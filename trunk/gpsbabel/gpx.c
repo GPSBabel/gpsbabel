@@ -452,6 +452,7 @@ gs_type_mapping{
 	{ gt_multi, "Multi-Cache" },
 	{ gt_virtual, "Virtual cache" },
 	{ gt_event, "Event cache" },
+	{ gt_webcam, "Webcam Cache" },
 	{ gt_suprise, "Unknown cache" },
 };
 

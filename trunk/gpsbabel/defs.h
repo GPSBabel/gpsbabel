@@ -85,7 +85,8 @@ typedef enum {
 	gt_virtual,
 	gt_letterbox,
 	gt_event,
-	gt_suprise
+	gt_suprise,
+	gt_webcam
 } geocache_type;
 
 typedef enum {
