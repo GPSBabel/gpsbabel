@@ -460,7 +460,7 @@ pdb_write_double(void* ptr, double d)
   return;
 }
 
-// Magellan and PCX formats use this DDMM.mm format
+/* Magellan and PCX formats use this DDMM.mm format */
 double ddmm2degrees(double pcx_val) {
 	double minutes;
 	signed int deg;
