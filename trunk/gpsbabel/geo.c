@@ -186,7 +186,7 @@ geo_read(void)
 }
 
 static void
-geo_waypt_pr(waypoint *waypointp)
+geo_waypt_pr(const waypoint *waypointp)
 {
 	fprintf(ofd, "<waypoint>\n");
 	fprintf(ofd, "<name id=\"%s\">", waypointp->shortname);

@@ -45,7 +45,7 @@ waypt_count(void)
 }
 
 void
-waypt_disp(waypoint *wpt)
+waypt_disp(const waypoint *wpt)
 {
 	if (wpt->creation_time) {
 		printf("%s ", ctime(&wpt->creation_time));

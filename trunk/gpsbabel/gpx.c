@@ -205,7 +205,7 @@ gpx_read(void)
 }
 
 static void
-gpx_waypt_pr(waypoint *waypointp)
+gpx_waypt_pr(const waypoint *waypointp)
 {
 
 	fprintf(ofd, "<wpt lat=\"%lf\" lon=\"%lf\">\n",

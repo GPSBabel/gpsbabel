@@ -91,7 +91,7 @@ abort();
 }
 
 static void
-gpsutil_disp(waypoint *wpt)
+gpsutil_disp(const waypoint *wpt)
 {
 	fprintf(file_out, "%f,%f:redpin:%s\n", 
 		wpt->position.longitude.degrees,

@@ -57,7 +57,7 @@ gpsman_wr_deinit(void)
 }
 
 static void
-gpsman_disp(waypoint *waypointp)
+gpsman_disp(const waypoint *waypointp)
 {
  	fprintf(out_file, "%-8.8s\t%s\t", 
 		waypointp->shortname, waypointp->description);
