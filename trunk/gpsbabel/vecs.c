@@ -36,6 +36,7 @@ extern ff_vecs_t mag_vecs;
 extern ff_vecs_t mapsend_vecs;
 extern ff_vecs_t mps_vecs;
 extern ff_vecs_t gpsutil_vecs;
+extern ff_vecs_t tiger_vecs;
 extern ff_vecs_t pcx_vecs;
 extern ff_vecs_t cetus_vecs;
 extern ff_vecs_t gpspilot_vecs;
@@ -153,8 +154,13 @@ vecs_t vec_list[] = {
 		"Geocaching Database", 
 		NULL
 	},
-
-        {
+	{
+		&tiger_vecs,
+		"tiger",
+		"U.S. Census Bureau Tiger Mapping Service",
+		NULL
+	},
+	{
 		NULL,
 		NULL,
 		NULL,
