@@ -31,14 +31,15 @@ dep:
 	make clean && make CC="gcc -MMD"  && cat *.d */*.d > /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_1_0_pre120602
-VERSIOND=1.1.0_pre120602
+VERSIONU=1_1_0
+VERSIOND=1.1.0
 release:
 	rm -fr gpsbabel-$(VERSIOND)
+	cvs tag gpsbabel_$(VERSIONU)
 	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
 	tar cvzf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
 	cd /tmp ; tar xvzf gpsbabel-$(VERSIOND).tar.gz
-	cd /tmp/gpsbabel-$(VERSIOND)/mingw ; make  && zip gpsbabel-$(VERSIOND).zip  gpsbabel.exe libexpat.dll && cp gpsbabel-$(VERSIOND).zip /tmp
+	cd /tmp/gpsbabel-$(VERSIOND)/mingw ; make  && zip -j gpsbabel-$(VERSIOND).zip  gpsbabel.exe libexpat.dll ../win32/gpsbabelfront.exe && cp gpsbabel-$(VERSIOND).zip /tmp
 	ncftpput -u anonymous upload.sf.net  /incoming /tmp/gpsbabel-$(VERSIOND).tar.gz /tmp/gpsbabel-$(VERSIOND).zip
 
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
