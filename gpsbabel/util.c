@@ -237,6 +237,8 @@ pstrdup(char *src)
 void 
 rtrim(char *s)
 {
+	char *t = s;
+
 	if (!s || !*s) {
 		return;
 	}
@@ -246,7 +248,7 @@ rtrim(char *s)
 	}
 
 	s--;
-	while (isspace (*s)) {
+	while ((s >= t) && isspace (*s)) {
 		*s = 0;
 		s--;
 	}
