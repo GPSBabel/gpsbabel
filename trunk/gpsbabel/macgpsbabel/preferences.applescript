@@ -14,27 +14,44 @@ property startState : false
 -- EVENT HANDLERS --
 
 on will finish launching theObject
-	
 	-- make empty entries in user defaults
 	make new default entry at end of default entries of user defaults with properties {name:"theInputType", contents:startIndex}
 	make new default entry at end of default entries of user defaults with properties {name:"theOutputType", contents:startIndex}
 	make new default entry at end of default entries of user defaults with properties {name:"gpsIN", contents:startState}
 	make new default entry at end of default entries of user defaults with properties {name:"gpsOUT", contents:startState}
 	make new default entry at end of default entries of user defaults with properties {name:"gpsReceiver", contents:startIndex}
-	
-	-- read current user defaults
-	my readSettings()
-	
-	-- deal with changes to MacGPSBabel window needed if any of the GPS check boxes are checked by default
-	if state of button "GPSswitchIN" of window "MacGPSBabel" is equal to 1 then
-		my gpsIN()
-	end if
-	if state of button "GPSswitchOUT" of window "MacGPSBabel" is equal to 1 then
-		my gpsOUT()
-	end if
 end will finish launching
 
+on awake from nib theObject
+	if theObject is window "MacGPSBabel" then
+		tell window "MacGPSBabel"
+			set popList to my getFormats()
+			repeat with i in popList
+				make new menu item at the end of menu items of menu of popup button "inPop" with properties {title:i, enabled:true}
+				make new menu item at the end of menu items of menu of popup button "outPop" with properties {title:i, enabled:true}
+			end repeat
+		end tell
+		
+		-- read current user defaults
+		my readSettings()
+		
+		-- deal with changes to MacGPSBabel window needed if any of the GPS check boxes are checked by default
+		if state of button "GPSswitchIN" of window "MacGPSBabel" is equal to 1 then
+			my gpsIN()
+		end if
+		if state of button "GPSswitchOUT" of window "MacGPSBabel" is equal to 1 then
+			my gpsOUT()
+		end if
+	end if
+end awake from nib
+
 on will open theObject
+	-- set the progress indicator style
+	if theObject is window "MacGPSBabel" then
+		set p to progress indicator 1 of theObject
+		call method "setStyle:" of p with parameter 1
+		call method "setDisplayedWhenStopped:" of p with parameters {false}
+	end if
 	if theObject is window "SelectGPS" then
 		-- get the list of available serial ports
 		set popList to my getSerial()
@@ -89,11 +106,13 @@ end clicked
 -- read user defaults
 on readSettings()
 	tell user defaults
-		set defaultInputIndex to contents of default entry "theInputType"
-		set defaultOutputIndex to contents of default entry "theOutputType"
+		set defaultInputIndex to contents of default entry "theInputType" as integer
+		set defaultOutputIndex to contents of default entry "theOutputType" as integer
 		set defaultgpsIN to contents of default entry "gpsIN" as boolean
 		set defaultgpsOUT to contents of default entry "gpsOUT" as boolean
 	end tell
+	-- call method "setObjectValue:" of object (popup button "inPop" of window "MacGPSBabel") with parameter defaultInputIndex
+	-- call method "synchronizeTitleAndSelectedItem" of object (popup button "inPop" of window "MacGPSBabel")
 	set contents of popup button "inPop" of window "MacGPSBabel" to defaultInputIndex
 	set contents of popup button "outPop" of window "MacGPSBabel" to defaultOutputIndex
 	set state of button "GPSswitchIN" of window "MacGPSBabel" to defaultgpsIN
@@ -142,3 +161,25 @@ on getSerial()
 	set AppleScript's text item delimiters to defaultDelimiters
 	return myList
 end getSerial
+
+-- handler (called at startup) to check with GPS Babel which file formats it can handle. Return the result as a list
+on getFormats()
+	set myList to {}
+	set typeList to {}
+	set extList to {}
+	set thePath to POSIX path of (path to me) as string
+	set scriptOut to (do shell script quoted form of thePath & "Contents/Resources/gpsbabel -^1") as string
+	set theCount to count of paragraphs in scriptOut
+	set defaultDelimiters to AppleScript's text item delimiters
+	set AppleScript's text item delimiters to tab
+	repeat with i from 1 to theCount
+		set theLine to paragraph i of scriptOut
+		if (first text item of theLine) is equal to "file" then
+			set the end of typeList to the second text item of theLine
+			set the end of extList to the third text item of theLine
+			set the end of myList to the last text item of theLine
+		end if
+	end repeat
+	set AppleScript's text item delimiters to defaultDelimiters
+	return myList
+end getFormats

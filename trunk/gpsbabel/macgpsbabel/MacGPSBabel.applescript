@@ -1,7 +1,7 @@
 -- MacGPSBabel: MacGPSBabel.applescript
 
 --  File created by Jeremy Atherton on Sunday, September 28, 2003.
---  Last modified by Jeremy Atherton on Monday, February 16, 2004.
+--  Last modified by Jeremy Atherton on Thursday, September 2, 2004.
 
 --  MacGPSBabel is part of the gpsbabel project and is Copyright (c) 2004 Robert Lipe.
 -- see http://gpsbabel.sourceforge.net/ for more details
@@ -14,25 +14,17 @@ global theFiles, typeList, extList, aFile
 
 -- Start up scripts
 -- get supported file types from gpsbabel and use these to populate the file types popup lists
-on awake from nib theObject
-	if theObject is window "MacGPSBabel" then
-		tell window "MacGPSBabel"
-			set popList to my getFormats()
-			repeat with i in popList
-				make new menu item at the end of menu items of menu of popup button "inPop" with properties {title:i, enabled:true}
-				make new menu item at the end of menu items of menu of popup button "outPop" with properties {title:i, enabled:true}
-			end repeat
-		end tell
-	end if
-end awake from nib
--- set the progress indicator style
-on will open theObject
-	if theObject is window "MacGPSBabel" then
-		set p to progress indicator 1 of theObject
-		call method "setStyle:" of p with parameter 1
-		call method "setDisplayedWhenStopped:" of p with parameters {false}
-	end if
-end will open
+-- on awake from nib theObject
+--	if theObject is window "MacGPSBabel" then
+--		tell window "MacGPSBabel"
+--			set popList to my getFormats()
+--			repeat with i in popList
+--				make new menu item at the end of menu items of menu of popup button "inPop" with properties {title:i, enabled:true}
+--				make new menu item at the end of menu items of menu of popup button "outPop" with properties {title:i, enabled:true}
+--			end repeat
+--		end tell
+--	end if
+-- end awake from nib
 
 -- handler for the File>Open menu item
 on choose menu item theObject
@@ -576,28 +568,6 @@ on applyFilters()
 	set filterText to distanceText & radiusText & duplicateText & arcText & polyText
 	return filterText
 end applyFilters
-
--- handler (called at startup) to check with GPS Babel which file formats it can handle. Return the result as a list
-on getFormats()
-	set myList to {}
-	set typeList to {}
-	set extList to {}
-	set thePath to POSIX path of (path to me) as string
-	set scriptOut to (do shell script quoted form of thePath & "Contents/Resources/gpsbabel -^1") as string
-	set theCount to count of paragraphs in scriptOut
-	set defaultDelimiters to AppleScript's text item delimiters
-	set AppleScript's text item delimiters to tab
-	repeat with i from 1 to theCount
-		set theLine to paragraph i of scriptOut
-		if (first text item of theLine) is equal to "file" then
-			set the end of typeList to the second text item of theLine
-			set the end of extList to the third text item of theLine
-			set the end of myList to the last text item of theLine
-		end if
-	end repeat
-	set AppleScript's text item delimiters to defaultDelimiters
-	return myList
-end getFormats
 
 -- handlers to deal with the GPS receiver checkboxes
 on GPSSwitchIN()
