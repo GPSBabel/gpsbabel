@@ -32,24 +32,7 @@ static FILE *tpg_file_in;
 static FILE *tpg_file_out;
 static void *mkshort_handle;
 
-static int i_am_little_endian;
-static int endianness_tested;
 static unsigned int waypt_out_count;
-
-static void
-test_endianness(void)
-{
-        union {
-                long l;
-                unsigned char uc[sizeof (long)];
-        } u;
-
-        u.l = 1;
-        i_am_little_endian = u.uc[0];
-
-        endianness_tested = 1;
-
-}
 
 static int
 tpg_fread(void *buff, size_t size, size_t members, FILE * fp) 
@@ -71,22 +54,8 @@ tpg_fread_double(FILE *fp)
 	unsigned char buf[8];
 	unsigned char sbuf[8];
 
-	if (!endianness_tested) {
-		test_endianness();
-	}
-
 	tpg_fread(buf, 1, 8, fp);
-	if (i_am_little_endian) {
-		return *(double *) buf;
-	}
-	sbuf[0] = buf[7];
-	sbuf[1] = buf[6];
-	sbuf[2] = buf[5];
-	sbuf[3] = buf[4];
-	sbuf[4] = buf[3];
-	sbuf[5] = buf[2];
-	sbuf[6] = buf[1];
-	sbuf[7] = buf[0];
+	le_read64(sbuf, buf);
 	return *(double *)sbuf;
 }
 
@@ -96,23 +65,8 @@ tpg_fwrite_double(double x, FILE *fp)
 	unsigned char *cptr = (unsigned char *)&x;
 	unsigned char cbuf[8];
 
-	if (!endianness_tested) {
-		test_endianness();
-	}
-	if (i_am_little_endian) {
-		fwrite(&x, 8, 1, fp);
-	} else {
-                cbuf[0] = cptr[7];
-                cbuf[1] = cptr[6];
-                cbuf[2] = cptr[5];
-                cbuf[3] = cptr[4];
-                cbuf[4] = cptr[3];
-                cbuf[5] = cptr[2];
-                cbuf[6] = cptr[1];
-                cbuf[7] = cptr[0];
-                fwrite(cbuf, 8, 1, fp);
-	}
-
+	le_read64(cbuf, cptr);
+	fwrite(cbuf, 8, 1, fp);
 }
 
 static int

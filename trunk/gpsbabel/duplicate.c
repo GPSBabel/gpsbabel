@@ -109,7 +109,7 @@ get_crc32(void * data, int datalen)
 static btree_node *
 addnode (btree_node * tree, btree_node * newnode, btree_node **oldnode)
 {
-	btree_node * tmp, * last;
+	btree_node * tmp, * last = NULL;
 
 	if ( *oldnode ) {*oldnode = NULL;}
 	

@@ -1499,7 +1499,7 @@ mps_write(void)
 	char		recType;
 	int			reclen;
 	int			reclen2;
-	int			tocopy;
+	unsigned int			tocopy;
 
 	unsigned char	copybuf[8192];
 

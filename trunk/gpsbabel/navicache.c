@@ -205,11 +205,6 @@ nav_wr_deinit(void)
 	fclose(ofd);
 }
 
-static void
-nav_waypt_pr(const waypoint *waypointp)
-{
-}
-
 void
 nav_write(void)
 {

@@ -134,19 +134,14 @@ void
 route_flush(queue *head)
 {
 	queue *elem, *tmp;
-	route_head *last = NULL;
-	
+	queue *q;
+
 	QUEUE_FOR_EACH(head, elem, tmp) {
-		if ( last ) {
-			route_free(last);
-		}
-		last = (route_head *)elem;
+		q = dequeue(elem);
+		route_free((route_head *) q);
 	}
-	if ( last ) {
-		route_free(last);
-	}
-	QUEUE_INIT(head);
 }
+
 void
 route_flush_all()
 {

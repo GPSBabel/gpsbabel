@@ -218,7 +218,6 @@ main(int argc, char *argv[])
 		usage(argv[0]);
 		exit(0);
 	}
-
 	if (ovecs == NULL)
 		waypt_disp_all(waypt_disp);
 

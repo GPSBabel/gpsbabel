@@ -29,29 +29,11 @@ static FILE *mapsend_file_in;
 static FILE *mapsend_file_out;
 static void *mkshort_handle;
 
-static int endianness_tested;
-static int i_am_little_endian;
-
 static int route_wp_count;
 static int mapsend_infile_version;
 static int trk_version = 30;
 
 #define MYNAME "mapsend"
-
-static void
-test_endianness(void)
-{
-	union {
-                long l;
-                unsigned char uc[sizeof (long)];
-        } u;
-
-        u.l = 1;
-        i_am_little_endian = u.uc[0];
-
-	endianness_tested = 1;
-
-}
 
 static void
 mapsend_rd_init(const char *fname)
@@ -69,103 +51,45 @@ mapsend_rd_deinit(void)
 }
 
 static 
-size_t 
+void 
 my_fread8(void *ptr, FILE *stream)
 {
 	unsigned char cbuf[8];
-	unsigned char *cptr = ptr;
 	size_t rv;
 
-	if (!endianness_tested) {
-		test_endianness();
-	}
-
-	if (i_am_little_endian) {	
-		rv = fread(ptr, 8, 1, stream);
-	} else { 
-		rv = fread(cbuf, 8, 1, stream);
-		cptr[0] = cbuf[7];
-		cptr[1] = cbuf[6];
-		cptr[2] = cbuf[5];
-		cptr[3] = cbuf[4];
-		cptr[4] = cbuf[3];
-		cptr[5] = cbuf[2];
-		cptr[6] = cbuf[1];
-		cptr[7] = cbuf[0];
-	}
-	return rv;
+	rv = fread(cbuf, 8, 1, stream);
+	le_read64(ptr, cbuf);
+	
 }
 
 static 
-size_t
+void
 my_fwrite8(void *ptr, FILE *stream)
 {
 	unsigned char cbuf[8];
-	unsigned char *cptr = ptr;
 
-	if (!endianness_tested) {
-		test_endianness();
-	}
-
-	if (i_am_little_endian) {	
-		return fwrite(ptr, 8, 1, stream);
-	} else {
-		cbuf[0] = cptr[7];
-		cbuf[1] = cptr[6];
-		cbuf[2] = cptr[5];
-		cbuf[3] = cptr[4];
-		cbuf[4] = cptr[3];
-		cbuf[5] = cptr[2];
-		cbuf[6] = cptr[1];
-		cbuf[7] = cptr[0];
-		return fwrite(cbuf, 8, 1, stream);
-	}
+	le_read64(cbuf, ptr);
+	fwrite(cbuf, 8, 1, stream);
 }
 
 static 
-size_t 
+void 
 my_fread4(void *ptr, FILE *stream)
 {
+	unsigned int *iptr = ptr;
 	unsigned char cbuf[4];
-	unsigned char *cptr = ptr;
 	size_t rv;
-	
-	if (!endianness_tested) {
-		test_endianness();
-	}
 
-	if (i_am_little_endian) {	
-		rv = fread(ptr, 4, 1, stream);
-	} else {
-		rv = fread(cbuf, 4, 1, stream);
-		cptr[0] = cbuf[3];
-		cptr[1] = cbuf[2];
-		cptr[2] = cbuf[1];
-		cptr[3] = cbuf[0];
-	}
-	return rv;
+	rv = fread(cbuf, 4, 1, stream);
+	*iptr = le_read32(cbuf);
 }
 
 static 
 size_t
 my_fwrite4(int *ptr, FILE *stream)
 {
-	unsigned char cbuf[4];
-	unsigned char *cptr = (unsigned char *) ptr;
-
-	if (!endianness_tested) {
-		test_endianness();
-	}
-
-	if (i_am_little_endian) {	
-		return fwrite(ptr, 4, 1, stream);
-	} else {
-		cbuf[0] = cptr[3];
-		cbuf[1] = cptr[2];
-		cbuf[2] = cptr[1];
-		cbuf[3] = cptr[0];
-		return fwrite(cbuf, 4, 1, stream);
-	}
+	int i = le_read32(ptr);
+	return fwrite(&i, 4, 1, stream);
 }
 
 static void
@@ -528,7 +452,7 @@ void mapsend_track_hdr(const route_head * trk)
 	 * we write mapsend v3.0 tracks as mapsend v2.0 tracks get
 	 * tremendously out of whack time/date wise.
 	 */
-	char *verstring;
+	char *verstring = "30";
 	queue *elem, *tmp;
 	char *tname;
 	unsigned char c;
