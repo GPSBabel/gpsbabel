@@ -98,10 +98,7 @@ my_read(void)
 
 	ReadShort(infile);		/* magic */
 	version = ReadShort(infile);
-#if 0
-	fprintf(outfile, "# Extracted from Delorme route version %d\n",
-		version);
-#endif
+	
 	ReadLong(infile);
 	if (version >= 6) {
 		ReadLong(infile);
@@ -131,6 +128,10 @@ my_read(void)
 	/*
 	 * here lie the route description records 
 	 */
+	if ( version < 6 ) {
+		track_head = route_head_alloc();
+		route_add_head(track_head);
+	}
 	count = ReadLong(infile);
 	while (count) {
 		ReadShort(infile);
@@ -140,14 +141,6 @@ my_read(void)
 			double lon;
 
 			record = ReadRecord(infile, recsize);
-			stringlen = le_read16((unsigned short *)(record + 0x10));
-#if 0
-			if (stringlen) {
-				fprintf(outfile, "# %*.*s\n",
-					stringlen, stringlen,
-					(char *)(record + 0x12));
-			}
-#endif
 			latlon = (struct ll *)(record);
 
 			lat = (0x80000000UL -
@@ -159,9 +152,6 @@ my_read(void)
 			wpt_tmp->position.latitude.degrees = lat;
 			wpt_tmp->position.longitude.degrees = -lon;
 			route_add_wpt(track_head, wpt_tmp);
-#if 0
-			fprintf(outfile, "%.9lf\t%.9lf\n", lat, -lon);
-#endif
 		} else {
 			Skip(infile, recsize);
 			/*
@@ -201,10 +191,6 @@ my_read(void)
 		recsize = ReadLong(infile);
 		record = ReadRecord(infile, recsize);
 		stringlen = le_read16((unsigned short *)record);
-#if 0
-		fprintf(outfile, "# %*.*s\n", stringlen, stringlen,
-			(char *)(record + 2));
-#endif
 		coordcount =
 			le_read16((unsigned short *)(record + 2 + stringlen + 0x3c));
 		latlon = (struct ll *)(record + 2 + stringlen + 0x3c + 2);
