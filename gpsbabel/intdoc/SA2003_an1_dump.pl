@@ -51,6 +51,11 @@ sub skip_bytes {
    $file = substr( $file, $count );
 }
 
+sub decodeGuid {
+   ($a, $b, $c, $d, $e, $f, $g, $h, $i, $j) = unpack( 'LSSSCCCCCC', shift );
+   sprintf( '%8.8x-%4.4x-%4.4x-%4.4x-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x',$a, $b, $c, $d, $e, $f, $g, $h, $i, $j);
+}
+
 # read file
 undef $/;
 $file = <>;
@@ -82,6 +87,7 @@ while ( $bitmapcount ) {
      $size, $xppm, $yppm, $colused, $colimprt ) = shiftunpack( 'lllssllllll');
     # palette
     $palettesize = $bitoffset - $bmisize - 14; # 14 bytes in BMFH, including the 'BM'
+
     open BMP, ">bitmap$filecount.bmp";
     binmode BMP;
     print BMP 'BM';
@@ -93,16 +99,20 @@ while ( $bitmapcount ) {
     print BMP substr($file, 0, $palettesize+$size);
     close BMP;
     $filecount++;
+
     skip_bytes( $palettesize );
     # image
     skip_bytes( $size );
   }
   else {
     # image information - the 'type' we read was actually the low word of the hotspot X coord.
-    ($hotspotxhi, $hotspoty, $unk1, $unk2, $unk3, $unk4, $unk5, $name ) = 
-          shiftunpack( 'sllllllC/A*' );
+    ($hotspotxhi, $hotspoty, $unk1, $guid, $name ) = shiftunpack( 'slla[16]C/a*' );
+
+    # fix the hotspot X coord
     $hotspotx = $rec_type + 0x10000*$hotspotxhi;
-    print( "Image: $hotspotx $hotspoty   $name\n" );
+
+    printf( "Image: %2d %2d %s $name\n", $hotspotx, $hotspoty, decodeGuid( $guid ) );
+    $imagenames{$guid} = $name;
     $bitmapcount--; 
   }
 } 
@@ -111,20 +121,42 @@ while ( $bitmapcount ) {
 
 ($magic, $wptcount) = shiftunpack( 'sl' );
 
+@types = qw(none marker line polygon text circle mapnote highlight unknown8 arc spline rectangle
+         unknown12 unknown13 road trail track waypoint);
+
 print( "$wptcount waypoints\n" );
 while ( $wptcount ) {
-  ($magic, $unk0, $lat, $lon, $unk1, $unk2, $unk3, $unk4, $unk5, $serial,
-   $unk6s, $unk7s, $unk8, $unk9, $unk10s, $name, $font, $unk11l, $unk11h, 
-   $unk12l, $unk12h, $unk13l, $unk13h, $unk14l, $unk14h, $fontcolor, $fontstyle, $fontsize, $unk17,
-   $unk18, $unk19, $unk20, $unk21, $unk22 ) = 
-   shiftunpack( 'slllsllsssssllss/A*s/A*sssssssslllllllll' );
 
-  # fontcolor is BGR (i.e. pure blue is 0xff00000, pure red is 0x0000ff)
-  # fontstyle is bitfield 0x10=bold, 0x20=italic, 0x80=underline
+  ($magic, $unk1, $lon, $lat, $type, $height, $width, $unk2, $unk3, $serial, 
+   $unk4, $zoom, $unk5, $circle_radius, $name, $font, $guid, $fontcolor, 
+   $fontstyle, $fontsize, $unk6, $outlinecolor, $unk7, $fillcolor, $unk8, $unk9 ) = 
+   shiftunpack( 'slllsllssssssds/a*s/a*a[16]lllllllll' );
+
+   # fontcolor is BGR (i.e. pure blue is 0xff00000, pure red is 0x0000ff)
+   # fontstyle is 0x10-bold, 0x20-italic, 0x80-underline
+
+   # width/height are in pixels for mapnotes and represent the offset of the mapnote
+   #    from the point (i.e. the dimensions of the tail.)
+   # width/height are in degrees times 0x800000 for rectangles
+
+   # Note that type appears to be shared with lines.
+   # type   desc
+   #   1     marker (flag, dot, etc.)
+   #   4     text
+   #   5     circle
+   #   6     mapnote
+   #  11     rectangle
+   #  17     waypoint
 
   $lat = decode( $lat );
   $lon = decode( $lon );
-  print ( "$lat   $lon   $serial  $name\n" );
+
+  $rect_height = $height/0x800000;
+  $rect_width = $width/0x800000;
+
+  printf ( "$magic -- %x %x %x %x %x %x %x %x %x -- $type $types[$type]  $lat  $lon  %s $imagenames{$guid}  '$name'\n", 
+      $unk1,  $unk2,  $unk3,  $unk4,  $unk5,  $unk6,  $unk7, $unk8, $unk9, decodeGuid( $guid ) );
+
   $wptcount--;
 } 
 
@@ -132,16 +164,30 @@ while ( $wptcount ) {
 ($magic, $linecount ) = shiftunpack( 'sl' );
 print ( "$linecount lines\n" );
 while ( $linecount ) {
-  print "--- start line ---\n";
-  ($magic, $unk1, $unk2, $unk3, $unk4, $unk5l, $unk6, $unk7, $unk8l, $unk9l,
-   $unk10_3, $unk11_0, $unk12_0, $unk13_0, $unk14s, $pointcount ) = 
-    shiftunpack( 'sllsslssllllllsl' );
-       # unk10_3 might be a count that counts $unkXX_0
+  ($magic, $unk1, $serial, $unk2, $unk3, $type, $unk4, $name, $lineweight, $linestyle, 
+   $linecolor, $unk5, $polyfillcolor, $unk6, $unk7, $unk8, $pointcount ) = 
+    shiftunpack( 'ssslssls/a*sllllllsl' );
+
+   # arcs are 4-point (3-segment) lines: start, third point, end, center (yes, that's overdetermined.)
+
+   # Note that type appears to be shared with points.
+   # type   desc
+   #   2     line
+   #   3     polygon
+   #   7     highlight
+   #   9     arc
+   #  10     spline
+   #  14     routable road
+   #  15     trail
+   #  16     track
+
+   printf ("--- start line ---   %.4x  %x %x %x %x %x %x %x %x -- $type $types[$type] '$name'\n", $magic,
+		$unk1, $unk2, $unk3, $unk4, $unk5, $unk6, $unk7, $unk8 );
   while ( $pointcount ) {
-    ($magic, $unk0, $lat, $lon, $unk0s ) = shiftunpack( 'sllls' );
+    ($magic, $unk0, $lon, $lat, $unk0s ) = shiftunpack( 'sllls' );
     $lat = decode( $lat );
     $lon = decode( $lon );
-    print "  $lat   $lon\n";
+    printf (" $magic   $lat   $lon   %x %x\n", $unk0, $unk0s);
     $pointcount--;
   }
   print "--- end line ---\n";
