@@ -66,11 +66,18 @@ fatal(const char *fmt, ...)
 /*
  * Read 4 bytes in big-endian.   Return as "int" in native endianness.
  */
-int
+signed int
 pdb_read4(pdb_32 *p)
 {
-	char *i = (char *) p;
+	unsigned char *i = (unsigned char *) p;
 	return i[0] << 24 | i[1] << 16  | i[2] << 8 | i[3];
+}
+
+signed int
+pdb_read2(pdb_16 *p)
+{
+	char *i = (char *) p;
+	return i[0] << 8 | i[0];
 }
 
 void
