@@ -31,7 +31,7 @@ static char *psn;
 
 static
 arglist_t csv_args[] = {
-	{"prefer_shortname", &psn, "Use shortnames even when we have longer names available"},
+	{"prefer_shortname", &psn, "Use shortnames even if longer names available"},
 	{0, 0, 0}
 };
 
@@ -189,6 +189,7 @@ ff_vecs_t csv_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
+	csv_args
 };
 
 ff_vecs_t xmap_vecs = {
@@ -198,5 +199,4 @@ ff_vecs_t xmap_vecs = {
 	xmap_wr_deinit,
 	data_read,
 	data_write,
-	csv_args
 };

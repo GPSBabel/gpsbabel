@@ -312,10 +312,10 @@ disp_vecs(void)
 	arglist_t *ap;
 
 	for (vec = vec_list; vec->vec; vec++) {
-		printf("	%-20.20s  %-50.50s\n",
+		printf("	%-20.20s  %-.50s\n",
 			vec->name, vec->desc);
 		for (ap = vec->vec->args; ap && ap->argstring; ap++) {
-		printf("	  %-18.18s    %-50.50s\n",
+		printf("	  %-18.18s    %-.50s\n",
 			ap->argstring, ap->helpstring);
 		}
 	}
