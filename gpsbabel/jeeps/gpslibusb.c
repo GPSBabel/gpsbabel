@@ -83,7 +83,7 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 {
 	int r;
 
-        r = usb_bulk_write(udev, gusb_bulk_out_ep, &opkt->dbuf[0], sz, TMOUT_I);
+        r = usb_bulk_write(udev, gusb_bulk_out_ep, (char *)(void *)opkt->dbuf, sz, TMOUT_I);
         if (gps_show_bytes) {
 		dump ("Sent", &opkt->dbuf[0], r);
 	}
