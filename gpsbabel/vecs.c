@@ -230,16 +230,30 @@ find_vec(char *const vecname, char **opts)
 	char *svecname = strtok(v, ",");
 
 	while (vec->vec) {
-		if (strcmp(svecname, vec->name) == 0) {
-			char * res = strchr(vecname, ',');
-			if (res)
-				*opts = strchr(vecname, ',')+1;
-			else
-				*opts = NULL;
-			free(v);
-			return vec->vec;
+		arglist_t *ap;
+		char *res;
+
+		if (strcmp(svecname, vec->name)) {
+			vec++;
+			continue;
 		}
-		vec++;
+
+		res = strchr(vecname, ',');
+		if (res) {
+			*opts = strchr(vecname, ',')+1;
+
+			if (vec->vec->args) {
+				for (ap = vec->vec->args; ap->argstring; ap++){
+					*ap->argval = get_option(*opts, ap->argstring);
+				}
+			}
+		} else {
+			*opts = NULL;
+		}
+
+		free(v);
+		return vec->vec;
+		
 	}
 	free(v);
 	return NULL;
@@ -295,9 +309,15 @@ void
 disp_vecs(void)
 {
 	vecs_t *vec;
+	arglist_t *ap;
+
 	for (vec = vec_list; vec->vec; vec++) {
 		printf("	%-20.20s  %-50.50s\n",
 			vec->name, vec->desc);
+		for (ap = vec->vec->args; ap && ap->argstring; ap++) {
+		printf("	  %-10.10s            %-40.40s\n",
+			ap->argstring, ap->helpstring);
+		}
 	}
 }
 

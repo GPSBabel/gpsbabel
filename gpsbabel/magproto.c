@@ -40,6 +40,9 @@ static double mag2degrees(double mag_val);
 static void mag_readmsg(void);
 static void *mkshort_handle;
 static char *deficon;
+static char *bs;
+static char *noack;
+
 
 typedef enum {
 	mrs_handoff = 0,
@@ -661,14 +664,18 @@ termwrite(char *obuf, int size)
 }
 #endif
 
+static
+arglist_t mag_args[] = {
+	{"baud", &bs, "Numeric value of bitrate (baud=4800)"},
+	{"noack", &noack, "Suppress use of handshaking in name of speed"},
+	{"deficon", &deficon, "Default icon name"},
+	{0, 0, 0}
+};
 
 static void
 mag_rd_init(const char *portname, const char *args)
 {
 	time_t now, later;
-	char * bs = get_option(args, "baud");
-	char * noack = get_option(args, "noack");
-	deficon = get_option(args, "deficon");
 
 	if (bs) {
 		bitrate=atoi(bs);
@@ -721,7 +728,6 @@ mag_wr_init(const char *portname, const char *args)
 	}
 #else
 	struct stat sbuf;
-	deficon = get_option(args, "deficon");
 	magfile_out = fopen(portname, "w+b");
 	fstat(fileno(magfile_out), &sbuf);
 	is_file = S_ISREG(sbuf.st_mode);
@@ -1145,4 +1151,5 @@ ff_vecs_t mag_vecs = {
 	mag_deinit,	
 	mag_read,
 	mag_write,
+	mag_args
 };

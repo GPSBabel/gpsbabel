@@ -202,6 +202,12 @@ void setshort_mustupper(void *, int n);
 void setshort_mustuniq(void *, int n);
 void setshort_whitespace_ok(void *, int n);
 
+typedef struct arglist {
+	char *argstring;
+	char **argval;
+	char *helpstring;
+} arglist_t;
+
 typedef struct ff_vecs {
 	ff_init rd_init;
 	ff_init wr_init;
@@ -209,6 +215,7 @@ typedef struct ff_vecs {
 	ff_deinit wr_deinit;
 	ff_read read;
 	ff_write write;
+	arglist_t *args;
 } ff_vecs_t;
 
 void waypt_init(void);
