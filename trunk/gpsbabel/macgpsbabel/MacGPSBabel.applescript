@@ -209,6 +209,18 @@ on clicked theObject
 		end if
 	end if
 	
+	-- Filter Window - Smart names check box
+	if theObject is the button "smartSwitch" of window "filterWindow" then
+		if state of button "smartSwitch" of window "filterWindow" is equal to 1 then
+			set enabled of text field "smartLen" of window "filterWindow" to true
+			set editable of text field "smartLen" of window "filterWindow" to true
+			set contents of text field "smartLen" of window "filterWindow" to ""
+		else
+			set enabled of text field "smartLen" of window "filterWindow" to false
+			set editable of text field "smartLen" of window "filterWindow" to false
+		end if
+	end if
+	
 	--debug mode
 	if theObject is the button "debugButton" of window "MacGPSBabel" then
 		if (visible of window "debugWindow") is false then
@@ -300,6 +312,18 @@ on convertFile(fileList)
 	-- create strings for output file
 	set currentOutIndex to contents of popup button "outPop" of window "MacGPSBabel"
 	set outType to item (currentOutIndex) of typeList
+	if visible of window "filterWindow" is true then
+		if state of button "smartSwitch" of window "filterWindow" is equal to 1 then
+			set smartSwitch to " -s"
+			if contents of text field "smartLen" of window "filterWindow" is not equal to "" then
+				set outType to outType & ",snlen=" & ((contents of text field "smartLen" of window "filterWindow") as integer) & " "
+			end if
+		else
+			set smartSwitch to ""
+		end if
+	else
+		set smartSwitch to ""
+	end if
 	set OutExt to item (currentOutIndex) of extList
 	-- set outPath to directory of aFile
 	tell save panel
@@ -327,7 +351,7 @@ on convertFile(fileList)
 	feedbackBusy(true)
 	-- do the script
 	set thePath to POSIX path of (path to me) as string
-	set theConvertScript to (quoted form of thePath & "Contents/Resources/gpsbabel" & fileText & " " & filterText & "-o " & outType & " -F " & quoted form of outputFile) as string
+	set theConvertScript to (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & fileText & " " & filterText & "-o " & outType & " -F " & quoted form of outputFile) as string
 	try
 		set scriptOut to do shell script theConvertScript as string
 		set convertYN to "Conversion Completed Successfully"
@@ -378,6 +402,18 @@ on uploadFile(fileList)
 	else
 		set gpsText to " magellan "
 	end if
+	if visible of window "filterWindow" is true then
+		if state of button "smartSwitch" of window "filterWindow" is equal to 1 then
+			set smartSwitch to " -s"
+			if contents of text field "smartLen" of window "filterWindow" is not equal to "" then
+				set gpsText to gpsText & ",snlen=" & ((contents of text field "smartLen" of window "filterWindow") as integer) & " "
+			end if
+		else
+			set smartSwitch to ""
+		end if
+	else
+		set smartSwitch to ""
+	end if
 	
 	-- run the script
 	set thePath to POSIX path of (path to me) as string
@@ -385,7 +421,7 @@ on uploadFile(fileList)
 	set visible of window "MacGPSBabel" to true
 	feedbackBusy(true)
 	set serialText to "-F /dev/cu." & (the title of popup button "serialPop" of window "selectGPS")
-	do shell script (quoted form of thePath & "Contents/Resources/gpsbabel" & fileText & " " & filterText & "-o " & gpsText & serialText)
+	do shell script (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & fileText & " " & filterText & "-o " & gpsText & serialText)
 	feedbackBusy(false)
 	display dialog "Upload Complete" buttons {"OK"} default button 1
 end uploadFile
@@ -413,6 +449,18 @@ on downloadFile()
 	
 	set currentOutIndex to contents of popup button "outPop" of window "MacGPSBabel"
 	set outType to item (currentOutIndex) of typeList
+	if visible of window "filterWindow" is true then
+		if state of button "smartSwitch" of window "filterWindow" is equal to 1 then
+			set smartSwitch to " -s"
+			if contents of text field "smartLen" of window "filterWindow" is not equal to "" then
+				set outType to outType & ",snlen=" & ((contents of text field "smartLen" of window "filterWindow") as integer) & " "
+			end if
+		else
+			set smartSwitch to ""
+		end if
+	else
+		set smartSwitch to ""
+	end if
 	set OutExt to item (currentOutIndex) of extList
 	set TempFileName to outName & OutExt
 	set theResult to display save panel in directory "~/Desktop" with file name TempFileName
@@ -427,7 +475,7 @@ on downloadFile()
 		set visible of window "SelectGPS" to false
 		set visible of window "MacGPSBabel" to true
 		feedbackBusy(true)
-		do shell script (quoted form of thePath & "Contents/Resources/gpsbabel" & trackText & " -i" & gpsText & "-f " & serialText & " " & filterText & " -o " & outType & " -F " & quoted form of outputFile)
+		do shell script (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & trackText & " -i" & gpsText & "-f " & serialText & " " & filterText & " -o " & outType & " -F " & quoted form of outputFile)
 		feedbackBusy(false)
 		display dialog "Download from GPS is complete" buttons {"OK"} default button 1
 	else

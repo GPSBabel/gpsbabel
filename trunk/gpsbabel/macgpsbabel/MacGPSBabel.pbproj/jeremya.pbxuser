@@ -13,7 +13,7 @@
 			DA206CF0015C4D9F03C91932,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 112497554;
+			PBXPerProjectTemplateStateSaveDate = 114188516;
 			"PBXTemplateGeometry-F5314676015831810DCA290F" = {
 				ContentSize = "{685, 434}";
 				LeftSlideOut = {
@@ -153,7 +153,7 @@
 						Collapsed = YES;
 						Frame = "{{0, 0}, {594, 280}}";
 						Split0 = {
-							Frame = "{{1e+06, 1e+06}, {594, 27}}";
+							Frame = "{{1e+06, 1e+06}, {594, 0}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -276,17 +276,17 @@
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = 3F2FDB0906B4943500A80064;
+									bookmark = 3F6587EF06CE7003007C6F9A;
 									history = (
 										F5E2D67E05CDA550017C67C1,
 										F5E2D67F05CDA550017C67C1,
 										F5E2D68005CDA550017C67C1,
 										F5EAB15305FF78D401A80065,
-										3F7037A506B335A800A80064,
 										3F7037A606B335A800A80064,
 										3F7037A706B335A800A80064,
-										3F2FDB0606B4943500A80064,
-										3F2FDB0706B4943500A80064,
+										3F10FD0506CC4D6D00A80064,
+										3F10FD0606CC4D6D00A80064,
+										3F6587EE06CE7003007C6F9A,
 									);
 									prevStack = (
 										F5F16EF80527D1B401A80064,
@@ -400,11 +400,89 @@
 										3F7037AA06B335A800A80064,
 										3F7037AB06B335A800A80064,
 										3F2FDB0806B4943500A80064,
+										3F5F093C06B4953400A80064,
+										3F10FD0806CC4D6D00A80064,
+										3F10FD0906CC4D6D00A80064,
+										3F10FD0A06CC4D6D00A80064,
+										3F10FD0B06CC4D6D00A80064,
+										3F10FD0C06CC4D6D00A80064,
 									);
 								};
 								NavCount = 1;
 								NavGeometry0 = {
 									Frame = "{{0, 0}, {864, 661}}";
+									NavBarVisible = YES;
+								};
+								NavSplitVertical = NO;
+							};
+							SplitCount = 1;
+							Tab1 = {
+								Debugger = {
+									Split0 = {
+										SplitCount = 2;
+									};
+									SplitCount = 1;
+									TabCount = 2;
+								};
+								LauncherConfigVersion = 7;
+							};
+							Tab2 = {
+								LauncherConfigVersion = 3;
+								Runner = {
+								};
+							};
+							TabCount = 5;
+						};
+						SplitCount = 1;
+						Tab1 = {
+							OptionsSetName = "Hierarchy, all classes";
+						};
+						TabCount = 5;
+					};
+				},
+				{
+					LeftSlideOut = {
+						Split0 = {
+							Split0 = {
+								NavCount = 1;
+								NavGeometry0 = {
+									Frame = "{{0, 0}, {685, 150}}";
+									NavBarVisible = YES;
+								};
+								NavSplitVertical = NO;
+							};
+							SplitCount = 1;
+							Tab1 = {
+								Debugger = {
+									Split0 = {
+										SplitCount = 2;
+									};
+									SplitCount = 1;
+									TabCount = 2;
+								};
+								LauncherConfigVersion = 7;
+							};
+							Tab2 = {
+								LauncherConfigVersion = 3;
+								Runner = {
+								};
+							};
+							TabCount = 5;
+						};
+						SplitCount = 1;
+						Tab1 = {
+							OptionsSetName = "Hierarchy, all classes";
+						};
+						TabCount = 5;
+					};
+				},
+				{
+					LeftSlideOut = {
+						Split0 = {
+							Split0 = {
+								NavCount = 1;
+								NavGeometry0 = {
+									Frame = "{{0, 0}, {594, 150}}";
 									NavBarVisible = YES;
 								};
 								NavSplitVertical = NO;
@@ -566,21 +644,283 @@
 					ToolbarVisible = YES;
 					WindowLocation = "{3, 0}";
 				},
+				{
+					ContentSize = "{685, 434}";
+					LeftSlideOut = {
+						Collapsed = NO;
+						Frame = "{{0, 23}, {685, 411}}";
+						Split0 = {
+							ActiveTab = 2;
+							ActiveTabName = PBXBuildResultsModule;
+							Collapsed = NO;
+							Frame = "{{0, 0}, {685, 411}}";
+							Split0 = {
+								Frame = "{{0, 301}, {685, 110}}";
+							};
+							SplitCount = 1;
+							Tab0 = {
+								Frame = "{{0, 0}, {952, 321}}";
+							};
+							Tab1 = {
+								Debugger = {
+									Collapsed = NO;
+									Frame = "{{0, 0}, {781, 452}}";
+									Split0 = {
+										Frame = "{{0, 24}, {781, 428}}";
+										Split0 = {
+											Frame = "{{0, 0}, {383, 428}}";
+										};
+										Split1 = {
+											DebugVariablesTableConfiguration = (
+												Name,
+												123,
+												Value,
+												85,
+												Summary,
+												155.123,
+											);
+											Frame = "{{392, 0}, {389, 428}}";
+										};
+										SplitCount = 2;
+									};
+									SplitCount = 1;
+									Tab0 = {
+										Frame = "{{0, 0}, {100, 50}}";
+									};
+									Tab1 = {
+										Frame = "{{0, 0}, {100, 50}}";
+									};
+									TabCount = 2;
+									TabsVisible = YES;
+								};
+								Frame = "{{0, 0}, {781, 452}}";
+								LauncherConfigVersion = 7;
+							};
+							Tab2 = {
+								Frame = "{{0, 0}, {685, 215}}";
+								LauncherConfigVersion = 3;
+								Runner = {
+									Frame = "{{0, 0}, {685, 215}}";
+								};
+							};
+							Tab3 = {
+								BuildMessageFrame = "{{0, 0}, {687, 262}}";
+								BuildTranscriptFrame = "{{0, 271}, {687, 2}}";
+								BuildTranscriptFrameExpanded = YES;
+								Frame = "{{0, 0}, {685, 295}}";
+							};
+							Tab4 = {
+								Frame = "{{0, 0}, {612, 295}}";
+							};
+							TabCount = 5;
+							TabsVisible = NO;
+						};
+						SplitCount = 1;
+						Tab0 = {
+							Frame = "{{0, 0}, {300, 533}}";
+							GroupTreeTableConfiguration = (
+								TargetStatusColumn,
+								18,
+								MainColumn,
+								267,
+							);
+						};
+						Tab1 = {
+							ClassesFrame = "{{0, 0}, {280, 398}}";
+							ClassesTreeTableConfiguration = (
+								PBXBookColumnIdentifier,
+								20,
+								PBXClassColumnIdentifier,
+								237,
+							);
+							Frame = "{{0, 0}, {278, 659}}";
+							MembersFrame = "{{0, 407}, {280, 252}}";
+							MembersTreeTableConfiguration = (
+								PBXBookColumnIdentifier,
+								20,
+								PBXMethodColumnIdentifier,
+								236,
+							);
+						};
+						Tab2 = {
+							Frame = "{{0, 0}, {200, 100}}";
+						};
+						Tab3 = {
+							Frame = "{{0, 0}, {200, 100}}";
+							TargetTableConfiguration = (
+								ActiveObject,
+								16,
+								ObjectNames,
+								202.296,
+							);
+						};
+						Tab4 = {
+							BreakpointsTreeTableConfiguration = (
+								breakpointColumn,
+								197,
+								enabledColumn,
+								31,
+							);
+							Frame = "{{0, 0}, {250, 100}}";
+						};
+						TabCount = 5;
+						TabsVisible = NO;
+					};
+					NavBarShownByDefault = YES;
+					StatusViewVisible = YES;
+					Template = F5314676015831810DCA290F;
+					ToolbarVisible = YES;
+					WindowLocation = "{7, 250}";
+				},
+				{
+					ContentSize = "{594, 303}";
+					LeftSlideOut = {
+						Collapsed = NO;
+						Frame = "{{0, 23}, {594, 280}}";
+						Split0 = {
+							ActiveTab = 1;
+							ActiveTabName = PBXRunSessionModule;
+							Collapsed = YES;
+							Frame = "{{0, 0}, {594, 280}}";
+							Split0 = {
+								Frame = "{{1e+06, 1e+06}, {594, 0}}";
+							};
+							SplitCount = 1;
+							Tab0 = {
+								Frame = "{{0, 0}, {804, 321}}";
+							};
+							Tab1 = {
+								Debugger = {
+									Collapsed = NO;
+									Frame = "{{0, 0}, {594, 274}}";
+									Split0 = {
+										Frame = "{{0, 24}, {594, 250}}";
+										Split0 = {
+											Frame = "{{0, 0}, {290, 250}}";
+										};
+										Split1 = {
+											DebugVariablesTableConfiguration = (
+												Name,
+												123,
+												Value,
+												85,
+												Summary,
+												62.123,
+											);
+											Frame = "{{299, 0}, {295, 250}}";
+										};
+										SplitCount = 2;
+									};
+									SplitCount = 1;
+									Tab0 = {
+										Frame = "{{0, 0}, {100, 50}}";
+									};
+									Tab1 = {
+										Frame = "{{0, 0}, {100, 50}}";
+									};
+									TabCount = 2;
+									TabsVisible = YES;
+								};
+								Frame = "{{0, 0}, {594, 274}}";
+								LauncherConfigVersion = 7;
+							};
+							Tab2 = {
+								Frame = "{{0, 0}, {594, 274}}";
+								LauncherConfigVersion = 3;
+								Runner = {
+									Frame = "{{0, 0}, {594, 274}}";
+								};
+							};
+							Tab3 = {
+								BuildMessageFrame = "{{0, 0}, {614, 262}}";
+								BuildTranscriptFrame = "{{0, 271}, {614, 2}}";
+								BuildTranscriptFrameExpanded = YES;
+								Frame = "{{0, 0}, {612, 295}}";
+							};
+							Tab4 = {
+								Frame = "{{0, 0}, {612, 295}}";
+							};
+							TabCount = 5;
+							TabsVisible = NO;
+						};
+						SplitCount = 1;
+						Tab0 = {
+							Frame = "{{0, 0}, {300, 533}}";
+							GroupTreeTableConfiguration = (
+								TargetStatusColumn,
+								18,
+								MainColumn,
+								267,
+							);
+						};
+						Tab1 = {
+							ClassesFrame = "{{0, 0}, {280, 398}}";
+							ClassesTreeTableConfiguration = (
+								PBXBookColumnIdentifier,
+								20,
+								PBXClassColumnIdentifier,
+								237,
+							);
+							Frame = "{{0, 0}, {278, 659}}";
+							MembersFrame = "{{0, 407}, {280, 252}}";
+							MembersTreeTableConfiguration = (
+								PBXBookColumnIdentifier,
+								20,
+								PBXMethodColumnIdentifier,
+								236,
+							);
+						};
+						Tab2 = {
+							Frame = "{{0, 0}, {200, 100}}";
+						};
+						Tab3 = {
+							Frame = "{{0, 0}, {200, 386}}";
+							TargetTableConfiguration = (
+								ActiveObject,
+								16,
+								ObjectNames,
+								202.296,
+							);
+						};
+						Tab4 = {
+							BreakpointsTreeTableConfiguration = (
+								breakpointColumn,
+								197,
+								enabledColumn,
+								31,
+							);
+							Frame = "{{0, 0}, {250, 386}}";
+						};
+						TabCount = 5;
+						TabsVisible = NO;
+					};
+					NavBarShownByDefault = YES;
+					StatusViewVisible = YES;
+					Template = F5534CB2020F3F8A0DCA290F;
+					ToolbarVisible = YES;
+					WindowLocation = "{4, 381}";
+				},
 			);
-			PBXWorkspaceStateSaveDate = 112497554;
+			PBXWorkspaceStateSaveDate = 114188516;
 		};
 		perUserProjectItems = {
 			3F0A602B062B681C007C67C1 = 3F0A602B062B681C007C67C1;
 			3F0A602C062B681C007C67C1 = 3F0A602C062B681C007C67C1;
 			3F0A602D062B681C007C67C1 = 3F0A602D062B681C007C67C1;
 			3F0BDAD706AF6C1F00A80064 = 3F0BDAD706AF6C1F00A80064;
-			3F2FDB0606B4943500A80064 = 3F2FDB0606B4943500A80064;
-			3F2FDB0706B4943500A80064 = 3F2FDB0706B4943500A80064;
+			3F10FD0506CC4D6D00A80064 = 3F10FD0506CC4D6D00A80064;
+			3F10FD0606CC4D6D00A80064 = 3F10FD0606CC4D6D00A80064;
+			3F10FD0806CC4D6D00A80064 = 3F10FD0806CC4D6D00A80064;
+			3F10FD0906CC4D6D00A80064 = 3F10FD0906CC4D6D00A80064;
+			3F10FD0A06CC4D6D00A80064 = 3F10FD0A06CC4D6D00A80064;
+			3F10FD0B06CC4D6D00A80064 = 3F10FD0B06CC4D6D00A80064;
+			3F10FD0C06CC4D6D00A80064 = 3F10FD0C06CC4D6D00A80064;
 			3F2FDB0806B4943500A80064 = 3F2FDB0806B4943500A80064;
-			3F2FDB0906B4943500A80064 = 3F2FDB0906B4943500A80064;
 			3F579AB40645EEDF007C6F93 = 3F579AB40645EEDF007C6F93;
 			3F579AB50645EEDF007C6F93 = 3F579AB50645EEDF007C6F93;
-			3F7037A506B335A800A80064 = 3F7037A506B335A800A80064;
+			3F5F093C06B4953400A80064 = 3F5F093C06B4953400A80064;
+			3F6587EE06CE7003007C6F9A = 3F6587EE06CE7003007C6F9A;
+			3F6587EF06CE7003007C6F9A = 3F6587EF06CE7003007C6F9A;
 			3F7037A606B335A800A80064 = 3F7037A606B335A800A80064;
 			3F7037A706B335A800A80064 = 3F7037A706B335A800A80064;
 			3F7037A806B335A800A80064 = 3F7037A806B335A800A80064;
@@ -710,7 +1050,7 @@
 		rLen = 0;
 		rLoc = 6066;
 		rType = 0;
-		vrLen = 1911;
+		vrLen = 1874;
 		vrLoc = 4192;
 	};
 	3F0A602C062B681C007C67C1 = {
@@ -732,73 +1072,79 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 301";
 		rLen = 0;
-		rLoc = 13627;
+		rLoc = 14214;
 		rType = 0;
 		vrLen = 1839;
 		vrLoc = 0;
 	};
-	3F2FDB0606B4943500A80064 = {
+	3F10FD0506CC4D6D00A80064 = {
 		isa = PBXTargetBookmark;
 		trg = 29B97326FDCFA39411CA2CEA;
-		uiCtxt = {
-			TOCViewDetailVisibleRect = "{{0, 0}, {590, 233}}";
-			TOCViewExpandedItems = (
-				"com.apple.target-editor-pane.settings",
-				"com.apple.target-editor-pane.settings.simple",
-				"com.apple.target-editor-pane.info-plist",
-				"com.apple.target-editor-pane.info-plist.simple",
-				"com.apple.target-editor-pane.buildphases",
-			);
-			TOCViewMasterVisibleRect = "{{0, 0}, {235, 607}}";
-			TOCViewSelectedItems = (
-				PBXTargetSummarySettingsModule,
-			);
-		};
 	};
-	3F2FDB0706B4943500A80064 = {
-		fRef = F586ED0005CB576C017C67C1;
-		isa = PBXTextBookmark;
-		name = "preferences.applescript: 122";
-		rLen = 0;
-		rLoc = 5321;
-		rType = 0;
-		vrLen = 2032;
-		vrLoc = 607;
-	};
-	3F2FDB0806B4943500A80064 = {
-		isa = PBXTargetBookmark;
-		trg = 29B97326FDCFA39411CA2CEA;
-		uiCtxt = {
-			TOCViewDetailVisibleRect = "{{0, 0}, {590, 233}}";
-			TOCViewExpandedItems = (
-				"com.apple.target-editor-pane.settings",
-				"com.apple.target-editor-pane.settings.simple",
-				"com.apple.target-editor-pane.info-plist",
-				"com.apple.target-editor-pane.info-plist.simple",
-				"com.apple.target-editor-pane.buildphases",
-			);
-			TOCViewMasterVisibleRect = "{{0, 0}, {235, 607}}";
-			TOCViewSelectedItems = (
-				PBXTargetSummarySettingsModule,
-			);
-		};
-	};
-	3F2FDB0906B4943500A80064 = {
+	3F10FD0606CC4D6D00A80064 = {
 		fRef = F586ED0005CB576C017C67C1;
 		isa = PBXTextBookmark;
 		name = "preferences.applescript: 144";
 		rLen = 0;
 		rLoc = 6066;
 		rType = 0;
-		vrLen = 1949;
-		vrLoc = 4117;
+		vrLen = 2066;
+		vrLoc = 40;
+	};
+	3F10FD0806CC4D6D00A80064 = {
+		isa = PBXTargetBookmark;
+		trg = 29B97326FDCFA39411CA2CEA;
+	};
+	3F10FD0906CC4D6D00A80064 = {
+		fRef = DA206CF3015C4E8B03C91932;
+		isa = PBXTextBookmark;
+		name = "MacGPSBabel.applescript: 301";
+		rLen = 0;
+		rLoc = 14214;
+		rType = 0;
+		vrLen = 1839;
+		vrLoc = 0;
+	};
+	3F10FD0A06CC4D6D00A80064 = {
+		fRef = F586ED0005CB576C017C67C1;
+		isa = PBXTextBookmark;
+		name = "preferences.applescript: 144";
+		rLen = 0;
+		rLoc = 6066;
+		rType = 0;
+		vrLen = 2106;
+		vrLoc = 40;
+	};
+	3F10FD0B06CC4D6D00A80064 = {
+		fRef = DA206CF3015C4E8B03C91932;
+		isa = PBXTextBookmark;
+		name = "MacGPSBabel.applescript: 301";
+		rLen = 0;
+		rLoc = 14214;
+		rType = 0;
+		vrLen = 1839;
+		vrLoc = 0;
+	};
+	3F10FD0C06CC4D6D00A80064 = {
+		fRef = F586ED0005CB576C017C67C1;
+		isa = PBXTextBookmark;
+		name = "preferences.applescript: 144";
+		rLen = 0;
+		rLoc = 6066;
+		rType = 0;
+		vrLen = 2066;
+		vrLoc = 40;
+	};
+	3F2FDB0806B4943500A80064 = {
+		isa = PBXTargetBookmark;
+		trg = 29B97326FDCFA39411CA2CEA;
 	};
 	3F579AB40645EEDF007C6F93 = {
 		fRef = DA206CF3015C4E8B03C91932;
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 426";
 		rLen = 0;
-		rLoc = 18393;
+		rLoc = 20376;
 		rType = 0;
 		vrLen = 1839;
 		vrLoc = 0;
@@ -813,15 +1159,35 @@
 		vrLen = 281;
 		vrLoc = 0;
 	};
-	3F7037A506B335A800A80064 = {
+	3F5F093C06B4953400A80064 = {
+		fRef = F586ED0005CB576C017C67C1;
+		isa = PBXTextBookmark;
+		name = "preferences.applescript: 144";
+		rLen = 0;
+		rLoc = 6066;
+		rType = 0;
+		vrLen = 1949;
+		vrLoc = 4117;
+	};
+	3F6587EE06CE7003007C6F9A = {
 		fRef = DA206CF3015C4E8B03C91932;
 		isa = PBXTextBookmark;
-		name = "MacGPSBabel.applescript: 301";
+		name = "MacGPSBabel.applescript: 23";
 		rLen = 0;
-		rLoc = 13627;
+		rLoc = 838;
 		rType = 0;
-		vrLen = 1634;
-		vrLoc = 12662;
+		vrLen = 1839;
+		vrLoc = 0;
+	};
+	3F6587EF06CE7003007C6F9A = {
+		fRef = DA206CF3015C4E8B03C91932;
+		isa = PBXTextBookmark;
+		name = "MacGPSBabel.applescript: 654";
+		rLen = 0;
+		rLoc = 28253;
+		rType = 0;
+		vrLen = 1669;
+		vrLoc = 18774;
 	};
 	3F7037A606B335A800A80064 = {
 		fRef = 089C165DFE840E0CC02AAC07;
@@ -858,7 +1224,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 301";
 		rLen = 0;
-		rLoc = 13627;
+		rLoc = 14214;
 		rType = 0;
 		vrLen = 1634;
 		vrLoc = 12662;
@@ -890,7 +1256,7 @@
 		rLen = 0;
 		rLoc = 5321;
 		rType = 0;
-		vrLen = 1911;
+		vrLen = 1874;
 		vrLoc = 4192;
 	};
 	3F9319EA06AF4FA500A80064 = {
@@ -898,7 +1264,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 426";
 		rLen = 0;
-		rLoc = 18393;
+		rLoc = 20376;
 		rType = 0;
 		vrLen = 1594;
 		vrLoc = 15551;
@@ -922,7 +1288,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 426";
 		rLen = 0;
-		rLoc = 18393;
+		rLoc = 20376;
 		rType = 0;
 		vrLen = 1839;
 		vrLoc = 0;
@@ -934,7 +1300,7 @@
 		rLen = 0;
 		rLoc = 6066;
 		rType = 0;
-		vrLen = 1911;
+		vrLen = 1874;
 		vrLoc = 4192;
 	};
 	3FB94847069C744B00A80064 = {
@@ -942,7 +1308,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 426";
 		rLen = 0;
-		rLoc = 18393;
+		rLoc = 20376;
 		rType = 0;
 		vrLen = 1955;
 		vrLoc = 350;
@@ -954,7 +1320,7 @@
 		rLen = 0;
 		rLoc = 6066;
 		rType = 0;
-		vrLen = 1911;
+		vrLen = 1874;
 		vrLoc = 4192;
 	};
 	3FB94849069C744B00A80064 = {
@@ -962,7 +1328,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 426";
 		rLen = 0;
-		rLoc = 18393;
+		rLoc = 20376;
 		rType = 0;
 		vrLen = 1594;
 		vrLoc = 15551;
@@ -992,7 +1358,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 606";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 1782;
 		vrLoc = 9262;
@@ -1056,7 +1422,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 564";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 1497;
 		vrLoc = 0;
@@ -1096,7 +1462,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 328";
 		rLen = 0;
-		rLoc = 16002;
+		rLoc = 17059;
 		rType = 0;
 		vrLen = 1498;
 		vrLoc = 0;
@@ -1186,7 +1552,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 426";
 		rLen = 0;
-		rLoc = 18393;
+		rLoc = 20376;
 		rType = 0;
 		vrLen = 2463;
 		vrLoc = 1202;
@@ -1304,7 +1670,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 568";
 		rLen = 0;
-		rLoc = 25534;
+		rLoc = 27531;
 		rType = 0;
 		vrLen = 1904;
 		vrLoc = 23011;
@@ -1362,7 +1728,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 554";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 1511;
 		vrLoc = 14316;
@@ -1396,7 +1762,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 556";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 1495;
 		vrLoc = 0;
@@ -1416,7 +1782,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 245";
 		rLen = 0;
-		rLoc = 12962;
+		rLoc = 13549;
 		rType = 0;
 		vrLen = 1811;
 		vrLoc = 11141;
@@ -1436,7 +1802,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 245";
 		rLen = 0;
-		rLoc = 12962;
+		rLoc = 13549;
 		rType = 0;
 		vrLen = 1795;
 		vrLoc = 11141;
@@ -1456,7 +1822,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 245";
 		rLen = 0;
-		rLoc = 12962;
+		rLoc = 13549;
 		rType = 0;
 		vrLen = 1773;
 		vrLoc = 9896;
@@ -1476,7 +1842,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 528";
 		rLen = 1109;
-		rLoc = 23829;
+		rLoc = 25826;
 		rType = 0;
 		vrLen = 2083;
 		vrLoc = 20945;
@@ -1496,7 +1862,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 543";
 		rLen = 543;
-		rLoc = 24939;
+		rLoc = 26936;
 		rType = 0;
 		vrLen = 2083;
 		vrLoc = 20945;
@@ -1516,7 +1882,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 557";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 1436;
 		vrLoc = 21697;
@@ -1530,7 +1896,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 564";
 		rLen = 161;
-		rLoc = 25535;
+		rLoc = 27532;
 		rType = 0;
 		vrLen = 1973;
 		vrLoc = 22760;
@@ -1550,7 +1916,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 577";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 1728;
 		vrLoc = 16243;
@@ -1570,7 +1936,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 577";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 1774;
 		vrLoc = 13079;
@@ -1610,7 +1976,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 318";
 		rLen = 0;
-		rLoc = 16002;
+		rLoc = 17059;
 		rType = 0;
 		vrLen = 1766;
 		vrLoc = 13015;
@@ -1640,7 +2006,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 556";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 1497;
 		vrLoc = 0;
@@ -1670,7 +2036,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 572";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 2257;
 		vrLoc = 782;
@@ -1690,7 +2056,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 572";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 2240;
 		vrLoc = 332;
@@ -1722,7 +2088,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 577";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 1728;
 		vrLoc = 16243;
@@ -1800,7 +2166,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 562";
 		rLen = 0;
-		rLoc = 25482;
+		rLoc = 27479;
 		rType = 0;
 		vrLen = 1973;
 		vrLoc = 22760;
@@ -1814,7 +2180,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 518";
 		rLen = 0;
-		rLoc = 22694;
+		rLoc = 24691;
 		rType = 0;
 		vrLen = 1965;
 		vrLoc = 21930;
@@ -1838,7 +2204,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 575";
 		rLen = 0;
-		rLoc = 26256;
+		rLoc = 28253;
 		rType = 0;
 		vrLen = 2154;
 		vrLoc = 21908;
@@ -1850,7 +2216,7 @@
 		rLen = 0;
 		rLoc = 4270;
 		rType = 0;
-		vrLen = 1911;
+		vrLen = 1874;
 		vrLoc = 4192;
 	};
 }
