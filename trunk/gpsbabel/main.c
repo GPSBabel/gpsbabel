@@ -171,6 +171,10 @@ main(int argc, char *argv[])
 					? argv[argn]+2 : argv[++argn];
 				global_opts.debug_level = atoi(optarg);
 				break;
+				/*
+				 * DOS-derived systems will need to escape
+				 * this as -^^.
+				 */
 			case '^':
 				disp_formats();
 				exit(0);
