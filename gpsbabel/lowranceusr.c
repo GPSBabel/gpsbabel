@@ -285,6 +285,7 @@ lowranceusr_waypt_pr(const waypoint *wpt)
 	short int WayptType;
 	char *name;
 	char *comment;
+	int alt = wpt->altitude;
 
 	/* our personal waypoint counter */
 	my_fwrite2(&waypt_out_count, file_out);
@@ -294,7 +295,7 @@ lowranceusr_waypt_pr(const waypoint *wpt)
 	my_fwrite4(&Lat, file_out);
 	Lon = lon_deg_to_mm(wpt->longitude);
 	my_fwrite4(&Lon, file_out);
-	my_fwrite4(&wpt->altitude, file_out);
+	my_fwrite4(&alt, file_out);
 
 	/* Try and make sure we have a name */
 	if ((! wpt->shortname) || global_opts.synthesize_shortnames) {
