@@ -327,7 +327,6 @@ vecs_t vec_list[] = {
                 "vcf",
                 "Vcard Output (for iPod)",
                 "vcf",
-                NULL
         },
 	{
 		NULL,
@@ -587,6 +586,18 @@ disp_v1(ff_type t)
 	}
 	printf("%s\t", tstring);
 }
+
+static void
+disp_v2(ff_vecs_t *v)
+{
+	int i;
+	for (i = 0; i < 3; i++) {
+		putchar(v->cap[i] & ff_cap_read  ? 'r' : '-');
+		putchar(v->cap[i] & ff_cap_write  ? 'w' : '-');
+	}
+	putchar('\t');
+}
+
 /*
  *  Display the available formats in a format that's easy to machine
  *  parse.   Typically invoked by programs like graphical wrappers to
@@ -601,6 +612,7 @@ disp_formats(int version)
 	switch(version) {
 	case 0:
 	case 1:
+	case 2:
 		for (vec = vec_list; vec->vec; vec++) {
 			/* Version 1 displays type at front of all types.
 			 * Version 0 skips internal types.
@@ -610,6 +622,9 @@ disp_formats(int version)
 			} else {
 				if (vec->vec->type == ff_type_internal)
 					continue;
+			}
+			if (version >= 2) {
+				disp_v2(vec->vec);
 			}
 			printf("%s\t%s\t%s\n", vec->name, 
 				vec->extension? vec->extension : "", 
