@@ -246,7 +246,7 @@ track_read(void)
 
 	ntracks = GPS_Command_Get_Track(portname, &array);
 
-	if ( ntracks == 0 )
+	if ( ntracks <= 0 )
 		return;
 
 	for(i = 0; i < ntracks; i++) {
@@ -306,15 +306,13 @@ route_read(void)
 	int32 nroutepts;
 	int i;
 	GPS_PWay *array;
+  route_head *rte_head;
 
 	nroutepts = GPS_Command_Get_Route(portname, &array);
 
 //	fprintf(stderr, "Routes %d\n", (int) nroutepts);
 #if 1
 	for (i = 0; i < nroutepts; i++) {
-		route_head *rte_head;
-		waypoint * wpt_tmp;
-
 		if (array[i]->isrte) {
 			char *csrc = NULL;
 			/* What a horrible API has libjeeps for making this
@@ -325,18 +323,16 @@ route_read(void)
 				case 202: csrc = array[i]->rte_ident; break;
 				default: break;
 			}
-		rte_head = route_head_alloc();
-		route_add_head(rte_head);
-		if (csrc) {
-			rte_head->rte_name = xstrdup(csrc);
-		}
-		;
-		
+      rte_head = route_head_alloc();
+      route_add_head(rte_head);
+      if (csrc) {
+        rte_head->rte_name = xstrdup(csrc);
+      }
 		} else { 
 			if (array[i]->islink)  {
 				continue; 
 			} else {
-				wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
+				waypoint *wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
 				wpt_tmp->latitude = array[i]->lat;
 				wpt_tmp->longitude = array[i]->lon;
 				wpt_tmp->shortname = array[i]->ident;

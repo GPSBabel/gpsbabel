@@ -1,28 +1,22 @@
 /* 
-    Support for Keyhole "kml" format.
+	Support for Keyhole "kml" format.
 
-    STATUS: 03/15/2005 - This file is kind of sketchy and was based
-	on examining sample KML data files found on the net.   I do now
-	have the full formal  spec from Keyhole, but have not revisited
-	this file with that information yet.   I'm checking it in becuase
-	there have been a couple of requests for KML support.   RJL
+	Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
+	Updates by Andrew Kirmse, akirmse at google.com
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
 #include "defs.h"
@@ -87,13 +81,13 @@ void wpt_e(const char *args, const char **unused)
 #if 0
 void wpt_name_s(const char *args, const char **attrv)
 {
-        const char **avp = &attrv[0];
-        while (*avp) {
-                if (0 == strcmp(avp[0], "id")) {
-                        wpt_tmp->shortname = xstrdup(avp[1]);
-                }
-                avp+=2;
-        }
+	    const char **avp = &attrv[0];
+	    while (*avp) {
+	            if (0 == strcmp(avp[0], "id")) {
+	                    wpt_tmp->shortname = xstrdup(avp[1]);
+	            }
+	            avp+=2;
+	    }
 }
 #endif
 
@@ -145,60 +139,164 @@ kml_wr_deinit(void)
 	fclose(ofd);
 }
 
-static void
-kml_waypt_pr(const waypoint *waypointp)
+static void kml_output_timestamp(const waypoint *waypointp)
 {
-	fputs("    <Placemark>\n", ofd);
-//	write_optional_xml_entity(ofd, "\t", "name", waypointp->shortname);
-	write_optional_xml_entity(ofd, "\t", "name", waypointp->description);
-
-	fprintf(ofd, "\t<description>");
-#if 0
-        if (waypointp->description) {
-		char *odesc = xml_entitize(waypointp->description);
-		fputs(odesc, ofd);
-		xfree(odesc);
+	if (waypointp->creation_time) {
+	fprintf(ofd, "\t  <TimeInstant>\n");
+	fprintf(ofd, "\t    ");
+		xml_write_time(ofd, waypointp->creation_time, "timePosition");
+	fprintf(ofd, "\t  </TimeInstant>\n");
 	}
-#endif
+}
+
+/*
+ * WAYPOINTS
+ */
+
+static void kml_waypt_pr(const waypoint *waypointp)
+{
+	fprintf(ofd, "\t<Placemark>\n");
+	write_optional_xml_entity(ofd, "\t", "name", waypointp->description);
+	fprintf(ofd, "\t  <styleUrl>#waypoint</styleUrl>\n");
+
+	// Description
 	if (waypointp->url) {
 		char * odesc = xml_entitize(waypointp->url);
+		fprintf(ofd, "\t  <description>");
 		fputs("\n", ofd);
 		fputs(odesc, ofd);
 		xfree(odesc);
+		fprintf(ofd, "\n\t</description>\n");
 	}
-	fprintf(ofd, "\n\t</description>\n");
-//	write_optional_xml_entity(ofd, "\t", "description", waypointp->description);	
-	fprintf(ofd, "\t<styleUrl>root://styleMaps#default?iconId=0x400</styleUrl>\n");
-	fprintf(ofd, "\t<Point>\n");
-	fprintf(ofd, "\t\t<coordinates>%f,%f,%f</coordinates>\n",
-		waypointp->longitude, waypointp->latitude, waypointp->altitude == unknown_alt ? 0.0 : waypointp->altitude);
-	fprintf(ofd, "\t</Point>\n");
-#if 0
-	fprintf(ofd, "<coord lat=\"%lf\" lon=\"%lf\"/>",
-		waypointp->latitude,
-		waypointp->longitude);
-	fprintf(ofd, "\n");
 
-	if (waypointp->icon_descr) {
-		fprintf(ofd, "<type>%s</type>\n", deficon ? deficon : waypointp->icon_descr);
-	}
-	if (waypointp->url) {
-		tmp = xml_entitize(waypointp->url);
-		fprintf(ofd, "<link text =\"Cache Details\">%s</link>\n", 
-			tmp);
-		xfree(tmp);
-	}
-#endif
-	fprintf(ofd, "    </Placemark>\n");
+	// Location
+	fprintf(ofd, "\t  <Point>\n");
+	fprintf(ofd, "\t\t<coordinates>%f,%f,%f</coordinates>\n",
+		waypointp->longitude, waypointp->latitude, 
+		waypointp->altitude == unknown_alt ? 0.0 : waypointp->altitude);
+	fprintf(ofd, "\t  </Point>\n");
+
+	// Timestamp
+	kml_output_timestamp(waypointp);
+
+	fprintf(ofd, "\t</Placemark>\n");
 }
 
-void
-kml_write(void)
+/*
+ * TRACKPOINTS
+ */
+
+static void kml_track_hdr(const route_head *header) 
+{
+	fprintf(ofd, "<Folder>\n");
+	fprintf(ofd, "  <visibility>1</visibility>\n");
+	write_optional_xml_entity(ofd, "  ", "name", header->rte_name);
+	write_optional_xml_entity(ofd, "  ", "desc", header->rte_desc);
+}
+
+static void kml_track_disp(const waypoint *waypointp)
+{
+	fprintf(ofd, "\t<Placemark>\n");
+	fprintf(ofd, "\t  <styleUrl>#track</styleUrl>\n");
+	fprintf(ofd, "\t  <Point>\n");
+	fprintf(ofd, "\t    <coordinates>%f,%f,%f</coordinates>\n",
+		waypointp->longitude, waypointp->latitude, 
+	      waypointp->altitude == unknown_alt ? 0.0 : waypointp->altitude);
+	fprintf(ofd, "\t  </Point>\n");
+
+	// Timestamp
+	kml_output_timestamp(waypointp);
+
+	fprintf(ofd, "\t</Placemark>\n");
+}
+
+static void kml_track_tlr(const route_head *header) 
+{
+	fprintf(ofd, "</Folder>\n");
+}
+
+/*
+ * ROUTES
+ */
+
+static void kml_route_hdr(const route_head *header) 
+{
+	fprintf(ofd, "<Folder>\n");
+	fprintf(ofd, "  <visibility>1</visibility>\n");
+	write_optional_xml_entity(ofd, "  ", "name", header->rte_name);
+	write_optional_xml_entity(ofd, "  ", "desc", header->rte_desc);
+}
+
+static void kml_route_disp(const waypoint *waypointp)
+{
+	fprintf(ofd, "\t<Placemark>\n");
+	fprintf(ofd, "\t  <styleUrl>#route</styleUrl>\n");
+	fprintf(ofd, "\t  <Point>\n");
+	fprintf(ofd, "\t    <coordinates>%f,%f,%f</coordinates>\n",
+		waypointp->longitude, waypointp->latitude, 
+		waypointp->altitude == unknown_alt ? 0.0 : waypointp->altitude);
+	fprintf(ofd, "\t  </Point>\n");
+	write_optional_xml_entity(ofd, "\t", "name", waypointp->description);
+
+	// Timestamp
+	kml_output_timestamp(waypointp);
+
+	fprintf(ofd, "\t</Placemark>\n");
+}
+
+static void kml_route_tlr(const route_head *header) 
+{
+	fprintf(ofd, "</Folder>\n");
+}
+
+static void kml_write_bitmap_style(const char *style, int bitmap, 
+	                               int x, int y, int width, int height)
+{
+	fprintf(ofd, "<Style id=\"%s\">\n", style);
+	fprintf(ofd, "<icon xlink:href=\"root://icons/bitmap-%d.png?x=%d&amp;y=%d&amp;w=%d&amp;h=%d\">\n",
+	      bitmap, x, y, width, height);
+	fprintf(ofd, "  root://icons/bitmap-%d.png?x=%d&amp;y=%d&amp;w=%d&amp;h=%d\n",
+	      bitmap, x, y, width, height);
+	fprintf(ofd, "</icon>\n");
+	fprintf(ofd, "</Style>\n");
+}  
+
+void kml_write(void)
 {
 	fprintf(ofd, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+	fprintf(ofd, "<Document xmlns:xlink=\"http://www.w3/org/1999/xlink\">\n");
+	// TODO(akirmse): Put in device name, maybe time?
+	fprintf(ofd, "<name>GPS device</name>\n");
+	fprintf(ofd, "<visibility>1</visibility>\n");
+
+	// Style settings for bitmaps
+	kml_write_bitmap_style("track", 4, 128, 0, 32, 32);
+	kml_write_bitmap_style("waypoint", 4, 160, 0, 32, 32);
+	kml_write_bitmap_style("route", 4, 160, 0, 32, 32);
+
 	fprintf(ofd, "<Folder>\n");
+	fprintf(ofd, "<name>Waypoints</name>\n");
+	fprintf(ofd, "<visibility>1</visibility>\n");
+
 	waypt_disp_all(kml_waypt_pr);
+
 	fprintf(ofd, "</Folder>\n");
+
+	// Output trackpoints
+	fprintf(ofd, "<Folder>\n");
+	fprintf(ofd, "<name>Tracks</name>\n");
+	fprintf(ofd, "<visibility>1</visibility>\n");
+	track_disp_all(kml_track_hdr, kml_track_tlr, kml_track_disp);
+	fprintf(ofd, "</Folder>\n");
+  
+	// Output routes
+	fprintf(ofd, "<Folder>\n");
+	fprintf(ofd, "<name>Routes</name>\n");
+	fprintf(ofd, "<visibility>1</visibility>\n");
+	route_disp_all(kml_route_hdr, kml_route_tlr, kml_route_disp);
+	fprintf(ofd, "</Folder>\n");
+
+	fprintf(ofd, "</Document>\n");
 }
 
 ff_vecs_t kml_vecs = {
