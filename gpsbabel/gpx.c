@@ -77,6 +77,7 @@ typedef enum {
 	tt_wpt_time,
 	tt_wpt_type,
 	tt_wpt_urlname,
+	tt_cache_name,
 	tt_cache_container,
 	tt_cache_type,
 	tt_cache_difficulty,
@@ -144,6 +145,7 @@ tag_mapping tag_path_map[] = {
 	{ tt_wpt_urlname, 0, "/gpx/wpt/urlname" },
 	{ tt_wpt_sym, 0, "/gpx/wpt/sym" },
 	{ tt_wpt_type, 1, "/gpx/wpt/type" },
+	{ tt_cache_name, 1, "/gpx/wpt/groundspeak:cache/groundspeak:name" },
 	{ tt_cache_container, 1, "/gpx/wpt/groundspeak:cache/groundspeak:container" },
 	{ tt_cache_type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:type" },
 	{ tt_cache_difficulty, 1, "/gpx/wpt/groundspeak:cache/groundspeak:difficulty" },
@@ -597,6 +599,13 @@ gpx_end(void *data, const char *el)
 		logpoint_ct = 0;
 		cur_tag = NULL;
 		wpt_tmp = NULL;
+		break;
+	case tt_cache_name:
+		if (gsshortnames) {
+			if (wpt_tmp->notes)
+				xfree(wpt_tmp->notes);
+			wpt_tmp->notes = xstrdup(cdatastrp);
+		}
 		break;
 	case tt_cache_container:
 		wpt_tmp->gc_data.container = gs_mkcont(cdatastrp);
