@@ -1206,7 +1206,7 @@ static void GPS_D108_Get(GPS_PWay *way, UC *s)
     (*way)->lon = GPS_Math_Semi_To_Deg(GPS_Util_Get_Int(p));
     p+=sizeof(int32);
     
-    (*way)->alt = (int32)GPS_Util_Get_Float(p);
+    (*way)->alt = GPS_Util_Get_Float(p);
     p+=sizeof(float);
     (*way)->dpth = (int32)GPS_Util_Get_Float(p);
     p+=sizeof(float);
@@ -1270,7 +1270,7 @@ static void GPS_D109_Get(GPS_PWay *way, UC *s)
     (*way)->lon = GPS_Math_Semi_To_Deg(GPS_Util_Get_Int(p));
     p+=sizeof(int32);
     
-    (*way)->alt = (int32)GPS_Util_Get_Float(p);
+    (*way)->alt = GPS_Util_Get_Float(p);
     p+=sizeof(float);
     (*way)->dpth = (int32)GPS_Util_Get_Float(p);
     p+=sizeof(float);
@@ -1953,7 +1953,6 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len)
     p+=sizeof(int32);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lon));
     p+=sizeof(int32);
-
     GPS_Util_Put_Float(p,way->alt);
     p+=sizeof(float);
     GPS_Util_Put_Float(p,way->dpth);
