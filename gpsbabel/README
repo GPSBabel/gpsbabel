@@ -343,6 +343,15 @@ THE FORMATS
         Information about and sketchy code to implement this file format
         were provided by Eric Cloninger.
 
+    GpilotS
+
+    	This is a Palm/OS file format ofr GPilotS.   It was tested against
+	version 6.2.
+
+	http://www.cru.fr/perso/cc/GPilotS/
+
+	Neither tracks nor routes are supported at this time.
+
     s_and_t
 
 	This is a CSV format for Microsoft Streets and Trips.   Detailed
