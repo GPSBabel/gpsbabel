@@ -29,6 +29,13 @@ static const char *portname;
 static void
 rw_init(const char *fname, const char *opts)
 {
+	if (global_opts.debug_level > 1)  {
+		GPS_Enable_Warning();
+		GPS_Enable_User();
+		GPS_Enable_Diagnose();
+	}
+	GPS_Enable_Error();
+
         if (GPS_Init(fname) < 0) {
 		fatal(MYNAME ":Can't init %s\n", fname);
 	}
@@ -58,7 +65,11 @@ data_read(void)
 		wpt_tmp->description = way[i]->cmnt;
 		wpt_tmp->position.longitude.degrees = way[i]->lon;
 		wpt_tmp->position.latitude.degrees = way[i]->lat;
-		wpt_tmp->position.altitude.altitude_meters = way[i]->alt;
+		if (way[i]->alt == (float) (1<<31)) {
+			wpt_tmp->position.altitude.altitude_meters = unknown_alt;
+		} else {
+			wpt_tmp->position.altitude.altitude_meters = way[i]->alt;
+		}
 		
 		waypt_add(wpt_tmp);
 	}
