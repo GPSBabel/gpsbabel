@@ -385,6 +385,10 @@ THE FORMATS
 	to text so it can be pulled into a spreadsheet or manipulated
 	with text processing tools.
 
+    tabsep
+
+	Dumps all fields in a traditional Unix tab separated style.
+
     mapconverter
 
 	Mapconverter is a format this is read by Mapopolis.com's mapconverter

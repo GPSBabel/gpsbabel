@@ -29,6 +29,7 @@
 /* macros */
 #define LAT_DIR(a) a < 0.0 ? 'S' : 'N'
 #define LON_DIR(a) a < 0.0 ? 'W' : 'E'
+#define NONULL(a) a ? a : ""
 
 /* convert excel time (days since 1900) to time_t and back again */
 #define EXCEL_TO_TIMET(a) ((a - 25569.0) * 86400.0)
@@ -681,10 +682,10 @@ xcsv_waypt_pr(const waypoint *wpt)
 		strcpy(buff, "\"\"");
         } else
         if (strcmp(fmp->key, "URL_LINK_TEXT") == 0) {
-            sprintf(buff, fmp->printfc, wpt->url_link_text);
+            sprintf(buff, fmp->printfc, NONULL(wpt->url_link_text));
         } else
         if (strcmp(fmp->key, "ICON_DESCR") == 0) {
-            sprintf(buff, fmp->printfc, wpt->icon_descr);
+            sprintf(buff, fmp->printfc, NONULL(wpt->icon_descr));
         } else
 
         /* LATITUDE CONVERSION***********************************************/

@@ -256,6 +256,10 @@ The fields used by the XCSV parser are as follows:
  o LON_DECIMALDIR / LON_DIRDECIMAL
    Same as LAT_DECIMALDIR / LAT_DIRDECIMAL except LON_ defines LONGITUDE.
 
+ o LAT_DIR / LON_DIR
+   LAT_DIR returns the single character 'N' or 'S' depending on the 
+   hemisphere of the latitude.  LON_DIR returns 'E' or 'W' depending on
+   the hemisphere of the longitude.
 
  o ALT_FEET
    ALT_FEET is the position's ALTITUDE in FEET.  This value is treated as 

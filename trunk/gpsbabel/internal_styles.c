@@ -456,6 +456,54 @@ static char s_and_t[] =
 "IFIELD	URL, \"\", \"%s\"			# URL\n"
 "IFIELD	IGNORE, \"\", \"\"			# Holder for Geocache Type\n"
 ;
+static char tabsep[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: Dumps all fields in a traditional Unix tab separated style\n"
+"#\n"
+"# The order of the fields (with the exception of LAT_DIR/LON_DIR) was\n"
+"# the same as documented in README.style when this format was created.\n"
+"# LAT_DIR/LON_DIR were undocumented, so I stuck them at the end of the\n"
+"# other lat/lon fields.\n"
+"#\n"
+"# However, please add any new gpsbabel fields to the end (to avoid\n"
+"# upsetting existing applications) regardless of where they land in\n"
+"# the README.style documentation.\n"
+"#\n"
+
+"DESCRIPTION		All database fields on one tab-separated line\n"
+
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		TAB\n"
+"RECORD_DELIMITER	NEWLINE\n"
+"BADCHARS		TAB\n"
+
+"#\n"
+"# INDIVIDUAL DATA FIELDS:\n"
+"#\n"
+"IFIELD	INDEX, \"\", \"%d\"\n"
+"IFIELD	SHORTNAME, \"\", \"%s\"\n"
+"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
+"IFIELD	NOTES, \"\", \"%s\"\n"
+"IFIELD	URL, \"\", \"%s\" 		\n"
+"IFIELD	URL_LINK_TEXT, \"\", \"%s\"\n"
+"IFIELD	ICON_DESCR, \"\", \"%s\"\n"
+"IFIELD	LAT_DECIMAL, \"\", \"%f\"\n"
+"IFIELD	LON_DECIMAL, \"\", \"%f\"\n"
+"IFIELD	LAT_INT32DEG, \"\", \"%ld\"\n"
+"IFIELD	LON_INT32DEG, \"\", \"%ld\"\n"
+"IFIELD	LAT_DECIMALDIR, \"\", \"%f/%c\"\n"
+"IFIELD	LON_DECIMALDIR, \"\", \"%f/%c\"\n"
+"IFIELD	LAT_DIRDECIMAL, \"\", \"%c/%f\"\n"
+"IFIELD	LON_DIRDECIMAL, \"\", \"%c/%f\"\n"
+"IFIELD	LAT_DIR, \"\", \"%c\"\n"
+"IFIELD	LON_DIR, \"\", \"%c\"\n"
+"IFIELD	ALT_FEET, \"\", \"%fF\"\n"
+"IFIELD	ALT_METERS, \"\", \"%fM\"\n"
+"IFIELD	EXCEL_TIME, \"\", \"%f\"\n"
+"IFIELD	TIMET_TIME, \"\", \"%ld\"\n"
+;
 static char xmap[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -519,4 +567,4 @@ static char xmapwpt[] =
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "s_and_t", s_and_t } , { "ozi", ozi } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "s_and_t", s_and_t } , { "ozi", ozi } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
