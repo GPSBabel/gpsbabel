@@ -5,6 +5,8 @@ FMTS=magproto.o gpx.o geo.o gpsman.o mapsend.o mapsource.o \
 
 OBJS=main.o queue.o route.o waypt.o util.o vecs.o $(FMTS)
 
+all: gpsbabel
+
 gpsbabel: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o gpsbabel -lexpat -lm
 
