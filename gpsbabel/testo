@@ -496,4 +496,11 @@ ${PNAME} -t -i gpl -f reference/track/webpark1.gpl -o gpl -F ${TMPDIR}/gpl1.gpl
 ${PNAME} -t -i gpl -f ${TMPDIR}/gpl1.gpl -o gpx -F ${TMPDIR}/gpl2.gpx
 ${DIFF} ${TMPDIR}/gpl1.gpx ${TMPDIR}/gpl2.gpx
 
+#
+# NetStumbler Summary File (read-only)
+#
+rm -f ${TMPDIR}/netstumbler.mps
+${PNAME} -i netstumbler -f reference/netstumbler.txt -o mapsource -F ${TMPDIR}/netstumbler.mps
+compare ${TMPDIR}/netstumbler.mps reference/netstumbler.mps
+
 exit 0
