@@ -292,6 +292,51 @@ THE FORMATS
 	http://vip.hyperusa.com/~dougs/geocachingdb/geocachingdb.htm
 
 
+DATA FILTERS
+
+	GPSBabel supports data filtering.  Data filters are invoked from
+	the command line via the '-x' option.  It should be noted that
+	data filters are invoked in the order they appear on the command
+	line and can be used in intermittently between several variations
+	of input and output functions.  It should also be noted that
+	filtering data from different input types can sometimes produce
+	undesirable results due to differences in the native data formats.
+
+
+    POSITION
+
+	The position filter is designed to remove points based on their
+	proximity to each other.  Distances can be passed on the command 
+	line by passing the distance=XXX option to the filter.  Distance
+	options may be expressed in feet (distance=3f) or meters 
+	(distance=1m).  The default is zero feet, essentially a duplicate
+	position.
+
+	For example:
+
+	gpsbabel -i geo -f 1.loc -f 2.loc -x position,distance=1f \
+	         -o mapsend -F 3.wpt
+
+	would remove multiple points that are within 1 foot of each other,
+	leaving just one.
+
+
+    DUPLICATE
+
+	The duplicate filter is designed to remove duplicate points based
+	on their shortname (traditionally a waypoint's name on the GPS
+	receiver), and/or their location (to a precision of 6 decimals).
+	This filter supports two options, "shortname" and "location".
+	Generally, at least one of these options is REQUIRED.  For example:
+
+	gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname \
+	         -o gpx -F merged_with_no_dupes.gpx
+
+	would remove points that have duplicate shortnames *AND* duplicate
+	locations.  The result would be a GPX file that more than likely
+	contains only unique points and point data.
+
+
 COMMON USAGE
 
 	Invocation was meant to be flexible.   Unfortunately, that can

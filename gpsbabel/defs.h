@@ -174,6 +174,10 @@ typedef void (*ff_read) (void);
 typedef void (*ff_write) (void);
 char * get_option(const char *iarglist, const char *argname);
 
+typedef void (*filter_init) (char const *);
+typedef void (*filter_process) (void);
+typedef void (*filter_deinit) (void);
+
 void fprintdms(FILE *, const coord *, int);
 
 typedef void (*waypt_cb) (const waypoint *);
@@ -218,6 +222,12 @@ typedef struct ff_vecs {
 	arglist_t *args;
 } ff_vecs_t;
 
+typedef struct filter_vecs {
+	filter_init f_init;
+	filter_process f_process;
+	filter_deinit f_deinit;
+} filter_vecs_t;
+
 void waypt_init(void);
 void route_init(void);
 void waypt_disp(const waypoint *);
@@ -226,10 +236,15 @@ void fatal(const char *, ...)
 	__attribute__ ((__format__ (__printf__, 1, 2)))
 #endif
 	;
+
 ff_vecs_t *find_vec(char *, char **);
 void disp_vecs(void);
 void disp_formats(void);
 void printposn(const coord *c, int is_lat);
+
+filter_vecs_t * find_filter_vec(char *, char **);
+void disp_filters(void);
+void disp_filter_vecs(void);
 
 void *xcalloc(size_t nmemb, size_t size);
 void *xmalloc(size_t size);

@@ -6,6 +6,8 @@ FMTS=magproto.o gpx.o geo.o gpsman.o mapsend.o mapsource.o \
 	psp.o mxf.o holux.o garmin.o ozi.o tmpro.o dna.o tpg.o gpsdrive.o \
 	xcsv.o xmapwpt.o gcdb.o
 
+FILTERS=position.o duplicate.o
+
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
 	jeeps/gpsprot.o jeeps/gpsread.o \
@@ -16,8 +18,8 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 
 COLDSYNC=coldsync/util.o coldsync/pdb.o
 
-OBJS=main.o queue.o route.o waypt.o util.o vecs.o mkshort.o csv_util.o \
-	$(COLDSYNC) $(GARMIN) $(JEEPS) $(FMTS)
+OBJS=main.o queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o csv_util.o \
+	$(COLDSYNC) $(GARMIN) $(JEEPS) $(FMTS) $(FILTERS)
 
 .c.o:
 	$(CC) -c $(CFLAGS) $< -o $@
@@ -94,6 +96,8 @@ tpg.o: tpg.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 util.o: util.c defs.h queue.h
 vecs.o: vecs.c defs.h queue.h
+filter_vecs.o: filter_vecs.c defs.h queue.h
+position.o:position.c defs.h
 waypt.o: waypt.c defs.h queue.h
 xcsv.o: xcsv.c defs.h queue.h csv_util.h
 xmapwpt.o: xmapwpt.c defs.h queue.h csv_util.h
