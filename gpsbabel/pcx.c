@@ -25,9 +25,15 @@
 static FILE *file_in;
 static FILE *file_out;
 static void *mkshort_handle;
+static char *deficon = "Waypoint";
 
 #define MYNAME "PCX"
 
+static
+arglist_t pcx_args[] = {
+	{"deficon", &deficon, "Default icon name"},
+	{0, 0, 0}
+};
 
 static void
 rd_init(const char *fname, const char *args)
@@ -100,7 +106,7 @@ gpsutil_disp(const waypoint *wpt)
 {
 	double lon,lat;
 	signed int ilon, ilat;
-	const char *icon_token = "0";
+	int icon_token = 0;
 	char tbuf[1024];
 	char *tp = tbuf;
 	time_t tm = wpt->creation_time;
@@ -118,7 +124,13 @@ gpsutil_disp(const waypoint *wpt)
 		tp++;
 	}
 
-	fprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5d %-40.40s %5e  %s\n",
+	icon_token = mps_find_icon_number_from_desc(deficon);
+	if (get_cache_icon(wpt)) {
+		icon_token = mps_find_icon_number_from_desc(get_cache_icon(wpt));
+	}
+
+
+	fprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5d %-40.40s %5e  %d\n",
                 global_opts.synthesize_shortnames ?
                         mkshort(mkshort_handle, wpt->description) : 
 			wpt->shortname,
@@ -159,4 +171,5 @@ ff_vecs_t pcx_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
+	pcx_args
 };
