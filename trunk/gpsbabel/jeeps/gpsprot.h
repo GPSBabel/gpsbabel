@@ -88,6 +88,7 @@ int32 gps_route_transfer;
  */
 #define pA300 300
 #define pA301 301
+#define pA302 302
 int32 gps_trk_transfer;
 
 /*
@@ -171,6 +172,7 @@ int32 gps_rte_link_type;
  */
 #define pD300 300
 #define pD301 301
+#define pD302 302
 int32 gps_trk_type;
 
 
