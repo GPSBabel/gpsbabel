@@ -668,6 +668,9 @@ mag_rd_init(const char *portname, const char *args)
 	}
 
 	terminit(portname);
+	if (!mkshort_handle) {
+		mkshort_handle = mkshort_new_handle();
+	}
 
 	if (!noack)
 		mag_handon();
@@ -715,8 +718,10 @@ mag_wr_init(const char *portname, const char *args)
 	fstat(fileno(magfile_out), &sbuf);
 	is_file = S_ISREG(sbuf.st_mode);
 #endif
-	mkshort_handle = mkshort_new_handle();
 
+	if (!mkshort_handle) {
+		mkshort_handle = mkshort_new_handle();
+	}
 	if (is_file) {
 		magfile_out = fopen(portname, "w+b");
 		if (magfile_out == NULL) {
