@@ -16,6 +16,18 @@ THE SOLUTION
 	so far have taken under 200 lines of reasonable ISO C so they can
 	be stamped out pretty trivially. 
 
+BUILDING IT
+	
+	The code should be compilable on any system with ISO C89 compilers.
+	It's been tested on UnixWare, OpenServer, OS/X, Linux, Solaris, and
+	a variety of processors and compilers.
+	
+	Libexpat is required.   If you get errors about expat.h being
+	missing, you must either edit the Makefile to tell the compiler
+	where it is or install it in a sensible place.   Exapt can be 
+	downloaded from http://expat.sourceforge.net and is part of Apache
+	so it's very portable.
+
 THE FORMATS
 
     GPX 
