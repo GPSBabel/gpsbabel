@@ -46,9 +46,9 @@ install:
 
 leaktest:
 	make EXTRA_CFLAGS=-DDEBUG_MEM
-	leaks/cleardebug
+	tools/cleardebug
 	./testo
-	leaks/memdebug | grep -v '^command line:'
+	tools/memdebug | grep -v '^command line:'
 
 internal_styles.c: mkstyle.sh
 	./mkstyle.sh > internal_styles.c
