@@ -76,7 +76,7 @@ data_read(void)
 	waypoint *wpt_tmp;
 	char ibuf[122];
 	struct tm tm;
-	route_head *track_head;
+	route_head *track_head = NULL;
 
 	for(;fgets(ibuf, sizeof(ibuf), file_in);) {
 		switch (ibuf[0]) {

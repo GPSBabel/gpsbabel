@@ -258,7 +258,7 @@ route_read(void)
 
 	nroutepts = GPS_Command_Get_Route(portname, &array);
 
-	fprintf(stderr, "Routes %d\n", nroutepts);
+	fprintf(stderr, "Routes %d\n", (int) nroutepts);
 #if 1
 	for (i = 0; i < nroutepts; i++) {
 		route_head *rte_head;

@@ -449,6 +449,9 @@ get_tz_offset(void)
 	}
 }
 
+/*
+ * Return the (zero based) month number of the year or -1 for failure.
+ */
 signed int
 month_lookup(const char *m)
 {

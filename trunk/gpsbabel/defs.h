@@ -243,11 +243,13 @@ void route_del_wpt(route_head *rte, waypoint *wpt);
 void route_add_head(route_head *rte);
 void track_add_head(route_head *rte);
 void route_disp_all(route_hdr, route_trl, waypt_cb);
+void track_disp_all(route_hdr, route_trl, waypt_cb);
 void route_free (route_head *);
 void route_flush( queue *);
 void route_flush_all(void);
 unsigned int route_waypt_count(void);
 unsigned int route_count(void);
+unsigned int track_count(void);
 
 /*
  * All shortname functions take a shortname handle as the first arg.
@@ -403,6 +405,7 @@ int case_ignore_strcmp(const char *s1, const char *s2);
 char *strsub(char *s, char *search, char *replace);
 void rtrim(char *s);
 signed int get_tz_offset(void);
+signed int month_lookup(const char *m);
 const char *get_cache_icon(const waypoint *waypointp);
 char * xml_entitize(const char * str);
 char * strip_html(const utf_string*);
