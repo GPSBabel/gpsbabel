@@ -257,6 +257,7 @@ gpx_wr_deinit(void)
 {
 	fclose(ofd);
 }
+
 void
 gpx_read(void)
 {
@@ -273,6 +274,26 @@ gpx_read(void)
 				XML_ErrorString(XML_GetErrorCode(psr)));
 		}
 	}
+}
+
+/*
+ *
+ */
+static
+void
+gpx_write_time(const time_t timep)
+{
+	struct tm *tm = gmtime(&timep);
+	
+	fprintf(ofd, "<time>%02d-%02d-%02dT%02d:%02d:%02dZ</time>\n",
+		tm->tm_year+1900, 
+		tm->tm_mon+1, 
+		tm->tm_mday, 
+		tm->tm_hour, 
+		tm->tm_min, 
+		tm->tm_sec
+	);
+
 }
 
 static void
@@ -292,6 +313,9 @@ gpx_waypt_pr(const waypoint *waypointp)
 		fprintf(ofd, "<ele>\n%f\n</ele>\n",
 			 waypointp->position.altitude.altitude_meters);
 	}
+	if (waypointp->creation_time) {
+		gpx_write_time(waypointp->creation_time);
+	}
 	if (waypointp->url) {
 		fprintf(ofd, "<url>%s</url>\n", waypointp->url);
 	}
@@ -300,6 +324,43 @@ gpx_waypt_pr(const waypoint *waypointp)
 			 waypointp->url_link_text);
 	}
 	fprintf(ofd, "</wpt>\n");
+}
+
+static void
+gpx_track_hdr(route_head *rte)
+{
+	fprintf(ofd, "<trk>\n");
+	if (rte->rte_name) {
+		fprintf(ofd, "  <name>\n");
+		fprintf(ofd, "  <![CDATA[%s]]>\n",rte->rte_name);
+		fprintf(ofd, "  </name>\n");
+	}
+	fprintf(ofd, "<trkseg>\n");
+}
+
+static void
+gpx_track_disp(const waypoint *waypointp)
+{
+	fprintf(ofd, "<trkpt lat=\"%lf\" lon=\"%lf\">\n",
+		waypointp->position.latitude.degrees,
+		waypointp->position.longitude.degrees);
+	if (waypointp->creation_time) {
+		gpx_write_time(waypointp->creation_time);
+	}
+	fprintf(ofd, "</trkpt>\n");
+}
+
+static void
+gpx_track_tlr(route_hdr *rte)
+{
+	fprintf(ofd, "</trkseg>\n");
+	fprintf(ofd, "</trk>\n");
+}
+
+static
+void gpx_track_pr()
+{
+	route_disp_all(gpx_track_hdr, gpx_track_tlr, gpx_track_disp);
 }
 
 void
@@ -314,7 +375,11 @@ gpx_write(void)
 	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/1/0\"\n");
 	fprintf(ofd, "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n");
 
-	waypt_disp_all(gpx_waypt_pr);
+	switch(global_opts.objective) {
+		case trkdata: gpx_track_pr();
+		default:
+		case wptdata: waypt_disp_all(gpx_waypt_pr);
+	}
 
 	fprintf(ofd, "</gpx>\n");
 }

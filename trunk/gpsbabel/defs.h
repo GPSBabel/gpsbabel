@@ -152,9 +152,12 @@ typedef void (*ff_write) (void);
 void fprintdms(FILE *, const coord *, int);
 
 typedef void (*waypt_cb) (const waypoint *);
+typedef void (*route_hdr)(const route_head *);
+typedef void (*route_trl)(const route_head *);
 void waypt_add (waypoint *);
 void waypt_del (waypoint *);
 void waypt_disp_all(waypt_cb);
+void route(route_hdr, route_trl, waypt_cb);
 unsigned int waypt_count(void);
 
 route_head *route_head_alloc(void);

@@ -53,24 +53,26 @@ route_add_wpt(route_head *rte, waypoint *wpt)
 }
 
 void
-route_disp (route_head *rh)
+route_disp (const route_head *rh, waypt_cb cb )
 {
 	queue *elem, *tmp;
-	printf("NEW ROUTE\n");
+//	printf("NEW ROUTE\n");
 	QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
 		waypoint *waypointp;
 		waypointp = (waypoint *) elem;
-			waypt_disp(waypointp);
+			(*cb)(waypointp);
 	}
 		
 }	
 void 
-route_disp_all()
+route_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
 {
 	queue *elem, *tmp;
 	QUEUE_FOR_EACH(&my_route_head, elem, tmp) {
-		route_head *rh;
-		rh = (route_head *) elem;
-		route_disp(rh);
+		const route_head *rhp;
+		rhp = (route_head *) elem;
+		(*rh)(rhp);
+		route_disp(rhp, wc);
+		(*rt)(rhp);
 	}
 }
