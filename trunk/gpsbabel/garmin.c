@@ -145,7 +145,7 @@ data_write(void)
 	extern int32 gps_save_id;
 	int short_length;
 
-	way = xmalloc(n*sizeof(*way));
+	way = xcalloc(n,sizeof(*way));
 
 	for (i = 0; i < n; i++) {
 		if(!((way)[i]=GPS_Way_New()))
@@ -203,7 +203,8 @@ data_write(void)
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypoint *wpt;
 		char *ident;
-		char *src;
+		char *src = NULL;
+		char *wptname;
 
 		wpt = (waypoint *) elem;
 
@@ -213,20 +214,18 @@ data_write(void)
 		ident = global_opts.synthesize_shortnames ? 
 				mkshort(src) : 
 				wpt->shortname;
-
 		strncpy(way[i]->ident,  ident, sizeof(way[i]->ident));
-		if (wpt->description) {
-			strncpy(way[i]->cmnt, wpt->description, 
-					sizeof(way[i]->cmnt));
-		} else {
-			way[i]->cmnt[0] = 0;
+		way[i]->ident[sizeof(way[i]->ident)-1] = 0;
+		if (src && strlen(src)) {
+			strncpy(way[i]->cmnt, src, sizeof(way[i]->cmnt));
 		}
 		way[i]->lon = wpt->position.longitude.degrees;
 		way[i]->lat = wpt->position.latitude.degrees;
-		way[i]->alt = wpt->position.altitude.altitude_meters;
+		if (wpt->position.altitude.altitude_meters != unknown_alt) {
+			way[i]->alt = wpt->position.altitude.altitude_meters;
+		}
 		i++;
 	}
-
 	if ((ret = GPS_Command_Send_Waypoint(portname, way, n)) < 0) {
 		fatal(MYNAME ":communication error sending wayoints..\n");
 	}

@@ -1839,17 +1839,23 @@ static void GPS_D108_Send(UC *data, GPS_PWay way, int32 *len)
 
 
     q = (UC *) way->ident;
-    while((*p++ = *q++));
+    i = sizeof(way->ident);
+    while((*p++ = *q++) && i--);
     q = (UC *) way->cmnt;
-    while((*p++ = *q++));
+    i = sizeof(way->cmnt);
+    while((*p++ = *q++) && i--);
     q = (UC *) way->facility;
-    while((*p++ = *q++));
+    i = sizeof(way->facility);
+    while((*p++ = *q++) && i--);
     q = (UC *) way->city;
-    while((*p++ = *q++));
+    i = sizeof(way->city);
+    while((*p++ = *q++) && i--);
     q = (UC *) way->addr;
-    while((*p++ = *q++));
+    i = sizeof(way->addr);
+    while((*p++ = *q++) && i--);
     q = (UC *) way->cross_road;
-    while((*p++ = *q++));
+    i = sizeof(way->cross_road);
+    while((*p++ = *q++) && i--);
     
     *len = p-data;
     
@@ -1875,7 +1881,6 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len)
     int32 i;
     
     p = data;
-
     *p++ = 1 /* way->wpt_class */;   	/* For D109, the class must be 1 */
     *p++ = 0 /* way->colour*/ ;		/* If non-zero, the waypoint is in 
 					   invisible ink on the V. */
@@ -1901,20 +1906,24 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len)
     for(i=0;i<4;++i) *p++ = 0xff; /* D109 silliness for ETE */
 
     q = (UC *) way->ident;
-    while((*p++ = *q++));
+    i = sizeof(way->ident);
+    while((*p++ = *q++) && i--);
     q = (UC *) way->cmnt;
-    while((*p++ = *q++));
+    i = sizeof(way->ident);
+    while((*p++ = *q++) && i--);
     q = (UC *) way->facility;
-    while((*p++ = *q++));
+    i = sizeof(way->facility);
+    while((*p++ = *q++) && i--);
     q = (UC *) way->city;
-    while((*p++ = *q++));
+    i = sizeof(way->city);
+    while((*p++ = *q++) && i--);
     q = (UC *) way->addr;
-    while((*p++ = *q++));
+    i = sizeof(way->addr);
+    while((*p++ = *q++) && i--);
     q = (UC *) way->cross_road;
-    while((*p++ = *q++));
-    
+    i = sizeof(way->cross_road);
+    while((*p++ = *q++) && i--);
     *len = p-data;
-    
     return;
 }
 
