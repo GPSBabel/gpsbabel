@@ -71,8 +71,8 @@ static
 size_t 
 my_fread8(void *ptr, FILE *stream)
 {
-	char cbuf[8];
-	char *cptr = ptr;
+	unsigned char cbuf[8];
+	unsigned char *cptr = ptr;
 	size_t rv;
 
 	if (!endianness_tested) {
@@ -99,8 +99,8 @@ static
 size_t
 my_fwrite8(void *ptr, FILE *stream)
 {
-	char cbuf[8];
-	char *cptr = ptr;
+	unsigned char cbuf[8];
+	unsigned char *cptr = ptr;
 
 	if (!endianness_tested) {
 		test_endianness();
@@ -125,8 +125,8 @@ static
 size_t 
 my_fread4(void *ptr, FILE *stream)
 {
-	char cbuf[4];
-	char *cptr = ptr;
+	unsigned char cbuf[4];
+	unsigned char *cptr = ptr;
 	size_t rv;
 	
 	if (!endianness_tested) {
@@ -149,8 +149,8 @@ static
 size_t
 my_fwrite4(int *ptr, FILE *stream)
 {
-	char cbuf[4];
-	char *cptr = (char *) ptr;
+	unsigned char cbuf[4];
+	unsigned char *cptr = (char *) ptr;
 
 	if (!endianness_tested) {
 		test_endianness();
@@ -399,17 +399,17 @@ n = ++cnt;
 	if (waypointp->icon_descr) {
 		iconp = mag_find_token_from_descr(waypointp->icon_descr);
 		if (1 == strlen(iconp)) {
-			n = iconp[0] - 'a';
+			c = iconp[0] - 'a';
 		} else {
-			n = iconp[1] - 'a' + 26;
+			c = iconp[1] - 'a' + 26;
 		}
 	} else  {
-		n = 0;
+		c = 0;
 	}
-	fwrite(&n, 1, 1, mapsend_file_out);
-n = 1;
+	fwrite(&c, 1, 1, mapsend_file_out);
+c = 1;
 		
-	fwrite(&n, 1, 1, mapsend_file_out);
+	fwrite(&c, 1, 1, mapsend_file_out);
 
 	falt = waypointp->position.altitude.altitude_meters;
 	my_fwrite8(&falt, mapsend_file_out);
@@ -462,7 +462,6 @@ mapsend_route_disp(const waypoint *waypointp)
 	unsigned char c;
 	const char *iconp;
 	double dbl;
-	int n;
 
 	route_wp_count++;
 	
@@ -483,14 +482,14 @@ mapsend_route_disp(const waypoint *waypointp)
 	if (waypointp->icon_descr) {
 		iconp = mag_find_token_from_descr(waypointp->icon_descr);
 		if (1 == strlen(iconp)) {
-			n = iconp[0] - 'a';
+			c = iconp[0] - 'a';
 		} else {
-			n = iconp[1] - 'a' + 26;
+			c = iconp[1] - 'a' + 26;
 		}
 	} else  {
-		n = 0;
+		c = 0;
 	}
-	fwrite(&n, 1, 1, mapsend_file_out);
+	fwrite(&c, 1, 1, mapsend_file_out);
 }
 
 static void
