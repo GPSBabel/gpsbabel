@@ -1,7 +1,7 @@
 /*
     Describe vectors containing filter operations.
  
-    Copyright (C) 2002,2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002,2004,2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -198,6 +198,15 @@ disp_filter_vecs(void)
 	}
 }
 
+static signed int
+alpha (const void *a, const void *b)
+{
+        const fl_vecs_t *const ap = a;
+        const fl_vecs_t *const bp = b;
+
+        return strcasecmp(ap->desc , bp->desc);
+}
+
 /*
  *  Display the available formats in a format that's easy to machine
  *  parse.   Typically invoked by programs like graphical wrappers to
@@ -207,6 +216,12 @@ void
 disp_filters(int version)
 {
 	fl_vecs_t *vec;
+
+	qsort(filter_vec_list, 
+		sizeof(filter_vec_list) / sizeof(filter_vec_list[0]) - 1,
+		sizeof(filter_vec_list[0]),
+		alpha);
+		
 
 	switch(version) {
 	case 0:
