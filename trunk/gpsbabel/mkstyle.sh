@@ -4,9 +4,9 @@ do
 	A=`basename $i | sed "s/.style$//"`
 	[ $A = "README" ] && continue
 	ALIST="{\"$A\", $A} , $ALIST"
-	echo "static char $A[] = \""
-	sed 's/"/\\"/g' $i
-	echo "\";"
+	echo "static char $A[] = "
+	sed 's/"/\\"/g;s/\(^.\)/"\1/g;s/\(.$\)/\1\"/g' $i 
+	echo ";"
 
 done
 
