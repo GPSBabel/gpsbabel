@@ -450,7 +450,9 @@ gs_type_mapping{
 } gs_type_map[] = {
 	{ gt_traditional, "Traditional cache" },
 	{ gt_multi, "Multi-Cache" },
-	{ gt_virtual, "Virtual cache" }
+	{ gt_virtual, "Virtual cache" },
+	{ gt_event, "Event cache" },
+	{ gt_suprise, "Unknown cache" },
 };
 
 struct
