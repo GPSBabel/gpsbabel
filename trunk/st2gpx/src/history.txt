@@ -31,3 +31,10 @@ Yeah, ok, I am just an amateur at this...
 28-11-2003	imports pushpins
 			imports lines to v3 annotations (2002+)
  5-12-2003  imports/exports symbols, with custom GPX symbol names
+11-12-2003	support lines with text (e.g. drive-time regions)
+			translate closed-polygons for import/export
+			export circles & ovals
+			support long pushpin notes
+			import groundspeak types with different symbols
+			various minor fixes
+			general clean-up

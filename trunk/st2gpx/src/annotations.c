@@ -1,7 +1,8 @@
 /*
 	annotations.c
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -34,8 +35,12 @@
 #include "gpx.h"
 #include "st2gpx.h"
 #include "pushpins.h"
-
 #include "annotations.h"
+
+#ifdef EXPLORE
+#include "explore.h"
+#endif
+
 
 // std_anotfile_header[8,9] are variable (number of annotations)
 char std_annotfile_header[12]    //  num annots
@@ -91,7 +96,7 @@ char * annot_type_name[4]={"Line", "Oval", "Textbox", "Circle"};
 // double magic2=0x10000;
 
 /*
-typedef struct annotationbuf
+struct annotationbuf
 {
 	int annot_num;
 	int flags;		// bit fields in first byte
@@ -107,7 +112,7 @@ typedef struct annotationbuf
 	int joinflag;		// 0 line does not join, 1, joins. Not sure what large balues for non-lines mean - xscale?
 	char unkn4;			// y-scale?
 	int num_points;		// different meaning for non-lines
-} structannotationbuf;
+};
 */
 
 
@@ -122,6 +127,7 @@ struct annot_rec * annot_rec_new()
 	nw->text = NULL;
 	nw->line_points=0;
 	nw->line_offset=0;
+	nw->is_closed_line_flag=0;
 	return nw;
 }
 
@@ -165,6 +171,7 @@ void annotations_delete(struct annotations * annots)
 }
 
 struct gpxpt* gpx_get_point(char* buf)
+//struct gpxpt* gpx_get_point(struct annot_line_point* bufpt)
 // Convert the 12-byte location structure in annotations stream to GPS coordinates.
 {
 	struct gpxpt * pt = gpxpt_new();
@@ -183,6 +190,10 @@ struct gpxpt* gpx_get_point(char* buf)
 	y= *(float *)(buf + 4);
 	z= *(float *)(buf + 8);
 
+//	x=bufpt->x;
+//	y=bufpt->y;
+//	z=bufpt->z;
+
 	//printf("gpx_get_point x=%f y=%f z=%f\n",x,y,z);
 	pt->lat =  atan2(z,sqrt(pow(x,2)+ pow(y,2)))*180/M_PI;
 	pt->lon =  atan2(y,x)*180/M_PI;
@@ -190,6 +201,24 @@ struct gpxpt* gpx_get_point(char* buf)
 	// set elevation for curiosity, but dont enable it with pt->use_elevation
 	pt->elevation= (sqrt(pow(x,2)+ pow(y,2)+ pow(z,2))-1)*6378137;
 	return pt;
+}
+
+void print_annot_rec(struct annot_rec * rec)
+{
+	int bit_flags = *(int*)(rec->buf + 8);
+	char* rec_type = NULL;
+
+	if (rec->type<4)
+		rec_type =annot_type_name[rec->type];
+
+	printf("Got annotation id %d, of type %s, %d line points",
+			rec->annot_num, rec_type, rec->line_points);
+	if(rec->text !=NULL)
+		printf(" and text '%s'", rec->text);
+	printf("\n");
+	if (opts.verbose_flag > 4)
+		printf("(type=%d) text length %d, bitflags %#x buf length %d\n",
+				rec->type, rec->text_length, bit_flags, rec->length);
 }
 
 struct annot_rec * read_annot_rec(FILE* annot_in_file, int version)
@@ -226,7 +255,7 @@ struct annot_rec * read_annot_rec(FILE* annot_in_file, int version)
 	}
 
 	// **********************
-	// Read the record header, up to begining of possible text
+	// Read the record header
 	// **********************
 
 	rec->buf = (char*)xmalloc(head_len);
@@ -235,12 +264,13 @@ struct annot_rec * read_annot_rec(FILE* annot_in_file, int version)
 	status = readbytes(annot_in_file, rec->buf, head_len);
 	if (status!=head_len)
 	{
-		//FIXME
-//		gpx_write_file_trailer(gpx_out_file);
-		// exit(1)
 		// should do some cleaning up here
 		return rec;
 	}
+
+#ifdef EXPLORE
+	print_f_annotation_line_header(rec->buf, head_len, version);
+#endif
 
 	rec->type = *(int*)(rec->buf+ANNOT_RECOS_TYPE);
 	if (rec->type > 3 )
@@ -253,10 +283,35 @@ struct annot_rec * read_annot_rec(FILE* annot_in_file, int version)
 	rec->annot_num = *(int*)(rec->buf+ANNOT_RECOS_ANUM);
 	// FIXME kludge, fit into the framework
 	bit_flags = *(int*)(rec->buf + 8);
-	rec->text_length = *(int*)(rec->buf+text_len_offset);
+	rec->text_length = *(unsigned int*)(rec->buf + text_len_offset);
+
+	// ***********************
+	// Read extra for the text
+	// ***********************
+
+	// There can be text for lines!
+	// This reads the extra part of annot+headfor the text,
+	// but not the actual text
+
+	rec->buf = (char*)realloc(rec->buf, head_len + 2*(rec->text_length));
+	// This read can fail because I have miscalculated size or number of records
+	// So exit gracefully
+	status = readbytes(annot_in_file, rec->buf + head_len, 2*(rec->text_length));
+	if (status != 2*(rec->text_length))
+	{
+		// should do some cleaning up here
+		return rec;
+	}
+	head_len += 2*(rec->text_length);
+	line_offset += 2*(rec->text_length);
+
+	// ******************************
+	// Now we can get num line points
+	// ******************************
+
 	rec->line_points=0;
 	if (rec->type == ANNOT_TYPE_LINE)
-		rec->line_points = *(int*)(rec->buf+head_len-4);
+		rec->line_points = *(unsigned int*)(rec->buf + head_len - 4 );
 
 	// ***************************
 	// Calculate the record length
@@ -267,11 +322,13 @@ struct annot_rec * read_annot_rec(FILE* annot_in_file, int version)
 		rec->length += 4;
 
 	// FIXME This is a kludge
+	// **** Should use c_shape_points
+	// c_shape_points = 33 instead of 61, so file is 12*(61-33)=336
 	if (opts.st_version_num>10)
 	{
-		if ( (rec->type == 1) || (rec->type == 4) )
+		if ( (rec->type == ANNOT_TYPE_OVAL) || (rec->type == ANNOT_TYPE_CIRCLE) )
 		{
-			printf("Fudge: shortening 336 bytes from oval record length, but I dont know why.\n");
+			//printf("Fudge: shortening 336 bytes from oval record length, but I dont know why.\n");
 			(rec->length) -= 336;
 		}
 	}
@@ -312,6 +369,13 @@ struct annot_rec * read_annot_rec(FILE* annot_in_file, int version)
 		str2ascii(rec->text);
 	}
 
+	if (rec->type == ANNOT_TYPE_LINE)
+	{
+		rec->is_closed_line_flag = *(unsigned char*)(rec->buf + head_len - 9);
+		if( (rec->is_closed_line_flag != 0) && (rec->is_closed_line_flag != 1) )
+			printf("Unexpected is_closed_line_flag=%d\n", rec->is_closed_line_flag);
+	}
+
 	if (opts.verbose_flag > 1)
 		print_annot_rec(rec);
 
@@ -335,6 +399,15 @@ struct annotations * process_annotations_stream(char* annot_in_file_name)
 	FILE* annot_in_file=NULL;
 	struct annotations * annots = annotations_new();
 
+	int readbyte;
+//	int max_read_more;
+//	int readmore;
+	char* readmorebuf=NULL;
+//	char* strange=NULL;
+	float* strange_float=NULL;
+	struct annot_line_point * strange_pts=NULL;
+//	struct gpxpt* strange_gpxpt;
+
 	annots->header_buf=(char*)xmalloc(ANNOT_FILE_HEAD_LEN);
 
 	if ((annot_in_file = fopen(annot_in_file_name, "rb")) == NULL)
@@ -352,12 +425,15 @@ struct annotations * process_annotations_stream(char* annot_in_file_name)
 	}
 	annots->stream_length += ANNOT_FILE_HEAD_LEN;
 
-	for (i=1; i<8; i++)
+	for (i=1; i<4; i++)
 		if ( annots->header_buf[i] != std_annotfile_header[i] )
 			printf("Nonstandard annotations file header, header[%i]=0x%x, normal value is 0x%x\n",
 					i, annots->header_buf[i], std_annotfile_header[i] );
 
 	annots->version = *(int*)(annots->header_buf+4);
+	if ((annots->version < 3) || (annots->version > 4))
+			printf("Unexpected annotations version %d\n", annots->version);
+
 	annots->num_annotations = *(int*)(annots->header_buf+8);
 
 	annots->annot_list = (struct annot_rec **)xmalloc(
@@ -383,8 +459,10 @@ struct annotations * process_annotations_stream(char* annot_in_file_name)
 	{
 	    rec = read_annot_rec(annot_in_file, annots->version);
 
+#ifdef EXPLORE
 		if (opts.explore_flag)
-			explore_annot(rec);
+			explore_annot(rec, annots->version);
+#endif
 		if (rec==NULL)
 		{
 			annots->read_recs_ok_flag = 0;
@@ -398,6 +476,8 @@ struct annotations * process_annotations_stream(char* annot_in_file_name)
 		annots->stream_length += rec->length;
 	}
 
+	// fudge for White_West_Sts.ptm was here
+
 	// Check that we are at the end of annotation file
 	if (read_tail_buff)
 	{
@@ -405,14 +485,17 @@ struct annotations * process_annotations_stream(char* annot_in_file_name)
 		status=readbytes(annot_in_file, checkEOF, 4);
 		annots->stream_length += status;
 		if ( (status!=4) || (checkEOF[0]!=0) || (checkEOF[1]!=0)
-				|| (checkEOF[2]!=0) || (checkEOF[3]!=0) || (getc(annot_in_file)!=EOF) )
+				|| (checkEOF[2]!=0) || (checkEOF[3]!=0) ||
+				(readbyte=getc(annot_in_file)!=EOF) )
 		{
 			fprintf (stderr, "Did not finish reading annotation file at EOF\n");
+			//ungetc(readbyte, annot_in_file);			
 		}
 		else
 			annots->read_tail_ok_flag=1;
 		free(checkEOF);
 	}
+	
 	fclose(annot_in_file);
 	return annots;
 }

@@ -1,7 +1,8 @@
 /*
 	properties.c
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -35,6 +36,10 @@
 
 #include "st2gpx.h"
 #include "properties.h"
+
+#ifdef EXPLORE
+#include "explore.h"
+#endif
 
 #define OLE_PROP_STREAM ".Olhud5yvVwudb10uAaq5ezn4Ac"
 
@@ -117,7 +122,7 @@ char * fmtid2str(char * str, char * fmtid)
 					*(unsigned char*)(fmtid+13),
 					*(unsigned char*)(fmtid+14),
 					*(unsigned char*)(fmtid+15)	);
-	str[39]=0;
+	str[38]=0;
 	return str;
 }
 
@@ -166,7 +171,8 @@ struct dictionary * read_dictionary(int ents, char* buf, int bufsize)
 	dict->ent_propid=(DWORD*)xmalloc(ents*sizeof(DWORD));
 	dict->ent_sz=(char**)xmalloc(ents*sizeof(char*));
 
-	printf("reading %d entries from dictionary\n", ents);
+	if (opts.verbose_flag > 4)
+		printf("reading %d entries from dictionary\n", ents);
 
 	while(ent_read<ents)
 	{
@@ -333,7 +339,9 @@ struct ole_property_set * read_ole_properties2(char* prop_file_name)
 	if ((prop_file = fopen(prop_file_name, "rb")) == NULL)
 	{
 		fprintf(stderr, "Cannot open property file %s\n", prop_file_name);
-		return NULL;
+		debug_pause();
+		exit(3);
+		//return NULL;
 	}
 
 	status=readbytes(prop_file, (char*)prop_header, sizeof(PROPERTYSETHEADER));

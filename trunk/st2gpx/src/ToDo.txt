@@ -5,10 +5,8 @@ To do:
 	option to show ppin names/info on import
 	center and size map on annotations.
 
-	Get lat & lon for journey route points not matched to pushpins
 	Get point info for non-line annotations, e.g. text boxes.
 	import route as s&t route (Journey), i.e. not just as a line.
-	fix overuse of realloc
 	support unicode names (remove str2ascii)
 
 	different colours for imported routes & tracks
@@ -20,6 +18,8 @@ To do:
 	clean up import structures, make like contents import?
 
 	support drive-time zones in annotations stream?
+
+	fix ppin import for longer renderdata
 
 Still to test:
 * various versions, esp import

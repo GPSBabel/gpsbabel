@@ -1,7 +1,8 @@
 /*
 	pushpins.cpp
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -25,9 +26,9 @@
 // for vt type values see http://www.canaimasoft.com/f90VB/OnlineManuals/UserManual/TH_99.htm
 
 //#import "c:\program files\common files\system\ado\msado15.dll" rename ( "EOF", "adoEOF" )
-//#import <msado15.dll> rename ( "EOF", "adoEOF" )
-#include "msado15.tlh"
-#include "msado15.tli"
+#import <msado15.dll> rename ( "EOF", "adoEOF" )
+//#include "msado15.tlh"
+//#include "msado15.tli"
 
 #include <windows.h>
 #include <initguid.h>  // Include only once in your application
@@ -39,7 +40,6 @@
 #include "pushpins.h"
 #include "ppinutil.h"
 #include "contents.h"
-
 
 struct InitOle {
 InitOle()  { ::CoInitialize(NULL); }
@@ -194,15 +194,16 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
 	int val_type=0;
 	char * ppin_sql = NULL;
 	char * UDM_sql = NULL;
-	char RenderData_buf[4]="";
+	char RenderData_buf[8]="";
 	int RenderData_len=0;
+	short int NoteTypeId;
 
 	ppplist->pushpin_list = (struct pushpin **)xmalloc(ppin_list_alloc_size*sizeof(struct pushpin *));
 
 	if (opts.st_version_num<9)
-		ppin_sql = "SELECT UD_Secondary.UdId, UD_Secondary.UdName, UD_Secondary.NoteShort, UD_Secondary.NoteLong, UD_Main.Grid, UD_Main.Precision, UD_Main.RenderData, UD_Main.MatchId, UD_Main.MOBBId FROM UD_Main INNER JOIN UD_Secondary ON UD_Main.UdId = UD_Secondary.UdId";
+		ppin_sql = "SELECT UD_Secondary.UdId, UD_Secondary.UdName, UD_Secondary.NoteTypeId, UD_Secondary.NoteShort, UD_Secondary.NoteLong, UD_Main.Grid, UD_Main.Precision, UD_Main.RenderData, UD_Main.MatchId, UD_Main.MOBBId FROM UD_Main INNER JOIN UD_Secondary ON UD_Main.UdId = UD_Secondary.UdId;";
 	else
-		ppin_sql = "SELECT UdId, UdName, NoteShort, NoteLong, Grid, Precision, RenderData, MatchId, MOBBId FROM UD_Main";
+		ppin_sql = "SELECT UdId, UdName, NoteTypeId, NoteShort, NoteLong, Grid, Precision, RenderData, MatchId, MOBBId FROM UD_Main;";
 
 	try 
 	{
@@ -226,8 +227,8 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
 		hr = rs->Open(ppin_sql, 
 			          cnstr, 
 					  ADODB::adOpenForwardOnly, 
-					  ADODB::adLockReadOnly, 
-					  -1 );
+					  ADODB::adLockReadOnly,  
+					  ADODB::adCmdText );
 
 		while ((rs->adoEOF == FALSE))
 		{
@@ -237,7 +238,14 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
 			variant2val(rs->Fields->GetItem("UdName")->Value,	VT_BSTR,&(ppin->UdName), 0);
 			variant2val(rs->Fields->GetItem("Grid")->Value,		VT_I4,	&(ppin->Grid), 0);
 			variant2val(rs->Fields->GetItem("Precision")->Value,VT_I4,	&(ppin->Precision), 0);
-			variant2val(rs->Fields->GetItem("NoteShort")->Value,VT_BSTR,&(ppin->NoteShort), 0);
+			variant2val(rs->Fields->GetItem("NoteTypeId")->Value,VT_I2, &NoteTypeId, 0);
+
+			if(NoteTypeId==1)
+				variant2val(rs->Fields->GetItem("NoteShort")->Value,VT_BSTR,&(ppin->NoteShort), 0);
+			else if(NoteTypeId==2)
+				variant2val(rs->Fields->GetItem("NoteShort")->Value,VT_BSTR,&(ppin->NoteShort), 0);
+			else
+				printf("Unexpected NoteTypeId=%d for ppin udid=%d\n", NoteTypeId, ppin->UdId);
 
 			RenderData_len = rs->Fields->GetItem("RenderData")->ActualSize;
 			val_type = rs->Fields->GetItem("RenderData")->Value.vt;
@@ -316,7 +324,7 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
 						  cnstr, 
 						  ADODB::adOpenForwardOnly, 
 						  ADODB::adLockReadOnly, 
-						  -1 );
+						  ADODB::adCmdText);
 
 			while ((rs->adoEOF == FALSE))
 			{
@@ -331,8 +339,9 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
 				ppplist->UDM_Data[UdmDataId]=(char*)xmalloc(ppplist->UDM_Data_length[UdmDataId]);
 				variant2val(rs->Fields->GetItem("UdmData")->Value, VT_ARRAY | VT_UI1, ppplist->UDM_Data[UdmDataId], ppplist->UDM_Data_length[UdmDataId] );
 
-				printf("In UDM_Data table, for UdId=%d got %d bytes of data\n",
-					UdmDataId, 	ppplist->UDM_Data_length[UdmDataId]);
+				if(opts.verbose_flag > 3)
+					printf("In UDM_Data table, for UdId=%d got %d bytes of data\n",
+						UdmDataId, 	ppplist->UDM_Data_length[UdmDataId]);
 				
 				if (opts.explore_flag)
 				{
@@ -354,11 +363,12 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
 	catch( _com_error &e)
 	{
         _bstr_t bstrSource(e.Source());
-        _bstr_t bs =  _bstr_t("*** Exception: ") + _bstr_t(e.Error()) + _bstr_t(" Msg: ") 
+        _bstr_t bs =  _bstr_t("*** Exception in read_pushpins(): ") + _bstr_t(e.Error()) + _bstr_t(" Msg: ") 
             + _bstr_t(e.ErrorMessage()) + _bstr_t(" Description: ") 
             + _bstr_t(e.Description());
 		
 		wprintf(bs);
+		printf("\n");
 		_flushall();
         
         if (opts.verbose_flag>4)
@@ -407,7 +417,7 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 			          cnstr, 
 					  ADODB::adOpenKeyset, 
 					  ADODB::adLockOptimistic, 
-					  -1 );
+					  ADODB::adCmdText);
 
 		variant2val(rs->Fields->GetItem("DbVersion")->Value,		VT_I2,	&DbVersion, 0);
 		variant2val(rs->Fields->GetItem("LastSetId")->Value,		VT_I4,	&LastSetId, 0);
@@ -446,13 +456,13 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 			          cnstr, 
 					  ADODB::adOpenKeyset, 
 					  ADODB::adLockOptimistic, 
-					  -1 );
+					  ADODB::adCmdText);
 			hr = rs2.CreateInstance( __uuidof( ADODB::Recordset ) );
 			hr = rs2->Open(sql2, 
 						  cnstr, 
 						  ADODB::adOpenKeyset, 
 						  ADODB::adLockOptimistic, 
-						  -1 );
+						  ADODB::adCmdText);
 		}
 		else
 		{
@@ -462,7 +472,7 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 			          cnstr, 
 					  ADODB::adOpenKeyset, 
 					  ADODB::adLockOptimistic, 
-					  -1 );
+					  ADODB::adCmdText);
 		}
 
  
@@ -473,6 +483,7 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 		short int sizero=0;
 		short int sione=1;
 		short int sitwo=2;
+		short int notetype;
 
 		// do for each wpt
 		for(w=0; w<all_gpx->wpt_list_count; w++)
@@ -515,8 +526,22 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 
 			rs2->Fields->GetItem("UdId"		)->Value = val2variant(VT_I4,  &thisUserDataId);
 			rs2->Fields->GetItem("UdName"   )->Value = val2variant(VT_BSTR,(gpt->name));
-			rs2->Fields->GetItem("NoteTypeId")->Value = val2variant(VT_I2,  &sione);
-			rs2->Fields->GetItem("NoteShort")->Value = val2variant(VT_BSTR,(gpt->desc));
+			
+			if(gpt->desc == NULL)
+			{
+				notetype=1;
+			}
+			else if(strlen(gpt->desc) < 255)
+			{
+				notetype=1;
+				rs2->Fields->GetItem("NoteShort")->Value = val2variant(VT_BSTR,(gpt->desc));
+			}
+			else
+			{
+				notetype=2;
+				rs2->Fields->GetItem("NoteLong")->Value = val2variant(VT_BSTR,(gpt->desc));
+			}
+			rs2->Fields->GetItem("NoteTypeId")->Value = val2variant(VT_I2,  &notetype);
 			rs2->Fields->GetItem("GeocodeHierarchy")->Value = val2variant(VT_I2,  &sizero);
 			rs2->Fields->GetItem("GeocodeContext"  )->Value = val2variant(VT_I4,  &lzero);
 			// sometime I should support this
@@ -550,8 +575,8 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 
 		char* SetName = all_gpx->data_source_name;
 		short int RenderMethod = 2;
-		short int GeocodeMethod = 5;
-		short int CreateMethod = 2;
+		short int GeocodeMethod = 3; //5;
+		short int CreateMethod = 1; // using 2 causes mp to crash
 		short int GeometryType = 1;
 		long UdCount=all_gpx->wpt_list_count;
 		long MatchedCount=all_gpx->wpt_list_count;
@@ -574,7 +599,7 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 			      cnstr, 
 				  ADODB::adOpenKeyset, 
 				  ADODB::adLockOptimistic, 
-				  -1 );
+				  ADODB::adCmdText);
 
 		rs->AddNew();
 
@@ -637,11 +662,12 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 	catch( _com_error &e)
 	{
         _bstr_t bstrSource(e.Source());
-        _bstr_t bs =  _bstr_t("*** Exception: ") + _bstr_t(e.Error()) + _bstr_t(" Msg: ") 
+        _bstr_t bs =  _bstr_t("*** Exception in write_pushpins_from_gpx(): ") + _bstr_t(e.Error()) + _bstr_t(" Msg: ") 
             + _bstr_t(e.ErrorMessage()) + _bstr_t(" Description: ") 
             + _bstr_t(e.Description());
 		
 		wprintf(bs);
+		printf("\n");
 		_flushall();
         
 //        if (opts.verbose_flag>4)

@@ -1,7 +1,8 @@
 /*
 	writepcx.c
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -309,7 +310,8 @@ void pcx5_write_ppin(FILE* file, struct pushpin * ppin)
 	// FIXME this should come from the pushpin icon
 	int symbol=8; // or 18
 
-	strpad(timedate, 19);
+	// 18 or 19?
+	strpad(timedate, 18);
 
 	// Should I create a meaningful note if there is none?
 	if(ppin->NoteShort)
@@ -338,7 +340,7 @@ void pcx5_write_jour_pt(FILE* file, struct journey * jour, struct jour_rtept * r
 {
 	char timedate[19]="";
 	float alt=0;
-	char desc[40];
+	char desc[41];
 	float proximity=0;
 
 	int symbol=8; // or 18
@@ -348,7 +350,7 @@ void pcx5_write_jour_pt(FILE* file, struct journey * jour, struct jour_rtept * r
 //	{
 		f_wpt_head = (struct f_jour_pt_head *)(jour->buf + (rtept->pthead_os));
 
-		strpad(timedate, 19);
+		strpad(timedate, 18);
 
 		memcpy(desc, rtept->text1,39);
 		strpad(desc, 40);
@@ -409,7 +411,8 @@ void pcx5_write_annot_line(FILE* file, struct annot_rec * pannot)
 	fprintf(file, "\n");
 	fprintf(file, GAR_TRK_HEADER);
 
-	strpad(timedate, 19);
+	// fixme - 18/19
+	strpad(timedate, 18);
 
 	for(p=0; p<pannot->line_points; p++)
 	{

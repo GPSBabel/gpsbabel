@@ -1,7 +1,8 @@
 /*
 	st2gpx.c
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -26,11 +27,12 @@
 */
 
 #include <stdio.h>
+#include <io.h>
 #include <stdlib.h>
 #include <memory.h>
 #include <math.h>
 #include <string.h>
-
+#include <direct.h>
 #include <malloc.h>
 #include <crtdbg.h>
 
@@ -139,6 +141,32 @@ char * strappend(char* str1, char* str2)
 	return nw;
 }
 
+char* buf2str(char* buf, int strlen)
+// make a null-terminated string from a buf
+{
+	char*str=NULL;
+	if (strlen==0)
+		return NULL;
+	str=(char*)xmalloc(strlen+1);
+	memcpy(str, buf, strlen);
+	str[strlen]=0;
+	return str;
+}
+
+char* buf2wstr(char* buf, int strlen)
+// make a null-terminated wide string from a buf
+// strlen is the number of characters, not len
+{
+	char*str=NULL;
+	if (strlen==0)
+		return NULL;
+	str=(char*)xmalloc(2*strlen+1);
+	memcpy(str, buf, 2*strlen);
+	str[2*strlen]=0;
+	str[2*strlen + 1]=0;
+	return str;
+}
+
 int readbytes(FILE* file, char* buf, int bytes2read)
 {
 	int i;
@@ -166,7 +194,7 @@ int readbytes(FILE* file, char* buf, int bytes2read)
 
 void show_usage()
 {
-	printf("st2gpx - Export data from MS Streets & Trips and Autoroute to GPX format\n\n");
+	printf("st2gpx - Export data from MS Streets & Trips, Autoroute and Mappoint to GPX format\n\n");
 	// FIXME update this line
 	printf("Usage: st2gpx [-hr] [-v verbose-level] [-g gpx-in-file] [-G gpx-out-file]");
 	printf("              [-m mpst-in-file] [-M pcx5-out-file] [-F st-mod-file] stfile\n\n");
@@ -198,11 +226,52 @@ void show_usage()
 void xsystem(char* syscmd)
 {
 	int status;
-	printf("%s \n", syscmd);
+	int original_stderr;
+	char* tempname=NULL;
+	FILE* tempfile;
+
+	if (opts.verbose_flag > 2)
+		printf("%s \n", syscmd);
+	else
+	{
+		// Throw away stderr from the system call.
+		// Actually, I just write it to a temp file.
+		original_stderr = _dup(2); // duplicate stderr
+		if( original_stderr == -1 )
+		{
+			perror( "_dup( 2 ) failure" );
+			exit( 1 );
+		}
+
+		tempname = tmpnam(tempname);
+		if( (tempname==NULL) || (( tempfile = fopen(tempname, "w") ) == NULL ))
+		{
+			puts( "Can't open tempfile for stderr\n" );
+			exit( 1 );
+		}
+		// stderr now refers to tempfile 
+		if( -1 == _dup2( _fileno( tempfile ), 2 ) )
+		{
+			perror( "Can't _dup2 stderr" );
+			exit( 1 );
+		}
+	}
+
 	_flushall();
 	status = system(syscmd);
+
+	if (opts.verbose_flag < 3)
+	{
+		// restore stderr
+		fflush( tempfile );
+		fflush( stderr );
+		fclose( tempfile );
+		_dup2( original_stderr, 2 );
+		remove(tempname);
+	}
+
 	if (status)
-		fprintf(stderr, "system call returned an error\n");
+		fprintf(stderr, "system call returned error %d\n", status);
 }
 
 main(int argc, char** argv)
@@ -231,6 +300,8 @@ main(int argc, char** argv)
     char cmdext[_MAX_EXT];
 	char * cmdpath=NULL;
 
+	char file1[_MAX_PATH];
+	char file2[_MAX_PATH];
 
 	struct pushpin_safelist* ppplist=NULL;
 	struct journey* jour=NULL;
@@ -253,7 +324,7 @@ main(int argc, char** argv)
 
 #ifdef MEMCHK
 	// Call _CrtCheckMemory at every allocation and deallocation request.
-	SET_CRT_DEBUG_FIELD(_CRTDBG_CHECK_ALWAYS_DF);
+//	SET_CRT_DEBUG_FIELD(_CRTDBG_CHECK_ALWAYS_DF);
 	// Keep freed memory blocks in the heaps linked list, assign them the _FREE_BLOCK type,
 	// and fill them with the byte value 0xDD.
 	SET_CRT_DEBUG_FIELD(_CRTDBG_DELAY_FREE_MEM_DF);
@@ -272,8 +343,8 @@ main(int argc, char** argv)
    _CrtSetReportFile( _CRT_ASSERT, _CRTDBG_FILE_STDOUT );
 #endif
 
-  // _CrtSetBreakAlloc(136);
-
+   // Set this to find where leaking mem was allocated
+   //_CrtSetBreakAlloc(209);
 
 	while (1)
     {
@@ -399,7 +470,7 @@ main(int argc, char** argv)
 			opts.source_file_name = (char*)xmalloc(strlen(argv[optind])+1);
 			strcpy(opts.source_file_name, argv[optind]);
 			if (opts.verbose_flag > 1)
-				printf("Analysing autoroute file %s\n\n", opts.source_file_name);
+				printf("Analysing MS Map file %s\n\n", opts.source_file_name);
 			if (ppin_in_file_name==NULL)
 				ppin_in_file_name = strappend(opts.source_file_name, ".Contents\\UserData.mdb");
 			if (jour_in_file_name==NULL)
@@ -413,12 +484,11 @@ main(int argc, char** argv)
 	{
 	    printf("Unrecognised option %s\n", argv[optind+1]);
 		show_usage();
-
 	}
 	else
 	{
 		if (opts.verbose_flag > 1)
-			printf("Not analysing any core S&T or autoroute file\n");
+			printf("Not analysing any core MS Map file\n");
 	}
 
 	if (opts.source_file_name)
@@ -428,9 +498,7 @@ main(int argc, char** argv)
 
 		// Find the path for istorage from the path in argv[0]
 
-		// this is not ANSI
 		_splitpath(argv[0], cmddrv, cmddir, cmdfilename, cmdext);
-		//sprintf(cmdpath, "%s%s", cmddrv, cmddir);
 		cmdpath = strappend(cmddrv, cmddir);
 
 		_fullpath(source_full_path, opts.source_file_name, _MAX_PATH);
@@ -438,11 +506,9 @@ main(int argc, char** argv)
 		sprintf(syscmd, "%sistorage\\istorage.exe \"%s\"", cmdpath, source_full_path);
 		xsystem(syscmd);
 
-		printf("*****************************************************************\n");
-		printf("Finished istorage command\n");
-
-		sprintf(syscmd, "rename \"%s.Contents\\UserData.\" UserData.mdb", opts.source_file_name);
-		xsystem(syscmd);
+		sprintf(file1, "%s.Contents\\UserData.", opts.source_file_name);
+		sprintf(file2, "%s.Contents\\UserData.mdb", opts.source_file_name);
+		rename(file1, file2);
 	}
 
 	// ***************************
@@ -456,7 +522,7 @@ main(int argc, char** argv)
 		if (all_gpx==NULL)
 			printf("Didn't read any usable data from %s ???\n",gpx_in_file_name);
 		printf("Read %d waypoints, %d routes and %d tracks from file %s\n", all_gpx->wpt_list_count, all_gpx->rte_list_count, all_gpx->trk_list_count, gpx_in_file_name);
-		printf("Importing this data as %d lines\n", all_gpx->rte_list_count + all_gpx->trk_list_count);
+		printf("Importing this data as %d pushpins and %d lines\n", all_gpx->wpt_list_count, all_gpx->rte_list_count + all_gpx->trk_list_count);
 	}
 
 	// Read Mapsource text-export file.
@@ -470,11 +536,12 @@ main(int argc, char** argv)
 		printf("Read %d waypoints, %d routes and %d tracks from file %s\n",
 				all_gpx->wpt_list_count, all_gpx->rte_list_count,
 				all_gpx->trk_list_count, mpst_in_file_name);
-		printf("Importing this data as %d lines\n",
+		printf("Importing this data as %d pushpins and %d lines\n",
+				all_gpx->wpt_list_count,
 				all_gpx->rte_list_count + all_gpx->trk_list_count);
 	}
 
-	// ole properties from S&T source file
+	// ole properties from S&T/Autoreoute/Mappoint source file
 	if (opts.source_file_name)
 	{
 		strips_properties=read_ole_properties(opts.source_file_name, NULL);
@@ -482,7 +549,7 @@ main(int argc, char** argv)
 		if ((prop!=NULL) && (prop->buf != NULL) )
 		{
 			opts.st_version_num = *(int*)(prop->buf);
-			printf("Autoroute/S&T version in %s is %d\n", opts.source_file_name, opts.st_version_num);
+			printf("MS Map version in %s is %d\n", opts.source_file_name, opts.st_version_num);
 		}
 		prop = get_propterty(strips_properties, 0x10000);
 		if ((prop!=NULL) && (prop->buf != NULL) )
@@ -533,26 +600,20 @@ main(int argc, char** argv)
 		if (annots==NULL)
 			printf("After merging data, dont have any annotations???\n");
 		printf("After merging data, there are %d annotations\n", annots->num_annotations);
-		//print_annotations(annots);
 		write_annotations(annots, annot_in_file_name);
-		//print_annotations(annots);
 
-		// ********************
-		// This is experimantal
-		// ********************
-		temp_str = strappend(opts.source_file_name, ".Contents\\Contents");
-		write_pushpins_from_gpx(ppin_in_file_name, all_gpx, conts, temp_str);
-		free(temp_str);
-		temp_str=NULL;
+		sprintf(file1, "%s.Contents\\Contents", opts.source_file_name);
+		write_pushpins_from_gpx(ppin_in_file_name, all_gpx, conts, file1);
 	}
 
-	// create the s&t/autoroute file from the modified parts
+	// create the s&t/autoroute/mappoint file from the modified parts
 	if ((opts.source_file_name!=NULL) && (all_gpx!=NULL) && (import_file_name!=NULL))
 	{
 		// Actually, we should allow NULL import_file_name and invent a sensible name
 
-		sprintf(syscmd, "rename %s.Contents\\UserData.mdb UserData.", opts.source_file_name);
-		xsystem(syscmd);
+		sprintf(file1, "%s.Contents\\UserData.mdb", opts.source_file_name);
+		sprintf(file2, "%s.Contents\\UserData.", opts.source_file_name);
+		rename(file1, file2);
 
 		contents_dir_name=(char*)xmalloc(strlen(opts.source_file_name)+20);
 		sprintf(contents_dir_name, "%s.Contents", opts.source_file_name);
@@ -562,27 +623,22 @@ main(int argc, char** argv)
 		sprintf(syscmd, "%sistorage\\istorage-make.exe \"%s\"", cmdpath, contents_full_path);
 		xsystem(syscmd);
 
-		printf("*****************************************************************\n");
-		printf("Finished istorage-make command\n");
-
-		sprintf(syscmd, "del \"%s\"", import_file_name);
-		xsystem(syscmd);
+		remove(import_file_name);
 
 		_splitpath(opts.source_file_name, cmddrv, cmddir, cmdfilename, cmdext);
-		sprintf(syscmd, "move \"%s.Contents.ole\" \"%s\"", opts.source_file_name, import_file_name);
-		xsystem(syscmd);
-
+		sprintf(file1, "%s.Contents.ole", opts.source_file_name);
+		rename(file1, import_file_name);
 	}
 
     // Clean up the compound file directory
 	if (opts.source_file_name)
 	{
 		{
-			sprintf(syscmd, "echo y|del \"%s.Contents\"", opts.source_file_name);
+			sprintf(syscmd, "echo y|del \"%s.Contents\" > null", opts.source_file_name);
 			xsystem(syscmd);
 
-			sprintf(syscmd, "rmdir \"%s.Contents\"", opts.source_file_name);
-			xsystem(syscmd);
+			sprintf(file1, "%s.Contents", opts.source_file_name);
+			_rmdir(file1);
 		}
 	}
 
@@ -609,14 +665,11 @@ main(int argc, char** argv)
 	if (opts.verbose_flag>5)
 		printf("Done freeing all\n");
 
-	//debug_show_sizes();
-	//debug_pause();
-	//printf("exiting main\n");
-
 	_flushall();
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 //	_CrtDumpMemoryLeaks();
-#endif
+//#endif
+	printf("All done.\n");
 	debug_pause();
 }
