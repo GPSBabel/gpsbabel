@@ -978,7 +978,7 @@ mag_waypt_pr(const waypoint *waypointp)
 	isrc = waypointp->notes ? waypointp->notes : waypointp->description;
 	owpt = global_opts.synthesize_shortnames ?
                         mkshort(isrc) : waypointp->shortname,
-	odesc = waypointp->description ? waypointp->description : "";
+	odesc = isrc ? isrc : "";
 	owpt = mag_cleanse(owpt);
 	odesc = mag_cleanse(odesc);
 
