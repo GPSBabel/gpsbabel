@@ -74,7 +74,7 @@ typedef struct			       /*                             size */
     float dist;			       /* proximity distance in meters 4 */
     char state[2];		       /* state                        2 */
     char cc[2];			       /* country code                 2 */
-    char varlenstrs[];			/* start of variable length strings */
+    char varlenstrs[1];			/* start of variable length strings */
     /* G_char ident[]; variable length string 1-51       */
     /* G_char comment[]; waypoint user comment 1-51      */
     /* G_char facility[]; facility name 1-31             */
