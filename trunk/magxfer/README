@@ -11,7 +11,7 @@ utility to shoot them into your receiver.  The files you need are in the
 
 Usage is simple:
 
-	magxfer [-p portname] [-b bitrate] -f filetosend.img
+	magxfer [-p portname] [-b bitrate] [-t type ] -f filetosend.img
 
 	portname specifies the serial port to use.  The default 
 		is "/dev/ttyS0" which is the first serial port on a 
@@ -20,6 +20,10 @@ Usage is simple:
 	bitrate specifies the speed to send the upload command.  The
 		default is 4800.   After connection is made, the actual
 		transfer happens at 115200 bps, regardless of this option.
+
+	type    can be d for detailed map or s for secondary base map such
+		as by Worldwide Basemap or p for primary basemap.  Default
+	        is d. 
 
 	filetosend.img is the image file you wish to upload to the unit.
 		

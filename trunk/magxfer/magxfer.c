@@ -41,6 +41,22 @@ typedef struct {
 void dump_xframe(vld *frame);
 void send_terminate(void);
 
+const char *usagestring = "\
+Usage: magxfer [-p portname] [-b bitrate] [-t type ] -f filetosend.img\n\
+       portname   port for uplkoad (default /dev/ttyS0)\n\
+       bitrate    bitrate (default is 4800)\n\
+       type       can be \n\
+       			b (secondary base map),\n\
+			B (primary base map), or\n\
+			d (detailed map)\n\
+		   (default d)\n\
+       filetosend.img is the image file you wish to upload to the unit\n";
+void 
+usage()
+{
+    fprintf(stderr,"%s",usagestring);
+}
+
 void
 debug(const char *fmt, ...)
 {
@@ -443,10 +459,14 @@ setup_port(const char *portname, unsigned bitrate)
  * the data.
  */
 void
-send_upload_cmd(void)
+send_upload_cmd(unsigned detailed)
 {
-#define MU_CMD "$PMGNCMD,MPUPLOAD,2*72\r\n"
-	write(magfd, MU_CMD, sizeof(MU_CMD));
+	static const char *cmd[] = {
+		"$PMGNCMD,MPUPLOAD,1*71\r\n", 
+		"$PMGNCMD,MPUPLOAD,2*72\r\n", 
+		"$PMGNCMD,MPUPLOAD,3*73\r\n",
+	};
+	write(magfd, cmd[detailed], strlen(cmd[detailed] + 1));
 	cfsetospeed(&new_tio, B115200);
 	cfsetispeed(&new_tio, B115200);
 	tcsetattr(magfd, TCSADRAIN, &new_tio);
@@ -506,18 +526,32 @@ sync_receiver(void)
 int
 main(int argc, char *argv[])
 {
-	static	char ibuf[10000000];
+	static	char ibuf[64*1024*1024];
 	unsigned short cksum;
 	size_t file_sz;
 	size_t sent_sz;
 	FILE *inf;
 	int c;
 	unsigned bitrate = 4800;
+	int detailedmap = 1;
 	const char *portname = "/dev/ttyS0";
-	const char *ifilename = "/dev/ttyS0";
+	const char *ifilename = "";
 
-	while ((c = getopt(argc, argv, "f:p:b:D:")) != EOF) {
+
+	while ((c = getopt(argc, argv, "t:f:p:b:D:")) != EOF) {
 		switch(c) {
+		        case 't':
+			    if (strcmp(optarg,"s") == 0)
+				detailedmap = 2;
+			    else if (strcmp(optarg,"d") == 0)
+				detailedmap = 1;
+			    else if (strcmp(optarg,"p") == 0)
+				detailedmap = 0;
+			    else {
+				fprintf(stderr,"Map type (-t option) can only be 'd', 'p', or 's'\n");
+				exit(1);
+			    }
+			    break;
 			case 'p':
 				portname = optarg;
 				break;
@@ -531,11 +565,18 @@ main(int argc, char *argv[])
 				bitrate = atoi(optarg);
 				break;
 			default:
+			        usage();
+				exit(1);
 				break;
 		}
 	}
+	if (ifilename[0] == '\0') {
+	        fprintf(stderr, "No input file specified. Exiting.\n");
+		usage();
+	        exit(1);
+	}
 	setup_port(portname, bitrate);
-	send_upload_cmd();
+	send_upload_cmd(detailedmap);
 	sync_receiver();
 
 	inf = fopen(ifilename, "r");
@@ -543,7 +584,7 @@ main(int argc, char *argv[])
 	if (file_sz == sizeof(ibuf)) {
 		fprintf(stderr, "File '%s' bigger than %d bytes.  Exiting.\n",
 			ifilename, sizeof(ibuf));
-
+		exit(1);
 	}
 
 	cksum = xor_checksum(ibuf, file_sz);

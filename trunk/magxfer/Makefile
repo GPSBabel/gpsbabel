@@ -5,8 +5,8 @@ magxfer: magxfer.c
 clean:
 	rm -f magxfer
 
-VERSIONU=1_0_0
-VERSIOND=1.0.0
+VERSIONU=1_0_1
+VERSIOND=1.0.1
 release:
 	cvs tag magxfer_$(VERSIONU)
 	cvs export -r magxfer_$(VERSIONU) -d magxfer-$(VERSIOND) magxfer
