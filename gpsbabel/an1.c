@@ -146,11 +146,49 @@ EncodeOrd( double ord )
 	return 0x80000000UL-tmp;
 }
 
+typedef struct guid {
+	unsigned long l;
+	unsigned short s[3];
+	unsigned char c[6];
+} GUID;
+
+static void 
+ReadGuid( FILE *f, GUID *guid )
+{
+	int i = 0;
+	guid->l = ReadLong( f );
+	for ( i = 0; i < 3; i++ ) {
+		guid->s[i] = ReadShort( f );
+	}
+	for ( i = 0; i < 6; i++ ) {
+		guid->c[i] = ReadChar( f );
+	}
+}
+
+static void 
+WriteGuid( FILE *f, GUID *guid )
+{
+	int i = 0;
+	WriteLong( f, guid->l );
+	for ( i = 0; i < 3; i++ ) {
+		WriteShort( f, guid->s[i] );
+	}
+	for ( i = 0; i < 6; i++ ) {
+		WriteChar( f, guid->c[i] );
+	}
+}
+	
+static int
+IsGuidEqual( GUID *a, GUID *b ) 
+{
+	return !memcmp( a, b, sizeof( GUID ));
+}
+
 typedef struct {
 	short hotspotxhi;
 	long hotspoty;
 	long unk1;
-	unsigned long guid[4];
+	GUID guid;
 	char *name;
 } an1_symbol_record;
 
@@ -173,7 +211,7 @@ typedef struct {
 	double radius;
 	char *name;
 	char *fontname;
-	long guid[4];
+	GUID guid;
 	long fontcolor;
 	long fontstyle;
 	long fontsize;
@@ -309,8 +347,7 @@ static void Read_AN1_Waypoint( FILE *f, an1_waypoint_record *wpt ) {
         wpt->name = ReadString( f, len );
         len = ReadShort( f );
         wpt->fontname = ReadString( f, len );
-        for ( len = 0; len < 4; len++ ) 
-		wpt->guid[len] = ReadLong( f );
+	ReadGuid( f, &wpt->guid );
         wpt->fontcolor = ReadLong( f );
 	wpt->fontstyle = ReadLong( f );
 	wpt->fontsize = ReadLong( f );
@@ -346,8 +383,7 @@ static void Write_AN1_Waypoint( FILE *f, an1_waypoint_record *wpt ) {
 	len = strlen( wpt->fontname );
 	WriteShort( f, len );
         WriteString( f, wpt->fontname );
-        for ( len = 0; len < 4; len++ ) 
-		WriteLong( f, wpt->guid[len] );
+	WriteGuid( f, &wpt->guid );
         WriteLong( f, wpt->fontcolor );
 	WriteLong( f, wpt->fontstyle );
 	WriteLong( f, wpt->fontsize );
@@ -454,9 +490,7 @@ static void Read_AN1_Symbol( FILE *f, an1_symbol_record *symbol ) {
 	symbol->hotspotxhi = ReadShort( f );
 	symbol->hotspoty = ReadLong( f );
 	symbol->unk1 = ReadLong( f );
-	for ( len = 0; len < 4; len++ ) {
-		symbol->guid[len] = ReadLong( f );
-	}
+	ReadGuid( f, &symbol->guid );
 	len = ReadChar( f );
 	symbol->name = ReadString( f, len );
 }
@@ -533,6 +567,8 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 {
 	an1_waypoint_record *rec;
 	int local;
+	GUID redFlag = {0x623e1ee0,{0xaf27,0x11d3,0x29bc},
+		{0x00,0x50,0x04,0x02,0xf5,0x32}};
 	
 	if ( wpt->an1_extras ) {
 		rec = (an1_waypoint_record *)(void *)(wpt->an1_extras);	
@@ -547,10 +583,7 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 		rec->unk2 = 3;
 		rec->unk3 = 18561;
 		rec->fontname = xstrdup( "Arial" );
-		rec->guid[0] = 1648238304;
-		rec->guid[1] = 299085607;
-		rec->guid[2] = 1342187964;
-		rec->guid[3] = 854917636;
+		memcpy( &rec->guid, &redFlag, sizeof( GUID ));
 		rec->fontsize = 10;
 	}
 	rec->name = xstrdup( wpt->description );
