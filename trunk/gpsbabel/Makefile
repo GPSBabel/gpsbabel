@@ -31,8 +31,8 @@ dep:
 	make clean && make CC="gcc -MMD"  && cat *.d */*.d > /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_1_0_pre1206
-VERSIOND=1.1.0_pre1206
+VERSIONU=1_1_0_pre120602
+VERSIOND=1.1.0_pre120602
 release:
 	rm -fr gpsbabel-$(VERSIOND)
 	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
