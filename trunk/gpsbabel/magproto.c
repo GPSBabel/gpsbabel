@@ -756,6 +756,10 @@ mag_wr_init(const char *portname, const char *args)
 #else
 	struct stat sbuf;
 	magfile_out = fopen(portname, "w+b");
+	if (!magfile_out) {
+		fatal(MYNAME ": '%s' cannot be opened for writing.\n",
+				portname);
+	}
 	fstat(fileno(magfile_out), &sbuf);
 	is_file = S_ISREG(sbuf.st_mode);
 #endif
@@ -845,7 +849,8 @@ mag_trkparse(char *trkmsg)
 	dmy = dmy / 100;
 	tm.tm_mday = dmy % 100; 
 
-	waypt->creation_time = mktime(&tm) + get_tz_offset() ;
+	waypt->creation_time = mktime(&tm) + get_tz_offset();
+	waypt->centiseconds = fracsecs;
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->position.latitude.degrees = ddmm2degrees(latdeg);
@@ -1192,7 +1197,8 @@ void mag_track_disp(const waypoint *waypointp)
 	double lon, lat;
 	int lon_deg, lat_deg;
 	char obuf[200];
-	int hms=0,fracsec=0;
+	int hms=0;
+	int fracsec;
 	int date=0;
 	struct tm *tm;
 
@@ -1202,8 +1208,11 @@ void mag_track_disp(const waypoint *waypointp)
 		tm = gmtime(&waypointp->creation_time);
 		hms = tm->tm_hour * 10000 + tm->tm_min  * 100 + tm->tm_sec;
 		date = tm->tm_mday * 10000 + tm->tm_mon * 100 + tm->tm_year;
-	} else 
+		fracsec = waypointp->centiseconds;
+	} else  {
 		date = 0;
+		fracsec = 0;
+	}
 
 	lon = fabs(ilon);
 	lat = fabs(ilat);
@@ -1217,7 +1226,7 @@ void mag_track_disp(const waypoint *waypointp)
 	lon = (lon_deg * 100.0 + lon);
 	lat = (lat_deg * 100.0 + lat);
 
-	sprintf(obuf,"PMGNTRK,%4.3f,%c,%09.3f,%c,%05.f,%c,%d.%d,A,,%06d", 
+	sprintf(obuf,"PMGNTRK,%4.3f,%c,%09.3f,%c,%05.f,%c,%06d.%02d,A,,%06d", 
 		lat, ilat < 0 ? 'S' : 'N',
 		lon, ilon < 0 ? 'W' : 'E',
 		waypointp->position.altitude.altitude_meters == unknown_alt ?
