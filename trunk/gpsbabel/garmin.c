@@ -143,6 +143,57 @@ track_read(void)
 	xfree(array);
 }
 
+static
+void
+route_read(void)
+{
+	int32 nroutepts;
+	int i;
+	GPS_PWay *array;
+
+	nroutepts = GPS_Command_Get_Route(portname, &array);
+
+	fprintf(stderr, "Routes %d\n", nroutepts);
+#if 1
+	for (i = 0; i < nroutepts; i++) {
+		route_head *rte_head;
+		waypoint * wpt_tmp;
+
+		if (array[i]->isrte) {
+			char *csrc = NULL;
+			/* What a horrible API has libjeeps for making this
+			 * my problem.
+			 */
+			switch (array[i]->rte_prot) {
+				case 201: csrc = array[i]->rte_cmnt; break;
+				case 202: csrc = array[i]->rte_ident; break;
+				default: break;
+			}
+		rte_head = route_head_alloc();
+		route_add_head(rte_head);
+		if (csrc) {
+			rte_head->rte_name = xstrdup(csrc);
+		}
+		;
+		
+		} else { 
+			if (array[i]->islink)  {
+				continue; 
+			} else {
+				wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
+				wpt_tmp->latitude = array[i]->lat;
+				wpt_tmp->longitude = array[i]->lon;
+				wpt_tmp->shortname = array[i]->ident;
+				route_add_wpt(rte_head, wpt_tmp);
+			}
+		}
+	}
+#else
+	GPS_Fmt_Print_Route(array, nroutepts, stderr);
+#endif
+
+}
+
 static void
 data_read(void)
 {
@@ -153,8 +204,12 @@ data_read(void)
 		case wptdata:
 			waypt_read();
 			break;
+		case rtedata:
+			route_read();
+			break;
 		default:
-			fatal(MYNAME ": Routes are not yet supported\n");
+			fatal(MYNAME ": Unknown objective %d.\n", 
+					global_opts.objective);
 	}
 }
 
