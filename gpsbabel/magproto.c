@@ -38,6 +38,8 @@ static char * termread(char *ibuf, int size);
 static void termwrite(char *obuf, int size);
 static double mag2degrees(double mag_val);
 static void mag_readmsg(void);
+static void mag_handon(void);
+static void mag_handoff(void);
 static void *mkshort_handle;
 static char *deficon;
 static char *bs;
@@ -272,9 +274,11 @@ mag_writemsg(const char * const buf)
 			}
 			if (retry_cnt--)
 				goto retry;
-			else
+			else {
+				mag_handoff();
 				fatal(MYNAME 
 					": Too many communication errors.\n");
+				}
 		}
 	}
 } 
@@ -716,6 +720,7 @@ mag_rd_init(const char *portname, const char *args)
 	 */
 	later = now + 6;
 	if (!is_file) {
+		got_version = 0;
 		mag_writemsg("PMGNCMD,VERSION");
 	}
 
@@ -734,6 +739,7 @@ mag_rd_init(const char *portname, const char *args)
 		 */
 		ignore_unable = 1;
 		mag_writemsg("PMGNCMD,NMEAOFF");
+		ignore_unable = 0;
 	}
 
 	QUEUE_INIT(&rte_wpt_tmp);
@@ -1163,7 +1169,7 @@ mag_waypt_pr(const waypoint *waypointp)
 
 	isrc = waypointp->notes ? waypointp->notes : waypointp->description;
 	owpt = global_opts.synthesize_shortnames ?
-                        mkshort(mkshort_handle, isrc) : waypointp->shortname,
+                        mkshort(mkshort_handle, isrc) : waypointp->shortname;
 	odesc = isrc ? isrc : "";
 	owpt = mag_cleanse(owpt);
 
@@ -1296,7 +1302,7 @@ mag_route_trl(const route_head * rte)
 		
 		if ((tmp == &rte->waypoint_list) || ((i % 2) == 0)) {
 			thisline++;
-			
+
 			sprintf(obuff, "PMGNRTE,%d,%d,c,%d,%s,%s", 
 				numlines, thisline, rte->rte_num,
 				buff1, buff2);
