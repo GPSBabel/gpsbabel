@@ -36,6 +36,7 @@ extern filter_vecs_t polygon_vecs;
 extern filter_vecs_t routesimple_vecs;
 extern filter_vecs_t reverse_route_vecs;
 extern filter_vecs_t sort_vecs;
+extern filter_vecs_t stackfilt_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -78,6 +79,11 @@ fl_vecs_t filter_vec_list[] = {
 		&sort_vecs,
 		"sort",
 		"Rearrange waypoints by resorting",
+	},
+	{
+		&stackfilt_vecs,
+		"stack",
+		"Save and restore waypoint lists"
 	},
         {
 		NULL,
@@ -130,6 +136,19 @@ free_filter_vec( filter_vecs_t *fvec )
 		xfree(*(fvec->args->argval));
 	}
 }
+
+void 
+exit_filter_vecs( void )
+{
+	fl_vecs_t *vec = filter_vec_list;
+	while ( vec->vec ) {
+		if ( vec->vec->f_exit ) {
+			(vec->vec->f_exit)();
+		}
+		vec++;
+	}
+}
+		
 
 /*
  *  Display the available formats in a format that's easy for humans to

@@ -22,7 +22,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
 	igc.o brauniger_iq.o
 
-FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o
+FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o
 
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
@@ -110,6 +110,12 @@ mac-release:
 
 # Machine generated from here down.  
 arcdist.o: arcdist.c defs.h queue.h grtcirc.h
+brauniger_iq.o: brauniger_iq.c defs.h queue.h jeeps/gpsserial.h \
+  jeeps/gps.h jeeps/gpsport.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h \
+  jeeps/gpsnmeaget.h
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 copilot.o: copilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 csv_util.o: csv_util.c defs.h queue.h csv_util.h grtcirc.h
@@ -140,6 +146,7 @@ html.o: html.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
   jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
+igc.o: igc.c defs.h queue.h
 internal_styles.o: internal_styles.c defs.h queue.h
 magnav.o: magnav.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 magproto.o: magproto.c defs.h queue.h magellan.h
@@ -170,6 +177,7 @@ route.o: route.c defs.h queue.h
 saroute.o: saroute.c defs.h queue.h
 smplrout.o: smplrout.c defs.h queue.h grtcirc.h
 sort.o: sort.c defs.h queue.h
+stackfilter.o: stackfilter.c defs.h queue.h
 text.o: text.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
@@ -212,7 +220,8 @@ jeeps/gpsmem.o: jeeps/gpsmem.c jeeps/gps.h defs.h queue.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
-  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h \
+  jeeps/garminusb.h
 jeeps/gpsprot.o: jeeps/gpsprot.c jeeps/gps.h defs.h queue.h \
   jeeps/gpsport.h jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h \
   jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \

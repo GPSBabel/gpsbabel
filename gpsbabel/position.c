@@ -357,6 +357,7 @@ filter_vecs_t position_vecs = {
 	position_init,
 	position_process,
 	position_deinit,
+	NULL,
 	position_args
 };
 
@@ -364,5 +365,6 @@ filter_vecs_t radius_vecs = {
 	radius_init,
 	radius_process,
 	radius_deinit,
+	NULL,
 	radius_args
 };

@@ -100,5 +100,6 @@ filter_vecs_t sort_vecs = {
 	sort_init,
 	sort_process,
 	NULL,
+	NULL,
 	sort_args
 };

@@ -246,6 +246,7 @@ char *GET_OPTION(const char *iarglist, const char *argname, DEBUG_PARAMS);
 typedef void (*filter_init) (char const *);
 typedef void (*filter_process) (void);
 typedef void (*filter_deinit) (void);
+typedef void (*filter_exit) (void);
 
 typedef void (*waypt_cb) (const waypoint *);
 typedef void (*route_hdr)(const route_head *);
@@ -364,6 +365,7 @@ typedef struct filter_vecs {
 	filter_init f_init;
 	filter_process f_process;
 	filter_deinit f_deinit;
+	filter_exit f_exit;
 	arglist_t *args;
 } filter_vecs_t;
 
@@ -389,6 +391,7 @@ filter_vecs_t * find_filter_vec(char *, char **);
 void free_filter_vec(filter_vecs_t *);
 void disp_filters(int version);
 void disp_filter_vecs(void);
+void exit_filter_vecs(void);
 
 #ifndef DEBUG_MEM
 void *xcalloc(size_t nmemb, size_t size);

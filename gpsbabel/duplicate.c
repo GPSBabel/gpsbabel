@@ -257,5 +257,6 @@ filter_vecs_t duplicate_vecs = {
 	duplicate_init,
 	duplicate_process,
 	duplicate_deinit,
+	NULL,
 	dup_args
 };

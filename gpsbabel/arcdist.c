@@ -159,5 +159,6 @@ filter_vecs_t arcdist_vecs = {
 	arcdist_init,
 	arcdist_process,
 	arcdist_deinit,
+	NULL,
 	arcdist_args
 };
