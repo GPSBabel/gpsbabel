@@ -46,10 +46,12 @@ extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t mxf_vecs;
 extern ff_vecs_t holux_vecs;
 extern ff_vecs_t ozi_vecs;
+extern ff_vecs_t xcsv_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t dna_vecs;
 extern ff_vecs_t magnav_vec;
 extern ff_vecs_t xmap_vecs;
+extern ff_vecs_t xmapwpt_vecs;
 extern ff_vecs_t tmpro_vecs;
 extern ff_vecs_t gpsdrive_vecs;
 
@@ -123,6 +125,12 @@ vecs_t vec_list[] = {
 		NULL
 	},
 	{
+		&xmapwpt_vecs,
+		"xmapwpt",
+		"Delorme XMap HH Native .WPT", 
+		".wpt"
+	},
+	{
 		&dna_vecs,
 		"dna",
 		"Navitrak DNA marker format",
@@ -175,6 +183,12 @@ vecs_t vec_list[] = {
 		"ozi",
 		"OziExplorer Waypoint",
 		"ozi"
+	},
+	{
+		&xcsv_vecs,
+		"xcsv",
+		"? Character Separated Values",
+		NULL
 	},
 	{
 		&tpg_vecs,

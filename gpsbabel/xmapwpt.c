@@ -1,14 +1,9 @@
 /*
-    Mapsend Exchange Format (.mxf)
-    (Maptech Terrain Navigator, Terrain Professional, Take a Hike)
-    (AKA Yet Another CSV Format) 
+    Delorme XMap HandHeld .WPT Format 
+    (as created by XMapHH Street Atlas/PPC)
+    1296126539:1481466224:1895825408:1392508928:3137157:text:text:text\n
 
     Contributed to gpsbabel by Alex Mottram (geo_alexm at cox-internet.com)
-
-    LAT, LON, "Waypoint Name", "Big Name", "Small Name", COLOR, ICON
-
-    As described in Maptech Terrain Navigator Help File.
-    Tested against Terrain Navigator and ExpertGPS import/export .MXF files.
 
     Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
 
@@ -31,37 +26,43 @@
 #include "defs.h"
 #include "csv_util.h"
 
-#define MYNAME	"MXF"
+#define MYNAME	"XMAPWPT"
 
 static void
-mxf_set_style()
+xmapwpt_set_style()
 {
-    /* set up the csv xcsv_file struct */
+    /* set up the xmapwpt xcsv_file struct */
     xcsv_file_init();
 
     /* this is an internal style, don't mess with it */
     xcsv_file.is_internal = 1;
 
     /* how the file gets split up */
-    xcsv_file.field_delimiter = ", ";
+    xcsv_file.field_delimiter = ":";
     xcsv_file.record_delimiter = "\n";
-    xcsv_file.badchars = "\",";
+    xcsv_file.badchars = ":";
 
-    xcsv_ifield_add("LAT_DECIMAL", "", "%08.5f");
-    xcsv_ifield_add("LON_DECIMAL", "", "%08.5f");
-    xcsv_ifield_add("DESCRIPTION", "", "%s");
-    xcsv_ifield_add("SHORTNAME", "", "%s");
-    xcsv_ifield_add("IGNORE", "", "%s");
-    xcsv_ifield_add("CONSTANT", "ff0000", "%s");
-    xcsv_ifield_add("CONSTANT", "47", "%s");
+    xcsv_ifield_add("CONSTANT", "1296126539", "%s");
+    xcsv_ifield_add("CONSTANT", "1481466224", "%s");
+    xcsv_ifield_add("LAT_INT32DEG", "", "%d");
+    xcsv_ifield_add("LON_INT32DEG", "", "%d");
+    xcsv_ifield_add("CONSTANT", "3137157", "%s");
+    xcsv_ifield_add("SHORTNAME", "", "%-.31s");   
+    xcsv_ifield_add("IGNORE", "", "%-.31s");      
 
-    xcsv_ofield_add("LAT_DECIMAL", "", "%08.5f");
-    xcsv_ofield_add("LON_DECIMAL", "", "%08.5f");
-    xcsv_ofield_add("DESCRIPTION", "", "\"%s\"");
-    xcsv_ofield_add("SHORTNAME", "", "\"%s\"");
-    xcsv_ofield_add("DESCRIPTION", "", "\"%s\"");
-    xcsv_ofield_add("CONSTANT", "ff0000", "%s");
-    xcsv_ofield_add("CONSTANT", "47", "%s");
+    /* 
+     * actual description len accepted is 79. however under win32, we
+     * run the risk of the compiled app ending a line in \r\n when we 
+     * say \n.  This, in turn, overruns a fixed len buffer and causes
+     * XmapHH to die both occasionally and horribly.
+     */
+    xcsv_ifield_add("DESCRIPTION", "", "%-.78s"); 
+
+    /* outfields are infields */
+    if (xcsv_file.ofield)
+        free(xcsv_file.ofield);
+    xcsv_file.ofield = &xcsv_file.ifield;
+    xcsv_file.ofield_ct = xcsv_file.ifield_ct;
 
     /* set up mkshort */
     if (global_opts.synthesize_shortnames) {
@@ -72,9 +73,9 @@ mxf_set_style()
 }
 
 static void
-mxf_rd_init(const char *fname, const char *args)
+xmapwpt_rd_init(const char *fname, const char *args)
 {
-    mxf_set_style();
+    xmapwpt_set_style();
 
     xcsv_file.xcsvfp = fopen(fname, "r");
     
@@ -84,9 +85,9 @@ mxf_rd_init(const char *fname, const char *args)
 }
 
 static void
-mxf_wr_init(const char *fname, const char *args)
+xmapwpt_wr_init(const char *fname, const char *args)
 {
-    mxf_set_style();
+    xmapwpt_set_style();
 
     xcsv_file.xcsvfp = fopen(fname, "w");
     
@@ -96,19 +97,19 @@ mxf_wr_init(const char *fname, const char *args)
 }
 
 static void
-mxf_deinit(void)
+xmapwpt_deinit(void)
 {
-    if (xcsv_file.xcsvfp) 
+    if (xcsv_file.xcsvfp)
         fclose(xcsv_file.xcsvfp);
         
     xcsv_destroy_style();
 }
 
-ff_vecs_t mxf_vecs = {
-    mxf_rd_init,
-    mxf_wr_init,
-    mxf_deinit,
-    mxf_deinit,
+ff_vecs_t xmapwpt_vecs = {
+    xmapwpt_rd_init,
+    xmapwpt_wr_init,
+    xmapwpt_deinit,
+    xmapwpt_deinit,
     xcsv_data_read,
     xcsv_data_write,
 };

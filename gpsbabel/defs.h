@@ -212,6 +212,7 @@ void *xcalloc(size_t nmemb, size_t size);
 void *xmalloc(size_t size);
 char *xstrdup(const char *s);
 void rtrim(char *s);
+signed int get_tz_offset(void);
 
 /*
  * PalmOS records like fixed-point numbers, which should be rounded

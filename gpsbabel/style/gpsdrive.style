@@ -1,0 +1,20 @@
+# gpsbabel XCSV style file
+#
+# Format: GPSDrive
+# Author: Alex Mottram
+#   Date: 12/11/2002
+#
+# 
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		SPACE
+RECORD_DELIMITER	NEWLINE
+BADCHARS		,"
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+
+IFIELD	ANYNAME, "", "%s"
+IFIELD	LAT_DECIMAL, "", "%08.5lf"
+IFIELD	LON_DECIMAL, "", "%08.5lf"

@@ -166,3 +166,24 @@ diff ${TMPDIR}/gpsdrive.txt reference
 ${PNAME} -i gpsdrive -f reference/gpsdrive.txt -o gpsdrive -F ${TMPDIR}/gpsdrive2.txt
 diff ${TMPDIR}/gpsdrive2.txt reference/gpsdrive.txt
 
+# XMapHH Street Atlas USA file format
+rm -f ${TMPDIR}/xmapwpt.wpt ${TMPDIR}/xmapwpt.xmapwpt
+${PNAME} -i xmapwpt -f reference/xmapwpt.wpt -o xmapwpt -F ${TMPDIR}/xmapwpt.xmapwpt
+${PNAME} -i xmapwpt -f ${TMPDIR}/xmapwpt.xmapwpt -o xmapwpt -F ${TMPDIR}/xmapwpt.wpt
+diff ${TMPDIR}/xmapwpt.wpt reference
+
+# XCSV
+# Test that we can parse a style file, and read and write data in the 
+# same xcsv format (a complete test is virtually impossible).
+echo "RECORD_DELIMITER NEWLINE" > ${TMPDIR}/testo.style
+echo "FIELD_DELIMITER COMMA" >> ${TMPDIR}/testo.style
+echo "BADCHARS COMMA" >> ${TMPDIR}/testo.style
+echo "PROLOGUE Header" >> ${TMPDIR}/testo.style
+echo "EPILOGUE Footer" >> ${TMPDIR}/testo.style
+echo "IFIELD SHORTNAME,,%s" >> ${TMPDIR}/testo.style
+echo "IFIELD LAT_DIRDECIMAL,,%c%lf" >> ${TMPDIR}/testo.style
+echo "IFIELD LON_DECIMALDIR,,%lf%c" >> ${TMPDIR}/testo.style
+rm -f ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
+${PNAME} -i geo -f geocaching.loc -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.geo
+${PNAME} -i xcsv,style=${TMPDIR}/testo.style -f ${TMPDIR}/xcsv.geo -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.xcsv
+diff -u ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv

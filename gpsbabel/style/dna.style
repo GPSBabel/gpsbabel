@@ -1,0 +1,24 @@
+# gpsbabel XCSV style file
+#
+# Format: DNA Marker Format
+# Author: Alex Mottram
+#   Date: 12/09/2002
+#
+# 
+# As defined in dna.c
+#
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		COMMA
+RECORD_DELIMITER	NEWLINE
+BADCHARS		COMMA
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	INDEX, "", "%d"
+IFIELD	LAT_DECIMAL, "", "%08.5lf"
+IFIELD	LON_DECIMAL, "", "%08.5lf"
+IFIELD	DESCRIPTION, "", "%s"
+

@@ -1,0 +1,23 @@
+# gpsbabel XCSV style file
+#
+# Format: Tiger Data Format
+# Author: Alex Mottram
+#   Date: 12/09/2002
+#
+# 
+# As defined in tiger.c
+#
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		COLON
+RECORD_DELIMITER	NEWLINE
+BADCHARS		COLON
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	LON_DECIMAL, "", "%lf"
+IFIELD	LAT_DECIMAL, "", "%lf"
+IFIELD	CONSTANT, "redpin", "%s"
+IFIELD	DESCRIPTION, "", "%s"
