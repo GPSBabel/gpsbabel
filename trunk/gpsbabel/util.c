@@ -22,6 +22,7 @@
 #include "defs.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 void *
 xmalloc(size_t size)

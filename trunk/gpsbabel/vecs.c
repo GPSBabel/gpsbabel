@@ -64,7 +64,8 @@ vecs_t vec_list[] = {
 	{
 		&gpsman_vecs,
 		"gpsman",
-		"GPSman"
+		"GPSman", 
+		NULL
 	},
 	{
 		&gpx_vecs,
@@ -75,12 +76,14 @@ vecs_t vec_list[] = {
 	{
 		&mag_vecs,
 		"magellan",
-		"Magellan protocol"
+		"Magellan protocol", 
+		NULL
 	},
 	{
 		&mapsend_vecs,
 		"mapsend",
-		"Magellan Mapsend"
+		"Magellan Mapsend", 
+		NULL
 	},
 	{
 		&pcx_vecs,
@@ -98,22 +101,26 @@ vecs_t vec_list[] = {
 	{
 		&gpsutil_vecs,
 		"gpsutil",
-		"gpsutil"
+		"gpsutil", 
+		NULL
 	},
 	{
 		&tiger_vecs,
 		"tiger",
-		"U.S. Census Bureau Tiger Mapping Service"
+		"U.S. Census Bureau Tiger Mapping Service", 
+		NULL
 	},
 	{
 		&csv_vecs,
 		"csv",
-		"Comma separated values"
+		"Comma separated values", 
+		NULL
 	},
 	{
 		&xmap_vecs,
 		"xmap",
-		"Delorme Topo USA4/XMap Conduit"
+		"Delorme Topo USA4/XMap Conduit", 
+		NULL
 	},
 	{
 		&dna_vecs,
@@ -130,22 +137,26 @@ vecs_t vec_list[] = {
 	{
 		&cetus_vecs,
 		"cetus",
-		"Cetus for Palm/OS"
+		"Cetus for Palm/OS", 
+		NULL
 	},
 	{
 		&gpspilot_vecs,
 		"gpspilot",
-		"GPSPilot Tracker for Palm/OS"
+		"GPSPilot Tracker for Palm/OS", 
+		NULL
 	},
 	{
 		&magnav_vec,
 		"magnav",
-		"Magellan NAV Companion for PalmOS"
+		"Magellan NAV Companion for PalmOS", 
+		NULL
 	},
 	{
 		&garmin_vecs,
 		"garmin",
-		"Garmin serial protocol"
+		"Garmin serial protocol", 
+		NULL
 	},
 	{
 		&mxf_vecs,
@@ -180,10 +191,12 @@ vecs_t vec_list[] = {
 	{
 		&gpsdrive_vecs,
 		"gpsdrive",
-		"GpsDrive Format"
+		"GpsDrive Format", 
+		NULL
 	},
 
         {
+		NULL,
 		NULL,
 		NULL,
 		NULL

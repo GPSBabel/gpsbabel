@@ -157,7 +157,7 @@ typedef void (*route_trl)(const route_head *);
 void waypt_add (waypoint *);
 void waypt_del (waypoint *);
 void waypt_disp_all(waypt_cb);
-void route(route_hdr, route_trl, waypt_cb);
+void route_disp_all(route_hdr, route_trl, waypt_cb);
 unsigned int waypt_count(void);
 
 route_head *route_head_alloc(void);
@@ -190,12 +190,13 @@ void fatal(const char *, ...)
 	;
 ff_vecs_t *find_vec(char *, char **);
 void disp_vecs(void);
+void disp_formats(void);
 void printposn(const coord *c, int is_lat);
 
 void *xcalloc(size_t nmemb, size_t size);
 void *xmalloc(size_t size);
-char * xstrdup(const char *s);
-
+char *xstrdup(const char *s);
+void *rtrim(char *s);
 
 /*
  * PalmOS records like fixed-point numbers, which should be rounded

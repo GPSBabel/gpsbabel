@@ -35,6 +35,8 @@ void   GPS_User(char *s);
 void   GPS_Disable_User(void);
 void   GPS_Enable_User(void);
 void   GPS_Diagnose(int32 c);
+void   GPS_Diag(const char *fmt, ...);
+
 void   GPS_Enable_Diagnose(void);
 void   GPS_Disable_Diagnose(void);
 
