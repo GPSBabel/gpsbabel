@@ -30,11 +30,6 @@
 int bitrate = 4800;
 #define MYNAME "MAGPROTO"
 
-#if __WIN32__
-#include <windows.h>
-HANDLE comport;
-#endif
-
 #define debug_serial  (global_opts.debug_level > 1)
 
 extern gpsdata_type objective;
@@ -424,7 +419,7 @@ mkspeed(bitrate)
 HANDLE comport;
 
 static
-void
+int
 terminit(const char *portname)
 {
 	DCB tio;	
@@ -465,7 +460,20 @@ terminit(const char *portname)
 
 	if (!SetCommState (comport, &tio)) {
 		CloseHandle(comport);
-   		fatal(MYNAME ": set port settings\n");
+
+		/*
+		 *  Probably not a com port.   Try it as a file.
+		 */
+		magfile_in = fopen(portname, "rb");
+		if (magfile_in == NULL) {
+			fatal(MYNAME ": Cannot open %s.%s\n",
+				portname, strerror(errno));
+		}
+		is_file = 1;
+		icon_mapping = map330_icon_table;
+		mag_cleanse = m330_cleanse;
+		got_version = 1;
+		return 0;
 	}
 
 	GetCommTimeouts (comport, &timeout);
@@ -476,6 +484,7 @@ terminit(const char *portname)
 		CloseHandle (comport);
 		fatal(MYNAME ": set timeouts\n");
 	}
+	return 1;
 }
 
 static char * 
@@ -614,7 +623,7 @@ mag_rd_init(const char *portname, const char *args)
 	}
 
 	terminit(portname);
-	
+
 	mag_handon();
 	now = time(NULL);
 	later = now + 3;
@@ -639,11 +648,17 @@ mag_rd_init(const char *portname, const char *args)
 static void
 mag_wr_init(const char *portname, const char *args)
 {
+#if __WIN32__
+	if (!terminit(portname)) {
+		is_file = 1;
+	}
+	is_file = 1;
+#else
 	struct stat sbuf;
-
 	magfile_out = fopen(portname, "w+b");
 	fstat(fileno(magfile_out), &sbuf);
 	is_file = S_ISREG(sbuf.st_mode);
+#endif
 
 	if (is_file) {
 		magfile_out = fopen(portname, "w+b");
