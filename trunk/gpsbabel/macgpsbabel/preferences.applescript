@@ -2,7 +2,7 @@
 -- MacGPSBabel
 
 --  Created by Jeremy Atherton on Fri Jan 30 2004.
---  Copyright (c) 2004 Jeremy Atherton. All rights reserved.
+--  Copyright (c) 2004 Jeremy Atherton.
 
 property startIndex : 0
 property startState : false
