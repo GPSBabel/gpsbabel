@@ -21,11 +21,12 @@
 
 #include <termios.h>
 #include <ctype.h>
+#include <time.h>
 
 #include "defs.h"
 #include "magellan.h"
 
-#define debug 1
+#define debug 0
 
 typedef enum {
 	mrs_handoff = 0,
@@ -39,6 +40,7 @@ static struct termios orig_tio;
 static int last_rx_csum;
 static int found_done;
 static icon_mapping_t *icon_mapping;
+static int got_version;
 
 static waypoint * mag_wptparse(char *);
 
@@ -175,7 +177,7 @@ fprintf(stderr, "E");
 static void
 mag_writeack(int osum)
 {
-	char obuf[100];
+	char obuf[200];
 	snprintf(obuf, sizeof(obuf), "PMGNCSM,%02X", osum);
 	mag_writemsg(obuf);
 }
@@ -200,6 +202,8 @@ mag_verparse(char *ibuf)
 	int prodid = mm_unknown; 
 	char version[1024];
 	pid_to_model_t *pp = pid_to_model;
+
+	got_version = 1;
 	sscanf(ibuf,"$PMGNVER,%d,%[^,]", &prodid, version);
 
 	for (pp = pid_to_model; pp->model ; pp++) {
@@ -226,15 +230,23 @@ mag_verparse(char *ibuf)
 static void
 mag_readmsg(void)
 {
-	char ibuf[100];
+	char ibuf[200];
 	int isz;
 	unsigned int isum;
 	char *isump;
-	fgets(ibuf, sizeof(ibuf), magfile);
+	char *gr;
+
+	gr = fgets(ibuf, sizeof(ibuf), magfile);
+
+	if (!gr && !got_version) {
+		fatal("Magproto: No data received from GPS.\n");
+	}
+
 	isz = strlen(ibuf);
+
 	if (isz < 5) {
-if (debug)
-fprintf(stderr, "SHORT READ %d\n", isz);
+		if (debug)
+			fprintf(stderr, "SHORT READ %d\n", isz);
 		return;
 	}
 	while (!isprint(ibuf[isz]))
@@ -244,6 +256,10 @@ fprintf(stderr, "SHORT READ %d\n", isz);
 	if (isum != mag_pchecksum(&ibuf[1], isz-3)) {
 if (debug)
 		fprintf(stderr, "RXERR %02x/%02x: '%s'\n", isum, mag_pchecksum(&ibuf[1],isz-5), ibuf);
+		/* Special case receive errors early on. */
+		if (!got_version) {
+			fatal("Magproto: bad communication.  Check bit rate.\n");
+		}
 	}
 if (debug)
 fprintf(stderr, "READ: %s\n", ibuf);
@@ -270,6 +286,8 @@ static void
 mag_rd_init(const char *portname)
 {
 	struct termios new_tio;
+	time_t now, later;
+
 	magfile = fopen(portname, "rw+b");
 	
 	if (magfile == NULL) {
@@ -286,13 +304,26 @@ mag_rd_init(const char *portname)
 	new_tio.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
 	new_tio.c_cflag &= ~(CSIZE|PARENB);
 	new_tio.c_cflag |= CS8;
+	new_tio.c_cc[VTIME] = 10;
+	new_tio.c_cc[VMIN] = 0;
 
 	cfsetospeed(&new_tio, B4800);
 	cfsetispeed(&new_tio, B4800);
 	tcsetattr(magfd, TCSAFLUSH, &new_tio);
 	
 	mag_handon();
+	now = time(NULL);
+	later = now + 2;
 	mag_writemsg("PMGNCMD,VERSION");
+
+	while (!got_version) {
+		mag_readmsg();
+		if (time(NULL) > later) {
+			fatal("Magproto: No acknowledgment from GPS on %s\n",
+				portname);
+		}
+	}
+
 	mag_writemsg("PMGNCMD,NMEAOFF");
 	return;
 }
