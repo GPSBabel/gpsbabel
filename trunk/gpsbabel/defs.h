@@ -172,7 +172,7 @@ typedef struct {
 	char *url_link_text;
 	int icon_descr_is_dynamic;
 	const char *icon_descr;
-	time_t creation_time;
+	time_t creation_time;	/* standardized in UTC/GMT */
 	int centiseconds;	/* Optional hundredths of a second. */
 	geocache_data gc_data;
 	xml_tag *gpx_extras;
