@@ -221,6 +221,19 @@ data_write(void)
 
 		wpt = (waypoint *) elem;
 
+		/*
+		 *  Undo less than helpful defaults from Way_New.
+		 */
+		way[i]->rte_ident[0] = 0;
+		way[i]->rte_cmnt[0] = 0;
+		way[i]->rte_link_subclass[0] = 0;
+		way[i]->rte_link_ident[0] = 0;
+		way[i]->city[0] = 0;
+		way[i]->state[0] = 0;
+		way[i]->facility[0] = 0;
+		way[i]->addr[0] = 0;
+		way[i]->cross_road[0] = 0;
+
 		if(wpt->description) src = wpt->description;
 		if(wpt->notes) src = wpt->notes;
 
