@@ -355,7 +355,7 @@ gpx_start(void *data, const char *el, const char **attr)
 		break; 
 	case tt_trk:
 		trk_head = route_head_alloc();
-		route_add_head(trk_head);
+		track_add_head(trk_head);
 		in_trk++;
 		break;
 	case tt_trkpt:
@@ -1148,7 +1148,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 			fprintf(ofd, "</desc>\n");
 		}
 	}
-	if (waypointp->altitude) {
+	if (waypointp->altitude != unknown_alt) {
 		fprintf(ofd, "<ele>\n%f\n</ele>\n",
 			 waypointp->altitude);
 	}
@@ -1220,7 +1220,7 @@ gpx_track_tlr(const route_head *rte)
 static
 void gpx_track_pr()
 {
-	route_disp_all(gpx_track_hdr, gpx_track_tlr, gpx_track_disp);
+	track_disp_all(gpx_track_hdr, gpx_track_tlr, gpx_track_disp);
 }
 
 static void
@@ -1327,19 +1327,10 @@ gpx_write(void)
 	fprintf(ofd, "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n");
 
         gpx_write_time( now, "time" );
-	switch(global_opts.objective) {
-		case trkdata: 
-				gpx_track_pr();
-				break;
-		case rtedata: 
-				gpx_route_pr();
-				break;
-		case wptdata: 
-				waypt_disp_all(gpx_waypt_pr);
-			      	break;
-		default:
-			      break;
-	}
+
+	waypt_disp_all(gpx_waypt_pr);
+	gpx_track_pr();
+	gpx_route_pr();
 
 	fprintf(ofd, "</gpx>\n");
 }

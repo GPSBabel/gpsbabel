@@ -601,7 +601,7 @@ psit_track_r(FILE *psit_file, route_head **trk)
 					track_head->rte_name = xstrdup(trkname);
 				}
 				trk_num++;
-				route_add_head(track_head);
+				track_add_head(track_head);
 			}
 
 			thisWaypoint->creation_time = dateTime;
@@ -795,7 +795,7 @@ psit_write(void)
 		route_disp_all(psit_routehdr_w_wrapper, psit_noop, psit_waypoint_w_wrapper);
 	}
 	if (global_opts.objective == trkdata) {
-		route_disp_all(psit_trackhdr_w_wrapper, psit_noop, psit_trackdatapoint_w_wrapper);
+		track_disp_all(psit_trackhdr_w_wrapper, psit_noop, psit_trackdatapoint_w_wrapper);
 	}
 
 	mkshort_del_handle(mkshort_handle);
