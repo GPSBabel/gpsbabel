@@ -82,6 +82,10 @@ int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
     len = 0;
     isDLE = gpsFalse;
     p = (*packet)->data;
+
+    if (gps_is_usb) {
+	    return GPS_Packet_Read_usb(fd, packet);
+    }
     
     start = GPS_Time_Now();
     GPS_Diag("Rx Data:");
@@ -191,6 +195,10 @@ int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
 
 int32 GPS_Get_Ack(int32 fd, GPS_PPacket *tra, GPS_PPacket *rec)
 {
+    if (gps_is_usb) {
+	    return 1;
+    }
+
     if(!GPS_Packet_Read(fd, rec))
 	return 0;
 
@@ -208,33 +216,3 @@ int32 GPS_Get_Ack(int32 fd, GPS_PPacket *tra, GPS_PPacket *rec)
 
     return 1;
 }
-
-
-
-
-
-#if 0
-
-int32 ajb(int32 fd)
-{
-    UC     u;
-    int32  n;
-    
-    while(1)
-    {
-	if((n=GPS_Serial_Chars_Ready(fd)))
-	{
-	    if(read(fd,&u,1)==-1)
-	    {
-		perror("read");
-		GPS_Error("NMEA Read: Read error");
-		gps_errno = FRAMING_ERROR;
-		return 0;
-	    }
-	    printf("%d %c\n",u,u);
-	}
-    }
-
-    return 0;
-}
-#endif

@@ -45,9 +45,15 @@ void GPS_Make_Packet(GPS_PPacket *packet, UC type, UC *data, int16 n)
     
     int32 i;
     UC  chk=0;
+
     
     p = data;
     q = (*packet)->data;
+
+    if (gps_is_usb) {
+	    GPS_Make_Packet_usb(packet, type, data, n);
+	    return;
+    }
     
     (*packet)->dle   = DLE;
     (*packet)->edle  = DLE;
@@ -55,7 +61,7 @@ void GPS_Make_Packet(GPS_PPacket *packet, UC type, UC *data, int16 n)
     (*packet)->n     = n;
     (*packet)->type  = type;
     (*packet)->bytes = 0;
-    
+
     chk -= type;
 
     if(n == DLE)
@@ -126,6 +132,9 @@ int32 GPS_Write_Packet(int32 fd, GPS_PPacket packet)
     size_t ret;
     const char *m1, *m2;
 
+    if (gps_is_usb) 
+	    return GPS_Write_Packet_usb(fd, packet);
+
     GPS_Diag("Tx Data:");
     Diag(&packet->dle, 3);    
     if((ret=GPS_Serial_Write(fd,(const void *) &packet->dle,(size_t)3)) == -1)
@@ -193,6 +202,9 @@ int32 GPS_Write_Packet(int32 fd, GPS_PPacket packet)
 int32 GPS_Send_Ack(int32 fd, GPS_PPacket *tra, GPS_PPacket *rec)
 {
     UC data[2];
+
+    if (gps_is_usb) 
+	    return 1;
     
     GPS_Util_Put_Short(data,(US)(*rec)->type);
     GPS_Make_Packet(tra,LINK_ID[0].Pid_Ack_Byte,data,2);

@@ -38,7 +38,7 @@ union {
 	unsigned char datasz[4];
 	unsigned char databuf[1]; /* actually an variable length array... */
 	} gusb_pkt;
-	unsigned char dbuf[MAX_GPS_PACKET_SIZE];
+	unsigned char dbuf[1024];
 } garmin_usb_packet;
 
 /*
