@@ -1,4 +1,4 @@
-gpsbabel XCSV Style File Layout:
+GPSBabel XCSV Style File Layout:
 
 The format of an XCSV style file is quite simple and designed to be easily
 implemented by non-programmers to handle "one-off" babel-ization of various
@@ -42,8 +42,8 @@ FIELD LAT_DECIMAL, "", "%f"  # ONLY THIS SENTENCE IS A COMMENT.
 
 GLOBAL PROPERTIES OF THE FILE:
 --------------------------------
-There are a few available directives to describe traits of the file being
-described and not specific lines appearing the files being described.
+There are a few available directives to describe general traits of the 
+file being described and not specific data within the file itself.
 
  o DESCRIPTION:
 
@@ -71,7 +71,7 @@ processing functions of GPSbabel.
 
  o SHORTWHITE: 
 
-   This tells the shortname synthesizer whether or not not allow whitespace
+   This tells the shortname synthesizer whether or not to allow whitespace
    in the synthesized shortnames.  Allowed values are zero and one.
 
    example:
@@ -108,8 +108,8 @@ The first few directives define the layout the physical file itself:
 
  o BADCHARS:
    Bad characters are things that should *never* be written into the XCSV
-   file on output.  Common bad characters are usually the FIELD_DELIMITER
-   itself.
+   file as data on output.  GPSBabel automatically includes any non-blank
+   FIELD_DELIMITER and RECORD_DELIMITER characters as BADCHARS by default.
 
    example: BADCHARS	COMMA
             BADCHARS	~|
@@ -139,8 +139,8 @@ DEFINING FIELDS WITHIN THE FILE:
 A field defines data.  There are two different classifications of FIELDS,
 IFIELD (file input) and OFIELD (file output).  In the absence of any OFIELDS,
 IFIELDS are use as both input and output.  The existence of OFIELDS is 
-primarily to allow more flexible mapping of gpsbabel data to output data 
-(say, for instance, to map the internal gpsbabel "description" variable to 
+primarily to allow more flexible mapping of GPSBabel data to output data 
+(say, for instance, to map the internal GPSBabel "description" variable to 
 two or more fields on output).  For all practical purposes, IFIELDS and 
 OFIELDS are defined the same way in the style file.
 
@@ -185,39 +185,39 @@ The fields used by the XCSV parser are as follows:
 
  o SHORTNAME
    A SHORTNAME is generally the waypoint name of the data being processed.  
-   SHORTNAME maps directly to the gpsbabel variable ->shortname.  A SHORTNAME 
+   SHORTNAME maps directly to the GPSBabel variable ->shortname.  A SHORTNAME 
    is CHARACTER data and requires a character array printf conversion.
 
    example: IFIELD SHORTNAME,"","%s"    (write shortname in the output file)
 
  o DESCRIPTION
    A DESCRIPTION is generally a long description of the waypoint.  A 
-   DESCRIPTION maps to the gpsbabel variable ->description and is otherwise 
+   DESCRIPTION maps to the GPSBabel variable ->description and is otherwise 
    handled exactly like a SHORTNAME.
 
    example: IFIELD DESCRIPTION,"","%s"  (write description in the output file)
 
  o NOTES
    NOTES are generally everything else about a waypoints. NOTES map to the 
-   gpsbabel variable ->notes and is otherwise handled exactly like a 
+   GPSBabel variable ->notes and is otherwise handled exactly like a 
    SHORTNAME.
 
  o URL
-   URL is a URL for the waypoint.  URL maps to the gpsbabel variable 
+   URL is a URL for the waypoint.  URL maps to the GPSBabel variable 
    ->url and is otherwise handled exactly like a SHORTNAME.
 
    example: IFIELD URL,"","%s" 	(writes the URL in the output file)
 
  o URL_LINK_TEXT
    URL_LINK_TEXT is a textual description of where a URL points.  
-   URL_LINK_TEXT maps to the gpsbabel variable ->url_link_text and 
+   URL_LINK_TEXT maps to the GPSBabel variable ->url_link_text and 
    is otherwise handled exactly like a SHORTNAME.
 
    example: IFIELD URL_LINK_TEXT,"","%s" (writes link text in the output file)
 
  o ICON_DESCR
    ICON_DESCR is a textual description of an icon type for a waypoint.
-   ICON_DESCR maps to the gpsbabel variable ->icon_desc and is otherwise 
+   ICON_DESCR maps to the GPSBabel variable ->icon_desc and is otherwise 
    handled exactly like a SHORTNAME.
 
    example: IFIELD ICON_DESCR,"","%s" (writes link text in the output file)
@@ -287,5 +287,5 @@ The fields used by the XCSV parser are as follows:
 EXAMPLES:
 --------
 For examples on using the XCSV module, please see the *.style files in
-the style/ subdirectory of gpsbabel.  
+the style/ subdirectory of GPSBabel.  
 

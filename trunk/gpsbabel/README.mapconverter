@@ -17,9 +17,9 @@ on your PDA.
 
 NOTES:
 
-o GPSBabel encodes "foo.txt" to have mapconverter use the output filename 
-  of "foo.pdb".  Similarly, if you tell GPSBabel to write output as
-  "bananagps.txt", mapconverter output will be "bananagps.pdb".
+o GPSBabel will write the name of its own output file in the output file
+  it creates as the input for Mapconverter.   Mapconverter will replace 
+  the extension of this filename with ".pdb".
 
 o The PocketPC version of Mapopolis doesn't notice files with the ".pdb"
   extension.  To make this work, change the extension to ".mlp" when
