@@ -150,7 +150,7 @@ position_runqueue(queue *q, int nelems, int qtype)
 				   comp[i]->longitude);
 
 		/* convert radians to integer feet */
-		dist = (int)((((dist * 180.0 * 60.0) / M_PI) * 1.1516) * 5280.0);
+		dist = (int)(5280*tomiles(dist));
 		
 		if (dist <= pos_dist) {
 			switch (qtype) {
@@ -273,7 +273,7 @@ radius_process(void)
 				   home_pos->longitude);
 
 		/* convert radians to float point statute miles */
-		dist = (((dist * 180.0 * 60.0) / M_PI) * 1.1516);
+		dist = tomiles(dist);
 
 		if ((dist >= pos_dist) == (exclopt == NULL)) {
 			waypt_del(waypointp);

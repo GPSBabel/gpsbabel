@@ -30,6 +30,7 @@ static double pos_dist;
 static char *distopt = NULL;
 static char *arcfileopt = NULL;
 static char *exclopt = NULL;
+static char *ptsopt = NULL;
 
 typedef struct {
 	double distance;
@@ -42,6 +43,8 @@ arglist_t arcdist_args[] = {
 	{"distance", &distopt, "Maximum distance from arc", 
 		ARGTYPE_FLOAT | ARGTYPE_REQUIRED},
 	{"exclude", &exclopt, "Exclude points close to the arc", ARGTYPE_BOOL},
+	{"points", &ptsopt, "Use distance from vertices not lines", 
+		ARGTYPE_BOOL},
 	{0, 0, 0, 0}
 };
 
@@ -78,17 +81,24 @@ arcdist_process(void)
 	    if ( argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
                 warning(MYNAME ": Warning: Arc file contains unusable vertex on line %d.\n", fileline );
 	    } 
-	    else if ( lat1 != BADVAL && lon1 != BADVAL &&
-	         lat2 != BADVAL && lon2 != BADVAL ) {
+	    else if ( lat2 != BADVAL && lon2 != BADVAL &&
+	         (ptsopt || (lat1 != BADVAL && lon1 != BADVAL ))) {
   	      QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 
 		waypointp = (waypoint *)elem;
-		dist = linedist(lat1, lon1, lat2, lon2, 
+		if ( ptsopt ) {
+		   dist = gcdist( lat2*M_PI/180.0, lon2*M_PI/180.0, 
+				   waypointp->latitude*M_PI/180.0, 
+				   waypointp->longitude*M_PI/180.0 );
+		}
+		else {
+		   dist = linedist(lat1, lon1, lat2, lon2, 
 				waypointp->latitude,
 				waypointp->longitude );
+		}
 
 		/* convert radians to float point statute miles */
-		dist = (((dist * 180.0 * 60.0) / M_PI) * 1.1516);
+		dist = tomiles(dist);
 
 		if ( waypointp->extra_data ) {
 			ed = (extra_data *) waypointp->extra_data;
