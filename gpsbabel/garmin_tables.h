@@ -181,5 +181,6 @@ static icon_mapping_t icon_table[] = {
 	{    92,  8227, "Micro-Cache" },   /* icon for "Toll Booth" */
 	{    48,   161, "Virtual cache" }, /* icon for "Scenic Area" */
 	{    86,  8217, "Multi-Cache" },   /* icon for "Stadium" */
+	{    44,   157, "Unknown Cache" },   /* icon for "Information" */
 	{    -1,    -1, NULL },
 };
