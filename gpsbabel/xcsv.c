@@ -166,8 +166,8 @@ xcsv_destroy_style(void)
     xcsv_file.is_internal = internal;
 }
 
-static const char *
-get_char_from_constant_table(char *key)
+const char *
+xcsv_get_char_from_constant_table(char *key)
 {
     char_map_t *cm = xcsv_char_table;
 
@@ -205,7 +205,7 @@ xcsv_parse_style_line(const char *sbuff)
     if (strlen(sbuff)) {
 	if (ISSTOKEN(sbuff, "FIELD_DELIMITER")) {
 	    sp = csv_stringtrim(&sbuff[16], "\"", 1);
-	    cp = get_char_from_constant_table(sp);
+	    cp = xcsv_get_char_from_constant_table(sp);
 	    if (cp) {
 		xcsv_file.field_delimiter = xstrdup(cp);
 		xfree(sp);
@@ -232,7 +232,7 @@ xcsv_parse_style_line(const char *sbuff)
 
 	if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
 	    sp = csv_stringtrim(&sbuff[17], "\"", 1);
-	    cp = get_char_from_constant_table(sp);
+	    cp = xcsv_get_char_from_constant_table(sp);
 	    if (cp) {
 		xcsv_file.record_delimiter = xstrdup(cp);
 		xfree(sp);
@@ -291,7 +291,7 @@ xcsv_parse_style_line(const char *sbuff)
 
 	if (ISSTOKEN(sbuff, "BADCHARS")) {
 	    sp = csv_stringtrim(&sbuff[9], "\"", 1);
-	    cp = get_char_from_constant_table(sp);
+	    cp = xcsv_get_char_from_constant_table(sp);
 
 	    if (cp) {
 	    	p = xstrdup(cp);

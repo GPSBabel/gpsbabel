@@ -62,6 +62,9 @@ xcsv_ofield_add(char *, char *, char *);
 void 
 xcsv_destroy_style(void);
 
+const char *
+xcsv_get_char_from_constant_table(char *key);
+
 /****************************************************************************/
 /* types required for various xcsv functions                                */
 /****************************************************************************/
