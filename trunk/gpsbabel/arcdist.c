@@ -172,7 +172,7 @@ arcdist_process(void)
 
 	FILE *arcfile = fopen( arcfileopt, "r" );
 	if ( arcfile == NULL ) {
-		fatal(MYNAME ":Can't open %s for reading.\n",arcfileopt); 
+		fatal(MYNAME ": Can't open %s for reading.\n",arcfileopt); 
 	}
 	
         lat1 = lon1 = lat2 = lon2 = BADVAL;
