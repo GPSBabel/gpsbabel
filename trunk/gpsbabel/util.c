@@ -676,7 +676,7 @@ char * xml_entitize(const char * str)
 			
 			utf8_to_int( cp, &bytes, &value );
 			cp += bytes-1;
-			elen += sprintf( tmpsub, "&#%d;", value ) - bytes;
+			elen += sprintf( tmpsub, "&#x%x;", value ) - bytes;
 		        nsecount++;	
 		}
 	}
@@ -721,7 +721,7 @@ char * xml_entitize(const char * str)
 				else {
 					xstr = NULL;
 				}
-				sprintf( p, "&#%d;", value );
+				sprintf( p, "&#x%x;", value );
 				p = p+strlen(p);
 				if ( xstr ) {
 					strcpy( p, xstr );
