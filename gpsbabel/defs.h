@@ -158,6 +158,7 @@ typedef struct {
 	int icon_descr_is_dynamic;
 	const char *icon_descr;
 	time_t creation_time;
+	int centiseconds;	/* Optional hundredths of a second. */
 	geocache_data gc_data;
 	xml_tag *gpx_extras;
 	void *extra_data;	/* Extra data added by, say, a filter. */
