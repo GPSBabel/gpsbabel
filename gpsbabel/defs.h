@@ -475,7 +475,8 @@ void xfputs(const char *errtxt, const char *s, FILE *stream);
 
 int case_ignore_strcmp(const char *s1, const char *s2);
 
-char *strsub(char *s, char *search, char *replace);
+char *strsub(const char *s, const char *search, const char *replace);
+char *gstrsub(const char *s, const char *search, const char *replace);
 void rtrim(char *s);
 signed int get_tz_offset(void);
 time_t current_time(void);
