@@ -61,6 +61,21 @@ char *rxdata[] = {
  *  internal.   This means we ignore that 'fd' number that gets passed in.
  */
 
+void GPS_Serial_Error(char *hdr)
+{
+	char msg[200];
+	char *s;
+
+	strcpy(msg, hdr);
+	s = msg + strlen(hdr);
+	*s++ = ':';
+	*s++ = ' ';
+
+	FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM, 0, 
+			GetLastError(), 0, s, sizeof(msg) - strlen(hdr) - 2, 0 );
+	GPS_Error(msg);
+}
+
 static HANDLE comport;
 
 int32 GPS_Serial_On(const char *port, int32 *fd)
@@ -70,7 +85,9 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
 
 	comport = CreateFile(port, GENERIC_READ|GENERIC_WRITE, 0, NULL,
 					  OPEN_EXISTING, 0, NULL);
+
 	if (comport == INVALID_HANDLE_VALUE) {
+		GPS_Serial_Error("CreateFile");
 		gps_errno = SERIAL_ERROR;
 		return 0;
 	}
@@ -96,18 +113,26 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
 	tio.StopBits = ONESTOPBIT;
 
 	if (!SetCommState (comport, &tio)) {
+		GPS_Serial_Error("SetCommState");
 		CloseHandle(comport);
 		gps_errno = SERIAL_ERROR;
 		return 0;
 	}
 
+	/*
+	 * The timeouts are kind of fictional as we always end up doing
+	 * single byte reads.   At 9600bps (the default) the individual
+	 * character time is 104Millisecs, so these are mostly "dead-man"
+	 * (i.e. cable unplugged, unit not turned on) values.
+	 */
 	GetCommTimeouts (comport, &timeout);
-	timeout.ReadIntervalTimeout = 10;
-	timeout.ReadTotalTimeoutMultiplier = 10;
+	timeout.ReadIntervalTimeout = 1000; /*like vtime.  In MS. */
+	timeout.ReadTotalTimeoutMultiplier = 1000;
 	timeout.ReadTotalTimeoutConstant = 1000;
-	timeout.WriteTotalTimeoutMultiplier = 10;
+	timeout.WriteTotalTimeoutMultiplier = 1000;
 	timeout.WriteTotalTimeoutConstant = 1000;
 	if (!SetCommTimeouts (comport, &timeout)) {
+		GPS_Serial_Error("SetCommTimeouts");
 		CloseHandle (comport);
 		gps_errno = SERIAL_ERROR;
 		return 0;
@@ -149,7 +174,7 @@ int32 GPS_Serial_Write(int32 ignored, const void *obuf, int size)
 
 int32 GPS_Serial_Read(int32 ignored, void *ibuf, int size)
 {
-	DWORD cnt;
+	DWORD cnt  = 0;
 
 	ReadFile(comport, ibuf, size, &cnt, NULL);
 	return cnt;
