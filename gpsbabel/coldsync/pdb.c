@@ -6,7 +6,7 @@
  *	You may distribute this file under the terms of the Artistic
  *	License, as specified in the README file.
  *
- * $Id: pdb.c,v 1.4 2004-01-18 01:24:41 robertl Exp $
+ * $Id: pdb.c,v 1.5 2004-01-19 18:15:22 robertl Exp $
  */
 /* XXX - The way zero-length records are handled is a bit of a kludge. They
  * shouldn't normally exist, with the exception of expunged records. But,
@@ -26,6 +26,16 @@
 #include <stdio.h>
 #include <fcntl.h>		/* For open() */
 #include <sys/types.h>
+/*
+ * Unistd.h (indeed, read, write, and lseek) are not part of ISO C.
+ * Systems may not have unistd.h.  While the below is tacky, Windows
+ * is the only system that we care about that has lseek and friends 
+ * but doesn't have it prototyped.  Systems with 64-bit file I/O but
+ * based on LP64 model (i.e. OS/X) _require_ the prototype for lseek.
+ */
+#if !defined (__WIN32__)
+#include <unistd.h>
+#endif
 #include <stdlib.h>
 #include <time.h>
 
