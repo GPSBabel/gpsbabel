@@ -34,7 +34,7 @@
 HANDLE comport;
 #endif
 
-#define debug 1
+#define debug 0
 
 char * termread(char *ibuf, int size);
 void termwrite(char *obuf, int size);
@@ -191,6 +191,7 @@ fprintf(stderr, "E");
 	}
 #endif
 } 
+
 static void
 mag_writeack(int osum)
 {
@@ -263,8 +264,15 @@ mag_readmsg(void)
 
 	gr = termread(ibuf, sizeof(ibuf));
 
-	if (!gr && !got_version) {
-		fatal("Magproto: No data received from GPS.\n");
+	if (!gr) {
+		if (!got_version) {
+			fatal("Magproto: No data received from GPS.\n");
+		} else {
+			if (is_file)  {
+				found_done = 1;
+			}
+			return;
+		}
 	}
 
 	isz = strlen(ibuf);
@@ -286,8 +294,9 @@ if (debug)
 			fatal("Magproto: bad communication.  Check bit rate.\n");
 		}
 	}
-if (debug)
-fprintf(stderr, "READ: %s\n", ibuf);
+	if (debug) {
+	fprintf(stderr, "READ: %s\n", ibuf);
+	}
 	if (IS_TKN("$PMGNCSM,")) {
 		last_rx_csum = strtoul(&ibuf[9], NULL, 16);
 		return;
@@ -298,11 +307,11 @@ fprintf(stderr, "READ: %s\n", ibuf);
 	} 
 	if (IS_TKN("$PMGNVER,")) {
 		mag_verparse(ibuf);
-return;
+		return;
 	} 
 	if (IS_TKN("$PMGNCMD,END") || is_file && feof(magfile_in)) {
 		found_done = 1;
-return;
+		return;
 	} 
 
 	mag_writeack(isum);
@@ -367,6 +376,11 @@ termread(char *ibuf, int size)
 {
 	int i=0;
 	DWORD cnt;
+
+	if (is_file) {
+		return fgets(ibuf, size, magfile_in);
+	}
+
 	ibuf[i]='a';
 	for(;i < size;i++) {
 		if (ReadFile (comport, &ibuf[i], 1, &cnt, NULL) != TRUE) 
@@ -381,9 +395,15 @@ void
 termwrite(char *obuf, int size)
 {
 	DWORD len;
+
+	if (is_file) {
+		fwrite(obuf, size, 1, magfile_out);
+		return;
+	}
+
 	WriteFile (comport, obuf, size, &len, NULL);
 	if (len != size) {
-		fatal("Write error");
+		fatal("Write error.  Wrote %d of %d bytes.", len, size);
 	}
 }
 
@@ -397,11 +417,32 @@ termdeinit()
 #else
 
 #include <termios.h>
+
 static struct termios orig_tio;
 static void
 terminit(const char *portname)
 {
 	struct termios new_tio;
+	struct stat sbuf;
+
+        magfile_in = fopen(portname, "rb");
+
+        if (magfile_in == NULL) {
+                fatal("Magproto: Cannot open %s.%s\n",
+                        portname, strerror(errno));
+        }
+
+	fstat(fileno(magfile_in), &sbuf);
+	is_file = S_ISREG(sbuf.st_mode);
+	if (is_file) {
+		icon_mapping = map330_icon_table;
+		got_version = 1;
+		return;
+	} 
+
+	magfile_out = fopen(portname, "w+b");
+	magfd = fileno(magfile_in);
+
 	tcgetattr(magfd, &orig_tio);
 	new_tio = orig_tio;
 	new_tio.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|
@@ -442,29 +483,8 @@ static void
 mag_rd_init(const char *portname)
 {
 	time_t now, later;
-	struct stat sbuf;
-#if 0	
-	magfile_in = fopen(portname, "r");
-	
-	if (magfile_in == NULL) {
-		fatal("Magproto: Cannot open %s.%s\n", 
-			portname, strerror(errno));
-	}
 
-	fstat(fileno(magfile_in), &sbuf);
-	is_file = S_ISREG(sbuf.st_mode);
-	if (is_file) {
-		icon_mapping = map330_icon_table;
-		got_version = 1;
-	} else {
-		terminit(portname);
-		magfile_out = fopen(portname, "w+");
-		magfd = fileno(magfile_in);
-	}
-#else
-terminit(portname);
-is_file = 0;
-#endif
+	terminit(portname);
 	
 	mag_handon();
 	now = time(NULL);
@@ -492,12 +512,12 @@ mag_wr_init(const char *portname)
 {
 	struct stat sbuf;
 
-	magfile_out = fopen(portname, "w+");
+	magfile_out = fopen(portname, "w+b");
 	fstat(fileno(magfile_out), &sbuf);
 	is_file = S_ISREG(sbuf.st_mode);
 
 	if (is_file) {
-		magfile_out = fopen(portname, "w+");
+		magfile_out = fopen(portname, "w+b");
 	} else {
 		mag_rd_init(portname);
 	}
@@ -619,8 +639,6 @@ mag2degrees(double mag_val)
 	return_value = (double) deg + minutes;
 	return return_value;
 } 
-
-
 
 /*
  * Given an incoming waypoint messages of the form:
