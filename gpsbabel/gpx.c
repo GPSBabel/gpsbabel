@@ -788,6 +788,10 @@ gpx_rd_deinit(void)
 {
 	vmem_free(&current_tag);
 	vmem_free(&cdatastr);
+	if ( xsi_schema_loc ) {
+		xfree(xsi_schema_loc);
+		xsi_schema_loc = NULL;
+	}
 	if ( gpx_email ) {
 		xfree(gpx_email);
 		gpx_email = NULL;
