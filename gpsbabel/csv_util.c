@@ -653,7 +653,7 @@ xcsv_waypt_pr(const waypoint *wpt)
             sprintf(buff, fmp->printfc, description);
         } else
         if (strcmp(fmp->key, "NOTES") == 0) {
-            sprintf(buff, fmp->printfc, wpt->notes);
+	    sprintf(buff, fmp->printfc, wpt->notes? wpt->notes : "");
         } else
         if (strcmp(fmp->key, "URL") == 0) {
 	    int off = 0;
