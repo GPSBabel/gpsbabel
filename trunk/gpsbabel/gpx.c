@@ -388,19 +388,7 @@ gpx_end(void *data, const char *el)
 			tm.tm_mon -= 1;
 			tm.tm_year -= 1900;
 			tm.tm_isdst = 1;
-			wpt_tmp->creation_time = mktime(&tm);
-#if 0
-			/* mktime assumes local time, and Z is gmtime */
-			/* localtime will initialize timezone and daylight */
-			/* 12/31/02 - RJL - unfortunately, this fix relies
-			 * on non-ANSI extensions, so I've turned this off
-			 * and reverted to the old way.
-			 */
-			localtime( &wpt_tmp->creation_time );
-			wpt_tmp->creation_time -= timezone - (daylight?3600:0);
-#else
-                        wpt_tmp->creation_time = mktime(&tm);
-#endif
+                        wpt_tmp->creation_time = mktime(&tm) + get_tz_offset();
 		}
 		if (in_wpt && in_gs_type && !in_gs_log) {
 			wpt_tmp->gc_data.type = gs_mktype(cdatastr);

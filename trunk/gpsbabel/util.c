@@ -106,6 +106,7 @@ fprintdms(FILE *file, const coord *c, int is_lat)
 	}
 	fprintf(file, "%c%f\t", d, fabs(c->degrees));
 }
+
 void
 fatal(const char *fmt, ...)
 {
@@ -193,5 +194,22 @@ si_round( double d )
 	}
 	else {
 		return (signed int)(d+0.5);
+	}
+}
+
+/*
+ *  Return a time_t suitable for adding to a time_t that is in GMT to
+ *  make it a local time.
+ */
+signed int 
+get_tz_offset(void)
+{
+	time_t now = time(0);
+	time_t later = mktime(gmtime(&now));
+
+	if (later == -1) {
+		return 0;
+	} else {
+		return (signed int) difftime(now, later);
 	}
 }
