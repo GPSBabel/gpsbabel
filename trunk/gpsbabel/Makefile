@@ -108,8 +108,11 @@ release:
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).tar.gz ftp://upload.sf.net/incoming/
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).zip ftp://upload.sf.net/incoming/
 
-mac-build:
+mac-usbfree:
 	make LIBEXPAT=/sw/lib/libexpat.a EXTRA_CFLAGS="-I/sw/include" LIBUSB= INHIBIT_USB=-DNO_USB
+
+mac-build:
+	make LIBEXPAT=/sw/lib/libexpat.a EXTRA_CFLAGS="-I/sw/include" LIBUSB="/sw/lib/libusb.a -lIOKit  -lBSDPClient -framework CoreFoundation"
 
 mac-release:
 	mkdir -p usr/bin usr/share/gpsbabel/doc
