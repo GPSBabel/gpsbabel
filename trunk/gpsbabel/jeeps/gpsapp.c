@@ -97,9 +97,10 @@ static void   GPS_D550_Send(UC *data, GPS_PAlmanac alm);
 static void   GPS_D551_Send(UC *data, GPS_PAlmanac alm);
 
 
-int32    gps_save_id;
-double gps_save_version;
-char  gps_save_string[GPS_ARB_LEN];
+int32	gps_save_id;
+int	gps_is_usb;
+double	gps_save_version;
+char	gps_save_string[GPS_ARB_LEN];
 
 
 /* @func GPS_Init ******************************************************
@@ -118,9 +119,16 @@ int32 GPS_Init(const char *port)
     int32 ret;
     
     (void) GPS_Util_Little();    
+
+    /*
+     *  Decide here if the portname refers to a USB device and set the 
+     *  global that's used as in inflection point for other decisions later.
+     */
+    gps_is_usb = (0 == strncmp(port, "usb:", 4));
+
     ret = GPS_A000(port);
     if(ret<0) return ret;
-    
+    if (gps_is_usb) return 1;    
     gps_save_time = GPS_Command_Get_Time(port);
     if(!gps_save_time) {
 	return FRAMING_ERROR;
@@ -154,12 +162,12 @@ static int32 GPS_A000(const char *port)
     if(!GPS_Serial_On(port, &fd))
 	return gps_errno;
 
-    if(!GPS_Serial_Flush(fd))
+    if(!gps_is_usb && !GPS_Serial_Flush(fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
 	return MEMORY_ERROR;
-    
+
     GPS_Make_Packet(&tra, LINK_ID[0].Pid_Product_Rqst,NULL,0);
     if(!GPS_Write_Packet(fd,tra))
 	return SERIAL_ERROR;
@@ -182,8 +190,6 @@ static int32 GPS_A000(const char *port)
     (void) sprintf(tstr,
 		   "Version:\t%.2f\n",gps_save_version);
     GPS_User(tstr);
-    
-    
 
 
     gps_date_time_transfer = pA600;
