@@ -29,6 +29,13 @@
 extern queue waypt_head;
 
 static double pos_dist;
+static char *distopt;
+
+static
+arglist_t position_args[] = {
+	{"distance", &distopt, "Maximum positional distance (required)"},
+	{0, 0, 0}
+};
 
 static double
 gc_distance(double lat1, double lon1, double lat2, double lon2)
@@ -117,18 +124,16 @@ position_process(void)
 void
 position_init(const char *args) {
 	char *fm;
-	char *p;
 
-	p = get_option(args, "distance");
+	pos_dist = 0;
 
-	if (p) {
-		pos_dist = strtod(p, &fm);
+	if (distopt) {
+		pos_dist = strtod(distopt, &fm);
 
 		if ((*fm == 'm') || (*fm == 'M')) {
 			 /* distance is meters */
 			pos_dist *= 3.2802;
 		}
-		xfree(p);
 	}
 }
 
@@ -140,5 +145,5 @@ filter_vecs_t position_vecs = {
 	position_init,
 	position_process,
 	position_deinit,
-	NULL
+	position_args
 };
