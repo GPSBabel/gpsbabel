@@ -180,6 +180,11 @@ int32 GPS_Serial_Read(int32 ignored, void *ibuf, int size)
 	return cnt;
 }
 
+int32 GPS_Serial_Close(int32 fd, const char *port)
+{
+	return 1;
+}
+
 #else
 
 #include <sys/ioctl.h>
@@ -278,8 +283,13 @@ int32 GPS_Serial_Open(int32 *fd, const char *port)
 {
     struct termios tty;
     
-
-    if((*fd = open(port, O_RDWR | O_NDELAY | O_NOCTTY))==-1)
+    /*
+     * This originally had O_NDELAY | O_NOCTTY in here, but this
+     * causes problems with Linux USB ttys (observed on PL2303 and MCT)
+     * and the rest of the code doesn't _REALLY_ handle the partial 
+     * write/retry case anyway.  - robertl
+     */
+    if((*fd = open(port, O_RDWR))==-1)
     {
 	perror("open");
 	GPS_Error("SERIAL: Cannot open serial port");
