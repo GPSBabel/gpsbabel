@@ -67,6 +67,8 @@ typedef struct mag_rte_head {
 	int nelems;
 } mag_rte_head;
 
+static queue rte_wpt_tmp; /* temporary PGMNWPL msgs for routes */
+
 static FILE *magfile_in;
 static FILE *magfile_out;
 static int magfd;
@@ -168,7 +170,6 @@ pid_to_model_t pid_to_model[] =
 };
 
 static icon_mapping_t *icon_mapping = map330_icon_table;
-
 
 /*
  *   For each receiver type, return a "cleansed" version of the string
@@ -419,12 +420,25 @@ retry:
 	} 
 	if (strncmp(ibuf, "$PMGNWPT,", 7) == 0) {
 		waypoint *wpt = mag_wptparse(ibuf);
-		waypt_add(wpt);
-	} 
+		switch (global_opts.objective)
+		{
+			case wptdata:
+				waypt_add(wpt);
+				break;
+			case rtedata:
+				ENQUEUE_TAIL(&rte_wpt_tmp, &wpt->Q);
+				break;
+			default:
+				break;
+		}
+	}
 	if (strncmp(ibuf, "$PMGNTRK,", 7) == 0) {
 		waypoint *wpt = mag_trkparse(ibuf);
 		route_add_wpt(trk_head, wpt);
-	} 
+	}
+	if (strncmp(ibuf, "$PMGNRTE,", 7) == 0) {
+		mag_rteparse(ibuf);
+	}
 	if (IS_TKN("$PMGNVER,")) {
 		mag_verparse(ibuf);
 	} 
@@ -716,6 +730,8 @@ mag_rd_init(const char *portname, const char *args)
 		mag_writemsg("PMGNCMD,NMEAOFF");
 	}
 
+	QUEUE_INIT(&rte_wpt_tmp);
+
 	return;
 }
 
@@ -760,6 +776,7 @@ mag_wr_init(const char *portname, const char *args)
 #endif
 		mag_rd_init(portname, args);
 	}
+	QUEUE_INIT(&rte_wpt_tmp);
 }
 
 static void
@@ -773,6 +790,8 @@ mag_deinit(void)
 	if(mkshort_handle)
 		mkshort_del_handle(mkshort_handle);
 	mkshort_handle = NULL;
+
+	waypt_flush(&rte_wpt_tmp);
 }
 
 
@@ -834,7 +853,7 @@ mag_trkparse(char *trkmsg)
  * $PMGNRTE,4,1,c,1,DAD,a,Anna,a*61
  * generate a route.
  */
-waypoint * 
+void
 mag_rteparse(char *rtemsg)
 {
 	char descr[100];
@@ -844,7 +863,8 @@ mag_rteparse(char *rtemsg)
 	char *currtemsg;
 	static mag_rte_head *mag_rte_head;
 	mag_rte_elem *rte_elem;
-
+	char *p;
+	
 	descr[0] = 0;
 
 	sscanf(rtemsg,"$PMGNRTE,%d,%d,%c,%d%n", 
@@ -852,9 +872,7 @@ mag_rteparse(char *rtemsg)
 
 	/*
 	 * This is the first component of a route.  Allocate a new
-	 * queue head.   It's kind of unfortunate that we can't know
-	 * a priori how many items are on this track, so we have to
-	 * alloc and chain those as we go.
+	 * queue head.   
 	 */
 	if (frag == 1) {
 		mag_rte_head = xcalloc(sizeof (*mag_rte_head),1);
@@ -869,13 +887,20 @@ mag_rteparse(char *rtemsg)
 	 * loop and pick those up.
 	 */
 	while (sscanf(currtemsg,",%[^,],%[^,]%n",next_stop, abuf,&n)) {
-		if (next_stop[0] == 0) {
+		if ((next_stop[0] == 0) || (next_stop[0] == '*')) {
 			break;
 		}
+		
+		/* trim CRC from waypoint icon string */
+		if ((p = strchr(abuf, '*')) != NULL)
+			*p = '\0';
+
 		rte_elem = xcalloc(sizeof (*rte_elem),1);
 		QUEUE_INIT(&rte_elem->Q);
+
 		rte_elem->wpt_name = xstrdup(next_stop);
 		rte_elem->wpt_icon = xstrdup(abuf);
+
 		ENQUEUE_TAIL(&mag_rte_head->Q, &rte_elem->Q);
 		next_stop[0] = 0;
 		currtemsg += n;
@@ -891,28 +916,38 @@ mag_rteparse(char *rtemsg)
 
 		rte_head = route_head_alloc();
 		route_add_head(rte_head);
+		rte_head->rte_num = rtenum;
 
-		/*
-		 *  TODO: I suppose we have to fetch the waypoints to
-		 *  get the underlying data for each stop in the route.
+		/* 
+		 * It is quite feasible that we have 200 waypoints,
+		 * 3 of which are used in the route.  We'll need to find
+		 * those in the queue for SD routes...
 		 */
+
 		QUEUE_FOR_EACH(&mag_rte_head->Q, elem, tmp) {
-			static int lat; /* Dummy data */
 			mag_rte_elem *re = (mag_rte_elem *) elem;
 			waypoint *waypt;
+			queue *welem, *wtmp;
 
-			waypt  = xcalloc(sizeof *waypt, 1);
+			/* 
+			 * Copy route points from temp wpt queue. 
+			 */
+			QUEUE_FOR_EACH(&rte_wpt_tmp, welem, wtmp) {
+				waypt = (waypoint *)welem;
+				if (strcmp(waypt->shortname, re->wpt_name) == 0) {
+					waypoint * wpt = waypt_dupe(waypt);
+					route_add_wpt(rte_head, wpt);
+					break;
+				}
+			}
 
-			/* TODO Populate rest of waypoint. */
-			waypt->shortname = re->wpt_name;
-			waypt->position.latitude.degrees = ++lat;
-
-			route_add_wpt(rte_head, waypt);
 			dequeue(&re->Q);
+			xfree(re->wpt_name);
+			xfree(re->wpt_icon);
 			xfree(re);
 		}
+		xfree(mag_rte_head);
 	}
-	return 0;
 }
 
 const char *
@@ -1003,7 +1038,8 @@ mag_wptparse(char *trkmsg)
 	
 	for (blah = icons ; blah < icone; blah++)
 		icon_token[i++] = *blah;
-
+	icon_token[i++] = '\0';
+	
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->position.latitude.degrees = mag2degrees(latdeg);
 
@@ -1021,6 +1057,8 @@ mag_wptparse(char *trkmsg)
 static void
 mag_read(void)
 {
+	found_done = 0;
+
 	switch (global_opts.objective)
 	{
 		case trkdata:
@@ -1030,17 +1068,51 @@ mag_read(void)
 			if (!is_file) 
 				mag_writemsg("PMGNCMD,TRACK,2");
 
+			while (!found_done) {
+				mag_readmsg();
+			}
+
 			break;
 		case wptdata:
 			if (!is_file) 
 				mag_writemsg("PMGNCMD,WAYPOINT");
+
+			while (!found_done) {
+				mag_readmsg();
+			}
+
+			break;
+		case rtedata:
+			if (!is_file) {
+				/* 
+				 * serial routes require waypoint & routes 
+				 * messages commands.
+				 */
+				mag_writemsg("PMGNCMD,WAYPOINT");
+
+				while (!found_done) {
+					mag_readmsg();
+				}
+
+				mag_writemsg("PMGNCMD,ROUTE");
+
+				found_done = 0;
+				while (!found_done) {
+					mag_readmsg();
+				}
+			} else {
+				/*
+				 * SD routes are a stream of PMGNWPL and 
+				 * PMGNRTE messages, in that order.
+				 */
+				while (!found_done) {
+					mag_readmsg();
+				}
+			}
+
 			break;
 		default:
-			fatal(MYNAME ": Routes are not yet supported\n");
-	}
-
-	while (!found_done) {
-		mag_readmsg();
+			fatal(MYNAME ": Unknown objective\n");
 	}
 }
 
@@ -1169,6 +1241,80 @@ void mag_track_pr()
 	route_disp_all(mag_track_nop, mag_track_nop, mag_track_disp);
 }
 
+/*
+The spec says to stack points:
+	$PMGNRTE,2,1,c,1,FOO,POINT1,b,POINT2,c,POINT3,d*6C<CR><LF>
+
+Meridian SD card and serial (at least) writes in pairs:
+	$PMGNRTE,4,1,c,1,HOME,c,I49X73,a*15
+	...
+	$PMGNRTE,4,4,c,1,RON273,a,MYCF93,a*7B
+	
+The spec also says that some units don't like single-legged pairs,
+and to replace the 2nd name with "<<>>", but I haven't seen one of those.
+*/
+
+static void
+mag_route_trl(const route_head * rte)
+{
+	queue *elem, *tmp;
+	waypoint *waypointp;
+	char obuff[256];
+	char buff1[64], buff2[64];
+	char *pbuff;
+	const char * icon_token;
+	int i, numlines, thisline;
+	
+	/* count waypoints for this route */
+	i = rte->rte_waypt_ct;
+
+	/* number of output PMGNRTE messages at 2 points per line */
+	numlines = (i / 2) + (i % 2);
+	
+	thisline = i = 0;
+	QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
+		waypointp = (waypoint *) elem;
+		i++;
+
+		if (deficon)
+			icon_token = mag_find_token_from_descr(deficon);
+		else
+			icon_token = mag_find_token_from_descr(waypointp->icon_descr);
+			
+		if (i == 1)
+			pbuff = buff1;
+		else
+			pbuff = buff2;
+
+		sprintf(pbuff, "%s,%s", waypointp->shortname, icon_token);
+		
+		if ((tmp == &rte->waypoint_list) || ((i % 2) == 0)) {
+			thisline++;
+			
+			sprintf(obuff, "PMGNRTE,%d,%d,c,%d,%s,%s", 
+				numlines, thisline, rte->rte_num,
+				buff1, buff2);
+
+			mag_writemsg(obuff);
+			buff1[0] = '\0';
+			buff2[0] = '\0';
+			i = 0;
+		}
+	}
+}
+
+static void
+mag_route_hdr()
+{
+}
+
+static void
+mag_route_pr()
+{
+	route_disp_all(mag_route_hdr, mag_route_trl, mag_waypt_pr);
+
+}
+
 static void
 mag_write(void)
 {
@@ -1185,8 +1331,11 @@ mag_write(void)
 		case wptdata:
 			waypt_disp_all(mag_waypt_pr);
 			break;
+		case rtedata:
+			mag_route_pr();
+			break;
 		default:
-			fatal(MYNAME ": Routes are not yet supported\n");
+			fatal(MYNAME ": Unknown objective.\n");
 	}
 }
 

@@ -238,3 +238,30 @@ ${PNAME} -i geo -f geocaching.loc -o csv -F ${TMPDIR}/filterpos.csv1
 ${PNAME} -i geo -f geocaching.loc -f geocaching.loc -x position,distance=5f \
 		-o csv -F ${TMPDIR}/filterpos.csv2
 compare ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2
+
+#
+# magellan SD card waypoint / route format
+#
+rm -f ${TMPDIR}/magellan.rte
+${PNAME} -r -i magellan -f reference/route/magellan.rte -o magellan \
+         -F ${TMPDIR}/magellan.rte
+compare ${TMPDIR}/magellan.rte reference/route/magellan.rte
+
+#
+# GPX routes -- since GPX contains a date stamp, tests will always
+# fail, so we use magellan as an interim format...
+#
+rm -f ${TMPDIR}/gpxroute.gpx ${TMPDIR}/maggpx.rte
+${PNAME} -r -i gpx -f reference/route/route.gpx -o gpx \
+         -F ${TMPDIR}/gpxroute.gpx
+${PNAME} -r -i gpx -f ${TMPDIR}/gpxroute.gpx -o magellan \
+         -F ${TMPDIR}/maggpx.rte
+compare ${TMPDIR}/maggpx.rte reference/route/magellan.rte
+
+#
+# MAPSEND waypoint / route format
+#
+rm -f ${TMPDIR}/route.mapsend
+${PNAME} -r -i mapsend -f reference/route/route.mapsend -o mapsend \
+         -F ${TMPDIR}/route.mapsend
+compare ${TMPDIR}/route.mapsend reference/route/
