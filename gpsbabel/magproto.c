@@ -294,7 +294,21 @@ return;
 	mag_writeack(isum);
 }
 
-#if _POSIX_SOURCE
+#if __WIN32__
+static
+void
+terminit()
+{
+}
+
+static
+void
+termdeinit()
+{
+}
+
+#else
+
 #include <termios.h>
 static struct termios orig_tio;
 static void
@@ -321,20 +335,6 @@ static void
 termdeinit()
 {
 	tcsetattr(magfd, TCSANOW, &orig_tio);
-}
-#endif
-
-#if __WIN32__
-static
-void
-terminit()
-{
-}
-
-static
-void
-termdeinit()
-{
 }
 #endif
 
