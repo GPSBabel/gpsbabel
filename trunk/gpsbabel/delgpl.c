@@ -58,6 +58,7 @@ gpl_read(void)
 	route_head *track_head;
 	int br;
 	gpl_point_t gp;
+	double alt_feet;
 
 	track_head = route_head_alloc();
 	track_add_head(track_head);
@@ -66,7 +67,8 @@ gpl_read(void)
 		wpt_tmp = waypt_new();
 		le_read64(&wpt_tmp->latitude, &gp.lat);
 		le_read64(&wpt_tmp->longitude, &gp.lon);
-		le_read64(&wpt_tmp->altitude, &gp.alt);
+		le_read64(&alt_feet, &gp.alt);
+		wpt_tmp->altitude = alt_feet * .3048;
 		wpt_tmp->creation_time = le_read32(&gp.tm);
 		route_add_wpt(track_head, wpt_tmp);
 	}
@@ -94,10 +96,11 @@ gpl_wr_deinit(void)
 static void
 gpl_trackpt(const waypoint *wpt)
 {
+	double alt_feet = wpt->altitude / .3048;
 	gpl_point_t gp = {0};
 	le_read64(&gp.lat, &wpt->latitude);
 	le_read64(&gp.lon, &wpt->longitude);
-	le_read64(&gp.alt, &wpt->altitude);
+	le_read64(&gp.alt, &alt_feet);
 	le_write32(&gp.tm, wpt->creation_time);
 
 	fwrite(&gp, sizeof(gp), 1, gplfile_out);
