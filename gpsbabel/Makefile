@@ -27,7 +27,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
-	vcf.o overlay.o google.o
+	vcf.o overlay.o google.o lowranceusr.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o
 
@@ -170,6 +170,7 @@ html.o: html.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 igc.o: igc.c defs.h queue.h gbtypes.h
 internal_styles.o: internal_styles.c defs.h queue.h gbtypes.h
+lowranceusr.o: lowranceusr.c defs.h queue.h gbtypes.h
 magnav.o: magnav.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
 magproto.o: magproto.c defs.h queue.h gbtypes.h magellan.h

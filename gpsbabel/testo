@@ -80,6 +80,17 @@ ${PNAME} -i geo -f geocaching.loc -o tiger -F ${TMPDIR}/tiger
 ${PNAME} -i tiger -f ${TMPDIR}/tiger -o tiger -F ${TMPDIR}/tiger2
 compare ${TMPDIR}/tiger ${TMPDIR}/tiger2
 
+#
+# Lowrance USR.  Binary, and also slightly lossy because of the math to
+# convert lat/long.
+#
+rm -f ${TMPDIR}/lowrance1.usr
+${PNAME} -i geo -f geocaching.loc -o lowranceusr -F ${TMPDIR}/lowrance1.usr
+bincompare ${TMPDIR}/lowrance1.usr reference/lowrance.usr
+${PNAME} -i lowranceusr -f ${TMPDIR}/lowrance1.usr -o gpx -o ${TMPDIR}/lowrance1.out
+${PNAME} -i geo -f geocaching.loc -o gpx -F ${TMPDIR}/lowrance2.out
+compare ${TMPDIR}/lowrance1.out ${TMPDIR}/lowrance2.out
+
 # CSV (Comma separated value) data.
 
 ${PNAME}  -i geo -f geocaching.loc -o csv -F ${TMPDIR}/csv.csv
