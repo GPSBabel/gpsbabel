@@ -50,6 +50,8 @@ static int in_gs_exported;
 static int in_gs_tbugs;
 static int in_something_else;
 static int in_number;
+static int in_email = 0;
+static int in_author = 0;
 
 static xml_tag *cur_tag;
 static char *cdatastr;
@@ -58,6 +60,9 @@ static int logpoint_ct = 0;
 
 static const char *gpx_version;
 static const char *gpx_creator;
+
+static char *gpx_email = NULL;
+static char *gpx_author = NULL;
 
 static waypoint *wpt_tmp;
 static FILE *fd;
@@ -236,7 +241,13 @@ gpx_start(void *data, const char *el, const char **attr)
 	} 
 	else if (strcmp(el, "gpx") == 0) {
 		tag_gpx(attr);
-	} 
+	}
+        else if (strcmp(el, "email") == 0 ) {
+		in_email++;
+	}
+	else if (strcmp(el, "author") == 0 ) {
+		in_author++;
+	}
 	else if (strcmp(el, "wpt") == 0) {
 		in_wpt++;
 		tag_wpt(attr);
@@ -482,6 +493,14 @@ gpx_end(void *data, const char *el)
 		if (in_cmt && in_rtept) {
 			wpt_tmp->description = xstrdup(cdatastr);
 		}
+		if (in_email) {
+			if ( gpx_email ) xfree(gpx_email);
+			gpx_email = xstrdup(cdatastr);
+		}
+		if (in_author) {
+			if ( gpx_author ) xfree(gpx_author);
+			gpx_author = xstrdup(cdatastr);
+		}
 		if (gsshortnames) {
 			if (in_gs_name && in_wpt && !in_gs_tbugs) {
 				wpt_tmp->notes = xstrdup(cdatastr);
@@ -561,6 +580,10 @@ gpx_end(void *data, const char *el)
 		in_name--;
 	} else if (strcmp(el, "desc") == 0) {
 		in_desc--;
+	} else if (strcmp(el, "email") == 0 ) {
+		in_email--;
+	} else if (strcmp(el, "author") == 0 ) {
+		in_author--;
 	} else if (strcmp(el, "cmt") == 0) {
 		in_cmt--;
 	} else if (strcmp(el, "ele") == 0) {
@@ -636,7 +659,8 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 	 * horrible state just I can concatenate buffers that it hands
 	 * me as a cdata that are fragmented becuae they span a read.  Grrr.
 	 */
-	if ((in_name && in_wpt) || (in_desc && in_wpt) || (in_ele) || 
+	if ((in_name && in_wpt) || (in_desc && in_wpt) || (in_ele) ||
+		        (in_email) || (in_author) ||	
 			(in_wpt && in_cmt) ||
 			(in_wpt && in_url) ||
 			(in_wpt && in_urlname) ||
@@ -719,6 +743,12 @@ gpx_rd_deinit(void)
 	if ( cdatastr ) {
 		xfree(cdatastr);
 	}
+	if ( gpx_email ) {
+		xfree(gpx_email);
+	}
+	if ( gpx_author ) {
+		xfree(gpx_author);
+	}
 	if (fd) {
 	        fclose(fd);
 	}
@@ -753,40 +783,48 @@ gpx_read(void)
 
 	while (!done) {
 		if ( fd ) {
-			len = fread(buf, 1, sizeof(buf)-10, fd);
+			char *badchar;
+			char *semi;
+			len = fread(buf, 1, sizeof(buf)-7, fd);
 			done = feof(fd) || !len;
 			buf[len] = '\0';
-			if ( buf[len-1] == '&' || 
-					buf[len-2]== '&' || 
-					buf[len-3]== '&' || 
-					buf[len-4]== '&' || 
-					buf[len-5]== '&' || 
-					buf[len-6] == '&' ) {
-				len += fread( buf+len, 1, 6, fd );
-				buf[len]='\0';
-			}	
+			badchar = buf+len-7;
+			badchar = strchr( badchar, '&' );
+			while ( badchar ) {
+				int extra = 7;
+				semi = strchr( badchar, ';');
+				while ( extra && !semi ) {
+					len += fread( buf+len, 1, 1, fd);
+					buf[len]='\0';
+					extra--;
+					if ( buf[len-1] == ';') 
+						semi= buf+len-1;
+				}
+				badchar = strchr( badchar+1, '&' );
+			} 
 			{
-				char *badchar = buf;
 				char *hex="0123456789abcdef";
 				badchar = strstr( buf, "&#x" );
 				while ( badchar ) {
 					int val = 0;
 					char *hexit = badchar+3;
-					char *semi = strchr( badchar, ';' );
-					*semi = '\0';
-					while (*hexit) {
-						val *= 16;
-						val += strchr( hex, *hexit )-hex;
-						hexit++;
-					}
-					if ( val < 32 ) {
-						warning( MYNAME ": Ignoring illegal character %s\n", badchar );
-						memmove( badchar, semi+1, strlen(semi+1)+1 );
-						len -= (semi-badchar)+1;
+					semi = strchr( badchar, ';' );
+					if ( semi ) {
+						*semi = '\0';
+						while (*hexit) {
+							val *= 16;
+							val += strchr( hex, *hexit )-hex;
+							hexit++;
+						}
+						if ( val < 32 ) {
+							warning( MYNAME ": Ignoring illegal character %s;\n\tConsider emailing %s at <%s>\n\tabout illegal characters in their GPX files.\n", badchar, gpx_author?gpx_author:"(unknown author)", gpx_email?gpx_email:"(unknown email address)" );
+							memmove( badchar, semi+1, strlen(semi+1)+1 );
+							len -= (semi-badchar)+1;
+							badchar--;
+						}
 					}
 					badchar = strstr( badchar+1, "&#x" );
 				} 
-					
 			}
 			result = XML_Parse(psr, buf, len, done);
 		}
