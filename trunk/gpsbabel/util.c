@@ -107,6 +107,20 @@ rtrim(char *s)
 	}
 }
 
+/*
+ *   Like strcmp, but case insensitive.  Like Berkeley's strcasecmp.
+ */
+
+int 
+case_ignore_strcmp(const char *s1, const char *s2)
+{
+	for(;toupper(*s1) == toupper(*s2); ++ s1, ++s2) {
+		if (*s1 == 0)
+			return 0;
+	}
+	return (toupper(*s1) < toupper(*s2)) ? -1 : +1;
+
+}
 
 coord
 mkposn(const char *string)
