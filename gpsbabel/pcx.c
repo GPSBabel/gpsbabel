@@ -103,13 +103,25 @@ data_read(void)
 			waypt_add(wpt_tmp);
 			break;
 		case 'H':
-			if (ibuf[3] == 'T' && ibuf[4] == 'N') {
+			/* Garmap2 has headers 
+  "H(2 spaces)LATITUDE(some spaces)LONGTITUDE(etc... followed by);track
+  			everything else is 
+			  H(2 chars)TN(tracknane\0)
+  			*/
+			if (ibuf[3] == 'L' && ibuf[4] == 'A') {
+				track_head = route_head_alloc();
+				track_head->rte_name = strdup("track");
+				track_add_head(track_head);
+			} else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
 				track_head = route_head_alloc();
 				track_head->rte_name = strdup(&ibuf[6]);
 				track_add_head(track_head);
 			}
 			break;
 		case 'T':
+			if (track_head == NULL) {
+				fatal(MYNAME ": track record found before track header.\n");
+			}
 			sscanf(ibuf, "T %lf %lf %s %s %ld", 
 				&lat, &lon, date, time, &alt);
 			memset(&tm, 0, sizeof(tm));
