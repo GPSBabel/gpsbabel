@@ -247,6 +247,7 @@ hsa_ndv_read(void)
 {
 	int len;
 	char buf[MY_CBUF];
+	memset(buf, 0, MY_CBUF);
 	
 	while ((len = fread(buf, 1, sizeof(buf), fd))) 
 	{
@@ -311,7 +312,7 @@ hsa_ndv_waypt_pr(const waypoint *waypointp)
 //	fprintf(ofd, "\t\t\t<FeatureNameNumber>1089009023</FeatureNameNumber>\n");
 	fprintf(ofd, "\t\t\t<Attr>attr=grpnam%s\x1ftrnrad50\x1fOBJNAM%s\x1flegnum%i\x1fusrmrk%s\x1fselect2</Attr>\n",
 				routeName, waypointp->shortname, legNum, waypointp->description);
-	fprintf(ofd, "\t\t\t<LegAttr></LegAttr>\n");
+	fprintf(ofd, "\t\t\t<LegAttr>attr=grpnam%s\x1f</LegAttr>\n", routeName);
 	fprintf(ofd, "\t\t\t<NumberOfVertexs>1</NumberOfVertexs>\n");
 	fprintf(ofd, "\t\t\t<Latitude>%lf</Latitude>\n", waypointp->latitude);
 	fprintf(ofd, "\t\t\t<Longitude>%lf</Longitude>\n", waypointp->longitude);
