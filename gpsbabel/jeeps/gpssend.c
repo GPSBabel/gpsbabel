@@ -92,7 +92,14 @@ void GPS_Make_Packet(GPS_PPacket *packet, UC type, UC *data, int16 n)
 }
 
 
-
+void
+Diag(void *buf, size_t sz)
+{
+	unsigned char *cbuf = (unsigned char *) buf;
+	while (sz--) {
+		GPS_Diag("%02x ", *cbuf++);
+	}
+}
 
 /* @func GPS_Write_Packet ***********************************************
 **
@@ -107,7 +114,9 @@ void GPS_Make_Packet(GPS_PPacket *packet, UC type, UC *data, int16 n)
 int32 GPS_Write_Packet(int32 fd, GPS_PPacket packet)
 {
     size_t ret;
-    
+
+    GPS_Diag("\nTx Data:");
+    Diag(&packet->dle, 3);    
     if((ret=GPS_Serial_Write(fd,(const void *)&packet->dle,(size_t)3)) == -1)
     {
 	perror("write");
@@ -120,6 +129,7 @@ int32 GPS_Write_Packet(int32 fd, GPS_PPacket packet)
 	return 0;
     }
 
+    Diag(packet->data, packet->bytes);
     if((ret=GPS_Serial_Write(fd,(const void *)packet->data,(size_t)packet->bytes)) == -1)
     {
 	perror("write");
@@ -133,6 +143,7 @@ int32 GPS_Write_Packet(int32 fd, GPS_PPacket packet)
     }
 
 
+    Diag(&packet->chk, 3);
     if((ret=GPS_Serial_Write(fd,(const void *)&packet->chk,(size_t)3)) == -1)
     {
 	perror("write");

@@ -23,6 +23,7 @@
 ********************************************************************/
 #include "gps.h"
 #include <fcntl.h>
+#include <stdarg.h>
 
 static int32 gps_endian_called=0;
 static int32 GPS_Little=0;
@@ -647,7 +648,18 @@ void GPS_Diagnose(int32 c)
     return;
 }
 
+void GPS_Diag(const char *fmt, ...)
+{
+    va_list argp;
+    va_start(argp, fmt);
 
+    if(gps_show_bytes) {
+         vfprintf(stdout, fmt, argp);
+    }
+    va_end(argp);
+    return;
+
+}
 
 /* @func GPS_Enable_Diagnose ***********************************************
 **
