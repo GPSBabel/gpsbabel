@@ -372,3 +372,54 @@ get_cache_icon(const waypoint *waypointp)
 	}
 	return NULL;
 }
+
+static int swapit = -1;
+
+static int doswap()
+{
+  if (swapit < 0)
+  {
+	/*	On Intel, Vax and MIPs little endian, -1.0 maps to the bytes
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f and on Motorola,
+		SPARC, ARM, and PowerPC, it maps to
+		0x3f, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00.
+	*/
+	double d = 1.0;
+	char c[8];
+	memcpy(c, &d, 8);
+	swapit = (c[0] == 0);
+  }
+  return swapit;
+}
+
+double
+pdb_read_double(void* ptr)
+{
+  double ret;
+  char r[8];
+  int i;
+  doswap(); /* make sure swapit is initialized */
+  for (i = 0; i < 8; i++)
+  {
+	int j = (swapit)?(7-i):i;
+	r[i] = ((char*)ptr)[j];
+  }
+  memcpy(&ret, r, 8);
+  return ret;
+}
+
+void
+pdb_write_double(void* ptr, double d)
+{
+  char r[8];
+  int i;
+
+  memcpy(r, &d, 8);
+  doswap(); /* make sure swapit is initialized */
+  for (i = 0; i < 8; i++)
+  {
+	int j = (swapit)?(7-i):i;
+	*(char*)ptr++ = r[j];
+  }
+  return;
+}

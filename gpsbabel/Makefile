@@ -3,7 +3,7 @@ CFLAGS=$(EXTRA_CFLAGS) -g -Icoldsync
 INSTALL_TARGETDIR=/usr/local/
 
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
-	gpsutil.o pcx.o cetus.o gpspilot.o magnav.o \
+	gpsutil.o pcx.o cetus.o copilot.o gpspilot.o magnav.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o
 
@@ -70,6 +70,7 @@ release:
 	ncftpput -u anonymous upload.sf.net  /incoming /tmp/gpsbabel-$(VERSIOND).tar.gz /tmp/gpsbabel-$(VERSIOND).zip
 
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
+copilot.o: copilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 csv.o: csv.c defs.h queue.h csv_util.h
 csv_util.o: csv_util.c defs.h queue.h csv_util.h
 dna.o: dna.c defs.h queue.h csv_util.h
