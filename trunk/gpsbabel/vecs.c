@@ -228,7 +228,7 @@ vecs_t vec_list[] = {
 	{
 		&coastexp_vecs,
 		"coastexp",
-		"CoastalExplorer.com XML",
+		"CoastalExplorer XML",
 		NULL
 	},
 	{	/* MRCB */

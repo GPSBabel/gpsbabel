@@ -86,6 +86,10 @@ typedef struct {
 extern global_options global_opts;
 extern const char gpsbabel_version[];
 
+/* Short or Long XML Times */
+#define XML_SHORT_TIME 1
+#define XML_LONG_TIME 2
+
 /*
  * Extended data if waypoint happens to represent a geocache.  This is 
  * totally voluntary data...
