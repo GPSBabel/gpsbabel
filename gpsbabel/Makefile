@@ -58,6 +58,7 @@ garmin.o: garmin.c defs.h queue.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
+gcdb.o: gcdb.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 geo.o: geo.c defs.h queue.h
 gpsdrive.o: gpsdrive.c defs.h queue.h csv_util.h
 gpsman.o: gpsman.c defs.h queue.h
@@ -68,11 +69,9 @@ holux.o: holux.c defs.h queue.h holux.h
 magnav.o: magnav.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 magproto.o: magproto.c defs.h queue.h magellan.h
 main.o: main.c defs.h queue.h
-mapsend.o: mapsend.c defs.h queue.h mapsend.h
+mapsend.o: mapsend.c defs.h queue.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h
 mkshort.o: mkshort.c defs.h queue.h
-xmapwpt.o: mxf.c defs.h queue.h csv_util.h
-xcsv.o: xcsv.c defs.h queue.h csv_util.h
 mxf.o: mxf.c defs.h queue.h csv_util.h
 ozi.o: ozi.c defs.h queue.h csv_util.h
 pcx.o: pcx.c defs.h queue.h
@@ -89,6 +88,8 @@ tpg.o: tpg.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
 util.o: util.c defs.h queue.h
 vecs.o: vecs.c defs.h queue.h
 waypt.o: waypt.c defs.h queue.h
+xcsv.o: xcsv.c defs.h queue.h csv_util.h
+xmapwpt.o: xmapwpt.c defs.h queue.h csv_util.h
 coldsync/pdb.o: coldsync/pdb.c coldsync/config.h coldsync/pdb.h
 coldsync/util.o: coldsync/util.c coldsync/config.h
 jeeps/gpsapp.o: jeeps/gpsapp.c jeeps/gps.h jeeps/gpsport.h \
@@ -101,16 +102,6 @@ jeeps/gpscom.o: jeeps/gpscom.c jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
-jeeps/gpsfmt.o: jeeps/gpsfmt.c jeeps/gps.h jeeps/gpsport.h \
-  jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
-  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
-  jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
-  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
-jeeps/gpsinput.o: jeeps/gpsinput.c jeeps/gps.h jeeps/gpsport.h \
-  jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
-  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
-  jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
-  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 jeeps/gpsmath.o: jeeps/gpsmath.c jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
@@ -118,11 +109,6 @@ jeeps/gpsmath.o: jeeps/gpsmath.c jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h \
   jeeps/gpsdatum.h
 jeeps/gpsmem.o: jeeps/gpsmem.c jeeps/gps.h jeeps/gpsport.h \
-  jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
-  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
-  jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
-  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
-jeeps/gpsproj.o: jeeps/gpsproj.c jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
