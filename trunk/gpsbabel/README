@@ -434,12 +434,27 @@ THE FORMATS
 
 	http://www.navicache.com/cgi-bin/ib312a/ikonboard.cgi?act=ST;f=23;t=334
 
-	PsiTrex
+    PsiTrex
 	
 	This is a text format created by KuDaTa's PsiTrex program for the Psion
 	PDAs. The format can't be readily handled by XCSV, so this format is
 	handled explicitly.  Waypoints, routes and tracks are all handled, with
 	icon names used corresponding to verison 1.13 of PsiTrex.
+
+    geoniche
+
+        Geoniche is a Palm/OS application oriented for the off-road user.
+	This module was contributed by Rick Richardson.
+
+	http://www.nwlink.com/~raydar/GeoNiche/
+
+    gpl
+
+	This is the 'gpl' format as used in Delorme mapping products.
+	It is a track format and contains little more than the tracklog
+	of a GPS that was attached while driving.
+
+	http://www.frontiernet.net/~werner/gps/
 	
 DATA FILTERS
 
@@ -605,6 +620,23 @@ DATA FILTERS
 
         gpsbabel -r -i saroute -f RoadTrip.anr -x simplify,count=50 \
                  -o magellan -F grocery.rte
+
+    REVERSE
+	
+	The reverse filter is used to reverse tracks and routes.   It's
+	mostly useful for those few formats where track/route sequence matters
+	and there isn't a way to reverse them using the program itself.
+
+        The reversal is performed in the laziest way possible.
+        Timestamps are kept with the original waypoints so the resulting
+        track or route will have the interesting characteristic that
+        time runs backwards.  This tends to make Magellan Mapsend,
+        in particular, do a wierd thing and place each waypoint on a
+        separate day.
+
+        Additionally, if you're using this to reverse a route that
+        navigates, say, an exit ramp or a one way street, you will be in
+        for unpleasant ride. application cares about timestamps
 
 COMMON USAGE
 
