@@ -22,6 +22,18 @@ gpsbabel: $(OBJS)
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
 
+# Nerdy release stuff that needs to work only on Linux.
+VERSIONU=1_0_0
+VERSIOND=1.0.0
+release:
+	rm -fr gpsbabel-$(VERSIOND)
+	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
+	tar cvzf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
+	cd /tmp ; tar xvzf gpsbabel-$(VERSIOND).tar.gz
+	cd /tmp/gpsbabel-$(VERSIOND)/mingw ; make  && zip gpsbabel-$(VERSIOND).zip  gpsbabel.exe libexpat.dll && cp gpsbabel-$(VERSIOND).zip /tmp
+	ncftpput -u anonymous upload.sf.net  /incoming /tmp/gpsbabel-$(VERSIOND).tar.gz /tmp/gpsbabel-$(VERSIOND).zip
+
+
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 csv.o: csv.c defs.h queue.h csv_util.h
 dna.o: dna.c defs.h queue.h csv_util.h
