@@ -122,8 +122,9 @@ THE FORMATS
     GPSPILOT
 
 	The file format for GPSPILOT (http://www.gpspilot.com) was provided
-	by Ron Parker.  GPSbabel can currently read gpspilot files, but not
-	write them.
+	by Ron Parker.  The output from this module has been tested with 
+        GPSPilot Tracker v5.05sx, but it is based on reverse-engineering
+        so it may not work with all versions of all GPSPilot products.
 
     MAGNAV
 

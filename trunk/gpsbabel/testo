@@ -134,3 +134,12 @@ ${PNAME} -i magnav -f reference/magnav.pdb -o gpsutil -F ${TMPDIR}/magnavt.gpu
 diff ${TMPDIR}/magnavt.gpu ${TMPDIR}/magnav.gpu
 diff reference/magnavr.gpu ${TMPDIR}/magnav.gpu
 
+# GPSPilot Tracker for PalmOS
+# This test is eerily similar to the NAV Companion test.  In fact, the 
+# converted reference file (magnavr.gpu) is identical.
+${PNAME} -i geo -f geocaching.loc -o gpspilot -F ${TMPDIR}/gpspilot.pdb
+${PNAME} -i gpspilot -f ${TMPDIR}/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspilot.gpu
+${PNAME} -i gpspilot -f reference/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspil_t.gpu
+diff ${TMPDIR}/gpspil_t.gpu ${TMPDIR}/gpspilot.gpu
+diff reference/magnavr.gpu ${TMPDIR}/gpspilot.gpu
+
