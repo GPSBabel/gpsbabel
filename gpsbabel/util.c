@@ -708,9 +708,10 @@ char * str_utf8_to_ascii( const char * str )
 		if ( *cur & 0x80 ) {
 			int bytes;
 			int value;
+			char *strvalue = "";
 			utf8_to_int( cur, &bytes, &value );
-
 			switch (value) {
+				case 0x2026: strvalue = "..."; break;
 				case 0x201c: value = '\"'; break;
 				case 0x201d: value = '\"'; break;
 				case 0xb4:
@@ -745,8 +746,13 @@ char * str_utf8_to_ascii( const char * str )
 				case 0xf8: value = '0'; break;
 				default: value='?'; break;;
 			}
-			*cur = (char)value;
-			strcpy( cur+1, cur+bytes );
+			if (strvalue) {
+				memcpy(cur, strvalue, bytes);
+				cur += bytes - 1;
+			} else {
+				*cur = (char)value;
+				strcpy( cur+1, cur+bytes );
+			}
 		}
 		cur++;
 	}
