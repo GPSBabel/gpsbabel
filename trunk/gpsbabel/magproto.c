@@ -43,7 +43,7 @@ static void *mkshort_handle;
 static char *deficon;
 static char *bs;
 static char *noack;
-
+static int route_out_count;
 
 typedef enum {
 	mrs_handoff = 0,
@@ -1274,6 +1274,9 @@ mag_route_trl(const route_head * rte)
 	/* number of output PMGNRTE messages at 2 points per line */
 	numlines = (i / 2) + (i % 2);
 	
+	/* increment the route counter. */
+	route_out_count++;
+	
 	thisline = i = 0;
 	QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
 		waypointp = (waypoint *) elem;
@@ -1295,7 +1298,7 @@ mag_route_trl(const route_head * rte)
 			thisline++;
 
 			sprintf(obuff, "PMGNRTE,%d,%d,c,%d,%s,%s", 
-				numlines, thisline, rte->rte_num,
+				numlines, thisline, route_out_count,
 				buff1, buff2);
 
 			mag_writemsg(obuff);
@@ -1314,6 +1317,7 @@ mag_route_hdr(const route_head *rh)
 static void
 mag_route_pr()
 {
+	route_out_count = 0;
 	route_disp_all(mag_route_hdr, mag_route_trl, mag_waypt_pr);
 
 }
