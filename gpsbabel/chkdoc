@@ -12,6 +12,12 @@ do
 		ECODE=1
 	fi
 	
+	if ! grep -qi $TYPE  ~/src/babelweb/changes.html
+	then
+		echo $TYPE is not documented in changes.html.
+		ECODE=1
+	fi
+	
 	if ! grep -qi "^    $TYPE$" README 
 	then
 		echo $TYPE is not documented in README.
