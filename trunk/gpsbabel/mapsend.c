@@ -233,7 +233,7 @@ mapsend_wpt_read(void)
 		if (wpt_icon < 26)
 			sprintf(tbuf, "%c", wpt_icon + 'a');
 		else
-			sprintf(tbuf, "a%c", wpt_icon - 27 + 'a');
+			sprintf(tbuf, "a%c", wpt_icon - 26 + 'a');
 		wpt_tmp->icon_descr = mag_find_descr_from_token(tbuf);
 
 		waypt_add(wpt_tmp);
@@ -347,7 +347,7 @@ n = ++cnt;
 		if (1 == strlen(iconp)) {
 			n = iconp[0] - 'a';
 		} else {
-			n = iconp[1] - 'a' + 27;
+			n = iconp[1] - 'a' + 26;
 		}
 	} else  {
 		n = 0;

@@ -136,7 +136,7 @@ static icon_mapping_t map330_icon_table[] = {
 	{ "z", "obstruction" },
 	{ "aa", "park" },
 	{ "ab", "resort" },
-	{ "ac", "restaraunt" },
+	{ "ac", "restaurant" },
 	{ "ad", "rock" },
 	{ "ae", "scuba" },
 	{ "af", "RV service" },
