@@ -33,7 +33,7 @@ route_head *
 route_head_alloc(void)
 {
 	route_head *rte_head;
-	rte_head = xmalloc(sizeof (*rte_head));
+	rte_head = xcalloc(sizeof (*rte_head), 1);
 	QUEUE_INIT(&rte_head->Q);
 	return rte_head;
 }
