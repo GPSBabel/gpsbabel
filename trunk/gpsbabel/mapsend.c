@@ -396,7 +396,7 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	double flong;
 	double flat;
 	static int cnt = 0;
-	const char *iconp;
+	const char *iconp = NULL;
 	const char *sn = global_opts.synthesize_shortnames ? 
 		mkshort(mkshort_handle, waypointp->description) :
 	       	waypointp->shortname;
@@ -428,6 +428,15 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	} else  {
 		c = 0;
 	}
+	if (get_cache_icon(waypointp)) {
+		iconp = mag_find_token_from_descr(get_cache_icon(waypointp));
+		if (1 == strlen(iconp)) {
+			c = iconp[0] - 'a';
+		} else {
+			c = iconp[1] - 'a' + 26;
+		}
+	}
+
 	fwrite(&c, 1, 1, mapsend_file_out);
 	c = 1;
 	fwrite(&c, 1, 1, mapsend_file_out);
