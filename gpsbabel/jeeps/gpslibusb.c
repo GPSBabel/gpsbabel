@@ -22,6 +22,7 @@
 
 
 #include <stdio.h>
+#include <ctype.h>
 #include <usb.h>
 #include "gps.h"
 #include "garminusb.h"
@@ -63,7 +64,7 @@ gusb_init(void)
 	return 1;
 }
 
-dump(char *msg, const unsigned char *in, int r)
+static void dump(char *msg, const unsigned char *in, int r)
 {
 	int i;
 	printf("%s: %d\n", msg, r);
@@ -87,6 +88,7 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 	if (r != sz) {
 		fprintf(stderr, "Bad cmdsend r %d sz %d\n", r, sz);
 	}
+	return r;
 }
 
 int
@@ -127,11 +129,10 @@ garmin_usb_teardown(void)
 	}
 }
 
+void
 garmin_usb_start(struct usb_device *dev)
 {
-	int ret;
 	int i;
-	char ibuf[4096];
 
 	if (udev) return;
 
@@ -182,7 +183,6 @@ garmin_usb_syncup(void)
 {
 	int maxct = 5;
 	int maxtries;
-	char ibuf[4096];
 
 	for (maxtries = maxct; maxtries; maxtries--) {
 
@@ -208,7 +208,6 @@ static
 void garmin_usb_scan(void)
 {
 	struct usb_bus *bus;
-	int c, i, a;
 
 	for (bus = busses; bus; bus = bus->next) {
 		struct usb_device *dev;
