@@ -67,6 +67,10 @@ diff ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 ${PNAME} -i magellan -f reference/magfile -o magellan -F ${TMPDIR}/magfile
 diff ${TMPDIR}/magfile reference/magfile
 
+# Navitrak DNA marker format
+${PNAME} -i dna -f reference/dnatest.txt -o dna -F ${TMPDIR}/dnatest.txt
+diff ${TMPDIR}/dnatest.txt reference/dnatest.txt
+
 # PSP (PocketStreets 2002 Pushpin (.PSP)) file format
 rm -f ${TMPDIR}/ps.psp ${TMPDIR}/psp.psp
 ${PNAME} -i psp -f reference/ps.psp -o psp -F ${TMPDIR}/psp.psp
