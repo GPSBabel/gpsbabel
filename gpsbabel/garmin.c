@@ -105,7 +105,7 @@ data_write(void)
 		fatal(MYNAME ":not enough memory\n");
 	for (i = 0; i < n; i++) {
 		if(!((way)[i]=GPS_Way_New()))
-			return MEMORY_ERROR;
+			fatal(MYNAME ":not enough memory\n");
 	}
 
 	i = 0;
