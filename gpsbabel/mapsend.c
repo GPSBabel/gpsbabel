@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
 #include "defs.h"
 #include "mapsend.h"
 
@@ -30,6 +29,8 @@ static FILE *mapsend_file_out;
 
 static int endianness_tested;
 static int i_am_little_endian;
+
+#define MYNAME "mapsend"
 
 static void
 test_endianness(void)
@@ -179,9 +180,8 @@ mapsend_wr_deinit(void)
 }
 
 static void
-mapsend_read(void)
+mapsend_wpt_read(void)
 {
-	mapsend_hdr hdr;
 	char tbuf[256];
 	char name[257];
 	char comment[257];
@@ -195,20 +195,15 @@ mapsend_read(void)
 	double wpt_long;
 	double wpt_lat;
 	waypoint *wpt_tmp;
-
-	/*
-	 * Becuase of the silly struct packing and the goofy variable-length
-	 * strings, each member has to be read in one at a time.  Grrr.
-	 */
-
-	fread(&hdr, sizeof(hdr), 1, mapsend_file_in);
-
 	my_fread4(&wpt_count, mapsend_file_in);
 
 	while (wpt_count--) {
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
 
-		fread(&scount, sizeof(scount), 1, mapsend_file_in);
+		if (fread(&scount, sizeof(scount), 1, mapsend_file_in) < 1) {
+			fatal(MYNAME ": out of data reading %d waypoints\n",
+					wpt_count);
+		}
 		fread(tbuf, scount, 1, mapsend_file_in);
 		p = strncpy(name, tbuf, scount);
 		p[scount] = '\0';
@@ -234,6 +229,79 @@ mapsend_read(void)
 		waypt_add(wpt_tmp);
 	}
 }
+
+static void
+mapsend_track_read(void)
+{
+	char *trk_name;
+	unsigned char scount;
+	unsigned int trk_count;
+	double wpt_long;
+	double wpt_lat;
+	float wpt_alt;
+	int time;
+	int valid;
+	int centisecs;
+	route_head *track_head;
+	waypoint *wpt_tmp;
+
+	fread(&scount, sizeof(scount), 1, mapsend_file_in);
+	trk_name = xmalloc(scount + 1);
+	fread(trk_name, scount, 1, mapsend_file_in);
+	trk_name[scount] = '\0';
+	my_fread4(&trk_count, mapsend_file_in);
+
+	track_head = route_head_alloc();
+	track_head->rte_name = trk_name;
+	route_add_head(track_head);
+
+	while (trk_count--) {
+		my_fread8(&wpt_long, mapsend_file_in);
+		my_fread8(&wpt_lat, mapsend_file_in);
+		my_fread4(&wpt_alt, mapsend_file_in);
+		my_fread4(&time, mapsend_file_in);
+		my_fread4(&valid, mapsend_file_in);
+		fread(&centisecs, 1, 1, mapsend_file_in);
+
+		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+		wpt_tmp->position.altitude.altitude_meters = wpt_alt;
+		wpt_tmp->position.latitude.degrees = -wpt_lat;
+		wpt_tmp->position.longitude.degrees = wpt_long;
+		wpt_tmp->creation_time = time;
+		route_add_wpt(track_head, wpt_tmp);
+	}
+}
+
+static void
+mapsend_read(void)
+{
+	mapsend_hdr hdr;
+	int type;
+
+	/*
+	 * Becuase of the silly struct packing and the goofy variable-length
+	 * strings, each member has to be read in one at a time.  Grrr.
+	 */
+
+	fread(&hdr, sizeof(hdr), 1, mapsend_file_in);
+	type = le_read16(&hdr.ms_type);
+
+	switch(type) {
+		case ms_type_wpt:
+			mapsend_wpt_read();
+			break;
+		case ms_type_track:
+			mapsend_track_read();
+			break;
+		case ms_type_log:
+			fatal(MYNAME ", GPS logs not supported.\n", type);
+		case ms_type_rgn:
+			fatal(MYNAME ", GPS regions not supported.\n", type);
+		default:
+			fatal(MYNAME ", unknown file type %d\n", type);
+	}
+}
+
 
 static void
 mapsend_waypt_pr(const waypoint *waypointp)
@@ -273,11 +341,11 @@ n = 1;
 }
 
 void
-mapsend_write(void)
+mapsend_wpt_write(void)
 {
-	mapsend_hdr hdr = {13, "4D533330 MS", "30", 1};
+	mapsend_hdr hdr = {13, "4D533330 MS", "30", ms_type_wpt};
 	int wpt_count = waypt_count();
-int n = 0;
+	int n = 0;
 
 	fwrite(&hdr, sizeof(hdr), 1, mapsend_file_out);
 	my_fwrite4(&wpt_count, mapsend_file_out);
@@ -288,11 +356,17 @@ int n = 0;
 /* TODO: Impelment routes here */
 }
 
+void 
+mapsend_trk_write(void)
+{
+	mapsend_hdr hdr = {13, "4D533334 MS", "34", ms_type_track};
+}
+
 ff_vecs_t mapsend_vecs = {
 	mapsend_rd_init,
 	mapsend_wr_init,
 	mapsend_rd_deinit,
 	mapsend_wr_deinit,
 	mapsend_read,
-	mapsend_write,
+	mapsend_wpt_write,
 };

@@ -22,10 +22,6 @@
 
 global_options global_opts;
 
-gpsdata_type objective = wptdata; /* if no explicit data type is given, assume waypoints */
-
-
-
 void
 usage(const char *pname)
 {
@@ -99,13 +95,13 @@ main(int argc, char *argv[])
 				global_opts.synthesize_shortnames = 1;
 				break;
 			case 't':
-				objective = trkdata;
+				global_opts.objective = trkdata;
 				break;
 			case 'w':
-				objective = wptdata;
+				global_opts.objective = wptdata;
 				break;
 			case 'r':
-				objective = rtedata;
+				global_opts.objective = rtedata;
 				break;
 			case 'D':
 				global_opts.debug_level = atoi(optarg);
