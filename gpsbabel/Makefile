@@ -72,6 +72,9 @@ dep:
 
 VERSIONU=1_1_1_beta10082003
 VERSIOND=1.1.1_beta10082003
+VERSIONU=1_2_0
+VERSIOND=1.2.0
+
 release:
 	./chkdoc
 	rm -fr gpsbabel-$(VERSIOND)
