@@ -57,6 +57,7 @@ extern ff_vecs_t navicache_vecs;
 extern ff_vecs_t psit_vecs;             /* MRCB */
 extern ff_vecs_t geoniche_vecs;
 extern ff_vecs_t gpl_vecs;
+extern ff_vecs_t ozi_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -221,6 +222,12 @@ vecs_t vec_list[] = {
 		&gpl_vecs,
 		"gpl",
 		"Delorme GPL",
+		NULL
+	},
+	{
+		&ozi_vecs,
+		"ozi",
+		"OziExplorer",
 		NULL
 	},
 	{
