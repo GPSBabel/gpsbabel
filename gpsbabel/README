@@ -148,21 +148,22 @@ THE FORMATS
         Garmin Mapsource format appears compatible with the various
         members of that product family.  Icon mapping is oriented toward
         versions above 4.07.  Altitude, proximity, and depth are not
-        supported.
+        supported.   Naming files *.mps will allow file->open in Mapsource
+	to find the files more easily.
 
         Information on the Garmin Mapsource format was provided by Ian
         Cowley.  The code was implemented by Robert Lipe.
 
     PCX
 
-	Garmin documents only PCX5, an older format limited to the lame NMEA
-	six-character waypoint names that's treated as a second-class citizien
-	in current versions of MapSource.  Use file->import to read these 
-	files.   Anyone with information on the *.mps file format that is
-	now preferred is encouraged to contact me with the details or better
-	yet, a module that implements it.   I spent time trying to reverse-
-	engineer a couple of *.mps files then I remembered that I don't own
-	a Garmin and wasn't that inspired.
+        Garmin documents only PCX5, an older format limited to the
+        lame NMEA six-character waypoint names that's treated as a
+        second-class citizien in current versions of MapSource.  In
+        Mapsource, use file->import to read these files.  If you name
+	the files *.wpt, Mapsource will find them easier.
+
+        In general, you should prefer the "mapsource" file format to
+        this one.
 
     CETUS
 
