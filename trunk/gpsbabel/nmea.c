@@ -301,10 +301,11 @@ nmea_trackpt_pr(const waypoint *wpt)
 		hms = 0;
 	}
 
-	snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%09.3f,%c,%09.3f,%c,04,0,0,0.9,M,0.0,M,,",
+	snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%09.3f,%c,%09.3f,%c,04,0,0,%.3f,M,0.0,M,,",
 			hms,
 			fabs(lat), lat < 0 ? 'S' : 'N',
-			fabs(lon), lon < 0 ? 'W' : 'E');
+			fabs(lon), lon < 0 ? 'W' : 'E',
+			wpt->altitude == unknown_alt ? 0 : wpt->altitude);
 
 	cksum = nmea_cksum(obuf);
 	fprintf(file_out, "$%s*%02X\n", obuf, cksum);
