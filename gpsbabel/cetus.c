@@ -20,18 +20,8 @@
  */
 
 #include "defs.h"
-#if CETUS
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
-
-typedef struct {
-	unsigned char data[4];
-} pdb_32;
-
-typedef struct {
-	unsigned char data[2];
-} pdb_16;
-
 
 struct record {
 	char type;
@@ -96,27 +86,6 @@ wr_deinit(void)
 	fclose(file_out);
 }
 
-/*
- * Read 4 bytes in big-endian.   Return as "int" in native endianness.
- */
-int
-read4(pdb_32 *p)
-{
-	char *i = (char *) p;
-	return i[0] << 24 | i[1] << 16  | i[2] << 8 | i[3];
-}
-
-void
-write4(pdb_32 *pp, unsigned i)
-{
-	char *p = (char *)pp;
-
-	p[0] = (i >> 24) & 0xff;
-	p[1] = (i >> 16) & 0xff;
-	p[2] = (i >> 8) & 0xff;
-	p[3] = i & 0xff;
-}
-
 static void
 data_read(void)
 {
@@ -139,10 +108,10 @@ data_read(void)
 		rec = (struct record *) pdb_rec->data;
 		wpt_tmp->shortname = strdup(rec->ID);
 		wpt_tmp->description = strdup(rec->name);
-		wpt_tmp->position.altitude.altitude_meters = read4(&rec->elevation) / 100.0;
+		wpt_tmp->position.altitude.altitude_meters = pdb_read4(&rec->elevation) / 100.0;
 
-		wpt_tmp->position.longitude.degrees = read4(&rec->longitude) / 10000000.0; 
-		wpt_tmp->position.latitude.degrees = read4(&rec->latitude) / 10000000.0; 
+		wpt_tmp->position.longitude.degrees = pdb_read4(&rec->longitude) / 10000000.0; 
+		wpt_tmp->position.latitude.degrees = pdb_read4(&rec->latitude) / 10000000.0; 
 		if (rec->year != 0xff) {
 			struct tm tm = {0};
 			time_t tval;
@@ -194,9 +163,9 @@ cetus_writewpt(waypoint *wpt)
 		rec->year = 0xff;
 	}
 
-	write4(&rec->longitude, wpt->position.longitude.degrees * 10000000.0);
-	write4(&rec->latitude, wpt->position.latitude.degrees * 10000000.0);
-	write4(&rec->elevation, wpt->position.altitude.altitude_meters * 100.0);
+	pdb_write4(&rec->longitude, wpt->position.longitude.degrees * 10000000.0);
+	pdb_write4(&rec->latitude, wpt->position.latitude.degrees * 10000000.0);
+	pdb_write4(&rec->elevation, wpt->position.altitude.altitude_meters * 100.0);
 
 	opdb_rec = new_Record (0, 0, ct++, sizeof(*rec), (const ubyte *)rec);
 
@@ -280,6 +249,3 @@ ff_vecs_t cetus_vecs = {
 	data_read,
 	data_write,
 };
-#else
-ff_vecs_t cetus_vecs;
-#endif
