@@ -1134,12 +1134,14 @@ gpx_write(void)
 	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/1/0\"\n");
 	fprintf(ofd, "xsi:schemaLocation=\"%s\">\n", xsi_schema_loc ? xsi_schema_loc : DEFAULT_XSI_SCHEMA_LOC);
 
-        gpx_write_time( now, "time" );
+	gpx_write_time( now, "time" );
 	waypt_compute_bounds(&bounds);
-	fprintf(ofd, "<bounds minlat=\"%f\" minlon =\"%f\" "
-		       "maxlat=\"%f\" maxlon=\"%f\" />\n",
-		       bounds.min_lat, bounds.min_lon, 
-		       bounds.max_lat, bounds.max_lon);
+	if (bounds.max_lat  < 360) {
+		fprintf(ofd, "<bounds minlat=\"%f\" minlon =\"%f\" "
+			       "maxlat=\"%f\" maxlon=\"%f\" />\n",
+			       bounds.min_lat, bounds.min_lon, 
+			       bounds.max_lat, bounds.max_lon);
+	}
 	waypt_disp_all(gpx_waypt_pr);
 	gpx_track_pr();
 	gpx_route_pr();
