@@ -28,10 +28,10 @@
 #define MYNAME "GARMIN" 
 static const char *portname;
 static void *mkshort_handle;
-GPS_PWay *tx_routelist;
-GPS_PWay *cur_tx_routelist_entry;
-GPS_PTrack *tx_tracklist;
-GPS_PTrack *cur_tx_tracklist_entry;
+static GPS_PWay *tx_routelist;
+static GPS_PWay *cur_tx_routelist_entry;
+static GPS_PTrack *tx_tracklist;
+static GPS_PTrack *cur_tx_tracklist_entry;
 
 static void
 rw_init(const char *fname)
