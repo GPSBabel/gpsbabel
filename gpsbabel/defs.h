@@ -384,6 +384,7 @@ void warning(const char *, ...)
 	;
 ff_vecs_t *find_vec(char *, char **);
 void disp_vecs(void);
+void exit_vecs(void);
 void disp_formats(int version);
 void printposn(double c, int is_lat);
 

@@ -132,8 +132,12 @@ find_filter_vec(char *const vecname, char **opts)
 void
 free_filter_vec( filter_vecs_t *fvec )
 {
-	if ( fvec->args && fvec->args->argval && *(fvec->args->argval) ) {
-		xfree(*(fvec->args->argval));
+	arglist_t *ap;
+	
+	if ( fvec->args ) {
+		for ( ap = fvec->args; ap->argstring; ap++) {
+			if (ap->argval && *ap->argval) xfree(*ap->argval);
+		}
 	}
 }
 

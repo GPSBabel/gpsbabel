@@ -301,6 +301,24 @@ vecs_t vec_list[] = {
 	}
 };
 
+void 
+exit_vecs( void )
+{
+	vecs_t *vec = vec_list;
+	while ( vec->vec ) {
+		arglist_t *ap;
+		if ( vec->vec->args ) {
+			for ( ap = vec->vec->args; ap->argstring; ap++ ) {
+				if ( ap->argval && *ap->argval ) {
+					xfree(*ap->argval);
+					*ap->argval = NULL;
+				}
+			}
+		}
+		vec++;
+	}
+}
+
 ff_vecs_t *
 find_vec(char *const vecname, char **opts)
 {
@@ -324,11 +342,8 @@ find_vec(char *const vecname, char **opts)
 
 			if (vec->vec->args) {
 				for (ap = vec->vec->args; ap->argstring; ap++){
-					void *av;
-					av = get_option(*opts, ap->argstring);
-					if (av) {
-						*ap->argval = av;
-					}
+					if ( *ap->argval ) xfree(*ap->argval);
+					*ap->argval = get_option(*opts, ap->argstring);
 				}
 			}
 		} else {

@@ -290,6 +290,7 @@ main(int argc, char *argv[])
 
 	waypt_flush_all();
 	route_flush_all();
+	exit_vecs();
 	exit_filter_vecs();
 
 #ifdef DEBUG_MEM
