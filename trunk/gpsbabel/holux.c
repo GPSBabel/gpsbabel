@@ -156,7 +156,7 @@ static void data_read(void)
 
 
 
-char *_mknshort (char *stIn,unsigned int sLen)
+char *mknshort (char *stIn,unsigned int sLen)
 {
     #define MAX_STRINGLEN 255
     static char strOut[MAX_STRINGLEN];
@@ -203,13 +203,13 @@ static void gpsutil_disp(waypoint *wpt)
 
     memset (&(pWptHxTmp->name),0x20,sizeof(pWptHxTmp->name));  
     if (wpt->shortname != NULL)
-        strncpy((char *)&(pWptHxTmp->name), _mknshort(wpt->shortname,sizeof(pWptHxTmp->name)),sizeof(pWptHxTmp->name));
+        strncpy((char *)&(pWptHxTmp->name), mknshort(wpt->shortname,sizeof(pWptHxTmp->name)),sizeof(pWptHxTmp->name));
     else
         sprintf((char *)&(pWptHxTmp->name),"W%d",sIndex);
 
     memset (&(pWptHxTmp->comment),0x20,sizeof(pWptHxTmp->comment));  
     if (wpt->description != NULL)
-            strncpy((char *)&(pWptHxTmp->comment), _mknshort(wpt->description,sizeof(pWptHxTmp->comment)),sizeof(pWptHxTmp->comment));
+            strncpy((char *)&(pWptHxTmp->comment), mknshort(wpt->description,sizeof(pWptHxTmp->comment)),sizeof(pWptHxTmp->comment));
 
     /*set the time */
 	if (wpt->creation_time) 
