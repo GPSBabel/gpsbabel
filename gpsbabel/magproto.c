@@ -981,7 +981,8 @@ mag_waypt_pr(const waypoint *waypointp)
 	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.8s,%-.30s,%s",
 		lat, ilon < 0 ? 'N' : 'S',
 		lon, ilat < 0 ? 'E' : 'W',
-		waypointp->position.altitude.altitude_meters,
+		waypointp->position.altitude.altitude_meters == unknown_alt ?
+			0 : waypointp->position.altitude.altitude_meters,
 		owpt,
 		odesc,
 		icon_token);
