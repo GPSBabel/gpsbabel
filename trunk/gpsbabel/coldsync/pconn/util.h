@@ -5,7 +5,7 @@
  *	You may distribute this file under the terms of the Artistic
  *	License, as specified in the README file.
  *
- * $Id: util.h,v 1.1 2002-08-16 06:14:09 robertl Exp $
+ * $Id: util.h,v 1.2 2002-08-24 03:01:31 robertl Exp $
  */
 #ifndef _util_h_
 #define _util_h_
@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include <time.h>
 #include "palm.h"
-// #include "dlp_cmd.h"
 
 /* XXX - The functions declared INLINE, below, really ought to be inline
  * functions. I'm not sure how to do this portably, though.
