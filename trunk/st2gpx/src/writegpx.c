@@ -86,9 +86,8 @@ void gpx_write_file_trailer(FILE* gpx_out_file)
 	}
 }
 
-void gpx_write_point(FILE* gpx_out_file, struct gpxpt * pt, int pt_type, char* opt_elms)
-// FIXEM do <name> from pt, not from opt_elms
-// FIXME same for other atts defined in gpxpt
+void gpx_write_point(FILE* gpx_out_file, struct gpxpt * pt, int pt_type)
+// FIXME write other atts defined in gpxpt
 {
 	if (gpx_out_file!=NULL)
 	{
@@ -96,17 +95,28 @@ void gpx_write_point(FILE* gpx_out_file, struct gpxpt * pt, int pt_type, char* o
 			fprintf(gpx_out_file, "\t\t");
 		else if (pt_type == GPX_RTEPT)
 			fprintf(gpx_out_file, "\t");
-		fprintf(gpx_out_file, "\t<%s lat=\"%f\" lon=\"%f\">%s</%s>\n",
-				gpxptypelabel[pt_type], pt->lat, pt->lon,
-				opt_elms, gpxptypelabel[pt_type]);
+		fprintf(gpx_out_file, "\t<%s lat=\"%f\" lon=\"%f\">", 
+				gpxptypelabel[pt_type], pt->lat, pt->lon);
+		if( (pt->name != NULL) && (strlen(pt->name)>0) )
+			fprintf(gpx_out_file, "<name><![CDATA[%s]]></name>", pt->name);
+		if( (pt->desc != NULL) && (strlen(pt->desc)>0) )
+			fprintf(gpx_out_file, "<desc><![CDATA[%s]]></desc>", pt->desc);
+		// FIXME do some translation here?
+		if(pt->symbol != 0)
+			fprintf(gpx_out_file, "<sym>MS Map Symbol %d</sym>", pt->symbol);
+		if( (pt->url != NULL) && (strlen(pt->url)>0) )
+			fprintf(gpx_out_file, "<desc><![CDATA[%s]]></desc>", pt->url);
+		if( (pt->urlname != NULL) && (strlen(pt->urlname)>0) )
+			fprintf(gpx_out_file, "<desc><![CDATA[%s]]></desc>", pt->urlname);
+		fprintf(gpx_out_file, "</%s>\n", gpxptypelabel[pt_type]);
 	}
 }
 
 void gpx_write_jour_point(FILE* gpx_out_file, struct journey * jour, struct jour_rtept * wpt)
 {
 	struct gpxpt * pt = gpxpt_new();
-	char* opt_elms;
-	int optlen;
+//	char* opt_elms;
+//	int optlen;
 	struct f_jour_pt_head * f_wpt_head;
 
 	if (gpx_out_file==NULL)
@@ -118,28 +128,31 @@ void gpx_write_jour_point(FILE* gpx_out_file, struct journey * jour, struct jour
 		f_wpt_head = (struct f_jour_pt_head *)(jour->buf + (wpt->pthead_os));
 		pt->lat=scaled2deg(f_wpt_head->scaled_lat);
 		pt->lon=scaled2deg(f_wpt_head->scaled_lon);
-		optlen = f_wpt_head->cbtext1 + 60;
-		opt_elms = (char*)xmalloc(optlen);
+//		optlen = f_wpt_head->cbtext1 + 60;
+//		opt_elms = (char*)xmalloc(optlen);
 		//FIXME use str2ascii??
-		sprintf(opt_elms, "<name><![CDATA[%s]]></name>", wpt->text1);
+//		sprintf(opt_elms, "<name><![CDATA[%s]]></name>", wpt->text1);
+		pt->name=_strdup(wpt->text1);
 
 	}
 	else
 	{
-		optlen = strlen(wpt->pushpin->UdName) + strlen(wpt->pushpin->NoteShort) + 60;
-		opt_elms = (char*)xmalloc(optlen);
+//		optlen = strlen(wpt->pushpin->UdName) + strlen(wpt->pushpin->NoteShort) + 60;
+//		opt_elms = (char*)xmalloc(optlen);
 
-		sprintf(opt_elms, "<name><![CDATA[%s]]></name><desc><![CDATA[%s]]></desc>",
-				wpt->pushpin->UdName, wpt->pushpin->NoteShort);
+//		sprintf(opt_elms, "<name><![CDATA[%s]]></name><desc><![CDATA[%s]]></desc>",
+//				wpt->pushpin->UdName, wpt->pushpin->NoteShort);
+		pt->name=_strdup(wpt->text1);
+		pt->desc=_strdup(wpt->pushpin->NoteShort);
 
 		pt->lat = wpt->pushpin->lat;
 		pt->lon = wpt->pushpin->lon;
 	}
 
-	gpx_write_point(gpx_out_file, pt, GPX_RTEPT, opt_elms);
+	gpx_write_point(gpx_out_file, pt, GPX_RTEPT);
 
 	gpxpt_delete(pt);
-	free(opt_elms);
+//	free(opt_elms);
 }
 
 void gpx_write_jour_header(FILE* gpx_out_file)
@@ -176,8 +189,8 @@ void gpx_write_pushpinlist (FILE* gpx_out_file, struct pushpin_safelist *ppplist
 {
 	int i;
 	struct gpxpt * pt=NULL;
-	char* opt_elms;
-	int optlen;
+//	char* opt_elms;
+//	int optlen;
 
 	if ((gpx_out_file==NULL) || (ppplist==NULL))
 		return;
@@ -191,28 +204,37 @@ void gpx_write_pushpinlist (FILE* gpx_out_file, struct pushpin_safelist *ppplist
 		if (ppplist->pushpin_list[i]==NULL)
 			break;
 
-		optlen = strlen(ppplist->pushpin_list[i]->UdName)
-				+ strlen(ppplist->pushpin_list[i]->NoteShort) + 60;
-		opt_elms = (char*)xmalloc(optlen);
+//		optlen = strlen(ppplist->pushpin_list[i]->UdName)
+//				+ strlen(ppplist->pushpin_list[i]->NoteShort) + 60;
+//		opt_elms = (char*)xmalloc(optlen);
 
-		sprintf(opt_elms, "<name><![CDATA[%s]]></name><desc><![CDATA[%s]]></desc>",
-				ppplist->pushpin_list[i]->UdName, ppplist->pushpin_list[i]->NoteShort);
+//		sprintf(opt_elms, "<name><![CDATA[%s]]></name><desc><![CDATA[%s]]></desc>",
+//				ppplist->pushpin_list[i]->UdName, ppplist->pushpin_list[i]->NoteShort);
+
+		pt->name = _strdup(ppplist->pushpin_list[i]->UdName);
+		pt->desc = _strdup(ppplist->pushpin_list[i]->NoteShort);
 
 		pt->lat = ppplist->pushpin_list[i]->lat;
 		pt->lon = ppplist->pushpin_list[i]->lon;
+		// FIXEM some translation is needed here
+		pt->symbol = ppplist->pushpin_list[i]->RenderData;
 
-		gpx_write_point(gpx_out_file, pt, GPX_WPT, opt_elms);
-		free(opt_elms);
+		gpx_write_point(gpx_out_file, pt, GPX_WPT);
+//		free(opt_elms);
+		free(pt->name);
+		pt->name=NULL;
+		free(pt->desc);
+		pt->desc=NULL;
 	}
 	fprintf(gpx_out_file, "\n");
 	gpxpt_delete(pt);
 }
 
-void gpx_write_annot_rec(FILE* gpx_out_file, const struct annot_rec * rec)
+void gpx_write_annot_rec(FILE* gpx_out_file, struct annot_rec * rec)
 {
 	int pt_type;
 	int p;
-	char opt_elms[200];
+//	char opt_elms[200];
 	struct gpxpt * pt;
 
 	if ( (gpx_out_file==NULL) || (rec==NULL) )
@@ -257,6 +279,7 @@ void gpx_write_annot_rec(FILE* gpx_out_file, const struct annot_rec * rec)
 		for (p=0; p < rec->line_points; p++)
 		{
 			pt=gpx_get_point(rec->buf + rec->line_offset + 12*p);
+			pt->name=(char*)xmalloc(7);
 			if(pt==NULL)
 			{
 				printf("got null pt #%p in annotation %d, skipping more points in this annotation\n",
@@ -264,12 +287,14 @@ void gpx_write_annot_rec(FILE* gpx_out_file, const struct annot_rec * rec)
 				break;
 			}
 			if(opts.use_gpx_route)
-				sprintf(opt_elms, "<name>rp%04d</name>", p);
+				sprintf(pt->name, "rp%04d", p);
+				//sprintf(opt_elms, "<name>rp%04d</name>", p);
 			else
 				// we need to include a name for trackpoints
 				// for them to be recognised by easygps.
-				sprintf(opt_elms, "<name>tp%04d</name>", p);
-			gpx_write_point(gpx_out_file, pt, pt_type, opt_elms);
+				sprintf(pt->name, "tp%04d", p);
+				//sprintf(opt_elms, "<name>tp%04d</name>", p);
+			gpx_write_point(gpx_out_file, pt, pt_type);
 			gpxpt_delete(pt);
 		}
 

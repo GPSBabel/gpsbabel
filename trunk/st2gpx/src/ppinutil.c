@@ -79,6 +79,10 @@ struct pushpin * pushpin_new()
 	nw->NoteShort=NULL;
 	nw->UdName=NULL;
 	strcpy(nw->garmin_ident, "      ");
+	nw->RenderData=0;
+	nw->RenderData2=0;
+	nw->url=NULL;
+	nw->urlname=NULL;
 	return nw;
 }
 
@@ -88,6 +92,8 @@ void pushpin_delete(struct pushpin * pp)
 		return;
 	free(pp->NoteShort);
 	free(pp->UdName);
+	free(pp->url);
+	free(pp->urlname);
 	free(pp);
 }
 
@@ -287,4 +293,83 @@ struct pushpin_safelist * process_pushpin_file(char* ppin_in_file_name)
 	fflush(stdout);
 
 	return ppplist;
+}
+
+char std_udm1[6] = {18, 0, 0, 0, 0, 0};
+char std_udm2[1] = {1};
+
+void explore_udm_data(struct pushpin_safelist * ppl)
+{
+	int i;
+	struct f_udm0_header * udm0_head=NULL;
+	struct f_udm0_header1 * udm0_head1=NULL;
+	struct f_udm0_ppin * udm0_ppin=NULL;
+	int expected_udm2_len=0;
+
+	printf("Exploring UDM_Data from UserData\n");
+
+	// check UDM_Data[1]
+	if(ppl->UDM_Data_length[1] != 6)
+		printf("Unexpcted UDM_Data[1] length = %d, expected length 6\n", 
+				ppl->UDM_Data_length[1]);
+	else
+		for(i=0; i<6; i++)
+			if(ppl->UDM_Data[1][i] != std_udm1[i])
+				printf("UDM_Data[1][%d]=%#x, normally expect value %#x\n", 
+						i,
+						(unsigned char)(ppl->UDM_Data[1][i]), 
+						(unsigned char)(std_udm1[i]));
+				         
+	// check UDM_Data[2]
+	if(ppl->UDM_Data_length[2] != 1)
+		printf("Unexpcted UDM_Data[2] length = %d, expected length 1\n", 
+				ppl->UDM_Data_length[2]);
+	else
+		if(ppl->UDM_Data[2][0] != std_udm2[0])
+				printf("UDM_Data[2][0]=%#x, normally expect value %#x\n", 
+						(unsigned char)ppl->UDM_Data[2][0], 
+						(unsigned char)(std_udm2[0]));
+
+	// check UDM_Data[0]
+	
+	if (ppl->UDM_Data_length[0] < 14)
+	{
+		printf("UDM_Data[0] is too small to have a valid header\n");
+		return;
+	}
+
+	udm0_head = (struct f_udm0_header *)(ppl->UDM_Data[0]);
+	printf("There are %d highlighted pushpins\n", udm0_head->c_highlight_recs);
+	// list the highlighted udids? Nah.
+
+	if(udm0_head->sunkn != 0x8001)
+	{
+		printf("Unexpected f_udm0_header:\n");
+		printbuf(ppl->UDM_Data[0], sizeof(struct f_udm0_header));
+	}
+
+	udm0_head1 = (struct f_udm0_header1*)
+					(ppl->UDM_Data[0] + sizeof(struct f_udm0_header) 
+					 + 4*(udm0_head->c_highlight_recs));
+		
+	if( udm0_head1->iunkn != 0)
+		printf("Unexpected f_udm0_header1->iunkn=%#x:\n",udm0_head1->iunkn);
+
+	expected_udm2_len = (14 + 4*(udm0_head->c_highlight_recs) 
+							+ 6*(udm0_head1->c_format_records));
+	if(ppl->UDM_Data_length[0] != expected_udm2_len)
+		printf("Unexpcted UDM_Data[0] length = %d, expected length %d for %d indicated format_records\n", 
+				ppl->UDM_Data_length[0], expected_udm2_len, udm0_head1->c_format_records);
+	else
+	{
+		udm0_ppin = (struct f_udm0_ppin *)(ppl->UDM_Data[0] + 14 + 4*(udm0_head->c_highlight_recs) );
+		// size has already been verified as (14 + 6 * udm0_head->c_format_records)
+		for(i=0; i<(udm0_head1->c_format_records); i++)
+			printf("udm0 ppin_rec[%d] has udid=%d, format=%#x, zorder=%d\n",
+					i, 
+					udm0_ppin[i].ppin_udid, 
+					udm0_ppin[i].format, 
+					udm0_ppin[i].zorder);
+	}
+
 }

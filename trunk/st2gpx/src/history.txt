@@ -21,7 +21,8 @@ Yeah, ok, I am just an amateur at this...
 			integrate parts into single C/C++ exe (except istorage)
  9-11-2003  fixed invalid gpx.
 10-11-2003  gpx import working for routes/tracks to s&t annotation lines.
-13-11-2003  export as pcx5 for import into Garmin MapSource
+13-11-2003  export as pcx5 for import into Garmin MapSource, 
+			import from Garmin MapSource text export format
 20-11-2003	substantial cleanup
 			fixed 8byte alignment in properties.c
 			introduced 1byte alignment for journey analysis
@@ -29,3 +30,4 @@ Yeah, ok, I am just an amateur at this...
 22-11-2003  explores UDM data
 28-11-2003	imports pushpins
 			imports lines to v3 annotations (2002+)
+ 5-12-2003  imports/exports symbols, with custom GPX symbol names

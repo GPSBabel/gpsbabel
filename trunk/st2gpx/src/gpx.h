@@ -47,6 +47,12 @@ typedef struct gpxpt
 	char use_elevation;
 	char * name;
 	char * desc;
+	// This is the MS Map symbol.
+	// FIXME Actually, MS Map symbol varies between versions, 
+	// so this should be an invariant id. 
+	int symbol;
+	char* url;
+	char* urlname;
 	// more later
 } tag_gpxpt;
 

@@ -53,13 +53,14 @@ void debug_pause()
 void printbuf(char* buf, int len)
 {
 	int i;
+	unsigned char * ubuf = (unsigned char *)buf;
 	printf("     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n");
 	printf("    -----------------------------------------------");
 	for(i=0; i<len; i++)
 	{
 		if (((i+1) & 0x0f) == 0x1)
 			printf("\n%2x| ",i/16);
-		printf("%2x ", (unsigned char)buf[i]);
+		printf("%2x ", ubuf[i]);
 	}
 	printf("\n\n");
 }

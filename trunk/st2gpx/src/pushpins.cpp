@@ -105,7 +105,7 @@ VARIANT val2variant(unsigned short fieldtype, void* stor_var)
 	return vt_val;
 };
 
-void variant2val(VARIANT vt_val, unsigned short fieldtype, void* stor_var)
+void variant2val(VARIANT vt_val, unsigned short fieldtype, void* stor_var, int expected_buf_length)
 {
 	char* shortstr=NULL;
 	long lbound;
@@ -114,7 +114,8 @@ void variant2val(VARIANT vt_val, unsigned short fieldtype, void* stor_var)
 	// should be a short?
 	char array_val=0;
 
-	if ((vt_val.vt == fieldtype) || ( (fieldtype==VT_BSTR) && (vt_val.vt==VT_NULL)))
+	if ((vt_val.vt == fieldtype) || ( (fieldtype==VT_BSTR) && (vt_val.vt==VT_NULL))
+		|| ( (fieldtype==(VT_ARRAY | VT_UI1)) && (vt_val.vt==VT_NULL)) )
 	{
 		switch (vt_val.vt)
 		{
@@ -134,6 +135,7 @@ void variant2val(VARIANT vt_val, unsigned short fieldtype, void* stor_var)
 			break;
 
 		case VT_NULL:
+			// FIXME should return NULL here and hande the nulls elsewhere
 			// expected string, this is null 
 			// so return empty string
 			shortstr = (char*)xmalloc(1);
@@ -147,14 +149,23 @@ void variant2val(VARIANT vt_val, unsigned short fieldtype, void* stor_var)
 			{
 				printf("got safe array of short ints, with %d dimensions and bounds %d:%d\n", 
 					SafeArrayGetDim(vt_val.parray), lbound, ubound);
-				printf("Sadly, I was expecting 1 dimention and lower bound of zero, so I will ignore this array.\n");
+				printf("Sadly, I was expecting 1 dimension and lower bound of zero, so I will ignore this array.\n");
 				break;
+			}
+
+			if (ubound+1 != expected_buf_length)
+			{
+				printf("Error reading VT_ARRAY: expected length %d but array has length %d\n",
+						expected_buf_length, ubound);
+				//return;
 			}
 			for(elmt=lbound; elmt<ubound+1; elmt++)
 			{
 				SafeArrayGetElement(vt_val.parray, &elmt, &array_val);
-				//printf("array(%d)=%d\n", elmt, array_val);
-				((char*)stor_var)[elmt-lbound]=array_val;
+				if (ubound+1 == expected_buf_length)
+					((char*)stor_var)[elmt-lbound]=array_val;
+				else
+					printf("array(%d)=%d\n", elmt, array_val);
 			}
 			//debug_pause();
 			break;
@@ -180,15 +191,18 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
 	struct pushpin_safelist * ppplist = pushpin_safelist_new();
 	// number of pushpins to allocate pointer-array storage for, this is incremented as needed
 	int ppin_list_alloc_size=100;
+	int val_type=0;
 	char * ppin_sql = NULL;
 	char * UDM_sql = NULL;
+	char RenderData_buf[4]="";
+	int RenderData_len=0;
 
 	ppplist->pushpin_list = (struct pushpin **)xmalloc(ppin_list_alloc_size*sizeof(struct pushpin *));
 
 	if (opts.st_version_num<9)
-		ppin_sql = "SELECT UD_Secondary.UdId, UD_Secondary.UdName, UD_Secondary.NoteShort, UD_Secondary.NoteLong, UD_Main.Grid, UD_Main.Precision, UD_Main.MatchId, UD_Main.MOBBId FROM UD_Main INNER JOIN UD_Secondary ON UD_Main.UdId = UD_Secondary.UdId";
+		ppin_sql = "SELECT UD_Secondary.UdId, UD_Secondary.UdName, UD_Secondary.NoteShort, UD_Secondary.NoteLong, UD_Main.Grid, UD_Main.Precision, UD_Main.RenderData, UD_Main.MatchId, UD_Main.MOBBId FROM UD_Main INNER JOIN UD_Secondary ON UD_Main.UdId = UD_Secondary.UdId";
 	else
-		ppin_sql = "SELECT UdId, UdName, NoteShort, NoteLong, Grid, Precision, MatchId, MOBBId FROM UD_Main";
+		ppin_sql = "SELECT UdId, UdName, NoteShort, NoteLong, Grid, Precision, RenderData, MatchId, MOBBId FROM UD_Main";
 
 	try 
 	{
@@ -219,13 +233,44 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
 		{
 			ppin = pushpin_new();
 
-			variant2val(rs->Fields->GetItem("UdId")->Value,		VT_I4,	&(ppin->UdId));
-			variant2val(rs->Fields->GetItem("UdName")->Value,	VT_BSTR,&(ppin->UdName));
-			variant2val(rs->Fields->GetItem("Grid")->Value,		VT_I4,	&(ppin->Grid));
-			variant2val(rs->Fields->GetItem("Precision")->Value,VT_I4,	&(ppin->Precision));
-			variant2val(rs->Fields->GetItem("NoteShort")->Value,VT_BSTR,&(ppin->NoteShort));
-			variant2val(rs->Fields->GetItem("MatchId")->Value,	VT_I2,  &(ppin->MatchId));
-			variant2val(rs->Fields->GetItem("MOBBId")->Value,	VT_I4,  &(ppin->MOBBId));
+			variant2val(rs->Fields->GetItem("UdId")->Value,		VT_I4,	&(ppin->UdId), 0);
+			variant2val(rs->Fields->GetItem("UdName")->Value,	VT_BSTR,&(ppin->UdName), 0);
+			variant2val(rs->Fields->GetItem("Grid")->Value,		VT_I4,	&(ppin->Grid), 0);
+			variant2val(rs->Fields->GetItem("Precision")->Value,VT_I4,	&(ppin->Precision), 0);
+			variant2val(rs->Fields->GetItem("NoteShort")->Value,VT_BSTR,&(ppin->NoteShort), 0);
+
+			RenderData_len = rs->Fields->GetItem("RenderData")->ActualSize;
+			val_type = rs->Fields->GetItem("RenderData")->Value.vt;
+			if(val_type!=VT_NULL)
+			{
+				if (RenderData_len==4)
+				{
+					variant2val(rs->Fields->GetItem("RenderData")->Value,(VT_ARRAY | VT_UI1),  RenderData_buf, RenderData_len);
+					ppin->RenderData = *(int*)RenderData_buf;
+					//printf("got pushpin symbol %#x=%d\n", ppin->RenderData, ppin->RenderData);
+				}
+				else if (RenderData_len==8)
+				{
+					variant2val(rs->Fields->GetItem("RenderData")->Value,(VT_ARRAY | VT_UI1),  RenderData_buf, RenderData_len);
+					ppin->RenderData = *(int*)RenderData_buf;
+					//printf("got pushpin symbol %#x=%d\n", ppin->RenderData, ppin->RenderData);
+					ppin->RenderData2 = *(int*)(RenderData_buf+4);
+					if(ppin->RenderData2 != 0)
+					{
+						printf("got pushpin symbol %#x=%d\n", ppin->RenderData, ppin->RenderData);
+						printf("Got pushpin symbol part2 %#x=%d\n", ppin->RenderData2, ppin->RenderData2);
+					}
+				}
+				else
+				{
+					printf("Unexpected RenderData_len=%d\n", RenderData_len);
+					variant2val(rs->Fields->GetItem("RenderData")->Value,(VT_ARRAY | VT_UI1),  RenderData_buf, RenderData_len);
+					printbuf(RenderData_buf, RenderData_len);
+				}
+			}
+
+			variant2val(rs->Fields->GetItem("MatchId")->Value,	VT_I2,  &(ppin->MatchId), 0);
+			variant2val(rs->Fields->GetItem("MOBBId")->Value,	VT_I4,  &(ppin->MOBBId), 0);
 
 			str2ascii(ppin->UdName);
 			str2ascii(ppin->NoteShort);
@@ -256,12 +301,14 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
 			hr = rs->MoveNext();
 		}
 		hr = rs->Close();
+		ppplist->num_pushpins=ppinnum;
 
 		// *************
 		// read UDM_Data
 		// *************
 
-		if (opts.explore_flag)
+		// always read udm data now
+		//if (opts.explore_flag)
 		{
 			UDM_sql = "Select UdmDataId, UdmData from UDM_Data";
 
@@ -273,7 +320,7 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
 
 			while ((rs->adoEOF == FALSE))
 			{
-				variant2val(rs->Fields->GetItem("UdmDataId")->Value, VT_I4, &UdmDataId);
+				variant2val(rs->Fields->GetItem("UdmDataId")->Value, VT_I4, &UdmDataId, 0);
 				if ( (UdmDataId<0) || (UdmDataId>3) )
 				{
 					printf("*** Unexpected UdmDataId=%d\n", UdmDataId);
@@ -282,15 +329,23 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
 				
 				ppplist->UDM_Data_length[UdmDataId] = rs->Fields->GetItem("UdmData")->ActualSize; 
 				ppplist->UDM_Data[UdmDataId]=(char*)xmalloc(ppplist->UDM_Data_length[UdmDataId]);
-				variant2val(rs->Fields->GetItem("UdmData")->Value, VT_ARRAY | VT_UI1, ppplist->UDM_Data[UdmDataId]);
+				variant2val(rs->Fields->GetItem("UdmData")->Value, VT_ARRAY | VT_UI1, ppplist->UDM_Data[UdmDataId], ppplist->UDM_Data_length[UdmDataId] );
 
 				printf("In UDM_Data table, for UdId=%d got %d bytes of data\n",
 					UdmDataId, 	ppplist->UDM_Data_length[UdmDataId]);
-				printbuf(ppplist->UDM_Data[UdmDataId], ppplist->UDM_Data_length[UdmDataId]);
+				
+				if (opts.explore_flag)
+				{
+					printbuf(ppplist->UDM_Data[UdmDataId], ppplist->UDM_Data_length[UdmDataId]);
+				}
 
 				hr = rs->MoveNext();
 			}
 		hr = rs->Close();
+
+		if (opts.explore_flag)
+			explore_udm_data(ppplist);
+
 		}
 
 	rs = NULL;
@@ -311,9 +366,8 @@ EXTERN_C struct pushpin_safelist * read_pushpins(char* ppin_file_name)
     }  
 
 	if (opts.verbose_flag > 1)
-		printf("Read %d pushpins from %s.\n", ppinnum, ppin_file_name);
+		printf("Read %d pushpins from %s.\n", ppplist->num_pushpins, ppin_file_name);
 
-	ppplist->num_pushpins=ppinnum;
 	return ppplist;
 }
 
@@ -355,9 +409,9 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 					  ADODB::adLockOptimistic, 
 					  -1 );
 
-		variant2val(rs->Fields->GetItem("DbVersion")->Value,		VT_I2,	&DbVersion);
-		variant2val(rs->Fields->GetItem("LastSetId")->Value,		VT_I4,	&LastSetId);
-		variant2val(rs->Fields->GetItem("LastUserDataId")->Value,	VT_I4,	&LastUserDataId);
+		variant2val(rs->Fields->GetItem("DbVersion")->Value,		VT_I2,	&DbVersion, 0);
+		variant2val(rs->Fields->GetItem("LastSetId")->Value,		VT_I4,	&LastSetId, 0);
+		variant2val(rs->Fields->GetItem("LastUserDataId")->Value,	VT_I4,	&LastUserDataId, 0);
 
 		printf("Got DbVersion=%d, LastSetId=%d and LastUserDataId=%d\n", DbVersion, LastSetId, LastUserDataId);
 
@@ -386,7 +440,7 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 
 		if (opts.st_version_num<9)
 		{
-			sql = "Select UdId, SetId, Grid, Precision, MatchId, MOBBId, SourceUdId from UD_Main";
+			sql = "Select UdId, SetId, Grid, Precision, RenderData, MatchId, MOBBId, SourceUdId from UD_Main";
 			sql2 = "Select UdId, NoteTypeId, GeocodeHierarchy, GeocodeContext, UdName, NoteShort, NoteLong from UD_Secondary";
 			hr = rs->Open(sql, 
 			          cnstr, 
@@ -402,7 +456,7 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 		}
 		else
 		{
-			sql = "Select UdId, SetId, Grid, Precision, MatchId, MOBBId, SourceUdId, NoteTypeId, GeocodeHierarchy, GeocodeContext, UdName, NoteShort, NoteLong from UD_Main";
+			sql = "Select UdId, SetId, Grid, Precision, RenderData, MatchId, MOBBId, SourceUdId, NoteTypeId, GeocodeHierarchy, GeocodeContext, UdName, NoteShort, NoteLong from UD_Main";
 			// maybe we have to do this later, when rs is set?
 			hr = rs->Open(sql, 
 			          cnstr, 
@@ -445,6 +499,14 @@ EXTERN_C void write_pushpins_from_gpx(char* ppin_file_name,
 			rs->Fields->GetItem("Grid"		)->Value = val2variant(VT_I4,	&(gridpt.grid));
 			rs->Fields->GetItem("Precision"	)->Value = val2variant(VT_I4,	&(gridpt.precision));
 			rs->Fields->GetItem("MatchId"	)->Value = val2variant(VT_I2,	&sitwo);
+			// This is stored in the DB as binary type, 
+			// but hopefully it should be ok to write as int.
+			// FIXME - Potential problem: 
+			// This field has longer maximum width in newer MAP versions.
+			// Width 32 (AR2001), 64 (MP2002), 128 (AR2003)
+
+			if(gpt->symbol != 0)
+				rs->Fields->GetItem("RenderData"	)->Value = val2variant(VT_I4,	&(gpt->symbol));
 			rs->Fields->GetItem("MOBBId"	)->Value = val2variant(VT_I4,	&lzero);
 			rs->Fields->GetItem("SourceUdId")->Value = val2variant(VT_I4,	&lzero);
 

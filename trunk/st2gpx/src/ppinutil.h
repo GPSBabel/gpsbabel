@@ -28,6 +28,33 @@
 extern "C" {
 #endif
 
+// The structures in UserData/UDM_Data for UDMId=0
+typedef struct f_udm0_header
+{
+	unsigned short int sunkn; // normally 0x8001
+	int c_highlight_recs; 
+} tag_f_udm0_header;
+// then c_highlight_recs ints with udid of highlighted ppin
+typedef struct f_udm0_header1
+{
+	int iunkn; // normally 0, probably indicates some array length to mess everything up
+	int c_format_records;
+} tag_f_udm0_header1;
+// then c_format_records of these:
+typedef struct f_udm0_ppin
+{
+	int ppin_udid;
+	// 1 = show name + info
+	// (no record if name not shown?)
+	// 3 = show name
+	// 4 = upper left
+	// 8 = upper right
+	// 12 = lower left
+	// 16 = lower right
+	unsigned char format;	
+	unsigned char zorder;
+} tag_f_udm0_ppin;
+
 typedef struct pushpin_safelist
 {
 	struct pushpin ** pushpin_list;
@@ -55,9 +82,15 @@ typedef struct pushpin
 	int SetId;
 	long Grid;
 	long Precision;
+	int RenderData;
+	// only in mappoint?
+	int RenderData2;
 //	dword RenderData;
-//	byte MatchId;
-//	long MOBBId;
+	// 1 = by hand
+	// 2 = from file?
+	// 4 = not matched?
+	short int MatchId;
+	long MOBBId;
 //	long SourceUdId;
 //	bool IsTerritory;
 //
@@ -75,12 +108,9 @@ typedef struct pushpin
 // shouldn't include these 3 here because they are not part of the native pushpin definition
 	double lat;
 	double lon;
-	// 1 = by hand
-	// 2 = from file?
-	// 4 = not matched?
-	short int MatchId;
-	long MOBBId;
 	char garmin_ident[7];
+	char* url;
+	char* urlname;
 } tag_pushpin;
 
 
@@ -122,6 +152,8 @@ struct pushpin_safelist * process_pushpin_file(char* ppin_in_file_name);
 //struct point ms2latlong(struct ms_point msp);
 struct point grid2latlon(long grid, long precision);
 struct grid_point latlon2grid(double lat, double lon);
+
+void explore_udm_data(struct pushpin_safelist * ppl);
 
 #ifdef	__cplusplus
 }
