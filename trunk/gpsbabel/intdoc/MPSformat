@@ -1,5 +1,6 @@
 // An EBNF+ format.
 
+// This is a comment
 // "xxx" is the literal three characters x, x and x
 // 0xA8 means a byte of hexadecimal value A8
 // <NULL> ::= 0x00
@@ -8,10 +9,13 @@
 // [<entity>] means <entity> is optional
 // <entity 1> | <entity 2> means either <entity 1> or <entity 2>
 // {<entity> <another entity>} is grouping of two or more entities together; mainly for use with the | or operator
-// This is a comment
 // Entity names might be long winded but are intended to convey some meaning without explicit/additional comments
 
 // Version history
+// V2.4 - 2003/10/18 18:42 BST (GMT+1) mrcb.mps.fmt@osps.net
+//        Updates to route formats to include interlink steps (my name for them)
+// V2.3 - 2003/10/03 17:49 BST (GMT+1) mrcb.mps.fmt@osps.net
+//        I must type really badly as there were more typoes to sort out.
 // V2.2 - 2003/09/27 23:33 BST (GMT+1) mrcb.mps.fmt@osps.net
 //        Corrected typoes
 //        Corrected NULL terminated string length counts for records with strings
@@ -180,9 +184,11 @@
 
 <Route record> ::=  <Route V3 record> | <Route V4 record> | <Route V5 record>
 
+// Note: for each waypoint that appears in a route, there must also be a "normal" waypoint defined
 <Route V3 record> ::= "R" ASCII-Route-Name-string <NULL> <Route autoname flag> <Route lat lon max> <Route max altitude>
 				<Route lat lon min> <Route min altitude> Long(Number-of-Waypoints-in-Route) <Route waypoint list V3>
 
+// Note: for each waypoint that appears in a route, there must also be a "normal" waypoint defined
 <Route V4 record> ::= "R" ASCII-Route-Name-string <NULL> <Route autoname flag> <Route lat lon max> <Route max altitude>
 				<Route lat lon min> <Route min altitude> Long(Number-of-Waypoints-in-Route) <Route waypoint list v4>
 
@@ -204,9 +210,9 @@
 // Part of the route bounding a 3D co-ordinate
 <Route min altitude> ::= <Altitude field>
 
-<Route waypoint list v3> ::= <Route link list v3> <Route waypoint v3> Long(0x00) 0x01
+<Route waypoint list v3> ::= <Route waypoint v3> <Route link list v3> Long(0x00) 0x01
 
-<Route link list v3> ::= <Route waypoint v3> <Route link details> [<Route link list v3>]
+<Route link list v3> ::= <Route link details> <Route waypoint v3> [<Route link list v3>]
 
 <Route waypoint v3> ::= <Route waypoint name> <Waypoint UNKNOWN 1 V3> <Route waypoint UNKNOWN 1 V3>
 
@@ -216,9 +222,9 @@
 <Route waypoint UNKNOWN 1 V3> ::= 0x00 0x03 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
                                   0x00 0x00
 
-<Route waypoint list v4> ::= <Route link list v4> <Route waypoint v4> Long(0x00) 0x01
+<Route waypoint list v4> ::= <Route waypoint v4> <Route link list v4> Long(0x00) 0x01
 
-<Route link list v4> ::= <Route waypoint v4> <Route link details> [<Route link list v4>]
+<Route link list v4> ::= <Route link details> <Route waypoint v4> [<Route link list v4>]
 
 <Route waypoint v4> ::= <Route waypoint name> <Waypoint class> <Waypoint country> <Waypoint UNKNOWN 1 V4> <Route waypoint UNKNOWN 1 V4>
 
@@ -226,8 +232,12 @@
 <Route waypoint UNKNOWN 1 V4> ::= 0x00 0x03 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
                                   0x00 0x00 0x00  
 
-<Route link details> ::= Long(0x02) <Route link end 1 co-ord> <Route link end 2 co-ord> <NULL> 
+<Route link details> ::= Long(0x02 + Num-of-Interlink-steps) <Route link end 1 co-ord> [<Interlink steps>] <Route link end 2 co-ord> <NULL> 
 					<Route link max co-ord> <Route link min co-ord>
+
+// These are optional additional steps between the two ends of the link
+// Why MapSource creates these is unknown
+<Interlink steps> ::= <co-ord> <Interlink steps>
 
 <Route link end 1 co-ord> ::= <co-ord>
 
