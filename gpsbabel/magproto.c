@@ -69,6 +69,7 @@ static int found_done;
 static int got_version;
 static int is_file = 0;
 static route_head *trk_head;
+static int ignore_unable;
 
 static waypoint * mag_wptparse(char *);
 typedef char * (cleanse_fn) (char *);
@@ -173,7 +174,7 @@ m315_cleanse(char *istring)
 	static char m315_valid_chars[] = 
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789";
 	for (o=rstring,i=istring; *i; i++) {
-		if (strchr(m315_valid_chars, *i)) {
+		if (strchr(m315_valid_chars, toupper(*i))) {
 			*o++ = toupper(*i);
 		}
 	}
@@ -332,12 +333,24 @@ mag_readmsg(void)
 	unsigned int isum;
 	char *isump;
 	char *gr;
+	int retrycnt = 20;
 
+retry:
 	gr = termread(ibuf, sizeof(ibuf));
 
 	if (!gr) {
 		if (!got_version) {
-			fatal(MYNAME ": No data received from GPS.\n");
+			/*
+			 * The 315 can take up to six seconds to respond to 
+			 * a VERSION command.   Since this is on startup,
+			 * we'll be fairly persistent in retrying.
+			 */
+			if (retrycnt--) {
+				fprintf(stderr, "%d\n", retrycnt);
+				goto retry;
+			} else {
+				fatal(MYNAME ": No data received from GPS.\n");
+			}
 		} else {
 			if (is_file)  {
 				found_done = 1;
@@ -383,13 +396,13 @@ mag_readmsg(void)
 	} 
 	if (IS_TKN("$PMGNVER,")) {
 		mag_verparse(ibuf);
-		return;
 	} 
 	mag_error = 0;
-	if (IS_TKN("$PMGNCMD,UNABLE")) {
+	if (!ignore_unable && IS_TKN("$PMGNCMD,UNABLE")) {
 		fprintf(stderr, "Unable to send\n");
 		found_done = 1;
 		mag_error = 1;
+		ignore_unable = 0;
 		return;
 	}
 	if (IS_TKN("$PMGNCMD,END") || (is_file && (feof(magfile_in)))) {
@@ -626,7 +639,11 @@ mag_rd_init(const char *portname, const char *args)
 
 	mag_handon();
 	now = time(NULL);
-	later = now + 3;
+	/*
+	 * The 315 can take up to 4.25 seconds to respond to initialization
+	 * commands.   Time out on the side of caution.
+	 */
+	later = now + 6;
 	if (!is_file) {
 		mag_writemsg("PMGNCMD,VERSION");
 	}
@@ -640,6 +657,11 @@ mag_rd_init(const char *portname, const char *args)
 	}
 
 	if (!is_file) {
+		/*
+		 * The 315 can't handle this command, so we set a global
+		 * to ignore the NAK on it.
+		 */
+		ignore_unable = 1;
 		mag_writemsg("PMGNCMD,NMEAOFF");
 	}
 	return;
