@@ -433,7 +433,10 @@ retry:
 	if (strncmp(ibuf, "$PMGNWPT,", 7) == 0) {
 		waypoint *wpt = mag_wptparse(ibuf);
 		waypoint_read_count++;
-		waypt_status_disp(waypoint_read_count, waypoint_read_count);
+		if (global_opts.verbose_status) {
+			waypt_status_disp(waypoint_read_count, 
+					waypoint_read_count);
+		}
 		switch (global_opts.objective)
 		{
 			case wptdata:
