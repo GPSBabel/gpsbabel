@@ -172,6 +172,15 @@ ${PNAME} -i cetus -f reference/cetus.pdb -o gpsutil -F ${TMPDIR}/cetust.gpu
 compare ${TMPDIR}/cetust.gpu ${TMPDIR}/cetus.gpu
 compare reference/cetus.gpu ${TMPDIR}/cetus.gpu
 
+# QuoVadis GPS for PalmOS
+# This test is derived from the Cetus test above.
+rm -f ${TMPDIR}/quovadis.pdb ${TMPDIR}/quovadis.gpu ${TMPDIR}/quovadist.gpu
+${PNAME} -i geo -f geocaching.loc -o quovadis -F ${TMPDIR}/quovadis.pdb
+${PNAME} -i quovadis -f ${TMPDIR}/quovadis.pdb -o gpsutil -F ${TMPDIR}/quovadis.gpu
+${PNAME} -i quovadis -f reference/quovadis.pdb -o gpsutil -F ${TMPDIR}/quovadist.gpu
+compare ${TMPDIR}/quovadist.gpu ${TMPDIR}/quovadis.gpu
+compare reference/quovadis.gpu ${TMPDIR}/quovadis.gpu
+
 # GpsDrive
 rm -f ${TMPDIR}/gpsdrive.txt
 ${PNAME} -i geo -f geocaching.loc -o gpsdrive -F ${TMPDIR}/gpsdrive.txt
