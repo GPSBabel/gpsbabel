@@ -23,6 +23,7 @@
 
 #include "defs.h"
 #include "mapsend.h"
+#include "magellan.h"
 
 static FILE *mapsend_file_in;
 static FILE *mapsend_file_out;
@@ -317,7 +318,7 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	double flong;
 	double flat;
 	static int cnt = 0;
-	char *iconp;
+	const char *iconp;
 	const char *sn = global_opts.synthesize_shortnames ? 
 		mkshort(mkshort_handle, waypointp->description) :
 	       	waypointp->shortname;
