@@ -74,21 +74,27 @@ void
 waypt_add(waypoint *wpt)
 {
 	ENQUEUE_TAIL(&waypt_head, &wpt->Q);
+	waypt_ct++;
 
 	/*
 	 * Some input may not have one or more of these types so we
 	 * try to be sure that we have these fields even if just by
 	 * copying them from elsewhere.
 	 */
+
 	if (wpt->shortname == NULL) {
 		if (wpt->description) {
 			wpt->shortname = xstrdup(wpt->description);
+		} else if (wpt->notes) {
+			wpt->shortname = xstrdup(wpt->notes);
 		} else {
-			if (wpt->notes) {
-				wpt->shortname = xstrdup(wpt->notes);
-			}
+		/* Last ditch:  make up a name */
+			char cbuf[10];
+			snprintf(cbuf, sizeof(cbuf), "WPT%03d", waypt_ct);
+			wpt->shortname = xstrdup(cbuf);
 		}
 	}
+
 	if (wpt->description == NULL || strlen(wpt->description) == 0) {
 		if (wpt->description)
 			xfree(wpt->description);
@@ -100,7 +106,6 @@ waypt_add(waypoint *wpt)
 			}
 		}
 	}
-	waypt_ct++;
 }
 
 void
