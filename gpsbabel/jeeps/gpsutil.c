@@ -34,7 +34,6 @@ int32 gps_user    = 0;
 int32 gps_show_bytes = 0;
 int32 gps_errno = 0;
 
-
 /* @func GPS_Util_Little ***********************************************
 **
 ** Determine endian nature of host
@@ -148,7 +147,7 @@ double GPS_Util_Get_Double(const UC *s)
 	for(i=sizeof(double)-1;i>-1;--i)
 	    *p++ = s[i];
     else
-	for(i=0;i<sizeof(double);++i)
+	for(i=0;i<(int32)sizeof(double);++i)
 	    *p++ = s[i];
 
     return ret;
@@ -177,7 +176,7 @@ void GPS_Util_Put_Double(UC *s, const double v)
 	for(i=sizeof(double)-1;i>-1;--i)
 	    s[i] = *p++;
     else
-	for(i=0;i<sizeof(double);++i)
+	for(i=0;i<(int32)sizeof(double);++i)
 	    s[i] = *p++;
 
     return;
@@ -206,7 +205,7 @@ int32 GPS_Util_Get_Int(const UC *s)
 	for(i=sizeof(int32)-1;i>-1;--i)
 	    *p++ = s[i];
     else
-	for(i=0;i<sizeof(int32);++i)
+	for(i=0;i<(int32)sizeof(int32);++i)
 	    *p++ = s[i];
 
     return ret;
@@ -235,7 +234,7 @@ void GPS_Util_Put_Int(UC *s, const int32 v)
 	for(i=sizeof(int32)-1;i>-1;--i)
 	    s[i] = *p++;
     else
-	for(i=0;i<sizeof(int32);++i)
+	for(i=0;i<(int32)sizeof(int32);++i)
 	    s[i] = *p++;
 
     return;
@@ -263,7 +262,7 @@ uint32 GPS_Util_Get_Uint(const UC *s)
 	for(i=sizeof(uint32)-1;i>-1;--i)
 	    *p++ = s[i];
     else
-	for(i=0;i<sizeof(uint32);++i)
+	for(i=0;i<(int32)sizeof(uint32);++i)
 	    *p++ = s[i];
 
     return ret;
@@ -292,7 +291,7 @@ void GPS_Util_Put_Uint(UC *s, const uint32 v)
 	for(i=sizeof(uint32)-1;i>-1;--i)
 	    s[i] = *p++;
     else
-	for(i=0;i<sizeof(uint32);++i)
+	for(i=0;i<(int32)sizeof(uint32);++i)
 	    s[i] = *p++;
 
     return;
@@ -320,7 +319,7 @@ float GPS_Util_Get_Float(const UC *s)
 	for(i=sizeof(float)-1;i>-1;--i)
 	    *p++ = s[i];
     else
-	for(i=0;i<sizeof(float);++i)
+	for(i=0;i<(int32)sizeof(float);++i)
 	    *p++ = s[i];
 
     return ret;
@@ -349,12 +348,11 @@ void GPS_Util_Put_Float(UC *s, const float v)
 	for(i=sizeof(float)-1;i>-1;--i)
 	    s[i] = *p++;
     else
-	for(i=0;i<sizeof(float);++i)
+	for(i=0;i<(int32)sizeof(float);++i)
 	    s[i] = *p++;
 
     return;
 }
-
 
 #if 0
 /* @func GPS_Util_Canon  ****************************************************
