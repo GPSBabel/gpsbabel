@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <time.h>
-#include <sys/time.h>
 
 
 #if __WIN32__
