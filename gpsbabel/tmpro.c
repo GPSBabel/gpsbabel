@@ -107,13 +107,13 @@ data_read(void)
 			 /* ignore: group  */
 			 break;
 		case 1:
-		    wpt_tmp->shortname = csv_stringtrim(s, "");
+		    wpt_tmp->shortname = csv_stringtrim(s, "", 0);
 		    break;
 		case 2:
 			/* Description is not a TopoMapPro format requirement.
 			   If we assign "" then .loc/.gpx will generate empty XML tags :(
 			*/
-			holder = csv_stringtrim(s, "");
+			holder = csv_stringtrim(s, "", 0);
 			if (strlen(holder))
 		    	wpt_tmp->description = holder;
 		    break;
@@ -145,7 +145,7 @@ data_read(void)
 			   use the TopoMapLinks links.
 			   (plus discards length 0 strings (so no empty XML tags))
 			*/
-			holder = csv_stringtrim(s, "");
+			holder = csv_stringtrim(s, "", 0);
 			if (strstr(holder, "http:") != NULL)
 				wpt_tmp->url = holder;
 			break;

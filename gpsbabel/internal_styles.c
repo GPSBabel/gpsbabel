@@ -237,7 +237,7 @@ static char mxf[] =
 "#\n"
 "FIELD_DELIMITER		COMMASPACE\n"
 "RECORD_DELIMITER	NEWLINE\n"
-"BADCHARS		COMMA\n"
+"BADCHARS		\",\n"
 
 "#\n"
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
@@ -253,8 +253,8 @@ static char mxf[] =
 "OFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
 "OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
 "OFIELD	DESCRIPTION, \"\", \"\"%s\"\"\n"
-"OFIELD	SHORTNAME, \"\", \"%s\"\n"
-"OFIELD	DESCRIPTION, \"\", \"%s\"\n"
+"OFIELD	SHORTNAME, \"\", \"\"%s\"\"\n"
+"OFIELD	DESCRIPTION, \"\", \"\"%s\"\"\n"
 "OFIELD	CONSTANT, \"ff0000\", \"%s\"	# COLOR\n"
 "OFIELD	CONSTANT, \"47\", \"%s\"		# ICON\n"
 ;

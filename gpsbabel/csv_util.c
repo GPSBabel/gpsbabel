@@ -83,19 +83,20 @@ csv_stringclean(const char *string, const char *chararray)
 /***********************************************************************************/
 /* csv_stringtrim() - trim whitespace and leading and trailing enclosures (quotes) */
 /*                    returns a copy of the modified string                        */
-/*    usage: p = csv_stringtrim(string, "\"")                                      */
+/*    usage: p = csv_stringtrim(string, "\"", 0)                                   */
 /***********************************************************************************/
 char *
 #ifdef DEBUG_MEM
-CSV_STRINGTRIM(const char *string, const char *enclosure,DEBUG_PARAMS)
+CSV_STRINGTRIM(const char *string, const char *enclosure, int strip_max, DEBUG_PARAMS)
 #else
-csv_stringtrim(const char *string, const char *enclosure)
+csv_stringtrim(const char *string, const char *enclosure, int strip_max)
 #endif
 {
     static const char *p1 = NULL;
     char *p2 = NULL;
     char * tmp = xxstrdup(string,file,line);
     size_t elen;
+    int stripped = 0;
 
     if (!strlen(string)) {
 	return (tmp);
@@ -120,13 +121,19 @@ csv_stringtrim(const char *string, const char *enclosure)
 	p1++;
     }
 
+    /* if no maximum strippage, assign a reasonable value to max */
+    strip_max = strip_max ? strip_max : 9999;
+
     /* if we have enclosures, skip past them in pairs */
     if (elen) {
-	while (((size_t) (p2 - p1) > elen) &&
+	while (
+	       (stripped < strip_max) &&
+	       ((size_t) (p2 - p1) > elen) &&
 	       (strncmp(p1, enclosure, elen) == 0) &&
 	       (strncmp((p2 - elen + 1), enclosure, elen) == 0)) {
 	    p2 -= elen;
             p1 += elen;
+            stripped++;
 	}
     }
 
@@ -394,22 +401,22 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        /* IGNORE -- Calculated Sequence # For Ouput*/
     } else
     if (strcmp(fmp->key, "SHORTNAME") == 0) {
-       wpt->shortname = csv_stringtrim(s, "");
+       wpt->shortname = csv_stringtrim(s, "", 0);
     } else
     if (strcmp(fmp->key, "DESCRIPTION") == 0) {
-       wpt->description = csv_stringtrim(s, "");
+       wpt->description = csv_stringtrim(s, "", 0);
     } else
     if (strcmp(fmp->key, "NOTES") == 0) {
-       wpt->notes = csv_stringtrim(s, "");
+       wpt->notes = csv_stringtrim(s, "", 0);
     } else
     if (strcmp(fmp->key, "URL") == 0) {
-       wpt->url = csv_stringtrim(s, "");
+       wpt->url = csv_stringtrim(s, "", 0);
     } else
     if (strcmp(fmp->key, "URL_LINK_TEXT") == 0) {
-       wpt->url_link_text = csv_stringtrim(s, "");
+       wpt->url_link_text = csv_stringtrim(s, "", 0);
     } else
     if (strcmp(fmp->key, "ICON_DESCR") == 0) {
-       wpt->icon_descr = csv_stringtrim(s, "");
+       wpt->icon_descr = csv_stringtrim(s, "", 0);
        wpt->icon_descr_is_dynamic = 1;
     } else
 
