@@ -1,4 +1,4 @@
-	/*
+/*
     Communicate Thales/Magellan serial protocol.
 
     Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
@@ -443,14 +443,8 @@ terminit(const char *portname)
 			  OPEN_EXISTING, 0, NULL);
 
 	if (comport == INVALID_HANDLE_VALUE) {
-		char *buf;
-
-		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-			FORMAT_MESSAGE_FROM_SYSTEM |
-			FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL,GetLastError(),0,
-			(LPTSTR) &buf,0,NULL);
-		fatal(MYNAME ": '%s' cannot be opened. %s\n", portname, buf);
+		is_file = 1;
+		return 0;
 	}
 	tio.DCBlength = sizeof(DCB);
 	GetCommState (comport, &tio);
@@ -675,7 +669,6 @@ mag_wr_init(const char *portname, const char *args)
 	if (!terminit(portname)) {
 		is_file = 1;
 	}
-	is_file = 1;
 #else
 	struct stat sbuf;
 	magfile_out = fopen(portname, "w+b");
@@ -685,6 +678,10 @@ mag_wr_init(const char *portname, const char *args)
 
 	if (is_file) {
 		magfile_out = fopen(portname, "w+b");
+		if (magfile_out == NULL) {
+			fatal(MYNAME ": '%s' cannot be opened for writing.\n",
+				       	portname);
+		}
 		icon_mapping = map330_icon_table;
 		mag_cleanse = m330_cleanse;
 		got_version = 1;
@@ -693,7 +690,9 @@ mag_wr_init(const char *portname, const char *args)
 		 *  This is a serial device.   The line has to be open for
 		 *  reading and writing, so we let rd_init do the dirty work.
 		 */
-		fclose(magfile_out);
+		if (magfile_out) {
+			fclose(magfile_out);
+		}
 		mag_rd_init(portname, args);
 	}
 }
