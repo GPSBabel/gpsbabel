@@ -62,17 +62,45 @@
 
 ****************************************/
 
+/*
+ * An input file mayh have both GGA and GLL sentences for the exact 
+ * same position fix.   If we see a single GGA, start ignoring GLL's.
+ */
+typedef enum {
+	gp_unknown = 0,
+	gpgga,
+	gplgll
+} preferred_posn_type;
+
 static FILE *file_in;
 static FILE *file_out;
 static route_head *trk_head;
+static void *mkshort_handle;
+static preferred_posn_type posn_type;
 
 #define MYNAME "nmea"
+
+/*
+ * Slightly different than the Magellan checksum fn.
+ */
+static int
+nmea_cksum(const char *const buf)
+{
+	int x = 0 ;
+	const char *p;
+
+	for (p = buf; *p; p++) {
+		x ^= *p;
+	}
+	return x;
+}
 
 static void
 nmea_rd_init(const char *fname)
 {
 	file_in = xfopen(fname, "r", MYNAME);
 }
+
 static  void
 nmea_rd_deinit(void)
 {
@@ -83,6 +111,9 @@ static void
 nmea_wr_init(const char *portname)
 {
 	file_out = xfopen(portname, "w+", MYNAME);
+	
+	mkshort_handle = mkshort_new_handle();
+	setshort_length(mkshort_handle, 6);
 }
 
 static  void
@@ -121,7 +152,7 @@ gpgll_parse(char *ibuf)
 	hms = hms / 100;
 	tm.tm_hour = hms % 100;
 
-	waypt->creation_time = mktime(&tm) + get_tz_offset() + time(0);;
+	waypt->creation_time = mktime(&tm) + get_tz_offset() + time(0);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -180,23 +211,109 @@ gpgga_parse(char *ibuf)
 }
 
 static void
+gpwpl_parse(char *ibuf)
+{
+	waypoint *waypt;
+	double latdeg, lngdeg;
+	char latdir, lngdir;
+	char sname[7];
+
+	sscanf(ibuf,"$GPWPL,%lf,%c,%lf,%c,%[^*]",
+		&latdeg,&latdir,
+		&lngdeg,&lngdir,
+		&sname);
+
+	waypt  = waypt_new();
+
+	if (latdir == 'S') latdeg = -latdeg;
+	waypt->latitude = ddmm2degrees(latdeg);
+	if (lngdir == 'W') lngdeg = -lngdeg;
+	waypt->longitude = ddmm2degrees(lngdeg);
+
+	waypt->shortname = xstrdup(sname);
+
+	waypt_add(waypt);
+
+}
+
+static void
 nmea_read(void)
 {
 	char ibuf[1024];
 
 	while (fgets(ibuf, sizeof(ibuf), file_in)) {
+		if (0 == strncmp(ibuf, "$GPWPL,", 7)) {
+			gpwpl_parse(ibuf);
+		} else
 		if (0 == strncmp(ibuf, "$GPGGA,", 7)) {
+			posn_type = gpgga;
 			gpgga_parse(ibuf);
+		} else
+		if (0 == strncmp(ibuf, "$GPGLL,", 7)) {
+			if (posn_type != gpgga) {
+				gpgll_parse(ibuf);
+			}
 		}
-//		if (0 == strncmp(ibuf, "$GPGLL,", 7)) {
-//			gpgll_parse(ibuf);
-//		}
 	}
 }
 
 static void
-nmea_write(void)
+nmea_wayptpr(const waypoint *wpt)
 {
+	char obuf[200];
+	double lat,lon;
+	char *s;
+	int cksum;
+
+	lat = degrees2ddmm(wpt->latitude);
+	lon = degrees2ddmm(wpt->longitude);
+	s = mkshort(mkshort_handle, wpt->shortname);
+
+	snprintf(obuf, sizeof(obuf),  "GPWPL,%09.3f,%c,%09.3f,%c,%s", 
+			fabs(lat), lat < 0 ? 'S' : 'N',
+			fabs(lon), lon < 0 ? 'W' : 'E', s
+
+	);
+	cksum = nmea_cksum(obuf);
+	fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+	
+	xfree(s);
+	
+}
+
+nmea_trackpt_pr(const waypoint *wpt)
+{
+	char obuf[200];
+	double lat,lon;
+	int cksum;
+        struct tm *tm;
+	int hms;
+
+	lat = degrees2ddmm(wpt->latitude);
+	lon = degrees2ddmm(wpt->longitude);
+
+	tm = gmtime(&wpt->creation_time);
+	if ( tm ) {
+		hms = tm->tm_hour * 10000 + tm->tm_min  * 100 +
+		tm->tm_sec;
+	} else {
+		hms = 0;
+	}
+
+	snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%09.3f,%c,%09.3f,%c,04,0,0,0.9,M,0.0,M,,",
+			hms,
+			fabs(lat), lat < 0 ? 'S' : 'N',
+			fabs(lon), lon < 0 ? 'W' : 'E');
+
+	cksum = nmea_cksum(obuf);
+	fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+}
+
+static void
+nmea_write()
+{
+	waypt_disp_all(nmea_wayptpr);
+	track_disp_all(NULL, NULL, nmea_trackpt_pr);
 }
 
 ff_vecs_t nmea_vecs = {
@@ -205,6 +322,6 @@ ff_vecs_t nmea_vecs = {
 	nmea_rd_deinit,	
 	nmea_wr_deinit,	
 	nmea_read,
-	NULL,
+	nmea_write,
 	NULL
 };
