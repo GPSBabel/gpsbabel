@@ -41,6 +41,11 @@ usage(const char *pname)
 "	In the second form of the command, INFILE and OUTFILE are the\n"
 "	first and second positional (non-option) arguments.\n"
 "\n"
+"	INTYPE and OUTTYPE must be one of the file types listed below, and\n"
+"	may include options valid for that file type.  For example:\n"
+"	  'gpx', 'gpx,snlen=10' and 'ozi,snlen=10,snwhite=1'\n"
+"	(without the quotes) are all valid file type specifications.\n"
+"\n"
 "Options:\n"
 "	-s		Synthesize shortnames\n"
 "	-r		Process route information\n"
@@ -76,6 +81,8 @@ main(int argc, char *argv[])
 	char *ovec_opts = NULL;
 	char *fvec_opts = NULL;
 	int opt_version = 0;
+	int did_something = 0;
+	const char *prog_name = argv[0]; /* argv is modified during processing */
 
 	global_opts.objective = wptdata;
 
@@ -136,6 +143,7 @@ main(int argc, char *argv[])
 				ivecs->rd_init(fname);
 				ivecs->read();
 				ivecs->rd_deinit();
+				did_something = 1;
 				break;
 			case 'F':
 				optarg = argv[argn][2]
@@ -205,6 +213,7 @@ main(int argc, char *argv[])
 		fatal ("Extra arguments on command line\n");
 	}
 	else if (argc && ivecs) {
+		did_something = 1;
 		ivecs->rd_init(argv[0]);
 		ivecs->read();
 		ivecs->rd_deinit();
@@ -215,11 +224,14 @@ main(int argc, char *argv[])
 		}
 	}
 	else if (argc) {
-		usage(argv[0]);
+		usage(prog_name);
 		exit(0);
 	}
 	if (ovecs == NULL)
 		waypt_disp_all(waypt_disp);
+
+	if (!did_something)
+		fatal ("Nothing to do!  Use '%s -h' for command-line options.\n", prog_name);
 
 	waypt_flush_all();
 	route_flush_all();
@@ -227,6 +239,5 @@ main(int argc, char *argv[])
 #ifdef DEBUG_MEM
 	debug_mem_close();
 #endif
-	
 	exit(0);
 }
