@@ -205,6 +205,22 @@ xcsv_parse_style_line(const char *sbuff)
 	    }
 	    else
 		xcsv_file.field_delimiter = sp;
+
+		p = csv_stringtrim(xcsv_file.field_delimiter, " ", 0);
+
+		/* field delimiters are always bad characters */
+		if (xcsv_file.badchars) {
+			xcsv_file.badchars = xrealloc(xcsv_file.badchars,
+				strlen(xcsv_file.badchars) +
+				strlen(p) + 1);
+		} else {
+			xcsv_file.badchars = xcalloc(strlen(p) + 1, 1);
+		}
+
+		strcat(xcsv_file.badchars, p);
+		
+		xfree(p);
+
 	} else
 
 	if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
@@ -215,7 +231,23 @@ xcsv_parse_style_line(const char *sbuff)
 		xfree(sp);
 	    }
 	    else
-		xcsv_file.field_delimiter = sp;
+		xcsv_file.record_delimiter = sp;
+		
+		p = csv_stringtrim(xcsv_file.record_delimiter, " ", 0);
+
+		/* record delimiters are always bad characters */
+		if (xcsv_file.badchars) {
+			xcsv_file.badchars = xrealloc(xcsv_file.badchars,
+				strlen(xcsv_file.badchars) +
+				strlen(p) + 1);
+		} else {
+			xcsv_file.badchars = xcalloc(strlen(p) + 1, 1);
+		}
+
+		strcat(xcsv_file.badchars, p);
+		
+		xfree(p);
+		
 	} else
 
 	if (ISSTOKEN(sbuff, "DESCRIPTION")) {
@@ -239,12 +271,26 @@ xcsv_parse_style_line(const char *sbuff)
 	if (ISSTOKEN(sbuff, "BADCHARS")) {
 	    sp = csv_stringtrim(&sbuff[9], "\"", 1);
 	    cp = get_char_from_constant_table(sp);
+
 	    if (cp) {
-		xcsv_file.badchars = xstrdup(cp);
+	    	p = xstrdup(cp);
 		xfree(sp);
 	    }
 	    else
-		xcsv_file.badchars = sp;
+		p = sp;
+		
+		if (xcsv_file.badchars) {
+			xcsv_file.badchars = xrealloc(xcsv_file.badchars,
+				strlen(xcsv_file.badchars) +
+				strlen(p) + 1);
+		} else {
+			xcsv_file.badchars = xcalloc(strlen(p) + 1, 1);
+		}
+
+		strcat(xcsv_file.badchars, p);
+		
+		xfree(p);
+		
 	} else
 
 	if (ISSTOKEN(sbuff, "PROLOGUE")) {
