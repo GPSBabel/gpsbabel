@@ -105,11 +105,7 @@ data_read(void)
 		char *vdata;
 		struct tm tm = {0};
 
-		wpt_tmp = calloc(sizeof(*wpt_tmp),1);
-		if (wpt_tmp == NULL) {
-			fatal(MYNAME ": cannot allocate memory\n");
-		}
-
+		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 		rec = (struct record *) pdb_rec->data;
 		wpt_tmp->position.altitude.altitude_meters = pdb_read4(&rec->elevation); 
 
@@ -118,10 +114,10 @@ data_read(void)
 
 		vdata = (char *) pdb_rec->data + sizeof(*rec);
 
-                wpt_tmp->shortname = strdup(vdata);
+                wpt_tmp->shortname = xstrdup(vdata);
 		vdata += strlen (vdata) + 1;
 
-		wpt_tmp->description = strdup(vdata);
+		wpt_tmp->description = xstrdup(vdata);
 		vdata += strlen (vdata) + 1;
 		
 		tm.tm_sec = pdb_read2(&rec->crt_sec);
@@ -146,7 +142,7 @@ my_writewpt(waypoint *wpt)
 	static int ct;
 	struct tm *tm;
 abort();
-	rec = calloc(sizeof(*rec),1);
+	rec = xcalloc(sizeof(*rec),1);
 #if 0
 	strncpy(rec->ID, wpt->shortname, sizeof(rec->ID));
 	rec->ID[sizeof(rec->ID)-1] = 0;

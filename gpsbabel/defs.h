@@ -112,9 +112,11 @@ void waypt_disp(waypoint *);
 void fatal(const char *, ...);
 ff_vecs_t *find_vec(char *);
 void disp_vecs(void);
-
-
 void printposn(coord *c, int is_lat);
+
+void *xcalloc(size_t nmemb, size_t size);
+void *xmalloc(size_t size);
+char * xstrdup(const char *s);
 
 /* 
  * Data types for Palm/OS files.

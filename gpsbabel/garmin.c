@@ -54,7 +54,7 @@ data_read(void)
 	}
 
 	for (i = 0; i < n; i++) {
-		waypoint *wpt_tmp = calloc(sizeof(*wpt_tmp),1);
+		waypoint *wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 
 		wpt_tmp->shortname = way[i]->ident;
 		wpt_tmp->description = way[i]->cmnt;
@@ -77,9 +77,8 @@ data_write(void)
 	extern queue waypt_head;
 	GPS_PWay *way;
 
+	way = xmalloc(n*sizeof(*way));
 
-	if(!(way=(GPS_PWay *)malloc(n*sizeof(GPS_PWay *)))) 
-		fatal(MYNAME ":not enough memory\n");
 	for (i = 0; i < n; i++) {
 		if(!((way)[i]=GPS_Way_New()))
 			fatal(MYNAME ":not enough memory\n");

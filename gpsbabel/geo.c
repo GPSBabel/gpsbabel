@@ -56,7 +56,7 @@ tag_name(const char **attrv)
 	const char **avp = &attrv[0];
 	while (*avp) { 
 		if (strcmp(avp[0], "id") == 0) {
-			wpt_tmp->shortname = strdup(avp[1]);
+			wpt_tmp->shortname = xstrdup(avp[1]);
 		}
 		avp+=2;
 	}
@@ -68,7 +68,7 @@ tag_link(const char **attrv)
 	const char **avp = &attrv[0];
 	while (*avp) { 
 		if (strcmp(avp[0], "text") == 0) {
-			wpt_tmp->url_link_text = strdup(avp[1]);
+			wpt_tmp->url_link_text = xstrdup(avp[1]);
 		}
 		avp+=2;
 	}
@@ -91,7 +91,7 @@ geo_start(void *data, const char *el, const char **attr)
 	}
 
 	if (strcmp(el, "waypoint") == 0) {
-		wpt_tmp = calloc(sizeof(*wpt_tmp), 1);
+		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
 		in_wpt++;
 	} else if (strcmp(el, "name") == 0) {
 		in_name++;
@@ -119,7 +119,7 @@ geo_end(void *data, const char *el)
 static void
 geo_cdata(void *dta, const XML_Char *s, int len)
 {
-	char *foo = malloc(len+1);
+	char *foo = xmalloc(len+1);
 	foo[len] = 0;
 	strncpy(foo, s, len);
 	if (in_name) {

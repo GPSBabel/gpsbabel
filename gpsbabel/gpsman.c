@@ -96,11 +96,7 @@ gpsman_read(void)
 		sscanf(ibuf, "%[^\t] %[^\t] %c%d %lf %c%d %lf",
 			sname, descr, &latdir, &latm, &latf, &londir, &lonm, &lonf);
 
-		wpt_tmp = calloc(sizeof(*wpt_tmp),1);
-
-		if (wpt_tmp == NULL) {
-			fatal(MYNAME ": Cannot allocate enough memory\n");
-		}
+		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 
 		lat = latm + latf;
 		lon = lonm + lonf;
@@ -110,8 +106,8 @@ gpsman_read(void)
 
 		wpt_tmp->position.longitude.degrees = lon;
 		wpt_tmp->position.latitude.degrees = lat;
-		wpt_tmp->shortname = strdup(sname);
-		wpt_tmp->description = strdup(descr);
+		wpt_tmp->shortname = xstrdup(sname);
+		wpt_tmp->description = xstrdup(descr);
 
 		waypt_add(wpt_tmp);
 	}

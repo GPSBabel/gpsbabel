@@ -75,10 +75,7 @@ data_read(void)
 
 		if (strlen(buff)) {
 
-		    wpt_tmp = calloc(sizeof(*wpt_tmp), 1);
-		    if (wpt_tmp == NULL) {
-			fatal(MYNAME ": cannot allocate memory\n");
-		    }
+		    wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
 
 		    s = buff;
 		    /* data delimited by commas, not enclosed */
@@ -95,9 +92,7 @@ data_read(void)
 				wpt_tmp->position.longitude.degrees = atof(s);
 			    	break;
 			case 2:
-			    	wpt_tmp->description = strdup(s);
-			    	if (! wpt_tmp->description) 
-			    	    fatal(MYNAME, ": cannot allocate memory\n");
+			    	wpt_tmp->description = xstrdup(s);
 		    		wpt_tmp->description = csv_stringtrim(wpt_tmp->description, " ");
 		    		break;
 			default:

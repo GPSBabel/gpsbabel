@@ -23,6 +23,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void *
+xmalloc(size_t size)
+{
+	void *obj = malloc(size);
+
+	if (!obj) {
+		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n");
+	}
+
+	return obj;
+}
+
+void *
+xcalloc(size_t nmemb, size_t size)
+{
+	void *obj = calloc(nmemb, size);
+
+	if (!obj) {
+		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n");
+	}
+
+	return obj;
+}
+
+char *
+xstrdup(const char *s)
+{
+	char *o = strdup(s);
+
+	if (!o) {
+		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n");
+	}
+
+	return o;
+}
+
+
 coord
 mkposn(const char *string)
 {

@@ -60,10 +60,7 @@ tag_wpt(const char **attrv)
 {
 	const char **avp = &attrv[0];
 
-	wpt_tmp = calloc(sizeof(*wpt_tmp), 1);
-	if (wpt_tmp == NULL) {
-		fatal(MYNAME ": allocate memory\n");
-	}
+	wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
 
 	while (*avp) { 
 		if (strcmp(avp[0], "lat") == 0) {
@@ -125,7 +122,7 @@ gpx_end(void *data, const char *el)
 static void
 gpx_cdata(void *dta, const XML_Char *s, int len)
 {
-	char *foo = malloc(len+1);
+	char *foo = xmalloc(len+1);
 	foo[len] = 0;
 	strncpy(foo, s, len);
 	if (in_name && in_wpt) {

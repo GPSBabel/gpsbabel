@@ -206,7 +206,7 @@ mapsend_read(void)
 	my_fread4(&wpt_count, mapsend_file_in);
 
 	while (wpt_count--) {
-		wpt_tmp = calloc(sizeof(*wpt_tmp), 1);
+		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
 
 		fread(&scount, sizeof(scount), 1, mapsend_file_in);
 		fread(tbuf, scount, 1, mapsend_file_in);
@@ -225,8 +225,8 @@ mapsend_read(void)
 		my_fread8(&wpt_long, mapsend_file_in);
 		my_fread8(&wpt_lat, mapsend_file_in);
 
-		wpt_tmp->shortname = strdup(name);
-		wpt_tmp->description = strdup(comment);
+		wpt_tmp->shortname = xstrdup(name);
+		wpt_tmp->description = xstrdup(comment);
 		wpt_tmp->position.altitude.altitude_meters = wpt_alt;
 		wpt_tmp->position.latitude.degrees = -wpt_lat;
 		wpt_tmp->position.longitude.degrees = wpt_long;

@@ -108,14 +108,11 @@ data_read(void)
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
 		waypoint *wpt_tmp;
 
-		wpt_tmp = calloc(sizeof(*wpt_tmp),1);
-		if (wpt_tmp == NULL) {
-			fatal(MYNAME ": cannot allocate memory\n");
-		}
+		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 
 		rec = (struct record *) pdb_rec->data;
-		wpt_tmp->shortname = strdup(rec->ID);
-		wpt_tmp->description = strdup(rec->name);
+		wpt_tmp->shortname = xstrdup(rec->ID);
+		wpt_tmp->description = xstrdup(rec->name);
 		wpt_tmp->position.altitude.altitude_meters = pdb_read4(&rec->elevation) / 100.0;
 
 		wpt_tmp->position.longitude.degrees = pdb_read4(&rec->longitude) / 10000000.0; 
@@ -146,7 +143,7 @@ cetus_writewpt(waypoint *wpt)
 	static int ct;
 	struct tm *tm;
 
-	rec = calloc(sizeof(*rec),1);
+	rec = xcalloc(sizeof(*rec),1);
 
 	strncpy(rec->ID, wpt->shortname, sizeof(rec->ID));
 	rec->ID[sizeof(rec->ID)-1] = 0;
@@ -226,11 +223,9 @@ data_write(void)
 	 * Turns out plain old strcmp will do the trick...
 	 */
 
-	htable = malloc(ct * sizeof(*htable));
+	htable = xmalloc(ct * sizeof(*htable));
 	bh = htable;
-	if (!htable) {
-		fatal (MYNAME ":Cannot get array for sorting waypoints.");
-	}
+
         QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
                 waypointp = (waypoint *) elem;
 		bh->wpt = waypointp;
