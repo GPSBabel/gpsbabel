@@ -27,7 +27,7 @@
 property fileList : {}
 property startIndex : 0
 property startState : false
-global theFiles, inFormatList, outFormatList, inTypeList, outTypeList, extList, aFile
+global theFiles, inFormatList, outFormatList, inRWList, outRWList, inTypeList, outTypeList, extList, aFile
 
 -- EVENT HANDLERS --
 
@@ -51,19 +51,8 @@ end will finish launching
 on awake from nib theObject
 	log "awake from nib - " & name of theObject
 	if theObject is window "MacGPSBabel" then
-		-- get supported file types from gpsbabel and use these to populate the file types popup lists
-		tell window "MacGPSBabel"
-			my getFormats()
-			repeat with i in inFormatList
-				make new menu item at the end of menu items of menu of popup button "inPop" with properties {title:i, enabled:true}
-			end repeat
-			repeat with i in outFormatList
-				make new menu item at the end of menu items of menu of popup button "outPop" with properties {title:i, enabled:true}
-			end repeat
-		end tell
-		
-		-- read current user defaults and set window controls as needed
-		my readSettings()
+		-- get supported file types from gpsbabel and use these to populate the file types popup list
+		my getFormats()
 		
 		-- deal with changes to MacGPSBabel window needed if any of the GPS check boxes are checked by default
 		if state of button "GPSswitchIN" of window "MacGPSBabel" is equal to 1 then
@@ -97,7 +86,7 @@ on will open theObject
 		repeat with i in popList
 			make new menu item at the end of menu items of menu of popup button "serialPop" of window "SelectGPS" with properties {title:i, enabled:true}
 		end repeat
-		-- make new menu item at the end of menu items of menu of popup button "serialPop" of window "SelectGPS" with properties {title:"Garmin USB", enabled:true}
+		make new menu item at the end of menu items of menu of popup button "serialPop" of window "SelectGPS" with properties {title:"Garmin USB", enabled:true}
 		
 		-- read user defaults for this window
 		tell user defaults
@@ -129,6 +118,8 @@ end will close
 -- handler for the File>Open menu item
 on choose menu item theObject
 	log "choose menu item - " & name of theObject
+	
+	-- mainMenu File>Open
 	if name of theObject is "open" then
 		if visible of window "MacGPSBabel" is true then
 			if contents of text field "inputFile" of window "MacGPSBabel" is equal to "" then
@@ -154,6 +145,10 @@ on choose menu item theObject
 			end if
 			my addFile()
 		end if
+	end if
+	
+	if name of theObject is "modePop" then
+		my getFormats()
 	end if
 end choose menu item
 
@@ -455,8 +450,6 @@ on sendFile(fileList)
 		return 0
 	else if state of button "GPSswitchOUT" of window "MacGPSBabel" = 1 then
 		set visible of window "SelectGPS" to true
-		set state of button "trackSwitch" of window "SelectGPS" to 0
-		set enabled of button "trackSwitch" of window "SelectGPS" to false
 		return 0
 	else if the title of current menu item of popup button "inPop" of window "MacGPSBabel" = "Select Input File Type" then
 		display dialog "Please select an input file type" buttons {"OK"} default button 1
@@ -477,6 +470,15 @@ on convertFile(fileList)
 		set filterText to my applyFilters()
 	else
 		set filterText to ""
+	end if
+	
+	-- waypoint, routes or tracks
+	if the title of popup button "modePop" of window "MacGPSBabel" is equal to "Tracks" then
+		set trackText to " -t"
+	else if the title of popup button "modePop" of window "MacGPSBabel" is equal to "Routes" then
+		set trackText to " -r"
+	else
+		set trackText to ""
 	end if
 	
 	-- create string for input files
@@ -529,7 +531,7 @@ on convertFile(fileList)
 	end if
 	-- do the script
 	set thePath to POSIX path of (path to me) as string
-	set theConvertScript to (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & fileText & " " & filterText & "-o " & outType & " -F " & quoted form of outputFile) as string
+	set theConvertScript to (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & trackText & fileText & " " & filterText & "-o " & outType & " -F " & quoted form of outputFile) as string
 	if (my runBabel(theConvertScript)) then
 		display dialog "File conversion is complete" buttons {"OK"} default button 1
 	else
@@ -545,7 +547,6 @@ on GPSSend()
 		display dialog "Please select an output file type" buttons {"OK"} default button 1
 	else
 		set visible of window "SelectGPS" to true
-		set enabled of button "trackSwitch" of window "selectGPS" to true
 	end if
 end GPSSend
 -- deal with uploading files to GPS receiver
@@ -555,6 +556,15 @@ on uploadFile(fileList)
 		set filterText to my applyFilters()
 	else
 		set filterText to ""
+	end if
+	
+	-- waypoint, routes or tracks
+	if the title of popup button "modePop" of window "MacGPSBabel" is equal to "Tracks" then
+		set trackText to " -t"
+	else if the title of popup button "modePop" of window "MacGPSBabel" is equal to "Routes" then
+		set trackText to " -r"
+	else
+		set trackText to ""
 	end if
 	
 	-- create string for input files
@@ -601,7 +611,7 @@ on uploadFile(fileList)
 	set visible of window "SelectGPS" to false
 	set visible of window "MacGPSBabel" to true
 	
-	set theConvertScript to (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & fileText & " " & filterText & "-o " & gpsText & " -F " & serialText)
+	set theConvertScript to (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & trackText & fileText & " " & filterText & "-o " & gpsText & " -F " & serialText)
 	if (my runBabel(theConvertScript)) then
 		display dialog "Upload to " & gpsRText & " GPS receiver is complete" buttons {"OK"} default button 1
 	else
@@ -617,9 +627,14 @@ on downloadFile()
 	else
 		set filterText to ""
 	end if
-	if state of button "trackSwitch" of window "selectGPS" is equal to 1 then
+	
+	-- waypoint, routes or tracks
+	if the title of popup button "modePop" of window "MacGPSBabel" is equal to "Tracks" then
 		set trackText to " -t"
 		set outName to "Tracks."
+	else if the title of popup button "modePop" of window "MacGPSBabel" is equal to "Routes" then
+		set trackText to " -r"
+		set outName to "Routes."
 	else
 		set trackText to ""
 	end if
@@ -853,7 +868,9 @@ on clearFiles()
 	
 	-- reset controls to user defaults
 	-- read current user defaults and set window controls as needed
-	my readSettings()
+	if the title of popup button "modePop" of window "MacGPSBabel" is equal to "Waypoints" then
+		my readSettings()
+	end if
 	
 	-- deal with changes to MacGPSBabel window needed if any of the GPS check boxes are checked by default
 	my gpsIN()
@@ -920,7 +937,8 @@ on getSerial()
 	return myList
 end getSerial
 
--- handler (called at startup) to check with GPS Babel which file formats it can handle. Return the result as a list
+-- handler (called at startup) to check with GPS Babel which file formats it can handle.
+-- Populates global lists with file types and capabilities
 on getFormats()
 	set inFormatList to {}
 	set outFormatList to {}
@@ -935,16 +953,63 @@ on getFormats()
 	repeat with i from 1 to theCount
 		set theLine to paragraph i of scriptOut
 		if (first text item of theLine) is equal to "file" then
-			if the first character of the second text item of theLine is equal to "r" then
-				set the end of inTypeList to the third text item of theLine
-				set the end of inFormatList to the last text item of theLine
+			if the title of popup button "modePop" of window "MacGPSBabel" is equal to "Waypoints" then
+				if the first character of the second text item of theLine is equal to "r" then
+					set the end of inTypeList to the third text item of theLine
+					set the end of inFormatList to the last text item of theLine
+				end if
+				if the second character of the second text item of theLine is equal to "w" then
+					set the end of extList to the 4th text item of theLine
+					set the end of outTypeList to the third text item of theLine
+					set the end of outFormatList to the last text item of theLine
+				end if
 			end if
-			if the second character of the second text item of theLine is equal to "w" then
-				set the end of extList to the 4th text item of theLine
-				set the end of outTypeList to the third text item of theLine
-				set the end of outFormatList to the last text item of theLine
+			if the title of popup button "modePop" of window "MacGPSBabel" is equal to "Tracks" then
+				if the third character of the second text item of theLine is equal to "r" then
+					set the end of inTypeList to the third text item of theLine
+					set the end of inFormatList to the last text item of theLine
+				end if
+				if the 4th character of the second text item of theLine is equal to "w" then
+					set the end of extList to the 4th text item of theLine
+					set the end of outTypeList to the third text item of theLine
+					set the end of outFormatList to the last text item of theLine
+				end if
+			end if
+			if the title of popup button "modePop" of window "MacGPSBabel" is equal to "Routes" then
+				if the 5th character of the second text item of theLine is equal to "r" then
+					set the end of inTypeList to the third text item of theLine
+					set the end of inFormatList to the last text item of theLine
+				end if
+				if the 6th character of the second text item of theLine is equal to "w" then
+					set the end of extList to the 4th text item of theLine
+					set the end of outTypeList to the third text item of theLine
+					set the end of outFormatList to the last text item of theLine
+				end if
 			end if
 		end if
 	end repeat
 	set AppleScript's text item delimiters to defaultDelimiters
+	
+	-- set current menu item of popup button "inPop" of window "MacGPSBabel" to menu item 1 of menu of popup button "inPop" of window "MacGPSBabel"
+	-- set current menu item of popup button "outPop" of window "MacGPSBabel" to menu item 1 of menu of popup button "outPop" of window "MacGPSBabel"
+	
+	tell window "MacGPSBabel"
+		if (count of menu items of popup button "inPop") is greater than 0 then
+			delete every menu item of menu of popup button "inPop"
+			make new menu item at the end of menu items of menu of popup button "inPop" with properties {title:"Select Input File Type", enabled:true}
+			delete every menu item of menu of popup button "outPop"
+			make new menu item at the end of menu items of menu of popup button "outPop" with properties {title:"Select Output File Type", enabled:true}
+		end if
+		repeat with i in inFormatList
+			make new menu item at the end of menu items of menu of popup button "inPop" with properties {title:i, enabled:true}
+		end repeat
+		repeat with i in outFormatList
+			make new menu item at the end of menu items of menu of popup button "outPop" with properties {title:i, enabled:true}
+		end repeat
+	end tell
+	
+	if the title of popup button "modePop" of window "MacGPSBabel" is equal to "Waypoints" then
+		my readSettings()
+	end if
+	
 end getFormats
