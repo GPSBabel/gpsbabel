@@ -31,14 +31,14 @@ static char *correct_coords = NULL;
 static
 arglist_t dup_args[] = {
 	{"shortname", &snopt, "Suppress duplicate waypoints based on name",
-		ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL},
 	{"location", &lcopt, "Suppress duplicate waypoint based on coords",
-		ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL},
 	{"all", &purge_duplicates, "Suppress all instances of duplicates",
-		ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL},
 	{"correct", &correct_coords, "Use coords from duplicate points", 
-		ARGTYPE_BOOL},
-	{0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL},
+	{0, 0, 0, 0, 0}
 };
 
 

@@ -307,6 +307,9 @@ exit_vecs( void )
 	vecs_t *vec = vec_list;
 	while ( vec->vec ) {
 		arglist_t *ap;
+		if ( vec->vec->exit ) {
+			(*vec->vec->exit)();
+		}
 		if ( vec->vec->args ) {
 			for ( ap = vec->vec->args; ap->argstring; ap++ ) {
 				if ( ap->argval && *ap->argval ) {
@@ -342,12 +345,37 @@ find_vec(char *const vecname, char **opts)
 
 			if (vec->vec->args) {
 				for (ap = vec->vec->args; ap->argstring; ap++){
+					char *opt = NULL; 
 					if ( *ap->argval ) xfree(*ap->argval);
-					*ap->argval = get_option(*opts, ap->argstring);
+					
+					opt = get_option(*opts, ap->argstring);
+					if ( opt ) {
+						*ap->argval = opt;
+					}
+					else if ( ap->defaultvalue ) {
+						*ap->argval = xstrdup( 
+							ap->defaultvalue );
+					}
+					else {
+						*ap->argval = NULL;
+					}
 				}
 			}
 		} else {
 			*opts = NULL;
+			if (vec->vec->args) {
+				for (ap = vec->vec->args; ap->argstring; ap++){
+					if ( *ap->argval ) xfree(*ap->argval);
+					
+					if ( ap->defaultvalue ) {
+						*ap->argval = xstrdup( 
+							ap->defaultvalue );
+					}
+					else {
+						*ap->argval = NULL;
+					}
+				}
+			}
 		}
 
 		xfree(v);

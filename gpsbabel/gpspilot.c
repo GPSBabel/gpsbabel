@@ -54,8 +54,8 @@ static char *dbname = NULL;
 
 static
 arglist_t gpspilot_args[] = {
-        {"dbname", &dbname, "Database name", ARGTYPE_STRING},
-        {0, 0, 0, 0}
+        {"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING},
+        {0, 0, 0, 0, 0}
 };
 
 static void
@@ -253,5 +253,6 @@ ff_vecs_t gpspilot_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
+	NULL, 
 	gpspilot_args
 };

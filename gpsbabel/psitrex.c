@@ -56,8 +56,9 @@ char *snlen;
 
 static
 arglist_t psit_args[] = {
-/*	{"snlen", &snlen, "Length of generated shortnames", ARGTYPE_INT }, */
-	{0, 0, 0, 0}
+/*	{"snlen", &snlen, "Length of generated shortnames", 
+ 	NULL, ARGTYPE_INT }, */
+	{0, 0, 0, 0, 0}
 };
 
 /* Taken from PsiTrex 1.13 */
@@ -804,5 +805,6 @@ ff_vecs_t psit_vecs = {
 	psit_wr_deinit,
 	psit_read,
 	psit_write,
+	NULL, 
 	psit_args
 };

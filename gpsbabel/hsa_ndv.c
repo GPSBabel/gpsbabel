@@ -42,8 +42,7 @@ FILE *ofd;
 
 static
 arglist_t hsa_ndv_args[] = {
-//	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING },
-	{0, 0, 0, 0}
+	{0, 0, 0, 0, 0}
 };
 
 #define MYNAME "HsaNdv"
@@ -352,6 +351,7 @@ ff_vecs_t HsaEndeavourNavigator_vecs = {
 	hsa_ndv_wr_deinit,
 	hsa_ndv_read,
 	hsa_ndv_write,
+	NULL, 
 	hsa_ndv_args
 };
 

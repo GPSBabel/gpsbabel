@@ -40,22 +40,22 @@ static int track_out_count;
 static int route_out_count;
 static int route_wpt_count;
 
-static char *snlenopt;
-static char *snwhiteopt;
-static char *snupperopt;
-static char *snuniqueopt;
+static char *snlenopt = NULL;
+static char *snwhiteopt = NULL;
+static char *snupperopt = NULL;
+static char *snuniqueopt = NULL;
 
 static
 arglist_t ozi_args[] = {
 	{"snlen", &snlenopt, "Max synthesized shortname length",
-		ARGTYPE_INT},
+		NULL, ARGTYPE_INT},
 	{"snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames",
-		ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL},
 	{"snupper", &snupperopt, "(0/1) UPPERCASE synth. shortnames",
-	        ARGTYPE_BOOL},
+	        NULL, ARGTYPE_BOOL},
 	{"snunique", &snuniqueopt, "(0/1) Make synth. shortnames unique",
-		ARGTYPE_BOOL},
-	{0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL},
+	{0, 0, 0, 0, 0}
 };
 
 gpsdata_type ozi_objective;
@@ -698,5 +698,6 @@ ff_vecs_t ozi_vecs = {
     wr_deinit,
     data_read,
     data_write,
+    NULL,
     ozi_args
 };

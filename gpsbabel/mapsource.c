@@ -65,23 +65,30 @@ static void *read_route_wpt_mkshort_handle;
 #define MPSNOTESBUFFERLEN	4096
 #define MPSDESCBUFFERLEN	4096
 
-char *snlen;
-char *snwhiteopt;
-char *mpsverout;
+char *snlen = NULL;
+char *snwhiteopt = NULL;
+char *mpsverout = NULL;
 char *mpsmergeout = NULL;
 char *mpsusedepth = NULL;
 char *mpsuseprox = NULL;
 
 static
 arglist_t mps_args[] = {
-	{"snlen", &snlen, "Length of generated shortnames", ARGTYPE_INT },
+	{"snlen", &snlen, "Length of generated shortnames", NULL, ARGTYPE_INT },
 	{ "snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames",
-		ARGTYPE_BOOL},
-	{"mpsverout", &mpsverout, "Version of mapsource file to generate (3,4,5)", ARGTYPE_INT },
-	{"mpsmergeout", &mpsmergeout, "Merge output with existing file", ARGTYPE_BOOL },
-	{"mpsusedepth", &mpsusedepth, "Use depth values on output (default is ignore)", ARGTYPE_BOOL },
-	{"mpsuseprox", &mpsuseprox, "Use proximity values on output (default is ignore)", ARGTYPE_BOOL },
-	{0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL},
+	{"mpsverout", &mpsverout, 
+		"Version of mapsource file to generate (3,4,5)", NULL,
+		ARGTYPE_INT },
+	{"mpsmergeout", &mpsmergeout, "Merge output with existing file", 
+		NULL, ARGTYPE_BOOL },
+	{"mpsusedepth", &mpsusedepth, 
+		"Use depth values on output (default is ignore)", NULL,
+		ARGTYPE_BOOL },
+	{"mpsuseprox", &mpsuseprox, 
+		"Use proximity values on output (default is ignore)", 
+		NULL, ARGTYPE_BOOL },
+	{0, 0, 0, 0, 0}
 };
 
 /*
@@ -2162,5 +2169,6 @@ ff_vecs_t mps_vecs = {
 	mps_wr_deinit,
 	mps_read,
 	mps_write,
+	NULL,
 	mps_args
 };

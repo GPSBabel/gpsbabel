@@ -40,9 +40,9 @@ static char *Arg_category = NULL;
 static
 arglist_t Args[] = {
 	{"dbname", &Arg_dbname,
-	    "Database name (filename)", ARGTYPE_STRING },
+	    "Database name (filename)", NULL, ARGTYPE_STRING },
 	{"category", &Arg_category,
-	    "Category name (Cache)", ARGTYPE_STRING },
+	    "Category name (Cache)", NULL, ARGTYPE_STRING },
 	{0, 0, 0, 0 }
 };
 
@@ -532,5 +532,6 @@ ff_vecs_t geoniche_vecs =
 	wr_deinit,
 	data_read,
 	data_write,
+	NULL, 
 	Args
 };

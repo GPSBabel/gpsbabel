@@ -37,21 +37,13 @@ static char *suppresswhite = NULL;
 static char *iconismarker = NULL;
 static char *snlen = NULL;
 
-static char *margin  = "15%";
-static char *xpixels = "768";
-static char *ypixels = "768";
-static char *oldthresh = "14";
-static char *oldmarker  = "redpin";
-static char *newmarker  = "greenpin";
-static char *unfoundmarker  = "bluepin";
-
-static char *optmargin = NULL;
-static char *optxpixels = NULL;
-static char *optypixels = NULL;
-static char *optoldthresh = NULL;
-static char *optoldmarker = NULL;
-static char *optnewmarker = NULL;
-static char *optunfoundmarker = NULL;
+static char *margin  = NULL; 
+static char *xpixels = NULL; 
+static char *ypixels = NULL;
+static char *oldthresh = NULL;
+static char *oldmarker  = NULL;
+static char *newmarker  = NULL;
+static char *unfoundmarker  = NULL;
 
 int scalev;
 int short_length;
@@ -71,47 +63,43 @@ static char *clickmap = NULL;
 static
 arglist_t tiger_args[] = {
 	{"nolabels", &nolabels, "Suppress labels on generated pins.",
-		ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL },
 	{"genurl", &genurl, "Generate file with lat/lon for centering map.",
-		ARGTYPE_OUTFILE },
-	{"margin", &optmargin, "Margin for map.  Degrees or percentage.",
-		ARGTYPE_FLOAT},
+		NULL, ARGTYPE_OUTFILE },
+	{"margin", &margin, "Margin for map.  Degrees or percentage.",
+		"15%", ARGTYPE_FLOAT},
 	{"snlen", &snlen, "Max shortname length when used with -s.",
-		ARGTYPE_INT},
-	{"oldthresh", &optoldthresh, "Days after which points are considered old.",
-		ARGTYPE_INT},
-	{"oldmarker", &optoldmarker, "Marker type for old points.",
-		ARGTYPE_STRING},
-	{"newmarker", &optnewmarker, "Marker type for new points.",
-		ARGTYPE_STRING},
+		NULL, ARGTYPE_INT},
+	{"oldthresh", &oldthresh, 
+		"Days after which points are considered old.",
+		"14", ARGTYPE_INT},
+	{"oldmarker", &oldmarker, "Marker type for old points.",
+		"redpin", ARGTYPE_STRING},
+	{"newmarker", &newmarker, "Marker type for new points.",
+		"greenpin", ARGTYPE_STRING},
 	{"suppresswhite", &suppresswhite,
-		"Suppress whitespace in generated shortnames", ARGTYPE_BOOL },
-	{"unfoundmarker", &optunfoundmarker, "Marker type for unfound points.",
-		ARGTYPE_STRING},
-	{"xpixels", &optxpixels, "Width in pixels of map.",
-		ARGTYPE_INT},
-	{"ypixels", &optypixels, "Height in pixels of map.",
-		ARGTYPE_INT},
+		"Suppress whitespace in generated shortnames", 
+		NULL, ARGTYPE_BOOL },
+	{"unfoundmarker", &unfoundmarker, "Marker type for unfound points.",
+		"bluepin", ARGTYPE_STRING},
+	{"xpixels", &xpixels, "Width in pixels of map.",
+		"768", ARGTYPE_INT},
+	{"ypixels", &ypixels, "Height in pixels of map.",
+		"768", ARGTYPE_INT},
 	{"iconismarker", &iconismarker,
-		"The icon description is already the marker", ARGTYPE_BOOL },
+		"The icon description is already the marker", NULL,
+		ARGTYPE_BOOL },
 #if CLICKMAP
 	{"clickmap", &clickmap, "Generate Clickable map web page.",
-		ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL},
 #endif
-	{0, 0, 0, 0}
+	{0, 0, 0, 0, 0}
 };
 
 
 static void
 rd_init(const char *fname)
 {
-	margin  = optmargin?optmargin:"15%";
-	xpixels = optxpixels?optxpixels:"768";
-	ypixels = optypixels?optypixels:"768";
-	oldthresh = optoldthresh?optoldthresh:"14";
-	oldmarker  = optoldmarker?optoldmarker:"redpin";
-	newmarker  = optnewmarker?optnewmarker:"greenpin";
-	unfoundmarker  = optunfoundmarker?optunfoundmarker:"bluepin";
 	file_in = xfopen(fname, "r", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 }
@@ -126,13 +114,6 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-	margin  = optmargin?optmargin:"15%";
-	xpixels = optxpixels?optxpixels:"768";
-	ypixels = optypixels?optypixels:"768";
-	oldthresh = optoldthresh?optoldthresh:"14";
-	oldmarker  = optoldmarker?optoldmarker:"redpin";
-	newmarker  = optnewmarker?optnewmarker:"greenpin";
-	unfoundmarker  = optunfoundmarker?optunfoundmarker:"bluepin";
 	file_out = xfopen(fname, "w", MYNAME);
 	thresh_days = strtod(oldthresh, NULL);
 }
@@ -302,5 +283,6 @@ ff_vecs_t tiger_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
+	NULL, 
 	tiger_args,
 };

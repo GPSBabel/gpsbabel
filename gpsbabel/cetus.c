@@ -100,9 +100,9 @@ static char *appendicon = NULL;
 
 static
 arglist_t cetus_args[] = {
-	{"dbname", &dbname, "Database name", ARGTYPE_STRING },
+	{"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING },
 	{"appendicon", &appendicon, "Append icon_descr to description.",
-		ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL },
 	{0, 0, 0, 0 }
 };
 
@@ -422,5 +422,6 @@ ff_vecs_t cetus_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
+	NULL,
 	cetus_args,
 };
