@@ -339,7 +339,7 @@ gpx_start(void *data, const char *el, const char **attr)
 {
 	char *e;
 	char *ep;
-	vmem_realloc(&current_tag, strlen(current_tag.mem) + 1 + strlen(el));
+	vmem_realloc(&current_tag, strlen(current_tag.mem) + 2 + strlen(el));
 	e = current_tag.mem;
 	ep = e + strlen(e);
 	*ep++ = '/';
@@ -636,9 +636,10 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 	char **cdata;
 	xml_tag *tmp_tag;
 
-	vmem_realloc(&cdatastr, len + strlen(cdatastr.mem));
+	vmem_realloc(&cdatastr,  1 + len + strlen(cdatastr.mem));
 	estr = (char *) cdatastr.mem + strlen(cdatastr.mem);
 	memcpy(estr, s, len);
+	estr[len]  = 0;
 
 	if (!cur_tag) 
 		return;
@@ -671,7 +672,7 @@ void
 gpx_rd_init(const char *fname)
 {
 	if ( fname[0] ) {
-	        fd = fopen(fname, "r");
+		fd = fopen(fname, "r");
 	        if (fd == NULL) {
 		        fatal(MYNAME ": Cannot open %s for reading\n", fname );
 	        }

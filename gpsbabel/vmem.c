@@ -58,7 +58,7 @@ vmem_realloc(vmem_t *vm, size_t size)
 	 * Reallocate only if we must.
 	 */
 	if (size > vm->size) {
-		vm->mem = xrealloc(vm->mem, size + 20);
+		vm->mem = xrealloc(vm->mem, size);
 		vm->size = size;
 	}
 	return;
