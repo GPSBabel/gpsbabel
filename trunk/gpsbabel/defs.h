@@ -250,6 +250,7 @@ void disp_filter_vecs(void);
 
 void *xcalloc(size_t nmemb, size_t size);
 void *xmalloc(size_t size);
+void *xrealloc(void *p, size_t s);
 char *xstrdup(const char *s);
 char *xstrappend(char *src, const char *new);
 int case_ignore_strcmp(const char *s1, const char *s2);
