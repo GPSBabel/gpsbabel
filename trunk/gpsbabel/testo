@@ -316,3 +316,13 @@ ${PNAME} -i easygps -f reference/easygps.loc -o easygps -F ${TMPDIR}/ez.loc
 ${PNAME} -i easygps -f reference/easygps.loc -o gpx -F ${TMPDIR}/ez1.gpx
 ${PNAME} -i easygps -f ${TMPDIR}/ez.loc -o gpx -F ${TMPDIR}/ez2.gpx
 compare ${TMPDIR}/ez1.gpx ${TMPDIR}/ez2.gpx
+
+#
+# Arc Distance filter
+#
+rm -f ${TMPDIR}/arcdist.txt
+${PNAME} -i xmap -f reference/arcdist_input.txt \
+         -x arc,file=reference/arcdist_arc.txt,distance=1 \
+         -o xmap -F ${TMPDIR}/arcdist.txt
+compare ${TMPDIR}/arcdist.txt reference/arcdist_output.txt
+
