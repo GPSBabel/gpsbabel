@@ -1,7 +1,7 @@
 /*
     Access Hiketech XML data files.
 
-    Copyright (C) 2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004,2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -268,7 +268,7 @@ void	ht_trk_alt(const char *args, const char **unused)
 
 ff_vecs_t hiketech_vecs = {
         ff_type_file,
-	{ ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_none },
+	{ ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write },
         hiketech_rd_init,
         hiketech_wr_init,
         hiketech_rd_deinit,
