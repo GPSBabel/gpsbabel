@@ -132,9 +132,12 @@ geo_end(void *data, const char *el)
 static void
 geo_cdata(void *dta, const XML_Char *s, int len)
 {
-	char *estr = cdatastr + strlen(cdatastr);
-	memcpy(estr, s, len); 
-	in_cdata++;
+	char *estr;
+	if (in_name || in_link) {
+		estr = cdatastr + strlen(cdatastr);
+		memcpy(estr, s, len); 
+		in_cdata++;
+	}
 }
 
 void
