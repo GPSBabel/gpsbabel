@@ -464,7 +464,9 @@ waypoint_write(void)
 			icon = d103_icon_number_from_symbol(wpt->icon_descr);
 		}
 		way[i]->smbl = icon;
-		if (wpt->altitude != unknown_alt) {
+		if (wpt->altitude == unknown_alt) {
+			way[i]->alt = 0;
+		} else {
 			way[i]->alt = wpt->altitude;
 		}
 		i++;
