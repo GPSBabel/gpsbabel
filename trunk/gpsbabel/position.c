@@ -109,7 +109,7 @@ position_process(void)
 				   comp[i+1]->position.longitude.degrees);
 
 		/* convert radians to integer feet */
-		dist = (int)((((dist * 180.0 * 60.0) / M_PI) / 1.1516) * 5280.0);
+		dist = (int)((((dist * 180.0 * 60.0) / M_PI) * 1.1516) * 5280.0);
 
 		if (dist <= pos_dist) { 
 			waypt_del(comp[i]);
