@@ -327,7 +327,7 @@ static void commit_buffer( void ) {
 }
 
 static void create_bookmark( char *bmtext ) {
-	struct bookmark *newmark = xcalloc( 1, sizeof(struct bookmark));
+	struct bookmark *newmark = (struct bookmark *) xcalloc( 1, sizeof(struct bookmark));
 	newmark->next = bookmark_tail;
 	newmark->offset = offset;
 	newmark->text = bmtext;
@@ -342,7 +342,7 @@ static void docprintf( int maxlen, char *format, ... ) {
     int newlen;
     int partlen;
     
-    txt = xmalloc( maxlen );  
+    txt = (char *) xmalloc( maxlen );  
 	
     va_start( list, format );
     newlen = vsprintf( txt, format, list );

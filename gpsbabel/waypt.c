@@ -37,7 +37,7 @@ waypoint *
 waypt_dupe(const waypoint *wpt) 
 {
 	waypoint * tmp;
-	tmp = xcalloc(sizeof *wpt, 1);
+	tmp = waypt_new();
 	memcpy(tmp, wpt, sizeof(waypoint));
 
 	if (wpt->shortname)
@@ -110,7 +110,7 @@ waypt_new(void)
 {
 	waypoint *wpt;
 
-	wpt = xcalloc(sizeof (*wpt), 1);
+	wpt = (waypoint *) xcalloc(sizeof (*wpt), 1);
 	wpt->altitude = unknown_alt;
 
 	return wpt;

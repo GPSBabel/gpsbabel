@@ -98,7 +98,7 @@ data_read(void)
 	}
 
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
-		waypoint *wpt = xcalloc(sizeof(*wpt),1);
+		waypoint *wpt = waypt_new();
 		struct dbrec *rec = (struct dbrec *) pdb_rec->data;
 		int nflds;
 		int length;

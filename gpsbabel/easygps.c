@@ -82,7 +82,7 @@ pread(void)
 	int ilen;
 
 	ilen = fgetc(file_in);
-	d = xmalloc(ilen + 1);
+	d = (char *) xmalloc(ilen + 1);
 	fread(d, ilen, 1, file_in);
 	d[ilen] = 0;
 	return d;
@@ -100,25 +100,25 @@ data_read(void)
 		unsigned char tag;
 		waypoint *wpt_tmp;
 
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+		wpt_tmp = waypt_new();
 			
 		for (tag = fgetc(file_in); tag != 0xff; tag = fgetc(file_in)) {
 		switch (tag) {
 			case 1:
-				wpt_tmp->shortname = pread();
+				wpt_tmp->shortname = (char *) pread();
 				break;
 			case 2:
 			case 3:
-				wpt_tmp->description = pread();
+				wpt_tmp->description = (char *) pread();
 				break;
 			case 5:
-				wpt_tmp->notes = pread();
+				wpt_tmp->notes = (char *) pread();
 				break;
 			case 6:
-				wpt_tmp->url_link_text = pread();
+				wpt_tmp->url_link_text = (char *) pread();
 				break;
 			case 7:
-				wpt_tmp->icon_descr = pread();
+				wpt_tmp->icon_descr = (char *) pread();
 				break;
 			case 8:  /* NULL Terminated (vs. pascal) descr */
 				bbufp = bbuf;

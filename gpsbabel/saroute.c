@@ -50,7 +50,7 @@ unsigned char *
 ReadRecord(FILE * f,
 	   unsigned long size)
 {
-	unsigned char *result = xmalloc(size);
+	unsigned char *result = (unsigned char *) xmalloc(size);
 
 	fread(result, size, 1, f);
 	return result;
@@ -146,10 +146,10 @@ my_read(void)
 			lon = (0x80000000UL -
 			       le_read32(&latlon->lon)) / (double)(0x800000);
 	
-			wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
+			wpt_tmp = waypt_new();
 			wpt_tmp->latitude = lat;
 			wpt_tmp->longitude = -lon;
-			wpt_tmp->shortname = xmalloc(7);
+			wpt_tmp->shortname = (char *) xmalloc(7);
 			sprintf( wpt_tmp->shortname, "\\%5.5x", serial++ );
 			route_add_wpt(track_head, wpt_tmp);
 			xfree(record);
@@ -209,7 +209,7 @@ my_read(void)
 				double lat;
 				double lon;
 
-				wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
+				wpt_tmp = waypt_new();
 
 				lat = (0x80000000UL -
 				       le_read32(&latlon->lat)) / 
@@ -220,7 +220,7 @@ my_read(void)
 
 				wpt_tmp->latitude = lat;
 				wpt_tmp->longitude = -lon;
-				wpt_tmp->shortname = xmalloc(7);
+				wpt_tmp->shortname = (char *) xmalloc(7);
 				sprintf( wpt_tmp->shortname, "\\%5.5x", 
 						serial++ );
 				route_add_wpt(track_head, wpt_tmp);

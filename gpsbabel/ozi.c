@@ -79,7 +79,7 @@ ozi_openfile(char *fname) {
     }
 
     /* allocate more than enough room for new filename */
-    tmpname = xcalloc(1, strlen(fname) +
+    tmpname = (char *) xcalloc(1, strlen(fname) +
                          strlen(buff) +
                          strlen(ozi_extensions[ozi_objective]) +
                          2); /* . (dot) plus null term */
@@ -550,7 +550,7 @@ data_read(void)
         }
         if ((strlen(buff)) && (strstr(buff, ",") != NULL)) {
 
-            wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+            wpt_tmp = waypt_new();
 
             /* data delimited by commas, possibly enclosed in quotes.  */
             s = buff;

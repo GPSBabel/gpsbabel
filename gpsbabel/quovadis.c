@@ -128,7 +128,7 @@ data_read(void)
 	for (i = 0; i < num_recs; i++) {
 	    waypoint *wpt_tmp;
 
-	    wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
+	    wpt_tmp = waypt_new();
 
 	    rec = (struct record *)
 		&(pdb_rec->data[i * sizeof(struct record)]);
@@ -166,12 +166,12 @@ quovadis_writewpt(waypoint *wpt)
 	    fatal(MYNAME ": libpdb couldn't append record\n");
 	}
 
-	current_rec = xcalloc(MAXCHUNKSIZE, 1);
+	current_rec = (ubyte *) xcalloc(MAXCHUNKSIZE, 1);
 	rec_index = 0;
 	rec_ptr = current_rec;
     }
 
-    rec = xcalloc(sizeof(*rec),1);
+    rec = (struct record *) xcalloc(sizeof(*rec),1);
 
     be_write32(&rec->longitude, (wpt->longitude +
 				 180.0) * 1000000.0);
@@ -211,8 +211,8 @@ static
 int 
 compare(const void *a, const void *b)
 {
-	const struct hdr *wa = a;
-	const struct hdr *wb = b;
+	const struct hdr *wa = (const struct hdr *) a;
+	const struct hdr *wb = (const struct hdr *) b;
 
 	return strcmp(wa->wpt->shortname, wb->wpt->shortname);
 }
@@ -248,7 +248,7 @@ data_write(void)
 	 * Turns out plain old strcmp will do the trick...
 	 */
 
-	htable = xmalloc(ct * sizeof(*htable));
+	htable = (struct hdr *) xmalloc(ct * sizeof(*htable));
 	bh = htable;
 
         QUEUE_FOR_EACH(&waypt_head, elem, tmp) {

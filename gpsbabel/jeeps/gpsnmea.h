@@ -52,7 +52,7 @@ typedef struct GPS_SRmm
 
 typedef struct GPS_SBod
 {
-    double true;
+    double True;
     double mag;
     char   dest[83];
     char   start[83];
@@ -98,7 +98,7 @@ typedef struct GPS_SRmb
     double lat;
     double lon;
     double range;
-    double true;
+    double True;
     double velocity;
     char   alarm;
     int32  valid;
@@ -152,7 +152,7 @@ typedef struct GPS_SBwc
     time_t time;
     double lat;
     double lon;
-    double true;
+    double True;
     double mag;
     double dist;
     char wpt[83];
@@ -164,7 +164,7 @@ typedef struct GPS_SBwr
     time_t time;
     double lat;
     double lon;
-    double true;
+    double True;
     double mag;
     double dist;
     char wpt[83];
@@ -186,7 +186,7 @@ typedef struct GPS_SHdm
 
 typedef struct GPS_SHsc
 {
-    double true;
+    double True;
     double mag;
     int32  valid;
 } GPS_OHsc,*GPS_PHsc;
@@ -205,7 +205,7 @@ typedef struct GPS_SR00
 
 typedef struct GPS_SVhw
 {
-    double true;
+    double True;
     double mag;
     double wspeed;
     double speed;
@@ -224,7 +224,7 @@ typedef struct GPS_SVwr
 
 typedef struct GPS_SVtg
 {
-    double true;
+    double True;
     double mag;
     double knots;
     double khr;
