@@ -388,16 +388,16 @@ static char s_and_t[] =
 "# GC171C,44.70605,-85.62265,The Michigan Frog by RealDcoy & LRB,http://www.geocaching.com/seek/cache_details.aspx?ID=5916,Traditional Cache\n"
 "#\n"
 
-"DESCRIPTION 		Microsoft Streets and Trips 2002/2003\n"
+"DESCRIPTION 		Microsoft Streets and Trips 2002-2005\n"
 
 "#\n"
 "# FILE LAYOUT DEFINITIIONS:\n"
 "#\n"
-"FIELD_DELIMITER		COMMA\n"
+"FIELD_DELIMITER		TAB\n"
 "RECORD_DELIMITER	NEWLINE\n"
 "BADCHARS		,\"\n"
 
-"PROLOGUE	Name,Latitude,Longitude,Name 2,URL,Type\n"
+"PROLOGUE	Name	Latitude	Longitude	Description	URL	Type	Container	Diff	Terr\n"
 
 "#\n"
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
@@ -409,7 +409,10 @@ static char s_and_t[] =
 "IFIELD	LON_DECIMAL, \"\", \"%f\"		# Longitude\n"
 "IFIELD	DESCRIPTION, \"\", \"%s\"		# Name 2 (Big Description)\n"
 "IFIELD	URL, \"\", \"%s\"			# URL\n"
-"IFIELD	IGNORE, \"\", \"\"			# Holder for Geocache Type\n"
+"IFIELD	GEOCACHE_TYPE, \"\", \"%s\"		# Geocache Type\n"
+"IFIELD	GEOCACHE_CONTAINER, \"\", \"%s\"	# Geocache Type\n"
+"IFIELD	GEOCACHE_DIFF, \"\", \"%3.1f\"	# Geocache Type\n"
+"IFIELD	GEOCACHE_TERR, \"\", \"%3.1f\"	# Geocache Type\n"
 ;
 static char saplus[] = 
 "# gpsbabel XCSV style file\n"
