@@ -195,7 +195,7 @@ gpx_read(void)
 
 	while (!done) {
 		len = fread(buf, 1, sizeof(buf), fd);
-		done = feof(fd); 
+		done = feof(fd) || !len; 
 		if (!XML_Parse(psr, buf, len, done)) {
 			fatal(MYNAME ": XML parse error at %d: %s\n", 
 				XML_GetCurrentLineNumber(psr),
