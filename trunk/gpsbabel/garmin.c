@@ -27,6 +27,7 @@
 #define MYNAME "GARMIN" 
 static const char *portname;
 static void *mkshort_handle;
+extern const char *mps_find_desc_from_icon_number(const int icon);
 
 static void
 rw_init(const char *fname, const char *opts)
