@@ -324,7 +324,7 @@ vecs_t vec_list[] = {
         },
         {
                 &vcf_vecs,
-                "vcf",
+                "vcard",
                 "Vcard Output (for iPod)",
                 "vcf",
         },
