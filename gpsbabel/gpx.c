@@ -822,12 +822,12 @@ gpx_read(void)
 					char *hexit = badchar+3;
 					semi = strchr( badchar, ';' );
 					if ( semi ) {
-						*semi = '\0';
-						while (*hexit) {
+						while (*hexit && *hexit != ';') {
 							val *= 16;
 							val += strchr( hex, *hexit )-hex;
 							hexit++;
 						}
+						
 						if ( val < 32 ) {
 							warning( MYNAME ": Ignoring illegal character %s;\n\tConsider emailing %s at <%s>\n\tabout illegal characters in their GPX files.\n", badchar, gpx_author?gpx_author:"(unknown author)", gpx_email?gpx_email:"(unknown email address)" );
 							memmove( badchar, semi+1, strlen(semi+1)+1 );
