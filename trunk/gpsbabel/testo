@@ -312,6 +312,17 @@ ${PNAME} -r -i gpx -f ${TMPDIR}/gpxroute.gpx -o magellan \
 compare ${TMPDIR}/maggpx.rte reference/route/magellan.rte
 
 #
+# GPX tracks -- since GPX contains a date stamp, tests will always
+# fail, so we use magellan as an interim format...
+#
+rm -f ${TMPDIR}/gpxtrack.gpx ${TMPDIR}/maggpx.trk
+${PNAME} -t -i gpx -f reference/track/tracks.gpx -o gpx \
+         -F ${TMPDIR}/gpxtrack.gpx
+${PNAME} -t -i magellan -f reference/track/meridian.trk -o gpx \
+         -F ${TMPDIR}/maggpx.trk
+compare ${TMPDIR}/maggpx.trk ${TMPDIR}/gpxtrack.gpx
+
+#
 # MAPSEND waypoint / route format
 #
 rm -f ${TMPDIR}/route.mapsend
