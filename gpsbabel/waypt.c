@@ -64,8 +64,7 @@ waypt_disp_all(waypt_cb cb)
 {
 	queue *elem, *tmp;
 	waypoint *waypointp;
-setshort_length(8);
-setshort_mustupper(0);
+
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypointp = (waypoint *) elem;
 		(*cb) (waypointp);
