@@ -236,12 +236,30 @@ REM GPX output.
 %PNAME% -i mapsource -f reference\mapsource.mps  -o mapsource -F %TMPDIR%\ms.mps
 %PNAME% -i mapsource -f %TMPDIR%\ms.mps -o gpx -F %TMPDIR%\ms2.gpx
 CALL :COMPARE %TMPDIR%\ms1.gpx %TMPDIR%\ms2.gpx
+
 REM
 REM MRCB mapsource track test
 REM
 DEL %TMPDIR%\mps-track.mps
 %PNAME% -t -i mapsource -f reference\track\mps-track.mps -o mapsource -F %TMPDIR%\mps-track.mps
 CALL :COMPARE %TMPDIR%\mps-track.mps reference\track
+REM Now do a test of reading waypoints from a track-only file - should have an empty result
+DEL %TMPDIR%\mps-track.mps
+%PNAME% -i mapsource -f reference\track\mps-track.mps -o mapsource -F %TMPDIR%\mps-track.mps
+CALL :COMPARE %TMPDIR%\mps-track.mps reference\mps-empty.mps
+
+REM
+REM MRCB mapsource route test
+REM
+DEL %TMPDIR%\mps-route.mps
+%PNAME% -r -i mapsource -f reference\route\route.mps -o mapsource,mpsverout=4 -F %TMPDIR%\mps-route.mps
+CALL :COMPARE %TMPDIR%\mps-route.mps reference\route\route.mps
+
+REM Now do a test of reading tracks from a route-only file - should have an empty result
+DEL %TMPDIR%\mps-route.mps
+%PNAME% -t -i mapsource -f reference\route\route.mps -o mapsource -F %TMPDIR%\mps-route.mps
+CALL :COMPARE %TMPDIR%\mps-route.mps reference\mps-empty.mps
+
 REM
 REM Geocaching Database is a binary Palm format that, like the GPX variants
 REM has a zillion "equivalent" encodings of any given record set.  So we
@@ -339,6 +357,44 @@ REM Navicache.
 %PNAME% -i navicache -f reference\navicache.xml -o gpsutil -F %TMPDIR%\navi.wpt
 CALL :COMPARE %TMPDIR%\navi.wpt reference\navicache.ref
 REM
+
+REM PsiTrex.  A text format that can't be handled by XCSV due to context of
+REM data based on other data values in the file
+REM Waypoints first
+DEL %TMPDIR%\psit-ww.txt %TMPDIR%\psit-ww.mps
+%PNAME% -i psitrex -f reference\psitwpts.txt -o mapsource -F %TMPDIR%\psit-ww.mps
+%PNAME% -i mapsource -f %TMPDIR%\psit-ww.mps -o psitrex -F %TMPDIR%\psit-ww.txt
+CALL :COMPARE reference\psitwpts.txt %TMPDIR%\psit-ww.txt
+
+REM Now test correct "empty" handling - ask for routes when there aren't any
+REM Uses mapsource as the empty handling for this has already happened above
+DEL %TMPDIR%\psit-wr.mps
+%PNAME% -r -i psitrex -f reference\psitwpts.txt -o mapsource -F %TMPDIR%\psit-wr.mps
+CALL :COMPARE reference\mps-empty.mps %TMPDIR%\psit-wr.mps
+
+REM Routes next
+DEL %TMPDIR%\psit-rr.txt %TMPDIR%\psit-rr.mps
+%PNAME% -r -i psitrex -f reference\route\psitrtes.txt -o mapsource -F %TMPDIR%\psit-rr.mps
+%PNAME% -r -i mapsource -f %TMPDIR%\psit-rr.mps -o psitrex -F %TMPDIR%\psit-rr.txt
+CALL :COMPARE reference\route\psitrtes.txt %TMPDIR%\psit-rr.txt
+
+REM Now test correct "empty" handling - ask for tracks when there aren't any
+REM Uses mapsource as the empty handling for this has already happened above
+DEL %TMPDIR%\psit-rt.mps
+%PNAME% -t -i psitrex -f reference\route\psitrtes.txt -o mapsource -F %TMPDIR%\psit-rt.mps
+CALL :COMPARE reference\mps-empty.mps %TMPDIR%\psit-rt.mps
+
+REM Tracks last
+DEL %TMPDIR%\psit-tt.txt %TMPDIR%\psit-tt.mps
+%PNAME% -t -i psitrex -f reference\track\psittrks.txt -o mapsource -F %TMPDIR%\psit-tt.mps
+%PNAME% -t -i mapsource -f %TMPDIR%\psit-tt.mps -o psitrex -F %TMPDIR%\psit-tt.txt
+CALL :COMPARE reference\track\psittrks.txt %TMPDIR%\psit-tt.txt
+
+REM Now test correct "empty" handling - ask for waypoints when there aren't any
+REM Uses mapsource as the empty handling for this has already happened above
+DEL %TMPDIR%\psit-tw.mps
+%PNAME% -i psitrex -f reference\track\psittrks.txt -o mapsource -F %TMPDIR%\psit-tw.mps
+CALL :COMPARE reference\mps-empty.mps %TMPDIR%\psit-tw.mps
 
 REM
 REM Arc Distance filter
