@@ -1,9 +1,9 @@
 CC=/home/robertl/cross-tools/bin/i386-mingw32msvc-gcc
 VPATH=..
 
-FILES=gpsbabel.exe libexpat.dll ../win32/gpsbabelfront.exe ../README*
+FILES=gpsbabel.exe libexpat.dll ../win32/gpsbabelfront.exe ../README* ../COPYING
 
-gpsbabel.exe:
+gpsbabel.exe:  wintesto.cmd
 
 include ../Makefile
 CFLAGS=-Iinclude -I../coldsync -O
@@ -13,3 +13,8 @@ gpsbabel.exe: $(OBJS)
 	cp gpsbabel.exe /tmp
 	zip -j /tmp/gpsbabel-$(VERSIOND).zip $(FILES)
 
+mkwintesto: mkwintesto.c
+	/usr/bin/cc mkwintesto.c ../util.c -o mkwintesto
+
+wintesto.cmd: mkwintesto
+	./mkwintesto ../testo
