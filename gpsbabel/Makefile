@@ -27,7 +27,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
-	vcf.o overlay.o kml.o google.o lowranceusr.o
+	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o
 
@@ -124,6 +124,7 @@ mac-release:
 
 # Machine generated from here down.  
 
+an1.o: an1.c defs.h queue.h gbtypes.h
 arcdist.o: arcdist.c defs.h queue.h gbtypes.h grtcirc.h
 brauniger_iq.o: brauniger_iq.c defs.h queue.h gbtypes.h jeeps/gpsserial.h \
   jeeps/gps.h jeeps/gpsport.h jeeps/gpssend.h jeeps/gpsread.h \
@@ -318,5 +319,4 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h defs.h queue.h gbtypes.h \
 shapelib/dbfopen.o: shapelib/dbfopen.c shapelib/shapefil.h
 shapelib/shpopen.o: shapelib/shpopen.c shapelib/shapefil.h
 internal_styles.c: mkstyle.sh style/README.style style/arc.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/s_and_t.style style/saplus.style style/tabsep.style style/xmap.style style/xmapwpt.style
-	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)
 	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)

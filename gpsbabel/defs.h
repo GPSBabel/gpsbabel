@@ -151,6 +151,13 @@ typedef struct xml_tag {
 	struct xml_tag *child;
 } xml_tag ;
 
+typedef void (*an1_destroy)(void *);
+typedef void (*an1_copy)(void **, void *);
+typedef struct {
+	an1_destroy destroy;
+	an1_copy copy;
+} an1_base;
+
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not 
  * cater to any specific model or protocol.  Anything that needs to
@@ -214,11 +221,14 @@ typedef struct {
 	 * This causes it to be removed last.
 	 * This is currently used by the saroute input filter to give named
 	 * waypoints (representing turns) a higher priority.
+	 * This is also used by the google input filter because they were
+	 * nice enough to use exactly the same priority scheme.
 	 */
 	int route_priority;
 	
 	geocache_data gc_data;
 	xml_tag *gpx_extras;
+	an1_base *an1_extras;
 	void *extra_data;	/* Extra data added by, say, a filter. */
 } waypoint;
 
@@ -229,6 +239,7 @@ typedef struct {
 	char *rte_desc;
 	int rte_num;
 	int rte_waypt_ct;		/* # waypoints in waypoint list */
+	an1_base *an1_extras;
 } route_head;
 
 /*

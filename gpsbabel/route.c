@@ -128,6 +128,10 @@ route_free(route_head *rte)
 	}
 	rte_waypts -= rte->rte_waypt_ct;
 	waypt_flush(&rte->waypoint_list);
+        if ( rte->an1_extras ) {
+                (*(rte->an1_extras->destroy))((void *)rte->an1_extras );
+                xfree( rte->an1_extras );
+        }
 	xfree(rte);
 }
 
