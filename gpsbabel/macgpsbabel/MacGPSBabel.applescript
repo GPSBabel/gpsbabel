@@ -26,8 +26,8 @@ on will finish launching theObject
 end will finish launching
 
 on awake from nib theObject
+	log "awake from nib - " & name of theObject
 	if theObject is window "MacGPSBabel" then
-		
 		-- get supported file types from gpsbabel and use these to populate the file types popup lists
 		tell window "MacGPSBabel"
 			set popList to my getFormats()
@@ -53,7 +53,7 @@ end awake from nib
 -- Deal with the opening and closing of windows
 
 on will open theObject
-	
+	log "will open - " & name of theObject
 	-- Main Window
 	if theObject is window "MacGPSBabel" then
 		-- set the progress indicator style
@@ -85,6 +85,7 @@ on will open theObject
 end will open
 
 on will close theObject
+	log "will close - " & name of theObject
 	if theObject is window "SelectGPS" then
 		-- store user defaults for this window
 		set newReceiverIndex to contents of popup button "gpsPop" of window "SelectGPS" as integer
@@ -100,6 +101,7 @@ end will close
 
 -- handler for the File>Open menu item
 on choose menu item theObject
+	log "choose menu item - " & name of theObject
 	if name of theObject is "open" then
 		if visible of window "MacGPSBabel" is true then
 			if contents of text field "inputFile" of window "MacGPSBabel" is equal to "" then
@@ -131,6 +133,8 @@ end choose menu item
 -- HANDLERS FOR BUTTON CLICKS
 
 on clicked theObject
+	log "clicked - " & name of theObject
+	
 	-- MAIN WINDOW - Select File button
 	if theObject is the button "selectButton" of window "MacGPSBabel" then
 		if contents of text field "inputFile" of window "MacGPSBabel" is equal to "" then
@@ -437,22 +441,13 @@ on convertFile(fileList)
 		display dialog "conversion cancelled" buttons {"OK"} default button 1
 		return 0
 	end if
-	feedbackBusy(true)
 	-- do the script
 	set thePath to POSIX path of (path to me) as string
 	set theConvertScript to (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & fileText & " " & filterText & "-o " & outType & " -F " & quoted form of outputFile) as string
-	try
-		set scriptOut to do shell script theConvertScript as string
-		set convertYN to "Conversion Completed Successfully"
-	on error
-		set scriptOut to "gpsbabel encountered an error"
-		set convertYN to "Conversion Failed!"
-	end try
-	feedbackBusy(false)
-	display dialog convertYN buttons {"OK"} default button 1
-	if visible of window "debugWindow" is true then
-		set the contents of text view 1 of scroll view 1 of window "debugWindow" to ""
-		set the contents of text view 1 of scroll view 1 of window "debugWindow" to "MacGPSBabel Report" & return & return & "The Shell Script:" & return & theConvertScript & return & return & convertYN & return & return & "Output From gpsbabel:" & return & scriptOut
+	if (my runBabel(theConvertScript)) then
+		display dialog "File conversion is complete" buttons {"OK"} default button 1
+	else
+		display dialog "Sorry, the file conversion failed" buttons {"OK"} default button 1
 	end if
 	my clearFiles()
 end convertFile
@@ -508,11 +503,13 @@ on uploadFile(fileList)
 	set thePath to POSIX path of (path to me) as string
 	set visible of window "SelectGPS" to false
 	set visible of window "MacGPSBabel" to true
-	feedbackBusy(true)
 	set serialText to "-F /dev/cu." & (the title of popup button "serialPop" of window "selectGPS")
-	do shell script (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & fileText & " " & filterText & "-o " & gpsText & serialText)
-	feedbackBusy(false)
-	display dialog "Upload Complete" buttons {"OK"} default button 1
+	set theConvertScript to (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & fileText & " " & filterText & "-o " & gpsText & serialText)
+	if (my runBabel(theConvertScript)) then
+		display dialog "Upload to" & gpsText & "GPS receiver is complete" buttons {"OK"} default button 1
+	else
+		display dialog "Sorry, upload to" & gpsText & "GPS receiver failed" buttons {"OK"} default button 1
+	end if
 end uploadFile
 -- deal with downloading files from GPS receiver
 on downloadFile()
@@ -563,14 +560,41 @@ on downloadFile()
 		set serialText to "/dev/cu." & (the title of popup button "serialPop" of window "selectGPS")
 		set visible of window "SelectGPS" to false
 		set visible of window "MacGPSBabel" to true
-		feedbackBusy(true)
-		do shell script (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & trackText & " -i" & gpsText & "-f " & serialText & " " & filterText & " -o " & outType & " -F " & quoted form of outputFile)
-		feedbackBusy(false)
-		display dialog "Download from GPS is complete" buttons {"OK"} default button 1
+		set theConvertScript to (quoted form of thePath & "Contents/Resources/gpsbabel" & smartSwitch & trackText & " -i" & gpsText & "-f " & serialText & " " & filterText & " -o " & outType & " -F " & quoted form of outputFile)
+		if (my runBabel(theConvertScript)) then
+			display dialog "Download from" & gpsText & "GPS receiver is complete" buttons {"OK"} default button 1
+		else
+			display dialog "Sorry, download from" & gpsText & "GPS receiver failed" buttons {"OK"} default button 1
+		end if
 	else
 		set outputFile to ""
 	end if
 end downloadFile
+
+-- Send the call to gpsbabel
+on runBabel(theConvertScript)
+	log "Tried to execute: " & theConvertScript
+	set theConvertScript to theConvertScript & " 2>&1"
+	feedbackBusy(true)
+	try
+		set scriptOut to do shell script theConvertScript as string
+		set babelHappy to true
+		log "Success! gpsbabel returned: " & scriptOut
+	on error
+		set scriptOut to "gpsbabel encountered an error"
+		set babelHappy to false
+		log "Error! gpsbabel returned: " & scriptOut
+	end try
+	feedbackBusy(false)
+	if visible of window "debugWindow" is true then
+		set the contents of text view 1 of scroll view 1 of window "debugWindow" to ""
+		set the contents of text view 1 of scroll view 1 of window "debugWindow" to "MacGPSBabel Report" & return & return & "The Shell Script:" & return & theConvertScript & return & return & convertYN & return & return & "Output From gpsbabel:" & return & scriptOut
+	end if
+	return babelHappy
+end runBabel
+
+
+
 
 -- FILTERING HANDLERS
 -- show filters window
