@@ -78,6 +78,14 @@ static const char *out_fname;
 struct pdb *opdb;
 struct pdb_record *opdb_rec;
 
+static char *dbname = NULL;
+
+static
+arglist_t cetus_args[] = {
+	{"dbname", &dbname, "Database name"},
+	{0, 0, 0}
+};
+
 static void
 rd_init(const char *fname, const char *args)
 {
@@ -91,6 +99,10 @@ static void
 rd_deinit(void)
 {
 	fclose(file_in);
+	if ( dbname ) {
+	    xfree(dbname);
+	    dbname = NULL;
+	}
 }
 
 static void
@@ -107,6 +119,10 @@ static void
 wr_deinit(void)
 {
 	fclose(file_out);
+	if ( dbname ) {
+	    xfree(dbname);
+	    dbname = NULL;
+	}
 }
 
 static void
@@ -297,7 +313,12 @@ data_write(void)
 		fatal (MYNAME ": new_pdb failed\n");
 	}
 
-	strncpy(opdb->name, out_fname, PDB_DBNAMELEN);
+	if ( dbname ) {
+	    strncpy( opdb->name, dbname, PDB_DBNAMELEN );
+	}
+	else {
+	    strncpy(opdb->name, out_fname, PDB_DBNAMELEN);
+	}
 	opdb->name[PDB_DBNAMELEN-1] = 0;
 	opdb->attributes = PDB_ATTR_BACKUP;
 	opdb->ctime = opdb->mtime = time(NULL) + 2082844800U;
@@ -337,4 +358,5 @@ ff_vecs_t cetus_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
+	cetus_args
 };
