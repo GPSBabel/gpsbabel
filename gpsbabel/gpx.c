@@ -29,6 +29,9 @@ static int in_name;
 static int in_time;
 static int in_desc;
 static int in_cdata;
+static int in_gs_type;
+static int in_gs_diff;
+static int in_gs_terr;
 static char *cdatastr;
 
 static XML_Parser psr;
@@ -98,12 +101,42 @@ gpx_start(void *data, const char *el, const char **attr)
 		tag_wpt(attr);
 	} if (strcmp(el, "time") == 0) {
 		in_time++;
+	} if (strcmp(el, "groundspeak:type") == 0) {
+		in_gs_type++;
+	} if (strcmp(el, "groundspeak:difficulty") == 0) {
+		in_gs_diff++;
+	} if (strcmp(el, "groundspeak:terrain") == 0) {
+		in_gs_terr++;
 	}
+}
+
+struct
+gs_type_mapping{
+	geocache_type type;
+	const char *name;
+} gs_type_map[] = {
+	{ gt_traditional, "Traditional cache" },
+	{ gt_virtual, "Virtual cache" }
+};
+static
+geocache_type
+gs_mktype(char *t)
+{
+	int i;
+	int sz = sizeof(gs_type_map) / sizeof(gs_type_map[0]);
+
+	for (i = 0; i < sz; i++) {
+		if (0 == strcmp(t, gs_type_map[i].name)) {
+			return gs_type_map[i].type;
+		}
+	}
+	return gt_unknown;
 }
 
 static void
 gpx_end(void *data, const char *el)
 {
+	float x;
 	if (in_cdata) {
 		if (in_name && in_wpt) {
 			wpt_tmp->shortname = xstrdup(cdatastr);
@@ -129,6 +162,17 @@ gpx_end(void *data, const char *el)
 			tm.tm_isdst = 1;
 			wpt_tmp->creation_time = mktime(&tm);
 		}
+		if (in_wpt && in_gs_type) {
+			wpt_tmp->gc_data.type = gs_mktype(cdatastr);
+		}
+		if (in_wpt && in_gs_diff) {
+			sscanf(cdatastr, "%f", &x);
+			wpt_tmp->gc_data.diff = x * 10;
+		}
+		if (in_wpt && in_gs_terr) {
+			sscanf(cdatastr, "%f", &x);
+			wpt_tmp->gc_data.terr = x * 10;
+		}
 		in_cdata--;
 		memset(cdatastr, 0, MY_CBUF);
 	}
@@ -147,6 +191,12 @@ gpx_end(void *data, const char *el)
 		in_ele--;
 	} else if (strcmp(el, "time") == 0) {
 		in_time--;
+	} if (strcmp(el, "groundspeak:type") == 0) {
+		in_gs_type--;
+	} if (strcmp(el, "groundspeak:difficulty") == 0) {
+		in_gs_diff--;
+	} if (strcmp(el, "groundspeak:terrain") == 0) {
+		in_gs_terr--;
 	}
 }
 
@@ -160,8 +210,10 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 	 * horrible state just I can concatenate buffers that it hands
 	 * me as a cdata that are fragmented becuae they span a read.  Grrr.
 	 */
-
 	if ((in_name && in_wpt) || (in_desc && in_wpt) || (in_ele) || 
+			(in_wpt && in_gs_type) || 
+			(in_wpt && in_gs_diff) || 
+			(in_wpt && in_gs_terr) || 
 			(in_time && (in_wpt || in_rte)))  {
 		estr = cdatastr + strlen(cdatastr);
 		memcpy(estr, s, len);
