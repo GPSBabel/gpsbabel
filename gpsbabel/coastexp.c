@@ -250,7 +250,7 @@ ce_cdata(void *dta, const XML_Char *s, int len)
 					yearString[4] = '\0';
 					t.tm_year = atoi(yearString) - 1900;
 					strncpy(monthString, currentMark->created+4, 2);
-					monthString[3] = '\0';
+					monthString[2] = '\0';
 					t.tm_mon = atoi(monthString) - 1;
 					strncpy(dayString, currentMark->created+6, 2);
 					dayString[2] = '\0';

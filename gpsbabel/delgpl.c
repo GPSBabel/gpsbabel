@@ -46,7 +46,7 @@ gpl_rd_init(const char *fname)
 {
 	gplfile_in = xfopen(fname, "rb", MYNAME);
 	if (sizeof(struct gpl_point) != 56) {
-		fatal(MYNAME, ": gpl_point is %d instead of 56.\n", 
+		fatal(MYNAME ": gpl_point is %d instead of 56.\n", 
 				sizeof(struct gpl_point));
 	}
 }

@@ -1,7 +1,7 @@
 /*
     Header for our common utilities for XML-based formats.
 
-    Copyright (C) 2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004, 2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,11 +37,22 @@ typedef struct xg_tag_mapping {
 
 
 void write_xml_entity(FILE *ofd, const char *indent,
-                 const char *tag, const char *value);
+		const char *tag, const char *value);
+void write_xml_entity_begin0(FILE *ofd, const char *indent,
+		const char *tag);
+void write_xml_entity_begin1(FILE *ofd, const char *indent, const char *tag, 
+		const char *attr1, const char *attrval1);
+void write_xml_entity_begin2(FILE *ofd, const char *indent, const char *tag, 
+		const char *attr1, const char *attrval1, 
+		const char *attr2, const char *attrval2);
+void write_xml_entity_end(FILE *ofd, const char *indent, const char *tag);
 
 void write_optional_xml_entity(FILE *ofd, const char *indent,
-                 const char *tag, const char *value);
+		const char *tag, const char *value);
 void xml_write_time(FILE *ofd, const time_t timep, char *elname);
+void xml_fill_in_time(char *time_string, const time_t timep, 
+		int long_or_short);
+void write_xml_header(FILE *ofd);
 
 void xml_init(const char *fname, xg_tag_mapping *tbl);
 void xml_read(void);

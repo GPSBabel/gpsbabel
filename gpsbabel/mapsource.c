@@ -95,6 +95,7 @@ arglist_t mps_args[] = {
  * A wrapper to ensure the doubles we fwrite are in correct endianness.
  */
 
+void
 le_fwrite64(void *ptr, int sz, int ct, FILE *stream)
 {
 	unsigned char cbuf[8];
@@ -107,6 +108,7 @@ le_fwrite64(void *ptr, int sz, int ct, FILE *stream)
 	fwrite(cbuf, 8, 1, stream);
 }
 
+void
 le_fread64(void *ptr, int sz, int ct, FILE *stream)
 {
 	unsigned char cbuf[8];

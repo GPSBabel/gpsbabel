@@ -100,7 +100,7 @@ my_read(void)
 void
 my_rd_deinit(void)
 {
-	close (ihandle);
+	SHPClose (ihandle);
 }
 
 void
@@ -129,7 +129,7 @@ my_write_wpt(const waypoint *wpt)
 }
 
 void
-poly_init()
+poly_init(const route_head *h)
 {
 	int ct = route_waypt_count();
 	polybufx = xcalloc(ct, sizeof(double));
@@ -148,7 +148,7 @@ poly_point(const waypoint *wpt)
 }
 
 void
-poly_deinit()
+poly_deinit(const route_head *h)
 {
 	SHPObject *shpobject;
 	shpobject = SHPCreateSimpleObject(SHPT_ARC, route_waypt_count(), 
@@ -185,6 +185,9 @@ my_write(void)
 			}
 			route_disp_all(poly_init, poly_deinit, poly_point);
 			break;
+		case rtedata:
+			fatal(MYNAME ":Routes are not supported\n");
+			break;
 	}
 }
 
@@ -197,5 +200,6 @@ ff_vecs_t shape_vecs = {
 	my_wr_deinit,
 	my_read,
 	my_write,
+	NULL,
 	NULL
 };
