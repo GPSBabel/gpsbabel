@@ -544,6 +544,9 @@ THE FORMATS
         'nosep' option.  To specify a name for the document, use the 'dbname'
         option.  Use the 'encrypt' option to encrypt hints from Groundspeak
         GPX files.  Use the 'logs' option to include Groundspeak cache logs.
+	If you would like the generated bookmarks to start with the short name
+        for the waypoint, specify the 'bookmarks_short' option.  This is
+        particularly useful when used in combination with the 'sort' filter.
 
         The following command line reads a GPX file with Groundspeak extensions
         and writes a Palm document with encrypted hints and logs:
