@@ -51,6 +51,7 @@ static const char *gpx_creator;
 static waypoint *wpt_tmp;
 static FILE *fd;
 static FILE *ofd;
+static void *mkshort_handle;
 
 #define MYNAME "GPX"
 #define MY_CBUF 4096
@@ -155,7 +156,6 @@ start_something_else(const char *el, const char **attrv)
 	const char **avp = attrv;
 	char **avcp = NULL;
 	int attr_count = 0;
-	
 	xml_tag *new_tag;
        
 	if ( !wpt_tmp ) {
@@ -532,6 +532,7 @@ gpx_rd_deinit(void)
 void
 gpx_wr_init(const char *fname, const char *args)
 {
+	mkshort_handle = mkshort_new_handle();
 	ofd = fopen(fname, "w");
 	if (ofd == NULL) {
 		fatal(MYNAME ": open %s for writing\n", fname );
@@ -542,6 +543,7 @@ static void
 gpx_wr_deinit(void)
 {
 	fclose(ofd);
+	mkshort_del_handle(mkshort_handle);
 }
 
 void
@@ -632,7 +634,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 {
 	char *tmp_ent;
 	const char *oname = global_opts.synthesize_shortnames ?
-				  mkshort(waypointp->description) : 
+				  mkshort(mkshort_handle, waypointp->description) : 
 				  waypointp->shortname;
 
 	fprintf(ofd, "<wpt lat=\"%lf\" lon=\"%lf\">\n",
@@ -724,7 +726,7 @@ void gpx_track_pr()
 void
 gpx_write(void)
 {
-	setshort_length(32);
+	setshort_length(mkshort_handle, 32);
 
 	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
 	fprintf(ofd, "<gpx\n version=\"1.0\"\n");

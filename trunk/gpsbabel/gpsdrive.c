@@ -33,6 +33,8 @@
 
 static FILE *file_in;
 static FILE *file_out;
+static void *mkshort_wr_handle;
+static void *mkshort_rd_handle;
 
 #define MYNAME "GPSDRIVE"
 
@@ -75,6 +77,7 @@ data_read(void)
 	int i;
 	waypoint *wpt_tmp;
 	int linecount = 0;
+	mkshort_rd_handle = mkshort_new_handle();
 
 	do {
 		linecount++;
@@ -117,7 +120,7 @@ data_read(void)
 		
 		/* We'll make up our own shortname. */
 		if (wpt_tmp->description) {
-			wpt_tmp->shortname = mkshort(wpt_tmp->description);
+			wpt_tmp->shortname = mkshort(mkshort_rd_handle, wpt_tmp->description);
 			waypt_add(wpt_tmp);
 		}
 
@@ -126,6 +129,7 @@ data_read(void)
 	}
 
     } while (!feof(file_in));
+    mkshort_del_handle(mkshort_rd_handle);
 }
 
 static void
@@ -147,7 +151,7 @@ gpsdrive_waypt_pr(const waypoint *wpt)
 	    shortname = csv_stringclean(wpt->notes, ",\"");
 
 	if ( shortname )
-		shortname = mkshort(shortname);
+		shortname = mkshort(mkshort_wr_handle, shortname);
 
 	fprintf(file_out, "%s %08.5f %08.5f\n",
 		shortname,
@@ -162,7 +166,10 @@ gpsdrive_waypt_pr(const waypoint *wpt)
 static void
 data_write(void)
 {
+	mkshort_wr_handle = mkshort_new_handle();
+
 	waypt_disp_all(gpsdrive_waypt_pr);
+	mkshort_del_handle(mkshort_wr_handle);
 }
 
 ff_vecs_t gpsdrive_vecs = {

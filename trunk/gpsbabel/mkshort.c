@@ -7,15 +7,111 @@
 static const char vowels[] = "aeiouAEIOU";
 
 #define DEFAULT_TARGET_LEN 8
-static unsigned int target_len = DEFAULT_TARGET_LEN;
-
 #define DEFAULT_BADCHARS "\"$.,'!-"
-static const char *badchars = DEFAULT_BADCHARS;
 
-static int mustupper = 0;
-static int whitespaceok = 1;
-static const char needmem[] = 
-	"mkshort: could not reallocate memory for string\n";
+/*
+ * Hash table tunings.   The reality is that our hash doesn't have to be 
+ * terribly complex; our strings are short (typically 8-20 bytes) and the
+ * string hash mixes things up enough that strcmp can generally bail on the
+ * first byte or two for a mismatch.  
+ */
+#define PRIME 37
+
+typedef struct {
+	int mustupper;
+	int whitespaceok;
+	unsigned int target_len;
+	char *badchars;
+	int must_uniq;
+	queue namelist[PRIME];
+	int depth[PRIME];
+} mkshort_handle;
+
+typedef struct {
+	queue list;
+	char *orig_shortname;
+	int conflictctr;
+} uniq_shortname;
+
+unsigned int hash_string(const char *key)
+{
+	unsigned int hash = 0;
+	while (*key) {
+		hash = ((hash<<5) ^ (hash>>27)) ^ *key++;
+	}
+	hash = hash % PRIME;
+	return hash;
+}
+
+void *
+mkshort_new_handle()
+{
+	int i;
+	mkshort_handle *h = xcalloc(sizeof *h, 1);
+
+	for (i = 0; i < PRIME; i++)
+		QUEUE_INIT(&h->namelist[i]);
+
+	h->whitespaceok = 1;
+	h->badchars = DEFAULT_BADCHARS;
+	h->target_len = DEFAULT_TARGET_LEN;
+	h->must_uniq=1;
+
+	return h;
+}
+
+char *
+mkshort_add_to_list(mkshort_handle *h, char *name)
+{
+	queue *e, *t;
+	int hash;
+	uniq_shortname *s = xmalloc(sizeof (uniq_shortname));
+	s->orig_shortname = strdup(name);
+	hash = hash_string(name);
+
+	QUEUE_FOR_EACH(&h->namelist[hash], e, t) {
+		uniq_shortname *z = (uniq_shortname *) e;
+
+		if (0 == strcmp(z->orig_shortname, name)) {
+			int l = strlen(name);
+			int dl;
+			char tbuf[10];
+
+			z->conflictctr++;
+			dl = sprintf(tbuf, ".%d", z->conflictctr);
+			strcpy(&name[l-dl], tbuf);
+			break;
+		}
+	}
+	ENQUEUE_TAIL(&h->namelist[hash], &s->list);
+	h->depth[hash]++;
+	return name;
+}
+
+void *
+mkshort_is_unique()
+{
+}
+
+void *
+mkshort_del_handle(void *h)
+{
+	mkshort_handle *hdr = h;
+	int i;
+
+	if (hdr) {
+		for (i = 0; i < PRIME; i++) {
+			queue *e, *t, *z;
+			QUEUE_FOR_EACH(&hdr->namelist[i], e, t) {
+				uniq_shortname *s = e;
+				dequeue(e);
+				free(s->orig_shortname);
+				free(s);
+			}
+		}
+		free(hdr);
+	}
+}
 
 /*
  * This is the stuff that makes me ashamed to be a C programmer...
@@ -50,19 +146,21 @@ delete_last_vowel(int start, char *istring, int *replaced)
  * strings returned by mkshort().  0 resets to default.
  */
 void
-setshort_length(int l)
+setshort_length(void *h, int l)
 {
+	mkshort_handle *hdl = h;
 	if (l == 0) {
-		target_len = DEFAULT_TARGET_LEN;
+		hdl->target_len = DEFAULT_TARGET_LEN;
 	} else {
-		target_len = l;
+		hdl->target_len = l;
 	}
 }
 
 void
-setshort_whitespace_ok(int l)
+setshort_whitespace_ok(void *h, int l)
 {
-	whitespaceok = l;
+	mkshort_handle *hdl = h;
+	hdl->whitespaceok = l;
 }
 
 /*
@@ -71,23 +169,25 @@ setshort_whitespace_ok(int l)
  * resets to default.
  */
 void
-setshort_badchars(const char *s)
+setshort_badchars(void *h, const char *s)
 {
+	mkshort_handle *hdl = h;
 	if (s == NULL) {
-		badchars = DEFAULT_BADCHARS;
+		hdl->badchars = DEFAULT_BADCHARS;
 	} else {
-		badchars = xstrdup(s);
+		hdl->badchars = xstrdup(s);
 	}
 }
 
 void
-setshort_mustupper(int i)
+setshort_mustupper(void *h, int i)
 {
-	mustupper = i;
+	mkshort_handle *hdl = h;
+	hdl->mustupper = i;
 }
 
 char *
-mkshort(const char *istring)
+mkshort(void *h, const char *istring)
 {
 	char *ostring = xstrdup(istring);
 	char *nstring;
@@ -95,11 +195,12 @@ mkshort(const char *istring)
 	char *cp;
 	char *np;
 	int i, l, nlen, replaced;
+	mkshort_handle *hdl = h;
 
 	/* 
 	 * Whack leading "[Tt]he",
  	 */
-	if (( strlen(ostring) > target_len + 4) && 
+	if (( strlen(ostring) > hdl->target_len + 4) && 
 	    (strncmp(ostring, "The ", 4) == 0 || 
 	    strncmp(ostring, "the ", 4) == 0)) {
 		nstring = xstrdup(ostring + 4);
@@ -123,7 +224,7 @@ mkshort(const char *istring)
 	free(ostring);
 	ostring = nstring;
 
-	if (!whitespaceok) {
+	if (!hdl->whitespaceok) {
 		/* 
 		 * Eliminate Whitespace 
 		 */
@@ -132,7 +233,7 @@ mkshort(const char *istring)
 		cp = ostring;
 		for (i=0;i<l;i++) {
 			if (!isspace(tstring[i])) {
-				if (mustupper) {
+				if (hdl->mustupper) {
 					tstring[i] = toupper(tstring[i]);
 				}
 				*cp++ = tstring[i];
@@ -150,7 +251,7 @@ mkshort(const char *istring)
 	l = strlen (tstring);
 	cp = ostring;
 	for (i=0;i<l;i++) {
-		if (strchr(badchars, tstring[i]) || !isascii(tstring[i]))
+		if (strchr(hdl->badchars, tstring[i]) || !isascii(tstring[i]))
 			continue;
 		*cp++ = tstring[i];
 	}
@@ -175,7 +276,7 @@ mkshort(const char *istring)
 	 * them.  If we run out of string, give up.
 	 */
 	replaced = 1;
-	while (replaced && strlen(ostring) > target_len) {
+	while (replaced && strlen(ostring) > hdl->target_len) {
 		ostring = delete_last_vowel(2, ostring, &replaced);
 	}
 	
@@ -197,9 +298,15 @@ mkshort(const char *istring)
 	 * Now brutally truncate the resulting string, preserve trailing 
 	 * numeric data.
  	 */
-	if ((/*i = */strlen(ostring)) > target_len) {
-		strcpy(&ostring[target_len] - strlen(np), np);
+	if ((/*i = */strlen(ostring)) > hdl->target_len) {
+		strcpy(&ostring[hdl->target_len] - strlen(np), np);
 	}
+
+
+	if (hdl->must_uniq) {
+		return mkshort_add_to_list(hdl, ostring);
+	}
+
 	return ostring;
 }
 

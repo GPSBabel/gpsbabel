@@ -180,11 +180,16 @@ void route_add (waypoint *);
 void route_add_wpt(route_head *rte, waypoint *wpt);
 void route_add_head(route_head *rte);
 
-char *mkshort (const char *);
-void setshort_length(int n);
-void setshort_badchars(const char *);
-void setshort_mustupper(int n);
-void setshort_whitespace_ok(int n);
+/*
+ * All shortname functions take a shortname handle as the first arg.
+ * This is an opaque pointer.  Callers must not fondle the contents of it.
+ */
+char *mkshort (void *, const char *);
+void *mkshort_new_handle(void);
+void setshort_length(void *, int n);
+void setshort_badchars(void *, const char *);
+void setshort_mustupper(void *, int n);
+void setshort_whitespace_ok(void *, int n);
 
 typedef struct ff_vecs {
 	ff_init rd_init;

@@ -28,6 +28,7 @@
 
 static FILE *file_in;
 static FILE *file_out;
+static void *mkshort_handle;
 
 #define MYNAME "DNA"
 
@@ -35,6 +36,8 @@ static void
 rd_init(const char *fname, const char *args)
 {
 	file_in = fopen(fname, "r");
+	mkshort_handle = mkshort_new_handle();
+
 	if (file_in == NULL) {
 		fatal(MYNAME ": Cannot open %s for reading\n", fname);
 	}
@@ -43,6 +46,7 @@ rd_init(const char *fname, const char *args)
 static void
 rd_deinit(void)
 {
+	mkshort_del_handle(mkshort_handle);
 	fclose(file_in);
 }
 
@@ -50,6 +54,7 @@ static void
 wr_init(const char *fname, const char *args)
 {
 	file_out = fopen(fname, "w");
+
 	if (file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
@@ -111,7 +116,7 @@ data_read(void)
 		wpt_tmp->creation_time = time(NULL);
 		
 		/* We'll make up our own shortname. */
-		wpt_tmp->shortname = mkshort(wpt_tmp->description);
+		wpt_tmp->shortname = mkshort(mkshort_handle, wpt_tmp->description);
 		
 		waypt_add(wpt_tmp);
 

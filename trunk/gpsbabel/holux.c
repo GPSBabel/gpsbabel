@@ -34,6 +34,7 @@ History:
 
 static  FILE *file_in;
 static 	unsigned char *HxWFile;
+static  void *mkshort_handle;
 static  char fOutname[256];
 
 
@@ -58,6 +59,8 @@ static void rd_deinit(void)
 static void
 wr_init(const char *fname, const char *args)
 {
+	mkshort_handle = mkshort_new_handle();
+
 	HxWFile = xcalloc(GM100_WPO_FILE_SIZE, 1);
 
 	strcpy (fOutname,fname);
@@ -69,6 +72,7 @@ wr_init(const char *fname, const char *args)
 
 static void wr_deinit(void)
 {   
+        mkshort_del_handle(mkshort_handle);
 
 }
 
@@ -156,8 +160,8 @@ char *mknshort (char *stIn,unsigned int sLen)
     if (stIn == NULL)
         return NULL;
 
-    setshort_length(sLen);
-    strcpy(strTmp,mkshort(stIn));      
+    setshort_length(mkshort_handle, sLen);
+    strcpy(strTmp,mkshort(mkshort_handle, stIn));      
 
     memset(strOut,' ', MAX_STRINGLEN);
     strncpy (strOut,strTmp,strlen(strTmp));

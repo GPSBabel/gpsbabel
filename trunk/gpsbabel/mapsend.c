@@ -26,6 +26,7 @@
 
 static FILE *mapsend_file_in;
 static FILE *mapsend_file_out;
+static void *mkshort_handle;
 
 static int endianness_tested;
 static int i_am_little_endian;
@@ -171,12 +172,14 @@ mapsend_wr_init(const char *fname, const char *args)
 		fprintf(stderr, "Cannot open '%s' for writing\n", fname);
 		exit(1);
 	}
+	mkshort_handle = mkshort_new_handle();
 }
 
 static void
 mapsend_wr_deinit(void)
 {
 	fclose(mapsend_file_out);
+	mkshort_del_handle(mkshort_handle);
 }
 
 static void
@@ -313,7 +316,8 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	double flat;
 	static int cnt = 0;
 	const char *sn = global_opts.synthesize_shortnames ? 
-		mkshort(waypointp->description) : waypointp->shortname;
+		mkshort(mkshort_handle, waypointp->description) :
+	       	waypointp->shortname;
 
 	c = strlen(sn);
 	fwrite(&c, 1, 1, mapsend_file_out);

@@ -24,10 +24,12 @@
 
 queue waypt_head;
 static unsigned int waypt_ct;
+static void *mkshort_handle;
 
 void
 waypt_init(void)
 {
+	mkshort_handle = mkshort_new_handle();
 	QUEUE_INIT(&waypt_head);
 }
 
@@ -66,8 +68,9 @@ waypt_disp(const waypoint *wpt)
 	printposn(&wpt->position.longitude,0);
 	printf("%s/%s", 
 		global_opts.synthesize_shortnames ? 
-			mkshort(wpt->description) : wpt->shortname, 
-		wpt->description);
+			mkshort(mkshort_handle, wpt->description) : 
+				wpt->shortname, 
+				wpt->description);
 	if (wpt->position.altitude.altitude_meters != unknown_alt)
 		printf(" %f", wpt->position.altitude.altitude_meters);
 	printf("\n");

@@ -26,10 +26,14 @@
 
 #define MYNAME "GARMIN" 
 static const char *portname;
+static void *mkshort_handle;
 
 static void
 rw_init(const char *fname, const char *opts)
 {
+	if (!mkshort_handle)
+		mkshort_handle = mkshort_new_handle();
+
 	if (global_opts.debug_level > 0)  {
 		GPS_Enable_Warning();
 		GPS_Enable_User();
@@ -211,8 +215,8 @@ data_write(void)
 			break;
 			
 	}
-	setshort_length(short_length);
-	setshort_mustupper(1);
+	setshort_length(mkshort_handle, short_length);
+	setshort_mustupper(mkshort_handle, 1);
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypoint *wpt;
 		char *ident;
@@ -238,7 +242,7 @@ data_write(void)
 		if(wpt->notes) src = wpt->notes;
 
 		ident = global_opts.synthesize_shortnames ? 
-				mkshort(src) : 
+				mkshort(mkshort_handle, src) : 
 				wpt->shortname;
 		strncpy(way[i]->ident,  ident, sizeof(way[i]->ident));
 		way[i]->ident[sizeof(way[i]->ident)-1] = 0;

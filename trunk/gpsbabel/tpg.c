@@ -30,6 +30,7 @@
 
 static FILE *tpg_file_in;
 static FILE *tpg_file_out;
+static void *mkshort_handle;
 
 static int i_am_little_endian;
 static int endianness_tested;
@@ -146,6 +147,8 @@ static void
 tpg_wr_init(const char *fname, const char *args)
 {
 	tpg_file_out = fopen(fname, "wb");
+	mkshort_handle = mkshort_new_handle();
+
 	if (tpg_file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
@@ -266,7 +269,7 @@ tpg_waypt_pr(const waypoint *wpt)
         if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
             if (wpt->description) {
                 if (global_opts.synthesize_shortnames)
-                    shortname = mkshort(wpt->description);
+                    shortname = mkshort(mkshort_handle, wpt->description);
                 else
                     shortname = xstrdup(wpt->description);
             } else {
@@ -351,8 +354,8 @@ tpg_write(void)
         s = waypt_count();
 
         if (global_opts.synthesize_shortnames) {
-            setshort_length(32);
-            setshort_whitespace_ok(1);
+            setshort_length(mkshort_handle, 32);
+            setshort_whitespace_ok(mkshort_handle, 1);
         }
 
         if (s > MAXTPGOUTPUTPINS) {

@@ -30,6 +30,8 @@
 #define MYNAME	"XCSV"
 #define ISSTOKEN(a,b) (strncmp(a,b, strlen(b)) == 0)
 
+static void *mkshort_handle;
+
 /* a table of config file constants mapped to chars */
 static 
 char_map_t xcsv_char_table[] = {
@@ -329,6 +331,7 @@ static void
 xcsv_wr_init(const char *fname, const char *args)
 {
     const char * p;
+    mkshort_handle = mkshort_new_handle();
     
     /* if we don't have an internal style defined, we need to
      * read it from a user-supplied style file, or die trying.
@@ -345,17 +348,17 @@ xcsv_wr_init(const char *fname, const char *args)
         if (global_opts.synthesize_shortnames) {
             p = get_option(args, "snlen");
             if (p)
-                setshort_length(atoi(p));
+                setshort_length(mkshort_handle, atoi(p));
 
             p = get_option(args, "snwhite");
             if (p)
-                setshort_whitespace_ok(atoi(p));
+                setshort_whitespace_ok(mkshort_handle, atoi(p));
 
             p = get_option(args, "snupper");
             if (p)
-                setshort_mustupper(atoi(p));
+                setshort_mustupper(mkshort_handle, atoi(p));
 
-            setshort_badchars(xcsv_file.badchars);
+            setshort_badchars(mkshort_handle, xcsv_file.badchars);
         }
     }
 
