@@ -293,6 +293,7 @@ fix_netstumbler_dupes(void)
 
 ff_vecs_t netstumbler_vecs = {
 	ff_type_file,
+	{ ff_cap_write, ff_cap_none, ff_cap_none },
 	rd_init,
 	NULL,
 	rd_deinit,

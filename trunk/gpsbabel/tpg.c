@@ -355,6 +355,7 @@ tpg_write(void)
 
 ff_vecs_t tpg_vecs = {
 	ff_type_file,
+	FF_CAP_RW_WPT,
 	tpg_rd_init,
 	tpg_wr_init,
 	tpg_rd_deinit,

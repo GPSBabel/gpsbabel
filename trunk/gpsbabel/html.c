@@ -254,6 +254,7 @@ data_write(void)
 
 ff_vecs_t html_vecs = {
 	ff_type_file,
+	{ ff_cap_write, ff_cap_none, ff_cap_none },
 	NULL,
 	wr_init,
 	NULL,

@@ -1388,6 +1388,7 @@ mag_write(void)
  */
 ff_vecs_t mag_svecs = {
 	ff_type_serial,
+	FF_CAP_RW_ALL,
 	mag_rd_init,	
 	mag_wr_init,	
 	mag_deinit,	
@@ -1400,6 +1401,7 @@ ff_vecs_t mag_svecs = {
 
 ff_vecs_t mag_fvecs = {
 	ff_type_file,
+	FF_CAP_RW_ALL,
 	mag_rd_init,	
 	mag_wr_init,	
 	mag_deinit,	

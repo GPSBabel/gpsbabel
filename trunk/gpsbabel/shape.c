@@ -190,6 +190,7 @@ my_write(void)
 
 ff_vecs_t shape_vecs = {
 	ff_type_internal,
+	FF_CAP_RW_ALL,
 	my_rd_init,	
 	my_wr_init,	
 	my_rd_deinit,

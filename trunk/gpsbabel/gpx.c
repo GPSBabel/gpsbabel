@@ -1296,6 +1296,7 @@ arglist_t gpx_args[] = {
 
 ff_vecs_t gpx_vecs = {
 	ff_type_file,
+	FF_CAP_RW_ALL,
 	gpx_rd_init,	
 	gpx_wr_init,	
 	gpx_rd_deinit,	

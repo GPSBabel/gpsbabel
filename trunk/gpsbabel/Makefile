@@ -26,7 +26,8 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
-	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o
+	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
+	vcf.o 
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o
 
@@ -89,8 +90,8 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_2_5_beta12222004
-VERSIOND=1.2.5_beta12222004
+VERSIONU=1_2_5_beta01032005
+VERSIOND=1.2.5_beta01032005
 #VERSIONU=1_2_4
 #VERSIOND=1.2.4
 

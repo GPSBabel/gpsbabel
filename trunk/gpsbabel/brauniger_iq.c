@@ -268,6 +268,7 @@ static arglist_t brauniger_iq_args[] = {
 
 ff_vecs_t brauniger_iq_vecs = {
     ff_type_serial,
+    FF_CAP_RW_ALL,
     rd_init,
     NULL,
     rd_deinit,
