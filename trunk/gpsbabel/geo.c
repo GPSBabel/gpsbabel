@@ -16,9 +16,8 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-
-#include <expat.h>
 #include "defs.h"
+#include <expat.h>
 
 static int in_wpt;
 static int in_name;
