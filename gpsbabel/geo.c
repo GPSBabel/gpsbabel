@@ -271,4 +271,5 @@ ff_vecs_t geo_vecs = {
 	geo_wr_deinit,
 	geo_read,
 	geo_write,
+	NULL
 };

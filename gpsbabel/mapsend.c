@@ -658,4 +658,5 @@ ff_vecs_t mapsend_vecs = {
 	mapsend_wr_deinit,
 	mapsend_read,
 	mapsend_wpt_write,
+	NULL
 };

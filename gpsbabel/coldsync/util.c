@@ -12,7 +12,7 @@
  * native format, convert them to Palm (big-endian) format, and write
  * them to a ubyte string.
  *
- * $Id: util.c,v 1.1 2002-08-16 06:13:10 robertl Exp $
+ * $Id: util.c,v 1.2 2003-07-28 22:59:01 robertl Exp $
  */
 
 #include "config.h"
@@ -249,7 +249,7 @@ void
 debug_dump(FILE *outfile, const char *prefix,
 	   const ubyte *buf, const udword len)
 {
-	int lineoff;
+	unsigned int lineoff;
 
 	for (lineoff = 0; lineoff < len; lineoff += 16)
 	{

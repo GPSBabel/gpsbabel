@@ -375,7 +375,7 @@ void
 le_read64(void *dest, const void *src)
 {
 	char *cdest = dest;
-	char *csrc = src;
+	const char *csrc = src;
 
 	doswap(); /* make sure i_am_little_endian is initialized */
 

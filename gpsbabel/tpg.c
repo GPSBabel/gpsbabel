@@ -34,7 +34,7 @@ static void *mkshort_handle;
 
 static int i_am_little_endian;
 static int endianness_tested;
-static int waypt_out_count;
+static unsigned int waypt_out_count;
 
 static void
 test_endianness(void)
@@ -394,4 +394,5 @@ ff_vecs_t tpg_vecs = {
 	tpg_wr_deinit,
 	tpg_read,
 	tpg_write,
+	NULL
 };
