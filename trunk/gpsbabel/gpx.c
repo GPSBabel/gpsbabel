@@ -58,8 +58,9 @@ static FILE *ofd;
 static
 char * gpx_entitize(const char * str) 
 {
-	int elen;
+	int elen, ecount;
 	const char ** ep;
+	const char * cp;
 	char * p, * tmp, * xstr;
 	const char * stdentities[] = {
 	"&",	"&amp;",
@@ -69,11 +70,27 @@ char * gpx_entitize(const char * str)
 	"\"",	"&quot;",
 	NULL,	NULL 
 	};
+	ep = stdentities;
+	elen = ecount = 0;
 
-	/* enough space for the whole string at max entity size */
-	/* i.e. "'" == &quot;&apos;&quot; */
-	tmp = xcalloc(((strlen(str) * 6) + 1), 1);
+	/* figure # of entity replacements and additional size. */
+	while (*ep) {
+		cp = str;
+		while ((cp = strstr(cp, *ep)) != NULL) {
+			elen += strlen(*(ep + 1)) - strlen(*ep);
+			ecount++;
+			cp += strlen(*ep);
+		}
+		ep += 2;
+	}
+
+	/* enough space for the whole string plus entity replacements, if any */
+	tmp = xcalloc((strlen(str) + elen + 1), 1);
 	strcpy(tmp, str);
+
+	/* no entity replacements */
+	if (ecount == 0)
+		return (tmp);
 
 	ep = stdentities;
 
@@ -82,10 +99,10 @@ char * gpx_entitize(const char * str)
 		while ((p = strstr(p, *ep)) != NULL) {
 			elen = strlen(*(ep + 1));
 
-			xstr = xstrdup(p + 1);
+			xstr = xstrdup(p + strlen(*ep));
 
+			strcpy(p, *(ep + 1));
 			strcpy(p + elen, xstr);
-			memcpy(p, *(ep + 1), elen);
 
 			free(xstr);
 
