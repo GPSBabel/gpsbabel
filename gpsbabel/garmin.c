@@ -415,6 +415,7 @@ waypoint_write(void)
 	}
 
 	i = 0;
+
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypoint *wpt;
 		char *ident;
@@ -455,6 +456,7 @@ waypoint_write(void)
 		} else {
 			icon = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
 		}
+
 		/* For units that support tiny numbers of waypoints, just
 		 * overwrite that and go very literal.
 		 */
@@ -467,6 +469,7 @@ waypoint_write(void)
 		}
 		i++;
 	}
+
 	if ((ret = GPS_Command_Send_Waypoint(portname, way, n, waypt_write_cb)) < 0) {
 		fatal(MYNAME ":communication error sending wayoints..\n");
 	}
@@ -654,6 +657,10 @@ static int
 d103_icon_number_from_symbol(const char *s)
 {
 	int i;
+
+	if (NULL == s) {
+		return 0;
+	}
 
 	for (i = 0; i < sizeof(d103_icons) / sizeof(d103_icons[0]); i++) {
 		if (0 == case_ignore_strcmp(s, d103_icons[i]))
