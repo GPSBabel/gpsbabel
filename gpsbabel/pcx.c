@@ -85,23 +85,31 @@ data_read(void)
 
 	for(;fgets(ibuf, sizeof(ibuf), file_in);) {
 		switch (ibuf[0]) {
-			case 'W': 
-			sscanf(ibuf, "W  %6c %c%lf %c%lf %s %s %ld %40c %*13c %d", 
+		case 'W': 
+			sscanf(ibuf, "W  %6c %c%lf %c%lf %s %s %ld", 
 				name, &latdir, &lat, &londir, &lon, 
-				date, time, &alt, desc, &symnum);
-		desc[sizeof(desc)-1] = '\0';
-		name[sizeof(name)-1] = '\0';
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
-		wpt_tmp->position.altitude.altitude_meters = alt;
-		wpt_tmp->shortname = xstrdup(name);
-		wpt_tmp->description = xstrdup(desc);
-		wpt_tmp->icon_descr = mps_find_desc_from_icon_number(symnum, PCX);
+				date, time, &alt);
+			sscanf(&ibuf[60], "%40c", 
+				desc);
+			sscanf(&ibuf[116], "%d", 
+				&symnum);
 
-		if (latdir == 'S') lat = -lat;
-		if (londir == 'W') lon = -lon;
-		wpt_tmp->position.longitude.degrees = lon/100.0;
-		wpt_tmp->position.latitude.degrees = lat/100.0;
-		waypt_add(wpt_tmp);
+			desc[sizeof(desc)-1] = '\0';
+			name[sizeof(name)-1] = '\0';
+			wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+			wpt_tmp->position.altitude.altitude_meters = alt;
+			wpt_tmp->shortname = xstrdup(name);
+			wpt_tmp->description = xstrdup(desc);
+			wpt_tmp->icon_descr = mps_find_desc_from_icon_number(symnum, PCX);
+
+			if (latdir == 'S') lat = -lat;
+			if (londir == 'W') lon = -lon;
+			wpt_tmp->position.longitude.degrees = lon/100.0;
+			wpt_tmp->position.latitude.degrees = lat/100.0;
+			waypt_add(wpt_tmp);
+			break;
+		default:
+			;
 		}
 	}
 }
