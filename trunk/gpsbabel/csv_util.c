@@ -579,23 +579,6 @@ xcsv_waypt_pr(const waypoint *wpt)
     field_map_t *fmp;
     queue *elem, *tmp;
 
-    if (wpt->shortname) {
-        anyname = xstrdup(wpt->shortname);
-    } else
-    if (wpt->description) {
-        anyname = mkshort(xcsv_file.mkshort_handle, wpt->description);
-    } else
-    if (wpt->notes) {
-        anyname = xstrdup(wpt->notes);
-    } else
-        anyname = xstrdup("");
-
-    if ((anyname) && (global_opts.synthesize_shortnames)) {
-	char *oldname = anyname;
-        anyname = mkshort(xcsv_file.mkshort_handle, 
-	        wpt->notes ? wpt->notes : wpt->description);
-	xfree(oldname);
-    }
     
     if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
         if (wpt->description) {
@@ -644,7 +627,27 @@ xcsv_waypt_pr(const waypoint *wpt)
             sprintf(buff, fmp->printfc, shortname);
         } else
         if (strcmp(fmp->key, "ANYNAME") == 0) {
+            if (wpt->shortname) {
+                anyname = xstrdup(wpt->shortname);
+            } else
+            if (wpt->description) {
+                anyname = mkshort(xcsv_file.mkshort_handle, wpt->description);
+            } else
+            if (wpt->notes) {
+                anyname = xstrdup(wpt->notes);
+            } else
+                anyname = xstrdup("");
+
+            if ((anyname) && (global_opts.synthesize_shortnames)) {
+		char *oldname = anyname;
+                anyname = mkshort(xcsv_file.mkshort_handle, 
+		        wpt->notes ? wpt->notes : wpt->description);
+		xfree(oldname);
+	    }
+
             sprintf(buff, fmp->printfc, anyname);
+            
+            xfree(anyname);
         } else
         if (strcmp(fmp->key, "DESCRIPTION") == 0) {
             sprintf(buff, fmp->printfc, description);
@@ -776,9 +779,6 @@ xcsv_waypt_pr(const waypoint *wpt)
 
     if (description)
         xfree(description);
-
-    if (anyname)
-        xfree(anyname);
 
     index++;
 }
