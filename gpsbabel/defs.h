@@ -109,8 +109,26 @@ typedef struct {
 typedef struct {
 	queue Q;
 	position position;
-	char *shortname;
+	/* shortname is a waypoint name as stored in receiver.  It should
+	 * strive to be, well, short, and unique.   Enforcing length and
+	 * character restrictions is the job of the output.   A typical
+	 * minimum length for shortname is 6 characters for NMEA units,
+	 * 8 for Magellan and 10 for Vista.   These are only guidelines.
+	 */
+	char *shortname;	 
+	/*
+	 * description is typically a human readable description of the 
+	 * waypoint.   It may be used as a comment field in some receivers.
+	 * These are probably under 40 bytes, but that's only a guideline.
+	 */
 	char *description;
+	/*
+	 * notes are relatively long - over 100 characters - prose associated
+	 * with the above.   Unlike shortname and description, these are never
+	 * used to compute anything else and are strictly "passed through".
+	 * Few formats support this.
+	 */
+	char *notes;
 	char *url;
 	char *url_link_text;
 	const char *icon_descr;
