@@ -384,7 +384,7 @@ on uploadFile(fileList)
 	set visible of window "SelectGPS" to false
 	set visible of window "MacGPSBabel" to true
 	feedbackBusy(true)
-	set serialText to "-F /dev/tty." & (the title of popup button "serialPop" of window "selectGPS")
+	set serialText to "-F /dev/cu." & (the title of popup button "serialPop" of window "selectGPS")
 	do shell script (quoted form of thePath & "Contents/Resources/gpsbabel" & fileText & " " & filterText & "-o " & gpsText & serialText)
 	feedbackBusy(false)
 	display dialog "Upload Complete" buttons {"OK"} default button 1
@@ -423,7 +423,7 @@ on downloadFile()
 		else
 			set gpsText to " magellan "
 		end if
-		set serialText to "/dev/tty." & (the title of popup button "serialPop" of window "selectGPS")
+		set serialText to "/dev/cu." & (the title of popup button "serialPop" of window "selectGPS")
 		set visible of window "SelectGPS" to false
 		set visible of window "MacGPSBabel" to true
 		feedbackBusy(true)

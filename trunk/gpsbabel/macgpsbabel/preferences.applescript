@@ -127,19 +127,18 @@ end gpsOUT
 -- find the serial ports
 on getSerial()
 	set myList to {}
-	set theScript to "cd /dev; ls | grep cu..."
+	set theScript to "cd /dev; ls | grep cu\\."
 	set scriptOut to (do shell script theScript) as string
-	set theCount to count of words in scriptOut
+	set theCount to count of paragraphs in scriptOut
 	set i to 0
+	set defaultDelimiters to AppleScript's text item delimiters
+	set AppleScript's text item delimiters to {"."}
 	repeat until i = theCount
 		set i to i + 1
-		set defaultDelimiters to AppleScript's text item delimiters
-		set AppleScript's text item delimiters to {"."}
-		set theWords to the count of text items in word i of scriptOut
+		set theWords to the count of text items in paragraph i of scriptOut
 		set z to 2
-		set the end of myList to (text items z thru theWords of word i of scriptOut) as string
-		set AppleScript's text item delimiters to defaultDelimiters
+		set the end of myList to (text items z thru theWords of paragraph i of scriptOut) as string
 	end repeat
-	set AppleScript's text item delimiters to {" "}
+	set AppleScript's text item delimiters to defaultDelimiters
 	return myList
 end getSerial
