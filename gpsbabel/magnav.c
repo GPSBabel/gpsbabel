@@ -116,7 +116,7 @@ data_read(void)
 		wpt_tmp->position.longitude.degrees = pdb_read4(&rec->longitude) / 1e5; 
 		wpt_tmp->position.latitude.degrees = pdb_read4(&rec->latitude) / 1e5; 
 
-		vdata = pdb_rec->data + sizeof(*rec);
+		vdata = (char *) pdb_rec->data + sizeof(*rec);
 
                 wpt_tmp->shortname = strdup(vdata);
 		vdata += strlen (vdata) + 1;
