@@ -217,9 +217,13 @@ pcx_track_hdr(const route_head *trk)
 void
 pcx_track_disp(const waypoint *wpt)
 {
+	double lon,lat;
 	char tbuf[100];
 	struct tm *tm;
 	char *tp;
+
+	lon = degrees2ddmm(wpt->longitude);
+	lat = degrees2ddmm(wpt->latitude);
 
 	tm = localtime(&wpt->creation_time);
 
@@ -227,8 +231,12 @@ pcx_track_disp(const waypoint *wpt)
 	for (tp = tbuf; *tp; tp++) {
 		*tp = toupper(*tp);
 	}
-	fprintf(file_out, "T  %+011.7f %+012.7f %s %.f\n",
-			wpt->latitude, wpt->longitude, tbuf, wpt->altitude);
+	fprintf(file_out, "T  %c%08.5f %c%011.5f %s %.f\n",
+			lat < 0.0 ? 'S' : 'N',
+			fabs(lat),
+			lon < 0.0 ? 'W' : 'E',
+			fabs(lon),
+			tbuf, wpt->altitude);
 }
 
 
@@ -243,7 +251,7 @@ fprintf(file_out,
 "M  G WGS 84               121 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00\n"
 "\n"
 "H  COORDINATE SYSTEM\n"
-"U  LAT LON DEG\n"
+"U  LAT LON DM\n"
 "\n"
 "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
 	setshort_length(mkshort_handle, 6);
