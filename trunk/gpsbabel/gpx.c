@@ -119,6 +119,7 @@ gs_type_mapping{
 	const char *name;
 } gs_type_map[] = {
 	{ gt_traditional, "Traditional cache" },
+	{ gt_multi, "Multi-Cache" },
 	{ gt_virtual, "Virtual cache" }
 };
 static

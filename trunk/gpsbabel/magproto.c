@@ -141,8 +141,8 @@ static icon_mapping_t map330_icon_table[] = {
 	{ "an", "winery" },
 	{ "ao", "wreck" },
 	{ "ap", "zoo" },
-	{ "ah", "Virtual cache"},
-	{ "an", "Event"},
+	{ "ah", "Virtual cache"}, 	/* Binos: becuase you "see" them. */
+	{ "an", "Multi-Cache"}, 	/* Winery: grapes 'coz they "bunch" */
 	{ NULL, NULL } 
 };
 
@@ -985,6 +985,9 @@ mag_waypt_pr(const waypoint *waypointp)
 	switch (waypointp->gc_data.type) {
 		case gt_virtual:
 			icon_token = mag_find_token_from_descr("Virtual cache");
+			break;
+		case gt_multi:
+			icon_token = mag_find_token_from_descr("Multi-Cache");
 			break;
 		default:
 			break;
