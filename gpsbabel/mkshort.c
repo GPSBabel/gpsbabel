@@ -180,7 +180,8 @@ delete_last_vowel(int start, char *istring, int *replaced)
 	for (l = strlen(istring); l > start; l--) {
 		if (strchr(vowels, istring[l-1])) {
 			char *ostring = xstrdup(istring);
-
+			/* If vowel is the first letter of a word, keep it.*/
+			if (istring[l-2] == ' ') continue;
 			strncpy(&ostring[l-1], &istring[l], 1+strlen(istring)-l);
 			ostring[strlen(istring)-1] = 0;
 			*replaced = 1;
@@ -288,6 +289,11 @@ mkshort(void *h, const char *istring)
 	xfree(ostring);
 	ostring = nstring;
 
+	/* Eliminate leading whitespace in all cases */
+	while (isspace(ostring[0])) {
+		memmove(&ostring[0], &ostring[1], strlen(ostring)-1);
+	}
+
 	if (!hdl->whitespaceok) {
 		/* 
 		 * Eliminate Whitespace 
@@ -324,6 +330,16 @@ mkshort(void *h, const char *istring)
 	*cp = 0;
 	xfree(tstring);
 
+	/* 
+	 * Eliminate repeated whitespace.  This can only shorten the string
+ 	 * so we do it in place.
+	 */
+	for (i = 0; i < l-1; i++) {
+		if (ostring[i] == ' ' && ostring[i+1] == ' ') {
+			memmove(&ostring[i], &ostring[i+1], l-i);
+		}
+	}
+	
 	/*
 	 * Toss vowels to approach target length, but don't toss them 	
 	 * if we don't have to.  We always keep the leading two letters
