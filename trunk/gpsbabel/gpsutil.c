@@ -55,6 +55,7 @@ data_read(void)
 	while( fscanf(file_in, "%s %le%c %le%c %ld%c %30[^,] %c",
 			name, &lat, &latdir, &lon, &londir,
 			&alt, &alttype, desc, icon) > 0) {
+		rtrim(desc);
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 		wpt_tmp->position.altitude.altitude_meters = alt;
 		wpt_tmp->shortname = xstrdup(name);

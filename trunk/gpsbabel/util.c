@@ -59,6 +59,23 @@ xstrdup(const char *s)
 	return o;
 }
 
+void *
+rtrim(char *s)
+{
+	char *p;
+
+	while (*s) {
+		s++;
+	}
+
+	s--;
+	while (isspace (*s)) {
+		*s = 0;
+		s--;
+	}
+
+}
+
 
 coord
 mkposn(const char *string)
