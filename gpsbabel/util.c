@@ -133,6 +133,49 @@ xstrdup(const char *s)
 	return o;
 }
 
+/*
+ * Duplicate at most sz bytes in str.
+ */
+char *
+xstrndup(const char *str, size_t sz)
+{
+	size_t newlen;
+	char *newstr;
+
+	newlen = strlen(str);
+	if (newlen > sz) {
+		newlen = sz;
+	}
+
+	newstr = xmalloc(newlen + 1);
+	memcpy(newstr, str, newlen);    
+	newstr[newlen] = 0;
+
+	return newstr;
+}
+
+/*
+ * Lazily trim whitespace (though not from allocated version) 
+ * while copying.
+ */
+char *
+xstrndupt(const char *str, size_t sz)
+{
+	size_t newlen;
+	char *newstr;
+
+	newlen = strlen(str);
+	if (newlen > sz) {
+		newlen = sz;
+	}
+
+	newstr = xmalloc(newlen + 1);
+	memcpy(newstr, str, newlen);
+	rtrim(newstr);
+
+	return newstr;
+}
+
 void *
 #ifdef DEBUG_MEM
 XREALLOC(void *p, size_t s, DEBUG_PARAMS )

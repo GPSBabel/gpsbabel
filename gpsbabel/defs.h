@@ -288,6 +288,8 @@ void *xmalloc(size_t size);
 void *xrealloc(void *p, size_t s);
 void xfree(void *mem);
 char *xstrdup(const char *s);
+char *xstrndup(const char *s, size_t n);
+char *xstrndupt(const char *s, size_t n);
 char *xstrappend(char *src, const char *new);
 #define xxcalloc(nmemb, size, file, line) xcalloc(nmemb, size)
 #define xxmalloc(size, file, line) xmalloc(size)

@@ -51,6 +51,7 @@ extern ff_vecs_t tmpro_vecs;
 extern ff_vecs_t gcdb_vecs;
 extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t quovadis_vecs;
+extern ff_vecs_t gpilots_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -179,6 +180,12 @@ vecs_t vec_list[] = {
 		&quovadis_vecs,
 		"quovadis",
 		"Quovadis",
+		NULL
+	},
+	{
+		&gpilots_vecs,
+		"gpilots",
+		"GpilotS",
 		NULL
 	},
 	{
