@@ -73,6 +73,11 @@ psp_fread_double(FILE *fp)
 {
 	unsigned char buf[8];
 	unsigned char sbuf[8];
+
+	if (!endianness_tested) {
+		test_endianness();
+	}
+
 	psp_fread(buf, 1, 8, psp_file_in);
 	if (i_am_little_endian) {
 		return *(double *) buf;
