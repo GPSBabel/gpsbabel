@@ -24,6 +24,7 @@ static queue my_route_head;
 static queue my_track_head;
 static int rte_head_ct;
 static int rte_waypts;
+static int trk_head_ct;
 
 void
 route_init(void)
@@ -43,6 +44,12 @@ unsigned int
 route_count(void)
 {
 	return rte_head_ct;	/* total # of routes */
+}
+
+unsigned int
+track_count(void)
+{
+	return trk_head_ct;	/* total # of tracks */
 }
 
 route_head *
@@ -68,6 +75,7 @@ track_add_head(route_head *rte)
 {
 	ENQUEUE_TAIL(&my_track_head, &rte->Q);
 	QUEUE_INIT(&rte->waypoint_list);
+	trk_head_ct++;
 }
 
 void

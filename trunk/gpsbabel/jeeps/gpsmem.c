@@ -182,7 +182,7 @@ GPS_PTrack GPS_Track_New(void)
 {
     GPS_PTrack ret;
     
-    if(!(ret=(GPS_PTrack)malloc(sizeof(GPS_OTrack))))
+    if(!(ret=(GPS_PTrack)calloc(1,sizeof(GPS_OTrack))))
     {
 	perror("malloc");
 	fprintf(stderr,"GPS_Track_New: Insufficient memory");
