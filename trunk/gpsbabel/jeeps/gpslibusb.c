@@ -155,13 +155,14 @@ garmin_usb_start(struct usb_device *dev)
 	/*
 	 * Hrmph.  No iManufacturer or iProduct headers....
 	 */
+	if (usb_set_configuration(udev, 1) < 0) {
+		fatal("usb_set_configuration failed");
+	}
+
 	if (usb_claim_interface(udev, 0) < 0) {
 //		abort();
 	}
 
-	if (usb_set_configuration(udev, 1) < 0) {
-		fatal("usb_set_configuration failed");
-	}
 
 
 	for (i = 0; i < dev->config->interface->altsetting->bNumEndpoints; i++) {
