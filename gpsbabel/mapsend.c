@@ -34,6 +34,7 @@ static int i_am_little_endian;
 
 static int route_wp_count;
 static int mapsend_infile_version;
+static int trk_version = 30;
 
 #define MYNAME "mapsend"
 
@@ -346,6 +347,7 @@ mapsend_track_read(void)
 		wpt_tmp->position.latitude.degrees = -wpt_lat;
 		wpt_tmp->position.longitude.degrees = wpt_long;
 		wpt_tmp->creation_time = time;
+		wpt_tmp->centiseconds = centisecs;
 		wpt_tmp->position.altitude.altitude_meters = wpt_alt;
 		route_add_wpt(track_head, wpt_tmp);
 	}
@@ -413,7 +415,7 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	fwrite(waypointp->description, c, 1, mapsend_file_out);
 
 	/* #, icon, status */
-n = ++cnt;
+	n = ++cnt;
 	my_fwrite4(&n, mapsend_file_out);
 
 	if (waypointp->icon_descr) {
@@ -427,8 +429,7 @@ n = ++cnt;
 		c = 0;
 	}
 	fwrite(&c, 1, 1, mapsend_file_out);
-c = 1;
-		
+	c = 1;
 	fwrite(&c, 1, 1, mapsend_file_out);
 
 	falt = waypointp->position.altitude.altitude_meters;
@@ -518,12 +519,23 @@ void mapsend_track_hdr(const route_head * trk)
 	 * we write mapsend v3.0 tracks as mapsend v2.0 tracks get
 	 * tremendously out of whack time/date wise.
 	 */
-	mapsend_hdr hdr = {13, "4D533334 MS", "34", ms_type_track, 0}; 
+	char *verstring;
 	queue *elem, *tmp;
 	char *tname;
 	unsigned char c;
 	int i;
+	mapsend_hdr hdr = {13, "4D533334 MS", "30", ms_type_track, 0};
 	
+	switch (trk_version) {
+		case 20: verstring = "30"; break;
+		case 30: verstring = "34"; break;
+		case 40: verstring = "36"; break;
+		default: fatal("Unknown track version."); break;
+	}
+
+	hdr.ms_version[0] = verstring[0];
+	hdr.ms_version[1] = verstring[1];
+
 	fwrite(&hdr, sizeof(hdr), 1, mapsend_file_out);
 
 	/* track name */
@@ -554,8 +566,23 @@ void mapsend_track_disp(const waypoint * wpt)
 	double dbl;
 	int i;
 	unsigned int u;
-	time_t t;
-	
+	int t;
+	int valid = 1;
+	static int last_time;
+	static int centi;
+
+	/*
+	 * Version 4.06 (at least) has a defect when it's set for .01km
+	 * tracking that will sometimes result in timestamps in the track
+	 * going BACKWARDS.   When mapsend sees this, it (stupidly) advances
+	 * the date by one, ignoring the date on the TRK lines.   This looks 
+	 * for time travel and just uses the previous time - it's better to
+	 * be thought to be standing still than to be time-travelling!
+	 */
+	t = wpt->creation_time;
+	if (t < last_time)  {
+		t = last_time;
+	}
 	
 	/* x = longitude */
 	dbl = wpt->position.longitude.degrees;
@@ -570,16 +597,17 @@ void mapsend_track_disp(const waypoint * wpt)
 	my_fwrite4(&i, mapsend_file_out);
 	
 	/* time */
-	i = wpt->creation_time;
-	my_fwrite4(&i, mapsend_file_out);
+	my_fwrite4(&t, mapsend_file_out);
+	last_time = t;
 
 	/* validity */
-	i = 1;
-	my_fwrite4(&i, mapsend_file_out);
+	my_fwrite4(&valid, mapsend_file_out);
 
 	/* 0 centiseconds */
-	c = 0;
-	fwrite(&c, 1, 1, mapsend_file_out);
+	if (trk_version >= 30) {
+		c = wpt->centiseconds;
+		fwrite(&c, 1, 1, mapsend_file_out);
+	}
 }
 
 void 
