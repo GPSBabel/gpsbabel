@@ -502,7 +502,8 @@ THE FORMATS
         This is a simple human readable version of the data file, handy for
         listings of any type of waypoint files.  Use the 'nosep' option
         to suppress the lines of dashes between entries.  Use the 
-        'encrypt' option to encrypt hints from Groundspeak GPX files. 
+        'encrypt' option to encrypt hints from Groundspeak GPX files.
+        Use the 'logs' option to include Groundspeak cache logs.
 
         The following command line reads a GPX file with Groundspeak extensions
         and writes a text file with encrypted hints:
@@ -517,7 +518,8 @@ THE FORMATS
         while maintaining almost all of the source HTML formatting.  Use the
         'stylesheet' option to specify a CSS stylesheet to be used with the 
         resulting HTML file.  Use the 'encrypt' option to encrypt hints from
-        Groundspeak GPX files.
+        Groundspeak GPX files.  Use the 'logs' option to include Groundspeak 
+        cache logs.
 
         The following command line reads a GPX file with Groundspeak extensions
         and writes an HTML file with encrypted hints that is rendered using a
@@ -535,13 +537,14 @@ THE FORMATS
         waypoint.  To suppress the dashed lines between waypoints, use the 
         'nosep' option.  To specify a name for the document, use the 'dbname'
         option.  Use the 'encrypt' option to encrypt hints from Groundspeak
-        GPX files.
+        GPX files.  Use the 'logs' option to include Groundspeak cache logs.
 
         The following command line reads a GPX file with Groundspeak extensions
-        and writes a Palm document with encrypted hints:
+        and writes a Palm document with encrypted hints and logs:
 
         gpsbabel -i gpx -f 12345.gpx \
-                 -o "palmdoc,dbname=Unfound Geocaches,encrypt" -F 12345.pdb
+                 -o "palmdoc,dbname=Unfound Geocaches,encrypt,logs" \
+                 -F 12345.pdb
 
 DATA FILTERS
 
