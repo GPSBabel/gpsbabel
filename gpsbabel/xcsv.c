@@ -496,7 +496,7 @@ xcsv_rd_init(const char *fname)
     }
 
     if (global_opts.masked_objective & (TRKDATAMASK|RTEDATAMASK)) {
-	warning(MYNAME "attempting to read %s as a track or route.  Converting to waypoints.\n", fname);
+	warning(MYNAME " attempt to read %s as a track or route, but this module only supports waypoints on read.  Reading as waypoints instead.\n", fname);
     }
 
     xcsv_file.xcsvfp = xfopen(fname, "r", MYNAME);
