@@ -210,6 +210,7 @@ gcdb_add_to_rec(struct dbrec *rec, char *fldname, gcdb_rectype rectype, void *da
 		memcpy(&rec->dbfld[rec_cnt],tbuf, length);
 		tbufp = tbuf;
 		length += 4 + sizeof(struct dbfld) * rec_cnt;
+		rec_cnt = 0;
 		return length;
 	}
 
@@ -252,7 +253,7 @@ gcdb_write_wpt(const waypoint *wpt)
 	 * We don't really know how many fields we'll have or how long
 	 * they'll be so we'll just lazily create a huge place to hold them.
 	 */
-	rec = xcalloc(sizeof(*rec) + 5000, 1);
+	rec = xcalloc(sizeof(*rec) + 500, 1);
 
 	gcdb_add_to_rec(rec, "gcna", RECTYPE_TEXT, wpt->description);
 	gcdb_add_to_rec(rec, "gcid", RECTYPE_TEXT, wpt->shortname);
