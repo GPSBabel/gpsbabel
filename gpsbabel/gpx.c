@@ -963,7 +963,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 	}
 	write_optional_xml_entity(ofd, "  ", "name", oname);
 	write_optional_xml_entity(ofd, "  ", "cmt", waypointp->description);
-	if (waypointp->notes)
+	if (waypointp->notes && waypointp->notes[0])
 		write_xml_entity(ofd, "  ", "desc", waypointp->notes);
 	else
 		write_optional_xml_entity(ofd, "  ", "desc", waypointp->description);
