@@ -24,7 +24,7 @@ typedef struct queue {
 	struct queue *prev;
 } queue;
 
-void enqueue(queue *new, queue *old);
+void enqueue(queue *new_el, queue *old);
 queue * dequeue(queue *element);
 
 #define QUEUE_INIT(head) (head)->next = (head)->prev = head
