@@ -318,19 +318,41 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	const char *sn = global_opts.synthesize_shortnames ? 
 		mkshort(mkshort_handle, waypointp->description) :
 	       	waypointp->shortname;
+	char *tmp;
 
-	c = sn ? strlen(sn) : 0;
+	/*
+	 * The format spec doesn't call out the character set of waypoint
+	 * name and description.  Empirically, we can see that it's 8859-1,
+	 * but if we create mapsend files containing those, Mapsend becomes
+	 * grumpy uploading the resulting waypoints and being unable to deal
+	 * with the resulting comm errors.
+ 	 * 
+	 * Ironically, our own Magellan serial module strips the "naughty"
+	 * characters, keeping it more in definition with their own serial
+	 * spec. :-)
+	 * 
+	 * So we just decompose the utf8 strings to ascii before stuffing
+	 * them into the Mapsend file.
+	 */
+
+	tmp = str_utf8_to_ascii(sn);
+	c = tmp ? strlen(tmp) : 0;
 	fwrite(&c, 1, 1, mapsend_file_out);
-	fwrite(sn, c, 1, mapsend_file_out);
+	fwrite(tmp, c, 1, mapsend_file_out);
+	if (tmp)
+		xfree(tmp);
 
-	if (waypointp->description) 
-		c = strlen(waypointp->description);
+	tmp = str_utf8_to_ascii(waypointp->description);
+	if (tmp)
+		c = strlen(tmp);
 	else
 		c = 0;
 
 	if (c > 30) c = 30;
 	fwrite(&c, 1, 1, mapsend_file_out);
-	fwrite(waypointp->description, c, 1, mapsend_file_out);
+	fwrite(tmp, c, 1, mapsend_file_out);
+	if (tmp)
+		xfree(tmp);
 
 	/* #, icon, status */
 	n = ++cnt;
