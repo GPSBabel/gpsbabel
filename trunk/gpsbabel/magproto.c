@@ -27,7 +27,17 @@
 #include "defs.h"
 #include "magellan.h"
 
-#define debug 0
+#define BAUDRATE B4800
+
+#if __WIN32__
+#include <windows.h>
+HANDLE comport;
+#endif
+
+#define debug 1
+
+char * termread(char *ibuf, int size);
+void termwrite(char *obuf, int size);
 
 typedef enum {
 	mrs_handoff = 0,
@@ -159,6 +169,8 @@ static void
 mag_writemsg(const char * const buf)
 {
 	unsigned int osum = mag_checksum(buf);
+	int i;
+	char obuf[1000];
 
 	if (debug) {
 		fprintf(stderr,"WRITE: $%s*%02X\r\n",buf, osum);
@@ -166,7 +178,9 @@ mag_writemsg(const char * const buf)
 #if 0
 	retry:
 #endif
-	fprintf(magfile_out, "$%s*%02X\r\n",buf, osum);
+	i = sprintf(obuf, "$%s*%02X\r\n",buf, osum);
+	termwrite(obuf, i);
+
 #if 0
 	if (magrxstate == mrs_handon) {
 		mag_readmsg();
@@ -247,7 +261,7 @@ mag_readmsg(void)
 	char *isump;
 	char *gr;
 
-	gr = fgets(ibuf, sizeof(ibuf), magfile_in);
+	gr = termread(ibuf, sizeof(ibuf));
 
 	if (!gr && !got_version) {
 		fatal("Magproto: No data received from GPS.\n");
@@ -295,16 +309,89 @@ return;
 }
 
 #if __WIN32__
+
+#include <windows.h>
+
+HANDLE comport;
+
 static
 void
-terminit()
+terminit(const char *portname)
 {
+	DCB tio;	
+	COMMTIMEOUTS timeout;
+
+	comport = CreateFile(portname, GENERIC_READ|GENERIC_WRITE, 0, NULL, 
+			  OPEN_EXISTING, 0, NULL);
+
+	if (comport == INVALID_HANDLE_VALUE) {
+		fatal("Cannot open '%s'", portname);
+	}
+	tio.DCBlength = sizeof(DCB);
+	GetCommState (comport, &tio);
+	tio.BaudRate = CBR_4800;
+	tio.fBinary = TRUE;
+	tio.fParity = TRUE;
+	tio.fOutxCtsFlow = FALSE;
+	tio.fOutxDsrFlow = FALSE;
+	tio.fDtrControl = DTR_CONTROL_ENABLE;
+	tio.fDsrSensitivity = FALSE;
+	tio.fTXContinueOnXoff = TRUE;
+	tio.fOutX = FALSE;
+	tio.fInX = FALSE;
+	tio.fErrorChar = FALSE;
+	tio.fNull = FALSE;
+	tio.fRtsControl = RTS_CONTROL_ENABLE;
+	tio.fAbortOnError = FALSE;
+	tio.ByteSize = 8;
+	tio.Parity = NOPARITY;
+	tio.StopBits = ONESTOPBIT;
+
+	if (!SetCommState (comport, &tio)) {
+		CloseHandle(comport);
+   		fatal("Unable to set port settings");
+	}
+
+	GetCommTimeouts (comport, &timeout);
+	timeout.ReadIntervalTimeout = 10;
+	timeout.WriteTotalTimeoutMultiplier = 10;
+	timeout.WriteTotalTimeoutConstant = 1000;
+	if (!SetCommTimeouts (comport, &timeout)) {
+		CloseHandle (comport);
+		fatal("Unable to set timeouts");
+	}
+}
+
+char * 
+termread(char *ibuf, int size)
+{
+	int i=0;
+	DWORD cnt;
+	ibuf[i]='a';
+	for(;i < size;i++) {
+		if (ReadFile (comport, &ibuf[i], 1, &cnt, NULL) != TRUE) 
+			break;
+		if (ibuf[i] == '\n') break;
+	}
+	ibuf[i] = 0;
+	return ibuf;
+}
+
+void
+termwrite(char *obuf, int size)
+{
+	DWORD len;
+	WriteFile (comport, obuf, size, &len, NULL);
+	if (len != size) {
+		fatal("Write error");
+	}
 }
 
 static
 void
 termdeinit()
 {
+	CloseHandle(comport);
 }
 
 #else
@@ -312,7 +399,7 @@ termdeinit()
 #include <termios.h>
 static struct termios orig_tio;
 static void
-terminit()
+terminit(const char *portname)
 {
 	struct termios new_tio;
 	tcgetattr(magfd, &orig_tio);
@@ -326,8 +413,8 @@ terminit()
 	new_tio.c_cc[VTIME] = 10;
 	new_tio.c_cc[VMIN] = 0;
 
-	cfsetospeed(&new_tio, B4800);
-	cfsetispeed(&new_tio, B4800);
+	cfsetospeed(&new_tio, BAUDRATE);
+	cfsetispeed(&new_tio, BAUDRATE);
 	tcsetattr(magfd, TCSAFLUSH, &new_tio);
 }
 
@@ -335,6 +422,18 @@ static void
 termdeinit()
 {
 	tcsetattr(magfd, TCSANOW, &orig_tio);
+}
+
+char * 
+termread(char *ibuf, int size)
+{
+	return fgets(ibuf, size, magfile_in);
+}
+
+void
+termwrite(char *obuf, int size)
+{
+	fwrite(obuf, size, 1, magfile_out);
 }
 #endif
 
@@ -344,7 +443,7 @@ mag_rd_init(const char *portname)
 {
 	time_t now, later;
 	struct stat sbuf;
-	
+#if 0	
 	magfile_in = fopen(portname, "r");
 	
 	if (magfile_in == NULL) {
@@ -354,15 +453,18 @@ mag_rd_init(const char *portname)
 
 	fstat(fileno(magfile_in), &sbuf);
 	is_file = S_ISREG(sbuf.st_mode);
-
 	if (is_file) {
 		icon_mapping = map330_icon_table;
 		got_version = 1;
 	} else {
-		terminit(magfile_in);
+		terminit(portname);
 		magfile_out = fopen(portname, "w+");
 		magfd = fileno(magfile_in);
 	}
+#else
+terminit(portname);
+is_file = 0;
+#endif
 	
 	mag_handon();
 	now = time(NULL);
@@ -455,7 +557,7 @@ mag_trkparse(char *trkmsg)
 	 * FIXME: mktime assumes the struct tm is in local time, which 
 	 * ours is not...
  	 */
-	waypt->time_created = mktime(&tm);
+	waypt->creation_time = mktime(&tm);
 
 	waypt->position.latitude.degrees = latdeg / 100.0;
 	waypt->position.longitude.degrees = lngdeg / 100.0;
@@ -498,6 +600,27 @@ mag_find_token_from_descr(const char *icon)
 	return icon_mapping[0].token;
 }
 
+static double 
+mag2degrees(double mag_val)
+{
+	double minutes;
+	double tmp_val;
+	double return_value;
+	int deg;
+
+	/* 
+	 * magellan value is DDMM.MM
+	 * e.g. 36 3.85 would be coded as 3603.85
+	 */
+	tmp_val = mag_val / 100.0;
+	deg = (int) tmp_val;
+	minutes = (tmp_val - deg) * 100.0;
+	minutes /= 60.0;
+	return_value = (double) deg + minutes;
+	return return_value;
+} 
+
+
 
 /*
  * Given an incoming waypoint messages of the form:
@@ -539,10 +662,10 @@ mag_wptparse(char *trkmsg)
 		icon_token[i++] = *blah;
 
 	if (latdir == 'S') latdeg = -latdeg;
-	waypt->position.latitude.degrees = latdeg / 100.0;
+	waypt->position.latitude.degrees = mag2degrees(latdeg);
 
 	if (lngdir == 'W') lngdeg = -lngdeg;
-	waypt->position.longitude.degrees = lngdeg / 100.0;
+	waypt->position.longitude.degrees = mag2degrees(lngdeg);
 
 	waypt->position.altitude.altitude_meters = alt;
 	waypt->shortname = strdup(shortname);
@@ -570,15 +693,25 @@ mag_waypt_pr(waypoint *waypointp)
 {
 	double lon, lat;
 	double ilon, ilat;
+	int lon_deg, lat_deg;
 	char obuf[200];
 	const char *icon_token=NULL;
 
 	ilat = waypointp->position.latitude.degrees;
 	ilon = waypointp->position.longitude.degrees;
 
-	lon =fabs(ilon * 100.0);
-	lat =fabs(ilat * 100.0);
+	lon = fabs(ilon);
+	lat = fabs(ilat);
 
+	lon_deg = lon;
+	lat_deg = lat;
+
+	lon = (lon - lon_deg) * 60.0;
+	lat = (lat - lat_deg) * 60.0;
+
+	lon = (lon_deg * 100.0 + lon);
+	lat = (lat_deg * 100.0 + lat);
+	
 	icon_token = mag_find_token_from_descr(waypointp->icon_descr);
 
 	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.8s,%-.30s,%s",
@@ -586,7 +719,7 @@ mag_waypt_pr(waypoint *waypointp)
 		lon, ilat < 0 ? 'E' : 'W',
 		waypointp->position.altitude.altitude_meters,
 		waypointp->shortname,
-		waypointp->description,
+		waypointp->description ? waypointp->description : "",
 		icon_token);
 	mag_writemsg(obuf);
 	if (!is_file) {
