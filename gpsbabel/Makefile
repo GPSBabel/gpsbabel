@@ -78,8 +78,8 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > $@ || (rm -f $@ ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_2_1_beta01152004
-VERSIOND=1.2.1_beta01152004
+VERSIONU=1_2_1_beta01312004
+VERSIOND=1.2.1_beta01312004
 #VERSIONU=1_2_1
 #VERSIOND=1.2.1
 
