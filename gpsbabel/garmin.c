@@ -229,7 +229,6 @@ data_write(void)
 		waypoint *wpt;
 		char *ident;
 		char *src = NULL;
-		char *wptname;
 
 		wpt = (waypoint *) elem;
 

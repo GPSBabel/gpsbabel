@@ -105,7 +105,6 @@ data_read(void)
 	double d;
 	do {
 		unsigned char tag;
-		unsigned char ilen;
 		waypoint *wpt_tmp;
 
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);

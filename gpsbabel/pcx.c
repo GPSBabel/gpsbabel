@@ -77,7 +77,6 @@ data_read(void)
 	char latdir, londir;
 	long alt; 
 	int symnum;
-	char alttype;
 	char date[10];
 	char time[9];
 	waypoint *wpt_tmp;

@@ -183,8 +183,6 @@ copilot_writewpt(const waypoint *wpt)
 static void
 data_write(void)
 {
-	queue *elem, *tmp;
-
 	if (NULL == (opdb = new_pdb())) { 
 		fatal (MYNAME ": new_pdb failed\n");
 	}

@@ -130,7 +130,7 @@ mkshort_del_handle(void *h)
 
 	if (hdr) {
 		for (i = 0; i < PRIME; i++) {
-			queue *e, *t, *z;
+			queue *e, *t;
 			QUEUE_FOR_EACH(&hdr->namelist[i], e, t) {
 				uniq_shortname *s = (uniq_shortname *) e;
 				dequeue(e);

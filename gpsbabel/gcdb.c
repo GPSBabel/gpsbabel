@@ -92,7 +92,6 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-	struct dbrec *rec;
 	struct pdb *pdb;
 	struct pdb_record *pdb_rec;
 
@@ -242,10 +241,7 @@ static void
 gcdb_write_wpt(const waypoint *wpt)
 {
 	struct dbrec *rec;
-	char *vdata;
-	char *recdata;
 	static int ct;
-	int length;
 	int reclen;
 	char tbuf[100];
 

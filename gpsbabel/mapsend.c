@@ -565,11 +565,9 @@ void mapsend_track_disp(const waypoint * wpt)
 	unsigned char c;
 	double dbl;
 	int i;
-	unsigned int u;
 	int t;
 	int valid = 1;
 	static int last_time;
-	static int centi;
 
 	/*
 	 * Version 4.06 (at least) has a defect when it's set for .01km
