@@ -455,6 +455,12 @@ THE FORMATS
 	of a GPS that was attached while driving.
 
 	http://www.frontiernet.net/~werner/gps/
+
+    saroute
+
+	This is a catch-all used by many Delorme mapping products and
+	reads the anr, rte, and rtd formats as either tracks or routes.
+	
 	
 DATA FILTERS
 
