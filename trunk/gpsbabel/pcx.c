@@ -72,8 +72,11 @@ data_read(void)
 	int symnum;
 	char date[10];
 	char time[9];
+	char month[4];
 	waypoint *wpt_tmp;
 	char ibuf[122];
+	struct tm tm;
+	route_head *track_head;
 
 	for(;fgets(ibuf, sizeof(ibuf), file_in);) {
 		switch (ibuf[0]) {
@@ -99,6 +102,31 @@ data_read(void)
 			wpt_tmp->latitude = ddmm2degrees(lat);
 			waypt_add(wpt_tmp);
 			break;
+		case 'H':
+			if (ibuf[3] == 'T' && ibuf[4] == 'N') {
+				track_head = route_head_alloc();
+				track_head->rte_name = strdup(&ibuf[6]);
+				track_add_head(track_head);
+			}
+			break;
+		case 'T':
+			sscanf(ibuf, "T %lf %lf %s %s %ld", 
+				&lat, &lon, date, time, &alt);
+			memset(&tm, 0, sizeof(tm));
+			tm.tm_hour = atoi(time);
+			tm.tm_min = atoi(time+3);
+			tm.tm_sec = atoi(time+6);
+			tm.tm_mday = atoi(date);
+			strncpy(month, date+3, 3);
+			month[3] = 0;
+			tm.tm_mon = month_lookup(month);
+			tm.tm_year = atoi(date + 7) + 100;
+			wpt_tmp = waypt_new();
+			wpt_tmp->creation_time = mktime(&tm) + get_tz_offset();
+			wpt_tmp->latitude = lat;
+			wpt_tmp->longitude = lon;
+			wpt_tmp->altitude = alt;
+			route_add_wpt(track_head, wpt_tmp);
 		default:
 			;
 		}
@@ -147,6 +175,32 @@ gpsutil_disp(const waypoint *wpt)
 }
 
 static void
+pcx_track_hdr(const route_head *trk)
+{
+	fprintf(file_out, "\n\nH  TN %s\n", trk->rte_name);
+	fprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT\n");
+
+}
+
+void
+pcx_track_disp(const waypoint *wpt)
+{
+	char tbuf[100];
+	struct tm *tm;
+	char *tp;
+
+	tm = localtime(&wpt->creation_time);
+
+	strftime(tbuf, sizeof(tbuf), "%d-%b-%y %T", tm);
+	for (tp = tbuf; *tp; tp++) {
+		*tp = toupper(*tp);
+	}
+	fprintf(file_out, "T  %+011.7f %+012.7f %s %.f\n",
+			wpt->latitude, wpt->longitude, tbuf, wpt->altitude);
+}
+
+
+static void
 data_write(void)
 {
 fprintf(file_out,
@@ -162,6 +216,10 @@ fprintf(file_out,
 "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
 	setshort_length(mkshort_handle, 6);
 	waypt_disp_all(gpsutil_disp);
+
+	if (global_opts.objective == trkdata) {
+		track_disp_all(pcx_track_hdr, NULL, pcx_track_disp);
+	}
 }
 
 
