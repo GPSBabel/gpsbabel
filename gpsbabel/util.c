@@ -785,8 +785,13 @@ char * str_utf8_to_cp1252( const char * str )
 
 char * str_utf8_to_ascii( const char * str )
 {
-	char *result = xstrdup( str );
-	char *cur = result;
+	char *result;
+	char *cur;
+
+	if (!str) return NULL;
+
+	result = xstrdup( str );
+	cur = result;
 	
 	while ( cur && *cur ) {
 		if ( *cur & 0x80 ) {
