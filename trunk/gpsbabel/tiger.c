@@ -143,9 +143,6 @@ tiger_disp(const waypoint *wpt)
 		if (lon > maxlon) maxlon = lon;
 		if (lat < minlat) minlat = lat;
 		if (lon < minlon) minlon = lon;
-		latsum += lat;
-		lonsum += lon;
-		rec_cnt++;
 	}
 
 	fprintf(file_out, "%f,%f:%s", lon, lat, pin);
@@ -179,6 +176,7 @@ data_write(void)
 	minlat = 9999.0;
 	minlon = 9999.0;
 	rec_cnt = 0;
+	double latsz,lonsz;
 
 	if (snlen)
 		short_length = atoi(snlen);
@@ -198,12 +196,23 @@ data_write(void)
 			fatal(MYNAME ": Cannot open '%s' for writing\n", 
 					genurl);
 		} 
+		latsz = fabs(maxlat - minlat); 
+		lonsz = fabs(maxlon - minlon); 
 
+		/*
+		 * Center the map along X and Y axis the midpoint of
+		 * our min and max coords each way.   Size it with an 
+		 * additional little boundary becuase Tiger always puts
+		 * the pin above the actual coord and if we don't pad
+		 * the top will be clipped.   It also makes the maps 
+		 * more useful to have a little bit of context around
+		 * the pins on the border.
+		 */
 		fprintf(urlf, "lat=%f&lon=%f&wid=%f&ht=%f",
-				latsum / rec_cnt,
-				lonsum / rec_cnt,
-				maxlat - minlat,
-				maxlon - minlon);
+				minlat + (latsz/2.0),
+				minlon + (lonsz/2.0),
+				latsz * 1.15,
+				latsz * 1.15);
 
 		if (scale) {
 			fprintf(urlf, "&iwd=%s&iht=%s", scale, scale);
