@@ -328,6 +328,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\garmin_tables.c">
+			</File>
+			<File
 				RelativePath="..\gcdb.c">
 				<FileConfiguration
 					Name="Release|Win32">
