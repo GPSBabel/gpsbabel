@@ -71,12 +71,12 @@ data_read(void)
 	int i;
 	waypoint *wpt_tmp;
 	int linecount = 0;
-	mkshort_rd_handle = mkshort_new_handle();
 	/*
 	 * Make sure that all waypoints in single read have same 
 	 * timestamp.
 	 */
 	time_t now = current_time();
+	mkshort_rd_handle = mkshort_new_handle();
 
 	do {
 		linecount++;
