@@ -25,6 +25,14 @@
  *  include a gross collection of  __STDC_VERSION >= 199901L  || __GNUC__
  */
 
+#if defined(_MSC_VER) && (_MSC_VER == 1200)
+
+typedef unsigned long gbuint32;
+typedef unsigned short gbuint16;
+typedef long gbint32;
+typedef short gbint16;
+
+#else
 
 #include <stdint.h>
 
@@ -32,3 +40,6 @@ typedef uint32_t	gbuint32;
 typedef uint16_t	gbuint16;
 typedef  int32_t 	 gbint32;
 typedef  int16_t	 gbint16;
+
+#endif // defined(_MSC_VER) && (_MSC_VER == 1200)
+
