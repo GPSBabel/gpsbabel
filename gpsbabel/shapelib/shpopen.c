@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: shpopen.c,v 1.1 2004-09-20 17:21:22 robertl Exp $
+ * $Id: shpopen.c,v 1.2 2004-09-27 01:13:58 robertl Exp $
  *
  * Project:  Shapelib
  * Purpose:  Implementation of core Shapefile read/write functions.
@@ -34,6 +34,9 @@
  ******************************************************************************
  *
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2004/09/20 17:21:22  robertl
+ * Check in shapelib and experimental prototype of crude shapefile support.
+ *
  * Revision 1.39  2002/08/26 06:46:56  warmerda
  * avoid c++ comments
  *
@@ -159,7 +162,7 @@
  */
 
 static char rcsid[] = 
-  "$Id: shpopen.c,v 1.1 2004-09-20 17:21:22 robertl Exp $";
+  "$Id: shpopen.c,v 1.2 2004-09-27 01:13:58 robertl Exp $";
 
 #include "shapefil.h"
 
@@ -786,8 +789,8 @@ SHPComputeExtents( SHPObject * psObject )
 SHPObject SHPAPI_CALL1(*)
 SHPCreateObject( int nSHPType, int nShapeId, int nParts,
                  int * panPartStart, int * panPartType,
-                 int nVertices, double * padfX, double * padfY,
-                 double * padfZ, double * padfM )
+                 int nVertices, const double * padfX, const double * padfY,
+                 const double * padfZ, const double * padfM )
 
 {
     SHPObject	*psObject;
@@ -895,8 +898,8 @@ SHPCreateObject( int nSHPType, int nShapeId, int nParts,
 
 SHPObject SHPAPI_CALL1(*)
 SHPCreateSimpleObject( int nSHPType, int nVertices,
-                       double * padfX, double * padfY,
-                       double * padfZ )
+                       const double * padfX, const double * padfY,
+                       const double * padfZ )
 
 {
     return( SHPCreateObject( nSHPType, -1, 0, NULL, NULL,
