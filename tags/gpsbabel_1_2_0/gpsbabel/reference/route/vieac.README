@@ -1,0 +1,14 @@
+From P.Roosen.
+
+'d like to contribute a small route definition file in Magellan format
+as reference, with some mean properties.   :-)
+
+1. Routes contain double entries: each route's last point is also the
+starting point of the next route (to prevent active route lines from
+being intermittent in the traffic situation).
+
+2. Route points contain different symbols (to give a hint to the status
+of a given route point during in-traffic operation: decision point,
+orientation help point, chaotic point, ...).
+
+
