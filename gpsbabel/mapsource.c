@@ -60,6 +60,7 @@ static void *read_route_wpt_mkshort_handle;
 #define DEFAULTICONVALUE		18
 
 char *snlen;
+char *snwhiteopt;
 char *mpsverout;
 char *mpsmergeout = NULL;
 char *mpsusedepth = NULL;
@@ -68,6 +69,8 @@ char *mpsuseprox = NULL;
 static
 arglist_t mps_args[] = {
 	{"snlen", &snlen, "Length of generated shortnames", ARGTYPE_INT },
+	{ "snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames",
+		ARGTYPE_BOOL},
 	{"mpsverout", &mpsverout, "Version of mapsource file to generate (3,4,5)", ARGTYPE_INT },
 	{"mpsmergeout", &mpsmergeout, "Merge output with existing file", ARGTYPE_BOOL },
 	{"mpsusedepth", &mpsusedepth, "Use depth values on output (default is ignore)", ARGTYPE_BOOL },
@@ -1819,7 +1822,11 @@ mps_write(void)
 	mkshort_handle = mkshort_new_handle();
 
 	setshort_length(mkshort_handle, short_length);
-	setshort_whitespace_ok(mkshort_handle, 0);
+
+	if (snwhiteopt)
+		setshort_whitespace_ok(mkshort_handle, atoi(snwhiteopt));
+	else
+		setshort_whitespace_ok(mkshort_handle, 0);
 
 	mps_fileHeader_w(mps_file_out, mps_ver_out);
 
