@@ -110,7 +110,7 @@ ozi_track_tlr(const route_head * rte)
 static void 
 ozi_track_pr()
 {
-    route_disp_all(ozi_track_hdr, ozi_track_tlr, ozi_track_disp);
+    track_disp_all(ozi_track_hdr, ozi_track_tlr, ozi_track_disp);
 }
 
 static void
@@ -218,7 +218,7 @@ rd_init(const char *fname)
     switch (global_opts.objective) {
     case trkdata:
         trk_head = route_head_alloc();
-        route_add_head(trk_head);
+        track_add_head(trk_head);
         break;
     case rtedata:
         break;
@@ -425,6 +425,25 @@ ozi_parse_routepoint(int field, char *str, waypoint * wpt_tmp)
     case 7:
         /* DAYS since 1900 00:00:00 in days.days (5.5) */
         wpt_tmp->creation_time = (atof(str) - 25569.0) * 86400.0;
+        break;
+    case 8:
+        /* symbol */
+        break;
+    case 9:
+        /* status */
+        break;
+    case 10:
+        /* map display format */
+        break;
+    case 11:
+        /* foreground color (RGB) */
+        break;
+    case 12:
+        /* background color (RGB) */
+        break;
+    case 13:
+        /* description */
+        wpt_tmp->description = csv_stringclean(str, ",");
         break;
     default:
         break;
