@@ -3,12 +3,12 @@
 # type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
 # INHIBIT_EXPAT and coment out LIBEXPAT on just to get a build working quickly.
 # INHIBIT_EXPAT=-DNO_EXPAT
-LIBEXPAT=-lexpat # -lefence
+LIBEXPAT=-lexpat -lusb # -lefence
 
 # USB may required non-standard libraries (like libusb) be installed
 # and may not be available on all OSes.  Uncomment this to remove the key
 # parts of USB from the build.
-INHIBIT_USB=-DNO_USB
+INHIBIT_USB=#-DNO_USB
 
 #
 # Enable either or both of these as you wish.
@@ -25,7 +25,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
-	igc.o brauniger_iq.o shape.o
+	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o
 
@@ -44,7 +44,7 @@ COLDSYNC=coldsync/util.o coldsync/pdb.o
 SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
 
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
-          csv_util.o grtcirc.o vmem.o util_crc.o \
+          csv_util.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(FMTS) $(FILTERS)
 OBJS = main.o $(LIBOBJS)
 
