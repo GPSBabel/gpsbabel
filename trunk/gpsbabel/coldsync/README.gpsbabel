@@ -1,0 +1,9 @@
+This directory is a subset of coldsync-2.2.5.  GPSbabel needs very 
+limited set of that functionality to read and write Palm/OS files.  
+I was faced with either reimplementing it (and I DON'T want to 
+become a Palm/OS expert) or cribbing the code.   Since it's all under 
+Artistic license, I took libpdb and the includes, whacked out the most 
+horribly non-portable pieces, jacked in a constand config.h, and pointed 
+the makefiles to it.
+
+
