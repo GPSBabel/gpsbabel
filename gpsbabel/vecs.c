@@ -205,7 +205,11 @@ find_vec(char *const vecname, char **opts)
 
 			if (vec->vec->args) {
 				for (ap = vec->vec->args; ap->argstring; ap++){
-					*ap->argval = get_option(*opts, ap->argstring);
+					void *av;
+					av = get_option(*opts, ap->argstring);
+					if (av) {
+						*ap->argval = av;
+					}
 				}
 			}
 		} else {
