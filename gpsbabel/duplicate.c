@@ -142,19 +142,68 @@ free_tree (btree_node *tree)
 	xfree(tree);
 }
 
+typedef struct {
+	waypoint *wpt;
+	int index;
+} wpt_ptr;
+
+/*
+ 
+It looks odd that we have different comparisons for date and index.
+	If exported if a < b return 1
+	if index    if a < b return -1
+
+The reason is that we want to sort in reverse order by date, but forward
+order by index.  So if we have four records:
+
+    date      index
+    June 24    0
+    June 25    1
+    June 25    2
+    June 24    3
+
+we want to sort them like this:
+
+    date      index
+    June 25    1
+    June 25    2
+    June 24    0
+    June 24    3
+
+Thus, the first point we come across is the latest point, but if we
+have two points with the same export date/time, we will first see the
+one with the smaller index (i.e. the first of those two points that we
+came across while importing waypoints.)
+
+In the (common) case that we have no exported dates, the dates will all
+be zero so the sort will end up being an expensive no-op (expensive
+because, sadly, quicksort can be O(n^2) on presorted elements.)
+*/
+
+
 static
 int
 compare(const void *a, const void *b)
 {
-	const waypoint *wa = *(waypoint **)a;
-	const waypoint *wb = *(waypoint **)b;
+	const wpt_ptr *wa = (wpt_ptr *)a;
+	const wpt_ptr *wb = (wpt_ptr *)b;
 
-	if ( wa->gc_data.exported < wb->gc_data.exported ) {
+	if ( wa->wpt->gc_data.exported < wb->wpt->gc_data.exported ) {
 		return 1;
-	} else if ( wa->gc_data.exported > wb->gc_data.exported ) {
+	} else if ( wa->wpt->gc_data.exported > wb->wpt->gc_data.exported ) {
 		return -1;
-	} 
+	}
+
+	/* If the exported dates are the same, sort by index. */
+	if ( wa->index < wb->index ) { 
+		return -1;
+	} else if (wa->index > wb->index ) {
+		return 1;
+	}
+
+	/* If index and date are the same, it's the same element. */
 	return 0;
+
 }
 
 void
@@ -167,21 +216,24 @@ duplicate_process(void)
         waypoint * delwpt = NULL;
 
 	int i, ct = waypt_count();
-	waypoint **htable, **bh;
+	wpt_ptr *htable, *bh;
 	queue *elem, *tmp;
 	extern queue waypt_head;
 
 	htable = xmalloc(ct * sizeof(*htable));
 	bh = htable;
 
+	i = 0;
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-		*bh = (waypoint *) elem;
+		bh->wpt = (waypoint *) elem;
+		bh->index = i;
+		i ++;
 		bh ++;
 	}
-	qsort(htable, ct, sizeof(*bh), compare);
+	qsort(htable, ct, sizeof(*htable), compare);
 
 	for (i=0;i<ct;i++) {
-		waypointp = htable[i];
+		waypointp = htable[i].wpt;
 	
 		memset(&dupe, '\0', sizeof(dupe));
 
