@@ -34,6 +34,22 @@ static double dotproduct( double x1, double y1, double z1,
   return (x1*x2+y1*y2+z1*z2);
 }
 
+/*
+ * Note: this conversion to miles uses the WGS84 value for the radius of
+ * the earth at the equator.
+ * (radius in meters)*(100cm/m) -> (radius in cm)
+ * (radius in cm) / (2.54 cm/in) -> (radius in in)
+ * (radius in in) / (12 in/ft) -> (radius in ft)
+ * (radius in ft) / (5280 ft/mi) -> (radius in mi)
+ * If the compiler is half-decent, it'll do all the math for us at compile
+ * time, so why not leave the expression human-readable?
+ */
+
+double tomiles( double rads ) {
+    const double radmiles = 6378137.0*100.0/2.54/12.0/5280.0;
+    return (rads*radmiles);
+}
+
 double gcdist( double lat1, double lon1, double lat2, double lon2 ) {
   return acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2));
 }

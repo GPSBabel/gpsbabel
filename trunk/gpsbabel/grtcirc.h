@@ -23,3 +23,5 @@ double gcdist( double lat1, double lon1, double lat2, double lon2 );
 double linedist(double lat1, double lon1,
 		double lat2, double lon2,
 		double lat3, double lon3 );
+
+double tomiles( double rads );
