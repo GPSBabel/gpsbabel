@@ -396,7 +396,7 @@ nmea_wayptpr(const waypoint *wpt)
 	lon = degrees2ddmm(wpt->longitude);
 	s = mkshort(mkshort_handle, wpt->shortname);
 
-	snprintf(obuf, sizeof(obuf),  "GPWPL,%09.3f,%c,%09.3f,%c,%s", 
+	snprintf(obuf, sizeof(obuf),  "GPWPL,%08.3f,%c,%09.3f,%c,%s", 
 			fabs(lat), lat < 0 ? 'S' : 'N',
 			fabs(lon), lon < 0 ? 'W' : 'E', s
 
@@ -428,7 +428,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 		hms = 0;
 	}
 
-	snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%09.3f,%c,%09.3f,%c,04,0,0,%.3f,M,0.0,M,,",
+	snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%08.3f,%c,%09.3f,%c,04,0,0,%.3f,M,0.0,M,,",
 			hms,
 			fabs(lat), lat < 0 ? 'S' : 'N',
 			fabs(lon), lon < 0 ? 'W' : 'E',
