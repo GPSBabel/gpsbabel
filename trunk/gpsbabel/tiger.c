@@ -36,7 +36,8 @@ int rec_cnt;
 static char *nolabels = NULL;
 static char *genurl = NULL;
 static char *margin  = "15%";
-static char *scale = "768";
+static char *xpixels = "768";
+static char *ypixels = "768";
 static char *snlen = NULL;
 static char *oldthresh = "14";
 static char *oldmarker  = "redpin";
@@ -66,8 +67,6 @@ arglist_t tiger_args[] = {
 		ARGTYPE_OUTFILE },
 	{"margin", &margin, "Margin for map.  Degrees or percentage.",
 		ARGTYPE_FLOAT},
-	{"scale", &scale, "Dimension in pixels of map.",
-		ARGTYPE_INT},
 	{"snlen", &snlen, "Max shortname length when used with -s.",
 		ARGTYPE_INT},
 	{"oldthresh", &oldthresh, "Days after which points are considered old.",
@@ -76,10 +75,14 @@ arglist_t tiger_args[] = {
 		ARGTYPE_STRING},
 	{"newmarker", &newmarker, "Marker type for new points.",
 		ARGTYPE_STRING},
+	{"suppresswhite", &suppresswhite,
+		"Suppress whitespace in generated shortnames", ARGTYPE_BOOL },
 	{"unfoundmarker", &unfoundmarker, "Marker type for unfound points.",
 		ARGTYPE_STRING},
-	{ "suppresswhite", &suppresswhite,
-		"Suppress whitespace in generated shortnames", ARGTYPE_BOOL },
+	{"xpixels", &xpixels, "Width in pixels of map.",
+		ARGTYPE_INT},
+	{"ypixels", &ypixels, "Height in pixels of map.",
+		ARGTYPE_INT},
 #if CLICKMAP
 	{"clickmap", &clickmap, "Generate Clickable map web page.",
 		ARGTYPE_BOOL},
@@ -254,9 +257,7 @@ data_write(void)
 				dscale(latsz),
 				dscale(lonsz));
 
-		if (scale) {
-			fprintf(urlf, "&iwd=%s&iht=%s", scale, scale);
-		}
+		fprintf(urlf, "&iwd=%s&iht=%s", xpixels, ypixels);
 		fclose(urlf);
 #if CLICKMAP
 		if (clickmap) {
