@@ -187,6 +187,15 @@ main(int argc, char *argv[])
 				global_opts.debug_level = atoi(optarg);
 				break;
 				/*
+				 * Undocumented '-vs' option for GUI wrappers.
+				 */
+			case 'v':
+				switch(argv[argn][2]) {
+				case 's': global_opts.verbose_status = 1; break;
+				}
+				break;
+
+				/*
 				 * DOS-derived systems will need to escape
 				 * this as -^^.
 				 */
