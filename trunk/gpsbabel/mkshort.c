@@ -387,7 +387,7 @@ mkshort(void *h, const char *istring)
 	 * Walk in the Woods 2.
 	 */
 	np = ostring + strlen(ostring);
-	while (isdigit(*(np-1) )) {
+	while (*np && isdigit(*(np-1) )) {
 		np--;
 	}
 	if (np) {
@@ -407,6 +407,7 @@ mkshort(void *h, const char *istring)
 	 * let the must_uniq code handle it.
 	 */
 	if (ostring[0] == '\0') {
+		xfree(ostring);
 		ostring = xstrdup("WPT");
 	}
 
