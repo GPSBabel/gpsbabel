@@ -22,7 +22,6 @@
 #include <ctype.h>
 #include <time.h>
 #include <errno.h>
-#include <sys/stat.h>
 
 #include "defs.h"
 #include "magellan.h"
@@ -631,7 +630,6 @@ static void
 terminit(const char *portname)
 {
 	struct termios new_tio;
-	struct stat sbuf;
 
         magfile_in = fopen(portname, "rb");
 
@@ -640,8 +638,7 @@ terminit(const char *portname)
                         portname, strerror(errno));
         }
 
-	fstat(fileno(magfile_in), &sbuf);
-	is_file = S_ISREG(sbuf.st_mode);
+	is_file = !isatty(fileno(magfile_in));
 	if (is_file) {
 		icon_mapping = map330_icon_table;
 		mag_cleanse = m330_cleanse;
@@ -757,14 +754,12 @@ mag_wr_init(const char *portname, const char *args)
 		is_file = 1;
 	}
 #else
-	struct stat sbuf;
 	magfile_out = fopen(portname, "w+b");
 	if (!magfile_out) {
 		fatal(MYNAME ": '%s' cannot be opened for writing.\n",
 				portname);
 	}
-	fstat(fileno(magfile_out), &sbuf);
-	is_file = S_ISREG(sbuf.st_mode);
+	is_file = !isatty(fileno(magfile_out));
 #endif
 
 	if (!mkshort_handle) {
