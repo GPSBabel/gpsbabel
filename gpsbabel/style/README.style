@@ -32,12 +32,26 @@ CRNEWLINE  	\r\n
 TAB  		\t
 SPACE  		<space>
 HASH  		#
+WHITESPACE	*** SEE WHITESPACE NOTES BELOW ***
+
+WHITESPACE:
+The WHITESPACE constant has special properties.  When reading data, 
+WHITESPACE refers to sequential runs of SPACES and/or TABS.  When
+writing data, WHITESPACE is always a single SPACE.
+
+For example, the following line:
+SOME_NAME       30.1208 -91.1365    SOME OTHER NAME
+
+Parses into the following data fields: 
+SOME_NAME,30.1208,-91.1365,SOME,OTHER,NAME
+
 
 COMMENTS:
 Anything after a hash (#) on a line is not parsed.  For example:
 #THIS ENTIRE LINE IS A COMMENT.
 #FIELD	LAT_DECIMAL, "", "%f"   THIS ENTIRE LINE IS A COMMENT
 FIELD LAT_DECIMAL, "", "%f"  # ONLY THIS SENTENCE IS A COMMENT.
+
 
 
 GLOBAL PROPERTIES OF THE FILE:

@@ -72,6 +72,7 @@ char_map_t xcsv_char_table[] = {
 	{ "TAB",  		"\t"	},
 	{ "SPACE",  		" "	},
 	{ "HASH",  		"#"	},
+	{ "WHITESPACE",		"\\w"	},
 	{ NULL, 		NULL	}
 };	
 
