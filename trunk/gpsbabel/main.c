@@ -94,7 +94,6 @@ main(int argc, char *argv[])
 				break;
 			case 'D':
 				global_opts.debug_level = atoi(optarg);
-//				global_opts.debug_level = 999;
 				argn++;
 				break;
 			case 'h':
