@@ -159,6 +159,7 @@ static icon_mapping_t map330_icon_table[] = {
 
 pid_to_model_t pid_to_model[] = 
 {
+	{ mm_gps315320, 19, "ColorTrak" },
 	{ mm_gps315320, 24, "GPS 315/320" },
 	{ mm_map410, 25, "Map 410" },
 	{ mm_map330, 30, "Map 330" },
