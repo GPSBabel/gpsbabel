@@ -805,15 +805,22 @@ gpx_rd_init(const char *fname)
 }
 #endif
 
-static void
-gpx_rd_deinit(void)
+static 
+void 
+gpx_rd_deinit(void) 
 {
 	vmem_free(&current_tag);
 	vmem_free(&cdatastr);
+	/* 
+	 * Don't free schema_loc.  It really is important that we preserve
+	 * this across reads or else merges/copies of files with different 
+	 * schemas won't retain the headers.
+	 *
 	if ( xsi_schema_loc ) {
 		xfree(xsi_schema_loc);
 		xsi_schema_loc = NULL;
 	}
+	*/ 
 	if ( gpx_email ) {
 		xfree(gpx_email);
 		gpx_email = NULL;
@@ -1068,16 +1075,16 @@ gpx_waypt_pr(const waypoint *waypointp)
 	if (waypointp->creation_time) {
 		gpx_write_time(waypointp->creation_time, "time");
 	}
+	if (waypointp->altitude != unknown_alt) {
+		fprintf(ofd, "  <ele>%f</ele>\n",
+			 waypointp->altitude);
+	}
 	write_optional_xml_entity(ofd, "  ", "name", oname);
 	write_optional_xml_entity(ofd, "  ", "cmt", waypointp->description);
 	if (waypointp->notes && waypointp->notes[0])
 		write_xml_entity(ofd, "  ", "desc", waypointp->notes);
 	else
 		write_optional_xml_entity(ofd, "  ", "desc", waypointp->description);
-	if (waypointp->altitude != unknown_alt) {
-		fprintf(ofd, "  <ele>%f</ele>\n",
-			 waypointp->altitude);
-	}
 	if (waypointp->url) {
 		tmp_ent = xml_entitize(waypointp->url);
 		fprintf(ofd, "  <url>%s%s</url>\n", urlbase ? urlbase : "", tmp_ent);
