@@ -71,6 +71,7 @@ extern ff_vecs_t igc_vecs;
 extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t hiketech_vecs;
 extern ff_vecs_t glogbook_vecs;
+extern ff_vecs_t vcf_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -319,6 +320,13 @@ vecs_t vec_list[] = {
                 &glogbook_vecs,
                 "glogbook",
                 "Garmin Logbook XML",
+                NULL
+        },
+        {
+                &vcf_vecs,
+                "vcf",
+                "Vcard Output (for iPod)",
+                "vcf",
                 NULL
         },
 	{
