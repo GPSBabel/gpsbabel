@@ -147,10 +147,10 @@ my_fread4(void *ptr, FILE *stream)
 
 static 
 size_t
-my_fwrite4(void *ptr, FILE *stream)
+my_fwrite4(int *ptr, FILE *stream)
 {
 	char cbuf[4];
-	char *cptr = ptr;
+	char *cptr = (char *) ptr;
 
 	if (!endianness_tested) {
 		test_endianness();
@@ -423,7 +423,7 @@ n = 1;
 static void 
 mapsend_route_hdr(const route_head *rte)
 {
-	int wp_ct;
+	int i;
 	unsigned char c;
 	char * rname;
 	
@@ -441,13 +441,13 @@ mapsend_route_hdr(const route_head *rte)
 	xfree(rname);
 	
 	/* route # */
-	c = rte->rte_num;
- 	my_fwrite4(&c, mapsend_file_out);
+	i = rte->rte_num;
+ 	my_fwrite4(&i, mapsend_file_out);
 	
-	wp_ct = rte->rte_waypt_ct;
+	i = rte->rte_waypt_ct;
 
 	/* # of waypoints to follow... */
-	my_fwrite4(&wp_ct, mapsend_file_out);
+	my_fwrite4(&i, mapsend_file_out);
 }
 
 static void 
