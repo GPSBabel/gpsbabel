@@ -190,7 +190,7 @@ xcsv_parse_style_line(const char *sbuff)
 
     if (strlen(sbuff)) {
 	if (ISSTOKEN(sbuff, "FIELD_DELIMITER")) {
-	    sp = csv_stringtrim(&sbuff[16], "\"");
+	    sp = csv_stringtrim(&sbuff[16], "\"", 1);
 	    cp = get_char_from_constant_table(sp);
 	    if (cp) {
 		xcsv_file.field_delimiter = xstrdup(cp);
@@ -201,7 +201,7 @@ xcsv_parse_style_line(const char *sbuff)
 	} else
 
 	if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
-	    sp = csv_stringtrim(&sbuff[17], "\"");
+	    sp = csv_stringtrim(&sbuff[17], "\"", 1);
 	    cp = get_char_from_constant_table(sp);
 	    if (cp) {
 		xcsv_file.record_delimiter = xstrdup(cp);
@@ -212,11 +212,11 @@ xcsv_parse_style_line(const char *sbuff)
 	} else
 
 	if (ISSTOKEN(sbuff, "DESCRIPTION")) {
-		xcsv_file.description = csv_stringtrim(&sbuff[11],"");
+		xcsv_file.description = csv_stringtrim(&sbuff[11],"", 0);
 	} else
 
 	if (ISSTOKEN(sbuff, "EXTENSION")) {
-		xcsv_file.extension = csv_stringtrim(&sbuff[10],"");
+		xcsv_file.extension = csv_stringtrim(&sbuff[10],"", 0);
 	} else
 
 	if (ISSTOKEN(sbuff, "SHORTLEN")) {
@@ -230,7 +230,7 @@ xcsv_parse_style_line(const char *sbuff)
 	} else
 
 	if (ISSTOKEN(sbuff, "BADCHARS")) {
-	    sp = csv_stringtrim(&sbuff[9], "\"");
+	    sp = csv_stringtrim(&sbuff[9], "\"", 1);
 	    cp = get_char_from_constant_table(sp);
 	    if (cp) {
 		xcsv_file.badchars = xstrdup(cp);
@@ -258,15 +258,15 @@ xcsv_parse_style_line(const char *sbuff)
 		switch(i) {
 		case 0:
 		    /* key */
-		    key = csv_stringtrim(s, "\"");
+		    key = csv_stringtrim(s, "\"", 1);
 		    break;
 		case 1:
 		    /* default value */
-		    val = csv_stringtrim(s, "\"");
+		    val = csv_stringtrim(s, "\"", 1);
 		    break;
 		case 2:
 		    /* printf conversion */
-		    pfc = csv_stringtrim(s, "\"");
+		    pfc = csv_stringtrim(s, "\"", 1);
 		    break;
 		default:
 		    break;
@@ -295,15 +295,15 @@ xcsv_parse_style_line(const char *sbuff)
 		switch(i) {
 		case 0:
 		    /* key */
-		    key = csv_stringtrim(s, "\"");
+		    key = csv_stringtrim(s, "\"", 1);
 		    break;
 		case 1:
 		    /* default value */
-		    val = csv_stringtrim(s, "\"");
+		    val = csv_stringtrim(s, "\"", 1);
 		    break;
 		case 2:
 		    /* printf conversion */
-		    pfc = csv_stringtrim(s, "\"");
+		    pfc = csv_stringtrim(s, "\"", 1);
 		    break;
 		default:
 		    break;
