@@ -581,8 +581,8 @@ ozi_waypt_pr(const waypoint * wpt)
             index, shortname, wpt->latitude, wpt->longitude, ozi_time, 0,
             1, 3, 0, 65535, description, 0, 0, 0, alt_feet, 6, 0, 17);
 
-    free(description);
-    free(shortname);
+    xfree(description);
+    xfree(shortname);
 
 }
 
