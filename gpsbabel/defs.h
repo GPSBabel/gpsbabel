@@ -200,7 +200,7 @@ void route_add_head(route_head *rte);
  */
 char *mkshort (void *, const char *);
 void *mkshort_new_handle(void);
-void *mkshort_del_handle(void *h)
+void *mkshort_del_handle(void *h);
 void setshort_length(void *, int n);
 void setshort_badchars(void *, const char *);
 void setshort_mustupper(void *, int n);
@@ -251,7 +251,7 @@ void *xcalloc(size_t nmemb, size_t size);
 void *xmalloc(size_t size);
 char *xstrdup(const char *s);
 char *xstrappend(char *src, const char *new);
-int case_ignore_strcmp(const char *s1, const char *s2)
+int case_ignore_strcmp(const char *s1, const char *s2);
 
 
 void rtrim(char *s);
