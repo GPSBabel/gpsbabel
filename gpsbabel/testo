@@ -32,12 +32,6 @@ ${PNAME} -i geo -f geocaching.loc -o mapsend -F ${TMPDIR}/mm.mapsend
 ${PNAME} -i mapsend -f ${TMPDIR}/mm.mapsend -o gpsutil -F ${TMPDIR}/mm.gps
 diff ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 
-# Garmin Mapsource
-rm -f ${TMPDIR}/mm.mapsource ${TMPDIR}/ms.gps
-#${PNAME} -i geo -f geocaching.loc -o mapsource -F ${TMPDIR}/mm.mapsource
-#${PNAME} -i mapsource -f ${TMPDIR}/mm.mapsource -o gpsutil -F ${TMPDIR}/ms.gps
-# diff ${TMPDIR}/ms.gps ${TMPDIR}/gu.wpt
-
 # Magellan serial
 # TODO
 
@@ -188,3 +182,16 @@ rm -f ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
 ${PNAME} -i geo -f geocaching.loc -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.geo
 ${PNAME} -i xcsv,style=${TMPDIR}/testo.style -f ${TMPDIR}/xcsv.geo -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.xcsv
 diff -u ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
+
+# Garmin Mapsource This is a binary format with some undocumented
+# fields.  This test is therefore intentionally vague.  We read a file,
+# convert it to GPX, then write a file as MPS, then read it back and
+# write it as GPX and compare them.  Since we're writing both GPX files
+# ourselves from the same version, we're immune to changes in our own
+# GPX output.
+
+rm -fr ${TMPDIR}/ms.gpx ${TMPDIR}/ms[12].gpx
+${PNAME} -i mapsource -f reference/mapsource.mps  -o gpx -F ${TMPDIR}/ms1.gpx
+${PNAME} -i mapsource -f reference/mapsource.mps  -o mapsource -F ${TMPDIR}/ms.mps
+${PNAME} -i mapsource -f ${TMPDIR}/ms.mps -o gpx -F ${TMPDIR}/ms2.gpx
+diff ${TMPDIR}/ms1.gpx ${TMPDIR}/ms2.gpx
