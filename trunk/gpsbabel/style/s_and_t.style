@@ -12,16 +12,16 @@
 # GC171C,44.70605,-85.62265,The Michigan Frog by RealDcoy & LRB,http://www.geocaching.com/seek/cache_details.aspx?ID=5916,Traditional Cache
 #
 
-DESCRIPTION 		Microsoft Streets and Trips 2002/2003
+DESCRIPTION 		Microsoft Streets and Trips 2002-2005
 
 #
 # FILE LAYOUT DEFINITIIONS:
 #
-FIELD_DELIMITER		COMMA
+FIELD_DELIMITER		TAB
 RECORD_DELIMITER	NEWLINE
 BADCHARS		,"
 
-PROLOGUE	Name,Latitude,Longitude,Name 2,URL,Type
+PROLOGUE	Name	Latitude	Longitude	Description	URL	Type	Container	Diff	Terr
 
 #
 # INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
@@ -33,4 +33,7 @@ IFIELD	LAT_DECIMAL, "", "%f"		# Latitude
 IFIELD	LON_DECIMAL, "", "%f"		# Longitude
 IFIELD	DESCRIPTION, "", "%s"		# Name 2 (Big Description)
 IFIELD	URL, "", "%s"			# URL
-IFIELD	IGNORE, "", ""			# Holder for Geocache Type
+IFIELD	GEOCACHE_TYPE, "", "%s"		# Geocache Type
+IFIELD	GEOCACHE_CONTAINER, "", "%s"	# Geocache Type
+IFIELD	GEOCACHE_DIFF, "", "%3.1f"	# Geocache Type
+IFIELD	GEOCACHE_TERR, "", "%3.1f"	# Geocache Type
