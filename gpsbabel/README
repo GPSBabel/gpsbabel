@@ -470,7 +470,20 @@ THE FORMATS
 
 	This is a catch-all used by many Delorme mapping products and
 	reads the anr, rte, and rtd formats as either tracks or routes.
+
+        The 'turns_only' option causes GPSBabel to read only the waypoints 
+        associated with named turns.  This should create a list of waypoints 
+        that correspond to the itinerary from Street Atlas.
 	
+        The 'turns_important' option only makes sense in conjunction with 
+        the 'simplify' filter.  It ensures that the route simplification 
+        process will remove the points corresponding to turns only after
+        it has removed all other route points.
+
+        Both options only apply to route files from newer versions of 
+        DeLorme software; older versions didn't store the turn information
+        with the route.
+
     saplus
 
         This format is for Street Atlas USA 2004 Plus.  

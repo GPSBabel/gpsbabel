@@ -29,7 +29,7 @@ static char *countopt = NULL;
 
 static
 arglist_t routesimple_args[] = {
-	{"count", &countopt,  "Maximum number of points in final route", 
+	{"count", &countopt,  "Maximum number of points in route", 
 		ARGTYPE_INT | ARGTYPE_REQUIRED},
 	{0, 0, 0, 0}
 };
@@ -108,9 +108,14 @@ compute_xte( struct xte *xte_rec ) {
 int
 compare_xte( const void *a, const void *b )
 {
-	double foo = (((struct xte *)a)->distance - ((struct xte *)b)->distance );
-	if ( foo < 0 ) return 1;
-	if ( foo > 0 ) return -1;
+	double distdiff = ((struct xte *)a)->distance - 
+		          ((struct xte *)b)->distance;
+	int priodiff = ((struct xte *)a)->intermed->wpt->route_priority -
+		       ((struct xte *)b)->intermed->wpt->route_priority;
+	if ( priodiff < 0 ) return 1;
+	if ( priodiff > 0 ) return -1;
+	if ( distdiff < 0 ) return 1;
+	if ( distdiff > 0 ) return -1;
 	return 0;
 }
 
@@ -134,8 +139,7 @@ void
 shuffle_xte( struct xte *xte_rec )
 {
 	struct xte tmp_xte;
-	while ( xte_rec > xte_recs && 
-			xte_rec->distance > xte_rec[-1].distance ) {
+	while ( xte_rec > xte_recs && compare_xte(xte_rec, xte_rec-1) < 0 ) {
 		tmp_xte.distance = xte_rec->distance;
 		tmp_xte.ordinal = xte_rec->ordinal;
 		tmp_xte.intermed = xte_rec->intermed;
@@ -150,7 +154,7 @@ shuffle_xte( struct xte *xte_rec )
 		xte_rec->intermed->xte_rec = xte_rec;
 	}
 	while ( xte_rec - xte_recs < xte_count-2 && 
-			xte_rec->distance < xte_rec[1].distance ) {
+			compare_xte( xte_rec, xte_rec+1) > 0 ) {
 		tmp_xte.distance = xte_rec->distance;
 		tmp_xte.ordinal = xte_rec->ordinal;
 		tmp_xte.intermed = xte_rec->intermed;

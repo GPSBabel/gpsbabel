@@ -28,6 +28,18 @@
 
 FILE *infile;
 
+char *turns_important = NULL;
+char *turns_only = NULL;
+
+static
+arglist_t saroute_args[] = {
+	{"turns_important", &turns_important, 
+		"Keep turns if simplify filter is used", ARGTYPE_BOOL },
+	{"turns_only", &turns_only, "Only read turns; skip all other points",
+		ARGTYPE_BOOL },
+	{0, 0, 0, 0 }
+};
+
 unsigned short
 ReadShort(FILE * f)
 {
@@ -221,12 +233,20 @@ my_read(void)
 				wpt_tmp->latitude = lat;
 				wpt_tmp->longitude = -lon;
 				wpt_tmp->shortname = (char *) xmalloc(7);
+				if ( turns_important && stringlen ) 
+					wpt_tmp->route_priority=1;
 				sprintf( wpt_tmp->shortname, "\\%5.5x", 
 						serial++ );
-				route_add_wpt(track_head, wpt_tmp);
+				if ( !turns_only || stringlen ) 
+					route_add_wpt(track_head, wpt_tmp);
 	
 				latlon++;
 				coordcount--;
+				stringlen = 0;
+				/* the stop point is a "turn" */
+				if ( coordcount == 1 && count == 0 ) {
+					stringlen = 1;
+				}
 			}
 			xfree(record);
 		}
@@ -252,5 +272,5 @@ ff_vecs_t saroute_vecs = {
 	NULL,
 	my_read,
 	NULL,
-	NULL
+	saroute_args
 };
