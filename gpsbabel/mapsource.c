@@ -19,6 +19,8 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
  */
 
+/* #define	MPS_DEBUG	0 */
+
 #include <stdio.h>
 #include <string.h>
 
@@ -58,6 +60,10 @@ static void *read_route_wpt_mkshort_handle;
 
 #define DEFAULTICONDESCR		"Waypoint"
 #define DEFAULTICONVALUE		18
+
+#define MPSNAMEBUFFERLEN	1024
+#define MPSNOTESBUFFERLEN	4096
+#define MPSDESCBUFFERLEN	4096
 
 char *snlen;
 char *snwhiteopt;
@@ -388,7 +394,7 @@ mps_fileHeader_r(FILE *mps_file, int *mps_ver)
 	fread(&reclen, 4, 1, mps_file);
 	reclen = le_read32(&reclen);
 	/* Skip reliably over the "program signature" section */
-	fseek(mps_file, reclen+1, SEEK_CUR); 
+	if (reclen >= 0) fseek(mps_file, reclen+1, SEEK_CUR); 
 }
 
 /*
@@ -473,7 +479,7 @@ mps_mapsegment_r(FILE *mps_file, int mps_ver)
 	fseek(mps_file, -5, SEEK_CUR);
 	fread(&reclen, 4, 1, mps_file);
 	reclen = le_read32(&reclen);
-	fseek( mps_file, reclen+1, SEEK_CUR); 
+	if (reclen >= 0) fseek( mps_file, reclen+1, SEEK_CUR); 
 	return;
 }
 
@@ -533,9 +539,9 @@ static void
 mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpsclass)
 {
 	char tbuf[100];
-	char wptname[256];
-	char wptdesc[256];
-	char wptnotes[4096]; /* rather generous, but I've nothing to go on for the sizing of this */
+	char wptname[MPSNAMEBUFFERLEN];
+	char wptdesc[MPSDESCBUFFERLEN];
+	char wptnotes[MPSNOTESBUFFERLEN];
 	int lat;
 	int lon;
 	int	icon;
@@ -578,11 +584,11 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 
 	fread(tbuf, 1, 1, mps_file);				/* proximity validity */
 	if (tbuf[0] == 1) {
-		fread(&mps_proximity,sizeof(mps_proximity),1,mps_file);
+		le_fread64(&mps_proximity,sizeof(mps_proximity),1,mps_file);
 	}
 	else {
 		mps_proximity = unknown_alt;
-		fread(tbuf,sizeof(mps_proximity),1, mps_file);
+		le_fread64(tbuf,sizeof(mps_proximity),1, mps_file);
 	}
 
 	fread(tbuf, 4, 1, mps_file);					/* display flag */
@@ -598,11 +604,11 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 
 	fread(tbuf, 1, 1, mps_file);					/* depth validity */
 	if (tbuf[0] == 1) {
-		fread(&mps_depth,sizeof(mps_depth),1,mps_file);
+		le_fread64(&mps_depth,sizeof(mps_depth),1,mps_file);
 	}
 	else {
 		mps_depth = unknown_alt;
-		fread(tbuf,sizeof(mps_depth),1, mps_file);
+		le_fread64(tbuf,sizeof(mps_depth),1, mps_file);
 	}
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
@@ -745,7 +751,7 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	else {
 		hdr[0] = 1;
 		fwrite(hdr, 1 , 1, mps_file);
-		fwrite(&mps_proximity, 8 , 1, mps_file);
+		le_fwrite64(&mps_proximity, 8 , 1, mps_file);
 	}
 
 	le_write32(&display, display);
@@ -767,7 +773,7 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	else {
 		hdr[0] = 1;
 		fwrite(hdr, 1 , 1, mps_file);
-		fwrite(&mps_depth, 8 , 1, mps_file);
+		le_fwrite64(&mps_depth, 8 , 1, mps_file);
 	}
 
 	fwrite(zbuf, 2, 1, mps_file);		/* unknown */
@@ -897,8 +903,8 @@ static void
 mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 {
 	char tbuf[100];
-	char rtename[256];
-	char wptname[256];
+	char rtename[MPSNAMEBUFFERLEN];
+	char wptname[MPSNAMEBUFFERLEN];
 	int lat;
 	int lon;
 	short int	rte_autoname = 0;
@@ -909,7 +915,7 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 
 	time_t	dateTime = 0;
 	route_head *rte_head;
-	unsigned int rte_count;
+	int rte_count;
 
 	waypoint	*thisWaypoint;
 	waypoint	*tempWpt;
@@ -918,6 +924,10 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	double	mps_depth = unknown_alt;
 
 	mps_readstr(mps_file, rtename, sizeof(rtename));
+#ifdef	MPS_DEBUG
+	fprintf(stderr, "mps_route_r: reading route %s\n", rtename);
+#endif
+
 	fread(&rte_autoname, 2, 1, mps_file);	/* autoname flag */
 	rte_autoname = le_read16(&rte_autoname);
 
@@ -952,6 +962,15 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	fread(&rte_count, 4, 1, mps_file);			/* number of waypoints in route */
 	rte_count = le_read32(&rte_count);
 
+	/* This might be rather presumptuous, but is it valid in any format to have route with no points? */
+	/* Let's assume not, so if the route count is zero or less, let's get out of here and allow the   */
+	/* caller to do any file resync                                                                   */
+	if (rte_count < 0) return;
+
+#ifdef	MPS_DEBUG
+	fprintf(stderr, "mps_route_r: route contains %d waypoints\n", rte_count);
+#endif
+
 	rte_head = route_head_alloc();
 	rte_head->rte_name = xstrdup(rtename);
 	route_add_head(rte_head);
@@ -962,6 +981,10 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	while (rte_count--) {
 
 		mps_readstr(mps_file, wptname, sizeof(wptname));
+#ifdef	MPS_DEBUG
+		fprintf(stderr, "mps_route_r: reading route waypoint %s\n", wptname);
+#endif
+
 		fread(&mpsclass, 4, 1, mps_file);			/* class */
 		mpsclass = le_read32(&mpsclass);
 		mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
@@ -986,6 +1009,22 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 		/* link details */
 		fread(&interlinkStepCount, 4, 1, mps_file);					/* NOT always 2, but will assume > 0 */
 		interlinkStepCount = le_read32(&interlinkStepCount);
+
+#ifdef	MPS_DEBUG
+		fprintf(stderr, "mps_route_r: interlink steps are %d\n", interlinkStepCount);
+#endif
+
+		/* Basically we're knackered if the step count is less than one since we hard code reading of the */
+		/* first, so if there isn't one, we'd lose sync on the file and read junk                         */
+		/* Given we've already done some route head allocation, do we return or do we die? It'd be good   */
+		/* do some clean up before returning.                                                             */
+		if (interlinkStepCount < 1) {
+			/* For RJL - are the following lines correct ? */
+			/* route_free(rte_head);
+			route_del_head(rte_head); */
+			return;
+		}
+
 		/* first end of link */
 		fread(&lat, 4, 1, mps_file); 
 		fread(&lon, 4, 1, mps_file); 
@@ -1016,6 +1055,9 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 			}
 			else {
 				/* should never reach here, but we do need a fallback position */
+#ifdef	MPS_DEBUG
+				fprintf(stderr, "mps_route_r: reached the point we never should\n");
+#endif
 				thisWaypoint = waypt_new();
 				thisWaypoint->shortname = xstrdup(wptname);
 				thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
@@ -1028,28 +1070,23 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 		route_add_wpt(rte_head, thisWaypoint);
 
 		/* take two off the count since we separately read the start and end parts of the link */
-		for (thisInterlinkStep = interlinkStepCount - 2; thisInterlinkStep > 0; thisInterlinkStep--) {
+		/* MRCB 2004/09/15 - NOPE, sorry, this needs to one, since interlink steps can be > 0 */
+		for (thisInterlinkStep = interlinkStepCount - 1; thisInterlinkStep > 0; thisInterlinkStep--) {
 			/* Could do this by doing a calculation on length of each co-ordinate and just doing one read
 			   but doing it this way makes it easier in the future to make use of this data */
-			fread(tbuf, 4, 1, mps_file);	/* lat */
-			fread(tbuf, 4, 1, mps_file);	/* lon */
-			fread(tbuf, 1, 1, mps_file);	/* altitude validity */
-			le_fread64(tbuf, 8, 1, mps_file);	/* altitude */
-		}
-
-		/* other end of link */
-		fread(&lat, 4, 1, mps_file); 
-		fread(&lon, 4, 1, mps_file); 
-		lat = le_read32(&lat);
-		lon = le_read32(&lon);
-	
-		fread(tbuf, 1, 1, mps_file);			/* altitude validity */
-		if (tbuf[0] == 1) {
-			le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);
-		}
-		else {
-			mps_altitude = unknown_alt;
-			le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
+			fread(&lat, 4, 1, mps_file); 
+			fread(&lon, 4, 1, mps_file); 
+			lat = le_read32(&lat);
+			lon = le_read32(&lon);
+		
+			fread(tbuf, 1, 1, mps_file);			/* altitude validity */
+			if (tbuf[0] == 1) {
+				le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);
+			}
+			else {
+				mps_altitude = unknown_alt;
+				le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
+			}
 		}
 
 		fread(tbuf, 1, 1, mps_file);			/* NULL */
@@ -1067,6 +1104,10 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	/* when the loop is done, there's still one waypoint to read with a small trailer */
 	/* all we want is the waypoint name; lat, lon and alt are already set from above  */
 	mps_readstr(mps_file, wptname, sizeof(wptname));
+#ifdef	MPS_DEBUG
+	fprintf(stderr, "mps_route_r: reading final route waypoint %s\n", wptname);
+#endif
+
 
 	fread(&mpsclass, 4, 1, mps_file);			/* class */
 	mpsclass = le_read32(&mpsclass);
@@ -1273,7 +1314,7 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 			hdr[0] = 1;
 
 			fwrite(hdr, 1 , 1, mps_file);
-			le_fwrite64(&maxalt, 8 , 1, mps_file);
+			le_fwrite64(&minalt, 8 , 1, mps_file);
 		}
 
 		le_write32(&rte_datapoints, rte_datapoints);
@@ -1508,24 +1549,38 @@ static void
 mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 {
 	char tbuf[100];
-	char trkname[256];
+	char trkname[MPSNAMEBUFFERLEN];
 	int lat;
 	int lon;
 
 	int	dateTime = 0;
 	route_head *track_head;
-	unsigned int trk_count;
+	int trk_count;
 
 	waypoint	*thisWaypoint;
 	double	mps_altitude = unknown_alt;
 	double	mps_depth = unknown_alt;
 
 	mps_readstr(mps_file, trkname, sizeof(trkname));
+#ifdef	MPS_DEBUG
+	fprintf(stderr, "mps_track_r: reading track %s\n", trkname);
+#endif
+
+
 	fread(tbuf, 1, 1, mps_file);				/* display flag */
 	fread(tbuf, 4, 1, mps_file);				/* colour */
 
 	fread(&trk_count, 4, 1, mps_file);			/* number of datapoints in tracklog */
 	trk_count = le_read32(&trk_count);
+
+	/* I don't know, but perhaps it's valid to have a track with no waypoints   */
+	/* Seems dumb, but truth is stranger than fiction. Of course, it could be   */
+	/* that there are more than MAXINT / 2 waypoints, yeah sure                 */
+	/* Allow the caller the perform the file resync caused by bombing out early */
+	if (trk_count < 0) return;
+#ifdef	MPS_DEBUG
+	fprintf(stderr, "mps_track_r: there are %d track waypoints %d\n", trk_count);
+#endif
 
 	track_head = route_head_alloc();
 	track_head->rte_name = xstrdup(trkname);
@@ -1558,11 +1613,11 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 
 		fread(tbuf, 1, 1, mps_file);			/* depth validity */
 		if (tbuf[0] == 1) {
-			fread(&mps_depth,sizeof(mps_depth),1,mps_file);
+			le_fread64(&mps_depth,sizeof(mps_depth),1,mps_file);
 		}
 		else {
 			mps_depth = unknown_alt;
-			fread(tbuf,sizeof(mps_depth),1, mps_file);
+			le_fread64(tbuf,sizeof(mps_depth),1, mps_file);
 		}
 
 		thisWaypoint = waypt_new();
@@ -1704,7 +1759,7 @@ mps_trackdatapoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 	else {
 		hdr[0] = 1;
 		fwrite(hdr, 1 , 1, mps_file);
-		fwrite(&mps_depth, 8 , 1, mps_file);
+		le_fwrite64(&mps_depth, 8 , 1, mps_file);
 	}
 }
 
@@ -1726,6 +1781,7 @@ mps_read(void)
 	int				reclen;
 	int				morework;
 	unsigned int	mpsWptClass;
+	long			mpsFileInPos;
 
 	mps_ver_in = 0;		/* although initialised at declaration, what happens if there are two mapsource
 						   input files? */
@@ -1742,34 +1798,73 @@ mps_read(void)
 		fread(&reclen, 4, 1, mps_file_in);
 		reclen = le_read32(&reclen);
 
+		if (reclen < 0) fatal (MYNAME ": a record length read from the input file is invalid. \nEither the file is corrupt or unsupported");
+
 		/* Read the record type "flag" in - using fread in case in the future need more than one char */
 		fread(&recType, 1, 1, mps_file_in);
+		mpsFileInPos = ftell(mps_file_in);
 		switch (recType) {
 		case 'W':
 			/* Waypoint record */
 			/* With routes, we need the waypoint info that reveals, for example, the symbol type */
 			mps_waypoint_r(mps_file_in, mps_ver_in, &wpt, &mpsWptClass);
-			/* only add to the "real" list if a "user" waypoint otherwise add to the private list */
-			if (mpsWptClass == MPSDEFAULTWPTCLASS) waypt_add(wpt);
-			else mps_wpt_q_add(&read_route_wpt_head, wpt);
-#ifdef DUMP_ICON_TABLE
-			printf("\t{  %4u, \"%s\" },\n", icon, wpt->shortname);
+
+#ifdef	MPS_DEBUG
+			fprintf(stderr,"Read a waypoint - %s\n", wpt->shortname);
 #endif
+
+			if (ftell(mps_file_in) != mpsFileInPos + reclen) {
+				/* should junk this record and not save it since we're out of sync with the file */
+				/* Should and how do we warn the user?                                           */
+#ifdef	MPS_DEBUG
+				fprintf(stderr,"Lost sync with the file reading waypoint - %s\n", wpt->shortname);
+#endif
+				fseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
+			}
+			else {
+				/* only add to the "real" list if a "user" waypoint otherwise add to the private list */
+				if (mpsWptClass == MPSDEFAULTWPTCLASS) waypt_add(wpt);
+				else mps_wpt_q_add(&read_route_wpt_head, wpt);
+#ifdef DUMP_ICON_TABLE
+				printf("\t{  %4u, \"%s\" },\n", icon, wpt->shortname);
+#endif
+			}
 			break;
 
 		case 'R':
 			/* Route record */
 			mps_route_r(mps_file_in, mps_ver_in, &rte);
+			if (ftell(mps_file_in) != mpsFileInPos + reclen) {
+				/* should junk this record and not save it since we're out of sync with the file */
+				/* Should and how do we warn the user?                                           */
+#ifdef	MPS_DEBUG
+				fprintf(stderr,"Lost sync with the file reading route - %s\n", rte->rte_name);
+#endif
+				fseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
+			}
 			break;
 
 		case 'T':
 			/* Track record */
 			mps_track_r(mps_file_in, mps_ver_in, &trk);
+			if (ftell(mps_file_in) != mpsFileInPos + reclen) {
+				/* should junk this record and not save it since we're out of sync with the file */
+				/* Should and how do we warn the user?                                           */
+#ifdef	MPS_DEBUG
+				fprintf(stderr,"Lost sync with the file reading track - %s\n", trk->rte_name);
+#endif
+				fseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
+			}
 			break;
 
 		case 'L':
 			/* Map segment record */
 			mps_mapsegment_r(mps_file_in, mps_ver_in);
+			if (ftell(mps_file_in) != mpsFileInPos + reclen) {
+				/* should junk this record and not save it since we're out of sync with the file */
+				/* Should and how do we warn the user?                                           */
+				fseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
+			}
 			break;
 
 		case 'V':
