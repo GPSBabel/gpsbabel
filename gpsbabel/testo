@@ -63,3 +63,11 @@ diff /tmp/ps.psp reference
 ${PNAME} -i mxf -f mxf.c -o mxf -F /tmp/mxf.mxf >/dev/null
 diff /tmp/mxf.mxf reference
 
+# MXF (Maptech Exchange Format) file format
+${PNAME} -i geo -f geocaching.loc -o mxf -F /tmp/mxf.mxf
+diff /tmp/mxf.mxf reference
+
+# MXF (Maptech Exchange Format) file format
+${PNAME} -i geo -f geocaching.loc -o mxf -F /tmp/mxf.mxf
+diff /tmp/mxf.mxf reference
+
