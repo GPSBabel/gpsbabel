@@ -1,5 +1,6 @@
 /*
     Acess to Garmin MapSource files.
+    Based on information provided by Ian Cowley.
 
     Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
 
@@ -24,111 +25,239 @@
 #include "defs.h"
 #include <ctype.h>
 
-static FILE *mapsource_file_in;
-static FILE *mapsource_file_out;
+static FILE *mps_file_in;
+static FILE *mps_file_out;
 
 #define MYNAME "MAPSOURCE" 
 
-static void
-mapsource_rd_init(const char *fname, const char *args)
+/*
+ *  File header.  MsRcd ... Nov_18_2002 14:11:40
+ */
+char mps_hdr[] = {
+	0x4d, 0x73, 0x52, 0x63, 0x64, 0x00, 0x02, 0x00, 
+	0x00, 0x00, 0x44, 0x67, 0x00, 0x1b, 0x00, 0x00,
+	0x00, 0x41, 0x96, 0x01, 0x53, 0x51, 0x41, 0x00, 
+	0x4f, 0x63, 0x74, 0x20, 0x32, 0x32, 0x20, 0x32,
+	0x30, 0x30, 0x31, 0x00, 0x31, 0x35, 0x3a, 0x34, 
+	0x35, 0x3a, 0x30, 0x35, 0x00
+}; 
+
+char mps_ftr[] = {
+	0x02, 0x00, 0x00, 0x00, 0x56, 0x00, 0x01
+};
+
+typedef struct icon_mapping {
+	const int symnum;
+	const char *icon;
+} icon_mapping_t;
+
+/*
+ * This list is meant for Mapsource version 4.07 and newer and is derived
+ * from the list at http://home.online.no/~sigurdhu/MapSource-text.htm .
+ * Someone more motivated than myself is encouraged to type the rest of
+ * these in.
+ */
+static icon_mapping_t icon_table[] = {
+	{ 0, "Marina" },
+	{ 6, "Bank" },
+	{ 6, "ATM" },
+	{ 11, "Restaraunt" },
+	{ 18, "Waypoint" },
+	{ 150, "Boating" },
+	{ 150, "Boat Ramp" },
+	{ 151, "Campground" },
+	{ 151, "Camping" },
+	{ 159, "Park" },
+	{ 170, "Car" },
+	{ -1, NULL },
+};
+
+const char *
+mps_find_desc_from_icon_number(const int icon)
 {
-	mapsource_file_in = fopen(fname, "r");
-	if (mapsource_file_in == NULL) {
+	icon_mapping_t *i;
+
+	for (i = icon_table; i->icon; i++) {
+		if (icon == i->symnum) {
+			return i->icon;
+		}
+	}
+	return "Waypoint";
+}
+
+const int
+mps_find_icon_number_from_desc(const char *desc)
+{
+	icon_mapping_t *i;
+	int def_icon = 18;
+
+	if (!desc) 
+		return def_icon;
+
+	for (i = icon_table; i->icon; i++) {
+		if (desc == i->icon) {
+			return i->symnum;
+		}
+	}
+	return def_icon;
+}
+
+static void
+mps_rd_init(const char *fname, const char *args)
+{
+	mps_file_in = fopen(fname, "rb");
+	if (mps_file_in == NULL) {
 		fatal(MYNAME ": '%s' for reading\n", fname);
 	}
 }
 
 static void
-mapsource_rd_deinit(void)
+mps_rd_deinit(void)
 {
-	fclose(mapsource_file_in);
+	fclose(mps_file_in);
 }
 
 static void
-mapsource_wr_init(const char *fname, const char *args)
+mps_wr_init(const char *fname, const char *args)
 {
-	mapsource_file_out = fopen(fname, "w");
-	if (mapsource_file_out == NULL) {
+	mps_file_out = fopen(fname, "wb");
+	if (mps_file_out == NULL) {
 		fatal(MYNAME ": '%s' for writing\n", fname);
 		exit(1);
 	}
 }
 
 static void
-mapsource_wr_deinit(void)
+mps_wr_deinit(void)
 {
-	fclose(mapsource_file_out);
+	fclose(mps_file_out);
 }
 
+/*
+ * get characters until and including terminating NULL from mps_file_in 
+ * and write into buf.
+ */
 static void
-mapsource_read(void)
+mps_readstr(char *buf, size_t sz)
 {
-	char name[9], date[20], timeb[20];
-	char ibuf[200];
-	double lat,lon;
-	char latdir, londir;
-	int latd, lond;
-	float latf, lonf;
-	int alt; 
-	char altunits[10];
-	char icon[20];
-	waypoint *wpt_tmp;
-
-	while (fgets(ibuf, sizeof(ibuf), mapsource_file_in)) {
-		sscanf(ibuf,
-		"Waypoint %s %s %s %c%d %f %c%d %f %d %s Symbol & Name %s",
-		 name, date, timeb, &latdir, &latd, &latf, &londir, &lond, &lonf, &alt, altunits, icon);
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
-/* FIXME: Implement actual appropriate conversion */
-		wpt_tmp->position.altitude.altitude_meters = alt * 3.0;
-		wpt_tmp->shortname = xstrdup(name);
-		wpt_tmp->description = xstrdup(name);
-
-		lat = latd + latf/100.0;
-		lon = lond + lonf/100.0;
-		if (latdir == 'S') lat = -lat;
-		if (londir == 'W') lon = -lon;
-		wpt_tmp->position.latitude.degrees = lat;
-		wpt_tmp->position.longitude.degrees = lon;
-
-		waypt_add(wpt_tmp);
+	int c;
+	while (sz-- && (c = fgetc (mps_file_in)) != EOF) {
+		*buf++ = c;
+		if (c == 0)  {
+			return;
+		}
 	}
 }
 
+
 static void
-mapsource_waypt_pr(const waypoint *waypointp)
+mps_read(void)
 {
-	char tbuf[1024];
-	char *tp = tbuf;
-	int d;
-	strftime(tbuf, sizeof(tbuf), "%d-%b-%y %I:%M:%S%p", localtime(&waypointp->creation_time));
-	while (*tp) {
-		*tp = toupper(*tp);
-		tp++;
+	char hdr[100];
+	char tbuf[100];
+	char wptname[256];
+	char wptdesc[256];
+	int reclen;
+	int lat;
+	int lon;
+	waypoint *wpt;
+
+	fread(hdr, 45, 1, mps_file_in);
+	for(;;)
+	{
+		long next_rec;
+		char icon;
+		fread(&reclen, 4, 1, mps_file_in);
+		reclen = le_read32(&reclen);
+		fread(tbuf, 1, 1, mps_file_in); /* 'W' */
+		/*
+		 * Use this to seek to next record to make us more immune
+		 * to changes in file format.
+		 */
+		next_rec = ftell(mps_file_in) + reclen;
+		/*
+		 * Each record has a 'W'.  When we run out of those, it's EOF.
+		 */
+		if (tbuf[0] != 'W') 
+			break;
+		wpt = xcalloc(sizeof(*wpt), 1);
+
+		mps_readstr(wptname, sizeof(wptname));
+		fread(tbuf, 9, 1, mps_file_in); /* unknown, 0 */
+		fread(tbuf, 12, 1, mps_file_in); /* unknown, 0xff */
+		fread(tbuf, 6, 1, mps_file_in); /* unknown 0 0 ff ff ff ff  */
+
+		fread(&lat, 4, 1, mps_file_in); 
+		fread(&lon, 4, 1, mps_file_in); 
+		lat = le_read32(&lat);
+		lon = le_read32(&lon);
+		
+		fread(tbuf, 9, 1, mps_file_in); /* alt, format unknown */
+
+		mps_readstr(wptdesc, sizeof(wptdesc));
+
+		fread(tbuf, 17, 1, mps_file_in); /* unknown */
+		fread(&icon, 1, 1, mps_file_in); /* unknown */
+		fseek(mps_file_in, next_rec, SEEK_SET);
+
+		wpt->shortname = xstrdup(wptname);
+		wpt->description = xstrdup(wptdesc);
+		wpt->position.latitude.degrees = lat / 2147483648.0 * 180.0;
+		wpt->position.longitude.degrees = lon / 2147483648.0 * 180.0;
+		wpt->icon_descr = mps_find_desc_from_icon_number(icon);
+		waypt_add(wpt);
 	}
-/* FIXME: cure the sign dependencies here. */
-	fprintf(mapsource_file_out, "Waypoint %s %s ", waypointp->shortname, tbuf);
-	fprintf(mapsource_file_out, "N%02.0f", waypointp->position.latitude.degrees);
-	d = waypointp->position.latitude.degrees;
-	fprintf(mapsource_file_out, " %06.3f ", (waypointp->position.latitude.degrees - d) * 100);
-	fprintf(mapsource_file_out, "W%02.0f", fabs(waypointp->position.longitude.degrees));
-	d = fabs(waypointp->position.longitude.degrees);
-	fprintf(mapsource_file_out, " %06.3f ", (fabs(waypointp->position.longitude.degrees) - d) * 100);
-	fprintf(mapsource_file_out, "0 ft Symbol & Name Unknown\n");
+
+}
+
+static void
+mps_waypt_pr(const waypoint *wpt)
+{
+	int reclen = 87 + strlen(wpt->shortname) + strlen(wpt->description);
+	char zbuf[100];
+	char ffbuf[100];
+	char display = 1;
+	char icon;
+	int lat = wpt->position.latitude.degrees  / 180.0 * 2147483648.0;
+	int lon = wpt->position.longitude.degrees  / 180.0 * 2147483648.0;
+
+	memset(zbuf, 0, sizeof(zbuf));
+	memset(ffbuf, 0xff, sizeof(ffbuf));
+
+	icon = mps_find_icon_number_from_desc(wpt->icon_descr);
+
+	fwrite(&reclen, 4, 1, mps_file_out);
+	fwrite("W", 1, 1, mps_file_out);
+	fputs(wpt->shortname, mps_file_out);
+	fwrite(zbuf, 1, 1, mps_file_out);
+	fwrite(zbuf, 9, 1, mps_file_out);
+	fwrite(ffbuf, 12, 1, mps_file_out);
+	fwrite(zbuf, 2, 1, mps_file_out);
+	fwrite(ffbuf, 4, 1, mps_file_out);
+	fwrite(&lat, 4, 1, mps_file_out);
+	fwrite(&lon, 4, 1, mps_file_out);
+	fwrite(zbuf, 9, 1, mps_file_out);
+	fputs(wpt->description, mps_file_out);
+	fwrite(zbuf, 10, 1, mps_file_out);
+	fwrite(&display, 1, 1, mps_file_out); /* Show waypoint w/ name */
+	fwrite(zbuf, 7, 1, mps_file_out);
+	fwrite(&icon, 1, 1, mps_file_out);
+	fwrite(zbuf, 23, 1, mps_file_out);
 }
 
 void
-mapsource_write(void)
+mps_write(void)
 {
-	waypt_disp_all(mapsource_waypt_pr);
-
+	fwrite(mps_hdr, sizeof(mps_hdr), 1, mps_file_out);
+	waypt_disp_all(mps_waypt_pr);
+	fwrite(mps_ftr, sizeof(mps_ftr), 1, mps_file_out);
 }
 
-ff_vecs_t mapsource_vecs = {
-	mapsource_rd_init,
-	mapsource_wr_init,
-	mapsource_rd_deinit,
-	mapsource_wr_deinit,
-	mapsource_read,
-	mapsource_write,
+ff_vecs_t mps_vecs = {
+	mps_rd_init,
+	mps_wr_init,
+	mps_rd_deinit,
+	mps_wr_deinit,
+	mps_read,
+	mps_write,
 };

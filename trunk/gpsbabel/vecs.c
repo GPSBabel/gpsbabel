@@ -34,7 +34,7 @@ extern ff_vecs_t gpsman_vecs;
 extern ff_vecs_t gpx_vecs;
 extern ff_vecs_t mag_vecs;
 extern ff_vecs_t mapsend_vecs;
-extern ff_vecs_t mapsource_vecs;
+extern ff_vecs_t mps_vecs;
 extern ff_vecs_t gpsutil_vecs;
 extern ff_vecs_t tiger_vecs;
 extern ff_vecs_t pcx_vecs;
@@ -93,13 +93,11 @@ vecs_t vec_list[] = {
 		"Garmin PCX5",
 		"pcx"
 	},
-#if 0
 	{
-		&mapsource_vecs,
+		&mps_vecs,
 		"mapsource",
 		"Garmin Mapsource"
 	},
-#endif
 	{
 		&gpsutil_vecs,
 		"gpsutil",

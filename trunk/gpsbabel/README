@@ -144,6 +144,16 @@ THE FORMATS
 	creating software like this possible.   It reads and writes only 
 	waypoints (not routes) at this time.
 
+    MAPSOURCE
+
+        Garmin Mapsource format appears compatible with the various
+        members of that product family.  Icon mapping is oriented toward
+        versions above 4.07.  Altitude, proximity, and depth are not
+        supported.
+
+        Information on the Garmin Mapsource format was provided by Ian
+        Cowley.  The code was implemented by Robert Lipe.
+
     PCX
 
 	Garmin documents only PCX5, an older format limited to the lame NMEA
