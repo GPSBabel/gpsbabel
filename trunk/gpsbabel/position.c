@@ -32,6 +32,7 @@ static double pos_dist;
 static char *distopt;
 static char *latopt;
 static char *lonopt;
+static char *exclopt;
 
 waypoint * home_pos;
 
@@ -50,6 +51,7 @@ arglist_t radius_args[] = {
 	{"lat", &latopt,       "Latitude for center point (D.DDDDD)"},
 	{"lon", &lonopt,       "Longitude for center point (D.DDDDD)"},
 	{"distance", &distopt, "Maximum distance from center"},
+	{"exclude", &exclopt,  "Exclude points close to center"},
 	{0, 0, 0}
 };
 
@@ -195,7 +197,7 @@ radius_process(void)
 		/* convert radians to float point statute miles */
 		dist = (((dist * 180.0 * 60.0) / M_PI) * 1.1516);
 
-		if (dist >= pos_dist) {
+		if ((dist >= pos_dist) == (exclopt == NULL)) {
 			waypt_del(waypointp);
 			waypt_free(waypointp);
 			continue;

@@ -402,7 +402,7 @@ DATA FILTERS
 	line by passing the distance=XXX option to the filter.  Distance
 	options may be expressed in feet (distance=3f) or meters 
 	(distance=1m).  The default is zero feet, essentially a duplicate
-	position.
+	position.  
 
 	For example:
 
@@ -420,7 +420,9 @@ DATA FILTERS
 	are declared on the command line by passing the distance=X.XX,
 	lat=X.XX, and lon=X.XX options to the filter.  Distance options 
 	may be expressed in miles (distance=3M) or kilometers (distance=3K).
-	The default is zero miles.
+	The default is zero miles.  Additionally, the exclude option may 
+        be specified to reverse the effect of the filter, so that points 
+        further from the center are kept and closer points are discarded.
 
 	For example:
 
