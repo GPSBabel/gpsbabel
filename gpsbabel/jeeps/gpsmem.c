@@ -23,11 +23,11 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
+#include "garminusb.h"
 #include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
 #include <limits.h>
-
 
 /* @func GPS_Packet_New ***********************************************
 **
@@ -39,15 +39,14 @@
 GPS_PPacket GPS_Packet_New(void)
 {
     GPS_PPacket ret;
-    
-    if(!(ret=(GPS_PPacket )malloc(sizeof(GPS_OPacket))))
+    int hdr_size = gps_is_usb  ? sizeof(garmin_usb_packet) : sizeof sizeof(GPS_OPacket) ;
+    if(!(ret=(GPS_PPacket )malloc(hdr_size)))
     {
 	perror("malloc");
 	fprintf(stderr,"GPS_Packet_New: Insufficient memory");
 	fflush(stderr);
 	return NULL;
     }
-
     if(!(ret->data = (UC *)malloc(MAX_GPS_PACKET_SIZE*sizeof(UC))))
     {
 	perror("malloc");
