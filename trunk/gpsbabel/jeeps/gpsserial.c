@@ -83,6 +83,14 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
 	DCB tio;
 	COMMTIMEOUTS timeout;
 
+	if (gps_is_usb) {
+	    switch (gusb_open(port)) {
+		    case 0: return NULL;
+		    case 1: return 1;
+		    case 2: exit(0);
+	    }
+	}
+
 	comport = CreateFile(port, GENERIC_READ|GENERIC_WRITE, 0, NULL,
 					  OPEN_EXISTING, 0, NULL);
 
@@ -143,7 +151,11 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
 
 int32 GPS_Serial_Off(const char *port, int32 fd)
 {
-	CloseHandle(comport);
+	if (gps_is_usb) {
+		gusb_close(port);
+	} else {
+		CloseHandle(comport);
+	}
 	return 1;
 }
 
@@ -356,7 +368,7 @@ int32 GPS_Serial_Read(int32 handle, void *ibuf, int size)
 
 int32 GPS_Serial_Write(int32 handle, const void *obuf, int size)
 {
-		return write(handle, obuf, size);
+	return write(handle, obuf, size);
 }
 
 
@@ -460,6 +472,8 @@ int32 GPS_Serial_Wait(int32 fd)
     fd_set rec;
     struct timeval t;
 
+    if (gps_is_usb) return 1;
+
     FD_ZERO(&rec);
     FD_SET(fd,&rec);
 
@@ -487,7 +501,9 @@ int32 GPS_Serial_Wait(int32 fd)
 
 int32 GPS_Serial_On(const char *port, int32 *fd)
 {
-
+    if (gps_is_usb) {
+	    return gusb_init();
+    }
     if(!GPS_Serial_Savetty(port))
     {
 	GPS_Error("Cannot access serial port");
