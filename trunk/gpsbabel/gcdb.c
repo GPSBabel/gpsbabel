@@ -177,7 +177,7 @@ data_read(void)
 					tm = be_read32(recdata) * 24 * 3600;
 					tm -= EPOCH_1904;
 					wpt->creation_time = tm;
-					fprintf(stderr, "date %d\n", tm);
+					warning( "date %d\n", tm);
 				}
 				break;
 #endif

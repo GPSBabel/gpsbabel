@@ -58,8 +58,7 @@ mapsend_rd_init(const char *fname, const char *args)
 {
 	mapsend_file_in = fopen(fname, "rb");
 	if (mapsend_file_in == NULL) {
-		fprintf(stderr, "Cannot open '%s' for reading\n", fname);
-		exit(1);
+		fatal( MYNAME ": Cannot open '%s' for reading\n", fname);
 	}
 }
 
@@ -174,8 +173,7 @@ mapsend_wr_init(const char *fname, const char *args)
 {
 	mapsend_file_out = fopen(fname, "wb");
 	if (mapsend_file_out == NULL) {
-		fprintf(stderr, "Cannot open '%s' for writing\n", fname);
-		exit(1);
+		fatal(MYNAME ": Cannot open '%s' for writing\n", fname);
 	}
 	mkshort_handle = mkshort_new_handle();
 	route_wp_count = 0;

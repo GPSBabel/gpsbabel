@@ -221,8 +221,9 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
     }
 
     if (enclosedepth != 0) {
-	fprintf(stderr, "%s: Warning- Unbalanced Field Enclosures (%s) on line %d\n",
-		MYNAME, enclosed_in, line_no);
+	warning(MYNAME 
+		": Warning- Unbalanced Field Enclosures (%s) on line %d\n",
+	        enclosed_in, line_no);
     }
 
     return (tmp);
@@ -493,7 +494,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        /* wpt->gc_data.type = gs_mktype(s);*/
 
     } else {
-       fprintf (stderr, "UNKNOWN STYLE DIRECTIVE: %s\n", fmp->key);
+       warning( MYNAME ": Unknown style directive: %s\n", fmp->key);
     }
 }
 

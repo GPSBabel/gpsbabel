@@ -285,7 +285,11 @@ void fatal(const char *, ...)
 	__attribute__ ((__format__ (__printf__, 1, 2)))
 #endif
 	;
-
+void warning(const char *, ...)
+#if __GNUC__
+	__attribute__ ((__format__ (__printf__, 1, 2)))
+#endif
+	;
 ff_vecs_t *find_vec(char *, char **);
 void disp_vecs(void);
 void disp_formats(int version);

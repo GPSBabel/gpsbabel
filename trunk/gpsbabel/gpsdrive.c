@@ -112,8 +112,9 @@ data_read(void)
 				wpt_tmp->icon_descr_is_dynamic = 1;
 				break;
 			default:
-			    fprintf (stderr, "%s: Warning: unmapped data fields on line %d.\n", 
-			       	MYNAME, linecount);
+			    warning(MYNAME 
+				": Warning: unmapped data fields on line %d.\n", 
+			       	linecount);
 			    break;
 			}
 			i++;
