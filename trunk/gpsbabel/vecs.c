@@ -52,6 +52,7 @@ extern ff_vecs_t gcdb_vecs;
 extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t quovadis_vecs;
 extern ff_vecs_t gpilots_vecs;
+extern ff_vecs_t saroute_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -187,6 +188,12 @@ vecs_t vec_list[] = {
 		"gpilots",
 		"GpilotS",
 		NULL
+	},
+	{
+		&saroute_vecs,
+		"saroute",
+		"Delorme Street Atlast Route",
+		".anr"
 	},
 	{
 		NULL,
