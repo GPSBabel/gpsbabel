@@ -138,9 +138,16 @@ garmin_usb_start(struct usb_device *dev)
 
 	if (udev) return;
 
+	/*
+	 * Linux _requires_ the reset.   OSX doesn't work if we DO reset it.
+	 * I really should study this more, but for now, we'll just avoid the
+	 * reset on Apple's OSX.
+	 */
+#if !defined (__APPLE__)
 	udev = usb_open(dev);
 	usb_reset(udev);
 	usb_close(udev);
+#endif /* APPLE */
 
 	udev = usb_open(dev);
 	atexit(garmin_usb_teardown);
