@@ -497,6 +497,19 @@ THE FORMATS
 	http://www.kolumbus.fi/eino.uikkanen/geoconvgb/index.htm
 	http://www.commlinx.com.au/GPS_recorder.htm
 
+    TEXT
+
+        This is a simple human readable version of the data file, handy for
+        listings of any type of waypoint files.
+
+    HTML
+
+        HTML output generates a single HTML file of all of the waypoints in
+        the input file.  It supports a number of Geocaching GPX extensions,
+        as well as filters out potentially harmful HTML from the input file
+        while maintaining almost all of the source HTML formatting.
+
+
 DATA FILTERS
 
 	GPSBabel supports data filtering.  Data filters are invoked from

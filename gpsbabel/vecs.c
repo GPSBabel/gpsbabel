@@ -60,6 +60,8 @@ extern ff_vecs_t geoniche_vecs;
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t ozi_vecs;
 extern ff_vecs_t nmea_vecs;
+extern ff_vecs_t text_vecs;
+extern ff_vecs_t html_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -242,6 +244,18 @@ vecs_t vec_list[] = {
 		&nmea_vecs,
 		"nmea",
 		"NMEA 0183 sentences",
+		NULL
+	},
+	{
+		&text_vecs,
+		"text",
+		"Textual Output",
+		NULL
+	},
+	{
+		&html_vecs,
+		"html",
+		"HTML Output",
 		NULL
 	},
 	{
