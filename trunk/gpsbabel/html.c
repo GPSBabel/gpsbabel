@@ -119,7 +119,7 @@ html_disp(const waypoint *wpt)
 			xfree( hint );
 		}
 	}
-	else if (!wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
+	else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
 		fprintf (file_out, "<p class=\"notes\">%s</p>\n", wpt->notes);
 	}
 	if ( includelogs && wpt->gpx_extras ) {
