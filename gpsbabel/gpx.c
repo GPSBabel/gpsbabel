@@ -31,6 +31,8 @@ static char *opt_logpoint = NULL;
 static int logpoint_ct = 0;
 
 static const char *gpx_version;
+static char *gpx_wversion;
+static int gpx_wversion_num;
 static const char *gpx_creator;
 static char *xsi_schema_loc;
 
@@ -77,6 +79,8 @@ typedef enum {
 	tt_wpt_time,
 	tt_wpt_type,
 	tt_wpt_urlname,
+	tt_wpt_link, 		/* New in GPX 1.1 */
+	tt_wpt_link_text, 	/* New in GPX 1.1 */
 	tt_cache,
 	tt_cache_name,
 	tt_cache_container,
@@ -145,6 +149,8 @@ tag_mapping tag_path_map[] = {
 	{ tt_wpt_desc, 0, "/gpx/wpt/desc" },
 	{ tt_wpt_url, 0, "/gpx/wpt/url" },
 	{ tt_wpt_urlname, 0, "/gpx/wpt/urlname" },
+	{ tt_wpt_link, 0, "/gpx/wpt/link" },			/* GPX 1.1 */
+	{ tt_wpt_link_text, 0, "/gpx/wpt/link/text" },		/* GPX 1.1 */
 	{ tt_wpt_sym, 0, "/gpx/wpt/sym" },
 	{ tt_wpt_type, 1, "/gpx/wpt/type" },
 	{ tt_cache, 1, "/gpx/wpt/groundspeak:cache" },
@@ -409,6 +415,11 @@ gpx_start(void *data, const char *el, const char **attr)
 	case tt_wpt:
 		tag_wpt(attr);
 		break;
+	case tt_wpt_link:
+		if (0 == strcmp(attr[0], "href")) {
+			wpt_tmp->url = xstrdup(attr[1]);
+		}
+		break;
 	case tt_rte:
 		rte_head = route_head_alloc();
 		route_add_head(rte_head);
@@ -625,6 +636,7 @@ gpx_end(void *data, const char *el)
 		wpt_tmp->url = xstrdup(cdatastrp);
 		break;
 	case tt_wpt_urlname:
+	case tt_wpt_link_text:
 		wpt_tmp->url_link_text = xstrdup(cdatastrp);
 		break;
 	case tt_wpt:
@@ -1103,10 +1115,17 @@ gpx_waypt_pr(const waypoint *waypointp)
 		write_optional_xml_entity(ofd, "  ", "desc", waypointp->description);
 	if (waypointp->url) {
 		tmp_ent = xml_entitize(waypointp->url);
-		fprintf(ofd, "  <url>%s%s</url>\n", urlbase ? urlbase : "", tmp_ent);
+		if (gpx_wversion_num > 10) {
+			
+			fprintf(ofd, "  <link href=\"%s%s\">\n", urlbase ? urlbase : "", tmp_ent);
+			write_optional_xml_entity(ofd, "  ", "text", waypointp->url_link_text);
+			fprintf(ofd, "  </link>\n");
+		} else {
+			fprintf(ofd, "  <url>%s%s</url>\n", urlbase ? urlbase : "", tmp_ent);
+			write_optional_xml_entity(ofd, "  ", "urlname", waypointp->url_link_text);
+		}
 		xfree(tmp_ent);
 	}
-	write_optional_xml_entity(ofd, "  ", "urlname", waypointp->url_link_text);
 	write_optional_xml_entity(ofd, "  ", "sym", waypointp->icon_descr);
 
 	fprint_xml_chain( waypointp->gpx_extras, waypointp );
@@ -1205,6 +1224,12 @@ gpx_write(void)
 	time_t now = 0;
 	int short_length;
 	bounds bounds;
+
+	gpx_wversion_num = strtod(gpx_wversion, NULL) * 10;
+
+	if (gpx_wversion_num <= 0) {
+		fatal(MYNAME ": gpx version number of '%s' not valid.\n", gpx_wversion);
+	}
 	
         now = current_time();
 
@@ -1220,12 +1245,15 @@ gpx_write(void)
 	setshort_length(mkshort_handle, short_length);
 
 	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
-	fprintf(ofd, "<gpx\n version=\"1.0\"\n");
+	fprintf(ofd, "<gpx\n version=\"%s\"\n", gpx_wversion);
 	fprintf(ofd, "creator=\"GPSBabel - http://www.gpsbabel.org\"\n");
 	fprintf(ofd, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/1/0\"\n");
+	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
 	fprintf(ofd, "xsi:schemaLocation=\"%s\">\n", xsi_schema_loc ? xsi_schema_loc : DEFAULT_XSI_SCHEMA_LOC);
 
+	if (gpx_wversion_num > 10) {	
+		fprintf(ofd, "<metadata>\n");
+	}
 	xml_write_time( ofd, now, "time" );
 	waypt_compute_bounds(&bounds);
 	if (bounds.max_lat  > -360) {
@@ -1234,6 +1262,11 @@ gpx_write(void)
 			       bounds.min_lat, bounds.min_lon, 
 			       bounds.max_lat, bounds.max_lon);
 	}
+
+	if (gpx_wversion_num > 10) {	
+		fprintf(ofd, "</metadata>\n");
+	}
+
 	waypt_disp_all(gpx_waypt_pr);
 	gpx_track_pr();
 	gpx_route_pr();
@@ -1256,6 +1289,8 @@ arglist_t gpx_args[] = {
 		NULL, ARGTYPE_BOOL },
 	{ "urlbase", &urlbase, "Base URL for link tag in output", 
 		NULL, ARGTYPE_STRING},
+	{ "gpxver", &gpx_wversion, "Target GPX version for output", 
+		"1.0", ARGTYPE_STRING},
 	{ 0, 0, 0, 0, 0 }
 };
 
