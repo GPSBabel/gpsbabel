@@ -219,6 +219,7 @@ return;
 static
 void garmin_usb_scan(void)
 {
+	int initted = 0;
 	struct usb_bus *bus;
 
 	for (bus = busses; bus; bus = bus->next) {
@@ -230,9 +231,14 @@ void garmin_usb_scan(void)
 			 * we just take the easy way out for now.
 			 */
 			if (dev->descriptor.idVendor == GARMIN_VID) {
-				garmin_usb_start(dev);
+				garmin_usb_start(dev);	
+				initted++;
 			}
 		}
+	}
+
+	if (0 == initted) {
+		fatal("Found no Garmin USB devices.\n");
 	}
 }
 
