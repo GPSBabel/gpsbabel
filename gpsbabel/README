@@ -745,6 +745,11 @@ DATA FILTERS
 	  41.144270897    -85.163655281
 	  41.141953468    -85.162882805
 
+        An arc file may optionally contain gaps in the arc.  You can 
+        specify such a gap by inserting a line containing "#break" 
+        either on a line by itself or after the coordinates of the
+        starting point of the new arc segment.
+
         In addition to the file containing the arc, you should also
         specify the maximum distance from the arc that will be accepted;
         that distance is declared on the command line with the
