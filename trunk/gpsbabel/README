@@ -71,12 +71,39 @@ THE FORMATS
     GARMIN
 
         Waypoint serial upload and download works reliably under both
-        POSIX and Windows.  I tested it with a Vista, a V, and a base
-        eTrext, all graciously provided on loan by Joe Armstrong.  The
-        communications library used, jeeps, claims to support most
-        models of Garmin hardware.  Be sure the GPS is set for "Garmin
-        mode" in setup and that nothing else (gpsd, getty, pppd, etc.)
-        is using the serial port.
+        POSIX and Windows.  I originally tested it with a Vista, a
+        V, and a base eTrex, all graciously provided on loan by Joe
+        Armstrong, but it's now regularly exercised on a 60CS (USB and
+        serial) and many other models.  The communications library used,
+        jeeps, claims to support most models of Garmin hardware.  Be
+        sure the GPS is set for "Garmin mode" in setup and that nothing
+        else (PDA hotsync programs, gpsd, getty, pppd, etc.) is using
+        the serial port.
+
+        New in GPSBabel 1.2.4 is USB support, but only under Windows.
+        It's reported successful with VistaC, SummitC, 60C, 60CS, 76C,
+        76CS, and 96C.  Some users report success with StreetPilot 2610
+        and some do not, but nobody's followed up with details on that.
+
+        Quest is known to not work, not becuase of USB problems, but
+        rather becuase it only implements a new waypoint protocol that's
+        seemingly only available on that model.  If you have a Quest and
+        would like to see it supported and can provide patches or a loan
+        of the equipment for a few days, please contact Robert Lipe.
+
+        Currently, only a single USB unit at a time can be supported.  The
+        device name to use on the command line is "usb:"   Thus, to read
+	the waypoints from a Garmin USB unit and write them to a GPX file:
+
+		gpsbabel -i garmin -f usb: -o gpx -F blah.gpx
+
+        When reporting problems with Garmin, be sure to include the full
+        unit model, firmware version, and be prepared to offer debugging
+	dumps by adding "-D9" to the command line, like:
+
+		gpsbabel -D9 -i garmin -f usb: -o gpx -F blah.gpx
+	
+
 
     GPSMAN
 
@@ -95,6 +122,8 @@ THE FORMATS
 
 	The U.S. Census Bureau proives online mapping facilities.  This
 	format is described at: http://tiger.census.gov/instruct.html.
+	Do notice that this format is not the actual Tiger line mapping
+	records, but rather the interface to their online mapping program.
 
     CSV
 
