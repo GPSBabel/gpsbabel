@@ -205,8 +205,7 @@ cetus_writewpt(waypoint *wpt)
 
 	rec = xcalloc(sizeof(*rec)+1018,1);
 
-	if (wpt->creation_time) {
-		tm = gmtime(&wpt->creation_time);
+	if (wpt->creation_time && (NULL != (tm = gmtime(&wpt->creation_time)))){
 		rec->min = tm->tm_min;
 		rec->hour = tm->tm_hour;
 		rec->sec = tm->tm_sec;
