@@ -313,7 +313,7 @@ vecs_t vec_list[] = {
         {
                 &hiketech_vecs,
                 "hiketech",
-                "Hiketech",
+                "HikeTech",
                 "gps"
         },
         {
