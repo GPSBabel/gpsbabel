@@ -484,7 +484,7 @@ copilot_writewpt(const waypoint *wpt)
 	    fatal(MYNAME ": libpdb couldn't get record memory\n");
     }
 
-    opdb_rec = new_Record (0, 0, ct++, vlen+1, vdata);	       
+    opdb_rec = new_Record (0, 0, ct++, (uword) (vlen+1), vdata);	       
 
     if (opdb_rec == NULL)
 	fatal(MYNAME ": libpdb couldn't create record\n");

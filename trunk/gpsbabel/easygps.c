@@ -25,7 +25,7 @@
 static FILE *file_in;
 static FILE *file_out;
 static void *mkshort_handle;
-static char *deficon = NULL;
+/* static char *deficon = NULL; */
 
 #define MYNAME "EasyGPS"
 

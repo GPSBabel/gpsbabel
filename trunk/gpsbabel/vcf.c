@@ -89,14 +89,9 @@ static void
 vcf_disp(const waypoint *wpt)
 {
 	int latint, lonint;
-	char tbuf[1024];
-	time_t tm = wpt->creation_time;
-	long utmz;
-	double utme, utmn;
-	char utmzc;
 	
-	lonint = abs(wpt->longitude);
-	latint = abs(wpt->latitude);
+	lonint = abs((int) wpt->longitude);
+	latint = abs((int) wpt->latitude);
 
 	fprintf(file_out, "BEGIN:VCARD\nVERSION:3.0\n");
 	fprintf(file_out, "N:%s;%s;;;\n", wpt->description,wpt->shortname);

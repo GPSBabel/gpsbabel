@@ -149,7 +149,7 @@ decode(char *buf)
 //	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
 	for(pdb_rec=pdb_rec->next; pdb_rec; pdb_rec=pdb_rec->next) {
 		waypoint *wpt_tmp;
-		char *vdata;
+		char *vdata = 0;
 		char *edata;
 		struct tm tm = {0};
 
@@ -266,8 +266,6 @@ my_writewpt(const waypoint *wpt)
 static void
 data_write(void)
 {
-	queue *elem, *tmp;
-
 	static char *appinfo = 
 		"\0\x01"
 		"User\0\0\0\0\0\0\0\0\0\0\0\0"

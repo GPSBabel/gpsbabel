@@ -148,7 +148,6 @@ kml_wr_deinit(void)
 static void
 kml_waypt_pr(const waypoint *waypointp)
 {
-	char *odesc;
 	fputs("    <Placemark>\n", ofd);
 //	write_optional_xml_entity(ofd, "\t", "name", waypointp->shortname);
 	write_optional_xml_entity(ofd, "\t", "name", waypointp->description);

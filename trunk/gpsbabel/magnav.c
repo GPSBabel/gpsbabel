@@ -179,7 +179,7 @@ my_writewpt(const waypoint *wpt)
 	
 	be_write32(&rec->longitude, si_round(wpt->longitude * 100000.0));
 	be_write32(&rec->latitude, si_round(wpt->latitude * 100000.0));
-	be_write32(&rec->elevation, wpt->altitude);
+	be_write32(&rec->elevation, (unsigned int) (wpt->altitude));
 
 	rec->plot = 0;
 	rec->unknown3 = 'a';
@@ -205,7 +205,7 @@ my_writewpt(const waypoint *wpt)
 	vdata[1] = '\0';
 	vdata += 2;
 	
-	opdb_rec = new_Record (0, 0, ct++, vdata-(char *)rec, (const ubyte *)rec);
+	opdb_rec = new_Record (0, 0, ct++, (uword) (vdata-(char *)rec), (const ubyte *)rec);
 
 	if (opdb_rec == NULL) {
 		fatal(MYNAME ": libpdb couldn't create record\n");

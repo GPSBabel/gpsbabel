@@ -22,6 +22,7 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
+#include "gpsusbint.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>

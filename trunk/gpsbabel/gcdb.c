@@ -293,7 +293,7 @@ gcdb_write_wpt(const waypoint *wpt)
 	 */
 	reclen = gcdb_add_to_rec(rec, NULL, 0, NULL);
 
-	opdb_rec = new_Record(0, 2, ct++, reclen, (const ubyte *)rec);
+	opdb_rec = new_Record(0, 2, ct++, (uword) reclen, (const ubyte *)rec);
 
 	if (opdb_rec == NULL) {
 		fatal(MYNAME ": libpdb couldn't create record\n");

@@ -605,7 +605,6 @@ ce_write(void)
 	   the standalone waypoints.
 	*/
 	time_t now = 0;
-	int short_length;
 	now = current_time();
 
 	write_xml_header(ofd);

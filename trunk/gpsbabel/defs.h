@@ -45,6 +45,11 @@
 #  define snprintf _snprintf
 #endif
 
+/* Turn off numeric conversion warning */
+#if __WIN32__
+#pragma warning(disable:4244)
+#endif
+
 /*
  * Common definitions.   There should be no protocol or file-specific
  * data in this file.
@@ -424,6 +429,7 @@ typedef struct filter_vecs {
 void waypt_init(void);
 void route_init(void);
 void waypt_disp(const waypoint *);
+void waypt_status_disp(int total_ct, int myct);
 void fatal(const char *, ...)
 #if __GNUC__
 	__attribute__ ((__format__ (__printf__, 1, 2)))
@@ -434,13 +440,13 @@ void warning(const char *, ...)
 	__attribute__ ((__format__ (__printf__, 1, 2)))
 #endif
 	;
-ff_vecs_t *find_vec(char *, char **);
+ff_vecs_t *find_vec(char * const, char **);
 void disp_vecs(void);
 void exit_vecs(void);
 void disp_formats(int version);
-void printposn(double c, int is_lat);
+void printposn(const double c, int is_lat);
 
-filter_vecs_t * find_filter_vec(char *, char **);
+filter_vecs_t * find_filter_vec(char * const, char **);
 void free_filter_vec(filter_vecs_t *);
 void disp_filters(int version);
 void disp_filter_vecs(void);

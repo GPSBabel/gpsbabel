@@ -256,7 +256,8 @@ static void write_header( void ) {
 		--recs;
 	}
 	
-	opdb_rec = new_Record (0, 0, 0, sizeof(struct doc_record0)+sizeof(short)*(ct-1), (const ubyte *)rec0);
+	opdb_rec = new_Record (0, 0, 0, 
+		(uword) (sizeof(struct doc_record0)+sizeof(short)*(ct-1)), (const ubyte *)rec0);
 
 	if (opdb_rec == NULL) {
 		fatal(MYNAME ": libpdb couldn't create summary record\n");
@@ -316,7 +317,7 @@ static void commit_buffer( void ) {
 
 	compress( &buf );
 	
-        opdb_rec = new_Record (0, 0, ct++, buf.len, (const ubyte *)buf.data);
+        opdb_rec = new_Record (0, 0, ct++, (uword) buf.len, (const ubyte *)buf.data);
 
         if (opdb_rec == NULL) {
                 fatal(MYNAME ": libpdb couldn't create record\n");
@@ -436,8 +437,8 @@ palmdoc_disp(const waypoint *wpt)
         bm = xstrdup(bookmarktext); 
         create_bookmark(bm);
  	
-	lonint = abs(wpt->longitude);
-	latint = abs(wpt->latitude);
+	lonint = abs((int) wpt->longitude);
+	latint = abs((int) wpt->latitude);
 
 	GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude, 
 		&utme, &utmn, &utmz, &utmzc);

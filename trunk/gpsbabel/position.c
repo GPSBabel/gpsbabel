@@ -230,7 +230,7 @@ position_noop_t(const route_head *h)
 {
 }
 
-void position_process() 
+void position_process(void) 
 {
 	int i = waypt_count();
 	

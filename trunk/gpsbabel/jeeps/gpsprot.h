@@ -247,7 +247,7 @@ int32 gps_link_type;
 
 struct GPS_MODEL_PROTOCOL
 {
-    int32 id;
+    US    id;
     int32 link;
     int32 command;
     int32 wayptt;

@@ -168,6 +168,7 @@ waypt_read_cb(int total_ct, GPS_PWay *way)
 		i++;
 		waypt_status_disp(total_ct, i);
 	}
+	return 0;
 }
 
 static void
@@ -389,7 +390,7 @@ sane_GPS_Way_New(void)
 	way->addr[0] = 0;
 	way->cross_road[0] = 0;
 	way->cross_road[0] = 0;
-	way->dpth = 1.0e25;
+	way->dpth = 1.0e25f;
 	way->wpt_class = 0;
 
 	return way;
@@ -433,7 +434,6 @@ waypoint_write(void)
 	queue *elem, *tmp;
 	extern queue waypt_head;
 	GPS_PWay *way;
-	extern int32 gps_save_id;
 	int icon;
 
 	way = xcalloc(n,sizeof(*way));
@@ -639,7 +639,7 @@ track_write(void)
 }
 
 static void
-data_write()
+data_write(void)
 {
 	if (poweroff) {
 		return;

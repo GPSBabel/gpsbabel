@@ -23,6 +23,7 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
+#include "garminusb.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -208,7 +209,7 @@ int32 GPS_Serial_Write(int32 ignored, const void *obuf, int size)
 		return 0;
 	}
 	WriteFile (comport, obuf, size, &len, NULL);
-	if (len != size) {
+	if (len != (DWORD) size) {
 		fatal ("Write error.   Wrote %d of %d bytes.", len, size);
 	}
 	return len;

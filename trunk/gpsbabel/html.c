@@ -70,8 +70,8 @@ html_disp(const waypoint *wpt)
 	double utme, utmn;
 	char utmzc;
 	
-	lonint = abs(wpt->longitude);
-	latint = abs(wpt->latitude);
+	lonint = abs((int) wpt->longitude);
+	latint = abs((int) wpt->latitude);
 	GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude, 
 		&utme, &utmn, &utmz, &utmzc);
 

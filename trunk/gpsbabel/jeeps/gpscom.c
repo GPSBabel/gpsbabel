@@ -84,7 +84,7 @@ int32 GPS_Command_Off(const char *port)
 ** @return [int32] number of waypoint entries
 ************************************************************************/
 
-int32 GPS_Command_Get_Waypoint(const char *port, GPS_PWay **way, int (*cb)())
+int32 GPS_Command_Get_Waypoint(const char *port, GPS_PWay **way, int (*cb)(int, struct GPS_SWay **))
 {
     int32 ret=0;
 
@@ -114,7 +114,7 @@ int32 GPS_Command_Get_Waypoint(const char *port, GPS_PWay **way, int (*cb)())
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Waypoint(const char *port, GPS_PWay *way, int32 n, int (*cb)())
+int32 GPS_Command_Send_Waypoint(const char *port, GPS_PWay *way, int32 n, int (*cb)(struct GPS_SWay **))
 {
     int32 ret=0;
 

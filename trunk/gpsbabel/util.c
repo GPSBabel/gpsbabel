@@ -497,8 +497,6 @@ get_tz_offset(void)
 time_t
 current_time(void)
 {
-	static char *frozen;
-	
 	if (getenv("GPSBABEL_FREEZE_TIME")) {
 		return 0;
 	}
@@ -917,7 +915,6 @@ strip_nastyhtml(const char * in)
 {
 	char *returnstr, *sp;
 	char *lcstr, *lcp;
-	int i;
 	
 	sp = returnstr = xstrdup(in);
 	lcp = lcstr = xstrdup(in);

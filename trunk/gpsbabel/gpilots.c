@@ -405,7 +405,7 @@ my_write_wpt(const waypoint *wpt)
 	le_write32(&rec->wpt.d103.lat, lat);
 	le_write32(&rec->wpt.d103.lon, lon);
 
-	opdb_rec = new_Record(0, 0, ct++, vdata - (char *) rec, (const ubyte *) rec);
+	opdb_rec = new_Record(0, 0, ct++, (uword) (vdata - (char *) rec), (const ubyte *) rec);
 
 	if (opdb_rec == NULL) {
 		fatal(MYNAME ": libpdb couldn't create record\n");

@@ -158,7 +158,7 @@ gpilots.o: gpilots.c defs.h queue.h gbtypes.h coldsync/palm.h \
 gpspilot.o: gpspilot.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
 gpsutil.o: gpsutil.c defs.h queue.h gbtypes.h magellan.h
-gpx.o: gpx.c defs.h queue.h gbtypes.h
+gpx.o: gpx.c defs.h queue.h gbtypes.h xmlgeneric.h
 grtcirc.o: grtcirc.c defs.h queue.h gbtypes.h
 hiketech.o: hiketech.c defs.h queue.h gbtypes.h xmlgeneric.h
 holux.o: holux.c defs.h queue.h gbtypes.h holux.h
@@ -170,6 +170,7 @@ html.o: html.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 igc.o: igc.c defs.h queue.h gbtypes.h
 internal_styles.o: internal_styles.c defs.h queue.h gbtypes.h
+kml.o: kml.c defs.h queue.h gbtypes.h xmlgeneric.h
 lowranceusr.o: lowranceusr.c defs.h queue.h gbtypes.h
 magnav.o: magnav.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
@@ -274,7 +275,7 @@ jeeps/gpsread.o: jeeps/gpsread.c jeeps/gps.h defs.h queue.h gbtypes.h \
   jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
   jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h \
-  jeeps/gpsnmeaget.h
+  jeeps/gpsnmeaget.h jeeps/gpsusbint.h
 jeeps/gpsrqst.o: jeeps/gpsrqst.c jeeps/gps.h defs.h queue.h gbtypes.h \
   jeeps/gpsport.h jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h \
   jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
@@ -286,25 +287,27 @@ jeeps/gpssend.o: jeeps/gpssend.c jeeps/gps.h defs.h queue.h gbtypes.h \
   jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
   jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h \
-  jeeps/gpsnmeaget.h
+  jeeps/gpsnmeaget.h jeeps/gpsusbint.h
 jeeps/gpsserial.o: jeeps/gpsserial.c jeeps/gps.h defs.h queue.h gbtypes.h \
   jeeps/gpsport.h jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h \
   jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
   jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h \
-  jeeps/gpsnmeaget.h
+  jeeps/gpsnmeaget.h jeeps/garminusb.h
 jeeps/gpsusbread.o: jeeps/gpsusbread.c jeeps/gps.h defs.h queue.h \
   gbtypes.h jeeps/gpsport.h jeeps/gpsserial.h jeeps/gpssend.h \
   jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsnmea.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
-  jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h jeeps/garminusb.h
+  jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h jeeps/garminusb.h \
+  jeeps/gpsusbint.h
 jeeps/gpsusbsend.o: jeeps/gpsusbsend.c jeeps/gps.h defs.h queue.h \
   gbtypes.h jeeps/gpsport.h jeeps/gpsserial.h jeeps/gpssend.h \
   jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsnmea.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
-  jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h jeeps/garminusb.h
+  jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h jeeps/garminusb.h \
+  jeeps/gpsusbint.h
 jeeps/gpsusbstub.o: jeeps/gpsusbstub.c
 jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h defs.h queue.h gbtypes.h \
   jeeps/gpsport.h jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h \
@@ -315,4 +318,5 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h defs.h queue.h gbtypes.h \
 shapelib/dbfopen.o: shapelib/dbfopen.c shapelib/shapefil.h
 shapelib/shpopen.o: shapelib/shpopen.c shapelib/shapefil.h
 internal_styles.c: mkstyle.sh style/README.style style/arc.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/s_and_t.style style/saplus.style style/tabsep.style style/xmap.style style/xmapwpt.style
+	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)
 	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)

@@ -22,8 +22,11 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
+#include "gpsusbint.h"
+
 #include <stdio.h>
 #include <errno.h>
+#include <ctype.h>
 
 
 /* @func GPS_Make_Packet ***********************************************
@@ -58,7 +61,7 @@ void GPS_Make_Packet(GPS_PPacket *packet, UC type, UC *data, int16 n)
     (*packet)->dle   = DLE;
     (*packet)->edle  = DLE;
     (*packet)->etx   = ETX;
-    (*packet)->n     = n;
+    (*packet)->n     = (UC) n;
     (*packet)->type  = type;
     (*packet)->bytes = 0;
 

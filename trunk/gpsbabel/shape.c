@@ -37,8 +37,6 @@ static int nameidx;
 static void
 my_rd_init(const char *fname)
 {
-	int i;
-
 	ihandle = SHPOpen(fname, "rb" );
 	if (ihandle == NULL) {
 		fatal(MYNAME ":Cannot open shp file %s for reading\n", fname);
