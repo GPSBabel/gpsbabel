@@ -232,35 +232,44 @@ GPS_PWay GPS_Way_New(void)
 	fflush(stderr);
 	return NULL;
     }
+
     /* 
      * Mark all as "unused".  These appear in the same order as in struct.
      * It's wretched that A) memset isn't used.  B) sizeof isn't used. C)
      * The whole stupid structure isn't simply memsetted sanely. 
      */
+
     for(i=0;i<6;++i) ret->ident[i]=' ';
     for(i=0;i<40;++i) ret->cmnt[i]=' ';
     for(i=0;i<256;++i) ret->wpt_ident[i]=' ';
     for(i=0;i<256;++i) ret->lnk_ident[i]=' ';
     for(i=0;i<18;++i) ret->subclass[i]=' ';
-    for(i=0;i<2;++i) ret->cc[i]=' ';
-    for(i=0;i<24;++i) ret->city[i]=' ';
-    for(i=0;i<2;++i) ret->state[i]=' ';
     for(i=0;i<30;++i) ret->name[i]=' ';
     for(i=0;i<32;++i) ret->facility[i]=' ';
     for(i=0;i<52;++i) ret->addr[i]=' ';
     for(i=0;i<52;++i) ret->cross_road[i]=' ';
+    for(i=0;i<24;++i) ret->city[i]=' ';
     for(i=0;i<20;++i) ret->rte_cmnt[i]=' ';
     for(i=0;i<256;++i) ret->rte_ident[i]=' ';
     for(i=0;i<18;++i) ret->rte_link_subclass[i]=' ';
     for(i=0;i<256;++i) ret->rte_link_ident[i]=' ';
+    for(i=0;i<2;++i) ret->state[i]=' ';
+    for(i=0;i<2;++i) ret->cc[i]=' ';
+
+    ret->facility[0] = 0;
+    ret->addr[0] = 0;
+    ret->wpt_ident[0] = 0;
     
-    ret->dst = ret->lat = ret->lon = GPS_FLTMAX;
+    ret->lat = ret->lon = GPS_FLTMAX;
+    ret->dst = 0;
     ret->smbl = ret->dspl = ret->colour = ret->alt = ret->prot = INT_MAX;
 
     if(gps_waypt_type==pD108)
     {
 	ret->dst  = 0;
 	ret->attr = 0x60;
+	for(i=0;i<7;++i) ret->subclass[i] = 0;
+	for(i=6;i<18;++i) ret->subclass[i] = 0xff;
     }
         
     return ret;

@@ -242,6 +242,9 @@ data_write(void)
 		way[i]->facility[0] = 0;
 		way[i]->addr[0] = 0;
 		way[i]->cross_road[0] = 0;
+		way[i]->cross_road[0] = 0;
+		way[i]->dpth = 1.0e25;
+		way[i]->wpt_class = 0;
 
 		if(wpt->description) src = wpt->description;
 		if(wpt->notes) src = wpt->notes;
