@@ -1,7 +1,7 @@
 /*
     Describe vectors containing file operations.
  
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2004, 2005  Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -227,7 +227,7 @@ vecs_t vec_list[] = {
 	{
 		&saroute_vecs,
 		"saroute",
-		"Delorme Street Atlas Route",
+		"DeLorme Street Atlas Route",
 		"anr"
 	},
 	{
@@ -263,7 +263,7 @@ vecs_t vec_list[] = {
 	{
 		&gpl_vecs,
 		"gpl",
-		"Delorme GPL",
+		"DeLorme GPL",
 		NULL
 	},
 	{
@@ -546,47 +546,73 @@ alpha (const void *a, const void *b)
 	const vecs_t *const *ap = a;
 	const vecs_t *const *bp = b;
 	
-	return strcmp((*ap)->name , (*bp)->name);
+	return strcasecmp((*ap)->desc , (*bp)->desc);
 }
 
-void
-disp_vecs(void)
+/*
+ * Smoosh the vecs list and style lists together and sort them
+ * alphabetically.  Returns an allocated copy of a style_vecs_array
+ * that's populated and sorted.
+ */
+vecs_t **
+sort_and_unify_vecs(int *ctp)
 {
-	vecs_t *vec;
-	style_vecs_t *svec;
-	arglist_t *ap;
 	int vc;
 	vecs_t **svp;
+	vecs_t *vec;
+	style_vecs_t *svec;
 	int i = 0;
-
-#define VEC_FMT "	%-20.20s  %-.50s\n"
 
 	/* Get a count from both the vec (normal) and the svec (csv) lists */
 
 	extern size_t nstyles;
 	vc = sizeof vec_list / sizeof vec_list[0] -1 + nstyles;
 
-	svp = xcalloc(vc, sizeof(style_vecs_t *));
 
+	svp = xcalloc(vc, sizeof(style_vecs_t *));
 	/* Normal vecs are easy; populate the first part of the array. */
 	for (vec = vec_list; vec->vec; vec++, i++) {
 		svp[i] = vec;
 	}
+
 	/* Walk the style list, parse the entries, dummy up a "normal" vec */
 	for (svec = style_list; svec->name; svec++, i++)  {
 		xcsv_read_internal_style(svec->style_buf);
 		svp[i] = xcalloc(1, sizeof **svp);
 		svp[i]->name = svec->name;
-		svp[i]->vec = svp[0]->vec; /* Interits xcsv opts */
+		svp[i]->vec = xmalloc(sizeof(*svp[i]->vec));
+		*svp[i]->vec = *vec_list[0].vec; /* Interits xcsv opts */
+		/* Reset file type to inherit ff_type from xcsv for everything
+		 * except the xcsv format itself, which we leave as "internal"
+		 */
+		if (strcmp(svec->name, "xcsv"))
+			svp[i]->vec->type = xcsv_file.type;
+		
 		svp[i]->desc = xcsv_file.description;
 	}
-
 	/* Now that we have everything in an array, alphabetize them */
 	qsort(svp, vc, sizeof(*svp), alpha);
 
+	*ctp = i;
+	return svp;
+}
+
+
+void
+disp_vecs(void)
+{
+	vecs_t **svp;
+	arglist_t *ap;
+	int vc;
+	int i = 0;
+
+	svp = sort_and_unify_vecs(&vc);
+#define VEC_FMT "	%-20.20s  %-.50s\n"
 	for (i=0;i<vc;i++) {
-		if ( svp[i]->vec->type != ff_type_internal ) 
-			printf(VEC_FMT, svp[i]->name, svp[i]->desc);
+		if ( svp[i]->vec->type == ff_type_internal )  {
+			continue;
+		}
+		printf(VEC_FMT, svp[i]->name, svp[i]->desc);
 		for (ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
 			if ( !(ap->argtype & ARGTYPE_HIDDEN)) 
 				printf("	  %-18.18s    %-.50s %s\n",
@@ -594,7 +620,7 @@ disp_vecs(void)
 				(ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
 		}
 	}
-		
+	xfree (svp);	
 	return;
 }
 
@@ -635,14 +661,19 @@ disp_v2(ff_vecs_t *v)
 void
 disp_formats(int version)
 {
+	vecs_t **svp;
 	vecs_t *vec;
 	style_vecs_t *svec;
+	int i, vc = 0;
 
 	switch(version) {
 	case 0:
 	case 1:
 	case 2:
-		for (vec = vec_list; vec->vec; vec++) {
+		svp = sort_and_unify_vecs(&vc);
+		for (i=0;i<vc;i++,vec++) {
+			vec = svp[i];
+
 			/* Version 1 displays type at front of all types.
 			 * Version 0 skips internal types.
 			 */
@@ -659,18 +690,9 @@ disp_formats(int version)
 				vec->extension? vec->extension : "", 
 				vec->desc);
 		}
-		for (svec = style_list; svec->name; svec++) {
-			xcsv_read_internal_style(svec->style_buf);
-			if (version > 0)
-				disp_v1(xcsv_file.type);
-			if (version >= 2) {
-				disp_v2(vec_list[0].vec);
-			}
-			printf("%s\t%s\t%s\n", svec->name, xcsv_file.extension ? 
-				xcsv_file.extension : "", xcsv_file.description);
-		}
 		break;
 	default:
 		;
 	}
+	xfree (svp);	
 }
