@@ -6,7 +6,7 @@
  * All the above *except* Meridian Green and Yellow.  The units with a 2MB
  *   base map have a different protocol used.
  *
- * Copyright 2003 by Robert Lipe.
+ * Copyright 2003, 2004 by Robert Lipe.
  * robertlipe@usa.net
  */
 
@@ -46,9 +46,10 @@ Usage: magxfer [-p portname] [-b bitrate] [-t type ] -f filetosend.img\n\
        portname   port for uplkoad (default /dev/ttyS0)\n\
        bitrate    bitrate (default is 4800)\n\
        type       can be \n\
-       			b (secondary base map),\n\
-			B (primary base map), or\n\
+			s (secondary base map),\n\
+			p (primary base map), or\n\
 			d (detailed map)\n\
+			h (firmware HEX file)\n\
 		   (default d)\n\
        filetosend.img is the image file you wish to upload to the unit\n";
 void 
@@ -111,6 +112,17 @@ int rxc(void)
 	exit(1);
 }
 
+int txs(const char *data, size_t n)
+{
+	if (debug_level >= 9) {
+		fprintf(stderr, "<%02x", *data);
+		if (n > 1)
+			fprintf(stderr, "...");
+		fprintf(stderr, ">");
+	}
+        return write(magfd, data, n);
+}
+
 /*
  * Certain things in the protocol return a 3 byte sequence
  * starting with '0x8e'.  We know when these will happen, so
@@ -136,7 +148,7 @@ size_t
 xmit_xframe(vld *frame, unsigned int frame_number)
 {
 	int i;
-	int acked_frame;
+	unsigned int acked_frame;
 	
 	if (debug_level > 3) {
 		dump_xframe(frame); 
@@ -149,7 +161,7 @@ xmit_xframe(vld *frame, unsigned int frame_number)
 		int unit_sum;
 		i = frame->data_length;
 
-		write(magfd, frame->data, i);
+		txs(frame->data, i);
 
 		unit_sum = get3();
 		if (unit_sum != 0) {
@@ -174,7 +186,6 @@ retry_tx:
 	}
 
 	i = frame->data_length + 10;
-	write(magfd, frame->data, i);
 	if (debug_level > 3) {
 		int x ;
 		fprintf(stderr, "Writing\n");
@@ -182,6 +193,42 @@ retry_tx:
 		  fprintf(stderr, "%02x ", frame->data[x]);
 		}
 		fprintf(stderr, "<\n");
+	}
+	txs(frame->data, i);
+        
+	if (frame_number == 0xffffffff) {
+		/*
+		 *  Do not wait for ACK for flash erase command
+		 *  We have to receive just a series of 0x87 for every
+		 *  block erased and two 0x55: one is the
+		 *  ACK for the frame and another for erase complete
+		 */
+		int cnt = 0;
+		int bcnt = 0;
+		char erase_command = 0x6a;
+		char ok = 0x55;
+		for (i = 0; i < 10; i++) {
+			unsigned char ch = rxc();
+			if(ch == 0x55) {
+				cnt++;
+				if (cnt >= 2)
+					return 0;
+			} else if (ch == 0x8f) {
+				printf("\rBlock erase: %4d", bcnt++);
+				fflush(stdout);
+				i--;
+			}
+		}
+		for (i = 0; (i = rxc()) ;) {
+			if (i == 0x55) break;
+			if (i == 0xaa) break;
+		}
+		txs(&ok, 1);
+		for (i = 0; (i = rxc()) ;) {
+			if (i == 0x55) break;
+		}
+		txs(&erase_command, 1);
+		goto retry_tx;
 	}
 
 	/*
@@ -288,7 +335,7 @@ dump_xframe(vld *frame)
  * Prepare a packet for transmission by adding framing, checksum, etc.
  */
 vld *
-make_xframe(void *data, int len, int recno)
+make_xframe(void *data, int len, unsigned int recno)
 {
 	vld *odata = xmalloc(sizeof *odata);
 	unsigned int words;
@@ -341,6 +388,12 @@ make_xframe(void *data, int len, int recno)
 	odata->data[aligned_len + 9] = ']';
 
 	return odata;
+}
+
+void free_xframe(vld *frame)
+{
+	free(frame->data);
+	free(frame);
 }
 
 /*
@@ -427,6 +480,7 @@ restore_port()
 void
 setup_port(const char *portname, unsigned bitrate)
 {
+	char clean_buff[256];
 	magfd = open (portname, O_RDWR);
 
 	if (magfd < 0) {
@@ -448,6 +502,7 @@ setup_port(const char *portname, unsigned bitrate)
 	cfsetospeed(&new_tio, mkspeed(bitrate));
 	cfsetispeed(&new_tio, mkspeed(bitrate));
 	tcsetattr(magfd, TCSAFLUSH, &new_tio);
+	read(magfd,clean_buff,sizeof(clean_buff));
 }
 
 
@@ -466,8 +521,9 @@ send_upload_cmd(unsigned detailed)
 		"$PMGNCMD,MPUPLOAD,1*71\r\n", 
 		"$PMGNCMD,MPUPLOAD,2*72\r\n", 
 		"$PMGNCMD,MPUPLOAD,3*73\r\n",
+                "$PMGNCMD,DBUPLOAD*77\r\n"
 	};
-	write(magfd, cmd[detailed], strlen(cmd[detailed] + 1));
+	txs(cmd[detailed], strlen(cmd[detailed]));
 	cfsetospeed(&new_tio, B115200);
 	cfsetispeed(&new_tio, B115200);
 	tcsetattr(magfd, TCSADRAIN, &new_tio);
@@ -497,7 +553,7 @@ sync_receiver(void)
 	char c = 0x55;
 
 	signal(SIGALRM, alarm_handler);
-	alarm(5);
+	alarm(10);
 
 	synced = 0;
 	for (i = 0;synced == 0;) {
@@ -508,7 +564,7 @@ sync_receiver(void)
 		}
 	}
 
-	write(magfd, &c, 1);
+	txs(&c, 1);
 
 	/*
 	 * The spec says we shouldn't have to wait again, but this makes
@@ -520,8 +576,197 @@ sync_receiver(void)
 			case 0:	break;
 			case 0xaa:  synced=1; 
 			case 0x77:  synced=1;
+			case 0x55:  synced=1;	// For firmware upload
 		}
 	}
+}
+
+/* Stuff for dealing with S-records file used for firmware distribution */
+
+#define STRSIZE		1024
+#define SRECSIZE	STRSIZE/2
+
+struct srec {
+	int length;
+	unsigned long address;
+	unsigned char data[SRECSIZE];
+};
+
+static char *fname;
+
+int hex(int ch)
+{
+	ch &= 0xff;
+	
+	if ((ch >= 'A') && (ch <= 'F'))
+		return ch - 'A' + 10;
+	else if ((ch >= 'a') && (ch <= 'f'))
+		return ch - 'a' + 10;
+	else if ((ch >= '0') && (ch <= '9'))
+		return ch - '0';
+	else
+		/* WARNING: This can be machine dependent.
+                   We assume that -1 is represented as 0xffffffff
+                   so if there is any error in a input hex format
+                   the output from this function and sbyte below
+                   will be -1 */
+                return -1;
+}
+
+int sbyte (char *ptr)
+{
+	return (hex(*ptr++) << 4) | hex(*ptr);
+}
+
+int get_srec(char *string, struct srec *srec)
+{
+	char *ptr;
+	unsigned char *sptr;
+	int length;
+	int type;
+	int data;
+	int chksum;
+	
+	while (ptr = strchr(string, '\r'))
+		memmove(ptr, ptr+1, strlen(ptr+1));
+	if (ptr = strchr(string, '\n'))
+		*ptr = 0;
+	ptr = string;
+	while(*ptr == ' ' || *ptr == '\t')
+		ptr++;
+	if (*ptr++ != 'S')
+		return 0;
+	if ((type = hex(*ptr++)) != 3)
+		return 0;
+	if (((length = sbyte(ptr)) < 0) || (length > SRECSIZE-1-4))
+		return -1;
+	ptr += 2;
+	if (length != strlen(ptr)/2)
+		return -2;
+	
+	chksum = length;
+	data = sbyte(ptr);
+	chksum += data;
+	srec->address  = data << 24;
+	ptr += 2;
+	data = sbyte(ptr);
+	chksum += data;
+	srec->address |= data << 16;
+	ptr += 2;
+	data = sbyte(ptr);
+	chksum += data;
+	srec->address |= data << 8;
+	ptr += 2;
+	data = sbyte(ptr);
+	chksum += data;
+	srec->address |= data;
+	ptr += 2;
+	
+	if (srec->address == -1U)
+		return -3;
+	
+	length -= 4;
+	sptr = &srec->data[0];
+	while (length > 1) {
+		if ((data = sbyte(ptr)) == -1)
+			return -4;
+		chksum += data;
+		ptr += 2;
+		*sptr++ = data;
+		length--;
+	}
+	
+	chksum += sbyte(ptr);
+	chksum++;
+	if (chksum & 0xff)
+		return -5;
+	srec->length = (int)(sptr - &srec->data[0]);
+	if (srec->address == 0)
+		printf("%s\n", string);
+	return srec->length;
+}
+
+void flash_erase(unsigned long min_address, unsigned long max_address)
+{
+	unsigned char data[4];
+        vld *frame;
+        char erase_command = 0x6a;
+        
+        data[0] = (max_address >> 24) & 0xff;
+        data[1] = (max_address >> 16) & 0xff;
+        data[2] = (max_address >> 8)  & 0xff;
+        data[3] = max_address & 0xff;
+        
+        frame = make_xframe(data, 4, min_address);
+        txs(&erase_command, 1);
+        xmit_xframe(frame, 0xffffffff);
+	free_xframe(frame);
+}
+
+void flash_program(unsigned long address, unsigned long length, char *buff)
+{
+	vld *frame;
+	if (length > 0) {
+		frame = make_xframe(buff, length, address);
+		printf("\rProgramming %4d bytes at address: %08x", length, address);
+		fflush(stdout);
+		xmit_xframe(frame, address-1);
+		free_xframe(frame);
+	}
+}
+
+void flash_end (void)
+{
+	vld *frame;
+	frame = make_xframe(NULL, 0, 0);
+	txs(frame->data, 6);
+	free_xframe(frame);
+}
+
+void firmware_upload (FILE *infile, char *buffer)
+{
+	FILE *outfile;
+	char string[STRSIZE];
+	struct srec srec;
+	unsigned long min_address,max_address;
+	unsigned long current_address = 0;
+	unsigned long frag_length = 0;
+	int rc;
+	
+	min_address = 0xffffffff;
+	max_address = 0x0;
+	while(fgets(string, sizeof(string)-1, infile)) {
+		if ((rc = get_srec(string, &srec)) == 0)
+			continue;
+		else if (rc < 0) {
+			fprintf(stderr, "Wrong record: %s\n", string);
+			exit(-3);
+		}
+		if ((srec.address + srec.length) > max_address)
+			max_address = srec.address + srec.length;
+		if (srec.address < min_address)
+			min_address = srec.address;
+	}
+	printf("Lowest address = %08X, Highest address = %08X\n", min_address, max_address);
+	fseek(infile, 0, 0);
+        flash_erase(min_address, max_address);
+	printf("\n");
+	while(fgets(string, sizeof(string)-1, infile)) {
+		if ((rc = get_srec(string, &srec)) <= 0)
+			continue;
+		if ((srec.address != current_address + frag_length) || (frag_length + srec.length > 1024)) {
+			flash_program(current_address, frag_length, buffer);
+			frag_length = 0;
+			current_address = srec.address;
+		}
+		memcpy(buffer + frag_length, &srec.data[0], srec.length);
+		frag_length += srec.length;
+	}
+	flash_program(current_address, frag_length, buffer);
+	printf("\n");
+	flash_end();
+	fclose(infile);
+        exit(0);
 }
 
 int
@@ -536,7 +781,7 @@ main(int argc, char *argv[])
 	unsigned bitrate = 4800;
 	int detailedmap = 1;
 	const char *portname = "/dev/ttyS0";
-	const char *ifilename = "";
+	const char *ifilename = NULL;
 
 
 	while ((c = getopt(argc, argv, "t:f:p:b:D:")) != EOF) {
@@ -548,6 +793,8 @@ main(int argc, char *argv[])
 				detailedmap = 1;
 			    else if (strcmp(optarg,"p") == 0)
 				detailedmap = 0;
+			    else if (strcmp(optarg,"h") == 0)
+				detailedmap = 3;
 			    else {
 				fprintf(stderr,"Map type (-t option) can only be 'd', 'p', or 's'\n");
 				exit(1);
@@ -571,7 +818,7 @@ main(int argc, char *argv[])
 				break;
 		}
 	}
-	if (ifilename[0] == '\0') {
+	if (!ifilename) {
 	        fprintf(stderr, "No input file specified. Exiting.\n");
 		usage();
 	        exit(1);
@@ -581,6 +828,13 @@ main(int argc, char *argv[])
 	sync_receiver();
 
 	inf = fopen(ifilename, "r");
+	if (!inf) {
+		perror(ifilename);
+		exit(1);
+	}
+        if (detailedmap == 3) {
+        	firmware_upload(inf,ibuf);
+        }
 	file_sz = fread(ibuf, 1, sizeof(ibuf), inf);
 	if (file_sz == sizeof(ibuf)) {
 		fprintf(stderr, "File '%s' bigger than %d bytes.  Exiting.\n",

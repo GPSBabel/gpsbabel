@@ -25,6 +25,20 @@ Usage is simple:
 		as by Worldwide Basemap or p for primary basemap.  Default
 	        is d. 
 
-	filetosend.img is the image file you wish to upload to the unit.
-		
+                Additionally, type can be h to specify a firmware
+                hex file containing srecords for upload on the unit.
+		See disclaimer below.
+
+        filetosend.img is the image file you wish to upload to the unit.
+
+***FIRMWARE UPDATE DISCLAIMER*** 
+
+Firmware upload has been tested on a SporTrak Pro in both normal mode
+and in emergency upload mode initiated by pressing NAV+MENU while
+turning the Sportrack ON.  It is possible that this doesn't work on all
+units.  Failed firmware upgrades may require returning your unit to
+Magellan for service which may or may not be covered under warranty.  We
+make no promise of any kind that firmware uploads will succeed.  If your
+unit croaks, it's your responsibility, not ours.
+
 
