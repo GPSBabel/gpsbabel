@@ -56,6 +56,7 @@ extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t navicache_vecs;
 extern ff_vecs_t psit_vecs;             /* MRCB */
 extern ff_vecs_t geoniche_vecs;
+extern ff_vecs_t gpl_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -214,6 +215,12 @@ vecs_t vec_list[] = {
 		&geoniche_vecs,
 		"geoniche",
 		"GeoNiche .pdb",
+		NULL
+	},
+	{
+		&gpl_vecs,
+		"gpl",
+		"Delorme GPL",
 		NULL
 	},
 	{
