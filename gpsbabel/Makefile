@@ -19,7 +19,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
-	ozi.o
+	ozi.o nmea.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o
 
