@@ -20,6 +20,7 @@
 
 
 #include "defs.h"
+#include "garmin_tables.h"
 #include <ctype.h>
 
 static FILE *file_in;
@@ -71,26 +72,30 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-	char name[9], desc[90];
+	char name[7], desc[40];
 	double lat,lon;
 	char latdir, londir;
 	long alt; 
+	int symnum;
 	char alttype;
 	char date[10];
 	char time[9];
 	waypoint *wpt_tmp;
-	char ibuf[100];
+	char ibuf[122];
 
 	for(;fgets(ibuf, sizeof(ibuf), file_in);) {
 		switch (ibuf[0]) {
 			case 'W': 
-			sscanf(ibuf, "W  %s %c%lf %c%lf %s %s %ld %90[^\n']", 
+			sscanf(ibuf, "W  %6c %c%lf %c%lf %s %s %ld %40c %*13c %d", 
 				name, &latdir, &lat, &londir, &lon, 
-				date, time, &alt, desc);
+				date, time, &alt, desc, &symnum);
+		desc[sizeof(desc)-1] = '\0';
+		name[sizeof(name)-1] = '\0';
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
 		wpt_tmp->position.altitude.altitude_meters = alt;
 		wpt_tmp->shortname = xstrdup(name);
 		wpt_tmp->description = xstrdup(desc);
+		wpt_tmp->icon_descr = mps_find_desc_from_icon_number(symnum, PCX);
 
 		if (latdir == 'S') lat = -lat;
 		if (londir == 'W') lon = -lon;
@@ -124,9 +129,9 @@ gpsutil_disp(const waypoint *wpt)
 		tp++;
 	}
 
-	icon_token = mps_find_icon_number_from_desc(deficon);
+	icon_token = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
 	if (get_cache_icon(wpt)) {
-		icon_token = mps_find_icon_number_from_desc(get_cache_icon(wpt));
+		icon_token = mps_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
 	}
 
 

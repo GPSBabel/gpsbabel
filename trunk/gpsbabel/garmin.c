@@ -23,11 +23,11 @@
 #include <limits.h>
 #include "defs.h"
 #include "jeeps/gps.h"
+#include "garmin_tables.h"
 
 #define MYNAME "GARMIN" 
 static const char *portname;
 static void *mkshort_handle;
-extern const char *mps_find_desc_from_icon_number(const int icon);
 
 static void
 rw_init(const char *fname, const char *opts)
@@ -78,7 +78,7 @@ waypt_read(void)
 		wpt_tmp->position.longitude.degrees = way[i]->lon;
 		wpt_tmp->position.latitude.degrees = way[i]->lat;
 		wpt_tmp->icon_descr =
-			mps_find_desc_from_icon_number(way[i]->smbl);
+			mps_find_desc_from_icon_number(way[i]->smbl, PCX);
 		/*
 		 * If a unit doesn't store altitude info (i.e. a D103)
 		 * gpsmem will default the alt to INT_MAX.   Other units 
@@ -265,7 +265,7 @@ data_write(void)
 		}
 		way[i]->lon = wpt->position.longitude.degrees;
 		way[i]->lat = wpt->position.latitude.degrees;
-		way[i]->smbl = mps_find_icon_number_from_desc(wpt->icon_descr);
+		way[i]->smbl = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
 		if (wpt->position.altitude.altitude_meters != unknown_alt) {
 			way[i]->alt = wpt->position.altitude.altitude_meters;
 		}
