@@ -169,7 +169,9 @@ main(int argc, char *argv[])
  					fvecs->f_process();
  					fvecs->f_deinit();
 					free_filter_vec(fvecs);
- 				} 
+ 				}  else {
+					fatal("Unknown filter '%s'\n",optarg);
+				}
  				break;
 			case 'D':
 				optarg = argv[argn][2]
