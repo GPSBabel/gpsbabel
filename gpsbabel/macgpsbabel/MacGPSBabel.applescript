@@ -31,6 +31,35 @@ on will open theObject
 	end if
 end will open
 
+on choose menu item theObject
+	if name of theObject is "open" then
+		if visible of window "MacGPSBabel" is true then
+			if contents of text field "inputFile" of window "MacGPSBabel" is equal to "" then
+				my selectFile()
+				return 0
+			else if the title of current menu item of popup button "inPop" of window "MacGPSBabel" = "Select Input File Type" then
+				display dialog "Please select an input file type for the previous file before adding another file" buttons {"OK"} default button 1
+				return 0
+			else if item 1 of (the last item in fileList) is not equal to (contents of text field "inputFile" of window "MacGPSBabel") then
+				set the end of fileList to {contents of text field "inputFile" of window "MacGPSBabel", contents of popup button "inPop" of window "MacGPSBabel"}
+			end if
+			my addFile()
+		else
+			set visible of window "MacGPSBabel" to true
+			if contents of text field "inputFile" of window "MacGPSBabel" is equal to "" then
+				my selectFile()
+				return 0
+			else if the title of current menu item of popup button "inPop" of window "MacGPSBabel" = "Select Input File Type" then
+				display dialog "Please select an input file type for the previous file before adding another file" buttons {"OK"} default button 1
+				return 0
+			else if item 1 of (the last item in fileList) is not equal to (contents of text field "inputFile" of window "MacGPSBabel") then
+				set the end of fileList to {contents of text field "inputFile" of window "MacGPSBabel", contents of popup button "inPop" of window "MacGPSBabel"}
+			end if
+			my addFile()
+		end if
+	end if
+end choose menu item
+
 -- the 'buisness' scripts, for dealing with all button clicks
 on clicked theObject
 	-- MAIN WINDOW - Select File button
