@@ -435,6 +435,8 @@ gpx_start(void *data, const char *el, const char **attr)
 	case tt_cache_desc_short:
 		tag_cache_desc(attr);
 		break;
+	default:
+		break;
 	}
 	if (passthrough) {
 		start_something_else(el, attr);
@@ -711,6 +713,8 @@ gpx_end(void *data, const char *el)
 		end_something_else();
 		*s = 0;
 		return;
+	default:
+		break;
 	}
 
 	if (passthrough)
@@ -1087,8 +1091,6 @@ gpx_waypt_pr(const waypoint *waypointp)
 static void
 gpx_track_hdr(const route_head *rte)
 {
-	char * tmp_ent;
-	
 	fprintf(ofd, "<trk>\n");
 	write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
 	write_optional_xml_entity(ofd, "  ", "desc", rte->rte_desc);
@@ -1130,8 +1132,6 @@ void gpx_track_pr()
 static void
 gpx_route_hdr(const route_head *rte)
 {
-	char * tmp_ent;
-	
 	fprintf(ofd, "<rte>\n");
 	write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
 	write_optional_xml_entity(ofd, "  ", "desc", rte->rte_desc);

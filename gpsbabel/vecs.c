@@ -415,6 +415,7 @@ disp_vecs(void)
  * Additional information for V1.
  * Output format type at front of line.
  */
+static void
 disp_v1(ff_type t)
 {
 	char *tstring;

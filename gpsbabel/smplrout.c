@@ -223,8 +223,6 @@ routesimple_process( void )
 
 void
 routesimple_init(const char *args) {
-	char *fm;
-
 	count = 0;
 
 	if (countopt) {
