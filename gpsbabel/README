@@ -663,6 +663,21 @@ THE FORMATS
 	default hints are unencrypted; use the 'encrypt' option to
         encrypt the hints.
 
+    Hiketech
+
+        This is the .gps format used by the Mac OS X applications
+        written by HikeTech. These include TopoDraw, Link2GPS, and
+        GPSWrite. More information about these products can be found at
+        http://www.hiketech.com
+
+    glogbook 
+
+        This is the XML format used by the Garmin Logbook product that
+        ships with Forerunner and Foretrex.
+
+	http://www.garmin.com
+
+
 DATA FILTERS
 
 	GPSBabel supports data filtering.  Data filters are invoked from
