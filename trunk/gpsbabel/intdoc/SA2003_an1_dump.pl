@@ -128,9 +128,10 @@ print( "$wptcount waypoints\n" );
 while ( $wptcount ) {
 
   ($magic, $unk1, $lon, $lat, $type, $height, $width, $unk2, $unk3, $serial, 
-   $unk4, $zoom, $unk5, $circle_radius, $name, $font, $guid, $fontcolor, 
-   $fontstyle, $fontsize, $unk6, $outlinecolor, $unk7, $fillcolor, $unk8, $unk9 ) = 
-   shiftunpack( 'slllsllssssssds/a*s/a*a[16]lllllllll' );
+   $unk4, $create_zoom, $visible_zoom, $unk5, $circle_radius, $name, $font, 
+   $guid, $fontcolor, $fontstyle, $fontsize, $unk6, $outlinecolor, $unk7, 
+   $fillcolor, $unk8, $unk9 ) = 
+   shiftunpack( 'slllsllssssCCsds/a*s/a*a[16]lllllllll' );
 
    # fontcolor is BGR (i.e. pure blue is 0xff00000, pure red is 0x0000ff)
    # fontstyle is 0x10-bold, 0x20-italic, 0x80-underline
