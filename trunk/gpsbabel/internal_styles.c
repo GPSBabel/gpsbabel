@@ -374,7 +374,7 @@ static char s_and_t[] =
 "#\n"
 "FIELD_DELIMITER		COMMA\n"
 "RECORD_DELIMITER	NEWLINE\n"
-"BADCHARS		COMMA\n"
+"BADCHARS		,\"\n"
 
 "PROLOGUE	Name,Latitude,Longitude,Name 2,URL,Type\n"
 
