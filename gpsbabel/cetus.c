@@ -77,6 +77,7 @@ static FILE *file_out;
 static const char *out_fname;
 struct pdb *opdb;
 struct pdb_record *opdb_rec;
+static void *mkshort_wr_handle;
 
 static char *dbname = NULL;
 
@@ -308,6 +309,9 @@ data_write(void)
         queue *elem, *tmp;
 	extern queue waypt_head;
         waypoint *waypointp;
+	mkshort_wr_handle = mkshort_new_handle();
+	setshort_length(mkshort_wr_handle, 15);
+	setshort_whitespace_ok(mkshort_wr_handle, 0);
 
 	if (NULL == (opdb = new_pdb())) { 
 		fatal (MYNAME ": new_pdb failed\n");
@@ -335,10 +339,15 @@ data_write(void)
 	bh = htable;
 
         QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-                waypointp = (waypoint *) elem;
-		bh->wpt = waypointp;
-		bh->wpt_name = waypointp->shortname;
-		bh ++;
+	    waypointp = (waypoint *) elem;
+	    bh->wpt = waypointp;
+	    if (global_opts.synthesize_shortnames && waypointp->description) {
+		if (waypointp->shortname)
+		    xfree(waypointp->shortname);
+		waypointp->shortname = mkshort(mkshort_wr_handle, waypointp->description);
+	    }
+	    bh->wpt_name = waypointp->shortname;
+	    bh ++;
 	}
 	qsort(htable, ct, sizeof(*bh), compare);
 
@@ -348,6 +357,7 @@ data_write(void)
 
 	pdb_Write(opdb, fileno(file_out));
 	xfree(htable);
+	mkshort_del_handle(mkshort_wr_handle);
 }
 
 
