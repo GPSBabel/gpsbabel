@@ -1,0 +1,11 @@
+
+./gpsbabel -^ |
+while read FMT
+do
+	set -- $FMT
+	TYPE=$1
+	grep -q $TYPE ~/src/babelweb/capabilities.html  || echo $TYPE is not documented in capabilities.html.
+	
+	grep -qi "^    $TYPE$" README || echo $TYPE is not documented in README.
+
+done
