@@ -196,6 +196,7 @@ typedef struct {
 	char *url;
 	char *url_link_text;
 	int icon_descr_is_dynamic;
+	int shortname_is_synthetic;
 	const char *icon_descr;
 	time_t creation_time;	/* standardized in UTC/GMT */
 	int centiseconds;	/* Optional hundredths of a second. */
