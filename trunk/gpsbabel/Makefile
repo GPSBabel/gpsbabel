@@ -80,8 +80,8 @@ dep:
 
 VERSIONU=1_2_2_beta0317a2004
 VERSIOND=1.2.2_beta0317a2004
-#VERSIONU=1_2_1
-#VERSIOND=1.2.1
+VERSIONU=1_2_2
+VERSIOND=1.2.2
 
 release:
 	cvs commit
