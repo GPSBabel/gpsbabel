@@ -25,12 +25,15 @@ extern queue waypt_head;
 
 static char *snopt = NULL;
 static char *lcopt = NULL;
+static char *purge_duplicates = NULL;
 
 static
 arglist_t dup_args[] = {
 	{"shortname", &snopt, "Suppress duplicate waypoints based on name",
 		ARGTYPE_BOOL},
 	{"location", &lcopt, "Suppress duplicate waypoint based on coords",
+		ARGTYPE_BOOL},
+	{"all", &purge_duplicates, "Suppress all instances of duplicates",
 		ARGTYPE_BOOL},
 	{0, 0, 0, 0}
 };
@@ -39,6 +42,7 @@ arglist_t dup_args[] = {
 typedef struct btree_node {
 	struct btree_node *left, *right;
 	unsigned long data;
+	waypoint *wpt;
 } btree_node;
 
 static unsigned long crc32_table[256] =
@@ -103,10 +107,12 @@ get_crc32(void * data, int datalen)
 }
 
 static btree_node *
-addnode (btree_node * tree, btree_node * newnode)
+addnode (btree_node * tree, btree_node * newnode, btree_node **oldnode)
 {
 	btree_node * tmp, * last;
 
+	if ( *oldnode ) {*oldnode = NULL;}
+	
 	if (!tree)
 		return (newnode);
 
@@ -119,6 +125,9 @@ addnode (btree_node * tree, btree_node * newnode)
 		} else if (newnode->data > tmp->data) {
 			tmp = tmp->left;
 		} else {
+			if ( oldnode ) {
+				*oldnode = tmp;
+			}
 			return (NULL);
 		}
 	}
@@ -213,6 +222,7 @@ duplicate_process(void)
 {
 	waypoint * waypointp;
 	btree_node * newnode, * btmp, * sup_tree = NULL;
+	btree_node * oldnode = NULL;
 	unsigned long crc = 0;
 	struct { char shortname[32]; char lat[13]; char lon[13]; } dupe;
         waypoint * delwpt = NULL;
@@ -253,8 +263,9 @@ duplicate_process(void)
 
 		newnode = (btree_node *)xcalloc(sizeof(btree_node), 1);
 		newnode->data = crc;
+		newnode->wpt = waypointp;
 
-		btmp = addnode(sup_tree, newnode);
+		btmp = addnode(sup_tree, newnode, &oldnode );
 
 		if (btmp == NULL) {
 			if ( delwpt ) {
@@ -263,6 +274,14 @@ duplicate_process(void)
 			delwpt = waypointp;
 			waypt_del(waypointp); /* collision */
 			xfree(newnode);
+			if ( purge_duplicates && oldnode ) {
+				if ( oldnode->wpt ) {
+					waypt_del( oldnode->wpt );
+					waypt_free( oldnode->wpt );
+					oldnode->wpt = NULL;
+				}
+			}
+			
 		} else {
 			sup_tree = btmp;
 		}
