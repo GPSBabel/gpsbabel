@@ -124,10 +124,7 @@ arglist_t my_args[] = {
 static void
 rd_init(const char *fname)
 {
-	file_in = fopen(fname, "rb");
-	if (file_in == NULL) {
-		fatal(MYNAME ": Cannot open %s for reading\n", fname);
-	}
+	file_in = xfopen(fname, "rb", MYNAME);
 }
 
 static void
@@ -143,11 +140,8 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-	file_out = fopen(fname, "wb");
+	file_out = xfopen(fname, "wb", MYNAME);
 	out_fname = fname;
-	if (file_out == NULL) {
-		fatal(MYNAME ": Cannot open %s for writing\n", fname);
-	}
 }
 
 static void

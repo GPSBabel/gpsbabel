@@ -207,11 +207,7 @@ ozi_route_pr()
 static void
 rd_init(const char *fname)
 {
-    file_in = fopen(fname, "r");
-
-    if (file_in == NULL) {
-        fatal(MYNAME ": Cannot open %s for reading\n", fname);
-    }
+    file_in = xfopen(fname, "r", MYNAME);
 
     mkshort_handle = mkshort_new_handle();
 
@@ -240,12 +236,7 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-    file_out = fopen(fname, "w");
-
-    if (file_out == NULL) {
-        fatal(MYNAME ": Cannot open %s for writing\n", fname);
-    }
-
+    file_out = xfopen(fname, "w", MYNAME);
     mkshort_handle = mkshort_new_handle();
 
     /* set mkshort options from the command line if applicable */

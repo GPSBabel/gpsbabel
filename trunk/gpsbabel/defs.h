@@ -363,6 +363,7 @@ void debug_mem_close();
 #define xxstrappend XSTRAPPEND
 #endif /* DEBUG_MEM */
 
+FILE *xfopen(const char *fname, const char *type, const char *errtxt);
 
 int case_ignore_strcmp(const char *s1, const char *s2);
 

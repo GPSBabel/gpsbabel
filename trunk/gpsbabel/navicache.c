@@ -151,10 +151,7 @@ nav_end(void *data, const char *el)
 void
 nav_rd_init(const char *fname)
 {
-	fd = fopen(fname, "r");
-	if (fd == NULL) {
-		fatal(MYNAME ":Cannot open %s for reading\n", fname);
-	}
+	fd = xfopen(fname, "r", MYNAME);
 
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {
@@ -193,10 +190,7 @@ void
 nav_wr_init(const char *fname)
 {
 	fatal(MYNAME ": Does not support writing Navicache files.\n");
-	ofd = fopen(fname, "w");
-	if (ofd == NULL) {
-		fatal(MYNAME ":Cannot open '%s' for writing\n", fname);
-	}
+	ofd = xfopen(fname, "w", MYNAME);
 }
 
 void

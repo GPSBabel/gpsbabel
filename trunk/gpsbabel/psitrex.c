@@ -178,10 +178,7 @@ psit_find_icon_number_from_desc(const char *desc)
 static void
 psit_rd_init(const char *fname)
 {
-	psit_file_in = fopen(fname, "r");
-	if (psit_file_in == NULL) {
-		fatal(MYNAME ": '%s' for reading\n", fname);
-	}
+	psit_file_in = xfopen(fname, "r", MYNAME);
 }
 
 static void
@@ -193,10 +190,7 @@ psit_rd_deinit(void)
 static void
 psit_wr_init(const char *fname)
 {
-	psit_file_out = fopen(fname, "w");
-	if (psit_file_out == NULL) {
-		fatal(MYNAME ": '%s' for writing\n", fname);
-	}
+	psit_file_out = xfopen(fname, "w", MYNAME);
 }
 
 static void

@@ -21,7 +21,6 @@
 
 #include <ctype.h>
 #include <time.h>
-#include <errno.h>
 
 #include "defs.h"
 
@@ -47,13 +46,10 @@ static FILE *gplfile_out;
 static void
 gpl_rd_init(const char *fname)
 {
-	gplfile_in = fopen(fname, "rb");
+	gplfile_in = xfopen(fname, "rb", MYNAME);
 	if (sizeof(struct gpl_point) != 56) {
 		fatal(MYNAME, ": gpl_point is %d instead of 56.\n", 
 				sizeof(struct gpl_point));
-	}
-	if (gplfile_in == NULL) {
-		fatal(MYNAME, ": '%s' for reading\n", fname);
 	}
 }
 
@@ -92,10 +88,7 @@ gpl_rd_deinit(void)
 static void
 gpl_wr_init(const char *fname)
 {
-	gplfile_out = fopen(fname, "wb");
-	if (gplfile_out == NULL) {
-		fatal(MYNAME ": Cannot open '%s' for writing\n", fname);
-	}
+	gplfile_out = xfopen(fname, "wb", MYNAME);
 }
 
 static void

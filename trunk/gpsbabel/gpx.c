@@ -679,10 +679,7 @@ void
 gpx_rd_init(const char *fname)
 {
 	if ( fname[0] ) {
-		fd = fopen(fname, "r");
-	        if (fd == NULL) {
-		        fatal(MYNAME ": Cannot open %s for reading\n", fname );
-	        }
+		fd = xfopen(fname, "r", MYNAME);
 	}
 	else {
 		fd = NULL;
@@ -732,10 +729,7 @@ gpx_wr_init(const char *fname)
 {
 	mkshort_handle = mkshort_new_handle();
 
-	ofd = fopen(fname, "w");
-	if (ofd == NULL) {
-		fatal(MYNAME ": open %s for writing\n", fname );
-	}
+	ofd = xfopen(fname, "w", MYNAME);
 }
 
 static void

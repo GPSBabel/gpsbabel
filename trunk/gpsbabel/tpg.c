@@ -86,10 +86,7 @@ valid_tpg_header(char * header, int len)
 static void
 tpg_rd_init(const char *fname)
 {
-	tpg_file_in = fopen(fname, "rb");
-	if (tpg_file_in == NULL) {
-		fatal(MYNAME ": Cannot open %s for reading\n", fname);
-	}
+	tpg_file_in = xfopen(fname, "rb", MYNAME);
 }
 
 static void
@@ -101,13 +98,8 @@ tpg_rd_deinit(void)
 static void
 tpg_wr_init(const char *fname)
 {
-	tpg_file_out = fopen(fname, "wb");
+	tpg_file_out = xfopen(fname, "wb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
-
-	if (tpg_file_out == NULL) {
-		fatal(MYNAME ": Cannot open %s for writing\n", fname);
-	}
-	
 	waypt_out_count = 0;
 }
 

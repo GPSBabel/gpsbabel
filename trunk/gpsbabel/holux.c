@@ -36,14 +36,12 @@ static  FILE *file_in;
 static 	unsigned char *HxWFile;
 static  void *mkshort_handle;
 static  char fOutname[256];
+#define MYNAME "Holux"
 
 
 static void rd_init(const char *fname)
 {
-	file_in = fopen(fname, "rb");
-	if (file_in == NULL) {
-		fatal("GPSBABEL: Cannot open %s for reading\n", fname);
-	}
+	file_in = xfopen(fname, "rb", MYNAME);
 }
 
 
@@ -276,10 +274,7 @@ static void data_write(void)
     waypt_disp_all(holux_disp);
    
 
-	file_out = fopen(fOutname, "wb");
-	if (file_out == NULL) {
-		fatal("GPSUTIL: Cannot open %s for writing\n", fOutname);
-	}
+    file_out = xfopen(fOutname, "wb", MYNAME);
   
     iWritten = fwrite (HxWFile, 1, GM100_WPO_FILE_SIZE,file_out);  
     if (iWritten == 0)

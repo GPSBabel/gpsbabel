@@ -57,10 +57,7 @@ arcdist_process(void)
         double lat1, lon1, lat2, lon2;
 	int fileline = 0;
 
-	FILE *arcfile = fopen( arcfileopt, "r" );
-	if ( arcfile == NULL ) {
-		fatal(MYNAME ": Can't open %s for reading.\n",arcfileopt); 
-	}
+	FILE *arcfile = xfopen( arcfileopt, "r", MYNAME );
 	
         lat1 = lon1 = lat2 = lon2 = BADVAL;
 	while ( !feof(arcfile)) {

@@ -21,7 +21,6 @@
 
 #include <ctype.h>
 #include <time.h>
-#include <errno.h>
 
 #include "defs.h"
 #include "magellan.h"
@@ -541,11 +540,7 @@ terminit(const char *portname)
 		/*
 		 *  Probably not a com port.   Try it as a file.
 		 */
-		magfile_in = fopen(portname, "rb");
-		if (magfile_in == NULL) {
-			fatal(MYNAME ": Cannot open %s.%s\n",
-				portname, strerror(errno));
-		}
+		magfile_in = xfopen(portname, "rb", MYNAME);
 		is_file = 1;
 		icon_mapping = map330_icon_table;
 		mag_cleanse = m330_cleanse;
@@ -638,12 +633,7 @@ terminit(const char *portname)
 {
 	struct termios new_tio;
 
-        magfile_in = fopen(portname, "rb");
-
-        if (magfile_in == NULL) {
-                fatal(MYNAME ": Cannot open %s.%s\n",
-                        portname, strerror(errno));
-        }
+        magfile_in = xfopen(portname, "rb", MYNAME);
 
 	is_file = !isatty(fileno(magfile_in));
 	if (is_file) {
@@ -653,7 +643,7 @@ terminit(const char *portname)
 		return;
 	} 
 
-	magfile_out = fopen(portname, "w+b");
+	magfile_out = xfopen(portname, "w+b", MYNAME);
 	magfd = fileno(magfile_in);
 
 	tcgetattr(magfd, &orig_tio);
@@ -761,11 +751,7 @@ mag_wr_init(const char *portname)
 		is_file = 1;
 	}
 #else
-	magfile_out = fopen(portname, "w+b");
-	if (!magfile_out) {
-		fatal(MYNAME ": '%s' cannot be opened for writing.\n",
-				portname);
-	}
+	magfile_out = xfopen(portname, "w+b", MYNAME);
 	is_file = !isatty(fileno(magfile_out));
 #endif
 
@@ -773,11 +759,7 @@ mag_wr_init(const char *portname)
 		mkshort_handle = mkshort_new_handle();
 	}
 	if (is_file) {
-		magfile_out = fopen(portname, "w+b");
-		if (magfile_out == NULL) {
-			fatal(MYNAME ": '%s' cannot be opened for writing.\n",
-				       	portname);
-		}
+		magfile_out = xfopen(portname, "w+b", MYNAME);
 		icon_mapping = map330_icon_table;
 		mag_cleanse = m330_cleanse;
 		got_version = 1;

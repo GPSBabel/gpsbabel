@@ -38,10 +38,7 @@ static int trk_version = 30;
 static void
 mapsend_rd_init(const char *fname)
 {
-	mapsend_file_in = fopen(fname, "rb");
-	if (mapsend_file_in == NULL) {
-		fatal( MYNAME ": Cannot open '%s' for reading\n", fname);
-	}
+	mapsend_file_in = xfopen(fname, "rb", MYNAME);
 }
 
 static void
@@ -95,10 +92,7 @@ my_fwrite4(int *ptr, FILE *stream)
 static void
 mapsend_wr_init(const char *fname)
 {
-	mapsend_file_out = fopen(fname, "wb");
-	if (mapsend_file_out == NULL) {
-		fatal(MYNAME ": Cannot open '%s' for writing\n", fname);
-	}
+	mapsend_file_out = xfopen(fname, "wb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 	route_wp_count = 0;
 }
