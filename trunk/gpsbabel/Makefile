@@ -72,11 +72,12 @@ dep:
 VERSIONU=1_1_1_beta09042003
 VERSIOND=1.1.1_beta09042003
 release:
+	./chkdoc
 	rm -fr gpsbabel-$(VERSIOND)
 	cvs tag gpsbabel_$(VERSIONU)
 	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
-	tar cvzf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
-	cd /tmp ; tar xvzf gpsbabel-$(VERSIOND).tar.gz
+	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
+	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
 	touch /tmp/gpsbabel-$(VERSIOND)/internal_styles.c
 	cd /tmp/gpsbabel-$(VERSIOND)/mingw ; make  && zip -j gpsbabel-$(VERSIOND).zip  gpsbabel.exe libexpat.dll ../win32/gpsbabelfront.exe && cp gpsbabel-$(VERSIOND).zip /tmp
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).tar.gz ftp://upload.sf.net/incoming/
