@@ -267,7 +267,6 @@ track_read(void)
 				sprintf(trk_head->rte_name, "%s #%s", trk_name, trk_seg_num_buf);
 			}
 			trk_seg_num++;
-			trk_head->rte_num = trk_num;
 			trk_num++;
 			track_add_head(trk_head);
 		}
@@ -444,7 +443,8 @@ waypoint_write(void)
 		way[i]->ident[sizeof(way[i]->ident)-1] = 0;
 
 		if (wpt->gc_data.diff && wpt->gc_data.terr) {
-	                snprintf(obuf, sizeof(obuf), "%d/%d %s", 
+	                snprintf(obuf, sizeof(obuf), "%s%d/%d %s", 
+wpt->gc_data.container == gc_micro ?  "M " : "", 
 					wpt->gc_data.diff, wpt->gc_data.terr, 
 					src);
 			memcpy(way[i]->cmnt, obuf, strlen(obuf));
@@ -592,7 +592,6 @@ track_write(void)
 
 	tx_tracklist = xcalloc(n, sizeof(GPS_PTrack));
 	cur_tx_tracklist_entry = tx_tracklist;
-
 	for (i = 0; i < n; i++) {
 		tx_tracklist[i] = GPS_Track_New();
 	}
