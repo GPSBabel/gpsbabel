@@ -26,6 +26,8 @@
 #  define M_PI 3.14159265358979323846
 #endif
 
+#define MYNAME "Arc filter"
+
 extern queue waypt_head;
 
 static double pos_dist;
@@ -163,25 +165,34 @@ arcdist_process(void)
 	int i, wc;
 	queue temp_head;
 	extra_data *ed;
+        double lat1, lon1, lat2, lon2;
 
 	FILE *arcfile = fopen( arcfileopt, "r" );
-	if ( arcfile ) {
-          double lat1, lon1, lat2, lon2;
-	  lat1 = lon1 = lat2 = lon2 = BADVAL;
-	  lon1 = -999999;
-	  while ( !feof(arcfile)) {
+	if ( arcfile == NULL ) {
+		fatal(MYNAME ":Can't open %s for reading.\n",arcfileopt); 
+	}
+	
+        lat1 = lon1 = lat2 = lon2 = BADVAL;
+	while ( !feof(arcfile)) {
 	    char line[200];
 	    char *pound = NULL;
+	    int argsfound = 0;
+	    int fileline = 0;
 	    
-	    fgets( line, 200, arcfile );
+	    fgets( line, sizeof(line), arcfile );
 	   
+	    fileline++;
+	    
 	    pound = strchr( line, '#' );
 	    if ( pound ) *pound = '\0';
 	    
 	    lat2 = lon2 = BADVAL;
-	    sscanf( line, "%lf %lf", &lat2, &lon2 );
-	    
-	    if ( lat1 != BADVAL && lon1 != BADVAL &&
+	    argsfound = sscanf( line, "%lf %lf", &lat2, &lon2 );
+	   
+	    if ( argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
+                fprintf( stderr, "%s: Warning: Arc file contains unusable vertex on line %d.", MYNAME, fileline );
+	    } 
+	    else if ( lat1 != BADVAL && lon1 != BADVAL &&
 	         lat2 != BADVAL && lon2 != BADVAL ) {
   	      QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 
@@ -208,10 +219,9 @@ arcdist_process(void)
 	    }
 	    lat1 = lat2;
 	    lon1 = lon2;
-	  }
-	    
-	  fclose(arcfile);
 	}
+	    
+	fclose(arcfile);
 
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
