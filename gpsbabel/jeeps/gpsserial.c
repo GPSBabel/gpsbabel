@@ -126,7 +126,7 @@ int32 GPS_Serial_Write(int32 ignored, const void *obuf, int size)
 	return len;
 }
 
-int GPS_Serial_Read(int32 ignored, void *ibuf, int size)
+int32 GPS_Serial_Read(int32 ignored, void *ibuf, int size)
 {
 	DWORD cnt;
 
