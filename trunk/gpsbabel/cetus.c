@@ -30,7 +30,7 @@
 struct record {
 	char type;	
 	
-	char padbyte1;
+	char   readonly;
 	
 	pdb_32 latitude; /* Big endian, degrees*1e7, s=negative */
 	pdb_32 longitude; /* same as lat; w=negative */
@@ -66,12 +66,10 @@ struct record {
 	unsigned char vmin;
 	unsigned char vsec;
 	
-	char padbyte2;
+	char   flagged;
 	
 	pdb_32 icon;
 	pdb_16 category;
-	char   flagged;
-	char   readonly;
 };
 
 static FILE *file_in;
