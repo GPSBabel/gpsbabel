@@ -56,6 +56,18 @@
    '  6    225444       Fix taken at 22:54:44 UTC
    '  7    A            Data valid
 
+   ' $GPRMC - Recommended minimum specific GNSS Data
+   ' $GPRMC,085721.194,A,5917.7210,N,01103.9227,E,21.42,50.33,300504,,*07
+   '  2    085721       Fix taken at 08:57:21 UTC
+   '  3    A				Fix valid (this field reads V if fix is not valid)
+   '  4,5  5917.7210,N   Latitude 59 deg 17.7210' N
+   '  6,7  01103.9227,E  Longitude 11 deg 03.9227' E
+   '  8    21.42			Speed over ground (knots)
+   '  9    50.33			Course over ground (true)
+   '	10   300504			Date 30/05-2004
+   '  11   Empty field	Magnetic variation
+
+
    ' The optional checksum field consists of a "*" and two hex digits repre-
    ' senting the exclusive OR of all characters between, but not including,
    ' the "$" and "*".  A checksum is required on some sentences.
@@ -63,13 +75,16 @@
 ****************************************/
 
 /*
- * An input file mayh have both GGA and GLL sentences for the exact 
- * same position fix.   If we see a single GGA, start ignoring GLL's.
+ * An input file may have both GGA and GLL and RMC sentences for the exact 
+ * same position fix. If we see a single GGA, start ignoring GLL's and RMC's.
+ *	GLL's will also be ignored if RMC's are found and GGA's not found.
  */
+ 
 typedef enum {
 	gp_unknown = 0,
 	gpgga,
-	gplgll
+	gplgll,
+	gprmc
 } preferred_posn_type;
 
 static FILE *file_in;
@@ -212,6 +227,48 @@ gpgga_parse(char *ibuf)
 }
 
 static void
+gprmc_parse(char *ibuf)
+{
+	double latdeg, lngdeg;
+	char lngdir, latdir;
+	double hms;
+	double speed, course;
+	char fix;
+	struct tm tm;
+	waypoint *waypt;
+
+	if (trk_head == NULL) {
+		trk_head = route_head_alloc();
+		track_add_head(trk_head);
+	}
+
+	waypt  = waypt_new();
+
+	memset(&tm, 0, sizeof(tm));
+
+	sscanf(ibuf,"$GPRMC,%f,%c,%lf,%c,%lf,%c,%lf,%lf",
+		&hms, &fix, &latdeg, &latdir,
+		&lngdeg, &lngdir,
+		&speed, &course);
+
+	tm.tm_sec = (long) hms % 100;
+	hms = hms / 100;
+	tm.tm_min = (long) hms % 100;
+	hms = hms / 100;
+	tm.tm_hour = (long) hms % 100;
+
+	waypt->creation_time = mktime(&tm) + get_tz_offset() + current_time();
+
+	if (latdir == 'S') latdeg = -latdeg;
+	waypt->latitude = ddmm2degrees(latdeg);
+
+	if (lngdir == 'W') lngdeg = -lngdeg;
+	waypt->longitude = ddmm2degrees(lngdeg);
+
+	route_add_wpt(trk_head, waypt);
+}
+
+static void
 gpwpl_parse(char *ibuf)
 {
 	waypoint *waypt;
@@ -272,8 +329,14 @@ nmea_read(void)
 			posn_type = gpgga;
 			gpgga_parse(ibuf);
 		} else
-		if (0 == strncmp(ibuf, "$GPGLL,", 7)) {
+		if (0 == strncmp(ibuf, "$GPRMC,", 7)) {
 			if (posn_type != gpgga) {
+		   	posn_type = gprmc;
+				gprmc_parse(ibuf);
+			}			
+		} else
+		if (0 == strncmp(ibuf, "$GPGLL,", 7)) {
+			if ((posn_type != gpgga) && (posn_type != gprmc)) {
 				gpgll_parse(ibuf);
 			}
 		} else
