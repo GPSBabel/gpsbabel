@@ -541,7 +541,9 @@ mag_deinit(void)
 {
 	mag_handoff();
 	termdeinit();
-	fclose(magfile_in);
+	if(magfile_in)
+		fclose(magfile_in);
+	magfile_in = NULL;
 }
 #if 0
 /*
