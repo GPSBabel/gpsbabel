@@ -105,6 +105,7 @@ typedef enum {
 	tt_trk_desc,
 	tt_trk_name,
 	tt_trk_trkseg,
+	tt_trk_number,
 	tt_trk_trkseg_trkpt,
 	tt_trk_trkseg_trkpt_cmt,
 	tt_trk_trkseg_trkpt_name,
@@ -175,6 +176,7 @@ tag_mapping tag_path_map[] = {
 	{ tt_trk_name, 0, "/gpx/trk/name" },
 	{ tt_trk_desc, 0, "/gpx/trk/desc" },
 	{ tt_trk_trkseg, 0, "/gpx/trk/trkseg" },
+	{ tt_trk_number, 0, "/gpx/trk/number" },
 	{ tt_trk_trkseg_trkpt, 0, "/gpx/trk/trkseg/trkpt" },
 	{ tt_trk_trkseg_trkpt_ele, 0, "/gpx/trk/trkseg/trkpt/ele" },
 	{ tt_trk_trkseg_trkpt_time, 0, "/gpx/trk/trkseg/trkpt/time" },
@@ -719,6 +721,9 @@ gpx_end(void *data, const char *el)
 		break;
 	case tt_trk_desc:
 		trk_head->rte_desc = xstrdup(cdatastrp);
+		break;
+	case tt_trk_number:
+		trk_head->rte_num = atoi(cdatastrp);
 		break;
 
 	/*
