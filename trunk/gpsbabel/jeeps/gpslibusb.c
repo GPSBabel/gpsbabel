@@ -84,7 +84,9 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 	int r;
 
         r = usb_bulk_write(udev, gusb_bulk_out_ep, &opkt->dbuf[0], sz, TMOUT_I);
-	dump ("Sent", &opkt->dbuf[0], r);
+        if (gps_show_bytes) {
+		dump ("Sent", &opkt->dbuf[0], r);
+	}
 	if (r != sz) {
 		fprintf(stderr, "Bad cmdsend r %d sz %d\n", r, sz);
 	}
@@ -151,7 +153,7 @@ garmin_usb_start(struct usb_device *dev)
 	}
 
 	if (usb_set_configuration(udev, 1) < 0) {
-		abort();
+		fatal("usb_set_configuration failed");
 	}
 
 
@@ -195,7 +197,9 @@ garmin_usb_syncup(void)
 
                 if ((le_read16(iresp.gusb_pkt.pkt_id) == 6) &&
                         (le_read32(iresp.gusb_pkt.datasz) == 4)) {
-			fprintf(stderr, "Synced in %d\n", maxct - maxtries);
+			if (gps_show_bytes) {
+				fprintf(stderr, "Synced in %d\n", maxct - maxtries);
+			}
 //			fprintf(stderr, "Unit number %u\n", iresp[15] << 24 | iresp[14] << 16 | iresp[13] << 8 | iresp[12]);
 			return;
 		}
