@@ -229,7 +229,11 @@ mapsend_wpt_read(void)
 		wpt_tmp->position.altitude.altitude_meters = wpt_alt;
 		wpt_tmp->position.latitude.degrees = -wpt_lat;
 		wpt_tmp->position.longitude.degrees = wpt_long;
-		sprintf(tbuf, "%c", wpt_icon + 'a');
+
+		if (wpt_icon < 26)
+			sprintf(tbuf, "%c", wpt_icon + 'a');
+		else
+			sprintf(tbuf, "a%c", wpt_icon - 27 + 'a');
 		wpt_tmp->icon_descr = mag_find_descr_from_token(tbuf);
 
 		waypt_add(wpt_tmp);
@@ -340,7 +344,11 @@ n = ++cnt;
 
 	if (waypointp->icon_descr) {
 		iconp = mag_find_token_from_descr(waypointp->icon_descr);
-		n = iconp[0] - 'a';
+		if (1 == strlen(iconp)) {
+			n = iconp[0] - 'a';
+		} else {
+			n = iconp[1] - 'a' + 27;
+		}
 	} else  {
 		n = 0;
 	}
