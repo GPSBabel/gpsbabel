@@ -1,0 +1,511 @@
+/*
+    Output only format for PalmDoc
+
+    Copyright (C) 2004 Scott Brynen, scott (at) brynen.com
+    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004 Ronald L. Parker, ron@parkrrrr.com
+    Portions from txt2pdbdoc, Copyright (C) 1998  Paul J. Lucas
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
+*/
+
+
+#include "defs.h"
+#include "jeeps/gpsmath.h"
+#include <ctype.h>
+#include "coldsync/palm.h"
+#include "coldsync/pdb.h"
+
+static FILE *file_out;
+static void *mkshort_handle;
+static void *mkshort_bookmark_handle;
+static const char *out_fname;
+static struct pdb *opdb;
+static struct pdb_record *opdb_rec;
+
+static char *suppresssep = NULL;
+static char *dbname = NULL;
+
+static int ct = 1;
+static int offset = 0;
+
+static char *encrypt;
+
+#define MYNAME "PALMDOC"
+
+/* constants */
+#define	BUFFER_SIZE    	4096     	/* big enough for uncompressed record */
+#define	COMPRESSED	2
+#define	COUNT_BITS	3		/* why this value?  I don't know */
+#define	DISP_BITS	11		/* ditto */
+
+#define	DOC_CREATOR	0x52454164	/* "REAd" */
+#define	DOC_TYPE	0x54455874	/* "TEXt" */
+#define	UNCOMPRESSED	1
+
+struct buffer {
+	unsigned char *data;
+	unsigned len;
+};
+
+#define	NEW_BUFFER(b)	(b)->data = (unsigned char *)xmalloc( ((b)->len = 0,BUFFER_SIZE) )
+
+static
+arglist_t palmdoc_args[] = {
+	{ "nosep", &suppresssep, 
+		"Suppress separator lines between waypoints", ARGTYPE_BOOL },
+	{"dbname", &dbname, "Database name", ARGTYPE_STRING },
+	{"encrypt", &encrypt, "Encrypt hints with ROT13", ARGTYPE_BOOL },
+	{0, 0, 0, 0}
+};
+
+static struct buffer buf;
+
+struct doc_record0                   /* 16 bytes total */
+{
+    unsigned short version;          /* 1 = plain text, 2 = compressed */
+    unsigned short reserved1;
+    unsigned long  doc_size;         /* in bytes, when uncompressed */
+    unsigned short num_records;      /* PDB header numRecords - 1 */
+    unsigned short rec_size;         /* usually RECORD_SIZE_MAX */
+    unsigned long  reserved2;
+    unsigned short recsizes[1];
+};
+
+static struct recordsize {
+	int size;
+	struct recordsize *next;
+} *recordsize_tail;
+
+static struct bookmark {
+	int offset;
+	char *text;
+	struct bookmark *next;
+} *bookmark_tail;
+
+struct bookmark_record {
+	char text[16];
+	unsigned long offset;
+};
+
+static void put_byte(struct buffer *b, unsigned char c, int *space)
+{
+	if ( *space ) {
+		*space = 0;
+		/*
+		** There is an outstanding space char: see if we can squeeze it
+		** in with an ASCII char.
+		*/
+		if ( c >= 0x40 && c <= 0x7F ) {
+			b->data[ b->len++ ] = c ^ 0x80;
+			return;
+		}
+		b->data[ b->len++ ] = ' ';	/* couldn't squeeze it in */
+	} else if ( c == ' ' ) {
+		*space = 1;
+		return;
+	}
+
+	if ( (c >= 1 && c <= 8) || c >= 0x80 )
+		b->data[ b->len++ ] = '\1';
+
+	b->data[ b->len++ ] = c;
+}
+
+static unsigned char * mem_find(unsigned char *t, int t_len, unsigned char *m, int m_len)
+{
+	register int i;
+	for ( i = t_len - m_len + 1; i > 0; --i, ++t )
+		if ( *t == *m && !memcmp( t, m, m_len ) )
+			return t;
+	return 0;
+}
+
+
+static void compress( struct buffer *b )
+{
+
+	unsigned i, j;
+	int space = 0;
+
+	unsigned char *buf_orig;
+	unsigned char *p;	/* walking test hit; works up on successive matches */
+	unsigned char *p_prev;
+	unsigned char *head;	/* current test string */
+	unsigned char *tail;	/* 1 past the current test buffer */
+	unsigned char *end;	/* 1 past the end of the input buffer */
+
+	p = p_prev = head = buf_orig = b->data;
+	tail = head + 1;
+	end = b->data + b->len;
+
+	NEW_BUFFER( b );
+	b->len = 0;
+
+	/* loop, absorbing one more char from the input buffer on each pass */
+	while ( head != end ) {
+		/* establish where the scan can begin */
+		if ( head - p_prev > (( 1 << DISP_BITS )-1) )
+			p_prev = head - (( 1 << DISP_BITS )-1);
+
+		/* scan in the previous data for a match */
+		p = mem_find( p_prev, tail - p_prev, head, tail - head );
+
+		/* on a mismatch or end of buffer, issued codes */
+		if ( !p || p == head || tail - head > ( 1 << COUNT_BITS ) + 2
+			|| tail == end
+		) {
+			/* issued the codes */
+			/* first, check for short runs */
+            if ( tail - head < 4 ) {
+				put_byte( b, *head++, &space );
+            }
+			else {
+				unsigned dist = head - p_prev;
+				unsigned compound = (dist << COUNT_BITS)
+					+ tail - head - 4;
+
+                /* for longer runs, issue a run-code */
+				/* issue space char if required */
+				if ( space ) {
+					b->data[ b->len++ ] = ' ';
+					space = 0;
+				}
+
+				b->data[ b->len++ ] = 0x80 + ( compound >> 8 );
+				b->data[ b->len++ ] = compound & 0xFF;
+				head = tail - 1;/* and start again */
+			}
+			p_prev = buf_orig;	/* start search again */
+		} else
+			p_prev = p;		/* got a match */
+
+		/* when we get to the end of the buffer, don't inc past the */
+		/* end; this forces the residue chars out one at a time */
+		if ( tail != end )
+			++tail;
+	}
+	xfree( buf_orig );
+
+	if ( space )
+		b->data[ b->len++ ] = ' ';	/* add left-over space */
+
+	/* final scan to merge consecutive high chars together */
+	for ( i = j = 0; i < b->len; ++i, ++j ) {
+		b->data[ j ] = b->data[ i ];
+
+		/* skip run-length codes */
+		if ( b->data[ j ] >= 0x80 && b->data[ j ] < 0xC0 )
+			b->data[ ++j ] = b->data[ ++i ];
+
+		/* if we hit a high char marker, look ahead for another */
+		else if ( b->data[ j ] == '\1' ) {
+			b->data[ j + 1 ] = b->data[ i + 1 ];
+			while ( i + 2 < b->len &&
+				b->data[ i + 2 ] == 1 && b->data[ j ] < 8
+			) {
+				b->data[ j ]++;
+				b->data[ j + b->data[ j ] ] = b->data[ i + 3 ];
+				i += 2;
+			}
+			j += b->data[ j ];
+			++i;
+		}
+	}
+	b->len = j;
+}
+
+static void write_header( void ) {
+	
+	int recs = ct-1;
+	--ct;
+	
+	struct doc_record0 *rec0 = xcalloc( 1, sizeof(struct doc_record0)+(ct-1)*sizeof(short));
+	be_write16( &rec0->version, COMPRESSED );
+	be_write16( &rec0->reserved1, 0 );
+	be_write32( &rec0->doc_size, offset );
+	be_write16( &rec0->num_records, ct );
+	be_write16( &rec0->rec_size, 4096 );
+	be_write32( &rec0->reserved2, 0 );
+	while ( recs ) {
+		struct recordsize *oldrec = recordsize_tail;
+		be_write16( &rec0->recsizes[recs], oldrec->size );
+		recordsize_tail = oldrec->next;
+		xfree( oldrec );
+		--recs;
+	}
+	
+	opdb_rec = new_Record (0, 0, 0, sizeof(struct doc_record0)+sizeof(short)*(ct-1), (const ubyte *)rec0);
+
+	if (opdb_rec == NULL) {
+		fatal(MYNAME ": libpdb couldn't create summary record\n");
+	}
+
+	if (pdb_InsertRecord(opdb, NULL, opdb_rec)) {
+		fatal(MYNAME ": libpdb couldn't insert summary record\n");
+	}
+}
+
+static void write_bookmarks( void ) {
+	struct bookmark *oldmark = NULL;
+	struct bookmark_record rec;
+
+	struct bookmark *newtail = NULL;
+
+	/* reverse the bookmark list */	
+	while ( bookmark_tail ) {
+		oldmark = bookmark_tail;
+		bookmark_tail = oldmark->next;
+		oldmark->next = newtail;
+		newtail = oldmark;
+	}
+	bookmark_tail = newtail;
+	
+	ct++;
+	while ( bookmark_tail ) {
+		oldmark = bookmark_tail;
+		bookmark_tail = oldmark->next;
+		
+		be_write32( &rec.offset, oldmark->offset );
+		memset( rec.text, 16, 0 );
+		strncpy( rec.text, oldmark->text, 16 );
+		
+		opdb_rec = new_Record( 0, 0, ct++, 
+				sizeof(struct bookmark_record),
+					(const ubyte *)&rec );
+		if (opdb_rec == NULL) {
+			fatal(MYNAME ": libpdb couldn't create bookmark record\n");
+		}
+
+		if (pdb_AppendRecord(opdb, opdb_rec)) {
+			fatal(MYNAME ": libpdb couldn't append bookmark record\n");
+		}
+
+		
+		xfree( oldmark );
+	} 
+}
+
+static void commit_buffer( void ) {
+
+	struct recordsize *newrec = xcalloc( 1, sizeof(struct recordsize));
+	newrec->next = recordsize_tail;
+	newrec->size = buf.len;
+	recordsize_tail = newrec;
+
+	compress( &buf );
+	
+        opdb_rec = new_Record (0, 0, ct++, buf.len, (const ubyte *)buf.data);
+
+        if (opdb_rec == NULL) {
+                fatal(MYNAME ": libpdb couldn't create record\n");
+        }
+
+        if (pdb_AppendRecord(opdb, opdb_rec)) {
+                fatal(MYNAME ": libpdb couldn't append record\n");
+        }
+
+}
+
+static void create_bookmark( char *bmtext ) {
+	struct bookmark *newmark = xcalloc( 1, sizeof(struct bookmark));
+	newmark->next = bookmark_tail;
+	newmark->offset = offset;
+	newmark->text = bmtext;
+	bookmark_tail = newmark;
+}	
+
+static void docprintf( int maxlen, char *format, ... ) {
+
+    char *txt = NULL;
+    char *txt2 = NULL;
+    va_list list;
+    int newlen;
+    int partlen;
+    
+    txt = xmalloc( maxlen );  
+	
+    va_start( list, format );
+    newlen = vsprintf( txt, format, list );
+
+    txt2 = txt;
+    offset += newlen;
+    while (txt2 && *txt2 ) {    
+        /* append to buffer what we can */
+	partlen = BUFFER_SIZE-1-buf.len;	
+    	if ( buf.len + newlen + 1 > BUFFER_SIZE ) 
+    	{
+	    strncpy( buf.data+buf.len, txt2, partlen );
+            buf.data[BUFFER_SIZE-1] = '\0';
+            txt2 += partlen;
+            newlen -= partlen;
+            buf.len = BUFFER_SIZE-1;
+            commit_buffer();
+            NEW_BUFFER( &buf );
+        }
+        else { 
+            strcpy( buf.data+buf.len, txt2 );
+            buf.len += newlen;
+            txt2 = NULL;
+        }
+    }
+    
+    xfree( txt );   
+}
+
+static void docfinish() {
+	commit_buffer();
+	write_header();
+	write_bookmarks();
+}
+
+static void
+wr_init(const char *fname)
+{
+	file_out = xfopen(fname, "wb", MYNAME);
+        out_fname = fname;
+		
+	mkshort_handle = mkshort_new_handle();
+	mkshort_bookmark_handle = mkshort_new_handle();
+	ct = 1;
+	offset = 1;
+	recordsize_tail = NULL;
+	bookmark_tail = NULL;
+	NEW_BUFFER( &buf );
+}
+
+static void
+wr_deinit(void)
+{
+	fclose(file_out);
+	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(mkshort_bookmark_handle);
+	
+        if ( dbname ) {
+            xfree(dbname);
+            dbname = NULL;
+	}
+}
+
+static void
+palmdoc_disp(const waypoint *wpt)
+{
+	int latint, lonint;
+	char tbuf[1024];
+	time_t tm = wpt->creation_time;
+	long utmz;
+	double utme, utmn;
+	char utmzc;
+
+        create_bookmark(mkshort(mkshort_bookmark_handle, wpt->description)); 
+ 	
+	lonint = abs(wpt->longitude);
+	latint = abs(wpt->latitude);
+
+	GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude, 
+		&utme, &utmn, &utmz, &utmzc);
+
+	if (tm == 0) 
+		tm = time(NULL);
+	strftime(tbuf, sizeof(tbuf), "%d-%b-%Y", localtime(&tm));
+
+	docprintf(300, "%-16s  %c%d %06.3f  %c%d %06.3f  (%ld%c %6.0f %7.0f)",
+		(global_opts.synthesize_shortnames) ? mkshort(mkshort_handle, wpt->description) : wpt->shortname,
+		wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), 
+		wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint),
+		utmz, utmzc, utme, utmn);
+	if (wpt->altitude != unknown_alt) 
+		docprintf (100, "  alt: %1.1f", wpt->altitude);
+	docprintf (10, "\n");
+	if (strcmp(wpt->description, wpt->shortname)) {
+		docprintf(10+strlen(wpt->description), "%s\n", wpt->description);
+	}
+	if (wpt->gc_data.terr) {
+	        if (wpt->gc_data.desc_short.utfstring) {
+	                char *stripped_html = strip_html(&wpt->gc_data.desc_short);
+			docprintf (10+strlen(stripped_html), "\n%s\n", stripped_html);
+                	xfree(stripped_html);
+       		}
+	        if (wpt->gc_data.desc_long.utfstring) {
+	                char *stripped_html = strip_html(&wpt->gc_data.desc_long);
+			docprintf (10+strlen(stripped_html), "\n%s\n", stripped_html);
+                	xfree(stripped_html);
+       		}
+		if (wpt->gc_data.hint) {
+			char *hint = NULL;
+			if ( encrypt )
+				hint = rot13( wpt->gc_data.hint );
+			else
+				hint = xstrdup( wpt->gc_data.hint );
+			docprintf (10+strlen(hint), "\nHint: %s\n", hint);
+			xfree( hint );
+		}
+	}
+	else if (strcmp(wpt->notes,wpt->description)) {
+		docprintf (10+strlen(wpt->notes), "%s\n", wpt->notes);
+	}
+	if (! suppresssep) 
+		docprintf(50, "---------------------------\n");
+	else
+		docprintf(10, "\n");
+		
+	
+}
+
+static void
+data_write(void)
+{
+	
+        if (NULL == (opdb = new_pdb())) {
+                fatal (MYNAME ": new_pdb failed\n");
+        }
+
+        if ( dbname ) {
+            strncpy( opdb->name, dbname, PDB_DBNAMELEN );
+        }
+        else {
+            strncpy(opdb->name, out_fname, PDB_DBNAMELEN);
+        }
+        opdb->name[PDB_DBNAMELEN-1] = 0;
+        opdb->attributes = PDB_ATTR_BACKUP;
+        opdb->ctime = opdb->mtime = current_time() + 2082844800U;
+        opdb->type = DOC_TYPE; 
+        opdb->creator = DOC_CREATOR;
+        opdb->version = 1;
+	
+	if (! suppresssep) 
+		docprintf(50, "---------------------------\n");
+	setshort_length(mkshort_handle, 20 );
+	setshort_length(mkshort_bookmark_handle, 16);
+	setshort_whitespace_ok( mkshort_bookmark_handle, 0 );
+	waypt_disp_all(palmdoc_disp);
+
+        docfinish();	
+	pdb_Write(opdb, fileno(file_out));
+}
+
+
+ff_vecs_t palmdoc_vecs = {
+	ff_type_file,
+	NULL,
+	wr_init,
+	NULL,
+	wr_deinit,
+	NULL,
+	data_write,
+	palmdoc_args
+};
+
+
