@@ -1,4 +1,8 @@
 
+echo "/* This file is machine-generated from the contents of style/ */"
+echo "/* by mkstyle.sh.   Editing it by hand is an exeedingly bad idea. */"
+echo 
+
 for i in style/*.style
 do
 	A=`basename $i | sed "s/.style$//"`
