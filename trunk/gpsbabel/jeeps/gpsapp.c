@@ -1640,7 +1640,15 @@ static void GPS_D103_Send(UC *data, GPS_PWay way, int32 *len)
     
     p = data;
 
-    for(i=0;i<6;++i) *p++ = way->ident[i];
+    for(i=0;i<6;++i)  {
+	    if (way->ident[i] == 0) {
+		    memset(p, ' ', 6-i);
+		    p+=6-i;
+		    break;
+	    }
+	    *p++ = way->ident[i];
+    }
+
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lat));
     p+=sizeof(int32);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lon));
