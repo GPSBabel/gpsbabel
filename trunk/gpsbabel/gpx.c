@@ -40,6 +40,7 @@ static int in_gs_diff;
 static int in_gs_terr;
 static int in_gs_log;
 static int in_gs_log_wpt;
+static int in_gs_tbugs;
 static int in_something_else;
 static xml_tag *cur_tag;
 static char *cdatastr;
@@ -340,6 +341,11 @@ gpx_start(void *data, const char *el, const char **attr)
 		in_something_else++;
 		start_something_else( el, attr );
 	}
+	else if (strcmp(el, "groundspeak:travelbugs") == 0) {
+		in_gs_tbugs++;
+		in_something_else++;
+		start_something_else( el, attr );
+	} 
 	else if (in_wpt) {
 		in_something_else++;
 		start_something_else( el, attr );
@@ -403,11 +409,11 @@ gpx_end(void *data, const char *el)
 {
 	float x;
 	if (in_cdata) {
-		if (in_name && in_wpt) {
+		if (in_name && in_wpt && !in_gs_tbugs) {
 			wpt_tmp->shortname = xstrdup(cdatastr);
 		}
 		if (gsshortnames) {
-			if (in_gs_name && in_wpt) {
+			if (in_gs_name && in_wpt && !in_gs_tbugs) {
 				wpt_tmp->notes = xstrdup(cdatastr);
 			}
 		} else {
@@ -513,6 +519,10 @@ gpx_end(void *data, const char *el)
 		end_something_else();
 	} else if (strcmp(el, "groundspeak:log_wpt") == 0) {
 		in_gs_log_wpt--;
+		in_something_else--;
+		end_something_else();
+	} else if (strcmp(el, "groundspeak:travelbugs") == 0) {
+		in_gs_tbugs--;
 		in_something_else--;
 		end_something_else();
 	} else if (in_wpt) {
