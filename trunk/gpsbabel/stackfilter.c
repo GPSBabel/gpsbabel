@@ -62,6 +62,7 @@ arglist_t stackfilt_args[] = {
 
 struct stack_elt {
 	queue waypts;
+	unsigned int waypt_ct;
 	struct stack_elt *next;
 } *stack = NULL;
 
@@ -74,10 +75,13 @@ stackfilt_process(void)
 	queue *tmp = NULL;
 	queue tmp_queue;
 	waypoint *wpt_tmp;
+	unsigned int tmp_count;
 	
 	if ( opt_push ) {
 		tmp_elt = (struct stack_elt *)xmalloc(sizeof(struct stack_elt));
 		QUEUE_MOVE(&(tmp_elt->waypts), &waypt_head);
+		tmp_elt->waypt_ct = waypt_count();
+		set_waypt_count(0);
 		tmp_elt->next = stack;
 		stack = tmp_elt;
 		if ( opt_copy ) {
@@ -102,6 +106,7 @@ stackfilt_process(void)
 		else {
 			waypt_flush( &waypt_head );
 			QUEUE_MOVE(&(waypt_head), &(stack->waypts) );
+			set_waypt_count(stack->waypt_ct);
 		}
 		stack = tmp_elt->next;
 		xfree( tmp_elt );
@@ -118,6 +123,10 @@ stackfilt_process(void)
 		QUEUE_MOVE(&tmp_queue, &(tmp_elt->waypts) );
 		QUEUE_MOVE(&(tmp_elt->waypts), &waypt_head );
 		QUEUE_MOVE(&waypt_head, &tmp_queue );
+		
+		tmp_count = waypt_count();
+		set_waypt_count( tmp_elt->waypt_ct );
+		tmp_elt->waypt_ct = tmp_count;
 	}
 }
 

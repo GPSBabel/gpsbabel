@@ -266,6 +266,7 @@ void waypt_compute_bounds(bounds *);
 void waypt_flush(queue *);
 void waypt_flush_all(void);
 unsigned int waypt_count(void);
+void set_waypt_count(unsigned int nc);
 void free_gpx_extras (xml_tag * tag);
 void xcsv_setup_internal_style(const char *style_buf);
 void xcsv_read_internal_style(const char *style_buf);
