@@ -76,6 +76,8 @@ proc fileDialog {w ent operation} {
 	{"All files"		*		}
 	{"loc files"		{.loc}		}
 	{"Waypoint files"	{.wpt} 		}
+	{"GPX files"		{.gpx} 		}
+	{"Various Palm/OS files" {.pdb} 		}
     }
     global ifile ofile
     if {$operation == "read"} {
