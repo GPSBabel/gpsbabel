@@ -1040,11 +1040,11 @@ fprint_xml_chain( xml_tag *tag, const waypoint *wpt )
 						"groundspeak:exported" );
 			}
 			fprintf( ofd, "</%s>", tag->tagname);
-			if ( tag->parentcdata ) {
-				tmp_ent = xml_entitize(tag->parentcdata);
-				fprintf(ofd, "%s", tmp_ent );
-				xfree(tmp_ent);
-			}
+		}
+		if ( tag->parentcdata ) {
+			tmp_ent = xml_entitize(tag->parentcdata);
+			fprintf(ofd, "%s", tmp_ent );
+			xfree(tmp_ent);
 		}
 		tag = tag->sibling;	
 	}
