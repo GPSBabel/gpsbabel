@@ -208,11 +208,20 @@ static int32 GPS_A000(const char *port)
     }
     else
     {
-	(void) GPS_Packet_Read(fd, &rec);
-	GPS_Send_Ack(fd, &tra, &rec);
-	GPS_A001(rec);
+        int maxct = 3;
+	while (maxct--) {
+		char pb[256];
+		(void) GPS_Packet_Read(fd, &rec);
+		GPS_Send_Ack(fd, &tra, &rec);
+		if (rec->type == 0xfd) {
+			GPS_A001(rec);
+			break;
+		}
+		snprintf(pb, sizeof(pb), "Ignoring unknown packet 0x%x.", 
+				rec->type);
+		GPS_Warning(pb);
+	}
     }
-
 
     /* Make sure PVT is off as some GPS' have it on by default */
     if(gps_pvt_transfer != -1)
@@ -5580,4 +5589,52 @@ void GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data *pvt)
 }
 
 
+/* 
+ *  It's unfortunate that these aren't constant and therefore switchable,
+ *  but they really are runtime variable.  Sigh.
+ */
 
+const char *
+Get_Pkt_Type(unsigned char p)
+{
+#define LT LINK_ID[gps_link_type]
+	if (p == LT.Pid_Ack_Byte)
+		return "ACK";
+	if (p == LT.Pid_Command_Data)
+		return "CMDDAT";
+	if (p == LT.Pid_Xfer_Cmplt)
+		return "XFRCMP";
+	if (p == LT.Pid_Date_Time_Data)
+		return "DATTIM";
+	if (p == LT.Pid_Position_Data)
+		return "POS";
+	if (p == LT.Pid_Prx_Wpt_Data)
+		return "WPT";
+	if (p == LT.Pid_Nak_Byte)
+		return "NAK";
+	if (p == LT.Pid_Records)
+		return "RECORD";
+	if (p == LT.Pid_Rte_Hdr)
+		return "RTEHDR";
+	if (p == LT.Pid_Rte_Wpt_Data)
+		return "RTEWPT";
+	if (p == LT.Pid_Almanac_Data)
+		return "RALMAN";
+	if (p == LT.Pid_Trk_Data)
+		return "TRKDAT";
+	if (p == LT.Pid_Wpt_Data)
+		return "WPTDAT";
+	if (p == LT.Pid_Pvt_Data)
+		return "PVTDAT";
+	if (p == LT.Pid_Rte_Link_Data)
+		return "LNKDAT";
+	if (p == LT.Pid_Trk_Hdr)
+		return "TRKHDR";
+	if (p == LT.Pid_Protocol_Array)
+		return "PRTARR";
+	if (p == LT.Pid_Product_Rqst)
+		return "PRDREQ";
+	if (p == LT.Pid_Product_Data)
+		return "PRDDAT";
+	return "UNKNOWN";
+}
