@@ -1765,6 +1765,9 @@
 					RelativePath="..\jeeps\gpsserial.h">
 				</File>
 				<File
+					RelativePath="..\jeeps\gpsusbint.h">
+				</File>
+				<File
 					RelativePath="..\jeeps\gpsutil.h">
 				</File>
 			</Filter>
