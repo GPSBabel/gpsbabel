@@ -11,6 +11,7 @@ static int target_len = DEFAULT_TARGET_LEN;
 static const char *badchars = DEFAULT_BADCHARS;
 
 static int mustupper = 0;
+static int whitespaceok = 1;
 static const char needmem[] = 
 	"mkshort: could not reallocate memory for string\n";
 
@@ -56,6 +57,12 @@ setshort_length(int l)
 	}
 }
 
+void
+setshort_whitespace_ok(int l)
+{
+	whitespaceok = l;
+}
+
 /*
  * Externally callable function to set the string of characters
  * that must never appear in a string returned by mkshort.  NULL
@@ -95,8 +102,9 @@ mkshort(char *istring)
 	/* 
 	 * Whack leading "[Tt]he",
  	 */
-	if (strncmp(ostring, "The ", 4) == 0 || 
-	    strncmp(ostring, "the ", 4) == 0) {
+	if (( strlen(ostring) > target_len + 4) && 
+	    (strncmp(ostring, "The ", 4) == 0 || 
+	    strncmp(ostring, "the ", 4) == 0)) {
 		nstring = strdup(ostring + 4);
 		if (!nstring) {
 			fatal(needmem);
@@ -121,25 +129,27 @@ mkshort(char *istring)
 	free(ostring);
 	ostring = nstring;
 
-	/* 
-	 * Eliminate Whitespace 
-	 */
-	tstring = strdup(ostring);
-	if (!tstring) {
-		fatal(needmem);
-	}
-	l = strlen (tstring);
-	cp = ostring;
-	for (i=0;i<l;i++) {
-		if (!isspace(tstring[i])) {
-			if (mustupper) {
-				tstring[i] = toupper(tstring[i]);
-			}
-			*cp++ = tstring[i];
+	if (!whitespaceok) {
+		/* 
+		 * Eliminate Whitespace 
+		 */
+		tstring = strdup(ostring);
+		if (!tstring) {
+			abort();
 		}
+		l = strlen (tstring);
+		cp = ostring;
+		for (i=0;i<l;i++) {
+			if (!isspace(tstring[i])) {
+				if (mustupper) {
+					tstring[i] = toupper(tstring[i]);
+				}
+				*cp++ = tstring[i];
+			}
+		}
+		free(tstring);
+		*cp = 0;
 	}
-	free(tstring);
-	*cp = 0;
 
 	/*
 	 * Eliminate chars on the blacklist.

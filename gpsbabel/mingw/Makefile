@@ -1,4 +1,4 @@
-CC=/home/robertl/cross-tools/bin/i386-mingw32msvc-gcc -Iinclude -I../coldsync -DCETUS
+CC=/home/robertl/cross-tools/bin/i386-mingw32msvc-gcc -Iinclude
 VPATH=..
 
 gpsbabel.exe:

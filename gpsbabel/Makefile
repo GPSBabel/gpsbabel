@@ -2,10 +2,15 @@ CFLAGS=-g -Icoldsync
 
 FMTS=magproto.o gpx.o geo.o gpsman.o mapsend.o mapsource.o \
 	gpsutil.o tiger.o pcx.o csv.o cetus.o gpspilot.o magnav.o \
-	psp.o mxf.o holux.o
+	psp.o mxf.o holux.o garmin.o
+
+JEEPS=jeeps/gpsapp.o jeeps/gpscom.o jeeps/gpsfmt.o jeeps/gpsinput.o \
+	jeeps/gpsmath.o jeeps/gpsmem.o  \
+	jeeps/gpsproj.o jeeps/gpsprot.o jeeps/gpsread.o \
+	jeeps/gpsrqst.o jeeps/gpssend.o jeeps/gpsserial.o jeeps/gpsutil.o
 
 OBJS=main.o queue.o route.o waypt.o util.o vecs.o mkshort.o \
-	coldsync/util.o coldsync/pdb.o $(FMTS)
+	coldsync/util.o coldsync/pdb.o $(GARMIN) $(JEEPS) $(FMTS)
 
 all: gpsbabel
 
