@@ -61,6 +61,7 @@ static route_head *rte_head;
 #define MYNAME "GPX"
 #define MY_CBUF 4096
 #define DEFAULT_XSI_SCHEMA_LOC "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
+#define DEFAULT_XSI_SCHEMA_LOC_FMT "\"http://www.topografix.com/GPX/%c/%c http://www.topografix.com/GPX/%c/%c/gpx.xsd\""
 
 /* 
  * Format used for floating point formats.  Put in one place to make it
@@ -1286,7 +1287,14 @@ gpx_write(void)
 	fprintf(ofd, "creator=\"GPSBabel - http://www.gpsbabel.org\"\n");
 	fprintf(ofd, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
-	fprintf(ofd, "xsi:schemaLocation=\"%s\">\n", xsi_schema_loc ? xsi_schema_loc : DEFAULT_XSI_SCHEMA_LOC);
+	if (xsi_schema_loc) {
+		fprintf(ofd, "xsi:schemaLocation=\"%s\">\n", xsi_schema_loc);
+	} else {
+		fprintf(ofd,
+			"xsi:schemaLocation=" DEFAULT_XSI_SCHEMA_LOC_FMT">\n",
+			gpx_wversion[0], gpx_wversion[2],
+			gpx_wversion[0], gpx_wversion[2]);
+	}
 
 	if (gpx_wversion_num > 10) {	
 		fprintf(ofd, "<metadata>\n");
