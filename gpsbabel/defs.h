@@ -212,7 +212,7 @@ typedef void (*waypt_cb) (const waypoint *);
 typedef void (*route_hdr)(const route_head *);
 typedef void (*route_trl)(const route_head *);
 void waypt_add (waypoint *);
-waypoint * waypt_dupe (waypoint *);
+waypoint * waypt_dupe (const waypoint *);
 waypoint * waypt_new(void);
 void waypt_del (waypoint *);
 void waypt_free (waypoint *);

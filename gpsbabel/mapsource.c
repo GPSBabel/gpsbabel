@@ -1,6 +1,6 @@
 /*
     Access to Garmin MapSource files.
-    Based on information provided by Ian Cowley.
+    Based on information provided by Ian Cowley & Mark Bradley
 
     Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
 
@@ -40,10 +40,24 @@ static	char	tempname[256];
 static	char	origname[256];
 
 static	const waypoint	*prevRouteWpt;
+/* Private queues of written out waypoints */
+static queue written_wpt_head;
+static queue written_route_wpt_head;
+static void *written_wpt_mkshort_handle;
+
+/* Private queue of read in waypoints assumed to be used only for routes */
+static queue read_route_wpt_head;
+static void *read_route_wpt_mkshort_handle;
+
+#define MPSDEFAULTWPTCLASS		0
+#define MPSHIDDENROUTEWPTCLASS	8
 
 #define MYNAME "MAPSOURCE" 
 #define ISME 0
 #define NOTME 1
+
+#define DEFAULTICONDESCR		"Waypoint"
+#define DEFAULTICONVALUE		18
 
 char *snlen;
 char *mpsverout;
@@ -67,6 +81,54 @@ mps_noop(const route_head *wp)
 	/* no-op */
 }
 
+void
+mps_wpt_q_init(queue *whichQueue)
+{
+	QUEUE_INIT(whichQueue);
+}
+
+void
+mps_wpt_q_deinit(queue *whichQueue)
+{
+	queue *elem, *tmp;
+
+	QUEUE_FOR_EACH(whichQueue, elem, tmp) {
+		waypoint *q = (waypoint *) dequeue(elem);
+		waypt_free(q);
+	}
+}
+
+/*
+ * Find a waypoint that we've already written out
+ *
+ */
+waypoint *
+mps_find_wpt_q_by_name(const queue *whichQueue, const char *name)
+{
+	queue *elem, *tmp;
+	waypoint *waypointp;
+
+	QUEUE_FOR_EACH(whichQueue, elem, tmp) {
+		waypointp = (waypoint *) elem;
+		if (0 == strcmp(waypointp->shortname, name)) {
+			return waypointp;
+		}
+	}
+	return NULL;
+}
+
+/*
+ * Add a waypoint that we've already written out to our list
+ *
+ */
+void
+mps_wpt_q_add(const queue *whichQueue, const waypoint *wpt)
+{
+	waypoint *written_wpt = waypt_dupe(wpt);
+	written_wpt->Q.next = written_wpt->Q.prev = NULL;
+	ENQUEUE_TAIL(whichQueue, &written_wpt->Q);
+}
+
 const char *
 mps_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 {
@@ -87,14 +149,14 @@ mps_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 				fatal(MYNAME ": unknown garmin format");
 		}
 	}
-	return "Waypoint";
+	return DEFAULTICONDESCR;
 }
 
 int
 mps_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
 {
 	icon_mapping_t *i;
-	int def_icon = 18;
+	int def_icon = DEFAULTICONVALUE;
 
 	if (!desc)
 		return def_icon;
@@ -117,7 +179,7 @@ mps_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
 
 int mps_converted_icon_number(const int icon_num, const int mpsver, garmin_formats_e garmin_format)
 {
-	int def_icon = 18;
+	int def_icon = DEFAULTICONVALUE;
 
 	switch (garmin_format) {
 	case MAPSOURCE:
@@ -163,12 +225,21 @@ static void
 mps_rd_init(const char *fname)
 {
 	mps_file_in = xfopen(fname, "rb", MYNAME);
+
+	read_route_wpt_mkshort_handle = mkshort_new_handle();
+	/* initialise the "private" queue of waypoints read for routes */
+	mps_wpt_q_init(&read_route_wpt_head);
 }
 
 static void
 mps_rd_deinit(void)
 {
 	fclose(mps_file_in);
+	if ( read_route_wpt_mkshort_handle ) {
+		mkshort_del_handle( read_route_wpt_mkshort_handle );
+	}
+	/* flush the "private" queue of waypoints read for routes */
+	mps_wpt_q_deinit(&read_route_wpt_head);
 }
 
 static void
@@ -199,6 +270,11 @@ mps_wr_init(const char *fname)
 	}
 
 	mps_file_out = xfopen(fname, "wb", MYNAME);
+
+	written_wpt_mkshort_handle = mkshort_new_handle();
+	/* initialise the "private" queue of waypoints written */
+	mps_wpt_q_init(&written_wpt_head);
+	mps_wpt_q_init(&written_route_wpt_head);
 }
 
 static void
@@ -210,6 +286,13 @@ mps_wr_deinit(void)
 		fclose(mps_file_temp);
 		remove(tempname);
 	}
+
+	if ( written_wpt_mkshort_handle ) {
+		mkshort_del_handle( written_wpt_mkshort_handle );
+	}
+	/* flush the "private" queue of waypoints written */
+	mps_wpt_q_deinit(&written_wpt_head);
+	mps_wpt_q_deinit(&written_route_wpt_head);
 }
 
 /*
@@ -310,16 +393,16 @@ mps_fileHeader_w(FILE *mps_file, int mps_ver)
 	hdr[5] = 'A';
 	hdr[6] = 0;
 	strcpy(hdr+7,"Oct 20 1999");
-	strcpy(hdr+19,"12:50:03");
+	strcpy(hdr+19,"12:50:33");
 	if (mps_ver == 4) {
 		hdr[1] = 0x96;					/* equates to V4.06 */
 		strcpy(hdr+7,"Oct 22 2001");
-		strcpy(hdr+19,"15:45:05");
+		strcpy(hdr+19,"15:45:33");
 	}
 	if (mps_ver == 5) {
 		hdr[1] = 0xF4;					/* equates to V5.0 */
 		strcpy(hdr+7,"Jul  3 2003");
-		strcpy(hdr+19,"08:35:39");
+		strcpy(hdr+19,"08:35:33");
 	}
 
 	reclen = 27;						/* pre measured! */
@@ -390,7 +473,7 @@ mps_mapsetname_w(FILE *mps_file, int mps_ver)
  * MRCB
  */
 static void
-mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
+mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpsclass)
 {
 	char tbuf[100];
 	char wptname[256];
@@ -398,7 +481,6 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
 	int lat;
 	int lon;
 	int	icon;
-	unsigned int	mpsclass;
 
 	waypoint	*thisWaypoint;
 	double	mps_altitude = unknown_alt;
@@ -410,20 +492,22 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
 
 	mps_readstr(mps_file, wptname, sizeof(wptname));
 
-	if ((mps_ver == 4) || (mps_ver == 5)) {
-		fread(&mpsclass, 4, 1, mps_file);			/* class */
-		mpsclass = le_read32(&mpsclass);
-		mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
-	}
+	fread(mpsclass, 4, 1, mps_file);			/* class */
+	(*mpsclass) = le_read32(mpsclass);
+	mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
 
-	fread(tbuf, 22, 1, mps_file);					/* subclass data (18) + unknown (4) */
+	fread(tbuf,17, 1, mps_file);				/* subclass data (17) */
+
+	if ((mps_ver == 4) || (mps_ver == 5)) {
+		fread(tbuf, 5, 1, mps_file);			/* additional subclass data (1) & terminator? (4) */
+	}
 
 	fread(&lat, 4, 1, mps_file); 
 	fread(&lon, 4, 1, mps_file); 
 	lat = le_read32(&lat);
 	lon = le_read32(&lon);
 	
-	fread(tbuf, 1, 1, mps_file);					/* altitude validity */
+	fread(tbuf, 1, 1, mps_file);				/* altitude validity */
 	if (tbuf[0] == 1) {
 		fread(&mps_altitude,sizeof(mps_altitude),1,mps_file);
 	}
@@ -434,7 +518,7 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
 
 	mps_readstr(mps_file, wptdesc, sizeof(wptdesc));
 
-	fread(tbuf, 1, 1, mps_file);			/* proximity validity */
+	fread(tbuf, 1, 1, mps_file);				/* proximity validity */
 	if (tbuf[0] == 1) {
 		fread(&mps_proximity,sizeof(mps_proximity),1,mps_file);
 	}
@@ -443,18 +527,18 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
 		fread(tbuf,sizeof(mps_proximity),1, mps_file);
 	}
 
-	fread(tbuf, 4, 1, mps_file);			/* display flag */
-	fread(tbuf, 4, 1, mps_file);			/* colour */
-	fread(&icon, 4, 1, mps_file);			/* display symbol */
+	fread(tbuf, 4, 1, mps_file);					/* display flag */
+	fread(tbuf, 4, 1, mps_file);					/* colour */
+	fread(&icon, 4, 1, mps_file);					/* display symbol */
 	icon = le_read32(&icon);
 
 	mps_readstr(mps_file, tbuf, sizeof(tbuf));		/* city */
 	mps_readstr(mps_file, tbuf, sizeof(tbuf));		/* state */
 	mps_readstr(mps_file, tbuf, sizeof(tbuf));		/*facility */
 
-	fread(tbuf, 1, 1, mps_file);			/* unknown */
+	fread(tbuf, 1, 1, mps_file);					/* unknown */
 
-	fread(tbuf, 1, 1, mps_file);			/* depth validity */
+	fread(tbuf, 1, 1, mps_file);					/* depth validity */
 	if (tbuf[0] == 1) {
 		fread(&mps_depth,sizeof(mps_depth),1,mps_file);
 	}
@@ -464,10 +548,10 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
 	}
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		fread(tbuf, 7, 1, mps_file);		/* unknown */
+		fread(tbuf, 7, 1, mps_file);				/* unknown */
 	}
 	else {
-		fread(tbuf, 2, 1, mps_file);		/* unknown */
+		fread(tbuf, 2, 1, mps_file);				/* unknown */
 	}
 
 	thisWaypoint->shortname = xstrdup(wptname);
@@ -480,10 +564,12 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
 
 	/* might need to change this to handle version dependent icon handling */
 	thisWaypoint->icon_descr = mps_find_desc_from_icon_number(icon, MAPSOURCE);
-	waypt_add(thisWaypoint);
+
+	/* The following Now done elsewhere since it can be useful to read in and 
+	  perhaps not add to the list */
+	/* waypt_add(thisWaypoint); */
 
 	return;
-
 }
 
 /*
@@ -491,7 +577,7 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
  * MRCB
  */
 static void
-mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
+mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRouteWpt)
 {
 	unsigned char hdr[100];
 	int reclen;
@@ -532,15 +618,16 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 	if ((mps_ver == 4) || (mps_ver == 5)) {
 		/* v4.06 & V5.0*/
 		reclen += 85;				/* "W" (1) + strlen(name) + NULL (1) + class(4) + country(sz) +  
-										unknown(22) + lat(4) + lon(4) + alt(9) + strlen(desc) + NULL (1) + 
-										 prox(9) + display(4) + colour(4) + symbol(4) + city(sz) + state(sz) + 
-										facility(sz) + unknown2(1) + depth(9) + unknown3(7) */
+										subclass(18) + unknown(4) + lat(4) + lon(4) + alt(9) + strlen(desc)
+										+ NULL (1) + prox(9) + display(4) + colour(4) + symbol(4) + city(sz) + 
+										state(sz) + facility(sz) + unknown2(1) + depth(9) + unknown3(7) */
 									/* -1 as reclen is interpreted from zero meaning a reclength of one */
 	}
 	else {
 		/* v3.02 */
-		reclen += 75;				/* "W" (1) + strlen(name) + NULL (1) + unknown(22) + lat(4) +  
-										lon(4) + alt(9) + strlen(desc) + NULL (1) + prox(9) + display(4) + 
+		reclen += 75;				/* "W" (1) + strlen(name) + NULL (1) + + class(4) + country(sz) +  
+										subclass(17) + lat(4) +  lon(4) + alt(9) + strlen(desc) + 
+										NULL (1) + prox(9) + display(4) + 
 										colour(4) + symbol(4) + city(sz) + state(sz) + facility(sz) + 
 										unknown2(1) + depth(9) + unknown3(2) */
 									/* -1 as reclen is interpreted from zero meaning a reclength of one */
@@ -550,18 +637,23 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 	fwrite(&reclen, 4, 1, mps_file);
 	fwrite("W", 1, 1, mps_file);
 	fputs(ident, mps_file);
-	fwrite(zbuf, 1, 1, mps_file);	/* NULL termination to ident */
+	fwrite(zbuf, 1, 1, mps_file);		/* NULL termination to ident */
+
+	if (isRouteWpt)	zbuf[0] = (char)MPSHIDDENROUTEWPTCLASS;
+	else			zbuf[0] = (char)MPSDEFAULTWPTCLASS;
+	fwrite(zbuf, 4, 1, mps_file);		/* class */
+
+	zbuf[0]=0;
+	fwrite(zbuf, 1, 1, mps_file);		/* country empty string */
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		fwrite(zbuf, 4, 1, mps_file);	/* class */
-		fwrite(zbuf, 1, 1, mps_file);	/* country */
-		fwrite(zbuf, 4, 1, mps_file);	/* unknown */
-		fwrite(ffbuf, 12, 1, mps_file);	/* unknown */
-		fwrite(zbuf, 2, 1, mps_file);	/* unknown */
+		fwrite(zbuf, 4, 1, mps_file);	/* subclass part 1 */
+		fwrite(ffbuf, 12, 1, mps_file);	/* subclass part 2 */
+		fwrite(zbuf, 2, 1, mps_file);	/* subclass part 3 */
 		fwrite(ffbuf, 4, 1, mps_file);	/* unknown */
 	}
 	else {
-		fwrite(zbuf, 13, 1, mps_file);
+		fwrite(zbuf, 8, 1, mps_file);
 		fwrite(ffbuf, 8, 1, mps_file);
 		fwrite(zbuf, 1, 1, mps_file);
 	}
@@ -620,10 +712,116 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 	}
 }
 
+/*
+ * wrapper to include the mps_ver_out information
+ * A waypoint is only written if it hasn't been written before
+ * based on it shortname alone
+ *
+ */
 static void
-mps_waypoint_w_wrapper(const waypoint *wpt)
+mps_waypoint_w_unique_wrapper(const waypoint *wpt)
 {
-	mps_waypoint_w(mps_file_out, mps_ver_out, wpt);
+	waypoint *wptfound = NULL;
+
+	/* Search for this waypoint in the ones already written */
+	wptfound = mps_find_wpt_q_by_name(&written_wpt_head, wpt->shortname);
+	/* is the next line necessary? Assumes we know who's called us and in what order */
+	if (wptfound == NULL) 
+		wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, wpt->shortname);
+
+	/* if this waypoint hasn't been written then it is okay to do so */
+	if (wptfound == NULL) {
+		mps_waypoint_w(mps_file_out, mps_ver_out, wpt, (1==0));
+
+		/* ensure we record in our "private" queue what has been 
+		written so that we don't write it again */
+		mps_wpt_q_add(&written_wpt_head, wpt);
+	}
+}
+
+/*
+ * wrapper to include the mps_ver_out information
+ * A waypoint is only written if it hasn't been written before
+ * based on it shortname alone
+ * Provided as a separate function from above in case we find
+ * have to do other things
+ *
+ */
+static void
+mps_route_wpt_w_unique_wrapper(const waypoint *wpt)
+{
+	waypoint *wptfound = NULL;
+
+	/* Search for this waypoint in the ones already written */
+	wptfound = mps_find_wpt_q_by_name(&written_wpt_head, wpt->shortname);
+	if (wptfound == NULL) 
+		/* so, not a real wpt, so must check route wpts already written as reals */
+		wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, wpt->shortname);
+
+	/* if this waypoint hasn't been written then it is okay to do so
+	   but assume it is only required for the route
+    */
+	if (wptfound == NULL) {
+		/* Although we haven't written one out, this might still be a "real" waypoint
+		   If so, we need to write it out now accordingly */
+		wptfound = find_waypt_by_name (wpt->shortname);
+
+		if (wptfound == NULL) {
+			/* well, we tried to find: it wasn't written and isn't a real waypoint */
+			mps_waypoint_w(mps_file_out, mps_ver_out, wpt, (1==1));
+			mps_wpt_q_add(&written_route_wpt_head, wpt);
+		}
+		else {
+			mps_waypoint_w(mps_file_out, mps_ver_out, wpt, (1==0));
+			/* Simulated real user waypoint */
+			mps_wpt_q_add(&written_wpt_head, wpt);
+		}
+	}
+}
+
+/*
+ * wrapper to include the mps_ver_out information
+ * This one always writes a waypoint. If it has been written before
+ * then generate a unique name before writing
+ *
+ */
+static void
+mps_waypoint_w_uniqloc_wrapper(waypoint *wpt)
+{
+	waypoint *wptfound = NULL;
+	char			*newName;
+	unsigned int	uniqueNum = 0;
+
+	/* Search for this waypoint in the ones already written */
+	wptfound = mps_find_wpt_q_by_name(&written_wpt_head, wpt->shortname);
+	/* is the next line necessary? Assumes we know who's called us and in what order */
+	if (wptfound == NULL) 
+		wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, wpt->shortname);
+
+	if (wptfound != NULL) {
+		/* check if this is the same waypoint by looking at the lat lon
+			not ideal, but better then having two same named waypoints
+			that kills MapSource.  If it is the same then don't bother
+			adding it in. If it isn't, then rename it
+		*/
+		if (((wpt->latitude - wptfound->latitude) != 0) || 
+			((wpt->longitude - wptfound->longitude) != 0)) {
+			/* Not the same lat lon, so rename and add */
+			newName = mkshort(written_wpt_mkshort_handle, wpt->shortname);
+			wptfound = waypt_dupe(wpt);
+			wptfound->Q.next = wptfound->Q.prev = NULL;
+			xfree(wptfound->shortname);
+			wptfound->shortname = newName;
+			mps_waypoint_w(mps_file_out, mps_ver_out, wptfound, (1==0));
+			mps_wpt_q_add(&written_wpt_head, wpt);
+		}
+	}
+	else {
+		mps_waypoint_w(mps_file_out, mps_ver_out, wpt, (1==0));
+		/* ensure we record in out "private" queue what has been 
+		written so that we don't write it again */
+		mps_wpt_q_add(&written_wpt_head, wpt);
+	}
 }
 
 /*
@@ -642,6 +840,7 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	int	interlinkStepCount;
 	int	thisInterlinkStep;
 	unsigned int	mpsclass;
+	int	FFsRead;
 
 	time_t	dateTime = 0;
 	route_head *rte_head;
@@ -698,21 +897,38 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	while (rte_count--) {
 
 		mps_readstr(mps_file, wptname, sizeof(wptname));
+		fread(&mpsclass, 4, 1, mps_file);			/* class */
+		mpsclass = le_read32(&mpsclass);
+		mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
+
 		if ((mps_ver == 4) || (mps_ver == 5)) {
-			fread(&mpsclass, 4, 1, mps_file);			/* class */
-			mpsclass = le_read32(&mpsclass);
-			mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
 			fread(tbuf, 18, 1, mps_file);				/* subclass data */
 
-			if (mpsclass != 0) {
-				fread(tbuf, 8, 1, mps_file);			/* unknown 8 x 0xFF */
-			}
-			fread(tbuf,  4, 1, mps_file);				/* unknown 4 x 0xFF */
-			fread(tbuf, 19, 1, mps_file);				/* unknown 0x00 0x03 0x00 .. 0x00 */
+			/* This is a bit unpleasant. Routes have a variable length of
+			   data that is terminated by the five bytes:
+			       0xFF 0xFF 0xFF 0xFF <not 0xFF>
+			   So, need to skip over the variable portion and stop after
+			   we found the terminator
+		   */
+			FFsRead = tbuf[1] = 0;
+			do {
+				fread(tbuf, 1, 1, mps_file);
+				if (tbuf[0] == -1) {
+					if ((FFsRead == 0) || (tbuf[1] == -1)) FFsRead++;
+				}
+				else if (FFsRead < 4) FFsRead = 0;
+				tbuf[1]=tbuf[0];
+			} while ((FFsRead < 4) || (tbuf[0] == -1));
+
+			/* The next thing is the unknown 0x00 0x03 0x00 .. 0x00 (19 bytes)
+			   but in looking for Arnie above we have read the first of these
+			   so, only read 18 bytes
+			*/
+			fread(tbuf, 18, 1, mps_file);
 		}
 		else {
-			fread(tbuf, 22, 1, mps_file);				/* unknown */
-			fread(tbuf, 18, 1, mps_file);				/* unknown */
+			fread(tbuf, 17, 1, mps_file);				/* subclass data */
+			fread(tbuf, 18, 1, mps_file);				/* unknown 0x00 0x03 0x00 .. 0x00 */
 		}
 
 		/* link details */
@@ -734,19 +950,29 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 		}
 
 		/* with MapSource routes, the real waypoint details are held as a separate waypoint, so copy from there
-		   if found */
+		   if found. With MapSource, one should consider the real waypoint list as definitive */
 		tempWpt = find_waypt_by_name(wptname);
 
 		if (tempWpt != NULL) {
 			thisWaypoint = waypt_dupe(tempWpt);
+			thisWaypoint->Q.next = thisWaypoint->Q.prev = NULL;
 		}
 		else {
-			thisWaypoint = xcalloc(sizeof(*thisWaypoint), 1);
-			thisWaypoint->shortname = xstrdup(wptname);
-			thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
-			thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
-			thisWaypoint->altitude = mps_altitude;
-			thisWaypoint->depth = mps_depth;
+			tempWpt = mps_find_wpt_q_by_name(&read_route_wpt_head, wptname);
+
+			if (tempWpt != NULL) {
+				thisWaypoint = waypt_dupe(tempWpt);
+				thisWaypoint->Q.next = thisWaypoint->Q.prev = NULL;
+			}
+			else {
+				/* should never reach here, but we do need a fallback position */
+				thisWaypoint = waypt_new();
+				thisWaypoint->shortname = xstrdup(wptname);
+				thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
+				thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
+				thisWaypoint->altitude = mps_altitude;
+				thisWaypoint->depth = mps_depth;
+			}
 		}
 
 		route_add_wpt(rte_head, thisWaypoint);
@@ -792,31 +1018,53 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	/* all we want is the waypoint name; lat, lon and alt are already set from above  */
 	mps_readstr(mps_file, wptname, sizeof(wptname));
 
-	if ((mps_ver == 4) || (mps_ver == 5)) {
+	fread(&mpsclass, 4, 1, mps_file);			/* class */
+	mpsclass = le_read32(&mpsclass);
+	mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
 
-		fread(&mpsclass, 4, 1, mps_file);			/* class */
-		mpsclass = le_read32(&mpsclass);
-		mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
+	if ((mps_ver == 4) || (mps_ver == 5)) {
 		fread(tbuf, 18, 1, mps_file);				/* subclass data */
 
-		fread(tbuf,  4, 1, mps_file);				/* unknown 4 x 0xFFs */
-		fread(tbuf, 19, 1, mps_file);				/* unknown 0x00 0x03 0x00 .. 0x00 */
+		/* This is a bit unpleasant. Routes have a variable length of
+			data that is terminated by the five bytes:
+			    0xFF 0xFF 0xFF 0xFF <not 0xFF>
+			So, need to skip over the variable portion and stop after
+			we found the terminator
+		*/
+		FFsRead = tbuf[1] = 0;
+		do {
+			fread(tbuf, 1, 1, mps_file);
+			if (tbuf[0] == -1) {
+				if ((FFsRead == 0) || (tbuf[1] == -1)) FFsRead++;
+			}
+			else if (FFsRead < 4) FFsRead = 0;
+			tbuf[1]=tbuf[0];
+		} while ((FFsRead < 4) || (tbuf[0] == -1));
+
+		/* The next thing is the unknown 0x00 0x03 0x00 .. 0x00 (19 bytes)
+			but in looking for Arnie above we have read the first of these
+			so, only read 18 bytes
+		*/
+		fread(tbuf, 18, 1, mps_file);
 	}
 	else {
-		fread(tbuf, 22, 1, mps_file);				/* unknown */
-		fread(tbuf, 18, 1, mps_file);				/* unknown */
+		fread(tbuf, 17, 1, mps_file);				/* subclass data */
+		fread(tbuf, 18, 1, mps_file);				/* unknown 0x00 0x03 0x00 .. 0x00 */
 	}
 
 	fread(tbuf, 5, 1, mps_file);					/* 5 byte trailer */
 	/* with MapSource routes, the real waypoint details are held as a separate waypoint, so copy from there
-		if found */
+		if found because there is more info held in a real waypoint than in its route counterpart,
+		e.g. the display symbol (aka icon)
+	*/
 	tempWpt = find_waypt_by_name(wptname);
 
 	if (tempWpt != NULL) {
 		thisWaypoint = waypt_dupe(tempWpt);
+		thisWaypoint->Q.next = thisWaypoint->Q.prev = NULL;
 	}
 	else {
-		thisWaypoint = xcalloc(sizeof(*thisWaypoint), 1);
+		thisWaypoint = waypt_new();
 		thisWaypoint->shortname = xstrdup(wptname);
 		thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
 		thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
@@ -914,9 +1162,10 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 										route lat lon min (2x4) + route min alt (9) +
 										num route datapoints value (4) */
 		
-		/* V3 - each waypoint: waypoint name + NULL (1) + unknown (22) + unknown (18) */
+		/* V3 - each waypoint: waypoint name + NULL (1) + class (4) + country + NULL (1) + 
+								subclass (17) + unknown (18) */
 		/* V4,5 - each waypoint: waypoint name + NULL (1) + class (4) + country + NULL (1) + 
-								unknown (22) + unknown (19) */
+								subclass (18) + unknown (4) + unknown (19) */
 		/* V* - each route link: 0x00000002 (4) + end 1 lat (4) + end 1 lon (4) + end 1 alt (9) +
 								end 2 lat (4) + end 2 lon (4) + end 2 alt (9) + NULL (1) +
 								link max lat (4) + link max lon (4) + link max alt (9) +
@@ -1001,13 +1250,13 @@ static void
 mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 {
 	unsigned char hdr[10];
-	int lat;
-	int lon;
-	time_t	t = rtewpt->creation_time;
-	char zbuf[20];
-	char ffbuf[20];
-	char *src;
-	char *ident;
+	int			lat;
+	int			lon;
+	time_t		t = rtewpt->creation_time;
+	char		zbuf[20];
+	char		ffbuf[20];
+	char		*src;
+	char		*ident;
 	int			reclen;
 
 	int			maxlat;
@@ -1017,7 +1266,8 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 	double		maxalt=unknown_alt;
 	double		minalt=unknown_alt;
 
-	double	mps_altitude;
+	double		mps_altitude;
+	waypoint	*wptfound;
 
 	memset(zbuf, 0, sizeof(zbuf));
 	memset(ffbuf, 0xff, sizeof(ffbuf));
@@ -1138,16 +1388,19 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 	fputs(ident, mps_file);
 	fwrite(zbuf, 1, 1, mps_file);	/* NULL termination to ident */
 
-	if ((mps_ver == 4) || (mps_ver == 5)) {
-		/* unknown */
-		fwrite(zbuf, 4, 1, mps_file);			/* class */
-		fwrite(zbuf, 1, 1, mps_file);			/* country - i.e. empty string */
+	wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, ident);
+	if (wptfound != NULL)	zbuf[0] = (char)MPSHIDDENROUTEWPTCLASS;
+	else					zbuf[0] = (char)MPSDEFAULTWPTCLASS;
+	fwrite(zbuf, 4, 1, mps_file);			/* class */
 
-		/* unknown, exactly as for waypoints */
-		fwrite(zbuf, 4, 1, mps_file);
-		fwrite(ffbuf, 12, 1, mps_file);
-		fwrite(zbuf, 2, 1, mps_file);
-		fwrite(ffbuf, 4, 1, mps_file);
+	zbuf[0]=0;
+	fwrite(zbuf, 1, 1, mps_file);			/* country - i.e. empty string */
+
+	if ((mps_ver == 4) || (mps_ver == 5)) {
+		fwrite(zbuf, 4, 1, mps_file);		/* subclass part 1 */
+		fwrite(ffbuf, 12, 1, mps_file);		/* subclass part 2 */
+		fwrite(zbuf, 2, 1, mps_file);		/* subclass part 3 */
+		fwrite(ffbuf, 4, 1, mps_file);		/* unknown */
 
 		fwrite(zbuf, 1, 1, mps_file);
 		hdr[0] = 3;
@@ -1155,11 +1408,9 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 		fwrite(zbuf, 17, 1, mps_file);
 	}
 	else {
-		/* unknown, exactly as for waypoints */
-		fwrite(zbuf, 13, 1, mps_file);
-		fwrite(ffbuf, 8, 1, mps_file);
-		fwrite(zbuf, 1, 1, mps_file);
-
+		fwrite(zbuf, 8, 1, mps_file);		/* subclass part 1 */
+		fwrite(ffbuf, 8, 1, mps_file);		/* subclass part 2 */
+		fwrite(zbuf, 1, 1, mps_file);		/* subclass part 3 */
 
 		/* unknown */
 		fwrite(zbuf, 1, 1, mps_file);
@@ -1169,7 +1420,6 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 	}
 
 	prevRouteWpt = rtewpt;
-
 }
 
 static void
@@ -1205,7 +1455,7 @@ mps_routetrlr_w_wrapper(const route_head *rte)
 
 
 /*
- * read in from file a route record
+ * read in from file a track record
  * MRCB
  */
 static void
@@ -1269,7 +1519,7 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 			fread(tbuf,sizeof(mps_depth),1, mps_file);
 		}
 
-		thisWaypoint = xcalloc(sizeof(*thisWaypoint), 1);
+		thisWaypoint = waypt_new();
 		thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
 		thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
 		thisWaypoint->creation_time = le_read32(&dateTime);
@@ -1422,13 +1672,14 @@ mps_trackdatapoint_w_wrapper(const waypoint *wpt)
 static void
 mps_read(void)
 {
-	waypoint	*wpt;
-	route_head	*rte;
-	route_head	*trk;
+	waypoint		*wpt;
+	route_head		*rte;
+	route_head		*trk;
 
-	char		recType;
-	int			reclen;
-	int			morework;
+	char			recType;
+	int				reclen;
+	int				morework;
+	unsigned int	mpsWptClass;
 
 	mps_ver_in = 0;		/* although initialised at declaration, what happens if there are two mapsource
 						   input files? */
@@ -1451,7 +1702,10 @@ mps_read(void)
 		case 'W':
 			/* Waypoint record */
 			/* With routes, we need the waypoint info that reveals, for example, the symbol type */
-			mps_waypoint_r(mps_file_in, mps_ver_in, &wpt);
+			mps_waypoint_r(mps_file_in, mps_ver_in, &wpt, &mpsWptClass);
+			/* only add to the "real" list if a "user" waypoint otherwise add to the private list */
+			if (mpsWptClass == MPSDEFAULTWPTCLASS) waypt_add(wpt);
+			else mps_wpt_q_add(&read_route_wpt_head, wpt);
 #ifdef DUMP_ICON_TABLE
 			printf("\t{  %4u, \"%s\" },\n", icon, wpt->shortname);
 #endif
@@ -1492,15 +1746,17 @@ mps_read(void)
 void
 mps_write(void)
 {
-	int			short_length;
-	waypoint	*wpt;
-	route_head	*rte;
-	route_head	*trk;
+	int				short_length;
+	waypoint		*wpt;
+	route_head		*rte;
+	route_head		*trk;
 
-	char		recType;
-	int			reclen;
-	int			reclen2;
-	unsigned int			tocopy;
+	char			recType;
+	int				reclen;
+	int				reclen2;
+	unsigned int	tocopy;
+	long			tempFilePos;
+	unsigned int	mpsWptClass;
 
 	unsigned char	copybuf[8192];
 
@@ -1515,6 +1771,9 @@ mps_write(void)
 
 		if (mpsverout) {
 			if (mps_ver_temp != atoi(mpsverout)) {
+				/* Need to clean up after a junk version specified */
+				/* close the real output file + renamed original output file */
+				/* then delete the "real" file and rename the temporarily renamed file back */
 				fclose(mps_file_temp);
 				fclose(mps_file_out);
 				remove(origname);
@@ -1540,6 +1799,10 @@ mps_write(void)
 
 	mps_fileHeader_w(mps_file_out, mps_ver_out);
 
+	/* .mps file order is wpts, rtes, trks then mapsets. If we've not been asked to write
+	   wpts, but we are merging, then read in the waypoints from the original file and 
+	   write them out, prior to doing rtes.
+	*/
 	if ((mpsmergeout) && (global_opts.objective != wptdata)) {
 		while (!feof(mps_file_temp)) {
 
@@ -1553,6 +1816,15 @@ mps_write(void)
 				fwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
 				fwrite(&recType, 1, 1, mps_file_out);
 
+				tempFilePos = ftell(mps_file_temp);
+				/* need to read in the waypoint info only because later we may need to check for uniqueness
+				   since we're here because the user didn't request waypoints, this should be acceptable */
+				mps_waypoint_r(mps_file_temp, mps_ver_temp, &wpt, &mpsWptClass);
+				mps_wpt_q_add(&written_wpt_head, wpt);
+				/* now return to the start of the waypoint data to do a "clean" copy */
+				fseek(mps_file_temp, tempFilePos, SEEK_SET);
+
+				/* copy the data using a "reasonably" sized buffer */
 				for(tocopy = reclen2; tocopy > 0; tocopy -= sizeof(copybuf)) {
 					fread(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_temp);
 					fwrite(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_out);
@@ -1562,6 +1834,7 @@ mps_write(void)
 		}	/* while (!feof(mps_file_temp)) */
 	}	/* if (mpsmergeout) */
 
+	/* irrespective of merging, now write out any waypoints */
 	if (global_opts.objective == wptdata) {
 
 		if (mpsmergeout) {
@@ -1576,17 +1849,23 @@ mps_write(void)
 				fread(&recType, 1, 1, mps_file_temp);
 
 				if (recType == 'W')  {
-					mps_waypoint_r(mps_file_temp, mps_ver_temp, &wpt);
+					/* need to be careful that we aren't duplicating a wpt defined from elsewhere */
+					mps_waypoint_r(mps_file_temp, mps_ver_temp, &wpt, &mpsWptClass);
+					if (mpsWptClass == MPSDEFAULTWPTCLASS) waypt_add(wpt);
 				}
 				else break;
 			}
 		}
-		waypt_disp_all(mps_waypoint_w_wrapper);
+		waypt_disp_all(mps_waypoint_w_unique_wrapper);
 	}
 
+	/* prior to writing any tracks as requested, if we're doing a merge, read in the rtes
+	   from the original file and then write them out, ready for tracks to follow
+	*/
 	if ((mpsmergeout) && (global_opts.objective != rtedata)) {
 		while (!feof(mps_file_temp)) {
 
+			/* this might all fail if the relevant waypoints haven't been written */
 			if (recType == 'R')  {
 				fwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
 				fwrite(&recType, 1, 1, mps_file_out);
@@ -1606,6 +1885,7 @@ mps_write(void)
 		}	/* while (!feof(mps_file_temp)) */
 	}	/* if (mpsmergeout) */
 
+	/* routes are next in the wpts, rtes, trks, mapset sequence */
 	if (global_opts.objective == rtedata) {
 
 		if (mpsmergeout) {
@@ -1625,11 +1905,22 @@ mps_write(void)
 				fread(&recType, 1, 1, mps_file_temp);
 			}
 		}
-		/* need to make sure there is a "real" waypoint for each route waypoint */
-		route_disp_all(mps_noop, mps_noop, mps_waypoint_w_wrapper);
+		/* need to make sure there is a "real" waypoint for each route waypoint
+		   Need to be careful about creating duplicate wpts as MapSource chokes on these
+		   so, if the user requested waypoints to be output too, then write the route
+		   waypoints only if unique in the total list of waypoints ("real" and route derived) 
+		   If the user didn't request waypoints to be output, then output the route derived
+		   waypoints without consideration for uniqueness for "real" waypoints that haven't
+		   been output (phew!)
+		*/
+		route_disp_all(mps_noop, mps_noop, mps_route_wpt_w_unique_wrapper);
+
 		route_disp_all(mps_routehdr_w_wrapper, mps_routetrlr_w_wrapper, mps_routedatapoint_w_wrapper);
 	}
 
+	/* If merging but we haven't been requested to write out tracks, then read in tracks from
+	   the original file and write these out prior to any mapset writes later on
+	*/
 	if ((mpsmergeout) && (global_opts.objective != trkdata)) {
 		while (!feof(mps_file_temp)) {
 
@@ -1652,6 +1943,7 @@ mps_write(void)
 		}	/* while (!feof(mps_file_temp)) */
 	}	/* if (mpsmergeout) */
 
+	/* tracks are next in the wpts, rte, trks, mapset sequence in .mps files */
 	if (global_opts.objective == trkdata) {
 		if (mpsmergeout) {
 			/* since we're processing tracks, we should read in from whatever version and write out
