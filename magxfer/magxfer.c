@@ -24,13 +24,14 @@
 
 
 #define xmalloc malloc
-#define FRAME_SIZE 2000
+#define FRAME_SIZE 1000
 
 int magfd;
 struct termios orig_tio;
 struct termios new_tio;
 
 int debug_level = 0;
+int synced;
 
 typedef struct {
 	unsigned int data_length;
@@ -124,9 +125,7 @@ xmit_xframe(vld *frame, unsigned int frame_number)
 		dump_xframe(frame); 
 	}
 
-	if (debug_level > 0) {
-		fprintf(stderr, "Sending packet %d ", frame_number);
-	}
+	debug("Sending packet %d ", frame_number);
 
 	if (frame->data_length == 6) {
 		int flen;
@@ -181,10 +180,7 @@ retry_tx:
 			exit (1);
 
 		case 0x81:
-			if (debug_level > 0) {
-				fprintf(stderr, "Retransmitting frame %d\n", 
-					frame_number);
-			}
+			debug("Retransmitting frame %d\n", frame_number);
 			/*
 			 * It's not documented, but the unit sends us two
 			 * additional bytes in one of these.  I'm guessing it's
@@ -195,8 +191,7 @@ retry_tx:
 			goto retry_tx;
 
 		case 0x82:
-			fprintf(stderr, 
-				"Unit saw rec length > 1024.  We sent %d\n",
+			debug( "Unit saw rec length > 1024.  We sent %d\n",
 				frame->data[0] << 8 | frame->data[1]);
 			exit(1);
 		default:
@@ -227,9 +222,7 @@ retry_tx:
 		abort();
 	}
 	
-	if (debug_level > 0) {
-		fprintf(stderr, "Acked.\n");
-	}
+	debug("Acked.\n");
 
 	return 0;
 }
@@ -364,6 +357,7 @@ xmit(char *buf, int sz)
 
 	for (n = 0; n < sz - FRAME_SIZE; n += FRAME_SIZE,frame_number++) {
 		vld = make_xframe(&buf[n], FRAME_SIZE, frame_number);
+		printf("\r%3.02f%% done", 100.0 * ((double) n / (double) sz));
 		xmit_xframe(vld, frame_number);
 		left -= FRAME_SIZE;
 	}
@@ -374,6 +368,7 @@ xmit(char *buf, int sz)
 	}
 
 	vld = make_xframe(&buf[0], 0, frame_number++);
+		printf("\r100.00%% done\n");
 	return xmit_xframe(vld, frame_number);
 }
 
@@ -451,7 +446,6 @@ void
 send_upload_cmd(void)
 {
 #define MU_CMD "$PMGNCMD,MPUPLOAD,2*72\r\n"
-fprintf(stderr, "send_up %d\n", magfd);
 	write(magfd, MU_CMD, sizeof(MU_CMD));
 	cfsetospeed(&new_tio, B115200);
 	cfsetispeed(&new_tio, B115200);
@@ -461,6 +455,10 @@ fprintf(stderr, "send_up %d\n", magfd);
 void
 alarm_handler(int a)
 {
+	if (synced) {
+		signal(SIGALRM, SIG_DFL);
+		return;
+	}
 	restore_port();
 	fprintf(stderr, "Fatal error: No communications %d.\n", magfd);
 	exit(1);
@@ -475,7 +473,6 @@ void
 sync_receiver(void)
 {
 	int i;
-	int synced;
 	char c = 0x55;
 
 	signal(SIGALRM, alarm_handler);
@@ -543,6 +540,11 @@ main(int argc, char *argv[])
 
 	inf = fopen(ifilename, "r");
 	file_sz = fread(ibuf, 1, sizeof(ibuf), inf);
+	if (file_sz == sizeof(ibuf)) {
+		fprintf(stderr, "File '%s' bigger than %d bytes.  Exiting.\n",
+			ifilename, sizeof(ibuf));
+
+	}
 
 	cksum = xor_checksum(ibuf, file_sz);
 	ibuf[file_sz++] = cksum >> 8;

@@ -3,10 +3,11 @@ under POSIX operating systems like UnixWare, OpenServer, Linux, FreeBSD,
 Solaris, and OpenBSD.  It is most useful on the 330 and SportTrak;
 Meridians can just read the maps from the SD cards.
 
-It does **not** create or edit those maps; for that you must still use
-Mapsend.  But once you've used Mapsend to create the maps, you may keep
-a collection of *.img files on your UNIX system and use this utility to 
-shoot them into your receiver.
+It does **not** create or edit those maps; for that you must still
+use Mapsend.  But once you've used Mapsend to create the maps, you
+may keep a collection of *.img files on your UNIX system and use this
+utility to shoot them into your receiver.  The files you need are in the
+"export/images" in whatever location you installed Mapsend.
 
 Usage is simple:
 
