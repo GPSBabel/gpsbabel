@@ -116,8 +116,9 @@ typedef struct {
     FILE * xcsvfp;		/* ptr to current *open* data file */
 
     char * description;		/* Description for help text */
-    int shortlen;		/* preferred shortname length */
     char * extension;		/* preferred filename extension (for wrappers)*/
+    
+    void * mkshort_handle;	/* handle for mkshort() */
     
 } xcsv_file_t;
 

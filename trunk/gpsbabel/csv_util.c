@@ -34,8 +34,6 @@
 #define EXCEL_TO_TIMET(a) ((a - 25569.0) * 86400.0)
 #define TIMET_TO_EXCEL(a) ((a / 86400.0) + 25569.0)
 
-static void *mkshort_handle;
-
 /*********************************************************************/
 /* csv_stringclean() - remove any unwanted characters from string.   */
 /*                     returns copy of string.                       */
@@ -307,6 +305,8 @@ xcsv_file_init(void)
      */
     xcsv_file.ofield = xcalloc(sizeof(queue), 1);
     QUEUE_INIT(xcsv_file.ofield);
+
+    xcsv_file.mkshort_handle = mkshort_new_handle();
 }
 
 /*****************************************************************************/
@@ -576,28 +576,28 @@ xcsv_waypt_pr(const waypoint *wpt)
     int i;
     field_map_t *fmp;
     queue *elem, *tmp;
-   
+
     if (wpt->shortname) {
-        anyname = mkshort(mkshort_handle, wpt->shortname);
+        anyname = xstrdup(wpt->shortname);
     } else
     if (wpt->description) {
-        anyname = mkshort(mkshort_handle, wpt->description);
+        anyname = mkshort(xcsv_file.mkshort_handle, wpt->description);
     } else
     if (wpt->notes) {
         anyname = xstrdup(wpt->notes);
-    }  else 
+    } else
         anyname = xstrdup("");
-        
+
     if ((anyname) && (global_opts.synthesize_shortnames)) {
 	char *oldname = anyname;
-        anyname = mkshort(mkshort_handle, oldname);
+        anyname = mkshort(xcsv_file.mkshort_handle, oldname);
 	xfree(oldname);
     }
     
     if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
         if (wpt->description) {
             if (global_opts.synthesize_shortnames)
-                shortname = mkshort(mkshort_handle, wpt->description);
+                shortname = mkshort(xcsv_file.mkshort_handle, wpt->description);
             else
                 shortname = csv_stringclean(wpt->description, xcsv_file.badchars);
         } else {
@@ -781,7 +781,6 @@ xcsv_data_write(void)
 {
     queue *elem, *tmp;
     ogue_t *ogp;
-    mkshort_handle = mkshort_new_handle();
 
     /* output prologue lines, if any. */
     QUEUE_FOR_EACH(&xcsv_file.prologue, elem, tmp) {
@@ -795,6 +794,5 @@ xcsv_data_write(void)
         ogp = (ogue_t *) elem;
         fprintf (xcsv_file.xcsvfp, "%s%s", ogp->val, xcsv_file.record_delimiter);
     }
-    mkshort_del_handle(mkshort_handle);
 }
 

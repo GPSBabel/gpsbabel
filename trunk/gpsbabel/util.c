@@ -43,7 +43,7 @@ debug_mem_output(char *format, ...)
 		vfprintf( debug_mem_file, format, args );
 		fflush( debug_mem_file );
 	}
-	va_end( format );
+	va_end( args );
 }
 
 void

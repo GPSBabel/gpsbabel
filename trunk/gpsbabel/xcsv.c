@@ -30,7 +30,19 @@
 #define MYNAME	"XCSV"
 #define ISSTOKEN(a,b) (strncmp(a,b, strlen(b)) == 0)
 
-static void *mkshort_handle;
+static char *styleopt;
+static char *snlenopt;
+static char *snwhiteopt;
+static char *snupperopt;
+
+static
+arglist_t xcsv_args[] = {
+	{"style", &styleopt, "Full path to XCSV style file (required)"},
+	{"snlen", &snlenopt, "Max synthesized shortname length"},
+	{"snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames"},
+	{"snupper", &snupperopt, "(0/1) UPPERCASE synth. shortnames"},
+	{0, 0, 0}
+};
 
 /* a table of config file constants mapped to chars */
 static 
@@ -64,37 +76,31 @@ xcsv_destroy_style(void)
 
     /* destroy the prologue */
     QUEUE_FOR_EACH(&xcsv_file.prologue, elem, tmp) {
-        if (xcsv_file.is_internal == 0) {
-            ogp = (ogue_t *)elem;
-            if (ogp->val)
-                xfree(ogp->val);
-        }
+        ogp = (ogue_t *)elem;
+        if (ogp->val)
+            xfree(ogp->val);
         if (elem)
             xfree(elem);
     }
 
     /* destroy the epilogue */
     QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {
-        if (xcsv_file.is_internal == 0) {
-            ogp = (ogue_t *)elem;
-            if (ogp->val)
-                xfree(ogp->val);
-        }
+        ogp = (ogue_t *)elem;
+        if (ogp->val)
+            xfree(ogp->val);
         if (elem)
             xfree(elem);
     }
 
     /* destroy the ifields */
     QUEUE_FOR_EACH(&xcsv_file.ifield, elem, tmp) {
-        if (xcsv_file.is_internal == 0) {
-            fmp = (field_map_t *) elem;
-            if (fmp->key)
-                xfree(fmp->key);
-            if (fmp->val)
-                xfree(fmp->val);
-            if (fmp->printfc)
-                xfree(fmp->printfc);
-        }
+        fmp = (field_map_t *) elem;
+        if (fmp->key)
+            xfree(fmp->key);
+        if (fmp->val)
+            xfree(fmp->val);
+        if (fmp->printfc)
+            xfree(fmp->printfc);
         if (elem)
             xfree(elem);
     }
@@ -102,15 +108,13 @@ xcsv_destroy_style(void)
     /* destroy the ofields, if they are not re-mapped to ifields. */
     if (xcsv_file.ofield != &xcsv_file.ifield) {
         QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
-            if (xcsv_file.is_internal == 0) {
-                fmp = (field_map_t *) elem;
-                if (fmp->key)
-                    xfree(fmp->key);
-                if (fmp->val)
-                    xfree(fmp->val);
-                if (fmp->printfc)
-                    xfree(fmp->printfc);
-            }
+            fmp = (field_map_t *) elem;
+            if (fmp->key)
+                xfree(fmp->key);
+            if (fmp->val)
+                xfree(fmp->val);
+            if (fmp->printfc)
+                xfree(fmp->printfc);
             if (elem)
                 xfree(elem);
         }
@@ -119,17 +123,24 @@ xcsv_destroy_style(void)
             xfree(xcsv_file.ofield);
     }
 
-    if (xcsv_file.is_internal == 0) {
-        /* other alloc'd glory */
-        if (xcsv_file.field_delimiter)
-            xfree(xcsv_file.field_delimiter);
+    /* other alloc'd glory */
+    if (xcsv_file.field_delimiter)
+        xfree(xcsv_file.field_delimiter);
 
-        if (xcsv_file.record_delimiter)
-            xfree(xcsv_file.record_delimiter);
+    if (xcsv_file.record_delimiter)
+        xfree(xcsv_file.record_delimiter);
 
-        if (xcsv_file.badchars)
-            xfree(xcsv_file.badchars);
-    }
+    if (xcsv_file.badchars)
+        xfree(xcsv_file.badchars);
+
+    if (xcsv_file.description)
+        xfree(xcsv_file.description);
+
+    if (xcsv_file.extension)
+        xfree(xcsv_file.extension);
+
+    if (xcsv_file.mkshort_handle)
+        xfree(xcsv_file.mkshort_handle);
 
     /* return everything to zeros */
     memset(&xcsv_file, '\0', sizeof(xcsv_file));
@@ -197,7 +208,13 @@ xcsv_parse_style_line(const char *sbuff)
 	} else
 
 	if (ISSTOKEN(sbuff, "SHORTLEN")) {
-		xcsv_file.shortlen = atoi(&sbuff[9]);
+            if (xcsv_file.mkshort_handle)
+                setshort_length(xcsv_file.mkshort_handle, atoi(&sbuff[9]));
+	} else
+
+	if (ISSTOKEN(sbuff, "SHORTWHITE")) {
+            if (xcsv_file.mkshort_handle)
+                setshort_whitespace_ok(xcsv_file.mkshort_handle, atoi(&sbuff[12]));
 	} else
 
 	if (ISSTOKEN(sbuff, "BADCHARS")) {
@@ -355,6 +372,7 @@ xcsv_read_internal_style(const char *style_buf)
 {
 	xcsv_file_init();
 	xcsv_file.is_internal = 1;
+
 	xcsv_parse_style_buff(style_buf);
 
 	/* if we have no output fields, use input fields as output fields */
@@ -369,20 +387,16 @@ xcsv_read_internal_style(const char *style_buf)
 static void
 xcsv_rd_init(const char *fname, const char *args)
 {
-    char *p;
 
     /* 
      * if we don't have an internal style defined, we need to
      * read it from a user-supplied style file, or die trying.
      */
     if (xcsv_file.is_internal == 0) {
-        p = get_option(args, "style");
-
-        if (!p)
+        if (!styleopt)
             fatal(MYNAME ": XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
 
-        xcsv_read_style(p);
-	xfree(p);
+        xcsv_read_style(styleopt);
     }
 
     xcsv_file.xcsvfp = fopen(fname, "r");
@@ -402,49 +416,38 @@ xcsv_rd_deinit(void)
 static void
 xcsv_wr_init(const char *fname, const char *args)
 {
-    char * p;
-    mkshort_handle = mkshort_new_handle();
-    
     /* if we don't have an internal style defined, we need to
      * read it from a user-supplied style file, or die trying.
      */
     if (xcsv_file.is_internal == 0) {
-        p = get_option(args, "style");
 
-        if (!p)
+        if (!styleopt)
             fatal(MYNAME ": XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
 
-        xcsv_read_style(p);
-	xfree(p);
-
-        /* set mkshort options from the command line */
-        if (global_opts.synthesize_shortnames) {
-            p = get_option(args, "snlen");
-            if (p) {
-                setshort_length(mkshort_handle, atoi(p));
-		xfree(p);
-	    }
-
-            p = get_option(args, "snwhite");
-            if (p) {
-                setshort_whitespace_ok(mkshort_handle, atoi(p));
-		xfree(p);
-	    }
-
-            p = get_option(args, "snupper");
-            if (p) {
-                setshort_mustupper(mkshort_handle, atoi(p));
-		xfree(p);
-	    }
-
-            setshort_badchars(mkshort_handle, xcsv_file.badchars);
-        }
+        xcsv_read_style(styleopt);
     }
 
     xcsv_file.xcsvfp = fopen(fname, "w");
 
     if (xcsv_file.xcsvfp == NULL)
         fatal(MYNAME ": Cannot open %s for writing\n", fname);
+
+    /* set mkshort options from the command line */
+    if (global_opts.synthesize_shortnames) {
+
+        if (snlenopt)
+            setshort_length(xcsv_file.mkshort_handle, atoi(snlenopt));
+
+        if (snwhiteopt)
+            setshort_whitespace_ok(xcsv_file.mkshort_handle, atoi(snwhiteopt));
+
+        if (snupperopt)
+            setshort_mustupper(xcsv_file.mkshort_handle, atoi(snupperopt));
+
+        setshort_badchars(xcsv_file.mkshort_handle, xcsv_file.badchars);
+
+    }
+
 }
 
 static void
@@ -453,7 +456,6 @@ xcsv_wr_deinit(void)
     fclose(xcsv_file.xcsvfp);
 
     xcsv_destroy_style();
-    mkshort_del_handle(mkshort_handle);
 }
 
 ff_vecs_t xcsv_vecs = {
@@ -463,4 +465,5 @@ ff_vecs_t xcsv_vecs = {
     xcsv_wr_deinit,
     xcsv_data_read,
     xcsv_data_write,
+    xcsv_args
 };

@@ -15,7 +15,7 @@ be *nothing* before the directive.  (i.e. not "  DIRECTIVE  VALUE")
 
 INTERNAL CONSTANTS:
 A few internal constants are defined in the XCSV parser to make the style
-file simpler.  They may or may be used and are optional in most cases. 
+file simpler.  They may or may not be used and are optional in most cases. 
 Note that only certain style file directives map these constants.
 
 STYLE CONSTANT  MAPS TO CHAR(s)
@@ -54,6 +54,30 @@ described and not specific lines appearing the files being described.
 
    This directive gives the filename extension generally associated with
    this file.
+
+GPSBABEL BEHAVIOR DIRECTIVES:
+-----------------------------
+There are a few available directives to 'control' some of the internal 
+processing functions of GPSbabel.
+
+ o SHORTLEN:
+
+   This sets the maximum allowed shortname length when using the internal
+   shortname synthesizer.
+
+   example:
+   SHORTLEN	16	# shortnames will be at most 16 characters long.
+
+
+ o SHORTWHITE: 
+
+   This tells the shortname synthesizer whether or not not allow whitespace
+   in the synthesized shortnames.  Allowed values are zero and one.
+
+   example:
+   SHORTWHITE	0	# Do not allow whitespace in shortname.
+   SHORTWHITE   1	# Allow whitespace in shortname.
+
 
 DEFINING THE LAYOUT OF THE FILE:
 --------------------------------
@@ -263,7 +287,5 @@ The fields used by the XCSV parser are as follows:
 EXAMPLES:
 --------
 For examples on using the XCSV module, please see the *.style files in
-the style/ subdirectory of gpsbabel.  For examples of using the XCSV
-module instead of carving out trivial C code, see the source code 
-examples ozi.c, mxf.c, and xmapwpt.c in the gpsbabel directory.
+the style/ subdirectory of gpsbabel.  
 
