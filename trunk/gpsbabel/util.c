@@ -638,6 +638,59 @@ dodefault:
 	}
 }
 
+char * str_utf8_to_cp1252( const char * str )
+{
+	char *result = xstrdup( str );
+	char *cur = result;
+	
+	while ( cur && *cur ) {
+		if ( *cur & 0x80 ) {
+			int bytes;
+			int value;
+			utf8_to_int( cur, &bytes, &value );
+			if ( value > 0xff ) {
+				switch (value) {
+					case 0x20AC: value = 0x80; break;
+					case 0x201A: value = 0x82; break;
+					case 0x0192: value = 0x83; break;
+					case 0x201E: value = 0x84; break;
+					case 0x2026: value = 0x85; break;
+					case 0x2020: value = 0x86; break;
+					case 0x2021: value = 0x87; break;
+					case 0x02C6: value = 0x88; break;
+					case 0x2030: value = 0x89; break;
+					case 0x0160: value = 0x8A; break;
+					case 0x2039: value = 0x8B; break;
+					case 0x0152: value = 0x8C; break;
+					case 0x017D: value = 0x8E; break;
+					case 0x2018: value = 0x91; break;
+					case 0x2019: value = 0x92; break;
+					case 0x201C: value = 0x93; break;
+					case 0x201D: value = 0x94; break;
+					case 0x2022: value = 0x95; break;
+					case 0x2013: value = 0x96; break;
+					case 0x2014: value = 0x97; break;
+					case 0x02DC: value = 0x98; break;
+					case 0x2122: value = 0x99; break;
+					case 0x0161: value = 0x9A; break;
+					case 0x203A: value = 0x9B; break;
+					case 0x0153: value = 0x9C; break;
+					case 0x017E: value = 0x9E; break;
+					case 0x0178: value = 0x9F; break;
+					// default is the generic "currency 
+					// sign" because question marks 
+					// just look stupid.
+					default: value = 0xA4; break;
+				}
+			}
+			*cur = (char)value;
+			strcpy( cur+1, cur+bytes );
+		}
+		cur++;
+	}
+	return result;
+}
+
 char * xml_entitize(const char * str) 
 {
 	int elen, ecount, nsecount;

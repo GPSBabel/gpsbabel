@@ -123,16 +123,22 @@ waypt_count(void)
 void
 waypt_disp(const waypoint *wpt)
 {
+	char *tmpdesc = NULL;
 	if (wpt->creation_time) {
 		printf("%s ", ctime(&wpt->creation_time));
 	}
 	printposn(wpt->latitude,1);
 	printposn(wpt->longitude,0);
+	
+	tmpdesc = str_utf8_to_cp1252( wpt->description);
 	printf("%s/%s", 
 		global_opts.synthesize_shortnames ? 
-			mkshort(mkshort_handle, wpt->description) : 
+			mkshort(mkshort_handle, tmpdesc) : 
 				wpt->shortname, 
-				wpt->description);
+				tmpdesc);
+	if ( tmpdesc ) 
+		xfree(tmpdesc);
+
 	if (wpt->altitude != unknown_alt)
 		printf(" %f", wpt->altitude);
 	printf("\n");
