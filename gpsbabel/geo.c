@@ -22,6 +22,8 @@
 static int in_wpt;
 static int in_name;
 static int in_link;
+static int in_cdata;
+static char *cdatastr;
 
 static XML_Parser psr;
 static waypoint *wpt_tmp;
@@ -30,6 +32,7 @@ FILE *fd;
 FILE *ofd;
 
 #define MYNAME "geo"
+#define MY_CBUF 4096
 
 static void
 tag_coord(const char **attrv)
@@ -104,6 +107,16 @@ geo_start(void *data, const char *el, const char **attr)
 static void
 geo_end(void *data, const char *el)
 {
+	if (in_cdata) {
+		if (in_name) {
+			wpt_tmp->description = xstrdup(cdatastr);
+		}
+		if (in_link) {
+			wpt_tmp->url = xstrdup(cdatastr);
+		}
+		in_cdata--;
+		memset(cdatastr,0, MY_CBUF);
+	}
 	if (strcmp(el, "waypoint") == 0) {
 		waypt_add(wpt_tmp);
 		in_wpt--;
@@ -119,17 +132,10 @@ geo_end(void *data, const char *el)
 static void
 geo_cdata(void *dta, const XML_Char *s, int len)
 {
-	char *foo = xmalloc(len+1);
-	foo[len] = 0;
-	strncpy(foo, s, len);
-	if (in_name) {
-		wpt_tmp->description = foo;
-	}
-	if (in_link) {
-		wpt_tmp->url = foo;
-	}
+	char *estr = cdatastr + strlen(cdatastr);
+	memcpy(estr, s, len); 
+	in_cdata++;
 }
-
 
 void
 geo_rd_init(const char *fname)
@@ -145,6 +151,7 @@ geo_rd_init(const char *fname)
 	}
 
 	XML_SetElementHandler(psr, geo_start, geo_end);
+	cdatastr = xcalloc(MY_CBUF,1);
 	XML_SetCharacterDataHandler(psr, geo_cdata);
 }
 
@@ -173,7 +180,7 @@ void
 geo_read(void)
 {
 	int len;
-	char buf[1024];
+	char buf[MY_CBUF];
 	
 	while ((len = fread(buf, 1, sizeof(buf), fd))) {
 		if (!XML_Parse(psr, buf, len, feof(fd))) {
@@ -182,7 +189,8 @@ geo_read(void)
 				XML_ErrorString(XML_GetErrorCode(psr)));
 		}
 	}
-	
+
+	XML_ParserFree(psr);
 }
 
 static void

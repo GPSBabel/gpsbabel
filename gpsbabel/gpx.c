@@ -28,6 +28,8 @@ static int in_ele;
 static int in_name;
 static int in_time;
 static int in_desc;
+static int in_cdata;
+static char *cdatastr;
 
 static XML_Parser psr;
 
@@ -39,6 +41,7 @@ static FILE *fd;
 static FILE *ofd;
 
 #define MYNAME "GPX"
+#define MY_CBUF 4096
 
 static void
 tag_gpx(const char **attrv)
@@ -101,6 +104,34 @@ gpx_start(void *data, const char *el, const char **attr)
 static void
 gpx_end(void *data, const char *el)
 {
+	if (in_cdata) {
+		if (in_name && in_wpt) {
+			wpt_tmp->shortname = xstrdup(cdatastr);
+		}
+		if (in_desc && in_wpt) {
+			wpt_tmp->description = xstrdup(cdatastr);
+		}
+		if (in_ele) {
+			sscanf(cdatastr, "%lf", 
+				&wpt_tmp->position.altitude.altitude_meters);
+		}
+		if (in_time && (in_wpt || in_rte)) {
+			struct tm tm;
+			sscanf(cdatastr, "%d-%d-%dT%d:%d:%dZ\n", 
+				&tm.tm_year,
+				&tm.tm_mon,
+				&tm.tm_mday,
+				&tm.tm_hour,
+				&tm.tm_min,
+				&tm.tm_sec);
+			tm.tm_mon -= 1;
+			tm.tm_year -= 1900;
+			tm.tm_isdst = 1;
+			wpt_tmp->creation_time = mktime(&tm);
+		}
+		in_cdata--;
+		memset(cdatastr, 0, MY_CBUF);
+	}
 	if (strcmp(el, "wpt") == 0) {
 		waypt_add(wpt_tmp);
 		in_wpt--;
@@ -122,32 +153,19 @@ gpx_end(void *data, const char *el)
 static void
 gpx_cdata(void *dta, const XML_Char *s, int len)
 {
-	char *foo = xmalloc(len+1);
-	foo[len] = 0;
-	strncpy(foo, s, len);
-	if (in_name && in_wpt) {
-		wpt_tmp->shortname = foo;
-	}
-	if (in_desc && in_wpt) {
-		wpt_tmp->description = foo;
-	}
-	if (in_ele) {
-		sscanf(foo, "%lf", 
-			&wpt_tmp->position.altitude.altitude_meters);
-	}
-	if (in_time && (in_wpt || in_rte)) {
-		struct tm tm;
-		sscanf(foo, "%d-%d-%dT%d:%d:%dZ\n", 
-			&tm.tm_year,
-			&tm.tm_mon,
-			&tm.tm_mday,
-			&tm.tm_hour,
-			&tm.tm_min,
-			&tm.tm_sec);
-		tm.tm_mon -= 1;
-		tm.tm_year -= 1900;
-		tm.tm_isdst = 1;
-		wpt_tmp->creation_time = mktime(&tm);
+	char *estr;
+
+	/*
+	 * I'm exceedingly unamused that libexpat makes me keep all this
+	 * horrible state just I can concatenate buffers that it hands
+	 * me as a cdata that are fragmented becuae they span a read.  Grrr.
+	 */
+
+	if ((in_name && in_wpt) || (in_desc && in_wpt) || (in_ele) || 
+			(in_time && (in_wpt || in_rte)))  {
+		estr = cdatastr + strlen(cdatastr);
+		memcpy(estr, s, len);
+		in_cdata++;
 	}
 }
 
@@ -162,6 +180,7 @@ gpx_rd_init(const char *fname)
 	if (!psr) {
 		fatal(MYNAME ": Cannot create XML Parser\n");
 	}
+	cdatastr = xcalloc(MY_CBUF, 1);
 	XML_SetElementHandler(psr, gpx_start, gpx_end);
 	XML_SetCharacterDataHandler(psr, gpx_cdata);
 }
@@ -191,7 +210,7 @@ gpx_read(void)
 {
 	int len;
 	int done = 0;
-	char buf[102400];
+	char buf[MY_CBUF];
 
 	while (!done) {
 		len = fread(buf, 1, sizeof(buf), fd);
