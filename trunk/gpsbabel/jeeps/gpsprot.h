@@ -180,6 +180,8 @@ int32 gps_trk_type;
  *  Trk Header Type
  */
 #define pD310 310
+#define pD311 311
+#define pD312 312
 int32 gps_trk_hdr_type;
 
 
