@@ -815,11 +815,7 @@ mag_trkparse(char *trkmsg)
 	dmy = dmy / 100;
 	tm.tm_mday = dmy % 100; 
 
-	/*
-	 * FIXME: mktime assumes the struct tm is in local time, which 
-	 * ours is not...
- 	 */
-	waypt->creation_time = mktime(&tm);
+	waypt->creation_time = mktime(&tm) + get_tz_offset() ;
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->position.latitude.degrees = mag2degrees(latdeg);
@@ -1134,10 +1130,17 @@ void mag_track_disp(const waypoint *waypointp)
 	int lon_deg, lat_deg;
 	char obuf[200];
 	int hms=0,fracsec=0; 	/* FIXME: Read HMS from waypoint time */
-	int date=0; 		/* FIXME: Read HMS from waypoint time */
+	int date=0;
+	struct tm *tm;
 
 	ilat = waypointp->position.latitude.degrees;
 	ilon = waypointp->position.longitude.degrees;
+	if (waypointp->creation_time) {
+		tm = gmtime(&waypointp->creation_time);
+		hms = tm->tm_hour * 10000 + tm->tm_min  * 100 + tm->tm_sec;
+		date = tm->tm_mday * 10000 + tm->tm_mon * 100 + tm->tm_year;
+	} else 
+		date = 0;
 
 	lon = fabs(ilon);
 	lat = fabs(ilat);
@@ -1154,7 +1157,7 @@ void mag_track_disp(const waypoint *waypointp)
 	/*
 	 * 	FIXME: Utterly untested.   LIkely wrong.
 	 */
-	sprintf(obuf,"PMGNTRK,%4.3f,%c,%4.3f,%c,%-.f,%c,%d.%d,A,,%d", 
+	sprintf(obuf,"PMGNTRK,%4.3f,%c,%09.3f,%c,%05.f,%c,%d.%d,A,,%06d", 
 		lat, ilat < 0 ? 'S' : 'N',
 		lon, ilon < 0 ? 'W' : 'E',
 		waypointp->position.altitude.altitude_meters == unknown_alt ?
