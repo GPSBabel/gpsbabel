@@ -118,3 +118,19 @@ diff ${TMPDIR}/ozi.ozi reference
 ${PNAME} -i holux -f reference/paris.wpo -o holux -F ${TMPDIR}/paris.wpo
 diff reference/paris.wpo ${TMPDIR}/paris.wpo
 
+# Magellan NAV Companion for PalmOS
+# This format is hard to test, because each record and the database itself
+# contains the time of creation, so two otherwise identical files won't
+# compare accurately.  In any case, the files are binary so diff wouldn't
+# like them.  So, we convert the reference file to gpsutil and the converted
+# file to gpsutil and make sure they're the same, and that they're the same
+# as one converted on a known-working installation.  Unfortunately, this does
+# not verify that the appinfo block was written correctly.  However, it does
+# successfully test for some endianness errors that might otherwise go 
+# unnoticed.
+${PNAME} -i geo -f geocaching.loc -o magnav -F ${TMPDIR}/magnav.pdb
+${PNAME} -i magnav -f ${TMPDIR}/magnav.pdb -o gpsutil -F ${TMPDIR}/magnav.gpu
+${PNAME} -i magnav -f reference/magnav.pdb -o gpsutil -F ${TMPDIR}/magnavt.gpu
+diff ${TMPDIR}/magnavt.gpu ${TMPDIR}/magnav.gpu
+diff reference/magnavr.gpu ${TMPDIR}/magnav.gpu
+
