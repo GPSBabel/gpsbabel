@@ -1,5 +1,5 @@
 /*
-    Distance Between Points Filter
+    Distance Between Points Filter(s)
 
     Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
 
@@ -30,10 +30,22 @@ extern queue waypt_head;
 
 static double pos_dist;
 static char *distopt;
+static char *latopt;
+static char *lonopt;
+
+waypoint * home_pos;
 
 static
 arglist_t position_args[] = {
 	{"distance", &distopt, "Maximum positional distance (required)"},
+	{0, 0, 0}
+};
+
+static
+arglist_t radius_args[] = {
+	{"lat", &latopt,       "Latitude for center point (D.DDDDD)"},
+	{"lon", &lonopt,       "Longitude for center point (D.DDDDD)"},
+	{"distance", &distopt, "Maximum distance from center"},
 	{0, 0, 0}
 };
 
@@ -81,7 +93,7 @@ position_comp(const void * a, const void * b)
 	return(0);
 }
 
-void
+void 
 position_process(void)
 {
 	queue * elem, * tmp;
@@ -111,7 +123,7 @@ position_process(void)
 		/* convert radians to integer feet */
 		dist = (int)((((dist * 180.0 * 60.0) / M_PI) * 1.1516) * 5280.0);
 
-		if (dist <= pos_dist) { 
+		if (dist <= pos_dist) {
 			waypt_del(comp[i]);
 			waypt_free(comp[i]);
 		}
@@ -141,9 +153,70 @@ void
 position_deinit(void) {
 }
 
+void 
+radius_process(void)
+{
+	queue * elem, * tmp;
+	waypoint * waypointp;
+	double dist;
+
+	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+		waypointp = (waypoint *)elem;
+
+		dist = gc_distance(waypointp->position.latitude.degrees,
+				   waypointp->position.longitude.degrees,
+				   home_pos->position.latitude.degrees,
+				   home_pos->position.longitude.degrees);
+
+		/* convert radians to float point statute miles */
+		dist = (((dist * 180.0 * 60.0) / M_PI) * 1.1516);
+
+		if (dist >= pos_dist) {
+			waypt_del(waypointp);
+			waypt_free(waypointp);
+		}
+	}
+}
+
+void
+radius_init(const char *args) {
+	char *fm;
+
+	pos_dist = 0;
+
+	if (distopt) {
+		pos_dist = strtod(distopt, &fm);
+
+		if ((*fm == 'k') || (*fm == 'K')) {
+			 /* distance is kilometers, convert to feet */
+			pos_dist *= .6214;
+		}
+	}
+
+	home_pos = xcalloc(sizeof(*home_pos), 1);
+
+	if (latopt)
+		home_pos->position.latitude.degrees = atof(latopt);
+	if (lonopt)
+		home_pos->position.longitude.degrees = atof(lonopt);
+}
+
+void
+radius_deinit(void) {
+	if (home_pos)
+		xfree(home_pos);
+}
+
 filter_vecs_t position_vecs = {
 	position_init,
 	position_process,
 	position_deinit,
 	position_args
+};
+
+filter_vecs_t radius_vecs = {
+	radius_init,
+	radius_process,
+	radius_deinit,
+	radius_args
 };

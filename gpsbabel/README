@@ -336,6 +336,23 @@ DATA FILTERS
 	leaving just one.
 
 
+    RADIUS
+
+	The radius filter is designed to include points based on their
+	proximity to a central point.  Distances and the central point 
+	are declared on the command line by passing the distance=X.XX,
+	lat=X.XX, and lon=X.XX options to the filter.  Distance options 
+	may be expressed in miles (distance=3M) or kilometers (distance=3K).
+	The default is zero miles.
+
+	For example:
+
+	gpsbabel -i geo -f 1.loc -x radius,distance=1.5M,lat=30.0,lon=-90.0 \
+	         -o mapsend -F 2.wpt
+
+	would include only points within 1.5 miles of N30.000 W90.000 
+
+
     DUPLICATE
 
 	The duplicate filter is designed to remove duplicate points based
