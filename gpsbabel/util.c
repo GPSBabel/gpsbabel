@@ -104,21 +104,21 @@ fatal(const char *fmt, ...)
  * Read 4 bytes in big-endian.   Return as "int" in native endianness.
  */
 signed int
-pdb_read4(pdb_32 *p)
+be_read32(void *p)
 {
 	unsigned char *i = (unsigned char *) p;
 	return i[0] << 24 | i[1] << 16  | i[2] << 8 | i[3];
 }
 
 signed int
-pdb_read2(pdb_16 *p)
+be_read16(void *p)
 {
 	char *i = (char *) p;
 	return i[0] << 8 | i[0];
 }
 
 void
-pdb_write4(pdb_32 *pp, unsigned i)
+be_write32(void *pp, unsigned i)
 {
 	char *p = (char *)pp;
 
@@ -127,3 +127,37 @@ pdb_write4(pdb_32 *pp, unsigned i)
 	p[2] = (i >> 8) & 0xff;
 	p[3] = i & 0xff;
 }
+
+signed int
+le_read16(void *addr)
+{
+	unsigned char *p = addr;
+	return p[0] | (p[1] << 8);
+}
+
+signed int
+le_read32(void *addr)
+{
+	unsigned char *p = addr;
+	return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
+}
+
+void
+le_write16(void *addr, unsigned value)
+{
+	unsigned char *p = addr;
+	p[0] = value;
+	p[1] = value >> 8;
+	
+}
+
+void 
+le_write32(void *addr, unsigned value)
+{
+	unsigned char *p = addr;
+	p[0] = value;
+	p[1] = value >> 8;
+	p[2] = value >> 16;
+	p[3] = value >> 24;
+}
+

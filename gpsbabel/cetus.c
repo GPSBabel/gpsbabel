@@ -113,10 +113,10 @@ data_read(void)
 		rec = (struct record *) pdb_rec->data;
 		wpt_tmp->shortname = xstrdup(rec->ID);
 		wpt_tmp->description = xstrdup(rec->name);
-		wpt_tmp->position.altitude.altitude_meters = pdb_read4(&rec->elevation) / 100.0;
+		wpt_tmp->position.altitude.altitude_meters = be_read32(&rec->elevation) / 100.0;
 
-		wpt_tmp->position.longitude.degrees = pdb_read4(&rec->longitude) / 10000000.0; 
-		wpt_tmp->position.latitude.degrees = pdb_read4(&rec->latitude) / 10000000.0; 
+		wpt_tmp->position.longitude.degrees = be_read32(&rec->longitude) / 10000000.0; 
+		wpt_tmp->position.latitude.degrees = be_read32(&rec->latitude) / 10000000.0; 
 		if (rec->year != 0xff) {
 			struct tm tm = {0};
 		
@@ -167,9 +167,9 @@ cetus_writewpt(waypoint *wpt)
 		rec->year = 0xff;
 	}
 
-	pdb_write4(&rec->longitude, wpt->position.longitude.degrees * 10000000.0);
-	pdb_write4(&rec->latitude, wpt->position.latitude.degrees * 10000000.0);
-	pdb_write4(&rec->elevation, wpt->position.altitude.altitude_meters * 100.0);
+	be_write32(&rec->longitude, wpt->position.longitude.degrees * 10000000.0);
+	be_write32(&rec->latitude, wpt->position.latitude.degrees * 10000000.0);
+	be_write32(&rec->elevation, wpt->position.altitude.altitude_meters * 100.0);
 
 	opdb_rec = new_Record (0, 0, ct++, sizeof(*rec), (const ubyte *)rec);
 

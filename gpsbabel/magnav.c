@@ -107,10 +107,10 @@ data_read(void)
 
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 		rec = (struct record *) pdb_rec->data;
-		wpt_tmp->position.altitude.altitude_meters = pdb_read4(&rec->elevation); 
+		wpt_tmp->position.altitude.altitude_meters = be_read32(&rec->elevation); 
 
-		wpt_tmp->position.longitude.degrees = pdb_read4(&rec->longitude) / 1e5; 
-		wpt_tmp->position.latitude.degrees = pdb_read4(&rec->latitude) / 1e5; 
+		wpt_tmp->position.longitude.degrees = be_read32(&rec->longitude) / 1e5; 
+		wpt_tmp->position.latitude.degrees = be_read32(&rec->latitude) / 1e5; 
 
 		vdata = (char *) pdb_rec->data + sizeof(*rec);
 
@@ -120,12 +120,12 @@ data_read(void)
 		wpt_tmp->description = xstrdup(vdata);
 		vdata += strlen (vdata) + 1;
 		
-		tm.tm_sec = pdb_read2(&rec->crt_sec);
-		tm.tm_min = pdb_read2(&rec->crt_min);
-		tm.tm_hour = pdb_read2(&rec->crt_hour);
-		tm.tm_mday = pdb_read2(&rec->crt_mday);
-		tm.tm_mon = pdb_read2(&rec->crt_mon) - 1;
-		tm.tm_year = pdb_read2(&rec->crt_year) - 1900;
+		tm.tm_sec = be_read16(&rec->crt_sec);
+		tm.tm_min = be_read16(&rec->crt_min);
+		tm.tm_hour = be_read16(&rec->crt_hour);
+		tm.tm_mday = be_read16(&rec->crt_mday);
+		tm.tm_mon = be_read16(&rec->crt_mon) - 1;
+		tm.tm_year = be_read16(&rec->crt_year) - 1900;
 		wpt_tmp->creation_time = mktime(&tm); 
 
 		waypt_add(wpt_tmp);
@@ -166,9 +166,9 @@ abort();
 		rec->year = 0xff;
 	}
 
-	pdb_write4(&rec->longitude, wpt->position.longitude.degrees * 10000000.0);
-	pdb_write4(&rec->latitude, wpt->position.latitude.degrees * 10000000.0);
-	pdb_write4(&rec->elevation, wpt->position.altitude.altitude_meters * 100.0);
+	be_write32(&rec->longitude, wpt->position.longitude.degrees * 10000000.0);
+	be_write32(&rec->latitude, wpt->position.latitude.degrees * 10000000.0);
+	be_write32(&rec->elevation, wpt->position.altitude.altitude_meters * 100.0);
 
 	opdb_rec = new_Record (0, 0, ct++, sizeof(*rec), (const ubyte *)rec);
 

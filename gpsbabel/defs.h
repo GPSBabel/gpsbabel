@@ -131,10 +131,14 @@ typedef struct {
 } pdb_16;
 
 /*
- * Protypes for Palm/OS helpers.
+ * Protypes for Endianness helpers.
  */
 
-signed int pdb_read2(pdb_16 *p);
-signed int pdb_read4(pdb_32 *p);
-void pdb_write2(pdb_16 *pp, unsigned i);
-void pdb_write4(pdb_32 *pp, unsigned i);
+signed int be_read16(void *p);
+signed int be_read32(void *p);
+signed int le_read16(void *p);
+signed int le_read32(void *p);
+void be_write16(void *pp, unsigned i);
+void be_write32(void *pp, unsigned i);
+void le_write16(void *pp, unsigned i);
+void le_write32(void *pp, unsigned i);

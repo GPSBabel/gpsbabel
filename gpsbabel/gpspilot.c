@@ -93,9 +93,9 @@ data_read(void)
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 
 		rec = (struct record *) pdb_rec->data;
-		wpt_tmp->position.longitude.degrees = pdb_read4(&rec->longitude) / 3.6e6; 
-		wpt_tmp->position.latitude.degrees = pdb_read4(&rec->latitude) / 3.6e6; 
-		wpt_tmp->position.altitude.altitude_meters = pdb_read2(&rec->elevation) / 100.0;
+		wpt_tmp->position.longitude.degrees = be_read32(&rec->longitude) / 3.6e6; 
+		wpt_tmp->position.latitude.degrees = be_read32(&rec->latitude) / 3.6e6; 
+		wpt_tmp->position.altitude.altitude_meters = be_read16(&rec->elevation) / 100.0;
 	
 		vdata = (char *) pdb_rec->data + sizeof(*rec);
 
