@@ -328,7 +328,7 @@ begin
     'GPSBabelGUI is simply a GUI front end for GPSBabel.exe.' +CR+CR+
     'GPSBabelGUI''s only purpose is to make it easier to call' +CR+
     'GPSBabel.exe, so it must be able to find it. The easiest' +CR+
-    'way for GPSBabelGUI to find GPSBable.exe is for both of' +CR+
+    'way for GPSBabelGUI to find GPSBabel.exe is for both of' +CR+
     'them to be in the same directory.' +CR+CR+
     'GPSBabelGUI will not permit any processing to take place' +CR+
     'if there is an error during startup, or if it cannot find' +CR+
