@@ -701,7 +701,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 		memcpy(estr, s, len);
 		in_cdata++;
 	}
-	if ( in_wpt && in_something_else && cur_tag ) {
+	if ( in_wpt && in_something_else && cur_tag && !in_gs_exported) {
 		if ( cur_tag->child ) {
 			tmp_tag = cur_tag->child;
 			while ( tmp_tag->sibling ) {
