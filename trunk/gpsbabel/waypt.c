@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include "defs.h"
 
-static queue waypt_head;
+queue waypt_head;
 static unsigned int waypt_ct;
 
 void
