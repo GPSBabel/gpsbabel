@@ -24,7 +24,11 @@
 #include "coldsync/pdb.h"
 
 #define MYNAME "GPSPilot"
-#define MYTYPE 0x706f696e  	/* poin */
+#define MYTYPE_POINTS 0x706f696e  	/* poin */
+#define MYTYPE_AIRPORT 0x706f3030  	/* po00 */
+#define MYTYPE_CITIES  0x706f3031  	/* po01 */
+#define MYTYPE_LNDMRKS 0x706f3032  	/* po02 */
+#define MYTYPE_NAVAIDS 0x706f3033  	/* po03 */
 #define MYCREATOR 0x47704c69 	/* GpLi */
 
 struct record {
@@ -32,6 +36,13 @@ struct record {
 	pdb_32 latitude; 	/* similarly */
 	pdb_16 elevation; 	/* meters */
 	pdb_16 magvar; 		/* magnetic variation in degrees, neg = west */
+};
+
+struct runways {
+	pdb_32 be_longitude; 	/* Big endian, long * 3.6e6 */
+	pdb_32 be_latitude; 	/* similarly */
+	pdb_32 en_longitude; 	/* Big endian, long * 3.6e6 */
+	pdb_32 en_latitude; 	/* similarly */
 };
 
 static FILE *file_in;
@@ -97,7 +108,19 @@ data_read(void)
 		fatal(MYNAME ": pdb_Read failed\n");
 	}
 
-	if ((pdb->creator != MYCREATOR) || (pdb->type != MYTYPE)) {
+	if ((pdb->creator != MYCREATOR)) {
+		fatal(MYNAME ": Not a gpspilot file.\n");
+	}
+
+	switch (pdb->type)
+	{
+	case MYTYPE_AIRPORT:
+	case MYTYPE_POINTS:
+	case MYTYPE_CITIES:
+	case MYTYPE_LNDMRKS:
+	case MYTYPE_NAVAIDS:
+	  break;
+	default:
 		fatal(MYNAME ": Not a gpspilot file.\n");
 	}
 
@@ -110,9 +133,21 @@ data_read(void)
 		rec = (struct record *) pdb_rec->data;
 		wpt_tmp->position.longitude.degrees = be_read32(&rec->longitude) / 3.6e6; 
 		wpt_tmp->position.latitude.degrees = be_read32(&rec->latitude) / 3.6e6; 
-		wpt_tmp->position.altitude.altitude_meters = be_read16(&rec->elevation) / 100.0;
+		wpt_tmp->position.altitude.altitude_meters =
+		  be_read16(&rec->elevation);
 	
 		vdata = (char *) pdb_rec->data + sizeof(*rec);
+
+		/*
+		* skip runway records if an airport.
+		*/
+		if (pdb_rec->category == 0)
+		{
+		  int numRunways;
+		  numRunways = be_read16(vdata);
+		  vdata += 2;
+		  vdata += (sizeof(struct runways) * numRunways);
+		}
 
 		/*
 		 * This maping is a bit contrived.   
@@ -208,7 +243,7 @@ data_write(void)
 	opdb->name[PDB_DBNAMELEN-1] = 0;
 	opdb->attributes = PDB_ATTR_BACKUP;
 	opdb->ctime = opdb->mtime = time(NULL) + 2082844800U;
-	opdb->type = MYTYPE;
+	opdb->type = MYTYPE_POINTS;
 	opdb->creator = MYCREATOR; 
 	opdb->version = 0;
 
