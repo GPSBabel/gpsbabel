@@ -21,6 +21,7 @@
  */
 
 #include "defs.h"
+#include "csv_util.h"
 #include <ctype.h>
 
 static FILE *file_in;
@@ -61,28 +62,62 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-	char desc[80];
-	char *odesc = desc;
-	double lat,lon;
+	char buff[1024];
+	char *s;
+	int i;
 	waypoint *wpt_tmp;
+	int linecount = 0;
 
-	while( fscanf(file_in, "%lf,%lf,%80[^\n]",
-			&lat, &lon, desc) > 0) {
-		wpt_tmp = calloc(sizeof(*wpt_tmp),1);
-		if (wpt_tmp == NULL) {
+	do {
+		linecount++;
+		memset(&buff, '\0', sizeof(buff));
+		fgets(buff, sizeof(buff), file_in);
+
+		if (strlen(buff)) {
+
+		    wpt_tmp = calloc(sizeof(*wpt_tmp), 1);
+		    if (wpt_tmp == NULL) {
 			fatal(MYNAME ": cannot allocate memory\n");
+		    }
+
+		    s = buff;
+		    /* data delimited by commas, not enclosed */
+		    s = csv_lineparse(s, ",", "", linecount);
+
+	    	    i = 0;
+
+		while (s) {
+			switch (i) {
+			case 0:
+				wpt_tmp->position.latitude.degrees = atof(s);
+				break;
+			case 1:
+				wpt_tmp->position.longitude.degrees = atof(s);
+			    	break;
+			case 2:
+			    	wpt_tmp->description = strdup(s);
+			    	if (! wpt_tmp->description) 
+			    	    fatal(MYNAME, ": cannot allocate memory\n");
+		    		wpt_tmp->description = csv_stringtrim(wpt_tmp->description, " ");
+		    		break;
+			default:
+			    	fprintf (stderr, "%s: Warning: unmapped data fields on line %d.\n", 
+			        	MYNAME, linecount);
+			    	break;
+			}
+			i++;
+
+			s = csv_lineparse(NULL, ",", "", linecount);
 		}
-		while (*odesc == ' ' || *odesc == '\t') {
-			odesc++;
-		}
-		wpt_tmp->shortname = strdup(odesc);
+	    
 		wpt_tmp->creation_time = time(NULL);
-
-		wpt_tmp->position.longitude.degrees = lon;
-		wpt_tmp->position.latitude.degrees = lat;
-
 		waypt_add(wpt_tmp);
+
+	} else {
+		/* empty line */
 	}
+
+    } while (!feof(file_in));
 }
 
 static void
@@ -92,6 +127,8 @@ gpsutil_disp(waypoint *wpt)
 
 	lon = wpt->position.longitude.degrees;
 	lat = wpt->position.latitude.degrees;
+        if (wpt->description) 
+	    wpt->description = csv_stringclean(wpt->description, ",\"");
 
 	fprintf(file_out, "%08.5f, %08.5f, %s\n",
 		lat,

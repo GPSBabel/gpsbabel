@@ -62,3 +62,7 @@ diff /tmp/ps.psp reference
 ${PNAME} -i geo -f geocaching.loc -o mxf -F /tmp/mxf.mxf
 diff /tmp/mxf.mxf reference
 
+# OZI (OziExplorer 1.1) file format
+${PNAME} -i geo -f geocaching.loc -o ozi -F /tmp/ozi.ozi
+diff /tmp/ozi.ozi reference
+

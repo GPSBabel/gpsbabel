@@ -128,8 +128,11 @@ THE FORMATS
 	complies with (at least) Maptech Terrain Navigator, Terrain
 	Professional, Take a Hike, and ExpertGPS import/export MFX.
 
-  Maptech MXF
-	Maptech's MXF is a CSV on steroids.  Contributed by Alex Mottram.
+    OZI
+
+	OziExplorer Waypoint Format - Another CSV format file.  
+	Tested against OziExplorer v 3.90.3a / Shareware.
+	Contributed by Alex Mottram
 
 
 COMMON USAGE
