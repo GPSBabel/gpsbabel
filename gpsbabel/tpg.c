@@ -157,6 +157,7 @@ tpg_wr_init(const char *fname, const char *args)
 static void
 tpg_wr_deinit(void)
 {
+	mkshort_del_handle(mkshort_handle);
 	fclose(tpg_file_out);
 }
 
@@ -337,8 +338,8 @@ tpg_waypt_pr(const waypoint *wpt)
         /* and finally 2 unknown bytes */
         fwrite(unknown2, 1, 2, tpg_file_out);
         
-        free (shortname);
-        free (description);
+        xfree(shortname);
+        xfree(description);
 }
 
 static void

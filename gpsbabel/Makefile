@@ -1,3 +1,4 @@
+# add -DDEBUG_MEM to turn on memory allocation logging
 CFLAGS=-g -Icoldsync
 INSTALL_TARGETDIR=/usr/local/
 

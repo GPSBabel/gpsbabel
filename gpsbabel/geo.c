@@ -161,6 +161,9 @@ geo_rd_init(const char *fname, const char *args)
 void
 geo_rd_deinit(void)
 {
+	if ( cdatastr ) {
+		xfree(cdatastr);
+	}
 	fclose(fd);
 }
 

@@ -161,7 +161,7 @@ data_read(void)
 	    }
 	    
 	    if (i != 11) {
-   	        free(wpt_tmp);
+   	        xfree(wpt_tmp);
 	        fprintf (stderr, "%s: WARNING - extracted %d fields from line %d. \nData on line ignored.\n", 
 	            MYNAME, i, linecount);
 	    } else {
@@ -225,9 +225,9 @@ tmpro_waypt_pr(const waypoint * wpt)
 	    
 
     if (description)
-	free(description);
+	xfree(description);
     if (shortname)
-	free(shortname);
+	xfree(shortname);
 }
 
 static void 

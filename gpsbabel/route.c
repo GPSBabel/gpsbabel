@@ -53,6 +53,19 @@ route_add_wpt(route_head *rte, waypoint *wpt)
 }
 
 void
+route_free(route_head *rte)
+{
+	if ( rte->rte_name ) {
+		xfree(rte->rte_name);
+	}
+	if ( rte->rte_desc ) {
+		xfree(rte->rte_desc);
+	}
+	waypt_flush(&rte->waypoint_list);
+	xfree(rte);
+}
+
+void
 route_disp (const route_head *rh, waypt_cb cb )
 {
 	queue *elem, *tmp;
@@ -75,3 +88,26 @@ route_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
 		(*rt)(rhp);
 	}
 }
+void
+route_flush(queue *head)
+{
+	queue *elem, *tmp;
+	route_head *last = NULL;
+	
+	QUEUE_FOR_EACH(head, elem, tmp) {
+		if ( last ) {
+			route_free(last);
+		}
+		last = (route_head *)elem;
+	}
+	if ( last ) {
+		route_free(last);
+	}
+	QUEUE_INIT(head);
+}
+void
+route_flush_all()
+{
+	route_flush(&my_route_head);
+}
+

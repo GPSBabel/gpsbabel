@@ -47,10 +47,14 @@ unsigned int hash_string(const char *key)
 }
 
 void *
+#ifdef DEBUG_MEM
+MKSHORT_NEW_HANDLE(DEBUG_PARAMS)
+#else
 mkshort_new_handle()
+#endif
 {
 	int i;
-	mkshort_handle *h = xcalloc(sizeof *h, 1);
+	mkshort_handle *h = xxcalloc(sizeof *h, 1, file, line);
 
 	for (i = 0; i < PRIME; i++)
 		QUEUE_INIT(&h->namelist[i]);
@@ -69,7 +73,7 @@ mkshort_add_to_list(mkshort_handle *h, char *name)
 	queue *e, *t;
 	int hash;
 	uniq_shortname *s = xcalloc(1, sizeof (uniq_shortname));
-	s->orig_shortname = strdup(name);
+	s->orig_shortname = xstrdup(name);
 	hash = hash_string(name);
 
 	QUEUE_FOR_EACH(&h->namelist[hash], e, t) {
@@ -110,11 +114,11 @@ mkshort_del_handle(void *h)
 			QUEUE_FOR_EACH(&hdr->namelist[i], e, t) {
 				uniq_shortname *s = (uniq_shortname *) e;
 				dequeue(e);
-				free(s->orig_shortname);
-				free(s);
+				xfree(s->orig_shortname);
+				xfree(s);
 			}
 		}
-		free(hdr);
+		xfree(hdr);
 	}
 }
 
@@ -131,6 +135,7 @@ delete_last_vowel(int start, char *istring, int *replaced)
 	/*
 	 * Basically impelement strrchr.
 	 */
+	*replaced = 0;
 	for (l = strlen(istring); l > start; l--) {
 		if (strchr(vowels, istring[l-1])) {
 			char *ostring = xstrdup(istring);
@@ -138,10 +143,11 @@ delete_last_vowel(int start, char *istring, int *replaced)
 			strncpy(&ostring[l-1], &istring[l], 1+strlen(istring)-l);
 			ostring[strlen(istring)-1] = 0;
 			*replaced = 1;
-			return ostring;
+			strcpy( istring, ostring );
+			xfree(ostring);
+			break;
 		}
 	}
-	*replaced = 0;
 	return istring;
 
 }
@@ -200,9 +206,13 @@ setshort_mustuniq(void *h, int i)
 
 
 char *
+#ifdef DEBUG_MEM
+MKSHORT(void *h, const char *istring, DEBUG_PARAMS )
+#else
 mkshort(void *h, const char *istring)
+#endif
 {
-	char *ostring = xstrdup(istring);
+	char *ostring = xxstrdup(istring, file, line);
 	char *nstring;
 	char *tstring;
 	char *cp;
@@ -216,8 +226,8 @@ mkshort(void *h, const char *istring)
 	if (( strlen(ostring) > hdl->target_len + 4) && 
 	    (strncmp(ostring, "The ", 4) == 0 || 
 	    strncmp(ostring, "the ", 4) == 0)) {
-		nstring = xstrdup(ostring + 4);
-		free(ostring);
+		nstring = xxstrdup(ostring + 4, file, line);
+		xfree(ostring);
 		ostring = nstring;
 	}
 
@@ -225,7 +235,7 @@ mkshort(void *h, const char *istring)
 	 * Look at the back of the string for " by BLAH" and whack 
 	 * it there.
 	 */
-	nstring = xstrdup(ostring);
+	nstring = xxstrdup(ostring, file, line);
 	l = strlen (nstring);
 	while (l > 0) {
 		if (strncmp(&nstring[l], " by ",4) == 0)  {
@@ -234,14 +244,14 @@ mkshort(void *h, const char *istring)
 		}
 		l --;
 	}
-	free(ostring);
+	xfree(ostring);
 	ostring = nstring;
 
 	if (!hdl->whitespaceok) {
 		/* 
 		 * Eliminate Whitespace 
 		 */
-		tstring = xstrdup(ostring);
+		tstring = xxstrdup(ostring, file, line);
 		l = strlen (tstring);
 		cp = ostring;
 		for (i=0;i<l;i++) {
@@ -252,7 +262,7 @@ mkshort(void *h, const char *istring)
 				*cp++ = tstring[i];
 			}
 		}
-		free(tstring);
+		xfree(tstring);
 		*cp = 0;
 	}
 
@@ -260,7 +270,7 @@ mkshort(void *h, const char *istring)
 	 * Eliminate chars on the blacklist.
 	 * Characters that aren't ASCII are never OK.
  	 */
-	tstring = xstrdup(ostring);
+	tstring = xxstrdup(ostring, file, line);
 	l = strlen (tstring);
 	cp = ostring;
 	for (i=0;i<l;i++) {
@@ -269,7 +279,7 @@ mkshort(void *h, const char *istring)
 		*cp++ = tstring[i];
 	}
 	*cp = 0;
-	free(tstring);
+	xfree(tstring);
 
 	/*
 	 * Toss vowels to approach target length, but don't toss them 	
@@ -281,8 +291,6 @@ mkshort(void *h, const char *istring)
 	 * when we really don't have to.  We should throw away one vowel, not
 	 * both.
 	 */
-
-	tstring = xstrdup(ostring);
 
 	/*
 	 * Delete vowels starting from the end.  If it fits, quit stomping

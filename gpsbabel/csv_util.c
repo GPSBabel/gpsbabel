@@ -43,11 +43,16 @@ static void *mkshort_handle;
 /*            (strip out ampersands, commas, and quotes.             */
 /*********************************************************************/
 char *
-csv_stringclean(const char *string, const char *chararray) {
+#ifdef DEBUG_MEM
+CSV_STRINGCLEAN(const char *string, const char *chararray, DEBUG_PARAMS)
+#else
+csv_stringclean(const char *string, const char *chararray)
+#endif	
+{
     char * p1;
     char * p2;
     const char * cp;
-    char * tmp = xstrdup(string);
+    char * tmp = xxstrdup(string,file,line);
 
     if ((! string) || (! chararray)) {
         return (tmp);
@@ -80,11 +85,15 @@ csv_stringclean(const char *string, const char *chararray) {
 /*    usage: p = csv_stringtrim(string, "\"")                                      */
 /***********************************************************************************/
 char *
+#ifdef DEBUG_MEM
+CSV_STRINGTRIM(const char *string, const char *enclosure,DEBUG_PARAMS)
+#else
 csv_stringtrim(const char *string, const char *enclosure)
+#endif
 {
     static const char *p1 = NULL;
     char *p2 = NULL;
-    char * tmp = xstrdup(string);
+    char * tmp = xxstrdup(string,file,line);
     size_t elen;
 
     if (!strlen(string)) {
@@ -146,6 +155,11 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
     int enclosedepth = 0;
     short int dfound;
 
+    if (tmp) {
+	xfree(tmp);
+	tmp = NULL;
+    }
+
     if (!p) {
 	/* first pass thru */
 	p =  stringstart;
@@ -154,11 +168,6 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
 	    /* last pass out */
 	    return (NULL);
 	}
-    }
-
-    if (tmp) {
-	free(tmp);
-	tmp = NULL;
     }
 
     /* the beginning of the string we start with (this pass) */
@@ -398,6 +407,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     } else
     if (strcmp(fmp->key, "ICON_DESCR") == 0) {
        wpt->icon_descr = csv_stringtrim(s, "");
+       wpt->icon_descr_is_dynamic = 1;
     } else
 
     /* LATITUDE CONVERSIONS**************************************************/
@@ -536,6 +546,9 @@ xcsv_data_read(void)
                 
                 if (elem == &xcsv_file.ifield) {
                     /* we've wrapped the queue. so stop parsing! */
+		    while (s) {
+			    s=csv_lineparse(NULL, "\xff","",linecount);
+		    }
                     break;
                 }
 
@@ -565,10 +578,10 @@ xcsv_waypt_pr(const waypoint *wpt)
     queue *elem, *tmp;
    
     if (wpt->shortname) {
-        anyname = xstrdup(mkshort(mkshort_handle, wpt->shortname));
+        anyname = mkshort(mkshort_handle, wpt->shortname);
     } else
     if (wpt->description) {
-        anyname = xstrdup(mkshort(mkshort_handle, wpt->description));
+        anyname = mkshort(mkshort_handle, wpt->description);
     } else
     if (wpt->notes) {
         anyname = xstrdup(wpt->notes);
@@ -576,7 +589,9 @@ xcsv_waypt_pr(const waypoint *wpt)
         anyname = xstrdup("");
         
     if ((anyname) && (global_opts.synthesize_shortnames)) {
-        anyname = mkshort(mkshort_handle, anyname);
+	char *oldname = anyname;
+        anyname = mkshort(mkshort_handle, oldname);
+	xfree(oldname);
     }
     
     if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
@@ -746,13 +761,13 @@ xcsv_waypt_pr(const waypoint *wpt)
     fprintf (xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
 
     if (shortname)
-        free(shortname);
+        xfree(shortname);
 
     if (description)
-        free(description);
+        xfree(description);
 
     if (anyname)
-        free(anyname);
+        xfree(anyname);
 
     index++;
 }

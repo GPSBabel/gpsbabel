@@ -132,7 +132,7 @@ track_read(void)
 	while(--ntracks) {
 		GPS_Track_Del(&array[ntracks]);
 	}
-	free(array);
+	xfree(array);
 }
 
 static void
@@ -263,7 +263,7 @@ data_write(void)
 	for (i = 0; i < n; ++i) {
 		GPS_Way_Del(&way[i]);
 	}
-	free(way);
+	xfree(way);
 }
 
 ff_vecs_t garmin_vecs = {

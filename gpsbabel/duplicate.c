@@ -25,8 +25,8 @@ extern queue waypt_head;
 
 static int duplicate_shortname = 0;
 static int duplicate_location = 0;
-char *snopt;
-char *lcopt;
+static char *snopt = NULL;
+static char *lcopt = NULL;
 
 static
 arglist_t dup_args[] = {
@@ -133,6 +133,18 @@ addnode (btree_node * tree, btree_node * newnode)
 }
 
 void
+free_tree (btree_node *tree)
+{
+	if ( tree->left ) {
+		free_tree(tree->left);
+	}
+	if ( tree->right ) {
+		free_tree(tree->right);
+	}
+	xfree(tree);
+}
+
+void
 duplicate_process(void)
 {
 	queue * elem, * tmp;
@@ -140,6 +152,7 @@ duplicate_process(void)
 	btree_node * newnode, * btmp, * ftmp, * sup_tree = NULL;
 	unsigned long crc = 0;
 	struct { char shortname[32]; char lat[13]; char lon[13]; } dupe;
+        waypoint * delwpt = NULL;
 	
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypointp = (waypoint *) elem;
@@ -164,30 +177,22 @@ duplicate_process(void)
 		btmp = addnode(sup_tree, newnode);
 
 		if (btmp == NULL) {
+			if ( delwpt ) {
+				waypt_free(delwpt);
+			}
+			delwpt = waypointp;
 			waypt_del(waypointp); /* collision */
-			free(newnode);
+			xfree(newnode);
 		} else {
 			sup_tree = btmp;
 		}
 	}
-
-	btmp = sup_tree->right;
-
-	while (btmp) {
-		ftmp = btmp;
-		btmp = btmp->right;
-		free(ftmp);
+	
+	if ( delwpt ) {
+		waypt_free(delwpt);
 	}
 
-	btmp = sup_tree->left;
-
-	while (btmp) {
-		ftmp = btmp;
-		btmp = btmp->left;
-		free(ftmp);
-	}
-
-	free(sup_tree);
+	free_tree(sup_tree);
 }
 
 void

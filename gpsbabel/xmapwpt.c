@@ -27,7 +27,7 @@
 #include "csv_util.h"
 
 #define MYNAME	"XMAPWPT"
-static void *mkshort_handle;
+static void *mkshort_handle= NULL;
 
 static void
 xmapwpt_set_style()
@@ -61,7 +61,7 @@ xmapwpt_set_style()
 
     /* outfields are infields */
     if (xcsv_file.ofield)
-        free(xcsv_file.ofield);
+        xfree(xcsv_file.ofield);
     xcsv_file.ofield = &xcsv_file.ifield;
     xcsv_file.ofield_ct = xcsv_file.ifield_ct;
 
@@ -106,6 +106,9 @@ xmapwpt_deinit(void)
         fclose(xcsv_file.xcsvfp);
         
     xcsv_destroy_style();
+    if ( mkshort_handle )
+	    mkshort_del_handle(mkshort_handle);
+    mkshort_handle = NULL;
 }
 
 ff_vecs_t xmapwpt_vecs = {

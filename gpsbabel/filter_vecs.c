@@ -68,7 +68,7 @@ find_filter_vec(char *const vecname, char **opts)
 
 		res = strchr(vecname, ',');
 		if (res) {
-			*opts = strchr(vecname, ',')+1;
+			*opts = res+1;
 
 			if (vec->vec->args) {
 				for (ap = vec->vec->args; ap->argstring; ap++){
@@ -79,12 +79,20 @@ find_filter_vec(char *const vecname, char **opts)
 			*opts = NULL;
 		}
 
-		free(v);
+		xfree(v);
 		return vec->vec;
 		
 	}
-	free(v);
+	xfree(v);
 	return NULL;
+}
+
+void
+free_filter_vec( filter_vecs_t *fvec )
+{
+	if ( fvec->args && fvec->args->argval && *(fvec->args->argval) ) {
+		xfree(*(fvec->args->argval));
+	}
 }
 
 /*

@@ -143,6 +143,7 @@ static void data_read(void)
 		wpt_tmp->position.latitude.degrees = lat;
 		waypt_add(wpt_tmp);
 	}
+    xfree(HxWpt);
 }
 
 
@@ -153,6 +154,7 @@ char *mknshort (char *stIn,unsigned int sLen)
     #define MAX_STRINGLEN 255
     static char strOut[MAX_STRINGLEN];
     char strTmp[MAX_STRINGLEN];
+    char *shortstr = NULL;
 
     if (sLen > MAX_STRINGLEN)
         return (stIn);
@@ -162,7 +164,10 @@ char *mknshort (char *stIn,unsigned int sLen)
 
     setshort_length(mkshort_handle, sLen);
     setshort_mustuniq(mkshort_handle, 0);
-    strcpy(strTmp,mkshort(mkshort_handle, stIn));      
+    
+    shortstr = mkshort(mkshort_handle, stIn);
+    strcpy(strTmp,shortstr);
+    xfree(shortstr);    
 
     memset(strOut,' ', MAX_STRINGLEN);
     strncpy (strOut,strTmp,strlen(strTmp));
@@ -283,7 +288,7 @@ static void data_write(void)
     }
 
 	fclose(file_out);
-    free(HxWFile);
+    xfree(HxWFile);
 }
 
 

@@ -20,13 +20,23 @@
 /* function prototypes */
 
 char *
+#ifndef DEBUG_MEM
 csv_stringtrim(const char *string, const char *enclosure);
+#else
+CSV_STRINGTRIM(const char *string, const char *enclosure, DEBUG_PARAMS);
+#define csv_stringtrim( s, e ) CSV_STRINGTRIM( s, e, __FILE__, __LINE__);
+#endif
 
 char *
 csv_lineparse(const char *stringstart, const char *delimited_by, const char *enclosed_in, const int line_no);
 
 char *
+#ifndef DEBUG_MEM
 csv_stringclean(const char *string, const char *chararray);
+#else
+CSV_STRINGCLEAN(const char *string, const char *chararray,DEBUG_PARAMS);
+#define csv_stringclean(s,c) CSV_STRINGCLEAN(s,c,__FILE__,__LINE__);
+#endif
 
 void 
 xcsv_data_read(void);

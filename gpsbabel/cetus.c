@@ -266,6 +266,7 @@ cetus_writewpt(waypoint *wpt)
 	if (pdb_AppendRecord(opdb, opdb_rec)) {
 		fatal(MYNAME ": libpdb couldn't append record\n");
 	}
+	xfree(rec);
 }
 
 struct hdr{
@@ -325,7 +326,7 @@ data_write(void)
 	}
 
 	pdb_Write(opdb, fileno(file_out));
-	free(htable);
+	xfree(htable);
 }
 
 

@@ -67,10 +67,10 @@ xcsv_destroy_style(void)
         if (xcsv_file.is_internal == 0) {
             ogp = (ogue_t *)elem;
             if (ogp->val)
-                free(ogp->val);
+                xfree(ogp->val);
         }
         if (elem)
-            free(elem);
+            xfree(elem);
     }
 
     /* destroy the epilogue */
@@ -78,10 +78,10 @@ xcsv_destroy_style(void)
         if (xcsv_file.is_internal == 0) {
             ogp = (ogue_t *)elem;
             if (ogp->val)
-                free(ogp->val);
+                xfree(ogp->val);
         }
         if (elem)
-            free(elem);
+            xfree(elem);
     }
 
     /* destroy the ifields */
@@ -89,14 +89,14 @@ xcsv_destroy_style(void)
         if (xcsv_file.is_internal == 0) {
             fmp = (field_map_t *) elem;
             if (fmp->key)
-                free(fmp->key);
+                xfree(fmp->key);
             if (fmp->val)
-                free(fmp->val);
+                xfree(fmp->val);
             if (fmp->printfc)
-                free(fmp->printfc);
+                xfree(fmp->printfc);
         }
         if (elem)
-            free(elem);
+            xfree(elem);
     }
 
     /* destroy the ofields, if they are not re-mapped to ifields. */
@@ -105,30 +105,30 @@ xcsv_destroy_style(void)
             if (xcsv_file.is_internal == 0) {
                 fmp = (field_map_t *) elem;
                 if (fmp->key)
-                    free(fmp->key);
+                    xfree(fmp->key);
                 if (fmp->val)
-                    free(fmp->val);
+                    xfree(fmp->val);
                 if (fmp->printfc)
-                    free(fmp->printfc);
+                    xfree(fmp->printfc);
             }
             if (elem)
-                free(elem);
+                xfree(elem);
         }
 
         if (xcsv_file.ofield)
-            free(xcsv_file.ofield);
+            xfree(xcsv_file.ofield);
     }
 
     if (xcsv_file.is_internal == 0) {
         /* other alloc'd glory */
         if (xcsv_file.field_delimiter)
-            free(xcsv_file.field_delimiter);
+            xfree(xcsv_file.field_delimiter);
 
         if (xcsv_file.record_delimiter)
-            free(xcsv_file.record_delimiter);
+            xfree(xcsv_file.record_delimiter);
 
         if (xcsv_file.badchars)
-            free(xcsv_file.badchars);
+            xfree(xcsv_file.badchars);
     }
 
     /* return everything to zeros */
@@ -183,8 +183,10 @@ xcsv_read_style(const char *fname)
             if (ISSTOKEN(sbuff, "FIELD_DELIMITER")) {
                 sp = csv_stringtrim(&sbuff[16], "\"");
                 cp = get_char_from_constant_table(sp);
-                if (cp)
+                if (cp) {
                     xcsv_file.field_delimiter = xstrdup(cp);
+		    xfree(sp);
+		}
                 else
                     xcsv_file.field_delimiter = sp;
             } else
@@ -192,8 +194,10 @@ xcsv_read_style(const char *fname)
             if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
                 sp = csv_stringtrim(&sbuff[17], "\"");
                 cp = get_char_from_constant_table(sp);
-                if (cp)
+                if (cp) {
                     xcsv_file.record_delimiter = xstrdup(cp);
+		    xfree(sp);
+		}
                 else
                     xcsv_file.field_delimiter = sp;
             } else
@@ -201,8 +205,10 @@ xcsv_read_style(const char *fname)
             if (ISSTOKEN(sbuff, "BADCHARS")) {
                 sp = csv_stringtrim(&sbuff[9], "\"");
                 cp = get_char_from_constant_table(sp);
-                if (cp)
+                if (cp) {
                     xcsv_file.badchars = xstrdup(cp);
+		    xfree(sp);
+		}
                 else
                     xcsv_file.badchars = sp;
             } else
@@ -241,7 +247,7 @@ xcsv_read_style(const char *fname)
                     i++;
 
                     s = csv_lineparse(NULL, ",", "", linecount);
-                }
+		}
 
                 xcsv_ifield_add(key, val, pfc);
 
@@ -287,7 +293,7 @@ xcsv_read_style(const char *fname)
     /* if we have no output fields, use input fields as output fields */
     if (xcsv_file.ofield_ct == 0) {
         if (xcsv_file.ofield) 
-            free(xcsv_file.ofield);
+            xfree(xcsv_file.ofield);
         xcsv_file.ofield = &xcsv_file.ifield;
         xcsv_file.ofield_ct = xcsv_file.ifield_ct;
     }
@@ -298,7 +304,7 @@ xcsv_read_style(const char *fname)
 static void
 xcsv_rd_init(const char *fname, const char *args)
 {
-    const char *p;
+    char *p;
 
     /* 
      * if we don't have an internal style defined, we need to
@@ -311,6 +317,7 @@ xcsv_rd_init(const char *fname, const char *args)
             fatal(MYNAME ": XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
 
         xcsv_read_style(p);
+	xfree(p);
     }
 
     xcsv_file.xcsvfp = fopen(fname, "r");
@@ -330,7 +337,7 @@ xcsv_rd_deinit(void)
 static void
 xcsv_wr_init(const char *fname, const char *args)
 {
-    const char * p;
+    char * p;
     mkshort_handle = mkshort_new_handle();
     
     /* if we don't have an internal style defined, we need to
@@ -343,20 +350,27 @@ xcsv_wr_init(const char *fname, const char *args)
             fatal(MYNAME ": XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
 
         xcsv_read_style(p);
+	xfree(p);
 
         /* set mkshort options from the command line */
         if (global_opts.synthesize_shortnames) {
             p = get_option(args, "snlen");
-            if (p)
+            if (p) {
                 setshort_length(mkshort_handle, atoi(p));
+		xfree(p);
+	    }
 
             p = get_option(args, "snwhite");
-            if (p)
+            if (p) {
                 setshort_whitespace_ok(mkshort_handle, atoi(p));
+		xfree(p);
+	    }
 
             p = get_option(args, "snupper");
-            if (p)
+            if (p) {
                 setshort_mustupper(mkshort_handle, atoi(p));
+		xfree(p);
+	    }
 
             setshort_badchars(mkshort_handle, xcsv_file.badchars);
         }
@@ -374,6 +388,7 @@ xcsv_wr_deinit(void)
     fclose(xcsv_file.xcsvfp);
 
     xcsv_destroy_style();
+    mkshort_del_handle(mkshort_handle);
 }
 
 ff_vecs_t xcsv_vecs = {

@@ -505,8 +505,8 @@ psp_waypt_pr(const waypoint *wpt)
              fwrite(&tbuf[0], 1, 1, psp_file_out);              /* null */
         }
         
-        free (shortname);
-        free (description);
+        xfree(shortname);
+        xfree(description);
 }
 
 static void
