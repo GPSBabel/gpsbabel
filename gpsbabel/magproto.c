@@ -1181,7 +1181,7 @@ mag_waypt_pr(const waypoint *waypointp)
 		odesc = mag_cleanse(odesc);
 	}
 
-	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%.lf,M,%-.8s,%-.30s,%s",
+	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.8s,%-.30s,%s",
 		lat, ilat < 0 ? 'S' : 'N',
 		lon, ilon < 0 ? 'W' : 'E',
 		waypointp->position.altitude.altitude_meters == unknown_alt ?
