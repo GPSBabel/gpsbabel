@@ -85,7 +85,6 @@ release:
 
 arcdist.o: arcdist.c defs.h queue.h
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
-quovadis.o: quovadis.c defs.h queue.h coldsync/palm.h coldsync/pdb.h quovadis.h
 copilot.o: copilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 csv_util.o: csv_util.c defs.h queue.h csv_util.h
 duplicate.o: duplicate.c defs.h queue.h
@@ -99,12 +98,12 @@ garmin.o: garmin.c defs.h queue.h jeeps/gps.h jeeps/gpsport.h \
   garmin_tables.h
 gcdb.o: gcdb.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 geo.o: geo.c defs.h queue.h
+gpilots.o: gpilots.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 gpspilot.o: gpspilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 gpsutil.o: gpsutil.c defs.h queue.h magellan.h
 gpx.o: gpx.c defs.h queue.h
 holux.o: holux.c defs.h queue.h holux.h
 internal_styles.o: internal_styles.c defs.h queue.h
-polygon.o: polygon.c defs.h queue.h
 magnav.o: magnav.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 magproto.o: magproto.c defs.h queue.h magellan.h
 main.o: main.c defs.h queue.h
@@ -112,9 +111,12 @@ mapsend.o: mapsend.c defs.h queue.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h
 pcx.o: pcx.c defs.h queue.h garmin_tables.h
+polygon.o: polygon.c defs.h queue.h
 position.o: position.c defs.h queue.h
 psp.o: psp.c defs.h queue.h
 queue.o: queue.c queue.h
+quovadis.o: quovadis.c quovadis.h defs.h queue.h coldsync/palm.h \
+  coldsync/pdb.h
 route.o: route.c defs.h queue.h
 tiger.o: tiger.c defs.h queue.h magellan.h
 tmpro.o: tmpro.c defs.h queue.h csv_util.h
@@ -182,5 +184,5 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
-internal_styles.c: mkstyle.sh style/README.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mxf.style style/nima.style style/ozi.style style/s_and_t.style style/xmap.style style/xmapwpt.style
-	./mkstyle.sh > $@ || (rm -f $@ ; exit 1)
+internal_styles.c: mkstyle.sh style/README.style style/arc.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/ozi.style style/s_and_t.style style/xmap.style style/xmapwpt.style
+	./mkstyle.sh > dep || (rm -f dep ; exit 1)
