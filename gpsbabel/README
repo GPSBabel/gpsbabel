@@ -30,7 +30,7 @@ BUILDING IT
 
 THE FORMATS
 
-    GPX 
+    GPX
 
 	This is the most capable and expressive of all the file formats
 	supplied.    It is described at http://www.topografix.com/gpx.asp
@@ -92,7 +92,7 @@ THE FORMATS
 	There are a billion variants of Comma Separated Value data.  This
 	is the one that makes Delorme S&A Deluxe 9 happy.
 
-    XMap 
+    XMap
 
 	Delorme TopoUSA/XMap Conduit is one of the billion CSV variants 
 	mentioned above.  It's just like S&A with the addition of a 
@@ -292,12 +292,13 @@ THE FORMATS
 
 	http://vip.hyperusa.com/~dougs/geocachingdb/geocachingdb.htm
 
-    CoPilot Flight Planner for Palm OS
+    CoPilot
 
-        This code is mostly intended to convert CoPilot databases into
-        other formats.  I don't think you should use this to write
-        CoPilot databases, although the code is there, mostly because
-        GPSBabel doesn't convert magnetic declination values.
+        This code is mostly intended to convert CoPilot Flight Planner
+        for Palmd/OS atabases into other formats.  You probably should
+        not use this to write CoPilot databases, although the code is
+        there, because GPSBabel doesn't convert magnetic declination
+        values.
 
         Questions, bug reports, etc, to ptomblin at xcski.com
 
@@ -317,6 +318,37 @@ THE FORMATS
         Information about and sketchy code to implement this file format
         were provided by Eric Cloninger.
 
+    s_and_t
+
+	This is a CSV format for Microsoft Streets and Trips.   Detailed
+	instructions on how to import to it, preserving hyperlinks, are at
+
+	http://gpsbabel.sourceforge.net/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html
+
+    Gcdb
+
+	This is the GeocachingDB by DougsBrat.  It works with v2 and v3
+	of this program.
+
+	http://vip.hyperusa.com/~dougs/geocachingdb/geocachingdb.htm
+
+    NIMA
+
+	This is a CSV format from the National Imagery and Mapping Agency.
+
+    Fugawi
+
+	This was a requested CSV format.   It's unknown which version of
+	which software it works with.
+
+	http://www.fugawi.com/
+
+    custom
+
+	This is a "kitchen sink" CSV format.   No known program will
+	read it, but it's handy for simply converting an arbitrary file
+	to text so it can be pulled into a spreadsheet or manipulated
+	with text processing tools.
 
 DATA FILTERS
 
