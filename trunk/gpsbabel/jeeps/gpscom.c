@@ -82,14 +82,14 @@ int32 GPS_Command_Off(const char *port)
 ** @return [int32] number of waypoint entries
 ************************************************************************/
 
-int32 GPS_Command_Get_Waypoint(const char *port, GPS_PWay **way)
+int32 GPS_Command_Get_Waypoint(const char *port, GPS_PWay **way, int (*cb)())
 {
     int32 ret=0;
 
     switch(gps_waypt_transfer)
     {
     case pA100:
-	ret = GPS_A100_Get(port,way);
+	ret = GPS_A100_Get(port,way, cb);
 	break;
     default:
 	GPS_Error("Get_Waypoint: Unknown waypoint protocol");

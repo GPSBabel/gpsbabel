@@ -574,7 +574,7 @@ static void GPS_A001(GPS_PPacket packet)
 **
 ** @return [int32] number of waypoint entries
 ************************************************************************/
-int32 GPS_A100_Get(const char *port, GPS_PWay **way)
+int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)())
 {
     static UC data[2];
     int32 fd;
@@ -628,7 +628,6 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way)
 	    return gps_errno;
 	if(!GPS_Send_Ack(fd, &tra, &rec))
 	    return gps_errno;
-
 	switch(gps_waypt_type)
 	{
 	case pD100:
@@ -679,6 +678,10 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way)
 	default:
 	    GPS_Error("A100_GET: Unknown waypoint protocol");
 	    return PROTOCOL_ERROR;
+	}
+	/* Issue callback for status updates. */
+	if (cb) {
+		cb(n, &((*way)[i]));
 	}
     }
 
