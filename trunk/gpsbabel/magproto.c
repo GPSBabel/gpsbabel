@@ -508,8 +508,7 @@ terminit(const char *portname)
 			  OPEN_EXISTING, 0, NULL);
 
 	if (comport == INVALID_HANDLE_VALUE) {
-		is_file = 1;
-		return 0;
+		goto try_as_file;
 	}
 	tio.DCBlength = sizeof(DCB);
 	GetCommState (comport, &tio);
@@ -537,6 +536,7 @@ terminit(const char *portname)
 		/*
 		 *  Probably not a com port.   Try it as a file.
 		 */
+try_as_file:
 		magfile_in = xfopen(portname, "rb", MYNAME);
 		is_file = 1;
 		icon_mapping = map330_icon_table;

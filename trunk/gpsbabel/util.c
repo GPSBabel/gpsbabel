@@ -230,6 +230,11 @@ xfopen(const char *fname, const char *type, const char *errtxt)
 	FILE *f;
 	int am_writing = strchr(type, 'w') != NULL;
 
+	if (fname == NULL) {
+		fatal("%s must have a filename specified for %s.\n",
+				errtxt, am_writing ? "write" : "read");
+	}
+
 	if (0 == strcmp(fname, "-"))
 		return am_writing ? stdout : stdin;
 	f = fopen(fname, type);
