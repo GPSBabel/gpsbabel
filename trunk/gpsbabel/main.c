@@ -55,6 +55,8 @@ usage(const char *pname)
 	);
 
 	disp_vecs();
+	printf("\nSupported data filters:\n");
+	disp_filter_vecs();
 }
 
 
@@ -66,10 +68,12 @@ main(int argc, char *argv[])
 	int argn;
 	ff_vecs_t *ivecs = NULL;
 	ff_vecs_t *ovecs = NULL;
+	filter_vecs_t *fvecs = NULL;
 	char *fname = NULL;
 	char *ofname = NULL;
 	char *ivec_opts = NULL;
 	char *ovec_opts = NULL;
+	char *fvec_opts = NULL;
 
 	global_opts.objective = wptdata;
 
@@ -140,6 +144,18 @@ main(int argc, char *argv[])
 			case 'r':
 				global_opts.objective = rtedata;
 				break;
+ 			case 'x':
+				optarg = argv[argn][2]
+					? argv[argn]+2 : argv[++argn];
+
+ 				fvecs = find_filter_vec(optarg, &fvec_opts);
+
+ 				if (fvecs) {
+ 					fvecs->f_init(fvec_opts);
+ 					fvecs->f_process();
+ 					fvecs->f_deinit();
+ 				} 
+ 				break;
 			case 'D':
 				optarg = argv[argn][2]
 					? argv[argn]+2 : argv[++argn];
@@ -148,6 +164,9 @@ main(int argc, char *argv[])
 			case '^':
 				disp_formats();
 				exit(0);
+ 			case '%':
+ 				disp_filters();
+  				exit(0);
 			case 'h':
 			case '?':
 				usage(argv[0]);

@@ -625,6 +625,9 @@ gpx_write_time(const time_t timep)
 {
 	struct tm *tm = gmtime(&timep);
 	
+	if (!tm)
+		return;
+	
 	fprintf(ofd, "<time>%02d-%02d-%02dT%02d:%02d:%02dZ</time>\n",
 		tm->tm_year+1900, 
 		tm->tm_mon+1, 
