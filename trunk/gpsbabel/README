@@ -555,6 +555,32 @@ THE FORMATS
                  -o "palmdoc,dbname=Unfound Geocaches,encrypt,logs" \
                  -F 12345.pdb
 
+    Netstumbler
+
+        NetStumbler 0.4 Summary File -- Another CSV format file.  The
+        default behavior when creating waypoints is to use the SSID for
+        the short name, and information about the access point for the
+        description.  When the SSID is not unique, is not available, or
+        consists of whitespace, a shortname is synthesized.  The snmac
+        option uses the MAC address for the shortname, and includes
+        the unmodified SSID in the description.  Different icons are
+        assigned to encrypted, non-encrypted, stealth, and non-stealth
+        access points; these may be changed with options.  Import only.
+
+	Additional options:
+
+	  nseicon  - Name of icon used for non-stealth encrypted access points
+
+	  nsneicon - Name of icon used for non-stealth non-encrypted access
+		     points
+
+	  seicon   - Name of icon used for stealth encrypted access points
+
+	  sneicon  - Name of icon used for stealth non-encrypted access points
+
+	  snmac    - Always use the MAC address as the shortname.
+
+
 DATA FILTERS
 
 	GPSBabel supports data filtering.  Data filters are invoked from
