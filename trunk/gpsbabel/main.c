@@ -19,7 +19,6 @@
 
 
 #include "defs.h"
-#include <unistd.h>
 
 void
 usage(const char *pname)
@@ -29,10 +28,13 @@ usage(const char *pname)
 	disp_vecs();
 }
 
+
+
 int
 main(int argc, char *argv[])
 {
 	int c;
+	int argn;
 	ff_vecs_t *ivecs = NULL;
 	ff_vecs_t *ovecs = NULL;
 	char *fname = NULL;
@@ -41,7 +43,25 @@ main(int argc, char *argv[])
 	waypt_init();
 	route_init();
 
-	while (( c = getopt(argc, argv, "?hi:o:f:F:")) != EOF) {
+	/*
+	 * Open-code getopts since POSIX-impaired OSes don't have one.
+	 */
+	for (argn = 1; argn < argc; argn++) {
+		char *optarg;
+
+		if (argv[argn][0] != '-') {
+			fatal ("argument '%s' not understood",argv[argn]);
+		}
+
+		if (argv[argn][1] == '?' || argv[argn][1] == 'h') {
+			usage(argv[0]);
+			exit(0);
+		}
+
+		c = argv[argn][1];
+		optarg = argv[argn+1];
+		argn++;
+
 		switch (c) {
 			case 'i': 
 				ivecs = find_vec(optarg);
