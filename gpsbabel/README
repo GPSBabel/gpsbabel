@@ -784,6 +784,13 @@ DATA FILTERS
         navigates, say, an exit ramp or a one way street, you will be in
         for unpleasant ride. application cares about timestamps
 
+    SORT
+
+        This simple filter allows you to alphabetize waypoints by
+        shortname or by description.  It has a special suboption (gcid)
+        to sort by geocaching.com waypoint ID's when the input comes
+        from a GPX file that has GC numbers in it.
+
 COMMON USAGE
 
 	Invocation was meant to be flexible.   Unfortunately, that can
