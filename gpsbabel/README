@@ -87,6 +87,14 @@ THE FORMATS
 	There are a billion variants of Comma Separated Value data.  This
 	is the one that makes Delorme S&A Deluxe 9 happy.
 
+    XMap 
+
+	Delorme TopoUSA/XMap Conduit is one of the billion CSV variants 
+	mentioned above.  It's just like S&A with the addition of a 
+	completely pointless line at the beginning and end of the file.   
+	This is the format used to hot-sync to XMap from withing TopoUSA.
+	Done with help of Dan Edwards.
+
     MAPSEND
 
 	Magellan was smart enough to document their file format to make
