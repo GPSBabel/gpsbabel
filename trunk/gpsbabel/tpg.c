@@ -256,6 +256,7 @@ tpg_waypt_pr(const waypoint *wpt)
 	char c;
 	char *shortname;
 	char *description;
+	static int out_count = 0;
 
         /* these unknown 4 are probably point properties (color, icon, etc..) */
 	unsigned char unknown4[] = { 0x78, 0x56, 0x34, 0x12 }; 
@@ -263,6 +264,9 @@ tpg_waypt_pr(const waypoint *wpt)
         /* these 2 appear to be constant across test files */
 	unsigned char unknown2[] = { 0x01, 0x80 };  
 	
+	/* our personal waypoint counter */
+	out_count++;
+
         /* this output format pretty much requires a description
          * and a shortname 
          */
@@ -336,7 +340,14 @@ tpg_waypt_pr(const waypoint *wpt)
         fwrite(description, 1, c, tpg_file_out);
 
         /* and finally 2 unknown bytes */
-        fwrite(unknown2, 1, 2, tpg_file_out);
+        
+        if (out_count == waypt_count()) {
+        	/* last point gets 0x0000 instead of 0x0180 */
+	        memset(tbuf, '\0', sizeof(tbuf));
+	        fwrite(tbuf, 1, 2, tpg_file_out);
+	} else {
+	        fwrite(unknown2, 1, 2, tpg_file_out);
+	}
         
         xfree(shortname);
         xfree(description);
