@@ -164,7 +164,15 @@ mps_read(void)
 	int lon;
 	waypoint *wpt;
 
-	fread(hdr, 45, 1, mps_file_in);
+	mps_readstr( hdr, sizeof(hdr));
+	if ( strcmp( hdr, "MsRcd" )) {
+		fatal(MYNAME ": This doesn't look like a mapsource file.\n");
+	}
+	fread( hdr, 7, 1, mps_file_in ); /* a DWORD and a string, looks like. */
+	fread(&reclen, 4, 1, mps_file_in );
+        reclen = le_read32(&reclen);
+	fseek( mps_file_in, reclen+1, SEEK_CUR); 
+	/* fread(hdr, 45, 1, mps_file_in); */
 #ifdef DUMP_ICON_TABLE
 	printf("static icon_mapping_t icon_table[] = {\n");
 #endif
