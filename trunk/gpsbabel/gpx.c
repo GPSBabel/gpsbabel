@@ -160,6 +160,23 @@ tag_mapping tag_path_map[] = {
 };
 
 
+static void
+write_xml_entity(FILE *ofd, const char *indent, 
+                 const char *tag, const char *value)
+{
+	char *tmp_ent = xml_entitize(value);
+	fprintf(ofd, "%s<%s>%s</%s>\n", indent, tag, tmp_ent, tag);
+	xfree(tmp_ent);
+}
+
+static void
+write_optional_xml_entity(FILE *ofd, const char *indent, 
+                          const char *tag, const char *value)
+{
+	if (value && *value)
+		write_xml_entity(ofd, indent, tag, value);
+}
+
 static tag_type
 get_tag(const char *t)
 {
@@ -192,7 +209,7 @@ tag_wpt(const char **attrv)
 {
 	const char **avp = &attrv[0];
 
-	wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+	wpt_tmp = waypt_new();
 
 	cur_tag = NULL;
 	while (*avp) { 
@@ -941,46 +958,23 @@ gpx_waypt_pr(const waypoint *waypointp)
 	if (waypointp->creation_time) {
 		gpx_write_time(waypointp->creation_time, "time");
 	}
-	if (oname) {
-		tmp_ent = xml_entitize(oname);
-		fprintf(ofd, "<name>%s</name>\n", tmp_ent);
-		xfree(tmp_ent);
-	}
-	if (waypointp->description) {
-		fprintf(ofd, "<cmt>");
-		fprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
-		fprintf(ofd, "</cmt>\n");
-	}
-	if (waypointp->notes) {
-		fprintf(ofd, "<desc>");
-		fprintf(ofd, "<![CDATA[%s]]>", waypointp->notes);
-		fprintf(ofd, "</desc>\n");
-	} else {
-		if (waypointp->description) {
-			fprintf(ofd, "<desc>");
-			fprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
-			fprintf(ofd, "</desc>\n");
-		}
-	}
+	write_optional_xml_entity(ofd, "  ", "name", oname);
+	write_optional_xml_entity(ofd, "  ", "cmt", waypointp->description);
+	if (waypointp->notes)
+		write_xml_entity(ofd, "  ", "desc", waypointp->notes);
+	else
+		write_optional_xml_entity(ofd, "  ", "desc", waypointp->description);
 	if (waypointp->altitude != unknown_alt) {
-		fprintf(ofd, "<ele>\n%f\n</ele>\n",
+		fprintf(ofd, "  <ele>%f</ele>\n",
 			 waypointp->altitude);
 	}
 	if (waypointp->url) {
 		tmp_ent = xml_entitize(waypointp->url);
-		fprintf(ofd, "<url>%s%s</url>\n", urlbase ? urlbase : "", tmp_ent);
+		fprintf(ofd, "  <url>%s%s</url>\n", urlbase ? urlbase : "", tmp_ent);
 		xfree(tmp_ent);
 	}
-	if (waypointp->url_link_text) {
-		tmp_ent = xml_entitize(waypointp->url_link_text);
-		fprintf(ofd, "<urlname>%s</urlname>\n", tmp_ent );
-		xfree(tmp_ent);
-	}
-	if (waypointp->icon_descr) {
-		tmp_ent = xml_entitize(waypointp->icon_descr);
-		fprintf(ofd, "<sym>%s</sym>\n", tmp_ent );
-		xfree(tmp_ent);
-	}
+	write_optional_xml_entity(ofd, "  ", "urlname", waypointp->url_link_text);
+	write_optional_xml_entity(ofd, "  ", "sym", waypointp->icon_descr);
 
 	fprint_xml_chain( waypointp->gpx_extras, waypointp );
 	fprintf(ofd, "</wpt>\n");
@@ -992,16 +986,8 @@ gpx_track_hdr(const route_head *rte)
 	char * tmp_ent;
 	
 	fprintf(ofd, "<trk>\n");
-	if (rte->rte_name) {
-		tmp_ent = xml_entitize(rte->rte_name);
-		fprintf(ofd, "<name>%s</name>\n", tmp_ent);
-		xfree(tmp_ent);
-	}
-	if (rte->rte_desc) {
-		tmp_ent = xml_entitize(rte->rte_desc);
-		fprintf(ofd, "<desc>%s</desc>\n", tmp_ent);
-		xfree(tmp_ent);
-	}
+	write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
+	write_optional_xml_entity(ofd, "  ", "desc", rte->rte_desc);
 	if (rte->rte_num) {
 		fprintf(ofd, "<number>%d</number>\n", rte->rte_num);
 	}
@@ -1043,57 +1029,32 @@ gpx_route_hdr(const route_head *rte)
 	char * tmp_ent;
 	
 	fprintf(ofd, "<rte>\n");
-	if (rte->rte_name) {
-		tmp_ent = xml_entitize(rte->rte_name);
-		fprintf(ofd, "<name>%s</name>\n", tmp_ent);
-		xfree(tmp_ent);
-	}
-	if (rte->rte_desc) {
-		tmp_ent = xml_entitize(rte->rte_desc);
-		fprintf(ofd, "<desc>%s</desc>\n", tmp_ent);
-		xfree(tmp_ent);
-	}
+	write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
+	write_optional_xml_entity(ofd, "  ", "desc", rte->rte_desc);
 	if (rte->rte_num) {
-		fprintf(ofd, "<number>%d</number>\n", rte->rte_num);
+		fprintf(ofd, "  <number>%d</number>\n", rte->rte_num);
 	}
 }
 
 static void
 gpx_route_disp(const waypoint *waypointp)
 {
-	fprintf(ofd, "<rtept lat=\"%f\" lon=\"%f\">\n",
+	fprintf(ofd, "  <rtept lat=\"%f\" lon=\"%f\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
 
 	if (waypointp->altitude != unknown_alt) {
-		fprintf(ofd, "<ele>%f</ele>\n",
+		fprintf(ofd, "    <ele>%f</ele>\n",
 			 waypointp->altitude);
 	}
 	if (waypointp->creation_time) {
 		gpx_write_time(waypointp->creation_time,"time");
 	}
-	if (waypointp->shortname) {
-		fprintf(ofd, "<name>");
-		fprintf(ofd, "<![CDATA[%s]]>", waypointp->shortname);
-		fprintf(ofd, "</name>\n");
-	}
-	if (waypointp->description) {
-		fprintf(ofd, "<cmt>");
-		fprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
-		fprintf(ofd, "</cmt>\n");
-	}
-	if (waypointp->notes) {
-		fprintf(ofd, "<desc>");
-		fprintf(ofd, "<![CDATA[%s]]>", waypointp->notes);
-		fprintf(ofd, "</desc>\n");
-	} 
-	if (waypointp->icon_descr) {
-		fprintf(ofd, "<sym>");
-		fprintf(ofd, "<![CDATA[%s]]>", waypointp->icon_descr);
-		fprintf(ofd, "</sym>");
-	}
-
-	fprintf(ofd, "</rtept>\n");
+	write_optional_xml_entity(ofd, "    ", "name", waypointp->shortname);
+	write_optional_xml_entity(ofd, "    ", "cmt", waypointp->description);
+	write_optional_xml_entity(ofd, "    ", "desc", waypointp->notes);
+	write_optional_xml_entity(ofd, "    ", "sym", waypointp->icon_descr);
+	fprintf(ofd, "  </rtept>\n");
 }
 
 static void
