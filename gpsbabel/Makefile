@@ -20,7 +20,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o
 
-FILTERS=position.o duplicate.o arcdist.o polygon.o
+FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o
 
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
@@ -128,6 +128,7 @@ quovadis.o: quovadis.c quovadis.h defs.h queue.h coldsync/palm.h \
   coldsync/pdb.h
 route.o: route.c defs.h queue.h
 saroute.o: saroute.c defs.h queue.h
+smplrout.o: smplrout.c defs.h grtcirc.h
 tiger.o: tiger.c defs.h queue.h csv_util.h
 tmpro.o: tmpro.c defs.h queue.h csv_util.h
 tpg.o: tpg.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \

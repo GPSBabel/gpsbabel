@@ -578,6 +578,26 @@ DATA FILTERS
 	gpsbabel -i geo -f 1.loc -x polygon,file=mycounty.txt \
 	  	 -o mapsend -F 2.wpt
 
+    SIMPLIFY
+
+	The Simplify filter is used to simplify routes and tracks for use
+        with formats that limit the number of points they can contain. 
+        The filter takes one required parameter, which is the maximum 
+        number of points a route may contain.  It attempts to remove 
+        points from each route until the number of points is at or below 
+        the given maximum, while also attempting to preserve the shape of
+        the original route as much as possible.  
+
+        The quality of the results will vary depending on the density of 
+        points in the original route and the length of the original route.
+
+        For example, suppose you have a route from Street Atlas 2003 that 
+        you wish to use with a Magellan GPS receiver that only supports up
+        to 50 points in a route:
+
+        gpsbabel -r -i saroute -f RoadTrip.anr -x simplify,count=50 \
+                 -o magellan -F grocery.rte
+
 COMMON USAGE
 
 	Invocation was meant to be flexible.   Unfortunately, that can

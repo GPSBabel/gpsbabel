@@ -69,6 +69,15 @@ route_add_wpt(route_head *rte, waypoint *wpt)
 	rte_waypts++;		/* total waypoints in all routes */
 }
 
+void 
+route_del_wpt( route_head *rte, waypoint *wpt)
+{
+	dequeue( &wpt->Q );
+	waypt_free( wpt );
+	rte->rte_waypt_ct--;
+	rte_waypts--;
+}
+
 void
 route_free(route_head *rte)
 {
@@ -78,6 +87,7 @@ route_free(route_head *rte)
 	if ( rte->rte_desc ) {
 		xfree(rte->rte_desc);
 	}
+	rte_waypts -= rte->rte_waypt_ct;
 	waypt_flush(&rte->waypoint_list);
 	xfree(rte);
 }
