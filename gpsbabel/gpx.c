@@ -31,6 +31,7 @@ static int in_desc;
 static int in_cdata;
 static int in_cmt;
 static int in_url;
+static int in_icon;
 static int in_urlname;
 static int in_gs_type;
 static int in_gs_diff;
@@ -295,6 +296,9 @@ gpx_start(void *data, const char *el, const char **attr)
 	else if (strcmp(el, "urlname") == 0) {
 		in_urlname++;
 	} 
+	else if (strcmp(el, "icon") == 0) {
+		in_icon++;
+	} 
 	else if (strcmp(el, "groundspeak:type") == 0) {
 		in_gs_type++;
 		in_something_else++;
@@ -372,6 +376,9 @@ gpx_end(void *data, const char *el)
 		if (in_urlname && in_wpt) {
 			wpt_tmp->url_link_text = xstrdup(cdatastr);
 		}
+		if (in_icon && in_wpt) {
+			wpt_tmp->icon_descr = xstrdup(cdatastr);
+		}
 		if (in_ele) {
 			sscanf(cdatastr, "%lf", 
 				&wpt_tmp->position.altitude.altitude_meters);
@@ -426,6 +433,8 @@ gpx_end(void *data, const char *el)
 		in_url--;
 	} else if (strcmp(el, "urlname") == 0) {
 		in_urlname--;
+	} else if (strcmp(el, "icon") == 0) {
+		in_icon--;
 	} else if (strcmp(el, "groundspeak:type") == 0) {
 		in_gs_type--;
 		in_something_else--;
@@ -472,6 +481,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 			(in_wpt && in_gs_type) || 
 			(in_wpt && in_gs_diff) || 
 			(in_wpt && in_gs_terr) || 
+			(in_wpt && in_icon) || 
 			(in_time && (in_wpt || in_rte)))  {
 		estr = cdatastr + strlen(cdatastr);
 		memcpy(estr, s, len);
@@ -678,6 +688,12 @@ gpx_waypt_pr(const waypoint *waypointp)
 		fprintf(ofd, "<urlname>%s</urlname>\n", tmp_ent );
 		free(tmp_ent);
 	}
+	if (waypointp->icon_descr) {
+		tmp_ent = gpx_entitize(waypointp->icon_descr);
+		fprintf(ofd, "<icon>%s</icon>\n", tmp_ent );
+		free(tmp_ent);
+	}
+
 	fprint_xml_chain( waypointp->gpx_extras);
 	fprintf(ofd, "</wpt>\n");
 }
