@@ -73,20 +73,17 @@ abort();
 	while( fscanf(file_in, "%s %le%c %le%c %ld%c %30[^,] %c",
 			name, &lat, &latdir, &lon, &londir,
 			&alt, &alttype, desc, icon) > 0) {
-		wpt_tmp = calloc(sizeof(*wpt_tmp),1);
-		if (wpt_tmp == NULL) {
-			fatal(MYNAME ": cannot allocate memory\n");
-		}
+		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 		wpt_tmp->position.altitude.altitude_meters = alt;
-		wpt_tmp->shortname = strdup(name);
-		wpt_tmp->description = strdup(desc);
+		wpt_tmp->shortname = xstrdup(name);
+		wpt_tmp->description = xstrdup(desc);
 		wpt_tmp->creation_time = time(NULL);
 
 		if (latdir == 'S') lat = -lat;
 		if (londir == 'W') lon = -lon;
 		wpt_tmp->position.longitude.degrees = lon/100.0;
 		wpt_tmp->position.latitude.degrees = lat/100.0;
-		wpt_tmp->icon_descr = strdup(icon);
+		wpt_tmp->icon_descr = xstrdup(icon);
 
 		waypt_add(wpt_tmp);
 	}

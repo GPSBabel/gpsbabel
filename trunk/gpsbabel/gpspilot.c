@@ -90,10 +90,7 @@ data_read(void)
 		waypoint *wpt_tmp;
 		char *vdata;
 
-		wpt_tmp = calloc(sizeof(*wpt_tmp),1);
-		if (wpt_tmp == NULL) {
-			fatal(MYNAME ": cannot allocate memory\n");
-		}
+		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 
 		rec = (struct record *) pdb_rec->data;
 		wpt_tmp->position.longitude.degrees = pdb_read4(&rec->longitude) / 3.6e6; 
@@ -110,11 +107,11 @@ data_read(void)
 		 * receiver) we use that for shortname and use 'name' as
 		 * our description.
 		 */
-		wpt_tmp->description = strdup(vdata);
+		wpt_tmp->description = xstrdup(vdata);
 		vdata = vdata + strlen(vdata) + 1;
 
 		vdata = vdata + strlen(vdata) + 1;
-		wpt_tmp->shortname = strdup(vdata);
+		wpt_tmp->shortname = xstrdup(vdata);
 		
 		waypt_add(wpt_tmp);
 
@@ -130,7 +127,7 @@ cetus_writewpt(waypoint *wpt)
 	static int ct;
 	struct tm *tm;
 
-	rec = calloc(sizeof(*rec),1);
+	rec = xcalloc(sizeof(*rec),1);
 #if FIXME
 	strncpy(rec->ID, wpt->shortname, sizeof(rec->ID));
 	rec->ID[sizeof(rec->ID)-1] = 0;

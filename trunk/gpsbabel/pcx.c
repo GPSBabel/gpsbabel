@@ -78,16 +78,16 @@ data_read(void)
 			sscanf(ibuf, "W  %s %c%lf %c%lf %s %s %ld %90[^\n']", 
 				name, &latdir, &lat, &londir, &lon, 
 				date, time, &alt, desc);
-		wpt_tmp = calloc(sizeof(*wpt_tmp), 1);
+		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
 		wpt_tmp->position.altitude.altitude_meters = alt;
-		wpt_tmp->shortname = strdup(name);
-		wpt_tmp->description = strdup(desc);
+		wpt_tmp->shortname = xstrdup(name);
+		wpt_tmp->description = xstrdup(desc);
 
 		if (latdir == 'S') lat = -lat;
 		if (londir == 'W') lon = -lon;
 		wpt_tmp->position.longitude.degrees = lon/100.0;
 		wpt_tmp->position.latitude.degrees = lat/100.0;
-		wpt_tmp->icon_descr = strdup(icon);
+		wpt_tmp->icon_descr = xstrdup(icon);
 		waypt_add(wpt_tmp);
 		}
 	}

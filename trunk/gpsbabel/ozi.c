@@ -81,11 +81,7 @@ data_read(void)
 
 	if ((strlen(buff)) && (strstr(buff, ",") != NULL)) {
 
-	    wpt_tmp = calloc(sizeof(*wpt_tmp), 1);
-
-	    if (wpt_tmp == NULL) {
-		fatal(MYNAME ": cannot allocate memory\n");
-	    }
+	    wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
 
 	    /* data delimited by commas, possibly enclosed in quotes.  */
 	    s = buff;
@@ -99,11 +95,7 @@ data_read(void)
 		    break;
 		case 1:
 		    /* waypoint name */
-		    wpt_tmp->shortname = strdup(s);
-
-		    if (! wpt_tmp->shortname) 
-			fatal(MYNAME, ": cannot allocate memory\n");
-
+		    wpt_tmp->shortname = xstrdup(s);
 		    csv_stringtrim(wpt_tmp->shortname, "");
 		    break;
 		case 2:
@@ -135,11 +127,7 @@ data_read(void)
 		    break;
 		case 10:
 		    /* Description */
-		    wpt_tmp->description = strdup(s);
-
-		    if (! wpt_tmp->description) 
-			fatal(MYNAME, ": cannot allocate memory\n");
-
+		    wpt_tmp->description = xstrdup(s);
 		    wpt_tmp->description = csv_stringtrim(wpt_tmp->description, "");
 
 		    break;

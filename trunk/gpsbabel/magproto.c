@@ -562,9 +562,7 @@ mag_trkparse(char *trkmsg)
 	struct tm tm;
 	waypoint *waypt;
 
-	waypt  = calloc(sizeof *waypt, 1);
-	if (waypt == NULL) 
-		return NULL;
+	waypt  = xcalloc(sizeof *waypt, 1);
 
 	printf("%s\n", trkmsg);
 	memset(&tm, 0, sizeof(tm));
@@ -678,9 +676,7 @@ mag_wptparse(char *trkmsg)
 	descr[0] = 0;
 	icon_token[0] = 0;
 
-	waypt  = calloc(sizeof *waypt, 1);
-	if (waypt == NULL) 
-		fatal(MYNAME ": Cannot allocate memory\n");
+	waypt  = xcalloc(sizeof *waypt, 1);
 
 	sscanf(trkmsg,"$PMGNWPL,%lf,%c,%lf,%c,%d,%c,%[^,],%[^,]", 
 		&latdeg,&latdir,
@@ -699,8 +695,8 @@ mag_wptparse(char *trkmsg)
 	waypt->position.longitude.degrees = mag2degrees(lngdeg);
 
 	waypt->position.altitude.altitude_meters = alt;
-	waypt->shortname = strdup(shortname);
-	waypt->description = strdup(descr);
+	waypt->shortname = xstrdup(shortname);
+	waypt->description = xstrdup(descr);
 	waypt->icon_descr = mag_find_descr_from_token(icon_token);
 
 	return waypt;

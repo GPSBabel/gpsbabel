@@ -32,7 +32,7 @@ delete_last_vowel(int start, char *istring, int *replaced)
 	 */
 	for (l = strlen(istring); l > start; l--) {
 		if (strchr(vowels, istring[l-1])) {
-			char *ostring = strdup(istring);
+			char *ostring = xstrdup(istring);
 
 			strncpy(&ostring[l-1], &istring[l], 1+strlen(istring)-l);
 			ostring[strlen(istring)-1] = 0;
@@ -76,7 +76,7 @@ setshort_badchars(const char *s)
 	if (s == NULL) {
 		badchars = DEFAULT_BADCHARS;
 	} else {
-		badchars = strdup(s);
+		badchars = xstrdup(s);
 	}
 }
 
@@ -89,17 +89,12 @@ setshort_mustupper(int i)
 char *
 mkshort(const char *istring)
 {
-	char *ostring = strdup(istring);
+	char *ostring = xstrdup(istring);
 	char *nstring;
 	char *tstring;
 	char *cp;
 	char *np;
 	int i, l, nlen, replaced;
-
-
-	if (!ostring) {
-		fatal("mkshort: could not reallocate memory for string\n");
-	}
 
 	/* 
 	 * Whack leading "[Tt]he",
@@ -107,10 +102,7 @@ mkshort(const char *istring)
 	if (( strlen(ostring) > target_len + 4) && 
 	    (strncmp(ostring, "The ", 4) == 0 || 
 	    strncmp(ostring, "the ", 4) == 0)) {
-		nstring = strdup(ostring + 4);
-		if (!nstring) {
-			fatal(needmem);
-		}
+		nstring = xstrdup(ostring + 4);
 		free(ostring);
 		ostring = nstring;
 	}
@@ -119,7 +111,7 @@ mkshort(const char *istring)
 	 * Look at the back of the string for " by BLAH" and whack 
 	 * it there.
 	 */
-	nstring = strdup(ostring);
+	nstring = xstrdup(ostring);
 	l = strlen (nstring);
 	while (l > 0) {
 		if (strncmp(&nstring[l], " by ",4) == 0)  {
@@ -135,10 +127,7 @@ mkshort(const char *istring)
 		/* 
 		 * Eliminate Whitespace 
 		 */
-		tstring = strdup(ostring);
-		if (!tstring) {
-			abort();
-		}
+		tstring = xstrdup(ostring);
 		l = strlen (tstring);
 		cp = ostring;
 		for (i=0;i<l;i++) {
@@ -156,10 +145,7 @@ mkshort(const char *istring)
 	/*
 	 * Eliminate chars on the blacklist.
  	 */
-	tstring = strdup(ostring);
-	if (!tstring) {
-		fatal(needmem);
-	}
+	tstring = xstrdup(ostring);
 	l = strlen (tstring);
 	cp = ostring;
 	for (i=0;i<l;i++) {
@@ -181,10 +167,7 @@ mkshort(const char *istring)
 	 * both.
 	 */
 
-	tstring = strdup(ostring);
-	if (!tstring) {
-		fatal(needmem);
-	}
+	tstring = xstrdup(ostring);
 
 	/*
 	 * Delete vowels starting from the end.  If it fits, quit stomping

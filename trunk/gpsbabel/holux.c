@@ -58,13 +58,9 @@ static void rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-	HxWFile = calloc(GM100_WPO_FILE_SIZE, 1);
-	if (HxWFile == NULL) 
-    {
-		fatal("GPSBABEL: Cannot alloc memory\n");
-    }
+	HxWFile = xcalloc(GM100_WPO_FILE_SIZE, 1);
 
-    strcpy (fOutname,fname);
+	strcpy (fOutname,fname);
 }
 
 
@@ -95,11 +91,7 @@ static void data_read(void)
 	struct tm *ptm;
 
 
-	HxWpt = calloc(GM100_WPO_FILE_SIZE, 1);
-	if (HxWpt == NULL) 
-    {
-		fatal("GPSBABEL: Cannot alloc memory\n");
-    }
+    HxWpt = xcalloc(GM100_WPO_FILE_SIZE, 1);
 
     /* read the wpo file to the data-array */
     iDataRead = fread( HxWpt, 1, GM100_WPO_FILE_SIZE, file_in );
@@ -115,7 +107,7 @@ static void data_read(void)
     /* Get the waypoints */
     for (iCount = 0; iCount < iWptNum ; iCount ++)
     {
-        wpt_tmp = calloc(sizeof(*wpt_tmp), 1);
+        wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
     
         iWptIndex = ((WPTHDR *)HxWpt)->idx[iCount];         /* get the waypoint index  */
         dwIndex= OFFS_WPT + (sizeof(WPT) * iWptIndex);
@@ -128,8 +120,8 @@ static void data_read(void)
         strncpy(desc,pWptHxTmp->comment,sizeof(pWptHxTmp->comment));
         desc[sizeof(pWptHxTmp->comment)]=0;
         
-		wpt_tmp->shortname = strdup(name);
-		wpt_tmp->description = strdup(desc);
+		wpt_tmp->shortname = xstrdup(name);
+		wpt_tmp->description = xstrdup(desc);
 
   		wpt_tmp->creation_time = 0;
         if (pWptHxTmp->date.year)

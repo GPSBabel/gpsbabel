@@ -78,14 +78,11 @@ mapsource_read(void)
 		sscanf(ibuf,
 		"Waypoint %s %s %s %c%d %f %c%d %f %d %s Symbol & Name %s",
 		 name, date, timeb, &latdir, &latd, &latf, &londir, &lond, &lonf, &alt, altunits, icon);
-		wpt_tmp = calloc(sizeof(*wpt_tmp),1);
-		if (wpt_tmp == NULL) {
-			fatal("MAPSOURCE: cannot allocate memory\n");
-		}
+		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 /* FIXME: Implement actual appropriate conversion */
 		wpt_tmp->position.altitude.altitude_meters = alt * 3.0;
-		wpt_tmp->shortname = strdup(name);
-		wpt_tmp->description = strdup(name);
+		wpt_tmp->shortname = xstrdup(name);
+		wpt_tmp->description = xstrdup(name);
 
 		lat = latd + latf/100.0;
 		lon = lond + lonf/100.0;

@@ -135,11 +135,7 @@ psp_read(void)
 	pincount = *(short int *)&buff[12];
 
 	while (pincount--) {
-	    wpt_tmp = calloc(sizeof(*wpt_tmp),1);
-
-	    if (wpt_tmp == NULL) {
-		fatal(MYNAME ": cannot allocate memory\n");
-	    }
+	    wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 
 	    /* things we will probably never know about this waypoint */
 	    /* coming from a pushpin file.                            */
@@ -198,7 +194,7 @@ psp_read(void)
 
 	    buffer_washer(buff, stringsize);
 
-	    wpt_tmp->shortname = strdup(buff);
+	    wpt_tmp->shortname = xstrdup(buff);
 
             /* 1 bytes string size */
     	    psp_fread(&buff[0], 1, 1, psp_file_in);
@@ -215,7 +211,7 @@ psp_read(void)
 
 	    buffer_washer(buff, stringsize);
 
-	    wpt_tmp->description = strdup(buff);
+	    wpt_tmp->description = xstrdup(buff);
 
             /* 1 bytes - string size */
     	    psp_fread(&buff[0], 1, 1, psp_file_in);

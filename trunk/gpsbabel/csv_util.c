@@ -180,11 +180,7 @@ csv_lineparse(char *stringstart, const char *delimited_by,
     }
 
     /* allocate enough space for this data field */
-    tmp = (char *) calloc((p - sp) + 1, sizeof(char));
-
-    if (!tmp) {
-	fatal(MYNAME ": cannot allocate memory\n");
-    }
+    tmp = xcalloc((p - sp) + 1, sizeof(char));
 
     strncpy(tmp, sp, (p - sp));
 
