@@ -87,7 +87,7 @@ gusb_open(const char *pname)
 			DIGCF_PRESENT|DIGCF_INTERFACEDEVICE);
 
 	if (hdevinfo == INVALID_HANDLE_VALUE) {
-		fatal("XXX");
+		GPS_Serial_Error("SetupDiGetClassDevs failed");
 		return 0;
 	}
 
@@ -95,7 +95,8 @@ gusb_open(const char *pname)
 	devinterface.cbSize = sizeof(SP_INTERFACE_DEVICE_DATA);
 	if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL, &GARMIN_GUID, 
 			0, &devinterface)) {
-		fatal("blah");
+		GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
+		warning("Is the unit powered up and connected?");
 		return 0;
 	}
 
@@ -107,7 +108,8 @@ gusb_open(const char *pname)
 	devinfo.cbSize = sizeof(SP_DEVINFO_DATA);
 
 	if (!SetupDiGetDeviceInterfaceDetail(hdevinfo, &devinterface, pdd, size, NULL, &devinfo)) {
-		fatal("ZZZ");
+		GPS_Serial_Error("SetupDiGetDeviceInterfaceDetail");
+		return 0;
 	}
 
 	/* Whew.  All that just to get something we can open... */
@@ -117,7 +119,7 @@ gusb_open(const char *pname)
 			0, NULL, OPEN_EXISTING, 0, NULL );
 	if (usb_handle == INVALID_HANDLE_VALUE) {
 		GPS_Serial_Error("CreateFile failed");
-		fatal("CreateFile");
+		return 0;
 	}
 
 	if(!DeviceIoControl(usb_handle, IOCTL_GARMIN_USB_BULK_OUT_PACKET_SIZE, NULL, 0,
