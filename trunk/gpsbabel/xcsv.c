@@ -493,6 +493,7 @@ xcsv_wr_init(const char *fname, const char *args)
     }
 
     xcsv_file.xcsvfp = fopen(fname, "w");
+    xcsv_file.fname = (char *)fname;
 
     if (xcsv_file.xcsvfp == NULL)
         fatal(MYNAME ": Cannot open %s for writing\n", fname);

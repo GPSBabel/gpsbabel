@@ -69,7 +69,7 @@ static char custom[] =
 "#\n"
 "# HEADER STUFF:\n"
 "#\n"
-"PROLOGUE	Prologue Line 1\n"
+"PROLOGUE	Prologue Line 1 __FILE__\n"
 "PROLOGUE	Prologue Line 2\n"
 
 "#\n"
@@ -242,6 +242,43 @@ static char gpsman[] =
 "IFIELD	IGNORE, \"\", \"%s\"\n"
 
 "# gpsman.c likes mkshort len = 8, whitespace = 0.\n"
+;
+static char mapconverter[] = 
+"# Format: Mapopolis.com Mapconverter\n"
+"# Author: Gary Paulson\n"
+"#   Date: 01/13/2003\n"
+"# Requires unsupported mapconverter.exe from mapopolis.com.\n"
+"#\n"
+"# Modifications by Alex Mottram documented 6/30/2003\n"
+"# Change %-40.40s on description output to %-.40s to stop padding.\n"
+"# Add QUOTE as badchars, remove COMMA.\n"
+"# Removed Mapconverter.exe's README information from style file.\n"
+"# Changed OFIELD to IFIELD in case you ever want to read one of these things.\n"
+"#\n"
+"#\n"
+"DESCRIPTION		Mapopolis.com Mapconverter CSV\n"
+"EXTENSION		txt\n"
+
+"# FILE LAYOUT DEFINITIIONS:\n"
+
+"FIELD_DELIMITER   COMMASPACE\n"
+"RECORD_DELIMITER  NEWLINE\n"
+"BADCHARS          \",\n"
+
+"# Map Info Record (header):\n"
+"PROLOGUE M, \"Geocaches\", \"GPSBabel\", Geocaches, __FILE__\n"
+"#\n"
+
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"# L Records:\n"
+"IFIELD  CONSTANT, \"L\", \"%s\"		# [L]ANDMARK\n"
+"IFIELD  CONSTANT, \"Geocaches\", \"%s\"     # Category for Landmark Searches\n"
+"IFIELD  DESCRIPTION, \"\", \"%-.40s\"       # Name\n"
+"IFIELD  CONSTANT, \"1\", \"%s\"		# View at Zoom Level 1 (1-4)\n"
+"IFIELD  LON_DECIMAL, \"\", \"%08.5f\"       # Longitude\n"
+"IFIELD  LAT_DECIMAL, \"\", \"%08.5f\"       # Latitude\n"
 ;
 static char mxf[] = 
 "# gpsbabel XCSV style file\n"
@@ -481,4 +518,4 @@ static char xmapwpt[] =
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "s_and_t", s_and_t } , { "ozi", ozi } , { "nima", nima } , { "mxf", mxf } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "s_and_t", s_and_t } , { "ozi", ozi } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};

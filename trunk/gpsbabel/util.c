@@ -305,6 +305,7 @@ fatal(const char *fmt, ...)
 	va_list ap;
 	va_start(ap, fmt);
 	vfprintf(stderr, fmt, ap);
+	va_end(ap);
 	exit(1);
 }
 
@@ -314,6 +315,7 @@ warning(const char *fmt, ...)
 	va_list ap;
 	va_start(ap, fmt);
 	vfprintf(stderr, fmt, ap);
+	va_end(ap);
 }
 
 /*
@@ -534,4 +536,38 @@ double degrees2ddmm(double deg_val) {
 	signed int deg;
 	deg = (signed int) deg_val;
 	return (double) (deg * 100.0) + ((deg_val - deg) * 60.0);
+}
+
+/*
+ * replace a single occurrence of "search" in  "s" with "replace".
+ * Returns an allocated copy if substitution was made, otherwise returns NULL.
+ * Doesn't try to make an optimally sized dest buffer.
+ */
+char *
+strsub(char *s, char *search, char *replace)
+{
+       char *p;
+       int len = strlen(s);
+       int slen = strlen(search);
+       int rlen = strlen(replace);
+       char *d;
+
+       p = strstr(s, search);
+       if (!slen || !p) {
+               return NULL;
+       }
+       
+       d = xmalloc(len + rlen);
+
+       /* Copy first part */
+       len = p - s;
+       memcpy(d, s, len);
+       d[len] = 0;
+
+       /* Copy replacement */
+       strcat(d, replace);
+
+       /* Copy last part */
+       strcat(d, p + slen);
+       return d;
 }

@@ -342,7 +342,7 @@ void debug_mem_close();
 
 int case_ignore_strcmp(const char *s1, const char *s2);
 
-
+char *strsub(char *s, char *search, char *replace);
 void rtrim(char *s);
 signed int get_tz_offset(void);
 const char *get_cache_icon(const waypoint *waypointp);
