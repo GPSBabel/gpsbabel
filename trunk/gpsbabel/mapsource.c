@@ -183,9 +183,19 @@ mps_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
 {
 	icon_mapping_t *i;
 	int def_icon = DEFAULTICONVALUE;
+	int n;
 
 	if (!desc)
 		return def_icon;
+
+	/*
+	 * If we were given a numeric icon number as a description 
+	 * (i.e. 8255), just return that.
+	 */
+	n = atoi(desc);
+	if (n)  {
+		return n;
+	}
 
 	for (i = icon_table; i->icon; i++) {
 		if (case_ignore_strcmp(desc,i->icon) == 0) {
