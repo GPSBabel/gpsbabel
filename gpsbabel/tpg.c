@@ -221,12 +221,12 @@ tpg_read(void)
             	lat, 
                 lon,
                 0.0,
-                &wpt_tmp->position.latitude.degrees,
-                &wpt_tmp->position.longitude.degrees,
+                &wpt_tmp->latitude,
+                &wpt_tmp->longitude,
                 &amt,
                 78);
 
-            wpt_tmp->position.altitude.altitude_meters = elev;
+            wpt_tmp->altitude = elev;
             
 
             /* 4 bytes? */
@@ -299,8 +299,8 @@ tpg_waypt_pr(const waypoint *wpt)
 
         /* convert lat/long to NAD27/CONUS datum */
         GPS_Math_WGS84_To_Known_Datum_M(
-        	wpt->position.latitude.degrees,
-                wpt->position.longitude.degrees,
+        	wpt->latitude,
+                wpt->longitude,
                 0.0,
                 &lat,
                 &lon,
@@ -312,7 +312,7 @@ tpg_waypt_pr(const waypoint *wpt)
         lon *= -1.0;
 
         /* convert meters back to feets */
-        elev = (short int) (wpt->position.altitude.altitude_meters * 3.2808);
+        elev = (short int) (wpt->altitude * 3.2808);
 
         /* 1 bytes stringsize for shortname */
         c = strlen(shortname);

@@ -113,7 +113,7 @@ static void data_read(void)
 	iWptIndex = le_read16(&((WPTHDR *)HxWpt)->idx[iCount]);
         pWptHxTmp =  (WPT *)&HxWpt[OFFS_WPT + (sizeof(WPT) * iWptIndex)];
         
-        wpt_tmp->position.altitude.altitude_meters = 0;
+        wpt_tmp->altitude = 0;
         strncpy(name,pWptHxTmp->name,sizeof(pWptHxTmp->name));
         name[sizeof(pWptHxTmp->name)]=0;
         
@@ -139,8 +139,8 @@ static void data_read(void)
 
         lon = le_read32(&pWptHxTmp->pt.iLongitude) / 36000.0; 
         lat = (le_read32(&pWptHxTmp->pt.iLatitude)  / 36000.0) * -1.0;
-		wpt_tmp->position.longitude.degrees = lon;
-		wpt_tmp->position.latitude.degrees = lat;
+		wpt_tmp->longitude = lon;
+		wpt_tmp->latitude = lat;
 		waypt_add(wpt_tmp);
 	}
     xfree(HxWpt);
@@ -184,8 +184,8 @@ static void holux_disp(const waypoint *wpt)
     short sIndex;
     WPT *pWptHxTmp;
 
-	lon =(double)wpt->position.longitude.degrees * 36000;
-	lat =(double)wpt->position.latitude.degrees * -36000;
+	lon =(double)wpt->longitude * 36000;
+	lat =(double)wpt->latitude * -36000;
 
 
     /* round it to increase the accuracy */

@@ -270,36 +270,36 @@ case_ignore_strcmp(const char *s1, const char *s2)
 
 }
 
-coord
+double
 mkposn(const char *string)
 {
-	coord coord = {0};
-	sscanf(string, "%lf", &coord.degrees);
+	double coord;
+	sscanf(string, "%lf", &coord);
 	return coord;
 }
 
 void
-printposn(const coord *c, int is_lat)
+printposn(const float c, int is_lat)
 {
 	char d;
 	if (is_lat) {
-		if (c->degrees < 0) d = 'S'; else d = 'N';
+		if (c < 0) d = 'S'; else d = 'N';
 	} else {
-		if (c->degrees < 0) d = 'W'; else d = 'E';
+		if (c < 0) d = 'W'; else d = 'E';
 	}
-	printf("%f%c ", fabs(c->degrees), d);
+	printf("%f%c ", fabs(c), d);
 }
 
 void
-fprintdms(FILE *file, const coord *c, int is_lat)
+fprintdms(FILE *file, const double c, int is_lat)
 {
 	char d;
 	if (is_lat) {
-		if (c->degrees < 0) d = 'S'; else d = 'N';
+		if (c < 0) d = 'S'; else d = 'N';
 	} else {
-		if (c->degrees < 0) d = 'W'; else d = 'E';
+		if (c < 0) d = 'W'; else d = 'E';
 	}
-	fprintf(file, "%c%f\t", d, fabs(c->degrees));
+	fprintf(file, "%c%f\t", d, fabs(c));
 }
 
 void

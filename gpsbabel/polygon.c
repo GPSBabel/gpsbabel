@@ -238,8 +238,8 @@ polygon_process(void)
 		    last = 1;
 		}
 		polytest( lat1, lon1, lat2, lon2, 
-			waypointp->position.latitude.degrees,
-			waypointp->position.longitude.degrees,
+			waypointp->latitude,
+			waypointp->longitude,
 		       	&ed->state, first, last );
 		first = 0;
 		last = 0;

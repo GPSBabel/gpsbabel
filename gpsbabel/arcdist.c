@@ -256,8 +256,8 @@ arcdist_process(void)
 
 		waypointp = (waypoint *)elem;
 		dist = linedist(lat1, lon1, lat2, lon2, 
-				waypointp->position.latitude.degrees,
-				waypointp->position.longitude.degrees );
+				waypointp->latitude,
+				waypointp->longitude );
 
 		/* convert radians to float point statute miles */
 		dist = (((dist * 180.0 * 60.0) / M_PI) * 1.1516);

@@ -101,11 +101,11 @@ data_read(void)
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 
 		rec = (struct record *) pdb_rec->data;
-		wpt_tmp->position.longitude.degrees =
+		wpt_tmp->longitude =
 		  -pdb_read_double(&rec->longitude) * conv;
-		wpt_tmp->position.latitude.degrees =
+		wpt_tmp->latitude =
 		  pdb_read_double(&rec->latitude) * conv;
-		wpt_tmp->position.altitude.altitude_meters =
+		wpt_tmp->altitude =
 		  pdb_read_double(&rec->elevation) * .3048;
 
 		vdata = (char *) pdb_rec->data + sizeof(*rec);
@@ -134,11 +134,11 @@ copilot_writewpt(const waypoint *wpt)
 
 	rec = xcalloc(sizeof(*rec)+1141,1);
 
-	pdb_write_double(&rec->latitude, wpt->position.latitude.degrees / conv);
+	pdb_write_double(&rec->latitude, wpt->latitude / conv);
 	pdb_write_double(&rec->longitude,
-		-wpt->position.longitude.degrees / conv);
+		-wpt->longitude / conv);
 	pdb_write_double(&rec->elevation,
-		wpt->position.altitude.altitude_meters / .3048);
+		wpt->altitude / .3048);
 	pdb_write_double(&rec->magvar, 0);
 
 	vdata = (char *)rec + sizeof(*rec);

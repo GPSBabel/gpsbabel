@@ -92,10 +92,10 @@ position_comp(const void * a, const void * b)
 	 * point.
 	 */
 
-	londiff = (x1->position.longitude.degrees -
-		   x2->position.longitude.degrees) * 1000000.0;
-	latdiff = (x1->position.latitude.degrees -
-		   x2->position.latitude.degrees) * 1000000.0;
+	londiff = (x1->longitude -
+		   x2->longitude) * 1000000.0;
+	latdiff = (x1->latitude -
+		   x2->latitude) * 1000000.0;
 
 	max = fabs(londiff) >= fabs(latdiff) ? floor(londiff) : floor(latdiff);
 
@@ -145,10 +145,10 @@ position_process(void)
 	qsort(comp, wc, sizeof(waypoint *), position_comp);
 
 	for (i = 0 ; i < (wc - 1) ; i++) {
-		dist = gc_distance(comp[i]->position.latitude.degrees,
-				   comp[i]->position.longitude.degrees,
-				   comp[i+1]->position.latitude.degrees,
-				   comp[i+1]->position.longitude.degrees);
+		dist = gc_distance(comp[i]->latitude,
+				   comp[i]->longitude,
+				   comp[i+1]->latitude,
+				   comp[i+1]->longitude);
 
 		/* convert radians to integer feet */
 		dist = (int)((((dist * 180.0 * 60.0) / M_PI) * 1.1516) * 5280.0);
@@ -197,10 +197,10 @@ radius_process(void)
 		extra_data *ed;
 
 		waypointp = (waypoint *)elem;
-		dist = gc_distance(waypointp->position.latitude.degrees,
-				   waypointp->position.longitude.degrees,
-				   home_pos->position.latitude.degrees,
-				   home_pos->position.longitude.degrees);
+		dist = gc_distance(waypointp->latitude,
+				   waypointp->longitude,
+				   home_pos->latitude,
+				   home_pos->longitude);
 
 		/* convert radians to float point statute miles */
 		dist = (((dist * 180.0 * 60.0) / M_PI) * 1.1516);
@@ -272,9 +272,9 @@ radius_init(const char *args) {
 	home_pos = xcalloc(sizeof(*home_pos), 1);
 
 	if (latopt)
-		home_pos->position.latitude.degrees = atof(latopt);
+		home_pos->latitude = atof(latopt);
 	if (lonopt)
-		home_pos->position.longitude.degrees = atof(lonopt);
+		home_pos->longitude = atof(lonopt);
 }
 
 void

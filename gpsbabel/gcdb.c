@@ -183,8 +183,8 @@ data_read(void)
 			}
 			recdata += (length + 1) & (~1);
 		}
-		wpt->position.latitude.degrees = lat_dir * (lat_deg + lat_min/60);
-		wpt->position.longitude.degrees = lon_dir * (lon_deg + lon_min/60);
+		wpt->latitude = lat_dir * (lat_deg + lat_min/60);
+		wpt->longitude = lon_dir * (lon_deg + lon_min/60);
 		waypt_add(wpt);
 	}
 
@@ -255,24 +255,24 @@ gcdb_write_wpt(const waypoint *wpt)
 	gcdb_add_to_rec(rec, "gcid", RECTYPE_TEXT, wpt->shortname);
 
 	gcdb_add_to_rec(rec, "lat0", RECTYPE_TEXT, 
-			wpt->position.latitude.degrees < 0 ? "S" : "N");
+			wpt->latitude < 0 ? "S" : "N");
 
-	sprintf(tbuf, "%d", (int) wpt->position.latitude.degrees);
+	sprintf(tbuf, "%d", (int) wpt->latitude);
 	gcdb_add_to_rec(rec, "lat1", RECTYPE_TEXT, tbuf);
 
-	sprintf(tbuf, "%f", 60 * (wpt->position.latitude.degrees - 
-				(int) wpt->position.latitude.degrees));
+	sprintf(tbuf, "%f", 60 * (wpt->latitude - 
+				(int) wpt->latitude));
 	gcdb_add_to_rec(rec, "lat2", RECTYPE_TEXT, tbuf);
 
 
 	gcdb_add_to_rec(rec, "lon0", RECTYPE_TEXT, 
-			wpt->position.longitude.degrees < 0 ? "W" : "E");
+			wpt->longitude < 0 ? "W" : "E");
 
-	sprintf(tbuf, "%d", (int) wpt->position.longitude.degrees);
+	sprintf(tbuf, "%d", (int) wpt->longitude);
 	gcdb_add_to_rec(rec, "lon1", RECTYPE_TEXT, tbuf);
 
-	sprintf(tbuf, "%f", 60 * (wpt->position.longitude.degrees - 
-				(int) wpt->position.longitude.degrees));
+	sprintf(tbuf, "%f", 60 * (wpt->longitude - 
+				(int) wpt->longitude));
 	gcdb_add_to_rec(rec, "lon2", RECTYPE_TEXT, tbuf);
 
 	if (wpt->gc_data.diff) {

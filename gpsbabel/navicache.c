@@ -112,15 +112,15 @@ nav_start(void *data, const char *el, const char **attr)
 			} else
 			if (0 == strcmp(ap[0], "latitude")) {
 				sscanf(ap[1], "%lf", 
-				&wpt_tmp->position.latitude.degrees);
+				&wpt_tmp->latitude);
 			} else
 			if (0 == strcmp(ap[0], "longitude")) {
 				sscanf(ap[1], "%lf", 
-				&wpt_tmp->position.longitude.degrees);
+				&wpt_tmp->longitude);
 			} else
 			if (0 == strcmp(ap[0], "longitude")) {
 				sscanf(ap[1], "%lf", 
-				&wpt_tmp->position.longitude.degrees);
+				&wpt_tmp->longitude);
 			} else
 			if (0 == strcmp(ap[0], "difficulty")) {
 				float x;

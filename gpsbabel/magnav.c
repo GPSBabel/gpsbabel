@@ -114,10 +114,10 @@ data_read(void)
 		memset (&tm, sizeof(tm), 0);
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 		rec = (struct record *) pdb_rec->data;
-		wpt_tmp->position.altitude.altitude_meters = be_read32(&rec->elevation); 
+		wpt_tmp->altitude = be_read32(&rec->elevation); 
 
-		wpt_tmp->position.longitude.degrees = be_read32(&rec->longitude) / 1e5; 
-		wpt_tmp->position.latitude.degrees = be_read32(&rec->latitude) / 1e5; 
+		wpt_tmp->longitude = be_read32(&rec->longitude) / 1e5; 
+		wpt_tmp->latitude = be_read32(&rec->latitude) / 1e5; 
 
 		vdata = (char *) pdb_rec->data + sizeof(*rec);
 
@@ -183,9 +183,9 @@ my_writewpt(const waypoint *wpt)
 	
         be_write16( &rec->unknown2, 0);
 	
-	be_write32(&rec->longitude, si_round(wpt->position.longitude.degrees * 100000.0));
-	be_write32(&rec->latitude, si_round(wpt->position.latitude.degrees * 100000.0));
-	be_write32(&rec->elevation, wpt->position.altitude.altitude_meters);
+	be_write32(&rec->longitude, si_round(wpt->longitude * 100000.0));
+	be_write32(&rec->latitude, si_round(wpt->latitude * 100000.0));
+	be_write32(&rec->elevation, wpt->altitude);
 
 	rec->plot = 0;
 	rec->unknown3 = 'a';

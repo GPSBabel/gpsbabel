@@ -142,8 +142,8 @@ data_read(void)
 				&lon, &lat, icon, desc)) {
 			wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
 
-			wpt_tmp->position.longitude.degrees = lon;
-			wpt_tmp->position.latitude.degrees = lat;
+			wpt_tmp->longitude = lon;
+			wpt_tmp->latitude = lat;
 			wpt_tmp->description = xstrdup(desc);
 			wpt_tmp->shortname = mkshort(mkshort_handle, desc);
 
@@ -156,8 +156,8 @@ static void
 tiger_disp(const waypoint *wpt)
 {
 	const char *pin;
-	double lat = wpt->position.latitude.degrees;
-	double lon = wpt->position.longitude.degrees;
+	double lat = wpt->latitude;
+	double lon = wpt->longitude;
 
 	if (iconismarker)
 		pin = wpt->icon_descr ? wpt->icon_descr : "";

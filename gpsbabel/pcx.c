@@ -95,15 +95,15 @@ data_read(void)
 			desc[sizeof(desc)-1] = '\0';
 			name[sizeof(name)-1] = '\0';
 			wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
-			wpt_tmp->position.altitude.altitude_meters = alt;
+			wpt_tmp->altitude = alt;
 			wpt_tmp->shortname = xstrdup(name);
 			wpt_tmp->description = xstrdup(desc);
 			wpt_tmp->icon_descr = mps_find_desc_from_icon_number(symnum, PCX);
 
 			if (latdir == 'S') lat = -lat;
 			if (londir == 'W') lon = -lon;
-			wpt_tmp->position.longitude.degrees = ddmm2degrees(lon);
-			wpt_tmp->position.latitude.degrees = ddmm2degrees(lat);
+			wpt_tmp->longitude = ddmm2degrees(lon);
+			wpt_tmp->latitude = ddmm2degrees(lat);
 			waypt_add(wpt_tmp);
 			break;
 		default:
@@ -121,8 +121,8 @@ gpsutil_disp(const waypoint *wpt)
 	char *tp = tbuf;
 	time_t tm = wpt->creation_time;
 
-	lon = degrees2ddmm(wpt->position.longitude.degrees);
-	lat = degrees2ddmm(wpt->position.latitude.degrees);
+	lon = degrees2ddmm(wpt->longitude);
+	lat = degrees2ddmm(wpt->latitude);
 
 	if (tm == 0) 
 		tm = time(NULL);

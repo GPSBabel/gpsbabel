@@ -59,11 +59,11 @@ tag_coord(const char **attrv)
 	while (*avp) { 
 		if (strcmp(avp[0], "lat") == 0) {
 			sscanf(avp[1], "%lf", 
-				&wpt_tmp->position.latitude.degrees);
+				&wpt_tmp->latitude);
 		}
 		else if (strcmp(avp[0], "lon") == 0) {
 			sscanf(avp[1], "%lf", 
-				&wpt_tmp->position.longitude.degrees);
+				&wpt_tmp->longitude);
 		}
 		avp+=2;
 	}
@@ -111,7 +111,7 @@ geo_start(void *data, const char *el, const char **attr)
 
 	if (in_wpt) {
 		if (strcmp(el, "ele") == 0) {
-			wpt_tmp->position.altitude.altitude_meters = atoi(attr[1]);
+			wpt_tmp->altitude = atoi(attr[1]);
 		}
 		else if (strcmp(el, "name") == 0) {
 			tag_name(attr);
@@ -258,8 +258,8 @@ geo_waypt_pr(const waypoint *waypointp)
 	fprintf(ofd, "</name>\n");
 
 	fprintf(ofd, "<coord lat=\"%lf\" lon=\"%lf\"/>",
-		waypointp->position.latitude.degrees,
-		waypointp->position.longitude.degrees);
+		waypointp->latitude,
+		waypointp->longitude);
 	fprintf(ofd, "\n");
 
 	if (waypointp->icon_descr) {

@@ -210,8 +210,8 @@ data_read(void)
 				 */
 				lon = le_read32(&rec->wpt.d103.lon);
 				lat = le_read32(&rec->wpt.d103.lat);
-				wpt_tmp->position.longitude.degrees = lon / 2147483648.0 * 180.0;
-				wpt_tmp->position.latitude.degrees = lat / 2147483648.0 * 180.0;
+				wpt_tmp->longitude = lon / 2147483648.0 * 180.0;
+				wpt_tmp->latitude = lat / 2147483648.0 * 180.0;
 				waypt_add(wpt_tmp);
 				break;
 			/*
@@ -228,8 +228,8 @@ data_read(void)
 					wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 					lon = le_read32(&tp->lon);
 					lat = le_read32(&tp->lat);
-					wpt_tmp->position.longitude.degrees = lon / 2147483648.0 * 180.0;
-					wpt_tmp->position.latitude.degrees = lat / 2147483648.0 * 180.0;
+					wpt_tmp->longitude = lon / 2147483648.0 * 180.0;
+					wpt_tmp->latitude = lat / 2147483648.0 * 180.0;
 					route_add_wpt(track_head, wpt_tmp);
 					tp++;
 				}
@@ -262,8 +262,8 @@ my_write_wpt(const waypoint *wpt)
 	rec->header.type = 4;
 	strncpy(rec->wpt.d103.ident, wpt->shortname, sizeof(rec->wpt.d103.ident));
 	strncpy(rec->wpt.d103.cmnt, wpt->description, sizeof(rec->wpt.d103.cmnt));
-	lat = wpt->position.latitude.degrees  / 180.0 * 2147483648.0;
-	lon = wpt->position.longitude.degrees  / 180.0 * 2147483648.0;
+	lat = wpt->latitude  / 180.0 * 2147483648.0;
+	lon = wpt->longitude  / 180.0 * 2147483648.0;
 	le_write32(&rec->wpt.d103.lat, lat);
 	le_write32(&rec->wpt.d103.lon, lon);
 

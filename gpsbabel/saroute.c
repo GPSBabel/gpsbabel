@@ -148,8 +148,8 @@ my_read(void)
 			       le_read32(&latlon->lon)) / (double)(0x800000);
 	
 			wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
-			wpt_tmp->position.latitude.degrees = lat;
-			wpt_tmp->position.longitude.degrees = -lon;
+			wpt_tmp->latitude = lat;
+			wpt_tmp->longitude = -lon;
 			route_add_wpt(track_head, wpt_tmp);
 		} else {
 			Skip(infile, recsize);
@@ -208,8 +208,8 @@ my_read(void)
 			lon = (0x80000000UL -
 			       le_read32(&latlon->lon)) / (double)(0x800000);
 
-			wpt_tmp->position.latitude.degrees = lat;
-			wpt_tmp->position.longitude.degrees = -lon;
+			wpt_tmp->latitude = lat;
+			wpt_tmp->longitude = -lon;
 			route_add_wpt(track_head, wpt_tmp);
 
 			latlon++;
