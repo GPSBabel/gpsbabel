@@ -31,7 +31,7 @@ queue * dequeue(queue *element);
 #define QUEUE_FIRST(head) (head)->next
 #define QUEUE_NEXT(element) (element)->next
 #define QUEUE_LAST(head) (head)->prev
-#define QUEUE_EMPTY (head)->next = head
+#define QUEUE_EMPTY (head)->next == head
 
 #define ENQUEUE_TAIL(listhead, element) \
 		enqueue(element, (listhead)->prev)
