@@ -36,12 +36,24 @@ static char *genurl = NULL;
 static char *scale = "768";
 int scalev;
 
+/*
+ *   The code bracketed by CLICKMAP is to generate clickable image maps
+ *   for a web browser.   It's functional, but is missing the math to do
+ *   the projection transformations.   Some trig geek can finish that.
+ */
+#if CLICKMAP
+static char *clickmap = NULL;
+#endif
+
 
 static
 arglist_t tiger_args[] = {
 	{"nolabels", &nolabels, "Suppress labels on generated pins."},
 	{"genurl", &genurl, "Generate file with lat/lon for centering map."},
 	{"scale", &scale, "Dimension in pixels of map."},
+#if CLICKMAP
+	{"clickmap", &clickmap, "Generate Clickable map web page."},
+#endif
 	{0, 0, 0}
 };
 
@@ -133,6 +145,18 @@ tiger_disp(const waypoint *wpt)
 }
 
 static void
+map_plot(const waypoint *wpt)
+{
+	static int x,y;
+
+	/* Replace with real math. */
+	x+=10;
+	y+=10;
+
+	fprintf(linkf, "<area shape=\"circle\" coords=\"%d,%d,7\" href=\"%s\" alt=\"%s\"\n", x, y, wpt->url, wpt->description);
+}
+
+static void
 data_write(void)
 {
 	maxlat = -9999.0;
@@ -162,6 +186,20 @@ data_write(void)
 			fprintf(urlf, "&iwd=%s&iht=%s", scale, scale);
 		}
 		fclose(urlf);
+#if CLICKMAP
+		if (clickmap) {
+			linkf = fopen(clickmap, "w");
+			if (linkf == NULL) {
+				fatal(MYNAME ": Cannot open '%s' for writing\n",
+						clickmap);
+			}
+			fprintf(linkf, "<map name=\"map\">\n");
+			waypt_disp_all(map_plot);
+			fprintf(linkf, "</map>\n");
+			fclose(linkf);
+			linkf = NULL;
+		}
+#endif
 	}
 }
 
