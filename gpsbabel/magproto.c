@@ -430,7 +430,9 @@ mkspeed(bitrate)
 	}
 }
 
-HANDLE comport;
+HANDLE comport = NULL;
+
+#define xCloseHandle(a) if (a) { CloseHandle(a); } a = NULL;
 
 static
 int
@@ -439,7 +441,11 @@ terminit(const char *portname)
 	DCB tio;	
 	COMMTIMEOUTS timeout;
 
-	comport = CreateFile(portname, GENERIC_READ|GENERIC_WRITE, 0, NULL, 
+        is_file = 0;
+
+	xCloseHandle(comport);
+
+	comport = CreateFile(portname, GENERIC_READ|GENERIC_WRITE, 0, NULL,
 			  OPEN_EXISTING, 0, NULL);
 
 	if (comport == INVALID_HANDLE_VALUE) {
@@ -467,7 +473,7 @@ terminit(const char *portname)
 	tio.StopBits = ONESTOPBIT;
 
 	if (!SetCommState (comport, &tio)) {
-		CloseHandle(comport);
+		xCloseHandle(comport);
 
 		/*
 		 *  Probably not a com port.   Try it as a file.
@@ -489,7 +495,7 @@ terminit(const char *portname)
 	timeout.WriteTotalTimeoutMultiplier = 10;
 	timeout.WriteTotalTimeoutConstant = 1000;
 	if (!SetCommTimeouts (comport, &timeout)) {
-		CloseHandle (comport);
+		xCloseHandle (comport);
 		fatal(MYNAME ": set timeouts\n");
 	}
 	return 1;
@@ -535,7 +541,7 @@ static
 void
 termdeinit()
 {
-	CloseHandle(comport);
+        xCloseHandle(comport);
 }
 
 #else
@@ -693,6 +699,11 @@ mag_wr_init(const char *portname, const char *args)
 		if (magfile_out) {
 			fclose(magfile_out);
 		}
+#if __WIN32__
+		if (comport) {
+			xCloseHandle(comport);
+		}
+#endif
 		mag_rd_init(portname, args);
 	}
 }
