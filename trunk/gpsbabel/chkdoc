@@ -16,9 +16,15 @@ checkit() {
 		ECODE=1
 	fi
 	
-	if ! grep -qi "^    $TYPE$" README 
+	if ! grep -qi "^    $TYPE$" ~/src/babelweb/README 
 	then
 		echo $STY $TYPE is not documented in README.
+		ECODE=1
+	fi
+
+	if ! grep -qi "$TYPE" testo
+	then
+		echo $STY $TYPE is not in testo.
 		ECODE=1
 	fi
 }
