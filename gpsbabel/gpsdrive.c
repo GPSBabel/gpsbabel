@@ -107,6 +107,7 @@ data_read(void)
 				wpt_tmp->position.longitude.degrees = atof(s);
 				break;
 			case 3:
+				rtrim(s);
 				wpt_tmp->icon_descr = xstrdup(s);
 				break;
 			default:
