@@ -37,6 +37,21 @@ void
 waypt_add(waypoint *wpt)
 {
 	ENQUEUE_TAIL(&waypt_head, &wpt->Q);
+
+	/*
+	 * Some input may not have one or more of these types so we
+	 * try to be sure that we have these fields even if just by
+	 * copying them from elsewhere.
+	 */
+	if (wpt->shortname == NULL) {
+		if (wpt->description) {
+			wpt->shortname = xstrdup(wpt->description);
+		} else {
+			if (wpt->notes) {
+				wpt->shortname = xstrdup(wpt->notes);
+			}
+		}
+	}
 	if (wpt->description == NULL) {
 		if (wpt->notes != NULL) {
 			wpt->description = xstrdup(wpt->notes);
