@@ -89,7 +89,7 @@ void wpt_name_s(const char *args, const char **attrv)
 
 void wpt_name(const char *args, const char **unused)
 {
-	if (args) wpt_tmp->description = xstrdup(args);
+	if (args) wpt_tmp->description = xstrappend(wpt_tmp->description,args);
 }
 
 void wpt_link_s(const char *args, const char **attrv)
