@@ -20,18 +20,17 @@
  */
 
 #include "defs.h"
-#include "magellan.h"
+// #include "magellan.h"
 #include "csv_util.h"
 
 static FILE *file_in;
 static FILE *file_out;
-static FILE *linkf;
 static void *mkshort_handle;
 static void *mkshort_whandle;
 
 #define MYNAME "GPSUTIL"
 
-static double maxlat, maxlon, minlat, minlon, latsum, lonsum;
+static double maxlat, maxlon, minlat, minlon;
 int rec_cnt;
 static char *nolabels = NULL;
 static char *genurl = NULL;
@@ -56,6 +55,7 @@ int thresh_days;
  *   the projection transformations.   Some trig geek can finish that.
  */
 #if CLICKMAP
+static FILE *linkf;
 static char *clickmap = NULL;
 #endif
 
@@ -187,6 +187,7 @@ tiger_disp(const waypoint *wpt)
 	fprintf(file_out, "\n");
 }
 
+#if CLICKMAP
 static void
 map_plot(const waypoint *wpt)
 {
@@ -198,6 +199,7 @@ map_plot(const waypoint *wpt)
 
 	fprintf(linkf, "<area shape=\"circle\" coords=\"%d,%d,7\" href=\"%s\" alt=\"%s\"\n", x, y, wpt->url, wpt->description);
 }
+#endif /* CLICKMAP */
 
 static double
 dscale(double distance)
