@@ -306,6 +306,7 @@ void *MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
 void mkshort_del_handle(void *h);
 void setshort_length(void *, int n);
 void setshort_badchars(void *, const char *);
+void setshort_goodchars(void *, const char *);
 void setshort_mustupper(void *, int n);
 void setshort_mustuniq(void *, int n);
 void setshort_whitespace_ok(void *, int n);

@@ -43,6 +43,7 @@ typedef struct {
 	int whitespaceok;
 	unsigned int target_len;
 	char *badchars;
+	char *goodchars;
 	int must_uniq;
 	queue namelist[PRIME];
 	int depth[PRIME];
@@ -236,6 +237,13 @@ setshort_badchars(void *h, const char *s)
 		hdl->badchars = xstrdup(s);
 	}
 }
+void
+setshort_goodchars(void *h, const char *s)
+{
+	mkshort_handle *hdl = h;
+
+	hdl->goodchars = xstrdup(s);
+}
 
 void
 setshort_mustupper(void *h, int i)
@@ -333,6 +341,8 @@ mkshort(void *h, const char *istring)
 	cp = ostring;
 	for (i=0;i<l;i++) {
 		if (strchr(hdl->badchars, tstring[i]) || !isascii(tstring[i]))
+			continue;
+		if (hdl->goodchars && (!strchr(hdl->goodchars, tstring[i])))
 			continue;
 		*cp++ = tstring[i];
 	}
