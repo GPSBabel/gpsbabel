@@ -1,6 +1,6 @@
 /*
   Comma separated value files.
-  NAME,LONG, LAT.
+  LONG, LAT, NAME.
   
     Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
 
