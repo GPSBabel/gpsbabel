@@ -509,6 +509,10 @@ DATA FILTERS
         specify the exclude option, which reverses the operation of the filter
         so that it only includes points that are NOT in the polygon.
 
+        Note that this filter currently will not work properly if your polygon 
+        contains one or both poles or if it spans the line of 180 degrees 
+        east or west longitude.  
+
         For example, assume you have a polygon file that defines the border of
         your county, called mycounty.txt.  This command line will give you only 
         the points in your county:
