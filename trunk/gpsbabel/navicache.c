@@ -111,7 +111,7 @@ nav_start(void *data, const char *el, const char **attr)
 {
 	if (0 == strcmp(el, "CacheDetails")) {
 		const char **ap;
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+		wpt_tmp = waypt_new();
 		for (ap = attr; *ap; ap+=2) {
 			if (0 == strcmp(ap[0], "cache_id")) {
 				wpt_tmp->shortname = xstrdup(ap[1]);

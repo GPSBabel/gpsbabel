@@ -168,7 +168,7 @@ waypt_read(void)
 	}
 
 	for (i = 0; i < n; i++) {
-		waypoint *wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
+		waypoint *wpt_tmp = waypt_new();
 
 		wpt_tmp->shortname = xstrdup(way[i]->ident);
 		wpt_tmp->description = xstrdup(way[i]->cmnt);

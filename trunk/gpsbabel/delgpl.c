@@ -63,7 +63,7 @@ gpl_read(void)
 	track_add_head(track_head);
 
 	while (fread(&gp, sizeof(gp), 1, gplfile_in) > 0) {
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
+		wpt_tmp = waypt_new();
 		le_read64(&wpt_tmp->latitude, &gp.lat);
 		le_read64(&wpt_tmp->longitude, &gp.lon);
 		le_read64(&wpt_tmp->altitude, &gp.alt);

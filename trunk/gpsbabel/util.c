@@ -152,7 +152,7 @@ xstrndup(const char *str, size_t sz)
 		newlen = sz;
 	}
 
-	newstr = xmalloc(newlen + 1);
+	newstr = (char *) xmalloc(newlen + 1);
 	memcpy(newstr, str, newlen);    
 	newstr[newlen] = 0;
 
@@ -178,7 +178,7 @@ xstrndupt(const char *str, size_t sz)
 		newlen = sz;
 	}
 
-	newstr = xmalloc(newlen + 1);
+	newstr = (char *) xmalloc(newlen + 1);
 	memcpy(newstr, str, newlen);
 	newstr[newlen] = '\0';
 	rtrim(newstr);
@@ -193,7 +193,7 @@ XREALLOC(void *p, size_t s, DEBUG_PARAMS )
 xrealloc(void *p, size_t s)
 #endif
 {
-	char *o = realloc(p,s);
+	char *o = (char *) realloc(p,s);
 #ifdef DEBUG_MEM
 	debug_mem_output( "realloc, %x, %x, %x, %s, %d\n", 
 			o, p, s, file, line );
@@ -211,20 +211,20 @@ xrealloc(void *p, size_t s)
 */
 char *
 #ifdef DEBUG_MEM
-XSTRAPPEND(char *src, const char *new, DEBUG_PARAMS)
+XSTRAPPEND(char *src, const char *newd, DEBUG_PARAMS)
 #else
-xstrappend(char *src, const char *new)
+xstrappend(char *src, const char *newd)
 #endif
 {
 	size_t newsz;
 
 	if (!src) {
-		return xxstrdup(new, file, line);
+		return xxstrdup(newd, file, line);
 	}
 
-	newsz = strlen(src) + strlen(new) + 1;
+	newsz = strlen(src) + strlen(newd) + 1;
 	src = xxrealloc(src, newsz, file, line);
-	strcat(src, new);
+	strcat(src, newd);
 
 	return src;
 }

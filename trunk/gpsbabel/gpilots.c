@@ -188,7 +188,7 @@ data_read(void)
 		int lon;
 		int sz;
 
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
+		wpt_tmp = waypt_new();
 
 		rec = (struct record *) pdb_rec->data;
 		switch(rec->header.type) {
@@ -219,7 +219,7 @@ data_read(void)
 				tp = (Custom_Trk_Point_Type *) ((char *) pdb_rec->data + sizeof(rec->wpt.CustTrkHdr));
 				/* FIXME: This is incomplete and probably wrong */
 				while (sz--) {
-					wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
+					wpt_tmp = waypt_new();
 					lon = le_read32(&tp->lon);
 					lat = le_read32(&tp->lat);
 					wpt_tmp->longitude = lon / 2147483648.0 * 180.0;

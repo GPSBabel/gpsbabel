@@ -166,7 +166,7 @@ data_read(void)
 		if (lat == 0 && lon == 0)	/* skip records with no GPS data */
 			continue;
 
-		wpt_tmp = (waypoint *) xcalloc(sizeof(*wpt_tmp), 1);
+		wpt_tmp = waypt_new();
 
 		if (stealth) {
 			if (!snmac)

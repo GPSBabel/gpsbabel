@@ -568,7 +568,7 @@ GPS_PBod GPS_Bod_New(void)
 
     ret->valid = 0;
     *ret->dest = *ret->start = '\0';
-    ret->true = ret->mag = (double)0.;
+    ret->True = ret->mag = (double)0.;
     
     return ret;
 }
@@ -698,7 +698,7 @@ GPS_PRmb GPS_Rmb_New(void)
 
     ret->valid = 0;
     *ret->owpt = *ret->dwpt = ret->warn = ret->correct = ret->alarm = '\0';
-    ret->cross = ret->lat = ret->lon = ret->range = ret->true = ret->velocity =
+    ret->cross = ret->lat = ret->lon = ret->range = ret->True = ret->velocity =
 	(double)0.;
     
     return ret;
@@ -869,7 +869,7 @@ GPS_PBwc GPS_Bwc_New(void)
     *ret->wpt = '\0';
     ret->time = (time_t)0;
     ret->valid = 0;
-    ret->lat = ret->lon = ret->true = ret->mag = ret->dist = (double)0.;
+    ret->lat = ret->lon = ret->True = ret->mag = ret->dist = (double)0.;
     
     return ret;
 }
@@ -912,7 +912,7 @@ GPS_PBwr GPS_Bwr_New(void)
     *ret->wpt = '\0';
     ret->time = (time_t)0;
     ret->valid = 0;
-    ret->lat = ret->lon = ret->true = ret->mag = ret->dist = (double)0.;
+    ret->lat = ret->lon = ret->True = ret->mag = ret->dist = (double)0.;
     
     return ret;
 }
@@ -1035,7 +1035,7 @@ GPS_PHsc GPS_Hsc_New(void)
 	return NULL;
 
     ret->valid = 0;
-    ret->true = ret->mag = (double)0.;
+    ret->True = ret->mag = (double)0.;
     
     return ret;
 }
@@ -1158,7 +1158,7 @@ GPS_PVhw GPS_Vhw_New(void)
 	return NULL;
 
     ret->valid = 0;
-    ret->true = ret->mag = ret->wspeed = ret->speed = (double)0.;
+    ret->True = ret->mag = ret->wspeed = ret->speed = (double)0.;
     
     return ret;
 }
@@ -1241,7 +1241,7 @@ GPS_PVtg GPS_Vtg_New(void)
 	return NULL;
 
     ret->valid = 0;
-    ret->true = ret->mag = ret->knots = ret->khr = (double)0.;
+    ret->True = ret->mag = ret->knots = ret->khr = (double)0.;
     
     return ret;
 }

@@ -46,7 +46,7 @@ static char *iconismarker = NULL;
 
 int scalev;
 int short_length;
-int thresh_days;
+double thresh_days;
 
 /*
  *   The code bracketed by CLICKMAP is to generate clickable image maps
