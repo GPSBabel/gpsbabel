@@ -1,3 +1,6 @@
+/* This file is machine-generated from the style/ directory */
+/* by mkstyle.sh.   Editing it by hand is an exeedingly bad idea. */
+
 static char csv[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
