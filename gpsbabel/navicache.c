@@ -43,7 +43,7 @@ arglist_t nav_args[] = {
 void
 nav_rd_init(const char *fname)
 {
-	fatal(MYNAME ": This build excluded GPX support becuase expat was not installed.\n");
+	fatal(MYNAME ": This build excluded GPX support because expat was not installed.\n");
 }
 
 void

@@ -22,7 +22,7 @@
  *  Mapsend File Format Description Revision 1.1, March 6, 2002 from Thales.
  * 
  * Note this file format was clearly NOT designed for cross-architecture
- * portability.  In fact, becuase of the pascal nature of the 'string' 
+ * portability.  In fact, because of the pascal nature of the 'string' 
  * data type described in that document, it's impractical to describe 
  * a 'struct waypoint' in C.
  * 

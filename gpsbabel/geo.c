@@ -49,7 +49,7 @@ arglist_t geo_args[] = {
 void
 geo_rd_init(const char *fname)
 {
-	fatal(MYNAME ": This build excluded GPX support becuase expat was not installed.\n");
+	fatal(MYNAME ": This build excluded GEO support because expat was not installed.\n");
 }
 
 void

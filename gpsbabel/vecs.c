@@ -64,6 +64,7 @@ extern ff_vecs_t text_vecs;
 extern ff_vecs_t palmdoc_vecs;
 extern ff_vecs_t html_vecs;
 extern ff_vecs_t netstumbler_vecs;
+extern ff_vecs_t HsaEndeavourNavigator_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -270,6 +271,12 @@ vecs_t vec_list[] = {
 		&netstumbler_vecs,
 		"netstumbler",
 		"NetStumbler Summary File",
+		NULL
+	},
+	{
+		&HsaEndeavourNavigator_vecs,
+		"hsandv",
+		"HSA Endeavour Navigator export File",
 		NULL
 	},
 	{

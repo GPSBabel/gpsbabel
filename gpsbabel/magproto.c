@@ -152,7 +152,7 @@ static icon_mapping_t map330_icon_table[] = {
 	{ "an", "winery" },
 	{ "ao", "wreck" },
 	{ "ap", "zoo" },
-	{ "ah", "Virtual cache"}, 	/* Binos: becuase you "see" them. */
+	{ "ah", "Virtual cache"}, 	/* Binos: because you "see" them. */
 	{ "ak", "Micro-Cache" },	/* Looks like a film canister. */
 	{ "an", "Multi-Cache"}, 	/* Winery: grapes 'coz they "bunch" */
 	{ "s",  "Unknown Cache"}, 	/* 'Suprise' cache: use a target. */

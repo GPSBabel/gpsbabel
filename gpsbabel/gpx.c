@@ -778,7 +778,7 @@ gpx_end(void *data, const char *el)
 void
 gpx_rd_init(const char *fname)
 {
-	fatal(MYNAME ": This build excluded GPX support becuase expat was not installed.\n");
+	fatal(MYNAME ": This build excluded GPX support because expat was not installed.\n");
 }
 
 #else /* NO_EXPAT */
@@ -847,7 +847,7 @@ gpx_rd_init(const char *fname)
 	cdatastr = vmem_alloc(1, 0);
 	*((char *)cdatastr.mem) = '\0';
 
-	/* We don't use xstrdup here becuase we' know we don't free
+	/* We don't use xstrdup here because we' know we don't free
 	 * this across reads and we unlock the safety belt from the 
 	 * leak tester.
 	 */

@@ -199,7 +199,7 @@ dscale(double distance)
 {
 	/*
 	 * If we have any specified margin options  factor those in now.  
-	 * A additional little boundary is helpful becuase Tiger always 
+	 * A additional little boundary is helpful because Tiger always 
 	 * puts the pin above the actual coord and if we don't pad the 
 	 * top will be clipped.   It also makes the maps more useful to 
 	 * have a little bit of context around the pins on the border.

@@ -277,7 +277,7 @@ mapsend_read(void)
 	char buf[3];
 
 	/*
-	 * Becuase of the silly struct packing and the goofy variable-length
+	 * Because of the silly struct packing and the goofy variable-length
 	 * strings, each member has to be read in one at a time.  Grrr.
 	 */
 
