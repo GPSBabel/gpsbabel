@@ -406,6 +406,36 @@ static char s_and_t[] =
 "IFIELD	URL, \"\", \"%s\"			# URL\n"
 "IFIELD	IGNORE, \"\", \"\"			# Holder for Geocache Type\n"
 ;
+static char saplus[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: \n"
+"# Author: Jim Bensman\n"
+"#   Date: 02/22/04\n"
+"#\n"
+
+"DESCRIPTION             Delorme Street Atlas Plus\n"
+
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER         COMMA\n"
+"RECORD_DELIMITER        NEWLINE\n"
+"BADCHARS                ,\"\n"
+
+"PROLOGUE        Name 2,Name,Latitude,Longitude,URL,Type\n"
+
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD  DESCRIPTION, \"\", \"%s\"           # Name 2 (Big Description)\n"
+"IFIELD  SHORTNAME, \"\", \"%s\"             # Name\n"
+"IFIELD  LAT_DECIMAL, \"\", \"%f\"           # Latitude\n"
+"IFIELD  LON_DECIMAL, \"\", \"%f\"           # Longitude\n"
+"IFIELD  URL, \"\", \"%s\"                   # URL\n"
+"IFIELD  IGNORE, \"\", \"\"                  # Holder for Geocache Type\n"
+
+;
 static char tabsep[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -517,4 +547,4 @@ static char xmapwpt[] =
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "s_and_t", s_and_t } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
