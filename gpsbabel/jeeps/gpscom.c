@@ -41,6 +41,8 @@ int32 GPS_Command_Off(const char *port)
 
     GPS_Util_Little();
 
+    gps_is_usb = (0 == strncmp(port, "usb:", 4));
+
     if(!GPS_Serial_On(port, &fd))
 	return gps_errno;
 
