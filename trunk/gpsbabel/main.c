@@ -189,6 +189,13 @@ main(int argc, char *argv[])
 				optarg = argv[argn][2]
 					? argv[argn]+2 : argv[++argn];
 				global_opts.debug_level = atoi(optarg);
+				/*
+				 * When debugging, announce version.
+				 */
+				if (global_opts.debug_level > 0)  {
+					warning("GPSBabel Version: " VERSION "\n" );
+				}
+
 				break;
 				/*
 				 * Undocumented '-vs' option for GUI wrappers.
