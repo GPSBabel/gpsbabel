@@ -155,11 +155,12 @@ my_writewpt(const waypoint *wpt)
 		wpt->shortname;
 
 	rec = xcalloc(sizeof(*rec)+56,1);
-	
+
+        tm = NULL;	
 	if ( wpt->creation_time ) {
 		tm = gmtime( &wpt->creation_time);
 	}
-	else {
+	if ( !tm ) {
 		time( &tm_t );
 		tm = gmtime( &tm_t );
 	}

@@ -1203,12 +1203,18 @@ void mag_track_disp(const waypoint *waypointp)
 
 	ilat = waypointp->position.latitude.degrees;
 	ilon = waypointp->position.longitude.degrees;
+	tm = NULL;
 	if (waypointp->creation_time) {
 		tm = gmtime(&waypointp->creation_time);
-		hms = tm->tm_hour * 10000 + tm->tm_min  * 100 + tm->tm_sec;
-		date = tm->tm_mday * 10000 + tm->tm_mon * 100 + tm->tm_year;
-		fracsec = waypointp->centiseconds;
-	} else  {
+		if ( tm ) {
+			hms = tm->tm_hour * 10000 + tm->tm_min  * 100 + 
+				   tm->tm_sec;
+			date = tm->tm_mday * 10000 + tm->tm_mon * 100 + 
+				   tm->tm_year;
+			fracsec = waypointp->centiseconds;
+		}
+	}
+        if (!tm) {
 		date = 0;
 		fracsec = 0;
 	}
