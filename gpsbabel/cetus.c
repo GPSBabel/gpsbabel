@@ -27,6 +27,22 @@
 #define MYTYPE  0x43577074  	/* CWpt */
 #define MYCREATOR 0x63475053 	/* cGPS */
 
+#define NOTESZ 4096
+#define DESCSZ 4096
+
+typedef enum {
+	WptEdit = 0, 	/* the position has been edited or it was */
+			/* imported from another source */
+	WptGPS2D = 1,   /* retrieved from a GPS with a 2D fix */
+	WptGPS3D = 2,	/* retrieved from a GPS with a 3D fix */
+	WptDGPS2D = 3,	/* retrieved from a GPS with a 2D fix and DGPS signal */
+	WptDGPS3D = 4, 	/* retrieved from a GPS with a 3D fix and DGPS signal */
+	WptAverage = 5,	/* averaging over 3D positions */
+	WptCache = 50,	/* this position is a geocache reference */
+	WptGarmin = 70	/* this position was imported from a Garmin GPS */
+			/* the icon field contains the garmin symbol number */
+} wpt_type;
+
 struct record {
 	char type;	
 	
@@ -194,14 +210,16 @@ data_read(void)
 
 
 static void
-cetus_writewpt(waypoint *wpt)
+cetus_writewpt(const waypoint *wpt)
 {
 	struct record *rec;
 	static int ct;
 	struct tm *tm;
 	char *vdata;
+	char *desc_long;
+	char *desc_short;
 
-	rec = xcalloc(sizeof(*rec)+1018,1);
+	rec = xcalloc(sizeof(*rec)+18 + NOTESZ + DESCSZ,1);
 
 	if (wpt->creation_time && (NULL != (tm = gmtime(&wpt->creation_time)))){
 		rec->min = tm->tm_min;
@@ -252,16 +270,34 @@ cetus_writewpt(waypoint *wpt)
 		        vdata[0] ='\0';
 	}
 	vdata += strlen( vdata ) + 1;
-	
-	if ( wpt->description ) {
-		        strncpy( vdata, wpt->description, 501 );
-			        vdata[500] = '\0';
+
+	if (wpt->gc_data.desc_short.utfstring) {
+		char *stripped_html = strip_html(&wpt->gc_data.desc_short);
+		desc_short = xstrdup("\n\n");
+		desc_short = xstrappend(desc_short, str_utf8_to_cp1252(stripped_html));
+		xfree(stripped_html);
+	} else {
+		desc_short = xstrdup("");
 	}
-	else {
-		        vdata[0] ='\0';
+
+	if (wpt->gc_data.desc_long.utfstring) {
+		char *stripped_html = strip_html(&wpt->gc_data.desc_long);
+		desc_long = xstrdup("\n\n");
+		desc_long = xstrappend(desc_long, str_utf8_to_cp1252(stripped_html));
+		xfree(stripped_html);
+	} else {
+		desc_long = xstrdup("");
 	}
+	snprintf(vdata, DESCSZ, "%s%s%s", 
+		wpt->description ? wpt->description : NULL,
+		desc_short,
+		desc_long);
+
+	xfree(desc_short);
+	xfree(desc_long);
+
 	if (appendicon && wpt->icon_descr) {
-		int left = 500 - strlen( vdata );
+		int left = DESCSZ - strlen( vdata );
 		int ilen = strlen( wpt->icon_descr );
 		if (ilen && left > (ilen+3)) {
 			strcat( vdata, " (" );
@@ -270,13 +306,13 @@ cetus_writewpt(waypoint *wpt)
 		}
 	}
 	vdata += strlen( vdata ) + 1;
-	
-	if ( wpt->notes ) {
-		/* RER note: this doesn't seem to be viewable in Cetus 1.2b2 */
-		strncpy( vdata, wpt->notes, 501 );
-		vdata[500] = '\0';
-	}
-	else {
+
+	if (wpt->gc_data.hint) {
+		rec->type = WptCache;
+		strncpy( vdata, wpt->gc_data.hint, NOTESZ + 1 ) ;
+		vdata[NOTESZ] = '\0';
+	} else {
+		rec->type = WptEdit;
 		vdata[0] ='\0';
 	}
 	vdata += strlen( vdata ) + 1;
