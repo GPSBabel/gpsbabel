@@ -73,7 +73,7 @@ static int last_rx_csum;
 static int found_done;
 static int got_version;
 static int is_file = 0;
-
+static route_head *trk_head;
 
 static waypoint * mag_wptparse(char *);
 typedef char * (cleanse_fn) (char *);
@@ -382,7 +382,7 @@ mag_readmsg(void)
 	} 
 	if (strncmp(ibuf, "$PMGNTRK,", 7) == 0) {
 		waypoint *wpt = mag_trkparse(ibuf);
-		waypt_add(wpt);
+		route_add_wpt(trk_head, wpt);
 	} 
 	if (IS_TKN("$PMGNVER,")) {
 		mag_verparse(ibuf);
@@ -914,18 +914,22 @@ mag_wptparse(char *trkmsg)
 static void
 mag_read(void)
 {
-	if (!is_file) {
-		switch (global_opts.objective)
-		{
-			case trkdata:
+	switch (global_opts.objective)
+	{
+		case trkdata:
+			trk_head = route_head_alloc();
+			route_add_head(trk_head);
+
+			if (!is_file) 
 				mag_writemsg("PMGNCMD,TRACK,2");
-				break;
-			case wptdata:
+
+			break;
+		case wptdata:
+			if (!is_file) 
 				mag_writemsg("PMGNCMD,WAYPOINT");
-				break;
-			default:
-				fatal(MYNAME ": Routes are not yet supported\n");
-		}
+			break;
+		default:
+			fatal(MYNAME ": Routes are not yet supported\n");
 	}
 
 	while (!found_done)

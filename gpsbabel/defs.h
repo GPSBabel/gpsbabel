@@ -65,7 +65,7 @@ typedef struct {
  * protocol for a receiver, like the Magellan serial data.
  */
 typedef enum {
-	trkdata = 0 ,
+	trkdata = 1 ,
 	wptdata,
 	rtedata
 } gpsdata_type;

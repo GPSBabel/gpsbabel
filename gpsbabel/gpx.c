@@ -401,9 +401,11 @@ gpx_write(void)
 	fprintf(ofd, "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n");
 
 	switch(global_opts.objective) {
-		case trkdata: gpx_track_pr();
-		default:
+		case trkdata: gpx_track_pr(); 
 		case wptdata: waypt_disp_all(gpx_waypt_pr);
+			      break;
+		default:
+			      break;
 	}
 
 	fprintf(ofd, "</gpx>\n");
