@@ -677,9 +677,9 @@ char * str_utf8_to_cp1252( const char * str )
 					case 0x0153: value = 0x9C; break;
 					case 0x017E: value = 0x9E; break;
 					case 0x0178: value = 0x9F; break;
-					// default is the generic "currency 
-					// sign" because question marks 
-					// just look stupid.
+					/* default is the generic "currency  */
+					/* sign" because question marks  */
+					/* just look stupid. */
 					default: value = 0xA4; break;
 				}
 			}
