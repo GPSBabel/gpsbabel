@@ -1,4 +1,4 @@
-CC=/home/robertl/cross-tools/bin/i386-mingw32msvc-gcc
+CC=/usr/local/cross-tools/bin/i386-mingw32msvc-gcc
 VPATH=..
 
 FILES=gpsbabel.exe libexpat.dll ../win32/gpsbabelfront.exe ../README* ../COPYING
