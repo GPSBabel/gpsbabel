@@ -104,7 +104,7 @@ data_read(void)
 		    break;
 		case 3:
 		    wpt_tmp->shortname = xstrdup(s);
-		    csv_stringtrim(wpt_tmp->shortname, "");
+		    wpt_tmp->shortname = csv_stringtrim(wpt_tmp->shortname, "");
 		    break;
 		case 4:
                     /* ignore.  another name-type  */
@@ -148,7 +148,10 @@ mxf_disp(waypoint * wpt)
     const char *color_hex = "ff0000";
 
     csv_stringclean(wpt->shortname, ",\"");
+    wpt->shortname = csv_stringtrim(wpt->shortname, "");
+    
     csv_stringclean(wpt->description, ",\"");
+    wpt->description = csv_stringtrim(wpt->description, "");
 
     fprintf(file_out, "%08.5f, %08.5f, \"%s\", \"%s\", \"%s\", %s, %d\n",
 	    wpt->position.latitude.degrees, wpt->position.longitude.degrees,

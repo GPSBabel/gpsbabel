@@ -47,9 +47,8 @@ csv_stringclean(char *string, const char *chararray) {
     while (*lp) lp++;
     
     cp = chararray;
+
     while (*cp) {
-
-
         p = string;
         while (*p) {
             if (*cp == *p) {
@@ -63,7 +62,6 @@ csv_stringclean(char *string, const char *chararray) {
     
     return (string);
 }
-
 
 /***********************************************************************************/
 /* csv_stringtrim() - trim whitespace and leading and trailing enclosures (quotes) */
@@ -160,11 +158,11 @@ csv_lineparse(char *stringstart, const char *delimited_by,
     /* length of delimiters and enclosures */
     dlen = strlen(delimited_by);
     elen = strlen(enclosed_in);
-
+    
     dfound = 0;
 
     while ((*p) && (!dfound)) {
-	if (strncmp(p, enclosed_in, elen) == 0) {
+        if ((elen) && (strncmp(p, enclosed_in, elen) == 0)) {
 	    if (enclosedepth)
 		enclosedepth--;
 	    else

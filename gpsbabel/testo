@@ -1,38 +1,43 @@
+
 PNAME=./gpsbabel
+TMPDIR=/tmp/gpsbabel.$$
+mkdir -p $TMPDIR
+trap "rm -fr $TMPDIR" 0 1 2 3 15
+
 
 # Geocaching .loc
-rm -f /tmp/gl.loc
-${PNAME} -i geo -f geocaching.loc -o geo -F /tmp/gl.loc
-diff /tmp/gl.loc reference
+rm -f ${TMPDIR}/gl.loc
+${PNAME} -i geo -f geocaching.loc -o geo -F ${TMPDIR}/gl.loc
+diff ${TMPDIR}/gl.loc reference
 
 # GPSUtil
-rm -f /tmp/gu.wpt
-${PNAME} -i geo -f geocaching.loc -o gpsutil -F /tmp/gu.wpt
-diff /tmp/gu.wpt reference
+rm -f ${TMPDIR}/gu.wpt
+${PNAME} -i geo -f geocaching.loc -o gpsutil -F ${TMPDIR}/gu.wpt
+diff ${TMPDIR}/gu.wpt reference
 
 # GPSman 
-rm -f /tmp/gm.gm /tmp/gm.gm+
-${PNAME} -i geo -f geocaching.loc -o gpsman -F /tmp/gm.gm
-${PNAME} -i gpsman -f /tmp/gm.gm -o gpsutil -F /tmp/gm.gm+
-diff /tmp/gm.gm+ /tmp/gu.wpt
+rm -f ${TMPDIR}/gm.gm ${TMPDIR}/gm.gm+
+${PNAME} -i geo -f geocaching.loc -o gpsman -F ${TMPDIR}/gm.gm
+${PNAME} -i gpsman -f ${TMPDIR}/gm.gm -o gpsutil -F ${TMPDIR}/gm.gm+
+diff ${TMPDIR}/gm.gm+ ${TMPDIR}/gu.wpt
 
 # GPX
-rm -f /tmp/gl.gpx /tmp/gpx.gpx
-${PNAME} -i geo -f geocaching.loc -o gpx -F /tmp/gl.gpx
-${PNAME} -i gpx -f /tmp/gl.gpx -o gpsutil -F /tmp/gpx.gpx
-diff /tmp/gpx.gpx /tmp/gu.wpt
+rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
+${PNAME} -i geo -f geocaching.loc -o gpx -F ${TMPDIR}/gl.gpx
+${PNAME} -i gpx -f ${TMPDIR}/gl.gpx -o gpsutil -F ${TMPDIR}/gpx.gpx
+diff ${TMPDIR}/gpx.gpx ${TMPDIR}/gu.wpt
 
 # Magellan Mapsend
-rm -f /tmp/mm.mapsend /tmp/mm.gps
-${PNAME} -i geo -f geocaching.loc -o mapsend -F /tmp/mm.mapsend
-${PNAME} -i mapsend -f /tmp/mm.mapsend -o gpsutil -F /tmp/mm.gps
-diff /tmp/mm.gps /tmp/gu.wpt
+rm -f ${TMPDIR}/mm.mapsend ${TMPDIR}/mm.gps
+${PNAME} -i geo -f geocaching.loc -o mapsend -F ${TMPDIR}/mm.mapsend
+${PNAME} -i mapsend -f ${TMPDIR}/mm.mapsend -o gpsutil -F ${TMPDIR}/mm.gps
+diff ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 
 # Garmin Mapsource
-rm -f /tmp/mm.mapsource /tmp/ms.gps
-#${PNAME} -i geo -f geocaching.loc -o mapsource -F /tmp/mm.mapsource
-#${PNAME} -i mapsource -f /tmp/mm.mapsource -o gpsutil -F /tmp/ms.gps
-# diff /tmp/ms.gps /tmp/gu.wpt
+rm -f ${TMPDIR}/mm.mapsource ${TMPDIR}/ms.gps
+#${PNAME} -i geo -f geocaching.loc -o mapsource -F ${TMPDIR}/mm.mapsource
+#${PNAME} -i mapsource -f ${TMPDIR}/mm.mapsource -o gpsutil -F ${TMPDIR}/ms.gps
+# diff ${TMPDIR}/ms.gps ${TMPDIR}/gu.wpt
 
 # Magellan serial
 # TODO
@@ -40,29 +45,35 @@ rm -f /tmp/mm.mapsource /tmp/ms.gps
 
 # CSV (Comma separated value) data.
 
-#${PNAME} -i geo -f geocaching.loc -o csv -F /tmp/csv.csv
-#${PNAME} -i csv -f /tmp/csv.csv -o gpsutil -F /tmp/csv2.csv
-#diff /tmp/csv2.csv /tmp/gu.wpt
+#${PNAME} -i geo -f geocaching.loc -o csv -F ${TMPDIR}/csv.csv
+#${PNAME} -i csv -f ${TMPDIR}/csv.csv -o gpsutil -F ${TMPDIR}/csv2.csv
+#diff ${TMPDIR}/csv2.csv ${TMPDIR}/gu.wpt
 
 # PCX (Garmin mapsource import) file format
-rm -f /tmp/mm.pcx /tmp/pcx.gps
-${PNAME} -i geo -f geocaching.loc -o pcx -F /tmp/mm.pcx
-${PNAME} -i pcx -f /tmp/mm.pcx -o gpsutil -F /tmp/pcx.gps
-diff /tmp/mm.gps /tmp/gu.wpt
+rm -f ${TMPDIR}/mm.pcx ${TMPDIR}/pcx.gps
+${PNAME} -i geo -f geocaching.loc -o pcx -F ${TMPDIR}/mm.pcx
+${PNAME} -i pcx -f ${TMPDIR}/mm.pcx -o gpsutil -F ${TMPDIR}/pcx.gps
+diff ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 
 # Magellan file format
-${PNAME} -i magellan -f reference/magfile -o magellan -F /tmp/magfile
-diff /tmp/magfile reference/magfile
+${PNAME} -i magellan -f reference/magfile -o magellan -F ${TMPDIR}/magfile
+diff ${TMPDIR}/magfile reference/magfile
 
 # PSP (PocketStreets 2002 Pushpin (.PSP)) file format
-${PNAME} -i geo -f geocaching.loc -o psp -F /tmp/ps.psp
-diff /tmp/ps.psp reference
+rm -f ${TMPDIR}/ps.psp ${TMPDIR}/psp.psp
+${PNAME} -i psp -f reference/ps.psp -o psp -F ${TMPDIR}/psp.psp
+${PNAME} -i psp -f ${TMPDIR}/psp.psp -o psp -F ${TMPDIR}/ps.psp
+diff ${TMPDIR}/ps.psp reference
 
 # MXF (Maptech Exchange Format) file format
-${PNAME} -i geo -f geocaching.loc -o mxf -F /tmp/mxf.mxf
-diff /tmp/mxf.mxf reference
+rm -f ${TMPDIR}/mx.mxf ${TMPDIR}/mxf.mxf
+${PNAME} -i mxf -f reference/mxf.mxf -o mxf -F ${TMPDIR}/mx.mxf
+${PNAME} -i mxf -f ${TMPDIR}/mx.mxf -o mxf -F ${TMPDIR}/mxf.mxf
+diff ${TMPDIR}/mxf.mxf reference
 
 # OZI (OziExplorer 1.1) file format
-${PNAME} -i geo -f geocaching.loc -o ozi -F /tmp/ozi.ozi
-diff /tmp/ozi.ozi reference
+rm -f ${TMPDIR}/oz.ozi ${TMPDIR}/ozi.ozi
+${PNAME} -i ozi -f reference/ozi.ozi -o ozi -F ${TMPDIR}/oz.ozi
+${PNAME} -i ozi -f ${TMPDIR}/oz.ozi -o ozi -F ${TMPDIR}/ozi.ozi
+diff ${TMPDIR}/ozi.ozi reference
 
