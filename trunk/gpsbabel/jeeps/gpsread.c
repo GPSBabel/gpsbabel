@@ -76,13 +76,15 @@ int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
     UC     *p;
     int32  i;
     UC     chk=0;
+    const char *m1;
+    const char *m2;
     
     len = 0;
     isDLE = gpsFalse;
     p = (*packet)->data;
     
     start = GPS_Time_Now();
-    GPS_Diag("\nRx Data:");
+    GPS_Diag("Rx Data:");
     while(GPS_Time_Now() < start+GPS_TIME_OUT)
     {
 	if((n=GPS_Serial_Chars_Ready(fd)))
@@ -158,6 +160,8 @@ int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
 			return 0;
 		    }
 		    
+		    m1 = Get_Pkt_Type((*packet)->type, (*packet)->data[0], &m2);
+		    GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
 		    return (*packet)->n;
 		}
 		

@@ -5604,13 +5604,31 @@ void GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data *pvt)
  */
 
 const char *
-Get_Pkt_Type(unsigned char p)
+Get_Pkt_Type(unsigned char p, unsigned char d0, const char **xinfo)
 {
+	*xinfo = NULL;
 #define LT LINK_ID[gps_link_type]
 	if (p == LT.Pid_Ack_Byte)
 		return "ACK";
-	if (p == LT.Pid_Command_Data)
+	if (p == LT.Pid_Command_Data) {
+		switch (d0) {
+			case 0: *xinfo = "Abort"; break;
+			case 1: *xinfo = "Xfer Alm"; break;
+			case 2: *xinfo = "Xfer Posn"; break;
+			case 3: *xinfo = "Xfer Prx"; break;
+			case 4: *xinfo = "Xfer Rte"; break;
+			case 5: *xinfo = "Xfer Time"; break;
+			case 6: *xinfo = "Xfer Trk"; break;
+			case 7: *xinfo = "Xfer Wpt"; break;
+			case 8: *xinfo = "Power Down"; break;
+			case 49: *xinfo = "Xfer PVT Start"; break;
+			case 50: *xinfo = "Xfer PVT Stop"; break;
+			case 92: *xinfo = "Flight Records"; break;
+			case 117: *xinfo = "Xfer Laps"; break;
+			default: *xinfo = "Unknown";
+		}
 		return "CMDDAT";
+	}
 	if (p == LT.Pid_Xfer_Cmplt)
 		return "XFRCMP";
 	if (p == LT.Pid_Date_Time_Data)
