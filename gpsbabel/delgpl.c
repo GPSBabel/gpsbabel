@@ -22,10 +22,8 @@
 #include <ctype.h>
 #include <time.h>
 #include <errno.h>
-#include <unistd.h>
 
 #include "defs.h"
-// #include "magellan.h"
 
 #define MYNAME "GPL"
 

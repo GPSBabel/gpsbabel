@@ -26,7 +26,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <errno.h>
-#include <unistd.h>
 
 
 /* @func GPS_Time_Now ***********************************************

@@ -20,7 +20,6 @@
  */
 
 #include <ctype.h>
-#include <unistd.h>
 #include "defs.h"
 #include "csv_util.h"
 

@@ -6,7 +6,7 @@
  *	You may distribute this file under the terms of the Artistic
  *	License, as specified in the README file.
  *
- * $Id: pdb.c,v 1.2 2002-08-24 03:00:59 robertl Exp $
+ * $Id: pdb.c,v 1.3 2004-01-08 03:15:00 robertl Exp $
  */
 /* XXX - The way zero-length records are handled is a bit of a kludge. They
  * shouldn't normally exist, with the exception of expunged records. But,
@@ -26,7 +26,6 @@
 #include <stdio.h>
 #include <fcntl.h>		/* For open() */
 #include <sys/types.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
 
