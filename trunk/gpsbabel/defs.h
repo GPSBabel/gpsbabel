@@ -111,6 +111,8 @@ void route_init(void);
 void waypt_disp(waypoint *);
 void fatal(const char *, ...);
 ff_vecs_t *find_vec(char *);
+void disp_vecs(void);
+
 
 void printposn(coord *c, int is_lat);
 

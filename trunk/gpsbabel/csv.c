@@ -59,13 +59,9 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-	char name[9], desc[80];
+	char desc[80];
 	char *odesc = desc;
 	double lat,lon;
-	char latdir, londir;
-	long alt; 
-	char alttype;
-	char icon[3] = {0};
 	waypoint *wpt_tmp;
 
 	while( fscanf(file_in, "%lf,%lf,%80[^\n]",
@@ -91,11 +87,6 @@ static void
 gpsutil_disp(waypoint *wpt)
 {
 	double lon,lat;
-	signed int ilon, ilat;
-	const char *icon_token = "0";
-	char tbuf[1024];
-	char *tp = tbuf;
-	time_t tm = wpt->creation_time;
 
 	lon = wpt->position.longitude.degrees;
 	lat = wpt->position.latitude.degrees;

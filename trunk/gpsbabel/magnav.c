@@ -204,12 +204,9 @@ compare(const void *a, const void *b)
 static void
 data_write(void)
 {
-	int i, ct = waypt_count();
-	struct hdr *htable, *bh;
+	int ct = waypt_count();
+	struct hdr *htable;
         queue *elem, *tmp;
-	extern queue waypt_head;
-        waypoint *waypointp;
-abort();
 
 	if (NULL == (opdb = new_pdb())) { 
 		fatal (MYNAME ": new_pdb failed\n");
