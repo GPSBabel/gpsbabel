@@ -337,14 +337,19 @@ human_to_dec( const char *instr, double *outlat, double *outlon )
     while ( cur && *cur ) {
 	switch (*cur) {
 	    case 'n': case 's': case 'N': case 'S':
-		if ( numind && numind < 3 ) {
-			numind = 0;
+		if ( unk[0] != 999 ) {
+		    numind = 0;
+		    numres = unk;
+		    lat[0] = unk[0];
+		    lat[1] = unk[1];
+		    lat[2] = unk[2];
+		    unk[0] = unk[1] = unk[2] = 999;
 		}
-		lat[0] = unk[0];
-		lat[1] = unk[1];
-		lat[2] = unk[2];
-		
-		numres = lat;
+		else {
+		    numres = lat;
+		    numind = 0;
+		    lat[0] = lat[1] = lat[2] = 999;
+		}
 		
 		if ( *cur == 'n' || *cur == 'N' ) 
 		    latsign = 1;
@@ -353,14 +358,19 @@ human_to_dec( const char *instr, double *outlat, double *outlon )
 		cur++;
 		break;
 	    case 'w': case 'e': case 'W': case 'E':
-		if ( numind && numind < 3 ) {
-			numind = 0;
+		if ( unk[0] != 999 ) {
+		    numind = 0;
+		    numres = unk;
+		    lon[0] = unk[0];
+		    lon[1] = unk[1];
+		    lon[2] = unk[2];
+		    unk[0] = unk[1] = unk[2] = 999;
 		}
-		lon[0] = unk[0];
-		lon[1] = unk[1];
-		lon[2] = unk[2];
-		
-		numres = lon;
+		else {
+		    numres = lon;
+		    numind = 0;
+		    lon[0] = lon[1] = lon[2] = 999;
+		}
 		
 		if ( *cur == 'e' || *cur == 'E' ) 
 		    lonsign = 1;
@@ -473,7 +483,7 @@ dec_to_human( char *buff, const char *format, const char *dirs, double val )
 	    sprintf( buff+strlen(buff), subformat );
 	}
 	formatptr += strlen(subformat);
-    } // end while;
+    } 
     
     xfree(subformat);
 }	
