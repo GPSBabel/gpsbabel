@@ -160,8 +160,8 @@ main(int argc, char *argv[])
 					/* simulates the default behaviour of waypoints */
 					if (doing_nothing) 
 						global_opts.masked_objective |= WPTDATAMASK;
-					if (ovecs->rd_init == NULL) {
-						fatal ("Format does not support reading.\n");
+					if (ovecs->wr_init == NULL) {
+						fatal ("Format does not support writing.\n");
 					}
 					ovecs->wr_init(ofname);
 					ovecs->write();
