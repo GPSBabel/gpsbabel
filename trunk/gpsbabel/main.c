@@ -26,6 +26,7 @@ global_options global_opts;
 void
 usage(const char *pname)
 {
+	printf("GPSBabel Version %s.  http://gpsbabel.sourceforge.net\n",VERSION );
 	printf("Usage: %s [-s] [-t|-w|-r] -i <INPUT_FILE_TYPE> -f <INPUT_FILE> -o <OUT FTYPE> -F <OUTPUT_FILE>\n", pname);
 	printf("Supported file types:\n");
 	disp_vecs();
