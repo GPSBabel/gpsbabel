@@ -255,7 +255,7 @@ THE FORMATS
         in and out of NAV Companion.  This conversion is based on partially
         incomplete reverse-engineering of the record format, so it may not
         work with all versions of NAV Companion.  It has been tested with 
-        version 2.10.
+        version 2.10 and 3.20.
 	
     PSP
 
