@@ -408,6 +408,22 @@ waypt_write_cb(GPS_PWay *way)
 	return 0;
 }
 
+/* 
+ * If we're not using smart icons, try to put the cache info in the
+ * description.
+ */
+const char *
+get_gc_info(waypoint *wpt)
+{
+	if (global_opts.no_smart_icons) {
+		if (wpt->gc_data.type == gt_virtual) return  "V ";
+		if (wpt->gc_data.type == gt_unknown) return  "? ";
+		if (wpt->gc_data.type == gt_multi) return  "Mlt ";
+		if (wpt->gc_data.container == gc_micro) return  "M ";
+	}
+	return "";
+}
+
 static void
 waypoint_write(void)
 {
@@ -459,7 +475,7 @@ waypoint_write(void)
 
 		if (wpt->gc_data.diff && wpt->gc_data.terr) {
 	                snprintf(obuf, sizeof(obuf), "%s%d/%d %s", 
-wpt->gc_data.container == gc_micro ?  "M " : "", 
+					get_gc_info(wpt),
 					wpt->gc_data.diff, wpt->gc_data.terr, 
 					src);
 			memcpy(way[i]->cmnt, obuf, strlen(obuf));
