@@ -28,7 +28,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <time.h>
 
 /* 
@@ -140,6 +139,7 @@ int32 GPS_Serial_Read(int32 ignored, void *ibuf, int size)
 #include <sys/ioctl.h>
 #include <sys/time.h>
 #include <termios.h>
+#include <unistd.h>
 
 static struct termios gps_ttysave;
 
