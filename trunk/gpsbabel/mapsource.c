@@ -213,13 +213,23 @@ mps_read(void)
 static void
 mps_waypt_pr(const waypoint *wpt)
 {
-	int reclen = 87 + strlen(wpt->shortname) + strlen(wpt->description);
+	char *src;
+	char *ident;
+	int reclen;
 	char zbuf[100];
 	char ffbuf[100];
 	char display = 1;
 	char icon;
 	int lat = wpt->position.latitude.degrees  / 180.0 * 2147483648.0;
 	int lon = wpt->position.longitude.degrees  / 180.0 * 2147483648.0;
+
+	if(wpt->description) src = wpt->description;
+	if(wpt->notes) src = wpt->notes;
+	ident = global_opts.synthesize_shortnames ?
+				mkshort(src) :
+				wpt->shortname;
+
+	reclen = 87 + strlen(ident) + strlen(wpt->description);
 
 	memset(zbuf, 0, sizeof(zbuf));
 	memset(ffbuf, 0xff, sizeof(ffbuf));
@@ -229,7 +239,7 @@ mps_waypt_pr(const waypoint *wpt)
 	le_write32(&reclen, reclen);
 	fwrite(&reclen, 4, 1, mps_file_out);
 	fwrite("W", 1, 1, mps_file_out);
-	fputs(wpt->shortname, mps_file_out);
+	fputs(ident, mps_file_out);
 	fwrite(zbuf, 1, 1, mps_file_out);
 	fwrite(zbuf, 9, 1, mps_file_out);
 	fwrite(ffbuf, 12, 1, mps_file_out);
@@ -253,6 +263,11 @@ mps_waypt_pr(const waypoint *wpt)
 void
 mps_write(void)
 {
+	int short_length = 10;
+
+	setshort_length(short_length);
+	setshort_whitespace_ok(0);
+
 	fwrite(mps_hdr, sizeof(mps_hdr), 1, mps_file_out);
 	waypt_disp_all(mps_waypt_pr);
 	fwrite(mps_ftr, sizeof(mps_ftr), 1, mps_file_out);
