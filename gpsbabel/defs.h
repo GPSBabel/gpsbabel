@@ -228,7 +228,7 @@ void *MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
 #define mkshort( a, b) MKSHORT(a,b,__FILE__, __LINE__)
 #define mkshort_new_handle() MKSHORT_NEW_HANDLE(__FILE__,__LINE__)
 #endif
-void *mkshort_del_handle(void *h);
+void mkshort_del_handle(void *h);
 void setshort_length(void *, int n);
 void setshort_badchars(void *, const char *);
 void setshort_mustupper(void *, int n);
