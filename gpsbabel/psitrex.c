@@ -797,6 +797,7 @@ psit_write(void)
 }
 
 ff_vecs_t psit_vecs = {
+	ff_type_file,
 	psit_rd_init,
 	psit_wr_init,
 	psit_rd_deinit,

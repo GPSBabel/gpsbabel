@@ -261,6 +261,7 @@ data_write(void)
 
 
 ff_vecs_t easygps_vecs = {
+	ff_type_file,
 	rd_init,
 	wr_init,
 	rd_deinit,

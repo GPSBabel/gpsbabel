@@ -524,6 +524,7 @@ data_write(void)
 
 ff_vecs_t geoniche_vecs =
 {
+	ff_type_file,
 	rd_init,
 	wr_init,
 	rd_deinit,

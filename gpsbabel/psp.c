@@ -458,6 +458,7 @@ psp_write(void)
 }
 
 ff_vecs_t psp_vecs = {
+	ff_type_file,
 	psp_rd_init,
 	psp_wr_init,
 	psp_rd_deinit,

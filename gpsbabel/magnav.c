@@ -262,6 +262,7 @@ data_write(void)
 
 
 ff_vecs_t magnav_vec = {
+	ff_type_file,
 	rd_init,
 	wr_init,
 	rd_deinit,
