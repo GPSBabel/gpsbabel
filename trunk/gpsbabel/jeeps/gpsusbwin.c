@@ -160,7 +160,7 @@ gusb_open(const char *pname)
 }
 
 int 
-gusb_close(void)
+gusb_close(const char *portname)
 {
 	if (usb_handle != INVALID_HANDLE_VALUE) {
 #if 0
