@@ -21,6 +21,7 @@
 
 #include "defs.h"
 #include "magellan.h"
+#include "csv_util.h"
 
 static FILE *file_in;
 static FILE *file_out;
@@ -126,6 +127,7 @@ tiger_disp(const waypoint *wpt)
 	char *pin;
 	double lat = wpt->position.latitude.degrees;
 	double lon = wpt->position.longitude.degrees;
+
 	if (wpt->creation_time > time(0) - 3600 * 24 * 14)
 		pin = "greenpin";
 	else
@@ -143,7 +145,9 @@ tiger_disp(const waypoint *wpt)
 
 	fprintf(file_out, "%f,%f:%s", lon, lat, pin);
 	if (!nolabels) {
-		fprintf(file_out, ":%s", wpt->description);
+		char *desc = csv_stringclean(wpt->description, ":");
+		fprintf(file_out, ":%s", desc);
+		xfree(desc);
 	}
 	fprintf(file_out, "\n");
 }
