@@ -156,7 +156,7 @@ tag_mapping tag_path_map[] = {
 	{ tt_trk, 0, "/gpx/trk" },
 	{ tt_trk_name, 0, "/gpx/trk/name" },
 	{ tt_trk_desc, 0, "/gpx/trk/desc" },
-	{ tt_trk_trkseg, 0, "/gps/trk/trkseg" },
+	{ tt_trk_trkseg, 0, "/gpx/trk/trkseg" },
 	{ tt_trk_trkseg_trkpt, 0, "/gpx/trk/trkseg/trkpt" },
 	{ tt_trk_trkseg_trkpt_ele, 0, "/gpx/trk/trkseg/trkpt/ele" },
 	{ tt_trk_trkseg_trkpt_time, 0, "/gpx/trk/trkseg/trkpt/time" },
