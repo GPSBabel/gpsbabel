@@ -585,8 +585,12 @@ mkspeed(unsigned br)
 		case 4800: return B4800;
 		case 9600: return B9600;
 		case 19200: return B19200;
+#if defined B57600
 		case 57600: return B57600;
+#endif
+#if defined B115200
 		case 115200: return B115200;
+#endif
 		default: return B4800;
 	}
 }
