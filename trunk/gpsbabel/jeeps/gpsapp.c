@@ -102,6 +102,30 @@ int	gps_is_usb;
 double	gps_save_version;
 char	gps_save_string[GPS_ARB_LEN];
 
+/*
+ * Internal function to copy what Garmin describes as a "Character Array".
+ * Dest buffer is padded with spaces and must not contain nulls.  Optionally
+ * we uppercase the string because some models (III's and 12's) react
+ * violently to lower case data.
+ */
+typedef enum { UpperNo = 0, UpperYes = 1 } copycase;
+static 
+void copy_char_array(UC **dst, UC* src, int count, copycase mustupper)
+{
+	UC *d = *dst;
+	int ocount =  count;
+	do {
+		UC sc = *src++;
+		if (sc == 0) {
+			while (count--) 
+				*d++ = ' ';
+			break;
+		}
+		else *d++ = mustupper == UpperYes ? toupper(sc) : sc;
+	} while (--count) ;
+	*dst += ocount;
+}
+
 
 /* @func GPS_Init ******************************************************
 **
@@ -1566,14 +1590,14 @@ static void GPS_D100_Send(UC *data, GPS_PWay way, int32 *len)
     
     p = data;
 
-    for(i=0;i<6;++i) *p++ = way->ident[i];
+    copy_char_array(&p, way->ident, 6, UpperYes);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lat));
     p+=sizeof(int32);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lon));
     p+=sizeof(int32);
     GPS_Util_Put_Uint(p,0);
     p+=sizeof(int32);
-    for(i=0;i<40;++i) *p++ = way->cmnt[i];
+    copy_char_array(&p, way->cmnt, 40, UpperYes);
 
     *len = 58;
     
@@ -1598,14 +1622,15 @@ static void GPS_D101_Send(UC *data, GPS_PWay way, int32 *len)
     
     p = data;
 
-    for(i=0;i<6;++i) *p++ = way->ident[i];
+    copy_char_array(&p, way->ident, 6, UpperYes);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lat));
     p+=sizeof(int32);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lon));
     p+=sizeof(int32);
     GPS_Util_Put_Uint(p,0);
     p+=sizeof(int32);
-    for(i=0;i<40;++i) *p++ = way->cmnt[i];
+    copy_char_array(&p, way->cmnt, 40, UpperYes);
+
 
     GPS_Util_Put_Float(p,way->dst);
     p+= sizeof(float);
@@ -1635,14 +1660,14 @@ static void GPS_D102_Send(UC *data, GPS_PWay way, int32 *len)
     
     p = data;
 
-    for(i=0;i<6;++i) *p++ = way->ident[i];
+    copy_char_array(&p, way->ident, 6, UpperYes);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lat));
     p+=sizeof(int32);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lon));
     p+=sizeof(int32);
     GPS_Util_Put_Uint(p,0);
     p+=sizeof(int32);
-    for(i=0;i<40;++i) *p++ = way->cmnt[i];
+    copy_char_array(&p, way->cmnt, 40, UpperYes);
 
     GPS_Util_Put_Float(p,way->dst);
     p+= sizeof(float);
@@ -1672,14 +1697,7 @@ static void GPS_D103_Send(UC *data, GPS_PWay way, int32 *len)
     
     p = data;
 
-    for(i=0;i<6;++i)  {
-	    if (way->ident[i] == 0) {
-		    memset(p, ' ', 6-i);
-		    p+=6-i;
-		    break;
-	    }
-	    *p++ = way->ident[i];
-    }
+    copy_char_array(&p, way->ident, 6, UpperYes);
 
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lat));
     p+=sizeof(int32);
@@ -1687,7 +1705,7 @@ static void GPS_D103_Send(UC *data, GPS_PWay way, int32 *len)
     p+=sizeof(int32);
     GPS_Util_Put_Uint(p,0);
     p+=sizeof(int32);
-    for(i=0;i<40;++i) *p++ = way->cmnt[i];
+    copy_char_array(&p, way->cmnt, 40, UpperYes);
 
     *p++ = way->smbl;
     *p   = way->dspl;
@@ -1715,7 +1733,7 @@ static void GPS_D104_Send(UC *data, GPS_PWay way, int32 *len)
     
     p = data;
 
-    for(i=0;i<6;++i) *p++ = way->ident[i];
+    copy_char_array(&p, way->ident, 6, UpperYes);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lat));
     p+=sizeof(int32);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lon));
@@ -1726,7 +1744,7 @@ static void GPS_D104_Send(UC *data, GPS_PWay way, int32 *len)
      * results in the comment being truncated there.   So we uppercase
      * the entire comment.
      */
-    for(i=0;i<40;++i) *p++ = toupper(way->cmnt[i]);
+    copy_char_array(&p, way->cmnt, 40, UpperYes);
 
     GPS_Util_Put_Float(p,way->dst);
     p+= sizeof(float);
@@ -1832,14 +1850,15 @@ static void GPS_D107_Send(UC *data, GPS_PWay way, int32 *len)
     int32 i;
     
     p = data;
-    for(i=0;i<6;++i) *p++ = way->ident[i];
+
+    copy_char_array(&p, way->ident, 6, UpperYes);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lat));
     p+=sizeof(int32);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lon));
     p+=sizeof(int32);
     GPS_Util_Put_Uint(p,0);
     p+=sizeof(int32);
-    for(i=0;i<40;++i) *p++ = way->cmnt[i];
+    copy_char_array(&p, way->cmnt, 40, UpperYes);
 
     *p++ = way->smbl;
     *p++ = way->dspl;
@@ -2004,7 +2023,7 @@ static void GPS_D150_Send(UC *data, GPS_PWay way, int32 *len)
 
     p = data;
 
-    for(i=0;i<6;++i) *p++ = way->ident[i];
+    copy_char_array(&p, way->ident, 6, UpperYes);
     for(i=0;i<2;++i) *p++ = way->cc[i];
 
     if(way->wpt_class == 7) way->wpt_class = 0;
@@ -2018,10 +2037,10 @@ static void GPS_D150_Send(UC *data, GPS_PWay way, int32 *len)
     GPS_Util_Put_Short(p,way->alt);
     p+=sizeof(int16);
 
-    for(i=0;i<24;++i) *p++ = way->city[i];
-    for(i=0;i<2;++i)  *p++ = way->state[i];
-    for(i=0;i<30;++i) *p++ = way->name[i];
-    for(i=0;i<40;++i) *p++ = way->cmnt[i];
+    copy_char_array(&p, way->city, 24, UpperYes);
+    copy_char_array(&p, way->state, 2, UpperYes);
+    copy_char_array(&p, way->name, 30, UpperYes);
+    copy_char_array(&p, way->cmnt, 40, UpperYes);
 
     *len = 115;
 
@@ -2046,7 +2065,7 @@ static void GPS_D151_Send(UC *data, GPS_PWay way, int32 *len)
     
     p = data;
 
-    for(i=0;i<6;++i) *p++ = way->ident[i];
+    copy_char_array(&p, way->ident, 6, UpperYes);
     
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lat));
     p+=sizeof(int32);
@@ -2054,13 +2073,13 @@ static void GPS_D151_Send(UC *data, GPS_PWay way, int32 *len)
     p+=sizeof(int32);
     GPS_Util_Put_Uint(p,0);
     p+=sizeof(int32);
-    for(i=0;i<40;++i) *p++ = way->cmnt[i];    
+    copy_char_array(&p, way->cmnt, 40, UpperYes);
     GPS_Util_Put_Float(p,way->dst);
     p+=sizeof(float);
 
-    for(i=0;i<30;++i) *p++ = way->name[i];
-    for(i=0;i<24;++i) *p++ = way->city[i];
-    for(i=0;i<2;++i)  *p++ = way->state[i];
+    copy_char_array(&p, way->name, 30, UpperYes);
+    copy_char_array(&p, way->city, 24, UpperYes);
+    copy_char_array(&p, way->state, 2, UpperYes);
 
     GPS_Util_Put_Short(p,way->alt);
     p+=sizeof(int16);
@@ -2095,7 +2114,7 @@ static void GPS_D152_Send(UC *data, GPS_PWay way, int32 *len)
     
     p = data;
 
-    for(i=0;i<6;++i) *p++ = way->ident[i];
+    copy_char_array(&p, way->ident, 6, UpperYes);
     
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lat));
     p+=sizeof(int32);
@@ -2103,13 +2122,13 @@ static void GPS_D152_Send(UC *data, GPS_PWay way, int32 *len)
     p+=sizeof(int32);
     GPS_Util_Put_Uint(p,0);
     p+=sizeof(int32);
-    for(i=0;i<40;++i) *p++ = way->cmnt[i];    
+    copy_char_array(&p, way->cmnt, 40, UpperYes);
     GPS_Util_Put_Float(p,way->dst);
     p+=sizeof(float);
 
-    for(i=0;i<30;++i) *p++ = way->name[i];
-    for(i=0;i<24;++i) *p++ = way->city[i];
-    for(i=0;i<2;++i)  *p++ = way->state[i];
+    copy_char_array(&p, way->name, 30, UpperYes);
+    copy_char_array(&p, way->city, 24, UpperYes);
+    copy_char_array(&p, way->state, 2, UpperYes);
 
     GPS_Util_Put_Short(p,way->alt);
     p+=sizeof(int16);
@@ -2143,7 +2162,7 @@ static void GPS_D154_Send(UC *data, GPS_PWay way, int32 *len)
     
     p = data;
 
-    for(i=0;i<6;++i) *p++ = way->ident[i];
+    copy_char_array(&p, way->ident, 6, UpperYes);
     
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lat));
     p+=sizeof(int32);
@@ -2151,13 +2170,14 @@ static void GPS_D154_Send(UC *data, GPS_PWay way, int32 *len)
     p+=sizeof(int32);
     GPS_Util_Put_Uint(p,0);
     p+=sizeof(int32);
-    for(i=0;i<40;++i) *p++ = way->cmnt[i];    
+    copy_char_array(&p, way->cmnt, 40, UpperYes);
+
     GPS_Util_Put_Float(p,way->dst);
     p+=sizeof(float);
 
-    for(i=0;i<30;++i) *p++ = way->name[i];
-    for(i=0;i<24;++i) *p++ = way->city[i];
-    for(i=0;i<2;++i)  *p++ = way->state[i];
+    copy_char_array(&p, way->name, 30, UpperYes);
+    copy_char_array(&p, way->city, 24, UpperYes);
+    copy_char_array(&p, way->state, 2, UpperYes);
 
     GPS_Util_Put_Short(p,way->alt);
     p+=sizeof(int16);
@@ -2194,7 +2214,7 @@ static void GPS_D155_Send(UC *data, GPS_PWay way, int32 *len)
     
     p = data;
 
-    for(i=0;i<6;++i) *p++ = way->ident[i];
+    copy_char_array(&p, way->ident, 6, UpperYes);
     
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lat));
     p+=sizeof(int32);
@@ -2202,13 +2222,13 @@ static void GPS_D155_Send(UC *data, GPS_PWay way, int32 *len)
     p+=sizeof(int32);
     GPS_Util_Put_Uint(p,0);
     p+=sizeof(int32);
-    for(i=0;i<40;++i) *p++ = way->cmnt[i];    
+    copy_char_array(&p, way->cmnt, 40, UpperYes);
     GPS_Util_Put_Float(p,way->dst);
     p+=sizeof(float);
 
-    for(i=0;i<30;++i) *p++ = way->name[i];
-    for(i=0;i<24;++i) *p++ = way->city[i];
-    for(i=0;i<2;++i)  *p++ = way->state[i];
+    copy_char_array(&p, way->name, 30, UpperYes);
+    copy_char_array(&p, way->city, 24, UpperYes);
+    copy_char_array(&p, way->state, 2, UpperYes);
 
     GPS_Util_Put_Short(p,way->alt);
     p+=sizeof(int16);
