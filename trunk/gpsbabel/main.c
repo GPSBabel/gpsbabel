@@ -86,6 +86,7 @@ main(int argc, char *argv[])
 	const char *prog_name = argv[0]; /* argv is modified during processing */
 
 	global_opts.objective = wptdata;
+	global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
 
 #ifdef DEBUG_MEM
 	debug_mem_open();
@@ -144,6 +145,8 @@ main(int argc, char *argv[])
 				if (ivecs->rd_init == NULL) {
 					fatal ("Format does not support reading.\n");
 				}
+				/* simulates the default behaviour of waypoints */
+				if (doing_nothing) global_opts.masked_objective |= WPTDATAMASK;
 				ivecs->rd_init(fname);
 				ivecs->read();
 				ivecs->rd_deinit();
@@ -154,6 +157,9 @@ main(int argc, char *argv[])
 					? argv[argn]+2 : argv[++argn];
 				ofname = optarg;
 				if (ovecs) {
+					/* simulates the default behaviour of waypoints */
+					if (doing_nothing) 
+						global_opts.masked_objective |= WPTDATAMASK;
 					if (ovecs->rd_init == NULL) {
 						fatal ("Format does not support reading.\n");
 					}
@@ -167,12 +173,15 @@ main(int argc, char *argv[])
 				break;
 			case 't':
 				global_opts.objective = trkdata;
+				global_opts.masked_objective |= TRKDATAMASK;
 				break;
 			case 'w':
 				global_opts.objective = wptdata;
+				global_opts.masked_objective |= WPTDATAMASK;
 				break;
 			case 'r':
 				global_opts.objective = rtedata;
+				global_opts.masked_objective |= RTEDATAMASK;
 				break;
 			case 'N':
 				global_opts.no_smart_icons = 1;
@@ -240,6 +249,8 @@ main(int argc, char *argv[])
 	}
 	else if (argc && ivecs) {
 		did_something = 1;
+		/* simulates the default behaviour of waypoints */
+		if (doing_nothing) global_opts.masked_objective |= WPTDATAMASK;
 		ivecs->rd_init(argv[0]);
 		ivecs->read();
 		ivecs->rd_deinit();

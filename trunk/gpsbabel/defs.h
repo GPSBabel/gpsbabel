@@ -63,10 +63,22 @@ typedef enum {
 	rtedata
 } gpsdata_type;
 
+#define NOTHINGMASK		0
+#define WPTDATAMASK		1
+#define TRKDATAMASK		2
+#define	RTEDATAMASK		4
+
+/* mask objective testing */
+#define	doing_nothing (global_opts.masked_objective == NOTHINGMASK)
+#define	doing_wpts ((global_opts.masked_objective & WPTDATAMASK) == WPTDATAMASK)
+#define	doing_trks ((global_opts.masked_objective & TRKDATAMASK) == TRKDATAMASK)
+#define	doing_rtes ((global_opts.masked_objective & RTEDATAMASK) == RTEDATAMASK)
+
 typedef struct {
 	int synthesize_shortnames;
 	int debug_level;
 	gpsdata_type objective;
+	unsigned int	masked_objective;
 	int verbose_status;	/* set by GUI wrappers for status */
 	int no_smart_icons;	
 } global_options;

@@ -438,38 +438,59 @@ mps_fileHeader_w(FILE *mps_file, int mps_ver)
 }
 
 /*
+ * read in from file a map segment record
+ * MRCB
+ */
+static void
+mps_mapsegment_r(FILE *mps_file, int mps_ver)
+{
+	char hdr[100];
+	int reclen;
+
+	/* At the moment we're not doing anything with map segments, but here's the template code as if we were
+	fread(&CDid, 4, 1, mps_file);
+	reclen = le_read32(&CDid);
+
+	fread(&CDSegmentid, 4, 1, mps_file);
+	reclen = le_read32(&CDSegmentid);
+
+	mps_readstr(mps_file, CDName, sizeof(CDName));
+	mps_readstr(mps_file, CDSegmentName, sizeof(CDSegmentName));
+	mps_readstr(mps_file, CDAreaName, sizeof(CDAreaName));
+
+	fread(hdr, 4, 1, mps_file); /* trailing long value */
+	
+	fseek(mps_file, -5, SEEK_CUR);
+	fread(&reclen, 4, 1, mps_file);
+	reclen = le_read32(&reclen);
+	fseek( mps_file, reclen+1, SEEK_CUR); 
+	return;
+}
+
+
+/*
  * read in from file a mapsetname record
  * there should always be one of these at the end of the file
  * MRCB
  */
-static int
+static void
 mps_mapsetname_r(FILE *mps_file, int mps_ver)
 {
 	char hdr[100];
 	int reclen;
 
+	/* At the moment we're not doing anything with mapsetnames, but here's the template code as if we were
+	mps_readstr(mps_file, hdr, sizeof(hdr));
+	char mapsetnamename[very large number?];
+	strcpy(mapsetnamename,hdr);
+	char mapsetnameAutonameFlag;
+	fread(&mapsetnameAutonameFlag, 1, 1, mps_file); */
+
+	fseek(mps_file, -5, SEEK_CUR);
 	fread(&reclen, 4, 1, mps_file);
 	reclen = le_read32(&reclen);
-
-	fread(hdr, 1, 1, mps_file);
-	if (hdr[0] == 'V') {
-		/* this IS a mapsetname */
-		
-		/* At the moment we're not doing anything with mapsetnames, but here's the template code as if we were
-		mps_readstr(mps_file, hdr, sizeof(hdr));
-		char mapsetnamename[very large number?];
-		strcpy(mapsetnamename,hdr);
-		char mapsetnameAutonameFlag;
-		fread(&mapsetnameAutonameFlag, 1, 1, mps_file); */
-
-		fseek( mps_file, reclen, SEEK_CUR); 
-		return ISME;
-	}
-	else {
-		/* Not a mapsetname */
-		fseek( mps_file, -5, SEEK_CUR); 
-		return NOTME;
-	}
+	fseek( mps_file, reclen+1, SEEK_CUR); 
+	return;
 }
 
 
@@ -504,6 +525,7 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 	char tbuf[100];
 	char wptname[256];
 	char wptdesc[256];
+	char wptnotes[4096]; /* rather generous, but I've nothing to go on for the sizing of this */
 	int lat;
 	int lon;
 	int	icon;
@@ -574,7 +596,8 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 	}
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		fread(tbuf, 7, 1, mps_file);				/* unknown */
+		fread(tbuf, 6, 1, mps_file);				/* unknown */
+		mps_readstr(mps_file, wptnotes, sizeof(wptnotes));
 	}
 	else {
 		fread(tbuf, 2, 1, mps_file);				/* unknown */
@@ -582,6 +605,7 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 
 	thisWaypoint->shortname = xstrdup(wptname);
 	thisWaypoint->description = xstrdup(wptdesc);
+	thisWaypoint->notes = xstrdup(wptnotes);
 	thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
 	thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
 	thisWaypoint->altitude = mps_altitude;
@@ -650,6 +674,7 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 										+ NULL (1) + prox(9) + display(4) + colour(4) + symbol(4) + city(sz) + 
 										state(sz) + facility(sz) + unknown2(1) + depth(9) + unknown3(7) */
 									/* -1 as reclen is interpreted from zero meaning a reclength of one */
+		if (wpt->notes) reclen += strlen(wpt->notes);
 	}
 	else {
 		/* v3.02 */
@@ -737,7 +762,9 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 
 	fwrite(zbuf, 2, 1, mps_file);		/* unknown */
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		fwrite(zbuf, 5, 1, mps_file);	/* unknown */
+		fwrite(zbuf, 4, 1, mps_file);	/* unknown */
+		if (wpt->notes) fputs(wpt->notes, mps_file);
+		fwrite(zbuf, 1, 1, mps_file);	/* string termination */
 	}
 }
 
@@ -930,28 +957,15 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 		mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
 
 		if ((mps_ver == 4) || (mps_ver == 5)) {
-			fread(tbuf, 18, 1, mps_file);				/* subclass data */
+			fread(tbuf, 22, 1, mps_file);				/* subclass data */
 
 			/* This is a bit unpleasant. Routes have a variable length of
-			   data that is terminated by the five bytes:
-			       0xFF 0xFF 0xFF 0xFF <not 0xFF>
-			   So, need to skip over the variable portion and stop after
-			   we found the terminator
-		   */
-			FFsRead = tbuf[1] = 0;
+			   data (min 22 bytes) terminated by a zero */
 			do {
 				fread(tbuf, 1, 1, mps_file);
-				if (tbuf[0] == -1) {
-					if ((FFsRead == 0) || (tbuf[1] == -1)) FFsRead++;
-				}
-				else if (FFsRead < 4) FFsRead = 0;
-				tbuf[1]=tbuf[0];
-			} while ((FFsRead < 4) || (tbuf[0] == -1));
+			} while (tbuf[0]);
 
-			/* The next thing is the unknown 0x00 0x03 0x00 .. 0x00 (19 bytes)
-			   but in looking for Arnie above we have read the first of these
-			   so, only read 18 bytes
-			*/
+			/* The next thing is the unknown 0x03 0x00 .. 0x00 (18 bytes) */
 			fread(tbuf, 18, 1, mps_file);
 		}
 		else {
@@ -960,7 +974,7 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 		}
 
 		/* link details */
-		fread(&interlinkStepCount, 4, 1, mps_file);					/* supposedly always 2 */
+		fread(&interlinkStepCount, 4, 1, mps_file);					/* NOT always 2, but will assume > 0 */
 		interlinkStepCount = le_read32(&interlinkStepCount);
 		/* first end of link */
 		fread(&lat, 4, 1, mps_file); 
@@ -1049,28 +1063,15 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		fread(tbuf, 18, 1, mps_file);				/* subclass data */
+		fread(tbuf, 22, 1, mps_file);				/* subclass data */
 
 		/* This is a bit unpleasant. Routes have a variable length of
-			data that is terminated by the five bytes:
-			    0xFF 0xFF 0xFF 0xFF <not 0xFF>
-			So, need to skip over the variable portion and stop after
-			we found the terminator
-		*/
-		FFsRead = tbuf[1] = 0;
+			data (min 22 bytes) terminated by a zero */
 		do {
 			fread(tbuf, 1, 1, mps_file);
-			if (tbuf[0] == -1) {
-				if ((FFsRead == 0) || (tbuf[1] == -1)) FFsRead++;
-			}
-			else if (FFsRead < 4) FFsRead = 0;
-			tbuf[1]=tbuf[0];
-		} while ((FFsRead < 4) || (tbuf[0] == -1));
+		} while (tbuf[0]);
 
-		/* The next thing is the unknown 0x00 0x03 0x00 .. 0x00 (19 bytes)
-			but in looking for Arnie above we have read the first of these
-			so, only read 18 bytes
-		*/
+		/* The next thing is the unknown 0x03 0x00 .. 0x00 (18 bytes) */
 		fread(tbuf, 18, 1, mps_file);
 	}
 	else {
@@ -1089,11 +1090,19 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 		thisWaypoint = waypt_dupe(tempWpt);
 	}
 	else {
-		thisWaypoint = waypt_new();
-		thisWaypoint->shortname = xstrdup(wptname);
-		thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
-		thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
-		thisWaypoint->altitude = mps_altitude;
+		tempWpt = mps_find_wpt_q_by_name(&read_route_wpt_head, wptname);
+
+		if (tempWpt != NULL) {
+			thisWaypoint = waypt_dupe(tempWpt);
+		}
+		else {
+			/* should never reach here, but we do need a fallback position */
+			thisWaypoint = waypt_new();
+			thisWaypoint->shortname = xstrdup(wptname);
+			thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
+			thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
+			thisWaypoint->altitude = mps_altitude;
+		}
 	}
 
 	route_add_wpt(rte_head, thisWaypoint);
@@ -1748,6 +1757,11 @@ mps_read(void)
 			mps_track_r(mps_file_in, mps_ver_in, &trk);
 			break;
 
+		case 'L':
+			/* Map segment record */
+			mps_mapsegment_r(mps_file_in, mps_ver_in);
+			break;
+
 		case 'V':
 			/* Mapset record */
 			mps_mapsetname_r(mps_file_in, mps_ver_in);
@@ -1834,7 +1848,8 @@ mps_write(void)
 	   wpts, but we are merging, then read in the waypoints from the original file and 
 	   write them out, prior to doing rtes.
 	*/
-	if ((mpsmergeout) && (global_opts.objective != wptdata)) {
+	/* if ((mpsmergeout) && (global_opts.objective != wptdata)) { */
+	if ((mpsmergeout) && (! doing_wpts)) {
 		while (!feof(mps_file_temp)) {
 
 			fread(&reclen, 4, 1, mps_file_temp);
@@ -1866,7 +1881,8 @@ mps_write(void)
 	}	/* if (mpsmergeout) */
 
 	/* irrespective of merging, now write out any waypoints */
-	if (global_opts.objective == wptdata) {
+	/* if (global_opts.objective == wptdata) { */
+	if (doing_wpts) {
 
 		if (mpsmergeout) {
 			/* since we're processing waypoints, we should read in from whatever version and write out */
@@ -1893,7 +1909,8 @@ mps_write(void)
 	/* prior to writing any tracks as requested, if we're doing a merge, read in the rtes
 	   from the original file and then write them out, ready for tracks to follow
 	*/
-	if ((mpsmergeout) && (global_opts.objective != rtedata)) {
+	/* if ((mpsmergeout) && (global_opts.objective != rtedata)) { */
+	if ((mpsmergeout) && (! doing_rtes)) {
 		while (!feof(mps_file_temp)) {
 
 			/* this might all fail if the relevant waypoints haven't been written */
@@ -1917,7 +1934,8 @@ mps_write(void)
 	}	/* if (mpsmergeout) */
 
 	/* routes are next in the wpts, rtes, trks, mapset sequence */
-	if (global_opts.objective == rtedata) {
+	/* if (global_opts.objective == rtedata) { */
+	if (doing_rtes) {
 
 		if (mpsmergeout) {
 			/* since we're processing routes, we should read in from whatever version and write out */
@@ -1952,7 +1970,8 @@ mps_write(void)
 	/* If merging but we haven't been requested to write out tracks, then read in tracks from
 	   the original file and write these out prior to any mapset writes later on
 	*/
-	if ((mpsmergeout) && (global_opts.objective != trkdata)) {
+	/* if ((mpsmergeout) && (global_opts.objective != trkdata)) { */
+	if ((mpsmergeout) && (! doing_trks)) {
 		while (!feof(mps_file_temp)) {
 
 			if (recType == 'T')  {
@@ -1975,7 +1994,8 @@ mps_write(void)
 	}	/* if (mpsmergeout) */
 
 	/* tracks are next in the wpts, rte, trks, mapset sequence in .mps files */
-	if (global_opts.objective == trkdata) {
+	/* if (global_opts.objective == trkdata) { */
+	if (doing_trks) {
 		if (mpsmergeout) {
 			/* since we're processing tracks, we should read in from whatever version and write out
 			   in the selected version */
@@ -1997,15 +2017,26 @@ mps_write(void)
 	}
 
 	if (mpsmergeout) {
-		/* should now be reading a mapset - since we would write out an empty one,
+		/* should now be reading a either a map segment or a mapset - since we would write out an empty one,
 		   let's use the one from the merge file which may well have decent data in */
-		fwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
-		fwrite(&recType, 1, 1, mps_file_out);
+		for (;;) {
+			fwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
+			fwrite(&recType, 1, 1, mps_file_out);
 
-		for(tocopy = reclen2; tocopy > 0; tocopy -= sizeof(copybuf)) {
-			fread(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_temp);
-			fwrite(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_out);
+			for(tocopy = reclen2; tocopy > 0; tocopy -= sizeof(copybuf)) {
+				fread(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_temp);
+				fwrite(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_out);
+			}
+			if (recType != 'V') {
+				fread(&reclen, 4, 1, mps_file_temp);
+				reclen2 = le_read32(&reclen);
+
+				/* Read the record type "flag" in - using fread in case in the future need more than one char */
+				fread(&recType, 1, 1, mps_file_temp);
+			}
+			else break;
 		}
+		
 	}
 	else mps_mapsetname_w(mps_file_out, mps_ver_out);
 
