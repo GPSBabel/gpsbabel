@@ -69,8 +69,8 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > $@ || (rm -f $@ ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_1_1_beta09232003
-VERSIOND=1.1.1_beta09232003
+VERSIONU=1_1_1_beta10082003
+VERSIOND=1.1.1_beta10082003
 release:
 	./chkdoc
 	rm -fr gpsbabel-$(VERSIOND)
@@ -112,6 +112,7 @@ main.o: main.c defs.h queue.h
 mapsend.o: mapsend.c defs.h queue.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h
+navicache.o: navicache.c defs.h queue.h
 pcx.o: pcx.c defs.h queue.h garmin_tables.h
 polygon.o: polygon.c defs.h queue.h
 position.o: position.c defs.h queue.h
@@ -120,7 +121,8 @@ queue.o: queue.c queue.h
 quovadis.o: quovadis.c quovadis.h defs.h queue.h coldsync/palm.h \
   coldsync/pdb.h
 route.o: route.c defs.h queue.h
-tiger.o: tiger.c defs.h queue.h magellan.h
+saroute.o: saroute.c defs.h queue.h
+tiger.o: tiger.c defs.h queue.h magellan.h csv_util.h
 tmpro.o: tmpro.c defs.h queue.h csv_util.h
 tpg.o: tpg.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
@@ -186,5 +188,5 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
-internal_styles.c: mkstyle.sh style/README.style style/arc.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/ozi.style style/s_and_t.style style/xmap.style style/xmapwpt.style
+internal_styles.c: mkstyle.sh style/README.style style/arc.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/ozi.style style/s_and_t.style style/tabsep.style style/xmap.style style/xmapwpt.style
 	./mkstyle.sh > $@ || (rm -f $@ ; exit 1)
