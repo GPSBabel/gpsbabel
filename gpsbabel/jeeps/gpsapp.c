@@ -337,12 +337,19 @@ static void GPS_A001(GPS_PPacket packet)
 	    }
 	    else if(data<400)
 	    {
-		if(data==300)
-		    gps_trk_transfer = pA300;
-		else if(data==301)
-		    gps_trk_transfer = pA301;
-		else
-		    GPS_Protocol_Error(tag,data);
+		    switch (data) {
+		    case 300: 
+			    gps_trk_transfer = pA300;
+			    break;
+		    case 301:
+			    gps_trk_transfer = pA301;
+			    break;
+		    case 302:
+			    gps_trk_transfer = pA302;
+			    break;
+		    default:
+			    GPS_Protocol_Error(tag,data);
+		    }
 		continue;
 	    }
 	    else if(data<500)
@@ -472,15 +479,13 @@ static void GPS_A001(GPS_PPacket packet)
 		
 	    else if(lasta<400)
 	    {
-		if(data==300)
-		    gps_trk_type = pD300;
-		else if(data==301)
-		    gps_trk_type = pD301;
-		else if(data==310)
-		    gps_trk_hdr_type = pD310;
-		else
-		    GPS_Protocol_Error(tag,data);
-		continue;
+		    switch (data) {
+			    case 300: gps_trk_type = pD300; break;
+			    case 301: gps_trk_type = pD301; break;
+			    case 302: gps_trk_type = pD302; break;
+		    	    default:  GPS_Protocol_Error(tag,data); break;
+		    }
+		    continue;
 	    }
 
 
@@ -3302,6 +3307,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 	    GPS_D300b_Get(&((*trk)[i]),rec->data);
 	    break;
 	case pD301:
+	case pD302:
 	    GPS_D301b_Get(&((*trk)[i]),rec->data);
 	    break;
 	default:
@@ -3509,6 +3515,7 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 		len = 13;
 		break;
 	    case pD301:
+	    case pD302:
 		GPS_D301_Send(data,trk[i]);
 		len = 21;
 		break;
