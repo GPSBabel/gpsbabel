@@ -79,6 +79,7 @@ typedef enum {
 	tt_cache_container,
 	tt_cache_difficulty,
 	tt_cache_terrain,
+	tt_cache_log_wpt,
 	tt_rte,
 	tt_rte_name,
 	tt_rte_desc,
@@ -141,6 +142,7 @@ tag_mapping tag_path_map[] = {
 	{ tt_cache_container, 1, "/gpx/wpt/groundspeak:cache/groundspeak:container" },
 	{ tt_cache_difficulty, 1, "/gpx/wpt/groundspeak:cache/groundspeak:difficulty" },
 	{ tt_cache_terrain, 1, "/gpx/wpt/groundspeak:cache/groundspeak:terrain" },
+	{ tt_cache_log_wpt, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:log_wpt" },
 
 	{ tt_rte, 0, "/gpx/rte" },
 	{ tt_rte_name, 0, "/gpx/rte/name" },
@@ -324,7 +326,7 @@ tag_log_wpt(const char **attrv)
 	const char **avp = &attrv[0];
 
 	/* create a new waypoint */
-	lwp_tmp = xcalloc(sizeof(*lwp_tmp), 1);
+	lwp_tmp = waypt_new();
 
 	/* extract the lat/lon attributes */
 	while (*avp) { 
@@ -399,6 +401,9 @@ gpx_start(void *data, const char *el, const char **attr)
 	case tt_unknown:
 		start_something_else(el, attr);
 		return;
+	case tt_cache_log_wpt:
+		if (opt_logpoint)
+			tag_log_wpt(attr);
 	}
 	if (passthrough) {
 		start_something_else(el, attr);
