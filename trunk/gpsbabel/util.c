@@ -745,6 +745,52 @@ char * str_utf8_to_ascii( const char * str )
 	return result;
 }
 
+/*
+ *  Without getting into all the complexity of technically legal HTML,
+ *  this function tries to strip "ugly" parts of it to make it more 
+ *  pleasant for a human reader.   Yes, this falls down in all kinds of
+ *  ways such as spaces within the tags, etc.
+ */
+char * 
+strip_html(utf_string *in)
+{
+	char *outstring, *out;
+	int ctr;
+	char *instr = in->utfstring;
+
+	if (!in->is_html)
+		return in->utfstring;
+	/*
+	 * We only shorten, so just dupe the input buf for space.
+	 */
+	out = outstring = xstrdup(in->utfstring);
+	outstring[0] = 0;
+
+	for(ctr=0; ; instr++) {
+		switch(*instr) {
+			case 0: 
+				fprintf(stderr, "%s\n", out);
+				return (out);
+
+			case '<':
+				fprintf(stderr, "\n+");
+				if (instr[1] == 'p')
+					*outstring++ = '\n';
+				ctr++;
+				break;
+			case '>':
+				ctr--;
+				break;
+			case '\n':
+				continue;
+			default:
+				if (ctr == 0) {
+					*outstring++ = *instr;
+				}
+		}
+	}
+}
+
 char * xml_entitize(const char * str) 
 {
 	int elen, ecount, nsecount;
