@@ -8,16 +8,30 @@ MKDIR %TMPDIR% 2>NUL:
 
 GOTO :REALSTART
 
-:COMPARE
-SET PARAM1=%1
-SET PARAM2=%2
-REM Test if param2 was a dir rather than a file, if so add a \* to make fc work
-FOR %%A IN (%2) DO IF "d--------"=="%%~aA" SET PARAM2=%2\*
+REM ==================================
+
+:CommonCOMPARE
+SET PARAM1=%2
+SET PARAM2=%3
+REM Test if param3 was a dir rather than a file, if so add a \* to make fc work
+FOR %%A IN (%3) DO IF "d--------"=="%%~aA" SET PARAM2=%3\*
 FOR /f "delims=" %%a IN ('fc %PARAM1% %PARAM2%') DO IF "x%%a"=="xFC: no differences encountered" GOTO :EOF
 REM Show the first 5 lines of difference
-fc /LB5 %PARAM1% %PARAM2%
+fc %1 /LB5 %PARAM1% %PARAM2%
 ECHO %* are not the same (first 5 differences above) - pausing. ^C to quit if required
 PAUSE
+GOTO :EOF
+
+REM ==================================
+
+:COMPARE
+CALL :CommonCOMPARE /L %1 %2
+GOTO :EOF
+
+REM ==================================
+
+:BINCOMPARE
+CALL :CommonCOMPARE /B %1 %2
 GOTO :EOF
 
 REM ==================================
@@ -35,6 +49,7 @@ REM ==================================
 
 SET PNAME=.\gpsbabel
 IF NOT EXIST %PNAME% ECHO Can't find %PNAME%&& GOTO :EOF
+
 
 
 
@@ -121,9 +136,9 @@ REM CSV (Comma separated value) data.
 @echo.
 CALL :COMPARE %TMPDIR%\csv2.csv %TMPDIR%\csv.csv 
 
-REM
+REM 
 REM Delorme TopoUSA 4 is a CSV strain.  
-REM
+REM 
 DEL %TMPDIR%\xmap-1.gpx %TMPDIR%\xmap-2.gpx %TMPDIR%\xmap
 @echo on
 @echo Testing...
@@ -258,6 +273,16 @@ DEL %TMPDIR%\magnav.pdb %TMPDIR%\magnav.gpu %TMPDIR%\magnavt.gpu
 CALL :COMPARE %TMPDIR%\magnavt.gpu %TMPDIR%\magnav.gpu
 CALL :COMPARE reference\gu.wpt %TMPDIR%\magnav.gpu
 
+DEL %TMPDIR%\magnav.pdb
+@echo on
+@echo Testing...
+%PNAME% -i geo -f geocaching.loc -o magnav -F %TMPDIR%\magnav.pdb
+@echo off
+@echo.
+CALL :BINCOMPARE %TMPDIR%\magnav.pdb reference\magnav.pdb
+
+
+
 REM GPSPilot Tracker for PalmOS
 REM This test is eerily similar to the NAV Companion test.  In fact, the 
 REM converted reference file (magnavr.gpu) is identical.
@@ -359,9 +384,9 @@ REM GPX output.
 @echo.
 CALL :COMPARE %TMPDIR%\ms1.gpx %TMPDIR%\ms2.gpx
 
-REM
+REM 
 REM MRCB mapsource track test
-REM
+REM 
 DEL %TMPDIR%\mps-track.mps
 @echo on
 @echo Testing...
@@ -378,9 +403,9 @@ DEL %TMPDIR%\mps-track.mps
 @echo.
 CALL :COMPARE %TMPDIR%\mps-track.mps reference\mps-empty.mps
 
-REM
+REM 
 REM MRCB mapsource route test
-REM
+REM 
 DEL %TMPDIR%\mps-route.mps
 @echo on
 @echo Testing...
@@ -398,12 +423,12 @@ DEL %TMPDIR%\mps-route.mps
 @echo.
 CALL :COMPARE %TMPDIR%\mps-route.mps reference\mps-empty.mps
 
-REM
+REM 
 REM Geocaching Database is a binary Palm format that, like the GPX variants
 REM has a zillion "equivalent" encodings of any given record set.  So we
 REM read the reference file, spin it to GPX and back to GCDB and then spin
 REM that one to GPX.
-REM
+REM 
 
 @echo on
 @echo Testing...
@@ -413,10 +438,10 @@ REM
 @echo.
 CALL :COMPARE %TMPDIR%\gcdb1.gpx %TMPDIR%\gcdb1.gpx
 
-REM
+REM 
 REM Duplicate filter - Since filters have no format of their own, we use csv
 REM as an intermediate format for testing the filter.
-REM
+REM 
 DEL %TMPDIR%\filterdupe.csv1 %TMPDIR%\filterdupe.csv2
 @echo on
 @echo Testing...
@@ -426,10 +451,10 @@ DEL %TMPDIR%\filterdupe.csv1 %TMPDIR%\filterdupe.csv2
 @echo.
 CALL :SORTandCOMPARE %TMPDIR%\filterdupe.csv1 %TMPDIR%\filterdupe.csv2
 
-REM
+REM 
 REM Position filter -  Since very small distances are essentialy a duplicate 
 REM position filter, we can test very similarly to the duplicate filter.
-REM
+REM 
 DEL %TMPDIR%\filterpos.csv1 %TMPDIR%\filterpos.csv2
 @echo on
 @echo Testing...
@@ -439,9 +464,9 @@ DEL %TMPDIR%\filterpos.csv1 %TMPDIR%\filterpos.csv2
 @echo.
 CALL :SORTandCOMPARE %TMPDIR%\filterpos.csv1 %TMPDIR%\filterpos.csv2
 
-REM
+REM 
 REM Radius filter
-REM
+REM 
 DEL %TMPDIR%\radius.csv
 @echo on
 @echo Testing...
@@ -449,9 +474,9 @@ DEL %TMPDIR%\radius.csv
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\radius.csv reference
-REM
+REM 
 REM magellan SD card waypoint / route format
-REM
+REM 
 DEL %TMPDIR%\magellan.rte
 @echo on
 @echo Testing...
@@ -460,10 +485,10 @@ DEL %TMPDIR%\magellan.rte
 @echo.
 CALL :COMPARE %TMPDIR%\magellan.rte reference\route\magellan.rte
 
-REM
+REM 
 REM GPX routes -- since GPX contains a date stamp, tests will always
 REM fail, so we use magellan as an interim format...
-REM
+REM 
 DEL %TMPDIR%\gpxroute.gpx %TMPDIR%\maggpx.rte
 @echo on
 @echo Testing...
@@ -473,10 +498,10 @@ DEL %TMPDIR%\gpxroute.gpx %TMPDIR%\maggpx.rte
 @echo.
 CALL :COMPARE %TMPDIR%\maggpx.rte reference\route\magellan.rte
 
-REM
+REM 
 REM GPX tracks -- since GPX contains a date stamp, tests will always
 REM fail, so we use magellan as an interim format...
-REM
+REM 
 DEL %TMPDIR%\gpxtrack.gpx %TMPDIR%\maggpx.trk
 @echo on
 @echo Testing...
@@ -486,9 +511,9 @@ DEL %TMPDIR%\gpxtrack.gpx %TMPDIR%\maggpx.trk
 @echo.
 CALL :COMPARE %TMPDIR%\maggpx.trk %TMPDIR%\gpxtrack.gpx
 
-REM
+REM 
 REM MAPSEND waypoint / route format
-REM
+REM 
 DEL %TMPDIR%\route.mapsend
 @echo on
 @echo Testing...
@@ -496,9 +521,9 @@ DEL %TMPDIR%\route.mapsend
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\route.mapsend reference\route
-REM
+REM 
 REM MAPSEND track format 
-REM
+REM 
 DEL %TMPDIR%\mapsend.trk
 @echo on
 @echo Testing...
@@ -506,9 +531,9 @@ DEL %TMPDIR%\mapsend.trk
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\mapsend.trk reference\track
-REM
+REM 
 REM copilot
-REM
+REM 
 DEL %TMPDIR%\copilot.pdb
 @echo on
 @echo Testing...
@@ -519,9 +544,9 @@ DEL %TMPDIR%\copilot.pdb
 @echo.
 CALL :COMPARE %TMPDIR%\cop1.gpx %TMPDIR%\cop2.gpx
 
-REM
+REM 
 REM EasyGPS.   Another binary format.
-REM
+REM 
 DEL %TMPDIR%\easy.loc
 @echo on
 @echo Testing...
@@ -532,11 +557,11 @@ DEL %TMPDIR%\easy.loc
 @echo.
 CALL :COMPARE %TMPDIR%\ez1.gpx %TMPDIR%\ez2.gpx
 
-REM
+REM 
 REM GPilotS.   A Palm format.  Another binary format that 
-REM
+REM 
 REM rm -f ${TMPDIR/gpilots.l
-REM${PNAME} -i easygps -f reference/gpilots.pdb -o gpx -F ${TMPDIR}/gp.gpx
+REM ${PNAME} -i easygps -f reference/gpilots.pdb -o gpx -F ${TMPDIR}/gp.gpx
 @echo on
 @echo Testing...
 %PNAME% -i geo -f geocaching.loc -o gpilots -F %TMPDIR%\blah.pdb
@@ -545,9 +570,9 @@ REM${PNAME} -i easygps -f reference/gpilots.pdb -o gpx -F ${TMPDIR}/gp.gpx
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\1.gpx %TMPDIR%\2.gpx
-REM${PNAME} -i easygps -f reference/gpilots.pdb -o gpx -F ${TMPDIR}/gp.gpx
+REM ${PNAME} -i easygps -f reference/gpilots.pdb -o gpx -F ${TMPDIR}/gp.gpx
 
-REM
+REM 
 REM Navicache.
 @echo on
 @echo Testing...
@@ -555,7 +580,7 @@ REM Navicache.
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\navi.wpt reference\navicache.ref
-REM
+REM 
 
 REM PsiTrex.  A text format that can't be handled by XCSV due to context of
 REM data based on other data values in the file
@@ -619,9 +644,9 @@ DEL %TMPDIR%\psit-tw.mps
 @echo.
 CALL :COMPARE reference\mps-empty.mps %TMPDIR%\psit-tw.mps
 
-REM
+REM 
 REM Arc Distance filter
-REM
+REM 
 DEL %TMPDIR%\arcdist.txt
 @echo on
 @echo Testing...
@@ -630,9 +655,9 @@ DEL %TMPDIR%\arcdist.txt
 @echo.
 CALL :COMPARE %TMPDIR%\arcdist.txt reference\arcdist_output.txt
 
-REM
+REM 
 REM Polygon filter
-REM
+REM 
 DEL %TMPDIR%\polygon.txt
 @echo on
 @echo Testing...
@@ -641,9 +666,9 @@ DEL %TMPDIR%\polygon.txt
 @echo.
 CALL :COMPARE %TMPDIR%\polygon.txt reference\polygon_output.txt
 
-REM
+REM 
 REM Simplify filter
-REM
+REM 
 DEL %TMPDIR%\simplify.txt
 @echo on
 @echo Testing...
@@ -652,10 +677,10 @@ DEL %TMPDIR%\simplify.txt
 @echo.
 CALL :COMPARE %TMPDIR%\simplify.txt reference\simplify_output.txt
 
-REM
+REM 
 REM Route reversal filter.   Do it twice and be sure we get what we
 REM started with.
-REM
+REM 
 DEL %TMPDIR%\reverse1.arc %TMPDIR%\reverse2.arc %TMPDIR%\reference.arc
 @echo on
 @echo Testing...
@@ -667,11 +692,19 @@ DEL %TMPDIR%\reverse1.arc %TMPDIR%\reverse2.arc %TMPDIR%\reference.arc
 REM Verify the first and last are the same
 CALL :COMPARE %TMPDIR%\reference.arc  %TMPDIR%\reverse2.arc
 REM Verify the first and second are different.
+REM ${DIFF}  ${TMPDIR}/reverse1.arc  ${TMPDIR}/reverse2.arc > /dev/null && {
+REM 		echo ERROR Failed reversal test.
+REM 		exit 1
+REM }
 
-REM
+REM parkrrrr: This isn't a straightforward compare; we *want* it to fail.
+REM Obviously this test should just be rewritten with a new reference.
+REM compare  ${TMPDIR}/reverse1.arc  ${TMPDIR}/reverse2.arc
+
+REM 
 REM Geoniche: No reference file was available, so we created one and just
 REM test it against itself.
-REM
+REM 
 DEL %TMPDIR%\gn.pdb %TMPDIR%\1.gpx %TMPDIR%\2.gpx
 @echo on
 @echo Testing...
@@ -680,21 +713,23 @@ DEL %TMPDIR%\gn.pdb %TMPDIR%\1.gpx %TMPDIR%\2.gpx
 %PNAME% -i geoniche -f %TMPDIR%\gn.pdb -o gpx -F %TMPDIR%\2.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\1.gpx %TMPDIR%\2.gpx
 
-REM
+REM 
 REM saroute covers *.anr, *.rte, and *.rtd, but I only have an .anr for testing.
 REM Unfortunately for us, this is a read-only format for now.
-REM
+REM 
 @echo on
 @echo Testing...
 %PNAME% -t -i saroute -f reference\track\i65.anr -o gpx -F %TMPDIR%\gpl1.gpx
 %PNAME% -t -i gpx -f reference\track\i65.anr.gpx -o gpx -F %TMPDIR%\gpl2.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\gpl1.gpx %TMPDIR%\gpl2.gpx
 
-REM
+REM 
 REM Delorme GPL file.   This is sort of a track format.
-REM
+REM 
 DEL %TMPDIR%\gpl1.gpx %TMPDIR%\gpl2.gpx %TMPDIR%\gpl1.gpl
 @echo on
 @echo Testing...
@@ -703,15 +738,145 @@ DEL %TMPDIR%\gpl1.gpx %TMPDIR%\gpl2.gpx %TMPDIR%\gpl1.gpl
 %PNAME% -t -i gpl -f %TMPDIR%\gpl1.gpl -o gpx -F %TMPDIR%\gpl2.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\gpl1.gpx %TMPDIR%\gpl2.gpx
 
-REM
+REM 
 REM NetStumbler Summary File (read-only)
-REM
+REM 
 DEL %TMPDIR%\netstumbler.mps
 @echo on
 @echo Testing...
 %PNAME% -i netstumbler -f reference\netstumbler.txt -o mapsource -F %TMPDIR%\netstumbler.mps
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\netstumbler.mps reference\netstumbler.mps
+CALL :BINCOMPARE %TMPDIR%\netstumbler.mps reference\netstumbler.mps
+
+REM 
+REM IGC tests
+REM 
+DEL %TMPDIR%\igc*out
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f reference\igc1.gpx -o igc -F %TMPDIR%\igc.out
+@echo off
+@echo.
+FINDSTR /V "XXXGenerated by GPSBabel Version" %TMPDIR%\igc.out> %TMPDIR%\igc_sed.out
+CALL :COMPARE %TMPDIR%\igc_sed.out reference\igc1_igc.out
+
+@echo on
+@echo Testing...
+%PNAME% -i igc -f %TMPDIR%\igc.out -o gpx -F %TMPDIR%\igc.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\igc.gpx reference\igc1_gpx.out
+
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f %TMPDIR%\igc.gpx -o igc -F %TMPDIR%\igc.out
+@echo off
+@echo.
+FINDSTR /V "XXXGenerated by GPSBabel Version" %TMPDIR%\igc.out> %TMPDIR%\igc_sed.out
+CALL :COMPARE %TMPDIR%\igc_sed.out reference\igc1_igc.out
+
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f reference\igc1_baro.gpx -i igc -f reference\igc1_igc.out -o igc,timeadj=auto -F %TMPDIR%\igc.out
+@echo off
+@echo.
+FINDSTR /V "XXXGenerated by GPSBabel Version" %TMPDIR%\igc.out> %TMPDIR%\igc_sed.out
+CALL :COMPARE %TMPDIR%\igc_sed.out reference\igc1_3d.out
+
+
+@echo on
+@echo Testing...
+%PNAME% -i igc -f reference\igc2.igc -o gpx -F %TMPDIR%\igc.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\igc.gpx reference\igc2_gpx.out
+
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f %TMPDIR%\igc.gpx -o igc -F %TMPDIR%\igc.out
+@echo off
+@echo.
+FINDSTR /V "XXXGenerated by GPSBabel Version" %TMPDIR%\igc.out> %TMPDIR%\igc_sed.out
+CALL :COMPARE %TMPDIR%\igc_sed.out reference\igc2_igc.out
+
+@echo on
+@echo Testing...
+%PNAME% -i igc -f %TMPDIR%\igc.out -o gpx -F %TMPDIR%\igc.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\igc.gpx reference\igc2_gpx.out
+
+
+REM 
+REM XCSV "human readable" tests
+REM 
+DEL %TMPDIR%\humanread.out
+@echo on
+@echo Testing...
+%PNAME% -i xcsv,style=reference\humanread.style -f reference\human.in -o arc -F %TMPDIR%\humanread.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\humanread.out reference\humanread.out
+
+DEL %TMPDIR%\humanwrite.out
+@echo on
+@echo Testing...
+%PNAME% -i xcsv,style=reference\humanread.style -f reference\human.in -o xcsv,style=reference\humanwrite.style -F %TMPDIR%\humanwrite.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\humanwrite.out reference\humanwrite.out
+
+REM 
+REM XCSV "path distance" test
+REM 
+DEL %TMPDIR%\pathdist.out
+@echo on
+@echo Testing...
+%PNAME% -i magellan -f reference\dusky.trk -o xcsv,style=reference\gnuplot.style -F %TMPDIR%\pathdist.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\pathdist.out reference\dusky.gnuplot
+
+REM hsandv
+DEL %TMPDIR%\hsandv.exp %TMPDIR%\1.exp %TMPDIR%\1.exp %TMPDIR%\Glad_5.exp
+@echo on
+@echo Testing...
+%PNAME% -i geo -f geocaching.loc -o hsandv -F %TMPDIR%\hsandv.exp
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\hsandv.exp reference
+REM the hsandv format is too lossy to do this test :(
+REM ${PNAME} -i hsandv -f ${TMPDIR}/hsandv.exp -o geo -F ${TMPDIR}/1.exp
+REM ${PNAME} -i hsandv -f reference/hsandv.exp -o geo -F ${TMPDIR}/2.exp
+REM compare ${TMPDIR}/1.exp ${TMPDIR}/2.exp
+REM test conversion from v4 to v5 files
+@echo on
+@echo Testing...
+%PNAME% -i hsandv -f reference\Glad_4.exp -o hsandv -F %TMPDIR%\Glad_5.exp
+@echo off
+@echo.
+REM Can't compare directly because of potential FP rounding.
+@echo on
+@echo Testing...
+%PNAME% -i hsandv -f %TMPDIR%\Glad_5.exp -o gpx -F %TMPDIR%\g5.gpx
+%PNAME% -i hsandv -f reference\Glad_5.exp -o gpx -F %TMPDIR%\g5r.gpx
+@echo off
+@echo.
+REM exit 1
+REM compare  ${TMPDIR}/g5.gpx ${TMPDIR}/g5r.gpx
+
+REM 
+REM stack filter tests
+REM These don't actually test for proper behavior, for now, but they do 
+REM exercise all of the currently-extant filter code.
+REM 
+
+@echo on
+@echo Testing...
+%PNAME% -i geo -f geocaching.loc -x stack,push,copy,nowarn -x stack,push,copy -x stack,push -x stack,pop,replace -x stack,pop,append -x stack,push,copy -x stack,pop,discard -x stack,swap,depth=1 -o
+@echo off
+@echo.
 
