@@ -32,6 +32,8 @@ static void *mkshort_handle;
 static int endianness_tested;
 static int i_am_little_endian;
 
+static int route_wp_count;
+
 #define MYNAME "mapsend"
 
 static void
@@ -174,6 +176,7 @@ mapsend_wr_init(const char *fname, const char *args)
 		exit(1);
 	}
 	mkshort_handle = mkshort_new_handle();
+	route_wp_count = 0;
 }
 
 static void
@@ -190,7 +193,7 @@ mapsend_wpt_read(void)
 	char name[257];
 	char comment[257];
 	char *p;
-	int wpt_count;
+	int wpt_count, rte_count, rte_num;
 	unsigned char scount;
 	int wpt_number;
 	char wpt_icon;
@@ -199,8 +202,10 @@ mapsend_wpt_read(void)
 	double wpt_long;
 	double wpt_lat;
 	waypoint *wpt_tmp;
-	my_fread4(&wpt_count, mapsend_file_in);
+	route_head *rte_head;
 
+	my_fread4(&wpt_count, mapsend_file_in);
+	
 	while (wpt_count--) {
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
 
@@ -237,6 +242,55 @@ mapsend_wpt_read(void)
 		wpt_tmp->icon_descr = mag_find_descr_from_token(tbuf);
 
 		waypt_add(wpt_tmp);
+	}
+	
+	/* now read the routes... */
+	my_fread4(&rte_count, mapsend_file_in);
+	
+	while (rte_count--) {
+		rte_head = route_head_alloc();
+		route_add_head(rte_head);
+		
+		/* route name */
+		fread(&scount, sizeof(scount), 1, mapsend_file_in);
+		fread(tbuf, scount, 1, mapsend_file_in);
+		tbuf[scount] = '\0';
+		rte_head->rte_name = xstrdup(tbuf);
+		
+		/* route # */
+		my_fread4(&rte_num, mapsend_file_in);
+		rte_head->rte_num = rte_num;
+		
+		/* points this route */
+		my_fread4(&wpt_count, mapsend_file_in);
+		
+		while (wpt_count--) {
+			wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+
+			/* waypoint name */
+			fread(&scount, sizeof(scount), 1, mapsend_file_in);
+			fread(tbuf, scount, 1, mapsend_file_in);
+			tbuf[scount] = '\0';
+
+			wpt_tmp->shortname = xstrdup(tbuf);
+			
+			/* waypoint # */
+			my_fread4(&wpt_number, mapsend_file_in);
+			my_fread8(&wpt_long, mapsend_file_in);
+			my_fread8(&wpt_lat, mapsend_file_in);
+			fread(&wpt_icon, sizeof(wpt_icon), 1, mapsend_file_in);
+
+			wpt_tmp->position.longitude.degrees = wpt_long;
+			wpt_tmp->position.latitude.degrees = -wpt_lat;
+
+			if (wpt_icon < 26)
+				sprintf(tbuf, "%c", wpt_icon + 'a');
+			else
+				sprintf(tbuf, "a%c", wpt_icon - 26 + 'a');
+			wpt_tmp->icon_descr = mag_find_descr_from_token(tbuf);
+
+			route_add_wpt(rte_head, wpt_tmp);
+		}
 	}
 }
 
@@ -354,6 +408,7 @@ n = ++cnt;
 	}
 	fwrite(&n, 1, 1, mapsend_file_out);
 n = 1;
+		
 	fwrite(&n, 1, 1, mapsend_file_out);
 
 	falt = waypointp->position.altitude.altitude_meters;
@@ -365,20 +420,108 @@ n = 1;
 	my_fwrite8(&flat, mapsend_file_out);
 }
 
-void
+static void 
+mapsend_route_hdr(const route_head *rte)
+{
+	int wp_ct;
+	unsigned char c;
+	char * rname;
+	
+	/* route name -- mapsend really seems to want something here.. */
+	if (!rte->rte_name)
+		rname = xstrdup("Route");
+	else
+		rname = xstrdup(rte->rte_name);
+
+	c = strlen(rname);
+	
+	fwrite(&c, 1, 1, mapsend_file_out);
+	fwrite(rname, c, 1, mapsend_file_out);
+
+	xfree(rname);
+	
+	/* route # */
+	c = rte->rte_num;
+ 	my_fwrite4(&c, mapsend_file_out);
+	
+	wp_ct = rte->rte_waypt_ct;
+
+	/* # of waypoints to follow... */
+	my_fwrite4(&wp_ct, mapsend_file_out);
+}
+
+static void 
+mapsend_noop()
+{
+	/* no-op */
+}
+
+static void 
+mapsend_route_disp(const waypoint *waypointp)
+{
+	unsigned char c;
+	const char *iconp;
+	double dbl;
+	int n;
+
+	route_wp_count++;
+	
+	/* waypoint name */
+	c = strlen(waypointp->shortname);
+	fwrite(&c, 1, 1, mapsend_file_out);
+	fwrite(waypointp->shortname, c, 1, mapsend_file_out);
+	
+	/* waypoint number */
+	my_fwrite4(&route_wp_count, mapsend_file_out);
+
+	dbl = waypointp->position.longitude.degrees;
+	my_fwrite8(&dbl, mapsend_file_out);
+
+	dbl = -waypointp->position.latitude.degrees;
+	my_fwrite8(&dbl, mapsend_file_out);
+
+	if (waypointp->icon_descr) {
+		iconp = mag_find_token_from_descr(waypointp->icon_descr);
+		if (1 == strlen(iconp)) {
+			n = iconp[0] - 'a';
+		} else {
+			n = iconp[1] - 'a' + 26;
+		}
+	} else  {
+		n = 0;
+	}
+	fwrite(&n, 1, 1, mapsend_file_out);
+}
+
+static void
 mapsend_wpt_write(void)
 {
 	mapsend_hdr hdr = {13, "4D533330 MS", "30", ms_type_wpt, 0};
 	int wpt_count = waypt_count();
 	int n = 0;
-
+	
 	fwrite(&hdr, sizeof(hdr), 1, mapsend_file_out);
-	my_fwrite4(&wpt_count, mapsend_file_out);
 
-	waypt_disp_all(mapsend_waypt_pr);
+	if (global_opts.objective == wptdata) {
+		my_fwrite4(&wpt_count, mapsend_file_out);
+		waypt_disp_all(mapsend_waypt_pr);
+	} else 
+	if (global_opts.objective == rtedata) {
+
+		/* # of points - all routes */
+		n = route_waypt_count();
+		my_fwrite4(&n, mapsend_file_out);
+
+		/* write points - all routes */
+		route_disp_all(mapsend_noop, mapsend_noop, mapsend_waypt_pr);
+	}
+		
+	n = route_count();
 
 	my_fwrite4(&n, mapsend_file_out);
-/* TODO: Implement routes here */
+	
+	if (n)
+		route_disp_all(mapsend_route_hdr, mapsend_noop, mapsend_route_disp);
 }
 
 #if LATER

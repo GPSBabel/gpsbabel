@@ -33,6 +33,26 @@ waypt_init(void)
 	QUEUE_INIT(&waypt_head);
 }
 
+waypoint *
+waypt_dupe(waypoint *wpt) 
+{
+	waypoint * tmp;
+	tmp = xcalloc(sizeof *wpt, 1);
+	memcpy(tmp, wpt, sizeof(waypoint));
+
+	if (wpt->shortname)
+		tmp->shortname = xstrdup(wpt->shortname);
+	if (wpt->description)
+		tmp->description = xstrdup(wpt->description);
+	if (wpt->notes)
+		tmp->notes = xstrdup(wpt->notes);
+	if (wpt->url)
+		tmp->url = xstrdup(wpt->url);
+	if (wpt->url_link_text)
+		tmp->url_link_text = xstrdup(wpt->url_link_text);
+
+	return tmp;
+}
 void
 waypt_add(waypoint *wpt)
 {

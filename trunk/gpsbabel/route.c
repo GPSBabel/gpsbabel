@@ -21,6 +21,8 @@
 #include "defs.h"
 
 static queue my_route_head;
+static int rte_head_ct;
+static int rte_waypts;
 
 void
 route_init(void)
@@ -28,6 +30,18 @@ route_init(void)
 	QUEUE_INIT(&my_route_head);
 }
 
+unsigned int
+route_waypt_count(void)
+{
+	/* total wapoint count -- all routes */
+	return rte_waypts;
+}
+
+unsigned int
+route_count(void)
+{
+	return rte_head_ct;	/* total # of routes */
+}
 
 route_head *
 route_head_alloc(void)
@@ -44,12 +58,15 @@ route_add_head(route_head *rte)
 {
 	ENQUEUE_TAIL(&my_route_head, &rte->Q);
 	QUEUE_INIT(&rte->waypoint_list);
+	rte_head_ct++;
 }
 
 void
 route_add_wpt(route_head *rte, waypoint *wpt)
 {
 	ENQUEUE_TAIL(&rte->waypoint_list, &wpt->Q);
+	rte->rte_waypt_ct++;	/* waypoints in this route */
+	rte_waypts++;		/* total waypoints in all routes */
 }
 
 void

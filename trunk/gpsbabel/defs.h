@@ -168,6 +168,7 @@ typedef struct {
 	char *rte_name;
 	char *rte_desc;
 	int rte_num;
+	int rte_waypt_ct;		/* # waypoints in waypoint list */
 } route_head;
 
 typedef void (*ff_init) (char const *, char const *);
@@ -193,6 +194,7 @@ typedef void (*waypt_cb) (const waypoint *);
 typedef void (*route_hdr)(const route_head *);
 typedef void (*route_trl)(const route_head *);
 void waypt_add (waypoint *);
+waypoint * waypt_dupe (waypoint *);
 void waypt_del (waypoint *);
 void waypt_free (waypoint *);
 void waypt_disp_all(waypt_cb);
@@ -208,6 +210,8 @@ void route_disp_all(route_hdr, route_trl, waypt_cb);
 void route_free (route_head *);
 void route_flush( queue *);
 void route_flush_all();
+unsigned int route_waypt_count(void);
+unsigned int route_count(void);
 
 /*
  * All shortname functions take a shortname handle as the first arg.
