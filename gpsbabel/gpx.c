@@ -798,7 +798,14 @@ gpx_rd_init(const char *fname)
 	cdatastr = vmem_alloc(1, 0);
 	*((char *)cdatastr.mem) = '\0';
 
-	xsi_schema_loc = xstrdup(DEFAULT_XSI_SCHEMA_LOC);
+	/* We don't use xstrdup here becuase we' know we don't free
+	 * this across reads and we unlock the safety belt from the 
+	 * leak tester.
+	 */
+	xsi_schema_loc = strdup(DEFAULT_XSI_SCHEMA_LOC);
+	if (!xsi_schema_loc) {
+		fatal("gpx: Unable to allocate %d bytes of memory.\n", strlen(DEFAULT_XSI_SCHEMA_LOC) + 1);
+	}
 
 	XML_SetElementHandler(psr, gpx_start, gpx_end);
 	XML_SetCharacterDataHandler(psr, gpx_cdata);
