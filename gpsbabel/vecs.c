@@ -296,7 +296,7 @@ disp_vecs(void)
 {
 	vecs_t *vec;
 	for (vec = vec_list; vec->vec; vec++) {
-		printf("%-20.20s  %-50.50s\n",
+		printf("	%-20.20s  %-50.50s\n",
 			vec->name, vec->desc);
 	}
 }

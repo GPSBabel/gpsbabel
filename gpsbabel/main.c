@@ -26,9 +26,33 @@ global_options global_opts;
 void
 usage(const char *pname)
 {
-	printf("GPSBabel Version %s.  http://gpsbabel.sourceforge.net\n",VERSION );
-	printf("Usage: %s [-s] [-t|-w|-r] -i <INPUT_FILE_TYPE> -f <INPUT_FILE> -o <OUT FTYPE> -F <OUTPUT_FILE>\n", pname);
-	printf("Supported file types:\n");
+	printf("GPSBabel Version %s.  http://gpsbabel.sourceforge.net\n\n",
+			VERSION );
+	printf(
+"Usage:\n"
+"	%s [options] -i INTYPE -f INFILE -o OUTTYPE -F OUTFILE\n"
+"	%s [options] -i INTYPE -o OUTTYPE INFILE [OUTFILE]\n"
+"\n"
+"	Converts GPS route and waypoint data from one format type to another.\n"
+"	The input type and filename are specified with the -i INTYPE\n"
+"	and -f INFILE options. The output type and filename are specified\n"
+"	with the -o OUTTYPE and -F OUTFILE options.\n"
+"\n"
+"	In the second form of the command, INFILE and OUTFILE are the\n"
+"	first and second positional (non-option) arguments.\n"
+"\n"
+"Options:\n"
+"	-s		Synthesize shortnames\n"
+"	-r		Process route information\n"
+"	-t		Process track information\n"
+"	-w		Process waypoint information [default]\n"
+"	-D level	Set debug level [%d]\n"
+"\n"
+"File Types (-i and -o options):\n"
+	, pname
+	, global_opts.debug_level
+	);
+
 	disp_vecs();
 }
 
@@ -58,7 +82,10 @@ main(int argc, char *argv[])
 		char *optarg;
 
 		if (argv[argn][0] != '-') {
-			fatal ("argument '%s' not understood\n",argv[argn]);
+			break;
+		}
+		if (argv[argn][1] == '-') {
+			break;
 		}
 
 		if (argv[argn][1] == '?' || argv[argn][1] == 'h') {
@@ -67,20 +94,22 @@ main(int argc, char *argv[])
 		}
 
 		c = argv[argn][1];
-		optarg = argv[argn+1];
 
 		switch (c) {
 			case 'i': 
+				optarg = argv[argn][2]
+					? argv[argn]+2 : argv[++argn];
 				ivecs = find_vec(optarg, &ivec_opts);
-				argn++;
 				break;
 			case 'o':
+				optarg = argv[argn][2]
+					? argv[argn]+2 : argv[++argn];
 				ovecs = find_vec(optarg, &ovec_opts);
-				argn++;
 				break;
 			case 'f':
+				optarg = argv[argn][2]
+					? argv[argn]+2 : argv[++argn];
 				fname = optarg;
-				argn++;
 				if (ivecs == NULL) {
 					fatal ("No valid input type specified\n");
 				}
@@ -89,8 +118,9 @@ main(int argc, char *argv[])
 				ivecs->rd_deinit();
 				break;
 			case 'F':
+				optarg = argv[argn][2]
+					? argv[argn]+2 : argv[++argn];
 				ofname = optarg;
-				argn++;
 				if (ovecs) {
 					ovecs->wr_init(ofname, ovec_opts);
 					ovecs->write();
@@ -110,8 +140,9 @@ main(int argc, char *argv[])
 				global_opts.objective = rtedata;
 				break;
 			case 'D':
+				optarg = argv[argn][2]
+					? argv[argn]+2 : argv[++argn];
 				global_opts.debug_level = atoi(optarg);
-				argn++;
 				break;
 			case '^':
 				disp_formats();
@@ -120,6 +151,26 @@ main(int argc, char *argv[])
 			case '?':
 				usage(argv[0]);
 				exit(0);
+		}
+	}
+
+	/*
+	 * Allow input and output files to be specified positionally
+	 * as well.  This is the typical command line format.
+	 */
+	argc -= argn;
+	argv += argn;
+	if (argc > 2) {
+		fatal ("Extra arguments on command line\n");
+	}
+	else if (argc) {
+		ivecs->rd_init(argv[0], ivec_opts);
+		ivecs->read();
+		ivecs->rd_deinit();
+		if (argc == 2 && ovecs) {
+			ovecs->wr_init(argv[1], ovec_opts);
+			ovecs->write();
+			ovecs->wr_deinit();
 		}
 	}
 
