@@ -34,6 +34,7 @@ static char *styleopt;
 static char *snlenopt;
 static char *snwhiteopt;
 static char *snupperopt;
+static char *snuniqueopt;
 char *xcsv_urlbase;
 
 static
@@ -42,6 +43,7 @@ arglist_t xcsv_args[] = {
 	{"snlen", &snlenopt, "Max synthesized shortname length"},
 	{"snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames"},
 	{"snupper", &snupperopt, "(0/1) UPPERCASE synth. shortnames"},
+	{"snunique", &snuniqueopt, "(0/1) Make synth. shortnames unique"},
 	{"urlbase", &xcsv_urlbase, "Basename prepended to URL on output"},
 	{0, 0, 0}
 };
@@ -451,6 +453,9 @@ xcsv_wr_init(const char *fname, const char *args)
 
         if (snupperopt)
             setshort_mustupper(xcsv_file.mkshort_handle, atoi(snupperopt));
+
+        if (snuniqueopt)
+            setshort_mustuniq(xcsv_file.mkshort_handle, atoi(snuniqueopt));
 
         setshort_badchars(xcsv_file.mkshort_handle, xcsv_file.badchars);
 

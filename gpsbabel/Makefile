@@ -58,8 +58,8 @@ dep:
 	(echo "internal_styles.c: mkstyle.sh" ; ls style/*.style) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_1_1_beta03072003
-VERSIOND=1.1.1_beta03072003
+VERSIONU=1_1_1_beta04162003
+VERSIOND=1.1.1_beta04162003
 release:
 	rm -fr gpsbabel-$(VERSIOND)
 	cvs tag gpsbabel_$(VERSIONU)
