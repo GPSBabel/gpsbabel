@@ -39,6 +39,7 @@ static void termwrite(char *obuf, int size);
 static double mag2degrees(double mag_val);
 static void mag_readmsg(void);
 static void *mkshort_handle;
+static char *deficon;
 
 typedef enum {
 	mrs_handoff = 0,
@@ -147,6 +148,7 @@ static icon_mapping_t map330_icon_table[] = {
 	{ "ao", "wreck" },
 	{ "ap", "zoo" },
 	{ "ah", "Virtual cache"}, 	/* Binos: becuase you "see" them. */
+	{ "ak", "Micro-Cache" },	/* Looks like a film canister. */
 	{ "an", "Multi-Cache"}, 	/* Winery: grapes 'coz they "bunch" */
 	{ NULL, NULL } 
 };
@@ -666,6 +668,7 @@ mag_rd_init(const char *portname, const char *args)
 	time_t now, later;
 	char * bs = get_option(args, "baud");
 	char * noack = get_option(args, "noack");
+	deficon = get_option(args, "deficon");
 
 	if (bs) {
 		bitrate=atoi(bs);
@@ -718,6 +721,7 @@ mag_wr_init(const char *portname, const char *args)
 	}
 #else
 	struct stat sbuf;
+	deficon = get_option(args, "deficon");
 	magfile_out = fopen(portname, "w+b");
 	fstat(fileno(magfile_out), &sbuf);
 	is_file = S_ISREG(sbuf.st_mode);
@@ -935,7 +939,7 @@ mag_find_token_from_descr(const char *icon)
 		if (case_ignore_strcmp(icon, i->icon) == 0)
 			return i->token;
 	}
-	return icon_mapping[0].token;
+		return icon_mapping[0].token;
 }
 
 static double 
@@ -1043,6 +1047,7 @@ mag_waypt_pr(const waypoint *waypointp)
 	double ilon, ilat;
 	int lon_deg, lat_deg;
 	char obuf[200];
+	char ofmtdesc[200];
 	const char *icon_token=NULL;
 	char *owpt;
 	char *odesc;
@@ -1063,7 +1068,21 @@ mag_waypt_pr(const waypoint *waypointp)
 	lon = (lon_deg * 100.0 + lon);
 	lat = (lat_deg * 100.0 + lat);
 	
-	icon_token = mag_find_token_from_descr(waypointp->icon_descr);
+	if (deficon)  {
+		icon_token = mag_find_token_from_descr(deficon);
+	} else {
+		icon_token = mag_find_token_from_descr(waypointp->icon_descr);
+	}
+
+	/*
+	 * For icons, type overwrites container.  So a multi-micro will 
+	 * get the icons for "multi".
+ 	 */
+	switch (waypointp->gc_data.container) {
+		case gc_micro: 
+			icon_token = mag_find_token_from_descr("Micro-Cache");
+			break;
+	}
 	switch (waypointp->gc_data.type) {
 		case gt_virtual:
 			icon_token = mag_find_token_from_descr("Virtual cache");
@@ -1073,14 +1092,20 @@ mag_waypt_pr(const waypoint *waypointp)
 			break;
 		default:
 			break;
-
 	}
 	isrc = waypointp->notes ? waypointp->notes : waypointp->description;
 	owpt = global_opts.synthesize_shortnames ?
                         mkshort(mkshort_handle, isrc) : waypointp->shortname,
 	odesc = isrc ? isrc : "";
 	owpt = mag_cleanse(owpt);
-	odesc = mag_cleanse(odesc);
+
+	if (waypointp->gc_data.diff && waypointp->gc_data.terr) {
+		sprintf(ofmtdesc, "%d/%d %s", waypointp->gc_data.diff, 
+			waypointp->gc_data.terr, odesc);
+		odesc = mag_cleanse(ofmtdesc);
+	} else {
+		odesc = mag_cleanse(odesc);
+	}
 
 	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.8s,%-.30s,%s",
 		lat, ilon < 0 ? 'N' : 'S',
