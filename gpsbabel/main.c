@@ -111,6 +111,9 @@ main(int argc, char *argv[])
 				global_opts.debug_level = atoi(optarg);
 				argn++;
 				break;
+			case '^':
+				disp_formats();
+				exit(0);
 			case 'h':
 			case '?':
 				usage(argv[0]);

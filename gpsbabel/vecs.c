@@ -24,8 +24,9 @@
 
 typedef struct {
 	ff_vecs_t *vec;
-	char *name;
-	char *desc;
+	const char *name;
+	const char *desc;
+	const char *extension;
 } vecs_t;
 
 extern ff_vecs_t geo_vecs;
@@ -57,7 +58,8 @@ vecs_t vec_list[] = {
 	{
 		&geo_vecs, 
 		"geo",
-		"Geocaching.com .loc"
+		"Geocaching.com .loc",
+		"loc"
 	}, 
 	{
 		&gpsman_vecs,
@@ -67,7 +69,8 @@ vecs_t vec_list[] = {
 	{
 		&gpx_vecs,
 		"gpx",
-		"GPX XML"
+		"GPX XML",
+		"gpx"
 	},
 	{
 		&mag_vecs,
@@ -82,13 +85,16 @@ vecs_t vec_list[] = {
 	{
 		&pcx_vecs,
 		"pcx",
-		"Garmin PCX5"
+		"Garmin PCX5",
+		"pcx"
 	},
+#if 0
 	{
 		&mapsource_vecs,
 		"mapsource",
 		"Garmin Mapsource"
 	},
+#endif
 	{
 		&gpsutil_vecs,
 		"gpsutil",
@@ -112,12 +118,14 @@ vecs_t vec_list[] = {
 	{
 		&dna_vecs,
 		"dna",
-		"Navitrak DNA marker format"
+		"Navitrak DNA marker format",
+		"dna"
 	},
 	{
 		&psp_vecs,
 		"psp",
-		"MS PocketStreets 2002 Pushpin"
+		"MS PocketStreets 2002 Pushpin",
+		"psp"
 	},
 	{
 		&cetus_vecs,
@@ -142,27 +150,32 @@ vecs_t vec_list[] = {
 	{
 		&mxf_vecs,
 		"mxf",
-		"MapTech Exchange Format"
+		"MapTech Exchange Format",
+		"mxf"
 	},
 	{
 		&holux_vecs,
 		"holux",
-		"Holux (gm-100) .wpo Format"
+		"Holux (gm-100) .wpo Format",
+		"wpo"
 	},
 	{
 		&ozi_vecs,
 		"ozi",
-		"OziExplorer Waypoint"
+		"OziExplorer Waypoint",
+		"ozi"
 	},
 	{
 		&tpg_vecs,
 		"tpg",
-		"National Geographic Topo .tpg"
+		"National Geographic Topo .tpg",
+		"tpg"
 	},
 	{
 		&tmpro_vecs,
 		"tmpro",
-		"TopoMapPro Places File"
+		"TopoMapPro Places File",
+		"tmpro"
 	},
 	{
 		&gpsdrive_vecs,
@@ -242,6 +255,10 @@ get_option(const char *iarglist, const char *argname)
 	return rval;
 }
 
+/*
+ *  Display the available formats in a format that's easy for humans to
+ *  parse for help on available command line options.
+ */
 void
 disp_vecs(void)
 {
@@ -249,5 +266,21 @@ disp_vecs(void)
 	for (vec = vec_list; vec->vec; vec++) {
 		printf("%-20.20s  %-50.50s\n",
 			vec->name, vec->desc);
+	}
+}
+
+/*
+ *  Display the available formats in a format that's easy to machine
+ *  parse.   Typically invoked by programs like graphical wrappers to
+ *  determine what formats are supported.
+ */
+void
+disp_formats(void)
+{
+	vecs_t *vec;
+	for (vec = vec_list; vec->vec; vec++) {
+		printf("%s\t%s\t%s\n", vec->name, 
+			vec->extension? vec->extension : "", 
+			vec->desc);
 	}
 }
