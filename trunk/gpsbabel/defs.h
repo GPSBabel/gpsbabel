@@ -173,7 +173,7 @@ typedef struct {
 	int rte_waypt_ct;		/* # waypoints in waypoint list */
 } route_head;
 
-typedef void (*ff_init) (char const *, char const *);
+typedef void (*ff_init) (char const *);
 typedef void (*ff_deinit) (void);
 typedef void (*ff_read) (void);
 typedef void (*ff_write) (void);

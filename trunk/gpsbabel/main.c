@@ -133,7 +133,7 @@ main(int argc, char *argv[])
 				if (ivecs == NULL) {
 					fatal ("No valid input type specified\n");
 				}
-				ivecs->rd_init(fname, ivec_opts);
+				ivecs->rd_init(fname);
 				ivecs->read();
 				ivecs->rd_deinit();
 				break;
@@ -142,7 +142,7 @@ main(int argc, char *argv[])
 					? argv[argn]+2 : argv[++argn];
 				ofname = optarg;
 				if (ovecs) {
-					ovecs->wr_init(ofname, ovec_opts);
+					ovecs->wr_init(ofname);
 					ovecs->write();
 					ovecs->wr_deinit();
 				}
@@ -205,11 +205,11 @@ main(int argc, char *argv[])
 		fatal ("Extra arguments on command line\n");
 	}
 	else if (argc && ivecs) {
-		ivecs->rd_init(argv[0], ivec_opts);
+		ivecs->rd_init(argv[0]);
 		ivecs->read();
 		ivecs->rd_deinit();
 		if (argc == 2 && ovecs) {
-			ovecs->wr_init(argv[1], ovec_opts);
+			ovecs->wr_init(argv[1]);
 			ovecs->write();
 			ovecs->wr_deinit();
 		}

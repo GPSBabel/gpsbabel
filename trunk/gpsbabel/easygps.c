@@ -36,7 +36,7 @@ arglist_t easygps_args[] = {
 };
 
 static void
-rd_init(const char *fname, const char *args)
+rd_init(const char *fname)
 {
 	char ibuf[100] = {'0'} ;
 	const char *ezsig = "TerraByte Location File";
@@ -61,7 +61,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname, const char *args)
+wr_init(const char *fname)
 {
 	file_out = fopen(fname, "wb");
 	mkshort_handle = mkshort_new_handle();

@@ -38,7 +38,7 @@ static  void *mkshort_handle;
 static  char fOutname[256];
 
 
-static void rd_init(const char *fname, const char *args)
+static void rd_init(const char *fname)
 {
 	file_in = fopen(fname, "rb");
 	if (file_in == NULL) {
@@ -57,7 +57,7 @@ static void rd_deinit(void)
 
 
 static void
-wr_init(const char *fname, const char *args)
+wr_init(const char *fname)
 {
 	mkshort_handle = mkshort_new_handle();
 

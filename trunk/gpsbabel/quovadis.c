@@ -74,7 +74,7 @@ static int wpt_to_icon(geocache_type	type) {
 }
 
 static void
-rd_init(const char *fname, const char *args)
+rd_init(const char *fname)
 {
 	file_in = fopen(fname, "rb");
 	if (file_in == NULL) {
@@ -93,7 +93,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname, const char *args)
+wr_init(const char *fname)
 {
 	file_out = fopen(fname, "wb");
 	out_fname = fname;

@@ -450,7 +450,7 @@ xcsv_read_internal_style(const char *style_buf)
 }
 
 static void
-xcsv_rd_init(const char *fname, const char *args)
+xcsv_rd_init(const char *fname)
 {
 
     /* 
@@ -479,7 +479,7 @@ xcsv_rd_deinit(void)
 }
 
 static void
-xcsv_wr_init(const char *fname, const char *args)
+xcsv_wr_init(const char *fname)
 {
     /* if we don't have an internal style defined, we need to
      * read it from a user-supplied style file, or die trying.

@@ -30,7 +30,7 @@ static const char *portname;
 static void *mkshort_handle;
 
 static void
-rw_init(const char *fname, const char *opts)
+rw_init(const char *fname)
 {
 	if (!mkshort_handle)
 		mkshort_handle = mkshort_new_handle();

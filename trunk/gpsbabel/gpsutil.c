@@ -12,7 +12,7 @@ static void *mkshort_handle;
 #define MYNAME "GPSUTIL"
 
 static void
-rd_init(const char *fname, const char *args)
+rd_init(const char *fname)
 {
 	file_in = fopen(fname, "r");
 	if (file_in == NULL) {
@@ -27,7 +27,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname, const char *args)
+wr_init(const char *fname)
 {
 	file_out = fopen(fname, "w");
 	if (file_out == NULL) {

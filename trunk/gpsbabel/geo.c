@@ -40,7 +40,7 @@ FILE *ofd;
 
 #if NO_EXPAT
 void
-geo_rd_init(const char *fname, const char *args)
+geo_rd_init(const char *fname)
 {
 	fatal(MYNAME ": This build excluded GPX support becuase expat was not installed.\n");
 }
@@ -185,7 +185,7 @@ geo_cdata(void *dta, const XML_Char *s, int len)
 }
 
 void
-geo_rd_init(const char *fname, const char *args)
+geo_rd_init(const char *fname)
 {
 	fd = fopen(fname, "r");
 	if (fd == NULL) {
@@ -235,7 +235,7 @@ geo_rd_deinit(void)
 }
 
 void
-geo_wr_init(const char *fname, const char *args)
+geo_wr_init(const char *fname)
 {
 	ofd = fopen(fname, "w");
 	if (ofd == NULL) {
