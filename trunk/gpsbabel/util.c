@@ -24,6 +24,9 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+static int i_am_little_endian = -1;
+static int doswap(void);
+
 #ifdef DEBUG_MEM
 #define DEBUG_FILENAME "/tmp/gpsbabel.debug"
 
@@ -173,7 +176,20 @@ xstrappend(char *src, const char *new)
 	return src;
 }
 
+/* 
+ * Duplicate a pascal string into a normal C string.
+ */
+char *
+pstrdup(char *src)
+{
+	int len = src[0];
+	char *obuf = xmalloc(len + 1);
 
+	memcpy(obuf, src + 1, len);
+	obuf[len] = 0;
+
+	return obuf;
+}
 
 void 
 rtrim(char *s)
@@ -296,6 +312,28 @@ le_read32(void *addr)
 	return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
 }
 
+/*
+ *  Read a little-endian 64-bit value from 'src' and return it in 'dest' 
+ *  in host endianness.
+ */
+void
+le_read64(void *dest, void *src)
+{
+	char *cdest = dest;
+	char *csrc = src;
+
+	doswap(); /* make sure i_am_little_endian is initialized */
+
+	if (i_am_little_endian) {
+		memcpy(dest, src, 8);
+	} else {
+		int i;
+		for (i = 0; i < 7; i++) {
+			cdest[i] = csrc[7-i];
+		}
+	}
+}
+
 void
 le_write16(void *addr, unsigned value)
 {
@@ -373,11 +411,9 @@ get_cache_icon(const waypoint *waypointp)
 	return NULL;
 }
 
-static int swapit = -1;
-
 static int doswap()
 {
-  if (swapit < 0)
+  if (i_am_little_endian < 0)
   {
 	/*	On Intel, Vax and MIPs little endian, -1.0 maps to the bytes
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f and on Motorola,
@@ -387,9 +423,9 @@ static int doswap()
 	double d = 1.0;
 	char c[8];
 	memcpy(c, &d, 8);
-	swapit = (c[0] == 0);
+	i_am_little_endian = (c[0] == 0);
   }
-  return swapit;
+  return i_am_little_endian;
 }
 
 double
@@ -398,10 +434,10 @@ pdb_read_double(void* ptr)
   double ret;
   char r[8];
   int i;
-  doswap(); /* make sure swapit is initialized */
+  doswap(); /* make sure i_am_little_endian is initialized */
   for (i = 0; i < 8; i++)
   {
-	int j = (swapit)?(7-i):i;
+	int j = (i_am_little_endian)?(7-i):i;
 	r[i] = ((char*)ptr)[j];
   }
   memcpy(&ret, r, 8);
@@ -415,10 +451,10 @@ pdb_write_double(void* ptr, double d)
   int i;
 
   memcpy(r, &d, 8);
-  doswap(); /* make sure swapit is initialized */
+  doswap(); /* make sure i_am_little_endian is initialized */
   for (i = 0; i < 8; i++)
   {
-	int j = (swapit)?(7-i):i;
+	int j = (i_am_little_endian)?(7-i):i;
 	*(char*)ptr++ = r[j];
   }
   return;
