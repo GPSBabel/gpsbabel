@@ -222,6 +222,13 @@ ${PNAME} -i mapsource -f reference/mapsource.mps  -o gpx -F ${TMPDIR}/ms1.gpx
 ${PNAME} -i mapsource -f reference/mapsource.mps  -o mapsource -F ${TMPDIR}/ms.mps
 ${PNAME} -i mapsource -f ${TMPDIR}/ms.mps -o gpx -F ${TMPDIR}/ms2.gpx
 compare ${TMPDIR}/ms1.gpx ${TMPDIR}/ms2.gpx
+#
+# MRCB mapsource track test
+#
+rm -f ${TMPDIR}/mps-track.mps
+${PNAME} -t -i mapsource -f reference/track/mps-track.mps -o mapsource \
+         -F ${TMPDIR}/mps-track.mps
+compare ${TMPDIR}/mps-track.mps reference/track/
 
 #
 # Geocaching Database is a binary Palm format that, like the GPX variants
