@@ -467,9 +467,9 @@ palmdoc_disp(const waypoint *wpt)
 		xml_tag *logpart = NULL;
 		curlog = xml_findfirst( root, "groundspeak:log" );
 		while ( curlog ) {
-			docprintf( 10, "\n" );
 			time_t logtime = 0;
 			struct tm *logtm = NULL;
+			docprintf( 10, "\n" );
 			
 			logpart = xml_findfirst( curlog, "groundspeak:type" );
 			if ( logpart ) {
