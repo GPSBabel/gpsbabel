@@ -610,13 +610,15 @@ gpx_end(void *data, const char *el)
 	case tt_cache_desc_long:
 		rtrim(cdatastrp);
 		if (cdatastrp[0]) {
-			wpt_tmp->gc_data.desc_long = xstrdup(cdatastrp);
+			wpt_tmp->gc_data.desc_long.is_html = cache_descr_is_html;
+			wpt_tmp->gc_data.desc_long.utfstring = xstrdup(cdatastrp);
 		}
 		break;
 	case tt_cache_desc_short:
 		rtrim(cdatastrp);
 		if (cdatastrp[0]) {
-			wpt_tmp->gc_data.desc_short = xstrdup(cdatastrp);
+			wpt_tmp->gc_data.desc_short.is_html = cache_descr_is_html;
+			wpt_tmp->gc_data.desc_short.utfstring = xstrdup(cdatastrp);
 		}
 		break;
 	case tt_cache_terrain:
