@@ -51,7 +51,7 @@ rw_deinit(void)
 }
 
 static void
-data_read(void)
+waypt_read(void)
 {
 	int i,n;
 	GPS_PWay *way;
@@ -75,7 +75,62 @@ data_read(void)
 		
 		waypt_add(wpt_tmp);
 	}
+}
 
+static
+void
+track_read(void)
+{
+	int32 ntracks;
+	GPS_PTrack *array;
+	route_head *trk_head = NULL;
+	waypoint *waypts;
+	int trk_num = 0;
+	char rtedescbuf[100];
+	int i;
+
+	ntracks = GPS_Command_Get_Track(portname, &array);
+	waypts = xcalloc(sizeof (waypoint), ntracks);
+
+	for(i = 0; i < ntracks; i++) {
+		if ((trk_head == NULL) || array[i]->tnew) {
+			trk_head = route_head_alloc();
+			trk_head->rte_num = trk_num;
+			sprintf(rtedescbuf, "Track %d", trk_num);
+			trk_head->rte_name = xstrdup(rtedescbuf);
+			trk_head->rte_num = trk_num;
+			trk_num++;
+			route_add_head(trk_head);
+		}
+
+		waypts[i].position.longitude.degrees = array[i]->lon;
+		waypts[i].position.latitude.degrees = array[i]->lat;
+		waypts[i].position.altitude.altitude_meters = array[i]->alt;
+		waypts[i].shortname = xstrdup(array[i]->trk_ident);
+		waypts[i].creation_time = array[i]->Time;
+		
+		route_add_wpt(trk_head, &waypts[i]);
+	}
+
+	while(--ntracks) {
+		GPS_Track_Del(&array[ntracks]);
+	}
+	free(array);
+}
+
+static void
+data_read(void)
+{
+	switch(global_opts.objective) {
+		case trkdata: 
+			track_read();
+			break;
+		case wptdata:
+			waypt_read();
+			break;
+		default:
+			fatal(MYNAME ": Routes are not yet supported\n");
+	}
 }
 
 static void
