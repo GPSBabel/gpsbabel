@@ -301,7 +301,17 @@ typedef struct arglist {
 	long argtype;
 } arglist_t;
 
+typedef enum {
+	ff_type_file = 1,	/* normal format: useful to a GUI. */
+	ff_type_internal,	/* fmt not useful with default options */
+	ff_type_serial,		/* format describes a serial protoco (GUI can display port names) */
+} ff_type;
+
+/*
+ *  Describe the file format to the caller.
+ */
 typedef struct ff_vecs {
+	ff_type type;
 	ff_init rd_init;
 	ff_init wr_init;
 	ff_deinit rd_deinit;

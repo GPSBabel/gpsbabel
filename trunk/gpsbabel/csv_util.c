@@ -329,6 +329,10 @@ xcsv_file_init(void)
      */
     xcsv_file.ofield = xcalloc(sizeof(queue), 1);
     QUEUE_INIT(xcsv_file.ofield);
+    /*
+     * Provide a sane default for CSV _files_.
+     */
+    xcsv_file.type = ff_type_file;
 
     xcsv_file.mkshort_handle = mkshort_new_handle();
 }

@@ -317,6 +317,7 @@ nmea_write()
 }
 
 ff_vecs_t nmea_vecs = {
+	ff_type_file,
 	nmea_rd_init,	
 	nmea_wr_init,	
 	nmea_rd_deinit,	

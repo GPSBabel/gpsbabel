@@ -251,6 +251,20 @@ xcsv_parse_style_line(const char *sbuff)
 		
 	} else
 
+	if (ISSTOKEN(sbuff, "FORMAT_TYPE")) {
+		const char *p;
+	        for (p = &sbuff[11]; *p && isspace(*p); p++) {
+			;
+		}
+		if (ISSTOKEN(p, "INTERNAL")) {
+			xcsv_file.type = ff_type_internal;
+		} 
+		/* this is almost inconcievable... */
+		if (ISSTOKEN(p, "SERIAL")) {
+			xcsv_file.type = ff_type_serial;
+		} 
+	} else
+
 	if (ISSTOKEN(sbuff, "DESCRIPTION")) {
 		xcsv_file.description = csv_stringtrim(&sbuff[11],"", 0);
 	} else
@@ -521,6 +535,7 @@ xcsv_wr_deinit(void)
 }
 
 ff_vecs_t xcsv_vecs = {
+    ff_type_internal,
     xcsv_rd_init,
     xcsv_wr_init,
     xcsv_rd_deinit,

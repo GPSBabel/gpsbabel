@@ -405,6 +405,22 @@ disp_vecs(void)
 }
 
 /*
+ * Additional information for V1.
+ * Output format type at front of line.
+ */
+disp_v1(ff_type t)
+{
+	char *tstring;
+		
+	switch (t) {
+		case ff_type_file: tstring = "file"; break;
+		case ff_type_serial: tstring = "serial"; break;
+		case ff_type_internal: tstring = "internal"; break;
+		default: tstring = "unknown"; break;
+	}
+	printf("%s\t", tstring);
+}
+/*
  *  Display the available formats in a format that's easy to machine
  *  parse.   Typically invoked by programs like graphical wrappers to
  *  determine what formats are supported.
@@ -417,13 +433,18 @@ disp_formats(int version)
 
 	switch(version) {
 	case 0:
+	case 1:
 		for (vec = vec_list; vec->vec; vec++) {
+			if (version > 0)
+				disp_v1(vec->vec->type);
 			printf("%s\t%s\t%s\n", vec->name, 
 				vec->extension? vec->extension : "", 
 				vec->desc);
 		}
 		for (svec = style_list; svec->name; svec++) {
 			xcsv_read_internal_style(svec->style_buf);
+			if (version > 0)
+				disp_v1(xcsv_file.type);
 			printf("%s\t%s\t%s\n", svec->name, xcsv_file.extension ? 
 				xcsv_file.extension : "", xcsv_file.description);
 		}

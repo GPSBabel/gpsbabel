@@ -110,6 +110,7 @@ gpl_write(void)
 }
 
 ff_vecs_t gpl_vecs = {
+	ff_type_file,
 	gpl_rd_init,	
 	gpl_wr_init,	
 	gpl_rd_deinit,	

@@ -560,6 +560,7 @@ data_write()
 
 
 ff_vecs_t garmin_vecs = {
+	ff_type_serial,
 	rw_init,
 	rw_init,
 	rw_deinit,

@@ -310,6 +310,7 @@ data_write(void)
 
 
 ff_vecs_t mapopolis_vecs = {
+	ff_type_file,
 	rd_init,
 	wr_init,
 	rd_deinit,

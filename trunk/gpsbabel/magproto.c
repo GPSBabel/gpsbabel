@@ -1343,6 +1343,7 @@ mag_write(void)
 }
 
 ff_vecs_t mag_vecs = {
+	ff_type_serial,
 	mag_rd_init,	
 	mag_wr_init,	
 	mag_deinit,	

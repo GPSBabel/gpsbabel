@@ -1214,6 +1214,7 @@ arglist_t gpx_args[] = {
 };
 
 ff_vecs_t gpx_vecs = {
+	ff_type_file,
 	gpx_rd_init,	
 	gpx_wr_init,	
 	gpx_rd_deinit,	
