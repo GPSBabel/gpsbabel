@@ -34,6 +34,7 @@ static int in_url;
 static int in_icon;
 static int in_urlname;
 static int in_gs_type;
+static int in_gs_name;
 static int in_gs_container;
 static int in_gs_diff;
 static int in_gs_terr;
@@ -54,6 +55,8 @@ static waypoint *wpt_tmp;
 static FILE *fd;
 static FILE *ofd;
 static void *mkshort_handle;
+
+static char *gsshortnames = NULL;
 
 #define MYNAME "GPX"
 #define MY_CBUF 4096
@@ -305,6 +308,11 @@ gpx_start(void *data, const char *el, const char **attr)
 		in_something_else++;
 		start_something_else( el, attr );
 	} 
+	else if (strcmp(el, "groundspeak:name") == 0) {
+		in_gs_name++;
+		in_something_else++;
+		start_something_else( el, attr );
+	} 
 	else if (strcmp(el, "groundspeak:container") == 0) {
 		in_gs_container++;
 		in_something_else++;
@@ -398,8 +406,14 @@ gpx_end(void *data, const char *el)
 		if (in_name && in_wpt) {
 			wpt_tmp->shortname = xstrdup(cdatastr);
 		}
-		if (in_desc && in_wpt) {
-			wpt_tmp->notes = xstrdup(cdatastr);
+		if (gsshortnames) {
+			if (in_gs_name && in_wpt) {
+				wpt_tmp->notes = xstrdup(cdatastr);
+			}
+		} else {
+			if (in_desc && in_wpt) {
+				wpt_tmp->notes = xstrdup(cdatastr);
+			}
 		}
 		if (in_cmt && in_wpt) {
 			wpt_tmp->description = xstrdup(cdatastr);
@@ -477,6 +491,10 @@ gpx_end(void *data, const char *el)
 		in_gs_type--;
 		in_something_else--;
 		end_something_else();
+	} else if (strcmp(el, "groundspeak:name") == 0) {
+		in_gs_name--;
+		in_something_else--;
+		end_something_else();
 	} else if (strcmp(el, "groundspeak:container") == 0) {
 		in_gs_container--;
 		in_something_else--;
@@ -521,6 +539,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 			(in_wpt && in_url) ||
 			(in_wpt && in_urlname) ||
 			(in_wpt && in_gs_type) || 
+			(in_wpt && in_gs_name) || 
 			(in_wpt && in_gs_container) || 
 			(in_wpt && in_gs_diff) || 
 			(in_wpt && in_gs_terr) || 
@@ -830,6 +849,12 @@ gpx_write(void)
 	fprintf(ofd, "</gpx>\n");
 }
 
+static
+arglist_t gpx_args[] = {
+	{ "gsshortnames", &gsshortnames, "Prefer shorter descriptions from Groundspeak files"},
+	{ 0, 0, 0}
+};
+
 ff_vecs_t gpx_vecs = {
 	gpx_rd_init,	
 	gpx_wr_init,	
@@ -837,4 +862,5 @@ ff_vecs_t gpx_vecs = {
 	gpx_wr_deinit,	
 	gpx_read,
 	gpx_write,
+	gpx_args,
 };
