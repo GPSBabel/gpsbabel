@@ -56,7 +56,6 @@ void
 route_disp (const route_head *rh, waypt_cb cb )
 {
 	queue *elem, *tmp;
-//	printf("NEW ROUTE\n");
 	QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
 		waypoint *waypointp;
 		waypointp = (waypoint *) elem;
