@@ -96,7 +96,7 @@ gpsutil_disp(waypoint *wpt)
 		lon < 0.0 ? 'W' : 'E',
 		wpt->position.altitude.altitude_meters,
 		'm', 
-		wpt->description,
+		wpt->description ? wpt->description : "",
 		icon_token);
 }
 
