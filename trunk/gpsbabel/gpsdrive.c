@@ -137,21 +137,27 @@ gpsdrive_waypt_pr(const waypoint *wpt)
 {
 	double lon,lat;
 	char * shortname = NULL;
+	char *isrc, *owpt;
 
 	lon = wpt->position.longitude.degrees;
 	lat = wpt->position.latitude.degrees;
 
-	if ( wpt->shortname )
-		shortname = csv_stringclean(wpt->shortname, ",\"");
-		
-	if (( shortname == NULL ) && wpt->description )
-		shortname = csv_stringclean(wpt->description, ",\"");	
+	isrc = wpt->notes ? wpt->notes : wpt->description;
+	if (global_opts.synthesize_shortnames) {
+		shortname = mkshort(mkshort_wr_handle, isrc);
+	} else {
+		if ( wpt->shortname )
+			shortname = csv_stringclean(wpt->shortname, ",\"");
+			
+		if (( shortname == NULL ) && wpt->description )
+			shortname = csv_stringclean(wpt->description, ",\"");	
 
-	if (( shortname == NULL ) && wpt->notes )
-	    shortname = csv_stringclean(wpt->notes, ",\"");
+		if (( shortname == NULL ) && wpt->notes )
+		    shortname = csv_stringclean(wpt->notes, ",\"");
 
-	if ( shortname )
-		shortname = mkshort(mkshort_wr_handle, shortname);
+		if ( shortname )
+			shortname = mkshort(mkshort_wr_handle, shortname);
+	}
 
 	fprintf(file_out, "%s %08.5f %08.5f\n",
 		shortname,
@@ -167,6 +173,7 @@ static void
 data_write(void)
 {
 	mkshort_wr_handle = mkshort_new_handle();
+	setshort_length(mkshort_wr_handle, 10);
 
 	waypt_disp_all(gpsdrive_waypt_pr);
 	mkshort_del_handle(mkshort_wr_handle);
