@@ -61,6 +61,7 @@ extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t ozi_vecs;
 extern ff_vecs_t nmea_vecs;
 extern ff_vecs_t text_vecs;
+extern ff_vecs_t palmdoc_vecs;
 extern ff_vecs_t html_vecs;
 
 static
@@ -256,6 +257,12 @@ vecs_t vec_list[] = {
 		&html_vecs,
 		"html",
 		"HTML Output",
+		NULL
+	},
+	{
+		&palmdoc_vecs,
+		"palmdoc",
+		"PalmDoc Output",
 		NULL
 	},
 	{

@@ -6,7 +6,7 @@
  *	You may distribute this file under the terms of the Artistic
  *	License, as specified in the README file.
  *
- * $Id: pdb.c,v 1.5 2004-01-19 18:15:22 robertl Exp $
+ * $Id: pdb.c,v 1.6 2004-04-16 16:47:51 parkrrrr Exp $
  */
 /* XXX - The way zero-length records are handled is a bit of a kludge. They
  * shouldn't normally exist, with the exception of expunged records. But,
@@ -865,8 +865,6 @@ pdb_AppendResource(struct pdb *db,
 	return 0;			/* Success */
 }
 
-#if 0
-
 /* pdb_InsertRecord
  * Insert 'newrec' into 'db', just after 'prev'. If 'prev' is NULL,
  * 'newrec' is inserted at the beginning of the list.
@@ -903,6 +901,7 @@ pdb_InsertRecord(struct pdb *db,	/* The database to insert into */
 	return 0;			/* Success */
 }
 
+#if 0
 /* pdb_InsertResource
  * Insert 'newrsrc' into 'db', just after 'prev'. If 'prev' is NULL, 'newrsrc'
  * is inserted at the beginning of the list.

@@ -500,15 +500,48 @@ THE FORMATS
     TEXT
 
         This is a simple human readable version of the data file, handy for
-        listings of any type of waypoint files.
+        listings of any type of waypoint files.  Use the 'nosep' option
+        to suppress the lines of dashes between entries.  Use the 
+        'encrypt' option to encrypt hints from Groundspeak GPX files. 
+
+        The following command line reads a GPX file with Groundspeak extensions
+        and writes a text file with encrypted hints:
+
+        gpsbabel -i gpx -f 12345.gpx -o text,encrypt -F 12345.txt
 
     HTML
 
         HTML output generates a single HTML file of all of the waypoints in
         the input file.  It supports a number of Geocaching GPX extensions,
         as well as filters out potentially harmful HTML from the input file
-        while maintaining almost all of the source HTML formatting.
+        while maintaining almost all of the source HTML formatting.  Use the
+        'stylesheet' option to specify a CSS stylesheet to be used with the 
+        resulting HTML file.  Use the 'encrypt' option to encrypt hints from
+        Groundspeak GPX files.
 
+        The following command line reads a GPX file with Groundspeak extensions
+        and writes an HTML file with encrypted hints that is rendered using a
+        custom stylesheet:
+
+        gpsbabel -i gpx -f 12345.gpx \
+                 -o html,stylesheet=green.css,encrypt -F 12345.html
+
+    PALMDOC
+ 
+        PalmDoc output is similar to Text output, except that it generates 
+        a Palm Database (PDB) file suitable for use with programs like 
+        CSpotRun, TealDoc, AportisDoc, Palm Reader, and others.  The resulting
+        file also contains bookmarks to make it easy to jump to a particular
+        waypoint.  To suppress the dashed lines between waypoints, use the 
+        'nosep' option.  To specify a name for the document, use the 'dbname'
+        option.  Use the 'encrypt' option to encrypt hints from Groundspeak
+        GPX files.
+
+        The following command line reads a GPX file with Groundspeak extensions
+        and writes a Palm document with encrypted hints:
+
+        gpsbabel -i gpx -f 12345.gpx \
+                 -o "palmdoc,dbname=Unfound Geocaches,encrypt" -F 12345.pdb
 
 DATA FILTERS
 
