@@ -87,6 +87,8 @@ data_write(void)
 	queue *elem, *tmp;
 	extern queue waypt_head;
 	GPS_PWay *way;
+	extern int32 gps_save_id;
+	int short_length;
 
 	way = xmalloc(n*sizeof(*way));
 
@@ -106,15 +108,29 @@ data_write(void)
 	 * Fortunately, getting this "wrong" only results in ugly names
 	 * when we're using the synthesize_shortname path.
 	 */
-	setshort_length(10);
+	short_length = 10;
+	switch (gps_save_id) {
+	case 155: 	
+		 	short_length = 20;
+			break;
+	default:
+			short_length = 10;
+			break;
+	}
+	setshort_length(short_length);
 	setshort_mustupper(1);
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypoint *wpt;
 		char *ident;
+		char *src;
 
 		wpt = (waypoint *) elem;
+
+		if(wpt->description) src = wpt->description;
+		if(wpt->notes) src = wpt->notes;
+
 		ident = global_opts.synthesize_shortnames ? 
-				mkshort(wpt->description) : 
+				mkshort(src) : 
 				wpt->shortname;
 
 		strncpy(way[i]->ident,  ident, sizeof(way[i]->ident));
