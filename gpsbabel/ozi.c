@@ -106,7 +106,7 @@ ozi_openfile(char *fname) {
         file_out = NULL;
     }
 
-    file_out = xfopen(tmpname, "w", MYNAME);
+    file_out = xfopen(tmpname, "wb", MYNAME);
 
     xfree(tmpname);
 
@@ -117,12 +117,12 @@ static void
 ozi_track_hdr(const route_head * rte)
 {
     static char *ozi_trk_header = 
-        "OziExplorer Track Point File Version 2.1\n"
-        "WGS 84\n"
-        "Altitude is in Feet\n"
-        "Reserved 3\n" 
-        "0,2,255,ComplimentsOfGPSBabel,0,0,2,8421376\n"
-        "0\n";
+        "OziExplorer Track Point File Version 2.1\r\n"
+        "WGS 84\r\n"
+        "Altitude is in Feet\r\n"
+        "Reserved 3\r\n" 
+        "0,2,255,ComplimentsOfGPSBabel,0,0,2,8421376\r\n"
+        "0\r\n";
 
     ozi_openfile(ozi_ofname);
     fprintf(file_out, ozi_trk_header);
@@ -144,7 +144,7 @@ ozi_track_disp(const waypoint * waypointp)
         alt_feet = (waypointp->altitude * 3.2808);
     }
 
-    fprintf(file_out, "%.6f,%.6f,0,%.0f,%.5f,,\n",
+    fprintf(file_out, "%.6f,%.6f,0,%.0f,%.5f,,\r\n",
             waypointp->latitude, waypointp->longitude, alt_feet, ozi_time);
 }
 
@@ -163,10 +163,10 @@ static void
 ozi_route_hdr(const route_head * rte)
 {
     static char *ozi_route_header = 
-        "OziExplorer Route File Version 1.0\n"
-        "WGS 84\n" 
-        "Reserved 1\n" 
-        "Reserved 2\n";
+        "OziExplorer Route File Version 1.0\r\n"
+        "WGS 84\r\n" 
+        "Reserved 1\r\n" 
+        "Reserved 2\r\n";
 
     /* prologue on 1st pass only */
     if (route_out_count == 0) {
@@ -188,7 +188,7 @@ ozi_route_hdr(const route_head * rte)
      * R, 1, ICP GALHETA,, 16711680 
      */
      
-     fprintf(file_out, "R,%d,%s,%s,\n", 
+     fprintf(file_out, "R,%d,%s,%s,\r\n", 
          route_out_count, 
          rte->rte_name ? rte->rte_name : "", 
          rte->rte_desc ? rte->rte_desc : "");
@@ -232,7 +232,7 @@ ozi_route_disp(const waypoint * waypointp)
  * W,1,7,7,007,-25.581670,-48.316660,36564.54196,10,1,4,0,65535,TR ILHA GALHETA,0,0 
  */
 
-    fprintf(file_out, "W,%d,%d,,%s,%.6f,%.6f,%.5f,0,1,3,0,65535,%s,0,0\n", 
+    fprintf(file_out, "W,%d,%d,,%s,%.6f,%.6f,%.5f,0,1,3,0,65535,%s,0,0\r\n", 
             route_out_count,
             route_wpt_count,
             waypointp->shortname ? waypointp->shortname : "",
@@ -650,7 +650,7 @@ ozi_waypt_pr(const waypoint * wpt)
     index++;
 
     fprintf(file_out,
-            "%d,%s,%.6f,%.6f,%.5f,%d,%d,%d,%d,%d,%s,%d,%d,%d,%.0f,%d,%d,%d\n",
+            "%d,%s,%.6f,%.6f,%.5f,%d,%d,%d,%d,%d,%s,%d,%d,%d,%.0f,%d,%d,%d\r\n",
             index, shortname, wpt->latitude, wpt->longitude, ozi_time, 0,
             1, 3, 0, 65535, description, 0, 0, 0, alt_feet, 6, 0, 17);
 
@@ -663,10 +663,10 @@ static void
 data_write(void)
 {
     static char *ozi_wpt_header = 
-        "OziExplorer Waypoint File Version 1.1\n"
-        "WGS 84\n" 
-        "Reserved 2\n" 
-        "Reserved 3\n";
+        "OziExplorer Waypoint File Version 1.1\r\n"
+        "WGS 84\r\n" 
+        "Reserved 2\r\n" 
+        "Reserved 3\r\n";
 
     track_out_count = route_out_count = 0;
     
