@@ -30,6 +30,12 @@
  * data in this file.
  */
 
+typedef struct {
+	int synthesize_shortnames;
+} global_options;
+
+extern global_options global_opts;
+
 /*
  * A coordinate in space.
  */
@@ -86,6 +92,9 @@ void route_add (waypoint *);
 void waypt_disp_all(waypt_cb);
 unsigned int waypt_count(void);
 void fprintdms(FILE *, coord *, int);
+char *mkshort (const char *);
+void setshort_length(int n);
+void setshort_badchars(const char *);
 
 typedef struct ff_vecs {
 	ff_init rd_init;
