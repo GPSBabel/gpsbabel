@@ -492,6 +492,7 @@ void xfprintf(const char *errtxt, FILE *stream, const char *format, ...);
 void xfputs(const char *errtxt, const char *s, FILE *stream);
 
 int case_ignore_strcmp(const char *s1, const char *s2);
+int case_ignore_strncmp(const char *s1, const char *s2, int n);
 
 char *strsub(const char *s, const char *search, const char *replace);
 char *gstrsub(const char *s, const char *search, const char *replace);

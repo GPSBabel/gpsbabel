@@ -149,18 +149,23 @@ mkshort_del_handle(void *h)
 	mkshort_handle *hdr = h;
 	int i;
 
-	if (hdr) {
-		for (i = 0; i < PRIME; i++) {
-			queue *e, *t;
-			QUEUE_FOR_EACH(&hdr->namelist[i], e, t) {
-				uniq_shortname *s = (uniq_shortname *) e;
-				dequeue(e);
-				xfree(s->orig_shortname);
-				xfree(s);
+	if (!hdr)
+		return;
+
+	for (i = 0; i < PRIME; i++) {
+		queue *e, *t;
+		QUEUE_FOR_EACH(&hdr->namelist[i], e, t) {
+			uniq_shortname *s = (uniq_shortname *) e;
+			if (global_opts.verbose_status >= 2 && s->conflictctr) {
+				fprintf(stderr, "%d Output name conflicts: '%s'\n",  
+					s->conflictctr, s->orig_shortname);
 			}
+			dequeue(e);
+			xfree(s->orig_shortname);
+			xfree(s);
 		}
-		xfree(hdr);
 	}
+	xfree(hdr);
 }
 
 /*
@@ -280,7 +285,7 @@ mkshort(void *h, const char *istring)
 	nstring = xxstrdup(ostring, file, line);
 	l = strlen (nstring);
 	while (l > 0) {
-		if (strncmp(&nstring[l], " by ",4) == 0)  {
+		if (case_ignore_strncmp(&nstring[l], " by ",4) == 0)  {
 			nstring[l] = 0;
 			break;
 		}
