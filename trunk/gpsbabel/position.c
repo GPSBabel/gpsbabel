@@ -33,6 +33,7 @@ static char *distopt;
 static char *latopt;
 static char *lonopt;
 static char *exclopt;
+static char *nosort;
 
 waypoint * home_pos;
 
@@ -56,6 +57,8 @@ arglist_t radius_args[] = {
 	{"distance", &distopt, "Maximum distance from center",
 		ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
 	{"exclude", &exclopt,  "Exclude points close to center",
+		ARGTYPE_BOOL },
+	{"nosort", &nosort,    "Inhibit sort by distance to center.",
 		ARGTYPE_BOOL },
 	{0, 0, 0, 0}
 };
@@ -233,7 +236,9 @@ radius_process(void)
 		i++;
 	}
 
-	qsort(comp, wc, sizeof(waypoint *), dist_comp);
+	if (!nosort) {
+		qsort(comp, wc, sizeof(waypoint *), dist_comp);
+	}
 
 	/*
 	 * The comp array is now sorted by distance.   As we run through it,
