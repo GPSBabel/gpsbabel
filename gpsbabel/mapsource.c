@@ -607,7 +607,6 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	/* might need to change this to handle version dependent icon handling */
 	icon = mps_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
 
-		fprintf(stderr, "%s ", wpt->icon_descr);
 	if (get_cache_icon(wpt) /* && wpt->icon_descr && (strcmp(wpt->icon_descr, "Geocache Found") != 0)*/) {
 		icon = mps_find_icon_number_from_desc(get_cache_icon(wpt), MAPSOURCE);
 	}
