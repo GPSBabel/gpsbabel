@@ -181,6 +181,16 @@ typedef struct {
 	int rte_waypt_ct;		/* # waypoints in waypoint list */
 } route_head;
 
+/*
+ *  Bounding box information.
+ */
+typedef struct {
+	double max_lat;
+	double max_lon;
+	double min_lat;
+	double min_lon;
+} bounds;
+
 typedef void (*ff_init) (char const *);
 typedef void (*ff_deinit) (void);
 typedef void (*ff_read) (void);
@@ -207,6 +217,7 @@ waypoint * waypt_new(void);
 void waypt_del (waypoint *);
 void waypt_free (waypoint *);
 void waypt_disp_all(waypt_cb);
+void waypt_compute_bounds(bounds *);
 void waypt_flush(queue *);
 void waypt_flush_all(void);
 unsigned int waypt_count(void);
