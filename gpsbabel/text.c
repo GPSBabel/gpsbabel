@@ -29,6 +29,7 @@ static void *mkshort_handle;
 
 static char *suppresssep = NULL;
 static char *encrypt = NULL;
+static char *includelogs = NULL;
 
 #define MYNAME "TEXT"
 
@@ -38,6 +39,8 @@ arglist_t text_args[] = {
 		"Suppress separator lines between waypoints", ARGTYPE_BOOL },
 	{ "encrypt", &encrypt,
 		"Encrypt hints using ROT13", ARGTYPE_BOOL },
+	{ "logs", &includelogs,
+		 "Include groundspeak logs if present", ARGTYPE_BOOL },
 	{0, 0, 0, 0}
 };
 
@@ -111,6 +114,90 @@ text_disp(const waypoint *wpt)
 	}
 	else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
 		fprintf (file_out, "%s\n", wpt->notes);
+	}
+
+	if ( includelogs && wpt->gpx_extras ) {
+		xml_tag *root = wpt->gpx_extras;
+		xml_tag *curlog = NULL;
+		xml_tag *logpart = NULL;
+		curlog = xml_findfirst( root, "groundspeak:log" );
+		while ( curlog ) {
+			fprintf( file_out, "\n" );
+			time_t logtime = 0;
+			struct tm *logtm = NULL;
+			
+			logpart = xml_findfirst( curlog, "groundspeak:type" );
+			if ( logpart ) {
+				fprintf( file_out, "%s by ", logpart->cdata );
+			}
+			
+			logpart = xml_findfirst( curlog, "groundspeak:finder" );
+			if ( logpart ) {
+				fprintf( file_out, "%s on ", logpart->cdata );
+			}
+			
+			logpart = xml_findfirst( curlog, "groundspeak:date" );
+			if ( logpart ) {
+				logtime = xml_parse_time( logpart->cdata );
+				logtm = localtime( &logtime );
+				if ( logtm ) {
+					fprintf( file_out, 
+						"%2.2d/%2.2d/%4.4d\n",
+						logtm->tm_mon+1,
+						logtm->tm_mday,
+						logtm->tm_year+1900
+						);
+				}
+			}
+			
+			logpart = xml_findfirst( curlog, "groundspeak:log_wpt" );
+			if ( logpart ) {
+				char *coordstr = NULL;
+				float lat = 0;
+				int latdeg = 0;
+				float lon = 0;
+				int londeg = 0;
+				coordstr = xml_attribute( logpart, "lat" );
+				if ( coordstr ) {
+					lat = atof( coordstr );
+				}
+			        coordstr = xml_attribute( logpart, "lon" );
+				if ( coordstr ) {
+					lon = atof( coordstr );
+				}
+				latdeg = abs(lat);
+				londeg = abs(lon);
+				
+				fprintf( file_out,
+					"%c %d %.3f' %c %d %.3f'\n",
+				
+					lat < 0 ? 'S' : 'N', latdeg, 60.0 * (fabs(lat) - latdeg), 
+					lon < 0 ? 'W' : 'E', londeg, 60.0 * (fabs(lon) - londeg)
+				);
+			}
+			
+			logpart = xml_findfirst( curlog, "groundspeak:text" );
+			if ( logpart ) {
+				char *encstr = NULL;
+				char *s = NULL;
+				int encoded = 0;
+				encstr = xml_attribute( logpart, "encoded" );
+				encoded = (encstr[0] != 'F');
+				
+				if ( encrypt && encoded ) {
+					s = rot13( logpart->cdata );
+				}
+				else {
+					s = xstrdup( logpart->cdata );
+				}
+					
+				fprintf( file_out, "%s", s ); 
+				xfree( s );
+			}
+
+			fprintf( file_out, "\n" );
+			curlog = xml_findnext( root, curlog, "groundspeak:log" );
+		}
 	}
 	if (! suppresssep) 
 		fprintf(file_out, "-----------------------------------------------------------------------------\n");

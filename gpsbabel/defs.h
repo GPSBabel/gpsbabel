@@ -435,6 +435,13 @@ char * strip_nastyhtml(const char * in);
 char * str_utf8_to_cp1252( const char * str );
 char * str_utf8_to_ascii( const char * str );
 
+/* this lives in gpx.c */
+time_t xml_parse_time( char *cdatastr );
+	
+xml_tag *xml_findfirst( xml_tag *root, char *tagname );
+xml_tag *xml_findnext( xml_tag *root, xml_tag *cur, char *tagname );
+char *xml_attribute( xml_tag *tag, char *attrname );
+
 char * rot13( const char *str );
 
 /*
