@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "defs.h"
+#include "grtcirc.h"
 
 #ifndef M_PI
 #  define M_PI 3.14159265358979323846
@@ -66,16 +67,12 @@ arglist_t radius_args[] = {
 static double
 gc_distance(double lat1, double lon1, double lat2, double lon2)
 {
-	double rlat1, rlat2, rlon1, rlon2;
-
-	/* convert to radians */
-	rlat1 = (lat1 * M_PI) / 180.0;
-	rlon1 = (lon1 * M_PI) / 180.0;
-	rlat2 = (lat2 * M_PI) / 180.0;
-	rlon2 = (lon2 * M_PI) / 180.0;
-
-	return (acos((sin(rlat1) * sin(rlat2)) +
-		(cos(rlat1) * cos(rlat2) * cos(rlon1 - rlon2))));
+	return gcdist( 
+	    (lat1 * M_PI) / 180.0,
+	    (lon1 * M_PI) / 180.0,
+	    (lat2 * M_PI) / 180.0,
+	    (lon2 * M_PI) / 180.0
+	    );
 }
 
 static int
