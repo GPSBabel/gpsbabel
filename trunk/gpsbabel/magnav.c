@@ -52,6 +52,8 @@ struct record {
 static FILE *file_in;
 static FILE *file_out;
 static const char *out_fname;
+static void *mkshort_handle;
+
 struct pdb *opdb;
 struct pdb_record *opdb_rec;
 
@@ -78,12 +80,15 @@ wr_init(const char *fname, const char *args)
 	if (file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
+	mkshort_handle = mkshort_new_handle();
+	setshort_length(mkshort_handle, 20);
 }
 
 static void
 wr_deinit(void)
 {
 	fclose(file_out);
+	mkshort_del_handle(mkshort_handle);
 }
 
 static void
@@ -144,7 +149,10 @@ my_writewpt(const waypoint *wpt)
 	struct tm *tm;
 	char *vdata;
 	time_t tm_t;
-	
+	const char *sn = global_opts.synthesize_shortnames ?
+		mkshort(mkshort_handle, wpt->description) :
+		wpt->shortname;
+
 	rec = xcalloc(sizeof(*rec)+56,1);
 	
 	if ( wpt->creation_time ) {
@@ -181,8 +189,8 @@ my_writewpt(const waypoint *wpt)
 	rec->unknown3 = 'a';
 	
 	vdata = (char *)rec + sizeof(*rec);
-	if ( wpt->shortname ) {
-		strncpy( vdata, wpt->shortname, 21 );
+	if ( sn ) {
+		strncpy( vdata, sn, 21 );
 		vdata[20] = '\0';
 	}
 	else { 
