@@ -456,7 +456,7 @@ int32 GPS_Serial_Chars_Ready(int32 fd)
     FD_SET(fd,&rec);
 
     t.tv_sec  = 0;
-    t.tv_usec = 0;
+    t.tv_usec = 1000;
     (void) select(fd+1,&rec,NULL,NULL,&t);
     if(FD_ISSET(fd,&rec))
 	return 1;
