@@ -168,8 +168,11 @@ ce_start(void *data, const char *el, const char **attr)
 static void
 ce_end(void *data, const char *el)
 {
-	if (0 == strcmp(el, "Route"))
+	if (0 == strcmp(el, "Route")) {
+		if (!doing_rtes)
+			ce_free_route(currentRoute);
 		inRoute = 0;
+	}
 	else if (0 == strcmp(el, "Mark"))
 		inMark = 0;
 }
