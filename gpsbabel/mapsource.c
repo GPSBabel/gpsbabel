@@ -257,7 +257,7 @@ mps_waypt_pr(const waypoint *wpt)
 
 	icon = mps_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
 
-	if (get_cache_icon(wpt) && (strcmp(wpt->icon_descr, "Geocache Found") != 0)) {
+	if (get_cache_icon(wpt) && wpt->icon_descr && (strcmp(wpt->icon_descr, "Geocache Found") != 0)) {
 		icon = mps_find_icon_number_from_desc(get_cache_icon(wpt), MAPSOURCE);
 	}
 
