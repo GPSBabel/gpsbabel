@@ -36,6 +36,7 @@ static char *getposn = NULL;
 static char *poweroff = NULL;
 static char *snlen = NULL;
 static char *snwhiteopt = NULL;
+static char *deficon = NULL;
 
 static
 arglist_t garmin_args[] = {
@@ -43,6 +44,7 @@ arglist_t garmin_args[] = {
 		ARGTYPE_INT },
 	{ "snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames",
 		NULL, ARGTYPE_BOOL},
+	{ "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
 	{ "get_posn", &getposn, "Return current position as a waypoint", 
 		NULL, ARGTYPE_BOOL},
 	{ "power_off", &poweroff, "Command unit to power itself down", 
@@ -452,10 +454,14 @@ waypoint_write(void)
 		way[i]->lon = wpt->longitude;
 		way[i]->lat = wpt->latitude;
 
-		if (get_cache_icon(wpt)) {
-			icon = mps_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
+		if (deficon) {
+			icon = mps_find_icon_number_from_desc(deficon, PCX);
 		} else {
-			icon = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
+			if (get_cache_icon(wpt)) {
+				icon = mps_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
+			} else {
+				icon = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
+			}
 		}
 
 		/* For units that support tiny numbers of waypoints, just
