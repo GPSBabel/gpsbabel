@@ -77,9 +77,10 @@ waypt_add(waypoint *wpt)
 			xfree(wpt->description);
 		if (wpt->notes != NULL) {
 			wpt->description = xstrdup(wpt->notes);
-		}
-		if (wpt->shortname != NULL) {
-			wpt->description = xstrdup(wpt->shortname);
+		} else  {
+			if (wpt->shortname != NULL) {
+				wpt->description = xstrdup(wpt->shortname);
+			}
 		}
 	}
 	waypt_ct++;
