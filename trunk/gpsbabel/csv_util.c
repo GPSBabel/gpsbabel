@@ -22,6 +22,7 @@
 #include <ctype.h>
 #include "defs.h"
 #include "csv_util.h"
+#include "grtcirc.h"
 
 #define MYNAME "CSV_UTIL"
 
@@ -38,6 +39,10 @@
 extern char *xcsv_urlbase;
 extern char *prefer_shortnames;
 
+static double pathdist = 0;
+static double oldlon = 999;
+static double oldlat = 999;
+    
 static int waypt_out_count;
 
 /*********************************************************************/
@@ -695,6 +700,12 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     } else
     if (strcmp(fmp->key, "GEOCACHE_CONTAINER") == 0) {
        wpt->gc_data.container = gs_mkcont(s);
+    } else
+    if ( strcmp( fmp->key, "PATH_DISTANCE_MILES") == 0) {
+       /* Ignored on input */
+    } else
+    if ( strcmp( fmp->key, "PATH_DISTANCE_KM") == 0 ) {
+       /* Ignored on input */
     } else {
        warning( MYNAME ": Unknown style directive: %s\n", fmp->key);
     }
@@ -776,6 +787,14 @@ xcsv_data_read(void)
     } while (!feof(xcsv_file.xcsvfp));
 }
 
+static void
+xcsv_resetpathlen()
+{
+    pathdist = 0;
+    oldlat = 999;
+    oldlon = 999;
+}
+
 /*****************************************************************************/
 /* xcsv_waypt_pr() - write output file, handling output conversions          */
 /*                  (the output meat)                                        */
@@ -791,6 +810,13 @@ xcsv_waypt_pr(const waypoint *wpt)
     int i;
     field_map_t *fmp;
     queue *elem, *tmp;
+    
+    if ( oldlon < 900 ) {
+	pathdist += tomiles(gcdist(oldlat*M_PI/180,oldlon*M_PI/180,
+			wpt->latitude*M_PI/180,wpt->longitude*M_PI/180));
+    }
+    oldlon = wpt->longitude;
+    oldlat = wpt->latitude;
 
     if (strcmp(xcsv_file.field_delimiter, "\\w") == 0)
         write_delimiter = " ";
@@ -980,6 +1006,16 @@ xcsv_waypt_pr(const waypoint *wpt)
             sprintf(buff, fmp->printfc,
               wpt->altitude);
         } else
+		
+        /* DISTANCE CONVERSIONS**********************************************/
+	if (strcmp(fmp->key, "PATH_DISTANCE_MILES") == 0) {
+            /* path (route/track) distance in miles */
+            sprintf( buff, fmp->printfc, pathdist );
+	} else
+	if (strcmp(fmp->key, "PATH_DISTANCE_KM") == 0) {
+            /* path (route/track) distance in  */
+            sprintf( buff, fmp->printfc, pathdist * 5280*12*2.54/100/1000 );
+	} else
 
         /* TIME CONVERSIONS**************************************************/
         if (strcmp(fmp->key, "EXCEL_TIME") == 0) {
@@ -1063,8 +1099,8 @@ xcsv_data_write(void)
     }
 
     waypt_disp_all(xcsv_waypt_pr);
-    route_disp_all(xcsv_noop,xcsv_noop,xcsv_waypt_pr);
-    track_disp_all(xcsv_noop,xcsv_noop,xcsv_waypt_pr);
+    route_disp_all(xcsv_resetpathlen,xcsv_noop,xcsv_waypt_pr);
+    track_disp_all(xcsv_resetpathlen,xcsv_noop,xcsv_waypt_pr);
 
     /* output epilogue lines, if any. */
     QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {
