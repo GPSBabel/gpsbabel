@@ -19,10 +19,10 @@
 
 /* function prototypes */
 char *
-csv_stringtrim(char *string, const char *enclosure);
+csv_stringtrim(const char *string, const char *enclosure);
 
 char *
-csv_lineparse(char *stringstart, const char *delimited_by, const char *enclosed_in, const int line_no);
+csv_lineparse(const char *stringstart, const char *delimited_by, const char *enclosed_in, const int line_no);
 
 char *
-csv_stringclean(char *string, const char *chararray);
+csv_stringclean(const char *string, const char *chararray);

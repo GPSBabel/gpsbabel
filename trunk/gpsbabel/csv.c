@@ -72,12 +72,12 @@ data_read(void)
 		linecount++;
 		memset(&buff, '\0', sizeof(buff));
 		fgets(buff, sizeof(buff), file_in);
-
+                 
 		if (strlen(buff)) {
 
 		    wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
-
 		    s = buff;
+
 		    /* data delimited by commas, not enclosed */
 		    s = csv_lineparse(s, ",", "", linecount);
 
@@ -92,8 +92,7 @@ data_read(void)
 				wpt_tmp->position.longitude.degrees = atof(s);
 			    	break;
 			case 2:
-			    	wpt_tmp->description = xstrdup(s);
-		    		wpt_tmp->description = csv_stringtrim(wpt_tmp->description, " ");
+		    		wpt_tmp->description = csv_stringtrim(s, " ");
 		    		break;
 			default:
 			    	fprintf (stderr, "%s: Warning: unmapped data fields on line %d.\n", 
@@ -106,6 +105,10 @@ data_read(void)
 		}
 	    
 		wpt_tmp->creation_time = time(NULL);
+		
+		/* We'll make up our own shortname. */
+		wpt_tmp->shortname = mkshort(wpt_tmp->description);
+		
 		waypt_add(wpt_tmp);
 
 	} else {
@@ -116,29 +119,32 @@ data_read(void)
 }
 
 static void
-gpsutil_disp(waypoint *wpt)
+csv_waypt_pr(const waypoint *wpt)
 {
 	double lon,lat;
+	char * description = NULL;
 
 	lon = wpt->position.longitude.degrees;
 	lat = wpt->position.latitude.degrees;
 
         if (wpt->description) 
-	    wpt->description = csv_stringclean(wpt->description, ",\"");
+	    description = csv_stringclean(wpt->description, ",\"");
 
 	fprintf(file_out, "%08.5f, %08.5f, %s\n",
 		lat,
 		lon,
-		wpt->description);
+		description);
+		
+	if (description)
+		free (description);
 
 }
 
 static void
 data_write(void)
 {
-	waypt_disp_all(gpsutil_disp);
+	waypt_disp_all(csv_waypt_pr);
 }
-
 
 ff_vecs_t csv_vecs = {
 	rd_init,
