@@ -196,7 +196,6 @@ psit_wr_init(const char *fname)
 	psit_file_out = fopen(fname, "w");
 	if (psit_file_out == NULL) {
 		fatal(MYNAME ": '%s' for writing\n", fname);
-		exit(1);
 	}
 }
 
