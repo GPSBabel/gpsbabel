@@ -401,7 +401,7 @@ mapsend_waypt_pr(const waypoint *waypointp)
 		mkshort(mkshort_handle, waypointp->description) :
 	       	waypointp->shortname;
 
-	c = strlen(sn);
+	c = sn ? strlen(sn) : 0;
 	fwrite(&c, 1, 1, mapsend_file_out);
 	fwrite(sn, c, 1, mapsend_file_out);
 
@@ -496,7 +496,7 @@ mapsend_route_disp(const waypoint *waypointp)
 	route_wp_count++;
 	
 	/* waypoint name */
-	c = strlen(waypointp->shortname);
+	c = waypointp->shortname ? strlen(waypointp->shortname) : 0;
 	fwrite(&c, 1, 1, mapsend_file_out);
 	fwrite(waypointp->shortname, c, 1, mapsend_file_out);
 	
