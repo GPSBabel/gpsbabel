@@ -24,7 +24,6 @@
 #include "jeeps/gps.h"
 
 #define MYNAME "GARMIN" 
-static FILE *file_in;
 static const char *portname;
 
 static void
@@ -40,7 +39,6 @@ rw_init(const char *fname)
 static void
 rw_deinit(void)
 {
-	fclose(file_in);
 }
 
 static void
@@ -112,8 +110,6 @@ data_write(void)
 		GPS_Way_Del(&way[i]);
 	}
 	free(way);
-
-
 }
 
 ff_vecs_t garmin_vecs = {
