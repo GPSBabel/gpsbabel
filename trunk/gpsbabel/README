@@ -773,6 +773,22 @@ THE FORMATS
 
         gpsbabel -i google -f google_map.js -o gpx -F google_map.gpx
 
+    AN1
+
+        This format supports the DeLorme ".an1" drawing file format.  It
+        can currently be used to either read or write drawing files.  If
+        you use this format to create drawing files with routes or waypoints
+        from another source, it will currently create "Red Flag" symbols 
+        for waypoints, and thick red lines for routes or tracks.  It is
+        possible to merge two drawing layers by doing something like this:
+
+        gpsbabel -i an1 -f one.an1 -f two.an1 -o an1 -F merged.an1
+
+        Currently, GPSBabel only writes drawing layers.  If your input
+        file is a road, track, trail, or waypoint layer, you should not
+        attempt to write to an .an1 file as the results may be 
+        unpredictable. 
+
 DATA FILTERS
 
 	GPSBabel supports data filtering.  Data filters are invoked from

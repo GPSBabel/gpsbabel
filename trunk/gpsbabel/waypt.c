@@ -66,6 +66,10 @@ waypt_dupe(const waypoint *wpt)
 	 */
 	tmp->Q.next = tmp->Q.prev = NULL;
 	tmp->gpx_extras = NULL;
+	if ( wpt->an1_extras ) {
+		wpt->an1_extras->copy((void **)(&tmp->an1_extras), 
+			 (void *)wpt->an1_extras );
+	}
 
 	return tmp;
 }
@@ -269,6 +273,10 @@ waypt_free( waypoint *wpt )
 	}
 	if (wpt->gc_data.desc_long.utfstring) {
 		xfree(wpt->gc_data.desc_long.utfstring);
+	}
+	if ( wpt->an1_extras ) {
+		(*(wpt->an1_extras->destroy))((void *)wpt->an1_extras );
+		xfree( wpt->an1_extras );
 	}
 	xfree(wpt);	
 }
