@@ -26,8 +26,6 @@
 
 #define MYNAME "GPL"
 
-extern gpsdata_type objective;
-
 typedef struct gpl_point {
 	unsigned int status;
 	unsigned int dummy1;
