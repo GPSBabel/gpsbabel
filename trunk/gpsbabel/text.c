@@ -109,7 +109,7 @@ text_disp(const waypoint *wpt)
 			xfree( hint );
 		}
 	}
-	else if (strcmp(wpt->notes,wpt->description)) {
+	else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
 		fprintf (file_out, "%s\n", wpt->notes);
 	}
 	if (! suppresssep) 
