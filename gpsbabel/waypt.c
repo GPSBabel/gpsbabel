@@ -53,6 +53,7 @@ waypt_dupe(waypoint *wpt)
 
 	return tmp;
 }
+
 void
 waypt_add(waypoint *wpt)
 {
@@ -190,21 +191,14 @@ void
 waypt_flush( queue *head )
 {
 	queue *elem, *tmp;
-	waypoint *last = NULL;
-			
+
+	queue *q;
 	QUEUE_FOR_EACH(head, elem, tmp) {
-		if ( last ) {
-			waypt_free(last);
-		}
-		last = (waypoint *)elem;
-        }
-	
-	if ( last ) {
-		waypt_free(last);
+		q = dequeue(elem);
+		waypt_free((waypoint *) q);
 	}
-	
-	QUEUE_INIT(head);
 }
+
 void
 waypt_flush_all()
 {

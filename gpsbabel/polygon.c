@@ -24,7 +24,6 @@
 
 extern queue waypt_head;
 
-static double pos_dist;
 static char *polyfileopt = NULL;
 static char *exclopt = NULL;
 

@@ -35,7 +35,6 @@ extern int
 mps_find_icon_number_from_desc(const char *desc, 
 	garmin_formats_e garmin_format);
 
-
 /* MapSource 4.13 */
 static icon_mapping_t icon_table[] = {
 /*	  mps    pcx    desc */
