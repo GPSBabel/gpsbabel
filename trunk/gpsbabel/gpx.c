@@ -980,31 +980,6 @@ gpx_read(void)
 #endif /* NO_EXPAT */
 }
 
-/*
- *
- */
-static
-void
-gpx_write_time(const time_t timep, char *elname)
-{
-	struct tm *tm = gmtime(&timep);
-	
-	if (!tm)
-		return;
-	
-	fprintf(ofd, "<%s>%02d-%02d-%02dT%02d:%02d:%02dZ</%s>\n",
-		elname,
-		tm->tm_year+1900, 
-		tm->tm_mon+1, 
-		tm->tm_mday, 
-		tm->tm_hour, 
-		tm->tm_min, 
-		tm->tm_sec,
-		elname
-	);
-
-}
-
 static void
 fprint_tag_and_attrs( char *prefix, char *suffix, xml_tag *tag )
 {
@@ -1041,7 +1016,7 @@ fprint_xml_chain( xml_tag *tag, const waypoint *wpt )
 			}
 			if ( strcmp(tag->tagname, "groundspeak:cache" ) == 0 
 					&& wpt->gc_data.exported) {
-				gpx_write_time( wpt->gc_data.exported, 
+				xml_write_time( ofd, wpt->gc_data.exported, 
 						"groundspeak:exported" );
 			}
 			fprintf( ofd, "</%s>", tag->tagname);
@@ -1114,7 +1089,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 		waypointp->latitude,
 		waypointp->longitude);
 	if (waypointp->creation_time) {
-		gpx_write_time(waypointp->creation_time, "time");
+		xml_write_time(ofd, waypointp->creation_time, "time");
 	}
 	if (waypointp->altitude != unknown_alt) {
 		fprintf(ofd, "  <ele>%f</ele>\n",
@@ -1161,7 +1136,7 @@ gpx_track_disp(const waypoint *waypointp)
 			 waypointp->altitude);
 	}
 	if (waypointp->creation_time) {
-		gpx_write_time(waypointp->creation_time,"time");
+		xml_write_time(ofd, waypointp->creation_time,"time");
 	}
 	fprintf(ofd, "</trkpt>\n");
 }
@@ -1202,7 +1177,7 @@ gpx_route_disp(const waypoint *waypointp)
 			 waypointp->altitude);
 	}
 	if (waypointp->creation_time) {
-		gpx_write_time(waypointp->creation_time,"time");
+		xml_write_time(ofd, waypointp->creation_time,"time");
 	}
 	write_optional_xml_entity(ofd, "    ", "name", waypointp->shortname);
 	write_optional_xml_entity(ofd, "    ", "cmt", waypointp->description);
@@ -1251,7 +1226,7 @@ gpx_write(void)
 	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/1/0\"\n");
 	fprintf(ofd, "xsi:schemaLocation=\"%s\">\n", xsi_schema_loc ? xsi_schema_loc : DEFAULT_XSI_SCHEMA_LOC);
 
-	gpx_write_time( now, "time" );
+	xml_write_time( ofd, now, "time" );
 	waypt_compute_bounds(&bounds);
 	if (bounds.max_lat  > -360) {
 		fprintf(ofd, "<bounds minlat=\"%0.9f\" minlon =\"%0.9f\" "
