@@ -29,9 +29,12 @@ static const char *portname;
 static void
 rw_init(const char *fname, const char *opts)
 {
-	if (global_opts.debug_level > 1)  {
+	if (global_opts.debug_level > 0)  {
 		GPS_Enable_Warning();
 		GPS_Enable_User();
+		GPS_Enable_Diagnose();
+	}
+	if (global_opts.debug_level > 1)  {
 		GPS_Enable_Diagnose();
 	}
 	GPS_Enable_Error();
