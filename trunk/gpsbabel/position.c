@@ -221,7 +221,13 @@ position_process_route(const route_head * rh) {
 }
 
 static void 
-position_noop(){
+position_noop_w(const waypoint *w)
+{
+}
+
+static void 
+position_noop_t(const route_head *h)
+{
 }
 
 void position_process() 
@@ -231,8 +237,8 @@ void position_process()
 	if (i)
 		position_runqueue(&waypt_head, i, wptdata);
 	
-	route_disp_all(position_process_route, position_noop, position_noop);
-	track_disp_all(position_process_route, position_noop, position_noop);
+	route_disp_all(position_process_route, position_noop_t, position_noop_w);
+	track_disp_all(position_process_route, position_noop_t, position_noop_w);
 }
 
 void

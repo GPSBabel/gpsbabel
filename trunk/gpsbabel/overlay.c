@@ -223,7 +223,7 @@ void ovl_read(void)
   char   *pstr;
   int     keyw,i;
   double  rwert;
-  route_head *route_head;
+  route_head *route_head = NULL;
   waypoint   *wpt;
   int      sym_cnt;
 
@@ -568,10 +568,12 @@ void symbol_deinit(const route_head *hd)
   queue *elem, *tmp;
   waypoint *waypointp;
   int i;
-  double lat1, lon1, lat2, lon2;
+  double lat1,lon1,lat2,lon2;
   double lats,lons,late,lone;
   double dist,d,dd;
 
+  lat1 = lon1 = lat2 = lon2 = 0.0;
+  lats = lons = late = lone = 0.0;
   dist = 0.0;
   i = 0;
   QUEUE_FOR_EACH(&(hd->waypoint_list), elem, tmp)

@@ -25,7 +25,7 @@ static char *script = NULL;
 
 FILE *fd;
 
-static long serial = 0;
+static int serial = 0;
 
 #define MYNAME "google"
 #define MY_CBUF 4096

@@ -454,5 +454,6 @@ ff_vecs_t nmea_vecs = {
 	nmea_wr_deinit,	
 	nmea_read,
 	nmea_write,
+	NULL,
 	NULL
 };

@@ -288,7 +288,7 @@ lowranceusr_waypt_pr(const waypoint *wpt)
 	int alt = wpt->altitude;
 
 	/* our personal waypoint counter */
-	my_fwrite2(&waypt_out_count, file_out);
+	my_fwrite2((short *) &waypt_out_count, file_out);
 	waypt_out_count++;
 
 	Lat = lat_deg_to_mm(wpt->latitude);

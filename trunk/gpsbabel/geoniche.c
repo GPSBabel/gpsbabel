@@ -43,7 +43,7 @@ arglist_t Args[] = {
 	    "Database name (filename)", NULL, ARGTYPE_STRING },
 	{"category", &Arg_category,
 	    "Category name (Cache)", NULL, ARGTYPE_STRING },
-	{0, 0, 0, 0 }
+	{0, 0, 0, 0, 0 }
 };
 
 #define	ARG_FREE(X) do { if (X) { xfree(X); X = NULL; } } while (0)
