@@ -74,6 +74,7 @@ extern ff_vecs_t hiketech_vecs;
 extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t overlay_vecs;
+extern ff_vecs_t kml_vecs;
 extern ff_vecs_t google_vecs;
 
 static
@@ -332,6 +333,12 @@ vecs_t vec_list[] = {
                 NULL
         },
         {
+                &kml_vecs,
+                "kml",
+                "Keyhole Markup Language",
+                NULL
+	},
+	{
                 &vcf_vecs,
                 "vcard",
                 "Vcard Output (for iPod)",
