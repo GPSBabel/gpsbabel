@@ -301,6 +301,34 @@ The fields used by the XCSV parser are as follows:
    
    example: IFIELD TIMET_TIME,"","%ld"
 
+ o GEOCACHE_DIFF
+   GEOCACHE_DIFF is valid only for geocaches and represents a DOUBLE 
+   PRECISION FLOAT.  A "three and a half star" cache would therefore be "3.5"
+
+   example: IFIELD GEOCACHE_DIFF,"","%3.1f"
+
+ o GEOCACHE_TERR
+   GEOCACHE_TERR is valid only for geocaches and represents a DOUBLE 
+   PRECISION FLOAT.  A "three and a half star" cache would therefore be "3.5"
+
+   example: IFIELD GEOCACHE_TERR,"","%3.1f"
+
+ o GEOCACHE_CONTAINER
+   GEOCACHE_CONTAINER is valid only for geocaches and is heavily influenced
+   by the Groundspeak container types.   Examples would include "Micro" 
+   and "Virtual".
+
+   example: GEOCACHE_CONTAINER,"","%s"
+
+ o GEOCACHE_TYPE
+   GEOCACHE_TYPE is valid only for geocaches and is heavily influenced
+   by the Groundspeak cache types.   Examples would include "Event cache" 
+   and "Multi-Cache".
+
+   example: GEOCACHE_TYPE,"","%s"
+
+
+
 
 EXAMPLES:
 --------
