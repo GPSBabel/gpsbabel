@@ -1,11 +1,11 @@
 # add -DDEBUG_MEM to turn on memory allocation logging
-CFLAGS=$(EXTRA_CFLAGS) -g -Icoldsync
+CFLAGS=$(EXTRA_CFLAGS) -g -Icoldsync 
 INSTALL_TARGETDIR=/usr/local/
 
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	gpsutil.o pcx.o cetus.o copilot.o gpspilot.o magnav.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o \
-	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o
+	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o
 
 FILTERS=position.o duplicate.o
 
@@ -71,6 +71,7 @@ release:
 # Machine generated from here down.   
 
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
+quovadis.o: quovadis.c defs.h queue.h coldsync/palm.h coldsync/pdb.h quovadis.h
 copilot.o: copilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 csv_util.o: csv_util.c defs.h queue.h csv_util.h
 duplicate.o: duplicate.c defs.h queue.h
