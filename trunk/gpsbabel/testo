@@ -1,5 +1,4 @@
-
-PNAME=./gpsbabel
+PNAME=${PNAME:-./gpsbabel}
 TMPDIR=/tmp/gpsbabel.$$
 mkdir -p $TMPDIR
 trap "rm -fr $TMPDIR" 0 1 2 3 15
