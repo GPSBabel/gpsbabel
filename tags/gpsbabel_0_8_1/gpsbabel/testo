@@ -1,0 +1,45 @@
+PNAME=./gpsbabel
+
+# Geocaching .loc
+${PNAME} -i geo -f geocaching.loc -o geo -F /tmp/gl.loc
+diff /tmp/gl.loc reference
+
+# GPSUtil
+${PNAME} -i geo -f geocaching.loc -o gpsutil -F /tmp/gu.wpt
+diff /tmp/gu.wpt reference
+
+# GPSman 
+${PNAME} -i geo -f geocaching.loc -o gpsman -F /tmp/gm.gm
+${PNAME} -i gpsman -f /tmp/gm.gm -o gpsutil -F /tmp/gm.gm+
+diff /tmp/gm.gm+ /tmp/gu.wpt
+
+# GPX
+${PNAME} -i geo -f geocaching.loc -o gpx -F /tmp/gl.gpx
+${PNAME} -i gpx -f /tmp/gl.gpx -o gpsutil -F /tmp/gpx.gpx
+diff /tmp/gpx.gpx /tmp/gu.wpt
+
+# Magellan Mapsend
+${PNAME} -i geo -f geocaching.loc -o mapsend -F /tmp/mm.mapsend
+${PNAME} -i mapsend -f /tmp/mm.mapsend -o gpsutil -F /tmp/mm.gps
+diff /tmp/mm.gps /tmp/gu.wpt
+
+# Garmin Mapsource
+#${PNAME} -i geo -f geocaching.loc -o mapsource -F /tmp/mm.mapsource
+#${PNAME} -i mapsource -f /tmp/mm.mapsource -o gpsutil -F /tmp/ms.gps
+# diff /tmp/ms.gps /tmp/gu.wpt
+
+# Magellan serial
+# TODO
+
+
+# CSV (Comma separated value) data.
+
+#${PNAME} -i geo -f geocaching.loc -o csv -F /tmp/csv.csv
+#${PNAME} -i csv -f /tmp/csv.csv -o gpsutil -F /tmp/csv2.csv
+#diff /tmp/csv2.csv /tmp/gu.wpt
+
+# PCX (Garmin mapsource import) file format
+${PNAME} -i geo -f geocaching.loc -o pcx -F /tmp/mm.pcx
+${PNAME} -i pcx -f /tmp/mm.pcx -o gpsutil -F /tmp/pcx.gps
+diff /tmp/mm.gps /tmp/gu.wpt
+
