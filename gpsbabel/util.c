@@ -332,7 +332,7 @@ le_read64(void *dest, void *src)
 		memcpy(dest, src, 8);
 	} else {
 		int i;
-		for (i = 0; i < 7; i++) {
+		for (i = 0; i < 8; i++) {
 			cdest[i] = csrc[7-i];
 		}
 	}
