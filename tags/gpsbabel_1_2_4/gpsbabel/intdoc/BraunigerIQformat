@@ -1,0 +1,55 @@
+The following description was provided courtesy of the guys at Brauniger,
+translated from German by Google:
+
+<begin>
+
+IQ-GPS PC data communication
+============================
+Description of the sequence for the transmission of barograms IQ-GPS over the
+serial interface (9600 Baud, 8, NO parity):  
+
+All values are binary coded, with exception of the Pilot names.
+
+* 48, 49, 50, 51, 52, 53 (to the synchronisation) 
+* 1 byte flight number
+* high and low - byte of the number of still following bytes 
+* high and low - byte of the serial number 
+* 25 byte pilot name (ASCII) 
+* high and low - byte of the starting date (e.g. 1309 for 13.09) 
+* high and low - byte of the starting year (e.g. 1995) 
+* high and low - byte of the maximum height 1 
+* high and low - byte of the maximum height 2 
+* high and low - byte of the maximum rise 
+* high and low - byte of the flying time in minutes 
+* 1 byte for the logging period (e.g. 5 for 5 seconds) 
+* high and low - byte of the starting time (e.g. 1105 for 11:05) 
+* high and low - byte of the stop time (e.g. 1305 for 13:05)
+    *  for future extensions:  2 polar coordinates follow:
+        * Sinking value 1 (e.g. 10 = -1.0m/s)
+        * Speed value 1 (km/h)
+        * Sinking value 2
+        * Speed value 2
+        * 12 GPS coordinate values, binary coded as 4 byte long variable, follow
+          negative value mean W (S), positive value mean E (N). 0x00000000 if no
+          marking set was set, for 0xFFFFFFFF if marking, but no valid position. 
+        * 4 byte Longitude 1 (MSB first)
+        * 4 byte Latitude 1 (MSB first)
+          ...
+        * 4 byte Longitude 12 (MSB first)
+        * 4 byte Latitude 12 (MSB first) 
+* now all heights and velocity values in the order:  2 byte for the height, 1
+  byte for speed.  Markings are coded in the height with an offset of 20.000 m.
+
+
+Leimkuhler 18.02.99
+
+<end>
+
+I'm not sure about the "future extensions" part.  My IQ-Competition/GPS doesn't
+spit out those values and I believe that it has the most recent firmware.
+
+Also, curiously the final height/speed pair consistently omits the speed part.
+
+
+Chris Jones
+Aug 2004
