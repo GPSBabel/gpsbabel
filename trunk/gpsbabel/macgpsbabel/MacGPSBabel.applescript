@@ -3,7 +3,7 @@
 
 --  Created by Jeremy Atherton on Sun Sep 28 2003.
 --  Last modified Saturday, January 31, 2004.
---  Copyright (c) 2003, 2004 Jeremy Atherton. All rights reserved.
+--  Copyright (c) 2003, 2004 Jeremy Atherton.
 
 -- PROPERTIES AND GLOBALS --
 property fileList : {}
@@ -23,31 +23,16 @@ on awake from nib theObject
 	end if
 end awake from nib
 
--- scripts to deal with opening and closing of SelectGPS window
 on will open theObject
 	if theObject is window "MacGPSBabel" then
 		set p to progress indicator 1 of theObject
 		call method "setStyle:" of p with parameter 1
 		call method "setDisplayedWhenStopped:" of p with parameters {false}
 	end if
-	if theObject is window "SelectGPS" then
-		set popList to my getSerial()
-		delete every menu item of menu of popup button "serialPop" of window "SelectGPS"
-		repeat with i in popList
-			make new menu item at the end of menu items of menu of popup button "serialPop" of window "SelectGPS" with properties {title:i, enabled:true}
-		end repeat
-		set visible of window "MacGPSBabel" to false
-	end if
 end will open
-on will close theObject
-	if theObject is window "SelectGPS" then
-		set visible of window "MacGPSBabel" to true
-	end if
-end will close
 
 -- the 'buisness' scripts, for dealing with all button clicks
 on clicked theObject
-	
 	-- MAIN WINDOW - Select File button
 	if theObject is the button "selectButton" of window "MacGPSBabel" then
 		if contents of text field "inputFile" of window "MacGPSBabel" is equal to "" then
@@ -316,25 +301,6 @@ on GPSSend()
 		set enabled of button "trackSwitch" of window "selectGPS" to true
 	end if
 end GPSSend
--- find the serial ports
-on getSerial()
-	set myList to {}
-	set theScript to "cd /dev; ls | grep cu..."
-	set scriptOut to (do shell script theScript) as string
-	set theCount to count of words in scriptOut
-	set i to 0
-	repeat until i = theCount
-		set i to i + 1
-		set defaultDelimiters to AppleScript's text item delimiters
-		set AppleScript's text item delimiters to {"."}
-		set theWords to the count of text items in word i of scriptOut
-		set z to 2
-		set the end of myList to (text items z thru theWords of word i of scriptOut) as string
-		set AppleScript's text item delimiters to defaultDelimiters
-	end repeat
-	set AppleScript's text item delimiters to {" "}
-	return myList
-end getSerial
 -- deal with uploading files to GPS receiver
 on uploadFile(fileList)
 	-- create string for filters
