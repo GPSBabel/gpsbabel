@@ -96,6 +96,7 @@ gpsutil_disp(const waypoint *wpt)
 static void
 data_write(void)
 {
+	fprintf(file_out, "#tms-marker\n");
 	waypt_disp_all(gpsutil_disp);
 }
 
