@@ -308,9 +308,11 @@ static int
 waypt_write_cb(GPS_PWay *way)
 {
 	static int i;
+	int n = waypt_count();
 
 	if (global_opts.verbose_status) {
-		fprintf(stdout, "%d\r", ++i*100/waypt_count());
+		i++;
+		fprintf(stdout, "%d/%d/%d\r", i*100/n, i, n);
 		fflush(stdout);
 	}
 	return 0;
