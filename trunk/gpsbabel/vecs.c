@@ -46,6 +46,7 @@ extern ff_vecs_t mxf_vecs;
 extern ff_vecs_t holux_vecs;
 extern ff_vecs_t ozi_vecs;
 extern ff_vecs_t dna_vecs;
+extern ff_vecs_t xmap_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -98,6 +99,11 @@ vecs_t vec_list[] = {
 		&csv_vecs,
 		"csv",
 		"Comma separated values"
+	},
+	{
+		&xmap_vecs,
+		"xmap",
+		"Delorme Topo USA4/XMap Conduit"
 	},
 	{
 		&dna_vecs,

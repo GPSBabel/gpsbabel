@@ -54,9 +54,24 @@ wr_init(const char *fname)
 }
 
 static void
+xmap_wr_init(const char *fname)
+{
+	wr_init(fname);
+	fprintf(file_out, "BEGIN SYMBOL\n");
+}
+
+
+static void
 wr_deinit(void)
 {
 	fclose(file_out);
+}
+
+static void
+xmap_wr_deinit(void)
+{
+	fprintf(file_out, "END\n");
+	wr_deinit();
 }
 
 static void
@@ -107,9 +122,10 @@ data_read(void)
 		wpt_tmp->creation_time = time(NULL);
 		
 		/* We'll make up our own shortname. */
-		wpt_tmp->shortname = mkshort(wpt_tmp->description);
-		
-		waypt_add(wpt_tmp);
+		if (wpt_tmp->description) {
+			wpt_tmp->shortname = mkshort(wpt_tmp->description);
+			waypt_add(wpt_tmp);
+		}
 
 	} else {
 		/* empty line */
@@ -151,6 +167,15 @@ ff_vecs_t csv_vecs = {
 	wr_init,
 	rd_deinit,
 	wr_deinit,
+	data_read,
+	data_write,
+};
+
+ff_vecs_t xmap_vecs = {
+	rd_init,
+	xmap_wr_init,
+	rd_deinit,
+	xmap_wr_deinit,
 	data_read,
 	data_write,
 };

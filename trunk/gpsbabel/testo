@@ -53,9 +53,19 @@ diff ${TMPDIR}/tiger ${TMPDIR}/tiger2
 
 # CSV (Comma separated value) data.
 
-#${PNAME} -i geo -f geocaching.loc -o csv -F ${TMPDIR}/csv.csv
-#${PNAME} -i csv -f ${TMPDIR}/csv.csv -o gpsutil -F ${TMPDIR}/csv2.csv
-#diff ${TMPDIR}/csv2.csv ${TMPDIR}/gu.wpt
+${PNAME}  -i geo -f geocaching.loc -o csv -F ${TMPDIR}/csv.csv
+${PNAME}  -i csv -f ${TMPDIR}/csv.csv -o csv -F ${TMPDIR}/csv2.csv
+diff ${TMPDIR}/csv2.csv ${TMPDIR}/csv.csv 
+
+#
+# Delorme TopoUSA 4 is a CSV strain.  
+#
+rm -f ${TMPDIR}/xmap-1.gpx ${TMPDIR}/xmap-2.gpx ${TMPDIR}/xmap
+${PNAME} -i xmap -f reference/xmap -o xmap -F ${TMPDIR}/xmap
+${PNAME} -i xmap -f reference/xmap -o gpx -F ${TMPDIR}/xmap-1.gpx
+${PNAME} -i xmap -f ${TMPDIR}/xmap -o gpx -F ${TMPDIR}/xmap-2.gpx
+diff ${TMPDIR}/xmap-1.gpx ${TMPDIR}/xmap-2.gpx
+diff reference/xmap ${TMPDIR}/xmap
 
 # PCX (Garmin mapsource import) file format
 rm -f ${TMPDIR}/mm.pcx ${TMPDIR}/pcx.gps
@@ -96,3 +106,4 @@ diff ${TMPDIR}/ozi.ozi reference
 # identical reference.
 ${PNAME} -i holux -f reference/paris.wpo -o holux -F ${TMPDIR}/paris.wpo
 diff reference/paris.wpo ${TMPDIR}/paris.wpo
+
