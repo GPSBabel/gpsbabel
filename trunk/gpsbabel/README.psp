@@ -1,0 +1,85 @@
+Using gpsbabel to create MS 2002 Pushpin Files
+----------------------------------------------
+
+The standard S&T method:
+    1. Create pushpins in S&T 2002 either by click-and-create or by importing 
+       from a CSV format file (A header line helps greatly decrease the time 
+       spent in the import data wizard).
+    2. Select the map region you wish to create.
+    3. Wait a couple of dozen minutes for the map to export.  
+    4. Copy map and corresponding .psp file to a folder on the mobile device.
+    5. Open map in pocketstreets.
+
+The gpsbabel/psp method:
+    1. Be sure you've already created the map/region.
+       (in this case, Lafayette.mps).
+    2. Run gpsbabel with .psp output.
+       (i.e. gpsbabel -i geo -f geocaching.loc -o psp -F Lafayette.psp)
+    3. Open map in pocketstreets.
+
+Notes in general:
+    o  PocketStreets loads pushpins files with the same name as the MAP
+       being loaded.  So if you have a map, "Lafayette.mps", the 
+       corresponding set of pins should be called "Lafayette.psp".
+       These two files need to be in the same "folder" on the mobile
+       device in order for things to work properly (waah!).
+
+    o  Pocketstreets re-writes pushpin files every time you open and 
+       close the map.  Doing so sometimes re-sizes the pushpin files.  
+       That's OK.
+
+    o  Pocketstreets won't choke on pushpins that are not for the map
+       being viewed, it simply "grays" them out in Pushpin Explorer.
+       This lets us make one HUGE pushpin file that covers dozens of 
+       maps.
+
+
+Example Usage:
+    o  I get 2 files from geocaching.com on a regular basis, each 
+       containing a couple-of-hundred waypoints.
+
+    o  I have a directory.. err.. folder on my hard drive located at
+       c:\makefiles.  
+
+    o  In that directory, I keep a batch file called "makefiles.bat" that
+       looks like this:
+
+    @echo off
+                                                                              
+    REM *** EXPERTGPS GPX FORMAT ***
+    REM *** NOTE THAT -x n IS NOT A STANDARD GPSBABEL FEATURE ***
+    gpsbabel -i geo -f 51.loc -f 61.loc -x n -o gpx -F e:\expertgps\geocaches.gpx
+
+    REM *** FILES FOR MAGELLAN SD CARD ***
+    gpsbabel -i gpx -f e:\expertgps\geocaches.gpx -o magellan -F geocache.wpt
+
+    REM *** BASE FILE FOR POCKETSTREETS PUSHPINS ***
+    REM *** NOTICE "-s" TO SYNTHESIZE SHORTNAMES ***
+    gpsbabel -s -i gpx -f e:\exertgps\geocaches.gpx -o psp -F geocache.psp
+
+    REM *** MULTIPLY PUSHPINS ONTO IPAQ ***
+    copy geocache.psp C:\"My Documents\Pocket_PC My Documents"\Incoming\Lafayette.psp
+    copy geocache.psp C:\"My Documents\Pocket_PC My Documents"\Incoming\BatonRouge.psp
+    copy geocache.psp C:\"My Documents\Pocket_PC My Documents"\Incoming\NewOrleans.psp
+    copy geocache.psp C:\"My Documents\Pocket_PC My Documents"\Incoming\Houston.psp
+
+    o When I get my .loc files from geocaching.com, I stick them in the 
+      "c:\makefiles" directory and run "makefiles.bat".  when the batch 
+      file is complete in a few seconds, I have managed to do accomplish 
+      a few things that used to be some cumbersome they weren't even worth
+      doing:
+
+      1. I have a "Magellan Protocol" text file to load onto my Meridian's 
+         SD card containing all of the geocaches from those 2 files.
+
+      2. I have created pushpins for 4 seperate maps.  Since I'm putting them
+         in the "Pocket_PC My Documents\Incoming" folder, they will auto-sync
+         to my iPaq when it syncs.  Since I store my maps on my iPaq's SD card,
+         I need to move these over to my maps folder by hand later. That takes
+         all of about 10 seconds.
+
+      3. It is my preference to have "synthesized shortnames" on my pushpin
+         files instead of geocaching.com "GCXXXX" names.  Since the shortname
+         synthesizer for pushpins is set to around 32 bytes, instead of seeing
+         "GCF00D" as a pushpin name, I see "Swinging Rope Bridge."
+         
