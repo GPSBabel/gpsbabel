@@ -30,11 +30,16 @@ static int in_time;
 static int in_desc;
 static int in_cdata;
 static int in_cmt;
+static int in_url;
+static int in_urlname;
 static int in_gs_type;
 static int in_gs_diff;
 static int in_gs_terr;
 static int in_gs_log;
+static int in_gs_log_wpt;
 static char *cdatastr;
+static int opt_logpoint = 0;
+static int logpoint_ct = 0;
 
 static XML_Parser psr;
 
@@ -84,6 +89,44 @@ tag_wpt(const char **attrv)
 }
 
 static void
+tag_log_wpt(const char **attrv)
+{
+	waypoint * lwp_tmp;
+	const char **avp = &attrv[0];
+
+	/* create a new waypoint */
+	lwp_tmp = xcalloc(sizeof(*lwp_tmp), 1);
+
+	/* extract the lat/lon attributes */
+	while (*avp) { 
+		if (strcmp(avp[0], "lat") == 0) {
+			sscanf(avp[1], "%lf", 
+				&lwp_tmp->position.latitude.degrees);
+		}
+		else if (strcmp(avp[0], "lon") == 0) {
+			sscanf(avp[1], "%lf", 
+			&lwp_tmp->position.longitude.degrees);
+		}
+		avp+=2;
+	}
+	/* Make a new shortname.  Since this is a groundspeak extension, 
+	  we assume that GCBLAH is the current shortname format and that
+	  wpt_tmp refers to the currently parsed waypoint. Unfortunatley,
+	  we need to keep track of log_wpt counts so we don't collide with
+	  dupe shortnames.
+	*/
+
+	if ((wpt_tmp->shortname) && (strlen(wpt_tmp->shortname) > 2)) {
+		/* copy of the shortname */
+		lwp_tmp->shortname = xcalloc(7, 1);
+		sprintf(lwp_tmp->shortname, "%-4.4s%02d", 
+			&wpt_tmp->shortname[2], logpoint_ct++);
+
+		waypt_add(lwp_tmp);
+	} 
+}
+
+static void
 gpx_start(void *data, const char *el, const char **attr)
 {
 
@@ -105,6 +148,10 @@ gpx_start(void *data, const char *el, const char **attr)
 		tag_wpt(attr);
 	} if (strcmp(el, "time") == 0) {
 		in_time++;
+	} if (strcmp(el, "url") == 0) {
+		in_url++;
+	} if (strcmp(el, "urlname") == 0) {
+		in_urlname++;
 	} if (strcmp(el, "groundspeak:type") == 0) {
 		in_gs_type++;
 	} if (strcmp(el, "groundspeak:difficulty") == 0) {
@@ -113,6 +160,10 @@ gpx_start(void *data, const char *el, const char **attr)
 		in_gs_terr++;
 	} if (strcmp(el, "groundspeak:log") == 0) {
 		in_gs_log++;
+	} if (strcmp(el, "groundspeak:log_wpt") == 0) {
+		in_gs_log_wpt++;
+                if (opt_logpoint)
+		    tag_log_wpt(attr);
 	}
 }
 
@@ -154,6 +205,12 @@ gpx_end(void *data, const char *el)
 		if (in_cmt && in_wpt) {
 			wpt_tmp->description = xstrdup(cdatastr);
 		}
+		if (in_url && in_wpt) {
+			wpt_tmp->url = xstrdup(cdatastr);
+		}
+		if (in_urlname && in_wpt) {
+			wpt_tmp->url_link_text = xstrdup(cdatastr);
+		}
 		if (in_ele) {
 			sscanf(cdatastr, "%lf", 
 				&wpt_tmp->position.altitude.altitude_meters);
@@ -189,6 +246,7 @@ gpx_end(void *data, const char *el)
 	if (strcmp(el, "wpt") == 0) {
 		waypt_add(wpt_tmp);
 		in_wpt--;
+		logpoint_ct = 0;
 	}
 	else if (strcmp(el, "rtept") == 0) {
 /*		route_add(wpt_tmp); */
@@ -203,6 +261,10 @@ gpx_end(void *data, const char *el)
 		in_ele--;
 	} else if (strcmp(el, "time") == 0) {
 		in_time--;
+	} else if (strcmp(el, "url") == 0) {
+		in_url--;
+	} else if (strcmp(el, "urlname") == 0) {
+		in_urlname--;
 	} if (strcmp(el, "groundspeak:type") == 0) {
 		in_gs_type--;
 	} if (strcmp(el, "groundspeak:difficulty") == 0) {
@@ -211,6 +273,8 @@ gpx_end(void *data, const char *el)
 		in_gs_terr--;
 	} if (strcmp(el, "groundspeak:log") == 0) {
 		in_gs_log--;
+	} if (strcmp(el, "groundspeak:log_wpt") == 0) {
+		in_gs_log_wpt--;
 	}
 }
 
@@ -226,6 +290,8 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 	 */
 	if ((in_name && in_wpt) || (in_desc && in_wpt) || (in_ele) || 
 			(in_wpt && in_cmt) ||
+			(in_wpt && in_url) ||
+			(in_wpt && in_urlname) ||
 			(in_wpt && in_gs_type) || 
 			(in_wpt && in_gs_diff) || 
 			(in_wpt && in_gs_terr) || 
@@ -243,6 +309,10 @@ gpx_rd_init(const char *fname, const char *args)
 	if (fd == NULL) {
 		fatal(MYNAME ": Cannot open %s for reading\n", fname );
 	}
+
+        if (get_option(args, "logpoint") != NULL)
+            opt_logpoint = 1;
+
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {
 		fatal(MYNAME ": Cannot create XML Parser\n");
