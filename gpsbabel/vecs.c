@@ -54,6 +54,7 @@ extern ff_vecs_t xmap_vecs;
 extern ff_vecs_t xmapwpt_vecs;
 extern ff_vecs_t tmpro_vecs;
 extern ff_vecs_t gpsdrive_vecs;
+extern ff_vecs_t gcdb_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -204,6 +205,12 @@ vecs_t vec_list[] = {
 		&gpsdrive_vecs,
 		"gpsdrive",
 		"GpsDrive Format", 
+		NULL
+	},
+	{
+		&gcdb_vecs,
+		"gcdb",
+		"Geocaching Database", 
 		NULL
 	},
 

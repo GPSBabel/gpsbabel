@@ -1,0 +1,343 @@
+/*
+    Read and write GeocachingPDB files.
+
+    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
+
+ */
+
+#include "defs.h"
+#include "coldsync/palm.h"
+#include "coldsync/pdb.h"
+
+#define MYNAME "GeocachingDB"
+#define MYTYPE  0x44415441  	/* DATA */
+#define MYCREATOR 0x42726174 	/* Brat */
+
+#define MAXRECSZ 500 /* This is overkill as the records seem to be around 100
+			 bytes a piece, but being conservative and dealing 
+			 with realloc issues just doesn't seem worth it. */
+
+typedef enum {
+	RECTYPE_TEXT = 0,
+	RECTYPE_DATE = 2
+} gcdb_rectype;
+
+struct dbfld {
+	char	fldname[4];
+	pdb_16  fldtype;
+	pdb_16  fldlen;
+};
+
+struct dbrec {
+	pdb_16  nflds;
+	struct dbfld dbfld[1];
+};
+
+static FILE *file_in;
+static FILE *file_out;
+static const char *out_fname;
+struct pdb *opdb;
+struct pdb_record *opdb_rec;
+
+
+static void
+rd_init(const char *fname, const char *args)
+{
+	file_in = fopen(fname, "rb");
+	if (file_in == NULL) {
+		fatal(MYNAME ": Cannot open %s for reading\n", fname);
+	}
+}
+
+static void
+rd_deinit(void)
+{
+	fclose(file_in);
+}
+
+static void
+wr_init(const char *fname, const char *args)
+{
+	file_out = fopen(fname, "wb");
+	out_fname = fname;
+	if (file_out == NULL) {
+		fatal(MYNAME ": Cannot open %s for writing\n", fname);
+	}
+}
+
+static void
+wr_deinit(void)
+{
+	fclose(file_out);
+}
+
+static void
+data_read(void)
+{
+	struct dbrec *rec;
+	struct pdb *pdb;
+	struct pdb_record *pdb_rec;
+
+	if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
+		fatal(MYNAME ": pdb_Read failed\n");
+	}
+
+	if ((pdb->creator != MYCREATOR) || (pdb->type != MYTYPE)) {
+		fatal(MYNAME ": Not a GeocachingDB file.\n");
+	}
+
+	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
+		waypoint *wpt = xcalloc(sizeof(*wpt),1);
+		struct dbrec *rec = (struct dbrec *) pdb_rec->data;
+		int nflds;
+		int length;
+		int type;
+		int i;
+		char *recdata;
+		int lat_dir = 0;
+		int lat_deg = 0;
+		float lat_min = 0.0;
+		int lon_dir = 0;
+		int lon_deg = 0;
+		float lon_min = 0.0;
+
+		nflds = be_read16(&rec->nflds);
+		recdata = (char *) &rec->dbfld[nflds];
+
+		for (i = 0; i < nflds; i++) {
+			length = (unsigned short) be_read16(&rec->dbfld[i].fldlen);
+			type = be_read16(&rec->dbfld[i].fldtype);
+
+			switch(type) {
+			case RECTYPE_TEXT: /* Text */
+				if (!strncmp("gcid", rec->dbfld[i].fldname,4)) {
+					wpt->shortname = xstrdup(recdata);
+				} else 
+				if (!strncmp("gcna", rec->dbfld[i].fldname,4)) {
+					wpt->description = xstrdup(recdata);
+				} else 
+				if (!strncmp("lat0", rec->dbfld[i].fldname,4)) {
+					lat_dir = *recdata == 'N' ? 1 : -1;
+				} else 
+				if (!strncmp("lat1", rec->dbfld[i].fldname,4)) {
+					lat_deg = atoi(recdata);
+				} else 
+				if (!strncmp("lat2", rec->dbfld[i].fldname,4)) {
+					lat_min = atof(recdata);
+				} 
+				if (!strncmp("lon0", rec->dbfld[i].fldname,4)) {
+					lon_dir = *recdata == 'E' ? 1 : -1;
+				} else 
+				if (!strncmp("lon1", rec->dbfld[i].fldname,4)) {
+					lon_deg = atoi(recdata);
+				} else 
+				if (!strncmp("lon2", rec->dbfld[i].fldname,4)) {
+					lon_min = atof(recdata);
+				} else
+				if (!strncmp("take", rec->dbfld[i].fldname,4)) {
+					wpt->notes = xstrappend(wpt->notes,  " Took ");
+					wpt->notes = xstrappend(wpt->notes,  recdata);
+				} else
+				if (!strncmp("left", rec->dbfld[i].fldname,4)) {
+					wpt->notes = xstrappend(wpt->notes, " Left ");
+					wpt->notes = xstrappend(wpt->notes,  recdata);
+				} else
+				if (!strncmp("diff", rec->dbfld[i].fldname,4)) {
+					wpt->gc_data.diff = 10 * atof(recdata);
+				} else
+				if (!strncmp("terr", rec->dbfld[i].fldname,4)) {
+					wpt->gc_data.terr = 10 * atof(recdata);
+				} 
+				break;
+#if 0
+				/* This really is the date of the find, 
+				 * not the cache creation date.   
+				 */
+			case RECTYPE_DATE:
+				if (!strncmp("date", rec->dbfld[i].fldname,4)) {
+					time_t tm;
+					tm = be_read32(recdata) * 24 * 3600;
+					tm -= EPOCH_1904;
+					wpt->creation_time = tm;
+					fprintf(stderr, "date %d\n", tm);
+				}
+				break;
+#endif
+			}
+			recdata += (length + 1) & (~1);
+		}
+		wpt->position.latitude.degrees = lat_dir * (lat_deg + lat_min/60);
+		wpt->position.longitude.degrees = lon_dir * (lon_deg + lon_min/60);
+		waypt_add(wpt);
+	}
+
+	free_pdb(pdb);
+}
+
+static int 
+gcdb_add_to_rec(struct dbrec *rec, char *fldname, gcdb_rectype rectype, void *data)
+{
+	int length;
+	static char *tbuf;
+	static char *tbufp;
+	static int rec_cnt;
+
+	if (fldname == NULL) {
+		length = tbufp - tbuf;
+		be_write16(&rec->nflds, rec_cnt);
+		memcpy(&rec->dbfld[rec_cnt],tbuf, length);
+		tbufp = tbuf;
+		length += 4 + sizeof(struct dbfld) * rec_cnt;
+		return length;
+	}
+
+	if (!tbuf) {
+		tbuf = xcalloc(MAXRECSZ, 1);
+		tbufp = tbuf;
+	}
+
+	be_write16(&rec->dbfld[rec_cnt].fldtype,rectype); 
+	strncpy(rec->dbfld[rec_cnt].fldname, fldname, 4);
+
+	switch (rectype) {
+	case RECTYPE_TEXT:
+		length = 1 + strlen(data);
+		be_write16(&rec->dbfld[rec_cnt].fldlen, length);
+		strcpy(tbufp, data);
+		tbufp += (length + 1) & (~1);
+		break;
+	case RECTYPE_DATE:
+		length = 4;
+		be_write16(&rec->dbfld[rec_cnt].fldlen, length);
+		be_write32(tbufp, ((time_t)data - EPOCH_1904)/ (3600 * 24));
+		tbufp += length;
+		break;
+	default:
+		abort();
+	}
+	rec_cnt++;
+}
+
+static void
+gcdb_write_wpt(const waypoint *wpt)
+{
+	struct dbrec *rec;
+	char *vdata;
+	char *recdata;
+	static int ct;
+	int length;
+	int reclen;
+	char tbuf[100];
+
+	/*
+	 * We don't really know how many fields we'll have or how long
+	 * they'll be so we'll just lazily create a huge place to hold them.
+	 */
+	rec = xcalloc(sizeof(*rec) + 5000, 1);
+
+	gcdb_add_to_rec(rec, "gcna", RECTYPE_TEXT, wpt->description);
+	gcdb_add_to_rec(rec, "gcid", RECTYPE_TEXT, wpt->shortname);
+
+	gcdb_add_to_rec(rec, "lat0", RECTYPE_TEXT, 
+			wpt->position.latitude.degrees < 0 ? "S" : "N");
+
+	sprintf(tbuf, "%d", (int) wpt->position.latitude.degrees);
+	gcdb_add_to_rec(rec, "lat1", RECTYPE_TEXT, tbuf);
+
+	sprintf(tbuf, "%f", 60 * (wpt->position.latitude.degrees - 
+				(int) wpt->position.latitude.degrees));
+	gcdb_add_to_rec(rec, "lat2", RECTYPE_TEXT, tbuf);
+
+
+	gcdb_add_to_rec(rec, "lon0", RECTYPE_TEXT, 
+			wpt->position.longitude.degrees < 0 ? "W" : "E");
+
+	sprintf(tbuf, "%d", (int) wpt->position.longitude.degrees);
+	gcdb_add_to_rec(rec, "lon1", RECTYPE_TEXT, tbuf);
+
+	sprintf(tbuf, "%f", 60 * (wpt->position.longitude.degrees - 
+				(int) wpt->position.longitude.degrees));
+	gcdb_add_to_rec(rec, "lon2", RECTYPE_TEXT, tbuf);
+
+	if (wpt->gc_data.diff) {
+		sprintf(tbuf, "%f", wpt->gc_data.diff / 10.0);
+		gcdb_add_to_rec(rec, "diff", RECTYPE_TEXT, tbuf);
+	}
+
+	if (wpt->gc_data.terr) {
+		sprintf(tbuf, "%f", wpt->gc_data.terr / 10.0);
+		gcdb_add_to_rec(rec, "terr", RECTYPE_TEXT, tbuf);
+	}
+
+#if 0
+				/* This really is the date of the find, 
+				 * not the cache creation date.   
+				 */
+	if (wpt->creation_time) {
+		gcdb_add_to_rec(rec, "date", RECTYPE_DATE, (void *) wpt->creation_time);
+	}
+#endif
+
+	/*
+	 * We're done.  Build the record.
+	 */
+	reclen = gcdb_add_to_rec(rec, NULL, 0, NULL);
+
+	opdb_rec = new_Record(0, 2, ct++, reclen, (const ubyte *)rec);
+
+	if (opdb_rec == NULL) {
+		fatal(MYNAME ": libpdb couldn't create record\n");
+	}
+
+	if (pdb_AppendRecord(opdb, opdb_rec)) {
+		fatal(MYNAME ": libpdb couldn't append record\n");
+	}
+
+	free(rec);
+}
+
+static void
+data_write(void)
+{
+	
+	if (NULL == (opdb = new_pdb())) { 
+		fatal (MYNAME ": new_pdb failed\n");
+	}
+
+	strncpy(opdb->name, out_fname, PDB_DBNAMELEN);
+	strncpy(opdb->name, "GeocachingDB", PDB_DBNAMELEN);
+	opdb->name[PDB_DBNAMELEN-1] = 0;
+	opdb->attributes = PDB_ATTR_BACKUP;
+	opdb->ctime = opdb->mtime = time(NULL) + 2082844800U;
+	opdb->type = MYTYPE;  /* CWpt */
+	opdb->creator = MYCREATOR; /* cGPS */
+	opdb->version = 1;
+
+	waypt_disp_all(gcdb_write_wpt);
+
+	pdb_Write(opdb, fileno(file_out));
+}
+
+
+ff_vecs_t gcdb_vecs = {
+	rd_init,
+	wr_init,
+	rd_deinit,
+	wr_deinit,
+	data_read,
+	data_write,
+};
