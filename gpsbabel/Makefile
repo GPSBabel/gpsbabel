@@ -15,6 +15,9 @@ COLDSYNC=coldsync/util.o coldsync/pdb.o
 OBJS=main.o queue.o route.o waypt.o util.o vecs.o mkshort.o csv_util.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(FMTS)
 
+.c.o:
+	$(CC) -c $(CFLAGS) $< -o $@
+
 all: gpsbabel
 
 gpsbabel: $(OBJS)
