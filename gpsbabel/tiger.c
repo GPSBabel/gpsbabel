@@ -156,7 +156,7 @@ data_read(void)
 static void
 tiger_disp(const waypoint *wpt)
 {
-	char *pin;
+	const char *pin;
 	double lat = wpt->position.latitude.degrees;
 	double lon = wpt->position.longitude.degrees;
 
