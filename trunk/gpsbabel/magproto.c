@@ -670,11 +670,11 @@ mag_trkparse(char *trkmsg)
 	hms = hms / 100;
 	tm.tm_hour = hms % 100;
 
-	tm.tm_mon =  dmy % 100;
+	tm.tm_year = 100 + dmy % 100;
+	dmy = dmy / 100;
+	tm.tm_mon =  dmy % 100 - 1;
 	dmy = dmy / 100;
 	tm.tm_mday = dmy % 100; 
-	dmy = dmy / 100;
-	tm.tm_year = 100 + dmy % 100;
 
 	/*
 	 * FIXME: mktime assumes the struct tm is in local time, which 
