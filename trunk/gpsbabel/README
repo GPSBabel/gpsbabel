@@ -463,7 +463,8 @@ DATA FILTERS
 	locations.  The result would be a GPX file that more than likely
 	contains only unique points and point data.
 
-     DISTANCE ALONG A ROUTE (ARC)
+    DISTANCE ALONG A ROUTE (ARC)
+    ARC
 
         The arc filter is designed to include points based on their
         proximity to an arc, which is a series of connected line
