@@ -27,7 +27,7 @@ static char arc[] =
 static char csv[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
-"# Format: Delorme SA 9.0 CSV\n"
+"# Format: DeLorme SA 9.0 CSV\n"
 "# Author: Alex Mottram\n"
 "#   Date: 12/09/2002\n"
 "#\n"
@@ -422,7 +422,7 @@ static char saplus[] =
 "#   Date: 02/22/04\n"
 "#\n"
 
-"DESCRIPTION             Delorme Street Atlas Plus\n"
+"DESCRIPTION             DeLorme Street Atlas Plus\n"
 
 "#\n"
 "# FILE LAYOUT DEFINITIIONS:\n"
@@ -502,7 +502,7 @@ static char tabsep[] =
 static char xmap[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
-"# Format: Delorme Xmap Conduit\n"
+"# Format: DeLorme Xmap Conduit\n"
 "# Author: Alex Mottram\n"
 "#   Date: 12/09/2002\n"
 "#\n"
@@ -510,7 +510,7 @@ static char xmap[] =
 "# As defined in csv.c/xmap\n"
 "#\n"
 
-"DESCRIPTION		Delorme XMap HH Native .WPT\n"
+"DESCRIPTION		DeLorme XMap HH Native .WPT\n"
 "EXTENSION		wpt\n"
 
 "#\n"
@@ -536,12 +536,12 @@ static char xmap[] =
 static char xmapwpt[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
-"# Format: Delorme Xmap HH Street Atlas USA .WPT (PocketPC)\n"
+"# Format: DeLorme Xmap HH Street Atlas USA .WPT (PocketPC)\n"
 "# Author: Alex Mottram\n"
 "#   Date: 12/09/2002\n"
 "#\n"
 "# \n"
-"DESCRIPTION 		Delorme XMat HH Street Atlas USA .WPT (PPC)\n"
+"DESCRIPTION 		DeLorme XMat HH Street Atlas USA .WPT (PPC)\n"
 "SHORTLEN		32\n"
 "SHORTWHITE		0\n"
 
