@@ -575,9 +575,53 @@ strsub(char *s, char *search, char *replace)
        return d;
 }
 
+			
+void utf8_to_int( const char *cp, int *bytes, int *value ) 
+{
+	if ( (*cp & 0xe0) == 0xc0 ) {
+		*bytes = 2;
+		*value = ((*cp & 0x1f) << 6) | 
+			(*(cp+1) & 0x3f); 
+	}
+	else if ( (*cp & 0xf0) == 0xe0 ) {
+		*bytes = 3;
+		*value = ((*cp & 0x0f) << 12) | 
+			((*(cp+1) & 0x3f) << 6) | 
+			(*(cp+2) & 0x3f); 
+	}
+	else if ( (*cp & 0xf8) == 0xf0 ) {
+		*bytes = 4;
+		*value = ((*cp & 0x07) << 18) | 
+			((*(cp+1) & 0x3f) << 12) | 
+			((*(cp+2) & 0x3f) << 6) | 
+			(*(cp+3) & 0x3f); 
+	}
+	else if ( (*cp & 0xfc) == 0xf8 ) {
+		*bytes = 5;
+		*value = ((*cp & 0x03) << 24) | 
+			((*(cp+1) & 0x3f) << 18) | 
+			((*(cp+2) & 0x3f) << 12) | 
+			((*(cp+3) & 0x3f) << 6) |
+			(*(cp+4) & 0x3f); 
+	}
+	else if ( (*cp & 0xfe) == 0xfc ) {
+		*bytes = 6;
+		*value = ((*cp & 0x01) << 30) | 
+			((*(cp+1) & 0x3f) << 24) | 
+			((*(cp+2) & 0x3f) << 18) | 
+			((*(cp+3) & 0x3f) << 12) |
+			((*(cp+4) & 0x3f) << 6) |
+			(*(cp+5) & 0x3f); 
+	}
+	else {
+		*bytes = 1;
+		*value = (unsigned char)*cp;
+	}
+}
+
 char * xml_entitize(const char * str) 
 {
-	int elen, ecount;
+	int elen, ecount, nsecount;
 	const char ** ep;
 	const char * cp;
 	char * p, * tmp, * xstr;
@@ -589,8 +633,11 @@ char * xml_entitize(const char * str)
 	"\"",	"&quot;",
 	NULL,	NULL 
 	};
+	char tmpsub[20];
+	int bytes = 0;
+	int value = 0;
 	ep = stdentities;
-	elen = ecount = 0;
+	elen = ecount = nsecount = 0;
 
 	/* figure # of entity replacements and additional size. */
 	while (*ep) {
@@ -602,32 +649,70 @@ char * xml_entitize(const char * str)
 		}
 		ep += 2;
 	}
+	
+	/* figure the same for other than standard entities (i.e. anything
+	 * that isn't in the range U+0000 to U+007F */
+	for ( cp = str; *cp; cp++ ) {
+		if ( *cp & 0x80 ) {
+			
+			utf8_to_int( cp, &bytes, &value );
+			cp += bytes-1;
+			elen += sprintf( tmpsub, "&#x%x;", value ) - bytes;
+		        nsecount++;	
+		}
+	}
 
 	/* enough space for the whole string plus entity replacements, if any */
 	tmp = xcalloc((strlen(str) + elen + 1), 1);
 	strcpy(tmp, str);
 
 	/* no entity replacements */
-	if (ecount == 0)
+	if (ecount == 0 && nsecount == 0)
 		return (tmp);
 
-	ep = stdentities;
+        if ( ecount != 0 ) {	
+		ep = stdentities;
 
-	while (*ep) {
+		while (*ep) {
+			p = tmp;
+			while ((p = strstr(p, *ep)) != NULL) {
+				elen = strlen(*(ep + 1));
+
+				xstr = xstrdup(p + strlen(*ep));
+
+				strcpy(p, *(ep + 1));
+				strcpy(p + elen, xstr);
+
+				xfree(xstr);
+
+				p += elen;
+			}  
+			ep += 2;
+		}
+	}
+
+	if ( nsecount != 0 ) {
 		p = tmp;
-		while ((p = strstr(p, *ep)) != NULL) {
-			elen = strlen(*(ep + 1));
-
-			xstr = xstrdup(p + strlen(*ep));
-
-			strcpy(p, *(ep + 1));
-			strcpy(p + elen, xstr);
-
-			xfree(xstr);
-
-			p += elen;
-		}  
-		ep += 2;
-	}    
+		while (*p) {
+			if ( *p & 0x80 ) {
+				utf8_to_int( p, &bytes, &value );
+				if ( p[bytes] ) {
+					xstr = xstrdup( p + bytes );
+				}
+				else {
+					xstr = NULL;
+				}
+				sprintf( p, "&#x%x;", value );
+				p = p+strlen(p);
+				if ( xstr ) {
+					strcpy( p, xstr );
+					xfree(xstr);
+				}
+			}
+			else {
+				p++;
+			}
+		}
+	}	
 	return (tmp);
 }
