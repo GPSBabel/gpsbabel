@@ -657,7 +657,6 @@ mag_trkparse(char *trkmsg)
 
 	waypt  = xcalloc(sizeof *waypt, 1);
 
-	printf("%s\n", trkmsg);
 	memset(&tm, 0, sizeof(tm));
 
 	sscanf(trkmsg,"$PMGNTRK,%lf,%c,%lf,%c,%d,%c,%d.%d,A,,%d", 

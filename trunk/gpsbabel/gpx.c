@@ -299,16 +299,21 @@ gpx_write_time(const time_t timep)
 static void
 gpx_waypt_pr(const waypoint *waypointp)
 {
+	const char *oname = global_opts.synthesize_shortnames ?
+				  mkshort(waypointp->description) : 
+				  waypointp->shortname;
 
 	fprintf(ofd, "<wpt lat=\"%lf\" lon=\"%lf\">\n",
 		waypointp->position.latitude.degrees,
 		waypointp->position.longitude.degrees);
-	fprintf(ofd, "<name>%s</name>\n", global_opts.synthesize_shortnames ?
-				          mkshort(waypointp->description) : 
-					  waypointp->shortname);
-	fprintf(ofd, "<desc>");
-	fprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
-	fprintf(ofd, "</desc>\n");
+	if (oname) {
+		fprintf(ofd, "<name>%s</name>\n", oname);
+	}
+	if (waypointp->description) {
+		fprintf(ofd, "<desc>");
+		fprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
+		fprintf(ofd, "</desc>\n");
+	}
 	if (waypointp->position.altitude.altitude_meters) {
 		fprintf(ofd, "<ele>\n%f\n</ele>\n",
 			 waypointp->position.altitude.altitude_meters);

@@ -193,7 +193,7 @@ int32 GPS_Get_Ack(int32 fd, GPS_PPacket *tra, GPS_PPacket *rec)
     if(LINK_ID[0].Pid_Ack_Byte != (*rec)->type)
     {
 	gps_error = FRAMING_ERROR;
-	return 0;
+/* rjl	return 0; */
     }
     
     if(*(*rec)->data != (*tra)->type)
