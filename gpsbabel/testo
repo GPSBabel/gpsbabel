@@ -14,6 +14,13 @@ compare()
 	} 
 }
 
+sort_and_compare()
+{
+	sort $1 > $TMPDIR/s1
+	sort $2 > $TMPDIR/s2
+	compare $TMPDIR/s1 $TMPDIR/s2
+}
+
 
 # Geocaching .loc
 rm -f ${TMPDIR}/gl.loc
@@ -227,7 +234,7 @@ rm -f ${TMPDIR}/filterdupe.csv1 ${TMPDIR}/filterdupe.csv2
 ${PNAME} -i geo -f geocaching.loc -o csv -F ${TMPDIR}/filterdupe.csv1
 ${PNAME} -i geo -f geocaching.loc -f geocaching.loc -x duplicate,shortname \
 		-o csv -F ${TMPDIR}/filterdupe.csv2
-compare ${TMPDIR}/filterdupe.csv1 ${TMPDIR}/filterdupe.csv2
+sort_and_compare ${TMPDIR}/filterdupe.csv1 ${TMPDIR}/filterdupe.csv2
 
 #
 # Position filter -  Since very small distances are essentialy a duplicate 
@@ -237,7 +244,7 @@ rm -f ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2
 ${PNAME} -i geo -f geocaching.loc -o csv -F ${TMPDIR}/filterpos.csv1
 ${PNAME} -i geo -f geocaching.loc -f geocaching.loc -x position,distance=5f \
 		-o csv -F ${TMPDIR}/filterpos.csv2
-compare ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2
+sort_and_compare ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2
 
 #
 # Radius filter
