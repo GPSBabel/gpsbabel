@@ -37,6 +37,8 @@
 extern char *xcsv_urlbase;
 extern char *prefer_shortnames;
 
+static int waypt_out_count;
+
 /*********************************************************************/
 /* csv_stringclean() - remove any unwanted characters from string.   */
 /*                     returns copy of string.                       */
@@ -579,7 +581,6 @@ static void
 xcsv_waypt_pr(const waypoint *wpt)
 {
     char buff[1024];
-    static int index = 0;
     char *shortname = NULL;
     char *description = NULL;
     char * anyname = NULL;
@@ -633,7 +634,7 @@ xcsv_waypt_pr(const waypoint *wpt)
             sprintf(buff, fmp->printfc, "");
         } else
         if (strcmp(fmp->key, "INDEX") == 0) {
-            sprintf(buff, fmp->printfc, index + atoi(fmp->val));
+            sprintf(buff, fmp->printfc, waypt_out_count + atoi(fmp->val));
         } else
         if (strcmp(fmp->key, "CONSTANT") == 0) {
             sprintf(buff, fmp->printfc, fmp->val);
@@ -792,7 +793,8 @@ xcsv_waypt_pr(const waypoint *wpt)
     if (description && description != shortname)
         xfree(description);
 
-    index++;
+    /* increment the index counter */
+    waypt_out_count++;
 }
 
 static void
@@ -811,6 +813,9 @@ xcsv_data_write(void)
     queue *elem, *tmp;
     ogue_t *ogp;
 
+    /* reset the index counter */
+    waypt_out_count = 0;
+    
     /* output prologue lines, if any. */
     QUEUE_FOR_EACH(&xcsv_file.prologue, elem, tmp) {
         ogp = (ogue_t *) elem;
