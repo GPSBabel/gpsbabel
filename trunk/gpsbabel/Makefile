@@ -25,7 +25,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
-	igc.o brauniger_iq.o
+	igc.o brauniger_iq.o shape.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o
 
@@ -41,9 +41,11 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 
 COLDSYNC=coldsync/util.o coldsync/pdb.o
 
+SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
+
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o grtcirc.o vmem.o util_crc.o \
-	$(COLDSYNC) $(GARMIN) $(JEEPS) $(FMTS) $(FILTERS)
+	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(FMTS) $(FILTERS)
 OBJS = main.o $(LIBOBJS)
 
 .c.o:
@@ -86,8 +88,8 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_2_4_beta09012004-steve
-VERSIOND=1.2.4_beta09012004-steve
+VERSIONU=1_2_4_beta09192004
+VERSIOND=1.2.4_beta09192004
 #VERSIONU=1_2_3
 #VERSIOND=1.2.3
 
