@@ -78,8 +78,8 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > $@ || (rm -f $@ ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_2_1_beta12132003
-VERSIOND=1.2.1_beta12132003
+VERSIONU=1_2_1_beta01072004
+VERSIOND=1.2.1_beta01072004
 #VERSIONU=1_2_1
 #VERSIOND=1.2.1
 
@@ -91,7 +91,7 @@ release:
 	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
 	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
 	touch /tmp/gpsbabel-$(VERSIOND)/internal_styles.c
-	cd /tmp/gpsbabel-$(VERSIOND)/mingw ; make  && zip -j gpsbabel-$(VERSIOND).zip  gpsbabel.exe libexpat.dll ../win32/gpsbabelfront.exe && cp gpsbabel-$(VERSIOND).zip /tmp
+	cd /tmp/gpsbabel-$(VERSIOND)/mingw ; make
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).tar.gz ftp://upload.sf.net/incoming/
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).zip ftp://upload.sf.net/incoming/
 
