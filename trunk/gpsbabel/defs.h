@@ -67,7 +67,6 @@ typedef struct {
 typedef struct {
 	queue Q;
 	position position;
-	time_t time_created; 
 	char *shortname;
 	char *description;
 	char *url;
@@ -120,7 +119,7 @@ typedef struct {
  * Protypes for Palm/OS helpers.
  */
 
-int pdb_read2(pdb_16 *p);
-int pdb_read4(pdb_32 *p);
+signed int pdb_read2(pdb_16 *p);
+signed int pdb_read4(pdb_32 *p);
 void pdb_write2(pdb_16 *pp, unsigned i);
 void pdb_write4(pdb_32 *pp, unsigned i);
