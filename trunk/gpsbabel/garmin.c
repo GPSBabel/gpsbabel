@@ -304,6 +304,17 @@ sane_GPS_Way_New(void)
 
 	return way;
 }
+static int 
+waypt_write_cb(GPS_PWay *way)
+{
+	static int i;
+
+	if (global_opts.verbose_status) {
+		fprintf(stdout, "%d\r", ++i*100/waypt_count());
+		fflush(stdout);
+	}
+	return 0;
+}
 
 static void
 waypoint_write(void)
@@ -350,13 +361,9 @@ waypoint_write(void)
 		if (wpt->altitude != unknown_alt) {
 			way[i]->alt = wpt->altitude;
 		}
-		if (global_opts.verbose_status) {
-			fprintf(stdout, "%d\r", i*100/n);
-			fflush(stdout);
-		}
 		i++;
 	}
-	if ((ret = GPS_Command_Send_Waypoint(portname, way, n)) < 0) {
+	if ((ret = GPS_Command_Send_Waypoint(portname, way, n, waypt_write_cb)) < 0) {
 		fatal(MYNAME ":communication error sending wayoints..\n");
 	}
 
@@ -365,6 +372,7 @@ waypoint_write(void)
 	}
 	if (global_opts.verbose_status) {
 		fprintf(stdout, "\r\n");
+		fflush(stdout);
 	}
 	xfree(way);
 }

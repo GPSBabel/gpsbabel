@@ -27,7 +27,6 @@
 #include <time.h>
 #include <stdlib.h>
 
-
 static int32    GPS_A000(const char *port);
 static void   GPS_A001(GPS_PPacket packet);
 
@@ -695,7 +694,7 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A100_Send(const char *port, GPS_PWay *way, int32 n)
+int32 GPS_A100_Send(const char *port, GPS_PWay *way, int32 n, int (*cb)())
 {
     UC data[GPS_ARB_LEN];
     int32 fd;
@@ -724,6 +723,11 @@ int32 GPS_A100_Send(const char *port, GPS_PWay *way, int32 n)
 
     for(i=0;i<n;++i)
     {
+        if (cb) {
+		if (cb(way[i]))
+			break;
+	}
+
 	switch(gps_waypt_type)
 	{
 	case pD100:
@@ -788,7 +792,7 @@ int32 GPS_A100_Send(const char *port, GPS_PWay *way, int32 n)
 	    return gps_errno;
 	}
     }
-    
+
     GPS_Util_Put_Short(data,COMMAND_ID[gps_device_command].Cmnd_Transfer_Wpt);
     GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Xfer_Cmplt,
 		    data,2);
