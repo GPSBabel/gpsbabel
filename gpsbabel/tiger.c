@@ -60,34 +60,22 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-abort();
-#if 0
-	char name[9], desc[30];
 	double lat,lon;
-	char latdir, londir;
-	long alt; 
-	char alttype;
-	char icon[3] = {0};
+	char desc[100];
+	char icon[100];
 	waypoint *wpt_tmp;
 
-	while( fscanf(file_in, "%s %le%c %le%c %ld%c %30[^,] %c",
-			name, &lat, &latdir, &lon, &londir,
-			&alt, &alttype, desc, icon) > 0) {
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
-		wpt_tmp->position.altitude.altitude_meters = alt;
-		wpt_tmp->shortname = xstrdup(name);
-		wpt_tmp->description = xstrdup(desc);
-		wpt_tmp->creation_time = time(NULL);
+	while( fscanf(file_in, "%lf,%lf:%100[^:]:%100[^\n]", 
+			&lon, &lat, icon, desc) > 0) {
+		wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
 
-		if (latdir == 'S') lat = -lat;
-		if (londir == 'W') lon = -lon;
-		wpt_tmp->position.longitude.degrees = lon/100.0;
-		wpt_tmp->position.latitude.degrees = lat/100.0;
-		wpt_tmp->icon_descr = xstrdup(icon);
+		wpt_tmp->position.longitude.degrees = lon;
+		wpt_tmp->position.latitude.degrees = lat;
+		wpt_tmp->description = xstrdup(desc);
+		wpt_tmp->shortname = mkshort(desc);
 
 		waypt_add(wpt_tmp);
 	}
-#endif
 }
 
 static void
