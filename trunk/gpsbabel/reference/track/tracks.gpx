@@ -5,522 +5,264 @@ creator="GPSBabel - http://gpsbabel.sourceforge.net"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>2003-03-13T21:19:01Z</time>
+<time>2004-01-08T20:11:32Z</time>
 <trk>
-<name>Nature Trail</name>
-<desc>Acadiana Park Nature Trail</desc>
-<number>1</number>
 <trkseg>
-<trkpt lat="30.257950" lon="-91.986633">
-<ele>20.000000</ele>
-<time>2002-05-19T16:43:11Z</time>
+<trkpt lat="30.062183" lon="-91.610350">
+<ele>1.000000</ele>
+<time>2002-05-25T17:06:21Z</time>
 </trkpt>
-<trkpt lat="30.258167" lon="-91.987217">
-<ele>13.000000</ele>
-<time>2002-05-19T16:45:02Z</time>
+<trkpt lat="30.062783" lon="-91.610567">
+<ele>0.000000</ele>
+<time>2002-05-25T17:09:55Z</time>
 </trkpt>
-<trkpt lat="30.258700" lon="-91.987283">
-<ele>5.000000</ele>
-<time>2002-05-19T16:46:36Z</time>
+<trkpt lat="30.062700" lon="-91.608267">
+<ele>0.000000</ele>
+<time>2002-05-25T17:12:00Z</time>
 </trkpt>
-<trkpt lat="30.257433" lon="-91.988600">
+<trkpt lat="30.062333" lon="-91.607383">
+<ele>0.000000</ele>
+<time>2002-05-25T17:12:48Z</time>
+</trkpt>
+<trkpt lat="30.061533" lon="-91.605283">
+<ele>0.000000</ele>
+<time>2002-05-25T17:14:41Z</time>
+</trkpt>
+<trkpt lat="30.059783" lon="-91.599400">
+<ele>0.000000</ele>
+<time>2002-05-25T17:17:16Z</time>
+</trkpt>
+<trkpt lat="30.057800" lon="-91.596683">
+<ele>0.000000</ele>
+<time>2002-05-25T17:17:46Z</time>
+</trkpt>
+<trkpt lat="30.055383" lon="-91.594900">
+<ele>0.000000</ele>
+<time>2002-05-25T17:18:20Z</time>
+</trkpt>
+<trkpt lat="30.053883" lon="-91.592617">
+<ele>0.000000</ele>
+<time>2002-05-25T17:19:01Z</time>
+</trkpt>
+<trkpt lat="30.049733" lon="-91.589750">
+<ele>0.000000</ele>
+<time>2002-05-25T17:20:46Z</time>
+</trkpt>
+<trkpt lat="30.049017" lon="-91.589883">
+<ele>0.000000</ele>
+<time>2002-05-25T17:21:10Z</time>
+</trkpt>
+<trkpt lat="30.048800" lon="-91.592933">
+<ele>0.000000</ele>
+<time>2002-05-25T17:21:51Z</time>
+</trkpt>
+<trkpt lat="30.046233" lon="-91.596450">
+<ele>0.000000</ele>
+<time>2002-05-25T17:22:35Z</time>
+</trkpt>
+<trkpt lat="30.045517" lon="-91.598717">
+<ele>0.000000</ele>
+<time>2002-05-25T17:23:08Z</time>
+</trkpt>
+<trkpt lat="30.047300" lon="-91.600267">
+<ele>0.000000</ele>
+<time>2002-05-25T18:04:23Z</time>
+</trkpt>
+<trkpt lat="30.047000" lon="-91.599633">
+<ele>2.000000</ele>
+<time>2002-05-25T18:06:04Z</time>
+</trkpt>
+<trkpt lat="30.046433" lon="-91.599467">
+<ele>0.000000</ele>
+<time>2002-05-25T18:07:06Z</time>
+</trkpt>
+<trkpt lat="30.046200" lon="-91.598950">
+<ele>1.000000</ele>
+<time>2002-05-25T18:08:18Z</time>
+</trkpt>
+<trkpt lat="30.046367" lon="-91.597733">
+<ele>0.000000</ele>
+<time>2002-05-25T18:10:20Z</time>
+</trkpt>
+<trkpt lat="30.046350" lon="-91.597167">
+<ele>0.000000</ele>
+<time>2002-05-25T18:11:09Z</time>
+</trkpt>
+<trkpt lat="30.046783" lon="-91.596333">
+<ele>0.000000</ele>
+<time>2002-05-25T18:12:18Z</time>
+</trkpt>
+<trkpt lat="30.047450" lon="-91.595200">
+<ele>0.000000</ele>
+<time>2002-05-25T18:14:22Z</time>
+</trkpt>
+<trkpt lat="30.047800" lon="-91.594767">
+<ele>2.000000</ele>
+<time>2002-05-25T18:15:04Z</time>
+</trkpt>
+<trkpt lat="30.048250" lon="-91.594083">
+<ele>1.000000</ele>
+<time>2002-05-25T18:16:14Z</time>
+</trkpt>
+<trkpt lat="30.048683" lon="-91.593800">
+<ele>1.000000</ele>
+<time>2002-05-25T18:17:01Z</time>
+</trkpt>
+<trkpt lat="30.049350" lon="-91.593850">
+<ele>0.000000</ele>
+<time>2002-05-25T18:18:07Z</time>
+</trkpt>
+<trkpt lat="30.050317" lon="-91.593983">
+<ele>2.000000</ele>
+<time>2002-05-25T18:19:51Z</time>
+</trkpt>
+<trkpt lat="30.050783" lon="-91.594117">
+<ele>0.000000</ele>
+<time>2002-05-25T18:20:39Z</time>
+</trkpt>
+<trkpt lat="30.051233" lon="-91.594367">
+<ele>0.000000</ele>
+<time>2002-05-25T18:21:24Z</time>
+</trkpt>
+<trkpt lat="30.051800" lon="-91.594367">
+<ele>0.000000</ele>
+<time>2002-05-25T18:22:17Z</time>
+</trkpt>
+<trkpt lat="30.052217" lon="-91.594667">
+<ele>0.000000</ele>
+<time>2002-05-25T18:23:18Z</time>
+</trkpt>
+<trkpt lat="30.053017" lon="-91.594683">
+<ele>0.000000</ele>
+<time>2002-05-25T18:24:37Z</time>
+</trkpt>
+<trkpt lat="30.054867" lon="-91.595200">
 <ele>6.000000</ele>
-<time>2002-05-19T16:51:46Z</time>
+<time>2002-05-25T18:28:13Z</time>
 </trkpt>
-<trkpt lat="30.257517" lon="-91.989250">
-<ele>0.000000</ele>
-<time>2002-05-19T16:52:57Z</time>
-</trkpt>
-<trkpt lat="30.257900" lon="-91.990617">
-<ele>5.000000</ele>
-<time>2002-05-19T16:56:09Z</time>
-</trkpt>
-<trkpt lat="30.258350" lon="-91.990717">
-<ele>0.000000</ele>
-<time>2002-05-19T16:58:19Z</time>
-</trkpt>
-<trkpt lat="30.258800" lon="-91.989833">
-<ele>3.000000</ele>
-<time>2002-05-19T17:00:54Z</time>
-</trkpt>
-<trkpt lat="30.258917" lon="-91.989267">
-<ele>0.000000</ele>
-<time>2002-05-19T17:02:12Z</time>
-</trkpt>
-<trkpt lat="30.258933" lon="-91.988417">
-<ele>0.000000</ele>
-<time>2002-05-19T17:04:16Z</time>
-</trkpt>
-<trkpt lat="30.258917" lon="-91.988000">
-<ele>1.000000</ele>
-<time>2002-05-19T17:10:37Z</time>
-</trkpt>
-<trkpt lat="30.258983" lon="-91.987400">
+<trkpt lat="30.053733" lon="-91.594933">
 <ele>2.000000</ele>
-<time>2002-05-19T17:12:51Z</time>
+<time>2002-05-25T18:31:36Z</time>
 </trkpt>
-<trkpt lat="30.258617" lon="-91.986967">
-<ele>2.000000</ele>
-<time>2002-05-19T17:14:05Z</time>
-</trkpt>
-<trkpt lat="30.258633" lon="-91.986167">
-<ele>2.000000</ele>
-<time>2002-05-19T17:16:36Z</time>
-</trkpt>
-<trkpt lat="30.258750" lon="-91.985667">
-<ele>1.000000</ele>
-<time>2002-05-19T17:17:33Z</time>
-</trkpt>
-<trkpt lat="30.258450" lon="-91.985283">
+<trkpt lat="30.053183" lon="-91.594783">
 <ele>0.000000</ele>
-<time>2002-05-19T17:20:20Z</time>
+<time>2002-05-25T18:32:56Z</time>
 </trkpt>
-<trkpt lat="30.257967" lon="-91.985217">
+<trkpt lat="30.052633" lon="-91.594833">
 <ele>0.000000</ele>
-<time>2002-05-19T17:21:35Z</time>
+<time>2002-05-25T18:34:02Z</time>
 </trkpt>
-<trkpt lat="30.257300" lon="-91.984117">
+<trkpt lat="30.052450" lon="-91.595433">
+<ele>0.000000</ele>
+<time>2002-05-25T18:36:03Z</time>
+</trkpt>
+<trkpt lat="30.052483" lon="-91.595967">
+<ele>0.000000</ele>
+<time>2002-05-25T18:36:48Z</time>
+</trkpt>
+<trkpt lat="30.052650" lon="-91.596783">
 <ele>1.000000</ele>
-<time>2002-05-19T17:25:49Z</time>
+<time>2002-05-25T18:37:52Z</time>
 </trkpt>
-<trkpt lat="30.257100" lon="-91.983733">
-<ele>9.000000</ele>
-<time>2002-05-19T17:26:52Z</time>
+<trkpt lat="30.053133" lon="-91.597850">
+<ele>0.000000</ele>
+<time>2002-05-25T18:39:18Z</time>
 </trkpt>
-<trkpt lat="30.257117" lon="-91.983067">
-<ele>3.000000</ele>
-<time>2002-05-19T17:30:08Z</time>
+<trkpt lat="30.053617" lon="-91.597967">
+<ele>0.000000</ele>
+<time>2002-05-25T18:40:15Z</time>
 </trkpt>
-<trkpt lat="30.257400" lon="-91.982450">
+<trkpt lat="30.053967" lon="-91.597767">
 <ele>6.000000</ele>
-<time>2002-05-19T17:32:42Z</time>
+<time>2002-05-25T18:41:25Z</time>
 </trkpt>
-<trkpt lat="30.257950" lon="-91.982283">
+<trkpt lat="30.053617" lon="-91.598083">
 <ele>0.000000</ele>
-<time>2002-05-19T17:36:46Z</time>
+<time>2002-05-25T18:42:37Z</time>
 </trkpt>
-<trkpt lat="30.258333" lon="-91.982833">
-<ele>4.000000</ele>
-<time>2002-05-19T17:41:15Z</time>
-</trkpt>
-<trkpt lat="30.258483" lon="-91.983767">
+<trkpt lat="30.053200" lon="-91.597917">
 <ele>0.000000</ele>
-<time>2002-05-19T17:43:08Z</time>
+<time>2002-05-25T18:44:01Z</time>
 </trkpt>
-<trkpt lat="30.258517" lon="-91.984433">
-<ele>6.000000</ele>
-<time>2002-05-19T17:44:29Z</time>
+<trkpt lat="30.052817" lon="-91.597517">
+<ele>0.000000</ele>
+<time>2002-05-25T18:45:53Z</time>
 </trkpt>
-<trkpt lat="30.258800" lon="-91.985233">
+<trkpt lat="30.052567" lon="-91.596933">
+<ele>0.000000</ele>
+<time>2002-05-25T18:46:54Z</time>
+</trkpt>
+<trkpt lat="30.052333" lon="-91.596433">
+<ele>0.000000</ele>
+<time>2002-05-25T18:47:42Z</time>
+</trkpt>
+<trkpt lat="30.052250" lon="-91.595683">
+<ele>0.000000</ele>
+<time>2002-05-25T18:48:41Z</time>
+</trkpt>
+<trkpt lat="30.052217" lon="-91.595017">
+<ele>0.000000</ele>
+<time>2002-05-25T18:49:52Z</time>
+</trkpt>
+<trkpt lat="30.051883" lon="-91.594700">
+<ele>0.000000</ele>
+<time>2002-05-25T18:50:49Z</time>
+</trkpt>
+<trkpt lat="30.051050" lon="-91.594400">
+<ele>0.000000</ele>
+<time>2002-05-25T18:52:14Z</time>
+</trkpt>
+<trkpt lat="30.050567" lon="-91.594233">
+<ele>0.000000</ele>
+<time>2002-05-25T18:52:56Z</time>
+</trkpt>
+<trkpt lat="30.050183" lon="-91.594100">
+<ele>0.000000</ele>
+<time>2002-05-25T18:53:38Z</time>
+</trkpt>
+<trkpt lat="30.049100" lon="-91.593717">
+<ele>0.000000</ele>
+<time>2002-05-25T18:55:11Z</time>
+</trkpt>
+<trkpt lat="30.048450" lon="-91.594250">
+<ele>0.000000</ele>
+<time>2002-05-25T18:56:32Z</time>
+</trkpt>
+<trkpt lat="30.048083" lon="-91.594750">
+<ele>0.000000</ele>
+<time>2002-05-25T18:57:24Z</time>
+</trkpt>
+<trkpt lat="30.047500" lon="-91.595450">
 <ele>7.000000</ele>
-<time>2002-05-19T17:48:21Z</time>
+<time>2002-05-25T18:58:40Z</time>
 </trkpt>
-<trkpt lat="30.258983" lon="-91.986267">
-<ele>4.000000</ele>
-<time>2002-05-19T17:50:10Z</time>
-</trkpt>
-<trkpt lat="30.259033" lon="-91.987283">
-<ele>7.000000</ele>
-<time>2002-05-19T17:54:10Z</time>
-</trkpt>
-<trkpt lat="30.258550" lon="-91.987050">
-<ele>0.000000</ele>
-<time>2002-05-19T17:55:21Z</time>
-</trkpt>
-<trkpt lat="30.258367" lon="-91.986167">
-<ele>0.000000</ele>
-<time>2002-05-19T17:57:38Z</time>
-</trkpt>
-<trkpt lat="30.258183" lon="-91.985683">
-<ele>1.000000</ele>
-<time>2002-05-19T17:59:00Z</time>
-</trkpt>
-<trkpt lat="30.258233" lon="-91.986633">
-<ele>18.000000</ele>
-<time>2002-05-19T18:02:55Z</time>
-</trkpt>
-<trkpt lat="30.257983" lon="-91.986967">
-<ele>38.000000</ele>
-<time>2002-05-19T18:05:28Z</time>
-</trkpt>
-<trkpt lat="30.257667" lon="-91.986550">
-<ele>1.000000</ele>
-<time>2002-05-19T18:10:59Z</time>
-</trkpt>
-<trkpt lat="30.257450" lon="-91.985650">
-<ele>3.000000</ele>
-<time>2002-05-19T18:12:45Z</time>
-</trkpt>
-<trkpt lat="30.256867" lon="-91.985600">
-<ele>18.000000</ele>
-<time>2002-05-19T18:15:47Z</time>
-</trkpt>
-<trkpt lat="30.256900" lon="-91.986050">
-<ele>12.000000</ele>
-<time>2002-05-19T18:17:45Z</time>
-</trkpt>
-<trkpt lat="30.256417" lon="-91.986283">
-<ele>1.000000</ele>
-<time>2002-05-19T18:19:26Z</time>
-</trkpt>
-<trkpt lat="30.255800" lon="-91.986267">
-<ele>3.000000</ele>
-<time>2002-05-19T18:20:52Z</time>
-</trkpt>
-<trkpt lat="30.256067" lon="-91.987117">
-<ele>19.000000</ele>
-<time>2002-05-19T18:22:54Z</time>
-</trkpt>
-<trkpt lat="30.256117" lon="-91.988050">
-<ele>19.000000</ele>
-<time>2002-05-19T18:24:11Z</time>
-</trkpt>
-<trkpt lat="30.256183" lon="-91.988533">
-<ele>20.000000</ele>
-<time>2002-05-19T18:25:17Z</time>
-</trkpt>
-</trkseg>
-</trk>
-<trk>
-<name>Hackberry Fishing</name>
-<desc>Lake Calcasieu</desc>
-<number>2</number>
-<trkseg>
-<trkpt lat="29.977283" lon="-93.342533">
-<ele>2.000000</ele>
-<time>2002-08-03T11:30:32Z</time>
-</trkpt>
-<trkpt lat="29.977117" lon="-93.341600">
-<ele>0.000000</ele>
-<time>2002-08-03T11:32:34Z</time>
-</trkpt>
-<trkpt lat="29.974233" lon="-93.339467">
-<ele>0.000000</ele>
-<time>2002-08-03T11:52:31Z</time>
-</trkpt>
-<trkpt lat="29.970667" lon="-93.339733">
-<ele>0.000000</ele>
-<time>2002-08-03T11:52:55Z</time>
-</trkpt>
-<trkpt lat="29.969283" lon="-93.336983">
-<ele>0.000000</ele>
-<time>2002-08-03T11:53:19Z</time>
-</trkpt>
-<trkpt lat="29.799350" lon="-93.346533">
-<ele>2.000000</ele>
-<time>2002-08-03T12:11:32Z</time>
-</trkpt>
-<trkpt lat="29.750450" lon="-93.341167">
-<ele>2.000000</ele>
-<time>2002-08-03T12:17:55Z</time>
-</trkpt>
-<trkpt lat="29.750183" lon="-93.340083">
-<ele>1.000000</ele>
-<time>2002-08-03T12:18:28Z</time>
-</trkpt>
-<trkpt lat="29.750667" lon="-93.340050">
-<ele>0.000000</ele>
-<time>2002-08-03T12:19:33Z</time>
-</trkpt>
-<trkpt lat="29.750917" lon="-93.340350">
-<ele>0.000000</ele>
-<time>2002-08-03T13:33:04Z</time>
-</trkpt>
-<trkpt lat="29.750800" lon="-93.339767">
-<ele>0.000000</ele>
-<time>2002-08-03T13:34:22Z</time>
-</trkpt>
-<trkpt lat="29.750233" lon="-93.340283">
-<ele>0.000000</ele>
-<time>2002-08-03T13:34:56Z</time>
-</trkpt>
-<trkpt lat="29.750567" lon="-93.341133">
-<ele>0.000000</ele>
-<time>2002-08-03T13:35:36Z</time>
-</trkpt>
-<trkpt lat="29.752250" lon="-93.341833">
-<ele>0.000000</ele>
-<time>2002-08-03T13:36:45Z</time>
-</trkpt>
-<trkpt lat="29.755750" lon="-93.343383">
-<ele>0.000000</ele>
-<time>2002-08-03T13:37:27Z</time>
-</trkpt>
-<trkpt lat="29.759383" lon="-93.343800">
-<ele>0.000000</ele>
-<time>2002-08-03T13:37:54Z</time>
-</trkpt>
-<trkpt lat="29.760533" lon="-93.344583">
-<ele>0.000000</ele>
-<time>2002-08-03T13:38:10Z</time>
-</trkpt>
-<trkpt lat="29.760850" lon="-93.345233">
-<ele>0.000000</ele>
-<time>2002-08-03T13:47:28Z</time>
-</trkpt>
-<trkpt lat="29.760733" lon="-93.344717">
-<ele>0.000000</ele>
-<time>2002-08-03T14:15:37Z</time>
-</trkpt>
-<trkpt lat="29.762217" lon="-93.344583">
-<ele>0.000000</ele>
-<time>2002-08-03T14:17:07Z</time>
-</trkpt>
-<trkpt lat="29.765233" lon="-93.345267">
-<ele>0.000000</ele>
-<time>2002-08-03T14:18:09Z</time>
-</trkpt>
-<trkpt lat="29.770950" lon="-93.345650">
-<ele>0.000000</ele>
-<time>2002-08-03T14:18:52Z</time>
-</trkpt>
-<trkpt lat="29.774100" lon="-93.345183">
-<ele>0.000000</ele>
-<time>2002-08-03T14:19:15Z</time>
-</trkpt>
-<trkpt lat="29.790817" lon="-93.345750">
-<ele>0.000000</ele>
-<time>2002-08-03T14:21:22Z</time>
-</trkpt>
-<trkpt lat="29.793400" lon="-93.346833">
-<ele>0.000000</ele>
-<time>2002-08-03T14:21:44Z</time>
-</trkpt>
-<trkpt lat="29.798967" lon="-93.346500">
-<ele>0.000000</ele>
-<time>2002-08-03T14:22:41Z</time>
-</trkpt>
-<trkpt lat="29.814350" lon="-93.347717">
-<ele>0.000000</ele>
-<time>2002-08-03T14:24:58Z</time>
-</trkpt>
-<trkpt lat="29.819283" lon="-93.347267">
-<ele>0.000000</ele>
-<time>2002-08-03T14:25:36Z</time>
-</trkpt>
-<trkpt lat="29.820917" lon="-93.344733">
-<ele>0.000000</ele>
-<time>2002-08-03T14:26:03Z</time>
-</trkpt>
-<trkpt lat="29.823667" lon="-93.337417">
-<ele>0.000000</ele>
-<time>2002-08-03T14:26:56Z</time>
-</trkpt>
-<trkpt lat="29.831367" lon="-93.334067">
-<ele>0.000000</ele>
-<time>2002-08-03T14:27:51Z</time>
-</trkpt>
-<trkpt lat="29.839067" lon="-93.329717">
-<ele>0.000000</ele>
-<time>2002-08-03T14:28:48Z</time>
-</trkpt>
-<trkpt lat="29.844000" lon="-93.329917">
-<ele>0.000000</ele>
-<time>2002-08-03T14:29:24Z</time>
-</trkpt>
-<trkpt lat="29.847800" lon="-93.329883">
-<ele>0.000000</ele>
-<time>2002-08-03T14:29:56Z</time>
-</trkpt>
-<trkpt lat="29.855933" lon="-93.331517">
-<ele>0.000000</ele>
-<time>2002-08-03T14:31:01Z</time>
-</trkpt>
-<trkpt lat="29.859833" lon="-93.332833">
-<ele>0.000000</ele>
-<time>2002-08-03T14:31:32Z</time>
-</trkpt>
-<trkpt lat="29.862233" lon="-93.332650">
-<ele>0.000000</ele>
-<time>2002-08-03T14:31:51Z</time>
-</trkpt>
-<trkpt lat="29.863817" lon="-93.330017">
-<ele>2.000000</ele>
-<time>2002-08-03T14:32:14Z</time>
-</trkpt>
-<trkpt lat="29.863717" lon="-93.327183">
-<ele>3.000000</ele>
-<time>2002-08-03T14:32:36Z</time>
-</trkpt>
-<trkpt lat="29.863283" lon="-93.325900">
-<ele>1.000000</ele>
-<time>2002-08-03T14:33:18Z</time>
-</trkpt>
-<trkpt lat="29.863450" lon="-93.324717">
-<ele>0.000000</ele>
-<time>2002-08-03T14:34:06Z</time>
-</trkpt>
-<trkpt lat="29.863517" lon="-93.323400">
-<ele>0.000000</ele>
-<time>2002-08-03T14:34:58Z</time>
-</trkpt>
-<trkpt lat="29.863483" lon="-93.322950">
-<ele>0.000000</ele>
-<time>2002-08-03T14:35:41Z</time>
-</trkpt>
-<trkpt lat="29.863000" lon="-93.323233">
-<ele>0.000000</ele>
-<time>2002-08-03T14:37:50Z</time>
-</trkpt>
-<trkpt lat="29.860033" lon="-93.325383">
-<ele>3.000000</ele>
-<time>2002-08-03T14:52:47Z</time>
-</trkpt>
-<trkpt lat="29.857567" lon="-93.327983">
-<ele>3.000000</ele>
-<time>2002-08-03T15:05:47Z</time>
-</trkpt>
-<trkpt lat="29.854917" lon="-93.331167">
-<ele>3.000000</ele>
-<time>2002-08-03T15:06:47Z</time>
-</trkpt>
-<trkpt lat="29.852233" lon="-93.340367">
-<ele>7.000000</ele>
-<time>2002-08-03T15:07:41Z</time>
-</trkpt>
-<trkpt lat="29.849833" lon="-93.344750">
-<ele>8.000000</ele>
-<time>2002-08-03T15:08:11Z</time>
-</trkpt>
-<trkpt lat="29.845717" lon="-93.349483">
-<ele>5.000000</ele>
-<time>2002-08-03T15:09:44Z</time>
-</trkpt>
-<trkpt lat="29.845300" lon="-93.349950">
-<ele>1.000000</ele>
-<time>2002-08-03T15:11:11Z</time>
-</trkpt>
-<trkpt lat="29.845167" lon="-93.349150">
-<ele>2.000000</ele>
-<time>2002-08-03T15:56:20Z</time>
-</trkpt>
-<trkpt lat="29.846183" lon="-93.345267">
-<ele>5.000000</ele>
-<time>2002-08-03T15:58:46Z</time>
-</trkpt>
-<trkpt lat="29.846683" lon="-93.344633">
-<ele>3.000000</ele>
-<time>2002-08-03T15:59:28Z</time>
-</trkpt>
-<trkpt lat="29.847583" lon="-93.344883">
-<ele>0.000000</ele>
-<time>2002-08-03T16:03:19Z</time>
-</trkpt>
-<trkpt lat="29.851750" lon="-93.344950">
-<ele>2.000000</ele>
-<time>2002-08-03T16:04:08Z</time>
-</trkpt>
-<trkpt lat="29.926533" lon="-93.340417">
-<ele>8.000000</ele>
-<time>2002-08-03T16:14:02Z</time>
-</trkpt>
-<trkpt lat="29.929517" lon="-93.339733">
-<ele>1.000000</ele>
-<time>2002-08-03T16:14:26Z</time>
-</trkpt>
-<trkpt lat="29.931117" lon="-93.340883">
-<ele>0.000000</ele>
-<time>2002-08-03T16:15:10Z</time>
-</trkpt>
-<trkpt lat="29.930333" lon="-93.341583">
-<ele>0.000000</ele>
-<time>2002-08-03T16:37:57Z</time>
-</trkpt>
-<trkpt lat="29.929900" lon="-93.342000">
-<ele>1.000000</ele>
-<time>2002-08-03T16:41:02Z</time>
-</trkpt>
-<trkpt lat="29.929433" lon="-93.341967">
-<ele>0.000000</ele>
-<time>2002-08-03T16:43:31Z</time>
-</trkpt>
-<trkpt lat="29.929267" lon="-93.342450">
-<ele>0.000000</ele>
-<time>2002-08-03T16:53:02Z</time>
-</trkpt>
-<trkpt lat="29.929767" lon="-93.341067">
-<ele>0.000000</ele>
-<time>2002-08-03T16:54:21Z</time>
-</trkpt>
-<trkpt lat="29.930600" lon="-93.340550">
-<ele>0.000000</ele>
-<time>2002-08-03T16:54:59Z</time>
-</trkpt>
-<trkpt lat="29.943900" lon="-93.338083">
-<ele>1.000000</ele>
-<time>2002-08-03T16:56:48Z</time>
-</trkpt>
-<trkpt lat="29.973283" lon="-93.335600">
-<ele>0.000000</ele>
-<time>2002-08-03T17:00:00Z</time>
-</trkpt>
-<trkpt lat="29.995500" lon="-93.334450">
-<ele>0.000000</ele>
-<time>2002-08-03T17:02:27Z</time>
-</trkpt>
-<trkpt lat="29.996100" lon="-93.334650">
-<ele>0.000000</ele>
-<time>2002-08-03T17:03:01Z</time>
-</trkpt>
-<trkpt lat="30.011567" lon="-93.332483">
-<ele>0.000000</ele>
-<time>2002-08-03T17:33:50Z</time>
-</trkpt>
-<trkpt lat="30.020383" lon="-93.330267">
-<ele>0.000000</ele>
-<time>2002-08-03T17:35:00Z</time>
-</trkpt>
-<trkpt lat="30.021933" lon="-93.330300">
-<ele>0.000000</ele>
-<time>2002-08-03T17:35:22Z</time>
-</trkpt>
-<trkpt lat="30.022300" lon="-93.329517">
-<ele>0.000000</ele>
-<time>2002-08-03T17:36:30Z</time>
-</trkpt>
-<trkpt lat="30.022633" lon="-93.329283">
-<ele>0.000000</ele>
-<time>2002-08-03T17:40:37Z</time>
-</trkpt>
-<trkpt lat="30.023017" lon="-93.329283">
-<ele>0.000000</ele>
-<time>2002-08-03T17:43:00Z</time>
-</trkpt>
-<trkpt lat="30.023333" lon="-93.329500">
-<ele>0.000000</ele>
-<time>2002-08-03T17:48:02Z</time>
-</trkpt>
-<trkpt lat="30.023333" lon="-93.330183">
-<ele>0.000000</ele>
-<time>2002-08-03T18:31:36Z</time>
-</trkpt>
-<trkpt lat="30.020033" lon="-93.332050">
+<trkpt lat="30.047067" lon="-91.596000">
 <ele>0.000000</ele>
-<time>2002-08-03T18:32:29Z</time>
+<time>2002-05-25T18:59:28Z</time>
 </trkpt>
-<trkpt lat="29.970267" lon="-93.337350">
+<trkpt lat="30.046633" lon="-91.596600">
 <ele>0.000000</ele>
-<time>2002-08-03T18:37:32Z</time>
+<time>2002-05-25T19:00:22Z</time>
 </trkpt>
-<trkpt lat="29.970467" lon="-93.339700">
+<trkpt lat="30.046400" lon="-91.597650">
 <ele>0.000000</ele>
-<time>2002-08-03T18:37:52Z</time>
+<time>2002-05-25T19:01:41Z</time>
 </trkpt>
-<trkpt lat="29.974033" lon="-93.339683">
+<trkpt lat="30.046233" lon="-91.598467">
 <ele>0.000000</ele>
-<time>2002-08-03T18:38:15Z</time>
+<time>2002-05-25T19:02:48Z</time>
 </trkpt>
-<trkpt lat="29.976200" lon="-93.340967">
+<trkpt lat="30.046317" lon="-91.598967">
 <ele>0.000000</ele>
-<time>2002-08-03T18:38:34Z</time>
+<time>2002-05-25T19:03:43Z</time>
 </trkpt>
-<trkpt lat="29.977000" lon="-93.341217">
+<trkpt lat="30.046783" lon="-91.599283">
 <ele>0.000000</ele>
-<time>2002-08-03T18:39:12Z</time>
+<time>2002-05-25T19:04:49Z</time>
 </trkpt>
-<trkpt lat="29.977100" lon="-93.342350">
+<trkpt lat="30.047133" lon="-91.599667">
 <ele>0.000000</ele>
-<time>2002-08-03T18:46:45Z</time>
+<time>2002-05-25T19:05:57Z</time>
 </trkpt>
 </trkseg>
 </trk>
