@@ -1912,6 +1912,8 @@ mps_write(void)
 	int				reclen;
 	int				reclen2;
 	unsigned int	tocopy;
+	unsigned int	block;
+	
 	long			tempFilePos;
 	unsigned int	mpsWptClass;
 
@@ -1988,9 +1990,10 @@ mps_write(void)
 				fseek(mps_file_temp, tempFilePos, SEEK_SET);
 
 				/* copy the data using a "reasonably" sized buffer */
-				for(tocopy = reclen2; tocopy > 0; tocopy -= sizeof(copybuf)) {
-					fread(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_temp);
-					fwrite(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_out);
+				for(tocopy = reclen2; tocopy > 0; tocopy -= block) {
+				  block = (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy);
+				  fread(copybuf, block, 1, mps_file_temp);
+				  fwrite(copybuf, block, 1, mps_file_out);
 				}
 			}
 			else break;
@@ -2026,6 +2029,7 @@ mps_write(void)
 	/* prior to writing any tracks as requested, if we're doing a merge, read in the rtes
 	   from the original file and then write them out, ready for tracks to follow
 	*/
+
 	/* if ((mpsmergeout) && (global_opts.objective != rtedata)) { */
 	if ((mpsmergeout) && (! doing_rtes)) {
 		while (!feof(mps_file_temp)) {
@@ -2035,9 +2039,11 @@ mps_write(void)
 				fwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
 				fwrite(&recType, 1, 1, mps_file_out);
 
-				for(tocopy = reclen2; tocopy > 0; tocopy -= sizeof(copybuf)) {
-					fread(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_temp);
-					fwrite(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_out);
+				/* copy the data using a "reasonably" sized buffer */
+				for(tocopy = reclen2; tocopy > 0; tocopy -= block) {
+				  block = (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy);
+				  fread(copybuf, block, 1, mps_file_temp);
+				  fwrite(copybuf, block, 1, mps_file_out);
 				}
 			}
 			else break;
@@ -2095,9 +2101,11 @@ mps_write(void)
 				fwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
 				fwrite(&recType, 1, 1, mps_file_out);
 
-				for(tocopy = reclen2; tocopy > 0; tocopy -= sizeof(copybuf)) {
-					fread(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_temp);
-					fwrite(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_out);
+				/* copy the data using a "reasonably" sized buffer */
+				for(tocopy = reclen2; tocopy > 0; tocopy -= block) {
+				  block = (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy);
+				  fread(copybuf, block, 1, mps_file_temp);
+				  fwrite(copybuf, block, 1, mps_file_out);
 				}
 			}
 			else break;
@@ -2140,10 +2148,13 @@ mps_write(void)
 			fwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
 			fwrite(&recType, 1, 1, mps_file_out);
 
-			for(tocopy = reclen2; tocopy > 0; tocopy -= sizeof(copybuf)) {
-				fread(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_temp);
-				fwrite(copybuf, (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy), 1, mps_file_out);
+			/* copy the data using a "reasonably" sized buffer */
+			for(tocopy = reclen2; tocopy > 0; tocopy -= block) {
+			  block = (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy);
+			  fread(copybuf, block, 1, mps_file_temp);
+			  fwrite(copybuf, block, 1, mps_file_out);
 			}
+			
 			if (recType != 'V') {
 				fread(&reclen, 4, 1, mps_file_temp);
 				reclen2 = le_read32(&reclen);
