@@ -337,3 +337,12 @@ ${PNAME} -i xmap -f reference/arcdist_input.txt \
          -o xmap -F ${TMPDIR}/arcdist.txt
 compare ${TMPDIR}/arcdist.txt reference/arcdist_output.txt
 
+#
+# Polygon filter
+#
+rm -f ${TMPDIR}/polygon.txt
+${PNAME} -i xmap -f reference/arcdist_input.txt \
+         -x polygon,file=reference/polygon_allencty.txt \
+         -o xmap -F ${TMPDIR}/polygon.txt
+compare ${TMPDIR}/polygon.txt reference/polygon_output.txt
+

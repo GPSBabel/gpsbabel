@@ -445,7 +445,7 @@ DATA FILTERS
 	locations.  The result would be a GPX file that more than likely
 	contains only unique points and point data.
 
-     DISTANCE ALONG A ROUTE
+     DISTANCE ALONG A ROUTE (ARC)
 
         The arc filter is designed to include points based on their
         proximity to an arc, which is a series of connected line
@@ -472,7 +472,9 @@ DATA FILTERS
         that distance is declared on the command line with the
         distance=X.XX option to the filter.  Distance options may be
         expressed in miles (distance=3M) or kilometers (distance=3K).
-        The default is zero miles.
+        The default is zero miles.  You may also specify the exclude option,
+        which causes GPSBabel to only include points that are further than
+        the specified distance from the arc.
 
 	For example, assuming the arc above is in a file called "lima_rd.txt":
 
@@ -482,6 +484,34 @@ DATA FILTERS
 	would include only points within one mile of the section of Lima Road
 	covered by the arc.
 
+    POLYGON
+
+        The polygon filter includes points if they are inside of a polygon.
+        A polygon file looks like an arc file, except that the arc it 
+        describes must be a closed cycle.  That is, for a simple polygon,
+        the first and last points must be the same.  Here's a square:
+
+          # A square (not really) polygon
+          41.0000       -85.0000
+          41.0000       -86.0000
+          42.0000       -86.0000
+          42.0000       -85.0000
+          41.0000       -85.0000
+
+        Polygons may include islands and holes.  To specify an island or a 
+        hole, just append it to the main polygon.
+
+        As with the arc filter, you specify a polygon by specifying the name
+        of the polygon that contains it, using the file option.  You can also
+        specify the exclude option, which reverses the operation of the filter
+        so that it only includes points that are NOT in the polygon.
+
+        For example, assume you have a polygon file that defines the border of
+        your county, called mycounty.txt.  This command line will give you only 
+        the points in your county:
+
+	gpsbabel -i geo -f 1.loc -x polygon,file=mycounty.txt \
+	  	 -o mapsend -F 2.wpt
 
 COMMON USAGE
 

@@ -32,6 +32,7 @@ extern filter_vecs_t position_vecs;
 extern filter_vecs_t radius_vecs;
 extern filter_vecs_t duplicate_vecs;
 extern filter_vecs_t arcdist_vecs;
+extern filter_vecs_t polygon_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -54,6 +55,11 @@ fl_vecs_t filter_vec_list[] = {
 		&arcdist_vecs,
 	        "arc",
 	        "Include Only Points Within Distance of Arc",
+	},
+	{
+		&polygon_vecs,
+		"polygon",
+		"Include Only Points Inside Polygon",
 	},
         {
 		NULL,
