@@ -33,6 +33,7 @@ static int in_cmt;
 static int in_gs_type;
 static int in_gs_diff;
 static int in_gs_terr;
+static int in_gs_log;
 static char *cdatastr;
 
 static XML_Parser psr;
@@ -110,6 +111,8 @@ gpx_start(void *data, const char *el, const char **attr)
 		in_gs_diff++;
 	} if (strcmp(el, "groundspeak:terrain") == 0) {
 		in_gs_terr++;
+	} if (strcmp(el, "groundspeak:log") == 0) {
+		in_gs_log++;
 	}
 }
 
@@ -169,7 +172,7 @@ gpx_end(void *data, const char *el)
 			tm.tm_isdst = 1;
 			wpt_tmp->creation_time = mktime(&tm);
 		}
-		if (in_wpt && in_gs_type) {
+		if (in_wpt && in_gs_type && !in_gs_log) {
 			wpt_tmp->gc_data.type = gs_mktype(cdatastr);
 		}
 		if (in_wpt && in_gs_diff) {
@@ -206,6 +209,8 @@ gpx_end(void *data, const char *el)
 		in_gs_diff--;
 	} if (strcmp(el, "groundspeak:terrain") == 0) {
 		in_gs_terr--;
+	} if (strcmp(el, "groundspeak:log") == 0) {
+		in_gs_log--;
 	}
 }
 
