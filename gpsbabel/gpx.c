@@ -40,6 +40,7 @@ static int in_gs_diff;
 static int in_gs_terr;
 static int in_gs_log;
 static int in_gs_log_wpt;
+static int in_gs_exported;
 static int in_gs_tbugs;
 static int in_something_else;
 static xml_tag *cur_tag;
@@ -56,6 +57,8 @@ static waypoint *wpt_tmp;
 static FILE *fd;
 static FILE *ofd;
 static void *mkshort_handle;
+
+static time_t file_time;
 
 static char *gsshortnames = NULL;
 
@@ -341,6 +344,10 @@ gpx_start(void *data, const char *el, const char **attr)
 		in_something_else++;
 		start_something_else( el, attr );
 	}
+	else if (strcmp(el, "groundspeak:exported") == 0) {
+		in_gs_exported++;
+		/* no start_something_else because the old date is eaten */
+	}
 	else if (strcmp(el, "groundspeak:travelbugs") == 0) {
 		in_gs_tbugs++;
 		in_something_else++;
@@ -404,6 +411,69 @@ gs_mkcont(char *t)
 	return gc_unknown;
 }
 
+static
+time_t 
+xml_parse_time( char *cdatastr ) 
+{
+	int off_hr = 0;
+	int off_min = 0;
+	int off_sign = 1;
+	char *offsetstr = NULL;
+	char *pointstr = NULL;
+	struct tm tm;
+	time_t rv = 0;
+	char *timestr = xstrdup( cdatastr );
+	
+	offsetstr = strchr( timestr, 'Z' );
+	if ( offsetstr ) {
+		/* zulu time; offsets stay at defaults */
+		*offsetstr = '\0';
+	} else {
+		offsetstr = strchr( timestr, '+' );
+		if ( offsetstr ) {
+			/* positive offset; parse it */
+			*offsetstr = '\0';
+			sscanf( offsetstr+1, "%d:%d", &off_hr, &off_min );
+		} else {
+			offsetstr = strchr( timestr, 'T' );
+			if ( offsetstr ) {
+				offsetstr = strchr( offsetstr, '-' );
+				if ( offsetstr ) {
+					/* negative offset; parse it */
+					*offsetstr = '\0';
+					sscanf( offsetstr+1, "%d:%d", 
+							&off_hr, &off_min );
+					off_sign = -1;
+				}
+			}
+		}
+			
+	}
+	
+	pointstr = strchr( timestr, '.' );
+	if ( pointstr ) {
+		*pointstr = '\0';
+	}
+	
+	sscanf(timestr, "%d-%d-%dT%d:%d:%d", 
+		&tm.tm_year,
+		&tm.tm_mon,
+		&tm.tm_mday,
+		&tm.tm_hour,
+		&tm.tm_min,
+		&tm.tm_sec);
+	tm.tm_mon -= 1;
+	tm.tm_year -= 1900;
+	tm.tm_isdst = 0;
+	
+	rv = mktime(&tm) + get_tz_offset() - off_sign*off_hr*3600 - 
+		off_sign*off_min*60;
+	
+        xfree(timestr);
+	
+	return rv;
+}
+
 static void
 gpx_end(void *data, const char *el)
 {
@@ -438,19 +508,14 @@ gpx_end(void *data, const char *el)
 			sscanf(cdatastr, "%lf", 
 				&wpt_tmp->position.altitude.altitude_meters);
 		}
-		if (in_time && (in_wpt || in_rte)) {
-			struct tm tm;
-			sscanf(cdatastr, "%d-%d-%dT%d:%d:%dZ\n", 
-				&tm.tm_year,
-				&tm.tm_mon,
-				&tm.tm_mday,
-				&tm.tm_hour,
-				&tm.tm_min,
-				&tm.tm_sec);
-			tm.tm_mon -= 1;
-			tm.tm_year -= 1900;
-			tm.tm_isdst = 1;
-                        wpt_tmp->creation_time = mktime(&tm) + get_tz_offset();
+		if (in_time) {
+			if ( in_wpt || in_rte) {
+                        	wpt_tmp->creation_time = 
+					xml_parse_time( cdatastr );
+			}
+			else {
+				file_time = xml_parse_time( cdatastr );
+			}
 		}
 		if (in_wpt && in_gs_type && !in_gs_log) {
 			wpt_tmp->gc_data.type = gs_mktype(cdatastr);
@@ -466,10 +531,16 @@ gpx_end(void *data, const char *el)
 			sscanf(cdatastr, "%f", &x);
 			wpt_tmp->gc_data.terr = x * 10;
 		}
+		if (in_gs_exported && in_wpt ) {
+                        wpt_tmp->gc_data.exported = xml_parse_time( cdatastr );
+		}
 		in_cdata--;
 		memset(cdatastr, 0, MY_CBUF);
 	}
 	if (strcmp(el, "wpt") == 0) {
+		if ( !wpt_tmp->gc_data.exported ) {
+			wpt_tmp->gc_data.exported = file_time;
+		}
 		waypt_add(wpt_tmp);
 		in_wpt--;
 		logpoint_ct = 0;
@@ -521,6 +592,9 @@ gpx_end(void *data, const char *el)
 		in_gs_log_wpt--;
 		in_something_else--;
 		end_something_else();
+	} else if (strcmp(el, "groundspeak:exported") == 0) {
+		in_gs_exported--;
+		/* no end_something_else because the old date is eaten */
 	} else if (strcmp(el, "groundspeak:travelbugs") == 0) {
 		in_gs_tbugs--;
 		in_something_else--;
@@ -554,7 +628,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 			(in_wpt && in_gs_diff) || 
 			(in_wpt && in_gs_terr) || 
 			(in_wpt && in_icon) || 
-			(in_time && (in_wpt || in_rte)))  {
+			(in_time))  {
 		estr = cdatastr + strlen(cdatastr);
 		memcpy(estr, s, len);
 		in_cdata++;
@@ -596,6 +670,8 @@ gpx_rd_init(const char *fname, const char *args)
         if (get_option(args, "logpoint") != NULL)
             opt_logpoint = 1;
 
+	file_time = 0;
+	
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {
 		fatal(MYNAME ": Cannot create XML Parser\n");
@@ -654,20 +730,22 @@ gpx_read(void)
  */
 static
 void
-gpx_write_time(const time_t timep)
+gpx_write_time(const time_t timep, char *elname)
 {
 	struct tm *tm = gmtime(&timep);
 	
 	if (!tm)
 		return;
 	
-	fprintf(ofd, "<time>%02d-%02d-%02dT%02d:%02d:%02dZ</time>\n",
+	fprintf(ofd, "<%s>%02d-%02d-%02dT%02d:%02d:%02dZ</%s>\n",
+		elname,
 		tm->tm_year+1900, 
 		tm->tm_mon+1, 
 		tm->tm_mday, 
 		tm->tm_hour, 
 		tm->tm_min, 
-		tm->tm_sec
+		tm->tm_sec,
+		elname
 	);
 
 }
@@ -688,7 +766,7 @@ fprint_tag_and_attrs( char *prefix, char *suffix, xml_tag *tag )
 }
 
 static void
-fprint_xml_chain( xml_tag *tag ) 
+fprint_xml_chain( xml_tag *tag, const waypoint *wpt ) 
 {
 	char *tmp_ent;
 	while ( tag ) {
@@ -704,7 +782,12 @@ fprint_xml_chain( xml_tag *tag )
 				xfree(tmp_ent);
 			}
 			if ( tag->child ) {
-				fprint_xml_chain(tag->child);
+				fprint_xml_chain(tag->child, wpt);
+			}
+			if ( strcmp(tag->tagname, "groundspeak:cache" ) == 0 
+					&& wpt->gc_data.exported) {
+				gpx_write_time( wpt->gc_data.exported, 
+						"groundspeak:exported" );
 			}
 			fprintf( ofd, "</%s>", tag->tagname);
 			if ( tag->parentcdata ) {
@@ -773,7 +856,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 			 waypointp->position.altitude.altitude_meters);
 	}
 	if (waypointp->creation_time) {
-		gpx_write_time(waypointp->creation_time);
+		gpx_write_time(waypointp->creation_time, "time");
 	}
 	if (waypointp->url) {
 		tmp_ent = gpx_entitize(waypointp->url);
@@ -791,7 +874,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 		xfree(tmp_ent);
 	}
 
-	fprint_xml_chain( waypointp->gpx_extras);
+	fprint_xml_chain( waypointp->gpx_extras, waypointp );
 	fprintf(ofd, "</wpt>\n");
 }
 
@@ -814,7 +897,7 @@ gpx_track_disp(const waypoint *waypointp)
 		waypointp->position.latitude.degrees,
 		waypointp->position.longitude.degrees);
 	if (waypointp->creation_time) {
-		gpx_write_time(waypointp->creation_time);
+		gpx_write_time(waypointp->creation_time,"time");
 	}
 	if (waypointp->position.altitude.altitude_meters != unknown_alt) {
 		fprintf(ofd, "<ele>\n%f\n</ele>\n",
@@ -839,6 +922,9 @@ void gpx_track_pr()
 void
 gpx_write(void)
 {
+	time_t now = 0;
+	
+        time( &now );
 	setshort_length(mkshort_handle, 32);
 
 	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
@@ -848,6 +934,7 @@ gpx_write(void)
 	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/1/0\"\n");
 	fprintf(ofd, "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n");
 
+        gpx_write_time( now, "time" );
 	switch(global_opts.objective) {
 		case trkdata: gpx_track_pr(); 
 		case wptdata: waypt_disp_all(gpx_waypt_pr);

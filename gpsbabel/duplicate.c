@@ -142,19 +142,47 @@ free_tree (btree_node *tree)
 	xfree(tree);
 }
 
+static
+int
+compare(const void *a, const void *b)
+{
+	const waypoint *wa = *(waypoint **)a;
+	const waypoint *wb = *(waypoint **)b;
+
+	if ( wa->gc_data.exported < wb->gc_data.exported ) {
+		return 1;
+	} else if ( wa->gc_data.exported > wb->gc_data.exported ) {
+		return -1;
+	} 
+	return 0;
+}
+
 void
 duplicate_process(void)
 {
-	queue * elem, * tmp;
 	waypoint * waypointp;
 	btree_node * newnode, * btmp, * sup_tree = NULL;
 	unsigned long crc = 0;
 	struct { char shortname[32]; char lat[13]; char lon[13]; } dupe;
         waypoint * delwpt = NULL;
-	
-	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-		waypointp = (waypoint *) elem;
 
+	int i, ct = waypt_count();
+	waypoint **htable, **bh;
+	queue *elem, *tmp;
+	extern queue waypt_head;
+
+	htable = xmalloc(ct * sizeof(*htable));
+	bh = htable;
+
+	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+		*bh = (waypoint *) elem;
+		bh ++;
+	}
+	qsort(htable, ct, sizeof(*bh), compare);
+
+	for (i=0;i<ct;i++) {
+		waypointp = htable[i];
+	
 		memset(&dupe, '\0', sizeof(dupe));
 
 		if (snopt) {
@@ -190,6 +218,7 @@ duplicate_process(void)
 		waypt_free(delwpt);
 	}
 
+	xfree(htable);
 	free_tree(sup_tree);
 }
 

@@ -107,6 +107,7 @@ typedef struct {
 	geocache_container container;
 	int diff; /* (multiplied by ten internally) */
 	int terr; /* (likewise) */
+	time_t exported;
 } geocache_data ;
 
 
