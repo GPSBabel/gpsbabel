@@ -81,7 +81,7 @@ printposn(coord *c, int is_lat)
 }
 
 void
-fprintdms(FILE *file, coord *c, int is_lat)
+fprintdms(FILE *file, const coord *c, int is_lat)
 {
 	char d;
 	if (is_lat) {
