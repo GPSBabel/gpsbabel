@@ -22,6 +22,8 @@
 #include <termios.h>
 #include <ctype.h>
 #include <time.h>
+#include <errno.h>
+#include <sys/stat.h>
 
 #include "defs.h"
 #include "magellan.h"
@@ -33,7 +35,8 @@ typedef enum {
 	mrs_handon
 } mag_rxstate;
 
-static FILE *magfile;
+static FILE *magfile_in;
+static FILE *magfile_out;
 static int magfd;
 static mag_rxstate magrxstate;
 static struct termios orig_tio;
@@ -41,6 +44,7 @@ static int last_rx_csum;
 static int found_done;
 static icon_mapping_t *icon_mapping;
 static int got_version;
+static int is_file = 0;
 
 static waypoint * mag_wptparse(char *);
 
@@ -163,7 +167,7 @@ mag_writemsg(const char * const buf)
 #if 0
 	retry:
 #endif
-	fprintf(magfile, "$%s*%02X\r\n",buf, osum);
+	fprintf(magfile_out, "$%s*%02X\r\n",buf, osum);
 #if 0
 	if (magrxstate == mrs_handon) {
 		mag_readmsg();
@@ -178,6 +182,9 @@ static void
 mag_writeack(int osum)
 {
 	char obuf[200];
+	if (is_file) {
+		return;
+	}
 	snprintf(obuf, sizeof(obuf), "PMGNCSM,%02X", osum);
 	mag_writemsg(obuf);
 }
@@ -186,14 +193,19 @@ static void
 mag_handon(void)
 {
 	magrxstate = mrs_handon;
-	mag_writemsg("PMGNCMD,HANDON");
+	
+	if (!is_file) {
+		mag_writemsg("PMGNCMD,HANDON");
+	}
 }
 
 static void
 mag_handoff(void)
 {
 	magrxstate = mrs_handoff;
-	mag_writemsg("PMGNCMD,HANDOFF");
+	if (!is_file) {
+		mag_writemsg("PMGNCMD,HANDOFF");
+	}
 }
 
 void
@@ -221,7 +233,7 @@ mag_verparse(char *ibuf)
 			icon_mapping = map330_icon_table;
 			break;
 		default:
-			abort();
+			fatal("Magproto: Unknown receiver type.\n");
 	}
 }
 
@@ -236,7 +248,7 @@ mag_readmsg(void)
 	char *isump;
 	char *gr;
 
-	gr = fgets(ibuf, sizeof(ibuf), magfile);
+	gr = fgets(ibuf, sizeof(ibuf), magfile_in);
 
 	if (!gr && !got_version) {
 		fatal("Magproto: No data received from GPS.\n");
@@ -275,10 +287,11 @@ fprintf(stderr, "READ: %s\n", ibuf);
 		mag_verparse(ibuf);
 return;
 	} 
-	if (IS_TKN("$PMGNCMD,END")) {
+	if (IS_TKN("$PMGNCMD,END") || is_file && feof(magfile_in)) {
 		found_done = 1;
 return;
 	} 
+
 	mag_writeack(isum);
 }
 
@@ -287,34 +300,46 @@ mag_rd_init(const char *portname)
 {
 	struct termios new_tio;
 	time_t now, later;
-
-	magfile = fopen(portname, "rw+b");
+	struct stat sbuf;
 	
-	if (magfile == NULL) {
-		perror("Open failed");
-		return;
+	magfile_in = fopen(portname, "r");
+	
+	if (magfile_in == NULL) {
+		fatal("Magproto: Cannot open %s.%s\n", 
+			portname, strerror(errno));
 	}
 
-	magfd = fileno(magfile);
-	tcgetattr(magfd, &orig_tio);
-	new_tio = orig_tio;
-	new_tio.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|
-		IXON);
-	new_tio.c_oflag &= ~OPOST;
-	new_tio.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-	new_tio.c_cflag &= ~(CSIZE|PARENB);
-	new_tio.c_cflag |= CS8;
-	new_tio.c_cc[VTIME] = 10;
-	new_tio.c_cc[VMIN] = 0;
+	fstat(fileno(magfile_in), &sbuf);
+	is_file = S_ISREG(sbuf.st_mode);
 
-	cfsetospeed(&new_tio, B4800);
-	cfsetispeed(&new_tio, B4800);
-	tcsetattr(magfd, TCSAFLUSH, &new_tio);
+	if (is_file) {
+		icon_mapping = map330_icon_table;
+		got_version = 1;
+	} else {
+		magfile_out = fopen(portname, "w+");
+		magfd = fileno(magfile_in);
+		tcgetattr(magfd, &orig_tio);
+		new_tio = orig_tio;
+		new_tio.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|
+			IGNCR|ICRNL|IXON);
+		new_tio.c_oflag &= ~OPOST;
+		new_tio.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
+		new_tio.c_cflag &= ~(CSIZE|PARENB);
+		new_tio.c_cflag |= CS8;
+		new_tio.c_cc[VTIME] = 10;
+		new_tio.c_cc[VMIN] = 0;
+
+		cfsetospeed(&new_tio, B4800);
+		cfsetispeed(&new_tio, B4800);
+		tcsetattr(magfd, TCSAFLUSH, &new_tio);
+	}
 	
 	mag_handon();
 	now = time(NULL);
 	later = now + 2;
-	mag_writemsg("PMGNCMD,VERSION");
+	if (!is_file) {
+		mag_writemsg("PMGNCMD,VERSION");
+	}
 
 	while (!got_version) {
 		mag_readmsg();
@@ -324,8 +349,26 @@ mag_rd_init(const char *portname)
 		}
 	}
 
-	mag_writemsg("PMGNCMD,NMEAOFF");
+	if (!is_file) {
+		mag_writemsg("PMGNCMD,NMEAOFF");
+	}
 	return;
+}
+
+static void
+mag_wr_init(const char *portname)
+{
+	struct stat sbuf;
+
+	magfile_out = fopen(portname, "w+");
+	fstat(fileno(magfile_out), &sbuf);
+	is_file = S_ISREG(sbuf.st_mode);
+
+	if (is_file) {
+		magfile_out = fopen(portname, "w+");
+	} else {
+		mag_rd_init(portname);
+	}
 }
 
 static void
@@ -333,7 +376,7 @@ mag_deinit(void)
 {
 	mag_handoff();
 	tcsetattr(magfd, TCSANOW, &orig_tio);
-	fclose(magfile);
+	fclose(magfile_in);
 }
 #if 0
 /*
@@ -479,88 +522,13 @@ mag_wptparse(char *trkmsg)
 	return waypt;
 }
 
-#if BLERF
-
-int main(void)
-{
-char trk1[] = "$PMGNTRK,3605.259,N,08644.389,W,00151,M,201444.61,A,,020302*66";
-char trk2[] = "$PMGNTRK,3605.315,N,08644.625,W,00153,M,211618.68,A,,020302*6D";
-char trk3[] = "$PMGNTRK,3605.320,N,08644.619,W,00164,M,212121.87,A,,020302*6F";
-char wpt1[] = "$PMGNWPL,3604.831,N,08659.737,W,0000000,M,PowerPln,Power Plant by White Dog Pack,a*50";
-char wpt2[] = "$PMGNWPL,3614.645,N,08641.885,W,0000000,M,CmbrlndR,Cumberland River Cache by GISG,a*7B";
-char wpt3[] = "$PMGNWPL,3608.210,N,08648.389,W,0000000,M,Puff!,Puff! by White Dog Pack,a*61";
-waypt_init();
-route_init();
-
-#if 1
-mag_trkparse(trk1);
-mag_trkparse(trk2);
-mag_trkparse(trk3);
-
-exit(0);
-#endif
-
-#if 1
-mag_wptparse(wpt1);
-mag_wptparse(wpt2);
-mag_wptparse(wpt3);
-exit(0);
-#endif
-	mag_init();
-
-#if 1
-	mag_writemsg("PMGNCMD,WAYPOINT");
-while (!found_done) {
- mag_readmsg();
-}
-exit(0);
-#endif
-#if 0
-	mag_writemsg("PMGNCMD,TRACK,2");
-while (!found_done) {
- mag_readmsg();
-}
-#endif
-#if 1
-	mag_writemsg("PMGNCMD,ROUTE");
-while (!found_done) {
- mag_readmsg();
-}
-exit(0);
-#endif
-#if 0
-	mag_writemsg("PMGNCMD,FIL,FIRST,?");
-sleep(2);
- mag_readmsg();
-while (!found_done) {
-  mag_writemsg("PMGNCMD,FIL,NEXT");
- mag_readmsg();
-sleep(2);
-}
-#endif
-	mag_deinit();
-	return 0;
-}
-
-#if SOON
-/* ROUTES */
-READ: $PMGNRTE,3,1,c,19,HOME,c,KidsAtPl,a*0F
-READ: $PMGNRTE,3,2,c,19,TrainWrc,a,Leipers,a*6F
-READ: $PMGNRTE,3,3,c,19,Nashvill,a,HOME,c*1A
-
-/* WAYPOINTS */
-READ: $PMGNWPL,3604.831,N,08659.737,W,0000000,M,PowerPln,Power Plant by White Do
-READ: $PMGNWPL,3614.645,N,08641.885,W,0000000,M,CmbrlndR,Cumberland River Cache
-READ: $PMGNWPL,3608.210,N,08648.389,W,0000000,M,Puff!,Puff! by White Dog Pack,a*
-61
-
-#endif
-#endif
-
 void
 mag_readwpt(void)
 {
-	mag_writemsg("PMGNCMD,WAYPOINT");
+	if (!is_file) {
+		mag_writemsg("PMGNCMD,WAYPOINT");
+	}
+
 	while (!found_done) {
 		mag_readmsg();
 	}
@@ -573,40 +541,46 @@ mag_waypt_pr(waypoint *waypointp)
 	double lon, lat;
 	double ilon, ilat;
 	char obuf[200];
+	const char *icon_token=NULL;
+
 	ilat = waypointp->position.latitude.degrees;
 	ilon = waypointp->position.longitude.degrees;
 
 	lon =fabs(ilon * 100.0);
 	lat =fabs(ilat * 100.0);
 
-	sprintf(obuf, "PMGNWPL,%4.3f,%c,%05.3f,%c,%.lf,M,%-.8s,%-.20s,%s",
+	icon_token = mag_find_token_from_descr(waypointp->icon_descr);
+
+	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.8s,%-.30s,%s",
 		lat, ilon < 0 ? 'N' : 'S',
 		lon, ilat < 0 ? 'E' : 'W',
 		waypointp->position.altitude.altitude_meters,
 		waypointp->shortname,
 		waypointp->description,
-		waypointp->icon_descr);
+		icon_token);
 	mag_writemsg(obuf);
-	mag_readmsg();
+	if (!is_file) {
+		mag_readmsg();
+	}
 }
 
 
 void
 mag_write(void)
 {
-#if 1
+	if (!is_file) {
 		mag_readmsg();
 		mag_readmsg();
 		mag_readmsg();
 		mag_readmsg();
-#endif
+	}
+
 	waypt_disp_all(mag_waypt_pr);
-	
 }
 
 ff_vecs_t mag_vecs = {
 	mag_rd_init,	
-	mag_rd_init,	
+	mag_wr_init,	
 	mag_deinit,	
 	mag_deinit,	
 	mag_readwpt,
