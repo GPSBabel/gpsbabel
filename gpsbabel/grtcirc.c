@@ -19,12 +19,7 @@
 
  */
 #include <stdio.h>
-#include <math.h>
 #include "defs.h"
-
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846
-#endif
 
 static void crossproduct( double x1, double y1, double z1, 
 		   double x2, double y2, double z2,

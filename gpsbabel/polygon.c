@@ -18,13 +18,7 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-#include <stdio.h>
-#include <math.h>
 #include "defs.h"
-
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846
-#endif
 
 #define MYNAME "Polygon filter"
 
