@@ -115,9 +115,13 @@ print( "$wptcount waypoints\n" );
 while ( $wptcount ) {
   ($magic, $unk0, $lat, $lon, $unk1, $unk2, $unk3, $unk4, $unk5, $serial,
    $unk6s, $unk7s, $unk8, $unk9, $unk10s, $name, $font, $unk11l, $unk11h, 
-   $unk12l, $unk12h, $unk13l, $unk13h, $unk14l, $unk14h, $unk15, $unk16, $fontsize, $unk17,
+   $unk12l, $unk12h, $unk13l, $unk13h, $unk14l, $unk14h, $fontcolor, $fontstyle, $fontsize, $unk17,
    $unk18, $unk19, $unk20, $unk21, $unk22 ) = 
    shiftunpack( 'slllsllsssssllss/A*s/A*sssssssslllllllll' );
+
+  # fontcolor is BGR (i.e. pure blue is 0xff00000, pure red is 0x0000ff)
+  # fontstyle is bitfield 0x10=bold, 0x20=italic, 0x80=underline
+
   $lat = decode( $lat );
   $lon = decode( $lon );
   print ( "$lat   $lon   $serial  $name\n" );
