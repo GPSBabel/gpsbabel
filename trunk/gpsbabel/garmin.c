@@ -429,7 +429,7 @@ waypoint_write(void)
 					src);
 			memcpy(way[i]->cmnt, obuf, strlen(obuf));
 		} else  {
-			memcpy(way[i]->cmnt, obuf, strlen(src));
+			memcpy(way[i]->cmnt, src, strlen(src));
 		}
 		way[i]->lon = wpt->longitude;
 		way[i]->lat = wpt->latitude;

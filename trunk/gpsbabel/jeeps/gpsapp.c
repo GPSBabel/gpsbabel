@@ -123,6 +123,11 @@ int32 GPS_Init(const char *port)
     if(!gps_save_time) {
 	return FRAMING_ERROR;
     }
+
+    if (0 == strncmp(gps_save_string, "GPilotS", 7)) {
+	    return 1;
+    }
+
     return GPS_Command_Get_Position(port,&gps_save_lat,&gps_save_lon);
 }
 
