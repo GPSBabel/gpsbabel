@@ -77,6 +77,7 @@ static FILE *file_out;
 static route_head *trk_head;
 static void *mkshort_handle;
 static preferred_posn_type posn_type;
+static time_t creation_time;
 
 #define MYNAME "nmea"
 
@@ -152,7 +153,7 @@ gpgll_parse(char *ibuf)
 	hms = hms / 100;
 	tm.tm_hour = hms % 100;
 
-	waypt->creation_time = mktime(&tm) + get_tz_offset() + current_time();
+	waypt->creation_time = creation_time;
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -197,7 +198,7 @@ gpgga_parse(char *ibuf)
 	hms = hms / 100;
 	tm.tm_hour = (long) hms % 100;
 
-	waypt->creation_time = mktime(&tm) + get_tz_offset() + current_time();
+	waypt->creation_time = creation_time;
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -237,9 +238,31 @@ gpwpl_parse(char *ibuf)
 }
 
 static void
+gpzda_parse(char *ibuf)
+{
+	double hms;
+	int dd, mm, yy, lclhrs, lclmins;
+	struct tm tm;
+
+	memset(&tm, 0, sizeof(tm));
+	sscanf(ibuf,"$GPZDA,%lf,%d,%d,%d,%d,%d", 
+		&hms, &dd, &mm, &yy, &lclhrs, &lclmins);
+	tm.tm_sec  = (int) hms % 100;
+	tm.tm_min  = (((int) hms - tm.tm_sec) / 100) % 100;
+	tm.tm_hour = (int) hms / 10000;
+	tm.tm_mday = dd;
+	tm.tm_mon  = mm - 1;
+	tm.tm_year = yy - 1900;
+	creation_time = mktime(&tm) - get_tz_offset();
+}
+
+static void
 nmea_read(void)
 {
 	char ibuf[1024];
+	struct tm tm;
+
+	creation_time = mktime(&tm) + get_tz_offset() + current_time();
 
 	while (fgets(ibuf, sizeof(ibuf), file_in)) {
 		if (0 == strncmp(ibuf, "$GPWPL,", 7)) {
@@ -253,6 +276,9 @@ nmea_read(void)
 			if (posn_type != gpgga) {
 				gpgll_parse(ibuf);
 			}
+		} else
+		if (0 == strncmp(ibuf, "$GPZDA,",7)) {
+			gpzda_parse(ibuf);
 		}
 	}
 }
@@ -287,7 +313,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 	char obuf[200];
 	double lat,lon;
 	int cksum;
-        struct tm *tm;
+	struct tm *tm;
 	int hms;
 
 	lat = degrees2ddmm(wpt->latitude);
