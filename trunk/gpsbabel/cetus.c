@@ -28,29 +28,50 @@
 #define MYCREATOR 0x63475053 	/* cGPS */
 
 struct record {
-	char type;
-	char ID[16]; /* Zero-terminated string. */
-	char name[61]; /* zero-terminated */
+	char type;	
+	
+	char padbyte1;
+	
 	pdb_32 latitude; /* Big endian, degrees*1e7, s=negative */
 	pdb_32 longitude; /* same as lat; w=negative */
-	unsigned char hour;  /* sample time, UTC */
-	unsigned char min;
-	unsigned char sec;
-	unsigned char year; /* 2002 = 02 */
+	pdb_32 elevation; /* Big endian, meters*100. blank=-1e8 */
+
+	pdb_16        year; /* sample time, UTC */
 	unsigned char mon;
 	unsigned char day;
-	pdb_32 elevation; /* Big endian, meters*100. blank=-1e8 */
-	char fix_quality; /* 3 = 3d fix, 0=no fix */
-	char sats_tracked; /* ff if averaged or unknown */
+	unsigned char hour;
+	unsigned char min;
+	unsigned char sec;
+	
+	/* accuracy and precision information for use where applicable */
+	char  sat; /* ff if averaged or unknown */
+	pdb_16 pdop; /* pdop * 100 */
 	pdb_16 hdop;
+	pdb_16 vdop;
 	pdb_16 dgpstime;
 	pdb_32 dgpsstn;
 	pdb_32 avgtime;
 	pdb_32 avgite;
-	pdb_16 icon;
-	char category;
-	char flagged;
-	char readonly;
+
+	pdb_16 dopmask;
+	pdb_16 elevmask;
+	
+	pdb_16 radius;
+	pdb_32 distance;
+	
+	pdb_16 vyear; /* date visited */
+	unsigned char vmon;
+	unsigned char vday;
+	unsigned char vhour;
+	unsigned char vmin;
+	unsigned char vsec;
+	
+	char padbyte2;
+	
+	pdb_32 icon;
+	pdb_16 category;
+	char   flagged;
+	char   readonly;
 };
 
 static FILE *file_in;
@@ -96,6 +117,7 @@ data_read(void)
 	struct record *rec;
 	struct pdb *pdb;
 	struct pdb_record *pdb_rec;
+	char *vdata;
 
 	if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
 		fatal(MYNAME ": pdb_Read failed\n");
@@ -104,6 +126,13 @@ data_read(void)
 	if ((pdb->creator != MYCREATOR) || (pdb->type != MYTYPE)) {
 		fatal(MYNAME ": Not a Cetus file.\n");
 	}
+	
+	if (pdb->version < 1) {
+	       fatal(MYNAME ": This file is from an obsolete beta version of Cetus GPS and is unsupported.\n");
+        }
+        if (pdb->version > 1) {
+	       fatal(MYNAME ": This file is from an unsupported newer version of Cetus GPS.  It may be supported in a newer version of GPSBabel.\n");
+	}
 
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
 		waypoint *wpt_tmp;
@@ -111,8 +140,6 @@ data_read(void)
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 
 		rec = (struct record *) pdb_rec->data;
-		wpt_tmp->shortname = xstrdup(rec->ID);
-		wpt_tmp->description = xstrdup(rec->name);
 		if ( be_read32(&rec->elevation) == -100000000 ) {
 			wpt_tmp->position.altitude.altitude_meters = unknown_alt;
 		}
@@ -121,19 +148,31 @@ data_read(void)
 		}
 			
 		wpt_tmp->position.longitude.degrees = be_read32(&rec->longitude) / 10000000.0; 
-		wpt_tmp->position.latitude.degrees = be_read32(&rec->latitude) / 10000000.0; 
-		if (rec->year != 0xff) {
+		wpt_tmp->position.latitude.degrees = be_read32(&rec->latitude) / 10000000.0;
+	        	
+		if (be_read16(&rec->year) != 0xff) {
 			struct tm tm = {0};
 		
 			tm.tm_min = rec->min;
 			tm.tm_hour = rec->hour;
 			tm.tm_mday = rec->day;
 			tm.tm_mon = rec->mon - 1;
-			tm.tm_year = rec->year + 100;
+			tm.tm_year = be_read16(&rec->year) - 1900;
 
 			wpt_tmp->creation_time = mktime(&tm); 
 			
 		}
+
+		vdata = (char *) pdb_rec->data + sizeof(*rec);
+		
+		wpt_tmp->shortname = xstrdup(vdata);
+		vdata = vdata + strlen(vdata) + 1;
+		
+		wpt_tmp->description = xstrdup(vdata);
+		vdata = vdata + strlen(vdata) + 1;
+		
+		wpt_tmp->notes = xstrdup(vdata);
+		
 		waypt_add(wpt_tmp);
 
 	} 
@@ -147,17 +186,9 @@ cetus_writewpt(waypoint *wpt)
 	struct record *rec;
 	static int ct;
 	struct tm *tm;
+	char *vdata;
 
-	rec = xcalloc(sizeof(*rec),1);
-
-	strncpy(rec->ID, wpt->shortname, sizeof(rec->ID));
-	rec->ID[sizeof(rec->ID)-1] = 0;
-	if (wpt->description) {
-		strncpy(rec->name, wpt->description, sizeof(rec->name));
-		rec->name[sizeof(rec->name)-1] = 0;
-	} else {
-		rec->name[0] = 0;
-	}
+	rec = xcalloc(sizeof(*rec)+1018,1);
 
 	if (wpt->creation_time) {
 		tm = gmtime(&wpt->creation_time);
@@ -166,27 +197,70 @@ cetus_writewpt(waypoint *wpt)
 		rec->sec = tm->tm_sec;
 		rec->day = tm->tm_mday;
 		rec->mon = tm->tm_mon + 1;
-		rec->year = tm->tm_year - 100;
+		be_write16( &rec->year, tm->tm_year + 1900);
 	} else {
 		rec->min = 0xff;
 		rec->hour = 0xff;
 		rec->sec = 0xff;
 		rec->day = 0xff;
 		rec->mon = 0xff;
-		rec->year = 0xff;
+		be_write16(&rec->year, 0xff);
 	}
 
 	be_write32(&rec->longitude, wpt->position.longitude.degrees * 10000000.0);
 	be_write32(&rec->latitude, wpt->position.latitude.degrees * 10000000.0);
 	if ( wpt->position.altitude.altitude_meters == unknown_alt ) {
-		be_write32(&rec->elevation, -100000000);
+		be_write32(&rec->elevation, -100000000U);
 	}
 	else {
 		be_write32(&rec->elevation, wpt->position.altitude.altitude_meters * 100.0);
 	}
+	
+	be_write16( &rec->pdop, 0xffff );
+	be_write16( &rec->hdop, 0xffff );
+	be_write16( &rec->vdop, 0xffff );
+	be_write16( &rec->dgpstime, 0xffff );	
+	be_write32( &rec->distance, 0xffffffff );
+	
+	rec->vmin = 0xff;
+	rec->vhour = 0xff;
+	rec->vsec = 0xff;
+	rec->vday = 0xff;
+	rec->vmon = 0xff;
+	be_write16(&rec->vyear, 0xff);
+	
+	rec->sat = 0xff;
 
-	opdb_rec = new_Record (0, 0, ct++, sizeof(*rec), (const ubyte *)rec);
-
+	vdata = (char *)rec + sizeof(*rec);
+	if ( wpt->shortname ) {
+		        strncpy( vdata, wpt->shortname, 16 );
+			        vdata[15] = '\0';
+	}
+	else {
+		        vdata[0] ='\0';
+	}
+	vdata += strlen( vdata ) + 1;
+	
+	if ( wpt->description ) {
+		        strncpy( vdata, wpt->description, 501 );
+			        vdata[500] = '\0';
+	}
+	else {
+		        vdata[0] ='\0';
+	}
+	vdata += strlen( vdata ) + 1;
+	
+	if ( wpt->notes ) {
+		        strncpy( vdata, wpt->notes, 501 );
+			        vdata[500] = '\0';
+	}
+	else {
+		        vdata[0] ='\0';
+	}
+	vdata += strlen( vdata ) + 1;
+	
+	opdb_rec = new_Record (0, 2, ct++, vdata-(char *)rec, (const ubyte *)rec);
+	
 	if (opdb_rec == NULL) {
 		fatal(MYNAME ": libpdb couldn't create record\n");
 	}
@@ -230,7 +304,7 @@ data_write(void)
 	opdb->ctime = opdb->mtime = time(NULL) + 2082844800U;
 	opdb->type = MYTYPE;  /* CWpt */
 	opdb->creator = MYCREATOR; /* cGPS */
-	opdb->version = 0;
+	opdb->version = 1;
 
 	/*
 	 * All this is to sort by waypoint names before going to Cetus.

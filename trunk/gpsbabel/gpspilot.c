@@ -111,6 +111,9 @@ data_read(void)
 		vdata = vdata + strlen(vdata) + 1;
 
 		wpt_tmp->shortname = xstrdup(vdata);
+		vdata = vdata + strlen(vdata) + 1;
+		
+		wpt_tmp->notes = xstrdup(vdata);
 		
 		waypt_add(wpt_tmp);
 
@@ -126,7 +129,7 @@ gpspilot_writewpt(waypoint *wpt)
 	static int ct = 0;
 	char *vdata;
 
-	rec = xcalloc(sizeof(*rec)+46,1);
+	rec = xcalloc(sizeof(*rec)+206,1);
 	
 	be_write32(&rec->longitude, si_round(wpt->position.longitude.degrees * 3.6e6));
 	be_write32(&rec->latitude, si_round(wpt->position.latitude.degrees * 3.6e6));
@@ -150,8 +153,15 @@ gpspilot_writewpt(waypoint *wpt)
                 vdata[0] ='\0';
         }
         vdata += strlen( vdata ) + 1;
-	vdata[0] = '\0'; /* long description - currently unsupported */
-	vdata++;
+	
+	if ( wpt->notes ) {
+                strncpy( vdata, wpt->notes, 161 );
+                vdata[160] = '\0';
+        }
+        else {
+                vdata[0] ='\0';
+        }
+        vdata += strlen( vdata ) + 1;
 
         opdb_rec = new_Record (0, 2, ct++, vdata-(char *)rec, (const ubyte *)rec);	       
 
