@@ -460,4 +460,14 @@ ${DIFF}  ${TMPDIR}/reverse1.arc  ${TMPDIR}/reverse2.arc > /dev/null && {
 		exit 1
 }
 
+#
+# Geoniche: No referene file was available, so we created one and just
+# test it against itself.
+#
+rm -f ${TMPDIR}/gn.pdb ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
+${PNAME} -i geoniche -f reference/geoniche.pdb -o geoniche -F ${TMPDIR}/gn.pdb
+${PNAME} -i geoniche -f reference/geoniche.pdb -o gpx -F ${TMPDIR}/1.gpx
+${PNAME} -i geoniche -f ${TMPDIR}/gn.pdb -o gpx -F ${TMPDIR}/2.gpx
+${DIFF} ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
+
 exit 0
