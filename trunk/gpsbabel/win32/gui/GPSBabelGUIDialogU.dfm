@@ -24,7 +24,7 @@ object GPSBabelGUIDialog: TGPSBabelGUIDialog
     Width = 250
     Height = 13
     Anchors = [akLeft, akBottom]
-    Caption = 'GPSBabel: http://sourceforge.net/projects/gpsbabel'
+    Caption = 'GPSBabel: http://www.gpsbabel.org'
   end
   object lblInputFileName: TLabel
     Left = 17
