@@ -102,6 +102,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="setupapi.lib"
 				OutputFile=".\Debug/GPSBabel.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -406,6 +407,9 @@
 				RelativePath="..\glogbook.c">
 			</File>
 			<File
+				RelativePath="..\google.c">
+			</File>
+			<File
 				RelativePath="..\gpilots.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -583,7 +587,13 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\kml.c">
+			</File>
+			<File
 				RelativePath="Expat\libexpat.lib">
+			</File>
+			<File
+				RelativePath="..\lowranceusr.c">
 			</File>
 			<File
 				RelativePath="..\magnav.c">
@@ -794,6 +804,9 @@
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\overlay.c">
 			</File>
 			<File
 				RelativePath="..\ozi.c">
@@ -1366,9 +1379,6 @@
 							ProgramDataBaseFileName="Debug\Jeeps/"
 							BrowseInformation="1"/>
 					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\jeeps\gpslibusb.c">
 				</File>
 				<File
 					RelativePath="..\jeeps\gpsmath.c">
