@@ -88,20 +88,31 @@ A First create the data you want in Streets & Trips, Autoroute or Mappoint.
 Q How do I import a GPS track or other GPX data into Streets & Trips, Autoroute or Mappoint?
 
 A First you need to have the data in GPX format - see GPSBabel for that.
-  Then you need to chose your import file, it can me an empty map or one with your existing data in it. 
+  Then you need to chose your import file, it can be a template map or one with your existing data in it. 
   Be sure to backup this file! Then the command is:
   st2gpx -g gpx-in-file -F output-file-name input-file-name
   where gpx-in-file must be a valid GPX file; input-file-name is your existing Streets & Trips, 
   Autoroute or Mappoint file; and output-file-name is the new Streets & Trips, Autoroute or Mappoint file.
   GPS routes and tracks will be drawn as blue poly-lines, and waypoints will be imported as pushpins.
 
-  
+
+Q What is a template map, and how do I get one?
+
+A A template map is basically an empty map for your version of Streets & Trips, Autoroute or Mappoint, 
+  which has been formatted for pushpins. )st2gpx cant import data into a map file unless it is formatted
+  for pushpins.) You can create one by starting with a new map (file\new) in Streets & Trips, Autoroute 
+  or Mappoint. Create a single pushpin, then delete the pushpin again (this formats the map structure for 
+  pushpins). Then save this file with a name like mappoint_2003_USA_template.ptm.
+
+    
 Q I would like to get the driving instructions, and detailed route, but st2gpx only saves the start/end and stops.
 
 A Unfortunately, the driving instructions are not saved in the file. You can add extra stops after the route 
   is calculated, or you can draw/trace a poly-line along the route calculated by Streets & Trips/Autoroute/Mappoint.
   This is exported as a track (or optionally a route), and can then be loaded to your GPS receiver 
-  using the correct software. I use an older Garmin GPS12 and loading a track this way works very well.
+  using the correct software. I use an older Garmin GPS12 and loading a track this way works very well (I save as 
+  pcx5 format and load via Garmin Mapsource. You may want to use GPSBabel to load directly to a Garmin or Magellan 
+  or into a format that your GPS software understands).
 
   
 Q How do I draw/trace a poly-line along the route?
