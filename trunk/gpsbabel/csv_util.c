@@ -795,11 +795,11 @@ xcsv_waypt_pr(const waypoint *wpt)
         /* GEOCACHE STUFF **************************************************/
         if (strcmp(fmp->key, "GEOCACHE_DIFF") == 0) {
             /* Geocache Difficulty as a double */
-            sprintf(buff, fmp->printfc, wpt->gc_data.diff / 10);
+            sprintf(buff, fmp->printfc, wpt->gc_data.diff / 10.0);
         } else
         if (strcmp(fmp->key, "GEOCACHE_TERR") == 0) {
             /* Geocache Terrain as a double */
-            sprintf(buff, fmp->printfc, wpt->gc_data.terr / 10);
+            sprintf(buff, fmp->printfc, wpt->gc_data.terr / 10.0);
         } else
         if (strcmp(fmp->key, "GEOCACHE_TYPE") == 0) {
             /* Geocache Type TODO */
