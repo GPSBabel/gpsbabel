@@ -193,6 +193,17 @@ typedef struct {
 	const char *icon_descr;
 	time_t creation_time;	/* standardized in UTC/GMT */
 	int centiseconds;	/* Optional hundredths of a second. */
+	
+	/*
+	 * route priority is for use by the simplify filter.  If we have
+	 * some reason to believe that the route point is more important,
+	 * we can give it a higher (numerically; 0 is the lowest) priority.
+	 * This causes it to be removed last.
+	 * This is currently used by the saroute input filter to give named
+	 * waypoints (representing turns) a higher priority.
+	 */
+	int route_priority;
+	
 	geocache_data gc_data;
 	xml_tag *gpx_extras;
 	void *extra_data;	/* Extra data added by, say, a filter. */
