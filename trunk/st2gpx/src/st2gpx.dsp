@@ -51,6 +51,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 libexpat.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
+# SUBTRACT LINK32 /debug
 
 !ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
 
@@ -74,8 +75,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 libexpat.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# SUBTRACT LINK32 /profile /map
+# ADD LINK32 libexpat.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /pdbtype:sept
+# SUBTRACT LINK32 /profile /map /debug
 
 !ENDIF 
 
@@ -89,58 +90,98 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=.\annotations.c
+
+!IF  "$(CFG)" == "st2gpx - Win32 Release"
+
+# ADD CPP /Za
+
+!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\contents.c
+
+!IF  "$(CFG)" == "st2gpx - Win32 Release"
+
+# ADD CPP /Za
+
+!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\debug.c
+
+!IF  "$(CFG)" == "st2gpx - Win32 Release"
+
+# ADD CPP /Za
+
+!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\getopt.c
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
 # ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\journey.c
+
+!IF  "$(CFG)" == "st2gpx - Win32 Release"
+
+# ADD CPP /Za
+
+!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\nannol.c
+
+!IF  "$(CFG)" == "st2gpx - Win32 Release"
+
+# ADD CPP /Za
+
+!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ppinutil.c
+
+!IF  "$(CFG)" == "st2gpx - Win32 Release"
+
+# ADD CPP /Za
+
+!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\properties.c
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
 # ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\pushpins.cpp
 
 !IF  "$(CFG)" == "st2gpx - Win32 Release"
+
+# ADD CPP /Ze
 
 !ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
 
@@ -152,31 +193,59 @@ SOURCE=.\pushpins.cpp
 # Begin Source File
 
 SOURCE=.\readgpx.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\readmpst.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\st2gpx.c
 
 !IF  "$(CFG)" == "st2gpx - Win32 Release"
 
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
 # ADD CPP /Za
+
+!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
 
 !ENDIF 
 
 # End Source File
 # Begin Source File
 
+SOURCE=.\readmpst.c
+
+!IF  "$(CFG)" == "st2gpx - Win32 Release"
+
+# ADD CPP /Za
+
+!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\st2gpx.c
+# ADD CPP /Za
+# End Source File
+# Begin Source File
+
 SOURCE=.\writegpx.c
+
+!IF  "$(CFG)" == "st2gpx - Win32 Release"
+
+# ADD CPP /Za
+
+!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\writepcx.c
+
+!IF  "$(CFG)" == "st2gpx - Win32 Release"
+
+# ADD CPP /Za
+
+!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Group "Header Files"
