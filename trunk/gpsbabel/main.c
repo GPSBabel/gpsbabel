@@ -38,6 +38,7 @@ usage(const char *pname, int shorter)
 "    The input type and filename are specified with the -i INTYPE\n"
 "    and -f INFILE options. The output type and filename are specified\n"
 "    with the -o OUTTYPE and -F OUTFILE options.\n"
+"    If '-' is used for INFILE or OUTFILE, stdin or stdout will be used.\n"
 "\n"
 "    In the second form of the command, INFILE and OUTFILE are the\n"
 "    first and second positional (non-option) arguments.\n"
