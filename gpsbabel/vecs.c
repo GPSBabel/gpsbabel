@@ -44,6 +44,7 @@ extern ff_vecs_t psp_vecs;
 extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t mxf_vecs;
 extern ff_vecs_t holux_vecs;
+extern ff_vecs_t ozi_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -126,6 +127,11 @@ vecs_t vec_list[] = {
 		&holux_vecs,
 		"holux",
 		"Holux (gm-100) .wpo Format"
+	},
+	{
+		&ozi_vecs,
+		"ozi",
+		"OziExplorer Waypoint"
 	},
 
         {

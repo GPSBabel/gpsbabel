@@ -29,114 +29,13 @@
  */
 
 #include "defs.h"
+#include "csv_util.h"
 #include <ctype.h>
 
 #define MYNAME	"MXF"
 
 static FILE *file_in;
 static FILE *file_out;
-
-static char * 
-csvstringclean(char * string)
-{
-    static char * p1 = NULL;
-    char * p2 = NULL;
-    
-    if (! string) { 
-        return (string); /* :) */
-    }
-
-    p2 = string;
-    
-    while ((*p2) && (p2++)) { }
-    p2--;
-    
-    while (isspace(*p2)) {
-        *p2 = '\0';
-        p2--;
-    }
-    
-    p1 = string;
-    
-    while (isspace(*p1)) {
-        p1++;
-    }
-
-    /* yank quotes in pairs only if they are bounding us */
-    while ((*p1 == '"') && (*p2 == '"')) {
-        *p2 = '\0';
-        p2--;
-        p1++;
-    }
-
-    return (p1);    
-}
-
-/* string parser.  sorta like strtok with quotes & pointers..  */
-/* designed to handle quoted and delimited data within quotes. */
-static char * 
-csvparse(char *stringstart, char *delimiter)
-{
-    char *sp;
-    static char *p = NULL;
-    static char *tmp = NULL;
-    size_t dlen;
-    int quotedepth = 0;
-    short int dfound;
-
-    if (!p) {
-	p = stringstart;
-
-	if (!p) {
-	    return (NULL);
-	}
-    }
-
-    if (tmp) {
-	free(tmp);
-	tmp = NULL;
-    }
-
-    sp = p;
-
-    dlen = strlen(delimiter);
-    dfound = 0;
-
-    while ((*p) && (! dfound)) {
-	if (*p == '"') {
-	    if (quotedepth) 
-		quotedepth--;
-	    else 
-		quotedepth++;
-	}
-
-	if ((!quotedepth) && (strncmp(p, delimiter, dlen) == 0)) {
-        	dfound = 1;
-        	
-	} else {
-	    	p++;
-	}
-
-    }
-
-    tmp = (char *) calloc((p - sp) + 1, sizeof(char));
-
-    if (! tmp) {
-	fatal(MYNAME ": cannot allocate memory\n");
-    }
-
-    strncpy(tmp, sp, (p - sp));
-
-    if (dfound) {
-        /* skip over the delimiter */
-        p += dlen;
-    } else {
-        /* end of the line */
-        p = NULL;
-    }
-
-    return (tmp);
-}
 
 static void 
 rd_init(const char *fname)
@@ -171,7 +70,7 @@ wr_deinit(void)
 static void 
 data_read(void)
 {
-    char buff[256];
+    char buff[1024];
     char *s;
     waypoint *wpt_tmp;
     int i;
@@ -190,8 +89,9 @@ data_read(void)
 		fatal(MYNAME ": cannot allocate memory\n");
 	    }
 
+	    /* data delimited by commas, possibly enclosed in quotes.  */
 	    s = buff;
-	    s = csvparse(s, ", ");
+	    s = csv_lineparse(s, ",", "\"", linecount);
 
 	    i = 0;
 	    while (s) {
@@ -203,10 +103,18 @@ data_read(void)
 		    wpt_tmp->position.longitude.degrees = atof(s);
 		    break;
 		case 2:
-		    wpt_tmp->description = strdup(csvstringclean(s));
+		    wpt_tmp->description = strdup(s);
+		    if (! wpt_tmp->description) 
+			fatal(MYNAME, ": cannot allocate memory\n");
+
+		    wpt_tmp->description = csv_stringtrim(wpt_tmp->description, "");
 		    break;
 		case 3:
-		    wpt_tmp->shortname = strdup(csvstringclean(s));
+		    wpt_tmp->shortname = strdup(s);
+		    if (! wpt_tmp->shortname) 
+			fatal(MYNAME, ": cannot allocate memory\n");
+
+		    csv_stringtrim(wpt_tmp->shortname, "");
 		    break;
 		case 4:
                     /* ignore.  another name-type  */
@@ -225,7 +133,7 @@ data_read(void)
 		}
 		i++;
 
-		s = csvparse(NULL, ", ");
+		s = csv_lineparse(NULL, ",", "\"", linecount);
 	    }
 	    
 	    if (i != 7) {
@@ -248,6 +156,9 @@ mxf_disp(waypoint * wpt)
 {
     int icon = 47; /* default to "dot" */
     const char *color_hex = "ff0000";
+
+    csv_stringclean(wpt->shortname, ",\"");
+    csv_stringclean(wpt->description, ",\"");
 
     fprintf(file_out, "%08.5f, %08.5f, \"%s\", \"%s\", \"%s\", %s, %d\n",
 	    wpt->position.latitude.degrees, wpt->position.longitude.degrees,
