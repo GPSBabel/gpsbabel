@@ -281,6 +281,5 @@ ff_vecs_t cetus_vecs = {
 	data_write,
 };
 #else
-ff_vecs_t cetus_vecs = {
-};
+ff_vecs_t cetus_vecs;
 #endif
