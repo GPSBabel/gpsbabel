@@ -1,5 +1,5 @@
-MS Pocketstreets 2002 Pushpins (.PSP) Q & A
--------------------------------------------
+MS Pocketstreets 2002/2003 Pushpins (.PSP) Q & A
+------------------------------------------------
 
 Q: Why should I use gpsbabel/psp to make pushpins when Streets & Trips (S&T)
    already does that for me?
@@ -19,7 +19,7 @@ Q: I keep getting a blank (32 byte) PSP file?
 
 A: There are either no points to write, or you have botched the command
    line for gpsbabel.  gpsbabel is sensitive to UPPER and lower case 
-   on the command line.  A simple command line to created PSP files
+   on the command line.  A simple command line to create PSP files
    looks like this:
 
    gpsbabel -i geo -f geocaching.loc -o psp -F NewOrleans.psp
@@ -65,9 +65,8 @@ A: As of this writing, I haven't seen any so I can't be sure.  If they
 
 Q: Does gpsbabel/psp work with (S&T 2001, S&T 2002, etc...) files?
 
-A: Probably not.  The psp module is designed / tested to work with
-   S&T 2002/Pocketstreets.  It probably won't work with S&T 2003 either
-   if MS fixes some of the problems between S&T 2002 and Pocketstreets.
+A: MS the file layout between S&T 2001 and S&T 2002.  The gpsbabel psp
+   module is known to work fine with S&T 2002 and 2003.
 
 
 Q: Does gpsbabel/psp work with (insert your country/location here) maps?
