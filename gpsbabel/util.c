@@ -515,6 +515,8 @@ get_cache_icon(const waypoint *waypointp)
 			return "Event Cache";
 		case gt_suprise:
 			return "Unknown Cache";
+		case gt_webcam:
+			return "Webcam Cache";
 		default:
 			break;
 	}
