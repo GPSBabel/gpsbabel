@@ -35,6 +35,10 @@ static char *lonopt;
 
 waypoint * home_pos;
 
+typedef struct {
+	double distance;
+} extra_data;
+
 static
 arglist_t position_args[] = {
 	{"distance", &distopt, "Maximum positional distance (required)"},
@@ -91,6 +95,22 @@ position_comp(const void * a, const void * b)
 		return (1);
 
 	return(0);
+}
+
+static int
+dist_comp(const void * a, const void * b)
+{
+	const waypoint *x1 = *(waypoint **)a;
+	const waypoint *x2 = *(waypoint **)b;
+	extra_data *x1e = x1->extra_data;
+	extra_data *x2e = x2->extra_data;
+
+	if (x1e->distance > x2e->distance)
+		return 1;
+	if (x1e->distance < x2e->distance)
+		return -1;
+	return 0;
+
 }
 
 void 
@@ -159,10 +179,14 @@ radius_process(void)
 	queue * elem, * tmp;
 	waypoint * waypointp;
 	double dist;
+	waypoint ** comp;
+	int i, wc;
+	queue temp_head;
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-		waypointp = (waypoint *)elem;
+		extra_data *ed;
 
+		waypointp = (waypoint *)elem;
 		dist = gc_distance(waypointp->position.latitude.degrees,
 				   waypointp->position.longitude.degrees,
 				   home_pos->position.latitude.degrees,
@@ -174,8 +198,48 @@ radius_process(void)
 		if (dist >= pos_dist) {
 			waypt_del(waypointp);
 			waypt_free(waypointp);
+			continue;
 		}
+
+		ed = xcalloc(1, sizeof(*ed));
+		ed->distance = dist;
+		waypointp->extra_data = ed;
 	}
+
+	wc = waypt_count();
+	QUEUE_INIT(&temp_head);
+
+	comp = xcalloc(wc, sizeof(*comp));
+
+	i = 0;
+
+	/*
+	 * Create an array of remaining waypoints, popping them off the
+	 * master queue as we go.   This gives us something reasonable 
+	 * for qsort.
+	 */
+
+	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+		waypoint *wp = (waypoint *) elem;
+		comp[i] = wp;
+		waypt_del(wp);
+		i++;
+	}
+
+	qsort(comp, wc, sizeof(waypoint *), dist_comp);
+
+	/*
+	 * The comp array is now sorted by distance.   As we run through it,
+	 * we push them back onto the master wp list, letting us pass them
+	 * on through in the modified order.
+ 	 */
+	for (i = 0; i < wc; i++) {
+		waypoint * wp = comp[i];
+		waypt_add(wp);
+		xfree(wp->extra_data);
+	}
+
+	free(comp);
 }
 
 void
