@@ -220,6 +220,7 @@ int32 GPS_Command_Get_Track(const char *port, GPS_PTrack **trk)
 	ret = GPS_A300_Get(port,trk);
 	break;
     case pA301:
+    case pA302:
 	ret = GPS_A301_Get(port,trk);
 	break;
     default:
