@@ -234,10 +234,17 @@ gpx_waypt_pr(const waypoint *waypointp)
 void
 gpx_write(void)
 {
-	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
-	fprintf(ofd, "<gpx\n\tversion=\"1.0\">\n");
 	setshort_length(32);
+
+	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
+	fprintf(ofd, "<gpx\n version=\"1.0\"\n");
+	fprintf(ofd, "creator=\"GPSBabel - http://gpsbabel.sourceforge.net\"\n");
+	fprintf(ofd, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/1/0\"\n");
+	fprintf(ofd, "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n");
+
 	waypt_disp_all(gpx_waypt_pr);
+
 	fprintf(ofd, "</gpx>\n");
 }
 

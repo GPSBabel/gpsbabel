@@ -500,7 +500,7 @@ mag_rd_init(const char *portname)
 	
 	mag_handon();
 	now = time(NULL);
-	later = now + 2;
+	later = now + 3;
 	if (!is_file) {
 		mag_writemsg("PMGNCMD,VERSION");
 	}
@@ -770,7 +770,11 @@ mag_write(void)
 		mag_readmsg();
 		mag_readmsg();
 	}
-
+	/* 
+	 * Whitespace is actually legal, but since waypoint name length is
+	 * only 8 bytes, we'll conserve them.
+	 */
+	setshort_whitespace_ok(0);
 	waypt_disp_all(mag_waypt_pr);
 }
 
