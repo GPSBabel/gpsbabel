@@ -1064,7 +1064,7 @@ mag_read(void)
 	{
 		case trkdata:
 			trk_head = route_head_alloc();
-			route_add_head(trk_head);
+			track_add_head(trk_head);
 
 			if (!is_file) 
 				mag_writemsg("PMGNCMD,TRACK,2");
@@ -1249,7 +1249,7 @@ void mag_track_disp(const waypoint *waypointp)
 static
 void mag_track_pr()
 {
-	route_disp_all(mag_track_nop, mag_track_nop, mag_track_disp);
+	track_disp_all(mag_track_nop, mag_track_nop, mag_track_disp);
 }
 
 /*
