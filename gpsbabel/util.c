@@ -772,7 +772,7 @@ char * str_utf8_to_ascii( const char * str )
 		if ( *cur & 0x80 ) {
 			int bytes;
 			int value;
-			char *strvalue = "";
+			char *strvalue = NULL;
 			utf8_to_int( cur, &bytes, &value );
 			switch (value) {
 				case 0x2026: strvalue = "..."; break;
