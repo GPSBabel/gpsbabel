@@ -68,7 +68,7 @@ data_read(void)
 		rtrim(desc);
 		rtrim(icon);
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
-		wpt_tmp->position.altitude.altitude_meters = alt;
+		wpt_tmp->altitude = alt;
 		wpt_tmp->shortname = xstrdup(name);
 		wpt_tmp->description = xstrdup(desc);
 		wpt_tmp->creation_time = time(NULL);
@@ -79,9 +79,9 @@ data_read(void)
 		lat /= 100.0;
 		lon /= 100.0;
 		ilon = (int)(lon);
-		wpt_tmp->position.longitude.degrees = ilon + (lon - ilon)*(100.0/60.0);
+		wpt_tmp->longitude = ilon + (lon - ilon)*(100.0/60.0);
 		ilat = (int)(lat);
-		wpt_tmp->position.latitude.degrees = ilat + (lat - ilat) * (100.0/60.0);
+		wpt_tmp->latitude = ilat + (lat - ilat) * (100.0/60.0);
 		wpt_tmp->icon_descr = mag_find_descr_from_token(icon);
 		waypt_add(wpt_tmp);
 	}
@@ -95,8 +95,8 @@ gpsutil_disp(const waypoint *wpt)
 
 	icon_token = mag_find_token_from_descr(wpt->icon_descr);
 
-	lon = degrees2ddmm(wpt->position.longitude.degrees);
-	lat = degrees2ddmm(wpt->position.latitude.degrees);
+	lon = degrees2ddmm(wpt->longitude);
+	lat = degrees2ddmm(wpt->latitude);
 
 	fprintf(file_out, "%-8s %08.3f%c %09.3f%c %07.0f%c %-30.30s %s\n",
                 global_opts.synthesize_shortnames ?
@@ -106,7 +106,7 @@ gpsutil_disp(const waypoint *wpt)
 		lat < 0.0 ? 'S' : 'N',
 		fabs(lon),
 		lon < 0.0 ? 'W' : 'E',
-		wpt->position.altitude.altitude_meters,
+		wpt->altitude,
 		'm', 
 		wpt->description ? wpt->description : "",
 		icon_token);

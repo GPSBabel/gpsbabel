@@ -159,14 +159,14 @@ data_read(void)
 
 		rec = (struct record *) pdb_rec->data;
 		if ( be_read32(&rec->elevation) == -100000000 ) {
-			wpt_tmp->position.altitude.altitude_meters = unknown_alt;
+			wpt_tmp->altitude = unknown_alt;
 		}
 		else {
-			wpt_tmp->position.altitude.altitude_meters = be_read32(&rec->elevation) / 100.0;
+			wpt_tmp->altitude = be_read32(&rec->elevation) / 100.0;
 		}
 			
-		wpt_tmp->position.longitude.degrees = be_read32(&rec->longitude) / 10000000.0; 
-		wpt_tmp->position.latitude.degrees = be_read32(&rec->latitude) / 10000000.0;
+		wpt_tmp->longitude = be_read32(&rec->longitude) / 10000000.0; 
+		wpt_tmp->latitude = be_read32(&rec->latitude) / 10000000.0;
 	        	
 		if (be_read16(&rec->year) != 0xff) {
 			struct tm tm;
@@ -225,13 +225,13 @@ cetus_writewpt(waypoint *wpt)
 		be_write16(&rec->year, 0xff);
 	}
 
-	be_write32(&rec->longitude, wpt->position.longitude.degrees * 10000000.0);
-	be_write32(&rec->latitude, wpt->position.latitude.degrees * 10000000.0);
-	if ( wpt->position.altitude.altitude_meters == unknown_alt ) {
+	be_write32(&rec->longitude, wpt->longitude * 10000000.0);
+	be_write32(&rec->latitude, wpt->latitude * 10000000.0);
+	if ( wpt->altitude == unknown_alt ) {
 		be_write32(&rec->elevation, -100000000U);
 	}
 	else {
-		be_write32(&rec->elevation, wpt->position.altitude.altitude_meters * 100.0);
+		be_write32(&rec->elevation, wpt->altitude * 100.0);
 	}
 	
 	be_write16( &rec->pdop, 0xffff );

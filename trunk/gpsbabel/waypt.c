@@ -105,15 +105,15 @@ waypt_disp(const waypoint *wpt)
 	if (wpt->creation_time) {
 		printf("%s ", ctime(&wpt->creation_time));
 	}
-	printposn(&wpt->position.latitude,1);
-	printposn(&wpt->position.longitude,0);
+	printposn(wpt->latitude,1);
+	printposn(wpt->longitude,0);
 	printf("%s/%s", 
 		global_opts.synthesize_shortnames ? 
 			mkshort(mkshort_handle, wpt->description) : 
 				wpt->shortname, 
 				wpt->description);
-	if (wpt->position.altitude.altitude_meters != unknown_alt)
-		printf(" %f", wpt->position.altitude.altitude_meters);
+	if (wpt->altitude != unknown_alt)
+		printf(" %f", wpt->altitude);
 	printf("\n");
 }
 

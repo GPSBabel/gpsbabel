@@ -473,9 +473,9 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
 
 	thisWaypoint->shortname = xstrdup(wptname);
 	thisWaypoint->description = xstrdup(wptdesc);
-	thisWaypoint->position.latitude.degrees = lat / 2147483648.0 * 180.0;
-	thisWaypoint->position.longitude.degrees = lon / 2147483648.0 * 180.0;
-	thisWaypoint->position.altitude.altitude_meters = mps_altitude;
+	thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
+	thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
+	thisWaypoint->altitude = mps_altitude;
 
 	/* might need to change this to handle version dependent icon handling */
 	thisWaypoint->icon_descr = mps_find_desc_from_icon_number(icon, MAPSOURCE);
@@ -494,8 +494,8 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 {
 	unsigned char hdr[100];
 	int reclen;
-	int lat = wpt->position.latitude.degrees  / 180.0 * 2147483648.0;
-	int lon = wpt->position.longitude.degrees  / 180.0 * 2147483648.0;
+	int lat = wpt->latitude  / 180.0 * 2147483648.0;
+	int lon = wpt->longitude  / 180.0 * 2147483648.0;
 	int	icon;
 	char *src;
 	char *ident;
@@ -504,7 +504,7 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 	int display = 1;
 	int colour = 0;			/*  (unknown colour) black is 1, white is 16 */
 
-	double	mps_altitude = wpt->position.altitude.altitude_meters;
+	double	mps_altitude = wpt->altitude;
 	double	mps_proximity = unknown_alt;
 	double	mps_depth = unknown_alt;
 
@@ -736,9 +736,9 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 		else {
 			thisWaypoint = xcalloc(sizeof(*thisWaypoint), 1);
 			thisWaypoint->shortname = xstrdup(wptname);
-			thisWaypoint->position.latitude.degrees = lat / 2147483648.0 * 180.0;
-			thisWaypoint->position.longitude.degrees = lon / 2147483648.0 * 180.0;
-			thisWaypoint->position.altitude.altitude_meters = mps_altitude;
+			thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
+			thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
+			thisWaypoint->altitude = mps_altitude;
 		}
 
 		route_add_wpt(rte_head, thisWaypoint);
@@ -806,9 +806,9 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	else {
 		thisWaypoint = xcalloc(sizeof(*thisWaypoint), 1);
 		thisWaypoint->shortname = xstrdup(wptname);
-		thisWaypoint->position.latitude.degrees = lat / 2147483648.0 * 180.0;
-		thisWaypoint->position.longitude.degrees = lon / 2147483648.0 * 180.0;
-		thisWaypoint->position.altitude.altitude_meters = mps_altitude;
+		thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
+		thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
+		thisWaypoint->altitude = mps_altitude;
 	}
 
 	route_add_wpt(rte_head, thisWaypoint);
@@ -863,15 +863,15 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 			if (rte_datapoints == 0) {
 				uniqueValue = testwpt->creation_time;
 			}
-			if (testwpt->position.latitude.degrees > maxlat) maxlat = testwpt->position.latitude.degrees;
-			if (testwpt->position.latitude.degrees < minlat) minlat = testwpt->position.latitude.degrees;
-			if (testwpt->position.longitude.degrees > maxlon) maxlon = testwpt->position.longitude.degrees;
-			if (testwpt->position.longitude.degrees < minlon) minlon = testwpt->position.longitude.degrees;
-			if (testwpt->position.altitude.altitude_meters != unknown_alt) {
-				if ((testwpt->position.altitude.altitude_meters > maxalt) || 
-					(maxalt == unknown_alt)) maxalt = testwpt->position.altitude.altitude_meters;
-				if ((testwpt->position.altitude.altitude_meters < minalt) ||
-					(minalt == unknown_alt)) minalt = testwpt->position.altitude.altitude_meters;
+			if (testwpt->latitude > maxlat) maxlat = testwpt->latitude;
+			if (testwpt->latitude < minlat) minlat = testwpt->latitude;
+			if (testwpt->longitude > maxlon) maxlon = testwpt->longitude;
+			if (testwpt->longitude < minlon) minlon = testwpt->longitude;
+			if (testwpt->altitude != unknown_alt) {
+				if ((testwpt->altitude > maxalt) || 
+					(maxalt == unknown_alt)) maxalt = testwpt->altitude;
+				if ((testwpt->altitude < minalt) ||
+					(minalt == unknown_alt)) minalt = testwpt->altitude;
 			}
 
 			if(testwpt->description) src = testwpt->description;
@@ -1017,15 +1017,15 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 		fwrite(&reclen, 4, 1, mps_file);
 
 		/* output end point 1 */
-		lat = prevRouteWpt->position.latitude.degrees  / 180.0 * 2147483648.0;
-		lon = prevRouteWpt->position.longitude.degrees  / 180.0 * 2147483648.0;
+		lat = prevRouteWpt->latitude  / 180.0 * 2147483648.0;
+		lon = prevRouteWpt->longitude  / 180.0 * 2147483648.0;
 		le_write32(&lat, lat);
 		le_write32(&lon, lon);
 
 		fwrite(&lat, 4, 1, mps_file);
 		fwrite(&lon, 4, 1, mps_file);
 
-		mps_altitude = prevRouteWpt->position.altitude.altitude_meters;
+		mps_altitude = prevRouteWpt->altitude;
 		if (mps_altitude == unknown_alt) {
 			fwrite(zbuf, 9, 1, mps_file);
 		}
@@ -1036,15 +1036,15 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 		}
 
 		/* output end point 2 */
-		lat = rtewpt->position.latitude.degrees  / 180.0 * 2147483648.0;
-		lon = rtewpt->position.longitude.degrees  / 180.0 * 2147483648.0;
+		lat = rtewpt->latitude  / 180.0 * 2147483648.0;
+		lon = rtewpt->longitude  / 180.0 * 2147483648.0;
 		le_write32(&lat, lat);
 		le_write32(&lon, lon);
 
 		fwrite(&lat, 4, 1, mps_file);
 		fwrite(&lon, 4, 1, mps_file);
 
-		mps_altitude = rtewpt->position.altitude.altitude_meters;
+		mps_altitude = rtewpt->altitude;
 		if (mps_altitude == unknown_alt) {
 			fwrite(zbuf, 9, 1, mps_file);
 		}
@@ -1054,31 +1054,31 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 			fwrite(&mps_altitude, 8 , 1, mps_file);
 		}
 
-		if (rtewpt->position.latitude.degrees > prevRouteWpt->position.latitude.degrees) {
-			maxlat = rtewpt->position.latitude.degrees  / 180.0 * 2147483648.0;
-			minlat = prevRouteWpt->position.latitude.degrees  / 180.0 * 2147483648.0;
+		if (rtewpt->latitude > prevRouteWpt->latitude) {
+			maxlat = rtewpt->latitude  / 180.0 * 2147483648.0;
+			minlat = prevRouteWpt->latitude  / 180.0 * 2147483648.0;
 		}
 		else {
-			minlat = rtewpt->position.latitude.degrees  / 180.0 * 2147483648.0;
-			maxlat = prevRouteWpt->position.latitude.degrees  / 180.0 * 2147483648.0;
+			minlat = rtewpt->latitude  / 180.0 * 2147483648.0;
+			maxlat = prevRouteWpt->latitude  / 180.0 * 2147483648.0;
 		}
 
-		if (rtewpt->position.longitude.degrees > prevRouteWpt->position.longitude.degrees) {
-			maxlon = rtewpt->position.longitude.degrees  / 180.0 * 2147483648.0;
-			minlon = prevRouteWpt->position.longitude.degrees  / 180.0 * 2147483648.0;
+		if (rtewpt->longitude > prevRouteWpt->longitude) {
+			maxlon = rtewpt->longitude  / 180.0 * 2147483648.0;
+			minlon = prevRouteWpt->longitude  / 180.0 * 2147483648.0;
 		}
 		else {
-			minlon = rtewpt->position.longitude.degrees  / 180.0 * 2147483648.0;
-			maxlon = prevRouteWpt->position.longitude.degrees  / 180.0 * 2147483648.0;
+			minlon = rtewpt->longitude  / 180.0 * 2147483648.0;
+			maxlon = prevRouteWpt->longitude  / 180.0 * 2147483648.0;
 		}
 
-		if (rtewpt->position.altitude.altitude_meters != unknown_alt) maxalt = rtewpt->position.altitude.altitude_meters;
-		if (rtewpt->position.altitude.altitude_meters != unknown_alt) minalt = rtewpt->position.altitude.altitude_meters;
-		if (prevRouteWpt->position.altitude.altitude_meters != unknown_alt) {
-			if ((prevRouteWpt->position.altitude.altitude_meters > maxalt) || 
-				(maxalt == unknown_alt)) maxalt = prevRouteWpt->position.altitude.altitude_meters;
-			if ((prevRouteWpt->position.altitude.altitude_meters < minalt) ||
-				(minalt == unknown_alt)) minalt = prevRouteWpt->position.altitude.altitude_meters;
+		if (rtewpt->altitude != unknown_alt) maxalt = rtewpt->altitude;
+		if (rtewpt->altitude != unknown_alt) minalt = rtewpt->altitude;
+		if (prevRouteWpt->altitude != unknown_alt) {
+			if ((prevRouteWpt->altitude > maxalt) || 
+				(maxalt == unknown_alt)) maxalt = prevRouteWpt->altitude;
+			if ((prevRouteWpt->altitude < minalt) ||
+				(minalt == unknown_alt)) minalt = prevRouteWpt->altitude;
 		}
 		
 		fwrite (zbuf, 1, 1, mps_file);
@@ -1258,11 +1258,11 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 		}
 
 		thisWaypoint = xcalloc(sizeof(*thisWaypoint), 1);
-		thisWaypoint->position.latitude.degrees = lat / 2147483648.0 * 180.0;
-		thisWaypoint->position.longitude.degrees = lon / 2147483648.0 * 180.0;
+		thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
+		thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
 		thisWaypoint->creation_time = dateTime;
 		thisWaypoint->centiseconds = 0;
-		thisWaypoint->position.altitude.altitude_meters = mps_altitude;
+		thisWaypoint->altitude = mps_altitude;
 		route_add_wpt(track_head, thisWaypoint);
 
 	}		/* while (trk_count--) */
@@ -1355,12 +1355,12 @@ static void
 mps_trackdatapoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 {
 	unsigned char hdr[10];
-	int lat = wpt->position.latitude.degrees  / 180.0 * 2147483648.0;
-	int lon = wpt->position.longitude.degrees  / 180.0 * 2147483648.0;
+	int lat = wpt->latitude  / 180.0 * 2147483648.0;
+	int lon = wpt->longitude  / 180.0 * 2147483648.0;
 	time_t	t = wpt->creation_time;
 	char zbuf[10];
 
-	double	mps_altitude = wpt->position.altitude.altitude_meters;
+	double	mps_altitude = wpt->altitude;
 	double	mps_proximity = unknown_alt;
 	double	mps_depth = unknown_alt;
 

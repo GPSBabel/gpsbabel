@@ -427,30 +427,30 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     /* LATITUDE CONVERSIONS**************************************************/
     if (strcmp(fmp->key, "LAT_DECIMAL") == 0) {
        /* latitude as a pure decimal value */
-       wpt->position.latitude.degrees = atof(s);
+       wpt->latitude = atof(s);
     } else
     if ((strcmp(fmp->key, "LAT_DECIMALDIR") == 0) ||
         (strcmp(fmp->key, "LAT_DIRDECIMAL") == 0)) {
        /* latitude as a decimal with N/S in it. */
-       wpt->position.latitude.degrees = decdir_to_dec(s);
+       wpt->latitude = decdir_to_dec(s);
     } else
     if (strcmp(fmp->key, "LAT_INT32DEG") == 0) {
        /* latitude as a 32 bit integer offset */
-       wpt->position.latitude.degrees = intdeg_to_dec(atof(s), 1);
+       wpt->latitude = intdeg_to_dec(atof(s), 1);
     } else
     /* LONGITUDE CONVERSIONS ***********************************************/
     if (strcmp(fmp->key, "LON_DECIMAL") == 0) {
        /* longitude as a pure decimal value */
-       wpt->position.longitude.degrees = atof(s);
+       wpt->longitude = atof(s);
     } else
     if ((strcmp(fmp->key, "LON_DECIMALDIR") == 0) ||
         (strcmp(fmp->key, "LON_DIRDECIMAL") == 0)) {
        /* longitude as a decimal with N/S in it. */
-       wpt->position.longitude.degrees = decdir_to_dec(s);
+       wpt->longitude = decdir_to_dec(s);
     } else
     if (strcmp(fmp->key, "LON_INT32DEG") == 0) {
        /* longitude as a 32 bit integer offset  */
-       wpt->position.longitude.degrees = intdeg_to_dec(atof(s), 0);
+       wpt->longitude = intdeg_to_dec(atof(s), 0);
     } else
 
     /* DIRECTIONS **********************************************************/
@@ -464,11 +464,11 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     /* ALTITUDE CONVERSIONS ************************************************/
     if (strcmp(fmp->key, "ALT_FEET") == 0) {
        /* altitude in feet as a decimal value */
-       wpt->position.altitude.altitude_meters = atof(s) * .3048;
+       wpt->altitude = atof(s) * .3048;
     } else
     if (strcmp(fmp->key, "ALT_METERS") == 0) {
        /* altitude in meters as a decimal value */
-       wpt->position.altitude.altitude_meters = atof(s);
+       wpt->altitude = atof(s);
     } else
 
     /* TIME CONVERSIONS ***************************************************/
@@ -691,70 +691,70 @@ xcsv_waypt_pr(const waypoint *wpt)
         /* LATITUDE CONVERSION***********************************************/
         if (strcmp(fmp->key, "LAT_DECIMAL") == 0) {
             /* latitude as a pure decimal value */
-            sprintf(buff, fmp->printfc, wpt->position.latitude.degrees);
+            sprintf(buff, fmp->printfc, wpt->latitude);
         } else
         if (strcmp(fmp->key, "LAT_DECIMALDIR") == 0) {
             /* latitude as a decimal value with N/S after it */
-            sprintf(buff, fmp->printfc, fabs(wpt->position.latitude.degrees), 
-              LAT_DIR(wpt->position.latitude.degrees));
+            sprintf(buff, fmp->printfc, fabs(wpt->latitude), 
+              LAT_DIR(wpt->latitude));
         } else
         if (strcmp(fmp->key, "LAT_DIRDECIMAL") == 0) {
             /* latitude as a decimal value with N/S before it */
             sprintf(buff, fmp->printfc, 
-              LAT_DIR(wpt->position.latitude.degrees),
-              fabs(wpt->position.latitude.degrees));
+              LAT_DIR(wpt->latitude),
+              fabs(wpt->latitude));
         } else
         if (strcmp(fmp->key, "LAT_INT32DEG") == 0) {
             /* latitude as an integer offset from 0 degrees */
             sprintf(buff, fmp->printfc,
-              dec_to_intdeg(wpt->position.latitude.degrees, 1));
+              dec_to_intdeg(wpt->latitude, 1));
         } else
 
         /* LONGITUDE CONVERSIONS*********************************************/
         if (strcmp(fmp->key, "LON_DECIMAL") == 0) {
             /* longitude as a pure decimal value */
-            sprintf(buff, fmp->printfc, wpt->position.longitude.degrees);
+            sprintf(buff, fmp->printfc, wpt->longitude);
         } else
         if (strcmp(fmp->key, "LON_DECIMALDIR") == 0) {
             /* latitude as a decimal value with N/S after it */
             sprintf(buff, fmp->printfc,
-              fabs(wpt->position.longitude.degrees), 
-              LON_DIR(wpt->position.longitude.degrees));
+              fabs(wpt->longitude), 
+              LON_DIR(wpt->longitude));
         } else
         if (strcmp(fmp->key, "LON_DIRDECIMAL") == 0) {
             /* latitude as a decimal value with N/S before it */
             sprintf(buff, fmp->printfc,
-              LON_DIR(wpt->position.longitude.degrees),
-              fabs(wpt->position.longitude.degrees));
+              LON_DIR(wpt->longitude),
+              fabs(wpt->longitude));
         } else
         if (strcmp(fmp->key, "LON_INT32DEG") == 0) {
             /* longitudee as an integer offset from 0 degrees */
             sprintf(buff, fmp->printfc,
-              dec_to_intdeg(wpt->position.longitude.degrees, 0));
+              dec_to_intdeg(wpt->longitude, 0));
         } else
 
         /* DIRECTIONS *******************************************************/
         if (strcmp(fmp->key, "LAT_DIR") == 0) {
             /* latitude N/S as a char */
             sprintf(buff, fmp->printfc,
-            LAT_DIR(wpt->position.latitude.degrees));
+            LAT_DIR(wpt->latitude));
         } else
         if (strcmp(fmp->key, "LON_DIR") == 0) {
             /* longitude E/W as a char */
             sprintf(buff, fmp->printfc,
-              LON_DIR(wpt->position.longitude.degrees));
+              LON_DIR(wpt->longitude));
         } else
 
         /* ALTITUDE CONVERSIONS**********************************************/
         if (strcmp(fmp->key, "ALT_FEET") == 0) {
             /* altitude in feet as a decimal value */
             sprintf(buff, fmp->printfc,
-              (wpt->position.altitude.altitude_meters * 3.2808));
+              (wpt->altitude * 3.2808));
         } else
         if (strcmp(fmp->key, "ALT_METERS") == 0) {
             /* altitude in meters as a decimal value */
             sprintf(buff, fmp->printfc,
-              wpt->position.altitude.altitude_meters);
+              wpt->altitude);
         } else
 
         /* TIME CONVERSIONS**************************************************/

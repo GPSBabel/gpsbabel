@@ -164,9 +164,9 @@ decode(char *buf)
 
 		for (; vdata < edata; rec = (struct record *) vdata) {
 			wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
-			wpt_tmp->position.latitude.degrees = Lat1 + 
+			wpt_tmp->latitude = Lat1 + 
 				be_read16(&rec->lat1d) / LATDIV2; 
-			wpt_tmp->position.longitude.degrees = Lon1 + 
+			wpt_tmp->longitude = Lon1 + 
 				be_read16(&rec->lon1d) / LONDIV2; 
 
 			vdata = (char *) rec + sizeof(*rec);
@@ -228,9 +228,9 @@ my_writewpt(const waypoint *wpt)
 	
         be_write16( &rec->unknown2, 0);
 	
-	be_write32(&rec->longitude, si_round(wpt->position.longitude.degrees * 100000.0));
-	be_write32(&rec->latitude, si_round(wpt->position.latitude.degrees * 100000.0));
-	be_write32(&rec->elevation, wpt->position.altitude.altitude_meters);
+	be_write32(&rec->longitude, si_round(wpt->longitude * 100000.0));
+	be_write32(&rec->latitude, si_round(wpt->latitude * 100000.0));
+	be_write32(&rec->elevation, wpt->altitude);
 
 	rec->plot = 0;
 	rec->unknown3 = 'a';

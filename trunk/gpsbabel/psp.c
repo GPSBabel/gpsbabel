@@ -298,7 +298,7 @@ psp_read(void)
 	while (pincount--) {
 	    wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 
-            wpt_tmp->position.altitude.altitude_meters = unknown_alt;
+            wpt_tmp->altitude = unknown_alt;
             
             /* offset 0x20 - 0x21 pin index */
     	    psp_fread(&pindex, 1, 2, psp_file_in);
@@ -326,8 +326,8 @@ psp_read(void)
 
             decode_psp_coordinates(&lat, &lon, gridbyte);
 
-            wpt_tmp->position.latitude.degrees = lat;
-            wpt_tmp->position.longitude.degrees = lon;
+            wpt_tmp->latitude = lat;
+            wpt_tmp->longitude = lon;
            
             /* 1 byte - pin display properties */
             psp_fread(&buff[0], 1, 1, psp_file_in);
@@ -430,8 +430,8 @@ psp_waypt_pr(const waypoint *wpt)
         }
 
         /* convert lat/long back to radians */
-	lat = (wpt->position.latitude.degrees * M_PI) / 180.0;
-        lon = (wpt->position.longitude.degrees * M_PI) / 180.0;
+	lat = (wpt->latitude * M_PI) / 180.0;
+        lon = (wpt->longitude * M_PI) / 180.0;
         
 	pindex++;
 	le_write16(tbuf, pindex);
@@ -444,8 +444,8 @@ psp_waypt_pr(const waypoint *wpt)
         
 
         /* set the grid byte */
-	c = grid_byte(wpt->position.latitude.degrees, 
-	              wpt->position.longitude.degrees);
+	c = grid_byte(wpt->latitude, 
+	              wpt->longitude);
 
 	/* since the grid byte matches with what pocketstreets does to   */
 	/* input files, our output appears identical to a pin file that  */

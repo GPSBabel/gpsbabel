@@ -313,17 +313,17 @@ psit_waypoint_r(FILE *psit_file, waypoint **wpt)
 	if (strlen(psit_current_token) > 0) {
 		thisWaypoint = xcalloc(sizeof(*thisWaypoint), 1);
 
-		thisWaypoint->position.latitude.degrees = atof(psit_current_token);
+		thisWaypoint->latitude = atof(psit_current_token);
 
 		psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), comma);
-		thisWaypoint->position.longitude.degrees = atof(psit_current_token);
+		thisWaypoint->longitude = atof(psit_current_token);
 
 		psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), comma);
 		if (psit_current_token[0] == '*') {
-			thisWaypoint->position.altitude.altitude_meters = unknown_alt;
+			thisWaypoint->altitude = unknown_alt;
 		}
 		else {
-			thisWaypoint->position.altitude.altitude_meters = atof(psit_current_token);
+			thisWaypoint->altitude = atof(psit_current_token);
 		}
 
 		/* the name */
@@ -359,14 +359,14 @@ psit_waypoint_w(FILE *psit_file, const waypoint *wpt)
 	int colour = 0;			/*  (unknown colour) black is 1, white is 16 */
 
 	fprintf(psit_file, "%11.6f,%11.6f,", 
-						wpt->position.latitude.degrees,
-						wpt->position.longitude.degrees);
+						wpt->latitude,
+						wpt->longitude);
 
-	if (wpt->position.altitude.altitude_meters == unknown_alt) 
+	if (wpt->altitude == unknown_alt) 
 		fprintf(psit_file, "********,");
 	else
 		fprintf(psit_file, "%8.2f,",
-						wpt->position.altitude.altitude_meters);
+						wpt->altitude);
 
 	ident = global_opts.synthesize_shortnames ?
 				mkshort(mkshort_handle, src) :
@@ -439,17 +439,17 @@ psit_route_r(FILE *psit_file, route_head **rte)
 		if (strlen(psit_current_token) > 0) {
 			thisWaypoint = xcalloc(sizeof(*thisWaypoint), 1);
 
-			thisWaypoint->position.latitude.degrees = atof(psit_current_token);
+			thisWaypoint->latitude = atof(psit_current_token);
 
 			psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), comma);
-			thisWaypoint->position.longitude.degrees = atof(psit_current_token);
+			thisWaypoint->longitude = atof(psit_current_token);
 
 			psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), comma);
 			if (psit_current_token[0] == '*') {
-				thisWaypoint->position.altitude.altitude_meters = unknown_alt;
+				thisWaypoint->altitude = unknown_alt;
 			}
 			else {
-				thisWaypoint->position.altitude.altitude_meters = atof(psit_current_token);
+				thisWaypoint->altitude = atof(psit_current_token);
 			}
 
 			/* the name */
@@ -569,17 +569,17 @@ psit_track_r(FILE *psit_file, route_head **trk)
 		if (strlen(psit_current_token) > 0) {
 			thisWaypoint = xcalloc(sizeof(*thisWaypoint), 1);
 
-			thisWaypoint->position.latitude.degrees = atof(psit_current_token);
+			thisWaypoint->latitude = atof(psit_current_token);
 
 			psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), comma);
-			thisWaypoint->position.longitude.degrees = atof(psit_current_token);
+			thisWaypoint->longitude = atof(psit_current_token);
 
 			psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), comma);
 			if (psit_current_token[0] == '*') {
-				thisWaypoint->position.altitude.altitude_meters = unknown_alt;
+				thisWaypoint->altitude = unknown_alt;
 			}
 			else {
-				thisWaypoint->position.altitude.altitude_meters = atof(psit_current_token);
+				thisWaypoint->altitude = atof(psit_current_token);
 			}
 
 			/* date portion of the date time DD/MM/YY */
@@ -696,19 +696,19 @@ psit_trackdatapoint_w(FILE *psit_file, const waypoint *wpt)
 	time_t	t = wpt->creation_time;
 	struct tm *tmTime = gmtime(&t);
 
-	double	psit_altitude = wpt->position.altitude.altitude_meters;
+	double	psit_altitude = wpt->altitude;
 	double	psit_proximity = unknown_alt;
 	double	psit_depth = unknown_alt;
 
 	fprintf(psit_file, "%11.6f,%11.6f,", 
-						wpt->position.latitude.degrees,
-						wpt->position.longitude.degrees);
+						wpt->latitude,
+						wpt->longitude);
 
-	if (wpt->position.altitude.altitude_meters == unknown_alt) 
+	if (wpt->altitude == unknown_alt) 
 		fprintf(psit_file, "********, ");
 	else
 		fprintf(psit_file, "%8.2f, ",
-						wpt->position.altitude.altitude_meters);
+						wpt->altitude);
 
 	/* Following date time format is fixed and reveals the origin of PsiTrex (i.e. the UK) */
 	fprintf(psit_file, "%02d/%02d/%02d %02d:%02d:%02d,",

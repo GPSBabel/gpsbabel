@@ -255,8 +255,8 @@ duplicate_process(void)
 
 		if (lcopt) {
 			/* let sprintf take care of rounding */
-			sprintf(dupe.lat, "%11.6f", waypointp->position.latitude.degrees);
-			sprintf(dupe.lon, "%11.6f", waypointp->position.longitude.degrees);
+			sprintf(dupe.lat, "%11.6f", waypointp->latitude);
+			sprintf(dupe.lon, "%11.6f", waypointp->longitude);
 		}
 
 		crc = get_crc32(&dupe, sizeof(dupe));

@@ -75,8 +75,8 @@ waypt_read(void)
 
 		wpt_tmp->shortname = xstrdup(way[i]->ident);
 		wpt_tmp->description = xstrdup(way[i]->cmnt);
-		wpt_tmp->position.longitude.degrees = way[i]->lon;
-		wpt_tmp->position.latitude.degrees = way[i]->lat;
+		wpt_tmp->longitude = way[i]->lon;
+		wpt_tmp->latitude = way[i]->lat;
 		wpt_tmp->icon_descr =
 			mps_find_desc_from_icon_number(way[i]->smbl, PCX);
 		/*
@@ -92,9 +92,9 @@ waypt_read(void)
 		     (way[i]->alt == INT_MAX) ||
 		     (way[i]->alt == 1.0e25)
 		     ) {
-			wpt_tmp->position.altitude.altitude_meters = unknown_alt;
+			wpt_tmp->altitude = unknown_alt;
 		} else {
-			wpt_tmp->position.altitude.altitude_meters = way[i]->alt;
+			wpt_tmp->altitude = way[i]->alt;
 		}
 		
 		waypt_add(wpt_tmp);
@@ -128,9 +128,9 @@ track_read(void)
 			route_add_head(trk_head);
 		}
 
-		waypts[i].position.longitude.degrees = array[i]->lon;
-		waypts[i].position.latitude.degrees = array[i]->lat;
-		waypts[i].position.altitude.altitude_meters = array[i]->alt;
+		waypts[i].longitude = array[i]->lon;
+		waypts[i].latitude = array[i]->lat;
+		waypts[i].altitude = array[i]->alt;
 		waypts[i].shortname = xstrdup(array[i]->trk_ident);
 		waypts[i].creation_time = array[i]->Time;
 		
@@ -262,11 +262,11 @@ data_write(void)
 		if (src && strlen(src)) {
 			strncpy(way[i]->cmnt, src, sizeof(way[i]->cmnt));
 		}
-		way[i]->lon = wpt->position.longitude.degrees;
-		way[i]->lat = wpt->position.latitude.degrees;
+		way[i]->lon = wpt->longitude;
+		way[i]->lat = wpt->latitude;
 		way[i]->smbl = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
-		if (wpt->position.altitude.altitude_meters != unknown_alt) {
-			way[i]->alt = wpt->position.altitude.altitude_meters;
+		if (wpt->altitude != unknown_alt) {
+			way[i]->alt = wpt->altitude;
 		}
 		i++;
 	}

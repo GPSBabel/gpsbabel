@@ -231,9 +231,9 @@ mapsend_wpt_read(void)
 
 		wpt_tmp->shortname = xstrdup(name);
 		wpt_tmp->description = xstrdup(comment);
-		wpt_tmp->position.altitude.altitude_meters = wpt_alt;
-		wpt_tmp->position.latitude.degrees = -wpt_lat;
-		wpt_tmp->position.longitude.degrees = wpt_long;
+		wpt_tmp->altitude = wpt_alt;
+		wpt_tmp->latitude = -wpt_lat;
+		wpt_tmp->longitude = wpt_long;
 
 		if (wpt_icon < 26)
 			sprintf(tbuf, "%c", wpt_icon + 'a');
@@ -280,8 +280,8 @@ mapsend_wpt_read(void)
 			my_fread8(&wpt_lat, mapsend_file_in);
 			fread(&wpt_icon, sizeof(wpt_icon), 1, mapsend_file_in);
 
-			wpt_tmp->position.longitude.degrees = wpt_long;
-			wpt_tmp->position.latitude.degrees = -wpt_lat;
+			wpt_tmp->longitude = wpt_long;
+			wpt_tmp->latitude = -wpt_lat;
 
 			if (wpt_icon < 26)
 				sprintf(tbuf, "%c", wpt_icon + 'a');
@@ -342,11 +342,11 @@ mapsend_track_read(void)
 		}
 
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
-		wpt_tmp->position.latitude.degrees = -wpt_lat;
-		wpt_tmp->position.longitude.degrees = wpt_long;
+		wpt_tmp->latitude = -wpt_lat;
+		wpt_tmp->longitude = wpt_long;
 		wpt_tmp->creation_time = time;
 		wpt_tmp->centiseconds = centisecs;
-		wpt_tmp->position.altitude.altitude_meters = wpt_alt;
+		wpt_tmp->altitude = wpt_alt;
 		route_add_wpt(track_head, wpt_tmp);
 	}
 }
@@ -441,12 +441,12 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	c = 1;
 	fwrite(&c, 1, 1, mapsend_file_out);
 
-	falt = waypointp->position.altitude.altitude_meters;
+	falt = waypointp->altitude;
 	my_fwrite8(&falt, mapsend_file_out);
 
-	flong = waypointp->position.longitude.degrees;
+	flong = waypointp->longitude;
 	my_fwrite8(&flong, mapsend_file_out);
-	flat = -waypointp->position.latitude.degrees;
+	flat = -waypointp->latitude;
 	my_fwrite8(&flat, mapsend_file_out);
 }
 
@@ -503,10 +503,10 @@ mapsend_route_disp(const waypoint *waypointp)
 	/* waypoint number */
 	my_fwrite4(&route_wp_count, mapsend_file_out);
 
-	dbl = waypointp->position.longitude.degrees;
+	dbl = waypointp->longitude;
 	my_fwrite8(&dbl, mapsend_file_out);
 
-	dbl = -waypointp->position.latitude.degrees;
+	dbl = -waypointp->latitude;
 	my_fwrite8(&dbl, mapsend_file_out);
 
 	if (waypointp->icon_descr) {
@@ -579,12 +579,14 @@ void mapsend_track_disp(const waypoint * wpt)
 	static int last_time;
 
 	/*
-	 * Version 4.06 (at least) has a defect when it's set for .01km
+	 * Firmware Ver 4.06 (at least) has a defect when it's set for .01km
 	 * tracking that will sometimes result in timestamps in the track
 	 * going BACKWARDS.   When mapsend sees this, it (stupidly) advances
 	 * the date by one, ignoring the date on the TRK lines.   This looks 
 	 * for time travel and just uses the previous time - it's better to
 	 * be thought to be standing still than to be time-travelling!
+	 *
+	 * This is rumoured (but yet unconfirmed) to be fixed in f/w 5.12.
 	 */
 	t = wpt->creation_time;
 	if (t < last_time)  {
@@ -592,15 +594,15 @@ void mapsend_track_disp(const waypoint * wpt)
 	}
 	
 	/* x = longitude */
-	dbl = wpt->position.longitude.degrees;
+	dbl = wpt->longitude;
 	my_fwrite8(&dbl, mapsend_file_out);
 
 	/* x = latitude */
-	dbl = -wpt->position.latitude.degrees;
+	dbl = -wpt->latitude;
 	my_fwrite8(&dbl, mapsend_file_out);
 
 	/* altitude */
-	i = wpt->position.altitude.altitude_meters;
+	i = wpt->altitude;
 	my_fwrite4(&i, mapsend_file_out);
 	
 	/* time */

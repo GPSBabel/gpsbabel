@@ -118,10 +118,10 @@ data_read(void)
 		    	wpt_tmp->description = holder;
 		    break;
 		case 3:
-		    wpt_tmp->position.latitude.degrees = atof(s);
+		    wpt_tmp->latitude = atof(s);
 		    break;
 		case 4:
-		    wpt_tmp->position.longitude.degrees = atof(s);
+		    wpt_tmp->longitude = atof(s);
 		    break;
 		case 5:
 			/* ignore: NZMapGrid Easting  */
@@ -130,7 +130,7 @@ data_read(void)
 			/* ignore: NZMapGrid Northing  */
 			 break;
 		case 7:
-			wpt_tmp->position.altitude.altitude_meters = atof(s);
+			wpt_tmp->altitude = atof(s);
 		    break;
 		case 8:
 		    /* ignore: color  */
@@ -215,9 +215,9 @@ tmpro_waypt_pr(const waypoint * wpt)
     fprintf(file_out, "new\t%.6s\t%.80s\t%08.6f\t%08.6f\t\t\t%.2f\t%d\t%d\t%.128s\n",
     	shortname,
     	description,
-	    wpt->position.latitude.degrees,
-	    wpt->position.longitude.degrees,
-	    wpt->position.altitude.altitude_meters,
+	    wpt->latitude,
+	    wpt->longitude,
+	    wpt->altitude,
 	    colour,
 	    icon,
 	    wpt->url

@@ -139,9 +139,9 @@ data_read(void)
 	    rec = (struct record *)
 		&(pdb_rec->data[i * sizeof(struct record)]);
 
-	    wpt_tmp->position.longitude.degrees =
+	    wpt_tmp->longitude =
 		(be_read32(&rec->longitude) / 1000000.0) - 180.0; 
-	    wpt_tmp->position.latitude.degrees =
+	    wpt_tmp->latitude =
 		90.0 - (be_read32(&rec->latitude) / 1000000.0);
 	    wpt_tmp->shortname = xstrdup(rec->name);
 
@@ -179,9 +179,9 @@ quovadis_writewpt(waypoint *wpt)
 
     rec = xcalloc(sizeof(*rec),1);
 
-    be_write32(&rec->longitude, (wpt->position.longitude.degrees +
+    be_write32(&rec->longitude, (wpt->longitude +
 				 180.0) * 1000000.0);
-    be_write32(&rec->latitude, (90.0 - wpt->position.latitude.degrees) * 1000000.0);
+    be_write32(&rec->latitude, (90.0 - wpt->latitude) * 1000000.0);
     if ( wpt->shortname ) {
 	strncpy(rec->name, wpt->shortname, 32 );
 	rec->name[31] = '\0';

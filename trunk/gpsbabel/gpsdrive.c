@@ -101,10 +101,10 @@ data_read(void)
 				wpt_tmp->description = csv_stringtrim(s, " ");
 				break;
 			case 1:
-				wpt_tmp->position.latitude.degrees = atof(s);
+				wpt_tmp->latitude = atof(s);
 				break;
 			case 2:
-				wpt_tmp->position.longitude.degrees = atof(s);
+				wpt_tmp->longitude = atof(s);
 				break;
 			case 3:
 				rtrim(s);
@@ -146,8 +146,8 @@ gpsdrive_waypt_pr(const waypoint *wpt)
 	char *isrc, *owpt;
 	char *tmpstr;
 
-	lon = wpt->position.longitude.degrees;
-	lat = wpt->position.latitude.degrees;
+	lon = wpt->longitude;
+	lat = wpt->latitude;
 
 	isrc = wpt->notes ? wpt->notes : wpt->description;
 	if (global_opts.synthesize_shortnames) {

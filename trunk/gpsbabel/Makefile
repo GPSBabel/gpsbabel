@@ -116,13 +116,14 @@ navicache.o: navicache.c defs.h queue.h
 pcx.o: pcx.c defs.h queue.h garmin_tables.h
 polygon.o: polygon.c defs.h queue.h
 position.o: position.c defs.h queue.h
+psitrex.o: psitrex.c defs.h queue.h garmin_tables.h
 psp.o: psp.c defs.h queue.h
 queue.o: queue.c queue.h
 quovadis.o: quovadis.c quovadis.h defs.h queue.h coldsync/palm.h \
   coldsync/pdb.h
 route.o: route.c defs.h queue.h
 saroute.o: saroute.c defs.h queue.h
-tiger.o: tiger.c defs.h queue.h magellan.h csv_util.h
+tiger.o: tiger.c defs.h queue.h csv_util.h
 tmpro.o: tmpro.c defs.h queue.h csv_util.h
 tpg.o: tpg.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \

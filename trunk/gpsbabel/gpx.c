@@ -163,11 +163,11 @@ tag_wpt(const char **attrv)
 	while (*avp) { 
 		if (strcmp(avp[0], "lat") == 0) {
 			sscanf(avp[1], "%lf", 
-				&wpt_tmp->position.latitude.degrees);
+				&wpt_tmp->latitude);
 		}
 		else if (strcmp(avp[0], "lon") == 0) {
 			sscanf(avp[1], "%lf", 
-				&wpt_tmp->position.longitude.degrees);
+				&wpt_tmp->longitude);
 		}
 		avp+=2;
 	}
@@ -257,11 +257,11 @@ tag_log_wpt(const char **attrv)
 	while (*avp) { 
 		if (strcmp(avp[0], "lat") == 0) {
 			sscanf(avp[1], "%lf", 
-				&lwp_tmp->position.latitude.degrees);
+				&lwp_tmp->latitude);
 		}
 		else if (strcmp(avp[0], "lon") == 0) {
 			sscanf(avp[1], "%lf", 
-			&lwp_tmp->position.longitude.degrees);
+			&lwp_tmp->longitude);
 		}
 		avp+=2;
 	}
@@ -564,7 +564,7 @@ gpx_end(void *data, const char *el)
 		}
 		if (in_ele) {
 			sscanf(cdatastr, "%lf", 
-				&wpt_tmp->position.altitude.altitude_meters);
+				&wpt_tmp->altitude);
 		}
 		if (in_time) {
 			if ( in_wpt || in_rte || in_trkpt || in_rtept) {
@@ -965,8 +965,8 @@ gpx_waypt_pr(const waypoint *waypointp)
 				  waypointp->shortname;
 
 	fprintf(ofd, "<wpt lat=\"%lf\" lon=\"%lf\">\n",
-		waypointp->position.latitude.degrees,
-		waypointp->position.longitude.degrees);
+		waypointp->latitude,
+		waypointp->longitude);
 	if (waypointp->creation_time) {
 		gpx_write_time(waypointp->creation_time, "time");
 	}
@@ -991,9 +991,9 @@ gpx_waypt_pr(const waypoint *waypointp)
 			fprintf(ofd, "</desc>\n");
 		}
 	}
-	if (waypointp->position.altitude.altitude_meters) {
+	if (waypointp->altitude) {
 		fprintf(ofd, "<ele>\n%f\n</ele>\n",
-			 waypointp->position.altitude.altitude_meters);
+			 waypointp->altitude);
 	}
 	if (waypointp->url) {
 		tmp_ent = gpx_entitize(waypointp->url);
@@ -1041,11 +1041,11 @@ static void
 gpx_track_disp(const waypoint *waypointp)
 {
 	fprintf(ofd, "<trkpt lat=\"%lf\" lon=\"%lf\">\n",
-		waypointp->position.latitude.degrees,
-		waypointp->position.longitude.degrees);
-	if (waypointp->position.altitude.altitude_meters != unknown_alt) {
+		waypointp->latitude,
+		waypointp->longitude);
+	if (waypointp->altitude != unknown_alt) {
 		fprintf(ofd, "<ele>%f</ele>\n",
-			 waypointp->position.altitude.altitude_meters);
+			 waypointp->altitude);
 	}
 	if (waypointp->creation_time) {
 		gpx_write_time(waypointp->creation_time,"time");
@@ -1091,12 +1091,12 @@ static void
 gpx_route_disp(const waypoint *waypointp)
 {
 	fprintf(ofd, "<rtept lat=\"%f\" lon=\"%f\">\n",
-		waypointp->position.latitude.degrees,
-		waypointp->position.longitude.degrees);
+		waypointp->latitude,
+		waypointp->longitude);
 
-	if (waypointp->position.altitude.altitude_meters != unknown_alt) {
+	if (waypointp->altitude != unknown_alt) {
 		fprintf(ofd, "<ele>%f</ele>\n",
-			 waypointp->position.altitude.altitude_meters);
+			 waypointp->altitude);
 	}
 	if (waypointp->creation_time) {
 		gpx_write_time(waypointp->creation_time,"time");

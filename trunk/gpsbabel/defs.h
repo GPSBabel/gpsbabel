@@ -32,34 +32,6 @@
 
 
 /*
- * A coordinate in space.
- */
-typedef struct {
-	double degrees;
-} coord;
-
-
-/*
- * An altitude is essentially a coordinate along only the Z axis.
- */
-
-typedef struct {
-	double altitude_meters;
-} altitude;
-
-
-/*
- * A triplet of the coordinates along the three axes describes
- * a position.
- */
-typedef struct {
-	coord latitude;
-	coord longitude;
-	altitude altitude;
-} position;
-
-
-/*
  * Define globally on which kind of data gpsbabel is working.
  * Important for "file types" that are essentially a communication
  * protocol for a receiver, like the Magellan serial data.
@@ -132,7 +104,10 @@ typedef struct xml_tag {
  */
 typedef struct {
 	queue Q;
-	position position;
+
+	double latitude;		/* Degrees */
+	double longitude; 		/* Degrees */
+	double altitude; 		/* Meters. */
 
 	/* 
 	 * The "thickness" of a waypoint; adds an element of 3D.  Can be
@@ -205,7 +180,7 @@ typedef void (*filter_init) (char const *);
 typedef void (*filter_process) (void);
 typedef void (*filter_deinit) (void);
 
-void fprintdms(FILE *, const coord *, int);
+// void fprintdms(FILE *, const coord *, int);
 
 typedef void (*waypt_cb) (const waypoint *);
 typedef void (*route_hdr)(const route_head *);
@@ -311,7 +286,7 @@ void warning(const char *, ...)
 ff_vecs_t *find_vec(char *, char **);
 void disp_vecs(void);
 void disp_formats(int version);
-void printposn(const coord *c, int is_lat);
+void printposn(float c, int is_lat);
 
 filter_vecs_t * find_filter_vec(char *, char **);
 void free_filter_vec(filter_vecs_t *);
