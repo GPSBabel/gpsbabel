@@ -182,7 +182,6 @@ extern double gps_save_version;
 extern char   gps_save_string[GPS_ARB_LEN];
 extern int gps_is_usb;
 
-
 extern struct COMMANDDATA COMMAND_ID[2];
 extern struct LINKDATA LINK_ID[3];
 extern struct GPS_MODEL_PROTOCOL GPS_MP[];
@@ -191,7 +190,6 @@ extern char *gps_marine_sym[];
 extern char *gps_land_sym[];
 extern char *gps_aviation_sym[];
 extern char *gps_16_sym[];
-
 
 
 #endif

@@ -36,7 +36,7 @@ arglist_t glogbook_args[] = {
 
 /* Tracks */
 static xg_callback	gl_trk_s;
-static xg_callback	gl_trk_ident;
+// static xg_callback	gl_trk_ident;
 static xg_callback	gl_trk_pnt_s, gl_trk_pnt_e;
 static xg_callback	gl_trk_utc;
 static xg_callback	gl_trk_lat;
@@ -126,11 +126,12 @@ void	gl_trk_s(const char *args, const char **unused)
 	trk_head = route_head_alloc();
 	track_add_head(trk_head);
 }
-
+#if 0
 void	gl_trk_ident(const char *args, const char **unused)
 {
 	trk_head->rte_name = xstrdup(args);
 }
+#endif
 
 void	gl_trk_pnt_s(const char *args, const char **unused)
 {

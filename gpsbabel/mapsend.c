@@ -544,7 +544,7 @@ void mapsend_track_disp(const waypoint * wpt)
 	my_fwrite8(&dbl, mapsend_file_out);
 
 	/* altitude */
-	i = wpt->altitude;
+	i = (int) wpt->altitude;
 	my_fwrite4(&i, mapsend_file_out);
 	
 	/* time */

@@ -39,6 +39,11 @@
 extern char *xcsv_urlbase;
 extern char *prefer_shortnames;
 
+extern const char *gs_get_container(geocache_container t);
+extern geocache_container gs_mktype(const char *t);
+extern geocache_container gs_mkcont(const char *t);
+extern const char *gs_get_cachetype(geocache_type t);
+
 static double pathdist = 0;
 static double oldlon = 999;
 static double oldlat = 999;
@@ -649,7 +654,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     } else
     if (strcmp(fmp->key, "LAT_INT32DEG") == 0) {
        /* latitude as a 32 bit integer offset */
-       wpt->latitude = intdeg_to_dec(atof(s), 1);
+       wpt->latitude = intdeg_to_dec((int) atof(s), 1);
     } else
     if ( strcmp(fmp->key, "LAT_HUMAN_READABLE") == 0) {
        human_to_dec( s, &wpt->latitude, &wpt->longitude, 1 );
@@ -669,7 +674,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     } else
     if (strcmp(fmp->key, "LON_INT32DEG") == 0) {
        /* longitude as a 32 bit integer offset  */
-       wpt->longitude = intdeg_to_dec(atof(s), 0);
+       wpt->longitude = intdeg_to_dec((int) atof(s), 0);
     } else
     if ( strcmp(fmp->key, "LON_HUMAN_READABLE") == 0) {
        human_to_dec( s, &wpt->latitude, &wpt->longitude, 2 );
@@ -812,7 +817,7 @@ xcsv_data_read(void)
 }
 
 static void
-xcsv_resetpathlen()
+xcsv_resetpathlen(const route_head *head)
 {
     pathdist = 0;
     oldlat = 999;

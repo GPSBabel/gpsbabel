@@ -173,9 +173,9 @@ quovadis_writewpt(waypoint *wpt)
 
     rec = (struct record *) xcalloc(sizeof(*rec),1);
 
-    be_write32(&rec->longitude, (wpt->longitude +
-				 180.0) * 1000000.0);
-    be_write32(&rec->latitude, (90.0 - wpt->latitude) * 1000000.0);
+    be_write32(&rec->longitude, (unsigned int) ((wpt->longitude +
+				 180.0) * 1000000.0));
+    be_write32(&rec->latitude, (unsigned int) ((90.0 - wpt->latitude) * 1000000.0));
     if ( wpt->shortname ) {
 	strncpy(rec->name, wpt->shortname, 32 );
 	rec->name[31] = '\0';
@@ -265,8 +265,8 @@ data_write(void)
 
 	if (rec_index != 0) {
 	    struct pdb_record* pdb_rec;
-	    pdb_rec = new_Record(0, 0, ct++, rec_index *
-				 sizeof(struct record), current_rec);
+	    pdb_rec = new_Record(0, 0, ct++, (uword) (rec_index *
+				 sizeof(struct record)), current_rec);
 	
 	    if (pdb_rec == NULL) {
 		fatal(MYNAME ": libpdb couldn't create record\n");

@@ -1,3 +1,4 @@
+# cvsps -u
 cvsps $* |  awk '
 /^Date:/ { 
 	logt = "";

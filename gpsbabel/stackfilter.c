@@ -74,7 +74,6 @@ stackfilt_process(void)
 	queue *elem = NULL;
 	queue *tmp = NULL;
 	queue tmp_queue;
-	waypoint *wpt_tmp;
 	unsigned int tmp_count;
 	
 	if ( opt_push ) {

@@ -83,7 +83,7 @@ gusb_open(const char *pname)
 // }
 	}
 
-	hdevinfo = SetupDiGetClassDevs( &GARMIN_GUID, NULL, NULL, 
+	hdevinfo = SetupDiGetClassDevs( (GUID *) &GARMIN_GUID, NULL, NULL, 
 			DIGCF_PRESENT|DIGCF_INTERFACEDEVICE);
 
 	if (hdevinfo == INVALID_HANDLE_VALUE) {
@@ -93,7 +93,7 @@ gusb_open(const char *pname)
 
 	/* Get the device associated with this index. */
 	devinterface.cbSize = sizeof(SP_INTERFACE_DEVICE_DATA);
-	if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL, &GARMIN_GUID, 
+	if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL, (GUID *) &GARMIN_GUID, 
 			0, &devinterface)) {
 		GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
 		warning("Is the unit powered up and connected?");
@@ -173,13 +173,14 @@ gusb_close(const char *portname)
 		usb_handle = INVALID_HANDLE_VALUE;
 #endif
 	}
+  return 0;
 }
 
 int
 gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
 {
 	DWORD rxed = GARMIN_USB_INTERRUPT_DATA_SIZE;
-	unsigned char *buf = &ibuf->dbuf;
+	unsigned char *buf = (unsigned char *) &ibuf->dbuf;
 	int i;
 	int tsz=0;
 	unsigned char *obuf = buf;
@@ -194,7 +195,7 @@ gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
 		fatal("ioctl");
 	}
 		buf += rxed;
-		sz =- rxed;
+		sz  -= rxed;
 		tsz += rxed;
 		if (rxed < GARMIN_USB_INTERRUPT_DATA_SIZE) {
 			break;
@@ -221,7 +222,7 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 {
 	DWORD rsz;
 	size_t i;
-	unsigned char *obuf = &opkt->dbuf;
+	unsigned char *obuf = (unsigned char *) &opkt->dbuf;
 	const char *m1, *m2;
 
 	/* The spec warns us about making writes an exact multiple
@@ -255,7 +256,7 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 static char *
 id_unit(void)
 {
-static const char  oid[12] = {20, 0, 0, 0, 0xfe, 0, 0, 0, 0, 0, 0, 0};
+static const unsigned char  oid[12] = {20, 0, 0, 0, 0xfe, 0, 0, 0, 0, 0, 0, 0};
 	/* 
 	 * Identify the unit before getting into all the protocol gunk.
 	 * We get two packets back, but we discard the protocol array 

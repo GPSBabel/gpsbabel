@@ -18,17 +18,7 @@
  */
 
 #include "uuid.h"
-
-static unsigned char
-random()
-{
-	if (getenv("GPSBABEL_FREEZE_TIME")) {
-		static unsigned char blech = 0;
-		return blech++;
-	} else
-		return ;
-}
-
+#include <stdlib.h>
 
 void
 uuid_generate(uuid_t uu)

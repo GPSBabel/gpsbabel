@@ -21,6 +21,7 @@
 #include <ctype.h>
 #include "gps.h"
 #include "garminusb.h"
+#include "gpsusbint.h"
 
 int32 GPS_Packet_Read_usb(int32 fd, GPS_PPacket *packet)
 {
@@ -54,7 +55,7 @@ int32 GPS_Packet_Read_usb(int32 fd, GPS_PPacket *packet)
 	 */
 	(*packet)->type = le_read16(&pkt.gusb_pkt.pkt_id);
 	payload_size = le_read32(&pkt.gusb_pkt.datasz);
-	(*packet)->n = payload_size;
+	(*packet)->n = (UC) payload_size;
 	memcpy((*packet)->data, &pkt.gusb_pkt.databuf, payload_size);
 	return payload_size;
 }

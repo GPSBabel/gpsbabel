@@ -842,20 +842,20 @@ static void wr_track(void)
 	QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
 	    wpt = (waypoint *) elem;
 	    pres_alt = interpolate_alt(pres_track, wpt->creation_time + time_adj);
-	    wr_fix_record(wpt, pres_alt, wpt->altitude);
+	    wr_fix_record(wpt, (int) pres_alt, (int) wpt->altitude);
 	}
     } else {
 	if (pres_track) {
 	    // Only the pressure altitude track was found so generate fix
 	    // records from it alone.
 	    QUEUE_FOR_EACH(&pres_track->waypoint_list, elem, tmp) {
-		wr_fix_record((waypoint *) elem, ((waypoint *) elem)->altitude, unknown_alt);
+		wr_fix_record((waypoint *) elem, (int) ((waypoint *) elem)->altitude, (int) unknown_alt);
 	    }
 	} else if (gnss_track) {
 	    // Only the GNSS altitude track was found so generate fix
 	    // records from it alone.
 	    QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
-		wr_fix_record((waypoint *) elem, unknown_alt, ((waypoint *) elem)->altitude);
+		wr_fix_record((waypoint *) elem, (int) unknown_alt, (int) ((waypoint *) elem)->altitude);
 	    }
 	} else {
 	    // No tracks found so nothing to do

@@ -617,7 +617,7 @@ termwrite(char *obuf, int size)
 		return;
 	}
 	WriteFile (comport, obuf, size, &len, NULL);
-	if (len != size) {
+	if ((int) len != size) {
 		fatal(MYNAME ":.  Wrote %d of %d bytes.\n", len, size);
 	}
 }

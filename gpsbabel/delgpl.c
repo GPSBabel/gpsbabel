@@ -56,7 +56,6 @@ gpl_read(void)
 {
 	waypoint *wpt_tmp;
 	route_head *track_head;
-	int br;
 	gpl_point_t gp;
 	double alt_feet;
 

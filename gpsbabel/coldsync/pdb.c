@@ -6,7 +6,7 @@
  *	You may distribute this file under the terms of the Artistic
  *	License, as specified in the README file.
  *
- * $Id: pdb.c,v 1.6 2004-04-16 16:47:51 parkrrrr Exp $
+ * $Id: pdb.c,v 1.7 2005-03-18 03:56:35 robertl Exp $
  */
 /* XXX - The way zero-length records are handled is a bit of a kludge. They
  * shouldn't normally exist, with the exception of expunged records. But,
@@ -33,7 +33,9 @@
  * but doesn't have it prototyped.  Systems with 64-bit file I/O but
  * based on LP64 model (i.e. OS/X) _require_ the prototype for lseek.
  */
-#if !defined (__WIN32__)
+#if defined (__WIN32__)
+#include <io.h>
+#else
 #include <unistd.h>
 #endif
 #include <stdlib.h>
@@ -434,7 +436,7 @@ pdb_Write(const struct pdb *db,
 	wptr = header_buf;
 	memcpy(wptr, db->name, PDB_DBNAMELEN);
 	wptr += PDB_DBNAMELEN;
-	put_uword(&wptr, (db->attributes & ~PDB_ATTR_OPEN));
+	put_uword(&wptr, (uword) (db->attributes & ~PDB_ATTR_OPEN));
 				/* Clear the 'open' flag before writing */
 	put_uword(&wptr, db->version);
 	put_udword(&wptr, db->ctime);
@@ -1200,7 +1202,7 @@ get_file_length(int fd)
 	/* And return to where we were before */
 	lseek(fd, here, SEEK_SET);
 
-	return eof - here;
+	return (uword) (eof - here);
 }
 
 /* pdb_LoadHeader
@@ -1519,9 +1521,9 @@ pdb_LoadAppBlock(int fd,
 		 struct pdb *db)
 {
 	int err;
-	localID next_off;		/* Offset of the next thing in the file
+	udword next_off;		/* Offset of the next thing in the file
 				 * after the AppInfo block */
-	off_t offset;		/* Offset into file, for checking */
+	udword offset;		/* Offset into file, for checking */
 
 	/* Check to see if there even *is* an AppInfo block */
 	if (db->appinfo_offset == 0L)
@@ -1582,7 +1584,7 @@ pdb_LoadAppBlock(int fd,
 	 * we've already passed the beginning of the AppInfo block, as
 	 * given by its offset in the header.
 	 */
-	offset = lseek(fd, 0L, SEEK_CUR);	/* Find out where we are */
+	offset = (udword) lseek(fd, 0L, SEEK_CUR);	/* Find out where we are */
 	if (offset != db->appinfo_offset)
 	{
 		if (offset > db->appinfo_offset)
@@ -1638,7 +1640,7 @@ pdb_LoadSortBlock(int fd,
 	int err;
 	localID next_off;		/* Offset of the next thing in the file
 				 * after the sort block */
-	off_t offset;		/* Offset into file, for checking */
+	localID offset;		/* Offset into file, for checking */
 
 	/* Check to see if there even *is* a sort block */
 	if (db->sortinfo_offset == 0L)
@@ -1695,7 +1697,7 @@ pdb_LoadSortBlock(int fd,
 	 * we've already passed the beginning of the sort block, as given
 	 * by its offset in the header.
 	 */
-	offset = lseek(fd, 0L, SEEK_CUR);	/* Find out where we are */
+	offset = (udword) lseek(fd, 0L, SEEK_CUR);	/* Find out where we are */
 	if (offset != db->sortinfo_offset)
 	{
 		if (offset > db->sortinfo_offset)
@@ -1755,7 +1757,7 @@ pdb_LoadResources(int fd,
 	     i < db->numrecs;
 	     i++, rsrc = rsrc->next)
 	{
-		off_t offset;		/* Current offset, for checking */
+		udword offset;		/* Current offset, for checking */
 		udword next_off;	/* Offset of next resource in file */
 
 		/* Sanity check: make sure we haven't stepped off the end
@@ -1785,7 +1787,7 @@ pdb_LoadResources(int fd,
 		 * whether we've already passed the beginning of the
 		 * resource, as given by its offset in the resource index.
 		 */
-		offset = lseek(fd, 0L, SEEK_CUR);
+		offset = (udword) lseek(fd, 0L, SEEK_CUR);
 					/* Find out where we are now */
 		if (offset != rsrc->offset)
 		{
@@ -1843,7 +1845,7 @@ pdb_LoadResources(int fd,
 		/* Subtract this resource's index from that of the next
 		 * thing, to get the size of this resource.
 		 */
-		rsrc->data_len = next_off - rsrc->offset;
+		rsrc->data_len = (uword) (next_off - rsrc->offset);
 
 		/* Allocate space for this resource */
 		if ((rsrc->data = (ubyte *) malloc(rsrc->data_len)) == NULL)
@@ -1893,7 +1895,7 @@ pdb_LoadRecords(int fd,
 	     i < db->numrecs;
 	     i++, rec = rec->next)
 	{
-		off_t offset;		/* Current offset, for checking */
+		udword offset;		/* Current offset, for checking */
 		localID next_off;	/* Offset of next resource in file */
 
 		/* Sanity check: make sure we haven't stepped off the end
@@ -1918,7 +1920,7 @@ pdb_LoadRecords(int fd,
 		 * whether we've already passed the beginning of the
 		 * record, as given by its offset in the record index.
 		 */
-		offset = lseek(fd, 0L, SEEK_CUR);
+		offset = (udword) lseek(fd, 0L, SEEK_CUR);
 					/* Find out where we are now */
 		if (offset != rec->offset)
 		{
@@ -1975,7 +1977,7 @@ pdb_LoadRecords(int fd,
 		/* Subtract this record's index from that of the next one,
 		 * to get the size of this record.
 		 */
-		rec->data_len = next_off - rec->offset;
+		rec->data_len = (uword) (next_off - rec->offset);
 
 		/* Allocate space for this record
 		 * If there's a record with length zero, don't pass that to

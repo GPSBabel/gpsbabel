@@ -495,7 +495,7 @@ gs_container_mapping{
 };
 
 geocache_type
-gs_mktype(char *t)
+gs_mktype(const char *t)
 {
 	int i;
 	int sz = sizeof(gs_type_map) / sizeof(gs_type_map[0]);
@@ -523,7 +523,7 @@ gs_get_cachetype(geocache_type t)
 }
 
 geocache_container
-gs_mkcont(char *t)
+gs_mkcont(const char *t)
 {
 	int i;
 	int sz = sizeof(gs_container_map) / sizeof(gs_container_map[0]);
@@ -1117,7 +1117,6 @@ write_gpx_url(const waypoint *waypointp)
 static void
 gpx_waypt_pr(const waypoint *waypointp)
 {
-	char *tmp_ent;
 	const char *oname;
 	char *odesc;
 

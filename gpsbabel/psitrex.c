@@ -208,7 +208,6 @@ static void
 psit_getToken(FILE *psit_file, char *buf, size_t sz, psit_tokenSep_type delimType)
 {
 	int c;
-char *buf2 = buf;	/* MRCB debug */
 
 	*buf = 0;
 
@@ -285,8 +284,6 @@ psit_waypoint_r(FILE *psit_file, waypoint **wpt)
 	int		garmin_icon_num;
 
 	waypoint	*thisWaypoint;
-	double	psit_altitude = unknown_alt;
-	double	psit_depth = unknown_alt;
 
 	if (strlen(psit_current_token) > 0) {
 		thisWaypoint = waypt_new();
@@ -331,10 +328,8 @@ static void
 psit_waypoint_w(FILE *psit_file, const waypoint *wpt)
 {
 	int	icon;
-	char *src;
-	const char *ident;
-	int display = 1;
-	int colour = 0;			/*  (unknown colour) black is 1, white is 16 */
+    const char *ident;
+	char *src = 0;  /* BUGBUG Passed to mkshort */
 
 	fprintf(psit_file, "%11.6f,%11.6f,", 
 						wpt->latitude,
@@ -383,13 +378,10 @@ psit_route_r(FILE *psit_file, route_head **rte)
 
 	int		garmin_icon_num;
 
-	time_t	dateTime = 0;
 	route_head *rte_head;
 	unsigned int rte_count;
 
 	waypoint	*thisWaypoint;
-	double	psit_altitude = unknown_alt;
-	double	psit_depth = unknown_alt;
 
 	psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
 
@@ -525,8 +517,6 @@ psit_track_r(FILE *psit_file, route_head **trk)
 	unsigned int trk_count;
 
 	waypoint	*thisWaypoint;
-	double	psit_altitude = unknown_alt;
-	double	psit_depth = unknown_alt;
 
 	psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
 	if (strlen(psit_current_token) == 0) {
@@ -675,10 +665,6 @@ psit_trackdatapoint_w(FILE *psit_file, const waypoint *wpt)
 {
 	time_t	t = wpt->creation_time;
 	struct tm *tmTime = gmtime(&t);
-
-	double	psit_altitude = wpt->altitude;
-	double	psit_proximity = unknown_alt;
-	double	psit_depth = unknown_alt;
 
 	fprintf(psit_file, "%11.6f,%11.6f,", 
 						wpt->latitude,

@@ -413,7 +413,7 @@ mps_fileHeader_r(FILE *mps_file, int *mps_ver)
 static void
 mps_fileHeader_w(FILE *mps_file, int mps_ver)
 {
-	char hdr[100];
+	unsigned char hdr[100];
 	int reclen;
 
 	strcpy (hdr, "MsRc");
@@ -469,10 +469,10 @@ mps_fileHeader_w(FILE *mps_file, int mps_ver)
 static void
 mps_mapsegment_r(FILE *mps_file, int mps_ver)
 {
-	char hdr[100];
 	int reclen;
 
 	/* At the moment we're not doing anything with map segments, but here's the template code as if we were
+	char hdr[100];
 	fread(&CDid, 4, 1, mps_file);
 	reclen = le_read32(&CDid);
 
@@ -501,10 +501,10 @@ mps_mapsegment_r(FILE *mps_file, int mps_ver)
 static void
 mps_mapsetname_r(FILE *mps_file, int mps_ver)
 {
-	char hdr[100];
 	int reclen;
 
 	/* At the moment we're not doing anything with mapsetnames, but here's the template code as if we were
+	char hdr[100];
 	mps_readstr(mps_file, hdr, sizeof(hdr));
 	char mapsetnamename[very large number?];
 	strcpy(mapsetnamename,hdr);
@@ -859,7 +859,7 @@ mps_route_wpt_w_unique_wrapper(const waypoint *wpt)
 		}
 	}
 }
-
+#if 0
 /*
  * wrapper to include the mps_ver_out information
  * This one always writes a waypoint. If it has been written before
@@ -871,7 +871,6 @@ mps_waypoint_w_uniqloc_wrapper(waypoint *wpt)
 {
 	waypoint *wptfound = NULL;
 	char			*newName;
-	unsigned int	uniqueNum = 0;
 
 	/* Search for this waypoint in the ones already written */
 	wptfound = mps_find_wpt_q_by_name(&written_wpt_head, wpt->shortname);
@@ -903,6 +902,7 @@ mps_waypoint_w_uniqloc_wrapper(waypoint *wpt)
 		mps_wpt_q_add(&written_wpt_head, wpt);
 	}
 }
+#endif
 
 /*
  * read in from file a route record
@@ -920,9 +920,7 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	int	interlinkStepCount;
 	int	thisInterlinkStep;
 	unsigned int	mpsclass;
-	int	FFsRead;
 
-	time_t	dateTime = 0;
 	route_head *rte_head;
 	int rte_count;
 
@@ -1179,7 +1177,6 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 {
 	unsigned int reclen;
 	unsigned int rte_datapoints;
-	unsigned int colour = 0;		/* unknown colour */
 	int			rname_len;
 	char		*rname;
 	char		hdr[20];
@@ -1319,7 +1316,6 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 			fwrite(zbuf, 9, 1, mps_file);
 		}
 		else {
-			unsigned char cbuf[8];
 			hdr[0] = 1;
 
 			fwrite(hdr, 1 , 1, mps_file);
@@ -1348,7 +1344,6 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 	unsigned char hdr[10];
 	int			lat;
 	int			lon;
-	time_t		t = rtewpt->creation_time;
 	char		zbuf[20];
 	char		ffbuf[20];
 	char		*src;

@@ -60,7 +60,7 @@ struct record {
 	unsigned char sec;
 	
 	/* accuracy and precision information for use where applicable */
-	char  sat; /* ff if averaged or unknown */
+	unsigned char  sat; /* ff if averaged or unknown */
 	pdb_16 pdop; /* pdop * 100 */
 	pdb_16 hdop;
 	pdb_16 vdop;
@@ -238,13 +238,13 @@ cetus_writewpt(const waypoint *wpt)
 		be_write16(&rec->year, 0xff);
 	}
 
-	be_write32(&rec->longitude, wpt->longitude * 10000000.0);
-	be_write32(&rec->latitude, wpt->latitude * 10000000.0);
+	be_write32(&rec->longitude, (unsigned int) (wpt->longitude * 10000000.0));
+	be_write32(&rec->latitude, (unsigned int) (wpt->latitude * 10000000.0));
 	if ( wpt->altitude == unknown_alt ) {
-		be_write32(&rec->elevation, -100000000U);
+		be_write32(&rec->elevation, -100000000);
 	}
 	else {
-		be_write32(&rec->elevation, wpt->altitude * 100.0);
+		be_write32(&rec->elevation, (unsigned int) (wpt->altitude * 100.0));
 	}
 	
 	be_write16( &rec->pdop, 0xffff );
@@ -327,7 +327,7 @@ cetus_writewpt(const waypoint *wpt)
 	}
 	vdata += strlen( vdata ) + 1;
 	
-	opdb_rec = new_Record (0, 2, ct++, vdata-(char *)rec, (const ubyte *)rec);
+	opdb_rec = new_Record (0, 2, ct++, (uword) (vdata-(char *)rec), (const ubyte *)rec);
 	
 	if (opdb_rec == NULL) {
 		fatal(MYNAME ": libpdb couldn't create record\n");

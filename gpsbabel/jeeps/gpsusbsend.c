@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include "garminusb.h"
+#include "gpsusbint.h"
 
 void 
 GPS_Make_Packet_usb(GPS_PPacket *packet, UC type, UC *data, int16 n)
@@ -36,7 +37,7 @@ GPS_Make_Packet_usb(GPS_PPacket *packet, UC type, UC *data, int16 n)
 
 	(*packet)->type = type;
 	memcpy((*packet)->data, data, n);
-	(*packet)->n = n;
+	(*packet)->n = (UC) n;
 	
 	return;
 }
@@ -44,8 +45,6 @@ GPS_Make_Packet_usb(GPS_PPacket *packet, UC type, UC *data, int16 n)
 int32
 GPS_Write_Packet_usb(int32 fd, GPS_PPacket packet)
 {
-	size_t ret, sz;
-
 	garmin_usb_packet gp = {0};
 
 

@@ -439,7 +439,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 }
 
 static void
-nmea_write()
+nmea_write(void)
 {
 	waypt_disp_all(nmea_wayptpr);
 	track_disp_all(NULL, NULL, nmea_trackpt_pr);
