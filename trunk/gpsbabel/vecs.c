@@ -41,6 +41,7 @@ extern ff_vecs_t csv_vecs;
 extern ff_vecs_t cetus_vecs;
 extern ff_vecs_t gpspilot_vecs;
 extern ff_vecs_t psp_vecs;
+extern ff_vecs_t mxf_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -110,6 +111,11 @@ vecs_t vec_list[] = {
 		"GPSPilot Tracker for Palm/OS"
 	},
 	{
+		&mxf_vecs,
+		"mxf",
+		"MapTech Exchange Format"
+	},
+        {
 		NULL,
 		NULL,
 		NULL
