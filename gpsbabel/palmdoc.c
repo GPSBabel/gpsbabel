@@ -265,6 +265,7 @@ static void write_header( void ) {
 	if (pdb_InsertRecord(opdb, NULL, opdb_rec)) {
 		fatal(MYNAME ": libpdb couldn't insert summary record\n");
 	}
+	xfree(rec0);
 }
 
 static void write_bookmarks( void ) {
@@ -302,7 +303,6 @@ static void write_bookmarks( void ) {
 			fatal(MYNAME ": libpdb couldn't append bookmark record\n");
 		}
 
-		
 		xfree( oldmark );
 	} 
 }
@@ -417,20 +417,24 @@ palmdoc_disp(const waypoint *wpt)
 	long utmz;
 	double utme, utmn;
 	char utmzc;
+	char *bm;
 
         char bookmarktext[17];
 
         if ( bmid ) {
+		char * s = mkshort(mkshort_bookmark_handle, wpt->description);
 		sprintf( bookmarktext, "%6s:%9s", 
-			wpt->shortname?wpt->shortname:"",
-			mkshort(mkshort_bookmark_handle, wpt->description));
+			wpt->shortname?wpt->shortname:"",s);
+		xfree(s);
 	}
 	else {
-		sprintf( bookmarktext, "%16s", 
-			mkshort(mkshort_bookmark_handle, wpt->description));
+		char * s = mkshort(mkshort_bookmark_handle, wpt->description);
+		sprintf( bookmarktext, "%16s", s);
+		xfree(s);
 	}	
-	
-        create_bookmark(xstrdup(bookmarktext)); 
+
+        bm = xstrdup(bookmarktext); 
+        create_bookmark(bm);
  	
 	lonint = abs(wpt->longitude);
 	latint = abs(wpt->latitude);
