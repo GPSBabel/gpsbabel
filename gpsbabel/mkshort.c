@@ -33,11 +33,14 @@ typedef struct {
 	int conflictctr;
 } uniq_shortname;
 
+/* 
+ * We hash all strings as upper case.
+ */
 unsigned int hash_string(const char *key)
 {
 	unsigned int hash = 0;
 	while (*key) {
-		hash = ((hash<<5) ^ (hash>>27)) ^ *key++;
+		hash = ((hash<<5) ^ (hash>>27)) ^ toupper(*key++);
 	}
 	hash = hash % PRIME;
 	return hash;
@@ -72,14 +75,21 @@ mkshort_add_to_list(mkshort_handle *h, char *name)
 	QUEUE_FOR_EACH(&h->namelist[hash], e, t) {
 		uniq_shortname *z = (uniq_shortname *) e;
 
-		if (0 == strcmp(z->orig_shortname, name)) {
+		if (0 == case_ignore_strcmp(z->orig_shortname, name)) {
 			int l = strlen(name);
 			int dl;
 			char tbuf[10];
 
 			z->conflictctr++;
 			dl = sprintf(tbuf, ".%d", z->conflictctr);
-			strcpy(&name[l-dl], tbuf);
+
+			if (l + dl < h->target_len) {
+				name = xrealloc(name, l + dl + 1);
+				strcat(name, tbuf);
+			}
+			else {
+				strcpy(&name[l-dl], tbuf);
+			}
 			break;
 		}
 	}
