@@ -32,7 +32,8 @@ typedef struct {
 
 extern ff_vecs_t geo_vecs;
 extern ff_vecs_t gpx_vecs;
-extern ff_vecs_t mag_vecs;
+extern ff_vecs_t mag_svecs;
+extern ff_vecs_t mag_fvecs;
 extern ff_vecs_t mapsend_vecs;
 extern ff_vecs_t mps_vecs;
 extern ff_vecs_t gpsutil_vecs;
@@ -82,9 +83,15 @@ vecs_t vec_list[] = {
 		"gpx"
 	},
 	{
-		&mag_vecs,
+		&mag_svecs,
 		"magellan",
-		"Magellan protocol", 
+		"Magellan serial protocol", 
+		NULL
+	},
+	{
+		&mag_fvecs,
+		"magellan",
+		"Magellan SD files (as for Meridians)", 
 		NULL
 	},
 	{
