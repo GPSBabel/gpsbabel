@@ -18,15 +18,13 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-
+#include <ctype.h>
 #include "gps.h"
 #include "garminusb.h"
 
 int32 GPS_Packet_Read_usb(int32 fd, GPS_PPacket *packet)
 {
 	int32  n;
-	UC     u;
-	UC     *p;
 	int32  i;
 	int32 payload_size;
 	const char *m1;
