@@ -29,6 +29,7 @@ typedef struct {
 } fl_vecs_t;
 
 extern filter_vecs_t position_vecs;
+extern filter_vecs_t radius_vecs;
 extern filter_vecs_t duplicate_vecs;
 
 static
@@ -37,6 +38,11 @@ fl_vecs_t filter_vec_list[] = {
 		&position_vecs, 
 		"position",
 		"Remove Points Within Distance",
+	}, 
+	{
+		&radius_vecs, 
+		"radius",
+		"Include Only Points Within Radius",
 	}, 
 	{
 		&duplicate_vecs, 

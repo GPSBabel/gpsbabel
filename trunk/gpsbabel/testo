@@ -240,6 +240,15 @@ ${PNAME} -i geo -f geocaching.loc -f geocaching.loc -x position,distance=5f \
 compare ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2
 
 #
+# Radius filter
+#
+rm -f ${TMPDIR}/radius.csv
+${PNAME} -i geo -f geocaching.loc \
+		-x radius,lat=35.9720,lon=-87.1347,distance=14.7 \
+		-o csv -F ${TMPDIR}/radius.csv
+compare ${TMPDIR}/radius.csv reference/
+
+#
 # magellan SD card waypoint / route format
 #
 rm -f ${TMPDIR}/magellan.rte
