@@ -51,7 +51,7 @@ leaktest:
 	tools/memdebug | grep -v '^command line:'
 
 dep:
-	make clean && make CC="gcc -MMD"  && cat *.d */*.d > /tmp/dep && rm *.d
+	make clean && make CC="gcc -MMD"  && cat *.d */*.d > /tmp/dep && rm *.d */*.d
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e "\t./mkstyle.sh > internal_styles.c" ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
