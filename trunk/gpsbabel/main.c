@@ -214,7 +214,7 @@ main(int argc, char *argv[])
 			ovecs->wr_deinit();
 		}
 	}
-	else {
+	else if (argc) {
 		usage(argv[0]);
 		exit(0);
 	}
