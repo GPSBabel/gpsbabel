@@ -126,7 +126,7 @@ static void data_read(void)
   		wpt_tmp->creation_time = 0;
         if (pWptHxTmp->date.year)
         {
-            ptm = gmtime(&pWptHxTmp->time);
+            ptm = gmtime((time_t*)&pWptHxTmp->time);
 		    tm.tm_hour = ptm->tm_hour; 
             tm.tm_min = ptm->tm_min;
 		    tm.tm_sec = ptm->tm_sec;
@@ -189,7 +189,9 @@ static void holux_disp(const waypoint *wpt)
 
     sIndex =  ((WPTHDR *)HxWFile)->num;
     ((WPTHDR *)HxWFile)->idx[sIndex] = sIndex;         /* set the waypoint index  */
+    ((WPTHDR *)HxWFile)->used[sIndex] = 0xff;           /* Waypoint used */ 
  
+
     /* set Waypoint */
     pWptHxTmp =  (WPT *)&HxWFile[OFFS_WPT + (sizeof(WPT) * sIndex)];
 
@@ -206,7 +208,7 @@ static void holux_disp(const waypoint *wpt)
     /*set the time */
 	if (wpt->creation_time) 
     {
-        /* tm = gmtime(&wpt->creation_time);  /* I get the wrong result with gmtime ???  */
+        /* tm = gmtime(&wpt->creation_time);*/  /* I get the wrong result with gmtime ???  */
         tm = localtime(&wpt->creation_time);
         pWptHxTmp->time = (tm->tm_hour * 3600) + (tm->tm_min * 60) +tm->tm_sec;
     	pWptHxTmp->date.day = tm->tm_mday; 
@@ -225,9 +227,9 @@ static void holux_disp(const waypoint *wpt)
     pWptHxTmp->pt.iLatitude = (int)lat;
     pWptHxTmp->pt.iLongitude = (int)lon;
     pWptHxTmp->checked = 01;
-
+    pWptHxTmp->vocidx = (short)0xffff;
     ((WPTHDR *)HxWFile)->num = ++sIndex;
-    ((WPTHDR *)HxWFile)->next= sIndex;
+    ((WPTHDR *)HxWFile)->next= ++sIndex;
 }
 
 
@@ -248,7 +250,7 @@ static void data_write(void)
     
     /* clear index list */
     for (sCount = 0; sCount < MAXWPT; sCount++)
-        ((WPTHDR *)HxWFile)->idx[sCount] = (short)0xffff; 
+        ((WPTHDR *)HxWFile)->idx[sCount] = (signed short)-1; 
     for (sCount = 0; sCount < MAXWPT; sCount++)
         ((WPTHDR *)HxWFile)->used[sCount] = 0; 
 
@@ -256,13 +258,13 @@ static void data_write(void)
    /* init the route area */
     ((RTEHDR *)&HxWFile[ROUTESTART])->id = RTE_HDR_ID;
     ((RTEHDR *)&HxWFile[ROUTESTART])->num = 0;
-    ((RTEHDR *)&HxWFile[ROUTESTART])->next = 0;
-    ((RTEHDR *)&HxWFile[ROUTESTART])->rteno = 0;
+    ((RTEHDR *)&HxWFile[ROUTESTART])->next = 1;
+    ((RTEHDR *)&HxWFile[ROUTESTART])->rteno = (signed short)-1;
     
     /* clear index list */
-    for (sCount = 0; sCount < MAXWPT; sCount++)
-        ((RTEHDR *)&HxWFile[ROUTESTART])->idx[sCount] = (short)0xffff; 
-    for (sCount = 0; sCount < MAXWPT; sCount++)
+    for (sCount = 0; sCount < MAXRTE; sCount++)
+        ((RTEHDR *)&HxWFile[ROUTESTART])->idx[sCount] = (signed short)-1; 
+    for (sCount = 0; sCount < MAXRTE; sCount++)
         ((RTEHDR *)&HxWFile[ROUTESTART])->used[sCount] = 0; 
 
 
