@@ -256,8 +256,9 @@ int32 GPS_Serial_Open(int32 *fd, const char *port)
     tty.c_lflag &= 0x0;
     tty.c_iflag &= 0x0;
     tty.c_oflag &= 0x0;
-    
-    
+    tty.c_cc[VMIN] = 1;
+    tty.c_cc[VTIME] = 0;
+
     if(tcsetattr(*fd,TCSANOW,&tty)==-1)
     {
 	perror("tcsetattr");
