@@ -35,6 +35,11 @@ void
 waypt_add(waypoint *wpt)
 {
 	ENQUEUE_TAIL(&waypt_head, &wpt->Q);
+	if (wpt->description == NULL) {
+		if (wpt->notes != NULL) {
+			wpt->description = xstrdup(wpt->notes);
+		}
+	}
 	waypt_ct++;
 }
 
