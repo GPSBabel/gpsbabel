@@ -858,15 +858,8 @@ REM test conversion from v4 to v5 files
 %PNAME% -i hsandv -f reference\Glad_4.exp -o hsandv -F %TMPDIR%\Glad_5.exp
 @echo off
 @echo.
-REM Can't compare directly because of potential FP rounding.
-@echo on
-@echo Testing...
-%PNAME% -i hsandv -f %TMPDIR%\Glad_5.exp -o gpx -F %TMPDIR%\g5.gpx
-%PNAME% -i hsandv -f reference\Glad_5.exp -o gpx -F %TMPDIR%\g5r.gpx
-@echo off
-@echo.
-REM exit 1
-REM compare  ${TMPDIR}/g5.gpx ${TMPDIR}/g5r.gpx
+REM FIXME: Can't compare directly because of potential FP rounding.
+REM FIXME: compare ${TMPDIR}/Glad_5.exp reference
 
 REM 
 REM stack filter tests
