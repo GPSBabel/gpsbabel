@@ -279,7 +279,7 @@ mkposn(const char *string)
 }
 
 void
-printposn(const float c, int is_lat)
+printposn(const double c, int is_lat)
 {
 	char d;
 	if (is_lat) {

@@ -293,7 +293,7 @@ void warning(const char *, ...)
 ff_vecs_t *find_vec(char *, char **);
 void disp_vecs(void);
 void disp_formats(int version);
-void printposn(float c, int is_lat);
+void printposn(double c, int is_lat);
 
 filter_vecs_t * find_filter_vec(char *, char **);
 void free_filter_vec(filter_vecs_t *);
