@@ -192,10 +192,9 @@ waypt_flush( queue *head )
 {
 	queue *elem, *tmp;
 
-	queue *q;
 	QUEUE_FOR_EACH(head, elem, tmp) {
-		q = dequeue(elem);
-		waypt_free((waypoint *) q);
+		waypoint *q = (waypoint *) dequeue(elem);
+		waypt_free(q);
 	}
 }
 

@@ -1221,7 +1221,7 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 
 	track_head = route_head_alloc();
 	track_head->rte_name = xstrdup(trkname);
-	route_add_head(track_head);
+	track_add_head(track_head);
 	*trk = track_head;
 
 	while (trk_count--) {
@@ -1416,7 +1416,7 @@ mps_read(void)
 
 	char		recType;
 	int			reclen;
-	int			skipMe;
+	int			morework;
 
 	mps_ver_in = 0;		/* although initialised at declaration, what happens if there are two mapsource
 						   input files? */
@@ -1426,57 +1426,46 @@ mps_read(void)
 	printf("static icon_mapping_t icon_table[] = {\n");
 #endif
 
+	morework = 1;
+	while (morework && !feof(mps_file_in)) {
 
-	while (!feof(mps_file_in)) {
-
-		/* skip over this record, unless.... */
-		skipMe = 1;
 		/* Read record length of next section */
 		fread(&reclen, 4, 1, mps_file_in);
 		reclen = le_read32(&reclen);
 
 		/* Read the record type "flag" in - using fread in case in the future need more than one char */
 		fread(&recType, 1, 1, mps_file_in);
-
-		if (recType == 'W')  {
+		switch (recType) {
+		case 'W':
 			/* Waypoint record */
 			/* With routes, we need the waypoint info that reveals, for example, the symbol type */
-			if ((global_opts.objective == wptdata) || (global_opts.objective == rtedata)) {
-				mps_waypoint_r(mps_file_in, mps_ver_in, &wpt);
+			mps_waypoint_r(mps_file_in, mps_ver_in, &wpt);
 #ifdef DUMP_ICON_TABLE
-				printf("\t{  %4u, \"%s\" },\n", icon, wpt->shortname);
+			printf("\t{  %4u, \"%s\" },\n", icon, wpt->shortname);
 #endif
-				skipMe = 0;
-			}
-		}
+			break;
 
-		if (recType == 'R')  {
+		case 'R':
 			/* Route record */
-			if (global_opts.objective == rtedata) {
-				mps_route_r(mps_file_in, mps_ver_in, &rte);
-				skipMe = 0;
-			}
-		}
+			mps_route_r(mps_file_in, mps_ver_in, &rte);
+			break;
 
-		if (recType == 'T')  {
+		case 'T':
 			/* Track record */
-			if (global_opts.objective == trkdata) {
-				mps_track_r(mps_file_in, mps_ver_in, &trk);
-				skipMe = 0;
-			}
-		}
+			mps_track_r(mps_file_in, mps_ver_in, &trk);
+			break;
 
-		if (recType == 'V')  {
+		case 'V':
 			/* Mapset record */
 			mps_mapsetname_r(mps_file_in, mps_ver_in);
-			skipMe = 0;
 			/* Last record in the file */
+			morework = 0;
 			break;
-		}
-
-		if (skipMe == 1) {
+		default:
+			/* Unknown record type.  Skip over it. */
 			fseek(mps_file_in, reclen, SEEK_CUR); 
 		}
+
 	}	/* while (!feof(mps_file_in)) */
 
 #ifdef DUMP_ICON_TABLE
@@ -1669,7 +1658,7 @@ mps_write(void)
 				fread(&recType, 1, 1, mps_file_temp);
 			}
 		}
-		route_disp_all(mps_trackhdr_w_wrapper, mps_noop, mps_trackdatapoint_w_wrapper);
+		track_disp_all(mps_trackhdr_w_wrapper, mps_noop, mps_trackdatapoint_w_wrapper);
 	}
 
 	if (mpsmergeout) {

@@ -21,6 +21,7 @@
 #include "defs.h"
 
 static queue my_route_head;
+static queue my_track_head;
 static int rte_head_ct;
 static int rte_waypts;
 
@@ -28,6 +29,7 @@ void
 route_init(void)
 {
 	QUEUE_INIT(&my_route_head);
+	QUEUE_INIT(&my_track_head);
 }
 
 unsigned int
@@ -59,6 +61,13 @@ route_add_head(route_head *rte)
 	ENQUEUE_TAIL(&my_route_head, &rte->Q);
 	QUEUE_INIT(&rte->waypoint_list);
 	rte_head_ct++;
+}
+
+void
+track_add_head(route_head *rte)
+{
+	ENQUEUE_TAIL(&my_track_head, &rte->Q);
+	QUEUE_INIT(&rte->waypoint_list);
 }
 
 void
@@ -118,11 +127,11 @@ route_reverse(const route_head *rte_hd)
 	}
 }
 
-void 
-route_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
+void
+common_disp_all(queue *qh, route_hdr rh, route_trl rt, waypt_cb wc)
 {
 	queue *elem, *tmp;
-	QUEUE_FOR_EACH(&my_route_head, elem, tmp) {
+	QUEUE_FOR_EACH(qh, elem, tmp) {
 		const route_head *rhp;
 		rhp = (route_head *) elem;
 		if (rh) (*rh)(rhp);
@@ -130,6 +139,19 @@ route_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
 		if (rt) (*rt)(rhp);
 	}
 }
+
+void 
+route_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
+{
+	common_disp_all(&my_route_head, rh, rt, wc);
+}
+
+void 
+track_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
+{
+	common_disp_all(&my_track_head, rh, rt, wc);
+}
+
 void
 route_flush(queue *head)
 {
@@ -146,5 +168,6 @@ void
 route_flush_all()
 {
 	route_flush(&my_route_head);
+	route_flush(&my_track_head);
 }
 

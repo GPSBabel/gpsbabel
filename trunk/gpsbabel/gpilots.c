@@ -219,7 +219,7 @@ data_read(void)
 			 */
 			case 101:
 				track_head = route_head_alloc();
-				route_add_head(track_head);
+				track_add_head(track_head);
 				track_head->rte_name = xstrndup(rec->wpt.CustTrkHdr.name, sizeof(rec->wpt.CustTrkHdr.name));
 				sz = be_read32(&rec->wpt.CustTrkHdr.number);
 				tp = (Custom_Trk_Point_Type *) ((char *) pdb_rec->data + sizeof(rec->wpt.CustTrkHdr));
