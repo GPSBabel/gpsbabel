@@ -123,6 +123,7 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
 	if (!SetCommState (comport, &tio)) {
 		GPS_Serial_Error("SetCommState");
 		CloseHandle(comport);
+		comport = INVALID_HANDLE_VALUE;
 		gps_errno = SERIAL_ERROR;
 		return 0;
 	}
@@ -142,6 +143,7 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
 	if (!SetCommTimeouts (comport, &timeout)) {
 		GPS_Serial_Error("SetCommTimeouts");
 		CloseHandle (comport);
+		comport = INVALID_HANDLE_VALUE;
 		gps_errno = SERIAL_ERROR;
 		return 0;
 	}
@@ -155,6 +157,7 @@ int32 GPS_Serial_Off(const char *port, int32 fd)
 		gusb_close(port);
 	} else {
 		CloseHandle(comport);
+		comport = INVALID_HANDLE_VALUE;
 	}
 	return 1;
 }
