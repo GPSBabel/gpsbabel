@@ -218,3 +218,23 @@ ${PNAME} -i gcdb -f reference/GeocachingDB.PDB -o gpx -F ${TMPDIR}/gcdb1.gpx \
 		-o gcdb -F ${TMPDIR}/gcdb1.pdb
 ${PNAME} -i gpx -f ${TMPDIR}/gcdb1.gpx -o gpx -F ${TMPDIR}/gcdb2.gpx
 compare ${TMPDIR}/gcdb1.gpx ${TMPDIR}/gcdb1.gpx
+
+#
+# Duplicate filter - Since filters have no format of their own, we use csv
+# as an intermediate format for testing the filter.
+#
+rm -f ${TMPDIR}/filterdupe.csv1 ${TMPDIR}/filterdupe.csv2
+${PNAME} -i geo -f geocaching.loc -o csv -F ${TMPDIR}/filterdupe.csv1
+${PNAME} -i geo -f geocaching.loc -f geocaching.loc -x duplicate,shortname \
+		-o csv -F ${TMPDIR}/filterdupe.csv2
+compare ${TMPDIR}/filterdupe.csv1 ${TMPDIR}/filterdupe.csv2
+
+#
+# Position filter -  Since very small distances are essentialy a duplicate 
+# position filter, we can test very similarly to the duplicate filter.
+#
+rm -f ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2
+${PNAME} -i geo -f geocaching.loc -o csv -F ${TMPDIR}/filterpos.csv1
+${PNAME} -i geo -f geocaching.loc -f geocaching.loc -x position,distance=5f \
+		-o csv -F ${TMPDIR}/filterpos.csv2
+compare ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2
