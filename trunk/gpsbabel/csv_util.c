@@ -849,17 +849,9 @@ xcsv_data_write(void)
        fprintf(xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
     }
 
-    switch (global_opts.objective ) {
-        case wptdata:
-            waypt_disp_all(xcsv_waypt_pr);
-            break;
-        case rtedata:
-	case trkdata:
-            route_disp_all(xcsv_noop,xcsv_noop,xcsv_waypt_pr);
-            break;
-        default:
-            break;
-    } 
+    waypt_disp_all(xcsv_waypt_pr);
+    route_disp_all(xcsv_noop,xcsv_noop,xcsv_waypt_pr);
+    track_disp_all(xcsv_noop,xcsv_noop,xcsv_waypt_pr);
 
     /* output epilogue lines, if any. */
     QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {

@@ -218,6 +218,7 @@ void
 routesimple_process( void ) 
 {
 	route_disp_all( routesimple_head, routesimple_tail, routesimple_waypt_pr );
+	track_disp_all( routesimple_head, routesimple_tail, routesimple_waypt_pr );
 }
 
 void
@@ -226,10 +227,6 @@ routesimple_init(const char *args) {
 
 	count = 0;
 
-	if ( global_opts.objective != rtedata &&
-	     global_opts.objective != trkdata ) {
-		fatal(MYNAME ": This filter only works in route (-r) mode.");
-	}
 	if (countopt) {
 		count = atol(countopt);
 	}
