@@ -422,7 +422,11 @@ int32 GPS_Input_Get_Waypoint(GPS_PWay **way, FILE *inf)
 	    if(ret<0) return gps_errno;
 	    break;
 	case 109:
-	    ret = GPS_Input_Get_D109(&((*way)[i]),inf);
+	    ret = GPS_Input_Get_D109(&((*way)[i]),inf, 109);
+	    if(ret<0) return gps_errno;
+	    break;
+	case 110:
+	    ret = GPS_Input_Get_D109(&((*way)[i]),inf, 110);
 	    if(ret<0) return gps_errno;
 	    break;
 	case 150:
@@ -550,7 +554,11 @@ int32 GPS_Input_Get_Proximity(GPS_PWay **way, FILE *inf)
 	    if(ret<0) return gps_errno;
 	    break;
 	case 109:
-	    ret = GPS_Input_Get_D109(&((*way)[i]),inf);
+	    ret = GPS_Input_Get_D109(&((*way)[i]),inf, 109);
+	    if(ret<0) return gps_errno;
+	    break;
+	case 110:
+	    ret = GPS_Input_Get_D109(&((*way)[i]),inf, 110);
 	    if(ret<0) return gps_errno;
 	    break;
 	case 450:
@@ -1070,8 +1078,9 @@ static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf)
 ** @param [r] inf [FILE *] stream
 **
 ** @return [int32] number of entries
+** D109's and D110's are so similar, we handle both with the same function.
 ************************************************************************/
-static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf, int protonum)
 {
     char s[GPS_ARB_LEN];
     char *p;

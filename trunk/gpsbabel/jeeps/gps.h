@@ -149,6 +149,9 @@ typedef struct GPS_SWay
     int32  rte_link_class;
     char   rte_link_subclass[18];
     char   rte_link_ident[256];
+
+    char     Time_populated;	/* 1 if true */
+    time_t   Time;		/* Unix time */
 } GPS_OWay, *GPS_PWay;
 
 

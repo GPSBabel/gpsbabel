@@ -214,6 +214,8 @@ waypt_read(void)
 		} else {
 			wpt_tmp->altitude = way[i]->alt;
 		}
+		if (way[i]->Time_populated)
+			wpt_tmp->creation_time = way[i]->Time;
 		
 		waypt_add(wpt_tmp);
 		GPS_Way_Del(&way[i]);
@@ -476,6 +478,7 @@ wpt->gc_data.container == gc_micro ?  "M " : "",
 		} else {
 			way[i]->alt = wpt->altitude;
 		}
+		way[i]->Time = wpt->creation_time;
 		i++;
 	}
 
