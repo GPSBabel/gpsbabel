@@ -36,8 +36,8 @@
 
 /* ------------------------------------------------------------------------------------ */
 int f_outputLine (
-	char	*pcWhat,
-	FILE	*pfWhere)
+	FILE	*pfWhere,
+	char	*pcWhat)
 {
 	int		iLength;
 	int		iThisChar;
@@ -99,6 +99,7 @@ int argc,
 {
 	char	acLineIn[LINELENGTH];
 	char	acLineOut[LINELENGTH];
+	char	*pcTerm;
 
 	int		iThisChar;
 	int		iStart;
@@ -129,40 +130,54 @@ int argc,
 		else {
 
 			/* Output the .CMD preamble */
-			f_outputLine("@echo off", pfTestoOut);
-			f_outputLine("REM", pfTestoOut);
-			f_outputLine("REM Simple Windows NT/2000/XP .cmd version of GPSBabel testo script", pfTestoOut);
-			f_outputLine("REM", pfTestoOut);
-			f_outputLine("", pfTestoOut);
-			f_outputLine("SET TMPDIR=%TEMP%\\WINTESTO", pfTestoOut);
-			f_outputLine("MKDIR %TMPDIR% 2>NUL:", pfTestoOut);
-			f_outputLine("", pfTestoOut);
-			f_outputLine("GOTO :REALSTART", pfTestoOut);
-			f_outputLine("", pfTestoOut);
-			f_outputLine(":COMPARE", pfTestoOut);
-			f_outputLine("SET PARAM1=%1", pfTestoOut);
-			f_outputLine("SET PARAM2=%2", pfTestoOut);
-			f_outputLine("REM Test if param2 was a dir rather than a file, if so add a \\* to make fc work", pfTestoOut);
-			f_outputLine("FOR %%A IN (%2) DO IF \"d--------\"==\"%%~aA\" SET PARAM2=%2\\*", pfTestoOut);
-			f_outputLine("FOR /f \"delims=\" %%a IN ('fc %PARAM1% %PARAM2%') DO IF \"x%%a\"==\"xFC: no differences encountered\" GOTO :EOF", pfTestoOut);
-			f_outputLine("REM Show the first 5 lines of difference", pfTestoOut);
-			f_outputLine("fc /LB5 %PARAM1% %PARAM2%", pfTestoOut);
-			f_outputLine("ECHO %* are not the same (first 5 differences above) - pausing. ^C to quit if required", pfTestoOut);
-			f_outputLine("PAUSE", pfTestoOut);
-			f_outputLine("GOTO :EOF", pfTestoOut);
-			f_outputLine("", pfTestoOut);
-			f_outputLine("REM ==================================", pfTestoOut);
-			f_outputLine("", pfTestoOut);
-			f_outputLine(":SORTandCOMPARE", pfTestoOut);
-			f_outputLine("SORT <%1 >%TMPDIR%\\s1", pfTestoOut);
-			f_outputLine("SORT <%2 >%TMPDIR%\\s2", pfTestoOut);
-			f_outputLine("CALL :COMPARE %TMPDIR%\\s1 %TMPDIR%\\s2", pfTestoOut);
-			f_outputLine("GOTO :EOF", pfTestoOut);
-			f_outputLine("", pfTestoOut);
-			f_outputLine("REM ==================================", pfTestoOut);
-			f_outputLine("", pfTestoOut);
-			f_outputLine(":REALSTART", pfTestoOut);
-			f_outputLine("", pfTestoOut);
+			f_outputLine(pfTestoOut, "@echo off");
+			f_outputLine(pfTestoOut, "REM");
+			f_outputLine(pfTestoOut, "REM Simple Windows NT/2000/XP .cmd version of GPSBabel testo script");
+			f_outputLine(pfTestoOut, "REM");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, "SET TMPDIR=%TEMP%\\WINTESTO");
+			f_outputLine(pfTestoOut, "MKDIR %TMPDIR% 2>NUL:");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, "GOTO :REALSTART");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, "REM ==================================");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, ":CommonCOMPARE");
+			f_outputLine(pfTestoOut, "SET PARAM1=%2");
+			f_outputLine(pfTestoOut, "SET PARAM2=%3");
+			f_outputLine(pfTestoOut, "REM Test if param3 was a dir rather than a file, if so add a \\* to make fc work");
+			f_outputLine(pfTestoOut, "FOR %%A IN (%3) DO IF \"d--------\"==\"%%~aA\" SET PARAM2=%3\\*");
+			f_outputLine(pfTestoOut, "FOR /f \"delims=\" %%a IN ('fc %PARAM1% %PARAM2%') DO IF \"x%%a\"==\"xFC: no differences encountered\" GOTO :EOF");
+			f_outputLine(pfTestoOut, "REM Show the first 5 lines of difference");
+			f_outputLine(pfTestoOut, "fc %1 /LB5 %PARAM1% %PARAM2%");
+			f_outputLine(pfTestoOut, "ECHO %* are not the same (first 5 differences above) - pausing. ^C to quit if required");
+			f_outputLine(pfTestoOut, "PAUSE");
+			f_outputLine(pfTestoOut, "GOTO :EOF");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, "REM ==================================");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, ":COMPARE");
+			f_outputLine(pfTestoOut, "CALL :CommonCOMPARE /L %1 %2");
+			f_outputLine(pfTestoOut, "GOTO :EOF");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, "REM ==================================");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, ":BINCOMPARE");
+			f_outputLine(pfTestoOut, "CALL :CommonCOMPARE /B %1 %2");
+			f_outputLine(pfTestoOut, "GOTO :EOF");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, "REM ==================================");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, ":SORTandCOMPARE");
+			f_outputLine(pfTestoOut, "SORT <%1 >%TMPDIR%\\s1");
+			f_outputLine(pfTestoOut, "SORT <%2 >%TMPDIR%\\s2");
+			f_outputLine(pfTestoOut, "CALL :COMPARE %TMPDIR%\\s1 %TMPDIR%\\s2");
+			f_outputLine(pfTestoOut, "GOTO :EOF");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, "REM ==================================");
+			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, ":REALSTART");
+			f_outputLine(pfTestoOut, "");
 
 
 
@@ -175,24 +190,34 @@ int argc,
 				if (acLineIn[0] == '#') {
 					acLineOut[0]='\0';
 					strcat (acLineOut,"REM");
+					iTarget = 3;
+
+					/* Add a space after the REM if the next char in the source isn't space */
+					/* We're trying to preserve the original as much as possible            */
+					if (acLineIn[1] != ' ') {
+						strcat (acLineOut, " ");
+						iTarget++;
+					}
+
 					/* Strip out any ending new lines */
 					for (iThisChar=1; iThisChar<LINELENGTH; iThisChar++) {
 						if ((acLineIn[iThisChar] == '\0') ||
 							(acLineIn[iThisChar] == '\n') ||
 							((acLineIn[iThisChar] == '\r') && (acLineIn[iThisChar+1] == '\n'))) {
 
-							acLineOut[iThisChar+2] = '\0';
+							acLineOut[iThisChar+iTarget-1] = '\0';
 							break;
 						}
-						acLineOut[iThisChar+2] = acLineIn[iThisChar];
+						acLineOut[iThisChar+iTarget-1] = acLineIn[iThisChar];
 					}
 					if (iEchoLevel > 0) {
-						f_outputLine("@echo off", pfTestoOut);
-						f_outputLine("@echo.", pfTestoOut);
+						f_outputLine(pfTestoOut, "@echo off");
+						f_outputLine(pfTestoOut, "@echo.");
 						iEchoLevel = 0;
 					}
-					iPrevLineContinues = f_outputLine(acLineOut, pfTestoOut);
-				}
+					iPrevLineContinues = f_outputLine(pfTestoOut, acLineOut);
+				}	/* Is the whole line a comment? */
+
 				/* Are we near the top of testo where the program variable is defined? */
 				else if (strncmp("PNAME=${PNAME:-",acLineIn,15) == 0) {
 					acLineOut[0]='\0';
@@ -213,15 +238,16 @@ int argc,
 						}
 					}
 					if (iEchoLevel > 0) {
-						f_outputLine("@echo off", pfTestoOut);
-						f_outputLine("@echo.", pfTestoOut);
+						f_outputLine(pfTestoOut, "@echo off");
+						f_outputLine(pfTestoOut, "@echo.");
 						iEchoLevel = 0;
 					}
-					iPrevLineContinues = f_outputLine(acLineOut, pfTestoOut);
-					if (iPrevLineContinues == 1) f_outputLine("", pfTestoOut);
-					iPrevLineContinues = f_outputLine("IF NOT EXIST %PNAME% ECHO Can't find %PNAME%&& GOTO :EOF", pfTestoOut);
-					/* fputs("\r\n", pfTestoOut); */
-				}
+					iPrevLineContinues = f_outputLine(pfTestoOut, acLineOut);
+					if (iPrevLineContinues == 1) f_outputLine(pfTestoOut, "");
+					iPrevLineContinues = f_outputLine(pfTestoOut, "IF NOT EXIST %PNAME% ECHO Can't find %PNAME%&& GOTO :EOF");
+					/* fputs("\r\n"); */
+				}	/* Are we near the top of testo where the program variable is defined? */
+
 				else {
 					/* Every other line.... */
 					iStart = 0;
@@ -233,8 +259,8 @@ int argc,
 					/* Is this one of the test sequences mostly (all?) starting with a cleanup? */
 					if (strncmp("rm -f ",acLineIn,6) == 0) {
 						if (iEchoLevel > 0) {
-							f_outputLine("@echo off", pfTestoOut);
-							f_outputLine("@echo.", pfTestoOut);
+							f_outputLine(pfTestoOut, "@echo off");
+							f_outputLine(pfTestoOut, "@echo.");
 							iEchoLevel = 0;
 						}
 						iStart = 6;
@@ -251,8 +277,8 @@ int argc,
 					/* Is this one of the test sequences where we compare the rest? */
 					if (strncmp("compare ",acLineIn,8) == 0) {
 						if (iEchoLevel > 0) {
-							f_outputLine("@echo off", pfTestoOut);
-							f_outputLine("@echo.", pfTestoOut);
+							f_outputLine(pfTestoOut, "@echo off");
+							f_outputLine(pfTestoOut, "@echo.");
 							iEchoLevel = 0;
 						}
 						iStart = 8;
@@ -260,10 +286,21 @@ int argc,
 						iTarget = 14;
 					}
 					/* Is this one of the test sequences where we compare the rest? */
+					if (strncmp("bincompare ",acLineIn,11) == 0) {
+						if (iEchoLevel > 0) {
+							f_outputLine(pfTestoOut, "@echo off");
+							f_outputLine(pfTestoOut, "@echo.");
+							iEchoLevel = 0;
+						}
+						iStart = 11;
+						strcat(acLineOut, "CALL :BINCOMPARE ");
+						iTarget = 17;
+					}
+					/* Is this one of the test sequences where we compare the rest? */
 					if (strncmp("sort_and_compare ",acLineIn,17) == 0) {
 						if (iEchoLevel > 0) {
-							f_outputLine("@echo off", pfTestoOut);
-							f_outputLine("@echo.", pfTestoOut);
+							f_outputLine(pfTestoOut, "@echo off");
+							f_outputLine(pfTestoOut, "@echo.");
 							iEchoLevel = 0;
 						}
 						iStart = 17;
@@ -273,8 +310,8 @@ int argc,
 					/* Is this one of the test sequences where we prepare some data? */
 					if (strncmp("echo \"",acLineIn,6) == 0) {
 						if (iEchoLevel > 0) {
-							f_outputLine("@echo off", pfTestoOut);
-							f_outputLine("@echo.", pfTestoOut);
+							f_outputLine(pfTestoOut, "@echo off");
+							f_outputLine(pfTestoOut, "@echo.");
 							iEchoLevel = 0;
 						}
 						iStart = 6;
@@ -282,6 +319,29 @@ int argc,
 						iTarget = 5;
 						iTranslateQuotes = 1;
 						iQuoteCount = 1;
+					}
+					/* Is this one of the test sequences where we prepare some data by using sed? */
+					/* we only cater for sed that removes lines - this is only windows after all  */
+					if (strncmp("sed '/^L",acLineIn,8) == 0) {
+						pcTerm = strstr(acLineIn+8,"/d'");
+
+						/* Did we find a terminator in the string? */
+						if ((pcTerm != NULL) && ((pcTerm - acLineIn) < LINELENGTH)) {
+							if (iEchoLevel > 0) {
+								f_outputLine(pfTestoOut, "@echo off");
+								f_outputLine(pfTestoOut, "@echo.");
+								iEchoLevel = 0;
+							}
+							iStart = 8;
+							strcat(acLineOut, "FINDSTR /V \"");
+							iTarget = 12;
+							for (iThisChar=8; iThisChar<(pcTerm - acLineIn); iThisChar++) {
+								acLineOut[iTarget++] = acLineIn[iStart++];
+							}
+							acLineOut[iTarget++] = (char)0;
+							strcat(acLineOut, "\"");
+							iStart += 3;	/* skip over the terminator of the sed command */
+						}	/* Did we find a terminator in the string? */
 					}
 					if ((iStart > 0) ||
 					    (iPrevLineContinues == 1)) {
@@ -361,25 +421,25 @@ int argc,
 							}
 						} /* for */
 						if ((iEchoLevel == 1) && (iPrevLineContinues != 1)) {
-							f_outputLine("@echo on", pfTestoOut);
-							f_outputLine("@echo Testing...", pfTestoOut);
+							f_outputLine(pfTestoOut, "@echo on");
+							f_outputLine(pfTestoOut, "@echo Testing...");
 						}
-						iPrevLineContinues = f_outputLine(acLineOut, pfTestoOut);
-						/* fputs("\r\n", pfTestoOut); */
+						iPrevLineContinues = f_outputLine(pfTestoOut, acLineOut);
+						/* fputs("\r\n"); */
 					}
 					else {
 						/* We didn't match the start of the line, so
 						  - if blank, print it
 						*/
 						if (iEchoLevel > 0) {
-							f_outputLine("@echo off", pfTestoOut);
-							f_outputLine("@echo.", pfTestoOut);
+							f_outputLine(pfTestoOut, "@echo off");
+							f_outputLine(pfTestoOut, "@echo.");
 							iEchoLevel = 0;
 						}
 						if ((acLineIn[0] == '\n') ||
 							(acLineIn[0] == '\0') ||
 							((acLineIn[0] == '\r') && (acLineIn[1] == '\n') && (acLineIn[2] == '\0'))) {
-								iPrevLineContinues = f_outputLine("", pfTestoOut);
+								iPrevLineContinues = f_outputLine(pfTestoOut, "");
 						}
 
 					}	/* else...  didn't match a start of line - so check rest of line */
