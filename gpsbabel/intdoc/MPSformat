@@ -12,6 +12,9 @@
 // Entity names might be long winded but are intended to convey some meaning without explicit/additional comments
 
 // Version history
+// V2.5 - 2004/01/12 20:49 GMT mrcb.mps.fmt@osps.net
+//        Updates to record signatures for MapSource V5.3 & 5.4
+//        Update to incorporate the sketchiest of subclass details
 // V2.4 - 2003/10/18 18:42 BST (GMT+1) mrcb.mps.fmt@osps.net
 //        Updates to route formats to include interlink steps (my name for them)
 // V2.3 - 2003/10/03 17:49 BST (GMT+1) mrcb.mps.fmt@osps.net
@@ -46,29 +49,41 @@
 
 <File Signature> ::= "MsRc" <First version related char> <NULL>
 
-<First version related char> ::= <MapSource from V3.02, V4.13, V5.03beta, V5.0 char>
+<First version related char> ::= <MapSource from V3.02, V4.13, V5.03beta, V5.0 char, V5.3 char, V5.4 char>
 
-<MapSource from V3.02, V4.13, v5.03beta, V5.0 char> ::= "d"
+<MapSource from V3.02, V4.13, v5.03beta, V5.0 char, V5.3 char, V5.4 char> ::= "d"
 
 <Format signature> ::= LengthOf(<Format details>) <Format details>
 
 <Format details> ::= "D" <Second version related char> <NULL>
 
-<Second version related char> ::= <MapSource V3.02 format byte> | <MapSource V4.06 format byte> | <MapSource V4.13 format byte> |
-					<MapSource V5.03beta format byte> | <MapSource V5.0 format byte>
+<Second version related char> ::= <MapSource V3.02 format byte> | 
+					<MapSource V4.06 format byte> | 
+					<MapSource V4.13 format byte> |
+					<MapSource V5.03beta format byte> | 
+					<MapSource V5.0 format byte> | 
+					<MapSource V5.3 format byte> | 
+					<MapSource V5.4 format byte>
 
 <MapSource V3.02 format byte> ::= "d"
 <MapSource V4.06 format byte> ::= "g"
 <MapSource V4.13 format byte> ::= "h"
 <MapSource V5.03beta format byte> ::= "i"
 <MapSource V5.0 format byte> ::= "i"
+<MapSource V5.3 format byte> ::= "i"
+<MapSource V5.4 format byte> ::= "i"
 
 <Program signature> ::= LengthOf(<Program signature details>) <Program signature details>
 
 <Program signature details> ::= "A" <UNKNOWN two bytes> <QA string> <NULL> <Program date time> <NULL>
 
-<UNKNOWN two bytes> ::= <MapSource V3.02 two bytes> | <MapSource V4.06 two bytes> | <MapSource V4.13 two bytes> |
-			<MapSource V5.03beta two bytes> | <MapSource V5.0 two bytes>
+<UNKNOWN two bytes> ::= <MapSource V3.02 two bytes> | 
+			<MapSource V4.06 two bytes> | 
+			<MapSource V4.13 two bytes> |
+			<MapSource V5.03beta two bytes> | 
+			<MapSource V5.0 two bytes> | 
+			<MapSource V5.3 two bytes> | 
+			<MapSource V5.4 two bytes>
 
 // Perhaps this is software build number
 <MapSource V3.02 two bytes> ::= 0x2E 0x01
@@ -76,18 +91,27 @@
 <MapSource V4.13 two bytes> ::= 0x9D 0x01
 <MapSource V5.03beta two bytes> ::= 0xF4 0x01
 <MapSource V5.0 two bytes> ::= 0xF4 0x01
+<MapSource V5.3 two bytes> ::= 0xF7 0x01
+<MapSource V5.4 two bytes> ::= 0xF8 0x01
 
 // SQA might be Software Quality Assurance;  buell appears in the beta, so is presumably the programmer's id
 <QA String> ::= "SQA" | "buell"
 
-<Program date time> ::= <MapSource V3.02 date time> | <MapSource V4.06 date time> | <MapSource V4.13 date time> |
-			<MapSource V5.03beta date time> | <MapSource V5.0 date time>
+<Program date time> ::= <MapSource V3.02 date time> | 
+			<MapSource V4.06 date time> | 
+			<MapSource V4.13 date time> |
+			<MapSource V5.03beta date time> | 
+			<MapSource V5.0 date time> | 
+			<MapSource V5.3 date time> | 
+			<MapSource V5.4 date time>
 
 <MapSource V3.02 date time> ::= "Oct 20 1999" <NULL> "12:50:03"
 <MapSource V4.06 date time> ::= "Oct 22 2001" <NULL> "15:45:05"
 <MapSource V4.13 date time> ::= "Mar  7 2003" <NULL> "15:12:28"
 <MapSource V5.03beta date time> ::= "Jun 27 2003" <NULL> "10:12:10"
 <MapSource V5.0 date time> ::= "Jul  3 2003" <NULL> "08:35:39"
+<MapSource V5.3 date time> ::= "Sep 24 2003" <NULL> "11:44:25"
+<MapSource V5.4 date time> ::= "Nov  6 2003" <NULL> "16:01:32"
 
 <Map Set Name> ::= LengthOf(<Map set details>) <Map set details>
 
@@ -158,19 +182,20 @@
 
 <Waypoint UNKNOWN 3 V3> ::= 2-bytes-unknown
 
-<Waypoint V4 record> ::= "W" <Waypoint name> <Waypoint class> <Waypoint country> <Waypoint UNKNOWN 1 V4> <Lat semicircle> 
-				<Lon semicircle> <Altitude field> <Waypoint description> <Proximity field> <Waypoint attributes V3> 
-				<Waypoint city> <Waypoint state> <Waypoint facility> <Waypoint UNKNOWN 2 V3> <Depth field> 
-				<Waypoint UNKNOWN 3 V4>
+<Waypoint V4 record> ::= "W" <Waypoint name> <Waypoint class> <Waypoint country> <Waypoint subclass data V4> 
+				<Waypoint UNKNOWN 1 V4> <Lat semicircle> <Lon semicircle> <Altitude field>  
+				<Waypoint description> <Proximity field> <Waypoint attributes V3> <Waypoint city> 
+				<Waypoint state> <Waypoint facility> <Waypoint UNKNOWN 2 V3> <Depth field> 
+                                <Waypoint UNKNOWN 3 V4>
 
-// The first four bytes are probably a Long()
-// The first four bytes of the sequence of twelve 0xFFs are either two Word() values or one Long() one
-// The two zeros between the FFs are a word value used (at least) when the waypoint is created as part of a route
-// The four 0xFFs or four 0x00s are alternatives; 0xFFs if the waypoint is created from scratch in this version of MapSource;
-// 0x00s if the waypoint was actually created in V3 of MapSource and the file is saved in this version
-<Waypoint UNKNOWN 1 V4> ::= {0x00 0x00 0x00 0x00 0xFF {0xFF 0xFF 0xFF 0xFF} | {0x00 0x00 0x00 0x00} 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 
-				0x00 0x00 0xFF 0xFF 0xFF 0xFF}
+// Values depend on <Waypoint class>. If class is zero, then
+// subclass = 0x00 0x00 0x00 0x00 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF
+//            (last two octects may be zero depending on whether the waypoint was originally created
+//             in MapSource V3)
+// If class is non-zero, then values are unknown
+<Waypoint subclass data V4> ::= 18-bytes-unknown
 
+<Waypoint UNKNOWN 1 V4> ::= 0xFF 0xFF 0xFF 0xFF
 
 // Perhaps the 2 bytes of <Waypoint UNKNOWN 3 V3> plus Field-defined-flag plus a Long value
 <Waypoint UNKNOWN 3 V4> ::= 7-bytes-unknown
@@ -226,7 +251,10 @@
 
 <Route link list v4> ::= <Route link details> <Route waypoint v4> [<Route link list v4>]
 
-<Route waypoint v4> ::= <Route waypoint name> <Waypoint class> <Waypoint country> <Waypoint UNKNOWN 1 V4> <Route waypoint UNKNOWN 1 V4>
+<Route waypoint v4> ::= <Route waypoint name> <Waypoint class> <Waypoint country> <Waypoint subclass data V4> 
+                        <Route subclass data V4> <Waypoint UNKNOWN 1 V4> <Route waypoint UNKNOWN 1 V4>
+
+<Route subclass data V4> ::= empty-if-class-is-zero | 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF
 
 // The first zero seems to be a string <NULL> terminator
 <Route waypoint UNKNOWN 1 V4> ::= 0x00 0x03 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
