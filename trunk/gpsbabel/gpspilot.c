@@ -100,7 +100,7 @@ data_read(void)
 		wpt_tmp->position.latitude.degrees = pdb_read4(&rec->latitude) / 3.6e6; 
 		wpt_tmp->position.altitude.altitude_meters = pdb_read2(&rec->elevation) / 100.0;
 	
-		vdata = pdb_rec->data + sizeof(*rec);
+		vdata = (char *) pdb_rec->data + sizeof(*rec);
 
 		/*
 		 * This maping is a bit contrived.   
