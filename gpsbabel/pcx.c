@@ -243,7 +243,7 @@ fprintf(file_out,
 "M  G WGS 84               121 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00\n"
 "\n"
 "H  COORDINATE SYSTEM\n"
-"U  LAT LON DM\n"
+"U  LAT LON DEG\n"
 "\n"
 "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
 	setshort_length(mkshort_handle, 6);
