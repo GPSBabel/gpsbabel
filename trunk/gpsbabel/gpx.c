@@ -468,7 +468,6 @@ gs_container_mapping{
 	{ gc_virtual, "Virtual" }
 };
 
-static
 geocache_type
 gs_mktype(char *t)
 {
@@ -483,7 +482,20 @@ gs_mktype(char *t)
 	return gt_unknown;
 }
 
-static
+const char *
+gs_get_cachetype(geocache_type t)
+{
+	int i;
+	int sz = sizeof(gs_type_map) / sizeof(gs_type_map[0]);
+
+	for (i = 0; i < sz; i++) {
+		if (t == gs_type_map[i].type) {
+			return gs_type_map[i].name;
+		}
+	}
+	return "Unknown";
+}
+
 geocache_container
 gs_mkcont(char *t)
 {
@@ -496,6 +508,20 @@ gs_mkcont(char *t)
 		}
 	}
 	return gc_unknown;
+}
+
+const char *
+gs_get_container(geocache_container t)
+{
+	int i;
+	int sz = sizeof(gs_container_map) / sizeof(gs_container_map[0]);
+
+	for (i = 0; i < sz; i++) {
+		if (t == gs_container_map[i].type) {
+			return gs_type_map[i].name;
+		}
+	}
+	return "Unknown";
 }
 
 static

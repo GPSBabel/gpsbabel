@@ -801,9 +801,13 @@ xcsv_waypt_pr(const waypoint *wpt)
             /* Geocache Terrain as a double */
             sprintf(buff, fmp->printfc, wpt->gc_data.terr / 10.0);
         } else
-        if (strcmp(fmp->key, "GEOCACHE_TYPE") == 0) {
-            /* Geocache Type TODO */
-            sprintf(buff, fmp->printfc, "Geocache");
+        if (strcmp(fmp->key, "GEOCACHE_CONTAINER") == 0) {
+            /* Geocache Container */
+            sprintf(buff, fmp->printfc, gs_get_container(wpt->gc_data.container));
+	} else
+	if (strcmp(fmp->key, "GEOCACHE_TYPE") == 0) {
+            /* Geocache Type */
+            sprintf(buff, fmp->printfc, gs_get_cachetype(wpt->gc_data.type));
         } else {
            /* this should probably never happen */
         }
