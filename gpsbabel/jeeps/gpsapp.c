@@ -267,7 +267,7 @@ static void GPS_A001(GPS_PPacket packet)
 	tag = *p;
 	data = GPS_Util_Get_Short(p+1);
 
-	snprintf(pb, sizeof(pb), "Capability '%c'.  Type %d", tag, data);
+	sprintf(pb, "Capability '%c'.  Type %d", tag, data);
 	GPS_User(pb);
 	
 	/* Only one type of P[hysical] so far */
@@ -1876,9 +1876,9 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len)
     
     p = data;
 
-    *p++ = 1; /* D109 constant data (grrrr.) */
-    *p++ = way->wpt_class;
-    *p++ = way->colour;
+    *p++ = 1 /* way->wpt_class */;   	/* For D109, the class must be 1 */
+    *p++ = 0 /* way->colour*/ ;		/* If non-zero, the waypoint is in 
+					   invisible ink on the V. */
     *p++ = way->dspl;
     *p++ = 0x70;
     GPS_Util_Put_Short(p,way->smbl);
