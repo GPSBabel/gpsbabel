@@ -65,8 +65,8 @@ release:
 	cd /tmp ; tar xvzf gpsbabel-$(VERSIOND).tar.gz
 	touch /tmp/gpsbabel-$(VERSIOND)/internal_styles.c
 	cd /tmp/gpsbabel-$(VERSIOND)/mingw ; make  && zip -j gpsbabel-$(VERSIOND).zip  gpsbabel.exe libexpat.dll ../win32/gpsbabelfront.exe && cp gpsbabel-$(VERSIOND).zip /tmp
-	curl -u anonymous:anonymous /tmp/gpsbabel-$(VERSIOND).tar.gz ftp://upload.sf.net/incoming/
-	curl -u anonymous:anonymous /tmp/gpsbabel-$(VERSIOND).zip ftp://upload.sf.net/incoming/
+	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).tar.gz ftp://upload.sf.net/incoming/
+	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).zip ftp://upload.sf.net/incoming/
 
 # Machine generated from here down.   
 
