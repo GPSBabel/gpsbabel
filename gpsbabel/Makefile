@@ -1,4 +1,5 @@
 CFLAGS=-g -Icoldsync
+INSTALL_TARGETDIR=/usr/local/
 
 FMTS=magproto.o gpx.o geo.o gpsman.o mapsend.o mapsource.o \
 	gpsutil.o tiger.o pcx.o csv.o cetus.o gpspilot.o magnav.o \
@@ -31,6 +32,12 @@ main.o:
 
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
+
+#
+# This will only work on UNIX-like substances.
+#
+install:
+	install gpsbabel  $(INSTALL_TARGETDIR)/bin
 
 # Nerdy release stuff that needs to work only on Linux.
 
