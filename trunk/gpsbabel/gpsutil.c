@@ -70,8 +70,7 @@ data_read(void)
 		wpt_tmp->position.longitude.degrees = ilon + (lon - ilon)*(100.0/60.0);
 		ilat = (int)(lat);
 		wpt_tmp->position.latitude.degrees = ilat + (lat - ilat) * (100.0/60.0);
-		wpt_tmp->icon_descr = xstrdup(icon);
-
+		wpt_tmp->icon_descr = mag_find_descr_from_token(icon);
 		waypt_add(wpt_tmp);
 	}
 }
