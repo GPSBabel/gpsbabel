@@ -125,7 +125,7 @@ mapsend_wpt_read(void)
 	my_fread4(&wpt_count, mapsend_file_in);
 	
 	while (wpt_count--) {
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+		wpt_tmp = waypt_new();
 
 		if (fread(&scount, sizeof(scount), 1, mapsend_file_in) < 1) {
 			fatal(MYNAME ": out of data reading %d waypoints\n",
@@ -183,7 +183,7 @@ mapsend_wpt_read(void)
 		my_fread4(&wpt_count, mapsend_file_in);
 		
 		while (wpt_count--) {
-			wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+			wpt_tmp = waypt_new();
 
 			/* waypoint name */
 			fread(&scount, sizeof(scount), 1, mapsend_file_in);
@@ -259,7 +259,7 @@ mapsend_track_read(void)
 			centisecs = 0;
 		}
 
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+		wpt_tmp = waypt_new();
 		wpt_tmp->latitude = -wpt_lat;
 		wpt_tmp->longitude = wpt_long;
 		wpt_tmp->creation_time = time;

@@ -84,7 +84,7 @@ data_read(void)
 	/* skip the line if it contains "sHyperLink" as it is a header (I hope :) */
 	if ((strlen(buff)) && (strstr(buff, "sHyperLink") == NULL)) {
 
-	    wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+	    wpt_tmp = waypt_new();
 
 	    /* data delimited by tabs, not enclosed in quotes.  */
 	    s = buff;

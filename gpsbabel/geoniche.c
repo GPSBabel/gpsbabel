@@ -216,7 +216,7 @@ data_read(void)
 	char		gid[6+1];
 	struct tm	tm;
 
-	wpt = xcalloc(sizeof(*wpt), 1);
+	wpt = waypt_new();
 	if (!wpt)
 	    fatal(MYNAME ": Couldn't allocate waypoint.\n");
 	vdata = (char *) pdb_rec->data;
