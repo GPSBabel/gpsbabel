@@ -159,19 +159,10 @@ data_read(void)
 		    break;
 		    /* 
 		     * Fields 18-23 were added around version 3.90.4g of
-		     * Ozi, but aren't documented.   We ignore them.
+		     * Ozi, but aren't documented.   We silently ignore 
+		     * these or any additional fields we don't need.
 		     */
-		case 18:
-		case 19:
-		case 20:
-		case 21:
-		case 22:
-		case 23:
-		    break;
 		default:
-		    /* whoa! nelly */
-		    fprintf (stderr, "%s: Warning: data fields on line %d exceed specification.\n", 
-		        MYNAME, linecount);
 		    break;
 		}
 		i++;
