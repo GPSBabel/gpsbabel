@@ -38,6 +38,7 @@ static char * termread(char *ibuf, int size);
 static void termwrite(char *obuf, int size);
 static double mag2degrees(double mag_val);
 static void mag_readmsg(void);
+static void *mkshort_handle;
 
 typedef enum {
 	mrs_handoff = 0,
@@ -330,16 +331,16 @@ mag_verparse(char *ibuf)
 		case mm_gps315320:
 		case mm_map410:
 			icon_mapping = gps315_icon_table;
-			setshort_length(6);
-			setshort_mustupper(1);
+			setshort_length(mkshort_handle, 6);
+			setshort_mustupper(mkshort_handle, 1);
 			mag_cleanse = m315_cleanse;
 			break;
 		case mm_map330:
 		case mm_meridian:
 		case mm_sportrak:
 			icon_mapping = map330_icon_table;
-			setshort_length(8);
-			setshort_mustupper(0);
+			setshort_length(mkshort_handle, 8);
+			setshort_mustupper(mkshort_handle, 0);
 			mag_cleanse = m330_cleanse;
 			break;
 		default:
@@ -714,6 +715,7 @@ mag_wr_init(const char *portname, const char *args)
 	fstat(fileno(magfile_out), &sbuf);
 	is_file = S_ISREG(sbuf.st_mode);
 #endif
+	mkshort_handle = mkshort_new_handle();
 
 	if (is_file) {
 		magfile_out = fopen(portname, "w+b");
@@ -1066,7 +1068,7 @@ mag_waypt_pr(const waypoint *waypointp)
 	}
 	isrc = waypointp->notes ? waypointp->notes : waypointp->description;
 	owpt = global_opts.synthesize_shortnames ?
-                        mkshort(isrc) : waypointp->shortname,
+                        mkshort(mkshort_handle, isrc) : waypointp->shortname,
 	odesc = isrc ? isrc : "";
 	owpt = mag_cleanse(owpt);
 	odesc = mag_cleanse(odesc);
@@ -1098,7 +1100,7 @@ mag_write(void)
 	 * Whitespace is actually legal, but since waypoint name length is
 	 * only 8 bytes, we'll conserve them.
 	 */
-	setshort_whitespace_ok(0);
+	setshort_whitespace_ok(mkshort_handle, 0);
 	waypt_disp_all(mag_waypt_pr);
 }
 

@@ -24,6 +24,7 @@
 
 static FILE *file_in;
 static FILE *file_out;
+static void *mkshort_handle;
 
 #define MYNAME "GPSUTIL"
 
@@ -31,6 +32,8 @@ static void
 rd_init(const char *fname, const char *args)
 {
 	file_in = fopen(fname, "r");
+	mkshort_handle = mkshort_new_handle();
+
 	if (file_in == NULL) {
 		fatal(MYNAME ": Cannot open %s for reading\n", fname);
 	}
@@ -40,12 +43,14 @@ static void
 rd_deinit(void)
 {
 	fclose(file_in);
+	mkshort_del_handle(mkshort_handle);
 }
 
 static void
 wr_init(const char *fname, const char *args)
 {
 	file_out = fopen(fname, "w");
+
 	if (file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
@@ -63,18 +68,21 @@ data_read(void)
 	double lat,lon;
 	char desc[100];
 	char icon[100];
+	char ibuf[1024];
 	waypoint *wpt_tmp;
 
-	while( fscanf(file_in, "%lf,%lf:%100[^:]:%100[^\n]", 
-			&lon, &lat, icon, desc) > 0) {
-		wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
+	while (fgets(ibuf, sizeof(ibuf), file_in)) {
+		if( sscanf(ibuf, "%lf,%lf:%100[^:]:%100[^\n]", 
+				&lon, &lat, icon, desc)) {
+			wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
 
-		wpt_tmp->position.longitude.degrees = lon;
-		wpt_tmp->position.latitude.degrees = lat;
-		wpt_tmp->description = xstrdup(desc);
-		wpt_tmp->shortname = mkshort(desc);
+			wpt_tmp->position.longitude.degrees = lon;
+			wpt_tmp->position.latitude.degrees = lat;
+			wpt_tmp->description = xstrdup(desc);
+			wpt_tmp->shortname = mkshort(mkshort_handle, desc);
 
-		waypt_add(wpt_tmp);
+			waypt_add(wpt_tmp);
+		}
 	}
 }
 

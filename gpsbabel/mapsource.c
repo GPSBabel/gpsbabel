@@ -27,6 +27,7 @@
 
 static FILE *mps_file_in;
 static FILE *mps_file_out;
+static void *mkshort_handle;
 
 #define MYNAME "MAPSOURCE" 
 
@@ -226,7 +227,7 @@ mps_waypt_pr(const waypoint *wpt)
 	if(wpt->description) src = wpt->description;
 	if(wpt->notes) src = wpt->notes;
 	ident = global_opts.synthesize_shortnames ?
-				mkshort(src) :
+				mkshort(mkshort_handle, src) :
 				wpt->shortname;
 
 	reclen = 87 + strlen(ident) + strlen(wpt->description);
@@ -264,13 +265,16 @@ void
 mps_write(void)
 {
 	int short_length = 10;
+	mkshort_handle = mkshort_new_handle();
 
-	setshort_length(short_length);
-	setshort_whitespace_ok(0);
+	setshort_length(mkshort_handle, short_length);
+	setshort_whitespace_ok(mkshort_handle, 0);
 
 	fwrite(mps_hdr, sizeof(mps_hdr), 1, mps_file_out);
 	waypt_disp_all(mps_waypt_pr);
 	fwrite(mps_ftr, sizeof(mps_ftr), 1, mps_file_out);
+	mkshort_del_handle(mkshort_handle);
+
 }
 
 ff_vecs_t mps_vecs = {

@@ -40,6 +40,7 @@
 
 static FILE *file_in;
 static FILE *file_out;
+static void *mkshort_handle;
 
 static void 
 rd_init(const char *fname, const char *args)
@@ -185,7 +186,7 @@ tmpro_waypt_pr(const waypoint * wpt)
  	if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
         if (wpt->description) {
             if (global_opts.synthesize_shortnames)
-                shortname = mkshort(wpt->description);
+                shortname = mkshort(mkshort_handle, wpt->description);
             else
                 shortname = csv_stringclean(wpt->description, ",\"");
         } else {
@@ -234,15 +235,17 @@ data_write(void)
 {
 	/* Short names */
 	if (global_opts.synthesize_shortnames) {
-        setshort_length(6);
-        setshort_whitespace_ok(0);
-        setshort_badchars("\",");
+	mkshort_handle = mkshort_new_handle();
+        setshort_length(mkshort_handle, 6);
+        setshort_whitespace_ok(mkshort_handle, 0);
+        setshort_badchars(mkshort_handle, "\",");
     }
     
 	/* Write file header */
 	fprintf(file_out, "Group\tsID\tsDescription\tfLat\tfLong\tfEasting\tfNorthing\tfAlt\tiColour\tiSymbol\tsHyperLink\n");
 
     waypt_disp_all(tmpro_waypt_pr);
+    mkshort_del_handle(mkshort_handle);
 }
 
 ff_vecs_t tmpro_vecs = {

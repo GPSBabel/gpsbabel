@@ -27,6 +27,7 @@
 #include "csv_util.h"
 
 #define MYNAME	"XMAPWPT"
+static void *mkshort_handle;
 
 static void
 xmapwpt_set_style()
@@ -66,9 +67,9 @@ xmapwpt_set_style()
 
     /* set up mkshort */
     if (global_opts.synthesize_shortnames) {
-        setshort_length(32);
-        setshort_whitespace_ok(0);
-        setshort_badchars(xcsv_file.badchars);
+        setshort_length(mkshort_handle, 32);
+        setshort_whitespace_ok(mkshort_handle, 0);
+        setshort_badchars(mkshort_handle, xcsv_file.badchars);
     }
 }
 
@@ -87,6 +88,8 @@ xmapwpt_rd_init(const char *fname, const char *args)
 static void
 xmapwpt_wr_init(const char *fname, const char *args)
 {
+    mkshort_handle = mkshort_new_handle();
+
     xmapwpt_set_style();
 
     xcsv_file.xcsvfp = fopen(fname, "w");

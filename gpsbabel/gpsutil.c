@@ -7,6 +7,7 @@
 
 static FILE *file_in;
 static FILE *file_out;
+static void *mkshort_handle;
 
 #define MYNAME "GPSUTIL"
 
@@ -32,12 +33,15 @@ wr_init(const char *fname, const char *args)
 	if (file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
+	mkshort_handle = mkshort_new_handle();
+
 }
 
 static void
 wr_deinit(void)
 {
 	fclose(file_out);
+	mkshort_del_handle(mkshort_handle);
 }
 
 static void
@@ -89,7 +93,8 @@ gpsutil_disp(const waypoint *wpt)
 
 	fprintf(file_out, "%-8s %08.3f%c %09.3f%c %07.0f%c %-30.30s %s\n",
                 global_opts.synthesize_shortnames ?
-                        mkshort(wpt->description) : wpt->shortname,
+                        mkshort(mkshort_handle, wpt->description) : 
+			wpt->shortname,
 		fabs(lat),
 		lat < 0.0 ? 'S' : 'N',
 		fabs(lon),

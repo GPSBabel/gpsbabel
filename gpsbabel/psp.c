@@ -35,6 +35,7 @@
 
 static FILE *psp_file_in;
 static FILE *psp_file_out;
+static FILE *mkshort_handle;
 
 static int i_am_little_endian;
 static int endianness_tested;
@@ -259,6 +260,8 @@ static void
 psp_wr_init(const char *fname, const char *args)
 {
 	psp_file_out = fopen(fname, "wb");
+	mkshort_handle = mkshort_new_handle();
+
 	if (psp_file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
@@ -267,6 +270,7 @@ psp_wr_init(const char *fname, const char *args)
 static void
 psp_wr_deinit(void)
 {
+	mkshort_del_handle(mkshort_handle);
 	fclose(psp_file_out);
 }
 
@@ -404,7 +408,7 @@ psp_waypt_pr(const waypoint *wpt)
         if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
             if (wpt->description) {
                 if (global_opts.synthesize_shortnames)
-                    shortname = mkshort(wpt->description);
+                    shortname = mkshort(mkshort_handle, wpt->description);
                 else
                     shortname = xstrdup(wpt->description);
             } else {
@@ -518,8 +522,8 @@ psp_write(void)
         s = waypt_count();
         
         if (global_opts.synthesize_shortnames) {
-            setshort_length(32);
-            setshort_whitespace_ok(1);
+            setshort_length(mkshort_handle, 32);
+            setshort_whitespace_ok(mkshort_handle, 1);
         }
 
         if (s > MAXPSPOUTPUTPINS) {

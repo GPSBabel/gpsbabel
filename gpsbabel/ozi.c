@@ -30,6 +30,9 @@
 
 #define MYNAME	"OZI"
 
+static void *mkshort_handle;
+
+
 static void
 ozi_set_style()
 {
@@ -78,9 +81,9 @@ ozi_set_style()
 
     /* set up mkshort */
     if (global_opts.synthesize_shortnames) {
-        setshort_length(32);
-        setshort_whitespace_ok(0);
-        setshort_badchars(xcsv_file.badchars);
+        setshort_length(mkshort_handle, 32);
+        setshort_whitespace_ok(mkshort_handle, 0);
+        setshort_badchars(mkshort_handle, xcsv_file.badchars);
     }
 }
 
@@ -100,6 +103,8 @@ static void
 ozi_wr_init(const char *fname, const char *args)
 {
     ozi_set_style();
+
+    mkshort_handle = mkshort_new_handle();
 
     xcsv_file.xcsvfp = fopen(fname, "w");
     

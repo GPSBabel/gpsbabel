@@ -24,6 +24,7 @@
 
 static FILE *file_in;
 static FILE *file_out;
+static void *mkshort_handle;
 
 #define MYNAME "PCX"
 
@@ -47,6 +48,8 @@ static void
 wr_init(const char *fname, const char *args)
 {
 	file_out = fopen(fname, "w");
+	mkshort_handle = mkshort_new_handle();
+
 	if (file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
@@ -56,6 +59,7 @@ static void
 wr_deinit(void)
 {
 	fclose(file_out);
+	mkshort_del_handle(mkshort_handle);
 }
 
 static void
@@ -118,7 +122,8 @@ gpsutil_disp(const waypoint *wpt)
 
 	fprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5d %-40.40s %5e  %s\n",
                 global_opts.synthesize_shortnames ?
-                        mkshort(wpt->description) : wpt->shortname,
+                        mkshort(mkshort_handle, wpt->description) : 
+			wpt->shortname,
 		lat < 0.0 ? 'S' : 'N',
 		fabs(lat),
 		lon < 0.0 ? 'W' : 'E',
@@ -144,7 +149,7 @@ fprintf(file_out,
 "U  LAT LON DM\n"
 "\n"
 "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
-	setshort_length(6);
+	setshort_length(mkshort_handle, 6);
 	waypt_disp_all(gpsutil_disp);
 }
 
