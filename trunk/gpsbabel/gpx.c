@@ -25,34 +25,6 @@
 	static XML_Parser psr;
 #endif
 
-static int in_wpt;
-static int in_rte;
-static int in_rtept;
-static int in_trk;
-static int in_trkpt;
-static int in_ele;
-static int in_name;
-static int in_time;
-static int in_desc;
-static int in_cdata;
-static int in_cmt;
-static int in_url;
-static int in_icon;
-static int in_urlname;
-static int in_gs_type;
-static int in_gs_name;
-static int in_gs_container;
-static int in_gs_diff;
-static int in_gs_terr;
-static int in_gs_log;
-static int in_gs_log_wpt;
-static int in_gs_exported;
-static int in_gs_tbugs;
-static int in_something_else;
-static int in_number;
-static int in_email = 0;
-static int in_author = 0;
-
 static xml_tag *cur_tag;
 static char *cdatastr;
 static char *opt_logpoint = NULL;
@@ -84,35 +56,51 @@ static route_head *rte_head;
 
 #define MYNAME "GPX"
 #define MY_CBUF 4096
-
 typedef enum {
 	tt_unknown = 0,
-	tt_ele,
-	tt_name,
 	tt_gpx,
-	tt_email,
 	tt_author,
-	tt_wpt,
 	tt_desc,
-	tt_cmt,
-	tt_rte,
-	tt_rtept,
-	tt_trk,
-	tt_trkpt,
-	tt_number,
+	tt_email,
 	tt_time,
-	tt_url,
-	tt_urlname,
-	tt_sym,
-	tt_cache_type,
-	tt_cache_name,
+	tt_wpt,
+	tt_wpt_cmt,
+	tt_wpt_desc,
+	tt_wpt_name,
+	tt_wpt_sym,
+	tt_wpt_url,
+	tt_wpt_ele,
+	tt_wpt_time,
+	tt_wpt_urlname,
 	tt_cache_container,
 	tt_cache_difficulty,
 	tt_cache_terrain,
-	tt_cache_log,
-	tt_cache_log_wpt,
-	tt_cache_exported,
-	tt_cache_travelbugs
+	tt_rte,
+	tt_rte_name,
+	tt_rte_desc,
+	tt_rte_cmt,
+	tt_rte_number,
+	tt_rte_rtept,
+	tt_rte_rtept_ele,
+	tt_rte_rtept_name,
+	tt_rte_rtept_desc,
+	tt_rte_rtept_sym,
+	tt_rte_rtept_time,
+	tt_rte_rtept_cmt,
+	tt_rte_rtept_url,
+	tt_rte_rtept_urlname,
+	tt_trk,
+	tt_trk_desc,
+	tt_trk_name,
+	tt_trk_trkpt,
+	tt_trk_trkpt_cmt,
+	tt_trk_trkpt_name,
+	tt_trk_trkpt_sym,
+	tt_trk_trkpt_url,
+	tt_trk_trkpt_urlname,
+	tt_trk_trkpt_desc,
+	tt_trk_trkpt_ele,
+	tt_trk_trkpt_time,
 } tag_type;
 
 typedef struct tag_mapping {
@@ -120,42 +108,63 @@ typedef struct tag_mapping {
 	const char *tag_name;
 } tag_mapping;
 
-tag_mapping tag_map[] = {
-	{ tt_ele, "ele" },
-	{ tt_name, "name" },
-	{ tt_gpx, "gpx" },
-	{ tt_email, "email" },
-	{ tt_author, "author" },
-	{ tt_wpt, "wpt" },
-	{ tt_desc, "desc" },
-	{ tt_cmt, "cmt" },
-	{ tt_rte, "rte" },
-	{ tt_rtept, "rtept" },
-	{ tt_trk, "trk" },
-	{ tt_trkpt, "trkpt" },
-	{ tt_number, "number" },
-	{ tt_time, "time" },
-	{ tt_url, "url" },
-	{ tt_urlname, "urlname" },
-	{ tt_sym, "sym" },
-	{ tt_cache_type, "groundspeak:type" },
-	{ tt_cache_name, "groundspeak:name" },
-	{ tt_cache_container, "groundspeak:container" },
-	{ tt_cache_difficulty, "groundspeak:difficulty" },
-	{ tt_cache_terrain, "groundspeak:terrain" },
-	{ tt_cache_log, "groundspeak:log" },
-	{ tt_cache_log_wpt, "groundspeak:log_wpt" },
-	{ tt_cache_exported, "groundspeak:exported" },
-	{ tt_cache_travelbugs, "groundspeak:travelbugs" },
+/*
+ * xpath(ish) mappings between full tag paths and internal identifers.
+ * These appear in the order they appear in the GPX specification.
+ * If it's not a tag we explictly handle, it doesn't go here.
+ */
+
+tag_mapping tag_path_map[] = {
+	{ tt_gpx, "/gpx" },
+	{ tt_time, "/gpx/time" },
+
+	{ tt_wpt, "/gpx/wpt" },
+	{ tt_wpt_ele, "/gpx/wpt/ele" },
+	{ tt_wpt_time, "/gpx/wpt/time" },
+	{ tt_wpt_name, "/gpx/wpt/name" },
+	{ tt_wpt_cmt, "/gpx/wpt/cmt" },
+	{ tt_wpt_desc, "/gpx/wpt/desc" },
+	{ tt_wpt_url, "/gpx/wpt/url" },
+	{ tt_wpt_urlname, "/gpx/wpt/urlname" },
+	{ tt_wpt_sym, "/gpx/wpt/sym" },
+	{ tt_cache_container, "/gpx/wpt/groundspeak:cache/groundspeak:container" },
+	{ tt_cache_difficulty, "/gpx/wpt/groundspeak:cache/groundspeak:difficulty" },
+	{ tt_cache_terrain, "/gpx/wpt/groundspeak:cache/groundspeak:terrain" },
+
+	{ tt_rte, "/gpx/rte" },
+	{ tt_rte_name, "/gpx/rte/name" },
+	{ tt_rte_desc, "/gpx/rte/desc" },
+	{ tt_rte_number, "/gpx/rte/number" },
+	{ tt_rte_rtept, "/gpx/rte/rtept" },
+	{ tt_rte_rtept_ele, "/gpx/rte/rtept/ele" },
+	{ tt_rte_rtept_time, "/gpx/rte/rtept/time" },
+	{ tt_rte_rtept_name, "/gpx/rte/rtept/name" },
+	{ tt_rte_rtept_cmt, "/gpx/rte/rtept/cmt" },
+	{ tt_rte_rtept_desc, "/gpx/rte/rtept/desc" },
+	{ tt_rte_rtept_url, "/gpx/rte/rtept/url" },
+	{ tt_rte_rtept_urlname, "/gpx/rte/rtept/urlname" },
+	{ tt_rte_rtept_sym, "/gpx/rte/rtept/sym" },
+
+	{ tt_trk, "/gpx/trk" },
+	{ tt_trk_name, "/gpx/trk/name" },
+	{ tt_trk_desc, "/gpx/trk/desc" },
+	{ tt_trk_trkpt_ele, "/gpx/trk/trkpt/ele" },
+	{ tt_trk_trkpt_time, "/gpx/trk/trkpt/time" },
+	{ tt_trk_trkpt_name, "/gpx/trk/trkpt/name" },
+	{ tt_trk_trkpt_cmt, "/gpx/trk/trkpt/cmt" },
+	{ tt_trk_trkpt_desc, "/gpx/trk/trkpt/desc" },
+	{ tt_trk_trkpt_url, "/gpx/trk/trkpt/url" },
+	{ tt_trk_trkpt_urlname, "/gpx/trk/trkpt/urlname" },
+	{ tt_trk_trkpt_sym, "/gpx/trk/trkpt/sym" },
 	{0}
 };
+
 
 static tag_type
 get_tag(const char *t)
 {
 	tag_mapping *tm;
-
-        for (tm = tag_map; tm->tag_type != 0; tm++) {
+	for (tm = tag_path_map; tm->tag_type != 0; tm++) {
 		if (0 == strcmp(tm->tag_name, t)) {
 			return tm->tag_type;
 		}
@@ -318,116 +327,37 @@ gpx_start(void *data, const char *el, const char **attr)
 	ep = e + strlen(e);
 	*ep++ = '/';
 	strcpy(ep, el);
-	switch (get_tag(el)) {
-	case tt_ele:
-		in_ele++;
-		break;
-	case tt_name:
-		in_name ++;
-		break;
+
+	
+	/*
+	 * FIXME: Find out why a cdatastr[0] doesn't adequately reset the 	
+	 * cdata handler.
+	 */
+	memset(cdatastr, 0, MY_CBUF);
+
+	switch (get_tag(current_tag.mem)) {
 	case tt_gpx:
 		tag_gpx(attr);
 		break;
-	case tt_email:
-		in_email++;
-		break;
-	case tt_author:
-		in_author++;
-		break;
 	case tt_wpt:
-		in_wpt++;
 		tag_wpt(attr);
-		break;
-	case tt_desc:
-		in_desc++;
-		break;
-	case tt_cmt:
-		in_cmt++;
 		break;
 	case tt_rte:
 		rte_head = route_head_alloc();
 		route_add_head(rte_head);
-		in_rte++;
 		break;
-	case tt_rtept:
-		in_rtept++;
+	case tt_rte_rtept:
 		tag_wpt(attr);
 		break; 
 	case tt_trk:
 		trk_head = route_head_alloc();
 		track_add_head(trk_head);
-		in_trk++;
 		break;
-	case tt_trkpt:
-		in_trkpt++;
+	case tt_trk_trkpt:
 		tag_wpt(attr);
 		break;
-	case tt_number:
-		in_number++;
-		break;
-	case tt_time:
-		in_time++;
-		break;
-	case tt_url:
-		in_url++;
-		break;
-	case tt_urlname:
-		in_urlname++;
-		break;
-	case tt_sym:
-		in_icon++;
-		break;
-	case tt_cache_type:
-		in_gs_type++;
-		in_something_else++;
-		start_something_else( el, attr );
-		break;
-	case tt_cache_name:
-		in_gs_name++;
-		in_something_else++;
-		start_something_else( el, attr );
-		break;
-	case tt_cache_container:
-		in_gs_container++;
-		in_something_else++;
-		start_something_else( el, attr );
-		break;
-	case tt_cache_difficulty:
-		in_gs_diff++;
-		in_something_else++;
-		start_something_else( el, attr );
-		break;
-	case tt_cache_terrain:
-		in_gs_terr++;
-		in_something_else++;
-		start_something_else( el, attr );
-		break;
-	case tt_cache_log:
-		in_gs_log++;
-		in_something_else++;
-		start_something_else( el, attr );
-		break;
-	case tt_cache_log_wpt:
-		in_gs_log_wpt++;
-                if (opt_logpoint)
-		    tag_log_wpt(attr);
-		in_something_else++;
-		start_something_else( el, attr );
-		break;
-	case tt_cache_exported:
-		in_gs_exported++;
-		/* no start_something_else because the old date is eaten */
-		break;
-	case tt_cache_travelbugs:
-		in_gs_tbugs++;
-		in_something_else++;
-		start_something_else( el, attr );
-		break;
 	default:
-		if (in_wpt) {
-			in_something_else++;
-			start_something_else( el, attr );
-		}
+		start_something_else(el, attr);
 		break;
 	}
 }
@@ -520,7 +450,6 @@ xml_parse_time( char *cdatastr )
 				}
 			}
 		}
-			
 	}
 	
 	pointstr = strchr( timestr, '.' );
@@ -556,209 +485,120 @@ gpx_end(void *data, const char *el)
 	if (strcmp(s + 1, el)) {
 		fprintf(stderr, "Mismatched tag %s\n", el);
 	}
-	*s = 0;
 
-
-	if (in_cdata) {
-		if (in_name && in_wpt && !in_gs_tbugs) {
-			wpt_tmp->shortname = xstrdup(cdatastr);
-		}
-		if (in_name && in_trk && !in_trkpt) {
-			trk_head->rte_name = xstrdup(cdatastr);
-		}
-		if (in_desc && in_trk && !in_trkpt) {
-			trk_head->rte_desc = xstrdup(cdatastr);
-		}
-		if (in_number && in_trk) {
-			trk_head->rte_num = atoi(cdatastr);
-		}
-		if (in_name && in_rte && ! in_rtept) {
-			rte_head->rte_name = xstrdup(cdatastr);
-		}
-		if (in_desc && in_rte && ! in_rtept ) {
-			rte_head->rte_desc = xstrdup(cdatastr);
-		}
-		if (in_number && in_rte) {
-			rte_head->rte_num = atoi(cdatastr);
-		}
-		if (in_name && in_rtept) {
-			wpt_tmp->shortname = xstrdup(cdatastr);
-		}
-		if (in_desc && in_rtept) {
-			wpt_tmp->notes = xstrdup(cdatastr);
-		}
-		if (in_cmt && in_rtept) {
-			wpt_tmp->description = xstrdup(cdatastr);
-		}
-		if (in_email) {
-			if ( gpx_email ) xfree(gpx_email);
-			gpx_email = xstrdup(cdatastr);
-		}
-		if (in_author) {
-			if ( gpx_author ) xfree(gpx_author);
-			gpx_author = xstrdup(cdatastr);
-		}
-		if (gsshortnames) {
-			if (in_gs_name && in_wpt && !in_gs_tbugs) {
-				wpt_tmp->notes = xstrdup(cdatastr);
-			}
-		} else {
-			if (in_desc && in_wpt) {
-				wpt_tmp->notes = xstrdup(cdatastr);
-			}
-		}
-		if ((in_cmt && in_wpt) || (in_cmt && in_rtept)) {
-			wpt_tmp->description = xstrdup(cdatastr);
-		}
-		if (in_url && in_wpt) {
-			wpt_tmp->url = xstrdup(cdatastr);
-		}
-		if (in_urlname && in_wpt) {
-			wpt_tmp->url_link_text = xstrdup(cdatastr);
-		}
-		if ((in_icon && in_wpt) || (in_icon && in_rtept)) {
-			wpt_tmp->icon_descr = xstrdup(cdatastr);
-			wpt_tmp->icon_descr_is_dynamic = 1;
-		}
-		if (in_ele) {
-			sscanf(cdatastr, "%lf", 
-				&wpt_tmp->altitude);
-		}
-		if (in_time) {
-			if ( in_wpt || in_rte || in_trkpt || in_rtept) {
-                        	wpt_tmp->creation_time = 
-					xml_parse_time( cdatastr );
-			}
-			else {
-				file_time = xml_parse_time( cdatastr );
-			}
-		}
-		if (in_wpt && in_gs_type && !in_gs_log) {
-			wpt_tmp->gc_data.type = gs_mktype(cdatastr);
-		}
-		if (in_wpt && in_gs_container) {
-			wpt_tmp->gc_data.container = gs_mkcont(cdatastr);
-		}
-		if (in_wpt && in_gs_diff) {
-			sscanf(cdatastr, "%f", &x);
-			wpt_tmp->gc_data.diff = x * 10;
-		}
-		if (in_wpt && in_gs_terr) {
-			sscanf(cdatastr, "%f", &x);
-			wpt_tmp->gc_data.terr = x * 10;
-		}
-		if (in_gs_exported && in_wpt ) {
-                        wpt_tmp->gc_data.exported = xml_parse_time( cdatastr );
-		}
-		in_cdata--;
-		memset(cdatastr, 0, MY_CBUF);
-	}
-	switch (get_tag(el)) {
-	case tt_wpt:
-		if ( !wpt_tmp->gc_data.exported ) {
-			wpt_tmp->gc_data.exported = file_time;
-		}
-		waypt_add(wpt_tmp);
-		in_wpt--;
-		logpoint_ct = 0;
-		break;
-	case tt_rte:
-		in_rte--;
-		break;
-	case tt_rtept:
-		route_add_wpt(rte_head, wpt_tmp);
-		in_rtept--;
-		break;
-	case tt_trk:
-		in_trk--;
-		break;
-	case tt_trkpt:
-		route_add_wpt(trk_head, wpt_tmp);
-		in_trkpt--;
-		break;
-	case tt_number:
-		in_number--;
-		break;
-	case tt_name:
-		in_name--;
-		break;
-	case tt_desc:
-		in_desc--;
+	switch (get_tag(current_tag.mem)) {
+	/*
+	 * First, the tags that are file-global.
+	 */
+	case tt_time:
+		file_time = xml_parse_time(cdatastr);
 		break;
 	case tt_email:
-		in_email--;
+		if (gpx_email) xfree(gpx_email);
+		gpx_email = xstrdup(cdatastr);
 		break;
 	case tt_author:
-		in_author--;
+		if (gpx_author) xfree(gpx_author);
+		gpx_author = xstrdup(cdatastr);
 		break;
-	case tt_cmt:
-		in_cmt--;
+	case tt_gpx:
+		/* Could invoke release code here */
 		break;
-	case tt_ele:
-		in_ele--;
+	/*
+	 * Waypoint-specific tags.
+	 */
+	case tt_wpt_url:
+		wpt_tmp->url = xstrdup(cdatastr);
 		break;
-	case tt_time:
-		in_time--;
+	case tt_wpt_urlname:
+		wpt_tmp->url_link_text = xstrdup(cdatastr);
 		break;
-	case tt_url:
-		in_url--;
-		break;
-	case tt_urlname:
-		in_urlname--;
-		break;
-	case tt_sym:
-		in_icon--;
-		break;
-	case tt_cache_type:
-		in_gs_type--;
-		in_something_else--;
-		end_something_else();
-		break;
-	case tt_cache_name:
-		in_gs_name--;
-		in_something_else--;
-		end_something_else();
+	case tt_wpt:
+		waypt_add(wpt_tmp);
+		logpoint_ct = 0;
 		break;
 	case tt_cache_container:
-		in_gs_container--;
-		in_something_else--;
-		end_something_else();
+		wpt_tmp->gc_data.container = gs_mkcont(cdatastr);
 		break;
 	case tt_cache_difficulty:
-		in_gs_diff--;
-		in_something_else--;
-		end_something_else();
+		sscanf(cdatastr, "%f", &x);
+		wpt_tmp->gc_data.diff = x * 10;
 		break;
 	case tt_cache_terrain:
-		in_gs_terr--;
-		in_something_else--;
-		end_something_else();
+		sscanf(cdatastr, "%f", &x);
+		wpt_tmp->gc_data.terr = x * 10;
 		break;
-	case tt_cache_log:
-		in_gs_log--;
-		in_something_else--;
-		end_something_else();
+	/*
+	 * Route-specific tags.
+ 	 */
+	case tt_rte_name:
+		rte_head->rte_name = xstrdup(cdatastr);
 		break;
-	case tt_cache_log_wpt:
-		in_gs_log_wpt--;
-		in_something_else--;
-		end_something_else();
+	case tt_rte:
 		break;
-	case tt_cache_exported:
-		in_gs_exported--;
-		/* no end_something_else because the old date is eaten */
+	case tt_rte_rtept:
+		route_add_wpt(rte_head, wpt_tmp);
 		break;
-	case tt_cache_travelbugs:
-		in_gs_tbugs--;
-		in_something_else--;
-		end_something_else();
+	case tt_rte_desc:
+		rte_head->rte_desc = xstrdup(cdatastr);
+		break;
+	case tt_rte_number:
+		rte_head->rte_num = atoi(cdatastr);
+		break;
+	/*
+	 * Track-specific tags.
+	 */
+	case tt_trk_name:
+		trk_head->rte_name = xstrdup(cdatastr);
+		break;
+	case tt_trk:
+		break;
+	case tt_trk_trkpt:
+		route_add_wpt(trk_head, wpt_tmp);
+		break;
+	case tt_trk_desc:
+		trk_head->rte_desc = xstrdup(cdatastr);
+		break;
+
+	/*
+	 * Items that are actually in multiple categories.
+	 */
+	case tt_wpt_ele:
+	case tt_rte_rtept_ele:
+	case tt_trk_trkpt_ele:
+		sscanf(cdatastr, "%lf", &wpt_tmp->altitude);
+		break;
+	case tt_wpt_name:
+	case tt_rte_rtept_name:
+	case tt_trk_trkpt_name:
+		wpt_tmp->shortname = xstrdup(cdatastr);
+		break;
+	case tt_wpt_sym:
+	case tt_rte_rtept_sym:
+	case tt_trk_trkpt_sym:
+		wpt_tmp->icon_descr = xstrdup(cdatastr);
+		wpt_tmp->icon_descr_is_dynamic = 1;
+		break;
+	case tt_wpt_time:
+	case tt_trk_trkpt_time:
+	case tt_rte_rtept_time:
+		wpt_tmp->creation_time = xml_parse_time( cdatastr );
+		break;
+	case tt_wpt_cmt:
+	case tt_rte_rtept_cmt:
+	case tt_trk_trkpt_cmt:
+		wpt_tmp->description = xstrdup(cdatastr);
+		break;
+	case tt_wpt_desc:
+	case tt_trk_trkpt_desc:
+	case tt_rte_rtept_desc:
+		wpt_tmp->notes = xstrdup(cdatastr);
 		break;
 	default:
-		if (in_wpt) {
-		in_something_else--;
 		end_something_else();
-		}
 	}
+
+	*s = 0;
 }
 
 #if NO_EXPAT
@@ -778,36 +618,12 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 	char **cdata;
 	xml_tag *tmp_tag;
 
-	/*
-	 * I'm exceedingly unamused that libexpat makes me keep all this
-	 * horrible state just I can concatenate buffers that it hands
-	 * me as a cdata that are fragmented becuae they span a read.  Grrr.
-	 */
-	if ((in_name && in_wpt) || (in_desc && in_wpt) || (in_ele) ||
-		        (in_email) || (in_author) ||	
-			(in_wpt && in_cmt) ||
-			(in_wpt && in_url) ||
-			(in_wpt && in_urlname) ||
-			(in_wpt && in_gs_type) || 
-			(in_wpt && in_gs_name) || 
-			(in_wpt && in_gs_container) || 
-			(in_wpt && in_gs_diff) || 
-			(in_wpt && in_gs_terr) || 
-			(in_wpt && in_icon) || 
-			(in_trk && in_name) || 
-			(in_trk && in_desc) || 
-			(in_trk && in_number) || 
-			(in_rte && in_cmt) || 
-			(in_rte && in_name) || 
-			(in_rte && in_desc) || 
-			(in_rte && in_icon) || 
-			(in_rte && in_number) || 
-			(in_time))  {
-		estr = cdatastr + strlen(cdatastr);
-		memcpy(estr, s, len);
-		in_cdata++;
-	}
-	if ( in_wpt && in_something_else && cur_tag && !in_gs_exported) {
+	estr = cdatastr + strlen(cdatastr);
+	memcpy(estr, s, len);
+
+	if (!cur_tag) 
+		return;
+
 		if ( cur_tag->child ) {
 			tmp_tag = cur_tag->child;
 			while ( tmp_tag->sibling ) {
@@ -830,7 +646,6 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 		memcpy( estr, s, len );
 		*(estr+len) = '\0';
 		*cdatalen += len;
-	}
 }
 
 void
