@@ -94,7 +94,7 @@ glogbook_waypt_pr(const waypoint *wpt)
 	if (wpt->altitude != unknown_alt) {
 		fprintf(ofd, "\t<Altitude>%f</Altitude>\n", wpt->altitude);
 	}
-	gpx_write_time(ofd, wpt->creation_time, "Time");
+	xml_write_time(ofd, wpt->creation_time, "Time");
 	fprintf(ofd, "\t</Position>\n");
 	fprintf(ofd, "</Trackpoint>\n");
 }
