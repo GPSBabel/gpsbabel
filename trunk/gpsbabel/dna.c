@@ -147,7 +147,7 @@ dna_waypt_pr(const waypoint *wpt)
 		description);
 		
 	if (description)
-		free (description);
+		xfree(description);
 
 }
 

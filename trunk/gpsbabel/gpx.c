@@ -107,7 +107,7 @@ char * gpx_entitize(const char * str)
 			strcpy(p, *(ep + 1));
 			strcpy(p + elen, xstr);
 
-			free(xstr);
+			xfree(xstr);
 
 			p += elen;
 		}  
@@ -412,6 +412,7 @@ gpx_end(void *data, const char *el)
 		}
 		if (in_icon && in_wpt) {
 			wpt_tmp->icon_descr = xstrdup(cdatastr);
+			wpt_tmp->icon_descr_is_dynamic = 1;
 		}
 		if (in_ele) {
 			sscanf(cdatastr, "%lf", 
@@ -546,7 +547,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 		*cdata = xcalloc( *cdatalen + len + 1, 1);
 		if ( estr ) {
 			memcpy( *cdata, estr, *cdatalen);
-			free( estr );
+			xfree( estr );
 		}
 		estr = *cdata + *cdatalen;
 		memcpy( estr, s, len );
@@ -578,6 +579,9 @@ gpx_rd_init(const char *fname, const char *args)
 static void
 gpx_rd_deinit(void)
 {
+	if ( cdatastr ) {
+		xfree(cdatastr);
+	}
 	fclose(fd);
 }
 
@@ -668,7 +672,7 @@ fprint_xml_chain( xml_tag *tag )
 			if ( tag->cdata ) {
 				tmp_ent = gpx_entitize( tag->cdata );
 				fprintf( ofd, "%s", tmp_ent );
-				free(tmp_ent);
+				xfree(tmp_ent);
 			}
 			if ( tag->child ) {
 				fprint_xml_chain(tag->child);
@@ -677,12 +681,31 @@ fprint_xml_chain( xml_tag *tag )
 			if ( tag->parentcdata ) {
 				tmp_ent = gpx_entitize(tag->parentcdata);
 				fprintf(ofd, "%s", tmp_ent );
-				free(tmp_ent);
+				xfree(tmp_ent);
 			}
 		}
 		tag = tag->sibling;	
 	}
 }	
+
+void free_gpx_extras( xml_tag *tag )
+{
+	xml_tag *next = NULL;
+	while ( tag ) {
+		if (tag->cdata) {
+			xfree(tag->cdata);
+		}
+		if (tag->child) {
+			free_gpx_extras(tag->child);
+		}
+		if (tag->parentcdata) {
+			xfree(tag->parentcdata);
+		}
+		next = tag->sibling;
+		xfree(tag);
+		tag = next;
+	}
+}
 
 static void
 gpx_waypt_pr(const waypoint *waypointp)
@@ -698,7 +721,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 	if (oname) {
 		tmp_ent = gpx_entitize(oname);
 		fprintf(ofd, "<name>%s</name>\n", tmp_ent);
-		free(tmp_ent);
+		xfree(tmp_ent);
 	}
 	if (waypointp->description) {
 		fprintf(ofd, "<cmt>");
@@ -726,17 +749,17 @@ gpx_waypt_pr(const waypoint *waypointp)
 	if (waypointp->url) {
 		tmp_ent = gpx_entitize(waypointp->url);
 		fprintf(ofd, "<url>%s</url>\n", tmp_ent);
-		free(tmp_ent);
+		xfree(tmp_ent);
 	}
 	if (waypointp->url_link_text) {
 		tmp_ent = gpx_entitize(waypointp->url_link_text);
 		fprintf(ofd, "<urlname>%s</urlname>\n", tmp_ent );
-		free(tmp_ent);
+		xfree(tmp_ent);
 	}
 	if (waypointp->icon_descr) {
 		tmp_ent = gpx_entitize(waypointp->icon_descr);
 		fprintf(ofd, "<sym>%s</sym>\n", tmp_ent );
-		free(tmp_ent);
+		xfree(tmp_ent);
 	}
 
 	fprint_xml_chain( waypointp->gpx_extras);

@@ -251,11 +251,11 @@ find_vec(char *const vecname, char **opts)
 			*opts = NULL;
 		}
 
-		free(v);
+		xfree(v);
 		return vec->vec;
 		
 	}
-	free(v);
+	xfree(v);
 	return NULL;
 }
 
@@ -264,7 +264,11 @@ find_vec(char *const vecname, char **opts)
  * Modelled approximately after getenv.
  */
 char *
+#ifdef DEBUG_MEM
+GET_OPTION(const char *iarglist, const char *argname, DEBUG_PARAMS)
+#else
 get_option(const char *iarglist, const char *argname)
+#endif
 {
 	size_t arglen = strlen(argname);
 	char *arglist;
@@ -298,6 +302,10 @@ get_option(const char *iarglist, const char *argname)
 	 * The caller mustn't free or otherwise get froggy with 
 	 * this data.
 	 */
+	if ( rval ) {
+		rval = xxstrdup(rval,file, line);
+	}
+	xfree(arglist);
 	return rval;
 }
 

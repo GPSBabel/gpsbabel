@@ -109,6 +109,7 @@ data_read(void)
 			case 3:
 				rtrim(s);
 				wpt_tmp->icon_descr = xstrdup(s);
+				wpt_tmp->icon_descr_is_dynamic = 1;
 				break;
 			default:
 			    fprintf (stderr, "%s: Warning: unmapped data fields on line %d.\n", 
@@ -142,6 +143,7 @@ gpsdrive_waypt_pr(const waypoint *wpt)
 	double lon,lat;
 	char * shortname = NULL;
 	char *isrc, *owpt;
+	char *tmpstr;
 
 	lon = wpt->position.longitude.degrees;
 	lat = wpt->position.latitude.degrees;
@@ -159,8 +161,11 @@ gpsdrive_waypt_pr(const waypoint *wpt)
 		if (( shortname == NULL ) && wpt->notes )
 		    shortname = csv_stringclean(wpt->notes, ",\"");
 
-		if ( shortname )
+		if ( shortname ) {
+			tmpstr = shortname;
 			shortname = mkshort(mkshort_wr_handle, shortname);
+			xfree(tmpstr);
+		}
 	}
 
 	fprintf(file_out, "%s %08.5f %08.5f",
@@ -170,12 +175,12 @@ gpsdrive_waypt_pr(const waypoint *wpt)
 	if (wpt->icon_descr) {
 		char *s = csv_stringclean(wpt->icon_descr, " ");
 		fprintf(file_out, " %s", s);
-		free(s);
+		xfree(s);
 	}
 	fprintf(file_out, "\n");
 		
 	if (shortname)
-		free (shortname);
+		xfree(shortname);
 
 }
 

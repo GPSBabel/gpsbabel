@@ -172,6 +172,7 @@ gpspilot_writewpt(const waypoint *wpt)
 	if (pdb_AppendRecord(opdb, opdb_rec)) {
 		fatal(MYNAME ": libpdb couldn't append record\n");
 	}
+	xfree(rec);
 }
 
 static void

@@ -70,7 +70,6 @@ data_read(void)
 	char latdir, londir;
 	long alt; 
 	char alttype;
-	char icon[3] = {0};
 	char date[10];
 	char time[9];
 	waypoint *wpt_tmp;
@@ -91,7 +90,6 @@ data_read(void)
 		if (londir == 'W') lon = -lon;
 		wpt_tmp->position.longitude.degrees = lon/100.0;
 		wpt_tmp->position.latitude.degrees = lat/100.0;
-		wpt_tmp->icon_descr = xstrdup(icon);
 		waypt_add(wpt_tmp);
 		}
 	}

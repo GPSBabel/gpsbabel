@@ -77,6 +77,15 @@ main(int argc, char *argv[])
 
 	global_opts.objective = wptdata;
 
+#ifdef DEBUG_MEM
+	debug_mem_open();
+	debug_mem_output( "command line: " );
+	for ( argn = 1; argn < argc; argn++ ) {
+		debug_mem_output( "%s ", argv[argn] );
+	}
+	debug_mem_output( "\n" );
+#endif
+	
 	waypt_init();
 	route_init();
 
@@ -147,13 +156,13 @@ main(int argc, char *argv[])
  			case 'x':
 				optarg = argv[argn][2]
 					? argv[argn]+2 : argv[++argn];
-
  				fvecs = find_filter_vec(optarg, &fvec_opts);
 
  				if (fvecs) {
  					fvecs->f_init(fvec_opts);
  					fvecs->f_process();
  					fvecs->f_deinit();
+					free_filter_vec(fvecs);
  				} 
  				break;
 			case 'D':
@@ -197,5 +206,12 @@ main(int argc, char *argv[])
 	if (ovecs == NULL)
 		waypt_disp_all(waypt_disp);
 
+	waypt_flush_all();
+	route_flush_all();
+
+#ifdef DEBUG_MEM
+	debug_mem_close();
+#endif
+	
 	exit(0);
 }

@@ -154,6 +154,7 @@ typedef struct {
 	char *notes;
 	char *url;
 	char *url_link_text;
+	int icon_descr_is_dynamic;
 	const char *icon_descr;
 	time_t creation_time;
 	geocache_data gc_data;
@@ -172,7 +173,14 @@ typedef void (*ff_init) (char const *, char const *);
 typedef void (*ff_deinit) (void);
 typedef void (*ff_read) (void);
 typedef void (*ff_write) (void);
+
+#ifndef DEBUG_MEM
 char * get_option(const char *iarglist, const char *argname);
+#else
+#define DEBUG_PARAMS const char *file, const int line
+char *GET_OPTION(const char *iarglist, const char *argname, DEBUG_PARAMS);
+#define get_option(iarglist, argname) GET_OPTION(iarglist, argname, __FILE__, __LINE__)
+#endif
 
 typedef void (*filter_init) (char const *);
 typedef void (*filter_process) (void);
@@ -185,21 +193,34 @@ typedef void (*route_hdr)(const route_head *);
 typedef void (*route_trl)(const route_head *);
 void waypt_add (waypoint *);
 void waypt_del (waypoint *);
+void waypt_free (waypoint *);
 void waypt_disp_all(waypt_cb);
-void route_disp_all(route_hdr, route_trl, waypt_cb);
+void waypt_flush(queue *);
+void waypt_flush_all();
 unsigned int waypt_count(void);
 
 route_head *route_head_alloc(void);
 void route_add (waypoint *);
 void route_add_wpt(route_head *rte, waypoint *wpt);
 void route_add_head(route_head *rte);
+void route_disp_all(route_hdr, route_trl, waypt_cb);
+void route_free (route_head *);
+void route_flush( queue *);
+void route_flush_all();
 
 /*
  * All shortname functions take a shortname handle as the first arg.
  * This is an opaque pointer.  Callers must not fondle the contents of it.
  */
+#ifndef DEBUG_MEM 
 char *mkshort (void *, const char *);
 void *mkshort_new_handle(void);
+#else
+char *MKSHORT(void *, const char *, DEBUG_PARAMS);
+void *MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
+#define mkshort( a, b) MKSHORT(a,b,__FILE__, __LINE__)
+#define mkshort_new_handle() MKSHORT_NEW_HANDLE(__FILE__,__LINE__)
+#endif
 void *mkshort_del_handle(void *h);
 void setshort_length(void *, int n);
 void setshort_badchars(void *, const char *);
@@ -245,14 +266,48 @@ void disp_formats(void);
 void printposn(const coord *c, int is_lat);
 
 filter_vecs_t * find_filter_vec(char *, char **);
+void free_filter_vec(filter_vecs_t *);
 void disp_filters(void);
 void disp_filter_vecs(void);
 
+#ifndef DEBUG_MEM
 void *xcalloc(size_t nmemb, size_t size);
 void *xmalloc(size_t size);
 void *xrealloc(void *p, size_t s);
+void xfree(void *mem);
 char *xstrdup(const char *s);
 char *xstrappend(char *src, const char *new);
+#define xxcalloc(nmemb, size, file, line) xcalloc(nmemb, size)
+#define xxmalloc(size, file, line) xmalloc(size)
+#define xxrealloc(p, s, file, line) xrealloc(p,s)
+#define xxfree(mem, file, line) xfree(mem)
+#define xxstrdup(s, file, line) xstrdup(s)
+#define xxstrappend(src, new, file, line) xstrappend(src, new)
+#else /* DEBUG_MEM */
+void *XCALLOC(size_t nmemb, size_t size, DEBUG_PARAMS );
+void *XMALLOC(size_t size, DEBUG_PARAMS );
+void *XREALLOC(void *p, size_t s, DEBUG_PARAMS );
+void XFREE(void *mem, DEBUG_PARAMS );
+char *XSTRDUP(const char *s, DEBUG_PARAMS );
+char *XSTRAPPEND(char *src, const char *new, DEBUG_PARAMS );
+void debug_mem_open();
+void debug_mem_output( char *format, ... );
+void debug_mem_close();
+#define xcalloc(nmemb, size) XCALLOC(nmemb, size, __FILE__, __LINE__)
+#define xmalloc(size) XMALLOC(size, __FILE__, __LINE__)
+#define xrealloc(p, s) XREALLOC(p,s,__FILE__,__LINE__)
+#define xfree(mem) XFREE(mem, __FILE__, __LINE__)
+#define xstrdup(s) XSTRDUP(s, __FILE__, __LINE__)
+#define xstrappend(src,new) XSTRAPPEND(src, new, __FILE__, __LINE__)
+#define xxcalloc XCALLOC
+#define xxmalloc XMALLOC
+#define xxrealloc XREALLOC
+#define xxfree XFREE
+#define xxstrdup XSTRDUP
+#define xxstrappend XSTRAPPEND
+#endif /* DEBUG_MEM */
+
+
 int case_ignore_strcmp(const char *s1, const char *s2);
 
 

@@ -33,7 +33,7 @@
 
 #define MYNAME	"MXF"
 
-static void *mkshort_handle;
+static void *mkshort_handle= NULL;
 
 static void
 mxf_set_style()
@@ -106,6 +106,9 @@ mxf_deinit(void)
         fclose(xcsv_file.xcsvfp);
         
     xcsv_destroy_style();
+    if ( mkshort_handle)
+	    mkshort_del_handle(mkshort_handle);
+    mkshort_handle = NULL;
 }
 
 ff_vecs_t mxf_vecs = {

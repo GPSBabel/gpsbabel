@@ -138,6 +138,9 @@ data_read(void)
 			wpt_tmp->shortname = mkshort(mkshort_handle, wpt_tmp->description);
 			waypt_add(wpt_tmp);
 		}
+		else {
+			waypt_free(wpt_tmp);
+		}
 
 	} else {
 		/* empty line */
@@ -172,7 +175,7 @@ csv_waypt_pr(const waypoint *wpt)
 		description);
 		
 	if (description)
-		free (description);
+		xfree(description);
 
 }
 

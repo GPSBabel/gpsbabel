@@ -104,18 +104,20 @@ position_process(void)
 		/* convert radians to integer feet */
 		dist = (int)((((dist * 180.0 * 60.0) / M_PI) / 1.1516) * 5280.0);
 
-		if (dist <= pos_dist) 
+		if (dist <= pos_dist) { 
 			waypt_del(comp[i]);
+			waypt_free(comp[i]);
+		}
 	}
 
 	if (comp)
-		free (comp);
+		xfree(comp);
 }
 
 void
 position_init(const char *args) {
 	char *fm;
-	const char *p;
+	char *p;
 
 	p = get_option(args, "distance");
 
@@ -126,6 +128,7 @@ position_init(const char *args) {
 			 /* distance is meters */
 			pos_dist *= 3.2802;
 		}
+		xfree(p);
 	}
 }
 
@@ -136,5 +139,6 @@ position_deinit(void) {
 filter_vecs_t position_vecs = {
 	position_init,
 	position_process,
-	position_deinit
+	position_deinit,
+	NULL
 };

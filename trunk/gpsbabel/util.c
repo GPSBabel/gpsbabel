@@ -24,11 +24,51 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#ifdef DEBUG_MEM
+#define DEBUG_FILENAME "/tmp/gpsbabel.debug"
+
+static FILE *debug_mem_file = NULL;
+void 
+debug_mem_open() 
+{
+	debug_mem_file = fopen( DEBUG_FILENAME, "a" );
+}
+
+void
+debug_mem_output(char *format, ...) 
+{
+	va_list args;
+	va_start( args, format );
+	if ( debug_mem_file ) {
+		vfprintf( debug_mem_file, format, args );
+		fflush( debug_mem_file );
+	}
+	va_end( format );
+}
+
+void
+debug_mem_close()
+{
+	if ( debug_mem_file ) {
+		fclose(debug_mem_file);
+	}
+	debug_mem_file = NULL;
+}
+#endif
+
 void *
+#ifdef DEBUG_MEM
+XMALLOC(size_t size, DEBUG_PARAMS)
+#else
 xmalloc(size_t size)
+#endif
 {
 	void *obj = malloc(size);
 
+#ifdef DEBUG_MEM
+	debug_mem_output( "malloc, %x, %d, %s, %d\n", 
+			obj, size, file, line );
+#endif
 	if (!obj) {
 		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n", size);
 	}
@@ -37,9 +77,17 @@ xmalloc(size_t size)
 }
 
 void *
+#ifdef DEBUG_MEM
+XCALLOC(size_t nmemb, size_t size, DEBUG_PARAMS)
+#else
 xcalloc(size_t nmemb, size_t size)
+#endif
 {
 	void *obj = calloc(nmemb, size);
+#ifdef DEBUG_MEM
+	debug_mem_output( "calloc, %x, %d, %d, %s, %d\n", 
+			obj, nmemb, size, file, line );
+#endif
 
 	if (!obj) {
 		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n", size);
@@ -48,10 +96,32 @@ xcalloc(size_t nmemb, size_t size)
 	return obj;
 }
 
+void
+#ifdef DEBUG_MEM
+XFREE( void *mem, DEBUG_PARAMS )
+#else
+xfree( void *mem )
+#endif
+{
+	free(mem);
+#ifdef DEBUG_MEM
+	debug_mem_output( "free, %x, %s, %d\n", 
+			mem, file, line );
+#endif
+}
+
 char *
+#ifdef DEBUG_MEM
+XSTRDUP(const char *s, DEBUG_PARAMS )
+#else
 xstrdup(const char *s)
+#endif
 {
 	char *o = strdup(s);
+#ifdef DEBUG_MEM
+	debug_mem_output( "strdup, %x, %x, %s, %d\n", 
+			o, s, file, line );
+#endif
 
 	if (!o) {
 		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n", strlen(s));
@@ -61,9 +131,17 @@ xstrdup(const char *s)
 }
 
 void *
+#ifdef DEBUG_MEM
+XREALLOC(void *p, size_t s, DEBUG_PARAMS )
+#else
 xrealloc(void *p, size_t s)
+#endif
 {
 	char *o = realloc(p,s);
+#ifdef DEBUG_MEM
+	debug_mem_output( "realloc, %x, %x, %x, %s, %d\n", 
+			o, p, s, file, line );
+#endif
 
 	if (!o) {
 		fatal("gpsbabel: Unable to realloc %d bytes of memory.\n", s);
@@ -76,16 +154,20 @@ xrealloc(void *p, size_t s)
 * For an allocated string, realloc it and append 's'
 */
 char *
+#ifdef DEBUG_MEM
+XSTRAPPEND(char *src, const char *new, DEBUG_PARAMS)
+#else
 xstrappend(char *src, const char *new)
+#endif
 {
 	size_t newsz;
 
 	if (!src) {
-		return(xstrdup(new));
+		return xxstrdup(new, file, line);
 	}
 
 	newsz = strlen(src) + strlen(new) + 1;
-	src = xrealloc(src, newsz);
+	src = xxrealloc(src, newsz, file, line);
 	strcat(src, new);
 
 	return src;

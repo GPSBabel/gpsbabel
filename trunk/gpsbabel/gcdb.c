@@ -53,6 +53,8 @@ static const char *out_fname;
 struct pdb *opdb;
 struct pdb_record *opdb_rec;
 
+static char *tbuf = NULL;
+static char *tbufp = NULL;
 
 static void
 rd_init(const char *fname, const char *args)
@@ -83,6 +85,8 @@ static void
 wr_deinit(void)
 {
 	fclose(file_out);
+	if ( tbuf ) 
+		xfree(tbuf);
 }
 
 static void
@@ -188,14 +192,18 @@ data_read(void)
 	free_pdb(pdb);
 }
 
+
 static int 
 gcdb_add_to_rec(struct dbrec *rec, char *fldname, gcdb_rectype rectype, void *data)
 {
 	int length;
-	static char *tbuf;
-	static char *tbufp;
 	static int rec_cnt;
 
+	if (!tbuf) {
+		tbuf = xcalloc(MAXRECSZ, 1);
+		tbufp = tbuf;
+	}
+	
 	if (fldname == NULL) {
 		length = tbufp - tbuf;
 		be_write16(&rec->nflds, rec_cnt);
@@ -203,11 +211,6 @@ gcdb_add_to_rec(struct dbrec *rec, char *fldname, gcdb_rectype rectype, void *da
 		tbufp = tbuf;
 		length += 4 + sizeof(struct dbfld) * rec_cnt;
 		return length;
-	}
-
-	if (!tbuf) {
-		tbuf = xcalloc(MAXRECSZ, 1);
-		tbufp = tbuf;
 	}
 
 	be_write16(&rec->dbfld[rec_cnt].fldtype,rectype); 
@@ -307,7 +310,7 @@ gcdb_write_wpt(const waypoint *wpt)
 		fatal(MYNAME ": libpdb couldn't append record\n");
 	}
 
-	free(rec);
+	xfree(rec);
 }
 
 static void

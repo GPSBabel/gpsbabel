@@ -770,6 +770,9 @@ mag_deinit(void)
 	if(magfile_in)
 		fclose(magfile_in);
 	magfile_in = NULL;
+	if(mkshort_handle)
+		mkshort_del_handle(mkshort_handle);
+	mkshort_handle = NULL;
 }
 
 
@@ -858,7 +861,7 @@ mag_rteparse(char *rtemsg)
 	 * alloc and chain those as we go.
 	 */
 	if (frag == 1) {
-		mag_rte_head = xmalloc(sizeof (*mag_rte_head));
+		mag_rte_head = xcalloc(sizeof (*mag_rte_head),1);
 		QUEUE_INIT(&mag_rte_head->Q);
 		mag_rte_head->nelems = frags;
 	}
@@ -873,7 +876,7 @@ mag_rteparse(char *rtemsg)
 		if (next_stop[0] == 0) {
 			break;
 		}
-		rte_elem = xmalloc(sizeof (*rte_elem));
+		rte_elem = xcalloc(sizeof (*rte_elem),1);
 		QUEUE_INIT(&rte_elem->Q);
 		rte_elem->wpt_name = xstrdup(next_stop);
 		rte_elem->wpt_icon = xstrdup(abuf);
@@ -910,7 +913,7 @@ mag_rteparse(char *rtemsg)
 
 			route_add_wpt(rte_head, waypt);
 			dequeue(&re->Q);
-			free(re);
+			xfree(re);
 		}
 	}
 	return 0;
@@ -1122,8 +1125,8 @@ mag_waypt_pr(const waypoint *waypointp)
 		odesc,
 		icon_token);
 	mag_writemsg(obuf);
-	free(owpt);
-	free(odesc);
+	xfree(owpt);
+	xfree(odesc);
 
 	if (!is_file) {
 		if (mag_error) {

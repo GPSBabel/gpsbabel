@@ -118,3 +118,58 @@ find_waypt_by_name(const char *name)
 
 	return NULL;
 }
+
+void 
+waypt_free( waypoint *wpt )
+{
+	if (wpt->shortname) {
+		xfree(wpt->shortname);
+	}
+	if (wpt->description) {
+		xfree(wpt->description);
+	}
+	if (wpt->notes) {
+		xfree(wpt->notes);
+	}
+	if (wpt->url) {
+		xfree(wpt->url);
+	}
+	if (wpt->url_link_text) {
+		xfree(wpt->url_link_text);
+	}
+	if (wpt->icon_descr && wpt->icon_descr_is_dynamic) {
+		xfree((char *)(void *)wpt->icon_descr);
+	}
+	if (wpt->gpx_extras) {
+		free_gpx_extras(wpt->gpx_extras);
+	}
+	xfree(wpt);	
+}
+
+void 
+waypt_flush( queue *head )
+{
+	queue *elem, *tmp;
+	waypoint *last = NULL;
+			
+	QUEUE_FOR_EACH(head, elem, tmp) {
+		if ( last ) {
+			waypt_free(last);
+		}
+		last = (waypoint *)elem;
+        }
+	
+	if ( last ) {
+		waypt_free(last);
+	}
+	
+	QUEUE_INIT(head);
+}
+void
+waypt_flush_all()
+{
+	if ( mkshort_handle ) {
+		mkshort_del_handle( mkshort_handle );
+	}
+	waypt_flush(&waypt_head);
+}
