@@ -31,8 +31,9 @@
 extern queue waypt_head;
 
 static double pos_dist;
-static char *distopt;
-static char *arcfileopt;
+static char *distopt = NULL;
+static char *arcfileopt = NULL;
+static char *exclopt = NULL;
 
 typedef struct {
 	double distance;
@@ -42,6 +43,7 @@ static
 arglist_t arcdist_args[] = {
 	{"file", &arcfileopt,  "File containing vertices of arc"},
 	{"distance", &distopt, "Maximum distance from arc"},
+	{"exclude", &exclopt, "Exclude points close to the arc"},
 	{0, 0, 0}
 };
 
@@ -166,6 +168,7 @@ arcdist_process(void)
 	queue temp_head;
 	extra_data *ed;
         double lat1, lon1, lat2, lon2;
+	int fileline = 0;
 
 	FILE *arcfile = fopen( arcfileopt, "r" );
 	if ( arcfile == NULL ) {
@@ -177,7 +180,6 @@ arcdist_process(void)
 	    char line[200];
 	    char *pound = NULL;
 	    int argsfound = 0;
-	    int fileline = 0;
 	    
 	    fgets( line, sizeof(line), arcfile );
 	   
@@ -190,7 +192,7 @@ arcdist_process(void)
 	    argsfound = sscanf( line, "%lf %lf", &lat2, &lon2 );
 	   
 	    if ( argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
-                fprintf( stderr, "%s: Warning: Arc file contains unusable vertex on line %d.", MYNAME, fileline );
+                fprintf( stderr, "%s: Warning: Arc file contains unusable vertex on line %d.\n", MYNAME, fileline );
 	    } 
 	    else if ( lat1 != BADVAL && lon1 != BADVAL &&
 	         lat2 != BADVAL && lon2 != BADVAL ) {
@@ -229,7 +231,7 @@ arcdist_process(void)
 		ed = wp->extra_data;
 		wp->extra_data = NULL;
 	        if ( ed ) {
-		    if (ed->distance >= pos_dist) {
+		    if ((ed->distance >= pos_dist) == (exclopt == NULL)) {
 			waypt_del(wp);
 			waypt_free(wp);
 			continue;
