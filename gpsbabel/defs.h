@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include <stddef.h>
 #include "queue.h"
 
 
@@ -46,6 +47,8 @@
  * Common definitions.   There should be no protocol or file-specific
  * data in this file.
  */
+#define BASE_STRUCT(memberp, struct_type, member_name) \
+   ((struct_type *)((char *)(memberp) - offsetof(struct_type, member_name)))
 
 
 /*
@@ -121,7 +124,8 @@ typedef struct xml_tag {
  * way to the target.
  */
 typedef struct {
-	queue Q;
+	queue Q;			/* Master waypoint q.  Not for use
+					   by modules. */
 
 	double latitude;		/* Degrees */
 	double longitude; 		/* Degrees */
