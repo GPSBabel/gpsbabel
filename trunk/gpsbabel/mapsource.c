@@ -73,6 +73,15 @@ static icon_mapping_t icon_table[] = {
 	{ -1, NULL },
 };
 
+char *snlen;
+
+static
+arglist_t mps_args[] = {
+	{"snlen", &snlen, "Length of generated shortnames" },
+	{0, 0, 0}
+};
+
+
 const char *
 mps_find_desc_from_icon_number(const int icon)
 {
@@ -264,7 +273,13 @@ mps_waypt_pr(const waypoint *wpt)
 void
 mps_write(void)
 {
-	int short_length = 10;
+	int short_length;
+
+	if (snlen)
+		short_length = atoi(snlen);
+	else
+		short_length = 10;
+
 	mkshort_handle = mkshort_new_handle();
 
 	setshort_length(mkshort_handle, short_length);
@@ -284,4 +299,5 @@ ff_vecs_t mps_vecs = {
 	mps_wr_deinit,
 	mps_read,
 	mps_write,
+	mps_args
 };
