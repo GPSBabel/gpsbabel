@@ -174,6 +174,7 @@ static icon_mapping_t icon_table[] = {
 	{    62,   176, "Truck Stop" },
 	{   103,  8243, "Tunnel" },
 	{   114, 16394, "Ultralight Area" },
+	{   139,  8282, "Water Hydrant" },	/* new in MapSource V5 */
 	{    18,    18, "Waypoint" },
 	{    17,    17, "White Buoy" },
 	{    35,    36, "White Dot" },

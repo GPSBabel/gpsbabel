@@ -54,6 +54,7 @@ extern ff_vecs_t quovadis_vecs;
 extern ff_vecs_t gpilots_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t navicache_vecs;
+extern ff_vecs_t psit_vecs;             /* MRCB */
 
 static
 vecs_t vec_list[] = {
@@ -200,6 +201,12 @@ vecs_t vec_list[] = {
 		&navicache_vecs,
 		"navicache",
 		"Navicache.com XML",
+		NULL
+	},
+	{	/* MRCB */
+		&psit_vecs,
+		"psitrex",
+		"KuDaTa PsiTrex text",
 		NULL
 	},
 	{

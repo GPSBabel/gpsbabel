@@ -145,24 +145,27 @@ THE FORMATS
 
     MAPSOURCE
 
-        Garmin Mapsource format appears compatible with the various
-        members of that product family.  Icon mapping is oriented toward
-        versions above 4.07.  Altitude is supported, but proximity, and 
-	depth are not.   Naming files *.mps will allow file->open in 
+	Garmin Mapsource format appears compatible with the various
+	members of that product family.  Icon mapping is attempted between
+	different MapSource versions.  Altitude is supported, but proximity 
+	and depth are not.   Naming files *.mps will allow file->open in 
 	Mapsource to find the files more easily.   Versions 3, 4 and 5 
 	of the Mapsource data format are handled automatically on input 
 	and by default the output is version 3 for maximum compatibility.  
-	Waypoints and tracklogs are handled, but routes are "work in 
-	progress" - maps are ignored.
+	Waypoints, routes and tracklogs are all handled, but maps sets are 
+	ignored.
 
-        Information on the Garmin Mapsource format was provided by Ian
-        Cowley and Mark Bradley.  The code was implemented by Robert Lipe
+	Information on the Garmin Mapsource format was provided by Ian
+	Cowley and Mark Bradley.  The code was implemented by Robert Lipe
 	and Mark Bradley.
 
 	Additional options:
-	  snlen -        set the length of generated shortnames
-	  mpsverout -    set the data format version of the output file
+	  snlen -		set the length of generated shortnames
+	  mpsverout -	set the data format version of the output file
 			(3,4 or 5)
+	  mpsmergeout -	if the output file already exists, then the output
+					is merged with it. This allows MapSource sections
+					not being handled to remain intact (e.g. map sets)
 
     PCX
 
@@ -414,6 +417,13 @@ THE FORMATS
 
 	http://www.navicache.com/cgi-bin/ib312a/ikonboard.cgi?act=ST;f=23;t=334
 
+	PsiTrex
+	
+	This is a text format created by KuDaTa's PsiTrex program for the Psion
+	PDAs. The format can't be readily handled by XCSV, so this format is
+	handled explicitly.  Waypoints, routes and tracks are all handled, with
+	icon names used corresponding to verison 1.13 of PsiTrex.
+	
 DATA FILTERS
 
 	GPSBabel supports data filtering.  Data filters are invoked from
