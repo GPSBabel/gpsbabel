@@ -19,7 +19,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
-	ozi.o nmea.o text.o html.o palmdoc.o
+	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o
 
@@ -34,7 +34,7 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 COLDSYNC=coldsync/util.o coldsync/pdb.o
 
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
-          csv_util.o grtcirc.o vmem.o \
+          csv_util.o grtcirc.o vmem.o util_crc.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(FMTS) $(FILTERS)
 OBJS = main.o $(LIBOBJS)
 
