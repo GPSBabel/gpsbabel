@@ -22,8 +22,10 @@
 static int in_wpt;
 static int in_name;
 static int in_link;
+static int in_type;
 static int in_cdata;
 static char *cdatastr;
+static char *typestr;
 
 static XML_Parser psr;
 static waypoint *wpt_tmp;
@@ -66,6 +68,18 @@ tag_name(const char **attrv)
 }
 
 static void
+tag_type(const char **attrv)
+{
+	const char **avp = &attrv[0];
+	while (*avp) { 
+		if (strcmp(avp[0], "type") == 0) {
+			wpt_tmp->icon_descr = xstrdup(avp[1]);
+		}
+		avp+=2;
+	}
+}
+
+static void
 tag_link(const char **attrv)
 {
 	const char **avp = &attrv[0];
@@ -91,6 +105,9 @@ geo_start(void *data, const char *el, const char **attr)
 		else if (strcmp(el, "coord") == 0) {
 			tag_coord(attr);
 		}
+		else if (strcmp(el, "type") == 0) {
+			tag_type(attr);
+		}
 	}
 
 	if (strcmp(el, "waypoint") == 0) {
@@ -98,6 +115,9 @@ geo_start(void *data, const char *el, const char **attr)
 		in_wpt++;
 	} else if (strcmp(el, "name") == 0) {
 		in_name++;
+	} else if (strcmp(el, "type") == 0) {
+		tag_type(attr);
+		in_type++;
 	} else if (strcmp(el, "link") == 0) {
 		tag_link(attr);
 		in_link++;
@@ -124,6 +144,11 @@ geo_end(void *data, const char *el)
 	else if (strcmp(el, "name") == 0) {
 		in_name--;
 	}
+	else if (strcmp(el, "type") == 0) {
+		wpt_tmp->icon_descr = xstrdup(typestr);
+		memset(typestr,0, MY_CBUF);
+		in_type--;
+	}
 	else if (strcmp(el, "link") == 0) {
 		in_link--;
 	}
@@ -137,6 +162,10 @@ geo_cdata(void *dta, const XML_Char *s, int len)
 		estr = cdatastr + strlen(cdatastr);
 		memcpy(estr, s, len); 
 		in_cdata++;
+	}
+	if (in_type) {
+		estr = typestr + strlen(typestr);
+		memcpy(estr, s, len); 
 	}
 }
 
@@ -155,6 +184,7 @@ geo_rd_init(const char *fname, const char *args)
 
 	XML_SetElementHandler(psr, geo_start, geo_end);
 	cdatastr = xcalloc(MY_CBUF,1);
+	typestr = xcalloc(MY_CBUF,1);
 	XML_SetCharacterDataHandler(psr, geo_cdata);
 }
 
@@ -163,6 +193,9 @@ geo_rd_deinit(void)
 {
 	if ( cdatastr ) {
 		xfree(cdatastr);
+	}
+	if ( typestr ) {
+		xfree(typestr);
 	}
 	fclose(fd);
 }
@@ -212,6 +245,9 @@ geo_waypt_pr(const waypoint *waypointp)
 		waypointp->position.longitude.degrees);
 	fprintf(ofd, "\n");
 
+	if (waypointp->icon_descr) {
+		fprintf(ofd, "<type>%s</type>\n", waypointp->icon_descr);
+	}
 	if (waypointp->url) {
 		fprintf(ofd, "<link text =\"Cache Details\">%s</link>\n", 
 			waypointp->url);

@@ -163,10 +163,10 @@ static char gpsdrive[] =
 "#\n"
 "FIELD_DELIMITER		SPACE\n"
 "RECORD_DELIMITER	NEWLINE\n"
-"BADCHARS		,\"\n"
+"BADCHARS		,'\"\n"
 
-"SHORTLEN          20\n"
-"SHORTWHITE                0\n"
+"SHORTLEN          	20\n"
+"SHORTWHITE              0\n"
 
 "#\n"
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
@@ -174,10 +174,12 @@ static char gpsdrive[] =
 "IFIELD	SHORTNAME, \"\", \"%s\"\n"
 "IFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
 "IFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
+"IFIELD	ICON_DESCR, \"\", \"%s\"\n"
 
 "OFIELD	ANYNAME, \"\", \"%s\"\n"
 "OFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
 "OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD	ICON_DESCR, \"\", \"%s\"\n"
 ;
 static char gpsman[] = 
 "# gpsbabel XCSV style file\n"

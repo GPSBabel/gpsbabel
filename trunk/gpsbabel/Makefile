@@ -165,4 +165,4 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 internal_styles.c: mkstyle.sh style/README.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mxf.style style/nima.style style/ozi.style style/s_and_t.style style/xmap.style style/xmapwpt.style
-	./mkstyle.sh > $@ || rm -f $@ ; exit 1
+	./mkstyle.sh > $@ || (rm -f $@ ; exit 1)
