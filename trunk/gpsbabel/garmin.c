@@ -20,6 +20,7 @@
  */
 
 #include <ctype.h>
+#include <limits.h>
 #include "defs.h"
 #include "jeeps/gps.h"
 
@@ -67,7 +68,19 @@ waypt_read(void)
 		wpt_tmp->description = way[i]->cmnt;
 		wpt_tmp->position.longitude.degrees = way[i]->lon;
 		wpt_tmp->position.latitude.degrees = way[i]->lat;
-		if (way[i]->alt == (float) (1<<31)) {
+		/*
+		 * If a unit doesn't store altitude info (i.e. a D103)
+		 * gpsmem will default the alt to INT_MAX.   Other units 
+		 * (I can't recall if it was the V (D109) hor the Vista (D108) 
+		 * return INT_MAX+1, contrary to the Garmin protocol doc which
+		 * says they should report 1.0e25.   So we'll try to trap 
+		 * all the cases here.     Yes, libjeeps should probably 
+		 * do this and not us...
+		 */
+		if ((way[i]->alt == (float) (1<<31)) || 
+		     (way[i]->alt == INT_MAX) ||
+		     (way[i]->alt == 1.0e25)
+		     ) {
 			wpt_tmp->position.altitude.altitude_meters = unknown_alt;
 		} else {
 			wpt_tmp->position.altitude.altitude_meters = way[i]->alt;
