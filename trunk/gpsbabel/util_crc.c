@@ -67,7 +67,7 @@ static unsigned long crc32_table[256] =
 };
 
 unsigned long
-get_crc32(void * data, int datalen)
+get_crc32(const void * data, int datalen)
 {
 	unsigned long crc = 0xFFFFFFFF;
 	const unsigned char * cp = (unsigned char *)data;
