@@ -463,7 +463,7 @@ char * str_utf8_to_cp1252( const char * str );
 char * str_utf8_to_ascii( const char * str );
 
 /* this lives in gpx.c */
-time_t xml_parse_time( char *cdatastr );
+time_t xml_parse_time( const char *cdatastr );
 	
 xml_tag *xml_findfirst( xml_tag *root, char *tagname );
 xml_tag *xml_findnext( xml_tag *root, xml_tag *cur, char *tagname );

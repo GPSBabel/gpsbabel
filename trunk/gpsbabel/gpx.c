@@ -189,24 +189,6 @@ tag_mapping tag_path_map[] = {
 	{0}
 };
 
-
-static void
-write_xml_entity(FILE *ofd, const char *indent, 
-                 const char *tag, const char *value)
-{
-	char *tmp_ent = xml_entitize(value);
-	fprintf(ofd, "%s<%s>%s</%s>\n", indent, tag, tmp_ent, tag);
-	xfree(tmp_ent);
-}
-
-static void
-write_optional_xml_entity(FILE *ofd, const char *indent, 
-                          const char *tag, const char *value)
-{
-	if (value && *value)
-		write_xml_entity(ofd, indent, tag, value);
-}
-
 static tag_type
 get_tag(const char *t, int *passthrough)
 {
@@ -546,7 +528,7 @@ gs_get_container(geocache_container t)
 }
 
 time_t 
-xml_parse_time( char *cdatastr ) 
+xml_parse_time( const char *cdatastr ) 
 {
 	int off_hr = 0;
 	int off_min = 0;
