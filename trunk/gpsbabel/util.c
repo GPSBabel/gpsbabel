@@ -621,7 +621,7 @@ double degrees2ddmm(double deg_val) {
  * Doesn't try to make an optimally sized dest buffer.
  */
 char *
-strsub(char *s, char *search, char *replace)
+strsub(const char *s, const char *search, const char *replace)
 {
        char *p;
        int len = strlen(s);
@@ -647,6 +647,21 @@ strsub(char *s, char *search, char *replace)
        /* Copy last part */
        strcat(d, p + slen);
        return d;
+}
+
+/*
+ *  As strsub, but do it globally.
+ */
+char *
+gstrsub(const char *s, const char *search, const char *replace)
+{
+	char *o = xstrdup(s);
+
+	while (strstr(o, search)) {
+		o = strsub(o, search, replace);
+	}
+
+	return o;
 }
 
 char *
@@ -782,6 +797,32 @@ char * str_utf8_to_cp1252( const char * str )
 	}
 	return result;
 }
+
+#if 0
+/*
+ * Convert to ISO 8859-1 (LATIN-1). The result is never longer than 
+ * the source.  
+ */
+char * 
+str_utf8_to_8859_1( const char * str )
+{
+	char *result = xstrdup( str );
+	char *cur = result;
+	unsigned char c;
+
+	while (c = *str++) {
+		if (c < 0x80) {
+			*cur++ = c;
+			continue;
+		} 
+		if ((c & 0xFE) == 0xC2) {
+			*cur++ = ((c & 0x03) << 6) | (*str++ & 0x3f);
+		}
+	}
+
+	return result;
+}
+#endif
 
 char * str_utf8_to_ascii( const char * str )
 {
