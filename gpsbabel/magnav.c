@@ -81,7 +81,7 @@ wr_init(const char *fname, const char *args)
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
 	mkshort_handle = mkshort_new_handle();
-	setshort_length(mkshort_handle, 9);
+	setshort_length(mkshort_handle, 20);
 }
 
 static void
