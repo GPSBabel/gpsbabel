@@ -130,10 +130,10 @@ ${PNAME} -i tpg -f reference/tpg.tpg -o mxf -F ${TMPDIR}/topo.mxf
 compare ${TMPDIR}/tpg.mxf ${TMPDIR}/topo.mxf
 
 # OZI (OziExplorer 1.1) file format
-rm -f ${TMPDIR}/oz.ozi ${TMPDIR}/ozi.ozi
-${PNAME} -i ozi -f reference/ozi.ozi -o ozi -F ${TMPDIR}/oz.ozi
-${PNAME} -i ozi -f ${TMPDIR}/oz.ozi -o ozi -F ${TMPDIR}/ozi.ozi
-compare ${TMPDIR}/ozi.ozi reference
+rm -f ${TMPDIR}/oz.wpt ${TMPDIR}/ozi.wpt
+${PNAME} -i ozi -f reference/ozi.wpt -o ozi -F ${TMPDIR}/oz.wpt
+${PNAME} -i ozi -f ${TMPDIR}/oz.wpt -o ozi -F ${TMPDIR}/ozi.wpt
+compare ${TMPDIR}/ozi.wpt reference
 
 # Holux support is a little funky to test.  Becuase it loses precision,
 # if we convert it to another format, we lose accuracy (rounding) in the
