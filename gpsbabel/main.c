@@ -27,7 +27,7 @@ const char gpsbabel_version[] = VERSION;
 static void
 usage(const char *pname, int shorter)
 {
-	printf("GPSBabel Version %s.  http://gpsbabel.sourceforge.net\n\n",
+	printf("GPSBabel Version %s.  http://www.gpsbabel.org\n\n",
 			VERSION );
 	printf(
 "Usage:\n"
