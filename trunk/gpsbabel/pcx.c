@@ -93,7 +93,6 @@ data_read(void)
 				desc);
 			sscanf(&ibuf[116], "%d", 
 				&symnum);
-
 			desc[sizeof(desc)-1] = '\0';
 			name[sizeof(name)-1] = '\0';
 			wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
@@ -104,8 +103,8 @@ data_read(void)
 
 			if (latdir == 'S') lat = -lat;
 			if (londir == 'W') lon = -lon;
-			wpt_tmp->position.longitude.degrees = lon/100.0;
-			wpt_tmp->position.latitude.degrees = lat/100.0;
+			wpt_tmp->position.longitude.degrees = ddmm2degrees(lon);
+			wpt_tmp->position.latitude.degrees = ddmm2degrees(lat);
 			waypt_add(wpt_tmp);
 			break;
 		default:
@@ -118,16 +117,13 @@ static void
 gpsutil_disp(const waypoint *wpt)
 {
 	double lon,lat;
-	signed int ilon, ilat;
 	int icon_token = 0;
 	char tbuf[1024];
 	char *tp = tbuf;
 	time_t tm = wpt->creation_time;
 
-	ilon = (signed int)wpt->position.longitude.degrees;
-	ilat = (signed int)wpt->position.latitude.degrees;
-	lon = (ilon * 100.0) + (wpt->position.longitude.degrees - ilon) * 60.0;
-	lat = (ilat * 100.0) + (wpt->position.latitude.degrees - ilat) * 60.0;
+	lon = degrees2ddmm(wpt->position.longitude.degrees);
+	lat = degrees2ddmm(wpt->position.latitude.degrees);
 
 	if (tm == 0) 
 		tm = time(NULL);
