@@ -582,17 +582,23 @@ strsub(char *s, char *search, char *replace)
 void utf8_to_int( const char *cp, int *bytes, int *value ) 
 {
 	if ( (*cp & 0xe0) == 0xc0 ) {
+		if ( (*(cp+1) & 0xc0) != 0x80 ) goto dodefault;
 		*bytes = 2;
 		*value = ((*cp & 0x1f) << 6) | 
 			(*(cp+1) & 0x3f); 
 	}
 	else if ( (*cp & 0xf0) == 0xe0 ) {
+		if ( (*(cp+1) & 0xc0) != 0x80 ) goto dodefault;
+		if ( (*(cp+2) & 0xc0) != 0x80 ) goto dodefault;
 		*bytes = 3;
 		*value = ((*cp & 0x0f) << 12) | 
 			((*(cp+1) & 0x3f) << 6) | 
 			(*(cp+2) & 0x3f); 
 	}
 	else if ( (*cp & 0xf8) == 0xf0 ) {
+		if ( (*(cp+1) & 0xc0) != 0x80 ) goto dodefault;
+		if ( (*(cp+2) & 0xc0) != 0x80 ) goto dodefault;
+		if ( (*(cp+3) & 0xc0) != 0x80 ) goto dodefault;
 		*bytes = 4;
 		*value = ((*cp & 0x07) << 18) | 
 			((*(cp+1) & 0x3f) << 12) | 
@@ -600,6 +606,10 @@ void utf8_to_int( const char *cp, int *bytes, int *value )
 			(*(cp+3) & 0x3f); 
 	}
 	else if ( (*cp & 0xfc) == 0xf8 ) {
+		if ( (*(cp+1) & 0xc0) != 0x80 ) goto dodefault;
+		if ( (*(cp+2) & 0xc0) != 0x80 ) goto dodefault;
+		if ( (*(cp+3) & 0xc0) != 0x80 ) goto dodefault;
+		if ( (*(cp+4) & 0xc0) != 0x80 ) goto dodefault;
 		*bytes = 5;
 		*value = ((*cp & 0x03) << 24) | 
 			((*(cp+1) & 0x3f) << 18) | 
@@ -608,6 +618,11 @@ void utf8_to_int( const char *cp, int *bytes, int *value )
 			(*(cp+4) & 0x3f); 
 	}
 	else if ( (*cp & 0xfe) == 0xfc ) {
+		if ( (*(cp+1) & 0xc0) != 0x80 ) goto dodefault;
+		if ( (*(cp+2) & 0xc0) != 0x80 ) goto dodefault;
+		if ( (*(cp+3) & 0xc0) != 0x80 ) goto dodefault;
+		if ( (*(cp+4) & 0xc0) != 0x80 ) goto dodefault;
+		if ( (*(cp+5) & 0xc0) != 0x80 ) goto dodefault;
 		*bytes = 6;
 		*value = ((*cp & 0x01) << 30) | 
 			((*(cp+1) & 0x3f) << 24) | 
@@ -617,6 +632,7 @@ void utf8_to_int( const char *cp, int *bytes, int *value )
 			(*(cp+5) & 0x3f); 
 	}
 	else {
+dodefault:
 		*bytes = 1;
 		*value = (unsigned char)*cp;
 	}
