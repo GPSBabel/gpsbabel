@@ -92,8 +92,13 @@ void * xrealloc(void* ptr, size_t size)
 char * str2ascii(char* str)
 {
 	int i;
-	int len=strlen(str);
+	int len;
 	unsigned char * ustr = (unsigned char*)str;
+
+	if(str==NULL)
+		return str;
+
+	len=strlen(str);
 	for(i=0; i<len; i++)
 		// FIXME saxcount complains that 0x1c is an invalid character, what else??
 		if ( (ustr[i]>127) || (ustr[i]==0x1c) )
@@ -107,11 +112,30 @@ char * str2ascii(char* str)
 char * strappend(char* str1, char* str2)
 // create a new string
 {
-	int len1=strlen(str1);
-	int len2=strlen(str2);
-	char* nw = (char*)xmalloc(len1 + len2 +1);
-	strcpy(nw, str1);
-	strcpy(nw+len1, str2);
+	int len1;
+	int len2;
+	char* nw;
+	
+	if (str1==NULL)
+		len1=0;
+	else
+		len1=strlen(str1);
+
+	if (str2==NULL)
+		len2=0;
+	else
+		len2=strlen(str2);
+
+	nw = (char*)xmalloc(len1 + len2 +1);
+
+	if (str1 != NULL)
+		strcpy(nw, str1);
+	if (str2 != NULL)
+		strcpy(nw+len1, str2);
+	
+	//just in case len1 + len2 =0
+	nw[len1 + len2]=0;
+
 	return nw;
 }
 

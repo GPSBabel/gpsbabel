@@ -27,3 +27,4 @@ Still to test:
 * import to file with existing data
 * import to empty file
 * meaning of options etc for v4 files
+

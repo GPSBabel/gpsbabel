@@ -28,10 +28,12 @@
 extern "C" {
 #endif
 
-//#define MEMCHK
-//#define DEBUG_STDOUT
 
 #ifdef _DEBUG
+
+#define MEMCHK
+#define DEBUG_STDOUT
+
 #define _CRTDBG_MAP_ALLOC
 #define  SET_CRT_DEBUG_FIELD(a)   _CrtSetDbgFlag((a) | _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG))
 #define  CLEAR_CRT_DEBUG_FIELD(a) _CrtSetDbgFlag(~(a) & _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG))
@@ -99,6 +101,7 @@ extern struct st2gpx_options opts;
 void * xmalloc(size_t size);
 void * xrealloc(void* ptr, size_t size);
 char * str2ascii(char* str);
+char * strappend(char* str1, char* str2);
 int readbytes(FILE* file, char* buf, int bytes2read);
 //nannol.c
 struct annotations * merge_gpx_annot(struct annotations * annots, struct gpx_data* all_gpx);

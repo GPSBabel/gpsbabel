@@ -55,7 +55,11 @@ char * gpx_elem_name[] =
 	"trkpt",
 	"name",
 	"desc",
-	"src"
+	"src",
+	"sym",
+	"type",
+	"url",
+	"urlname"
 };
 
 struct gpxpt * gpxpt_new()
@@ -67,6 +71,9 @@ struct gpxpt * gpxpt_new()
 	nw->lon=0;
 	nw->elevation=0;
 	nw->use_elevation=0;
+	nw->symbol=0;
+	nw->url=NULL;
+	nw->urlname=NULL;
 	return nw;
 }
 
@@ -76,20 +83,23 @@ void gpxpt_delete(struct gpxpt * pt)
 		return;
 	free(pt->name);
 	free(pt->desc);
+	free(pt->url);
+	free(pt->urlname);
 	free(pt);
 }
 
 struct gpxpt * gpxpt_copy(struct gpxpt * otherpt)
 {
 	struct gpxpt * nw = (struct gpxpt *)xmalloc(sizeof(struct gpxpt));
-	nw->name=xmalloc(strlen(otherpt->name)+1);
-	strcpy(nw->name, otherpt->name);
-	nw->desc=xmalloc(strlen(otherpt->desc)+1);
-	strcpy(nw->desc, otherpt->desc);
+	nw->name = _strdup(otherpt->name);
+	nw->desc = _strdup(otherpt->desc);
 	nw->lat=otherpt->lat;
 	nw->lon=otherpt->lon;
 	nw->elevation=otherpt->elevation;
 	nw->use_elevation=otherpt->use_elevation;
+	nw->symbol = otherpt->symbol;
+	nw->url = _strdup(otherpt->url);
+	nw->urlname = _strdup(otherpt->urlname);
 	return nw;
 }
 
@@ -486,7 +496,6 @@ void enddesc(void *userData, const char *name)
 	desc[cdata_length]=0;
 	cdata=NULL;
 	cdata_length=0;
-	str2ascii(desc);
 	switch (current_main_element)
 	{
 	case GPX_ELEM_TYPE_WPT:
@@ -521,7 +530,169 @@ void endsrc(void *userData, const char *name)
 {
 }
 
-#define GPX_NUM_ELEM_HANDLERS 10
+void startsym(void *userData, const char *name, const char **atts)
+{
+}
+
+void endsym(void *userData, const char *name)
+{
+	struct gpx_data * dat = (struct gpx_data *)userData;
+	char* sym_str = xrealloc(cdata, cdata_length+1);
+	int sym_num=0;
+	int read;
+
+	sym_str[cdata_length]=0;
+	cdata=NULL;
+	cdata_length=0;
+
+
+	// We need to convert the name of the symbol sym_str from GPX 
+	// into a numeric symbol number for MS Map.
+	// For now we just accept MS Map Symbol n
+
+/*	if (strncmp(sym_str, "MS Map Symbol", 13)!=0)
+	{
+		free(sym_str);
+		return;
+	}
+*/	
+	read=sscanf(sym_str, "MS Map Symbol %d", &sym_num);
+
+	if( (read==1) && (sym_num>0) )
+		printf("Translated symbol name %s as symbol number %d\n", sym_str, sym_num);
+	else
+	{
+		printf("Couldn't translate symbol name %s to a symbol number\n", sym_str);
+		free(sym_str);
+		return;
+	}
+
+	switch (current_main_element)
+	{
+	case GPX_ELEM_TYPE_WPT:
+		// We may have already set the symbol from <type>,
+		// which over-rides the symbol.
+		// Fixme this override should eb an option, not the default.
+		if(dat->wpt_list[dat->wpt_list_count-1]->symbol == 0)
+			dat->wpt_list[dat->wpt_list_count-1]->symbol=sym_num;
+		break;
+	case GPX_ELEM_TYPE_RTE:
+	case GPX_ELEM_TYPE_RTEPT:
+	case GPX_ELEM_TYPE_TRK:
+	case GPX_ELEM_TYPE_TRKSEG:
+	case GPX_ELEM_TYPE_TRKPT:
+	default:
+		break;
+	}
+
+	free(sym_str);
+}
+
+void starttype(void *userData, const char *name, const char **atts)
+{
+}
+
+void endtype(void *userData, const char *name)
+{
+	struct gpx_data * dat = (struct gpx_data *)userData;
+	char* type_str = xrealloc(cdata, cdata_length+1);
+	int sym_num=0;
+
+	type_str[cdata_length]=0;
+	cdata=NULL;
+	cdata_length=0;
+
+	if(strcmp(type_str, "Geocache|Virtual Cache")==0)
+		sym_num=68; // balloon
+	else if(strcmp(type_str, "Geocache|Traditional Cache")==0)
+		sym_num=55; // small purple or green triange
+	else if(strcmp(type_str, "Geocache|Multi-Cache")==0)
+		sym_num=107; // three flags
+		//sym_num=132; // traffic-light
+	else if(strcmp(type_str, "Geocache|Unknown Cache")==0)
+		sym_num=254; // question-mark
+	else if(strcmp(type_str, "Geocache|Micro Cache")==0)
+		sym_num=65;
+	
+	switch (current_main_element)
+	{
+	case GPX_ELEM_TYPE_WPT:
+		if(sym_num != 0)
+			dat->wpt_list[dat->wpt_list_count-1]->symbol=sym_num;
+		break;
+	case GPX_ELEM_TYPE_RTE:
+	case GPX_ELEM_TYPE_RTEPT:
+	case GPX_ELEM_TYPE_TRK:
+	case GPX_ELEM_TYPE_TRKSEG:
+	case GPX_ELEM_TYPE_TRKPT:
+	default:
+		break;
+	}
+
+	free(type_str);
+}
+
+void starturl(void *userData, const char *name, const char **atts)
+{
+}
+
+void endurl(void *userData, const char *name)
+{
+	struct gpx_data * dat = (struct gpx_data *)userData;
+	char* url_str = xrealloc(cdata, cdata_length+1);
+
+	url_str[cdata_length]=0;
+	cdata=NULL;
+	cdata_length=0;
+
+	switch (current_main_element)
+	{
+	case GPX_ELEM_TYPE_WPT:
+		dat->wpt_list[dat->wpt_list_count-1]->url=url_str;
+		break;
+	case GPX_ELEM_TYPE_RTE:
+	case GPX_ELEM_TYPE_RTEPT:
+	case GPX_ELEM_TYPE_TRK:
+	case GPX_ELEM_TYPE_TRKSEG:
+	case GPX_ELEM_TYPE_TRKPT:
+	default:
+		break;
+		free(url_str);
+	}
+
+}
+
+void starturlname(void *userData, const char *name, const char **atts)
+{
+}
+
+void endurlname(void *userData, const char *name)
+{
+	struct gpx_data * dat = (struct gpx_data *)userData;
+	char* url_str = xrealloc(cdata, cdata_length+1);
+
+	url_str[cdata_length]=0;
+	cdata=NULL;
+	cdata_length=0;
+
+	switch (current_main_element)
+	{
+	case GPX_ELEM_TYPE_WPT:
+		dat->wpt_list[dat->wpt_list_count-1]->urlname=url_str;
+		break;
+	case GPX_ELEM_TYPE_RTE:
+	case GPX_ELEM_TYPE_RTEPT:
+	case GPX_ELEM_TYPE_TRK:
+	case GPX_ELEM_TYPE_TRKSEG:
+	case GPX_ELEM_TYPE_TRKPT:
+	default:
+		break;
+		free(url_str);
+	}
+
+}
+
+#define GPX_NUM_ELEM_HANDLERS 14
 
 gpx_elm_start_handler gpx_start_elm_handler[] =
 {
@@ -534,7 +705,11 @@ gpx_elm_start_handler gpx_start_elm_handler[] =
 	&starttrkpt,
 	&startname,
 	&startdesc,
-	&startsrc
+	&startsrc,
+	&startsym,
+	&starttype,
+	&starturl,
+	&starturlname
 };
 
 gpx_elm_end_handler gpx_end_elm_handler[] =
@@ -548,9 +723,12 @@ gpx_elm_end_handler gpx_end_elm_handler[] =
 	&endtrkpt,
 	&endname,
 	&enddesc,
-	&endsrc
+	&endsrc,
+	&endsym,
+	&endtype,
+	&endurl,
+	&endurlname
 };
-
 
 int get_gpx_type_ndx(const char* type_name)
 {

@@ -90,15 +90,6 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=.\annotations.c
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
-# SUBTRACT CPP /FA<none>
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -220,14 +211,6 @@ SOURCE=.\build.txt
 # Begin Source File
 
 SOURCE=.\history.txt
-# End Source File
-# Begin Source File
-
-SOURCE=.\msado15.tlh
-# End Source File
-# Begin Source File
-
-SOURCE=.\msado15.tli
 # End Source File
 # Begin Source File
 
