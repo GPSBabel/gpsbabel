@@ -819,8 +819,18 @@ xcsv_data_write(void)
     
     /* output prologue lines, if any. */
     QUEUE_FOR_EACH(&xcsv_file.prologue, elem, tmp) {
-        ogp = (ogue_t *) elem;
-        fprintf (xcsv_file.xcsvfp, "%s%s", ogp->val, xcsv_file.record_delimiter);
+       char *ol;
+       ogp = (ogue_t *) elem;
+
+       ol = strsub(ogp->val, "__FILE__", xcsv_file.fname);
+
+       if (ol) {
+               fprintf(xcsv_file.xcsvfp, "%s", ol);
+               free(ol);
+       } else {
+               fprintf(xcsv_file.xcsvfp, "%s", ogp->val);
+       }
+       fprintf(xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
     }
 
     switch (global_opts.objective ) {

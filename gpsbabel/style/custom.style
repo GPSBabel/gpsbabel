@@ -17,7 +17,7 @@ BADCHARS		COMMA
 #
 # HEADER STUFF:
 #
-PROLOGUE	Prologue Line 1
+PROLOGUE	Prologue Line 1 __FILE__
 PROLOGUE	Prologue Line 2
 
 #
