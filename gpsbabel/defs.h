@@ -99,6 +99,20 @@ typedef struct {
 	int terr; /* (likewise) */
 } geocache_data ;
 
+
+
+typedef struct xml_tag {
+	char *tagname;
+	char *cdata;
+	int cdatalen;
+	char *parentcdata;
+	int parentcdatalen;
+	char **attributes;
+	struct xml_tag *parent;
+	struct xml_tag *sibling;
+	struct xml_tag *child;
+} xml_tag ;
+
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not 
  * cater to any specific model or protocol.  Anything that needs to
@@ -133,6 +147,7 @@ typedef struct {
 	const char *icon_descr;
 	time_t creation_time;
 	geocache_data gc_data;
+	xml_tag *gpx_extras;
 } waypoint;
 
 typedef struct {
