@@ -16,7 +16,8 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-
+#ifndef gpsbabel_defs_h_included
+#define gpsbabel_defs_h_included
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
@@ -471,3 +472,4 @@ double degrees2ddmm(double deg_val);
  */
 #define unknown_alt -99999999.0
 
+#endif /* gpsbabel_defs_h_included */

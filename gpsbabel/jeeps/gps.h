@@ -6,6 +6,7 @@ extern "C"
 #ifndef gps_h
 #define gps_h
 
+#include "../defs.h"
 #include "gpsport.h"
 #include <time.h>
 
