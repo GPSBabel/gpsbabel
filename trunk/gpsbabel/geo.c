@@ -252,6 +252,8 @@ geo_wr_deinit(void)
 static void
 geo_waypt_pr(const waypoint *waypointp)
 {
+	char *tmp;
+
 	fprintf(ofd, "<waypoint>\n");
 	fprintf(ofd, "<name id=\"%s\">", waypointp->shortname);
 	fprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
@@ -266,8 +268,10 @@ geo_waypt_pr(const waypoint *waypointp)
 		fprintf(ofd, "<type>%s</type>\n", waypointp->icon_descr);
 	}
 	if (waypointp->url) {
+		tmp = xml_entitize(waypointp->url);
 		fprintf(ofd, "<link text =\"Cache Details\">%s</link>\n", 
-			waypointp->url);
+			tmp);
+		free(tmp);
 	}
 	fprintf(ofd, "</waypoint>\n");
 }

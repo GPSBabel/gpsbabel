@@ -79,64 +79,6 @@ static route_head *rte_head;
 #define MYNAME "GPX"
 #define MY_CBUF 4096
 
-static
-char * gpx_entitize(const char * str) 
-{
-	int elen, ecount;
-	const char ** ep;
-	const char * cp;
-	char * p, * tmp, * xstr;
-	const char * stdentities[] = {
-	"&",	"&amp;",
-	"<",	"&lt;",
-	">",	"&gt;",
-	"'", 	"&apos;",
-	"\"",	"&quot;",
-	NULL,	NULL 
-	};
-	ep = stdentities;
-	elen = ecount = 0;
-
-	/* figure # of entity replacements and additional size. */
-	while (*ep) {
-		cp = str;
-		while ((cp = strstr(cp, *ep)) != NULL) {
-			elen += strlen(*(ep + 1)) - strlen(*ep);
-			ecount++;
-			cp += strlen(*ep);
-		}
-		ep += 2;
-	}
-
-	/* enough space for the whole string plus entity replacements, if any */
-	tmp = xcalloc((strlen(str) + elen + 1), 1);
-	strcpy(tmp, str);
-
-	/* no entity replacements */
-	if (ecount == 0)
-		return (tmp);
-
-	ep = stdentities;
-
-	while (*ep) {
-		p = tmp;
-		while ((p = strstr(p, *ep)) != NULL) {
-			elen = strlen(*(ep + 1));
-
-			xstr = xstrdup(p + strlen(*ep));
-
-			strcpy(p, *(ep + 1));
-			strcpy(p + elen, xstr);
-
-			xfree(xstr);
-
-			p += elen;
-		}  
-		ep += 2;
-	}    
-	return (tmp);
-}
-
 static void
 tag_gpx(const char **attrv)
 {
@@ -886,7 +828,7 @@ fprint_xml_chain( xml_tag *tag, const waypoint *wpt )
 			fprint_tag_and_attrs( "<", ">", tag );
 		
 			if ( tag->cdata ) {
-				tmp_ent = gpx_entitize( tag->cdata );
+				tmp_ent = xml_entitize( tag->cdata );
 				fprintf( ofd, "%s", tmp_ent );
 				xfree(tmp_ent);
 			}
@@ -900,7 +842,7 @@ fprint_xml_chain( xml_tag *tag, const waypoint *wpt )
 			}
 			fprintf( ofd, "</%s>", tag->tagname);
 			if ( tag->parentcdata ) {
-				tmp_ent = gpx_entitize(tag->parentcdata);
+				tmp_ent = xml_entitize(tag->parentcdata);
 				fprintf(ofd, "%s", tmp_ent );
 				xfree(tmp_ent);
 			}
@@ -971,7 +913,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 		gpx_write_time(waypointp->creation_time, "time");
 	}
 	if (oname) {
-		tmp_ent = gpx_entitize(oname);
+		tmp_ent = xml_entitize(oname);
 		fprintf(ofd, "<name>%s</name>\n", tmp_ent);
 		xfree(tmp_ent);
 	}
@@ -996,17 +938,17 @@ gpx_waypt_pr(const waypoint *waypointp)
 			 waypointp->altitude);
 	}
 	if (waypointp->url) {
-		tmp_ent = gpx_entitize(waypointp->url);
+		tmp_ent = xml_entitize(waypointp->url);
 		fprintf(ofd, "<url>%s%s</url>\n", urlbase ? urlbase : "", tmp_ent);
 		xfree(tmp_ent);
 	}
 	if (waypointp->url_link_text) {
-		tmp_ent = gpx_entitize(waypointp->url_link_text);
+		tmp_ent = xml_entitize(waypointp->url_link_text);
 		fprintf(ofd, "<urlname>%s</urlname>\n", tmp_ent );
 		xfree(tmp_ent);
 	}
 	if (waypointp->icon_descr) {
-		tmp_ent = gpx_entitize(waypointp->icon_descr);
+		tmp_ent = xml_entitize(waypointp->icon_descr);
 		fprintf(ofd, "<sym>%s</sym>\n", tmp_ent );
 		xfree(tmp_ent);
 	}
@@ -1022,12 +964,12 @@ gpx_track_hdr(const route_head *rte)
 	
 	fprintf(ofd, "<trk>\n");
 	if (rte->rte_name) {
-		tmp_ent = gpx_entitize(rte->rte_name);
+		tmp_ent = xml_entitize(rte->rte_name);
 		fprintf(ofd, "<name>%s</name>\n", tmp_ent);
 		xfree(tmp_ent);
 	}
 	if (rte->rte_desc) {
-		tmp_ent = gpx_entitize(rte->rte_desc);
+		tmp_ent = xml_entitize(rte->rte_desc);
 		fprintf(ofd, "<desc>%s</desc>\n", tmp_ent);
 		xfree(tmp_ent);
 	}
@@ -1073,12 +1015,12 @@ gpx_route_hdr(const route_head *rte)
 	
 	fprintf(ofd, "<rte>\n");
 	if (rte->rte_name) {
-		tmp_ent = gpx_entitize(rte->rte_name);
+		tmp_ent = xml_entitize(rte->rte_name);
 		fprintf(ofd, "<name>%s</name>\n", tmp_ent);
 		xfree(tmp_ent);
 	}
 	if (rte->rte_desc) {
-		tmp_ent = gpx_entitize(rte->rte_desc);
+		tmp_ent = xml_entitize(rte->rte_desc);
 		fprintf(ofd, "<desc>%s</desc>\n", tmp_ent);
 		xfree(tmp_ent);
 	}

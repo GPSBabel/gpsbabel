@@ -574,3 +574,60 @@ strsub(char *s, char *search, char *replace)
        strcat(d, p + slen);
        return d;
 }
+
+char * xml_entitize(const char * str) 
+{
+	int elen, ecount;
+	const char ** ep;
+	const char * cp;
+	char * p, * tmp, * xstr;
+	const char * stdentities[] = {
+	"&",	"&amp;",
+	"<",	"&lt;",
+	">",	"&gt;",
+	"'", 	"&apos;",
+	"\"",	"&quot;",
+	NULL,	NULL 
+	};
+	ep = stdentities;
+	elen = ecount = 0;
+
+	/* figure # of entity replacements and additional size. */
+	while (*ep) {
+		cp = str;
+		while ((cp = strstr(cp, *ep)) != NULL) {
+			elen += strlen(*(ep + 1)) - strlen(*ep);
+			ecount++;
+			cp += strlen(*ep);
+		}
+		ep += 2;
+	}
+
+	/* enough space for the whole string plus entity replacements, if any */
+	tmp = xcalloc((strlen(str) + elen + 1), 1);
+	strcpy(tmp, str);
+
+	/* no entity replacements */
+	if (ecount == 0)
+		return (tmp);
+
+	ep = stdentities;
+
+	while (*ep) {
+		p = tmp;
+		while ((p = strstr(p, *ep)) != NULL) {
+			elen = strlen(*(ep + 1));
+
+			xstr = xstrdup(p + strlen(*ep));
+
+			strcpy(p, *(ep + 1));
+			strcpy(p + elen, xstr);
+
+			xfree(xstr);
+
+			p += elen;
+		}  
+		ep += 2;
+	}    
+	return (tmp);
+}
