@@ -85,8 +85,6 @@ static void data_read(void)
     int iWptNum;
     int iWptIndex;
     WPT *pWptHxTmp;
-    int iWptLen;
-    DWORD dwIndex;
 	struct tm tm;
 	struct tm *ptm;
 
@@ -101,7 +99,6 @@ static void data_read(void)
 		fatal("GPSBABEL: Error reading data from .wpo file\n");
     }
 
-    iWptLen = sizeof(WPT);
     iWptNum = le_read16(&((WPTHDR *)HxWpt)->num);
 
     /* Get the waypoints */
@@ -110,7 +107,6 @@ static void data_read(void)
         wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
     
 	iWptIndex = le_read16(&((WPTHDR *)HxWpt)->idx[iCount]);
-        dwIndex= OFFS_WPT + (sizeof(WPT) * iWptIndex);
         pWptHxTmp =  (WPT *)&HxWpt[OFFS_WPT + (sizeof(WPT) * iWptIndex)];
         
         wpt_tmp->position.altitude.altitude_meters = 0;
@@ -196,15 +192,15 @@ static void holux_disp(const waypoint *wpt)
     /* set Waypoint */
     pWptHxTmp =  (WPT *)&HxWFile[OFFS_WPT + (sizeof(WPT) * sIndex)];
 
-    memset (&(pWptHxTmp->name),0x20,sizeof(pWptHxTmp->name));  
+    memset (pWptHxTmp->name,0x20,sizeof(pWptHxTmp->name));  
     if (wpt->shortname != NULL)
-        strncpy((char *)&(pWptHxTmp->name), mknshort(wpt->shortname,sizeof(pWptHxTmp->name)),sizeof(pWptHxTmp->name));
+        strncpy(pWptHxTmp->name, mknshort(wpt->shortname,sizeof(pWptHxTmp->name)),sizeof(pWptHxTmp->name));
     else
-        sprintf((char *)&(pWptHxTmp->name),"W%d",sIndex);
+        sprintf(pWptHxTmp->name,"W%d",sIndex);
 
-    memset (&(pWptHxTmp->comment),0x20,sizeof(pWptHxTmp->comment));  
+    memset (pWptHxTmp->comment,0x20,sizeof(pWptHxTmp->comment));  
     if (wpt->description != NULL)
-            strncpy((char *)&(pWptHxTmp->comment), mknshort(wpt->description,sizeof(pWptHxTmp->comment)),sizeof(pWptHxTmp->comment));
+            strncpy(pWptHxTmp->comment, mknshort(wpt->description,sizeof(pWptHxTmp->comment)),sizeof(pWptHxTmp->comment));
 
     /*set the time */
 	if (wpt->creation_time) 

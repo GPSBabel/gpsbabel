@@ -72,7 +72,7 @@ data_read(void)
 
 	do {
 		linecount++;
-		memset(&buff, '\0', sizeof(buff));
+		memset(buff, '\0', sizeof(buff));
 		fgets(buff, sizeof(buff), file_in);
                  
 		if (strlen(buff)) {
@@ -87,7 +87,7 @@ data_read(void)
 
 		while (s) {
 			switch (i) {
-			case 0: // WPT #, skip.
+			case 0: /* WPT #, skip. */
 			  break;
 			case 1:
 				wpt_tmp->position.latitude.degrees = atof(s);

@@ -37,6 +37,8 @@ HANDLE comport;
 
 #define debug_serial  (global_opts.debug_level > 1)
 
+extern gpsdata_type objective;
+
 static char * termread(char *ibuf, int size);
 static void termwrite(char *obuf, int size);
 
@@ -344,9 +346,9 @@ mag_readmsg(void)
 	isump = &ibuf[isz-1];
 	isum  = strtoul(isump, NULL,16); 
 	if (isum != mag_pchecksum(&ibuf[1], isz-3)) {
-if (debug_serial)
-		fprintf(stderr, "RXERR %02x/%02x: '%s'\n", isum, mag_pchecksum(&ibuf[1],isz-5), ibuf);
-		/* Special case receive errors early on. */
+		if (debug_serial)
+			fprintf(stderr, "RXERR %02x/%02x: '%s'\n", isum, mag_pchecksum(&ibuf[1],isz-5), ibuf);
+			/* Special case receive errors early on. */
 		if (!got_version) {
 			fatal(MYNAME ": bad communication.  Check bit rate.\n");
 		}
@@ -360,6 +362,10 @@ if (debug_serial)
 	} 
 	if (strncmp(ibuf, "$PMGNWPT,", 7) == 0) {
 		waypoint *wpt = mag_wptparse(ibuf);
+		waypt_add(wpt);
+	} 
+	if (strncmp(ibuf, "$PMGNTRK,", 7) == 0) {
+		waypoint *wpt = mag_trkparse(ibuf);
 		waypt_add(wpt);
 	} 
 	if (IS_TKN("$PMGNVER,")) {
@@ -613,7 +619,8 @@ mag_deinit(void)
 		fclose(magfile_in);
 	magfile_in = NULL;
 }
-#if 0
+
+
 /*
  * Given an incoming track messages of the form:
  * $PMGNTRK,3605.259,N,08644.389,W,00151,M,201444.61,A,,020302*66
@@ -639,7 +646,7 @@ mag_trkparse(char *trkmsg)
 
 	sscanf(trkmsg,"$PMGNTRK,%lf,%c,%lf,%c,%d,%c,%d.%d,A,,%d", 
 		&latdeg,&latdir,
-		&lngdeg,&lngsecs,&lngdir,
+		&lngdeg,&lngdir,
 		&alt,&altunits,&hms,&fracsecs,&dmy);
 
 	tm.tm_sec = hms % 100;
@@ -667,7 +674,8 @@ mag_trkparse(char *trkmsg)
 	return waypt;
 	
 }
-#endif
+
+
 
 const char *
 mag_find_descr_from_token(const char *token)
@@ -773,15 +781,24 @@ mag_wptparse(char *trkmsg)
 }
 
 static void
-mag_readwpt(void)
+mag_read(void)
 {
 	if (!is_file) {
-		mag_writemsg("PMGNCMD,WAYPOINT");
+		switch (global_opts.objective)
+		{
+			case trkdata:
+				mag_writemsg("PMGNCMD,TRACK,2");
+				break;
+			case wptdata:
+				mag_writemsg("PMGNCMD,WAYPOINT");
+				break;
+			default:
+				fatal(MYNAME ": Routes are not yet supported\n");
+		}
 	}
 
-	while (!found_done) {
+	while (!found_done)
 		mag_readmsg();
-	}
 }
 
 static
@@ -871,6 +888,6 @@ ff_vecs_t mag_vecs = {
 	mag_wr_init,	
 	mag_deinit,	
 	mag_deinit,	
-	mag_readwpt,
+	mag_read,
 	mag_write,
 };
