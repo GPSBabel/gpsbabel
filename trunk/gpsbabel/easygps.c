@@ -211,6 +211,7 @@ write_pstring(const char *p)
 static void
 ez_disp(const waypoint *wpt)
 {
+	char tbuf[8];
 	fprintf(file_out, "W", 0xb);
 	if (wpt->shortname) {
 		fputc(1, file_out);
@@ -225,9 +226,11 @@ ez_disp(const waypoint *wpt)
 		write_pstring(wpt->icon_descr);
 	}
 	fputc(0x63, file_out);
-	fwrite(&wpt->position.latitude.degrees, 8, 1, file_out);
+	le_read64(tbuf, &wpt->position.latitude.degrees);
+	fwrite(tbuf, 8, 1, file_out);
 	fputc(0x64, file_out);
-	fwrite(&wpt->position.longitude.degrees, 8, 1, file_out);
+	le_read64(tbuf, &wpt->position.longitude.degrees);
+	fwrite(tbuf, 8, 1, file_out);
 	if (wpt->notes) {
 		fputc(5, file_out);
 		write_pstring(wpt->notes);
