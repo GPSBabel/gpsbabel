@@ -471,6 +471,7 @@ void
 xcsv_setup_internal_style(const char *style_buf)
 {
 	xcsv_file_init();
+	xcsv_destroy_style();
 	xcsv_file.is_internal = !!style_buf;
 	intstylebuf = style_buf;
 }
