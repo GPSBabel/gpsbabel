@@ -34,6 +34,15 @@
 #endif
 
 /*
+ * Snprintf is in SUS (so it's in most UNIX-like substance) and it's in 
+ * C99 (albeit with slightly different semantics) but it isn't in C89.   
+ * This tweaks allows us to use snprintf on the holdout.
+ */
+#if __WIN32__
+#  define snprintf _snprintf
+#endif
+
+/*
  * Common definitions.   There should be no protocol or file-specific
  * data in this file.
  */
