@@ -7,7 +7,11 @@ gpsbabel.exe:  wintesto.cmd
 
 include ../Makefile
 CFLAGS=-Iinclude -I../coldsync -O $(INHIBIT_USB)
-# INHIBIT_USB=-DNO_USB
+#
+# Must define empty (don't comment out the whole line) if you want to 
+# override INHIBIT_USB from the parent Makefile.
+#
+INHIBIT_USB=#-DNO_USB
 OSJEEPS=jeeps/gpsusbwin.o
 
 gpsbabel.exe: $(OBJS)
