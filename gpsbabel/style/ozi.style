@@ -24,9 +24,9 @@ PROLOGUE	Reserved 3
 #
 IFIELD	INDEX, "1", "%4d"
 IFIELD	SHORTNAME, "", "%-14.14s"
-IFIELD	LAT_DECIMAL, "", "%11.6lf"
-IFIELD	LON_DECIMAL, "", "%11.6lf"
-IFIELD	EXCEL_TIME, "", "%011.5lf"
+IFIELD	LAT_DECIMAL, "", "%11.6f"
+IFIELD	LON_DECIMAL, "", "%11.6f"
+IFIELD	EXCEL_TIME, "", "%011.5f"
 IFIELD	CONSTANT, "0", "%3s"  		# icon 
 IFIELD	CONSTANT, "1", "%2s"  		# 1 
 IFIELD	CONSTANT, "3", "%2s"  		# display format opts 
@@ -36,7 +36,7 @@ IFIELD	DESCRIPTION, "", "%-40.40s"
 IFIELD	CONSTANT, "0", "%2s"  		# pointer direction 
 IFIELD	CONSTANT, "0", "%2s"  		# garmin display flags 
 IFIELD	CONSTANT, "0", "%5s"  		# proximity distance 
-IFIELD	ALT_FEET, "", "%7.0lf"
+IFIELD	ALT_FEET, "", "%7.0f"
 IFIELD	CONSTANT, "6", "%2s"  		# waypt name text size 
 IFIELD	CONSTANT, "0", "%2s"  		# bold checkbox 
 IFIELD	CONSTANT, "17", "%2s"  		# symbol size 

@@ -22,8 +22,8 @@ PROLOGUE	!W:
 #
 IFIELD	SHORTNAME, "", "%-8.8s"
 IFIELD	DESCRIPTION, "", "%s"
-IFIELD	LAT_DIRDECIMAL, "", "%c%lf"
-IFIELD	LON_DIRDECIMAL, "", "%c%lf"
+IFIELD	LAT_DIRDECIMAL, "", "%c%f"
+IFIELD	LON_DIRDECIMAL, "", "%c%f"
 IFIELD	IGNORE, "", "%s"
 
 # gpsman.c likes mkshort len = 8, whitespace = 0.

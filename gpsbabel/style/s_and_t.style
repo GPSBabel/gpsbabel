@@ -26,8 +26,8 @@ PROLOGUE	Name,Latitude,Longitude,Name 2,URL,Type
 #       HAVE OUR WAY WITH THE FORMATTING. 
 #
 IFIELD	SHORTNAME, "", "%s"		# Name
-IFIELD	LAT_DECIMAL, "", "%lf"		# Latitude
-IFIELD	LON_DECIMAL, "", "%lf"		# Longitude
+IFIELD	LAT_DECIMAL, "", "%f"		# Latitude
+IFIELD	LON_DECIMAL, "", "%f"		# Longitude
 IFIELD	DESCRIPTION, "", "%s"		# Name 2 (Big Description)
 IFIELD	URL, "", "%s"			# URL
 IFIELD	IGNORE, "", ""			# Holder for Geocache Type

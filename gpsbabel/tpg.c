@@ -254,10 +254,10 @@ tpg_waypt_pr(const waypoint *wpt)
 	char *description;
 
         /* these unknown 4 are probably point properties (color, icon, etc..) */
-	char unknown4[] = { 0x78, 0x56, 0x34, 0x12 }; 
+	unsigned char unknown4[] = { 0x78, 0x56, 0x34, 0x12 }; 
 
         /* these 2 appear to be constant across test files */
-	char unknown2[] = { 0x01, 0x80 };  
+	unsigned char unknown2[] = { 0x01, 0x80 };  
 	
         /* this output format pretty much requires a description
          * and a shortname 

@@ -612,133 +612,127 @@ xcsv_waypt_pr(const waypoint *wpt)
 
         if (strcmp(fmp->key, "IGNORE") == 0) {
             /* IGNORE -- Write the char printf conversion */
-            snprintf (buff, sizeof(buff), fmp->printfc, "");
+            sprintf(buff, fmp->printfc, "");
         } else
         if (strcmp(fmp->key, "INDEX") == 0) {
-            snprintf (buff, sizeof(buff), fmp->printfc, index + atoi(fmp->val));
+            sprintf(buff, fmp->printfc, index + atoi(fmp->val));
         } else
         if (strcmp(fmp->key, "CONSTANT") == 0) {
-            snprintf (buff, sizeof(buff), fmp->printfc, fmp->val);
+            sprintf(buff, fmp->printfc, fmp->val);
         } else
         if (strcmp(fmp->key, "SHORTNAME") == 0) {
-            snprintf (buff, sizeof(buff), fmp->printfc, shortname);
+            sprintf(buff, fmp->printfc, shortname);
         } else
         if (strcmp(fmp->key, "ANYNAME") == 0) {
-            snprintf (buff, sizeof(buff), fmp->printfc, anyname);
+            sprintf(buff, fmp->printfc, anyname);
         } else
         if (strcmp(fmp->key, "DESCRIPTION") == 0) {
-            snprintf (buff, sizeof(buff), fmp->printfc, description);
+            sprintf(buff, fmp->printfc, description);
         } else
         if (strcmp(fmp->key, "NOTES") == 0) {
-            snprintf (buff, sizeof(buff), fmp->printfc, wpt->notes);
+            sprintf(buff, fmp->printfc, wpt->notes);
         } else
         if (strcmp(fmp->key, "URL") == 0) {
-            snprintf (buff, sizeof(buff), fmp->printfc, wpt->url);
+            sprintf(buff, fmp->printfc, wpt->url);
         } else
         if (strcmp(fmp->key, "URL_LINK_TEXT") == 0) {
-            snprintf (buff, sizeof(buff), fmp->printfc, wpt->url_link_text);
+            sprintf(buff, fmp->printfc, wpt->url_link_text);
         } else
         if (strcmp(fmp->key, "ICON_DESCR") == 0) {
-            snprintf (buff, sizeof(buff), fmp->printfc, wpt->icon_descr);
+            sprintf(buff, fmp->printfc, wpt->icon_descr);
         } else
 
         /* LATITUDE CONVERSION***********************************************/
         if (strcmp(fmp->key, "LAT_DECIMAL") == 0) {
             /* latitude as a pure decimal value */
-            snprintf (buff, sizeof(buff), fmp->printfc,
-              wpt->position.latitude.degrees);
+            sprintf(buff, fmp->printfc, wpt->position.latitude.degrees);
         } else
         if (strcmp(fmp->key, "LAT_DECIMALDIR") == 0) {
             /* latitude as a decimal value with N/S after it */
-            snprintf (buff, sizeof(buff), fmp->printfc,
-              fabs(wpt->position.latitude.degrees), 
+            sprintf(buff, fmp->printfc, fabs(wpt->position.latitude.degrees), 
               LAT_DIR(wpt->position.latitude.degrees));
         } else
         if (strcmp(fmp->key, "LAT_DIRDECIMAL") == 0) {
             /* latitude as a decimal value with N/S before it */
-            snprintf (buff, sizeof(buff), fmp->printfc,
+            sprintf(buff, fmp->printfc, 
               LAT_DIR(wpt->position.latitude.degrees),
               fabs(wpt->position.latitude.degrees));
         } else
         if (strcmp(fmp->key, "LAT_INT32DEG") == 0) {
             /* latitude as an integer offset from 0 degrees */
-            snprintf (buff, sizeof(buff), fmp->printfc,
+            sprintf(buff, fmp->printfc,
               dec_to_intdeg(wpt->position.latitude.degrees, 1));
         } else
 
         /* LONGITUDE CONVERSIONS*********************************************/
         if (strcmp(fmp->key, "LON_DECIMAL") == 0) {
             /* longitude as a pure decimal value */
-            snprintf (buff, sizeof(buff), fmp->printfc,
-              wpt->position.longitude.degrees);
+            sprintf(buff, fmp->printfc, wpt->position.longitude.degrees);
         } else
         if (strcmp(fmp->key, "LON_DECIMALDIR") == 0) {
             /* latitude as a decimal value with N/S after it */
-            snprintf (buff, sizeof(buff), fmp->printfc,
+            sprintf(buff, fmp->printfc,
               fabs(wpt->position.longitude.degrees), 
               LON_DIR(wpt->position.longitude.degrees));
         } else
         if (strcmp(fmp->key, "LON_DIRDECIMAL") == 0) {
             /* latitude as a decimal value with N/S before it */
-            snprintf (buff, sizeof(buff), fmp->printfc,
+            sprintf(buff, fmp->printfc,
               LON_DIR(wpt->position.longitude.degrees),
               fabs(wpt->position.longitude.degrees));
         } else
         if (strcmp(fmp->key, "LON_INT32DEG") == 0) {
             /* longitudee as an integer offset from 0 degrees */
-            snprintf (buff, sizeof(buff), fmp->printfc,
+            sprintf(buff, fmp->printfc,
               dec_to_intdeg(wpt->position.longitude.degrees, 0));
         } else
 
         /* DIRECTIONS *******************************************************/
         if (strcmp(fmp->key, "LAT_DIR") == 0) {
             /* latitude N/S as a char */
-            snprintf (buff, sizeof(buff), fmp->printfc,
-              LAT_DIR(wpt->position.latitude.degrees));
+            sprintf(buff, fmp->printfc,
+            LAT_DIR(wpt->position.latitude.degrees));
         } else
         if (strcmp(fmp->key, "LON_DIR") == 0) {
             /* longitude E/W as a char */
-            snprintf (buff, sizeof(buff), fmp->printfc,
+            sprintf(buff, fmp->printfc,
               LON_DIR(wpt->position.longitude.degrees));
         } else
 
         /* ALTITUDE CONVERSIONS**********************************************/
         if (strcmp(fmp->key, "ALT_FEET") == 0) {
             /* altitude in feet as a decimal value */
-            snprintf (buff, sizeof(buff), fmp->printfc,
+            sprintf(buff, fmp->printfc,
               (wpt->position.altitude.altitude_meters * 3.2808));
         } else
         if (strcmp(fmp->key, "ALT_METERS") == 0) {
             /* altitude in meters as a decimal value */
-            snprintf (buff, sizeof(buff), fmp->printfc,
+            sprintf(buff, fmp->printfc,
               wpt->position.altitude.altitude_meters);
         } else
 
         /* TIME CONVERSIONS**************************************************/
         if (strcmp(fmp->key, "EXCEL_TIME") == 0) {
             /* creation time as an excel (double) time */
-            snprintf (buff, sizeof(buff), fmp->printfc,
-              TIMET_TO_EXCEL(wpt->creation_time));
+            sprintf(buff, fmp->printfc, TIMET_TO_EXCEL(wpt->creation_time));
         } else
         if (strcmp(fmp->key, "TIMET_TIME") == 0) {
             /* time as a time_t variable */
-            snprintf (buff, sizeof(buff), fmp->printfc, wpt->creation_time);
+            sprintf(buff, fmp->printfc, wpt->creation_time);
         } else
 
         /* GEOCACHE STUFF **************************************************/
         if (strcmp(fmp->key, "GEOCACHE_DIFF") == 0) {
             /* Geocache Difficulty as a double */
-            snprintf (buff, sizeof(buff), fmp->printfc,
-              wpt->gc_data.diff / 10);
+            sprintf(buff, fmp->printfc, wpt->gc_data.diff / 10);
         } else
         if (strcmp(fmp->key, "GEOCACHE_TERR") == 0) {
             /* Geocache Terrain as a double */
-            snprintf (buff, sizeof(buff), fmp->printfc,
-              wpt->gc_data.terr / 10);
+            sprintf(buff, fmp->printfc, wpt->gc_data.terr / 10);
         } else
         if (strcmp(fmp->key, "GEOCACHE_TYPE") == 0) {
             /* Geocache Type TODO */
-            snprintf (buff, sizeof(buff), fmp->printfc, "Geocache");
+            sprintf(buff, fmp->printfc, "Geocache");
         } else {
            /* this should probably never happen */
         }
