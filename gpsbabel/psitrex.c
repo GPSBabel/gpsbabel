@@ -26,6 +26,8 @@
 #include "garmin_tables.h"
 #include <ctype.h>
 
+#define MYNAME "PSITREX" 
+
 typedef enum {
 	ltrimEOL = 1 ,		/* skip spaces & tabs to start; ends on EOL */
 	EOL,				/* don't skip spaces and tabs to start; end on EOL */
@@ -47,8 +49,6 @@ static void *mkshort_handle;
    1 = change of track to write out track header
    0 = in the middle of writing out track datapoints, so don't write a header */
 static int	psit_track_state = 2;
-
-#define MYNAME "MAPSOURCE" 
 
 static char psit_current_token[256];
 
@@ -583,17 +583,25 @@ psit_track_r(FILE *psit_file, route_head **trk)
 			}
 
 			/* date portion of the date time DD/MM/YY */
-			psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), whitespace);
-			sscanf(psit_current_token, "%02d/%02d/%02d", &(tmTime.tm_mday) , &(tmTime.tm_mon), &(tmTime.tm_year));
-			tmTime.tm_year += (tmTime.tm_year > 50 ? 0 : 100);		/* years are less 1900 in the tm struct */
-			tmTime.tm_mon--;										/* months are 0 to 11 in the tm struct */
+			psit_getToken(psit_file, psit_current_token,
+					sizeof(psit_current_token), whitespace);
+			sscanf(psit_current_token, "%02d/%02d/%02d", 
+				&(tmTime.tm_mday) , &(tmTime.tm_mon), 
+				&(tmTime.tm_year));
 
+			/* years are less 1900 in the tm struct */
+			tmTime.tm_year += (tmTime.tm_year > 50 ? 0 : 100);		
+			/* months are 0 to 11 in the tm struct */
+			tmTime.tm_mon--;										
 			/* time portion of the date time hh:mm:ss */
-			psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);
-			sscanf(psit_current_token, "%02d:%02d:%02d", &(tmTime.tm_hour) , &(tmTime.tm_min), &(tmTime.tm_sec));
+			psit_getToken(psit_file,psit_current_token,
+					sizeof(psit_current_token), wscomma);
+			sscanf(psit_current_token, "%02d:%02d:%02d", 
+					&(tmTime.tm_hour) , &(tmTime.tm_min), 
+					&(tmTime.tm_sec));
 
 			tmTime.tm_isdst = 0;
-			dateTime = mktime(&tmTime);
+			dateTime = mktime(&tmTime) + get_tz_offset();
 
 			psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), whitespace);
 
@@ -669,7 +677,6 @@ psit_trackhdr_w(FILE *psit_file, const route_head *trk)
 		}
 	}
 	psit_track_state = 1;
-
 }
 
 static void
@@ -687,7 +694,7 @@ static void
 psit_trackdatapoint_w(FILE *psit_file, const waypoint *wpt)
 {
 	time_t	t = wpt->creation_time;
-	struct tm *tmTime = gmtime(&(wpt->creation_time));
+	struct tm *tmTime = gmtime(&t);
 
 	double	psit_altitude = wpt->position.altitude.altitude_meters;
 	double	psit_proximity = unknown_alt;

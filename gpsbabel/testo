@@ -392,8 +392,7 @@ compare reference/mps-empty.mps ${TMPDIR}/psit-rt.mps
 rm -f ${TMPDIR}/psit-tt.txt ${TMPDIR}/psit-tt.mps
 ${PNAME} -t -i psitrex -f reference/track/psittrks.txt -o mapsource -F ${TMPDIR}/psit-tt.mps
 ${PNAME} -t -i mapsource -f ${TMPDIR}/psit-tt.mps -o psitrex -F ${TMPDIR}/psit-tt.txt
-echo skipping psitrex track test for now
-# compare reference/track/psittrks.txt ${TMPDIR}/psit-tt.txt
+compare reference/track/psittrks.txt ${TMPDIR}/psit-tt.txt
 
 # Now test correct "empty" handling - ask for waypoints when there aren't any
 # Uses mapsource as the empty handling for this has already happened above
