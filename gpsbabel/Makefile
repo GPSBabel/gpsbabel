@@ -78,13 +78,15 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > $@ || (rm -f $@ ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_2_2_beta03182004
-VERSIOND=1.2.2_beta03182004
+VERSIONU=1_2_2_beta0317a2004
+VERSIOND=1.2.2_beta0317a2004
 #VERSIONU=1_2_1
 #VERSIOND=1.2.1
 
 release:
+	cvs commit
 	./chkdoc
+	make clean &&  cd mingw ; make clean 
 	rm -fr gpsbabel-$(VERSIOND)
 	cvs tag -F gpsbabel_$(VERSIONU)
 	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
