@@ -136,7 +136,7 @@ data_read(void)
 						break;
 					}
 				}
-				wpt_tmp->description = xstrdup(bbuf);
+				wpt_tmp->notes = xstrdup(bbuf);
 				break;
 			case 9: /* NULL Terminated (vs. pascal) link */
 				bbufp = bbuf;
