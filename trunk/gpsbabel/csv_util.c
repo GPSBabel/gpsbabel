@@ -826,7 +826,7 @@ xcsv_data_write(void)
 
        if (ol) {
                fprintf(xcsv_file.xcsvfp, "%s", ol);
-               free(ol);
+               xfree(ol);
        } else {
                fprintf(xcsv_file.xcsvfp, "%s", ogp->val);
        }
