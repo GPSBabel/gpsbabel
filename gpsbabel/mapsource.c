@@ -188,6 +188,7 @@ static icon_mapping_t icon_table[] = {
 	{    62, "Truck Stop" },
 	{   103, "Tunnel" },
 	{   114, "Ultralight Area" },
+	{    18, "Waypoint" },
 	{    17, "White Buoy" },
 	{    35, "White Dot" },
 	{    88, "Zoo" },
