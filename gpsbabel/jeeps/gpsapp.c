@@ -483,6 +483,9 @@ static void GPS_A001(GPS_PPacket packet)
 			    case 300: gps_trk_type = pD300; break;
 			    case 301: gps_trk_type = pD301; break;
 			    case 302: gps_trk_type = pD302; break;
+			    case 310: gps_trk_hdr_type = pD310; break;
+			    case 311: gps_trk_hdr_type = pD311; break;
+			    case 312: gps_trk_hdr_type = pD312; break;
 		    	    default:  GPS_Protocol_Error(tag,data); break;
 		    }
 		    continue;
@@ -3283,6 +3286,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 	    switch(gps_trk_hdr_type)
 	    {
 	    case pD310:
+	    case pD312:
 		GPS_D310_Get(&((*trk)[i]),rec->data);
 		break;
 	    default:
@@ -3307,8 +3311,10 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 	    GPS_D300b_Get(&((*trk)[i]),rec->data);
 	    break;
 	case pD301:
-	case pD302:
 	    GPS_D301b_Get(&((*trk)[i]),rec->data);
+	    break;
+	case pD302:
+	    GPS_D302b_Get(&((*trk)[i]),rec->data);
 	    break;
 	default:
 	    GPS_Error("A301_GET: Unknown track protocol");
@@ -3497,6 +3503,7 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 	    switch(gps_trk_hdr_type)
 	    {
 	    case pD310:
+	    case pD312:
 		GPS_D310_Send(data,trk[i],&len);
 		break;
 	    default:
@@ -3670,6 +3677,52 @@ void GPS_D301b_Get(GPS_PTrack *trk, UC *data)
     return;
 }
 
+/* @func GPS_D302b_Get ******************************************************
+**
+** Get track data (A301 protocol)
+**
+** @param [w] trk [GPS_PTrack *] track
+** @param [r] data [UC *] packet data
+**
+** @return [void]
+************************************************************************/
+void GPS_D302b_Get(GPS_PTrack *trk, UC *data)
+{
+    UC *p;
+    uint32 t;
+    double temp;
+    
+    p=data;
+    
+    (*trk)->lat = GPS_Math_Semi_To_Deg(GPS_Util_Get_Int(p));
+    p+=sizeof(int32);
+
+    (*trk)->lon = GPS_Math_Semi_To_Deg(GPS_Util_Get_Int(p));
+    p+=sizeof(int32);
+
+    t = GPS_Util_Get_Uint(p);
+    if(!t || t==0x7fffffff || t==0xffffffff)
+	(*trk)->Time=0;
+    else
+	(*trk)->Time = GPS_Math_Gtime_To_Utime((time_t)t);
+    p+=sizeof(uint32);
+
+    (*trk)->alt = GPS_Util_Get_Float(p);
+    p+=sizeof(float);
+
+    (*trk)->dpth = GPS_Util_Get_Float(p);
+    p+=sizeof(float);
+
+    /* The only difference between 302 and 301 is the presence of temp
+     * in the middle.   Nice planning, eh?
+     */
+    temp = GPS_Util_Get_Float(p);
+    p+=sizeof(float);
+
+    (*trk)->tnew = *p;
+
+    return;
+}
 
 
 /* @func GPS_D310_Get ******************************************************
@@ -3698,6 +3751,29 @@ void GPS_D310_Get(GPS_PTrack *trk, UC *s)
     return;
 }
 
+/* @func GPS_D311_Get ******************************************************
+**
+** Get track header data (A301 protocol)
+**
+** @param [w] trk [GPS_PTrack *] track
+** @param [r] s [UC *] packet data
+**
+** @return [void]
+************************************************************************/
+void GPS_D311_Get(GPS_PTrack *trk, UC *s)
+{
+    UC *p;
+    UC *q;
+    short identifier;
+    
+    p=s;
+
+    /* Forerunner */
+    identifier = GPS_Util_Get_Short(s);
+    sprintf((*trk)->trk_ident, "%d", identifier);
+
+    return;
+}
 
 
 /* @func GPS_D300_Send **************************************************
