@@ -203,6 +203,8 @@ void waypt_disp_all(waypt_cb);
 void waypt_flush(queue *);
 void waypt_flush_all();
 unsigned int waypt_count(void);
+void free_gpx_extras (xml_tag * tag);
+void xcsv_read_internal_style(const char *style_buf);
 
 route_head *route_head_alloc(void);
 void route_add (waypoint *);
