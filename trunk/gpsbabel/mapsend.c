@@ -237,7 +237,7 @@ mapsend_track_read(void)
 
 	track_head = route_head_alloc();
 	track_head->rte_name = trk_name;
-	route_add_head(track_head);
+	track_add_head(track_head);
 
 	while (trk_count--) {
 		my_fread8(&wpt_long, mapsend_file_in);
@@ -540,7 +540,7 @@ void mapsend_track_disp(const waypoint * wpt)
 void 
 mapsend_track_write(void)
 {
-	route_disp_all(mapsend_track_hdr, mapsend_noop, mapsend_track_disp);
+	track_disp_all(mapsend_track_hdr, mapsend_noop, mapsend_track_disp);
 }
 
 static void
