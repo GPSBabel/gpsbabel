@@ -1342,8 +1342,23 @@ mag_write(void)
 	}
 }
 
-ff_vecs_t mag_vecs = {
+/*
+ *  This is repeated just so it shows up as separate menu options
+ *  for the benefit of GUI wrappers.
+ */
+ff_vecs_t mag_svecs = {
 	ff_type_serial,
+	mag_rd_init,	
+	mag_wr_init,	
+	mag_deinit,	
+	mag_deinit,	
+	mag_read,
+	mag_write,
+	mag_args
+};
+
+ff_vecs_t mag_fvecs = {
+	ff_type_file,
 	mag_rd_init,	
 	mag_wr_init,	
 	mag_deinit,	
