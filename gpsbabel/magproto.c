@@ -444,6 +444,14 @@ retry:
 	}
 	if (strncmp(ibuf, "$PMGNTRK,", 7) == 0) {
 		waypoint *wpt = mag_trkparse(ibuf);
+		/*
+		 * Allow lazy allocation of track head.
+		 */
+		if (trk_head == NULL) {
+			trk_head = route_head_alloc();
+			track_add_head(trk_head);
+		}
+
 		route_add_wpt(trk_head, wpt);
 	}
 	if (strncmp(ibuf, "$PMGNRTE,", 7) == 0) {
@@ -1056,9 +1064,6 @@ mag_read(void)
 	switch (global_opts.objective)
 	{
 		case trkdata:
-			trk_head = route_head_alloc();
-			track_add_head(trk_head);
-
 			if (!is_file) 
 				mag_writemsg("PMGNCMD,TRACK,2");
 
