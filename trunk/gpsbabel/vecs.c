@@ -72,6 +72,7 @@ extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t hiketech_vecs;
 extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t vcf_vecs;
+extern ff_vecs_t overlay_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -328,6 +329,12 @@ vecs_t vec_list[] = {
                 "Vcard Output (for iPod)",
                 "vcf",
         },
+	{
+		&overlay_vecs,
+		"overlay",
+		"GeoGrid-Viewer",
+		"ovl"
+	},
 	{
 		NULL,
 		NULL,
