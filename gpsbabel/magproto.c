@@ -1129,7 +1129,7 @@ void mag_track_disp(const waypoint *waypointp)
 	double lon, lat;
 	int lon_deg, lat_deg;
 	char obuf[200];
-	int hms=0,fracsec=0; 	/* FIXME: Read HMS from waypoint time */
+	int hms=0,fracsec=0;
 	int date=0;
 	struct tm *tm;
 
@@ -1154,9 +1154,6 @@ void mag_track_disp(const waypoint *waypointp)
 	lon = (lon_deg * 100.0 + lon);
 	lat = (lat_deg * 100.0 + lat);
 
-	/*
-	 * 	FIXME: Utterly untested.   LIkely wrong.
-	 */
 	sprintf(obuf,"PMGNTRK,%4.3f,%c,%09.3f,%c,%05.f,%c,%d.%d,A,,%06d", 
 		lat, ilat < 0 ? 'S' : 'N',
 		lon, ilon < 0 ? 'W' : 'E',
