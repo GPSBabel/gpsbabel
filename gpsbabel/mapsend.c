@@ -411,6 +411,8 @@ mapsend_waypt_pr(const waypoint *waypointp)
 		c = strlen(waypointp->description);
 	else
 		c = 0;
+
+	if (c > 30) c = 30;
 	fwrite(&c, 1, 1, mapsend_file_out);
 	fwrite(waypointp->description, c, 1, mapsend_file_out);
 
