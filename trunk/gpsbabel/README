@@ -279,6 +279,18 @@ THE FORMATS
         against GpsDrive v 1.30 found @ http://www.kraftvoll.at/software.
         Contributed by Alan Curry.
 
+    Geocaching DB
+
+	This is a PDA file format.    It was tested against version 2
+	of GeocachingDB and a development snapshot of version 3.  
+	Information on the file format came from Dougs Brat and Ron Parker.
+	A particularly handy way to use GPSBabel on these files is to use
+	GPSBabel to read a GPX file with Groundspeak  (geocaching.com) 
+	extensions and let it write you a GeocachingDB file that contains
+	the cache names, difficulty, terrain, and such.
+
+	http://vip.hyperusa.com/~dougs/geocachingdb/geocachingdb.htm
+
 
 COMMON USAGE
 
