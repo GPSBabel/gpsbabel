@@ -30,8 +30,6 @@ int bitrate = 4800;
 
 #define debug_serial  (global_opts.debug_level > 1)
 
-extern gpsdata_type objective;
-
 static char * termread(char *ibuf, int size);
 static void termwrite(char *obuf, int size);
 static void mag_readmsg(void);
