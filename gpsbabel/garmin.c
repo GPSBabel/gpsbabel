@@ -109,15 +109,25 @@ track_read(void)
 	int32 ntracks;
 	GPS_PTrack *array;
 	route_head *trk_head = NULL;
-	waypoint *waypts;
 	int trk_num = 0;
 	char rtedescbuf[100];
 	int i;
 
 	ntracks = GPS_Command_Get_Track(portname, &array);
-	waypts = xcalloc(sizeof (waypoint), ntracks);
 
 	for(i = 0; i < ntracks; i++) {
+		waypoint *wpt;
+
+		/*
+		 * This is probably always in slot zero, but the Garmin
+		 * serial spec says these can appear anywhere.  Toss them
+		 * out so we don't treat it as an extraneous trackpoint.
+		 */ 	
+		if (array[i]->ishdr) {
+			continue;
+		}
+
+
 		if ((trk_head == NULL) || array[i]->tnew) {
 			trk_head = route_head_alloc();
 			trk_head->rte_num = trk_num;
@@ -128,13 +138,15 @@ track_read(void)
 			route_add_head(trk_head);
 		}
 
-		waypts[i].longitude = array[i]->lon;
-		waypts[i].latitude = array[i]->lat;
-		waypts[i].altitude = array[i]->alt;
-		waypts[i].shortname = xstrdup(array[i]->trk_ident);
-		waypts[i].creation_time = array[i]->Time;
+		wpt = waypt_new();
+
+		wpt->longitude = array[i]->lon;
+		wpt->latitude = array[i]->lat;
+		wpt->altitude = array[i]->alt;
+		wpt->shortname = xstrdup(array[i]->trk_ident);
+		wpt->creation_time = array[i]->Time;
 		
-		route_add_wpt(trk_head, &waypts[i]);
+		route_add_wpt(trk_head, wpt);
 	}
 
 	while(--ntracks) {
