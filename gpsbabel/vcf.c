@@ -26,10 +26,14 @@
 static FILE *file_out;
 static void *mkshort_handle;
 
+static char *encrypt = NULL;
+
 #define MYNAME "VCF"
 
 static
 arglist_t vcf_args[] = {
+	{ "encrypt", &encrypt,
+		"Encrypt hints using ROT13", NULL, ARGTYPE_BOOL },
 	{0, 0, 0, 0, 0}
 };
 
@@ -72,8 +76,10 @@ static void
 vcf_print(const char *s)
 {
 	char *p;
+
 	if (!s)
 		return;
+
  	p = gstrsub(s, "\n", "\\n");
 	fputs(p, file_out);
 	xfree(p);
@@ -105,7 +111,13 @@ vcf_disp(const waypoint *wpt)
 	fprintf(file_out, "\\n");
 	vcf_print_utf(&wpt->gc_data.desc_long);
 	fprintf(file_out, "\\n\\nHINT:\\n");
-	vcf_print(wpt->gc_data.hint);
+	if (encrypt) {
+		char *s = rot13(wpt->gc_data.hint);
+		vcf_print(s);
+		xfree(s);
+	} else {
+		vcf_print(wpt->gc_data.hint);
+	}
 
 	fprintf(file_out, "\nEND:VCARD\n");
 }
