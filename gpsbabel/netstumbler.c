@@ -32,7 +32,6 @@ static char *sneicon = "Green Diamond";
 static char *snmac = NULL;
 
 static void	fix_netstumbler_dupes(void);
-extern unsigned long get_crc32(const void * data, int datalen);
 
 #define MYNAME "NETSTUMBLER"
 
