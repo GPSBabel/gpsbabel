@@ -2,7 +2,7 @@ CFLAGS=-g -Icoldsync
 
 FMTS=magproto.o gpx.o geo.o gpsman.o mapsend.o mapsource.o \
 	gpsutil.o tiger.o pcx.o csv.o cetus.o gpspilot.o magnav.o \
-	psp.o mxf.o holux.o garmin.o ozi.o
+	psp.o mxf.o holux.o garmin.o ozi.o dna.o
 
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o jeeps/gpsfmt.o jeeps/gpsinput.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
@@ -24,6 +24,7 @@ clean:
 
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 csv.o: csv.c defs.h queue.h csv_util.h
+dna.o: dna.c defs.h queue.h csv_util.h
 csv_util.o: csv_util.c defs.h queue.h csv_util.h
 garmin.o: garmin.c defs.h queue.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \

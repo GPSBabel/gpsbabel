@@ -141,6 +141,14 @@ THE FORMATS
         Professional, Take a Hike, and ExpertGPS import/export MFX.
         Contributed by Alex Mottram.
 
+    DNA
+
+	Navitrak DNA marker format - Another CSV format file.
+	This is the format that is compatible with the DNA Desktop
+	import/export command.  Reading the binary Markers.jwp 
+	format directly off the data card is not supported yet.
+	Contributed by Tim Zickus.
+
     OZI
 
         OziExplorer Waypoint Format - Another CSV format file.  Tested
