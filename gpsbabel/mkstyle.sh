@@ -5,7 +5,7 @@ do
 	[ $A = "README" ] && continue
 	ALIST="{ \"$A\", $A } , $ALIST"
 	echo "static char $A[] = "
-	sed 's/"/\\"/g;s/\(^.\)/"\1/g;s/\(.$\)/\1\\\n"/g' $i 
+	sed 's/\\/\\\\/;s/"/\\"/g;s/\(^.\)/"\1/g;s/\(.$\)/\1\\\n"/g' $i 
 	echo ";"
 
 done

@@ -173,8 +173,14 @@ xcsv_parse_style_line(const char *sbuff)
      */
 
     /* whack off any comments */
-    if ((p = strchr(sbuff, '#')) != NULL)
-	*p = '\0';
+    if ((p = strchr(sbuff, '#')) != NULL) {
+	    if ((p > sbuff) && p[-1] == '\\') {
+		memmove(p-1, p, strlen(p));
+	    	p[strlen(p)-1] = '\0';
+	    } else {
+		*p = '\0';
+	    }	 
+    }
 
     if (strlen(sbuff)) {
 	if (ISSTOKEN(sbuff, "FIELD_DELIMITER")) {
