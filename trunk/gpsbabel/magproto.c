@@ -35,11 +35,11 @@ static void termwrite(char *obuf, int size);
 static void mag_readmsg(void);
 static void mag_handon(void);
 static void mag_handoff(void);
-static void *mkshort_handle;
-static char *deficon;
-static char *bs;
-static char *noack;
-static char *nukewpt;
+static void *mkshort_handle = NULL;
+static char *deficon = NULL;
+static char *bs = NULL;
+static char *noack = NULL;
+static char *nukewpt = NULL;
 static int route_out_count;
 static int waypoint_read_count;
 

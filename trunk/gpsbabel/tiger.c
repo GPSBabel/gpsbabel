@@ -33,16 +33,25 @@ static double maxlat, maxlon, minlat, minlon;
 int rec_cnt;
 static char *nolabels = NULL;
 static char *genurl = NULL;
+static char *suppresswhite = NULL;
+static char *iconismarker = NULL;
+static char *snlen = NULL;
+
 static char *margin  = "15%";
 static char *xpixels = "768";
 static char *ypixels = "768";
-static char *snlen = NULL;
 static char *oldthresh = "14";
 static char *oldmarker  = "redpin";
 static char *newmarker  = "greenpin";
 static char *unfoundmarker  = "bluepin";
-static char *suppresswhite = NULL;
-static char *iconismarker = NULL;
+
+static char *optmargin = NULL;
+static char *optxpixels = NULL;
+static char *optypixels = NULL;
+static char *optoldthresh = NULL;
+static char *optoldmarker = NULL;
+static char *optnewmarker = NULL;
+static char *optunfoundmarker = NULL;
 
 int scalev;
 int short_length;
@@ -65,23 +74,23 @@ arglist_t tiger_args[] = {
 		ARGTYPE_BOOL },
 	{"genurl", &genurl, "Generate file with lat/lon for centering map.",
 		ARGTYPE_OUTFILE },
-	{"margin", &margin, "Margin for map.  Degrees or percentage.",
+	{"margin", &optmargin, "Margin for map.  Degrees or percentage.",
 		ARGTYPE_FLOAT},
 	{"snlen", &snlen, "Max shortname length when used with -s.",
 		ARGTYPE_INT},
-	{"oldthresh", &oldthresh, "Days after which points are considered old.",
+	{"oldthresh", &optoldthresh, "Days after which points are considered old.",
 		ARGTYPE_INT},
-	{"oldmarker", &oldmarker, "Marker type for old points.",
+	{"oldmarker", &optoldmarker, "Marker type for old points.",
 		ARGTYPE_STRING},
-	{"newmarker", &newmarker, "Marker type for new points.",
+	{"newmarker", &optnewmarker, "Marker type for new points.",
 		ARGTYPE_STRING},
 	{"suppresswhite", &suppresswhite,
 		"Suppress whitespace in generated shortnames", ARGTYPE_BOOL },
-	{"unfoundmarker", &unfoundmarker, "Marker type for unfound points.",
+	{"unfoundmarker", &optunfoundmarker, "Marker type for unfound points.",
 		ARGTYPE_STRING},
-	{"xpixels", &xpixels, "Width in pixels of map.",
+	{"xpixels", &optxpixels, "Width in pixels of map.",
 		ARGTYPE_INT},
-	{"ypixels", &ypixels, "Height in pixels of map.",
+	{"ypixels", &optypixels, "Height in pixels of map.",
 		ARGTYPE_INT},
 	{"iconismarker", &iconismarker,
 		"The icon description is already the marker", ARGTYPE_BOOL },
@@ -96,6 +105,13 @@ arglist_t tiger_args[] = {
 static void
 rd_init(const char *fname)
 {
+	margin  = optmargin?optmargin:"15%";
+	xpixels = optxpixels?optxpixels:"768";
+	ypixels = optypixels?optypixels:"768";
+	oldthresh = optoldthresh?optoldthresh:"14";
+	oldmarker  = optoldmarker?optoldmarker:"redpin";
+	newmarker  = optnewmarker?optnewmarker:"greenpin";
+	unfoundmarker  = optunfoundmarker?optunfoundmarker:"bluepin";
 	file_in = xfopen(fname, "r", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 }
@@ -110,6 +126,13 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
+	margin  = optmargin?optmargin:"15%";
+	xpixels = optxpixels?optxpixels:"768";
+	ypixels = optypixels?optypixels:"768";
+	oldthresh = optoldthresh?optoldthresh:"14";
+	oldmarker  = optoldmarker?optoldmarker:"redpin";
+	newmarker  = optnewmarker?optnewmarker:"greenpin";
+	unfoundmarker  = optunfoundmarker?optunfoundmarker:"bluepin";
 	file_out = xfopen(fname, "w", MYNAME);
 	thresh_days = strtod(oldthresh, NULL);
 }

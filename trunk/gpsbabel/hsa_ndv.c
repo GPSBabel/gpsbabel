@@ -422,8 +422,10 @@ void readVersion4( FILE* pFile)
 		for( Vertex = 0; Vertex < numberOfVerticies; Vertex++)
 		{		
 			// read vertex position
-			if( !readPositionRecord( pFile, &lat2, &lng2, pts2) )
+			if( !readPositionRecord( pFile, &lat2, &lng2, pts2) ) {
+				xfree(wpt_tmp);
 				return;
+			}
 
 			wpt_tmp->longitude = lng2;
 			wpt_tmp->latitude = lat2;
@@ -432,12 +434,16 @@ void readVersion4( FILE* pFile)
 
 
 		// read the class name
-		if( !readRecord( pFile, EF_CLNM_REC, className) )
+		if( !readRecord( pFile, EF_CLNM_REC, className) ) {
+			xfree( wpt_tmp );
 			return;
+		}
 
 		// read the attributes name
-		if( !readRecord( pFile, EF_ATTR_REC, attr) )
+		if( !readRecord( pFile, EF_ATTR_REC, attr) ) {
+			xfree( wpt_tmp );
 			return;
+		}
 		getAttr(attr, ATTR_OBJECTNAME, &wpt_tmp->shortname, '\x1f');
 		getAttr(attr, ATTR_USRMRK, &wpt_tmp->description, '\x1f');
 

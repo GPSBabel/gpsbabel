@@ -30,6 +30,10 @@ static char *nsneicon = "Green Square";
 static char *seicon = "Red Diamond";
 static char *sneicon = "Green Diamond";
 static char *snmac = NULL;
+static char *optnseicon = NULL;
+static char *optnsneicon = NULL;
+static char *optseicon = NULL;
+static char *optsneicon = NULL;
 
 static void	fix_netstumbler_dupes(void);
 
@@ -37,10 +41,10 @@ static void	fix_netstumbler_dupes(void);
 
 static
 arglist_t netstumbler_args[] = {
-	{"nseicon", &nseicon, "Non-stealth encrypted icon name", ARGTYPE_STRING },
-	{"nsneicon", &nsneicon, "Non-stealth non-encrypted icon name", ARGTYPE_STRING },
-	{"seicon", &seicon, "Stealth encrypted icon name", ARGTYPE_STRING },
-	{"sneicon", &sneicon, "Stealth non-encrypted icon name", ARGTYPE_STRING },
+	{"nseicon", &optnseicon, "Non-stealth encrypted icon name", ARGTYPE_STRING },
+	{"nsneicon", &optnsneicon, "Non-stealth non-encrypted icon name", ARGTYPE_STRING },
+	{"seicon", &optseicon, "Stealth encrypted icon name", ARGTYPE_STRING },
+	{"sneicon", &optsneicon, "Stealth non-encrypted icon name", ARGTYPE_STRING },
 	{"snmac", &snmac, "Shortname is MAC address", ARGTYPE_BOOL },
 	{0, 0, 0, 0}
 };
@@ -48,6 +52,10 @@ arglist_t netstumbler_args[] = {
 static void
 rd_init(const char *fname)
 {
+	nseicon = optnseicon?optnseicon:"Red Square";
+	nsneicon = optnsneicon?optnsneicon:"Green Square";
+	seicon = optseicon?optseicon:"Red Diamond";
+	sneicon = optsneicon?optsneicon:"Green Diamond";
 	file_in = xfopen(fname, "r", MYNAME);
 }
 

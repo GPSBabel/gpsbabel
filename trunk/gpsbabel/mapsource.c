@@ -546,7 +546,7 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 	int lon;
 	int	icon;
 
-	waypoint	*thisWaypoint;
+ 	waypoint	*thisWaypoint = NULL;
 	double	mps_altitude = unknown_alt;
 	double	mps_proximity = unknown_alt;
 	double	mps_depth = unknown_alt;
@@ -634,7 +634,7 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 	/* The following Now done elsewhere since it can be useful to read in and 
 	  perhaps not add to the list */
 	/* waypt_add(thisWaypoint); */
-
+	
 	return;
 }
 
@@ -1820,11 +1820,15 @@ mps_read(void)
 				fprintf(stderr,"Lost sync with the file reading waypoint - %s\n", wpt->shortname);
 #endif
 				fseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
+				waypt_free( wpt );
 			}
 			else {
 				/* only add to the "real" list if a "user" waypoint otherwise add to the private list */
 				if (mpsWptClass == MPSDEFAULTWPTCLASS) waypt_add(wpt);
-				else mps_wpt_q_add(&read_route_wpt_head, wpt);
+				else {
+					mps_wpt_q_add(&read_route_wpt_head, wpt);
+					waypt_free( wpt );
+				}
 #ifdef DUMP_ICON_TABLE
 				printf("\t{  %4u, \"%s\" },\n", icon, wpt->shortname);
 #endif
@@ -1972,6 +1976,7 @@ mps_write(void)
 				   since we're here because the user didn't request waypoints, this should be acceptable */
 				mps_waypoint_r(mps_file_temp, mps_ver_temp, &wpt, &mpsWptClass);
 				mps_wpt_q_add(&written_wpt_head, wpt);
+				waypt_free( wpt );
 				/* now return to the start of the waypoint data to do a "clean" copy */
 				fseek(mps_file_temp, tempFilePos, SEEK_SET);
 
@@ -2003,7 +2008,7 @@ mps_write(void)
 				if (recType == 'W')  {
 					/* need to be careful that we aren't duplicating a wpt defined from elsewhere */
 					mps_waypoint_r(mps_file_temp, mps_ver_temp, &wpt, &mpsWptClass);
-					if (mpsWptClass == MPSDEFAULTWPTCLASS) waypt_add(wpt);
+					if (mpsWptClass == MPSDEFAULTWPTCLASS) waypt_add(wpt);else waypt_free(wpt);
 				}
 				else break;
 			}

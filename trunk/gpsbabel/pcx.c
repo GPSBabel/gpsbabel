@@ -26,19 +26,26 @@
 static FILE *file_in;
 static FILE *file_out;
 static void *mkshort_handle;
+static char *optdeficon = NULL;
 static char *deficon = "Waypoint";
 
 #define MYNAME "PCX"
 
 static
 arglist_t pcx_args[] = {
-	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING },
+	{"deficon", &optdeficon, "Default icon name", ARGTYPE_STRING },
 	{0, 0, 0, 0}
 };
 
 static void
 rd_init(const char *fname)
 {
+	if ( optdeficon ) {
+		deficon = optdeficon;
+	}
+	else {
+		deficon = "Waypoint";
+	}
 	file_in = xfopen(fname, "r", MYNAME);
 }
 
@@ -51,6 +58,12 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
+	if ( optdeficon ) {
+		deficon = optdeficon;
+	}
+	else {
+		deficon = "Waypoint";
+	}
 	file_out = xfopen(fname, "w", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 }
