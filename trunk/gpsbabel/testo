@@ -80,11 +80,12 @@ diff ${TMPDIR}/magfile reference/magfile
 ${PNAME} -i dna -f reference/dnatest.txt -o dna -F ${TMPDIR}/dnatest.txt
 diff ${TMPDIR}/dnatest.txt reference/dnatest.txt
 
-# PSP (PocketStreets 2002 Pushpin (.PSP)) file format
-rm -f ${TMPDIR}/ps.psp ${TMPDIR}/psp.psp
-${PNAME} -i psp -f reference/ps.psp -o psp -F ${TMPDIR}/psp.psp
-${PNAME} -i psp -f ${TMPDIR}/psp.psp -o psp -F ${TMPDIR}/ps.psp
-diff ${TMPDIR}/ps.psp reference
+# PSP (PocketStreets 2002 Pushpin (.PSP)) file format. Use mxf as an 
+# intermediate format to avoid binary FP anomalies on different platforms.
+rm -f ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
+${PNAME} -i psp -f reference/ps.psp -o mxf -F ${TMPDIR}/psp.mxf
+${PNAME} -i geo -f geocaching.loc -o mxf -F ${TMPDIR}/mxf.psp
+diff ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
 
 # MXF (Maptech Exchange Format) file format
 rm -f ${TMPDIR}/mx.mxf ${TMPDIR}/mxf.mxf

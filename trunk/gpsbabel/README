@@ -135,8 +135,8 @@ THE FORMATS
 	NOTE:	sn* options require use of the '-s' command line option.
 
 	Example Usage:
-	gpsbabel -i xsv,style=foo.style -f foo -o xsv,style=bar.style -F bar
-	gpsbabel -s -i gpx -f foo.gpx -o xsv,style=my.style,snlen=8 -F bar
+	gpsbabel -i xcsv,style=foo.style -f foo -o xcsv,style=bar.style -F bar
+	gpsbabel -s -i gpx -f foo.gpx -o xcsv,style=my.style,snlen=8 -F bar
 
     MAPSEND
 

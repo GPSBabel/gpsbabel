@@ -36,8 +36,8 @@ HASH  		#
 COMMENTS:
 Anything after a hash (#) on a line is not parsed.  For example:
 #THIS ENTIRE LINE IS A COMMENT.
-#FIELD	LAT_DECIMAL, "", "%lf"   THIS ENTIRE LINE IS A COMMENT
-FIELD LAT_DECIMAL, "", "%lf"  # ONLY THIS SENTENCE IS A COMMENT.
+#FIELD	LAT_DECIMAL, "", "%f"   THIS ENTIRE LINE IS A COMMENT
+FIELD LAT_DECIMAL, "", "%f"  # ONLY THIS SENTENCE IS A COMMENT.
 
 
 DEFINING THE LAYOUT OF THE FILE:
@@ -188,7 +188,7 @@ The fields used by the XCSV parser are as follows:
    signed decimal format (i.e. -91.0000).  This data is handled internally as 
    a DOUBLE PRECISION FLOAT and requires a FLOATING POINT printf conversion.
 
-   example: IFIELD LAT_DECIMAL,"","%lf"
+   example: IFIELD LAT_DECIMAL,"","%f"
 
  o LON_DECIMAL
    See LAT_DECIMAL, except LON_DECIMAL defines LONGITUDE.
@@ -211,8 +211,8 @@ The fields used by the XCSV parser are as follows:
    character appears before (LAT_DIRDECIMAL) or after (LAT_DECIMALDIR) the
    decimal number.
    
-   example: IFIELD LAT_DECIMALDIR,"","%lf %c"
-   example: IFIELD LAT_DIRDECIMAL,"","%c %08.5lf"
+   example: IFIELD LAT_DECIMALDIR,"","%f %c"       (writes 31.333 N)
+   example: IFIELD LAT_DIRDECIMAL,"","%c %f"       (writes N 31.333)
 
  o LON_DECIMALDIR / LON_DIRDECIMAL
    Same as LAT_DECIMALDIR / LAT_DIRDECIMAL except LON_ defines LONGITUDE.
@@ -223,7 +223,7 @@ The fields used by the XCSV parser are as follows:
    a SIGNED DOUBLE PRECISION FLOAT and requires a FLOATING POINT printf 
    conversion.
 
-   example: IFIELD ALT_FEET,"","%.0lf"
+   example: IFIELD ALT_FEET,"","%.0f"
 
  o ALT_METERS
    ALT_METERS is identical to ALT_FEET with the exception that the altitude
@@ -234,7 +234,7 @@ The fields used by the XCSV parser are as follows:
    the decimal days since 1/1/1900 and is handled internally as a DOUBLE
    PRECISION FLOAT and requires a FLOATING POINT printf conversion.
 
-   example: IFIELD EXCEL_TIME,"","%11.5lf"
+   example: IFIELD EXCEL_TIME,"","%11.5f"
 
  o TIMET_TIME
    TIMET_TIME is the waypoint's creation time, if any.  This is actually
