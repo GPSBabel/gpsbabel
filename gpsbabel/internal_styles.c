@@ -368,56 +368,6 @@ static char nima[] =
 "IFIELD	DESCRIPTION, \"\", \"%s\"		# FULL_NAME_ND\n"
 "IFIELD	IGNORE, \"\", \"%s\"		# MODIFY_DATE\n"
 ;
-static char ozi[] = 
-"# gpsbabel XCSV style file\n"
-"#\n"
-"# Format: Ozi Explorer\n"
-"# Author: Alex Mottram\n"
-"#   Date: 12/09/2002\n"
-"#\n"
-"# \n"
-"# As used in ozi.c\n"
-"# Modifications 9/18/2003 - Remove printf conversion constraints.\n"
-"#\n"
-
-"DESCRIPTION		OziExplorer Waypoint\n"
-"EXTENSION		ozi\n"
-"SHORTLEN		14\n"
-
-"#\n"
-"# FILE LAYOUT DEFINITIIONS:\n"
-"#\n"
-"FIELD_DELIMITER		COMMA\n"
-"RECORD_DELIMITER	NEWLINE\n"
-"BADCHARS		COMMA\n"
-
-"PROLOGUE	OziExplorer Waypoint File Version 1.1\n"
-"PROLOGUE	WGS 84\n"
-"PROLOGUE	Reserved 2\n"
-"PROLOGUE	Reserved 3\n"
-
-"#\n"
-"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
-"#\n"
-"IFIELD	INDEX, \"1\", \"%d\"\n"
-"IFIELD	SHORTNAME, \"\", \"%s\"\n"
-"IFIELD	LAT_DECIMAL, \"\", \"%.6f\"\n"
-"IFIELD	LON_DECIMAL, \"\", \"%.6f\"\n"
-"IFIELD	EXCEL_TIME, \"\", \"%.5f\"\n"
-"IFIELD	CONSTANT, \"0\", \"%s\"  		# icon \n"
-"IFIELD	CONSTANT, \"1\", \"%s\"  		# 1 \n"
-"IFIELD	CONSTANT, \"3\", \"%s\"  		# display format opts \n"
-"IFIELD	CONSTANT, \"0\", \"%s\"  		# foreground color \n"
-"IFIELD	CONSTANT, \"65535\", \"%s\"  	# background color \n"
-"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
-"IFIELD	CONSTANT, \"0\", \"%s\"  		# pointer direction \n"
-"IFIELD	CONSTANT, \"0\", \"%s\"  		# garmin display flags \n"
-"IFIELD	CONSTANT, \"0\", \"%s\"  		# proximity distance \n"
-"IFIELD	ALT_FEET, \"\", \"%.0f\"\n"
-"IFIELD	CONSTANT, \"6\", \"%s\"  		# waypt name text size \n"
-"IFIELD	CONSTANT, \"0\", \"%s\"  		# bold checkbox \n"
-"IFIELD	CONSTANT, \"17\", \"%s\"  		# symbol size \n"
-;
 static char s_and_t[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -567,4 +517,4 @@ static char xmapwpt[] =
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "s_and_t", s_and_t } , { "ozi", ozi } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "s_and_t", s_and_t } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};

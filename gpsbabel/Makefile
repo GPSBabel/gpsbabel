@@ -18,7 +18,8 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	gpsutil.o pcx.o cetus.o copilot.o gpspilot.o magnav.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
-	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o
+	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
+	ozi.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o
 
@@ -211,5 +212,5 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
-internal_styles.c: mkstyle.sh style/README.style style/arc.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/ozi.style style/s_and_t.style style/tabsep.style style/xmap.style style/xmapwpt.style
+internal_styles.c: mkstyle.sh style/README.style style/arc.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/s_and_t.style style/tabsep.style style/xmap.style style/xmapwpt.style
 	./mkstyle.sh > $@ || (rm -f $@ ; exit 1)
