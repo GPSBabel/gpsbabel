@@ -62,7 +62,7 @@ struct pdb_record *opdb_rec;
 static void
 rd_init(const char *fname)
 {
-	file_in = fopen(fname, "r");
+	file_in = fopen(fname, "rb");
 	if (file_in == NULL) {
 		fatal(MYNAME ": Cannot open %s for reading\n", fname);
 	}
@@ -77,7 +77,7 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-	file_out = fopen(fname, "w");
+	file_out = fopen(fname, "wb");
 	out_fname = fname;
 	if (file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
@@ -147,8 +147,12 @@ cetus_writewpt(waypoint *wpt)
 
 	strncpy(rec->ID, wpt->shortname, sizeof(rec->ID));
 	rec->ID[sizeof(rec->ID)-1] = 0;
-	strncpy(rec->name, wpt->description, sizeof(rec->name));
-	rec->name[sizeof(rec->name)-1] = 0;
+	if (wpt->description) {
+		strncpy(rec->name, wpt->description, sizeof(rec->name));
+		rec->name[sizeof(rec->name)-1] = 0;
+	} else {
+		rec->name[0] = 0;
+	}
 
 	if (wpt->creation_time) {
 		tm = gmtime(&wpt->creation_time);

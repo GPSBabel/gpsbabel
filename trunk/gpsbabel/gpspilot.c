@@ -43,7 +43,7 @@ struct pdb_record *opdb_rec;
 static void
 rd_init(const char *fname)
 {
-	file_in = fopen(fname, "r");
+	file_in = fopen(fname, "rb");
 	if (file_in == NULL) {
 		fatal(MYNAME ": Cannot open %s for reading\n", fname);
 	}
@@ -58,7 +58,7 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-	file_out = fopen(fname, "w");
+	file_out = fopen(fname, "wb");
 	out_fname = fname;
 	if (file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
