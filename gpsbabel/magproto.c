@@ -689,10 +689,11 @@ termwrite(char *obuf, int size)
 
 static
 arglist_t mag_args[] = {
-	{"baud", &bs, "Numeric value of bitrate (baud=4800)"},
-	{"noack", &noack, "Suppress use of handshaking in name of speed"},
-	{"deficon", &deficon, "Default icon name"},
-	{0, 0, 0}
+	{"baud", &bs, "Numeric value of bitrate (baud=4800)", ARGTYPE_INT },
+	{"noack", &noack, "Suppress use of handshaking in name of speed",
+		ARGTYPE_BOOL},
+	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING },
+	{0, 0, 0, 0}
 };
 
 static void

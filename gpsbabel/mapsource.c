@@ -52,8 +52,8 @@ char *snlen;
 
 static
 arglist_t mps_args[] = {
-	{"snlen", &snlen, "Length of generated shortnames" },
-	{0, 0, 0}
+	{"snlen", &snlen, "Length of generated shortnames", ARGTYPE_INT },
+	{0, 0, 0, 0}
 };
 
 const char *

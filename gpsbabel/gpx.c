@@ -63,6 +63,9 @@ static FILE *fd;
 static FILE *ofd;
 static void *mkshort_handle;
 
+static const char *input_string = NULL;
+static int input_string_len = 0;
+
 static time_t file_time;
 
 static char *gsshortnames = NULL;
@@ -733,9 +736,16 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 void
 gpx_rd_init(const char *fname, const char *args)
 {
-	fd = fopen(fname, "r");
-	if (fd == NULL) {
-		fatal(MYNAME ": Cannot open %s for reading\n", fname );
+	if ( fname[0] ) {
+	        fd = fopen(fname, "r");
+	        if (fd == NULL) {
+		        fatal(MYNAME ": Cannot open %s for reading\n", fname );
+	        }
+	}
+	else {
+		fd = NULL;
+		input_string = fname+1;
+		input_string_len = strlen(input_string);
 	}
 
         if (get_option(args, "logpoint") != NULL)
@@ -758,7 +768,9 @@ gpx_rd_deinit(void)
 	if ( cdatastr ) {
 		xfree(cdatastr);
 	}
-	fclose(fd);
+	if (fd) {
+	        fclose(fd);
+	}
 }
 
 void
@@ -786,11 +798,25 @@ gpx_read(void)
 	int len;
 	int done = 0;
 	char buf[MY_CBUF];
+	int result = 0;
 
 	while (!done) {
-		len = fread(buf, 1, sizeof(buf), fd);
-		done = feof(fd) || !len; 
-		if (!XML_Parse(psr, buf, len, done)) {
+		if ( fd ) {
+			len = fread(buf, 1, sizeof(buf), fd);
+			done = feof(fd) || !len;
+			result = XML_Parse(psr, buf, len, done);
+		}
+		else if (input_string) {
+			done = 0;
+			result = XML_Parse(psr, input_string, 
+					input_string_len, done );
+			done = 1;
+		}
+		else {
+			done = 1;
+			result = -1;
+		}
+		if (!result) {
 			fatal(MYNAME ": XML parse error at %d: %s\n", 
 				XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
@@ -1131,10 +1157,13 @@ gpx_write(void)
 
 static
 arglist_t gpx_args[] = {
-	{ "gsshortnames", &gsshortnames, "Prefer shorter descriptions from Groundspeak files"},
-	{ "snlen", &snlen, "Length of generated shortnames" },
-	{ "suppresswhite", &suppresswhite, "Suppress whitspace in generated shortnames" },
-	{ 0, 0, 0}
+	{ "gsshortnames", &gsshortnames, 
+		"Prefer shorter descriptions from Groundspeak files",
+		ARGTYPE_BOOL },
+	{ "snlen", &snlen, "Length of generated shortnames", ARGTYPE_INT },
+	{ "suppresswhite", &suppresswhite, 
+		"Suppress whitespace in generated shortnames", ARGTYPE_BOOL },
+	{ 0, 0, 0, 0 }
 };
 
 ff_vecs_t gpx_vecs = {

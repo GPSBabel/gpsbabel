@@ -40,14 +40,21 @@ char *xcsv_urlbase;
 
 static
 arglist_t xcsv_args[] = {
-	{"style", &styleopt, "Full path to XCSV style file (required)"},
-	{"snlen", &snlenopt, "Max synthesized shortname length"},
-	{"snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames"},
-	{"snupper", &snupperopt, "(0/1) UPPERCASE synth. shortnames"},
-	{"snunique", &snuniqueopt, "(0/1) Make synth. shortnames unique"},
-	{"urlbase", &xcsv_urlbase, "Basename prepended to URL on output"},
-	{"prefer_shortnames", &prefer_shortnames, "Use shortname instead of description"},
-	{0, 0, 0}
+	{"style", &styleopt, "Full path to XCSV style file",
+		ARGTYPE_FILE | ARGTYPE_REQUIRED },
+	{"snlen", &snlenopt, "Max synthesized shortname length",
+		ARGTYPE_INT},
+	{"snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames",
+		ARGTYPE_BOOL},
+	{"snupper", &snupperopt, "(0/1) UPPERCASE synth. shortnames",
+	        ARGTYPE_BOOL},
+	{"snunique", &snuniqueopt, "(0/1) Make synth. shortnames unique",
+		ARGTYPE_BOOL},
+	{"urlbase", &xcsv_urlbase, "Basename prepended to URL on output",
+	        ARGTYPE_STRING},
+	{"prefer_shortnames", &prefer_shortnames, 
+		"Use shortname instead of description", ARGTYPE_BOOL },
+	{0, 0, 0, 0}
 };
 
 /* a table of config file constants mapped to chars */

@@ -82,8 +82,8 @@ static char *dbname = NULL;
 
 static
 arglist_t cetus_args[] = {
-	{"dbname", &dbname, "Database name"},
-	{0, 0, 0}
+	{"dbname", &dbname, "Database name", ARGTYPE_STRING },
+	{0, 0, 0, 0 }
 };
 
 static void

@@ -32,8 +32,8 @@ static char *deficon = "Waypoint";
 
 static
 arglist_t pcx_args[] = {
-	{"deficon", &deficon, "Default icon name"},
-	{0, 0, 0}
+	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING },
+	{0, 0, 0, 0}
 };
 
 static void

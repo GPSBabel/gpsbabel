@@ -235,10 +235,23 @@ void setshort_mustupper(void *, int n);
 void setshort_mustuniq(void *, int n);
 void setshort_whitespace_ok(void *, int n);
 
+#define ARGTYPE_UNKNOWN  0
+#define ARGTYPE_INT      0x00000001
+#define ARGTYPE_FLOAT    0x00000002
+#define ARGTYPE_STRING   0x00000003
+#define ARGTYPE_BOOL     0x00000004
+#define ARGTYPE_FILE     0x00000005
+#define ARGTYPE_OUTFILE  0x00000006
+#define ARGTYPE_REQUIRED 0x40000000
+
+#define ARGTYPE_TYPEMASK 0x00000fff
+#define ARGTYPE_FLAGMASK 0xfffff000
+
 typedef struct arglist {
 	char *argstring;
 	char **argval;
 	char *helpstring;
+	long argtype;
 } arglist_t;
 
 typedef struct ff_vecs {
