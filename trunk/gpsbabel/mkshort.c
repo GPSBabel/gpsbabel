@@ -85,7 +85,7 @@ is_unique(mkshort_handle *h, char *name)
 }
 
 static
-int
+void
 add_to_hashlist(mkshort_handle *h, char *name)
 {
 	int hash = hash_string(name);
@@ -122,7 +122,7 @@ mkshort_add_to_list(mkshort_handle *h, char *name)
 	return name;
 }
 
-void *
+void
 mkshort_del_handle(void *h)
 {
 	mkshort_handle *hdr = h;

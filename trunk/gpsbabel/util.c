@@ -453,13 +453,18 @@ get_cache_icon(const waypoint *waypointp)
 		case gc_micro: 
 			return "Micro-Cache";
 			break;
+		default:
+			break;
 	}
 	switch (waypointp->gc_data.type) {
 		case gt_virtual:
 			return "Virtual cache";
 		case gt_multi:
 			return "Multi-Cache";
-			break;
+		case gt_event:
+			return "Event Cache";
+		case gt_suprise:
+			return "Unknown Cache";
 		default:
 			break;
 	}
