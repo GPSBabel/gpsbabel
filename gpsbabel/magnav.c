@@ -94,11 +94,11 @@ data_read(void)
 	struct pdb_record *pdb_rec;
 
 	if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
-		fatal(MYNAME ": pdb_Read failed");
+		fatal(MYNAME ": pdb_Read failed\n");
 	}
 
 	if ((pdb->creator != MYCREATOR) || (pdb->type != MYTYPE)) {
-		fatal(MYNAME ": Not a Magellan Navigator file.");
+		fatal(MYNAME ": Not a Magellan Navigator file.\n");
 	}
 
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
@@ -204,11 +204,11 @@ my_writewpt(waypoint *wpt)
 	opdb_rec = new_Record (0, 0, ct++, vdata-(char *)rec, (const ubyte *)rec);
 
 	if (opdb_rec == NULL) {
-		fatal(MYNAME ": libpdb couldn't create record");
+		fatal(MYNAME ": libpdb couldn't create record\n");
 	}
 
 	if (pdb_AppendRecord(opdb, opdb_rec)) {
-		fatal(MYNAME ": libpdb couldn't append record");
+		fatal(MYNAME ": libpdb couldn't append record\n");
 	}
 }
 

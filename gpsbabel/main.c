@@ -58,7 +58,7 @@ main(int argc, char *argv[])
 		char *optarg;
 
 		if (argv[argn][0] != '-') {
-			fatal ("argument '%s' not understood",argv[argn]);
+			fatal ("argument '%s' not understood\n",argv[argn]);
 		}
 
 		if (argv[argn][1] == '?' || argv[argn][1] == 'h') {
@@ -82,7 +82,7 @@ main(int argc, char *argv[])
 				fname = optarg;
 				argn++;
 				if (ivecs == NULL) {
-					fatal ("No valid input type specified");
+					fatal ("No valid input type specified\n");
 				}
 				ivecs->rd_init(fname, ivec_opts);
 				ivecs->read();
