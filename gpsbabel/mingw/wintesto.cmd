@@ -1,3 +1,4 @@
+@echo off
 REM
 REM Simple Windows NT/2000/XP .cmd version of GPSBabel testo script
 REM
@@ -312,6 +313,15 @@ DEL %TMPDIR%\gpxroute.gpx %TMPDIR%\maggpx.rte
 CALL :COMPARE %TMPDIR%\maggpx.rte reference\route\magellan.rte
 
 REM
+REM GPX tracks -- since GPX contains a date stamp, tests will always
+REM fail, so we use magellan as an interim format...
+REM
+DEL %TMPDIR%\gpxtrack.gpx %TMPDIR%\maggpx.trk
+%PNAME% -t -i gpx -f reference\track\tracks.gpx -o gpx -F %TMPDIR%\gpxtrack.gpx
+%PNAME% -t -i magellan -f reference\track\meridian.trk -o gpx -F %TMPDIR%\maggpx.trk
+CALL :COMPARE %TMPDIR%\maggpx.trk %TMPDIR%\gpxtrack.gpx
+
+REM
 REM MAPSEND waypoint / route format
 REM
 DEL %TMPDIR%\route.mapsend
@@ -410,11 +420,22 @@ DEL %TMPDIR%\polygon.txt
 %PNAME% -i xmap -f reference\arcdist_input.txt -x polygon,file=reference\polygon_allencty.txt -o xmap -F %TMPDIR%\polygon.txt
 CALL :COMPARE %TMPDIR%\polygon.txt reference\polygon_output.txt
 
-
-
+REM
+REM Simplify filter
+REM
+DEL %TMPDIR%\simplify.txt
+%PNAME% -r -i gpx -f reference\route\route.gpx -x simplify,count=10 -o arc -F %TMPDIR%\simplify.txt
+CALL :COMPARE %TMPDIR%\simplify.txt reference\simplify_output.txt
 
 REM
-REM This is  nasty.   If we have a dictionary handy, treat it as a list of
-REM waypoints and reduce all the names to eight characters.   Fewer chars
-REM results in lost waypoints currently and that's a defect.
+REM Route reversal filter.   Do it twice and be sure we get what we
+REM started with.
 REM
+DEL %TMPDIR%\reverse1.arc %TMPDIR%\reverse2.arc %TMPDIR%\reference.arc
+%PNAME% -r -i gpx -f reference\route\route.gpx -o arc -F %TMPDIR%\reference.arc
+%PNAME% -r -i gpx -f reference\route\route.gpx -x reverse -o arc -F %TMPDIR%\reverse1.arc
+%PNAME% -r -i gpx -f reference\route\route.gpx -x reverse -x reverse -o arc -F %TMPDIR%\reverse2.arc
+REM Verify the first and last are the same
+CALL :COMPARE %TMPDIR%\reference.arc  %TMPDIR%\reverse2.arc
+REM Verify the first and second are different.
+

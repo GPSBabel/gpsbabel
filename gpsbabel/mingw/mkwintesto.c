@@ -115,6 +115,7 @@ int main(
 		else {
 
 			// Output the .CMD preamble
+			f_outputLine("@echo off", pfTestoOut);
 			f_outputLine("REM", pfTestoOut);
 			f_outputLine("REM Simple Windows NT/2000/XP .cmd version of GPSBabel testo script", pfTestoOut);
 			f_outputLine("REM", pfTestoOut);
