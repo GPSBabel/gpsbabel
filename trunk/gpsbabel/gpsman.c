@@ -25,7 +25,7 @@ static FILE *out_file;
 #define MYNAME "GPSMAN"
 
 static void
-gpsman_rd_init(const char *fname)
+gpsman_rd_init(const char *fname, const char *args)
 {
 	in_file = fopen(fname, "r");
 	if (in_file == NULL) {
@@ -40,7 +40,7 @@ gpsman_rd_deinit(void)
 }
 
 static void
-gpsman_wr_init(const char *fname)
+gpsman_wr_init(const char *fname, const char *args)
 {
 	out_file = fopen(fname, "w");
 	if (out_file == NULL) {

@@ -58,6 +58,9 @@ THE FORMATS
 	program.    Communication errors are handled and verification of
 	data is turned on.
 
+	Additional options:
+	baud: may be 1200, 2400, 4800, 9600, 19200, but must match receiver.
+
     GARMIN
 
 	Waypoint serial upload and download works reliably under both

@@ -222,7 +222,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 }
 
 void
-gpx_rd_init(const char *fname)
+gpx_rd_init(const char *fname, const char *args)
 {
 	fd = fopen(fname, "r");
 	if (fd == NULL) {
@@ -244,7 +244,7 @@ gpx_rd_deinit(void)
 }
 
 void
-gpx_wr_init(const char *fname)
+gpx_wr_init(const char *fname, const char *args)
 {
 	ofd = fopen(fname, "w");
 	if (ofd == NULL) {

@@ -41,6 +41,8 @@ main(int argc, char *argv[])
 	ff_vecs_t *ovecs = NULL;
 	char *fname = NULL;
 	char *ofname = NULL;
+	char *ivec_opts = NULL;
+	char *ovec_opts = NULL;
 
 	waypt_init();
 	route_init();
@@ -65,11 +67,11 @@ main(int argc, char *argv[])
 
 		switch (c) {
 			case 'i': 
-				ivecs = find_vec(optarg);
+				ivecs = find_vec(optarg, &ivec_opts);
 				argn++;
 				break;
 			case 'o':
-				ovecs = find_vec(optarg);
+				ovecs = find_vec(optarg, &ovec_opts);
 				argn++;
 				break;
 			case 'f':
@@ -78,7 +80,7 @@ main(int argc, char *argv[])
 				if (ivecs == NULL) {
 					fatal ("No valid input type specified");
 				}
-				ivecs->rd_init(fname);
+				ivecs->rd_init(fname, ivec_opts);
 				ivecs->read();
 				ivecs->rd_deinit();
 				break;
@@ -86,7 +88,7 @@ main(int argc, char *argv[])
 				ofname = optarg;
 				argn++;
 				if (ovecs) {
-					ovecs->wr_init(ofname);
+					ovecs->wr_init(ofname, ovec_opts);
 					ovecs->write();
 					ovecs->wr_deinit();
 				}

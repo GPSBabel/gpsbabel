@@ -27,7 +27,7 @@
 static const char *portname;
 
 static void
-rw_init(const char *fname)
+rw_init(const char *fname, const char *opts)
 {
         if (GPS_Init(fname) < 0) {
 		fatal(MYNAME ":Can't init %s\n", fname);

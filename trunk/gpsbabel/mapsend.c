@@ -48,7 +48,7 @@ test_endianness(void)
 }
 
 static void
-mapsend_rd_init(const char *fname)
+mapsend_rd_init(const char *fname, const char *args)
 {
 	mapsend_file_in = fopen(fname, "rb");
 	if (mapsend_file_in == NULL) {
@@ -164,7 +164,7 @@ my_fwrite4(void *ptr, FILE *stream)
 }
 
 static void
-mapsend_wr_init(const char *fname)
+mapsend_wr_init(const char *fname, const char *args)
 {
 	mapsend_file_out = fopen(fname, "wb");
 	if (mapsend_file_out == NULL) {

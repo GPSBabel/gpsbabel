@@ -78,7 +78,6 @@ typedef struct {
 
 extern global_options global_opts;
 
-
 /*
  * Extended data if waypoint happens to represent a geocache.  This is 
  * totally voluntary data...
@@ -144,10 +143,11 @@ typedef struct {
 	int rte_num;
 } route_head;
 
-typedef void (*ff_init) (char const *);
+typedef void (*ff_init) (char const *, char const *);
 typedef void (*ff_deinit) (void);
 typedef void (*ff_read) (void);
 typedef void (*ff_write) (void);
+char * get_option(const char *iarglist, const char *argname);
 
 void fprintdms(FILE *, const coord *, int);
 
@@ -188,7 +188,7 @@ void fatal(const char *, ...)
 	__attribute__ ((__format__ (__printf__, 1, 2)));
 #endif
 	;
-ff_vecs_t *find_vec(char *);
+ff_vecs_t *find_vec(char *, char **);
 void disp_vecs(void);
 void printposn(const coord *c, int is_lat);
 

@@ -128,7 +128,7 @@ valid_tpg_header(char * header, int len)
 }
 
 static void
-tpg_rd_init(const char *fname)
+tpg_rd_init(const char *fname, const char *args)
 {
 	tpg_file_in = fopen(fname, "rb");
 	if (tpg_file_in == NULL) {
@@ -143,7 +143,7 @@ tpg_rd_deinit(void)
 }
 
 static void
-tpg_wr_init(const char *fname)
+tpg_wr_init(const char *fname, const char *args)
 {
 	tpg_file_out = fopen(fname, "wb");
 	if (tpg_file_out == NULL) {
