@@ -88,10 +88,9 @@ static
 int
 add_to_hashlist(mkshort_handle *h, char *name)
 {
-	int hash;
-
-	hash = hash_string(name);
+	int hash = hash_string(name);
 	uniq_shortname *s = xcalloc(1, sizeof (uniq_shortname));
+
 	s->orig_shortname = xstrdup(name);
 	ENQUEUE_TAIL(&h->namelist[hash], &s->list);
 }
