@@ -135,6 +135,7 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
 	 * (i.e. cable unplugged, unit not turned on) values.
 	 */
 	GetCommTimeouts (comport, &timeout);
+
 	timeout.ReadIntervalTimeout = 1000; /*like vtime.  In MS. */
 	timeout.ReadTotalTimeoutMultiplier = 1000;
 	timeout.ReadTotalTimeoutConstant = 1000;
@@ -164,12 +165,24 @@ int32 GPS_Serial_Off(const char *port, int32 fd)
 
 int32 GPS_Serial_Chars_Ready(int32 fd)
 {
-	return 1;
+	COMSTAT lpStat;
+	DWORD lpErrors;
+
+	ClearCommError(comport, &lpErrors, &lpStat);
+	return (lpStat.cbInQue > 0);
 }
 
 int32 GPS_Serial_Wait(int32 fd)
 {
-	return 1;
+	/* Wait a short time before testing if data is ready.
+	 * The GPS II, in particular, has a noticable time responding
+	 * with a response to the device inquiry and if we give up on this
+	 * too soon, we fail to read the response to the A001 packet and
+	 * blow our state machines when it starts streaming the capabiilties
+	 * response packet.
+	 */
+	Sleep(usecDELAY / 1000);
+	return GPS_Serial_Chars_Ready(fd);
 }
 
 int32 GPS_Serial_Flush(int32 fd)
