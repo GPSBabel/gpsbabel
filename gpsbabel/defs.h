@@ -380,6 +380,8 @@ void *XMALLOC(size_t size, DEBUG_PARAMS );
 void *XREALLOC(void *p, size_t s, DEBUG_PARAMS );
 void XFREE(void *mem, DEBUG_PARAMS );
 char *XSTRDUP(const char *s, DEBUG_PARAMS );
+char *XSTRNDUP(const char *src, size_t size, DEBUG_PARAMS );
+char *XSTRNDUPT(const char *src, size_t size, DEBUG_PARAMS );
 char *XSTRAPPEND(char *src, const char *new, DEBUG_PARAMS );
 void debug_mem_open();
 void debug_mem_output( char *format, ... );
@@ -389,12 +391,15 @@ void debug_mem_close();
 #define xrealloc(p, s) XREALLOC(p,s,__FILE__,__LINE__)
 #define xfree(mem) XFREE(mem, __FILE__, __LINE__)
 #define xstrdup(s) XSTRDUP(s, __FILE__, __LINE__)
+#define xstrndup(s, z) XSTRNDUP(s, z, __FILE__, __LINE__)
+#define xstrndupt(s, z) XSTRNDUPT(s, z, __FILE__, __LINE__)
 #define xstrappend(src,new) XSTRAPPEND(src, new, __FILE__, __LINE__)
 #define xxcalloc XCALLOC
 #define xxmalloc XMALLOC
 #define xxrealloc XREALLOC
 #define xxfree XFREE
 #define xxstrdup XSTRDUP
+#define xxstrndupt XSTRNDUPT
 #define xxstrappend XSTRAPPEND
 #endif /* DEBUG_MEM */
 
