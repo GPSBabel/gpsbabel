@@ -142,3 +142,9 @@ void be_write16(void *pp, unsigned i);
 void be_write32(void *pp, unsigned i);
 void le_write16(void *pp, unsigned i);
 void le_write32(void *pp, unsigned i);
+
+/*
+ * A constant for unknown altitude.   It's tempting to just use zero
+ * but that's not very nice for the folks near sea level.
+ */
+#define unknown_alt -99999999.0
