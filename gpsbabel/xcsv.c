@@ -188,6 +188,18 @@ xcsv_parse_style_line(const char *sbuff)
 		xcsv_file.field_delimiter = sp;
 	} else
 
+	if (ISSTOKEN(sbuff, "DESCRIPTION")) {
+		xcsv_file.description = csv_stringtrim(&sbuff[11],"");
+	} else
+
+	if (ISSTOKEN(sbuff, "EXTENSION")) {
+		xcsv_file.extension = csv_stringtrim(&sbuff[10],"");
+	} else
+
+	if (ISSTOKEN(sbuff, "SHORTLEN")) {
+		xcsv_file.shortlen = atoi(&sbuff[9]);
+	} else
+
 	if (ISSTOKEN(sbuff, "BADCHARS")) {
 	    sp = csv_stringtrim(&sbuff[9], "\"");
 	    cp = get_char_from_constant_table(sp);
@@ -276,6 +288,32 @@ xcsv_parse_style_line(const char *sbuff)
     }
 }
 
+
+/*
+ * A wrapper for xcsv_parse_style_line that reads until it hits
+ * a terminating null.   Makes multiple calls to that function so
+ * that "ignore to end of line" comments work right.
+ */
+static void
+xcsv_parse_style_buff(const char *sbuff)
+{
+	char ibuf[256];
+	char *ibufp;
+	size_t i;
+
+	while (*sbuff) {
+		ibuf[0] = 0;
+		i = 0;
+	 	for (ibufp = ibuf; *sbuff != '\n' && i++ < sizeof(ibuf); ) {
+			*ibufp++ = *sbuff++;
+		}
+		while (*sbuff == '\n' || *sbuff == '\r')
+			sbuff++;
+		*ibufp = 0;
+		xcsv_parse_style_line(ibuf);
+	}
+}
+
 static void
 xcsv_read_style(const char *fname)
 {
@@ -305,6 +343,27 @@ xcsv_read_style(const char *fname)
     }
 
     fclose(fp);
+}
+
+/*
+ * Passed a pointer to an internal buffer that would be identical
+ * to the series of bytes that would be in a style file, we set up
+ * the xcsv parser and make it ready for general use.
+ */
+void
+xcsv_read_internal_style(const char *style_buf)
+{
+	xcsv_file_init();
+	xcsv_file.is_internal = 1;
+	xcsv_parse_style_buff(style_buf);
+
+	/* if we have no output fields, use input fields as output fields */
+	if (xcsv_file.ofield_ct == 0) {
+		if (xcsv_file.ofield) 
+			xfree(xcsv_file.ofield);
+		xcsv_file.ofield = &xcsv_file.ifield;
+		xcsv_file.ofield_ct = xcsv_file.ifield_ct;
+	}
 }
 
 static void

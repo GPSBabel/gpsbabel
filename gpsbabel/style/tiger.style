@@ -7,6 +7,9 @@
 # 
 # As defined in tiger.c
 #
+
+DESCRIPTION		U.S. Census Bureau Tiger Mapping Service
+
 #
 # FILE LAYOUT DEFINITIIONS:
 #

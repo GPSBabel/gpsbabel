@@ -40,6 +40,21 @@ Anything after a hash (#) on a line is not parsed.  For example:
 FIELD LAT_DECIMAL, "", "%f"  # ONLY THIS SENTENCE IS A COMMENT.
 
 
+GLOBAL PROPERTIES OF THE FILE:
+--------------------------------
+There are a few available directives to describe traits of the file being
+described and not specific lines appearing the files being described.
+
+ o DESCRIPTION:
+
+   This is the description of the file format being described. This text
+   appears in the help screens and in menus used by the various GUI wrappers.
+
+ o EXTENSION: 
+
+   This directive gives the filename extension generally associated with
+   this file.
+
 DEFINING THE LAYOUT OF THE FILE:
 --------------------------------
 The first few directives define the layout the physical file itself:

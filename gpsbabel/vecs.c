@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include "defs.h"
+#include "csv_util.h"
 
 typedef struct {
 	ff_vecs_t *vec;
@@ -30,46 +31,39 @@ typedef struct {
 } vecs_t;
 
 extern ff_vecs_t geo_vecs;
-extern ff_vecs_t gpsman_vecs;
 extern ff_vecs_t gpx_vecs;
 extern ff_vecs_t mag_vecs;
 extern ff_vecs_t mapsend_vecs;
 extern ff_vecs_t mps_vecs;
 extern ff_vecs_t gpsutil_vecs;
-extern ff_vecs_t tiger_vecs;
 extern ff_vecs_t pcx_vecs;
-extern ff_vecs_t csv_vecs;
 extern ff_vecs_t cetus_vecs;
 extern ff_vecs_t gpspilot_vecs;
 extern ff_vecs_t psp_vecs;
 extern ff_vecs_t garmin_vecs;
-extern ff_vecs_t mxf_vecs;
 extern ff_vecs_t holux_vecs;
-extern ff_vecs_t ozi_vecs;
 extern ff_vecs_t xcsv_vecs;
 extern ff_vecs_t tpg_vecs;
-extern ff_vecs_t dna_vecs;
 extern ff_vecs_t magnav_vec;
-extern ff_vecs_t xmap_vecs;
 extern ff_vecs_t xmapwpt_vecs;
 extern ff_vecs_t tmpro_vecs;
-extern ff_vecs_t gpsdrive_vecs;
 extern ff_vecs_t gcdb_vecs;
 
 static
 vecs_t vec_list[] = {
+	/* XCSV must be the first entry in this table. */
+	{
+		&xcsv_vecs,
+		"xcsv",
+		"? Character Separated Values",
+		NULL
+	},
 	{
 		&geo_vecs, 
 		"geo",
 		"Geocaching.com .loc",
 		"loc"
 	}, 
-	{
-		&gpsman_vecs,
-		"gpsman",
-		"GPSman", 
-		NULL
-	},
 	{
 		&gpx_vecs,
 		"gpx",
@@ -97,7 +91,8 @@ vecs_t vec_list[] = {
 	{
 		&mps_vecs,
 		"mapsource",
-		"Garmin Mapsource"
+		"Garmin Mapsource",
+		NULL
 	},
 	{
 		&gpsutil_vecs,
@@ -106,34 +101,10 @@ vecs_t vec_list[] = {
 		NULL
 	},
 	{
-		&tiger_vecs,
-		"tiger",
-		"U.S. Census Bureau Tiger Mapping Service", 
-		NULL
-	},
-	{
-		&csv_vecs,
-		"csv",
-		"Comma separated values", 
-		NULL
-	},
-	{
-		&xmap_vecs,
-		"xmap",
-		"Delorme Topo USA4/XMap Conduit", 
-		NULL
-	},
-	{
 		&xmapwpt_vecs,
 		"xmapwpt",
 		"Delorme XMap HH Native .WPT", 
 		".wpt"
-	},
-	{
-		&dna_vecs,
-		"dna",
-		"Navitrak DNA marker format",
-		"dna"
 	},
 	{
 		&psp_vecs,
@@ -166,28 +137,10 @@ vecs_t vec_list[] = {
 		NULL
 	},
 	{
-		&mxf_vecs,
-		"mxf",
-		"MapTech Exchange Format",
-		"mxf"
-	},
-	{
 		&holux_vecs,
 		"holux",
 		"Holux (gm-100) .wpo Format",
 		"wpo"
-	},
-	{
-		&ozi_vecs,
-		"ozi",
-		"OziExplorer Waypoint",
-		"ozi"
-	},
-	{
-		&xcsv_vecs,
-		"xcsv",
-		"? Character Separated Values",
-		NULL
 	},
 	{
 		&tpg_vecs,
@@ -200,12 +153,6 @@ vecs_t vec_list[] = {
 		"tmpro",
 		"TopoMapPro Places File",
 		"tmpro"
-	},
-	{
-		&gpsdrive_vecs,
-		"gpsdrive",
-		"GpsDrive Format", 
-		NULL
 	},
 	{
 		&gcdb_vecs,
@@ -226,6 +173,7 @@ ff_vecs_t *
 find_vec(char *const vecname, char **opts)
 {
 	vecs_t *vec = vec_list;
+	style_vecs_t *svec = style_list;
 	char *v = xstrdup(vecname);
 	char *svecname = strtok(v, ",");
 
@@ -255,6 +203,24 @@ find_vec(char *const vecname, char **opts)
 		return vec->vec;
 		
 	}
+
+	/* 
+	 * Didn't find it in the table of "real" file types, so plan B
+	 * is to search the list of xcsv styles.
+	 */
+	while (svec->name) {
+		if (strcmp(svecname, svec->name)) {
+			svec++;
+			continue;
+		}
+		xcsv_read_internal_style(svec->style_buf);
+
+		return vec_list[0].vec;
+	}
+	
+	/*
+	 * Not found.
+	 */
 	xfree(v);
 	return NULL;
 }
@@ -317,15 +283,26 @@ void
 disp_vecs(void)
 {
 	vecs_t *vec;
+	style_vecs_t *svec;
 	arglist_t *ap;
 
+#define VEC_FMT "	%-20.20s  %-.50s\n"
+
 	for (vec = vec_list; vec->vec; vec++) {
-		printf("	%-20.20s  %-.50s\n",
-			vec->name, vec->desc);
+		printf(VEC_FMT, vec->name, vec->desc);
 		for (ap = vec->vec->args; ap && ap->argstring; ap++) {
 		printf("	  %-18.18s    %-.50s\n",
 			ap->argstring, ap->helpstring);
 		}
+	}
+
+	/*
+	 * Parse each internal style table in sequence to get the
+	 * help strings from it.
+	 */
+	for (svec = style_list; svec->name; svec++) {
+		xcsv_read_internal_style(svec->style_buf);
+		printf(VEC_FMT, svec->name, xcsv_file.description);
 	}
 }
 
@@ -338,9 +315,16 @@ void
 disp_formats(void)
 {
 	vecs_t *vec;
+	style_vecs_t *svec;
+
 	for (vec = vec_list; vec->vec; vec++) {
 		printf("%s\t%s\t%s\n", vec->name, 
 			vec->extension? vec->extension : "", 
 			vec->desc);
+	}
+	for (svec = style_list; svec->name; svec++) {
+		xcsv_read_internal_style(svec->style_buf);
+		printf("%s\t%s\t%s\n", svec->name, xcsv_file.extension ? 
+			xcsv_file.extension : "", xcsv_file.description);
 	}
 }

@@ -5,7 +5,8 @@
 #   Date: 12/09/2002
 #
 # 
-# As defined in csv.c
+DESCRIPTION	Comma separated values
+SHORTLEN	8
 #
 #
 # FILE LAYOUT DEFINITIIONS:
