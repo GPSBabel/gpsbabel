@@ -203,6 +203,7 @@ static icon_mapping_t icon_table[] = {
 	{ 16402, "Seaplane Base" },
 
 #if SOMEONE_ELSE
+/* FIXME: Find icons for these */
 	{ 1, "Virtual cache"},
 	{ 2, "Micro-Cache"},
 	{ 3, "Multi-Cache"},
@@ -217,7 +218,6 @@ arglist_t mps_args[] = {
 	{"snlen", &snlen, "Length of generated shortnames" },
 	{0, 0, 0}
 };
-
 
 const char *
 mps_find_desc_from_icon_number(const int icon)
@@ -382,6 +382,10 @@ mps_waypt_pr(const waypoint *wpt)
 	memset(ffbuf, 0xff, sizeof(ffbuf));
 
 	icon = mps_find_icon_number_from_desc(wpt->icon_descr);
+
+	if (get_cache_icon(wpt)) {
+		icon = mps_find_icon_number_from_desc(get_cache_icon(wpt));
+	}
 
 	le_write32(&reclen, reclen);
 	fwrite(&reclen, 4, 1, mps_file_out);
