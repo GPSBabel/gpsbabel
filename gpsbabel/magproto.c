@@ -720,7 +720,7 @@ mag_rd_init(const char *portname)
 	if (!noack)
 		mag_handon();
 
-	now = time(NULL);
+	now = current_time();
 	/*
 	 * The 315 can take up to 4.25 seconds to respond to initialization
 	 * commands.   Time out on the side of caution.
@@ -733,7 +733,7 @@ mag_rd_init(const char *portname)
 
 	while (!got_version) {
 		mag_readmsg();
-		if (time(NULL) > later) {
+		if (current_time() > later) {
 			fatal(MYNAME ": No acknowledgment from GPS on %s\n",
 				portname);
 		}

@@ -410,6 +410,7 @@ int case_ignore_strcmp(const char *s1, const char *s2);
 char *strsub(char *s, char *search, char *replace);
 void rtrim(char *s);
 signed int get_tz_offset(void);
+time_t current_time(void);
 signed int month_lookup(const char *m);
 const char *get_cache_icon(const waypoint *waypointp);
 char * xml_entitize(const char * str);

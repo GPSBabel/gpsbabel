@@ -53,7 +53,7 @@ data_read(void)
 	 * Make sure that all waypoints in single read have same 
 	 * timestamp.
 	 */
-	time_t now = time(NULL);
+	time_t now = current_time();
 
 
 	for(;fgets(ibuf, sizeof(ibuf), file_in);) {

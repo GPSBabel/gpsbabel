@@ -447,7 +447,7 @@ si_round( double d )
 signed int 
 get_tz_offset(void)
 {
-	time_t now = time(0);
+	time_t now = current_time();
 	time_t later = mktime(gmtime(&now));
 
 	if (later == -1) {
@@ -455,6 +455,21 @@ get_tz_offset(void)
 	} else {
 		return (signed int) difftime(now, later);
 	}
+}
+
+/*
+ * A wrapper for time(2) that allows us to "freeze" time for testing.
+ */
+time_t
+current_time(void)
+{
+	static char *frozen;
+	
+	if (getenv("GPSBABEL_FREEZE_TIME")) {
+		return 0;
+	}
+
+	return time(NULL);
 }
 
 /*

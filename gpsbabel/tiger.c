@@ -155,7 +155,7 @@ tiger_disp(const waypoint *wpt)
 		pin = wpt->icon_descr ? wpt->icon_descr : "";
 	else if (wpt->icon_descr && strstr(wpt->icon_descr, "-unfound"))
 		pin = unfoundmarker;
-	else if (wpt->creation_time > time(0) - 3600 * 24 * thresh_days)
+	else if (wpt->creation_time > current_time() - 3600 * 24 * thresh_days)
 		pin = newmarker;
 	else
 		pin = oldmarker;

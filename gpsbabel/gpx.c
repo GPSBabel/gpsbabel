@@ -1197,7 +1197,7 @@ gpx_write(void)
 	int short_length;
 	bounds bounds;
 	
-        time( &now );
+        now = current_time();
 
 	if (snlen)
 		short_length = atoi(snlen);

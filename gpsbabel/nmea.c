@@ -152,7 +152,7 @@ gpgll_parse(char *ibuf)
 	hms = hms / 100;
 	tm.tm_hour = hms % 100;
 
-	waypt->creation_time = mktime(&tm) + get_tz_offset() + time(0);
+	waypt->creation_time = mktime(&tm) + get_tz_offset() + current_time();
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -197,7 +197,7 @@ gpgga_parse(char *ibuf)
 	hms = hms / 100;
 	tm.tm_hour = (long) hms % 100;
 
-	waypt->creation_time = mktime(&tm) + get_tz_offset() + time(NULL);
+	waypt->creation_time = mktime(&tm) + get_tz_offset() + current_time();
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
