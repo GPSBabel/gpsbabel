@@ -312,6 +312,172 @@ decdir_to_dec(const char * decdir)
     return(rval * sign);
 }
 
+
+/*****************************************************************************
+ * human_to_dec() - convert a "human-readable" lat and/or lon to decimal
+ * usage: human_to_dec( "N 41° 09.12' W 085° 09.36'", &lat, &lon );
+ *        human_to_dec( "41 9 5.652 N", &lat, &lon );
+ *****************************************************************************/
+
+static void
+human_to_dec( const char *instr, double *outlat, double *outlon )
+{
+    double unk[3] = {999,999,999};
+    double lat[3] = {999,999,999};
+    double lon[3] = {999,999,999};
+    int    latsign = 0;
+    int    lonsign = 0;
+   
+    const char *cur;
+    double *numres = unk;
+    int numind = 0;
+    
+    cur = instr;
+       
+    while ( cur && *cur ) {
+	switch (*cur) {
+	    case 'n': case 's': case 'N': case 'S':
+		if ( numind && numind < 3 ) {
+			numind = 0;
+		}
+		lat[0] = unk[0];
+		lat[1] = unk[1];
+		lat[2] = unk[2];
+		
+		numres = lat;
+		
+		if ( *cur == 'n' || *cur == 'N' ) 
+		    latsign = 1;
+		else
+		    latsign = -1;
+		cur++;
+		break;
+	    case 'w': case 'e': case 'W': case 'E':
+		if ( numind && numind < 3 ) {
+			numind = 0;
+		}
+		lon[0] = unk[0];
+		lon[1] = unk[1];
+		lon[2] = unk[2];
+		
+		numres = lon;
+		
+		if ( *cur == 'e' || *cur == 'E' ) 
+		    lonsign = 1;
+		else
+		    lonsign = -1;
+		cur++;
+		break;
+	    case '1': case '2': case '3': case '4': case '5':
+	    case '6': case '7': case '8': case '9': case '0': case '.':
+		numres[numind] = atof(cur);
+		while (cur && *cur && strchr("1234567890.",*cur)) cur++;
+		break;
+	    default:
+		if (numres[numind] != 999) {
+    		    numind++;
+		    if ( numind > 2 ) {
+		        numres = unk;
+		        numind = 0;
+		    }
+		}
+		cur++;
+		break;      
+	}
+    }
+    
+    if ( outlat ) {
+	if ( lat[0] != 999 ) *outlat = lat[0];
+	if ( lat[1] != 999 ) *outlat += lat[1]/60.0;
+	if ( lat[2] != 999 ) *outlat += lat[2]/3600.0;
+	if ( latsign ) *outlat *= latsign;
+    }
+    if ( outlon ) {
+	if ( lon[0] != 999 ) *outlon = lon[0];
+	if ( lon[1] != 999 ) *outlon += lon[1]/60.0;
+	if ( lon[2] != 999 ) *outlon += lon[2]/3600.0;
+	if ( lonsign ) *outlon *= lonsign;
+    }
+}
+
+/*
+ * dec_to_human - convert decimal degrees to human readable
+ */
+
+void
+dec_to_human( char *buff, const char *format, const char *dirs, double val )
+{
+    char *subformat = NULL;
+    const char *formatptr = NULL;
+    char *percent = NULL;
+    char *type = NULL;
+    
+    int  index = 0; 
+    int  intvals[3] = {0,0,0};
+    double  dblvals[3] = {0,0,0};
+    int  sign = 0;
+    
+    sign = (val < 0) ? 0 : 1;
+    
+    dblvals[0] = fabs(val);
+    intvals[0] = (int)dblvals[0];
+    dblvals[1] = 60*(dblvals[0]-intvals[0]);
+    intvals[1] = (int)dblvals[1];
+    dblvals[2] = 60*(dblvals[1]-intvals[1]);
+    intvals[2] = (int)dblvals[2];
+    
+    subformat = xmalloc( strlen(format)+2);
+    formatptr = format;
+    
+    buff[0] = '\0';
+    
+    while ( formatptr && *formatptr ) {
+	strcpy( subformat, formatptr );
+	percent = strchr( subformat, '%' );
+	if ( percent ) {
+	    type = percent+1+strcspn( percent+1, "cdiouxXeEfgG%" );
+	    *(type+1) = '\0';
+	    switch( *type ) {
+		case 'c':
+		    sprintf( buff+strlen(buff), subformat, dirs[sign] );
+		    break;
+		case 'd':
+		case 'i':
+		case 'o':
+		case 'u':
+		case 'x':
+		case 'X':
+		    if (index>2) fatal(MYNAME ": too many format specifiers\n");
+		    sprintf( buff+strlen(buff), subformat, intvals[index]);
+		    index++;
+		    break;
+		case 'e':
+		case 'E':
+		case 'f':
+		case 'g':
+		case 'G':
+		    if (index>2) fatal(MYNAME ": too many format specifiers\n");
+		    sprintf( buff+strlen(buff), subformat, dblvals[index]);
+		    index++;
+		    break;
+		case '%':
+		    sprintf( buff+strlen(buff), subformat );
+		    break;
+		default:
+		    fatal(MYNAME ": invalid format specifier\n");
+		    break;
+
+	    }
+	}
+	else {
+	    sprintf( buff+strlen(buff), subformat );
+	}
+	formatptr += strlen(subformat);
+    } // end while;
+    
+    xfree(subformat);
+}	
+
 /*****************************************************************************/
 /* xcsv_file_init() - prepare xcsv_file for first use.                       */
 /*****************************************************************************/
@@ -452,6 +618,9 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        /* latitude as a 32 bit integer offset */
        wpt->latitude = intdeg_to_dec(atof(s), 1);
     } else
+    if ( strcmp(fmp->key, "LAT_HUMAN_READABLE") == 0) {
+       human_to_dec( s, &wpt->latitude, &wpt->longitude );
+    } else
     /* LONGITUDE CONVERSIONS ***********************************************/
     if (strcmp(fmp->key, "LON_DECIMAL") == 0) {
        /* longitude as a pure decimal value */
@@ -466,7 +635,13 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        /* longitude as a 32 bit integer offset  */
        wpt->longitude = intdeg_to_dec(atof(s), 0);
     } else
-
+    if ( strcmp(fmp->key, "LON_HUMAN_READABLE") == 0) {
+       human_to_dec( s, &wpt->latitude, &wpt->longitude );
+    } else
+    /* LAT AND LON CONVERSIONS ********************************************/
+    if ( strcmp(fmp->key, "LATLON_HUMAN_READABLE") == 0) {
+       human_to_dec( s, &wpt->latitude, &wpt->longitude );
+    } else
     /* DIRECTIONS **********************************************************/
     if (strcmp(fmp->key, "LAT_DIR") == 0) {
        /* latitude N/S.  Ignore on input for now */
@@ -736,6 +911,9 @@ xcsv_waypt_pr(const waypoint *wpt)
             sprintf(buff, fmp->printfc,
               dec_to_intdeg(wpt->latitude, 1));
         } else
+	if (strcmp(fmp->key, "LAT_HUMAN_READABLE") == 0) {
+	    dec_to_human( buff, fmp->printfc, "SN", wpt->latitude );
+	} else
 
         /* LONGITUDE CONVERSIONS*********************************************/
         if (strcmp(fmp->key, "LON_DECIMAL") == 0) {
@@ -759,6 +937,15 @@ xcsv_waypt_pr(const waypoint *wpt)
             sprintf(buff, fmp->printfc,
               dec_to_intdeg(wpt->longitude, 0));
         } else
+	if (strcmp(fmp->key, "LON_HUMAN_READABLE") == 0) {
+	    dec_to_human( buff, fmp->printfc, "WE", wpt->longitude );
+	} else
+	if (strcmp(fmp->key, "LATLON_HUMAN_READABLE") == 0) {
+	    dec_to_human( buff, fmp->printfc, "SN", wpt->latitude );
+	    if ( !isspace(buff[strlen(buff)])) strcat( buff, " " );
+	    dec_to_human( buff+strlen(buff), fmp->printfc, "WE", 
+			    wpt->longitude );
+	} else
 
         /* DIRECTIONS *******************************************************/
         if (strcmp(fmp->key, "LAT_DIR") == 0) {
