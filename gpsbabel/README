@@ -195,18 +195,18 @@ THE FORMATS
 	is the one that makes Delorme S&A Deluxe 9 happy.   It's also a very
 	simple program and useful for many other programs like spreadsheets.
 
-        CSV is also the correct format for Lowrance MapCreate, their
-        commercial mapping program, or GDM6 (their free waypoint
-        manager) for iFinder which is available at 
-	http://www.lowrance.com/Software/GDM6/Default.asp
+        CSV is also the correct format for Lowrance MapCreate,
+        their commercial mapping program, or GDM6 (their free
+        waypoint manager) for iFinder which is available at
+        http://www.lowrance.com/Software/GDM6/Default.asp
 
-    Lowrance USR
+    LowranceUSR
 
-        The Lowrance iFinder GPS series has the unique capability to
-        output its data to an MMC card.  The data is saved to the card
-        as a .USR file and can be read by your computer using a card
-        reader.  Currently only reading and writing of waypoints (no
-        routes or tracks) is supported.
+	The Lowrance iFinder GPS series has the unique capability to
+	output its data to an MMC card.  The data is saved to the card
+	as a .USR file and can be read by your computer using a card
+	reader.  Currently only reading and writing of waypoints (no
+	routes or tracks) is supported.
 
     XMap
 
