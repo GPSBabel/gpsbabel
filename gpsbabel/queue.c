@@ -22,12 +22,12 @@
 #include "queue.h"
 
 void
-enqueue(queue *new, queue *old)
+enqueue(queue *new_el, queue *old)
 {
-	new->next = old->next;
-	new->prev = old;
-	old->next->prev = new;
-	old->next = new;
+	new_el->next = old->next;
+	new_el->prev = old;
+	old->next->prev = new_el;
+	old->next = new_el;
 }
 
 queue *
