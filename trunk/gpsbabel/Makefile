@@ -45,7 +45,7 @@ COLDSYNC=coldsync/util.o coldsync/pdb.o
 SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
 
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
-          csv_util.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
+          csv_util.o grtcirc.o vmem.o util_crc.o xmlgeneric.o uuid.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(FMTS) $(FILTERS)
 OBJS = main.o $(LIBOBJS)
 
@@ -166,6 +166,7 @@ mapsend.o: mapsend.c defs.h queue.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h
 navicache.o: navicache.c defs.h queue.h
+coastexp.o: coastexp.c defs.h queue.h
 netstumbler.o: netstumbler.c defs.h queue.h csv_util.h
 nmea.o: nmea.c defs.h queue.h
 ozi.o: ozi.c defs.h queue.h csv_util.h
