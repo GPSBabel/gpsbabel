@@ -1,3 +1,6 @@
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/robertl/xerces-c1_7_0-linux7.2/lib
+export PATH=$PATH:/home/robertl/xerces-c1_7_0-linux7.2/bin
+
 SAX2Count reference/holux.gpx
 ./gpsbabel -i gpx -f reference/holux.gpx -o gpx -F /tmp/1.gpx
 SAX2Count /tmp/1.gpx
