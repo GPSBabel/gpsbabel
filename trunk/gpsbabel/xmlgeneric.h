@@ -45,4 +45,5 @@ void xml_write_time(FILE *ofd, const time_t timep, char *elname);
 
 void xml_init(const char *fname, xg_tag_mapping *tbl);
 void xml_read(void);
+void xml_readstring(char *str);
 void xml_deinit(void);

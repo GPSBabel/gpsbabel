@@ -575,6 +575,10 @@ rm -f ${TMPDIR}/google.out
 ${PNAME} -i google -f reference/google.xml -o arc -F ${TMPDIR}/google.out
 compare ${TMPDIR}/google.out reference/google.arc
 
+rm -f ${TMPDIR}/google.out
+${PNAME} -i google -f reference/google.js -o arc -F ${TMPDIR}/google.out
+compare ${TMPDIR}/google.out reference/google.arc
+
 #
 # XCSV "human readable" tests
 #
