@@ -20,28 +20,57 @@
 #include <stdio.h>
 #include "defs.h"
 
-static queue route_head;
+static queue my_route_head;
 
 void
 route_init(void)
 {
-	QUEUE_INIT(&route_head);
+	QUEUE_INIT(&my_route_head);
 }
 
-void
-route_add(waypoint *wpt)
+
+route_head *
+route_head_alloc(void)
 {
-	ENQUEUE_TAIL(&route_head, &wpt->Q);
+	route_head *rte_head;
+	rte_head = xmalloc(sizeof (*rte_head));
+	QUEUE_INIT(&rte_head->Q);
+
+}
+
+
+void
+route_add_head(route_head *rte)
+{
+	ENQUEUE_TAIL(&my_route_head, &rte->Q);
+	QUEUE_INIT(&rte->waypoint_list);
 }
 
 void
-route_disp_all(waypt_cb cb)
+route_add_wpt(route_head *rte, waypoint *wpt)
+{
+	ENQUEUE_TAIL(&rte->waypoint_list, &wpt->Q);
+}
+
+void
+route_disp (route_head *rh)
 {
 	queue *elem, *tmp;
-	waypoint *waypointp;
-
-	QUEUE_FOR_EACH(&route_head, elem, tmp) {
+	printf("NEW ROUTE\n");
+	QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
+		waypoint *waypointp;
 		waypointp = (waypoint *) elem;
-		(*cb)(waypointp);
+			waypt_disp(waypointp);
+	}
+		
+}	
+void 
+route_disp_all()
+{
+	queue *elem, *tmp;
+	QUEUE_FOR_EACH(&my_route_head, elem, tmp) {
+		route_head *rh;
+		rh = (route_head *) elem;
+		route_disp(rh);
 	}
 }
