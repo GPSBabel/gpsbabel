@@ -38,6 +38,7 @@ static char *exclopt = NULL;
 
 typedef struct {
 	unsigned short state;
+	unsigned short override;
 } extra_data;
 
 static
@@ -163,7 +164,7 @@ static void polytest ( double lat1, double lon1,
 		}
 		else if (!(lon1 <= lon3 && lon2 <= lon3)) {
 		    /* we're inside the bbox of a diagonal line.  math time. */
-		    double loni = (lon2-lon1)/(lat2-lat1)*(lat3-lat1);
+		    double loni = lon1+(lon2-lon1)/(lat2-lat1)*(lat3-lat1);
 		    if ( loni > lon3 ) {
 		        *state = *state ^ INSIDE;
 		    }
@@ -221,7 +222,12 @@ polygon_process(void)
 		else {
 		    ed = xcalloc(1, sizeof(*ed));
 		    ed->state = OUTSIDE;
+		    ed->override = 0;
 		    waypointp->extra_data = ed;
+		}
+		if ( lat2 == waypointp->latitude && 
+		     lon2 == waypointp->longitude ) {
+		    ed->override = 1;
 		}
 	        if ( olat != BADVAL && olon != BADVAL &&
 	            olat == lat2 && olon == lon2 ) {
@@ -263,6 +269,7 @@ polygon_process(void)
 		ed = wp->extra_data;
 		wp->extra_data = NULL;
 	        if ( ed ) {
+		    if ( ed->override ) ed->state = INSIDE;
 		    if (((ed->state & INSIDE) == OUTSIDE ) == (exclopt == NULL)) {
 			waypt_del(wp);
 			waypt_free(wp);
