@@ -795,6 +795,12 @@ xcsv_waypt_pr(const waypoint *wpt)
     index++;
 }
 
+static void
+xcsv_noop(const route_head *wp)
+{
+	        /* no-op */
+}
+
 /*****************************************************************************/
 /* xcsv_data_write(void) - write prologues, spawn the output loop, and write */
 /*                         epilogues.                                        */
@@ -810,7 +816,18 @@ xcsv_data_write(void)
         ogp = (ogue_t *) elem;
         fprintf (xcsv_file.xcsvfp, "%s%s", ogp->val, xcsv_file.record_delimiter);
     }
-    waypt_disp_all(xcsv_waypt_pr);
+
+    switch (global_opts.objective ) {
+        case wptdata:
+            waypt_disp_all(xcsv_waypt_pr);
+            break;
+        case rtedata:
+	case trkdata:
+            route_disp_all(xcsv_noop,xcsv_noop,xcsv_waypt_pr);
+            break;
+        default:
+            break;
+    } 
 
     /* output epilogue lines, if any. */
     QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {
