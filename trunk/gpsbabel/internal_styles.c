@@ -106,6 +106,47 @@ static char dna[] =
 "IFIELD	DESCRIPTION, \"\", \"%s\"\n"
 
 ;
+static char fugawi[] = 
+"# fugawi XCSV style file\n"
+"#\n"
+"# Format: Fugawi\n"
+"# Author: Robert Lipe\n"
+"#   Date: 03/10/2003\n"
+"#\n"
+"# \n"
+
+"DESCRIPTION		Fugawi\n"
+"EXTENSION		txt\n"
+"SHORTLEN		10\n"
+
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		COMMA\n"
+"RECORD_DELIMITER	NEWLINE\n"
+"BADCHARS		COMMA\n"
+
+"PROLOGUE \\# Latitude, Longitude and UTM coordinates are in WGS84 datum\n"
+"PROLOGUE \\#\n"
+"PROLOGUE \\# Every set of data contains the following:\n"
+"PROLOGUE \\#\n"
+"PROLOGUE \\# Waypoint name\n"
+"PROLOGUE \\# Waypoint comment\n"
+"PROLOGUE \\# Waypoint description\n"
+"PROLOGUE \\# Latitude in Degree and decimals (soutern hemisphere has neg. degrees)\n"
+"PROLOGUE \\# Longitude in degree and decimals (neg. numbers: west of Greenwich)\n"
+"PROLOGUE \\# Height in meters\n"
+
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	SHORTNAME, \"\", \"%s\"\n"
+"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
+"IFIELD	NOTES, \"\", \"%s\"\n"
+"IFIELD	LAT_DECIMAL, \"\", \"%-.7f\"\n"
+"IFIELD	LON_DECIMAL, \"\", \"%-.7f\"\n"
+"IFIELD	ALT_METERS, \"\", \"%-7.1f\"\n"
+;
 static char gpsdrive[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -123,6 +164,9 @@ static char gpsdrive[] =
 "FIELD_DELIMITER		SPACE\n"
 "RECORD_DELIMITER	NEWLINE\n"
 "BADCHARS		,\"\n"
+
+"SHORTLEN          20\n"
+"SHORTWHITE                0\n"
 
 "#\n"
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
@@ -409,4 +453,4 @@ static char xmapwpt[] =
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "s_and_t", s_and_t } , { "ozi", ozi } , { "nima", nima } , { "mxf", mxf } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "dna", dna } , { "custom", custom } , { "csv", csv } ,  {0,0}};
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "s_and_t", s_and_t } , { "ozi", ozi } , { "nima", nima } , { "mxf", mxf } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } ,  {0,0}};
