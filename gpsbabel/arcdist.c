@@ -290,7 +290,6 @@ arcdist_process(void)
 		    if ((ed->distance >= pos_dist) == (exclopt == NULL)) {
 			waypt_del(wp);
 			waypt_free(wp);
-			continue;
 		    }
 		    xfree( ed );
 		}
