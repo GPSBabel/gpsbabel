@@ -28,8 +28,8 @@
 extern "C" {
 #endif
 
-#define MEMCHK
-#define DEBUG_STDOUT
+//#define MEMCHK
+//#define DEBUG_STDOUT
 //#define MEMTRACE
 
 #ifdef _DEBUG
@@ -42,21 +42,12 @@ extern "C" {
 #endif
 
 #ifndef M_PI
-#define M_PI 3.14159265358979323846 
+#define M_PI 3.14159265358979323846
 #endif
 
 typedef unsigned short WCHAR;
 
-//#define ST_VERSION_AUTOROUTE2001	1
-//#define ST_VERSION_STREETSTRIPS2000 2
-//#define ST_VERSION_STREETSTRIPS2001 3
-
-//#define ST_VERSION_AUTOROUTE2002	4
-//#define ST_VERSION_AUTOROUTE2003	5
-//#define ST_VERSION_STREETSTRIPS2002 6
-//#define ST_VERSION_STREETSTRIPS2003 7
-
-typedef struct st2gpx_options 
+typedef struct st2gpx_options
 {
 	// 0 - only errors
 	// 1 also the structured data output, e.g. line point info
@@ -103,7 +94,7 @@ extern struct f_jour_header;
 extern struct contents;
 
 #endif // __cplusplus
- 
+
 //st2gpx.c
 extern struct st2gpx_options opts;
 void * xmalloc(size_t size);
