@@ -136,6 +136,12 @@ waypt_count(void)
 }
 
 void
+set_waypt_count(unsigned int nc)
+{
+	waypt_ct = nc;
+}
+
+void
 waypt_disp(const waypoint *wpt)
 {
 	char *tmpdesc = NULL;
