@@ -1,11 +1,11 @@
 # gpsbabel XCSV style file
 #
-# Format: Delorme Xmap HH Street Atlas USA .WPT (PocketPC)
+# Format: DeLorme Xmap HH Street Atlas USA .WPT (PocketPC)
 # Author: Alex Mottram
 #   Date: 12/09/2002
 #
 # 
-DESCRIPTION 		Delorme XMat HH Street Atlas USA .WPT (PPC)
+DESCRIPTION 		DeLorme XMat HH Street Atlas USA .WPT (PPC)
 SHORTLEN		32
 SHORTWHITE		0
 
