@@ -29,6 +29,12 @@ static FILE *file_out;
 static void *mkshort_handle;
 static char *psn;
 
+static
+arglist_t csv_args[] = {
+	{"prefer_shortname", &psn, "Use shortnames even when we have longer names available"},
+	{0, 0, 0}
+};
+
 #define MYNAME "CSV"
 
 static void
@@ -53,8 +59,6 @@ static void
 wr_init(const char *fname, const char *args)
 {
 	file_out = fopen(fname, "w");
-
-	psn = get_option(args, "prefer_shortname");
 
 	if (file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
@@ -194,4 +198,5 @@ ff_vecs_t xmap_vecs = {
 	xmap_wr_deinit,
 	data_read,
 	data_write,
+	csv_args
 };

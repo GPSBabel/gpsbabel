@@ -315,7 +315,7 @@ disp_vecs(void)
 		printf("	%-20.20s  %-50.50s\n",
 			vec->name, vec->desc);
 		for (ap = vec->vec->args; ap && ap->argstring; ap++) {
-		printf("	  %-10.10s            %-40.40s\n",
+		printf("	  %-18.18s    %-50.50s\n",
 			ap->argstring, ap->helpstring);
 		}
 	}

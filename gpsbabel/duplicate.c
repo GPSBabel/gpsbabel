@@ -25,6 +25,16 @@ extern queue waypt_head;
 
 static int duplicate_shortname = 0;
 static int duplicate_location = 0;
+char *snopt;
+char *lcopt;
+
+static
+arglist_t dup_args[] = {
+	{"shortname", &snopt, "Suppress duplicate waypoints based on name"},
+	{"location", &lcopt, "Suppress duplicate waypoint based on coords"},
+	{0, 0, 0}
+};
+
 
 typedef struct btree_node {
 	struct btree_node *left, *right;
@@ -181,22 +191,17 @@ duplicate_process(void)
 }
 
 void
-duplicate_init(const char *args) {
+duplicate_init(const char *args) 
+{
 	const char *p;
-	
-	p = get_option(args, "shortname");
-	if (p) {
-		duplicate_shortname = 1;
-	}
 
-	p = get_option(args, "location");
-	if (p) {
-		duplicate_location = 1;
-	}
+	duplicate_shortname = snopt != NULL;
+	duplicate_location = lcopt != NULL;
 }
 
 void
-duplicate_deinit(void) {
+duplicate_deinit(void) 
+{
 }
 
 filter_vecs_t duplicate_vecs = {
