@@ -225,7 +225,7 @@ GPS_PWay GPS_Way_New(void)
     GPS_PWay ret;
     int32 i;
     
-    if(!(ret=(GPS_PWay)malloc(sizeof(GPS_OWay))))
+    if(!(ret=(GPS_PWay)xcalloc(sizeof(GPS_OWay),1)))
     {
 	perror("malloc");
 	fprintf(stderr,"GPS_Way_New: Insufficient memory");
@@ -233,10 +233,19 @@ GPS_PWay GPS_Way_New(void)
 	return NULL;
     }
 
+    /*
+     * It turns out that the Way struct, initialized with zeros (not the
+     * random stuff that we got with malloc, but REALLY initialized with
+     * zeros from the calloc above actually does use C strings and it's
+     * up to the various way_blah_send functions to zero/string pad things
+     * as it goes.   So neutralize this.
+     */
+#if 0
+
     /* 
      * Mark all as "unused".  These appear in the same order as in the struct.
      */
-#define BLANK(x)  memset(x, ' ',sizeof(x))
+#define BLANK(x)   memset(x, ' ',sizeof(x))
     BLANK(ret->ident);
     BLANK(ret->cmnt);
     BLANK(ret->wpt_ident);
@@ -257,6 +266,7 @@ GPS_PWay GPS_Way_New(void)
     ret->facility[0] = 0;
     ret->addr[0] = 0;
     ret->wpt_ident[0] = 0;
+#endif
     
     ret->lat = ret->lon = GPS_FLTMAX;
     ret->dst = 0;

@@ -1,3 +1,5 @@
+GPSBABEL_FREEZE_TIME=y
+export GPSBABEL_FREEZE_TIME
 
 PNAME=${PNAME:-./gpsbabel}
 DIFF=${DIFF:-diff}
