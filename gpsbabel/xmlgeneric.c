@@ -37,6 +37,12 @@ static xg_tag_mapping *xg_tag_tbl;
 #define MYNAME "XML Reader"
 
 void
+write_xml_header(FILE *ofd)
+{
+	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
+}
+
+void
 write_xml_entity(FILE *ofd, const char *indent,
                  const char *tag, const char *value)
 {
@@ -51,6 +57,37 @@ write_optional_xml_entity(FILE *ofd, const char *indent,
 {
         if (value && *value)
                 write_xml_entity(ofd, indent, tag, value);
+}
+
+void
+write_xml_entity_begin0(FILE *ofd, const char *indent,
+							  const char *tag)
+{
+    fprintf(ofd, "%s<%s>\n", indent, tag);
+}
+
+void
+write_xml_entity_begin1(FILE *ofd, const char *indent,
+							  const char *tag, const char *attr,
+							  const char *attrval)
+{
+    fprintf(ofd, "%s<%s %s=\"%s\">\n", indent, tag, attr, attrval);
+}
+
+void
+write_xml_entity_begin2(FILE *ofd, const char *indent,
+							  const char *tag, const char *attr1,
+							  const char *attrval1, const char *attr2,
+							  const char *attrval2)
+{
+    fprintf(ofd, "%s<%s %s=\"%s\" %s=\"%s\">\n", indent, tag, attr1, attrval1, attr2, attrval2);
+}
+
+void
+write_xml_entity_end(FILE *ofd, const char *indent,
+					 const char *tag)
+{
+    fprintf(ofd, "%s</%s>\n", indent, tag);
 }
 
 void
