@@ -41,6 +41,7 @@ void write_xml_entity(FILE *ofd, const char *indent,
 
 void write_optional_xml_entity(FILE *ofd, const char *indent,
                  const char *tag, const char *value);
+void xml_write_time(FILE *ofd, const time_t timep, char *elname);
 
 void xml_init(const char *fname, xg_tag_mapping *tbl);
 void xml_read(void);

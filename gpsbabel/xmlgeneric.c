@@ -53,6 +53,26 @@ write_optional_xml_entity(FILE *ofd, const char *indent,
                 write_xml_entity(ofd, indent, tag, value);
 }
 
+void
+xml_write_time(FILE *ofd, const time_t timep, char *elname)
+{
+	struct tm *tm = gmtime(&timep);
+	
+	if (!tm)
+		return;
+	
+	fprintf(ofd, "<%s>%02d-%02d-%02dT%02d:%02d:%02dZ</%s>\n",
+		elname,
+		tm->tm_year+1900, 
+		tm->tm_mon+1, 
+		tm->tm_mday, 
+		tm->tm_hour, 
+		tm->tm_min, 
+		tm->tm_sec,
+		elname
+	);
+
+}
 
 /***********************************************************************
  * These implement a simple interface for "generic" XML that
