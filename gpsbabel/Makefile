@@ -87,6 +87,14 @@ release:
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).tar.gz ftp://upload.sf.net/incoming/
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).zip ftp://upload.sf.net/incoming/
 
+mac-build:
+	make LIBEXPAT=/sw/lib/libexpat.a EXTRA_CFLAGS="-s -I/sw/include"
+	mkdir -p usr/bin usr/share/gpsbabel/doc
+	cp gpsbabel usr/bin/
+	cp README* COPYING usr/share/gpsbabel/doc
+	tar cvzf gpsbabel-osx.tgz usr/bin/gpsbabel
+	curl -u anonymous:anonymous --upload-file gpsbabel-osx.tgz ftp://upload.sf.net/incoming/
+
 # Machine generated from here down.   
 
 arcdist.o: arcdist.c defs.h queue.h grtcirc.h
