@@ -590,7 +590,8 @@ xcsv_waypt_pr(const waypoint *wpt)
 
     if ((anyname) && (global_opts.synthesize_shortnames)) {
 	char *oldname = anyname;
-        anyname = mkshort(xcsv_file.mkshort_handle, oldname);
+        anyname = mkshort(xcsv_file.mkshort_handle, 
+	        wpt->notes ? wpt->notes : wpt->description);
 	xfree(oldname);
     }
     
