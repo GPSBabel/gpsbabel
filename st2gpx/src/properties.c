@@ -57,14 +57,14 @@ typedef struct PROPERTYSETHEADER
 typedef struct FORMATIDOFFSET
 {
    FMTID     fmtid ;       // semantic name of a section
-   DWORD     dwOffset ;    // offset from start of whole property set 
+   DWORD     dwOffset ;    // offset from start of whole property set
                            // stream to the section
 } FORMATIDOFFSET;
 
-typedef struct PROPERTYIDOFFSET 
+typedef struct PROPERTYIDOFFSET
 {
     DWORD        propid;     // name of a property
-    DWORD        dwOffset;   // offset from the start of the section to that 
+    DWORD        dwOffset;   // offset from the start of the section to that
                              // property type/value pair
 } PROPERTYIDOFFSET;
 
@@ -75,7 +75,7 @@ typedef struct tagPROPERTYSECTIONHEADER
     PROPERTYIDOFFSET   rgPropIDOffset[];    // Array of property locations
 } PROPERTYSECTIONHEADER;
 
-typedef struct SERIALIZEDPROPERTYVALUE 
+typedef struct SERIALIZEDPROPERTYVALUE
 {
     DWORD        dwType;      // type tag
     BYTE        rgb[];        // the actual property value
@@ -84,15 +84,15 @@ typedef struct SERIALIZEDPROPERTYVALUE
 /*
 typedef struct tagENTRY {
     DWORD    propid;  // Property ID
-    DWORD    cb;      // Count of bytes in the string, including the null 
+    DWORD    cb;      // Count of bytes in the string, including the null
                       // at the end.
-    char     sz[cb];  // Zero-terminated string. Code page as indicated 
+    char     sz[cb];  // Zero-terminated string. Code page as indicated
                       // by property ID one.
     } ENTRY;
 
 typedef struct tagDICTIONARY {
     DWORD    cEntries;        // Count of entries in the list.
-    ENTRY    rgEntry[cEntries]; 
+    ENTRY    rgEntry[cEntries];
     } DICTIONARY;
 */
 
@@ -105,9 +105,9 @@ char * fmtid2str(char * str, char * fmtid)
 // We need to be careful here to get the byte order correct.
 // This seems to match MS's interpretation.
 {
-	sprintf(str, "{%8.8x-%4.4x-%4.4x-%2.2x%2.2x-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x}", 
-					*(unsigned long*)(fmtid), 
-					*(unsigned short*)(fmtid+4), 
+	sprintf(str, "{%8.8x-%4.4x-%4.4x-%2.2x%2.2x-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x}",
+					*(unsigned long*)(fmtid),
+					*(unsigned short*)(fmtid+4),
 					*(unsigned short*)(fmtid+6),
 					*(unsigned char*)(fmtid+8),
 					*(unsigned char*)(fmtid+9),
@@ -123,11 +123,11 @@ char * fmtid2str(char * str, char * fmtid)
 
 struct ole_property_set * ole_property_set_new(int cProps)
 {
-	struct ole_property_set * props 
-		=(struct ole_property_set*)xmalloc(sizeof(struct ole_property_set)); 
+	struct ole_property_set * props
+		=(struct ole_property_set*)xmalloc(sizeof(struct ole_property_set));
 	props->cProps = cProps;
-	props->dict=NULL; 
-	props->pPropList = (struct ole_property*)xmalloc(cProps*sizeof(struct ole_property)); 
+	props->dict=NULL;
+	props->pPropList = (struct ole_property*)xmalloc(cProps*sizeof(struct ole_property));
 	return props;
 }
 
@@ -140,19 +140,19 @@ void ole_property_set_delete(struct ole_property_set * props)
 
 	for(i=0; i<props->cProps; i++)
 	{
-		xfree(props->pPropList[i].buf);
+		free(props->pPropList[i].buf);
 		// FIXME who owns this memory? Cant free it if it is a pointer into another buff
-		//xfree(props->pPropList[i]);
+		//free(props->pPropList[i]);
 	}
 
 	if (props->dict != NULL)
 	{
-		xfree(props->dict->ent_propid);
-		xfree(props->dict->ent_sz);
-		xfree(props->dict);
+		free(props->dict->ent_propid);
+		free(props->dict->ent_sz);
+		free(props->dict);
 	}
-	xfree(props->pPropList);
-	xfree(props);
+	free(props->pPropList);
+	free(props);
 }
 
 
@@ -173,9 +173,9 @@ struct dictionary * read_dictionary(int ents, char* buf, int bufsize)
 		if (bytes_read>bufsize)
 		{
 			printf("read past end of buffer while reading properties dictionary\n");
-			xfree(dict->ent_propid);
-			xfree(dict->ent_sz);
-			xfree(dict);
+			free(dict->ent_propid);
+			free(dict->ent_sz);
+			free(dict);
 			return NULL;
 		}
 
@@ -191,10 +191,10 @@ struct dictionary * read_dictionary(int ents, char* buf, int bufsize)
 		{
 			printf("reading dictionary, read entry for propid %#x with name length %d > max allowed length of 128\n",
 				dict->ent_propid[ent_read], this_ent_cb);
-//			xfree(dict->ent_cb);
-			xfree(dict->ent_propid);
-			xfree(dict->ent_sz);
-			xfree(dict);
+//			free(dict->ent_cb);
+			free(dict->ent_propid);
+			free(dict->ent_sz);
+			free(dict);
 			return NULL;
 		}
 
@@ -227,7 +227,7 @@ unsigned int get_dict_entry(struct dictionary* dict, DWORD propid)
 struct ole_property * get_propterty(struct ole_property_set * props, DWORD propid)
 {
 	unsigned int i;
-	
+
 	if (props==NULL)
 		return NULL;
 
@@ -262,8 +262,8 @@ void print_ole_properties(struct ole_property_set * props)
 		if (dict_ent != -1)
 			name = props->dict->ent_sz[dict_ent];
 
-		wprintf(L"\nproperty %d: has name %s propid %#x, type %#x, and length %d bytes\n", 
-				i, name, props->pPropList[i].propid, 
+		wprintf(L"\nproperty %d: has name %s propid %#x, type %#x, and length %d bytes\n",
+				i, name, props->pPropList[i].propid,
 				props->pPropList[i].dwType, props->pPropList[i].buflen );
 
 		switch(props->pPropList[i].propid)
@@ -276,18 +276,18 @@ void print_ole_properties(struct ole_property_set * props)
 				wprintf(L"%#x   %s\n", props->dict->ent_propid[j], (props->dict->ent_sz[j]));
 			break;
 		case 1:
-			printf("This specifies codepage %d (1200=Unicode, 1252=Ansi).\n", 
+			printf("This specifies codepage %d (1200=Unicode, 1252=Ansi).\n",
 					*(USHORT*)(props->pPropList[i].buf) );
 			break;
 		case 0x80000000:
-			printf("This specifies locale %d .\n", 
+			printf("This specifies locale %d .\n",
 					*(unsigned short*)(props->pPropList[i].buf) );
 			break;
 		default:
 			switch(props->pPropList[i].dwType)
 			{
 			case VT_BSTR: //=8
-			//  the prefix bytecount is still there 
+			//  the prefix bytecount is still there
 				wprintf(L"This has value '%ls'\n", props->pPropList[i].buf+4);
 				break;
 			case VT_UNKNOWN: //=13
@@ -339,7 +339,7 @@ struct ole_property_set * read_ole_properties2(char* prop_file_name)
 	status=readbytes(prop_file, (char*)prop_header, sizeof(PROPERTYSETHEADER));
 	status=readbytes(prop_file, (char*)fmt_id_os, sizeof(FORMATIDOFFSET));
 
-	if ( (prop_header->wByteOrder != 0xFFFE) || (prop_header->wFormat != 0) 
+	if ( (prop_header->wByteOrder != 0xFFFE) || (prop_header->wFormat != 0)
 		 || (prop_header->dwReserved != 1)  || (fmt_id_os->dwOffset !=0x30) )
 	{
 		printf("Not a valid properties set header in file %s\n", prop_file_name);
@@ -352,7 +352,7 @@ struct ole_property_set * read_ole_properties2(char* prop_file_name)
 	psect_header = (PROPERTYSECTIONHEADER *)xrealloc(psect_header, psect_header->cbSection);
 	section_buff = (char*)psect_header;
 
-	status=readbytes(prop_file, (char*)(psect_header->rgPropIDOffset), 
+	status=readbytes(prop_file, (char*)(psect_header->rgPropIDOffset),
 						psect_header->cbSection - sizeof(PROPERTYSECTIONHEADER));
 
 	property_set = ole_property_set_new(psect_header->cProperties);
@@ -382,8 +382,8 @@ struct ole_property_set * read_ole_properties2(char* prop_file_name)
 	for (i=0; i< psect_header->cProperties; i++)
 	{
 		property_set->pPropList[i].propid = psect_header->rgPropIDOffset[i].propid;
-		
-//		property_set->pPropList[i].buf 
+
+//		property_set->pPropList[i].buf
 //			= section_buff + psect_header->rgPropIDOffset[i].dwOffset  + 4;
 
 		property_set->pPropList[i].buf = (char*)xmalloc(property_set->pPropList[i].buflen);
@@ -396,16 +396,16 @@ struct ole_property_set * read_ole_properties2(char* prop_file_name)
 
 	for (i=0; i< property_set->cProps; i++)
 		if (property_set->pPropList[i].propid==0)
-			property_set->dict=read_dictionary(property_set->pPropList[i].dwType, 
-								property_set->pPropList[i].buf, 
+			property_set->dict=read_dictionary(property_set->pPropList[i].dwType,
+								property_set->pPropList[i].buf,
 								property_set->pPropList[i].buflen);
 
 	fclose(prop_file);
-	xfree(prop_header);
-	xfree(psect_header);
-	xfree(fmt_id_os);
+	free(prop_header);
+	free(psect_header);
+	free(fmt_id_os);
 
-	return property_set;	
+	return property_set;
 }
 
 struct ole_property_set * read_ole_properties(char* source_file_name, char* properties_file_name)
@@ -413,13 +413,13 @@ struct ole_property_set * read_ole_properties(char* source_file_name, char* prop
 	char * prop_file_name;
 	struct ole_property_set * strips_property_set=NULL;
 	struct ole_property_set * summary_property_set=NULL;
-	
+
 	if ( (source_file_name==NULL) && (properties_file_name==NULL) )
 		return NULL;
 
 	if (source_file_name!=NULL)
 		prop_file_name = (char*)xmalloc(strlen(source_file_name)+40);
-	else 
+	else
 		prop_file_name = properties_file_name;
 
 	strcpy(prop_file_name, source_file_name);
@@ -445,7 +445,7 @@ struct ole_property_set * read_ole_properties(char* source_file_name, char* prop
 
 	debug_pause();
 
-	xfree(prop_file_name);
+	free(prop_file_name);
 	ole_property_set_delete(summary_property_set);
 
 	return strips_property_set;

@@ -139,7 +139,7 @@ void gpx_write_jour_point(FILE* gpx_out_file, struct journey * jour, struct jour
 	gpx_write_point(gpx_out_file, pt, GPX_RTEPT, opt_elms);
 
 	gpxpt_delete(pt);
-	xfree(opt_elms);
+	free(opt_elms);
 }
 
 void gpx_write_jour_header(FILE* gpx_out_file)
@@ -191,7 +191,7 @@ void gpx_write_pushpinlist (FILE* gpx_out_file, struct pushpin_safelist *ppplist
 		if (ppplist->pushpin_list[i]==NULL)
 			break;
 
-		optlen = strlen(ppplist->pushpin_list[i]->UdName) 
+		optlen = strlen(ppplist->pushpin_list[i]->UdName)
 				+ strlen(ppplist->pushpin_list[i]->NoteShort) + 60;
 		opt_elms = (char*)xmalloc(optlen);
 
@@ -202,7 +202,7 @@ void gpx_write_pushpinlist (FILE* gpx_out_file, struct pushpin_safelist *ppplist
 		pt->lon = ppplist->pushpin_list[i]->lon;
 
 		gpx_write_point(gpx_out_file, pt, GPX_WPT, opt_elms);
-		xfree(opt_elms);
+		free(opt_elms);
 	}
 	fprintf(gpx_out_file, "\n");
 	gpxpt_delete(pt);
@@ -300,8 +300,8 @@ void gpx_write_annotations(FILE* gpx_out_file, struct annotations * annots)
 		}
 }
 
-void gpx_write_all(char* gpx_out_file_name, 
-				   struct pushpin_safelist *ppplist, 
+void gpx_write_all(char* gpx_out_file_name,
+				   struct pushpin_safelist *ppplist,
 				   struct journey * jour,
 				   struct annotations * annots)
 {

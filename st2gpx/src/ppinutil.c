@@ -56,16 +56,16 @@ void pushpin_safelist_delete(struct pushpin_safelist * ppl)
 	int i;
 	if (ppl==NULL)
 		return;
-	
+
 	for (i=0; i<ppl->num_pushpins; i++)
 		pushpin_delete(ppl->pushpin_list[i]);
-	
-	xfree(ppl->pushpin_list);
-	
-	for(i=0; i<3; i++)
-		xfree(ppl->UDM_Data[i]);
 
-	xfree(ppl);
+	free(ppl->pushpin_list);
+
+	for(i=0; i<3; i++)
+		free(ppl->UDM_Data[i]);
+
+	free(ppl);
 }
 
 struct pushpin * pushpin_new()
@@ -86,13 +86,13 @@ void pushpin_delete(struct pushpin * pp)
 {
 	if(pp==NULL)
 		return;
-	xfree(pp->NoteShort);
-	xfree(pp->UdName);
-	xfree(pp);
+	free(pp->NoteShort);
+	free(pp->UdName);
+	free(pp);
 }
 
-struct point grid2latlon(long grid, long precision) 
-//struct point ms2latlong(struct ms_point msp) 
+struct point grid2latlon(long grid, long precision)
+//struct point ms2latlong(struct ms_point msp)
 {
 // Convert the 2 long values in UserData stream to GPS coordinates.
 
@@ -119,7 +119,7 @@ struct point grid2latlon(long grid, long precision)
 		p.lon=-180;
 		return p;
 	}
-	for(i=0; i<16; i++) 
+	for(i=0; i<16; i++)
 	{
 		lat_val += (lat_mask & grid) >> i;
 		lon_val += (lon_mask & grid) >> (i+1);
@@ -136,7 +136,7 @@ struct point grid2latlon(long grid, long precision)
 	lat_val=0;
 	lon_val=0;
 
-	for (i=0; i<16; i++) 
+	for (i=0; i<16; i++)
 	{
 		lat_val += (lat_mask & precision) >> i;
 		lon_val += (lon_mask & precision) >> (i+1);
@@ -155,7 +155,7 @@ struct point grid2latlon(long grid, long precision)
 	if (p.lon > 180) p.lon -= 360;
 	if (p.lat > 180) p.lat -= 360;
 
-	if ( (p.lat > 90) || (p.lat < -90) ) 
+	if ( (p.lat > 90) || (p.lat < -90) )
 	{
 		printf("Got bad lat value %f converting pushpin data, setting.\n");
 //		p.lat=-180;
@@ -184,7 +184,7 @@ struct grid_point latlon2grid(double lat, double lon) {
 		msp.grid += ((mask & lon_grid_ndx) << (i+1));
 		mask <<= 1;
 	}
-	
+
 	mask=1;
 	for(i=0; i<16; i++) {
 		msp.precision += ((mask & lat_prec_ndx) << i);

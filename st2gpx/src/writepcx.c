@@ -86,7 +86,7 @@ void garmin_ident_crush(char* str)
 	str[6]=0;
 }
 
-void comp_mk_uniq_idents(char* ident_array, int ident_to_mk_uniq, int count_idents) 
+void comp_mk_uniq_idents(char* ident_array, int ident_to_mk_uniq, int count_idents)
 // compare ident_to_mk_uniq-th ident to all preceding idents,
 // and make ident_to_mk_uniq-th ident
 {
@@ -161,7 +161,7 @@ void make_uniq_idents(struct pushpin_safelist * ppplist, struct journey * jour)
 	}
 	else
 		count_ppins=ppplist->num_pushpins;
-	
+
 	ident_array=(char*)xmalloc(7*(count_ppins + jour->count_rtepts));
 
 	// copy ppin names before we start mangling them
@@ -180,8 +180,8 @@ void make_uniq_idents(struct pushpin_safelist * ppplist, struct journey * jour)
 	// copy rtept names before we start mangling them
 	for (i=0; i< (jour->count_rtepts); i++)
 	{
-		memcpy(ident_array + 7*(count_ppins) +7*i, 
-			   jour->rtept_list[i].text1, 
+		memcpy(ident_array + 7*(count_ppins) +7*i,
+			   jour->rtept_list[i].text1,
 			   6);
 		garmin_ident_crush(ident_array + 7*(count_ppins) + 7*i);
 	}
@@ -193,7 +193,7 @@ void make_uniq_idents(struct pushpin_safelist * ppplist, struct journey * jour)
 		// Create a unique ident if neccesary.
 		// Only check against list of already-verified unique
 		comp_mk_uniq_idents(ident_array, i, count_ppins + jour->count_rtepts);
-		
+
 		strncpy(ppplist->pushpin_list[i]->garmin_ident, ident_array+7*i, 7);
 	}
 
@@ -225,24 +225,24 @@ void make_uniq_idents(struct pushpin_safelist * ppplist, struct journey * jour)
 						   ppplist->pushpin_list[j]->garmin_ident,
 						   7);
 					// Although the journey stream doesn't associate this pushpin with the route,
-					// I have decided to. Again, this is questionable 
+					// I have decided to. Again, this is questionable
 					// but not likely to happen anyway.
 					jour->rtept_list[i].pushpin = ppplist->pushpin_list[j];
 				}
 				else
 				{
 					// no matching wpt for this rtept, so we need to create one.
-					// We just create the garmin_ident in the jour-rtept here, 
+					// We just create the garmin_ident in the jour-rtept here,
 					// later we will write a corresponding wpt to the pcx file.
 					comp_mk_uniq_idents(ident_array, count_ppins + i, count_ppins + jour->count_rtepts);
-				}				
+				}
 		}
 		// set the jour-rtept garmin_ident
 		memcpy(jour->rtept_list[i].garmin_ident,
 			   ident_array + 7*(count_ppins) +7*i,
 			   7);
 	}
-	xfree(ident_array);
+	free(ident_array);
 }
 
 void gar_write_header(FILE* gar_out_file)
@@ -352,18 +352,18 @@ void pcx5_write_jour_pt(FILE* file, struct journey * jour, struct jour_rtept * r
 
 		memcpy(desc, rtept->text1,39);
 		strpad(desc, 40);
-		
-		pcx5_write_pt(file, 
-					  pt_type, 
-					  rtept->garmin_ident, 
-					  scaled2deg(f_wpt_head->scaled_lat), 
-					  scaled2deg(f_wpt_head->scaled_lon), 
-					  timedate,	
-					  alt, 
-					  desc, 
-					  proximity, 
+
+		pcx5_write_pt(file,
+					  pt_type,
+					  rtept->garmin_ident,
+					  scaled2deg(f_wpt_head->scaled_lat),
+					  scaled2deg(f_wpt_head->scaled_lon),
+					  timedate,
+					  alt,
+					  desc,
+					  proximity,
 					  symbol);
-		
+
 //	}
 //	else if(pt_type==GAR_RTE)
 //	{

@@ -50,23 +50,8 @@ void debug_pause()
 	}
 }
 
-int fixhex(char c)
-{
-// gcc (version?) does not print single byte hex values properly
-// eg 0xe3 prints as 0xFFFFFFE3
-// this is only a problem for values above 0x80
-// Or maybe that is the proper handling of unsigned?
-// Aaaahhh. I should use %u for printing unsigned... but the hex problem is still there
-	if(c & 0x80)
-	{
-		return ((int)c-0xFFFFFF00);
-	} else
-		return c;
-}
-
 void printbuf(char* buf, int len)
 {
-//	unsigned i;
 	int i;
 	printf("     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n");
 	printf("    -----------------------------------------------");
@@ -74,59 +59,7 @@ void printbuf(char* buf, int len)
 	{
 		if (((i+1) & 0x0f) == 0x1)
 			printf("\n%2x| ",i/16);
-		printf("%2x ",fixhex(buf[i]));
-	}
-	printf("\n\n");
-}
-
-void printbufwide(char* buf, int len)
-{
-	int i;
-	for(i=0; i<len; i++)
-	{
-		printf("%2x ",fixhex(buf[i]));
-	}
-	printf("\n\n");
-}
-
-void printbufhigh(char* buf, int len)
-{
-	int i;
-	for(i=0; i<len; i++)
-	{
-		printf("%02x %02x\n", i, fixhex(buf[i]));
-	}
-	printf("\n\n");
-}
-
-void printbufasfloat(char* buf, int len)
-{
-//	unsigned i;
-	int i;
-//	printf("     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n");
-//	printf("    -----------------------------------------------");
-	for(i=0; i<len-3; i++)
-	{
-		if (((i+1) & 0x03) == 0x1)
-			printf("\n%2x| ",i);
-		printf("%f  ", *(float*)(buf+i));
-		fflush(stdout);
-	}
-	printf("\n\n");
-}
-
-void printfloatbuf(float* fbuf, int len)
-{
-//	unsigned i;
-	int i;
-//	printf("     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n");
-//	printf("    -----------------------------------------------");
-	for(i=0; i<len; i++)
-	{
-		if (((i+1) & 0x03) == 0x1)
-			printf("\n%2x| ",4*i);
-		printf("%f  ", fbuf[i]);
-		fflush(stdout);
+		printf("%2x ", (unsigned char)buf[i]);
 	}
 	printf("\n\n");
 }
@@ -134,7 +67,6 @@ void printfloatbuf(float* fbuf, int len)
 void printpoints(char* buf, int numpts)
 {
 	int i;
-//	int j;
 	struct gpxpt* pt;
 	printf("Latitude  Longitude Height");
 	printf("\n");
@@ -148,100 +80,8 @@ void printpoints(char* buf, int numpts)
 	printf("\n\n");
 }
 
-void printpointsbuf(char* buf, int len)
-{
-//	unsigned i;
-//	unsigned j;
-	int i;
-	int j;
-	printf("     0  1  2  3  4  5  6  7  8  9  A  B\n");
-	printf("    -----------------------------------");
-	for(i=0; i<len; i++)
-	{
-		printf("\n%2x| ",i);
-	//	printf("\n");
-		for (j=0; j<12; j++)
-		{
-			printf("%2x ",fixhex(buf[12*i+j]));
-			fflush(stdout);
-		}
-	}
-	printf("\n\n");
-}
-
-void printbufaspoints(char* buf, int buflen)
-{
-	int i;
-//	int j;
-	struct gpxpt * pt;
-	printf("Latitude  Longitude Height");
-	printf("\n");
-	printf("--------------------------\n");
-	for(i=0; i<buflen-11; i++)
-	{
-		pt = gpx_get_point(buf + 12*i);
-		printf("%#02x %f N %f E %f m \n", i, pt->lat, pt->lon, pt->elevation);
-		gpxpt_delete(pt);
-		fflush(stdout);
-	}
-	printf("\n\n");
-}
-
-void printnzbuf(char* buf, int len)
-{
-// print non-zero values in the buffer
-//	unsigned i;
-	int i;
-	for(i=0; i<len; i++)
-	{
-//		if (buf[i] != 0) printf("Buf[%x]=%2x ",fixhex(i), fixhex(buf[i]));
-		if (buf[i] != 0) printf("Buf[%x]=%2x ",i, fixhex(buf[i]));
-	}
-	printf("\n");
-}
-
-//void printnzhead(struct annot_rec rec)
-//{
-//	printnzbuf(rec.buf, annot_head_len[rec.type]);
-//}
-
 void explore_annot(struct annot_rec * rec)
 {
-	char* header;
-	char* tail;
-	int taillength;
-
-	header = (char*)xmalloc(ANNOT_REC_HEAD_LEN);
-	memcpy(header, rec->buf, ANNOT_RECOS_TEXT);
-	memcpy(header+ANNOT_RECOS_TEXT+2*rec->text_length, rec->buf,
-		ANNOT_REC_HEAD_LEN-ANNOT_RECOS_TEXT);
-
-	tail = rec->buf+ANNOT_REC_HEAD_LEN+2*rec->text_length;
-	taillength = rec->length - ANNOT_REC_HEAD_LEN+2*rec->text_length;
-
-	printf("Record buffer\n", annot_type_name[rec->type]);
-	printbuf(rec->buf, rec->length);
-	printf("Record high buffer\n", annot_type_name[rec->type]);
-	printbufhigh(rec->buf, rec->length);
-	printf("Record wide header:\n", annot_type_name[rec->type]);
-	printbufwide(header, ANNOT_REC_HEAD_LEN);
-	printf("Record tail:\n");
-	printbuf(tail, taillength);
-	printf("Record wide tail:\n");
-	printbufwide(tail, taillength);
-	printf("Record tail as floats:\n");
-	printbufasfloat(tail, taillength);
-	printf("Record tail as points:\n");
-	printbufaspoints(tail, taillength);
-//	if (rec->type == ANNOT_TYPE_TEXT)
-//	{
-		//printfloatbuf((float*)(tail+3), taillength/4 -1);
-//	}
-//	else if (rec->type == ANNOT_TYPE_OVAL )
-//		printfloatbuf((float*)(tail+3), taillength/4 -1);
-//	else if (rec->type == ANNOT_TYPE_CIRCLE ))
-//		printfloatbuf((float*)(tail+3), taillength/4 -1);
-	xfree(header);
 }
 
 void print_f_jour_header(struct f_jour_header * head)
@@ -266,17 +106,17 @@ void print_f_jour_pt_head(struct f_jour_pt_head * pt_head)
 	printf("iunkn0 %#x=%d\n", pt_head->iunkn0, pt_head->iunkn0);
 	printf("sched_arrive_flag %d\n", pt_head->sched_arrive_flag);
 	printf("sched_depart_flag %d\n", pt_head->sched_depart_flag);
-	printf("arrive_time_secs %d\n", pt_head->arrive_time_secs); 
+	printf("arrive_time_secs %d\n", pt_head->arrive_time_secs);
 	printf("depart_time_secs %d\n", pt_head->depart_time_secs);
 	printf("iunkn1 %#x=%d\n", pt_head->iunkn1, pt_head->iunkn1);
 //	x = pt_head->unkn_scaled_lon;
 //	x = x*360/0x10000;
 //	x = x/0x10000;
-	printf("scaled_lon %d gives lon %f\n", 
+	printf("scaled_lon %d gives lon %f\n",
 			pt_head->scaled_lon, scaled2deg(pt_head->scaled_lon));
 //	x = (pt_head->unkn_scaled_lat*360/0x10000);
 //	x = x/0x10000;
-	printf("scaled_lat %d gives lat %f\n", 
+	printf("scaled_lat %d gives lat %f\n",
 			pt_head->scaled_lat, scaled2deg(pt_head->scaled_lat));
 	printf("cbtext1 %d\n",pt_head->cbtext1);
 	printbuf((char*)pt_head, sizeof(struct f_jour_pt_head));
@@ -293,16 +133,16 @@ void print_f_jour_pt_tail(struct f_jour_pt_tail * pt_tail)
 	printf("road_id %x=%d\n", pt_tail->road_id, pt_tail->road_id);
 	printf("dist_along_rd_frac %lf \n",  pt_tail->dist_along_rd_frac);
 
-	printf("rd_arrive_sc_lat %d gives lat %f\n", 
+	printf("rd_arrive_sc_lat %d gives lat %f\n",
 			pt_tail->rd_arrive_sc_lat, scaled2deg(pt_tail->rd_arrive_sc_lat));
 
-	printf("rd_arrive_sc_lon %d gives lat %f\n", 
+	printf("rd_arrive_sc_lon %d gives lat %f\n",
 			pt_tail->rd_arrive_sc_lon, scaled2deg(pt_tail->rd_arrive_sc_lon));
 
-	printf("rd_depart_sc_lat %d gives lat %f\n", 
+	printf("rd_depart_sc_lat %d gives lat %f\n",
 			pt_tail->rd_depart_sc_lat, scaled2deg(pt_tail->rd_depart_sc_lat));
 
-	printf("rd_depart_sc_lon %d gives lat %f\n", 
+	printf("rd_depart_sc_lon %d gives lat %f\n",
 			pt_tail->rd_depart_sc_lon, scaled2deg(pt_tail->rd_depart_sc_lon));
 
 	printf("iunkn8 %x=%d\n", pt_tail->iunkn8, pt_tail->iunkn8);
@@ -544,9 +384,9 @@ void print_annotations(struct annotations * annots)
 	int i;
 	// This is only the main stuff
 	printf("Annotations list, version=%d, num_annotations=%d, max_annot_num=%d, stream_length=%d\n",
-		   annots->version, annots->num_annotations, 
+		   annots->version, annots->num_annotations,
 		   annots->max_annot_num, annots->stream_length);
-	
+
 	for(i=0; i<annots->num_annotations; i++)
 		print_annot_rec(annots->annot_list[i]);
 }
