@@ -1075,3 +1075,57 @@ char * html_entitize(const char * str)
 {
 	return entitize(str, 1);
 }
+
+/*
+ * xml_tag utilities
+ */
+
+xml_tag *xml_next( xml_tag *root, xml_tag *cur )
+{
+	if ( cur->child ) {
+		cur = cur->child;
+	}
+	else if ( cur->sibling ) {
+		cur = cur->sibling;
+	}
+	else {
+		cur = cur->parent;
+		if ( cur == root ) {
+			cur = NULL;
+		}
+		if ( cur ) {
+			cur = cur->sibling;
+		}
+	}
+	return cur;
+}
+
+xml_tag *xml_findnext( xml_tag *root, xml_tag *cur, char *tagname ) 
+{
+	xml_tag *result = cur;
+	do {
+		result = xml_next( root, result );
+	} while ( result && case_ignore_strcmp( result->tagname, tagname ));
+	return result;
+}
+
+xml_tag *xml_findfirst( xml_tag *root, char *tagname )
+{
+	return xml_findnext( root, root, tagname );
+}
+
+char *xml_attribute( xml_tag *tag, char *attrname ) 
+{
+	char *result = NULL;
+	if ( tag->attributes ) {
+		char **attr = tag->attributes;
+		while ( attr && *attr ) {
+			if ( 0 == case_ignore_strcmp( *attr, attrname )) {
+				result = attr[1];
+				break;
+			}
+			attr+=2;
+		}
+	}
+	return result;
+}

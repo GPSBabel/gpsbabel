@@ -542,7 +542,6 @@ gs_get_container(geocache_container t)
 	return "Unknown";
 }
 
-static
 time_t 
 xml_parse_time( char *cdatastr ) 
 {
