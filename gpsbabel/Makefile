@@ -17,7 +17,8 @@ INSTALL_TARGETDIR=/usr/local/
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	gpsutil.o pcx.o cetus.o copilot.o gpspilot.o magnav.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o \
-	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o gpilots.o
+	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
+	gpilots.o saroute.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o
 
