@@ -44,7 +44,7 @@ arglist_t saroute_args[] = {
 unsigned short
 ReadShort(FILE * f)
 {
-	unsigned short result = 0;
+	gbuint16 result = 0;
 
 	fread(&result, sizeof (result), 1, f);
 	return le_read16(&result);
@@ -53,7 +53,7 @@ ReadShort(FILE * f)
 unsigned long
 ReadLong(FILE * f)
 {
-	unsigned long result = 0;
+	gbuint32 result = 0;
 
 	fread(&result, sizeof (result), 1, f);
 	return le_read32(&result);
@@ -100,8 +100,8 @@ my_read(void)
 	unsigned char *record;
 	static int serial = 0;
 	struct ll {
-		long lat;
-		long lon;
+		gbint32 lat;
+		gbint32 lon;
 	} *latlon;
 	unsigned short coordcount;
 	route_head *track_head;
@@ -250,7 +250,7 @@ my_read(void)
 				}
 			}
 			if ( version > 10 ) {
-				Skip(infile,2*sizeof(long));
+				Skip(infile,2*sizeof(gbuint32));
 			}
 			xfree(record);
 		}
