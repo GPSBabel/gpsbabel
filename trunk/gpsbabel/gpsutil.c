@@ -88,8 +88,8 @@ gpsutil_disp(const waypoint *wpt)
 
 	icon_token = mag_find_token_from_descr(wpt->icon_descr);
 
-	lon = wpt->position.longitude.degrees * 100.0;
-	lat = wpt->position.latitude.degrees * 100.0;
+	lon = degrees2ddmm(wpt->position.longitude.degrees);
+	lat = degrees2ddmm(wpt->position.latitude.degrees);
 
 	fprintf(file_out, "%-8s %08.3f%c %09.3f%c %07.0f%c %-30.30s %s\n",
                 global_opts.synthesize_shortnames ?
