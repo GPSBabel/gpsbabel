@@ -941,8 +941,22 @@ static void
 gpx_waypt_pr(const waypoint *waypointp)
 {
 	char *tmp_ent;
-	const char *oname = global_opts.synthesize_shortnames ?
-				  mkshort(mkshort_handle, waypointp->notes) : 
+	const char *oname;
+	char *odesc;
+
+	/*
+	 * Desparation time, try very hard to get a good shortname
+	 */
+	odesc = waypointp->notes;
+	if (!odesc) {
+		odesc = waypointp->description;
+	}
+	if (!odesc) {
+		odesc = waypointp->shortname;
+	}
+
+	oname = global_opts.synthesize_shortnames ?
+				  mkshort(mkshort_handle, odesc) : 
 				  waypointp->shortname;
 
 	fprintf(ofd, "<wpt lat=\"%lf\" lon=\"%lf\">\n",
