@@ -321,6 +321,7 @@ radius_process(void)
 		waypoint * wp = comp[i];
 		waypt_add(wp);
 		xfree(wp->extra_data);
+		wp->extra_data = NULL;
 	}
 
 	xfree(comp);
