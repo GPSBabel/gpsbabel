@@ -35,6 +35,7 @@ static void GPS_Fmt_Print_Way105(GPS_PWay way, FILE *outf);
 static void GPS_Fmt_Print_Way106(GPS_PWay way, FILE *outf);
 static void GPS_Fmt_Print_Way107(GPS_PWay way, FILE *outf);
 static void GPS_Fmt_Print_Way108(GPS_PWay way, FILE *outf);
+static void GPS_Fmt_Print_Way109(GPS_PWay way, FILE *outf);
 static void GPS_Fmt_Print_Way150(GPS_PWay way, FILE *outf);
 static void GPS_Fmt_Print_Way151(GPS_PWay way, FILE *outf);
 static void GPS_Fmt_Print_Way152(GPS_PWay way, FILE *outf);
@@ -505,6 +506,9 @@ int32 GPS_Fmt_Print_Waypoint(GPS_PWay *way, int32 n, FILE *outf)
 	case 108:
 	    GPS_Fmt_Print_Way108(way[i],outf);
 	    break;
+	case 109:
+	    GPS_Fmt_Print_Way109(way[i],outf);
+	    break;
 	case 150:
 	    GPS_Fmt_Print_Way150(way[i],outf);
 	    break;
@@ -586,6 +590,9 @@ int32 GPS_Fmt_Print_Proximity(GPS_PWay *way, int32 n, FILE *outf)
 	    break;
 	case 108:
 	    GPS_Fmt_Print_Way108(way[i],outf);
+	    break;
+	case 109:
+	    GPS_Fmt_Print_Way109(way[i],outf);
 	    break;
 	case 450:
 	    GPS_Fmt_Print_Way150(way[i],outf);
@@ -1002,6 +1009,87 @@ static void GPS_Fmt_Print_Way108(GPS_PWay way, FILE *outf)
     return;
 }
 
+/* @funcstatic GPS_Fmt_Print_Way109 ************************************
+**
+** Output waypoint D109
+**
+** @param [r] way [GPS_PWay] waypoint
+** @param [w] outf [FILE *] output stream
+**
+** @return [void]
+************************************************************************/
+
+static void GPS_Fmt_Print_Way109(GPS_PWay way, FILE *outf)
+{
+    char **p;
+    int32  x;
+
+    static char *dspl[]=
+    {
+	"SW","S","SC"
+    };
+
+    static char *col[]=
+    {
+	"Black","Dark_Red","Dark_Green","Dark_Yellow","Dark_Blue",
+	"Dark_Magenta","Dark_Cyan","Light_Grey","Dark_Grey","Red","Green",
+	"Yellow","Blue","Magenta","Cyan","White"
+    };
+
+    
+    if(way->smbl < 8192)
+    {
+	p = gps_marine_sym;
+	x = 0;
+    }
+    else if(way->smbl < 16384)
+    {
+	p = gps_land_sym;
+	x = 8192;
+    }
+    else
+    {
+	p = gps_aviation_sym;
+	x = 16384;
+    }
+
+    (void) fprintf(outf,"\tIdent:            %s\n",way->ident);
+    (void) fprintf(outf,"\tLatitude:         %f\n",way->lat);
+    (void) fprintf(outf,"\tLongitude:        %f\n",way->lon);
+    if(way->colour==0xff)
+	(void) fprintf(outf,"\tColour:           255    [Default]\n");
+    else
+	(void) fprintf(outf,"\tColour:           %-6d [%s]\n",(int)way->colour,
+		       col[way->colour]);
+#if 0
+    /* avoid bounds violation in D109.   Probably masking a bug elswhere...*/
+    (void) fprintf(outf,"\tDisplay:          %-6d [%s]\n",(int)way->dspl,
+		   dspl[way->dspl]);
+#endif
+    (void) fprintf(outf,"\tSymbol:           %-6d [%s]\n",(int)way->smbl,
+	    p[way->smbl-x]);
+    (void) fprintf(outf,"\tAltitude:         %d\n",(int)way->alt);
+    (void) fprintf(outf,"\tDepth:            %f\n",way->dpth);
+    (void) fprintf(outf,"\tState:            %-2.2s\n",way->state);
+    (void) fprintf(outf,"\tCountry:          %-2.2s\n",way->cc);
+    (void) fprintf(outf,"\tClass:            %d\n",way->wpt_class);
+    if(way->wpt_class>=0x80 && way->wpt_class<=0x85)
+	(void) fprintf(outf,"\tSubclass:         %18.18s\n",way->subclass);
+    if(!way->wpt_class)
+	(void) fprintf(outf,"\tComment:          %s\n",way->cmnt);
+    if(way->wpt_class>=0x40 && way->wpt_class<=0x46)
+    {
+	(void) fprintf(outf,"\tFacility:         %s\n",way->facility);
+	(void) fprintf(outf,"\tCity:             %s\n",way->city);
+    }
+    if(way->wpt_class==0x83)
+	(void) fprintf(outf,"\tAddress:          %s\n",way->addr);
+    if(way->wpt_class==0x82)
+	(void) fprintf(outf,"\tCross Road:       %s\n",way->cross_road);
+    
+
+    return;
+}
 
 /* @funcstatic GPS_Fmt_Print_Way150 *************************************
 **
@@ -1313,6 +1401,9 @@ int32 GPS_Fmt_Print_Route(GPS_PWay *way, int32 n, FILE *outf)
 	case 108:
 	    GPS_Fmt_Print_Way108(way[i],outf);
 	    break;
+	case 109:
+	    GPS_Fmt_Print_Way109(way[i],outf);
+	    break;
 	case 150:
 	    GPS_Fmt_Print_Way150(way[i],outf);
 	    break;
@@ -1440,6 +1531,9 @@ static int32 GPS_Fmt_Print_Route201(GPS_PWay *way, int32 n, FILE *outf)
 	    break;
 	case 108:
 	    GPS_Fmt_Print_Way108(way[i],outf);
+	    break;
+	case 109:
+	    GPS_Fmt_Print_Way109(way[i],outf);
 	    break;
 	case 150:
 	    GPS_Fmt_Print_Way150(way[i],outf);
