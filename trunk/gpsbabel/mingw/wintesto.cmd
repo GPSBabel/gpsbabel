@@ -582,6 +582,34 @@ REM Navicache.
 CALL :COMPARE %TMPDIR%\navi.wpt reference\navicache.ref
 REM 
 
+REM 
+REM CoastalExplorer..
+@echo on
+@echo Testing...
+%PNAME% -r -i coastexp -f reference\coastexp.nob -o gpx -F %TMPDIR%\coastexp.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\coastexp.gpx reference\coastexp.ref
+@echo on
+@echo Testing...
+%PNAME% -r -i gpx -f %TMPDIR%\coastexp.gpx -o coastexp -F %TMPDIR%\coastexp.nob
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\coastexp.nob reference\coastexp.ref2
+@echo on
+@echo Testing...
+%PNAME% -w -i coastexp -f reference\coastexp.nob -o gpx -F %TMPDIR%\coastexp.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\coastexp.gpx reference\coastexp.ref3
+@echo on
+@echo Testing...
+%PNAME% -w -i gpx -f %TMPDIR%\coastexp.gpx -o coastexp -F %TMPDIR%\coastexp.nob
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\coastexp.nob reference\coastexp.ref4
+REM 
+
 REM PsiTrex.  A text format that can't be handled by XCSV due to context of
 REM data based on other data values in the file
 REM Waypoints first

@@ -232,7 +232,11 @@ data_read(void)
 		int lon;
 		int sz;
 		fi_t fi;
-                
+		int trk_num = 0;
+		int trk_seg_num = 1;
+		char trk_seg_num_buf[10];
+		char *trk_name = "";
+
 		wpt_tmp = waypt_new();
 
 		rec = (struct record *) pdb_rec->data;
@@ -282,9 +286,7 @@ data_read(void)
 			 * CustomTrkHdr
 			 */
 			case 101:
-			  track_head = route_head_alloc();
-			  track_add_head(track_head);
-			  track_head->rte_name = xstrndup(rec->wpt.CustTrkHdr.name, sizeof(rec->wpt.CustTrkHdr.name));
+			  trk_name = rec->wpt.CustTrkHdr.name;
 			  sz = be_read16(&rec->wpt.CustTrkHdr.number);
               
 			  /* switch between custom track points and compact track points.
@@ -294,7 +296,27 @@ data_read(void)
 			  case 102:
 				tp_cust = (Custom_Trk_Point_Type *) ((char *) pdb_rec->data + sizeof(rec->header) + sizeof(rec->wpt.CustTrkHdr));
 				while (sz--) {
+				  if ((int)(tp_cust->new_trk) == 1 || trk_seg_num == 1) {
+					/* 
+					 * Start a new track segment
+					 */
+					track_head = route_head_alloc();
+					if (trk_seg_num == 1) {
+					  track_head->rte_name = xstrdup(trk_name);
+					} else {
+					  /* name in the form TRACKNAME #n */
+					  snprintf(trk_seg_num_buf, sizeof(trk_seg_num_buf), "%d", trk_seg_num);
+					  track_head->rte_name = xmalloc(strlen(trk_name)+strlen(trk_seg_num_buf)+3);
+					  sprintf(track_head->rte_name, "%s #%s", trk_name, trk_seg_num_buf);
+					}
+					trk_seg_num++;
+					track_head->rte_num = trk_num;
+					trk_num++;
+					track_add_head(track_head);
+				  }
+
 				  wpt_tmp = waypt_new();
+
 				  /* This is even more odd.
 				   * Track data is stored as big endian while
 				   * waypoint data is little endian!?
@@ -318,6 +340,25 @@ data_read(void)
 			  case 104:
 				tp_comp = (Compact_Trk_Point_Type *) ((char *) pdb_rec->data + sizeof(rec->header) + sizeof(rec->wpt.CustTrkHdr));
 				while (sz--) {
+				  if ((int)(tp_comp->new_trk) == 1 || trk_seg_num == 1) {
+					/* 
+					 * Start a new track segment
+					 */
+					track_head = route_head_alloc();
+					if (trk_seg_num == 1) {
+					  track_head->rte_name = xstrdup(trk_name);
+					} else {
+					  /* name in the form TRACKNAME #n */
+					  snprintf(trk_seg_num_buf, sizeof(trk_seg_num_buf), "%d", trk_seg_num);
+					  track_head->rte_name = xmalloc(strlen(trk_name)+strlen(trk_seg_num_buf)+3);
+					  sprintf(track_head->rte_name, "%s #%s", trk_name, trk_seg_num_buf);
+					}
+					trk_seg_num++;
+					track_head->rte_num = trk_num;
+					trk_num++;
+					track_add_head(track_head);
+				  }
+
 				  wpt_tmp = waypt_new();
 				  lon = be_read32(&tp_comp->lon);
 				  lat = be_read32(&tp_comp->lat);
