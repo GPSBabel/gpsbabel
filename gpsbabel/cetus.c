@@ -80,10 +80,13 @@ struct pdb_record *opdb_rec;
 static void *mkshort_wr_handle;
 
 static char *dbname = NULL;
+static char *appendicon = NULL;
 
 static
 arglist_t cetus_args[] = {
 	{"dbname", &dbname, "Database name", ARGTYPE_STRING },
+	{"appendicon", &appendicon, "Append icon_descr to description.",
+		ARGTYPE_BOOL },
 	{0, 0, 0, 0 }
 };
 
@@ -263,14 +266,24 @@ cetus_writewpt(waypoint *wpt)
 	else {
 		        vdata[0] ='\0';
 	}
+	if (appendicon && wpt->icon_descr) {
+		int left = 500 - strlen( vdata );
+		int ilen = strlen( wpt->icon_descr );
+		if (ilen && left > (ilen+3)) {
+			strcat( vdata, " (" );
+			strcat( vdata, wpt->icon_descr );
+			strcat( vdata, ")" );
+		}
+	}
 	vdata += strlen( vdata ) + 1;
 	
 	if ( wpt->notes ) {
-		        strncpy( vdata, wpt->notes, 501 );
-			        vdata[500] = '\0';
+		/* RER note: this doesn't seem to be viewable in Cetus 1.2b2 */
+		strncpy( vdata, wpt->notes, 501 );
+		vdata[500] = '\0';
 	}
 	else {
-		        vdata[0] ='\0';
+		vdata[0] ='\0';
 	}
 	vdata += strlen( vdata ) + 1;
 	
