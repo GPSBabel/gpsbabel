@@ -166,7 +166,6 @@ data_read(void)
 	struct record *rec;
 	struct pdb *pdb;
 	struct pdb_record *pdb_rec;
-	char *vdata;
 	route_head *track_head;
 
 	if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
@@ -283,12 +282,6 @@ my_write_wpt(const waypoint *wpt)
 static void
 data_write(void)
 {
-	int i, ct = waypt_count();
-	struct hdr *htable, *bh;
-	queue *elem, *tmp;
-	extern queue waypt_head;
-	waypoint *waypointp;
-
 	if (NULL == (opdb = new_pdb())) { 
 		fatal (MYNAME ": new_pdb failed\n");
 	}
