@@ -518,7 +518,7 @@ gs_get_container(geocache_container t)
 
 	for (i = 0; i < sz; i++) {
 		if (t == gs_container_map[i].type) {
-			return gs_type_map[i].name;
+			return gs_container_map[i].name;
 		}
 	}
 	return "Unknown";
