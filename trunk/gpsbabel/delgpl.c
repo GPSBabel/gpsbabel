@@ -64,10 +64,7 @@ gpl_read(void)
 	track_head = route_head_alloc();
 	route_add_head(track_head);
 
-	while (!feof(gplfile_in)) {
-		if (0 > fread(&gp, sizeof(gp), 1, gplfile_in)) {
-			warning(MYNAME, "short data read.\n");
-		}
+	while (fread(&gp, sizeof(gp), 1, gplfile_in) > 0) {
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 		le_read64(&wpt_tmp->latitude, &gp.lat);
 		le_read64(&wpt_tmp->longitude, &gp.lon);
@@ -75,7 +72,6 @@ gpl_read(void)
 		wpt_tmp->creation_time = le_read32(&gp.tm);
 		route_add_wpt(track_head, wpt_tmp);
 	}
-	
 }
 
 
@@ -101,7 +97,6 @@ static void
 gpl_trackpt(const waypoint *wpt)
 {
 	gpl_point_t gp = {0};
-
 	le_read64(&gp.lat, &wpt->latitude);
 	le_read64(&gp.lon, &wpt->longitude);
 	le_read64(&gp.alt, &wpt->altitude);
@@ -114,27 +109,6 @@ static void
 gpl_write(void)
 {
 	route_disp_all(NULL, NULL, gpl_trackpt);
-#if 0
-	/* 
-	 * Whitespace is actually legal, but since waypoint name length is
-	 * only 8 bytes, we'll conserve them.
-	 */
-	setshort_whitespace_ok(mkshort_handle, 0);
-	switch (global_opts.objective)
-	{
-		case trkdata:
-			mag_track_pr();
-			break;
-		case wptdata:
-			waypt_disp_all(mag_waypt_pr);
-			break;
-		case rtedata:
-			mag_route_pr();
-			break;
-		default:
-			fatal(MYNAME ": Unknown objective.\n");
-	}
-#endif
 }
 
 ff_vecs_t gpl_vecs = {
