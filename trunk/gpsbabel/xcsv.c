@@ -38,6 +38,8 @@ static char *snuniqueopt = NULL;
 char *prefer_shortnames = NULL;
 char *xcsv_urlbase = NULL;
 
+static const char *intstylebuf = NULL;
+
 static
 arglist_t xcsv_args[] = {
 	{"style", &styleopt, "Full path to XCSV style file", NULL,
@@ -83,6 +85,7 @@ xcsv_destroy_style(void)
     queue *elem, *tmp;
     field_map_t *fmp;
     ogue_t *ogp;
+    int internal = 0;
 
     /* 
      * If this xcsv_file struct came from a file we can free it all.
@@ -158,7 +161,9 @@ xcsv_destroy_style(void)
         xfree(xcsv_file.mkshort_handle);
 
     /* return everything to zeros */
+    internal = xcsv_file.is_internal;
     memset(&xcsv_file, '\0', sizeof(xcsv_file));
+    xcsv_file.is_internal = internal;
 }
 
 static const char *
@@ -462,6 +467,15 @@ xcsv_read_internal_style(const char *style_buf)
 	}
 }
 
+void
+xcsv_setup_internal_style(const char *style_buf)
+{
+	xcsv_file_init();
+	xcsv_file.is_internal = !!style_buf;
+	intstylebuf = style_buf;
+}
+
+
 static void
 xcsv_rd_init(const char *fname)
 {
@@ -470,7 +484,10 @@ xcsv_rd_init(const char *fname)
      * if we don't have an internal style defined, we need to
      * read it from a user-supplied style file, or die trying.
      */
-    if (xcsv_file.is_internal == 0) {
+    if (xcsv_file.is_internal ) {
+	xcsv_read_internal_style( intstylebuf );
+    }
+    else {
         if (!styleopt)
             fatal(MYNAME ": XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
 
@@ -495,7 +512,10 @@ xcsv_wr_init(const char *fname)
     /* if we don't have an internal style defined, we need to
      * read it from a user-supplied style file, or die trying.
      */
-    if (xcsv_file.is_internal == 0) {
+    if (xcsv_file.is_internal ) {
+	xcsv_read_internal_style( intstylebuf );
+    }
+    else {
 
         if (!styleopt)
             fatal(MYNAME ": XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");

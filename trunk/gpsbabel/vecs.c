@@ -378,6 +378,7 @@ find_vec(char *const vecname, char **opts)
 			}
 		}
 
+		xcsv_setup_internal_style( NULL );
 		xfree(v);
 		return vec->vec;
 		
@@ -407,7 +408,7 @@ find_vec(char *const vecname, char **opts)
 		} else {
 			*opts = NULL;
 		}
-		xcsv_read_internal_style(svec->style_buf);
+		xcsv_setup_internal_style(svec->style_buf);
 
 		xfree(v);
 
