@@ -594,10 +594,15 @@ disp_formats(int version)
 	case 0:
 	case 1:
 		for (vec = vec_list; vec->vec; vec++) {
-			if (version > 0)
+			/* Version 1 displays type at front of all types.
+			 * Version 0 skips internal types.
+			 */
+			if (version > 0) {
 				disp_v1(vec->vec->type);
-			if (vec->vec->type == ff_type_internal)
-				continue;
+			} else {
+				if (vec->vec->type == ff_type_internal)
+					continue;
+			}
 			printf("%s\t%s\t%s\n", vec->name, 
 				vec->extension? vec->extension : "", 
 				vec->desc);
