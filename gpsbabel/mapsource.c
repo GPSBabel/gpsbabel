@@ -1260,7 +1260,7 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 		thisWaypoint = xcalloc(sizeof(*thisWaypoint), 1);
 		thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
 		thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
-		thisWaypoint->creation_time = dateTime;
+		thisWaypoint->creation_time = le_read32(&dateTime);
 		thisWaypoint->centiseconds = 0;
 		thisWaypoint->altitude = mps_altitude;
 		route_add_wpt(track_head, thisWaypoint);
