@@ -641,6 +641,12 @@ xcsv_waypt_pr(const waypoint *wpt)
 	    description = shortname;
     }
 
+    if (description) {
+	    char *odesc = description;
+	    description = str_utf8_to_ascii(odesc);
+	    xfree(odesc);
+    }
+
     i = 0;
     QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
         fmp = (field_map_t *) elem;
