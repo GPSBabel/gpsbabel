@@ -83,6 +83,16 @@ data_write(void)
 	}
 
 	i = 0;
+	/*
+	 * FIXME: Someone that knows the Garmin protocol could 
+	 * do something clever here and switch on gps_save_id to 
+	 * setshort_length to 
+	 * 	15 for  the V, 
+	 * 	10 for Street Pilot, Rhino, 76
+	 * 	6 for the III, 12, emap, and etrex
+	 * Fortunately, getting this "wrong" only results in ugly names
+	 * when we're using the synthesize_shortname path.
+	 */
 	setshort_length(10);
 	setshort_mustupper(1);
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
