@@ -72,7 +72,7 @@ static FILE *magfile_out;
 static int magfd;
 static mag_rxstate magrxstate;
 static int mag_error;
-static int last_rx_csum;
+static unsigned int last_rx_csum;
 static int found_done;
 static int got_version;
 static int is_file = 0;
