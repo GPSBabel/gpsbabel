@@ -66,6 +66,7 @@ static void *mkshort_handle;
 static time_t file_time;
 
 static char *gsshortnames = NULL;
+static char *urlbase = NULL;
 static route_head *trk_head;
 static route_head *rte_head;
 
@@ -762,6 +763,8 @@ void
 gpx_wr_init(const char *fname, const char *args)
 {
 	mkshort_handle = mkshort_new_handle();
+	urlbase = get_option(args, "urlbase");
+
 	ofd = fopen(fname, "w");
 	if (ofd == NULL) {
 		fatal(MYNAME ": open %s for writing\n", fname );
@@ -934,7 +937,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 	}
 	if (waypointp->url) {
 		tmp_ent = gpx_entitize(waypointp->url);
-		fprintf(ofd, "<url>%s</url>\n", tmp_ent);
+		fprintf(ofd, "<url>%s%s</url>\n", urlbase ? urlbase : "", tmp_ent);
 		xfree(tmp_ent);
 	}
 	if (waypointp->url_link_text) {
