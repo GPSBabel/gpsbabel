@@ -503,6 +503,7 @@ psit_routehdr_w(FILE *psit_file, const route_head *rte)
 
 		fprintf(psit_file, "Route:  %s\n",
 							rname);
+		xfree(rname);
 	}
 }
 
@@ -658,6 +659,7 @@ psit_trackhdr_w(FILE *psit_file, const route_head *trk)
 			fprintf (psit_file, "Track:  %s\n",
 								tname);
 
+			xfree(tname);
 		}
 	}
 	psit_track_state = 1;
