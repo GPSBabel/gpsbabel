@@ -215,17 +215,17 @@ static int32 GPS_A000(const char *port)
     else
     {
         int maxct = 3;
+	/*
+	 * The unit may return more than one packet, so read and
+	 * discard all but the product inquiry response.
+	 */
 	while (maxct--) {
-		char pb[256];
 		(void) GPS_Packet_Read(fd, &rec);
 		GPS_Send_Ack(fd, &tra, &rec);
 		if (rec->type == 0xfd) {
 			GPS_A001(rec);
 			break;
 		}
-		snprintf(pb, sizeof(pb), "Ignoring unknown packet 0x%x.", 
-				rec->type);
-		GPS_Warning(pb);
 	}
     }
 
