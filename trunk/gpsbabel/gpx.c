@@ -1096,11 +1096,6 @@ gpx_route_tlr(const route_head *rte)
 }
 
 static
-void gpx_noop()
-{
-}
-
-static
 void gpx_route_pr()
 {
 	/* output routes */
