@@ -348,10 +348,13 @@ static void GPS_A001(GPS_PPacket packet)
 	    }
 	    else if(data<700)
 	    {
-		if(data!=600)
-		    GPS_Protocol_Error(tag,data);
-		else
+		if (data == 600)
 		    gps_date_time_transfer = pA600;
+		else {
+		    /* Stupid  undocumented 60C packets */
+		    /* GPS_Protocol_Error(tag,data); */
+	  	     continue;
+		}
 		continue;
 	    }
 	    else if(data<800)
@@ -511,10 +514,13 @@ static void GPS_A001(GPS_PPacket packet)
 
 	    else if(lasta<700)
 	    {
-		if(data!=600)
-		    GPS_Protocol_Error(tag,data);
-		else
+		if (data == 600) {
 		    gps_date_time_type = pD600;
+		} else {
+		    /* Stupid undocumented 60 D601 packets */
+		    /* GPS_Protocol_Error(tag,data); */
+			continue;
+		}
 		continue;
 	    }
 	    else if(lasta<800)
