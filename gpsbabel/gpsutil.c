@@ -62,10 +62,11 @@ data_read(void)
 			name, &lat, &latdir, &lon, &londir,
 			&alt, &alttype, desc, icon);
 		desc[0] = '\0';
+		icon[0] = '\0';
 		sscanf(&ibuf[39], "%30c", desc);
-		sscanf(&ibuf[68], "%2s", icon);
-		fprintf(stderr, "Icon >%s< Desc >%s<\n", icon, desc);
+		sscanf(&ibuf[70], "%2c", icon);
 		rtrim(desc);
+		rtrim(icon);
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 		wpt_tmp->position.altitude.altitude_meters = alt;
 		wpt_tmp->shortname = xstrdup(name);
