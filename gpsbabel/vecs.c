@@ -68,6 +68,8 @@ extern ff_vecs_t netstumbler_vecs;
 extern ff_vecs_t HsaEndeavourNavigator_vecs;
 extern ff_vecs_t igc_vecs;
 extern ff_vecs_t brauniger_iq_vecs;
+extern ff_vecs_t hiketech_vecs;
+extern ff_vecs_t glogbook_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -298,6 +300,18 @@ vecs_t vec_list[] = {
                 &brauniger_iq_vecs,
                 "baroiq",
                 "Brauniger IQ Series Barograph Download",
+                NULL
+        },
+        {
+                &hiketech_vecs,
+                "hiketech",
+                "Hiketech",
+                "gps"
+        },
+        {
+                &glogbook_vecs,
+                "glogbook",
+                "Garmin Logbook XML",
                 NULL
         },
 	{
