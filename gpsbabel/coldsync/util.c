@@ -12,7 +12,7 @@
  * native format, convert them to Palm (big-endian) format, and write
  * them to a ubyte string.
  *
- * $Id: util.c,v 1.2 2003-07-28 22:59:01 robertl Exp $
+ * $Id: util.c,v 1.3 2004-01-18 01:24:41 robertl Exp $
  */
 
 #include "config.h"
@@ -224,7 +224,7 @@ time_palmtime2dlp(const udword palmt,
 		  struct dlp_time *dlpt)
 {
 	struct tm *tm;
-	time_t t;
+time_t t;
 
 	/* Convert the Palm time to a Unix time_t */
 	t = palmt - EPOCH_1904;
