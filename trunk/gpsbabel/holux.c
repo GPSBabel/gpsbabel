@@ -102,14 +102,14 @@ static void data_read(void)
     }
 
     iWptLen = sizeof(WPT);
-    iWptNum = ((WPTHDR *)HxWpt)->num;
+    iWptNum = le_read16(&((WPTHDR *)HxWpt)->num);
 
     /* Get the waypoints */
     for (iCount = 0; iCount < iWptNum ; iCount ++)
     {
         wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
     
-        iWptIndex = ((WPTHDR *)HxWpt)->idx[iCount];         /* get the waypoint index  */
+	iWptIndex = le_read16(&((WPTHDR *)HxWpt)->idx[iCount]);
         dwIndex= OFFS_WPT + (sizeof(WPT) * iWptIndex);
         pWptHxTmp =  (WPT *)&HxWpt[OFFS_WPT + (sizeof(WPT) * iWptIndex)];
         
@@ -137,8 +137,8 @@ static void data_read(void)
             wpt_tmp->creation_time = mktime(&tm); 
         }
 
-        lon = (double)pWptHxTmp->pt.iLongitude / 36000; 
-        lat = ((double)pWptHxTmp->pt.iLatitude  / 36000) * -1;
+        lon = le_read32(&pWptHxTmp->pt.iLongitude) / 36000.0; 
+        lat = (le_read32(&pWptHxTmp->pt.iLatitude)  / 36000.0) * -1.0;
 		wpt_tmp->position.longitude.degrees = lon;
 		wpt_tmp->position.latitude.degrees = lat;
 		waypt_add(wpt_tmp);
@@ -187,8 +187,9 @@ static void holux_disp(const waypoint *wpt)
     lat += (double)((int)lat/abs((int)lat)) * .5;
 
 
-    sIndex =  ((WPTHDR *)HxWFile)->num;
+    sIndex =  le_read16(&((WPTHDR *)HxWFile)->num);
     ((WPTHDR *)HxWFile)->idx[sIndex] = sIndex;         /* set the waypoint index  */
+    le_write16(&((WPTHDR *)HxWFile)->idx[sIndex], sIndex);         /* set the waypoint index  */
     ((WPTHDR *)HxWFile)->used[sIndex] = 0xff;           /* Waypoint used */ 
  
 
@@ -224,12 +225,12 @@ static void holux_disp(const waypoint *wpt)
     }
 
 
-    pWptHxTmp->pt.iLatitude = (int)lat;
-    pWptHxTmp->pt.iLongitude = (int)lon;
+    le_write32(&pWptHxTmp->pt.iLatitude,(unsigned int) lat);
+    le_write32(&pWptHxTmp->pt.iLongitude,(unsigned int) lon);
     pWptHxTmp->checked = 01;
     pWptHxTmp->vocidx = (short)0xffff;
-    ((WPTHDR *)HxWFile)->num = ++sIndex;
-    ((WPTHDR *)HxWFile)->next= ++sIndex;
+    le_write16(&((WPTHDR *)HxWFile)->num, ++sIndex);
+    le_write16(&((WPTHDR *)HxWFile)->next, ++sIndex);
 }
 
 
@@ -244,7 +245,7 @@ static void data_write(void)
     short sCount;
 
     /* init the waypoint area*/
-    ((WPTHDR *)HxWFile)->id = WPT_HDR_ID;
+    le_write32(&((WPTHDR *)HxWFile)->id, WPT_HDR_ID);
     ((WPTHDR *)HxWFile)->num = 0;
     ((WPTHDR *)HxWFile)->next = 0;
     
@@ -253,12 +254,11 @@ static void data_write(void)
         ((WPTHDR *)HxWFile)->idx[sCount] = (signed short)-1; 
     for (sCount = 0; sCount < MAXWPT; sCount++)
         ((WPTHDR *)HxWFile)->used[sCount] = 0; 
-
    
    /* init the route area */
-    ((RTEHDR *)&HxWFile[ROUTESTART])->id = RTE_HDR_ID;
+    le_write32(&((RTEHDR *)&HxWFile[ROUTESTART])->id, RTE_HDR_ID);
     ((RTEHDR *)&HxWFile[ROUTESTART])->num = 0;
-    ((RTEHDR *)&HxWFile[ROUTESTART])->next = 1;
+    le_write16(&((RTEHDR *)&HxWFile[ROUTESTART])->next, 1);
     ((RTEHDR *)&HxWFile[ROUTESTART])->rteno = (signed short)-1;
     
     /* clear index list */
@@ -266,7 +266,6 @@ static void data_write(void)
         ((RTEHDR *)&HxWFile[ROUTESTART])->idx[sCount] = (signed short)-1; 
     for (sCount = 0; sCount < MAXRTE; sCount++)
         ((RTEHDR *)&HxWFile[ROUTESTART])->used[sCount] = 0; 
-
 
     waypt_disp_all(holux_disp);
    
