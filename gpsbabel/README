@@ -38,9 +38,8 @@ THE FORMATS
 	Magellan unit.
 
 	As of 08/30/02, gpsbabel can also read and write the files that
-	can be stuck on the flash memory parts 
-
-BLAH BLAH BLAH
+	can be stuck on the flash memory parts for the Meridian models.
+	Simply specify a file instead of a serial port.
 
 	As of this writing, there is still a lot of "scribbling" in the 
 	source for functionality that isn't hooked up to the rest of the
@@ -118,10 +117,26 @@ COMMON USAGE
 
 	This command will read from a Magellan unit attached to the first
 	serial port on a Linux system (device names will vary on other OSes)
-	and write them as a geocaching loc file.
+	and write them as a geocaching loc file.  The second command does 
+	the same for windows.
 
 	gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc
+	gpsbabel -i magellan -f com1 -o geo -F mag.loc
+	
 
+	Optionally, you may specify "-s" in any command line.  This causes
+	the program to ignore any "short" names that may be present in the
+	source data format and synthesize one from the long name.  This
+	is particularly useful if you're writing to a target format that 
+	isn't the lowest common denominator but the source data was written
+	for the lowest common denominator.   I use this for writing data
+	from geocaching.com to my Magellan so my waypoints have "real" names
+	instead of the 'GC1234' ones that are optimized for NMEA-only 
+	receivers.   A geocacher with a Magellan receiver may thus find
+	commands like this useful.
+
+	gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0 
+	gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1
 
 ADVANCED USAGE
 
