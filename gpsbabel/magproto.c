@@ -115,6 +115,7 @@ static icon_mapping_t map330_icon_table[] = {
 	{ "e", "airport" },
 	{ "f", "amusement park" },
 	{ "g", "ATM" },
+	{ "g", "Bank" },
 	{ "h", "auto repair" },
 	{ "i", "boating" },
 	{ "j", "camping" },
