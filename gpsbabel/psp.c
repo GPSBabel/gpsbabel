@@ -140,26 +140,88 @@ psp_fwrite_word(unsigned int x, FILE *fp)
 #endif
 
 
-static int
-valid_psp_header(char * header, int len) 
+/* Implement the grid in ascii art... This makes a bit of sense if you stand
+   on a point over the north pole and look down on the earth.
+
+-180   -90        0       90      180 
+------------------------------------    /\
+| 0x03  U|S 0x02 U|k 0x00  | 0x01   |   90
+|--------|--------|--------|--------|   0
+| 0x07   |  0x06  |  0x04  | 0x05   |   -90
+------------------------------------    \/
+*/    
+static 
+char grid_byte(double lat, double lon)
 {
-    char header_bytes[] = { 0x31, 0x6E, 0x69, 0x50, 0x00 }; /* 1niP <stop> */
-    char *p, *s;
-
-    if (len != 32) {
-        return (-1);
-    }
-
-    p = header_bytes;
-    s = header;
-
-    while (*p) {
-        if (*p++ != *s++) {
-            return(-1);
+    char c = 0x00;
+    
+    if ((lon >= 0.0) && (lon < 90.0)) {
+        if (lat >= 0.0) {
+            c = 0x00;
+        } else {
+            c = 0x04;
+        }
+    } else
+    if (lon >= 90.0) {
+        if (lat >= 0.0) {
+            c = 0x01;
+        } else {
+            c = 0x05;
+        }
+    } else
+    if ((lon < 0.0) && (lon >= -90.0)) {
+        if (lat >= 0.0) {
+            c = 0x02;
+        } else {
+            c = 0x06;
+        }
+    } else 
+    if (lon < -90.0) {
+        if (lat >= 0.0) {
+            c = 0x03;
+        } else {
+            c = 0x07;
         }
     }
+        
+    return (c);
+}    
 
-    return (0);
+void decode_psp_coordinates(double * lat, double * lon, const char lonbyte)
+{
+    /* This is some sort of 1/2 Polar,  1/2 Cartesian coordinate mess in  */
+    /* the pin file.  I really shouldn't have to do this. Zones 02 and 03 */
+    /* work properly.  The other zones are assumptions based on 02 and 03 */
+
+    if ((lonbyte == 0x02) || (lonbyte == 0x06)) {
+        /* one step west of zero longitude */
+        if (*lon > 0.0) 
+            *lon *= -1.0;
+    } else 
+    if ((lonbyte == 0x03) || (lonbyte == 0x07)) {
+        /* two steps west of zero longitude */
+        if (*lon > 0.0)
+            *lon -= 180.0;
+    } else 
+    if ((lonbyte == 0x00) || (lonbyte == 0x04)) {
+        /* one step east of zero longitude */
+        if (*lon < 0.0)
+            *lon *= -1.0;
+    } else 
+    if ((lonbyte == 0x01) || (lonbyte == 0x05)) {
+        /* two steps east of zero longitude */
+        if (*lon < 0.0)
+            *lon += 180.0;
+    }
+}
+
+static int
+valid_psp_header(char * header)
+{
+    char header_bytes[] = { 0x31, 0x6E, 0x69, 0x50 }; /* 1niP <stop> */
+
+    return (memcmp(header_bytes, header, 4));
+    
 }
 
 static char *
@@ -213,14 +275,17 @@ psp_read(void)
 {
 	char buff[MAXPSPSTRINGSIZE + 1];
 	double radians;
+	double lat, lon;
 	waypoint *wpt_tmp;
 	int stringsize;
 	short int pincount;
+	short int pindex;
+        char gridbyte = 0x00;
 
         /* 32 bytes - file header */
         psp_fread(&buff[0], 1, 32, psp_file_in);
 
-        if (valid_psp_header(buff, 32) != 0) {
+        if (valid_psp_header(buff) != 0) {
             fatal(MYNAME ": input file does not appear to be a valid .PSP file.\n");
         }
 
@@ -229,41 +294,44 @@ psp_read(void)
 	while (pincount--) {
 	    wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 
-	    /* things we will probably never know about this waypoint */
-	    /* coming from a pushpin file.                            */
+            wpt_tmp->position.altitude.altitude_meters = unknown_alt;
+            
+            /* offset 0x20 - 0x21 pin index */
+    	    psp_fread(&pindex, 1, 2, psp_file_in);
 
-	    /*
-	        wpt_tmp->creation_time;
-  	        wpt_tmp->position.altitude.altitude_meters;
-  	        wpt_tmp->url;
-  	        wpt_tmp->url_link_text;
-  	        wpt_tmp->icon_descr;  TODO: map this.
-	    */
+            /* offset 0x22 - 0x23 */
+    	    psp_fread(&buff[0], 1, 2, psp_file_in);
 
-            /* 4 bytes at start of record */
-            /* coming out of S&T, this 1st byte is probably the pin # (0x01, 0x02, etc...) */
-            /* coming from pocketstreets, it's generally 0x00. Sometimes 0xC3. ?           */
-
-    	    psp_fread(&buff[0], 1, 4, psp_file_in);
-
-            /* 1 byte, unkown */
-            psp_fread(&buff[0], 1, 1, psp_file_in);
+            /* offset 0x24 */
+            /* 1 byte, the grid byte - needed for sign corrections later*/
+            psp_fread(&gridbyte, 1, 1, psp_file_in);
 
             /* 8 bytes - latitude in radians */
 	    radians = psp_fread_double(psp_file_in);
-            wpt_tmp->position.latitude.degrees = (radians * 180.0) / M_PI;
+            lat = (radians * 180.0) / M_PI;
 
             /* 8 bytes - longitude in radians */
 	    radians = psp_fread_double(psp_file_in);
-            wpt_tmp->position.longitude.degrees = (radians * 180.0) / M_PI;
+            lon = (radians * 180.0) / M_PI;
 
+            /* since we don't know the origin of this PSP file, we use  */
+            /* the grid byte adjust longitude, if necessary, mimicing   */
+            /* the behavior of pocketstreets correcting the data.  This */
+            /* does not correct the fact that points in eastern US are  */
+            /* written with the wrong coordinates by S&T. (MS bug)      */
+
+            decode_psp_coordinates(&lat, &lon, gridbyte);
+
+            wpt_tmp->position.latitude.degrees = lat;
+            wpt_tmp->position.longitude.degrees = lon;
+           
             /* 1 byte - pin display properties */
             psp_fread(&buff[0], 1, 1, psp_file_in);
 
 	    /* 3 bytes - unknown */
             psp_fread(&buff[0], 1, 3, psp_file_in);
 
-            /* 1 bytes - icon 0x00 - 0x27 */
+            /* 1 bytes - icon (values: 0x00 - 0x27) */
             psp_fread(&buff[0], 1, 1, psp_file_in);
 
 	    /* 3 bytes - unknown */
@@ -329,6 +397,7 @@ psp_waypt_pr(const waypoint *wpt)
 	char tbuf[64];
 	char c;
 	int i;
+	static short int pindex = 0;
 	char *shortname;
 	char *description;
 
@@ -359,16 +428,28 @@ psp_waypt_pr(const waypoint *wpt)
         /* convert lat/long back to radians */
 	lat = (wpt->position.latitude.degrees * M_PI) / 180.0;
         lon = (wpt->position.longitude.degrees * M_PI) / 180.0;
-
-        /* 4 leading bytes */
+        
+	pindex++;
+	le_write16(tbuf, pindex);
+        /* 2 bytes - pin index */
+        fwrite(tbuf, 1, 2, psp_file_out);
+        
+        /* 2 bytes - null bytes */
         memset(tbuf, '\0', sizeof(tbuf));
-        fwrite(tbuf, 1, 4, psp_file_out);
+        fwrite(tbuf, 1, 2, psp_file_out);
+        
 
-        /* my test files seem to always have this byte as 0x03, */
-        /* although nothing seems to really care.               */
-	c = 0x03;
+        /* set the grid byte */
+	c = grid_byte(wpt->position.latitude.degrees, 
+	              wpt->position.longitude.degrees);
 
-        /* 1 unknown bytes */
+	/* since the grid byte matches with what pocketstreets does to   */
+	/* input files, our output appears identical to a pin file that  */
+        /* has already been processed and corrected by pocketstreets.    */
+        /* Due to the grid and signs, it'll look different than one that */
+        /* comes straight from S&T.                                      */
+	
+        /* the grid byte */
         fwrite(&c, 1, 1, psp_file_out);
 
         /* 8 bytes - latitude/radians */
@@ -378,7 +459,7 @@ psp_waypt_pr(const waypoint *wpt)
         psp_fwrite_double(lon, psp_file_out);
 
         /* 1 byte - pin properties */
-        c = 0x14; /* display pin name on! display notes on! */
+        c = 0x14; /* display pin name on, display notes on. 0x04 = no notes */
         fwrite(&c, 1, 1, psp_file_out);
 
         memset(tbuf, '\0', sizeof(tbuf));
