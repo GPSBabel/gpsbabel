@@ -45,39 +45,39 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <desc>IGCHDRS~HFFXA035~HFPLTPILOT:Bill Bloggs~HFGTYGLIDERTYPE:Schleicher ASH-25~HFGIDGLIDERID:ABCD-1234~HFDTM100GPSDATUM:WGS-1984~HFRFWFIRMWAREVERSION:6.4~HFRHWHARDWAREVERSION:3.0~HFFTYFRTYPE:Manufacturer Model~HFGPSMarconiCanada:Superstar 12ch max10000m~HFPRSPRESSALTSENSOR:Sensyn XYZ1111 max11000m~HFCIDCOMPETITIONID:XYZ-78910~HFCCLCOMPETITIONCLASS:15mMotor Glider~HFSCMSECONDCREW:JohnSmith~</desc>
 <trkseg>
 <trkpt lat="54.118683" lon="-2.822367">
-<ele>280.000000</ele>
+  <ele>280.000000</ele>
 <time>2001-07-16T16:02:40Z</time>
 </trkpt>
 <trkpt lat="51.118767" lon="-1.821667">
-<ele>288.000000</ele>
+  <ele>288.000000</ele>
 <time>2001-07-16T16:02:45Z</time>
 </trkpt>
 <trkpt lat="51.118900" lon="-1.821383">
-<ele>290.000000</ele>
+  <ele>290.000000</ele>
 <time>2001-07-16T16:02:50Z</time>
 </trkpt>
 <trkpt lat="51.119000" lon="-1.820350">
-<ele>290.000000</ele>
+  <ele>290.000000</ele>
 <time>2001-07-16T16:02:55Z</time>
 </trkpt>
 <trkpt lat="51.119167" lon="-1.820033">
-<ele>291.000000</ele>
+  <ele>291.000000</ele>
 <time>2001-07-16T16:03:00Z</time>
 </trkpt>
 <trkpt lat="51.119667" lon="-1.819750">
-<ele>291.000000</ele>
+  <ele>291.000000</ele>
 <time>2001-07-16T16:03:05Z</time>
 </trkpt>
 <trkpt lat="51.120200" lon="-1.819567">
-<ele>293.000000</ele>
+  <ele>293.000000</ele>
 <time>2001-07-16T16:03:10Z</time>
 </trkpt>
 <trkpt lat="51.120333" lon="-1.819167">
-<ele>494.000000</ele>
+  <ele>494.000000</ele>
 <time>2001-07-17T16:02:48Z</time>
 </trkpt>
 <trkpt lat="51.122167" lon="-1.818783">
-<ele>496.000000</ele>
+  <ele>496.000000</ele>
 <time>2001-07-17T16:02:52Z</time>
 </trkpt>
 </trkseg>
@@ -87,39 +87,39 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <desc>IGCHDRS~HFFXA035~HFPLTPILOT:Bill Bloggs~HFGTYGLIDERTYPE:Schleicher ASH-25~HFGIDGLIDERID:ABCD-1234~HFDTM100GPSDATUM:WGS-1984~HFRFWFIRMWAREVERSION:6.4~HFRHWHARDWAREVERSION:3.0~HFFTYFRTYPE:Manufacturer Model~HFGPSMarconiCanada:Superstar 12ch max10000m~HFPRSPRESSALTSENSOR:Sensyn XYZ1111 max11000m~HFCIDCOMPETITIONID:XYZ-78910~HFCCLCOMPETITIONCLASS:15mMotor Glider~HFSCMSECONDCREW:JohnSmith~</desc>
 <trkseg>
 <trkpt lat="54.118683" lon="-2.822367">
-<ele>421.000000</ele>
+  <ele>421.000000</ele>
 <time>2001-07-16T16:02:40Z</time>
 </trkpt>
 <trkpt lat="51.118767" lon="-1.821667">
-<ele>429.000000</ele>
+  <ele>429.000000</ele>
 <time>2001-07-16T16:02:45Z</time>
 </trkpt>
 <trkpt lat="51.118900" lon="-1.821383">
-<ele>432.000000</ele>
+  <ele>432.000000</ele>
 <time>2001-07-16T16:02:50Z</time>
 </trkpt>
 <trkpt lat="51.119000" lon="-1.820350">
-<ele>430.000000</ele>
+  <ele>430.000000</ele>
 <time>2001-07-16T16:02:55Z</time>
 </trkpt>
 <trkpt lat="51.119167" lon="-1.820033">
-<ele>432.000000</ele>
+  <ele>432.000000</ele>
 <time>2001-07-16T16:03:00Z</time>
 </trkpt>
 <trkpt lat="51.119667" lon="-1.819750">
-<ele>435.000000</ele>
+  <ele>435.000000</ele>
 <time>2001-07-16T16:03:05Z</time>
 </trkpt>
 <trkpt lat="51.120200" lon="-1.819567">
-<ele>435.000000</ele>
+  <ele>435.000000</ele>
 <time>2001-07-16T16:03:10Z</time>
 </trkpt>
 <trkpt lat="51.120333" lon="-1.819167">
-<ele>436.000000</ele>
+  <ele>436.000000</ele>
 <time>2001-07-17T16:02:48Z</time>
 </trkpt>
 <trkpt lat="51.122167" lon="-1.818783">
-<ele>439.000000</ele>
+  <ele>439.000000</ele>
 <time>2001-07-17T16:02:52Z</time>
 </trkpt>
 </trkseg>
