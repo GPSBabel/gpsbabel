@@ -194,7 +194,7 @@ arcdist_process(void)
 	    argsfound = sscanf( line, "%lf %lf", &lat2, &lon2 );
 	   
 	    if ( argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
-                fprintf( stderr, "%s: Warning: Arc file contains unusable vertex on line %d.\n", MYNAME, fileline );
+                warning(MYNAME ": Warning: Arc file contains unusable vertex on line %d.\n", fileline );
 	    } 
 	    else if ( lat1 != BADVAL && lon1 != BADVAL &&
 	         lat2 != BADVAL && lon2 != BADVAL ) {

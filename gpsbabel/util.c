@@ -308,6 +308,14 @@ fatal(const char *fmt, ...)
 	exit(1);
 }
 
+void
+warning(const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	vfprintf(stderr, fmt, ap);
+}
+
 /*
  * Read 4 bytes in big-endian.   Return as "int" in native endianness.
  */

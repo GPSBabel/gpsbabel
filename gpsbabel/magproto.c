@@ -256,7 +256,7 @@ mag_writemsg(const char * const buf)
 	char obuf[1000];
 
 	if (debug_serial) {
-		fprintf(stderr,"WRITE: $%s*%02X\r\n",buf, osum);
+		warning("WRITE: $%s*%02X\r\n",buf, osum);
 	}
 
     retry:
@@ -268,7 +268,7 @@ mag_writemsg(const char * const buf)
 		mag_readmsg();
 		if (last_rx_csum != osum) {
 			if (debug_serial) {
-				fprintf(stderr, "COMM ERROR: Expected %02x, got %02x", 
+				warning("COMM ERROR: Expected %02x, got %02x", 
 						osum, last_rx_csum);
 			}
 			if (retry_cnt--)
@@ -299,7 +299,7 @@ mag_writeack(int osum)
 	i = sprintf(obuf, "$%s*%02X\r\n",nbuf, nsum);
 
 	if (debug_serial) {
-		fprintf(stderr,"ACK WRITE: %s",obuf);
+		warning("ACK WRITE: %s",obuf);
 	}
 	/*
 	 * Don't call mag_writemsg here so we don't get into ack feedback
@@ -386,7 +386,7 @@ retry:
 			 * we'll be fairly persistent in retrying.
 			 */
 			if (retrycnt--) {
-				fprintf(stderr, "%d\n", retrycnt);
+				warning( "%d\n", retrycnt);
 				goto retry;
 			} else {
 				fatal(MYNAME ": No data received from GPS.\n");
@@ -403,7 +403,7 @@ retry:
 
 	if (isz < 5) {
 		if (debug_serial)
-			fprintf(stderr, "SHORT READ %d\n", isz);
+			warning( "SHORT READ %d\n", isz);
 		return;
 	}
 	mag_error = 0;
@@ -413,14 +413,14 @@ retry:
 	isum  = strtoul(isump, NULL,16); 
 	if (isum != mag_pchecksum(&ibuf[1], isz-3)) {
 		if (debug_serial)
-			fprintf(stderr, "RXERR %02x/%02x: '%s'\n", isum, mag_pchecksum(&ibuf[1],isz-5), ibuf);
+			warning( "RXERR %02x/%02x: '%s'\n", isum, mag_pchecksum(&ibuf[1],isz-5), ibuf);
 			/* Special case receive errors early on. */
 		if (!got_version) {
 			fatal(MYNAME ": bad communication.  Check bit rate.\n");
 		}
 	}
 	if (debug_serial) {
-		fprintf(stderr, "READ: %s\n", ibuf);
+		warning( "READ: %s\n", ibuf);
 	}
 	if (IS_TKN("$PMGNCSM,")) {
 		last_rx_csum = strtoul(&ibuf[9], NULL, 16);
@@ -453,7 +453,7 @@ retry:
 	} 
 	mag_error = 0;
 	if (!ignore_unable && IS_TKN("$PMGNCMD,UNABLE")) {
-		fprintf(stderr, "Unable to send\n");
+		warning( "Unable to send\n");
 		found_done = 1;
 		mag_error = 1;
 		ignore_unable = 0;
@@ -1180,7 +1180,7 @@ mag_waypt_pr(const waypoint *waypointp)
 
 	if (!is_file) {
 		if (mag_error) {
-			fprintf(stderr, "Protocol error Writing '%s'\n", obuf);
+			warning( "Protocol error Writing '%s'\n", obuf);
 		}
 	}
 }

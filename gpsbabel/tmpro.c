@@ -151,8 +151,8 @@ data_read(void)
 			break;
 		default:
 		    /* whoa! nelly */
-		    fprintf (stderr, "%s: Warning: data fields on line %d exceed specification.\n", 
-		        MYNAME, linecount);
+		    warning(MYNAME ": Warning: data fields on line %d exceed specification.\n", 
+		        linecount);
 		    break;
 		}
 		i++;
@@ -162,8 +162,8 @@ data_read(void)
 	    
 	    if (i != 11) {
    	        xfree(wpt_tmp);
-	        fprintf (stderr, "%s: WARNING - extracted %d fields from line %d. \nData on line ignored.\n", 
-	            MYNAME, i, linecount);
+	        warning(MYNAME ": WARNING - extracted %d fields from line %d. \nData on line ignored.\n", 
+	            i, linecount);
 	    } else {
    	        waypt_add(wpt_tmp);
    	    }
