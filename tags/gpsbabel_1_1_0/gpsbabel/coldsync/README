@@ -1,0 +1,211 @@
+	This is ColdSync, a tool for synchronizing data between Palm
+devices and Unix workstations.
+
+	Copyright (C) 1999-2001, Andrew Arensburger.
+
+	The latest version of this package is available at
+	http://www.ooblick.com/software/coldsync/
+
+	This package is distributable under the terms of the Artistic
+License. You should have received a file called "Artistic", which
+specifies the terms under which this package may be distributed and
+modified.
+	The Artistic License is taken from the Perl 5.005_03
+distribution, so some of the text is specific to Perl and does not
+apply to ColdSync. I hope to address this in a future release.
+
+	This product includes software developed by the University of
+California, Berkeley and its contributors.
+
+	This product includes software developed by the Apache Group
+for use in the Apache HTTP server project (http://www.apache.org/).
+	(Actually, the Apache code in question was written by Panos
+Tsirigotis. See comments in "src/ap_snprintf.c".)
+
+	       ----------------------------------------
+
+* WHAT IS COLDSYNC?
+
+	ColdSync is a tool for synchronizing data between Palm
+computing devices (such as the PalmPilot, PalmPilot Pro, Palm V,
+QualComm PDQ, Handspring Visor and so forth), and a Unix workstation.
+	ColdSync can back up and restore the state of a Palm, as well
+as synchronize its data, which is sort of like a two-way rdist (see
+below). In future versions, it will be possible to do more interesting
+things with this data.
+
+* WHAT YOU'LL NEED
+
+	- A POSIX-compliant operating system, preferably some flavor
+	  of Unix
+	- An ANSI C compiler
+	- An ANSI C++ compiler
+	- Perl 5.005_03 or later (though earlier versions might work)
+
+* BUILDING AND INSTALLING COLDSYNC
+
+	If you've built GNU software before, this should be familiar
+territory. You should be able to just
+
+	./configure
+	make
+	make install
+
+Full details are provided in the "INSTALL" file.
+
+* WHAT IS SYNCHRONIZING?
+
+	Synchronizing, also referred to as "syncing" refers to the
+process of examining two databases (everything on the Palm is a
+database) to see how they differ, and updating them so that they are
+identical.
+	Syncing is different from just overwriting one database with
+the other. For instance, if you add an entry for "Aunt Mabel" in your
+Palm's address book, and an entry for "Uncle Bob" on your desktop
+machine, then you don't want to just copy the address book from the
+Palm to the desktop or vice-versa: that would delete one of the
+entries that you just created. When you sync with ColdSync, you'll
+wind up with both entries, on both the Palm and the desktop.
+
+	Another difference between synchronizing and blind copying
+lies in the fact that PalmOS has facilities to support syncing. If you
+have 2000 entries in your Palm address book and want to copy them to
+the desktop, it'll take a rather long time to copy them over a
+relatively slow serial connection. When it syncs, ColdSync copies only
+those records that have changed.
+
+	ColdSync tries to be very cautious when it syncs, and not
+delete any information unless it is sure that that is the right thing
+to do. Its attitude is that it's better to err on the side of caution,
+and maybe make you delete something twice, than it is to delete some
+crucial bit of information.
+
+* SECURITY CONSIDERATIONS
+
+	ColdSync is not secure. Period.
+	I have tried to pay due attention to security considerations,
+but the sync process itself is inherently insecure. When ColdSync,
+running on a workstation, receives a connection from a Palm, it has no
+reliable way of knowing that the Palm on the other end is in fact the
+one that it claims to be.
+	Likewise, when a Palm syncs with a workstation (whether that
+workstation is using ColdSync or Palm's own HotSync), it has no
+reliable way of knowing that the workstation is the one that it claims
+to be.
+	PalmOS allows you to mark records as "private." This doesn't
+mean a thing when you sync: the private and non-private records are
+treated equally. In particular, anyone who has physical access to your
+Palm can download your private records.
+
+	There may be a Palm utility out there that will encrypt each
+record in a database before a sync, but I don't know of any such
+utility.
+
+* INTERNATIONALIZATION
+
+	ColdSync includes some internationalization (i18n) support. It
+is believed to work on all platforms with a Uniforum-compliant libintl
+(gettext()). ColdSync does not work with XPG i18n (catgets() etc.).
+	However, you need GNU xgettext to compile the message catalog
+("i18n/messages.po") from the source files.
+
+	       ----------------------------------------
+
+COMPATIBILITY NOTES
+
+* ColdSync 2.2.4
+
+FreeBSD:
+	This package was developed under FreeBSD 3.x/4.x, and compiles
+	cleanly with no modification under 4.2-RELEASE.
+
+	On newer versions of FreeBSD (4.0 and beyond), it's possible
+	to communicate with the Handspring Visor using its USB
+	interface. Configure a listen type of "usb" rather than
+	"serial", and use device /dev/ugen0.
+
+Redhat Linux 6.2 (also Debian, and probably others):
+	(as of ColdSync v1.6.6-20010130)
+	Compiles cleanly with no modifications. Runs fine.
+
+	The Linux serial device driver appears to drop characters at
+	random. As a result, you may see a lot of
+
+	##### Got an unexpected data packet. Sending an ACK to shut it up.
+
+	messages.
+
+Solaris 2.7:
+	(as of v2.2.4)
+	There are still some problems with ColdSync's IPv6 code under
+	Solaris 2.6 and later. You'll need to use
+		./configure --without-ipv6
+
+	(as of v2.2.0-20010805)
+	Compiles with Sun Forte 6U1.
+
+	ColdSync is known not to work with Sun's i18n utilities.
+	ColdSync should detect this, and disable i18n.
+
+Digital Unix 4.0:
+	(as of ColdSync v2.4.4-20011113)
+	DEC's linker chokes on the overly-long identifiers produced by
+	the STL. GNU ld might work.
+
+	(as of ColdSync v1.6.6-20010130)
+	Compiles with gcc 2.7.2. Compilation prints several warnings;
+	they appear to be benign:
+
+	PConnection_serial.c:444: warning: implicit declaration of function `cfmakeraw'
+	PConnection_net.c:281: warning: passing arg 6 of `_Erecvfrom' from incompatiblepointer type
+	PConnection_net.c:674: warning: passing arg 6 of `_Erecvfrom' from incompatiblepointer type
+	PConnection_net.c:872: warning: passing arg 3 of `_Eaccept' from incompatible pointer type
+	config.c:964: warning: overflow in implicit constant conversion
+	GenericConduit.cc:82: warning: unused parameter `const struct conduit_block * block'
+
+	If you are using DEC's C compiler, I suggest the following
+	compiler flags:
+		-std1 -msg_enable level3
+
+
+AIX 4.1:
+	(as of ColdSync v1.1.2)
+	Compiles with gcc 2.7.2, but when linking, complains that:
+
+		ld: 0711-224 WARNING: Duplicate symbol: _IO_cleanup_registration_needed
+		ld: 0711-345 Use the -bloadmap or -bnoquiet option to obtain more information.
+
+	This may be a problem with the installation, though (the same
+	thing happens when compiling "Hello, world").
+
+	I've only compiled it. I don't know whether it actually runs.
+
+If you have any updated information, please send it in to the
+maintainer (arensb@ooblick.com). My testing pool isn't as large as it
+once was.
+
+Windows NT:
+	(as of ColdSync 1.4.5)
+	To the best of my knowledge, ColdSync compiles and runs under
+	Windows NT with the Cygwin tools.
+
+	However, ColdSync was written as a Unix tool. Windows users
+	have the HotSync desktop tools from Palm, which work quite
+	well. If ColdSync works under Windows, that's wonderful, but
+	I'm not going to let Windows compatibility get in the way of
+	Unix development.
+
+MacOS X:
+	(as of ColdSync 1.4.6)
+
+	According to one correspondent, ColdSync compiles and runs
+	with no problems under MacOS X.
+	The serial port should be /dev/ttyd.printer .
+
+	       ----------------------------------------
+
+BUGS:
+	If you create a Memo record, delete it without leaving the
+editor, and check the "Save archive copy on PC" box, it will be
+archived, but the archived record may contain trailing garbage.
+	This is due to a bug in PalmOS (as of 3.0).
