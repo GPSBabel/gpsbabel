@@ -215,7 +215,7 @@ psp_read(void)
 	pincount = le_read16(&buff[12]);
 
 	while (pincount--) {
-	    wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
+	    wpt_tmp = waypt_new();
 
             wpt_tmp->altitude = unknown_alt;
             

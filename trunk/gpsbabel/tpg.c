@@ -135,7 +135,7 @@ tpg_read(void)
         
         
 	while (pointcount--) {
-	    wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
+	    wpt_tmp = waypt_new();
 
             /* 1 bytes at start of record - string size for shortname */
     	    tpg_fread(&buff[0], 1, 1, tpg_file_in);

@@ -88,7 +88,7 @@ data_read(void)
 		waypoint *wpt_tmp;
 		char *vdata;
 
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
+		wpt_tmp = waypt_new();
 
 		rec = (struct record *) pdb_rec->data;
 		wpt_tmp->longitude =

@@ -157,7 +157,7 @@ decode(char *buf)
 		edata = (char *) rec + pdb_rec->data_len;
 
 		for (; vdata < edata; rec = (struct record *) vdata) {
-			wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
+			wpt_tmp = waypt_new();
 			wpt_tmp->latitude = Lat1 + 
 				be_read16(&rec->lat1d) / LATDIV2; 
 			wpt_tmp->longitude = Lon1 + 

@@ -782,7 +782,7 @@ xcsv_data_read(void)
         }
 
         if (strlen(buff)) {
-            wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+            wpt_tmp = waypt_new();
 
             s = buff;
             s = csv_lineparse(s, xcsv_file.field_delimiter, "", linecount);

@@ -94,7 +94,7 @@ data_read(void)
 				&symnum);
 			desc[sizeof(desc)-1] = '\0';
 			name[sizeof(name)-1] = '\0';
-			wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+			wpt_tmp = waypt_new();
 			wpt_tmp->altitude = alt;
 			wpt_tmp->shortname = xstrdup(name);
 			wpt_tmp->description = xstrdup(desc);

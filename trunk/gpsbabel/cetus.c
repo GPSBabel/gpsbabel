@@ -165,7 +165,7 @@ data_read(void)
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
 		waypoint *wpt_tmp;
 
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
+		wpt_tmp = waypt_new();
 
 		rec = (struct record *) pdb_rec->data;
 		if ( be_read32(&rec->elevation) == -100000000 ) {
