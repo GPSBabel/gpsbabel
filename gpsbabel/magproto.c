@@ -524,6 +524,7 @@ mag_wr_init(const char *portname)
 }
 
 static void
+
 mag_deinit(void)
 {
 	mag_handoff();
