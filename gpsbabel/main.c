@@ -46,6 +46,7 @@ usage(const char *pname)
 "	-r		Process route information\n"
 "	-t		Process track information\n"
 "	-w		Process waypoint information [default]\n"
+"	-x filtername	Invoke filter\n"
 "	-D level	Set debug level [%d]\n"
 "\n"
 "File Types (-i and -o options):\n"
