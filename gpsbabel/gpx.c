@@ -595,6 +595,8 @@ gpx_end(void *data, const char *el)
 	case tt_wpt:
 		waypt_add(wpt_tmp);
 		logpoint_ct = 0;
+		cur_tag = NULL;
+		wpt_tmp = NULL;
 		break;
 	case tt_cache_container:
 		wpt_tmp->gc_data.container = gs_mkcont(cdatastrp);
