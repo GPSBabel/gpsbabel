@@ -784,6 +784,61 @@ char * str_utf8_to_ascii( const char * str )
 	return result;
 }
 
+/* 
+ * Get rid of potentially nasty HTML that would influence another record
+ * that includes;
+ * <body> - to stop backgrounds from being loaded
+ * </body> and </html>- stop processing altogether
+ * <style> </style> - stop overriding styles for everything
+ */
+char *
+strip_nastyhtml(const char * in)
+{
+	char *returnstr, *sp;
+	char *lcstr, *lcp;
+	int i;
+	
+	sp = returnstr = xstrdup(in);
+	lcp = lcstr = xstrdup(in);
+	
+	while (*lcp) {
+		*lcp = tolower(*lcp);
+		lcp++;
+	}
+	while (lcp = strstr(lcstr, "<body")) {   /* becomes <---- */
+		sp = returnstr + (lcp - lcstr) ;
+		sp++; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
+		*lcp = '*';         /* so we wont find it again */
+	}
+	while (lcp = strstr(lcstr, "</body")) {
+		sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
+		sp++; sp++; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
+		*lcp = '*';         /* so we wont find it again */
+	}
+	while (lcp = strstr(lcstr, "</html")) {
+		sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
+		sp++; sp++; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
+		*lcp = '*';         /* so we wont find it again */
+	}
+	while (lcp = strstr(lcstr, "<style")) {
+		sp = returnstr + (lcp - lcstr) ; /* becomes <!--   */
+		sp++; *sp++ = '!'; *sp++ = '-'; *sp++ = '-';  *sp++ = ' '; *sp++ = ' '; *sp = ' ';
+		*lcp = '*';         /* so we wont find it again */
+	}
+	while (lcp = strstr(lcstr, "</style>")) {
+		sp = returnstr + (lcp - lcstr) ; /* becomes    --> */
+		*sp++ = ' '; *sp++ = ' '; *sp++ = ' '; *sp++ = ' '; *sp++ = ' '; *sp++ = '-'; *sp++ = '-'; 
+		*lcp = '*';         /* so we wont find it again */
+	}
+	while (lcp = strstr(lcstr, "<image")) {
+		sp = returnstr + (lcp - lcstr) ; /* becomes <img */
+		sp+=3; *sp++ = 'g'; *sp++ = ' '; *sp++ = ' ';
+		*lcp = '*';
+	}
+	xfree (lcstr);
+	return (returnstr);
+}
+	
 /*
  *  Without getting into all the complexity of technically legal HTML,
  *  this function tries to strip "ugly" parts of it to make it more 
@@ -794,54 +849,96 @@ char *
 strip_html(const utf_string *in)
 {
 	char *outstring, *out;
-	int ctr;
 	char *instr = in->utfstring;
-
+	char tag[8];
+	short int taglen;
+	
 	if (!in->is_html)
 		return in->utfstring;
 	/*
 	 * We only shorten, so just dupe the input buf for space.
 	 */
-	out = outstring = xstrdup(in->utfstring);
-	outstring[0] = 0;
 
-	for(ctr=0; ; instr++) {
-		switch(*instr) {
-			case 0: 
-				return (out);
+	outstring = out = xstrdup(in->utfstring);
 
-			case '<':
-				if (instr[1] == 'p')
-					*outstring++ = '\n';
-				ctr++;
-				break;
-			case '>':
-				ctr--;
-				break;
-			case '\n':
-				continue;
-			default:
-				if (ctr == 0) {
-					*outstring++ = *instr;
-				}
+	tag[0] = 0;
+	while (*instr) {
+		if ((*instr == '<') || (*instr == '&')) {
+			tag[0] = *instr;
+			taglen = 0;
 		}
+		
+		if (! tag[0]) {
+			if (*instr != '\n')
+				*out++ = *instr;
+		}
+		else {
+			if (taglen < (sizeof(tag)-1)) {
+				tag[taglen++] = tolower(*instr);
+				tag[taglen] = 0;
+			}
+		}
+		
+		if ( ((tag[0] == '<') && (*instr == '>')) ||
+		     ((tag[0] == '&') && (*instr == ';')) ) {
+			if (! strcmp(tag,"&amp;"))
+				*out++ = '&';
+			else if (! strcmp (tag, "&lt;"))
+				*out++ = '<';
+			else if (! strcmp (tag, "&gt;"))
+				*out++ = '>';
+			else if (! strcmp (tag, "&quot;"))
+				*out++ = '"';
+			else if (! strcmp (tag, "&nbsp;"))
+				*out++ = ' ';
+			else if (! strcmp (tag, "&deg;")) {
+				*out++ = 'd'; *out++ = 'e'; *out++ = 'g';
+			}
+			else if ((tag[0]=='<') && (tag[1]=='p'))
+				*out++ = '\n';
+			else if ((tag[0]=='<') && (tag[1]=='b') && (tag[2]=='r'))
+				*out++ = '\n';
+			else if ((tag[0]=='<') && (tag[1]=='/') && (tag[2]=='t') && (tag[3]=='r'))
+				*out++ = '\n';
+			else if ((tag[0]=='<') && (tag[1]=='/') && (tag[2]=='t') && (tag[3]=='d'))
+				*out++ = ' ';
+			else if ((tag[0]=='<') && (tag[1]=='i') && (tag[2]=='m') && (tag[3]=='g')) {
+				*out++ = '['; *out++ = 'I'; *out++ = 'M'; *out++ = 'G'; *out++ = ']';
+			}
+			
+		      tag[0] = 0;
+		}
+		*instr++;
 	}
+	*out++ = 0;
+	return (outstring);
 }
 
-char * xml_entitize(const char * str) 
+typedef struct {
+	const char * text;
+	const char * entity;
+	int  not_html;
+} entity_types;
+
+static 
+entity_types stdentities[] =  {
+	{ "&",	"&amp;", 0 },
+	{ "'", 	"&apos;", 1 },
+	{ "<",	"&lt;", 0 },
+	{ ">",	"&gt;", 0 },
+	{ "\"",	"&quot;", 0 },
+	{ NULL,	NULL, 0 }
+};
+
+static 
+char * 
+entitize(const char * str, int is_html) 
 {
 	int elen, ecount, nsecount;
-	const char ** ep;
+	entity_types *ep;
 	const char * cp;
 	char * p, * tmp, * xstr;
-	const char * stdentities[] = {
-	"&",	"&amp;",
-	"<",	"&lt;",
-	">",	"&gt;",
-	"'", 	"&apos;",
-	"\"",	"&quot;",
-	NULL,	NULL 
-	};
+
 	char tmpsub[20];
 	int bytes = 0;
 	int value = 0;
@@ -849,14 +946,14 @@ char * xml_entitize(const char * str)
 	elen = ecount = nsecount = 0;
 
 	/* figure # of entity replacements and additional size. */
-	while (*ep) {
+	while (ep->text) {
 		cp = str;
-		while ((cp = strstr(cp, *ep)) != NULL) {
-			elen += strlen(*(ep + 1)) - strlen(*ep);
+		while ((cp = strstr(cp, ep->text)) != NULL) {
+			elen += strlen(ep->entity) - strlen(ep->text);
 			ecount++;
-			cp += strlen(*ep);
+			cp += strlen(ep->text);
 		}
-		ep += 2;
+		ep++;
 	}
 	
 	/* figure the same for other than standard entities (i.e. anything
@@ -880,23 +977,23 @@ char * xml_entitize(const char * str)
 		return (tmp);
 
         if ( ecount != 0 ) {	
-		ep = stdentities;
-
-		while (*ep) {
+		for (ep = stdentities; ep->text; ep++) {
 			p = tmp;
-			while ((p = strstr(p, *ep)) != NULL) {
-				elen = strlen(*(ep + 1));
+			if (is_html && ep->not_html)  {
+				continue;
+			}
+			while ((p = strstr(p, ep->text)) != NULL) {
+				elen = strlen(ep->entity);
 
-				xstr = xstrdup(p + strlen(*ep));
+				xstr = xstrdup(p + strlen(ep->text));
 
-				strcpy(p, *(ep + 1));
+				strcpy(p, ep->entity);
 				strcpy(p + elen, xstr);
 
 				xfree(xstr);
 
 				p += elen;
 			}  
-			ep += 2;
 		}
 	}
 
@@ -924,4 +1021,18 @@ char * xml_entitize(const char * str)
 		}
 	}	
 	return (tmp);
+}
+
+/*
+ * Public callers for the above to hide the absence of &apos from HTML
+ */
+
+char * xml_entitize(const char * str) 
+{
+	return entitize(str, 0);
+}
+
+char * html_entitize(const char * str) 
+{
+	return entitize(str, 1);
 }
