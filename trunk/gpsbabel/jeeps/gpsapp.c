@@ -375,10 +375,13 @@ static void GPS_A001(GPS_PPacket packet)
 	    }
 	    else if(data<900)
 	    {
-		if(data!=800)
-		    GPS_Protocol_Error(tag,data);
-		else
+		if (data == 800)
 		    gps_pvt_transfer = pA800;
+		/*
+		 * Undocumented A802 packets introduced on Vista 3.60 f/w.
+		 * else  
+		 *  GPS_Protocol_Error(tag,data);
+		 */
 		continue;
 	    }
 	    else if (data < 1000)
@@ -542,10 +545,13 @@ static void GPS_A001(GPS_PPacket packet)
 	    }
 	    else if(lasta<900)
 	    {
-		if(data!=800)
-		    GPS_Protocol_Error(tag,data);
-		else
+		if (data == 800)
 		    gps_pvt_type = pD800;
+		/*
+		 *  Stupid, undocumented Vista 3.60 D802 packets 
+		 else
+		    GPS_Protocol_Error(tag,data);
+	         */
 		continue;
 	    }
 
