@@ -335,16 +335,17 @@ data_read(void)
 	wpt->longitude = lon;
 	wpt->altitude = alt;
 	wpt->icon_descr = category;
+	wpt->icon_descr_is_dynamic = 1;
 
 	if (gid[0])
 	{
-	    wpt->shortname = strdup(gid);
+	    wpt->shortname = xstrdup(gid);
 	    wpt->description = title;
 	    wpt->notes = notes;
 	}
 	else
 	{
-	    wpt->shortname = strdup(title);
+	    wpt->shortname = xstrdup(title);
 	    wpt->description = title;
 	    wpt->notes = notes;
 	}
@@ -439,7 +440,7 @@ copilot_writewpt(const waypoint *wpt)
 
     /* Notes field MUST have soemthing in it */
     if (!wpt->notes || wpt->notes[0] == 0)
-	notes = strdup(title);
+	notes = xstrdup(title);
     else
 	notes = enscape(wpt->notes);
 
