@@ -1,0 +1,254 @@
+gpsbabel XCSV Style File Layout:
+
+The format of an XCSV style file is quite simple and designed to be easily
+implemented by non-programmers to handle "one-off" babel-ization of various
+XCSV (whatever separated values) text files.  The format and usage of the 
+various style directives are described below.
+
+The first and foremost important step is understanding how the config
+file is laid out itself.  The format is:
+
+DIRECTIVE<whitespace>VALUE
+
+Where <whitespace> is a space, tab, spaces, tabs, etc...  There should
+be *nothing* before the directive.  (i.e. not "  DIRECTIVE  VALUE")
+
+INTERNAL CONSTANTS:
+A few internal constants are defined in the XCSV parser to make the style
+file simpler.  They may or may be used and are optional in most cases. 
+Note that only certain style file directives map these constants.
+
+STYLE CONSTANT  MAPS TO CHAR(s)
+---------------------------------------
+COMMA		,
+COMMASPACE	,<space> 
+SINGLEQUOTE	'
+DOUBLEQUOTE	"
+COLON		:
+SEMICOLON	;
+NEWLINE		\n
+CR		\r
+CRNEWLINE  	\r\n
+TAB  		\t
+SPACE  		<space>
+HASH  		#
+
+COMMENTS:
+Anything after a hash (#) on a line is not parsed.  For example:
+#THIS ENTIRE LINE IS A COMMENT.
+#FIELD	LAT_DECIMAL, "", "%lf"   THIS ENTIRE LINE IS A COMMENT
+FIELD LAT_DECIMAL, "", "%lf"  # ONLY THIS SENTENCE IS A COMMENT.
+
+
+DEFINING THE LAYOUT OF THE FILE:
+--------------------------------
+The first few directives define the layout the physical file itself:
+
+ o FIELD_DELIMITER:
+   The field delimiter defines the character(s) that separate the fields in 
+   the rows of data inside the XCSV file.  Common field delimiters are commas 
+   and tabs. (referred to as "comma separated values" and "tab separated 
+   values")
+
+   examples: FIELD_DELIMITER	COMMA
+             FIELD_DELIMITER	~
+
+   The directive FIELD_DELIMITER is parsed for STYLE CONSTANTS as defined in 
+   the table above.
+
+ o RECORD DELIMITER:
+   The record delimiter defines that character(s) that separate ROWS of 
+   data (FIELDS) in the XCSV file.  The most common record delimiters
+   are NEWLINE and CR (carriage return).
+
+   example: RECORD_DELIMITER	NEWLINE
+            RECORD_DELIMITER    |
+
+   The directive RECORD_DELIMITER is parsed for STYLE CONSTANTS as defined 
+   in the table above.
+
+ o BADCHARS:
+   Bad characters are things that should *never* be written into the XCSV
+   file on output.  Common bad characters are usually the FIELD_DELIMITER
+   itself.
+
+   example: BADCHARS	COMMA
+            BADCHARS	~|
+
+   The directive BADCHARS is parsed for STYLE CONSTANTS as defined in the 
+   table above.
+
+ o PROLOGUE
+   A prologue is basically constant data that is written to the output
+   file BEFORE any waypoints are processed.  PROLOGUE can be defined 
+   multiple times in the style file, once for each "line" before the data 
+   begins.  This is commonly used in XCSV files as a "header" row.  
+
+   example: PROLOGUE	OziExplorer Waypoint File Version 1.1
+            PROLOGUE	WGS 84
+   * or *
+            PROLOGUE	Symbol,Name,Latitude,Longitude
+
+ o EPILOGUE
+   An Epilogue is the same as a prologue, except this data is written at 
+   the END of the file.  See the examples for PROLOGUE above.
+
+
+DEFINING FIELDS WITHIN THE FILE:
+-------------------------------
+
+A field defines data.  There are two different classifications of FIELDS,
+IFIELD (file input) and OFIELD (file output).  In the absence of any OFIELDS,
+IFIELDS are use as both input and output.  The existence of OFIELDS is 
+primarily to allow more flexible mapping of gpsbabel data to output data 
+(say, for instance, to map the internal gpsbabel "description" variable to 
+two or more fields on output).  For all practical purposes, IFIELDS and 
+OFIELDS are defined the same way in the style file.
+
+There are several different types of fields that may be defined.  Each field 
+consists of three pieces of information: the FIELD TYPE, a DEFAULT VALUE, and 
+a PRINTF CONVERSION (for output).  In many cases, not all pieces are used,
+but all 3 pieces are required.
+
+FIELDS should be defined in the style file in the logical order that they
+appear in the data, from left to right.  This is the order in which they are
+parsed from input and written to output.
+
+The fields used by the XCSV parser are as follows:
+
+ o IGNORE 
+   IGNORE fields are, guess what, ignored on input.   Internally, IGNORE 
+   fields are treated as CHARACTER data, and as such, require a printf 
+   conversion for a character array.  
+
+   example: IFIELD IGNORE,"","%14.14s"    (writes a 14 character blank field)
+            IFIELD IGNORE,"","%s"         (writes a blank field on output)
+
+ o CONSTANT 
+   CONSTANT fields are, of course, constant.  They are ignored on input, 
+   however they write CONSTANT data on output.  As such, they require a 
+   DEFAULT VALUE and a printf conversion for a character array.
+  
+   example: IFIELD CONSTANT,"FFFFFF","%s"   (writes "FFFFFF" in the field)
+            IFIELD CONSTANT,"01/01/70","%s" (a constant date field)
+
+ o INDEX
+   An INDEX field is used ONLY on output.  The INDEX constant defines a field 
+   that, at output, contains the sequence number of the waypoint being 
+   written, starting at 0.  An index is managed internally as an INTEGER 
+   and requires an INTEGER printf conversion.  An INDEX has one special
+   property.  The DEFAULT VALUE of the index is added to the index 
+   on each iteration (to allow indexes starting at 1, 100, etc..).   
+
+   example: IFIELD INDEX,"0","%04d"      (Starts counting at zero)
+            IFIELD INDEX,"","%04d"       (Starts counting at zero)
+            IFIELD INDEX,"1","%04d"      (Starts counting at one)
+
+ o SHORTNAME
+   A SHORTNAME is generally the waypoint name of the data being processed.  
+   SHORTNAME maps directly to the gpsbabel variable ->shortname.  A SHORTNAME 
+   is CHARACTER data and requires a character array printf conversion.
+
+   example: IFIELD SHORTNAME,"","%s"    (write shortname in the output file)
+
+ o DESCRIPTION
+   A DESCRIPTION is generally a long description of the waypoint.  A 
+   DESCRIPTION maps to the gpsbabel variable ->description and is otherwise 
+   handled exactly like a SHORTNAME.
+
+   example: IFIELD DESCRIPTION,"","%s"  (write description in the output file)
+
+ o NOTES
+   NOTES are generally everything else about a waypoints. NOTES map to the 
+   gpsbabel variable ->notes and is otherwise handled exactly like a 
+   SHORTNAME.
+
+ o URL
+   URL is a URL for the waypoint.  URL maps to the gpsbabel variable 
+   ->url and is otherwise handled exactly like a SHORTNAME.
+
+   example: IFIELD URL,"","%s" 	(writes the URL in the output file)
+
+ o URL_LINK_TEXT
+   URL_LINK_TEXT is a textual description of where a URL points.  
+   URL_LINK_TEXT maps to the gpsbabel variable ->url_link_text and 
+   is otherwise handled exactly like a SHORTNAME.
+
+   example: IFIELD URL_LINK_TEXT,"","%s" (writes link text in the output file)
+
+ o ICON_DESCR
+   ICON_DESCR is a textual description of an icon type for a waypoint.
+   ICON_DESCR maps to the gpsbabel variable ->icon_desc and is otherwise 
+   handled exactly like a SHORTNAME.
+
+   example: IFIELD ICON_DESCR,"","%s" (writes link text in the output file)
+
+ o LAT_DECIMAL
+   LAT_DECIMAL defines LATITUDE in DECIMAL format.  Note that this is a PURE 
+   signed decimal format (i.e. -91.0000).  This data is handled internally as 
+   a DOUBLE PRECISION FLOAT and requires a FLOATING POINT printf conversion.
+
+   example: IFIELD LAT_DECIMAL,"","%lf"
+
+ o LON_DECIMAL
+   See LAT_DECIMAL, except LON_DECIMAL defines LONGITUDE.
+
+ o LAT_INT32DEG
+   LAT_INT32DEG defines LATITUDE in what I call INT32DEGREES.  This value is 
+   a signed LONG INTEGER and requires a LONG INTEGER printf conversion. 
+
+   example: IFIELD LAT_INT32DEG,"","%ld"
+
+ o LON_INT32DEG
+   See LON_INT32DEG except LON_INT32DEG defines LONGITUDE.
+
+ o LAT_DECIMALDIR / LAT_DIRDECIMAL
+   LAT_DECIMALDIR and LAT_DIRDECIMAL  defines LATITUDE in DECIMAL format 
+   with the added bonus of a 'N/S' or 'E/W' direction character.  This data 
+   is handled internally as a DOUBLE PRECISION FLOAT and a single 
+   CHARACTER and requires a FLOATING POINT as well as a CHARACTER printf 
+   conversion.  The only difference between the two is whether the directional
+   character appears before (LAT_DIRDECIMAL) or after (LAT_DECIMALDIR) the
+   decimal number.
+   
+   example: IFIELD LAT_DECIMALDIR,"","%lf %c"
+   example: IFIELD LAT_DIRDECIMAL,"","%c %08.5lf"
+
+ o LON_DECIMALDIR / LON_DIRDECIMAL
+   Same as LAT_DECIMALDIR / LAT_DIRDECIMAL except LON_ defines LONGITUDE.
+
+
+ o ALT_FEET
+   ALT_FEET is the position's ALTITUDE in FEET.  This value is treated as 
+   a SIGNED DOUBLE PRECISION FLOAT and requires a FLOATING POINT printf 
+   conversion.
+
+   example: IFIELD ALT_FEET,"","%.0lf"
+
+ o ALT_METERS
+   ALT_METERS is identical to ALT_FEET with the exception that the altitude
+   is in METERS.
+
+ o EXCEL_TIME
+   EXCEL_TIME is the waypoint's creation time, if any.  This is actually
+   the decimal days since 1/1/1900 and is handled internally as a DOUBLE
+   PRECISION FLOAT and requires a FLOATING POINT printf conversion.
+
+   example: IFIELD EXCEL_TIME,"","%11.5lf"
+
+ o TIMET_TIME
+   TIMET_TIME is the waypoint's creation time, if any.  This is actually
+   the integer seconds since 1/1/1970 (let's not start the holy war) and
+   is handled internally as a LONG INTEGER and requires a LONG INTEGER
+   printf conversion.
+   
+   example: IFIELD TIMET_TIME,"","%ld"
+
+
+EXAMPLES:
+--------
+For examples on using the XCSV module, please see the *.style files in
+the style/ subdirectory of gpsbabel.  For examples of using the XCSV
+module instead of carving out trivial C code, see the source code 
+examples ozi.c, mxf.c, and xmapwpt.c in the gpsbabel directory.
+

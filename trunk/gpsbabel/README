@@ -100,6 +100,44 @@ THE FORMATS
 	This is the format used to hot-sync to XMap from withing TopoUSA.
 	Done with help of Dan Edwards.
 
+    XMapWpt
+
+	Delorme XMapHandHeld Street Atlas USA is another of the billion 
+	CSV variants.  This is the format used by XmapHH SA USA on
+	(at least) PocketPC O/S.  Please see README.xmapwpt for more 
+	information on it's intricacies.  This XMap is not to be confused
+	with the XMap mentioned above. Contributed to gpsbabel by
+	Alex Mottram.
+
+    XCSV
+
+	XCSV is an open-ended "Whatever Separated Values" parser / writer
+	designed to work with user-supplied "style" files.  It should handle 
+	at least a few thousand of the billion CSV variants available.  
+	By itself, it doesn't comply to any format, however *most* CSV 
+	variants can be described as a "style" and fine-tuned by the end 
+	user.  For more information on it's use, please see README.style 
+	in the style/ sub-directory of gpsbabel.  For an example of using 
+	the XCSV module within your C program, look at the ozi.c, mxf.c, and
+	xmapwpt.c sources in the gpsbabel directory.  This module was 
+	contributed to gpsbabel by Alex Mottram.
+
+	Additional Options:
+	style	-	**REQUIRED** Path to XCSV style file.
+
+	snlen	-	Maximum length of synthesized shortnames. 
+	snwhite	-	Switch defining whether or not to allow whitespace
+			in synthesized shortnames. 
+			(0 = NO WHITESPACE, 1 = WHITESPACE OK).
+	snupper	-	Switch defining whether or not to force uppercase 
+			in shortnames. (0 = LEAVE AS IS, 1 = UPPERCASE ALL).
+	
+	NOTE:	sn* options require use of the '-s' command line option.
+
+	Example Usage:
+	gpsbabel -i xsv,style=foo.style -f foo -o xsv,style=bar.style -F bar
+	gpsbabel -s -i gpx -f foo.gpx -o xsv,style=my.style,snlen=8 -F bar
+
     MAPSEND
 
 	Magellan was smart enough to document their file format to make

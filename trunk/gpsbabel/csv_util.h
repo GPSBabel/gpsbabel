@@ -18,6 +18,7 @@
  */
 
 /* function prototypes */
+
 char *
 csv_stringtrim(const char *string, const char *enclosure);
 
@@ -26,3 +27,88 @@ csv_lineparse(const char *stringstart, const char *delimited_by, const char *enc
 
 char *
 csv_stringclean(const char *string, const char *chararray);
+
+void 
+xcsv_data_read(void);
+
+void 
+xcsv_data_write(void);
+
+void 
+xcsv_file_init(void); 
+
+void 
+xcsv_prologue_add(char *);
+
+void 
+xcsv_epilogue_add(char *);
+
+void 
+xcsv_ifield_add(char *, char *, char *);
+
+void 
+xcsv_ofield_add(char *, char *, char *);
+
+void 
+xcsv_destroy_style(void);
+
+/****************************************************************************/
+/* types required for various xcsv functions                                */
+/****************************************************************************/
+
+/* something to map fields to waypts */
+typedef struct field_map {
+	queue Q;
+	char * key;
+	char * val;
+	char * printfc;
+} field_map_t;
+
+/* a queuing struct for prologues / epilogues */
+typedef struct ogue {
+	queue Q;
+	char * val;
+} ogue_t;
+
+/* something to map config file constants to chars */
+typedef struct char_map {
+	const char * key;
+	const char * chars;
+} char_map_t;
+
+/* 
+ * a type describing all the wonderful elements of xcsv files, in a 
+ * nutshell.
+ */
+typedef struct {
+    int is_internal;		/* bool - is internal (1) or parsed (0) */
+
+    int prologue_lines;		/* # of lines to ignore at top of the file */
+    int epilogue_lines;		/* # of lines to ignore at bottom of file */
+
+    /* header lines for writing at the top of the file. */
+    queue prologue;
+
+    /* footer lines for writing at the bottom of the file. */
+    queue epilogue;
+
+    char * field_delimiter; 	/* comma, quote, etc... */
+    char * record_delimiter;	/* newline, c/r, etc... */
+
+    char * badchars;		/* characters we never write to output */
+    
+    queue ifield;		/* input field mapping */
+    queue * ofield;    		/* output field mapping */
+    
+    int ifield_ct;		/* actual # of ifields */
+    int ofield_ct;		/* actual # of ofields */
+    
+    FILE * xcsvfp;		/* ptr to current *open* data file */
+    
+} xcsv_file_t;
+
+
+/****************************************************************************/
+/* obligatory global struct                                                 */
+/****************************************************************************/
+xcsv_file_t xcsv_file;

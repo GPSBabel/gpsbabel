@@ -1,0 +1,42 @@
+# gpsbabel XCSV style file
+#
+# Format: Ozi Explorer
+# Author: Alex Mottram
+#   Date: 12/09/2002
+#
+# 
+# As used in ozi.c
+#
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		COMMA
+RECORD_DELIMITER	NEWLINE
+BADCHARS		COMMA
+
+PROLOGUE	OziExplorer Waypoint File Version 1.1
+PROLOGUE	WGS 84
+PROLOGUE	Reserved 2
+PROLOGUE	Reserved 3
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	INDEX, "1", "%4d"
+IFIELD	SHORTNAME, "", "%-14.14s"
+IFIELD	LAT_DECIMAL, "", "%11.6lf"
+IFIELD	LON_DECIMAL, "", "%11.6lf"
+IFIELD	EXCEL_TIME, "", "%011.5lf"
+IFIELD	CONSTANT, "0", "%3s"  		# icon 
+IFIELD	CONSTANT, "1", "%2s"  		# 1 
+IFIELD	CONSTANT, "3", "%2s"  		# display format opts 
+IFIELD	CONSTANT, "0", "%10s"  		# foreground color 
+IFIELD	CONSTANT, "65535", "%10s"  	# background color 
+IFIELD	DESCRIPTION, "", "%-40.40s"
+IFIELD	CONSTANT, "0", "%2s"  		# pointer direction 
+IFIELD	CONSTANT, "0", "%2s"  		# garmin display flags 
+IFIELD	CONSTANT, "0", "%5s"  		# proximity distance 
+IFIELD	ALT_FEET, "", "%7.0lf"
+IFIELD	CONSTANT, "6", "%2s"  		# waypt name text size 
+IFIELD	CONSTANT, "0", "%2s"  		# bold checkbox 
+IFIELD	CONSTANT, "17", "%2s"  		# symbol size 
