@@ -89,7 +89,7 @@ static FILE *file_in;
 static FILE *file_out;
 static void *mkshort_handle;
 
-static unsigned int waypt_out_count;
+static unsigned short waypt_out_count;
 
 #define MYNAME "Lowrance USR"
 
@@ -97,6 +97,22 @@ static unsigned int waypt_out_count;
 #define SEMIMINOR		   6356752.3142
 #define DEGREESTORADIANS	0.017453292
 #define SECSTO2000		  946713599
+
+static
+size_t
+my_fwrite4(int *ptr, FILE *stream)
+{
+        int i = le_read32(ptr);
+        return fwrite(&i, 4, 1, stream);
+}
+
+static
+size_t
+my_fwrite2(short *ptr, FILE *stream)
+{
+	short i = le_read16(ptr);
+	return fwrite(&i, 2, 1, stream);
+}
 
 const char *
 lowranceusr_find_desc_from_icon_number(const int icon)
@@ -265,20 +281,20 @@ data_read(void)
 static void
 lowranceusr_waypt_pr(const waypoint *wpt)
 {
-	long int TextLen, Lat, Lon, Time, SymbolId;
+	int TextLen, Lat, Lon, Time, SymbolId;
 	short int WayptType;
 	char *name;
 	char *comment;
 
 	/* our personal waypoint counter */
-	fwrite(&waypt_out_count, 2, 1, file_out);
+	my_fwrite2(&waypt_out_count, file_out);
 	waypt_out_count++;
 
 	Lat = lat_deg_to_mm(wpt->latitude);
-	fwrite(&Lat, 4, 1, file_out);
+	my_fwrite4(&Lat, file_out);
 	Lon = lon_deg_to_mm(wpt->longitude);
-	fwrite(&Lon, 4, 1, file_out);
-	fwrite(&wpt->altitude, 4, 1, file_out);
+	my_fwrite4(&Lon, file_out);
+	my_fwrite4(&wpt->altitude, file_out);
 
 	/* Try and make sure we have a name */
 	if ((! wpt->shortname) || global_opts.synthesize_shortnames) {
@@ -296,7 +312,7 @@ lowranceusr_waypt_pr(const waypoint *wpt)
 	}
 
 	TextLen = strlen(name);
-	fwrite(&TextLen, 4, 1, file_out);
+	my_fwrite4(&TextLen, file_out);
 	fwrite(name, 1, TextLen, file_out);
 	xfree(name);
 
@@ -306,12 +322,12 @@ lowranceusr_waypt_pr(const waypoint *wpt)
 	if (0 && wpt->description && strcmp(wpt->description, wpt->shortname) != 0) {
 		comment = xstrdup(wpt->description);
 		TextLen = strlen(comment);
-		fwrite(&TextLen, 4, 1, file_out);
+		my_fwrite4(&TextLen, file_out);
 		fwrite(comment, 1, TextLen, file_out);
 		xfree(comment);
 	} else {
 		TextLen = 0;
-		fwrite(&TextLen, 4, 1, file_out);
+		my_fwrite4(&TextLen, file_out);
 	}
 
 	if (wpt->creation_time > SECSTO2000) {
@@ -319,7 +335,7 @@ lowranceusr_waypt_pr(const waypoint *wpt)
 	} else {
 		Time = SECSTO2000 + 1;
 	}
-	fwrite(&Time, 4, 1, file_out);
+	my_fwrite4(&Time, file_out);
 
 	if (get_cache_icon(wpt) && wpt->icon_descr && (strcmp(wpt->icon_descr, "Geocache Found") != 0)) {
 		SymbolId = lowranceusr_find_icon_number_from_desc(get_cache_icon(wpt));
@@ -327,11 +343,11 @@ lowranceusr_waypt_pr(const waypoint *wpt)
 		SymbolId = lowranceusr_find_icon_number_from_desc(wpt->icon_descr);
 	}
 
-	fwrite(&SymbolId, 4, 1, file_out);
+	my_fwrite4(&SymbolId, file_out);
 
 	/* USER waypoint type */
 	WayptType = 0;
-	fwrite(&WayptType, 2, 1, file_out);
+	my_fwrite2(&WayptType, file_out);
 }
 
 static void
@@ -343,18 +359,18 @@ data_write(void)
 	MinorVersion = 0;
 	NumWaypoints = waypt_count();
 
-	fwrite(&MajorVersion, 2, 1, file_out);
-	fwrite(&MinorVersion, 2, 1, file_out);
-	fwrite(&NumWaypoints, 2, 1, file_out);
+	my_fwrite2(&MajorVersion, file_out);
+	my_fwrite2(&MinorVersion, file_out);
+	my_fwrite2(&NumWaypoints, file_out);
 	waypt_disp_all(lowranceusr_waypt_pr);
 
 	/* We don't support these yet... */
 	NumRoutes = 0;
-	fwrite(&NumRoutes, 2, 1, file_out);
+	my_fwrite2(&NumRoutes, file_out);
 	NumIcons = 0;
-	fwrite(&NumIcons, 2, 1, file_out);
+	my_fwrite2(&NumIcons, file_out);
 	NumTrails = 0;
-	fwrite(&NumTrails, 2, 1, file_out);
+	my_fwrite2(&NumTrails, file_out);
 }
 
 
