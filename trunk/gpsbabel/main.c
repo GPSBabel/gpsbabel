@@ -24,48 +24,53 @@
 global_options global_opts;
 
 static void
-usage(const char *pname)
+usage(const char *pname, int shorter)
 {
 	printf("GPSBabel Version %s.  http://gpsbabel.sourceforge.net\n\n",
 			VERSION );
 	printf(
 "Usage:\n"
-"	%s [options] -i INTYPE -f INFILE -o OUTTYPE -F OUTFILE\n"
-"	%s [options] -i INTYPE -o OUTTYPE INFILE [OUTFILE]\n"
+"    %s [options] -i INTYPE -f INFILE -o OUTTYPE -F OUTFILE\n"
+"    %s [options] -i INTYPE -o OUTTYPE INFILE [OUTFILE]\n"
 "\n"
-"	Converts GPS route and waypoint data from one format type to another.\n"
-"	The input type and filename are specified with the -i INTYPE\n"
-"	and -f INFILE options. The output type and filename are specified\n"
-"	with the -o OUTTYPE and -F OUTFILE options.\n"
+"    Converts GPS route and waypoint data from one format type to another.\n"
+"    The input type and filename are specified with the -i INTYPE\n"
+"    and -f INFILE options. The output type and filename are specified\n"
+"    with the -o OUTTYPE and -F OUTFILE options.\n"
 "\n"
-"	In the second form of the command, INFILE and OUTFILE are the\n"
-"	first and second positional (non-option) arguments.\n"
+"    In the second form of the command, INFILE and OUTFILE are the\n"
+"    first and second positional (non-option) arguments.\n"
 "\n"
-"	INTYPE and OUTTYPE must be one of the file types listed below, and\n"
-"	may include options valid for that file type.  For example:\n"
-"	  'gpx', 'gpx,snlen=10' and 'ozi,snlen=10,snwhite=1'\n"
-"	(without the quotes) are all valid file type specifications.\n"
+"    INTYPE and OUTTYPE must be one of the file types listed below, and\n"
+"    may include options valid for that file type.  For example:\n"
+"      'gpx', 'gpx,snlen=10' and 'ozi,snlen=10,snwhite=1'\n"
+"    (without the quotes) are all valid file type specifications.\n"
 "\n"
 "Options:\n"
-"	-s		Synthesize shortnames\n"
-"	-r		Process route information\n"
-"	-t		Process track information\n"
-"	-w		Process waypoint information [default]\n"
-"	-N		No smart icons on output\n"
-"	-x filtername	Invoke filter\n"
-"	-D level	Set debug level [%d]\n"
-"       -h, -?          Print this message and exit\n"
-"       -V              Print GPSBabel version and exit\n"
+"    -s               Synthesize shortnames\n"
+"    -r               Process route information\n"
+"    -t               Process track information\n"
+"    -w               Process waypoint information [default]\n"
+"    -N               No smart icons on output\n"
+"    -x filtername    Invoke filter\n"
+"    -D level         Set debug level [%d]\n"
+"    -h, -?           Print detailed help and exit\n"
+"    -V               Print GPSBabel version and exit\n"
 "\n"
-"File Types (-i and -o options):\n"
 	, pname
 	, pname
 	, global_opts.debug_level
 	);
-
-	disp_vecs();
-	printf("\nSupported data filters:\n");
-	disp_filter_vecs();
+	if ( shorter ) {
+		printf( "\n\n[Press enter]" );
+		fgetc(stdin);
+	}
+	else {
+	        printf("File Types (-i and -o options):\n");
+		disp_vecs();
+		printf("\nSupported data filters:\n");
+		disp_filter_vecs();
+	}
 }
 
 
@@ -102,6 +107,11 @@ main(int argc, char *argv[])
 	waypt_init();
 	route_init();
 
+	if ( argc < 2 ) {
+		usage(argv[0],1);
+		exit(0);
+	}
+	
 	/*
 	 * Open-code getopts since POSIX-impaired OSes don't have one.
 	 */
@@ -121,7 +131,7 @@ main(int argc, char *argv[])
 		}
 
 		if (argv[argn][1] == '?' || argv[argn][1] == 'h') {
-			usage(argv[0]);
+			usage(argv[0],0);
 			exit(0);
 		}
 
@@ -240,7 +250,7 @@ main(int argc, char *argv[])
   				exit(0);
 			case 'h':
 			case '?':
-				usage(argv[0]);
+				usage(argv[0],0);
 				exit(0);
 		}
 	}
@@ -268,7 +278,7 @@ main(int argc, char *argv[])
 		}
 	}
 	else if (argc) {
-		usage(prog_name);
+		usage(prog_name,0);
 		exit(0);
 	}
 	if (ovecs == NULL)
