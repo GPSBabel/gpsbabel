@@ -1334,7 +1334,8 @@ mag_route_trl(const route_head * rte)
 			thisline++;
 
 			sprintf(obuff, "PMGNRTE,%d,%d,c,%d,%s,%s", 
-				numlines, thisline, route_out_count,
+				numlines, thisline, 
+				rte->rte_num ? rte->rte_num : route_out_count,
 				buff1, buff2);
 
 			mag_writemsg(obuff);
