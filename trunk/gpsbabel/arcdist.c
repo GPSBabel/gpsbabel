@@ -74,7 +74,12 @@ arcdist_process(void)
 	    fileline++;
 	    
 	    pound = strchr( line, '#' );
-	    if ( pound ) *pound = '\0';
+	    if ( pound ) {
+		if ( 0 == strncmp( pound, "#break", 6)) {
+		    lat1 = lon1 = BADVAL;
+		}
+		*pound = '\0';
+	    }
 	    
 	    lat2 = lon2 = BADVAL;
 	    argsfound = sscanf( line, "%lf %lf", &lat2, &lon2 );
