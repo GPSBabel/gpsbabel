@@ -1,5 +1,12 @@
+
+# If you do not have libexpat and you have no use for reading any input
+# type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
+# INHIBIT_EXPAT and coment out LIBEXPAT on just to get a build working quickly.
+# INHIBIT_EXPAT=-DNO_EXPAT
+LIBEXPAT=-lexpat
+
 # add -DDEBUG_MEM to turn on memory allocation logging
-CFLAGS=$(EXTRA_CFLAGS) -g -Icoldsync
+CFLAGS=$(EXTRA_CFLAGS) -g -Icoldsync  $(INHIBIT_EXPAT)
 INSTALL_TARGETDIR=/usr/local/
 
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
@@ -29,7 +36,7 @@ OBJS = main.o $(LIBOBJS)
 all: gpsbabel
 
 gpsbabel: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o gpsbabel -lexpat -lm
+	$(CC) $(CFLAGS) $(OBJS) -o gpsbabel $(LIBEXPAT) -lm
 
 main.o:
 	$(CC) -c $(CFLAGS) -DVERSION=\"$(VERSIOND)\" $<

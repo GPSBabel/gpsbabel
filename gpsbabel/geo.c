@@ -17,7 +17,10 @@
 
  */
 #include "defs.h"
+#if !NO_EXPAT
 #include <expat.h>
+static XML_Parser psr;
+#endif
 
 static int in_wpt;
 static int in_name;
@@ -27,7 +30,6 @@ static int in_cdata;
 static char *cdatastr;
 static char *typestr;
 
-static XML_Parser psr;
 static waypoint *wpt_tmp;
 
 FILE *fd;
@@ -36,6 +38,18 @@ FILE *ofd;
 #define MYNAME "geo"
 #define MY_CBUF 4096
 
+#if NO_EXPAT
+void
+geo_rd_init(const char *fname, const char *args)
+{
+	fatal(MYNAME ": This build excluded GPX support becuase expat was not installed.\n");
+}
+
+void
+geo_read(void)
+{
+}
+#else
 static void
 tag_coord(const char **attrv)
 {
@@ -190,6 +204,25 @@ geo_rd_init(const char *fname, const char *args)
 }
 
 void
+geo_read(void)
+{
+	int len;
+	char buf[MY_CBUF];
+	
+	while ((len = fread(buf, 1, sizeof(buf), fd))) {
+		if (!XML_Parse(psr, buf, len, feof(fd))) {
+			fatal(MYNAME ":Parse error at %d: %s\n", 
+				XML_GetCurrentLineNumber(psr),
+				XML_ErrorString(XML_GetErrorCode(psr)));
+		}
+	}
+
+	XML_ParserFree(psr);
+}
+
+#endif
+
+void
 geo_rd_deinit(void)
 {
 	if ( cdatastr ) {
@@ -214,23 +247,6 @@ void
 geo_wr_deinit(void)
 {
 	fclose(ofd);
-}
-
-void
-geo_read(void)
-{
-	int len;
-	char buf[MY_CBUF];
-	
-	while ((len = fread(buf, 1, sizeof(buf), fd))) {
-		if (!XML_Parse(psr, buf, len, feof(fd))) {
-			fatal(MYNAME ":Parse error at %d: %s\n", 
-				XML_GetCurrentLineNumber(psr),
-				XML_ErrorString(XML_GetErrorCode(psr)));
-		}
-	}
-
-	XML_ParserFree(psr);
 }
 
 static void

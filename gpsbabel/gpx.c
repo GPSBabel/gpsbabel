@@ -20,7 +20,10 @@
  */
 
 #include "defs.h"
-#include <expat.h>
+#ifndef NO_EXPAT
+	#include <expat.h>
+	static XML_Parser psr;
+#endif
 
 static int in_wpt;
 static int in_rte;
@@ -52,8 +55,6 @@ static xml_tag *cur_tag;
 static char *cdatastr;
 static int opt_logpoint = 0;
 static int logpoint_ct = 0;
-
-static XML_Parser psr;
 
 static const char *gpx_version;
 static const char *gpx_creator;
@@ -671,6 +672,15 @@ gpx_end(void *data, const char *el)
 	}
 }
 
+#if NO_EXPAT
+void
+gpx_rd_init(const char *fname, const char *args)
+{
+	fatal(MYNAME ": This build excluded GPX support becuase expat was not installed.\n");
+}
+
+#else /* NO_EXPAT */
+
 static void
 gpx_cdata(void *dta, const XML_Char *s, int len)
 {
@@ -761,6 +771,7 @@ gpx_rd_init(const char *fname, const char *args)
 	XML_SetElementHandler(psr, gpx_start, gpx_end);
 	XML_SetCharacterDataHandler(psr, gpx_cdata);
 }
+#endif
 
 static void
 gpx_rd_deinit(void)
@@ -795,6 +806,7 @@ gpx_wr_deinit(void)
 void
 gpx_read(void)
 {
+#ifndef NO_EXPAT
 	int len;
 	int done = 0;
 	char buf[MY_CBUF];
@@ -822,6 +834,7 @@ gpx_read(void)
 				XML_ErrorString(XML_GetErrorCode(psr)));
 		}
 	}
+#endif /* NO_EXPAT */
 }
 
 /*
