@@ -453,6 +453,9 @@ get_tz_offset(void)
 const char *
 get_cache_icon(const waypoint *waypointp)
 {
+	if (global_opts.no_smart_icons)
+		return NULL;
+
 	/*
 	 * For icons, type overwrites container.  So a multi-micro will 
 	 * get the icons for "multi".
