@@ -34,6 +34,7 @@ extern filter_vecs_t duplicate_vecs;
 extern filter_vecs_t arcdist_vecs;
 extern filter_vecs_t polygon_vecs;
 extern filter_vecs_t routesimple_vecs;
+extern filter_vecs_t reverse_route_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -66,6 +67,11 @@ fl_vecs_t filter_vec_list[] = {
 		&routesimple_vecs,
 		"simplify",
 		"Simplify routes",
+	},
+	{
+		&reverse_route_vecs,
+		"reverse",
+		"Reverse stops within routes",
 	},
         {
 		NULL,

@@ -63,6 +63,7 @@ static const char *gpx_creator;
 
 static char *gpx_email = NULL;
 static char *gpx_author = NULL;
+vmem_t current_tag;
 
 static waypoint *wpt_tmp;
 static FILE *fd;
@@ -83,6 +84,84 @@ static route_head *rte_head;
 
 #define MYNAME "GPX"
 #define MY_CBUF 4096
+
+typedef enum {
+	tt_unknown = 0,
+	tt_ele,
+	tt_name,
+	tt_gpx,
+	tt_email,
+	tt_author,
+	tt_wpt,
+	tt_desc,
+	tt_cmt,
+	tt_rte,
+	tt_rtept,
+	tt_trk,
+	tt_trkpt,
+	tt_number,
+	tt_time,
+	tt_url,
+	tt_urlname,
+	tt_sym,
+	tt_cache_type,
+	tt_cache_name,
+	tt_cache_container,
+	tt_cache_difficulty,
+	tt_cache_terrain,
+	tt_cache_log,
+	tt_cache_log_wpt,
+	tt_cache_exported,
+	tt_cache_travelbugs
+} tag_type;
+
+typedef struct tag_mapping {
+	tag_type tag_type;
+	const char *tag_name;
+} tag_mapping;
+
+tag_mapping tag_map[] = {
+	{ tt_ele, "ele" },
+	{ tt_name, "name" },
+	{ tt_gpx, "gpx" },
+	{ tt_email, "email" },
+	{ tt_author, "author" },
+	{ tt_wpt, "wpt" },
+	{ tt_desc, "desc" },
+	{ tt_cmt, "cmt" },
+	{ tt_rte, "rte" },
+	{ tt_rtept, "rtept" },
+	{ tt_trk, "trk" },
+	{ tt_trkpt, "trkpt" },
+	{ tt_number, "number" },
+	{ tt_time, "time" },
+	{ tt_url, "url" },
+	{ tt_urlname, "urlname" },
+	{ tt_sym, "sym" },
+	{ tt_cache_type, "groundspeak:type" },
+	{ tt_cache_name, "groundspeak:name" },
+	{ tt_cache_container, "groundspeak:container" },
+	{ tt_cache_difficulty, "groundspeak:difficulty" },
+	{ tt_cache_terrain, "groundspeak:terrain" },
+	{ tt_cache_log, "groundspeak:log" },
+	{ tt_cache_log_wpt, "groundspeak:log_wpt" },
+	{ tt_cache_exported, "groundspeak:exported" },
+	{ tt_cache_travelbugs, "groundspeak:travelbugs" },
+	{0}
+};
+
+static tag_type
+get_tag(const char *t)
+{
+	tag_mapping *tm;
+
+        for (tm = tag_map; tm->tag_type != 0; tm++) {
+		if (0 == strcmp(tm->tag_name, t)) {
+			return tm->tag_type;
+		}
+	}
+	return tt_unknown;
+}
 
 static void
 tag_gpx(const char **attrv)
@@ -232,114 +311,124 @@ tag_log_wpt(const char **attrv)
 static void
 gpx_start(void *data, const char *el, const char **attr)
 {
-
-	if (strcmp(el, "ele") == 0) {
+	char *e;
+	char *ep;
+	vmem_realloc(&current_tag, strlen(current_tag.mem) + 1 + strlen(el));
+	e = current_tag.mem;
+	ep = e + strlen(e);
+	*ep++ = '/';
+	strcpy(ep, el);
+	switch (get_tag(el)) {
+	case tt_ele:
 		in_ele++;
-	} 
-	else if (strcmp(el, "name") == 0) {
+		break;
+	case tt_name:
 		in_name ++;
-	} 
-	else if (strcmp(el, "gpx") == 0) {
+		break;
+	case tt_gpx:
 		tag_gpx(attr);
-	}
-        else if (strcmp(el, "email") == 0 ) {
+		break;
+	case tt_email:
 		in_email++;
-	}
-	else if (strcmp(el, "author") == 0 ) {
+		break;
+	case tt_author:
 		in_author++;
-	}
-	else if (strcmp(el, "wpt") == 0) {
+		break;
+	case tt_wpt:
 		in_wpt++;
 		tag_wpt(attr);
-	} 
-	else if (strcmp(el, "desc") == 0) {
+		break;
+	case tt_desc:
 		in_desc++;
-	} 
-	else if (strcmp(el, "cmt") == 0) {
+		break;
+	case tt_cmt:
 		in_cmt++;
-	} 
-	else if (strcmp(el, "rte") == 0) {
+		break;
+	case tt_rte:
 		rte_head = route_head_alloc();
 		route_add_head(rte_head);
 		in_rte++;
-	} 
-	else if (strcmp(el, "rtept") == 0) {
+		break;
+	case tt_rtept:
 		in_rtept++;
 		tag_wpt(attr);
-	} 
-	else if (strcmp(el, "trk") == 0) {
+		break; 
+	case tt_trk:
 		trk_head = route_head_alloc();
 		route_add_head(trk_head);
 		in_trk++;
-	} 
-	else if (strcmp(el, "trkpt") == 0) {
+		break;
+	case tt_trkpt:
 		in_trkpt++;
 		tag_wpt(attr);
-	} 
-	else if (strcmp(el, "number") == 0) {
+		break;
+	case tt_number:
 		in_number++;
-	} 
-	else if (strcmp(el, "time") == 0) {
+		break;
+	case tt_time:
 		in_time++;
-	} 
-	else if (strcmp(el, "url") == 0) {
+		break;
+	case tt_url:
 		in_url++;
-	} 
-	else if (strcmp(el, "urlname") == 0) {
+		break;
+	case tt_urlname:
 		in_urlname++;
-	} 
-	else if (strcmp(el, "sym") == 0) {
+		break;
+	case tt_sym:
 		in_icon++;
-	} 
-	else if (strcmp(el, "groundspeak:type") == 0) {
+		break;
+	case tt_cache_type:
 		in_gs_type++;
 		in_something_else++;
 		start_something_else( el, attr );
-	} 
-	else if (strcmp(el, "groundspeak:name") == 0) {
+		break;
+	case tt_cache_name:
 		in_gs_name++;
 		in_something_else++;
 		start_something_else( el, attr );
-	} 
-	else if (strcmp(el, "groundspeak:container") == 0) {
+		break;
+	case tt_cache_container:
 		in_gs_container++;
 		in_something_else++;
 		start_something_else( el, attr );
-	} 
-	else if (strcmp(el, "groundspeak:difficulty") == 0) {
+		break;
+	case tt_cache_difficulty:
 		in_gs_diff++;
 		in_something_else++;
 		start_something_else( el, attr );
-	} 
-	else if (strcmp(el, "groundspeak:terrain") == 0) {
+		break;
+	case tt_cache_terrain:
 		in_gs_terr++;
 		in_something_else++;
 		start_something_else( el, attr );
-	} 
-	else if (strcmp(el, "groundspeak:log") == 0) {
+		break;
+	case tt_cache_log:
 		in_gs_log++;
 		in_something_else++;
 		start_something_else( el, attr );
-	} 
-	else if (strcmp(el, "groundspeak:log_wpt") == 0) {
+		break;
+	case tt_cache_log_wpt:
 		in_gs_log_wpt++;
                 if (opt_logpoint)
 		    tag_log_wpt(attr);
 		in_something_else++;
 		start_something_else( el, attr );
-	}
-	else if (strcmp(el, "groundspeak:exported") == 0) {
+		break;
+	case tt_cache_exported:
 		in_gs_exported++;
 		/* no start_something_else because the old date is eaten */
-	}
-	else if (strcmp(el, "groundspeak:travelbugs") == 0) {
+		break;
+	case tt_cache_travelbugs:
 		in_gs_tbugs++;
 		in_something_else++;
 		start_something_else( el, attr );
-	} 
-	else if (in_wpt) {
-		in_something_else++;
-		start_something_else( el, attr );
+		break;
+	default:
+		if (in_wpt) {
+			in_something_else++;
+			start_something_else( el, attr );
+		}
+		break;
 	}
 }
 
@@ -461,7 +550,15 @@ xml_parse_time( char *cdatastr )
 static void
 gpx_end(void *data, const char *el)
 {
+	char *s = strrchr(current_tag.mem, '/');
+
+	if (strcmp(s + 1, el)) {
+		fprintf(stderr, "Mismatched tag %s\n", el);
+	}
+	*s = 0;
+
 	float x;
+
 	if (in_cdata) {
 		if (in_name && in_wpt && !in_gs_tbugs) {
 			wpt_tmp->shortname = xstrdup(cdatastr);
@@ -556,84 +653,111 @@ gpx_end(void *data, const char *el)
 		in_cdata--;
 		memset(cdatastr, 0, MY_CBUF);
 	}
-	if (strcmp(el, "wpt") == 0) {
+	switch (get_tag(el)) {
+	case tt_wpt:
 		if ( !wpt_tmp->gc_data.exported ) {
 			wpt_tmp->gc_data.exported = file_time;
 		}
 		waypt_add(wpt_tmp);
 		in_wpt--;
 		logpoint_ct = 0;
-	} 
-	  else if (strcmp(el, "rte") == 0) {
+		break;
+	case tt_rte:
 		in_rte--;
-	} else if (strcmp(el, "rtept") == 0) {
+		break;
+	case tt_rtept:
 		route_add_wpt(rte_head, wpt_tmp);
 		in_rtept--;
-	} else if (strcmp(el, "trk") == 0) {
+		break;
+	case tt_trk:
 		in_trk--;
-	} else if (strcmp(el, "trkpt") == 0) {
+		break;
+	case tt_trkpt:
 		route_add_wpt(trk_head, wpt_tmp);
 		in_trkpt--;
-	} else if (strcmp(el, "number") == 0) {
+		break;
+	case tt_number:
 		in_number--;
-	} else if (strcmp(el, "name") == 0) {
+		break;
+	case tt_name:
 		in_name--;
-	} else if (strcmp(el, "desc") == 0) {
+		break;
+	case tt_desc:
 		in_desc--;
-	} else if (strcmp(el, "email") == 0 ) {
+		break;
+	case tt_email:
 		in_email--;
-	} else if (strcmp(el, "author") == 0 ) {
+		break;
+	case tt_author:
 		in_author--;
-	} else if (strcmp(el, "cmt") == 0) {
+		break;
+	case tt_cmt:
 		in_cmt--;
-	} else if (strcmp(el, "ele") == 0) {
+		break;
+	case tt_ele:
 		in_ele--;
-	} else if (strcmp(el, "time") == 0) {
+		break;
+	case tt_time:
 		in_time--;
-	} else if (strcmp(el, "url") == 0) {
+		break;
+	case tt_url:
 		in_url--;
-	} else if (strcmp(el, "urlname") == 0) {
+		break;
+	case tt_urlname:
 		in_urlname--;
-	} else if (strcmp(el, "sym") == 0) {
+		break;
+	case tt_sym:
 		in_icon--;
-	} else if (strcmp(el, "groundspeak:type") == 0) {
+		break;
+	case tt_cache_type:
 		in_gs_type--;
 		in_something_else--;
 		end_something_else();
-	} else if (strcmp(el, "groundspeak:name") == 0) {
+		break;
+	case tt_cache_name:
 		in_gs_name--;
 		in_something_else--;
 		end_something_else();
-	} else if (strcmp(el, "groundspeak:container") == 0) {
+		break;
+	case tt_cache_container:
 		in_gs_container--;
 		in_something_else--;
 		end_something_else();
-	} else if (strcmp(el, "groundspeak:difficulty") == 0) {
+		break;
+	case tt_cache_difficulty:
 		in_gs_diff--;
 		in_something_else--;
 		end_something_else();
-	} else if (strcmp(el, "groundspeak:terrain") == 0) {
+		break;
+	case tt_cache_terrain:
 		in_gs_terr--;
 		in_something_else--;
 		end_something_else();
-	} else if (strcmp(el, "groundspeak:log") == 0) {
+		break;
+	case tt_cache_log:
 		in_gs_log--;
 		in_something_else--;
 		end_something_else();
-	} else if (strcmp(el, "groundspeak:log_wpt") == 0) {
+		break;
+	case tt_cache_log_wpt:
 		in_gs_log_wpt--;
 		in_something_else--;
 		end_something_else();
-	} else if (strcmp(el, "groundspeak:exported") == 0) {
+		break;
+	case tt_cache_exported:
 		in_gs_exported--;
 		/* no end_something_else because the old date is eaten */
-	} else if (strcmp(el, "groundspeak:travelbugs") == 0) {
+		break;
+	case tt_cache_travelbugs:
 		in_gs_tbugs--;
 		in_something_else--;
 		end_something_else();
-	} else if (in_wpt) {
+		break;
+	default:
+		if (in_wpt) {
 		in_something_else--;
 		end_something_else();
+		}
 	}
 }
 
@@ -726,6 +850,7 @@ gpx_rd_init(const char *fname)
 
 
 	file_time = 0;
+	current_tag = vmem_alloc(1);
 	
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {
@@ -740,6 +865,7 @@ gpx_rd_init(const char *fname)
 static void
 gpx_rd_deinit(void)
 {
+	vmem_free(&current_tag);
 	if ( cdatastr ) {
 		xfree(cdatastr);
 		cdatastr = NULL;

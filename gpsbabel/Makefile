@@ -20,7 +20,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o
 
-FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o
+FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o
 
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
@@ -33,7 +33,7 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 COLDSYNC=coldsync/util.o coldsync/pdb.o
 
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
-          csv_util.o grtcirc.o \
+          csv_util.o grtcirc.o vmem.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(FMTS) $(FILTERS)
 OBJS = main.o $(LIBOBJS)
 
@@ -50,6 +50,13 @@ main.o:
 
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
+
+check:
+	./testo
+
+torture:
+	./testo
+	./torture_test
 
 #
 # This will only work on UNIX-like substances.
@@ -70,10 +77,10 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > $@ || (rm -f $@ ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_1_1_beta10082003
-VERSIOND=1.1.1_beta10082003
-VERSIONU=1_2_1
-VERSIOND=1.2.1
+VERSIONU=1_2_1_beta12132003
+VERSIOND=1.2.1_beta12132003
+#VERSIONU=1_2_1
+#VERSIOND=1.2.1
 
 release:
 	./chkdoc
