@@ -2,6 +2,8 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+#include "defs.h"
+
 static const char vowels[] = "aeiouAEIOU";
 
 #define DEFAULT_TARGET_LEN 8
@@ -85,7 +87,7 @@ setshort_mustupper(int i)
 }
 
 char *
-mkshort(char *istring)
+mkshort(const char *istring)
 {
 	char *ostring = strdup(istring);
 	char *nstring;
