@@ -136,7 +136,7 @@ csv_stringtrim(const char *string, const char *enclosure, int strip_max)
     if (elen) {
 	while (
 	       (stripped < strip_max) &&
-	       ((size_t) (p2 - p1) > elen) &&
+	       ((size_t) (p2 - p1) >= elen) &&
 	       (strncmp(p1, enclosure, elen) == 0) &&
 	       (strncmp((p2 - elen + 1), enclosure, elen) == 0)) {
 	    p2 -= elen;
@@ -836,8 +836,7 @@ xcsv_waypt_pr(const waypoint *wpt)
             else
                 shortname = csv_stringclean(wpt->description, xcsv_file.badchars);
         } else {
-            /* no description available */
-            shortname = xstrdup("");
+            /* no shortname available -- let shortname default on output */
         }
     } else{
         shortname = csv_stringclean(wpt->shortname, xcsv_file.badchars);
@@ -847,7 +846,7 @@ xcsv_waypt_pr(const waypoint *wpt)
         if (shortname) {
             description = csv_stringclean(shortname, xcsv_file.badchars);
         } else {
-            description = xstrdup("");
+            /* no description -- let description default on output */
         }
     } else {
         description = csv_stringclean(wpt->description, xcsv_file.badchars);
@@ -886,7 +885,8 @@ xcsv_waypt_pr(const waypoint *wpt)
             sprintf(buff, fmp->printfc, fmp->val);
         } else
         if (strcmp(fmp->key, "SHORTNAME") == 0) {
-            sprintf(buff, fmp->printfc, shortname);
+            sprintf(buff, fmp->printfc, 
+                (shortname && *shortname) ? shortname : fmp->val);
         } else
         if (strcmp(fmp->key, "ANYNAME") == 0) {
             if (wpt->shortname) {
@@ -898,7 +898,7 @@ xcsv_waypt_pr(const waypoint *wpt)
             if (wpt->notes) {
                 anyname = xstrdup(wpt->notes);
             } else
-                anyname = xstrdup("");
+                anyname = xstrdup(fmp->val);
 
             if ((anyname) && (global_opts.synthesize_shortnames)) {
                 anyname = xstrdup(shortname);
@@ -909,10 +909,12 @@ xcsv_waypt_pr(const waypoint *wpt)
             xfree(anyname);
         } else
         if (strcmp(fmp->key, "DESCRIPTION") == 0) {
-            sprintf(buff, fmp->printfc, description);
+            sprintf(buff, fmp->printfc, 
+                (description && *description) ? description : fmp->val);
         } else
         if (strcmp(fmp->key, "NOTES") == 0) {
-	    sprintf(buff, fmp->printfc, wpt->notes? wpt->notes : "");
+	    sprintf(buff, fmp->printfc, 
+	        (wpt->notes && *wpt->notes) ? wpt->notes : fmp->val);
         } else
         if (strcmp(fmp->key, "URL") == 0) {
 	    int off = 0;
@@ -923,13 +925,16 @@ xcsv_waypt_pr(const waypoint *wpt)
 	    if (wpt->url)
 		sprintf(buff + off, fmp->printfc, wpt->url);
 	    else
-		strcpy(buff, "\"\"");
+		strcpy(buff, (fmp->val && *fmp->val) ? fmp->val : "\"\"");
         } else
         if (strcmp(fmp->key, "URL_LINK_TEXT") == 0) {
-            sprintf(buff, fmp->printfc, NONULL(wpt->url_link_text));
+            sprintf(buff, fmp->printfc, 
+                (wpt->url_link_text && *wpt->url_link_text) ? wpt->url_link_text : fmp->val);
         } else
         if (strcmp(fmp->key, "ICON_DESCR") == 0) {
-            sprintf(buff, fmp->printfc, NONULL(wpt->icon_descr));
+            sprintf(buff, fmp->printfc, 
+                (wpt->icon_descr && *wpt->icon_descr) ? 
+                wpt->icon_descr : fmp->val);
         } else
 
         /* LATITUDE CONVERSION***********************************************/

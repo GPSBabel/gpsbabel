@@ -387,3 +387,11 @@ EXAMPLES:
 For examples on using the XCSV module, please see the *.style files in
 the style/ subdirectory of GPSBabel.  
 
+MISCELLANEOUS NOTES:
+--------------------
+ o DEFAULT VALUES
+   Default values are supported for any output fields that contain pure 
+   character data output such as URL and NOTES.  Default values are only
+   written on output and are not used to supplement missing input.  When 
+   using default values your mileage will vary greatly depending on the 
+   input formats used to populate waypoint data.
