@@ -23,8 +23,6 @@
 
 extern queue waypt_head;
 
-static int duplicate_shortname = 0;
-static int duplicate_location = 0;
 static char *snopt = NULL;
 static char *lcopt = NULL;
 
@@ -149,7 +147,7 @@ duplicate_process(void)
 {
 	queue * elem, * tmp;
 	waypoint * waypointp;
-	btree_node * newnode, * btmp, * ftmp, * sup_tree = NULL;
+	btree_node * newnode, * btmp, * sup_tree = NULL;
 	unsigned long crc = 0;
 	struct { char shortname[32]; char lat[13]; char lon[13]; } dupe;
         waypoint * delwpt = NULL;
@@ -159,11 +157,11 @@ duplicate_process(void)
 
 		memset(&dupe, '\0', sizeof(dupe));
 
-		if (duplicate_shortname) {
+		if (snopt) {
 			strncpy(dupe.shortname, waypointp->shortname, sizeof(dupe.shortname) - 1);
 		}
 
-		if (duplicate_location) {
+		if (lcopt) {
 			/* let sprintf take care of rounding */
 			sprintf(dupe.lat, "%11.6f", waypointp->position.latitude.degrees);
 			sprintf(dupe.lon, "%11.6f", waypointp->position.longitude.degrees);
@@ -198,8 +196,6 @@ duplicate_process(void)
 void
 duplicate_init(const char *args) 
 {
-	duplicate_shortname = snopt != NULL;
-	duplicate_location = lcopt != NULL;
 }
 
 void
