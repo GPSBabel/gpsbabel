@@ -19,8 +19,8 @@
 
  */
 
-#include <expat.h>
 #include "defs.h"
+#include <expat.h>
 
 static int in_wpt;
 static int in_rte;
