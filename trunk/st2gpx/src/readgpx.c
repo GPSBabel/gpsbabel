@@ -44,7 +44,7 @@ static int cdata_length;
 
 //FILE* gpx_in_file=NULL;
 
-char * gpx_elem_name[] = 
+char * gpx_elem_name[] =
 {
 	"unknown-element",
 	"wpt",
@@ -74,9 +74,9 @@ void gpxpt_delete(struct gpxpt * pt)
 {
 	if(pt==NULL)
 		return;
-	xfree(pt->name);
-	xfree(pt->desc);
-	xfree(pt);
+	free(pt->name);
+	free(pt->desc);
+	free(pt);
 }
 
 struct gpxpt * gpxpt_copy(struct gpxpt * otherpt)
@@ -122,9 +122,9 @@ void gpxrte_delete(struct gpxrte * rte)
 		return;
 	for (i=0; i<rte->rtept_list_count; i++)
 		gpxpt_delete(rte->rtept_list[i]);
-	xfree(rte->rtept_list);
-	xfree(rte->name);
-	xfree(rte);
+	free(rte->rtept_list);
+	free(rte->name);
+	free(rte);
 }
 
 struct gpxtrk * gpxtrk_new()
@@ -142,8 +142,8 @@ void gpxtrk_delete(struct gpxtrk * trk)
 		return;
 	for (i=0; i<trk->trkpt_list_count; i++)
 		gpxpt_delete(trk->trkpt_list[i]);
-	xfree(trk->trkpt_list);
-	xfree(trk);
+	free(trk->trkpt_list);
+	free(trk);
 }
 
 struct gpx_data * gpx_data_new()
@@ -165,17 +165,17 @@ void gpx_data_delete(struct gpx_data * data)
 	if(data==NULL)
 		return;
 
-	xfree(data->data_source_name);
+	free(data->data_source_name);
 	for (i=0; i<data->wpt_list_count; i++)
 		gpxpt_delete(data->wpt_list[i]);
 	for (i=0; i<data->rte_list_count; i++)
 		gpxrte_delete(data->rte_list[i]);
 	for (i=0; i<data->trk_list_count; i++)
 		gpxtrk_delete(data->trk_list[i]);
-	xfree(data->wpt_list);
-	xfree(data->rte_list);
-	xfree(data->trk_list);
-	xfree(data);
+	free(data->wpt_list);
+	free(data->rte_list);
+	free(data->trk_list);
+	free(data);
 }
 
 void print_wptlist(struct gpxpt ** wpt_list, int wpt_list_count)
@@ -183,7 +183,7 @@ void print_wptlist(struct gpxpt ** wpt_list, int wpt_list_count)
 	int i;
 	printf("Global waypoints:\n");
 	for (i=0; i<wpt_list_count; i++)
-		printf("wpt: lat=%f, lon=%f, name='%s', desc='%s'\n", 
+		printf("wpt: lat=%f, lon=%f, name='%s', desc='%s'\n",
 				wpt_list[i]->lat, wpt_list[i]->lon, wpt_list[i]->name, wpt_list[i]->desc);
 }
 
@@ -192,7 +192,7 @@ void print_route(struct gpxrte * rte)
 	int i;
 	printf("Route '%s' with %d route-points:\n", rte->name, rte->rtept_list_count);
 	for (i=0; i<rte->rtept_list_count; i++)
-		printf("rtept: lat=%f, lon=%f, name='%s', desc='%s'\n", 
+		printf("rtept: lat=%f, lon=%f, name='%s', desc='%s'\n",
 				(rte->rtept_list)[i]->lat, (rte->rtept_list)[i]->lon,
 				(rte->rtept_list)[i]->name, (rte->rtept_list)[i]->desc);
 }
@@ -210,7 +210,7 @@ void print_track(struct gpxtrk * trk)
 	int i;
 	printf("Track with %d track-points:\n", trk->trkpt_list_count);
 	for (i=0; i<trk->trkpt_list_count; i++)
-		printf("trkpt: lat=%f, lon=%f\n", 
+		printf("trkpt: lat=%f, lon=%f\n",
 				trk->trkpt_list[i]->lat, trk->trkpt_list[i]->lon);
 }
 
@@ -230,10 +230,10 @@ void print_gpx_data(struct gpx_data * all_data)
 }
 
 char* get_att(char* match, const char **atts)
-{		  
+{
 	const char **avp = &atts[0];
-	while (*avp) { 
-		if (strcmp(avp[0], match) == 0) 
+	while (*avp) {
+		if (strcmp(avp[0], match) == 0)
 			return (char *)avp[1];
 		avp+=2;
 	}
@@ -325,7 +325,7 @@ void startrtept(void *userData, const char *name, const char **atts)
 	}
 	current_main_element=GPX_ELEM_TYPE_RTEPT;
 
-	thisrte->rtept_list=(struct gpxpt **)xrealloc(thisrte->rtept_list, 
+	thisrte->rtept_list=(struct gpxpt **)xrealloc(thisrte->rtept_list,
 												(thisrte->rtept_list_count+1)*sizeof(struct gpxpt *));
 	thisrte->rtept_list[thisrte->rtept_list_count] = gpxpt_new();
 	sscanf(get_att("lat", atts), "%lf", &(thisrte->rtept_list[thisrte->rtept_list_count]->lat));
@@ -373,9 +373,9 @@ void endtrk(void *userData, const char *name)
 	}
 	current_main_element=0;
 
-//	printf("read end of track%d, with %d points\n", 
+//	printf("read end of track%d, with %d points\n",
 //			dat->trk_list_count,
-//			dat->trk_list[dat->trk_list_count-1]->trkpt_list_count); 
+//			dat->trk_list[dat->trk_list_count-1]->trkpt_list_count);
 }
 
 // just eat <trkseg>: we join all track segments as a single track
@@ -415,7 +415,7 @@ void starttrkpt(void *userData, const char *name, const char **atts)
 	}
 	current_main_element=GPX_ELEM_TYPE_TRKPT;
 
-	thistrk->trkpt_list=(struct gpxpt **)xrealloc(thistrk->trkpt_list, 
+	thistrk->trkpt_list=(struct gpxpt **)xrealloc(thistrk->trkpt_list,
 												(thistrk->trkpt_list_count+1)*sizeof(struct gpxpt *));
 	thistrk->trkpt_list[thistrk->trkpt_list_count]=gpxpt_new();
 	sscanf(get_att("lat", atts), "%lf", &(thistrk->trkpt_list[thistrk->trkpt_list_count]->lat));
@@ -468,7 +468,7 @@ void endname(void *userData, const char *name)
 		//break;
 	case GPX_ELEM_TYPE_TRKPT:
 	default:
-		xfree(nameval);
+		free(nameval);
 		break;
 	}
 }
@@ -508,7 +508,7 @@ void enddesc(void *userData, const char *name)
 //		break;
 	case GPX_ELEM_TYPE_TRKPT:
 	default:
-		xfree(desc);
+		free(desc);
 		break;
 	}
 }
@@ -523,7 +523,7 @@ void endsrc(void *userData, const char *name)
 
 #define GPX_NUM_ELEM_HANDLERS 10
 
-gpx_elm_start_handler gpx_start_elm_handler[] = 
+gpx_elm_start_handler gpx_start_elm_handler[] =
 {
 	&startunkn,
 	&startwpt,
@@ -537,7 +537,7 @@ gpx_elm_start_handler gpx_start_elm_handler[] =
 	&startsrc
 };
 
-gpx_elm_end_handler gpx_end_elm_handler[] = 
+gpx_elm_end_handler gpx_end_elm_handler[] =
 {
 	&endunkn,
 	&endwpt,
@@ -567,7 +567,7 @@ startElement(void *userData, const char *name, const char **atts)
 	int i = get_gpx_type_ndx(name);
 	gpx_start_elm_handler[i](userData, name, atts);
 
-	xfree(cdata);
+	free(cdata);
 	cdata=NULL;
 	cdata_length=0;
 
@@ -623,7 +623,7 @@ struct gpx_data * process_gpx_in_file(char* gpx_in_file_name)
 		printf("Importing data from %s\n", gpx_in_file_name);
 		gpx_in_file = fopen(gpx_in_file_name, "r");
 	}
- 
+
  	if(gpx_in_file==NULL)
 	{
 		fprintf(stderr, "Unable to open GPX file %s\n", gpx_in_file_name);
@@ -631,11 +631,11 @@ struct gpx_data * process_gpx_in_file(char* gpx_in_file_name)
 		exit(1);
 	}
 
-	do 
+	do
 	{
 		size_t len = fread(buf, 1, sizeof(buf), gpx_in_file);
 		done = len < sizeof(buf);
-		if (XML_Parse(parser, buf, len, done) == XML_STATUS_ERROR) 
+		if (XML_Parse(parser, buf, len, done) == XML_STATUS_ERROR)
 		{
 			fprintf(stderr,
 				"%s at line %d\n",
@@ -650,7 +650,7 @@ struct gpx_data * process_gpx_in_file(char* gpx_in_file_name)
 	{
 	}
 
-	xfree(cdata);
+	free(cdata);
 
 	return all_data;
 }

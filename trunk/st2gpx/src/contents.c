@@ -71,10 +71,13 @@ struct contents * contents_new()
 
 void contents_delete(struct contents * conts)
 {
-	xfree(conts->list_f_pcbtext);
-	xfree(conts->list_f_text);
-	xfree(conts->buf);
-	xfree(conts);
+	if(conts != NULL)
+	{
+		free(conts->list_f_pcbtext);
+		free(conts->list_f_text);
+		free(conts->buf);
+	}
+	free(conts);
 }
 
 void print_f_contents0(struct f_contents0 * conts)
@@ -217,17 +220,17 @@ struct contents * parse_contents_buffer(char* buf, unsigned int buf_len)
 			printf("Array[%d]=%d - unknown meaning\n", i, conts->f_conts_array[i]);
 
 		printf("n:=Array[3]=%d is number of user pushpin sets\n", (conts->f_conts_array)[3]);
-		
+
 //		for(i=0; i< (conts->f_conts_array[3]); i++)
-//			printf("Array[%d]=%d is SetId for user PushpinSet[%d] \n", 
+//			printf("Array[%d]=%d is SetId for user PushpinSet[%d] \n",
 //					4+i,
 //					conts->f_conts_array[4+i],
-//					conts->f_conts_array[3] - i -1);	
+//					conts->f_conts_array[3] - i -1);
 
 		for(i=0; i< (conts->f_conts_array[3]); i++)
 			printf("Array[4+n-(%d)]=%d is SetId for user PushpinSet[%d]\n",
 					i, conts->f_conts_array[3+(conts->f_conts_array[3])-i], i);
-		
+
 		for(i=0; (4 + (conts->f_conts_array[3] +i)) < (conts->f_conts0->array_len)/2 ; i++)
 			printf("Array[5+n+(%d)]=%d - unknown meaning\n",
 					i, conts->f_conts_array[4+(conts->f_conts_array[3])+i]);
@@ -235,7 +238,7 @@ struct contents * parse_contents_buffer(char* buf, unsigned int buf_len)
 		debug_pause();
 
 //		printf("Dumping Contents array tail:\n");
-//		printbuf((char*)(conts->f_conts_array + 4 + conts->f_conts_array[3]), 
+//		printbuf((char*)(conts->f_conts_array + 4 + conts->f_conts_array[3]),
 //				 (conts->f_conts0->array_len)-2*(4 + conts->f_conts_array[3])  );
 	}
 
@@ -263,7 +266,7 @@ struct contents * parse_contents_buffer(char* buf, unsigned int buf_len)
 	{
 		temp_str=buf2str(conts->f_text0, *(conts->f_pcbtext0));
 		printf("Got Text0='%s'\n", temp_str);
-		xfree(temp_str);
+		free(temp_str);
 		temp_str=NULL;
 	}
 
@@ -296,7 +299,7 @@ struct contents * parse_contents_buffer(char* buf, unsigned int buf_len)
 	{
 		temp_str=buf2str(conts->f_text1, conts->f_conts1->cbText1);
 		printf("Got Text1='%s'\n", temp_str);
-		xfree(temp_str);
+		free(temp_str);
 		temp_str=NULL;
 	}
 
@@ -347,7 +350,7 @@ struct contents * parse_contents_buffer(char* buf, unsigned int buf_len)
 		{
 			temp_str = buf2str(conts->list_f_text[i], *(conts->list_f_pcbtext[i]));
 			printf("Got list_text[%d]='%s'\n", i, temp_str);
-			xfree(temp_str);
+			free(temp_str);
 		}
 	}
 
@@ -356,7 +359,7 @@ struct contents * parse_contents_buffer(char* buf, unsigned int buf_len)
 	// **************************
 
     conts->pusunkn0 = (unsigned short*)(conts->buf+buf_pos);
-	
+
 	buf_pos += sizeof(unsigned short);
 	if (buf_pos>(conts->buf_len))
 	{
@@ -409,7 +412,7 @@ struct contents * parse_contents_buffer(char* buf, unsigned int buf_len)
 		temp_str=buf2str(conts->CountryText, conts->f_conts3->cbCountryText);
 		if(opts.explore_flag)
 		printf("Got CountryText='%s'\n", temp_str);
-		xfree(temp_str);
+		free(temp_str);
 		temp_str=NULL;
 	}
 
@@ -417,7 +420,7 @@ struct contents * parse_contents_buffer(char* buf, unsigned int buf_len)
 		conts->fully_parsed_flag=1;
 	else
 	{
-		printf("Unexpected %d bytes of contents buffer still remaining.\n", 
+		printf("Unexpected %d bytes of contents buffer still remaining.\n",
 				(conts->buf_len)-buf_pos);
 		printbuf((conts->buf)+buf_pos, (conts->buf_len)-buf_pos);
 	}

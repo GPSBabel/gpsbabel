@@ -30,7 +30,6 @@ extern "C" {
 
 //#define MEMCHK
 //#define DEBUG_STDOUT
-//#define MEMTRACE
 
 #ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC
@@ -99,7 +98,6 @@ extern struct contents;
 extern struct st2gpx_options opts;
 void * xmalloc(size_t size);
 void * xrealloc(void* ptr, size_t size);
-void xfree(void * obj);
 char * str2ascii(char* str);
 int readbytes(FILE* file, char* buf, int bytes2read);
 //nannol.c

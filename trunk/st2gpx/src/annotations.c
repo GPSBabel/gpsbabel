@@ -61,19 +61,19 @@ char std_annot_linerec_header_v4[LINE_REC_LEN_V4] =
 //   type                   annot#1               ,
 	{0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, // 0x00
 
-	 0x00, 0x00, 0x00, 0x00, 
+	 0x00, 0x00, 0x00, 0x00,
 
 //show length,
 //   order
 //behind roads
-	 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+	 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 //   blue                     2pt
-	 0x12, 0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 
+	 0x12, 0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00,
 //                         show line
-	 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 
-	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+	 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	 0x00};
 
 //struct parameters {
@@ -131,9 +131,9 @@ void annot_rec_delete(struct annot_rec * annot_rec)
 	if (annot_rec==NULL)
 		return;
 	//for(i=0; i<annot_rec->line_points)
-	xfree(annot_rec->buf);
-	xfree(annot_rec->text);
-	xfree(annot_rec);
+	free(annot_rec->buf);
+	free(annot_rec->text);
+	free(annot_rec);
 }
 
 struct annotations * annotations_new()
@@ -159,9 +159,9 @@ void annotations_delete(struct annotations * annots)
 
 	for (i=0; i<annots->num_annotations; i++)
 		annot_rec_delete(annots->annot_list[i]);
-	xfree(annots->annot_list);
-	xfree(annots->header_buf);
-	xfree(annots);
+	free(annots->annot_list);
+	free(annots->header_buf);
+	free(annots);
 }
 
 struct gpxpt* gpx_get_point(char* buf)
@@ -276,12 +276,12 @@ struct annot_rec * read_annot_rec(FILE* annot_in_file, int version)
 		}
 	}
 
-	if (rec->type == ANNOT_TYPE_LINE) 
+	if (rec->type == ANNOT_TYPE_LINE)
 		rec->line_offset = line_offset;
 
 	if (rec->type<4)
 		rec_type =annot_type_name[rec->type];
-	else 
+	else
 		rec_type=NULL;
 
 	if (opts.verbose_flag > 4)
@@ -383,9 +383,8 @@ struct annotations * process_annotations_stream(char* annot_in_file_name)
 	{
 	    rec = read_annot_rec(annot_in_file, annots->version);
 
-		// current version of explore annots is a bit childish
-//		if (opts.explore_flag)
-//			explore_annot(rec);
+		if (opts.explore_flag)
+			explore_annot(rec);
 		if (rec==NULL)
 		{
 			annots->read_recs_ok_flag = 0;
@@ -412,7 +411,7 @@ struct annotations * process_annotations_stream(char* annot_in_file_name)
 		}
 		else
 			annots->read_tail_ok_flag=1;
-		xfree(checkEOF);
+		free(checkEOF);
 	}
 	fclose(annot_in_file);
 	return annots;

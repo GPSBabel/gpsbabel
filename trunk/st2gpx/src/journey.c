@@ -65,10 +65,10 @@ void jour_rtept_delete(struct jour_rtept * jourpt)
 {
 	if (jourpt==NULL)
 		return;
-	xfree(jourpt->text1);
-	xfree(jourpt->text2);
+	free(jourpt->text1);
+	free(jourpt->text2);
 	// This is part of an array, so free the array
-	//xfree(jourpt);
+	//free(jourpt);
 }
 
 struct journey * journey_new()
@@ -94,14 +94,14 @@ void journey_delete(struct journey * jour)
 		return;
 	for(i=0; i< jour->count_rtepts; i++)
 		jour_rtept_delete(jour->rtept_list + i);
-	xfree(jour->rtept_list);
-	xfree(jour->avoid_os_list);
-	xfree(jour->buf);
-	xfree(jour);
+	free(jour->rtept_list);
+	free(jour->avoid_os_list);
+	free(jour->buf);
+	free(jour);
 }
 
 
-struct journey * process_journey_stream (char* jour_in_file_name, 
+struct journey * process_journey_stream (char* jour_in_file_name,
 										 struct pushpin_safelist * ppplist)
 {
 	int j;
@@ -136,7 +136,7 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 		fprintf(stderr, "Quitting because I cannot open %s\n", jour_in_file_name);
 		exit(1);
 	}
-	
+
 	bytes2read=sizeof(struct f_jour_header);
 	jour->buf=(char*)xmalloc(jour->buf_len+bytes2read);
 	status = readbytes(jour_in_file, jour->buf, bytes2read);
@@ -196,7 +196,7 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 			memcpy(jour->rtept_list[j].text1, jour->buf + jour->buf_len, bytes2read);
 			jour->rtept_list[j].text1[bytes2read]=0;
 			jour->buf_len += bytes2read;
-		
+
 			str2ascii(jour->rtept_list[j].text1);
 		}
 		if (opts.explore_flag)
@@ -274,23 +274,23 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 				lat=jour->rtept_list[j].pushpin->lat;
 				lon=jour->rtept_list[j].pushpin->lon;
 
-				printf("Matching pushpin Grid %#x=%d, Precision %#x=%d, MOBBId %#x=%d\n", 
-						jour->rtept_list[j].pushpin->Grid, 
-						jour->rtept_list[j].pushpin->Grid, 
-						jour->rtept_list[j].pushpin->Precision, 
-						jour->rtept_list[j].pushpin->Precision, 
-						jour->rtept_list[j].pushpin->MOBBId, 
+				printf("Matching pushpin Grid %#x=%d, Precision %#x=%d, MOBBId %#x=%d\n",
+						jour->rtept_list[j].pushpin->Grid,
+						jour->rtept_list[j].pushpin->Grid,
+						jour->rtept_list[j].pushpin->Precision,
+						jour->rtept_list[j].pushpin->Precision,
+						jour->rtept_list[j].pushpin->MOBBId,
 						jour->rtept_list[j].pushpin->MOBBId);
 
-				printf("Matching pushpin Lat %f Lon %f\n", 
-						jour->rtept_list[j].pushpin->lat, 
+				printf("Matching pushpin Lat %f Lon %f\n",
+						jour->rtept_list[j].pushpin->lat,
 						jour->rtept_list[j].pushpin->lon);
 
 				x = cos(lon*M_PI/180)*cos(lat*M_PI/180);
 				y = sin(lon*M_PI/180)*cos(lat*M_PI/180);
 				z = sin(lat*M_PI/180);
 
-				printf("For matching pushpin X=%f Y=%f Z=%f\n", x,y,z); 
+				printf("For matching pushpin X=%f Y=%f Z=%f\n", x,y,z);
 			}
 */
 		}
@@ -347,7 +347,7 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 		jour->buf=(char*)xrealloc(jour->buf, jour->buf_len+bytes2read);
 		status = readbytes(jour_in_file, jour->buf + jour->buf_len, bytes2read);
 		if (status!=bytes2read)
-		{			
+		{
 			printf("Unexpected EOF in the Journey stream, options eur10\n");
 		    fclose(jour_in_file);
 			return jour;

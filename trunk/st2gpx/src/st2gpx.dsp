@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /Zp1 /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /Zp1 /Za /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -75,8 +75,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 libexpat.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /pdbtype:sept
-# SUBTRACT LINK32 /profile /map /debug
+# ADD LINK32 libexpat.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
+# SUBTRACT LINK32 /profile /map
 
 !ENDIF 
 
@@ -93,9 +93,9 @@ SOURCE=.\annotations.c
 
 !IF  "$(CFG)" == "st2gpx - Win32 Release"
 
-# ADD CPP /Za
-
 !ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
+
+# SUBTRACT CPP /FA<none>
 
 !ENDIF 
 
@@ -106,9 +106,9 @@ SOURCE=.\contents.c
 
 !IF  "$(CFG)" == "st2gpx - Win32 Release"
 
-# ADD CPP /Za
-
 !ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
+
+# ADD CPP /Za
 
 !ENDIF 
 
@@ -116,15 +116,6 @@ SOURCE=.\contents.c
 # Begin Source File
 
 SOURCE=.\debug.c
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
-# ADD CPP /Za
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -134,41 +125,14 @@ SOURCE=.\getopt.c
 # Begin Source File
 
 SOURCE=.\journey.c
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
-# ADD CPP /Za
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\nannol.c
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
-# ADD CPP /Za
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\ppinutil.c
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
-# ADD CPP /Za
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -178,74 +142,27 @@ SOURCE=.\properties.c
 # Begin Source File
 
 SOURCE=.\pushpins.cpp
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
-# ADD CPP /Ze /W4 /Gi
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\readgpx.c
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
-# ADD CPP /Za
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\readmpst.c
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
-# ADD CPP /Za
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\st2gpx.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\writegpx.c
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
-# ADD CPP /Za
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\writepcx.c
-
-!IF  "$(CFG)" == "st2gpx - Win32 Release"
-
-# ADD CPP /Za
-
-!ELSEIF  "$(CFG)" == "st2gpx - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -303,6 +220,14 @@ SOURCE=.\build.txt
 # Begin Source File
 
 SOURCE=.\history.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\msado15.tlh
+# End Source File
+# Begin Source File
+
+SOURCE=.\msado15.tli
 # End Source File
 # Begin Source File
 

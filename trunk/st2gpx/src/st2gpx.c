@@ -57,23 +57,13 @@ void * xmalloc(size_t size)
 		debug_pause();
 		exit(-1);
 	}
-//#ifdef   _DEBUG
-//	obj = _malloc_dbg(size, _NORMAL_BLOCK, __FILE__, __LINE__ );
-//#else
 	obj = malloc(size);
-//#endif
 	if (!obj)
 	{
 		fprintf(stderr, "Unable to allocate %d bytes of memory.\n", size);
 		debug_pause();
 		exit(-1);
 	}
-
-#ifdef _DEBUG
-#ifdef MEMTRACE
-	printf("Malloc'd %d bytes at %lx\n", size, obj);
-#endif
-#endif
 
 	return obj;
 }
@@ -88,17 +78,7 @@ void * xrealloc(void* ptr, size_t size)
 		exit(-1);
 	}
 
-#ifdef _DEBUG
-#ifdef MEMTRACE
-	printf("reallocing from %lx\n", ptr);
-#endif
-#endif
-
-//#ifdef   _DEBUG
-//	obj = _realloc_dbg(ptr, size, _NORMAL_BLOCK, __FILE__, __LINE__ );
-//#else
 	obj = realloc(ptr, size);
-//#endif
 	if (!obj)
 	{
 		fprintf(stderr, "Unable to (re)allocate %d bytes of memory.\n", size);
@@ -106,29 +86,7 @@ void * xrealloc(void* ptr, size_t size)
 		exit(-1);
 	}
 
-#ifdef _DEBUG
-#ifdef MEMTRACE
-	printf("realloc'd %d bytes at %lx\n", size, obj);
-#endif
-#endif
-
 	return obj;
-}
-
-void xfree(void * obj)
-{
-//#ifdef   _DEBUG
-//	_free_dbg(obj, _NORMAL_BLOCK);
-//#else
-
-#ifdef _DEBUG
-#ifdef MEMTRACE
-	printf("freeing mem at %lx\n", obj);
-#endif
-#endif
-
-	free(obj);
-// #endif
 }
 
 char * str2ascii(char* str)
@@ -147,7 +105,7 @@ char * str2ascii(char* str)
 }
 
 char * strappend(char* str1, char* str2)
-// create a new string 
+// create a new string
 {
 	int len1=strlen(str1);
 	int len2=strlen(str2);
@@ -256,11 +214,9 @@ main(int argc, char** argv)
 	struct gpx_data* all_gpx=NULL;
 	struct ole_property_set * strips_properties=NULL;
 	struct ole_property * prop = NULL;
-	struct contents * conts;
+	struct contents * conts=NULL;
 
 	char* temp_str=NULL;
-
-//	int verify_eof_flag = 0;
 
 	opts.explore_flag=0;
 	opts.use_gpx_route=0;
@@ -274,11 +230,11 @@ main(int argc, char** argv)
 #ifdef MEMCHK
 	// Call _CrtCheckMemory at every allocation and deallocation request.
 	SET_CRT_DEBUG_FIELD(_CRTDBG_CHECK_ALWAYS_DF);
-	// Keep freed memory blocks in the heaps linked list, assign them the _FREE_BLOCK type, 
+	// Keep freed memory blocks in the heaps linked list, assign them the _FREE_BLOCK type,
 	// and fill them with the byte value 0xDD.
 	SET_CRT_DEBUG_FIELD(_CRTDBG_DELAY_FREE_MEM_DF);
-	// Perform automatic leak checking at program exit via a call to _CrtDumpMemoryLeaks 
-	// and generate an error report if the application failed to free all the memory 
+	// Perform automatic leak checking at program exit via a call to _CrtDumpMemoryLeaks
+	// and generate an error report if the application failed to free all the memory
 	// it allocated.
 	SET_CRT_DEBUG_FIELD(_CRTDBG_LEAK_CHECK_DF);
 #endif
@@ -488,9 +444,9 @@ main(int argc, char** argv)
 		if (all_gpx==NULL)
 			printf("Didn't read any usable data from %s ???\n",mpst_in_file_name);
 		printf("Read %d waypoints, %d routes and %d tracks from file %s\n",
-				all_gpx->wpt_list_count, all_gpx->rte_list_count, 
+				all_gpx->wpt_list_count, all_gpx->rte_list_count,
 				all_gpx->trk_list_count, mpst_in_file_name);
-		printf("Importing this data as %d lines\n", 
+		printf("Importing this data as %d lines\n",
 				all_gpx->rte_list_count + all_gpx->trk_list_count);
 	}
 
@@ -501,13 +457,13 @@ main(int argc, char** argv)
 		prop = get_propterty(strips_properties, 0x60002);
 		if ((prop!=NULL) && (prop->buf != NULL) )
 		{
-			opts.st_version_num = *(int*)(prop->buf); 
+			opts.st_version_num = *(int*)(prop->buf);
 			printf("Autoroute/S&T version in %s is %d\n", opts.source_file_name, opts.st_version_num);
 		}
 		prop = get_propterty(strips_properties, 0x10000);
 		if ((prop!=NULL) && (prop->buf != NULL) )
 		{
-			opts.MapName = (WCHAR*)(prop->buf + 4); 
+			opts.MapName = (WCHAR*)(prop->buf + 4);
 			wprintf(L"MapName is %ls\n", opts.MapName);
 			if(wcscmp(opts.MapName, L"USA")==0)
 				opts.isUSA=1;
@@ -518,6 +474,7 @@ main(int argc, char** argv)
 
 	// check the contents stream
 	//if(opts.explore_flag)
+	if(opts.source_file_name)
 	{
 		temp_str = strappend(opts.source_file_name, ".Contents\\Contents");
 		conts = read_contents(temp_str);
@@ -613,18 +570,18 @@ main(int argc, char** argv)
 	ole_property_set_delete(strips_properties);
 	contents_delete(conts);
 
-	xfree(cmdpath);
-	xfree(ppin_in_file_name);
-	xfree(jour_in_file_name);
-	xfree(annot_in_file_name);
-	xfree(gpx_in_file_name);
-	xfree(gpx_out_file_name);
-	xfree(pcx5_out_file_name);
-	xfree(import_file_name);
-	xfree(opts.source_file_name);
-	xfree(contents_dir_name);
-	xfree(mpst_in_file_name);
-	
+	free(cmdpath);
+	free(ppin_in_file_name);
+	free(jour_in_file_name);
+	free(annot_in_file_name);
+	free(gpx_in_file_name);
+	free(gpx_out_file_name);
+	free(pcx5_out_file_name);
+	free(import_file_name);
+	free(opts.source_file_name);
+	free(contents_dir_name);
+	free(mpst_in_file_name);
+
 	if (opts.verbose_flag>5)
 		printf("Done freeing all\n");
 
@@ -635,7 +592,7 @@ main(int argc, char** argv)
 	_flushall();
 
 #ifdef _DEBUG
-//	_CrtDumpMemoryLeaks();  
+//	_CrtDumpMemoryLeaks();
 #endif
 	debug_pause();
 }
