@@ -58,16 +58,30 @@ find_filter_vec(char *const vecname, char **opts)
 	char *svecname = strtok(v, ",");
 
 	while (vec->vec) {
-		if (strcmp(svecname, vec->name) == 0) {
-			char * res = strchr(vecname, ',');
-			if (res)
-				*opts = strchr(vecname, ',')+1;
-			else
-				*opts = NULL;
-			free(v);
-			return vec->vec;
+		arglist_t *ap;
+		char *res;
+
+		if (strcmp(svecname, vec->name)) {
+			vec++;
+			continue;
 		}
-		vec++;
+
+		res = strchr(vecname, ',');
+		if (res) {
+			*opts = strchr(vecname, ',')+1;
+
+			if (vec->vec->args) {
+				for (ap = vec->vec->args; ap->argstring; ap++){
+					*ap->argval = get_option(*opts, ap->argstring);
+				}
+			}
+		} else {
+			*opts = NULL;
+		}
+
+		free(v);
+		return vec->vec;
+		
 	}
 	free(v);
 	return NULL;
