@@ -27,6 +27,15 @@ static waypoint *wpt_tmp;
 FILE *fd;
 FILE *ofd;
 
+static char *noretired;
+
+static
+arglist_t nav_args[] = {
+	{"noretired", &noretired, "Suppress retired geocaches.",
+		ARGTYPE_BOOL },
+	{0, 0, 0, 0}
+};
+
 #define MYNAME "navicache"
 #define MY_CBUF 4096
 
@@ -133,7 +142,40 @@ nav_start(void *data, const char *el, const char **attr)
 				wpt_tmp->gc_data.terr = x * 10;
 			} else
 			if (0 == strcmp(ap[0], "cache_type")) {
+				static char buf[512];
+
 	                        wpt_tmp->gc_data.type = nc_mktype(ap[1]);
+				if (!strcmp(ap[1], "normal"))
+				    wpt_tmp->icon_descr = "Geocache-regular";
+				else if (!strcmp(ap[1], "multi-part"))
+				    wpt_tmp->icon_descr = "Geocache-multi";
+				else if (!strcmp(ap[1], "moving_travelling"))
+				    wpt_tmp->icon_descr = "Geocache-moving";
+				else {
+				    sprintf(buf, "Geocache-%-.20s", ap[1]);
+				    wpt_tmp->icon_descr = xstrdup(buf);
+				}
+			} else
+			if (0 == strcmp(ap[0], "hidden_date")) {
+			    struct tm tm;
+
+			    sscanf(ap[1], "%d-%d-%d", 
+				&tm.tm_year,
+				&tm.tm_mon,
+				&tm.tm_mday);
+			    tm.tm_mon -= 1;
+			    tm.tm_year -= 1900;
+			    tm.tm_isdst = 0;
+			    tm.tm_hour = 0;
+			    tm.tm_min = 0;
+			    tm.tm_sec = 0;
+			    wpt_tmp->creation_time = mktime(&tm);
+			} else
+			if (0 == strcmp(ap[0], "retired")) {
+				if (!strcmp(ap[1], "yes") && noretired) {
+				    xfree(wpt_tmp);
+				    return;
+				}
 			} else
 			if (0 == strcmp(ap[0], "cache_size")) {
 	                        wpt_tmp->gc_data.container = nc_mkcont(ap[1]);
@@ -212,5 +254,5 @@ ff_vecs_t navicache_vecs = {
 	nav_wr_deinit,
 	nav_read,
 	nav_write,
-	NULL
+	nav_args,
 };
