@@ -1,3 +1,4 @@
+#if !defined(NO_USB)
 /*
     Windows layer of Garmin/USB protocol.
 
@@ -292,3 +293,4 @@ char ocmd2[] = {0x14, 00, 00, 00, 0xfe, 00, 00, 00, 00, 00, 00, 00};
 	usb_intr_get();
 }
 #endif
+#endif /* !defined(NO_USB) */
