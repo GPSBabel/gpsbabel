@@ -355,8 +355,20 @@ The fields used by the XCSV parser are as follows:
 
    example: GEOCACHE_TYPE,"","%s"
 
+ o PATH_DISTANCE_MILES
+   PATH_DISTANCE_MILES outputs the total length of the route or track from
+   the start point to the current point, in miles.  This and the altitude
+   could be used to create an elevation profile.  PATH_DISTANCE_MILES is
+   a DOUBLE PRECISION FLOAT.
+   PATH_DISTANCE_MILES is not valid as an input field.
+   PATH_DISTANCE_MILES is only meaningful if the data comes from a track
+   or a route; waypoint data will generate essentially meaningless output.
 
+   example: PATH_DISTANCE_MILES,"","%f"
 
+ o PATH_DISTANCE_KM
+   PATH_DISTANCE_KM is like PATH_DISTANCE_MILES except it outputs the 
+   length in kilometers.  
 
 EXAMPLES:
 --------

@@ -533,4 +533,12 @@ rm -f ${TMPDIR}/humanwrite.out
 ${PNAME} -i xcsv,style=reference/humanread.style -f reference/human.in -o xcsv,style=reference/humanwrite.style -F ${TMPDIR}/humanwrite.out
 compare ${TMPDIR}/humanwrite.out reference/humanwrite.out
 
+#
+# XCSV "path distance" test
+#
+rm -f ${TMPDIR}/pathdist.out
+${PNAME} -i magellan -f reference/dusky.trk -o xcsv,style=reference/gnuplot.style -F ${TMPDIR}/pathdist.out
+compare ${TMPDIR}/pathdist.out reference/dusky.gnuplot
+
+
 exit 0
