@@ -20,6 +20,7 @@
  */
 
 #include "defs.h"
+#if CETUS
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
 
@@ -279,3 +280,7 @@ ff_vecs_t cetus_vecs = {
 	data_read,
 	data_write,
 };
+#else
+ff_vecs_t cetus_vecs = {
+};
+#endif
