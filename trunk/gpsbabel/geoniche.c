@@ -509,7 +509,7 @@ data_write(void)
     PdbOut->name[PDB_DBNAMELEN-1] = 0;
 
     PdbOut->attributes = PDB_ATTR_BACKUP;
-    PdbOut->ctime = PdbOut->mtime = time(NULL) + (49*365 + 17*366) * (60*60*24);
+    PdbOut->ctime = PdbOut->mtime = current_time() + (49*365 + 17*366) * (60*60*24);
     PdbOut->type = MYTYPE;
     PdbOut->creator = MYCREATOR; 
     PdbOut->version = 0;

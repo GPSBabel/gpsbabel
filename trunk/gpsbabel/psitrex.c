@@ -483,7 +483,7 @@ psit_routehdr_w(FILE *psit_file, const route_head *rte)
 		}		
 
 		if (uniqueValue == 0) {
-			uniqueValue = time(NULL);
+			uniqueValue = current_time();
 		}
 
 		/* route name */
@@ -638,7 +638,7 @@ psit_trackhdr_w(FILE *psit_file, const route_head *trk)
 			}
 
 			if (uniqueValue == 0) {
-				uniqueValue = time(NULL);
+				uniqueValue = current_time();
 			}
 
 			/* track name */

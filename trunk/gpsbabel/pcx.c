@@ -146,7 +146,7 @@ gpsutil_disp(const waypoint *wpt)
 	lat = degrees2ddmm(wpt->latitude);
 
 	if (tm == 0) 
-		tm = time(NULL);
+		tm = current_time();
 	strftime(tbuf, sizeof(tbuf), "%d-%b-%y %I:%M:%S", localtime(&tm));
 	while (*tp) {
 		*tp = toupper(*tp);

@@ -251,7 +251,7 @@ mps_wr_init(const char *fname)
 		}
 		else {
 			fclose(mps_file_out);
-			srand((unsigned) time(NULL));
+			srand((unsigned) current_time());
 
 			for (;;) {
 				/* create a temporary name  based on a random char and the existing name */
@@ -1143,7 +1143,7 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 		}		
 
 		if (uniqueValue == 0) {
-			uniqueValue = time(NULL);
+			uniqueValue = current_time();
 		}
 
 		/* route name */
@@ -1562,7 +1562,7 @@ mps_trackhdr_w(FILE *mps_file, int mps_ver, const route_head *trk)
 		}
 
 		if (uniqueValue == 0) {
-			uniqueValue = time(NULL);
+			uniqueValue = current_time();
 		}
 
 		/* track name */

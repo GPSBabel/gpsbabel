@@ -318,7 +318,7 @@ data_write(void)
 	strncpy(opdb->name, "GeocachingDB", PDB_DBNAMELEN);
 	opdb->name[PDB_DBNAMELEN-1] = 0;
 	opdb->attributes = PDB_ATTR_BACKUP;
-	opdb->ctime = opdb->mtime = time(NULL) + 2082844800U;
+	opdb->ctime = opdb->mtime = current_time() + 2082844800U;
 	opdb->type = MYTYPE;  /* CWpt */
 	opdb->creator = MYCREATOR; /* cGPS */
 	opdb->version = 1;

@@ -200,7 +200,7 @@ my_writewpt(const waypoint *wpt)
 		tm = gmtime( &wpt->creation_time);
 	}
 	if ( !tm ) {
-		time( &tm_t );
+		tm_t = current_time();
 		tm = gmtime( &tm_t );
 	}
 	
@@ -296,7 +296,7 @@ data_write(void)
 	strncpy(opdb->name, "Companion Waypoints", PDB_DBNAMELEN);
 	opdb->name[PDB_DBNAMELEN-1] = 0;
 	opdb->attributes = PDB_ATTR_BACKUP;
-	opdb->ctime = opdb->mtime = time(NULL) + 2082844800U;
+	opdb->ctime = opdb->mtime = current_time() + 2082844800U;
 	opdb->type = MYTYPE;  /* CWpt */
 	opdb->creator = MYCREATOR; /* cGPS */
 	opdb->version = 1;
