@@ -476,6 +476,22 @@ THE FORMATS
         check any circle and in the second to last column, change URL to
         none and then click next. Use the same name you used the first
         time but add -Flag to it.
+
+    nmea
+
+	This format is the file representation of the NMEA0183 log and
+	waypoint format.   Representative programs include:
+
+	http://www.genimap.fi/kuluttajatuotteet/alue2.asp?folder=38&subfolder=16662&2057
+
+	http://homepages.tig.com.au/~robk/datalogger.html
+	http://www.gpstm.com/eng/features_eng.htm
+	http://www.gpsmaster.nl/
+	http://www.silcom.com/~rwhately/index.html
+	http://www.visualgps.net/VisualGPSce/default.htm
+	http://www.gpsu.co.uk/
+	http://www.kolumbus.fi/eino.uikkanen/geoconvgb/index.htm
+
 	
 DATA FILTERS
 
