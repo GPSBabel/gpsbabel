@@ -108,7 +108,8 @@ typedef enum {
 	gc_other,
 	gc_regular,
 	gc_large,
-	gc_virtual
+	gc_virtual,
+	gc_small
 } geocache_container;
 
 typedef struct {

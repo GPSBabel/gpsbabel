@@ -485,6 +485,7 @@ gs_container_mapping{
 	{ gc_micro, "Micro" },
 	{ gc_regular, "Regular" },
 	{ gc_large, "Large" },
+	{ gc_small, "Small" },
 	{ gc_virtual, "Virtual" }
 };
 
