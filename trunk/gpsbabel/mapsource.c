@@ -86,7 +86,7 @@ mps_find_desc_from_icon_number(const int icon)
 	return "Waypoint";
 }
 
-const int
+int
 mps_find_icon_number_from_desc(const char *desc)
 {
 	icon_mapping_t *i;

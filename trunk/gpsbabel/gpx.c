@@ -387,7 +387,7 @@ gs_mkcont(char *t)
 			return gs_container_map[i].type;
 		}
 	}
-	return gt_unknown;
+	return gc_unknown;
 }
 
 static void
