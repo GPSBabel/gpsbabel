@@ -29,7 +29,7 @@ xmalloc(size_t size)
 	void *obj = malloc(size);
 
 	if (!obj) {
-		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n");
+		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n", size);
 	}
 
 	return obj;
@@ -41,7 +41,7 @@ xcalloc(size_t nmemb, size_t size)
 	void *obj = calloc(nmemb, size);
 
 	if (!obj) {
-		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n");
+		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n", size);
 	}
 
 	return obj;
@@ -53,7 +53,7 @@ xstrdup(const char *s)
 	char *o = strdup(s);
 
 	if (!o) {
-		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n");
+		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n", strlen(s));
 	}
 
 	return o;

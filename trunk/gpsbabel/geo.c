@@ -145,12 +145,12 @@ geo_rd_init(const char *fname)
 {
 	fd = fopen(fname, "r");
 	if (fd == NULL) {
-		fatal(MYNAME ":Can not open %s for reading\n");
+		fatal(MYNAME ":Cannot open %s for reading\n", fname);
 	}
 
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {
-		fatal(MYNAME ":Can not create XML parser\n");
+		fatal(MYNAME ":Cannot create XML parser\n");
 	}
 
 	XML_SetElementHandler(psr, geo_start, geo_end);
@@ -169,7 +169,7 @@ geo_wr_init(const char *fname)
 {
 	ofd = fopen(fname, "w");
 	if (ofd == NULL) {
-		fatal(MYNAME ":Can not open %s for writing\n");
+		fatal(MYNAME ":Cannot open '%s' for writing\n", fname);
 	}
 }
 
