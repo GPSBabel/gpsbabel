@@ -473,6 +473,13 @@ THE FORMATS
 
 	http://www.navicache.com/cgi-bin/ib312a/ikonboard.cgi?act=ST;f=23;t=334
 
+    coastexp
+
+	This is the XML format used by CoastalExplorer (tm). For the moment
+	this is only available as an input format.
+
+	http://www.rosepointnav.com
+
     PsiTrex
 	
 	This is a text format created by KuDaTa's PsiTrex program for the Psion
