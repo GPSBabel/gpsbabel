@@ -183,9 +183,11 @@ my_read(void)
 	 * routing begins here 
 	 */
 	count = ReadLong(infile);
-	while (count) {
+	if ( count ) {
 		track_head = route_head_alloc();
 		route_add_head(track_head);
+	}
+	while (count) {
 		ReadShort(infile);
 		recsize = ReadLong(infile);
 		record = ReadRecord(infile, recsize);
