@@ -227,6 +227,7 @@ typedef struct filter_vecs {
 	filter_init f_init;
 	filter_process f_process;
 	filter_deinit f_deinit;
+	arglist_t *args;
 } filter_vecs_t;
 
 void waypt_init(void);

@@ -193,8 +193,6 @@ duplicate_process(void)
 void
 duplicate_init(const char *args) 
 {
-	const char *p;
-
 	duplicate_shortname = snopt != NULL;
 	duplicate_location = lcopt != NULL;
 }
@@ -207,5 +205,6 @@ duplicate_deinit(void)
 filter_vecs_t duplicate_vecs = {
 	duplicate_init,
 	duplicate_process,
-	duplicate_deinit
+	duplicate_deinit,
+	dup_args
 };
