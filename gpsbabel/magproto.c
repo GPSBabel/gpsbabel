@@ -318,7 +318,7 @@ if (debug_serial)
 		mag_error = 1;
 		return;
 	}
-	if (IS_TKN("$PMGNCMD,END") || is_file && feof(magfile_in)) {
+	if (IS_TKN("$PMGNCMD,END") || (is_file && (feof(magfile_in)))) {
 		found_done = 1;
 		return;
 	} 

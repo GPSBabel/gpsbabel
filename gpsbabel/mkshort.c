@@ -1,4 +1,6 @@
 #include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
 
 static const char vowels[] = "aeiouAEIOU";
 
@@ -18,8 +20,7 @@ static
 char *
 delete_last_vowel(int start, char *istring, int *replaced)
 {
-	int i,l;
-	char *ostring;
+	int l;
 	
 	/*
 	 * Basically impelement strrchr.
@@ -82,7 +83,7 @@ mkshort(char *istring)
 	char *tstring;
 	char *cp;
 	char *np;
-	int i,j,l, nlen, replaced;
+	int i, l, nlen, replaced;
 
 
 	if (!ostring) {

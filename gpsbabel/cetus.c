@@ -122,7 +122,6 @@ data_read(void)
 		wpt_tmp->position.latitude.degrees = pdb_read4(&rec->latitude) / 10000000.0; 
 		if (rec->year != 0xff) {
 			struct tm tm = {0};
-			time_t tval;
 		
 			tm.tm_min = rec->min;
 			tm.tm_hour = rec->hour;

@@ -38,7 +38,6 @@ test_endianness(void)
                 long l;
                 unsigned char uc[sizeof (long)];
         } u;
-        unsigned int i;
 
         u.l = 1;
         i_am_little_endian = u.uc[0];

@@ -191,7 +191,6 @@ abort();
 	opdb->version = 0;
 }
 
-
 ff_vecs_t gpspilot_vecs = {
 	rd_init,
 	wr_init,
