@@ -1,9 +1,10 @@
--- MacGPSBabel.applescript
--- MacGPSBabel
+-- MacGPSBabel: MacGPSBabel.applescript
 
---  Created by Jeremy Atherton on Sun Sep 28 2003.
---  Last modified Saturday, January 31, 2004.
---  Copyright (c) 2003, 2004 Jeremy Atherton.
+--  File created by Jeremy Atherton on Sunday, September 28, 2003.
+--  Last modified by Jeremy Atherton on Monday, February 16, 2004.
+
+--  MacGPSBabel is part of the gpsbabel project and is Copyright (c) 2004 Robert Lipe.
+-- see http://gpsbabel.sourceforge.net/ for more details
 
 -- PROPERTIES AND GLOBALS --
 property fileList : {}
@@ -11,6 +12,8 @@ global theFiles, typeList, extList, aFile
 
 -- EVENT HANDLERS --
 
+-- Start up scripts
+-- get supported file types from gpsbabel and use these to populate the file types popup lists
 on awake from nib theObject
 	if theObject is window "MacGPSBabel" then
 		tell window "MacGPSBabel"
@@ -22,7 +25,7 @@ on awake from nib theObject
 		end tell
 	end if
 end awake from nib
-
+-- set the progress indicator style
 on will open theObject
 	if theObject is window "MacGPSBabel" then
 		set p to progress indicator 1 of theObject
@@ -31,6 +34,7 @@ on will open theObject
 	end if
 end will open
 
+-- handler for the File>Open menu item
 on choose menu item theObject
 	if name of theObject is "open" then
 		if visible of window "MacGPSBabel" is true then
@@ -213,6 +217,7 @@ on clicked theObject
 	end if
 end clicked
 
+
 -- MY HANDLERS --
 
 
@@ -236,7 +241,6 @@ on addFile()
 	set contents of text field "inputFile" of window "MacGPSBabel" to aFile
 	set the contents of popup button "inPop" of window "MacGPSBabel" to 0
 end addFile
-------------------------------------------------------------------------
 
 -- SCRIPTS FOR CONTROLLING THE CONVERSION
 -- work out which kind of conversion to do
@@ -561,6 +565,7 @@ on GPSswitchOUT()
 	end if
 end GPSswitchOUT
 
+-- start/stop the Main window's progress indicator
 on feedbackBusy(yn)
 	tell window "MacGPSBabel"
 		if yn then
