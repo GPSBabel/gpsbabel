@@ -583,5 +583,15 @@ compare ${TMPDIR}/hsandv.exp reference
 ${PNAME} -i hsandv -f reference/Glad_4.exp -o hsandv -F ${TMPDIR}/Glad_5.exp
 compare ${TMPDIR}/Glad_5.exp reference
 
+#
+# stack filter tests
+# These don't actually test for proper behavior, for now, but they do 
+# exercise all of the currently-extant filter code except for the "clean
+# up leftover stacks" code that would output a warning.  Of course, that 
+# code is the most likely to generate memory leaks, so maybe we need a 
+# 'nowarn' option to the stack filter so we can test it...
+#
+
+${PNAME} -i geo -f geocaching.loc -x stack,push,copy -x stack,push,copy -x stack,push -x stack,pop,replace -x stack,pop,append -x stack,push,copy -x stack,pop,discard -x stack,swap,depth=1 -x stack,pop -o arc -F ${TMPDIR}/stackfilt.txt
 
 exit 0
