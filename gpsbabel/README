@@ -164,8 +164,17 @@ THE FORMATS
 	  mpsverout -	set the data format version of the output file
 			(3,4 or 5)
 	  mpsmergeout -	if the output file already exists, then the output
-					is merged with it. This allows MapSource sections
-					not being handled to remain intact (e.g. map sets)
+			is merged with it. This allows MapSource sections
+			not being handled to remain intact (e.g. map sets)
+
+    PsiTrex
+
+        This is a text format created by KuDaTa's PsiTrex program for
+        the Psion PDAs. The format can't be readily handled by XCSV, so
+        this format is handled explicitly.  Waypoints, routes and tracks
+        are all handled, with icon names used corresponding to verison
+        1.13 of PsiTrex. This module was contributed to GPSBabel by Mark
+        Bradley.
 
     PCX
 
