@@ -684,11 +684,20 @@ termwrite(char *obuf, int size)
 }
 #endif
 
+/*
+ *  Arg tables are doubled up so that -? can output appropriate help
+ */
 static
-arglist_t mag_args[] = {
+arglist_t mag_sargs[] = {
 	{"baud", &bs, "Numeric value of bitrate (baud=4800)", ARGTYPE_INT },
 	{"noack", &noack, "Suppress use of handshaking in name of speed",
 		ARGTYPE_BOOL},
+	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING },
+	{0, 0, 0, 0}
+};
+
+static
+arglist_t mag_fargs[] = {
 	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING },
 	{0, 0, 0, 0}
 };
@@ -1354,7 +1363,7 @@ ff_vecs_t mag_svecs = {
 	mag_deinit,	
 	mag_read,
 	mag_write,
-	mag_args
+	mag_sargs
 };
 
 ff_vecs_t mag_fvecs = {
@@ -1365,5 +1374,5 @@ ff_vecs_t mag_fvecs = {
 	mag_deinit,	
 	mag_read,
 	mag_write,
-	mag_args
+	mag_fargs
 };
