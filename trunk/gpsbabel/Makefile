@@ -32,7 +32,8 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 
 COLDSYNC=coldsync/util.o coldsync/pdb.o
 
-LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o csv_util.o \
+LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
+          csv_util.o grtcirc.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(FMTS) $(FILTERS)
 OBJS = main.o $(LIBOBJS)
 
@@ -85,7 +86,7 @@ release:
 
 # Machine generated from here down.   
 
-arcdist.o: arcdist.c defs.h queue.h
+arcdist.o: arcdist.c defs.h queue.h grtcirc.h
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 copilot.o: copilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 csv_util.o: csv_util.c defs.h queue.h csv_util.h
@@ -104,6 +105,7 @@ gpilots.o: gpilots.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 gpspilot.o: gpspilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 gpsutil.o: gpsutil.c defs.h queue.h magellan.h
 gpx.o: gpx.c defs.h queue.h
+grtcirc.o: grtcirc.c defs.h queue.h
 holux.o: holux.c defs.h queue.h holux.h
 internal_styles.o: internal_styles.c defs.h queue.h
 magnav.o: magnav.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
@@ -115,7 +117,7 @@ mkshort.o: mkshort.c defs.h queue.h
 navicache.o: navicache.c defs.h queue.h
 pcx.o: pcx.c defs.h queue.h garmin_tables.h
 polygon.o: polygon.c defs.h queue.h
-position.o: position.c defs.h queue.h
+position.o: position.c defs.h queue.h grtcirc.h
 psitrex.o: psitrex.c defs.h queue.h garmin_tables.h
 psp.o: psp.c defs.h queue.h
 queue.o: queue.c queue.h
