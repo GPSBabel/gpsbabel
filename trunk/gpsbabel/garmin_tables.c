@@ -48,6 +48,7 @@ icon_mapping_t garmin_icon_table[] = {
 	{    71,  8200, "City (Large)" },
 	{    70,  8199, "City (Medium)" },
 	{    69,  8198, "City (Small)" },
+	{    69,  8198, "Small City" },
 	{    97,  8237, "Civil" },
 	{   119,  8262, "Contact, Afro" },
 	{   120,  8272, "Contact, Alien" },
