@@ -1264,7 +1264,7 @@ gpx_write(void)
 
 	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
 	fprintf(ofd, "<gpx\n version=\"1.0\"\n");
-	fprintf(ofd, "creator=\"GPSBabel - http://gpsbabel.sourceforge.net\"\n");
+	fprintf(ofd, "creator=\"GPSBabel - http://www.gpsbabel.org\"\n");
 	fprintf(ofd, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/1/0\"\n");
 	fprintf(ofd, "xsi:schemaLocation=\"%s\">\n", xsi_schema_loc ? xsi_schema_loc : DEFAULT_XSI_SCHEMA_LOC);
