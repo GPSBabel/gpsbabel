@@ -372,6 +372,10 @@ gpx_track_disp(const waypoint *waypointp)
 	if (waypointp->creation_time) {
 		gpx_write_time(waypointp->creation_time);
 	}
+	if (waypointp->position.altitude.altitude_meters != unknown_alt) {
+		fprintf(ofd, "<ele>\n%f\n</ele>\n",
+			 waypointp->position.altitude.altitude_meters);
+	}
 	fprintf(ofd, "</trkpt>\n");
 }
 
