@@ -107,54 +107,6 @@ struct record
 };
 
 
-#if 0
-struct record {
-
-	char type;	
-	
-	char   readonly;
-	
-	pdb_32 latitude; /* Big endian, degrees*1e7, s=negative */
-	pdb_32 longitude; /* same as lat; w=negative */
-	pdb_32 elevation; /* Big endian, meters*100. blank=-1e8 */
-
-	pdb_16        year; /* sample time, UTC */
-	unsigned char mon;
-	unsigned char day;
-	unsigned char hour;
-	unsigned char min;
-	unsigned char sec;
-	
-	/* accuracy and precision information for use where applicable */
-	char  sat; /* ff if averaged or unknown */
-	pdb_16 pdop; /* pdop * 100 */
-	pdb_16 hdop;
-	pdb_16 vdop;
-	pdb_16 dgpstime;
-	pdb_32 dgpsstn;
-	pdb_32 avgtime;
-	pdb_32 avgite;
-
-	pdb_16 dopmask;
-	pdb_16 elevmask;
-	
-	pdb_16 radius;
-	pdb_32 distance;
-	
-	pdb_16 vyear; /* date visited */
-	unsigned char vmon;
-	unsigned char vday;
-	unsigned char vhour;
-	unsigned char vmin;
-	unsigned char vsec;
-	
-	char   flagged;
-	
-	pdb_32 icon;
-	pdb_16 category;
-};
-#endif
-
 static FILE *file_in;
 static FILE *file_out;
 static const char *out_fname;
@@ -286,40 +238,6 @@ data_read(void)
 			default:
 				fatal(MYNAME ": input record type %d not supported.\n", rec->header.type); 
 		}
-#if 0
-		if ( be_read32(&rec->elevation) == -100000000 ) {
-			wpt_tmp->position.altitude.altitude_meters = unknown_alt;
-		}
-		else {
-			wpt_tmp->position.altitude.altitude_meters = be_read32(&rec->elevation) / 100.0;
-		}
-			
-		wpt_tmp->position.longitude.degrees = be_read32(&rec->longitude) / 10000000.0; 
-		wpt_tmp->position.latitude.degrees = be_read32(&rec->latitude) / 10000000.0;
-			
-		if (be_read16(&rec->year) != 0xff) {
-			struct tm tm = {0};
-		
-			tm.tm_min = rec->min;
-			tm.tm_hour = rec->hour;
-			tm.tm_mday = rec->day;
-			tm.tm_mon = rec->mon - 1;
-			tm.tm_year = be_read16(&rec->year) - 1900;
-
-			wpt_tmp->creation_time = mktime(&tm); 
-			
-		}
-
-		vdata = (char *) pdb_rec->data + sizeof(*rec);
-		
-		wpt_tmp->shortname = xstrdup(vdata);
-		vdata = vdata + strlen(vdata) + 1;
-		
-		wpt_tmp->description = xstrdup(vdata);
-		vdata = vdata + strlen(vdata) + 1;
-		
-		wpt_tmp->notes = xstrdup(vdata);
-#endif
 
 	} 
 	free_pdb(pdb);
