@@ -58,6 +58,7 @@ extern ff_vecs_t psit_vecs;             /* MRCB */
 extern ff_vecs_t geoniche_vecs;
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t ozi_vecs;
+extern ff_vecs_t nmea_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -228,6 +229,12 @@ vecs_t vec_list[] = {
 		&ozi_vecs,
 		"ozi",
 		"OziExplorer",
+		NULL
+	},
+	{
+		&nmea_vecs,
+		"nmea",
+		"NMEA 0183 sentences",
 		NULL
 	},
 	{

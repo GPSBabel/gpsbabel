@@ -1183,7 +1183,7 @@ gpx_write(void)
 
 	gpx_write_time( now, "time" );
 	waypt_compute_bounds(&bounds);
-	if (bounds.max_lat  < 360) {
+	if (bounds.max_lat  > -360) {
 		fprintf(ofd, "<bounds minlat=\"%f\" minlon =\"%f\" "
 			       "maxlat=\"%f\" maxlon=\"%f\" />\n",
 			       bounds.min_lat, bounds.min_lon, 
