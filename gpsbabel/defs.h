@@ -149,17 +149,24 @@ typedef void (*ff_deinit) (void);
 typedef void (*ff_read) (void);
 typedef void (*ff_write) (void);
 
+void fprintdms(FILE *, const coord *, int);
+
 typedef void (*waypt_cb) (const waypoint *);
 void waypt_add (waypoint *);
 void waypt_del (waypoint *);
-void route_add (waypoint *);
 void waypt_disp_all(waypt_cb);
 unsigned int waypt_count(void);
-void fprintdms(FILE *, const coord *, int);
+
+route_head *route_head_alloc(void);
+void route_add (waypoint *);
+void route_add_wpt(route_head *rte, waypoint *wpt);
+void route_add_head(route_head *rte);
+
 char *mkshort (const char *);
 void setshort_length(int n);
 void setshort_badchars(const char *);
 void setshort_mustupper(int n);
+void setshort_whitespace_ok(int n);
 
 typedef struct ff_vecs {
 	ff_init rd_init;
@@ -173,7 +180,11 @@ typedef struct ff_vecs {
 void waypt_init(void);
 void route_init(void);
 void waypt_disp(const waypoint *);
-void fatal(const char *, ...);
+void fatal(const char *, ...)
+#if __GNUC__
+	__attribute__ ((__format__ (__printf__, 1, 2)));
+#endif
+	;
 ff_vecs_t *find_vec(char *);
 void disp_vecs(void);
 void printposn(const coord *c, int is_lat);

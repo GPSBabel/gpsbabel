@@ -426,7 +426,7 @@ terminit(const char *portname)
 			FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,GetLastError(),0,
 			(LPTSTR) &buf,0,NULL);
-		fatal(MYNAME ": '%s' cannot be opened. %s", portname, buf);
+		fatal(MYNAME ": '%s' cannot be opened. %s\n", portname, buf);
 	}
 	tio.DCBlength = sizeof(DCB);
 	GetCommState (comport, &tio);
@@ -450,7 +450,7 @@ terminit(const char *portname)
 
 	if (!SetCommState (comport, &tio)) {
 		CloseHandle(comport);
-   		fatal(MYNAME ": set port settings");
+   		fatal(MYNAME ": set port settings\n");
 	}
 
 	GetCommTimeouts (comport, &timeout);
@@ -459,7 +459,7 @@ terminit(const char *portname)
 	timeout.WriteTotalTimeoutConstant = 1000;
 	if (!SetCommTimeouts (comport, &timeout)) {
 		CloseHandle (comport);
-		fatal(MYNAME ": set timeouts");
+		fatal(MYNAME ": set timeouts\n");
 	}
 }
 
@@ -495,7 +495,7 @@ termwrite(char *obuf, int size)
 	}
 	WriteFile (comport, obuf, size, &len, NULL);
 	if (len != size) {
-		fatal(MYNAME ":.  Wrote %d of %d bytes.", len, size);
+		fatal(MYNAME ":.  Wrote %d of %d bytes.\n", len, size);
 	}
 }
 
@@ -932,6 +932,8 @@ mag_waypt_pr(const waypoint *waypointp)
 	switch (waypointp->gc_data.type) {
 		case gt_virtual:
 			icon_token = mag_find_token_from_descr("Virtual cache");
+			break;
+		default:
 			break;
 
 	}
