@@ -1,5 +1,0 @@
-export PNAME="wine -- mingw/gpsbabel"
-
-cd ..
-exec ./testo
-
