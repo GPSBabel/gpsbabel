@@ -6,7 +6,7 @@
  *	You may distribute this file under the terms of the Artistic
  *	License, as specified in the README file.
  *
- * $Id: pdb.c,v 1.3 2004-01-08 03:15:00 robertl Exp $
+ * $Id: pdb.c,v 1.4 2004-01-18 01:24:41 robertl Exp $
  */
 /* XXX - The way zero-length records are handled is a bit of a kludge. They
  * shouldn't normally exist, with the exception of expunged records. But,
@@ -666,6 +666,7 @@ pdb_Write(const struct pdb *db,
 	return 0;		/* Success */
 }
 
+#if 0
 /* pdb_FindRecordByID
  * Find the record in 'db' whose ID is 'id'. Return a pointer to it. If no
  * such record exists, or in case of error, returns NULL.
@@ -777,6 +778,7 @@ pdb_DeleteRecordByID(
 	/* Couldn't find it. Oh, well. Call it a success anyway. */
 	return 0;
 }
+#endif
 
 /* pdb_AppendRecord
  * Append a new record to 'db's record list. 'newrec' is not copied, so it
@@ -853,6 +855,8 @@ pdb_AppendResource(struct pdb *db,
 	return 0;			/* Success */
 }
 
+#if 0
+
 /* pdb_InsertRecord
  * Insert 'newrec' into 'db', just after 'prev'. If 'prev' is NULL,
  * 'newrec' is inserted at the beginning of the list.
@@ -924,6 +928,7 @@ pdb_InsertResource(struct pdb *db,	/* The database to insert into */
 
 	return 0;			/* Success */
 }
+#endif
 
 /* new_Record
  * Create a new record from the given arguments, and return a pointer to
