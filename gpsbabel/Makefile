@@ -3,7 +3,7 @@
 # type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
 # INHIBIT_EXPAT and coment out LIBEXPAT on just to get a build working quickly.
 # INHIBIT_EXPAT=-DNO_EXPAT
-LIBEXPAT=-lexpat # -lefence
+LIBEXPAT=-lexpat #-lefence
 
 #
 # Enable either or both of these as you wish.
@@ -78,8 +78,8 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > $@ || (rm -f $@ ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_2_1_beta01312004
-VERSIOND=1.2.1_beta01312004
+VERSIONU=1_2_2_beta02152004
+VERSIOND=1.2.2_beta02152004
 #VERSIONU=1_2_1
 #VERSIOND=1.2.1
 
