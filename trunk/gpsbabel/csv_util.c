@@ -847,7 +847,7 @@ xcsv_waypt_pr(const waypoint *wpt)
     oldlon = wpt->longitude;
     oldlat = wpt->latitude;
 
-    if (strcmp(xcsv_file.field_delimiter, "\\w") == 0)
+    if (xcsv_file.field_delimiter && strcmp(xcsv_file.field_delimiter, "\\w") == 0)
         write_delimiter = " ";
     else
         write_delimiter = xcsv_file.field_delimiter;
@@ -903,7 +903,12 @@ xcsv_waypt_pr(const waypoint *wpt)
             sprintf(buff, fmp->printfc, waypt_out_count + atoi(fmp->val));
         } else
         if (strcmp(fmp->key, "CONSTANT") == 0) {
-            sprintf(buff, fmp->printfc, fmp->val);
+	    const char *cp = xcsv_get_char_from_constant_table(fmp->val);
+	    if (cp) {
+                sprintf(buff, fmp->printfc, cp);
+	    } else {
+		sprintf(buff, fmp->printfc, fmp->val);
+	    }
         } else
         if (strcmp(fmp->key, "SHORTNAME") == 0) {
             sprintf(buff, fmp->printfc, 
