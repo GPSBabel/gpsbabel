@@ -53,6 +53,7 @@ extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t quovadis_vecs;
 extern ff_vecs_t gpilots_vecs;
 extern ff_vecs_t saroute_vecs;
+extern ff_vecs_t navicache_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -192,8 +193,14 @@ vecs_t vec_list[] = {
 	{
 		&saroute_vecs,
 		"saroute",
-		"Delorme Street Atlast Route",
+		"Delorme Street Atlas Route",
 		".anr"
+	},
+	{
+		&navicache_vecs,
+		"navicache",
+		"Navicache.com XML",
+		NULL
 	},
 	{
 		NULL,

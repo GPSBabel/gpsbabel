@@ -329,6 +329,12 @@ compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
 #${PNAME} -i easygps -f reference/gpilots.pdb -o gpx -F ${TMPDIR}/gp.gpx
 
 #
+# Navicache.
+${PNAME} -i navicache -f reference/navicache.xml -o gpsutil -F ${TMPDIR}/navi.wpt
+compare ${TMPDIR}/navi.wpt reference/navicache.ref
+#
+
+#
 # Arc Distance filter
 #
 rm -f ${TMPDIR}/arcdist.txt
