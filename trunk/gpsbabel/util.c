@@ -121,7 +121,7 @@ XSTRDUP(const char *s, DEBUG_PARAMS )
 xstrdup(const char *s)
 #endif
 {
-	char *o = strdup(s);
+	char *o = s ? strdup(s) : strdup("");
 #ifdef DEBUG_MEM
 	debug_mem_output( "strdup, %x, %x, %s, %d\n", 
 			o, s, file, line );
