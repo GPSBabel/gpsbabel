@@ -607,7 +607,8 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	/* might need to change this to handle version dependent icon handling */
 	icon = mps_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
 
-	if (get_cache_icon(wpt) && wpt->icon_descr && (strcmp(wpt->icon_descr, "Geocache Found") != 0)) {
+		fprintf(stderr, "%s ", wpt->icon_descr);
+	if (get_cache_icon(wpt) /* && wpt->icon_descr && (strcmp(wpt->icon_descr, "Geocache Found") != 0)*/) {
 		icon = mps_find_icon_number_from_desc(get_cache_icon(wpt), MAPSOURCE);
 	}
 
@@ -1223,9 +1224,12 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 			fwrite(zbuf, 9, 1, mps_file);
 		}
 		else {
+			unsigned char cbuf[8];
 			hdr[0] = 1;
+			le_read64(cbuf, &minalt);
+
 			fwrite(hdr, 1 , 1, mps_file);
-			fwrite(&minalt, 8 , 1, mps_file);
+			fwrite(cbuf, 8 , 1, mps_file);
 		}
 
 		le_write32(&rte_datapoints, rte_datapoints);
