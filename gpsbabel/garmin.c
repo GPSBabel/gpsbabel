@@ -323,20 +323,15 @@ data_read(void)
 		return;
 	}
 
-	switch(global_opts.objective) {
-		case trkdata: 
-			track_read();
-			break;
-		case wptdata:
-			waypt_read();
-			break;
-		case rtedata:
-			route_read();
-			break;
-		default:
-			fatal(MYNAME ": Unknown objective %d.\n", 
-					global_opts.objective);
-	}
+	if (global_opts.masked_objective & WPTDATAMASK)
+	  waypt_read();
+	if (global_opts.masked_objective & TRKDATAMASK)
+	  track_read();
+	if (global_opts.masked_objective & RTEDATAMASK)
+	  route_read();
+	if (!(global_opts.masked_objective & 
+	      (WPTDATAMASK | TRKDATAMASK | RTEDATAMASK)))
+	  fatal(MYNAME ": Nothing to do.\n");
 }
 
 static GPS_PWay
@@ -579,18 +574,13 @@ data_write()
 	if (poweroff) {
 		return;
 	}
-	switch(global_opts.objective) {
-		case wptdata:
-			waypoint_write();
-			break;
-		case rtedata:
-			route_write();
-			break;
-		case trkdata:
-			track_write();
-			break;
-	}
 
+	if (global_opts.masked_objective & WPTDATAMASK)
+	  waypoint_write();
+	if (global_opts.masked_objective & RTEDATAMASK)
+	  route_write();
+	if (global_opts.masked_objective & TRKDATAMASK)
+	  track_write();
 }
 
 
