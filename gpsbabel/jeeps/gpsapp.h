@@ -53,6 +53,7 @@ int32  GPS_A800_Off(const char *port, int32 *fd);
 int32  GPS_A800_Get(int32 *fd, GPS_PPvt_Data *packet);
 void   GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data *pvt);
 
+const char * Get_Pkt_Type(unsigned char p, unsigned char d0, const char **xinfo);
 
 
 #endif
