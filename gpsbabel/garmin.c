@@ -34,11 +34,18 @@ static GPS_PTrack *tx_tracklist;
 static GPS_PTrack *cur_tx_tracklist_entry;
 static char *getposn;
 static char *poweroff;
+static char *snlen;
+static char *snwhiteopt;
 
 static
 arglist_t garmin_args[] = {
-	{ "get_posn", &getposn, "Return current position as a waypoint", ARGTYPE_BOOL},
-	{ "power_off", &poweroff, "Command unit to power itself down", ARGTYPE_BOOL},
+	{ "snlen", &snlen, "Length of generated shortnames", ARGTYPE_INT },
+	{ "snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames",
+		ARGTYPE_BOOL},
+	{ "get_posn", &getposn, "Return current position as a waypoint", 
+		ARGTYPE_BOOL},
+	{ "power_off", &poweroff, "Command unit to power itself down", 
+		ARGTYPE_BOOL},
 	{ 0, 0, 0, 0}
 };
 
@@ -114,7 +121,17 @@ rw_init(const char *fname)
 			break;
 			
 	}
-	setshort_length(mkshort_handle, short_length);
+	/*
+	 * If the user provided a short_length, override the calculated value.
+	 */
+	if (snlen)
+		setshort_length(mkshort_handle, atoi(snlen));
+	else
+		setshort_length(mkshort_handle, short_length);
+
+	if (snwhiteopt)
+		setshort_whitespace_ok(mkshort_handle, atoi(snwhiteopt));
+
 	setshort_mustupper(mkshort_handle, 1);
 
 }
@@ -373,6 +390,7 @@ waypoint_write(void)
 	extern queue waypt_head;
 	GPS_PWay *way;
 	extern int32 gps_save_id;
+	int icon;
 
 	way = xcalloc(n,sizeof(*way));
 
@@ -385,6 +403,7 @@ waypoint_write(void)
 		waypoint *wpt;
 		char *ident;
 		char *src = NULL;
+		char obuf[256];
 
 		wpt = (waypoint *) elem;
 
@@ -403,12 +422,24 @@ waypoint_write(void)
 			xfree(ident);
 		}
 		way[i]->ident[sizeof(way[i]->ident)-1] = 0;
-		if (src && strlen(src)) {
-			memcpy(way[i]->cmnt, src, strlen(src));
+
+		if (wpt->gc_data.diff && wpt->gc_data.terr) {
+	                snprintf(obuf, sizeof(obuf), "%d/%d %s", 
+					wpt->gc_data.diff, wpt->gc_data.terr, 
+					src);
+			memcpy(way[i]->cmnt, obuf, strlen(obuf));
+		} else  {
+			memcpy(way[i]->cmnt, obuf, strlen(src));
 		}
 		way[i]->lon = wpt->longitude;
 		way[i]->lat = wpt->latitude;
-		way[i]->smbl = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
+
+		if (get_cache_icon(wpt)) {
+			icon = mps_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
+		} else {
+			icon = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
+		}
+		way[i]->smbl = icon;
 		if (wpt->altitude != unknown_alt) {
 			way[i]->alt = wpt->altitude;
 		}

@@ -100,6 +100,17 @@ Diag(void *buf, size_t sz)
 	}
 }
 
+void 
+DiagS(void *buf, size_t sz)
+{
+	unsigned char *cbuf = (unsigned char *) buf;
+
+	while (sz--) {
+		unsigned char c = *cbuf++;
+		GPS_Diag("%c", isalnum(c) ? c : '.');
+	}
+}
+
 /* @func GPS_Write_Packet ***********************************************
 **
 ** Forms a complete packet to send 
@@ -143,6 +154,11 @@ int32 GPS_Write_Packet(int32 fd, GPS_PPacket packet)
 
 
     Diag(&packet->chk, 3);
+
+    GPS_Diag(": ");
+    DiagS(packet->data, packet->bytes);
+    DiagS(&packet->chk, 3);
+
     if((ret=GPS_Serial_Write(fd,(const void *)&packet->chk,(size_t)3)) == -1)
     {
 	perror("write");
