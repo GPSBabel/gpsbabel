@@ -290,8 +290,12 @@ mkshort(void *h, const char *istring)
 	ostring = nstring;
 
 	/* Eliminate leading whitespace in all cases */
-	while (isspace(ostring[0])) {
-		memmove(&ostring[0], &ostring[1], strlen(ostring)-1);
+	while (ostring[0] && isspace(ostring[0])) {
+		/* If orig string has N bytes, we want to copy N-1 bytes
+		 * of the string itself plus the string terminator (which 
+		 * matters if the string consists of nothing but spaces) 
+		 */
+		memmove(&ostring[0], &ostring[1], strlen(ostring));
 	}
 
 	if (!hdl->whitespaceok) {
