@@ -691,6 +691,60 @@ char * str_utf8_to_cp1252( const char * str )
 	return result;
 }
 
+char * str_utf8_to_ascii( const char * str )
+{
+	char *result = xstrdup( str );
+	char *cur = result;
+	
+	while ( cur && *cur ) {
+		if ( *cur & 0x80 ) {
+			int bytes;
+			int value;
+			utf8_to_int( cur, &bytes, &value );
+
+			switch (value) {
+				case 0x201c: value = '\"'; break;
+				case 0x201d: value = '\"'; break;
+				case 0xb4:
+				case 0x2018: value = '`'; break;
+				case 0x2019: value = '\''; break;
+					    
+				case 0xf2: 
+				case 0xf3: 
+				case 0xf4: 
+				case 0xf5: 
+				case 0xf6: value = 'o'; break;
+
+				case 0xe0:
+				case 0xe1:
+				case 0xe2:
+				case 0xe3:
+				case 0xe4:
+				case 0xe5: value = 'a'; break;
+
+				case 0xe8:
+				case 0xe9:
+				case 0xea:
+				case 0xeb: value = 'e'; break;
+
+				case 0xc0:
+				case 0xc1:
+				case 0xc2:
+				case 0xc3:
+				case 0xc4:
+				case 0xc5: value = 'A'; break;
+
+				case 0xf8: value = '0'; break;
+				default: value='?'; break;;
+			}
+			*cur = (char)value;
+			strcpy( cur+1, cur+bytes );
+		}
+		cur++;
+	}
+	return result;
+}
+
 char * xml_entitize(const char * str) 
 {
 	int elen, ecount, nsecount;
