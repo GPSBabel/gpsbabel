@@ -1,8 +1,32 @@
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/robertl/xerces-c1_7_0-linux7.2/lib
 export PATH=$PATH:/home/robertl/xerces-c1_7_0-linux7.2/bin
 
+gpxval()
+{
+	echo "Validating $*"
+	./gpsbabel $* -o gpx -F /tmp/$$.gpx
+	SAX2Count /tmp/$$.gpx
+	./gpsbabel $* -o gpx,gpxver=1.0 -F /tmp/$$.gpx
+	SAX2Count /tmp/$$.gpx
+	./gpsbabel $* -o gpx,gpxver=1.1 -F /tmp/$$.gpx
+	SAX2Count /tmp/$$.gpx
+}
+
+
+# gpxval "-i gpx -f reference/holux.gpx" 
+gpxval -i mapsend -f reference/chicago.trk
+
 SAX2Count reference/holux.gpx
-./gpsbabel -i gpx -f reference/holux.gpx -o gpx -F /tmp/1.gpx
-SAX2Count /tmp/1.gpx
-./gpsbabel -i mapsend -f reference/chicago.trk -o gpx -F /tmp/2.gpx
-SAX2Count /tmp/2.gpx
+
+# Routes
+
+# gpxval -i gpx -f reference/route/blah.gpx 
+gpxval -i magellan -f reference/route/magellan.rte 
+gpxval -i psitrex -f reference/route/psitrtes.txt 
+# gpxval -i gpx -f reference/route/route.gpx 
+gpxval -i mapsend -f reference/route/route.mapsend 
+gpxval -i mapsource -f reference/route/route.mps 
+
+# Tracks
+
+gpxval -i mapsource -f reference/route/route.mps 
