@@ -44,6 +44,8 @@ main(int argc, char *argv[])
 	char *ivec_opts = NULL;
 	char *ovec_opts = NULL;
 
+	global_opts.objective = wptdata;
+
 	waypt_init();
 	route_init();
 
