@@ -34,6 +34,7 @@ static int in_url;
 static int in_icon;
 static int in_urlname;
 static int in_gs_type;
+static int in_gs_container;
 static int in_gs_diff;
 static int in_gs_terr;
 static int in_gs_log;
@@ -304,6 +305,11 @@ gpx_start(void *data, const char *el, const char **attr)
 		in_something_else++;
 		start_something_else( el, attr );
 	} 
+	else if (strcmp(el, "groundspeak:container") == 0) {
+		in_gs_container++;
+		in_something_else++;
+		start_something_else( el, attr );
+	} 
 	else if (strcmp(el, "groundspeak:difficulty") == 0) {
 		in_gs_diff++;
 		in_something_else++;
@@ -341,6 +347,19 @@ gs_type_mapping{
 	{ gt_multi, "Multi-Cache" },
 	{ gt_virtual, "Virtual cache" }
 };
+
+struct
+gs_container_mapping{
+	geocache_container type;
+	const char *name;
+} gs_container_map[] = {
+	{ gc_other, "Unknown" },
+	{ gc_micro, "Micro" },
+	{ gc_regular, "Regular" },
+	{ gc_large, "Large" },
+	{ gc_virtual, "Virtual" }
+};
+
 static
 geocache_type
 gs_mktype(char *t)
@@ -351,6 +370,21 @@ gs_mktype(char *t)
 	for (i = 0; i < sz; i++) {
 		if (0 == case_ignore_strcmp(t, gs_type_map[i].name)) {
 			return gs_type_map[i].type;
+		}
+	}
+	return gt_unknown;
+}
+
+static
+geocache_container
+gs_mkcont(char *t)
+{
+	int i;
+	int sz = sizeof(gs_container_map) / sizeof(gs_container_map[0]);
+
+	for (i = 0; i < sz; i++) {
+		if (0 == case_ignore_strcmp(t, gs_container_map[i].name)) {
+			return gs_container_map[i].type;
 		}
 	}
 	return gt_unknown;
@@ -400,6 +434,9 @@ gpx_end(void *data, const char *el)
 		if (in_wpt && in_gs_type && !in_gs_log) {
 			wpt_tmp->gc_data.type = gs_mktype(cdatastr);
 		}
+		if (in_wpt && in_gs_container) {
+			wpt_tmp->gc_data.container = gs_mkcont(cdatastr);
+		}
 		if (in_wpt && in_gs_diff) {
 			sscanf(cdatastr, "%f", &x);
 			wpt_tmp->gc_data.diff = x * 10;
@@ -437,6 +474,10 @@ gpx_end(void *data, const char *el)
 		in_icon--;
 	} else if (strcmp(el, "groundspeak:type") == 0) {
 		in_gs_type--;
+		in_something_else--;
+		end_something_else();
+	} else if (strcmp(el, "groundspeak:container") == 0) {
+		in_gs_container--;
 		in_something_else--;
 		end_something_else();
 	} else if (strcmp(el, "groundspeak:difficulty") == 0) {
@@ -479,6 +520,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 			(in_wpt && in_url) ||
 			(in_wpt && in_urlname) ||
 			(in_wpt && in_gs_type) || 
+			(in_wpt && in_gs_container) || 
 			(in_wpt && in_gs_diff) || 
 			(in_wpt && in_gs_terr) || 
 			(in_wpt && in_icon) || 
