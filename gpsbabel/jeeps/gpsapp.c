@@ -48,7 +48,7 @@ static void   GPS_D105_Get(GPS_PWay *way, UC *s);
 static void   GPS_D106_Get(GPS_PWay *way, UC *s);
 static void   GPS_D107_Get(GPS_PWay *way, UC *s);
 static void   GPS_D108_Get(GPS_PWay *way, UC *s);
-static void   GPS_D109_Get(GPS_PWay *way, UC *s);
+static void   GPS_D109_Get(GPS_PWay *way, UC *s, int proto);
 static void   GPS_D150_Get(GPS_PWay *way, UC *s);
 static void   GPS_D151_Get(GPS_PWay *way, UC *s);
 static void   GPS_D152_Get(GPS_PWay *way, UC *s);
@@ -64,7 +64,7 @@ static void   GPS_D105_Send(UC *data, GPS_PWay way, int32 *len);
 static void   GPS_D106_Send(UC *data, GPS_PWay way, int32 *len);
 static void   GPS_D107_Send(UC *data, GPS_PWay way, int32 *len);
 static void   GPS_D108_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D109_Send(UC *data, GPS_PWay way, int32 *len);
+static void   GPS_D109_Send(UC *data, GPS_PWay way, int32 *len, int proto);
 static void   GPS_D150_Send(UC *data, GPS_PWay way, int32 *len);
 static void   GPS_D151_Send(UC *data, GPS_PWay way, int32 *len);
 static void   GPS_D152_Send(UC *data, GPS_PWay way, int32 *len);
@@ -343,10 +343,9 @@ static void GPS_A001(GPS_PPacket packet)
 	    }
 	    else if(data<200)
 	    {
-		if(data!=100)
-		    GPS_Protocol_Error(tag,data);
-		else
+		if(data==100)
 		    gps_waypt_transfer = pA100;
+		/* Ignore A101 Waypoint Category Transfer Protocol. */
 		continue;
 	    }
 	    else if(data<300)
@@ -439,7 +438,7 @@ static void GPS_A001(GPS_PPacket packet)
 	{
 	    if(lasta<200)
 	    {
-		if(data<=109 && data>=100)
+		if(data<=110 && data>=100)
 		{
 		    gps_waypt_type = data;
 		    continue;
@@ -453,6 +452,11 @@ static void GPS_A001(GPS_PPacket packet)
 		{
 		    gps_waypt_type = data;
 		    continue;
+		}
+		if (data == 120) 
+		{
+			/* Quest 3.0 has a D120  for Wpt category ignore it*/
+			continue;
 		}
 		else
 		    GPS_Protocol_Error(tag,data);
@@ -472,7 +476,7 @@ static void GPS_A001(GPS_PPacket packet)
 		    continue;
 		}
 		    
-		if(data<=109 && data>=100)
+		if(data<=110 && data>=100)
 		{
 		    gps_rte_type = data;
 		    continue;
@@ -696,7 +700,10 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)())
 	    GPS_D108_Get(&((*way)[i]),rec->data);
 	    break;
 	case pD109:
-	    GPS_D109_Get(&((*way)[i]),rec->data);
+	    GPS_D109_Get(&((*way)[i]),rec->data, 109);
+	    break;
+	case pD110:
+	    GPS_D109_Get(&((*way)[i]),rec->data, 110);
 	    break;
 	case pD150:
 	    GPS_D150_Get(&((*way)[i]),rec->data);
@@ -827,7 +834,10 @@ int32 GPS_A100_Send(const char *port, GPS_PWay *way, int32 n, int (*cb)())
 	    GPS_D108_Send(data,way[i],&len);
 	    break;
 	case pD109:
-	    GPS_D109_Send(data,way[i],&len);
+	    GPS_D109_Send(data,way[i],&len, 109);
+	    break;
+	case pD110:
+	    GPS_D109_Send(data,way[i],&len, 110);
 	    break;
 	case pD150:
 	    GPS_D150_Send(data,way[i],&len);
@@ -1269,8 +1279,11 @@ static void GPS_D108_Get(GPS_PWay *way, UC *s)
 ** @param [r] s [UC *] packet data
 **
 ** @return [void]
+** Quest uses D110's which are just like D109's but with the addition
+** of temp, time, and wpt_cat stuck between ete and ident.   Rather than
+** duplicating the function, we just handle this at runtime.
 ************************************************************************/
-static void GPS_D109_Get(GPS_PWay *way, UC *s)
+static void GPS_D109_Get(GPS_PWay *way, UC *s, int protoid)
 {
     UC *p;
     UC *q;
@@ -1305,6 +1318,11 @@ static void GPS_D109_Get(GPS_PWay *way, UC *s)
     for(i=0;i<2;++i) (*way)->cc[i] = *p++;
 
     p += 4; /* Skip over "outbound link ete in seconds */
+    if (protoid == 110) {
+	p += 4; /* skip float temp */
+	p += 4;  /* skip longword time */
+	p += 2; /* skip int "category membership " */
+    }
 
     q = (UC *) (*way)->ident;
     while((*q++ = *p++));
@@ -1951,8 +1969,9 @@ static void GPS_D108_Send(UC *data, GPS_PWay way, int32 *len)
 ** @param [w] len [int32 *] packet length
 **
 ** @return [void]
+** D109's and D110's are so simlar, we handle themw with the same code.
 ************************************************************************/
-static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len, int protoid)
 {
     UC *p;
     UC *q;
@@ -1964,7 +1983,13 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len)
     *p++ = 0 /* way->colour*/ ;		/* If non-zero, the waypoint is in 
 					   invisible ink on the V. */
     *p++ = way->dspl;
-    *p++ = 0x70;
+    if (protoid == 109) {
+	*p++ = 0x70;
+    } else if (protoid == 110) {
+	*p++  = 0x80;
+    } else {
+	GPS_Warning("Unknown protoid in GPS_D109_Send.");
+    }
     GPS_Util_Put_Short(p,way->smbl);
     p+=sizeof(int16);
     for(i=0;i<18;++i) *p++ = way->subclass[i];
@@ -1982,6 +2007,21 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len)
     for(i=0;i<2;++i) *p++ = way->state[i];
     for(i=0;i<2;++i) *p++ = way->cc[i];
     for(i=0;i<4;++i) *p++ = 0xff; /* D109 silliness for ETE */
+    if (protoid == 110) {
+	float temp = 1.0e25;
+
+	GPS_Util_Put_Float(p, temp);
+	p += 4;
+
+	if (way->Time_populated) {
+		GPS_Util_Put_Uint(p,GPS_Math_Utime_To_Gtime(way->Time));
+		p+=sizeof(uint32);
+	} else {
+		for(i=0;i<4;++i) *p++ = 0xff; /* unknown time*/
+	}
+
+	for(i=0;i<2;++i) *p++ = 0x00; /* D110 category */
+    }
 
     q = (UC *) way->ident;
     i = XMIN(51, sizeof(way->ident));
@@ -2369,7 +2409,10 @@ int32 GPS_A200_Get(const char *port, GPS_PWay **way)
 	    GPS_D108_Get(&((*way)[i]),rec->data);
 	    break;
 	case pD109:
-	    GPS_D109_Get(&((*way)[i]),rec->data);
+	    GPS_D109_Get(&((*way)[i]),rec->data,109);
+	    break;
+	case pD110:
+	    GPS_D109_Get(&((*way)[i]),rec->data,110);
 	    break;
 	case pD150:
 	    GPS_D150_Get(&((*way)[i]),rec->data);
@@ -2559,7 +2602,10 @@ int32 GPS_A201_Get(const char *port, GPS_PWay **way)
 	    GPS_D108_Get(&((*way)[i]),rec->data);
 	    break;
 	case pD109:
-	    GPS_D109_Get(&((*way)[i]),rec->data);
+	    GPS_D109_Get(&((*way)[i]),rec->data,109);
+	    break;
+	case pD110:
+	    GPS_D109_Get(&((*way)[i]),rec->data,110);
 	    break;
 	case pD150:
 	    GPS_D150_Get(&((*way)[i]),rec->data);
@@ -2870,7 +2916,10 @@ int32 GPS_A201_Send(const char *port, GPS_PWay *way, int32 n)
 		GPS_D108_Send(data,way[i],&len);
 		break;
 	    case pD109:
-		GPS_D109_Send(data,way[i],&len);
+		GPS_D109_Send(data,way[i],&len, 109);
+		break;
+	    case pD110:
+		GPS_D109_Send(data,way[i],&len, 110);
 		break;
 	    case pD150:
 		GPS_D150_Send(data,way[i],&len);
@@ -4051,7 +4100,10 @@ int32 GPS_A400_Get(const char *port, GPS_PWay **way)
 	    GPS_D108_Get(&((*way)[i]),rec->data);
 	    break;
 	case pD109:
-	    GPS_D109_Get(&((*way)[i]),rec->data);
+	    GPS_D109_Get(&((*way)[i]),rec->data,109);
+	    break;
+	case pD110:
+	    GPS_D109_Get(&((*way)[i]),rec->data,110);
 	    break;
 	case pD450:
 	    GPS_D450_Get(&((*way)[i]),rec->data);
