@@ -19,7 +19,6 @@
 
  */
 
-#include <termios.h>
 #include <ctype.h>
 #include <time.h>
 #include <errno.h>
@@ -39,12 +38,12 @@ static FILE *magfile_in;
 static FILE *magfile_out;
 static int magfd;
 static mag_rxstate magrxstate;
-static struct termios orig_tio;
 static int last_rx_csum;
 static int found_done;
 static icon_mapping_t *icon_mapping;
 static int got_version;
 static int is_file = 0;
+
 
 static waypoint * mag_wptparse(char *);
 
@@ -185,7 +184,7 @@ mag_writeack(int osum)
 	if (is_file) {
 		return;
 	}
-	snprintf(obuf, sizeof(obuf), "PMGNCSM,%02X", osum);
+	sprintf(obuf, "PMGNCSM,%02X", osum);
 	mag_writemsg(obuf);
 }
 
@@ -295,10 +294,54 @@ return;
 	mag_writeack(isum);
 }
 
+#if _POSIX_SOURCE
+#include <termios.h>
+static struct termios orig_tio;
+static void
+terminit()
+{
+	struct termios new_tio;
+	tcgetattr(magfd, &orig_tio);
+	new_tio = orig_tio;
+	new_tio.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|
+		IGNCR|ICRNL|IXON);
+	new_tio.c_oflag &= ~OPOST;
+	new_tio.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
+	new_tio.c_cflag &= ~(CSIZE|PARENB);
+	new_tio.c_cflag |= CS8;
+	new_tio.c_cc[VTIME] = 10;
+	new_tio.c_cc[VMIN] = 0;
+
+	cfsetospeed(&new_tio, B4800);
+	cfsetispeed(&new_tio, B4800);
+	tcsetattr(magfd, TCSAFLUSH, &new_tio);
+}
+
+static void
+termdeinit()
+{
+	tcsetattr(magfd, TCSANOW, &orig_tio);
+}
+#endif
+
+#if __WIN32__
+static
+void
+terminit()
+{
+}
+
+static
+void
+termdeinit()
+{
+}
+#endif
+
+
 static void
 mag_rd_init(const char *portname)
 {
-	struct termios new_tio;
 	time_t now, later;
 	struct stat sbuf;
 	
@@ -316,22 +359,9 @@ mag_rd_init(const char *portname)
 		icon_mapping = map330_icon_table;
 		got_version = 1;
 	} else {
+		terminit(magfile_in);
 		magfile_out = fopen(portname, "w+");
 		magfd = fileno(magfile_in);
-		tcgetattr(magfd, &orig_tio);
-		new_tio = orig_tio;
-		new_tio.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|
-			IGNCR|ICRNL|IXON);
-		new_tio.c_oflag &= ~OPOST;
-		new_tio.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-		new_tio.c_cflag &= ~(CSIZE|PARENB);
-		new_tio.c_cflag |= CS8;
-		new_tio.c_cc[VTIME] = 10;
-		new_tio.c_cc[VMIN] = 0;
-
-		cfsetospeed(&new_tio, B4800);
-		cfsetispeed(&new_tio, B4800);
-		tcsetattr(magfd, TCSAFLUSH, &new_tio);
 	}
 	
 	mag_handon();
@@ -375,7 +405,7 @@ static void
 mag_deinit(void)
 {
 	mag_handoff();
-	tcsetattr(magfd, TCSANOW, &orig_tio);
+	termdeinit();
 	fclose(magfile_in);
 }
 #if 0
