@@ -32,6 +32,7 @@ static int logpoint_ct = 0;
 
 static const char *gpx_version;
 static const char *gpx_creator;
+static char *xsi_schema_loc;
 
 static char *gpx_email = NULL;
 static char *gpx_author = NULL;
@@ -56,6 +57,8 @@ static route_head *rte_head;
 
 #define MYNAME "GPX"
 #define MY_CBUF 4096
+#define DEFAULT_XSI_SCHEMA_LOC "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
+
 typedef enum {
 	tt_unknown = 0,
 	tt_gpx,
@@ -211,6 +214,12 @@ tag_gpx(const char **attrv)
 		}
 		else if (strcmp(avp[0], "src") == 0) {
 			gpx_creator = avp[1];
+		}
+		else if (strcmp(avp[0], "xsi:schemaLocation") == 0) {
+			if (0 == strstr(xsi_schema_loc, avp[1])) {
+			    xsi_schema_loc = xstrappend(xsi_schema_loc, " ");
+			    xsi_schema_loc = xstrappend(xsi_schema_loc, avp[1]);
+			}
 		}
 		avp+=2;
 	}
@@ -715,6 +724,8 @@ gpx_rd_init(const char *fname)
 	cdatastr = vmem_alloc(1, 0);
 	*((char *)cdatastr.mem) = '\0';
 
+	xsi_schema_loc = xstrdup(DEFAULT_XSI_SCHEMA_LOC);
+
 	XML_SetElementHandler(psr, gpx_start, gpx_end);
 	XML_SetCharacterDataHandler(psr, gpx_cdata);
 }
@@ -1101,6 +1112,7 @@ gpx_write(void)
 {
 	time_t now = 0;
 	int short_length;
+	bounds bounds;
 	
         time( &now );
 
@@ -1120,10 +1132,14 @@ gpx_write(void)
 	fprintf(ofd, "creator=\"GPSBabel - http://gpsbabel.sourceforge.net\"\n");
 	fprintf(ofd, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/1/0\"\n");
-	fprintf(ofd, "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n");
+	fprintf(ofd, "xsi:schemaLocation=\"%s\">\n", xsi_schema_loc ? xsi_schema_loc : DEFAULT_XSI_SCHEMA_LOC);
 
         gpx_write_time( now, "time" );
-
+	waypt_compute_bounds(&bounds);
+	fprintf(ofd, "<bounds minlat=\"%f\" minlon =\"%f\" "
+		       "maxlat=\"%f\" maxlon=\"%f\" />\n",
+		       bounds.min_lat, bounds.min_lon, 
+		       bounds.max_lat, bounds.max_lon);
 	waypt_disp_all(gpx_waypt_pr);
 	gpx_track_pr();
 	gpx_route_pr();
