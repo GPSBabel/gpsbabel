@@ -35,11 +35,18 @@ static double maxlat, maxlon, minlat, minlon, latsum, lonsum;
 int rec_cnt;
 static char *nolabels = NULL;
 static char *genurl = NULL;
+static char *margin  = "15%";
 static char *scale = "768";
 static char *snlen = NULL;
-static char *margin  = "15%";
+static char *oldthresh = "14";
+static char *oldmarker  = "redpin";
+static char *newmarker  = "greenpin";
+static char *unfoundmarker  = "bluepin";
+static char *suppresswhite = NULL;
+
 int scalev;
 int short_length;
+int thresh_days;
 
 /*
  *   The code bracketed by CLICKMAP is to generate clickable image maps
@@ -63,6 +70,16 @@ arglist_t tiger_args[] = {
 		ARGTYPE_INT},
 	{"snlen", &snlen, "Max shortname length when used with -s.",
 		ARGTYPE_INT},
+	{"oldthresh", &oldthresh, "Days after which points are considered old.",
+		ARGTYPE_INT},
+	{"oldmarker", &oldmarker, "Marker type for old points.",
+		ARGTYPE_STRING},
+	{"newmarker", &newmarker, "Marker type for new points.",
+		ARGTYPE_STRING},
+	{"unfoundmarker", &unfoundmarker, "Marker type for unfound points.",
+		ARGTYPE_STRING},
+	{ "suppresswhite", &suppresswhite,
+		"Suppress whitespace in generated shortnames", ARGTYPE_BOOL },
 #if CLICKMAP
 	{"clickmap", &clickmap, "Generate Clickable map web page.",
 		ARGTYPE_BOOL},
@@ -93,6 +110,7 @@ static void
 wr_init(const char *fname, const char *args)
 {
 	file_out = fopen(fname, "w");
+	thresh_days = strtod(oldthresh, NULL);
 
 	if (file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
@@ -136,10 +154,12 @@ tiger_disp(const waypoint *wpt)
 	double lat = wpt->position.latitude.degrees;
 	double lon = wpt->position.longitude.degrees;
 
-	if (wpt->creation_time > time(0) - 3600 * 24 * 14)
-		pin = "greenpin";
+	if (wpt->icon_descr && strstr(wpt->icon_descr, "-unfound"))
+		pin = unfoundmarker;
+	else if (wpt->creation_time > time(0) - 3600 * 24 * thresh_days)
+		pin = newmarker;
 	else
-		pin = "redpin";
+		pin = oldmarker;
 
 	if (genurl) {
 		if (lat > maxlat) maxlat = lat;
@@ -203,6 +223,11 @@ data_write(void)
 	else
 		short_length = 10;
 	mkshort_whandle = mkshort_new_handle();
+
+	if (suppresswhite) {
+		setshort_whitespace_ok(mkshort_whandle, 0);
+	}
+
 	setshort_length(mkshort_whandle, short_length);
 
 	fprintf(file_out, "#tms-marker\n");
