@@ -246,11 +246,15 @@ void setshort_mustupper(void *, int n);
 void setshort_mustuniq(void *, int n);
 void setshort_whitespace_ok(void *, int n);
 
+/*
+ *  Vmem flags values.
+ */
+#define VMFL_NOZERO (1 << 0)
 typedef struct vmem {
 	void *mem;		/* visible memory object */
 	size_t size; 		/* allocated size of object */
 } vmem_t;
-vmem_t 	vmem_alloc(size_t);
+vmem_t 	vmem_alloc(size_t, int flags);
 void 	vmem_free(vmem_t*);
 void 	vmem_realloc(vmem_t*, size_t);
 

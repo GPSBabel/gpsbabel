@@ -684,13 +684,16 @@ gpx_rd_init(const char *fname)
 
 
 	file_time = 0;
-	current_tag = vmem_alloc(1);
+	current_tag = vmem_alloc(1, 0);
+	*((char *)current_tag.mem) = '\0';
 	
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {
 		fatal(MYNAME ": Cannot create XML Parser\n");
 	}
-	cdatastr = vmem_alloc(1);
+	cdatastr = vmem_alloc(1, 0);
+	*((char *)cdatastr.mem) = '\0';
+
 	XML_SetElementHandler(psr, gpx_start, gpx_end);
 	XML_SetCharacterDataHandler(psr, gpx_cdata);
 }
