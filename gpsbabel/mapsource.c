@@ -48,12 +48,16 @@ static	const waypoint	*prevRouteWpt;
 char *snlen;
 char *mpsverout;
 char *mpsmergeout = NULL;
+char *mpsusedepth = NULL;
+char *mpsuseprox = NULL;
 
 static
 arglist_t mps_args[] = {
 	{"snlen", &snlen, "Length of generated shortnames", ARGTYPE_INT },
 	{"mpsverout", &mpsverout, "Version of mapsource file to generate (3,4,5)", ARGTYPE_INT },
 	{"mpsmergeout", &mpsmergeout, "Merge output with existing file", ARGTYPE_BOOL },
+	{"mpsusedepth", &mpsusedepth, "Use depth values on output (default is ignore)", ARGTYPE_BOOL },
+	{"mpsuseprox", &mpsuseprox, "Use proximity values on output (default is ignore)", ARGTYPE_BOOL },
 	{0, 0, 0, 0}
 };
 
@@ -394,6 +398,7 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
 	int lat;
 	int lon;
 	int	icon;
+	unsigned int	mpsclass;
 
 	waypoint	*thisWaypoint;
 	double	mps_altitude = unknown_alt;
@@ -406,11 +411,12 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
 	mps_readstr(mps_file, wptname, sizeof(wptname));
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		fread(tbuf, 4, 1, mps_file);				/* class */
+		fread(&mpsclass, 4, 1, mps_file);			/* class */
+		mpsclass = le_read32(&mpsclass);
 		mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
 	}
 
-	fread(tbuf, 22, 1, mps_file);					/* unknown */
+	fread(tbuf, 22, 1, mps_file);					/* subclass data (18) + unknown (4) */
 
 	fread(&lat, 4, 1, mps_file); 
 	fread(&lon, 4, 1, mps_file); 
@@ -469,6 +475,8 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
 	thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
 	thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
 	thisWaypoint->altitude = mps_altitude;
+	thisWaypoint->proximity = mps_proximity;
+	thisWaypoint->depth = mps_depth;
 
 	/* might need to change this to handle version dependent icon handling */
 	thisWaypoint->icon_descr = mps_find_desc_from_icon_number(icon, MAPSOURCE);
@@ -498,9 +506,9 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 	int colour = 0;			/*  (unknown colour) black is 1, white is 16 */
 
 	double	mps_altitude = wpt->altitude;
-	double	mps_proximity = unknown_alt;
-	double	mps_depth = unknown_alt;
-
+	double	mps_proximity = (mpsuseprox ? wpt->proximity : unknown_alt);
+	double	mps_depth = (mpsusedepth ? wpt->depth : unknown_alt);
+	
 	if(wpt->description) src = wpt->description;
 	if(wpt->notes) src = wpt->notes;
 	ident = global_opts.synthesize_shortnames ?
@@ -633,6 +641,7 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	short int	rte_autoname = 0;
 	int	interlinkStepCount;
 	int	thisInterlinkStep;
+	unsigned int	mpsclass;
 
 	time_t	dateTime = 0;
 	route_head *rte_head;
@@ -643,7 +652,6 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 
 	double	mps_altitude = unknown_alt;
 	double	mps_depth = unknown_alt;
-
 
 	mps_readstr(mps_file, rtename, sizeof(rtename));
 	fread(&rte_autoname, 2, 1, mps_file);	/* autoname flag */
@@ -691,10 +699,16 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 
 		mps_readstr(mps_file, wptname, sizeof(wptname));
 		if ((mps_ver == 4) || (mps_ver == 5)) {
-			fread(tbuf, 4, 1, mps_file);				/* class */
+			fread(&mpsclass, 4, 1, mps_file);			/* class */
+			mpsclass = le_read32(&mpsclass);
 			mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
-			fread(tbuf, 22, 1, mps_file);				/* unknown */
-			fread(tbuf, 19, 1, mps_file);				/* unknown */
+			fread(tbuf, 18, 1, mps_file);				/* subclass data */
+
+			if (mpsclass != 0) {
+				fread(tbuf, 8, 1, mps_file);			/* unknown 8 x 0xFF */
+			}
+			fread(tbuf,  4, 1, mps_file);				/* unknown 4 x 0xFF */
+			fread(tbuf, 19, 1, mps_file);				/* unknown 0x00 0x03 0x00 .. 0x00 */
 		}
 		else {
 			fread(tbuf, 22, 1, mps_file);				/* unknown */
@@ -732,6 +746,7 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 			thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
 			thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
 			thisWaypoint->altitude = mps_altitude;
+			thisWaypoint->depth = mps_depth;
 		}
 
 		route_add_wpt(rte_head, thisWaypoint);
@@ -778,10 +793,14 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	mps_readstr(mps_file, wptname, sizeof(wptname));
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		fread(tbuf, 4, 1, mps_file);				/* class */
+
+		fread(&mpsclass, 4, 1, mps_file);			/* class */
+		mpsclass = le_read32(&mpsclass);
 		mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
-		fread(tbuf, 22, 1, mps_file);				/* unknown */
-		fread(tbuf, 19, 1, mps_file);				/* unknown */
+		fread(tbuf, 18, 1, mps_file);				/* subclass data */
+
+		fread(tbuf,  4, 1, mps_file);				/* unknown 4 x 0xFFs */
+		fread(tbuf, 19, 1, mps_file);				/* unknown 0x00 0x03 0x00 .. 0x00 */
 	}
 	else {
 		fread(tbuf, 22, 1, mps_file);				/* unknown */
@@ -1256,6 +1275,7 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 		thisWaypoint->creation_time = le_read32(&dateTime);
 		thisWaypoint->centiseconds = 0;
 		thisWaypoint->altitude = mps_altitude;
+		thisWaypoint->depth = mps_depth;
 		route_add_wpt(track_head, thisWaypoint);
 
 	}		/* while (trk_count--) */
@@ -1354,8 +1374,7 @@ mps_trackdatapoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 	char zbuf[10];
 
 	double	mps_altitude = wpt->altitude;
-	double	mps_proximity = unknown_alt;
-	double	mps_depth = unknown_alt;
+	double	mps_depth = (mpsusedepth ? wpt->depth : unknown_alt);
 
 	memset(zbuf, 0, sizeof(zbuf));
 
