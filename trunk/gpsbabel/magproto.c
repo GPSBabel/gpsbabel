@@ -158,6 +158,7 @@ pid_to_model_t pid_to_model[] =
 	{ mm_map330, 30, "Map 330" },
 	{ mm_gps310, 31, "GPS 310" },
 	{ mm_meridian, 33, "Meridian" },
+	{ mm_sportrak, 36, "SporTrak" },
 	{ mm_unknown, 0, NULL }
 };
 
@@ -315,13 +316,14 @@ mag_verparse(char *ibuf)
 			break;
 		case mm_map330:
 		case mm_meridian:
+		case mm_sportrak:
 			icon_mapping = map330_icon_table;
 			setshort_length(8);
 			setshort_mustupper(0);
 			mag_cleanse = m330_cleanse;
 			break;
 		default:
-			fatal(MYNAME ": Unknown receiver type.\n");
+			fatal(MYNAME ": Unknown receiver type %d, model version '%s'.\n", prodid, version);
 	}
 }
 
@@ -947,6 +949,7 @@ mag_waypt_pr(const waypoint *waypointp)
 	const char *icon_token=NULL;
 	char *owpt;
 	char *odesc;
+	char *isrc;
 
 	ilat = waypointp->position.latitude.degrees;
 	ilon = waypointp->position.longitude.degrees;
@@ -972,8 +975,9 @@ mag_waypt_pr(const waypoint *waypointp)
 			break;
 
 	}
+	isrc = waypointp->notes ? waypointp->notes : waypointp->description;
 	owpt = global_opts.synthesize_shortnames ?
-                        mkshort(waypointp->description) : waypointp->shortname,
+                        mkshort(isrc) : waypointp->shortname,
 	odesc = waypointp->description ? waypointp->description : "";
 	owpt = mag_cleanse(owpt);
 	odesc = mag_cleanse(odesc);
