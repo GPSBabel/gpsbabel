@@ -1,30 +1,35 @@
 
 THE PROBLEM
 
-	There are simply too many gratituosuly different file formats to 
-	hold waypoint and route information in various programs used by 
-	computers.  GPX (http://www.topografix.com/gpx.asp) attempts to 
-	define a standard in XML to contain all the data, but there are 
-	too many programs that don't understand it yet and too much data 
-	that are in an alternate format.
+        There are simply too many gratituosuly different file formats to
+        hold waypoint, track, and route information in various programs
+        used by computers.  GPX (http://www.topografix.com/gpx.asp)
+        attempts to define a standard in XML to contain all the data,
+        but there are too many programs that don't understand it yet and
+        too much data that are in an alternate format.
 
 THE SOLUTION
 
-	I needed to convert waypoints between a couple of formats, so
-	I whipped up a converter and based it on an extensible foundation
-	so that it was easy to add new formats.  Most file formats added
-	so far have taken under 200 lines of reasonable ISO C so they can
-	be stamped out pretty trivially. 
+        I needed to convert waypoints between a couple of formats, so I
+        whipped up a converter and based it on an extensible foundation
+        so that it was easy to add new formats.  Most file formats
+        added so far have taken under 200 lines of reasonable ISO C so
+        they can be stamped out pretty trivially.  Formats that are
+        ASCII text delimited in some fixed way can be added with no
+        programming at all via our 'style' mechanism.
 
-BUILDING IT
+GETTING IT / BUILDING IT
 
-        The code should be compilable on any system with ISO C89
-        compilers.  It's been tested on UnixWare, OpenServer, OS/X,
-        Linux, Solaris, and a variety of processors and compilers.
+        GPSBabel is distributed in source format that will work on about
+        any operating system and as ready-to-run binaries for some
+        operating systems, notably Windows.  See the "OS-Specific notes"
+        at http://gpsbabel.sourceforge.net for instructions on those
+        binary kits.
 
-        The code should be compilable on any system with ISO C89
-        compilers.  It's been tested on UnixWare, OpenServer, OS/X,
-        Linux, Solaris, and a variety of processors and compilers.
+        For operating systems where no binary is provided, you will have
+        to build it.  The code should be compilable on any system with
+        ISO C89 compilers.  It's been tested on UnixWare, OpenServer,
+        OS/X, Linux, Solaris, and a variety of processors and compilers.
 
         Libexpat is required for source builds.  If you get errors about
         expat.h being missing, you must either edit the Makefile to tell
@@ -53,27 +58,26 @@ THE FORMATS
 	Meridian, and SportTrak family.  I expect it to work on any modern
 	Magellan unit.
 
-	As of 08/30/02, gpsbabel can also read and write the files that
-	can be stuck on the flash memory parts for the Meridian models.
-	Simply specify a file instead of a serial port.
+        As of 08/30/02, GPSBabel can also read and write the files that
+        can be stuck on the SD memory cards with the Meridian models.
+        Simply specify a file instead of a serial port.
 
-	As of this writing, there is still a lot of "scribbling" in the 
-	source for functionality that isn't hooked up to the rest of the
-	program.    Communication errors are handled and verification of
-	data is turned on.
+        Communication errors are handled robustly and verification of
+        data is enabled.
 
-	Additional options:
+	Additional sub options:
 	baud: may be 1200, 2400, 4800, 9600, 19200, but must match receiver.
 
     GARMIN
 
-	Waypoint serial upload and download works reliably under both
-	POSIX and Windows.   I tested it with a Vista graciously provided
-	on loan by Joe Armstrong.   The communications library used, jeeps,
-	claims to support most models of Garmin hardware.   Be sure the GPS 
-	is set for "Garmin mode" in setup and that nothing else (gpsd, getty,
-	pppd, etc.) is using the serial port.
-	
+        Waypoint serial upload and download works reliably under both
+        POSIX and Windows.  I tested it with a Vista, a V, and a base
+        eTrext, all graciously provided on loan by Joe Armstrong.  The
+        communications library used, jeeps, claims to support most
+        models of Garmin hardware.  Be sure the GPS is set for "Garmin
+        mode" in setup and that nothing else (gpsd, getty, pppd, etc.)
+        is using the serial port.
+
     GPSMAN
 
 	GPS Manager can read and write formats that this converter doesn't
@@ -81,10 +85,11 @@ THE FORMATS
 
     GPSUTIL
 
-	GPSUtil has a simple file format of this program that runs on POSIX-
-	compliant OSes like UNIX and Linux.   Reads and writes of this format
-	are reliable.   (I've also contributed to this program.)  It's 	
-	available at http://www.cs.uakron.edu/~hennings/gpsutil/.
+        GPSUtil has a simple file format of this program that
+        runs on POSIX- compliant OSes like UNIX and Linux.
+        Reads and writes of this format are reliable.  (I've
+        also contributed to this program.)  It's available at
+        http://www.cs.uakron.edu/~hennings/gpsutil/.
 
     TIGER
 
@@ -110,7 +115,7 @@ THE FORMATS
 	CSV variants.  This is the format used by XmapHH SA USA on
 	(at least) PocketPC O/S.  Please see README.xmapwpt for more 
 	information on it's intricacies.  This XMap is not to be confused
-	with the XMap mentioned above. Contributed to gpsbabel by
+	with the XMap mentioned above. Contributed to GPSBabel by
 	Alex Mottram.
 
     XCSV
@@ -121,10 +126,10 @@ THE FORMATS
 	By itself, it doesn't comply to any format, however *most* CSV 
 	variants can be described as a "style" and fine-tuned by the end 
 	user.  For more information on it's use, please see README.style 
-	in the style/ sub-directory of gpsbabel.  For an example of using 
+	in the style/ sub-directory of GPSBabel.  For an example of using 
 	the XCSV module within your C program, look at the ozi.c, mxf.c, and
-	xmapwpt.c sources in the gpsbabel directory.  This module was 
-	contributed to gpsbabel by Alex Mottram.
+	xmapwpt.c sources in the GPSBabel directory.  This module was 
+	contributed to GPSBabel by Alex Mottram.
 
 	Additional Options:
 	style	-	**REQUIRED** Path to XCSV style file.
@@ -195,8 +200,7 @@ THE FORMATS
 
 	Cetus GPS (http://www.cetusgps.dk/) is a program for Palm/OS.  
 	Working with Ron Parker and Kjeld Jensen, we can now read and write
-	files for that program.   It hasn't been exhaustively tested, but 
-	has seemed fine on every input and output we've tried.
+	files for that program.   
 
     QUOVADIS
 
@@ -657,3 +661,14 @@ ADVANCED USAGE
 	You can write the same data in different output formats:
 
 	gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx 1.wpt
+
+ROUTE AND TRACK MODES
+
+        The presence of "-t" on the command line tells us to work with
+        tracks.  The presence of "-r" tells us to work with routes.
+        Tracks and routes are advanced features and don't try to
+        handle every possible hazard that can be encountered during a
+        conversion.  If you're merging or converting files of similar
+        limitations, things work very well.  The presence of "-s" on
+        the command line tends to creat havoc because tracks and routes.
+
