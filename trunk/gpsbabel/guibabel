@@ -19,14 +19,14 @@ proc positionWindow w {
 
 proc showCmd w {
  global ifile ofile use_shortnames ftyperead ftypewrite
- set cmd "-i $ftyperead -f $ifile"
+ set cmd "gpsbabel -i $ftyperead -f $ifile"
  if {$use_shortnames > 0} {
 	set cmd [concat $cmd "-s"]
   }
  set cmd [concat $cmd  "-o $ftypewrite -F $ofile"]
-# exec $cmd
+ eval exec $cmd
  
- tk_messageBox -icon info -message  $cmd
+# tk_messageBox -icon info -message  $cmd
 }
 
 set w .filebox
@@ -41,7 +41,7 @@ positionWindow $w
 
 frame $w.buttons
 pack $w.buttons -side bottom -fill x -pady 2m
-button $w.buttons.dismiss -text Cancel -command "destroy $w"
+button $w.buttons.dismiss -text End -command "destroy $w"
 button $w.buttons.code -text OK -command "showCmd $w"
 pack $w.buttons.dismiss $w.buttons.code -side left -expand 1
 
