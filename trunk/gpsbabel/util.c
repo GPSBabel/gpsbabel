@@ -118,6 +118,15 @@ be_read16(void *p)
 }
 
 void
+be_write16(void *addr, unsigned value)
+{
+	unsigned char *p = addr;
+	p[0] = value >> 8;
+	p[1] = value;
+	
+}
+
+void
 be_write32(void *pp, unsigned i)
 {
 	char *p = (char *)pp;
@@ -161,3 +170,13 @@ le_write32(void *addr, unsigned value)
 	p[3] = value >> 24;
 }
 
+signed int 
+round( double d )
+{
+	if ( d < 0 ) {
+		return (signed int)(d-0.5);
+	}
+	else {
+		return (signed int)(d+0.5);
+	}
+}

@@ -47,6 +47,7 @@ extern ff_vecs_t holux_vecs;
 extern ff_vecs_t ozi_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t dna_vecs;
+extern ff_vecs_t magnav_vec;
 extern ff_vecs_t xmap_vecs;
 
 static
@@ -124,6 +125,11 @@ vecs_t vec_list[] = {
 	{
 		&gpspilot_vecs,
 		"gpspilot",
+	},
+	{
+		&magnav_vec,
+		"magnav",
+		"Magellan NAV Companion for PalmOS"
 		"GPSPilot Tracker for Palm/OS"
 	},
 	{

@@ -141,6 +141,14 @@ void *xcalloc(size_t nmemb, size_t size);
 void *xmalloc(size_t size);
 char * xstrdup(const char *s);
 
+
+/*
+ * PalmOS records like fixed-point numbers, which should be rounded
+ * to deal with possible floating-point representation errors.
+ */
+
+signed int round( double d );
+
 /* 
  * Data types for Palm/OS files.
  */

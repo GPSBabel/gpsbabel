@@ -46,6 +46,7 @@ struct record {
 	pdb_32 longitude; /* lon * 1e5 */
 	pdb_32 elevation; /* meters */
 	char plot; /* 1 = plot on map screen.   default = 0 */
+	char unknown3; /* always 'a' */
 };
 
 static FILE *file_in;
@@ -141,36 +142,66 @@ my_writewpt(waypoint *wpt)
 	struct record *rec;
 	static int ct;
 	struct tm *tm;
-abort();
-	rec = xcalloc(sizeof(*rec),1);
-#if 0
-	strncpy(rec->ID, wpt->shortname, sizeof(rec->ID));
-	rec->ID[sizeof(rec->ID)-1] = 0;
-	strncpy(rec->name, wpt->description, sizeof(rec->name));
-	rec->name[sizeof(rec->name)-1] = 0;
-
-	if (wpt->creation_time) {
-		tm = gmtime(&wpt->creation_time);
-		rec->min = tm->tm_min;
-		rec->hour = tm->tm_hour;
-		rec->sec = tm->tm_sec;
-		rec->day = tm->tm_mday;
-		rec->mon = tm->tm_mon + 1;
-		rec->year = tm->tm_year - 100;
-	} else {
-		rec->min = 0xff;
-		rec->hour = 0xff;
-		rec->sec = 0xff;
-		rec->day = 0xff;
-		rec->mon = 0xff;
-		rec->year = 0xff;
+	char *vdata;
+	time_t tm_t;
+	
+	rec = xcalloc(sizeof(*rec)+56,1);
+	
+	if ( wpt->creation_time ) {
+		tm = gmtime( &wpt->creation_time);
 	}
+	else {
+		time( &tm_t );
+		tm = gmtime( &tm_t );
+	}
+	
+	be_write16( &rec->crt_sec, tm->tm_sec );
+	be_write16( &rec->crt_min, tm->tm_min );
+	be_write16( &rec->crt_hour, tm->tm_hour );
+	be_write16( &rec->crt_mday, tm->tm_mday );
+	be_write16( &rec->crt_mon, tm->tm_mon + 1 );
+	be_write16( &rec->crt_year, tm->tm_mon + 1900 );
+	
+        be_write16( &rec->unknown, 0);
+	
+	be_write16( &rec->xx_sec, tm->tm_sec );
+	be_write16( &rec->xx_min, tm->tm_min );
+	be_write16( &rec->xx_hour, tm->tm_hour );
+	be_write16( &rec->xx_mday, tm->tm_mday );
+	be_write16( &rec->xx_mon, tm->tm_mon + 1 );
+	be_write16( &rec->xx_year, tm->tm_mon + 1900 );
+	
+        be_write16( &rec->unknown2, 0);
+	
+	be_write32(&rec->longitude, round(wpt->position.longitude.degrees * 100000.0));
+	be_write32(&rec->latitude, round(wpt->position.latitude.degrees * 100000.0));
+	be_write32(&rec->elevation, wpt->position.altitude.altitude_meters);
 
-	be_write32(&rec->longitude, wpt->position.longitude.degrees * 10000000.0);
-	be_write32(&rec->latitude, wpt->position.latitude.degrees * 10000000.0);
-	be_write32(&rec->elevation, wpt->position.altitude.altitude_meters * 100.0);
-
-	opdb_rec = new_Record (0, 0, ct++, sizeof(*rec), (const ubyte *)rec);
+	rec->plot = 0;
+	rec->unknown3 = 'a';
+	
+	vdata = (char *)rec + sizeof(*rec);
+	if ( wpt->shortname ) {
+		strncpy( vdata, wpt->shortname, 21 );
+		vdata[20] = '\0';
+	}
+	else { 
+		vdata[0] ='\0';
+	}
+	vdata += strlen( vdata ) + 1;
+	if ( wpt->description ) {
+		strncpy( vdata, wpt->description, 33 );
+		vdata[32] = '\0';
+	}
+	else {
+		vdata[0] = '\0';
+	}
+	vdata += strlen( vdata ) + 1;
+	vdata[0] = '\0';
+	vdata[1] = '\0';
+	vdata += 2;
+	
+	opdb_rec = new_Record (0, 0, ct++, vdata-(char *)rec, (const ubyte *)rec);
 
 	if (opdb_rec == NULL) {
 		fatal(MYNAME ": libpdb couldn't create record");
@@ -179,35 +210,53 @@ abort();
 	if (pdb_AppendRecord(opdb, opdb_rec)) {
 		fatal(MYNAME ": libpdb couldn't append record");
 	}
-#endif
 }
-
-struct hdr{
-	char *wpt_name; 
-	waypoint *wpt;
-};
 
 static void
 data_write(void)
 {
-	int ct = waypt_count();
-	struct hdr *htable;
-        queue *elem, *tmp;
+        extern queue waypt_head;
+	queue *elem, *tmp;
 
+	static char *appinfo = 
+		"\0\x01"
+		"User\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+		"\0\x01\x02\x03\x04\x05\x06\x07\x08"
+		"\x09\x0a\x0b\x0c\x0d\x0e\x0f\0\0";
+	
 	if (NULL == (opdb = new_pdb())) { 
 		fatal (MYNAME ": new_pdb failed\n");
 	}
 
-	strncpy(opdb->name, out_fname, PDB_DBNAMELEN);
+	strncpy(opdb->name, "Companion Waypoints", PDB_DBNAMELEN);
 	opdb->name[PDB_DBNAMELEN-1] = 0;
 	opdb->attributes = PDB_ATTR_BACKUP;
 	opdb->ctime = opdb->mtime = time(NULL) + 2082844800U;
 	opdb->type = MYTYPE;  /* CWpt */
 	opdb->creator = MYCREATOR; /* cGPS */
-	opdb->version = 0;
-
+	opdb->version = 1;
+	opdb->appinfo = (void *)appinfo;
+	opdb->appinfo_len = 276;
+        QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+		my_writewpt((waypoint *)elem);
+	}
+	
 	pdb_Write(opdb, fileno(file_out));
-	free(htable);
 }
 
 
