@@ -120,7 +120,10 @@ my_write_wpt(const waypoint *wpt)
 {
 	SHPObject *shpobject;
 
-	shpobject = SHPCreateSimpleObject(SHPT_POINT, 1, &wpt->longitude, &wpt->latitude, &wpt->altitude);
+	shpobject = SHPCreateSimpleObject(SHPT_POINT, 1, 
+			(double *)(void *)&wpt->longitude, 
+			(double *)(void *)&wpt->latitude, 
+			(double *)(void *)&wpt->altitude);
 	SHPWriteObject(ohandle, -1, shpobject);
 	SHPDestroyObject(shpobject);
 }
