@@ -407,7 +407,7 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt)
 	double	mps_proximity = unknown_alt;
 	double	mps_depth = unknown_alt;
 
-	thisWaypoint = xcalloc(sizeof(*thisWaypoint), 1);
+	thisWaypoint = waypt_new();
 	*wpt = thisWaypoint;
 
 	mps_readstr(mps_file, wptname, sizeof(wptname));
