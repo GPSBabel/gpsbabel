@@ -236,6 +236,7 @@ main(int argc, char *argv[])
 			case 'v':
 				switch(argv[argn][2]) {
 				case 's': global_opts.verbose_status = 1; break;
+				case 'S': global_opts.verbose_status = 2; break;
 				}
 				break;
 
