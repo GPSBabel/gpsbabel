@@ -881,6 +881,8 @@ gpx_rd_deinit(void)
 	if (fd) {
 	        fclose(fd);
 	}
+	XML_ParserFree(psr);
+	psr = NULL;
 }
 
 void
