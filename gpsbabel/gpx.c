@@ -39,6 +39,7 @@ static char *gpx_author = NULL;
 vmem_t current_tag;
 
 static waypoint *wpt_tmp;
+static int cache_descr_is_html;
 static FILE *fd;
 static FILE *ofd;
 static void *mkshort_handle;
@@ -79,6 +80,9 @@ typedef enum {
 	tt_cache_container,
 	tt_cache_difficulty,
 	tt_cache_terrain,
+	tt_cache_hint,
+	tt_cache_desc_short,
+	tt_cache_desc_long,
 	tt_cache_log_wpt,
 	tt_rte,
 	tt_rte_name,
@@ -142,6 +146,9 @@ tag_mapping tag_path_map[] = {
 	{ tt_cache_container, 1, "/gpx/wpt/groundspeak:cache/groundspeak:container" },
 	{ tt_cache_difficulty, 1, "/gpx/wpt/groundspeak:cache/groundspeak:difficulty" },
 	{ tt_cache_terrain, 1, "/gpx/wpt/groundspeak:cache/groundspeak:terrain" },
+	{ tt_cache_hint, 1, "/gpx/wpt/groundspeak:cache/groundspeak:encoded_hints" },
+	{ tt_cache_desc_short, 1, "/gpx/wpt/groundspeak:cache/groundspeak:short_description" },
+	{ tt_cache_desc_long, 1, "/gpx/wpt/groundspeak:cache/groundspeak:long_description" },
 	{ tt_cache_log_wpt, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:log_wpt" },
 
 	{ tt_rte, 0, "/gpx/rte" },
@@ -245,6 +252,21 @@ tag_wpt(const char **attrv)
 				&wpt_tmp->longitude);
 		}
 		avp+=2;
+	}
+}
+
+static void
+tag_cache_desc(const char ** attrv)
+{
+	const char **avp;
+
+	cache_descr_is_html = 0;
+	for (avp = &attrv[0]; *avp; avp+=2) {
+		if (strcmp(avp[0], "html") == 0) {
+			if (strcmp(avp[1], "True") == 0) {
+				cache_descr_is_html = 1;
+			}
+		}
 	}
 }
 
@@ -404,6 +426,11 @@ gpx_start(void *data, const char *el, const char **attr)
 	case tt_cache_log_wpt:
 		if (opt_logpoint)
 			tag_log_wpt(attr);
+		break;
+	case tt_cache_desc_long:
+	case tt_cache_desc_short:
+		tag_cache_desc(attr);
+		break;
 	}
 	if (passthrough) {
 		start_something_else(el, attr);
@@ -573,6 +600,24 @@ gpx_end(void *data, const char *el)
 	case tt_cache_difficulty:
 		sscanf(cdatastrp, "%f", &x);
 		wpt_tmp->gc_data.diff = x * 10;
+		break;
+	case tt_cache_hint:
+		rtrim(cdatastrp);
+		if (cdatastrp[0]) {
+			wpt_tmp->gc_data.hint = xstrdup(cdatastrp);
+		}
+		break;
+	case tt_cache_desc_long:
+		rtrim(cdatastrp);
+		if (cdatastrp[0]) {
+			wpt_tmp->gc_data.desc_long = xstrdup(cdatastrp);
+		}
+		break;
+	case tt_cache_desc_short:
+		rtrim(cdatastrp);
+		if (cdatastrp[0]) {
+			wpt_tmp->gc_data.desc_short = xstrdup(cdatastrp);
+		}
 		break;
 	case tt_cache_terrain:
 		sscanf(cdatastrp, "%f", &x);

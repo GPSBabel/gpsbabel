@@ -101,6 +101,9 @@ typedef struct {
 	int diff; /* (multiplied by ten internally) */
 	int terr; /* (likewise) */
 	time_t exported;
+	char *hint; /* all these UTF8, XML entities removed, May be not HTML. */
+	char *desc_short;
+	char *desc_long; 
 } geocache_data ;
 
 
@@ -389,6 +392,7 @@ signed int get_tz_offset(void);
 const char *get_cache_icon(const waypoint *waypointp);
 char * xml_entitize(const char * str);
 char * str_utf8_to_cp1252( const char * str );
+char * str_utf8_to_ascii( const char * str );
 
 /*
  * PalmOS records like fixed-point numbers, which should be rounded
