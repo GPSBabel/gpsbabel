@@ -349,7 +349,7 @@ gs_mktype(char *t)
 	int sz = sizeof(gs_type_map) / sizeof(gs_type_map[0]);
 
 	for (i = 0; i < sz; i++) {
-		if (0 == strcmp(t, gs_type_map[i].name)) {
+		if (0 == case_ignore_strcmp(t, gs_type_map[i].name)) {
 			return gs_type_map[i].type;
 		}
 	}
