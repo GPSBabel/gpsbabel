@@ -247,7 +247,10 @@ typedef struct ff_vecs {
 typedef struct style_vecs {
 	const char *name;
 	const char *style_buf;
+	const char *desc;
+	const char *ext;
 } style_vecs_t;
+extern style_vecs_t style_list[];
 
 typedef struct filter_vecs {
 	filter_init f_init;
@@ -318,6 +321,7 @@ int case_ignore_strcmp(const char *s1, const char *s2);
 
 void rtrim(char *s);
 signed int get_tz_offset(void);
+const char *get_cache_icon(const waypoint *waypointp);
 
 /*
  * PalmOS records like fixed-point numbers, which should be rounded

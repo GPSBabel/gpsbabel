@@ -1083,25 +1083,10 @@ mag_waypt_pr(const waypoint *waypointp)
 		icon_token = mag_find_token_from_descr(waypointp->icon_descr);
 	}
 
-	/*
-	 * For icons, type overwrites container.  So a multi-micro will 
-	 * get the icons for "multi".
- 	 */
-	switch (waypointp->gc_data.container) {
-		case gc_micro: 
-			icon_token = mag_find_token_from_descr("Micro-Cache");
-			break;
+	if (get_cache_icon(waypointp)) {
+		icon_token = mag_find_token_from_descr(get_cache_icon(waypointp));
 	}
-	switch (waypointp->gc_data.type) {
-		case gt_virtual:
-			icon_token = mag_find_token_from_descr("Virtual cache");
-			break;
-		case gt_multi:
-			icon_token = mag_find_token_from_descr("Multi-Cache");
-			break;
-		default:
-			break;
-	}
+
 	isrc = waypointp->notes ? waypointp->notes : waypointp->description;
 	owpt = global_opts.synthesize_shortnames ?
                         mkshort(mkshort_handle, isrc) : waypointp->shortname,
