@@ -87,8 +87,9 @@ data_read(void)
 
 	    /* data delimited by commas, possibly enclosed in quotes.  */
 	    s = buff;
-	    s = csv_lineparse(s, ",", "\"", linecount);
 
+	    s = csv_lineparse(s, ",", "\"", linecount);
+	    
 	    i = 0;
 	    while (s) {
 		switch (i) {
@@ -99,12 +100,10 @@ data_read(void)
 		    wpt_tmp->position.longitude.degrees = atof(s);
 		    break;
 		case 2:
-		    wpt_tmp->description = xstrdup(s);
-		    wpt_tmp->description = csv_stringtrim(wpt_tmp->description, "");
+		    wpt_tmp->description = csv_stringtrim(s, "");
 		    break;
 		case 3:
-		    wpt_tmp->shortname = xstrdup(s);
-		    wpt_tmp->shortname = csv_stringtrim(wpt_tmp->shortname, "");
+		    wpt_tmp->shortname = csv_stringtrim(s, "");
 		    break;
 		case 4:
                     /* ignore.  another name-type  */
@@ -142,27 +141,42 @@ data_read(void)
 }
 
 static void 
-mxf_disp(waypoint * wpt)
+mxf_waypt_pr(const waypoint * wpt)
 {
     int icon = 47; /* default to "dot" */
     const char *color_hex = "ff0000";
+    char *shortname = NULL;
+    char *description = NULL;
 
-    csv_stringclean(wpt->shortname, ",\"");
-    wpt->shortname = csv_stringtrim(wpt->shortname, "");
+    if (wpt->shortname) {
+        shortname = csv_stringclean(wpt->shortname, ",\"");
+        shortname = csv_stringtrim(shortname, "");
+    } else {
+        shortname = xstrdup("");
+    }
     
-    csv_stringclean(wpt->description, ",\"");
-    wpt->description = csv_stringtrim(wpt->description, "");
-
+    if (wpt->description) {
+        description = csv_stringclean(wpt->description, ",\"");
+        description = csv_stringtrim(description, "");
+    } else {
+        shortname = xstrdup("");
+    }
+    
     fprintf(file_out, "%08.5f, %08.5f, \"%s\", \"%s\", \"%s\", %s, %d\n",
 	    wpt->position.latitude.degrees, wpt->position.longitude.degrees,
-	    wpt->description, wpt->shortname, wpt->description, 
+	    description, shortname, description, 
 	    color_hex, icon);
+
+    if (description)
+	free(description);
+    if (shortname)
+	free(shortname);
 }
 
 static void 
 data_write(void)
 {
-    waypt_disp_all(mxf_disp);
+    waypt_disp_all(mxf_waypt_pr);
 }
 
 ff_vecs_t mxf_vecs = {

@@ -233,24 +233,34 @@ psp_read(void)
 }
 
 static void
-psp_disp(waypoint *wpt)
+psp_waypt_pr(const waypoint *wpt)
 {
 	double lon, lat;
 	char tbuf[64];
 	char c;
 	int i;
+	char *shortname;
+	char *description;
+	
 
-        /* this output format pretty much requires a description and a shortname */
-        if (!wpt->shortname)  {
-            if (wpt->description)
-                wpt->shortname = xstrdup(wpt->description);
+        /* this output format pretty much requires a description
+         * and a shortname 
+         */
+
+        if (wpt->shortname)  {
+            shortname = xstrdup(wpt->shortname);
+        } else {
+            if (wpt->description) 
+                shortname = xstrdup(wpt->description);
             else 
-                wpt->shortname = xstrdup("");
+                shortname = xstrdup("");
         }
-        if (!wpt->description)  {
-            wpt->description = xstrdup(wpt->shortname);
-        }
-        
+                
+        if (wpt->description)  {
+            description = xstrdup(wpt->description);
+        } else {
+            description = xstrdup(shortname);
+	}        
 
         /* convert lat/long back to radians */
 	lat = (wpt->position.latitude.degrees * M_PI) / 180.0;
@@ -288,21 +298,21 @@ psp_disp(waypoint *wpt)
         /* 3 unknown bytes */
         fwrite(&tbuf, 1, 3, psp_file_out); /* 3 junk */
 
-        c = strlen(wpt->shortname);
+        c = strlen(shortname);
         /* 1 string size */
         fwrite(&c, 1, 1, psp_file_out);
 
-        for (i = 0 ; wpt->shortname[i] ; i++) {
-             fwrite(&wpt->shortname[i], 1, 1, psp_file_out);    /* char */
+        for (i = 0 ; shortname[i] ; i++) {
+             fwrite(&shortname[i], 1, 1, psp_file_out);    /* char */
              fwrite(&tbuf[0], 1, 1, psp_file_out);              /* null */
         }
 
-        c = strlen(wpt->description);
+        c = strlen(description);
         /*  1 byte string size */
         fwrite(&c, 1, 1, psp_file_out);
 
-        for (i = 0 ; wpt->description[i] ; i++) {
-             fwrite(&wpt->description[i], 1, 1, psp_file_out);  /* char */
+        for (i = 0 ; description[i] ; i++) {
+             fwrite(&description[i], 1, 1, psp_file_out);  /* char */
              fwrite(&tbuf[0], 1, 1, psp_file_out);              /* null */
         }
 
@@ -315,6 +325,9 @@ psp_disp(waypoint *wpt)
              fwrite(&tbuf[i], 1, 1, psp_file_out);              /* char */
              fwrite(&tbuf[0], 1, 1, psp_file_out);              /* null */
         }
+        
+        free (shortname);
+        free (description);
 }
 
 static void
@@ -338,7 +351,7 @@ psp_write(void)
 
         fwrite(&header_bytes, 1,  32, psp_file_out);
 
-        waypt_disp_all(psp_disp);
+        waypt_disp_all(psp_waypt_pr);
 }
 
 ff_vecs_t psp_vecs = {

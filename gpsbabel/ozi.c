@@ -95,8 +95,7 @@ data_read(void)
 		    break;
 		case 1:
 		    /* waypoint name */
-		    wpt_tmp->shortname = xstrdup(s);
-		    wpt_tmp->shortname = csv_stringtrim(wpt_tmp->shortname, "");
+		    wpt_tmp->shortname = csv_stringtrim(s, "");
 		    break;
 		case 2:
 		    /* degrees latitude */
@@ -127,8 +126,7 @@ data_read(void)
 		    break;
 		case 10:
 		    /* Description */
-		    wpt_tmp->description = xstrdup(s);
-		    wpt_tmp->description = csv_stringtrim(wpt_tmp->description, "");
+		    wpt_tmp->description = csv_stringtrim(s, "");
 
 		    break;
 		case 11:
@@ -174,24 +172,36 @@ data_read(void)
 }
 
 static void 
-ozi_disp(waypoint * wpt)
+ozi_waypt_pr(const waypoint * wpt)
 {
     static int index = 0;
     double alt_feet;
     double ozi_time;
+    char * description;
+    char * shortname;
 
     ozi_time = (wpt->creation_time / 86400.0) + 25569.0;
     alt_feet = (wpt->position.altitude.altitude_meters * 3.2808); 
     
-    csv_stringclean(wpt->description, ",");
-    csv_stringclean(wpt->shortname, ",");
+    if (wpt->description) 
+        description = csv_stringclean(wpt->description, ",");
+    else
+        description = xstrdup("");
+        
+    if (wpt->shortname) 
+        shortname = csv_stringclean(wpt->shortname, ",");
+    else 
+        shortname = xstrdup("");
 
     index++;
 
     fprintf(file_out, "%4d,%-14.14s,%11.6f,%11.6f,%011.5f,%3d,%2d,%2d,%10d,%10d,%-40.40s,%2d,%2d,%5d,%7.0f,%2d,%2d,%2d\n", 
-	index, wpt->shortname, wpt->position.latitude.degrees, 
+	index, shortname, wpt->position.latitude.degrees, 
 	wpt->position.longitude.degrees, ozi_time, 0, 1, 3, 0, 65535,
-	wpt->description, 0, 0, 0, alt_feet, 6, 0, 17);
+	description, 0, 0, 0, alt_feet, 6, 0, 17);
+
+    free(description);
+    free(shortname);
 
 }
 
@@ -204,7 +214,7 @@ data_write(void)
     fprintf(file_out, "Reserved 2\n");
     fprintf(file_out, "Reserved 3\n");
 
-    waypt_disp_all(ozi_disp);
+    waypt_disp_all(ozi_waypt_pr);
 }
 
 ff_vecs_t ozi_vecs = {
