@@ -32,9 +32,12 @@
  * sloppy about not obeying packet boundries.  If this is too high, the
  * multiple packets responding to the device inquriy will be glommed into
  * one packet and we'll misparse them.  If it's too low, we'll get partially
- * satisfied reads.
+ * satisfied reads.  It turns out this isn't terrible becuase we still end
+ * up with DLE boundings and the upper layers (which are used to doing frame
+ * coalescion into packets anyway becuase of their serial background) will
+ * compensate.
  */
-#define TMOUT_I 0015 /*  Milliseconds to timeout intr pipe access. */
+#define TMOUT_I 0100 /*  Milliseconds to timeout intr pipe access. */
 
 int gusb_intr_in_ep;
 int gusb_bulk_out_ep;
@@ -79,49 +82,12 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 {
 	int r;
 
-        r = usb_bulk_write(udev, gusb_bulk_out_ep, &opkt->dbuf, sz, TMOUT_I);
+        r = usb_bulk_write(udev, gusb_bulk_out_ep, &opkt->dbuf[0], sz, TMOUT_I);
 	dump ("Sent", &opkt->dbuf[0], r);
 	if (r != sz) {
-		fprintf(stderr, "Bad cmdsend\n");
+		fprintf(stderr, "Bad cmdsend r %d sz %d\n", r, sz);
 	}
 }
-#if 0
-int
-gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
-{
-	int rv = 0;
-	unsigned char *obuf = &ibuf->dbuf;
-	unsigned char *buf = obuf;
-
-	while (sz) {
-		int r;
-		/*
-		 * Since Garmin stupidly put bulk data on an interrupt pipe
-		 * with an absurdly tiny buffer, we have to coalesce reads
-		 * and we have to be fast about getting them.    (High speed
-		 * polling totally misses the point of USB...)
-		 */
-
-		r = usb_interrupt_read(udev, gusb_intr_in_ep, buf, sz, TMOUT_I);
-		printf("Read: %d/%d \n", r, sz);
-		if (r > 0) {
-			buf += r;
-			rv += r;
-			sz -= r;
-		}
-		if (r < 0) return rv;
-		/*
-		 * A zero length read AFTER a successful read means we're
-		 * done.
-		 */
-		if (r == 0 && rv) {
-			break;
-		}
-	}
-	dump("completed intr Got", obuf, rv);
-	return rv;
-}
-#else
 
 int
 gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
@@ -129,7 +95,7 @@ gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
 	unsigned char *buf = &ibuf->dbuf[0];
 	unsigned char *obuf = buf;
 	int r = -1, tsz = 0;
- while (r <= 0)
+
 	r = usb_interrupt_read(udev, gusb_intr_in_ep, buf, sz, TMOUT_I);
 
 	tsz = r;
@@ -149,16 +115,12 @@ gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
         }
 
 	return (r);
-
-
 }
-#endif
 
 void
 garmin_usb_teardown(void)
 {
 	if (udev) {
-		fprintf(stderr, "Tearing down\n");
 		usb_release_interface(udev, 0);
 		usb_close(udev);
 		udev = NULL;
@@ -171,6 +133,12 @@ garmin_usb_start(struct usb_device *dev)
 	int i;
 	char ibuf[4096];
 
+	if (udev) return;
+
+	udev = usb_open(dev);
+	usb_reset(udev);
+	usb_close(udev);
+
 	udev = usb_open(dev);
 	atexit(garmin_usb_teardown);
 	if (!udev) { fatal("usb_open failed"); }
@@ -178,7 +146,7 @@ garmin_usb_start(struct usb_device *dev)
 	 * Hrmph.  No iManufacturer or iProduct headers....
 	 */
 	if (usb_claim_interface(udev, 0) < 0) {
-		abort();
+//		abort();
 	}
 
 	if (usb_set_configuration(udev, 1) < 0) {
@@ -202,20 +170,11 @@ garmin_usb_start(struct usb_device *dev)
 					gusb_intr_in_ep = EA(ep->bEndpointAddress);
 				break;
 		}
-		}
-//printf("Bulk in: %d\n", gusb_bulk_in_ep);
-//printf("Bulk out: %d\n", gusb_bulk_out_ep);
-//printf("intr in: %d\n", gusb_intr_in_ep);
+	}
 
 	garmin_usb_syncup();
 
-// fprintf(stdout, "====================================================\n");
-
 	return;
-	usb_release_interface(udev, 0);
-	usb_reset(udev);
-	usb_close(udev);
-exit(1);
 }
 
 void
@@ -224,11 +183,6 @@ garmin_usb_syncup(void)
 	int maxct = 5;
 	int maxtries;
 	char ibuf[4096];
-#if 0
-	usb_clear_halt(udev, gusb_intr_in_ep);
-	usb_clear_halt(udev, gusb_bulk_out_ep);
-	usb_clear_halt(udev, gusb_bulk_in_ep);
-#endif
 
 	for (maxtries = maxct; maxtries; maxtries--) {
 

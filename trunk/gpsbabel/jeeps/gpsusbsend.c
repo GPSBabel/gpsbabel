@@ -24,23 +24,21 @@
 #include <errno.h>
 #include "garminusb.h"
 
-
-void GPS_Make_Packet_usb(GPS_PPacket *packet, UC type, UC *data, int16 n)
+void 
+GPS_Make_Packet_usb(GPS_PPacket *packet, UC type, UC *data, int16 n)
 {
-    garmin_usb_packet **up = (garmin_usb_packet**) packet;
+	/*
+	 * For the USB case, it's a little tacky that we just copy
+	 * the params into *packet, but we really don't have any manipulations
+	 * to do here.   They're done in send_packet in order to keep the
+	 * contents of *packet identical for the serial and USB cases.
+	 */
 
-    /*
-     * This is a little tacky that we're stuffing a garmin_usb_packet
-     * into a GPS_PPacket, but the packet is big enough and we have only
-     * a few places that really peek into this structure anyway...
-     */
-    memset(*up, 0, sizeof **packet);	
-    (*up)->gusb_pkt.type = 0x14; /* Garmin protocol layer */
-    le_write16((*up)->gusb_pkt.pkt_id, type);
-    le_write32((*up)->gusb_pkt.datasz, n);
-    memcpy(&(*up)->gusb_pkt.databuf, data, n);
-
-    return;
+	(*packet)->type = type;
+	memcpy((*packet)->data, data, n);
+	(*packet)->n = n;
+	
+	return;
 }
 
 int32
@@ -48,8 +46,17 @@ GPS_Write_Packet_usb(int32 fd, GPS_PPacket packet)
 {
 	size_t ret, sz;
 
-    	garmin_usb_packet *gp = (garmin_usb_packet*) packet;
-	sz = le_read32(gp->gusb_pkt.datasz);
+	garmin_usb_packet gp = {0};
 
-	return  gusb_cmd_send(gp, sz + 12);
+
+	/*
+	 * Take the "portable" GPS_Packet data and put them into
+	 * the USB packet that we will put on the wire.
+	 */
+	gp.gusb_pkt.type = 0x14;
+    	le_write16(&gp.gusb_pkt.pkt_id, packet->type);
+	le_write32(&gp.gusb_pkt.datasz, packet->n );
+	memcpy(&gp.gusb_pkt.databuf, packet->data, packet->n);
+
+	return  gusb_cmd_send(&gp, packet->n + 12);
 }

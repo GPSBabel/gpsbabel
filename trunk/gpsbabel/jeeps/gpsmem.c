@@ -39,7 +39,7 @@
 GPS_PPacket GPS_Packet_New(void)
 {
     GPS_PPacket ret;
-    int hdr_size = gps_is_usb  ? sizeof(garmin_usb_packet) : sizeof(GPS_OPacket) ;
+    int hdr_size = sizeof(GPS_OPacket) ;
     if(!(ret=(GPS_PPacket )malloc(hdr_size)))
     
     {
