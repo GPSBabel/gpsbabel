@@ -116,7 +116,7 @@ int32 GPS_Serial_Flush(int32 fd)
 	return 1;
 }
 
-int32 GPS_Serial_Write(int ignored, void *obuf, int size)
+int32 GPS_Serial_Write(int32 ignored, const void *obuf, int size)
 {
 	DWORD len;
 	WriteFile (comport, obuf, size, &len, NULL);
@@ -126,7 +126,7 @@ int32 GPS_Serial_Write(int ignored, void *obuf, int size)
 	return len;
 }
 
-int GPS_Serial_Read(int ignored, void *ibuf, int size)
+int GPS_Serial_Read(int32 ignored, void *ibuf, int size)
 {
 	DWORD cnt;
 
@@ -272,7 +272,7 @@ int32 GPS_Serial_Read(int32 handle, void *ibuf, int size)
 		return read(handle, ibuf, size);
 }
 
-int32 GPS_Serial_Write(int32 handle, void *obuf, int size)
+int32 GPS_Serial_Write(int32 handle, const void *obuf, int size)
 {
 		return write(handle, obuf, size);
 }

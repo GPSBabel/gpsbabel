@@ -40,5 +40,5 @@ typedef enum {
 	ms_type_rgn = 0,
 	ms_type_wpt = 1,
 	ms_type_track = 2,
-	ms_type_log = 3,
+	ms_type_log = 3
 } ms_type;

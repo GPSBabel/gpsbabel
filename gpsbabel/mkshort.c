@@ -196,7 +196,7 @@ mkshort(const char *istring)
 	 * Now brutally truncate the resulting string, preserve trailing 
 	 * numeric data.
  	 */
-	if ((i = strlen(ostring)) > target_len) {
+	if ((/*i = */strlen(ostring)) > target_len) {
 		strcpy(&ostring[target_len] - strlen(np), np);
 	}
 	return ostring;

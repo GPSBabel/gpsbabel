@@ -19,6 +19,7 @@
 
 
 #include "defs.h"
+#include <ctype.h>
 
 global_options global_opts;
 

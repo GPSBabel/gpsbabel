@@ -117,7 +117,7 @@ int32 GPS_Write_Packet(int32 fd, GPS_PPacket packet)
 
     GPS_Diag("\nTx Data:");
     Diag(&packet->dle, 3);    
-    if((ret=GPS_Serial_Write(fd,(const void *)&packet->dle,(size_t)3)) == -1)
+    if((ret=GPS_Serial_Write(fd,(const void *) &packet->dle,(size_t)3)) == -1)
     {
 	perror("write");
 	GPS_Error("SEND: Write to GPS failed");

@@ -353,7 +353,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 }
 
 static void
-gpx_track_hdr(route_head *rte)
+gpx_track_hdr(const route_head *rte)
 {
 	fprintf(ofd, "<trk>\n");
 	if (rte->rte_name) {
@@ -381,7 +381,7 @@ gpx_track_disp(const waypoint *waypointp)
 }
 
 static void
-gpx_track_tlr(route_hdr *rte)
+gpx_track_tlr(const route_head *rte)
 {
 	fprintf(ofd, "</trkseg>\n");
 	fprintf(ofd, "</trk>\n");
