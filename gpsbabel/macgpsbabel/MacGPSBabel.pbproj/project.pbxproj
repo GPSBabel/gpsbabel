@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		080E96DCFE201CFB7F000001 = {
 			fileRef = 29B97318FDCFA39411CA2CEA;
@@ -19,6 +19,7 @@
 			isa = PBXGroup;
 			name = Scripts;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		089C165CFE840E0CC02AAC07 = {
 			children = (
@@ -28,13 +29,16 @@
 			isa = PBXVariantGroup;
 			name = InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		089C165DFE840E0CC02AAC07 = {
 			fileEncoding = 10;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		089C165EFE840E0CC02AAC07 = {
 			fileRef = 089C165CFE840E0CC02AAC07;
@@ -60,12 +64,15 @@
 			isa = PBXGroup;
 			name = "Linked Frameworks";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		1058C7A1FEA54F0111CA2CBB = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = Cocoa.framework;
 			path = /System/Library/Frameworks/Cocoa.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		1058C7A2FEA54F0111CA2CBB = {
 			children = (
@@ -75,6 +82,7 @@
 			isa = PBXGroup;
 			name = "Other Frameworks";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		1058C7A3FEA54F0111CA2CBB = {
 			fileRef = 1058C7A1FEA54F0111CA2CBB;
@@ -93,9 +101,11 @@
 //173
 //174
 		17587328FF379C6511CA2CBB = {
-			isa = PBXApplicationReference;
+			explicitFileType = wrapper.application;
+			isa = PBXFileReference;
 			path = MacGPSBabel.app;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 //170
 //171
@@ -114,6 +124,7 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //190
 //191
@@ -126,6 +137,8 @@
 //293
 //294
 		29B97313FDCFA39411CA2CEA = {
+			buildSettings = {
+			};
 			buildStyles = (
 				4A9504CCFFE6A4B311CA0CBA,
 				4A9504CDFFE6A4B311CA0CBA,
@@ -150,6 +163,7 @@
 			name = Application;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97315FDCFA39411CA2CEA = {
 			children = (
@@ -159,12 +173,15 @@
 			name = "Other Sources";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97316FDCFA39411CA2CEA = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = main.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97317FDCFA39411CA2CEA = {
 			children = (
@@ -178,6 +195,7 @@
 			name = Resources;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97318FDCFA39411CA2CEA = {
 			children = (
@@ -187,12 +205,15 @@
 			name = MainMenu.nib;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97319FDCFA39411CA2CEA = {
 			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
 			name = English;
 			path = English.lproj/MainMenu.nib;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97323FDCFA39411CA2CEA = {
 			children = (
@@ -203,18 +224,23 @@
 			name = Frameworks;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97324FDCFA39411CA2CEA = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = AppKit.framework;
 			path = /System/Library/Frameworks/AppKit.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		29B97325FDCFA39411CA2CEA = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = Foundation.framework;
 			path = /System/Library/Frameworks/Foundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		29B97326FDCFA39411CA2CEA = {
 			buildPhases = (
@@ -262,7 +288,7 @@
 	<key>CFBundleSignature</key>
 	<string>mGPS</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.4</string>
+	<string>1.0.5</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>YES</string>
 	<key>NSMainNibFile</key>
@@ -327,21 +353,24 @@
 //4A3
 //4A4
 		4A9504CCFFE6A4B311CA0CBA = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
 		};
 		4A9504CDFFE6A4B311CA0CBA = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				OTHER_OSAFLAGS = "-x";
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -357,10 +386,12 @@
 //DA3
 //DA4
 		DA206CF1015C4E2903C91932 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = AppleScriptKit.framework;
 			path = /System/Library/Frameworks/AppleScriptKit.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		DA206CF2015C4E2903C91932 = {
 			fileRef = DA206CF1015C4E2903C91932;
@@ -371,14 +402,18 @@
 		DA206CF3015C4E8B03C91932 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.applescript;
 			path = MacGPSBabel.applescript;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		DA206CF4015C4E8B03C91932 = {
 			isa = PBXFileReference;
+			lastKnownFileType = archive.asdictionary;
 			name = AppleScriptKit.asdictionary;
 			path = /System/Library/Frameworks/AppleScriptKit.framework/Versions/A/Resources/AppleScriptKit.asdictionary;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		DA206CF5015C4E8B03C91932 = {
 			fileRef = DA206CF3015C4E8B03C91932;
@@ -412,13 +447,17 @@
 //F54
 		F508F3FF05A7A82F01A80064 = {
 			isa = PBXFileReference;
+			lastKnownFileType = text.rtf;
 			path = Credits.rtf;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F514A08D05A6164F01A80064 = {
-			isa = PBXExecutableFileReference;
+			isa = PBXFileReference;
+			lastKnownFileType = "compiled.mach-o.executable";
 			path = gpsbabel;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F514A08E05A6164F01A80064 = {
 			fileRef = F514A08D05A6164F01A80064;
@@ -428,8 +467,10 @@
 		};
 		F52E6CB4059959B801A80064 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
 			path = mgb.icns;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F52E6CB5059959B801A80064 = {
 			fileRef = F52E6CB4059959B801A80064;
@@ -440,8 +481,10 @@
 		F586ED0005CB576C017C67C1 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.applescript;
 			path = preferences.applescript;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F586ED0105CB576C017C67C1 = {
 			fileRef = F586ED0005CB576C017C67C1;
