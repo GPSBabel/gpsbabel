@@ -50,12 +50,9 @@ leaktest:
 	./testo
 	tools/memdebug | grep -v '^command line:'
 
-internal_styles.c: mkstyle.sh
-	./mkstyle.sh > internal_styles.c
-
 dep:
-	make clean && make CC="gcc -MMD"  && cat *.d */*.d > /tmp/dep
-	(echo "internal_styles.c: mkstyle.sh" ; ls style/*.style) >> /tmp/dep
+	make clean && make CC="gcc -MMD"  && cat *.d */*.d > /tmp/dep && rm *.d
+	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e "\t./mkstyle.sh > internal_styles.c" ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
 VERSIONU=1_1_1_beta04162003
@@ -69,11 +66,13 @@ release:
 	cd /tmp/gpsbabel-$(VERSIOND)/mingw ; make  && zip -j gpsbabel-$(VERSIOND).zip  gpsbabel.exe libexpat.dll ../win32/gpsbabelfront.exe && cp gpsbabel-$(VERSIOND).zip /tmp
 	ncftpput -u anonymous upload.sf.net  /incoming /tmp/gpsbabel-$(VERSIOND).tar.gz /tmp/gpsbabel-$(VERSIOND).zip
 
+# Machine generated from here down.   
+
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 copilot.o: copilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
-csv.o: csv.c defs.h queue.h csv_util.h
 csv_util.o: csv_util.c defs.h queue.h csv_util.h
-dna.o: dna.c defs.h queue.h csv_util.h
+duplicate.o: duplicate.c defs.h queue.h
+filter_vecs.o: filter_vecs.c defs.h queue.h
 garmin.o: garmin.c defs.h queue.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
@@ -81,21 +80,19 @@ garmin.o: garmin.c defs.h queue.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 gcdb.o: gcdb.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 geo.o: geo.c defs.h queue.h
-gpsdrive.o: gpsdrive.c defs.h queue.h csv_util.h
-gpsman.o: gpsman.c defs.h queue.h
 gpspilot.o: gpspilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 gpsutil.o: gpsutil.c defs.h queue.h magellan.h
 gpx.o: gpx.c defs.h queue.h
 holux.o: holux.c defs.h queue.h holux.h
+internal_styles.o: internal_styles.c defs.h queue.h
 magnav.o: magnav.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 magproto.o: magproto.c defs.h queue.h magellan.h
 main.o: main.c defs.h queue.h
 mapsend.o: mapsend.c defs.h queue.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h
 mkshort.o: mkshort.c defs.h queue.h
-mxf.o: mxf.c defs.h queue.h csv_util.h
-ozi.o: ozi.c defs.h queue.h csv_util.h
 pcx.o: pcx.c defs.h queue.h
+position.o: position.c defs.h queue.h
 psp.o: psp.c defs.h queue.h
 queue.o: queue.c queue.h
 route.o: route.c defs.h queue.h
@@ -107,13 +104,13 @@ tpg.o: tpg.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
   jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 util.o: util.c defs.h queue.h
-vecs.o: vecs.c defs.h queue.h
-filter_vecs.o: filter_vecs.c defs.h queue.h
-position.o:position.c defs.h
+vecs.o: vecs.c defs.h queue.h csv_util.h
 waypt.o: waypt.c defs.h queue.h
 xcsv.o: xcsv.c defs.h queue.h csv_util.h
-coldsync/pdb.o: coldsync/pdb.c coldsync/config.h coldsync/pdb.h
-coldsync/util.o: coldsync/util.c coldsync/config.h
+coldsync/pdb.o: coldsync/pdb.c coldsync/config.h coldsync/palm.h \
+  coldsync/pdb.h
+coldsync/util.o: coldsync/util.c coldsync/config.h coldsync/pconn/util.h \
+  coldsync/palm.h
 jeeps/gpsapp.o: jeeps/gpsapp.c jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
@@ -165,3 +162,5 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
+internal_styles.c: mkstyle.sh style/README.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mxf.style style/nima.style style/ozi.style style/s_and_t.style style/xmap.style style/xmapwpt.style
+	./mkstyle.sh > internal_styles.c
