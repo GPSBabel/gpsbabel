@@ -881,6 +881,12 @@ void free_gpx_extras( xml_tag *tag )
 		if (tag->parentcdata) {
 			xfree(tag->parentcdata);
 		}
+		if (tag->tagname) {
+        		xfree(tag->tagname);
+		}
+		if (tag->attributes) {
+        		xfree(tag->attributes);
+		}
 		next = tag->sibling;
 		xfree(tag);
 		tag = next;
