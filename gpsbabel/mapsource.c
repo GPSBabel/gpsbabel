@@ -1788,7 +1788,7 @@ mps_write(void)
 	if (mpsverout)
 		mps_ver_out = atoi(mpsverout);
 	else
-		mps_ver_out = 3;
+		mps_ver_out = 5;
 
 	mkshort_handle = mkshort_new_handle();
 

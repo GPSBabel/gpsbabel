@@ -234,13 +234,13 @@ compare ${TMPDIR}/ms1.gpx ${TMPDIR}/ms2.gpx
 # MRCB mapsource track test
 #
 rm -f ${TMPDIR}/mps-track.mps
-${PNAME} -t -i mapsource -f reference/track/mps-track.mps -o mapsource \
+${PNAME} -t -i mapsource -f reference/track/mps-track.mps -o mapsource,mpsverout=3 \
          -F ${TMPDIR}/mps-track.mps
 compare ${TMPDIR}/mps-track.mps reference/track/
 
 # Now do a test of reading waypoints from a track-only file - should have an empty result
 rm -f ${TMPDIR}/mps-track.mps
-${PNAME} -i mapsource -f reference/track/mps-track.mps -o mapsource \
+${PNAME} -i mapsource -f reference/track/mps-track.mps -o mapsource,mpsverout=3 \
          -F ${TMPDIR}/mps-track.mps
 compare ${TMPDIR}/mps-track.mps reference/mps-empty.mps
 
@@ -254,7 +254,7 @@ compare ${TMPDIR}/mps-route.mps reference/route/route.mps
 
 # Now do a test of reading tracks from a route-only file - should have an empty result
 rm -f ${TMPDIR}/mps-route.mps
-${PNAME} -t -i mapsource -f reference/route/route.mps -o mapsource \
+${PNAME} -t -i mapsource -f reference/route/route.mps -o mapsource,mpsverout=3 \
          -F ${TMPDIR}/mps-route.mps
 compare ${TMPDIR}/mps-route.mps reference/mps-empty.mps
 
@@ -391,7 +391,7 @@ compare reference/psitwpts.txt ${TMPDIR}/psit-ww.txt
 # Now test correct "empty" handling - ask for routes when there aren't any
 # Uses mapsource as the empty handling for this has already happened above
 rm -f ${TMPDIR}/psit-wr.mps
-${PNAME} -r -i psitrex -f reference/psitwpts.txt -o mapsource -F ${TMPDIR}/psit-wr.mps
+${PNAME} -r -i psitrex -f reference/psitwpts.txt -o mapsource,mpsverout=3 -F ${TMPDIR}/psit-wr.mps
 compare reference/mps-empty.mps ${TMPDIR}/psit-wr.mps
 
 # Routes next
@@ -403,7 +403,7 @@ compare reference/route/psitrtes.txt ${TMPDIR}/psit-rr.txt
 # Now test correct "empty" handling - ask for tracks when there aren't any
 # Uses mapsource as the empty handling for this has already happened above
 rm -f ${TMPDIR}/psit-rt.mps
-${PNAME} -t -i psitrex -f reference/route/psitrtes.txt -o mapsource -F ${TMPDIR}/psit-rt.mps
+${PNAME} -t -i psitrex -f reference/route/psitrtes.txt -o mapsource,mpsverout=3 -F ${TMPDIR}/psit-rt.mps
 compare reference/mps-empty.mps ${TMPDIR}/psit-rt.mps
 
 # Tracks last
@@ -415,7 +415,7 @@ compare reference/track/psittrks.txt ${TMPDIR}/psit-tt.txt
 # Now test correct "empty" handling - ask for waypoints when there aren't any
 # Uses mapsource as the empty handling for this has already happened above
 rm -f ${TMPDIR}/psit-tw.mps
-${PNAME} -i psitrex -f reference/track/psittrks.txt -o mapsource -F ${TMPDIR}/psit-tw.mps
+${PNAME} -i psitrex -f reference/track/psittrks.txt -o mapsource,mpsverout=3 -F ${TMPDIR}/psit-tw.mps
 compare reference/mps-empty.mps ${TMPDIR}/psit-tw.mps
 
 #

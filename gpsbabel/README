@@ -154,15 +154,19 @@ THE FORMATS
 
     MAPSOURCE
 
-	Garmin Mapsource format appears compatible with the various
-	members of that product family.  Icon mapping is attempted between
-	different MapSource versions.  Altitude is supported, but proximity 
-	and depth are not.   Naming files *.mps will allow file->open in 
-	Mapsource to find the files more easily.   Versions 3, 4 and 5 
-	of the Mapsource data format are handled automatically on input 
-	and by default the output is version 3 for maximum compatibility.  
-	Waypoints, routes and tracklogs are all handled, but maps sets are 
-	ignored.
+        Garmin Mapsource format appears compatible with the various
+        members of that product family.  Icon mapping is attempted
+        between different MapSource versions.  Altitude is supported,
+        but proximity and depth are not.  Naming files *.mps will
+        allow file->open in Mapsource to find the files more easily.
+        Versions 3, 4 and 5 of the Mapsource data format are handled
+        automatically on input and by default the output is version 5.
+        (Until 3/2004, it was version 3, but since Mapsource updates
+        are free, the convenience of having modern icon sets outweighs
+        the backward compatibility concern.  Users of other versions
+        can either upgrade or specify the switches to get get output in
+        a compatible format.)  Waypoints, routes and tracklogs are all
+        handled, but maps sets are ignored.
 
 	Information on the Garmin Mapsource format was provided by Ian
 	Cowley and Mark Bradley.  The code was implemented by Robert Lipe
@@ -461,6 +465,23 @@ THE FORMATS
 	This is a catch-all used by many Delorme mapping products and
 	reads the anr, rte, and rtd formats as either tracks or routes.
 	
+<<<<<<< README
+    saplus
+
+        This format is for Street Atlas USA 2004 Plus.  
+
+        For geocachers importing data from a tool like GSAK or Spinner,
+        import the file twice in XData.  One will create a file with the
+        Cache description as a hyperlink on the flag.  This can clutter
+        up the screen and when you try to zoom in, it causes problems.
+        So the second one will only have a flag.  Thus you can turn off
+        and on which one you want to view.  The first time you import
+        the file, in the assign field types, check the circle above Full
+        Name and then next.  The second time you import the file do not
+        check any circle and in the second to last column, change URL to
+        none and then click next. Use the same name you used the first
+        time but add -Flag to it.
+=======
     saplus
 
         This format is for Street Atlas USA 2004 Plus.  
@@ -492,6 +513,7 @@ THE FORMATS
 	http://www.gpsu.co.uk/
 	http://www.kolumbus.fi/eino.uikkanen/geoconvgb/index.htm
 
+>>>>>>> 1.56
 	
 DATA FILTERS
 
