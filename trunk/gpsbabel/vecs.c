@@ -222,7 +222,11 @@ get_option(const char *iarglist, const char *argname)
 			break;
 		}
 	}
-	free(arglist);
+	/*
+	 * Return an offset into the allocated copy.
+	 * The caller mustn't free or otherwise get froggy with 
+	 * this data.
+	 */
 	return rval;
 }
 
