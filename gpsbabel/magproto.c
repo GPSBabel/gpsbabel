@@ -121,7 +121,7 @@ pid_to_model_t pid_to_model[] =
 	{ mm_map330, 30, "Map 330" },
 	{ mm_gps310, 31, "GPS 310" },
 	{ mm_meridian, 33, "Meridian" },
-	{ 0, 0, NULL }
+	{ mm_unknown, 0, NULL }
 };
 
 
@@ -206,7 +206,7 @@ mag_verparse(char *ibuf)
 	got_version = 1;
 	sscanf(ibuf,"$PMGNVER,%d,%[^,]", &prodid, version);
 
-	for (pp = pid_to_model; pp->model ; pp++) {
+	for (pp = pid_to_model; pp->model != mm_unknown; pp++) {
 		if (pp->pid == prodid) {
 			break;
 		}
@@ -335,7 +335,7 @@ mag_deinit(void)
 	tcsetattr(magfd, TCSANOW, &orig_tio);
 	fclose(magfile);
 }
-
+#if 0
 /*
  * Given an incoming track messages of the form:
  * $PMGNTRK,3605.259,N,08644.389,W,00151,M,201444.61,A,,020302*66
@@ -360,14 +360,11 @@ mag_trkparse(char *trkmsg)
 
 	printf("%s\n", trkmsg);
 	memset(&tm, 0, sizeof(tm));
-#if 0
+
 	sscanf(trkmsg,"$PMGNTRK,%lf,%c,%lf,%c,%d,%c,%d.%d,A,,%d", 
 		&latdeg,&latdir,
 		&lngdeg,&lngsecs,&lngdir,
 		&alt,&altunits,&hms,&fracsecs,&dmy);
-#else
-latdeg = 123;
-#endif
 
 	tm.tm_sec = hms % 100;
 	hms = hms / 100;
@@ -394,6 +391,7 @@ latdeg = 123;
 	return waypt;
 	
 }
+#endif
 
 const char *
 mag_find_descr_from_token(const char *token)

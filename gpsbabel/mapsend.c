@@ -69,15 +69,16 @@ my_fread8(void *ptr, FILE *stream)
 {
 	char cbuf[8];
 	char *cptr = ptr;
+	size_t rv;
 
 	if (!endianness_tested) {
 		test_endianness();
 	}
 
 	if (i_am_little_endian) {	
-		fread(ptr, 8, 1, stream);
+		rv = fread(ptr, 8, 1, stream);
 	} else { 
-		fread(cbuf, 8, 1, stream);
+		rv = fread(cbuf, 8, 1, stream);
 		cptr[0] = cbuf[7];
 		cptr[1] = cbuf[6];
 		cptr[2] = cbuf[5];
@@ -87,6 +88,7 @@ my_fread8(void *ptr, FILE *stream)
 		cptr[6] = cbuf[1];
 		cptr[7] = cbuf[0];
 	}
+	return rv;
 }
 
 static 
@@ -101,7 +103,7 @@ my_fwrite8(void *ptr, FILE *stream)
 	}
 
 	if (i_am_little_endian) {	
-		fwrite(ptr, 8, 1, stream);
+		return fwrite(ptr, 8, 1, stream);
 	} else {
 		cbuf[0] = cptr[7];
 		cbuf[1] = cptr[6];
@@ -111,7 +113,7 @@ my_fwrite8(void *ptr, FILE *stream)
 		cbuf[5] = cptr[2];
 		cbuf[6] = cptr[1];
 		cbuf[7] = cptr[0];
-		fwrite(cbuf, 8, 1, stream);
+		return fwrite(cbuf, 8, 1, stream);
 	}
 }
 
@@ -121,20 +123,22 @@ my_fread4(void *ptr, FILE *stream)
 {
 	char cbuf[4];
 	char *cptr = ptr;
+	size_t rv;
 	
 	if (!endianness_tested) {
 		test_endianness();
 	}
 
 	if (i_am_little_endian) {	
-		fread(ptr, 4, 1, stream);
+		rv = fread(ptr, 4, 1, stream);
 	} else {
-		fread(cbuf, 4, 1, stream);
+		rv = fread(cbuf, 4, 1, stream);
 		cptr[0] = cbuf[3];
 		cptr[1] = cbuf[2];
 		cptr[2] = cbuf[1];
 		cptr[3] = cbuf[0];
 	}
+	return rv;
 }
 
 static 
@@ -149,13 +153,13 @@ my_fwrite4(void *ptr, FILE *stream)
 	}
 
 	if (i_am_little_endian) {	
-		fwrite(ptr, 4, 1, stream);
+		return fwrite(ptr, 4, 1, stream);
 	} else {
 		cbuf[0] = cptr[3];
 		cbuf[1] = cptr[2];
 		cbuf[2] = cptr[1];
 		cbuf[3] = cptr[0];
-		fwrite(cbuf, 4, 1, stream);
+		return fwrite(cbuf, 4, 1, stream);
 	}
 }
 
@@ -206,12 +210,12 @@ mapsend_read(void)
 		wpt_tmp = calloc(sizeof(*wpt_tmp), 1);
 
 		fread(&scount, sizeof(scount), 1, mapsend_file_in);
-		fread(&tbuf, scount, 1, mapsend_file_in);
+		fread(tbuf, scount, 1, mapsend_file_in);
 		p = strncpy(name, tbuf, scount);
 		p[scount] = '\0';
 
 		fread(&scount, sizeof(scount), 1, mapsend_file_in);
-		fread(&tbuf, scount, 1, mapsend_file_in);
+		fread(tbuf, scount, 1, mapsend_file_in);
 		p = strncpy(comment, tbuf, scount);
 		p[scount] = '\0';
 
