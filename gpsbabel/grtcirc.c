@@ -131,6 +131,8 @@ double linedist(double lat1, double lon1,
     lp = sqrt(xp*xp+yp*yp+zp*zp);
 
     if ( lp ) {
+
+      /* After this, 'p' is normalized */
       xp /= lp;
       yp /= lp;
       zp /= lp;
@@ -140,7 +142,7 @@ double linedist(double lat1, double lon1,
 
       crossproduct(xp,yp,zp,x2,y2,z2,&xa2,&ya2,&za2);
       d2 = dotproduct( xa2, ya2, za2, xa, ya, za );
-     
+
       if ( d1 >= 0 && d2 >= 0 ) {
           /* rather than call gcdist and all its sines and cosines and
            * worse, we can get the angle directly.  It's the arctangent
@@ -157,8 +159,8 @@ double linedist(double lat1, double lon1,
       /* otherwise, get the distance from the closest endpoint */
       c1 = dotproduct( x1,y1,z1,xp,yp,zp );
       c2 = dotproduct( x2,y2,z2,xp,yp,zp );
-      d1 = labs(d1);
-      d2 = labs(d2);
+      d1 = fabs(d1);
+      d2 = fabs(d2);
       
       /* This is a hack.  d$n$ is proportional to the sine of the angle
        * between point $n$ and point p.  That preserves orderedness up
@@ -176,7 +178,7 @@ double linedist(double lat1, double lon1,
 	d2 = 2 - d2;
       }
 
-      if ( labs(d1) < labs(d2)) {
+      if ( fabs(d1) < fabs(d2)) {
         return gcdist(lat1,lon1,lat3,lon3);  
       }
       else {
