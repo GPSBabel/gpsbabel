@@ -103,7 +103,44 @@ hiketech_wr_deinit(void)
 }
 
 static void
-hiktech_waypt_pr(const waypoint *wpt)
+hiketech_trk_hdr(const route_head *rte)
+{
+	fprintf(ofd, "<trk>\n");
+	write_optional_xml_entity(ofd, " ", "ident", rte->rte_name);
+}
+
+static void
+hiketech_trk_tlr(const route_head *rte)
+{
+	fprintf(ofd, "</trk>\n");
+}
+
+void
+hiketech_print_utc(time_t tm, const char *indent, const char *tag)
+{
+	char tbuf[80];
+        strftime(tbuf, sizeof(tbuf), "%Y-%m-%d %I:%M:%S", gmtime(&tm));
+	fprintf(ofd, "%s<%s>%s</%s>\n",indent,tag,tbuf,tag);
+}
+
+static void
+hiketech_trkpt_pr(const waypoint *waypointp)
+{
+	fprintf(ofd, " <pnt>\n");
+	if (waypointp->creation_time) {
+		hiketech_print_utc(waypointp->creation_time, "  ", "utc");
+	}
+	fprintf(ofd, "  <lat>%f</lat>\n", waypointp->latitude);
+	fprintf(ofd, "  <long>%f</long>\n", waypointp->longitude);
+	if (waypointp->altitude != unknown_alt) {
+		fprintf(ofd, "  <alt>%f</alt>\n",
+			 waypointp->altitude);
+	}
+	fprintf(ofd, " </pnt>\n");
+}
+
+static void
+hiketech_waypt_pr(const waypoint *wpt)
 {	
 	fprintf(ofd, "<wpt>\n");
 	write_xml_entity(ofd, "\t", "ident", wpt->shortname);
@@ -122,9 +159,11 @@ hiktech_waypt_pr(const waypoint *wpt)
 void
 hiketech_write(void)
 {
-	fprintf(ofd, "<hiketech version=\"1.1\" url=\"http://www.hiketech.com\">\n");
+	fprintf(ofd, "<hiketech version=\"1.2\" url=\"http://www.hiketech.com\">\n");
 	fprintf(ofd, "<gpsdata>\n");
-	waypt_disp_all(hiktech_waypt_pr);
+	track_disp_all(hiketech_trk_hdr, hiketech_trk_tlr, hiketech_trkpt_pr);
+	track_disp_all(NULL, NULL, hiketech_trkpt_pr);
+	waypt_disp_all(hiketech_waypt_pr);
 	fprintf(ofd, "</gpsdata>\n");
 	fprintf(ofd, "</hiketech>\n");
 }
