@@ -124,15 +124,44 @@ THE FORMATS
 
     MXF
 
-	Maptech Exchange Format - Another CSV format file.  This format
-	complies with (at least) Maptech Terrain Navigator, Terrain
-	Professional, Take a Hike, and ExpertGPS import/export MFX.
+        Maptech Exchange Format - Another CSV format file.  This format
+        complies with (at least) Maptech Terrain Navigator, Terrain
+        Professional, Take a Hike, and ExpertGPS import/export MFX.
+        Contributed by Alex Mottram.
 
     OZI
 
-	OziExplorer Waypoint Format - Another CSV format file.  
-	Tested against OziExplorer v 3.90.3a / Shareware.
-	Contributed by Alex Mottram
+        OziExplorer Waypoint Format - Another CSV format file.  Tested
+        against OziExplorer v 3.90.3a / Shareware.  Contributed by Alex
+        Mottram.
+
+    HOLUX
+
+        The Holuxgm-100 (e-fox) gps receiver uses standard compact
+        flash cards.  File formats were provided by Holux-Taiwan
+        http://www.holux.com.tw to the author.  The code was tested
+        against version 2.27E1; other versions and receivers may
+        work but have not been explictly tested.  Anyone with
+        information on other Holux receivers is encouraged to contact
+        jochen@bauerbahn.net.
+
+        When copying the .wpo file to a flash card, the file must be
+        named "tempwprt.wpo" as the receiver will ignore all other
+        files.
+
+        Comparing the waypoints of a .wpo files against other formats
+        like .gpx you may notice a small difference in the latitude
+        and longitude values.  The reason is the low resolution of
+        the coordinates in the wpo file format.  In a .wpo file the
+        reolution is 1/10"; in gpx for example it is 1/100".  A a practical
+	matter, this loss is only about 1.7meters (5 feet).
+
+
+        The generated waypoint failes can also be used by MapShow
+        version 1.14.  This program is free of charge from the Holux web
+        site.
+
+        This format was contributed by Jochen Becker.
 
 
 COMMON USAGE
