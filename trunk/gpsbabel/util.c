@@ -62,3 +62,24 @@ fatal(const char *fmt, ...)
 	vfprintf(stderr, fmt, ap);
 	exit(1);
 }
+
+/*
+ * Read 4 bytes in big-endian.   Return as "int" in native endianness.
+ */
+int
+pdb_read4(pdb_32 *p)
+{
+	char *i = (char *) p;
+	return i[0] << 24 | i[1] << 16  | i[2] << 8 | i[3];
+}
+
+void
+pdb_write4(pdb_32 *pp, unsigned i)
+{
+	char *p = (char *)pp;
+
+	p[0] = (i >> 24) & 0xff;
+	p[1] = (i >> 16) & 0xff;
+	p[2] = (i >> 8) & 0xff;
+	p[3] = i & 0xff;
+}

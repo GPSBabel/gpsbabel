@@ -104,3 +104,23 @@ void fatal(const char *, ...);
 ff_vecs_t *find_vec(char *);
 
 void printposn(coord *c, int is_lat);
+
+/* 
+ * Data types for Palm/OS files.
+ */
+typedef struct {
+	unsigned char data[4];
+} pdb_32;
+
+typedef struct {
+	unsigned char data[2];
+} pdb_16;
+
+/*
+ * Protypes for Palm/OS helpers.
+ */
+
+int pdb_read2(pdb_16 *p);
+int pdb_read4(pdb_32 *p);
+void pdb_write2(pdb_16 *pp, unsigned i);
+void pdb_write4(pdb_32 *pp, unsigned i);
