@@ -1,7 +1,7 @@
 /*
     Communicate Thales/Magellan serial protocol.
 
-    Copyright (C) 2002, 2003, 2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004, 2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,10 @@
 #include "magellan.h"
 
 int bitrate = 4800;
+int wptcmtcnt;
+int wptcmtcnt_max;
 #define MYNAME "MAGPROTO"
+#define MAXCMTCT 200
 
 #define debug_serial  (global_opts.debug_level > 1)
 
@@ -38,6 +41,7 @@ static void mag_handoff(void);
 static void *mkshort_handle = NULL;
 static char *deficon = NULL;
 static char *bs = NULL;
+static char *cmts = NULL;
 static char *noack = NULL;
 static char *nukewpt = NULL;
 static int route_out_count;
@@ -713,6 +717,8 @@ static
 arglist_t mag_sargs[] = {
 	{"baud", &bs, "Numeric value of bitrate (baud=4800)", NULL,
 		ARGTYPE_INT },
+	{"maxcmts", &cmts, "Max number of comments to write (maxcmts=200)", 
+		NULL, ARGTYPE_INT },
 	{"noack", &noack, "Suppress use of handshaking in name of speed",
 		NULL, ARGTYPE_BOOL},
 	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
@@ -790,6 +796,16 @@ mag_rd_init(const char *portname)
 static void
 mag_wr_init(const char *portname)
 {
+	if (bs) {
+		bitrate=atoi(bs);
+	}
+
+	if (cmts) {
+		wptcmtcnt_max = atoi(cmts);
+	} else {
+		wptcmtcnt_max = MAXCMTCT ;
+	}
+
 #if __WIN32__
 	if (!terminit(portname, 1)) {
 		is_file = 1;
@@ -1193,6 +1209,14 @@ mag_waypt_pr(const waypoint *waypointp)
 		odesc = mag_cleanse(odesc);
 	}
 
+	/*
+	 * For the benefit of DirectRoute (which uses waypoint comments
+	 * to deliver turn-by-turn popups for street routing) allow a 
+	 * cap on the comments delivered so we leave space for it to route.
+	 */
+	if (odesc && !is_file && (wptcmtcnt++ >= wptcmtcnt_max))
+		odesc[0] = 0;
+
 	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.8s,%-.46s,%s",
 		lat, ilat < 0 ? 'S' : 'N',
 		lon, ilon < 0 ? 'W' : 'E',
@@ -1366,7 +1390,11 @@ mag_write(void)
 	 * Whitespace is actually legal, but since waypoint name length is
 	 * only 8 bytes, we'll conserve them.
 	 */
+
 	setshort_whitespace_ok(mkshort_handle, 0);
+
+	wptcmtcnt = 0;
+
 	switch (global_opts.objective)
 	{
 		case trkdata:
