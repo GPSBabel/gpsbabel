@@ -20,7 +20,6 @@
  */
 
 #include "defs.h"
-// #include "magellan.h"
 #include "csv_util.h"
 
 static FILE *file_in;
