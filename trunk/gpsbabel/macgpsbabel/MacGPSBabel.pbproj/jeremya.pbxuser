@@ -13,7 +13,7 @@
 			DA206CF0015C4D9F03C91932,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 97476936;
+			PBXPerProjectTemplateStateSaveDate = 97730381;
 			"PBXTemplateGeometry-F5314676015831810DCA290F" = {
 				ContentSize = "{685, 434}";
 				LeftSlideOut = {
@@ -268,7 +268,7 @@
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F5D9F71005CF63CD017C67C1;
+									bookmark = F528C85D05D3422A017C67C1;
 									history = (
 										F5F16EF60527D1B401A80064,
 										F557060705C8B0C0017C67C1,
@@ -278,7 +278,7 @@
 										F5E2D67F05CDA550017C67C1,
 										F5E2D68005CDA550017C67C1,
 										F5D9F70E05CF63CD017C67C1,
-										F58F331A05CF5079017C67C1,
+										F5D9F71005CF63CD017C67C1,
 									);
 									prevStack = (
 										F5F16EF80527D1B401A80064,
@@ -820,7 +820,7 @@
 					WindowLocation = "{4, 381}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 97476936;
+			PBXWorkspaceStateSaveDate = 97730381;
 		};
 		perUserProjectItems = {
 			F508F40305A7AE8A01A80064 = F508F40305A7AE8A01A80064;
@@ -834,6 +834,7 @@
 			F51CF6B405AF9E8901A80064 = F51CF6B405AF9E8901A80064;
 			F523D7AD05CB3DB9017C67C1 = F523D7AD05CB3DB9017C67C1;
 			F523D7AE05CB3DB9017C67C1 = F523D7AE05CB3DB9017C67C1;
+			F528C85D05D3422A017C67C1 = F528C85D05D3422A017C67C1;
 			F52B871705A8A05001A80064 = F52B871705A8A05001A80064;
 			F52B871905A8A05001A80064 = F52B871905A8A05001A80064;
 			F52B871B05A8A05001A80064 = F52B871B05A8A05001A80064;
@@ -871,7 +872,6 @@
 			F586ED1205CC1ED5017C67C1 = F586ED1205CC1ED5017C67C1;
 			F586ED1305CC1ED5017C67C1 = F586ED1305CC1ED5017C67C1;
 			F586ED1405CC1ED5017C67C1 = F586ED1405CC1ED5017C67C1;
-			F58F331A05CF5079017C67C1 = F58F331A05CF5079017C67C1;
 			F58F331C05CF5079017C67C1 = F58F331C05CF5079017C67C1;
 			F58F331D05CF5079017C67C1 = F58F331D05CF5079017C67C1;
 			F58F331E05CF5079017C67C1 = F58F331E05CF5079017C67C1;
@@ -931,7 +931,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 480";
 		rLen = 0;
-		rLoc = 3196;
+		rLoc = 4796;
 		rType = 0;
 		vrLen = 2445;
 		vrLoc = 5977;
@@ -975,7 +975,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 564";
 		rLen = 0;
-		rLoc = 23133;
+		rLoc = 24733;
 		rType = 0;
 		vrLen = 1497;
 		vrLoc = 0;
@@ -1015,7 +1015,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 328";
 		rLen = 0;
-		rLoc = 13341;
+		rLoc = 14941;
 		rType = 0;
 		vrLen = 1498;
 		vrLoc = 0;
@@ -1024,12 +1024,22 @@
 		isa = PBXTargetBookmark;
 		trg = 29B97326FDCFA39411CA2CEA;
 	};
+	F528C85D05D3422A017C67C1 = {
+		fRef = DA206CF3015C4E8B03C91932;
+		isa = PBXTextBookmark;
+		name = "MacGPSBabel.applescript: 572";
+		rLen = 0;
+		rLoc = 24733;
+		rType = 0;
+		vrLen = 2391;
+		vrLoc = 782;
+	};
 	F52B871705A8A05001A80064 = {
 		fRef = DA206CF3015C4E8B03C91932;
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 480";
 		rLen = 0;
-		rLoc = 3196;
+		rLoc = 4796;
 		rType = 0;
 		vrLen = 1744;
 		vrLoc = 189;
@@ -1039,7 +1049,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 190";
 		rLen = 0;
-		rLoc = 3196;
+		rLoc = 4796;
 		rType = 0;
 		vrLen = 1958;
 		vrLoc = 8259;
@@ -1049,7 +1059,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 188";
 		rLen = 0;
-		rLoc = 3196;
+		rLoc = 4796;
 		rType = 0;
 		vrLen = 2222;
 		vrLoc = 8371;
@@ -1059,7 +1069,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 434";
 		rLen = 0;
-		rLoc = 3196;
+		rLoc = 4796;
 		rType = 0;
 		vrLen = 1792;
 		vrLoc = 0;
@@ -1087,7 +1097,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 434";
 		rLen = 0;
-		rLoc = 3196;
+		rLoc = 4796;
 		rType = 0;
 		vrLen = 1792;
 		vrLoc = 0;
@@ -1101,7 +1111,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 193";
 		rLen = 0;
-		rLoc = 3196;
+		rLoc = 4796;
 		rType = 0;
 		vrLen = 1413;
 		vrLoc = 2970;
@@ -1125,7 +1135,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 499";
 		rLen = 0;
-		rLoc = 3196;
+		rLoc = 4796;
 		rType = 0;
 		vrLen = 1552;
 		vrLoc = 0;
@@ -1149,7 +1159,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 499";
 		rLen = 0;
-		rLoc = 3196;
+		rLoc = 4796;
 		rType = 0;
 		vrLen = 1552;
 		vrLoc = 0;
@@ -1173,7 +1183,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 554";
 		rLen = 0;
-		rLoc = 23133;
+		rLoc = 24733;
 		rType = 0;
 		vrLen = 1511;
 		vrLoc = 14316;
@@ -1211,7 +1221,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 556";
 		rLen = 0;
-		rLoc = 23133;
+		rLoc = 24733;
 		rType = 0;
 		vrLen = 1495;
 		vrLoc = 0;
@@ -1231,7 +1241,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 245";
 		rLen = 0;
-		rLoc = 10769;
+		rLoc = 12369;
 		rType = 0;
 		vrLen = 1811;
 		vrLoc = 11141;
@@ -1251,7 +1261,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 245";
 		rLen = 0;
-		rLoc = 10769;
+		rLoc = 12369;
 		rType = 0;
 		vrLen = 1795;
 		vrLoc = 11141;
@@ -1271,7 +1281,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 245";
 		rLen = 0;
-		rLoc = 10769;
+		rLoc = 12369;
 		rType = 0;
 		vrLen = 1773;
 		vrLoc = 9896;
@@ -1291,7 +1301,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 528";
 		rLen = 1109;
-		rLoc = 21317;
+		rLoc = 22917;
 		rType = 0;
 		vrLen = 2083;
 		vrLoc = 20945;
@@ -1311,7 +1321,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 543";
 		rLen = 543;
-		rLoc = 22427;
+		rLoc = 24027;
 		rType = 0;
 		vrLen = 2083;
 		vrLoc = 20945;
@@ -1331,24 +1341,14 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 557";
 		rLen = 0;
-		rLoc = 23133;
+		rLoc = 24733;
 		rType = 0;
-		vrLen = 2221;
+		vrLen = 1436;
 		vrLoc = 21697;
 	};
 	F586ED1405CC1ED5017C67C1 = {
 		isa = PBXTargetBookmark;
 		trg = 29B97326FDCFA39411CA2CEA;
-	};
-	F58F331A05CF5079017C67C1 = {
-		fRef = DA206CF3015C4E8B03C91932;
-		isa = PBXTextBookmark;
-		name = "MacGPSBabel.applescript: 41";
-		rLen = 0;
-		rLoc = 1009;
-		rType = 0;
-		vrLen = 1835;
-		vrLoc = 282;
 	};
 	F58F331C05CF5079017C67C1 = {
 		fRef = F586ED0005CB576C017C67C1;
@@ -1365,7 +1365,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 577";
 		rLen = 0;
-		rLoc = 23133;
+		rLoc = 24733;
 		rType = 0;
 		vrLen = 1728;
 		vrLoc = 16243;
@@ -1385,7 +1385,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 577";
 		rLen = 0;
-		rLoc = 23133;
+		rLoc = 24733;
 		rType = 0;
 		vrLen = 1774;
 		vrLoc = 13079;
@@ -1425,7 +1425,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 318";
 		rLen = 0;
-		rLoc = 13341;
+		rLoc = 14941;
 		rType = 0;
 		vrLen = 1766;
 		vrLoc = 13015;
@@ -1445,7 +1445,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 41";
 		rLen = 0;
-		rLoc = 1009;
+		rLoc = 2609;
 		rType = 0;
 		vrLen = 1835;
 		vrLoc = 282;
@@ -1455,7 +1455,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 556";
 		rLen = 0;
-		rLoc = 23133;
+		rLoc = 24733;
 		rType = 0;
 		vrLen = 1497;
 		vrLoc = 0;
@@ -1495,7 +1495,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 543";
 		rLen = 0;
-		rLoc = 23133;
+		rLoc = 24733;
 		rType = 0;
 		vrLen = 1598;
 		vrLoc = 13210;
@@ -1526,7 +1526,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 577";
 		rLen = 0;
-		rLoc = 23133;
+		rLoc = 24733;
 		rType = 0;
 		vrLen = 1728;
 		vrLoc = 16243;
@@ -1608,7 +1608,7 @@
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 111";
 		rLen = 0;
-		rLoc = 3196;
+		rLoc = 4796;
 		rType = 0;
 		vrLen = 1256;
 		vrLoc = 3068;
