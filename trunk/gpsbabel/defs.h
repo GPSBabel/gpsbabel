@@ -245,6 +245,15 @@ void setshort_mustupper(void *, int n);
 void setshort_mustuniq(void *, int n);
 void setshort_whitespace_ok(void *, int n);
 
+typedef struct vmem {
+	void *mem;		/* visible memory object */
+	size_t size; 		/* allocated size of object */
+} vmem_t;
+vmem_t 	vmem_alloc(size_t);
+void 	vmem_free(vmem_t*);
+void 	vmem_realloc(vmem_t*, size_t);
+
+
 #define ARGTYPE_UNKNOWN  0
 #define ARGTYPE_INT      0x00000001
 #define ARGTYPE_FLOAT    0x00000002

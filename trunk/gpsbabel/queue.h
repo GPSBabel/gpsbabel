@@ -35,6 +35,8 @@ queue * dequeue(queue *element);
 
 #define ENQUEUE_TAIL(listhead, element) \
 		enqueue(element, (listhead)->prev)
+#define ENQUEUE_HEAD(listhead, element) \
+		enqueue(element, listhead)
 
 #define QUEUE_FOR_EACH(listhead, element, tmp) \
 	for ((element) = QUEUE_FIRST(listhead); \

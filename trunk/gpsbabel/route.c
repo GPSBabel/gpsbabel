@@ -96,13 +96,28 @@ void
 route_disp (const route_head *rh, waypt_cb cb )
 {
 	queue *elem, *tmp;
+	if (!cb)  {
+		return;
+	}
 	QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
 		waypoint *waypointp;
 		waypointp = (waypoint *) elem;
 			(*cb)(waypointp);
 	}
 		
-}	
+}
+
+void 
+route_reverse(const route_head *rte_hd)
+{
+	/* Cast away const-ness */
+	route_head *rh = (route_head *) rte_hd;
+	queue *elem, *tmp;
+	QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
+		ENQUEUE_HEAD(&rh->waypoint_list, dequeue(elem));
+	}
+}
+
 void 
 route_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
 {
@@ -110,9 +125,9 @@ route_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
 	QUEUE_FOR_EACH(&my_route_head, elem, tmp) {
 		const route_head *rhp;
 		rhp = (route_head *) elem;
-		(*rh)(rhp);
+		if (rh) (*rh)(rhp);
 		route_disp(rhp, wc);
-		(*rt)(rhp);
+		if (rt) (*rt)(rhp);
 	}
 }
 void

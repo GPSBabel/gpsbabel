@@ -428,18 +428,25 @@ ${PNAME} -r -i gpx -f reference/route/route.gpx \
 compare ${TMPDIR}/simplify.txt reference/simplify_output.txt
 
 #
-# This is  nasty.   If we have a dictionary handy, treat it as a list of
-# waypoints and reduce all the names to eight characters.   Fewer chars
-# results in lost waypoints currently and that's a defect.
+# Route reversal filter.   Do it twice and be sure we get what we
+# started with.
 #
-DICT=/usr/share/dict/words
-if [ -f $DICT ]; 
-then
-	WORDS=`cat $DICT | wc -l`
-	SWORDS=`${PNAME} -i gpsdrive -f $DICT -o gpsdrive,snlen=8 -F /dev/fd/1 | wc -l`
-	if [ $WORDS -ne $SWORDS ];
-	then
-		echo "Shortname reduction failed."
-		exit 1	
-	fi
-fi
+rm -f ${TMPDIR}/reverse1.arc ${TMPDIR}/reverse2.arc ${TMPDIR}/reference.arc
+${PNAME} -r -i gpx -f reference/route/route.gpx \
+	  -o arc -F ${TMPDIR}/reference.arc
+${PNAME} -r -i gpx -f reference/route/route.gpx \
+         -x reverse \
+         -o arc -F ${TMPDIR}/reverse1.arc
+${PNAME} -r -i gpx -f reference/route/route.gpx \
+         -x reverse \
+         -x reverse \
+         -o arc -F ${TMPDIR}/reverse2.arc
+# Verify the first and last are the same
+compare ${TMPDIR}/reference.arc  ${TMPDIR}/reverse2.arc
+# Verify the first and second are different.
+${DIFF}  ${TMPDIR}/reverse1.arc  ${TMPDIR}/reverse2.arc > /dev/null && {
+		echo ERROR Failed reversal test.
+		exit 1
+}
+
+exit 0
