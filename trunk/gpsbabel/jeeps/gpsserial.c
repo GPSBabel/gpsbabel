@@ -248,7 +248,8 @@ int32 GPS_Serial_Open(int32 *fd, const char *port)
 	return 0;
     }
 
-    tty.c_cflag |= (CREAD | CS8 | CSIZE | CLOCAL);
+    tty.c_cflag &= ~(CSIZE);
+    tty.c_cflag |= (CREAD | CS8 | CLOCAL);
     cfsetospeed(&tty,B9600);
     cfsetispeed(&tty,B9600);
     
