@@ -83,6 +83,7 @@ int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
     p = (*packet)->data;
     
     start = GPS_Time_Now();
+    GPS_Diag("\nRx Data:");
     while(GPS_Time_Now() < start+GPS_TIME_OUT)
     {
 	if((n=GPS_Serial_Chars_Ready(fd)))
@@ -95,7 +96,7 @@ int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
 		return 0;
 	    }
 
-	    GPS_Diagnose(u);
+	    GPS_Diag("%02x ", u);
 
 	    if(!len)
 	    {
