@@ -168,7 +168,7 @@ gpgga_parse(char *ibuf)
 {
 	double latdeg, lngdeg;
 	char lngdir, latdir;
-	int hms;
+	double hms;
 	int fix;
 	int nsats;
 	double hdop;
@@ -186,16 +186,16 @@ gpgga_parse(char *ibuf)
 
 	memset(&tm, 0, sizeof(tm));
 
-	sscanf(ibuf,"$GPGGA,%d,%lf,%c,%lf,%c,%d,%d,%lf,%lf,%c",
+	sscanf(ibuf,"$GPGGA,%f,%lf,%c,%lf,%c,%d,%d,%lf,%lf,%c",
 		&hms, &latdeg,&latdir,
 		&lngdeg,&lngdir,
 		&fix,&nsats,&hdop,&alt,&altunits);
 
-	tm.tm_sec = hms % 100;
+	tm.tm_sec = (long) hms % 100;
 	hms = hms / 100;
-	tm.tm_min = hms % 100;
+	tm.tm_min = (long) hms % 100;
 	hms = hms / 100;
-	tm.tm_hour = hms % 100;
+	tm.tm_hour = (long) hms % 100;
 
 	waypt->creation_time = mktime(&tm) + get_tz_offset() + time(NULL);
 
@@ -281,6 +281,7 @@ nmea_wayptpr(const waypoint *wpt)
 	
 }
 
+void
 nmea_trackpt_pr(const waypoint *wpt)
 {
 	char obuf[200];
