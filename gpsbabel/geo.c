@@ -271,7 +271,7 @@ geo_waypt_pr(const waypoint *waypointp)
 		tmp = xml_entitize(waypointp->url);
 		fprintf(ofd, "<link text =\"Cache Details\">%s</link>\n", 
 			tmp);
-		free(tmp);
+		xfree(tmp);
 	}
 	fprintf(ofd, "</waypoint>\n");
 }
