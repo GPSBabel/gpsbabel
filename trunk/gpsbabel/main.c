@@ -192,9 +192,9 @@ main(int argc, char *argv[])
  				fvecs = find_filter_vec(optarg, &fvec_opts);
 
  				if (fvecs) {
- 					fvecs->f_init(fvec_opts);
+ 					if (fvecs->f_init) fvecs->f_init(fvec_opts);
  					fvecs->f_process();
- 					fvecs->f_deinit();
+ 					if (fvecs->f_deinit) fvecs->f_deinit();
 					free_filter_vec(fvecs);
  				}  else {
 					fatal("Unknown filter '%s'\n",optarg);
