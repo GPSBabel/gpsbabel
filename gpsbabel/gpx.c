@@ -753,8 +753,41 @@ gpx_read(void)
 
 	while (!done) {
 		if ( fd ) {
-			len = fread(buf, 1, sizeof(buf), fd);
+			len = fread(buf, 1, sizeof(buf)-10, fd);
 			done = feof(fd) || !len;
+			buf[len] = '\0';
+			if ( buf[len-1] == '&' || 
+					buf[len-2]== '&' || 
+					buf[len-3]== '&' || 
+					buf[len-4]== '&' || 
+					buf[len-5]== '&' || 
+					buf[len-6] == '&' ) {
+				len += fread( buf+len, 1, 6, fd );
+				buf[len]='\0';
+			}	
+			{
+				char *badchar = buf;
+				char *hex="0123456789abcdef";
+				badchar = strstr( buf, "&#x" );
+				while ( badchar ) {
+					int val = 0;
+					char *hexit = badchar+3;
+					char *semi = strchr( badchar, ';' );
+					*semi = '\0';
+					while (*hexit) {
+						val *= 16;
+						val += strchr( hex, *hexit )-hex;
+						hexit++;
+					}
+					if ( val < 32 ) {
+						warning( MYNAME ": Ignoring illegal character %s\n", badchar );
+						memmove( badchar, semi+1, strlen(semi+1)+1 );
+						len -= (semi-badchar)+1;
+					}
+					badchar = strstr( badchar+1, "&#x" );
+				} 
+					
+			}
 			result = XML_Parse(psr, buf, len, done);
 		}
 		else if (input_string) {
