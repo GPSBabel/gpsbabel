@@ -26,6 +26,7 @@
 #endif
 
 extern queue waypt_head;
+static route_head *cur_rte = NULL;
 
 static double pos_dist;
 static char *distopt;
@@ -120,55 +121,116 @@ dist_comp(const void * a, const void * b)
 
 }
 
-void 
-position_process(void)
+/* tear through a waypoint queue, processing points by distance */
+static void 
+position_runqueue(queue *q, int nelems, int qtype)
 {
 	queue * elem, * tmp;
 	waypoint ** comp;
 	double dist;
-	int i, wc;
+	int i, j;
 	int del = 0;
 
-	wc = waypt_count();
-
-	comp = (waypoint **) xcalloc(wc, sizeof(*comp));
+	comp = (waypoint **) xcalloc(nelems, sizeof(*comp));
 
 	i = 0;
 
-	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+	QUEUE_FOR_EACH(q, elem, tmp) {
 		comp[i] = (waypoint *)elem;
 		i++;
 	}
 
-	qsort(comp, wc, sizeof(waypoint *), position_comp);
+	if (qtype == wptdata)
+		qsort(comp, nelems, sizeof(waypoint *), position_comp);
 
-	for (i = 0 ; i < (wc - 1) ; i++) {
-		dist = gc_distance(comp[i]->latitude,
-				   comp[i]->longitude,
-				   comp[i+1]->latitude,
-				   comp[i+1]->longitude);
+	for (i = 1, j = 0 ; i < nelems ; i++) {
+		dist = gc_distance(comp[j]->latitude,
+				   comp[j]->longitude,
+				   comp[i]->latitude,
+				   comp[i]->longitude);
 
 		/* convert radians to integer feet */
 		dist = (int)((((dist * 180.0 * 60.0) / M_PI) * 1.1516) * 5280.0);
-
+		
 		if (dist <= pos_dist) {
-			waypt_del(comp[i]);
-			waypt_free(comp[i]);
-			del = !!purge_duplicates;
+			switch (qtype) {
+				case wptdata:
+					waypt_del(comp[i]);
+					waypt_free(comp[i]);
+					del = !!purge_duplicates;
+					break;
+				case trkdata:
+				case rtedata:
+					route_del_wpt(cur_rte, comp[i]);
+					del = !!purge_duplicates;
+					break;
+				default:
+					break;
+			}
 		}
 		else if (del ) {
-			waypt_del(comp[i]);
-			waypt_free(comp[i]);
-			del = 0;
+			switch (qtype) {
+				case wptdata:
+					waypt_del(comp[i]);
+					waypt_free(comp[i]);
+					del = 0;
+					break;
+				case trkdata:
+				case rtedata:
+					route_del_wpt(cur_rte, comp[i]);
+					del = 0;
+					break;
+				default:
+					break;
+			}
+		} else {
+			j = i; /* advance last use point */
 		}
 	}
 	if ( del ) {
-		waypt_del(comp[wc-1]);
-		waypt_free(comp[wc-1]);
+		switch (qtype) {
+			case wptdata:
+				waypt_del(comp[nelems-1]);
+				waypt_free(comp[nelems-1]);
+				break;
+			case trkdata:
+			case rtedata:
+				route_del_wpt(cur_rte, comp[i]);
+				break;
+			default:
+				break;
+		}
 	}
 
 	if (comp)
 		xfree(comp);
+}
+
+static void
+position_process_route(const route_head * rh) { 
+    int i = rh->rte_waypt_ct;
+
+    if (i) {
+    	cur_rte = (route_head *)rh;
+        position_runqueue((queue *)&rh->waypoint_list, i, rtedata);
+        cur_rte = NULL;
+    }
+
+}
+
+static void 
+position_noop(){
+}
+
+void position_process() 
+{
+	int i = waypt_count();
+	
+	if (i)
+		position_runqueue(&waypt_head, i, wptdata);
+	
+	route_disp_all(position_process_route, position_noop, position_noop);
+	track_disp_all(position_process_route, position_noop, position_noop);
 }
 
 void
