@@ -41,6 +41,7 @@ static int32 GPS_Input_Get_D105(GPS_PWay *way, FILE *inf);
 static int32 GPS_Input_Get_D106(GPS_PWay *way, FILE *inf);
 static int32 GPS_Input_Get_D107(GPS_PWay *way, FILE *inf);
 static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf);
+static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf);
 static int32 GPS_Input_Get_D150(GPS_PWay *way, FILE *inf);
 static int32 GPS_Input_Get_D151(GPS_PWay *way, FILE *inf);
 static int32 GPS_Input_Get_D152(GPS_PWay *way, FILE *inf);
@@ -420,6 +421,10 @@ int32 GPS_Input_Get_Waypoint(GPS_PWay **way, FILE *inf)
 	    ret = GPS_Input_Get_D108(&((*way)[i]),inf);
 	    if(ret<0) return gps_errno;
 	    break;
+	case 109:
+	    ret = GPS_Input_Get_D109(&((*way)[i]),inf);
+	    if(ret<0) return gps_errno;
+	    break;
 	case 150:
 	    ret = GPS_Input_Get_D150(&((*way)[i]),inf);
 	    if(ret<0) return gps_errno;
@@ -542,6 +547,10 @@ int32 GPS_Input_Get_Proximity(GPS_PWay **way, FILE *inf)
 	    break;
 	case 108:
 	    ret = GPS_Input_Get_D108(&((*way)[i]),inf);
+	    if(ret<0) return gps_errno;
+	    break;
+	case 109:
+	    ret = GPS_Input_Get_D109(&((*way)[i]),inf);
 	    if(ret<0) return gps_errno;
 	    break;
 	case 450:
@@ -1051,6 +1060,143 @@ static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf)
     return 1;
 }
 
+
+
+/* @funcstatic GPS_Input_Get_D109   ************************************
+**
+** Get a D109 Entry
+**
+** @param [w] way [GPS_PWay *] pointer to waypoint entry
+** @param [r] inf [FILE *] stream
+**
+** @return [int32] number of entries
+************************************************************************/
+static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf)
+{
+    char s[GPS_ARB_LEN];
+    char *p;
+    double f;
+    int32 d;
+    int32 xc;
+    
+
+    if(!GPS_Input_Read_Line(s,inf))
+	return gps_errno;
+    GPS_Input_Load_Strnull((*way)->ident,s);
+    
+    if(!GPS_Input_Read_Line(s,inf))
+	return gps_errno;
+    p=strchr(s,':');
+    if(sscanf(p+1,"%lf",&f)!=1)
+	    return gps_errno;
+    (*way)->lat = f;
+
+    if(!GPS_Input_Read_Line(s,inf))
+	return gps_errno;
+    p=strchr(s,':');
+    if(sscanf(p+1,"%lf",&f)!=1)
+	    return gps_errno;
+    (*way)->lon = f;
+
+    if(!GPS_Input_Read_Line(s,inf))
+	return gps_errno;
+    p=strchr(s,':');
+    if(sscanf(p+1,"%d",(int *)&d)!=1)
+	    return gps_errno;
+    (*way)->colour = d;
+
+    if(!GPS_Input_Read_Line(s,inf))
+	return gps_errno;
+    p=strchr(s,':');
+    if(sscanf(p+1,"%d",(int *)&d)!=1)
+	    return gps_errno;
+    (*way)->dspl = d;
+
+    if(!GPS_Input_Read_Line(s,inf))
+	return gps_errno;
+    p=strchr(s,':');
+    if(sscanf(p+1,"%d",(int *)&d)!=1)
+	    return gps_errno;
+    (*way)->smbl = d;
+
+    if(!GPS_Input_Read_Line(s,inf))
+	return gps_errno;
+    p=strchr(s,':');
+    if(sscanf(p+1,"%d",(int *)&d)!=1)
+	    return gps_errno;
+    (*way)->alt = d;
+
+    if(!GPS_Input_Read_Line(s,inf))
+	return gps_errno;
+    p=strchr(s,':');
+    if(sscanf(p+1,"%lf",&f)!=1)
+	    return gps_errno;
+    (*way)->dpth = f;
+
+    if(!GPS_Input_Read_Line(s,inf))
+	return gps_errno;
+    GPS_Input_Load_String((*way)->state,2,s);
+
+    if(!GPS_Input_Read_Line(s,inf))
+	return gps_errno;
+    GPS_Input_Load_String((*way)->cc,2,s);
+
+    if(!GPS_Input_Read_Line(s,inf))
+	return gps_errno;
+    p=strchr(s,':');
+    if(sscanf(p+1,"%d",(int *)&d)!=1)
+	    return gps_errno;
+    (*way)->wpt_class = d;
+    xc = d;
+
+    if(xc>=0x80 && xc<=0x85)
+    {
+	if(!GPS_Input_Read_Line(s,inf))
+	    return gps_errno;
+	GPS_Input_Load_String((char *)(*way)->subclass,18,s);
+    }
+    else
+    {
+	GPS_Util_Put_Short((*way)->subclass,0);
+	GPS_Util_Put_Int((*way)->subclass+2,0);
+	GPS_Util_Put_Uint((*way)->subclass+6,0xffffffff);
+	GPS_Util_Put_Uint((*way)->subclass+10,0xffffffff);
+	GPS_Util_Put_Uint((*way)->subclass+14,0xffffffff);
+    }
+	
+    if(!xc)
+    {
+	if(!GPS_Input_Read_Line(s,inf))
+	    return gps_errno;
+	GPS_Input_Load_Strnull((*way)->cmnt,s);
+    }
+
+    if(xc>=0x40 && xc<=0x46)
+    {
+	if(!GPS_Input_Read_Line(s,inf))
+	    return gps_errno;
+	GPS_Input_Load_Strnull((*way)->facility,s);
+	if(!GPS_Input_Read_Line(s,inf))
+	    return gps_errno;
+	GPS_Input_Load_Strnull((*way)->city,s);
+    }
+
+    if(xc==0x83)
+    {
+	if(!GPS_Input_Read_Line(s,inf))
+	    return gps_errno;
+	GPS_Input_Load_Strnull((*way)->addr,s);
+    }
+
+    if(xc==0x82)
+    {
+	if(!GPS_Input_Read_Line(s,inf))
+	    return gps_errno;
+	GPS_Input_Load_Strnull((*way)->cross_road,s);
+    }
+
+    return 1;
+}
 
 
 /* @funcstatic GPS_Input_Get_D150   ************************************

@@ -139,6 +139,7 @@ int32 gps_pvt_transfer;
 #define pD106 106
 #define pD107 107
 #define pD108 108
+#define pD109 109
 #define pD150 150
 #define pD151 151
 #define pD152 152
