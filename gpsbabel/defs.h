@@ -202,7 +202,7 @@ char * xstrdup(const char *s);
  * to deal with possible floating-point representation errors.
  */
 
-signed int round( double d );
+signed int si_round( double d );
 
 /* 
  * Data types for Palm/OS files.

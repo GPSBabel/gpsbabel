@@ -173,8 +173,8 @@ my_writewpt(waypoint *wpt)
 	
         be_write16( &rec->unknown2, 0);
 	
-	be_write32(&rec->longitude, round(wpt->position.longitude.degrees * 100000.0));
-	be_write32(&rec->latitude, round(wpt->position.latitude.degrees * 100000.0));
+	be_write32(&rec->longitude, si_round(wpt->position.longitude.degrees * 100000.0));
+	be_write32(&rec->latitude, si_round(wpt->position.latitude.degrees * 100000.0));
 	be_write32(&rec->elevation, wpt->position.altitude.altitude_meters);
 
 	rec->plot = 0;
