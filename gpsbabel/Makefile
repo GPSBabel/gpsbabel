@@ -3,12 +3,13 @@
 # type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
 # INHIBIT_EXPAT and coment out LIBEXPAT on just to get a build working quickly.
 # INHIBIT_EXPAT=-DNO_EXPAT
-LIBEXPAT=-lexpat -lusb # -lefence
+LIBEXPAT=-lexpat #-lefence
 
 # USB may required non-standard libraries (like libusb) be installed
 # and may not be available on all OSes.  Uncomment this to remove the key
 # parts of USB from the build.
 INHIBIT_USB=#-DNO_USB
+LIBUSB=-lusb
 
 #
 # Enable either or both of these as you wish.
@@ -54,7 +55,7 @@ OBJS = main.o $(LIBOBJS)
 all: gpsbabel
 
 gpsbabel: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o gpsbabel $(LIBEXPAT) -lm
+	$(CC) $(CFLAGS) $(OBJS) -o gpsbabel $(LIBEXPAT) $(LIBUSB) -lm
 
 main.o:
 	$(CC) -c $(CFLAGS) -DVERSION=\"$(VERSIOND)\" $<
@@ -108,7 +109,7 @@ release:
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).zip ftp://upload.sf.net/incoming/
 
 mac-build:
-	make LIBEXPAT=/sw/lib/libexpat.a EXTRA_CFLAGS="-I/sw/include"
+	make LIBEXPAT=/sw/lib/libexpat.a EXTRA_CFLAGS="-I/sw/include" LIBUSB= INHIBIT_USB=-DNO_USB
 
 mac-release:
 	mkdir -p usr/bin usr/share/gpsbabel/doc
