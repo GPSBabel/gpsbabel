@@ -144,12 +144,13 @@ mkshort(const char *istring)
 
 	/*
 	 * Eliminate chars on the blacklist.
+	 * Characters that aren't ASCII are never OK.
  	 */
 	tstring = xstrdup(ostring);
 	l = strlen (tstring);
 	cp = ostring;
 	for (i=0;i<l;i++) {
-		if (strchr(badchars, tstring[i]))
+		if (strchr(badchars, tstring[i]) || !isascii(tstring[i]))
 			continue;
 		*cp++ = tstring[i];
 	}
