@@ -37,6 +37,7 @@ static char *nolabels = NULL;
 static char *genurl = NULL;
 static char *scale = "768";
 static char *snlen = NULL;
+static char *margin  = "15%";
 int scalev;
 int short_length;
 
@@ -56,6 +57,8 @@ arglist_t tiger_args[] = {
 		ARGTYPE_BOOL },
 	{"genurl", &genurl, "Generate file with lat/lon for centering map.",
 		ARGTYPE_OUTFILE },
+	{"margin", &margin, "Margin for map.  Degrees or percentage.",
+		ARGTYPE_FLOAT},
 	{"scale", &scale, "Dimension in pixels of map.",
 		ARGTYPE_INT},
 	{"snlen", &snlen, "Max shortname length when used with -s.",
@@ -168,6 +171,23 @@ map_plot(const waypoint *wpt)
 	fprintf(linkf, "<area shape=\"circle\" coords=\"%d,%d,7\" href=\"%s\" alt=\"%s\"\n", x, y, wpt->url, wpt->description);
 }
 
+static double
+dscale(double distance)
+{
+	/*
+	 * If we have any specified margin options  factor those in now.  
+	 * A additional little boundary is helpful becuase Tiger always 
+	 * puts the pin above the actual coord and if we don't pad the 
+	 * top will be clipped.   It also makes the maps more useful to 
+	 * have a little bit of context around the pins on the border.
+	 */
+
+	if (strchr(margin, '%'))
+		return distance + strtod(margin, NULL) / 100.0 * distance;
+	else
+		return strtod(margin, NULL) + distance;
+}
+
 static void
 data_write(void)
 {
@@ -201,18 +221,13 @@ data_write(void)
 
 		/*
 		 * Center the map along X and Y axis the midpoint of
-		 * our min and max coords each way.   Size it with an 
-		 * additional little boundary becuase Tiger always puts
-		 * the pin above the actual coord and if we don't pad
-		 * the top will be clipped.   It also makes the maps 
-		 * more useful to have a little bit of context around
-		 * the pins on the border.
+		 * our min and max coords each way.   
 		 */
 		fprintf(urlf, "lat=%f&lon=%f&wid=%f&ht=%f",
 				minlat + (latsz/2.0),
 				minlon + (lonsz/2.0),
-				latsz * 1.15,
-				latsz * 1.15);
+				dscale(latsz),
+				dscale(latsz));
 
 		if (scale) {
 			fprintf(urlf, "&iwd=%s&iht=%s", scale, scale);
