@@ -568,6 +568,12 @@ compare ${TMPDIR}/igc_sed.out reference/igc2_igc.out
 ${PNAME} -i igc -f ${TMPDIR}/igc.out -o gpx -F ${TMPDIR}/igc.gpx
 compare ${TMPDIR}/igc.gpx reference/igc2_gpx.out
 
+#
+# Google Maps XML test
+#
+rm -f ${TMPDIR}/google.out
+${PNAME} -i google -f reference/google.xml -o arc -F ${TMPDIR}/google.out
+compare ${TMPDIR}/google.out reference/google.arc
 
 #
 # XCSV "human readable" tests
