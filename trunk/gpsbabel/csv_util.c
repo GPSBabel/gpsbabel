@@ -856,10 +856,8 @@ xcsv_waypt_pr(const waypoint *wpt)
 	    if (description) {
 		    xfree(description);
 	    }
-	    description = shortname;
-    }
-
-    if (description) {
+ 	    description = shortname;
+    } else if (description) {
 	    char *odesc = description;
 	    description = str_utf8_to_ascii(odesc);
 	    xfree(odesc);
@@ -1070,11 +1068,11 @@ xcsv_waypt_pr(const waypoint *wpt)
 
     fprintf (xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
 
-    if (shortname)
-        xfree(shortname);
-
     if (description && description != shortname)
         xfree(description);
+
+    if (shortname)
+        xfree(shortname);
 
     /* increment the index counter */
     waypt_out_count++;
