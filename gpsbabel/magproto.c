@@ -157,7 +157,7 @@ m315_cleanse(char *istring)
 	static char m315_valid_chars[] = 
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789";
 	for (o=rstring,i=istring; *i; i++) {
-		if (strchr(m315_valid_chars, *o)) {
+		if (strchr(m315_valid_chars, *i)) {
 			*o++ = toupper(*i);
 		}
 	}
@@ -178,8 +178,8 @@ m330_cleanse(char *istring)
 	char *o, *i;
 
 	for (o=rstring,i=istring; *i;i++) {
-		if (strchr(m330_valid_chars, *o)) {
-			*o++ = (*i);
+		if (strchr(m330_valid_chars, *i)) {
+			*o++ = *i;
 		}
 	}
 	*o = 0;
