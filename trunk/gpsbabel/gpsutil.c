@@ -47,6 +47,7 @@ wr_deinit(void)
 static void
 data_read(void)
 {
+	char ibuf[100];
 	char name[9], desc[30];
 	double lat,lon;
 	char latdir, londir;
@@ -56,9 +57,14 @@ data_read(void)
 	char icon[3] = {0};
 	waypoint *wpt_tmp;
 
-	while( fscanf(file_in, "%s %le%c %le%c %ld%c %30[^,] %c",
+	for(;fgets(ibuf, sizeof(ibuf), file_in);) {
+	sscanf(ibuf, "%s %le%c %le%c %ld%c %30[^,] %c",
 			name, &lat, &latdir, &lon, &londir,
-			&alt, &alttype, desc, icon) > 0) {
+			&alt, &alttype, desc, icon);
+		desc[0] = '\0';
+		sscanf(&ibuf[39], "%30c", desc);
+		sscanf(&ibuf[68], "%2s", icon);
+		fprintf(stderr, "Icon >%s< Desc >%s<\n", icon, desc);
 		rtrim(desc);
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 		wpt_tmp->position.altitude.altitude_meters = alt;
