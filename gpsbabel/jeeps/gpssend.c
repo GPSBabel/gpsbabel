@@ -125,7 +125,7 @@ int32 GPS_Write_Packet(int32 fd, GPS_PPacket packet)
 {
     size_t ret;
 
-    GPS_Diag("\nTx Data:");
+    GPS_Diag("Tx Data:");
     Diag(&packet->dle, 3);    
     if((ret=GPS_Serial_Write(fd,(const void *) &packet->dle,(size_t)3)) == -1)
     {
@@ -158,6 +158,7 @@ int32 GPS_Write_Packet(int32 fd, GPS_PPacket packet)
     GPS_Diag(": ");
     DiagS(packet->data, packet->bytes);
     DiagS(&packet->chk, 3);
+    GPS_Diag("(%-8s)\n", Get_Pkt_Type(packet->type));
 
     if((ret=GPS_Serial_Write(fd,(const void *)&packet->chk,(size_t)3)) == -1)
     {

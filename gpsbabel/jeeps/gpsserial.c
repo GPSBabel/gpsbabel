@@ -30,6 +30,25 @@
 #include <stdio.h>
 #include <time.h>
 
+#if 0
+#define GARMULATOR 1
+char *rxdata[] = {
+	"10 06 02 fe 00 fa 10 03",
+	"10 ff 7d 97 00 0e 01 53 74 72 65 65 74 50 69 6c 6f 74 20 33 20 53 6f 66 74 77 61 72 65 20 56 65 72 73 69 6f 6e 20 32 2e 37 30 00 56 45 52 42 4d 41 50 20 41 6d 65 72 69 63 61 73 20 41 75 74 6f 72 6f 75 74 65 20 31 2e 30 30 00 56 45 52 41 55 44 20 45 6e 67 6c 69 73 68 20 33 2e 30 31 00 56 45 52 53 50 4c 53 43 52 4e 20 53 70 6c 61 73 68 20 53 63 72 65 65 6e 20 4d 69 73 73 69 6e 67 00 f1 10 03",
+	"10 f8 0e 56 45 52 53 4d 41 50 31 20 4e 6f 6e 65 00 fb 10 03",
+
+	/* Guessing from here down */
+	/* "10 06 02 fe 00 fa 10 03", /* Ack the unknown packet */
+	"10 fd 24 50 00 00 4c 01 00 41 0a 00 41 64 00 44 6d 00 41 c9 00 44 ca 00 44 6d 00 44 d2 00 41 2d 01 44 36 01 44 2d 01 66 10 03", /* PTR Array */
+	"10 06 02 0a 00 ee 10 03", /* Ack */
+	"10 0e 08 06 04 d4 07 00 17 3a 30 84 10 03", /* DATTIME */
+	"10 06 02 0a 00 ee 10 03", /* Ack */
+	"10 1b 02 09 00 da 10 03", /* RECORD */
+	"10 06 02 0a 00 ee 10 03", /* Ack */
+	"10 23 5f 01 00 ff 70 3f 20 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 a6 1b aa 19 6e 78 5c c2 00 00 00 00 51 59 04 69 00 00 00 00 00 00 00 00 ff ff ff ff 47 43 31 41 33 37 00 54 68 65 20 54 72 6f 6c 6c 20 62 79 20 61 31 38 32 70 69 6c 6f 74 20 26 20 46 61 6d 69 6c 79 00 00 00 00 00 59 10 03"
+	"10 0c 02 07 00 eb 10 03" /* XFERCMP */
+};
+#endif
 /* 
  * termio on Cygwin is apparently broken, so we revert to Windows serial.
  */
@@ -275,7 +294,29 @@ int32 GPS_Serial_Open(int32 *fd, const char *port)
 
 int32 GPS_Serial_Read(int32 handle, void *ibuf, int size)
 {
-		return read(handle, ibuf, size);
+#if GARMULATOR
+	static int l;
+	static char *rp;
+	char **rxp = &rxdata[l];
+	char *hex;
+	char *rx = *rxp;
+	char *ib = ibuf;
+
+	if (!rp) rp = rxdata[0];
+
+	/* Skip over nulls in our pasted strings */
+	if (*rp == 0) {
+	        rp = rxdata[++l];
+	}
+
+	*ib = strtoul(rp, &rp, 16);
+	if (*rp) rp++;
+	fprintf(stderr, ".");
+	return 1;
+
+#else
+	return read(handle, ibuf, size);
+#endif
 }
 
 int32 GPS_Serial_Write(int32 handle, const void *obuf, int size)
@@ -345,13 +386,20 @@ int32 GPS_Serial_Chars_Ready(int32 fd)
 {
     fd_set rec;
     struct timeval t;
+#if GARMULATOR
+    static foo;
+    /* Return sporadic reads just to torment the rest of the code. */
+    if ((foo++ & 0xf) == 0)
+    	return 1;
+    else
+	return 0;
+#endif
 
     FD_ZERO(&rec);
     FD_SET(fd,&rec);
 
     t.tv_sec  = 0;
     t.tv_usec = 0;
-
     (void) select(fd+1,&rec,NULL,NULL,&t);
     if(FD_ISSET(fd,&rec))
 	return 1;
