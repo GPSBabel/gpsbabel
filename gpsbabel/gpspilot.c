@@ -110,7 +110,6 @@ data_read(void)
 		wpt_tmp->description = xstrdup(vdata);
 		vdata = vdata + strlen(vdata) + 1;
 
-		vdata = vdata + strlen(vdata) + 1;
 		wpt_tmp->shortname = xstrdup(vdata);
 		
 		waypt_add(wpt_tmp);
@@ -121,41 +120,40 @@ data_read(void)
 
 
 static void
-cetus_writewpt(waypoint *wpt)
+gpspilot_writewpt(waypoint *wpt)
 {
 	struct record *rec;
-	static int ct;
-	struct tm *tm;
+	static int ct = 0;
+	char *vdata;
 
-	rec = xcalloc(sizeof(*rec),1);
-#if FIXME
-	strncpy(rec->ID, wpt->shortname, sizeof(rec->ID));
-	rec->ID[sizeof(rec->ID)-1] = 0;
-	strncpy(rec->name, wpt->description, sizeof(rec->name));
-	rec->name[sizeof(rec->name)-1] = 0;
+	rec = xcalloc(sizeof(*rec)+46,1);
+	
+	be_write32(&rec->longitude, round(wpt->position.longitude.degrees * 3.6e6));
+	be_write32(&rec->latitude, round(wpt->position.latitude.degrees * 3.6e6));
+	be_write16(&rec->elevation, round(wpt->position.altitude.altitude_meters));
+	be_write16(&rec->magvar, 0 );
+	
+	vdata = (char *)rec + sizeof(*rec);
+	if ( wpt->description ) {
+                strncpy( vdata, wpt->description, 36 );
+                vdata[35] = '\0';
+        }
+        else {
+                vdata[0] ='\0';
+        }
+        vdata += strlen( vdata ) + 1;
+	if ( wpt->shortname ) {
+                strncpy( vdata, wpt->shortname, 9 );
+                vdata[8] = '\0';
+        }
+        else {
+                vdata[0] ='\0';
+        }
+        vdata += strlen( vdata ) + 1;
+	vdata[0] = '\0'; /* long description - currently unsupported */
+	vdata++;
 
-	if (wpt->creation_time) {
-		tm = gmtime(&wpt->creation_time);
-		rec->min = tm->tm_min;
-		rec->hour = tm->tm_hour;
-		rec->sec = tm->tm_sec;
-		rec->day = tm->tm_mday;
-		rec->mon = tm->tm_mon + 1;
-		rec->year = tm->tm_year - 100;
-	} else {
-		rec->min = 0xff;
-		rec->hour = 0xff;
-		rec->sec = 0xff;
-		rec->day = 0xff;
-		rec->mon = 0xff;
-		rec->year = 0xff;
-	}
-
-	pdb_write4(&rec->longitude, wpt->position.longitude.degrees * 10000000.0);
-	pdb_write4(&rec->latitude, wpt->position.latitude.degrees * 10000000.0);
-	pdb_write4(&rec->elevation, wpt->position.altitude.altitude_meters * 100.0);
-#endif
-	opdb_rec = new_Record (0, 0, ct++, sizeof(*rec), (const ubyte *)rec);
+        opdb_rec = new_Record (0, 2, ct++, vdata-(char *)rec, (const ubyte *)rec);	       
 
 	if (opdb_rec == NULL) {
 		fatal(MYNAME ": libpdb couldn't create record");
@@ -169,12 +167,9 @@ cetus_writewpt(waypoint *wpt)
 static void
 data_write(void)
 {
-	int i, ct = waypt_count();
-	struct hdr *htable, *bh;
-        queue *elem, *tmp;
-	extern queue waypt_head;
-        waypoint *waypointp;
-abort();
+        extern queue waypt_head;
+	queue *elem, *tmp;
+
 	if (NULL == (opdb = new_pdb())) { 
 		fatal (MYNAME ": new_pdb failed\n");
 	}
@@ -183,10 +178,16 @@ abort();
 	opdb->name[PDB_DBNAMELEN-1] = 0;
 	opdb->attributes = PDB_ATTR_BACKUP;
 	opdb->ctime = opdb->mtime = time(NULL) + 2082844800U;
-	opdb->type = MYTYPE;  /* poin */
-	opdb->creator = MYCREATOR; /* GpLi */
+	opdb->type = MYTYPE;
+	opdb->creator = MYCREATOR; 
 	opdb->version = 0;
+        QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+		gpspilot_writewpt((waypoint *)elem);
+	}
+	
+	pdb_Write(opdb, fileno(file_out));
 }
+
 
 ff_vecs_t gpspilot_vecs = {
 	rd_init,
