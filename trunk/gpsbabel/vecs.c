@@ -39,6 +39,7 @@ extern ff_vecs_t tiger_vecs;
 extern ff_vecs_t pcx_vecs;
 extern ff_vecs_t csv_vecs;
 extern ff_vecs_t cetus_vecs;
+extern ff_vecs_t gpspilot_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -96,6 +97,11 @@ vecs_t vec_list[] = {
 		&cetus_vecs,
 		"cetus",
 		"Cetus for Palm/OS"
+	},
+	{
+		&gpspilot_vecs,
+		"gpspilot",
+		"GPSPilot Tracker for Palm/OS"
 	},
 	{
 		NULL,
