@@ -129,7 +129,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 	if (in_name && in_wpt) {
 		wpt_tmp->shortname = foo;
 	}
-	if (in_desc) {
+	if (in_desc && in_wpt) {
 		wpt_tmp->description = foo;
 	}
 	if (in_ele) {
