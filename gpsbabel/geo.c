@@ -204,10 +204,10 @@ geo_waypt_pr(const waypoint *waypointp)
 	fprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
 	fprintf(ofd, "</name>\n");
 
-	fprintf(ofd, "<coord lat=\"%lf\" lon=\"%lf\">",
+	fprintf(ofd, "<coord lat=\"%lf\" lon=\"%lf\"/>",
 		waypointp->position.latitude.degrees,
 		waypointp->position.longitude.degrees);
-	fprintf(ofd, "</coord>\n");
+	fprintf(ofd, "\n");
 
 	if (waypointp->url) {
 		fprintf(ofd, "<link text =\"Cache Details\">%s</link>\n", 
