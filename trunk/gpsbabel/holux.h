@@ -33,7 +33,6 @@
 #endif
 
 
-#define EMPTY_WPO       "empty.wpo"
 #define GM100_WPO_FILE_SIZE 25512       /* size of a holux gm-100 wpo file */ 
 
 #define ROUTESTART	    23600           /* Offset for start of route */
@@ -63,10 +62,19 @@ typedef  struct tagWPTHDR
 
 typedef  struct tagPOINT
 {
-    int       iLongitude;
-    int       iLatitude;
+    signed int  iLongitude;
+    signed int  iLatitude;
 }POINT;
 
+
+
+
+typedef  struct tagDATE
+{
+    BYTE    day;
+    BYTE    month;
+    short   year;
+}HX_DATE;
 
 
 typedef struct tagWPT
@@ -74,12 +82,12 @@ typedef struct tagWPT
 	char name[8];				        /* wpt name  */
 	char comment[12];			        /* comment string */	
 	POINT	 pt;				        /* waypoint location  */
-	short vocidx;				        /* voice index, not used */
-	short usecount;			            /* counter: times used by routes */
-	int date;				            /* date */
-	int time;				            /* time	 */
-	char checked;				        /* Active or not */
-    BYTE    dummy[3];                   /* fill bytes */
+	short    vocidx;				    /* voice index, not used */
+	short    usecount;			        /* counter: times used by routes */
+	HX_DATE     date;			            /* date */
+	unsigned time;			            /* time	 */
+	char     checked;				    /* Active or not */
+    BYTE     dummy[3];                  /* fill bytes */
 }WPT;
 
 

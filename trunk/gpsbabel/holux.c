@@ -32,14 +32,14 @@ History:
 #include "holux.h"
 
 
-static FILE *file_in;
+static  FILE *file_in;
 static 	unsigned char *HxWFile;
 static  char fOutname[256];
 
 
 static void rd_init(const char *fname)
 {
-	file_in = fopen(fname, "r");
+	file_in = fopen(fname, "rb");
 	if (file_in == NULL) {
 		fatal("GPSBABEL: Cannot open %s for reading\n", fname);
 	}
@@ -53,38 +53,28 @@ static void rd_deinit(void)
 
 
 
+
+
 static void
 wr_init(const char *fname)
 {
-    FILE *file_in;
-	
-    file_in = fopen(EMPTY_WPO, "rb");
-	if (file_in == NULL) {
-		fatal("GPSBABEL: Cannot open %s for reading\n", EMPTY_WPO);
-    }
-
-
 	HxWFile = calloc(GM100_WPO_FILE_SIZE, 1);
 	if (HxWFile == NULL) 
     {
 		fatal("GPSBABEL: Cannot alloc memory\n");
     }
 
-    /* read the empty wpo file to the data-array */
-    fread( HxWFile, 1, GM100_WPO_FILE_SIZE, file_in );
-	fclose(file_in);
     strcpy (fOutname,fname);
-    
 }
 
 
-/* write the collected data to the output file */
+
+
+
 static void wr_deinit(void)
 {   
-    /* this function is never called */
 
 }
-
 
 
 
@@ -101,6 +91,9 @@ static void data_read(void)
     WPT *pWptHxTmp;
     int iWptLen;
     DWORD dwIndex;
+	struct tm tm;
+	struct tm *ptm;
+
 
 	HxWpt = calloc(GM100_WPO_FILE_SIZE, 1);
 	if (HxWpt == NULL) 
@@ -138,6 +131,20 @@ static void data_read(void)
 		wpt_tmp->shortname = strdup(name);
 		wpt_tmp->description = strdup(desc);
 
+  		wpt_tmp->creation_time = 0;
+        if (pWptHxTmp->date.year)
+        {
+            ptm = gmtime(&pWptHxTmp->time);
+		    tm.tm_hour = ptm->tm_hour; 
+            tm.tm_min = ptm->tm_min;
+		    tm.tm_sec = ptm->tm_sec;
+
+            tm.tm_mday = pWptHxTmp->date.day;
+		    tm.tm_mon = pWptHxTmp->date.month - 1;
+		    tm.tm_year = pWptHxTmp->date.year - 1900;
+            wpt_tmp->creation_time = mktime(&tm); 
+        }
+
         lon = (double)pWptHxTmp->pt.iLongitude / 36000; 
         lat = ((double)pWptHxTmp->pt.iLatitude  / 36000) * -1;
 		wpt_tmp->position.longitude.degrees = lon;
@@ -148,48 +155,124 @@ static void data_read(void)
 
 
 
+
+char *_mknshort (char *stIn,unsigned int sLen)
+{
+    #define MAX_STRINGLEN 255
+    static char strOut[MAX_STRINGLEN];
+    char strTmp[MAX_STRINGLEN];
+
+    if (sLen > MAX_STRINGLEN)
+        return (stIn);
+
+    if (stIn == NULL)
+        return NULL;
+
+    setshort_length(sLen);
+    strcpy(strTmp,mkshort(stIn));      
+
+    memset(strOut,' ', MAX_STRINGLEN);
+    strncpy (strOut,strTmp,strlen(strTmp));
+    return (strOut);
+}
+
+
+
+
 static void gpsutil_disp(waypoint *wpt)
 {
 	double lon,lat;
-    int iIndex;
+	struct tm *tm;
+    short sIndex;
     WPT *pWptHxTmp;
 
-	lon =wpt->position.longitude.degrees * 36000;
-	lat =wpt->position.latitude.degrees * -36000;
+	lon =(double)wpt->position.longitude.degrees * 36000;
+	lat =(double)wpt->position.latitude.degrees * -36000;
 
-    iIndex =  ((WPTHDR *)HxWFile)->num;
-    ((WPTHDR *)HxWFile)->idx[iIndex] = iIndex;         /* set the waypoint index  */
+
+    /* round it to increase the accuracy */
+    lon += (double)((int)lon/abs((int)lon)) * .5;
+    lat += (double)((int)lat/abs((int)lat)) * .5;
+
+
+    sIndex =  ((WPTHDR *)HxWFile)->num;
+    ((WPTHDR *)HxWFile)->idx[sIndex] = sIndex;         /* set the waypoint index  */
  
     /* set Waypoint */
-    pWptHxTmp =  (WPT *)&HxWFile[OFFS_WPT + (sizeof(WPT) * iIndex)];
+    pWptHxTmp =  (WPT *)&HxWFile[OFFS_WPT + (sizeof(WPT) * sIndex)];
 
     memset (&(pWptHxTmp->name),0x20,sizeof(pWptHxTmp->name));  
     if (wpt->shortname != NULL)
-        strncpy((char *)&(pWptHxTmp->name), wpt->shortname, sizeof(pWptHxTmp->name));
+        strncpy((char *)&(pWptHxTmp->name), _mknshort(wpt->shortname,sizeof(pWptHxTmp->name)),sizeof(pWptHxTmp->name));
     else
-        sprintf((char *)&(pWptHxTmp->name),"W%d",iIndex);
+        sprintf((char *)&(pWptHxTmp->name),"W%d",sIndex);
 
     memset (&(pWptHxTmp->comment),0x20,sizeof(pWptHxTmp->comment));  
     if (wpt->description != NULL)
-        strncpy((char *)&(pWptHxTmp->comment), wpt->description, sizeof(pWptHxTmp->comment));
-     
+            strncpy((char *)&(pWptHxTmp->comment), _mknshort(wpt->description,sizeof(pWptHxTmp->comment)),sizeof(pWptHxTmp->comment));
+
+    /*set the time */
+	if (wpt->creation_time) 
+    {
+        /* tm = gmtime(&wpt->creation_time);  /* I get the wrong result with gmtime ???  */
+        tm = localtime(&wpt->creation_time);
+        pWptHxTmp->time = (tm->tm_hour * 3600) + (tm->tm_min * 60) +tm->tm_sec;
+    	pWptHxTmp->date.day = tm->tm_mday; 
+    	pWptHxTmp->date.month = tm->tm_mon + 1;
+    	pWptHxTmp->date.year = tm->tm_year + 1900;
+    }
+    else
+    {
+        pWptHxTmp->time = 0;
+    	pWptHxTmp->date.day = 0; 
+    	pWptHxTmp->date.month = 0;
+    	pWptHxTmp->date.year = 0;
+    }
+
 
     pWptHxTmp->pt.iLatitude = (int)lat;
     pWptHxTmp->pt.iLongitude = (int)lon;
     pWptHxTmp->checked = 01;
 
-    ((WPTHDR *)HxWFile)->num = ++iIndex;
-    ((WPTHDR *)HxWFile)->next= iIndex;
-
-
-
+    ((WPTHDR *)HxWFile)->num = ++sIndex;
+    ((WPTHDR *)HxWFile)->next= sIndex;
 }
+
+
+
+
 
 
 static void data_write(void)
 {
     int iWritten;
     FILE *file_out;
+    short sCount;
+
+    /* init the waypoint area*/
+    ((WPTHDR *)HxWFile)->id = WPT_HDR_ID;
+    ((WPTHDR *)HxWFile)->num = 0;
+    ((WPTHDR *)HxWFile)->next = 0;
+    
+    /* clear index list */
+    for (sCount = 0; sCount < MAXWPT; sCount++)
+        ((WPTHDR *)HxWFile)->idx[sCount] = (short)0xffff; 
+    for (sCount = 0; sCount < MAXWPT; sCount++)
+        ((WPTHDR *)HxWFile)->used[sCount] = 0; 
+
+   
+   /* init the route area */
+    ((RTEHDR *)&HxWFile[ROUTESTART])->id = RTE_HDR_ID;
+    ((RTEHDR *)&HxWFile[ROUTESTART])->num = 0;
+    ((RTEHDR *)&HxWFile[ROUTESTART])->next = 0;
+    ((RTEHDR *)&HxWFile[ROUTESTART])->rteno = 0;
+    
+    /* clear index list */
+    for (sCount = 0; sCount < MAXWPT; sCount++)
+        ((RTEHDR *)&HxWFile[ROUTESTART])->idx[sCount] = (short)0xffff; 
+    for (sCount = 0; sCount < MAXWPT; sCount++)
+        ((RTEHDR *)&HxWFile[ROUTESTART])->used[sCount] = 0; 
+
 
     waypt_disp_all(gpsutil_disp);
    
@@ -208,6 +291,8 @@ static void data_write(void)
 	fclose(file_out);
     free(HxWFile);
 }
+
+
 
 
 ff_vecs_t holux_vecs = {
