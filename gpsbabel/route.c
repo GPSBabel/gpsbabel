@@ -71,11 +71,27 @@ route_add_head(route_head *rte)
 }
 
 void
+route_del_head(route_head *rte)
+{
+	dequeue( &rte->Q );
+	route_free( rte );
+	rte_head_ct--;
+}
+
+void
 track_add_head(route_head *rte)
 {
 	ENQUEUE_TAIL(&my_track_head, &rte->Q);
 	QUEUE_INIT(&rte->waypoint_list);
 	trk_head_ct++;
+}
+
+void
+track_del_head(route_head *rte)
+{
+	dequeue( &rte->Q );
+	route_free( rte );
+	trk_head_ct--;
 }
 
 void

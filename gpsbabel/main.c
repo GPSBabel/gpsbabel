@@ -22,6 +22,7 @@
 #include <ctype.h>
 
 global_options global_opts;
+const char gpsbabel_version[] = VERSION;
 
 static void
 usage(const char *pname, int shorter)

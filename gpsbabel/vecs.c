@@ -65,6 +65,7 @@ extern ff_vecs_t palmdoc_vecs;
 extern ff_vecs_t html_vecs;
 extern ff_vecs_t netstumbler_vecs;
 extern ff_vecs_t HsaEndeavourNavigator_vecs;
+extern ff_vecs_t igc_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -279,6 +280,12 @@ vecs_t vec_list[] = {
 		"HSA Endeavour Navigator export File",
 		NULL
 	},
+        {
+                &igc_vecs,
+                "igc",
+                "FAI/IGC Flight Recorder Data Format",
+                NULL
+        },
 	{
 		NULL,
 		NULL,
