@@ -1,0 +1,116 @@
+st2gpx - Export/import data from MS Streets & Trips, Autoroute and Mappoint files to GPX format
+
+By James Sherring, james_sherring@yahoo.com
+
+********************************************************************************************
+
+WARNING 
+*******
+ms2gpx could corrupt Microsoft Streets & Trips, Autoroute and Mappoint files.
+ms2gpx is based on my (James Sherring) limited understanding and guessing of Microsoft file formats.
+These file formats are undocumented, vary between products and versions, and certainly have information
+that I do not understand. 
+
+There is no guarantee that this program will work correctly. 
+It is possible that it will import or export data erroneously,
+corrupt your data files, 
+that files modified by st2gpx will crash applications using them,
+or that there will be other loss of data or other effects.
+
+It is recommended that you backup any data before using this program.
+
+Usage of this program indicates that you understand this risk and assume all responsibility for your data.
+
+********************************************************************************************
+
+Usage: st2gpx [-hr] [-v verbose-level] [-g gpx-in-file] [-G gpx-out-file] 
+	      [-m mpst-in-file] [-M pcx5-out-file] [-F st-mod-file] stfile
+
+-h : Help (this text)
+-r : Export drawn-lines as routes instead of tracks
+-g gpx-in-file    : Import data from GPX XML format gpx-in-file
+-G gpx-out-file   : Write output to GPX XML format gpx-out-file
+-F st-mod-file    : Write modified stfile with imported data
+                    to (new) st-mod-file.
+-m mpst-in-file   : Import data from Garmin MapSource text-export mpst-in-file
+-M pcx5-out-file  : Write output to Garmin MapSource importable pcx5-out-file
+
+export hint: st2gpx stfile (or use drag & drop)
+import hint: st2gpx -g gpx-in-file -F st-mod-file st-template-file
+
+Debugging options:
+-e : Explore data further
+-v [n]              : Set debugging verbosity to 'n' (0-6, default 2)
+-u userdata-file    : Process pushpins in (mdb) file userdata-file
+-j journey-file     : Process Journey in file journey-file
+-a annotations-file : Process Annotations in file annotations-file
+-p properties-file  : Analyse OLE properties-file
+
+
+FAQ
+---
+
+Q What is st2gpx for?
+
+A I wanted to draw tracks from my GPS in Autoroute to see where I had been. 
+  And I wanted to download data from Autoroute to my GPS.
+
+  st2gpx is used for converting data in Microsoft Map (Streets & Trips, Autoroute and Mappoint)	format
+  to a usable data format. GPX is becoming the standard format for GPS data. GPSBabel can convert GPX data 
+  into many other data formats.
+  
+
+Q Is there a GUI version?
+
+A Sorry, not yet.
+ 
+ 
+Q What can st2gpx do that you cant do with import/export in Microsoft Map (Streets & Trips, Autoroute and Mappoint)?
+
+A st2gpx can import and export poly-lines. Streets & Trips and Autoroute cant do this, and Mappoint needs 
+  to be programmed to achieve this. Normally Streets & Trips and Autoroute only import pushpins.
+  (st2gpx can also import/export pushpins and export the driving route.) 
+
+
+Q How do I save a GPS track or other GPX data from Streets & Trips, Autoroute or Mappoint?
+
+A First create the data you want in Streets & Trips, Autoroute or Mappoint.
+  This can include pushpins, route, and poly-lines. It does not include driving instructions or drawing shapes 
+  other than poly-lines.
+  Then the command is:
+  st2gpx input-file-name 
+  input-file-name is your existing Streets & Trips, Autoroute or Mappoint file; 
+  The data will be exported into a file of the same name with the extension .gpx 
+  (you can specify the name of the output file with the -G option)
+  You can use GPSBabel or other programs with this data.
+
+
+Q How do I import a GPS track or other GPX data into Streets & Trips, Autoroute or Mappoint?
+
+A First you need to have the data in GPX format - see GPSBabel for that.
+  Then you need to chose your import file, it can me an empty map or one with your existing data in it. 
+  Be sure to backup this file! Then the command is:
+  st2gpx -g gpx-in-file -F output-file-name input-file-name
+  where gpx-in-file must be a valid GPX file; input-file-name is your existing Streets & Trips, 
+  Autoroute or Mappoint file; and output-file-name is the new Streets & Trips, Autoroute or Mappoint file.
+  GPS routes and tracks will be drawn as blue poly-lines, and waypoints will be imported as pushpins.
+
+  
+Q I would like to get the driving instructions, and detailed route, but st2gpx only saves the start/end and stops.
+
+A Unfortunately, the driving instructions are not saved in the file. You can add extra stops after the route 
+  is calculated, or you can draw/trace a poly-line along the route calculated by Streets & Trips/Autoroute/Mappoint.
+  This is exported as a track (or optionally a route), and can then be loaded to your GPS receiver 
+  using the correct software. I use an older Garmin GPS12 and loading a track this way works very well.
+
+  
+Q How do I draw/trace a poly-line along the route?
+
+A You need to use the drawing toolbar. There are many different line types, but I find 'freeform' the best.
+  Begin with the entire route in view (or the part that you want to trace) and mark out the major points. 
+  Then you can zoom in and add more detail by adding points or correct points by dragging them.
+  I find it best to add points at significant turns or intersections, and perhaps an extra point or two
+  near the intersection so the line direction of approach or exit from the intersection is accurate.
+  You can add many more points to get a very detailed trace of the route, but that may not be necessary.
+  Experiment, and see what works for you.
+  

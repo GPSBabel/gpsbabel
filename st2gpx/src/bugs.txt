@@ -19,3 +19,7 @@ Bugs:
 	but "steph's wedding.est" is ok (single space)
 	
 	with input file "Plesivec - Plešivec.gpx" we fail to open the gpx as input
+
+	jlps coredump only with release build
+	(-G output\jlps.gpx -M output\jlps.rte input\jlps.axe)
+	problem seems to be in (compiler) cleanup at end of pcx5_write_jour_pt, after pcx5_write_pt
