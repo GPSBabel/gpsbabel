@@ -44,7 +44,7 @@ install:
 
 # Nerdy release stuff that needs to work only on Linux.
 
-internal_styles.c: mkstyle.sh style/csv.style
+internal_styles.c: mkstyle.sh
 	./mkstyle.sh > internal_styles.c
 
 dep:
