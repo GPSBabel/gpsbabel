@@ -59,11 +59,13 @@ waypt_disp(const waypoint *wpt)
 	}
 	printposn(&wpt->position.latitude,1);
 	printposn(&wpt->position.longitude,0);
-	printf("%s/%s %f\n", 
+	printf("%s/%s", 
 		global_opts.synthesize_shortnames ? 
 			mkshort(wpt->description) : wpt->shortname, 
-		wpt->description, 
-		wpt->position.altitude.altitude_meters);
+		wpt->description);
+	if (wpt->position.altitude.altitude_meters != unknown_alt)
+		printf(" %f", wpt->position.altitude.altitude_meters);
+	printf("\n");
 }
 
 void
