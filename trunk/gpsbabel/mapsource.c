@@ -1204,7 +1204,7 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 	int lat;
 	int lon;
 
-	time_t	dateTime = 0;
+	int	dateTime = 0;
 	route_head *track_head;
 	unsigned int trk_count;
 
