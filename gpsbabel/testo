@@ -59,3 +59,7 @@ diff /tmp/magfile reference/magfile
 ${PNAME} -i geo -f geocaching.loc -o psp -F /tmp/ps.psp
 diff /tmp/ps.psp reference
 
+# MXF (Maptech Exchange Format) file format
+${PNAME} -i mxf -f mxf.c -o mxf -F /tmp/mxf.mxf >/dev/null
+diff /tmp/mxf.mxf reference
+

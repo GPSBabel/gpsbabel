@@ -114,6 +114,9 @@ THE FORMATS
 	.MPS files.  Unfortunately, you need one .PSP file for every 
 	.MPS file. :(
 
+  Maptech MXF
+	Maptech's MXF is a CSV on steroids.  Contributed by Alex Mottram.
+
 
 COMMON USAGE
 
