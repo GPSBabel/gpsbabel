@@ -556,7 +556,7 @@ disp_vecs(void)
 
 	/* Normal vecs are easy; populate the first part of the array. */
 	for (vec = vec_list; vec->vec; vec++, i++) {
-			svp[i] = vec;
+		svp[i] = vec;
 	}
 	/* Walk the style list, parse the entries, dummy up a "normal" vec */
 	for (svec = style_list; svec->name; svec++, i++)  {
@@ -571,7 +571,8 @@ disp_vecs(void)
 	qsort(svp, vc, sizeof(*svp), alpha);
 
 	for (i=0;i<vc;i++) {
-		printf(VEC_FMT, svp[i]->name, svp[i]->desc);
+		if ( svp[i]->vec->type != ff_type_internal ) 
+			printf(VEC_FMT, svp[i]->name, svp[i]->desc);
 		for (ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
 			if ( !(ap->argtype & ARGTYPE_HIDDEN)) 
 				printf("	  %-18.18s    %-.50s %s\n",
