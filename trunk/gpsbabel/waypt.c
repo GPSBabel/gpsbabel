@@ -34,7 +34,7 @@ waypt_init(void)
 }
 
 waypoint *
-waypt_dupe(waypoint *wpt) 
+waypt_dupe(const waypoint *wpt) 
 {
 	waypoint * tmp;
 	tmp = xcalloc(sizeof *wpt, 1);
