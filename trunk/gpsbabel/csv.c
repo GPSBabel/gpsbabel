@@ -146,6 +146,9 @@ csv_waypt_pr(const waypoint *wpt)
         if (wpt->description) 
 	    description = csv_stringclean(wpt->description, ",\"");
 
+	if ((description == NULL) && wpt->notes)
+	    description = csv_stringclean(wpt->notes, ",\"");
+
 	fprintf(file_out, "%08.5f, %08.5f, %s\n",
 		lat,
 		lon,
