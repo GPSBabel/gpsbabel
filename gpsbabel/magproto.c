@@ -1269,7 +1269,7 @@ mag_route_trl(const route_head * rte)
 	waypoint *waypointp;
 	char obuff[256];
 	char buff1[64], buff2[64];
-	char *pbuff;
+	char *pbuff, *owpt;
 	const char * icon_token;
 	int i, numlines, thisline;
 	
@@ -1297,7 +1297,12 @@ mag_route_trl(const route_head * rte)
 		else
 			pbuff = buff2;
 
-		sprintf(pbuff, "%s,%s", waypointp->shortname, icon_token);
+		owpt = waypointp->shortname;
+		owpt = mag_cleanse(owpt);
+
+		sprintf(pbuff, "%s,%s", owpt, icon_token);
+		
+		xfree(owpt);
 		
 		if ((tmp == &rte->waypoint_list) || ((i % 2) == 0)) {
 			thisline++;
