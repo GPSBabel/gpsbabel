@@ -24,7 +24,7 @@
  * (Donations welcome. :-)
  */
 typedef enum {
-	mm_unknown,
+	mm_unknown = 0 ,
 	mm_gps315320,
 	mm_map410,
 	mm_map330,
