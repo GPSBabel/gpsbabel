@@ -93,8 +93,18 @@ typedef enum {
 	gt_suprise
 } geocache_type;
 
+typedef enum {
+	gc_unknown = 0,
+	gc_micro,
+	gc_other,
+	gc_regular,
+	gc_large,
+	gc_virtual
+} geocache_container;
+
 typedef struct {
 	geocache_type type;
+	geocache_container container;
 	int diff; /* (multiplied by ten internally) */
 	int terr; /* (likewise) */
 } geocache_data ;
