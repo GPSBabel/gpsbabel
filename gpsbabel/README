@@ -276,12 +276,12 @@ ADVANCED USAGE
 	new -i argument is seen.  Files are read in the order they appear.  
 	So you could merge three input files into one output file with:
 	
-	gpsbabel -i geo 1.loc 2.loc 3.loc -o geo -F big.loc
+	gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc
 
 	You can merge files of different types:
 
-	gpsbabel  -i geo 1.loc -i gpx 2.gpx -i pcx 3.pcx -o gpsutil -F big.gps
+	gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx -o gpsutil -F big.gps
 
 	You can write the same data in different output formats:
 
-	gpsbabel -i geo 1.loc -o gpx -F 1.gpx -o pcx 1.wpt
+	gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx 1.wpt
