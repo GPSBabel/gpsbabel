@@ -106,7 +106,7 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 116301737;
+			PBXPerProjectTemplateStateSaveDate = 116907658;
 			PBXPrepackagedSmartGroups_v2 = (
 				{
 					PBXTransientLocationAtTop = bottom;
@@ -918,11 +918,14 @@
 					WindowLocation = "{4, 381}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 116301737;
+			PBXWorkspaceStateSaveDate = 116907658;
 		};
 		perUserProjectItems = {
-			3F26E6CA06EE9FD000A5ACEA = 3F26E6CA06EE9FD000A5ACEA;
-			3FC2F7C606EE9F8B002083D3 = 3FC2F7C606EE9F8B002083D3;
+			3F13581706F7DEF5001F6BE7 = 3F13581706F7DEF5001F6BE7;
+			3F13583006F7EC6B001F6BE7 = 3F13583006F7EC6B001F6BE7;
+			3FB41B8906EFB84A0017502D = 3FB41B8906EFB84A0017502D;
+			3FB41B8B06EFB84A0017502D = 3FB41B8B06EFB84A0017502D;
+			3FB41B8C06EFB84A0017502D = 3FB41B8C06EFB84A0017502D;
 		};
 		sourceControlManager = 3F8AAF0806E7E5D400E74F19;
 		userBuildSettings = {
@@ -934,15 +937,25 @@
 			DA206CF0015C4D9F03C91932,
 		);
 	};
-	3F26E6CA06EE9FD000A5ACEA = {
+	3F13581706F7DEF5001F6BE7 = {
 		fRef = DA206CF3015C4E8B03C91932;
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 815";
 		rLen = 0;
-		rLoc = 34625;
+		rLoc = 35444;
 		rType = 0;
-		vrLen = 1394;
-		vrLoc = 14697;
+		vrLen = 1617;
+		vrLoc = 22605;
+	};
+	3F13583006F7EC6B001F6BE7 = {
+		fRef = DA206CF3015C4E8B03C91932;
+		isa = PBXTextBookmark;
+		name = "MacGPSBabel.applescript: 839";
+		rLen = 0;
+		rLoc = 35550;
+		rType = 0;
+		vrLen = 1415;
+		vrLoc = 23045;
 	};
 	3F8AAF0806E7E5D400E74F19 = {
 		fallbackIsa = XCSourceControlManager;
@@ -966,15 +979,25 @@
 		wantsCodeCompletionTabCompletes = 1;
 		wantsIndex = 1;
 	};
-	3FC2F7C606EE9F8B002083D3 = {
+	3FB41B8906EFB84A0017502D = {
+		fRef = DA206CF4015C4E8B03C91932;
+		fallbackIsa = PBXBookmark;
+		isa = ASKDictionaryBookmark;
+	};
+	3FB41B8B06EFB84A0017502D = {
 		fRef = DA206CF3015C4E8B03C91932;
 		isa = PBXTextBookmark;
 		name = "MacGPSBabel.applescript: 815";
 		rLen = 0;
-		rLoc = 34625;
+		rLoc = 35444;
 		rType = 0;
-		vrLen = 1409;
-		vrLoc = 14697;
+		vrLen = 1617;
+		vrLoc = 22605;
+	};
+	3FB41B8C06EFB84A0017502D = {
+		fRef = DA206CF4015C4E8B03C91932;
+		fallbackIsa = PBXBookmark;
+		isa = ASKDictionaryBookmark;
 	};
 	DA206CF0015C4D9F03C91932 = {
 		activeArgIndex = 2147483647;
@@ -1003,9 +1026,9 @@
 	};
 	DA206CF3015C4E8B03C91932 = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1672, 12225}}";
-			sepNavSelRange = "{34625, 0}";
-			sepNavVisRect = "{{0, 4905}, {862, 533}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1672, 12585}}";
+			sepNavSelRange = "{35550, 0}";
+			sepNavVisRect = "{{0, 8145}, {862, 533}}";
 		};
 	};
 }
