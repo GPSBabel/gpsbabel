@@ -85,7 +85,7 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
 
 	if (gps_is_usb) {
 	    switch (gusb_open(port)) {
-		    case 0: return NULL;
+		    case 0: return 0;
 		    case 1: return 1;
 		    case 2: exit(0);
 	    }
