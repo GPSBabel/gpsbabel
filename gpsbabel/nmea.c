@@ -153,8 +153,6 @@ gpgll_parse(char *ibuf)
 		track_add_head(trk_head);
 	}
 
-	waypt = waypt_new();
-
 	memset(&tm, 0, sizeof(tm));
 
 	sscanf(ibuf,"$GPGLL,%lf,%c,%lf,%c,%d,%c,",
@@ -162,11 +160,15 @@ gpgll_parse(char *ibuf)
 		&lngdeg,&lngdir,
 		&hms,&valid);
 
+	if (valid != 'A')
+		return;
 	tm.tm_sec = hms % 100;
 	hms = hms / 100;
 	tm.tm_min = hms % 100;
 	hms = hms / 100;
 	tm.tm_hour = hms % 100;
+
+	waypt = waypt_new();
 
 	waypt->creation_time = creation_time;
 
@@ -198,20 +200,23 @@ gpgga_parse(char *ibuf)
 		track_add_head(trk_head);
 	}
 
-	waypt  = waypt_new();
-
 	memset(&tm, 0, sizeof(tm));
 
-	sscanf(ibuf,"$GPGGA,%f,%lf,%c,%lf,%c,%d,%d,%lf,%lf,%c",
+	sscanf(ibuf,"$GPGGA,%lf,%lf,%c,%lf,%c,%d,%d,%lf,%lf,%c",
 		&hms, &latdeg,&latdir,
 		&lngdeg,&lngdir,
 		&fix,&nsats,&hdop,&alt,&altunits);
+
+	if (fix == 0)
+		return;
 
 	tm.tm_sec = (long) hms % 100;
 	hms = hms / 100;
 	tm.tm_min = (long) hms % 100;
 	hms = hms / 100;
 	tm.tm_hour = (long) hms % 100;
+
+	waypt  = waypt_new();
 
 	waypt->creation_time = creation_time;
 
@@ -234,6 +239,7 @@ gprmc_parse(char *ibuf)
 	double hms;
 	double speed, course;
 	char fix;
+	unsigned int dmy;
 	struct tm tm;
 	waypoint *waypt;
 
@@ -242,22 +248,33 @@ gprmc_parse(char *ibuf)
 		track_add_head(trk_head);
 	}
 
-	waypt  = waypt_new();
-
 	memset(&tm, 0, sizeof(tm));
 
-	sscanf(ibuf,"$GPRMC,%f,%c,%lf,%c,%lf,%c,%lf,%lf",
+	sscanf(ibuf,"$GPRMC,%lf,%c,%lf,%c,%lf,%c,%lf,%lf,%u",
 		&hms, &fix, &latdeg, &latdir,
 		&lngdeg, &lngdir,
-		&speed, &course);
+		&speed, &course, &dmy);
 
+	if (fix != 'A')
+		return;
 	tm.tm_sec = (long) hms % 100;
 	hms = hms / 100;
 	tm.tm_min = (long) hms % 100;
 	hms = hms / 100;
 	tm.tm_hour = (long) hms % 100;
 
-	waypt->creation_time = mktime(&tm) + get_tz_offset() + current_time();
+	tm.tm_year = dmy % 100 + 100;
+	dmy = dmy / 100;
+	tm.tm_mon  = dmy % 100 - 1;
+	dmy = dmy / 100;
+	tm.tm_mday = dmy;
+	creation_time = mktime(&tm) + get_tz_offset();
+
+	if (posn_type == gpgga)
+		return;
+
+	waypt  = waypt_new();
+	waypt->creation_time = creation_time;
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -310,18 +327,35 @@ gpzda_parse(char *ibuf)
 	tm.tm_mday = dd;
 	tm.tm_mon  = mm - 1;
 	tm.tm_year = yy - 1900;
-	creation_time = mktime(&tm) - get_tz_offset();
+	creation_time = mktime(&tm) + get_tz_offset();
 }
 
 static void
 nmea_read(void)
 {
 	char ibuf[1024];
+	char *ck;
+	int ckval, ckcmp;
 	struct tm tm;
 
 	creation_time = mktime(&tm) + get_tz_offset() + current_time();
 
 	while (fgets(ibuf, sizeof(ibuf), file_in)) {
+		ck = rindex(ibuf, '*');
+		if (ck != NULL) {
+			*ck = '\0';
+			ckval = nmea_cksum(&ibuf[1]);
+			*ck = '*';
+			ck++;
+			sscanf(ck, "%2X", &ckcmp);
+			if (ckval != ckcmp) {
+#if 0
+				printf("ckval %X, %X, %s\n", ckval, ckcmp, ck);
+				printf("NMEA %s\n", ibuf);
+#endif
+				continue;
+			}
+		}
 		if (0 == strncmp(ibuf, "$GPWPL,", 7)) {
 			gpwpl_parse(ibuf);
 		} else
@@ -331,9 +365,13 @@ nmea_read(void)
 		} else
 		if (0 == strncmp(ibuf, "$GPRMC,", 7)) {
 			if (posn_type != gpgga) {
-		   	posn_type = gprmc;
-				gprmc_parse(ibuf);
+				posn_type = gprmc;
 			}			
+			/*			
+			 * Allways call gprmc_parse() because like GPZDA
+			 * it contains the full date.
+			 */			
+			gprmc_parse(ibuf);
 		} else
 		if (0 == strncmp(ibuf, "$GPGLL,", 7)) {
 			if ((posn_type != gpgga) && (posn_type != gprmc)) {
