@@ -165,7 +165,13 @@ pid_to_model_t pid_to_model[] =
 	{ mm_map330, 30, "Map 330" },
 	{ mm_gps310, 31, "GPS 310" },
 	{ mm_meridian, 33, "Meridian" },
-	{ mm_sportrak, 36, "SporTrak" },
+	{ mm_meridian, 35, "ProMark 2" },
+	{ mm_sportrak, 36, "SporTrak Map/Pro" },
+	{ mm_sportrak, 37, "SporTrak" },
+	{ mm_meridian, 39, "Meridian Color" },
+	{ mm_sportrak, 41, "Sportrak Color" },
+	{ mm_sportrak, 42, "Sportrak Marine" },
+	{ mm_meridian, 43, "Meridian Marine" },
 	{ mm_unknown, 0, NULL }
 };
 
