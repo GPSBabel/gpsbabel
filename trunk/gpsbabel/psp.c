@@ -1,6 +1,6 @@
 /*
     PocketStreets 2002 Pushpin Files
-    Contributed to gpsbabel by Alex Mottram.
+    Contributed to gpsbabel by Alex Mottram (geo_alexm at cox-internet.com)
     
     Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
 
@@ -21,39 +21,56 @@
  */
 
 #include "defs.h"
-
 #include <ctype.h>
 #include <math.h>  /* for M_PI */
 
-#define MYNAME "PSP"
+#define MYNAME	"PSP"
 
-/*#define _DEBUG_PSP	1*/
 #define MAXPSPSTRINGSIZE	256
 #define MAXPSPOUTPUTPINS	8192   /* Any more points than this is ludicrous */
 
 static FILE *psp_file_in;
 static FILE *psp_file_out;
 
-#ifdef _DEBUG_PSP
-static void 
-dump_bufferstuff(char * header, char * buffer, int bufferlen)
-{
-    int i;
+static int
+psp_fread(void *buff, size_t size, size_t members, FILE * fp) {
+    size_t br;
 
-    printf("%s\n--------\n", header);
+    br = fread(buff, size, members, fp);
 
-    for (i = 0 ; i < bufferlen ; i++) {
-	printf("%0.2X ", (unsigned char)buffer[i]);
-    } 
-    printf("\n");
+    if (br != members) {
+        fatal(MYNAME ": requested to read %d bytes, read %d bytes.\n", members, br);
+    }
+
+    return (br);
 }
-#endif
+
+static int
+valid_psp_header(char * header, int len) {
+    char header_bytes[] = { 0x31, 0x6E, 0x69, 0x50, 0x00 }; /* 1niP <stop> */
+    char *p, *s;
+
+    if (len != 32) {
+        return (-1);
+    }
+
+    p = header_bytes;
+    s = header;
+
+    while (*p) {
+        if (*p++ != *s++) {
+            return(-1);
+        }
+    }
+
+    return (0);
+}
 
 static char *
 buffer_washer(char * buff, int buffer_len)
 {
     int i;
-    
+
     for (i = 0 ; i < buffer_len - 1; i++) {
 	if (buff[i] == '\0') {
 	    memcpy(&buff[i], &buff[i+1], buffer_len - i);
@@ -68,7 +85,7 @@ buffer_washer(char * buff, int buffer_len)
 static void
 psp_rd_init(const char *fname)
 {
-	psp_file_in = fopen(fname, "r");
+	psp_file_in = fopen(fname, "rb");
 	if (psp_file_in == NULL) {
 		fatal(MYNAME ": Cannot open %s for reading\n", fname);
 	}
@@ -83,7 +100,7 @@ psp_rd_deinit(void)
 static void
 psp_wr_init(const char *fname)
 {
-	psp_file_out = fopen(fname, "w");
+	psp_file_out = fopen(fname, "wb");
 	if (psp_file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
@@ -98,17 +115,21 @@ psp_wr_deinit(void)
 static void
 psp_read(void)
 {
-	char buff[MAXPSPSTRINGSIZE + 1]; 
+	char buff[MAXPSPSTRINGSIZE + 1];
 	double radians;
 	waypoint *wpt_tmp;
 	int stringsize;
 	short int pincount;
 
         /* 32 bytes - file header */
-        fread(&buff[0], 1, 32, psp_file_in);
-        
+        psp_fread(&buff[0], 1, 32, psp_file_in);
+
+        if (valid_psp_header(buff, 32) != 0) {
+            fatal(MYNAME ": input file does not appear to be a valid .PSP file.\n");
+        }
+
 	pincount = *(short int *)&buff[12];
-	
+
 	while (pincount--) {
 	    wpt_tmp = calloc(sizeof(*wpt_tmp),1);
 
@@ -119,68 +140,64 @@ psp_read(void)
 	    /* things we will probably never know about this waypoint */
 	    /* coming from a pushpin file.                            */
 
-	    /* 
+	    /*
 	        wpt_tmp->creation_time;
   	        wpt_tmp->position.altitude.altitude_meters;
   	        wpt_tmp->url;
   	        wpt_tmp->url_link_text;
   	        wpt_tmp->icon_descr;  TODO: map this.
 	    */
-	    
+
             /* 4 bytes at start of record */
             /* coming out of S&T, this 1st byte is probably the pin # (0x01, 0x02, etc...) */
             /* coming from pocketstreets, it's generally 0x00. Sometimes 0xC3. ?           */
-            
-    	    fread(&buff[0], 1, 4, psp_file_in);
+
+    	    psp_fread(&buff[0], 1, 4, psp_file_in);
 
             /* 1 byte, unkown */
-            fread(&buff[0], 1, 1, psp_file_in);
+            psp_fread(&buff[0], 1, 1, psp_file_in);
 
             /* 8 bytes - latitude in radians */
-            fread(&buff[0], 1, 8, psp_file_in);
+            psp_fread(&buff[0], 1, 8, psp_file_in);
             radians = *(double *)&buff[0];
             wpt_tmp->position.latitude.degrees = (radians * 180.0) / M_PI;
 
             /* 8 bytes - longitude in radians */
-            fread(&buff[0], 1, 8, psp_file_in);
+            psp_fread(&buff[0], 1, 8, psp_file_in);
             radians = *(double *)&buff[0];
             wpt_tmp->position.longitude.degrees = (radians * 180.0) / M_PI;
 
             /* 1 byte - pin display properties */
-            fread(&buff[0], 1, 1, psp_file_in);
+            psp_fread(&buff[0], 1, 1, psp_file_in);
 
 	    /* 3 bytes - unknown */
-            fread(&buff[0], 1, 3, psp_file_in);
+            psp_fread(&buff[0], 1, 3, psp_file_in);
 
-	    /* 1 bytes - icon 0x00 - 0x27 */
-            fread(&buff[0], 1, 1, psp_file_in);
+            /* 1 bytes - icon 0x00 - 0x27 */
+            psp_fread(&buff[0], 1, 1, psp_file_in);
 
 	    /* 3 bytes - unknown */
-    	    fread(&buff[0], 1, 3, psp_file_in);
+    	    psp_fread(&buff[0], 1, 3, psp_file_in);
 
             /* 1 byte - string size */
-    	    fread(&buff[0], 1, 1, psp_file_in);
+    	    psp_fread(&buff[0], 1, 1, psp_file_in);
 
     	    stringsize = buff[0];
     	    stringsize *= 2;
-    	    
+
     	    if (stringsize > MAXPSPSTRINGSIZE) {
 		fatal(MYNAME ": variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
     	    }
 
             /* stringsize bytes - string data */
-    	    fread(&buff[0], 1, stringsize, psp_file_in);
+    	    psp_fread(&buff[0], 1, stringsize, psp_file_in);
 
 	    buffer_washer(buff, stringsize);
-
-#ifdef _DEBUG_PSP
-    	    printf ("string1: [%s]\n", buff);
-#endif    	    
 
 	    wpt_tmp->shortname = strdup(buff);
 
             /* 1 bytes string size */
-    	    fread(&buff[0], 1, 1, psp_file_in);
+    	    psp_fread(&buff[0], 1, 1, psp_file_in);
 
     	    stringsize = buff[0];
     	    stringsize *= 2;
@@ -189,22 +206,15 @@ psp_read(void)
 		fatal(MYNAME ": variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
     	    }
 
-#ifdef _DEBUG_PSP
-    	    printf ("string2: there are %d bytes to follow at offset %ld\n", stringsize, ftell(psp_file_in));
-#endif
-
-            /* stringsize bytes - string data */            
-    	    fread(&buff[0], 1, stringsize, psp_file_in);
+            /* stringsize bytes - string data */
+    	    psp_fread(&buff[0], 1, stringsize, psp_file_in);
 
 	    buffer_washer(buff, stringsize);
 
-#ifdef _DEBUG_PSP
-     	    printf ("string2: [%s]\n", buff);
-#endif
 	    wpt_tmp->description = strdup(buff);
 
             /* 1 bytes - string size */
-    	    fread(&buff[0], 1, 1, psp_file_in);
+    	    psp_fread(&buff[0], 1, 1, psp_file_in);
 
     	    stringsize = buff[0];
     	    stringsize *= 2;
@@ -213,24 +223,13 @@ psp_read(void)
 		fatal(MYNAME ": variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
     	    }
 
-
-#ifdef _DEBUG_PSP
-    	    printf ("string: there are %d bytes to follow at offset %ld\n", stringsize, ftell(psp_file_in));
-#endif
-
             /* stringsize bytes - string data (address?) */
-    	    fread(&buff[0], 1, stringsize, psp_file_in);
+    	    psp_fread(&buff[0], 1, stringsize, psp_file_in);
 
 	    buffer_washer(buff, stringsize);
 
-#ifdef _DEBUG_PSP
-    	    printf ("string3: [%s]\n", buff);
-#endif    	    
-	    
-    	    waypt_add(wpt_tmp);
-	} 
-
-
+	    waypt_add(wpt_tmp);
+	}
 }
 
 static void
@@ -248,11 +247,11 @@ psp_disp(waypoint *wpt)
         /* 4 leading bytes */
         memset(&tbuf, '\0', sizeof(tbuf));
         fwrite(&tbuf, 1, 4, psp_file_out);
-	
+
         /* my test files seem to always have this byte as 0x03, */
         /* although nothing seems to really care.               */
 	c = 0x03;
-	
+
         /* 1 unknown bytes */
         fwrite(&c, 1, 1, psp_file_out);
 
@@ -263,13 +262,13 @@ psp_disp(waypoint *wpt)
         fwrite(&lon, 1, 8, psp_file_out);
 
         /* 1 byte - pin properties */
-        c = 0x14; /* display pin on! display notes on! */
+        c = 0x14; /* display pin name on! display notes on! */
         fwrite(&c, 1, 1, psp_file_out);
 
         memset(&tbuf, '\0', sizeof(tbuf));
 
         /* 3 unknown bytes */
-        fwrite(&tbuf, 1, 3, psp_file_out); 
+        fwrite(&tbuf, 1, 3, psp_file_out);
 
         /* 1 icon byte 0x00 = PIN */
         fwrite(&tbuf, 1, 1, psp_file_out);
@@ -279,7 +278,7 @@ psp_disp(waypoint *wpt)
 
         c = strlen(wpt->shortname);
         /* 1 string size */
-        fwrite(&c, 1, 1, psp_file_out); 
+        fwrite(&c, 1, 1, psp_file_out);
 
         for (i = 0 ; wpt->shortname[i] ; i++) {
              fwrite(&wpt->shortname[i], 1, 1, psp_file_out);    /* char */
@@ -298,13 +297,12 @@ psp_disp(waypoint *wpt)
         /* just for the hell of it, we'll scrap the third string. */
         c = strlen(tbuf);
         /* 1 byte string size */
-        fwrite(&c, 1, 1, psp_file_out); 
+        fwrite(&c, 1, 1, psp_file_out);
 
         for (i = 0 ; tbuf[i] ; i++) {
              fwrite(&tbuf[i], 1, 1, psp_file_out);              /* char */
              fwrite(&tbuf[0], 1, 1, psp_file_out);              /* null */
         }
-        
 }
 
 static void
@@ -318,16 +316,16 @@ psp_write(void)
         /* offset 0x0C - 0x0D = 2 byte pin count */
 
         s = waypt_count();
-        
+
         if (s > MAXPSPOUTPUTPINS) {
-            fatal(MYNAME ": output too many pushpins (%d).  The max is %d.  Sorry.\n", s, MAXPSPOUTPUTPINS);
+            fatal(MYNAME ": attempt to output too many pushpins (%d).  The max is %d.  Sorry.\n", s, MAXPSPOUTPUTPINS);
         }
 
         /* insert waypoint count into header */
         memcpy(&header_bytes[12], &s, 2);
 
         fwrite(&header_bytes, 1,  32, psp_file_out);
-        
+
         waypt_disp_all(psp_disp);
 }
 

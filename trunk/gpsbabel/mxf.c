@@ -1,14 +1,14 @@
 /*
     Mapsend Exchange Format (.mxf)
     (Maptech Terrain Navigator, Terrain Professional, Take a Hike)
-    (Aka Yet Another CSV Format) 
+    (AKA Yet Another CSV Format) 
 
-    Contributed to gpsbabel by Alex Mottram
+    Contributed to gpsbabel by Alex Mottram (geo_alexm at cox-internet.com)
 
-    LAT,LON,"WPT Name", "Big Name","Small Name",COLORxFF,(int)ICON
+    LAT, LON, "Waypoint Name", "Big Name", "Small Name", COLOR, ICON
 
-    as described at: www.memory-map.co.uk/downloads/PDF/mm_tsb3_import_export_text_files.pdf 
-    tested against ExpertGPS import/export .mxf files.
+    As described in Maptech Terrain Navigator Help File.
+    Tested against Terrain Navigator and ExpertGPS import/export .MXF files.
 
     Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
 
@@ -36,9 +36,8 @@
 static FILE *file_in;
 static FILE *file_out;
 
-/* remember what dave & gamera say about pointer math... */
 static char * 
-cvsstringclean(char * string)
+csvstringclean(char * string)
 {
     static char * p1 = NULL;
     char * p2 = NULL;
@@ -73,7 +72,8 @@ cvsstringclean(char * string)
     return (p1);    
 }
 
-/* string parser.  sorta like strtok with quotes & pointers.. */
+/* string parser.  sorta like strtok with quotes & pointers..  */
+/* designed to handle quoted and delimited data within quotes. */
 static char * 
 csvparse(char *stringstart, char *delimiter)
 {
@@ -82,6 +82,7 @@ csvparse(char *stringstart, char *delimiter)
     static char *tmp = NULL;
     size_t dlen;
     int quotedepth = 0;
+    short int dfound;
 
     if (!p) {
 	p = stringstart;
@@ -99,8 +100,9 @@ csvparse(char *stringstart, char *delimiter)
     sp = p;
 
     dlen = strlen(delimiter);
+    dfound = 0;
 
-    while ((*p) && (! tmp)) {
+    while ((*p) && (! dfound)) {
 	if (*p == '"') {
 	    if (quotedepth) 
 		quotedepth--;
@@ -109,32 +111,31 @@ csvparse(char *stringstart, char *delimiter)
 	}
 
 	if ((!quotedepth) && (strncmp(p, delimiter, dlen) == 0)) {
-		tmp = (char *) calloc((p - sp) + 1, sizeof(char));
-		if (! tmp) {
-		    fatal(MYNAME ": cannot allocate memory\n");
-		}
-		strncpy(tmp, sp, (p - sp));
-	}
-	p++;
-    }
-
-    if (!tmp) {
-	tmp = (char *) calloc((p - sp) + 1, sizeof(char));
-
-	if (! tmp) {
-	    fatal(MYNAME ": cannot allocate memory\n");
+        	dfound = 1;
+        	
+	} else {
+	    	p++;
 	}
 
-	strncpy(tmp, sp, (p - sp));
-
-	p = NULL;
     }
 
-    if (tmp) {
-	return (tmp);
+    tmp = (char *) calloc((p - sp) + 1, sizeof(char));
+
+    if (! tmp) {
+	fatal(MYNAME ": cannot allocate memory\n");
     }
 
-    return (NULL);
+    strncpy(tmp, sp, (p - sp));
+
+    if (dfound) {
+        /* skip over the delimiter */
+        p += dlen;
+    } else {
+        /* end of the line */
+        p = NULL;
+    }
+
+    return (tmp);
 }
 
 static void 
@@ -190,7 +191,7 @@ data_read(void)
 	    }
 
 	    s = buff;
-	    s = csvparse(s, ",");
+	    s = csvparse(s, ", ");
 
 	    i = 0;
 	    while (s) {
@@ -202,10 +203,10 @@ data_read(void)
 		    wpt_tmp->position.longitude.degrees = atof(s);
 		    break;
 		case 2:
-		    wpt_tmp->description = strdup(cvsstringclean(s));
+		    wpt_tmp->description = strdup(csvstringclean(s));
 		    break;
 		case 3:
-		    wpt_tmp->shortname = strdup(cvsstringclean(s));
+		    wpt_tmp->shortname = strdup(csvstringclean(s));
 		    break;
 		case 4:
                     /* ignore.  another name-type  */
@@ -218,27 +219,25 @@ data_read(void)
 		    break;
 		default:
 		    /* whoa! nelly */
-		    printf ("%s: Warning: data fields on line %d exceed specification.\n", 
+		    fprintf (stderr, "%s: Warning: data fields on line %d exceed specification.\n", 
 		        MYNAME, linecount);
 		    break;
 		}
 		i++;
 
-		s = csvparse(NULL, ",");
+		s = csvparse(NULL, ", ");
 	    }
 	    
 	    if (i != 7) {
    	        free(wpt_tmp);
-	        printf ("%s: WARNING - extracted %d fields from line %d. \nData on line ignored.\n", 
+	        fprintf (stderr, "%s: WARNING - extracted %d fields from line %d. \nData on line ignored.\n", 
 	            MYNAME, i, linecount);
 	    } else {
    	        waypt_add(wpt_tmp);
    	    }
 
 	} else {
-            /* this complains too much 
-	     * printf ("%s: WARNING - blank line at line %d.\n", MYNAME, linecount);
-             */
+            /* empty line */
 	}
 
     } while (!feof(file_in));
@@ -247,18 +246,13 @@ data_read(void)
 static void 
 mxf_disp(waypoint * wpt)
 {
-    double lon, lat;
     int icon = 47; /* default to "dot" */
     const char *color_hex = "ff0000";
 
-    lon = wpt->position.longitude.degrees;
-    lat = wpt->position.latitude.degrees;
-
     fprintf(file_out, "%08.5f, %08.5f, \"%s\", \"%s\", \"%s\", %s, %d\n",
-	    lat, lon,
+	    wpt->position.latitude.degrees, wpt->position.longitude.degrees,
 	    wpt->description, wpt->shortname, wpt->description, 
 	    color_hex, icon);
-
 }
 
 static void 
@@ -266,7 +260,6 @@ data_write(void)
 {
     waypt_disp_all(mxf_disp);
 }
-
 
 ff_vecs_t mxf_vecs = {
     rd_init,
@@ -277,15 +270,3 @@ ff_vecs_t mxf_vecs = {
     data_write,
 };
 
-
-/*
-    Excerpt from Maptech help file.
-
-    Below is an example of the .MXF file format:
-
-    43.7601389, -071.2791299, "Cottonwood", "Cttnwd", "A very large tree", 800080, 137
-    43.7617236, -071.2917695, "Fencepost", "Fncpst", "", 808080, 14
-    43.7576237, -071.2888850, "Aspen", "Aspen", "", ffff, 137
-    43.7562457, -071.2777147, "Cache", "Cache", "", ff, 138
-    43.7576583, -071.2701399, "Tent site", "Tntst", "", ff, 111
-*/

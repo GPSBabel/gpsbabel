@@ -99,6 +99,7 @@ THE FORMATS
 	write them.
 	
     PSP
+
 	Microsoft's PocketStreets 2002 Pushpin (.PSP) format is not yet 
 	completely documented.  THE .PSP MODULE DOES NOT WORK WITH MS 
 	STREETS & TRIPS 2002 .EST FILES.  To create .PSP files from 
@@ -113,6 +114,12 @@ THE FORMATS
 	as it allows us to create one big .PSP file that covers multiple 
 	.MPS files.  Unfortunately, you need one .PSP file for every 
 	.MPS file. :(
+
+    MXF
+
+	Maptech Exchange Format - Another CSV format file.  This format
+	complies with (at least) Maptech Terrain Navigator, Terrain
+	Professional, Take a Hike, and ExpertGPS import/export MFX.
 
   Maptech MXF
 	Maptech's MXF is a CSV on steroids.  Contributed by Alex Mottram.
