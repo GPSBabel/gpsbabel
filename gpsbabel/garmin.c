@@ -490,7 +490,7 @@ route_waypt_pr(const waypoint *wpt)
 	 */
 	rte->islink = 1;
 	cur_tx_routelist_entry++;
-	rte++;
+	rte = *cur_tx_routelist_entry;
 
 	rte->lon = wpt->longitude;
 	rte->lat = wpt->latitude;
