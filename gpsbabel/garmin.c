@@ -30,6 +30,8 @@ static const char *portname;
 static void *mkshort_handle;
 GPS_PWay *tx_routelist;
 GPS_PWay *cur_tx_routelist_entry;
+GPS_PTrack *tx_tracklist;
+GPS_PTrack *cur_tx_tracklist_entry;
 
 static void
 rw_init(const char *fname)
@@ -168,6 +170,9 @@ track_read(void)
 	char *trk_name = "";
 
 	ntracks = GPS_Command_Get_Track(portname, &array);
+
+	if ( ntracks == 0 )
+		return;
 
 	for(i = 0; i < ntracks; i++) {
 		waypoint *wpt;
@@ -455,6 +460,58 @@ route_write(void)
 }
 
 static void
+track_hdr_pr(const route_head *trk_head)
+{
+	(*cur_tx_tracklist_entry)->tnew = gpsTrue;
+	(*cur_tx_tracklist_entry)->ishdr = gpsTrue;
+	if ( trk_head->rte_name ) {
+		strncpy((*cur_tx_tracklist_entry)->trk_ident, trk_head->rte_name, sizeof((*cur_tx_tracklist_entry)->trk_ident));
+		(*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
+	}
+	cur_tx_tracklist_entry++;
+}
+
+static void
+track_waypt_pr(const waypoint *wpt)
+{
+	(*cur_tx_tracklist_entry)->lat = wpt->latitude;
+	(*cur_tx_tracklist_entry)->lon = wpt->longitude;
+	(*cur_tx_tracklist_entry)->alt = wpt->altitude;
+	(*cur_tx_tracklist_entry)->Time = wpt->creation_time;
+	if ( wpt->shortname ) {
+		strncpy((*cur_tx_tracklist_entry)->trk_ident, wpt->shortname, sizeof((*cur_tx_tracklist_entry)->trk_ident));
+		(*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
+	}
+	cur_tx_tracklist_entry++;
+}
+
+static void
+track_write(void)
+{
+	int i;
+        /* Headers plus trackpoints. Trackpoints are added by
+         * route_add_waypt so get route_waypt_count() 
+         */
+	int n = route_waypt_count() + track_count();
+
+	tx_tracklist = xcalloc(n, sizeof(GPS_PTrack));
+	cur_tx_tracklist_entry = tx_tracklist;
+
+	for (i = 0; i < n; i++) {
+		tx_tracklist[i] = GPS_Track_New();
+	}
+
+	track_disp_all(track_hdr_pr, route_noop, track_waypt_pr);
+
+	GPS_Command_Send_Track(portname, tx_tracklist, n);
+
+	for (i = 0; i < n; i++) {
+		GPS_Track_Del(&tx_tracklist[i]);
+	}
+	xfree(tx_tracklist);
+}
+
+static void
 data_write()
 {
 	switch(global_opts.objective) {
@@ -464,8 +521,9 @@ data_write()
 		case rtedata:
 			route_write();
 			break;
-		default:
-			fatal(MYNAME ":writing tracks isn't supported\n");
+		case trkdata:
+			track_write();
+			break;
 	}
 
 }
