@@ -44,6 +44,7 @@ data_read(void)
 	char name[9], desc[30];
 	double lat,lon;
 	char latdir, londir;
+	int ilat, ilon;
 	long alt; 
 	char alttype;
 	char icon[3] = {0};
@@ -63,8 +64,13 @@ data_read(void)
 
 		if (latdir == 'S') lat = -lat;
 		if (londir == 'W') lon = -lon;
-		wpt_tmp->position.longitude.degrees = lon/100.0;
-		wpt_tmp->position.latitude.degrees = lat/100.0;
+
+		lat /= 100.0;
+		lon /= 100.0;
+		ilon = (int)(lon);
+		wpt_tmp->position.longitude.degrees = ilon + (lon - ilon)*(100.0/60.0);
+		ilat = (int)(lat);
+		wpt_tmp->position.latitude.degrees = ilat + (lat - ilat) * (100.0/60.0);
 		wpt_tmp->icon_descr = strdup(icon);
 
 		waypt_add(wpt_tmp);
