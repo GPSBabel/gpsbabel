@@ -7,7 +7,7 @@ gpsbabel.exe:  wintesto.cmd
 
 include ../Makefile
 CFLAGS=-Iinclude -I../coldsync -O $(INHIBIT_USB)
-INHIBIT_USB=-DNO_USB
+# INHIBIT_USB=-DNO_USB
 OSJEEPS=jeeps/gpsusbwin.o
 
 gpsbabel.exe: $(OBJS)
