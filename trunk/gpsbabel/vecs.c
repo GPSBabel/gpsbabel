@@ -217,7 +217,7 @@ vecs_t vec_list[] = {
 		&saroute_vecs,
 		"saroute",
 		"Delorme Street Atlas Route",
-		".anr"
+		"anr"
 	},
 	{
 		&navicache_vecs,
