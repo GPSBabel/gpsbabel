@@ -82,6 +82,17 @@ while ( $bitmapcount ) {
      $size, $xppm, $yppm, $colused, $colimprt ) = shiftunpack( 'lllssllllll');
     # palette
     $palettesize = $bitoffset - $bmisize - 14; # 14 bytes in BMFH, including the 'BM'
+    open BMP, ">bitmap$filecount.bmp";
+    binmode BMP;
+    print BMP 'BM';
+    $head = pack('lssl', ($fhsize,  $res_0_1, $res_0_2, $bitoffset));
+    print BMP $head;
+    $head = pack('lllssllllll', ($bmisize, $width, $height, $planes, $bpp,
+            $compression, $size, $xppm, $yppm, $colused, $colimprt));
+    print BMP $head;
+    print BMP substr($file, 0, $palettesize+$size);
+    close BMP;
+    $filecount++;
     skip_bytes( $palettesize );
     # image
     skip_bytes( $size );
