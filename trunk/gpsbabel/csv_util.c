@@ -30,6 +30,7 @@
 #define LAT_DIR(a) a < 0.0 ? 'S' : 'N'
 #define LON_DIR(a) a < 0.0 ? 'W' : 'E'
 #define NONULL(a) a ? a : ""
+#define ISWHITESPACE(a) ((a == ' ') || (a == '\t'))
 
 /* convert excel time (days since 1900) to time_t and back again */
 #define EXCEL_TO_TIMET(a) ((a - 25569.0) * 86400.0)
@@ -165,11 +166,15 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
     size_t dlen = 0, elen = 0;
     int enclosedepth = 0;
     short int dfound;
+    short int hyper_whitespace_delimiter = 0;
 
     if (tmp) {
 	xfree(tmp);
 	tmp = NULL;
     }
+    
+    if (strcmp(delimited_by, "\\w") == 0)
+        hyper_whitespace_delimiter = 1;
 
     if (!p) {
 	/* first pass thru */
@@ -185,7 +190,7 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
     sp = p;
 
     /* length of delimiters and enclosures */
-    if (delimited_by) 
+    if ((delimited_by) && (!hyper_whitespace_delimiter))
         dlen = strlen(delimited_by);
     if (enclosed_in)
         elen = strlen(enclosed_in);
@@ -200,13 +205,19 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
 		enclosedepth++;
 	}
 
-	if ((!enclosedepth) && (strncmp(p, delimited_by, dlen) == 0)) {
-	    dfound = 1;
-	} else {
-	    p++;
+	if (!enclosedepth) {
+	    if ((dlen) && (strncmp(p, delimited_by, dlen) == 0)) {
+	        dfound = 1;
+	    } else if ((hyper_whitespace_delimiter) && (ISWHITESPACE(*p))) {
+	        dfound = 1;
+	        while (ISWHITESPACE(*p))
+	            p++;
+	    } else {
+	        p++;
+	    }
 	}
     }
-
+    
     /* allocate enough space for this data field */
     tmp = xcalloc((p - sp) + 1, sizeof(char));
 
@@ -586,10 +597,15 @@ xcsv_waypt_pr(const waypoint *wpt)
     char *shortname = NULL;
     char *description = NULL;
     char * anyname = NULL;
+    char * write_delimiter;
     int i;
     field_map_t *fmp;
     queue *elem, *tmp;
 
+    if (strcmp(xcsv_file.field_delimiter, "\\w") == 0)
+        write_delimiter = " ";
+    else
+        write_delimiter = xcsv_file.field_delimiter;
     
     if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
         if (wpt->description) {
@@ -627,7 +643,7 @@ xcsv_waypt_pr(const waypoint *wpt)
         fmp = (field_map_t *) elem;
 
         if (i != 0) 
-            fprintf (xcsv_file.xcsvfp, xcsv_file.field_delimiter);
+            fprintf (xcsv_file.xcsvfp, write_delimiter);
 
         i++;
 
