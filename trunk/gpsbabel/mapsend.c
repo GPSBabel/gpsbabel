@@ -228,6 +228,8 @@ mapsend_wpt_read(void)
 		wpt_tmp->position.altitude.altitude_meters = wpt_alt;
 		wpt_tmp->position.latitude.degrees = -wpt_lat;
 		wpt_tmp->position.longitude.degrees = wpt_long;
+		sprintf(tbuf, "%c", wpt_icon + 'a');
+		wpt_tmp->icon_descr = mag_find_descr_from_token(tbuf);
 
 		waypt_add(wpt_tmp);
 	}
@@ -315,6 +317,7 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	double flong;
 	double flat;
 	static int cnt = 0;
+	char *iconp;
 	const char *sn = global_opts.synthesize_shortnames ? 
 		mkshort(mkshort_handle, waypointp->description) :
 	       	waypointp->shortname;
@@ -323,14 +326,23 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	fwrite(&c, 1, 1, mapsend_file_out);
 	fwrite(sn, c, 1, mapsend_file_out);
 
-	c = strlen(waypointp->description);
+	if (waypointp->description) 
+		c = strlen(waypointp->description);
+	else
+		c = 0;
 	fwrite(&c, 1, 1, mapsend_file_out);
 	fwrite(waypointp->description, c, 1, mapsend_file_out);
 
 	/* #, icon, status */
 n = ++cnt;
 	my_fwrite4(&n, mapsend_file_out);
-n = 0;
+
+	if (waypointp->icon_descr) {
+		iconp = mag_find_token_from_descr(waypointp->icon_descr);
+		n = iconp[0] - 'a';
+	} else  {
+		n = 0;
+	}
 	fwrite(&n, 1, 1, mapsend_file_out);
 n = 1;
 	fwrite(&n, 1, 1, mapsend_file_out);
