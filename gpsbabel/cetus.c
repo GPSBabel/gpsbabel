@@ -218,6 +218,7 @@ cetus_writewpt(const waypoint *wpt)
 	char *vdata;
 	char *desc_long;
 	char *desc_short;
+	char *desc;
 
 	rec = xcalloc(sizeof(*rec)+18 + NOTESZ + DESCSZ,1);
 
@@ -290,11 +291,16 @@ cetus_writewpt(const waypoint *wpt)
 	} else {
 		desc_long = xstrdup("");
 	}
+
+	desc = wpt->description ? str_utf8_to_cp1252(wpt->description) : 
+		xstrdup("");
+
 	snprintf(vdata, DESCSZ, "%s%s%s", 
-		wpt->description ? wpt->description : NULL,
+		desc,
 		desc_short,
 		desc_long);
 
+	xfree(desc);
 	xfree(desc_short);
 	xfree(desc_long);
 
