@@ -1,0 +1,23 @@
+Analysing autoroute file jlps.axe
+
+D:\GPSBABEL\MYCODE\ST2GPX~1.1\istorage\istorage.exe jlps.axe 
+del jlps.axe.Contents\UserData.mdb 
+rename jlps.axe.Contents\UserData. UserData.mdb 
+Finished reading pushpins
+Processing Journey stream
+got Journey file header with 8 waypoints
+*** Warning *** Ignoring route point 'Singel' without matching pushpin
+(yes, I should do someting more clever than this).
+*** Warning *** Ignoring route point 'N445' without matching pushpin
+(yes, I should do someting more clever than this).
+Writing gpx route for Journey
+Finnished proccessing Journey stream.
+Annotations file header indicates 3 annotations in file
+Got annotation 1 with internal id 1, of type Line, text length 0, and 49 line points
+Got annotation 2 with internal id 3, of type Line, text length 0, and 97 line points
+Got annotation 3 with internal id 4, of type Line, text length 0, and 118 line points
+echo y|del jlps.axe.Contents 
+All files in directory will be deleted!
+Are you sure (Y/N)?y
+del jlps.axe.Contents\UserData.mdb 
+rmdir jlps.axe.Contents 
