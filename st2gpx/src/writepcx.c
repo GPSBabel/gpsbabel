@@ -350,9 +350,9 @@ void pcx5_write_jour_pt(FILE* file, struct journey * jour, struct jour_rtept * r
 
 		strpad(timedate, 19);
 
-		strcpy(desc, rtept->text1);
+		memcpy(desc, rtept->text1,39);
 		strpad(desc, 40);
-
+		
 		pcx5_write_pt(file, 
 					  pt_type, 
 					  rtept->garmin_ident, 
@@ -363,6 +363,7 @@ void pcx5_write_jour_pt(FILE* file, struct journey * jour, struct jour_rtept * r
 					  desc, 
 					  proximity, 
 					  symbol);
+		
 //	}
 //	else if(pt_type==GAR_RTE)
 //	{
