@@ -1,7 +1,7 @@
 /*
     Jeeps wrapper for Garmin serial protocol.
   
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,6 +32,15 @@ static GPS_PWay *tx_routelist;
 static GPS_PWay *cur_tx_routelist_entry;
 static GPS_PTrack *tx_tracklist;
 static GPS_PTrack *cur_tx_tracklist_entry;
+static char *getposn;
+static char *poweroff;
+
+static
+arglist_t garmin_args[] = {
+	{ "get_posn", &getposn, "Return current position as a waypoint", ARGTYPE_BOOL},
+	{ "power_off", &poweroff, "Command unit to power itself down", ARGTYPE_BOOL},
+	{ 0, 0, 0, 0}
+};
 
 static void
 rw_init(const char *fname)
@@ -49,6 +58,11 @@ rw_init(const char *fname)
 		GPS_Enable_Diagnose();
 	}
 	GPS_Enable_Error();
+
+	if (poweroff) {
+		GPS_Command_Off(fname);
+		return;
+	}
 
         if (GPS_Init(fname) < 0) {
 		fatal(MYNAME ":Can't init %s\n", fname);
@@ -119,6 +133,15 @@ waypt_read(void)
 {
 	int i,n;
 	GPS_PWay *way;
+
+	if (getposn) {
+		waypoint *wpt = waypt_new();
+		wpt->latitude = gps_save_lat;
+		wpt->longitude = gps_save_lon;
+		wpt->shortname = "Position";
+		waypt_add(wpt);
+		return;
+	}
 
 	if ((n = GPS_Command_Get_Waypoint(portname, &way)) < 0) {
 		fatal(MYNAME  ":Can't get waypoint from %s\n", portname);
@@ -279,6 +302,10 @@ route_read(void)
 static void
 data_read(void)
 {
+	if (poweroff) {
+		return;
+	}
+
 	switch(global_opts.objective) {
 		case trkdata: 
 			track_read();
@@ -514,6 +541,9 @@ track_write(void)
 static void
 data_write()
 {
+	if (poweroff) {
+		return;
+	}
 	switch(global_opts.objective) {
 		case wptdata:
 			waypoint_write();
@@ -536,5 +566,5 @@ ff_vecs_t garmin_vecs = {
 	rw_deinit,
 	data_read,
 	data_write,
-	NULL
+	garmin_args
 };

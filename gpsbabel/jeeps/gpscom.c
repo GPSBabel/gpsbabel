@@ -39,6 +39,8 @@ int32 GPS_Command_Off(const char *port)
     GPS_PPacket tra;
     GPS_PPacket rec;
 
+    GPS_Util_Little();
+
     if(!GPS_Serial_On(port, &fd))
 	return gps_errno;
 
@@ -46,8 +48,9 @@ int32 GPS_Command_Off(const char *port)
 	return MEMORY_ERROR;
 
     GPS_Util_Put_Short(data,COMMAND_ID[gps_device_command].Cmnd_Turn_Off_Pwr);
-    
-    GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
+   
+    /* robertl - LINK_ID isn't set yet.  Hardcode it to Garmin spec value */ 
+    GPS_Make_Packet(&tra, 10, /* LINK_ID[gps_link_type].Pid_Command_Data, */
 		    data,2);
     if(!GPS_Write_Packet(fd,tra))
 	return gps_errno;
