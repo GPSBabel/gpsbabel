@@ -64,17 +64,17 @@ data_read(void)
 	char ssid[2 + 32 + 2 + 1];			/* "( " + SSID + " )" + null */
 	char mac[2 + 17 + 2 + 1];			/* "( " + MAC + " )" + null */
 	char desc[sizeof ssid - 1 + 15 + 1];	/* room for channel/speed */
-	double lat,lon;
+	double lat = 0, lon = 0;
 	waypoint *wpt_tmp;
 	int line_no = 0;
 	int stealth_num = 0, whitespace_num = 0;
-	long flags;
-	int speed, channel;
+	long flags = 0;
+	int speed = 0, channel = 0;
 	struct tm tm;
 
 	for(; fgets(ibuf, sizeof(ibuf), file_in);) {
 		char *field;
-		int field_num, len, i, stealth;
+		int field_num, len, i, stealth = 0;
 		
         /* A sharp in column zero might be a comment.  Or it might be
          * something useful, like the date.
@@ -223,8 +223,18 @@ compare(const void *a, const void *b)
 		return -1;
 	else if (crc_a > crc_b)
 		return 1;
-	else
-		return 0;
+	else {
+		/* CRCs are equal; we need to subsort on the description (which
+		 * includes the MAC address) to guarantee the same ordering of
+		 * the output for any qsort() implementation.  this is strictly
+		 * to make the testo script happy.
+		 * */
+
+		waypoint *wpt_a = ((const htable_t *)a)->wpt;
+		waypoint *wpt_b = ((const htable_t *)b)->wpt;
+
+		return strcmp(wpt_a->description, wpt_b->description);
+	}
 }
 
 /* netstumbler data will have a lot of duplicate shortnames if the SSID
