@@ -658,7 +658,9 @@ gstrsub(const char *s, const char *search, const char *replace)
 	char *o = xstrdup(s);
 
 	while (strstr(o, search)) {
+		char *oo = o;
 		o = strsub(o, search, replace);
+		xfree(oo);
 	}
 
 	return o;
