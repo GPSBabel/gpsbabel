@@ -125,7 +125,6 @@ void
 mps_wpt_q_add(const queue *whichQueue, const waypoint *wpt)
 {
 	waypoint *written_wpt = waypt_dupe(wpt);
-	written_wpt->Q.next = written_wpt->Q.prev = NULL;
 	ENQUEUE_TAIL(whichQueue, &written_wpt->Q);
 }
 
@@ -809,7 +808,6 @@ mps_waypoint_w_uniqloc_wrapper(waypoint *wpt)
 			/* Not the same lat lon, so rename and add */
 			newName = mkshort(written_wpt_mkshort_handle, wpt->shortname);
 			wptfound = waypt_dupe(wpt);
-			wptfound->Q.next = wptfound->Q.prev = NULL;
 			xfree(wptfound->shortname);
 			wptfound->shortname = newName;
 			mps_waypoint_w(mps_file_out, mps_ver_out, wptfound, (1==0));
@@ -955,14 +953,12 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 
 		if (tempWpt != NULL) {
 			thisWaypoint = waypt_dupe(tempWpt);
-			thisWaypoint->Q.next = thisWaypoint->Q.prev = NULL;
 		}
 		else {
 			tempWpt = mps_find_wpt_q_by_name(&read_route_wpt_head, wptname);
 
 			if (tempWpt != NULL) {
 				thisWaypoint = waypt_dupe(tempWpt);
-				thisWaypoint->Q.next = thisWaypoint->Q.prev = NULL;
 			}
 			else {
 				/* should never reach here, but we do need a fallback position */
@@ -1061,7 +1057,6 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 
 	if (tempWpt != NULL) {
 		thisWaypoint = waypt_dupe(tempWpt);
-		thisWaypoint->Q.next = thisWaypoint->Q.prev = NULL;
 	}
 	else {
 		thisWaypoint = waypt_new();
