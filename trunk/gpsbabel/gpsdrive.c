@@ -174,6 +174,7 @@ data_write(void)
 {
 	mkshort_wr_handle = mkshort_new_handle();
 	setshort_length(mkshort_wr_handle, 10);
+	setshort_whitespace_ok(mkshort_wr_handle, 0);
 
 	waypt_disp_all(gpsdrive_waypt_pr);
 	mkshort_del_handle(mkshort_wr_handle);
