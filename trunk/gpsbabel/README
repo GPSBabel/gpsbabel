@@ -467,8 +467,9 @@ DATA FILTERS
 	The duplicate filter is designed to remove duplicate points based
 	on their shortname (traditionally a waypoint's name on the GPS
 	receiver), and/or their location (to a precision of 6 decimals).
-	This filter supports two options, "shortname" and "location".
-	Generally, at least one of these options is REQUIRED.  For example:
+	This filter supports two options that specify how duplicates will
+        be recognized, "shortname" and "location".  Generally, at least one 
+        of these options is REQUIRED.  For example:
 
 	gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname \
 	         -o gpx -F merged_with_no_dupes.gpx
@@ -476,6 +477,14 @@ DATA FILTERS
 	would remove points that have duplicate shortnames *AND* duplicate
 	locations.  The result would be a GPX file that more than likely
 	contains only unique points and point data.
+
+        The duplicate filter can also take an "all" option.  If you specify 
+        that option, all instances of a duplicated waypoint will be removed,
+        not just the second and subsequent instances.  If your input file
+        contains waypoints A, B, B, and C, the output file will contain 
+        waypoints A, B, and C without the "all" option, or just A and C 
+        with the "all" option.  This option can be useful as an "ignore
+        list" in some circumstances.
 
     DISTANCE ALONG A ROUTE (ARC)
     ARC
