@@ -555,3 +555,4 @@ static char xmapwpt[] =
 ;
 #include "defs.h"
 style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 15;
