@@ -84,6 +84,7 @@ typedef struct {
 } global_options;
 
 extern global_options global_opts;
+extern const char gpsbabel_version[];
 
 /*
  * Extended data if waypoint happens to represent a geocache.  This is 
@@ -267,8 +268,10 @@ void route_add (waypoint *);
 void route_add_wpt(route_head *rte, waypoint *wpt);
 void route_del_wpt(route_head *rte, waypoint *wpt);
 void route_add_head(route_head *rte);
+void route_del_head(route_head *rte);
 void route_reverse(const route_head *rte_hd);
 void track_add_head(route_head *rte);
+void track_del_head(route_head *rte);
 void route_disp_all(route_hdr, route_trl, waypt_cb);
 void track_disp_all(route_hdr, route_trl, waypt_cb);
 void route_free (route_head *);
@@ -431,6 +434,8 @@ void debug_mem_close();
 #endif /* DEBUG_MEM */
 
 FILE *xfopen(const char *fname, const char *type, const char *errtxt);
+void xfprintf(const char *errtxt, FILE *stream, const char *format, ...);
+void xfputs(const char *errtxt, const char *s, FILE *stream);
 
 int case_ignore_strcmp(const char *s1, const char *s2);
 

@@ -54,7 +54,7 @@ foreach i {read write} {
 # TODO: Get this list from 'gpsbabel -?' instead of hardcoding it here.
     tk_optionMenu $f.ftypes $ftype geo gpsman gpx \
 	magellan mapsend pcx mapsource gpsutil tiger csv xmap dna psp \
-	cetus gpspilot magnav garmin mxf holux ozi tpg
+	cetus gpspilot magnav garmin mxf holux ozi tpg igc
     pack $f.lab -side left
     pack $f.ent -side left -expand yes -fill x
     pack $f.but -side left

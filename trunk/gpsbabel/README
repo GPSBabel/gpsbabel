@@ -593,6 +593,12 @@ THE FORMATS
 
 	  snmac    - Always use the MAC address as the shortname.
 
+    IGC
+
+        FAI/IGC Data File -- Used by the international gliding community to
+        record gliding flights.  IGC files can be converted to and from tracks
+        representing recorded flights, and routes representing task
+        declarations in other formats.
 
 DATA FILTERS
 
