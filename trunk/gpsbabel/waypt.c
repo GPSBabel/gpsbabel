@@ -130,7 +130,7 @@ waypt_disp(const waypoint *wpt)
 	printposn(wpt->latitude,1);
 	printposn(wpt->longitude,0);
 	
-	tmpdesc = str_utf8_to_cp1252( wpt->description);
+	tmpdesc = str_utf8_to_ascii( wpt->description);
 	printf("%s/%s", 
 		global_opts.synthesize_shortnames ? 
 			mkshort(mkshort_handle, tmpdesc) : 
