@@ -51,6 +51,7 @@ sort_comp(const void * a, const void * b)
 	   case sm_gcid: return x1->gc_data.id > x2->gc_data.id;
 	   case sm_shortname: return strcmp (x1->shortname, x2->shortname);
 	   case sm_description: return strcmp (x1->description, x2->description);
+	   default: abort(); /* Internal caller error. */
 	}
 }
 
