@@ -6,6 +6,30 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
+<rte>
+  <name>0001</name>
+  <desc>IGCDATE000000: </desc>
+  <rtept lat="-30.675867" lon="150.609033">
+    <name>TAKEOFF</name>
+    <cmt>BORAH </cmt>
+  </rtept>
+  <rtept lat="-30.675867" lon="150.609033">
+    <name>START</name>
+    <cmt>BORAH </cmt>
+  </rtept>
+  <rtept lat="-30.729933" lon="150.649200">
+    <name>TURN01</name>
+    <cmt>BALDWI</cmt>
+  </rtept>
+  <rtept lat="-30.763683" lon="150.723200">
+    <name>FINISH</name>
+    <cmt>MANAIR</cmt>
+  </rtept>
+  <rtept lat="-30.763683" lon="150.723200">
+    <name>LANDING</name>
+    <cmt>MANAIR</cmt>
+  </rtept>
+</rte>
 <trk>
   <name>GNSSALTTRK</name>
   <desc>IGCHDRS~HFPLTPILOT:CHRIS JONES~</desc>
@@ -351,28 +375,4 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 </trkseg>
 </trk>
-<rte>
-  <name>0001</name>
-  <desc>IGCDATE000000: </desc>
-  <rtept lat="-30.675867" lon="150.609033">
-    <name>TAKEOFF</name>
-    <cmt>BORAH </cmt>
-  </rtept>
-  <rtept lat="-30.675867" lon="150.609033">
-    <name>START</name>
-    <cmt>BORAH </cmt>
-  </rtept>
-  <rtept lat="-30.729933" lon="150.649200">
-    <name>TURN01</name>
-    <cmt>BALDWI</cmt>
-  </rtept>
-  <rtept lat="-30.763683" lon="150.723200">
-    <name>FINISH</name>
-    <cmt>MANAIR</cmt>
-  </rtept>
-  <rtept lat="-30.763683" lon="150.723200">
-    <name>LANDING</name>
-    <cmt>MANAIR</cmt>
-  </rtept>
-</rte>
 </gpx>

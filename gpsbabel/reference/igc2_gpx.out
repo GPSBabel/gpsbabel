@@ -6,6 +6,40 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
+<rte>
+  <name>0001</name>
+  <desc>IGCDATE160701: 500KTri</desc>
+  <rtept lat="51.189317" lon="-1.031650">
+<time>2001-07-15T21:38:41Z</time>
+    <name>TAKEOFF</name>
+    <cmt>LashamClubhouse</cmt>
+  </rtept>
+  <rtept lat="51.169650" lon="-1.044067">
+<time>2001-07-15T21:38:41Z</time>
+    <name>START</name>
+    <cmt>LashamStart S Start</cmt>
+  </rtept>
+  <rtept lat="52.151533" lon="-2.920450">
+<time>2001-07-15T21:38:41Z</time>
+    <name>TURN01</name>
+    <cmt>Sarnesfield TP1</cmt>
+  </rtept>
+  <rtept lat="52.502450" lon="-0.293533">
+<time>2001-07-15T21:38:41Z</time>
+    <name>TURN02</name>
+    <cmt>NormanCross TP2</cmt>
+  </rtept>
+  <rtept lat="51.169650" lon="-1.044067">
+<time>2001-07-15T21:38:41Z</time>
+    <name>FINISH</name>
+    <cmt>LashamStart S Finish</cmt>
+  </rtept>
+  <rtept lat="51.189317" lon="-1.031650">
+<time>2001-07-15T21:38:41Z</time>
+    <name>LANDING</name>
+    <cmt>LashamClubhouse</cmt>
+  </rtept>
+</rte>
 <trk>
   <name>PRESALTTRK</name>
   <desc>IGCHDRS~HFFXA035~HFPLTPILOT:Bill Bloggs~HFGTYGLIDERTYPE:Schleicher ASH-25~HFGIDGLIDERID:ABCD-1234~HFDTM100GPSDATUM:WGS-1984~HFRFWFIRMWAREVERSION:6.4~HFRHWHARDWAREVERSION:3.0~HFFTYFRTYPE:Manufacturer Model~HFGPSMarconiCanada:Superstar 12ch max10000m~HFPRSPRESSALTSENSOR:Sensyn XYZ1111 max11000m~HFCIDCOMPETITIONID:XYZ-78910~HFCCLCOMPETITIONCLASS:15mMotor Glider~HFSCMSECONDCREW:JohnSmith~</desc>
@@ -90,38 +124,4 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 </trkseg>
 </trk>
-<rte>
-  <name>0001</name>
-  <desc>IGCDATE160701: 500KTri</desc>
-  <rtept lat="51.189317" lon="-1.031650">
-<time>2001-07-15T21:38:41Z</time>
-    <name>TAKEOFF</name>
-    <cmt>LashamClubhouse</cmt>
-  </rtept>
-  <rtept lat="51.169650" lon="-1.044067">
-<time>2001-07-15T21:38:41Z</time>
-    <name>START</name>
-    <cmt>LashamStart S Start</cmt>
-  </rtept>
-  <rtept lat="52.151533" lon="-2.920450">
-<time>2001-07-15T21:38:41Z</time>
-    <name>TURN01</name>
-    <cmt>Sarnesfield TP1</cmt>
-  </rtept>
-  <rtept lat="52.502450" lon="-0.293533">
-<time>2001-07-15T21:38:41Z</time>
-    <name>TURN02</name>
-    <cmt>NormanCross TP2</cmt>
-  </rtept>
-  <rtept lat="51.169650" lon="-1.044067">
-<time>2001-07-15T21:38:41Z</time>
-    <name>FINISH</name>
-    <cmt>LashamStart S Finish</cmt>
-  </rtept>
-  <rtept lat="51.189317" lon="-1.031650">
-<time>2001-07-15T21:38:41Z</time>
-    <name>LANDING</name>
-    <cmt>LashamClubhouse</cmt>
-  </rtept>
-</rte>
 </gpx>

@@ -1,30 +1,45 @@
 <?xml version="1.0"?>
 <gpx
  version="1.0"
-creator="GPSBabel - http://gpsbabel.sourceforge.net"
+creator="GPSBabel - http://www.gpsbabel.org"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>2004-08-25T09:57:00Z</time>
-<bounds minlat="-35.498071" minlon ="148.115814" maxlat="-27.755478" maxlon="153.042490" />
-<wpt lat="-29.480116" lon="150.133619">
+<time>2005-01-18T18:58:35Z</time>
+<bounds minlat="-30.342870000" minlon ="149.746093000" maxlat="-27.755478000" maxlon="150.477059000" />
+<wpt lat="-29.480116000" lon="150.133619000">
   <name>PALLMG</name>
   <cmt>PALLMG</cmt>
   <desc>PALLMG</desc>
   <sym>dot</sym>
 </wpt>
-<wpt lat="-27.755478" lon="149.746093">
+<wpt lat="-27.755478000" lon="149.746093000">
   <name>PILOT</name>
   <cmt>CHRIS JONES</cmt>
   <desc>CHRIS JONES</desc>
   <sym>dot</sym>
 </wpt>
-<wpt lat="-30.342870" lon="150.477059">
+<wpt lat="-30.342870000" lon="150.477059000">
   <name>PLUMTH</name>
   <cmt>PLUMTHORPE LOC</cmt>
   <desc>PLUMTHORPE LOC</desc>
   <sym>dot</sym>
 </wpt>
+<rte>
+  <name>AB1</name>
+  <rtept lat="-30.675867" lon="150.609035">
+    <ele>0.000000</ele>
+    <name>BORAH </name>
+  </rtept>
+  <rtept lat="-30.729929" lon="150.649193">
+    <ele>0.000000</ele>
+    <name>BALDWI</name>
+  </rtept>
+  <rtept lat="-30.763677" lon="150.723195">
+    <ele>0.000000</ele>
+    <name>MANAIR</name>
+  </rtept>
+</rte>
 <trk>
 <trkseg>
 <trkpt lat="-30.747492" lon="150.720524">
@@ -531,19 +546,4 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 </trkseg>
 </trk>
-<rte>
-  <name>AB1</name>
-  <rtept lat="-30.675867" lon="150.609035">
-    <ele>0.000000</ele>
-    <name>BORAH </name>
-  </rtept>
-  <rtept lat="-30.729929" lon="150.649193">
-    <ele>0.000000</ele>
-    <name>BALDWI</name>
-  </rtept>
-  <rtept lat="-30.763677" lon="150.723195">
-    <ele>0.000000</ele>
-    <name>MANAIR</name>
-  </rtept>
-</rte>
 </gpx>
