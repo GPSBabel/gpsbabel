@@ -36,6 +36,7 @@ extern gpsdata_type objective;
 
 static char * termread(char *ibuf, int size);
 static void termwrite(char *obuf, int size);
+static double mag2degrees(double mag_val);
 
 typedef enum {
 	mrs_handoff = 0,
@@ -753,8 +754,12 @@ mag_trkparse(char *trkmsg)
  	 */
 	waypt->creation_time = mktime(&tm);
 
-	waypt->position.latitude.degrees = latdeg / 100.0;
-	waypt->position.longitude.degrees = lngdeg / 100.0;
+	if (latdir == 'S') latdeg = -latdeg;
+	waypt->position.latitude.degrees = mag2degrees(latdeg);
+
+	if (lngdir == 'W') lngdeg = -lngdeg;
+	waypt->position.longitude.degrees = mag2degrees(lngdeg);
+
 	waypt->position.altitude.altitude_meters = alt;
 
 	return waypt;
