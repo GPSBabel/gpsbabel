@@ -127,44 +127,15 @@ mkshort(char *istring)
 		abort();
 	}
 
+	/*
+	 * Delete vowels starting from the end.  If it fits, quit stomping
+	 * them.  If we run out of string, give up.
+	 */
 	replaced = 1;
 	while (replaced && strlen(ostring) > TGT_LEN) {
-		ostring = delete_last_vowel(2, ostring,&replaced);
+		ostring = delete_last_vowel(2, ostring, &replaced);
 	}
 	
-	
-#if 0
-	tstring = strdup(ostring);
-	if (!tstring) {
-		abort();
-	}
-	l = strlen (tstring);
-	cp = ostring+2;
-	for (i=2;i<l+1;i++) {
-		int good;
-		if (strlen(ostring) < TGT_LEN) 
-			break;
-		switch (tstring[i]) {
-			case 0:
-				*cp = 0;
-				break;
-			case 'a':
-			case 'e':
-			case 'i':
-			case 'o':
-			case 'u':
-			case 'A':
-			case 'E':
-			case 'I':
-			case 'O':
-			case 'U':
-				continue;
-			default:
-		}
-		*cp++ = tstring[i];
-	}
-#endif
-
 	/*
 	 * Next to last thing, we look for trailing numbers and try to 
 	 * preserve those.  This ensures that.
@@ -177,7 +148,6 @@ mkshort(char *istring)
 	}
 	if (np) {
 		nlen = strlen(np);
-// printf("Number %s, %d\n", np, nlen);
 	}
 
 	/*
