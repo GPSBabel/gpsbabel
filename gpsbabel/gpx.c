@@ -29,6 +29,7 @@ static int in_name;
 static int in_time;
 static int in_desc;
 static int in_cdata;
+static int in_cmt;
 static int in_gs_type;
 static int in_gs_diff;
 static int in_gs_terr;
@@ -96,6 +97,8 @@ gpx_start(void *data, const char *el, const char **attr)
 		tag_wpt(attr);
 	} if (strcmp(el, "desc") == 0) {
 		in_desc++;
+	} if (strcmp(el, "cmt") == 0) {
+		in_cmt++;
 	} if (strcmp(el, "rtept") == 0) {
 		in_rte++;
 		tag_wpt(attr);
@@ -142,6 +145,9 @@ gpx_end(void *data, const char *el)
 			wpt_tmp->shortname = xstrdup(cdatastr);
 		}
 		if (in_desc && in_wpt) {
+			wpt_tmp->notes = xstrdup(cdatastr);
+		}
+		if (in_cmt && in_wpt) {
 			wpt_tmp->description = xstrdup(cdatastr);
 		}
 		if (in_ele) {
@@ -187,6 +193,8 @@ gpx_end(void *data, const char *el)
 		in_name--;
 	} else if (strcmp(el, "desc") == 0) {
 		in_desc--;
+	} else if (strcmp(el, "cmt") == 0) {
+		in_cmt--;
 	} else if (strcmp(el, "ele") == 0) {
 		in_ele--;
 	} else if (strcmp(el, "time") == 0) {
@@ -211,6 +219,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 	 * me as a cdata that are fragmented becuae they span a read.  Grrr.
 	 */
 	if ((in_name && in_wpt) || (in_desc && in_wpt) || (in_ele) || 
+			(in_wpt && in_cmt) ||
 			(in_wpt && in_gs_type) || 
 			(in_wpt && in_gs_diff) || 
 			(in_wpt && in_gs_terr) || 
@@ -310,9 +319,20 @@ gpx_waypt_pr(const waypoint *waypointp)
 		fprintf(ofd, "<name>%s</name>\n", oname);
 	}
 	if (waypointp->description) {
-		fprintf(ofd, "<desc>");
+		fprintf(ofd, "<cmt>");
 		fprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
+		fprintf(ofd, "</cmt>\n");
+	}
+	if (waypointp->notes) {
+		fprintf(ofd, "<desc>");
+		fprintf(ofd, "<![CDATA[%s]]>", waypointp->notes);
 		fprintf(ofd, "</desc>\n");
+	} else {
+		if (waypointp->description) {
+			fprintf(ofd, "<desc>");
+			fprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
+			fprintf(ofd, "</desc>\n");
+		}
 	}
 	if (waypointp->position.altitude.altitude_meters) {
 		fprintf(ofd, "<ele>\n%f\n</ele>\n",
