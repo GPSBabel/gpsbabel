@@ -82,14 +82,13 @@ csv_stringclean(const char *string, const char *chararray)
         while (*p1) {
             if (*cp == *p1) {
                 /* we don't want this character! */
-                strncpy(p1, p1 + 1, (p2 - p1));
+		memmove(p1, p1 + 1, (p2 - p1));
                 p1[p2 - p1] = '\0';
             }
             p1++;
         }
         cp++;
     }
-    
     return (tmp);
 }
 
@@ -151,7 +150,8 @@ csv_stringtrim(const char *string, const char *enclosure, int strip_max)
     }
 
     /* copy what's left over back into tmp. */
-    strncpy(tmp, p1, (p2 - p1) + 1);
+    memmove(tmp, p1, (p2 - p1) + 1);
+
     tmp[(p2 - p1) + 1] = '\0';
 
     return (tmp);
