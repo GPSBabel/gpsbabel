@@ -1669,7 +1669,11 @@ static void GPS_D104_Send(UC *data, GPS_PWay way, int32 *len)
     p+=sizeof(int32);
     GPS_Util_Put_Uint(p,0);
     p+=sizeof(int32);
-    for(i=0;i<40;++i) *p++ = way->cmnt[i];
+    /* byonke confirms that sending lower case comment data to a III+
+     * results in the comment being truncated there.   So we uppercase
+     * the entire comment.
+     */
+    for(i=0;i<40;++i) *p++ = toupper(way->cmnt[i]);
 
     GPS_Util_Put_Float(p,way->dst);
     p+= sizeof(float);
@@ -1677,7 +1681,7 @@ static void GPS_D104_Send(UC *data, GPS_PWay way, int32 *len)
     GPS_Util_Put_Short(p,way->smbl);
     p+=sizeof(int16);
 
-    *p = way->dspl;
+    *p = 3; /* display symbol with waypoint name */
 
     *len = 65;
     
