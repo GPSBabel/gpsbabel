@@ -45,6 +45,7 @@ extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t mxf_vecs;
 extern ff_vecs_t holux_vecs;
 extern ff_vecs_t ozi_vecs;
+extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t dna_vecs;
 extern ff_vecs_t xmap_vecs;
 
@@ -144,6 +145,11 @@ vecs_t vec_list[] = {
 		&ozi_vecs,
 		"ozi",
 		"OziExplorer Waypoint"
+	},
+	{
+		&tpg_vecs,
+		"tpg",
+		"National Geographic Topo .tpg"
 	},
 
         {

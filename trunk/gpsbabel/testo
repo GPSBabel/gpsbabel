@@ -93,6 +93,17 @@ ${PNAME} -i mxf -f reference/mxf.mxf -o mxf -F ${TMPDIR}/mx.mxf
 ${PNAME} -i mxf -f ${TMPDIR}/mx.mxf -o mxf -F ${TMPDIR}/mxf.mxf
 diff ${TMPDIR}/mxf.mxf reference
 
+# TPG (NG Topo!) file format
+# This is hard to test as the datum conversions create minute
+# inconsistencies in the coordinates.  So..  we test our i/o 
+# against a format that rounds higher than we care to compare
+# for binary data. 
+rm -f ${TMPDIR}/topo.mxf ${TMPDIR}/tpg.mxf ${TMPDIR}/geo.tpg
+${PNAME} -i geo -f geocaching.loc -o tpg -F ${TMPDIR}/geo.tpg
+${PNAME} -i tpg -f ${TMPDIR}/geo.tpg -o mxf -F ${TMPDIR}/tpg.mxf
+${PNAME} -i tpg -f reference/tpg.tpg -o mxf -F ${TMPDIR}/topo.mxf
+diff ${TMPDIR}/tpg.mxf ${TMPDIR}/topo.mxf
+
 # OZI (OziExplorer 1.1) file format
 rm -f ${TMPDIR}/oz.ozi ${TMPDIR}/ozi.ozi
 ${PNAME} -i ozi -f reference/ozi.ozi -o ozi -F ${TMPDIR}/oz.ozi

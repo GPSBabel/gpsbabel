@@ -183,15 +183,29 @@ ozi_waypt_pr(const waypoint * wpt)
     ozi_time = (wpt->creation_time / 86400.0) + 25569.0;
     alt_feet = (wpt->position.altitude.altitude_meters * 3.2808); 
     
-    if (wpt->description) 
-        description = csv_stringclean(wpt->description, ",");
-    else
-        description = xstrdup("");
-        
-    if (wpt->shortname) 
+    if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
+        if (wpt->description) {
+            if (global_opts.synthesize_shortnames)
+                shortname = mkshort(wpt->description);
+            else
+                shortname = csv_stringclean(wpt->description, ",");
+        } else {
+            /* no description available */
+            shortname = xstrdup("");
+        }
+    } else{
         shortname = csv_stringclean(wpt->shortname, ",");
-    else 
-        shortname = xstrdup("");
+    }
+
+    if (! wpt->description) {
+        if (shortname) {
+            description = csv_stringclean(shortname, ",");
+        } else {
+            description = xstrdup("");
+        }
+    } else{
+        description = csv_stringclean(wpt->description, ",");
+    }
 
     index++;
 
@@ -213,6 +227,12 @@ data_write(void)
     fprintf(file_out, "WGS 84\n");
     fprintf(file_out, "Reserved 2\n");
     fprintf(file_out, "Reserved 3\n");
+
+    if (global_opts.synthesize_shortnames) {
+        setshort_length(32);
+        setshort_whitespace_ok(0);
+        setshort_badchars("\",");
+    }
 
     waypt_disp_all(ozi_waypt_pr);
 }
