@@ -1,5 +1,5 @@
 # add -DDEBUG_MEM to turn on memory allocation logging
-CFLAGS=$(EXTRA_CFLAGS) -g -Icoldsync 
+CFLAGS=$(EXTRA_CFLAGS) -g -Icoldsync
 INSTALL_TARGETDIR=/usr/local/
 
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
@@ -7,7 +7,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o gpilots.o
 
-FILTERS=position.o duplicate.o arcdist.o
+FILTERS=position.o duplicate.o arcdist.o polygon.o
 
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
@@ -19,8 +19,9 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 
 COLDSYNC=coldsync/util.o coldsync/pdb.o
 
-OBJS=main.o queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o csv_util.o \
+LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o csv_util.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(FMTS) $(FILTERS)
+OBJS = main.o $(LIBOBJS)
 
 .c.o:
 	$(CC) -c $(CFLAGS) $< -o $@
@@ -70,6 +71,7 @@ release:
 
 # Machine generated from here down.   
 
+arcdist.o: arcdist.c defs.h queue.h
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 quovadis.o: quovadis.c defs.h queue.h coldsync/palm.h coldsync/pdb.h quovadis.h
 copilot.o: copilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
@@ -90,6 +92,7 @@ gpsutil.o: gpsutil.c defs.h queue.h magellan.h
 gpx.o: gpx.c defs.h queue.h
 holux.o: holux.c defs.h queue.h holux.h
 internal_styles.o: internal_styles.c defs.h queue.h
+polygon.o: polygon.c defs.h queue.h
 magnav.o: magnav.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 magproto.o: magproto.c defs.h queue.h magellan.h
 main.o: main.c defs.h queue.h
