@@ -213,6 +213,15 @@ THE FORMATS
 
         This format was contributed by Jochen Becker.
 
+    TMPRO
+
+        TopoMapPro Places File.  Reads and writes places files for use
+        in TopoMapPro (http://www.topomappro.com).  As this file type
+        can store links other than web links, anything that is not a
+        http url will be discarded.  Note that this does not do datum
+        conversions, so if your file does need WGS84/NZGD2000 data.
+        Colour of waypoint icons defaults to red.
+
 
 COMMON USAGE
 

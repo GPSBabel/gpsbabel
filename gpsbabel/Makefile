@@ -2,7 +2,7 @@ CFLAGS=-g -Icoldsync
 
 FMTS=magproto.o gpx.o geo.o gpsman.o mapsend.o mapsource.o \
 	gpsutil.o tiger.o pcx.o csv.o cetus.o gpspilot.o magnav.o \
-	psp.o mxf.o holux.o garmin.o ozi.o dna.o tpg.o tmp.o
+	psp.o mxf.o holux.o garmin.o ozi.o tmpro.o dna.o tpg.o
 
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o jeeps/gpsfmt.o jeeps/gpsinput.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
@@ -63,6 +63,7 @@ psp.o: psp.c defs.h queue.h
 queue.o: queue.c queue.h
 route.o: route.c defs.h queue.h
 tiger.o: tiger.c defs.h queue.h magellan.h
+tmpro.o: tmpro.c defs.h queue.h csv_util.h
 util.o: util.c defs.h queue.h
 vecs.o: vecs.c defs.h queue.h
 waypt.o: waypt.c defs.h queue.h

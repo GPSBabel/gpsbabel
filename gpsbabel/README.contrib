@@ -4,13 +4,29 @@ integration.
 
 Standards are good.   ISO C and POSIX are greal preferred.
 
-Reuse is OK, if not onerous.  For example, using the expat libraries vastly
-  simplifies the XML parsers while increasing their robustness plus those
-  libraries are ubiquitous.  So I consider it OK to require expat.
+Reuse is OK, if doing so is not onerous.  For example, using the expat
+libraries vastly simplifies the XML parsers while increasing their
+robustness plus those libraries are ubiquitous.  So I consider it OK to
+require expat.
 
-If you contribute  a new target, contribute a test case along with it.  It's
-not that hard and it helps us be sure that the next version of thie program
-doesn't break your file format.
+If you are creating a new target you should submit patches (use 
+"cvs diff -uN" to create patches) to the following files:
+* Yourcode.c and/or Yourcode.h - this is the code required to do your
+  conversions and any support files that your code requires.
+* vecs.c - an updated vecs.c file implementing your conversion code into
+  GPSBabel.
+* Makefile - an updated Makefile telling the compiler how to build and link
+  your conversion into GPSBabel
+* README - an excerpt for the README about your conversion and any  
+  idiosyncrasies  it may have.
+* testo - an updated script that tests your conversion (this should produce
+  no output if all is good, see the current testo script for examples)
+* YourOutput - a sample file of code produced by your function (used in testo
+  and lives in a directory called "reference").
+
+Please ensure that you are building and testing against the latest code
+from the top of the CVS tree and that any code you modify is the latest
+version from the CVS - Note: code changes sometimes occur frequently!
 
 Compilers complain for a reason.   Code shouldn't emit warnings.
 
