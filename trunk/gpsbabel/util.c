@@ -483,13 +483,6 @@ get_cache_icon(const waypoint *waypointp)
 	 * For icons, type overwrites container.  So a multi-micro will 
 	 * get the icons for "multi".
  	 */
-	switch (waypointp->gc_data.container) {
-		case gc_micro: 
-			return "Micro-Cache";
-			break;
-		default:
-			break;
-	}
 	switch (waypointp->gc_data.type) {
 		case gt_virtual:
 			return "Virtual cache";
@@ -499,6 +492,13 @@ get_cache_icon(const waypoint *waypointp)
 			return "Event Cache";
 		case gt_suprise:
 			return "Unknown Cache";
+		default:
+			break;
+	}
+	switch (waypointp->gc_data.container) {
+		case gc_micro: 
+			return "Micro-Cache";
+			break;
 		default:
 			break;
 	}
