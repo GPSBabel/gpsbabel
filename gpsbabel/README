@@ -124,6 +124,17 @@ THE FORMATS
 	The file format for GPSPILOT (http://www.gpspilot.com) was provided
 	by Ron Parker.  GPSbabel can currently read gpspilot files, but not
 	write them.
+
+    MAGNAV
+
+        Magellan NAV Companion for Palm/OS is not really designed for this 
+        sort of use, but its file format is supported and with a little bit
+        of patience you can both read and write NAV Companion waypoints.
+        Please read README.magnav for further tips on getting waypoints
+        in and out of NAV Companion.  This conversion is based on partially
+        incomplete reverse-engineering of the record format, so it may not
+        work with all versions of NAV Companion.  It has been tested with 
+        version 2.10.
 	
     PSP
 

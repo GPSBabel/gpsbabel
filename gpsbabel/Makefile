@@ -1,4 +1,4 @@
-CFLAGS=-g -Icoldsync
+CFLAGS=-g -Icoldsync -belf -I/usr/local/include/
 
 FMTS=magproto.o gpx.o geo.o gpsman.o mapsend.o mapsource.o \
 	gpsutil.o tiger.o pcx.o csv.o cetus.o gpspilot.o magnav.o \
