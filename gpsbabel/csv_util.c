@@ -44,8 +44,7 @@ csv_stringclean(const char *string, const char *chararray) {
     }
 
     /* p2 - end of the original string */
-    p2 = tmp;
-    while (*p2) p2++;
+    p2 = tmp + strlen(tmp);
     
     cp = chararray;
 
@@ -88,20 +87,16 @@ csv_stringtrim(const char *string, const char *enclosure)
 	elen = strlen(enclosure);
     }
 
-    p2 = tmp;
+    p2 = tmp + strlen(tmp) - 1;
     p1 = tmp;
 
-    /* advance p2 to the end of the string, then back it off. */
-    while ((*p2) && (p2++)) { }
-    p2--;
-
     /* trim off trailing whitespace */
-    while (isspace(*p2)) {
+    while ((p2 > p1) && isspace(*p2)) {
 	p2--;
     }
 
     /* advance p1 past any leading whitespace */
-    while (isspace(*p1)) {
+    while ((p1 < p2) && (isspace(*p1))) {
 	p1++;
     }
 
@@ -202,3 +197,4 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
 
     return (tmp);
 }
+
