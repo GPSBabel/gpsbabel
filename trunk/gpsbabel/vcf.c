@@ -52,13 +52,28 @@ wr_deinit(void)
  * newlines as we go.
  */
 static void
-vcf_print(const char *s)
+vcf_print_utf(const utf_string *s)
 {
-	char *p;
+	char *p, *p2;
+	char *stripped_html;
 
 	if (!s)
 		return;
 
+	stripped_html = strip_html(s);
+ 	p = gstrsub(stripped_html, "\n", "\\n");
+ 	p2 = gstrsub(p, "<p>", "\\n");
+	fputs(p2, file_out);
+	xfree(p);
+	xfree(p2);
+}
+
+static void
+vcf_print(const char *s)
+{
+	char *p;
+	if (!s)
+		return;
  	p = gstrsub(s, "\n", "\\n");
 	fputs(p, file_out);
 	xfree(p);
@@ -86,9 +101,9 @@ vcf_disp(const waypoint *wpt)
 	}
 
 	fprintf(file_out, "NOTE:");
-	vcf_print(wpt->gc_data.desc_short.utfstring);
+	vcf_print_utf(&wpt->gc_data.desc_short);
 	fprintf(file_out, "\\n");
-	vcf_print(wpt->gc_data.desc_long.utfstring);
+	vcf_print_utf(&wpt->gc_data.desc_long);
 	fprintf(file_out, "\\n\\nHINT:\\n");
 	vcf_print(wpt->gc_data.hint);
 
