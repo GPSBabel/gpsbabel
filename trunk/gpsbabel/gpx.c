@@ -742,12 +742,15 @@ gpx_rd_deinit(void)
 {
 	if ( cdatastr ) {
 		xfree(cdatastr);
+		cdatastr = NULL;
 	}
 	if ( gpx_email ) {
 		xfree(gpx_email);
+		gpx_email = NULL;
 	}
 	if ( gpx_author ) {
 		xfree(gpx_author);
+		gpx_author = NULL;
 	}
 	if (fd) {
 	        fclose(fd);
