@@ -536,6 +536,7 @@ void mapsend_track_hdr(const route_head * trk)
 	
 	fwrite(&c, 1, 1, mapsend_file_out);
 	fwrite(tname, c, 1, mapsend_file_out);
+	xfree(tname);
 	
 	/* total nodes (waypoints) this track */
 	i = 0;
