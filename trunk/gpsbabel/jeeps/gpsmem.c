@@ -296,7 +296,7 @@ GPS_PWay GPS_Way_New(void)
 
 void GPS_Way_Del(GPS_PWay *thys)
 {
-    free((void *)*thys);
+    xfree((void *)*thys);
 
     return;
 }
