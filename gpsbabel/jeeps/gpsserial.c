@@ -84,6 +84,8 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
 
 	GetCommTimeouts (comport, &timeout);
 	timeout.ReadIntervalTimeout = 10;
+	timeout.ReadTotalTimeoutMultiplier = 10;
+	timeout.ReadTotalTimeoutConstant = 1000;
 	timeout.WriteTotalTimeoutMultiplier = 10;
 	timeout.WriteTotalTimeoutConstant = 1000;
 	if (!SetCommTimeouts (comport, &timeout)) {
