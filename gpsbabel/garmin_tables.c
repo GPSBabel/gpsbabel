@@ -135,6 +135,7 @@ icon_mapping_t garmin_icon_table[] = {
 	{     3,     3, "Red Diamond" },
 	{    16,    16, "Red Square" },
 	{    10,    10, "Residence" },
+	{    10,    10, "House" },
 	{    11,    11, "Restaurant" },
 	{    54,   167, "Restricted Area" },
 	{    39,   152, "Restroom" },
