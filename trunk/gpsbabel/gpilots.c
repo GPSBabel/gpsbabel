@@ -326,87 +326,32 @@ data_read(void)
 }
 
 
+struct hdr{
+	char *wpt_name; 
+	waypoint *wpt;
+};
+
 static void
-my_writept(waypoint *wpt)
+my_write_wpt(const waypoint *wpt)
 {
 	struct record *rec;
 	static int ct;
-	struct tm *tm;
 	char *vdata;
+	int lat, lon;
 
-	rec = xcalloc(sizeof(*rec)+1018,1);
-#if 0
-	if (wpt->creation_time) {
-		tm = gmtime(&wpt->creation_time);
-		rec->min = tm->tm_min;
-		rec->hour = tm->tm_hour;
-		rec->sec = tm->tm_sec;
-		rec->day = tm->tm_mday;
-		rec->mon = tm->tm_mon + 1;
-		be_write16( &rec->year, tm->tm_year + 1900);
-	} else {
-		rec->min = 0xff;
-		rec->hour = 0xff;
-		rec->sec = 0xff;
-		rec->day = 0xff;
-		rec->mon = 0xff;
-		be_write16(&rec->year, 0xff);
-	}
+	rec = xcalloc(sizeof *rec, 1);
+	vdata = (char *)rec + sizeof (*rec);
 
-	be_write32(&rec->longitude, wpt->position.longitude.degrees * 10000000.0);
-	be_write32(&rec->latitude, wpt->position.latitude.degrees * 10000000.0);
-	if ( wpt->position.altitude.altitude_meters == unknown_alt ) {
-		be_write32(&rec->elevation, -100000000U);
-	}
-	else {
-		be_write32(&rec->elevation, wpt->position.altitude.altitude_meters * 100.0);
-	}
-	
-	be_write16( &rec->pdop, 0xffff );
-	be_write16( &rec->hdop, 0xffff );
-	be_write16( &rec->vdop, 0xffff );
-	be_write16( &rec->dgpstime, 0xffff );	
-	be_write32( &rec->distance, 0xffffffff );
-	
-	rec->vmin = 0xff;
-	rec->vhour = 0xff;
-	rec->vsec = 0xff;
-	rec->vday = 0xff;
-	rec->vmon = 0xff;
-	be_write16(&rec->vyear, 0xff);
-	
-	rec->sat = 0xff;
+	rec->header.type = 4;
+	strncpy(rec->wpt.d103.ident, wpt->shortname, sizeof(rec->wpt.d103.ident));
+	strncpy(rec->wpt.d103.cmnt, wpt->description, sizeof(rec->wpt.d103.cmnt));
+	lat = wpt->position.latitude.degrees  / 180.0 * 2147483648.0;
+	lon = wpt->position.longitude.degrees  / 180.0 * 2147483648.0;
+	le_write32(&rec->wpt.d103.lat, lat);
+	le_write32(&rec->wpt.d103.lon, lon);
 
-	vdata = (char *)rec + sizeof(*rec);
-	if ( wpt->shortname ) {
-			strncpy( vdata, wpt->shortname, 16 );
-				vdata[15] = '\0';
-	}
-	else {
-			vdata[0] ='\0';
-	}
-	vdata += strlen( vdata ) + 1;
-	
-	if ( wpt->description ) {
-			strncpy( vdata, wpt->description, 501 );
-				vdata[500] = '\0';
-	}
-	else {
-			vdata[0] ='\0';
-	}
-	vdata += strlen( vdata ) + 1;
-	
-	if ( wpt->notes ) {
-			strncpy( vdata, wpt->notes, 501 );
-				vdata[500] = '\0';
-	}
-	else {
-			vdata[0] ='\0';
-	}
-	vdata += strlen( vdata ) + 1;
-#endif	
-	opdb_rec = new_Record (0, 2, ct++, vdata-(char *)rec, (const ubyte *)rec);
-	
+	opdb_rec = new_Record(0, 0, ct++, vdata - (char *) rec, (const ubyte *) rec);
+
 	if (opdb_rec == NULL) {
 		fatal(MYNAME ": libpdb couldn't create record\n");
 	}
@@ -415,21 +360,6 @@ my_writept(waypoint *wpt)
 		fatal(MYNAME ": libpdb couldn't append record\n");
 	}
 	xfree(rec);
-}
-
-struct hdr{
-	char *wpt_name; 
-	waypoint *wpt;
-};
-
-static
-int 
-compare(const void *a, const void *b)
-{
-	const struct hdr *wa = a;
-	const struct hdr *wb = b;
-
-	return strcmp(wa->wpt->shortname, wb->wpt->shortname);
 }
 
 static void
@@ -447,41 +377,24 @@ data_write(void)
 
 	if ( dbname ) {
 	    strncpy( opdb->name, dbname, PDB_DBNAMELEN );
-	}
-	else {
+	} else {
 	    strncpy(opdb->name, out_fname, PDB_DBNAMELEN);
 	}
+
+	/*
+	 * Populate header.
+	 */
 	opdb->name[PDB_DBNAMELEN-1] = 0;
 	opdb->attributes = PDB_ATTR_BACKUP;
 	opdb->ctime = opdb->mtime = time(NULL) + 2082844800U;
-#if SOON
-	opdb->type = MYTYPE;  /* CWpt */
-	opdb->creator = MYCREATOR; /* cGPS */
-#endif
+
+	opdb->type = MYWPT;
+	opdb->creator = MYCREATOR;
 	opdb->version = 1;
 
-	/*
-	 * All this is to sort by waypoint names before going to Cetus.
-	 * Turns out plain old strcmp will do the trick...
-	 */
-
-	htable = xmalloc(ct * sizeof(*htable));
-	bh = htable;
-
-        QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-                waypointp = (waypoint *) elem;
-		bh->wpt = waypointp;
-		bh->wpt_name = waypointp->shortname;
-		bh ++;
-	}
-	qsort(htable, ct, sizeof(*bh), compare);
-
-	for (i=0;i<ct;i++) {
-		my_writept(htable[i].wpt);
-	}
+	waypt_disp_all(my_write_wpt);
 
 	pdb_Write(opdb, fileno(file_out));
-	xfree(htable);
 }
 
 
