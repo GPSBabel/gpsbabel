@@ -95,7 +95,7 @@ printposn(const coord *c, int is_lat)
 	} else {
 		if (c->degrees < 0) d = 'W'; else d = 'E';
 	}
-	printf("%lf%c ", fabs(c->degrees), d);
+	printf("%f%c ", fabs(c->degrees), d);
 }
 
 void
@@ -107,7 +107,7 @@ fprintdms(FILE *file, const coord *c, int is_lat)
 	} else {
 		if (c->degrees < 0) d = 'W'; else d = 'E';
 	}
-	fprintf(file, "%c%lf\t", d, fabs(c->degrees));
+	fprintf(file, "%c%f\t", d, fabs(c->degrees));
 }
 void
 fatal(const char *fmt, ...)
