@@ -52,7 +52,7 @@ static struct qv_icon_mapping mapping[] = {
 #define num_mappings (sizeof(mapping) / sizeof(struct qv_icon_mapping))
 
 static geocache_type icon_to_wpt(int	icon_bitmap) {
-    int i;
+    unsigned int i;
 
     for (i = 0; i < num_mappings; i++) {
 	if (icon_bitmap == mapping[i].bitmap_id) {
@@ -63,7 +63,7 @@ static geocache_type icon_to_wpt(int	icon_bitmap) {
 }
 
 static int wpt_to_icon(geocache_type	type) {
-    int i;
+    unsigned int i;
 
     for (i = 0; i < num_mappings; i++) {
 	if (type == mapping[i].gc_type) {

@@ -545,4 +545,5 @@ ff_vecs_t psp_vecs = {
 	psp_wr_deinit,
 	psp_read,
 	psp_write,
+	NULL
 };

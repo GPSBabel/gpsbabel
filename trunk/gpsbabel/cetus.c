@@ -165,8 +165,9 @@ data_read(void)
 		wpt_tmp->position.latitude.degrees = be_read32(&rec->latitude) / 10000000.0;
 	        	
 		if (be_read16(&rec->year) != 0xff) {
-			struct tm tm = {0};
-		
+			struct tm tm;
+
+			memset (&tm, sizeof(tm), 0);
 			tm.tm_min = rec->min;
 			tm.tm_hour = rec->hour;
 			tm.tm_mday = rec->day;
@@ -358,5 +359,5 @@ ff_vecs_t cetus_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
-	cetus_args
+	cetus_args,
 };

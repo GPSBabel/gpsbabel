@@ -301,4 +301,5 @@ ff_vecs_t holux_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
+	NULL
 };

@@ -109,8 +109,9 @@ data_read(void)
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
 		waypoint *wpt_tmp;
 		char *vdata;
-		struct tm tm = {0};
+		struct tm tm;
 
+		memset (&tm, sizeof(tm), 0);
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 		rec = (struct record *) pdb_rec->data;
 		wpt_tmp->position.altitude.altitude_meters = be_read32(&rec->elevation); 
@@ -272,4 +273,5 @@ ff_vecs_t magnav_vec = {
 	wr_deinit,
 	data_read,
 	data_write,
+	NULL
 };

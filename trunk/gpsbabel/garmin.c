@@ -287,5 +287,5 @@ ff_vecs_t garmin_vecs = {
 	rw_deinit,
 	data_read,
 	data_write,
-
+	NULL
 };

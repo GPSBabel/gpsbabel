@@ -119,4 +119,5 @@ ff_vecs_t gpsutil_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
+	NULL
 };
