@@ -1268,8 +1268,8 @@ gpx_write(void)
 	}
 
 	waypt_disp_all(gpx_waypt_pr);
-	gpx_track_pr();
 	gpx_route_pr();
+	gpx_track_pr();
 
 	fprintf(ofd, "</gpx>\n");
 }
