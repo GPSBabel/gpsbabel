@@ -246,7 +246,7 @@ radius_process(void)
 		xfree(wp->extra_data);
 	}
 
-	free(comp);
+	xfree(comp);
 }
 
 void
