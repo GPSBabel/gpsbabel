@@ -389,7 +389,6 @@ retry:
 			 * we'll be fairly persistent in retrying.
 			 */
 			if (retrycnt--) {
-				warning( "%d\n", retrycnt);
 				goto retry;
 			} else {
 				fatal(MYNAME ": No data received from GPS.\n");
