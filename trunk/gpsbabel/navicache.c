@@ -179,7 +179,15 @@ nav_start(void *data, const char *el, const char **attr)
 			} else
 			if (0 == strcmp(ap[0], "cache_size")) {
 	                        wpt_tmp->gc_data.container = nc_mkcont(ap[1]);
-			} 
+			}  else
+			if (0 == strcmp(ap[0], "description")) {
+				wpt_tmp->gc_data.desc_long.is_html = 1;
+				wpt_tmp->gc_data.desc_long.utfstring = xstrdup(ap[1]);
+			} else
+			if (0 == strcmp(ap[0], "comments")) {
+				wpt_tmp->gc_data.desc_short.is_html = 1;
+				wpt_tmp->gc_data.desc_short.utfstring = xstrdup(ap[1]);
+			}
 		}
 		waypt_add(wpt_tmp);
 	}
