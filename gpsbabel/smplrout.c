@@ -67,7 +67,7 @@ routesimple_waypt_pr( const waypoint *wpt )
 {
 	if ( !cur_rte ) return;
 	xte_recs[xte_count].ordinal=xte_count;
-	xte_recs[xte_count].intermed = (xte_intermed *) xmalloc( sizeof(struct xte_intermed));
+	xte_recs[xte_count].intermed = (struct xte_intermed *) xmalloc( sizeof(struct xte_intermed));
 	xte_recs[xte_count].intermed->wpt = wpt;
 	xte_recs[xte_count].intermed->xte_rec = xte_recs+xte_count;
 	xte_recs[xte_count].intermed->next = NULL;
@@ -125,7 +125,7 @@ routesimple_head( const route_head *rte )
 	/* short-circuit if we already have fewer than the max points */
 	if ( count >= rte->rte_waypt_ct) return;
 	
-	xte_recs = (xte *) xcalloc(  rte->rte_waypt_ct, sizeof (struct xte));
+	xte_recs = (struct xte *) xcalloc(  rte->rte_waypt_ct, sizeof (struct xte));
 	cur_rte = rte;
 	
 }
