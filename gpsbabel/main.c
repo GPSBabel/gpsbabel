@@ -54,6 +54,8 @@ usage(const char *pname)
 "	-N		No smart icons on output\n"
 "	-x filtername	Invoke filter\n"
 "	-D level	Set debug level [%d]\n"
+"       -h, -?          Print this message and exit\n"
+"       -v              Print GPSBabel version and exit\n"
 "\n"
 "File Types (-i and -o options):\n"
 	, pname
@@ -111,6 +113,11 @@ main(int argc, char *argv[])
 		}
 		if (argv[argn][1] == '-') {
 			break;
+		}
+		
+		if (argv[argn][1] == 'v' ) {
+			 printf("\nGPSBabel Version %s\n\n", VERSION );
+			 exit(0);
 		}
 
 		if (argv[argn][1] == '?' || argv[argn][1] == 'h') {
