@@ -263,8 +263,10 @@ cetus_writewpt(const waypoint *wpt)
 
 	vdata = (char *)rec + sizeof(*rec);
 	if ( wpt->shortname ) {
-		        strncpy( vdata, wpt->shortname, 16 );
-			        vdata[15] = '\0';
+			char *sn = str_utf8_to_cp1252(wpt->shortname);
+		        strncpy( vdata, sn, 16 );
+		        vdata[15] = '\0';
+			xfree(sn);
 	}
 	else {
 		        vdata[0] ='\0';
@@ -308,8 +310,10 @@ cetus_writewpt(const waypoint *wpt)
 	vdata += strlen( vdata ) + 1;
 
 	if (wpt->gc_data.hint) {
+		char *hint = str_utf8_to_cp1252(wpt->gc_data.hint);
 		rec->type = WptCache;
-		strncpy( vdata, wpt->gc_data.hint, NOTESZ + 1 ) ;
+		strncpy( vdata, hint, NOTESZ + 1 ) ;
+		xfree(hint);
 		vdata[NOTESZ] = '\0';
 	} else {
 		rec->type = WptEdit;
