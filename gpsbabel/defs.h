@@ -180,13 +180,12 @@ typedef void (*filter_init) (char const *);
 typedef void (*filter_process) (void);
 typedef void (*filter_deinit) (void);
 
-// void fprintdms(FILE *, const coord *, int);
-
 typedef void (*waypt_cb) (const waypoint *);
 typedef void (*route_hdr)(const route_head *);
 typedef void (*route_trl)(const route_head *);
 void waypt_add (waypoint *);
 waypoint * waypt_dupe (waypoint *);
+waypoint * waypt_new(void);
 void waypt_del (waypoint *);
 void waypt_free (waypoint *);
 void waypt_disp_all(waypt_cb);

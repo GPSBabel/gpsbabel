@@ -93,6 +93,20 @@ waypt_del(waypoint *wpt)
 	waypt_ct--;
 }
 
+/*
+ * A constructor for a single waypoint.
+ */
+waypoint *
+waypt_new(void)
+{
+	waypoint *wpt;
+
+	wpt = xcalloc(sizeof (*wpt), 1);
+	wpt->altitude = unknown_alt;
+
+	return wpt;
+}
+
 unsigned int
 waypt_count(void)
 {
