@@ -24,9 +24,27 @@
 
 static FILE *file_in;
 static FILE *file_out;
+static FILE *linkf;
 static void *mkshort_handle;
 
 #define MYNAME "GPSUTIL"
+
+static double maxlat, maxlon, minlat, minlon, latsum, lonsum;
+int rec_cnt;
+static char *nolabels = NULL;
+static char *genurl = NULL;
+static char *scale = "768";
+int scalev;
+
+
+static
+arglist_t tiger_args[] = {
+	{"nolabels", &nolabels, "Suppress labels on generated pins."},
+	{"genurl", &genurl, "Generate file with lat/lon for centering map."},
+	{"scale", &scale, "Dimension in pixels of map."},
+	{0, 0, 0}
+};
+
 
 static void
 rd_init(const char *fname, const char *args)
@@ -87,25 +105,64 @@ data_read(void)
 }
 
 static void
-gpsutil_disp(const waypoint *wpt)
+tiger_disp(const waypoint *wpt)
 {
 	char *pin;
+	double lat = wpt->position.latitude.degrees;
+	double lon = wpt->position.longitude.degrees;
 	if (wpt->creation_time > time(0) - 3600 * 24 * 14)
 		pin = "greenpin";
 	else
 		pin = "redpin";
-	fprintf(file_out, "%f,%f:%s:%s\n", 
-		wpt->position.longitude.degrees,
-		 wpt->position.latitude.degrees,
-		 pin,
-		 wpt->description);
+
+	if (genurl) {
+		if (lat > maxlat) maxlat = lat;
+		if (lon > maxlon) maxlon = lon;
+		if (lat < minlat) minlat = lat;
+		if (lon < minlon) minlon = lon;
+		latsum += lat;
+		lonsum += lon;
+		rec_cnt++;
+	}
+
+	fprintf(file_out, "%f,%f:%s", lon, lat, pin);
+	if (!nolabels) {
+		fprintf(file_out, ":%s", wpt->description);
+	}
+	fprintf(file_out, "\n");
 }
 
 static void
 data_write(void)
 {
+	maxlat = -9999.0;
+	maxlon = -9999.0;
+	minlat = 9999.0;
+	minlon = 9999.0;
+	rec_cnt = 0;
 	fprintf(file_out, "#tms-marker\n");
-	waypt_disp_all(gpsutil_disp);
+	waypt_disp_all(tiger_disp);
+
+	if (genurl) {
+		FILE *urlf;
+
+		urlf = fopen(genurl, "w");
+		if (urlf == NULL) {
+			fatal(MYNAME ": Cannot open '%s' for writing\n", 
+					genurl);
+		} 
+
+		fprintf(urlf, "lat=%f&lon=%f&wid=%f&ht=%f",
+				latsum / rec_cnt,
+				lonsum / rec_cnt,
+				maxlat - minlat,
+				maxlon - minlon);
+
+		if (scale) {
+			fprintf(urlf, "&iwd=%s&iht=%s", scale, scale);
+		}
+		fclose(urlf);
+	}
 }
 
 
@@ -116,4 +173,5 @@ ff_vecs_t tiger_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
+	tiger_args,
 };
