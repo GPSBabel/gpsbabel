@@ -243,6 +243,12 @@ waypt_free( waypoint *wpt )
 	if (wpt->gpx_extras) {
 		free_gpx_extras(wpt->gpx_extras);
 	}
+	if (wpt->gc_data.desc_short.utfstring) {
+		xfree(wpt->gc_data.desc_short.utfstring);
+	}
+	if (wpt->gc_data.desc_long.utfstring) {
+		xfree(wpt->gc_data.desc_long.utfstring);
+	}
 	xfree(wpt);	
 }
 
