@@ -171,6 +171,7 @@ xstrndupt(const char *str, size_t sz)
 
 	newstr = xmalloc(newlen + 1);
 	memcpy(newstr, str, newlen);
+	newstr[newlen+1] = '\0';
 	rtrim(newstr);
 
 	return newstr;
