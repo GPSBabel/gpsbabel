@@ -248,8 +248,6 @@ typedef struct ff_vecs {
 typedef struct style_vecs {
 	const char *name;
 	const char *style_buf;
-	const char *desc;
-	const char *ext;
 } style_vecs_t;
 extern style_vecs_t style_list[];
 

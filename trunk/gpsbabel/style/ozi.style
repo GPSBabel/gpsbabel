@@ -7,6 +7,10 @@
 # 
 # As used in ozi.c
 #
+
+DESCRIPTION		OziExplorer Waypoint
+EXTENSION		ozi
+
 #
 # FILE LAYOUT DEFINITIIONS:
 #

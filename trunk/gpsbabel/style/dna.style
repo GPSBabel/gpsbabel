@@ -8,6 +8,10 @@
 # As defined in dna.c
 #
 #
+
+DESCRIPTION 		Navitrak DNA marker format
+EXTENSION		dna
+
 # FILE LAYOUT DEFINITIIONS:
 #
 FIELD_DELIMITER		COMMA

@@ -5,6 +5,9 @@
 #   Date: 11/24/2002
 #
 #
+
+DESCRIPTION		Custom "Everything" Style
+
 # FILE LAYOUT DEFINITIIONS:
 #
 FIELD_DELIMITER		COMMA

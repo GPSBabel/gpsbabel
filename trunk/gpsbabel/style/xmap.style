@@ -7,6 +7,10 @@
 # 
 # As defined in csv.c/xmap
 #
+
+DESCRIPTION		Delorme XMap HH Native .WPT
+EXTENSION		wpt
+
 #
 # FILE LAYOUT DEFINITIIONS:
 #

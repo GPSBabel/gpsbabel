@@ -8,6 +8,9 @@
 # As defined in gpsman.c
 #
 #
+
+DESCRIPTION		GPSman
+
 # FILE LAYOUT DEFINITIIONS:
 #
 FIELD_DELIMITER		TAB

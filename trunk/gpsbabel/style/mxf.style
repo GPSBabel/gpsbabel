@@ -8,6 +8,11 @@
 # As used in mxf.c
 #
 #
+
+DESCRIPTION		MapTech Exchange Format
+EXTENSION		mxf
+
+#
 # FILE LAYOUT DEFINITIIONS:
 #
 FIELD_DELIMITER		COMMASPACE

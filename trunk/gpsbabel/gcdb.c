@@ -233,6 +233,8 @@ gcdb_add_to_rec(struct dbrec *rec, char *fldname, gcdb_rectype rectype, void *da
 		abort();
 	}
 	rec_cnt++;
+
+	return length;
 }
 
 static void

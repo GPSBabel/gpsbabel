@@ -2,9 +2,9 @@
 CFLAGS=-g -Icoldsync
 INSTALL_TARGETDIR=/usr/local/
 
-FMTS=magproto.o gpx.o geo.o gpsman.o mapsend.o mapsource.o \
-	gpsutil.o tiger.o pcx.o csv.o cetus.o gpspilot.o magnav.o \
-	psp.o mxf.o holux.o garmin.o ozi.o tmpro.o dna.o tpg.o gpsdrive.o \
+FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
+	gpsutil.o pcx.o cetus.o gpspilot.o magnav.o \
+	psp.o holux.o garmin.o tmpro.o tpg.o \
 	xcsv.o xmapwpt.o gcdb.o internal_styles.o
 
 FILTERS=position.o duplicate.o
@@ -44,11 +44,12 @@ install:
 
 # Nerdy release stuff that needs to work only on Linux.
 
-internal_styles.c:
+internal_styles.c: mkstyle.sh style/csv.style
 	./mkstyle.sh > internal_styles.c
 
 dep:
 	make clean && make CC="gcc -MMD"  && cat *.d */*.d > /tmp/dep
+	(echo "internal_styles.c: mkstyle.sh" ; ls style/*.style) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
 VERSIONU=1_1_1_beta02122003
