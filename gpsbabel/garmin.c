@@ -53,6 +53,10 @@ rw_init(const char *fname, const char *opts)
 static void
 rw_deinit(void)
 {
+	if (mkshort_handle) {
+		mkshort_del_handle(mkshort_handle);
+		mkshort_handle = NULL;
+	}
 }
 
 static void
@@ -68,8 +72,8 @@ waypt_read(void)
 	for (i = 0; i < n; i++) {
 		waypoint *wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
 
-		wpt_tmp->shortname = way[i]->ident;
-		wpt_tmp->description = way[i]->cmnt;
+		wpt_tmp->shortname = xstrdup(way[i]->ident);
+		wpt_tmp->description = xstrdup(way[i]->cmnt);
 		wpt_tmp->position.longitude.degrees = way[i]->lon;
 		wpt_tmp->position.latitude.degrees = way[i]->lat;
 		/*
@@ -91,6 +95,7 @@ waypt_read(void)
 		}
 		
 		waypt_add(wpt_tmp);
+		GPS_Way_Del(&way[i]);
 	}
 }
 
@@ -245,6 +250,9 @@ data_write(void)
 				mkshort(mkshort_handle, src) : 
 				wpt->shortname;
 		strncpy(way[i]->ident,  ident, sizeof(way[i]->ident));
+		if (global_opts.synthesize_shortnames) { 
+			xfree(ident);
+		}
 		way[i]->ident[sizeof(way[i]->ident)-1] = 0;
 		if (src && strlen(src)) {
 			strncpy(way[i]->cmnt, src, sizeof(way[i]->cmnt));
