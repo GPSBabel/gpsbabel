@@ -145,6 +145,7 @@ geo_end(void *data, const char *el)
 		in_name--;
 	}
 	else if (strcmp(el, "type") == 0) {
+		wpt_tmp->icon_descr_is_dynamic = 1;
 		wpt_tmp->icon_descr = xstrdup(typestr);
 		memset(typestr,0, MY_CBUF);
 		in_type--;
