@@ -371,11 +371,29 @@ typedef enum {
 	ff_type_serial,		/* format describes a serial protoco (GUI can display port names) */
 } ff_type;
 
+typedef enum {
+	ff_cap_rw_wpt,
+	ff_cap_rw_trk,
+	ff_cap_rw_rte
+} ff_cap_array;
+
+typedef enum {
+	ff_cap_none,
+	ff_cap_read = 1,
+	ff_cap_write = 2
+} ff_cap;
+#define FF_CAP_RW_ALL \
+	{ ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write }
+
+#define FF_CAP_RW_WPT \
+	{ ff_cap_read | ff_cap_write, ff_cap_none, ff_cap_none}
+
 /*
  *  Describe the file format to the caller.
  */
 typedef struct ff_vecs {
 	ff_type type;
+	ff_cap cap[3];
 	ff_init rd_init;
 	ff_init wr_init;
 	ff_deinit rd_deinit;

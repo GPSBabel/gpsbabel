@@ -584,6 +584,7 @@ mapsend_wpt_write(void)
 
 ff_vecs_t mapsend_vecs = {
 	ff_type_file,
+	FF_CAP_RW_ALL,
 	mapsend_rd_init,
 	mapsend_wr_init,
 	mapsend_rd_deinit,

@@ -447,6 +447,7 @@ nmea_write()
 
 ff_vecs_t nmea_vecs = {
 	ff_type_file,
+	{ ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write, ff_cap_none},
 	nmea_rd_init,	
 	nmea_wr_init,	
 	nmea_rd_deinit,	

@@ -562,6 +562,7 @@ xcsv_wr_deinit(void)
 
 ff_vecs_t xcsv_vecs = {
     ff_type_internal,
+    FF_CAP_RW_WPT, /* This is a bit of a lie for now... */
     xcsv_rd_init,
     xcsv_wr_init,
     xcsv_rd_deinit,

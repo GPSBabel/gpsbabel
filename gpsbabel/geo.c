@@ -198,6 +198,7 @@ geo_write(void)
 
 ff_vecs_t geo_vecs = {
 	ff_type_file,
+	FF_CAP_RW_WPT,
 	geo_rd_init,	
 	geo_wr_init,	
 	geo_rd_deinit,

@@ -345,6 +345,7 @@ hsa_ndv_write(void)
 
 ff_vecs_t HsaEndeavourNavigator_vecs = {
 	ff_type_file,
+	FF_CAP_RW_WPT,
 	hsa_ndv_rd_init,	
 	hsa_ndv_wr_init,	
 	hsa_ndv_rd_deinit,

@@ -894,6 +894,7 @@ static arglist_t igc_args[] = {
 
 ff_vecs_t igc_vecs = {
     ff_type_file,
+    { ff_cap_none , ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write },
     rd_init,
     wr_init,
     rd_deinit,

@@ -622,6 +622,7 @@ ce_write(void)
 
 ff_vecs_t coastexp_vecs = {
 	ff_type_file,
+	{ ff_cap_read|ff_cap_write, ff_cap_none, ff_cap_read|ff_cap_write },
 	ce_rd_init,
 	ce_wr_init,
 	ce_rd_deinit,

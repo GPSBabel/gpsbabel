@@ -2174,6 +2174,7 @@ mps_write(void)
 
 ff_vecs_t mps_vecs = {
 	ff_type_file,
+	FF_CAP_RW_ALL,
 	mps_rd_init,
 	mps_wr_init,
 	mps_rd_deinit,
