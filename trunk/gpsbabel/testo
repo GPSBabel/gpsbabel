@@ -128,6 +128,7 @@ diff reference/paris.wpo ${TMPDIR}/paris.wpo
 # not verify that the appinfo block was written correctly.  However, it does
 # successfully test for some endianness errors that might otherwise go 
 # unnoticed.
+rm -f ${TMPDIR}/magnav.pdb ${TMPDIR}/magnav.gpu ${TMPDIR}/magnavt.gpu
 ${PNAME} -i geo -f geocaching.loc -o magnav -F ${TMPDIR}/magnav.pdb
 ${PNAME} -i magnav -f ${TMPDIR}/magnav.pdb -o gpsutil -F ${TMPDIR}/magnav.gpu
 ${PNAME} -i magnav -f reference/magnav.pdb -o gpsutil -F ${TMPDIR}/magnavt.gpu
@@ -137,9 +138,18 @@ diff reference/magnavr.gpu ${TMPDIR}/magnav.gpu
 # GPSPilot Tracker for PalmOS
 # This test is eerily similar to the NAV Companion test.  In fact, the 
 # converted reference file (magnavr.gpu) is identical.
+rm -f ${TMPDIR}/gpspilot.pdb ${TMPDIR}/gpspilot.gpu ${TMPDIR}/gpspil_t.gpu
 ${PNAME} -i geo -f geocaching.loc -o gpspilot -F ${TMPDIR}/gpspilot.pdb
 ${PNAME} -i gpspilot -f ${TMPDIR}/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspilot.gpu
 ${PNAME} -i gpspilot -f reference/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspil_t.gpu
 diff ${TMPDIR}/gpspil_t.gpu ${TMPDIR}/gpspilot.gpu
 diff reference/magnavr.gpu ${TMPDIR}/gpspilot.gpu
 
+# Cetus GPS for PalmOS
+# This test is also similar to the NAV Companion test.
+rm -f ${TMPDIR}/cetus.pdb ${TMPDIR}/cetus.gpu ${TMPDIR}/cetust.gpu
+${PNAME} -i geo -f geocaching.loc -o cetus -F ${TMPDIR}/cetus.pdb
+${PNAME} -i cetus -f ${TMPDIR}/cetus.pdb -o gpsutil -F ${TMPDIR}/cetus.gpu
+${PNAME} -i cetus -f reference/cetus.pdb -o gpsutil -F ${TMPDIR}/cetust.gpu
+diff ${TMPDIR}/cetust.gpu ${TMPDIR}/cetus.gpu
+diff reference/cetus.gpu ${TMPDIR}/cetus.gpu
