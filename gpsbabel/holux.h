@@ -33,7 +33,8 @@
 #endif
 
 
-#define GM100_WPO_FILE_SIZE 25512       /* size of a holux gm-100 wpo file */ 
+/* #define GM100_WPO_FILE_SIZE 25512 */      /* size of a holux gm-100 wpo file used by mapShow 1.4*/ 
+#define GM100_WPO_FILE_SIZE 25600       /* size of a holux gm-100 wpo file used by the GM-100*/ 
 
 #define ROUTESTART	    23600           /* Offset for start of route */
 #define MAXWPT		    500             /* max number of waypoint */
@@ -84,7 +85,7 @@ typedef struct tagWPT
 	POINT	 pt;				        /* waypoint location  */
 	short    vocidx;				    /* voice index, not used */
 	short    usecount;			        /* counter: times used by routes */
-	HX_DATE     date;			            /* date */
+	HX_DATE     date;			        /* date */
 	unsigned time;			            /* time	 */
 	char     checked;				    /* Active or not */
     BYTE     dummy[3];                  /* fill bytes */
@@ -94,12 +95,12 @@ typedef struct tagWPT
 
 typedef  struct tagRTEHDR
 {
-	DWORD	    id;			             /* RTE_HDR_ID */
-	short		num;			         /* Current route number */
-	short		next;			         /* next route number */
-	short		idx[MAXRTE];	         /* saving route index here for each route, default was -1  */
-	BYTE		used[MAXRTE];	         /* Have the wpt been used (0xFF), Default was 0 */
-	short		rteno;			         /* Saving navigationroute number here */
+	DWORD	        id;			             /* RTE_HDR_ID */
+	short		    num;			         /* Current route number */
+	short		    next;			         /* next route number */
+	signed short	idx[MAXRTE];	         /* saving route index here for each route, default was -1  */
+	BYTE		    used[MAXRTE];	         /* Have the wpt been used (0xFF), Default was 0 */
+	signed short    rteno;			         /* Saving navigationroute number here */
 }RTEHDR;
 
 
