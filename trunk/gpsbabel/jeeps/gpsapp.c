@@ -3289,6 +3289,9 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 	    case pD312:
 		GPS_D310_Get(&((*trk)[i]),rec->data);
 		break;
+	    case pD311:
+		GPS_D311_Get(&((*trk)[i]),rec->data);
+		break;
 	    default:
 		GPS_Error("A301_Get: Unknown track protocol");
 		return PROTOCOL_ERROR;
@@ -5201,7 +5204,6 @@ int32 GPS_A600_Send(const char *port, time_t Time)
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
 	return MEMORY_ERROR;
 
-    
     switch(gps_date_time_type)
     {
     case pD600:
