@@ -449,13 +449,14 @@ pdb_write_double(void* ptr, double d)
 {
   char r[8];
   int i;
+  char *optr = ptr;
 
   memcpy(r, &d, 8);
   doswap(); /* make sure i_am_little_endian is initialized */
   for (i = 0; i < 8; i++)
   {
 	int j = (i_am_little_endian)?(7-i):i;
-	*(char*)ptr++ = r[j];
+	*optr++ = r[j];
   }
   return;
 }
