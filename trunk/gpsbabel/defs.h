@@ -322,15 +322,36 @@ void 	vmem_free(vmem_t*);
 void 	vmem_realloc(vmem_t*, size_t);
 
 
-#define ARGTYPE_UNKNOWN  0
-#define ARGTYPE_INT      0x00000001
-#define ARGTYPE_FLOAT    0x00000002
-#define ARGTYPE_STRING   0x00000003
-#define ARGTYPE_BOOL     0x00000004
-#define ARGTYPE_FILE     0x00000005
-#define ARGTYPE_OUTFILE  0x00000006
-#define ARGTYPE_REQUIRED 0x40000000
-#define ARGTYPE_HIDDEN   0x20000000
+#define ARGTYPE_UNKNOWN    0x00000000
+#define ARGTYPE_INT        0x00000001
+#define ARGTYPE_FLOAT      0x00000002
+#define ARGTYPE_STRING     0x00000003
+#define ARGTYPE_BOOL       0x00000004
+#define ARGTYPE_FILE       0x00000005
+#define ARGTYPE_OUTFILE    0x00000006
+
+/* REQUIRED means that the option is required to be set. 
+ * See also BEGIN/END_REQ */
+#define ARGTYPE_REQUIRED   0x40000000
+
+/* HIDDEN means that the option does not appear in help texts.  Useful
+ * for debugging or testing options */
+#define ARGTYPE_HIDDEN     0x20000000
+
+/* BEGIN/END_EXCL mark the beginning and end of an exclusive range of
+ * options. No more than one of the options in the range may be selected 
+ * or set. If exactly one must be set, use with BEGIN/END_REQ
+ * Both of these flags set is just like neither set, so avoid doing that. */
+#define ARGTYPE_BEGIN_EXCL 0x10000000
+#define ARGTYPE_END_EXCL   0x08000000
+
+/* BEGIN/END_REQ mark the beginning and end of a required range of 
+ * options.  One or more of the options in the range MUST be selected or set.
+ * If exactly one must be set, use with BEGIN/END_EXCL 
+ * Both of these flags set is synonymous with REQUIRED, so use that instead
+ * for "groups" of exactly one option. */
+#define ARGTYPE_BEGIN_REQ  0x04000000
+#define ARGTYPE_END_REQ    0x02000000 
 
 #define ARGTYPE_TYPEMASK 0x00000fff
 #define ARGTYPE_FLAGMASK 0xfffff000
