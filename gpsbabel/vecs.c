@@ -49,6 +49,7 @@ extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t dna_vecs;
 extern ff_vecs_t magnav_vec;
 extern ff_vecs_t xmap_vecs;
+extern ff_vecs_t tmp_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -156,6 +157,11 @@ vecs_t vec_list[] = {
 		&tpg_vecs,
 		"tpg",
 		"National Geographic Topo .tpg"
+	},
+	{
+		&tmp_vecs,
+		"tmp",
+		"TopoMapPro"
 	},
 
         {
