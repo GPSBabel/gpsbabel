@@ -24,3 +24,17 @@ mkwintesto: mkwintesto.c
 
 wintesto.cmd: mkwintesto
 	./mkwintesto ../testo
+
+# The "usbfree" target is useful for generating an executable that 
+# works on NT 3.5 or 4.0 since it doesn't have USB support and tanks
+# on our libsetupapi references.
+
+usbfree:
+	$(MAKE) INHIBIT_USB=-DNO_USB gpsbabel-usbfree.exe
+
+gpsbabel-usbfree.exe: $(OBJS)
+	$(CC) -static $(CFLAGS) $(OBJS) lib/libexpat.a -o gpsbabel-usbfree.exe
+	zip -j /tmp/gpsbabel-nousb-$(VERSIOND).zip gpsbabel-usbfree.exe
+
+
+
