@@ -505,9 +505,11 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        wpt->gc_data.terr = atof(s) * 10;
     } else
     if (strcmp(fmp->key, "GEOCACHE_TYPE") == 0) {
-       /* Geocache Type - TODO */
-       /* wpt->gc_data.type = gs_mktype(s);*/
-
+       /* Geocache Type */
+       wpt->gc_data.type = gs_mktype(s);
+    } else
+    if (strcmp(fmp->key, "GEOCACHE_CONTAINER") == 0) {
+       wpt->gc_data.container = gs_mkcont(s);
     } else {
        warning( MYNAME ": Unknown style directive: %s\n", fmp->key);
     }
