@@ -158,7 +158,7 @@ buffer_washer(char * buff, int buffer_len)
 
     for (i = 0 ; i < buffer_len - 1; i++) {
 	if (buff[i] == '\0') {
-	    memcpy(&buff[i], &buff[i+1], buffer_len - i);
+	    memmove(&buff[i], &buff[i+1], buffer_len - i);
 	    buffer_len--;
 	    buff[buffer_len] = '\0';
 	}
