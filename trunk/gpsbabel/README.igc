@@ -83,10 +83,44 @@ If both pressure altitude and GNSS altitude are recorded in the IGC file, two
 tracks will be written to the new track file, representing the two altitude
 tracks.  The latitude, longitude and timestamps in the tracks will be identical.
 
+
+Merging into IGC format
+=======================
 A route stored in another format can be merged with an existing IGC file that
 has no task declaration, to generate a new IGC file with a task declaration:
 
     gpsbabel -i igc -f myflight.igc -i gpx -f myrte.gpx -o igc -F mynew.igc
+
+A two dimensional (lat/lon) track recorded during a flight by a GPS receiver
+can be merged with a one dimensional (altitude) track recorded during the same
+flight by a barograph instrument.  The result is a three dimensional IGC file
+representing the flight:
+
+    gpsbabel -i gpx -f baro.gpx -i igc -f my2D.igc -o igc -F my3D.igc
+
+Sometimes there is a discrepancy between the internal clock in the barograph
+instrument and GPS time which can result in the altitude and ground positions
+not correlating correctly.  This can be corrected manually by passing the time
+difference in seconds between the two time domains through the "timeadj"
+parameter.  This can be any positive or negative integer:
+
+    gpsbabel -i gpx -f baro.gpx -i igc -f my2D.igc -o igc,timeadj=27 -F my3D.igc
+
+GPSBabel can also attempt to deduce the time difference automatically.  This
+is done by comparing the time that it thinks that you landed on the GPS track
+and the barograph and adjusting accordingly:
+
+    gpsbabel -i gpx -f baro.gpx -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc
+
+The same can be acheived by downloading directly from a barograph instrument
+supported by GPSBabel.  For example with a Brauniger IQ Comp GPS variometer:
+
+    gpsbabel -i baroiq -f /dev/ttyS0 -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc
+
+or:
+
+    gpsbabel -i baroiq -f com1 -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc
+
 
 
 Chris Jones
