@@ -294,9 +294,9 @@ mapsend_read(void)
 			mapsend_track_read();
 			break;
 		case ms_type_log:
-			fatal(MYNAME ", GPS logs not supported.\n", type);
+			fatal(MYNAME ", GPS logs not supported.\n");
 		case ms_type_rgn:
-			fatal(MYNAME ", GPS regions not supported.\n", type);
+			fatal(MYNAME ", GPS regions not supported.\n");
 		default:
 			fatal(MYNAME ", unknown file type %d\n", type);
 	}
@@ -343,7 +343,7 @@ n = 1;
 void
 mapsend_wpt_write(void)
 {
-	mapsend_hdr hdr = {13, "4D533330 MS", "30", ms_type_wpt};
+	mapsend_hdr hdr = {13, "4D533330 MS", "30", ms_type_wpt, 0};
 	int wpt_count = waypt_count();
 	int n = 0;
 
@@ -353,14 +353,16 @@ mapsend_wpt_write(void)
 	waypt_disp_all(mapsend_waypt_pr);
 
 	my_fwrite4(&n, mapsend_file_out);
-/* TODO: Impelment routes here */
+/* TODO: Implement routes here */
 }
 
+#if LATER
 void 
 mapsend_trk_write(void)
 {
-	mapsend_hdr hdr = {13, "4D533334 MS", "34", ms_type_track};
+	mapsend_hdr hdr = {13, "4D533334 MS", "34", ms_type_track, 0};
 }
+#endif
 
 ff_vecs_t mapsend_vecs = {
 	mapsend_rd_init,
