@@ -36,6 +36,7 @@ static void *mkshort_handle;
 static route_head *trk_head;
 static route_head *rte_head;
 
+static int track_out_count;
 static int route_out_count;
 static int route_wpt_count;
 
@@ -43,23 +44,6 @@ static char *snlenopt;
 static char *snwhiteopt;
 static char *snupperopt;
 static char *snuniqueopt;
-
-static char *ozi_wpt_header = "OziExplorer Waypoint File Version 1.1\n"
-                              "WGS 84\n" 
-                              "Reserved 2\n" 
-                              "Reserved 3\n";
-
-static char *ozi_trk_header = "OziExplorer Track Point File Version 2.1\n"
-                              "WGS 84\n"
-                              "Altitude is in Feet\n"
-                              "Reserved 3\n" 
-                              "0,2,255,ComplimentsOfGPSBabel,0,0,2,8421376\n"
-                              "0\n";
-
-static char *ozi_route_header = "OziExplorer Route File Version 1.0\n"
-                                "WGS 84\n" 
-                                "Reserved 1\n" 
-                                "Reserved 2\n";
 
 static
 arglist_t ozi_args[] = {
@@ -74,14 +58,76 @@ arglist_t ozi_args[] = {
 	{0, 0, 0, 0}
 };
 
+gpsdata_type ozi_objective;
+
+static char *ozi_ofname = NULL;
+
+static void
+ozi_openfile(char *fname) {
+    char *c, *tmpname;
+    char *ozi_extensions[] = {0, "plt", "wpt", "rte"};
+    char buff[32];
+    
+    /* if we're doing multi-track output, sequence the filenames like:
+     * mytrack.plt, mytrack-1.plt...
+     */
+
+    if ((track_out_count) && (ozi_objective == trkdata)) {
+        sprintf(buff, "-%d", track_out_count);
+    } else {
+        buff[0] = '\0';
+    }
+
+    /* allocate more than enough room for new filename */
+    tmpname = xcalloc(1, strlen(fname) +
+                         strlen(buff) +
+                         strlen(ozi_extensions[ozi_objective]) +
+                         2); /* . (dot) plus null term */
+
+    strcpy(tmpname, fname);
+
+    /* locate and remove file extension */
+    c = strrchr(tmpname, '.');
+
+    if (c)
+        *c = '\0';
+
+    /* append the -xx sequence number for tracks if needed */
+    strcat(tmpname + strlen(tmpname), buff);
+
+    strcat(tmpname, ".");
+
+    /* append the extension after the "." */
+    strcat(tmpname, ozi_extensions[ozi_objective]);
+
+    /* re-open file_out with the new filename */
+    if (file_out) {
+        fclose(file_out);
+        file_out = NULL;
+    }
+
+    file_out = xfopen(tmpname, "w", MYNAME);
+
+    xfree(tmpname);
+
+    return;
+}
+
 static void 
 ozi_track_hdr(const route_head * rte)
 {
-    /* prologue at TOF only. */
-    if (route_out_count == 0) 
-        fprintf(file_out, ozi_trk_header);
+    static char *ozi_trk_header = 
+        "OziExplorer Track Point File Version 2.1\n"
+        "WGS 84\n"
+        "Altitude is in Feet\n"
+        "Reserved 3\n" 
+        "0,2,255,ComplimentsOfGPSBabel,0,0,2,8421376\n"
+        "0\n";
 
-    route_out_count++;
+    ozi_openfile(ozi_ofname);
+    fprintf(file_out, ozi_trk_header);
+
+    track_out_count++;
 }
 
 static void 
@@ -116,6 +162,12 @@ ozi_track_pr()
 static void
 ozi_route_hdr(const route_head * rte)
 {
+    static char *ozi_route_header = 
+        "OziExplorer Route File Version 1.0\n"
+        "WGS 84\n" 
+        "Reserved 1\n" 
+        "Reserved 2\n";
+
     /* prologue on 1st pass only */
     if (route_out_count == 0) {
         fprintf(file_out, ozi_route_header);
@@ -189,7 +241,6 @@ ozi_route_disp(const waypoint * waypointp)
             ozi_time,
             waypointp->description ? waypointp->description : "");
 
-
 }
 
 static void
@@ -203,40 +254,33 @@ ozi_route_pr()
     route_disp_all(ozi_route_hdr, ozi_route_tlr, ozi_route_disp);
 }
 
-
 static void
 rd_init(const char *fname)
 {
     file_in = xfopen(fname, "r", MYNAME);
 
     mkshort_handle = mkshort_new_handle();
-
-    switch (global_opts.objective) {
-    case trkdata:
-        trk_head = route_head_alloc();
-        track_add_head(trk_head);
-        break;
-    case rtedata:
-        break;
-    case wptdata:
-        break;
-    default:
-        break;
-
-    }
 }
 
 static void
 rd_deinit(void)
 {
     fclose(file_in);
+    file_in = NULL;
     mkshort_del_handle(mkshort_handle);
 }
 
 static void
 wr_init(const char *fname)
 {
-    file_out = xfopen(fname, "w", MYNAME);
+    
+    /* At this point, we have no idea whether we'll be writing waypoint,
+     * route, or tracks.  So we'll hold off opening any files until
+     * we're actually ready to write.
+     */
+
+    ozi_ofname = (char *)fname;
+
     mkshort_handle = mkshort_new_handle();
 
     /* set mkshort options from the command line if applicable */
@@ -265,6 +309,9 @@ static void
 wr_deinit(void)
 {
     fclose(file_out);
+    file_out = NULL;
+    ozi_ofname = NULL;
+
     mkshort_del_handle(mkshort_handle);
 }
 
@@ -485,6 +532,22 @@ data_read(void)
         memset(buff, '\0', sizeof(buff));
         fgets(buff, sizeof(buff), file_in);
 
+        /* 
+         * this is particularly nasty.  use the first line of the file
+         * to attempt to divine the data type we are parsing
+         */
+        if (linecount == 1) {
+            if (strstr(buff, "Track Point") != NULL) {
+                trk_head = route_head_alloc();
+                track_add_head(trk_head);
+                ozi_objective = trkdata;
+            } else
+            if (strstr(buff, "Route File") != NULL) {
+                ozi_objective = rtedata;
+            } else {
+                ozi_objective = wptdata;
+            }
+        }
         if ((strlen(buff)) && (strstr(buff, ",") != NULL)) {
 
             wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
@@ -495,7 +558,7 @@ data_read(void)
 
             i = 0;
             while (s) {
-                switch (global_opts.objective) {
+                switch (ozi_objective) {
                 case trkdata:
                     ozi_parse_track(i, s, wpt_tmp);
                     break;
@@ -515,7 +578,7 @@ data_read(void)
                 s = csv_lineparse(NULL, ",", "", linecount);
             }
 
-            switch (global_opts.objective) {
+            switch (ozi_objective) {
             case trkdata:
                 if (linecount > 6) /* skipping over file header */
                     route_add_wpt(trk_head, wpt_tmp);
@@ -599,22 +662,32 @@ ozi_waypt_pr(const waypoint * wpt)
 static void
 data_write(void)
 {
+    static char *ozi_wpt_header = 
+        "OziExplorer Waypoint File Version 1.1\n"
+        "WGS 84\n" 
+        "Reserved 2\n" 
+        "Reserved 3\n";
 
-    switch (global_opts.objective) {
-    case trkdata:
-        ozi_track_pr();
-        break;
-    case rtedata:
-        route_out_count = 0;
-        ozi_route_pr();
-        break;
-    case wptdata:
+    track_out_count = route_out_count = 0;
+    
+    if (waypt_count()) {
+        ozi_objective = wptdata;
+        ozi_openfile(ozi_ofname);
         fprintf(file_out, ozi_wpt_header);
         waypt_disp_all(ozi_waypt_pr);
-        break;
-    default:
-        break;
     }
+
+    if (track_count()) {
+        ozi_objective = trkdata;
+        ozi_track_pr(); /* ozi_track_hdr handles filenames / file_out */
+    }
+
+    if (route_count()) {
+        ozi_objective = rtedata;
+        ozi_openfile(ozi_ofname); /* ozi routes go in one big file */
+        ozi_route_pr();
+    }
+
 }
 
 ff_vecs_t ozi_vecs = {
