@@ -35,6 +35,7 @@ static char *snlenopt;
 static char *snwhiteopt;
 static char *snupperopt;
 static char *snuniqueopt;
+char *prefer_shortnames;
 char *xcsv_urlbase;
 
 static
@@ -45,6 +46,7 @@ arglist_t xcsv_args[] = {
 	{"snupper", &snupperopt, "(0/1) UPPERCASE synth. shortnames"},
 	{"snunique", &snuniqueopt, "(0/1) Make synth. shortnames unique"},
 	{"urlbase", &xcsv_urlbase, "Basename prepended to URL on output"},
+	{"prefer_shortnames", &prefer_shortnames, "Use shortname instead of description"},
 	{0, 0, 0}
 };
 

@@ -35,6 +35,7 @@
 #define TIMET_TO_EXCEL(a) ((a / 86400.0) + 25569.0)
 
 extern char *xcsv_urlbase;
+extern char *prefer_shortnames;
 
 /*********************************************************************/
 /* csv_stringclean() - remove any unwanted characters from string.   */
@@ -602,6 +603,13 @@ xcsv_waypt_pr(const waypoint *wpt)
         }
     } else {
         description = csv_stringclean(wpt->description, xcsv_file.badchars);
+    }
+
+    if (prefer_shortnames) {
+	    if (description) {
+		    xfree(description);
+	    }
+	    description = shortname;
     }
 
     i = 0;
