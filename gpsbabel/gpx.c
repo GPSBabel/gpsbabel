@@ -551,13 +551,13 @@ static void
 gpx_end(void *data, const char *el)
 {
 	char *s = strrchr(current_tag.mem, '/');
+	float x;
 
 	if (strcmp(s + 1, el)) {
 		fprintf(stderr, "Mismatched tag %s\n", el);
 	}
 	*s = 0;
 
-	float x;
 
 	if (in_cdata) {
 		if (in_name && in_wpt && !in_gs_tbugs) {
