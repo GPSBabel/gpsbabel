@@ -634,6 +634,9 @@ disp_formats(int version)
 			xcsv_read_internal_style(svec->style_buf);
 			if (version > 0)
 				disp_v1(xcsv_file.type);
+			if (version >= 2) {
+				disp_v2(vec_list[0].vec);
+			}
 			printf("%s\t%s\t%s\n", svec->name, xcsv_file.extension ? 
 				xcsv_file.extension : "", xcsv_file.description);
 		}
