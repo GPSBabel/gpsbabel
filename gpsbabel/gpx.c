@@ -117,6 +117,10 @@ typedef struct tag_mapping {
 tag_mapping tag_path_map[] = {
 	{ tt_gpx, "/gpx" },
 	{ tt_time, "/gpx/time" },
+	{ tt_author, "/gpx/author" },
+	{ tt_email, "/gpx/email" },
+	{ tt_time, "/gpx/time" },
+	{ tt_desc, "/gpx/desc" },
 
 	{ tt_wpt, "/gpx/wpt" },
 	{ tt_wpt_ele, "/gpx/wpt/ele" },
