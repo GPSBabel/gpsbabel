@@ -26,6 +26,7 @@ extern queue waypt_head;
 static char *snopt = NULL;
 static char *lcopt = NULL;
 static char *purge_duplicates = NULL;
+static char *correct_coords = NULL;
 
 static
 arglist_t dup_args[] = {
@@ -34,6 +35,8 @@ arglist_t dup_args[] = {
 	{"location", &lcopt, "Suppress duplicate waypoint based on coords",
 		ARGTYPE_BOOL},
 	{"all", &purge_duplicates, "Suppress all instances of duplicates",
+		ARGTYPE_BOOL},
+	{"correct", &correct_coords, "Use coords from duplicate points", 
 		ARGTYPE_BOOL},
 	{0, 0, 0, 0}
 };
@@ -270,6 +273,10 @@ duplicate_process(void)
 		if (btmp == NULL) {
 			if ( delwpt ) {
 				waypt_free(delwpt);
+			}
+			if ( correct_coords && oldnode && oldnode->wpt ) {
+				oldnode->wpt->latitude = waypointp->latitude;
+				oldnode->wpt->longitude = waypointp->longitude;
 			}
 			delwpt = waypointp;
 			waypt_del(waypointp); /* collision */
