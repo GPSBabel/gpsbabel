@@ -915,6 +915,8 @@ fprint_xml_chain( xml_tag *tag, const waypoint *wpt )
 void free_gpx_extras( xml_tag *tag )
 {
 	xml_tag *next = NULL;
+	char **ap;
+	
 	while ( tag ) {
 		if (tag->cdata) {
 			xfree(tag->cdata);
@@ -929,8 +931,14 @@ void free_gpx_extras( xml_tag *tag )
         		xfree(tag->tagname);
 		}
 		if (tag->attributes) {
-        		xfree(tag->attributes);
+			ap = tag->attributes;
+
+			while (*ap)
+				xfree(*ap++);
+
+			xfree(tag->attributes);
 		}
+		
 		next = tag->sibling;
 		xfree(tag);
 		tag = next;
