@@ -71,6 +71,7 @@ typedef enum {
 	tt_wpt_url,
 	tt_wpt_ele,
 	tt_wpt_time,
+	tt_wpt_type,
 	tt_wpt_urlname,
 	tt_cache_container,
 	tt_cache_difficulty,
@@ -105,8 +106,9 @@ typedef enum {
 } tag_type;
 
 typedef struct tag_mapping {
-	tag_type tag_type;
-	const char *tag_name;
+	tag_type tag_type;		/* enum from above for this tag */
+	int tag_passthrough;		/* true if we don't generate this */
+	const char *tag_name;		/* xpath-ish tag name */
 } tag_mapping;
 
 /*
@@ -116,53 +118,54 @@ typedef struct tag_mapping {
  */
 
 tag_mapping tag_path_map[] = {
-	{ tt_gpx, "/gpx" },
-	{ tt_time, "/gpx/time" },
-	{ tt_author, "/gpx/author" },
-	{ tt_email, "/gpx/email" },
-	{ tt_time, "/gpx/time" },
-	{ tt_desc, "/gpx/desc" },
+	{ tt_gpx, 0, "/gpx" },
+	{ tt_time, 0, "/gpx/time" },
+	{ tt_author, 0, "/gpx/author" },
+	{ tt_email, 0, "/gpx/email" },
+	{ tt_time, 0, "/gpx/time" },
+	{ tt_desc, 0, "/gpx/desc" },
 
-	{ tt_wpt, "/gpx/wpt" },
-	{ tt_wpt_ele, "/gpx/wpt/ele" },
-	{ tt_wpt_time, "/gpx/wpt/time" },
-	{ tt_wpt_name, "/gpx/wpt/name" },
-	{ tt_wpt_cmt, "/gpx/wpt/cmt" },
-	{ tt_wpt_desc, "/gpx/wpt/desc" },
-	{ tt_wpt_url, "/gpx/wpt/url" },
-	{ tt_wpt_urlname, "/gpx/wpt/urlname" },
-	{ tt_wpt_sym, "/gpx/wpt/sym" },
-	{ tt_cache_container, "/gpx/wpt/groundspeak:cache/groundspeak:container" },
-	{ tt_cache_difficulty, "/gpx/wpt/groundspeak:cache/groundspeak:difficulty" },
-	{ tt_cache_terrain, "/gpx/wpt/groundspeak:cache/groundspeak:terrain" },
+	{ tt_wpt, 0, "/gpx/wpt" },
+	{ tt_wpt_ele, 0, "/gpx/wpt/ele" },
+	{ tt_wpt_time, 0, "/gpx/wpt/time" },
+	{ tt_wpt_name, 0, "/gpx/wpt/name" },
+	{ tt_wpt_cmt, 0, "/gpx/wpt/cmt" },
+	{ tt_wpt_desc, 0, "/gpx/wpt/desc" },
+	{ tt_wpt_url, 0, "/gpx/wpt/url" },
+	{ tt_wpt_urlname, 0, "/gpx/wpt/urlname" },
+	{ tt_wpt_sym, 0, "/gpx/wpt/sym" },
+	{ tt_wpt_type, 1, "/gpx/wpt/type" },
+	{ tt_cache_container, 1, "/gpx/wpt/groundspeak:cache/groundspeak:container" },
+	{ tt_cache_difficulty, 1, "/gpx/wpt/groundspeak:cache/groundspeak:difficulty" },
+	{ tt_cache_terrain, 1, "/gpx/wpt/groundspeak:cache/groundspeak:terrain" },
 
-	{ tt_rte, "/gpx/rte" },
-	{ tt_rte_name, "/gpx/rte/name" },
-	{ tt_rte_desc, "/gpx/rte/desc" },
-	{ tt_rte_number, "/gpx/rte/number" },
-	{ tt_rte_rtept, "/gpx/rte/rtept" },
-	{ tt_rte_rtept_ele, "/gpx/rte/rtept/ele" },
-	{ tt_rte_rtept_time, "/gpx/rte/rtept/time" },
-	{ tt_rte_rtept_name, "/gpx/rte/rtept/name" },
-	{ tt_rte_rtept_cmt, "/gpx/rte/rtept/cmt" },
-	{ tt_rte_rtept_desc, "/gpx/rte/rtept/desc" },
-	{ tt_rte_rtept_url, "/gpx/rte/rtept/url" },
-	{ tt_rte_rtept_urlname, "/gpx/rte/rtept/urlname" },
-	{ tt_rte_rtept_sym, "/gpx/rte/rtept/sym" },
+	{ tt_rte, 0, "/gpx/rte" },
+	{ tt_rte_name, 0, "/gpx/rte/name" },
+	{ tt_rte_desc, 0, "/gpx/rte/desc" },
+	{ tt_rte_number, 0, "/gpx/rte/number" },
+	{ tt_rte_rtept, 0, "/gpx/rte/rtept" },
+	{ tt_rte_rtept_ele, 0, "/gpx/rte/rtept/ele" },
+	{ tt_rte_rtept_time, 0, "/gpx/rte/rtept/time" },
+	{ tt_rte_rtept_name, 0, "/gpx/rte/rtept/name" },
+	{ tt_rte_rtept_cmt, 0, "/gpx/rte/rtept/cmt" },
+	{ tt_rte_rtept_desc, 0, "/gpx/rte/rtept/desc" },
+	{ tt_rte_rtept_url, 0, "/gpx/rte/rtept/url" },
+	{ tt_rte_rtept_urlname, 0, "/gpx/rte/rtept/urlname" },
+	{ tt_rte_rtept_sym, 0, "/gpx/rte/rtept/sym" },
 
-	{ tt_trk, "/gpx/trk" },
-	{ tt_trk_name, "/gpx/trk/name" },
-	{ tt_trk_desc, "/gpx/trk/desc" },
-	{ tt_trk_trkseg, "/gps/trk/trkseg" },
-	{ tt_trk_trkseg_trkpt, "/gpx/trk/trkseg/trkpt" },
-	{ tt_trk_trkseg_trkpt_ele, "/gpx/trk/trkseg/trkpt/ele" },
-	{ tt_trk_trkseg_trkpt_time, "/gpx/trk/trkseg/trkpt/time" },
-	{ tt_trk_trkseg_trkpt_name, "/gpx/trk/trkseg/trkpt/name" },
-	{ tt_trk_trkseg_trkpt_cmt, "/gpx/trk/trkseg/trkpt/cmt" },
-	{ tt_trk_trkseg_trkpt_desc, "/gpx/trk/trkseg/trkpt/desc" },
-	{ tt_trk_trkseg_trkpt_url, "/gpx/trk/trkseg/trkpt/url" },
-	{ tt_trk_trkseg_trkpt_urlname, "/gpx/trk/trkseg/trkpt/urlname" },
-	{ tt_trk_trkseg_trkpt_sym, "/gpx/trk/trkseg/trkpt/sym" },
+	{ tt_trk, 0, "/gpx/trk" },
+	{ tt_trk_name, 0, "/gpx/trk/name" },
+	{ tt_trk_desc, 0, "/gpx/trk/desc" },
+	{ tt_trk_trkseg, 0, "/gps/trk/trkseg" },
+	{ tt_trk_trkseg_trkpt, 0, "/gpx/trk/trkseg/trkpt" },
+	{ tt_trk_trkseg_trkpt_ele, 0, "/gpx/trk/trkseg/trkpt/ele" },
+	{ tt_trk_trkseg_trkpt_time, 0, "/gpx/trk/trkseg/trkpt/time" },
+	{ tt_trk_trkseg_trkpt_name, 0, "/gpx/trk/trkseg/trkpt/name" },
+	{ tt_trk_trkseg_trkpt_cmt, 0, "/gpx/trk/trkseg/trkpt/cmt" },
+	{ tt_trk_trkseg_trkpt_desc, 0, "/gpx/trk/trkseg/trkpt/desc" },
+	{ tt_trk_trkseg_trkpt_url, 0, "/gpx/trk/trkseg/trkpt/url" },
+	{ tt_trk_trkseg_trkpt_urlname, 0, "/gpx/trk/trkseg/trkpt/urlname" },
+	{ tt_trk_trkseg_trkpt_sym, 0, "/gpx/trk/trkseg/trkpt/sym" },
 	{0}
 };
 
@@ -185,14 +188,16 @@ write_optional_xml_entity(FILE *ofd, const char *indent,
 }
 
 static tag_type
-get_tag(const char *t)
+get_tag(const char *t, int *passthrough)
 {
 	tag_mapping *tm;
 	for (tm = tag_path_map; tm->tag_type != 0; tm++) {
 		if (0 == strcmp(tm->tag_name, t)) {
+			*passthrough = tm->tag_passthrough;
 			return tm->tag_type;
 		}
 	}
+	*passthrough = 1;
 	return tt_unknown;
 }
 
@@ -346,6 +351,8 @@ gpx_start(void *data, const char *el, const char **attr)
 {
 	char *e;
 	char *ep;
+	int passthrough;
+
 	vmem_realloc(&current_tag, strlen(current_tag.mem) + 2 + strlen(el));
 	e = current_tag.mem;
 	ep = e + strlen(e);
@@ -359,7 +366,7 @@ gpx_start(void *data, const char *el, const char **attr)
 	 */
 	memset(cdatastr.mem, 0, cdatastr.size);
 
-	switch (get_tag(current_tag.mem)) {
+	switch (get_tag(current_tag.mem, &passthrough)) {
 	case tt_gpx:
 		tag_gpx(attr);
 		break;
@@ -380,9 +387,12 @@ gpx_start(void *data, const char *el, const char **attr)
 	case tt_trk_trkseg_trkpt:
 		tag_wpt(attr);
 		break;
-	default:
+	case tt_unknown:
 		start_something_else(el, attr);
-		break;
+		return;
+	}
+	if (passthrough) {
+		start_something_else(el, attr);
 	}
 }
 
@@ -506,12 +516,13 @@ gpx_end(void *data, const char *el)
 	char *s = strrchr(current_tag.mem, '/');
 	float x;
 	char *cdatastrp = cdatastr.mem;
+	int passthrough;
 
 	if (strcmp(s + 1, el)) {
 		fprintf(stderr, "Mismatched tag %s\n", el);
 	}
 
-	switch (get_tag(current_tag.mem)) {
+	switch (get_tag(current_tag.mem, &passthrough)) {
 	/*
 	 * First, the tags that are file-global.
 	 */
@@ -619,9 +630,14 @@ gpx_end(void *data, const char *el)
 	case tt_rte_rtept_desc:
 		wpt_tmp->notes = xstrdup(cdatastrp);
 		break;
-	default:
+	case tt_unknown:
 		end_something_else();
+		*s = 0;
+		return;
 	}
+
+	if (passthrough)
+		end_something_else();
 
 	*s = 0;
 }
