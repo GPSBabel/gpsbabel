@@ -67,38 +67,59 @@ mkshort_new_handle()
 	return h;
 }
 
-char *
-mkshort_add_to_list(mkshort_handle *h, char *name)
+static 
+int
+is_unique(mkshort_handle *h, char *name)
 {
 	queue *e, *t;
 	int hash;
-	uniq_shortname *s = xcalloc(1, sizeof (uniq_shortname));
-	s->orig_shortname = xstrdup(name);
-	hash = hash_string(name);
 
+	hash = hash_string(name);
 	QUEUE_FOR_EACH(&h->namelist[hash], e, t) {
 		uniq_shortname *z = (uniq_shortname *) e;
-
 		if (0 == case_ignore_strcmp(z->orig_shortname, name)) {
-			size_t l = strlen(name);
-			int dl;
-			char tbuf[10];
-
-			z->conflictctr++;
-			dl = sprintf(tbuf, ".%d", z->conflictctr);
-
-			if (l + dl < h->target_len) {
-				name = xrealloc(name, l + dl + 1);
-				strcat(name, tbuf);
-			}
-			else {
-				strcpy(&name[l-dl], tbuf);
-			}
-			break;
+			return 0;
 		}
 	}
+	return 1;
+}
+
+static
+int
+add_to_hashlist(mkshort_handle *h, char *name)
+{
+	int hash;
+
+	hash = hash_string(name);
+	uniq_shortname *s = xcalloc(1, sizeof (uniq_shortname));
+	s->orig_shortname = xstrdup(name);
 	ENQUEUE_TAIL(&h->namelist[hash], &s->list);
-	h->depth[hash]++;
+}
+
+char *
+mkshort_add_to_list(mkshort_handle *h, char *name)
+{
+	while (!is_unique(h, name)) {
+		int dl;
+		char tbuf[10];
+		size_t l = strlen(name);
+		int hash = hash_string(name);
+		uniq_shortname *s = (uniq_shortname *) h->namelist[hash].next;
+
+		s->conflictctr++;
+
+		dl = sprintf(tbuf, ".%d", s->conflictctr);
+
+		if (l + dl < h->target_len) {
+			name = xrealloc(name, l + dl + 1);
+			strcat(name, tbuf);
+		}
+		else {
+			strcpy(&name[l-dl], tbuf);
+		}
+	}
+
+	add_to_hashlist(h, name);
 	return name;
 }
 
@@ -327,7 +348,6 @@ mkshort(void *h, const char *istring)
 	if (hdl->must_uniq) {
 		return mkshort_add_to_list(hdl, ostring);
 	}
-
 	return ostring;
 }
 
