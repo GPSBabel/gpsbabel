@@ -342,3 +342,33 @@ get_tz_offset(void)
 		return (signed int) difftime(now, later);
 	}
 }
+
+/*
+ * Return a pointer to a constant string that is suitable for icon lookup
+ * based on geocache attributes.   The strings used are those present in 
+ * a GPX file from geocaching.com.  Thus we sort of make all the other 
+ * formats do lookups based on these strings.
+ */
+const char *
+get_cache_icon(const waypoint *waypointp)
+{
+	/*
+	 * For icons, type overwrites container.  So a multi-micro will 
+	 * get the icons for "multi".
+ 	 */
+	switch (waypointp->gc_data.container) {
+		case gc_micro: 
+			return "Micro-Cache";
+			break;
+	}
+	switch (waypointp->gc_data.type) {
+		case gt_virtual:
+			return "Virtual cache";
+		case gt_multi:
+			return "Multi-Cache";
+			break;
+		default:
+			break;
+	}
+	return NULL;
+}
