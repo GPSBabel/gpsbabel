@@ -704,3 +704,14 @@ DEL %TMPDIR%\gpl1.gpx %TMPDIR%\gpl2.gpx %TMPDIR%\gpl1.gpl
 @echo off
 @echo.
 
+REM
+REM NetStumbler Summary File (read-only)
+REM
+DEL %TMPDIR%\netstumbler.mps
+@echo on
+@echo Testing...
+%PNAME% -i netstumbler -f reference\netstumbler.txt -o mapsource -F %TMPDIR%\netstumbler.mps
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\netstumbler.mps reference\netstumbler.mps
+
