@@ -293,6 +293,19 @@ THE FORMATS
 
 	http://vip.hyperusa.com/~dougs/geocachingdb/geocachingdb.htm
 
+    CoPilot Flight Planner for Palm OS
+
+        This code is mostly intended to convert CoPilot databases into
+        other formats.  I don't think you should use this to write
+        CoPilot databases, although the code is there, mostly because
+        GPSBabel doesn't convert magnetic declination values.
+
+        Questions, bug reports, etc, to ptomblin at xcski.com
+
+
+	http://xcski.com/~ptomblin/CoPilot/
+	http://navaid.com/CoPilot/
+
 
 DATA FILTERS
 

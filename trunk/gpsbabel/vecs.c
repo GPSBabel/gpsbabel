@@ -40,6 +40,7 @@ extern ff_vecs_t tiger_vecs;
 extern ff_vecs_t pcx_vecs;
 extern ff_vecs_t cetus_vecs;
 extern ff_vecs_t gpspilot_vecs;
+extern ff_vecs_t copilot_vecs;
 extern ff_vecs_t psp_vecs;
 extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t holux_vecs;
@@ -110,6 +111,12 @@ vecs_t vec_list[] = {
 		&cetus_vecs,
 		"cetus",
 		"Cetus for Palm/OS", 
+		NULL
+	},
+	{
+		&copilot_vecs,
+		"copilot",
+		"CoPilot Flight Planner for Palm/OS", 
 		NULL
 	},
 	{

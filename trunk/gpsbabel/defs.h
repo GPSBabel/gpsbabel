@@ -344,6 +344,10 @@ typedef struct {
 	unsigned char data[2];
 } pdb_16;
 
+typedef struct {
+	unsigned char data[8];
+} pdb_double;
+
 /*
  * Protypes for Endianness helpers.
  */
@@ -356,6 +360,8 @@ void be_write16(void *pp, unsigned i);
 void be_write32(void *pp, unsigned i);
 void le_write16(void *pp, unsigned i);
 void le_write32(void *pp, unsigned i);
+double pdb_read_double(void *p);
+void pdb_write_double(void *pp, double d);
 
 /*
  * A constant for unknown altitude.   It's tempting to just use zero
