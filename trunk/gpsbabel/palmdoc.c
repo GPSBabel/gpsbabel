@@ -37,6 +37,7 @@ static struct pdb_record *opdb_rec;
 
 static char *suppresssep = NULL;
 static char *dbname = NULL;
+static char *bmid = NULL;
 static char *includelogs = NULL;
 
 static int ct = 1;
@@ -71,6 +72,8 @@ arglist_t palmdoc_args[] = {
 	{"encrypt", &encrypt, "Encrypt hints with ROT13", ARGTYPE_BOOL },
 	{ "logs", &includelogs,
 		"Include groundspeak logs if present", ARGTYPE_BOOL },
+	{ "bookmarks_short", &bmid, "Include short name in bookmarks", 
+		ARGTYPE_BOOL },
 	{0, 0, 0, 0}
 };
 
@@ -413,7 +416,19 @@ palmdoc_disp(const waypoint *wpt)
 	double utme, utmn;
 	char utmzc;
 
-        create_bookmark(mkshort(mkshort_bookmark_handle, wpt->description)); 
+        char bookmarktext[17];
+
+        if ( bmid ) {
+		sprintf( bookmarktext, "%6s:%9s", 
+			wpt->shortname?wpt->shortname:"",
+			mkshort(mkshort_bookmark_handle, wpt->description));
+	}
+	else {
+		sprintf( bookmarktext, "%16s", 
+			mkshort(mkshort_bookmark_handle, wpt->description));
+	}	
+	
+        create_bookmark(xstrdup(bookmarktext)); 
  	
 	lonint = abs(wpt->longitude);
 	latint = abs(wpt->latitude);
@@ -576,7 +591,7 @@ data_write(void)
 	if (! suppresssep) 
 		docprintf(50, "---------------------------\n");
 	setshort_length(mkshort_handle, 20 );
-	setshort_length(mkshort_bookmark_handle, 16);
+	setshort_length(mkshort_bookmark_handle, 16-(bmid?7:0));
 	setshort_whitespace_ok( mkshort_bookmark_handle, 0 );
 	waypt_disp_all(palmdoc_disp);
 
