@@ -141,8 +141,7 @@ THE FORMATS
     MAPSEND
 
 	Magellan was smart enough to document their file format to make
-	creating software like this possible.   It reads and writes only 
-	waypoints (not routes) at this time.
+	creating software like this possible.
 
     MAPSOURCE
 
