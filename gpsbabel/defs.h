@@ -118,6 +118,7 @@ typedef struct {
 typedef struct {
 	geocache_type type;
 	geocache_container container;
+	int id; /* The decimal cache number */
 	int diff; /* (multiplied by ten internally) */
 	int terr; /* (likewise) */
 	time_t exported;

@@ -21,7 +21,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
 	ozi.o nmea.o text.o html.o palmdoc.o
 
-FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o
+FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o
 
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \

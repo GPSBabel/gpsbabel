@@ -77,6 +77,7 @@ typedef enum {
 	tt_wpt_time,
 	tt_wpt_type,
 	tt_wpt_urlname,
+	tt_cache,
 	tt_cache_name,
 	tt_cache_container,
 	tt_cache_type,
@@ -145,6 +146,7 @@ tag_mapping tag_path_map[] = {
 	{ tt_wpt_urlname, 0, "/gpx/wpt/urlname" },
 	{ tt_wpt_sym, 0, "/gpx/wpt/sym" },
 	{ tt_wpt_type, 1, "/gpx/wpt/type" },
+	{ tt_cache, 1, "/gpx/wpt/groundspeak:cache" },
 	{ tt_cache_name, 1, "/gpx/wpt/groundspeak:cache/groundspeak:name" },
 	{ tt_cache_container, 1, "/gpx/wpt/groundspeak:cache/groundspeak:container" },
 	{ tt_cache_type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:type" },
@@ -270,6 +272,19 @@ tag_cache_desc(const char ** attrv)
 			if (strcmp(avp[1], "True") == 0) {
 				cache_descr_is_html = 1;
 			}
+		}
+	}
+}
+
+static void
+tag_gs_cache(const char **attrv)
+{
+	const char **avp;
+
+	cache_descr_is_html = 0;
+	for (avp = &attrv[0]; *avp; avp+=2) {
+		if (strcmp(avp[0], "id") == 0) {
+				wpt_tmp->gc_data.id = atoi(avp[1]);
 		}
 	}
 }
@@ -427,6 +442,9 @@ gpx_start(void *data, const char *el, const char **attr)
 	case tt_unknown:
 		start_something_else(el, attr);
 		return;
+	case tt_cache:
+		tag_gs_cache(attr);
+		break;
 	case tt_cache_log_wpt:
 		if (opt_logpoint)
 			tag_log_wpt(attr);

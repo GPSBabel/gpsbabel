@@ -1,7 +1,7 @@
 /*
     Describe vectors containing filter operations.
  
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002,2004 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ extern filter_vecs_t arcdist_vecs;
 extern filter_vecs_t polygon_vecs;
 extern filter_vecs_t routesimple_vecs;
 extern filter_vecs_t reverse_route_vecs;
+extern filter_vecs_t sort_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -72,6 +73,11 @@ fl_vecs_t filter_vec_list[] = {
 		&reverse_route_vecs,
 		"reverse",
 		"Reverse stops within routes",
+	},
+	{
+		&sort_vecs,
+		"sort",
+		"Rearrange waypoints by resorting",
 	},
         {
 		NULL,
