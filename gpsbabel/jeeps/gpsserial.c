@@ -136,6 +136,7 @@ int32 GPS_Serial_Read(int32 ignored, void *ibuf, int size)
 #else
 
 #include <sys/ioctl.h>
+#include <sys/time.h>
 #include <termios.h>
 
 static struct termios gps_ttysave;
