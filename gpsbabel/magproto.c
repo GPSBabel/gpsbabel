@@ -37,10 +37,12 @@ extern gpsdata_type objective;
 static char * termread(char *ibuf, int size);
 static void termwrite(char *obuf, int size);
 static double mag2degrees(double mag_val);
+static void mag_readmsg(void);
 
 typedef enum {
 	mrs_handoff = 0,
-	mrs_handon
+	mrs_handon,
+	mrs_awaiting_ack
 } mag_rxstate;
 
 /*
@@ -235,57 +237,78 @@ static void
 mag_writemsg(const char * const buf)
 {
 	unsigned int osum = mag_checksum(buf);
+	int retry_cnt = 20;
 	int i;
 	char obuf[1000];
 
 	if (debug_serial) {
 		fprintf(stderr,"WRITE: $%s*%02X\r\n",buf, osum);
 	}
-#if 0
-	retry:
-#endif
+
+    retry:
+
 	i = sprintf(obuf, "$%s*%02X\r\n",buf, osum);
 	termwrite(obuf, i);
-
-#if 0
-	if (magrxstate == mrs_handon) {
+	if (magrxstate == mrs_handon || magrxstate == mrs_awaiting_ack) {
+		magrxstate = mrs_awaiting_ack;
 		mag_readmsg();
 		if (last_rx_csum != osum) {
-fprintf(stderr, "E");
-			goto retry;
+			if (debug_serial) {
+				fprintf(stderr, "COMM ERROR: Expected %02x, got %02x", 
+						osum, last_rx_csum);
+			}
+			if (retry_cnt--)
+				goto retry;
+			else
+				fatal(MYNAME 
+					": Too many communication errors.\n");
 		}
 	}
-#endif
 } 
 
 static void
 mag_writeack(int osum)
 {
 	char obuf[200];
+	char nbuf[200];
+	int i;
+	unsigned int nsum;
+
 	if (is_file) {
 		return;
 	}
-	sprintf(obuf, "PMGNCSM,%02X", osum);
-	mag_writemsg(obuf);
+
+	i = sprintf(nbuf, "PMGNCSM,%02X", osum);
+	nsum = mag_checksum(nbuf);
+	i = sprintf(obuf, "$%s*%02X\r\n",nbuf, nsum);
+
+	if (debug_serial) {
+		fprintf(stderr,"ACK WRITE: %s",obuf);
+	}
+	/*
+	 * Don't call mag_writemsg here so we don't get into ack feedback
+	 * loops.
+	 */
+	termwrite(obuf, i);
 }
 
 static void
 mag_handon(void)
 {
-	magrxstate = mrs_handon;
-	
 	if (!is_file) {
 		mag_writemsg("PMGNCMD,HANDON");
 	}
+	magrxstate = mrs_handon;
+	
 }
 
 static void
 mag_handoff(void)
 {
-	magrxstate = mrs_handoff;
 	if (!is_file) {
 		mag_writemsg("PMGNCMD,HANDOFF");
 	}
+	magrxstate = mrs_handoff;
 }
 
 void
@@ -385,6 +408,7 @@ retry:
 	}
 	if (IS_TKN("$PMGNCSM,")) {
 		last_rx_csum = strtoul(&ibuf[9], NULL, 16);
+		magrxstate = mrs_handon;
 		return;
 	} 
 	if (strncmp(ibuf, "$PMGNWPT,", 7) == 0) {
@@ -665,6 +689,7 @@ mag_rd_init(const char *portname, const char *args)
 		ignore_unable = 1;
 		mag_writemsg("PMGNCMD,NMEAOFF");
 	}
+
 	return;
 }
 
@@ -986,8 +1011,9 @@ mag_read(void)
 			fatal(MYNAME ": Routes are not yet supported\n");
 	}
 
-	while (!found_done)
+	while (!found_done) {
 		mag_readmsg();
+	}
 }
 
 static
@@ -1050,7 +1076,6 @@ mag_waypt_pr(const waypoint *waypointp)
 	free(odesc);
 
 	if (!is_file) {
-		mag_readmsg();
 		if (mag_error) {
 			fprintf(stderr, "Protocol error Writing '%s'\n", obuf);
 		}
@@ -1061,17 +1086,6 @@ mag_waypt_pr(const waypoint *waypointp)
 static void
 mag_write(void)
 {
-	if (!is_file) {
-		mag_readmsg();
-#if !__WIN32__
-		/*
-		 * I have no idea why this is fatal under Windows.
-		 */
-		mag_readmsg();
-		mag_readmsg();
-		mag_readmsg();
-#endif
-	}
 	/* 
 	 * Whitespace is actually legal, but since waypoint name length is
 	 * only 8 bytes, we'll conserve them.
