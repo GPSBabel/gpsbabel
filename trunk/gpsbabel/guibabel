@@ -24,6 +24,8 @@ proc showCmd w {
 	set cmd [concat $cmd "-s"]
   }
  set cmd [concat $cmd  "-o $ftypewrite -F $ofile"]
+# exec $cmd
+ 
  tk_messageBox -icon info -message  $cmd
 }
 
