@@ -1120,6 +1120,54 @@ mag_waypt_pr(const waypoint *waypointp)
 	}
 }
 
+static
+void mag_track_nop(const route_head *rte)
+{
+	return;
+}
+
+static
+void mag_track_disp(const waypoint *waypointp)
+{
+	double ilon, ilat;
+	double lon, lat;
+	int lon_deg, lat_deg;
+	char obuf[200];
+	int hms=0,fracsec=0; 	/* FIXME: Read HMS from waypoint time */
+	int date=0; 		/* FIXME: Read HMS from waypoint time */
+
+	ilat = waypointp->position.latitude.degrees;
+	ilon = waypointp->position.longitude.degrees;
+
+	lon = fabs(ilon);
+	lat = fabs(ilat);
+
+	lon_deg = lon;
+	lat_deg = lat;
+
+	lon = (lon - lon_deg) * 60.0;
+	lat = (lat - lat_deg) * 60.0;
+
+	lon = (lon_deg * 100.0 + lon);
+	lat = (lat_deg * 100.0 + lat);
+
+	/*
+	 * 	FIXME: Utterly untested.   LIkely wrong.
+	 */
+	sprintf(obuf,"PMGNTRK,%4.3f,%c,%4.3f,%c,%-.f,%c,%d.%d,A,,%d", 
+		lat, ilat < 0 ? 'S' : 'N',
+		lon, ilon < 0 ? 'W' : 'E',
+		waypointp->position.altitude.altitude_meters == unknown_alt ?
+                        0 : waypointp->position.altitude.altitude_meters,
+			'M',hms,fracsec,date);
+	mag_writemsg(obuf);
+}
+
+static
+void mag_track_pr()
+{
+	route_disp_all(mag_track_nop, mag_track_nop, mag_track_disp);
+}
 
 static void
 mag_write(void)
@@ -1129,7 +1177,17 @@ mag_write(void)
 	 * only 8 bytes, we'll conserve them.
 	 */
 	setshort_whitespace_ok(mkshort_handle, 0);
-	waypt_disp_all(mag_waypt_pr);
+	switch (global_opts.objective)
+	{
+		case trkdata:
+			mag_track_pr();
+			break;
+		case wptdata:
+			waypt_disp_all(mag_waypt_pr);
+			break;
+		default:
+			fatal(MYNAME ": Routes are not yet supported\n");
+	}
 }
 
 ff_vecs_t mag_vecs = {
