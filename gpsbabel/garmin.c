@@ -49,6 +49,9 @@ arglist_t garmin_args[] = {
 	{ 0, 0, 0, 0}
 };
 
+static const char * d103_symbol_from_icon_number(unsigned int n);
+static int d103_icon_number_from_symbol(const char *s);
+
 static void
 rw_init(const char *fname)
 {
@@ -169,10 +172,17 @@ waypt_read(void)
 
 		wpt_tmp->shortname = xstrdup(way[i]->ident);
 		wpt_tmp->description = xstrdup(way[i]->cmnt);
+		rtrim(wpt_tmp->shortname);
+		rtrim(wpt_tmp->description);
 		wpt_tmp->longitude = way[i]->lon;
 		wpt_tmp->latitude = way[i]->lat;
-		wpt_tmp->icon_descr =
-			mps_find_desc_from_icon_number(way[i]->smbl, PCX);
+		if (gps_waypt_type == 103) {
+			wpt_tmp->icon_descr = d103_symbol_from_icon_number(
+					way[i]->smbl);
+		} else {
+			wpt_tmp->icon_descr = mps_find_desc_from_icon_number(
+					way[i]->smbl, PCX);
+		}
 		/*
 		 * If a unit doesn't store altitude info (i.e. a D103)
 		 * gpsmem will default the alt to INT_MAX.   Other units 
@@ -434,6 +444,12 @@ waypoint_write(void)
 		} else {
 			icon = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
 		}
+		/* For units that support tiny numbers of waypoints, just
+		 * overwrite that and go very literal.
+		 */
+		if (gps_waypt_type == 103) {
+			icon = d103_icon_number_from_symbol(wpt->icon_descr);
+		}
 		way[i]->smbl = icon;
 		if (wpt->altitude != unknown_alt) {
 			way[i]->alt = wpt->altitude;
@@ -594,3 +610,43 @@ ff_vecs_t garmin_vecs = {
 	data_write,
 	garmin_args
 };
+
+static const char *d103_icons[16] = {
+	"dot",
+	"house",
+	"gas",
+	"car",
+	"fish",
+	"boat",
+	"anchor",
+	"wreck",
+	"exit",
+	"skull",
+	"flag",
+	"camp",
+	"circle_x",
+	"deer",
+	"1st_aid",
+	"back-track"
+};
+
+static const char *
+d103_symbol_from_icon_number(unsigned int n)
+{
+	if (n  <= 15)
+		return d103_icons[n];
+	else
+		return "unknown";
+}
+
+static int 
+d103_icon_number_from_symbol(const char *s)
+{
+	int i;
+
+	for (i = 0; i < sizeof(d103_icons) / sizeof(d103_icons[0]); i++) {
+		if (0 == case_ignore_strcmp(s, d103_icons[i]))
+			return i;
+	}
+	return 0;
+}
