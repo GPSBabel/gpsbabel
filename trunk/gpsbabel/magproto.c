@@ -22,7 +22,6 @@
 #include <ctype.h>
 #include <time.h>
 #include <errno.h>
-#include <unistd.h>
 
 #include "defs.h"
 #include "magellan.h"
@@ -611,6 +610,7 @@ termdeinit()
 #else
 
 #include <termios.h>
+#include <unistd.h>
 
 speed_t 
 mkspeed(unsigned br)

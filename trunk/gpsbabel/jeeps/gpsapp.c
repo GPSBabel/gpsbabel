@@ -26,7 +26,6 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 
 static int32    GPS_A000(const char *port);
