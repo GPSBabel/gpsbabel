@@ -216,14 +216,14 @@ DEL %TMPDIR%\topo.mxf %TMPDIR%\tpg.mxf %TMPDIR%\geo.tpg
 CALL :COMPARE %TMPDIR%\tpg.mxf %TMPDIR%\topo.mxf
 
 REM OZI (OziExplorer 1.1) file format
-DEL %TMPDIR%\oz.ozi %TMPDIR%\ozi.ozi
+DEL %TMPDIR%\oz.wpt %TMPDIR%\ozi.wpt
 @echo on
 @echo Testing...
-%PNAME% -i ozi -f reference\ozi.ozi -o ozi -F %TMPDIR%\oz.ozi
-%PNAME% -i ozi -f %TMPDIR%\oz.ozi -o ozi -F %TMPDIR%\ozi.ozi
+%PNAME% -i ozi -f reference\ozi.wpt -o ozi -F %TMPDIR%\oz.wpt
+%PNAME% -i ozi -f %TMPDIR%\oz.wpt -o ozi -F %TMPDIR%\ozi.wpt
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\ozi.ozi reference
+CALL :COMPARE %TMPDIR%\ozi.wpt reference
 
 REM Holux support is a little funky to test.  Becuase it loses precision,
 REM if we convert it to another format, we lose accuracy (rounding) in the
@@ -365,7 +365,7 @@ REM
 DEL %TMPDIR%\mps-track.mps
 @echo on
 @echo Testing...
-%PNAME% -t -i mapsource -f reference\track\mps-track.mps -o mapsource -F %TMPDIR%\mps-track.mps
+%PNAME% -t -i mapsource -f reference\track\mps-track.mps -o mapsource,mpsverout=3 -F %TMPDIR%\mps-track.mps
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\mps-track.mps reference\track
@@ -373,7 +373,7 @@ REM Now do a test of reading waypoints from a track-only file - should have an e
 DEL %TMPDIR%\mps-track.mps
 @echo on
 @echo Testing...
-%PNAME% -i mapsource -f reference\track\mps-track.mps -o mapsource -F %TMPDIR%\mps-track.mps
+%PNAME% -i mapsource -f reference\track\mps-track.mps -o mapsource,mpsverout=3 -F %TMPDIR%\mps-track.mps
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\mps-track.mps reference\mps-empty.mps
@@ -393,7 +393,7 @@ REM Now do a test of reading tracks from a route-only file - should have an empt
 DEL %TMPDIR%\mps-route.mps
 @echo on
 @echo Testing...
-%PNAME% -t -i mapsource -f reference\route\route.mps -o mapsource -F %TMPDIR%\mps-route.mps
+%PNAME% -t -i mapsource -f reference\route\route.mps -o mapsource,mpsverout=3 -F %TMPDIR%\mps-route.mps
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\mps-route.mps reference\mps-empty.mps
@@ -574,7 +574,7 @@ REM Uses mapsource as the empty handling for this has already happened above
 DEL %TMPDIR%\psit-wr.mps
 @echo on
 @echo Testing...
-%PNAME% -r -i psitrex -f reference\psitwpts.txt -o mapsource -F %TMPDIR%\psit-wr.mps
+%PNAME% -r -i psitrex -f reference\psitwpts.txt -o mapsource,mpsverout=3 -F %TMPDIR%\psit-wr.mps
 @echo off
 @echo.
 CALL :COMPARE reference\mps-empty.mps %TMPDIR%\psit-wr.mps
@@ -594,7 +594,7 @@ REM Uses mapsource as the empty handling for this has already happened above
 DEL %TMPDIR%\psit-rt.mps
 @echo on
 @echo Testing...
-%PNAME% -t -i psitrex -f reference\route\psitrtes.txt -o mapsource -F %TMPDIR%\psit-rt.mps
+%PNAME% -t -i psitrex -f reference\route\psitrtes.txt -o mapsource,mpsverout=3 -F %TMPDIR%\psit-rt.mps
 @echo off
 @echo.
 CALL :COMPARE reference\mps-empty.mps %TMPDIR%\psit-rt.mps
@@ -614,7 +614,7 @@ REM Uses mapsource as the empty handling for this has already happened above
 DEL %TMPDIR%\psit-tw.mps
 @echo on
 @echo Testing...
-%PNAME% -i psitrex -f reference\track\psittrks.txt -o mapsource -F %TMPDIR%\psit-tw.mps
+%PNAME% -i psitrex -f reference\track\psittrks.txt -o mapsource,mpsverout=3 -F %TMPDIR%\psit-tw.mps
 @echo off
 @echo.
 CALL :COMPARE reference\mps-empty.mps %TMPDIR%\psit-tw.mps
