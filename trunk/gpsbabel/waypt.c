@@ -77,3 +77,19 @@ waypt_disp_all(waypt_cb cb)
 		(*cb) (waypointp);
 	}
 }
+
+waypoint *
+find_waypt_by_name(const char *name)
+{
+	queue *elem, *tmp;
+	waypoint *waypointp;
+
+	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+		waypointp = (waypoint *) elem;
+		if (0 == strcmp(waypointp->shortname, name)) {
+			return waypointp;
+		}
+	}
+
+	return NULL;
+}
