@@ -96,6 +96,12 @@ COMMON USAGE
 	tells it to read the first file in geocaching.com format and create
 	a new file in GPX format.
 
+	This command will read from a Magellan unit attached to the first
+	serial port on a Linux system (device names will vary on other OSes)
+	and write them as a geocaching loc file.
+
+	gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc
+
 
 ADVANCED USAGE
 
