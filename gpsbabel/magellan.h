@@ -45,3 +45,5 @@ typedef struct icon_mapping {
 
 const char * mag_find_descr_from_token(const char *token);
 const char * mag_find_token_from_descr(const char *icon);
+
+waypoint * mag_trkparse(char *trkmsg);

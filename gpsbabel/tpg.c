@@ -321,8 +321,8 @@ tpg_waypt_pr(const waypoint *wpt)
         fwrite(&elev, 1, 2, tpg_file_out);
 
         /* 4 unknown bytes */
-        memset(&tbuf, '\0', sizeof(tbuf));
-        fwrite(&unknown4, 1, 4, tpg_file_out);
+        memset(tbuf, '\0', sizeof(tbuf));
+        fwrite(unknown4, 1, 4, tpg_file_out);
 
         /* 1 bytes stringsize for description */
         c = strlen(description);
@@ -332,7 +332,7 @@ tpg_waypt_pr(const waypoint *wpt)
         fwrite(description, 1, c, tpg_file_out);
 
         /* and finally 2 unknown bytes */
-        fwrite(&unknown2, 1, 2, tpg_file_out);
+        fwrite(unknown2, 1, 2, tpg_file_out);
         
         free (shortname);
         free (description);
@@ -359,13 +359,13 @@ tpg_write(void)
             fatal(MYNAME ": attempt to output too many points (%d).  The max is %d.  Sorry.\n", s, MAXTPGOUTPUTPINS);
         }
 
-	le_write16(&uc, s);
+	le_write16(uc, s);
 
         /* write the waypoint count */
-        fwrite(&uc, 1,  2, tpg_file_out);
+        fwrite(uc, 1,  2, tpg_file_out);
 
         /* write the rest of the header */
-        fwrite(&header_bytes, 1, 19, tpg_file_out);
+        fwrite(header_bytes, 1, 19, tpg_file_out);
 
         waypt_disp_all(tpg_waypt_pr);
 }

@@ -361,8 +361,8 @@ psp_waypt_pr(const waypoint *wpt)
         lon = (wpt->position.longitude.degrees * M_PI) / 180.0;
 
         /* 4 leading bytes */
-        memset(&tbuf, '\0', sizeof(tbuf));
-        fwrite(&tbuf, 1, 4, psp_file_out);
+        memset(tbuf, '\0', sizeof(tbuf));
+        fwrite(tbuf, 1, 4, psp_file_out);
 
         /* my test files seem to always have this byte as 0x03, */
         /* although nothing seems to really care.               */
@@ -381,16 +381,16 @@ psp_waypt_pr(const waypoint *wpt)
         c = 0x14; /* display pin name on! display notes on! */
         fwrite(&c, 1, 1, psp_file_out);
 
-        memset(&tbuf, '\0', sizeof(tbuf));
+        memset(tbuf, '\0', sizeof(tbuf));
 
         /* 3 unknown bytes */
-        fwrite(&tbuf, 1, 3, psp_file_out);
+        fwrite(tbuf, 1, 3, psp_file_out);
 
         /* 1 icon byte 0x00 = PIN */
-        fwrite(&tbuf, 1, 1, psp_file_out);
+        fwrite(tbuf, 1, 1, psp_file_out);
 
         /* 3 unknown bytes */
-        fwrite(&tbuf, 1, 3, psp_file_out); /* 3 junk */
+        fwrite(tbuf, 1, 3, psp_file_out); /* 3 junk */
 
         c = strlen(shortname);
         /* 1 string size */
@@ -448,7 +448,7 @@ psp_write(void)
         /* insert waypoint count into header */
 	le_write16(&header_bytes[12], s);
 
-        fwrite(&header_bytes, 1,  32, psp_file_out);
+        fwrite(header_bytes, 1,  32, psp_file_out);
 
         waypt_disp_all(psp_waypt_pr);
 }

@@ -30,12 +30,6 @@
  * data in this file.
  */
 
-typedef struct {
-	int synthesize_shortnames;
-	int debug_level;
-} global_options;
-
-extern global_options global_opts;
 
 /*
  * A coordinate in space.
@@ -63,6 +57,27 @@ typedef struct {
 	coord longitude;
 	altitude altitude;
 } position;
+
+
+/*
+ * Define globally on which kind of data gpsbabel is working.
+ * Important for "file types" that are essentially a communication
+ * protocol for a receiver, like the Magellan serial data.
+ */
+typedef enum {
+	trkdata = 0 ,
+	wptdata,
+	rtedata
+} gpsdata_type;
+
+typedef struct {
+	int synthesize_shortnames;
+	int debug_level;
+	gpsdata_type objective;
+} global_options;
+
+extern global_options global_opts;
+
 
 /*
  * Extended data if waypoint happens to represent a geocache.  This is 

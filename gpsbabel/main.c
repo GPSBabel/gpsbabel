@@ -22,10 +22,14 @@
 
 global_options global_opts;
 
+gpsdata_type objective = wptdata; /* if no explicit data type is given, assume waypoints */
+
+
+
 void
 usage(const char *pname)
 {
-	printf("Usage: %s [-s] -i <INPUT_FILE_TYPE> -f <INPUT_FILE> -o <OUT FTYPE> -F <OUTPUT_FILE>\n", pname);
+	printf("Usage: %s [-s] [-t|-w|-r] -i <INPUT_FILE_TYPE> -f <INPUT_FILE> -o <OUT FTYPE> -F <OUTPUT_FILE>\n", pname);
 	printf("Supported file types:\n");
 	disp_vecs();
 }
@@ -93,6 +97,15 @@ main(int argc, char *argv[])
 				break;
 			case 's':
 				global_opts.synthesize_shortnames = 1;
+				break;
+			case 't':
+				objective = trkdata;
+				break;
+			case 'w':
+				objective = wptdata;
+				break;
+			case 'r':
+				objective = rtedata;
 				break;
 			case 'D':
 				global_opts.debug_level = atoi(optarg);

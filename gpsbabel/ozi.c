@@ -77,7 +77,7 @@ data_read(void)
 
     do {
         linecount++;
-	memset(&buff, '\0', sizeof(buff));
+	memset(buff, '\0', sizeof(buff));
 	fgets(buff, sizeof(buff), file_in);
 
 	if ((strlen(buff)) && (strstr(buff, ",") != NULL)) {
