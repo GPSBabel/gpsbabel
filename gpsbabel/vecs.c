@@ -42,6 +42,7 @@ extern ff_vecs_t cetus_vecs;
 extern ff_vecs_t gpspilot_vecs;
 extern ff_vecs_t psp_vecs;
 extern ff_vecs_t mxf_vecs;
+extern ff_vecs_t holux_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -115,6 +116,12 @@ vecs_t vec_list[] = {
 		"mxf",
 		"MapTech Exchange Format"
 	},
+	{
+		&holux_vecs,
+		"holux",
+		"Holux (gm-100) .wpo Format"
+	},
+
         {
 		NULL,
 		NULL,
