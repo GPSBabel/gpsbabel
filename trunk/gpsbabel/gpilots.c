@@ -282,7 +282,9 @@ data_read(void)
 					route_add_wpt(track_head, wpt_tmp);
 					tp++;
 				}
-
+				break;
+			default:
+				fatal(MYNAME ": input record type %d not supported.\n", rec->header.type); 
 		}
 #if 0
 		if ( be_read32(&rec->elevation) == -100000000 ) {
