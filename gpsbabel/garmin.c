@@ -105,7 +105,12 @@ data_write(void)
 				wpt->shortname;
 
 		strncpy(way[i]->ident,  ident, sizeof(way[i]->ident));
-		strncpy(way[i]->cmnt, wpt->description, sizeof(way[i]->cmnt));
+		if (wpt->description) {
+			strncpy(way[i]->cmnt, wpt->description, 
+					sizeof(way[i]->cmnt));
+		} else {
+			way[i]->cmnt[0] = 0;
+		}
 		way[i]->lon = wpt->position.longitude.degrees;
 		way[i]->lat = wpt->position.latitude.degrees;
 		way[i]->alt = wpt->position.altitude.altitude_meters;
