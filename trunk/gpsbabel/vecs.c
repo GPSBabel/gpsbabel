@@ -50,6 +50,7 @@ extern ff_vecs_t magnav_vec;
 extern ff_vecs_t tmpro_vecs;
 extern ff_vecs_t gcdb_vecs;
 extern ff_vecs_t easygps_vecs;
+extern ff_vecs_t quovadis_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -172,6 +173,12 @@ vecs_t vec_list[] = {
 		&easygps_vecs,
 		"easygps",
 		"EasyGPS",
+		NULL
+	},
+	{
+		&quovadis_vecs,
+		"quovadis",
+		"Quovadis",
 		NULL
 	},
 	{
