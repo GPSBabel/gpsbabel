@@ -28,6 +28,7 @@ static FILE *file_out;
 static void *mkshort_handle;
 
 static char *suppresssep = NULL;
+static char *encrypt = NULL;
 
 #define MYNAME "TEXT"
 
@@ -35,6 +36,8 @@ static
 arglist_t text_args[] = {
 	{ "nosep", &suppresssep, 
 		"Suppress separator lines between waypoints", ARGTYPE_BOOL },
+	{ "encrypt", &encrypt,
+		"Encrypt hints using ROT13", ARGTYPE_BOOL },
 	{0, 0, 0, 0}
 };
 
@@ -97,7 +100,13 @@ text_disp(const waypoint *wpt)
                 	xfree(stripped_html);
        		}
 		if (wpt->gc_data.hint) {
-			fprintf (file_out, "\nHint: %s\n", wpt->gc_data.hint);
+			char *hint = NULL;
+			if ( encrypt ) 
+				hint = rot13( wpt->gc_data.hint );
+			else
+				hint = xstrdup( wpt->gc_data.hint );
+			fprintf (file_out, "\nHint: %s\n", hint);
+			xfree( hint );
 		}
 	}
 	else if (strcmp(wpt->notes,wpt->description)) {

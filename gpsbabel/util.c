@@ -628,7 +628,29 @@ strsub(char *s, char *search, char *replace)
        strcat(d, p + slen);
        return d;
 }
-			
+
+char *
+rot13( const char *s )
+{
+	char *result = xstrdup( s );
+	char *cur = result;
+	int flip = 1;
+	while (cur && *cur ) {
+		if ( flip ) {
+			if (*cur == '[') flip = 0;
+			else if ( *cur >= 'A' && *cur <= 'Z' ) {
+				*cur = 'A' + ((*cur-'A')+13)%26;
+			}
+			else if ( *cur >= 'a' && *cur <= 'z' ) {
+				*cur = 'a' + ((*cur-'a')+13)%26;
+			}
+		}
+		else if ( *cur == ']' ) flip = 1;
+		cur++;
+	}
+	return result;
+}
+
 void utf8_to_int( const char *cp, int *bytes, int *value ) 
 {
 	if ( (*cp & 0xe0) == 0xc0 ) {

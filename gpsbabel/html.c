@@ -28,6 +28,7 @@ static FILE *file_out;
 static void *mkshort_handle;
 
 static char *stylesheet = NULL;
+static char *encrypt = NULL;
 
 #define MYNAME "HTML"
 
@@ -35,6 +36,8 @@ static
 arglist_t html_args[] = {
 	{ "stylesheet", &stylesheet, 
 		"Path to HTML style sheet", ARGTYPE_STRING },
+	{ "encrypt", &encrypt,
+		"Encrypt hints using ROT13", ARGTYPE_BOOL },
 	{0, 0, 0, 0}
 };
 
@@ -104,7 +107,13 @@ html_disp(const waypoint *wpt)
 			fprintf (file_out, "<p class=\"desclong\">%s</p>\n", strip_nastyhtml(wpt->gc_data.desc_long.utfstring));
        		}
 		if (wpt->gc_data.hint) {
-			fprintf (file_out, "<p class=\"hint\"><strong>Hint:</strong> %s</p>\n", wpt->gc_data.hint);
+			char *hint = NULL;
+			if ( encrypt )
+				hint = rot13( wpt->gc_data.hint );
+			else 
+				hint = xstrdup( wpt->gc_data.hint );
+			fprintf (file_out, "<p class=\"hint\"><strong>Hint:</strong> %s</p>\n", hint);
+			xfree( hint );
 		}
 	}
 	else if (strcmp(wpt->notes,wpt->description)) {
