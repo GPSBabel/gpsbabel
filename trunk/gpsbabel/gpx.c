@@ -37,6 +37,8 @@ static int in_gs_diff;
 static int in_gs_terr;
 static int in_gs_log;
 static int in_gs_log_wpt;
+static int in_something_else;
+static xml_tag *cur_tag;
 static char *cdatastr;
 static int opt_logpoint = 0;
 static int logpoint_ct = 0;
@@ -52,6 +54,47 @@ static FILE *ofd;
 
 #define MYNAME "GPX"
 #define MY_CBUF 4096
+
+static
+char * gpx_entitize(const char * str) 
+{
+	int elen;
+	const char ** ep;
+	char * p, * tmp, * xstr;
+	const char * stdentities[] = {
+	"&",	"&amp;",
+	"<",	"&lt;",
+	">",	"&gt;",
+	"'", 	"&apos;",
+	"\"",	"&quot;",
+	NULL,	NULL 
+	};
+
+	/* enough space for the whole string at max entity size */
+	/* i.e. "'" == &quot;&apos;&quot; */
+	tmp = xcalloc(((strlen(str) * 6) + 1), 1);
+	strcpy(tmp, str);
+
+	ep = stdentities;
+
+	while (*ep) {
+		p = tmp;
+		while ((p = strstr(p, *ep)) != NULL) {
+			elen = strlen(*(ep + 1));
+
+			xstr = xstrdup(p + 1);
+
+			strcpy(p + elen, xstr);
+			memcpy(p, *(ep + 1), elen);
+
+			free(xstr);
+
+			p += elen;
+		}  
+		ep += 2;
+	}    
+	return (tmp);
+}
 
 static void
 tag_gpx(const char **attrv)
@@ -75,6 +118,7 @@ tag_wpt(const char **attrv)
 
 	wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
 
+	cur_tag = NULL;
 	while (*avp) { 
 		if (strcmp(avp[0], "lat") == 0) {
 			sscanf(avp[1], "%lf", 
@@ -85,6 +129,77 @@ tag_wpt(const char **attrv)
 				&wpt_tmp->position.longitude.degrees);
 		}
 		avp+=2;
+	}
+}
+
+static void
+start_something_else(const char *el, const char **attrv)
+{
+	const char **avp = attrv;
+	char **avcp = NULL;
+	int attr_count = 0;
+	
+	xml_tag *new_tag;
+       
+	if ( !wpt_tmp ) {
+		return;
+	}
+	
+        new_tag = (xml_tag *)xcalloc(sizeof(xml_tag),1);
+        new_tag->tagname = xstrdup(el);
+	
+	/* count attributes */
+	while (*avp) {
+		attr_count++;
+		avp++;
+	}
+	
+	/* copy attributes */
+	avp = attrv;
+	new_tag->attributes = (char **)xcalloc(sizeof(char *),attr_count);
+	avcp = new_tag->attributes;
+	while (*avp) {
+		*avcp = xstrdup(*avp);
+		avcp++;
+		avp++;
+	}
+	
+	if ( cur_tag ) {
+		if ( cur_tag->child ) {
+			cur_tag = cur_tag->child;
+			while ( cur_tag->sibling ) {
+				cur_tag = cur_tag->sibling;
+			}
+			cur_tag->sibling = new_tag;
+			new_tag->parent = cur_tag->parent;
+		}
+		else {
+			cur_tag->child = new_tag;
+			new_tag->parent = cur_tag;
+		}
+	}
+	else {
+		if ( wpt_tmp->gpx_extras ) {
+			cur_tag = wpt_tmp->gpx_extras;
+			while ( cur_tag->sibling ) {
+				cur_tag = cur_tag->sibling;
+			}
+			cur_tag->sibling = new_tag;
+			new_tag->parent = NULL;
+		}
+		else {
+			wpt_tmp->gpx_extras = new_tag;
+			new_tag->parent = NULL;
+		}
+	}
+	cur_tag = new_tag;
+}
+
+static void
+end_something_else()
+{
+	if ( cur_tag ) {
+		cur_tag = cur_tag->parent;
 	}
 }
 
@@ -132,38 +247,66 @@ gpx_start(void *data, const char *el, const char **attr)
 
 	if (strcmp(el, "ele") == 0) {
 		in_ele++;
-	} if (strcmp(el, "name") == 0) {
+	} 
+	else if (strcmp(el, "name") == 0) {
 		in_name ++;
-	} if (strcmp(el, "gpx") == 0) {
+	} 
+	else if (strcmp(el, "gpx") == 0) {
 		tag_gpx(attr);
-	} if (strcmp(el, "wpt") == 0) {
+	} 
+	else if (strcmp(el, "wpt") == 0) {
 		in_wpt++;
 		tag_wpt(attr);
-	} if (strcmp(el, "desc") == 0) {
+	} 
+	else if (strcmp(el, "desc") == 0) {
 		in_desc++;
-	} if (strcmp(el, "cmt") == 0) {
+	} 
+	else if (strcmp(el, "cmt") == 0) {
 		in_cmt++;
-	} if (strcmp(el, "rtept") == 0) {
+	} 
+	else if (strcmp(el, "rtept") == 0) {
 		in_rte++;
 		tag_wpt(attr);
-	} if (strcmp(el, "time") == 0) {
+	} 
+	else if (strcmp(el, "time") == 0) {
 		in_time++;
-	} if (strcmp(el, "url") == 0) {
+	} 
+	else if (strcmp(el, "url") == 0) {
 		in_url++;
-	} if (strcmp(el, "urlname") == 0) {
+	} 
+	else if (strcmp(el, "urlname") == 0) {
 		in_urlname++;
-	} if (strcmp(el, "groundspeak:type") == 0) {
+	} 
+	else if (strcmp(el, "groundspeak:type") == 0) {
 		in_gs_type++;
-	} if (strcmp(el, "groundspeak:difficulty") == 0) {
+		in_something_else++;
+		start_something_else( el, attr );
+	} 
+	else if (strcmp(el, "groundspeak:difficulty") == 0) {
 		in_gs_diff++;
-	} if (strcmp(el, "groundspeak:terrain") == 0) {
+		in_something_else++;
+		start_something_else( el, attr );
+	} 
+	else if (strcmp(el, "groundspeak:terrain") == 0) {
 		in_gs_terr++;
-	} if (strcmp(el, "groundspeak:log") == 0) {
+		in_something_else++;
+		start_something_else( el, attr );
+	} 
+	else if (strcmp(el, "groundspeak:log") == 0) {
 		in_gs_log++;
-	} if (strcmp(el, "groundspeak:log_wpt") == 0) {
+		in_something_else++;
+		start_something_else( el, attr );
+	} 
+	else if (strcmp(el, "groundspeak:log_wpt") == 0) {
 		in_gs_log_wpt++;
                 if (opt_logpoint)
 		    tag_log_wpt(attr);
+		in_something_else++;
+		start_something_else( el, attr );
+	}
+	else if (in_wpt) {
+		in_something_else++;
+		start_something_else( el, attr );
 	}
 }
 
@@ -228,6 +371,10 @@ gpx_end(void *data, const char *el)
 			tm.tm_year -= 1900;
 			tm.tm_isdst = 1;
 			wpt_tmp->creation_time = mktime(&tm);
+			/* mktime assumes local time, and Z is gmtime */
+			/* localtime will initialize timezone and daylight */
+			localtime( &wpt_tmp->creation_time );
+			wpt_tmp->creation_time -= timezone - (daylight?3600:0);
 		}
 		if (in_wpt && in_gs_type && !in_gs_log) {
 			wpt_tmp->gc_data.type = gs_mktype(cdatastr);
@@ -265,16 +412,29 @@ gpx_end(void *data, const char *el)
 		in_url--;
 	} else if (strcmp(el, "urlname") == 0) {
 		in_urlname--;
-	} if (strcmp(el, "groundspeak:type") == 0) {
+	} else if (strcmp(el, "groundspeak:type") == 0) {
 		in_gs_type--;
-	} if (strcmp(el, "groundspeak:difficulty") == 0) {
+		in_something_else--;
+		end_something_else();
+	} else if (strcmp(el, "groundspeak:difficulty") == 0) {
 		in_gs_diff--;
-	} if (strcmp(el, "groundspeak:terrain") == 0) {
+		in_something_else--;
+		end_something_else();
+	} else if (strcmp(el, "groundspeak:terrain") == 0) {
 		in_gs_terr--;
-	} if (strcmp(el, "groundspeak:log") == 0) {
+		in_something_else--;
+		end_something_else();
+	} else if (strcmp(el, "groundspeak:log") == 0) {
 		in_gs_log--;
-	} if (strcmp(el, "groundspeak:log_wpt") == 0) {
+		in_something_else--;
+		end_something_else();
+	} else if (strcmp(el, "groundspeak:log_wpt") == 0) {
 		in_gs_log_wpt--;
+		in_something_else--;
+		end_something_else();
+	} else if (in_wpt) {
+		in_something_else--;
+		end_something_else();
 	}
 }
 
@@ -282,6 +442,9 @@ static void
 gpx_cdata(void *dta, const XML_Char *s, int len)
 {
 	char *estr;
+	int *cdatalen;
+	char **cdata;
+	xml_tag *tmp_tag;
 
 	/*
 	 * I'm exceedingly unamused that libexpat makes me keep all this
@@ -299,6 +462,30 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 		estr = cdatastr + strlen(cdatastr);
 		memcpy(estr, s, len);
 		in_cdata++;
+	}
+	if ( in_wpt && in_something_else && cur_tag ) {
+		if ( cur_tag->child ) {
+			tmp_tag = cur_tag->child;
+			while ( tmp_tag->sibling ) {
+				tmp_tag = tmp_tag->sibling;
+			}
+			cdata = &(tmp_tag->parentcdata);
+			cdatalen = &(tmp_tag->parentcdatalen);
+		}
+		else {
+			cdata = &(cur_tag->cdata);
+			cdatalen = &(cur_tag->cdatalen);
+		}
+		estr = *cdata;
+		*cdata = xcalloc( *cdatalen + len + 1, 1);
+		if ( estr ) {
+			memcpy( *cdata, estr, *cdatalen);
+			free( estr );
+		}
+		estr = *cdata + *cdatalen;
+		memcpy( estr, s, len );
+		*(estr+len) = '\0';
+		*cdatalen += len;
 	}
 }
 
@@ -382,8 +569,54 @@ gpx_write_time(const time_t timep)
 }
 
 static void
+fprint_tag_and_attrs( char *prefix, char *suffix, xml_tag *tag )
+{
+	char **pa;
+	fprintf( ofd, "%s%s", prefix, tag->tagname );
+	pa = tag->attributes;
+	if ( pa ) {
+		while ( *pa ) {
+			fprintf( ofd, " %s=\"%s\"", pa[0], pa[1] );
+			pa += 2;
+		}
+	}
+	fprintf( ofd, "%s", suffix );
+}
+
+static void
+fprint_xml_chain( xml_tag *tag ) 
+{
+	char *tmp_ent;
+	while ( tag ) {
+		if ( !tag->cdata && !tag->child ) {
+			fprint_tag_and_attrs( "<", "/>", tag );
+		}
+		else {
+			fprint_tag_and_attrs( "<", ">", tag );
+		
+			if ( tag->cdata ) {
+				tmp_ent = gpx_entitize( tag->cdata );
+				fprintf( ofd, "%s", tmp_ent );
+				free(tmp_ent);
+			}
+			if ( tag->child ) {
+				fprint_xml_chain(tag->child);
+			}
+			fprintf( ofd, "</%s>", tag->tagname);
+			if ( tag->parentcdata ) {
+				tmp_ent = gpx_entitize(tag->parentcdata);
+				fprintf(ofd, "%s", tmp_ent );
+				free(tmp_ent);
+			}
+		}
+		tag = tag->sibling;	
+	}
+}	
+
+static void
 gpx_waypt_pr(const waypoint *waypointp)
 {
+	char *tmp_ent;
 	const char *oname = global_opts.synthesize_shortnames ?
 				  mkshort(waypointp->description) : 
 				  waypointp->shortname;
@@ -392,7 +625,9 @@ gpx_waypt_pr(const waypoint *waypointp)
 		waypointp->position.latitude.degrees,
 		waypointp->position.longitude.degrees);
 	if (oname) {
-		fprintf(ofd, "<name>%s</name>\n", oname);
+		tmp_ent = gpx_entitize(oname);
+		fprintf(ofd, "<name>%s</name>\n", tmp_ent);
+		free(tmp_ent);
 	}
 	if (waypointp->description) {
 		fprintf(ofd, "<cmt>");
@@ -418,12 +653,16 @@ gpx_waypt_pr(const waypoint *waypointp)
 		gpx_write_time(waypointp->creation_time);
 	}
 	if (waypointp->url) {
-		fprintf(ofd, "<url>%s</url>\n", waypointp->url);
+		tmp_ent = gpx_entitize(waypointp->url);
+		fprintf(ofd, "<url>%s</url>\n", tmp_ent);
+		free(tmp_ent);
 	}
 	if (waypointp->url_link_text) {
-		fprintf(ofd, "<urlname>%s</urlname>\n",
-			 waypointp->url_link_text);
+		tmp_ent = gpx_entitize(waypointp->url_link_text);
+		fprintf(ofd, "<urlname>%s</urlname>\n", tmp_ent );
+		free(tmp_ent);
 	}
+	fprint_xml_chain( waypointp->gpx_extras);
 	fprintf(ofd, "</wpt>\n");
 }
 
