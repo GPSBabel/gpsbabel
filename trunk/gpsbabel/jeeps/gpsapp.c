@@ -1206,7 +1206,7 @@ static void GPS_D109_Get(GPS_PWay *way, UC *s)
     int32 i;
 
     p=s;
-    
+
     (*way)->prot = 109;
     (*way)->wpt_class = *p++;
     (*way)->colour    = *p++;
@@ -2289,6 +2289,9 @@ int32 GPS_A200_Get(const char *port, GPS_PWay **way)
 	case pD108:
 	    GPS_D108_Get(&((*way)[i]),rec->data);
 	    break;
+	case pD109:
+	    GPS_D109_Get(&((*way)[i]),rec->data);
+	    break;
 	case pD150:
 	    GPS_D150_Get(&((*way)[i]),rec->data);
 	    break;
@@ -2475,6 +2478,9 @@ int32 GPS_A201_Get(const char *port, GPS_PWay **way)
 	    break;
 	case pD108:
 	    GPS_D108_Get(&((*way)[i]),rec->data);
+	    break;
+	case pD109:
+	    GPS_D109_Get(&((*way)[i]),rec->data);
 	    break;
 	case pD150:
 	    GPS_D150_Get(&((*way)[i]),rec->data);
@@ -2882,7 +2888,7 @@ static void GPS_D201_Get(GPS_PWay *way, UC *s)
     (*way)->rte_num  = *p++;
     (*way)->isrte    = 1;
     for(i=0;i<20;++i) (*way)->rte_cmnt[i] = *p++;
-    
+
     return;
 }
 
@@ -2905,7 +2911,10 @@ static void GPS_D202_Get(GPS_PWay *way, UC *s)
     p=s;
 
     (*way)->rte_prot = 201;
+#if 0
+    /* D202 has only a null terminated string for rte_ident */
     (*way)->rte_num  = *p++;
+#endif
     (*way)->isrte    = 1;
     q = (UC *) (*way)->rte_ident;
     while((*q++=*p++));
