@@ -5,4 +5,4 @@
 
 #define STDC_HEADERS 1
 #define _(str)        str
-// #define bzero(str, len)             memset((str), 0, (len))
+#define inline 
