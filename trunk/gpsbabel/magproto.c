@@ -472,7 +472,9 @@ terminit(const char *portname)
 static void
 termdeinit()
 {
-	tcsetattr(magfd, TCSANOW, &orig_tio);
+	if (!is_file) {
+		tcsetattr(magfd, TCSANOW, &orig_tio);
+	}
 }
 
 char * 
