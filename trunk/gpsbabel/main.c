@@ -55,7 +55,7 @@ usage(const char *pname)
 "	-x filtername	Invoke filter\n"
 "	-D level	Set debug level [%d]\n"
 "       -h, -?          Print this message and exit\n"
-"       -v              Print GPSBabel version and exit\n"
+"       -V              Print GPSBabel version and exit\n"
 "\n"
 "File Types (-i and -o options):\n"
 	, pname
@@ -115,7 +115,7 @@ main(int argc, char *argv[])
 			break;
 		}
 		
-		if (argv[argn][1] == 'v' ) {
+		if (argv[argn][1] == 'V' ) {
 			 printf("\nGPSBabel Version %s\n\n", VERSION );
 			 exit(0);
 		}
