@@ -148,20 +148,30 @@ mxf_waypt_pr(const waypoint * wpt)
     char *shortname = NULL;
     char *description = NULL;
 
-    if (wpt->shortname) {
+    if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
+        if (wpt->description) {
+            if (global_opts.synthesize_shortnames)
+                shortname = mkshort(wpt->description);
+            else
+                shortname = csv_stringclean(wpt->description, ",\"");
+        } else {
+            /* no description available */
+            shortname = xstrdup("");
+        }
+    } else{
         shortname = csv_stringclean(wpt->shortname, ",\"");
-        shortname = csv_stringtrim(shortname, "");
-    } else {
-        shortname = xstrdup("");
     }
-    
-    if (wpt->description) {
+
+    if (! wpt->description) {
+        if (shortname) {
+            description = csv_stringclean(shortname, ",\"");
+        } else {
+            description = xstrdup("");
+        }
+    } else{
         description = csv_stringclean(wpt->description, ",\"");
-        description = csv_stringtrim(description, "");
-    } else {
-        shortname = xstrdup("");
     }
-    
+
     fprintf(file_out, "%08.5f, %08.5f, \"%s\", \"%s\", \"%s\", %s, %d\n",
 	    wpt->position.latitude.degrees, wpt->position.longitude.degrees,
 	    description, shortname, description, 
@@ -176,6 +186,12 @@ mxf_waypt_pr(const waypoint * wpt)
 static void 
 data_write(void)
 {
+    if (global_opts.synthesize_shortnames) {
+        setshort_length(32);
+        setshort_whitespace_ok(0);
+        setshort_badchars("\",");
+    }
+
     waypt_disp_all(mxf_waypt_pr);
 }
 

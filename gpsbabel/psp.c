@@ -331,26 +331,30 @@ psp_waypt_pr(const waypoint *wpt)
 	int i;
 	char *shortname;
 	char *description;
-	
 
-        /* this output format pretty much requires a description
-         * and a shortname 
-         */
-
-        if (wpt->shortname)  {
-            shortname = xstrdup(wpt->shortname);
-        } else {
-            if (wpt->description) 
-                shortname = xstrdup(wpt->description);
-            else 
+        if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
+            if (wpt->description) {
+                if (global_opts.synthesize_shortnames)
+                    shortname = mkshort(wpt->description);
+                else
+                    shortname = xstrdup(wpt->description);
+            } else {
+                /* no description available */
                 shortname = xstrdup("");
+            }
+        } else{
+            shortname = xstrdup(wpt->shortname);
         }
-                
-        if (wpt->description)  {
+
+        if (! wpt->description) {
+            if (shortname) {
+                description = xstrdup(shortname);
+            } else {
+                description = xstrdup("");
+            }
+        } else{
             description = xstrdup(wpt->description);
-        } else {
-            description = xstrdup(shortname);
-	}        
+        }
 
         /* convert lat/long back to radians */
 	lat = (wpt->position.latitude.degrees * M_PI) / 180.0;
@@ -431,6 +435,11 @@ psp_write(void)
         /* offset 0x0C - 0x0D = 2 byte pin count */
 
         s = waypt_count();
+        
+        if (global_opts.synthesize_shortnames) {
+            setshort_length(32);
+            setshort_whitespace_ok(1);
+        }
 
         if (s > MAXPSPOUTPUTPINS) {
             fatal(MYNAME ": attempt to output too many pushpins (%d).  The max is %d.  Sorry.\n", s, MAXPSPOUTPUTPINS);
