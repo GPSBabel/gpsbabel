@@ -141,6 +141,9 @@ main(int argc, char *argv[])
 				if (ivecs == NULL) {
 					fatal ("No valid input type specified\n");
 				}
+				if (ivecs->rd_init == NULL) {
+					fatal ("Format does not support reading.\n");
+				}
 				ivecs->rd_init(fname);
 				ivecs->read();
 				ivecs->rd_deinit();
@@ -151,6 +154,9 @@ main(int argc, char *argv[])
 					? argv[argn]+2 : argv[++argn];
 				ofname = optarg;
 				if (ovecs) {
+					if (ovecs->rd_init == NULL) {
+						fatal ("Format does not support reading.\n");
+					}
 					ovecs->wr_init(ofname);
 					ovecs->write();
 					ovecs->wr_deinit();
