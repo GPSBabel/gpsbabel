@@ -138,6 +138,8 @@ rw_init(const char *fname)
 	if (snwhiteopt)
 		setshort_whitespace_ok(mkshort_handle, atoi(snwhiteopt));
 
+	/* Technically, even this is a little loose as spaces arent allowed */
+	setshort_goodchars(mkshort_handle, "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789");
 	setshort_mustupper(mkshort_handle, 1);
 
 }
@@ -438,6 +440,7 @@ waypoint_write(void)
 		 * but rather a garmin "fixed length" buffer that's padded
 		 * to the end with spaces.  So this is NOT (strlen+1).
 		 */
+fprintf(stderr, "%s\n", ident);
 		memcpy(way[i]->ident, ident, strlen(ident));
 		if (global_opts.synthesize_shortnames) { 
 			xfree(ident);
