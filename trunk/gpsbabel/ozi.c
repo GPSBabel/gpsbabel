@@ -85,7 +85,7 @@ data_read(void)
 
 	    /* data delimited by commas, possibly enclosed in quotes.  */
 	    s = buff;
-	    s = csv_lineparse(s, ",", "\"", linecount);
+	    s = csv_lineparse(s, ",", "", linecount);
 
 	    i = 0;
 	    while (s) {
@@ -96,7 +96,7 @@ data_read(void)
 		case 1:
 		    /* waypoint name */
 		    wpt_tmp->shortname = xstrdup(s);
-		    csv_stringtrim(wpt_tmp->shortname, "");
+		    wpt_tmp->shortname = csv_stringtrim(wpt_tmp->shortname, "");
 		    break;
 		case 2:
 		    /* degrees latitude */
@@ -161,7 +161,7 @@ data_read(void)
 		}
 		i++;
 
-		s = csv_lineparse(NULL, ",", "\"", linecount);
+		s = csv_lineparse(NULL, ",", "", linecount);
 	    }
 	    
    	    waypt_add(wpt_tmp);

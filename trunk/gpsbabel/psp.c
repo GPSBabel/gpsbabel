@@ -240,6 +240,18 @@ psp_disp(waypoint *wpt)
 	char c;
 	int i;
 
+        /* this output format pretty much requires a description and a shortname */
+        if (!wpt->shortname)  {
+            if (wpt->description)
+                wpt->shortname = xstrdup(wpt->description);
+            else 
+                wpt->shortname = xstrdup("");
+        }
+        if (!wpt->description)  {
+            wpt->description = xstrdup(wpt->shortname);
+        }
+        
+
         /* convert lat/long back to radians */
 	lat = (wpt->position.latitude.degrees * M_PI) / 180.0;
         lon = (wpt->position.longitude.degrees * M_PI) / 180.0;
@@ -285,8 +297,8 @@ psp_disp(waypoint *wpt)
              fwrite(&tbuf[0], 1, 1, psp_file_out);              /* null */
         }
 
-        /*  1 byte string size */
         c = strlen(wpt->description);
+        /*  1 byte string size */
         fwrite(&c, 1, 1, psp_file_out);
 
         for (i = 0 ; wpt->description[i] ; i++) {

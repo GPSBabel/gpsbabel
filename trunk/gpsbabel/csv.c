@@ -122,6 +122,7 @@ gpsutil_disp(waypoint *wpt)
 
 	lon = wpt->position.longitude.degrees;
 	lat = wpt->position.latitude.degrees;
+
         if (wpt->description) 
 	    wpt->description = csv_stringclean(wpt->description, ",\"");
 
