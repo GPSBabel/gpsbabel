@@ -230,9 +230,10 @@ static void compress( struct buffer *b )
 static void write_header( void ) {
 	
 	int recs = ct-1;
+	struct doc_record0 *rec0;
 	--ct;
 	
-	struct doc_record0 *rec0 = xcalloc( 1, sizeof(struct doc_record0)+(ct-1)*sizeof(short));
+	rec0 = xcalloc( 1, sizeof(struct doc_record0)+(ct-1)*sizeof(short));
 	be_write16( &rec0->version, COMPRESSED );
 	be_write16( &rec0->reserved1, 0 );
 	be_write32( &rec0->doc_size, offset );
