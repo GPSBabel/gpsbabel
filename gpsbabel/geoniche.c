@@ -34,6 +34,20 @@ static struct pdb	*PdbOut;
 
 static char		Rec0Magic[] = "68000NV4Q2";
 
+static char *Arg_dbname = NULL;
+static char *Arg_category = NULL;
+
+static
+arglist_t Args[] = {
+	{"dbname", &Arg_dbname,
+	    "Database name (filename)", ARGTYPE_STRING },
+	{"category", &Arg_category,
+	    "Category name (Cache)", ARGTYPE_STRING },
+	{0, 0, 0, 0 }
+};
+
+#define	ARG_FREE(X) do { if (X) { xfree(X); X = NULL; } } while (0)
+
 /*
  * Conversions between gc.com ID's and GID's
  */
@@ -103,6 +117,8 @@ static void
 rd_deinit(void)
 {
     fclose(FileIn);
+    ARG_FREE(Arg_dbname);
+    ARG_FREE(Arg_category);
 }
 
 static void
@@ -118,6 +134,8 @@ static void
 wr_deinit(void)
 {
     fclose(FileOut);
+    ARG_FREE(Arg_dbname);
+    ARG_FREE(Arg_category);
 }
 
 static char *
@@ -211,8 +229,10 @@ data_read(void)
 	/* Field 1: Target */
 	p = field(&vdata, &vlen);
 	if (!p) fatal(MYNAME ": Premature EOD processing field 1.\n");
+	if (strcmp(p, "Route") == 0)
+	    fatal(MYNAME ": Route record type is not implemented.\n");
 	if (strcmp(p, "Target"))
-	    fatal(MYNAME ": Can only handle Target records.\n");
+	    fatal(MYNAME ": Unknown record type '%s'.\n", p);
 	xfree(p);
 
 	/* Field 2: Import ID number */
@@ -438,7 +458,7 @@ copilot_writewpt(const waypoint *wpt)
 	    , id
 	    , title
 	    /* route ID */
-	    , "Cache" /*wpt->icon_descr*/
+	    , Arg_category ? Arg_category : "Cache"
 	    , wpt->latitude
 	    , wpt->longitude
 	    , wpt->altitude
@@ -485,8 +505,12 @@ data_write(void)
     if (NULL == (PdbOut = new_pdb()))
 	fatal (MYNAME ": new_pdb failed\n");
 
-    strncpy(PdbOut->name, FilenameOut, PDB_DBNAMELEN);
+    if (Arg_dbname)
+	strncpy(PdbOut->name, Arg_dbname, PDB_DBNAMELEN);
+    else
+	strncpy(PdbOut->name, FilenameOut, PDB_DBNAMELEN);
     PdbOut->name[PDB_DBNAMELEN-1] = 0;
+
     PdbOut->attributes = PDB_ATTR_BACKUP;
     PdbOut->ctime = PdbOut->mtime = time(NULL) + (49*365 + 17*366) * (60*60*24);
     PdbOut->type = MYTYPE;
@@ -510,5 +534,5 @@ ff_vecs_t geoniche_vecs =
 	wr_deinit,
 	data_read,
 	data_write,
-	NULL
+	Args
 };
