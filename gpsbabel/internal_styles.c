@@ -346,34 +346,6 @@ static char s_and_t[] =
 "IFIELD	URL, \"\", \"%s\"			# URL\n"
 "IFIELD	IGNORE, \"\", \"\"			# Holder for Geocache Type\n"
 ;
-static char tiger[] = 
-"# gpsbabel XCSV style file\n"
-"#\n"
-"# Format: Tiger Data Format\n"
-"# Author: Alex Mottram\n"
-"#   Date: 12/09/2002\n"
-"#\n"
-"# \n"
-"# As defined in tiger.c\n"
-"#\n"
-
-"DESCRIPTION		U.S. Census Bureau Tiger Mapping Service\n"
-
-"#\n"
-"# FILE LAYOUT DEFINITIIONS:\n"
-"#\n"
-"FIELD_DELIMITER		COLON\n"
-"RECORD_DELIMITER	NEWLINE\n"
-"BADCHARS		COLON\n"
-
-"#\n"
-"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
-"#\n"
-"IFIELD	LON_DECIMAL, \"\", \"%f\"\n"
-"IFIELD	LAT_DECIMAL, \"\", \"%f\"\n"
-"IFIELD	CONSTANT, \"redpin\", \"%s\"\n"
-"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
-;
 static char xmap[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -404,37 +376,5 @@ static char xmap[] =
 "IFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%s\"\n"
 ;
-static char xmapwpt[] = 
-"# gpsbabel XCSV style file\n"
-"#\n"
-"# Format: Delorme Xmap HH Street Atlas USA .WPT (PocketPC)\n"
-"# Author: Alex Mottram\n"
-"#   Date: 12/09/2002\n"
-"#\n"
-"# \n"
-"DESCRIPTION 		Delorme XMat HH Street Atlas USA .WPT (PPC)\n"
-"SHORTLEN		32\n"
-"SHORTWHITE		0\n"
-
-"#\n"
-"#\n"
-"# FILE LAYOUT DEFINITIIONS:\n"
-"#\n"
-"FIELD_DELIMITER		COLON\n"
-"RECORD_DELIMITER	NEWLINE\n"
-"BADCHARS		COLON\n"
-
-"#\n"
-"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
-"#\n"
-"IFIELD	CONSTANT, \"1296126539\", \"%s\"\n"
-"IFIELD	CONSTANT, \"1481466224\", \"%s\"\n"
-"IFIELD	LAT_INT32DEG, \"\", \"%d\"\n"
-"IFIELD	LON_INT32DEG, \"\", \"%d\"\n"
-"IFIELD	CONSTANT, \"3137157\", \"%s\"\n"
-"IFIELD	SHORTNAME, \"\", \"%-.31s\"\n"
-"IFIELD	IGNORE, \"\", \"%-.31s\"\n"
-"IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
-;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tiger", tiger } , { "s_and_t", s_and_t } , { "ozi", ozi } , { "nima", nima } , { "mxf", mxf } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "dna", dna } , { "custom", custom } , { "csv", csv } ,  {0,0}};
+style_vecs_t style_list[] = {{ "xmap", xmap } , { "s_and_t", s_and_t } , { "ozi", ozi } , { "nima", nima } , { "mxf", mxf } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "dna", dna } , { "custom", custom } , { "csv", csv } ,  {0,0}};

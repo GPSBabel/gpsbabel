@@ -5,7 +5,7 @@ INSTALL_TARGETDIR=/usr/local/
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	gpsutil.o pcx.o cetus.o gpspilot.o magnav.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o \
-	xcsv.o gcdb.o internal_styles.o
+	xcsv.o gcdb.o tiger.o internal_styles.o
 
 FILTERS=position.o duplicate.o
 
@@ -58,8 +58,8 @@ dep:
 	(echo "internal_styles.c: mkstyle.sh" ; ls style/*.style) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_1_1_beta03022003
-VERSIOND=1.1.1_beta03022003
+VERSIONU=1_1_1_beta03072003
+VERSIOND=1.1.1_beta03072003
 release:
 	rm -fr gpsbabel-$(VERSIOND)
 	cvs tag gpsbabel_$(VERSIONU)
