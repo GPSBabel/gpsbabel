@@ -60,6 +60,39 @@ xstrdup(const char *s)
 	return o;
 }
 
+void *
+xrealloc(void *p, size_t s)
+{
+	char *o = realloc(p,s);
+
+	if (!o) {
+		fatal("gpsbabel: Unable to realloc %d bytes of memory.\n", s);
+			}
+
+	return o;
+}
+
+/*
+* For an allocated string, realloc it and append 's'
+*/
+char *
+xstrappend(char *src, const char *new)
+{
+	size_t newsz;
+
+	if (!src) {
+		return(xstrdup(new));
+	}
+
+	newsz = strlen(src) + strlen(new) + 1;
+	src = xrealloc(src, newsz);
+	strcat(src, new);
+
+	return src;
+}
+
+
+
 void 
 rtrim(char *s)
 {
@@ -129,8 +162,8 @@ be_read32(void *p)
 signed int
 be_read16(void *p)
 {
-	char *i = (char *) p;
-	return i[0] << 8 | i[0];
+	unsigned char *i = (unsigned char *) p;
+	return i[0] << 8 | i[1];
 }
 
 void
