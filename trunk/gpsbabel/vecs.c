@@ -411,32 +411,61 @@ get_option(const char *iarglist, const char *argname)
  *  Display the available formats in a format that's easy for humans to
  *  parse for help on available command line options.
  */
+static signed int 
+alpha (const void *a, const void *b)
+{
+
+	const vecs_t *const *ap = a;
+	const vecs_t *const *bp = b;
+	
+	return strcmp((*ap)->name , (*bp)->name);
+}
+
 void
 disp_vecs(void)
 {
 	vecs_t *vec;
 	style_vecs_t *svec;
 	arglist_t *ap;
+	int vc;
+	vecs_t **svp;
+	int i = 0;
 
 #define VEC_FMT "	%-20.20s  %-.50s\n"
 
-	for (vec = vec_list; vec->vec; vec++) {
-		printf(VEC_FMT, vec->name, vec->desc);
-		for (ap = vec->vec->args; ap && ap->argstring; ap++) {
+	/* Get a count from both the vec (normal) and the svec (csv) lists */
+
+	extern size_t nstyles;
+	vc = sizeof vec_list / sizeof vec_list[0] -1 + nstyles;
+
+	svp = xcalloc(vc, sizeof(style_vecs_t *));
+
+	/* Normal vecs are easy; populate the first part of the array. */
+	for (vec = vec_list; vec->vec; vec++, i++) {
+			svp[i] = vec;
+	}
+	/* Walk the style list, parse the entries, dummy up a "normal" vec */
+	for (svec = style_list; svec->name; svec++, i++)  {
+		xcsv_read_internal_style(svec->style_buf);
+		svp[i] = xcalloc(1, sizeof **svp);
+		svp[i]->name = svec->name;
+		svp[i]->vec = svp[0]->vec; /* Interits xcsv opts */
+		svp[i]->desc = xcsv_file.description;
+	}
+
+	/* Now that we have everything in an array, alphabetize them */
+	qsort(svp, vc, sizeof(*svp), alpha);
+
+	for (i=0;i<vc;i++) {
+		printf(VEC_FMT, svp[i]->name, svp[i]->desc);
+		for (ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
 		printf("	  %-18.18s    %-.50s %s\n",
 			ap->argstring, ap->helpstring,
 			(ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
 		}
 	}
-
-	/*
-	 * Parse each internal style table in sequence to get the
-	 * help strings from it.
-	 */
-	for (svec = style_list; svec->name; svec++) {
-		xcsv_read_internal_style(svec->style_buf);
-		printf(VEC_FMT, svec->name, xcsv_file.description);
-	}
+		
+	return;
 }
 
 /*
