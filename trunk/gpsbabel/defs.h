@@ -200,7 +200,7 @@ void route_init(void);
 void waypt_disp(const waypoint *);
 void fatal(const char *, ...)
 #if __GNUC__
-	__attribute__ ((__format__ (__printf__, 1, 2)));
+	__attribute__ ((__format__ (__printf__, 1, 2)))
 #endif
 	;
 ff_vecs_t *find_vec(char *, char **);
