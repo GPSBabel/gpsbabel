@@ -107,8 +107,9 @@ csv_stringtrim(const char *string, const char *enclosure)
 
     /* if we have enclosures, skip past them in pairs */
     if (elen) {
-	while ((strncmp(tmp, enclosure, elen) == 0)
-	       && (strncmp(p2, enclosure, elen) == 0)) {
+	while (((p2 - p1) > elen) &&
+	       (strncmp(p1, enclosure, elen) == 0) &&
+	       (strncmp((p2 - elen + 1), enclosure, elen) == 0)) {
 	    p2 -= elen;
             p1 += elen;
 	}
