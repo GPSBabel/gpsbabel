@@ -19,6 +19,7 @@
 
 #include "defs.h"
 #if !NO_EXPAT
+#include "xmlgeneric.h"
 #include <expat.h>
 static XML_Parser psr;
 #endif
