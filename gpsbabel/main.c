@@ -51,6 +51,7 @@ usage(const char *pname)
 "	-r		Process route information\n"
 "	-t		Process track information\n"
 "	-w		Process waypoint information [default]\n"
+"	-N		No smart icons on output\n"
 "	-x filtername	Invoke filter\n"
 "	-D level	Set debug level [%d]\n"
 "\n"
@@ -166,6 +167,9 @@ main(int argc, char *argv[])
 				break;
 			case 'r':
 				global_opts.objective = rtedata;
+				break;
+			case 'N':
+				global_opts.no_smart_icons = 1;
 				break;
  			case 'x':
 				optarg = argv[argn][2]

@@ -29,6 +29,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define	LINELENGTH	200
 #define	MYNAME		"MkWinTesto"
@@ -81,8 +82,19 @@ int f_outputLine (
 }
 
 /* ------------------------------------------------------------------------------------ */
+void
+fatal(const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	vfprintf(stderr, fmt, ap);
+	va_end(ap);
+	exit(1);
+}
+
+/* ------------------------------------------------------------------------------------ */
 int main(
-	int argc, 
+int argc, 
 	char *argv[])
 {
 	char	acLineIn[LINELENGTH];

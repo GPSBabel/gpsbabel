@@ -14,7 +14,7 @@ gpsbabel.exe: $(OBJS)
 	cp gpsbabel.exe /tmp
 
 mkwintesto: mkwintesto.c
-	/usr/bin/cc mkwintesto.c ../util.c -o mkwintesto
+	/usr/bin/cc mkwintesto.c -o mkwintesto
 
 wintesto.cmd: mkwintesto
 	./mkwintesto ../testo

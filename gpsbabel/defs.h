@@ -67,6 +67,7 @@ typedef struct {
 	int debug_level;
 	gpsdata_type objective;
 	int verbose_status;	/* set by GUI wrappers for status */
+	int no_smart_icons;	
 } global_options;
 
 extern global_options global_opts;
