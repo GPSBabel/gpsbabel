@@ -1,6 +1,6 @@
 # gpsbabel XCSV style file
 #
-# Format: Delorme Xmap Conduit
+# Format: DeLorme Xmap Conduit
 # Author: Alex Mottram
 #   Date: 12/09/2002
 #
@@ -8,7 +8,7 @@
 # As defined in csv.c/xmap
 #
 
-DESCRIPTION		Delorme XMap HH Native .WPT
+DESCRIPTION		DeLorme XMap HH Native .WPT
 EXTENSION		wpt
 
 #
