@@ -523,9 +523,10 @@ disp_vecs(void)
 	for (i=0;i<vc;i++) {
 		printf(VEC_FMT, svp[i]->name, svp[i]->desc);
 		for (ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
-		printf("	  %-18.18s    %-.50s %s\n",
-			ap->argstring, ap->helpstring,
-			(ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
+			if ( !(ap->argtype & ARGTYPE_HIDDEN)) 
+				printf("	  %-18.18s    %-.50s %s\n",
+				ap->argstring, ap->helpstring,
+				(ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
 		}
 	}
 		
