@@ -82,8 +82,8 @@ my_read(void)
 	unsigned short version;
 	unsigned long count;
 	unsigned long recsize;
-	unsigned char *record;
 	unsigned short stringlen;
+	unsigned char *record;
 	static int serial = 0;
 	struct ll {
 		long lat;
@@ -116,7 +116,7 @@ my_read(void)
 
 	stringlen = le_read16((unsigned short *)(record + 0x1a));
 	Skip(infile, stringlen - 4);
-	free(record);
+	xfree(record);
 
 	/*
 	 * end of filename record 
@@ -151,6 +151,7 @@ my_read(void)
 			wpt_tmp->shortname = xmalloc(7);
 			sprintf( wpt_tmp->shortname, "\\%5.5x", serial++ );
 			route_add_wpt(track_head, wpt_tmp);
+			xfree(record);
 		} else {
 			Skip(infile, recsize);
 			/*
@@ -219,7 +220,7 @@ my_read(void)
 			latlon++;
 			coordcount--;
 		}
-		free(record);
+		xfree(record);
 	}
 	/*
 	 * end of routing 

@@ -585,6 +585,7 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	int	icon;
 	char *src;
 	char *ident;
+	char *ascii_description;
 	char zbuf[25];
 	char ffbuf[25];
 	int display = 1;
@@ -613,7 +614,8 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	icon = mps_converted_icon_number(icon, mps_ver, MAPSOURCE);
 
 	/* two NULL (0x0) bytes at end of each string */
-	reclen = strlen(ident) + ((wpt->description) ? strlen(wpt->description) : 0) + 2;	
+	ascii_description = wpt->description ? str_utf8_to_ascii(wpt->description) : xstrdup("");
+	reclen = strlen(ident) + strlen(ascii_description) + 2;	
 	if ((mps_ver == 4) || (mps_ver == 5)) {
 		/* v4.06 & V5.0*/
 		reclen += 85;				/* "W" (1) + strlen(name) + NULL (1) + class(4) + country(sz) +  
@@ -670,9 +672,10 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 		fwrite(hdr, 1 , 1, mps_file);
 		fwrite(&mps_altitude, 8 , 1, mps_file);
 	}
-
-	if (wpt->description) fputs(wpt->description, mps_file);
+	if (wpt->description) fputs(ascii_description, mps_file);
 	fwrite(zbuf, 1, 1, mps_file);	/* NULL termination */
+	xfree(ascii_description);
+	ascii_description = NULL;
 
 	if (mps_proximity == unknown_alt) {
 		fwrite(zbuf, 9, 1, mps_file);

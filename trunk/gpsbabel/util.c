@@ -193,7 +193,7 @@ xrealloc(void *p, size_t s)
 
 	if (!o) {
 		fatal("gpsbabel: Unable to realloc %d bytes of memory.\n", s);
-			}
+	}
 
 	return o;
 }

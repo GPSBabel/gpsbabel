@@ -170,10 +170,12 @@ tiger_disp(const waypoint *wpt)
 	fprintf(file_out, "%f,%f:%s", lon, lat, pin);
 	if (!nolabels) {
 		char *desc = csv_stringclean(wpt->description, ":");
+		char *adesc = str_utf8_to_ascii(desc);
 		if (global_opts.synthesize_shortnames)
-			desc = mkshort(mkshort_whandle, desc);
-		fprintf(file_out, ":%s", desc);
+			adesc = mkshort(mkshort_whandle, adesc);
+		fprintf(file_out, ":%s", adesc);
 		xfree(desc);
+		xfree(adesc);
 	}
 	fprintf(file_out, "\n");
 }
