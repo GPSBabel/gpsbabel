@@ -783,6 +783,19 @@ gpx_read(void)
 
 	while (!done) {
 		if ( fd ) {
+			/* 
+			 * The majority of this block (in fact, all but the 
+			 * call to XML_Parse) are a disgusting hack to 
+			 * correct defective GPX files that Geocaching.com
+			 * issues as pocket queries.   They contain escape
+			 * characters as entities (&#x00-&#x1f) which makes
+			 * them not validate which croaks expat and torments
+			 * users.
+			 *
+			 * Look for '&' in the last 6 chars.   If we find
+			 * it, strip it, then read byte-at-a-time until
+			 * we find a non-entity.
+			 */
 			char *badchar;
 			char *semi;
 			len = fread(buf, 1, sizeof(buf)-7, fd);
