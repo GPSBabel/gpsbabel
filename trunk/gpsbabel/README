@@ -163,6 +163,13 @@ THE FORMATS
         against OziExplorer v 3.90.3a / Shareware.  Contributed by Alex
         Mottram.
 
+    TPG
+
+	National Geographic Topo! Waypoint Format.  This filter 
+	reads and writes .TPG files created by various editions of NG Topo! 
+	This filter will *not* work with the newer combined .TPO files.  
+	Contributed by Alex Mottram.
+
     HOLUX
 
         The Holuxgm-100 (e-fox) gps receiver uses standard compact
