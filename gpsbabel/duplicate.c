@@ -273,7 +273,9 @@ duplicate_process(void)
 	}
 
 	xfree(htable);
-	free_tree(sup_tree);
+	if ( sup_tree ) {
+		free_tree(sup_tree);
+	}
 }
 
 void
