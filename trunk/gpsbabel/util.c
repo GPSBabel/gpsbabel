@@ -449,6 +449,21 @@ get_tz_offset(void)
 	}
 }
 
+signed int
+month_lookup(const char *m)
+{
+	static const char *months[] = {
+		"JAN", "FEB", "MAR", "APR", "MAY", "JUN", 
+		"JUL", "AUG", "SEP", "OCT", "NOV", "DEC", NULL };
+	const char **mp;
+
+	for (mp = months; *mp; mp++) {
+		if (0 == case_ignore_strcmp(*mp, m))
+			return mp - months;
+	}
+	return -1;
+}
+
 /*
  * Return a pointer to a constant string that is suitable for icon lookup
  * based on geocache attributes.   The strings used are those present in 
@@ -585,7 +600,6 @@ strsub(char *s, char *search, char *replace)
        strcat(d, p + slen);
        return d;
 }
-
 			
 void utf8_to_int( const char *cp, int *bytes, int *value ) 
 {
