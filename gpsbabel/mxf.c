@@ -38,7 +38,7 @@ static FILE *file_in;
 static FILE *file_out;
 
 static void 
-rd_init(const char *fname)
+rd_init(const char *fname, const char *args)
 {
     file_in = fopen(fname, "r");
     if (file_in == NULL) {
@@ -53,7 +53,7 @@ rd_deinit(void)
 }
 
 static void 
-wr_init(const char *fname)
+wr_init(const char *fname, const char *args)
 {
     file_out = fopen(fname, "w");
     if (file_out == NULL) {

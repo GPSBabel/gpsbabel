@@ -141,7 +141,7 @@ geo_cdata(void *dta, const XML_Char *s, int len)
 }
 
 void
-geo_rd_init(const char *fname)
+geo_rd_init(const char *fname, const char *args)
 {
 	fd = fopen(fname, "r");
 	if (fd == NULL) {
@@ -165,7 +165,7 @@ geo_rd_deinit(void)
 }
 
 void
-geo_wr_init(const char *fname)
+geo_wr_init(const char *fname, const char *args)
 {
 	ofd = fopen(fname, "w");
 	if (ofd == NULL) {

@@ -37,7 +37,7 @@ static 	unsigned char *HxWFile;
 static  char fOutname[256];
 
 
-static void rd_init(const char *fname)
+static void rd_init(const char *fname, const char *args)
 {
 	file_in = fopen(fname, "rb");
 	if (file_in == NULL) {
@@ -56,7 +56,7 @@ static void rd_deinit(void)
 
 
 static void
-wr_init(const char *fname)
+wr_init(const char *fname, const char *args)
 {
 	HxWFile = xcalloc(GM100_WPO_FILE_SIZE, 1);
 

@@ -30,7 +30,7 @@ static FILE *mapsource_file_out;
 #define MYNAME "MAPSOURCE" 
 
 static void
-mapsource_rd_init(const char *fname)
+mapsource_rd_init(const char *fname, const char *args)
 {
 	mapsource_file_in = fopen(fname, "r");
 	if (mapsource_file_in == NULL) {
@@ -45,7 +45,7 @@ mapsource_rd_deinit(void)
 }
 
 static void
-mapsource_wr_init(const char *fname)
+mapsource_wr_init(const char *fname, const char *args)
 {
 	mapsource_file_out = fopen(fname, "w");
 	if (mapsource_file_out == NULL) {

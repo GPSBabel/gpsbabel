@@ -27,7 +27,7 @@
 #include "defs.h"
 #include "magellan.h"
 
-#define BAUDRATE B4800
+int bitrate = 4800;
 #define MYNAME "MAGPROTO"
 
 #if __WIN32__
@@ -406,6 +406,19 @@ mag_readmsg(void)
 
 #include <windows.h>
 
+DWORD 
+mkspeed(bitrate)
+{
+	switch (bitrate) {
+		case 1200: return CBR_1200;
+		case 2400: return CBR_2400;
+		case 4800: return CBR_4800;
+		case 9600: return CBR_9600;
+		case 19200: return CBR_19200;
+		default: return CBR_4800;
+	}
+}
+
 HANDLE comport;
 
 static
@@ -430,7 +443,7 @@ terminit(const char *portname)
 	}
 	tio.DCBlength = sizeof(DCB);
 	GetCommState (comport, &tio);
-	tio.BaudRate = CBR_4800;
+	tio.BaudRate = mkspeed(bitrate);
 	tio.fBinary = TRUE;
 	tio.fParity = TRUE;
 	tio.fOutxCtsFlow = FALSE;
@@ -510,6 +523,20 @@ termdeinit()
 
 #include <termios.h>
 
+speed_t 
+mkspeed(unsigned br)
+{
+	switch (br) {
+		case 1200: return B1200;
+		case 2400: return B2400;
+		case 4800: return B4800;
+		case 9600: return B9600;
+		case 19200: return B19200;
+		default: return B4800;
+	}
+}
+
+
 static struct termios orig_tio;
 static void
 terminit(const char *portname)
@@ -547,8 +574,8 @@ terminit(const char *portname)
 	new_tio.c_cc[VTIME] = 10;
 	new_tio.c_cc[VMIN] = 0;
 
-	cfsetospeed(&new_tio, BAUDRATE);
-	cfsetispeed(&new_tio, BAUDRATE);
+	cfsetospeed(&new_tio, mkspeed(bitrate));
+	cfsetispeed(&new_tio, mkspeed(bitrate));
 	tcsetattr(magfd, TCSAFLUSH, &new_tio);
 }
 
@@ -575,9 +602,14 @@ termwrite(char *obuf, int size)
 
 
 static void
-mag_rd_init(const char *portname)
+mag_rd_init(const char *portname, const char *args)
 {
 	time_t now, later;
+	char * bs = get_option(args, "baud");
+
+	if (bs) {
+		bitrate=atoi(bs);
+	}
 
 	terminit(portname);
 	
@@ -603,7 +635,7 @@ mag_rd_init(const char *portname)
 }
 
 static void
-mag_wr_init(const char *portname)
+mag_wr_init(const char *portname, const char *args)
 {
 	struct stat sbuf;
 
@@ -622,7 +654,7 @@ mag_wr_init(const char *portname)
 		 *  reading and writing, so we let rd_init do the dirty work.
 		 */
 		fclose(magfile_out);
-		mag_rd_init(portname);
+		mag_rd_init(portname, args);
 	}
 }
 

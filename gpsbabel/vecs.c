@@ -166,16 +166,64 @@ vecs_t vec_list[] = {
 };
 
 ff_vecs_t *
-find_vec(char *const vecname)
+find_vec(char *const vecname, char **opts)
 {
 	vecs_t *vec = vec_list;
+	char *v = xstrdup(vecname);
+	char *svecname = strtok(v, ",");
+
 	while (vec->vec) {
-		if (strcmp(vecname, vec->name) == 0) {
+		if (strcmp(svecname, vec->name) == 0) {
+			char * res = strchr(vecname, ',');
+			if (res)
+				*opts = strchr(vecname, ',')+1;
+			else
+				*opts = NULL;
+			free(v);
 			return vec->vec;
 		}
 		vec++;
 	}
+	free(v);
 	return NULL;
+}
+
+/*
+ * Find and return a specific argument in an arg list.
+ * Modelled approximately after getenv.
+ */
+char *
+get_option(const char *iarglist, const char *argname)
+{
+	size_t arglen = strlen(argname);
+	char *arglist;
+	char *rval = NULL;
+	char *arg;
+	char *argp;
+
+	if (!iarglist) {
+		return NULL;
+	}
+
+	arglen = strlen(argname);
+	arglist = xstrdup(iarglist);
+
+	for (arg = arglist; argp = strtok(arg, ","); arg = NULL) {
+		if (0 == strncmp(argp, argname, arglen)) {
+			/*
+			 * If we have something of the form "foo=bar"
+			 * return "bar".   Otherwise, we assume we have
+			 * simply "foo" so we return that.
+			 */
+			if (argp[arglen] == '=')
+				rval = argp + arglen + 1;
+			else
+				rval = argp;
+			break;
+		}
+	}
+	free(arglist);
+	return rval;
 }
 
 void
