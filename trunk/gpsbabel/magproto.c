@@ -495,7 +495,7 @@ HANDLE comport = NULL;
 
 static
 int
-terminit(const char *portname)
+terminit(const char *portname, int create_ok)
 {
 	DCB tio;	
 	COMMTIMEOUTS timeout;
@@ -537,7 +537,7 @@ terminit(const char *portname)
 		 *  Probably not a com port.   Try it as a file.
 		 */
 try_as_file:
-		magfile_in = xfopen(portname, "rb", MYNAME);
+		magfile_in = xfopen(portname, create_ok ? "w+b" : "rb", MYNAME);
 		is_file = 1;
 		icon_mapping = map330_icon_table;
 		mag_cleanse = m330_cleanse;
@@ -630,7 +630,7 @@ mkspeed(unsigned br)
 
 static struct termios orig_tio;
 static void
-terminit(const char *portname)
+terminit(const char *portname, int create_ok)
 {
 	struct termios new_tio;
 
@@ -711,7 +711,7 @@ mag_rd_init(const char *portname)
 		bitrate=atoi(bs);
 	}
 
-	terminit(portname);
+	terminit(portname, 0);
 	if (!mkshort_handle) {
 		mkshort_handle = mkshort_new_handle();
 	}
@@ -757,7 +757,7 @@ static void
 mag_wr_init(const char *portname)
 {
 #if __WIN32__
-	if (!terminit(portname)) {
+	if (!terminit(portname, 1)) {
 		is_file = 1;
 	}
 #else
@@ -1195,9 +1195,9 @@ void mag_track_disp(const waypoint *waypointp)
 	int lon_deg, lat_deg;
 	char obuf[200];
 	int hms=0;
-	int fracsec;
+	int fracsec=0;
 	int date=0;
-	struct tm *tm;
+	struct tm *tm = NULL;
 
 	ilat = waypointp->latitude;
 	ilon = waypointp->longitude;
