@@ -74,7 +74,7 @@ on clicked theObject
 		else if the title of current menu item of popup button "inPop" of window "MacGPSBabel" = "Select Input File Type" then
 			display dialog "Please select an input file type for the previous file before adding another file" buttons {"OK"} default button 1
 			return 0
-		else if item 1 of (the last item in fileList) is not equal to (contents of text field "inputFile" of window "MacGPSBabel") then
+		else if fileList is equal to {} or item 1 of (the last item in fileList) is not equal to (contents of text field "inputFile" of window "MacGPSBabel") then
 			set the end of fileList to {contents of text field "inputFile" of window "MacGPSBabel", contents of popup button "inPop" of window "MacGPSBabel"}
 		end if
 		my addFile()
@@ -82,14 +82,7 @@ on clicked theObject
 	
 	-- MAIN WINDOW - Clear button
 	if theObject is the button "clearButton" of window "MacGPSBabel" then
-		set contents of text field "inputFile" of window "MacGPSBabel" to ""
-		set fileList to {}
-		set title of button "selectButton" of window "MacGPSBabel" to "Select File"
-		set enabled of button "sendButton" of window "MacGPSBabel" to false
-		set key equivalent of button "selectButton" of window "MacGPSBabel" to return
-		set enabled of button "clearButton" of window "MacGPSBabel" to false
-		set the contents of popup button "inPop" of window "MacGPSBabel" to 0
-		set the contents of popup button "outPop" of window "MacGPSBabel" to 0
+		my clearFiles()
 	end if
 	
 	-- MAIN WINDOW - Send button
@@ -215,6 +208,26 @@ on clicked theObject
 			set contents of text field "polyFile" of window "filterWindow" to ""
 		end if
 	end if
+	
+	--debug mode
+	if theObject is the button "debugButton" of window "MacGPSBabel" then
+		if (visible of window "debugWindow") is false then
+			set visible of window "debugWindow" to true
+		else
+			set visible of window "debugWindow" to false
+		end if
+	end if
+	if theObject is the button "executeButton" of window "debugWindow" then
+		set theScript to contents of text field "debugInput" of window "debugWindow"
+		if theScript starts with "gpsbabel" then
+			set thePath to quoted form of (POSIX path of (path to me) as string) & "Contents/Resources/"
+			set theScript to thePath & theScript
+		end if
+		set theOutput to do shell script theScript as string
+		set the contents of text view 1 of scroll view 1 of window "debugWindow" to ""
+		set the contents of text view 1 of scroll view 1 of window "debugWindow" to theOutput
+	end if
+	
 end clicked
 
 
@@ -314,14 +327,21 @@ on convertFile(fileList)
 	feedbackBusy(true)
 	-- do the script
 	set thePath to POSIX path of (path to me) as string
+	set theConvertScript to (quoted form of thePath & "Contents/Resources/gpsbabel" & fileText & " " & filterText & "-o " & outType & " -F " & quoted form of outputFile) as string
 	try
-		set scriptOut to (do shell script quoted form of thePath & "Contents/Resources/gpsbabel" & fileText & " " & filterText & "-o " & outType & " -F " & quoted form of outputFile) as string
-		feedbackBusy(false)
-		display dialog "Conversion Complete" & return & scriptOut buttons {"OK"} default button 1
+		set scriptOut to do shell script theConvertScript as string
+		set convertYN to "Conversion Completed Successfully"
 	on error
-		feedbackBusy(false)
-		display dialog "Conversion Failed" & return & scriptOut buttons {"OK"} default button 1
+		set scriptOut to "gpsbabel encountered an error"
+		set convertYN to "Conversion Failed!"
 	end try
+	feedbackBusy(false)
+	display dialog convertYN buttons {"OK"} default button 1
+	if visible of window "debugWindow" is true then
+		set the contents of text view 1 of scroll view 1 of window "debugWindow" to ""
+		set the contents of text view 1 of scroll view 1 of window "debugWindow" to "MacGPSBabel Report" & return & return & "The Shell Script:" & return & theConvertScript & return & return & convertYN & return & return & "Output From gpsbabel:" & return & scriptOut
+	end if
+	my clearFiles()
 end convertFile
 
 -- GPS RECEIVER HANDLERS
@@ -515,19 +535,17 @@ on getFormats()
 	set typeList to {}
 	set extList to {}
 	set thePath to POSIX path of (path to me) as string
-	set scriptOut to (do shell script quoted form of thePath & "Contents/Resources/gpsbabel -^") as string
+	set scriptOut to (do shell script quoted form of thePath & "Contents/Resources/gpsbabel -^1") as string
 	set theCount to count of paragraphs in scriptOut
-	set i to 1
 	set defaultDelimiters to AppleScript's text item delimiters
 	set AppleScript's text item delimiters to tab
-	repeat until i = theCount + 1
+	repeat with i from 1 to theCount
 		set theLine to paragraph i of scriptOut
-		if (first text item of theLine) is not equal to "xcsv" and (first text item of theLine) is not equal to "magellan" and (first text item of theLine) is not equal to "garmin" then
-			set the end of typeList to the first text item of theLine
-			set the end of extList to the second text item of theLine
+		if (first text item of theLine) is equal to "file" then
+			set the end of typeList to the second text item of theLine
+			set the end of extList to the third text item of theLine
 			set the end of myList to the last text item of theLine
 		end if
-		set i to i + 1
 	end repeat
 	set AppleScript's text item delimiters to defaultDelimiters
 	return myList
@@ -575,3 +593,14 @@ on feedbackBusy(yn)
 		end if
 	end tell
 end feedbackBusy
+
+on clearFiles()
+	set contents of text field "inputFile" of window "MacGPSBabel" to ""
+	set fileList to {}
+	set title of button "selectButton" of window "MacGPSBabel" to "Select File"
+	set enabled of button "sendButton" of window "MacGPSBabel" to false
+	set key equivalent of button "selectButton" of window "MacGPSBabel" to return
+	set enabled of button "clearButton" of window "MacGPSBabel" to false
+	set the contents of popup button "inPop" of window "MacGPSBabel" to 0
+	set the contents of popup button "outPop" of window "MacGPSBabel" to 0
+end clearFiles
