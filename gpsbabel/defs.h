@@ -96,17 +96,20 @@ typedef enum {
 } geocache_container;
 
 typedef struct {
+	int is_html;
+	char *utfstring;
+} utf_string;
+
+typedef struct {
 	geocache_type type;
 	geocache_container container;
 	int diff; /* (multiplied by ten internally) */
 	int terr; /* (likewise) */
 	time_t exported;
 	char *hint; /* all these UTF8, XML entities removed, May be not HTML. */
-	char *desc_short;
-	char *desc_long; 
+	utf_string desc_short;
+	utf_string desc_long; 
 } geocache_data ;
-
-
 
 typedef struct xml_tag {
 	char *tagname;
@@ -391,6 +394,7 @@ void rtrim(char *s);
 signed int get_tz_offset(void);
 const char *get_cache_icon(const waypoint *waypointp);
 char * xml_entitize(const char * str);
+char * strip_html(const utf_string*);
 char * str_utf8_to_cp1252( const char * str );
 char * str_utf8_to_ascii( const char * str );
 
