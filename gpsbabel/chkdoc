@@ -1,11 +1,23 @@
+ECODE=0
 
 ./gpsbabel -^ |
 while read FMT
 do
+	export ECODE
 	set -- $FMT
 	TYPE=$1
-	grep -q $TYPE ~/src/babelweb/capabilities.html  || echo $TYPE is not documented in capabilities.html.
+	if ! grep -q $TYPE ~/src/babelweb/capabilities.html
+	then
+		echo $TYPE is not documented in capabilities.html.
+		ECODE=1
+	fi
 	
-	grep -qi "^    $TYPE$" README || echo $TYPE is not documented in README.
+	if ! grep -qi "^    $TYPE$" README 
+	then
+		echo $TYPE is not documented in README.
+		ECODE=1
+	fi
 
 done
+
+exit $ECODE
