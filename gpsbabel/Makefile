@@ -5,10 +5,13 @@ FMTS=magproto.o gpx.o geo.o gpsman.o mapsend.o mapsource.o \
 	psp.o mxf.o holux.o garmin.o ozi.o tmpro.o dna.o tpg.o gpsdrive.o \
 	xcsv.o xmapwpt.o gcdb.o
 
-JEEPS=jeeps/gpsapp.o jeeps/gpscom.o jeeps/gpsfmt.o jeeps/gpsinput.o \
+JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
-	jeeps/gpsproj.o jeeps/gpsprot.o jeeps/gpsread.o \
+	jeeps/gpsprot.o jeeps/gpsread.o \
 	jeeps/gpsrqst.o jeeps/gpssend.o jeeps/gpsserial.o jeeps/gpsutil.o
+# Extra modules in Jeeps that we don't use
+# 	jeeps/gpsfmt.o jeeps/gpsinput.o jeeps/gpsproj.o
+
 
 COLDSYNC=coldsync/util.o coldsync/pdb.o
 
