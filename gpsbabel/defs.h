@@ -137,13 +137,14 @@ typedef struct {
 	/* 
 	 * The "thickness" of a waypoint; adds an element of 3D.  Can be
 	 * used to construct rudimentary polygons for, say, airspace 
-	 * definitions.
+	 * definitions.   The units are meters.
 	 */
 	double depth;
 
 	/*
 	 * An alarm trigger value that can be considered to be a circle
-	 * surrounding a waypoint (or cylinder if depth is also defined)
+	 * surrounding a waypoint (or cylinder if depth is also defined).
+	 * The units are meters.
 	 */
 	double proximity;
 
