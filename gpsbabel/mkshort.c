@@ -80,7 +80,7 @@ mkshort_add_to_list(mkshort_handle *h, char *name)
 		uniq_shortname *z = (uniq_shortname *) e;
 
 		if (0 == case_ignore_strcmp(z->orig_shortname, name)) {
-			int l = strlen(name);
+			size_t l = strlen(name);
 			int dl;
 			char tbuf[10];
 
