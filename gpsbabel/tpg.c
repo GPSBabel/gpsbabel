@@ -202,9 +202,10 @@ tpg_waypt_pr(const waypoint *wpt)
 	double amt;
 	short int elev;
 	char tbuf[64];
-	char c;
+	char c,ocount;
 	char *shortname;
 	char *description;
+	int i;
 
         /* these unknown 4 are probably point properties (color, icon, etc..) */
 	unsigned char unknown4[] = { 0x78, 0x56, 0x34, 0x12 }; 
@@ -262,10 +263,27 @@ tpg_waypt_pr(const waypoint *wpt)
 
         /* 1 bytes stringsize for shortname */
         c = strlen(shortname);
-        fwrite(&c, 1, 1, tpg_file_out);
-        
-        /* shortname */
-        fwrite(shortname, 1, c, tpg_file_out);
+        ocount = 0;
+	/* 
+	 * It's reported the only legal characters are upper case
+	 * A-Z and 0-9.  Wow.   We have to make two passes: one to
+	 * count and one to output.
+	 */
+	for (i = 0; i < c; i++) {
+		char oc = toupper(shortname[i]);
+		if (isalnum(oc) || oc == ' ') {
+			ocount++;
+		}
+	}
+
+        fwrite(&ocount, 1, 1, tpg_file_out);
+
+	for (i = 0; i < c; i++) {
+		char oc = toupper(shortname[i]);
+		if (isalnum(oc) || oc == ' ') {
+			fputc(oc, tpg_file_out);
+		}
+	}
 
         /* 8 bytes - longitude */
         tpg_fwrite_double(lon, tpg_file_out);
@@ -316,6 +334,7 @@ tpg_write(void)
         if (global_opts.synthesize_shortnames) {
             setshort_length(mkshort_handle, 32);
             setshort_whitespace_ok(mkshort_handle, 1);
+            setshort_mustupper(mkshort_handle, 1);
         }
 
         if (s > MAXTPGOUTPUTPINS) {

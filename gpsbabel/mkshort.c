@@ -276,9 +276,6 @@ mkshort(void *h, const char *istring)
 		cp = ostring;
 		for (i=0;i<l;i++) {
 			if (!isspace(tstring[i])) {
-				if (hdl->mustupper) {
-					tstring[i] = toupper(tstring[i]);
-				}
 				*cp++ = tstring[i];
 			}
 		}
@@ -286,6 +283,11 @@ mkshort(void *h, const char *istring)
 		*cp = 0;
 	}
 
+	if (hdl->mustupper) {
+		for (tstring = ostring; *tstring; tstring++) {
+			*tstring = toupper(*tstring);
+		}
+	}
 	/*
 	 * Eliminate chars on the blacklist.
 	 * Characters that aren't ASCII are never OK.
@@ -342,7 +344,6 @@ mkshort(void *h, const char *istring)
 	if ((/*i = */strlen(ostring)) > hdl->target_len) {
 		strcpy(&ostring[hdl->target_len] - strlen(np), np);
 	}
-
 
 	if (hdl->must_uniq) {
 		return mkshort_add_to_list(hdl, ostring);
