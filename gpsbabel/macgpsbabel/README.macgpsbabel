@@ -1,8 +1,0 @@
-MacGPSBabel is a Mac OS X GUI front-end for gpsbabel. The GUI was developed using Apple's 'Interface Builder' application and the code to link the GUI to gpsbabel is written in Applescript.
-
-Build instructions.
-
-MacGPSBabel can be built with Apple's developer tools in the same way that you would build any other application. As it is, the Project Builder will assume that you have added a build of gpsbabel into the same folder as the rest of the MacGPSBabel project files. This binary will then be embedded in the build of MacGPSBabel. If you do not do this then MacGPSBabel will not work, however, it is possible to place the gpsbabel binary into the Resources Folder in the MacGPSBabel package after building it.
-
-Debug (verbose) Mode
-This can be activated by pressing command-option-v whilst the main MacGPSBabel window is the active window. When debug mode is active, using MacGPSBabel in the usual manner will result in a report for each file conversion being displayed in the debug window. Alternatively, commands can be typed directly in the debug window and run using the 'execute' button (the full path to any file needs to be specified).

@@ -1,5 +1,0 @@
-#!/bin/sh
-
-rm /tmp/gpsbabel.debug
-touch /tmp/gpsbabel.debug
-
