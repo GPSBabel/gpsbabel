@@ -28,6 +28,7 @@
 #include "magellan.h"
 
 #define BAUDRATE B4800
+#define MYNAME "MAGPROTO"
 
 #if __WIN32__
 #include <windows.h>
@@ -248,7 +249,7 @@ mag_verparse(char *ibuf)
 			icon_mapping = map330_icon_table;
 			break;
 		default:
-			fatal("Magproto: Unknown receiver type.\n");
+			fatal(MYNAME ": Unknown receiver type.\n");
 	}
 }
 
@@ -267,7 +268,7 @@ mag_readmsg(void)
 
 	if (!gr) {
 		if (!got_version) {
-			fatal("Magproto: No data received from GPS.\n");
+			fatal(MYNAME ": No data received from GPS.\n");
 		} else {
 			if (is_file)  {
 				found_done = 1;
@@ -293,7 +294,7 @@ if (debug_serial)
 		fprintf(stderr, "RXERR %02x/%02x: '%s'\n", isum, mag_pchecksum(&ibuf[1],isz-5), ibuf);
 		/* Special case receive errors early on. */
 		if (!got_version) {
-			fatal("Magproto: bad communication.  Check bit rate.\n");
+			fatal(MYNAME ": bad communication.  Check bit rate.\n");
 		}
 	}
 	if (debug_serial) {
@@ -343,7 +344,7 @@ terminit(const char *portname)
 			  OPEN_EXISTING, 0, NULL);
 
 	if (comport == INVALID_HANDLE_VALUE) {
-		fatal("Cannot open '%s'", portname);
+		fatal(MYNAME ": '%s'", portname);
 	}
 	tio.DCBlength = sizeof(DCB);
 	GetCommState (comport, &tio);
@@ -367,7 +368,7 @@ terminit(const char *portname)
 
 	if (!SetCommState (comport, &tio)) {
 		CloseHandle(comport);
-   		fatal("Unable to set port settings");
+   		fatal(MYNAME ": set port settings");
 	}
 
 	GetCommTimeouts (comport, &timeout);
@@ -376,7 +377,7 @@ terminit(const char *portname)
 	timeout.WriteTotalTimeoutConstant = 1000;
 	if (!SetCommTimeouts (comport, &timeout)) {
 		CloseHandle (comport);
-		fatal("Unable to set timeouts");
+		fatal(MYNAME ": set timeouts");
 	}
 }
 
@@ -412,7 +413,7 @@ termwrite(char *obuf, int size)
 
 	WriteFile (comport, obuf, size, &len, NULL);
 	if (len != size) {
-		fatal("Write error.  Wrote %d of %d bytes.", len, size);
+		fatal(MYNAME ":.  Wrote %d of %d bytes.", len, size);
 	}
 }
 
@@ -437,7 +438,7 @@ terminit(const char *portname)
         magfile_in = fopen(portname, "rb");
 
         if (magfile_in == NULL) {
-                fatal("Magproto: Cannot open %s.%s\n",
+                fatal(MYNAME ": Cannot open %s.%s\n",
                         portname, strerror(errno));
         }
 
@@ -505,7 +506,7 @@ mag_rd_init(const char *portname)
 	while (!got_version) {
 		mag_readmsg();
 		if (time(NULL) > later) {
-			fatal("Magproto: No acknowledgment from GPS on %s\n",
+			fatal(MYNAME ": No acknowledgment from GPS on %s\n",
 				portname);
 		}
 	}
@@ -677,7 +678,7 @@ mag_wptparse(char *trkmsg)
 
 	waypt  = calloc(sizeof *waypt, 1);
 	if (waypt == NULL) 
-		fatal("Magproto: Cannot allocate memory\n");
+		fatal(MYNAME ": Cannot allocate memory\n");
 
 	sscanf(trkmsg,"$PMGNWPL,%lf,%c,%lf,%c,%d,%c,%[^,],%[^,]", 
 		&latdeg,&latdir,

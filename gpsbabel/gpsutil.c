@@ -8,12 +8,14 @@
 static FILE *file_in;
 static FILE *file_out;
 
+#define MYNAME "GPSUTIL"
+
 static void
 rd_init(const char *fname)
 {
 	file_in = fopen(fname, "r");
 	if (file_in == NULL) {
-		fatal("GPSUTIL: Cannot open %s for reading\n", fname);
+		fatal(MYNAME ": Cannot open %s for reading\n", fname);
 	}
 }
 
@@ -28,7 +30,7 @@ wr_init(const char *fname)
 {
 	file_out = fopen(fname, "w");
 	if (file_out == NULL) {
-		fatal("GPSUTIL: Cannot open %s for writing\n", fname);
+		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
 }
 
@@ -55,7 +57,7 @@ data_read(void)
 			&alt, &alttype, desc, icon) > 0) {
 		wpt_tmp = calloc(sizeof(*wpt_tmp),1);
 		if (wpt_tmp == NULL) {
-			fatal("GPSMAN: cannot allocate memory\n");
+			fatal(MYNAME ": cannot allocate memory\n");
 		}
 		wpt_tmp->position.altitude.altitude_meters = alt;
 		wpt_tmp->shortname = strdup(name);

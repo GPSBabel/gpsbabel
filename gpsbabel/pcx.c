@@ -25,12 +25,15 @@
 static FILE *file_in;
 static FILE *file_out;
 
+#define MYNAME "PCX"
+
+
 static void
 rd_init(const char *fname)
 {
 	file_in = fopen(fname, "r");
 	if (file_in == NULL) {
-		fatal("GPSUTIL: Cannot open %s for reading\n", fname);
+		fatal(MYNAME ": Cannot open %s for reading\n", fname);
 	}
 }
 
@@ -45,7 +48,7 @@ wr_init(const char *fname)
 {
 	file_out = fopen(fname, "w");
 	if (file_out == NULL) {
-		fatal("GPSUTIL: Cannot open %s for writing\n", fname);
+		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
 }
 

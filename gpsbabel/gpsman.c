@@ -22,12 +22,14 @@
 static FILE *in_file;
 static FILE *out_file;
 
+#define MYNAME "GPSMAN"
+
 static void
 gpsman_rd_init(const char *fname)
 {
 	in_file = fopen(fname, "r");
 	if (in_file == NULL) {
-		fatal("GPSMAN: Cannot open %s for reading\n", fname);
+		fatal(MYNAME ": Cannot open %s for reading\n", fname);
 	}
 
 }
@@ -42,7 +44,7 @@ gpsman_wr_init(const char *fname)
 {
 	out_file = fopen(fname, "w");
 	if (out_file == NULL) {
-		fatal("GPSMAN: Cannot open %s for writing\n", fname);
+		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
 
 	fprintf(out_file, "!Format: DDD 1 WGS 84\n");
@@ -97,7 +99,7 @@ gpsman_read(void)
 		wpt_tmp = calloc(sizeof(*wpt_tmp),1);
 
 		if (wpt_tmp == NULL) {
-			fatal("GPSMAN: Cannot allocate enough memory\n");
+			fatal(MYNAME ": Cannot allocate enough memory\n");
 		}
 
 		lat = latm + latf;
