@@ -1,5 +1,5 @@
-VERSIONU=1_1_0
-VERSIOND=1.1.0
+VERSIONU=1_2_0
+VERSIOND=1.2.0
 
 all: magxfer
 
