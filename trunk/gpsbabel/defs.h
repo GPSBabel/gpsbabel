@@ -160,6 +160,7 @@ typedef struct {
 	time_t creation_time;
 	geocache_data gc_data;
 	xml_tag *gpx_extras;
+	void *extra_data;	/* Extra data added by, say, a filter. */
 } waypoint;
 
 typedef struct {
