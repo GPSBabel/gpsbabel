@@ -54,7 +54,8 @@ Usage: magxfer [-p portname] [-b bitrate] [-t type ] -f filetosend.img\n\
 void 
 usage()
 {
-    fprintf(stderr,"%s",usagestring);
+	fprintf(stderr, "\nmagxfer version " VERSION "\n");
+	fprintf(stderr,"%s",usagestring);
 }
 
 void
