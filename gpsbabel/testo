@@ -222,6 +222,7 @@ ${PNAME} -i mapsource -f reference/mapsource.mps  -o gpx -F ${TMPDIR}/ms1.gpx
 ${PNAME} -i mapsource -f reference/mapsource.mps  -o mapsource -F ${TMPDIR}/ms.mps
 ${PNAME} -i mapsource -f ${TMPDIR}/ms.mps -o gpx -F ${TMPDIR}/ms2.gpx
 compare ${TMPDIR}/ms1.gpx ${TMPDIR}/ms2.gpx
+
 #
 # MRCB mapsource track test
 #
@@ -229,6 +230,26 @@ rm -f ${TMPDIR}/mps-track.mps
 ${PNAME} -t -i mapsource -f reference/track/mps-track.mps -o mapsource \
          -F ${TMPDIR}/mps-track.mps
 compare ${TMPDIR}/mps-track.mps reference/track/
+
+# Now do a test of reading waypoints from a track-only file - should have an empty result
+rm -f ${TMPDIR}/mps-track.mps
+${PNAME} -i mapsource -f reference/track/mps-track.mps -o mapsource \
+         -F ${TMPDIR}/mps-track.mps
+compare ${TMPDIR}/mps-track.mps reference/mps-empty.mps
+
+#
+# MRCB mapsource route test
+#
+rm -f ${TMPDIR}/mps-route.mps
+${PNAME} -r -i mapsource -f reference/route/route.mps -o mapsource,mpsverout=4 \
+         -F ${TMPDIR}/mps-route.mps
+compare ${TMPDIR}/mps-route.mps reference/route/route.mps
+
+# Now do a test of reading tracks from a route-only file - should have an empty result
+rm -f ${TMPDIR}/mps-route.mps
+${PNAME} -t -i mapsource -f reference/route/route.mps -o mapsource \
+         -F ${TMPDIR}/mps-route.mps
+compare ${TMPDIR}/mps-route.mps reference/mps-empty.mps
 
 #
 # Geocaching Database is a binary Palm format that, like the GPX variants
@@ -340,6 +361,45 @@ compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
 ${PNAME} -i navicache -f reference/navicache.xml -o gpsutil -F ${TMPDIR}/navi.wpt
 compare ${TMPDIR}/navi.wpt reference/navicache.ref
 #
+
+# PsiTrex.  A text format that can't be handled by XCSV due to context of
+# data based on other data values in the file
+# Waypoints first
+rm -f ${TMPDIR}/psit-ww.txt ${TMPDIR}/psit-ww.mps
+${PNAME} -i psitrex -f reference/psitwpts.txt -o mapsource -F ${TMPDIR}/psit-ww.mps
+${PNAME} -i mapsource -f ${TMPDIR}/psit-ww.mps -o psitrex -F ${TMPDIR}/psit-ww.txt
+compare reference/psitwpts.txt ${TMPDIR}/psit-ww.txt
+
+# Now test correct "empty" handling - ask for routes when there aren't any
+# Uses mapsource as the empty handling for this has already happened above
+rm -f ${TMPDIR}/psit-wr.mps
+${PNAME} -r -i psitrex -f reference/psitwpts.txt -o mapsource -F ${TMPDIR}/psit-wr.mps
+compare reference/mps-empty.mps ${TMPDIR}/psit-wr.mps
+
+# Routes next
+rm -f ${TMPDIR}/psit-rr.txt ${TMPDIR}/psit-rr.mps
+${PNAME} -r -i psitrex -f reference/route/psitrtes.txt -o mapsource -F ${TMPDIR}/psit-rr.mps
+${PNAME} -r -i mapsource -f ${TMPDIR}/psit-rr.mps -o psitrex -F ${TMPDIR}/psit-rr.txt
+compare reference/route/psitrtes.txt ${TMPDIR}/psit-rr.txt
+
+# Now test correct "empty" handling - ask for tracks when there aren't any
+# Uses mapsource as the empty handling for this has already happened above
+rm -f ${TMPDIR}/psit-rt.mps
+${PNAME} -t -i psitrex -f reference/route/psitrtes.txt -o mapsource -F ${TMPDIR}/psit-rt.mps
+compare reference/mps-empty.mps ${TMPDIR}/psit-rt.mps
+
+# Tracks last
+rm -f ${TMPDIR}/psit-tt.txt ${TMPDIR}/psit-tt.mps
+${PNAME} -t -i psitrex -f reference/track/psittrks.txt -o mapsource -F ${TMPDIR}/psit-tt.mps
+${PNAME} -t -i mapsource -f ${TMPDIR}/psit-tt.mps -o psitrex -F ${TMPDIR}/psit-tt.txt
+echo skipping psitrex track test for now
+# compare reference/track/psittrks.txt ${TMPDIR}/psit-tt.txt
+
+# Now test correct "empty" handling - ask for waypoints when there aren't any
+# Uses mapsource as the empty handling for this has already happened above
+rm -f ${TMPDIR}/psit-tw.mps
+${PNAME} -i psitrex -f reference/track/psittrks.txt -o mapsource -F ${TMPDIR}/psit-tw.mps
+compare reference/mps-empty.mps ${TMPDIR}/psit-tw.mps
 
 #
 # Arc Distance filter

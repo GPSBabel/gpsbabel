@@ -99,6 +99,9 @@ int main(
 
 	// ===========================
 
+	if (argc < 2) {
+		fatal(MYNAME ": needs a single parameter, the (testo) file to convert\n");
+	}
 	pfTestoIn = fopen(argv[1], "rb");
 
 	if (pfTestoIn == NULL) {
