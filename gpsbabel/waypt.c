@@ -52,6 +52,14 @@ waypt_dupe(const waypoint *wpt)
 		tmp->url_link_text = xstrdup(wpt->url_link_text);
 	if (wpt->icon_descr && wpt->icon_descr_is_dynamic)
 		tmp->icon_descr = xstrdup(wpt->icon_descr);
+	if (wpt->gc_data.desc_short.utfstring) {
+		tmp->gc_data.desc_short.utfstring = 
+			xstrdup(tmp->gc_data.desc_short.utfstring);
+	}
+	if (wpt->gc_data.desc_long.utfstring) {
+		tmp->gc_data.desc_long.utfstring = 
+			xstrdup(tmp->gc_data.desc_long.utfstring);
+	}
 	/*
 	 * It's important that this duplicated waypoint not appear
 	 * on the master Q.
