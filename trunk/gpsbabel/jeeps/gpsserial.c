@@ -180,6 +180,17 @@ int32 GPS_Serial_Flush(int32 fd)
 int32 GPS_Serial_Write(int32 ignored, const void *obuf, int size)
 {
 	DWORD len;
+
+	/* 
+	 * Unbelievably, the Keyspan PDA serial driver 3.2, a "Windows 
+	 * Certified driver", will crash the OS on a write of zero bytes.
+	 * We get such writes from upstream when there are zero payload
+	 * bytes.  SO we trap those here to stop Keyspan & Windows from
+	 * nuking the system.
+	 */
+	if (size == 0) {
+		return 0;
+	}
 	WriteFile (comport, obuf, size, &len, NULL);
 	if (len != size) {
 		fatal ("Write error.   Wrote %d of %d bytes.", len, size);
