@@ -37,6 +37,8 @@ static char *poweroff = NULL;
 static char *snlen = NULL;
 static char *snwhiteopt = NULL;
 static char *deficon = NULL;
+/* Technically, even this is a little loose as spaces arent allowed */
+static char valid_waypt_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789";
 
 static
 arglist_t garmin_args[] = {
@@ -127,6 +129,11 @@ rw_init(const char *fname)
 			break;
 			
 	}
+	if (global_opts.debug_level > 0)  {
+		fprintf(stderr, "Waypoint type: %d\n"
+			"Chosen waypoint length %d\n",
+			 gps_waypt_type, short_length);
+	}
 	/*
 	 * If the user provided a short_length, override the calculated value.
 	 */
@@ -138,8 +145,7 @@ rw_init(const char *fname)
 	if (snwhiteopt)
 		setshort_whitespace_ok(mkshort_handle, atoi(snwhiteopt));
 
-	/* Technically, even this is a little loose as spaces arent allowed */
-	setshort_goodchars(mkshort_handle, "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789");
+	setshort_goodchars(mkshort_handle, valid_waypt_chars);
 	setshort_mustupper(mkshort_handle, 1);
 
 }
@@ -302,7 +308,7 @@ route_read(void)
 
 	nroutepts = GPS_Command_Get_Route(portname, &array);
 
-	fprintf(stderr, "Routes %d\n", (int) nroutepts);
+//	fprintf(stderr, "Routes %d\n", (int) nroutepts);
 #if 1
 	for (i = 0; i < nroutepts; i++) {
 		route_head *rte_head;
@@ -433,15 +439,19 @@ waypoint_write(void)
 		if(wpt->description) src = wpt->description;
 		if(wpt->notes) src = wpt->notes;
 
-		ident = global_opts.synthesize_shortnames ? 
-				mkshort(mkshort_handle, src) : 
-				wpt->shortname;
+		/* 
+		 * mkshort will do collision detection and namespace 
+		 * cleaning 
+		 */
+		ident = mkshort(mkshort_handle, 
+			global_opts.synthesize_shortnames ? src : 
+			wpt->shortname);
 		/* Should not be a strcpy as 'ident' isn't really a C string,
 		 * but rather a garmin "fixed length" buffer that's padded
 		 * to the end with spaces.  So this is NOT (strlen+1).
 		 */
-fprintf(stderr, "%s\n", ident);
 		memcpy(way[i]->ident, ident, strlen(ident));
+
 		if (global_opts.synthesize_shortnames) { 
 			xfree(ident);
 		}
