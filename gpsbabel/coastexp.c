@@ -263,7 +263,7 @@ ce_cdata(void *dta, const XML_Char *s, int len)
 					strncpy(secString, currentMark->created+13, 2);
 					secString[3] = '\0';
 					t.tm_sec = atoi(secString);
-					currentMark->wp->creation_time = mktime(&t);
+					currentMark->wp->creation_time = mktime(&t) + get_tz_offset();
 				}
 			}
 			else if (inRoute) {
@@ -574,10 +574,10 @@ ce_waypt_pr(const waypoint *wp)
 
 /* Generate a standalone mark XML */
 static void
-ce_standalone_mark_pr(const waypoint *wp)
+ce_mark_pr(const waypoint *wp)
 {
 	write_xml_entity_begin2(ofd, "\t", "Mark",
-							"created", ce_gen_current_time(),
+							"created", ce_gen_creation_time(wp->creation_time),
 							"id", ce_gen_uuid());
 	ce_waypt_pr(wp);
 	write_xml_entity_end(ofd, "\t", "Mark");
@@ -590,11 +590,7 @@ ce_marks_pr(void)
 	queue *elem, *tmp;
 	QUEUE_FOR_EACH(&ce_mark_head, elem, tmp) {
 		ce_mark *mark = (ce_mark *) elem;
-		write_xml_entity_begin2(ofd, "\t", "Mark",
-								"created", ce_gen_creation_time(mark->wp->creation_time),
-								"id", mark->id);
-		ce_waypt_pr(mark->wp);
-		write_xml_entity_end(ofd, "\t", "Mark");
+		ce_mark_pr(mark->wp);
 		ce_free_mark(mark);
 	}
 }
@@ -618,7 +614,7 @@ ce_write(void)
 
 	route_disp_all(ce_route_hdr, ce_route_tlr, ce_route_disp);
 	ce_marks_pr();
-	waypt_disp_all(ce_standalone_mark_pr);
+	waypt_disp_all(ce_mark_pr);
 
 	write_xml_entity_end(ofd, "", "NavObjectCollection");
 }
