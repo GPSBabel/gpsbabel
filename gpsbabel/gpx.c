@@ -62,6 +62,16 @@ static route_head *rte_head;
 #define MY_CBUF 4096
 #define DEFAULT_XSI_SCHEMA_LOC "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
 
+/* 
+ * Format used for floating point formats.  Put in one place to make it
+ * easier to tweak when comparing output with other GPX programs that 
+ * have more or less digits of output...
+ */
+/* #define FLT_FMT "%.9lf" */  /* ExpertGPS */
+#define FLT_FMT "%0.9lf" 
+#define FLT_FMT_T "%lf" 
+#define FLT_FMT_R "%lf" 
+
 typedef enum {
 	tt_unknown = 0,
 	tt_gpx,
@@ -1075,6 +1085,33 @@ void free_gpx_extras( xml_tag *tag )
 	}
 }
 
+/*
+ * Handle the grossness of GPX 1.0 vs. 1.1 handling of linky links.
+ */
+static void
+write_gpx_url(const waypoint *waypointp)
+{
+	char *tmp_ent;
+
+	if (waypointp->url) {
+		tmp_ent = xml_entitize(waypointp->url);
+		if (gpx_wversion_num > 10) {
+			
+			fprintf(ofd, "  <link href=\"%s%s\">\n", 
+				urlbase ? urlbase : "", tmp_ent);
+			write_optional_xml_entity(ofd, "  ", "text", 
+				waypointp->url_link_text);
+			fprintf(ofd, "  </link>\n");
+		} else {
+			fprintf(ofd, "  <url>%s%s</url>\n", 
+				urlbase ? urlbase : "", tmp_ent);
+			write_optional_xml_entity(ofd, "  ", "urlname", 
+				waypointp->url_link_text);
+		}
+		xfree(tmp_ent);
+	}
+}
+
 static void
 gpx_waypt_pr(const waypoint *waypointp)
 {
@@ -1097,15 +1134,15 @@ gpx_waypt_pr(const waypoint *waypointp)
 				  mkshort(mkshort_handle, odesc) : 
 				  waypointp->shortname;
 
-	fprintf(ofd, "<wpt lat=\"%0.9lf\" lon=\"%0.9lf\">\n",
+	fprintf(ofd, "<wpt lat=\"" FLT_FMT "\" lon=\"" FLT_FMT "\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
-	if (waypointp->creation_time) {
-		xml_write_time(ofd, waypointp->creation_time, "time");
-	}
 	if (waypointp->altitude != unknown_alt) {
 		fprintf(ofd, "  <ele>%f</ele>\n",
 			 waypointp->altitude);
+	}
+	if (waypointp->creation_time) {
+		xml_write_time(ofd, waypointp->creation_time, "time");
 	}
 	write_optional_xml_entity(ofd, "  ", "name", oname);
 	write_optional_xml_entity(ofd, "  ", "cmt", waypointp->description);
@@ -1113,19 +1150,8 @@ gpx_waypt_pr(const waypoint *waypointp)
 		write_xml_entity(ofd, "  ", "desc", waypointp->notes);
 	else
 		write_optional_xml_entity(ofd, "  ", "desc", waypointp->description);
-	if (waypointp->url) {
-		tmp_ent = xml_entitize(waypointp->url);
-		if (gpx_wversion_num > 10) {
-			
-			fprintf(ofd, "  <link href=\"%s%s\">\n", urlbase ? urlbase : "", tmp_ent);
-			write_optional_xml_entity(ofd, "  ", "text", waypointp->url_link_text);
-			fprintf(ofd, "  </link>\n");
-		} else {
-			fprintf(ofd, "  <url>%s%s</url>\n", urlbase ? urlbase : "", tmp_ent);
-			write_optional_xml_entity(ofd, "  ", "urlname", waypointp->url_link_text);
-		}
-		xfree(tmp_ent);
-	}
+	write_gpx_url(waypointp);
+
 	write_optional_xml_entity(ofd, "  ", "sym", waypointp->icon_descr);
 
 	fprint_xml_chain( waypointp->gpx_extras, waypointp );
@@ -1147,7 +1173,7 @@ gpx_track_hdr(const route_head *rte)
 static void
 gpx_track_disp(const waypoint *waypointp)
 {
-	fprintf(ofd, "<trkpt lat=\"%lf\" lon=\"%lf\">\n",
+	fprintf(ofd, "<trkpt lat=\"" FLT_FMT_T "\" lon=\"" FLT_FMT_T "\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
 	if (waypointp->altitude != unknown_alt) {
@@ -1157,6 +1183,16 @@ gpx_track_disp(const waypoint *waypointp)
 	if (waypointp->creation_time) {
 		xml_write_time(ofd, waypointp->creation_time,"time");
 	}
+
+	/* GPX doesn't require a name on output, so if we made one up
+	 * on input, we might as well say nothing.
+	 */
+	if (!waypointp->shortname_is_synthetic) {
+		write_optional_xml_entity(ofd, "  ", "name", 
+			waypointp->shortname);
+	}
+	write_optional_xml_entity(ofd, "  ", "desc", waypointp->notes);
+	write_gpx_url(waypointp);
 	write_optional_xml_entity(ofd, "  ", "sym", waypointp->icon_descr);
 	fprintf(ofd, "</trkpt>\n");
 }
@@ -1188,7 +1224,7 @@ gpx_route_hdr(const route_head *rte)
 static void
 gpx_route_disp(const waypoint *waypointp)
 {
-	fprintf(ofd, "  <rtept lat=\"%f\" lon=\"%f\">\n",
+	fprintf(ofd, "  <rtept lat=\"" FLT_FMT_R "\" lon=\"" FLT_FMT_R "\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
 
