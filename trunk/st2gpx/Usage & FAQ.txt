@@ -125,3 +125,11 @@ A You need to use the drawing toolbar. There are many different line types, but 
   You can add many more points to get a very detailed trace of the route, but that may not be necessary.
   Experiment, and see what works for you.
   
+
+Q I get a error and no data in the GPX file.
+
+A First, make sure that you dont have the input or output file already open in Streets & Trips, Autoroute or 
+  Mappoint file. Try downloading the latest version of st2gpx. If you still have problems, send me the error 
+  message and the input file.
+  
+  
