@@ -148,14 +148,139 @@ get_char_from_constant_table(char *key)
 }
 
 static void
-xcsv_read_style(const char *fname)
+xcsv_parse_style_line(const char *sbuff)
 {
-    char sbuff[8192];
     int i, linecount = 0;
-    FILE *fp;
     char *s, *p, *sp;
     const char *cp;
     char *key, *val, *pfc;
+
+    /* 
+     * tokens should be parsed longest to shortest, unless something
+     * requires a previously set value.  This way something like
+     * SHORT and SHORTNAME don't collide.
+     */
+
+    /* whack off any comments */
+    if ((p = strchr(sbuff, '#')) != NULL)
+	*p = '\0';
+
+    if (strlen(sbuff)) {
+	if (ISSTOKEN(sbuff, "FIELD_DELIMITER")) {
+	    sp = csv_stringtrim(&sbuff[16], "\"");
+	    cp = get_char_from_constant_table(sp);
+	    if (cp) {
+		xcsv_file.field_delimiter = xstrdup(cp);
+		xfree(sp);
+	    }
+	    else
+		xcsv_file.field_delimiter = sp;
+	} else
+
+	if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
+	    sp = csv_stringtrim(&sbuff[17], "\"");
+	    cp = get_char_from_constant_table(sp);
+	    if (cp) {
+		xcsv_file.record_delimiter = xstrdup(cp);
+		xfree(sp);
+	    }
+	    else
+		xcsv_file.field_delimiter = sp;
+	} else
+
+	if (ISSTOKEN(sbuff, "BADCHARS")) {
+	    sp = csv_stringtrim(&sbuff[9], "\"");
+	    cp = get_char_from_constant_table(sp);
+	    if (cp) {
+		xcsv_file.badchars = xstrdup(cp);
+		xfree(sp);
+	    }
+	    else
+		xcsv_file.badchars = sp;
+	} else
+
+	if (ISSTOKEN(sbuff, "PROLOGUE")) {
+	    xcsv_prologue_add(xstrdup(&sbuff[9]));
+	} else
+
+	if (ISSTOKEN(sbuff, "EPILOGUE")) {
+	    xcsv_epilogue_add(xstrdup(&sbuff[9]));
+	} else
+
+	if (ISSTOKEN(sbuff, "IFIELD")) {
+	    key = val = pfc = NULL;
+	    
+	    s = csv_lineparse(&sbuff[6], ",", "", linecount);
+
+	    i = 0;
+	    while (s) {
+		switch(i) {
+		case 0:
+		    /* key */
+		    key = csv_stringtrim(s, "\"");
+		    break;
+		case 1:
+		    /* default value */
+		    val = csv_stringtrim(s, "\"");
+		    break;
+		case 2:
+		    /* printf conversion */
+		    pfc = csv_stringtrim(s, "\"");
+		    break;
+		default:
+		    break;
+		}
+		i++;
+
+		s = csv_lineparse(NULL, ",", "", linecount);
+	    }
+
+	    xcsv_ifield_add(key, val, pfc);
+
+	} else
+
+	/* 
+	 * as OFIELDs are implemented as an after-thought, I'll
+	 * leave this as it's own parsing for now.  We could
+	 * change the world on ifield vs ofield format later..
+	 */
+	if (ISSTOKEN(sbuff, "OFIELD")) {
+	    key = val = pfc = NULL;
+
+	    s = csv_lineparse(&sbuff[6], ",", "", linecount);
+
+	    i = 0;
+	    while (s) {
+		switch(i) {
+		case 0:
+		    /* key */
+		    key = csv_stringtrim(s, "\"");
+		    break;
+		case 1:
+		    /* default value */
+		    val = csv_stringtrim(s, "\"");
+		    break;
+		case 2:
+		    /* printf conversion */
+		    pfc = csv_stringtrim(s, "\"");
+		    break;
+		default:
+		    break;
+		}
+		i++;
+		s = csv_lineparse(NULL, ",", "", linecount);
+	    }
+
+	    xcsv_ofield_add(key, val, pfc);
+	}
+    }
+}
+
+static void
+xcsv_read_style(const char *fname)
+{
+    char sbuff[8192];
+    FILE *fp;
 
     xcsv_file_init();
 
@@ -168,126 +293,7 @@ xcsv_read_style(const char *fname)
         memset(sbuff, '\0', sizeof(sbuff));
         fgets(sbuff, sizeof(sbuff), fp);
         rtrim(sbuff);
-
-        /* 
-         * tokens should be parsed longest to shortest, unless something
-         * requires a previously set value.  This way something like
-         * SHORT and SHORTNAME don't collide.
-         */
-
-        /* whack off any comments */
-        if ((p = strchr(sbuff, '#')) != NULL)
-            *p = '\0';
-
-        if (strlen(sbuff)) {
-            if (ISSTOKEN(sbuff, "FIELD_DELIMITER")) {
-                sp = csv_stringtrim(&sbuff[16], "\"");
-                cp = get_char_from_constant_table(sp);
-                if (cp) {
-                    xcsv_file.field_delimiter = xstrdup(cp);
-		    xfree(sp);
-		}
-                else
-                    xcsv_file.field_delimiter = sp;
-            } else
-
-            if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
-                sp = csv_stringtrim(&sbuff[17], "\"");
-                cp = get_char_from_constant_table(sp);
-                if (cp) {
-                    xcsv_file.record_delimiter = xstrdup(cp);
-		    xfree(sp);
-		}
-                else
-                    xcsv_file.field_delimiter = sp;
-            } else
-
-            if (ISSTOKEN(sbuff, "BADCHARS")) {
-                sp = csv_stringtrim(&sbuff[9], "\"");
-                cp = get_char_from_constant_table(sp);
-                if (cp) {
-                    xcsv_file.badchars = xstrdup(cp);
-		    xfree(sp);
-		}
-                else
-                    xcsv_file.badchars = sp;
-            } else
-
-            if (ISSTOKEN(sbuff, "PROLOGUE")) {
-                xcsv_prologue_add(xstrdup(&sbuff[9]));
-            } else
-
-            if (ISSTOKEN(sbuff, "EPILOGUE")) {
-                xcsv_epilogue_add(xstrdup(&sbuff[9]));
-            } else
-
-            if (ISSTOKEN(sbuff, "IFIELD")) {
-                key = val = pfc = NULL;
-                
-                s = csv_lineparse(&sbuff[6], ",", "", linecount);
-
-                i = 0;
-                while (s) {
-                    switch(i) {
-                    case 0:
-                        /* key */
-                        key = csv_stringtrim(s, "\"");
-                        break;
-                    case 1:
-                        /* default value */
-                        val = csv_stringtrim(s, "\"");
-                        break;
-                    case 2:
-                        /* printf conversion */
-                        pfc = csv_stringtrim(s, "\"");
-                        break;
-                    default:
-                        break;
-                    }
-                    i++;
-
-                    s = csv_lineparse(NULL, ",", "", linecount);
-		}
-
-                xcsv_ifield_add(key, val, pfc);
-
-            } else
-
-            /* 
-             * as OFIELDs are implemented as an after-thought, I'll
-             * leave this as it's own parsing for now.  We could
-             * change the world on ifield vs ofield format later..
-             */
-            if (ISSTOKEN(sbuff, "OFIELD")) {
-                key = val = pfc = NULL;
-
-                s = csv_lineparse(&sbuff[6], ",", "", linecount);
-
-                i = 0;
-                while (s) {
-                    switch(i) {
-                    case 0:
-                        /* key */
-                        key = csv_stringtrim(s, "\"");
-                        break;
-                    case 1:
-                        /* default value */
-                        val = csv_stringtrim(s, "\"");
-                        break;
-                    case 2:
-                        /* printf conversion */
-                        pfc = csv_stringtrim(s, "\"");
-                        break;
-                    default:
-                        break;
-                    }
-                    i++;
-                    s = csv_lineparse(NULL, ",", "", linecount);
-                }
-
-                xcsv_ofield_add(key, val, pfc);
-            }
-        }
+	xcsv_parse_style_line(sbuff);
     } while (!feof(fp));
 
     /* if we have no output fields, use input fields as output fields */
