@@ -716,7 +716,7 @@ mag_readwpt(void)
 
 static
 void
-mag_waypt_pr(waypoint *waypointp)
+mag_waypt_pr(const waypoint *waypointp)
 {
 	double lon, lat;
 	double ilon, ilat;

@@ -171,7 +171,7 @@ char *mknshort (char *stIn,unsigned int sLen)
 
 
 
-static void gpsutil_disp(waypoint *wpt)
+static void holux_disp(const waypoint *wpt)
 {
 	double lon,lat;
 	struct tm *tm;
@@ -266,7 +266,7 @@ static void data_write(void)
         ((RTEHDR *)&HxWFile[ROUTESTART])->used[sCount] = 0; 
 
 
-    waypt_disp_all(gpsutil_disp);
+    waypt_disp_all(holux_disp);
    
 
 	file_out = fopen(fOutname, "wb");

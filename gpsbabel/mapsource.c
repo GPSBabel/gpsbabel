@@ -96,7 +96,7 @@ mapsource_read(void)
 }
 
 static void
-mapsource_waypt_pr(waypoint *waypointp)
+mapsource_waypt_pr(const waypoint *waypointp)
 {
 	char tbuf[1024];
 	char *tp = tbuf;

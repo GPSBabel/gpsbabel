@@ -87,7 +87,7 @@ typedef void (*ff_deinit) (void);
 typedef void (*ff_read) (void);
 typedef void (*ff_write) (void);
 
-typedef void (*waypt_cb) (waypoint *);
+typedef void (*waypt_cb) (const waypoint *);
 void waypt_add (waypoint *);
 void route_add (waypoint *);
 void waypt_disp_all(waypt_cb);
@@ -109,11 +109,11 @@ typedef struct ff_vecs {
 
 void waypt_init(void);
 void route_init(void);
-void waypt_disp(waypoint *);
+void waypt_disp(const waypoint *);
 void fatal(const char *, ...);
 ff_vecs_t *find_vec(char *);
 void disp_vecs(void);
-void printposn(coord *c, int is_lat);
+void printposn(const coord *c, int is_lat);
 
 void *xcalloc(size_t nmemb, size_t size);
 void *xmalloc(size_t size);

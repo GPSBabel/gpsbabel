@@ -236,7 +236,7 @@ mapsend_read(void)
 }
 
 static void
-mapsend_waypt_pr(waypoint *waypointp)
+mapsend_waypt_pr(const waypoint *waypointp)
 {
 	int n;
 	unsigned char c;

@@ -77,7 +77,7 @@ data_read(void)
 }
 
 static void
-gpsutil_disp(waypoint *wpt)
+gpsutil_disp(const waypoint *wpt)
 {
 	double lon,lat;
 	const char *icon_token;
