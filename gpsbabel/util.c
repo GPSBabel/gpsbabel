@@ -60,11 +60,9 @@ xstrdup(const char *s)
 	return o;
 }
 
-void *
+void 
 rtrim(char *s)
 {
-	char *p;
-
 	while (*s) {
 		s++;
 	}
@@ -74,7 +72,6 @@ rtrim(char *s)
 		*s = 0;
 		s--;
 	}
-
 }
 
 
