@@ -92,15 +92,16 @@ typedef enum {
 	tt_trk,
 	tt_trk_desc,
 	tt_trk_name,
-	tt_trk_trkpt,
-	tt_trk_trkpt_cmt,
-	tt_trk_trkpt_name,
-	tt_trk_trkpt_sym,
-	tt_trk_trkpt_url,
-	tt_trk_trkpt_urlname,
-	tt_trk_trkpt_desc,
-	tt_trk_trkpt_ele,
-	tt_trk_trkpt_time,
+	tt_trk_trkseg,
+	tt_trk_trkseg_trkpt,
+	tt_trk_trkseg_trkpt_cmt,
+	tt_trk_trkseg_trkpt_name,
+	tt_trk_trkseg_trkpt_sym,
+	tt_trk_trkseg_trkpt_url,
+	tt_trk_trkseg_trkpt_urlname,
+	tt_trk_trkseg_trkpt_desc,
+	tt_trk_trkseg_trkpt_ele,
+	tt_trk_trkseg_trkpt_time,
 } tag_type;
 
 typedef struct tag_mapping {
@@ -152,14 +153,16 @@ tag_mapping tag_path_map[] = {
 	{ tt_trk, "/gpx/trk" },
 	{ tt_trk_name, "/gpx/trk/name" },
 	{ tt_trk_desc, "/gpx/trk/desc" },
-	{ tt_trk_trkpt_ele, "/gpx/trk/trkpt/ele" },
-	{ tt_trk_trkpt_time, "/gpx/trk/trkpt/time" },
-	{ tt_trk_trkpt_name, "/gpx/trk/trkpt/name" },
-	{ tt_trk_trkpt_cmt, "/gpx/trk/trkpt/cmt" },
-	{ tt_trk_trkpt_desc, "/gpx/trk/trkpt/desc" },
-	{ tt_trk_trkpt_url, "/gpx/trk/trkpt/url" },
-	{ tt_trk_trkpt_urlname, "/gpx/trk/trkpt/urlname" },
-	{ tt_trk_trkpt_sym, "/gpx/trk/trkpt/sym" },
+	{ tt_trk_trkseg, "/gps/trk/trkseg" },
+	{ tt_trk_trkseg_trkpt, "/gpx/trk/trkseg/trkpt" },
+	{ tt_trk_trkseg_trkpt_ele, "/gpx/trk/trkseg/trkpt/ele" },
+	{ tt_trk_trkseg_trkpt_time, "/gpx/trk/trkseg/trkpt/time" },
+	{ tt_trk_trkseg_trkpt_name, "/gpx/trk/trkseg/trkpt/name" },
+	{ tt_trk_trkseg_trkpt_cmt, "/gpx/trk/trkseg/trkpt/cmt" },
+	{ tt_trk_trkseg_trkpt_desc, "/gpx/trk/trkseg/trkpt/desc" },
+	{ tt_trk_trkseg_trkpt_url, "/gpx/trk/trkseg/trkpt/url" },
+	{ tt_trk_trkseg_trkpt_urlname, "/gpx/trk/trkseg/trkpt/urlname" },
+	{ tt_trk_trkseg_trkpt_sym, "/gpx/trk/trkseg/trkpt/sym" },
 	{0}
 };
 
@@ -374,7 +377,7 @@ gpx_start(void *data, const char *el, const char **attr)
 		trk_head = route_head_alloc();
 		track_add_head(trk_head);
 		break;
-	case tt_trk_trkpt:
+	case tt_trk_trkseg_trkpt:
 		tag_wpt(attr);
 		break;
 	default:
@@ -575,7 +578,7 @@ gpx_end(void *data, const char *el)
 		break;
 	case tt_trk:
 		break;
-	case tt_trk_trkpt:
+	case tt_trk_trkseg_trkpt:
 		route_add_wpt(trk_head, wpt_tmp);
 		break;
 	case tt_trk_desc:
@@ -587,32 +590,32 @@ gpx_end(void *data, const char *el)
 	 */
 	case tt_wpt_ele:
 	case tt_rte_rtept_ele:
-	case tt_trk_trkpt_ele:
+	case tt_trk_trkseg_trkpt_ele:
 		sscanf(cdatastrp, "%lf", &wpt_tmp->altitude);
 		break;
 	case tt_wpt_name:
 	case tt_rte_rtept_name:
-	case tt_trk_trkpt_name:
+	case tt_trk_trkseg_trkpt_name:
 		wpt_tmp->shortname = xstrdup(cdatastrp);
 		break;
 	case tt_wpt_sym:
 	case tt_rte_rtept_sym:
-	case tt_trk_trkpt_sym:
+	case tt_trk_trkseg_trkpt_sym:
 		wpt_tmp->icon_descr = xstrdup(cdatastrp);
 		wpt_tmp->icon_descr_is_dynamic = 1;
 		break;
 	case tt_wpt_time:
-	case tt_trk_trkpt_time:
+	case tt_trk_trkseg_trkpt_time:
 	case tt_rte_rtept_time:
 		wpt_tmp->creation_time = xml_parse_time( cdatastrp );
 		break;
 	case tt_wpt_cmt:
 	case tt_rte_rtept_cmt:
-	case tt_trk_trkpt_cmt:
+	case tt_trk_trkseg_trkpt_cmt:
 		wpt_tmp->description = xstrdup(cdatastrp);
 		break;
 	case tt_wpt_desc:
-	case tt_trk_trkpt_desc:
+	case tt_trk_trkseg_trkpt_desc:
 	case tt_rte_rtept_desc:
 		wpt_tmp->notes = xstrdup(cdatastrp);
 		break;
