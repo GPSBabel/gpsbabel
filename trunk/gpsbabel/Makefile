@@ -98,7 +98,9 @@ release:
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).zip ftp://upload.sf.net/incoming/
 
 mac-build:
-	make LIBEXPAT=/sw/lib/libexpat.a EXTRA_CFLAGS="-s -I/sw/include"
+	make LIBEXPAT=/sw/lib/libexpat.a EXTRA_CFLAGS="-I/sw/include"
+
+mac-release:
 	mkdir -p usr/bin usr/share/gpsbabel/doc
 	cp gpsbabel usr/bin/
 	cp README* COPYING usr/share/gpsbabel/doc
