@@ -36,7 +36,6 @@ extern gpsdata_type objective;
 
 static char * termread(char *ibuf, int size);
 static void termwrite(char *obuf, int size);
-static double mag2degrees(double mag_val);
 static void mag_readmsg(void);
 static void mag_handon(void);
 static void mag_handoff(void);
@@ -849,10 +848,10 @@ mag_trkparse(char *trkmsg)
 	waypt->creation_time = mktime(&tm) + get_tz_offset() ;
 
 	if (latdir == 'S') latdeg = -latdeg;
-	waypt->position.latitude.degrees = mag2degrees(latdeg);
+	waypt->position.latitude.degrees = ddmm2degrees(latdeg);
 
 	if (lngdir == 'W') lngdeg = -lngdeg;
-	waypt->position.longitude.degrees = mag2degrees(lngdeg);
+	waypt->position.longitude.degrees = ddmm2degrees(lngdeg);
 
 	waypt->position.altitude.altitude_meters = alt;
 
@@ -994,26 +993,6 @@ mag_find_token_from_descr(const char *icon)
 		return icon_mapping[0].token;
 }
 
-static double 
-mag2degrees(double mag_val)
-{
-	double minutes;
-	double tmp_val;
-	double return_value;
-	int deg;
-
-	/* 
-	 * magellan value is DDMM.MM
-	 * e.g. 36 3.85 would be coded as 3603.85
-	 */
-	tmp_val = mag_val / 100.0;
-	deg = (int) tmp_val;
-	minutes = (tmp_val - deg) * 100.0;
-	minutes /= 60.0;
-	return_value = (double) deg + minutes;
-	return return_value;
-} 
-
 /*
  * Given an incoming waypoint messages of the form:
  * $PMGNWPL,3549.499,N,08650.827,W,0000257,M,HOME,HOME,c*4D
@@ -1053,10 +1032,10 @@ mag_wptparse(char *trkmsg)
 	icon_token[i++] = '\0';
 	
 	if (latdir == 'S') latdeg = -latdeg;
-	waypt->position.latitude.degrees = mag2degrees(latdeg);
+	waypt->position.latitude.degrees = ddmm2degrees(latdeg);
 
 	if (lngdir == 'W') lngdeg = -lngdeg;
-	waypt->position.longitude.degrees = mag2degrees(lngdeg);
+	waypt->position.longitude.degrees = ddmm2degrees(lngdeg);
 
 	waypt->position.altitude.altitude_meters = alt;
 	waypt->shortname = xstrdup(shortname);

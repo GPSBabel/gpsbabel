@@ -364,6 +364,13 @@ double pdb_read_double(void *p);
 void pdb_write_double(void *pp, double d);
 
 /*
+ * Prototypes for generic conversion routines (util.c).
+ */
+
+double ddmm2degrees(double ddmm_val);
+double degrees2ddmm(double deg_val);
+
+/*
  * A constant for unknown altitude.   It's tempting to just use zero
  * but that's not very nice for the folks near sea level.
  */
