@@ -171,12 +171,12 @@ map_plot(const waypoint *wpt)
 static void
 data_write(void)
 {
+	double latsz,lonsz;
 	maxlat = -9999.0;
 	maxlon = -9999.0;
 	minlat = 9999.0;
 	minlon = 9999.0;
 	rec_cnt = 0;
-	double latsz,lonsz;
 
 	if (snlen)
 		short_length = atoi(snlen);
