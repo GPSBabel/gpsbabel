@@ -58,6 +58,8 @@ data_read(void)
 	waypoint *wpt_tmp;
 
 	for(;fgets(ibuf, sizeof(ibuf), file_in);) {
+	/*  A sharp in column zero or an blank line is a comment */
+	if (ibuf[0] == '#' || ibuf[0] == '\n') continue;
 	sscanf(ibuf, "%s %le%c %le%c %ld%c %30[^,] %c",
 			name, &lat, &latdir, &lon, &londir,
 			&alt, &alttype, desc, icon);
