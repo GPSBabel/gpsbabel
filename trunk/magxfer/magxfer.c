@@ -27,6 +27,7 @@
 #define FRAME_SIZE 1000
 
 int magfd;
+int datatype = 1;
 struct termios orig_tio;
 struct termios new_tio;
 
@@ -196,7 +197,7 @@ retry_tx:
 	}
 	txs(frame->data, i);
         
-	if (frame_number == 0xffffffff) {
+	if (datatype == 3 && frame_number == 0xffffffff) {
 		/*
 		 *  Do not wait for ACK for flash erase command
 		 *  We have to receive just a series of 0x87 for every
@@ -230,6 +231,13 @@ retry_tx:
 		txs(&erase_command, 1);
 		goto retry_tx;
 	}
+
+        if (datatype == 4) {
+            for (i = 0; (i = rxc()) ;) {
+		    if (i == 0x55)
+                        return 0;
+	    }
+        }
 
 	/*
 	 * Eat the 'OK' codes the unit spits out after the frame.
@@ -470,7 +478,11 @@ void
 restore_port()
 {
 	if (magfd) {
+		sleep(1);
 		tcsetattr(magfd, TCSAFLUSH, &orig_tio);
+		sleep(1);
+		close(magfd);
+		magfd = 0;
 	}
 }
 
@@ -490,6 +502,7 @@ setup_port(const char *portname, unsigned bitrate)
 	}
 
 	tcgetattr(magfd, &orig_tio);
+	atexit(restore_port);
 	new_tio = orig_tio;
 	new_tio.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|
 		IGNCR|ICRNL|IXON);
@@ -502,7 +515,8 @@ setup_port(const char *portname, unsigned bitrate)
 	cfsetospeed(&new_tio, mkspeed(bitrate));
 	cfsetispeed(&new_tio, mkspeed(bitrate));
 	tcsetattr(magfd, TCSAFLUSH, &new_tio);
-	read(magfd,clean_buff,sizeof(clean_buff));
+	while(read(magfd,clean_buff,sizeof(clean_buff)) == sizeof(clean_buff))
+            /* Read until buffer is empty */;
 }
 
 
@@ -515,17 +529,23 @@ setup_port(const char *portname, unsigned bitrate)
  * the data.
  */
 void
-send_upload_cmd(unsigned detailed)
+send_upload_cmd(void)
 {
 	static const char *cmd[] = {
 		"$PMGNCMD,MPUPLOAD,1*71\r\n", 
 		"$PMGNCMD,MPUPLOAD,2*72\r\n", 
 		"$PMGNCMD,MPUPLOAD,3*73\r\n",
-                "$PMGNCMD,DBUPLOAD*77\r\n"
+		"$PMGNCMD,DBUPLOAD*77\r\n",
+		""
 	};
-	txs(cmd[detailed], strlen(cmd[detailed]));
+	txs(cmd[datatype], strlen(cmd[datatype]));
+	if (datatype == 4 ) {
+		cfsetospeed(&new_tio, B19200);
+		cfsetispeed(&new_tio, B19200);
+        } else {
 	cfsetospeed(&new_tio, B115200);
 	cfsetispeed(&new_tio, B115200);
+        }
 	tcsetattr(magfd, TCSADRAIN, &new_tio);
 }
 
@@ -536,7 +556,6 @@ alarm_handler(int a)
 		signal(SIGALRM, SIG_DFL);
 		return;
 	}
-	restore_port();
 	fprintf(stderr, "Fatal error: No communications %d.\n", magfd);
 	exit(1);
 	
@@ -707,7 +726,16 @@ void flash_program(unsigned long address, unsigned long length, char *buff)
 {
 	vld *frame;
 	if (length > 0) {
+		if (datatype == 3) {
 		frame = make_xframe(buff, length, address);
+                } else {
+                    unsigned long first4bytes;
+                    first4bytes  = (*buff++ << 24) & 0xff000000;
+                    first4bytes |= (*buff++ << 16) & 0x00ff0000;
+                    first4bytes |= (*buff++ <<  8) & 0x0000ff00;
+                    first4bytes |= *buff++         & 0x000000ff;
+                    frame = make_xframe(buff, length-4, first4bytes);
+                }
 		printf("\rProgramming %4d bytes at address: %08x", length, address);
 		fflush(stdout);
 		xmit_xframe(frame, address-1);
@@ -749,8 +777,10 @@ void firmware_upload (FILE *infile, char *buffer)
 	}
 	printf("Lowest address = %08X, Highest address = %08X\n", min_address, max_address);
 	fseek(infile, 0, 0);
+        if (datatype == 3) {
         flash_erase(min_address, max_address);
 	printf("\n");
+        }
 	while(fgets(string, sizeof(string)-1, infile)) {
 		if ((rc = get_srec(string, &srec)) <= 0)
 			continue;
@@ -779,7 +809,6 @@ main(int argc, char *argv[])
 	FILE *inf;
 	int c;
 	unsigned bitrate = 4800;
-	int detailedmap = 1;
 	const char *portname = "/dev/ttyS0";
 	const char *ifilename = NULL;
 
@@ -788,15 +817,17 @@ main(int argc, char *argv[])
 		switch(c) {
 		        case 't':
 			    if (strcmp(optarg,"s") == 0)
-				detailedmap = 2;
+				datatype = 2;
 			    else if (strcmp(optarg,"d") == 0)
-				detailedmap = 1;
+				datatype = 1;
 			    else if (strcmp(optarg,"p") == 0)
-				detailedmap = 0;
+				datatype = 0;
 			    else if (strcmp(optarg,"h") == 0)
-				detailedmap = 3;
+				datatype = 3;
+			    else if (strcmp(optarg,"c") == 0)
+				datatype = 4;
 			    else {
-				fprintf(stderr,"Map type (-t option) can only be 'd', 'p', or 's'\n");
+				fprintf(stderr,"Map or file type (-t option) can only be 'd', 'p', 's' or 'h'\n");
 				exit(1);
 			    }
 			    break;
@@ -824,7 +855,7 @@ main(int argc, char *argv[])
 	        exit(1);
 	}
 	setup_port(portname, bitrate);
-	send_upload_cmd(detailedmap);
+	send_upload_cmd();
 	sync_receiver();
 
 	inf = fopen(ifilename, "r");
@@ -832,7 +863,7 @@ main(int argc, char *argv[])
 		perror(ifilename);
 		exit(1);
 	}
-        if (detailedmap == 3) {
+        if ((datatype == 3) || (datatype == 4)) {
         	firmware_upload(inf,ibuf);
         }
 	file_sz = fread(ibuf, 1, sizeof(ibuf), inf);
