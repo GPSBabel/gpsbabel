@@ -181,7 +181,7 @@ echo "IFIELD LON_DECIMALDIR,,%lf%c" >> ${TMPDIR}/testo.style
 rm -f ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
 ${PNAME} -i geo -f geocaching.loc -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.geo
 ${PNAME} -i xcsv,style=${TMPDIR}/testo.style -f ${TMPDIR}/xcsv.geo -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.xcsv
-diff -u ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
+diff ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
 
 # Garmin Mapsource This is a binary format with some undocumented
 # fields.  This test is therefore intentionally vague.  We read a file,
