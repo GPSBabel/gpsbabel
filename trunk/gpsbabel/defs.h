@@ -92,10 +92,11 @@ void waypt_add (waypoint *);
 void route_add (waypoint *);
 void waypt_disp_all(waypt_cb);
 unsigned int waypt_count(void);
-void fprintdms(FILE *, coord *, int);
+void fprintdms(FILE *, const coord *, int);
 char *mkshort (const char *);
 void setshort_length(int n);
 void setshort_badchars(const char *);
+void setshort_mustupper(int n);
 
 typedef struct ff_vecs {
 	ff_init rd_init;
