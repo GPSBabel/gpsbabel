@@ -28,9 +28,12 @@ ${PNAME} -i geo -f geocaching.loc -o geo -F ${TMPDIR}/gl.loc
 compare ${TMPDIR}/gl.loc reference
 
 # GPSUtil
-rm -f ${TMPDIR}/gu.wpt
+rm -f ${TMPDIR}/gu.wpt ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
 ${PNAME} -i geo -f geocaching.loc -o gpsutil -F ${TMPDIR}/gu.wpt
 compare ${TMPDIR}/gu.wpt reference
+${PNAME} -i gpsutil -f ${TMPDIR}/gu.wpt -o gpx -F ${TMPDIR}/1.gpx
+${PNAME} -i gpsutil -f reference/gu.wpt -o gpx -F ${TMPDIR}/2.gpx
+compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
 
 # GPSman 
 rm -f ${TMPDIR}/gm.gm ${TMPDIR}/gm.gm+
@@ -98,6 +101,10 @@ rm -f ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
 ${PNAME} -i psp -f reference/ps.psp -o mxf -F ${TMPDIR}/psp.mxf
 ${PNAME} -i geo -f geocaching.loc -o mxf -F ${TMPDIR}/mxf.psp
 compare ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
+${PNAME} -i psp -f reference/ps.psp -o gpx -F ${TMPDIR}/psp1.gpx
+${PNAME} -i psp -f reference/ps.psp -o psp -F ${TMPDIR}/xxx.psp
+${PNAME} -i psp -f ${TMPDIR}/xxx.psp -o gpx -F ${TMPDIR}/psp2.gpx
+compare ${TMPDIR}/psp1.gpx ${TMPDIR}/psp2.gpx
 
 # MXF (Maptech Exchange Format) file format
 rm -f ${TMPDIR}/mx.mxf ${TMPDIR}/mxf.mxf
