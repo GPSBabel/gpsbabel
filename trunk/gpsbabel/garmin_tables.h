@@ -178,9 +178,14 @@ static icon_mapping_t icon_table[] = {
 	{    17,    17, "White Buoy" },
 	{    35,    36, "White Dot" },
 	{    88,  8219, "Zoo" },
-	{    92,  8227, "Micro-Cache" },   /* icon for "Toll Booth" */
-	{    48,   161, "Virtual cache" }, /* icon for "Scenic Area" */
-	{    86,  8217, "Multi-Cache" },   /* icon for "Stadium" */
-	{    44,   157, "Unknown Cache" },   /* icon for "Information" */
+	{    92,  8227, "Micro-Cache" },   	/* icon for "Toll Booth" */
+	{    48,   161, "Virtual cache" }, 	/* icon for "Scenic Area" */
+	{    86,  8217, "Multi-Cache" },   	/* icon for "Stadium" */
+	{    44,   157, "Unknown Cache" },   	/* icon for "Information" */
+	{    64,   178, "Locationless (Reverse) Cache" }, /* Icon for "Flag" */
+	{    83,  8214, "Post Office" },  	/* Icon for "Post Office" */
+	{    47,   160, "Event Cache" }, 	/* Icon for "Event" */
+	{    90,  8221, "Webcam Cache" }, 	/* Icon for "Live Theatre" */
+
 	{    -1,    -1, NULL },
 };
