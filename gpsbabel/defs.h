@@ -244,6 +244,11 @@ typedef struct ff_vecs {
 	arglist_t *args;
 } ff_vecs_t;
 
+typedef struct style_vecs {
+	const char *name;
+	const char *style_buf;
+} style_vecs_t;
+
 typedef struct filter_vecs {
 	filter_init f_init;
 	filter_process f_process;

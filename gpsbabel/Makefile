@@ -5,7 +5,7 @@ INSTALL_TARGETDIR=/usr/local/
 FMTS=magproto.o gpx.o geo.o gpsman.o mapsend.o mapsource.o \
 	gpsutil.o tiger.o pcx.o csv.o cetus.o gpspilot.o magnav.o \
 	psp.o mxf.o holux.o garmin.o ozi.o tmpro.o dna.o tpg.o gpsdrive.o \
-	xcsv.o xmapwpt.o gcdb.o
+	xcsv.o xmapwpt.o gcdb.o internal_styles.o
 
 FILTERS=position.o duplicate.o
 
@@ -43,6 +43,9 @@ install:
 	install gpsbabel  $(INSTALL_TARGETDIR)/bin
 
 # Nerdy release stuff that needs to work only on Linux.
+
+internal_styles.c:
+	./mkstyle.sh > internal_styles.c
 
 dep:
 	make clean && make CC="gcc -MMD"  && cat *.d */*.d > /tmp/dep
