@@ -19,6 +19,9 @@ all: gpsbabel
 gpsbabel: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o gpsbabel -lexpat -lm
 
+main.o:
+	$(CC) -c $(CFLAGS) -DVERSION=\"$(VERSIOND)\" $<
+
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
 
@@ -28,8 +31,8 @@ dep:
 	make clean && make CC="gcc -MMD"  && cat *.d */*.d > /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_0_0
-VERSIOND=1.0.0
+VERSIONU=1_1_0_pre1206
+VERSIOND=1.1.0_pre1206
 release:
 	rm -fr gpsbabel-$(VERSIOND)
 	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
