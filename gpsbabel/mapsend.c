@@ -21,11 +21,31 @@
 #include <stdio.h>
 #include <string.h>
 
+
 #include "defs.h"
 #include "mapsend.h"
 
 static FILE *mapsend_file_in;
 static FILE *mapsend_file_out;
+
+static int endianness_tested;
+static int i_am_little_endian;
+
+static void
+test_endianness(void)
+{
+	union {
+                long l;
+                unsigned char uc[sizeof (long)];
+        } u;
+        unsigned int i;
+
+        u.l = 1;
+        i_am_little_endian = u.uc[0];
+
+	endianness_tested = 1;
+
+}
 
 static void
 mapsend_rd_init(const char *fname)
@@ -41,6 +61,102 @@ static void
 mapsend_rd_deinit(void)
 {
 	fclose(mapsend_file_in);
+}
+
+static 
+size_t 
+my_fread8(void *ptr, FILE *stream)
+{
+	char cbuf[8];
+	char *cptr = ptr;
+
+	if (!endianness_tested) {
+		test_endianness();
+	}
+
+	if (i_am_little_endian) {	
+		fread(ptr, 8, 1, stream);
+	} else { 
+		fread(cbuf, 8, 1, stream);
+		cptr[0] = cbuf[7];
+		cptr[1] = cbuf[6];
+		cptr[2] = cbuf[5];
+		cptr[3] = cbuf[4];
+		cptr[4] = cbuf[3];
+		cptr[5] = cbuf[2];
+		cptr[6] = cbuf[1];
+		cptr[7] = cbuf[0];
+	}
+}
+
+static 
+size_t
+my_fwrite8(void *ptr, FILE *stream)
+{
+	char cbuf[8];
+	char *cptr = ptr;
+
+	if (!endianness_tested) {
+		test_endianness();
+	}
+
+	if (i_am_little_endian) {	
+		fwrite(ptr, 8, 1, stream);
+	} else {
+		cbuf[0] = cptr[7];
+		cbuf[1] = cptr[6];
+		cbuf[2] = cptr[5];
+		cbuf[3] = cptr[4];
+		cbuf[4] = cptr[3];
+		cbuf[5] = cptr[2];
+		cbuf[6] = cptr[1];
+		cbuf[7] = cptr[0];
+		fwrite(cbuf, 8, 1, stream);
+	}
+}
+
+static 
+size_t 
+my_fread4(void *ptr, FILE *stream)
+{
+	char cbuf[4];
+	char *cptr = ptr;
+	
+	if (!endianness_tested) {
+		test_endianness();
+	}
+
+	if (i_am_little_endian) {	
+		fread(ptr, 4, 1, stream);
+	} else {
+		fread(cbuf, 4, 1, stream);
+		cptr[0] = cbuf[3];
+		cptr[1] = cbuf[2];
+		cptr[2] = cbuf[1];
+		cptr[3] = cbuf[0];
+	}
+}
+
+static 
+size_t
+my_fwrite4(void *ptr, FILE *stream)
+{
+	char cbuf[4];
+	char *cptr = ptr;
+
+	if (!endianness_tested) {
+		test_endianness();
+	}
+
+	if (i_am_little_endian) {	
+		fwrite(ptr, 4, 1, stream);
+	} else {
+		cbuf[0] = cptr[3];
+		cbuf[1] = cptr[2];
+		cbuf[2] = cptr[1];
+		cbuf[3] = cptr[0];
+		fwrite(cbuf, 4, 1, stream);
+	}
 }
 
 static void
@@ -84,7 +200,7 @@ mapsend_read(void)
 
 	fread(&hdr, sizeof(hdr), 1, mapsend_file_in);
 
-	fread(&wpt_count, sizeof(wpt_count), 1, mapsend_file_in);
+	my_fread4(&wpt_count, mapsend_file_in);
 
 	while (wpt_count--) {
 		wpt_tmp = calloc(sizeof(*wpt_tmp), 1);
@@ -99,12 +215,12 @@ mapsend_read(void)
 		p = strncpy(comment, tbuf, scount);
 		p[scount] = '\0';
 
-		fread(&wpt_number, sizeof(wpt_number), 1, mapsend_file_in);
+		my_fread4(&wpt_number, mapsend_file_in);
 		fread(&wpt_icon, sizeof(wpt_icon), 1, mapsend_file_in);
 		fread(&wpt_status, sizeof(wpt_status), 1, mapsend_file_in);
-		fread(&wpt_alt, sizeof(wpt_alt), 1, mapsend_file_in);
-		fread(&wpt_long, sizeof(wpt_long), 1, mapsend_file_in);
-		fread(&wpt_lat, sizeof(wpt_lat), 1, mapsend_file_in);
+		my_fread8(&wpt_alt, mapsend_file_in);
+		my_fread8(&wpt_long, mapsend_file_in);
+		my_fread8(&wpt_lat, mapsend_file_in);
 
 		wpt_tmp->shortname = strdup(name);
 		wpt_tmp->description = strdup(comment);
@@ -120,34 +236,35 @@ static void
 mapsend_waypt_pr(waypoint *waypointp)
 {
 	int n;
+	unsigned char c;
 	double falt;
 	double flong;
 	double flat;
 static int cnt = 0;
 
-	n = strlen(waypointp->shortname);
-	fwrite(&n, 1, 1, mapsend_file_out);
-	fwrite(waypointp->shortname, n, 1, mapsend_file_out);
+	c = strlen(waypointp->shortname);
+	fwrite(&c, 1, 1, mapsend_file_out);
+	fwrite(waypointp->shortname, c, 1, mapsend_file_out);
 
-	n = strlen(waypointp->description);
-	fwrite(&n, 1, 1, mapsend_file_out);
-	fwrite(waypointp->description, n, 1, mapsend_file_out);
+	c = strlen(waypointp->description);
+	fwrite(&c, 1, 1, mapsend_file_out);
+	fwrite(waypointp->description, c, 1, mapsend_file_out);
 
 	/* #, icon, status */
 n = ++cnt;
-	fwrite(&n, 4, 1, mapsend_file_out);
+	my_fwrite4(&n, mapsend_file_out);
 n = 0;
 	fwrite(&n, 1, 1, mapsend_file_out);
 n = 1;
 	fwrite(&n, 1, 1, mapsend_file_out);
 
 	falt = waypointp->position.altitude.altitude_meters;
-	fwrite(&falt, sizeof(double), 1, mapsend_file_out);
+	my_fwrite8(&falt, mapsend_file_out);
 
 	flong = waypointp->position.longitude.degrees;
-	fwrite(&flong, sizeof(double), 1, mapsend_file_out);
+	my_fwrite8(&flong, mapsend_file_out);
 	flat = -waypointp->position.latitude.degrees;
-	fwrite(&flat, sizeof(double), 1, mapsend_file_out);
+	my_fwrite8(&flat, mapsend_file_out);
 }
 
 void
@@ -158,11 +275,11 @@ mapsend_write(void)
 int n = 0;
 
 	fwrite(&hdr, sizeof(hdr), 1, mapsend_file_out);
-	fwrite(&wpt_count, sizeof(wpt_count), 1, mapsend_file_out);
+	my_fwrite4(&wpt_count, mapsend_file_out);
 
 	waypt_disp_all(mapsend_waypt_pr);
 
-	fwrite(&n, 4, 1, mapsend_file_out);
+	my_fwrite4(&n, mapsend_file_out);
 /* TODO: Impelment routes here */
 }
 
