@@ -154,23 +154,49 @@ data_write(void)
 
 	i = 0;
 	/*
-	 * FIXME: Someone that knows the Garmin protocol could 
-	 * do something clever here and switch on gps_save_id to 
-	 * setshort_length to 
-	 * 	15 for  the V, 
+	 * Grope the unit we're talking to to set setshort_length to 
+	 * 	20 for  the V, 
 	 * 	10 for Street Pilot, Rhino, 76
 	 * 	6 for the III, 12, emap, and etrex
 	 * Fortunately, getting this "wrong" only results in ugly names
 	 * when we're using the synthesize_shortname path.
 	 */
 	short_length = 10;
-	switch (gps_save_id) {
-	case 155: 	
-		 	short_length = 20;
+
+	switch ( gps_waypt_type )	/* waypoint type as defined by jeeps */
+	{
+		case 100:	/* The GARMIN GPS Interface Specification, */
+		case 101:	/* says these waypoint types use an ident */
+		case 102:	/* length of 6.  Waypoint types 106, 108 */
+		case 103:	/* and 109 are all variable  length    */
+		case 104:
+		case 105:
+		case 107:
+		case 150:
+		case 151:
+		case 152:
+		case 154:
+		case 155:
+			short_length = 6;
 			break;
-	default:
-			short_length = 10;
+		case 106:	/* Waypoint types with variable ident length */
+		case 108: 	/* Need GPSr id to know the actual length */
+		case 109:                   
+			switch ( gps_save_id )
+			{
+				case 130:	/* Garmin Etrex (yellow) */
+					short_length = 6;
+					break;
+				case 155:	/* Garmin V */
+					short_length = 20;
+					break;
+				default:
+					break;
+			}
 			break;
+		default:
+			break;
+			
 	}
 	setshort_length(short_length);
 	setshort_mustupper(1);
