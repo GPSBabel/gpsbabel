@@ -485,6 +485,11 @@ static char tabsep[] =
 "IFIELD	ALT_METERS, \"\", \"%fM\"\n"
 "IFIELD	EXCEL_TIME, \"\", \"%f\"\n"
 "IFIELD	TIMET_TIME, \"\", \"%ld\"\n"
+"IFIELD  GEOCACHE_DIFF,\"\",\"%3.1f\"\n"
+"IFIELD  GEOCACHE_TERR,\"\",\"%3.1f\"\n"
+"IFIELD  GEOCACHE_CONTAINER,\"\",\"%s\"\n"
+"IFIELD  GEOCACHE_TYPE,\"\",\"%s\"\n"
+
 ;
 static char xmap[] = 
 "# gpsbabel XCSV style file\n"

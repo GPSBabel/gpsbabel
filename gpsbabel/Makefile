@@ -75,7 +75,7 @@ leaktest:
 
 dep:
 	make clean && make CC="gcc -MMD"  && cat *.d */*.d > /tmp/dep && rm *.d */*.d
-	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > $@ || (rm -f $@ ; exit 1)' ) >> /tmp/dep
+	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
 #VERSIONU=1_2_3_beta04272004
@@ -243,4 +243,4 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h defs.h queue.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h \
   jeeps/gpsnmeaget.h
 internal_styles.c: mkstyle.sh style/README.style style/arc.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/s_and_t.style style/saplus.style style/tabsep.style style/xmap.style style/xmapwpt.style
-	./mkstyle.sh > dep || (rm -f dep ; exit 1)
+	./mkstyle.sh > internal_sytles.c || (rm -f dep ; exit 1)
