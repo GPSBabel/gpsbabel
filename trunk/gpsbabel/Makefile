@@ -3,7 +3,7 @@
 # type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
 # INHIBIT_EXPAT and coment out LIBEXPAT on just to get a build working quickly.
 # INHIBIT_EXPAT=-DNO_EXPAT
-LIBEXPAT=-lexpat
+LIBEXPAT=-lexpat # -lefence
 
 #
 # Enable either or both of these as you wish.
@@ -104,11 +104,11 @@ mac-build:
 	curl -u anonymous:anonymous --upload-file gpsbabel-osx.tgz ftp://upload.sf.net/incoming/
 
 # Machine generated from here down.   
-
 arcdist.o: arcdist.c defs.h queue.h grtcirc.h
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 copilot.o: copilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 csv_util.o: csv_util.c defs.h queue.h csv_util.h
+delgpl.o: delgpl.c defs.h queue.h
 duplicate.o: duplicate.c defs.h queue.h
 easygps.o: easygps.c defs.h queue.h
 filter_vecs.o: filter_vecs.c defs.h queue.h
@@ -135,6 +135,7 @@ mapsend.o: mapsend.c defs.h queue.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h
 navicache.o: navicache.c defs.h queue.h
+ozi.o: ozi.c defs.h queue.h csv_util.h
 pcx.o: pcx.c defs.h queue.h garmin_tables.h
 polygon.o: polygon.c defs.h queue.h
 position.o: position.c defs.h queue.h grtcirc.h
@@ -143,6 +144,7 @@ psp.o: psp.c defs.h queue.h
 queue.o: queue.c queue.h
 quovadis.o: quovadis.c quovadis.h defs.h queue.h coldsync/palm.h \
   coldsync/pdb.h
+reverse_route.o: reverse_route.c defs.h queue.h
 route.o: route.c defs.h queue.h
 saroute.o: saroute.c defs.h queue.h
 smplrout.o: smplrout.c defs.h queue.h grtcirc.h
@@ -155,6 +157,7 @@ tpg.o: tpg.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 util.o: util.c defs.h queue.h
 vecs.o: vecs.c defs.h queue.h csv_util.h
+vmem.o: vmem.c defs.h queue.h
 waypt.o: waypt.c defs.h queue.h
 xcsv.o: xcsv.c defs.h queue.h csv_util.h
 coldsync/pdb.o: coldsync/pdb.c coldsync/config.h coldsync/palm.h \
