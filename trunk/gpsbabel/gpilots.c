@@ -43,11 +43,11 @@ Semicircle_Type;
 
 typedef struct
 {
-	unsigned char ident[6];		/* identifier */
+	char ident[6];			/* identifier */
 	unsigned char lat[4];		/* position */
 	unsigned char lon[4];		/* position */
 	unsigned char unused[4];	/* should be set to zero */
-	unsigned char cmnt[40];		/* comment */
+	char cmnt[40];			/* comment */
 	unsigned char smbl;		/* symbol id */
 	unsigned char dspl;		/* display option */
 } D103_Wpt_Type;
@@ -103,7 +103,7 @@ struct record
 #if LATER
 		Custom_Rte_Hdr_Type CustRteHdr;
 #endif
-	};
+	} wpt;
 };
 
 
@@ -251,14 +251,14 @@ data_read(void)
 			 * G103Type
 			 */
 			case 4:
-				wpt_tmp->shortname = xstrndupt(rec->d103.cmnt, sizeof(rec->d103.ident));
-				wpt_tmp->description = xstrndupt(rec->d103.cmnt, sizeof(rec->d103.cmnt));
+				wpt_tmp->shortname = xstrndupt(rec->wpt.d103.cmnt, sizeof(rec->wpt.d103.ident));
+				wpt_tmp->description = xstrndupt(rec->wpt.d103.cmnt, sizeof(rec->wpt.d103.cmnt));
 				/* This is odd.   This is a Palm DB file,
 				 * yet the data appears to be little endian,
 				 * not appropriate the the actual Palm.
 				 */
-				lon = le_read32(&rec->d103.lon);
-				lat = le_read32(&rec->d103.lat);
+				lon = le_read32(&rec->wpt.d103.lon);
+				lat = le_read32(&rec->wpt.d103.lat);
 				wpt_tmp->position.longitude.degrees = lon / 2147483648.0 * 180.0;
 				wpt_tmp->position.latitude.degrees = lat / 2147483648.0 * 180.0;
 				waypt_add(wpt_tmp);
@@ -269,9 +269,9 @@ data_read(void)
 			case 101:
 				track_head = route_head_alloc();
 				route_add_head(track_head);
-				track_head->rte_name = xstrndup(rec->CustTrkHdr.name, sizeof(rec->CustTrkHdr.name));
-				sz = be_read32(&rec->CustTrkHdr.number);
-				tp = (Custom_Trk_Point_Type *) ((char *) pdb_rec->data + sizeof(rec->CustTrkHdr));
+				track_head->rte_name = xstrndup(rec->wpt.CustTrkHdr.name, sizeof(rec->wpt.CustTrkHdr.name));
+				sz = be_read32(&rec->wpt.CustTrkHdr.number);
+				tp = (Custom_Trk_Point_Type *) ((char *) pdb_rec->data + sizeof(rec->wpt.CustTrkHdr));
 				/* FIXME: This is incomplete and probably wrong */
 				while (sz--) {
 					wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);

@@ -1304,7 +1304,7 @@ mag_route_trl(const route_head * rte)
 }
 
 static void
-mag_route_hdr()
+mag_route_hdr(const route_head *rh)
 {
 }
 

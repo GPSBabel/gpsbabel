@@ -88,7 +88,7 @@ waypt_read(void)
 		 * all the cases here.     Yes, libjeeps should probably 
 		 * do this and not us...
 		 */
-		if ((way[i]->alt == (float) (1<<31)) || 
+		if ((way[i]->alt == (float) (1U<<31)) || 
 		     (way[i]->alt == INT_MAX) ||
 		     (way[i]->alt == 1.0e25)
 		     ) {
