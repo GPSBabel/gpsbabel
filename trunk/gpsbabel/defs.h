@@ -490,6 +490,11 @@ double ddmm2degrees(double ddmm_val);
 double degrees2ddmm(double deg_val);
 
 /*
+ *  From util_crc.c
+ */
+unsigned long get_crc32(void * data, int datalen);
+
+/*
  * A constant for unknown altitude.   It's tempting to just use zero
  * but that's not very nice for the folks near sea level.
  */
