@@ -1151,12 +1151,13 @@ gpx_track_disp(const waypoint *waypointp)
 		waypointp->latitude,
 		waypointp->longitude);
 	if (waypointp->altitude != unknown_alt) {
-		fprintf(ofd, "<ele>%f</ele>\n",
+		fprintf(ofd, "  <ele>%f</ele>\n",
 			 waypointp->altitude);
 	}
 	if (waypointp->creation_time) {
 		xml_write_time(ofd, waypointp->creation_time,"time");
 	}
+	write_optional_xml_entity(ofd, "  ", "sym", waypointp->icon_descr);
 	fprintf(ofd, "</trkpt>\n");
 }
 
