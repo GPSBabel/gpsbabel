@@ -85,13 +85,13 @@ COMMON USAGE
 	Invocation was meant to be flexible.   Unfortunately, that can
 	sometimes lead to unwieldy command lines.
 
-		mgps -? 
+		gpsbabel -? 
 
 	will always show you the supported file types.   To use this
 	program, just tell it what you're reading, where to read it from,
 	what you're writing, and what to write it to.  For example:
 
-	mgps -i geo -f /tmp/geocaching.loc -o gpx -F /tmp/geocaching.gpx
+	gpsbabel -i geo -f /tmp/geocaching.loc -o gpx -F /tmp/geocaching.gpx
 
 	tells it to read the first file in geocaching.com format and create
 	a new file in GPX format.
@@ -104,12 +104,12 @@ ADVANCED USAGE
 	new -i argument is seen.  Files are read in the order they appear.  
 	So you could merge three input files into one output file with:
 	
-	mgps -i geo 1.loc 2.loc 3.loc -o geo -F big.loc
+	gpsbabel -i geo 1.loc 2.loc 3.loc -o geo -F big.loc
 
 	You can merge files of different types:
 
-	mgps  -i geo 1.loc -i gpx 2.gpx -i pcx 3.pcx -o gpsutil -F big.gps
+	gpsbabel  -i geo 1.loc -i gpx 2.gpx -i pcx 3.pcx -o gpsutil -F big.gps
 
 	You can write the same data in different output formats:
 
-	mgps -i geo 1.loc -o gpx -F 1.gpx -o pcx 1.wpt
+	gpsbabel -i geo 1.loc -o gpx -F 1.gpx -o pcx 1.wpt
