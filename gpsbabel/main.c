@@ -50,6 +50,7 @@ usage(const char *pname)
 "\n"
 "File Types (-i and -o options):\n"
 	, pname
+	, pname
 	, global_opts.debug_level
 	);
 
