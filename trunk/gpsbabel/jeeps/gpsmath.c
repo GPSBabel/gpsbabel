@@ -266,7 +266,7 @@ int32 GPS_Math_Deg_To_Semi(double v)
 
 double GPS_Math_Semi_To_Deg(int32 v)
 {
-    return v / (double) ((1U<<31) * 180);
+    return (double) (((double)v/(double)(1U<<31)) * (double)180);
 }
 
 
