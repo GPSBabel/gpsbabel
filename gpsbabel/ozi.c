@@ -73,6 +73,7 @@ data_read(void)
     waypoint *wpt_tmp;
     int i;
     int linecount = 0;
+    double alt;
 
     do {
         linecount++;
@@ -140,7 +141,12 @@ data_read(void)
 		    break;
 		case 14:
 		    /* altitude in feet */
-		    wpt_tmp->position.altitude.altitude_meters = (atof(s) * .3048);
+		    alt = atof(s);
+		    if (alt == -777) {
+		        wpt_tmp->position.altitude.altitude_meters = unknown_alt;
+		    } else {
+		        wpt_tmp->position.altitude.altitude_meters = alt * .3048;
+		    }
 		    break;
 		case 15:
 		    /* waypoint text name size */
@@ -150,6 +156,17 @@ data_read(void)
 		    break;
 		case 17:
 		    /* symbol size - 17 default */
+		    break;
+		    /* 
+		     * Fields 18-23 were added around version 3.90.4g of
+		     * Ozi, but aren't documented.   We ignore them.
+		     */
+		case 18:
+		case 19:
+		case 20:
+		case 21:
+		case 22:
+		case 23:
 		    break;
 		default:
 		    /* whoa! nelly */
@@ -181,7 +198,11 @@ ozi_waypt_pr(const waypoint * wpt)
     char * shortname;
 
     ozi_time = (wpt->creation_time / 86400.0) + 25569.0;
-    alt_feet = (wpt->position.altitude.altitude_meters * 3.2808); 
+    if (wpt->position.altitude.altitude_meters == unknown_alt) {
+	alt_feet = -777;
+    } else {
+	alt_feet = (wpt->position.altitude.altitude_meters * 3.2808); 
+    }
     
     if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
         if (wpt->description) {
