@@ -7,7 +7,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o gpilots.o
 
-FILTERS=position.o duplicate.o
+FILTERS=position.o duplicate.o arcdist.o
 
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
