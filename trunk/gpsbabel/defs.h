@@ -64,6 +64,26 @@ typedef struct {
 	altitude altitude;
 } position;
 
+/*
+ * Extended data if waypoint happens to represent a geocache.  This is 
+ * totally voluntary data...
+ */
+
+typedef enum {
+	gt_unknown = 0 ,
+	gt_traditional,
+	gt_multi,
+	gt_virtual,
+	gt_letterbox,
+	gt_event,
+	gt_suprise
+} geocache_type;
+
+typedef struct {
+	geocache_type type;
+	int diff; /* (multiplied by ten internally) */
+	int terr; /* (likewise) */
+} geocache_data ;
 
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not 
@@ -80,6 +100,7 @@ typedef struct {
 	char *url_link_text;
 	const char *icon_descr;
 	time_t creation_time;
+	geocache_data gc_data;
 } waypoint;
 
 typedef void (*ff_init) (char const *);
@@ -149,3 +170,4 @@ void le_write32(void *pp, unsigned i);
  * but that's not very nice for the folks near sea level.
  */
 #define unknown_alt -99999999.0
+

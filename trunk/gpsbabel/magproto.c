@@ -1,4 +1,4 @@
-/*
+	/*
     Communicate Thales/Magellan serial protocol.
 
     Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
@@ -53,7 +53,6 @@ static mag_rxstate magrxstate;
 static int mag_error;
 static int last_rx_csum;
 static int found_done;
-static icon_mapping_t *icon_mapping;
 static int got_version;
 static int is_file = 0;
 
@@ -129,6 +128,8 @@ static icon_mapping_t map330_icon_table[] = {
 	{ "an", "winery" },
 	{ "ao", "wreck" },
 	{ "ap", "zoo" },
+	{ "ah", "Virtual cache"},
+	{ "an", "Event"},
 	{ NULL, NULL } 
 };
 
@@ -142,6 +143,7 @@ pid_to_model_t pid_to_model[] =
 	{ mm_unknown, 0, NULL }
 };
 
+static icon_mapping_t *icon_mapping = map330_icon_table;
 
 
 /*
@@ -375,7 +377,6 @@ if (debug_serial)
 		found_done = 1;
 		return;
 	} 
-
 	mag_writeack(isum);
 }
 
@@ -396,7 +397,14 @@ terminit(const char *portname)
 			  OPEN_EXISTING, 0, NULL);
 
 	if (comport == INVALID_HANDLE_VALUE) {
-		fatal(MYNAME ": '%s'", portname);
+		char *buf;
+
+		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			FORMAT_MESSAGE_FROM_SYSTEM |
+			FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,GetLastError(),0,
+			(LPTSTR) &buf,0,NULL);
+		fatal(MYNAME ": '%s' cannot be opened. %s", portname, buf);
 	}
 	tio.DCBlength = sizeof(DCB);
 	GetCommState (comport, &tio);
@@ -445,12 +453,13 @@ termread(char *ibuf, int size)
 
 	ibuf[i]='a';
 	for(;i < size;i++) {
-		if (ReadFile (comport, &ibuf[i], 1, &cnt, NULL) != TRUE) 
+		if (ReadFile (comport, &ibuf[i], 1, &cnt, NULL) != TRUE)
 			break;
 		if (ibuf[i] == '\n') break;
 	}
 	ibuf[i] = 0;
 	return ibuf;
+
 }
 
 static void
@@ -462,7 +471,6 @@ termwrite(char *obuf, int size)
 		fwrite(obuf, size, 1, magfile_out);
 		return;
 	}
-
 	WriteFile (comport, obuf, size, &len, NULL);
 	if (len != size) {
 		fatal(MYNAME ":.  Wrote %d of %d bytes.", len, size);
@@ -587,6 +595,11 @@ mag_wr_init(const char *portname)
 		mag_cleanse = m330_cleanse;
 		got_version = 1;
 	} else {
+		/*
+		 *  This is a serial device.   The line has to be open for
+		 *  reading and writing, so we let rd_init do the dirty work.
+		 */
+		fclose(magfile_out);
 		mag_rd_init(portname);
 	}
 }
@@ -799,6 +812,12 @@ mag_waypt_pr(const waypoint *waypointp)
 	lat = (lat_deg * 100.0 + lat);
 	
 	icon_token = mag_find_token_from_descr(waypointp->icon_descr);
+	switch (waypointp->gc_data.type) {
+		case gt_virtual:
+			icon_token = mag_find_token_from_descr("Virtual cache");
+			break;
+
+	}
 	owpt = global_opts.synthesize_shortnames ?
                         mkshort(waypointp->description) : waypointp->shortname,
 	odesc = waypointp->description ? waypointp->description : "";
@@ -830,9 +849,14 @@ mag_write(void)
 {
 	if (!is_file) {
 		mag_readmsg();
+#if !__WIN32__
+		/*
+		 * I have no idea why this is fatal under Windows.
+		 */
 		mag_readmsg();
 		mag_readmsg();
 		mag_readmsg();
+#endif
 	}
 	/* 
 	 * Whitespace is actually legal, but since waypoint name length is
