@@ -7,7 +7,7 @@
 static const char vowels[] = "aeiouAEIOU";
 
 #define DEFAULT_TARGET_LEN 8
-static int target_len = DEFAULT_TARGET_LEN;
+static unsigned int target_len = DEFAULT_TARGET_LEN;
 
 #define DEFAULT_BADCHARS "\"$.,'!-"
 static const char *badchars = DEFAULT_BADCHARS;
