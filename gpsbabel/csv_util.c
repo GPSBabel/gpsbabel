@@ -782,7 +782,7 @@ xcsv_waypt_pr(const waypoint *wpt)
     if (shortname)
         xfree(shortname);
 
-    if (description)
+    if (description && description != shortname)
         xfree(description);
 
     index++;
