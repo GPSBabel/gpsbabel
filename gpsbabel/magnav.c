@@ -137,7 +137,7 @@ data_read(void)
 
 
 static void
-my_writewpt(waypoint *wpt)
+my_writewpt(const waypoint *wpt)
 {
 	struct record *rec;
 	static int ct;
@@ -215,7 +215,6 @@ my_writewpt(waypoint *wpt)
 static void
 data_write(void)
 {
-        extern queue waypt_head;
 	queue *elem, *tmp;
 
 	static char *appinfo = 
@@ -252,9 +251,8 @@ data_write(void)
 	opdb->version = 1;
 	opdb->appinfo = (void *)appinfo;
 	opdb->appinfo_len = 276;
-        QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-		my_writewpt((waypoint *)elem);
-	}
+
+	waypt_disp_all(my_writewpt);
 	
 	pdb_Write(opdb, fileno(file_out));
 }

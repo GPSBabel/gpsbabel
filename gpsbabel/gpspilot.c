@@ -123,7 +123,7 @@ data_read(void)
 
 
 static void
-gpspilot_writewpt(waypoint *wpt)
+gpspilot_writewpt(const waypoint *wpt)
 {
 	struct record *rec;
 	static int ct = 0;
@@ -177,7 +177,6 @@ gpspilot_writewpt(waypoint *wpt)
 static void
 data_write(void)
 {
-        extern queue waypt_head;
 	queue *elem, *tmp;
 
 	if (NULL == (opdb = new_pdb())) { 
@@ -191,9 +190,8 @@ data_write(void)
 	opdb->type = MYTYPE;
 	opdb->creator = MYCREATOR; 
 	opdb->version = 0;
-        QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-		gpspilot_writewpt((waypoint *)elem);
-	}
+
+	waypt_disp_all(gpspilot_writewpt);
 	
 	pdb_Write(opdb, fileno(file_out));
 }
