@@ -36,7 +36,7 @@
 #include "csv_util.h"
 #include <ctype.h>
 
-#define MYNAME	"TMP"
+#define MYNAME	"TMPro"
 
 static FILE *file_in;
 static FILE *file_out;
@@ -140,7 +140,7 @@ data_read(void)
 		case 10:
 			/* URL is not a TopoMapPro format requirement.
 			   You can store file links etc, we will discard anything that is not http
-			   (as URLs in TMP must start "http:") as other GPS formats probably can't 
+			   (as URLs in TMPro must start "http:") as other GPS formats probably can't 
 			   use the TopoMapLinks links.
 			   (plus discards length 0 strings (so no empty XML tags))
 			*/
@@ -175,7 +175,7 @@ data_read(void)
 }
 
 static void 
-tmp_waypt_pr(const waypoint * wpt)
+tmpro_waypt_pr(const waypoint * wpt)
 {
     int icon = 1; /* default to "flag" */
     int colour = 255; /*default to red */
@@ -242,10 +242,10 @@ data_write(void)
 	/* Write file header */
 	fprintf(file_out, "Group\tsID\tsDescription\tfLat\tfLong\tfEasting\tfNorthing\tfAlt\tiColour\tiSymbol\tsHyperLink\n");
 
-    waypt_disp_all(tmp_waypt_pr);
+    waypt_disp_all(tmpro_waypt_pr);
 }
 
-ff_vecs_t tmp_vecs = {
+ff_vecs_t tmpro_vecs = {
     rd_init,
     wr_init,
     rd_deinit,

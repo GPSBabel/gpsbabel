@@ -93,6 +93,12 @@ ${PNAME} -i mxf -f reference/mxf.mxf -o mxf -F ${TMPDIR}/mx.mxf
 ${PNAME} -i mxf -f ${TMPDIR}/mx.mxf -o mxf -F ${TMPDIR}/mxf.mxf
 diff ${TMPDIR}/mxf.mxf reference
 
+# tmpro (TopoMapPro Places) file format
+rm -f ${TMPDIR}/topomappro.txt ${TMPDIR}/mxf.mxf
+${PNAME} -i tmpro -f reference/topomappro.txt -o tmpro -F ${TMPDIR}/tmp.txt
+${PNAME} -i tmpro -f ${TMPDIR}/tmp.txt -o tmpro -F ${TMPDIR}/topomappro.txt
+diff ${TMPDIR}/topomappro.txt reference
+
 # TPG (NG Topo!) file format
 # This is hard to test as the datum conversions create minute
 # inconsistencies in the coordinates.  So..  we test our i/o 
