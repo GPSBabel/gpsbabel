@@ -293,14 +293,6 @@ case_ignore_strcmp(const char *s1, const char *s2)
 
 }
 
-double
-mkposn(const char *string)
-{
-	double coord;
-	sscanf(string, "%lf", &coord);
-	return coord;
-}
-
 void
 printposn(const double c, int is_lat)
 {
@@ -311,18 +303,6 @@ printposn(const double c, int is_lat)
 		if (c < 0) d = 'W'; else d = 'E';
 	}
 	printf("%f%c ", fabs(c), d);
-}
-
-void
-fprintdms(FILE *file, const double c, int is_lat)
-{
-	char d;
-	if (is_lat) {
-		if (c < 0) d = 'S'; else d = 'N';
-	} else {
-		if (c < 0) d = 'W'; else d = 'E';
-	}
-	fprintf(file, "%c%f\t", d, fabs(c));
 }
 
 void
