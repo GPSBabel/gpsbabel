@@ -27,8 +27,8 @@ static const char *out_fname;
 struct pdb *opdb;
 
 static int ct;
-static char* rec_ptr = NULL;
-static char* current_rec = NULL;
+static ubyte* rec_ptr = NULL;
+static ubyte* current_rec = NULL;
 static int rec_index = 0;
 
 static char *dbname = NULL;
@@ -72,10 +72,10 @@ static int wpt_to_icon(geocache_type	type) {
     }
     return QUESTION_ICON;
 }
-
+#if 0
 static void
-docopy(char*		dest,
-       const char*	src,
+docopy(ubyte*		dest,
+       const ubyte*	src,
        const int	size)
 {
     int i;
@@ -83,6 +83,7 @@ docopy(char*		dest,
 	dest[i] = src[i];
     }
 }
+#endif
 
 static void
 rd_init(const char *fname, const char *args)
@@ -173,7 +174,7 @@ quovadis_writewpt(waypoint *wpt)
     int	i;
 
     if (current_rec == NULL) {
-	char dummy = 0;
+	ubyte dummy = 0;
 	struct pdb_record *pdb_rec;
 	pdb_rec = new_Record(0, 0, ct++, 1, &dummy);
 	if (pdb_rec == NULL) {
@@ -208,7 +209,7 @@ quovadis_writewpt(waypoint *wpt)
 	rec->reserved[i] = 0;
     }
 
-    docopy(rec_ptr, (const char*)rec, sizeof(*rec));
+    memcpy(rec_ptr, rec, sizeof(*rec));
     rec_ptr += sizeof(*rec);
     rec_index += 1;
     xfree(rec);

@@ -152,7 +152,7 @@ size_t
 my_fwrite4(int *ptr, FILE *stream)
 {
 	unsigned char cbuf[4];
-	unsigned char *cptr = (char *) ptr;
+	unsigned char *cptr = (unsigned char *) ptr;
 
 	if (!endianness_tested) {
 		test_endianness();
@@ -474,7 +474,7 @@ mapsend_route_hdr(const route_head *rte)
 }
 
 static void 
-mapsend_noop()
+mapsend_noop(const route_head *wp)
 {
 	/* no-op */
 }
