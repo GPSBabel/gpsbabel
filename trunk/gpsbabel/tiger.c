@@ -27,6 +27,7 @@ static FILE *file_in;
 static FILE *file_out;
 static FILE *linkf;
 static void *mkshort_handle;
+static void *mkshort_whandle;
 
 #define MYNAME "GPSUTIL"
 
@@ -35,7 +36,9 @@ int rec_cnt;
 static char *nolabels = NULL;
 static char *genurl = NULL;
 static char *scale = "768";
+static char *snlen = NULL;
 int scalev;
+int short_length;
 
 /*
  *   The code bracketed by CLICKMAP is to generate clickable image maps
@@ -54,6 +57,8 @@ arglist_t tiger_args[] = {
 	{"genurl", &genurl, "Generate file with lat/lon for centering map.",
 		ARGTYPE_OUTFILE },
 	{"scale", &scale, "Dimension in pixels of map.",
+		ARGTYPE_INT},
+	{"snlen", &snlen, "Max shortname length when used with -s.",
 		ARGTYPE_INT},
 #if CLICKMAP
 	{"clickmap", &clickmap, "Generate Clickable map web page.",
@@ -146,6 +151,8 @@ tiger_disp(const waypoint *wpt)
 	fprintf(file_out, "%f,%f:%s", lon, lat, pin);
 	if (!nolabels) {
 		char *desc = csv_stringclean(wpt->description, ":");
+		if (global_opts.synthesize_shortnames)
+			desc = mkshort(mkshort_whandle, desc);
 		fprintf(file_out, ":%s", desc);
 		xfree(desc);
 	}
@@ -172,6 +179,14 @@ data_write(void)
 	minlat = 9999.0;
 	minlon = 9999.0;
 	rec_cnt = 0;
+
+	if (snlen)
+		short_length = atoi(snlen);
+	else
+		short_length = 10;
+	mkshort_whandle = mkshort_new_handle();
+	setshort_length(mkshort_whandle, short_length);
+
 	fprintf(file_out, "#tms-marker\n");
 	waypt_disp_all(tiger_disp);
 
@@ -209,6 +224,8 @@ data_write(void)
 		}
 #endif
 	}
+
+	mkshort_del_handle(mkshort_whandle);
 }
 
 
