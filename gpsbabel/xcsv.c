@@ -495,6 +495,10 @@ xcsv_rd_init(const char *fname)
         xcsv_read_style(styleopt);
     }
 
+    if (global_opts.masked_objective & (TRKDATAMASK|RTEDATAMASK)) {
+	warning(MYNAME "attempting to read %s as a track or route.  Converting to waypoints.\n", fname);
+    }
+
     xcsv_file.xcsvfp = xfopen(fname, "r", MYNAME);
 
 }
