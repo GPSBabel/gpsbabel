@@ -207,6 +207,7 @@ waypoint * find_waypt_by_name(const char *name);
 route_head *route_head_alloc(void);
 void route_add (waypoint *);
 void route_add_wpt(route_head *rte, waypoint *wpt);
+void route_del_wpt(route_head *rte, waypoint *wpt);
 void route_add_head(route_head *rte);
 void route_disp_all(route_hdr, route_trl, waypt_cb);
 void route_free (route_head *);

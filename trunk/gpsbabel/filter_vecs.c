@@ -33,6 +33,7 @@ extern filter_vecs_t radius_vecs;
 extern filter_vecs_t duplicate_vecs;
 extern filter_vecs_t arcdist_vecs;
 extern filter_vecs_t polygon_vecs;
+extern filter_vecs_t routesimple_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -60,6 +61,11 @@ fl_vecs_t filter_vec_list[] = {
 		&polygon_vecs,
 		"polygon",
 		"Include Only Points Inside Polygon",
+	},
+	{
+		&routesimple_vecs,
+		"simplify",
+		"Simplify routes",
 	},
         {
 		NULL,
