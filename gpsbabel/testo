@@ -265,3 +265,11 @@ rm -f ${TMPDIR}/route.mapsend
 ${PNAME} -r -i mapsend -f reference/route/route.mapsend -o mapsend \
          -F ${TMPDIR}/route.mapsend
 compare ${TMPDIR}/route.mapsend reference/route/
+
+#
+# MAPSEND track format 
+#
+rm -f ${TMPDIR}/mapsend.trk
+${PNAME} -t -i mapsend -f reference/track/mapsend.trk -o mapsend \
+         -F ${TMPDIR}/mapsend.trk
+compare ${TMPDIR}/mapsend.trk reference/track/

@@ -33,6 +33,7 @@ static int endianness_tested;
 static int i_am_little_endian;
 
 static int route_wp_count;
+static int mapsend_infile_version;
 
 #define MYNAME "mapsend"
 
@@ -302,10 +303,12 @@ mapsend_track_read(void)
 	unsigned int trk_count;
 	double wpt_long;
 	double wpt_lat;
-	float wpt_alt;
+	double wpt_alt;
+	int i = 0;
+	float f = 0;
 	int time;
 	int valid;
-	int centisecs;
+	unsigned char centisecs;
 	route_head *track_head;
 	waypoint *wpt_tmp;
 
@@ -322,16 +325,28 @@ mapsend_track_read(void)
 	while (trk_count--) {
 		my_fread8(&wpt_long, mapsend_file_in);
 		my_fread8(&wpt_lat, mapsend_file_in);
-		my_fread4(&wpt_alt, mapsend_file_in);
+		if (mapsend_infile_version < 36) { /* < version 4.0 */
+			my_fread4(&i, mapsend_file_in);
+			wpt_alt = i;
+		} else {
+			my_fread4(&f, mapsend_file_in);
+			wpt_alt = f;
+		}
 		my_fread4(&time, mapsend_file_in);
 		my_fread4(&valid, mapsend_file_in);
-		fread(&centisecs, 1, 1, mapsend_file_in);
+
+		/* centiseconds only in >= version 3.0 */
+		if (mapsend_infile_version >= 34) {
+			fread(&centisecs, 1, 1, mapsend_file_in);
+		} else {
+			centisecs = 0;
+		}
 
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
-		wpt_tmp->position.altitude.altitude_meters = wpt_alt;
 		wpt_tmp->position.latitude.degrees = -wpt_lat;
 		wpt_tmp->position.longitude.degrees = wpt_long;
 		wpt_tmp->creation_time = time;
+		wpt_tmp->position.altitude.altitude_meters = wpt_alt;
 		route_add_wpt(track_head, wpt_tmp);
 	}
 }
@@ -341,6 +356,7 @@ mapsend_read(void)
 {
 	mapsend_hdr hdr;
 	int type;
+	char buf[3];
 
 	/*
 	 * Becuase of the silly struct packing and the goofy variable-length
@@ -349,6 +365,10 @@ mapsend_read(void)
 
 	fread(&hdr, sizeof(hdr), 1, mapsend_file_in);
 	type = le_read16(&hdr.ms_type);
+	strncpy(buf, hdr.ms_version, 2);
+	buf[2] = '\0';
+	
+	mapsend_infile_version = atoi(buf);
 
 	switch(type) {
 		case ms_type_wpt:
@@ -492,6 +512,81 @@ mapsend_route_disp(const waypoint *waypointp)
 	fwrite(&c, 1, 1, mapsend_file_out);
 }
 
+void mapsend_track_hdr(const route_head * trk)
+{
+	/* 
+	 * we write mapsend v3.0 tracks as mapsend v2.0 tracks get
+	 * tremendously out of whack time/date wise.
+	 */
+	mapsend_hdr hdr = {13, "4D533334 MS", "34", ms_type_track, 0}; 
+	queue *elem, *tmp;
+	char *tname;
+	unsigned char c;
+	int i;
+	
+	fwrite(&hdr, sizeof(hdr), 1, mapsend_file_out);
+
+	/* track name */
+	if (!trk->rte_name)
+		tname = xstrdup("Track");
+	else
+		tname = xstrdup(trk->rte_name);
+
+	c = strlen(tname);
+	
+	fwrite(&c, 1, 1, mapsend_file_out);
+	fwrite(tname, c, 1, mapsend_file_out);
+	
+	/* total nodes (waypoints) this track */
+	i = 0;
+	QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
+		i++;
+	}		
+
+	my_fwrite4(&i, mapsend_file_out);
+	
+}
+
+void mapsend_track_disp(const waypoint * wpt)
+{
+	unsigned char c;
+	double dbl;
+	int i;
+	unsigned int u;
+	time_t t;
+	
+	
+	/* x = longitude */
+	dbl = wpt->position.longitude.degrees;
+	my_fwrite8(&dbl, mapsend_file_out);
+
+	/* x = latitude */
+	dbl = -wpt->position.latitude.degrees;
+	my_fwrite8(&dbl, mapsend_file_out);
+
+	/* altitude */
+	i = wpt->position.altitude.altitude_meters;
+	my_fwrite4(&i, mapsend_file_out);
+	
+	/* time */
+	i = wpt->creation_time;
+	my_fwrite4(&i, mapsend_file_out);
+
+	/* validity */
+	i = 1;
+	my_fwrite4(&i, mapsend_file_out);
+
+	/* 0 centiseconds */
+	c = 0;
+	fwrite(&c, 1, 1, mapsend_file_out);
+}
+
+void 
+mapsend_track_write(void)
+{
+	route_disp_all(mapsend_track_hdr, mapsend_noop, mapsend_track_disp);
+}
+
 static void
 mapsend_wpt_write(void)
 {
@@ -499,37 +594,35 @@ mapsend_wpt_write(void)
 	int wpt_count = waypt_count();
 	int n = 0;
 	
-	fwrite(&hdr, sizeof(hdr), 1, mapsend_file_out);
+	if (global_opts.objective == trkdata) {
+		mapsend_track_write();
+	} else {
+		fwrite(&hdr, sizeof(hdr), 1, mapsend_file_out);
 
-	if (global_opts.objective == wptdata) {
-		my_fwrite4(&wpt_count, mapsend_file_out);
-		waypt_disp_all(mapsend_waypt_pr);
-	} else 
-	if (global_opts.objective == rtedata) {
+		if (global_opts.objective == wptdata) {
+			my_fwrite4(&wpt_count, mapsend_file_out);
+			waypt_disp_all(mapsend_waypt_pr);
+		} else 
+		if (global_opts.objective == rtedata) {
 
-		/* # of points - all routes */
-		n = route_waypt_count();
-		my_fwrite4(&n, mapsend_file_out);
+			/* # of points - all routes */
+			n = route_waypt_count();
+			my_fwrite4(&n, mapsend_file_out);
 
-		/* write points - all routes */
-		route_disp_all(mapsend_noop, mapsend_noop, mapsend_waypt_pr);
-	}
+			/* write points - all routes */
+			route_disp_all(mapsend_noop, mapsend_noop, mapsend_waypt_pr);
+		}
 		
-	n = route_count();
+		n = route_count();
 
-	my_fwrite4(&n, mapsend_file_out);
+		my_fwrite4(&n, mapsend_file_out);
 	
-	if (n)
-		route_disp_all(mapsend_route_hdr, mapsend_noop, mapsend_route_disp);
+		if (n)
+			route_disp_all(mapsend_route_hdr, mapsend_noop, mapsend_route_disp);
+	}
 }
 
-#if LATER
-void 
-mapsend_trk_write(void)
-{
-	mapsend_hdr hdr = {13, "4D533334 MS", "34", ms_type_track, 0};
-}
-#endif
+
 
 ff_vecs_t mapsend_vecs = {
 	mapsend_rd_init,
