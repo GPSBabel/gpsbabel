@@ -34,7 +34,7 @@
 HANDLE comport;
 #endif
 
-#define debug 0
+#define debug_serial  (global_opts.debug_level > 1)
 
 char * termread(char *ibuf, int size);
 void termwrite(char *obuf, int size);
@@ -48,6 +48,7 @@ static FILE *magfile_in;
 static FILE *magfile_out;
 static int magfd;
 static mag_rxstate magrxstate;
+static int mag_error;
 static int last_rx_csum;
 static int found_done;
 static icon_mapping_t *icon_mapping;
@@ -172,7 +173,7 @@ mag_writemsg(const char * const buf)
 	int i;
 	char obuf[1000];
 
-	if (debug) {
+	if (debug_serial) {
 		fprintf(stderr,"WRITE: $%s*%02X\r\n",buf, osum);
 	}
 #if 0
@@ -278,24 +279,25 @@ mag_readmsg(void)
 	isz = strlen(ibuf);
 
 	if (isz < 5) {
-		if (debug)
+		if (debug_serial)
 			fprintf(stderr, "SHORT READ %d\n", isz);
 		return;
 	}
+	mag_error = 0;
 	while (!isprint(ibuf[isz]))
 		isz--;
 	isump = &ibuf[isz-1];
 	isum  = strtoul(isump, NULL,16); 
 	if (isum != mag_pchecksum(&ibuf[1], isz-3)) {
-if (debug)
+if (debug_serial)
 		fprintf(stderr, "RXERR %02x/%02x: '%s'\n", isum, mag_pchecksum(&ibuf[1],isz-5), ibuf);
 		/* Special case receive errors early on. */
 		if (!got_version) {
 			fatal("Magproto: bad communication.  Check bit rate.\n");
 		}
 	}
-	if (debug) {
-	fprintf(stderr, "READ: %s\n", ibuf);
+	if (debug_serial) {
+		fprintf(stderr, "READ: %s\n", ibuf);
 	}
 	if (IS_TKN("$PMGNCSM,")) {
 		last_rx_csum = strtoul(&ibuf[9], NULL, 16);
@@ -309,6 +311,13 @@ if (debug)
 		mag_verparse(ibuf);
 		return;
 	} 
+	mag_error = 0;
+	if (IS_TKN("$PMGNCMD,UNABLE")) {
+		fprintf(stderr, "Unable to send\n");
+		found_done = 1;
+		mag_error = 1;
+		return;
+	}
 	if (IS_TKN("$PMGNCMD,END") || is_file && feof(magfile_in)) {
 		found_done = 1;
 		return;
@@ -744,6 +753,9 @@ mag_waypt_pr(waypoint *waypointp)
 	mag_writemsg(obuf);
 	if (!is_file) {
 		mag_readmsg();
+		if (mag_error) {
+			fprintf(stderr, "Protocol error Writing '%s'\n", obuf);
+		}
 	}
 }
 

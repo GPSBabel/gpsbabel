@@ -92,6 +92,11 @@ main(int argc, char *argv[])
 			case 's':
 				global_opts.synthesize_shortnames = 1;
 				break;
+			case 'D':
+				global_opts.debug_level = atoi(optarg);
+//				global_opts.debug_level = 999;
+				argn++;
+				break;
 			case 'h':
 			case '?':
 				usage(argv[0]);

@@ -32,6 +32,7 @@
 
 typedef struct {
 	int synthesize_shortnames;
+	int debug_level;
 } global_options;
 
 extern global_options global_opts;
