@@ -26,7 +26,7 @@
 #endif
 
 static xml_tag *cur_tag;
-static char *cdatastr;
+static vmem_t cdatastr;
 static char *opt_logpoint = NULL;
 static int logpoint_ct = 0;
 
@@ -333,7 +333,7 @@ gpx_start(void *data, const char *el, const char **attr)
 	 * FIXME: Find out why a cdatastr[0] doesn't adequately reset the 	
 	 * cdata handler.
 	 */
-	memset(cdatastr, 0, MY_CBUF);
+	memset(cdatastr.mem, 0, cdatastr.size);
 
 	switch (get_tag(current_tag.mem)) {
 	case tt_gpx:
@@ -481,6 +481,7 @@ gpx_end(void *data, const char *el)
 {
 	char *s = strrchr(current_tag.mem, '/');
 	float x;
+	char *cdatastrp = cdatastr.mem;
 
 	if (strcmp(s + 1, el)) {
 		fprintf(stderr, "Mismatched tag %s\n", el);
@@ -491,15 +492,15 @@ gpx_end(void *data, const char *el)
 	 * First, the tags that are file-global.
 	 */
 	case tt_time:
-		file_time = xml_parse_time(cdatastr);
+		file_time = xml_parse_time(cdatastrp);
 		break;
 	case tt_email:
 		if (gpx_email) xfree(gpx_email);
-		gpx_email = xstrdup(cdatastr);
+		gpx_email = xstrdup(cdatastrp);
 		break;
 	case tt_author:
 		if (gpx_author) xfree(gpx_author);
-		gpx_author = xstrdup(cdatastr);
+		gpx_author = xstrdup(cdatastrp);
 		break;
 	case tt_gpx:
 		/* Could invoke release code here */
@@ -508,31 +509,31 @@ gpx_end(void *data, const char *el)
 	 * Waypoint-specific tags.
 	 */
 	case tt_wpt_url:
-		wpt_tmp->url = xstrdup(cdatastr);
+		wpt_tmp->url = xstrdup(cdatastrp);
 		break;
 	case tt_wpt_urlname:
-		wpt_tmp->url_link_text = xstrdup(cdatastr);
+		wpt_tmp->url_link_text = xstrdup(cdatastrp);
 		break;
 	case tt_wpt:
 		waypt_add(wpt_tmp);
 		logpoint_ct = 0;
 		break;
 	case tt_cache_container:
-		wpt_tmp->gc_data.container = gs_mkcont(cdatastr);
+		wpt_tmp->gc_data.container = gs_mkcont(cdatastrp);
 		break;
 	case tt_cache_difficulty:
-		sscanf(cdatastr, "%f", &x);
+		sscanf(cdatastrp, "%f", &x);
 		wpt_tmp->gc_data.diff = x * 10;
 		break;
 	case tt_cache_terrain:
-		sscanf(cdatastr, "%f", &x);
+		sscanf(cdatastrp, "%f", &x);
 		wpt_tmp->gc_data.terr = x * 10;
 		break;
 	/*
 	 * Route-specific tags.
  	 */
 	case tt_rte_name:
-		rte_head->rte_name = xstrdup(cdatastr);
+		rte_head->rte_name = xstrdup(cdatastrp);
 		break;
 	case tt_rte:
 		break;
@@ -540,16 +541,16 @@ gpx_end(void *data, const char *el)
 		route_add_wpt(rte_head, wpt_tmp);
 		break;
 	case tt_rte_desc:
-		rte_head->rte_desc = xstrdup(cdatastr);
+		rte_head->rte_desc = xstrdup(cdatastrp);
 		break;
 	case tt_rte_number:
-		rte_head->rte_num = atoi(cdatastr);
+		rte_head->rte_num = atoi(cdatastrp);
 		break;
 	/*
 	 * Track-specific tags.
 	 */
 	case tt_trk_name:
-		trk_head->rte_name = xstrdup(cdatastr);
+		trk_head->rte_name = xstrdup(cdatastrp);
 		break;
 	case tt_trk:
 		break;
@@ -557,7 +558,7 @@ gpx_end(void *data, const char *el)
 		route_add_wpt(trk_head, wpt_tmp);
 		break;
 	case tt_trk_desc:
-		trk_head->rte_desc = xstrdup(cdatastr);
+		trk_head->rte_desc = xstrdup(cdatastrp);
 		break;
 
 	/*
@@ -566,33 +567,33 @@ gpx_end(void *data, const char *el)
 	case tt_wpt_ele:
 	case tt_rte_rtept_ele:
 	case tt_trk_trkpt_ele:
-		sscanf(cdatastr, "%lf", &wpt_tmp->altitude);
+		sscanf(cdatastrp, "%lf", &wpt_tmp->altitude);
 		break;
 	case tt_wpt_name:
 	case tt_rte_rtept_name:
 	case tt_trk_trkpt_name:
-		wpt_tmp->shortname = xstrdup(cdatastr);
+		wpt_tmp->shortname = xstrdup(cdatastrp);
 		break;
 	case tt_wpt_sym:
 	case tt_rte_rtept_sym:
 	case tt_trk_trkpt_sym:
-		wpt_tmp->icon_descr = xstrdup(cdatastr);
+		wpt_tmp->icon_descr = xstrdup(cdatastrp);
 		wpt_tmp->icon_descr_is_dynamic = 1;
 		break;
 	case tt_wpt_time:
 	case tt_trk_trkpt_time:
 	case tt_rte_rtept_time:
-		wpt_tmp->creation_time = xml_parse_time( cdatastr );
+		wpt_tmp->creation_time = xml_parse_time( cdatastrp );
 		break;
 	case tt_wpt_cmt:
 	case tt_rte_rtept_cmt:
 	case tt_trk_trkpt_cmt:
-		wpt_tmp->description = xstrdup(cdatastr);
+		wpt_tmp->description = xstrdup(cdatastrp);
 		break;
 	case tt_wpt_desc:
 	case tt_trk_trkpt_desc:
 	case tt_rte_rtept_desc:
-		wpt_tmp->notes = xstrdup(cdatastr);
+		wpt_tmp->notes = xstrdup(cdatastrp);
 		break;
 	default:
 		end_something_else();
@@ -618,7 +619,8 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 	char **cdata;
 	xml_tag *tmp_tag;
 
-	estr = cdatastr + strlen(cdatastr);
+	vmem_realloc(&cdatastr, len + strlen(cdatastr.mem));
+	estr = (char *) cdatastr.mem + strlen(cdatastr.mem);
 	memcpy(estr, s, len);
 
 	if (!cur_tag) 
@@ -671,7 +673,7 @@ gpx_rd_init(const char *fname)
 	if (!psr) {
 		fatal(MYNAME ": Cannot create XML Parser\n");
 	}
-	cdatastr = xcalloc(MY_CBUF, 1);
+	cdatastr = vmem_alloc(1);
 	XML_SetElementHandler(psr, gpx_start, gpx_end);
 	XML_SetCharacterDataHandler(psr, gpx_cdata);
 }
@@ -681,10 +683,7 @@ static void
 gpx_rd_deinit(void)
 {
 	vmem_free(&current_tag);
-	if ( cdatastr ) {
-		xfree(cdatastr);
-		cdatastr = NULL;
-	}
+	vmem_free(&cdatastr);
 	if ( gpx_email ) {
 		xfree(gpx_email);
 		gpx_email = NULL;
