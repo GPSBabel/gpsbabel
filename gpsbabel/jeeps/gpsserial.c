@@ -31,8 +31,10 @@
 #include <unistd.h>
 #include <time.h>
 
-
-#if __WIN32__
+/* 
+ * termio on Cygwin is apparently broken, so we revert to Windows serial.
+ */
+#if defined (__WIN32__) || defined (__CYGWIN__)
 
 #include <windows.h>
 /*
