@@ -247,6 +247,10 @@ xml_deinit(void)
 {
 	vmem_free(&current_tag);
 	vmem_free(&cdatastr);
+	if (ifd) {
+		fclose(ifd);
+		ifd = NULL;
+	}
 }
 
 /******************************************/
