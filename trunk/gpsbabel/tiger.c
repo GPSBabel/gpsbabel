@@ -248,11 +248,11 @@ data_write(void)
 		 * Center the map along X and Y axis the midpoint of
 		 * our min and max coords each way.   
 		 */
-		fprintf(urlf, "lat=%f&lon=%f&wid=%f&ht=%f",
+		fprintf(urlf, "lat=%f&lon=%f&ht=%f&wid=%f",
 				minlat + (latsz/2.0),
 				minlon + (lonsz/2.0),
 				dscale(latsz),
-				dscale(latsz));
+				dscale(lonsz));
 
 		if (scale) {
 			fprintf(urlf, "&iwd=%s&iht=%s", scale, scale);
