@@ -211,22 +211,6 @@ psit_wr_deinit(void)
  * and write into buf.
  */
 static void
-psit_readstr(FILE *psit_file, char *buf, size_t sz)
-{
-	int c;
-	while (sz-- && (c = fgetc (psit_file)) != EOF) {
-		*buf++ = c;
-		if (c == 0)  {
-			return;
-		}
-	}
-}
-
-/*
- * get characters until and including terminating NULL from psit_file_in 
- * and write into buf.
- */
-static void
 psit_getToken(FILE *psit_file, char *buf, size_t sz, psit_tokenSep_type delimType)
 {
 	int c;
