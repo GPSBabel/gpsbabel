@@ -2790,6 +2790,9 @@ int32 GPS_A201_Send(const char *port, GPS_PWay *way, int32 n)
 	    case pD108:
 		GPS_D108_Send(data,way[i],&len);
 		break;
+	    case pD109:
+		GPS_D109_Send(data,way[i],&len);
+		break;
 	    case pD150:
 		GPS_D150_Send(data,way[i],&len);
 		break;
