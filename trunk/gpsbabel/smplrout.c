@@ -246,5 +246,6 @@ filter_vecs_t routesimple_vecs = {
 	routesimple_init,
 	routesimple_process,
 	routesimple_deinit,
+	NULL,
 	routesimple_args
 };

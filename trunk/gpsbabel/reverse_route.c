@@ -62,5 +62,6 @@ filter_vecs_t reverse_route_vecs = {
 	reverse_route_init,
 	reverse_route_process,
 	reverse_route_deinit,
+	NULL,
 	reverse_route_args
 };

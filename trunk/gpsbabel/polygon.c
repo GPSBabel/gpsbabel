@@ -293,5 +293,6 @@ filter_vecs_t polygon_vecs = {
 	polygon_init,
 	polygon_process,
 	polygon_deinit,
+	NULL,
 	polygon_args
 };
