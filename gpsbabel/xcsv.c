@@ -34,6 +34,7 @@ static char *styleopt;
 static char *snlenopt;
 static char *snwhiteopt;
 static char *snupperopt;
+char *xcsv_urlbase;
 
 static
 arglist_t xcsv_args[] = {
@@ -41,6 +42,7 @@ arglist_t xcsv_args[] = {
 	{"snlen", &snlenopt, "Max synthesized shortname length"},
 	{"snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames"},
 	{"snupper", &snupperopt, "(0/1) UPPERCASE synth. shortnames"},
+	{"urlbase", &xcsv_urlbase, "Basename prepended to URL on output"},
 	{0, 0, 0}
 };
 
