@@ -322,16 +322,19 @@ decdir_to_dec(const char * decdir)
  * human_to_dec() - convert a "human-readable" lat and/or lon to decimal
  * usage: human_to_dec( "N 41° 09.12' W 085° 09.36'", &lat, &lon );
  *        human_to_dec( "41 9 5.652 N", &lat, &lon );
+ *        
+ *        which: 0-no preference    1-prefer lat    2-prefer lon
  *****************************************************************************/
 
 static void
-human_to_dec( const char *instr, double *outlat, double *outlon )
+human_to_dec( const char *instr, double *outlat, double *outlon, int which )
 {
     double unk[3] = {999,999,999};
     double lat[3] = {999,999,999};
     double lon[3] = {999,999,999};
     int    latsign = 0;
     int    lonsign = 0;
+    int    unksign = 1;
    
     const char *cur;
     double *numres = unk;
@@ -388,6 +391,10 @@ human_to_dec( const char *instr, double *outlat, double *outlon )
 		numres[numind] = atof(cur);
 		while (cur && *cur && strchr("1234567890.",*cur)) cur++;
 		break;
+	    case '-':
+		unksign = -1;
+		cur++;
+		break;
 	    default:
 		if (numres[numind] != 999) {
     		    numind++;
@@ -398,6 +405,17 @@ human_to_dec( const char *instr, double *outlat, double *outlon )
 		}
 		cur++;
 		break;      
+	}
+    }
+    
+    if ( lat[0] == 999 && lon[0] == 999 ) {
+	if ( which == 1 ) {
+	    lat[0] = unk[0]; lat[1] = unk[1]; lat[2] = unk[2];
+	    latsign = unksign;
+	}
+	else if ( which == 2 ) {
+	    lon[0] = unk[0]; lon[1] = unk[1]; lon[2] = unk[2];
+	    lonsign = unksign;
 	}
     }
     
@@ -634,7 +652,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        wpt->latitude = intdeg_to_dec(atof(s), 1);
     } else
     if ( strcmp(fmp->key, "LAT_HUMAN_READABLE") == 0) {
-       human_to_dec( s, &wpt->latitude, &wpt->longitude );
+       human_to_dec( s, &wpt->latitude, &wpt->longitude, 1 );
     } else
     if ( strcmp(fmp->key, "LAT_NMEA") == 0) {
 	wpt->latitude = ddmm2degrees(wpt->latitude);
@@ -654,14 +672,14 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        wpt->longitude = intdeg_to_dec(atof(s), 0);
     } else
     if ( strcmp(fmp->key, "LON_HUMAN_READABLE") == 0) {
-       human_to_dec( s, &wpt->latitude, &wpt->longitude );
+       human_to_dec( s, &wpt->latitude, &wpt->longitude, 2 );
     } else
     if ( strcmp(fmp->key, "LON_NMEA") == 0) {
 	wpt->latitude = ddmm2degrees(wpt->longitude);
     } else
     /* LAT AND LON CONVERSIONS ********************************************/
     if ( strcmp(fmp->key, "LATLON_HUMAN_READABLE") == 0) {
-       human_to_dec( s, &wpt->latitude, &wpt->longitude );
+       human_to_dec( s, &wpt->latitude, &wpt->longitude, 0 );
     } else
     /* DIRECTIONS **********************************************************/
     if (strcmp(fmp->key, "LAT_DIR") == 0) {
