@@ -223,6 +223,12 @@ THE FORMATS
         data, your output file won't either.
         Colour of waypoint icons defaults to red.
 
+    GPSDRIVE
+  
+        GpsDrive way.txt file format. A space seperated format file. Tested
+        against GpsDrive v 1.30 found @ http://www.kraftvoll.at/software.
+        Contributed by Alan Curry.
+
 
 COMMON USAGE
 

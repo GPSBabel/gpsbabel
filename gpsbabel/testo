@@ -158,3 +158,11 @@ ${PNAME} -i cetus -f ${TMPDIR}/cetus.pdb -o gpsutil -F ${TMPDIR}/cetus.gpu
 ${PNAME} -i cetus -f reference/cetus.pdb -o gpsutil -F ${TMPDIR}/cetust.gpu
 diff ${TMPDIR}/cetust.gpu ${TMPDIR}/cetus.gpu
 diff reference/cetus.gpu ${TMPDIR}/cetus.gpu
+
+# GpsDrive
+rm -f ${TMPDIR}/gpsdrive.txt
+${PNAME} -i geo -f geocaching.loc -o gpsdrive -F ${TMPDIR}/gpsdrive.txt
+diff ${TMPDIR}/gpsdrive.txt reference
+${PNAME} -i gpsdrive -f reference/gpsdrive.txt -o gpsdrive -F ${TMPDIR}/gpsdrive2.txt
+diff ${TMPDIR}/gpsdrive2.txt reference/gpsdrive.txt
+
