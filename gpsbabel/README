@@ -66,7 +66,9 @@ THE FORMATS
 	Waypoint serial upload and download works reliably under both
 	POSIX and Windows.   I tested it with a Vista graciously provided
 	on loan by Joe Armstrong.   The communications library used, jeeps,
-	claims to support most models of Garmin hardware.
+	claims to support most models of Garmin hardware.   Be sure the GPS 
+	is set for "Garmin mode" in setup and that nothing else (gpsd, getty,
+	pppd, etc.) is using the serial port.
 	
     GPSMAN
 
