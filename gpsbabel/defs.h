@@ -325,6 +325,7 @@ void 	vmem_realloc(vmem_t*, size_t);
 #define ARGTYPE_FILE     0x00000005
 #define ARGTYPE_OUTFILE  0x00000006
 #define ARGTYPE_REQUIRED 0x40000000
+#define ARGTYPE_HIDDEN   0x20000000
 
 #define ARGTYPE_TYPEMASK 0x00000fff
 #define ARGTYPE_FLAGMASK 0xfffff000

@@ -33,6 +33,8 @@ static char *opt_discard = NULL;
 static char *opt_replace = NULL;
 static char *opt_swap = NULL;
 static char *opt_depth = NULL;
+static char *nowarn = NULL;
+static int  warnings_enabled = 1;
 static int  swapdepth = 0;
 
 static
@@ -52,6 +54,8 @@ arglist_t stackfilt_args[] = {
 	{"swap", &opt_swap, "Swap waypoint list with <depth> item on stack", 
 		NULL, ARGTYPE_BOOL},
 	{"depth", &opt_depth, "Item to use when swapping", NULL, ARGTYPE_INT},
+	{"nowarn", &nowarn, "Suppress cleanup warning", NULL, 
+		ARGTYPE_INT | ARGTYPE_HIDDEN},
 	{0, 0, 0, 0, 0}
 };
 
@@ -121,6 +125,10 @@ stackfilt_init(const char *args) {
 	
 	int invalid = 0;
 	
+	if ( nowarn ) {
+		warnings_enabled = 0;
+	}
+	
 	if ( opt_depth ) {
 		swapdepth = atoi( opt_depth );
 	}
@@ -163,7 +171,7 @@ void
 stackfilt_exit( void ) {
 	struct stack_elt *tmp_elt = NULL;
  
-	if ( stack ) {
+	if ( warnings_enabled && stack ) {
 		warning( MYNAME " Warning: leftover stack entries; "
 			"check command line for mistakes\n" );
 	}	
