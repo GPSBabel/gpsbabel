@@ -24,10 +24,16 @@
 #include <stdlib.h>
 
 vmem_t 
-vmem_alloc(size_t size)
+vmem_alloc(size_t size, int flags)
 {
 	vmem_t vm;
-	vm.mem = xmalloc(size);
+	/*
+	 * By default, zero the allocated thingy.
+	 */
+	if (flags & VMFL_NOZERO)
+		vm.mem = xmalloc(size);
+	else
+		vm.mem = xcalloc(size, 1);
 	vm.size = size;
 	return vm;
 }
