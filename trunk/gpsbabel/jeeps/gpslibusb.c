@@ -23,25 +23,30 @@
 
 #include <stdio.h>
 #include <usb.h>
+#include "gps.h"
 #include "garminusb.h"
 
 #define GARMIN_VID 0x91e
-#define TMOUT_W 1000 /*  Milliseconds to timeout device access. */
-#define TMOUT_R 0000 /*  Milliseconds to timeout device access. */
-#define TMOUT_I 0001 /*  Milliseconds to timeout device access. */
+
+/* This is very sensitive to timing; libusb and/or the unit is kind of
+ * sloppy about not obeying packet boundries.  If this is too high, the
+ * multiple packets responding to the device inquriy will be glommed into
+ * one packet and we'll misparse them.  If it's too low, we'll get partially
+ * satisfied reads.
+ */
+#define TMOUT_I 0015 /*  Milliseconds to timeout intr pipe access. */
 
 int gusb_intr_in_ep;
 int gusb_bulk_out_ep;
 int gusb_bulk_in_ep;
 
 static const char  oinit[12] = {0, 0, 0, 0, 0x05, 0, 0, 0, 0, 0, 0, 0};
-static const char oinit2[12] = {0, 0, 0, 0, 0x10, 0, 0, 0, 0, 0, 0, 0};
-static const char RQST[12] = {0x14, 0, 0, 0, 0xfe, 0, 0, 0, 0, 0, 0, 0};
-static char iresp[16];
-static char iresp2[16];
+garmin_usb_packet iresp;
 
 static struct usb_bus *busses;
 static	usb_dev_handle *udev;
+static void garmin_usb_scan(void);
+static void garmin_usb_syncup(void);
 
 gusb_init(void)
 {
@@ -55,7 +60,7 @@ gusb_init(void)
 	return 1;
 }
 
-dump(char *msg, unsigned char *in, int r)
+dump(char *msg, const unsigned char *in, int r)
 {
 	int i;
 	printf("%s: %d\n", msg, r);
@@ -73,18 +78,19 @@ int
 gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 {
 	int r;
-        r = usb_bulk_write(udev, gusb_bulk_out_ep, &opkt->dbuf, sz, TMOUT_W);
-	dump ("Sent", &opkt->dbuf, r);
+
+        r = usb_bulk_write(udev, gusb_bulk_out_ep, &opkt->dbuf, sz, TMOUT_I);
+	dump ("Sent", &opkt->dbuf[0], r);
 	if (r != sz) {
 		fprintf(stderr, "Bad cmdsend\n");
 	}
 }
-
+#if 0
 int
 gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
 {
 	int rv = 0;
-	unsigned char *obuf = ibuf->dbuf;
+	unsigned char *obuf = &ibuf->dbuf;
 	unsigned char *buf = obuf;
 
 	while (sz) {
@@ -115,6 +121,49 @@ gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
 	dump("completed intr Got", obuf, rv);
 	return rv;
 }
+#else
+
+int
+gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
+{
+	unsigned char *buf = &ibuf->dbuf[0];
+	unsigned char *obuf = buf;
+	int r = -1, tsz = 0;
+ while (r <= 0)
+	r = usb_interrupt_read(udev, gusb_intr_in_ep, buf, sz, TMOUT_I);
+
+	tsz = r;
+
+        if (gps_show_bytes) {
+		int i;
+                const char *m1, *m2;
+                printf("RX [%d]:", tsz);
+                for(i=0;i<tsz;i++)
+                        GPS_Diag("%02x ", obuf[i]);
+                for(i=0;i<tsz;i++)
+                        GPS_Diag("%c", isalnum(obuf[i])? obuf[i] : '.');
+
+                m1 = Get_Pkt_Type(ibuf->gusb_pkt.pkt_id[0], ibuf->gusb_pkt.databuf[0], &m2);
+                GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
+                printf("\n");
+        }
+
+	return (r);
+
+
+}
+#endif
+
+void
+garmin_usb_teardown(void)
+{
+	if (udev) {
+		fprintf(stderr, "Tearing down\n");
+		usb_release_interface(udev, 0);
+		usb_close(udev);
+		udev = NULL;
+	}
+}
 
 garmin_usb_start(struct usb_device *dev)
 {
@@ -123,6 +172,7 @@ garmin_usb_start(struct usb_device *dev)
 	char ibuf[4096];
 
 	udev = usb_open(dev);
+	atexit(garmin_usb_teardown);
 	if (!udev) { fatal("usb_open failed"); }
 	/*
 	 * Hrmph.  No iManufacturer or iProduct headers....
@@ -158,11 +208,6 @@ garmin_usb_start(struct usb_device *dev)
 //printf("intr in: %d\n", gusb_intr_in_ep);
 
 	garmin_usb_syncup();
-#if 0
-	cmd_send(RQST, sizeof(RQST));
-	cmd_get(ibuf, sizeof(ibuf));
-exit(0);
-#endif
 
 // fprintf(stdout, "====================================================\n");
 
@@ -172,10 +217,11 @@ exit(0);
 	usb_close(udev);
 exit(1);
 }
-#if 1
+
+void
 garmin_usb_syncup(void)
 {
-	int maxct = 200;
+	int maxct = 5;
 	int maxtries;
 	char ibuf[4096];
 #if 0
@@ -185,27 +231,24 @@ garmin_usb_syncup(void)
 #endif
 
 	for (maxtries = maxct; maxtries; maxtries--) {
-		gusb_cmd_send(oinit, sizeof(oinit));
-		gusb_cmd_get(iresp, sizeof(iresp));
-		if (iresp[4] == 6 && iresp[8] == 4) {
+
+                le_write16(&iresp.gusb_pkt.pkt_id, 0);
+                le_write32(&iresp.gusb_pkt.datasz, 0);
+                le_write32(&iresp.gusb_pkt.databuf, 0);
+
+		gusb_cmd_send((const garmin_usb_packet *) oinit, sizeof(oinit));
+		gusb_cmd_get(&iresp, sizeof(iresp));
+
+                if ((le_read16(iresp.gusb_pkt.pkt_id) == 6) &&
+                        (le_read32(iresp.gusb_pkt.datasz) == 4)) {
 			fprintf(stderr, "Synced in %d\n", maxct - maxtries);
 //			fprintf(stderr, "Unit number %u\n", iresp[15] << 24 | iresp[14] << 16 | iresp[13] << 8 | iresp[12]);
 			return;
 		}
 	}
-#if 0
-	for (maxtries = maxct; maxtries; maxtries--) {
-		gusb_cmd_send(oinit2, sizeof(oinit2));
-		gusb_cmd_get(iresp2, sizeof(iresp2));
-		if (iresp2[4] == 0x11 && iresp2[8] == 4) {
-			return;
-		}
-	}
-#endif
-fprintf(stderr, "Cannot sync up with receiver\n");
-exit(1);
+return;
+	fatal("Cannot sync up with receiver\n");
 }
-#endif
 
 static
 void garmin_usb_scan(void)
@@ -228,11 +271,4 @@ void garmin_usb_scan(void)
 	}
 }
 
-#if 0
-Xmain()
-{
-		garmin_usb_init();
-		garmin_usb_scan();
-}
-#endif
 #endif /* !defined(NO_USB) */
