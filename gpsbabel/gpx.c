@@ -296,7 +296,7 @@ gpx_start(void *data, const char *el, const char **attr)
 	else if (strcmp(el, "urlname") == 0) {
 		in_urlname++;
 	} 
-	else if (strcmp(el, "icon") == 0) {
+	else if (strcmp(el, "sym") == 0) {
 		in_icon++;
 	} 
 	else if (strcmp(el, "groundspeak:type") == 0) {
@@ -433,7 +433,7 @@ gpx_end(void *data, const char *el)
 		in_url--;
 	} else if (strcmp(el, "urlname") == 0) {
 		in_urlname--;
-	} else if (strcmp(el, "icon") == 0) {
+	} else if (strcmp(el, "sym") == 0) {
 		in_icon--;
 	} else if (strcmp(el, "groundspeak:type") == 0) {
 		in_gs_type--;
@@ -690,7 +690,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 	}
 	if (waypointp->icon_descr) {
 		tmp_ent = gpx_entitize(waypointp->icon_descr);
-		fprintf(ofd, "<icon>%s</icon>\n", tmp_ent );
+		fprintf(ofd, "<sym>%s</sym>\n", tmp_ent );
 		free(tmp_ent);
 	}
 
