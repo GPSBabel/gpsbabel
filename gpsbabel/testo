@@ -403,12 +403,6 @@ compare ${TMPDIR}/navi.wpt reference/navicache.ref
 
 #
 # CoastalExplorer..
-${PNAME} -i coastexp -f reference/coastexp.nob -o gpx -F ${TMPDIR}/coastexp.gpx
-compare ${TMPDIR}/coastexp.gpx reference/coastexp.ref
-#
-
-#
-# CoastalExplorer..
 ${PNAME} -r -i coastexp -f reference/coastexp.nob -o gpx -F ${TMPDIR}/coastexp.gpx
 compare ${TMPDIR}/coastexp.gpx reference/coastexp.ref
 ${PNAME} -r -i gpx -f ${TMPDIR}/coastexp.gpx -o coastexp -F ${TMPDIR}/coastexp.nob

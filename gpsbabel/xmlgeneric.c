@@ -91,21 +91,35 @@ write_xml_entity_end(FILE *ofd, const char *indent,
 }
 
 void
-xml_write_time(FILE *ofd, const time_t timep, char *elname)
+xml_fill_in_time(char *time_string, const time_t timep, int long_or_short)
 {
 	struct tm *tm = gmtime(&timep);
+	char *format;
 	
 	if (!tm)
 		return;
 	
-	fprintf(ofd, "<%s>%02d-%02d-%02dT%02d:%02d:%02dZ</%s>\n",
-		elname,
+	if (long_or_short == XML_LONG_TIME)
+		format = "%02d-%02d-%02dT%02d:%02d:%02dZ";
+	else
+		format = "%02d%02d%02dT%02d%02d%02dZ";
+	sprintf(time_string, format,
 		tm->tm_year+1900, 
 		tm->tm_mon+1, 
 		tm->tm_mday, 
 		tm->tm_hour, 
 		tm->tm_min, 
-		tm->tm_sec,
+		tm->tm_sec);
+}
+
+void
+xml_write_time(FILE *ofd, const time_t timep, char *elname)
+{
+	char time_string[64];
+	xml_fill_in_time(time_string, timep, XML_LONG_TIME);
+	fprintf(ofd, "<%s>%s</%s>\n",
+		elname,
+		time_string,
 		elname
 	);
 
