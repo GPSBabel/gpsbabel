@@ -45,9 +45,13 @@ static char csv[] =
 "#\n"
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
 "#\n"
-"IFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
-"IFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
+"IFIELD	LAT_HUMAN_READABLE, \"\", \"%08.5f\"\n"
+"IFIELD	LON_HUMAN_READABLE, \"\", \"%08.5f\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%s\"\n"
+
+"OFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD	DESCRIPTION, \"\", \"%s\"\n"
 ;
 static char custom[] = 
 "# gpsbabel XCSV style file\n"
@@ -518,9 +522,13 @@ static char xmap[] =
 "#\n"
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
 "#\n"
-"IFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
-"IFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
+"IFIELD	LAT_HUMAN_READABLE, \"\", \"%08.5f\"\n"
+"IFIELD	LON_HUMAN_READABLE, \"\", \"%08.5f\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%s\"\n"
+
+"OFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD	DESCRIPTION, \"\", \"%s\"\n"
 ;
 static char xmapwpt[] = 
 "# gpsbabel XCSV style file\n"
