@@ -122,9 +122,9 @@ text_disp(const waypoint *wpt)
 		xml_tag *logpart = NULL;
 		curlog = xml_findfirst( root, "groundspeak:log" );
 		while ( curlog ) {
-			fprintf( file_out, "\n" );
 			time_t logtime = 0;
 			struct tm *logtm = NULL;
+			fprintf( file_out, "\n" );
 			
 			logpart = xml_findfirst( curlog, "groundspeak:type" );
 			if ( logpart ) {
