@@ -226,6 +226,7 @@ mps_waypt_pr(const waypoint *wpt)
 
 	icon = mps_find_icon_number_from_desc(wpt->icon_descr);
 
+	le_write32(&reclen, reclen);
 	fwrite(&reclen, 4, 1, mps_file_out);
 	fwrite("W", 1, 1, mps_file_out);
 	fputs(wpt->shortname, mps_file_out);
@@ -234,8 +235,12 @@ mps_waypt_pr(const waypoint *wpt)
 	fwrite(ffbuf, 12, 1, mps_file_out);
 	fwrite(zbuf, 2, 1, mps_file_out);
 	fwrite(ffbuf, 4, 1, mps_file_out);
+
+	le_write32(&lat, lat);
+	le_write32(&lon, lon);
 	fwrite(&lat, 4, 1, mps_file_out);
 	fwrite(&lon, 4, 1, mps_file_out);
+
 	fwrite(zbuf, 9, 1, mps_file_out);
 	fputs(wpt->description, mps_file_out);
 	fwrite(zbuf, 10, 1, mps_file_out);
