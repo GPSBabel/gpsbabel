@@ -571,5 +571,17 @@ rm -f ${TMPDIR}/pathdist.out
 ${PNAME} -i magellan -f reference/dusky.trk -o xcsv,style=reference/gnuplot.style -F ${TMPDIR}/pathdist.out
 compare ${TMPDIR}/pathdist.out reference/dusky.gnuplot
 
+# hsandv
+rm -f ${TMPDIR}/hsandv.exp ${TMPDIR}/1.exp ${TMPDIR}/1.exp ${TMPDIR}/Glad_5.exp
+${PNAME} -i geo -f geocaching.loc -o hsandv -F ${TMPDIR}/hsandv.exp
+compare ${TMPDIR}/hsandv.exp reference
+#the hsandv format is too lossy to do this test :(
+#${PNAME} -i hsandv -f ${TMPDIR}/hsandv.exp -o geo -F ${TMPDIR}/1.exp
+#${PNAME} -i hsandv -f reference/hsandv.exp -o geo -F ${TMPDIR}/2.exp
+#compare ${TMPDIR}/1.exp ${TMPDIR}/2.exp
+#test conversion from v4 to v5 files
+${PNAME} -i hsandv -f reference/Glad_4.exp -o hsandv -F ${TMPDIR}/Glad_5.exp
+compare ${TMPDIR}/Glad_5.exp reference
+
 
 exit 0
