@@ -88,7 +88,7 @@ main(int argc, char *argv[])
 				if (ovecs) {
 					ovecs->wr_init(ofname);
 					ovecs->write();
-					ovecs->rd_deinit();
+					ovecs->wr_deinit();
 				}
 				break;
 			case 's':
