@@ -151,7 +151,7 @@ ${PNAME} -i geo -f geocaching.loc -o magnav -F ${TMPDIR}/magnav.pdb
 ${PNAME} -i magnav -f ${TMPDIR}/magnav.pdb -o gpsutil -F ${TMPDIR}/magnav.gpu
 ${PNAME} -i magnav -f reference/magnav.pdb -o gpsutil -F ${TMPDIR}/magnavt.gpu
 compare ${TMPDIR}/magnavt.gpu ${TMPDIR}/magnav.gpu
-compare reference/magnavr.gpu ${TMPDIR}/magnav.gpu
+compare reference/gu.wpt ${TMPDIR}/magnav.gpu
 
 # GPSPilot Tracker for PalmOS
 # This test is eerily similar to the NAV Companion test.  In fact, the 
@@ -161,7 +161,7 @@ ${PNAME} -i geo -f geocaching.loc -o gpspilot -F ${TMPDIR}/gpspilot.pdb
 ${PNAME} -i gpspilot -f ${TMPDIR}/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspilot.gpu
 ${PNAME} -i gpspilot -f reference/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspil_t.gpu
 compare ${TMPDIR}/gpspil_t.gpu ${TMPDIR}/gpspilot.gpu
-compare reference/magnavr.gpu ${TMPDIR}/gpspilot.gpu
+compare reference/gu.wpt ${TMPDIR}/gpspilot.gpu
 
 # Cetus GPS for PalmOS
 # This test is also similar to the NAV Companion test.
