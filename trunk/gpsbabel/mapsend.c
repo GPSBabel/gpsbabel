@@ -50,7 +50,7 @@ test_endianness(void)
 static void
 mapsend_rd_init(const char *fname)
 {
-	mapsend_file_in = fopen(fname, "r");
+	mapsend_file_in = fopen(fname, "rb");
 	if (mapsend_file_in == NULL) {
 		fprintf(stderr, "Cannot open '%s' for reading\n", fname);
 		exit(1);
@@ -166,7 +166,7 @@ my_fwrite4(void *ptr, FILE *stream)
 static void
 mapsend_wr_init(const char *fname)
 {
-	mapsend_file_out = fopen(fname, "w");
+	mapsend_file_out = fopen(fname, "wb");
 	if (mapsend_file_out == NULL) {
 		fprintf(stderr, "Cannot open '%s' for writing\n", fname);
 		exit(1);
