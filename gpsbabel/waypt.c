@@ -72,9 +72,14 @@ waypt_add(waypoint *wpt)
 			}
 		}
 	}
-	if (wpt->description == NULL) {
+	if (wpt->description == NULL || strlen(wpt->description) == 0) {
+		if (wpt->description)
+			xfree(wpt->description);
 		if (wpt->notes != NULL) {
 			wpt->description = xstrdup(wpt->notes);
+		}
+		if (wpt->shortname != NULL) {
+			wpt->description = xstrdup(wpt->shortname);
 		}
 	}
 	waypt_ct++;
