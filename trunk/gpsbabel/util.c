@@ -752,7 +752,7 @@ char * str_utf8_to_ascii( const char * str )
  *  ways such as spaces within the tags, etc.
  */
 char * 
-strip_html(utf_string *in)
+strip_html(const utf_string *in)
 {
 	char *outstring, *out;
 	int ctr;
@@ -769,11 +769,9 @@ strip_html(utf_string *in)
 	for(ctr=0; ; instr++) {
 		switch(*instr) {
 			case 0: 
-				fprintf(stderr, "%s\n", out);
 				return (out);
 
 			case '<':
-				fprintf(stderr, "\n+");
 				if (instr[1] == 'p')
 					*outstring++ = '\n';
 				ctr++;
