@@ -189,6 +189,7 @@ void *mkshort_new_handle(void);
 void setshort_length(void *, int n);
 void setshort_badchars(void *, const char *);
 void setshort_mustupper(void *, int n);
+void setshort_mustuniq(void *, int n);
 void setshort_whitespace_ok(void *, int n);
 
 typedef struct ff_vecs {

@@ -161,6 +161,7 @@ char *mknshort (char *stIn,unsigned int sLen)
         return NULL;
 
     setshort_length(mkshort_handle, sLen);
+    setshort_mustuniq(mkshort_handle, 0);
     strcpy(strTmp,mkshort(mkshort_handle, stIn));      
 
     memset(strOut,' ', MAX_STRINGLEN);

@@ -89,11 +89,6 @@ mkshort_add_to_list(mkshort_handle *h, char *name)
 }
 
 void *
-mkshort_is_unique()
-{
-}
-
-void *
 mkshort_del_handle(void *h)
 {
 	mkshort_handle *hdr = h;
@@ -185,6 +180,14 @@ setshort_mustupper(void *h, int i)
 	mkshort_handle *hdl = h;
 	hdl->mustupper = i;
 }
+
+void
+setshort_mustuniq(void *h, int i)
+{
+	mkshort_handle *hdl = h;
+	hdl->must_uniq = i;
+}
+
 
 char *
 mkshort(void *h, const char *istring)
