@@ -118,6 +118,14 @@ typedef struct {
 	geocache_data gc_data;
 } waypoint;
 
+typedef struct {
+	queue Q;		/* Link onto parent list. */
+	queue waypoint_list;	/* List of child waypoints */
+	char *rte_name;
+	char *rte_desc;
+	int rte_num;
+} route_head;
+
 typedef void (*ff_init) (char const *);
 typedef void (*ff_deinit) (void);
 typedef void (*ff_read) (void);
