@@ -60,7 +60,7 @@ gpl_read(void)
 	gpl_point_t gp;
 
 	track_head = route_head_alloc();
-	route_add_head(track_head);
+	track_add_head(track_head);
 
 	while (fread(&gp, sizeof(gp), 1, gplfile_in) > 0) {
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp),1);
@@ -106,7 +106,7 @@ gpl_trackpt(const waypoint *wpt)
 static void
 gpl_write(void)
 {
-	route_disp_all(NULL, NULL, gpl_trackpt);
+	track_disp_all(NULL, NULL, gpl_trackpt);
 }
 
 ff_vecs_t gpl_vecs = {
