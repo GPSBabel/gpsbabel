@@ -187,6 +187,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\coastexp.c">
+			</File>
+			<File
 				RelativePath="..\copilot.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -400,6 +403,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\glogbook.c">
+			</File>
+			<File
 				RelativePath="..\gpilots.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -503,6 +509,9 @@
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\hiketech.c">
 			</File>
 			<File
 				RelativePath="..\holux.c">
@@ -1039,6 +1048,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\shape.c">
+			</File>
+			<File
 				RelativePath="..\smplrout.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1079,6 +1091,9 @@
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\stackfilter.c">
 			</File>
 			<File
 				RelativePath="..\text.c">
@@ -1207,6 +1222,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\uuid.c">
+			</File>
+			<File
+				RelativePath="..\vcf.c">
+			</File>
+			<File
 				RelativePath="..\vecs.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1290,6 +1311,9 @@
 						BrowseInformation="1"/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="..\xmlgeneric.c">
+			</File>
 			<Filter
 				Name="Jeeps"
 				Filter="">
@@ -1342,6 +1366,9 @@
 							ProgramDataBaseFileName="Debug\Jeeps/"
 							BrowseInformation="1"/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\jeeps\gpslibusb.c">
 				</File>
 				<File
 					RelativePath="..\jeeps\gpsmath.c">
@@ -1519,6 +1546,18 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\jeeps\gpsusbread.c">
+				</File>
+				<File
+					RelativePath="..\jeeps\gpsusbsend.c">
+				</File>
+				<File
+					RelativePath="..\jeeps\gpsusbstub.c">
+				</File>
+				<File
+					RelativePath="..\jeeps\gpsusbwin.c">
+				</File>
+				<File
 					RelativePath="..\jeeps\gpsutil.c">
 					<FileConfiguration
 						Name="Release|Win32">
@@ -1596,6 +1635,16 @@
 							ProgramDataBaseFileName="Debug\Coldsync/"
 							BrowseInformation="1"/>
 					</FileConfiguration>
+				</File>
+			</Filter>
+			<Filter
+				Name="shapelib"
+				Filter="">
+				<File
+					RelativePath="..\shapelib\dbfopen.c">
+				</File>
+				<File
+					RelativePath="..\shapelib\shpopen.c">
 				</File>
 			</Filter>
 		</Filter>
