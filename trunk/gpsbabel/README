@@ -23,7 +23,7 @@ GETTING IT / BUILDING IT
         GPSBabel is distributed in source format that will work on about
         any operating system and as ready-to-run binaries for some
         operating systems, notably Windows.  See the "OS-Specific notes"
-        at http://gpsbabel.sourceforge.net for instructions on those
+        at http://www.gpsbabel.org for instructions on those
         binary kits.
 
         For operating systems where no binary is provided, you will have
@@ -398,7 +398,7 @@ THE FORMATS
 	This is a CSV format for Microsoft Streets and Trips.   Detailed
 	instructions on how to import to it, preserving hyperlinks, are at
 
-	http://gpsbabel.sourceforge.net/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html
+	http://www.gpsbabel.org/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html
 
     Gcdb
 
