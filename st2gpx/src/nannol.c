@@ -1,7 +1,8 @@
 /*
 	nannol.c
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -29,12 +30,27 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <math.h>
+#include <string.h>
 
 #include "gpx.h"
 #include "st2gpx.h"
 #include "annotations.h"
 
-//static int readheight = 0;
+#ifdef EXPLORE
+#include "explore.h"
+#endif
+
+int nullstrcmp(char* str1, char* str2)
+{
+	if ( (str1==NULL) && (str2==NULL) )
+		return 0;
+	else if( (str1!=NULL) && (str2!=NULL) )
+		return strcmp(str1, str2);
+	else if(str1==NULL)
+		return -1;
+	else
+		return 1;
+}
 
 struct annot_rec * gpx2annot_line_rec(struct gpxpt** ptlist, int num_pts, int annot, int version)
 {
@@ -72,6 +88,22 @@ struct annot_rec * gpx2annot_line_rec(struct gpxpt** ptlist, int num_pts, int an
 		printf("Unrecognised record format type %d, unable to process more annotations.\n", rec->type);
 		return NULL;
 		break;
+	}
+
+	// If the last point is 'the same' as the first point,
+	// then set this as a closed-line.
+	// 'the same' means same name and epsilon-close
+	if( (nullstrcmp(ptlist[0]->name, ptlist[num_pts-1]->name) == 0)
+		&& (fabs(ptlist[0]->lat - ptlist[num_pts-1]->lat) < 0.000001)
+		&& (fabs(ptlist[0]->lon - ptlist[num_pts-1]->lon) < 0.000001) )
+	{
+		// set the closed-line flag
+		*(unsigned char*)(rec->buf+line_offset-9) = 1;
+
+		// So that the last point is only implicit
+		num_pts--;
+
+		printf("Last point in a track or route is same as the first point, so removing last point and setting this as a closed line.\n");
 	}
 
 	// set the annotation (record) number

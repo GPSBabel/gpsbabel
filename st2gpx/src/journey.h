@@ -1,7 +1,8 @@
 /*
 	journey.h
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -51,7 +52,7 @@ extern "C" {
 // * points located by address Vs by mouse Vs by pushpin
 // * avoid areas
 // * drag route
-typedef struct f_jour_header
+struct f_jour_header
 {
 	int	iunkn0;
 	int	iunkn1;
@@ -61,9 +62,9 @@ typedef struct f_jour_header
 	int	iunkn4;
 	int	iunkn5;
 	int	iunkn6;
-} tag_f_jour_header;
+};
 
-typedef struct f_jour_pt_head
+struct f_jour_pt_head
 {
 	// DB prim key for pushpin
 	// 0 if no pushpin
@@ -83,20 +84,20 @@ typedef struct f_jour_pt_head
 	int scaled_lon;
 	int scaled_lat;
 	unsigned char cbtext1;
-} tag_f_jour_pt_head;
+};
 
 // then jour_pt_head.cbtext1 bytes of text
 
-typedef struct f_jour_pt_mid
+struct f_jour_pt_mid
 {
 	// this just seems to be a const FF FE FF
 	char mid_tag[3];
 	unsigned char cbtext2;
-} tag_f_jour_pt_mid;
+};
 
 // then 2*jour_pt_mid.cbtext2 bytes of wide text
 
-typedef struct f_jour_pt_tail
+struct f_jour_pt_tail
 {
 	// 0=fastest
 	// 1=shortest
@@ -125,9 +126,9 @@ typedef struct f_jour_pt_tail
 	int	iunkn13; // 1
 	// ? size ?
 	int	iunkn14; // 30
-} tag_f_jour_pt_tail;
+} ;
 
-typedef struct f_jour_opts
+struct f_jour_opts
 {
 	// @00
 	short int	siunkn0;
@@ -232,9 +233,10 @@ typedef struct f_jour_opts
 	// @166
 	int		rest_dur_secs;
 	int		rest_interval_secs;
-} tag_jour_opts;
+} ;
 
-typedef struct f_jour_opts_EUR_8
+// 56 bytes
+ struct f_jour_opts_EUR_8
 {
 	int		iunkn38;
 	int		iunkn39;
@@ -256,10 +258,11 @@ typedef struct f_jour_opts_EUR_8
 	// not in usa version8
 	int		iunkn44;
 	unsigned short int count_avoid_regions;
-} tag_f_jour_opts_EUR_8;
+} ;
 
-// Also works for USA9 and USA11
-typedef struct f_jour_opts_EUR_10
+// 22 bytes
+// Also works for USA9 and USA11 - and EUR9, EUR11
+struct f_jour_opts_EUR_10
 {
 	int		iunkn38;
 	int		iunkn39;
@@ -269,9 +272,10 @@ typedef struct f_jour_opts_EUR_10
 	int		iunkn42;
 
 	unsigned short int count_avoid_regions;
-} tag_f_jour_opts_EUR_10;
+};
 
-typedef struct f_jour_opts_USA_8
+// 52 bytes
+struct f_jour_opts_USA_8
 {
 	int		iunkn38;
 	int		iunkn39;
@@ -291,9 +295,10 @@ typedef struct f_jour_opts_USA_8
 	int		iunkn49;
 	// @1a0
 	unsigned short int count_avoid_regions;
-} tag_f_jour_opts_USA_8;
+};
 
-typedef struct f_jour_opts_USA_10
+// 32 bytes
+struct f_jour_opts_USA_10
 {
 	int		iunkn38;
 	int		iunkn39;
@@ -306,10 +311,10 @@ typedef struct f_jour_opts_USA_10
 	int		iunkn43;
 	int		iunkn44;
 	unsigned short int count_avoid_regions;
-} tag_f_jour_opts_USA_10;
+};
 
 
-typedef struct f_jour_avoid
+struct f_jour_avoid
 {
 	float	x;
 	float	y;
@@ -322,16 +327,16 @@ typedef struct f_jour_avoid
 	int		iunkn5;
 	// avoid num? annot?
 	int		annot_num;
-} tag_f_jour_avoid;
+};
 
 
-typedef struct f_jour_trailer
+struct f_jour_trailer
 {
 	int		iunkn0; // =0x65
 	int		iunkn1;
-} f_tag_jour_trailer;
+};
 
-typedef struct jour_rtept
+struct jour_rtept
 {
 	int pthead_os;
 	// mem owned by this struct, as buf does not have terminating null
@@ -343,12 +348,12 @@ typedef struct jour_rtept
 	// pointer to pushpin owned by pushpinlist
 	struct pushpin* pushpin;
 	char garmin_ident[7];
-} tag_jour_trept;
+};
 
 struct jour_rtept_rec * jour_rtept_rec_new();
 void jour_rtept_rec_delete(struct jour_rtept_rec * jourpt_rec);
 
-typedef struct journey
+struct journey
 {
 	int buf_len;
 	char* buf;
@@ -367,7 +372,7 @@ typedef struct journey
 	// an array of ofsets to f_jour_avoid
 	int * avoid_os_list;
 	int trailer_os;
-} tag_journey;
+};
 
 float scaled2deg(int scaled_deg);
 

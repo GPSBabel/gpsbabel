@@ -1,7 +1,8 @@
 /*
 	annotations.h
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -46,21 +47,13 @@ extern "C" {
 #define ANNOT_RECOS_TEXT	24
 #define ANNOT_RECOS_LINENUMPOINTS 53
 #define ANNOT_RECOS_LINEJOINFLAG 48
-#define ANNOT_RECOS_XSCALE	48
-#define ANNOT_RECOS_YSCALE	52
+#define ANNOT_RECOS_OVAL_POINTOS 136 // 24 for text + 4 + 11ints=44 + 1double=8 + 5pts=60
 
 // + 12*NUM POINTS
 #define LINE_REC_LEN_V3 57
 #define LINE_REC_LEN_V4 61 //???
 
-
-//#define ANNOT_TYPE_LINE		0
-//#define ANNOT_TYPE_OVAL		1
-//#define ANNOT_TYPE_TEXT		2
-//#define ANNOT_TYPE_CIRCLE	3
-
-/*
-typedef struct annotations_file_head
+struct f_annotations_file_head
 {
 	// always 0x2d001234
 	unsigned int uiunkn0;
@@ -69,63 +62,9 @@ typedef struct annotations_file_head
 	unsigned int version;
 	// number of annotations in the stream
 	unsigned int c_annots;
-} tag_annotations_file_head;
-		
-typedef struct annotation_record_header
-{
-	// 0 = line
-	// 1 = Oval
-	// 2 = Textbox/Rectangle
-	// 3 = Circle
-	unsigned int type;
-	// 0x8 = show length
-	// 0x10 = order before roads
-	// (order defore other objects depends on file order (last highest) and obj type)
-	unsigned int bitflags;
-	int iunkn0;
-	int iunkn1;
-	// iunkn2 is only for version 10+ (9+?)
-	int iunkn2;
-	unsigned int text_len;
-	char text[];
-	// 0 =black
-	// 12=blue
-	unsigned int fill_color;
-	// 0 = none
-	// 1 = fill
-	// + some other high-byte flags?
-	int fill_flag;
-	//  0 = black
-	// 12 = blue
-	// 0d = yellow
-	unsigned int line color;
-	// 20*point size 
-	unsigned int line_width;
-	// 00=none, 
-	// 01=left, 
-	// 02=right, 
-	// 03=both;
-	int arrow_type;
-	int iunkn3;
-	// 01 is a joined line: the first & last points are joined
-	// 00 is a line-type
-	int closed_flag;
-	char cunkn0;
-	// number of points in the line
-	char c_line_points;
-	struct point_rec[];
-} tag_annotation_header;
+} ;
 
-struct annot_line_point
-{
-	float x;
-	float y;
-	float z;
-}
-
-*/
-
-typedef struct annot_rec
+struct annot_rec
 {
 	// ANNOT_TYPE_
 	int type;
@@ -135,15 +74,16 @@ typedef struct annot_rec
 	int text_length;
 	char* text;
 	int line_points;
-	// Pointer to the line-points data in buf, 
+	// Pointer to the line-points data in buf,
 	// because it moves with different file formats.
 	int line_offset;
-} tag_annot_rec;
+	unsigned char is_closed_line_flag;
+};
 
 struct annot_rec * annot_rec_new();
 void annot_rec_delete(struct annot_rec * annot_rec);
 
-typedef struct annotations
+struct annotations
 {
 	int num_annotations;
 	int max_annot_num;
@@ -155,11 +95,12 @@ typedef struct annotations
 	int stream_length;
 	// This is the annotations version number, as stored in the annotations stream
 	int version;
-} tag_annotations;
+};
 
 struct annotations * annotations_new();
 void annotations_delete(struct annotations * annots);
 struct gpxpt* gpx_get_point(char* buf);
+//struct gpxpt* gpx_get_point(struct annot_line_point* bufpt);
 
 extern char std_annotfile_header[ANNOT_FILE_HEAD_LEN];
 extern char std_annot_linerec_header_v3[LINE_REC_LEN_V3];
@@ -174,7 +115,6 @@ extern char * st_version[];
 //} tag_parameters;
 
 struct annotations * process_annotations_stream(char* annot_in_file_name);
-
 
 #ifdef	__cplusplus
 }

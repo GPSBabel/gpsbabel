@@ -1,7 +1,8 @@
 /*
 	journey.c
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -36,8 +37,11 @@
 #include "st2gpx.h"
 #include "pushpins.h"
 #include "ppinutil.h"
-
 #include "journey.h"
+
+#ifdef EXPLORE
+#include "explore.h"
+#endif
 
 float scaled2deg(int scaled_deg)
 // there must be a simple single line calc
@@ -77,11 +81,13 @@ struct journey * journey_new()
 	nw->buf_len=0;
 	nw->buf=NULL;
 
+	nw->count_rtepts=0;
 	nw->rtept_list=NULL;
 	nw->jopts_os=0;
 	nw->jopts_eur8_os=0;
 	nw->jopts_usa8_os=0;
 	nw->jopts_usa10_os=0;
+	nw->count_avoid_regions=0;
 	nw->avoid_os_list=NULL;
 	nw->trailer_os=0;
 	return nw;
@@ -129,11 +135,13 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 	struct f_jour_opts_USA_8* opts_usa8;
 	struct f_jour_opts_USA_10* opts_usa10;
 
-	printf("Processing Journey stream\n");
+	if (opts.verbose_flag>2)
+		printf("Processing Journey stream\n");
 
 	if ((jour_in_file = fopen(jour_in_file_name, "rb")) == NULL)
 	{
 		fprintf(stderr, "Quitting because I cannot open %s\n", jour_in_file_name);
+		debug_pause();
 		exit(1);
 	}
 
@@ -152,8 +160,6 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 
 	printf("got Journey file header with %d waypoints\n", jour->count_rtepts);
 	debug_pause();
-	if (opts.explore_flag)
-		print_f_jour_header((struct f_jour_header*)(jour->buf + jour->header_os));
 
 	// an array of jour_rtept
 	jour->rtept_list = (struct jour_rtept *)xmalloc(
@@ -175,9 +181,6 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 		}
 		jour->rtept_list[j].pthead_os=jour->buf_len;
 		jour->buf_len += bytes2read;
-		if (opts.explore_flag)
-			print_f_jour_pt_head((struct f_jour_pt_head*)
-									(jour->buf + jour->rtept_list[j].pthead_os));
 
 		// read pt text1
 		bytes2read=((struct f_jour_pt_head*)
@@ -199,8 +202,6 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 
 			str2ascii(jour->rtept_list[j].text1);
 		}
-		if (opts.explore_flag)
-			printf("Got text1 %s\n", jour->rtept_list[j].text1);
 
 		// read pt middle
 		bytes2read=sizeof(struct f_jour_pt_mid);
@@ -214,11 +215,6 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 		}
 		jour->rtept_list[j].ptmid_os=jour->buf_len;
 		jour->buf_len += bytes2read;
-		if (opts.explore_flag)
-		{
-			printf("dumping jour->rtept_list[%d].ptmid:\n", j);
-			printbuf(jour->buf + jour->rtept_list[j].ptmid_os, bytes2read);
-		}
 
 		// read pt text2
 		bytes2read=2*(((struct f_jour_pt_mid*)(jour->buf+jour->rtept_list[j].ptmid_os))->cbtext2);
@@ -238,8 +234,6 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 			jour->rtept_list[j].text2[bytes2read+1]=0;
 			jour->buf_len += bytes2read;
 		}
-		if (opts.explore_flag)
-			wprintf(L"Got text2 %s\n", jour->rtept_list[j].text2);
 
 		// read pt tail
 		bytes2read=sizeof(struct f_jour_pt_tail);
@@ -253,8 +247,6 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 		}
 		jour->rtept_list[j].pttail_os=jour->buf_len;
 		jour->buf_len += bytes2read;
-		if (opts.explore_flag)
-			print_f_jour_pt_tail((struct f_jour_pt_tail*)(jour->buf +jour->rtept_list[j].pttail_os));
 
 		pt_head = (struct f_jour_pt_head*)(jour->buf+jour->rtept_list[j].pthead_os);
 //		UdId= ((struct f_jour_pt_head*)(jour->buf+jour->rtept_list[j].pthead_os))->UdId;
@@ -317,8 +309,6 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 	}
 	jour->jopts_os=jour->buf_len;
 	jour->buf_len += bytes2read;
-	if (opts.explore_flag)
-		print_f_jour_opts((struct f_jour_opts*)(jour->buf + jour->jopts_os));
 
 	// read file-version specific journey options
 	if( (opts.st_version_num==8) && (opts.isUSA==0))
@@ -336,12 +326,10 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 		jour->buf_len += bytes2read;
 		opts_eur8=(struct f_jour_opts_EUR_8*)(jour->buf + jour->jopts_eur8_os);
 		jour->count_avoid_regions = opts_eur8->count_avoid_regions;
-		if (opts.explore_flag)
-			print_f_jour_opts_EUR_8(opts_eur8);
 	}
 	else if(    ( (opts.st_version_num==10) && (opts.isUSA==0) )
-			 || ( (opts.st_version_num==9)  && (opts.isUSA==1) )
-			 || ( (opts.st_version_num==11) && (opts.isUSA==1) ))
+			 || ( (opts.st_version_num==9)  )
+			 || ( (opts.st_version_num==11)  ))
 	{
 		bytes2read=sizeof(struct f_jour_opts_EUR_10);
 		jour->buf=(char*)xrealloc(jour->buf, jour->buf_len+bytes2read);
@@ -356,8 +344,6 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 		jour->buf_len += bytes2read;
 		opts_eur10=(struct f_jour_opts_EUR_10*)(jour->buf + jour->jopts_eur10_os);
 		jour->count_avoid_regions = opts_eur10->count_avoid_regions;
-		if (opts.explore_flag)
-			print_f_jour_opts_EUR_10(opts_eur10);
 	}
 	else if( (opts.st_version_num==8) && (opts.isUSA) )
 	{
@@ -374,10 +360,8 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 		jour->buf_len += bytes2read;
 		opts_usa8=(struct f_jour_opts_USA_8*)(jour->buf + jour->jopts_usa8_os);
 		jour->count_avoid_regions = opts_usa8->count_avoid_regions;
-		if (opts.explore_flag)
-			print_f_jour_opts_USA_8(opts_usa8);
 	}
-	else if( (opts.st_version_num==10) && (opts.isUSA) )
+	else if((opts.st_version_num==10) && (opts.isUSA) )
 	{
 		bytes2read=sizeof(struct f_jour_opts_USA_10);
 		jour->buf=(char*)xrealloc(jour->buf, jour->buf_len+bytes2read);
@@ -392,8 +376,6 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 		jour->buf_len += bytes2read;
 		opts_usa10=(struct f_jour_opts_USA_10*)(jour->buf + jour->jopts_usa10_os);
 		jour->count_avoid_regions = opts_usa10->count_avoid_regions;
-		if (opts.explore_flag)
-			print_f_jour_opts_USA_10(opts_usa10);
 	}
 	else
 		printf("I dont yet understand the structure of the Journey options for this file version.\n");
@@ -419,8 +401,6 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 			}
 			jour->avoid_os_list[j]= jour->buf_len;
 			jour->buf_len += bytes2read;
-			if (opts.explore_flag)
-				print_f_jour_avoid((struct f_jour_avoid*)(jour->buf + jour->avoid_os_list[j]));
 		}
 	}
 
@@ -436,8 +416,6 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 	}
 	jour->trailer_os=jour->buf_len;
 	jour->buf_len += bytes2read;
-	if (opts.explore_flag)
-		print_f_jour_trailer((struct f_jour_trailer*)(jour->buf + jour->trailer_os));
 
 	readmore=0;
 	if ((readbyte = getc(jour_in_file))!=EOF)
@@ -457,8 +435,14 @@ struct journey * process_journey_stream (char* jour_in_file_name,
 
     fclose(jour_in_file);
 
-	printf("Finished processing Journey stream.\n");
+	if (opts.verbose_flag>2)
+		printf("Finished processing Journey stream.\n");
 	fflush(stdout);
+
+#ifdef EXPLORE
+	if (opts.explore_flag)
+		print_journey(jour);
+#endif
 
 	return jour;
 }

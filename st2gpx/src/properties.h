@@ -1,7 +1,8 @@
 /*
 	properties.h
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -31,7 +32,7 @@ extern "C" {
 
 typedef unsigned long DWORD;
 
-typedef struct dictionary 
+struct dictionary 
 {
     DWORD    cEntries;        // Count of entries in the list.
 	// array of propids
@@ -39,17 +40,17 @@ typedef struct dictionary
 	// This next is an array of pointers into properties value,
 	// with the string length preceeding (ie X->ent_cb == X->ent_sz -4)
     char **  ent_sz;  // Zero-terminated string. Code page as indicated. 
-} tag_dictionary;
+};
 
-typedef struct ole_property
+struct ole_property
 {
 	DWORD	propid;
     DWORD   dwType;      // type tag
 	int		buflen;
 	char*	buf;
-} tag_ole_property;
+};
 
-typedef struct ole_property_set
+struct ole_property_set
 {
 //	FMTID  fmtid ;       // semantic name of a section
 	char   fmtid[16];       // semantic name of a section
@@ -59,7 +60,7 @@ typedef struct ole_property_set
 	unsigned int	   cProps;
 	struct dictionary * dict;
 	struct ole_property * pPropList;
-} tag_ole_property_set;
+};
 
 struct ole_property_set * read_ole_properties(char* source_file_name, char* properties_file_name);
 void ole_property_set_delete(struct ole_property_set * props);

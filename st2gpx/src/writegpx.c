@@ -1,7 +1,8 @@
 /*
 	writegpx.c
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -43,6 +44,9 @@
 #define GPX_RTEPT 1
 #define GPX_TRKPT 2
 char * gpxptypelabel[3] = {"wpt", "rtept", "trkpt"};
+
+// Sequential numbering of track-points
+int pt_num;
 
 FILE* gpx_open_write_file_header(char* gpx_out_file_name)
 {
@@ -189,27 +193,18 @@ void gpx_write_pushpinlist (FILE* gpx_out_file, struct pushpin_safelist *ppplist
 {
 	int i;
 	struct gpxpt * pt=NULL;
-//	char* opt_elms;
-//	int optlen;
 
 	if ((gpx_out_file==NULL) || (ppplist==NULL))
 		return;
 
 	pt = gpxpt_new();
 
-	printf("writting gpx waypoints for %d pushpins\n", ppplist->num_pushpins);
+	printf("writing gpx waypoints for %d pushpins\n", ppplist->num_pushpins);
 
 	for (i=0; i<ppplist->num_pushpins; i++)
 	{
 		if (ppplist->pushpin_list[i]==NULL)
 			break;
-
-//		optlen = strlen(ppplist->pushpin_list[i]->UdName)
-//				+ strlen(ppplist->pushpin_list[i]->NoteShort) + 60;
-//		opt_elms = (char*)xmalloc(optlen);
-
-//		sprintf(opt_elms, "<name><![CDATA[%s]]></name><desc><![CDATA[%s]]></desc>",
-//				ppplist->pushpin_list[i]->UdName, ppplist->pushpin_list[i]->NoteShort);
 
 		pt->name = _strdup(ppplist->pushpin_list[i]->UdName);
 		pt->desc = _strdup(ppplist->pushpin_list[i]->NoteShort);
@@ -220,7 +215,6 @@ void gpx_write_pushpinlist (FILE* gpx_out_file, struct pushpin_safelist *ppplist
 		pt->symbol = ppplist->pushpin_list[i]->RenderData;
 
 		gpx_write_point(gpx_out_file, pt, GPX_WPT);
-//		free(opt_elms);
 		free(pt->name);
 		pt->name=NULL;
 		free(pt->desc);
@@ -230,12 +224,15 @@ void gpx_write_pushpinlist (FILE* gpx_out_file, struct pushpin_safelist *ppplist
 	gpxpt_delete(pt);
 }
 
-void gpx_write_annot_rec(FILE* gpx_out_file, struct annot_rec * rec)
+void gpx_write_annot_rec(FILE* gpx_out_file, struct annot_rec * rec, int annot_version)
 {
 	int pt_type;
 	int p;
-//	char opt_elms[200];
-	struct gpxpt * pt;
+	struct gpxpt * pt=NULL;
+	struct gpxpt * first_point = NULL;
+	int point_os;
+	int data_os;
+	int c_shape_points;
 
 	if ( (gpx_out_file==NULL) || (rec==NULL) )
 	{
@@ -276,10 +273,17 @@ void gpx_write_annot_rec(FILE* gpx_out_file, struct annot_rec * rec)
 		// *******************
 
 
-		for (p=0; p < rec->line_points; p++)
+		for (p=0; p < rec->line_points; p++, pt_num++)
 		{
 			pt=gpx_get_point(rec->buf + rec->line_offset + 12*p);
-			pt->name=(char*)xmalloc(7);
+			// I wanted to keep pt names less that 6 chars, 
+			// but there can be large polylines e.g with more than 30,000 pts
+			if(pt_num>9999999)
+			{
+				printf("Too many points\n");
+				exit(0);
+			}
+			pt->name=(char*)xmalloc(10);
 			if(pt==NULL)
 			{
 				printf("got null pt #%p in annotation %d, skipping more points in this annotation\n",
@@ -287,17 +291,23 @@ void gpx_write_annot_rec(FILE* gpx_out_file, struct annot_rec * rec)
 				break;
 			}
 			if(opts.use_gpx_route)
-				sprintf(pt->name, "rp%04d", p);
-				//sprintf(opt_elms, "<name>rp%04d</name>", p);
+				sprintf(pt->name, "rp%04d", pt_num);
 			else
 				// we need to include a name for trackpoints
 				// for them to be recognised by easygps.
-				sprintf(pt->name, "tp%04d", p);
-				//sprintf(opt_elms, "<name>tp%04d</name>", p);
+				sprintf(pt->name, "tp%04d", pt_num);
 			gpx_write_point(gpx_out_file, pt, pt_type);
+			if(p==0)
+				first_point = gpxpt_copy(pt);
 			gpxpt_delete(pt);
 		}
-
+		
+		// If this is a closed poly-line, then add the first point
+		// as the implicit last point.
+		if(rec->is_closed_line_flag)
+			gpx_write_point(gpx_out_file, first_point, pt_type);
+		gpxpt_delete(first_point);
+		
 		// ********************
 		//  rte or trk trailer
 		// ********************
@@ -306,10 +316,94 @@ void gpx_write_annot_rec(FILE* gpx_out_file, struct annot_rec * rec)
 			fprintf(gpx_out_file, "\t</rte>\n");
 		else
 			fprintf(gpx_out_file, "\t\t</trkseg>\n\t</trk>\n");
+		
+		break;
 
 	case ANNOT_TYPE_OVAL:
-	case ANNOT_TYPE_TEXT:
 	case ANNOT_TYPE_CIRCLE:
+
+		if (annot_version==3)
+		{
+			data_os=ANNOT_RECOS_TEXT;
+			// FIXME get this from buf
+			c_shape_points=61;
+			point_os = ANNOT_RECOS_OVAL_POINTOS;
+		}
+		else if (annot_version==4)
+		{
+			data_os=ANNOT_RECOS_TEXT + 4;
+			point_os = ANNOT_RECOS_OVAL_POINTOS + 4;
+			c_shape_points=33;
+		}
+		else
+		{
+			printf("Unexpected annotation version %d\n", annot_version);
+			return;
+		}
+
+		//otail = (struct f_annotation_oval_tail *)(rec->buf + data_os);
+
+		// ************
+		//  trk header
+		// ************
+
+		fprintf(gpx_out_file, "\t<trk>\n");
+
+		fprintf(gpx_out_file, "\t\t<name>");
+		if (rec->text==NULL)
+			fprintf(gpx_out_file, "TK%04d\n", rec->annot_num);
+		else
+			fprintf(gpx_out_file, rec->text);
+		fprintf(gpx_out_file, "</name>\n");
+
+		fprintf(gpx_out_file, "\t\t<src>Extracted from Annotation %d (%s)</src>\n",
+				rec->annot_num, annot_type_name[rec->type]);
+		fprintf(gpx_out_file, "\t\t<trkseg>\n");
+
+		// ************
+		//  trk points
+		// ************
+
+		for (p=0; p < c_shape_points; p++, pt_num++)
+		{
+			pt=gpx_get_point(rec->buf + point_os + 12*p);
+			// I wanted to keep pt names less that 6 chars, 
+			// but there can be large polylines e.g with more than 30,000 pts
+			if(pt_num>9999999)
+			{
+				printf("Too many points\n");
+				exit(0);
+			}
+			pt->name=(char*)xmalloc(10);
+			if(pt==NULL)
+			{
+				printf("got null pt #%p in annotation %d, skipping more points in this annotation\n",
+						p, rec->annot_num);
+				break;
+			}
+			if(opts.use_gpx_route)
+				sprintf(pt->name, "rp%04d", pt_num);
+			else
+				// we need to include a name for trackpoints
+				// for them to be recognised by easygps.
+				sprintf(pt->name, "tp%04d", pt_num);
+			gpx_write_point(gpx_out_file, pt, pt_type);
+			if(p==0)
+				first_point = gpxpt_copy(pt);
+			gpxpt_delete(pt);
+		}
+		//close the loop
+		gpx_write_point(gpx_out_file, first_point, pt_type);
+		gpxpt_delete(first_point);
+
+		// *************
+		//  trk trailer
+		// *************
+
+		fprintf(gpx_out_file, "\t\t</trkseg>\n\t</trk>\n");
+
+		break;
+	case ANNOT_TYPE_TEXT:
 	default:
 		break;
 	}
@@ -318,10 +412,19 @@ void gpx_write_annot_rec(FILE* gpx_out_file, struct annot_rec * rec)
 void gpx_write_annotations(FILE* gpx_out_file, struct annotations * annots)
 {
 	int i;
+
+	if(annots->num_annotations == 0)
+		return;
+
+	if(opts.use_gpx_route)
+		printf("writing gpx routes for %d annotations\n", annots->num_annotations);
+	else
+		printf("writing gpx tracks for %d annotations\n", annots->num_annotations);
+
 	if ( (gpx_out_file!=NULL) && (annots!=NULL) )
 		for (i=0; i < annots->num_annotations; i++)
 		{
-			gpx_write_annot_rec(gpx_out_file, annots->annot_list[i]);
+			gpx_write_annot_rec(gpx_out_file, annots->annot_list[i], annots->version);
 		}
 }
 
@@ -334,6 +437,7 @@ void gpx_write_all(char* gpx_out_file_name,
 	if ( (ppplist==NULL) && (jour==NULL) && (annots==NULL) )
 		return;
 	gpx_out_file = gpx_open_write_file_header(gpx_out_file_name);
+	pt_num=0;
 	gpx_write_pushpinlist(gpx_out_file, ppplist);
 	gpx_write_journey(gpx_out_file, jour);
 	gpx_write_annotations(gpx_out_file, annots);

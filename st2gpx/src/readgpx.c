@@ -1,7 +1,8 @@
 /*
 	readgpx.c
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -32,7 +33,6 @@
 #include <expat.h>
 #include "gpx.h"
 #include "st2gpx.h"
-
 
 typedef void (*gpx_elm_start_handler)(void *, const char *, const char **);
 typedef void (*gpx_elm_end_handler)(void *, const char *);
@@ -611,8 +611,10 @@ void endtype(void *userData, const char *name)
 		//sym_num=132; // traffic-light
 	else if(strcmp(type_str, "Geocache|Unknown Cache")==0)
 		sym_num=254; // question-mark
-	else if(strcmp(type_str, "Geocache|Micro Cache")==0)
-		sym_num=65;
+	else if(strcmp(type_str, "Geocache|Micro-Cache")==0)
+		sym_num=65; // rotor/X
+	else if(strcmp(type_str, "Geocache|Event Cache")==0)
+		sym_num=138; // knife & fork
 	
 	switch (current_main_element)
 	{

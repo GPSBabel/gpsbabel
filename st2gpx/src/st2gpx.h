@@ -1,7 +1,8 @@
 /*
 	st2gpx.h
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -28,9 +29,9 @@
 extern "C" {
 #endif
 
+//#define EXPLORE
 
 #ifdef _DEBUG
-
 #define MEMCHK
 #define DEBUG_STDOUT
 
@@ -48,7 +49,7 @@ extern "C" {
 
 typedef unsigned short WCHAR;
 
-typedef struct st2gpx_options
+struct st2gpx_options
 {
 	// 0 - only errors
 	// 1 also the structured data output, e.g. line point info
@@ -69,7 +70,7 @@ typedef struct st2gpx_options
 	// 0 for EUR, i.e. Autoroute
 	// 1 for USA, i,e, Streets & Trips
 	unsigned char isUSA;
-} tag_st2gpx_options;
+};
 
 
 // FIXME is this the correct way to forward define these?
@@ -81,17 +82,7 @@ extern struct annotations;
 extern struct pushpin_safelist;
 extern struct annot_rec ;
 extern struct gpx_data;
-extern struct f_jour_pt_head;
-extern struct f_jour_pt_tail;
-extern struct f_jour_opts_EUR_8;
-extern struct f_jour_opts_EUR_10;
-extern struct f_jour_opts_USA_8;
-extern struct f_jour_opts_USA_10;
-extern struct f_jour_opts;
-extern struct f_jour_avoid;
-extern struct f_jour_trailer;
 extern struct journey;
-extern struct f_jour_header;
 extern struct contents;
 
 #endif // __cplusplus
@@ -102,6 +93,8 @@ void * xmalloc(size_t size);
 void * xrealloc(void* ptr, size_t size);
 char * str2ascii(char* str);
 char * strappend(char* str1, char* str2);
+char * buf2str(char* buf, int strlen);
+char * buf2wstr(char* buf, int strlen);
 int readbytes(FILE* file, char* buf, int bytes2read);
 //nannol.c
 struct annotations * merge_gpx_annot(struct annotations * annots, struct gpx_data* all_gpx);
@@ -111,19 +104,6 @@ void pcx5_export(char* pcx5_out_file_name, struct pushpin_safelist * ppplist, st
 //debug.c
 void debug_pause();
 void printbuf(char* buf, int len);
-void explore_annot(struct annot_rec * rec);
-void print_f_jour_header(struct f_jour_header * head);
-void print_f_jour_pt_head(struct f_jour_pt_head * pt_head);
-void print_f_jour_pt_tail(struct f_jour_pt_tail * pt_tail);
-void print_f_jour_opts(struct f_jour_opts * jopts);
-void print_f_jour_opts_EUR_8(struct f_jour_opts_EUR_8 * jopts);
-void print_f_jour_opts_EUR_10(struct f_jour_opts_EUR_10 * jopts);
-void print_f_jour_opts_USA_8(struct f_jour_opts_USA_8 * jopts);
-void print_f_jour_opts_USA_10(struct f_jour_opts_USA_10 * jopts);
-void print_f_jour_avoid(struct f_jour_avoid * avoid);
-void print_f_jour_trailer(struct f_jour_trailer * trailer);
-void print_annot_rec(struct annot_rec * rec);
-void print_annotations(struct annotations * annots);
 void debug_show_sizes();
 //st2gpx.c
 struct gpx_data * read_mpstext(char* mpstxt_file_name);

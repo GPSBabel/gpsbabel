@@ -1,7 +1,8 @@
 /*
 	ppinutil.h
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -28,55 +29,28 @@
 extern "C" {
 #endif
 
-// The structures in UserData/UDM_Data for UDMId=0
-typedef struct f_udm0_header
-{
-	unsigned short int sunkn; // normally 0x8001
-	int c_highlight_recs; 
-} tag_f_udm0_header;
-// then c_highlight_recs ints with udid of highlighted ppin
-typedef struct f_udm0_header1
-{
-	int iunkn; // normally 0, probably indicates some array length to mess everything up
-	int c_format_records;
-} tag_f_udm0_header1;
-// then c_format_records of these:
-typedef struct f_udm0_ppin
-{
-	int ppin_udid;
-	// 1 = show name + info
-	// (no record if name not shown?)
-	// 3 = show name
-	// 4 = upper left
-	// 8 = upper right
-	// 12 = lower left
-	// 16 = lower right
-	unsigned char format;	
-	unsigned char zorder;
-} tag_f_udm0_ppin;
-
-typedef struct pushpin_safelist
+struct pushpin_safelist
 {
 	struct pushpin ** pushpin_list;
 	int num_pushpins;
 	char * UDM_Data[3];
 	long UDM_Data_length[3];
-} tag_pushpin_safelist;
+};
 
-typedef struct grid_point {
+struct grid_point {
 	long grid;
 	long precision;
-} tag_ms_point;
+};
 
-typedef struct point {
+struct point {
 	double lon;
 	double lat;
-} tag_point;
+};
 
 // max size to be read from ppin memo fields
 #define MAX_PPIN_MEMO	1000
 
-typedef struct pushpin
+struct pushpin
 {
 	long UdId;
 	int SetId;
@@ -111,12 +85,12 @@ typedef struct pushpin
 	char garmin_ident[7];
 	char* url;
 	char* urlname;
-} tag_pushpin;
+} ;
 
 
 // not used yet
 
-typedef struct pushpinset
+struct pushpinset
 {
 	int SetId;
 	char* SetName; // max 128
@@ -139,7 +113,7 @@ typedef struct pushpinset
 	char* DataSrcDescr; // memo
 	char[30] CurrencyData;
 */
-} tag_pushpinset;
+};
 
 struct pushpin * pushpin_new();
 void pushpin_delete(struct pushpin * pp);

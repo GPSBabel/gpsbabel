@@ -19,4 +19,7 @@ Bugs:
 	but "steph's wedding.est" is ok (single space)
 	
 	with input file "Plesivec - Plešivec.gpx" we fail to open the gpx as input
+	
+	exception importing gpx with long descriptions
+	mp2004 imported ppins: dont show info, accessing ballon property crashes mp
 

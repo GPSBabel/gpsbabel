@@ -1,7 +1,8 @@
 /*
 	gpx.h
 
-	Extract data from MS Streets & Trips .est and Autoroute .axe files in GPX format.
+	Extract data from MS Streets & Trips .est, Autoroute .axe 
+	and Mapoint .ptm files in GPX format.
 
     Copyright (C) 2003 James Sherring, james_sherring@yahoo.com
 
@@ -39,7 +40,7 @@ extern "C" {
 #define GPX_ELEM_TYPE_DESC	8
 #define GPX_ELEM_TYPE_SRC	9
 
-typedef struct gpxpt
+struct gpxpt
 {
 	double lat;
 	double lon;
@@ -54,32 +55,32 @@ typedef struct gpxpt
 	char* url;
 	char* urlname;
 	// more later
-} tag_gpxpt;
+};
 
 struct gpxpt * gpxpt_new();
 void gpxpt_delete(struct gpxpt * pt);
 struct gpxpt * gpxpt_copy(struct gpxpt * otherpt);
 
-typedef struct gpxrte
+struct gpxrte
 {
 	char*	name;
 	struct gpxpt**	rtept_list;
 	int rtept_list_count;
-} tag_gpxrte;
+};
 
 struct gpxrte * gpxrte_new();
 void gpxrte_delete(struct gpxrte * rte);
 
-typedef struct gpxtrk
+struct gpxtrk
 {
 	struct gpxpt**	trkpt_list;
 	int trkpt_list_count;
-} tag_gpxtrk;
+} ;
 
 struct gpxtrk * gpxtrk_new();
 void gpxtrk_delete(struct gpxtrk * trk);
 
-typedef struct gpx_data
+struct gpx_data
 {
 	char* data_source_name;
 	struct gpxpt ** wpt_list;
@@ -88,7 +89,7 @@ typedef struct gpx_data
 	int rte_list_count;
 	struct gpxtrk ** trk_list;
 	int trk_list_count;
-} tag_gpx_data;
+};
 
 struct gpx_data * gpx_data_new();
 void gpx_data_delete(struct gpx_data * data);
