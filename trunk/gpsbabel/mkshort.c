@@ -386,6 +386,14 @@ mkshort(void *h, const char *istring)
 		strcpy(&ostring[hdl->target_len] - strlen(np), np);
 	}
 
+	/* 
+	 * If, after all that, we have an empty string, punt and
+	 * let the must_uniq code handle it.
+	 */
+	if (ostring[0] == '\0') {
+		ostring = xstrdup("WPT");
+	}
+
 	if (hdl->must_uniq) {
 		return mkshort_add_to_list(hdl, ostring);
 	}
