@@ -50,6 +50,12 @@ waypt_dupe(const waypoint *wpt)
 		tmp->url = xstrdup(wpt->url);
 	if (wpt->url_link_text)
 		tmp->url_link_text = xstrdup(wpt->url_link_text);
+	/*
+	 * It's important that this duplicated waypoint not appear
+	 * on the master Q.
+	 */
+	tmp->Q.next = tmp->Q.prev = NULL;
+	tmp->gpx_extras = NULL;
 
 	return tmp;
 }
