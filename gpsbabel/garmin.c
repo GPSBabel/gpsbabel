@@ -68,29 +68,6 @@ data_read(void)
 }
 
 static void
-gpsutil_disp(waypoint *wpt)
-{
-#if 0
-	double lon,lat;
-	signed int ilon, ilat;
-	const char *icon_token = "0";
-	char tbuf[1024];
-	char *tp = tbuf;
-	time_t tm = wpt->creation_time;
-
-	lon = wpt->position.longitude.degrees;
-	lat = wpt->position.latitude.degrees;
-
-	fprintf(file_out, "%08.5f, %08.5f, %s\n",
-		lat,
-		lon,
-		wpt->description);
-
-#else
-//	garmin_write_waypoint(wpt);
-#endif
-}
-static void
 data_write(void)
 {
 	int i;

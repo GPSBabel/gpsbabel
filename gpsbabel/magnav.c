@@ -191,16 +191,6 @@ struct hdr{
 	waypoint *wpt;
 };
 
-static
-int 
-compare(const void *a, const void *b)
-{
-	const struct hdr *wa = a;
-	const struct hdr *wb = b;
-
-	return strcmp(wa->wpt->shortname, wb->wpt->shortname);
-}
-
 static void
 data_write(void)
 {

@@ -22,7 +22,6 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-// #include <termios.h>
 #include <fcntl.h>
 
 static int32 gps_endian_called=0;

@@ -33,7 +33,6 @@ History:
 
 
 static FILE *file_in;
-static  unsigned char byWpoFile[GM100_WPO_FILE_SIZE];
 static 	unsigned char *HxWFile;
 static  char fOutname[256];
 
@@ -93,7 +92,6 @@ static void data_read(void)
 {
 	char name[9], desc[90];
 	double lat,lon;
-	char icon[3] = {0};
 	unsigned char *HxWpt;
 	waypoint *wpt_tmp;
     int iCount;
@@ -153,10 +151,6 @@ static void data_read(void)
 static void gpsutil_disp(waypoint *wpt)
 {
 	double lon,lat;
-	const char *icon_token = "0";
-	char tbuf[1024];
-	char *tp = tbuf;
-	time_t tm = wpt->creation_time;
     int iIndex;
     WPT *pWptHxTmp;
 
