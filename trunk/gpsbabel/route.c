@@ -100,6 +100,11 @@ route_add_wpt(route_head *rte, waypoint *wpt)
 	ENQUEUE_TAIL(&rte->waypoint_list, &wpt->Q);
 	rte->rte_waypt_ct++;	/* waypoints in this route */
 	rte_waypts++;		/* total waypoints in all routes */
+	if (wpt->shortname == NULL) {
+		char tmpnam[10];
+		snprintf(tmpnam, sizeof(tmpnam), "RPT%03d",rte_waypts);
+		wpt->shortname = xstrdup(tmpnam);
+	}
 }
 
 void 
