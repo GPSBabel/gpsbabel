@@ -405,10 +405,7 @@ xcsv_read_style(const char *fname)
 
     xcsv_file_init();
 
-    fp = fopen(fname, "r");
-
-    if (!fp)
-        fatal(MYNAME ": Cannot read style file: %s\n", fname);
+    fp = xfopen(fname, "r", MYNAME);
 
     do {
         memset(sbuff, '\0', sizeof(sbuff));
@@ -465,10 +462,8 @@ xcsv_rd_init(const char *fname)
         xcsv_read_style(styleopt);
     }
 
-    xcsv_file.xcsvfp = fopen(fname, "r");
+    xcsv_file.xcsvfp = xfopen(fname, "r", MYNAME);
 
-    if (xcsv_file.xcsvfp == NULL)
-        fatal(MYNAME ": Cannot open %s for reading\n", fname);
 }
 
 static void
@@ -493,11 +488,8 @@ xcsv_wr_init(const char *fname)
         xcsv_read_style(styleopt);
     }
 
-    xcsv_file.xcsvfp = fopen(fname, "w");
+    xcsv_file.xcsvfp = xfopen(fname, "w", MYNAME);
     xcsv_file.fname = (char *)fname;
-
-    if (xcsv_file.xcsvfp == NULL)
-        fatal(MYNAME ": Cannot open %s for writing\n", fname);
 
     /* set mkshort options from the command line */
     if (global_opts.synthesize_shortnames) {

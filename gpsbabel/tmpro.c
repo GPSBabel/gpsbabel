@@ -45,10 +45,7 @@ static void *mkshort_handle;
 static void 
 rd_init(const char *fname)
 {
-    file_in = fopen(fname, "r");
-    if (file_in == NULL) {
-	fatal(MYNAME ": Cannot open %s for reading\n", fname);
-    }
+    file_in = xfopen(fname, "r", MYNAME);
 }
 
 static void 
@@ -60,10 +57,7 @@ rd_deinit(void)
 static void 
 wr_init(const char *fname)
 {
-    file_out = fopen(fname, "w");
-    if (file_out == NULL) {
-	fatal(MYNAME ": Cannot open %s for writing\n", fname);
-    }
+    file_out = xfopen(fname, "w", MYNAME);
 }
 
 static void 

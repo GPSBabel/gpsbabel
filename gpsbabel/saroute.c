@@ -66,10 +66,7 @@ Skip(FILE * f,
 static void
 rd_init(const char *fname)
 {
-	infile = fopen(fname, "rb");
-	if (infile == NULL) {
-		fatal(MYNAME ": Cannot open %s for reading\n", fname);
-	}
+	infile = xfopen(fname, "rb", MYNAME);
 }
 
 static void

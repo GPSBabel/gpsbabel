@@ -194,10 +194,7 @@ geo_cdata(void *dta, const XML_Char *s, int len)
 void
 geo_rd_init(const char *fname)
 {
-	fd = fopen(fname, "r");
-	if (fd == NULL) {
-		fatal(MYNAME ":Cannot open %s for reading\n", fname);
-	}
+	fd = xfopen(fname, "r", MYNAME);
 
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {
@@ -244,10 +241,7 @@ geo_rd_deinit(void)
 void
 geo_wr_init(const char *fname)
 {
-	ofd = fopen(fname, "w");
-	if (ofd == NULL) {
-		fatal(MYNAME ":Cannot open '%s' for writing\n", fname);
-	}
+	ofd = xfopen(fname, "w", MYNAME);
 }
 
 void

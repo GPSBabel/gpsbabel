@@ -187,10 +187,7 @@ polygon_process(void)
 	int first = 1;
 	int last = 0;
 
-	FILE *polyfile = fopen( polyfileopt, "r" );
-	if ( polyfile == NULL ) {
-		fatal(MYNAME ":Can't open %s for reading.\n",polyfileopt); 
-	}
+	FILE *polyfile = xfopen( polyfileopt, "r", MYNAME );
 	
         olat = olon = lat1 = lon1 = lat2 = lon2 = BADVAL;
 	while ( !feof(polyfile)) {

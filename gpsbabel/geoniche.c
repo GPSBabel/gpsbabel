@@ -108,9 +108,7 @@ id2gid(char gid[6+1], int id)
 static void
 rd_init(const char *fname)
 {
-    FileIn = fopen(fname, "rb");
-    if (FileIn == NULL)
-	fatal(MYNAME ": Cannot open %s for reading\n", fname);
+    FileIn = xfopen(fname, "rb", MYNAME);
 }
 
 static void
@@ -124,10 +122,8 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-    FileOut = fopen(fname, "wb");
+    FileOut = xfopen(fname, "wb", MYNAME);
     FilenameOut = fname;
-    if (FileOut == NULL)
-	fatal(MYNAME ": Cannot open %s for writing\n", fname);
 }
 
 static void

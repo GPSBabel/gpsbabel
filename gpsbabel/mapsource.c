@@ -158,10 +158,7 @@ int mps_converted_icon_number(const int icon_num, const int mpsver, garmin_forma
 static void
 mps_rd_init(const char *fname)
 {
-	mps_file_in = fopen(fname, "rb");
-	if (mps_file_in == NULL) {
-		fatal(MYNAME ": '%s' for reading\n", fname);
-	}
+	mps_file_in = xfopen(fname, "rb", MYNAME);
 }
 
 static void
@@ -174,7 +171,7 @@ static void
 mps_wr_init(const char *fname)
 {
 	if (mpsmergeout) {
-		mps_file_out = fopen(fname, "rb");
+		mps_file_out = xfopen(fname, "rb", MYNAME);
 		if (mps_file_out == NULL) {
 			mpsmergeout = NULL;
 		}
@@ -192,16 +189,12 @@ mps_wr_init(const char *fname)
 				fclose(mps_file_temp);
 			}
 			rename(fname, tempname);
-			mps_file_temp = fopen(tempname, "rb");
+			mps_file_temp = xfopen(tempname, "rb", MYNAME);
 			strcpy(origname, fname);	/* save in case we need to revert the renamed file */
 		}
 	}
 
-	mps_file_out = fopen(fname, "wb");
-	if (mps_file_out == NULL) {
-		fatal(MYNAME ": '%s' for writing\n", fname);
-		exit(1);
-	}
+	mps_file_out = xfopen(fname, "wb", MYNAME);
 }
 
 static void

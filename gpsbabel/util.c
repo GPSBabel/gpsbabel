@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <errno.h>
 
 static int i_am_little_endian = -1;
 static int doswap(void);
@@ -34,7 +35,7 @@ static FILE *debug_mem_file = NULL;
 void 
 debug_mem_open() 
 {
-	debug_mem_file = fopen( DEBUG_FILENAME, "a" );
+	debug_mem_file = xfopen( DEBUG_FILENAME, "a", "debug" );
 }
 
 void
@@ -219,6 +220,28 @@ xstrappend(char *src, const char *new)
 
 	return src;
 }
+
+/*
+ * Wrapper for open that honours - for stdin, stdout, unifies error text.
+ */
+FILE *
+xfopen(const char *fname, const char *type, const char *errtxt)
+{
+	FILE *f;
+	int am_writing = strchr(type, 'w') != NULL;
+
+	if (0 == strcmp(fname, "-"))
+		return am_writing ? stdout : stdin;
+	f = fopen(fname, type);
+	if (NULL == f) {
+		fatal("%s cannot open '%s' for %s.  Error was '%s'.\n",
+				errtxt, fname, 
+				am_writing ? "write" : "read", 
+				strerror(errno));
+	}
+	return f;
+}
+
 
 /* 
  * Duplicate a pascal string into a normal C string.

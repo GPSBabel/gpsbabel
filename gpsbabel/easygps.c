@@ -41,10 +41,7 @@ rd_init(const char *fname)
 	char ibuf[100] = {'0'} ;
 	const char *ezsig = "TerraByte Location File";
 
-	file_in = fopen(fname, "rb");
-	if (file_in == NULL) {
-		fatal(MYNAME ": Cannot open %s for reading\n", fname);
-	}
+	file_in = xfopen(fname, "rb", MYNAME);
 
 	fread(ibuf, 52, 1, file_in);
 	
@@ -63,12 +60,8 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-	file_out = fopen(fname, "wb");
+	file_out = xfopen(fname, "wb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
-
-	if (file_out == NULL) {
-		fatal(MYNAME ": Cannot open %s for writing\n", fname);
-	}
 }
 
 static void

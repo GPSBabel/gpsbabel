@@ -170,10 +170,7 @@ buffer_washer(char * buff, int buffer_len)
 static void
 psp_rd_init(const char *fname)
 {
-	psp_file_in = fopen(fname, "rb");
-	if (psp_file_in == NULL) {
-		fatal(MYNAME ": Cannot open %s for reading\n", fname);
-	}
+	psp_file_in = xfopen(fname, "rb", MYNAME);
 }
 
 static void
@@ -185,12 +182,8 @@ psp_rd_deinit(void)
 static void
 psp_wr_init(const char *fname)
 {
-	psp_file_out = fopen(fname, "wb");
+	psp_file_out = xfopen(fname, "wb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
-
-	if (psp_file_out == NULL) {
-		fatal(MYNAME ": Cannot open %s for writing\n", fname);
-	}
 }
 
 static void

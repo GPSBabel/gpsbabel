@@ -96,12 +96,8 @@ arglist_t tiger_args[] = {
 static void
 rd_init(const char *fname)
 {
-	file_in = fopen(fname, "r");
+	file_in = xfopen(fname, "r", MYNAME);
 	mkshort_handle = mkshort_new_handle();
-
-	if (file_in == NULL) {
-		fatal(MYNAME ": Cannot open %s for reading\n", fname);
-	}
 }
 
 static void
@@ -114,12 +110,8 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-	file_out = fopen(fname, "w");
+	file_out = xfopen(fname, "w", MYNAME);
 	thresh_days = strtod(oldthresh, NULL);
-
-	if (file_out == NULL) {
-		fatal(MYNAME ": Cannot open %s for writing\n", fname);
-	}
 }
 
 static void
@@ -245,11 +237,7 @@ data_write(void)
 	if (genurl) {
 		FILE *urlf;
 
-		urlf = fopen(genurl, "w");
-		if (urlf == NULL) {
-			fatal(MYNAME ": Cannot open '%s' for writing\n", 
-					genurl);
-		} 
+		urlf = xfopen(genurl, "w", MYNAME);
 		latsz = fabs(maxlat - minlat); 
 		lonsz = fabs(maxlon - minlon); 
 
@@ -267,11 +255,7 @@ data_write(void)
 		fclose(urlf);
 #if CLICKMAP
 		if (clickmap) {
-			linkf = fopen(clickmap, "w");
-			if (linkf == NULL) {
-				fatal(MYNAME ": Cannot open '%s' for writing\n",
-						clickmap);
-			}
+			linkf = xfopen(clickmap, "w", MY NAME);
 			fprintf(linkf, "<map name=\"map\">\n");
 			waypt_disp_all(map_plot);
 			fprintf(linkf, "</map>\n");
