@@ -37,13 +37,14 @@ HANDLE comport;
 
 #define debug_serial  (global_opts.debug_level > 1)
 
-char * termread(char *ibuf, int size);
-void termwrite(char *obuf, int size);
+static char * termread(char *ibuf, int size);
+static void termwrite(char *obuf, int size);
 
 typedef enum {
 	mrs_handoff = 0,
 	mrs_handon
 } mag_rxstate;
+
 
 static FILE *magfile_in;
 static FILE *magfile_out;
@@ -58,6 +59,8 @@ static int is_file = 0;
 
 
 static waypoint * mag_wptparse(char *);
+typedef char * (cleanse_fn) (char *);
+static cleanse_fn *mag_cleanse;
 
 static icon_mapping_t gps315_icon_table[] = {
 	{ "a", "filled circle" },
@@ -139,6 +142,49 @@ pid_to_model_t pid_to_model[] =
 	{ mm_unknown, 0, NULL }
 };
 
+
+
+/*
+ *   For each receiver type, return a "cleansed" version of the string
+ *   that's valid for a waypoint name or comment.   The string should be
+ *   freed when you're done with it.
+ */
+static char *
+m315_cleanse(char *istring)
+{
+	char *rstring = xmalloc(strlen(istring)+1);
+	char *i,*o;
+	static char m315_valid_chars[] = 
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789";
+	for (o=rstring,i=istring; *i; i++) {
+		if (strchr(m315_valid_chars, *o)) {
+			*o++ = toupper(*i);
+		}
+	}
+	*o = 0;
+	return rstring;
+}
+
+/*
+ * Do same for 330, Meridian, and SportTrak.
+ */
+static char *
+m330_cleanse(char *istring)
+{
+	static char m330_valid_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
+			"abcdefghijklmnopqrstuvwxyz"
+			"0123456789+-.'/!@#<%^&>()=:\\";
+	char *rstring = xmalloc(strlen(istring)+1);
+	char *o, *i;
+
+	for (o=rstring,i=istring; *i;i++) {
+		if (strchr(m330_valid_chars, *o)) {
+			*o++ = (*i);
+		}
+	}
+	*o = 0;
+	return rstring;
+}
 
 /*
  * Given a protocol message, compute the checksum as needed by 
@@ -243,10 +289,16 @@ mag_verparse(char *ibuf)
 		case mm_gps315320:
 		case mm_map410:
 			icon_mapping = gps315_icon_table;
+			setshort_length(6);
+			setshort_mustupper(1);
+			mag_cleanse = m315_cleanse;
 			break;
 		case mm_map330:
 		case mm_meridian:
 			icon_mapping = map330_icon_table;
+			setshort_length(8);
+			setshort_mustupper(0);
+			mag_cleanse = m330_cleanse;
 			break;
 		default:
 			fatal(MYNAME ": Unknown receiver type.\n");
@@ -381,7 +433,7 @@ terminit(const char *portname)
 	}
 }
 
-char * 
+static char * 
 termread(char *ibuf, int size)
 {
 	int i=0;
@@ -401,7 +453,7 @@ termread(char *ibuf, int size)
 	return ibuf;
 }
 
-void
+static void
 termwrite(char *obuf, int size)
 {
 	DWORD len;
@@ -446,6 +498,7 @@ terminit(const char *portname)
 	is_file = S_ISREG(sbuf.st_mode);
 	if (is_file) {
 		icon_mapping = map330_icon_table;
+		mag_cleanse = m330_cleanse;
 		got_version = 1;
 		return;
 	} 
@@ -477,13 +530,13 @@ termdeinit()
 	}
 }
 
-char * 
+static char * 
 termread(char *ibuf, int size)
 {
 	return fgets(ibuf, size, magfile_in);
 }
 
-void
+static void
 termwrite(char *obuf, int size)
 {
 	fwrite(obuf, size, 1, magfile_out);
@@ -530,13 +583,15 @@ mag_wr_init(const char *portname)
 
 	if (is_file) {
 		magfile_out = fopen(portname, "w+b");
+		icon_mapping = map330_icon_table;
+		mag_cleanse = m330_cleanse;
+		got_version = 1;
 	} else {
 		mag_rd_init(portname);
 	}
 }
 
 static void
-
 mag_deinit(void)
 {
 	mag_handoff();
@@ -658,7 +713,7 @@ mag2degrees(double mag_val)
  * $PMGNWPL,3549.499,N,08650.827,W,0000257,M,HOME,HOME,c*4D
  * create and return a populated waypoint.
  */
-waypoint * 
+static waypoint * 
 mag_wptparse(char *trkmsg)
 {
 	double latdeg, lngdeg;
@@ -704,7 +759,7 @@ mag_wptparse(char *trkmsg)
 	return waypt;
 }
 
-void
+static void
 mag_readwpt(void)
 {
 	if (!is_file) {
@@ -725,6 +780,8 @@ mag_waypt_pr(const waypoint *waypointp)
 	int lon_deg, lat_deg;
 	char obuf[200];
 	const char *icon_token=NULL;
+	char *owpt;
+	char *odesc;
 
 	ilat = waypointp->position.latitude.degrees;
 	ilon = waypointp->position.longitude.degrees;
@@ -742,16 +799,23 @@ mag_waypt_pr(const waypoint *waypointp)
 	lat = (lat_deg * 100.0 + lat);
 	
 	icon_token = mag_find_token_from_descr(waypointp->icon_descr);
+	owpt = global_opts.synthesize_shortnames ?
+                        mkshort(waypointp->description) : waypointp->shortname,
+	odesc = waypointp->description ? waypointp->description : "";
+	owpt = mag_cleanse(owpt);
+	odesc = mag_cleanse(odesc);
 
 	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.8s,%-.30s,%s",
 		lat, ilon < 0 ? 'N' : 'S',
 		lon, ilat < 0 ? 'E' : 'W',
 		waypointp->position.altitude.altitude_meters,
-                global_opts.synthesize_shortnames ?
-                        mkshort(waypointp->description) : waypointp->shortname,
-		waypointp->description ? waypointp->description : "",
+		owpt,
+		odesc,
 		icon_token);
 	mag_writemsg(obuf);
+	free(owpt);
+	free(odesc);
+
 	if (!is_file) {
 		mag_readmsg();
 		if (mag_error) {
@@ -761,7 +825,7 @@ mag_waypt_pr(const waypoint *waypointp)
 }
 
 
-void
+static void
 mag_write(void)
 {
 	if (!is_file) {
