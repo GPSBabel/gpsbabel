@@ -65,7 +65,7 @@ mkshort_add_to_list(mkshort_handle *h, char *name)
 {
 	queue *e, *t;
 	int hash;
-	uniq_shortname *s = xmalloc(sizeof (uniq_shortname));
+	uniq_shortname *s = xcalloc(1, sizeof (uniq_shortname));
 	s->orig_shortname = strdup(name);
 	hash = hash_string(name);
 
