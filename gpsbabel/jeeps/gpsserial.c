@@ -221,6 +221,8 @@ static struct termios gps_ttysave;
 int32 GPS_Serial_Savetty(const char *port)
 {
     int32 fd;
+
+    if (gps_is_usb) return 1;
     
     if((fd = open(port, O_RDWR|O_NDELAY))==-1)
     {
@@ -262,6 +264,8 @@ int32 GPS_Serial_Savetty(const char *port)
 int32 GPS_Serial_Restoretty(const char *port)
 {
     int32 fd;
+
+    if (gps_is_usb) return 1;
     
     if((fd = open(port, O_RDWR|O_NDELAY))==-1)
     {
@@ -385,6 +389,7 @@ int32 GPS_Serial_Write(int32 handle, const void *obuf, int size)
 ************************************************************************/
 int32 GPS_Serial_Flush(int32 fd)
 {
+    if (gps_is_usb) return 1;
     
     if(tcflush(fd,TCIOFLUSH))
     {
@@ -411,6 +416,8 @@ int32 GPS_Serial_Flush(int32 fd)
 
 int32 GPS_Serial_Close(int32 fd, const char *port)
 {
+    if (gps_is_usb)  return 1;
+
     if(close(fd)==-1)
     {
 	perror("close");
