@@ -43,8 +43,8 @@ arglist_t stackfilt_args[] = {
 	{"append", &opt_append, "Append list when popping", ARGTYPE_BOOL},
 	{"discard", &opt_discard, "Discard top of stack when popping", ARGTYPE_BOOL},
 	{"replace", &opt_replace, "Replace list with top of stack (default)", ARGTYPE_BOOL},
-	{"swap", &opt_swap, "Swap waypoint list with <depth> element of stack", ARGTYPE_BOOL},
-	{"depth", &opt_depth, "Element to use in swap operation", ARGTYPE_INT},
+	{"swap", &opt_swap, "Swap waypoint list with <depth> item on stack", ARGTYPE_BOOL},
+	{"depth", &opt_depth, "Item to use when swapping", ARGTYPE_INT},
 	{0, 0, 0, 0}
 };
 
