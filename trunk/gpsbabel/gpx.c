@@ -212,7 +212,9 @@ gpx_waypt_pr(waypoint *waypointp)
 	fprintf(ofd, "<wpt lat=\"%lf\" lon=\"%lf\">\n",
 		waypointp->position.latitude.degrees,
 		waypointp->position.longitude.degrees);
-	fprintf(ofd, "<name>%s</name>\n", waypointp->shortname);
+	fprintf(ofd, "<name>%s</name>\n", global_opts.synthesize_shortnames ?
+				          mkshort(waypointp->description) : 
+					  waypointp->shortname);
 	fprintf(ofd, "<desc>");
 	fprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
 	fprintf(ofd, "</desc>\n");
@@ -235,6 +237,7 @@ gpx_write(void)
 {
 	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
 	fprintf(ofd, "<gpx\n\tversion=\"1.0\">\n");
+	setshort_length(32);
 	waypt_disp_all(gpx_waypt_pr);
 	fprintf(ofd, "</gpx>\n");
 }

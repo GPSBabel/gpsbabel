@@ -11,6 +11,8 @@ static int target_len = DEFAULT_TARGET_LEN;
 static const char *badchars = DEFAULT_BADCHARS;
 
 static int mustupper = 0;
+static const char needmem[] = 
+	"mkshort: could not reallocate memory for string\n";
 
 /*
  * This is the stuff that makes me ashamed to be a C programmer...
@@ -87,7 +89,7 @@ mkshort(char *istring)
 
 
 	if (!ostring) {
-		abort();
+		fatal("mkshort: could not reallocate memory for string\n");
 	}
 
 	/* 
@@ -97,7 +99,7 @@ mkshort(char *istring)
 	    strncmp(ostring, "the ", 4) == 0) {
 		nstring = strdup(ostring + 4);
 		if (!nstring) {
-			abort();
+			fatal(needmem);
 		}
 		free(ostring);
 		ostring = nstring;
@@ -124,7 +126,7 @@ mkshort(char *istring)
 	 */
 	tstring = strdup(ostring);
 	if (!tstring) {
-		abort();
+		fatal(needmem);
 	}
 	l = strlen (tstring);
 	cp = ostring;
@@ -144,7 +146,7 @@ mkshort(char *istring)
  	 */
 	tstring = strdup(ostring);
 	if (!tstring) {
-		abort();
+		fatal(needmem);
 	}
 	l = strlen (tstring);
 	cp = ostring;
@@ -169,7 +171,7 @@ mkshort(char *istring)
 
 	tstring = strdup(ostring);
 	if (!tstring) {
-		abort();
+		fatal(needmem);
 	}
 
 	/*
