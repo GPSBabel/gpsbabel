@@ -34,9 +34,10 @@ char *turns_only = NULL;
 static
 arglist_t saroute_args[] = {
 	{"turns_important", &turns_important, 
-		"Keep turns if simplify filter is used", ARGTYPE_BOOL },
+		"Keep turns if simplify filter is used", 
+		NULL, ARGTYPE_BOOL },
 	{"turns_only", &turns_only, "Only read turns; skip all other points",
-		ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL },
 	{0, 0, 0, 0 }
 };
 
@@ -275,5 +276,6 @@ ff_vecs_t saroute_vecs = {
 	NULL,
 	my_read,
 	NULL,
+	NULL, 
 	saroute_args
 };

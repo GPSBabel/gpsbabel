@@ -709,18 +709,19 @@ termwrite(char *obuf, int size)
  */
 static
 arglist_t mag_sargs[] = {
-	{"baud", &bs, "Numeric value of bitrate (baud=4800)", ARGTYPE_INT },
+	{"baud", &bs, "Numeric value of bitrate (baud=4800)", NULL,
+		ARGTYPE_INT },
 	{"noack", &noack, "Suppress use of handshaking in name of speed",
-		ARGTYPE_BOOL},
-	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING },
-	{"nukewpt", &nukewpt, "Delete all waypoints", ARGTYPE_BOOL },
-	{0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL},
+	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
+	{"nukewpt", &nukewpt, "Delete all waypoints", NULL, ARGTYPE_BOOL },
+	{0, 0, 0, 0, 0}
 };
 
 static
 arglist_t mag_fargs[] = {
-	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING },
-	{0, 0, 0, 0}
+	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
+	{0, 0, 0, 0, 0}
 };
 
 static void
@@ -1391,6 +1392,7 @@ ff_vecs_t mag_svecs = {
 	mag_deinit,	
 	mag_read,
 	mag_write,
+	NULL, 
 	mag_sargs
 };
 
@@ -1402,5 +1404,6 @@ ff_vecs_t mag_fvecs = {
 	mag_deinit,	
 	mag_read,
 	mag_write,
+	NULL, 
 	mag_fargs
 };

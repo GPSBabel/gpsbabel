@@ -36,12 +36,12 @@ static char *includelogs = NULL;
 static
 arglist_t html_args[] = {
 	{ "stylesheet", &stylesheet, 
-		"Path to HTML style sheet", ARGTYPE_STRING },
+		"Path to HTML style sheet", NULL, ARGTYPE_STRING },
 	{ "encrypt", &encrypt,
-		"Encrypt hints using ROT13", ARGTYPE_BOOL },
+		"Encrypt hints using ROT13", NULL, ARGTYPE_BOOL },
 	{ "logs", &includelogs, 
-		"Include groundspeak logs if present", ARGTYPE_BOOL },
-	{0, 0, 0, 0}
+		"Include groundspeak logs if present", NULL, ARGTYPE_BOOL },
+	{0, 0, 0, 0, 0}
 };
 
 
@@ -260,5 +260,6 @@ ff_vecs_t html_vecs = {
 	wr_deinit,
 	NULL,
 	data_write,
+	NULL, 
 	html_args
 };

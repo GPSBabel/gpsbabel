@@ -234,6 +234,7 @@ typedef void (*ff_init) (char const *);
 typedef void (*ff_deinit) (void);
 typedef void (*ff_read) (void);
 typedef void (*ff_write) (void);
+typedef void (*ff_exit) (void);
 
 #ifndef DEBUG_MEM
 char * get_option(const char *iarglist, const char *argname);
@@ -332,6 +333,7 @@ typedef struct arglist {
 	char *argstring;
 	char **argval;
 	char *helpstring;
+	char *defaultvalue;
 	long argtype;
 } arglist_t;
 
@@ -352,6 +354,7 @@ typedef struct ff_vecs {
 	ff_deinit wr_deinit;
 	ff_read read;
 	ff_write write;
+	ff_exit exit;
 	arglist_t *args;
 } ff_vecs_t;
 

@@ -25,13 +25,14 @@
 static FILE *file_in;
 static FILE *file_out;
 static void *mkshort_handle;
-static char *deficon = "Waypoint";
+static char *deficon = NULL;
 
 #define MYNAME "EasyGPS"
 
 static
 arglist_t easygps_args[] = {
-/*	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING}, */
+/*	{"deficon", &deficon, "Default icon name", "Waypoint", 
+  	ARGTYPE_STRING}, */
 	{0, 0, 0, 0 }
 };
 
@@ -268,5 +269,6 @@ ff_vecs_t easygps_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
+	NULL, 
 	easygps_args
 };

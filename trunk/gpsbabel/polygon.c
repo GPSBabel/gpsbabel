@@ -44,10 +44,10 @@ typedef struct {
 static
 arglist_t polygon_args[] = {
 	{"file", &polyfileopt,  "File containing vertices of polygon",
-		ARGTYPE_FILE | ARGTYPE_REQUIRED },
+		NULL, ARGTYPE_FILE | ARGTYPE_REQUIRED },
 	{"exclude", &exclopt, "Exclude points inside the polygon",
-		ARGTYPE_BOOL },
-	{0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL },
+	{0, 0, 0, 0, 0}
 };
 
 static void polytest ( double lat1, double lon1,

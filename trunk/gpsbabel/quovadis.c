@@ -35,8 +35,8 @@ static char *dbname = NULL;
 
 static
 arglist_t quovadis_args[] = {
-	{"dbname", &dbname, "Database name", ARGTYPE_STRING},
-	{0, 0, 0, 0}
+	{"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING},
+	{0, 0, 0, 0, 0}
 };
 
 static struct qv_icon_mapping mapping[] = {
@@ -291,5 +291,6 @@ ff_vecs_t quovadis_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
+	NULL, 
 	quovadis_args
 };

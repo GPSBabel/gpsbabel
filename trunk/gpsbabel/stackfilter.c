@@ -37,15 +37,22 @@ static int  swapdepth = 0;
 
 static
 arglist_t stackfilt_args[] = {
-	{"push", &opt_push, "Push waypoint list onto stack", ARGTYPE_BOOL},
-	{"copy", &opt_copy, "Copy waypoint list when pushing", ARGTYPE_BOOL},
-	{"pop", &opt_pop, "Pop waypoint list from stack", ARGTYPE_BOOL},
-	{"append", &opt_append, "Append list when popping", ARGTYPE_BOOL},
-	{"discard", &opt_discard, "Discard top of stack when popping", ARGTYPE_BOOL},
-	{"replace", &opt_replace, "Replace list with top of stack (default)", ARGTYPE_BOOL},
-	{"swap", &opt_swap, "Swap waypoint list with <depth> item on stack", ARGTYPE_BOOL},
-	{"depth", &opt_depth, "Item to use when swapping", ARGTYPE_INT},
-	{0, 0, 0, 0}
+	{"push", &opt_push, "Push waypoint list onto stack", NULL, 
+		ARGTYPE_BOOL},
+	{"copy", &opt_copy, "Copy waypoint list when pushing", NULL,
+		ARGTYPE_BOOL},
+	{"pop", &opt_pop, "Pop waypoint list from stack", NULL,
+		ARGTYPE_BOOL},
+	{"append", &opt_append, "Append list when popping", NULL,
+		ARGTYPE_BOOL},
+	{"discard", &opt_discard, "Discard top of stack when popping", 
+		NULL, ARGTYPE_BOOL},
+	{"replace", &opt_replace, "Replace list with top of stack (default)", 
+		NULL, ARGTYPE_BOOL},
+	{"swap", &opt_swap, "Swap waypoint list with <depth> item on stack", 
+		NULL, ARGTYPE_BOOL},
+	{"depth", &opt_depth, "Item to use when swapping", NULL, ARGTYPE_INT},
+	{0, 0, 0, 0, 0}
 };
 
 struct stack_elt {

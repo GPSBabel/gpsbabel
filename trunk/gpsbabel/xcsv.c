@@ -30,31 +30,32 @@
 #define MYNAME	"XCSV"
 #define ISSTOKEN(a,b) (strncmp(a,b, strlen(b)) == 0)
 
-static char *styleopt;
-static char *snlenopt;
-static char *snwhiteopt;
-static char *snupperopt;
-static char *snuniqueopt;
-char *prefer_shortnames;
-char *xcsv_urlbase;
+static char *styleopt = NULL;
+static char *snlenopt = NULL;
+static char *snwhiteopt = NULL;
+static char *snupperopt = NULL;
+static char *snuniqueopt = NULL;
+char *prefer_shortnames = NULL;
+char *xcsv_urlbase = NULL;
 
 static
 arglist_t xcsv_args[] = {
-	{"style", &styleopt, "Full path to XCSV style file",
+	{"style", &styleopt, "Full path to XCSV style file", NULL,
 		ARGTYPE_FILE | ARGTYPE_REQUIRED },
-	{"snlen", &snlenopt, "Max synthesized shortname length",
+	{"snlen", &snlenopt, "Max synthesized shortname length", NULL,
 		ARGTYPE_INT},
 	{"snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames",
-		ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL},
 	{"snupper", &snupperopt, "(0/1) UPPERCASE synth. shortnames",
-	        ARGTYPE_BOOL},
+	        NULL, ARGTYPE_BOOL},
 	{"snunique", &snuniqueopt, "(0/1) Make synth. shortnames unique",
-		ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL},
 	{"urlbase", &xcsv_urlbase, "Basename prepended to URL on output",
-	        ARGTYPE_STRING},
+	        NULL, ARGTYPE_STRING},
 	{"prefer_shortnames", &prefer_shortnames, 
-		"Use shortname instead of description", ARGTYPE_BOOL },
-	{0, 0, 0, 0}
+		"Use shortname instead of description", 
+		NULL, ARGTYPE_BOOL },
+	{0, 0, 0, 0, 0}
 };
 
 /* a table of config file constants mapped to chars */
@@ -542,5 +543,6 @@ ff_vecs_t xcsv_vecs = {
     xcsv_wr_deinit,
     xcsv_data_read,
     xcsv_data_write,
+    NULL, 
     xcsv_args
 };

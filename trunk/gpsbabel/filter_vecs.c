@@ -114,11 +114,33 @@ find_filter_vec(char *const vecname, char **opts)
 
 			if (vec->vec->args) {
 				for (ap = vec->vec->args; ap->argstring; ap++){
-					*ap->argval = get_option(*opts, ap->argstring);
+					char *opt = get_option(*opts, 
+							ap->argstring);
+					if ( opts ) {
+						*ap->argval = opt;
+					}
+					else if ( ap->defaultvalue ) {
+						*ap->argval = xstrdup(
+							ap->defaultvalue);
+					}
+					else {
+						*ap->argval = NULL;
+					}
 				}
 			}
 		} else {
 			*opts = NULL;
+			if (vec->vec->args) {
+				for (ap = vec->vec->args; ap->argstring; ap++){
+					if ( ap->defaultvalue ) {
+						*ap->argval = xstrdup(
+							ap->defaultvalue);
+					}
+					else {
+						*ap->argval = NULL;
+					}
+				}
+			}
 		}
 
 		xfree(v);

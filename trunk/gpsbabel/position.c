@@ -29,12 +29,12 @@ extern queue waypt_head;
 static route_head *cur_rte = NULL;
 
 static double pos_dist;
-static char *distopt;
+static char *distopt = NULL;
 static char *purge_duplicates = NULL;
-static char *latopt;
-static char *lonopt;
-static char *exclopt;
-static char *nosort;
+static char *latopt = NULL;
+static char *lonopt = NULL;
+static char *exclopt = NULL;
+static char *nosort = NULL;
 
 waypoint * home_pos;
 
@@ -45,24 +45,26 @@ typedef struct {
 static
 arglist_t position_args[] = {
 	{"distance", &distopt, "Maximum positional distance",
-		ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
-	{"all", &purge_duplicates, "Suppress all points close to other points", ARGTYPE_BOOL }, 
-	{0, 0, 0, 0}
+		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+	{"all", &purge_duplicates, 
+		"Suppress all points close to other points", 
+		NULL, ARGTYPE_BOOL }, 
+	{0, 0, 0, 0, 0}
 };
 
 static
 arglist_t radius_args[] = {
 	{"lat", &latopt,       "Latitude for center point (D.DDDDD)",
-		ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
 	{"lon", &lonopt,       "Longitude for center point (D.DDDDD)",
-		ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
 	{"distance", &distopt, "Maximum distance from center",
-		ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
 	{"exclude", &exclopt,  "Exclude points close to center",
-		ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL },
 	{"nosort", &nosort,    "Inhibit sort by distance to center.",
-		ARGTYPE_BOOL },
-	{0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL },
+	{0, 0, 0, 0, 0}
 };
 
 static double

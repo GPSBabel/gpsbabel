@@ -27,13 +27,13 @@ static waypoint *wpt_tmp;
 FILE *fd;
 FILE *ofd;
 
-static char *noretired;
+static char *noretired = NULL;
 
 static
 arglist_t nav_args[] = {
 	{"noretired", &noretired, "Suppress retired geocaches.",
-		ARGTYPE_BOOL },
-	{0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL },
+	{0, 0, 0, 0, 0}
 };
 
 #define MYNAME "navicache"
@@ -262,5 +262,6 @@ ff_vecs_t navicache_vecs = {
 	nav_wr_deinit,
 	nav_read,
 	nav_write,
+	NULL, 
 	nav_args,
 };

@@ -29,7 +29,7 @@ static int in_type;
 static int in_cdata;
 static char *cdatastr;
 static char *typestr;
-static char *deficon;
+static char *deficon = NULL;
 
 static waypoint *wpt_tmp;
 
@@ -38,8 +38,8 @@ FILE *ofd;
 
 static
 arglist_t geo_args[] = {
-	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING },
-	{0, 0, 0, 0}
+	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
+	{0, 0, 0, 0, 0}
 };
 
 #define MYNAME "geo"
@@ -293,5 +293,6 @@ ff_vecs_t geo_vecs = {
 	geo_wr_deinit,
 	geo_read,
 	geo_write,
+	NULL, 
 	geo_args
 };

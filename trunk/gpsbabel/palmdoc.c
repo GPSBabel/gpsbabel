@@ -67,14 +67,16 @@ struct buffer {
 static
 arglist_t palmdoc_args[] = {
 	{ "nosep", &suppresssep, 
-		"Suppress separator lines between waypoints", ARGTYPE_BOOL },
-	{"dbname", &dbname, "Database name", ARGTYPE_STRING },
-	{"encrypt", &encrypt, "Encrypt hints with ROT13", ARGTYPE_BOOL },
-	{ "logs", &includelogs,
-		"Include groundspeak logs if present", ARGTYPE_BOOL },
-	{ "bookmarks_short", &bmid, "Include short name in bookmarks", 
+		"Suppress separator lines between waypoints", NULL,
 		ARGTYPE_BOOL },
-	{0, 0, 0, 0}
+	{"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING },
+	{"encrypt", &encrypt, "Encrypt hints with ROT13", NULL,
+		ARGTYPE_BOOL },
+	{ "logs", &includelogs,
+		"Include groundspeak logs if present", NULL, ARGTYPE_BOOL },
+	{ "bookmarks_short", &bmid, "Include short name in bookmarks", 
+		NULL, ARGTYPE_BOOL },
+	{0, 0, 0, 0, 0}
 };
 
 static struct buffer buf;
@@ -608,6 +610,7 @@ ff_vecs_t palmdoc_vecs = {
 	wr_deinit,
 	NULL,
 	data_write,
+	NULL, 
 	palmdoc_args
 };
 

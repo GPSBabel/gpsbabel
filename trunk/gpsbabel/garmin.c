@@ -32,20 +32,21 @@ static GPS_PWay *tx_routelist;
 static GPS_PWay *cur_tx_routelist_entry;
 static GPS_PTrack *tx_tracklist;
 static GPS_PTrack *cur_tx_tracklist_entry;
-static char *getposn;
-static char *poweroff;
-static char *snlen;
-static char *snwhiteopt;
+static char *getposn = NULL;
+static char *poweroff = NULL;
+static char *snlen = NULL;
+static char *snwhiteopt = NULL;
 
 static
 arglist_t garmin_args[] = {
-	{ "snlen", &snlen, "Length of generated shortnames", ARGTYPE_INT },
+	{ "snlen", &snlen, "Length of generated shortnames", NULL, 
+		ARGTYPE_INT },
 	{ "snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames",
-		ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL},
 	{ "get_posn", &getposn, "Return current position as a waypoint", 
-		ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL},
 	{ "power_off", &poweroff, "Command unit to power itself down", 
-		ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL},
 	{ 0, 0, 0, 0}
 };
 
@@ -624,6 +625,7 @@ ff_vecs_t garmin_vecs = {
 	rw_deinit,
 	data_read,
 	data_write,
+	NULL,
 	garmin_args
 };
 

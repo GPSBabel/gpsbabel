@@ -1288,13 +1288,18 @@ static
 arglist_t gpx_args[] = {
 	{ "gsshortnames", &gsshortnames, 
 		"Prefer shorter descriptions from Groundspeak files",
-		ARGTYPE_BOOL },
-	{ "snlen", &snlen, "Length of generated shortnames", ARGTYPE_INT },
+		NULL, ARGTYPE_BOOL },
+	{ "snlen", &snlen, "Length of generated shortnames", 
+		NULL, ARGTYPE_INT },
 	{ "suppresswhite", &suppresswhite, 
-		"Suppress whitespace in generated shortnames", ARGTYPE_BOOL },
-	{ "logpoint", &opt_logpoint, "Create waypoints from geocache log entries", ARGTYPE_BOOL },
-	{ "urlbase", &urlbase, "Base URL for link tag in output", ARGTYPE_STRING},
-	{ 0, 0, 0, 0 }
+		"Suppress whitespace in generated shortnames", 
+		NULL, ARGTYPE_BOOL },
+	{ "logpoint", &opt_logpoint, 
+		"Create waypoints from geocache log entries", 
+		NULL, ARGTYPE_BOOL },
+	{ "urlbase", &urlbase, "Base URL for link tag in output", 
+		NULL, ARGTYPE_STRING},
+	{ 0, 0, 0, 0, 0 }
 };
 
 ff_vecs_t gpx_vecs = {
@@ -1305,5 +1310,6 @@ ff_vecs_t gpx_vecs = {
 	gpx_wr_deinit,	
 	gpx_read,
 	gpx_write,
+	NULL, 
 	gpx_args,
 };

@@ -30,8 +30,8 @@ static char *countopt = NULL;
 static
 arglist_t routesimple_args[] = {
 	{"count", &countopt,  "Maximum number of points in route", 
-		ARGTYPE_INT | ARGTYPE_REQUIRED},
-	{0, 0, 0, 0}
+		NULL, ARGTYPE_INT | ARGTYPE_REQUIRED},
+	{0, 0, 0, 0, 0}
 };
 
 struct xte_intermed;
