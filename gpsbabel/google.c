@@ -21,6 +21,7 @@
 
 static char *encoded_points = NULL;
 static char *encoded_levels = NULL;
+static char *script = NULL;
 
 FILE *fd;
 
@@ -42,15 +43,31 @@ google_read(void)
 }
 #else
 
-static xg_callback      goog_points, goog_levels, goog_poly_e;
+static xg_callback      goog_points, goog_levels, goog_poly_e, goog_script;
 
 static 
 xg_tag_mapping google_map[] = {
 	{ goog_points,  cb_cdata,       "/page/directions/polyline/points" },
 	{ goog_levels,  cb_cdata,       "/page/directions/polyline/levels" },
 	{ goog_poly_e,  cb_end,         "/page/directions/polyline" },
+	{ goog_script,  cb_cdata,       "/html/head/script" },
 	{ NULL,         0,              NULL }
 };
+
+void goog_script( const char *args, const char **unused ) 
+{
+	if (args)
+	{
+		if ( script ) 
+		{
+			script = xstrappend( script, args );
+		}
+		else
+		{
+			script = xstrdup( args );
+		}
+	}
+}			
 
 void goog_points( const char *args, const char **unused )
 {
@@ -157,6 +174,22 @@ void
 google_read(void)
 {
 	xml_read();
+	if ( script ) 
+	{
+		char *xml = strchr( script, '\'' );
+		char *end = NULL;
+		if ( xml ) {
+			xml++;
+			end = strrchr( xml, '\'' );
+			if ( end ) {
+				*end = '\0';
+				xml_deinit();
+				xml_init( NULL, google_map );
+				xml_readstring( xml );
+			}
+		}
+		xfree( script );
+	}
 }
 #endif
 

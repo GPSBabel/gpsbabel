@@ -220,10 +220,23 @@ void xml_read(void)
 	
 }
 
+void xml_readstring( char *str ) 
+{
+	int len = strlen(str);
+	if (!XML_Parse(psr, str, len, 1)) {
+		fatal( MYNAME ":Parse error at %d: %s\n",
+				XML_GetCurrentLineNumber(psr),
+				XML_ErrorString(XML_GetErrorCode(psr)));
+	}
+	XML_ParserFree(psr);
+}
+
 void
 xml_init(const char *fname, xg_tag_mapping *tbl)
 {
-	ifd = xfopen(fname, "r", MYNAME);
+	if (fname) {
+		ifd = xfopen(fname, "r", MYNAME);
+	}
 
 	current_tag = vmem_alloc(1,0);
 	*((char *)current_tag.mem) = '\0';
