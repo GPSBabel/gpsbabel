@@ -41,10 +41,12 @@ typedef struct {
 
 static
 arglist_t arcdist_args[] = {
-	{"file", &arcfileopt,  "File containing vertices of arc"},
-	{"distance", &distopt, "Maximum distance from arc"},
-	{"exclude", &exclopt, "Exclude points close to the arc"},
-	{0, 0, 0}
+	{"file", &arcfileopt,  "File containing vertices of arc", 
+		ARGTYPE_FILE | ARGTYPE_REQUIRED},
+	{"distance", &distopt, "Maximum distance from arc", 
+		ARGTYPE_FLOAT | ARGTYPE_REQUIRED},
+	{"exclude", &exclopt, "Exclude points close to the arc", ARGTYPE_BOOL},
+	{0, 0, 0, 0}
 };
 
 static double gcdist( double lat1, double lon1, double lat2, double lon2 ) {

@@ -42,17 +42,22 @@ typedef struct {
 
 static
 arglist_t position_args[] = {
-	{"distance", &distopt, "Maximum positional distance (required)"},
-	{0, 0, 0}
+	{"distance", &distopt, "Maximum positional distance",
+		ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+	{0, 0, 0, 0}
 };
 
 static
 arglist_t radius_args[] = {
-	{"lat", &latopt,       "Latitude for center point (D.DDDDD)"},
-	{"lon", &lonopt,       "Longitude for center point (D.DDDDD)"},
-	{"distance", &distopt, "Maximum distance from center"},
-	{"exclude", &exclopt,  "Exclude points close to center"},
-	{0, 0, 0}
+	{"lat", &latopt,       "Latitude for center point (D.DDDDD)",
+		ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+	{"lon", &lonopt,       "Longitude for center point (D.DDDDD)",
+		ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+	{"distance", &distopt, "Maximum distance from center",
+		ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+	{"exclude", &exclopt,  "Exclude points close to center",
+		ARGTYPE_BOOL },
+	{0, 0, 0, 0}
 };
 
 static double

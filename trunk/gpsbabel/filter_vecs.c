@@ -127,8 +127,9 @@ disp_filter_vecs(void)
 		printf("	%-20.20s  %-50.50s\n",
 			vec->name, vec->desc);
 		for (ap = vec->vec->args; ap && ap->argstring; ap++) {
-			printf("	  %-18.18s    %-.50s\n",
-				ap->argstring, ap->helpstring);
+			printf("	  %-18.18s    %-.50s %s\n",
+				ap->argstring, ap->helpstring,
+				(ap->argtype&ARGTYPE_REQUIRED)?"(required)":"");
 		}
 	}
 }

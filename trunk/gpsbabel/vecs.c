@@ -339,8 +339,9 @@ disp_vecs(void)
 	for (vec = vec_list; vec->vec; vec++) {
 		printf(VEC_FMT, vec->name, vec->desc);
 		for (ap = vec->vec->args; ap && ap->argstring; ap++) {
-		printf("	  %-18.18s    %-.50s\n",
-			ap->argstring, ap->helpstring);
+		printf("	  %-18.18s    %-.50s %s\n",
+			ap->argstring, ap->helpstring,
+			(ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
 		}
 	}
 

@@ -28,9 +28,11 @@ static char *lcopt = NULL;
 
 static
 arglist_t dup_args[] = {
-	{"shortname", &snopt, "Suppress duplicate waypoints based on name"},
-	{"location", &lcopt, "Suppress duplicate waypoint based on coords"},
-	{0, 0, 0}
+	{"shortname", &snopt, "Suppress duplicate waypoints based on name",
+		ARGTYPE_BOOL},
+	{"location", &lcopt, "Suppress duplicate waypoint based on coords",
+		ARGTYPE_BOOL},
+	{0, 0, 0, 0}
 };
 
 

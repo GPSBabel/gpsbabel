@@ -48,13 +48,17 @@ static char *clickmap = NULL;
 
 static
 arglist_t tiger_args[] = {
-	{"nolabels", &nolabels, "Suppress labels on generated pins."},
-	{"genurl", &genurl, "Generate file with lat/lon for centering map."},
-	{"scale", &scale, "Dimension in pixels of map."},
+	{"nolabels", &nolabels, "Suppress labels on generated pins.",
+		ARGTYPE_BOOL },
+	{"genurl", &genurl, "Generate file with lat/lon for centering map.",
+		ARGTYPE_OUTFILE },
+	{"scale", &scale, "Dimension in pixels of map.",
+		ARGTYPE_INT},
 #if CLICKMAP
-	{"clickmap", &clickmap, "Generate Clickable map web page."},
+	{"clickmap", &clickmap, "Generate Clickable map web page.",
+		ARGTYPE_BOOL},
 #endif
-	{0, 0, 0}
+	{0, 0, 0, 0}
 };
 
 
