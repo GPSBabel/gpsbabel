@@ -174,7 +174,7 @@ duplicate_process(void)
 	queue *elem, *tmp;
 	extern queue waypt_head;
 
-	htable = xmalloc(ct * sizeof(*htable));
+	htable = (wpt_ptr *) xmalloc(ct * sizeof(*htable));
 	bh = htable;
 
 	i = 0;

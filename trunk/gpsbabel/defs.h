@@ -256,6 +256,7 @@ void route_add (waypoint *);
 void route_add_wpt(route_head *rte, waypoint *wpt);
 void route_del_wpt(route_head *rte, waypoint *wpt);
 void route_add_head(route_head *rte);
+void route_reverse(const route_head *rte_hd);
 void track_add_head(route_head *rte);
 void route_disp_all(route_hdr, route_trl, waypt_cb);
 void track_disp_all(route_hdr, route_trl, waypt_cb);
@@ -382,13 +383,13 @@ void xfree(void *mem);
 char *xstrdup(const char *s);
 char *xstrndup(const char *s, size_t n);
 char *xstrndupt(const char *s, size_t n);
-char *xstrappend(char *src, const char *new);
+char *xstrappend(char *src, const char *addon);
 #define xxcalloc(nmemb, size, file, line) xcalloc(nmemb, size)
 #define xxmalloc(size, file, line) xmalloc(size)
 #define xxrealloc(p, s, file, line) xrealloc(p,s)
 #define xxfree(mem, file, line) xfree(mem)
 #define xxstrdup(s, file, line) xstrdup(s)
-#define xxstrappend(src, new, file, line) xstrappend(src, new)
+#define xxstrappend(src, addon, file, line) xstrappend(src, addon)
 #else /* DEBUG_MEM */
 void *XCALLOC(size_t nmemb, size_t size, DEBUG_PARAMS );
 void *XMALLOC(size_t size, DEBUG_PARAMS );
@@ -397,7 +398,7 @@ void XFREE(void *mem, DEBUG_PARAMS );
 char *XSTRDUP(const char *s, DEBUG_PARAMS );
 char *XSTRNDUP(const char *src, size_t size, DEBUG_PARAMS );
 char *XSTRNDUPT(const char *src, size_t size, DEBUG_PARAMS );
-char *XSTRAPPEND(char *src, const char *new, DEBUG_PARAMS );
+char *XSTRAPPEND(char *src, const char *addon, DEBUG_PARAMS );
 void debug_mem_open();
 void debug_mem_output( char *format, ... );
 void debug_mem_close();
@@ -408,7 +409,7 @@ void debug_mem_close();
 #define xstrdup(s) XSTRDUP(s, __FILE__, __LINE__)
 #define xstrndup(s, z) XSTRNDUP(s, z, __FILE__, __LINE__)
 #define xstrndupt(s, z) XSTRNDUPT(s, z, __FILE__, __LINE__)
-#define xstrappend(src,new) XSTRAPPEND(src, new, __FILE__, __LINE__)
+#define xstrappend(src,addon) XSTRAPPEND(src, addon, __FILE__, __LINE__)
 #define xxcalloc XCALLOC
 #define xxmalloc XMALLOC
 #define xxrealloc XREALLOC

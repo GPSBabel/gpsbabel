@@ -211,11 +211,11 @@ xcsv_parse_style_line(const char *sbuff)
 
 		/* field delimiters are always bad characters */
 		if (xcsv_file.badchars) {
-			xcsv_file.badchars = xrealloc(xcsv_file.badchars,
+			xcsv_file.badchars = (char *) xrealloc(xcsv_file.badchars,
 				strlen(xcsv_file.badchars) +
 				strlen(p) + 1);
 		} else {
-			xcsv_file.badchars = xcalloc(strlen(p) + 1, 1);
+			xcsv_file.badchars = (char *) xcalloc(strlen(p) + 1, 1);
 		}
 
 		strcat(xcsv_file.badchars, p);
@@ -238,11 +238,11 @@ xcsv_parse_style_line(const char *sbuff)
 
 		/* record delimiters are always bad characters */
 		if (xcsv_file.badchars) {
-			xcsv_file.badchars = xrealloc(xcsv_file.badchars,
+			xcsv_file.badchars = (char *) xrealloc(xcsv_file.badchars,
 				strlen(xcsv_file.badchars) +
 				strlen(p) + 1);
 		} else {
-			xcsv_file.badchars = xcalloc(strlen(p) + 1, 1);
+			xcsv_file.badchars = (char *) xcalloc(strlen(p) + 1, 1);
 		}
 
 		strcat(xcsv_file.badchars, p);
@@ -295,11 +295,11 @@ xcsv_parse_style_line(const char *sbuff)
 		p = sp;
 		
 		if (xcsv_file.badchars) {
-			xcsv_file.badchars = xrealloc(xcsv_file.badchars,
+			xcsv_file.badchars = (char *) xrealloc(xcsv_file.badchars,
 				strlen(xcsv_file.badchars) +
 				strlen(p) + 1);
 		} else {
-			xcsv_file.badchars = xcalloc(strlen(p) + 1, 1);
+			xcsv_file.badchars = (char *) xcalloc(strlen(p) + 1, 1);
 		}
 
 		strcat(xcsv_file.badchars, p);

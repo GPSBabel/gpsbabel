@@ -109,8 +109,8 @@ dist_comp(const void * a, const void * b)
 {
 	const waypoint *x1 = *(waypoint **)a;
 	const waypoint *x2 = *(waypoint **)b;
-	extra_data *x1e = x1->extra_data;
-	extra_data *x2e = x2->extra_data;
+	extra_data *x1e = (extra_data *) x1->extra_data;
+	extra_data *x2e = (extra_data *) x2->extra_data;
 
 	if (x1e->distance > x2e->distance)
 		return 1;
@@ -131,7 +131,7 @@ position_process(void)
 
 	wc = waypt_count();
 
-	comp = xcalloc(wc, sizeof(*comp));
+	comp = (waypoint **) xcalloc(wc, sizeof(*comp));
 
 	i = 0;
 
@@ -219,7 +219,7 @@ radius_process(void)
 			continue;
 		}
 
-		ed = xcalloc(1, sizeof(*ed));
+		ed = (extra_data *) xcalloc(1, sizeof(*ed));
 		ed->distance = dist;
 		waypointp->extra_data = ed;
 	}
@@ -227,7 +227,7 @@ radius_process(void)
 	wc = waypt_count();
 	QUEUE_INIT(&temp_head);
 
-	comp = xcalloc(wc, sizeof(*comp));
+	comp = (waypoint **) xcalloc(wc, sizeof(*comp));
 
 	i = 0;
 
@@ -277,7 +277,7 @@ radius_init(const char *args) {
 		}
 	}
 
-	home_pos = xcalloc(sizeof(*home_pos), 1);
+	home_pos = (waypoint *) xcalloc(sizeof(*home_pos), 1);
 
 	if (latopt)
 		home_pos->latitude = atof(latopt);

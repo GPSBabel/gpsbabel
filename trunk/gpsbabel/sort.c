@@ -63,7 +63,7 @@ sort_process(void)
 
 	wc = waypt_count();
 
-	comp = xcalloc(wc, sizeof(*comp));
+	comp = (waypoint **) xcalloc(wc, sizeof(*comp));
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		comp[i] = (waypoint *)elem;
