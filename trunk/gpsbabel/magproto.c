@@ -47,6 +47,22 @@ typedef enum {
 	mrs_handon
 } mag_rxstate;
 
+/*
+ *   An individual element of a route.
+ */
+typedef struct mag_rte_elem {
+	queue Q;	 		/* My link pointers */
+	char *wpt_name;
+	char *wpt_icon;
+} mag_rte_elem;
+
+/*
+ *  A header of a route.  Related elements of a route belong to this.
+ */
+typedef struct mag_rte_head {
+	queue Q;			/* Queue head for child rte_elems */
+	int nelems;
+} mag_rte_head;
 
 static FILE *magfile_in;
 static FILE *magfile_out;
@@ -675,7 +691,91 @@ mag_trkparse(char *trkmsg)
 	
 }
 
+/*
+ * Given an incoming route messages of the form:
+ * $PMGNRTE,4,1,c,1,DAD,a,Anna,a*61
+ * generate a route.
+ */
+waypoint * 
+mag_rteparse(char *rtemsg)
+{
+	char descr[100];
+	int n;
+	int frags,frag,rtenum;
+	char xbuf[100],next_stop[100],abuf[100];
+	char *currtemsg;
+	static mag_rte_head *mag_rte_head;
+	mag_rte_elem *rte_elem;
 
+	descr[0] = 0;
+
+	sscanf(rtemsg,"$PMGNRTE,%d,%d,%c,%d%n", 
+		&frags,&frag,xbuf,&rtenum,&n);
+
+	/*
+	 * This is the first component of a route.  Allocate a new
+	 * queue head.   It's kind of unfortunate that we can't know
+	 * a priori how many items are on this track, so we have to
+	 * alloc and chain those as we go.
+	 */
+	if (frag == 1) {
+		mag_rte_head = xmalloc(sizeof (*mag_rte_head));
+		QUEUE_INIT(&mag_rte_head->Q);
+		mag_rte_head->nelems = frags;
+	}
+
+	currtemsg = rtemsg + n;
+
+	/*
+	 * The individual line may contain several route elements.
+	 * loop and pick those up.
+	 */
+	while (sscanf(currtemsg,",%[^,],%[^,]%n",next_stop, abuf,&n)) {
+		if (next_stop[0] == 0) {
+			break;
+		}
+		rte_elem = xmalloc(sizeof (*rte_elem));
+		QUEUE_INIT(&rte_elem->Q);
+		rte_elem->wpt_name = xstrdup(next_stop);
+		rte_elem->wpt_icon = xstrdup(abuf);
+		ENQUEUE_TAIL(&mag_rte_head->Q, &rte_elem->Q);
+		next_stop[0] = 0;
+		currtemsg += n;
+	}
+
+	/*
+	 * If this was the last fragment of the route, add it to the
+	 * gpsbabel internal structs now.
+	 */
+	if (frag == mag_rte_head->nelems) {
+		queue *elem, *tmp;
+		route_head *rte_head;
+
+		rte_head = route_head_alloc();
+		route_add_head(rte_head);
+
+		/*
+		 *  TODO: I suppose we have to fetch the waypoints to
+		 *  get the underlying data for each stop in the route.
+		 */
+		QUEUE_FOR_EACH(&mag_rte_head->Q, elem, tmp) {
+			static int lat; /* Dummy data */
+			mag_rte_elem *re = (mag_rte_elem *) elem;
+			waypoint *waypt;
+
+			waypt  = xcalloc(sizeof *waypt, 1);
+
+			/* TODO Populate rest of waypoint. */
+			waypt->shortname = re->wpt_name;
+			waypt->position.latitude.degrees = ++lat;
+
+			route_add_wpt(rte_head, waypt);
+			dequeue(&re->Q);
+			free(re);
+		}
+	}
+	return 0;
+}
 
 const char *
 mag_find_descr_from_token(const char *token)

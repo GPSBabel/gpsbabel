@@ -181,7 +181,7 @@ gpx_end(void *data, const char *el)
 		in_wpt--;
 	}
 	else if (strcmp(el, "rtept") == 0) {
-		route_add(wpt_tmp);
+/*		route_add(wpt_tmp); */
 		in_rte--;
 	} else if (strcmp(el, "name") == 0) {
 		in_name--;
