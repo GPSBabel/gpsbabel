@@ -139,10 +139,11 @@ ce_start(void *data, const char *el, const char **attr)
 				// Create a CE route object and add it to the list of routes
 				currentRoute = (ce_route *) xcalloc(sizeof (ce_route), 1);
 				currentRoute->id=xstrdup(ap[1]);
-				if (doing_rtes)
-				currentRoute->r = route_head_alloc();
+				if (doing_rtes) 
+					currentRoute->r = route_head_alloc();
 				QUEUE_INIT(&currentRoute->ce_mark_head);
-				ce_add_route(currentRoute);
+				if (doing_rtes) 
+					ce_add_route(currentRoute);
 			}
 		}
 	} else if (0 == strcmp(el, "Mark")) {
