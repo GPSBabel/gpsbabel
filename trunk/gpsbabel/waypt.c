@@ -38,6 +38,13 @@ waypt_add(waypoint *wpt)
 	waypt_ct++;
 }
 
+void
+waypt_del(waypoint *wpt)
+{
+	dequeue(&wpt->Q);
+	waypt_ct--;
+}
+
 unsigned int
 waypt_count(void)
 {

@@ -89,6 +89,7 @@ typedef void (*ff_write) (void);
 
 typedef void (*waypt_cb) (const waypoint *);
 void waypt_add (waypoint *);
+void waypt_del (waypoint *);
 void route_add (waypoint *);
 void waypt_disp_all(waypt_cb);
 unsigned int waypt_count(void);
