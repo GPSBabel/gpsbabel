@@ -27,6 +27,8 @@
 #include <time.h>
 #include <stdlib.h>
 
+#define XMIN(a,b) (a < b? a : b)
+
 static int32    GPS_A000(const char *port);
 static void   GPS_A001(GPS_PPacket packet);
 
@@ -1851,22 +1853,22 @@ static void GPS_D108_Send(UC *data, GPS_PWay way, int32 *len)
 
 
     q = (UC *) way->ident;
-    i = sizeof(way->ident);
+    i = XMIN(51, sizeof(way->ident));
     while((*p++ = *q++) && i--);
     q = (UC *) way->cmnt;
-    i = sizeof(way->cmnt);
+    i = XMIN(51, sizeof(way->cmnt));
     while((*p++ = *q++) && i--);
     q = (UC *) way->facility;
-    i = sizeof(way->facility);
+    i = XMIN(31, sizeof(way->facility));
     while((*p++ = *q++) && i--);
     q = (UC *) way->city;
-    i = sizeof(way->city);
+    i = XMIN(25, sizeof(way->city));
     while((*p++ = *q++) && i--);
     q = (UC *) way->addr;
-    i = sizeof(way->addr);
+    i = XMIN(51, sizeof(way->addr));
     while((*p++ = *q++) && i--);
     q = (UC *) way->cross_road;
-    i = sizeof(way->cross_road);
+    i = XMIN(51, sizeof(way->cross_road));
     while((*p++ = *q++) && i--);
     
     *len = p-data;
@@ -1918,22 +1920,22 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len)
     for(i=0;i<4;++i) *p++ = 0xff; /* D109 silliness for ETE */
 
     q = (UC *) way->ident;
-    i = sizeof(way->ident);
+    i = XMIN(51, sizeof(way->ident));
     while((*p++ = *q++) && i--);
     q = (UC *) way->cmnt;
-    i = sizeof(way->ident);
+    i = XMIN(51, sizeof(way->cmnt));
     while((*p++ = *q++) && i--);
     q = (UC *) way->facility;
-    i = sizeof(way->facility);
+    i = XMIN(31, sizeof(way->facility));
     while((*p++ = *q++) && i--);
     q = (UC *) way->city;
-    i = sizeof(way->city);
+    i = XMIN(25, sizeof(way->city));
     while((*p++ = *q++) && i--);
     q = (UC *) way->addr;
-    i = sizeof(way->addr);
+    i = XMIN(51, sizeof(way->addr));
     while((*p++ = *q++) && i--);
     q = (UC *) way->cross_road;
-    i = sizeof(way->cross_road);
+    i = XMIN(51, sizeof(way->cross_road));
     while((*p++ = *q++) && i--);
     *len = p-data;
     return;
