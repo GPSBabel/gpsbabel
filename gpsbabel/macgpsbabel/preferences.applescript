@@ -1,10 +1,11 @@
--- preferences.applescript
--- MacGPSBabel
+-- MacGPSBabel: preferences.applescript
+-- File Created by Jeremy Atherton on January 30, 2004
+-- Last modified by Jeremy Atherton on Monday, February 16, 2004
 
--- This script deals mostly with reading and saving user defaults. Along the way, it also deals with getting the list of available serial ports.
+--  MacGPSBabel is part of the gpsbabel project and is Copyright (c) 2004 Robert Lipe.
+-- see http://gpsbabel.sourceforge.net/ for more details
 
---  Created by Jeremy Atherton on Fri Jan 30 2004.
---  Copyright (c) 2004 Jeremy Atherton.
+-- This script (preferences.applescript) deals mostly with reading and saving user defaults. Along the way, it also deals with getting the list of available serial ports.
 
 -- PROPERTIES --
 property startIndex : 0

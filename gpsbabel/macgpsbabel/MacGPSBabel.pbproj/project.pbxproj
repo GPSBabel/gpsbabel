@@ -259,7 +259,7 @@
 	<key>CFBundleSignature</key>
 	<string>mGPS</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.b4</string>
+	<string>1.0</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>YES</string>
 	<key>NSMainNibFile</key>
