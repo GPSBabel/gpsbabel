@@ -19,7 +19,7 @@ BADCHARS	        TAB
 #
 PROLOGUE plot "-" with lines
 
-IFIELD  PATH_DISTANCE_MILES, "", "%lf"
+IFIELD  PATH_DISTANCE_MILES, "", "%.4lf"
 IFIELD  ALT_FEET, "", "%f"
 
 EPILOGUE e
