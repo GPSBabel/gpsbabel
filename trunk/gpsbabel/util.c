@@ -138,7 +138,11 @@ xstrdup(const char *s)
  * Duplicate at most sz bytes in str.
  */
 char *
+#ifdef DEBUG_MEM
+XSTRNDUP(const char *str, size_t sz, DEBUG_PARAMS )
+#else
 xstrndup(const char *str, size_t sz)
+#endif
 {
 	size_t newlen;
 	char *newstr;
@@ -160,7 +164,11 @@ xstrndup(const char *str, size_t sz)
  * while copying.
  */
 char *
+#ifdef DEBUG_MEM
+XSTRNDUPT(const char *str, size_t sz, DEBUG_PARAMS )
+#else
 xstrndupt(const char *str, size_t sz)
+#endif
 {
 	size_t newlen;
 	char *newstr;
