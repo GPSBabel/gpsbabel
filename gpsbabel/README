@@ -45,6 +45,13 @@ THE FORMATS
 	source for functionality that isn't hooked up to the rest of the
 	program.    Communication errors are handled and verification of
 	data is turned on.
+
+    GARMIN
+
+	Waypoint serial upload and download works reliably under both
+	POSIX and Windows.   I tested it with a Vista graciously provided
+	on loan by Joe Armstrong.   The communications library used, jeeps,
+	claims to support most models of Garmin hardware.
 	
     GPSMAN
 
