@@ -75,7 +75,7 @@ tpg_fread_double(FILE *fp)
 		test_endianness();
 	}
 
-	tpg_fread(buf, 1, 8, tpg_file_in);
+	tpg_fread(buf, 1, 8, fp);
 	if (i_am_little_endian) {
 		return *(double *) buf;
 	}

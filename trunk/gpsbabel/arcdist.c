@@ -165,9 +165,6 @@ arcdist_process(void)
 	queue * elem, * tmp;
 	waypoint * waypointp;
 	double dist;
-	waypoint ** comp;
-	int i, wc;
-	queue temp_head;
 	extra_data *ed;
         double lat1, lon1, lat2, lon2;
 	int fileline = 0;

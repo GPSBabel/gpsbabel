@@ -224,8 +224,6 @@ my_writewpt(const waypoint *wpt)
 static void
 data_write(void)
 {
-	queue *elem, *tmp;
-
 	static char *appinfo = 
 		"\0\x01"
 		"User\0\0\0\0\0\0\0\0\0\0\0\0"

@@ -187,9 +187,6 @@ polygon_process(void)
 {
 	queue * elem, * tmp;
 	waypoint * waypointp;
-	waypoint ** comp;
-	int i, wc;
-	queue temp_head;
 	extra_data *ed;
         double lat1, lon1, lat2, lon2;
 	double olat, olon;
