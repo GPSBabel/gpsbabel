@@ -29,11 +29,18 @@ static int in_type;
 static int in_cdata;
 static char *cdatastr;
 static char *typestr;
+static char *deficon;
 
 static waypoint *wpt_tmp;
 
 FILE *fd;
 FILE *ofd;
+
+static
+arglist_t geo_args[] = {
+	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING },
+	{0, 0, 0, 0}
+};
 
 #define MYNAME "geo"
 #define MY_CBUF 4096
@@ -265,7 +272,7 @@ geo_waypt_pr(const waypoint *waypointp)
 	fprintf(ofd, "\n");
 
 	if (waypointp->icon_descr) {
-		fprintf(ofd, "<type>%s</type>\n", waypointp->icon_descr);
+		fprintf(ofd, "<type>%s</type>\n", deficon ? deficon : waypointp->icon_descr);
 	}
 	if (waypointp->url) {
 		tmp = xml_entitize(waypointp->url);
@@ -291,5 +298,5 @@ ff_vecs_t geo_vecs = {
 	geo_wr_deinit,
 	geo_read,
 	geo_write,
-	NULL
+	geo_args
 };
