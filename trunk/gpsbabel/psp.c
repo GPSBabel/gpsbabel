@@ -211,7 +211,7 @@ psp_wr_deinit(void)
 static void
 psp_read(void)
 {
-	unsigned char buff[MAXPSPSTRINGSIZE + 1];
+	char buff[MAXPSPSTRINGSIZE + 1];
 	double radians;
 	waypoint *wpt_tmp;
 	int stringsize;
@@ -326,7 +326,7 @@ static void
 psp_waypt_pr(const waypoint *wpt)
 {
 	double lon, lat;
-	unsigned char tbuf[64];
+	char tbuf[64];
 	char c;
 	int i;
 	char *shortname;
