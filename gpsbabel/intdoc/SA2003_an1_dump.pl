@@ -60,11 +60,14 @@ sub decodeGuid {
 undef $/;
 $file = <>;
 
+@filetypes = qw( drawing road trail waypoint track );
+
 # read file header
-($magic, $unk1 ) = shiftunpack( 'ss' );
+($magic, $filetype ) = shiftunpack( 'ss' );
 
 print <<END;
 MAGIC   $magic
+$filetypes[$filetype] layer
 
 END
 
