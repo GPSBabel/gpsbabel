@@ -898,6 +898,9 @@ gpx_waypt_pr(const waypoint *waypointp)
 	fprintf(ofd, "<wpt lat=\"%lf\" lon=\"%lf\">\n",
 		waypointp->position.latitude.degrees,
 		waypointp->position.longitude.degrees);
+	if (waypointp->creation_time) {
+		gpx_write_time(waypointp->creation_time, "time");
+	}
 	if (oname) {
 		tmp_ent = gpx_entitize(oname);
 		fprintf(ofd, "<name>%s</name>\n", tmp_ent);
@@ -922,9 +925,6 @@ gpx_waypt_pr(const waypoint *waypointp)
 	if (waypointp->position.altitude.altitude_meters) {
 		fprintf(ofd, "<ele>\n%f\n</ele>\n",
 			 waypointp->position.altitude.altitude_meters);
-	}
-	if (waypointp->creation_time) {
-		gpx_write_time(waypointp->creation_time, "time");
 	}
 	if (waypointp->url) {
 		tmp_ent = gpx_entitize(waypointp->url);
