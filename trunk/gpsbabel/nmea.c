@@ -341,7 +341,7 @@ nmea_read(void)
 	creation_time = mktime(&tm) + get_tz_offset() + current_time();
 
 	while (fgets(ibuf, sizeof(ibuf), file_in)) {
-		ck = rindex(ibuf, '*');
+		ck = strrchr(ibuf, '*');
 		if (ck != NULL) {
 			*ck = '\0';
 			ckval = nmea_cksum(&ibuf[1]);
