@@ -52,7 +52,7 @@ leaktest:
 
 dep:
 	make clean && make CC="gcc -MMD"  && cat *.d */*.d > /tmp/dep && rm *.d */*.d
-	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e "\t./mkstyle.sh > internal_styles.c" ) >> /tmp/dep
+	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e "\t./mkstyle.sh > $@ || (rm -f $@ ; exit 1)" ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
 VERSIONU=1_1_1_beta00514003
@@ -74,12 +74,14 @@ cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 copilot.o: copilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 csv_util.o: csv_util.c defs.h queue.h csv_util.h
 duplicate.o: duplicate.c defs.h queue.h
+easygps.o: easygps.c defs.h queue.h
 filter_vecs.o: filter_vecs.c defs.h queue.h
 garmin.o: garmin.c defs.h queue.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
-  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h \
+  garmin_tables.h
 gcdb.o: gcdb.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 geo.o: geo.c defs.h queue.h
 gpspilot.o: gpspilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
@@ -91,9 +93,9 @@ magnav.o: magnav.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 magproto.o: magproto.c defs.h queue.h magellan.h
 main.o: main.c defs.h queue.h
 mapsend.o: mapsend.c defs.h queue.h mapsend.h magellan.h
-mapsource.o: mapsource.c defs.h queue.h
+mapsource.o: mapsource.c defs.h queue.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h
-pcx.o: pcx.c defs.h queue.h
+pcx.o: pcx.c defs.h queue.h garmin_tables.h
 position.o: position.c defs.h queue.h
 psp.o: psp.c defs.h queue.h
 queue.o: queue.c queue.h

@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include "defs.h"
+#include "garmin_tables.h"
 #include <ctype.h>
 
 static FILE *mps_file_in;
@@ -47,154 +48,6 @@ char mps_ftr[] = {
 	0x02, 0x00, 0x00, 0x00, 0x56, 0x00, 0x01
 };
 
-typedef struct icon_mapping {
-	const int symnum;
-	const char *icon;
-} icon_mapping_t;
-
-static icon_mapping_t icon_table[] = {
-	{   107, "Airport" },
-	{    73, "Amusement Park" },
-	{    55, "Ball Park" },
-	{     6, "Bank" },
-	{    13, "Bar" },
-	{   104, "Beach" },
-	{     1, "Bell" },
-	{    37, "Boat Ramp" },
-	{    74, "Bowling" },
-	{    93, "Bridge" },
-	{    94, "Building" },
-	{    38, "Campground" },
-	{    56, "Car" },
-	{    75, "Car Rental" },
-	{    76, "Car Repair" },
-	{    95, "Cemetery" },
-	{    96, "Church" },
-	{    65, "Circle with X" },
-	{    72, "City (Capitol)" },
-	{    71, "City (Large)" },
-	{    70, "City (Medium)" },
-	{    69, "City (Small)" },
-	{    97, "Civil" },
-	{   119, "Contact, Afro" },
-	{   120, "Contact, Alien" },
-	{   121, "Contact, Ball Cap" },
-	{   122, "Contact, Big Ears" },
-	{   123, "Contact, Biker" },
-	{   124, "Contact, Bug" },
-	{   125, "Contact, Cat" },
-	{   126, "Contact, Dog" },
-	{   127, "Contact, Dreadlocks" },
-	{   128, "Contact, Female1" },
-	{   129, "Contact, Female2" },
-	{   130, "Contact, Female3" },
-	{   131, "Contact, Goatee" },
-	{   132, "Contact, Kung-Fu" },
-	{   133, "Contact, Pig" },
-	{   134, "Contact, Pirate" },
-	{   135, "Contact, Ranger" },
-	{   136, "Contact, Smiley" },
-	{   137, "Contact, Spike" },
-	{   138, "Contact, Sumo" },
-	{    52, "Controlled Area" },
-	{    89, "Convenience Store" },
-	{    98, "Crossing" },
-	{    51, "Dam" },
-	{    53, "Danger Area" },
-	{    87, "Department Store" },
-	{     4, "Diver Down Flag 1" },
-	{     5, "Diver Down Flag 2" },
-	{    41, "Drinking Water" },
-	{    63, "Exit" },
-	{    77, "Fast Food" },
-	{     7, "Fishing Area" },
-	{    78, "Fitness Center" },
-	{    64, "Flag" },
-	{   105, "Forest" },
-	{     8, "Gas Station" },
-	{   117, "Geocache" },
-	{   118, "Geocache Found" },
-	{    99, "Ghost Town" },
-	{   113, "Glider Area" },
-	{    68, "Golf Course" },
-	{     2, "Green Diamond" },
-	{    15, "Green Square" },
-	{   108, "Heliport" },
-	{     9, "Horn" },
-	{    57, "Hunting Area" },
-	{    44, "Information" },
-	{   100, "Levee" },
-	{    12, "Light" },
-	{    90, "Live Theater" },
-	{    59, "Lodging" },
-	{    20, "Man Overboard" },
-	{     0, "Marina" },
-	{    43, "Medical Facility" },
-	{    66, "Mile Marker" },
-	{   101, "Military" },
-	{    60, "Mine" },
-	{    79, "Movie Theater" },
-	{    80, "Museum" },
-	{    21, "Navaid, Amber" },
-	{    22, "Navaid, Black" },
-	{    23, "Navaid, Blue" },
-	{    24, "Navaid, Green" },
-	{    25, "Navaid, Green/Red" },
-	{    26, "Navaid, Green/White" },
-	{    27, "Navaid, Orange" },
-	{    28, "Navaid, Red" },
-	{    29, "Navaid, Red/Green" },
-	{    30, "Navaid, Red/White" },
-	{    31, "Navaid, Violet" },
-	{    32, "Navaid, White" },
-	{    33, "Navaid, White/Green" },
-	{    34, "Navaid, White/Red" },
-	{   102, "Oil Field" },
-	{   115, "Parachute Area" },
-	{    46, "Park" },
-	{    45, "Parking Area" },
-	{    81, "Pharmacy" },
-	{    47, "Picnic Area" },
-	{    82, "Pizza" },
-	{    83, "Post Office" },
-	{   109, "Private Field" },
-	{    36, "Radio Beacon" },
-	{     3, "Red Diamond" },
-	{    16, "Red Square" },
-	{    10, "Residence" },
-	{    11, "Restaurant" },
-	{    54, "Restricted Area" },
-	{    39, "Restroom" },
-	{    84, "RV Park" },
-	{    91, "Scales" },
-	{    48, "Scenic Area" },
-	{    85, "School" },
-	{   116, "Seaplane Base" },
-	{    19, "Shipwreck" },
-	{    58, "Shopping Center" },
-	{   112, "Short Tower" },
-	{    40, "Shower" },
-	{    49, "Skiing Area" },
-	{    14, "Skull and Crossbones" },
-	{   110, "Soft Field" },
-	{    86, "Stadium" },
-	{   106, "Summit" },
-	{    50, "Swimming Area" },
-	{   111, "Tall Tower" },
-	{    42, "Telephone" },
-	{    92, "Toll Booth" },
-	{    67, "TracBack Point" },
-	{    61, "Trail Head" },
-	{    62, "Truck Stop" },
-	{   103, "Tunnel" },
-	{   114, "Ultralight Area" },
-	{    18, "Waypoint" },
-	{    17, "White Buoy" },
-	{    35, "White Dot" },
-	{    88, "Zoo" },
-	{ -1, NULL },
-};
-
 char *snlen;
 
 static
@@ -204,20 +57,30 @@ arglist_t mps_args[] = {
 };
 
 const char *
-mps_find_desc_from_icon_number(const int icon)
+mps_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 {
 	icon_mapping_t *i;
 
 	for (i = icon_table; i->icon; i++) {
-		if (icon == i->symnum) {
-			return i->icon;
+		switch (garmin_format) {
+			case MAPSOURCE:
+				if (icon == i->mpssymnum)
+					return i->icon;
+				break;
+			case PCX:
+			case GARMIN_SERIAL:
+				if (icon == i->pcxsymnum)
+					return i->icon;
+				break;
+			default:
+				fatal(MYNAME ": unknown garmin format");
 		}
 	}
 	return "Waypoint";
 }
 
 int
-mps_find_icon_number_from_desc(const char *desc)
+mps_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
 {
 	icon_mapping_t *i;
 	int def_icon = 18;
@@ -227,7 +90,15 @@ mps_find_icon_number_from_desc(const char *desc)
 
 	for (i = icon_table; i->icon; i++) {
 		if (case_ignore_strcmp(desc,i->icon) == 0) {
-			return i->symnum;
+			switch (garmin_format) {
+			case MAPSOURCE:
+				return i->mpssymnum;
+			case PCX:
+			case GARMIN_SERIAL:
+				return i->pcxsymnum;
+			default:
+				fatal(MYNAME ": unknown garmin format");
+			}
 		}
 	}
 	return def_icon;
@@ -339,7 +210,7 @@ mps_read(void)
 		wpt->description = xstrdup(wptdesc);
 		wpt->position.latitude.degrees = lat / 2147483648.0 * 180.0;
 		wpt->position.longitude.degrees = lon / 2147483648.0 * 180.0;
-		wpt->icon_descr = mps_find_desc_from_icon_number(icon);
+		wpt->icon_descr = mps_find_desc_from_icon_number(icon, MAPSOURCE);
 		waypt_add(wpt);
 
 #ifdef DUMP_ICON_TABLE
@@ -376,10 +247,10 @@ mps_waypt_pr(const waypoint *wpt)
 	memset(zbuf, 0, sizeof(zbuf));
 	memset(ffbuf, 0xff, sizeof(ffbuf));
 
-	icon = mps_find_icon_number_from_desc(wpt->icon_descr);
+	icon = mps_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
 
 	if (get_cache_icon(wpt)) {
-		icon = mps_find_icon_number_from_desc(get_cache_icon(wpt));
+		icon = mps_find_icon_number_from_desc(get_cache_icon(wpt), MAPSOURCE);
 	}
 
 	le_write32(&reclen, reclen);
