@@ -275,6 +275,34 @@ The fields used by the XCSV parser are as follows:
    hemisphere of the latitude.  LON_DIR returns 'E' or 'W' depending on
    the hemisphere of the longitude.
 
+ o LAT_HUMAN_READABLE
+   LAT_HUMAN_READABLE defines LATITUDE in a human-readable format.  This 
+   format is probably the most expressive format.  It is similar to 
+   LAT_DECIMALDIR in that it requires multiple printf conversions, but it
+   is far more flexible as to the contents of those conversions.  On read,
+   the printf conversions are ignored and GPSBabel attempts to determine the
+   latitude and longitude based on what is in the file.
+
+   example: IFIELD LAT_HUMAN_READABLE,"","%c %d %f"   (writes N 31 40.000)
+   example: IFIELD LAT_HUMAN_READABLE,"","%d deg %f min %c"
+                                         (writes "31 deg 40.000 min N")
+            Note that this string will confuse the reading routine due 
+            to the letter "n" in "min" and the letter "e" in "deg."
+   example: IFIELD LAT_HUMAN_READABLE,"","%d %d %f%c" (writes 31 40 00.000N)
+
+ o LON_HUMAN_READABLE
+   See LAT_HUMAN_READABLE except LON_HUMAN_READABLE defines LONGITUDE.
+
+ o LATLON_HUMAN_READABLE
+   LATLON_HUMAN_READABLE is like LAT_HUMAN_READABLE and LON_HUMAN_READABLE
+   except that it reads and writes both latitude and longitude as a single 
+   field.  On write, the same format specifier is used for both coordinates.
+   On read, GPSBabel does exactly the same thing it does for 
+   LAT_HUMAN_READABLE or LON_HUMAN_READABLE.
+
+   example: IFIELD LATLON_HUMAN_READABLE,"","%c %d %f"
+            (writes "N 31 40.126 W 85 09.62" as a single field)
+
  o ALT_FEET
    ALT_FEET is the position's ALTITUDE in FEET.  This value is treated as 
    a SIGNED DOUBLE PRECISION FLOAT and requires a FLOATING POINT printf 
