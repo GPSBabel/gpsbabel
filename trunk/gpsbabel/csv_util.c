@@ -636,6 +636,9 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     if ( strcmp(fmp->key, "LAT_HUMAN_READABLE") == 0) {
        human_to_dec( s, &wpt->latitude, &wpt->longitude );
     } else
+    if ( strcmp(fmp->key, "LAT_NMEA") == 0) {
+	wpt->latitude = ddmm2degrees(wpt->latitude);
+    } else
     /* LONGITUDE CONVERSIONS ***********************************************/
     if (strcmp(fmp->key, "LON_DECIMAL") == 0) {
        /* longitude as a pure decimal value */
@@ -652,6 +655,9 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     } else
     if ( strcmp(fmp->key, "LON_HUMAN_READABLE") == 0) {
        human_to_dec( s, &wpt->latitude, &wpt->longitude );
+    } else
+    if ( strcmp(fmp->key, "LON_NMEA") == 0) {
+	wpt->latitude = ddmm2degrees(wpt->longitude);
     } else
     /* LAT AND LON CONVERSIONS ********************************************/
     if ( strcmp(fmp->key, "LATLON_HUMAN_READABLE") == 0) {
@@ -950,6 +956,9 @@ xcsv_waypt_pr(const waypoint *wpt)
 	if (strcmp(fmp->key, "LAT_HUMAN_READABLE") == 0) {
 	    dec_to_human( buff, fmp->printfc, "SN", wpt->latitude );
 	} else
+	if (strcmp(fmp->key, "LAT_NMEA") == 0) {
+		sprintf(buff, fmp->printfc, degrees2ddmm(wpt->latitude));
+	} else
 
         /* LONGITUDE CONVERSIONS*********************************************/
         if (strcmp(fmp->key, "LON_DECIMAL") == 0) {
@@ -981,6 +990,9 @@ xcsv_waypt_pr(const waypoint *wpt)
 	    if ( !isspace(buff[strlen(buff)])) strcat( buff, " " );
 	    dec_to_human( buff+strlen(buff), fmp->printfc, "WE", 
 			    wpt->longitude );
+	} else
+	if (strcmp(fmp->key, "LON_NMEA") == 0) {
+		sprintf(buff, fmp->printfc, degrees2ddmm(wpt->longitude));
 	} else
 
         /* DIRECTIONS *******************************************************/
