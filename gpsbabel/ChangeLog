@@ -1,5 +1,7 @@
-NEW: blah blah
 NEW: Add Cetus support.   Thanx to Ron Parker and Kjeld Jensen.
+NEW: Add gpspilot support.
 NEW: Windows support.  You must download and install the expat dll if you
 	do not already have it.   Get it from
 	http://sourceforge.net/projects/mingwrep/
+
+FIXED: Bad math in gpsutil.

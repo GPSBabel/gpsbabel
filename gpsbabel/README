@@ -33,7 +33,14 @@ THE FORMATS
 
     MAGELLAN
 
-	Waypoint upload and download works reliably.
+	Waypoint serial upload and download works reliably to the 315, 330, 
+	Meridian, and SportTrak family.  I expect it to work on any modern
+	Magellan unit.
+
+	As of 08/30/02, gpsbabel can also read and write the files that
+	can be stuck on the flash memory parts 
+
+BLAH BLAH BLAH
 
 	As of this writing, there is still a lot of "scribbling" in the 
 	source for functionality that isn't hooked up to the rest of the
@@ -78,6 +85,19 @@ THE FORMATS
 	yet, a module that implements it.   I spent time trying to reverse-
 	engineer a couple of *.mps files then I remembered that I don't own
 	a Garmin and wasn't that inspired.
+
+    CETUS
+
+	Cetus GPS (http://www.cetusgps.dk/) is a program for Palm/OS.  
+	Working with Ron Parker and Kjeld Jensen, we can now read and write
+	files for that program.   It hasn't been exhaustively tested, but 
+	has seemed fine on every input and output we've tried.
+
+    GPSPILOT
+
+	The file format for GPSPILOT (http://www.gpspilot.com) was provided
+	by Ron Parker.  GPSbabel can currently read gpspilot files, but not
+	write them.
 	
 
 COMMON USAGE

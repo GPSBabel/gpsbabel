@@ -20,10 +20,12 @@
 
 #include "defs.h"
 
+global_options global_opts;
+
 void
 usage(const char *pname)
 {
-	printf("Usage: %s -i <INPUT_FILE_TYPE> -f <INPUT_FILE> -o <OUT FTYPE> -F <OUTPUT_FILE>\n", pname);
+	printf("Usage: %s [-s] -i <INPUT_FILE_TYPE> -f <INPUT_FILE> -o <OUT FTYPE> -F <OUTPUT_FILE>\n", pname);
 	printf("Supported file types:\n");
 	disp_vecs();
 }
@@ -60,17 +62,19 @@ main(int argc, char *argv[])
 
 		c = argv[argn][1];
 		optarg = argv[argn+1];
-		argn++;
 
 		switch (c) {
 			case 'i': 
 				ivecs = find_vec(optarg);
+				argn++;
 				break;
 			case 'o':
 				ovecs = find_vec(optarg);
+				argn++;
 				break;
 			case 'f':
 				fname = optarg;
+				argn++;
 				if (ivecs == NULL) {
 					fatal ("No valid input type specified");
 				}
@@ -79,10 +83,14 @@ main(int argc, char *argv[])
 				break;
 			case 'F':
 				ofname = optarg;
+				argn++;
 				if (ovecs) {
 					ovecs->wr_init(ofname);
 					ovecs->write();
 				}
+				break;
+			case 's':
+				global_opts.synthesize_shortnames = 1;
 				break;
 			case 'h':
 			case '?':

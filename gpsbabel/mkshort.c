@@ -1,14 +1,20 @@
 #include <string.h>
 
-const char badchars[] = "\"$.,'!-";
-const char vowels[] = "aeiouAEIOU";
+static const char vowels[] = "aeiouAEIOU";
 
-#define TGT_LEN 8
+#define DEFAULT_TARGET_LEN 8
+static int target_len = DEFAULT_TARGET_LEN;
+
+#define DEFAULT_BADCHARS "\"$.,'!-"
+static const char *badchars = DEFAULT_BADCHARS;
+
+static int mustupper = 0;
 
 /*
  * This is the stuff that makes me ashamed to be a C programmer...
  */
 
+static 
 char *
 delete_last_vowel(int start, char *istring, int *replaced)
 {
@@ -31,6 +37,41 @@ delete_last_vowel(int start, char *istring, int *replaced)
 	*replaced = 0;
 	return istring;
 
+}
+
+/*
+ * Externally callable function to set the max length of the
+ * strings returned by mkshort().  0 resets to default.
+ */
+void
+setshort_length(int l)
+{
+	if (l == 0) {
+		target_len = DEFAULT_TARGET_LEN;
+	} else {
+		target_len = l;
+	}
+}
+
+/*
+ * Externally callable function to set the string of characters
+ * that must never appear in a string returned by mkshort.  NULL
+ * resets to default.
+ */
+void
+setshort_badchars(const char *s)
+{
+	if (s == NULL) {
+		badchars = DEFAULT_BADCHARS;
+	} else {
+		badchars = strdup(s);
+	}
+}
+
+void
+setshort_mustupper(int i)
+{
+	mustupper = i;
 }
 
 char *
@@ -88,6 +129,9 @@ mkshort(char *istring)
 	cp = ostring;
 	for (i=0;i<l;i++) {
 		if (!isspace(tstring[i])) {
+			if (mustupper) {
+				tstring[i] = toupper(tstring[i]);
+			}
 			*cp++ = tstring[i];
 		}
 	}
@@ -132,7 +176,7 @@ mkshort(char *istring)
 	 * them.  If we run out of string, give up.
 	 */
 	replaced = 1;
-	while (replaced && strlen(ostring) > TGT_LEN) {
+	while (replaced && strlen(ostring) > target_len) {
 		ostring = delete_last_vowel(2, ostring, &replaced);
 	}
 	
@@ -154,13 +198,13 @@ mkshort(char *istring)
 	 * Now brutally truncate the resulting string, preserve trailing 
 	 * numeric data.
  	 */
-	if ((i = strlen(ostring)) > TGT_LEN) {
-		strcpy(&ostring[TGT_LEN] - strlen(np), np);
+	if ((i = strlen(ostring)) > target_len) {
+		strcpy(&ostring[target_len] - strlen(np), np);
 	}
 	return ostring;
 }
 
-
+#if 0
 char *foo[] =  {
 "VwthPst# 3700.706N 08627.588W 0000000m View the Past #2              ",
 "PilotRoc 3655.270N 08717.173W 0000000m Pilot Rock by CacheAdvance    ",
@@ -335,3 +379,4 @@ printf("%s\n", delete_last_vowel(0, "ixxx", &r));
 printf("%s\n", delete_last_vowel(0, "aexxx", &r));
 	
 }
+#endif

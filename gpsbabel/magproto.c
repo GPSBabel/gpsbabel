@@ -737,7 +737,8 @@ mag_waypt_pr(waypoint *waypointp)
 		lat, ilon < 0 ? 'N' : 'S',
 		lon, ilat < 0 ? 'E' : 'W',
 		waypointp->position.altitude.altitude_meters,
-		waypointp->shortname,
+                global_opts.synthesize_shortnames ?
+                        mkshort(waypointp->description) : waypointp->shortname,
 		waypointp->description ? waypointp->description : "",
 		icon_token);
 	mag_writemsg(obuf);

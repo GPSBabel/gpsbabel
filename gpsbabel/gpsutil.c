@@ -89,7 +89,8 @@ gpsutil_disp(waypoint *wpt)
 	lat = wpt->position.latitude.degrees * 100.0;
 
 	fprintf(file_out, "%-8s %08.3f%c %09.3f%c %07.0f%c %-30.30s %s\n",
-		wpt->shortname,
+                global_opts.synthesize_shortnames ?
+                        mkshort(wpt->description) : wpt->shortname,
 		fabs(lat),
 		lat < 0.0 ? 'S' : 'N',
 		fabs(lon),

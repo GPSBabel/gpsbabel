@@ -53,7 +53,8 @@ waypt_disp(waypoint *wpt)
 	printposn(&wpt->position.latitude,1);
 	printposn(&wpt->position.longitude,0);
 	printf("%s/%s %f\n", 
-		wpt->shortname, 
+		global_opts.synthesize_shortnames ? 
+			mkshort(wpt->description) : wpt->shortname, 
 		wpt->description, 
 		wpt->position.altitude.altitude_meters);
 }
@@ -63,7 +64,8 @@ waypt_disp_all(waypt_cb cb)
 {
 	queue *elem, *tmp;
 	waypoint *waypointp;
-
+setshort_length(8);
+setshort_mustupper(0);
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypointp = (waypoint *) elem;
 		(*cb) (waypointp);
