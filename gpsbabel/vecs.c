@@ -56,6 +56,7 @@ extern ff_vecs_t gpilots_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t navicache_vecs;
 extern ff_vecs_t psit_vecs;             /* MRCB */
+extern ff_vecs_t shape_vecs;
 extern ff_vecs_t geoniche_vecs;
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t ozi_vecs;
@@ -225,6 +226,12 @@ vecs_t vec_list[] = {
 		&psit_vecs,
 		"psitrex",
 		"KuDaTa PsiTrex text",
+		NULL
+	},
+	{
+		&shape_vecs,
+		"shape",
+		"ESRI shapefile",
 		NULL
 	},
 	{
@@ -568,6 +575,8 @@ disp_formats(int version)
 		for (vec = vec_list; vec->vec; vec++) {
 			if (version > 0)
 				disp_v1(vec->vec->type);
+			if (vec->vec->type == ff_type_internal)
+				continue;
 			printf("%s\t%s\t%s\n", vec->name, 
 				vec->extension? vec->extension : "", 
 				vec->desc);
