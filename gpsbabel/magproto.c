@@ -739,7 +739,7 @@ mag_rd_init(const char *portname)
 		}
 	}
 
-	if (!is_file) {
+	if (!is_file && (icon_mapping != gps315_icon_table)) {
 		/*
 		 * The 315 can't handle this command, so we set a global
 		 * to ignore the NAK on it.
