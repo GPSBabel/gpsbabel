@@ -11,7 +11,7 @@ CFLAGS=-Iinclude -I../coldsync -O
 gpsbabel.exe: $(OBJS)
 	$(CC) -static $(CFLAGS) $(OBJS) lib/libexpat.a -o gpsbabel.exe 
 	zip -j /tmp/gpsbabel-$(VERSIOND).zip $(FILES)
-	cp gpsbabel.exe gpsbabel-$(VERSIOND).zip /tmp
+	cp gpsbabel.exe /tmp
 
 mkwintesto: mkwintesto.c
 	/usr/bin/cc mkwintesto.c ../util.c -o mkwintesto
