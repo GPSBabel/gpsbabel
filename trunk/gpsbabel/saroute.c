@@ -81,6 +81,7 @@ my_read(void)
 
 	unsigned short version;
 	unsigned long count;
+	unsigned long outercount;
 	unsigned long recsize;
 	unsigned short stringlen;
 	unsigned char *record;
@@ -167,64 +168,73 @@ my_read(void)
 	 */
 
 	/*
-	 * unknown record (route params?) lives here 
+	 * outercount is the number of route segments (start+end+stops+vias-1)
 	 */
-	count = ReadLong(infile);
-	while (count) {
+
+	outercount = ReadLong(infile);
+	while (outercount) {
+
+		/*
+		 * unknown record (route params?) lives here 
+		 */
 		ReadShort(infile);
 		recsize = ReadLong(infile);
 		Skip(infile, recsize);
-		count--;
-	}
-	/*
-	 * end of unknown record 
-	 */
 
-	/*
-	 * routing begins here 
-	 */
-	count = ReadLong(infile);
-	if ( count ) {
-		track_head = route_head_alloc();
-		route_add_head(track_head);
-	}
-	while (count) {
-		ReadShort(infile);
-		recsize = ReadLong(infile);
-		record = ReadRecord(infile, recsize);
-		stringlen = le_read16((unsigned short *)record);
-		coordcount =
-			le_read16((unsigned short *)(record + 2 + stringlen + 0x3c));
-		latlon = (struct ll *)(record + 2 + stringlen + 0x3c + 2);
-		count--;
-		if (count) {
-			coordcount--;
+		/*
+		 * end of unknown record 
+		 */
+
+		/*
+		 * routing begins here 
+		 */
+		count = ReadLong(infile);
+		if ( count ) {
+			track_head = route_head_alloc();
+			route_add_head(track_head);
 		}
-		while (coordcount) {
-			double lat;
-			double lon;
+		while (count) {
+			ReadShort(infile);
+			recsize = ReadLong(infile);
+			record = ReadRecord(infile, recsize);
+			stringlen = le_read16((unsigned short *)record);
+			coordcount = le_read16((unsigned short *)
+					(record + 2 + stringlen + 0x3c));
+			latlon = (struct ll *)(record + 2 + stringlen + 0x3c + 2);
+			count--;
+			if (count) {
+				coordcount--;
+			}
+			while (coordcount) {
+				double lat;
+				double lon;
 
-			wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
+				wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
 
-			lat = (0x80000000UL -
-			       le_read32(&latlon->lat)) / (double)(0x800000);
-			lon = (0x80000000UL -
-			       le_read32(&latlon->lon)) / (double)(0x800000);
+				lat = (0x80000000UL -
+				       le_read32(&latlon->lat)) / 
+					(double)(0x800000);
+				lon = (0x80000000UL -
+				       le_read32(&latlon->lon)) / 
+					(double)(0x800000);
 
-			wpt_tmp->latitude = lat;
-			wpt_tmp->longitude = -lon;
-			wpt_tmp->shortname = xmalloc(7);
-			sprintf( wpt_tmp->shortname, "\\%5.5x", serial++ );
-			route_add_wpt(track_head, wpt_tmp);
-
-			latlon++;
-			coordcount--;
+				wpt_tmp->latitude = lat;
+				wpt_tmp->longitude = -lon;
+				wpt_tmp->shortname = xmalloc(7);
+				sprintf( wpt_tmp->shortname, "\\%5.5x", 
+						serial++ );
+				route_add_wpt(track_head, wpt_tmp);
+	
+				latlon++;
+				coordcount--;
+			}
+			xfree(record);
 		}
-		xfree(record);
+		/*
+		 * end of routing 
+		 */
+		outercount--;
 	}
-	/*
-	 * end of routing 
-	 */
 
 }
 
