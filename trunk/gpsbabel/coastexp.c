@@ -253,16 +253,16 @@ ce_cdata(void *dta, const XML_Char *s, int len)
 					monthString[3] = '\0';
 					t.tm_mon = atoi(monthString) - 1;
 					strncpy(dayString, currentMark->created+6, 2);
-					dayString[3] = '\0';
+					dayString[2] = '\0';
 					t.tm_mday = atoi(dayString);
 					strncpy(hourString, currentMark->created+9, 2);
-					hourString[3] = '\0';
+					hourString[2] = '\0';
 					t.tm_hour = atoi(hourString);
 					strncpy(minString, currentMark->created+11, 2);
-					minString[3] = '\0';
+					minString[2] = '\0';
 					t.tm_min = atoi(minString);
 					strncpy(secString, currentMark->created+13, 2);
-					secString[3] = '\0';
+					secString[2] = '\0';
 					t.tm_sec = atoi(secString);
 					currentMark->wp->creation_time = mktime(&t) + get_tz_offset();
 				}
