@@ -24,6 +24,8 @@
 
 static int in_wpt;
 static int in_rte;
+static int in_trk;
+static int in_trkpt;
 static int in_ele;
 static int in_name;
 static int in_time;
@@ -43,6 +45,8 @@ static int in_gs_log_wpt;
 static int in_gs_exported;
 static int in_gs_tbugs;
 static int in_something_else;
+static int in_number;
+
 static xml_tag *cur_tag;
 static char *cdatastr;
 static int opt_logpoint = 0;
@@ -61,6 +65,7 @@ static void *mkshort_handle;
 static time_t file_time;
 
 static char *gsshortnames = NULL;
+static route_head *trk_head;
 
 #define MYNAME "GPX"
 #define MY_CBUF 4096
@@ -295,6 +300,18 @@ gpx_start(void *data, const char *el, const char **attr)
 		in_rte++;
 		tag_wpt(attr);
 	} 
+	else if (strcmp(el, "trk") == 0) {
+		trk_head = route_head_alloc();
+		route_add_head(trk_head);
+		in_trk++;
+	} 
+	else if (strcmp(el, "trkpt") == 0) {
+		in_trkpt++;
+		tag_wpt(attr);
+	} 
+	else if (strcmp(el, "number") == 0) {
+		in_number++;
+	} 
 	else if (strcmp(el, "time") == 0) {
 		in_time++;
 	} 
@@ -482,6 +499,15 @@ gpx_end(void *data, const char *el)
 		if (in_name && in_wpt && !in_gs_tbugs) {
 			wpt_tmp->shortname = xstrdup(cdatastr);
 		}
+		if (in_name && in_trk && !in_trkpt) {
+			trk_head->rte_name = xstrdup(cdatastr);
+		}
+		if (in_desc && in_trk && !in_trkpt) {
+			trk_head->rte_desc = xstrdup(cdatastr);
+		}
+		if (in_number && in_trk) {
+			trk_head->rte_num = atoi(cdatastr);
+		}
 		if (gsshortnames) {
 			if (in_gs_name && in_wpt && !in_gs_tbugs) {
 				wpt_tmp->notes = xstrdup(cdatastr);
@@ -509,7 +535,7 @@ gpx_end(void *data, const char *el)
 				&wpt_tmp->position.altitude.altitude_meters);
 		}
 		if (in_time) {
-			if ( in_wpt || in_rte) {
+			if ( in_wpt || in_rte || in_trkpt) {
                         	wpt_tmp->creation_time = 
 					xml_parse_time( cdatastr );
 			}
@@ -548,6 +574,13 @@ gpx_end(void *data, const char *el)
 	else if (strcmp(el, "rtept") == 0) {
 /*		route_add(wpt_tmp); */
 		in_rte--;
+	} else if (strcmp(el, "trk") == 0) {
+		in_trk--;
+	} else if (strcmp(el, "trkpt") == 0) {
+		route_add_wpt(trk_head, wpt_tmp);
+		in_trkpt--;
+	} else if (strcmp(el, "number") == 0) {
+		in_number--;
 	} else if (strcmp(el, "name") == 0) {
 		in_name--;
 	} else if (strcmp(el, "desc") == 0) {
@@ -628,6 +661,9 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 			(in_wpt && in_gs_diff) || 
 			(in_wpt && in_gs_terr) || 
 			(in_wpt && in_icon) || 
+			(in_trk && in_name) || 
+			(in_trk && in_desc) || 
+			(in_trk && in_number) || 
 			(in_time))  {
 		estr = cdatastr + strlen(cdatastr);
 		memcpy(estr, s, len);
@@ -881,11 +917,21 @@ gpx_waypt_pr(const waypoint *waypointp)
 static void
 gpx_track_hdr(const route_head *rte)
 {
+	char * tmp_ent;
+	
 	fprintf(ofd, "<trk>\n");
 	if (rte->rte_name) {
-		fprintf(ofd, "  <name>\n");
-		fprintf(ofd, "  <![CDATA[%s]]>\n",rte->rte_name);
-		fprintf(ofd, "  </name>\n");
+		tmp_ent = gpx_entitize(rte->rte_name);
+		fprintf(ofd, "<name>%s</name>\n", tmp_ent);
+		xfree(tmp_ent);
+	}
+	if (rte->rte_desc) {
+		tmp_ent = gpx_entitize(rte->rte_desc);
+		fprintf(ofd, "<desc>%s</desc>\n", tmp_ent);
+		xfree(tmp_ent);
+	}
+	if (rte->rte_num) {
+		fprintf(ofd, "<number>%d</number>\n", rte->rte_num);
 	}
 	fprintf(ofd, "<trkseg>\n");
 }
@@ -896,12 +942,12 @@ gpx_track_disp(const waypoint *waypointp)
 	fprintf(ofd, "<trkpt lat=\"%lf\" lon=\"%lf\">\n",
 		waypointp->position.latitude.degrees,
 		waypointp->position.longitude.degrees);
+	if (waypointp->position.altitude.altitude_meters != unknown_alt) {
+		fprintf(ofd, "<ele>%f</ele>\n",
+			 waypointp->position.altitude.altitude_meters);
+	}
 	if (waypointp->creation_time) {
 		gpx_write_time(waypointp->creation_time,"time");
-	}
-	if (waypointp->position.altitude.altitude_meters != unknown_alt) {
-		fprintf(ofd, "<ele>\n%f\n</ele>\n",
-			 waypointp->position.altitude.altitude_meters);
 	}
 	fprintf(ofd, "</trkpt>\n");
 }
