@@ -217,6 +217,8 @@ void printposn(const coord *c, int is_lat);
 void *xcalloc(size_t nmemb, size_t size);
 void *xmalloc(size_t size);
 char *xstrdup(const char *s);
+char *xstrappend(char *src, const char *new);
+
 void rtrim(char *s);
 signed int get_tz_offset(void);
 
