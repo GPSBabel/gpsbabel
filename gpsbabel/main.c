@@ -204,7 +204,7 @@ main(int argc, char *argv[])
 	if (argc > 2) {
 		fatal ("Extra arguments on command line\n");
 	}
-	else if (argc) {
+	else if (argc && ivecs) {
 		ivecs->rd_init(argv[0], ivec_opts);
 		ivecs->read();
 		ivecs->rd_deinit();
@@ -213,6 +213,10 @@ main(int argc, char *argv[])
 			ovecs->write();
 			ovecs->wr_deinit();
 		}
+	}
+	else {
+		usage(argv[0]);
+		exit(0);
 	}
 
 	if (ovecs == NULL)
