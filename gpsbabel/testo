@@ -1,36 +1,47 @@
+
 PNAME=${PNAME:-./gpsbabel}
+DIFF=${DIFF:-diff}
+
 TMPDIR=/tmp/gpsbabel.$$
 mkdir -p $TMPDIR
 trap "rm -fr $TMPDIR" 0 1 2 3 15
+
+compare()
+{
+	${DIFF} $* ||  {
+		echo ERROR comparing $*
+		exit 1
+	} 
+}
 
 
 # Geocaching .loc
 rm -f ${TMPDIR}/gl.loc
 ${PNAME} -i geo -f geocaching.loc -o geo -F ${TMPDIR}/gl.loc
-diff ${TMPDIR}/gl.loc reference
+compare ${TMPDIR}/gl.loc reference
 
 # GPSUtil
 rm -f ${TMPDIR}/gu.wpt
 ${PNAME} -i geo -f geocaching.loc -o gpsutil -F ${TMPDIR}/gu.wpt
-diff ${TMPDIR}/gu.wpt reference
+compare ${TMPDIR}/gu.wpt reference
 
 # GPSman 
 rm -f ${TMPDIR}/gm.gm ${TMPDIR}/gm.gm+
 ${PNAME} -i geo -f geocaching.loc -o gpsman -F ${TMPDIR}/gm.gm
 ${PNAME} -i gpsman -f ${TMPDIR}/gm.gm -o gpsutil -F ${TMPDIR}/gm.gm+
-diff ${TMPDIR}/gm.gm+ ${TMPDIR}/gu.wpt
+compare ${TMPDIR}/gm.gm+ ${TMPDIR}/gu.wpt
 
 # GPX
 rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
 ${PNAME} -i geo -f geocaching.loc -o gpx -F ${TMPDIR}/gl.gpx
 ${PNAME} -i gpx -f ${TMPDIR}/gl.gpx -o gpsutil -F ${TMPDIR}/gpx.gpx
-diff ${TMPDIR}/gpx.gpx ${TMPDIR}/gu.wpt
+compare ${TMPDIR}/gpx.gpx ${TMPDIR}/gu.wpt
 
 # Magellan Mapsend
 rm -f ${TMPDIR}/mm.mapsend ${TMPDIR}/mm.gps
 ${PNAME} -i geo -f geocaching.loc -o mapsend -F ${TMPDIR}/mm.mapsend
 ${PNAME} -i mapsend -f ${TMPDIR}/mm.mapsend -o gpsutil -F ${TMPDIR}/mm.gps
-diff ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
+compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 
 # Magellan serial
 # TODO
@@ -42,13 +53,13 @@ diff ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 rm -f ${TMPDIR}/tiger
 ${PNAME} -i geo -f geocaching.loc -o tiger -F ${TMPDIR}/tiger
 ${PNAME} -i tiger -f ${TMPDIR}/tiger -o tiger -F ${TMPDIR}/tiger2
-diff ${TMPDIR}/tiger ${TMPDIR}/tiger2
+compare ${TMPDIR}/tiger ${TMPDIR}/tiger2
 
 # CSV (Comma separated value) data.
 
 ${PNAME}  -i geo -f geocaching.loc -o csv -F ${TMPDIR}/csv.csv
 ${PNAME}  -i csv -f ${TMPDIR}/csv.csv -o csv -F ${TMPDIR}/csv2.csv
-diff ${TMPDIR}/csv2.csv ${TMPDIR}/csv.csv 
+compare ${TMPDIR}/csv2.csv ${TMPDIR}/csv.csv 
 
 #
 # Delorme TopoUSA 4 is a CSV strain.  
@@ -57,41 +68,41 @@ rm -f ${TMPDIR}/xmap-1.gpx ${TMPDIR}/xmap-2.gpx ${TMPDIR}/xmap
 ${PNAME} -i xmap -f reference/xmap -o xmap -F ${TMPDIR}/xmap
 ${PNAME} -i xmap -f reference/xmap -o gpx -F ${TMPDIR}/xmap-1.gpx
 ${PNAME} -i xmap -f ${TMPDIR}/xmap -o gpx -F ${TMPDIR}/xmap-2.gpx
-diff ${TMPDIR}/xmap-1.gpx ${TMPDIR}/xmap-2.gpx
-diff reference/xmap ${TMPDIR}/xmap
+compare ${TMPDIR}/xmap-1.gpx ${TMPDIR}/xmap-2.gpx
+compare reference/xmap ${TMPDIR}/xmap
 
 # PCX (Garmin mapsource import) file format
 rm -f ${TMPDIR}/mm.pcx ${TMPDIR}/pcx.gps
 ${PNAME} -i geo -f geocaching.loc -o pcx -F ${TMPDIR}/mm.pcx
 ${PNAME} -i pcx -f ${TMPDIR}/mm.pcx -o gpsutil -F ${TMPDIR}/pcx.gps
-diff ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
+compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 
 # Magellan file format
 ${PNAME} -i magellan -f reference/magfile -o magellan -F ${TMPDIR}/magfile
-diff ${TMPDIR}/magfile reference/magfile
+compare ${TMPDIR}/magfile reference/magfile
 
 # Navitrak DNA marker format
 ${PNAME} -i dna -f reference/dnatest.txt -o dna -F ${TMPDIR}/dnatest.txt
-diff ${TMPDIR}/dnatest.txt reference/dnatest.txt
+compare ${TMPDIR}/dnatest.txt reference/dnatest.txt
 
 # PSP (PocketStreets 2002 Pushpin (.PSP)) file format. Use mxf as an 
-# intermediate format to avoid binary FP anomalies on different platforms.
+# intermediate format to avoid binary FP anomalies on compareerent platforms.
 rm -f ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
 ${PNAME} -i psp -f reference/ps.psp -o mxf -F ${TMPDIR}/psp.mxf
 ${PNAME} -i geo -f geocaching.loc -o mxf -F ${TMPDIR}/mxf.psp
-diff ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
+compare ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
 
 # MXF (Maptech Exchange Format) file format
 rm -f ${TMPDIR}/mx.mxf ${TMPDIR}/mxf.mxf
 ${PNAME} -i mxf -f reference/mxf.mxf -o mxf -F ${TMPDIR}/mx.mxf
 ${PNAME} -i mxf -f ${TMPDIR}/mx.mxf -o mxf -F ${TMPDIR}/mxf.mxf
-diff ${TMPDIR}/mxf.mxf reference
+compare ${TMPDIR}/mxf.mxf reference
 
 # tmpro (TopoMapPro Places) file format
 rm -f ${TMPDIR}/topomappro.txt ${TMPDIR}/mxf.mxf
 ${PNAME} -i tmpro -f reference/topomappro.txt -o tmpro -F ${TMPDIR}/tmp.txt
 ${PNAME} -i tmpro -f ${TMPDIR}/tmp.txt -o tmpro -F ${TMPDIR}/topomappro.txt
-diff ${TMPDIR}/topomappro.txt reference
+compare ${TMPDIR}/topomappro.txt reference
 
 # TPG (NG Topo!) file format
 # This is hard to test as the datum conversions create minute
@@ -102,13 +113,13 @@ rm -f ${TMPDIR}/topo.mxf ${TMPDIR}/tpg.mxf ${TMPDIR}/geo.tpg
 ${PNAME} -i geo -f geocaching.loc -o tpg -F ${TMPDIR}/geo.tpg
 ${PNAME} -i tpg -f ${TMPDIR}/geo.tpg -o mxf -F ${TMPDIR}/tpg.mxf
 ${PNAME} -i tpg -f reference/tpg.tpg -o mxf -F ${TMPDIR}/topo.mxf
-diff ${TMPDIR}/tpg.mxf ${TMPDIR}/topo.mxf
+compare ${TMPDIR}/tpg.mxf ${TMPDIR}/topo.mxf
 
 # OZI (OziExplorer 1.1) file format
 rm -f ${TMPDIR}/oz.ozi ${TMPDIR}/ozi.ozi
 ${PNAME} -i ozi -f reference/ozi.ozi -o ozi -F ${TMPDIR}/oz.ozi
 ${PNAME} -i ozi -f ${TMPDIR}/oz.ozi -o ozi -F ${TMPDIR}/ozi.ozi
-diff ${TMPDIR}/ozi.ozi reference
+compare ${TMPDIR}/ozi.ozi reference
 
 # Holux support is a little funky to test.  Becuase it loses precision,
 # if we convert it to another format, we lose accuracy (rounding) in the
@@ -116,12 +127,12 @@ diff ${TMPDIR}/ozi.ozi reference
 # So we verify that we can read the reference and write it and get an
 # identical reference.
 ${PNAME} -i holux -f reference/paris.wpo -o holux -F ${TMPDIR}/paris.wpo
-diff reference/paris.wpo ${TMPDIR}/paris.wpo
+compare reference/paris.wpo ${TMPDIR}/paris.wpo
 
 # Magellan NAV Companion for PalmOS
 # This format is hard to test, because each record and the database itself
 # contains the time of creation, so two otherwise identical files won't
-# compare accurately.  In any case, the files are binary so diff wouldn't
+# compare accurately.  In any case, the files are binary so compare wouldn't
 # like them.  So, we convert the reference file to gpsutil and the converted
 # file to gpsutil and make sure they're the same, and that they're the same
 # as one converted on a known-working installation.  Unfortunately, this does
@@ -132,8 +143,8 @@ rm -f ${TMPDIR}/magnav.pdb ${TMPDIR}/magnav.gpu ${TMPDIR}/magnavt.gpu
 ${PNAME} -i geo -f geocaching.loc -o magnav -F ${TMPDIR}/magnav.pdb
 ${PNAME} -i magnav -f ${TMPDIR}/magnav.pdb -o gpsutil -F ${TMPDIR}/magnav.gpu
 ${PNAME} -i magnav -f reference/magnav.pdb -o gpsutil -F ${TMPDIR}/magnavt.gpu
-diff ${TMPDIR}/magnavt.gpu ${TMPDIR}/magnav.gpu
-diff reference/magnavr.gpu ${TMPDIR}/magnav.gpu
+compare ${TMPDIR}/magnavt.gpu ${TMPDIR}/magnav.gpu
+compare reference/magnavr.gpu ${TMPDIR}/magnav.gpu
 
 # GPSPilot Tracker for PalmOS
 # This test is eerily similar to the NAV Companion test.  In fact, the 
@@ -142,8 +153,8 @@ rm -f ${TMPDIR}/gpspilot.pdb ${TMPDIR}/gpspilot.gpu ${TMPDIR}/gpspil_t.gpu
 ${PNAME} -i geo -f geocaching.loc -o gpspilot -F ${TMPDIR}/gpspilot.pdb
 ${PNAME} -i gpspilot -f ${TMPDIR}/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspilot.gpu
 ${PNAME} -i gpspilot -f reference/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspil_t.gpu
-diff ${TMPDIR}/gpspil_t.gpu ${TMPDIR}/gpspilot.gpu
-diff reference/magnavr.gpu ${TMPDIR}/gpspilot.gpu
+compare ${TMPDIR}/gpspil_t.gpu ${TMPDIR}/gpspilot.gpu
+compare reference/magnavr.gpu ${TMPDIR}/gpspilot.gpu
 
 # Cetus GPS for PalmOS
 # This test is also similar to the NAV Companion test.
@@ -151,21 +162,21 @@ rm -f ${TMPDIR}/cetus.pdb ${TMPDIR}/cetus.gpu ${TMPDIR}/cetust.gpu
 ${PNAME} -i geo -f geocaching.loc -o cetus -F ${TMPDIR}/cetus.pdb
 ${PNAME} -i cetus -f ${TMPDIR}/cetus.pdb -o gpsutil -F ${TMPDIR}/cetus.gpu
 ${PNAME} -i cetus -f reference/cetus.pdb -o gpsutil -F ${TMPDIR}/cetust.gpu
-diff ${TMPDIR}/cetust.gpu ${TMPDIR}/cetus.gpu
-diff reference/cetus.gpu ${TMPDIR}/cetus.gpu
+compare ${TMPDIR}/cetust.gpu ${TMPDIR}/cetus.gpu
+compare reference/cetus.gpu ${TMPDIR}/cetus.gpu
 
 # GpsDrive
 rm -f ${TMPDIR}/gpsdrive.txt
 ${PNAME} -i geo -f geocaching.loc -o gpsdrive -F ${TMPDIR}/gpsdrive.txt
-diff ${TMPDIR}/gpsdrive.txt reference
+compare ${TMPDIR}/gpsdrive.txt reference
 ${PNAME} -i gpsdrive -f reference/gpsdrive.txt -o gpsdrive -F ${TMPDIR}/gpsdrive2.txt
-diff ${TMPDIR}/gpsdrive2.txt reference/gpsdrive.txt
+compare ${TMPDIR}/gpsdrive2.txt reference/gpsdrive.txt
 
 # XMapHH Street Atlas USA file format
 rm -f ${TMPDIR}/xmapwpt.wpt ${TMPDIR}/xmapwpt.xmapwpt
 ${PNAME} -i xmapwpt -f reference/xmapwpt.wpt -o xmapwpt -F ${TMPDIR}/xmapwpt.xmapwpt
 ${PNAME} -i xmapwpt -f ${TMPDIR}/xmapwpt.xmapwpt -o xmapwpt -F ${TMPDIR}/xmapwpt.wpt
-diff ${TMPDIR}/xmapwpt.wpt reference
+compare ${TMPDIR}/xmapwpt.wpt reference
 
 # XCSV
 # Test that we can parse a style file, and read and write data in the 
@@ -181,7 +192,7 @@ echo "IFIELD LON_DECIMALDIR,,%lf%c" >> ${TMPDIR}/testo.style
 rm -f ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
 ${PNAME} -i geo -f geocaching.loc -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.geo
 ${PNAME} -i xcsv,style=${TMPDIR}/testo.style -f ${TMPDIR}/xcsv.geo -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.xcsv
-diff ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
+compare ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
 
 # Garmin Mapsource This is a binary format with some undocumented
 # fields.  This test is therefore intentionally vague.  We read a file,
@@ -194,7 +205,7 @@ rm -fr ${TMPDIR}/ms.gpx ${TMPDIR}/ms[12].gpx
 ${PNAME} -i mapsource -f reference/mapsource.mps  -o gpx -F ${TMPDIR}/ms1.gpx
 ${PNAME} -i mapsource -f reference/mapsource.mps  -o mapsource -F ${TMPDIR}/ms.mps
 ${PNAME} -i mapsource -f ${TMPDIR}/ms.mps -o gpx -F ${TMPDIR}/ms2.gpx
-diff ${TMPDIR}/ms1.gpx ${TMPDIR}/ms2.gpx
+compare ${TMPDIR}/ms1.gpx ${TMPDIR}/ms2.gpx
 
 #
 # Geocaching Database is a binary Palm format that, like the GPX variants
@@ -206,4 +217,4 @@ diff ${TMPDIR}/ms1.gpx ${TMPDIR}/ms2.gpx
 ${PNAME} -i gcdb -f reference/GeocachingDB.PDB -o gpx -F ${TMPDIR}/gcdb1.gpx \
 		-o gcdb -F ${TMPDIR}/gcdb1.pdb
 ${PNAME} -i gpx -f ${TMPDIR}/gcdb1.gpx -o gpx -F ${TMPDIR}/gcdb2.gpx
-diff ${TMPDIR}/gcdb1.gpx ${TMPDIR}/gcdb1.gpx
+compare ${TMPDIR}/gcdb1.gpx ${TMPDIR}/gcdb1.gpx
