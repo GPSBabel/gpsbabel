@@ -80,6 +80,7 @@ main(int argc, char *argv[])
 				}
 				ivecs->rd_init(fname);
 				ivecs->read();
+				ivecs->rd_deinit();
 				break;
 			case 'F':
 				ofname = optarg;
@@ -87,6 +88,7 @@ main(int argc, char *argv[])
 				if (ovecs) {
 					ovecs->wr_init(ofname);
 					ovecs->write();
+					ovecs->rd_deinit();
 				}
 				break;
 			case 's':
