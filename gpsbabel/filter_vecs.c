@@ -31,6 +31,7 @@ typedef struct {
 extern filter_vecs_t position_vecs;
 extern filter_vecs_t radius_vecs;
 extern filter_vecs_t duplicate_vecs;
+extern filter_vecs_t arcdist_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -48,7 +49,12 @@ fl_vecs_t filter_vec_list[] = {
 		&duplicate_vecs, 
 		"duplicate",
 		"Remove Duplicates",
-	}, 
+	},
+        {
+		&arcdist_vecs,
+	        "arc",
+	        "Include Only Points Within Distance of Arc",
+	},
         {
 		NULL,
 		NULL,
