@@ -22,10 +22,6 @@
 #include "defs.h"
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
-#include "math.h"
-#ifndef M_PI
-#define M_PI 3.14159265358979323846 
-#endif
 
 static double conv = 180.0 / M_PI;
 

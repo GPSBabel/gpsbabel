@@ -25,6 +25,14 @@
 #include <stdarg.h>
 #include "queue.h"
 
+
+/*
+ * Amazingly, this constant is not specified in the standard...
+ */
+#ifndef M_PI
+#  define M_PI 3.14159265358979323846
+#endif
+
 /*
  * Common definitions.   There should be no protocol or file-specific
  * data in this file.
