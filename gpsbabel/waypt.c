@@ -147,6 +147,13 @@ waypt_disp(const waypoint *wpt)
 }
 
 void
+waypt_status_disp(int total_ct, int myct)
+{
+	fprintf(stdout, "%d/%d/%d\r", myct*100/total_ct, myct, total_ct);
+	fflush(stdout);
+}
+
+void
 waypt_disp_all(waypt_cb cb)
 {
 	queue *elem, *tmp;
@@ -157,8 +164,7 @@ waypt_disp_all(waypt_cb cb)
 		waypointp = (waypoint *) elem;
 		if (global_opts.verbose_status) {
 			i++;
-			fprintf(stdout, "%d/%d/%d\r", i*100/waypt_ct, i, waypt_ct);
-			fflush(stdout);
+			waypt_status_disp(waypt_ct, i);
 		}
 		(*cb) (waypointp);
 	}

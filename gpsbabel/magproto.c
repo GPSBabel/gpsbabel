@@ -1,7 +1,7 @@
 /*
     Communicate Thales/Magellan serial protocol.
 
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ static char *deficon;
 static char *bs;
 static char *noack;
 static int route_out_count;
+static int waypoint_read_count;
 
 typedef enum {
 	mrs_handoff = 0,
@@ -430,6 +431,8 @@ retry:
 	} 
 	if (strncmp(ibuf, "$PMGNWPT,", 7) == 0) {
 		waypoint *wpt = mag_wptparse(ibuf);
+		waypoint_read_count++;
+		waypt_status_disp(waypoint_read_count, waypoint_read_count);
 		switch (global_opts.objective)
 		{
 			case wptdata:
@@ -715,6 +718,7 @@ static void
 mag_rd_init(const char *portname)
 {
 	time_t now, later;
+	waypoint_read_count = 0;
 
 	if (bs) {
 		bitrate=atoi(bs);

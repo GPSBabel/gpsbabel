@@ -28,7 +28,7 @@ int32  GPS_Command_Send_Almanac(const char *port, GPS_PAlmanac *alm, int32 n);
 int32  GPS_Command_Get_Track(const char *port, GPS_PTrack **trk);
 int32  GPS_Command_Send_Track(const char *port, GPS_PTrack *trk, int32 n);
 
-int32  GPS_Command_Get_Waypoint(const char *port, GPS_PWay **way);
+int32  GPS_Command_Get_Waypoint(const char *port, GPS_PWay **way,int (*cb)());
 int32  GPS_Command_Send_Waypoint(const char *port, GPS_PWay *way, int32 n, int (*cb)());
 
 int32  GPS_Command_Get_Proximity(const char *port, GPS_PWay **way);

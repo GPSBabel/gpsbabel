@@ -148,6 +148,17 @@ rw_deinit(void)
 	}
 }
 
+static int
+waypt_read_cb(int total_ct, GPS_PWay *way)
+{
+	static int i;
+
+	if (global_opts.verbose_status) {
+		i++;
+		waypt_status_disp(total_ct, i);
+	}
+}
+
 static void
 waypt_read(void)
 {
@@ -163,7 +174,7 @@ waypt_read(void)
 		return;
 	}
 
-	if ((n = GPS_Command_Get_Waypoint(portname, &way)) < 0) {
+	if ((n = GPS_Command_Get_Waypoint(portname, &way, waypt_read_cb)) < 0) {
 		fatal(MYNAME  ":Can't get waypoint from %s\n", portname);
 	}
 
@@ -371,6 +382,7 @@ sane_GPS_Way_New(void)
 
 	return way;
 }
+
 static int 
 waypt_write_cb(GPS_PWay *way)
 {
@@ -379,8 +391,7 @@ waypt_write_cb(GPS_PWay *way)
 
 	if (global_opts.verbose_status) {
 		i++;
-		fprintf(stdout, "%d/%d/%d\r", i*100/n, i, n);
-		fflush(stdout);
+		waypt_status_disp(n, i);
 	}
 	return 0;
 }

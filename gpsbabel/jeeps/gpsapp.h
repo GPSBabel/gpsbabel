@@ -11,7 +11,7 @@ extern "C"
 
 int32  GPS_Init(const char *port);
 
-int32  GPS_A100_Get(const char *port, GPS_PWay **way);
+int32  GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int ct, GPS_PWay *));
 int32  GPS_A100_Send(const char *port, GPS_PWay *way, int32 n, int (*cb)(GPS_PWay *));
 
 int32  GPS_A200_Get(const char *port, GPS_PWay **way);
