@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
+#include "garmin_tables.h"
 
 #define MYNAME "GPilotS"
 #define MYWPT  0x57707473  	/* Wpts */
@@ -33,6 +34,7 @@
 /*
  * Structures grafted from http://www.cru.fr/perso/cc/GPilotS/
  */
+ 
 
 typedef struct
 {
@@ -52,6 +54,35 @@ typedef struct
 	unsigned char dspl;		/* display option */
 } D103_Wpt_Type;
 
+typedef union {
+    float f;
+    unsigned int i;
+} fi_t;
+
+typedef struct			       /*                             size */
+{
+    unsigned char wpt_class;            /* class (see below)            1 */
+    unsigned char color;                /* color (see below)            1 */
+    unsigned char dspl;                 /* display options (see below)  1 */
+    unsigned char attr;                 /* attributes (see below)       1 */
+    unsigned char smbl[2];              /* waypoint symbol              2 */
+    unsigned char subclass[18];         /* subclass                    18 */
+    unsigned char lat[4];		/* position */
+    unsigned char lon[4];		/* position */
+    float alt;			       /* altitude in meters           4 */
+    float dpth;			       /* depth in meters              4 */
+    float dist;			       /* proximity distance in meters 4 */
+    char state[2];		       /* state                        2 */
+    char cc[2];			       /* country code                 2 */
+    char varlenstrs[];			/* start of variable length strings */
+    /* G_char ident[]; variable length string 1-51       */
+    /* G_char comment[]; waypoint user comment 1-51      */
+    /* G_char facility[]; facility name 1-31             */
+    /* G_char city[]; city name 1-25                     */
+    /* G_char addr[]; address number 1-51                */
+    /* G_char cross_road[]; intersecting road label 1-51 */
+}
+D108_Wpt_Type;
 
 typedef struct			       /* structure de waypoint "interne" */
 {
@@ -72,11 +103,13 @@ typedef struct			       /* internal track header */
     unsigned char dspl;		       /* display on the map ? */
     unsigned char color;	       /* color */
     unsigned char type;		       /* type of following track points */
-    unsigned char number[4];	       /* number of track points */
+    unsigned char unused;              /* type of following track points */
+    unsigned char number[2];	       /* number of track points */
     unsigned char latmin[4];	       /* latitude min */
     unsigned char latmax[4];	       /* latitude max */
     unsigned char lonmin[4];	       /* longitude min */
     unsigned char lonmax[4];	       /* longitude max */
+    unsigned char unused2[2];          /* type of following track points */
 }
 Custom_Trk_Hdr_Type;
 
@@ -87,7 +120,16 @@ typedef struct
 	unsigned char time[4];
 	unsigned char alt[4];
 	unsigned char new_trk;
+	unsigned char unused;
 } Custom_Trk_Point_Type;
+
+typedef struct			       /* custom compact track point type */
+{
+	unsigned char lat[4];		/* position */
+	unsigned char lon[4];		/* position */
+	unsigned char new_trk;
+	unsigned char unused;
+} Compact_Trk_Point_Type;                /* size : 10 bytes */
 
 struct record
 {
@@ -98,6 +140,7 @@ struct record
 	} header;
 	union {
 		D103_Wpt_Type d103;
+		D108_Wpt_Type d108;
 		Custom_Wpt_Type CustWpt;
 		Custom_Trk_Hdr_Type CustTrkHdr;
 #if LATER
@@ -183,11 +226,13 @@ data_read(void)
 	
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
 		waypoint *wpt_tmp;
-		Custom_Trk_Point_Type *tp;
+		Custom_Trk_Point_Type *tp_cust;
+		Compact_Trk_Point_Type *tp_comp;
 		int lat;
 		int lon;
 		int sz;
-
+		fi_t fi;
+                
 		wpt_tmp = waypt_new();
 
 		rec = (struct record *) pdb_rec->data;
@@ -196,40 +241,98 @@ data_read(void)
 			 * G103Type
 			 */
 			case 4:
-				wpt_tmp->shortname = xstrndupt(rec->wpt.d103.cmnt, sizeof(rec->wpt.d103.ident));
-				wpt_tmp->description = xstrndupt(rec->wpt.d103.cmnt, sizeof(rec->wpt.d103.cmnt));
-				/* This is odd.   This is a Palm DB file,
-				 * yet the data appears to be little endian,
-				 * not appropriate the the actual Palm.
-				 */
-				lon = le_read32(&rec->wpt.d103.lon);
-				lat = le_read32(&rec->wpt.d103.lat);
-				wpt_tmp->longitude = lon / 2147483648.0 * 180.0;
-				wpt_tmp->latitude = lat / 2147483648.0 * 180.0;
-				waypt_add(wpt_tmp);
-				break;
+			  wpt_tmp->shortname = xstrndupt(rec->wpt.d103.ident, sizeof(rec->wpt.d103.ident));
+			  wpt_tmp->description = xstrndupt(rec->wpt.d103.cmnt, sizeof(rec->wpt.d103.cmnt));
+			  /* This is odd.   This is a Palm DB file,
+			   * yet the data appears to be little endian,
+			   * not appropriate the the actual Palm.
+			   */
+			  lon = le_read32(&rec->wpt.d103.lon);
+			  lat = le_read32(&rec->wpt.d103.lat);
+			  wpt_tmp->longitude = lon / 2147483648.0 * 180.0;
+			  wpt_tmp->latitude = lat / 2147483648.0 * 180.0;
+			  waypt_add(wpt_tmp);
+			  break;
+			/*
+			 * G108Type
+			 */
+			case 9:
+			  wpt_tmp->shortname = xstrndupt(rec->wpt.d108.varlenstrs, 50);
+			  wpt_tmp->description = xstrndupt(rec->wpt.d108.varlenstrs + strlen(wpt_tmp->shortname) + 1, 50);
+			  /* This is odd.   This is a Palm DB file,
+			   * yet the data appears to be little endian,
+			   * not appropriate the the actual Palm.
+			   */
+			  lon = le_read32(&rec->wpt.d108.lon);
+			  lat = le_read32(&rec->wpt.d108.lat);
+			  wpt_tmp->longitude = lon / 2147483648.0 * 180.0;
+			  wpt_tmp->latitude = lat / 2147483648.0 * 180.0;
+			  fi.i = le_read32(&rec->wpt.d108.alt);
+			  wpt_tmp->altitude = fi.f;
+			  fi.i = le_read32(&rec->wpt.d108.dpth);
+			  wpt_tmp->depth = fi.f;
+			  fi.i = le_read32(&rec->wpt.d108.dist);
+			  wpt_tmp->proximity = fi.f;
+			  wpt_tmp->icon_descr_is_dynamic = 0;
+			  wpt_tmp->icon_descr = mps_find_desc_from_icon_number((rec->wpt.d108.smbl[1] << 8) + rec->wpt.d108.smbl[0], PCX);
+			  waypt_add(wpt_tmp);
+			  break;
+
 			/*
 			 * CustomTrkHdr
 			 */
 			case 101:
-				track_head = route_head_alloc();
-				track_add_head(track_head);
-				track_head->rte_name = xstrndup(rec->wpt.CustTrkHdr.name, sizeof(rec->wpt.CustTrkHdr.name));
-				sz = be_read32(&rec->wpt.CustTrkHdr.number);
-				tp = (Custom_Trk_Point_Type *) ((char *) pdb_rec->data + sizeof(rec->wpt.CustTrkHdr));
-				/* FIXME: This is incomplete and probably wrong */
+			  track_head = route_head_alloc();
+			  track_add_head(track_head);
+			  track_head->rte_name = xstrndup(rec->wpt.CustTrkHdr.name, sizeof(rec->wpt.CustTrkHdr.name));
+			  sz = be_read16(&rec->wpt.CustTrkHdr.number);
+              
+			  /* switch between custom track points and compact track points.
+			   * (compact points have no altitude and time info.
+			   */
+			  switch (rec->wpt.CustTrkHdr.type) {
+			  case 102:
+				tp_cust = (Custom_Trk_Point_Type *) ((char *) pdb_rec->data + sizeof(rec->header) + sizeof(rec->wpt.CustTrkHdr));
 				while (sz--) {
-					wpt_tmp = waypt_new();
-					lon = le_read32(&tp->lon);
-					lat = le_read32(&tp->lat);
-					wpt_tmp->longitude = lon / 2147483648.0 * 180.0;
-					wpt_tmp->latitude = lat / 2147483648.0 * 180.0;
-					route_add_wpt(track_head, wpt_tmp);
-					tp++;
+				  wpt_tmp = waypt_new();
+				  /* This is even more odd.
+				   * Track data is stored as big endian while
+				   * waypoint data is little endian!?
+				   */
+				  lon = be_read32(&tp_cust->lon);
+				  lat = be_read32(&tp_cust->lat);
+				  wpt_tmp->longitude = lon / 2147483648.0 * 180.0;
+				  wpt_tmp->latitude = lat / 2147483648.0 * 180.0;
+				  /*
+				   * Convert Garmin/GPilotS time format to gpsbabel time format.
+				   * Garmin/GPilotS count seconds from "UTC 12:00 AM December 31 1989".
+				   * gpsbabel counts seconds from "UTC 12:00 AM January 1 1970".
+				   */
+				  wpt_tmp->creation_time = be_read32(&tp_cust->time) + 631065600;
+				  fi.i = be_read32(&tp_cust->alt);
+				  wpt_tmp->altitude = fi.f;
+				  route_add_wpt(track_head, wpt_tmp);
+				  tp_cust++;
 				}
 				break;
-			default:
-				fatal(MYNAME ": input record type %d not supported.\n", rec->header.type); 
+			  case 104:
+				tp_comp = (Compact_Trk_Point_Type *) ((char *) pdb_rec->data + sizeof(rec->header) + sizeof(rec->wpt.CustTrkHdr));
+				while (sz--) {
+				  wpt_tmp = waypt_new();
+				  lon = be_read32(&tp_comp->lon);
+				  lat = be_read32(&tp_comp->lat);
+				  wpt_tmp->longitude = lon / 2147483648.0 * 180.0;
+				  wpt_tmp->latitude = lat / 2147483648.0 * 180.0;
+				  route_add_wpt(track_head, wpt_tmp);
+				  tp_comp++;
+				}
+				break;
+			  default:
+				fatal(MYNAME ": track point type %d not supported.\n", rec->wpt.CustTrkHdr.type); 
+			  }
+			  break;
+		default:
+		  fatal(MYNAME ": input record type %d not supported.\n", rec->header.type); 
 		}
 
 	} 
