@@ -360,6 +360,8 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	fwrite(&c, 1, 1, mapsend_file_out);
 
 	falt = waypointp->altitude;
+	if (falt == unknown_alt)
+		falt = 0;
 	my_fwrite8(&falt, mapsend_file_out);
 
 	flong = waypointp->longitude;
