@@ -25,6 +25,8 @@
 #include <ctype.h>
 #include <math.h>  /* for M_PI */
 
+#define MYNAME "PSP"
+
 /*#define _DEBUG_PSP	1*/
 #define MAXPSPSTRINGSIZE	256
 #define MAXPSPOUTPUTPINS	8192   /* Any more points than this is ludicrous */
@@ -68,7 +70,7 @@ psp_rd_init(const char *fname)
 {
 	psp_file_in = fopen(fname, "r");
 	if (psp_file_in == NULL) {
-		fatal("PSP: Cannot open %s for reading\n", fname);
+		fatal(MYNAME ": Cannot open %s for reading\n", fname);
 	}
 }
 
@@ -83,7 +85,7 @@ psp_wr_init(const char *fname)
 {
 	psp_file_out = fopen(fname, "w");
 	if (psp_file_out == NULL) {
-		fatal("PSP: Cannot open %s for writing\n", fname);
+		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
 }
 
@@ -111,7 +113,7 @@ psp_read(void)
 	    wpt_tmp = calloc(sizeof(*wpt_tmp),1);
 
 	    if (wpt_tmp == NULL) {
-		fatal("PSP: cannot allocate memory\n");
+		fatal(MYNAME ": cannot allocate memory\n");
 	    }
 
 	    /* things we will probably never know about this waypoint */
@@ -163,7 +165,7 @@ psp_read(void)
     	    stringsize *= 2;
     	    
     	    if (stringsize > MAXPSPSTRINGSIZE) {
-		fatal("PSP: variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
+		fatal(MYNAME ": variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
     	    }
 
             /* stringsize bytes - string data */
@@ -184,7 +186,7 @@ psp_read(void)
     	    stringsize *= 2;
 
     	    if (stringsize > MAXPSPSTRINGSIZE) {
-		fatal("PSP: variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
+		fatal(MYNAME ": variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
     	    }
 
 #ifdef _DEBUG_PSP
@@ -208,7 +210,7 @@ psp_read(void)
     	    stringsize *= 2;
 
     	    if (stringsize > MAXPSPSTRINGSIZE) {
-		fatal("PSP: variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
+		fatal(MYNAME ": variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
     	    }
 
 
@@ -318,7 +320,7 @@ psp_write(void)
         s = waypt_count();
         
         if (s > MAXPSPOUTPUTPINS) {
-            fatal("attempt to output too many pushpins (%d).  The max is %d.  Sorry.\n", s, MAXPSPOUTPUTPINS);
+            fatal(MYNAME ": output too many pushpins (%d).  The max is %d.  Sorry.\n", s, MAXPSPOUTPUTPINS);
         }
 
         /* insert waypoint count into header */

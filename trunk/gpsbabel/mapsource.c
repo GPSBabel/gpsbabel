@@ -27,12 +27,14 @@
 static FILE *mapsource_file_in;
 static FILE *mapsource_file_out;
 
+#define MYNAME "MAPSOURCE" 
+
 static void
 mapsource_rd_init(const char *fname)
 {
 	mapsource_file_in = fopen(fname, "r");
 	if (mapsource_file_in == NULL) {
-		fatal("Cannot open '%s' for reading\n", fname);
+		fatal(MYNAME ": '%s' for reading\n", fname);
 	}
 }
 
@@ -47,7 +49,7 @@ mapsource_wr_init(const char *fname)
 {
 	mapsource_file_out = fopen(fname, "w");
 	if (mapsource_file_out == NULL) {
-		fatal("Cannot open '%s' for writing\n", fname);
+		fatal(MYNAME ": '%s' for writing\n", fname);
 		exit(1);
 	}
 }

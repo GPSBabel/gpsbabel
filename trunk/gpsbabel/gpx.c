@@ -38,6 +38,8 @@ static waypoint *wpt_tmp;
 static FILE *fd;
 static FILE *ofd;
 
+#define MYNAME "GPX"
+
 static void
 tag_gpx(const char **attrv)
 {
@@ -60,7 +62,7 @@ tag_wpt(const char **attrv)
 
 	wpt_tmp = calloc(sizeof(*wpt_tmp), 1);
 	if (wpt_tmp == NULL) {
-		fatal("Can not allocate memory\n");
+		fatal(MYNAME ": allocate memory\n");
 	}
 
 	while (*avp) { 
@@ -157,11 +159,11 @@ gpx_rd_init(const char *fname)
 {
 	fd = fopen(fname, "r");
 	if (fd == NULL) {
-		fatal("GPX: Cannot open %s for reading\n", fname );
+		fatal(MYNAME ": Cannot open %s for reading\n", fname );
 	}
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {
-		fatal("GPX: Cannot create XML Parser\n");
+		fatal(MYNAME ": Cannot create XML Parser\n");
 	}
 	XML_SetElementHandler(psr, gpx_start, gpx_end);
 	XML_SetCharacterDataHandler(psr, gpx_cdata);
@@ -178,7 +180,7 @@ gpx_wr_init(const char *fname)
 {
 	ofd = fopen(fname, "w");
 	if (ofd == NULL) {
-		fatal("GPX: Cannot open %s for writing\n", fname );
+		fatal(MYNAME ": open %s for writing\n", fname );
 	}
 }
 
@@ -198,7 +200,7 @@ gpx_read(void)
 		len = fread(buf, 1, sizeof(buf), fd);
 		done = feof(fd); 
 		if (!XML_Parse(psr, buf, len, done)) {
-			fatal("GPX: XML parse error at %d: %s\n", 
+			fatal(MYNAME ": XML parse error at %d: %s\n", 
 				XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
 		}
