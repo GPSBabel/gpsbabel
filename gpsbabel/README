@@ -571,7 +571,13 @@ DATA FILTERS
         with the "all" option.  This option can be useful as an "ignore
         list" in some circumstances.
 
-    DISTANCE ALONG A ROUTE (ARC)
+	Finally, the duplicate filter takes a "correct" option.  If you
+	specify that option, the latitude and longitude frmo later duplicates
+	will replace the latitude and longitude in earlier waypoints.  You
+	can use this to apply a list of "waypoint corrections" to a larger
+	file, while keeping all of the other details from the larger file.
+
+    DISTANCE FROM A ROUTE (ARC)
     ARC
 
         The arc filter is designed to include points based on their
