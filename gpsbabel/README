@@ -475,8 +475,8 @@ THE FORMATS
 
     coastexp
 
-	This is the XML format used by CoastalExplorer (tm). For the moment
-	this is only available as an input format.
+	This is the format used by CoastalExplorer (tm). The format is
+	XML with items uniquely identified by Windows-style UUIDs.
 
 	http://www.rosepointnav.com
 
