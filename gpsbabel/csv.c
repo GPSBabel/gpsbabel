@@ -26,6 +26,7 @@
 
 static FILE *file_in;
 static FILE *file_out;
+static char *psn;
 
 #define MYNAME "CSV"
 
@@ -48,6 +49,8 @@ static void
 wr_init(const char *fname, const char *args)
 {
 	file_out = fopen(fname, "w");
+	psn = get_option(args, "prefer_shortname");
+
 	if (file_out == NULL) {
 		fatal(MYNAME ": Cannot open %s for writing\n", fname);
 	}
@@ -143,8 +146,13 @@ csv_waypt_pr(const waypoint *wpt)
 	lon = wpt->position.longitude.degrees;
 	lat = wpt->position.latitude.degrees;
 
-        if (wpt->description) 
-	    description = csv_stringclean(wpt->description, ",\"");
+	if (psn)  {
+		if (wpt->shortname) 
+		    description = csv_stringclean(wpt->shortname, ",\"");
+	} else {
+		if (wpt->description) 
+		    description = csv_stringclean(wpt->description, ",\"");
+	}
 
 	if ((description == NULL) && wpt->notes)
 	    description = csv_stringclean(wpt->notes, ",\"");
