@@ -1,11 +1,11 @@
 # add -DDEBUG_MEM to turn on memory allocation logging
-CFLAGS=-g -Icoldsync
+CFLAGS=$(EXTRA_CFLAGS) -g -Icoldsync
 INSTALL_TARGETDIR=/usr/local/
 
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
 	gpsutil.o pcx.o cetus.o gpspilot.o magnav.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o \
-	xcsv.o xmapwpt.o gcdb.o internal_styles.o
+	xcsv.o gcdb.o internal_styles.o
 
 FILTERS=position.o duplicate.o
 
@@ -43,6 +43,12 @@ install:
 	install gpsbabel  $(INSTALL_TARGETDIR)/bin
 
 # Nerdy release stuff that needs to work only on Linux.
+
+leaktest:
+	make EXTRA_CFLAGS=-DDEBUG_MEM
+	leaks/cleardebug
+	./testo
+	leaks/memdebug | grep -v '^command line:'
 
 internal_styles.c: mkstyle.sh
 	./mkstyle.sh > internal_styles.c
@@ -105,7 +111,6 @@ filter_vecs.o: filter_vecs.c defs.h queue.h
 position.o:position.c defs.h
 waypt.o: waypt.c defs.h queue.h
 xcsv.o: xcsv.c defs.h queue.h csv_util.h
-xmapwpt.o: xmapwpt.c defs.h queue.h csv_util.h
 coldsync/pdb.o: coldsync/pdb.c coldsync/config.h coldsync/pdb.h
 coldsync/util.o: coldsync/util.c coldsync/config.h
 jeeps/gpsapp.o: jeeps/gpsapp.c jeeps/gps.h jeeps/gpsport.h \

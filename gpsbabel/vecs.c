@@ -45,7 +45,6 @@ extern ff_vecs_t holux_vecs;
 extern ff_vecs_t xcsv_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t magnav_vec;
-extern ff_vecs_t xmapwpt_vecs;
 extern ff_vecs_t tmpro_vecs;
 extern ff_vecs_t gcdb_vecs;
 
@@ -99,12 +98,6 @@ vecs_t vec_list[] = {
 		"gpsutil",
 		"gpsutil", 
 		NULL
-	},
-	{
-		&xmapwpt_vecs,
-		"xmapwpt",
-		"Delorme XMap HH Native .WPT", 
-		".wpt"
 	},
 	{
 		&psp_vecs,
@@ -214,6 +207,8 @@ find_vec(char *const vecname, char **opts)
 			continue;
 		}
 		xcsv_read_internal_style(svec->style_buf);
+
+		xfree(v);
 
 		return vec_list[0].vec;
 	}
