@@ -40,6 +40,7 @@ extern ff_vecs_t pcx_vecs;
 extern ff_vecs_t csv_vecs;
 extern ff_vecs_t cetus_vecs;
 extern ff_vecs_t gpspilot_vecs;
+extern ff_vecs_t psp_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -92,6 +93,11 @@ vecs_t vec_list[] = {
 		&csv_vecs,
 		"csv",
 		"Comma separated values"
+	},
+	{
+		&psp_vecs,
+		"psp",
+		"MS PocketStreets 2002 Pushpin"
 	},
 	{
 		&cetus_vecs,

@@ -54,3 +54,8 @@ diff /tmp/mm.gps /tmp/gu.wpt
 ${PNAME} -i magellan -f reference/magfile -o magellan -F /tmp/magfile
 diff /tmp/magfile reference/magfile
 
+
+# PSP (PocketStreets 2002 Pushpin (.PSP)) file format
+${PNAME} -i geo -f geocaching.loc -o psp -F /tmp/ps.psp
+diff /tmp/ps.psp reference
+
