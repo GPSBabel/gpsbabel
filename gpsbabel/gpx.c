@@ -1127,7 +1127,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 				  mkshort(mkshort_handle, odesc) : 
 				  waypointp->shortname;
 
-	fprintf(ofd, "<wpt lat=\"%lf\" lon=\"%lf\">\n",
+	fprintf(ofd, "<wpt lat=\"%0.9lf\" lon=\"%0.9lf\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
 	if (waypointp->creation_time) {
@@ -1271,8 +1271,8 @@ gpx_write(void)
 	gpx_write_time( now, "time" );
 	waypt_compute_bounds(&bounds);
 	if (bounds.max_lat  > -360) {
-		fprintf(ofd, "<bounds minlat=\"%f\" minlon =\"%f\" "
-			       "maxlat=\"%f\" maxlon=\"%f\" />\n",
+		fprintf(ofd, "<bounds minlat=\"%0.9f\" minlon =\"%0.9f\" "
+			       "maxlat=\"%0.9f\" maxlon=\"%0.9f\" />\n",
 			       bounds.min_lat, bounds.min_lon, 
 			       bounds.max_lat, bounds.max_lon);
 	}
