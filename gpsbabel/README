@@ -600,6 +600,13 @@ THE FORMATS
         representing recorded flights, and routes representing task
         declarations in other formats.
 
+    BAROIQ
+
+        Serial download protocol for the Brauniger IQ series of barograph
+        recording flight instruments.  Creates a track of altitude vs time
+        which can be merged with a GPS track of the same flight to create a
+        three dimensional IGC file.
+
 DATA FILTERS
 
 	GPSBabel supports data filtering.  Data filters are invoked from
