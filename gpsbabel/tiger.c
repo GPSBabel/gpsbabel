@@ -81,9 +81,15 @@ data_read(void)
 static void
 gpsutil_disp(const waypoint *wpt)
 {
-	fprintf(file_out, "%f,%f:redpin:%s\n", 
+	char *pin;
+	if (wpt->creation_time > time(0) - 3600 * 24 * 14)
+		pin = "greenpin";
+	else
+		pin = "redpin";
+	fprintf(file_out, "%f,%f:%s:%s\n", 
 		wpt->position.longitude.degrees,
 		 wpt->position.latitude.degrees,
+		 pin,
 		 wpt->description);
 }
 
