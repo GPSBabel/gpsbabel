@@ -24,7 +24,7 @@ char *
 csv_stringtrim(const char *string, const char *enclosure, int strip_max);
 #else
 CSV_STRINGTRIM(const char *string, const char *enclosure, int strip_max, DEBUG_PARAMS);
-#define csv_stringtrim( s, e,m ) CSV_STRINGTRIM( s, e, m, __FILE__, __LINE__);
+#define csv_stringtrim( s, e,m ) CSV_STRINGTRIM( s, e, m, __FILE__, __LINE__)
 #endif
 
 char *
@@ -35,7 +35,7 @@ char *
 csv_stringclean(const char *string, const char *chararray);
 #else
 CSV_STRINGCLEAN(const char *string, const char *chararray,DEBUG_PARAMS);
-#define csv_stringclean(s,c) CSV_STRINGCLEAN(s,c,__FILE__,__LINE__);
+#define csv_stringclean(s,c) CSV_STRINGCLEAN(s,c,__FILE__,__LINE__)
 #endif
 
 void 
