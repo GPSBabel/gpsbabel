@@ -422,6 +422,8 @@ char * strip_nastyhtml(const char * in);
 char * str_utf8_to_cp1252( const char * str );
 char * str_utf8_to_ascii( const char * str );
 
+char * rot13( const char *str );
+
 /*
  * PalmOS records like fixed-point numbers, which should be rounded
  * to deal with possible floating-point representation errors.
