@@ -1,6 +1,29 @@
-/* This file is machine-generated from the style/ directory */
+/* This file is machine-generated from the contents of style/ */
 /* by mkstyle.sh.   Editing it by hand is an exeedingly bad idea. */
 
+static char arc[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: GPSBabel arc filter format\n"
+"# Author: Ron Parker\n"
+"#   Date: 17 July 2003\n"
+"#\n"
+
+"DESCRIPTION		GPSBabel arc filter file\n"
+"EXTENSION		txt\n"
+
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		TAB\n"
+"RECORD_DELIMITER	NEWLINE\n"
+
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
+"IFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
+;
 static char csv[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -458,4 +481,4 @@ static char xmapwpt[] =
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "s_and_t", s_and_t } , { "ozi", ozi } , { "nima", nima } , { "mxf", mxf } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } ,  {0,0}};
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "s_and_t", s_and_t } , { "ozi", ozi } , { "nima", nima } , { "mxf", mxf } , { "gpsman", gpsman } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
