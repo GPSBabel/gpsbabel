@@ -124,12 +124,12 @@ data_read(void)
 		wpt_tmp->description = strdup(vdata);
 		vdata += strlen (vdata) + 1;
 		
-		tm.tm_sec = pdb_read16(&rec->crt_sec);
-		tm.tm_min = pdb_read16(&rec->crt_min);
-		tm.tm_hour = pdb_read16(&rec->crt_hour);
-		tm.tm_mday = pdb_read16(&rec->crt_mday);
-		tm.tm_mon = pdb_read16(&rec->crt_mon) - 1;
-		tm.tm_year = pdb_read16(&rec->crt_year) - 1900;
+		tm.tm_sec = pdb_read2(&rec->crt_sec);
+		tm.tm_min = pdb_read2(&rec->crt_min);
+		tm.tm_hour = pdb_read2(&rec->crt_hour);
+		tm.tm_mday = pdb_read2(&rec->crt_mday);
+		tm.tm_mon = pdb_read2(&rec->crt_mon) - 1;
+		tm.tm_year = pdb_read2(&rec->crt_year) - 1900;
 		wpt_tmp->creation_time = mktime(&tm); 
 
 		waypt_add(wpt_tmp);
@@ -228,7 +228,7 @@ abort();
 }
 
 
-ff_vecs_t cetus_vecs = {
+ff_vecs_t magnav_vec = {
 	rd_init,
 	wr_init,
 	rd_deinit,
