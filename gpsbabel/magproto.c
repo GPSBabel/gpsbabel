@@ -852,12 +852,12 @@ mag_trkparse(char *trkmsg)
 	waypt->centiseconds = fracsecs;
 
 	if (latdir == 'S') latdeg = -latdeg;
-	waypt->position.latitude.degrees = ddmm2degrees(latdeg);
+	waypt->latitude = ddmm2degrees(latdeg);
 
 	if (lngdir == 'W') lngdeg = -lngdeg;
-	waypt->position.longitude.degrees = ddmm2degrees(lngdeg);
+	waypt->longitude = ddmm2degrees(lngdeg);
 
-	waypt->position.altitude.altitude_meters = alt;
+	waypt->altitude = alt;
 
 	return waypt;
 	
@@ -1036,12 +1036,12 @@ mag_wptparse(char *trkmsg)
 	icon_token[i++] = '\0';
 	
 	if (latdir == 'S') latdeg = -latdeg;
-	waypt->position.latitude.degrees = ddmm2degrees(latdeg);
+	waypt->latitude = ddmm2degrees(latdeg);
 
 	if (lngdir == 'W') lngdeg = -lngdeg;
-	waypt->position.longitude.degrees = ddmm2degrees(lngdeg);
+	waypt->longitude = ddmm2degrees(lngdeg);
 
-	waypt->position.altitude.altitude_meters = alt;
+	waypt->altitude = alt;
 	waypt->shortname = xstrdup(shortname);
 	waypt->description = xstrdup(descr);
 	waypt->icon_descr = mag_find_descr_from_token(icon_token);
@@ -1125,8 +1125,8 @@ mag_waypt_pr(const waypoint *waypointp)
 	char *odesc;
 	char *isrc;
 
-	ilat = waypointp->position.latitude.degrees;
-	ilon = waypointp->position.longitude.degrees;
+	ilat = waypointp->latitude;
+	ilon = waypointp->longitude;
 
 	lon = fabs(ilon);
 	lat = fabs(ilat);
@@ -1167,8 +1167,8 @@ mag_waypt_pr(const waypoint *waypointp)
 	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.8s,%-.30s,%s",
 		lat, ilat < 0 ? 'S' : 'N',
 		lon, ilon < 0 ? 'W' : 'E',
-		waypointp->position.altitude.altitude_meters == unknown_alt ?
-			0 : waypointp->position.altitude.altitude_meters,
+		waypointp->altitude == unknown_alt ?
+			0 : waypointp->altitude,
 		owpt,
 		odesc,
 		icon_token);
@@ -1201,8 +1201,8 @@ void mag_track_disp(const waypoint *waypointp)
 	int date=0;
 	struct tm *tm;
 
-	ilat = waypointp->position.latitude.degrees;
-	ilon = waypointp->position.longitude.degrees;
+	ilat = waypointp->latitude;
+	ilon = waypointp->longitude;
 	tm = NULL;
 	if (waypointp->creation_time) {
 		tm = gmtime(&waypointp->creation_time);
@@ -1234,8 +1234,8 @@ void mag_track_disp(const waypoint *waypointp)
 	sprintf(obuf,"PMGNTRK,%4.3f,%c,%09.3f,%c,%05.f,%c,%06d.%02d,A,,%06d", 
 		lat, ilat < 0 ? 'S' : 'N',
 		lon, ilon < 0 ? 'W' : 'E',
-		waypointp->position.altitude.altitude_meters == unknown_alt ?
-                        0 : waypointp->position.altitude.altitude_meters,
+		waypointp->altitude == unknown_alt ?
+                        0 : waypointp->altitude,
 			'M',hms,fracsec,date);
 	mag_writemsg(obuf);
 }
