@@ -56,6 +56,12 @@ data_read(void)
 	char alttype;
 	char icon[3] = {0};
 	waypoint *wpt_tmp;
+	/*
+	 * Make sure that all waypoints in single read have same 
+	 * timestamp.
+	 */
+	time_t now = time(NULL);
+
 
 	for(;fgets(ibuf, sizeof(ibuf), file_in);) {
 	/*  A sharp in column zero or an blank line is a comment */
@@ -73,7 +79,7 @@ data_read(void)
 		wpt_tmp->altitude = alt;
 		wpt_tmp->shortname = xstrdup(name);
 		wpt_tmp->description = xstrdup(desc);
-		wpt_tmp->creation_time = time(NULL);
+		wpt_tmp->creation_time = now;
 
 		if (latdir == 'S') lat = -lat;
 		if (londir == 'W') lon = -lon;

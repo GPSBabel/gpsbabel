@@ -78,6 +78,11 @@ data_read(void)
 	waypoint *wpt_tmp;
 	int linecount = 0;
 	mkshort_rd_handle = mkshort_new_handle();
+	/*
+	 * Make sure that all waypoints in single read have same 
+	 * timestamp.
+	 */
+	time_t now = time(NULL);
 
 	do {
 		linecount++;
@@ -122,7 +127,7 @@ data_read(void)
 			s = csv_lineparse(NULL, " ", "", linecount);
 		}
 	    
-		wpt_tmp->creation_time = time(NULL);
+		wpt_tmp->creation_time = now;
 		
 		/* We'll make up our own shortname. */
 		if (wpt_tmp->description) {
