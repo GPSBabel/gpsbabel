@@ -61,6 +61,11 @@ char *rxdata[] = {
  *  internal.   This means we ignore that 'fd' number that gets passed in.
  */
 
+static HANDLE comport;
+
+/*
+ * Display an error from the serial subsystem.
+ */
 void GPS_Serial_Error(char *hdr)
 {
 	char msg[200];
@@ -75,8 +80,6 @@ void GPS_Serial_Error(char *hdr)
 			GetLastError(), 0, s, sizeof(msg) - strlen(hdr) - 2, 0 );
 	GPS_Error(msg);
 }
-
-static HANDLE comport;
 
 int32 GPS_Serial_On(const char *port, int32 *fd)
 {
@@ -248,7 +251,7 @@ int32 GPS_Serial_Savetty(const char *port)
 
     if (gps_is_usb) return 1;
     
-    if((fd = open(port, O_RDWR|O_NDELAY))==-1)
+    if((fd = open(port, O_RDWR))==-1)
     {
 	perror("open");
 	gps_errno = SERIAL_ERROR;
@@ -263,7 +266,6 @@ int32 GPS_Serial_Savetty(const char *port)
 	GPS_Error("SERIAL: tcgetattr error");
 	return 0;
     }
-
 
     if(!GPS_Serial_Close(fd,port))
     {
@@ -291,7 +293,7 @@ int32 GPS_Serial_Restoretty(const char *port)
 
     if (gps_is_usb) return 1;
     
-    if((fd = open(port, O_RDWR|O_NDELAY))==-1)
+    if((fd = open(port, O_RDWR))==-1)
     {
 	perror("open");
 	gps_errno = HARDWARE_ERROR;
@@ -339,7 +341,6 @@ int32 GPS_Serial_Open(int32 *fd, const char *port)
 	gps_errno = SERIAL_ERROR;
 	return 0;
     }
-
 
     if(tcgetattr(*fd,&tty)==-1)
     {
