@@ -137,10 +137,18 @@ waypt_disp_all(waypt_cb cb)
 {
 	queue *elem, *tmp;
 	waypoint *waypointp;
+	int i = 0;
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypointp = (waypoint *) elem;
+		if (global_opts.verbose_status) {
+			fprintf(stdout, "%d\r", ++i*100/waypt_ct);
+			fflush(stdout);
+		}
 		(*cb) (waypointp);
+	}
+	if (global_opts.verbose_status) {
+		fprintf(stdout, "\r\n");
 	}
 }
 

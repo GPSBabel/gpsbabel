@@ -549,8 +549,10 @@ terminit(const char *portname)
 	}
 
 	GetCommTimeouts (comport, &timeout);
-	timeout.ReadIntervalTimeout = 10;
-	timeout.WriteTotalTimeoutMultiplier = 10;
+	timeout.ReadIntervalTimeout = 100;
+	timeout.ReadTotalTimeoutMultiplier = 100;
+	timeout.ReadTotalTimeoutConstant = 100;
+	timeout.WriteTotalTimeoutMultiplier = 100;
 	timeout.WriteTotalTimeoutConstant = 1000;
 	if (!SetCommTimeouts (comport, &timeout)) {
 		xCloseHandle (comport);
@@ -573,11 +575,13 @@ termread(char *ibuf, int size)
 	for(;i < size;i++) {
 		if (ReadFile (comport, &ibuf[i], 1, &cnt, NULL) != TRUE)
 			break;
-		if (ibuf[i] == '\n') break;
+		if (cnt < 1) 
+			return NULL;
+		if (ibuf[i] == '\n') 
+			break;
 	}
 	ibuf[i] = 0;
 	return ibuf;
-
 }
 
 static void

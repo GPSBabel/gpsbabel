@@ -350,6 +350,10 @@ waypoint_write(void)
 		if (wpt->altitude != unknown_alt) {
 			way[i]->alt = wpt->altitude;
 		}
+		if (global_opts.verbose_status) {
+			fprintf(stdout, "%d\r", i*100/n);
+			fflush(stdout);
+		}
 		i++;
 	}
 	if ((ret = GPS_Command_Send_Waypoint(portname, way, n)) < 0) {
@@ -358,6 +362,9 @@ waypoint_write(void)
 
 	for (i = 0; i < n; ++i) {
 		GPS_Way_Del(&way[i]);
+	}
+	if (global_opts.verbose_status) {
+		fprintf(stdout, "\r\n");
 	}
 	xfree(way);
 }
