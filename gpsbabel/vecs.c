@@ -215,9 +215,24 @@ find_vec(char *const vecname, char **opts)
 	 * is to search the list of xcsv styles.
 	 */
 	while (svec->name) {
+		arglist_t *ap;
+		char *res;
+
 		if (strcmp(svecname, svec->name)) {
 			svec++;
 			continue;
+		}
+
+		res = strchr(vecname, ',');
+		if (res) {
+			*opts = strchr(vecname, ',') + 1;
+			if (vec_list[0].vec->args) {
+				for (ap = vec_list[0].vec->args; ap->argstring; ap++) {
+					*ap->argval = get_option(*opts, ap->argstring);
+				}
+			}
+		} else {
+			*opts = NULL;
 		}
 		xcsv_read_internal_style(svec->style_buf);
 
