@@ -28,10 +28,14 @@
 #define MYNAME "GARMIN" 
 static const char *portname;
 static void *mkshort_handle;
+GPS_PWay *tx_routelist;
+GPS_PWay *cur_tx_routelist_entry;
 
 static void
 rw_init(const char *fname)
 {
+	int short_length;
+
 	if (!mkshort_handle)
 		mkshort_handle = mkshort_new_handle();
 
@@ -48,6 +52,54 @@ rw_init(const char *fname)
 		fatal(MYNAME ":Can't init %s\n", fname);
 	}
 	portname = fname;
+
+	/*
+	 * Grope the unit we're talking to to set setshort_length to 
+	 * 	20 for  the V, 
+	 * 	10 for Street Pilot, Rhino, 76
+	 * 	6 for the III, 12, emap, and etrex
+	 * Fortunately, getting this "wrong" only results in ugly names
+	 * when we're using the synthesize_shortname path.
+	 */
+	short_length = 10;
+
+	switch ( gps_waypt_type )	/* waypoint type as defined by jeeps */
+	{
+		case 100:	/* The GARMIN GPS Interface Specification, */
+		case 101:	/* says these waypoint types use an ident */
+		case 102:	/* length of 6.  Waypoint types 106, 108 */
+		case 103:	/* and 109 are all variable  length    */
+		case 104:
+		case 105:
+		case 107:
+		case 150:
+		case 151:
+		case 152:
+		case 154:
+		case 155:
+			short_length = 6;
+			break;
+		case 106:	/* Waypoint types with variable ident length */
+		case 108: 	/* Need GPSr id to know the actual length */
+		case 109:                   
+			switch ( gps_save_id )
+			{
+				case 130:	/* Garmin Etrex (yellow) */
+					short_length = 6;
+					break;
+				case 155:	/* Garmin V */
+					short_length = 20;
+					break;
+				default:
+					break;
+			}
+			break;
+		default:
+			break;
+			
+	}
+	setshort_length(mkshort_handle, short_length);
+	setshort_mustupper(mkshort_handle, 1);
 
 }
 
@@ -225,8 +277,36 @@ data_read(void)
 	}
 }
 
+static GPS_PWay
+sane_GPS_Way_New(void)
+{
+	GPS_PWay way;
+	way = GPS_Way_New();
+	if (!way) {
+		fatal(MYNAME ":not enough memory\n");
+	}
+
+	/*
+	 *  Undo less than helpful defaults from Way_New.
+	 */
+	way->rte_ident[0] = 0;
+	way->rte_cmnt[0] = 0;
+	way->rte_link_subclass[0] = 0;
+	way->rte_link_ident[0] = 0;
+	way->city[0] = 0;
+	way->state[0] = 0;
+	way->facility[0] = 0;
+	way->addr[0] = 0;
+	way->cross_road[0] = 0;
+	way->cross_road[0] = 0;
+	way->dpth = 1.0e25;
+	way->wpt_class = 0;
+
+	return way;
+}
+
 static void
-data_write(void)
+waypoint_write(void)
 {
 	int i;
 	int32 ret;
@@ -235,85 +315,20 @@ data_write(void)
 	extern queue waypt_head;
 	GPS_PWay *way;
 	extern int32 gps_save_id;
-	int short_length;
 
 	way = xcalloc(n,sizeof(*way));
 
 	for (i = 0; i < n; i++) {
-		if(!((way)[i]=GPS_Way_New()))
-			fatal(MYNAME ":not enough memory\n");
+		way[i] = sane_GPS_Way_New();
 	}
 
 	i = 0;
-	/*
-	 * Grope the unit we're talking to to set setshort_length to 
-	 * 	20 for  the V, 
-	 * 	10 for Street Pilot, Rhino, 76
-	 * 	6 for the III, 12, emap, and etrex
-	 * Fortunately, getting this "wrong" only results in ugly names
-	 * when we're using the synthesize_shortname path.
-	 */
-	short_length = 10;
-
-	switch ( gps_waypt_type )	/* waypoint type as defined by jeeps */
-	{
-		case 100:	/* The GARMIN GPS Interface Specification, */
-		case 101:	/* says these waypoint types use an ident */
-		case 102:	/* length of 6.  Waypoint types 106, 108 */
-		case 103:	/* and 109 are all variable  length    */
-		case 104:
-		case 105:
-		case 107:
-		case 150:
-		case 151:
-		case 152:
-		case 154:
-		case 155:
-			short_length = 6;
-			break;
-		case 106:	/* Waypoint types with variable ident length */
-		case 108: 	/* Need GPSr id to know the actual length */
-		case 109:                   
-			switch ( gps_save_id )
-			{
-				case 130:	/* Garmin Etrex (yellow) */
-					short_length = 6;
-					break;
-				case 155:	/* Garmin V */
-					short_length = 20;
-					break;
-				default:
-					break;
-			}
-			break;
-		default:
-			break;
-			
-	}
-	setshort_length(mkshort_handle, short_length);
-	setshort_mustupper(mkshort_handle, 1);
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypoint *wpt;
 		char *ident;
 		char *src = NULL;
 
 		wpt = (waypoint *) elem;
-
-		/*
-		 *  Undo less than helpful defaults from Way_New.
-		 */
-		way[i]->rte_ident[0] = 0;
-		way[i]->rte_cmnt[0] = 0;
-		way[i]->rte_link_subclass[0] = 0;
-		way[i]->rte_link_ident[0] = 0;
-		way[i]->city[0] = 0;
-		way[i]->state[0] = 0;
-		way[i]->facility[0] = 0;
-		way[i]->addr[0] = 0;
-		way[i]->cross_road[0] = 0;
-		way[i]->cross_road[0] = 0;
-		way[i]->dpth = 1.0e25;
-		way[i]->wpt_class = 0;
 
 		if(wpt->description) src = wpt->description;
 		if(wpt->notes) src = wpt->notes;
@@ -346,6 +361,85 @@ data_write(void)
 	}
 	xfree(way);
 }
+
+static void
+route_hdr_pr(const route_head *rte)
+{
+	(*cur_tx_routelist_entry)->rte_num = rte->rte_num;
+	(*cur_tx_routelist_entry)->isrte = 1;
+}
+
+static void
+route_waypt_pr(const waypoint *wpt)
+{
+	GPS_PWay rte = *cur_tx_routelist_entry;
+
+	/*
+	 * As stupid as this is, libjeeps seems to want an empty 
+	 * waypoint between every link in a route that has nothing
+	 * but the 'islink' member set.   Rather than "fixing" libjeeps,
+	 * we just double them up (sigh) and do that here.
+	 */
+	rte->islink = 1;
+	cur_tx_routelist_entry++;
+	rte++;
+
+	rte->lon = wpt->longitude;
+	rte->lat = wpt->latitude;
+	rte->smbl = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
+	if (wpt->altitude != unknown_alt) {
+		rte->alt = wpt->altitude;
+	}
+	strncpy(rte->ident, wpt->shortname, sizeof(rte->ident));
+	rte->ident[sizeof(rte->ident)-1] = 0;
+
+	if (wpt->description) {
+		strncpy(rte->cmnt, wpt->description, sizeof(rte->cmnt));
+		rte->cmnt[sizeof(rte->ident)-1] = 0;
+	} else  {
+		rte->cmnt[0] = 0;
+	}
+	cur_tx_routelist_entry++;
+}
+
+static void
+route_noop(const route_head *wp)
+{
+}
+
+static void
+route_write(void)
+{
+	int i;
+	int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
+
+	tx_routelist = xcalloc(n,sizeof(GPS_PWay));
+	cur_tx_routelist_entry = tx_routelist;
+
+	for (i = 0; i < n; i++) {
+		tx_routelist[i] = sane_GPS_Way_New();
+	}
+
+	route_disp_all(route_hdr_pr, route_noop, route_waypt_pr);
+	GPS_Command_Send_Route(portname, tx_routelist, n);
+}
+
+static void
+data_write()
+{
+	switch(global_opts.objective) {
+		case wptdata:
+			waypoint_write();
+			break;
+		case rtedata:
+			route_write();
+			break;
+		default:
+			fatal(MYNAME ":writing tracks isn't supported\n");
+	}
+
+}
+
 
 ff_vecs_t garmin_vecs = {
 	rw_init,
