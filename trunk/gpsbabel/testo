@@ -3,10 +3,23 @@ export GPSBABEL_FREEZE_TIME
 
 PNAME=${PNAME:-./gpsbabel}
 DIFF=${DIFF:-diff}
+OD=${OD:-od -Ax -txC -v}
 
 TMPDIR=/tmp/gpsbabel.$$
 mkdir -p $TMPDIR
 trap "rm -fr $TMPDIR" 0 1 2 3 15
+
+bincompare()
+{
+	rm -f ${TMPDIR}/bc1
+        rm -f ${TMPDIR}/bc2
+        ${OD} $1 >${TMPDIR}/bc1 
+        ${OD} $2 >${TMPDIR}/bc2
+        ${DIFF} ${TMPDIR}/bc1 ${TMPDIR}/bc2 || {
+		echo ERROR binary comparing $*
+                exit 1
+	}
+}
 
 compare()
 {
@@ -161,6 +174,12 @@ ${PNAME} -i magnav -f ${TMPDIR}/magnav.pdb -o gpsutil -F ${TMPDIR}/magnav.gpu
 ${PNAME} -i magnav -f reference/magnav.pdb -o gpsutil -F ${TMPDIR}/magnavt.gpu
 compare ${TMPDIR}/magnavt.gpu ${TMPDIR}/magnav.gpu
 compare reference/gu.wpt ${TMPDIR}/magnav.gpu
+
+rm -f ${TMPDIR}/magnav.pdb
+${PNAME} -i geo -f geocaching.loc -o magnav -F ${TMPDIR}/magnav.pdb
+bincompare ${TMPDIR}/magnav.pdb reference/magnav.pdb
+
+
 
 # GPSPilot Tracker for PalmOS
 # This test is eerily similar to the NAV Companion test.  In fact, the 
@@ -501,6 +520,17 @@ ${DIFF} ${TMPDIR}/gpl1.gpx ${TMPDIR}/gpl2.gpx
 #
 rm -f ${TMPDIR}/netstumbler.mps
 ${PNAME} -i netstumbler -f reference/netstumbler.txt -o mapsource -F ${TMPDIR}/netstumbler.mps
-compare ${TMPDIR}/netstumbler.mps reference/netstumbler.mps
+bincompare ${TMPDIR}/netstumbler.mps reference/netstumbler.mps
+
+#
+# XCSV "human readable" tests
+#
+rm -f ${TMPDIR}/humanread.out
+${PNAME} -i xcsv,style=reference/humanread.style -f reference/human.in -o arc -F ${TMPDIR}/humanread.out
+compare ${TMPDIR}/humanread.out reference/humanread.out
+
+rm -f ${TMPDIR}/humanwrite.out
+${PNAME} -i xcsv,style=reference/humanread.style -f reference/human.in -o xcsv,style=reference/humanwrite.style -F ${TMPDIR}/humanwrite.out
+compare ${TMPDIR}/humanwrite.out reference/humanwrite.out
 
 exit 0
