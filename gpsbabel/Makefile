@@ -14,7 +14,7 @@ DEBUGGING=-g $(EXTRA_DEBUGGING)
 CFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -Icoldsync $(INHIBIT_EXPAT) $(OPTIMIZATION)
 INSTALL_TARGETDIR=/usr/local/
 
-FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
+FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	gpsutil.o pcx.o cetus.o copilot.o gpspilot.o magnav.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
@@ -111,7 +111,7 @@ mac-release:
 arcdist.o: arcdist.c defs.h queue.h grtcirc.h
 cetus.o: cetus.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 copilot.o: copilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
-csv_util.o: csv_util.c defs.h queue.h csv_util.h
+csv_util.o: csv_util.c defs.h queue.h csv_util.h grtcirc.h
 delgpl.o: delgpl.c defs.h queue.h
 duplicate.o: duplicate.c defs.h queue.h
 easygps.o: easygps.c defs.h queue.h
@@ -122,15 +122,18 @@ garmin.o: garmin.c defs.h queue.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsmath.h jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h \
   garmin_tables.h
+garmin_tables.o: garmin_tables.c garmin_tables.h
 gcdb.o: gcdb.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 geo.o: geo.c defs.h queue.h
 geoniche.o: geoniche.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
-gpilots.o: gpilots.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
+gpilots.o: gpilots.c defs.h queue.h coldsync/palm.h coldsync/pdb.h \
+  garmin_tables.h
 gpspilot.o: gpspilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 gpsutil.o: gpsutil.c defs.h queue.h magellan.h
 gpx.o: gpx.c defs.h queue.h
 grtcirc.o: grtcirc.c defs.h queue.h
 holux.o: holux.c defs.h queue.h holux.h
+hsa_ndv.o: hsa_ndv.c defs.h queue.h
 html.o: html.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
@@ -144,6 +147,7 @@ mapsend.o: mapsend.c defs.h queue.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h
 navicache.o: navicache.c defs.h queue.h
+netstumbler.o: netstumbler.c defs.h queue.h csv_util.h
 nmea.o: nmea.c defs.h queue.h
 ozi.o: ozi.c defs.h queue.h csv_util.h
 palmdoc.o: palmdoc.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h \
@@ -164,6 +168,7 @@ reverse_route.o: reverse_route.c defs.h queue.h
 route.o: route.c defs.h queue.h
 saroute.o: saroute.c defs.h queue.h
 smplrout.o: smplrout.c defs.h queue.h grtcirc.h
+sort.o: sort.c defs.h queue.h
 text.o: text.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
@@ -177,6 +182,7 @@ tpg.o: tpg.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
   jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
   jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 util.o: util.c defs.h queue.h
+util_crc.o: util_crc.c
 vecs.o: vecs.c defs.h queue.h csv_util.h
 vmem.o: vmem.c defs.h queue.h
 waypt.o: waypt.c defs.h queue.h
@@ -243,4 +249,4 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h defs.h queue.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h \
   jeeps/gpsnmeaget.h
 internal_styles.c: mkstyle.sh style/README.style style/arc.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/s_and_t.style style/saplus.style style/tabsep.style style/xmap.style style/xmapwpt.style
-	./mkstyle.sh > internal_styles.c || (rm -f dep ; exit 1)
+	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)

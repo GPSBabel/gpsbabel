@@ -160,7 +160,7 @@ mps_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 {
 	icon_mapping_t *i;
 
-	for (i = icon_table; i->icon; i++) {
+	for (i = garmin_icon_table; i->icon; i++) {
 		switch (garmin_format) {
 			case MAPSOURCE:
 				if (icon == i->mpssymnum)
@@ -197,7 +197,7 @@ mps_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
 		return n;
 	}
 
-	for (i = icon_table; i->icon; i++) {
+	for (i = garmin_icon_table; i->icon; i++) {
 		if (case_ignore_strcmp(desc,i->icon) == 0) {
 			switch (garmin_format) {
 			case MAPSOURCE:
@@ -1732,7 +1732,7 @@ mps_read(void)
 	mps_fileHeader_r(mps_file_in, &mps_ver_in);
 
 #ifdef DUMP_ICON_TABLE
-	printf("static icon_mapping_t icon_table[] = {\n");
+	printf("static icon_mapping_t garmin_icon_table[] = {\n");
 #endif
 
 	morework = 1;
