@@ -5,8 +5,13 @@
 # INHIBIT_EXPAT=-DNO_EXPAT
 LIBEXPAT=-lexpat
 
+#
+# Enable either or both of these as you wish.
+#
+OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
+DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
-CFLAGS=$(EXTRA_CFLAGS) -g -Icoldsync  $(INHIBIT_EXPAT)
+CFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -Icoldsync $(INHIBIT_EXPAT) $(OPTIMIZATION)
 INSTALL_TARGETDIR=/usr/local/
 
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o \
@@ -63,8 +68,8 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e "\t./mkstyle.sh > $@ || (rm -f $@ ; exit 1)" ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_1_1_beta00514003
-VERSIOND=1.1.1_beta00514003
+VERSIONU=1_1_1_beta07312003
+VERSIOND=1.1.1_beta07312003
 release:
 	rm -fr gpsbabel-$(VERSIOND)
 	cvs tag gpsbabel_$(VERSIONU)
