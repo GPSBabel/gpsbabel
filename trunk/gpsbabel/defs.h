@@ -133,6 +133,20 @@ typedef struct xml_tag {
 typedef struct {
 	queue Q;
 	position position;
+
+	/* 
+	 * The "thickness" of a waypoint; adds an element of 3D.  Can be
+	 * used to construct rudimentary polygons for, say, airspace 
+	 * definitions.
+	 */
+	double depth;
+
+	/*
+	 * An alarm trigger value that can be considered to be a circle
+	 * surrounding a waypoint (or cylinder if depth is also defined)
+	 */
+	double proximity;
+
 	/* shortname is a waypoint name as stored in receiver.  It should
 	 * strive to be, well, short, and unique.   Enforcing length and
 	 * character restrictions is the job of the output.   A typical
