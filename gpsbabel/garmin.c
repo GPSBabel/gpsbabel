@@ -394,13 +394,17 @@ waypoint_write(void)
 		ident = global_opts.synthesize_shortnames ? 
 				mkshort(mkshort_handle, src) : 
 				wpt->shortname;
-		strncpy(way[i]->ident,  ident, sizeof(way[i]->ident));
+		/* Should not be a strcpy as 'ident' isn't really a C string,
+		 * but rather a garmin "fixed length" buffer that's padded
+		 * to the end with spaces.  So this is NOT (strlen+1).
+		 */
+		memcpy(way[i]->ident, ident, strlen(ident));
 		if (global_opts.synthesize_shortnames) { 
 			xfree(ident);
 		}
 		way[i]->ident[sizeof(way[i]->ident)-1] = 0;
 		if (src && strlen(src)) {
-			strncpy(way[i]->cmnt, src, sizeof(way[i]->cmnt));
+			memcpy(way[i]->cmnt, src, strlen(src));
 		}
 		way[i]->lon = wpt->longitude;
 		way[i]->lat = wpt->latitude;
