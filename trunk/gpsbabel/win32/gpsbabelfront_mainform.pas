@@ -1,6 +1,6 @@
 {
 
-		Copyright (C) 2002 Josh M. McKee, geo@mrsnazz.com
+    Copyright (C) 2002 Josh M. McKee, mrsnazz@users.sourceforge.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,6 +18,16 @@
 
 }
 
+{
+    1.0.0   JMc   First release
+    1.0.1   JMc   - Switched to using AddFormat for populating the formats table
+                  - Updated formats table to include currently supported formats
+                  - Switched to using CreateProcess rather than WinExec, so that
+                    we can display data from stderr to the user.
+    1.0.2   JMc   - Added LoadFormats to call the new -^ switch, to dynamically
+                    load the supported formats from gpsbabel.exe.
+}
+
 unit gpsbabelfront_mainform;
 
 interface
@@ -26,12 +36,9 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, StdCtrls;
 
-const
-	FormatCount = 18;
-
 type
-	TFormat = record
-  	sType:string; // type to be passed to GPSBabel
+  TFormat = record
+    sType:string; // type to be passed to GPSBabel
     sExt:string;  // default file extension
     sDesc:string; // description of format
   end;
@@ -51,15 +58,20 @@ type
     btnOutput: TButton;
     OpenDialogInput: TOpenDialog;
     SaveDialogOutput: TSaveDialog;
+    Label4: TLabel;
+    Label5: TLabel;
+    memoStdErr: TMemo;
+    Label6: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnInputClick(Sender: TObject);
     procedure btnOutputClick(Sender: TObject);
     procedure btnProcessClick(Sender: TObject);
-  private
-    { Private declarations }
   public
-    { Public declarations }
-    formats:array[0..FormatCount-1] of TFormat;
+    formats:array of TFormat;
+    nFormatCount:integer;
+
+    procedure LoadFormats;
+    procedure AddFormat(sType,sExt,sDesc:string);
 
     procedure PopulateCombos;
     procedure PopulateDialogs;
@@ -72,29 +84,40 @@ implementation
 
 {$R *.dfm}
 
+procedure TFormGPSBabelFront.AddFormat(sType,sExt,sDesc:string);
+begin
+  SetLength(formats,nFormatCount+1);
+
+  formats[nFormatCount].sType := sType;
+  formats[nFormatCount].sExt := sExt;
+  formats[nFormatCount].sDesc := sDesc;
+
+  inc(nFormatCount);
+end;
+
 procedure TFormGPSBabelFront.PopulateCombos;
 var
-	i:integer;
+  i:integer;
 begin
-	for i:=0 to FormatCount-1 do begin
-  	comboInput.items.add(formats[i].sDesc);
+  for i:=0 to nFormatCount-1 do begin
+    comboInput.items.add(formats[i].sDesc);
     comboOutput.items.add(formats[i].sDesc);
   end;
 end;
 
 procedure TFormGPSBabelFront.PopulateDialogs;
 var
-	i:integer;
+  i:integer;
 begin
-	OpenDialogInput.Filter := '';
+  OpenDialogInput.Filter := '';
   SaveDialogOutput.Filter := '';
-	for i:=0 to FormatCount-1 do begin
-		if (formats[i].sExt<>'') then begin
-    	OpenDialogInput.Filter := OpenDialogInput.Filter + formats[i].sDesc + ' (*.' +
-    		formats[i].sExt + ')|*.' + uppercase(formats[i].sExt) + '|';
+  for i:=0 to nFormatCount-1 do begin
+    if (formats[i].sExt<>'') then begin
+      OpenDialogInput.Filter := OpenDialogInput.Filter + formats[i].sDesc + ' (*.' +
+        formats[i].sExt + ')|*.' + uppercase(formats[i].sExt) + '|';
 
-			SaveDialogOutput.Filter := SaveDialogOutput.Filter + formats[i].sDesc + ' (*.' +
-  	  	formats[i].sExt + ')|*.' + uppercase(formats[i].sExt) + '|';
+      SaveDialogOutput.Filter := SaveDialogOutput.Filter + formats[i].sDesc + ' (*.' +
+        formats[i].sExt + ')|*.' + uppercase(formats[i].sExt) + '|';
     end;
   end;
 
@@ -104,112 +127,256 @@ end;
 
 procedure TFormGPSBabelFront.FormCreate(Sender: TObject);
 begin
-	formats[0].sType := 'geo';
-  formats[0].sExt := 'loc';
-  formats[0].sDesc := 'Geocaching.com .loc';
-	formats[1].sType := 'gpsman';
-  formats[1].sExt := '';
-  formats[1].sDesc := 'GPSman';
-	formats[2].sType := 'gpx';
-	formats[2].sExt := 'gpx';
-  formats[2].sDesc := 'GPX XML';
-  formats[3].sType := 'magellan';
-  formats[3].sExt := '';
-  formats[3].sDesc := 'Magellan protocol';
-	formats[4].sType := 'mapsend';
-  formats[4].sExt := '';
-  formats[4].sDesc := 'Magellan Mapsend';
-  formats[5].sType := 'pcx';
-  formats[5].sExt := 'pcx';
-  formats[5].sDesc := 'Garmin PCX5';
-  formats[6].sType := 'mapsource';
-  formats[6].sExt := '';
-  formats[6].sDesc := 'Garmin Mapsource';
-  formats[7].sType := 'gpsutil';
-  formats[7].sExt := '';
-  formats[7].sDesc := 'gpsutil';
-  formats[8].sType := 'tiger';
-  formats[8].sExt := '';
-  formats[8].sDesc := 'U.S. Census Bureau Tiger Mapping Service';
-  formats[9].sType := 'csv';
-  formats[9].sExt := 'csv';
-  formats[9].sDesc := 'Comma separated values';
-  formats[10].sType := 'dna';
-  formats[10].sExt := 'dna';
-  formats[10].sDesc := 'Navitrak DNA marker format';
-  formats[11].sType := 'psp';
-  formats[11].sExt := 'psp';
-  formats[11].sDesc := 'MS PocketStreets 2002 Pushpin';
-	formats[12].sType := 'cetus';
-  formats[12].sExt := 'pdb';
-  formats[12].sDesc := 'Cetus for Palm/OS';
-  formats[13].sType := 'gpspilot';
-  formats[13].sExt := '';
-  formats[13].sDesc := 'GPSPilot Tracker for Palm/OS';
-  formats[14].sType := 'garmin';
-  formats[14].sExt := '';
-  formats[14].sDesc := 'Garmin serial protocol';
-	formats[15].sType := 'mxf';
-  formats[15].sExt := 'mxf';
-  formats[15].sDesc := 'MapTech Exchange Format';
-	formats[16].sType := 'holux';
-  formats[16].sExt := 'wpo';
-  formats[16].sDesc := 'Holux (gm-100) .wpo Format';
-	formats[17].sType := 'ozi';
-  formats[17].sExt := 'ozi';
-  formats[17].sDesc := 'OziExplorer Waypoint';
+  nFormatCount := 0;
 
+  // load formats from GPSBabel.exe
+  LoadFormats;
+
+  if nFormatCount = 0 then begin
+    ShowMessage('Unable to load format list from GPSBabel.exe. Default format list is being used instead.');
+
+    // add the default formats
+    AddFormat('geo','loc','Geocaching.com .loc');
+    AddFormat('gpsman','','GPSman');
+    AddFormat('gpx','gpx','GPX XML');
+    AddFormat('magellan','','Magellan protocol');
+    AddFormat('mapsend','','Magellan Mapsend');
+    AddFormat('pcx','pcx','Garmin PCX5');
+    AddFormat('mapsource','','Garmin Mapsource');
+    AddFormat('gpsutil','','gpsutil');
+    AddFormat('tiger','','U.S. Census Bureau Tiger Mapping Service');
+    AddFormat('csv','csv','Comma seperated values');
+    AddFormat('xmap','','Delorme Topo USA4/XMap Conduit');
+    AddFormat('dna','dna','Navitrak DNA marker format');
+    AddFormat('psp','psp','MS PocketStreets 2002 Pushpin');
+    AddFormat('cetus','','Cetus for Palm/OS');
+    AddFormat('gpspilot','','GPSPilot Tracker for Palm/OS');
+    AddFormat('magnav','','Magellan NAV Companion for PalmOS');
+    AddFormat('garmin','','Garmin serial protocol');
+    AddFormat('mxf','mxf','MapTech Exchange Format');
+    AddFormat('holux','wpo','Holux (gm-100) .wpo Format');
+    AddFormat('ozi','ozi','OziExplorer Waypoint');
+    AddFormat('tpg','tpg','National Geographic Topo .tpg');
+    AddFormat('tmpro','tmpro','TopoMapPro Places File');
+  end;
+
+  // Set up the dropdown lists and open/save dialog filters using the formats
   PopulateCombos;
   PopulateDialogs;
 end;
 
 procedure TFormGPSBabelFront.btnInputClick(Sender: TObject);
 var
-	sExt:string;
+  sExt:string;
   i:integer;
 begin
-	if opendialoginput.Execute then begin
-  	editInput.Text := opendialoginput.filename;
+  if opendialoginput.Execute then begin
+    editInput.Text := opendialoginput.filename;
     sExt := uppercase(ExtractFileExt(editInput.text));
-		for i := 0 to FormatCount-1 do begin
-    	if '.' + uppercase(formats[i].sExt) = sExt then comboInput.ItemIndex := i;
+    for i := 0 to nFormatCount-1 do begin
+      if '.' + uppercase(formats[i].sExt) = sExt then comboInput.ItemIndex := i;
     end;
   end;
 end;
 
 procedure TFormGPSBabelFront.btnOutputClick(Sender: TObject);
 var
-	sExt:string;
+  sExt:string;
   i:integer;
 begin
-	if savedialogoutput.Execute then begin
-  	editOutput.Text := savedialogoutput.filename;
+  if savedialogoutput.Execute then begin
+    editOutput.Text := savedialogoutput.filename;
     sExt := uppercase(ExtractFileExt(editOutput.text));
-		for i := 0 to FormatCount-1 do begin
-    	if '.' + uppercase(formats[i].sExt) = sExt then comboOutput.ItemIndex := i;
+    for i := 0 to nFormatCount-1 do begin
+      if '.' + uppercase(formats[i].sExt) = sExt then comboOutput.ItemIndex := i;
     end;
   end;
 end;
 
-procedure TFormGPSBabelFront.btnProcessClick(Sender: TObject);
+procedure TFormGPSBabelFront.LoadFormats;
 var
-	sIgnoreShort:string;
+  sIgnoreShort:string;
   sCmd:string;
   f:file;
-begin
-	if cbIgnoreShort.checked then sIgnoreShort := '-s' else sIgnoreShort := '';
+  Buffer:array[0..255] of char;
+  hRead,hWrite:THandle;
+  StartupInfo:TStartupInfo;
+  ProcessInfo:TProcessInformation;
+  saAttr:TSecurityAttributes;
+  OutSt:TMemoryStream;
+  dwRead:DWord;
+  dwExitCode:cardinal;
+  overlapped:TOverlapped;
+  slstFormats:TStringList;
+  i:integer;
 
+  procedure ExtractFormat(sFormat:string);
+  var
+    toks:array[0..2] of string;
+    i,nTok,nLen:integer;
+  begin
+    i := 1;
+    nTok := 0;
+    toks[0] := '';
+    toks[1] := '';
+    toks[2] := '';
+    nLen := length(sFormat);
+    while ((i<=nLen) and (nTok<3)) do begin
+      if sFormat[i]=#9 then begin
+        inc(nTok);
+      end else begin
+        toks[nTok] := toks[nTok] + sFormat[i];
+      end;
+      inc(i);
+    end;
+    {showmessage(toks[0]);
+    showmessage(toks[1]);
+    showmessage(toks[2]);}
+    
+    AddFormat(toks[0],toks[1],toks[2]);
+  end;
+
+begin
+  slstFormats := TStringList.Create;
+
+  sCmd := 'GPSBabel -^';
+
+  memoStdErr.lines.clear;
+
+  saAttr.nLength := sizeof(TSECURITYATTRIBUTES);
+  saAttr.bInheritHandle := true;
+  saAttr.lpSecurityDescriptor := nil;
+
+  if not CreatePipe(hRead, hWrite,@saAttr,0) then begin
+    ShowMessage('Unable to create pipe!');
+    Exit;
+  end;
+
+  AllocConsole;
+
+  FillChar(StartupInfo,Sizeof(StartupInfo),#0);
+  StartupInfo.cb := Sizeof(StartupInfo);
+  StartupInfo.dwFlags := STARTF_USESHOWWINDOW or STARTF_USESTDHANDLES;
+  StartupInfo.wShowWindow := SW_HIDE and SW_SHOWMINNOACTIVE;
+  StartupInfo.hStdInput := GetStdHandle(STD_INPUT_HANDLE);
+  StartupInfo.hStdOutput:= hWrite;
+  StartupInfo.hStdError := hWrite;
+
+  if not CreateProcess(nil,pchar(sCmd),nil,nil,true,CREATE_NEW_CONSOLE,nil,nil,StartupInfo,ProcessInfo) then begin
+    ShowMessage('Unable to execute GPSBabel.exe.')
+  end else begin
+    while (WaitforSingleObject(ProcessInfo.hProcess,0)) <> WAIT_OBJECT_0 do;
+
+    PeekNamedPipe(hRead,nil,0,nil,@dwRead,nil);
+
+    if dwRead>0 then begin
+      OutSt := TMemoryStream.Create;
+
+      repeat
+        if ReadFile(hRead, Buffer, 80, dwRead, nil) then begin
+          OutSt.WriteBuffer(Buffer, dwRead)
+      end;
+      until dwRead<>80;
+
+      OutSt.Seek(0,0);
+      slstFormats.LoadFromStream(OutSt);
+      for i:=0 to slstFormats.count-1 do begin
+        ExtractFormat(slstFormats[i]);
+      end;
+      OutSt.Free;
+    end else memoStdErr.lines.add('Command executed successfully.');
+  end;
+
+  CloseHandle(hRead); CloseHandle(hWrite);
+  FreeConsole;
+end;
+
+procedure TFormGPSBabelFront.btnProcessClick(Sender: TObject);
+var
+  sIgnoreShort:string;
+  sCmd:string;
+  f:file;
+  Buffer:array[0..255] of char;
+  hRead,hWrite:THandle;
+  StartupInfo:TStartupInfo;
+  ProcessInfo:TProcessInformation;
+  saAttr:TSecurityAttributes;
+  OutSt:TMemoryStream;
+  dwRead:DWord;
+  dwExitCode:cardinal;
+  overlapped:TOverlapped;
+begin
+  if (comboInput.ItemIndex)<0 then begin
+    ShowMessage('You must select the input file format.');
+    exit;
+  end;
+
+  if (comboOutput.ItemIndex)<0 then begin
+    ShowMessage('You must select the output file format.');
+    exit;
+  end;
+
+  if cbIgnoreShort.checked then sIgnoreShort := '-s' else sIgnoreShort := '';
+
+  // The output file must exist, or else ExtractShortPathName will not function
   if not fileexists(editoutput.text) then begin
-		system.assign(f,editoutput.text);
-		system.rewrite(f);
+    system.assign(f,editoutput.text);
+    system.rewrite(f);
     system.close(f);
   end;
 
+  // Construct the command line to execute gpsbabel.exe. ExtractShortPathName
+  // is used to reduce any "long" file/directory names in the paths down to
+  // 8.3 dos format names (this removes spaces, etc).
   sCmd := 'GPSBabel '+sIgnoreShort+' -i '+formats[comboInput.itemindex].sType+' -f '+
-  	ExtractShortPathName(editInput.text)+' -o '+formats[comboOutput.itemindex].sType+' -F '+
-    ExtractShortPathName(editOutput.text) + ' > result.txt';
+    ExtractShortPathName(editInput.text)+' -o '+formats[comboOutput.itemindex].sType+' -F '+
+    ExtractShortPathName(editOutput.text);
 
-	WinExec(pchar(sCmd),SW_SHOW);
+  memoStdErr.lines.clear;
+
+  saAttr.nLength := sizeof(TSECURITYATTRIBUTES);
+  saAttr.bInheritHandle := true;
+  saAttr.lpSecurityDescriptor := nil;
+
+  if not CreatePipe(hRead, hWrite,@saAttr,0) then begin
+    ShowMessage('Unable to create pipe!');
+    Exit;
+  end;
+
+  AllocConsole;
+
+  FillChar(StartupInfo,Sizeof(StartupInfo),#0);
+  StartupInfo.cb := Sizeof(StartupInfo);
+  StartupInfo.dwFlags := STARTF_USESHOWWINDOW or STARTF_USESTDHANDLES;
+  StartupInfo.wShowWindow := SW_HIDE and SW_SHOWMINNOACTIVE;
+  StartupInfo.hStdInput := GetStdHandle(STD_INPUT_HANDLE);
+  StartupInfo.hStdOutput:= hWrite;
+  StartupInfo.hStdError := hWrite;
+
+  if not CreateProcess(nil,pchar(sCmd),nil,nil,true,CREATE_NEW_CONSOLE,nil,nil,StartupInfo,ProcessInfo) then begin
+    ShowMessage('Unable to execute GPSBabel.exe.')
+  end else begin
+    while (WaitforSingleObject(ProcessInfo.hProcess,0)) <> WAIT_OBJECT_0 do;
+
+    PeekNamedPipe(hRead,nil,0,nil,@dwRead,nil);
+
+    if dwRead>0 then begin
+      OutSt := TMemoryStream.Create;
+
+      repeat
+        if ReadFile(hRead, Buffer, 80, dwRead, nil) then begin
+          OutSt.WriteBuffer(Buffer, dwRead)
+      end;
+      until dwRead<>80;
+
+      OutSt.Seek(0,0);
+      memoStdErr.lines.LoadFromStream(OutSt);
+      OutSt.Free;
+    end else memoStdErr.lines.add('Command executed successfully.');
+  end;
+
+  CloseHandle(hRead); CloseHandle(hWrite);
+  FreeConsole;
 end;
 
 end.
