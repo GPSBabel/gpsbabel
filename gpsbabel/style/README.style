@@ -290,6 +290,18 @@ The fields used by the XCSV parser are as follows:
             to the letter "n" in "min" and the letter "e" in "deg."
    example: IFIELD LAT_HUMAN_READABLE,"","%d %d %f%c" (writes 31 40 00.000N)
 
+ o LAT_NMEA
+   Defines the latitude in the format used by the NMEA standard which is
+   degrees multiplied by 100 plus decimal minutes.
+
+   example: IFIELD  LAT_NMEA, "%f", "%08.3f"	(writes  3558.322)
+
+ o LON_NMEA
+   Defines the longitude in the format used by the NMEA standard which is
+   degrees multiplied by 100 plus decimal minutes.
+
+   example: IFIELD  LON_NMEA, "%f", "%010.3f"   (writes -08708.082)
+
  o LON_HUMAN_READABLE
    See LAT_HUMAN_READABLE except LON_HUMAN_READABLE defines LONGITUDE.
 
