@@ -92,7 +92,7 @@ vcf_disp(const waypoint *wpt)
 	fprintf(file_out, "\\n\\nHINT:\\n");
 	vcf_print(wpt->gc_data.hint);
 
-	fprintf(file_out, "END:VCARD\n");
+	fprintf(file_out, "\nEND:VCARD\n");
 }
 
 static void
