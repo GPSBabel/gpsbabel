@@ -1,0 +1,21 @@
+st2gpx known issues
+
+
+Features:
+
+	Depends on ADO2.5
+
+	Known to work with Autoroute 2001, 
+
+	Probably works with Autoroute 2002-3, Streets & Trips 2000-4, Mappoint 2000-4, 
+	but not fully tested 
+
+	Overwrites output files without warning
+
+
+Bugs:
+
+	Problem with input name "steph's  wedding.est",
+	but "steph's wedding.est" is ok (single space)
+	
+	with input file "Plesivec - Plešivec.gpx" we fail to open the gpx as input
