@@ -802,7 +802,9 @@ gpx_rd_init(const char *fname)
 	 * this across reads and we unlock the safety belt from the 
 	 * leak tester.
 	 */
-	xsi_schema_loc = strdup(DEFAULT_XSI_SCHEMA_LOC);
+	if (!xsi_schema_loc) {
+		xsi_schema_loc = strdup(DEFAULT_XSI_SCHEMA_LOC);
+	}
 	if (!xsi_schema_loc) {
 		fatal("gpx: Unable to allocate %d bytes of memory.\n", strlen(DEFAULT_XSI_SCHEMA_LOC) + 1);
 	}
