@@ -73,6 +73,7 @@ extern ff_vecs_t hiketech_vecs;
 extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t overlay_vecs;
+extern ff_vecs_t google_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -334,6 +335,12 @@ vecs_t vec_list[] = {
 		"overlay",
 		"GeoGrid-Viewer",
 		"ovl"
+	},
+	{
+		&google_vecs,
+		"google",
+		"Google Maps XML",
+		"xml"
 	},
 	{
 		NULL,
