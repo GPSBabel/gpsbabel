@@ -212,7 +212,7 @@ static void
 ez_disp(const waypoint *wpt)
 {
 	char tbuf[8];
-	fprintf(file_out, "W", 0xb);
+	fprintf(file_out, "W");
 	if (wpt->shortname) {
 		fputc(1, file_out);
 		write_pstring(wpt->shortname);

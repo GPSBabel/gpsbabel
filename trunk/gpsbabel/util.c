@@ -372,7 +372,7 @@ le_read32(void *addr)
  *  in host endianness.
  */
 void
-le_read64(void *dest, void *src)
+le_read64(void *dest, const void *src)
 {
 	char *cdest = dest;
 	char *csrc = src;

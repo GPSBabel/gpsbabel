@@ -184,7 +184,7 @@ data_read(void)
 			/* blah */
 			break;
 		default:
-			fatal(MYNAME ": Unknown file type 0x%x\n", pdb->type);
+			fatal(MYNAME ": Unknown file type 0x%x\n", (int) pdb->type);
 	}
 	
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
