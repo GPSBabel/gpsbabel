@@ -244,11 +244,13 @@ mapsend_waypt_pr(waypoint *waypointp)
 	double falt;
 	double flong;
 	double flat;
-static int cnt = 0;
+	static int cnt = 0;
+	const char *sn = global_opts.synthesize_shortnames ? 
+		mkshort(waypointp->description) : waypointp->shortname;
 
-	c = strlen(waypointp->shortname);
+	c = strlen(sn);
 	fwrite(&c, 1, 1, mapsend_file_out);
-	fwrite(waypointp->shortname, c, 1, mapsend_file_out);
+	fwrite(sn, c, 1, mapsend_file_out);
 
 	c = strlen(waypointp->description);
 	fwrite(&c, 1, 1, mapsend_file_out);
