@@ -194,6 +194,10 @@ pstrdup(char *src)
 void 
 rtrim(char *s)
 {
+	if (!s || !*s) {
+		return;
+	}
+
 	while (*s) {
 		s++;
 	}
