@@ -156,13 +156,14 @@ start_something_else(const char *el, const char **attrv)
 	
 	/* copy attributes */
 	avp = attrv;
-	new_tag->attributes = (char **)xcalloc(sizeof(char *),attr_count);
+	new_tag->attributes = (char **)xcalloc(sizeof(char *),attr_count+1);
 	avcp = new_tag->attributes;
 	while (*avp) {
 		*avcp = xstrdup(*avp);
 		avcp++;
 		avp++;
 	}
+	*avcp = NULL;
 	
 	if ( cur_tag ) {
 		if ( cur_tag->child ) {
@@ -597,7 +598,7 @@ fprint_xml_chain( xml_tag *tag )
 	char *tmp_ent;
 	while ( tag ) {
 		if ( !tag->cdata && !tag->child ) {
-			fprint_tag_and_attrs( "<", "/>", tag );
+			fprint_tag_and_attrs( "<", " />", tag );
 		}
 		else {
 			fprint_tag_and_attrs( "<", ">", tag );
