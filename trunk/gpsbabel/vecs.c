@@ -55,6 +55,7 @@ extern ff_vecs_t quovadis_vecs;
 extern ff_vecs_t gpilots_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t navicache_vecs;
+extern ff_vecs_t coastexp_vecs;
 extern ff_vecs_t psit_vecs;             /* MRCB */
 extern ff_vecs_t shape_vecs;
 extern ff_vecs_t geoniche_vecs;
@@ -222,6 +223,12 @@ vecs_t vec_list[] = {
 		&navicache_vecs,
 		"navicache",
 		"Navicache.com XML",
+		NULL
+	},
+	{
+		&coastexp_vecs,
+		"coastexp",
+		"CoastalExplorer.com XML",
 		NULL
 	},
 	{	/* MRCB */

@@ -401,6 +401,12 @@ ${PNAME} -i navicache -f reference/navicache.xml -o gpsutil -F ${TMPDIR}/navi.wp
 compare ${TMPDIR}/navi.wpt reference/navicache.ref
 #
 
+#
+# CoastalExplorer..
+${PNAME} -i coastexp -f reference/coastexp.nob -o gpx -F ${TMPDIR}/coastexp.gpx
+compare ${TMPDIR}/coastexp.gpx reference/coastexp.ref
+#
+
 # PsiTrex.  A text format that can't be handled by XCSV due to context of
 # data based on other data values in the file
 # Waypoints first

@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="34.019184000" minlon ="-122.441589000" maxlat="37.229349000" maxlon="-120.438209000" />
+<wpt lat="37.229349000" lon="-122.441589000">
+  <name>PESCDR01</name>
+  <cmt>PESCDR01</cmt>
+  <desc>PESCDR01</desc>
+</wpt>
+<wpt lat="37.183397000" lon="-122.411904000">
+  <name>PIGEON01</name>
+  <cmt>PIGEON01</cmt>
+  <desc>PIGEON01</desc>
+</wpt>
+<wpt lat="37.090736000" lon="-122.348775000">
+  <name>ANONUV01</name>
+  <cmt>ANONUV01</cmt>
+  <desc>ANONUV01</desc>
+</wpt>
+<wpt lat="36.929502000" lon="-122.113725000">
+  <name>SCRUZ01</name>
+  <cmt>SCRUZ01</cmt>
+  <desc>SCRUZ01</desc>
+</wpt>
+<wpt lat="36.934235000" lon="-122.022130000">
+  <name>SCRUZ02</name>
+  <cmt>SCRUZ02</cmt>
+  <desc>SCRUZ02</desc>
+</wpt>
+<wpt lat="36.960666000" lon="-122.024734000">
+  <name>SCRUZENT</name>
+  <cmt>SCRUZENT</cmt>
+  <desc>SCRUZENT</desc>
+</wpt>
+<wpt lat="36.581344000" lon="-121.995411000">
+  <name>CYPRSSPT</name>
+  <cmt>CYPRSSPT</cmt>
+  <desc>CYPRSSPT</desc>
+</wpt>
+<wpt lat="36.301110000" lon="-121.919097000">
+  <name>PTSUR</name>
+  <cmt>PTSUR</cmt>
+  <desc>PTSUR</desc>
+</wpt>
+<wpt lat="36.238177000" lon="-121.855209000">
+  <name>COOPERPT</name>
+  <cmt>COOPERPT</cmt>
+  <desc>COOPERPT</desc>
+</wpt>
+<wpt lat="36.225175000" lon="-121.801314000">
+  <name>PFEIFENT</name>
+  <cmt>PFEIFENT</cmt>
+  <desc>PFEIFENT</desc>
+</wpt>
+<wpt lat="36.230449000" lon="-121.797444000">
+  <name>PFEIFANC</name>
+  <cmt>PFEIFANC</cmt>
+  <desc>PFEIFANC</desc>
+</wpt>
+<wpt lat="35.879801000" lon="-121.498947000">
+  <name>SANMRT01</name>
+  <cmt>SANMRT01</cmt>
+  <desc>SANMRT01</desc>
+</wpt>
+<wpt lat="35.652801000" lon="-121.308485000">
+  <name>PDRSBLNC</name>
+  <cmt>PDRSBLNC</cmt>
+  <desc>PDRSBLNC</desc>
+</wpt>
+<wpt lat="35.623297000" lon="-121.185920000">
+  <name>SNSMNENT</name>
+  <cmt>SNSMNENT</cmt>
+  <desc>SNSMNENT</desc>
+</wpt>
+<wpt lat="35.640478000" lon="-121.183772000">
+  <name>SNSMNANC</name>
+  <cmt>SNSMNANC</cmt>
+  <desc>SNSMNANC</desc>
+</wpt>
+<wpt lat="35.572353000" lon="-121.152797000">
+  <name>CAMBRIA</name>
+  <cmt>CAMBRIA</cmt>
+  <desc>CAMBRIA</desc>
+</wpt>
+<wpt lat="35.449214000" lon="-121.020825000">
+  <name>PTESTERO</name>
+  <cmt>PTESTERO</cmt>
+  <desc>PTESTERO</desc>
+</wpt>
+<wpt lat="35.216602000" lon="-120.928391000">
+  <name>PTBUCHON</name>
+  <cmt>PTBUCHON</cmt>
+  <desc>PTBUCHON</desc>
+</wpt>
+<wpt lat="34.883361000" lon="-120.684631000">
+  <name>PTSAL01</name>
+  <cmt>PTSAL01</cmt>
+  <desc>PTSAL01</desc>
+</wpt>
+<wpt lat="34.884641000" lon="-120.652026000">
+  <name>PTSALENT</name>
+  <cmt>A description of the Point Sal Entrance mark</cmt>
+  <desc>A description of the Point Sal Entrance mark</desc>
+</wpt>
+<wpt lat="34.896555000" lon="-120.649124000">
+  <name>PTSALANC</name>
+  <cmt>PTSALANC</cmt>
+  <desc>PTSALANC</desc>
+</wpt>
+<wpt lat="34.758180000" lon="-120.642516000">
+  <name>PURSMAPT</name>
+  <cmt>PURSMAPT</cmt>
+  <desc>PURSMAPT</desc>
+</wpt>
+<wpt lat="34.572579000" lon="-120.663636000">
+  <name>PTARGLLO</name>
+  <cmt>PTARGLLO</cmt>
+  <desc>PTARGLLO</desc>
+</wpt>
+<wpt lat="34.113844000" lon="-120.492630000">
+  <name>SANMGL01</name>
+  <cmt>SANMGL01</cmt>
+  <desc>SANMGL01</desc>
+</wpt>
+<wpt lat="34.029483000" lon="-120.471409000">
+  <name>SANMGL02</name>
+  <cmt>SANMGL02</cmt>
+  <desc>SANMGL02</desc>
+</wpt>
+<wpt lat="34.019184000" lon="-120.444197000">
+  <name>SANMGL03</name>
+  <cmt>SANMGL03</cmt>
+  <desc>SANMGL03</desc>
+</wpt>
+<wpt lat="34.023478000" lon="-120.438209000">
+  <name>ADCOVENT</name>
+  <cmt>ADCOVENT</cmt>
+  <desc>ADCOVENT</desc>
+</wpt>
+<wpt lat="34.028615000" lon="-120.439696000">
+  <name>ADCOVANC</name>
+  <cmt>ADCOVANC</cmt>
+  <desc>ADCOVANC</desc>
+</wpt>
+<rte>
+  <name>Into The Bay</name>
+  <rtept lat="37.763290" lon="-122.282580">
+    <name>SFBALBAY</name>
+  </rtept>
+  <rtept lat="37.751613" lon="-122.339028">
+    <name>SFBAY001</name>
+  </rtept>
+  <rtept lat="37.817420" lon="-122.394305">
+    <name>SFBAY002</name>
+  </rtept>
+  <rtept lat="37.819339" lon="-122.478302">
+    <name>SFGGBRDG</name>
+  </rtept>
+  <rtept lat="37.773033" lon="-122.605838">
+    <name>SFCHNL01</name>
+  </rtept>
+  <rtept lat="37.518860" lon="-122.529914">
+    <name>HMCOLREF</name>
+  </rtept>
+  <rtept lat="37.482348" lon="-122.507704">
+    <name>HMPILL01</name>
+  </rtept>
+  <rtept lat="37.475062" lon="-122.488531">
+    <name>HMPILLPT</name>
+  </rtept>
+  <rtept lat="37.476448" lon="-122.475800">
+    <name>HMPILL02</name>
+  </rtept>
+</rte>
+</gpx>
