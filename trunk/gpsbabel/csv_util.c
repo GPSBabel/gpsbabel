@@ -34,6 +34,8 @@
 #define EXCEL_TO_TIMET(a) ((a - 25569.0) * 86400.0)
 #define TIMET_TO_EXCEL(a) ((a / 86400.0) + 25569.0)
 
+extern char *xcsv_urlbase;
+
 /*********************************************************************/
 /* csv_stringclean() - remove any unwanted characters from string.   */
 /*                     returns copy of string.                       */
@@ -651,7 +653,15 @@ xcsv_waypt_pr(const waypoint *wpt)
             sprintf(buff, fmp->printfc, wpt->notes);
         } else
         if (strcmp(fmp->key, "URL") == 0) {
-            sprintf(buff, fmp->printfc, wpt->url);
+	    int off = 0;
+	    if (xcsv_urlbase) {
+		strcpy(buff, xcsv_urlbase);
+		off = strlen(xcsv_urlbase);
+	    }
+	    if (wpt->url)
+		sprintf(buff + off, fmp->printfc, wpt->url);
+	    else
+		strcpy(buff, "\"\"");
         } else
         if (strcmp(fmp->key, "URL_LINK_TEXT") == 0) {
             sprintf(buff, fmp->printfc, wpt->url_link_text);
