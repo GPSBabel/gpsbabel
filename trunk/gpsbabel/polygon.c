@@ -276,7 +276,6 @@ polygon_process(void)
 		    if (((ed->state & INSIDE) == OUTSIDE ) == (exclopt == NULL)) {
 			waypt_del(wp);
 			waypt_free(wp);
-			continue;
 		    }
 		    xfree( ed );
 		}
