@@ -127,10 +127,17 @@ disp_filter_vecs(void)
  *  determine what formats are supported.
  */
 void
-disp_filters(void)
+disp_filters(int version)
 {
 	fl_vecs_t *vec;
-	for (vec = filter_vec_list; vec->vec; vec++) {
-		printf("%s\t%s\n", vec->name, vec->desc);
+
+	switch(version) {
+	case 0:
+		for (vec = filter_vec_list; vec->vec; vec++) {
+			printf("%s\t%s\n", vec->name, vec->desc);
+		}
+		break;
+	default:
+		;
 	}
 }

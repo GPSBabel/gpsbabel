@@ -273,12 +273,12 @@ void fatal(const char *, ...)
 
 ff_vecs_t *find_vec(char *, char **);
 void disp_vecs(void);
-void disp_formats(void);
+void disp_formats(int version);
 void printposn(const coord *c, int is_lat);
 
 filter_vecs_t * find_filter_vec(char *, char **);
 void free_filter_vec(filter_vecs_t *);
-void disp_filters(void);
+void disp_filters(int version);
 void disp_filter_vecs(void);
 
 #ifndef DEBUG_MEM
