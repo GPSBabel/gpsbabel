@@ -92,8 +92,8 @@ dep:
 
 VERSIONU=1_2_5_beta03272005-c
 VERSIOND=1.2.5_beta03272005-c
-#VERSIONU=1_2_4
-#VERSIOND=1.2.4
+VERSIONU=1_2_5
+VERSIOND=1.2.5
 
 release:
 	cvs commit
