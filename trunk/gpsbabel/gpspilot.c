@@ -128,9 +128,9 @@ gpspilot_writewpt(waypoint *wpt)
 
 	rec = xcalloc(sizeof(*rec)+46,1);
 	
-	be_write32(&rec->longitude, round(wpt->position.longitude.degrees * 3.6e6));
-	be_write32(&rec->latitude, round(wpt->position.latitude.degrees * 3.6e6));
-	be_write16(&rec->elevation, round(wpt->position.altitude.altitude_meters));
+	be_write32(&rec->longitude, si_round(wpt->position.longitude.degrees * 3.6e6));
+	be_write32(&rec->latitude, si_round(wpt->position.latitude.degrees * 3.6e6));
+	be_write16(&rec->elevation, si_round(wpt->position.altitude.altitude_meters));
 	be_write16(&rec->magvar, 0 );
 	
 	vdata = (char *)rec + sizeof(*rec);

@@ -171,7 +171,7 @@ le_write32(void *addr, unsigned value)
 }
 
 signed int 
-round( double d )
+si_round( double d )
 {
 	if ( d < 0 ) {
 		return (signed int)(d-0.5);
