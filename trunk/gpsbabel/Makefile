@@ -78,7 +78,7 @@ VERSIOND=1.2.1
 release:
 	./chkdoc
 	rm -fr gpsbabel-$(VERSIOND)
-	cvs tag gpsbabel_$(VERSIONU)
+	cvs tag -F gpsbabel_$(VERSIONU)
 	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
 	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
 	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
@@ -104,6 +104,7 @@ garmin.o: garmin.c defs.h queue.h jeeps/gps.h jeeps/gpsport.h \
   garmin_tables.h
 gcdb.o: gcdb.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 geo.o: geo.c defs.h queue.h
+geoniche.o: geoniche.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 gpilots.o: gpilots.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 gpspilot.o: gpspilot.c defs.h queue.h coldsync/palm.h coldsync/pdb.h
 gpsutil.o: gpsutil.c defs.h queue.h magellan.h
@@ -128,7 +129,7 @@ quovadis.o: quovadis.c quovadis.h defs.h queue.h coldsync/palm.h \
   coldsync/pdb.h
 route.o: route.c defs.h queue.h
 saroute.o: saroute.c defs.h queue.h
-smplrout.o: smplrout.c defs.h grtcirc.h
+smplrout.o: smplrout.c defs.h queue.h grtcirc.h
 tiger.o: tiger.c defs.h queue.h csv_util.h
 tmpro.o: tmpro.c defs.h queue.h csv_util.h
 tpg.o: tpg.c defs.h queue.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
