@@ -116,7 +116,7 @@ html_disp(const waypoint *wpt)
 			xfree( hint );
 		}
 	}
-	else if (strcmp(wpt->notes,wpt->description)) {
+	else if (!wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
 		fprintf (file_out, "<p class=\"notes\">%s</p>\n", wpt->notes);
 	}
 	fprintf(file_out, "</td></tr></table>\n");

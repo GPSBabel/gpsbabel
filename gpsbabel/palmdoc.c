@@ -454,7 +454,7 @@ palmdoc_disp(const waypoint *wpt)
 			xfree( hint );
 		}
 	}
-	else if (strcmp(wpt->notes,wpt->description)) {
+	else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
 		docprintf (10+strlen(wpt->notes), "%s\n", wpt->notes);
 	}
 	if (! suppresssep) 
