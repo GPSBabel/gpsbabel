@@ -543,6 +543,8 @@ DATA FILTERS
 	would remove multiple points that are within 1 foot of each other,
 	leaving just one.
 
+	You can also specify the "all" option, which would remove all 
+	of the points rather than leaving one.
 
     RADIUS
 
