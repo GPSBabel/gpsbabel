@@ -186,8 +186,8 @@ void show_usage()
 {
 	printf("st2gpx - Export data from MS Streets & Trips and Autoroute to GPX format\n\n");
 	// FIXME update this line
-	printf("Usage: st2gpx [-hre] [-v verbose-level] [-a annotations-file] [-u userdata-file] ");
-	printf("[-j journey-file] [-G gpx-file] stfile\n\n");
+	printf("Usage: st2gpx [-hr] [-v verbose-level] [-g gpx-in-file] [-G gpx-out-file]");
+	printf("              [-m mpst-in-file] [-M pcx5-out-file] [-F st-mod-file] stfile\n\n");
 	printf("-h : Help (this text)\n");
 	printf("-r : Export drawn-lines as routes instead of tracks\n");
 	printf("-g gpx-in-file    : Import data from GPX XML format gpx-in-file\n");
