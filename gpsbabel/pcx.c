@@ -77,6 +77,9 @@ data_read(void)
 	char ibuf[122];
 	struct tm tm;
 	route_head *track_head = NULL;
+	int n; 
+	char lathemi, lonhemi;
+
 
 	for(;fgets(ibuf, sizeof(ibuf), file_in);) {
 		switch (ibuf[0]) {
@@ -119,11 +122,22 @@ data_read(void)
 			}
 			break;
 		case 'T':
-			if (track_head == NULL) {
-				fatal(MYNAME ": track record found before track header.\n");
-			}
-			sscanf(ibuf, "T %lf %lf %s %s %ld", 
+			n = sscanf(ibuf, "T %lf %lf %s %s %ld", 
 				&lat, &lon, date, time, &alt);
+
+			if (n == 0) {
+				/* Attempt alternate PCX format used by 
+				 * www.radroutenplaner.nrw.de */
+				n = sscanf(ibuf, "T %c%lf %c%lf %s %s %ld", 
+				&lathemi, &lat, &lonhemi, &lon, date, 
+					time, &alt);
+				if (lathemi == 'S') lat = -lat;
+				if (lonhemi == 'W') lon = -lon;
+			} else if (n == 0) {
+				fatal(MYNAME ":Unrecognized track line '%s'", 
+						ibuf);
+			}
+
 			memset(&tm, 0, sizeof(tm));
 			tm.tm_hour = atoi(time);
 			tm.tm_min = atoi(time+3);
@@ -138,6 +152,12 @@ data_read(void)
 			wpt_tmp->latitude = lat;
 			wpt_tmp->longitude = lon;
 			wpt_tmp->altitude = alt;
+			/* Did we get a track point before a track header? */
+			if (track_head == NULL) {
+				track_head = route_head_alloc();
+				track_head->rte_name = strdup("Default");
+				track_add_head(track_head);
+			}
 			route_add_wpt(track_head, wpt_tmp);
 		default:
 			;
