@@ -157,10 +157,12 @@ mkshort_del_handle(void *h)
 		queue *e, *t;
 		QUEUE_FOR_EACH(&hdr->namelist[i], e, t) {
 			uniq_shortname *s = (uniq_shortname *) e;
+#if 0
 			if (global_opts.verbose_status >= 2 && s->conflictctr) {
 				fprintf(stderr, "%d Output name conflicts: '%s'\n",  
 					s->conflictctr, s->orig_shortname);
 			}
+#endif
 			dequeue(e);
 			xfree(s->orig_shortname);
 			xfree(s);
@@ -258,7 +260,6 @@ setshort_mustuniq(void *h, int i)
 	mkshort_handle *hdl = h;
 	hdl->must_uniq = i;
 }
-
 
 char *
 #ifdef DEBUG_MEM
