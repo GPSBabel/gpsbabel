@@ -434,7 +434,8 @@ retry:
 		found_done = 1;
 		return;
 	} 
-	mag_writeack(isum);
+	if (magrxstate != mrs_handoff)
+		mag_writeack(isum);
 }
 
 #if __WIN32__
@@ -450,6 +451,8 @@ mkspeed(bitrate)
 		case 4800: return CBR_4800;
 		case 9600: return CBR_9600;
 		case 19200: return CBR_19200;
+		case 57600: return CBR_57600;
+		case 115200: return CBR_115200;
 		default: return CBR_4800;
 	}
 }
@@ -581,6 +584,8 @@ mkspeed(unsigned br)
 		case 4800: return B4800;
 		case 9600: return B9600;
 		case 19200: return B19200;
+		case 57600: return B57600;
+		case 115200: return B115200;
 		default: return B4800;
 	}
 }
@@ -655,6 +660,7 @@ mag_rd_init(const char *portname, const char *args)
 {
 	time_t now, later;
 	char * bs = get_option(args, "baud");
+	char * noack = get_option(args, "noack");
 
 	if (bs) {
 		bitrate=atoi(bs);
@@ -662,7 +668,9 @@ mag_rd_init(const char *portname, const char *args)
 
 	terminit(portname);
 
-	mag_handon();
+	if (!noack)
+		mag_handon();
+
 	now = time(NULL);
 	/*
 	 * The 315 can take up to 4.25 seconds to respond to initialization
