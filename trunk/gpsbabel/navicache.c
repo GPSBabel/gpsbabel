@@ -192,7 +192,7 @@ nav_rd_deinit(void)
 void
 nav_wr_init(const char *fname, const char *args)
 {
-	fatal(MYNAME ": Does not support writing Navicache files.\n")
+	fatal(MYNAME ": Does not support writing Navicache files.\n");
 	ofd = fopen(fname, "w");
 	if (ofd == NULL) {
 		fatal(MYNAME ":Cannot open '%s' for writing\n", fname);
