@@ -248,6 +248,9 @@ my_read(void)
 					stringlen = 1;
 				}
 			}
+			if ( version > 10 ) {
+				Skip(infile,2*sizeof(long));
+			}
 			xfree(record);
 		}
 		/*
