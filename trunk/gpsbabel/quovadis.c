@@ -72,18 +72,6 @@ static int wpt_to_icon(geocache_type	type) {
     }
     return QUESTION_ICON;
 }
-#if 0
-static void
-docopy(ubyte*		dest,
-       const ubyte*	src,
-       const int	size)
-{
-    int i;
-    for (i = 0; i < size; i++) {
-	dest[i] = src[i];
-    }
-}
-#endif
 
 static void
 rd_init(const char *fname, const char *args)
