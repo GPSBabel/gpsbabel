@@ -125,12 +125,12 @@ vecs_t vec_list[] = {
 	{
 		&gpspilot_vecs,
 		"gpspilot",
+		"GPSPilot Tracker for Palm/OS"
 	},
 	{
 		&magnav_vec,
 		"magnav",
 		"Magellan NAV Companion for PalmOS"
-		"GPSPilot Tracker for Palm/OS"
 	},
 	{
 		&garmin_vecs,
