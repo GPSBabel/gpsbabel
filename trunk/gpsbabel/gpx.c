@@ -66,6 +66,8 @@ static void *mkshort_handle;
 static time_t file_time;
 
 static char *gsshortnames = NULL;
+static char *snlen = NULL;
+static char *suppresswhite = NULL;
 static char *urlbase = NULL;
 static route_head *trk_head;
 static route_head *rte_head;
@@ -901,7 +903,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 {
 	char *tmp_ent;
 	const char *oname = global_opts.synthesize_shortnames ?
-				  mkshort(mkshort_handle, waypointp->description) : 
+				  mkshort(mkshort_handle, waypointp->notes) : 
 				  waypointp->shortname;
 
 	fprintf(ofd, "<wpt lat=\"%lf\" lon=\"%lf\">\n",
@@ -1087,9 +1089,20 @@ void
 gpx_write(void)
 {
 	time_t now = 0;
+	int short_length;
 	
         time( &now );
-	setshort_length(mkshort_handle, 32);
+
+	if (snlen)
+		short_length = atoi(snlen);
+	else
+		short_length = 32;
+
+	if (suppresswhite) {
+		setshort_whitespace_ok(mkshort_handle, 0);
+	}
+
+	setshort_length(mkshort_handle, short_length);
 
 	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
 	fprintf(ofd, "<gpx\n version=\"1.0\"\n");
@@ -1119,6 +1132,8 @@ gpx_write(void)
 static
 arglist_t gpx_args[] = {
 	{ "gsshortnames", &gsshortnames, "Prefer shorter descriptions from Groundspeak files"},
+	{ "snlen", &snlen, "Length of generated shortnames" },
+	{ "suppresswhite", &suppresswhite, "Suppress whitspace in generated shortnames" },
 	{ 0, 0, 0}
 };
 
