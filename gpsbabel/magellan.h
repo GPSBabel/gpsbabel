@@ -29,7 +29,8 @@ typedef enum {
 	mm_map410,
 	mm_map330,
 	mm_gps310,
-	mm_meridian
+	mm_meridian,
+	mm_sportrak
 } meridian_model;
 
 typedef struct pid_to_model {
