@@ -29,6 +29,7 @@ extern queue waypt_head;
 
 static double pos_dist;
 static char *distopt;
+static char *purge_duplicates = NULL;
 static char *latopt;
 static char *lonopt;
 static char *exclopt;
@@ -44,6 +45,7 @@ static
 arglist_t position_args[] = {
 	{"distance", &distopt, "Maximum positional distance",
 		ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+	{"all", &purge_duplicates, "Suppress all points close to other points", ARGTYPE_BOOL }, 
 	{0, 0, 0, 0}
 };
 
@@ -125,6 +127,7 @@ position_process(void)
 	waypoint ** comp;
 	double dist;
 	int i, wc;
+	int del = 0;
 
 	wc = waypt_count();
 
@@ -151,7 +154,17 @@ position_process(void)
 		if (dist <= pos_dist) {
 			waypt_del(comp[i]);
 			waypt_free(comp[i]);
+			del = !!purge_duplicates;
 		}
+		else if (del ) {
+			waypt_del(comp[i]);
+			waypt_free(comp[i]);
+			del = 0;
+		}
+	}
+	if ( del ) {
+		waypt_del(comp[wc-1]);
+		waypt_free(comp[wc-1]);
 	}
 
 	if (comp)
