@@ -44,6 +44,7 @@ static char *oldmarker  = "redpin";
 static char *newmarker  = "greenpin";
 static char *unfoundmarker  = "bluepin";
 static char *suppresswhite = NULL;
+static char *iconismarker = NULL;
 
 int scalev;
 int short_length;
@@ -83,6 +84,8 @@ arglist_t tiger_args[] = {
 		ARGTYPE_INT},
 	{"ypixels", &ypixels, "Height in pixels of map.",
 		ARGTYPE_INT},
+	{"iconismarker", &iconismarker,
+		"The icon description is already the marker", ARGTYPE_BOOL },
 #if CLICKMAP
 	{"clickmap", &clickmap, "Generate Clickable map web page.",
 		ARGTYPE_BOOL},
@@ -157,7 +160,9 @@ tiger_disp(const waypoint *wpt)
 	double lat = wpt->position.latitude.degrees;
 	double lon = wpt->position.longitude.degrees;
 
-	if (wpt->icon_descr && strstr(wpt->icon_descr, "-unfound"))
+	if (iconismarker)
+		pin = wpt->icon_descr ? wpt->icon_descr : "";
+	else if (wpt->icon_descr && strstr(wpt->icon_descr, "-unfound"))
 		pin = unfoundmarker;
 	else if (wpt->creation_time > time(0) - 3600 * 24 * thresh_days)
 		pin = newmarker;
