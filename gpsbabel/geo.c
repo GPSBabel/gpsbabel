@@ -200,8 +200,8 @@ geo_waypt_pr(waypoint *waypointp)
 	if (waypointp->url) {
 		fprintf(ofd, "<link text =\"Cache Details\">%s</link>\n", 
 			waypointp->url);
-		fprintf(ofd, "</waypoint>\n");
 	}
+	fprintf(ofd, "</waypoint>\n");
 }
 
 void
