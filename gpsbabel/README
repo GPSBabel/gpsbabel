@@ -755,6 +755,23 @@ THE FORMATS
 	There are many features in this file format that we don't yet
 	support, but simple waypoint lists convert fine.
 
+    GOOGLE
+        
+        This format is designed to read the XML emitted when you tack
+        "&output=js" onto the end of a Google Maps route URL (use the 
+        "link to this page" option to get a usable URL.)  This allows 
+        you to plan a route using Google Maps, then download it and use 
+        it in your own mapping program or GPS receiver.  If you use a 
+        Unix-compatible operating system, this shell script might be 
+        useful:
+
+        #!/bin/sh
+        FROM="233 S. Wacker, Chicago, IL"
+        TO="1060 W. Addison, Chicago, IL"
+        wget -O - "http://maps.google.com/maps?q=$FROM to $TO&output=js" \
+           2>/dev/null >google_map.js
+
+        gpsbabel -i google -f google_map.js -o gpx -F google_map.gpx
 
 DATA FILTERS
 

@@ -200,7 +200,7 @@ google_rd_deinit(void)
 }
 
 ff_vecs_t google_vecs = {
-	ff_type_internal,
+	ff_type_file,
         { ff_cap_none, ff_cap_read, ff_cap_none},
 	google_rd_init,	
 	NULL,
