@@ -91,10 +91,10 @@ arcdist_process(void)
 		dist = (((dist * 180.0 * 60.0) / M_PI) * 1.1516);
 
 		if ( waypointp->extra_data ) {
-			ed = waypointp->extra_data;
+			ed = (extra_data *) waypointp->extra_data;
 		}
 		else {
-			ed = xcalloc(1, sizeof(*ed));
+			ed = (extra_data *) xcalloc(1, sizeof(*ed));
 			ed->distance = BADVAL;
 		}
 		if ( ed->distance > dist ) {
@@ -112,7 +112,7 @@ arcdist_process(void)
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypoint *wp = (waypoint *) elem;
-		ed = wp->extra_data;
+		ed = (extra_data *) wp->extra_data;
 		wp->extra_data = NULL;
 	        if ( ed ) {
 		    if ((ed->distance >= pos_dist) == (exclopt == NULL)) {

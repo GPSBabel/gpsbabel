@@ -217,13 +217,13 @@ polygon_process(void)
 
 		waypointp = (waypoint *)elem;
 		if ( waypointp->extra_data ) {
-		    ed = waypointp->extra_data;
+		    ed = (extra_data *) waypointp->extra_data;
 		}
 		else {
-		    ed = xcalloc(1, sizeof(*ed));
+		    ed = (extra_data *) xcalloc(1, sizeof(*ed));
 		    ed->state = OUTSIDE;
 		    ed->override = 0;
-		    waypointp->extra_data = ed;
+		    waypointp->extra_data = (extra_data *) ed;
 		}
 		if ( lat2 == waypointp->latitude && 
 		     lon2 == waypointp->longitude ) {
@@ -266,7 +266,7 @@ polygon_process(void)
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypoint *wp = (waypoint *) elem;
-		ed = wp->extra_data;
+		ed = (extra_data *) wp->extra_data;
 		wp->extra_data = NULL;
 	        if ( ed ) {
 		    if ( ed->override ) ed->state = INSIDE;

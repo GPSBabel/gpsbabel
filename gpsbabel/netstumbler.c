@@ -166,7 +166,7 @@ data_read(void)
 		if (lat == 0 && lon == 0)	/* skip records with no GPS data */
 			continue;
 
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+		wpt_tmp = (waypoint *) xcalloc(sizeof(*wpt_tmp), 1);
 
 		if (stealth) {
 			if (!snmac)
@@ -244,7 +244,7 @@ fix_netstumbler_dupes(void)
 	unsigned long last_crc;
 	char ssid[32 + 5 + 1];
 
-	htable = xmalloc(ct * sizeof *htable);
+	htable = (htable_t *) xmalloc(ct * sizeof *htable);
 	bh = htable;
 
 	i = 0;
