@@ -162,8 +162,10 @@ track_read(void)
 	GPS_PTrack *array;
 	route_head *trk_head = NULL;
 	int trk_num = 0;
-	char rtedescbuf[100];
 	int i;
+	int trk_seg_num = 1;
+	char trk_seg_num_buf[10];
+	char *trk_name = "";
 
 	ntracks = GPS_Command_Get_Track(portname, &array);
 
@@ -176,6 +178,10 @@ track_read(void)
 		 * out so we don't treat it as an extraneous trackpoint.
 		 */ 	
 		if (array[i]->ishdr) {
+			trk_name = array[i]->trk_ident;
+			if (!trk_name)
+				trk_name = "";
+			trk_seg_num = 1;
 			continue;
 		}
 
@@ -183,11 +189,18 @@ track_read(void)
 		if ((trk_head == NULL) || array[i]->tnew) {
 			trk_head = route_head_alloc();
 			trk_head->rte_num = trk_num;
-			sprintf(rtedescbuf, "Track %d", trk_num);
-			trk_head->rte_name = xstrdup(rtedescbuf);
+			if (trk_seg_num == 1) {
+				trk_head->rte_name = xstrdup(trk_name);
+			} else {
+				/* name in the form TRACKNAME #n */
+				snprintf(trk_seg_num_buf, sizeof(trk_seg_num_buf), "%d", trk_seg_num);
+				trk_head->rte_name = xmalloc(strlen(trk_name)+strlen(trk_seg_num_buf)+3);
+				sprintf(trk_head->rte_name, "%s #%s", trk_name, trk_seg_num_buf);
+			}
+			trk_seg_num++;
 			trk_head->rte_num = trk_num;
 			trk_num++;
-			route_add_head(trk_head);
+			track_add_head(trk_head);
 		}
 
 		wpt = waypt_new();
