@@ -29,6 +29,8 @@ static waypoint *wpt_tmp;
 FILE *fd;
 FILE *ofd;
 
+#define MYNAME "geo"
+
 static void
 tag_coord(const char **attrv)
 {
@@ -134,12 +136,12 @@ geo_rd_init(const char *fname)
 {
 	fd = fopen(fname, "r");
 	if (fd == NULL) {
-		abort();
+		fatal(MYNAME ":Can not open %s for reading\n");
 	}
 
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {
-		abort();
+		fatal(MYNAME ":Can not create XML parser\n");
 	}
 
 	XML_SetElementHandler(psr, geo_start, geo_end);
@@ -157,7 +159,7 @@ geo_wr_init(const char *fname)
 {
 	ofd = fopen(fname, "w");
 	if (ofd == NULL) {
-		abort();
+		fatal(MYNAME ":Can not open %s for writing\n");
 	}
 }
 
@@ -175,10 +177,9 @@ geo_read(void)
 	
 	while ((len = fread(buf, 1, sizeof(buf), fd))) {
 		if (!XML_Parse(psr, buf, len, feof(fd))) {
-			fprintf(stderr, "Parse error at %d: %s\n", 
+			fatal(MYNAME ":Parse error at %d: %s\n", 
 				XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
-			exit(1);
 		}
 	}
 	
