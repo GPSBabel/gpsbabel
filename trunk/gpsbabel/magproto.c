@@ -177,7 +177,7 @@ pid_to_model_t pid_to_model[] =
 	{ mm_meridian, 43, "Meridian Marine" },
 	{ mm_sportrak, 44, "Sportrak Topo" },
 	{ mm_sportrak, 45, "Mystic" },
-	{ mm_merdian, 46, "MobileMapper" },
+	{ mm_meridian, 46, "MobileMapper" },
 	{ mm_unknown, 0, NULL }
 };
 

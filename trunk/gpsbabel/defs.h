@@ -191,7 +191,7 @@ void waypt_del (waypoint *);
 void waypt_free (waypoint *);
 void waypt_disp_all(waypt_cb);
 void waypt_flush(queue *);
-void waypt_flush_all();
+void waypt_flush_all(void);
 unsigned int waypt_count(void);
 void free_gpx_extras (xml_tag * tag);
 void xcsv_read_internal_style(const char *style_buf);
@@ -204,7 +204,7 @@ void route_add_head(route_head *rte);
 void route_disp_all(route_hdr, route_trl, waypt_cb);
 void route_free (route_head *);
 void route_flush( queue *);
-void route_flush_all();
+void route_flush_all(void);
 unsigned int route_waypt_count(void);
 unsigned int route_count(void);
 

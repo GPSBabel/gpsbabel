@@ -23,7 +23,7 @@
 
 global_options global_opts;
 
-void
+static void
 usage(const char *pname)
 {
 	printf("GPSBabel Version %s.  http://gpsbabel.sourceforge.net\n\n",
