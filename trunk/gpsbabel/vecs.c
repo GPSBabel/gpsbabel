@@ -335,19 +335,25 @@ disp_vecs(void)
  *  determine what formats are supported.
  */
 void
-disp_formats(void)
+disp_formats(int version)
 {
 	vecs_t *vec;
 	style_vecs_t *svec;
 
-	for (vec = vec_list; vec->vec; vec++) {
-		printf("%s\t%s\t%s\n", vec->name, 
-			vec->extension? vec->extension : "", 
-			vec->desc);
-	}
-	for (svec = style_list; svec->name; svec++) {
-		xcsv_read_internal_style(svec->style_buf);
-		printf("%s\t%s\t%s\n", svec->name, xcsv_file.extension ? 
-			xcsv_file.extension : "", xcsv_file.description);
+	switch(version) {
+	case 0:
+		for (vec = vec_list; vec->vec; vec++) {
+			printf("%s\t%s\t%s\n", vec->name, 
+				vec->extension? vec->extension : "", 
+				vec->desc);
+		}
+		for (svec = style_list; svec->name; svec++) {
+			xcsv_read_internal_style(svec->style_buf);
+			printf("%s\t%s\t%s\n", svec->name, xcsv_file.extension ? 
+				xcsv_file.extension : "", xcsv_file.description);
+		}
+		break;
+	default:
+		;
 	}
 }

@@ -75,6 +75,7 @@ main(int argc, char *argv[])
 	char *ivec_opts = NULL;
 	char *ovec_opts = NULL;
 	char *fvec_opts = NULL;
+	int opt_version = 0;
 
 	global_opts.objective = wptdata;
 
@@ -109,6 +110,10 @@ main(int argc, char *argv[])
 		}
 
 		c = argv[argn][1];
+
+		if (argv[argn][2]) {
+			opt_version = atoi(&argv[argn][2]);
+		}
 
 		switch (c) {
 			case 'i': 
@@ -176,10 +181,10 @@ main(int argc, char *argv[])
 				 * this as -^^.
 				 */
 			case '^':
-				disp_formats();
+				disp_formats(opt_version);
 				exit(0);
  			case '%':
- 				disp_filters();
+ 				disp_filters(opt_version);
   				exit(0);
 			case 'h':
 			case '?':
