@@ -39,6 +39,7 @@ static void *mkshort_handle;
 static char *deficon;
 static char *bs;
 static char *noack;
+static char *nukewpt;
 static int route_out_count;
 static int waypoint_read_count;
 
@@ -562,10 +563,13 @@ try_as_file:
 	}
 
 	GetCommTimeouts (comport, &timeout);
-	timeout.ReadIntervalTimeout = 100;
-	timeout.ReadTotalTimeoutMultiplier = 100;
-	timeout.ReadTotalTimeoutConstant = 100;
-	timeout.WriteTotalTimeoutMultiplier = 100;
+	/* We basically do single character reads and simulate line input
+	 * mode, so these values are kind of fictional.
+	 */
+	timeout.ReadIntervalTimeout = 1000;
+	timeout.ReadTotalTimeoutMultiplier = 1000;
+	timeout.ReadTotalTimeoutConstant = 1000;
+	timeout.WriteTotalTimeoutMultiplier = 1000;
 	timeout.WriteTotalTimeoutConstant = 1000;
 	if (!SetCommTimeouts (comport, &timeout)) {
 		xCloseHandle (comport);
@@ -709,6 +713,7 @@ arglist_t mag_sargs[] = {
 	{"noack", &noack, "Suppress use of handshaking in name of speed",
 		ARGTYPE_BOOL},
 	{"deficon", &deficon, "Default icon name", ARGTYPE_STRING },
+	{"nukewpt", &nukewpt, "Delete all waypoints", ARGTYPE_BOOL },
 	{0, 0, 0, 0}
 };
 
@@ -763,6 +768,15 @@ mag_rd_init(const char *portname)
 		ignore_unable = 1;
 		mag_writemsg("PMGNCMD,NMEAOFF");
 		ignore_unable = 0;
+	}
+	if (nukewpt) {
+		/* The unit will send us an "end" message upon completion */
+		mag_writemsg("PMGNCMD,DELETE,WAYPOINT");
+		mag_readmsg();
+		if (!found_done) {
+			fatal(MYNAME ": Unexpected response to waypoint delete command.\n");
+		}
+		found_done = 0;
 	}
 
 	QUEUE_INIT(&rte_wpt_tmp);
