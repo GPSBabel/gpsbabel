@@ -109,14 +109,14 @@ int32 GPS_Command_Get_Waypoint(const char *port, GPS_PWay **way)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Waypoint(const char *port, GPS_PWay *way, int32 n)
+int32 GPS_Command_Send_Waypoint(const char *port, GPS_PWay *way, int32 n, int (*cb)())
 {
     int32 ret=0;
 
     switch(gps_waypt_transfer)
     {
     case pA100:
-	ret = GPS_A100_Send(port, way, n);
+	ret = GPS_A100_Send(port, way, n, cb);
 	break;
     default:
 	GPS_Error("Send_Waypoint: Unknown waypoint protocol");
