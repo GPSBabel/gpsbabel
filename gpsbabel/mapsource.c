@@ -105,7 +105,7 @@ mps_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
 }
 
 static void
-mps_rd_init(const char *fname, const char *args)
+mps_rd_init(const char *fname)
 {
 	mps_file_in = fopen(fname, "rb");
 	if (mps_file_in == NULL) {
@@ -120,7 +120,7 @@ mps_rd_deinit(void)
 }
 
 static void
-mps_wr_init(const char *fname, const char *args)
+mps_wr_init(const char *fname)
 {
 	mps_file_out = fopen(fname, "wb");
 	if (mps_file_out == NULL) {

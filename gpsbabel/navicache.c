@@ -32,7 +32,7 @@ FILE *ofd;
 
 #if NO_EXPAT
 void
-nav_rd_init(const char *fname, const char *args)
+nav_rd_init(const char *fname)
 {
 	fatal(MYNAME ": This build excluded GPX support becuase expat was not installed.\n");
 }
@@ -149,7 +149,7 @@ nav_end(void *data, const char *el)
 }
 
 void
-nav_rd_init(const char *fname, const char *args)
+nav_rd_init(const char *fname)
 {
 	fd = fopen(fname, "r");
 	if (fd == NULL) {
@@ -190,7 +190,7 @@ nav_rd_deinit(void)
 }
 
 void
-nav_wr_init(const char *fname, const char *args)
+nav_wr_init(const char *fname)
 {
 	fatal(MYNAME ": Does not support writing Navicache files.\n");
 	ofd = fopen(fname, "w");

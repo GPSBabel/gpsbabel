@@ -697,7 +697,7 @@ arglist_t mag_args[] = {
 };
 
 static void
-mag_rd_init(const char *portname, const char *args)
+mag_rd_init(const char *portname)
 {
 	time_t now, later;
 
@@ -748,7 +748,7 @@ mag_rd_init(const char *portname, const char *args)
 }
 
 static void
-mag_wr_init(const char *portname, const char *args)
+mag_wr_init(const char *portname)
 {
 #if __WIN32__
 	if (!terminit(portname)) {
@@ -788,7 +788,7 @@ mag_wr_init(const char *portname, const char *args)
 			xCloseHandle(comport);
 		}
 #endif
-		mag_rd_init(portname, args);
+		mag_rd_init(portname);
 	}
 	QUEUE_INIT(&rte_wpt_tmp);
 }

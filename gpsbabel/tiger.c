@@ -92,7 +92,7 @@ arglist_t tiger_args[] = {
 
 
 static void
-rd_init(const char *fname, const char *args)
+rd_init(const char *fname)
 {
 	file_in = fopen(fname, "r");
 	mkshort_handle = mkshort_new_handle();
@@ -110,7 +110,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname, const char *args)
+wr_init(const char *fname)
 {
 	file_out = fopen(fname, "w");
 	thresh_days = strtod(oldthresh, NULL);

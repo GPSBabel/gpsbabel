@@ -242,7 +242,7 @@ buffer_washer(char * buff, int buffer_len)
 }
 
 static void
-psp_rd_init(const char *fname, const char *args)
+psp_rd_init(const char *fname)
 {
 	psp_file_in = fopen(fname, "rb");
 	if (psp_file_in == NULL) {
@@ -257,7 +257,7 @@ psp_rd_deinit(void)
 }
 
 static void
-psp_wr_init(const char *fname, const char *args)
+psp_wr_init(const char *fname)
 {
 	psp_file_out = fopen(fname, "wb");
 	mkshort_handle = mkshort_new_handle();

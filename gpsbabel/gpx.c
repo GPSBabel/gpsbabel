@@ -53,7 +53,7 @@ static int in_number;
 
 static xml_tag *cur_tag;
 static char *cdatastr;
-static int opt_logpoint = 0;
+static char *opt_logpoint = NULL;
 static int logpoint_ct = 0;
 
 static const char *gpx_version;
@@ -674,7 +674,7 @@ gpx_end(void *data, const char *el)
 
 #if NO_EXPAT
 void
-gpx_rd_init(const char *fname, const char *args)
+gpx_rd_init(const char *fname)
 {
 	fatal(MYNAME ": This build excluded GPX support becuase expat was not installed.\n");
 }
@@ -744,7 +744,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 }
 
 void
-gpx_rd_init(const char *fname, const char *args)
+gpx_rd_init(const char *fname)
 {
 	if ( fname[0] ) {
 	        fd = fopen(fname, "r");
@@ -758,8 +758,6 @@ gpx_rd_init(const char *fname, const char *args)
 		input_string_len = strlen(input_string);
 	}
 
-        if (get_option(args, "logpoint") != NULL)
-            opt_logpoint = 1;
 
 	file_time = 0;
 	
@@ -785,10 +783,9 @@ gpx_rd_deinit(void)
 }
 
 void
-gpx_wr_init(const char *fname, const char *args)
+gpx_wr_init(const char *fname)
 {
 	mkshort_handle = mkshort_new_handle();
-	urlbase = get_option(args, "urlbase");
 
 	ofd = fopen(fname, "w");
 	if (ofd == NULL) {
@@ -1198,6 +1195,8 @@ arglist_t gpx_args[] = {
 	{ "snlen", &snlen, "Length of generated shortnames", ARGTYPE_INT },
 	{ "suppresswhite", &suppresswhite, 
 		"Suppress whitespace in generated shortnames", ARGTYPE_BOOL },
+	{ "logpoint", &opt_logpoint, "Create waypoints from geocache log entries", ARGTYPE_BOOL },
+	{ "urlbase", &urlbase, "Base URL for link tag in output", ARGTYPE_STRING},
 	{ 0, 0, 0, 0 }
 };
 

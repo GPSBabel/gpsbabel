@@ -64,8 +64,7 @@ Skip(FILE * f,
 }
 
 static void
-rd_init(const char *fname,
-	const char *args)
+rd_init(const char *fname)
 {
 	infile = fopen(fname, "rb");
 	if (infile == NULL) {
@@ -225,8 +224,7 @@ my_read(void)
 }
 
 static void
-wr_init(const char *fname,
-	const char *args)
+wr_init(const char *fname)
 {
 	fatal(MYNAME ":Not enough information is known about this format to write it.\n");
 }
