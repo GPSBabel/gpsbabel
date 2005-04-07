@@ -42,6 +42,14 @@ arglist_t an1_args[] = {
 	{0, 0, 0, 0 }
 };
 
+typedef struct guid {
+	unsigned long l;
+	unsigned short s[3];
+	unsigned char c[6];
+} GUID;
+
+#include "an1sym.h"
+
 static unsigned short
 ReadShort(FILE * f)
 {
@@ -126,32 +134,6 @@ WriteString( FILE *f, char *s )
 	fwrite( s, 1, strlen(s), f );
 }
 
-static void
-Skip(FILE * f,
-     unsigned long distance)
-{
-	fseek(f, distance, SEEK_CUR);
-}
-
-static double
-DecodeOrd( long ord )
-{
-	return (double)(0x80000000-ord)/(0x800000);
-}
-
-static long
-EncodeOrd( double ord )
-{
-	unsigned long tmp = ord * 0x800000;
-	return 0x80000000UL-tmp;
-}
-
-typedef struct guid {
-	unsigned long l;
-	unsigned short s[3];
-	unsigned char c[6];
-} GUID;
-
 static void 
 ReadGuid( FILE *f, GUID *guid )
 {
@@ -176,8 +158,28 @@ WriteGuid( FILE *f, GUID *guid )
 	for ( i = 0; i < 6; i++ ) {
 		WriteChar( f, guid->c[i] );
 	}
+}	
+
+static void
+Skip(FILE * f,
+     unsigned long distance)
+{
+	fseek(f, distance, SEEK_CUR);
 }
-	
+
+static double
+DecodeOrd( long ord )
+{
+	return (double)(0x80000000-ord)/(0x800000);
+}
+
+static long
+EncodeOrd( double ord )
+{
+	unsigned long tmp = ord * 0x800000;
+	return 0x80000000UL-tmp;
+}
+
 static int
 IsGuidEqual( GUID *a, GUID *b ) 
 {
@@ -546,6 +548,7 @@ static void Read_AN1_Waypoints( FILE *f ) {
 	unsigned long i = 0;
 	an1_waypoint_record *rec = NULL;
 	waypoint *wpt_tmp;
+	char *icon = NULL;
 	ReadShort( f );
 	count = ReadLong( f );
 	for (i = 0; i < count; i++ ) {
@@ -556,6 +559,11 @@ static void Read_AN1_Waypoints( FILE *f ) {
 		wpt_tmp->longitude = -DecodeOrd( rec->lon );
 		wpt_tmp->latitude = DecodeOrd( rec->lat );
 		wpt_tmp->description = xstrdup( rec->name );
+		
+		if (FindIconByGuid(&rec->guid, &icon)) {
+			wpt_tmp->icon_descr = icon;
+		}
+		
 		wpt_tmp->an1_extras = (an1_base *)(void *)rec;
 		rec = NULL;
 		waypt_add( wpt_tmp );
@@ -567,8 +575,6 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 {
 	an1_waypoint_record *rec;
 	int local;
-	GUID redFlag = {0x623e1ee0,{0xaf27,0x11d3,0x29bc},
-		{0x00,0x50,0x04,0x02,0xf5,0x32}};
 	
 	if ( wpt->an1_extras ) {
 		rec = (an1_waypoint_record *)(void *)(wpt->an1_extras);	
@@ -583,13 +589,17 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 		rec->unk2 = 3;
 		rec->unk3 = 18561;
 		rec->fontname = xstrdup( "Arial" );
-		memcpy( &rec->guid, &redFlag, sizeof( GUID ));
+		FindIconByName( "Red Flag", &rec->guid );
 		rec->fontsize = 10;
 	}
 	rec->name = xstrdup( wpt->description );
 	rec->lat = EncodeOrd( wpt->latitude );
 	rec->lon = EncodeOrd( -wpt->longitude );
 	rec->serial = serial++;
+	
+	if ( wpt->icon_descr ) {
+		FindIconByName( (char *)(void *)wpt->icon_descr, &rec->guid );
+	}
 	
 	Write_AN1_Waypoint( outfile, rec );
 	if ( local ) {

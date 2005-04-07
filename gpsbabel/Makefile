@@ -124,7 +124,7 @@ mac-release:
 
 # Machine generated from here down.  
 
-an1.o: an1.c defs.h queue.h gbtypes.h
+an1.o: an1.c defs.h queue.h gbtypes.h an1sym.h
 arcdist.o: arcdist.c defs.h queue.h gbtypes.h grtcirc.h
 brauniger_iq.o: brauniger_iq.c defs.h queue.h gbtypes.h jeeps/gpsserial.h \
   jeeps/gps.h jeeps/gpsport.h jeeps/gpssend.h jeeps/gpsread.h \
