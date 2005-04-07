@@ -89,6 +89,10 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 	}
 	if (r != sz) {
 		fprintf(stderr, "Bad cmdsend r %d sz %d\n", r, sz);
+		if (r < 0) {
+			fatal("usb_bulk_write failed. '%s'", 
+				usb_strerror());
+		}
 	}
 	return r;
 }
