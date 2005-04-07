@@ -54,7 +54,7 @@ static void garmin_usb_syncup(void);
 
 gusb_init(void)
 {
-//usb_set_debug(99);
+// usb_set_debug(99);
 	usb_init();
 	usb_find_busses();
 	usb_find_devices();
@@ -183,7 +183,15 @@ garmin_usb_start(struct usb_device *dev)
 		}
 	}
 
-	garmin_usb_syncup();
+	/*
+	 *  Zero is the configuration endpoint, so if we made it through
+	 * that loop without non-zero values for all three, we're hosed.
+	 */
+	if (gusb_intr_in_ep && gusb_bulk_in_ep && gusb_bulk_out_ep) {
+		garmin_usb_syncup();
+	} else {
+		fatal("Could not identify endpoints on USB device.\nFound endpoints Intr In %d Bulk Out %d Bulk In %d\n", gusb_intr_in_ep, gusb_bulk_out_ep, gusb_bulk_in_ep);
+	}
 
 	return;
 }
