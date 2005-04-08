@@ -213,7 +213,7 @@ m315_cleanse(char *istring)
 /*
  * Do same for 330, Meridian, and SportTrak.
  */
-static char *
+char *
 m330_cleanse(char *istring)
 {
 	static char m330_valid_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
@@ -235,7 +235,7 @@ m330_cleanse(char *istring)
  * Given a protocol message, compute the checksum as needed by 
  * the Magellan protocol.
  */
-static unsigned int 
+unsigned int 
 mag_checksum(const char * const buf)
 {
 	int csum = 0;
