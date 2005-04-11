@@ -66,7 +66,7 @@ html_disp(const waypoint *wpt)
 	int latint, lonint;
 	char tbuf[1024];
 	time_t tm = wpt->creation_time;
-	long utmz;
+	int32 utmz;
 	double utme, utmn;
 	char utmzc;
 	
