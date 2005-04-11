@@ -50,7 +50,7 @@ waypt_dupe(const waypoint *wpt)
 		tmp->url = xstrdup(wpt->url);
 	if (wpt->url_link_text)
 		tmp->url_link_text = xstrdup(wpt->url_link_text);
-	if (wpt->icon_descr && wpt->icon_descr_is_dynamic)
+	if (wpt->icon_descr && wpt->wpt_flags.icon_descr_is_dynamic)
 		tmp->icon_descr = xstrdup(wpt->icon_descr);
 	if (wpt->gc_data.desc_short.utfstring) {
 		tmp->gc_data.desc_short.utfstring = 
@@ -262,7 +262,7 @@ waypt_free( waypoint *wpt )
 	if (wpt->url_link_text) {
 		xfree(wpt->url_link_text);
 	}
-	if (wpt->icon_descr && wpt->icon_descr_is_dynamic) {
+	if (wpt->icon_descr && wpt->wpt_flags.icon_descr_is_dynamic) {
 		xfree((char *)(void *)wpt->icon_descr);
 	}
 	if (wpt->gpx_extras) {

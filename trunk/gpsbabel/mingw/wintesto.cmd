@@ -126,6 +126,27 @@ DEL %TMPDIR%\tiger
 @echo.
 CALL :COMPARE %TMPDIR%\tiger %TMPDIR%\tiger2
 
+REM 
+REM Lowrance USR.  Binary, and also slightly lossy because of the math to
+REM convert lat/long.  It also doesn't support description, which makes it
+REM awkward  to test.
+REM 
+DEL %TMPDIR%\lowrance1.usr
+@echo on
+@echo Testing...
+%PNAME% -i geo -f geocaching.loc -o lowranceusr -F %TMPDIR%\lowrance1.usr
+@echo off
+@echo.
+CALL :BINCOMPARE %TMPDIR%\lowrance1.usr reference\lowrance.usr
+@echo on
+@echo Testing...
+%PNAME% -i lowranceusr -f %TMPDIR%\lowrance1.usr -o lowranceusr -F %TMPDIR%\lowrance1.usr
+@echo off
+@echo.
+REM And because of the FP rounding, we can't even read our file, write it back
+REM and get the same data.  Sigh. 
+REM bincompare reference/lowrance.usr  ${TMPDIR}/lowrance1.usr
+
 REM CSV (Comma separated value) data.
 
 @echo on
@@ -250,7 +271,7 @@ REM identical reference.
 %PNAME% -i holux -f reference\paris.wpo -o holux -F %TMPDIR%\paris.wpo
 @echo off
 @echo.
-CALL :COMPARE reference\paris.wpo %TMPDIR%\paris.wpo
+REM compare reference/paris.wpo ${TMPDIR}/paris.wpo
 
 REM Magellan NAV Companion for PalmOS
 REM This format is hard to test, because each record and the database itself
@@ -837,6 +858,59 @@ CALL :COMPARE %TMPDIR%\igc_sed.out reference\igc2_igc.out
 @echo.
 CALL :COMPARE %TMPDIR%\igc.gpx reference\igc2_gpx.out
 
+REM 
+REM Google Maps XML test
+REM 
+DEL %TMPDIR%\google.out
+@echo on
+@echo Testing...
+%PNAME% -i google -f reference\google.xml -o arc -F %TMPDIR%\google.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\google.out reference\google.arc
+
+DEL %TMPDIR%\google.out
+@echo on
+@echo Testing...
+%PNAME% -i google -f reference\google.js -o arc -F %TMPDIR%\google.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\google.out reference\google.arc
+
+REM 
+REM DeLorme .an1 tests
+REM 
+DEL %TMPDIR%\an1.out
+@echo on
+@echo Testing...
+%PNAME% -i an1 -f reference\foo.an1 -o csv -F %TMPDIR%\an1.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\an1.out reference\an1-in.ref
+
+DEL %TMPDIR%\an1.out
+@echo on
+@echo Testing...
+%PNAME% -i an1 -f reference\foo.an1 -o an1 -F %TMPDIR%\an1.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\an1.out reference\an1-an1.ref
+
+DEL %TMPDIR%\an1.out
+@echo on
+@echo Testing...
+%PNAME% -i xmap -f reference\xmap -o an1 -F %TMPDIR%\an1.out 
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\an1.out reference\an1-out.ref
+
+DEL %TMPDIR%\an1.out
+@echo on
+@echo Testing...
+%PNAME% -i google -f reference\google.js -o an1 -F %TMPDIR%\an1.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\an1.out reference\an1-line-out.ref
 
 REM 
 REM XCSV "human readable" tests
@@ -898,6 +972,39 @@ REM
 @echo on
 @echo Testing...
 %PNAME% -i geo -f geocaching.loc -x stack,push,copy,nowarn -x stack,push,copy -x stack,push -x stack,pop,replace -x stack,pop,append -x stack,push,copy -x stack,pop,discard -x stack,swap,depth=1 -o
+@echo off
+@echo.
+
+REM 
+REM 'tabsep' isn't really tested in any non-trivial way, but we do exercise
+REM it.
+REM 
+
+@echo on
+@echo Testing...
+%PNAME% -i geo -f geocaching.loc  -o tabsep -F - | ${PNAME} -i tabsep -f - -o geo -F %TMPDIR%\tabsep.out
+%PNAME% -i geo -f geocaching.loc  -o geo -F %TMPDIR%\geotabsep.out
+@echo off
+@echo.
+
+REM 
+REM Now do the same for custom - it has the same issues.
+REM 
+
+CALL :COMPARE %TMPDIR%\tabsep.out %TMPDIR%\geotabsep.out
+@echo on
+@echo Testing...
+%PNAME% -i geo -f geocaching.loc  -o custom -F - | ${PNAME} -i custom -f - -o geo -F %TMPDIR%\custom.out
+%PNAME% -i geo -f geocaching.loc  -o geo -F %TMPDIR%\geocustom.out
+@echo off
+@echo.
+
+REM 
+REM Write something to the various output-only formats
+REM 
+@echo on
+@echo Testing...
+%PNAME% -i geo -f geocaching.loc -o text -F %TMPDIR%\text.out -o html -F %TMPDIR%\html.out -o vcard -F %TMPDIR%\vcard.out #-o palmdoc -F %TMPDIR%\pd.out
 @echo off
 @echo.
 

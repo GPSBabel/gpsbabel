@@ -8,7 +8,7 @@
  */
 
 typedef unsigned char UC;
-typedef uint16        US;
+typedef gbuint16      US;
 typedef gbuint16      uint16;
 typedef gbint16       int16;
 typedef gbuint32      uint32;

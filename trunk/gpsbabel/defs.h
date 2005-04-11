@@ -159,11 +159,20 @@ typedef struct {
 } an1_base;
 
 /*
+ * Misc bitfields inside struct waypoint;
+ */
+typedef struct {
+	unsigned int icon_descr_is_dynamic:1; 
+	unsigned int shortname_is_synthetic:1;
+} wp_flags;
+
+/*
  * This is a waypoint, as stored in the GPSR.   It tries to not 
  * cater to any specific model or protocol.  Anything that needs to
  * be truncated, edited, or otherwise trimmed should be done on the
  * way to the target.
  */
+
 typedef struct {
 	queue Q;			/* Master waypoint q.  Not for use
 					   by modules. */
@@ -208,8 +217,8 @@ typedef struct {
 	char *notes;
 	char *url;
 	char *url_link_text;
-	int icon_descr_is_dynamic;
-	int shortname_is_synthetic;
+
+	wp_flags wpt_flags;
 	const char *icon_descr;
 	time_t creation_time;	/* standardized in UTC/GMT */
 	int centiseconds;	/* Optional hundredths of a second. */
