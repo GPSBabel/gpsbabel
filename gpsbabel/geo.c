@@ -109,7 +109,7 @@ void wpt_link(const char *args, const char **attrv)
 
 void wpt_type(const char *args, const char **unused)
 {
-	wpt_tmp->icon_descr_is_dynamic = 1;
+	wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
 	wpt_tmp->icon_descr = xstrdup(args);
 }
 

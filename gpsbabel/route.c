@@ -104,7 +104,7 @@ route_add_wpt(route_head *rte, waypoint *wpt)
 		char tmpnam[10];
 		snprintf(tmpnam, sizeof(tmpnam), "RPT%03d",rte_waypts);
 		wpt->shortname = xstrdup(tmpnam);
-		wpt->shortname_is_synthetic = 1;
+		wpt->wpt_flags.shortname_is_synthetic = 1;
 	}
 }
 

@@ -335,7 +335,7 @@ data_read(void)
 	wpt->longitude = lon;
 	wpt->altitude = alt;
 	wpt->icon_descr = category;
-	wpt->icon_descr_is_dynamic = 1;
+	wpt->wpt_flags.icon_descr_is_dynamic = 1;
 
 	if (gid[0])
 	{

@@ -181,7 +181,7 @@ void  	ht_ident(const char *args, const char **unused)
 void 	ht_sym(const char *args, const char **unused)
 {
 	wpt_tmp->icon_descr = xstrdup(args);
-	wpt_tmp->icon_descr_is_dynamic = 1;
+	wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
 }
 
 void  	ht_lat(const char *args, const char **unused)

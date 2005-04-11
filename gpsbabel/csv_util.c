@@ -639,7 +639,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     } else
     if (strcmp(fmp->key, "ICON_DESCR") == 0) {
        wpt->icon_descr = csv_stringtrim(s, "", 0);
-       wpt->icon_descr_is_dynamic = 1;
+       wpt->wpt_flags.icon_descr_is_dynamic = 1;
     } else
 
     /* LATITUDE CONVERSIONS**************************************************/

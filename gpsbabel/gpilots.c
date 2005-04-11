@@ -277,7 +277,7 @@ data_read(void)
 			  wpt_tmp->depth = fi.f;
 			  fi.i = le_read32(&rec->wpt.d108.dist);
 			  wpt_tmp->proximity = fi.f;
-			  wpt_tmp->icon_descr_is_dynamic = 0;
+			  wpt_tmp->wpt_flags.icon_descr_is_dynamic = 0;
 			  wpt_tmp->icon_descr = mps_find_desc_from_icon_number((rec->wpt.d108.smbl[1] << 8) + rec->wpt.d108.smbl[0], PCX);
 			  waypt_add(wpt_tmp);
 			  break;

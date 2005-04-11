@@ -750,7 +750,7 @@ gpx_end(void *data, const char *el)
 	case tt_rte_rtept_sym:
 	case tt_trk_trkseg_trkpt_sym:
 		wpt_tmp->icon_descr = xstrdup(cdatastrp);
-		wpt_tmp->icon_descr_is_dynamic = 1;
+		wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
 		break;
 	case tt_wpt_time:
 	case tt_trk_trkseg_trkpt_time:
@@ -1188,7 +1188,7 @@ gpx_track_disp(const waypoint *waypointp)
 	/* GPX doesn't require a name on output, so if we made one up
 	 * on input, we might as well say nothing.
 	 */
-	if (!waypointp->shortname_is_synthetic) {
+	if (!waypointp->wpt_flags.shortname_is_synthetic) {
 		write_optional_xml_entity(ofd, "  ", "name", 
 			waypointp->shortname);
 	}
