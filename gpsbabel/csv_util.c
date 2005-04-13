@@ -854,8 +854,8 @@ xcsv_waypt_pr(const waypoint *wpt)
     
     if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
         if (wpt->description) {
-            if (global_opts.synthesize_shortnames)
-                shortname = mkshort(xcsv_file.mkshort_handle, wpt->description);
+            if (global_opts.synthesize_shortnames) 
+		shortname = mkshort_from_wpt(xcsv_file.mkshort_handle, wpt);
             else
                 shortname = csv_stringclean(wpt->description, xcsv_file.badchars);
         } else {

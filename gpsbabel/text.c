@@ -82,7 +82,7 @@ text_disp(const waypoint *wpt)
 	strftime(tbuf, sizeof(tbuf), "%d-%b-%Y", localtime(&tm));
 
 	fprintf(file_out, "%-16s  %c%d %06.3f  %c%d %06.3f  (%ld%c %6.0f %7.0f)",
-		(global_opts.synthesize_shortnames) ? mkshort(mkshort_handle, wpt->description) : wpt->shortname,
+		(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname,
 		wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), 
 		wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint),
 		utmz, utmzc, utme, utmn);

@@ -397,7 +397,7 @@ data_write(void)
 	    if (global_opts.synthesize_shortnames && waypointp->description) {
 		if (waypointp->shortname)
 		    xfree(waypointp->shortname);
-		waypointp->shortname = mkshort(mkshort_wr_handle, waypointp->description);
+		waypointp->shortname = mkshort_from_wpt(mkshort_wr_handle, waypointp);
 	    }
 	    bh->wpt_name = waypointp->shortname;
 	    bh ++;

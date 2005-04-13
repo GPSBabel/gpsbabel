@@ -90,10 +90,10 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_2_5_beta03272005-c
-VERSIOND=1.2.5_beta03272005-c
-VERSIONU=1_2_5
-VERSIOND=1.2.5
+VERSIONU=1_2_6-beta04122005-gsak
+VERSIOND=1.2.6_beta04122005-gsak
+# VERSIONU=1_2_5
+# VERSIOND=1.2.5
 
 release:
 	cvs commit

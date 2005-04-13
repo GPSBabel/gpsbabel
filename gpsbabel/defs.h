@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004, 2005  Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -330,6 +330,7 @@ void *MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
 #define mkshort( a, b) MKSHORT(a,b,__FILE__, __LINE__)
 #define mkshort_new_handle() MKSHORT_NEW_HANDLE(__FILE__,__LINE__)
 #endif
+char *mkshort_from_wpt(void *h, const waypoint *wpt);
 void mkshort_del_handle(void *h);
 void setshort_length(void *, int n);
 void setshort_badchars(void *, const char *);

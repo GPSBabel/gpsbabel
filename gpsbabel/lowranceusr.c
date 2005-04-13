@@ -300,7 +300,7 @@ lowranceusr_waypt_pr(const waypoint *wpt)
 	/* Try and make sure we have a name */
 	if ((! wpt->shortname) || global_opts.synthesize_shortnames) {
 		if (wpt->description && global_opts.synthesize_shortnames) {
-			name = mkshort(mkshort_handle, wpt->description);
+			name = mkshort_from_wpt(mkshort_handle, wpt);
 		} else if (wpt->shortname) {
 			name = xstrdup(wpt->shortname);
 		} else if (wpt->description) {
