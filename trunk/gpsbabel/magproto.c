@@ -1168,7 +1168,7 @@ mag_waypt_pr(const waypoint *waypointp)
 	const char *icon_token=NULL;
 	char *owpt;
 	char *odesc;
-	char *isrc;
+	char *isrc = NULL;
 
 	ilat = waypointp->latitude;
 	ilon = waypointp->longitude;
@@ -1197,7 +1197,7 @@ mag_waypt_pr(const waypoint *waypointp)
 
 	isrc = waypointp->notes ? waypointp->notes : waypointp->description;
 	owpt = global_opts.synthesize_shortnames ?
-                        mkshort(mkshort_handle, isrc) : waypointp->shortname;
+                        mkshort_from_wpt(mkshort_handle, waypointp) : waypointp->shortname;
 	odesc = isrc ? isrc : "";
 	owpt = mag_cleanse(owpt);
 

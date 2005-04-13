@@ -52,7 +52,6 @@ static int input_string_len = 0;
 
 static time_t file_time;
 
-static char *gsshortnames = NULL;
 static char *snlen = NULL;
 static char *suppresswhite = NULL;
 static char *urlbase = NULL;
@@ -658,11 +657,7 @@ gpx_end(void *data, const char *el)
 		wpt_tmp = NULL;
 		break;
 	case tt_cache_name:
-		if (gsshortnames) {
-			if (wpt_tmp->notes)
-				xfree(wpt_tmp->notes);
-			wpt_tmp->notes = xstrdup(cdatastrp);
-		}
+		wpt_tmp->notes = xstrdup(cdatastrp);
 		break;
 	case tt_cache_container:
 		wpt_tmp->gc_data.container = gs_mkcont(cdatastrp);
@@ -1321,9 +1316,6 @@ gpx_write(void)
 
 static
 arglist_t gpx_args[] = {
-	{ "gsshortnames", &gsshortnames, 
-		"Prefer shorter descriptions from Groundspeak files",
-		NULL, ARGTYPE_BOOL },
 	{ "snlen", &snlen, "Length of generated shortnames", 
 		NULL, ARGTYPE_INT },
 	{ "suppresswhite", &suppresswhite, 

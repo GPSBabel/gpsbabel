@@ -287,22 +287,6 @@ mkshort(void *h, const char *istring)
 		ostring = nstring;
 	}
 
-	/*
-	 * Look at the back of the string for " by BLAH" and whack 
-	 * it there.
-	 */
-	nstring = xxstrdup(ostring, file, line);
-	l = strlen (nstring);
-	while (l > 0) {
-		if (case_ignore_strncmp(&nstring[l], " by ",4) == 0)  {
-			nstring[l] = 0;
-			break;
-		}
-		l --;
-	}
-	xfree(ostring);
-	ostring = nstring;
-
 	/* Eliminate leading whitespace in all cases */
 	while (ostring[0] && isspace(ostring[0])) {
 		/* If orig string has N bytes, we want to copy N-1 bytes
@@ -416,6 +400,32 @@ mkshort(void *h, const char *istring)
 	}
 	return ostring;
 }
+
+/*
+ * As above, but arg list is a waypoint so we can centralize
+ * the code that considers the alternate sources.
+ */
+char *
+mkshort_from_wpt(void *h, const waypoint *wpt)
+{
+	/* This probably came from a Groundspeak Pocket Query
+	 * so use the 'cache name' instead of the description field
+	 * which contains placer name, diff, terr, and generally way
+	 * more stuff than should be in any one field...
+ 	 */
+	if (wpt->gc_data.diff && wpt->gc_data.terr && wpt->notes) {
+		return mkshort(h, wpt->notes);
+	}
+
+	if (wpt->description) {
+		return mkshort(h, wpt->description);
+	}
+
+	if (wpt->notes) {
+		return mkshort(h, wpt->notes);
+	}
+}
+
 
 #if 0
 char *foo[] =  {

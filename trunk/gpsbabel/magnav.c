@@ -145,7 +145,7 @@ my_writewpt(const waypoint *wpt)
 	char *vdata;
 	time_t tm_t;
 	const char *sn = global_opts.synthesize_shortnames ?
-		mkshort(mkshort_handle, wpt->description) :
+		mkshort_from_wpt(mkshort_handle, wpt) :
 		wpt->shortname;
 
 	rec = xcalloc(sizeof(*rec)+56,1);

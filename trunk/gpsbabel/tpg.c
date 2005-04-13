@@ -225,7 +225,7 @@ tpg_waypt_pr(const waypoint *wpt)
         if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
             if (wpt->description) {
                 if (global_opts.synthesize_shortnames)
-                    shortname = mkshort(mkshort_handle, wpt->description);
+                    shortname = mkshort_from_wpt(mkshort_handle, wpt);
                 else
                     shortname = xstrdup(wpt->description);
             } else {

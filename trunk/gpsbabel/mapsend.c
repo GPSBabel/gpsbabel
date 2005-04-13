@@ -316,7 +316,7 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	static int cnt = 0;
 	const char *iconp = NULL;
 	const char *sn = global_opts.synthesize_shortnames ? 
-		mkshort(mkshort_handle, waypointp->description) :
+		mkshort_from_wpt(mkshort_handle, waypointp) :
 	       	waypointp->shortname;
 	char *tmp;
 
