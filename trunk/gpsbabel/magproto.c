@@ -1215,7 +1215,7 @@ mag_waypt_pr(const waypoint *waypointp)
 	 * to deliver turn-by-turn popups for street routing) allow a 
 	 * cap on the comments delivered so we leave space for it to route.
 	 */
-	if (odesc && !is_file && (wptcmtcnt++ >= wptcmtcnt_max))
+	if (odesc && /* !is_file && */ (wptcmtcnt++ >= wptcmtcnt_max))
 		odesc[0] = 0;
 
 	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.8s,%-.46s,%s",
