@@ -34,7 +34,11 @@ typedef short gbint16;
 
 #else
 
-#include <stdint.h>
+# if defined (__FreeBSD__)
+#  include <inttypes.h>
+# else
+#  include <stdint.h>
+# endif
 
 typedef uint32_t	gbuint32;
 typedef uint16_t	gbuint16;
