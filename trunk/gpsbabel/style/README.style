@@ -32,6 +32,7 @@ CRNEWLINE  	\r\n
 TAB  		\t
 SPACE  		<space>
 HASH  		#
+PIPE  		|
 WHITESPACE	*** SEE WHITESPACE NOTES BELOW ***
 
 WHITESPACE:
