@@ -784,10 +784,30 @@ THE FORMATS
 
         gpsbabel -i an1 -f one.an1 -f two.an1 -o an1 -F merged.an1
 
-        Currently, GPSBabel only writes drawing layers.  If your input
-        file is a road, track, trail, or waypoint layer, you should not
-        attempt to write to an .an1 file as the results may be 
-        unpredictable. 
+        In this case, the merged data will contain all of the properties
+        of the original data.
+
+        Currently, GPSBabel only writes drawing layers, as opposed to road, 
+        track, and other specialized layers.  If your input file is a road, 
+        track, trail, or waypoint layer, you should not attempt to write to 
+        an .an1 file as the results may be unpredictable.  Note that this 
+        also applies to merging files, so you can't currently merge two road
+        layers with GPSBabel (officially; there is an unsupported "type" 
+        option that works in limited cases.)
+
+    TomTom
+
+	This format can read and write TomTom .ov2 (POI) files, as used by the 
+        TomTom GO and TomTom Navigator.  It has been tested with an original
+        TomTom GO running version 5.00 of the TomTom software.  There may be
+        some records that confuse the input module - if you have an example
+        of such a record "in the wild", and you aren't restricted from sharing
+        it, we encourage you to post to the gpsbabel-misc mailing list to 
+        contact a developer.
+
+        Note that in addition to the .ov2 file, you will need a .bmp file for
+        the icon.  It should be 22x22 and 16 colors, and have the same name
+        (not including the extension) as the .ov2 file.
 
 DATA FILTERS
 

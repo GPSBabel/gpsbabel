@@ -27,7 +27,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
-	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o
+	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o
 
@@ -213,6 +213,7 @@ text.o: text.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 tiger.o: tiger.c defs.h queue.h gbtypes.h csv_util.h
 tmpro.o: tmpro.c defs.h queue.h gbtypes.h csv_util.h
+tomtom.o: tomtom.c defs.h queue.h gbtypes.h
 tpg.o: tpg.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/gpsport.h jeeps/gpsserial.h jeeps/gpssend.h jeeps/gpsread.h \
   jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \

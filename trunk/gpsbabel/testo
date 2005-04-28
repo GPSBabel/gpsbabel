@@ -612,6 +612,22 @@ ${PNAME} -i google -f reference/google.js -o an1 -F ${TMPDIR}/an1.out
 compare ${TMPDIR}/an1.out reference/an1-line-out.ref
 
 #
+# TomTom .ov2 tests
+#
+
+rm -f ${TMPDIR}/ov2.out
+${PNAME} -i arc -f reference/google.arc -o tomtom -F ${TMPDIR}/ov2.out
+compare ${TMPDIR}/ov2.out reference/ov2-arc-out.ref
+
+rm -f ${TMPDIR}/ov2.out
+${PNAME} -i geo -f reference/gl.loc -o tomtom -F ${TMPDIR}/ov2.out
+compare ${TMPDIR}/ov2.out reference/ov2-geo-out.ref
+
+rm -f ${TMPDIR}/ov2.out
+${PNAME} -i tomtom -f reference/ov2-geo-out.ref -o gpsutil -F ${TMPDIR}/ov2.out
+compare ${TMPDIR}/ov2.out reference/ov2-in.ref
+
+#
 # XCSV "human readable" tests
 #
 rm -f ${TMPDIR}/humanread.out
