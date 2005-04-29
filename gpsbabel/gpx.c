@@ -478,6 +478,9 @@ gs_type_mapping{
 	{ gt_event, "Event cache" },
 	{ gt_webcam, "Webcam Cache" },
 	{ gt_suprise, "Unknown cache" },
+	{ gt_earth, "Earthcache" },
+	{ gt_cito, "Cache In Trash Out Event" },
+	{ gt_letterbox, "Letterbox Hybrid" },
 };
 
 struct
