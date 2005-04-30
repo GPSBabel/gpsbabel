@@ -77,6 +77,7 @@ extern ff_vecs_t overlay_vecs;
 extern ff_vecs_t kml_vecs;
 extern ff_vecs_t google_vecs;
 extern ff_vecs_t an1_vecs;
+extern ff_vecs_t tomtom_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -362,6 +363,12 @@ vecs_t vec_list[] = {
 		"an1",
 		"DeLorme .an1 (drawing) file",
 		"an1"
+	},
+	{
+		&tomtom_vecs,
+		"tomtom",
+		"TomTom POI file",
+		"ov2"
 	},
 	{
 		NULL,
