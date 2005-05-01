@@ -481,6 +481,9 @@ gs_type_mapping{
 	{ gt_earth, "Earthcache" },
 	{ gt_cito, "Cache In Trash Out Event" },
 	{ gt_letterbox, "Letterbox Hybrid" },
+	{ gt_locationless, "Locationless (Reverse) Cache" },
+
+	{ gt_benchmark, "Benchmark" }, /* Not Groundspeak; for GSAK  */
 };
 
 struct
