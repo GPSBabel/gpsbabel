@@ -111,6 +111,8 @@ typedef enum {
 	gt_suprise,
 	gt_webcam,
 	gt_earth,
+	gt_locationless,
+	gt_benchmark, /* Extension to Groundspeak for GSAK */
 	gt_cito
 } geocache_type;
 

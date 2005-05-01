@@ -913,6 +913,34 @@ DEL %TMPDIR%\an1.out
 CALL :COMPARE %TMPDIR%\an1.out reference\an1-line-out.ref
 
 REM 
+REM TomTom .ov2 tests
+REM 
+
+DEL %TMPDIR%\ov2.out
+@echo on
+@echo Testing...
+%PNAME% -i arc -f reference\google.arc -o tomtom -F %TMPDIR%\ov2.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\ov2.out reference\ov2-arc-out.ref
+
+DEL %TMPDIR%\ov2.out
+@echo on
+@echo Testing...
+%PNAME% -i geo -f reference\gl.loc -o tomtom -F %TMPDIR%\ov2.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\ov2.out reference\ov2-geo-out.ref
+
+DEL %TMPDIR%\ov2.out
+@echo on
+@echo Testing...
+%PNAME% -i tomtom -f reference\ov2-geo-out.ref -o gpsutil -F %TMPDIR%\ov2.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\ov2.out reference\ov2-in.ref
+
+REM 
 REM XCSV "human readable" tests
 REM 
 DEL %TMPDIR%\humanread.out
