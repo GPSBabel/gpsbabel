@@ -104,10 +104,14 @@ html_disp(const waypoint *wpt)
 	}
 	if (wpt->gc_data.terr) {
 	        if (wpt->gc_data.desc_short.utfstring) {
-			fprintf (file_out, "<p class=\"descshort\">%s</p>\n", strip_nastyhtml(wpt->gc_data.desc_short.utfstring));
+			char *tmpstr = strip_nastyhtml(wpt->gc_data.desc_short.utfstring);
+			fprintf (file_out, "<p class=\"descshort\">%s</p>\n", tmpstr );
+			xfree( tmpstr );
        		}
 	        if (wpt->gc_data.desc_long.utfstring) {
-			fprintf (file_out, "<p class=\"desclong\">%s</p>\n", strip_nastyhtml(wpt->gc_data.desc_long.utfstring));
+			char *tmpstr = strip_nastyhtml(wpt->gc_data.desc_long.utfstring);
+			fprintf (file_out, "<p class=\"desclong\">%s</p>\n", tmpstr );
+			xfree( tmpstr );
        		}
 		if (wpt->gc_data.hint) {
 			char *hint = NULL;
