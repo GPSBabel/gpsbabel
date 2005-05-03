@@ -70,6 +70,7 @@ vcf_print_utf(const utf_string *s)
 	fputs(p2, file_out);
 	xfree(p);
 	xfree(p2);
+	xfree(stripped_html);
 }
 
 static void
