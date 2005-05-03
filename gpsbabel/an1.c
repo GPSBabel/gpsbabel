@@ -657,6 +657,36 @@ Write_One_AN1_Line( const route_head *rte )
 	if ( rte->an1_extras ) {
 		rec = (an1_line_record *)(void *)(rte->an1_extras);	
 		local = 0;
+		switch (output_type_num) {
+			case 1:
+				if ( rec->type != 14 ) {
+					rec = Alloc_AN1_Line();
+					memcpy( rec, rte->an1_extras, sizeof(an1_line_record));
+					local = 1;
+					rec->magic = 4112;
+					rec->unk1 = 4359;
+					rec->unk2 = 655360;
+					rec->type = 14;
+					rec->unk8 = 2;
+				} // end if
+				break;
+			case 2:
+				if ( rec->type != 15 ) {
+					rec = Alloc_AN1_Line();
+					memcpy( rec, rte->an1_extras, sizeof(an1_line_record));
+					local = 1;
+					rec->type = 15;
+				} // end if
+				break;				
+			case 4:
+				if ( rec->type != 16 ) {
+					rec = Alloc_AN1_Line();
+					memcpy( rec, rte->an1_extras, sizeof(an1_line_record));
+					local = 1;
+					rec->type = 16;
+				} // end if
+				break;
+		}
 	}
 	else {
 		rec = Alloc_AN1_Line();
