@@ -187,9 +187,10 @@ delete_last_vowel(int start, char *istring, int *replaced)
 	*replaced = 0;
 	for (l = strlen(istring); l > start; l--) {
 		if (strchr(vowels, istring[l-1])) {
-			char *ostring = xstrdup(istring);
+			char *ostring;
 			/* If vowel is the first letter of a word, keep it.*/
 			if (istring[l-2] == ' ') continue;
+			ostring = xstrdup(istring);
 			strncpy(&ostring[l-1], &istring[l], 1+strlen(istring)-l);
 			ostring[strlen(istring)-1] = 0;
 			*replaced = 1;
