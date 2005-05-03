@@ -972,7 +972,7 @@ strip_html(const utf_string *in)
 	short int taglen;
 	
 	if (!in->is_html)
-		return in->utfstring;
+		return xstrdup(in->utfstring);
 	/*
 	 * We only shorten, so just dupe the input buf for space.
 	 */
