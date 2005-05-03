@@ -9,6 +9,9 @@ sub alloc {
         ($ofile,$oline) = @{$arena{$addr}};
         print( "duplicate allocation $addr at $file $line\n  allocated at $ofile $oline\n" );
     }
+    if ( $freed{$addr} ) {
+	delete $freed{$addr};
+    }
     $arena{$addr} = [$file,$line];
 }
 
