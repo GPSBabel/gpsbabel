@@ -417,6 +417,7 @@ get_gc_info(waypoint *wpt)
 		if (wpt->gc_data.type == gt_unknown) return  "? ";
 		if (wpt->gc_data.type == gt_multi) return  "Mlt ";
 		if (wpt->gc_data.container == gc_micro) return  "M ";
+		if (wpt->gc_data.container == gc_small) return  "S ";
 	}
 	return "";
 }
