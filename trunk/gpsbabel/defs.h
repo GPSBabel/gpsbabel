@@ -138,6 +138,8 @@ typedef struct {
 	int diff; /* (multiplied by ten internally) */
 	int terr; /* (likewise) */
 	time_t exported;
+	time_t last_found;
+	char *placer; /* Placer name */
 	char *hint; /* all these UTF8, XML entities removed, May be not HTML. */
 	utf_string desc_short;
 	utf_string desc_long; 
