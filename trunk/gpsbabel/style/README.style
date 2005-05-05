@@ -342,6 +342,14 @@ The fields used by the XCSV parser are as follows:
    
    example: IFIELD TIMET_TIME,"","%ld"
 
+ o YYYYMMDD_TIME
+   TIMET_TIME is the waypoint's creation time, if any.  It's a single
+   decimal field containing four digits of year, two digits of month, 
+   and two digits of date.   Internally it is a LONG INTEGER and thus
+   requires a LONG INTEGER printf conversion.
+
+   example: IFIELD YYYYMMDD_TIME,"","%ld"
+
  o GEOCACHE_DIFF
    GEOCACHE_DIFF is valid only for geocaches and represents a DOUBLE 
    PRECISION FLOAT.  A "three and a half star" cache would therefore be "3.5"
@@ -367,6 +375,24 @@ The fields used by the XCSV parser are as follows:
    and "Multi-Cache".
 
    example: GEOCACHE_TYPE,"","%s"
+
+ o GEOCACHE_PLACER
+   GEOCACHE_PLACER is a string containing the name of the placer of a 
+   geocache.   
+
+   example: GEOCACHE_PLACER,"","%s"
+
+ o GEOCACHE_LAST_FOUND
+   A long integer in format YYYYMMDD containing the last time this geocache
+   was found.
+
+   example: GEOCACHE_LAST_FOUND,"","%ld"
+
+ o GEOCACHE_HINT
+   The hint for this geocache.   No additional transformation (such as rot13)
+   will be performed on this string.
+
+   example: GEOCACHE_HINT,"","%s"
 
  o PATH_DISTANCE_MILES
    PATH_DISTANCE_MILES outputs the total length of the route or track from

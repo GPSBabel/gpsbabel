@@ -2,6 +2,7 @@
     Utilities for parsing Character Separated Value files (CSV)
 
     Copyright (C) 2002 Alex Mottram (geo_alexm at cox-internet.com)
+    Copyright (C) 2002-2005 Robert Lipe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -603,6 +604,37 @@ xcsv_epilogue_add(char *epilogue)
     xcsv_file.epilogue_lines++;
 }
 
+static
+time_t
+yyyymmdd_to_time(const char *s)
+{
+	int t = atol(s);
+	struct tm tm;
+
+	memset(&tm, 0, sizeof(tm));
+
+	tm.tm_mday = t % 100;
+	t = t / 100;
+	tm.tm_mon = t % 100 - 1;
+	t = t / 100;
+	tm.tm_year = t - 1900;
+	return mktime(&tm);
+}
+
+static 
+long 
+time_to_yyyymmdd(time_t t)
+{
+	long b;
+	struct tm *tm = gmtime(&t);
+
+	b = (1900 + tm->tm_year) * 10000 + 
+		(1 + tm->tm_mon) * 100 + 
+		tm->tm_mday;
+
+	return b;
+}
+
 /*****************************************************************************/
 /* xcsv_parse_val() - parse incoming data into the waypt structure.          */
 /* usage: xcsv_parse_val("-123.34", *waypt, *field_map)                      */
@@ -713,6 +745,12 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        /* Time as time_t */
        wpt->creation_time = atol(s);
      } else
+    if (strcmp(fmp->key, "YYYYMMDD_TIME") == 0) {
+	wpt->creation_time = yyyymmdd_to_time(s);
+    } else
+    if (strcmp(fmp->key, "GEOCACHE_LAST_FOUND") == 0) {
+	wpt->gc_data.last_found = yyyymmdd_to_time(s);
+    } else
 
     /* GEOCACHING STUFF ***************************************************/
     if (strcmp(fmp->key, "GEOCACHE_DIFF") == 0) {
@@ -730,6 +768,14 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     if (strcmp(fmp->key, "GEOCACHE_CONTAINER") == 0) {
        wpt->gc_data.container = gs_mkcont(s);
     } else
+    if (strcmp(fmp->key, "GEOCACHE_HINT") == 0) {
+       wpt->gc_data.hint = csv_stringtrim(s, "", 0);
+    } else
+    if (strcmp(fmp->key, "GEOCACHE_PLACER") == 0) {
+       wpt->gc_data.placer = csv_stringtrim(s, "", 0);
+    } else
+	
+    /* OTHER STUFF ***************************************************/
     if ( strcmp( fmp->key, "PATH_DISTANCE_MILES") == 0) {
        /* Ignored on input */
     } else
@@ -1069,6 +1115,12 @@ xcsv_waypt_pr(const waypoint *wpt)
             /* time as a time_t variable */
             sprintf(buff, fmp->printfc, wpt->creation_time);
         } else
+        if (strcmp(fmp->key, "YYYYMMDD_TIME") == 0) {
+	    sprintf(buff, fmp->printfc, time_to_yyyymmdd(wpt->creation_time));
+	} else
+        if (strcmp(fmp->key, "GEOCACHE_LAST_FOUND") == 0) {
+	    sprintf(buff, fmp->printfc, time_to_yyyymmdd(wpt->gc_data.last_found));
+	} else
 
         /* GEOCACHE STUFF **************************************************/
         if (strcmp(fmp->key, "GEOCACHE_DIFF") == 0) {
@@ -1086,6 +1138,12 @@ xcsv_waypt_pr(const waypoint *wpt)
 	if (strcmp(fmp->key, "GEOCACHE_TYPE") == 0) {
             /* Geocache Type */
             sprintf(buff, fmp->printfc, gs_get_cachetype(wpt->gc_data.type));
+        } else 
+	if (strcmp(fmp->key, "GEOCACHE_HINT") == 0) {
+	    sprintf(buff, fmp->printfc, NONULL(wpt->gc_data.hint));
+        } else 
+	if (strcmp(fmp->key, "GEOCACHE_PLACER") == 0) {
+	    sprintf(buff, fmp->printfc, NONULL(wpt->gc_data.placer));
         } else {
            /* this should probably never happen */
         }
