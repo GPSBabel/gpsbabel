@@ -772,6 +772,13 @@ THE FORMATS
            2>/dev/null >google_map.js
 
         gpsbabel -i google -f google_map.js -o gpx -F google_map.gpx
+	
+    TourExchangeFormat
+    
+	XML based export format, used by Map&Guide
+	"Motorrad-Routenplaner". This software can only export routing data.
+	So we don't support writing.
+	
 
     AN1
 

@@ -686,5 +686,6 @@ ${PNAME} -i geo -f geocaching.loc  -o geo -F ${TMPDIR}/geocustom.out
 # Write something to the various output-only formats
 #
 ${PNAME} -i geo -f geocaching.loc -o text -F ${TMPDIR}/text.out -o html -F ${TMPDIR}/html.out -o vcard -F ${TMPDIR}/vcard.out #-o palmdoc -F ${TMPDIR}/pd.out
+./gpsbabel -i tef -f tef_xml.sample.xml -o gpx -F /dev/null
 
 exit 0

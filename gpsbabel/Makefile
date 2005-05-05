@@ -27,7 +27,8 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
-	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o
+	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
+	tef_xml.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o
 
@@ -90,8 +91,8 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_2_6-beta04302005c-gsak
-VERSIOND=1.2.6_beta04302005c-gsak
+VERSIONU=1_2_6-beta04302005c-gsak+jamiez
+VERSIOND=1.2.6_beta04302005c-gsak+jamiez
 # VERSIONU=1_2_5
 # VERSIOND=1.2.5
 
@@ -177,6 +178,7 @@ magnav.o: magnav.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
 magproto.o: magproto.c defs.h queue.h gbtypes.h magellan.h
 main.o: main.c defs.h queue.h gbtypes.h
+tef_xml.o: tef_xml.c defs.h queue.h gbtypes.h xmlgeneric.h
 mapsend.o: mapsend.c defs.h queue.h gbtypes.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h gbtypes.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h gbtypes.h

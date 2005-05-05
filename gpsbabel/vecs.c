@@ -78,6 +78,7 @@ extern ff_vecs_t kml_vecs;
 extern ff_vecs_t google_vecs;
 extern ff_vecs_t an1_vecs;
 extern ff_vecs_t tomtom_vecs;
+extern ff_vecs_t tef_xml_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -369,6 +370,12 @@ vecs_t vec_list[] = {
 		"tomtom",
 		"TomTom POI file",
 		"ov2"
+	},
+	{
+		&tef_xml_vecs,
+		"tef",
+		"Map&Guide 'TourExchangeFormat' XML",
+		"xml"
 	},
 	{
 		NULL,
