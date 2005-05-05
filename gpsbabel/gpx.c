@@ -1,7 +1,7 @@
 /*
     Access GPX data files.
 
-    Copyright (C) 2002, 2003, 2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004, 2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -102,6 +102,9 @@ typedef enum {
 	tt_cache_desc_short,
 	tt_cache_desc_long,
 	tt_cache_log_wpt,
+	tt_cache_log_type,
+	tt_cache_log_date,
+	tt_cache_placer,
 	tt_rte,
 	tt_rte_name,
 	tt_rte_desc,
@@ -174,6 +177,9 @@ tag_mapping tag_path_map[] = {
 	{ tt_cache_desc_short, 1, "/gpx/wpt/groundspeak:cache/groundspeak:short_description" },
 	{ tt_cache_desc_long, 1, "/gpx/wpt/groundspeak:cache/groundspeak:long_description" },
 	{ tt_cache_log_wpt, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:log_wpt" },
+	{ tt_cache_log_type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type" },
+	{ tt_cache_log_date, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date" },
+	{ tt_cache_placer, 1, "/gpx/wpt/groundspeak:cache/groundspeak:placed_by" },
 
 	{ tt_rte, 0, "/gpx/rte" },
 	{ tt_rte_name, 0, "/gpx/rte/name" },
@@ -472,12 +478,12 @@ gs_type_mapping{
 	geocache_type type;
 	const char *name;
 } gs_type_map[] = {
-	{ gt_traditional, "Traditional cache" },
-	{ gt_multi, "Multi-Cache" },
-	{ gt_virtual, "Virtual cache" },
-	{ gt_event, "Event cache" },
+	{ gt_traditional, "Traditional Cache" },
+	{ gt_multi, "Multi-cache" },
+	{ gt_virtual, "Virtual Cache" },
+	{ gt_event, "Event Cache" },
 	{ gt_webcam, "Webcam Cache" },
-	{ gt_suprise, "Unknown cache" },
+	{ gt_suprise, "Unknown Cache" },
 	{ gt_earth, "Earthcache" },
 	{ gt_cito, "Cache In Trash Out Event" },
 	{ gt_letterbox, "Letterbox Hybrid" },
@@ -623,6 +629,7 @@ gpx_end(void *data, const char *el)
 	float x;
 	char *cdatastrp = cdatastr.mem;
 	int passthrough;
+	static time_t gc_log_date;
 
 	if (strcmp(s + 1, el)) {
 		fprintf(stderr, "Mismatched tag %s\n", el);
@@ -698,6 +705,24 @@ gpx_end(void *data, const char *el)
 	case tt_cache_terrain:
 		sscanf(cdatastrp, "%f", &x);
 		wpt_tmp->gc_data.terr = x * 10;
+		break;
+	case tt_cache_placer:
+		wpt_tmp->gc_data.placer = xstrdup(cdatastrp);
+		break;
+	case tt_cache_log_date:
+		gc_log_date = xml_parse_time( cdatastrp );
+		break;
+	/*
+	 * "Found it" logs follow the date according to the schema,
+	 * if this is the first "found it" for this waypt, just use the
+	 * last date we saw in this log.
+	 */
+	case tt_cache_log_type:
+		if ((0 == strcmp(cdatastrp, "Found it")) && 
+		    (0 == wpt_tmp->gc_data.last_found)) {
+			wpt_tmp->gc_data.last_found  = gc_log_date;
+		}
+		gc_log_date = 0;
 		break;
 	/*
 	 * Route-specific tags.
