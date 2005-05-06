@@ -228,10 +228,11 @@ tef_item_start(const char *args, const char **attrv)
 void 
 tef_point(const char *args, const char **attrv)
 {
-	if (!wpt_tmp) return;
-	
         const char **avp = &attrv[0];
 	char *comma;
+
+	if (!wpt_tmp) return;
+	
         while (*avp) 
 	{
     	    if (strcmp(avp[0], "y") == 0) 
