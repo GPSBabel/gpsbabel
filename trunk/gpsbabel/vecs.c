@@ -76,6 +76,7 @@ extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t overlay_vecs;
 extern ff_vecs_t kml_vecs;
 extern ff_vecs_t google_vecs;
+extern ff_vecs_t maggeo_vecs;
 extern ff_vecs_t an1_vecs;
 extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t tef_xml_vecs;
@@ -200,7 +201,7 @@ vecs_t vec_list[] = {
 	{
 		&gcdb_vecs,
 		"gcdb",
-		"Geocaching Database", 
+		"GeocachingDB for Palm/OS", 
 		NULL
 	},
 	{
@@ -358,6 +359,12 @@ vecs_t vec_list[] = {
 		"google",
 		"Google Maps XML",
 		"xml"
+	},
+	{
+		&maggeo_vecs,
+		"maggeo",
+		"Magellan Explorist Geocaching",
+		"gs"
 	},
 	{
 		&an1_vecs,
