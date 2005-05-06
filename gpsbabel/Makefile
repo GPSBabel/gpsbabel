@@ -3,7 +3,7 @@
 # type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
 # INHIBIT_EXPAT and coment out LIBEXPAT on just to get a build working quickly.
 # INHIBIT_EXPAT=-DNO_EXPAT
-LIBEXPAT=-lexpat #-lefence
+LIBEXPAT=-lexpat -lefence
 
 # USB may required non-standard libraries (like libusb) be installed
 # and may not be available on all OSes.  Uncomment this to remove the key
