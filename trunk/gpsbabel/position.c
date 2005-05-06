@@ -35,6 +35,8 @@ static char *latopt = NULL;
 static char *lonopt = NULL;
 static char *exclopt = NULL;
 static char *nosort = NULL;
+static char *maxctarg = NULL;
+static int maxct;
 
 waypoint * home_pos;
 
@@ -64,6 +66,8 @@ arglist_t radius_args[] = {
 		NULL, ARGTYPE_BOOL },
 	{"nosort", &nosort,    "Inhibit sort by distance to center.",
 		NULL, ARGTYPE_BOOL },
+	{"maxcount", &maxctarg,"Output no more than this number of points",
+		NULL, ARGTYPE_INT },
 	{0, 0, 0, 0, 0}
 };
 
@@ -325,9 +329,14 @@ radius_process(void)
  	 */
 	for (i = 0; i < wc; i++) {
 		waypoint * wp = comp[i];
-		waypt_add(wp);
+
 		xfree(wp->extra_data);
 		wp->extra_data = NULL;
+
+		if (maxctarg && i >= maxct) {
+			continue;
+		}
+		waypt_add(wp);
 	}
 
 	xfree(comp);
@@ -346,6 +355,12 @@ radius_init(const char *args) {
 			 /* distance is kilometers, convert to feet */
 			pos_dist *= .6214;
 		}
+	}
+
+	if (maxctarg) {
+		maxct = atoi(maxctarg);
+	} else {
+		maxct = 0;
 	}
 
 	home_pos = (waypoint *) xcalloc(sizeof(*home_pos), 1);
