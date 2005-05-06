@@ -287,7 +287,7 @@ tef_xml_rd_deinit(void)
 
 ff_vecs_t tef_xml_vecs = {
 	ff_type_file,
-	{ ff_cap_read, ff_cap_none, ff_cap_none },
+	{ ff_cap_none, ff_cap_none, ff_cap_write },
 	tef_xml_rd_init,	
 	NULL,	
 	tef_xml_rd_deinit,
