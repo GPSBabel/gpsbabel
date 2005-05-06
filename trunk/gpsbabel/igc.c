@@ -518,8 +518,8 @@ static char *latlon2str(const waypoint * wpt)
     char lon_hemi = wpt->longitude < 0 ? 'W' : 'E';
     unsigned char lat_deg = fabs(wpt->latitude);
     unsigned char lon_deg = fabs(wpt->longitude);
-    unsigned int lat_min = (fabs(wpt->latitude) - lat_deg) * 60000 + 0.5;
-    unsigned int lon_min = (fabs(wpt->longitude) - lon_deg) * 60000 + 0.5;
+    unsigned int lat_min = rint((fabs(wpt->latitude) - lat_deg) * 60000);
+    unsigned int lon_min = rint((fabs(wpt->longitude) - lon_deg) * 60000);
 
     if (snprintf(str, 18, "%02u%05u%c%03u%05u%c",
 		 lat_deg, lat_min, lat_hemi, lon_deg, lon_min, lon_hemi) != 17) {
