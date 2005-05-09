@@ -28,7 +28,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
-	tef_xml.o maggeo.o
+	tef_xml.o maggeo.o pathaway.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o
 
@@ -179,6 +179,8 @@ magnav.o: magnav.c defs.h queue.h gbtypes.h coldsync/palm.h \
 magproto.o: magproto.c defs.h queue.h gbtypes.h magellan.h
 main.o: main.c defs.h queue.h gbtypes.h
 tef_xml.o: tef_xml.c defs.h queue.h gbtypes.h xmlgeneric.h
+pathaway.o: pathaway.c defs.h queue.h gbtypes.h \
+  coldsync/palm.h coldsync/pdb.h
 mapsend.o: mapsend.c defs.h queue.h gbtypes.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h gbtypes.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h gbtypes.h
