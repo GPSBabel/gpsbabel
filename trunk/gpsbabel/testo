@@ -694,4 +694,11 @@ rm -f ${TMPDIR}/tef_xms.mps
 ${PNAME} -r -i tef -f reference/route/tef_xml.sample.xml -o mapsource -F ${TMPDIR}/tef_xml.mps
 bincompare ${TMPDIR}/tef_xml.mps reference/route/tef_xml.mps
 
+#
+# pathaway palm database .pdb
+#
+rm -f ${TMPDIR}/pathaway.mps
+${PNAME} -t -i pathaway -f reference/track/pathaway.pdb -o mapsource -F ${TMPDIR}/pathaway.mps
+bincompare ${TMPDIR}/pathaway.mps reference/track/pathaway.mps
+
 exit 0

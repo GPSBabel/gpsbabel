@@ -80,6 +80,7 @@ extern ff_vecs_t maggeo_vecs;
 extern ff_vecs_t an1_vecs;
 extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t tef_xml_vecs;
+extern ff_vecs_t ppdb_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -383,6 +384,12 @@ vecs_t vec_list[] = {
 		"tef",
 		"Map&Guide 'TourExchangeFormat' XML",
 		"xml"
+	},
+	{
+		&ppdb_vecs,
+		"pathaway",
+		"PathAway Palm Database",
+		"pdb"
 	},
 	{
 		NULL,
