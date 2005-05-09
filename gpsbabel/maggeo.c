@@ -170,7 +170,7 @@ maggeo_waypt_pr(const waypoint *waypointp)
 	 * 
 	 */
 	snprintf(obuf, sizeof(obuf),
-		"PMGNGEO,%4.3f,%c,%09.3f,%c,%04.0f,F",
+		"PMGNGEO,%4.3f,%c,%08.3f,%c,%04.0f,F",
                 lat, ilat < 0 ? 'S' : 'N',
                 lon, ilon < 0 ? 'W' : 'E',
                 waypointp->altitude == unknown_alt ?

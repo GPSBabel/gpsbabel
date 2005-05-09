@@ -179,7 +179,7 @@ tag_mapping tag_path_map[] = {
 	{ tt_cache_log_wpt, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:log_wpt" },
 	{ tt_cache_log_type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type" },
 	{ tt_cache_log_date, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date" },
-	{ tt_cache_placer, 1, "/gpx/wpt/groundspeak:cache/groundspeak:placed_by" },
+	{ tt_cache_placer, 1, "/gpx/wpt/groundspeak:cache/groundspeak:owner" },
 
 	{ tt_rte, 0, "/gpx/rte" },
 	{ tt_rte_name, 0, "/gpx/rte/name" },
