@@ -170,6 +170,13 @@ write_long( FILE *file, long value ) {
 } 
 
 static void
+write_float_as_long( FILE *file, double value ) 
+{
+	long tmp = (value + 0.500000000001);
+	write_long( file, tmp);
+}
+
+static void
 write_char( FILE *file, unsigned char value ) {
 	fwrite( &value, 1, 1, file );
 }
@@ -197,10 +204,10 @@ write_blocks( FILE *f, struct blockheader *blocks ) {
 	int i;
 	write_char( f, 1 );
 	write_long( f, blocks->size );
-	write_long( f, blocks->maxlon*100000 );
-	write_long( f, blocks->maxlat*100000 );
-	write_long( f, blocks->minlon*100000 );
-	write_long( f, blocks->minlat*100000 );
+	write_float_as_long( f, blocks->maxlon*100000 );
+	write_float_as_long( f, blocks->maxlat*100000 );
+	write_float_as_long( f, blocks->minlon*100000 );
+	write_float_as_long( f, blocks->minlat*100000 );
 	if ( blocks->ch1 ) {
 		write_blocks( f, blocks->ch1 );
 	}
@@ -210,12 +217,10 @@ write_blocks( FILE *f, struct blockheader *blocks ) {
 	if ( !blocks->ch1 && !blocks->ch2 ) {
 		for ( i = 0; i < blocks->count; i++ ) {
 			write_char( f, 2 );
-			write_long( f, 
-				strlen( blocks->start[i].wpt->description ) 
-				+ 14 );
-			write_long( f, blocks->start[i].wpt->longitude*100000);
-			write_long( f, blocks->start[i].wpt->latitude*100000);
-			write_string( f, blocks->start[i].wpt->description );
+			write_long( f, strlen( blocks->start[i].wpt->description ) + 14 );
+			write_float_as_long( f, blocks->start[i].wpt->longitude*100000);
+			write_float_as_long( f, blocks->start[i].wpt->latitude*100000);
+			write_string( f, blocks->start[i].wpt->description);
 		}
 	}
 }	
