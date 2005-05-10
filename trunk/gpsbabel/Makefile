@@ -91,8 +91,8 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_2_6-beta05062005-marky
-VERSIOND=1.2.6_beta05062005-marky
+VERSIONU=1_2_6-beta05092005
+VERSIOND=1.2.6_beta05092005
 # VERSIONU=1_2_5
 # VERSIOND=1.2.5
 
