@@ -62,6 +62,7 @@ ppdb_read(void)
 	int latdeg, longdeg;
 	double latval, longval, altfeet;
 	struct tm dttm;
+	route_head *track_head;
 
 	if (NULL == (pdb = pdb_Read(fileno(fd)))) {
 		fatal(MYNAME ": pdb_Read failed\n");
@@ -75,7 +76,7 @@ ppdb_read(void)
 	       fatal(MYNAME ": This file is from an untested version of PathAway and is unsupported.\n");
         }
 
-	route_head *track_head = route_head_alloc();
+	track_head = route_head_alloc();
 	track_add_head(track_head);
 
 	track_head->rte_name = xstrdup(pdb->name);
