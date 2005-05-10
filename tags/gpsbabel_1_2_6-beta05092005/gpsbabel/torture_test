@@ -1,0 +1,27 @@
+
+PNAME=${PNAME:-./gpsbabel}
+DIFF=${DIFF:-diff}
+
+TMPDIR=/tmp/gpsbabel.$$
+mkdir -p $TMPDIR
+trap "rm -fr $TMPDIR" 0 1 2 3 15
+
+#
+# This is  nasty.   If we have a dictionary handy, treat it as a list of
+# waypoints and reduce all the names to eight characters.   Fewer chars
+# results in lost waypoints currently and that's a defect.
+#
+DICT=/usr/share/dict/words
+if [ -f $DICT ];
+then
+        WORDS=`cat $DICT | wc -l`
+        SWORDS=`${PNAME} -i gpsdrive -f $DICT -o gpsdrive,snlen=8 -F /dev/fd/1 |
+ wc -l`
+        if [ $WORDS -ne $SWORDS ];
+        then
+                echo "Shortname reduction failed."
+                exit 1
+        fi
+fi
+
+exit 0

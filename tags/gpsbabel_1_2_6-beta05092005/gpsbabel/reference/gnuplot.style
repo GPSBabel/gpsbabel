@@ -1,0 +1,26 @@
+# gpsbabel XCSV style file
+#
+# Format: GnuPlot output for track profiles
+# Author: Ron Parker
+#   Date: 17 Aug 2004
+#
+#
+
+DESCRIPTION		Gnuplot track profile
+
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		TAB
+RECORD_DELIMITER	NEWLINE
+BADCHARS	        TAB	
+
+#
+# INDIVIDUAL DATA FIELDS:
+#
+PROLOGUE plot "-" with lines
+
+IFIELD  PATH_DISTANCE_MILES, "", "%.4lf"
+IFIELD  ALT_FEET, "", "%f"
+
+EPILOGUE e
+
