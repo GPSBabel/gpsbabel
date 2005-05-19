@@ -87,6 +87,7 @@ typedef struct {
 	unsigned int	masked_objective;
 	int verbose_status;	/* set by GUI wrappers for status */
 	int no_smart_icons;	
+	int no_smart_names;	
 } global_options;
 
 extern global_options global_opts;
