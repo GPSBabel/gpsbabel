@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -203,7 +203,19 @@ main(int argc, char *argv[])
 				global_opts.masked_objective |= RTEDATAMASK;
 				break;
 			case 'N':
-				global_opts.no_smart_icons = 1;
+				switch(argv[argn][2]) {
+					case 'i':
+						global_opts.no_smart_icons = 1;
+						break;
+					case 'n':
+						global_opts.no_smart_names = 1;
+						break;
+					default:
+						global_opts.no_smart_names = 1;
+						global_opts.no_smart_icons = 1;
+						break;
+				}
+				
 				break;
  			case 'x':
 				optarg = argv[argn][2]
