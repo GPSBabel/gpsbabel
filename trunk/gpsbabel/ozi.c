@@ -4,7 +4,7 @@
 
     As described in OziExplorer Help File
 
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -548,6 +548,13 @@ data_read(void)
                 ozi_objective = wptdata;
             }
         }
+
+        if (linecount == 2) {
+	    if (case_ignore_strncmp(buff, "WGS 84", 6)) {
+		warning(MYNAME "Only supports reading WGS 84 datum, not '%s'\n", buff);
+	    }
+	}
+
         if ((strlen(buff)) && (strstr(buff, ",") != NULL)) {
 
             wpt_tmp = waypt_new();
