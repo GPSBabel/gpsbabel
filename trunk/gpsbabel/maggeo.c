@@ -83,9 +83,9 @@ maggeo_fmtdate(time_t t)
 	char *cbuf = xmalloc(SZ);
 	struct tm *tm = NULL;
 	int date;
-
 	tm = gmtime(&t);
-	if ( tm ) {
+
+	if ( t && tm ) {
 		date = tm->tm_mday * 100000 + (1+tm->tm_mon) * 1000 + 
 			   tm->tm_year;
 		snprintf(cbuf, SZ, "%07d", date);
@@ -154,7 +154,7 @@ maggeo_waypt_pr(const waypoint *waypointp)
 	ctype = gs_get_cachetype(waypointp->gc_data.type);
 	placeddate = maggeo_fmtdate(waypointp->creation_time);
 	lfounddate = maggeo_fmtdate(waypointp->gc_data.last_found);
-	cname = mkshort(desc_handle, waypointp->notes);
+	cname = mkshort(desc_handle, waypointp->notes ? waypointp->notes : waypointp->shortname);
 	placer = waypointp->gc_data.placer;
 
 	/*
