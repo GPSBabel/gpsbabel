@@ -178,6 +178,9 @@ int32 GPS_Serial_Chars_Ready(int32 fd)
 
 int32 GPS_Serial_Wait(int32 fd)
 {
+
+	if (gps_is_usb) return 1;
+
 	/* Wait a short time before testing if data is ready.
 	 * The GPS II, in particular, has a noticable time responding
 	 * with a response to the device inquiry and if we give up on this
