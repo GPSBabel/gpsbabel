@@ -343,7 +343,7 @@ The fields used by the XCSV parser are as follows:
    example: IFIELD TIMET_TIME,"","%ld"
 
  o YYYYMMDD_TIME
-   TIMET_TIME is the waypoint's creation time, if any.  It's a single
+   YYYYMMDD_TIME is the waypoint's creation time, if any.  It's a single
    decimal field containing four digits of year, two digits of month, 
    and two digits of date.   Internally it is a LONG INTEGER and thus
    requires a LONG INTEGER printf conversion.
