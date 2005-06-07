@@ -396,7 +396,7 @@ static void ppdb_read(void)
 
 	if ((pdb_in->appinfo_len > 0) && (pdb_in->appinfo != NULL))
 	{
-	    ppdb_appdata_t *info = (ppdb_appdata_t *) pdb_in->appinfo;
+	    info = (ppdb_appdata_t *) pdb_in->appinfo;
 	    descr = info->vehicleStr;
 	}
 	
