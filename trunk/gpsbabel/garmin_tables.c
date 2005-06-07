@@ -214,5 +214,30 @@ icon_mapping_t garmin_icon_table[] = {
 	{    47,   160, "Event Cache" }, 	/* Icon for "Event" */
 	{    90,  8221, "Webcam Cache" }, 	/* Icon for "Live Theatre" */
 
+	/* MapSource V6.x */
+	
+	{   140,  8286, "Flag, Red" },		
+	{   141,  8284, "Flag, Blue" },
+	{   142,  8285, "Flag, Green" },
+	{   143,  8289, "Pin, Red" },
+	{   144,  8287, "Pin, Blue" },
+	{   145,  8288, "Pin, Green" },
+	{   146,  8292, "Diamond, Red" },
+	{   147,  8290, "Diamond, Blue" },
+	{   148,  8291, "Diamond, Green" },
+	{   149,  8293, "Bike Trail" },
+	{   150,   181, "Fishing Hot Spot Facility" }, 
+	{   151,  8249, "Police Station"}, 
+	{   152,  8251, "Ski Resort" }, 
+	{   153,  8252, "Ice Skating" }, 
+	{   154,  8253, "Wrecker" }, 
+	{   155,   184, "Anchor Prohibited" }, 
+	{   156,   185, "Beacon" }, 
+	{   157,   186, "Coast Guard" }, 
+	{   158,   187, "Reef" }, 
+	{   159,   188, "Weed Bed" }, 
+	{   160,   189, "Dropoff" }, 
+	{   161,   190, "Dock" }, 
+	
 	{    -1,    -1, NULL },
 };
