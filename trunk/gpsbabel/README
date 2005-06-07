@@ -134,6 +134,15 @@ THE FORMATS
 	Additional sub options:
 	baud: may be 1200, 2400, 4800, 9600, 19200, but must match receiver.
 
+    MAGELLANX
+
+ 	The SD card format used by the Magellan Explorist 300, 400, and 500.
+	It's identical to the Magellan SD format used by Meridian, but allows
+	longer waypoint names.
+	
+	You should name any file created with this format with a ".upt"
+	extension so the firmware can read it.
+
     GARMIN
 
         Waypoint serial upload and download works reliably under both

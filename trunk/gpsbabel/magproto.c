@@ -46,6 +46,7 @@ static char *noack = NULL;
 static char *nukewpt = NULL;
 static int route_out_count;
 static int waypoint_read_count;
+static int wpt_len = 8;
 
 typedef enum {
 	mrs_handoff = 0,
@@ -365,7 +366,7 @@ mag_verparse(char *ibuf)
 		case mm_meridian:
 		case mm_sportrak:
 			icon_mapping = map330_icon_table;
-			setshort_length(mkshort_handle, 8);
+			setshort_length(mkshort_handle, wpt_len);
 			setshort_mustupper(mkshort_handle, 0);
 			mag_cleanse = m330_cleanse;
 			break;
@@ -794,7 +795,7 @@ mag_rd_init(const char *portname)
 }
 
 static void
-mag_wr_init(const char *portname)
+mag_wr_init_common(const char *portname)
 {
 	if (bs) {
 		bitrate=atoi(bs);
@@ -839,6 +840,24 @@ mag_wr_init(const char *portname)
 		mag_rd_init(portname);
 	}
 	QUEUE_INIT(&rte_wpt_tmp);
+}
+
+/*
+ * Entry point for extended (explorist) points.
+ */
+static void
+magX_wr_init(const char *portname)
+{
+	wpt_len = 20;
+	mag_wr_init_common(portname);
+	setshort_length(mkshort_handle, wpt_len);
+}
+
+static void
+mag_wr_init(const char *portname)
+{
+	wpt_len = 8;
+	mag_wr_init_common(portname);
 }
 
 static void
@@ -1218,11 +1237,12 @@ mag_waypt_pr(const waypoint *waypointp)
 	if (odesc && /* !is_file && */ (wptcmtcnt++ >= wptcmtcnt_max))
 		odesc[0] = 0;
 
-	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.8s,%-.46s,%s",
+	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.*s,%-.46s,%s",
 		lat, ilat < 0 ? 'S' : 'N',
 		lon, ilon < 0 ? 'W' : 'E',
 		waypointp->altitude == unknown_alt ?
 			0 : waypointp->altitude,
+		wpt_len,
 		owpt,
 		odesc,
 		icon_token);
@@ -1440,4 +1460,19 @@ ff_vecs_t mag_fvecs = {
 	mag_write,
 	NULL, 
 	mag_fargs
+};
+
+/*
+ * Extended (Explorist) entry tables.
+ */
+ff_vecs_t magX_fvecs = {
+	ff_type_file,
+	FF_CAP_RW_ALL,
+	mag_rd_init,	
+	magX_wr_init,	
+	mag_deinit,	
+	mag_deinit,	
+	mag_read,
+	mag_write,
+	NULL, 
 };
