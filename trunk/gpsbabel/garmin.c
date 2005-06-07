@@ -293,8 +293,8 @@ track_read(void)
 		route_add_wpt(trk_head, wpt);
 	}
 
-	while(--ntracks) {
-		GPS_Track_Del(&array[ntracks]);
+	while(ntracks) {
+		GPS_Track_Del(&array[--ntracks]);
 	}
 	xfree(array);
 }

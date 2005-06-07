@@ -63,7 +63,7 @@ struct LINKDATA LINK_ID[3]=
 
 struct GPS_MODEL_PROTOCOL GPS_MP[]=
 {
-    {   7,pL001,pA010,pA100,pD100,pA200,pD200,-1,-1,-1,-1,
+    {   7,pL001,pA010,pA100,pD100,pA200,pD200,-1,-1,-1,-1,-1,
 	   pA500,pD500
     },
     {  13,pL001,pA010,pA100,pD100,pA200,pD200,pD100,pA300,pD300,pA400,pD400,
