@@ -61,6 +61,13 @@ COMMON USAGE
 	gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc
 	gpsbabel -i magellan -f com1 -o geo -F mag.loc
 	
+    PathAway (Palm) database
+    
+	PathAway is a Palm software designed for handling "most" GPS devices 
+	(including BlueTooth). In this time (i mean 2005) a free tool 
+	to convert this database is located on the homepage 
+	of PathAway (www.pathaway.com). But i've read there ... for windows and
+	the output format was also very limited. 
 
 	Optionally, you may specify "-s" in any command line.  This causes
 	the program to ignore any "short" names that may be present in the
