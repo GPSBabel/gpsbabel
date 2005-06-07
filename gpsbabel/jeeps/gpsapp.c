@@ -3036,7 +3036,7 @@ static void GPS_D202_Get(GPS_PWay *way, UC *s)
 
     p=s;
 
-    (*way)->rte_prot = 201;
+    (*way)->rte_prot = 202;
 #if 0
     /* D202 has only a null terminated string for rte_ident */
     (*way)->rte_num  = *p++;
