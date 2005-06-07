@@ -34,6 +34,7 @@ extern ff_vecs_t geo_vecs;
 extern ff_vecs_t gpx_vecs;
 extern ff_vecs_t mag_svecs;
 extern ff_vecs_t mag_fvecs;
+extern ff_vecs_t magX_fvecs;
 extern ff_vecs_t mapsend_vecs;
 extern ff_vecs_t mps_vecs;
 extern ff_vecs_t gpsutil_vecs;
@@ -112,8 +113,14 @@ vecs_t vec_list[] = {
 	{
 		&mag_fvecs,
 		"magellan",
-		"Magellan SD files (as for Meridians)", 
+		"Magellan SD files (as for Meridian)", 
 		NULL
+	},
+	{
+		&magX_fvecs,
+		"magellanx",
+		"Magellan SD files (as for eXplorist)", 
+		"upt"
 	},
 	{
 		&mapsend_vecs,
