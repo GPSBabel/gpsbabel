@@ -695,10 +695,14 @@ ${PNAME} -r -i tef -f reference/route/tef_xml.sample.xml -o mapsource -F ${TMPDI
 bincompare ${TMPDIR}/tef_xml.mps reference/route/tef_xml.mps
 
 #
-# pathaway palm database .pdb
+# PathAway Palm Database .pdb tests
 #
-rm -f ${TMPDIR}/pathaway.mps
-${PNAME} -t -i pathaway -f reference/track/pathaway.pdb -o mapsource -F ${TMPDIR}/pathaway.mps
-bincompare ${TMPDIR}/pathaway.mps reference/track/pathaway.mps
+rm -f ${TMPDIR}/pathaway*
+${PNAME} -i geo -f geocaching.loc -o pathaway,dbname="pathaway-geo" -F ${TMPDIR}/pathaway-geo.pdb
+${PNAME} -i pathaway -f ${TMPDIR}/pathaway-geo.pdb -o geo -F ${TMPDIR}/pathaway-geo.loc
+compare ${TMPDIR}/pathaway-geo.loc reference/pathaway-geo.loc
+rm -f ${TMPDIR}/pathaway*
+${PNAME} -t -i pathaway -f reference/track/pathaway.pdb -o gpx -F ${TMPDIR}/pathaway.gpx
+compare ${TMPDIR}/pathaway.gpx reference/track/pathaway.gpx
 
 exit 0

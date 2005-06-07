@@ -29,14 +29,22 @@
 static char *deficon = NULL;
 
 static waypoint *wpt_tmp = NULL;
-static int wpt_tmp_valid = 0;
 static int item_count = -1;
 static int waypoints = 0;
+static int mapsource = 0;
 
 static route_head *route = NULL;
 
 FILE *fd;
 FILE *ofd;
+
+static char *routevia = NULL;
+
+static arglist_t tef_xml_args[] = 
+{
+	{"routevia", &routevia, "Include only via stations in route", NULL, ARGTYPE_BOOL},
+	{0, 0, 0, 0 }
+};
 
 #define MYNAME "TourExchangeFormat"
 
@@ -102,20 +110,23 @@ tef_header(const char *args, const char **attrv)
 {
 	const char **avp = &attrv[0];
 
-	route = route_head_alloc();
-        while (*avp) 
+	if (global_opts.objective == rtedata)
 	{
-	    if (strcmp(avp[0], "Name") == 0) 
+	    route = route_head_alloc();
+	    while (*avp) 
 	    {
-		route->rte_name = str_utf8_to_cp1252(avp[1]);
+		if (strcmp(avp[0], "Name") == 0) 
+		{
+		    route->rte_name = str_utf8_to_cp1252(avp[1]);
+		}
+		else if (strcmp(avp[0], "Software") == 0) 
+		{
+		    route->rte_desc = str_utf8_to_cp1252(avp[1]);
+		}
+        	avp+=2;
 	    }
-	    else if (strcmp(avp[0], "Software") == 0) 
-	    {
-		route->rte_desc = str_utf8_to_cp1252(avp[1]);
-	    }
-            avp+=2;
-        }
-	route_add_head(route);
+	    route_add_head(route);
+	}
 }
 
 /*
@@ -141,40 +152,36 @@ tef_list_start(const char *args, const char **attrv)
  * local procedure for waypoint handling
  */
  
-void waypoint_final(int force)
+void waypoint_final()
 {
-	if (!wpt_tmp) return;
+	int via;
+	if (wpt_tmp == NULL) return;
+
+	via = wpt_tmp->centiseconds;
+	wpt_tmp->centiseconds = 0;
 	
-	if (force || wpt_tmp_valid > 0)
-	{
+	if (via != 0)
 	    waypt_add(wpt_tmp);
-	    if (route)
+	    
+	if (route != NULL)
+	{
+	    if ((via != 0) || (routevia == NULL))
 	    {
-		waypoint *wpt = waypt_new();
-		wpt->shortname = xstrdup(wpt_tmp->shortname);
-		wpt->description = xstrdup(wpt_tmp->description);
-		wpt->latitude = wpt_tmp->latitude;
-		wpt->longitude = wpt_tmp->longitude;
+		waypoint *wpt = waypt_dupe(wpt_tmp);
 		route_add_wpt(route, wpt);
-		wpt_tmp = NULL;
 	    }
 	}
-	else
-	{
+	
+	if (via == 0)
 	    waypt_free(wpt_tmp);
-	    wpt_tmp = NULL;
-	}
+	    
+	wpt_tmp = NULL;
 }
 
-/*
- * 
- */
- 
 void 
 tef_item_end(const char *args, const char **unused)
 {
-	waypoint_final(waypoints == 0);
-	waypoints++;
+	waypoint_final();
 }
 
 /*
@@ -184,7 +191,7 @@ tef_item_end(const char *args, const char **unused)
 void 
 tef_list_end(const char *args, const char **unused)
 {
-	waypoint_final(1);
+	waypoint_final();
 	if (waypoints != item_count)
 	{
 	    fatal(MYNAME ": count waypoints differ to interlal ItemCount!\n");
@@ -201,7 +208,14 @@ tef_item_start(const char *args, const char **attrv)
 	const char **avp = &attrv[0];
 
 	wpt_tmp = waypt_new();
-	wpt_tmp_valid = 0;
+	wpt_tmp->centiseconds = 0;
+	
+	waypoints++;
+	
+	if ((waypoints == 1) || (waypoints == item_count)) 
+	    wpt_tmp->centiseconds++;
+	    
+	waypoints++;
 	
 	while (*avp) 
 	{
@@ -215,7 +229,7 @@ tef_item_start(const char *args, const char **attrv)
 	    }
 	    if ((0 == strcmp(avp[0], "ViaStation")) && (0 == strcmp(avp[1], "true")))
 	    {
-		wpt_tmp_valid = 1;
+		wpt_tmp->centiseconds = 1;
 	    }
 	    avp+=2;
 	}
@@ -293,5 +307,5 @@ ff_vecs_t tef_xml_vecs = {
 	tef_xml_read,
 	NULL,
 	NULL, 
-	NULL
+	tef_xml_args
 };

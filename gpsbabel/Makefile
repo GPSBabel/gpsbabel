@@ -180,7 +180,7 @@ magproto.o: magproto.c defs.h queue.h gbtypes.h magellan.h
 main.o: main.c defs.h queue.h gbtypes.h
 tef_xml.o: tef_xml.c defs.h queue.h gbtypes.h xmlgeneric.h
 pathaway.o: pathaway.c defs.h queue.h gbtypes.h \
-  coldsync/palm.h coldsync/pdb.h
+  coldsync/palm.h coldsync/pdb.h csv_util.h
 mapsend.o: mapsend.c defs.h queue.h gbtypes.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h gbtypes.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h gbtypes.h
