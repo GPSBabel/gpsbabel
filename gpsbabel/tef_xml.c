@@ -31,7 +31,6 @@ static char *deficon = NULL;
 static waypoint *wpt_tmp = NULL;
 static int item_count = -1;
 static int waypoints = 0;
-static int mapsource = 0;
 
 static route_head *route = NULL;
 
@@ -194,7 +193,7 @@ tef_list_end(const char *args, const char **unused)
 	waypoint_final();
 	if (waypoints != item_count)
 	{
-	    fatal(MYNAME ": count waypoints differ to interlal ItemCount!\n");
+	    fatal(MYNAME ": waypoint count differs to internal \"ItemCount\"! (%d to %d)\n", waypoints, item_count);
 	}
 }
 
@@ -209,8 +208,6 @@ tef_item_start(const char *args, const char **attrv)
 
 	wpt_tmp = waypt_new();
 	wpt_tmp->centiseconds = 0;
-	
-	waypoints++;
 	
 	if ((waypoints == 1) || (waypoints == item_count)) 
 	    wpt_tmp->centiseconds++;

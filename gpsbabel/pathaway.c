@@ -169,9 +169,10 @@ char *str_pool_getcpy(char *src, char *def)
  
 char *ppdb_fmt_float(const double val)
 {
+	char *c;
 	char *str = str_pool_get(32);
 	snprintf(str, 32, "%.8f", val);
-	char *c = str + strlen(str) - 1;
+	c = str + strlen(str) - 1;
 	while ((c > str) && (*c == '0'))
 	{
 	    *c = '\0';
@@ -188,6 +189,7 @@ char *ppdb_fmt_float(const double val)
 
 char *ppdb_fmt_degrees(char dir, double val)
 {
+	char *tmp;
 	char *str = str_pool_get(32);
 	int deg = abs(val);
 	double min = 60.0 * (fabs(val) - deg);
@@ -201,7 +203,7 @@ char *ppdb_fmt_degrees(char dir, double val)
 	snprintf(str, 31, "%c%02d 000", dir, deg);
 	snprintf(str + 6 - power, 24, "%.8f", min);
 	
-	char *tmp = str + strlen(str) - 1;	/* trim trailing nulls */
+	tmp = str + strlen(str) - 1;	/* trim trailing nulls */
 	while ((tmp > str) && (*tmp == '0'))
 	{
 	    *tmp = '\0';
@@ -248,7 +250,7 @@ double ppdb_decode_coord(const char *str)
 int ppdb_decode_tm(char *str, struct tm *tm)
 {
 	int i = 3;
-	int msec, d1, d2, d3, d4;
+	int msec, d1, d2, d3, d4, year;
 	time_t tnow;
 	struct tm now;
     
@@ -272,7 +274,7 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 	now.tm_year += 1900;
 	now.tm_mon++;
 	
-	int year = (d1 * 100) + d2;
+	year = (d1 * 100) + d2;
 	
 	/* next code works for most, except for 19. and 20. of month */
 	/* for trouble use input date format - !!! ToDo !!! */
@@ -303,10 +305,10 @@ static int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_
 	
 	for (pdb_rec = pdb_in->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) 
 	{
+		int line = 0;
 		waypoint *wpt_tmp = waypt_new();
 		data = (char *) pdb_rec->data;
 		
-		int line = 0;
 		str = csv_lineparse(data, ",", """", line++);
 		while (str != NULL)
 		{
