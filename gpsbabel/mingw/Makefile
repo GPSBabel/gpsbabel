@@ -1,7 +1,7 @@
 CC=/usr/local/cross-tools/bin/i386-mingw32msvc-gcc
 VPATH=..:../shapelib
 
-FILES=gpsbabel.exe libexpat.dll ../win32/GPSBabelGUI.exe ../README* ../COPYING
+FILES=gpsbabel.exe libexpat.dll ../win32/GPSBabelGUI.exe ../README* ../style/README.style ../COPYING
 
 gpsbabel.exe:  wintesto.cmd
 
