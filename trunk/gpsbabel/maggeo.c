@@ -229,7 +229,7 @@ strconsume(char *instr, int *eaten)
 
 ff_vecs_t maggeo_vecs = {
 	ff_type_file,
-	FF_CAP_RW_WPT,
+	{ ff_cap_read, ff_cap_none, ff_cap_none },
 	maggeo_rd_init,
 	maggeo_wr_init,
 	maggeo_rd_deinit,
