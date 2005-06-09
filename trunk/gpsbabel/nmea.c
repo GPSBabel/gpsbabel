@@ -187,7 +187,7 @@ gpgga_parse(char *ibuf)
 	double latdeg, lngdeg;
 	char lngdir, latdir;
 	double hms;
-	int fix;
+	int fix = 0;
 	int nsats;
 	double hdop;
 	struct tm tm;
