@@ -86,6 +86,7 @@ typedef struct GPS_STrack
     time_t   Time;		/* Unix time */
     float    alt;		/* Altitude */
     float    dpth;		/* Depth    */
+    int32    heartrate;		/* Heatrate as in Garmin 301 */
     int32    tnew;		/* New track? */
     int32    ishdr;		/* Track header? */
     int32    dspl;		/* Display on map? */

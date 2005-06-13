@@ -512,10 +512,11 @@ static void GPS_A001(GPS_PPacket packet)
 			    case 300: gps_trk_type = pD300; break;
 			    case 301: gps_trk_type = pD301; break;
 			    case 302: gps_trk_type = pD302; break;
+			    case 303: gps_trk_type = pD303; break;
 			    case 310: gps_trk_hdr_type = pD310; break;
 			    case 311: gps_trk_hdr_type = pD311; break;
 			    case 312: gps_trk_hdr_type = pD312; break;
-		    	    default:  GPS_Protocol_Error(tag,data); break;
+			    default:  GPS_Protocol_Error(tag,data); break;
 		    }
 		    continue;
 	    }
@@ -3382,6 +3383,9 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 	case pD302:
 	    GPS_D302b_Get(&((*trk)[i]),rec->data);
 	    break;
+	case pD303:
+	    GPS_D303b_Get(&((*trk)[i]),rec->data,rec->n);
+	    break;
 	default:
 	    GPS_Error("A301_GET: Unknown track protocol");
 	    return PROTOCOL_ERROR;
@@ -3786,6 +3790,84 @@ void GPS_D302b_Get(GPS_PTrack *trk, UC *data)
     p+=sizeof(float);
 
     (*trk)->tnew = *p;
+
+    return;
+}
+
+
+/* @func GPS_D303b_Get ******************************************************
+**
+** Get track data (A302 protocol) -- XXX used in Forerunner 301
+**
+** @param [w] trk [GPS_PTrack *] track
+** @param [r] data [UC *] packet data
+**
+** @return [void]
+************************************************************************/
+void GPS_D303b_Get(GPS_PTrack *trk, UC *data, UC length)
+{
+    UC *p;
+    uint32 t;
+    uint32 raw_lat, raw_lon;
+    int lat_undefined, lon_undefined;
+    int i;
+    
+    GPS_Diag("GPS_D303b_Get (length=%02d) ", length);
+    for (i = 0; i < length; i++) GPS_Diag("%02x ", data[i]);
+    GPS_Diag("\n");
+    
+    p=data;
+    
+    /* Latitude and longitude are sometimes invalid (0x7fffffff or 
+     * maybe 0xffffffff?) I guess this makes sense if the device is 
+     * reporting heart rate and time anyway.  I presume that latitude 
+     * and longitude are defined or left undefined together? 
+     */
+    raw_lat = GPS_Util_Get_Int(p);
+    lat_undefined = !raw_lat || raw_lat==0x7fffffff || raw_lat==0xffffffff;
+    if (lat_undefined)
+	(*trk)->lat=0;
+    else
+	(*trk)->lat = GPS_Math_Semi_To_Deg(raw_lat);
+    p+=sizeof(int32);
+
+    raw_lon = GPS_Util_Get_Int(p);
+    lon_undefined = !raw_lon || raw_lon==0x7fffffff || raw_lon==0xffffffff;
+    if (lon_undefined)
+	(*trk)->lon=0;
+    else
+	(*trk)->lon = GPS_Math_Semi_To_Deg(raw_lon);
+    p+=sizeof(int32);
+
+    if (lat_undefined != lon_undefined) 
+	GPS_Warning("GPS_D303b_Get: assumption (lat_undefined == lon_undefined) violated");
+
+    t = GPS_Util_Get_Uint(p);
+    if(!t || t==0x7fffffff || t==0xffffffff)
+	(*trk)->Time=0;
+    else
+	(*trk)->Time = GPS_Math_Gtime_To_Utime((time_t)t);
+    p+=sizeof(uint32);
+
+    /* When latitude and longitude are undefined, this field seems to be 
+     * a constant on my receiver (51 59 04 69) */
+    (*trk)->alt = GPS_Util_Get_Float(p);
+    if (lat_undefined || lon_undefined) (*trk)->alt = 0.0f;
+    p+=sizeof(float);
+
+    /* Heartrate is reported as 0 if there is no signal from 
+     * a heartrate monitor.  A uint32 is a bit overkill, even 
+     * for me in my state of fitness. Perhaps this is actually 
+     * a char or uint16, leaving room for a trk_seg bool at the end? 
+     */
+    (*trk)->heartrate = GPS_Util_Get_Uint(p);
+    p+=sizeof(uint32);
+	
+    /* There doesn't seem to be a trk_seg bool, or at least I've not 
+     * observed it yet.  One possibility is to start a new segment 
+     * each time latitude and longitude are undefined? (Ie data from 
+     * the heartrate monitor but none from the GPS. */
+    (*trk)->tnew = 0;	
 
     return;
 }

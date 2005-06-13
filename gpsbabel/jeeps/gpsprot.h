@@ -174,6 +174,7 @@ int32 gps_rte_link_type;
 #define pD300 300
 #define pD301 301
 #define pD302 302
+#define pD303 303
 int32 gps_trk_type;
 
 

@@ -39,7 +39,7 @@ char *rxdata[] = {
 	"10 f8 0e 56 45 52 53 4d 41 50 31 20 4e 6f 6e 65 00 fb 10 03",
 
 	/* Guessing from here down */
-	/* "10 06 02 fe 00 fa 10 03", /* Ack the unknown packet */
+	"10 06 02 fe 00 fa 10 03", /* Ack the unknown packet */
 	"10 fd 24 50 00 00 4c 01 00 41 0a 00 41 64 00 44 6d 00 41 c9 00 44 ca 00 44 6d 00 44 d2 00 41 2d 01 44 36 01 44 2d 01 66 10 03", /* PTR Array */
 	"10 06 02 0a 00 ee 10 03", /* Ack */
 	"10 0e 08 06 04 d4 07 00 17 3a 30 84 10 03", /* DATTIME */
