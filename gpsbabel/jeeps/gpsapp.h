@@ -28,7 +28,7 @@ int32  GPS_D300_Get(GPS_PTrack *trk, int32 entries, int32 fd);
 void   GPS_D300b_Get(GPS_PTrack *trk, UC *data);
 void   GPS_D301b_Get(GPS_PTrack *trk, UC *data);
 void   GPS_D302b_Get(GPS_PTrack *trk, UC *data);
-void   GPS_D303b_Get(GPS_PTrack *trk, UC *data, UC length);
+void   GPS_D303b_Get(GPS_PTrack *trk, UC *data);
 void   GPS_D310_Get(GPS_PTrack *trk, UC *s);
 void   GPS_D311_Get(GPS_PTrack *trk, UC *s);
 void   GPS_D300_Send(UC *data, GPS_PTrack trk);

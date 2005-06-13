@@ -3384,7 +3384,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 	    GPS_D302b_Get(&((*trk)[i]),rec->data);
 	    break;
 	case pD303:
-	    GPS_D303b_Get(&((*trk)[i]),rec->data,rec->n);
+	    GPS_D303b_Get(&((*trk)[i]),rec->data);
 	    break;
 	default:
 	    GPS_Error("A301_GET: Unknown track protocol");
@@ -3804,17 +3804,13 @@ void GPS_D302b_Get(GPS_PTrack *trk, UC *data)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D303b_Get(GPS_PTrack *trk, UC *data, UC length)
+void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
 {
     UC *p;
     uint32 t;
     uint32 raw_lat, raw_lon;
     int lat_undefined, lon_undefined;
     int i;
-    
-    GPS_Diag("GPS_D303b_Get (length=%02d) ", length);
-    for (i = 0; i < length; i++) GPS_Diag("%02x ", data[i]);
-    GPS_Diag("\n");
     
     p=data;
     
