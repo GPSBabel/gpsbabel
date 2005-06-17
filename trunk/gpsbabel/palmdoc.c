@@ -357,7 +357,7 @@ static void docprintf( int maxlen, char *format, ... ) {
 	partlen = BUFFER_SIZE-1-buf.len;	
     	if ( buf.len + newlen + 1 > BUFFER_SIZE ) 
     	{
-	    strncpy( buf.data+buf.len, txt2, partlen );
+	    strncpy( (char *) buf.data+buf.len, txt2, partlen );
             buf.data[BUFFER_SIZE-1] = '\0';
             txt2 += partlen;
             newlen -= partlen;
@@ -366,7 +366,7 @@ static void docprintf( int maxlen, char *format, ... ) {
             NEW_BUFFER( &buf );
         }
         else { 
-            strcpy( buf.data+buf.len, txt2 );
+            strcpy( (char *) buf.data+buf.len, txt2 );
             buf.len += newlen;
             txt2 = NULL;
         }
