@@ -130,7 +130,7 @@ maggeo_waypt_pr(const waypoint *waypointp)
 	int lon_deg, lat_deg;
 	char *shortname;
 	char *cname = NULL;
-	char *ctype = NULL;
+	const char *ctype = NULL;
 	char *placer = NULL;
 	char *lfounddate = NULL;
 	char *placeddate = NULL;
