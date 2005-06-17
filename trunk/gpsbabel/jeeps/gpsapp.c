@@ -110,8 +110,9 @@ char	gps_save_string[GPS_ARB_LEN];
  * violently to lower case data.
  */
 typedef enum { UpperNo = 0, UpperYes = 1 } copycase;
+
 static 
-void copy_char_array(UC **dst, UC* src, int count, copycase mustupper)
+void copy_char_array(UC **dst, char* src, int count, copycase mustupper)
 {
 	UC *d = *dst;
 	int ocount =  count;
