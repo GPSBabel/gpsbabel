@@ -193,7 +193,7 @@ data_read(void)
 
     /* Process record 0 */
     pdb_rec = pdb->rec_index.rec;
-    if (strcmp(pdb_rec->data, Rec0Magic))
+    if (strcmp((char *) pdb_rec->data, Rec0Magic))
 	fatal(MYNAME ": Bad record 0, not a GeoNiche file.\n");
     pdb_rec = pdb_rec->next;
 
@@ -408,7 +408,7 @@ copilot_writewpt(const waypoint *wpt)
     struct pdb_record	*opdb_rec;
     int			vlen;
     static int		vsize = 4096;
-    char		*vdata;
+    ubyte		*vdata;
     char		*title;
     struct tm		tm;
     char		datestr[10+1];
@@ -418,7 +418,7 @@ copilot_writewpt(const waypoint *wpt)
 
     if (ct == 0)
     {
-	opdb_rec = new_Record (0, 0, ct++, sizeof(Rec0Magic), Rec0Magic);	       
+	opdb_rec = new_Record (0, 0, ct++, sizeof(Rec0Magic), (ubyte *) Rec0Magic);	       
 	if (opdb_rec == NULL)
 	    fatal(MYNAME ": libpdb couldn't create record\n");
 	if (pdb_AppendRecord(PdbOut, opdb_rec))
@@ -444,13 +444,13 @@ copilot_writewpt(const waypoint *wpt)
     else
 	notes = enscape(wpt->notes);
 
-    vdata = (char *) xmalloc(vsize);
+    vdata = (ubyte *) xmalloc(vsize);
     if (vdata == NULL)
 	fatal(MYNAME ": libpdb couldn't get record memory\n");
 
     for (;;)
     {
-	vlen = snprintf(vdata, vsize,
+	vlen = snprintf((char *) vdata, vsize,
 	    "Target,%d,%s,,%s,%f,%f,%f,%s,%s,,,,%d,,,,%s"
 	    , id
 	    , title
@@ -479,7 +479,7 @@ copilot_writewpt(const waypoint *wpt)
 	    vsize = vlen + 1;
 	else
 	    vsize *= 2;
-	vdata = (char *) xrealloc(vdata, vsize);
+	vdata = (ubyte *) xrealloc(vdata, vsize);
 	if (vdata == NULL)
 	    fatal(MYNAME ": libpdb couldn't get record memory\n");
     }
