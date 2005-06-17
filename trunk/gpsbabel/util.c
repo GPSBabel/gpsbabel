@@ -895,7 +895,7 @@ char * str_utf8_to_ascii( const char * str )
 				cur += bytes - 1;
 			} else {
 				*cur = (char)value;
-				memmove(cur+1, cur+bytes, bytes+1);
+				memmove(cur+1, cur+bytes, strlen(cur+bytes));
 			}
 		}
 		cur++;
