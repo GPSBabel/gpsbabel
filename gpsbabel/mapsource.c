@@ -413,7 +413,7 @@ mps_fileHeader_r(FILE *mps_file, int *mps_ver)
 static void
 mps_fileHeader_w(FILE *mps_file, int mps_ver)
 {
-	unsigned char hdr[100];
+	char hdr[100];
 	int reclen;
 
 	strcpy (hdr, "MsRc");
