@@ -538,6 +538,7 @@ signed int get_tz_offset(void);
 time_t current_time(void);
 signed int month_lookup(const char *m);
 const char *get_cache_icon(const waypoint *waypointp);
+const char *gs_get_cachetype(geocache_type t);
 char * xml_entitize(const char * str);
 char * html_entitize(const char * str);
 char * strip_html(const utf_string*);
