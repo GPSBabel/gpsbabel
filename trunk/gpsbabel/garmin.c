@@ -51,7 +51,7 @@ arglist_t garmin_args[] = {
 		NULL, ARGTYPE_BOOL},
 	{ "power_off", &poweroff, "Command unit to power itself down", 
 		NULL, ARGTYPE_BOOL},
-	{ 0, 0, 0, 0}
+	{ 0, 0, 0, 0, 0}
 };
 
 static const char * d103_symbol_from_icon_number(unsigned int n);
