@@ -696,7 +696,7 @@ d103_symbol_from_icon_number(unsigned int n)
 static int 
 d103_icon_number_from_symbol(const char *s)
 {
-	int i;
+	unsigned int i;
 
 	if (NULL == s) {
 		return 0;
