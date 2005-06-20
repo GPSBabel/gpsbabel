@@ -707,4 +707,11 @@ rm -f ${TMPDIR}/pathaway*
 ${PNAME} -t -i pathaway -f reference/track/pathaway.pdb -o gpx -F ${TMPDIR}/pathaway.gpx
 compare ${TMPDIR}/pathaway.gpx reference/track/pathaway.gpx
 
+#
+# Vito Navigator II .smt tests
+#
+rm -f ${TMPDIR}/vitosmt*
+${PNAME} -i vitosmt -f reference/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt.gpx
+compare ${TMPDIR}/vitosmt.gpx reference/vitosmt.gpx
+
 exit 0

@@ -315,6 +315,10 @@ SOURCE=..\cetus.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\vitosmt.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\coastexp.c
 # End Source File
 # Begin Source File
