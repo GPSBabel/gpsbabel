@@ -82,6 +82,7 @@ extern ff_vecs_t an1_vecs;
 extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t tef_xml_vecs;
 extern ff_vecs_t ppdb_vecs;
+extern ff_vecs_t vitosmt_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -399,6 +400,12 @@ vecs_t vec_list[] = {
 		"pdb"
 	},
 	{
+		&vitosmt_vecs,
+		"vitosmt",
+		"Vito Navigator II tracks",
+		"smt"
+	},	
+	{
 		NULL,
 		NULL,
 		NULL,
@@ -588,7 +595,7 @@ alpha (const void *a, const void *b)
 	const vecs_t *const *ap = a;
 	const vecs_t *const *bp = b;
 	
-	return strcasecmp((*ap)->desc , (*bp)->desc);
+	return case_ignore_strcmp((*ap)->desc , (*bp)->desc);
 }
 
 /*

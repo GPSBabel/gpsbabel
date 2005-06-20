@@ -839,6 +839,13 @@ THE FORMATS
         the icon.  It should be 22x22 and 16 colors, and have the same name
         (not including the extension) as the .ov2 file.
 
+    VitoSMT
+
+	Vito Navigator II is a Pocket PC GPS application.  This format reads
+	a Vito Navigator II .SMT track file in waypoint mode.  It is still 
+	a work in progress.
+
+
 DATA FILTERS
 
 	GPSBabel supports data filtering.  Data filters are invoked from
