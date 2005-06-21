@@ -162,16 +162,11 @@ THE FORMATS
         else (PDA hotsync programs, gpsd, getty, pppd, etc.) is using
         the serial port.
 
-        New in GPSBabel 1.2.4 is USB support, but only under Windows.
-        It's reported successful with VistaC, SummitC, 60C, 60CS, 76C,
-        76CS, and 96C.  Some users report success with StreetPilot 2610
-        and some do not, but nobody's followed up with details on that.
-
-        Quest is known to not work, not becuase of USB problems, but
-        rather becuase it only implements a new waypoint protocol that's
-        seemingly only available on that model.  If you have a Quest and
-        would like to see it supported and can provide patches or a loan
-        of the equipment for a few days, please contact Robert Lipe.
+        GPSBabel supports the USB Garmins under Windows and on Linux and
+        OS/X via libusb.  It's reported successful with VistaC, SummitC,
+        60C, 60CS, 76C, 76CS, 96C, and Quest.  Some users report success
+        with StreetPilot 2610 and some do not, but nobody's followed up
+        with details on that.
 
         Currently, only a single USB unit at a time can be supported.  The
         device name to use on the command line is "usb:"   Thus, to read
