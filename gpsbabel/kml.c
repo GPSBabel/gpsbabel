@@ -208,7 +208,7 @@ static void kml_output_header(const route_head *header)
 
         // Create an array for holding waypoint coordinates so that we
         // can produce a LineString at the end.
-        point3d_list = (point3d *) malloc(header->rte_waypt_ct * sizeof(point3d));
+        point3d_list = (point3d *) xmalloc(header->rte_waypt_ct * sizeof(point3d));
         point3d_list_len = 0;
 }
 
