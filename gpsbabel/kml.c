@@ -22,16 +22,45 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static char *deficon = NULL;
+// options
+static char *opt_deficon = NULL;
+static char *opt_export_lines = NULL;
+static char *opt_export_points = NULL;
+static char *opt_line_width = NULL;
+static char *opt_line_color = NULL;
+
+static int export_lines;
+static int export_points;
 
 static waypoint *wpt_tmp;
 
 FILE *fd;
 FILE *ofd;
 
+typedef struct {
+  double latitude;
+  double longitude;
+  double altitude;
+} point3d;
+
+static int      point3d_list_len;
+static point3d *point3d_list;
+
 static
 arglist_t kml_args[] = {
-	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
+	{"deficon", &opt_deficon, "Default icon name", NULL, ARGTYPE_STRING },
+	{"lines", &opt_export_lines, 
+         "Export linestrings for tracks and routes",
+         "1", ARGTYPE_BOOL },
+	{"points", &opt_export_points, 
+         "Export placemarks for tracks and routes",
+         "1", ARGTYPE_BOOL },
+	{"line_width", &opt_line_width, 
+         "Width of lines, in pixels",
+         "6", ARGTYPE_BOOL },
+	{"line_color", &opt_line_color, 
+         "Line color, specified in hex AABBGGRR",
+         "64eeee17", ARGTYPE_BOOL },
 	{0, 0, 0, 0, 0}
 };
 
@@ -139,6 +168,19 @@ kml_wr_deinit(void)
 	fclose(ofd);
 }
 
+static void kml_write_bitmap_style(const char *style, int bitmap, 
+	                               int x, int y, int width, int height)
+{
+	fprintf(ofd, "<Style id=\"%s\">\n", style);
+	fprintf(ofd, "<icon xlink:href=\"root://icons/bitmap-%d.png?x=%d&amp;y=%d&amp;w=%d&amp;h=%d\">\n",
+	      bitmap, x, y, width, height);
+	fprintf(ofd, "  root://icons/bitmap-%d.png?x=%d&amp;y=%d&amp;w=%d&amp;h=%d\n",
+	      bitmap, x, y, width, height);
+	fprintf(ofd, "</icon>\n");
+	fprintf(ofd, "</Style>\n");
+}  
+
+
 static void kml_output_timestamp(const waypoint *waypointp)
 {
 	if (waypointp->creation_time) {
@@ -149,6 +191,87 @@ static void kml_output_timestamp(const waypoint *waypointp)
 	}
 }
 
+
+static void kml_output_header(const route_head *header)
+{
+        fprintf(ofd, "<Folder>\n");
+	fprintf(ofd, "  <visibility>1</visibility>\n");
+	write_optional_xml_entity(ofd, "  ", "name", header->rte_name);
+	write_optional_xml_entity(ofd, "  ", "desc", header->rte_desc);
+
+        if (export_points) {
+          // Put the points in a subfolder
+          fprintf(ofd, "  <Folder>\n");
+          fprintf(ofd, "    <visibility>1</visibility>\n");
+          fprintf(ofd, "    <name>Points</name>\n");
+        }
+
+        // Create an array for holding waypoint coordinates so that we
+        // can produce a LineString at the end.
+        point3d_list = (point3d *) malloc(header->rte_waypt_ct * sizeof(point3d));
+        point3d_list_len = 0;
+}
+
+
+static void kml_output_point(const waypoint *waypointp, const char *style)
+{
+  // Save off this point for later use
+  point3d *pt = &point3d_list[point3d_list_len];
+  point3d_list_len++;
+  pt->longitude = waypointp->longitude;
+  pt->latitude = waypointp->latitude;
+  pt->altitude = unknown_alt ? 0.0 : waypointp->altitude;
+
+  if (export_points) {
+	fprintf(ofd, "\t<Placemark>\n");
+	fprintf(ofd, "\t  <styleUrl>%s</styleUrl>\n", style);
+	fprintf(ofd, "\t  <Point>\n");
+	fprintf(ofd, "\t    <coordinates>%f,%f,%f</coordinates>\n",
+		pt->longitude, pt->latitude, pt->altitude);
+	fprintf(ofd, "\t  </Point>\n");
+
+	// Timestamp
+	kml_output_timestamp(waypointp);
+
+	fprintf(ofd, "\t</Placemark>\n");
+  }
+}
+
+
+static void kml_output_tailer()
+{
+  int i;
+
+  if (export_points) {
+    fprintf(ofd, "  </Folder>\n");
+  }
+  
+  // Add a linestring for this track?
+  if (export_lines) {
+    fprintf(ofd, "\t<Placemark>\n");
+    fprintf(ofd, "\t  <styleUrl>#lineStyle</styleUrl>\n");
+    fprintf(ofd, "\t  <name>Path</name>\n");
+    fprintf(ofd, "\t  <MultiGeometry>\n");
+    fprintf(ofd, "\t    <LineString>\n");
+    fprintf(ofd, "\t      <coordinates>\n");
+    for (i = 0; i < point3d_list_len; ++i)
+      fprintf(ofd, "%f,%f,%f ", 
+              point3d_list[i].longitude,
+              point3d_list[i].latitude,
+              point3d_list[i].altitude);
+    
+    fprintf(ofd, "\n\t      </coordinates>\n");
+    fprintf(ofd, "\t    </LineString>\n");
+    fprintf(ofd, "\t  </MultiGeometry>\n");
+    fprintf(ofd, "\t</Placemark>\n");
+  }
+  
+  free(point3d_list);
+  point3d_list = NULL;
+  
+  fprintf(ofd, "</Folder>\n");
+}
+
 /*
  * WAYPOINTS
  */
@@ -156,7 +279,7 @@ static void kml_output_timestamp(const waypoint *waypointp)
 static void kml_waypt_pr(const waypoint *waypointp)
 {
 	fprintf(ofd, "\t<Placemark>\n");
-	write_optional_xml_entity(ofd, "\t", "name", waypointp->description);
+	write_optional_xml_entity(ofd, "\t", "name", waypointp->shortname);
 	fprintf(ofd, "\t  <styleUrl>#waypoint</styleUrl>\n");
 
 	// Description
@@ -188,31 +311,17 @@ static void kml_waypt_pr(const waypoint *waypointp)
 
 static void kml_track_hdr(const route_head *header) 
 {
-	fprintf(ofd, "<Folder>\n");
-	fprintf(ofd, "  <visibility>1</visibility>\n");
-	write_optional_xml_entity(ofd, "  ", "name", header->rte_name);
-	write_optional_xml_entity(ofd, "  ", "desc", header->rte_desc);
+	kml_output_header(header);
 }
 
 static void kml_track_disp(const waypoint *waypointp)
 {
-	fprintf(ofd, "\t<Placemark>\n");
-	fprintf(ofd, "\t  <styleUrl>#track</styleUrl>\n");
-	fprintf(ofd, "\t  <Point>\n");
-	fprintf(ofd, "\t    <coordinates>%f,%f,%f</coordinates>\n",
-		waypointp->longitude, waypointp->latitude, 
-	      waypointp->altitude == unknown_alt ? 0.0 : waypointp->altitude);
-	fprintf(ofd, "\t  </Point>\n");
-
-	// Timestamp
-	kml_output_timestamp(waypointp);
-
-	fprintf(ofd, "\t</Placemark>\n");
+  kml_output_point(waypointp, "#track");
 }
 
 static void kml_track_tlr(const route_head *header) 
 {
-	fprintf(ofd, "</Folder>\n");
+  kml_output_tailer();
 }
 
 /*
@@ -221,48 +330,25 @@ static void kml_track_tlr(const route_head *header)
 
 static void kml_route_hdr(const route_head *header) 
 {
-	fprintf(ofd, "<Folder>\n");
-	fprintf(ofd, "  <visibility>1</visibility>\n");
-	write_optional_xml_entity(ofd, "  ", "name", header->rte_name);
-	write_optional_xml_entity(ofd, "  ", "desc", header->rte_desc);
+        kml_output_header(header);
 }
 
 static void kml_route_disp(const waypoint *waypointp)
 {
-	fprintf(ofd, "\t<Placemark>\n");
-	fprintf(ofd, "\t  <styleUrl>#route</styleUrl>\n");
-	fprintf(ofd, "\t  <Point>\n");
-	fprintf(ofd, "\t    <coordinates>%f,%f,%f</coordinates>\n",
-		waypointp->longitude, waypointp->latitude, 
-		waypointp->altitude == unknown_alt ? 0.0 : waypointp->altitude);
-	fprintf(ofd, "\t  </Point>\n");
-	write_optional_xml_entity(ofd, "\t", "name", waypointp->description);
-
-	// Timestamp
-	kml_output_timestamp(waypointp);
-
-	fprintf(ofd, "\t</Placemark>\n");
+        kml_output_point(waypointp, "#route");
 }
 
 static void kml_route_tlr(const route_head *header) 
 {
-	fprintf(ofd, "</Folder>\n");
+        kml_output_tailer();
 }
-
-static void kml_write_bitmap_style(const char *style, int bitmap, 
-	                               int x, int y, int width, int height)
-{
-	fprintf(ofd, "<Style id=\"%s\">\n", style);
-	fprintf(ofd, "<icon xlink:href=\"root://icons/bitmap-%d.png?x=%d&amp;y=%d&amp;w=%d&amp;h=%d\">\n",
-	      bitmap, x, y, width, height);
-	fprintf(ofd, "  root://icons/bitmap-%d.png?x=%d&amp;y=%d&amp;w=%d&amp;h=%d\n",
-	      bitmap, x, y, width, height);
-	fprintf(ofd, "</icon>\n");
-	fprintf(ofd, "</Style>\n");
-}  
 
 void kml_write(void)
 {
+  // Parse options
+  export_lines = (0 == strcmp("1", opt_export_lines));
+  export_points = (0 == strcmp("1", opt_export_points));
+
 	fprintf(ofd, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 	fprintf(ofd, "<Document xmlns:xlink=\"http://www.w3/org/1999/xlink\">\n");
 	// TODO(akirmse): Put in device name, maybe time?
@@ -273,6 +359,14 @@ void kml_write(void)
 	kml_write_bitmap_style("track", 4, 128, 0, 32, 32);
 	kml_write_bitmap_style("waypoint", 4, 160, 0, 32, 32);
 	kml_write_bitmap_style("route", 4, 160, 0, 32, 32);
+        
+        // Style settings for line strings
+        fprintf(ofd, "<Style id=\"lineStyle\">\n");
+        fprintf(ofd, "  <LineStyle>\n");
+        fprintf(ofd, "    <color>%s</color>\n", opt_line_color);
+        fprintf(ofd, "    <width>%s</width>\n", opt_line_width);
+        fprintf(ofd, "  </LineStyle>\n");
+        fprintf(ofd, "</Style>\n");
 
 	fprintf(ofd, "<Folder>\n");
 	fprintf(ofd, "<name>Waypoints</name>\n");
