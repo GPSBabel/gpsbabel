@@ -68,9 +68,7 @@ trackfilter_qsort_cb(const void *a, const void *b)
 	const trkflt_t *ra = a;
 	const trkflt_t *rb = b;
 
-	if (ra->first_time < rb->first_time) return -1;
-	else if (ra->first_time > rb->first_time) return +1;
-	else return 0;
+	return ra->first_time - rb->first_time;
 }
 
 /*----------------------------------------------------------------------------------------*/
@@ -299,6 +297,7 @@ trackfilter_split(void)
 		wpt = waypt_dupe(buff[j]);
 		route_del_wpt(master, buff[j]);
 		route_add_wpt(curr, wpt);
+		buff[j] = wpt;
 	    }
 	}
 	
