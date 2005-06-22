@@ -805,7 +805,7 @@ char * str_utf8_to_cp1252( const char * str )
 				}
 			}
 			*cur = (char)value;
-			strcpy( cur+1, cur+bytes );
+			memmove(cur+1, cur+bytes, strlen(cur+bytes) + 1);
 		}
 		cur++;
 	}
