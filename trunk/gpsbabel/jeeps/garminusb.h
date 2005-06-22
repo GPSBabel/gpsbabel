@@ -56,3 +56,4 @@ int gusb_cmd_send(const garmin_usb_packet *obuf, size_t sz);
 int gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz);
 int gusb_open(const char *portname);
 int gusb_close(const char *portname);
+int gusb_init(void);

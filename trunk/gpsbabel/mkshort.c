@@ -425,6 +425,9 @@ mkshort_from_wpt(void *h, const waypoint *wpt)
 	if (wpt->notes) {
 		return mkshort(h, wpt->notes);
 	}
+
+	/* Should probably never actually happen... */
+	return NULL;
 }
 
 

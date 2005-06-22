@@ -100,6 +100,7 @@ maggeo_fmtdate(time_t t)
  * cleansing it of NMEA-isms and decomposing to ASCII as we go.
  */
 static
+void
 append(char *buf, const char *str)
 {
 	char *cleansed1, *cleansed2;
