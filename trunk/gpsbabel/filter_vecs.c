@@ -37,6 +37,7 @@ extern filter_vecs_t routesimple_vecs;
 extern filter_vecs_t reverse_route_vecs;
 extern filter_vecs_t sort_vecs;
 extern filter_vecs_t stackfilt_vecs;
+extern filter_vecs_t trackfilter_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -84,6 +85,11 @@ fl_vecs_t filter_vec_list[] = {
 		&stackfilt_vecs,
 		"stack",
 		"Save and restore waypoint lists"
+	},
+	{
+		&trackfilter_vecs,
+		"track",
+		"Manipulate track lists"
 	},
         {
 		NULL,

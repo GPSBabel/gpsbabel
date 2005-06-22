@@ -1127,3 +1127,54 @@ DATA FILTERS
                     -x stack,pop,append \
                     -o magellan -F fwaind.wpt
  
+
+    TRACK
+
+        The track filter is a tool for manipulating track lists.  The
+        following options are available:
+
+        TITLE
+
+            Gives the new track(s) a basic title. Basic means if more
+            than one track is created by filter the title will be
+            expanded with the date the new track. Special formats (see
+            UNIX date or strftime for details) are possible.
+
+            gpsbabel -t \
+		-i gpx -f in.gpx  \
+	          -x track,pack,split,title="ACTIVE LOG-%D" \ 
+		-o gpx -F out.gpx PACK
+
+            With this default option all tracks from input will be
+            packed into one track. If tracks overlaps in time, the
+            filter stops working.   To pack all the tracks together
+	    into one track and give it a name, use this:
+
+	    gpsbabel -t \
+		     -i gpx -f in.gpx \
+		     -x track,pack,title="ACTIVE LOG" \
+		     -o gpx -F out.gpx
+		     
+	SPLIT
+	
+	    The input track will be split into several tracks 
+	    depending on date of track points. If there is more 
+	    than one track, use the pack option before before 
+	    using this. 
+  
+	    To split a single tracks into separate tracks for each day
+	    and name them, use this:
+ 
+	    gpsbabel -t \
+		     -i gpx -f in.gpx \
+		     -x track,split,title="ACTIVE LOG # %Y%m%d" \
+		     -o gpx -F out.gpx
+
+	    If the input has multiple tracks, pack them together before
+	    splitting them back apart per day thusly:
+	    
+	    gpsbabel -t \
+		     -i gpx -f in.gpx \
+		     -x track,pack,split,title="ACTIVE LOG # %D" \
+		     -o gpx -F out.gpx
+

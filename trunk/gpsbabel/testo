@@ -716,4 +716,15 @@ compare ${TMPDIR}/vitosmt.gpx reference/vitosmt.gpx
 ${PNAME} -t -i vitosmt,tzoffset=-7 -f reference/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt_t.gpx
 compare ${TMPDIR}/vitosmt_t.gpx reference/track/vitosmt_t.gpx
 
+#
+# tracks filter tests
+#
+
+rm -f ${TMPDIR}/trackfilter*
+
+${PNAME} -t -i gpx -f reference/track/trackfilter.gpx -x track,pack,split,title="LOG-%Y%m%d" -o gpx -F ${TMPDIR}/trackfilter-new.gpx
+grep -v "<time>" reference/track/trackfilter-new.gpx > ${TMPDIR}/trackfilter.ref
+grep -v "<time>" ${TMPDIR}/trackfilter-new.gpx > ${TMPDIR}/trackfilter.new
+compare ${TMPDIR}/trackfilter.ref ${TMPDIR}/trackfilter.new
+
 exit 0
