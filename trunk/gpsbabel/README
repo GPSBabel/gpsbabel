@@ -783,20 +783,24 @@ THE FORMATS
            2>/dev/null >google_map.js
 
         gpsbabel -i google -f google_map.js -o gpx -F google_map.gpx
-	
+
+        Note that Internet Explorer has been observed to damage the
+        XHTML beyond recognition so use a better browser to save the
+        pages such as Firefox or Mozilla.
+
     TourExchangeFormat
-    
-	XML based export format, used by Map&Guide
-	"Motorrad-Routenplaner". This software can only export routing data.
-	So we don't support writing.
-	
+
+        XML based export format, used by Map&Guide
+        "Motorrad-Routenplaner". This software can only export routing
+        data.  So we don't support writing.
+
     PathAway
-    
-	PathAway is a Palm software designed for handling "most" GPS devices 
-	(including BlueTooth). In this time (i mean 2005) a free tool 
-	to convert this database is located on the homepage 
-	of PathAway (www.pathaway.com). But i've read there ... for windows and
-	the output formats are also very limited. 
+
+        PathAway is a Palm software designed for handling "most" GPS
+        devices (including BlueTooth). In this time (i mean 2005) a free
+        tool to convert this database is located on the homepage of
+        PathAway (www.pathaway.com). But i've read there ... for windows
+        and the output formats are also very limited.
 
     AN1
 
