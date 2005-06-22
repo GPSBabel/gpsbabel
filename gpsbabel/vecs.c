@@ -739,9 +739,9 @@ disp_formats(int version)
 				vec->extension? vec->extension : "", 
 				vec->desc);
 		}
+		xfree (svp);	
 		break;
 	default:
 		;
 	}
-	xfree (svp);	
 }

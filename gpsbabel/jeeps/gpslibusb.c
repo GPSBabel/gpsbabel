@@ -52,6 +52,7 @@ static	usb_dev_handle *udev;
 static void garmin_usb_scan(void);
 static void garmin_usb_syncup(void);
 
+int
 gusb_init(void)
 {
 // usb_set_debug(99);

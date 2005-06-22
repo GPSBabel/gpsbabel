@@ -204,7 +204,7 @@ alpha (const void *a, const void *b)
         const fl_vecs_t *const ap = a;
         const fl_vecs_t *const bp = b;
 
-        return strcasecmp(ap->desc , bp->desc);
+        return case_ignore_strcmp(ap->desc , bp->desc);
 }
 
 /*
