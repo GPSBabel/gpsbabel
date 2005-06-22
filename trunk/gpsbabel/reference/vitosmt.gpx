@@ -5,4206 +5,1665 @@ creator="GPSBabel - http://www.gpsbabel.org"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>2005-06-15T02:39:36Z</time>
-<bounds minlat="45.402068318" minlon ="-75.780584974" maxlat="45.522013318" maxlon="-75.647869974" />
-<wpt lat="45.484283318" lon="-75.680948307">
-  <ele>34.200000</ele>
-<time>2004-10-30T17:36:00Z</time>
-  <name>SMT0001</name>
-  <cmt>SMT0001</cmt>
-  <desc>SMT0001</desc>
-</wpt>
-<wpt lat="45.484103318" lon="-75.680708307">
-  <ele>2.700000</ele>
-<time>2004-10-30T17:36:00Z</time>
-  <name>SMT0002</name>
-  <cmt>SMT0002</cmt>
-  <desc>SMT0002</desc>
-</wpt>
-<wpt lat="45.484206651" lon="-75.680601640">
-  <ele>7.600000</ele>
-<time>2004-10-30T17:36:00Z</time>
-  <name>SMT0003</name>
-  <cmt>SMT0003</cmt>
-  <desc>SMT0003</desc>
-</wpt>
-<wpt lat="45.484181651" lon="-75.681018307">
-  <ele>31.000000</ele>
-<time>2004-10-30T17:37:00Z</time>
-  <name>SMT0004</name>
-  <cmt>SMT0004</cmt>
-  <desc>SMT0004</desc>
-</wpt>
-<wpt lat="45.484179984" lon="-75.681378307">
-  <ele>60.300000</ele>
-<time>2004-10-30T17:37:00Z</time>
-  <name>SMT0005</name>
-  <cmt>SMT0005</cmt>
-  <desc>SMT0005</desc>
-</wpt>
-<wpt lat="45.484139984" lon="-75.681699974">
-  <ele>54.900000</ele>
-<time>2004-10-30T17:38:00Z</time>
-  <name>SMT0006</name>
-  <cmt>SMT0006</cmt>
-  <desc>SMT0006</desc>
-</wpt>
-<wpt lat="45.484199984" lon="-75.681508307">
-  <ele>63.900000</ele>
-<time>2004-10-30T17:39:00Z</time>
-  <name>SMT0007</name>
-  <cmt>SMT0007</cmt>
-  <desc>SMT0007</desc>
-</wpt>
-<wpt lat="45.484116651" lon="-75.681653307">
-  <ele>68.500000</ele>
-<time>2004-10-30T17:42:00Z</time>
-  <name>SMT0008</name>
-  <cmt>SMT0008</cmt>
-  <desc>SMT0008</desc>
-</wpt>
-<wpt lat="45.484101651" lon="-75.681514974">
-  <ele>51.600000</ele>
-<time>2004-10-30T17:43:00Z</time>
-  <name>SMT0009</name>
-  <cmt>SMT0009</cmt>
-  <desc>SMT0009</desc>
-</wpt>
-<wpt lat="45.484104984" lon="-75.681549974">
-  <ele>67.500000</ele>
-<time>2004-10-30T17:44:00Z</time>
-  <name>SMT0010</name>
-  <cmt>SMT0010</cmt>
-  <desc>SMT0010</desc>
-</wpt>
-<wpt lat="45.483876651" lon="-75.682063307">
-  <ele>64.200000</ele>
-<time>2004-10-30T17:45:00Z</time>
-  <name>SMT0011</name>
-  <cmt>SMT0011</cmt>
-  <desc>SMT0011</desc>
-</wpt>
-<wpt lat="45.483844984" lon="-75.682641640">
-  <ele>64.100000</ele>
-<time>2004-10-30T17:45:00Z</time>
-  <name>SMT0012</name>
-  <cmt>SMT0012</cmt>
-  <desc>SMT0012</desc>
-</wpt>
-<wpt lat="45.483806651" lon="-75.683328307">
-  <ele>64.300000</ele>
-<time>2004-10-30T17:45:00Z</time>
-  <name>SMT0013</name>
-  <cmt>SMT0013</cmt>
-  <desc>SMT0013</desc>
-</wpt>
-<wpt lat="45.483771651" lon="-75.683849974">
-  <ele>65.300000</ele>
-<time>2004-10-30T17:45:00Z</time>
-  <name>SMT0014</name>
-  <cmt>SMT0014</cmt>
-  <desc>SMT0014</desc>
-</wpt>
-<wpt lat="45.483724984" lon="-75.684484974">
-  <ele>65.900000</ele>
-<time>2004-10-30T17:45:00Z</time>
-  <name>SMT0015</name>
-  <cmt>SMT0015</cmt>
-  <desc>SMT0015</desc>
-</wpt>
-<wpt lat="45.483556651" lon="-75.684986640">
-  <ele>65.400000</ele>
-<time>2004-10-30T17:45:00Z</time>
-  <name>SMT0016</name>
-  <cmt>SMT0016</cmt>
-  <desc>SMT0016</desc>
-</wpt>
-<wpt lat="45.483218318" lon="-75.685408307">
-  <ele>64.300000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0017</name>
-  <cmt>SMT0017</cmt>
-  <desc>SMT0017</desc>
-</wpt>
-<wpt lat="45.482859984" lon="-75.685844974">
-  <ele>64.200000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0018</name>
-  <cmt>SMT0018</cmt>
-  <desc>SMT0018</desc>
-</wpt>
-<wpt lat="45.482581651" lon="-75.686218307">
-  <ele>62.700000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0019</name>
-  <cmt>SMT0019</cmt>
-  <desc>SMT0019</desc>
-</wpt>
-<wpt lat="45.482371651" lon="-75.686641640">
-  <ele>62.000000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0020</name>
-  <cmt>SMT0020</cmt>
-  <desc>SMT0020</desc>
-</wpt>
-<wpt lat="45.482279984" lon="-75.687278307">
-  <ele>63.500000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0021</name>
-  <cmt>SMT0021</cmt>
-  <desc>SMT0021</desc>
-</wpt>
-<wpt lat="45.482353318" lon="-75.687779974">
-  <ele>65.000000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0022</name>
-  <cmt>SMT0022</cmt>
-  <desc>SMT0022</desc>
-</wpt>
-<wpt lat="45.482608318" lon="-75.687871640">
-  <ele>64.600000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0023</name>
-  <cmt>SMT0023</cmt>
-  <desc>SMT0023</desc>
-</wpt>
-<wpt lat="45.482978318" lon="-75.687918307">
-  <ele>62.400000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0024</name>
-  <cmt>SMT0024</cmt>
-  <desc>SMT0024</desc>
-</wpt>
-<wpt lat="45.483434984" lon="-75.687971640">
-  <ele>60.400000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0025</name>
-  <cmt>SMT0025</cmt>
-  <desc>SMT0025</desc>
-</wpt>
-<wpt lat="45.483919984" lon="-75.688029974">
-  <ele>60.300000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0026</name>
-  <cmt>SMT0026</cmt>
-  <desc>SMT0026</desc>
-</wpt>
-<wpt lat="45.484433318" lon="-75.688096640">
-  <ele>59.900000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0027</name>
-  <cmt>SMT0027</cmt>
-  <desc>SMT0027</desc>
-</wpt>
-<wpt lat="45.484956651" lon="-75.688164974">
-  <ele>59.600000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0028</name>
-  <cmt>SMT0028</cmt>
-  <desc>SMT0028</desc>
-</wpt>
-<wpt lat="45.485471651" lon="-75.688229974">
-  <ele>59.500000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0029</name>
-  <cmt>SMT0029</cmt>
-  <desc>SMT0029</desc>
-</wpt>
-<wpt lat="45.485983318" lon="-75.688294974">
-  <ele>59.400000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0030</name>
-  <cmt>SMT0030</cmt>
-  <desc>SMT0030</desc>
-</wpt>
-<wpt lat="45.486494984" lon="-75.688363307">
-  <ele>59.400000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0031</name>
-  <cmt>SMT0031</cmt>
-  <desc>SMT0031</desc>
-</wpt>
-<wpt lat="45.486998318" lon="-75.688436640">
-  <ele>58.500000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0032</name>
-  <cmt>SMT0032</cmt>
-  <desc>SMT0032</desc>
-</wpt>
-<wpt lat="45.487469984" lon="-75.688489974">
-  <ele>58.200000</ele>
-<time>2004-10-30T17:46:00Z</time>
-  <name>SMT0033</name>
-  <cmt>SMT0033</cmt>
-  <desc>SMT0033</desc>
-</wpt>
-<wpt lat="45.487934984" lon="-75.688543307">
-  <ele>57.900000</ele>
-<time>2004-10-30T17:47:00Z</time>
-  <name>SMT0034</name>
-  <cmt>SMT0034</cmt>
-  <desc>SMT0034</desc>
-</wpt>
-<wpt lat="45.488379984" lon="-75.688593307">
-  <ele>58.100000</ele>
-<time>2004-10-30T17:47:00Z</time>
-  <name>SMT0035</name>
-  <cmt>SMT0035</cmt>
-  <desc>SMT0035</desc>
-</wpt>
-<wpt lat="45.488798318" lon="-75.688636640">
-  <ele>58.700000</ele>
-<time>2004-10-30T17:47:00Z</time>
-  <name>SMT0036</name>
-  <cmt>SMT0036</cmt>
-  <desc>SMT0036</desc>
-</wpt>
-<wpt lat="45.489213318" lon="-75.688663307">
-  <ele>60.000000</ele>
-<time>2004-10-30T17:47:00Z</time>
-  <name>SMT0037</name>
-  <cmt>SMT0037</cmt>
-  <desc>SMT0037</desc>
-</wpt>
-<wpt lat="45.489598318" lon="-75.688753307">
-  <ele>61.000000</ele>
-<time>2004-10-30T17:47:00Z</time>
-  <name>SMT0038</name>
-  <cmt>SMT0038</cmt>
-  <desc>SMT0038</desc>
-</wpt>
-<wpt lat="45.490036651" lon="-75.688806640">
-  <ele>61.400000</ele>
-<time>2004-10-30T17:47:00Z</time>
-  <name>SMT0039</name>
-  <cmt>SMT0039</cmt>
-  <desc>SMT0039</desc>
-</wpt>
-<wpt lat="45.490474984" lon="-75.688881640">
-  <ele>61.400000</ele>
-<time>2004-10-30T17:47:00Z</time>
-  <name>SMT0040</name>
-  <cmt>SMT0040</cmt>
-  <desc>SMT0040</desc>
-</wpt>
-<wpt lat="45.490929984" lon="-75.688949974">
-  <ele>61.100000</ele>
-<time>2004-10-30T17:47:00Z</time>
-  <name>SMT0041</name>
-  <cmt>SMT0041</cmt>
-  <desc>SMT0041</desc>
-</wpt>
-<wpt lat="45.491354984" lon="-75.689004974">
-  <ele>60.800000</ele>
-<time>2004-10-30T17:48:00Z</time>
-  <name>SMT0042</name>
-  <cmt>SMT0042</cmt>
-  <desc>SMT0042</desc>
-</wpt>
-<wpt lat="45.491793318" lon="-75.689064974">
-  <ele>61.500000</ele>
-<time>2004-10-30T17:48:00Z</time>
-  <name>SMT0043</name>
-  <cmt>SMT0043</cmt>
-  <desc>SMT0043</desc>
-</wpt>
-<wpt lat="45.492119984" lon="-75.689344974">
-  <ele>66.100000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0044</name>
-  <cmt>SMT0044</cmt>
-  <desc>SMT0044</desc>
-</wpt>
-<wpt lat="45.492079984" lon="-75.689621640">
-  <ele>65.700000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0045</name>
-  <cmt>SMT0045</cmt>
-  <desc>SMT0045</desc>
-</wpt>
-<wpt lat="45.491934984" lon="-75.690171640">
-  <ele>65.000000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0046</name>
-  <cmt>SMT0046</cmt>
-  <desc>SMT0046</desc>
-</wpt>
-<wpt lat="45.491731651" lon="-75.690834974">
-  <ele>63.500000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0047</name>
-  <cmt>SMT0047</cmt>
-  <desc>SMT0047</desc>
-</wpt>
-<wpt lat="45.491584984" lon="-75.691313307">
-  <ele>63.300000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0048</name>
-  <cmt>SMT0048</cmt>
-  <desc>SMT0048</desc>
-</wpt>
-<wpt lat="45.491428318" lon="-75.691803307">
-  <ele>63.700000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0049</name>
-  <cmt>SMT0049</cmt>
-  <desc>SMT0049</desc>
-</wpt>
-<wpt lat="45.491266651" lon="-75.692304974">
-  <ele>64.100000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0050</name>
-  <cmt>SMT0050</cmt>
-  <desc>SMT0050</desc>
-</wpt>
-<wpt lat="45.491101651" lon="-75.692809974">
-  <ele>64.500000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0051</name>
-  <cmt>SMT0051</cmt>
-  <desc>SMT0051</desc>
-</wpt>
-<wpt lat="45.490934984" lon="-75.693316640">
-  <ele>64.700000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0052</name>
-  <cmt>SMT0052</cmt>
-  <desc>SMT0052</desc>
-</wpt>
-<wpt lat="45.490771651" lon="-75.693828307">
-  <ele>64.900000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0053</name>
-  <cmt>SMT0053</cmt>
-  <desc>SMT0053</desc>
-</wpt>
-<wpt lat="45.490604984" lon="-75.694339974">
-  <ele>64.900000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0054</name>
-  <cmt>SMT0054</cmt>
-  <desc>SMT0054</desc>
-</wpt>
-<wpt lat="45.490443318" lon="-75.694843307">
-  <ele>65.000000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0055</name>
-  <cmt>SMT0055</cmt>
-  <desc>SMT0055</desc>
-</wpt>
-<wpt lat="45.490294984" lon="-75.695339974">
-  <ele>65.500000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0056</name>
-  <cmt>SMT0056</cmt>
-  <desc>SMT0056</desc>
-</wpt>
-<wpt lat="45.490161651" lon="-75.695831640">
-  <ele>65.400000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0057</name>
-  <cmt>SMT0057</cmt>
-  <desc>SMT0057</desc>
-</wpt>
-<wpt lat="45.490011651" lon="-75.696534974">
-  <ele>64.800000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0058</name>
-  <cmt>SMT0058</cmt>
-  <desc>SMT0058</desc>
-</wpt>
-<wpt lat="45.489936651" lon="-75.697071640">
-  <ele>64.800000</ele>
-<time>2004-10-30T17:49:00Z</time>
-  <name>SMT0059</name>
-  <cmt>SMT0059</cmt>
-  <desc>SMT0059</desc>
-</wpt>
-<wpt lat="45.489853318" lon="-75.697576640">
-  <ele>59.900000</ele>
-<time>2004-10-30T17:50:00Z</time>
-  <name>SMT0060</name>
-  <cmt>SMT0060</cmt>
-  <desc>SMT0060</desc>
-</wpt>
-<wpt lat="45.489801651" lon="-75.698213307">
-  <ele>61.900000</ele>
-<time>2004-10-30T17:50:00Z</time>
-  <name>SMT0061</name>
-  <cmt>SMT0061</cmt>
-  <desc>SMT0061</desc>
-</wpt>
-<wpt lat="45.489754984" lon="-75.698726640">
-  <ele>61.800000</ele>
-<time>2004-10-30T17:50:00Z</time>
-  <name>SMT0062</name>
-  <cmt>SMT0062</cmt>
-  <desc>SMT0062</desc>
-</wpt>
-<wpt lat="45.489699984" lon="-75.699319974">
-  <ele>61.800000</ele>
-<time>2004-10-30T17:50:00Z</time>
-  <name>SMT0063</name>
-  <cmt>SMT0063</cmt>
-  <desc>SMT0063</desc>
-</wpt>
-<wpt lat="45.489643318" lon="-75.699938307">
-  <ele>62.000000</ele>
-<time>2004-10-30T17:50:00Z</time>
-  <name>SMT0064</name>
-  <cmt>SMT0064</cmt>
-  <desc>SMT0064</desc>
-</wpt>
-<wpt lat="45.489591651" lon="-75.700563307">
-  <ele>61.400000</ele>
-<time>2004-10-30T17:50:00Z</time>
-  <name>SMT0065</name>
-  <cmt>SMT0065</cmt>
-  <desc>SMT0065</desc>
-</wpt>
-<wpt lat="45.489541651" lon="-75.701163307">
-  <ele>60.800000</ele>
-<time>2004-10-30T17:50:00Z</time>
-  <name>SMT0066</name>
-  <cmt>SMT0066</cmt>
-  <desc>SMT0066</desc>
-</wpt>
-<wpt lat="45.489496651" lon="-75.701703307">
-  <ele>61.000000</ele>
-<time>2004-10-30T17:50:00Z</time>
-  <name>SMT0067</name>
-  <cmt>SMT0067</cmt>
-  <desc>SMT0067</desc>
-</wpt>
-<wpt lat="45.489451651" lon="-75.702231640">
-  <ele>60.300000</ele>
-<time>2004-10-30T17:50:00Z</time>
-  <name>SMT0068</name>
-  <cmt>SMT0068</cmt>
-  <desc>SMT0068</desc>
-</wpt>
-<wpt lat="45.489389984" lon="-75.702743307">
-  <ele>60.900000</ele>
-<time>2004-10-30T17:50:00Z</time>
-  <name>SMT0069</name>
-  <cmt>SMT0069</cmt>
-  <desc>SMT0069</desc>
-</wpt>
-<wpt lat="45.489343318" lon="-75.703383307">
-  <ele>62.200000</ele>
-<time>2004-10-30T17:50:00Z</time>
-  <name>SMT0070</name>
-  <cmt>SMT0070</cmt>
-  <desc>SMT0070</desc>
-</wpt>
-<wpt lat="45.489293318" lon="-75.704023307">
-  <ele>63.300000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0071</name>
-  <cmt>SMT0071</cmt>
-  <desc>SMT0071</desc>
-</wpt>
-<wpt lat="45.489231651" lon="-75.704708307">
-  <ele>63.200000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0072</name>
-  <cmt>SMT0072</cmt>
-  <desc>SMT0072</desc>
-</wpt>
-<wpt lat="45.489146651" lon="-75.705394974">
-  <ele>62.600000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0073</name>
-  <cmt>SMT0073</cmt>
-  <desc>SMT0073</desc>
-</wpt>
-<wpt lat="45.489028318" lon="-75.706098307">
-  <ele>62.300000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0074</name>
-  <cmt>SMT0074</cmt>
-  <desc>SMT0074</desc>
-</wpt>
-<wpt lat="45.488898318" lon="-75.706801640">
-  <ele>62.500000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0075</name>
-  <cmt>SMT0075</cmt>
-  <desc>SMT0075</desc>
-</wpt>
-<wpt lat="45.488768318" lon="-75.707498307">
-  <ele>62.000000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0076</name>
-  <cmt>SMT0076</cmt>
-  <desc>SMT0076</desc>
-</wpt>
-<wpt lat="45.488641651" lon="-75.708188307">
-  <ele>60.900000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0077</name>
-  <cmt>SMT0077</cmt>
-  <desc>SMT0077</desc>
-</wpt>
-<wpt lat="45.488513318" lon="-75.708861640">
-  <ele>60.400000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0078</name>
-  <cmt>SMT0078</cmt>
-  <desc>SMT0078</desc>
-</wpt>
-<wpt lat="45.488386651" lon="-75.709506640">
-  <ele>60.300000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0079</name>
-  <cmt>SMT0079</cmt>
-  <desc>SMT0079</desc>
-</wpt>
-<wpt lat="45.488271651" lon="-75.710108307">
-  <ele>60.700000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0080</name>
-  <cmt>SMT0080</cmt>
-  <desc>SMT0080</desc>
-</wpt>
-<wpt lat="45.488168318" lon="-75.710661640">
-  <ele>61.300000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0081</name>
-  <cmt>SMT0081</cmt>
-  <desc>SMT0081</desc>
-</wpt>
-<wpt lat="45.488086651" lon="-75.711166640">
-  <ele>61.000000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0082</name>
-  <cmt>SMT0082</cmt>
-  <desc>SMT0082</desc>
-</wpt>
-<wpt lat="45.488013318" lon="-75.711723307">
-  <ele>61.500000</ele>
-<time>2004-10-30T17:51:00Z</time>
-  <name>SMT0083</name>
-  <cmt>SMT0083</cmt>
-  <desc>SMT0083</desc>
-</wpt>
-<wpt lat="45.487949984" lon="-75.712279974">
-  <ele>64.900000</ele>
-<time>2004-10-30T17:52:00Z</time>
-  <name>SMT0084</name>
-  <cmt>SMT0084</cmt>
-  <desc>SMT0084</desc>
-</wpt>
-<wpt lat="45.487984984" lon="-75.712933307">
-  <ele>62.600000</ele>
-<time>2004-10-30T17:52:00Z</time>
-  <name>SMT0085</name>
-  <cmt>SMT0085</cmt>
-  <desc>SMT0085</desc>
-</wpt>
-<wpt lat="45.488029984" lon="-75.713444974">
-  <ele>63.000000</ele>
-<time>2004-10-30T17:52:00Z</time>
-  <name>SMT0086</name>
-  <cmt>SMT0086</cmt>
-  <desc>SMT0086</desc>
-</wpt>
-<wpt lat="45.488121651" lon="-75.714049974">
-  <ele>64.400000</ele>
-<time>2004-10-30T17:52:00Z</time>
-  <name>SMT0087</name>
-  <cmt>SMT0087</cmt>
-  <desc>SMT0087</desc>
-</wpt>
-<wpt lat="45.488244984" lon="-75.714553307">
-  <ele>66.900000</ele>
-<time>2004-10-30T17:52:00Z</time>
-  <name>SMT0088</name>
-  <cmt>SMT0088</cmt>
-  <desc>SMT0088</desc>
-</wpt>
-<wpt lat="45.488421651" lon="-75.715106640">
-  <ele>66.100000</ele>
-<time>2004-10-30T17:52:00Z</time>
-  <name>SMT0089</name>
-  <cmt>SMT0089</cmt>
-  <desc>SMT0089</desc>
-</wpt>
-<wpt lat="45.488543318" lon="-75.715656640">
-  <ele>68.400000</ele>
-<time>2004-10-30T17:52:00Z</time>
-  <name>SMT0090</name>
-  <cmt>SMT0090</cmt>
-  <desc>SMT0090</desc>
-</wpt>
-<wpt lat="45.488674984" lon="-75.716279974">
-  <ele>69.000000</ele>
-<time>2004-10-30T17:52:00Z</time>
-  <name>SMT0091</name>
-  <cmt>SMT0091</cmt>
-  <desc>SMT0091</desc>
-</wpt>
-<wpt lat="45.488806651" lon="-75.716893307">
-  <ele>67.200000</ele>
-<time>2004-10-30T17:52:00Z</time>
-  <name>SMT0092</name>
-  <cmt>SMT0092</cmt>
-  <desc>SMT0092</desc>
-</wpt>
-<wpt lat="45.488936651" lon="-75.717478307">
-  <ele>64.200000</ele>
-<time>2004-10-30T17:52:00Z</time>
-  <name>SMT0093</name>
-  <cmt>SMT0093</cmt>
-  <desc>SMT0093</desc>
-</wpt>
-<wpt lat="45.489093318" lon="-75.718039974">
-  <ele>62.500000</ele>
-<time>2004-10-30T17:52:00Z</time>
-  <name>SMT0094</name>
-  <cmt>SMT0094</cmt>
-  <desc>SMT0094</desc>
-</wpt>
-<wpt lat="45.489424984" lon="-75.718156640">
-  <ele>62.700000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0095</name>
-  <cmt>SMT0095</cmt>
-  <desc>SMT0095</desc>
-</wpt>
-<wpt lat="45.489774984" lon="-75.717996640">
-  <ele>62.900000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0096</name>
-  <cmt>SMT0096</cmt>
-  <desc>SMT0096</desc>
-</wpt>
-<wpt lat="45.490136651" lon="-75.717739974">
-  <ele>64.500000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0097</name>
-  <cmt>SMT0097</cmt>
-  <desc>SMT0097</desc>
-</wpt>
-<wpt lat="45.490384984" lon="-75.717338307">
-  <ele>64.000000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0098</name>
-  <cmt>SMT0098</cmt>
-  <desc>SMT0098</desc>
-</wpt>
-<wpt lat="45.490638318" lon="-75.716773307">
-  <ele>62.400000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0099</name>
-  <cmt>SMT0099</cmt>
-  <desc>SMT0099</desc>
-</wpt>
-<wpt lat="45.491044984" lon="-75.716493307">
-  <ele>63.700000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0100</name>
-  <cmt>SMT0100</cmt>
-  <desc>SMT0100</desc>
-</wpt>
-<wpt lat="45.491414984" lon="-75.716511640">
-  <ele>65.300000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0101</name>
-  <cmt>SMT0101</cmt>
-  <desc>SMT0101</desc>
-</wpt>
-<wpt lat="45.491814984" lon="-75.716563307">
-  <ele>66.700000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0102</name>
-  <cmt>SMT0102</cmt>
-  <desc>SMT0102</desc>
-</wpt>
-<wpt lat="45.492238318" lon="-75.716621640">
-  <ele>66.500000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0103</name>
-  <cmt>SMT0103</cmt>
-  <desc>SMT0103</desc>
-</wpt>
-<wpt lat="45.492661651" lon="-75.716674974">
-  <ele>65.500000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0104</name>
-  <cmt>SMT0104</cmt>
-  <desc>SMT0104</desc>
-</wpt>
-<wpt lat="45.493069984" lon="-75.716726640">
-  <ele>65.400000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0105</name>
-  <cmt>SMT0105</cmt>
-  <desc>SMT0105</desc>
-</wpt>
-<wpt lat="45.493453318" lon="-75.716771640">
-  <ele>65.200000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0106</name>
-  <cmt>SMT0106</cmt>
-  <desc>SMT0106</desc>
-</wpt>
-<wpt lat="45.493868318" lon="-75.716813307">
-  <ele>64.700000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0107</name>
-  <cmt>SMT0107</cmt>
-  <desc>SMT0107</desc>
-</wpt>
-<wpt lat="45.494263318" lon="-75.716848307">
-  <ele>66.000000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0108</name>
-  <cmt>SMT0108</cmt>
-  <desc>SMT0108</desc>
-</wpt>
-<wpt lat="45.494699984" lon="-75.716894974">
-  <ele>65.300000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0109</name>
-  <cmt>SMT0109</cmt>
-  <desc>SMT0109</desc>
-</wpt>
-<wpt lat="45.495071651" lon="-75.716933307">
-  <ele>64.800000</ele>
-<time>2004-10-30T17:53:00Z</time>
-  <name>SMT0110</name>
-  <cmt>SMT0110</cmt>
-  <desc>SMT0110</desc>
-</wpt>
-<wpt lat="45.495548318" lon="-75.716979974">
-  <ele>63.800000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0111</name>
-  <cmt>SMT0111</cmt>
-  <desc>SMT0111</desc>
-</wpt>
-<wpt lat="45.496021651" lon="-75.717034974">
-  <ele>64.800000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0112</name>
-  <cmt>SMT0112</cmt>
-  <desc>SMT0112</desc>
-</wpt>
-<wpt lat="45.496488318" lon="-75.717098307">
-  <ele>66.300000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0113</name>
-  <cmt>SMT0113</cmt>
-  <desc>SMT0113</desc>
-</wpt>
-<wpt lat="45.496939984" lon="-75.717161640">
-  <ele>68.300000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0114</name>
-  <cmt>SMT0114</cmt>
-  <desc>SMT0114</desc>
-</wpt>
-<wpt lat="45.497386651" lon="-75.717216640">
-  <ele>68.300000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0115</name>
-  <cmt>SMT0115</cmt>
-  <desc>SMT0115</desc>
-</wpt>
-<wpt lat="45.497838318" lon="-75.717268307">
-  <ele>66.800000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0116</name>
-  <cmt>SMT0116</cmt>
-  <desc>SMT0116</desc>
-</wpt>
-<wpt lat="45.498301651" lon="-75.717314974">
-  <ele>65.000000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0117</name>
-  <cmt>SMT0117</cmt>
-  <desc>SMT0117</desc>
-</wpt>
-<wpt lat="45.498663318" lon="-75.717353307">
-  <ele>64.500000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0118</name>
-  <cmt>SMT0118</cmt>
-  <desc>SMT0118</desc>
-</wpt>
-<wpt lat="45.499039984" lon="-75.717391640">
-  <ele>64.900000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0119</name>
-  <cmt>SMT0119</cmt>
-  <desc>SMT0119</desc>
-</wpt>
-<wpt lat="45.499431651" lon="-75.717443307">
-  <ele>65.600000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0120</name>
-  <cmt>SMT0120</cmt>
-  <desc>SMT0120</desc>
-</wpt>
-<wpt lat="45.499838318" lon="-75.717493307">
-  <ele>66.300000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0121</name>
-  <cmt>SMT0121</cmt>
-  <desc>SMT0121</desc>
-</wpt>
-<wpt lat="45.500253318" lon="-75.717538307">
-  <ele>66.900000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0122</name>
-  <cmt>SMT0122</cmt>
-  <desc>SMT0122</desc>
-</wpt>
-<wpt lat="45.500648318" lon="-75.717584974">
-  <ele>66.700000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0123</name>
-  <cmt>SMT0123</cmt>
-  <desc>SMT0123</desc>
-</wpt>
-<wpt lat="45.501116651" lon="-75.717641640">
-  <ele>66.700000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0124</name>
-  <cmt>SMT0124</cmt>
-  <desc>SMT0124</desc>
-</wpt>
-<wpt lat="45.501551651" lon="-75.717698307">
-  <ele>66.900000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0125</name>
-  <cmt>SMT0125</cmt>
-  <desc>SMT0125</desc>
-</wpt>
-<wpt lat="45.501978318" lon="-75.717751640">
-  <ele>67.600000</ele>
-<time>2004-10-30T17:54:00Z</time>
-  <name>SMT0126</name>
-  <cmt>SMT0126</cmt>
-  <desc>SMT0126</desc>
-</wpt>
-<wpt lat="45.502406651" lon="-75.717804974">
-  <ele>69.100000</ele>
-<time>2004-10-30T17:55:00Z</time>
-  <name>SMT0127</name>
-  <cmt>SMT0127</cmt>
-  <desc>SMT0127</desc>
-</wpt>
-<wpt lat="45.502793318" lon="-75.717849974">
-  <ele>70.400000</ele>
-<time>2004-10-30T17:55:00Z</time>
-  <name>SMT0128</name>
-  <cmt>SMT0128</cmt>
-  <desc>SMT0128</desc>
-</wpt>
-<wpt lat="45.502426651" lon="-75.717838307">
-  <ele>73.100000</ele>
-<time>2004-10-30T17:55:00Z</time>
-  <name>SMT0129</name>
-  <cmt>SMT0129</cmt>
-  <desc>SMT0129</desc>
-</wpt>
-<wpt lat="45.502019984" lon="-75.717779974">
-  <ele>72.800000</ele>
-<time>2004-10-30T17:55:00Z</time>
-  <name>SMT0130</name>
-  <cmt>SMT0130</cmt>
-  <desc>SMT0130</desc>
-</wpt>
-<wpt lat="45.501633318" lon="-75.717731640">
-  <ele>72.800000</ele>
-<time>2004-10-30T17:55:00Z</time>
-  <name>SMT0131</name>
-  <cmt>SMT0131</cmt>
-  <desc>SMT0131</desc>
-</wpt>
-<wpt lat="45.501268318" lon="-75.717731640">
-  <ele>72.100000</ele>
-<time>2004-10-30T17:55:00Z</time>
-  <name>SMT0132</name>
-  <cmt>SMT0132</cmt>
-  <desc>SMT0132</desc>
-</wpt>
-<wpt lat="45.501341651" lon="-75.717983307">
-  <ele>66.600000</ele>
-<time>2004-10-30T18:03:00Z</time>
-  <name>SMT0133</name>
-  <cmt>SMT0133</cmt>
-  <desc>SMT0133</desc>
-</wpt>
-<wpt lat="45.501273318" lon="-75.717739974">
-  <ele>75.100000</ele>
-<time>2004-10-30T18:07:00Z</time>
-  <name>SMT0134</name>
-  <cmt>SMT0134</cmt>
-  <desc>SMT0134</desc>
-</wpt>
-<wpt lat="45.501348318" lon="-75.717911640">
-  <ele>61.800000</ele>
-<time>2004-10-30T18:07:00Z</time>
-  <name>SMT0135</name>
-  <cmt>SMT0135</cmt>
-  <desc>SMT0135</desc>
-</wpt>
-<wpt lat="45.501248318" lon="-75.717721640">
-  <ele>75.200000</ele>
-<time>2004-10-30T18:07:00Z</time>
-  <name>SMT0136</name>
-  <cmt>SMT0136</cmt>
-  <desc>SMT0136</desc>
-</wpt>
-<wpt lat="45.500863318" lon="-75.717626640">
-  <ele>69.600000</ele>
-<time>2004-10-30T18:07:00Z</time>
-  <name>SMT0137</name>
-  <cmt>SMT0137</cmt>
-  <desc>SMT0137</desc>
-</wpt>
-<wpt lat="45.500404984" lon="-75.717573307">
-  <ele>69.900000</ele>
-<time>2004-10-30T18:07:00Z</time>
-  <name>SMT0138</name>
-  <cmt>SMT0138</cmt>
-  <desc>SMT0138</desc>
-</wpt>
-<wpt lat="45.500016651" lon="-75.717529974">
-  <ele>69.400000</ele>
-<time>2004-10-30T18:07:00Z</time>
-  <name>SMT0139</name>
-  <cmt>SMT0139</cmt>
-  <desc>SMT0139</desc>
-</wpt>
-<wpt lat="45.499581651" lon="-75.717474974">
-  <ele>68.400000</ele>
-<time>2004-10-30T18:07:00Z</time>
-  <name>SMT0140</name>
-  <cmt>SMT0140</cmt>
-  <desc>SMT0140</desc>
-</wpt>
-<wpt lat="45.499103318" lon="-75.717416640">
-  <ele>67.900000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0141</name>
-  <cmt>SMT0141</cmt>
-  <desc>SMT0141</desc>
-</wpt>
-<wpt lat="45.498594984" lon="-75.717356640">
-  <ele>67.900000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0142</name>
-  <cmt>SMT0142</cmt>
-  <desc>SMT0142</desc>
-</wpt>
-<wpt lat="45.498079984" lon="-75.717299974">
-  <ele>67.200000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0143</name>
-  <cmt>SMT0143</cmt>
-  <desc>SMT0143</desc>
-</wpt>
-<wpt lat="45.497568318" lon="-75.717244974">
-  <ele>66.800000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0144</name>
-  <cmt>SMT0144</cmt>
-  <desc>SMT0144</desc>
-</wpt>
-<wpt lat="45.497068318" lon="-75.717189974">
-  <ele>67.200000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0145</name>
-  <cmt>SMT0145</cmt>
-  <desc>SMT0145</desc>
-</wpt>
-<wpt lat="45.496576651" lon="-75.717124974">
-  <ele>67.900000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0146</name>
-  <cmt>SMT0146</cmt>
-  <desc>SMT0146</desc>
-</wpt>
-<wpt lat="45.496088318" lon="-75.717069974">
-  <ele>68.400000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0147</name>
-  <cmt>SMT0147</cmt>
-  <desc>SMT0147</desc>
-</wpt>
-<wpt lat="45.495599984" lon="-75.717018307">
-  <ele>68.200000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0148</name>
-  <cmt>SMT0148</cmt>
-  <desc>SMT0148</desc>
-</wpt>
-<wpt lat="45.495123318" lon="-75.716971640">
-  <ele>67.300000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0149</name>
-  <cmt>SMT0149</cmt>
-  <desc>SMT0149</desc>
-</wpt>
-<wpt lat="45.494676651" lon="-75.716926640">
-  <ele>66.200000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0150</name>
-  <cmt>SMT0150</cmt>
-  <desc>SMT0150</desc>
-</wpt>
-<wpt lat="45.494273318" lon="-75.716881640">
-  <ele>65.200000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0151</name>
-  <cmt>SMT0151</cmt>
-  <desc>SMT0151</desc>
-</wpt>
-<wpt lat="45.493829984" lon="-75.716851640">
-  <ele>64.800000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0152</name>
-  <cmt>SMT0152</cmt>
-  <desc>SMT0152</desc>
-</wpt>
-<wpt lat="45.493456651" lon="-75.716814974">
-  <ele>64.300000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0153</name>
-  <cmt>SMT0153</cmt>
-  <desc>SMT0153</desc>
-</wpt>
-<wpt lat="45.493009984" lon="-75.716763307">
-  <ele>64.600000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0154</name>
-  <cmt>SMT0154</cmt>
-  <desc>SMT0154</desc>
-</wpt>
-<wpt lat="45.492534984" lon="-75.716714974">
-  <ele>65.100000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0155</name>
-  <cmt>SMT0155</cmt>
-  <desc>SMT0155</desc>
-</wpt>
-<wpt lat="45.492069984" lon="-75.716671640">
-  <ele>64.700000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0156</name>
-  <cmt>SMT0156</cmt>
-  <desc>SMT0156</desc>
-</wpt>
-<wpt lat="45.491611651" lon="-75.716611640">
-  <ele>64.400000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0157</name>
-  <cmt>SMT0157</cmt>
-  <desc>SMT0157</desc>
-</wpt>
-<wpt lat="45.491178318" lon="-75.716573307">
-  <ele>64.200000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0158</name>
-  <cmt>SMT0158</cmt>
-  <desc>SMT0158</desc>
-</wpt>
-<wpt lat="45.490781651" lon="-75.716624974">
-  <ele>63.600000</ele>
-<time>2004-10-30T18:08:00Z</time>
-  <name>SMT0159</name>
-  <cmt>SMT0159</cmt>
-  <desc>SMT0159</desc>
-</wpt>
-<wpt lat="45.490486651" lon="-75.716983307">
-  <ele>64.800000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0160</name>
-  <cmt>SMT0160</cmt>
-  <desc>SMT0160</desc>
-</wpt>
-<wpt lat="45.490276651" lon="-75.717503307">
-  <ele>66.600000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0161</name>
-  <cmt>SMT0161</cmt>
-  <desc>SMT0161</desc>
-</wpt>
-<wpt lat="45.489973318" lon="-75.717891640">
-  <ele>66.600000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0162</name>
-  <cmt>SMT0162</cmt>
-  <desc>SMT0162</desc>
-</wpt>
-<wpt lat="45.489578318" lon="-75.718076640">
-  <ele>64.500000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0163</name>
-  <cmt>SMT0163</cmt>
-  <desc>SMT0163</desc>
-</wpt>
-<wpt lat="45.489203318" lon="-75.718221640">
-  <ele>62.100000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0164</name>
-  <cmt>SMT0164</cmt>
-  <desc>SMT0164</desc>
-</wpt>
-<wpt lat="45.488851651" lon="-75.718056640">
-  <ele>61.700000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0165</name>
-  <cmt>SMT0165</cmt>
-  <desc>SMT0165</desc>
-</wpt>
-<wpt lat="45.488756651" lon="-75.717576640">
-  <ele>62.200000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0166</name>
-  <cmt>SMT0166</cmt>
-  <desc>SMT0166</desc>
-</wpt>
-<wpt lat="45.488619984" lon="-75.716939974">
-  <ele>64.000000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0167</name>
-  <cmt>SMT0167</cmt>
-  <desc>SMT0167</desc>
-</wpt>
-<wpt lat="45.488471651" lon="-75.716254974">
-  <ele>66.800000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0168</name>
-  <cmt>SMT0168</cmt>
-  <desc>SMT0168</desc>
-</wpt>
-<wpt lat="45.488326651" lon="-75.715566640">
-  <ele>68.800000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0169</name>
-  <cmt>SMT0169</cmt>
-  <desc>SMT0169</desc>
-</wpt>
-<wpt lat="45.488183318" lon="-75.714894974">
-  <ele>68.800000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0170</name>
-  <cmt>SMT0170</cmt>
-  <desc>SMT0170</desc>
-</wpt>
-<wpt lat="45.488044984" lon="-75.714233307">
-  <ele>67.400000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0171</name>
-  <cmt>SMT0171</cmt>
-  <desc>SMT0171</desc>
-</wpt>
-<wpt lat="45.487933318" lon="-75.713548307">
-  <ele>65.300000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0172</name>
-  <cmt>SMT0172</cmt>
-  <desc>SMT0172</desc>
-</wpt>
-<wpt lat="45.487871651" lon="-75.712849974">
-  <ele>63.100000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0173</name>
-  <cmt>SMT0173</cmt>
-  <desc>SMT0173</desc>
-</wpt>
-<wpt lat="45.487864984" lon="-75.712134974">
-  <ele>62.500000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0174</name>
-  <cmt>SMT0174</cmt>
-  <desc>SMT0174</desc>
-</wpt>
-<wpt lat="45.487923318" lon="-75.711421640">
-  <ele>63.500000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0175</name>
-  <cmt>SMT0175</cmt>
-  <desc>SMT0175</desc>
-</wpt>
-<wpt lat="45.488023318" lon="-75.710714974">
-  <ele>63.900000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0176</name>
-  <cmt>SMT0176</cmt>
-  <desc>SMT0176</desc>
-</wpt>
-<wpt lat="45.488151651" lon="-75.710016640">
-  <ele>63.900000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0177</name>
-  <cmt>SMT0177</cmt>
-  <desc>SMT0177</desc>
-</wpt>
-<wpt lat="45.488291651" lon="-75.709326640">
-  <ele>64.200000</ele>
-<time>2004-10-30T18:09:00Z</time>
-  <name>SMT0178</name>
-  <cmt>SMT0178</cmt>
-  <desc>SMT0178</desc>
-</wpt>
-<wpt lat="45.488426651" lon="-75.708639974">
-  <ele>63.800000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0179</name>
-  <cmt>SMT0179</cmt>
-  <desc>SMT0179</desc>
-</wpt>
-<wpt lat="45.488559984" lon="-75.707956640">
-  <ele>63.500000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0180</name>
-  <cmt>SMT0180</cmt>
-  <desc>SMT0180</desc>
-</wpt>
-<wpt lat="45.488688318" lon="-75.707291640">
-  <ele>62.900000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0181</name>
-  <cmt>SMT0181</cmt>
-  <desc>SMT0181</desc>
-</wpt>
-<wpt lat="45.488811651" lon="-75.706639974">
-  <ele>62.700000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0182</name>
-  <cmt>SMT0182</cmt>
-  <desc>SMT0182</desc>
-</wpt>
-<wpt lat="45.488931651" lon="-75.705988307">
-  <ele>63.500000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0183</name>
-  <cmt>SMT0183</cmt>
-  <desc>SMT0183</desc>
-</wpt>
-<wpt lat="45.489043318" lon="-75.705328307">
-  <ele>63.800000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0184</name>
-  <cmt>SMT0184</cmt>
-  <desc>SMT0184</desc>
-</wpt>
-<wpt lat="45.489129984" lon="-75.704668307">
-  <ele>63.600000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0185</name>
-  <cmt>SMT0185</cmt>
-  <desc>SMT0185</desc>
-</wpt>
-<wpt lat="45.489186651" lon="-75.703996640">
-  <ele>63.700000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0186</name>
-  <cmt>SMT0186</cmt>
-  <desc>SMT0186</desc>
-</wpt>
-<wpt lat="45.489223318" lon="-75.703386640">
-  <ele>64.500000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0187</name>
-  <cmt>SMT0187</cmt>
-  <desc>SMT0187</desc>
-</wpt>
-<wpt lat="45.489108318" lon="-75.702879974">
-  <ele>64.400000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0188</name>
-  <cmt>SMT0188</cmt>
-  <desc>SMT0188</desc>
-</wpt>
-<wpt lat="45.488839984" lon="-75.702716640">
-  <ele>64.900000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0189</name>
-  <cmt>SMT0189</cmt>
-  <desc>SMT0189</desc>
-</wpt>
-<wpt lat="45.488469984" lon="-75.702673307">
-  <ele>63.600000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0190</name>
-  <cmt>SMT0190</cmt>
-  <desc>SMT0190</desc>
-</wpt>
-<wpt lat="45.488094984" lon="-75.702624974">
-  <ele>62.400000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0191</name>
-  <cmt>SMT0191</cmt>
-  <desc>SMT0191</desc>
-</wpt>
-<wpt lat="45.487711651" lon="-75.702559974">
-  <ele>61.600000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0192</name>
-  <cmt>SMT0192</cmt>
-  <desc>SMT0192</desc>
-</wpt>
-<wpt lat="45.487626651" lon="-75.702279974">
-  <ele>61.500000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0193</name>
-  <cmt>SMT0193</cmt>
-  <desc>SMT0193</desc>
-</wpt>
-<wpt lat="45.487426651" lon="-75.701849974">
-  <ele>61.500000</ele>
-<time>2004-10-30T18:10:00Z</time>
-  <name>SMT0194</name>
-  <cmt>SMT0194</cmt>
-  <desc>SMT0194</desc>
-</wpt>
-<wpt lat="45.487458318" lon="-75.701973307">
-  <ele>48.600000</ele>
-<time>2004-10-30T18:35:00Z</time>
-  <name>SMT0195</name>
-  <cmt>SMT0195</cmt>
-  <desc>SMT0195</desc>
-</wpt>
-<wpt lat="45.487486651" lon="-75.701916640">
-  <ele>63.200000</ele>
-<time>2004-10-30T18:35:00Z</time>
-  <name>SMT0196</name>
-  <cmt>SMT0196</cmt>
-  <desc>SMT0196</desc>
-</wpt>
-<wpt lat="45.487418318" lon="-75.701748307">
-  <ele>49.300000</ele>
-<time>2004-10-30T18:38:00Z</time>
-  <name>SMT0197</name>
-  <cmt>SMT0197</cmt>
-  <desc>SMT0197</desc>
-</wpt>
-<wpt lat="45.487458318" lon="-75.701791640">
-  <ele>63.800000</ele>
-<time>2004-10-30T18:38:00Z</time>
-  <name>SMT0198</name>
-  <cmt>SMT0198</cmt>
-  <desc>SMT0198</desc>
-</wpt>
-<wpt lat="45.487628318" lon="-75.702291640">
-  <ele>59.300000</ele>
-<time>2004-10-30T18:46:00Z</time>
-  <name>SMT0199</name>
-  <cmt>SMT0199</cmt>
-  <desc>SMT0199</desc>
-</wpt>
-<wpt lat="45.487993318" lon="-75.702561640">
-  <ele>62.400000</ele>
-<time>2004-10-30T18:46:00Z</time>
-  <name>SMT0200</name>
-  <cmt>SMT0200</cmt>
-  <desc>SMT0200</desc>
-</wpt>
-<wpt lat="45.488384984" lon="-75.702579974">
-  <ele>60.600000</ele>
-<time>2004-10-30T18:46:00Z</time>
-  <name>SMT0201</name>
-  <cmt>SMT0201</cmt>
-  <desc>SMT0201</desc>
-</wpt>
-<wpt lat="45.488476651" lon="-75.702226640">
-  <ele>60.200000</ele>
-<time>2004-10-30T18:46:00Z</time>
-  <name>SMT0202</name>
-  <cmt>SMT0202</cmt>
-  <desc>SMT0202</desc>
-</wpt>
-<wpt lat="45.488536651" lon="-75.701534974">
-  <ele>60.400000</ele>
-<time>2004-10-30T18:47:00Z</time>
-  <name>SMT0203</name>
-  <cmt>SMT0203</cmt>
-  <desc>SMT0203</desc>
-</wpt>
-<wpt lat="45.488586651" lon="-75.700934974">
-  <ele>60.500000</ele>
-<time>2004-10-30T18:47:00Z</time>
-  <name>SMT0204</name>
-  <cmt>SMT0204</cmt>
-  <desc>SMT0204</desc>
-</wpt>
-<wpt lat="45.488636651" lon="-75.700338307">
-  <ele>58.900000</ele>
-<time>2004-10-30T18:47:00Z</time>
-  <name>SMT0205</name>
-  <cmt>SMT0205</cmt>
-  <desc>SMT0205</desc>
-</wpt>
-<wpt lat="45.488683318" lon="-75.699753307">
-  <ele>57.300000</ele>
-<time>2004-10-30T18:47:00Z</time>
-  <name>SMT0206</name>
-  <cmt>SMT0206</cmt>
-  <desc>SMT0206</desc>
-</wpt>
-<wpt lat="45.488726651" lon="-75.699179974">
-  <ele>55.700000</ele>
-<time>2004-10-30T18:47:00Z</time>
-  <name>SMT0207</name>
-  <cmt>SMT0207</cmt>
-  <desc>SMT0207</desc>
-</wpt>
-<wpt lat="45.488768318" lon="-75.698619974">
-  <ele>54.300000</ele>
-<time>2004-10-30T18:47:00Z</time>
-  <name>SMT0208</name>
-  <cmt>SMT0208</cmt>
-  <desc>SMT0208</desc>
-</wpt>
-<wpt lat="45.488811651" lon="-75.698066640">
-  <ele>53.600000</ele>
-<time>2004-10-30T18:47:00Z</time>
-  <name>SMT0209</name>
-  <cmt>SMT0209</cmt>
-  <desc>SMT0209</desc>
-</wpt>
-<wpt lat="45.488861651" lon="-75.697453307">
-  <ele>58.200000</ele>
-<time>2004-10-30T18:47:00Z</time>
-  <name>SMT0210</name>
-  <cmt>SMT0210</cmt>
-  <desc>SMT0210</desc>
-</wpt>
-<wpt lat="45.488903318" lon="-75.696914974">
-  <ele>59.100000</ele>
-<time>2004-10-30T18:47:00Z</time>
-  <name>SMT0211</name>
-  <cmt>SMT0211</cmt>
-  <desc>SMT0211</desc>
-</wpt>
-<wpt lat="45.488908318" lon="-75.696361640">
-  <ele>64.900000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0212</name>
-  <cmt>SMT0212</cmt>
-  <desc>SMT0212</desc>
-</wpt>
-<wpt lat="45.488984984" lon="-75.695743307">
-  <ele>61.900000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0213</name>
-  <cmt>SMT0213</cmt>
-  <desc>SMT0213</desc>
-</wpt>
-<wpt lat="45.489034984" lon="-75.695164974">
-  <ele>59.000000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0214</name>
-  <cmt>SMT0214</cmt>
-  <desc>SMT0214</desc>
-</wpt>
-<wpt lat="45.489093318" lon="-75.694539974">
-  <ele>56.200000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0215</name>
-  <cmt>SMT0215</cmt>
-  <desc>SMT0215</desc>
-</wpt>
-<wpt lat="45.489149984" lon="-75.693906640">
-  <ele>55.300000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0216</name>
-  <cmt>SMT0216</cmt>
-  <desc>SMT0216</desc>
-</wpt>
-<wpt lat="45.489198318" lon="-75.693269974">
-  <ele>56.100000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0217</name>
-  <cmt>SMT0217</cmt>
-  <desc>SMT0217</desc>
-</wpt>
-<wpt lat="45.489246651" lon="-75.692636640">
-  <ele>56.900000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0218</name>
-  <cmt>SMT0218</cmt>
-  <desc>SMT0218</desc>
-</wpt>
-<wpt lat="45.489294984" lon="-75.692004974">
-  <ele>56.600000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0219</name>
-  <cmt>SMT0219</cmt>
-  <desc>SMT0219</desc>
-</wpt>
-<wpt lat="45.489339984" lon="-75.691361640">
-  <ele>57.000000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0220</name>
-  <cmt>SMT0220</cmt>
-  <desc>SMT0220</desc>
-</wpt>
-<wpt lat="45.489383318" lon="-75.690726640">
-  <ele>56.400000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0221</name>
-  <cmt>SMT0221</cmt>
-  <desc>SMT0221</desc>
-</wpt>
-<wpt lat="45.489423318" lon="-75.690114974">
-  <ele>56.000000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0222</name>
-  <cmt>SMT0222</cmt>
-  <desc>SMT0222</desc>
-</wpt>
-<wpt lat="45.489459984" lon="-75.689541640">
-  <ele>56.400000</ele>
-<time>2004-10-30T18:48:00Z</time>
-  <name>SMT0223</name>
-  <cmt>SMT0223</cmt>
-  <desc>SMT0223</desc>
-</wpt>
-<wpt lat="45.489494984" lon="-75.688966640">
-  <ele>57.100000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0224</name>
-  <cmt>SMT0224</cmt>
-  <desc>SMT0224</desc>
-</wpt>
-<wpt lat="45.489269984" lon="-75.688713307">
-  <ele>59.400000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0225</name>
-  <cmt>SMT0225</cmt>
-  <desc>SMT0225</desc>
-</wpt>
-<wpt lat="45.488809984" lon="-75.688681640">
-  <ele>59.300000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0226</name>
-  <cmt>SMT0226</cmt>
-  <desc>SMT0226</desc>
-</wpt>
-<wpt lat="45.488401651" lon="-75.688648307">
-  <ele>59.300000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0227</name>
-  <cmt>SMT0227</cmt>
-  <desc>SMT0227</desc>
-</wpt>
-<wpt lat="45.487961651" lon="-75.688604974">
-  <ele>59.200000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0228</name>
-  <cmt>SMT0228</cmt>
-  <desc>SMT0228</desc>
-</wpt>
-<wpt lat="45.487506651" lon="-75.688566640">
-  <ele>59.500000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0229</name>
-  <cmt>SMT0229</cmt>
-  <desc>SMT0229</desc>
-</wpt>
-<wpt lat="45.487046651" lon="-75.688524974">
-  <ele>59.600000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0230</name>
-  <cmt>SMT0230</cmt>
-  <desc>SMT0230</desc>
-</wpt>
-<wpt lat="45.486576651" lon="-75.688468307">
-  <ele>59.600000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0231</name>
-  <cmt>SMT0231</cmt>
-  <desc>SMT0231</desc>
-</wpt>
-<wpt lat="45.486116651" lon="-75.688408307">
-  <ele>59.100000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0232</name>
-  <cmt>SMT0232</cmt>
-  <desc>SMT0232</desc>
-</wpt>
-<wpt lat="45.485651651" lon="-75.688343307">
-  <ele>58.700000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0233</name>
-  <cmt>SMT0233</cmt>
-  <desc>SMT0233</desc>
-</wpt>
-<wpt lat="45.485183318" lon="-75.688273307">
-  <ele>57.800000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0234</name>
-  <cmt>SMT0234</cmt>
-  <desc>SMT0234</desc>
-</wpt>
-<wpt lat="45.484704984" lon="-75.688206640">
-  <ele>57.500000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0235</name>
-  <cmt>SMT0235</cmt>
-  <desc>SMT0235</desc>
-</wpt>
-<wpt lat="45.484226651" lon="-75.688148307">
-  <ele>57.600000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0236</name>
-  <cmt>SMT0236</cmt>
-  <desc>SMT0236</desc>
-</wpt>
-<wpt lat="45.483769984" lon="-75.688089974">
-  <ele>57.000000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0237</name>
-  <cmt>SMT0237</cmt>
-  <desc>SMT0237</desc>
-</wpt>
-<wpt lat="45.483319984" lon="-75.688019974">
-  <ele>56.300000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0238</name>
-  <cmt>SMT0238</cmt>
-  <desc>SMT0238</desc>
-</wpt>
-<wpt lat="45.482888318" lon="-75.687926640">
-  <ele>57.500000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0239</name>
-  <cmt>SMT0239</cmt>
-  <desc>SMT0239</desc>
-</wpt>
-<wpt lat="45.482471651" lon="-75.687841640">
-  <ele>58.600000</ele>
-<time>2004-10-30T18:49:00Z</time>
-  <name>SMT0240</name>
-  <cmt>SMT0240</cmt>
-  <desc>SMT0240</desc>
-</wpt>
-<wpt lat="45.482179984" lon="-75.687438307">
-  <ele>60.200000</ele>
-<time>2004-10-30T18:50:00Z</time>
-  <name>SMT0241</name>
-  <cmt>SMT0241</cmt>
-  <desc>SMT0241</desc>
-</wpt>
-<wpt lat="45.482203318" lon="-75.686971640">
-  <ele>61.400000</ele>
-<time>2004-10-30T18:50:00Z</time>
-  <name>SMT0242</name>
-  <cmt>SMT0242</cmt>
-  <desc>SMT0242</desc>
-</wpt>
-<wpt lat="45.482296651" lon="-75.686473307">
-  <ele>60.300000</ele>
-<time>2004-10-30T18:50:00Z</time>
-  <name>SMT0243</name>
-  <cmt>SMT0243</cmt>
-  <desc>SMT0243</desc>
-</wpt>
-<wpt lat="45.482573318" lon="-75.685931640">
-  <ele>59.700000</ele>
-<time>2004-10-30T18:50:00Z</time>
-  <name>SMT0244</name>
-  <cmt>SMT0244</cmt>
-  <desc>SMT0244</desc>
-</wpt>
-<wpt lat="45.482909984" lon="-75.685536640">
-  <ele>57.400000</ele>
-<time>2004-10-30T18:50:00Z</time>
-  <name>SMT0245</name>
-  <cmt>SMT0245</cmt>
-  <desc>SMT0245</desc>
-</wpt>
-<wpt lat="45.483196651" lon="-75.685216640">
-  <ele>54.700000</ele>
-<time>2004-10-30T18:50:00Z</time>
-  <name>SMT0246</name>
-  <cmt>SMT0246</cmt>
-  <desc>SMT0246</desc>
-</wpt>
-<wpt lat="45.483476651" lon="-75.684846640">
-  <ele>55.600000</ele>
-<time>2004-10-30T18:50:00Z</time>
-  <name>SMT0247</name>
-  <cmt>SMT0247</cmt>
-  <desc>SMT0247</desc>
-</wpt>
-<wpt lat="45.483689984" lon="-75.684366640">
-  <ele>57.300000</ele>
-<time>2004-10-30T18:50:00Z</time>
-  <name>SMT0248</name>
-  <cmt>SMT0248</cmt>
-  <desc>SMT0248</desc>
-</wpt>
-<wpt lat="45.483766651" lon="-75.683743307">
-  <ele>57.600000</ele>
-<time>2004-10-30T18:50:00Z</time>
-  <name>SMT0249</name>
-  <cmt>SMT0249</cmt>
-  <desc>SMT0249</desc>
-</wpt>
-<wpt lat="45.483791651" lon="-75.683224974">
-  <ele>57.100000</ele>
-<time>2004-10-30T18:50:00Z</time>
-  <name>SMT0250</name>
-  <cmt>SMT0250</cmt>
-  <desc>SMT0250</desc>
-</wpt>
-<wpt lat="45.483819984" lon="-75.682603307">
-  <ele>57.400000</ele>
-<time>2004-10-30T18:50:00Z</time>
-  <name>SMT0251</name>
-  <cmt>SMT0251</cmt>
-  <desc>SMT0251</desc>
-</wpt>
-<wpt lat="45.483854984" lon="-75.682068307">
-  <ele>56.000000</ele>
-<time>2004-10-30T18:51:00Z</time>
-  <name>SMT0252</name>
-  <cmt>SMT0252</cmt>
-  <desc>SMT0252</desc>
-</wpt>
-<wpt lat="45.484109984" lon="-75.681706640">
-  <ele>56.400000</ele>
-<time>2004-10-30T18:51:00Z</time>
-  <name>SMT0253</name>
-  <cmt>SMT0253</cmt>
-  <desc>SMT0253</desc>
-</wpt>
-<wpt lat="45.484221651" lon="-75.681858307">
-  <ele>57.000000</ele>
-<time>2004-10-30T18:53:00Z</time>
-  <name>SMT0254</name>
-  <cmt>SMT0254</cmt>
-  <desc>SMT0254</desc>
-</wpt>
-<wpt lat="45.484466651" lon="-75.682334974">
-  <ele>56.500000</ele>
-<time>2004-10-30T19:05:00Z</time>
-  <name>SMT0255</name>
-  <cmt>SMT0255</cmt>
-  <desc>SMT0255</desc>
-</wpt>
-<wpt lat="45.484141651" lon="-75.681764974">
-  <ele>51.200000</ele>
-<time>2004-10-30T19:05:00Z</time>
-  <name>SMT0256</name>
-  <cmt>SMT0256</cmt>
-  <desc>SMT0256</desc>
-</wpt>
-<wpt lat="45.484411651" lon="-75.682239974">
-  <ele>56.500000</ele>
-<time>2004-10-30T19:05:00Z</time>
-  <name>SMT0257</name>
-  <cmt>SMT0257</cmt>
-  <desc>SMT0257</desc>
-</wpt>
-<wpt lat="45.484174984" lon="-75.681736640">
-  <ele>39.500000</ele>
-<time>2004-10-30T19:05:00Z</time>
-  <name>SMT0258</name>
-  <cmt>SMT0258</cmt>
-  <desc>SMT0258</desc>
-</wpt>
-<wpt lat="45.484411651" lon="-75.682454974">
-  <ele>56.500000</ele>
-<time>2004-10-30T19:05:00Z</time>
-  <name>SMT0259</name>
-  <cmt>SMT0259</cmt>
-  <desc>SMT0259</desc>
-</wpt>
-<wpt lat="45.484129984" lon="-75.681824974">
-  <ele>33.200000</ele>
-<time>2004-10-30T19:05:00Z</time>
-  <name>SMT0260</name>
-  <cmt>SMT0260</cmt>
-  <desc>SMT0260</desc>
-</wpt>
-<wpt lat="45.484348318" lon="-75.682256640">
-  <ele>56.500000</ele>
-<time>2004-10-30T19:05:00Z</time>
-  <name>SMT0261</name>
-  <cmt>SMT0261</cmt>
-  <desc>SMT0261</desc>
-</wpt>
-<wpt lat="45.484266651" lon="-75.681953307">
-  <ele>55.300000</ele>
-<time>2004-10-30T19:06:00Z</time>
-  <name>SMT0262</name>
-  <cmt>SMT0262</cmt>
-  <desc>SMT0262</desc>
-</wpt>
-<wpt lat="45.484169984" lon="-75.681424974">
-  <ele>53.300000</ele>
-<time>2004-10-30T19:07:00Z</time>
-  <name>SMT0263</name>
-  <cmt>SMT0263</cmt>
-  <desc>SMT0263</desc>
-</wpt>
-<wpt lat="45.484151651" lon="-75.681509974">
-  <ele>39.800000</ele>
-<time>2004-10-30T19:08:00Z</time>
-  <name>SMT0264</name>
-  <cmt>SMT0264</cmt>
-  <desc>SMT0264</desc>
-</wpt>
-<wpt lat="45.484219984" lon="-75.681581640">
-  <ele>57.400000</ele>
-<time>2004-10-30T19:08:00Z</time>
-  <name>SMT0265</name>
-  <cmt>SMT0265</cmt>
-  <desc>SMT0265</desc>
-</wpt>
-<wpt lat="45.484033318" lon="-75.681706640">
-  <ele>61.700000</ele>
-<time>2004-10-30T19:08:00Z</time>
-  <name>SMT0266</name>
-  <cmt>SMT0266</cmt>
-  <desc>SMT0266</desc>
-</wpt>
-<wpt lat="45.483866651" lon="-75.682206640">
-  <ele>58.500000</ele>
-<time>2004-10-30T19:08:00Z</time>
-  <name>SMT0267</name>
-  <cmt>SMT0267</cmt>
-  <desc>SMT0267</desc>
-</wpt>
-<wpt lat="45.483826651" lon="-75.682829974">
-  <ele>56.700000</ele>
-<time>2004-10-30T19:08:00Z</time>
-  <name>SMT0268</name>
-  <cmt>SMT0268</cmt>
-  <desc>SMT0268</desc>
-</wpt>
-<wpt lat="45.483783318" lon="-75.683513307">
-  <ele>56.000000</ele>
-<time>2004-10-30T19:08:00Z</time>
-  <name>SMT0269</name>
-  <cmt>SMT0269</cmt>
-  <desc>SMT0269</desc>
-</wpt>
-<wpt lat="45.483734984" lon="-75.684179974">
-  <ele>55.900000</ele>
-<time>2004-10-30T19:08:00Z</time>
-  <name>SMT0270</name>
-  <cmt>SMT0270</cmt>
-  <desc>SMT0270</desc>
-</wpt>
-<wpt lat="45.483631651" lon="-75.684779974">
-  <ele>55.600000</ele>
-<time>2004-10-30T19:08:00Z</time>
-  <name>SMT0271</name>
-  <cmt>SMT0271</cmt>
-  <desc>SMT0271</desc>
-</wpt>
-<wpt lat="45.483351651" lon="-75.685234974">
-  <ele>56.500000</ele>
-<time>2004-10-30T19:08:00Z</time>
-  <name>SMT0272</name>
-  <cmt>SMT0272</cmt>
-  <desc>SMT0272</desc>
-</wpt>
-<wpt lat="45.483053318" lon="-75.685589974">
-  <ele>57.900000</ele>
-<time>2004-10-30T19:09:00Z</time>
-  <name>SMT0273</name>
-  <cmt>SMT0273</cmt>
-  <desc>SMT0273</desc>
-</wpt>
-<wpt lat="45.482773318" lon="-75.685949974">
-  <ele>58.600000</ele>
-<time>2004-10-30T19:09:00Z</time>
-  <name>SMT0274</name>
-  <cmt>SMT0274</cmt>
-  <desc>SMT0274</desc>
-</wpt>
-<wpt lat="45.482498318" lon="-75.686328307">
-  <ele>57.900000</ele>
-<time>2004-10-30T19:09:00Z</time>
-  <name>SMT0275</name>
-  <cmt>SMT0275</cmt>
-  <desc>SMT0275</desc>
-</wpt>
-<wpt lat="45.482324984" lon="-75.686791640">
-  <ele>58.400000</ele>
-<time>2004-10-30T19:09:00Z</time>
-  <name>SMT0276</name>
-  <cmt>SMT0276</cmt>
-  <desc>SMT0276</desc>
-</wpt>
-<wpt lat="45.482271651" lon="-75.687359974">
-  <ele>57.800000</ele>
-<time>2004-10-30T19:09:00Z</time>
-  <name>SMT0277</name>
-  <cmt>SMT0277</cmt>
-  <desc>SMT0277</desc>
-</wpt>
-<wpt lat="45.482474984" lon="-75.687781640">
-  <ele>51.900000</ele>
-<time>2004-10-30T19:09:00Z</time>
-  <name>SMT0278</name>
-  <cmt>SMT0278</cmt>
-  <desc>SMT0278</desc>
-</wpt>
-<wpt lat="45.482816651" lon="-75.687856640">
-  <ele>51.200000</ele>
-<time>2004-10-30T19:09:00Z</time>
-  <name>SMT0279</name>
-  <cmt>SMT0279</cmt>
-  <desc>SMT0279</desc>
-</wpt>
-<wpt lat="45.483251651" lon="-75.687924974">
-  <ele>49.400000</ele>
-<time>2004-10-30T19:09:00Z</time>
-  <name>SMT0280</name>
-  <cmt>SMT0280</cmt>
-  <desc>SMT0280</desc>
-</wpt>
-<wpt lat="45.483614984" lon="-75.687981640">
-  <ele>48.600000</ele>
-<time>2004-10-30T19:09:00Z</time>
-  <name>SMT0281</name>
-  <cmt>SMT0281</cmt>
-  <desc>SMT0281</desc>
-</wpt>
-<wpt lat="45.484031651" lon="-75.688076640">
-  <ele>45.600000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0282</name>
-  <cmt>SMT0282</cmt>
-  <desc>SMT0282</desc>
-</wpt>
-<wpt lat="45.484488318" lon="-75.688141640">
-  <ele>48.100000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0283</name>
-  <cmt>SMT0283</cmt>
-  <desc>SMT0283</desc>
-</wpt>
-<wpt lat="45.484943318" lon="-75.688174974">
-  <ele>49.800000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0284</name>
-  <cmt>SMT0284</cmt>
-  <desc>SMT0284</desc>
-</wpt>
-<wpt lat="45.485426651" lon="-75.688246640">
-  <ele>50.800000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0285</name>
-  <cmt>SMT0285</cmt>
-  <desc>SMT0285</desc>
-</wpt>
-<wpt lat="45.485924984" lon="-75.688306640">
-  <ele>51.600000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0286</name>
-  <cmt>SMT0286</cmt>
-  <desc>SMT0286</desc>
-</wpt>
-<wpt lat="45.486423318" lon="-75.688374974">
-  <ele>52.400000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0287</name>
-  <cmt>SMT0287</cmt>
-  <desc>SMT0287</desc>
-</wpt>
-<wpt lat="45.486924984" lon="-75.688434974">
-  <ele>54.900000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0288</name>
-  <cmt>SMT0288</cmt>
-  <desc>SMT0288</desc>
-</wpt>
-<wpt lat="45.487428318" lon="-75.688479974">
-  <ele>57.600000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0289</name>
-  <cmt>SMT0289</cmt>
-  <desc>SMT0289</desc>
-</wpt>
-<wpt lat="45.487908318" lon="-75.688526640">
-  <ele>57.000000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0290</name>
-  <cmt>SMT0290</cmt>
-  <desc>SMT0290</desc>
-</wpt>
-<wpt lat="45.488369984" lon="-75.688571640">
-  <ele>57.600000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0291</name>
-  <cmt>SMT0291</cmt>
-  <desc>SMT0291</desc>
-</wpt>
-<wpt lat="45.488803318" lon="-75.688626640">
-  <ele>57.400000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0292</name>
-  <cmt>SMT0292</cmt>
-  <desc>SMT0292</desc>
-</wpt>
-<wpt lat="45.489166651" lon="-75.688666640">
-  <ele>57.800000</ele>
-<time>2004-10-30T19:10:00Z</time>
-  <name>SMT0293</name>
-  <cmt>SMT0293</cmt>
-  <desc>SMT0293</desc>
-</wpt>
-<wpt lat="45.489571651" lon="-75.688714974">
-  <ele>58.800000</ele>
-<time>2004-10-30T19:11:00Z</time>
-  <name>SMT0294</name>
-  <cmt>SMT0294</cmt>
-  <desc>SMT0294</desc>
-</wpt>
-<wpt lat="45.490033318" lon="-75.688786640">
-  <ele>58.700000</ele>
-<time>2004-10-30T19:11:00Z</time>
-  <name>SMT0295</name>
-  <cmt>SMT0295</cmt>
-  <desc>SMT0295</desc>
-</wpt>
-<wpt lat="45.490436651" lon="-75.688863307">
-  <ele>58.800000</ele>
-<time>2004-10-30T19:11:00Z</time>
-  <name>SMT0296</name>
-  <cmt>SMT0296</cmt>
-  <desc>SMT0296</desc>
-</wpt>
-<wpt lat="45.490854984" lon="-75.688934974">
-  <ele>58.600000</ele>
-<time>2004-10-30T19:11:00Z</time>
-  <name>SMT0297</name>
-  <cmt>SMT0297</cmt>
-  <desc>SMT0297</desc>
-</wpt>
-<wpt lat="45.491263318" lon="-75.688998307">
-  <ele>58.000000</ele>
-<time>2004-10-30T19:11:00Z</time>
-  <name>SMT0298</name>
-  <cmt>SMT0298</cmt>
-  <desc>SMT0298</desc>
-</wpt>
-<wpt lat="45.491638318" lon="-75.689056640">
-  <ele>58.200000</ele>
-<time>2004-10-30T19:11:00Z</time>
-  <name>SMT0299</name>
-  <cmt>SMT0299</cmt>
-  <desc>SMT0299</desc>
-</wpt>
-<wpt lat="45.492006651" lon="-75.689111640">
-  <ele>59.900000</ele>
-<time>2004-10-30T19:11:00Z</time>
-  <name>SMT0300</name>
-  <cmt>SMT0300</cmt>
-  <desc>SMT0300</desc>
-</wpt>
-<wpt lat="45.492113318" lon="-75.689476640">
-  <ele>55.300000</ele>
-<time>2004-10-30T19:12:00Z</time>
-  <name>SMT0301</name>
-  <cmt>SMT0301</cmt>
-  <desc>SMT0301</desc>
-</wpt>
-<wpt lat="45.491978318" lon="-75.690074974">
-  <ele>59.200000</ele>
-<time>2004-10-30T19:12:00Z</time>
-  <name>SMT0302</name>
-  <cmt>SMT0302</cmt>
-  <desc>SMT0302</desc>
-</wpt>
-<wpt lat="45.491793318" lon="-75.690669974">
-  <ele>60.100000</ele>
-<time>2004-10-30T19:12:00Z</time>
-  <name>SMT0303</name>
-  <cmt>SMT0303</cmt>
-  <desc>SMT0303</desc>
-</wpt>
-<wpt lat="45.491579984" lon="-75.691338307">
-  <ele>59.600000</ele>
-<time>2004-10-30T19:12:00Z</time>
-  <name>SMT0304</name>
-  <cmt>SMT0304</cmt>
-  <desc>SMT0304</desc>
-</wpt>
-<wpt lat="45.491428318" lon="-75.691814974">
-  <ele>59.200000</ele>
-<time>2004-10-30T19:12:00Z</time>
-  <name>SMT0305</name>
-  <cmt>SMT0305</cmt>
-  <desc>SMT0305</desc>
-</wpt>
-<wpt lat="45.491271651" lon="-75.692296640">
-  <ele>59.300000</ele>
-<time>2004-10-30T19:12:00Z</time>
-  <name>SMT0306</name>
-  <cmt>SMT0306</cmt>
-  <desc>SMT0306</desc>
-</wpt>
-<wpt lat="45.491113318" lon="-75.692781640">
-  <ele>58.800000</ele>
-<time>2004-10-30T19:12:00Z</time>
-  <name>SMT0307</name>
-  <cmt>SMT0307</cmt>
-  <desc>SMT0307</desc>
-</wpt>
-<wpt lat="45.490954984" lon="-75.693273307">
-  <ele>58.800000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0308</name>
-  <cmt>SMT0308</cmt>
-  <desc>SMT0308</desc>
-</wpt>
-<wpt lat="45.490796651" lon="-75.693766640">
-  <ele>58.900000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0309</name>
-  <cmt>SMT0309</cmt>
-  <desc>SMT0309</desc>
-</wpt>
-<wpt lat="45.490638318" lon="-75.694254974">
-  <ele>59.400000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0310</name>
-  <cmt>SMT0310</cmt>
-  <desc>SMT0310</desc>
-</wpt>
-<wpt lat="45.490481651" lon="-75.694734974">
-  <ele>60.000000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0311</name>
-  <cmt>SMT0311</cmt>
-  <desc>SMT0311</desc>
-</wpt>
-<wpt lat="45.490331651" lon="-75.695211640">
-  <ele>59.900000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0312</name>
-  <cmt>SMT0312</cmt>
-  <desc>SMT0312</desc>
-</wpt>
-<wpt lat="45.490193318" lon="-75.695686640">
-  <ele>60.400000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0313</name>
-  <cmt>SMT0313</cmt>
-  <desc>SMT0313</desc>
-</wpt>
-<wpt lat="45.490033318" lon="-75.696404974">
-  <ele>59.800000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0314</name>
-  <cmt>SMT0314</cmt>
-  <desc>SMT0314</desc>
-</wpt>
-<wpt lat="45.489944984" lon="-75.697009974">
-  <ele>60.600000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0315</name>
-  <cmt>SMT0315</cmt>
-  <desc>SMT0315</desc>
-</wpt>
-<wpt lat="45.489893318" lon="-75.697518307">
-  <ele>62.600000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0316</name>
-  <cmt>SMT0316</cmt>
-  <desc>SMT0316</desc>
-</wpt>
-<wpt lat="45.489828318" lon="-75.698096640">
-  <ele>61.100000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0317</name>
-  <cmt>SMT0317</cmt>
-  <desc>SMT0317</desc>
-</wpt>
-<wpt lat="45.489766651" lon="-75.698756640">
-  <ele>62.900000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0318</name>
-  <cmt>SMT0318</cmt>
-  <desc>SMT0318</desc>
-</wpt>
-<wpt lat="45.489716651" lon="-75.699353307">
-  <ele>62.600000</ele>
-<time>2004-10-30T19:13:00Z</time>
-  <name>SMT0319</name>
-  <cmt>SMT0319</cmt>
-  <desc>SMT0319</desc>
-</wpt>
-<wpt lat="45.489666651" lon="-75.699961640">
-  <ele>61.700000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0320</name>
-  <cmt>SMT0320</cmt>
-  <desc>SMT0320</desc>
-</wpt>
-<wpt lat="45.489619984" lon="-75.700538307">
-  <ele>61.000000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0321</name>
-  <cmt>SMT0321</cmt>
-  <desc>SMT0321</desc>
-</wpt>
-<wpt lat="45.489576651" lon="-75.701048307">
-  <ele>60.600000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0322</name>
-  <cmt>SMT0322</cmt>
-  <desc>SMT0322</desc>
-</wpt>
-<wpt lat="45.489529984" lon="-75.701629974">
-  <ele>61.000000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0323</name>
-  <cmt>SMT0323</cmt>
-  <desc>SMT0323</desc>
-</wpt>
-<wpt lat="45.489486651" lon="-75.702144974">
-  <ele>60.800000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0324</name>
-  <cmt>SMT0324</cmt>
-  <desc>SMT0324</desc>
-</wpt>
-<wpt lat="45.489448318" lon="-75.702764974">
-  <ele>58.600000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0325</name>
-  <cmt>SMT0325</cmt>
-  <desc>SMT0325</desc>
-</wpt>
-<wpt lat="45.489398318" lon="-75.703353307">
-  <ele>59.700000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0326</name>
-  <cmt>SMT0326</cmt>
-  <desc>SMT0326</desc>
-</wpt>
-<wpt lat="45.489351651" lon="-75.703901640">
-  <ele>60.500000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0327</name>
-  <cmt>SMT0327</cmt>
-  <desc>SMT0327</desc>
-</wpt>
-<wpt lat="45.489296651" lon="-75.704481640">
-  <ele>61.500000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0328</name>
-  <cmt>SMT0328</cmt>
-  <desc>SMT0328</desc>
-</wpt>
-<wpt lat="45.489228318" lon="-75.705103307">
-  <ele>62.000000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0329</name>
-  <cmt>SMT0329</cmt>
-  <desc>SMT0329</desc>
-</wpt>
-<wpt lat="45.489124984" lon="-75.705753307">
-  <ele>61.800000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0330</name>
-  <cmt>SMT0330</cmt>
-  <desc>SMT0330</desc>
-</wpt>
-<wpt lat="45.489003318" lon="-75.706404974">
-  <ele>61.300000</ele>
-<time>2004-10-30T19:14:00Z</time>
-  <name>SMT0331</name>
-  <cmt>SMT0331</cmt>
-  <desc>SMT0331</desc>
-</wpt>
-<wpt lat="45.488876651" lon="-75.707066640">
-  <ele>60.900000</ele>
-<time>2004-10-30T19:15:00Z</time>
-  <name>SMT0332</name>
-  <cmt>SMT0332</cmt>
-  <desc>SMT0332</desc>
-</wpt>
-<wpt lat="45.488748318" lon="-75.707749974">
-  <ele>61.100000</ele>
-<time>2004-10-30T19:15:00Z</time>
-  <name>SMT0333</name>
-  <cmt>SMT0333</cmt>
-  <desc>SMT0333</desc>
-</wpt>
-<wpt lat="45.488621651" lon="-75.708441640">
-  <ele>61.200000</ele>
-<time>2004-10-30T19:15:00Z</time>
-  <name>SMT0334</name>
-  <cmt>SMT0334</cmt>
-  <desc>SMT0334</desc>
-</wpt>
-<wpt lat="45.488493318" lon="-75.709136640">
-  <ele>61.500000</ele>
-<time>2004-10-30T19:15:00Z</time>
-  <name>SMT0335</name>
-  <cmt>SMT0335</cmt>
-  <desc>SMT0335</desc>
-</wpt>
-<wpt lat="45.488363318" lon="-75.709836640">
-  <ele>60.800000</ele>
-<time>2004-10-30T19:15:00Z</time>
-  <name>SMT0336</name>
-  <cmt>SMT0336</cmt>
-  <desc>SMT0336</desc>
-</wpt>
-<wpt lat="45.488234984" lon="-75.710521640">
-  <ele>60.300000</ele>
-<time>2004-10-30T19:15:00Z</time>
-  <name>SMT0337</name>
-  <cmt>SMT0337</cmt>
-  <desc>SMT0337</desc>
-</wpt>
-<wpt lat="45.488126651" lon="-75.711161640">
-  <ele>61.000000</ele>
-<time>2004-10-30T19:15:00Z</time>
-  <name>SMT0338</name>
-  <cmt>SMT0338</cmt>
-  <desc>SMT0338</desc>
-</wpt>
-<wpt lat="45.488056651" lon="-75.711686640">
-  <ele>62.500000</ele>
-<time>2004-10-30T19:15:00Z</time>
-  <name>SMT0339</name>
-  <cmt>SMT0339</cmt>
-  <desc>SMT0339</desc>
-</wpt>
-<wpt lat="45.488076651" lon="-75.712229974">
-  <ele>66.800000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0340</name>
-  <cmt>SMT0340</cmt>
-  <desc>SMT0340</desc>
-</wpt>
-<wpt lat="45.488076651" lon="-75.712893307">
-  <ele>66.700000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0341</name>
-  <cmt>SMT0341</cmt>
-  <desc>SMT0341</desc>
-</wpt>
-<wpt lat="45.488118318" lon="-75.713466640">
-  <ele>67.200000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0342</name>
-  <cmt>SMT0342</cmt>
-  <desc>SMT0342</desc>
-</wpt>
-<wpt lat="45.488206651" lon="-75.714113307">
-  <ele>68.400000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0343</name>
-  <cmt>SMT0343</cmt>
-  <desc>SMT0343</desc>
-</wpt>
-<wpt lat="45.488343318" lon="-75.714756640">
-  <ele>70.000000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0344</name>
-  <cmt>SMT0344</cmt>
-  <desc>SMT0344</desc>
-</wpt>
-<wpt lat="45.488484984" lon="-75.715376640">
-  <ele>71.000000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0345</name>
-  <cmt>SMT0345</cmt>
-  <desc>SMT0345</desc>
-</wpt>
-<wpt lat="45.488619984" lon="-75.715998307">
-  <ele>69.000000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0346</name>
-  <cmt>SMT0346</cmt>
-  <desc>SMT0346</desc>
-</wpt>
-<wpt lat="45.488759984" lon="-75.716621640">
-  <ele>66.400000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0347</name>
-  <cmt>SMT0347</cmt>
-  <desc>SMT0347</desc>
-</wpt>
-<wpt lat="45.488904984" lon="-75.717249974">
-  <ele>64.100000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0348</name>
-  <cmt>SMT0348</cmt>
-  <desc>SMT0348</desc>
-</wpt>
-<wpt lat="45.489028318" lon="-75.717773307">
-  <ele>62.900000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0349</name>
-  <cmt>SMT0349</cmt>
-  <desc>SMT0349</desc>
-</wpt>
-<wpt lat="45.489316651" lon="-75.718193307">
-  <ele>61.300000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0350</name>
-  <cmt>SMT0350</cmt>
-  <desc>SMT0350</desc>
-</wpt>
-<wpt lat="45.489631651" lon="-75.718078307">
-  <ele>59.600000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0351</name>
-  <cmt>SMT0351</cmt>
-  <desc>SMT0351</desc>
-</wpt>
-<wpt lat="45.489988318" lon="-75.717894974">
-  <ele>57.600000</ele>
-<time>2004-10-30T19:16:00Z</time>
-  <name>SMT0352</name>
-  <cmt>SMT0352</cmt>
-  <desc>SMT0352</desc>
-</wpt>
-<wpt lat="45.490291651" lon="-75.717553307">
-  <ele>57.800000</ele>
-<time>2004-10-30T19:17:00Z</time>
-  <name>SMT0353</name>
-  <cmt>SMT0353</cmt>
-  <desc>SMT0353</desc>
-</wpt>
-<wpt lat="45.490499984" lon="-75.717059974">
-  <ele>59.500000</ele>
-<time>2004-10-30T19:17:00Z</time>
-  <name>SMT0354</name>
-  <cmt>SMT0354</cmt>
-  <desc>SMT0354</desc>
-</wpt>
-<wpt lat="45.490738318" lon="-75.716638307">
-  <ele>60.800000</ele>
-<time>2004-10-30T19:17:00Z</time>
-  <name>SMT0355</name>
-  <cmt>SMT0355</cmt>
-  <desc>SMT0355</desc>
-</wpt>
-<wpt lat="45.491081651" lon="-75.716463307">
-  <ele>59.700000</ele>
-<time>2004-10-30T19:17:00Z</time>
-  <name>SMT0356</name>
-  <cmt>SMT0356</cmt>
-  <desc>SMT0356</desc>
-</wpt>
-<wpt lat="45.491469984" lon="-75.716504974">
-  <ele>58.200000</ele>
-<time>2004-10-30T19:17:00Z</time>
-  <name>SMT0357</name>
-  <cmt>SMT0357</cmt>
-  <desc>SMT0357</desc>
-</wpt>
-<wpt lat="45.491876651" lon="-75.716578307">
-  <ele>57.800000</ele>
-<time>2004-10-30T19:17:00Z</time>
-  <name>SMT0358</name>
-  <cmt>SMT0358</cmt>
-  <desc>SMT0358</desc>
-</wpt>
-<wpt lat="45.492034984" lon="-75.716918307">
-  <ele>59.600000</ele>
-<time>2004-10-30T19:17:00Z</time>
-  <name>SMT0359</name>
-  <cmt>SMT0359</cmt>
-  <desc>SMT0359</desc>
-</wpt>
-<wpt lat="45.491984984" lon="-75.717489974">
-  <ele>62.600000</ele>
-<time>2004-10-30T19:17:00Z</time>
-  <name>SMT0360</name>
-  <cmt>SMT0360</cmt>
-  <desc>SMT0360</desc>
-</wpt>
-<wpt lat="45.492223318" lon="-75.717669974">
-  <ele>62.900000</ele>
-<time>2004-10-30T19:17:00Z</time>
-  <name>SMT0361</name>
-  <cmt>SMT0361</cmt>
-  <desc>SMT0361</desc>
-</wpt>
-<wpt lat="45.492426651" lon="-75.718104974">
-  <ele>63.200000</ele>
-<time>2004-10-30T19:17:00Z</time>
-  <name>SMT0362</name>
-  <cmt>SMT0362</cmt>
-  <desc>SMT0362</desc>
-</wpt>
-<wpt lat="45.492693318" lon="-75.718359974">
-  <ele>34.400000</ele>
-<time>2004-10-30T21:43:00Z</time>
-  <name>SMT0363</name>
-  <cmt>SMT0363</cmt>
-  <desc>SMT0363</desc>
-</wpt>
-<wpt lat="45.409561651" lon="-75.688821640">
-  <ele>87.200000</ele>
-<time>2004-11-04T21:28:00Z</time>
-  <name>SMT0364</name>
-  <cmt>SMT0364</cmt>
-  <desc>SMT0364</desc>
-</wpt>
-<wpt lat="45.409449984" lon="-75.688984974">
-  <ele>96.200000</ele>
-<time>2004-11-04T21:28:00Z</time>
-  <name>SMT0365</name>
-  <cmt>SMT0365</cmt>
-  <desc>SMT0365</desc>
-</wpt>
-<wpt lat="45.409489984" lon="-75.688799974">
-  <ele>103.000000</ele>
-<time>2004-11-04T21:29:00Z</time>
-  <name>SMT0366</name>
-  <cmt>SMT0366</cmt>
-  <desc>SMT0366</desc>
-</wpt>
-<wpt lat="45.409376651" lon="-75.688951640">
-  <ele>115.500000</ele>
-<time>2004-11-04T21:32:00Z</time>
-  <name>SMT0367</name>
-  <cmt>SMT0367</cmt>
-  <desc>SMT0367</desc>
-</wpt>
-<wpt lat="45.409271651" lon="-75.689434974">
-  <ele>101.600000</ele>
-<time>2004-11-04T21:32:00Z</time>
-  <name>SMT0368</name>
-  <cmt>SMT0368</cmt>
-  <desc>SMT0368</desc>
-</wpt>
-<wpt lat="45.409384984" lon="-75.689006640">
-  <ele>112.300000</ele>
-<time>2004-11-04T21:33:00Z</time>
-  <name>SMT0369</name>
-  <cmt>SMT0369</cmt>
-  <desc>SMT0369</desc>
-</wpt>
-<wpt lat="45.409273318" lon="-75.689414974">
-  <ele>108.500000</ele>
-<time>2004-11-04T21:34:00Z</time>
-  <name>SMT0370</name>
-  <cmt>SMT0370</cmt>
-  <desc>SMT0370</desc>
-</wpt>
-<wpt lat="45.458223318" lon="-75.768649974">
-  <ele>91.700000</ele>
-<time>2004-11-04T23:55:00Z</time>
-  <name>SMT0371</name>
-  <cmt>SMT0371</cmt>
-  <desc>SMT0371</desc>
-</wpt>
-<wpt lat="45.458384984" lon="-75.769111640">
-  <ele>97.300000</ele>
-<time>2004-11-04T23:56:00Z</time>
-  <name>SMT0372</name>
-  <cmt>SMT0372</cmt>
-  <desc>SMT0372</desc>
-</wpt>
-<wpt lat="45.458418318" lon="-75.769633307">
-  <ele>98.600000</ele>
-<time>2004-11-04T23:57:00Z</time>
-  <name>SMT0373</name>
-  <cmt>SMT0373</cmt>
-  <desc>SMT0373</desc>
-</wpt>
-<wpt lat="45.458353318" lon="-75.770148307">
-  <ele>91.000000</ele>
-<time>2004-11-04T23:57:00Z</time>
-  <name>SMT0374</name>
-  <cmt>SMT0374</cmt>
-  <desc>SMT0374</desc>
-</wpt>
-<wpt lat="45.458454984" lon="-75.770646640">
-  <ele>96.600000</ele>
-<time>2004-11-04T23:58:00Z</time>
-  <name>SMT0375</name>
-  <cmt>SMT0375</cmt>
-  <desc>SMT0375</desc>
-</wpt>
-<wpt lat="45.458574984" lon="-75.771133307">
-  <ele>95.000000</ele>
-<time>2004-11-04T23:58:00Z</time>
-  <name>SMT0376</name>
-  <cmt>SMT0376</cmt>
-  <desc>SMT0376</desc>
-</wpt>
-<wpt lat="45.458871651" lon="-75.771324974">
-  <ele>95.400000</ele>
-<time>2004-11-04T23:59:00Z</time>
-  <name>SMT0377</name>
-  <cmt>SMT0377</cmt>
-  <desc>SMT0377</desc>
-</wpt>
-<wpt lat="45.459234984" lon="-75.771383307">
-  <ele>97.600000</ele>
-<time>2004-11-04T23:59:00Z</time>
-  <name>SMT0378</name>
-  <cmt>SMT0378</cmt>
-  <desc>SMT0378</desc>
-</wpt>
-<wpt lat="45.459589984" lon="-75.771216640">
-  <ele>94.500000</ele>
-<time>2004-11-05T00:00:00Z</time>
-  <name>SMT0379</name>
-  <cmt>SMT0379</cmt>
-  <desc>SMT0379</desc>
-</wpt>
-<wpt lat="45.459538318" lon="-75.771018307">
-  <ele>95.700000</ele>
-<time>2004-11-05T00:00:00Z</time>
-  <name>SMT0380</name>
-  <cmt>SMT0380</cmt>
-  <desc>SMT0380</desc>
-</wpt>
-<wpt lat="45.460071651" lon="-75.770246640">
-  <ele>101.300000</ele>
-<time>2004-11-05T00:12:00Z</time>
-  <name>SMT0381</name>
-  <cmt>SMT0381</cmt>
-  <desc>SMT0381</desc>
-</wpt>
-<wpt lat="45.460188318" lon="-75.770391640">
-  <ele>108.700000</ele>
-<time>2004-11-05T00:14:00Z</time>
-  <name>SMT0382</name>
-  <cmt>SMT0382</cmt>
-  <desc>SMT0382</desc>
-</wpt>
-<wpt lat="45.460069984" lon="-75.770229974">
-  <ele>107.800000</ele>
-<time>2004-11-05T00:14:00Z</time>
-  <name>SMT0383</name>
-  <cmt>SMT0383</cmt>
-  <desc>SMT0383</desc>
-</wpt>
-<wpt lat="45.460081651" lon="-75.770426640">
-  <ele>103.400000</ele>
-<time>2004-11-05T00:14:00Z</time>
-  <name>SMT0384</name>
-  <cmt>SMT0384</cmt>
-  <desc>SMT0384</desc>
-</wpt>
-<wpt lat="45.459981651" lon="-75.770973307">
-  <ele>103.000000</ele>
-<time>2004-11-05T00:15:00Z</time>
-  <name>SMT0385</name>
-  <cmt>SMT0385</cmt>
-  <desc>SMT0385</desc>
-</wpt>
-<wpt lat="45.459956651" lon="-75.771518307">
-  <ele>98.400000</ele>
-<time>2004-11-05T00:15:00Z</time>
-  <name>SMT0386</name>
-  <cmt>SMT0386</cmt>
-  <desc>SMT0386</desc>
-</wpt>
-<wpt lat="45.459759984" lon="-75.771949974">
-  <ele>102.000000</ele>
-<time>2004-11-05T00:16:00Z</time>
-  <name>SMT0387</name>
-  <cmt>SMT0387</cmt>
-  <desc>SMT0387</desc>
-</wpt>
-<wpt lat="45.459611651" lon="-75.772419974">
-  <ele>97.500000</ele>
-<time>2004-11-05T00:16:00Z</time>
-  <name>SMT0388</name>
-  <cmt>SMT0388</cmt>
-  <desc>SMT0388</desc>
-</wpt>
-<wpt lat="45.459661651" lon="-75.772928307">
-  <ele>90.400000</ele>
-<time>2004-11-05T00:17:00Z</time>
-  <name>SMT0389</name>
-  <cmt>SMT0389</cmt>
-  <desc>SMT0389</desc>
-</wpt>
-<wpt lat="45.459696651" lon="-75.773461640">
-  <ele>90.500000</ele>
-<time>2004-11-05T00:17:00Z</time>
-  <name>SMT0390</name>
-  <cmt>SMT0390</cmt>
-  <desc>SMT0390</desc>
-</wpt>
-<wpt lat="45.459664984" lon="-75.773981640">
-  <ele>90.200000</ele>
-<time>2004-11-05T00:17:00Z</time>
-  <name>SMT0391</name>
-  <cmt>SMT0391</cmt>
-  <desc>SMT0391</desc>
-</wpt>
-<wpt lat="45.459621651" lon="-75.774501640">
-  <ele>94.900000</ele>
-<time>2004-11-05T00:18:00Z</time>
-  <name>SMT0392</name>
-  <cmt>SMT0392</cmt>
-  <desc>SMT0392</desc>
-</wpt>
-<wpt lat="45.459663318" lon="-75.775023307">
-  <ele>95.400000</ele>
-<time>2004-11-05T00:18:00Z</time>
-  <name>SMT0393</name>
-  <cmt>SMT0393</cmt>
-  <desc>SMT0393</desc>
-</wpt>
-<wpt lat="45.459604984" lon="-75.775528307">
-  <ele>98.800000</ele>
-<time>2004-11-05T00:19:00Z</time>
-  <name>SMT0394</name>
-  <cmt>SMT0394</cmt>
-  <desc>SMT0394</desc>
-</wpt>
-<wpt lat="45.459556651" lon="-75.776026640">
-  <ele>90.600000</ele>
-<time>2004-11-05T00:19:00Z</time>
-  <name>SMT0395</name>
-  <cmt>SMT0395</cmt>
-  <desc>SMT0395</desc>
-</wpt>
-<wpt lat="45.459386651" lon="-75.776458307">
-  <ele>102.700000</ele>
-<time>2004-11-05T00:20:00Z</time>
-  <name>SMT0396</name>
-  <cmt>SMT0396</cmt>
-  <desc>SMT0396</desc>
-</wpt>
-<wpt lat="45.458906651" lon="-75.776494974">
-  <ele>110.000000</ele>
-<time>2004-11-05T00:26:00Z</time>
-  <name>SMT0397</name>
-  <cmt>SMT0397</cmt>
-  <desc>SMT0397</desc>
-</wpt>
-<wpt lat="45.458978318" lon="-75.776474974">
-  <ele>124.000000</ele>
-<time>2004-11-05T00:27:00Z</time>
-  <name>SMT0398</name>
-  <cmt>SMT0398</cmt>
-  <desc>SMT0398</desc>
-</wpt>
-<wpt lat="45.492576651" lon="-75.718236640">
-  <ele>0.000000</ele>
-<time>2005-02-01T08:56:00Z</time>
-  <name>SMT0399</name>
-  <cmt>SMT0399</cmt>
-  <desc>SMT0399</desc>
-</wpt>
-<wpt lat="45.492576651" lon="-75.718236640">
-  <ele>54.900000</ele>
-<time>2005-02-01T08:56:00Z</time>
-  <name>SMT0400</name>
-  <cmt>SMT0400</cmt>
-  <desc>SMT0400</desc>
-</wpt>
-<wpt lat="45.410543318" lon="-75.685016640">
-  <ele>34.200000</ele>
-<time>2005-03-15T02:11:00Z</time>
-  <name>SMT0401</name>
-  <cmt>SMT0401</cmt>
-  <desc>SMT0401</desc>
-</wpt>
-<wpt lat="45.410414984" lon="-75.685189974">
-  <ele>47.800000</ele>
-<time>2005-03-15T02:12:00Z</time>
-  <name>SMT0402</name>
-  <cmt>SMT0402</cmt>
-  <desc>SMT0402</desc>
-</wpt>
-<wpt lat="45.410416651" lon="-75.685121640">
-  <ele>33.300000</ele>
-<time>2005-03-15T02:12:00Z</time>
-  <name>SMT0403</name>
-  <cmt>SMT0403</cmt>
-  <desc>SMT0403</desc>
-</wpt>
-<wpt lat="45.410483318" lon="-75.685109974">
-  <ele>48.600000</ele>
-<time>2005-03-15T02:12:00Z</time>
-  <name>SMT0404</name>
-  <cmt>SMT0404</cmt>
-  <desc>SMT0404</desc>
-</wpt>
-<wpt lat="45.410689984" lon="-75.684781640">
-  <ele>69.900000</ele>
-<time>2005-03-15T02:13:00Z</time>
-  <name>SMT0405</name>
-  <cmt>SMT0405</cmt>
-  <desc>SMT0405</desc>
-</wpt>
-<wpt lat="45.410859984" lon="-75.684329974">
-  <ele>75.500000</ele>
-<time>2005-03-15T02:13:00Z</time>
-  <name>SMT0406</name>
-  <cmt>SMT0406</cmt>
-  <desc>SMT0406</desc>
-</wpt>
-<wpt lat="45.411134984" lon="-75.684268307">
-  <ele>78.400000</ele>
-<time>2005-03-15T02:14:00Z</time>
-  <name>SMT0407</name>
-  <cmt>SMT0407</cmt>
-  <desc>SMT0407</desc>
-</wpt>
-<wpt lat="45.411234984" lon="-75.683899974">
-  <ele>82.000000</ele>
-<time>2005-03-15T02:14:00Z</time>
-  <name>SMT0408</name>
-  <cmt>SMT0408</cmt>
-  <desc>SMT0408</desc>
-</wpt>
-<wpt lat="45.411426651" lon="-75.683463307">
-  <ele>82.000000</ele>
-<time>2005-03-15T02:14:00Z</time>
-  <name>SMT0409</name>
-  <cmt>SMT0409</cmt>
-  <desc>SMT0409</desc>
-</wpt>
-<wpt lat="45.411591651" lon="-75.682943307">
-  <ele>79.700000</ele>
-<time>2005-03-15T02:16:00Z</time>
-  <name>SMT0410</name>
-  <cmt>SMT0410</cmt>
-  <desc>SMT0410</desc>
-</wpt>
-<wpt lat="45.411468318" lon="-75.682711640">
-  <ele>76.300000</ele>
-<time>2005-03-15T02:17:00Z</time>
-  <name>SMT0411</name>
-  <cmt>SMT0411</cmt>
-  <desc>SMT0411</desc>
-</wpt>
-<wpt lat="45.411604984" lon="-75.682798307">
-  <ele>78.600000</ele>
-<time>2005-03-15T02:18:00Z</time>
-  <name>SMT0412</name>
-  <cmt>SMT0412</cmt>
-  <desc>SMT0412</desc>
-</wpt>
-<wpt lat="45.411481651" lon="-75.683266640">
-  <ele>81.700000</ele>
-<time>2005-03-15T02:20:00Z</time>
-  <name>SMT0413</name>
-  <cmt>SMT0413</cmt>
-  <desc>SMT0413</desc>
-</wpt>
-<wpt lat="45.411314984" lon="-75.683724974">
-  <ele>77.200000</ele>
-<time>2005-03-15T02:20:00Z</time>
-  <name>SMT0414</name>
-  <cmt>SMT0414</cmt>
-  <desc>SMT0414</desc>
-</wpt>
-<wpt lat="45.411193318" lon="-75.684214974">
-  <ele>78.400000</ele>
-<time>2005-03-15T02:21:00Z</time>
-  <name>SMT0415</name>
-  <cmt>SMT0415</cmt>
-  <desc>SMT0415</desc>
-</wpt>
-<wpt lat="45.500144984" lon="-75.735021640">
-  <ele>34.000000</ele>
-<time>2005-03-19T23:39:00Z</time>
-  <name>SMT0416</name>
-  <cmt>SMT0416</cmt>
-  <desc>SMT0416</desc>
-</wpt>
-<wpt lat="45.499814984" lon="-75.735399974">
-  <ele>34.000000</ele>
-<time>2005-03-19T23:39:00Z</time>
-  <name>SMT0417</name>
-  <cmt>SMT0417</cmt>
-  <desc>SMT0417</desc>
-</wpt>
-<wpt lat="45.499831651" lon="-75.739623307">
-  <ele>64.900000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0418</name>
-  <cmt>SMT0418</cmt>
-  <desc>SMT0418</desc>
-</wpt>
-<wpt lat="45.499686651" lon="-75.739721640">
-  <ele>66.300000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0419</name>
-  <cmt>SMT0419</cmt>
-  <desc>SMT0419</desc>
-</wpt>
-<wpt lat="45.499216651" lon="-75.739754974">
-  <ele>65.200000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0420</name>
-  <cmt>SMT0420</cmt>
-  <desc>SMT0420</desc>
-</wpt>
-<wpt lat="45.498831651" lon="-75.739811640">
-  <ele>63.200000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0421</name>
-  <cmt>SMT0421</cmt>
-  <desc>SMT0421</desc>
-</wpt>
-<wpt lat="45.498476651" lon="-75.739969974">
-  <ele>62.700000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0422</name>
-  <cmt>SMT0422</cmt>
-  <desc>SMT0422</desc>
-</wpt>
-<wpt lat="45.498126651" lon="-75.740134974">
-  <ele>63.500000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0423</name>
-  <cmt>SMT0423</cmt>
-  <desc>SMT0423</desc>
-</wpt>
-<wpt lat="45.497756651" lon="-75.740256640">
-  <ele>64.800000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0424</name>
-  <cmt>SMT0424</cmt>
-  <desc>SMT0424</desc>
-</wpt>
-<wpt lat="45.497381651" lon="-75.740359974">
-  <ele>66.800000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0425</name>
-  <cmt>SMT0425</cmt>
-  <desc>SMT0425</desc>
-</wpt>
-<wpt lat="45.497018318" lon="-75.740463307">
-  <ele>69.300000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0426</name>
-  <cmt>SMT0426</cmt>
-  <desc>SMT0426</desc>
-</wpt>
-<wpt lat="45.496643318" lon="-75.740629974">
-  <ele>72.100000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0427</name>
-  <cmt>SMT0427</cmt>
-  <desc>SMT0427</desc>
-</wpt>
-<wpt lat="45.496249984" lon="-75.740866640">
-  <ele>74.100000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0428</name>
-  <cmt>SMT0428</cmt>
-  <desc>SMT0428</desc>
-</wpt>
-<wpt lat="45.495858318" lon="-75.741149974">
-  <ele>77.400000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0429</name>
-  <cmt>SMT0429</cmt>
-  <desc>SMT0429</desc>
-</wpt>
-<wpt lat="45.495548318" lon="-75.741538307">
-  <ele>82.100000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0430</name>
-  <cmt>SMT0430</cmt>
-  <desc>SMT0430</desc>
-</wpt>
-<wpt lat="45.495361651" lon="-75.742001640">
-  <ele>87.200000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0431</name>
-  <cmt>SMT0431</cmt>
-  <desc>SMT0431</desc>
-</wpt>
-<wpt lat="45.495254984" lon="-75.742608307">
-  <ele>88.100000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0432</name>
-  <cmt>SMT0432</cmt>
-  <desc>SMT0432</desc>
-</wpt>
-<wpt lat="45.495116651" lon="-75.743238307">
-  <ele>87.100000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0433</name>
-  <cmt>SMT0433</cmt>
-  <desc>SMT0433</desc>
-</wpt>
-<wpt lat="45.494938318" lon="-75.743686640">
-  <ele>86.200000</ele>
-<time>2005-03-19T23:40:00Z</time>
-  <name>SMT0434</name>
-  <cmt>SMT0434</cmt>
-  <desc>SMT0434</desc>
-</wpt>
-<wpt lat="45.494688318" lon="-75.744236640">
-  <ele>82.900000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0435</name>
-  <cmt>SMT0435</cmt>
-  <desc>SMT0435</desc>
-</wpt>
-<wpt lat="45.494493318" lon="-75.744686640">
-  <ele>77.800000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0436</name>
-  <cmt>SMT0436</cmt>
-  <desc>SMT0436</desc>
-</wpt>
-<wpt lat="45.494303318" lon="-75.745118307">
-  <ele>73.000000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0437</name>
-  <cmt>SMT0437</cmt>
-  <desc>SMT0437</desc>
-</wpt>
-<wpt lat="45.493978318" lon="-75.745618307">
-  <ele>67.200000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0438</name>
-  <cmt>SMT0438</cmt>
-  <desc>SMT0438</desc>
-</wpt>
-<wpt lat="45.493634984" lon="-75.745874974">
-  <ele>63.300000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0439</name>
-  <cmt>SMT0439</cmt>
-  <desc>SMT0439</desc>
-</wpt>
-<wpt lat="45.493274984" lon="-75.746009974">
-  <ele>61.200000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0440</name>
-  <cmt>SMT0440</cmt>
-  <desc>SMT0440</desc>
-</wpt>
-<wpt lat="45.492911651" lon="-75.746051640">
-  <ele>58.800000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0441</name>
-  <cmt>SMT0441</cmt>
-  <desc>SMT0441</desc>
-</wpt>
-<wpt lat="45.492443318" lon="-75.746051640">
-  <ele>61.300000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0442</name>
-  <cmt>SMT0442</cmt>
-  <desc>SMT0442</desc>
-</wpt>
-<wpt lat="45.492001651" lon="-75.746031640">
-  <ele>63.900000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0443</name>
-  <cmt>SMT0443</cmt>
-  <desc>SMT0443</desc>
-</wpt>
-<wpt lat="45.491571651" lon="-75.746069974">
-  <ele>63.900000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0444</name>
-  <cmt>SMT0444</cmt>
-  <desc>SMT0444</desc>
-</wpt>
-<wpt lat="45.491203318" lon="-75.746341640">
-  <ele>61.900000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0445</name>
-  <cmt>SMT0445</cmt>
-  <desc>SMT0445</desc>
-</wpt>
-<wpt lat="45.490919984" lon="-75.746804974">
-  <ele>58.900000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0446</name>
-  <cmt>SMT0446</cmt>
-  <desc>SMT0446</desc>
-</wpt>
-<wpt lat="45.490699984" lon="-75.747223307">
-  <ele>55.600000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0447</name>
-  <cmt>SMT0447</cmt>
-  <desc>SMT0447</desc>
-</wpt>
-<wpt lat="45.490429984" lon="-75.747733307">
-  <ele>50.800000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0448</name>
-  <cmt>SMT0448</cmt>
-  <desc>SMT0448</desc>
-</wpt>
-<wpt lat="45.490164984" lon="-75.748203307">
-  <ele>47.600000</ele>
-<time>2005-03-19T23:41:00Z</time>
-  <name>SMT0449</name>
-  <cmt>SMT0449</cmt>
-  <desc>SMT0449</desc>
-</wpt>
-<wpt lat="45.489886651" lon="-75.748574974">
-  <ele>45.100000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0450</name>
-  <cmt>SMT0450</cmt>
-  <desc>SMT0450</desc>
-</wpt>
-<wpt lat="45.489978318" lon="-75.748924974">
-  <ele>43.200000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0451</name>
-  <cmt>SMT0451</cmt>
-  <desc>SMT0451</desc>
-</wpt>
-<wpt lat="45.490293318" lon="-75.749444974">
-  <ele>39.600000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0452</name>
-  <cmt>SMT0452</cmt>
-  <desc>SMT0452</desc>
-</wpt>
-<wpt lat="45.490593318" lon="-75.749933307">
-  <ele>38.600000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0453</name>
-  <cmt>SMT0453</cmt>
-  <desc>SMT0453</desc>
-</wpt>
-<wpt lat="45.490906651" lon="-75.750411640">
-  <ele>38.900000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0454</name>
-  <cmt>SMT0454</cmt>
-  <desc>SMT0454</desc>
-</wpt>
-<wpt lat="45.491234984" lon="-75.750869974">
-  <ele>41.200000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0455</name>
-  <cmt>SMT0455</cmt>
-  <desc>SMT0455</desc>
-</wpt>
-<wpt lat="45.491554984" lon="-75.751308307">
-  <ele>43.300000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0456</name>
-  <cmt>SMT0456</cmt>
-  <desc>SMT0456</desc>
-</wpt>
-<wpt lat="45.491873318" lon="-75.751728307">
-  <ele>43.500000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0457</name>
-  <cmt>SMT0457</cmt>
-  <desc>SMT0457</desc>
-</wpt>
-<wpt lat="45.492154984" lon="-75.752126640">
-  <ele>46.700000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0458</name>
-  <cmt>SMT0458</cmt>
-  <desc>SMT0458</desc>
-</wpt>
-<wpt lat="45.492444984" lon="-75.752481640">
-  <ele>49.400000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0459</name>
-  <cmt>SMT0459</cmt>
-  <desc>SMT0459</desc>
-</wpt>
-<wpt lat="45.492853318" lon="-75.752664974">
-  <ele>50.000000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0460</name>
-  <cmt>SMT0460</cmt>
-  <desc>SMT0460</desc>
-</wpt>
-<wpt lat="45.493206651" lon="-75.752828307">
-  <ele>49.900000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0461</name>
-  <cmt>SMT0461</cmt>
-  <desc>SMT0461</desc>
-</wpt>
-<wpt lat="45.493581651" lon="-75.753039974">
-  <ele>49.800000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0462</name>
-  <cmt>SMT0462</cmt>
-  <desc>SMT0462</desc>
-</wpt>
-<wpt lat="45.493956651" lon="-75.753251640">
-  <ele>52.200000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0463</name>
-  <cmt>SMT0463</cmt>
-  <desc>SMT0463</desc>
-</wpt>
-<wpt lat="45.494379984" lon="-75.753424974">
-  <ele>54.600000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0464</name>
-  <cmt>SMT0464</cmt>
-  <desc>SMT0464</desc>
-</wpt>
-<wpt lat="45.494813318" lon="-75.753479974">
-  <ele>57.100000</ele>
-<time>2005-03-19T23:42:00Z</time>
-  <name>SMT0465</name>
-  <cmt>SMT0465</cmt>
-  <desc>SMT0465</desc>
-</wpt>
-<wpt lat="45.495249984" lon="-75.753451640">
-  <ele>60.600000</ele>
-<time>2005-03-19T23:43:00Z</time>
-  <name>SMT0466</name>
-  <cmt>SMT0466</cmt>
-  <desc>SMT0466</desc>
-</wpt>
-<wpt lat="45.495653318" lon="-75.753389974">
-  <ele>62.900000</ele>
-<time>2005-03-19T23:43:00Z</time>
-  <name>SMT0467</name>
-  <cmt>SMT0467</cmt>
-  <desc>SMT0467</desc>
-</wpt>
-<wpt lat="45.496034984" lon="-75.753254974">
-  <ele>65.000000</ele>
-<time>2005-03-19T23:43:00Z</time>
-  <name>SMT0468</name>
-  <cmt>SMT0468</cmt>
-  <desc>SMT0468</desc>
-</wpt>
-<wpt lat="45.496379984" lon="-75.753073307">
-  <ele>68.600000</ele>
-<time>2005-03-19T23:43:00Z</time>
-  <name>SMT0469</name>
-  <cmt>SMT0469</cmt>
-  <desc>SMT0469</desc>
-</wpt>
-<wpt lat="45.496731651" lon="-75.752888307">
-  <ele>69.500000</ele>
-<time>2005-03-19T23:44:00Z</time>
-  <name>SMT0470</name>
-  <cmt>SMT0470</cmt>
-  <desc>SMT0470</desc>
-</wpt>
-<wpt lat="45.497136651" lon="-75.752658307">
-  <ele>68.700000</ele>
-<time>2005-03-19T23:44:00Z</time>
-  <name>SMT0471</name>
-  <cmt>SMT0471</cmt>
-  <desc>SMT0471</desc>
-</wpt>
-<wpt lat="45.497519984" lon="-75.752429974">
-  <ele>68.700000</ele>
-<time>2005-03-19T23:44:00Z</time>
-  <name>SMT0472</name>
-  <cmt>SMT0472</cmt>
-  <desc>SMT0472</desc>
-</wpt>
-<wpt lat="45.497883318" lon="-75.752146640">
-  <ele>67.900000</ele>
-<time>2005-03-19T23:44:00Z</time>
-  <name>SMT0473</name>
-  <cmt>SMT0473</cmt>
-  <desc>SMT0473</desc>
-</wpt>
-<wpt lat="45.498263318" lon="-75.751798307">
-  <ele>68.800000</ele>
-<time>2005-03-19T23:44:00Z</time>
-  <name>SMT0474</name>
-  <cmt>SMT0474</cmt>
-  <desc>SMT0474</desc>
-</wpt>
-<wpt lat="45.498468318" lon="-75.751324974">
-  <ele>71.200000</ele>
-<time>2005-03-19T23:44:00Z</time>
-  <name>SMT0475</name>
-  <cmt>SMT0475</cmt>
-  <desc>SMT0475</desc>
-</wpt>
-<wpt lat="45.498383318" lon="-75.750954974">
-  <ele>71.000000</ele>
-<time>2005-03-19T23:44:00Z</time>
-  <name>SMT0476</name>
-  <cmt>SMT0476</cmt>
-  <desc>SMT0476</desc>
-</wpt>
-<wpt lat="45.498323318" lon="-75.750426640">
-  <ele>71.400000</ele>
-<time>2005-03-19T23:44:00Z</time>
-  <name>SMT0477</name>
-  <cmt>SMT0477</cmt>
-  <desc>SMT0477</desc>
-</wpt>
-<wpt lat="45.498303318" lon="-75.749898307">
-  <ele>70.200000</ele>
-<time>2005-03-19T23:44:00Z</time>
-  <name>SMT0478</name>
-  <cmt>SMT0478</cmt>
-  <desc>SMT0478</desc>
-</wpt>
-<wpt lat="45.498273318" lon="-75.749359974">
-  <ele>71.600000</ele>
-<time>2005-03-19T23:44:00Z</time>
-  <name>SMT0479</name>
-  <cmt>SMT0479</cmt>
-  <desc>SMT0479</desc>
-</wpt>
-<wpt lat="45.498113318" lon="-75.749308307">
-  <ele>66.900000</ele>
-<time>2005-03-19T23:44:00Z</time>
-  <name>SMT0480</name>
-  <cmt>SMT0480</cmt>
-  <desc>SMT0480</desc>
-</wpt>
-<wpt lat="45.498251651" lon="-75.749271640">
-  <ele>64.700000</ele>
-<time>2005-03-19T23:46:00Z</time>
-  <name>SMT0481</name>
-  <cmt>SMT0481</cmt>
-  <desc>SMT0481</desc>
-</wpt>
-<wpt lat="45.498483318" lon="-75.748863307">
-  <ele>64.000000</ele>
-<time>2005-03-19T23:46:00Z</time>
-  <name>SMT0482</name>
-  <cmt>SMT0482</cmt>
-  <desc>SMT0482</desc>
-</wpt>
-<wpt lat="45.498574984" lon="-75.748353307">
-  <ele>62.300000</ele>
-<time>2005-03-19T23:47:00Z</time>
-  <name>SMT0483</name>
-  <cmt>SMT0483</cmt>
-  <desc>SMT0483</desc>
-</wpt>
-<wpt lat="45.498793318" lon="-75.748264974">
-  <ele>62.600000</ele>
-<time>2005-03-19T23:47:00Z</time>
-  <name>SMT0484</name>
-  <cmt>SMT0484</cmt>
-  <desc>SMT0484</desc>
-</wpt>
-<wpt lat="45.499148318" lon="-75.748189974">
-  <ele>65.300000</ele>
-<time>2005-03-19T23:50:00Z</time>
-  <name>SMT0485</name>
-  <cmt>SMT0485</cmt>
-  <desc>SMT0485</desc>
-</wpt>
-<wpt lat="45.499041651" lon="-75.748394974">
-  <ele>63.300000</ele>
-<time>2005-03-19T23:51:00Z</time>
-  <name>SMT0486</name>
-  <cmt>SMT0486</cmt>
-  <desc>SMT0486</desc>
-</wpt>
-<wpt lat="45.497856651" lon="-75.749469974">
-  <ele>54.600000</ele>
-<time>2005-03-20T00:10:00Z</time>
-  <name>SMT0487</name>
-  <cmt>SMT0487</cmt>
-  <desc>SMT0487</desc>
-</wpt>
-<wpt lat="45.498216651" lon="-75.649618307">
-  <ele>75.100000</ele>
-<time>2005-03-21T00:14:00Z</time>
-  <name>SMT0488</name>
-  <cmt>SMT0488</cmt>
-  <desc>SMT0488</desc>
-</wpt>
-<wpt lat="45.497918318" lon="-75.649704974">
-  <ele>71.400000</ele>
-<time>2005-03-21T00:15:00Z</time>
-  <name>SMT0489</name>
-  <cmt>SMT0489</cmt>
-  <desc>SMT0489</desc>
-</wpt>
-<wpt lat="45.498189984" lon="-75.649638307">
-  <ele>72.400000</ele>
-<time>2005-03-21T00:15:00Z</time>
-  <name>SMT0490</name>
-  <cmt>SMT0490</cmt>
-  <desc>SMT0490</desc>
-</wpt>
-<wpt lat="45.497829984" lon="-75.649766640">
-  <ele>71.900000</ele>
-<time>2005-03-21T00:15:00Z</time>
-  <name>SMT0491</name>
-  <cmt>SMT0491</cmt>
-  <desc>SMT0491</desc>
-</wpt>
-<wpt lat="45.497384984" lon="-75.649929974">
-  <ele>71.300000</ele>
-<time>2005-03-21T00:15:00Z</time>
-  <name>SMT0492</name>
-  <cmt>SMT0492</cmt>
-  <desc>SMT0492</desc>
-</wpt>
-<wpt lat="45.497034984" lon="-75.650114974">
-  <ele>72.900000</ele>
-<time>2005-03-21T00:16:00Z</time>
-  <name>SMT0493</name>
-  <cmt>SMT0493</cmt>
-  <desc>SMT0493</desc>
-</wpt>
-<wpt lat="45.498061651" lon="-75.649669974">
-  <ele>67.000000</ele>
-<time>2005-03-21T00:16:00Z</time>
-  <name>SMT0494</name>
-  <cmt>SMT0494</cmt>
-  <desc>SMT0494</desc>
-</wpt>
-<wpt lat="45.497941651" lon="-75.649514974">
-  <ele>69.200000</ele>
-<time>2005-03-21T00:17:00Z</time>
-  <name>SMT0495</name>
-  <cmt>SMT0495</cmt>
-  <desc>SMT0495</desc>
-</wpt>
-<wpt lat="45.497821651" lon="-75.649088307">
-  <ele>88.100000</ele>
-<time>2005-03-21T00:19:00Z</time>
-  <name>SMT0496</name>
-  <cmt>SMT0496</cmt>
-  <desc>SMT0496</desc>
-</wpt>
-<wpt lat="45.497909984" lon="-75.648709974">
-  <ele>84.700000</ele>
-<time>2005-03-21T00:20:00Z</time>
-  <name>SMT0497</name>
-  <cmt>SMT0497</cmt>
-  <desc>SMT0497</desc>
-</wpt>
-<wpt lat="45.498061651" lon="-75.648249974">
-  <ele>91.700000</ele>
-<time>2005-03-21T00:21:00Z</time>
-  <name>SMT0498</name>
-  <cmt>SMT0498</cmt>
-  <desc>SMT0498</desc>
-</wpt>
-<wpt lat="45.498383318" lon="-75.648003307">
-  <ele>92.500000</ele>
-<time>2005-03-21T00:22:00Z</time>
-  <name>SMT0499</name>
-  <cmt>SMT0499</cmt>
-  <desc>SMT0499</desc>
-</wpt>
-<wpt lat="45.498734984" lon="-75.647869974">
-  <ele>93.700000</ele>
-<time>2005-03-21T00:23:00Z</time>
-  <name>SMT0500</name>
-  <cmt>SMT0500</cmt>
-  <desc>SMT0500</desc>
-</wpt>
-<wpt lat="45.497018318" lon="-75.656534974">
-  <ele>109.500000</ele>
-<time>2005-03-21T00:54:00Z</time>
-  <name>SMT0501</name>
-  <cmt>SMT0501</cmt>
-  <desc>SMT0501</desc>
-</wpt>
-<wpt lat="45.496941651" lon="-75.656519974">
-  <ele>96.700000</ele>
-<time>2005-03-21T00:55:00Z</time>
-  <name>SMT0502</name>
-  <cmt>SMT0502</cmt>
-  <desc>SMT0502</desc>
-</wpt>
-<wpt lat="45.496803318" lon="-75.656766640">
-  <ele>119.500000</ele>
-<time>2005-03-21T01:00:00Z</time>
-  <name>SMT0503</name>
-  <cmt>SMT0503</cmt>
-  <desc>SMT0503</desc>
-</wpt>
-<wpt lat="45.496871651" lon="-75.656744974">
-  <ele>97.700000</ele>
-<time>2005-03-21T01:00:00Z</time>
-  <name>SMT0504</name>
-  <cmt>SMT0504</cmt>
-  <desc>SMT0504</desc>
-</wpt>
-<wpt lat="45.497028318" lon="-75.656513307">
-  <ele>99.200000</ele>
-<time>2005-03-21T01:08:00Z</time>
-  <name>SMT0505</name>
-  <cmt>SMT0505</cmt>
-  <desc>SMT0505</desc>
-</wpt>
-<wpt lat="45.521953318" lon="-75.780584974">
-  <ele>114.200000</ele>
-<time>2005-03-21T01:35:00Z</time>
-  <name>SMT0506</name>
-  <cmt>SMT0506</cmt>
-  <desc>SMT0506</desc>
-</wpt>
-<wpt lat="45.521836651" lon="-75.780571640">
-  <ele>123.100000</ele>
-<time>2005-03-21T01:37:00Z</time>
-  <name>SMT0507</name>
-  <cmt>SMT0507</cmt>
-  <desc>SMT0507</desc>
-</wpt>
-<wpt lat="45.521524984" lon="-75.780306640">
-  <ele>120.300000</ele>
-<time>2005-03-21T01:37:00Z</time>
-  <name>SMT0508</name>
-  <cmt>SMT0508</cmt>
-  <desc>SMT0508</desc>
-</wpt>
-<wpt lat="45.521374984" lon="-75.779839974">
-  <ele>122.500000</ele>
-<time>2005-03-21T01:38:00Z</time>
-  <name>SMT0509</name>
-  <cmt>SMT0509</cmt>
-  <desc>SMT0509</desc>
-</wpt>
-<wpt lat="45.521269984" lon="-75.779344974">
-  <ele>119.900000</ele>
-<time>2005-03-21T01:39:00Z</time>
-  <name>SMT0510</name>
-  <cmt>SMT0510</cmt>
-  <desc>SMT0510</desc>
-</wpt>
-<wpt lat="45.521434984" lon="-75.778958307">
-  <ele>114.200000</ele>
-<time>2005-03-21T01:40:00Z</time>
-  <name>SMT0511</name>
-  <cmt>SMT0511</cmt>
-  <desc>SMT0511</desc>
-</wpt>
-<wpt lat="45.521379984" lon="-75.778359974">
-  <ele>112.300000</ele>
-<time>2005-03-21T01:44:00Z</time>
-  <name>SMT0512</name>
-  <cmt>SMT0512</cmt>
-  <desc>SMT0512</desc>
-</wpt>
-<wpt lat="45.521828318" lon="-75.778494974">
-  <ele>112.300000</ele>
-<time>2005-03-21T01:44:00Z</time>
-  <name>SMT0513</name>
-  <cmt>SMT0513</cmt>
-  <desc>SMT0513</desc>
-</wpt>
-<wpt lat="45.521339984" lon="-75.777826640">
-  <ele>177.300000</ele>
-<time>2005-03-21T01:44:00Z</time>
-  <name>SMT0514</name>
-  <cmt>SMT0514</cmt>
-  <desc>SMT0514</desc>
-</wpt>
-<wpt lat="45.521164984" lon="-75.777573307">
-  <ele>166.500000</ele>
-<time>2005-03-21T01:44:00Z</time>
-  <name>SMT0515</name>
-  <cmt>SMT0515</cmt>
-  <desc>SMT0515</desc>
-</wpt>
-<wpt lat="45.521283318" lon="-75.777779974">
-  <ele>160.200000</ele>
-<time>2005-03-21T01:44:00Z</time>
-  <name>SMT0516</name>
-  <cmt>SMT0516</cmt>
-  <desc>SMT0516</desc>
-</wpt>
-<wpt lat="45.521386651" lon="-75.778128307">
-  <ele>132.400000</ele>
-<time>2005-03-21T01:44:00Z</time>
-  <name>SMT0517</name>
-  <cmt>SMT0517</cmt>
-  <desc>SMT0517</desc>
-</wpt>
-<wpt lat="45.521651651" lon="-75.778359974">
-  <ele>109.300000</ele>
-<time>2005-03-21T01:45:00Z</time>
-  <name>SMT0518</name>
-  <cmt>SMT0518</cmt>
-  <desc>SMT0518</desc>
-</wpt>
-<wpt lat="45.521798318" lon="-75.778508307">
-  <ele>122.400000</ele>
-<time>2005-03-21T01:46:00Z</time>
-  <name>SMT0519</name>
-  <cmt>SMT0519</cmt>
-  <desc>SMT0519</desc>
-</wpt>
-<wpt lat="45.521751651" lon="-75.778316640">
-  <ele>121.500000</ele>
-<time>2005-03-21T01:47:00Z</time>
-  <name>SMT0520</name>
-  <cmt>SMT0520</cmt>
-  <desc>SMT0520</desc>
-</wpt>
-<wpt lat="45.521858318" lon="-75.778469974">
-  <ele>121.000000</ele>
-<time>2005-03-21T01:49:00Z</time>
-  <name>SMT0521</name>
-  <cmt>SMT0521</cmt>
-  <desc>SMT0521</desc>
-</wpt>
-<wpt lat="45.521733318" lon="-75.778381640">
-  <ele>120.600000</ele>
-<time>2005-03-21T01:51:00Z</time>
-  <name>SMT0522</name>
-  <cmt>SMT0522</cmt>
-  <desc>SMT0522</desc>
-</wpt>
-<wpt lat="45.521834984" lon="-75.778489974">
-  <ele>109.500000</ele>
-<time>2005-03-21T01:52:00Z</time>
-  <name>SMT0523</name>
-  <cmt>SMT0523</cmt>
-  <desc>SMT0523</desc>
-</wpt>
-<wpt lat="45.522013318" lon="-75.778469974">
-  <ele>132.000000</ele>
-<time>2005-03-21T01:56:00Z</time>
-  <name>SMT0524</name>
-  <cmt>SMT0524</cmt>
-  <desc>SMT0524</desc>
-</wpt>
-<wpt lat="45.521984984" lon="-75.778456640">
-  <ele>113.200000</ele>
-<time>2005-03-21T01:56:00Z</time>
-  <name>SMT0525</name>
-  <cmt>SMT0525</cmt>
-  <desc>SMT0525</desc>
-</wpt>
-<wpt lat="45.521588318" lon="-75.778263307">
-  <ele>110.800000</ele>
-<time>2005-03-21T01:58:00Z</time>
-  <name>SMT0526</name>
-  <cmt>SMT0526</cmt>
-  <desc>SMT0526</desc>
-</wpt>
-<wpt lat="45.521571651" lon="-75.778304974">
-  <ele>93.800000</ele>
-<time>2005-03-21T01:59:00Z</time>
-  <name>SMT0527</name>
-  <cmt>SMT0527</cmt>
-  <desc>SMT0527</desc>
-</wpt>
-<wpt lat="45.521686651" lon="-75.778338307">
-  <ele>116.600000</ele>
-<time>2005-03-21T01:59:00Z</time>
-  <name>SMT0528</name>
-  <cmt>SMT0528</cmt>
-  <desc>SMT0528</desc>
-</wpt>
-<wpt lat="45.521654984" lon="-75.778279974">
-  <ele>98.900000</ele>
-<time>2005-03-21T01:59:00Z</time>
-  <name>SMT0529</name>
-  <cmt>SMT0529</cmt>
-  <desc>SMT0529</desc>
-</wpt>
-<wpt lat="45.521636651" lon="-75.778579974">
-  <ele>98.300000</ele>
-<time>2005-03-21T02:00:00Z</time>
-  <name>SMT0530</name>
-  <cmt>SMT0530</cmt>
-  <desc>SMT0530</desc>
-</wpt>
-<wpt lat="45.521499984" lon="-75.778371640">
-  <ele>99.700000</ele>
-<time>2005-03-21T02:00:00Z</time>
-  <name>SMT0531</name>
-  <cmt>SMT0531</cmt>
-  <desc>SMT0531</desc>
-</wpt>
-<wpt lat="45.521531651" lon="-75.778569974">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="45.458204984" minlon ="-75.770526640" maxlat="45.497519984" maxlon="-75.684934974" />
+<wpt lat="45.460366651" lon="-75.767939974">
+  <ele>33.700000</ele>
+<time>2005-05-09T23:02:00Z</time>
+  <name>WPT001</name>
+  <cmt>WPT001</cmt>
+  <desc>WPT001</desc>
+</wpt>
+<wpt lat="45.460339984" lon="-75.767591640">
+  <ele>33.700000</ele>
+<time>2005-05-09T23:02:00Z</time>
+  <name>WPT002</name>
+  <cmt>WPT002</cmt>
+  <desc>WPT002</desc>
+</wpt>
+<wpt lat="45.458376651" lon="-75.768483307">
+  <ele>105.400000</ele>
+<time>2005-05-10T00:09:00Z</time>
+  <name>WPT003</name>
+  <cmt>WPT003</cmt>
+  <desc>WPT003</desc>
+</wpt>
+<wpt lat="45.458293318" lon="-75.768566640">
   <ele>104.600000</ele>
-<time>2005-03-21T02:01:00Z</time>
-  <name>SMT0532</name>
-  <cmt>SMT0532</cmt>
-  <desc>SMT0532</desc>
+<time>2005-05-10T00:09:00Z</time>
+  <name>WPT004</name>
+  <cmt>WPT004</cmt>
+  <desc>WPT004</desc>
 </wpt>
-<wpt lat="45.521814984" lon="-75.778851640">
-  <ele>119.900000</ele>
-<time>2005-03-21T02:04:00Z</time>
-  <name>SMT0533</name>
-  <cmt>SMT0533</cmt>
-  <desc>SMT0533</desc>
+<wpt lat="45.458298318" lon="-75.768701640">
+  <ele>102.500000</ele>
+<time>2005-05-10T00:09:00Z</time>
+  <name>WPT005</name>
+  <cmt>WPT005</cmt>
+  <desc>WPT005</desc>
 </wpt>
-<wpt lat="45.521656651" lon="-75.778868307">
-  <ele>120.000000</ele>
-<time>2005-03-21T02:05:00Z</time>
-  <name>SMT0534</name>
-  <cmt>SMT0534</cmt>
-  <desc>SMT0534</desc>
+<wpt lat="45.458266651" lon="-75.769021640">
+  <ele>108.900000</ele>
+<time>2005-05-10T00:10:00Z</time>
+  <name>WPT006</name>
+  <cmt>WPT006</cmt>
+  <desc>WPT006</desc>
 </wpt>
-<wpt lat="45.521494984" lon="-75.778363307">
-  <ele>114.900000</ele>
-<time>2005-03-21T02:06:00Z</time>
-  <name>SMT0535</name>
-  <cmt>SMT0535</cmt>
-  <desc>SMT0535</desc>
+<wpt lat="45.458204984" lon="-75.770038307">
+  <ele>108.400000</ele>
+<time>2005-05-10T00:11:00Z</time>
+  <name>WPT007</name>
+  <cmt>WPT007</cmt>
+  <desc>WPT007</desc>
 </wpt>
-<wpt lat="45.521618318" lon="-75.778381640">
-  <ele>107.000000</ele>
-<time>2005-03-21T02:07:00Z</time>
-  <name>SMT0536</name>
-  <cmt>SMT0536</cmt>
-  <desc>SMT0536</desc>
+<wpt lat="45.458274984" lon="-75.770526640">
+  <ele>110.600000</ele>
+<time>2005-05-10T00:11:00Z</time>
+  <name>WPT008</name>
+  <cmt>WPT008</cmt>
+  <desc>WPT008</desc>
 </wpt>
-<wpt lat="45.521949984" lon="-75.778509974">
-  <ele>119.100000</ele>
-<time>2005-03-21T02:09:00Z</time>
-  <name>SMT0537</name>
-  <cmt>SMT0537</cmt>
-  <desc>SMT0537</desc>
+<wpt lat="45.458353318" lon="-75.770481640">
+  <ele>106.200000</ele>
+<time>2005-05-10T00:14:00Z</time>
+  <name>WPT009</name>
+  <cmt>WPT009</cmt>
+  <desc>WPT009</desc>
 </wpt>
-<wpt lat="45.521689984" lon="-75.778443307">
-  <ele>115.400000</ele>
-<time>2005-03-21T02:10:00Z</time>
-  <name>SMT0538</name>
-  <cmt>SMT0538</cmt>
-  <desc>SMT0538</desc>
+<wpt lat="45.492471651" lon="-75.717699974">
+  <ele>34.100000</ele>
+<time>2005-05-10T01:36:00Z</time>
+  <name>WPT010</name>
+  <cmt>WPT010</cmt>
+  <desc>WPT010</desc>
 </wpt>
-<wpt lat="45.521629984" lon="-75.778689974">
-  <ele>110.200000</ele>
-<time>2005-03-21T02:11:00Z</time>
-  <name>SMT0539</name>
-  <cmt>SMT0539</cmt>
-  <desc>SMT0539</desc>
+<wpt lat="45.492506651" lon="-75.717636640">
+  <ele>-22.300000</ele>
+<time>2005-06-04T01:36:00Z</time>
+  <name>WPT011</name>
+  <cmt>WPT011</cmt>
+  <desc>WPT011</desc>
 </wpt>
-<wpt lat="45.521386651" lon="-75.779053307">
-  <ele>118.700000</ele>
-<time>2005-03-21T02:12:00Z</time>
-  <name>SMT0540</name>
-  <cmt>SMT0540</cmt>
-  <desc>SMT0540</desc>
+<wpt lat="45.492283318" lon="-75.717694974">
+  <ele>-34.800000</ele>
+<time>2005-06-04T01:36:00Z</time>
+  <name>WPT012</name>
+  <cmt>WPT012</cmt>
+  <desc>WPT012</desc>
 </wpt>
-<wpt lat="45.411203318" lon="-75.684156640">
-  <ele>75.300000</ele>
-<time>2005-04-06T20:21:00Z</time>
-  <name>SMT0541</name>
-  <cmt>SMT0541</cmt>
-  <desc>SMT0541</desc>
+<wpt lat="45.492396651" lon="-75.717684974">
+  <ele>-28.700000</ele>
+<time>2005-06-04T01:36:00Z</time>
+  <name>WPT013</name>
+  <cmt>WPT013</cmt>
+  <desc>WPT013</desc>
 </wpt>
-<wpt lat="45.411211651" lon="-75.683936640">
-  <ele>73.200000</ele>
-<time>2005-04-06T20:22:00Z</time>
-  <name>SMT0542</name>
-  <cmt>SMT0542</cmt>
-  <desc>SMT0542</desc>
+<wpt lat="45.492381651" lon="-75.717586640">
+  <ele>-21.000000</ele>
+<time>2005-06-04T01:36:00Z</time>
+  <name>WPT014</name>
+  <cmt>WPT014</cmt>
+  <desc>WPT014</desc>
 </wpt>
-<wpt lat="45.411381651" lon="-75.683483307">
-  <ele>75.800000</ele>
-<time>2005-04-06T20:22:00Z</time>
-  <name>SMT0543</name>
-  <cmt>SMT0543</cmt>
-  <desc>SMT0543</desc>
+<wpt lat="45.492294984" lon="-75.717593307">
+  <ele>-25.300000</ele>
+<time>2005-06-04T01:36:00Z</time>
+  <name>WPT015</name>
+  <cmt>WPT015</cmt>
+  <desc>WPT015</desc>
 </wpt>
-<wpt lat="45.411544984" lon="-75.683009974">
-  <ele>72.500000</ele>
-<time>2005-04-06T20:23:00Z</time>
-  <name>SMT0544</name>
-  <cmt>SMT0544</cmt>
-  <desc>SMT0544</desc>
+<wpt lat="45.491944984" lon="-75.717474974">
+  <ele>43.400000</ele>
+<time>2005-06-04T01:36:00Z</time>
+  <name>WPT016</name>
+  <cmt>WPT016</cmt>
+  <desc>WPT016</desc>
 </wpt>
-<wpt lat="45.411868318" lon="-75.682776640">
-  <ele>73.800000</ele>
-<time>2005-04-06T20:23:00Z</time>
-  <name>SMT0545</name>
-  <cmt>SMT0545</cmt>
-  <desc>SMT0545</desc>
+<wpt lat="45.491938318" lon="-75.717353307">
+  <ele>39.300000</ele>
+<time>2005-06-04T01:36:00Z</time>
+  <name>WPT017</name>
+  <cmt>WPT017</cmt>
+  <desc>WPT017</desc>
 </wpt>
-<wpt lat="45.412003318" lon="-75.682288307">
-  <ele>73.900000</ele>
-<time>2005-04-06T20:24:00Z</time>
-  <name>SMT0546</name>
-  <cmt>SMT0546</cmt>
-  <desc>SMT0546</desc>
+<wpt lat="45.491969984" lon="-75.717238307">
+  <ele>48.300000</ele>
+<time>2005-06-04T01:36:00Z</time>
+  <name>WPT018</name>
+  <cmt>WPT018</cmt>
+  <desc>WPT018</desc>
 </wpt>
-<wpt lat="45.412193318" lon="-75.681831640">
-  <ele>75.300000</ele>
-<time>2005-04-06T20:24:00Z</time>
-  <name>SMT0547</name>
-  <cmt>SMT0547</cmt>
-  <desc>SMT0547</desc>
+<wpt lat="45.491994984" lon="-75.717094974">
+  <ele>44.500000</ele>
+<time>2005-06-04T01:37:00Z</time>
+  <name>WPT019</name>
+  <cmt>WPT019</cmt>
+  <desc>WPT019</desc>
 </wpt>
-<wpt lat="45.412381651" lon="-75.681374974">
-  <ele>72.000000</ele>
-<time>2005-04-06T20:25:00Z</time>
-  <name>SMT0548</name>
-  <cmt>SMT0548</cmt>
-  <desc>SMT0548</desc>
+<wpt lat="45.491996651" lon="-75.716914974">
+  <ele>39.900000</ele>
+<time>2005-06-04T01:37:00Z</time>
+  <name>WPT020</name>
+  <cmt>WPT020</cmt>
+  <desc>WPT020</desc>
 </wpt>
-<wpt lat="45.412563318" lon="-75.680919974">
-  <ele>74.200000</ele>
-<time>2005-04-06T20:25:00Z</time>
-  <name>SMT0549</name>
-  <cmt>SMT0549</cmt>
-  <desc>SMT0549</desc>
+<wpt lat="45.492019984" lon="-75.716781640">
+  <ele>23.600000</ele>
+<time>2005-06-04T01:37:00Z</time>
+  <name>WPT021</name>
+  <cmt>WPT021</cmt>
+  <desc>WPT021</desc>
 </wpt>
-<wpt lat="45.412714984" lon="-75.680449974">
-  <ele>75.000000</ele>
-<time>2005-04-06T20:26:00Z</time>
-  <name>SMT0550</name>
-  <cmt>SMT0550</cmt>
-  <desc>SMT0550</desc>
+<wpt lat="45.492071651" lon="-75.716738307">
+  <ele>46.700000</ele>
+<time>2005-06-04T01:37:00Z</time>
+  <name>WPT022</name>
+  <cmt>WPT022</cmt>
+  <desc>WPT022</desc>
 </wpt>
-<wpt lat="45.412729984" lon="-75.679933307">
-  <ele>73.500000</ele>
-<time>2005-04-06T20:27:00Z</time>
-  <name>SMT0551</name>
-  <cmt>SMT0551</cmt>
-  <desc>SMT0551</desc>
+<wpt lat="45.492071651" lon="-75.716736640">
+  <ele>61.300000</ele>
+<time>2005-06-04T01:37:00Z</time>
+  <name>WPT023</name>
+  <cmt>WPT023</cmt>
+  <desc>WPT023</desc>
 </wpt>
-<wpt lat="45.412998318" lon="-75.679808307">
-  <ele>74.800000</ele>
-<time>2005-04-06T20:27:00Z</time>
-  <name>SMT0552</name>
-  <cmt>SMT0552</cmt>
-  <desc>SMT0552</desc>
+<wpt lat="45.492096651" lon="-75.716736640">
+  <ele>74.600000</ele>
+<time>2005-06-04T01:38:00Z</time>
+  <name>WPT024</name>
+  <cmt>WPT024</cmt>
+  <desc>WPT024</desc>
 </wpt>
-<wpt lat="45.412933318" lon="-75.679978307">
-  <ele>80.200000</ele>
-<time>2005-04-06T20:28:00Z</time>
-  <name>SMT0553</name>
-  <cmt>SMT0553</cmt>
-  <desc>SMT0553</desc>
-</wpt>
-<wpt lat="45.413058318" lon="-75.679989974">
-  <ele>67.000000</ele>
-<time>2005-04-06T20:29:00Z</time>
-  <name>SMT0554</name>
-  <cmt>SMT0554</cmt>
-  <desc>SMT0554</desc>
-</wpt>
-<wpt lat="45.406581651" lon="-75.686301640">
-  <ele>69.500000</ele>
-<time>2005-04-11T20:38:00Z</time>
-  <name>SMT0555</name>
-  <cmt>SMT0555</cmt>
-  <desc>SMT0555</desc>
-</wpt>
-<wpt lat="45.406278318" lon="-75.686593307">
-  <ele>75.800000</ele>
-<time>2005-04-11T20:38:00Z</time>
-  <name>SMT0556</name>
-  <cmt>SMT0556</cmt>
-  <desc>SMT0556</desc>
-</wpt>
-<wpt lat="45.406054984" lon="-75.687011640">
-  <ele>73.800000</ele>
-<time>2005-04-11T20:39:00Z</time>
-  <name>SMT0557</name>
-  <cmt>SMT0557</cmt>
-  <desc>SMT0557</desc>
-</wpt>
-<wpt lat="45.405831651" lon="-75.687424974">
-  <ele>72.400000</ele>
-<time>2005-04-11T20:39:00Z</time>
-  <name>SMT0558</name>
-  <cmt>SMT0558</cmt>
-  <desc>SMT0558</desc>
-</wpt>
-<wpt lat="45.405718318" lon="-75.687913307">
+<wpt lat="45.492099984" lon="-75.716729974">
   <ele>63.600000</ele>
-<time>2005-04-11T20:40:00Z</time>
-  <name>SMT0559</name>
-  <cmt>SMT0559</cmt>
-  <desc>SMT0559</desc>
+<time>2005-06-04T01:38:00Z</time>
+  <name>WPT025</name>
+  <cmt>WPT025</cmt>
+  <desc>WPT025</desc>
 </wpt>
-<wpt lat="45.405651651" lon="-75.688389974">
-  <ele>78.700000</ele>
-<time>2005-04-11T20:41:00Z</time>
-  <name>SMT0560</name>
-  <cmt>SMT0560</cmt>
-  <desc>SMT0560</desc>
+<wpt lat="45.492721651" lon="-75.718441640">
+  <ele>83.600000</ele>
+<time>2005-06-04T01:55:00Z</time>
+  <name>WPT026</name>
+  <cmt>WPT026</cmt>
+  <desc>WPT026</desc>
 </wpt>
-<wpt lat="45.405419984" lon="-75.688764974">
-  <ele>71.100000</ele>
-<time>2005-04-11T20:41:00Z</time>
-  <name>SMT0561</name>
-  <cmt>SMT0561</cmt>
-  <desc>SMT0561</desc>
-</wpt>
-<wpt lat="45.405153318" lon="-75.689208307">
-  <ele>70.600000</ele>
-<time>2005-04-11T20:42:00Z</time>
-  <name>SMT0562</name>
-  <cmt>SMT0562</cmt>
-  <desc>SMT0562</desc>
-</wpt>
-<wpt lat="45.405189984" lon="-75.689579974">
-  <ele>82.500000</ele>
-<time>2005-04-11T20:42:00Z</time>
-  <name>SMT0563</name>
-  <cmt>SMT0563</cmt>
-  <desc>SMT0563</desc>
-</wpt>
-<wpt lat="45.405009984" lon="-75.689891640">
-  <ele>76.300000</ele>
-<time>2005-04-11T20:43:00Z</time>
-  <name>SMT0564</name>
-  <cmt>SMT0564</cmt>
-  <desc>SMT0564</desc>
-</wpt>
-<wpt lat="45.404636651" lon="-75.690394974">
-  <ele>86.000000</ele>
-<time>2005-04-11T20:45:00Z</time>
-  <name>SMT0565</name>
-  <cmt>SMT0565</cmt>
-  <desc>SMT0565</desc>
-</wpt>
-<wpt lat="45.404589984" lon="-75.690458307">
-  <ele>69.800000</ele>
-<time>2005-04-11T20:46:00Z</time>
-  <name>SMT0566</name>
-  <cmt>SMT0566</cmt>
-  <desc>SMT0566</desc>
-</wpt>
-<wpt lat="45.404701651" lon="-75.690258307">
-  <ele>68.000000</ele>
-<time>2005-04-11T20:46:00Z</time>
-  <name>SMT0567</name>
-  <cmt>SMT0567</cmt>
-  <desc>SMT0567</desc>
-</wpt>
-<wpt lat="45.404916651" lon="-75.689834974">
-  <ele>65.600000</ele>
-<time>2005-04-11T20:46:00Z</time>
-  <name>SMT0568</name>
-  <cmt>SMT0568</cmt>
-  <desc>SMT0568</desc>
-</wpt>
-<wpt lat="45.404863318" lon="-75.689396640">
-  <ele>78.300000</ele>
-<time>2005-04-11T20:47:00Z</time>
-  <name>SMT0569</name>
-  <cmt>SMT0569</cmt>
-  <desc>SMT0569</desc>
-</wpt>
-<wpt lat="45.404719984" lon="-75.689423307">
-  <ele>75.100000</ele>
-<time>2005-04-11T20:47:00Z</time>
-  <name>SMT0570</name>
-  <cmt>SMT0570</cmt>
-  <desc>SMT0570</desc>
-</wpt>
-<wpt lat="45.404488318" lon="-75.689043307">
-  <ele>66.800000</ele>
-<time>2005-04-11T20:49:00Z</time>
-  <name>SMT0571</name>
-  <cmt>SMT0571</cmt>
-  <desc>SMT0571</desc>
-</wpt>
-<wpt lat="45.404579984" lon="-75.688869974">
-  <ele>70.900000</ele>
-<time>2005-04-11T20:49:00Z</time>
-  <name>SMT0572</name>
-  <cmt>SMT0572</cmt>
-  <desc>SMT0572</desc>
-</wpt>
-<wpt lat="45.404393318" lon="-75.688891640">
-  <ele>67.200000</ele>
-<time>2005-04-11T20:51:00Z</time>
-  <name>SMT0573</name>
-  <cmt>SMT0573</cmt>
-  <desc>SMT0573</desc>
-</wpt>
-<wpt lat="45.404473318" lon="-75.689058307">
-  <ele>69.500000</ele>
-<time>2005-04-11T20:51:00Z</time>
-  <name>SMT0574</name>
-  <cmt>SMT0574</cmt>
-  <desc>SMT0574</desc>
-</wpt>
-<wpt lat="45.404306651" lon="-75.689516640">
-  <ele>73.700000</ele>
-<time>2005-04-11T20:51:00Z</time>
-  <name>SMT0575</name>
-  <cmt>SMT0575</cmt>
-  <desc>SMT0575</desc>
-</wpt>
-<wpt lat="45.404134984" lon="-75.689973307">
-  <ele>69.700000</ele>
-<time>2005-04-11T20:52:00Z</time>
-  <name>SMT0576</name>
-  <cmt>SMT0576</cmt>
-  <desc>SMT0576</desc>
-</wpt>
-<wpt lat="45.403926651" lon="-75.690396640">
-  <ele>71.100000</ele>
-<time>2005-04-11T20:52:00Z</time>
-  <name>SMT0577</name>
-  <cmt>SMT0577</cmt>
-  <desc>SMT0577</desc>
-</wpt>
-<wpt lat="45.403761651" lon="-75.690856640">
-  <ele>68.800000</ele>
-<time>2005-04-11T20:53:00Z</time>
-  <name>SMT0578</name>
-  <cmt>SMT0578</cmt>
-  <desc>SMT0578</desc>
-</wpt>
-<wpt lat="45.403563318" lon="-75.691304974">
-  <ele>71.400000</ele>
-<time>2005-04-11T20:53:00Z</time>
-  <name>SMT0579</name>
-  <cmt>SMT0579</cmt>
-  <desc>SMT0579</desc>
-</wpt>
-<wpt lat="45.403426651" lon="-75.691778307">
-  <ele>67.700000</ele>
-<time>2005-04-11T20:54:00Z</time>
-  <name>SMT0580</name>
-  <cmt>SMT0580</cmt>
-  <desc>SMT0580</desc>
-</wpt>
-<wpt lat="45.403324984" lon="-75.692269974">
-  <ele>71.900000</ele>
-<time>2005-04-11T20:54:00Z</time>
-  <name>SMT0581</name>
-  <cmt>SMT0581</cmt>
-  <desc>SMT0581</desc>
-</wpt>
-<wpt lat="45.403231651" lon="-75.692123307">
-  <ele>72.500000</ele>
-<time>2005-04-11T20:55:00Z</time>
-  <name>SMT0582</name>
-  <cmt>SMT0582</cmt>
-  <desc>SMT0582</desc>
-</wpt>
-<wpt lat="45.403048318" lon="-75.691679974">
-  <ele>75.300000</ele>
-<time>2005-04-11T20:57:00Z</time>
-  <name>SMT0583</name>
-  <cmt>SMT0583</cmt>
-  <desc>SMT0583</desc>
-</wpt>
-<wpt lat="45.402718318" lon="-75.691393307">
-  <ele>73.500000</ele>
-<time>2005-04-11T20:57:00Z</time>
-  <name>SMT0584</name>
-  <cmt>SMT0584</cmt>
-  <desc>SMT0584</desc>
-</wpt>
-<wpt lat="45.402394984" lon="-75.691168307">
-  <ele>70.500000</ele>
-<time>2005-04-11T20:58:00Z</time>
-  <name>SMT0585</name>
-  <cmt>SMT0585</cmt>
-  <desc>SMT0585</desc>
-</wpt>
-<wpt lat="45.402089984" lon="-75.690881640">
-  <ele>73.900000</ele>
-<time>2005-04-11T20:58:00Z</time>
-  <name>SMT0586</name>
-  <cmt>SMT0586</cmt>
-  <desc>SMT0586</desc>
-</wpt>
-<wpt lat="45.402068318" lon="-75.690489974">
-  <ele>74.100000</ele>
-<time>2005-04-11T20:59:00Z</time>
-  <name>SMT0587</name>
-  <cmt>SMT0587</cmt>
-  <desc>SMT0587</desc>
-</wpt>
-<wpt lat="45.402264984" lon="-75.690044974">
-  <ele>73.100000</ele>
-<time>2005-04-11T20:59:00Z</time>
-  <name>SMT0588</name>
-  <cmt>SMT0588</cmt>
-  <desc>SMT0588</desc>
-</wpt>
-<wpt lat="45.402446651" lon="-75.689593307">
-  <ele>70.600000</ele>
-<time>2005-04-11T20:59:00Z</time>
-  <name>SMT0589</name>
-  <cmt>SMT0589</cmt>
-  <desc>SMT0589</desc>
-</wpt>
-<wpt lat="45.402639984" lon="-75.689161640">
-  <ele>73.200000</ele>
-<time>2005-04-11T21:00:00Z</time>
-  <name>SMT0590</name>
-  <cmt>SMT0590</cmt>
-  <desc>SMT0590</desc>
-</wpt>
-<wpt lat="45.402811651" lon="-75.688709974">
-  <ele>73.000000</ele>
-<time>2005-04-11T21:00:00Z</time>
-  <name>SMT0591</name>
-  <cmt>SMT0591</cmt>
-  <desc>SMT0591</desc>
-</wpt>
-<wpt lat="45.402696651" lon="-75.688309974">
-  <ele>73.100000</ele>
-<time>2005-04-11T21:01:00Z</time>
-  <name>SMT0592</name>
-  <cmt>SMT0592</cmt>
-  <desc>SMT0592</desc>
-</wpt>
-<wpt lat="45.402368318" lon="-75.688096640">
-  <ele>73.800000</ele>
-<time>2005-04-11T21:01:00Z</time>
-  <name>SMT0593</name>
-  <cmt>SMT0593</cmt>
-  <desc>SMT0593</desc>
-</wpt>
-<wpt lat="45.402584984" lon="-75.688304974">
-  <ele>75.100000</ele>
-<time>2005-04-11T21:02:00Z</time>
-  <name>SMT0594</name>
-  <cmt>SMT0594</cmt>
-  <desc>SMT0594</desc>
-</wpt>
-<wpt lat="45.402409984" lon="-75.688078307">
-  <ele>76.300000</ele>
-<time>2005-04-11T21:04:00Z</time>
-  <name>SMT0595</name>
-  <cmt>SMT0595</cmt>
-  <desc>SMT0595</desc>
-</wpt>
-<wpt lat="45.402499984" lon="-75.687739974">
-  <ele>75.800000</ele>
-<time>2005-04-11T21:04:00Z</time>
-  <name>SMT0596</name>
-  <cmt>SMT0596</cmt>
-  <desc>SMT0596</desc>
-</wpt>
-<wpt lat="45.402651651" lon="-75.687274974">
-  <ele>73.400000</ele>
-<time>2005-04-11T21:05:00Z</time>
-  <name>SMT0597</name>
-  <cmt>SMT0597</cmt>
-  <desc>SMT0597</desc>
-</wpt>
-<wpt lat="45.402863318" lon="-75.686858307">
-  <ele>68.700000</ele>
-<time>2005-04-11T21:05:00Z</time>
-  <name>SMT0598</name>
-  <cmt>SMT0598</cmt>
-  <desc>SMT0598</desc>
-</wpt>
-<wpt lat="45.403023318" lon="-75.686398307">
-  <ele>69.000000</ele>
-<time>2005-04-11T21:06:00Z</time>
-  <name>SMT0599</name>
-  <cmt>SMT0599</cmt>
-  <desc>SMT0599</desc>
-</wpt>
-<wpt lat="45.403216651" lon="-75.685966640">
+<wpt lat="45.492656651" lon="-75.718409974">
   <ele>76.200000</ele>
-<time>2005-04-11T21:06:00Z</time>
-  <name>SMT0600</name>
-  <cmt>SMT0600</cmt>
-  <desc>SMT0600</desc>
+<time>2005-06-04T01:55:00Z</time>
+  <name>WPT027</name>
+  <cmt>WPT027</cmt>
+  <desc>WPT027</desc>
+</wpt>
+<wpt lat="45.492591651" lon="-75.718313307">
+  <ele>76.300000</ele>
+<time>2005-06-04T01:57:00Z</time>
+  <name>WPT028</name>
+  <cmt>WPT028</cmt>
+  <desc>WPT028</desc>
+</wpt>
+<wpt lat="45.492568318" lon="-75.718309974">
+  <ele>59.800000</ele>
+<time>2005-06-04T01:57:00Z</time>
+  <name>WPT029</name>
+  <cmt>WPT029</cmt>
+  <desc>WPT029</desc>
+</wpt>
+<wpt lat="45.492314984" lon="-75.718339974">
+  <ele>34.300000</ele>
+<time>2005-06-05T03:06:00Z</time>
+  <name>WPT030</name>
+  <cmt>WPT030</cmt>
+  <desc>WPT030</desc>
+</wpt>
+<wpt lat="45.491909984" lon="-75.718324974">
+  <ele>34.300000</ele>
+<time>2005-06-05T03:14:00Z</time>
+  <name>WPT031</name>
+  <cmt>WPT031</cmt>
+  <desc>WPT031</desc>
+</wpt>
+<wpt lat="45.492206651" lon="-75.718414974">
+  <ele>34.300000</ele>
+<time>2005-06-05T03:14:00Z</time>
+  <name>WPT032</name>
+  <cmt>WPT032</cmt>
+  <desc>WPT032</desc>
+</wpt>
+<wpt lat="45.492689984" lon="-75.718359974">
+  <ele>70.800000</ele>
+<time>2005-06-05T03:15:00Z</time>
+  <name>WPT033</name>
+  <cmt>WPT033</cmt>
+  <desc>WPT033</desc>
+</wpt>
+<wpt lat="45.492691651" lon="-75.718408307">
+  <ele>61.200000</ele>
+<time>2005-06-05T03:16:00Z</time>
+  <name>WPT034</name>
+  <cmt>WPT034</cmt>
+  <desc>WPT034</desc>
+</wpt>
+<wpt lat="45.492601651" lon="-75.718438307">
+  <ele>62.400000</ele>
+<time>2005-06-05T03:17:00Z</time>
+  <name>WPT035</name>
+  <cmt>WPT035</cmt>
+  <desc>WPT035</desc>
+</wpt>
+<wpt lat="45.492479984" lon="-75.718403307">
+  <ele>54.200000</ele>
+<time>2005-06-05T03:22:00Z</time>
+  <name>WPT036</name>
+  <cmt>WPT036</cmt>
+  <desc>WPT036</desc>
+</wpt>
+<wpt lat="45.492566651" lon="-75.718339974">
+  <ele>57.000000</ele>
+<time>2005-06-05T03:25:00Z</time>
+  <name>WPT037</name>
+  <cmt>WPT037</cmt>
+  <desc>WPT037</desc>
+</wpt>
+<wpt lat="45.492343318" lon="-75.722331640">
+  <ele>0.000000</ele>
+<time>2005-06-05T03:39:00Z</time>
+  <name>WPT038</name>
+  <cmt>WPT038</cmt>
+  <desc>WPT038</desc>
+</wpt>
+<wpt lat="45.492314984" lon="-75.722923307">
+  <ele>57.600000</ele>
+<time>2005-06-05T03:39:00Z</time>
+  <name>WPT039</name>
+  <cmt>WPT039</cmt>
+  <desc>WPT039</desc>
+</wpt>
+<wpt lat="45.492369984" lon="-75.722586640">
+  <ele>74.800000</ele>
+<time>2005-06-05T03:39:00Z</time>
+  <name>WPT040</name>
+  <cmt>WPT040</cmt>
+  <desc>WPT040</desc>
+</wpt>
+<wpt lat="45.493596651" lon="-75.728018307">
+  <ele>95.100000</ele>
+<time>2005-06-05T03:44:00Z</time>
+  <name>WPT041</name>
+  <cmt>WPT041</cmt>
+  <desc>WPT041</desc>
+</wpt>
+<wpt lat="45.492388318" lon="-75.731491640">
+  <ele>69.100000</ele>
+<time>2005-06-05T03:50:00Z</time>
+  <name>WPT042</name>
+  <cmt>WPT042</cmt>
+  <desc>WPT042</desc>
+</wpt>
+<wpt lat="45.492379984" lon="-75.731639974">
+  <ele>71.300000</ele>
+<time>2005-06-05T03:52:00Z</time>
+  <name>WPT043</name>
+  <cmt>WPT043</cmt>
+  <desc>WPT043</desc>
+</wpt>
+<wpt lat="45.492419984" lon="-75.731754974">
+  <ele>71.300000</ele>
+<time>2005-06-05T03:52:00Z</time>
+  <name>WPT044</name>
+  <cmt>WPT044</cmt>
+  <desc>WPT044</desc>
+</wpt>
+<wpt lat="45.492678318" lon="-75.732136640">
+  <ele>71.300000</ele>
+<time>2005-06-05T03:53:00Z</time>
+  <name>WPT045</name>
+  <cmt>WPT045</cmt>
+  <desc>WPT045</desc>
+</wpt>
+<wpt lat="45.492764984" lon="-75.732181640">
+  <ele>70.700000</ele>
+<time>2005-06-05T03:53:00Z</time>
+  <name>WPT046</name>
+  <cmt>WPT046</cmt>
+  <desc>WPT046</desc>
+</wpt>
+<wpt lat="45.493056651" lon="-75.734448307">
+  <ele>68.400000</ele>
+<time>2005-06-05T03:56:00Z</time>
+  <name>WPT047</name>
+  <cmt>WPT047</cmt>
+  <desc>WPT047</desc>
+</wpt>
+<wpt lat="45.492984984" lon="-75.734376640">
+  <ele>72.900000</ele>
+<time>2005-06-05T03:56:00Z</time>
+  <name>WPT048</name>
+  <cmt>WPT048</cmt>
+  <desc>WPT048</desc>
+</wpt>
+<wpt lat="45.493048318" lon="-75.734484974">
+  <ele>71.400000</ele>
+<time>2005-06-05T03:57:00Z</time>
+  <name>WPT049</name>
+  <cmt>WPT049</cmt>
+  <desc>WPT049</desc>
+</wpt>
+<wpt lat="45.493248318" lon="-75.734873307">
+  <ele>71.200000</ele>
+<time>2005-06-05T03:57:00Z</time>
+  <name>WPT050</name>
+  <cmt>WPT050</cmt>
+  <desc>WPT050</desc>
+</wpt>
+<wpt lat="45.493511651" lon="-75.735343307">
+  <ele>71.600000</ele>
+<time>2005-06-05T03:58:00Z</time>
+  <name>WPT051</name>
+  <cmt>WPT051</cmt>
+  <desc>WPT051</desc>
+</wpt>
+<wpt lat="45.494089984" lon="-75.736121640">
+  <ele>71.000000</ele>
+<time>2005-06-04T04:00:00Z</time>
+  <name>WPT052</name>
+  <cmt>WPT052</cmt>
+  <desc>WPT052</desc>
+</wpt>
+<wpt lat="45.494091651" lon="-75.736254974">
+  <ele>72.100000</ele>
+<time>2005-06-05T04:00:00Z</time>
+  <name>WPT053</name>
+  <cmt>WPT053</cmt>
+  <desc>WPT053</desc>
+</wpt>
+<wpt lat="45.494156651" lon="-75.736351640">
+  <ele>72.700000</ele>
+<time>2005-06-05T04:00:00Z</time>
+  <name>WPT054</name>
+  <cmt>WPT054</cmt>
+  <desc>WPT054</desc>
+</wpt>
+<wpt lat="45.494316651" lon="-75.736706640">
+  <ele>72.200000</ele>
+<time>2005-06-05T04:00:00Z</time>
+  <name>WPT055</name>
+  <cmt>WPT055</cmt>
+  <desc>WPT055</desc>
+</wpt>
+<wpt lat="45.494326651" lon="-75.736839974">
+  <ele>72.500000</ele>
+<time>2005-06-05T04:00:00Z</time>
+  <name>WPT056</name>
+  <cmt>WPT056</cmt>
+  <desc>WPT056</desc>
+</wpt>
+<wpt lat="45.494348318" lon="-75.737104974">
+  <ele>73.000000</ele>
+<time>2005-06-05T04:01:00Z</time>
+  <name>WPT057</name>
+  <cmt>WPT057</cmt>
+  <desc>WPT057</desc>
+</wpt>
+<wpt lat="45.494411651" lon="-75.737268307">
+  <ele>73.300000</ele>
+<time>2005-06-05T04:01:00Z</time>
+  <name>WPT058</name>
+  <cmt>WPT058</cmt>
+  <desc>WPT058</desc>
+</wpt>
+<wpt lat="45.494488318" lon="-75.737228307">
+  <ele>78.100000</ele>
+<time>2005-06-05T04:01:00Z</time>
+  <name>WPT059</name>
+  <cmt>WPT059</cmt>
+  <desc>WPT059</desc>
+</wpt>
+<wpt lat="45.494713318" lon="-75.737163307">
+  <ele>77.000000</ele>
+<time>2005-06-05T04:02:00Z</time>
+  <name>WPT060</name>
+  <cmt>WPT060</cmt>
+  <desc>WPT060</desc>
+</wpt>
+<wpt lat="45.494818318" lon="-75.737188307">
+  <ele>75.500000</ele>
+<time>2005-06-05T04:02:00Z</time>
+  <name>WPT061</name>
+  <cmt>WPT061</cmt>
+  <desc>WPT061</desc>
+</wpt>
+<wpt lat="45.495011651" lon="-75.737183307">
+  <ele>71.000000</ele>
+<time>2005-06-05T04:02:00Z</time>
+  <name>WPT062</name>
+  <cmt>WPT062</cmt>
+  <desc>WPT062</desc>
+</wpt>
+<wpt lat="45.495254984" lon="-75.737171640">
+  <ele>75.800000</ele>
+<time>2005-06-05T04:03:00Z</time>
+  <name>WPT063</name>
+  <cmt>WPT063</cmt>
+  <desc>WPT063</desc>
+</wpt>
+<wpt lat="45.495354984" lon="-75.737114974">
+  <ele>72.600000</ele>
+<time>2005-06-05T04:03:00Z</time>
+  <name>WPT064</name>
+  <cmt>WPT064</cmt>
+  <desc>WPT064</desc>
+</wpt>
+<wpt lat="45.495581651" lon="-75.736874974">
+  <ele>70.300000</ele>
+<time>2005-06-05T04:03:00Z</time>
+  <name>WPT065</name>
+  <cmt>WPT065</cmt>
+  <desc>WPT065</desc>
+</wpt>
+<wpt lat="45.495921651" lon="-75.736509974">
+  <ele>74.600000</ele>
+<time>2005-06-05T04:04:00Z</time>
+  <name>WPT066</name>
+  <cmt>WPT066</cmt>
+  <desc>WPT066</desc>
+</wpt>
+<wpt lat="45.495844984" lon="-75.736588307">
+  <ele>76.300000</ele>
+<time>2005-06-05T04:05:00Z</time>
+  <name>WPT067</name>
+  <cmt>WPT067</cmt>
+  <desc>WPT067</desc>
+</wpt>
+<wpt lat="45.495876651" lon="-75.736471640">
+  <ele>72.100000</ele>
+<time>2005-06-05T04:05:00Z</time>
+  <name>WPT068</name>
+  <cmt>WPT068</cmt>
+  <desc>WPT068</desc>
+</wpt>
+<wpt lat="45.495916651" lon="-75.736536640">
+  <ele>80.900000</ele>
+<time>2005-06-05T04:06:00Z</time>
+  <name>WPT069</name>
+  <cmt>WPT069</cmt>
+  <desc>WPT069</desc>
+</wpt>
+<wpt lat="45.495866651" lon="-75.736521640">
+  <ele>89.500000</ele>
+<time>2005-06-05T04:06:00Z</time>
+  <name>WPT070</name>
+  <cmt>WPT070</cmt>
+  <desc>WPT070</desc>
+</wpt>
+<wpt lat="45.496203318" lon="-75.734848307">
+  <ele>102.100000</ele>
+<time>2005-06-05T04:37:00Z</time>
+  <name>WPT071</name>
+  <cmt>WPT071</cmt>
+  <desc>WPT071</desc>
+</wpt>
+<wpt lat="45.496083318" lon="-75.734841640">
+  <ele>102.800000</ele>
+<time>2005-06-11T04:38:00Z</time>
+  <name>WPT072</name>
+  <cmt>WPT072</cmt>
+  <desc>WPT072</desc>
+</wpt>
+<wpt lat="45.496109984" lon="-75.734754974">
+  <ele>94.100000</ele>
+<time>2005-06-11T04:38:00Z</time>
+  <name>WPT073</name>
+  <cmt>WPT073</cmt>
+  <desc>WPT073</desc>
+</wpt>
+<wpt lat="45.496299984" lon="-75.734379974">
+  <ele>93.300000</ele>
+<time>2005-06-11T04:39:00Z</time>
+  <name>WPT074</name>
+  <cmt>WPT074</cmt>
+  <desc>WPT074</desc>
+</wpt>
+<wpt lat="45.496259984" lon="-75.734368307">
+  <ele>83.800000</ele>
+<time>2005-06-11T04:40:00Z</time>
+  <name>WPT075</name>
+  <cmt>WPT075</cmt>
+  <desc>WPT075</desc>
+</wpt>
+<wpt lat="45.496204984" lon="-75.734474974">
+  <ele>85.100000</ele>
+<time>2005-06-11T04:41:00Z</time>
+  <name>WPT076</name>
+  <cmt>WPT076</cmt>
+  <desc>WPT076</desc>
+</wpt>
+<wpt lat="45.496191651" lon="-75.734614974">
+  <ele>85.600000</ele>
+<time>2005-06-11T04:41:00Z</time>
+  <name>WPT077</name>
+  <cmt>WPT077</cmt>
+  <desc>WPT077</desc>
+</wpt>
+<wpt lat="45.496134984" lon="-75.734768307">
+  <ele>85.900000</ele>
+<time>2005-06-11T04:41:00Z</time>
+  <name>WPT078</name>
+  <cmt>WPT078</cmt>
+  <desc>WPT078</desc>
+</wpt>
+<wpt lat="45.496108318" lon="-75.734911640">
+  <ele>85.200000</ele>
+<time>2005-06-11T04:41:00Z</time>
+  <name>WPT079</name>
+  <cmt>WPT079</cmt>
+  <desc>WPT079</desc>
+</wpt>
+<wpt lat="45.496044984" lon="-75.735079974">
+  <ele>87.100000</ele>
+<time>2005-06-11T04:41:00Z</time>
+  <name>WPT080</name>
+  <cmt>WPT080</cmt>
+  <desc>WPT080</desc>
+</wpt>
+<wpt lat="45.495993318" lon="-75.735166640">
+  <ele>82.300000</ele>
+<time>2005-06-11T04:41:00Z</time>
+  <name>WPT081</name>
+  <cmt>WPT081</cmt>
+  <desc>WPT081</desc>
+</wpt>
+<wpt lat="45.495931651" lon="-75.735276640">
+  <ele>78.800000</ele>
+<time>2005-06-11T04:42:00Z</time>
+  <name>WPT082</name>
+  <cmt>WPT082</cmt>
+  <desc>WPT082</desc>
+</wpt>
+<wpt lat="45.495874984" lon="-75.735439974">
+  <ele>75.500000</ele>
+<time>2005-06-11T04:42:00Z</time>
+  <name>WPT083</name>
+  <cmt>WPT083</cmt>
+  <desc>WPT083</desc>
+</wpt>
+<wpt lat="45.495826651" lon="-75.735561640">
+  <ele>74.100000</ele>
+<time>2005-06-11T04:42:00Z</time>
+  <name>WPT084</name>
+  <cmt>WPT084</cmt>
+  <desc>WPT084</desc>
+</wpt>
+<wpt lat="45.495858318" lon="-75.735689974">
+  <ele>72.500000</ele>
+<time>2005-06-11T04:42:00Z</time>
+  <name>WPT085</name>
+  <cmt>WPT085</cmt>
+  <desc>WPT085</desc>
+</wpt>
+<wpt lat="45.495931651" lon="-75.735779974">
+  <ele>74.000000</ele>
+<time>2005-06-11T04:43:00Z</time>
+  <name>WPT086</name>
+  <cmt>WPT086</cmt>
+  <desc>WPT086</desc>
+</wpt>
+<wpt lat="45.495899984" lon="-75.735658307">
+  <ele>74.700000</ele>
+<time>2005-06-11T04:43:00Z</time>
+  <name>WPT087</name>
+  <cmt>WPT087</cmt>
+  <desc>WPT087</desc>
+</wpt>
+<wpt lat="45.495808318" lon="-75.735613307">
+  <ele>72.300000</ele>
+<time>2005-06-11T04:43:00Z</time>
+  <name>WPT088</name>
+  <cmt>WPT088</cmt>
+  <desc>WPT088</desc>
+</wpt>
+<wpt lat="45.495711651" lon="-75.735599974">
+  <ele>72.200000</ele>
+<time>2005-06-11T04:44:00Z</time>
+  <name>WPT089</name>
+  <cmt>WPT089</cmt>
+  <desc>WPT089</desc>
+</wpt>
+<wpt lat="45.495679984" lon="-75.735724974">
+  <ele>73.000000</ele>
+<time>2005-06-11T04:44:00Z</time>
+  <name>WPT090</name>
+  <cmt>WPT090</cmt>
+  <desc>WPT090</desc>
+</wpt>
+<wpt lat="45.495651651" lon="-75.735859974">
+  <ele>74.400000</ele>
+<time>2005-06-11T04:44:00Z</time>
+  <name>WPT091</name>
+  <cmt>WPT091</cmt>
+  <desc>WPT091</desc>
+</wpt>
+<wpt lat="45.495756651" lon="-75.735824974">
+  <ele>81.200000</ele>
+<time>2005-06-11T04:44:00Z</time>
+  <name>WPT092</name>
+  <cmt>WPT092</cmt>
+  <desc>WPT092</desc>
+</wpt>
+<wpt lat="45.495728318" lon="-75.735801640">
+  <ele>70.100000</ele>
+<time>2005-06-11T04:44:00Z</time>
+  <name>WPT093</name>
+  <cmt>WPT093</cmt>
+  <desc>WPT093</desc>
+</wpt>
+<wpt lat="45.495708318" lon="-75.735911640">
+  <ele>64.400000</ele>
+<time>2005-06-11T04:45:00Z</time>
+  <name>WPT094</name>
+  <cmt>WPT094</cmt>
+  <desc>WPT094</desc>
+</wpt>
+<wpt lat="45.495683318" lon="-75.736064974">
+  <ele>64.000000</ele>
+<time>2005-06-11T04:45:00Z</time>
+  <name>WPT095</name>
+  <cmt>WPT095</cmt>
+  <desc>WPT095</desc>
+</wpt>
+<wpt lat="45.495584984" lon="-75.736138307">
+  <ele>64.600000</ele>
+<time>2005-06-11T04:46:00Z</time>
+  <name>WPT096</name>
+  <cmt>WPT096</cmt>
+  <desc>WPT096</desc>
+</wpt>
+<wpt lat="45.495651651" lon="-75.736043307">
+  <ele>67.300000</ele>
+<time>2005-06-11T04:46:00Z</time>
+  <name>WPT097</name>
+  <cmt>WPT097</cmt>
+  <desc>WPT097</desc>
+</wpt>
+<wpt lat="45.495691651" lon="-75.735939974">
+  <ele>71.400000</ele>
+<time>2005-06-11T04:48:00Z</time>
+  <name>WPT098</name>
+  <cmt>WPT098</cmt>
+  <desc>WPT098</desc>
+</wpt>
+<wpt lat="45.495706651" lon="-75.736066640">
+  <ele>71.700000</ele>
+<time>2005-06-11T04:49:00Z</time>
+  <name>WPT099</name>
+  <cmt>WPT099</cmt>
+  <desc>WPT099</desc>
+</wpt>
+<wpt lat="45.495733318" lon="-75.735924974">
+  <ele>72.300000</ele>
+<time>2005-06-11T04:51:00Z</time>
+  <name>WPT100</name>
+  <cmt>WPT100</cmt>
+  <desc>WPT100</desc>
+</wpt>
+<wpt lat="45.495666651" lon="-75.735996640">
+  <ele>81.200000</ele>
+<time>2005-06-11T04:51:00Z</time>
+  <name>WPT101</name>
+  <cmt>WPT101</cmt>
+  <desc>WPT101</desc>
+</wpt>
+<wpt lat="45.495646651" lon="-75.735903307">
+  <ele>74.500000</ele>
+<time>2005-06-11T04:51:00Z</time>
+  <name>WPT102</name>
+  <cmt>WPT102</cmt>
+  <desc>WPT102</desc>
+</wpt>
+<wpt lat="45.495689984" lon="-75.735704974">
+  <ele>74.700000</ele>
+<time>2005-06-11T04:51:00Z</time>
+  <name>WPT103</name>
+  <cmt>WPT103</cmt>
+  <desc>WPT103</desc>
+</wpt>
+<wpt lat="45.495769984" lon="-75.735519974">
+  <ele>76.200000</ele>
+<time>2005-06-11T04:52:00Z</time>
+  <name>WPT104</name>
+  <cmt>WPT104</cmt>
+  <desc>WPT104</desc>
+</wpt>
+<wpt lat="45.495858318" lon="-75.735479974">
+  <ele>77.900000</ele>
+<time>2005-06-11T04:52:00Z</time>
+  <name>WPT105</name>
+  <cmt>WPT105</cmt>
+  <desc>WPT105</desc>
+</wpt>
+<wpt lat="45.495914984" lon="-75.735378307">
+  <ele>78.600000</ele>
+<time>2005-06-11T04:52:00Z</time>
+  <name>WPT106</name>
+  <cmt>WPT106</cmt>
+  <desc>WPT106</desc>
+</wpt>
+<wpt lat="45.495991651" lon="-75.735234974">
+  <ele>80.700000</ele>
+<time>2005-06-11T04:52:00Z</time>
+  <name>WPT107</name>
+  <cmt>WPT107</cmt>
+  <desc>WPT107</desc>
+</wpt>
+<wpt lat="45.496076651" lon="-75.735043307">
+  <ele>84.400000</ele>
+<time>2005-06-11T04:52:00Z</time>
+  <name>WPT108</name>
+  <cmt>WPT108</cmt>
+  <desc>WPT108</desc>
+</wpt>
+<wpt lat="45.496214984" lon="-75.734634974">
+  <ele>92.600000</ele>
+<time>2005-06-11T04:53:00Z</time>
+  <name>WPT109</name>
+  <cmt>WPT109</cmt>
+  <desc>WPT109</desc>
+</wpt>
+<wpt lat="45.496243318" lon="-75.734476640">
+  <ele>95.800000</ele>
+<time>2005-06-11T04:53:00Z</time>
+  <name>WPT110</name>
+  <cmt>WPT110</cmt>
+  <desc>WPT110</desc>
+</wpt>
+<wpt lat="45.496326651" lon="-75.734336640">
+  <ele>94.700000</ele>
+<time>2005-06-11T04:53:00Z</time>
+  <name>WPT111</name>
+  <cmt>WPT111</cmt>
+  <desc>WPT111</desc>
+</wpt>
+<wpt lat="45.496198318" lon="-75.734216640">
+  <ele>59.200000</ele>
+<time>2005-06-11T18:39:00Z</time>
+  <name>WPT112</name>
+  <cmt>WPT112</cmt>
+  <desc>WPT112</desc>
+</wpt>
+<wpt lat="45.496179984" lon="-75.734338307">
+  <ele>55.200000</ele>
+<time>2005-06-12T18:39:00Z</time>
+  <name>WPT113</name>
+  <cmt>WPT113</cmt>
+  <desc>WPT113</desc>
+</wpt>
+<wpt lat="45.496081651" lon="-75.734656640">
+  <ele>56.100000</ele>
+<time>2005-06-12T18:40:00Z</time>
+  <name>WPT114</name>
+  <cmt>WPT114</cmt>
+  <desc>WPT114</desc>
+</wpt>
+<wpt lat="45.495996651" lon="-75.734781640">
+  <ele>54.500000</ele>
+<time>2005-06-12T18:40:00Z</time>
+  <name>WPT115</name>
+  <cmt>WPT115</cmt>
+  <desc>WPT115</desc>
+</wpt>
+<wpt lat="45.495906651" lon="-75.734983307">
+  <ele>48.700000</ele>
+<time>2005-06-12T18:40:00Z</time>
+  <name>WPT116</name>
+  <cmt>WPT116</cmt>
+  <desc>WPT116</desc>
+</wpt>
+<wpt lat="45.495801651" lon="-75.735363307">
+  <ele>43.700000</ele>
+<time>2005-06-12T18:41:00Z</time>
+  <name>WPT117</name>
+  <cmt>WPT117</cmt>
+  <desc>WPT117</desc>
+</wpt>
+<wpt lat="45.495801651" lon="-75.735514974">
+  <ele>45.100000</ele>
+<time>2005-06-12T18:41:00Z</time>
+  <name>WPT118</name>
+  <cmt>WPT118</cmt>
+  <desc>WPT118</desc>
+</wpt>
+<wpt lat="45.495833318" lon="-75.735654974">
+  <ele>44.600000</ele>
+<time>2005-06-12T18:41:00Z</time>
+  <name>WPT119</name>
+  <cmt>WPT119</cmt>
+  <desc>WPT119</desc>
+</wpt>
+<wpt lat="45.495914984" lon="-75.735726640">
+  <ele>44.100000</ele>
+<time>2005-06-12T18:41:00Z</time>
+  <name>WPT120</name>
+  <cmt>WPT120</cmt>
+  <desc>WPT120</desc>
+</wpt>
+<wpt lat="45.495956651" lon="-75.735839974">
+  <ele>43.000000</ele>
+<time>2005-06-12T18:41:00Z</time>
+  <name>WPT121</name>
+  <cmt>WPT121</cmt>
+  <desc>WPT121</desc>
+</wpt>
+<wpt lat="45.496036651" lon="-75.735908307">
+  <ele>42.000000</ele>
+<time>2005-06-12T18:41:00Z</time>
+  <name>WPT122</name>
+  <cmt>WPT122</cmt>
+  <desc>WPT122</desc>
+</wpt>
+<wpt lat="45.496151651" lon="-75.735971640">
+  <ele>41.400000</ele>
+<time>2005-06-12T18:41:00Z</time>
+  <name>WPT123</name>
+  <cmt>WPT123</cmt>
+  <desc>WPT123</desc>
+</wpt>
+<wpt lat="45.496328318" lon="-75.735998307">
+  <ele>41.600000</ele>
+<time>2005-06-12T18:42:00Z</time>
+  <name>WPT124</name>
+  <cmt>WPT124</cmt>
+  <desc>WPT124</desc>
+</wpt>
+<wpt lat="45.496431651" lon="-75.735963307">
+  <ele>41.600000</ele>
+<time>2005-06-12T18:42:00Z</time>
+  <name>WPT125</name>
+  <cmt>WPT125</cmt>
+  <desc>WPT125</desc>
+</wpt>
+<wpt lat="45.496608318" lon="-75.735874974">
+  <ele>41.600000</ele>
+<time>2005-06-12T18:42:00Z</time>
+  <name>WPT126</name>
+  <cmt>WPT126</cmt>
+  <desc>WPT126</desc>
+</wpt>
+<wpt lat="45.496763318" lon="-75.735828307">
+  <ele>41.600000</ele>
+<time>2005-06-12T18:42:00Z</time>
+  <name>WPT127</name>
+  <cmt>WPT127</cmt>
+  <desc>WPT127</desc>
+</wpt>
+<wpt lat="45.496854984" lon="-75.735886640">
+  <ele>41.600000</ele>
+<time>2005-06-12T18:42:00Z</time>
+  <name>WPT128</name>
+  <cmt>WPT128</cmt>
+  <desc>WPT128</desc>
+</wpt>
+<wpt lat="45.496996651" lon="-75.735931640">
+  <ele>41.600000</ele>
+<time>2005-06-12T18:43:00Z</time>
+  <name>WPT129</name>
+  <cmt>WPT129</cmt>
+  <desc>WPT129</desc>
+</wpt>
+<wpt lat="45.497081651" lon="-75.735889974">
+  <ele>41.600000</ele>
+<time>2005-06-12T18:43:00Z</time>
+  <name>WPT130</name>
+  <cmt>WPT130</cmt>
+  <desc>WPT130</desc>
+</wpt>
+<wpt lat="45.497164984" lon="-75.735838307">
+  <ele>41.600000</ele>
+<time>2005-06-12T18:43:00Z</time>
+  <name>WPT131</name>
+  <cmt>WPT131</cmt>
+  <desc>WPT131</desc>
+</wpt>
+<wpt lat="45.497229984" lon="-75.735719974">
+  <ele>41.600000</ele>
+<time>2005-06-12T18:43:00Z</time>
+  <name>WPT132</name>
+  <cmt>WPT132</cmt>
+  <desc>WPT132</desc>
+</wpt>
+<wpt lat="45.497303318" lon="-75.735568307">
+  <ele>41.700000</ele>
+<time>2005-06-12T18:43:00Z</time>
+  <name>WPT133</name>
+  <cmt>WPT133</cmt>
+  <desc>WPT133</desc>
+</wpt>
+<wpt lat="45.497301651" lon="-75.735439974">
+  <ele>41.700000</ele>
+<time>2005-06-12T18:43:00Z</time>
+  <name>WPT134</name>
+  <cmt>WPT134</cmt>
+  <desc>WPT134</desc>
+</wpt>
+<wpt lat="45.497318318" lon="-75.735193307">
+  <ele>41.800000</ele>
+<time>2005-06-12T18:43:00Z</time>
+  <name>WPT135</name>
+  <cmt>WPT135</cmt>
+  <desc>WPT135</desc>
+</wpt>
+<wpt lat="45.497329984" lon="-75.734973307">
+  <ele>42.300000</ele>
+<time>2005-06-12T18:44:00Z</time>
+  <name>WPT136</name>
+  <cmt>WPT136</cmt>
+  <desc>WPT136</desc>
+</wpt>
+<wpt lat="45.497464984" lon="-75.733798307">
+  <ele>45.200000</ele>
+<time>2005-06-12T18:44:00Z</time>
+  <name>WPT137</name>
+  <cmt>WPT137</cmt>
+  <desc>WPT137</desc>
+</wpt>
+<wpt lat="45.497519984" lon="-75.733038307">
+  <ele>46.700000</ele>
+<time>2005-06-12T18:45:00Z</time>
+  <name>WPT138</name>
+  <cmt>WPT138</cmt>
+  <desc>WPT138</desc>
+</wpt>
+<wpt lat="45.497474984" lon="-75.732808307">
+  <ele>47.400000</ele>
+<time>2005-06-12T18:45:00Z</time>
+  <name>WPT139</name>
+  <cmt>WPT139</cmt>
+  <desc>WPT139</desc>
+</wpt>
+<wpt lat="45.497466651" lon="-75.732938307">
+  <ele>48.300000</ele>
+<time>2005-06-12T18:45:00Z</time>
+  <name>WPT140</name>
+  <cmt>WPT140</cmt>
+  <desc>WPT140</desc>
+</wpt>
+<wpt lat="45.497506651" lon="-75.733146640">
+  <ele>49.000000</ele>
+<time>2005-06-12T18:46:00Z</time>
+  <name>WPT141</name>
+  <cmt>WPT141</cmt>
+  <desc>WPT141</desc>
+</wpt>
+<wpt lat="45.497499984" lon="-75.733361640">
+  <ele>49.400000</ele>
+<time>2005-06-12T18:46:00Z</time>
+  <name>WPT142</name>
+  <cmt>WPT142</cmt>
+  <desc>WPT142</desc>
+</wpt>
+<wpt lat="45.497463318" lon="-75.733511640">
+  <ele>49.900000</ele>
+<time>2005-06-12T18:46:00Z</time>
+  <name>WPT143</name>
+  <cmt>WPT143</cmt>
+  <desc>WPT143</desc>
+</wpt>
+<wpt lat="45.497483318" lon="-75.733636640">
+  <ele>49.500000</ele>
+<time>2005-06-12T18:47:00Z</time>
+  <name>WPT144</name>
+  <cmt>WPT144</cmt>
+  <desc>WPT144</desc>
+</wpt>
+<wpt lat="45.497466651" lon="-75.733898307">
+  <ele>55.000000</ele>
+<time>2005-06-12T18:47:00Z</time>
+  <name>WPT145</name>
+  <cmt>WPT145</cmt>
+  <desc>WPT145</desc>
+</wpt>
+<wpt lat="45.497471651" lon="-75.734046640">
+  <ele>56.600000</ele>
+<time>2005-06-12T18:47:00Z</time>
+  <name>WPT146</name>
+  <cmt>WPT146</cmt>
+  <desc>WPT146</desc>
+</wpt>
+<wpt lat="45.497383318" lon="-75.734076640">
+  <ele>56.100000</ele>
+<time>2005-06-12T18:48:00Z</time>
+  <name>WPT147</name>
+  <cmt>WPT147</cmt>
+  <desc>WPT147</desc>
+</wpt>
+<wpt lat="45.497269984" lon="-75.734148307">
+  <ele>56.700000</ele>
+<time>2005-06-12T18:48:00Z</time>
+  <name>WPT148</name>
+  <cmt>WPT148</cmt>
+  <desc>WPT148</desc>
+</wpt>
+<wpt lat="45.497241651" lon="-75.734263307">
+  <ele>70.600000</ele>
+<time>2005-06-12T18:49:00Z</time>
+  <name>WPT149</name>
+  <cmt>WPT149</cmt>
+  <desc>WPT149</desc>
+</wpt>
+<wpt lat="45.497159984" lon="-75.734243307">
+  <ele>75.600000</ele>
+<time>2005-06-12T18:49:00Z</time>
+  <name>WPT150</name>
+  <cmt>WPT150</cmt>
+  <desc>WPT150</desc>
+</wpt>
+<wpt lat="45.497066651" lon="-75.734216640">
+  <ele>76.100000</ele>
+<time>2005-06-12T18:49:00Z</time>
+  <name>WPT151</name>
+  <cmt>WPT151</cmt>
+  <desc>WPT151</desc>
+</wpt>
+<wpt lat="45.496981651" lon="-75.734176640">
+  <ele>77.400000</ele>
+<time>2005-06-12T18:49:00Z</time>
+  <name>WPT152</name>
+  <cmt>WPT152</cmt>
+  <desc>WPT152</desc>
+</wpt>
+<wpt lat="45.497001651" lon="-75.734269974">
+  <ele>84.500000</ele>
+<time>2005-06-12T18:50:00Z</time>
+  <name>WPT153</name>
+  <cmt>WPT153</cmt>
+  <desc>WPT153</desc>
+</wpt>
+<wpt lat="45.497056651" lon="-75.734181640">
+  <ele>90.200000</ele>
+<time>2005-06-12T18:50:00Z</time>
+  <name>WPT154</name>
+  <cmt>WPT154</cmt>
+  <desc>WPT154</desc>
+</wpt>
+<wpt lat="45.497098318" lon="-75.734301640">
+  <ele>93.200000</ele>
+<time>2005-06-12T18:50:00Z</time>
+  <name>WPT155</name>
+  <cmt>WPT155</cmt>
+  <desc>WPT155</desc>
+</wpt>
+<wpt lat="45.497131651" lon="-75.734461640">
+  <ele>94.400000</ele>
+<time>2005-06-12T18:50:00Z</time>
+  <name>WPT156</name>
+  <cmt>WPT156</cmt>
+  <desc>WPT156</desc>
+</wpt>
+<wpt lat="45.497083318" lon="-75.734576640">
+  <ele>95.400000</ele>
+<time>2005-06-12T18:51:00Z</time>
+  <name>WPT157</name>
+  <cmt>WPT157</cmt>
+  <desc>WPT157</desc>
+</wpt>
+<wpt lat="45.497011651" lon="-75.734718307">
+  <ele>96.500000</ele>
+<time>2005-06-12T18:51:00Z</time>
+  <name>WPT158</name>
+  <cmt>WPT158</cmt>
+  <desc>WPT158</desc>
+</wpt>
+<wpt lat="45.497041651" lon="-75.734841640">
+  <ele>96.300000</ele>
+<time>2005-06-12T18:51:00Z</time>
+  <name>WPT159</name>
+  <cmt>WPT159</cmt>
+  <desc>WPT159</desc>
+</wpt>
+<wpt lat="45.496978318" lon="-75.734936640">
+  <ele>97.000000</ele>
+<time>2005-06-12T18:51:00Z</time>
+  <name>WPT160</name>
+  <cmt>WPT160</cmt>
+  <desc>WPT160</desc>
+</wpt>
+<wpt lat="45.496954984" lon="-75.735069974">
+  <ele>96.900000</ele>
+<time>2005-06-12T18:51:00Z</time>
+  <name>WPT161</name>
+  <cmt>WPT161</cmt>
+  <desc>WPT161</desc>
+</wpt>
+<wpt lat="45.496956651" lon="-75.735244974">
+  <ele>98.200000</ele>
+<time>2005-06-12T18:52:00Z</time>
+  <name>WPT162</name>
+  <cmt>WPT162</cmt>
+  <desc>WPT162</desc>
+</wpt>
+<wpt lat="45.496894984" lon="-75.735343307">
+  <ele>98.600000</ele>
+<time>2005-06-12T18:52:00Z</time>
+  <name>WPT163</name>
+  <cmt>WPT163</cmt>
+  <desc>WPT163</desc>
+</wpt>
+<wpt lat="45.496828318" lon="-75.735484974">
+  <ele>98.400000</ele>
+<time>2005-06-12T18:52:00Z</time>
+  <name>WPT164</name>
+  <cmt>WPT164</cmt>
+  <desc>WPT164</desc>
+</wpt>
+<wpt lat="45.496764984" lon="-75.735634974">
+  <ele>98.200000</ele>
+<time>2005-06-12T18:52:00Z</time>
+  <name>WPT165</name>
+  <cmt>WPT165</cmt>
+  <desc>WPT165</desc>
+</wpt>
+<wpt lat="45.496698318" lon="-75.735818307">
+  <ele>97.000000</ele>
+<time>2005-06-12T18:53:00Z</time>
+  <name>WPT166</name>
+  <cmt>WPT166</cmt>
+  <desc>WPT166</desc>
+</wpt>
+<wpt lat="45.496658318" lon="-75.735986640">
+  <ele>96.600000</ele>
+<time>2005-06-12T18:53:00Z</time>
+  <name>WPT167</name>
+  <cmt>WPT167</cmt>
+  <desc>WPT167</desc>
+</wpt>
+<wpt lat="45.496573318" lon="-75.736061640">
+  <ele>96.100000</ele>
+<time>2005-06-12T18:53:00Z</time>
+  <name>WPT168</name>
+  <cmt>WPT168</cmt>
+  <desc>WPT168</desc>
+</wpt>
+<wpt lat="45.496441651" lon="-75.736114974">
+  <ele>94.800000</ele>
+<time>2005-06-12T18:53:00Z</time>
+  <name>WPT169</name>
+  <cmt>WPT169</cmt>
+  <desc>WPT169</desc>
+</wpt>
+<wpt lat="45.496343318" lon="-75.736063307">
+  <ele>95.200000</ele>
+<time>2005-06-12T18:53:00Z</time>
+  <name>WPT170</name>
+  <cmt>WPT170</cmt>
+  <desc>WPT170</desc>
+</wpt>
+<wpt lat="45.495934984" lon="-75.735669974">
+  <ele>93.600000</ele>
+<time>2005-06-12T18:53:00Z</time>
+  <name>WPT171</name>
+  <cmt>WPT171</cmt>
+  <desc>WPT171</desc>
+</wpt>
+<wpt lat="45.495949984" lon="-75.735524974">
+  <ele>92.400000</ele>
+<time>2005-06-12T18:53:00Z</time>
+  <name>WPT172</name>
+  <cmt>WPT172</cmt>
+  <desc>WPT172</desc>
+</wpt>
+<wpt lat="45.495986651" lon="-75.735344974">
+  <ele>91.200000</ele>
+<time>2005-06-12T18:54:00Z</time>
+  <name>WPT173</name>
+  <cmt>WPT173</cmt>
+  <desc>WPT173</desc>
+</wpt>
+<wpt lat="45.496024984" lon="-75.735221640">
+  <ele>92.400000</ele>
+<time>2005-06-12T18:54:00Z</time>
+  <name>WPT174</name>
+  <cmt>WPT174</cmt>
+  <desc>WPT174</desc>
+</wpt>
+<wpt lat="45.496096651" lon="-75.734986640">
+  <ele>94.400000</ele>
+<time>2005-06-12T18:54:00Z</time>
+  <name>WPT175</name>
+  <cmt>WPT175</cmt>
+  <desc>WPT175</desc>
+</wpt>
+<wpt lat="45.496131651" lon="-75.734836640">
+  <ele>92.800000</ele>
+<time>2005-06-12T18:55:00Z</time>
+  <name>WPT176</name>
+  <cmt>WPT176</cmt>
+  <desc>WPT176</desc>
+</wpt>
+<wpt lat="45.496186651" lon="-75.734716640">
+  <ele>94.900000</ele>
+<time>2005-06-12T18:55:00Z</time>
+  <name>WPT177</name>
+  <cmt>WPT177</cmt>
+  <desc>WPT177</desc>
+</wpt>
+<wpt lat="45.496241651" lon="-75.734586640">
+  <ele>95.600000</ele>
+<time>2005-06-12T18:55:00Z</time>
+  <name>WPT178</name>
+  <cmt>WPT178</cmt>
+  <desc>WPT178</desc>
+</wpt>
+<wpt lat="45.496301651" lon="-75.734363307">
+  <ele>96.300000</ele>
+<time>2005-06-12T18:55:00Z</time>
+  <name>WPT179</name>
+  <cmt>WPT179</cmt>
+  <desc>WPT179</desc>
+</wpt>
+<wpt lat="45.496216651" lon="-75.734409974">
+  <ele>96.300000</ele>
+<time>2005-06-12T18:56:00Z</time>
+  <name>WPT180</name>
+  <cmt>WPT180</cmt>
+  <desc>WPT180</desc>
+</wpt>
+<wpt lat="45.496306651" lon="-75.734371640">
+  <ele>98.800000</ele>
+<time>2005-06-12T18:56:00Z</time>
+  <name>WPT181</name>
+  <cmt>WPT181</cmt>
+  <desc>WPT181</desc>
+</wpt>
+<wpt lat="45.496194984" lon="-75.734224974">
+  <ele>97.900000</ele>
+<time>2005-06-12T18:57:00Z</time>
+  <name>WPT182</name>
+  <cmt>WPT182</cmt>
+  <desc>WPT182</desc>
+</wpt>
+<wpt lat="45.495998318" lon="-75.734101640">
+  <ele>97.600000</ele>
+<time>2005-06-12T18:57:00Z</time>
+  <name>WPT183</name>
+  <cmt>WPT183</cmt>
+  <desc>WPT183</desc>
+</wpt>
+<wpt lat="45.494281651" lon="-75.733509974">
+  <ele>97.300000</ele>
+<time>2005-06-12T18:57:00Z</time>
+  <name>WPT184</name>
+  <cmt>WPT184</cmt>
+  <desc>WPT184</desc>
+</wpt>
+<wpt lat="45.491526651" lon="-75.730496640">
+  <ele>97.500000</ele>
+<time>2005-06-12T18:58:00Z</time>
+  <name>WPT185</name>
+  <cmt>WPT185</cmt>
+  <desc>WPT185</desc>
+</wpt>
+<wpt lat="45.490809984" lon="-75.728584974">
+  <ele>97.700000</ele>
+<time>2005-06-12T18:58:00Z</time>
+  <name>WPT186</name>
+  <cmt>WPT186</cmt>
+  <desc>WPT186</desc>
+</wpt>
+<wpt lat="45.489388318" lon="-75.725018307">
+  <ele>98.100000</ele>
+<time>2005-06-12T18:58:00Z</time>
+  <name>WPT187</name>
+  <cmt>WPT187</cmt>
+  <desc>WPT187</desc>
+</wpt>
+<wpt lat="45.488314984" lon="-75.722894974">
+  <ele>98.200000</ele>
+<time>2005-06-12T18:58:00Z</time>
+  <name>WPT188</name>
+  <cmt>WPT188</cmt>
+  <desc>WPT188</desc>
+</wpt>
+<wpt lat="45.487204984" lon="-75.721489974">
+  <ele>98.200000</ele>
+<time>2005-06-12T18:58:00Z</time>
+  <name>WPT189</name>
+  <cmt>WPT189</cmt>
+  <desc>WPT189</desc>
+</wpt>
+<wpt lat="45.487416651" lon="-75.720791640">
+  <ele>97.900000</ele>
+<time>2005-06-12T18:58:00Z</time>
+  <name>WPT190</name>
+  <cmt>WPT190</cmt>
+  <desc>WPT190</desc>
+</wpt>
+<wpt lat="45.488398318" lon="-75.721109974">
+  <ele>97.800000</ele>
+<time>2005-06-12T18:58:00Z</time>
+  <name>WPT191</name>
+  <cmt>WPT191</cmt>
+  <desc>WPT191</desc>
+</wpt>
+<wpt lat="45.490408318" lon="-75.722254974">
+  <ele>101.300000</ele>
+<time>2005-06-12T18:58:00Z</time>
+  <name>WPT192</name>
+  <cmt>WPT192</cmt>
+  <desc>WPT192</desc>
+</wpt>
+<wpt lat="45.491743318" lon="-75.723359974">
+  <ele>105.300000</ele>
+<time>2005-06-12T18:58:00Z</time>
+  <name>WPT193</name>
+  <cmt>WPT193</cmt>
+  <desc>WPT193</desc>
+</wpt>
+<wpt lat="45.491659984" lon="-75.723431640">
+  <ele>105.600000</ele>
+<time>2005-06-12T18:58:00Z</time>
+  <name>WPT194</name>
+  <cmt>WPT194</cmt>
+  <desc>WPT194</desc>
+</wpt>
+<wpt lat="45.491213318" lon="-75.723554974">
+  <ele>105.700000</ele>
+<time>2005-06-12T18:59:00Z</time>
+  <name>WPT195</name>
+  <cmt>WPT195</cmt>
+  <desc>WPT195</desc>
+</wpt>
+<wpt lat="45.490278318" lon="-75.723608307">
+  <ele>104.700000</ele>
+<time>2005-06-12T18:59:00Z</time>
+  <name>WPT196</name>
+  <cmt>WPT196</cmt>
+  <desc>WPT196</desc>
+</wpt>
+<wpt lat="45.490369984" lon="-75.723388307">
+  <ele>103.600000</ele>
+<time>2005-06-12T18:59:00Z</time>
+  <name>WPT197</name>
+  <cmt>WPT197</cmt>
+  <desc>WPT197</desc>
+</wpt>
+<wpt lat="45.490526651" lon="-75.721809974">
+  <ele>101.300000</ele>
+<time>2005-06-12T18:59:00Z</time>
+  <name>WPT198</name>
+  <cmt>WPT198</cmt>
+  <desc>WPT198</desc>
+</wpt>
+<wpt lat="45.490071651" lon="-75.720394974">
+  <ele>99.900000</ele>
+<time>2005-06-12T18:59:00Z</time>
+  <name>WPT199</name>
+  <cmt>WPT199</cmt>
+  <desc>WPT199</desc>
+</wpt>
+<wpt lat="45.488781651" lon="-75.717853307">
+  <ele>98.100000</ele>
+<time>2005-06-12T18:59:00Z</time>
+  <name>WPT200</name>
+  <cmt>WPT200</cmt>
+  <desc>WPT200</desc>
+</wpt>
+<wpt lat="45.488024984" lon="-75.715301640">
+  <ele>97.900000</ele>
+<time>2005-06-12T18:59:00Z</time>
+  <name>WPT201</name>
+  <cmt>WPT201</cmt>
+  <desc>WPT201</desc>
+</wpt>
+<wpt lat="45.487381651" lon="-75.712531640">
+  <ele>97.700000</ele>
+<time>2005-06-12T19:00:00Z</time>
+  <name>WPT202</name>
+  <cmt>WPT202</cmt>
+  <desc>WPT202</desc>
+</wpt>
+<wpt lat="45.487396651" lon="-75.711828307">
+  <ele>97.700000</ele>
+<time>2005-06-12T19:00:00Z</time>
+  <name>WPT203</name>
+  <cmt>WPT203</cmt>
+  <desc>WPT203</desc>
+</wpt>
+<wpt lat="45.487534984" lon="-75.711744974">
+  <ele>97.700000</ele>
+<time>2005-06-12T19:00:00Z</time>
+  <name>WPT204</name>
+  <cmt>WPT204</cmt>
+  <desc>WPT204</desc>
+</wpt>
+<wpt lat="45.487728318" lon="-75.711471640">
+  <ele>97.500000</ele>
+<time>2005-06-12T19:00:00Z</time>
+  <name>WPT205</name>
+  <cmt>WPT205</cmt>
+  <desc>WPT205</desc>
+</wpt>
+<wpt lat="45.487859984" lon="-75.710994974">
+  <ele>97.300000</ele>
+<time>2005-06-12T19:00:00Z</time>
+  <name>WPT206</name>
+  <cmt>WPT206</cmt>
+  <desc>WPT206</desc>
+</wpt>
+<wpt lat="45.488128318" lon="-75.708784974">
+  <ele>97.100000</ele>
+<time>2005-06-12T19:00:00Z</time>
+  <name>WPT207</name>
+  <cmt>WPT207</cmt>
+  <desc>WPT207</desc>
+</wpt>
+<wpt lat="45.488351651" lon="-75.705628307">
+  <ele>97.000000</ele>
+<time>2005-06-12T19:00:00Z</time>
+  <name>WPT208</name>
+  <cmt>WPT208</cmt>
+  <desc>WPT208</desc>
+</wpt>
+<wpt lat="45.488748318" lon="-75.704488307">
+  <ele>97.100000</ele>
+<time>2005-06-12T19:00:00Z</time>
+  <name>WPT209</name>
+  <cmt>WPT209</cmt>
+  <desc>WPT209</desc>
+</wpt>
+<wpt lat="45.489294984" lon="-75.703023307">
+  <ele>97.200000</ele>
+<time>2005-06-12T19:00:00Z</time>
+  <name>WPT210</name>
+  <cmt>WPT210</cmt>
+  <desc>WPT210</desc>
+</wpt>
+<wpt lat="45.489278318" lon="-75.703171640">
+  <ele>97.100000</ele>
+<time>2005-06-12T19:00:00Z</time>
+  <name>WPT211</name>
+  <cmt>WPT211</cmt>
+  <desc>WPT211</desc>
+</wpt>
+<wpt lat="45.489263318" lon="-75.703306640">
+  <ele>96.900000</ele>
+<time>2005-06-12T19:01:00Z</time>
+  <name>WPT212</name>
+  <cmt>WPT212</cmt>
+  <desc>WPT212</desc>
+</wpt>
+<wpt lat="45.489364984" lon="-75.702803307">
+  <ele>96.900000</ele>
+<time>2005-06-12T19:01:00Z</time>
+  <name>WPT213</name>
+  <cmt>WPT213</cmt>
+  <desc>WPT213</desc>
+</wpt>
+<wpt lat="45.489553318" lon="-75.700098307">
+  <ele>97.300000</ele>
+<time>2005-06-12T19:01:00Z</time>
+  <name>WPT214</name>
+  <cmt>WPT214</cmt>
+  <desc>WPT214</desc>
+</wpt>
+<wpt lat="45.489698318" lon="-75.698621640">
+  <ele>97.200000</ele>
+<time>2005-06-12T19:01:00Z</time>
+  <name>WPT215</name>
+  <cmt>WPT215</cmt>
+  <desc>WPT215</desc>
+</wpt>
+<wpt lat="45.489766651" lon="-75.698538307">
+  <ele>97.200000</ele>
+<time>2005-06-12T19:02:00Z</time>
+  <name>WPT216</name>
+  <cmt>WPT216</cmt>
+  <desc>WPT216</desc>
+</wpt>
+<wpt lat="45.489761651" lon="-75.698398307">
+  <ele>97.100000</ele>
+<time>2005-06-12T19:02:00Z</time>
+  <name>WPT217</name>
+  <cmt>WPT217</cmt>
+  <desc>WPT217</desc>
+</wpt>
+<wpt lat="45.489583318" lon="-75.695093307">
+  <ele>97.400000</ele>
+<time>2005-06-12T19:02:00Z</time>
+  <name>WPT218</name>
+  <cmt>WPT218</cmt>
+  <desc>WPT218</desc>
+</wpt>
+<wpt lat="45.489726651" lon="-75.693488307">
+  <ele>97.500000</ele>
+<time>2005-06-12T19:02:00Z</time>
+  <name>WPT219</name>
+  <cmt>WPT219</cmt>
+  <desc>WPT219</desc>
+</wpt>
+<wpt lat="45.489909984" lon="-75.693386640">
+  <ele>97.500000</ele>
+<time>2005-06-12T19:02:00Z</time>
+  <name>WPT220</name>
+  <cmt>WPT220</cmt>
+  <desc>WPT220</desc>
+</wpt>
+<wpt lat="45.490408318" lon="-75.692841640">
+  <ele>97.500000</ele>
+<time>2005-06-12T19:02:00Z</time>
+  <name>WPT221</name>
+  <cmt>WPT221</cmt>
+  <desc>WPT221</desc>
+</wpt>
+<wpt lat="45.490608318" lon="-75.692348307">
+  <ele>97.400000</ele>
+<time>2005-06-12T19:02:00Z</time>
+  <name>WPT222</name>
+  <cmt>WPT222</cmt>
+  <desc>WPT222</desc>
+</wpt>
+<wpt lat="45.491079984" lon="-75.690218307">
+  <ele>97.400000</ele>
+<time>2005-06-12T19:02:00Z</time>
+  <name>WPT223</name>
+  <cmt>WPT223</cmt>
+  <desc>WPT223</desc>
+</wpt>
+<wpt lat="45.491288318" lon="-75.688778307">
+  <ele>97.300000</ele>
+<time>2005-06-12T19:03:00Z</time>
+  <name>WPT224</name>
+  <cmt>WPT224</cmt>
+  <desc>WPT224</desc>
+</wpt>
+<wpt lat="45.491183318" lon="-75.688611640">
+  <ele>97.300000</ele>
+<time>2005-06-12T19:03:00Z</time>
+  <name>WPT225</name>
+  <cmt>WPT225</cmt>
+  <desc>WPT225</desc>
+</wpt>
+<wpt lat="45.490993318" lon="-75.688663307">
+  <ele>99.000000</ele>
+<time>2005-06-12T19:03:00Z</time>
+  <name>WPT226</name>
+  <cmt>WPT226</cmt>
+  <desc>WPT226</desc>
+</wpt>
+<wpt lat="45.489688318" lon="-75.688748307">
+  <ele>99.300000</ele>
+<time>2005-06-12T19:03:00Z</time>
+  <name>WPT227</name>
+  <cmt>WPT227</cmt>
+  <desc>WPT227</desc>
+</wpt>
+<wpt lat="45.489516651" lon="-75.688719974">
+  <ele>99.200000</ele>
+<time>2005-06-12T19:03:00Z</time>
+  <name>WPT228</name>
+  <cmt>WPT228</cmt>
+  <desc>WPT228</desc>
+</wpt>
+<wpt lat="45.489606651" lon="-75.688778307">
+  <ele>99.000000</ele>
+<time>2005-06-12T19:03:00Z</time>
+  <name>WPT229</name>
+  <cmt>WPT229</cmt>
+  <desc>WPT229</desc>
+</wpt>
+<wpt lat="45.489716651" lon="-75.688851640">
+  <ele>98.600000</ele>
+<time>2005-06-12T19:03:00Z</time>
+  <name>WPT230</name>
+  <cmt>WPT230</cmt>
+  <desc>WPT230</desc>
+</wpt>
+<wpt lat="45.489636651" lon="-75.688773307">
+  <ele>98.300000</ele>
+<time>2005-06-12T19:04:00Z</time>
+  <name>WPT231</name>
+  <cmt>WPT231</cmt>
+  <desc>WPT231</desc>
+</wpt>
+<wpt lat="45.489688318" lon="-75.688884974">
+  <ele>98.000000</ele>
+<time>2005-06-12T19:04:00Z</time>
+  <name>WPT232</name>
+  <cmt>WPT232</cmt>
+  <desc>WPT232</desc>
+</wpt>
+<wpt lat="45.489699984" lon="-75.688648307">
+  <ele>98.200000</ele>
+<time>2005-06-12T19:04:00Z</time>
+  <name>WPT233</name>
+  <cmt>WPT233</cmt>
+  <desc>WPT233</desc>
+</wpt>
+<wpt lat="45.489858318" lon="-75.688149974">
+  <ele>98.400000</ele>
+<time>2005-06-12T19:04:00Z</time>
+  <name>WPT234</name>
+  <cmt>WPT234</cmt>
+  <desc>WPT234</desc>
+</wpt>
+<wpt lat="45.489979984" lon="-75.687781640">
+  <ele>98.400000</ele>
+<time>2005-06-12T19:04:00Z</time>
+  <name>WPT235</name>
+  <cmt>WPT235</cmt>
+  <desc>WPT235</desc>
+</wpt>
+<wpt lat="45.489979984" lon="-75.687646640">
+  <ele>98.100000</ele>
+<time>2005-06-12T19:05:00Z</time>
+  <name>WPT236</name>
+  <cmt>WPT236</cmt>
+  <desc>WPT236</desc>
+</wpt>
+<wpt lat="45.490004984" lon="-75.684934974">
+  <ele>97.400000</ele>
+<time>2005-06-12T19:05:00Z</time>
+  <name>WPT237</name>
+  <cmt>WPT237</cmt>
+  <desc>WPT237</desc>
 </wpt>
 </gpx>

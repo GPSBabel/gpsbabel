@@ -837,8 +837,16 @@ THE FORMATS
     VitoSMT
 
 	Vito Navigator II is a Pocket PC GPS application.  This format reads
-	a Vito Navigator II .SMT track file in waypoint mode.  It is still 
-	a work in progress.
+	a Vito Navigator II .SMT track file and can work in either waypoint 
+	or track mode.  The tzoffset parameter is used to set the UTC offset
+	of the imput file.
+
+	for example, process a file that was produced in Eastern Daylight 
+	Time (-4h from UTC):
+		gpsbabel -i vitosmt,tzoffset=-4 -f vitosmt.smt
+
+	A file that was produced in France Daylight Savings time:
+		gpsbabel -i vitosmt,tzoffset=1 -f paris.smt
 
 
 DATA FILTERS
