@@ -26,7 +26,8 @@
 #define MYNAME "vitosmt"
 #include "defs.h"
 
-FILE *infile;
+FILE			*infile;
+static char *  	arg_tzoffset=NULL;
 
 static unsigned long
 ReadLong(FILE * f)
@@ -83,16 +84,20 @@ vitosmt_read(void)
 	unsigned short version			=0;
 	unsigned long count				=0;
 	const unsigned long recsize		=64;
-	unsigned short stringlen		=0;
-	static int serial				=0;
-
-/*	route_head		*track_head		=0; */
+	unsigned short	stringlen		=0;
+	route_head		*track_head		=0; 
 	waypoint		*wpt_tmp		=0;
 	double			latrad			=0;
 	double			lonrad			=0;
 	double			elev			=0;
 	unsigned char*	timestamp		=0;
 	struct tm		tmStruct		={0,0,0,0,0,0,0,0,0};
+	int	iTzoffset		=0;
+
+	/* Compute offset between local time zone and time offset argument */
+	if (arg_tzoffset)	{
+		iTzoffset = get_tz_offset() - (unsigned int) 60*60*atof(arg_tzoffset);
+	}
 
 	/* 
 	 * 24 bytes header 
@@ -104,19 +109,20 @@ vitosmt_read(void)
 	ReadLong(infile);			/* 599	*/
 	ReadLong(infile);			/* 600	*/
 
-/* 	track_head = route_head_alloc(); */
-/*	route_add_head(track_head); */
-	
-
 	while (count) {
 		/*
 		 *	64 bytes of data	
 		 */
+		if (feof(infile)||ferror(infile)) 
+		{
+			break;
+		}
+
 		latrad		=ReadDouble(infile);	/* WGS84 latitude in radians */
 		lonrad		=ReadDouble(infile);	/* WGS84 longitude in radians */
 		elev		=ReadDouble(infile);	/* elevation in meters */
-		timestamp	=ReadRecord(infile,8);	/* local time */
-		Skip(infile,32);		/* remainder, unknown fmt */
+		timestamp	=ReadRecord(infile,5);	/* local time */
+		Skip(infile,35);					/* remainder, unknown fmt */
 
 		wpt_tmp = waypt_new();
 		
@@ -129,19 +135,32 @@ vitosmt_read(void)
 		tmStruct.tm_mday	=timestamp[2];
 		tmStruct.tm_hour	=timestamp[3];
 		tmStruct.tm_min		=timestamp[4];
-		tmStruct.tm_sec 	=timestamp[5];
+		tmStruct.tm_sec 	=0;				
 		tmStruct.tm_isdst	=-1;
 
-		wpt_tmp->creation_time = mktime(&tmStruct); /* + get_tz_offset(); */
-
-		wpt_tmp->shortname = (char *) xmalloc(10);
-		snprintf(wpt_tmp->shortname, 10, "SMT%04d",++serial);
+		wpt_tmp->creation_time = mktime(&tmStruct) - iTzoffset;
 		wpt_tmp->wpt_flags.shortname_is_synthetic = 1;
-		
-		waypt_add(wpt_tmp);
+
+		switch (global_opts.objective)
+		{
+			case wptdata:
+				waypt_add(wpt_tmp);
+				break;
+			case trkdata:
+				if (track_head == NULL) {
+					track_head = route_head_alloc();
+					track_add_head(track_head);
+				}
+				route_add_wpt(track_head, wpt_tmp);
+				break;
+			default:
+				fatal(MYNAME ": This file type only supports "
+					"waypoint or track (-w or -t) mode.");
+
+				break;
+		}
 
 		xfree(timestamp);
-
 
 		count--;
 	}
@@ -153,6 +172,12 @@ wr_init(const char *fname)
 	fatal(MYNAME ":Not enough information is known about this format to write it.\n");
 }
 
+static
+arglist_t vitosmt_args[] = {
+	{"tzoffset", &arg_tzoffset, "Time zone offset of SMT file (hours)", NULL, ARGTYPE_FLOAT },
+	{0, 0, 0, 0, 0}
+};
+
 ff_vecs_t vitosmt_vecs = {
 	ff_type_file,
 	{ ff_cap_read, ff_cap_read, ff_cap_none},
@@ -163,5 +188,5 @@ ff_vecs_t vitosmt_vecs = {
 	vitosmt_read,
 	NULL,
 	NULL, 
-	NULL
+	vitosmt_args
 };
