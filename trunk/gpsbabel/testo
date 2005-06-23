@@ -711,9 +711,9 @@ compare ${TMPDIR}/pathaway.gpx reference/track/pathaway.gpx
 # Vito Navigator II .smt tests
 #
 rm -f ${TMPDIR}/vitosmt*
-${PNAME}    -i vitosmt,tzoffset=-7 -f reference/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt.gpx
+${PNAME}    -i vitosmt,tzoffset=-4 -f reference/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt.gpx
 compare ${TMPDIR}/vitosmt.gpx reference/vitosmt.gpx
-${PNAME} -t -i vitosmt,tzoffset=-7 -f reference/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt_t.gpx
+${PNAME} -t -i vitosmt,tzoffset=-4 -f reference/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt_t.gpx
 compare ${TMPDIR}/vitosmt_t.gpx reference/track/vitosmt_t.gpx
 
 #
