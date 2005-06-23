@@ -18,16 +18,21 @@
 
 */
 
-/* ToDo:
-	--- date format for read database --
+/* 
+	remarks:
+	
+	The german release 3.0 of PathAway violates the PathAway standards:
+	* N.. .... O.. .... instead of N.. .... E.. ....
+	* date is formatted in DDMMYYYY instead of YYYYMMDD
 */
 
+#include <ctype.h>
 #include "defs.h"
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
 #include "csv_util.h"
 
-#define MYNAME "PathAway pdb"
+#define MYNAME "pathaway"
 
 #define PPDB_MAGIC_TRK	0x55735472		/* UsTr */
 #define PPDB_MAGIC_WPT  0x506f4c69		/* PoLi */
@@ -36,7 +41,9 @@
 FILE *fd_in, *fd_out;
 struct pdb *pdb_in, *pdb_out;
 char *fname_in, *fname_out;
+static void *mkshort_handle;
 static gpsdata_type ppdb_type;
+unsigned char german_release = 0;
 
 typedef struct ppdb_appdata
 {
@@ -50,15 +57,15 @@ typedef struct ppdb_appdata
 
 #define PPDB_APPINFO_SIZE sizeof(struct ppdb_appdata)
 
-static char *date_fmt = NULL;
 static char *dbname = NULL;
 static char *deficon = NULL;
+static char *snlen_opt = NULL;
 
 static arglist_t ppdb_args[] = 
 {
 	{"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING},
 	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING},
-/*	{"dtfmt", &date_fmt, "Date format", NULL, ARGTYPE_STRING }, 		ToDo */
+	{"snlen", &snlen_opt, "Length of generated shortnames", NULL, ARGTYPE_INT },
 	{0, 0, 0, 0 }
 };
 
@@ -67,6 +74,29 @@ is_fatal(int is, const char *msg, ... )
 {
     if (is) fatal(MYNAME ": %s\n", msg);
 }
+
+#define PPDB_DEBUG 1
+
+#if PPDB_DEBUG
+static void
+internal_debug(const char *filename, int fileline, const char *format, ... )
+{
+	va_list args;
+	char *buff;
+	static int ct;
+	
+	buff = (char *) xmalloc(1024);
+	va_start(args, format);
+	vsnprintf(buff, 1023, format, args);
+	printf("DBG(%d): %s in file %s, line %d\n", ct++, buff, filename, fileline);
+	va_end(args);
+	xfree(buff);
+}
+#define DBG(fmt, args...) internal_debug (__FILE__, __LINE__, fmt, ## args )
+#else
+#define DBG(fmt, args...)
+#endif
+
 
 #define CHECK_INP(i, j) is_fatal((i != j), "Error in data structure.")
 
@@ -169,10 +199,9 @@ char *str_pool_getcpy(char *src, char *def)
  
 char *ppdb_fmt_float(const double val)
 {
-	char *c;
 	char *str = str_pool_get(32);
 	snprintf(str, 32, "%.8f", val);
-	c = str + strlen(str) - 1;
+	char *c = str + strlen(str) - 1;
 	while ((c > str) && (*c == '0'))
 	{
 	    *c = '\0';
@@ -189,7 +218,6 @@ char *ppdb_fmt_float(const double val)
 
 char *ppdb_fmt_degrees(char dir, double val)
 {
-	char *tmp;
 	char *str = str_pool_get(32);
 	int deg = abs(val);
 	double min = 60.0 * (fabs(val) - deg);
@@ -203,7 +231,7 @@ char *ppdb_fmt_degrees(char dir, double val)
 	snprintf(str, 31, "%c%02d 000", dir, deg);
 	snprintf(str + 6 - power, 24, "%.8f", min);
 	
-	tmp = str + strlen(str) - 1;	/* trim trailing nulls */
+	char *tmp = str + strlen(str) - 1;	/* trim trailing nulls */
 	while ((tmp > str) && (*tmp == '0'))
 	{
 	    *tmp = '\0';
@@ -231,6 +259,8 @@ double ppdb_decode_coord(const char *str)
 	}
 	else
 	{
+	    if (*str == 'O') german_release = 1;
+	    
 	    char *tmp = strchr(str, ' ');
 	    if ((tmp) && (tmp - str < 4))
 	    {
@@ -249,8 +279,7 @@ double ppdb_decode_coord(const char *str)
 
 int ppdb_decode_tm(char *str, struct tm *tm)
 {
-	int i = 3;
-	int msec, d1, d2, d3, d4, year;
+	int msec, d1, d2, d3, d4;
 	time_t tnow;
 	struct tm now;
     
@@ -274,12 +303,14 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 	now.tm_year += 1900;
 	now.tm_mon++;
 	
-	year = (d1 * 100) + d2;
+	int year = (d1 * 100) + d2;
 	
+	/* the coordinates comes before date and time in
+	   the dataset, so the flag "german_release" is set yet. */
+
 	/* next code works for most, except for 19. and 20. of month */
-	/* for trouble use input date format - !!! ToDo !!! */
 	
-	if ((year < 1980) || (year > now.tm_year))			/* YYYYMMDD or DDMMYYY ????? */
+	if ((german_release != 0) || (year < 1980) || (year > now.tm_year))	/* YYYYMMDD or DDMMYYY ????? */
 	{
 	    tm->tm_year = (d3 * 100) + d4;
 	    tm->tm_mon = d2;
@@ -291,24 +322,22 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 	    tm->tm_mon = d3;
 	    tm->tm_mday = d4;
 	}
-	
+
 	return 1;
 }
 
 static int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_rec, route_head *head)
 {
-	char *data, *str, *tmp;
-	char latdir, longdir;
-	int latdeg, longdeg, i;
-	double latval, longval, altfeet;
+	char *data, *str;
+	double altfeet;
 	struct tm tm;
 	
 	for (pdb_rec = pdb_in->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) 
 	{
-		int line = 0;
 		waypoint *wpt_tmp = waypt_new();
 		data = (char *) pdb_rec->data;
 		
+		int line = 0;
 		str = csv_lineparse(data, ",", """", line++);
 		while (str != NULL)
 		{
@@ -382,7 +411,7 @@ static void ppdb_rd_deinit(void)
 
 static void ppdb_read(void)
 {
-	struct pdb_record *pdb_rec;
+	struct pdb_record *pdb_rec = NULL;
 	ppdb_appdata_t *info = NULL;
 	route_head *track_head, *route_head;
 	const char *descr = NULL;
@@ -406,7 +435,7 @@ static void ppdb_read(void)
 	{
 	    case PPDB_MAGIC_TRK:
 		ppdb_type = trkdata; /* as default */
-		if (info)
+		if (info != NULL)
 		{
 		    switch(info->dataBaseSubType)
 		    {
@@ -458,13 +487,29 @@ static void ppdb_read(void)
 
 static void ppdb_wr_init(const char *fname)
 {
+	int len;
+
 	fname_out = xstrdup(fname);
 	str_pool_init();
 	fd_out = xfopen(fname, "wb", MYNAME);
+	mkshort_handle = mkshort_new_handle();
+	
+	if (global_opts.synthesize_shortnames != 0)
+	{
+	    if (snlen_opt != NULL)
+		len = atoi(snlen_opt);
+	    else
+		len = 10;
+	    setshort_length(mkshort_handle, len);
+	    setshort_mustupper(mkshort_handle, 1);
+	    setshort_badchars(mkshort_handle, ",");
+	    setshort_whitespace_ok(mkshort_handle, 0);
+	}
 }
 
 static void ppdb_wr_deinit(void)
 {
+	mkshort_del_handle(mkshort_handle);
 	fclose(fd_out);
 	str_pool_deinit();
 	xfree(fname_out);
@@ -480,7 +525,7 @@ static void ppdb_write_wpt(const waypoint *wpt)
 {
 	char *buff, *tmp;
 	char latdir, longdir;
-	int latdeg, longdeg, len;
+	int len;
 	struct pdb_record *rec;
 	static int ct;
 	struct tm tm;
@@ -520,9 +565,17 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	}
 	buff = ppdb_strcat(buff, ",", NULL, &len);
 	
-	tmp = str_pool_getcpy(wpt->shortname, "");
-	while (strchr(tmp, ',') != NULL)
-	    *strchr(tmp, ',') = '.';
+	if (global_opts.synthesize_shortnames != 0)
+	{
+	    tmp = mkshort_from_wpt(mkshort_handle, wpt);
+	    DBG("shortname %s from %s", tmp, wpt->shortname);
+	}
+	else
+	{
+	    tmp = str_pool_getcpy(wpt->shortname, "");
+	    while (strchr(tmp, ',') != NULL)
+		*strchr(tmp, ',') = '.';
+	}
 	buff = ppdb_strcat(buff, tmp, "", &len);
 	
 	buff = ppdb_strcat(buff, ",", NULL, &len);
