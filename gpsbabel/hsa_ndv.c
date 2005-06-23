@@ -388,7 +388,7 @@ void readVersion4( FILE* pFile)
 		long* pts2 = 0;
 
 		int soundArray = FALSE;
-		int numberOfVerticies;
+		int numberOfVerticies = 0;
 		char className[256];
 		char attr[1024];
 		int Vertex;
