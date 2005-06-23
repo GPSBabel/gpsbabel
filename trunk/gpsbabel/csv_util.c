@@ -185,6 +185,17 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
     if (strcmp(delimited_by, "\\w") == 0)
         hyper_whitespace_delimiter = 1;
 
+    /*
+     * This is tacky.  Our "csv" format is actually "commaspace" format.
+     * Changing that causes unwanted churn, but it also makes "real" 
+     * comma separated data (such as likely to be produced by Excel, etc.) 
+     * unreadable.   So we silently change it here on a read and let the
+     * whitespace eater consume the space.
+     */
+    if (strcmp(delimited_by, ", ") == 0) {
+	delimited_by = ",";
+    }
+
     if (!p) {
 	/* first pass thru */
 	p =  stringstart;
