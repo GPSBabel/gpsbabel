@@ -92,11 +92,19 @@ vitosmt_read(void)
 	double			elev			=0;
 	unsigned char*	timestamp		=0;
 	struct tm		tmStruct		={0,0,0,0,0,0,0,0,0};
-	int	iTzoffset		=0;
+	double			seconds			=0.0;
+	double			speed			=0.0;
+	double			heading			=0.0;
+	double			dop				=0.0;
+	unsigned char*	unknown			=0;
+	char			shortname[10]	="\0";
+	char			description[40]	="\0";
+	int				serial			=0;
+	int				iTzoffset		=0;
 
 	/* Compute offset between local time zone and time offset argument */
 	if (arg_tzoffset)	{
-		iTzoffset = get_tz_offset() - (unsigned int) 60*60*atof(arg_tzoffset);
+		iTzoffset = get_tz_offset() - (int)(60*60*atof(arg_tzoffset));
 	}
 
 	/* 
@@ -122,7 +130,11 @@ vitosmt_read(void)
 		lonrad		=ReadDouble(infile);	/* WGS84 longitude in radians */
 		elev		=ReadDouble(infile);	/* elevation in meters */
 		timestamp	=ReadRecord(infile,5);	/* local time */
-		Skip(infile,35);					/* remainder, unknown fmt */
+		seconds		=ReadDouble(infile);	/* seconds */
+		speed		=ReadDouble(infile);    /* possibly ground speed, unknown units*/
+		heading		=ReadDouble(infile);	/* heading in degrees */
+		dop		=ReadDouble(infile);	/* dilution of precision */
+		unknown		=ReadRecord(infile,3); 	/* remainder, unknown fmt */
 
 		wpt_tmp = waypt_new();
 		
@@ -135,11 +147,20 @@ vitosmt_read(void)
 		tmStruct.tm_mday	=timestamp[2];
 		tmStruct.tm_hour	=timestamp[3];
 		tmStruct.tm_min		=timestamp[4];
-		tmStruct.tm_sec 	=0;				
+		tmStruct.tm_sec 	=(int)floor(seconds);
 		tmStruct.tm_isdst	=-1;
 
-		wpt_tmp->creation_time = mktime(&tmStruct) - iTzoffset;
+		wpt_tmp->creation_time = mktime(&tmStruct) + iTzoffset;
+		wpt_tmp->centiseconds = fmod(100*seconds+0.5,100);
+	
+		snprintf(shortname, sizeof shortname-1 , "WP%04d", ++serial);
+		snprintf(description, sizeof description-1, 
+			"Spd=%.1lf Hdg=%03.0lf DoP=%4.1lf Flg=%02x%02x%02x", 
+			speed,heading,dop,unknown[0],unknown[1],unknown[2]);
+		
+		wpt_tmp->shortname = xstrdup(shortname);
 		wpt_tmp->wpt_flags.shortname_is_synthetic = 1;
+		wpt_tmp->notes = xstrdup(description);
 
 		switch (global_opts.objective)
 		{
@@ -161,6 +182,7 @@ vitosmt_read(void)
 		}
 
 		xfree(timestamp);
+		xfree(unknown);
 
 		count--;
 	}
