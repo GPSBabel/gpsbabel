@@ -48,7 +48,7 @@ REM ==================================
 
 
 SET PNAME=.\gpsbabel
-IF NOT EXIST %PNAME% ECHO Can't find %PNAME%&& GOTO :EOF
+IF NOT EXIST %PNAME%.EXE ECHO Can't find %PNAME%&& GOTO :EOF
 
 
 
@@ -1010,7 +1010,7 @@ REM
 
 @echo on
 @echo Testing...
-%PNAME% -i geo -f geocaching.loc  -o tabsep -F - | ${PNAME} -i tabsep -f - -o geo -F %TMPDIR%\tabsep.out
+%PNAME% -i geo -f geocaching.loc  -o tabsep -F - | %PNAME% -i tabsep -f - -o geo -F %TMPDIR%\tabsep.out
 %PNAME% -i geo -f geocaching.loc  -o geo -F %TMPDIR%\geotabsep.out
 @echo off
 @echo.
@@ -1022,7 +1022,7 @@ REM
 CALL :COMPARE %TMPDIR%\tabsep.out %TMPDIR%\geotabsep.out
 @echo on
 @echo Testing...
-%PNAME% -i geo -f geocaching.loc  -o custom -F - | ${PNAME} -i custom -f - -o geo -F %TMPDIR%\custom.out
+%PNAME% -i geo -f geocaching.loc  -o custom -F - | %PNAME% -i custom -f - -o geo -F %TMPDIR%\custom.out
 %PNAME% -i geo -f geocaching.loc  -o geo -F %TMPDIR%\geocustom.out
 @echo off
 @echo.
@@ -1035,4 +1035,64 @@ REM
 %PNAME% -i geo -f geocaching.loc -o text -F %TMPDIR%\text.out -o html -F %TMPDIR%\html.out -o vcard -F %TMPDIR%\vcard.out #-o palmdoc -F %TMPDIR%\pd.out
 @echo off
 @echo.
+
+REM 
+REM TourExchangeFormat tef (read only)
+REM 
+DEL %TMPDIR%\tef_xml*
+@echo on
+@echo Testing...
+%PNAME% -r -i tef -f reference\route\tef_xml.sample.xml -o gpx -F %TMPDIR%\tef_xml.sample.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\tef_xml.sample.gpx.ref %TMPDIR%\tef_xml.sample.gpx.new
+
+REM 
+REM PathAway Palm Database .pdb tests
+REM 
+DEL %TMPDIR%\pathaway*
+@echo on
+@echo Testing...
+%PNAME% -i geo -f geocaching.loc -o pathaway,dbname=pathaway-geo -F %TMPDIR%\pathaway-geo.pdb
+%PNAME% -i pathaway -f %TMPDIR%\pathaway-geo.pdb -o geo -F %TMPDIR%\pathaway-geo.loc
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\pathaway-geo.loc reference\pathaway-geo.loc
+DEL %TMPDIR%\pathaway*
+@echo on
+@echo Testing...
+%PNAME% -t -i pathaway -f reference\track\pathaway.pdb -o gpx -F %TMPDIR%\pathaway.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\pathaway.gpx reference\track\pathaway.gpx
+
+REM 
+REM Vito Navigator II .smt tests
+REM 
+DEL %TMPDIR%\vitosmt*
+@echo on
+@echo Testing...
+%PNAME%    -i vitosmt -f reference\vitosmt.smt -o gpx -F %TMPDIR%\vitosmt.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\vitosmt.gpx reference\vitosmt.gpx
+@echo on
+@echo Testing...
+%PNAME% -t -i vitosmt -f reference\vitosmt.smt -o gpx -F %TMPDIR%\vitosmt_t.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\vitosmt_t.gpx reference\track\vitosmt_t.gpx
+
+REM 
+REM tracks filter tests
+REM 
+
+DEL %TMPDIR%\trackfilter*
+
+@echo on
+@echo Testing...
+%PNAME% -t -i gpx -f reference\track\trackfilter.gpx -x track,pack,split,title=LOG-%%Y%%m%%d -o gpx -F %TMPDIR%\trackfilter-new.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\trackfilter.ref %TMPDIR%\trackfilter.new
 
