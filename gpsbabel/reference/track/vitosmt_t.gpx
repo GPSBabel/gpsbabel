@@ -10,951 +10,1188 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <trkseg>
 <trkpt lat="45.460367" lon="-75.767940">
   <ele>33.700000</ele>
-<time>2005-05-09T23:02:00Z</time>
+<time>2005-05-09T18:02:01Z</time>
+  <desc>Spd=0.0 Hdg=000 DoP=30.6 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.460340" lon="-75.767592">
   <ele>33.700000</ele>
-<time>2005-05-09T23:02:00Z</time>
+<time>2005-05-09T18:02:03Z</time>
+  <desc>Spd=0.0 Hdg=000 DoP=30.6 Flg=0a0703</desc>
 </trkpt>
 <trkpt lat="45.458377" lon="-75.768483">
   <ele>105.400000</ele>
-<time>2005-05-10T00:09:00Z</time>
+<time>2005-05-09T19:09:13Z</time>
+  <desc>Spd=2.8 Hdg=251 DoP=1.4 Flg=200707</desc>
 </trkpt>
 <trkpt lat="45.458293" lon="-75.768567">
   <ele>104.600000</ele>
-<time>2005-05-10T00:09:00Z</time>
+<time>2005-05-09T19:09:23Z</time>
+  <desc>Spd=2.8 Hdg=260 DoP=2.4 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.458298" lon="-75.768702">
   <ele>102.500000</ele>
-<time>2005-05-10T00:09:00Z</time>
+<time>2005-05-09T19:09:44Z</time>
+  <desc>Spd=0.7 Hdg=233 DoP=2.4 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.458267" lon="-75.769022">
   <ele>108.900000</ele>
-<time>2005-05-10T00:10:00Z</time>
+<time>2005-05-09T19:10:04Z</time>
+  <desc>Spd=2.1 Hdg=297 DoP=2.2 Flg=200706</desc>
 </trkpt>
 <trkpt lat="45.458205" lon="-75.770038">
   <ele>108.400000</ele>
-<time>2005-05-10T00:11:00Z</time>
+<time>2005-05-09T19:11:22Z</time>
+  <desc>Spd=2.3 Hdg=290 DoP=1.0 Flg=200709</desc>
 </trkpt>
 <trkpt lat="45.458275" lon="-75.770527">
   <ele>110.600000</ele>
-<time>2005-05-10T00:11:00Z</time>
+<time>2005-05-09T19:11:50Z</time>
+  <desc>Spd=2.2 Hdg=031 DoP=1.4 Flg=200708</desc>
 </trkpt>
 <trkpt lat="45.458353" lon="-75.770482">
   <ele>106.200000</ele>
-<time>2005-05-10T00:14:00Z</time>
+<time>2005-05-09T19:14:00Z</time>
+  <desc>Spd=0.4 Hdg=033 DoP=1.0 Flg=22070a</desc>
 </trkpt>
 <trkpt lat="45.492472" lon="-75.717700">
   <ele>34.100000</ele>
-<time>2005-05-10T01:36:00Z</time>
+<time>2005-05-09T20:36:00Z</time>
+  <desc>Spd=0.0 Hdg=000 DoP=7.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.492507" lon="-75.717637">
   <ele>-22.300000</ele>
-<time>2005-06-04T01:36:00Z</time>
+<time>2005-06-03T20:36:06Z</time>
+  <desc>Spd=2.9 Hdg=151 DoP=2.6 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.492283" lon="-75.717695">
   <ele>-34.800000</ele>
-<time>2005-06-04T01:36:00Z</time>
+<time>2005-06-03T20:36:08Z</time>
+  <desc>Spd=3.0 Hdg=141 DoP=3.4 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.492397" lon="-75.717685">
   <ele>-28.700000</ele>
-<time>2005-06-04T01:36:00Z</time>
+<time>2005-06-03T20:36:09Z</time>
+  <desc>Spd=2.6 Hdg=166 DoP=2.6 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.492382" lon="-75.717587">
   <ele>-21.000000</ele>
-<time>2005-06-04T01:36:00Z</time>
+<time>2005-06-03T20:36:17Z</time>
+  <desc>Spd=1.4 Hdg=166 DoP=3.8 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.492295" lon="-75.717593">
   <ele>-25.300000</ele>
-<time>2005-06-04T01:36:00Z</time>
+<time>2005-06-03T20:36:31Z</time>
+  <desc>Spd=2.9 Hdg=114 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.491945" lon="-75.717475">
   <ele>43.400000</ele>
-<time>2005-06-04T01:36:00Z</time>
+<time>2005-06-03T20:36:45Z</time>
+  <desc>Spd=3.0 Hdg=079 DoP=3.8 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.491938" lon="-75.717353">
   <ele>39.300000</ele>
-<time>2005-06-04T01:36:00Z</time>
+<time>2005-06-03T20:36:51Z</time>
+  <desc>Spd=2.7 Hdg=065 DoP=1.6 Flg=200706</desc>
 </trkpt>
 <trkpt lat="45.491970" lon="-75.717238">
   <ele>48.300000</ele>
-<time>2005-06-04T01:36:00Z</time>
+<time>2005-06-03T20:36:58Z</time>
+  <desc>Spd=2.5 Hdg=087 DoP=1.6 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.491995" lon="-75.717095">
   <ele>44.500000</ele>
-<time>2005-06-04T01:37:00Z</time>
+<time>2005-06-03T20:37:07Z</time>
+  <desc>Spd=2.9 Hdg=088 DoP=1.6 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.491997" lon="-75.716915">
   <ele>39.900000</ele>
-<time>2005-06-04T01:37:00Z</time>
+<time>2005-06-03T20:37:18Z</time>
+  <desc>Spd=3.0 Hdg=068 DoP=2.6 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.492020" lon="-75.716782">
   <ele>23.600000</ele>
-<time>2005-06-04T01:37:00Z</time>
+<time>2005-06-03T20:37:26Z</time>
+  <desc>Spd=0.3 Hdg=140 DoP=2.6 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.492072" lon="-75.716738">
   <ele>46.700000</ele>
-<time>2005-06-04T01:37:00Z</time>
+<time>2005-06-03T20:37:46Z</time>
+  <desc>Spd=0.4 Hdg=115 DoP=4.0 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.492072" lon="-75.716737">
   <ele>61.300000</ele>
-<time>2005-06-04T01:37:00Z</time>
+<time>2005-06-03T20:37:52Z</time>
+  <desc>Spd=0.3 Hdg=129 DoP=1.6 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.492097" lon="-75.716737">
   <ele>74.600000</ele>
-<time>2005-06-04T01:38:00Z</time>
+<time>2005-06-03T20:38:16Z</time>
+  <desc>Spd=0.5 Hdg=001 DoP=4.0 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.492100" lon="-75.716730">
   <ele>63.600000</ele>
-<time>2005-06-04T01:38:00Z</time>
+<time>2005-06-03T20:38:50Z</time>
+  <desc>Spd=0.3 Hdg=214 DoP=2.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.492722" lon="-75.718442">
   <ele>83.600000</ele>
-<time>2005-06-04T01:55:00Z</time>
+<time>2005-06-03T20:55:06Z</time>
+  <desc>Spd=0.4 Hdg=156 DoP=5.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.492657" lon="-75.718410">
   <ele>76.200000</ele>
-<time>2005-06-04T01:55:00Z</time>
+<time>2005-06-03T20:55:14Z</time>
+  <desc>Spd=0.2 Hdg=137 DoP=5.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.492592" lon="-75.718313">
   <ele>76.300000</ele>
-<time>2005-06-04T01:57:00Z</time>
+<time>2005-06-03T20:57:31Z</time>
+  <desc>Spd=0.2 Hdg=151 DoP=10.6 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.492568" lon="-75.718310">
   <ele>59.800000</ele>
-<time>2005-06-04T01:57:00Z</time>
+<time>2005-06-03T20:57:54Z</time>
+  <desc>Spd=0.0 Hdg=000 DoP=5.2 Flg=120704</desc>
 </trkpt>
 <trkpt lat="45.492315" lon="-75.718340">
   <ele>34.300000</ele>
-<time>2005-06-05T03:06:00Z</time>
+<time>2005-06-04T22:06:26Z</time>
+  <desc>Spd=0.0 Hdg=000 DoP=25.4 Flg=0a0703</desc>
 </trkpt>
 <trkpt lat="45.491910" lon="-75.718325">
   <ele>34.300000</ele>
-<time>2005-06-05T03:14:00Z</time>
+<time>2005-06-04T22:14:32Z</time>
+  <desc>Spd=0.0 Hdg=000 DoP=28.2 Flg=0a0703</desc>
 </trkpt>
 <trkpt lat="45.492207" lon="-75.718415">
   <ele>34.300000</ele>
-<time>2005-06-05T03:14:00Z</time>
+<time>2005-06-04T22:14:43Z</time>
+  <desc>Spd=0.1 Hdg=157 DoP=28.2 Flg=0a0703</desc>
 </trkpt>
 <trkpt lat="45.492690" lon="-75.718360">
   <ele>70.800000</ele>
-<time>2005-06-05T03:15:00Z</time>
+<time>2005-06-04T22:15:39Z</time>
+  <desc>Spd=0.2 Hdg=032 DoP=1.8 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.492692" lon="-75.718408">
   <ele>61.200000</ele>
-<time>2005-06-05T03:16:00Z</time>
+<time>2005-06-04T22:16:38Z</time>
+  <desc>Spd=2.0 Hdg=161 DoP=2.0 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.492602" lon="-75.718438">
   <ele>62.400000</ele>
-<time>2005-06-05T03:17:00Z</time>
+<time>2005-06-04T22:17:21Z</time>
+  <desc>Spd=0.2 Hdg=163 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.492480" lon="-75.718403">
   <ele>54.200000</ele>
-<time>2005-06-05T03:22:00Z</time>
+<time>2005-06-04T22:22:58Z</time>
+  <desc>Spd=0.8 Hdg=067 DoP=6.8 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.492567" lon="-75.718340">
   <ele>57.000000</ele>
-<time>2005-06-05T03:25:00Z</time>
+<time>2005-06-04T22:25:52Z</time>
+  <desc>Spd=0.0 Hdg=000 DoP=19.4 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.492343" lon="-75.722332">
   <ele>0.000000</ele>
-<time>2005-06-05T03:39:00Z</time>
+<time>2005-06-04T22:39:14Z</time>
+  <desc>Spd=0.0 Hdg=000 DoP=24.7 Flg=140004</desc>
 </trkpt>
 <trkpt lat="45.492315" lon="-75.722923">
   <ele>57.600000</ele>
-<time>2005-06-05T03:39:00Z</time>
+<time>2005-06-04T22:39:18Z</time>
+  <desc>Spd=0.0 Hdg=000 DoP=17.8 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.492370" lon="-75.722587">
   <ele>74.800000</ele>
-<time>2005-06-05T03:39:00Z</time>
+<time>2005-06-04T22:39:19Z</time>
+  <desc>Spd=0.2 Hdg=051 DoP=1.0 Flg=220707</desc>
 </trkpt>
 <trkpt lat="45.493597" lon="-75.728018">
   <ele>95.100000</ele>
-<time>2005-06-05T03:44:00Z</time>
+<time>2005-06-04T22:44:29Z</time>
+  <desc>Spd=0.2 Hdg=023 DoP=1.6 Flg=220705</desc>
 </trkpt>
 <trkpt lat="45.492388" lon="-75.731492">
   <ele>69.100000</ele>
-<time>2005-06-05T03:50:00Z</time>
+<time>2005-06-04T22:50:38Z</time>
+  <desc>Spd=2.4 Hdg=273 DoP=1.0 Flg=200707</desc>
 </trkpt>
 <trkpt lat="45.492380" lon="-75.731640">
   <ele>71.300000</ele>
-<time>2005-06-05T03:52:00Z</time>
+<time>2005-06-04T22:52:35Z</time>
+  <desc>Spd=2.3 Hdg=304 DoP=1.0 Flg=200707</desc>
 </trkpt>
 <trkpt lat="45.492420" lon="-75.731755">
   <ele>71.300000</ele>
-<time>2005-06-05T03:52:00Z</time>
+<time>2005-06-04T22:52:43Z</time>
+  <desc>Spd=2.6 Hdg=322 DoP=1.4 Flg=200706</desc>
 </trkpt>
 <trkpt lat="45.492678" lon="-75.732137">
   <ele>71.300000</ele>
-<time>2005-06-05T03:53:00Z</time>
+<time>2005-06-04T22:53:15Z</time>
+  <desc>Spd=1.7 Hdg=346 DoP=1.4 Flg=200706</desc>
 </trkpt>
 <trkpt lat="45.492765" lon="-75.732182">
   <ele>70.700000</ele>
-<time>2005-06-05T03:53:00Z</time>
+<time>2005-06-04T22:53:25Z</time>
+  <desc>Spd=0.1 Hdg=032 DoP=1.4 Flg=220706</desc>
 </trkpt>
 <trkpt lat="45.493057" lon="-75.734448">
   <ele>68.400000</ele>
-<time>2005-06-05T03:56:00Z</time>
+<time>2005-06-04T22:56:24Z</time>
+  <desc>Spd=1.6 Hdg=125 DoP=1.2 Flg=200706</desc>
 </trkpt>
 <trkpt lat="45.492985" lon="-75.734377">
   <ele>72.900000</ele>
-<time>2005-06-05T03:56:00Z</time>
+<time>2005-06-04T22:56:54Z</time>
+  <desc>Spd=2.5 Hdg=302 DoP=1.2 Flg=200706</desc>
 </trkpt>
 <trkpt lat="45.493048" lon="-75.734485">
   <ele>71.400000</ele>
-<time>2005-06-05T03:57:00Z</time>
+<time>2005-06-04T22:57:12Z</time>
+  <desc>Spd=0.9 Hdg=313 DoP=1.0 Flg=200707</desc>
 </trkpt>
 <trkpt lat="45.493248" lon="-75.734873">
   <ele>71.200000</ele>
-<time>2005-06-05T03:57:00Z</time>
+<time>2005-06-04T22:57:43Z</time>
+  <desc>Spd=0.1 Hdg=055 DoP=1.0 Flg=200708</desc>
 </trkpt>
 <trkpt lat="45.493512" lon="-75.735343">
   <ele>71.600000</ele>
-<time>2005-06-05T03:58:00Z</time>
+<time>2005-06-04T22:58:26Z</time>
+  <desc>Spd=3.5 Hdg=338 DoP=1.4 Flg=200707</desc>
 </trkpt>
 <trkpt lat="45.494090" lon="-75.736122">
   <ele>71.000000</ele>
-<time>2005-06-04T04:00:00Z</time>
+<time>2005-06-03T23:00:00Z</time>
+  <desc>Spd=1.2 Hdg=300 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.494092" lon="-75.736255">
   <ele>72.100000</ele>
-<time>2005-06-05T04:00:00Z</time>
+<time>2005-06-04T23:00:11Z</time>
+  <desc>Spd=2.1 Hdg=306 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.494157" lon="-75.736352">
   <ele>72.700000</ele>
-<time>2005-06-05T04:00:00Z</time>
+<time>2005-06-04T23:00:20Z</time>
+  <desc>Spd=1.9 Hdg=285 DoP=6.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.494317" lon="-75.736707">
   <ele>72.200000</ele>
-<time>2005-06-05T04:00:00Z</time>
+<time>2005-06-04T23:00:48Z</time>
+  <desc>Spd=1.3 Hdg=311 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.494327" lon="-75.736840">
   <ele>72.500000</ele>
-<time>2005-06-05T04:00:00Z</time>
+<time>2005-06-04T23:00:59Z</time>
+  <desc>Spd=1.0 Hdg=209 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.494348" lon="-75.737105">
   <ele>73.000000</ele>
-<time>2005-06-05T04:01:00Z</time>
+<time>2005-06-04T23:01:09Z</time>
+  <desc>Spd=3.1 Hdg=293 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.494412" lon="-75.737268">
   <ele>73.300000</ele>
-<time>2005-06-05T04:01:00Z</time>
+<time>2005-06-04T23:01:44Z</time>
+  <desc>Spd=2.7 Hdg=348 DoP=19.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.494488" lon="-75.737228">
   <ele>78.100000</ele>
-<time>2005-06-05T04:01:00Z</time>
+<time>2005-06-04T23:01:58Z</time>
+  <desc>Spd=2.6 Hdg=358 DoP=6.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.494713" lon="-75.737163">
   <ele>77.000000</ele>
-<time>2005-06-05T04:02:00Z</time>
+<time>2005-06-04T23:02:16Z</time>
+  <desc>Spd=1.8 Hdg=341 DoP=4.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.494818" lon="-75.737188">
   <ele>75.500000</ele>
-<time>2005-06-05T04:02:00Z</time>
+<time>2005-06-04T23:02:25Z</time>
+  <desc>Spd=0.4 Hdg=012 DoP=4.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495012" lon="-75.737183">
   <ele>71.000000</ele>
-<time>2005-06-05T04:02:00Z</time>
+<time>2005-06-04T23:02:42Z</time>
+  <desc>Spd=1.6 Hdg=026 DoP=12.4 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495255" lon="-75.737172">
   <ele>75.800000</ele>
-<time>2005-06-05T04:03:00Z</time>
+<time>2005-06-04T23:03:21Z</time>
+  <desc>Spd=2.3 Hdg=038 DoP=4.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495355" lon="-75.737115">
   <ele>72.600000</ele>
-<time>2005-06-05T04:03:00Z</time>
+<time>2005-06-04T23:03:31Z</time>
+  <desc>Spd=3.0 Hdg=049 DoP=1.6 Flg=200706</desc>
 </trkpt>
 <trkpt lat="45.495582" lon="-75.736875">
   <ele>70.300000</ele>
-<time>2005-06-05T04:03:00Z</time>
+<time>2005-06-04T23:03:53Z</time>
+  <desc>Spd=2.1 Hdg=027 DoP=2.8 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.495922" lon="-75.736510">
   <ele>74.600000</ele>
-<time>2005-06-05T04:04:00Z</time>
+<time>2005-06-04T23:04:31Z</time>
+  <desc>Spd=1.6 Hdg=201 DoP=1.8 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.495845" lon="-75.736588">
   <ele>76.300000</ele>
-<time>2005-06-05T04:05:00Z</time>
+<time>2005-06-04T23:05:05Z</time>
+  <desc>Spd=0.9 Hdg=117 DoP=1.6 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.495877" lon="-75.736472">
   <ele>72.100000</ele>
-<time>2005-06-05T04:05:00Z</time>
+<time>2005-06-04T23:05:45Z</time>
+  <desc>Spd=0.3 Hdg=130 DoP=5.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495917" lon="-75.736537">
   <ele>80.900000</ele>
-<time>2005-06-05T04:06:00Z</time>
+<time>2005-06-04T23:06:19Z</time>
+  <desc>Spd=0.6 Hdg=129 DoP=4.0 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495867" lon="-75.736522">
   <ele>89.500000</ele>
-<time>2005-06-05T04:06:00Z</time>
+<time>2005-06-04T23:06:25Z</time>
+  <desc>Spd=0.1 Hdg=088 DoP=4.0 Flg=120704</desc>
 </trkpt>
 <trkpt lat="45.496203" lon="-75.734848">
   <ele>102.100000</ele>
-<time>2005-06-05T04:37:00Z</time>
+<time>2005-06-04T23:37:53Z</time>
+  <desc>Spd=0.2 Hdg=165 DoP=2.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.496083" lon="-75.734842">
   <ele>102.800000</ele>
-<time>2005-06-11T04:38:00Z</time>
+<time>2005-06-10T23:38:21Z</time>
+  <desc>Spd=0.8 Hdg=244 DoP=13.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496110" lon="-75.734755">
   <ele>94.100000</ele>
-<time>2005-06-11T04:38:00Z</time>
+<time>2005-06-10T23:38:55Z</time>
+  <desc>Spd=1.6 Hdg=087 DoP=1.6 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.496300" lon="-75.734380">
   <ele>93.300000</ele>
-<time>2005-06-11T04:39:00Z</time>
+<time>2005-06-10T23:39:44Z</time>
+  <desc>Spd=0.2 Hdg=216 DoP=1.6 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.496260" lon="-75.734368">
   <ele>83.800000</ele>
-<time>2005-06-11T04:40:00Z</time>
+<time>2005-06-10T23:40:44Z</time>
+  <desc>Spd=2.3 Hdg=251 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.496205" lon="-75.734475">
   <ele>85.100000</ele>
-<time>2005-06-11T04:41:00Z</time>
+<time>2005-06-10T23:41:04Z</time>
+  <desc>Spd=3.2 Hdg=239 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.496192" lon="-75.734615">
   <ele>85.600000</ele>
-<time>2005-06-11T04:41:00Z</time>
+<time>2005-06-10T23:41:11Z</time>
+  <desc>Spd=3.3 Hdg=235 DoP=16.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496135" lon="-75.734768">
   <ele>85.900000</ele>
-<time>2005-06-11T04:41:00Z</time>
+<time>2005-06-10T23:41:19Z</time>
+  <desc>Spd=2.6 Hdg=248 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.496108" lon="-75.734912">
   <ele>85.200000</ele>
-<time>2005-06-11T04:41:00Z</time>
+<time>2005-06-10T23:41:27Z</time>
+  <desc>Spd=1.9 Hdg=260 DoP=2.4 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.496045" lon="-75.735080">
   <ele>87.100000</ele>
-<time>2005-06-11T04:41:00Z</time>
+<time>2005-06-10T23:41:43Z</time>
+  <desc>Spd=2.5 Hdg=216 DoP=3.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495993" lon="-75.735167">
   <ele>82.300000</ele>
-<time>2005-06-11T04:41:00Z</time>
+<time>2005-06-10T23:41:51Z</time>
+  <desc>Spd=2.1 Hdg=239 DoP=1.2 Flg=200706</desc>
 </trkpt>
 <trkpt lat="45.495932" lon="-75.735277">
   <ele>78.800000</ele>
-<time>2005-06-11T04:42:00Z</time>
+<time>2005-06-10T23:42:00Z</time>
+  <desc>Spd=1.9 Hdg=236 DoP=2.4 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495875" lon="-75.735440">
   <ele>75.500000</ele>
-<time>2005-06-11T04:42:00Z</time>
+<time>2005-06-10T23:42:14Z</time>
+  <desc>Spd=1.9 Hdg=228 DoP=1.4 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.495827" lon="-75.735562">
   <ele>74.100000</ele>
-<time>2005-06-11T04:42:00Z</time>
+<time>2005-06-10T23:42:25Z</time>
+  <desc>Spd=2.2 Hdg=323 DoP=2.0 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495858" lon="-75.735690">
   <ele>72.500000</ele>
-<time>2005-06-11T04:42:00Z</time>
+<time>2005-06-10T23:42:50Z</time>
+  <desc>Spd=0.9 Hdg=333 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.495932" lon="-75.735780">
   <ele>74.000000</ele>
-<time>2005-06-11T04:43:00Z</time>
+<time>2005-06-10T23:43:01Z</time>
+  <desc>Spd=2.5 Hdg=154 DoP=40.6 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495900" lon="-75.735658">
   <ele>74.700000</ele>
-<time>2005-06-11T04:43:00Z</time>
+<time>2005-06-10T23:43:09Z</time>
+  <desc>Spd=2.4 Hdg=198 DoP=2.0 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495808" lon="-75.735613">
   <ele>72.300000</ele>
-<time>2005-06-11T04:43:00Z</time>
+<time>2005-06-10T23:43:38Z</time>
+  <desc>Spd=0.7 Hdg=194 DoP=0.0 Flg=000700</desc>
 </trkpt>
 <trkpt lat="45.495712" lon="-75.735600">
   <ele>72.200000</ele>
-<time>2005-06-11T04:44:00Z</time>
+<time>2005-06-10T23:44:05Z</time>
+  <desc>Spd=1.5 Hdg=237 DoP=0.0 Flg=000700</desc>
 </trkpt>
 <trkpt lat="45.495680" lon="-75.735725">
   <ele>73.000000</ele>
-<time>2005-06-11T04:44:00Z</time>
+<time>2005-06-10T23:44:11Z</time>
+  <desc>Spd=1.7 Hdg=272 DoP=38.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495652" lon="-75.735860">
   <ele>74.400000</ele>
-<time>2005-06-11T04:44:00Z</time>
+<time>2005-06-10T23:44:23Z</time>
+  <desc>Spd=0.3 Hdg=215 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.495757" lon="-75.735825">
   <ele>81.200000</ele>
-<time>2005-06-11T04:44:00Z</time>
+<time>2005-06-10T23:44:43Z</time>
+  <desc>Spd=0.4 Hdg=209 DoP=37.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495728" lon="-75.735802">
   <ele>70.100000</ele>
-<time>2005-06-11T04:44:00Z</time>
+<time>2005-06-10T23:44:47Z</time>
+  <desc>Spd=1.3 Hdg=257 DoP=9.4 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495708" lon="-75.735912">
   <ele>64.400000</ele>
-<time>2005-06-11T04:45:00Z</time>
+<time>2005-06-10T23:45:02Z</time>
+  <desc>Spd=1.6 Hdg=295 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.495683" lon="-75.736065">
   <ele>64.000000</ele>
-<time>2005-06-11T04:45:00Z</time>
+<time>2005-06-10T23:45:35Z</time>
+  <desc>Spd=1.2 Hdg=175 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.495585" lon="-75.736138">
   <ele>64.600000</ele>
-<time>2005-06-11T04:46:00Z</time>
+<time>2005-06-10T23:46:07Z</time>
+  <desc>Spd=1.4 Hdg=122 DoP=23.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495652" lon="-75.736043">
   <ele>67.300000</ele>
-<time>2005-06-11T04:46:00Z</time>
+<time>2005-06-10T23:46:36Z</time>
+  <desc>Spd=0.3 Hdg=190 DoP=5.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495692" lon="-75.735940">
   <ele>71.400000</ele>
-<time>2005-06-11T04:48:00Z</time>
+<time>2005-06-10T23:48:44Z</time>
+  <desc>Spd=0.2 Hdg=183 DoP=43.6 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495707" lon="-75.736067">
   <ele>71.700000</ele>
-<time>2005-06-11T04:49:00Z</time>
+<time>2005-06-10T23:49:14Z</time>
+  <desc>Spd=0.3 Hdg=052 DoP=24.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495733" lon="-75.735925">
   <ele>72.300000</ele>
-<time>2005-06-11T04:51:00Z</time>
+<time>2005-06-10T23:51:19Z</time>
+  <desc>Spd=0.2 Hdg=156 DoP=2.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495667" lon="-75.735997">
   <ele>81.200000</ele>
-<time>2005-06-11T04:51:00Z</time>
+<time>2005-06-10T23:51:31Z</time>
+  <desc>Spd=2.2 Hdg=098 DoP=36.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495647" lon="-75.735903">
   <ele>74.500000</ele>
-<time>2005-06-11T04:51:00Z</time>
+<time>2005-06-10T23:51:43Z</time>
+  <desc>Spd=3.2 Hdg=051 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.495690" lon="-75.735705">
   <ele>74.700000</ele>
-<time>2005-06-11T04:51:00Z</time>
+<time>2005-06-10T23:51:53Z</time>
+  <desc>Spd=2.6 Hdg=044 DoP=13.6 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495770" lon="-75.735520">
   <ele>76.200000</ele>
-<time>2005-06-11T04:52:00Z</time>
+<time>2005-06-10T23:52:08Z</time>
+  <desc>Spd=1.4 Hdg=082 DoP=50.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495858" lon="-75.735480">
   <ele>77.900000</ele>
-<time>2005-06-11T04:52:00Z</time>
+<time>2005-06-10T23:52:19Z</time>
+  <desc>Spd=1.5 Hdg=080 DoP=26.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495915" lon="-75.735378">
   <ele>78.600000</ele>
-<time>2005-06-11T04:52:00Z</time>
+<time>2005-06-10T23:52:27Z</time>
+  <desc>Spd=3.4 Hdg=048 DoP=50.0 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495992" lon="-75.735235">
   <ele>80.700000</ele>
-<time>2005-06-11T04:52:00Z</time>
+<time>2005-06-10T23:52:37Z</time>
+  <desc>Spd=2.2 Hdg=062 DoP=1.6 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.496077" lon="-75.735043">
   <ele>84.400000</ele>
-<time>2005-06-11T04:52:00Z</time>
+<time>2005-06-10T23:52:54Z</time>
+  <desc>Spd=2.8 Hdg=060 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.496215" lon="-75.734635">
   <ele>92.600000</ele>
-<time>2005-06-11T04:53:00Z</time>
+<time>2005-06-10T23:53:33Z</time>
+  <desc>Spd=2.5 Hdg=058 DoP=2.0 Flg=200705</desc>
 </trkpt>
 <trkpt lat="45.496243" lon="-75.734477">
   <ele>95.800000</ele>
-<time>2005-06-11T04:53:00Z</time>
+<time>2005-06-10T23:53:43Z</time>
+  <desc>Spd=2.7 Hdg=056 DoP=5.0 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.496327" lon="-75.734337">
   <ele>94.700000</ele>
-<time>2005-06-11T04:53:00Z</time>
+<time>2005-06-10T23:53:53Z</time>
+  <desc>Spd=2.5 Hdg=028 DoP=0.8 Flg=220707</desc>
 </trkpt>
 <trkpt lat="45.496198" lon="-75.734217">
   <ele>59.200000</ele>
-<time>2005-06-11T18:39:00Z</time>
+<time>2005-06-11T13:39:26Z</time>
+  <desc>Spd=1.9 Hdg=245 DoP=9.4 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.496180" lon="-75.734338">
   <ele>55.200000</ele>
-<time>2005-06-12T18:39:00Z</time>
+<time>2005-06-12T13:39:42Z</time>
+  <desc>Spd=3.0 Hdg=240 DoP=6.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496082" lon="-75.734657">
   <ele>56.100000</ele>
-<time>2005-06-12T18:40:00Z</time>
+<time>2005-06-12T13:40:08Z</time>
+  <desc>Spd=2.5 Hdg=239 DoP=7.6 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495997" lon="-75.734782">
   <ele>54.500000</ele>
-<time>2005-06-12T18:40:00Z</time>
+<time>2005-06-12T13:40:16Z</time>
+  <desc>Spd=2.3 Hdg=243 DoP=11.8 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495907" lon="-75.734983">
   <ele>48.700000</ele>
-<time>2005-06-12T18:40:00Z</time>
+<time>2005-06-12T13:40:33Z</time>
+  <desc>Spd=2.0 Hdg=237 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.495802" lon="-75.735363">
   <ele>43.700000</ele>
-<time>2005-06-12T18:41:00Z</time>
+<time>2005-06-12T13:41:02Z</time>
+  <desc>Spd=3.3 Hdg=262 DoP=7.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495802" lon="-75.735515">
   <ele>45.100000</ele>
-<time>2005-06-12T18:41:00Z</time>
+<time>2005-06-12T13:41:16Z</time>
+  <desc>Spd=2.5 Hdg=299 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.495833" lon="-75.735655">
   <ele>44.600000</ele>
-<time>2005-06-12T18:41:00Z</time>
+<time>2005-06-12T13:41:24Z</time>
+  <desc>Spd=2.3 Hdg=314 DoP=16.6 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495915" lon="-75.735727">
   <ele>44.100000</ele>
-<time>2005-06-12T18:41:00Z</time>
+<time>2005-06-12T13:41:31Z</time>
+  <desc>Spd=2.6 Hdg=331 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.495957" lon="-75.735840">
   <ele>43.000000</ele>
-<time>2005-06-12T18:41:00Z</time>
+<time>2005-06-12T13:41:40Z</time>
+  <desc>Spd=2.3 Hdg=335 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.496037" lon="-75.735908">
   <ele>42.000000</ele>
-<time>2005-06-12T18:41:00Z</time>
+<time>2005-06-12T13:41:48Z</time>
+  <desc>Spd=3.3 Hdg=341 DoP=7.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496152" lon="-75.735972">
   <ele>41.400000</ele>
-<time>2005-06-12T18:41:00Z</time>
+<time>2005-06-12T13:41:55Z</time>
+  <desc>Spd=3.1 Hdg=002 DoP=6.8 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496328" lon="-75.735998">
   <ele>41.600000</ele>
-<time>2005-06-12T18:42:00Z</time>
+<time>2005-06-12T13:42:05Z</time>
+  <desc>Spd=2.1 Hdg=018 DoP=6.8 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496432" lon="-75.735963">
   <ele>41.600000</ele>
-<time>2005-06-12T18:42:00Z</time>
+<time>2005-06-12T13:42:14Z</time>
+  <desc>Spd=2.5 Hdg=011 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.496608" lon="-75.735875">
   <ele>41.600000</ele>
-<time>2005-06-12T18:42:00Z</time>
+<time>2005-06-12T13:42:31Z</time>
+  <desc>Spd=1.5 Hdg=333 DoP=7.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496763" lon="-75.735828">
   <ele>41.600000</ele>
-<time>2005-06-12T18:42:00Z</time>
+<time>2005-06-12T13:42:44Z</time>
+  <desc>Spd=2.2 Hdg=348 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.496855" lon="-75.735887">
   <ele>41.600000</ele>
-<time>2005-06-12T18:42:00Z</time>
+<time>2005-06-12T13:42:50Z</time>
+  <desc>Spd=2.1 Hdg=335 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.496997" lon="-75.735932">
   <ele>41.600000</ele>
-<time>2005-06-12T18:43:00Z</time>
+<time>2005-06-12T13:43:03Z</time>
+  <desc>Spd=3.4 Hdg=357 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.497082" lon="-75.735890">
   <ele>41.600000</ele>
-<time>2005-06-12T18:43:00Z</time>
+<time>2005-06-12T13:43:06Z</time>
+  <desc>Spd=1.9 Hdg=345 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.497165" lon="-75.735838">
   <ele>41.600000</ele>
-<time>2005-06-12T18:43:00Z</time>
+<time>2005-06-12T13:43:15Z</time>
+  <desc>Spd=2.4 Hdg=069 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.497230" lon="-75.735720">
   <ele>41.600000</ele>
-<time>2005-06-12T18:43:00Z</time>
+<time>2005-06-12T13:43:24Z</time>
+  <desc>Spd=2.9 Hdg=083 DoP=7.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497303" lon="-75.735568">
   <ele>41.700000</ele>
-<time>2005-06-12T18:43:00Z</time>
+<time>2005-06-12T13:43:34Z</time>
+  <desc>Spd=3.0 Hdg=093 DoP=33.8 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.497302" lon="-75.735440">
   <ele>41.700000</ele>
-<time>2005-06-12T18:43:00Z</time>
+<time>2005-06-12T13:43:41Z</time>
+  <desc>Spd=3.6 Hdg=105 DoP=6.8 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497318" lon="-75.735193">
   <ele>41.800000</ele>
-<time>2005-06-12T18:43:00Z</time>
+<time>2005-06-12T13:43:54Z</time>
+  <desc>Spd=2.7 Hdg=064 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.497330" lon="-75.734973">
   <ele>42.300000</ele>
-<time>2005-06-12T18:44:00Z</time>
+<time>2005-06-12T13:44:06Z</time>
+  <desc>Spd=3.4 Hdg=068 DoP=21.8 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.497465" lon="-75.733798">
   <ele>45.200000</ele>
-<time>2005-06-12T18:44:00Z</time>
+<time>2005-06-12T13:44:53Z</time>
+  <desc>Spd=2.6 Hdg=108 DoP=7.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497520" lon="-75.733038">
   <ele>46.700000</ele>
-<time>2005-06-12T18:45:00Z</time>
+<time>2005-06-12T13:45:30Z</time>
+  <desc>Spd=2.4 Hdg=105 DoP=8.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497475" lon="-75.732808">
   <ele>47.400000</ele>
-<time>2005-06-12T18:45:00Z</time>
+<time>2005-06-12T13:45:44Z</time>
+  <desc>Spd=2.0 Hdg=261 DoP=8.6 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497467" lon="-75.732938">
   <ele>48.300000</ele>
-<time>2005-06-12T18:45:00Z</time>
+<time>2005-06-12T13:45:55Z</time>
+  <desc>Spd=2.7 Hdg=275 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.497507" lon="-75.733147">
   <ele>49.000000</ele>
-<time>2005-06-12T18:46:00Z</time>
+<time>2005-06-12T13:46:07Z</time>
+  <desc>Spd=1.6 Hdg=252 DoP=0.0 Flg=000700</desc>
 </trkpt>
 <trkpt lat="45.497500" lon="-75.733362">
   <ele>49.400000</ele>
-<time>2005-06-12T18:46:00Z</time>
+<time>2005-06-12T13:46:22Z</time>
+  <desc>Spd=1.0 Hdg=175 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.497463" lon="-75.733512">
   <ele>49.900000</ele>
-<time>2005-06-12T18:46:00Z</time>
+<time>2005-06-12T13:46:37Z</time>
+  <desc>Spd=1.6 Hdg=224 DoP=8.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.497483" lon="-75.733637">
   <ele>49.500000</ele>
-<time>2005-06-12T18:47:00Z</time>
+<time>2005-06-12T13:47:06Z</time>
+  <desc>Spd=2.4 Hdg=255 DoP=6.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497467" lon="-75.733898">
   <ele>55.000000</ele>
-<time>2005-06-12T18:47:00Z</time>
+<time>2005-06-12T13:47:31Z</time>
+  <desc>Spd=2.1 Hdg=267 DoP=9.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497472" lon="-75.734047">
   <ele>56.600000</ele>
-<time>2005-06-12T18:47:00Z</time>
+<time>2005-06-12T13:47:40Z</time>
+  <desc>Spd=1.5 Hdg=159 DoP=5.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497383" lon="-75.734077">
   <ele>56.100000</ele>
-<time>2005-06-12T18:48:00Z</time>
+<time>2005-06-12T13:48:17Z</time>
+  <desc>Spd=2.2 Hdg=233 DoP=10.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497270" lon="-75.734148">
   <ele>56.700000</ele>
-<time>2005-06-12T18:48:00Z</time>
+<time>2005-06-12T13:48:37Z</time>
+  <desc>Spd=0.3 Hdg=150 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.497242" lon="-75.734263">
   <ele>70.600000</ele>
-<time>2005-06-12T18:49:00Z</time>
+<time>2005-06-12T13:49:04Z</time>
+  <desc>Spd=1.8 Hdg=155 DoP=5.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.497160" lon="-75.734243">
   <ele>75.600000</ele>
-<time>2005-06-12T18:49:00Z</time>
+<time>2005-06-12T13:49:14Z</time>
+  <desc>Spd=1.1 Hdg=137 DoP=5.0 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.497067" lon="-75.734217">
   <ele>76.100000</ele>
-<time>2005-06-12T18:49:00Z</time>
+<time>2005-06-12T13:49:29Z</time>
+  <desc>Spd=0.4 Hdg=357 DoP=10.6 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496982" lon="-75.734177">
   <ele>77.400000</ele>
-<time>2005-06-12T18:49:00Z</time>
+<time>2005-06-12T13:49:49Z</time>
+  <desc>Spd=1.8 Hdg=233 DoP=6.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497002" lon="-75.734270">
   <ele>84.500000</ele>
-<time>2005-06-12T18:50:00Z</time>
+<time>2005-06-12T13:50:10Z</time>
+  <desc>Spd=2.1 Hdg=066 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.497057" lon="-75.734182">
   <ele>90.200000</ele>
-<time>2005-06-12T18:50:00Z</time>
+<time>2005-06-12T13:50:25Z</time>
+  <desc>Spd=1.7 Hdg=286 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.497098" lon="-75.734302">
   <ele>93.200000</ele>
-<time>2005-06-12T18:50:00Z</time>
+<time>2005-06-12T13:50:45Z</time>
+  <desc>Spd=2.4 Hdg=251 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.497132" lon="-75.734462">
   <ele>94.400000</ele>
-<time>2005-06-12T18:50:00Z</time>
+<time>2005-06-12T13:50:55Z</time>
+  <desc>Spd=2.1 Hdg=246 DoP=6.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497083" lon="-75.734577">
   <ele>95.400000</ele>
-<time>2005-06-12T18:51:00Z</time>
+<time>2005-06-12T13:51:04Z</time>
+  <desc>Spd=2.3 Hdg=245 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.497012" lon="-75.734718">
   <ele>96.500000</ele>
-<time>2005-06-12T18:51:00Z</time>
+<time>2005-06-12T13:51:16Z</time>
+  <desc>Spd=3.3 Hdg=262 DoP=6.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.497042" lon="-75.734842">
   <ele>96.300000</ele>
-<time>2005-06-12T18:51:00Z</time>
+<time>2005-06-12T13:51:38Z</time>
+  <desc>Spd=2.1 Hdg=208 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.496978" lon="-75.734937">
   <ele>97.000000</ele>
-<time>2005-06-12T18:51:00Z</time>
+<time>2005-06-12T13:51:47Z</time>
+  <desc>Spd=2.7 Hdg=269 DoP=6.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496955" lon="-75.735070">
   <ele>96.900000</ele>
-<time>2005-06-12T18:51:00Z</time>
+<time>2005-06-12T13:51:57Z</time>
+  <desc>Spd=1.9 Hdg=229 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.496957" lon="-75.735245">
   <ele>98.200000</ele>
-<time>2005-06-12T18:52:00Z</time>
+<time>2005-06-12T13:52:10Z</time>
+  <desc>Spd=1.4 Hdg=243 DoP=6.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496895" lon="-75.735343">
   <ele>98.600000</ele>
-<time>2005-06-12T18:52:00Z</time>
+<time>2005-06-12T13:52:24Z</time>
+  <desc>Spd=2.9 Hdg=221 DoP=6.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496828" lon="-75.735485">
   <ele>98.400000</ele>
-<time>2005-06-12T18:52:00Z</time>
+<time>2005-06-12T13:52:38Z</time>
+  <desc>Spd=2.1 Hdg=238 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.496765" lon="-75.735635">
   <ele>98.200000</ele>
-<time>2005-06-12T18:52:00Z</time>
+<time>2005-06-12T13:52:51Z</time>
+  <desc>Spd=2.8 Hdg=254 DoP=6.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496698" lon="-75.735818">
   <ele>97.000000</ele>
-<time>2005-06-12T18:53:00Z</time>
+<time>2005-06-12T13:53:04Z</time>
+  <desc>Spd=4.9 Hdg=225 DoP=6.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496658" lon="-75.735987">
   <ele>96.600000</ele>
-<time>2005-06-12T18:53:00Z</time>
+<time>2005-06-12T13:53:12Z</time>
+  <desc>Spd=4.8 Hdg=204 DoP=13.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496573" lon="-75.736062">
   <ele>96.100000</ele>
-<time>2005-06-12T18:53:00Z</time>
+<time>2005-06-12T13:53:17Z</time>
+  <desc>Spd=4.2 Hdg=185 DoP=3.2 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.496442" lon="-75.736115">
   <ele>94.800000</ele>
-<time>2005-06-12T18:53:00Z</time>
+<time>2005-06-12T13:53:25Z</time>
+  <desc>Spd=3.9 Hdg=157 DoP=13.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496343" lon="-75.736063">
   <ele>95.200000</ele>
-<time>2005-06-12T18:53:00Z</time>
+<time>2005-06-12T13:53:30Z</time>
+  <desc>Spd=3.4 Hdg=138 DoP=13.6 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495935" lon="-75.735670">
   <ele>93.600000</ele>
-<time>2005-06-12T18:53:00Z</time>
+<time>2005-06-12T13:53:51Z</time>
+  <desc>Spd=2.8 Hdg=083 DoP=8.8 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495950" lon="-75.735525">
   <ele>92.400000</ele>
-<time>2005-06-12T18:53:00Z</time>
+<time>2005-06-12T13:53:56Z</time>
+  <desc>Spd=1.7 Hdg=087 DoP=3.0 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.495987" lon="-75.735345">
   <ele>91.200000</ele>
-<time>2005-06-12T18:54:00Z</time>
+<time>2005-06-12T13:54:07Z</time>
+  <desc>Spd=1.6 Hdg=079 DoP=3.0 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.496025" lon="-75.735222">
   <ele>92.400000</ele>
-<time>2005-06-12T18:54:00Z</time>
+<time>2005-06-12T13:54:19Z</time>
+  <desc>Spd=1.5 Hdg=083 DoP=6.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496097" lon="-75.734987">
   <ele>94.400000</ele>
-<time>2005-06-12T18:54:00Z</time>
+<time>2005-06-12T13:54:46Z</time>
+  <desc>Spd=1.9 Hdg=068 DoP=2.8 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.496132" lon="-75.734837">
   <ele>92.800000</ele>
-<time>2005-06-12T18:55:00Z</time>
+<time>2005-06-12T13:55:02Z</time>
+  <desc>Spd=2.5 Hdg=044 DoP=2.8 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.496187" lon="-75.734717">
   <ele>94.900000</ele>
-<time>2005-06-12T18:55:00Z</time>
+<time>2005-06-12T13:55:11Z</time>
+  <desc>Spd=2.2 Hdg=082 DoP=9.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496242" lon="-75.734587">
   <ele>95.600000</ele>
-<time>2005-06-12T18:55:00Z</time>
+<time>2005-06-12T13:55:21Z</time>
+  <desc>Spd=0.1 Hdg=110 DoP=2.8 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.496302" lon="-75.734363">
   <ele>96.300000</ele>
-<time>2005-06-12T18:55:00Z</time>
+<time>2005-06-12T13:55:43Z</time>
+  <desc>Spd=1.2 Hdg=207 DoP=9.2 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.496217" lon="-75.734410">
   <ele>96.300000</ele>
-<time>2005-06-12T18:56:00Z</time>
+<time>2005-06-12T13:56:17Z</time>
+  <desc>Spd=1.4 Hdg=186 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.496307" lon="-75.734372">
   <ele>98.800000</ele>
-<time>2005-06-12T18:56:00Z</time>
+<time>2005-06-12T13:56:27Z</time>
+  <desc>Spd=0.9 Hdg=185 DoP=2.6 Flg=100704</desc>
 </trkpt>
 <trkpt lat="45.496195" lon="-75.734225">
   <ele>97.900000</ele>
-<time>2005-06-12T18:57:00Z</time>
+<time>2005-06-12T13:57:10Z</time>
+  <desc>Spd=12.0 Hdg=167 DoP=9.6 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.495998" lon="-75.734102">
   <ele>97.600000</ele>
-<time>2005-06-12T18:57:00Z</time>
+<time>2005-06-12T13:57:13Z</time>
+  <desc>Spd=12.0 Hdg=167 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.494282" lon="-75.733510">
   <ele>97.300000</ele>
-<time>2005-06-12T18:57:00Z</time>
+<time>2005-06-12T13:57:44Z</time>
+  <desc>Spd=12.0 Hdg=167 DoP=0.0 Flg=000700</desc>
 </trkpt>
 <trkpt lat="45.491527" lon="-75.730497">
   <ele>97.500000</ele>
-<time>2005-06-12T18:58:00Z</time>
+<time>2005-06-12T13:58:20Z</time>
+  <desc>Spd=47.9 Hdg=132 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.490810" lon="-75.728585">
   <ele>97.700000</ele>
-<time>2005-06-12T18:58:00Z</time>
+<time>2005-06-12T13:58:21Z</time>
+  <desc>Spd=45.2 Hdg=135 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.489388" lon="-75.725018">
   <ele>98.100000</ele>
-<time>2005-06-12T18:58:00Z</time>
+<time>2005-06-12T13:58:24Z</time>
+  <desc>Spd=40.9 Hdg=145 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.488315" lon="-75.722895">
   <ele>98.200000</ele>
-<time>2005-06-12T18:58:00Z</time>
+<time>2005-06-12T13:58:28Z</time>
+  <desc>Spd=40.1 Hdg=147 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.487205" lon="-75.721490">
   <ele>98.200000</ele>
-<time>2005-06-12T18:58:00Z</time>
+<time>2005-06-12T13:58:34Z</time>
+  <desc>Spd=40.1 Hdg=147 DoP=0.0 Flg=000700</desc>
 </trkpt>
 <trkpt lat="45.487417" lon="-75.720792">
   <ele>97.900000</ele>
-<time>2005-06-12T18:58:00Z</time>
+<time>2005-06-12T13:58:42Z</time>
+  <desc>Spd=29.3 Hdg=160 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.488398" lon="-75.721110">
   <ele>97.800000</ele>
-<time>2005-06-12T18:58:00Z</time>
+<time>2005-06-12T13:58:43Z</time>
+  <desc>Spd=19.2 Hdg=182 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.490408" lon="-75.722255">
   <ele>101.300000</ele>
-<time>2005-06-12T18:58:00Z</time>
+<time>2005-06-12T13:58:46Z</time>
+  <desc>Spd=15.5 Hdg=174 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.491743" lon="-75.723360">
   <ele>105.300000</ele>
-<time>2005-06-12T18:58:00Z</time>
+<time>2005-06-12T13:58:52Z</time>
+  <desc>Spd=16.2 Hdg=179 DoP=10.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.491660" lon="-75.723432">
   <ele>105.600000</ele>
-<time>2005-06-12T18:58:00Z</time>
+<time>2005-06-12T13:58:54Z</time>
+  <desc>Spd=16.1 Hdg=183 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.491213" lon="-75.723555">
   <ele>105.700000</ele>
-<time>2005-06-12T18:59:00Z</time>
+<time>2005-06-12T13:59:01Z</time>
+  <desc>Spd=16.1 Hdg=183 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.490278" lon="-75.723608">
   <ele>104.700000</ele>
-<time>2005-06-12T18:59:00Z</time>
+<time>2005-06-12T13:59:15Z</time>
+  <desc>Spd=9.5 Hdg=126 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.490370" lon="-75.723388">
   <ele>103.600000</ele>
-<time>2005-06-12T18:59:00Z</time>
+<time>2005-06-12T13:59:17Z</time>
+  <desc>Spd=27.9 Hdg=083 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.490527" lon="-75.721810">
   <ele>101.300000</ele>
-<time>2005-06-12T18:59:00Z</time>
+<time>2005-06-12T13:59:24Z</time>
+  <desc>Spd=26.9 Hdg=084 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.490072" lon="-75.720395">
   <ele>99.900000</ele>
-<time>2005-06-12T18:59:00Z</time>
+<time>2005-06-12T13:59:29Z</time>
+  <desc>Spd=31.0 Hdg=110 DoP=2.6 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.488782" lon="-75.717853">
   <ele>98.100000</ele>
-<time>2005-06-12T18:59:00Z</time>
+<time>2005-06-12T13:59:40Z</time>
+  <desc>Spd=28.7 Hdg=115 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.488025" lon="-75.715302">
   <ele>97.900000</ele>
-<time>2005-06-12T18:59:00Z</time>
+<time>2005-06-12T13:59:54Z</time>
+  <desc>Spd=32.9 Hdg=106 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.487382" lon="-75.712532">
   <ele>97.700000</ele>
-<time>2005-06-12T19:00:00Z</time>
+<time>2005-06-12T14:00:08Z</time>
+  <desc>Spd=32.9 Hdg=106 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.487397" lon="-75.711828">
   <ele>97.700000</ele>
-<time>2005-06-12T19:00:00Z</time>
+<time>2005-06-12T14:00:12Z</time>
+  <desc>Spd=27.6 Hdg=087 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.487535" lon="-75.711745">
   <ele>97.700000</ele>
-<time>2005-06-12T19:00:00Z</time>
+<time>2005-06-12T14:00:13Z</time>
+  <desc>Spd=27.4 Hdg=085 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.487728" lon="-75.711472">
   <ele>97.500000</ele>
-<time>2005-06-12T19:00:00Z</time>
+<time>2005-06-12T14:00:15Z</time>
+  <desc>Spd=36.2 Hdg=085 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.487860" lon="-75.710995">
   <ele>97.300000</ele>
-<time>2005-06-12T19:00:00Z</time>
+<time>2005-06-12T14:00:17Z</time>
+  <desc>Spd=37.0 Hdg=084 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.488128" lon="-75.708785">
   <ele>97.100000</ele>
-<time>2005-06-12T19:00:00Z</time>
+<time>2005-06-12T14:00:26Z</time>
+  <desc>Spd=37.0 Hdg=084 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.488352" lon="-75.705628">
   <ele>97.000000</ele>
-<time>2005-06-12T19:00:00Z</time>
+<time>2005-06-12T14:00:39Z</time>
+  <desc>Spd=37.0 Hdg=084 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.488748" lon="-75.704488">
   <ele>97.100000</ele>
-<time>2005-06-12T19:00:00Z</time>
+<time>2005-06-12T14:00:43Z</time>
+  <desc>Spd=14.6 Hdg=086 DoP=6.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.489295" lon="-75.703023">
   <ele>97.200000</ele>
-<time>2005-06-12T19:00:00Z</time>
+<time>2005-06-12T14:00:52Z</time>
+  <desc>Spd=0.3 Hdg=104 DoP=6.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.489278" lon="-75.703172">
   <ele>97.100000</ele>
-<time>2005-06-12T19:00:00Z</time>
+<time>2005-06-12T14:00:56Z</time>
+  <desc>Spd=0.3 Hdg=198 DoP=6.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.489263" lon="-75.703307">
   <ele>96.900000</ele>
-<time>2005-06-12T19:01:00Z</time>
+<time>2005-06-12T14:01:14Z</time>
+  <desc>Spd=1.8 Hdg=002 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.489365" lon="-75.702803">
   <ele>96.900000</ele>
-<time>2005-06-12T19:01:00Z</time>
+<time>2005-06-12T14:01:37Z</time>
+  <desc>Spd=28.7 Hdg=082 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.489553" lon="-75.700098">
   <ele>97.300000</ele>
-<time>2005-06-12T19:01:00Z</time>
+<time>2005-06-12T14:01:45Z</time>
+  <desc>Spd=8.2 Hdg=094 DoP=0.0 Flg=000700</desc>
 </trkpt>
 <trkpt lat="45.489698" lon="-75.698622">
   <ele>97.200000</ele>
-<time>2005-06-12T19:01:00Z</time>
+<time>2005-06-12T14:01:59Z</time>
+  <desc>Spd=2.8 Hdg=090 DoP=6.4 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.489767" lon="-75.698538">
   <ele>97.200000</ele>
-<time>2005-06-12T19:02:00Z</time>
+<time>2005-06-12T14:02:04Z</time>
+  <desc>Spd=2.8 Hdg=092 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.489762" lon="-75.698398">
   <ele>97.100000</ele>
-<time>2005-06-12T19:02:00Z</time>
+<time>2005-06-12T14:02:12Z</time>
+  <desc>Spd=30.5 Hdg=094 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.489583" lon="-75.695093">
   <ele>97.400000</ele>
-<time>2005-06-12T19:02:00Z</time>
+<time>2005-06-12T14:02:28Z</time>
+  <desc>Spd=30.5 Hdg=094 DoP=0.0 Flg=000700</desc>
 </trkpt>
 <trkpt lat="45.489727" lon="-75.693488">
   <ele>97.500000</ele>
-<time>2005-06-12T19:02:00Z</time>
+<time>2005-06-12T14:02:36Z</time>
+  <desc>Spd=28.0 Hdg=076 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.489910" lon="-75.693387">
   <ele>97.500000</ele>
-<time>2005-06-12T19:02:00Z</time>
+<time>2005-06-12T14:02:37Z</time>
+  <desc>Spd=28.3 Hdg=075 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.490408" lon="-75.692842">
   <ele>97.500000</ele>
-<time>2005-06-12T19:02:00Z</time>
+<time>2005-06-12T14:02:41Z</time>
+  <desc>Spd=28.3 Hdg=075 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.490608" lon="-75.692348">
   <ele>97.400000</ele>
-<time>2005-06-12T19:02:00Z</time>
+<time>2005-06-12T14:02:44Z</time>
+  <desc>Spd=28.3 Hdg=075 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.491080" lon="-75.690218">
   <ele>97.400000</ele>
-<time>2005-06-12T19:02:00Z</time>
+<time>2005-06-12T14:02:56Z</time>
+  <desc>Spd=25.6 Hdg=090 DoP=0.0 Flg=000700</desc>
 </trkpt>
 <trkpt lat="45.491288" lon="-75.688778">
   <ele>97.300000</ele>
-<time>2005-06-12T19:03:00Z</time>
+<time>2005-06-12T14:03:04Z</time>
+  <desc>Spd=26.8 Hdg=111 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.491183" lon="-75.688612">
   <ele>97.300000</ele>
-<time>2005-06-12T19:03:00Z</time>
+<time>2005-06-12T14:03:05Z</time>
+  <desc>Spd=30.1 Hdg=126 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.490993" lon="-75.688663">
   <ele>99.000000</ele>
-<time>2005-06-12T19:03:00Z</time>
+<time>2005-06-12T14:03:06Z</time>
+  <desc>Spd=20.6 Hdg=172 DoP=2.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.489688" lon="-75.688748">
   <ele>99.300000</ele>
-<time>2005-06-12T19:03:00Z</time>
+<time>2005-06-12T14:03:16Z</time>
+  <desc>Spd=12.7 Hdg=155 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.489517" lon="-75.688720">
   <ele>99.200000</ele>
-<time>2005-06-12T19:03:00Z</time>
+<time>2005-06-12T14:03:20Z</time>
+  <desc>Spd=0.3 Hdg=160 DoP=2.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.489607" lon="-75.688778">
   <ele>99.000000</ele>
-<time>2005-06-12T19:03:00Z</time>
+<time>2005-06-12T14:03:26Z</time>
+  <desc>Spd=0.3 Hdg=170 DoP=2.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.489717" lon="-75.688852">
   <ele>98.600000</ele>
-<time>2005-06-12T19:03:00Z</time>
+<time>2005-06-12T14:03:53Z</time>
+  <desc>Spd=2.2 Hdg=167 DoP=2.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.489637" lon="-75.688773">
   <ele>98.300000</ele>
-<time>2005-06-12T19:04:00Z</time>
+<time>2005-06-12T14:04:12Z</time>
+  <desc>Spd=1.7 Hdg=318 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.489688" lon="-75.688885">
   <ele>98.000000</ele>
-<time>2005-06-12T19:04:00Z</time>
+<time>2005-06-12T14:04:34Z</time>
+  <desc>Spd=3.2 Hdg=077 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.489700" lon="-75.688648">
   <ele>98.200000</ele>
-<time>2005-06-12T19:04:00Z</time>
+<time>2005-06-12T14:04:37Z</time>
+  <desc>Spd=6.3 Hdg=048 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.489858" lon="-75.688150">
   <ele>98.400000</ele>
-<time>2005-06-12T19:04:00Z</time>
+<time>2005-06-12T14:04:43Z</time>
+  <desc>Spd=6.3 Hdg=048 DoP=0.0 Flg=000701</desc>
 </trkpt>
 <trkpt lat="45.489980" lon="-75.687782">
   <ele>98.400000</ele>
-<time>2005-06-12T19:04:00Z</time>
+<time>2005-06-12T14:04:51Z</time>
+  <desc>Spd=0.2 Hdg=240 DoP=2.0 Flg=080703</desc>
 </trkpt>
 <trkpt lat="45.489980" lon="-75.687647">
   <ele>98.100000</ele>
-<time>2005-06-12T19:05:00Z</time>
+<time>2005-06-12T14:05:11Z</time>
+  <desc>Spd=0.3 Hdg=159 DoP=0.0 Flg=000702</desc>
 </trkpt>
 <trkpt lat="45.490005" lon="-75.684935">
   <ele>97.400000</ele>
-<time>2005-06-12T19:05:00Z</time>
+<time>2005-06-12T14:05:30Z</time>
+  <desc>Spd=0.7 Hdg=247 DoP=0.0 Flg=020702</desc>
 </trkpt>
 </trkseg>
 </trk>
