@@ -200,8 +200,9 @@ char *str_pool_getcpy(char *src, char *def)
 char *ppdb_fmt_float(const double val)
 {
 	char *str = str_pool_get(32);
+	char *c;
 	snprintf(str, 32, "%.8f", val);
-	char *c = str + strlen(str) - 1;
+	c = str + strlen(str) - 1;
 	while ((c > str) && (*c == '0'))
 	{
 	    *c = '\0';
@@ -223,6 +224,8 @@ char *ppdb_fmt_degrees(char dir, double val)
 	double min = 60.0 * (fabs(val) - deg);
 	int power = 0;
 	double fx = min;
+	char *tmp;
+
 	while (fx > 1.0)
 	{
 	    fx = fx / 10.0;
@@ -231,7 +234,7 @@ char *ppdb_fmt_degrees(char dir, double val)
 	snprintf(str, 31, "%c%02d 000", dir, deg);
 	snprintf(str + 6 - power, 24, "%.8f", min);
 	
-	char *tmp = str + strlen(str) - 1;	/* trim trailing nulls */
+	tmp = str + strlen(str) - 1;	/* trim trailing nulls */
 	while ((tmp > str) && (*tmp == '0'))
 	{
 	    *tmp = '\0';
@@ -259,9 +262,11 @@ double ppdb_decode_coord(const char *str)
 	}
 	else
 	{
+	    char *tmp;
+
 	    if (*str == 'O') german_release = 1;
 	    
-	    char *tmp = strchr(str, ' ');
+	    *tmp = strchr(str, ' ');
 	    if ((tmp) && (tmp - str < 4))
 	    {
 		CHECK_INP(3, sscanf(str,"%c%d %lf", &dir, &deg, &val));
@@ -282,6 +287,7 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 	int msec, d1, d2, d3, d4;
 	time_t tnow;
 	struct tm now;
+	int year;
     
 	if (*str == '\0') return 0;	/* empty date and time */
 
@@ -303,7 +309,7 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 	now.tm_year += 1900;
 	now.tm_mon++;
 	
-	int year = (d1 * 100) + d2;
+	year = (d1 * 100) + d2;
 	
 	/* the coordinates comes before date and time in
 	   the dataset, so the flag "german_release" is set yet. */
@@ -335,10 +341,11 @@ static int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_
 	for (pdb_rec = pdb_in->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) 
 	{
 		waypoint *wpt_tmp = waypt_new();
-		data = (char *) pdb_rec->data;
-		
 		int line = 0;
+
+		data = (char *) pdb_rec->data;
 		str = csv_lineparse(data, ",", """", line++);
+
 		while (str != NULL)
 		{
 		    switch(line)
