@@ -43,6 +43,7 @@
  */
 #if __WIN32__
 #  define snprintf _snprintf
+#  define vsnprintf _vsnprintf
 #endif
 
 /* Turn off numeric conversion warning */
