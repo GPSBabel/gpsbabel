@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /WX /GX /O2 /I "expat" /I "..\coldsync" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "__WIN32__" /D VERSION=\"1.2.1_beta01072004_msvc\" /YX /FD /c
+# ADD CPP /nologo /W3 /WX /GX /O2 /I "expat" /I "..\coldsync" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "__WIN32__" /D VERSION=\"1.2.6_beta06232005_msvc\" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -66,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /WX /Gm /GX /ZI /Od /I "expat" /I "..\coldsync" /D "WIN32" /D "__WIN32__" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D VERSION=\"1.2.1_beta01072004_msvc\" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /WX /Gm /GX /ZI /Od /I "expat" /I "..\coldsync" /D "WIN32" /D "__WIN32__" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D VERSION=\"1.2.6_beta06232005_msvc\" /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -303,6 +303,10 @@ SOURCE=..\shapelib\shpopen.c
 # End Group
 # Begin Source File
 
+SOURCE=..\an1.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\arcdist.c
 # End Source File
 # Begin Source File
@@ -312,10 +316,6 @@ SOURCE=..\brauniger_iq.c
 # Begin Source File
 
 SOURCE=..\cetus.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\vitosmt.c
 # End Source File
 # Begin Source File
 
@@ -427,6 +427,10 @@ SOURCE=..\lowranceusr.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\maggeo.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\magnav.c
 # End Source File
 # Begin Source File
@@ -476,6 +480,10 @@ SOURCE=..\ozi.c
 # Begin Source File
 
 SOURCE=..\palmdoc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\pathaway.c
 # End Source File
 # Begin Source File
 
@@ -535,6 +543,10 @@ SOURCE=..\stackfilter.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\tef_xml.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\text.c
 # End Source File
 # Begin Source File
@@ -544,6 +556,10 @@ SOURCE=..\tiger.c
 # Begin Source File
 
 SOURCE=..\tmpro.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\tomtom.c
 # End Source File
 # Begin Source File
 
@@ -568,6 +584,10 @@ SOURCE=..\vcf.c
 # Begin Source File
 
 SOURCE=..\vecs.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\vitosmt.c
 # End Source File
 # Begin Source File
 

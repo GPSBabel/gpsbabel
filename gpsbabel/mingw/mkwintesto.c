@@ -244,7 +244,7 @@ int argc,
 					}
 					iPrevLineContinues = f_outputLine(pfTestoOut, acLineOut);
 					if (iPrevLineContinues == 1) f_outputLine(pfTestoOut, "");
-					iPrevLineContinues = f_outputLine(pfTestoOut, "IF NOT EXIST %PNAME% ECHO Can't find %PNAME%&& GOTO :EOF");
+					iPrevLineContinues = f_outputLine(pfTestoOut, "IF NOT EXIST %PNAME%.EXE ECHO Can't find %PNAME%&& GOTO :EOF");
 					/* fputs("\r\n"); */
 				}	/* Are we near the top of testo where the program variable is defined? */
 
@@ -409,6 +409,13 @@ int argc,
 							if (strncmp("${TMPDIR}",acLineIn+iThisChar,9) == 0) {
 								strcpy(acLineOut+iTarget+iThisChar-iStart,"%TMPDIR%");
 								/* %TMPDIR% is one char shorter than ${TMPDIR} */
+								iTarget--;
+								/* skip forward to the end of the string matched
+								   (less one as the loop will add one) */
+								iThisChar += 8;
+							} else if (strncmp("${PNAME} ",acLineIn+iThisChar,9) == 0) {
+								strcpy(acLineOut+iTarget+iThisChar-iStart,"%PNAME% ");
+								/* one char shorter */
 								iTarget--;
 								/* skip forward to the end of the string matched
 								   (less one as the loop will add one) */
