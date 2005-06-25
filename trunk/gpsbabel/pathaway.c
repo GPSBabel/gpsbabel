@@ -66,7 +66,7 @@ static arglist_t ppdb_args[] =
 	{"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING},
 	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING},
 	{"snlen", &snlen_opt, "Length of generated shortnames", NULL, ARGTYPE_INT },
-	{0, 0, 0, 0 }
+	{0, 0, 0, 0, 0 }
 };
 
 static void 
@@ -266,7 +266,7 @@ double ppdb_decode_coord(const char *str)
 
 	    if (*str == 'O') german_release = 1;
 	    
-	    *tmp = strchr(str, ' ');
+	    tmp = strchr(str, ' ');
 	    if ((tmp) && (tmp - str < 4))
 	    {
 		CHECK_INP(3, sscanf(str,"%c%d %lf", &dir, &deg, &val));
