@@ -240,1024 +240,1024 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <rte>
   <name>von bei D 95030 Hof/Innenstadt nach bei D95032 Hof </name>
   <desc>MOTORRAD Tourenplaner 2005/2006 9.50</desc>
-  <rtept lat="50.326840" lon="11.912930">
+  <rtept lat="50.326840000" lon="11.912930000">
     <name>bei D 95030 Hof/Innenstadt </name>
     <cmt>B2 Schleizer Strasse</cmt>
   </rtept>
-  <rtept lat="50.362350" lon="11.903730">
+  <rtept lat="50.362350000" lon="11.903730000">
     <name>in Zedtwitz halb rechts halten auf B2 Hofer Strasse</name>
     <cmt>B2 Hofer Strasse</cmt>
   </rtept>
-  <rtept lat="50.372360" lon="11.891400">
+  <rtept lat="50.372360000" lon="11.891400000">
     <name>rechts abbiegen auf B2</name>
     <cmt>B2</cmt>
   </rtept>
-  <rtept lat="50.393720" lon="11.867560">
+  <rtept lat="50.393720000" lon="11.867560000">
     <name>bei D 95183 T&#xf6;pen </name>
     <cmt>B2\Hofer Strasse</cmt>
   </rtept>
-  <rtept lat="50.442190" lon="11.860640">
+  <rtept lat="50.442190000" lon="11.860640000">
     <name>in Gefell links abbiegen auf B90 Friedensstrasse</name>
     <cmt>B90 Friedensstrasse</cmt>
   </rtept>
-  <rtept lat="50.450910" lon="11.652160">
+  <rtept lat="50.450910000" lon="11.652160000">
     <name>in Lobenstein halb rechts halten auf B90 Hirschberger Strasse</name>
     <cmt>B90 Hirschberger Strasse</cmt>
   </rtept>
-  <rtept lat="50.451520" lon="11.642930">
+  <rtept lat="50.451520000" lon="11.642930000">
     <name>geradeaus weiter auf Strasse der Jugend (L1095)</name>
     <cmt>Strasse der Jugend (L1095)</cmt>
   </rtept>
-  <rtept lat="50.457560" lon="11.642810">
+  <rtept lat="50.457560000" lon="11.642810000">
     <name>bei D 07356 Lobenstein </name>
     <cmt>L1095\Strasse der Jugend</cmt>
   </rtept>
-  <rtept lat="50.462250" lon="11.648150">
+  <rtept lat="50.462250000" lon="11.648150000">
     <name>links abbiegen auf L1099</name>
     <cmt>L1099</cmt>
   </rtept>
-  <rtept lat="50.472270" lon="11.640990">
+  <rtept lat="50.472270000" lon="11.640990000">
     <name>rechts abbiegen</name>
   </rtept>
-  <rtept lat="50.475460" lon="11.652270">
+  <rtept lat="50.475460000" lon="11.652270000">
     <name>in Sch&#xf6;nbrunn links abbiegen auf Sch&#xf6;nbrunn</name>
     <cmt>Sch&#xf6;nbrunn</cmt>
   </rtept>
-  <rtept lat="50.475750" lon="11.652890">
+  <rtept lat="50.475750000" lon="11.652890000">
     <name>links abbiegen auf Sch&#xf6;nbrunn</name>
     <cmt>Sch&#xf6;nbrunn</cmt>
   </rtept>
-  <rtept lat="50.476670" lon="11.652930">
+  <rtept lat="50.476670000" lon="11.652930000">
     <name>halb rechts halten auf Sch&#xf6;nbrunn</name>
     <cmt>Sch&#xf6;nbrunn</cmt>
   </rtept>
-  <rtept lat="50.477110" lon="11.653620">
+  <rtept lat="50.477110000" lon="11.653620000">
     <name>geradeaus weiter auf L1095 </name>
     <cmt>L1095 </cmt>
   </rtept>
-  <rtept lat="50.480800" lon="11.661000">
+  <rtept lat="50.480800000" lon="11.661000000">
     <name>halb links halten auf L1095 </name>
     <cmt>L1095 </cmt>
   </rtept>
-  <rtept lat="50.481060" lon="11.661630">
+  <rtept lat="50.481060000" lon="11.661630000">
     <name>in Bellevue links abbiegen auf L1095</name>
     <cmt>L1095</cmt>
   </rtept>
-  <rtept lat="50.499560" lon="11.728450">
+  <rtept lat="50.499560000" lon="11.728450000">
     <name>in Saalburg geradeaus weiter auf L1095</name>
     <cmt>L1095</cmt>
   </rtept>
-  <rtept lat="50.500130" lon="11.729100">
+  <rtept lat="50.500130000" lon="11.729100000">
     <name>geradeaus weiter auf L1095</name>
     <cmt>L1095</cmt>
   </rtept>
-  <rtept lat="50.502810" lon="11.734100">
+  <rtept lat="50.502810000" lon="11.734100000">
     <name>links abbiegen auf L1095</name>
     <cmt>L1095</cmt>
   </rtept>
-  <rtept lat="50.503480" lon="11.733400">
+  <rtept lat="50.503480000" lon="11.733400000">
     <name>rechts abbiegen auf Schleizer Strasse (L1095)</name>
     <cmt>Schleizer Strasse (L1095)</cmt>
   </rtept>
-  <rtept lat="50.507190" lon="11.733460">
+  <rtept lat="50.507190000" lon="11.733460000">
     <name>bei D 07929 Saalburg-Ebersdorf/Saalburg </name>
     <cmt>L1095</cmt>
   </rtept>
-  <rtept lat="50.523110" lon="11.738670">
+  <rtept lat="50.523110000" lon="11.738670000">
     <name>geradeaus weiter auf L1095</name>
     <cmt>L1095</cmt>
   </rtept>
-  <rtept lat="50.527710" lon="11.747960">
+  <rtept lat="50.527710000" lon="11.747960000">
     <name>links abbiegen</name>
   </rtept>
-  <rtept lat="50.524670" lon="11.714020">
+  <rtept lat="50.524670000" lon="11.714020000">
     <name>bei D07907 Burgk/Burgkhammer </name>
     <cmt>K550</cmt>
   </rtept>
-  <rtept lat="50.540680" lon="11.707810">
+  <rtept lat="50.540680000" lon="11.707810000">
     <name>rechts abbiegen auf L1101</name>
     <cmt>L1101</cmt>
   </rtept>
-  <rtept lat="50.546710" lon="11.724920">
+  <rtept lat="50.546710000" lon="11.724920000">
     <name>geradeaus weiter auf Burgkhammer </name>
     <cmt>Burgkhammer </cmt>
   </rtept>
-  <rtept lat="50.551440" lon="11.719450">
+  <rtept lat="50.551440000" lon="11.719450000">
     <name>bei D 07907 Burgk/Burgkhammer </name>
     <cmt>Burgkhammer</cmt>
   </rtept>
-  <rtept lat="50.551630" lon="11.719460">
+  <rtept lat="50.551630000" lon="11.719460000">
     <name>in Burgkhammer links abbiegen auf L1101 </name>
     <cmt>L1101 </cmt>
   </rtept>
-  <rtept lat="50.540680" lon="11.707810">
+  <rtept lat="50.540680000" lon="11.707810000">
     <name>links abbiegen</name>
   </rtept>
-  <rtept lat="50.527710" lon="11.747960">
+  <rtept lat="50.527710000" lon="11.747960000">
     <name>links abbiegen auf L1095</name>
     <cmt>L1095</cmt>
   </rtept>
-  <rtept lat="50.543020" lon="11.772720">
+  <rtept lat="50.543020000" lon="11.772720000">
     <name>links abbiegen auf Burgker Chaussee (L1101)</name>
     <cmt>Burgker Chaussee (L1101)</cmt>
   </rtept>
-  <rtept lat="50.555320" lon="11.734230">
+  <rtept lat="50.555320000" lon="11.734230000">
     <name>links abbiegen auf Burgker Strasse (L1101)</name>
     <cmt>Burgker Strasse (L1101)</cmt>
   </rtept>
-  <rtept lat="50.555000" lon="11.733890">
+  <rtept lat="50.555000000" lon="11.733890000">
     <name>halb rechts halten auf L2357</name>
     <cmt>L2357</cmt>
   </rtept>
-  <rtept lat="50.556270" lon="11.719810">
+  <rtept lat="50.556270000" lon="11.719810000">
     <name>bei D 07907 Burgk </name>
     <cmt>L2357</cmt>
   </rtept>
-  <rtept lat="50.555000" lon="11.733890">
+  <rtept lat="50.555000000" lon="11.733890000">
     <name>geradeaus weiter auf Burgker Strasse (L1101)</name>
     <cmt>Burgker Strasse (L1101)</cmt>
   </rtept>
-  <rtept lat="50.555320" lon="11.734230">
+  <rtept lat="50.555320000" lon="11.734230000">
     <name>geradeaus weiter auf L2357</name>
     <cmt>L2357</cmt>
   </rtept>
-  <rtept lat="50.558740" lon="11.736880">
+  <rtept lat="50.558740000" lon="11.736880000">
     <name>bei D 07907 Schleiz/M&#xf6;schlitz </name>
     <cmt>L2357</cmt>
   </rtept>
-  <rtept lat="50.560320" lon="11.738180">
+  <rtept lat="50.560320000" lon="11.738180000">
     <name>links abbiegen</name>
   </rtept>
-  <rtept lat="50.570230" lon="11.729630">
+  <rtept lat="50.570230000" lon="11.729630000">
     <name>in Grochwitz halb rechts halten auf M&#xfc;hlenstrasse</name>
     <cmt>M&#xfc;hlenstrasse</cmt>
   </rtept>
-  <rtept lat="50.571140" lon="11.730220">
+  <rtept lat="50.571140000" lon="11.730220000">
     <name>geradeaus weiter auf Sackgasse</name>
     <cmt>Sackgasse</cmt>
   </rtept>
-  <rtept lat="50.572250" lon="11.732300">
+  <rtept lat="50.572250000" lon="11.732300000">
     <name>geradeaus weiter </name>
   </rtept>
-  <rtept lat="50.579640" lon="11.750480">
+  <rtept lat="50.579640000" lon="11.750480000">
     <name>links abbiegen auf L1103 </name>
     <cmt>L1103 </cmt>
   </rtept>
-  <rtept lat="50.589520" lon="11.742120">
+  <rtept lat="50.589520000" lon="11.742120000">
     <name>links abbiegen auf L1103</name>
     <cmt>L1103</cmt>
   </rtept>
-  <rtept lat="50.592190" lon="11.734450">
+  <rtept lat="50.592190000" lon="11.734450000">
     <name>in Crispendorf halb rechts halten auf Ortsstrasse (L1103)</name>
     <cmt>Ortsstrasse (L1103)</cmt>
   </rtept>
-  <rtept lat="50.590570" lon="11.729760">
+  <rtept lat="50.590570000" lon="11.729760000">
     <name>halb rechts halten auf Ortsstrasse (L1103)</name>
     <cmt>Ortsstrasse (L1103)</cmt>
   </rtept>
-  <rtept lat="50.592260" lon="11.712030">
+  <rtept lat="50.592260000" lon="11.712030000">
     <name>halb rechts halten auf L1103</name>
     <cmt>L1103</cmt>
   </rtept>
-  <rtept lat="50.605660" lon="11.651000">
+  <rtept lat="50.605660000" lon="11.651000000">
     <name>in Ziegenr&#xfc;ck halb links halten auf Schleizer Strasse (L1103)</name>
     <cmt>Schleizer Strasse (L1103)</cmt>
   </rtept>
-  <rtept lat="50.608740" lon="11.649800">
+  <rtept lat="50.608740000" lon="11.649800000">
     <name>rechts abbiegen auf Plothental (L2350)</name>
     <cmt>Plothental (L2350)</cmt>
   </rtept>
-  <rtept lat="50.608090" lon="11.653350">
+  <rtept lat="50.608090000" lon="11.653350000">
     <name>bei D 07924 Ziegenr&#xfc;ck </name>
     <cmt>L2350\Plothental</cmt>
   </rtept>
-  <rtept lat="50.627150" lon="11.693550">
+  <rtept lat="50.627150000" lon="11.693550000">
     <name>in Tausa halb links halten auf Tausa (L2350)</name>
     <cmt>Tausa (L2350)</cmt>
   </rtept>
-  <rtept lat="50.635050" lon="11.706870">
+  <rtept lat="50.635050000" lon="11.706870000">
     <name>in Bucha links abbiegen auf Ortsstrasse (L2350)</name>
     <cmt>Ortsstrasse (L2350)</cmt>
   </rtept>
-  <rtept lat="50.647380" lon="11.703560">
+  <rtept lat="50.647380000" lon="11.703560000">
     <name>rechts abbiegen auf L2350</name>
     <cmt>L2350</cmt>
   </rtept>
-  <rtept lat="50.652220" lon="11.719550">
+  <rtept lat="50.652220000" lon="11.719550000">
     <name>in Knau halb links halten auf Hauptstrasse (L2349)</name>
     <cmt>Hauptstrasse (L2349)</cmt>
   </rtept>
-  <rtept lat="50.650840" lon="11.722880">
+  <rtept lat="50.650840000" lon="11.722880000">
     <name>bei D 07389 Knau </name>
     <cmt>L2349\Hauptstrasse</cmt>
   </rtept>
-  <rtept lat="50.649250" lon="11.725600">
+  <rtept lat="50.649250000" lon="11.725600000">
     <name>links abbiegen auf Hauptstrasse (L2349)</name>
     <cmt>Hauptstrasse (L2349)</cmt>
   </rtept>
-  <rtept lat="50.638840" lon="11.773210">
+  <rtept lat="50.638840000" lon="11.773210000">
     <name>bei D 07907 Plothen </name>
     <cmt>L2349\Ortsstrasse</cmt>
   </rtept>
-  <rtept lat="50.643500" lon="11.816310">
+  <rtept lat="50.643500000" lon="11.816310000">
     <name>in Dittersdorf rechts abbiegen auf L1077</name>
     <cmt>L1077</cmt>
   </rtept>
-  <rtept lat="50.610310" lon="11.825020">
+  <rtept lat="50.610310000" lon="11.825020000">
     <name>rechts abbiegen auf Ziegelei</name>
     <cmt>Ziegelei</cmt>
   </rtept>
-  <rtept lat="50.609550" lon="11.825070">
+  <rtept lat="50.609550000" lon="11.825070000">
     <name>halb rechts halten auf B2</name>
     <cmt>B2</cmt>
   </rtept>
-  <rtept lat="50.603620" lon="11.823910">
+  <rtept lat="50.603620000" lon="11.823910000">
     <name>in Oettersdorf links abbiegen auf L&#xf6;hmaer Weg  (K301)</name>
     <cmt>L&#xf6;hmaer Weg  (K301)</cmt>
   </rtept>
-  <rtept lat="50.604720" lon="11.825820">
+  <rtept lat="50.604720000" lon="11.825820000">
     <name>rechts abbiegen auf L&#xf6;hmaer Weg  (K301)</name>
     <cmt>L&#xf6;hmaer Weg  (K301)</cmt>
   </rtept>
-  <rtept lat="50.602840" lon="11.828100">
+  <rtept lat="50.602840000" lon="11.828100000">
     <name>links abbiegen auf L&#xf6;hmaer Weg (K301)</name>
     <cmt>L&#xf6;hmaer Weg (K301)</cmt>
   </rtept>
-  <rtept lat="50.614300" lon="11.849910">
+  <rtept lat="50.614300000" lon="11.849910000">
     <name>rechts abbiegen</name>
   </rtept>
-  <rtept lat="50.611660" lon="11.851660">
+  <rtept lat="50.611660000" lon="11.851660000">
     <name>in L&#xf6;hma links abbiegen auf Ortsstrasse</name>
     <cmt>Ortsstrasse</cmt>
   </rtept>
-  <rtept lat="50.611610" lon="11.854620">
+  <rtept lat="50.611610000" lon="11.854620000">
     <name>geradeaus weiter </name>
   </rtept>
-  <rtept lat="50.606090" lon="11.883090">
+  <rtept lat="50.606090000" lon="11.883090000">
     <name>in Kirschkau geradeaus weiter auf Ortsstrasse</name>
     <cmt>Ortsstrasse</cmt>
   </rtept>
-  <rtept lat="50.604690" lon="11.885940">
+  <rtept lat="50.604690000" lon="11.885940000">
     <name>rechts abbiegen auf Ortsstrasse</name>
     <cmt>Ortsstrasse</cmt>
   </rtept>
-  <rtept lat="50.604130" lon="11.885740">
+  <rtept lat="50.604130000" lon="11.885740000">
     <name>rechts abbiegen auf Ortsstrasse</name>
     <cmt>Ortsstrasse</cmt>
   </rtept>
-  <rtept lat="50.603540" lon="11.884620">
+  <rtept lat="50.603540000" lon="11.884620000">
     <name>links abbiegen auf Ortsstrasse</name>
     <cmt>Ortsstrasse</cmt>
   </rtept>
-  <rtept lat="50.603310" lon="11.885560">
+  <rtept lat="50.603310000" lon="11.885560000">
     <name>rechts abbiegen auf Ortsstrasse</name>
     <cmt>Ortsstrasse</cmt>
   </rtept>
-  <rtept lat="50.602920" lon="11.885410">
+  <rtept lat="50.602920000" lon="11.885410000">
     <name>geradeaus weiter auf B94 </name>
     <cmt>B94 </cmt>
   </rtept>
-  <rtept lat="50.594350" lon="11.887760">
+  <rtept lat="50.594350000" lon="11.887760000">
     <name>rechts abbiegen auf B94</name>
     <cmt>B94</cmt>
   </rtept>
-  <rtept lat="50.590560" lon="11.884750">
+  <rtept lat="50.590560000" lon="11.884750000">
     <name>links abbiegen auf Dorfstrasse</name>
     <cmt>Dorfstrasse</cmt>
   </rtept>
-  <rtept lat="50.587800" lon="11.886210">
+  <rtept lat="50.587800000" lon="11.886210000">
     <name>in L&#xf6;ssau links abbiegen</name>
   </rtept>
-  <rtept lat="50.568210" lon="11.907330">
+  <rtept lat="50.568210000" lon="11.907330000">
     <name>bei D 07907 Schleiz/Langenbuch </name>
     <cmt>K304\L&#xf6;ssauer Strasse</cmt>
   </rtept>
-  <rtept lat="50.566910" lon="11.907870">
+  <rtept lat="50.566910000" lon="11.907870000">
     <name>in Langenbuch links abbiegen auf Thierbacher Strasse (L2348)</name>
     <cmt>Thierbacher Strasse (L2348)</cmt>
   </rtept>
-  <rtept lat="50.575470" lon="11.930590">
+  <rtept lat="50.575470000" lon="11.930590000">
     <name>geradeaus weiter</name>
   </rtept>
-  <rtept lat="50.580230" lon="11.991480">
+  <rtept lat="50.580230000" lon="11.991480000">
     <name>in Pausa/Vogtl. rechts abbiegen</name>
   </rtept>
-  <rtept lat="50.578300" lon="11.992490">
+  <rtept lat="50.578300000" lon="11.992490000">
     <name>rechts abbiegen auf Plauensche Strasse (S316)</name>
     <cmt>Plauensche Strasse (S316)</cmt>
   </rtept>
-  <rtept lat="50.576240" lon="11.990570">
+  <rtept lat="50.576240000" lon="11.990570000">
     <name>in Oberreichenau halb links halten auf Am M&#xfc;hlgraben (S316)</name>
     <cmt>Am M&#xfc;hlgraben (S316)</cmt>
   </rtept>
-  <rtept lat="50.575210" lon="11.991270">
+  <rtept lat="50.575210000" lon="11.991270000">
     <name>bei D 07952 Pausa/Oberreichenau </name>
     <cmt>S316\Am M&#xfc;hlgraben</cmt>
   </rtept>
-  <rtept lat="50.542020" lon="12.081040">
+  <rtept lat="50.542020000" lon="12.081040000">
     <name>in Syrau halb rechts halten auf B282/E49 Hauptstrasse</name>
     <cmt>B282/E49 Hauptstrasse</cmt>
   </rtept>
-  <rtept lat="50.541330" lon="12.081960">
+  <rtept lat="50.541330000" lon="12.081960000">
     <name>bei D 08548 Syrau </name>
     <cmt>B282/E49\Hauptstrasse</cmt>
   </rtept>
-  <rtept lat="50.525500" lon="12.110520">
+  <rtept lat="50.525500000" lon="12.110520000">
     <name>rechts abbiegen auf Pausaer Strasse</name>
     <cmt>Pausaer Strasse</cmt>
   </rtept>
-  <rtept lat="50.517180" lon="12.120040">
+  <rtept lat="50.517180000" lon="12.120040000">
     <name>rechts abbiegen auf B92/E49 Pausaer Strasse</name>
     <cmt>B92/E49 Pausaer Strasse</cmt>
   </rtept>
-  <rtept lat="50.507510" lon="12.129620">
+  <rtept lat="50.507510000" lon="12.129620000">
     <name>in Plauen links abbiegen auf Martin-Luther-Strasse</name>
     <cmt>Martin-Luther-Strasse</cmt>
   </rtept>
-  <rtept lat="50.504660" lon="12.142140">
+  <rtept lat="50.504660000" lon="12.142140000">
     <name>bei D 08525 Plauen/Prei&#xdf;elp&#xf6;hl </name>
     <cmt>Martin-Luther-Strasse</cmt>
   </rtept>
-  <rtept lat="50.502330" lon="12.145030">
+  <rtept lat="50.502330000" lon="12.145030000">
     <name>links abbiegen auf Lessingstrasse</name>
     <cmt>Lessingstrasse</cmt>
   </rtept>
-  <rtept lat="50.501780" lon="12.151440">
+  <rtept lat="50.501780000" lon="12.151440000">
     <name>links abbiegen auf B173 Hammerstrasse</name>
     <cmt>B173 Hammerstrasse</cmt>
   </rtept>
-  <rtept lat="50.497700" lon="12.182310">
+  <rtept lat="50.497700000" lon="12.182310000">
     <name>links abbiegen auf Voigtsgr&#xfc;ner Weg (K6605)</name>
     <cmt>Voigtsgr&#xfc;ner Weg (K6605)</cmt>
   </rtept>
-  <rtept lat="50.506420" lon="12.194890">
+  <rtept lat="50.506420000" lon="12.194890000">
     <name>rechts abbiegen auf Zum Plom</name>
     <cmt>Zum Plom</cmt>
   </rtept>
-  <rtept lat="50.507990" lon="12.212220">
+  <rtept lat="50.507990000" lon="12.212220000">
     <name>rechts abbiegen</name>
   </rtept>
-  <rtept lat="50.504010" lon="12.218670">
+  <rtept lat="50.504010000" lon="12.218670000">
     <name>in Neuensalz links abbiegen auf B169</name>
     <cmt>B169</cmt>
   </rtept>
-  <rtept lat="50.503880" lon="12.219540">
+  <rtept lat="50.503880000" lon="12.219540000">
     <name>links abbiegen auf B169 Alte Plauener Strasse</name>
     <cmt>B169 Alte Plauener Strasse</cmt>
   </rtept>
-  <rtept lat="50.504570" lon="12.220490">
+  <rtept lat="50.504570000" lon="12.220490000">
     <name>geradeaus weiter auf B173 Hauptstrasse</name>
     <cmt>B173 Hauptstrasse</cmt>
   </rtept>
-  <rtept lat="50.506320" lon="12.227040">
+  <rtept lat="50.506320000" lon="12.227040000">
     <name>bei D 08541 Neuensalz </name>
     <cmt>B173\Hauptstrasse</cmt>
   </rtept>
-  <rtept lat="50.519140" lon="12.242830">
+  <rtept lat="50.519140000" lon="12.242830000">
     <name>in Thossfell geradeaus weiter auf B173 Hauptstrasse</name>
     <cmt>B173 Hauptstrasse</cmt>
   </rtept>
-  <rtept lat="50.520430" lon="12.243390">
+  <rtept lat="50.520430000" lon="12.243390000">
     <name>geradeaus weiter auf B173 Hauptstrasse</name>
     <cmt>B173 Hauptstrasse</cmt>
   </rtept>
-  <rtept lat="50.524530" lon="12.244410">
+  <rtept lat="50.524530000" lon="12.244410000">
     <name>links abbiegen auf Gansgr&#xfc;ner Strasse (K7880)</name>
     <cmt>Gansgr&#xfc;ner Strasse (K7880)</cmt>
   </rtept>
-  <rtept lat="50.524640" lon="12.244230">
+  <rtept lat="50.524640000" lon="12.244230000">
     <name>links abbiegen auf Gansgr&#xfc;ner Strasse (K7880)</name>
     <cmt>Gansgr&#xfc;ner Strasse (K7880)</cmt>
   </rtept>
-  <rtept lat="50.528170" lon="12.221450">
+  <rtept lat="50.528170000" lon="12.221450000">
     <name>in Gansgr&#xfc;n links abbiegen auf Dorfstrasse</name>
     <cmt>Dorfstrasse</cmt>
   </rtept>
-  <rtept lat="50.528210" lon="12.221250">
+  <rtept lat="50.528210000" lon="12.221250000">
     <name>rechts abbiegen auf Dorfstrasse (K7880)</name>
     <cmt>Dorfstrasse (K7880)</cmt>
   </rtept>
-  <rtept lat="50.528670" lon="12.222680">
+  <rtept lat="50.528670000" lon="12.222680000">
     <name>halb rechts halten auf Dorfstrasse (K7880)</name>
     <cmt>Dorfstrasse (K7880)</cmt>
   </rtept>
-  <rtept lat="50.528780" lon="12.224090">
+  <rtept lat="50.528780000" lon="12.224090000">
     <name>halb links halten</name>
   </rtept>
-  <rtept lat="50.546070" lon="12.218730">
+  <rtept lat="50.546070000" lon="12.218730000">
     <name>bei D 08543 P&#xf6;hl/Helmsgr&#xfc;n </name>
     <cmt>K7880\Helmsgr&#xfc;n-Dorfstrasse</cmt>
   </rtept>
-  <rtept lat="50.548640" lon="12.219230">
+  <rtept lat="50.548640000" lon="12.219230000">
     <name>in Helmsgr&#xfc;n halb rechts halten</name>
   </rtept>
-  <rtept lat="50.566180" lon="12.225640">
+  <rtept lat="50.566180000" lon="12.225640000">
     <name>in Herlasgr&#xfc;n rechts abbiegen auf Herlasgr&#xfc;n-Dorfstrasse (K7811)</name>
     <cmt>Herlasgr&#xfc;n-Dorfstrasse (K7811)</cmt>
   </rtept>
-  <rtept lat="50.566740" lon="12.226250">
+  <rtept lat="50.566740000" lon="12.226250000">
     <name>bei D 08543 Herlasgr&#xfc;n </name>
     <cmt>K7811\Herlasgr&#xfc;n-Dorfstrasse</cmt>
   </rtept>
-  <rtept lat="50.567370" lon="12.227000">
+  <rtept lat="50.567370000" lon="12.227000000">
     <name>links abbiegen auf Herlasgr&#xfc;n-Christgr&#xfc;ner Strasse</name>
     <cmt>Herlasgr&#xfc;n-Christgr&#xfc;ner Strasse</cmt>
   </rtept>
-  <rtept lat="50.569600" lon="12.224910">
+  <rtept lat="50.569600000" lon="12.224910000">
     <name>geradeaus weiter auf Christgr&#xfc;ner Strasse</name>
     <cmt>Christgr&#xfc;ner Strasse</cmt>
   </rtept>
-  <rtept lat="50.575660" lon="12.221830">
+  <rtept lat="50.575660000" lon="12.221830000">
     <name>rechts abbiegen auf Drecksch&#xe4;nke (S297)</name>
     <cmt>Drecksch&#xe4;nke (S297)</cmt>
   </rtept>
-  <rtept lat="50.578200" lon="12.231830">
+  <rtept lat="50.578200000" lon="12.231830000">
     <name>links abbiegen auf S298</name>
     <cmt>S298</cmt>
   </rtept>
-  <rtept lat="50.590870" lon="12.216020">
+  <rtept lat="50.590870000" lon="12.216020000">
     <name>in Reimersgr&#xfc;n links abbiegen</name>
   </rtept>
-  <rtept lat="50.598770" lon="12.198880">
+  <rtept lat="50.598770000" lon="12.198880000">
     <name>halb rechts halten</name>
   </rtept>
-  <rtept lat="50.605680" lon="12.187530">
+  <rtept lat="50.605680000" lon="12.187530000">
     <name>in Cosch&#xfc;tz rechts abbiegen auf Friedensstrasse (K7887)</name>
     <cmt>Friedensstrasse (K7887)</cmt>
   </rtept>
-  <rtept lat="50.613500" lon="12.194140">
+  <rtept lat="50.613500000" lon="12.194140000">
     <name>links abbiegen auf S298</name>
     <cmt>S298</cmt>
   </rtept>
-  <rtept lat="50.624800" lon="12.201270">
+  <rtept lat="50.624800000" lon="12.201270000">
     <name>rechts abbiegen auf Netzschkauer Strasse (S296)</name>
     <cmt>Netzschkauer Strasse (S296)</cmt>
   </rtept>
-  <rtept lat="50.624630" lon="12.202870">
+  <rtept lat="50.624630000" lon="12.202870000">
     <name>bei D 07985 Elsterberg/Reuth </name>
     <cmt>S296\Netzschkauer Strasse</cmt>
   </rtept>
-  <rtept lat="50.610360" lon="12.242670">
+  <rtept lat="50.610360000" lon="12.242670000">
     <name>bei D 08491 Netzschkau </name>
     <cmt>S296\Elsterberger Strasse</cmt>
   </rtept>
-  <rtept lat="50.610420" lon="12.244010">
+  <rtept lat="50.610420000" lon="12.244010000">
     <name>in Netzschkau links abbiegen auf Elsterberger Strasse (S296)</name>
     <cmt>Elsterberger Strasse (S296)</cmt>
   </rtept>
-  <rtept lat="50.610910" lon="12.244700">
+  <rtept lat="50.610910000" lon="12.244700000">
     <name>rechts abbiegen auf Strasse der Einheit (S296)</name>
     <cmt>Strasse der Einheit (S296)</cmt>
   </rtept>
-  <rtept lat="50.611020" lon="12.246920">
+  <rtept lat="50.611020000" lon="12.246920000">
     <name>halb rechts halten auf Strasse der Einheit (S296)</name>
     <cmt>Strasse der Einheit (S296)</cmt>
   </rtept>
-  <rtept lat="50.611980" lon="12.248750">
+  <rtept lat="50.611980000" lon="12.248750000">
     <name>links abbiegen auf B173 Plauener Strasse</name>
     <cmt>B173 Plauener Strasse</cmt>
   </rtept>
-  <rtept lat="50.621930" lon="12.257800">
+  <rtept lat="50.621930000" lon="12.257800000">
     <name>bei D 08499 Mylau/Obermylau </name>
     <cmt>B173\Netzschkauer Strasse</cmt>
   </rtept>
-  <rtept lat="50.620960" lon="12.264180">
+  <rtept lat="50.620960000" lon="12.264180000">
     <name>bei D 08499 Mylau/Obermylau </name>
     <cmt>B173\Robert-Georgi-Weg</cmt>
   </rtept>
-  <rtept lat="50.619010" lon="12.286640">
+  <rtept lat="50.619010000" lon="12.286640000">
     <name>in Reichenbach im Vogtland links abbiegen auf B173/B94 Klinkhardtstrasse</name>
     <cmt>B173/B94 Klinkhardtstrasse</cmt>
   </rtept>
-  <rtept lat="50.624730" lon="12.291980">
+  <rtept lat="50.624730000" lon="12.291980000">
     <name>links abbiegen auf B173/B94 Dr.-K&#xfc;lz-Strasse</name>
     <cmt>B173/B94 Dr.-K&#xfc;lz-Strasse</cmt>
   </rtept>
-  <rtept lat="50.628460" lon="12.285400">
+  <rtept lat="50.628460000" lon="12.285400000">
     <name>rechts abbiegen auf B173 Friedensstrasse</name>
     <cmt>B173 Friedensstrasse</cmt>
   </rtept>
-  <rtept lat="50.627970" lon="12.301540">
+  <rtept lat="50.627970000" lon="12.301540000">
     <name>bei D 08468 Reichenbach </name>
     <cmt>B173\Friedensstrasse</cmt>
   </rtept>
-  <rtept lat="50.646230" lon="12.359220">
+  <rtept lat="50.646230000" lon="12.359220000">
     <name>in Neumark geradeaus weiter auf B173</name>
     <cmt>B173</cmt>
   </rtept>
-  <rtept lat="50.652080" lon="12.364410">
+  <rtept lat="50.652080000" lon="12.364410000">
     <name>geradeaus weiter auf B173</name>
     <cmt>B173</cmt>
   </rtept>
-  <rtept lat="50.652850" lon="12.364860">
+  <rtept lat="50.652850000" lon="12.364860000">
     <name>bei D 08496 Neumark/Unterneumark </name>
     <cmt>B173</cmt>
   </rtept>
-  <rtept lat="50.676760" lon="12.408650">
+  <rtept lat="50.676760000" lon="12.408650000">
     <name>in Sch&#xf6;nfels links abbiegen auf Stenner Strasse</name>
     <cmt>Stenner Strasse</cmt>
   </rtept>
-  <rtept lat="50.676360" lon="12.405730">
+  <rtept lat="50.676360000" lon="12.405730000">
     <name>geradeaus weiter auf Zwickauer Strasse (K9351)</name>
     <cmt>Zwickauer Strasse (K9351)</cmt>
   </rtept>
-  <rtept lat="50.676090" lon="12.405090">
+  <rtept lat="50.676090000" lon="12.405090000">
     <name>D 08115 Sch&#xf6;nfels </name>
     <cmt>K9351\Zwickauer Strasse</cmt>
   </rtept>
-  <rtept lat="50.676360" lon="12.405730">
+  <rtept lat="50.676360000" lon="12.405730000">
     <name>halb rechts halten auf Stenner Strasse</name>
     <cmt>Stenner Strasse</cmt>
   </rtept>
-  <rtept lat="50.676760" lon="12.408650">
+  <rtept lat="50.676760000" lon="12.408650000">
     <name>links abbiegen auf B173 Neumarker Strasse</name>
     <cmt>B173 Neumarker Strasse</cmt>
   </rtept>
-  <rtept lat="50.713570" lon="12.479620">
+  <rtept lat="50.713570000" lon="12.479620000">
     <name>bei D 08056 Zwickau/Bahnhofsvorstadt </name>
     <cmt>B173\Reichenbacher Strasse</cmt>
   </rtept>
-  <rtept lat="50.718230" lon="12.489810">
+  <rtept lat="50.718230000" lon="12.489810000">
     <name>in Zwickau rechts abbiegen auf B173 Humboldtstrasse</name>
     <cmt>B173 Humboldtstrasse</cmt>
   </rtept>
-  <rtept lat="50.714260" lon="12.493590">
+  <rtept lat="50.714260000" lon="12.493590000">
     <name>links abbiegen auf B173 Am Schwanenteich</name>
     <cmt>B173 Am Schwanenteich</cmt>
   </rtept>
-  <rtept lat="50.714770" lon="12.495420">
+  <rtept lat="50.714770000" lon="12.495420000">
     <name>rechts halten auf B173 Dr.-Friedrichs-Ring</name>
     <cmt>B173 Dr.-Friedrichs-Ring</cmt>
   </rtept>
-  <rtept lat="50.714820" lon="12.499450">
+  <rtept lat="50.714820000" lon="12.499450000">
     <name>geradeaus weiter auf B173 Gl&#xfc;ck-Auf-Br&#xfc;cke/&#xc4;ussere Dresdner Strasse</name>
     <cmt>B173 Gl&#xfc;ck-Auf-Br&#xfc;cke/&#xc4;ussere Dresdner Strasse</cmt>
   </rtept>
-  <rtept lat="50.745140" lon="12.596660">
+  <rtept lat="50.745140000" lon="12.596660000">
     <name>rechts abbiegen auf Dresdner Strasse</name>
     <cmt>Dresdner Strasse</cmt>
   </rtept>
-  <rtept lat="50.747100" lon="12.606600">
+  <rtept lat="50.747100000" lon="12.606600000">
     <name>geradeaus weiter auf &#xc4;ussere Zwickauer Strasse</name>
     <cmt>&#xc4;ussere Zwickauer Strasse</cmt>
   </rtept>
-  <rtept lat="50.754700" lon="12.626850">
+  <rtept lat="50.754700000" lon="12.626850000">
     <name>in Lichtenstein/Sa. geradeaus weiter auf Innere Zwickauer Strasse</name>
     <cmt>Innere Zwickauer Strasse</cmt>
   </rtept>
-  <rtept lat="50.756270" lon="12.630730">
+  <rtept lat="50.756270000" lon="12.630730000">
     <name>bei D 09350 Lichtenstein </name>
     <cmt>S255\Innere Zwickauer Strasse</cmt>
   </rtept>
-  <rtept lat="50.756540" lon="12.631750">
+  <rtept lat="50.756540000" lon="12.631750000">
     <name>rechts abbiegen auf Hartensteiner Strasse (S255)</name>
     <cmt>Hartensteiner Strasse (S255)</cmt>
   </rtept>
-  <rtept lat="50.755020" lon="12.633250">
+  <rtept lat="50.755020000" lon="12.633250000">
     <name>rechts abbiegen auf Hartensteiner Strasse (S255)</name>
     <cmt>Hartensteiner Strasse (S255)</cmt>
   </rtept>
-  <rtept lat="50.750240" lon="12.635920">
+  <rtept lat="50.750240000" lon="12.635920000">
     <name>rechts abbiegen auf Hartensteiner Strasse (S255)</name>
     <cmt>Hartensteiner Strasse (S255)</cmt>
   </rtept>
-  <rtept lat="50.749980" lon="12.635800">
+  <rtept lat="50.749980000" lon="12.635800000">
     <name>halb links halten auf Hartensteiner Strasse (S255)</name>
     <cmt>Hartensteiner Strasse (S255)</cmt>
   </rtept>
-  <rtept lat="50.659650" lon="12.696920">
+  <rtept lat="50.659650000" lon="12.696920000">
     <name>geradeaus weiter auf S283</name>
     <cmt>S283</cmt>
   </rtept>
-  <rtept lat="50.656440" lon="12.694480">
+  <rtept lat="50.656440000" lon="12.694480000">
     <name>rechts abbiegen auf S283</name>
     <cmt>S283</cmt>
   </rtept>
-  <rtept lat="50.663330" lon="12.674480">
+  <rtept lat="50.663330000" lon="12.674480000">
     <name>in Hartenstein links abbiegen auf August-Bebel-Strasse (S283)</name>
     <cmt>August-Bebel-Strasse (S283)</cmt>
   </rtept>
-  <rtept lat="50.661550" lon="12.671280">
+  <rtept lat="50.661550000" lon="12.671280000">
     <name>geradeaus weiter auf Bahnhofstrasse (S284)</name>
     <cmt>Bahnhofstrasse (S284)</cmt>
   </rtept>
-  <rtept lat="50.661500" lon="12.671250">
+  <rtept lat="50.661500000" lon="12.671250000">
     <name>bei D 08118 Hartenstein </name>
     <cmt>S284\Bahnhofstrasse</cmt>
   </rtept>
-  <rtept lat="50.652280" lon="12.663720">
+  <rtept lat="50.652280000" lon="12.663720000">
     <name>rechts abbiegen</name>
   </rtept>
-  <rtept lat="50.651940" lon="12.661090">
+  <rtept lat="50.651940000" lon="12.661090000">
     <name>links abbiegen</name>
   </rtept>
-  <rtept lat="50.650900" lon="12.661430">
+  <rtept lat="50.650900000" lon="12.661430000">
     <name>in Stein rechts abbiegen auf Langenbacher Strasse (K9309)</name>
     <cmt>Langenbacher Strasse (K9309)</cmt>
   </rtept>
-  <rtept lat="50.650240" lon="12.660000">
+  <rtept lat="50.650240000" lon="12.660000000">
     <name>halb links halten auf Wildbacher Strasse (K9309)</name>
     <cmt>Wildbacher Strasse (K9309)</cmt>
   </rtept>
-  <rtept lat="50.639360" lon="12.651730">
+  <rtept lat="50.639360000" lon="12.651730000">
     <name>geradeaus weiter</name>
   </rtept>
-  <rtept lat="50.638200" lon="12.653400">
+  <rtept lat="50.638200000" lon="12.653400000">
     <name>halb rechts halten auf Hartensteiner Strasse (K9109)</name>
     <cmt>Hartensteiner Strasse (K9109)</cmt>
   </rtept>
-  <rtept lat="50.628530" lon="12.645540">
+  <rtept lat="50.628530000" lon="12.645540000">
     <name>in Wildbach rechts abbiegen auf Hartensteiner Strasse (K9109)</name>
     <cmt>Hartensteiner Strasse (K9109)</cmt>
   </rtept>
-  <rtept lat="50.613360" lon="12.641420">
+  <rtept lat="50.613360000" lon="12.641420000">
     <name>links abbiegen auf Silberbachstrasse</name>
     <cmt>Silberbachstrasse</cmt>
   </rtept>
-  <rtept lat="50.610720" lon="12.646900">
+  <rtept lat="50.610720000" lon="12.646900000">
     <name>geradeaus weiter auf Zechenplatz </name>
     <cmt>Zechenplatz </cmt>
   </rtept>
-  <rtept lat="50.601390" lon="12.655020">
+  <rtept lat="50.601390000" lon="12.655020000">
     <name>in Schlema geradeaus weiter auf Schneeberger Weg</name>
     <cmt>Schneeberger Weg</cmt>
   </rtept>
-  <rtept lat="50.601140" lon="12.654880">
+  <rtept lat="50.601140000" lon="12.654880000">
     <name>links abbiegen auf Zechenplatz</name>
     <cmt>Zechenplatz</cmt>
   </rtept>
-  <rtept lat="50.600740" lon="12.655420">
+  <rtept lat="50.600740000" lon="12.655420000">
     <name>rechts abbiegen auf Friedensstrasse</name>
     <cmt>Friedensstrasse</cmt>
   </rtept>
-  <rtept lat="50.598610" lon="12.650890">
+  <rtept lat="50.598610000" lon="12.650890000">
     <name>rechts abbiegen auf B169 Kobaltstrasse/Auer Strasse</name>
     <cmt>B169 Kobaltstrasse/Auer Strasse</cmt>
   </rtept>
-  <rtept lat="50.589690" lon="12.643190">
+  <rtept lat="50.589690000" lon="12.643190000">
     <name>in Schneeberg rechts abbiegen auf B169 Kobaltstrasse</name>
     <cmt>B169 Kobaltstrasse</cmt>
   </rtept>
-  <rtept lat="50.546590" lon="12.576330">
+  <rtept lat="50.546590000" lon="12.576330000">
     <name>in Hundsh&#xfc;bel halb rechts halten auf B169 Hauptstrasse</name>
     <cmt>B169 Hauptstrasse</cmt>
   </rtept>
-  <rtept lat="50.533910" lon="12.527210">
+  <rtept lat="50.533910000" lon="12.527210000">
     <name>in St&#xfc;tzengr&#xfc;n rechts abbiegen auf B169 Auerbacher Strasse</name>
     <cmt>B169 Auerbacher Strasse</cmt>
   </rtept>
-  <rtept lat="50.531180" lon="12.405660">
+  <rtept lat="50.531180000" lon="12.405660000">
     <name>in Rodewisch rechts abbiegen auf B169 Postplatz</name>
     <cmt>B169 Postplatz</cmt>
   </rtept>
-  <rtept lat="50.532110" lon="12.403920">
+  <rtept lat="50.532110000" lon="12.403920000">
     <name>links abbiegen auf B169 Postplatz</name>
     <cmt>B169 Postplatz</cmt>
   </rtept>
-  <rtept lat="50.528900" lon="12.401610">
+  <rtept lat="50.528900000" lon="12.401610000">
     <name>bei D 08228 Rodewisch </name>
     <cmt>B169\Lindenstrasse</cmt>
   </rtept>
-  <rtept lat="50.508270" lon="12.397900">
+  <rtept lat="50.508270000" lon="12.397900000">
     <name>bei D 08209 Auerbach </name>
     <cmt>B169\G&#xf6;ltzschtalstrasse</cmt>
   </rtept>
-  <rtept lat="50.502860" lon="12.397930">
+  <rtept lat="50.502860000" lon="12.397930000">
     <name>in Auerbach/Vogtl. links abbiegen auf B169 G&#xf6;ltzschtalstrasse</name>
     <cmt>B169 G&#xf6;ltzschtalstrasse</cmt>
   </rtept>
-  <rtept lat="50.489000" lon="12.393790">
+  <rtept lat="50.489000000" lon="12.393790000">
     <name>in Ellefeld links abbiegen auf Neuberg</name>
     <cmt>Neuberg</cmt>
   </rtept>
-  <rtept lat="50.489800" lon="12.396290">
+  <rtept lat="50.489800000" lon="12.396290000">
     <name>rechts abbiegen auf Neuberg</name>
     <cmt>Neuberg</cmt>
   </rtept>
-  <rtept lat="50.493660" lon="12.405330">
+  <rtept lat="50.493660000" lon="12.405330000">
     <name>rechts abbiegen auf Beerheider Strasse  (K7833)</name>
     <cmt>Beerheider Strasse  (K7833)</cmt>
   </rtept>
-  <rtept lat="50.487180" lon="12.421360">
+  <rtept lat="50.487180000" lon="12.421360000">
     <name>rechts abbiegen auf Beerheider Strasse (K7833)</name>
     <cmt>Beerheider Strasse (K7833)</cmt>
   </rtept>
-  <rtept lat="50.479200" lon="12.424870">
+  <rtept lat="50.479200000" lon="12.424870000">
     <name>bei D 08209 Auerbach/Beerheide </name>
     <cmt>K7833\Rempesgr&#xfc;ner Strasse</cmt>
   </rtept>
-  <rtept lat="50.478470" lon="12.425460">
+  <rtept lat="50.478470000" lon="12.425460000">
     <name>in Beerheide links abbiegen auf Strasse des Friedens (K7826)</name>
     <cmt>Strasse des Friedens (K7826)</cmt>
   </rtept>
-  <rtept lat="50.485670" lon="12.433050">
+  <rtept lat="50.485670000" lon="12.433050000">
     <name>in Hohengr&#xfc;n rechts abbiegen auf Klingenthaler Strasse (S300)</name>
     <cmt>Klingenthaler Strasse (S300)</cmt>
   </rtept>
-  <rtept lat="50.481160" lon="12.433910">
+  <rtept lat="50.481160000" lon="12.433910000">
     <name>links abbiegen</name>
   </rtept>
-  <rtept lat="50.479840" lon="12.435860">
+  <rtept lat="50.479840000" lon="12.435860000">
     <name>links abbiegen auf Schallerbachstrasse (K7822)</name>
     <cmt>Schallerbachstrasse (K7822)</cmt>
   </rtept>
-  <rtept lat="50.500210" lon="12.435830">
+  <rtept lat="50.500210000" lon="12.435830000">
     <name>in Brunn rechts abbiegen auf Sch&#xf6;nheider Strasse (S278)</name>
     <cmt>Sch&#xf6;nheider Strasse (S278)</cmt>
   </rtept>
-  <rtept lat="50.505090" lon="12.522040">
+  <rtept lat="50.505090000" lon="12.522040000">
     <name>in Sch&#xf6;nheide halb rechts halten auf Hauptstrasse (S278)</name>
     <cmt>Hauptstrasse (S278)</cmt>
   </rtept>
-  <rtept lat="50.503030" lon="12.533360">
+  <rtept lat="50.503030000" lon="12.533360000">
     <name>D 08304 Sch&#xf6;nheide </name>
     <cmt>S278\Hauptstrasse</cmt>
   </rtept>
-  <rtept lat="50.504610" lon="12.539940">
+  <rtept lat="50.504610000" lon="12.539940000">
     <name>halb links halten auf Hauptstrasse (S278)</name>
     <cmt>Hauptstrasse (S278)</cmt>
   </rtept>
-  <rtept lat="50.505590" lon="12.541190">
+  <rtept lat="50.505590000" lon="12.541190000">
     <name>geradeaus weiter auf Eibenstocker Strasse (S277)</name>
     <cmt>Eibenstocker Strasse (S277)</cmt>
   </rtept>
-  <rtept lat="50.504570" lon="12.557440">
+  <rtept lat="50.504570000" lon="12.557440000">
     <name>rechts abbiegen auf B283 Muldenstrasse</name>
     <cmt>B283 Muldenstrasse</cmt>
   </rtept>
-  <rtept lat="50.467820" lon="12.495110">
+  <rtept lat="50.467820000" lon="12.495110000">
     <name>halb rechts halten auf Am Filz</name>
     <cmt>Am Filz</cmt>
   </rtept>
-  <rtept lat="50.462790" lon="12.490730">
+  <rtept lat="50.462790000" lon="12.490730000">
     <name>geradeaus weiter auf B283 Sch&#xf6;nheider Strasse</name>
     <cmt>B283 Sch&#xf6;nheider Strasse</cmt>
   </rtept>
-  <rtept lat="50.458250" lon="12.488440">
+  <rtept lat="50.458250000" lon="12.488440000">
     <name>bei D 08262 Tannenbergsthal/J&#xe4;gersgr&#xfc;n </name>
     <cmt>B283\Sch&#xf6;nheider Strasse</cmt>
   </rtept>
-  <rtept lat="50.434530" lon="12.461120">
+  <rtept lat="50.434530000" lon="12.461120000">
     <name>bei D 08262 Tannenbergsthal </name>
     <cmt>B283\Klingenthaler Strasse</cmt>
   </rtept>
-  <rtept lat="50.385760" lon="12.481900">
+  <rtept lat="50.385760000" lon="12.481900000">
     <name>in Klingenthal/Sa. links abbiegen auf B283 Auerbacher Strasse</name>
     <cmt>B283 Auerbacher Strasse</cmt>
   </rtept>
-  <rtept lat="50.375370" lon="12.476030">
+  <rtept lat="50.375370000" lon="12.476030000">
     <name>rechts abbiegen auf Mittelbergstrasse</name>
     <cmt>Mittelbergstrasse</cmt>
   </rtept>
-  <rtept lat="50.372770" lon="12.469460">
+  <rtept lat="50.372770000" lon="12.469460000">
     <name>rechts abbiegen auf Falkensteiner Strasse (S304)</name>
     <cmt>Falkensteiner Strasse (S304)</cmt>
   </rtept>
-  <rtept lat="50.384530" lon="12.456220">
+  <rtept lat="50.384530000" lon="12.456220000">
     <name>bei D 08248 Klingenthal/Brunnd&#xf6;bra </name>
     <cmt>S304\Falkensteiner Strasse</cmt>
   </rtept>
-  <rtept lat="50.419640" lon="12.399730">
+  <rtept lat="50.419640000" lon="12.399730000">
     <name>bei D 08223 Gr&#xfc;nbach-Muldenberg </name>
     <cmt>S302/S304</cmt>
   </rtept>
-  <rtept lat="50.423220" lon="12.397740">
+  <rtept lat="50.423220000" lon="12.397740000">
     <name>halb links halten auf S304</name>
     <cmt>S304</cmt>
   </rtept>
-  <rtept lat="50.446180" lon="12.364590">
+  <rtept lat="50.446180000" lon="12.364590000">
     <name>bei D 08223 Gr&#xfc;nbach </name>
     <cmt>S304\Bahnhofstrasse</cmt>
   </rtept>
-  <rtept lat="50.449330" lon="12.362170">
+  <rtept lat="50.449330000" lon="12.362170000">
     <name>in Gr&#xfc;nbach links abbiegen auf Neust&#xe4;dter Strasse (K7835)</name>
     <cmt>Neust&#xe4;dter Strasse (K7835)</cmt>
   </rtept>
-  <rtept lat="50.449520" lon="12.361460">
+  <rtept lat="50.449520000" lon="12.361460000">
     <name>links abbiegen auf Siehdichf&#xfc;rer Strasse (K7835)</name>
     <cmt>Siehdichf&#xfc;rer Strasse (K7835)</cmt>
   </rtept>
-  <rtept lat="50.442120" lon="12.331960">
+  <rtept lat="50.442120000" lon="12.331960000">
     <name>in Neudorf links abbiegen auf Sch&#xf6;necker Strasse (S301)</name>
     <cmt>Sch&#xf6;necker Strasse (S301)</cmt>
   </rtept>
-  <rtept lat="50.438410" lon="12.333160">
+  <rtept lat="50.438410000" lon="12.333160000">
     <name>links abbiegen auf Sch&#xf6;necker Strasse (S301)</name>
     <cmt>Sch&#xf6;necker Strasse (S301)</cmt>
   </rtept>
-  <rtept lat="50.400420" lon="12.337200">
+  <rtept lat="50.400420000" lon="12.337200000">
     <name>bei D 08261 Sch&#xf6;neck </name>
     <cmt>S301</cmt>
   </rtept>
-  <rtept lat="50.396910" lon="12.337530">
+  <rtept lat="50.396910000" lon="12.337530000">
     <name>in Sch&#xf6;neck/Vogtl. rechts abbiegen auf Falkensteiner Strasse (S301/S302)</name>
     <cmt>Falkensteiner Strasse (S301/S302)</cmt>
   </rtept>
-  <rtept lat="50.396810" lon="12.337350">
+  <rtept lat="50.396810000" lon="12.337350000">
     <name>links abbiegen auf Albertplatz/Falkensteiner Strasse (S301/S302)</name>
     <cmt>Albertplatz/Falkensteiner Strasse (S301/S302)</cmt>
   </rtept>
-  <rtept lat="50.393440" lon="12.343620">
+  <rtept lat="50.393440000" lon="12.343620000">
     <name>rechts abbiegen auf Klingenthaler Strasse (S301)</name>
     <cmt>Klingenthaler Strasse (S301)</cmt>
   </rtept>
-  <rtept lat="50.389690" lon="12.349500">
+  <rtept lat="50.389690000" lon="12.349500000">
     <name>einfahren in Kreisverkehr </name>
   </rtept>
-  <rtept lat="50.389490" lon="12.349660">
+  <rtept lat="50.389490000" lon="12.349660000">
     <name>2. M&#xf6;glichkeit aus Kreisverkehr ausfahren auf K&#xe4;rnerstrasse (S305)</name>
     <cmt>K&#xe4;rnerstrasse (S305)</cmt>
   </rtept>
-  <rtept lat="50.343070" lon="12.370580">
+  <rtept lat="50.343070000" lon="12.370580000">
     <name>rechts abbiegen auf B283</name>
     <cmt>B283</cmt>
   </rtept>
-  <rtept lat="50.328660" lon="12.351510">
+  <rtept lat="50.328660000" lon="12.351510000">
     <name>bei D 08258 Markneukirchen/Friebus </name>
     <cmt>B283</cmt>
   </rtept>
-  <rtept lat="50.309690" lon="12.307080">
+  <rtept lat="50.309690000" lon="12.307080000">
     <name>rechts abbiegen auf B283</name>
     <cmt>B283</cmt>
   </rtept>
-  <rtept lat="50.308960" lon="12.305950">
+  <rtept lat="50.308960000" lon="12.305950000">
     <name>in Siebenbrunn geradeaus weiter auf Am Bahnhof </name>
     <cmt>Am Bahnhof </cmt>
   </rtept>
-  <rtept lat="50.307980" lon="12.302170">
+  <rtept lat="50.307980000" lon="12.302170000">
     <name>links abbiegen auf Str&#xe4;ssler Berg</name>
     <cmt>Str&#xe4;ssler Berg</cmt>
   </rtept>
-  <rtept lat="50.304230" lon="12.298880">
+  <rtept lat="50.304230000" lon="12.298880000">
     <name>geradeaus weiter auf Siebenbrunner Strasse</name>
     <cmt>Siebenbrunner Strasse</cmt>
   </rtept>
-  <rtept lat="50.298960" lon="12.297280">
+  <rtept lat="50.298960000" lon="12.297280000">
     <name>in Str&#xe4;ssel links abbiegen auf B&#xf6;hmische Strasse (K7846)</name>
     <cmt>B&#xf6;hmische Strasse (K7846)</cmt>
   </rtept>
-  <rtept lat="50.284250" lon="12.313970">
+  <rtept lat="50.284250000" lon="12.313970000">
     <name>in Sch&#xf6;nlind rechts abbiegen auf Markneukirchner Strasse (K7843)</name>
     <cmt>Markneukirchner Strasse (K7843)</cmt>
   </rtept>
-  <rtept lat="50.284020" lon="12.314200">
+  <rtept lat="50.284020000" lon="12.314200000">
     <name>links abbiegen auf Landw&#xfc;ster Strasse (K7846)</name>
     <cmt>Landw&#xfc;ster Strasse (K7846)</cmt>
   </rtept>
-  <rtept lat="50.271330" lon="12.328640">
+  <rtept lat="50.271330000" lon="12.328640000">
     <name>in Landw&#xfc;st halb rechts halten auf Sch&#xf6;nlinder Strasse (K7844)</name>
     <cmt>Sch&#xf6;nlinder Strasse (K7844)</cmt>
   </rtept>
-  <rtept lat="50.271090" lon="12.328480">
+  <rtept lat="50.271090000" lon="12.328480000">
     <name>rechts abbiegen auf Rauner Strasse (K7844)</name>
     <cmt>Rauner Strasse (K7844)</cmt>
   </rtept>
-  <rtept lat="50.271540" lon="12.321940">
+  <rtept lat="50.271540000" lon="12.321940000">
     <name>bei D 08258 Landw&#xfc;st </name>
     <cmt>K7844\Rauner Strasse</cmt>
   </rtept>
-  <rtept lat="50.268830" lon="12.299750">
+  <rtept lat="50.268830000" lon="12.299750000">
     <name>geradeaus weiter auf B92/E49</name>
     <cmt>B92/E49</cmt>
   </rtept>
-  <rtept lat="50.304990" lon="12.252880">
+  <rtept lat="50.304990000" lon="12.252880000">
     <name>bei D 08626 Adorf/Jugelsburg </name>
     <cmt>B92/E49</cmt>
   </rtept>
-  <rtept lat="50.324370" lon="12.257480">
+  <rtept lat="50.324370000" lon="12.257480000">
     <name>bei D 08626 Adorf </name>
     <cmt>B92/E49\Oelsnitzer Strasse</cmt>
   </rtept>
-  <rtept lat="50.366630" lon="12.216240">
+  <rtept lat="50.366630000" lon="12.216240000">
     <name>halb links halten</name>
   </rtept>
-  <rtept lat="50.367860" lon="12.214720">
+  <rtept lat="50.367860000" lon="12.214720000">
     <name>geradeaus weiter auf B92/E49 Adorfer Strasse</name>
     <cmt>B92/E49 Adorfer Strasse</cmt>
   </rtept>
-  <rtept lat="50.371970" lon="12.208900">
+  <rtept lat="50.371970000" lon="12.208900000">
     <name>halb links halten</name>
   </rtept>
-  <rtept lat="50.372620" lon="12.207490">
+  <rtept lat="50.372620000" lon="12.207490000">
     <name>rechts abbiegen</name>
   </rtept>
-  <rtept lat="50.374280" lon="12.206760">
+  <rtept lat="50.374280000" lon="12.206760000">
     <name>links abbiegen auf B92/E49 Adorfer Strasse</name>
     <cmt>B92/E49 Adorfer Strasse</cmt>
   </rtept>
-  <rtept lat="50.416260" lon="12.173500">
+  <rtept lat="50.416260000" lon="12.173500000">
     <name>in Oelsnitz links abbiegen auf Rosa-Luxemburg-Strasse (S311)</name>
     <cmt>Rosa-Luxemburg-Strasse (S311)</cmt>
   </rtept>
-  <rtept lat="50.416790" lon="12.172210">
+  <rtept lat="50.416790000" lon="12.172210000">
     <name>links abbiegen auf Grabenstrasse (S311)</name>
     <cmt>Grabenstrasse (S311)</cmt>
   </rtept>
-  <rtept lat="50.415480" lon="12.169330">
+  <rtept lat="50.415480000" lon="12.169330000">
     <name>links abbiegen auf Kirchplatz (S311)</name>
     <cmt>Kirchplatz (S311)</cmt>
   </rtept>
-  <rtept lat="50.414790" lon="12.168470">
+  <rtept lat="50.414790000" lon="12.168470000">
     <name>rechts abbiegen auf Heppeplatz (S311)</name>
     <cmt>Heppeplatz (S311)</cmt>
   </rtept>
-  <rtept lat="50.415410" lon="12.167330">
+  <rtept lat="50.415410000" lon="12.167330000">
     <name>links abbiegen auf Bahnhofstrasse (S307)</name>
     <cmt>Bahnhofstrasse (S307)</cmt>
   </rtept>
-  <rtept lat="50.412260" lon="12.161490">
+  <rtept lat="50.412260000" lon="12.161490000">
     <name>rechts abbiegen auf Talsperrenstrasse (S310)</name>
     <cmt>Talsperrenstrasse (S310)</cmt>
   </rtept>
-  <rtept lat="50.413130" lon="12.149220">
+  <rtept lat="50.413130000" lon="12.149220000">
     <name>rechts abbiegen auf Talsperrenstrasse (K7854)</name>
     <cmt>Talsperrenstrasse (K7854)</cmt>
   </rtept>
-  <rtept lat="50.420020" lon="12.103010">
+  <rtept lat="50.420020000" lon="12.103010000">
     <name>bei D 08606 Planschwitz </name>
     <cmt>K7854\Oelsnitzer Strasse</cmt>
   </rtept>
-  <rtept lat="50.420170" lon="12.102340">
+  <rtept lat="50.420170000" lon="12.102340000">
     <name>in Planschwitz links abbiegen auf Talsperrenstrasse (K7854)</name>
     <cmt>Talsperrenstrasse (K7854)</cmt>
   </rtept>
-  <rtept lat="50.418860" lon="12.098760">
+  <rtept lat="50.418860000" lon="12.098760000">
     <name>links abbiegen</name>
   </rtept>
-  <rtept lat="50.399460" lon="12.095840">
+  <rtept lat="50.399460000" lon="12.095840000">
     <name>in B&#xf6;senbrunn rechts abbiegen auf S310</name>
     <cmt>S310</cmt>
   </rtept>
-  <rtept lat="50.402680" lon="12.091080">
+  <rtept lat="50.402680000" lon="12.091080000">
     <name>links abbiegen auf S310</name>
     <cmt>S310</cmt>
   </rtept>
-  <rtept lat="50.402190" lon="12.064050">
+  <rtept lat="50.402190000" lon="12.064050000">
     <name>in Dr&#xf6;da rechts abbiegen auf Hauptstrasse/Bobenneukirchener Strasse (S310)</name>
     <cmt>Hauptstrasse/Bobenneukirchener Strasse (S310)</cmt>
   </rtept>
-  <rtept lat="50.402690" lon="12.063550">
+  <rtept lat="50.402690000" lon="12.063550000">
     <name>halb rechts halten auf Bobenneukirchener Strasse (S310)</name>
     <cmt>Bobenneukirchener Strasse (S310)</cmt>
   </rtept>
-  <rtept lat="50.404490" lon="12.063910">
+  <rtept lat="50.404490000" lon="12.063910000">
     <name>bei D 08538 Burgstein/Dr&#xf6;da </name>
     <cmt>S310\Bobenneukirchener Strasse</cmt>
   </rtept>
-  <rtept lat="50.424620" lon="12.066970">
+  <rtept lat="50.424620000" lon="12.066970000">
     <name>in Pirk rechts abbiegen auf B173 Hofer Strasse</name>
     <cmt>B173 Hofer Strasse</cmt>
   </rtept>
-  <rtept lat="50.427520" lon="12.070870">
+  <rtept lat="50.427520000" lon="12.070870000">
     <name>links abbiegen auf Zur Pirkm&#xfc;hle (K7859)</name>
     <cmt>Zur Pirkm&#xfc;hle (K7859)</cmt>
   </rtept>
-  <rtept lat="50.429200" lon="12.061160">
+  <rtept lat="50.429200000" lon="12.061160000">
     <name>bei D 08538 Burgstein/Pirk </name>
     <cmt>K7859</cmt>
   </rtept>
-  <rtept lat="50.429140" lon="12.032920">
+  <rtept lat="50.429140000" lon="12.032920000">
     <name>in Geilsdorf links abbiegen auf Winkel (K7859)</name>
     <cmt>Winkel (K7859)</cmt>
   </rtept>
-  <rtept lat="50.434110" lon="12.008480">
+  <rtept lat="50.434110000" lon="12.008480000">
     <name>in Schwand links abbiegen auf Weischlitzer Strasse (K7859)</name>
     <cmt>Weischlitzer Strasse (K7859)</cmt>
   </rtept>
-  <rtept lat="50.432550" lon="12.007660">
+  <rtept lat="50.432550000" lon="12.007660000">
     <name>halb rechts halten auf Weischlitzer Strasse (K7859)</name>
     <cmt>Weischlitzer Strasse (K7859)</cmt>
   </rtept>
-  <rtept lat="50.429900" lon="11.981960">
+  <rtept lat="50.429900000" lon="11.981960000">
     <name>bei D 08538 Burgstein/Kemnitz </name>
     <cmt>K7859</cmt>
   </rtept>
-  <rtept lat="50.427600" lon="11.976500">
+  <rtept lat="50.427600000" lon="11.976500000">
     <name>links abbiegen auf Kemnitzer Strasse </name>
     <cmt>Kemnitzer Strasse </cmt>
   </rtept>
-  <rtept lat="50.418390" lon="11.985720">
+  <rtept lat="50.418390000" lon="11.985720000">
     <name>in Krebes rechts abbiegen auf Burgsteinstrasse (K7860)</name>
     <cmt>Burgsteinstrasse (K7860)</cmt>
   </rtept>
-  <rtept lat="50.415470" lon="11.979040">
+  <rtept lat="50.415470000" lon="11.979040000">
     <name>geradeaus weiter</name>
   </rtept>
-  <rtept lat="50.410280" lon="11.969940">
+  <rtept lat="50.410280000" lon="11.969940000">
     <name>links abbiegen</name>
   </rtept>
-  <rtept lat="50.388740" lon="11.996920">
+  <rtept lat="50.388740000" lon="11.996920000">
     <name>in Heinersgr&#xfc;n halb links halten auf An der Kapelle (K7855)</name>
     <cmt>An der Kapelle (K7855)</cmt>
   </rtept>
-  <rtept lat="50.378030" lon="12.016060">
+  <rtept lat="50.378030000" lon="12.016060000">
     <name>rechts abbiegen</name>
   </rtept>
-  <rtept lat="50.375530" lon="12.011930">
+  <rtept lat="50.375530000" lon="12.011930000">
     <name>geradeaus weiter auf B173</name>
     <cmt>B173</cmt>
   </rtept>
-  <rtept lat="50.326920" lon="11.913060">
+  <rtept lat="50.326920000" lon="11.913060000">
     <name>bei D95032 Hof </name>
   </rtept>
 </rte>
