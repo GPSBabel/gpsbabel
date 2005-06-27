@@ -70,8 +70,8 @@ static route_head *rte_head;
  */
 /* #define FLT_FMT "%.9lf" */  /* ExpertGPS */
 #define FLT_FMT "%0.9lf" 
-#define FLT_FMT_T "%lf" 
-#define FLT_FMT_R "%lf" 
+#define FLT_FMT_T "%0.9lf" 
+#define FLT_FMT_R "%0.9lf" 
 
 typedef enum {
 	tt_unknown = 0,
