@@ -86,12 +86,21 @@ compare ${TMPDIR}/tiger ${TMPDIR}/tiger2
 # awkward  to test.
 #
 rm -f ${TMPDIR}/lowrance1.usr
+rm -f ${TMPDIR}/enchilada1.usr
+rm -f ${TMPDIR}/enchilada.gpx
 ${PNAME} -i geo -f geocaching.loc -o lowranceusr -F ${TMPDIR}/lowrance1.usr
 bincompare ${TMPDIR}/lowrance1.usr reference/lowrance.usr
 ${PNAME} -i lowranceusr -f ${TMPDIR}/lowrance1.usr -o lowranceusr -F ${TMPDIR}/lowrance1.usr
 # And because of the FP rounding, we can't even read our file, write it back
 # and get the same data.  Sigh. 
 # bincompare reference/lowrance.usr  ${TMPDIR}/lowrance1.usr
+${PNAME} -i lowranceusr -f reference/all.usr -o gpx -F ${TMPDIR}/enchilada.gpx
+${PNAME} -i gpx -f ${TMPDIR}/enchilada.gpx -o lowranceusr -F ${TMPDIR}/enchilada1.usr
+bincompare ${TMPDIR}/enchilada1.usr reference/enchilada.usr
+# Don't convert icons as waypts
+${PNAME} -i lowranceusr,ignoreicons -f reference/all.usr -o gpx -F ${TMPDIR}/enchilada.gpx
+${PNAME} -i gpx -f ${TMPDIR}/enchilada.gpx -o lowranceusr -F ${TMPDIR}/enchilada1.usr
+bincompare ${TMPDIR}/enchilada1.usr reference/ignoreicons.usr
 
 # CSV (Comma separated value) data.
 
