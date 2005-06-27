@@ -83,6 +83,7 @@ extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t tef_xml_vecs;
 extern ff_vecs_t ppdb_vecs;
 extern ff_vecs_t vitosmt_vecs;
+extern ff_vecs_t gdb_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -404,6 +405,12 @@ vecs_t vec_list[] = {
 		"vitosmt",
 		"Vito Navigator II tracks",
 		"smt"
+	},	
+	{
+		&gdb_vecs,
+		"gdb",
+		"Garmin Database",
+		"gdb"
 	},	
 	{
 		NULL,

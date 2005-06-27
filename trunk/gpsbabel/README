@@ -845,6 +845,14 @@ THE FORMATS
 	VitoNavigator II on the Pocket PC.
 
 
+    GDB
+
+        Support for the "Garmin GPS Database" format used by default
+        in MapSource versions 6.1 and later. With this first step you
+        should be able to read waypoints, routes and tracks from .gdb
+        files.
+
+
 DATA FILTERS
 
 	GPSBabel supports data filtering.  Data filters are invoked from
