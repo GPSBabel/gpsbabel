@@ -462,6 +462,7 @@ void waypt_status_disp(int total_ct, int myct);
 void fatal(const char *, ...)
 #if __GNUC__
 	__attribute__ ((__format__ (__printf__, 1, 2)))
+	__attribute__((noreturn))
 #endif
 	;
 void warning(const char *, ...)
