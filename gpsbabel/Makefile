@@ -56,6 +56,15 @@ OBJS = main.o $(LIBOBJS)
 
 all: gpsbabel
 
+#
+# Alternate makefile target for the case when you have no libusb and no 
+# need for Garmin/USB (60, 76C, VistaC, Quest, etc.) support.
+#
+usbfree:
+	make LIBUSB= INHIBIT_USB=-DNO_USB
+
+
+
 gpsbabel: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o gpsbabel $(LIBEXPAT) $(LIBUSB) -lm
 
