@@ -242,6 +242,15 @@ typedef struct {
 	 * nice enough to use exactly the same priority scheme.
 	 */
 	int route_priority;
+
+	/* Optional dilution of precision:  positional, horizontal, veritcal.  
+	 * 1 <= dop <= 50 
+	 */ 
+	unsigned char hdop;		
+	unsigned char vdop;		
+	unsigned char pdop;		
+	signed short course;	/* Optional: degrees true */
+	signed int speed;   	/* Optional: meters per second. */
 	
 	geocache_data gc_data;
 	xml_tag *gpx_extras;
