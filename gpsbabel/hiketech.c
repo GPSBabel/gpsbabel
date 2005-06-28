@@ -244,7 +244,7 @@ void	ht_trk_utc(const char *args, const char **unused)
         tm.tm_year -= 1900;
         tm.tm_isdst = 0;
 
-        utc = mktime(&tm) + get_tz_offset() ;
+        utc = mkgmtime(&tm);
 
 	wpt_tmp->creation_time = utc;
 }

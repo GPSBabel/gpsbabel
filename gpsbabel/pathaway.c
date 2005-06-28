@@ -370,7 +370,7 @@ static int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_
 			    {
 				tm.tm_year -= 1900;
 				tm.tm_mon--;
-				wpt_tmp->creation_time = mktime(&tm) + get_tz_offset();
+				wpt_tmp->creation_time = mkgmtime(&tm);
 			    }
 			    break;
 			case 5:

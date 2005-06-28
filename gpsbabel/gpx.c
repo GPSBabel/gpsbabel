@@ -614,8 +614,7 @@ xml_parse_time( const char *cdatastr )
 	tm.tm_year -= 1900;
 	tm.tm_isdst = 0;
 	
-	rv = mktime(&tm) + get_tz_offset() - off_sign*off_hr*3600 - 
-		off_sign*off_min*60;
+	rv = mkgmtime(&tm) - off_sign*off_hr*3600 - off_sign*off_min*60;
 	
         xfree(timestr);
 	

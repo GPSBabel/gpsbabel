@@ -268,7 +268,7 @@ gprmc_parse(char *ibuf)
 	tm.tm_mon  = dmy % 100 - 1;
 	dmy = dmy / 100;
 	tm.tm_mday = dmy;
-	creation_time = mktime(&tm) + get_tz_offset();
+	creation_time = mkgmtime(&tm);
 
 	if (posn_type == gpgga)
 		return;
@@ -327,7 +327,7 @@ gpzda_parse(char *ibuf)
 	tm.tm_mday = dd;
 	tm.tm_mon  = mm - 1;
 	tm.tm_year = yy - 1900;
-	creation_time = mktime(&tm) + get_tz_offset();
+	creation_time = mkgmtime(&tm);
 }
 
 static void
@@ -338,7 +338,7 @@ nmea_read(void)
 	int ckval, ckcmp;
 	struct tm tm;
 
-	creation_time = mktime(&tm) + get_tz_offset() + current_time();
+	creation_time = mkgmtime(&tm) + current_time();
 
 	while (fgets(ibuf, sizeof(ibuf), file_in)) {
 		ck = strrchr(ibuf, '*');

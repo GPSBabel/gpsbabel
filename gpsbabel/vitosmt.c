@@ -162,7 +162,7 @@ vitosmt_read(void)
 		tmStruct.tm_sec 	=(int)floor(seconds);
 		tmStruct.tm_isdst	=-1;
 
-		wpt_tmp->creation_time = mktime(&tmStruct) + get_tz_offset();
+		wpt_tmp->creation_time = mkgmtime(&tmStruct);
 		wpt_tmp->centiseconds = fmod(100*seconds+0.5,100);
 	
 		snprintf(shortname, sizeof shortname-1 , "WP%04d", ++serial);

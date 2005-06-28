@@ -915,7 +915,7 @@ mag_trkparse(char *trkmsg)
 	dmy = dmy / 100;
 	tm.tm_mday = dmy % 100; 
 
-	waypt->creation_time = mktime(&tm) + get_tz_offset();
+	waypt->creation_time = mkgmtime(&tm);
 	waypt->centiseconds = fracsecs;
 
 	if (latdir == 'S') latdeg = -latdeg;
