@@ -894,7 +894,7 @@ mag_trkparse(char *trkmsg)
 	struct tm tm;
 	waypoint *waypt;
 
-	waypt  = xcalloc(sizeof *waypt, 1);
+	waypt  = waypt_new();
 
 	memset(&tm, 0, sizeof(tm));
 
@@ -1089,7 +1089,7 @@ mag_wptparse(char *trkmsg)
 	descr[0] = 0;
 	icon_token[0] = 0;
 
-	waypt  = xcalloc(sizeof *waypt, 1);
+	waypt  = waypt_new();
 
 	sscanf(trkmsg,"$PMGNWPL,%lf,%c,%lf,%c,%d,%c,%[^,],%[^,]", 
 		&latdeg,&latdir,
