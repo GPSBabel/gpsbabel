@@ -157,6 +157,9 @@ static char *seg_break;
 #define SECSTO2000			946713600
 #define MAX_TRAIL_POINTS 9999
 
+/* Jan 1, 2000 00:00:00 */
+struct tm base_time = { 0, 0, 0, 1, 0, 100, 5, 1, -1 };
+
 static
 size_t
 my_fwrite4(int *ptr, FILE *stream)
@@ -286,6 +289,7 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	long int TextLen;
 	time_t waypt_time;
 	short waypt_type;
+	time_t base_time_secs = mktime(&base_time);
 
 	lowranceusr_fread(&buff[0], 4, 1, file_in);
 	wpt_tmp->latitude = lat_mm_to_deg(le_read32(&buff[0]));
@@ -314,23 +318,14 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	/* Time is number of seconds since Jan. 1, 2000 */
 	waypt_time = le_read32(&buff[0]);
 	if (waypt_time)
-		wpt_tmp->creation_time = SECSTO2000 + waypt_time;
+		wpt_tmp->creation_time = base_time_secs + waypt_time;
 
     if (global_opts.debug_level >= 2)
 	{
-		struct tm *tm;
-		char tstr[20];
-
-		tm = gmtime(&(wpt_tmp->creation_time));
-		if (tm)
-		{
-			sprintf(tstr,"%d/%d/%d %d:%d:%d\n",tm->tm_mon+1, tm->tm_mday,
-				tm->tm_year, tm->tm_hour, tm->tm_min, tm->tm_sec);
-			printf("LOWRANCE parse_waypt: creation_time (GMT) %s\n", tstr);
-			printf("LOWRANCE parse_waypt: creation time (local) %s\n", 
-				ctime(&(wpt_tmp->creation_time)));
-			printf("LOWRANCE parse_waypt: waypt time (local) %s\n", ctime(&waypt_time));
-		}
+		printf("LOWRANCE parse_waypt: creation time %ld\n", 
+			wpt_tmp->creation_time);
+		printf("LOWRANCE parse_waypt: base_time %ld\n", base_time_secs);
+		printf("LOWRANCE parse_waypt: waypt time %ld\n", waypt_time);
 	}
 
 	/* Symbol ID */
@@ -596,6 +591,7 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 	char *name;
 	char *comment;
 	int alt = wpt->altitude;
+	time_t base_time_secs = mktime(&base_time);
 
 	Lat = lat_deg_to_mm(wpt->latitude);
 	my_fwrite4(&Lat, file_out);
@@ -644,8 +640,8 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 		my_fwrite4(&TextLen, file_out);
 	}
 
-	if (wpt->creation_time > SECSTO2000) {
-		Time = wpt->creation_time - SECSTO2000;
+	if (wpt->creation_time > base_time_secs) {
+		Time = wpt->creation_time - base_time_secs;
 	} else {
 		Time = 0;
 	}
@@ -653,7 +649,10 @@ lowranceusr_waypt_disp(const waypoint *wpt)
     if (global_opts.debug_level >= 2)
 	{
 		time_t wpt_time = Time;
-	printf("LOWRANCE waypt_disp: waypt time (local): %s\n",ctime(&wpt_time));
+		printf("LOWRANCE waypt_disp: base_time : %ld\n",base_time_secs);
+		printf("LOWRANCE waypt_disp: creation time : %ld\n",wpt->creation_time);
+		printf("LOWRANCE waypt_disp: waypt time : %ld\n",wpt_time);
+		printf("LOWRANCE waypt_disp: waypt time (local): %s\n",ctime(&wpt_time));
 	}
 
 	my_fwrite4(&Time, file_out);
