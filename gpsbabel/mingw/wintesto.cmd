@@ -132,6 +132,8 @@ REM convert lat/long.  It also doesn't support description, which makes it
 REM awkward  to test.
 REM 
 DEL %TMPDIR%\lowrance1.usr
+DEL %TMPDIR%\enchilada1.usr
+DEL %TMPDIR%\enchilada.gpx
 @echo on
 @echo Testing...
 %PNAME% -i geo -f geocaching.loc -o lowranceusr -F %TMPDIR%\lowrance1.usr
@@ -146,6 +148,21 @@ CALL :BINCOMPARE %TMPDIR%\lowrance1.usr reference\lowrance.usr
 REM And because of the FP rounding, we can't even read our file, write it back
 REM and get the same data.  Sigh. 
 REM bincompare reference/lowrance.usr  ${TMPDIR}/lowrance1.usr
+@echo on
+@echo Testing...
+%PNAME% -i lowranceusr -f reference\all.usr -o gpx -F %TMPDIR%\enchilada.gpx
+%PNAME% -i gpx -f %TMPDIR%\enchilada.gpx -o lowranceusr -F %TMPDIR%\enchilada1.usr
+@echo off
+@echo.
+CALL :BINCOMPARE %TMPDIR%\enchilada1.usr reference\enchilada.usr
+REM Don't convert icons as waypts
+@echo on
+@echo Testing...
+%PNAME% -i lowranceusr,ignoreicons -f reference\all.usr -o gpx -F %TMPDIR%\enchilada.gpx
+%PNAME% -i gpx -f %TMPDIR%\enchilada.gpx -o lowranceusr -F %TMPDIR%\enchilada1.usr
+@echo off
+@echo.
+CALL :BINCOMPARE %TMPDIR%\enchilada1.usr reference\ignoreicons.usr
 
 REM CSV (Comma separated value) data.
 

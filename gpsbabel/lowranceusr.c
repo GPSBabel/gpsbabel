@@ -139,22 +139,23 @@ static FILE *file_out;
 static void *mkshort_handle;
 
 static unsigned short waypt_out_count;
-static int trail_count, lowrance_route_count;
+static unsigned int trail_count, lowrance_route_count;
 static int trail_point_count;
+static int continuous = 1;
 static short num_section_points;
 static route_head *trk_head;
 static route_head *rte_head;
 static char *ignoreicons;
+static char *merge;
+static char *seg_break;
 
 #define MYNAME "Lowrance USR"
 
 #define MAXUSRSTRINGSIZE	256
 #define SEMIMINOR		   6356752.3142
 #define DEGREESTORADIANS	0.017453292
+#define SECSTO2000			946713600
 #define MAX_TRAIL_POINTS 9999
-
-/* Jan 1, 2000 00:00:00 */
-struct tm base_time = { 0, 0, 0, 1, 0, 100, 5, 1, 1 };
 
 static
 size_t
@@ -220,7 +221,11 @@ lowranceusr_fread(void *buff, size_t size, size_t members, FILE * fp)
 static
 arglist_t lowranceusr_args[] = {
 	{"ignoreicons", &ignoreicons, "Ignore event marker icons",
-	 NULL, ARGTYPE_BOOL }
+	 NULL, ARGTYPE_BOOL },
+	{"merge", &merge, "(USR output) Merge into one segmented track",
+	NULL, ARGTYPE_BOOL },
+	{"break", &seg_break, "(USR input) Break segments into separate tracks",
+	NULL, ARGTYPE_BOOL }
 };
 
 static void
@@ -280,7 +285,6 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	char buff[MAXUSRSTRINGSIZE + 1];
 	long int TextLen;
 	time_t waypt_time;
-	time_t base_time_secs = mktime(&base_time);
 	short waypt_type;
 
 	lowranceusr_fread(&buff[0], 4, 1, file_in);
@@ -309,7 +313,8 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	lowranceusr_fread(&buff[0], 4, 1, file_in);
 	/* Time is number of seconds since Jan. 1, 2000 */
 	waypt_time = le_read32(&buff[0]);
-	wpt_tmp->creation_time = base_time_secs + waypt_time;
+	if (waypt_time)
+		wpt_tmp->creation_time = SECSTO2000 + waypt_time;
 
     if (global_opts.debug_level >= 2)
 	{
@@ -324,7 +329,6 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 			printf("LOWRANCE parse_waypt: creation_time (GMT) %s\n", tstr);
 			printf("LOWRANCE parse_waypt: creation time (local) %s\n", 
 				ctime(&(wpt_tmp->creation_time)));
-			printf("LOWRANCE parse_waypt: base time (local) %s\n", ctime(&base_time_secs));
 			printf("LOWRANCE parse_waypt: waypt time (local) %s\n", ctime(&waypt_time));
 		}
 	}
@@ -445,9 +449,10 @@ lowranceusr_parse_trails(void)
 {
 	char buff[MAXUSRSTRINGSIZE + 1];
 	short int num_trails, num_trail_points, num_section_points;
-	int visible, i,j;
+	int i,j, trk_num;
 	long int text_len;
 	waypoint *wpt_tmp;
+	route_head *trk_tmp;
 
 	/* num trails */
 	lowranceusr_fread(&buff[0], 2, 1, file_in);
@@ -456,10 +461,10 @@ lowranceusr_parse_trails(void)
     if (global_opts.debug_level >= 1)
 		printf("LOWRANCE parse_trails: num trails = %d\n", num_trails);
 
-	for (i=0; i < num_trails; i++)
+	for (i=trk_num=0; i < num_trails; i++)
 	{
 		trk_head = route_head_alloc();
-		trk_head->rte_num = i+1;
+		trk_head->rte_num = ++trk_num;
 		track_add_head(trk_head);
 
 		/* trail name */
@@ -467,7 +472,7 @@ lowranceusr_parse_trails(void)
 		text_len = buff[0];
 
 if (global_opts.debug_level >= 1)
-	printf("LOWRANCE parse_trails: name text len = %d\n", text_len);
+	printf("LOWRANCE parse_trails: name text len = %ld\n", text_len);
 
 		if (text_len)
 			lowranceusr_fread(&buff[0], text_len, 1, file_in);
@@ -506,8 +511,8 @@ if (global_opts.debug_level >= 1)
 if (global_opts.debug_level >= 1)
 	printf("LOWRANCE parse_trails: num section points = %d\n", num_section_points);
 
-			for (j=0; j < num_section_points; j++, num_trail_points--)
-			{
+				for (j=0; j < num_section_points; j++, num_trail_points--)
+				{
 				wpt_tmp = waypt_new();
 				lowranceusr_fread(&buff[0], 4, 1, file_in);
 				wpt_tmp->latitude = lat_mm_to_deg(le_read32(&buff[0]));
@@ -515,11 +520,20 @@ if (global_opts.debug_level >= 1)
 				wpt_tmp->longitude = lon_mm_to_deg(le_read32(&buff[0]));
 				/* continuous */
 				lowranceusr_fread(&buff[0], 1, 1, file_in);
+				if (!buff[0] && seg_break && j)
+				{
+					trk_tmp = route_head_alloc();
+					trk_tmp->rte_num = ++trk_num;
+					trk_tmp->rte_name = xstrdup(trk_head->rte_name);
+					trk_tmp->rte_desc = '\0';
+					track_add_head(trk_tmp);
+					trk_head = trk_tmp;
+				}
 				route_add_wpt(trk_head, wpt_tmp);
 			
 if (global_opts.debug_level >= 1)
 	printf("LOWRANCE parse_trails: Trail pt lat %f lon %f\n", wpt_tmp->latitude, wpt_tmp->longitude);
-			}
+				}
 			}
 		}
 		/* remove the trail since it's empty */
@@ -533,7 +547,6 @@ data_read(void)
 	char buff[MAXUSRSTRINGSIZE + 1];
 	short int NumWaypoints, MajorVersion, MinorVersion, object_num;
 	int i;
-	long int TextLen;
 
 	lowranceusr_fread(&buff[0], 2, 1, file_in);
 	MajorVersion = le_read16(&buff[0]);
@@ -583,7 +596,6 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 	char *name;
 	char *comment;
 	int alt = wpt->altitude;
-	time_t base_time_secs = mktime(&base_time);
 
 	Lat = lat_deg_to_mm(wpt->latitude);
 	my_fwrite4(&Lat, file_out);
@@ -632,10 +644,10 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 		my_fwrite4(&TextLen, file_out);
 	}
 
-	if (wpt->creation_time > base_time_secs) {
-		Time = wpt->creation_time - base_time_secs;
+	if (wpt->creation_time > SECSTO2000) {
+		Time = wpt->creation_time - SECSTO2000;
 	} else {
-		Time = base_time_secs;
+		Time = 0;
 	}
 
     if (global_opts.debug_level >= 2)
@@ -721,6 +733,8 @@ lowranceusr_track_hdr(const route_head *trk)
 
 	num_trail_points = (short) trk->rte_waypt_ct;
 	max_trail_size = MAX_TRAIL_POINTS;
+	if (num_trail_points > max_trail_size)
+		num_trail_points = max_trail_size;
 	num_section_points = num_trail_points;
 
     if (global_opts.debug_level >= 1)
@@ -733,11 +747,6 @@ lowranceusr_track_hdr(const route_head *trk)
 	my_fwrite2(&num_section_points, file_out);
 	xfree(name);
 	trail_point_count=1;
-}
-
-static void
-lowranceusr_track_tlr(const route_head *trk)
-{
 }
 
 static void
@@ -775,29 +784,85 @@ lowranceusr_route_hdr(const route_head *rte)
 }
 
 static void
-lowranceusr_route_tlr(const route_head *rte)
-{
-}
-
-static void
 lowranceusr_track_disp(const waypoint *wpt)
 {
-	int continuous = 1;
 	int lat, lon;
 
-	if (trail_point_count <= MAX_TRAIL_POINTS)
+	if (++trail_point_count <= MAX_TRAIL_POINTS)
 	{
 		lat = lat_deg_to_mm(wpt->latitude);
 		lon = lon_deg_to_mm(wpt->longitude);
 
     if (global_opts.debug_level >= 1)
-		printf("LOWRANCE track_disp: Trail point #%d lat = %ld long = %ld\n",trail_point_count, lat, lon);
+		printf("LOWRANCE track_disp: Trail point #%d lat = %d long = %d\n",trail_point_count, lat, lon);
 
 		my_fwrite4(&lat, file_out);
 		my_fwrite4(&lon, file_out);
 		fwrite(&continuous, 1, 1, file_out);
-		trail_point_count++;
+		if (!continuous)
+			continuous = 1;
 	}
+}
+
+static void
+lowranceusr_merge_track_hdr(const route_head *trk)
+{
+	int text_len;
+	char *name, tmp_name[20];
+
+	if (++trail_count == 1)
+	{
+		if (trk->rte_name) {
+			name = xstrdup(trk->rte_name);
+		} else if (trk->rte_desc) {
+				name = xstrdup(trk->rte_desc);
+		} else
+		{
+			tmp_name[0]='\0';
+			sprintf(tmp_name, "Babel %d", trail_count);
+			name = xstrdup(tmp_name);
+		}
+		text_len = strlen(name);
+		my_fwrite4(&text_len, file_out);
+
+		if (global_opts.debug_level >= 1)
+			printf("LOWRANCE track_hdr: trail name = %s\n", name);
+
+		fwrite(name, 1, text_len, file_out);
+	}
+
+	trail_point_count += (short) trk->rte_waypt_ct;
+}
+
+static void
+lowranceusr_merge_track_tlr(const route_head *trk)
+{
+	short num_trail_points, max_trail_size;
+	int visible=1;
+
+	if (trail_count == track_count())	/* last trail */
+	{
+		num_trail_points = trail_point_count;
+		max_trail_size = MAX_TRAIL_POINTS;
+		if (num_trail_points > max_trail_size)
+			num_trail_points = max_trail_size;
+		num_section_points = num_trail_points;
+
+    if (global_opts.debug_level >= 1)
+	printf("LOWRANCE merge_track_tlr: num_trail_points = %d\nmax_trail_size = %d\nnum_section_points = %d\n",
+			num_trail_points, max_trail_size, num_section_points);
+
+		fwrite(&visible, 1, 1, file_out);
+		my_fwrite2(&num_trail_points, file_out);
+		my_fwrite2(&max_trail_size, file_out);
+		my_fwrite2(&num_section_points, file_out);
+	}
+}
+static void
+
+lowranceusr_merge_track_hdr_2(const route_head *trk)
+{
+	continuous = 0;
 }
 
 static void
@@ -830,7 +895,7 @@ data_write(void)
 	if (NumRoutes)
 	{
 		lowrance_route_count=0;
-		route_disp_all(lowranceusr_route_hdr, lowranceusr_route_tlr, lowranceusr_waypt_disp);
+		route_disp_all(lowranceusr_route_hdr, NULL, lowranceusr_waypt_disp);
 	}
 
 	/* no support for Icons */
@@ -839,15 +904,33 @@ data_write(void)
 	
 	/* Track support added 6/21/05 */
 	NumTrails = track_count();
-	my_fwrite2(&NumTrails, file_out);
 
-    if (global_opts.debug_level >= 1)
-	printf("LOWRANCE data_write: Num tracks = %d\n", NumTrails);
-
-	if (NumTrails)
+	if (NumTrails && merge)
 	{
-		trail_count=0;
-		track_disp_all(lowranceusr_track_hdr, lowranceusr_track_tlr, lowranceusr_track_disp);
+		NumTrails = 1;
+		my_fwrite2(&NumTrails, file_out);
+		trail_point_count = 0;
+		trail_count = 0;
+		/* count the number of total track points */
+		track_disp_all(lowranceusr_merge_track_hdr, lowranceusr_merge_track_tlr, NULL);
+		/* write out the new track header */
+		trail_point_count = 0;
+		track_disp_all(lowranceusr_merge_track_hdr_2, NULL, lowranceusr_track_disp);
+
+	}
+	else
+	{
+	
+		my_fwrite2(&NumTrails, file_out);
+
+		if (global_opts.debug_level >= 1)
+		printf("LOWRANCE data_write: Num tracks = %d\n", NumTrails);
+
+		if (NumTrails)
+		{
+			trail_count=0;
+			track_disp_all(lowranceusr_track_hdr, NULL, lowranceusr_track_disp);
+		}
 	}
 }
 
@@ -862,5 +945,5 @@ ff_vecs_t lowranceusr_vecs = {
 	data_read,
 	data_write,
 	NULL, 
-//	lowranceusr_args
+	lowranceusr_args
 };
