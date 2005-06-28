@@ -212,8 +212,12 @@ THE FORMATS
 	Event marker icons are converted to waypoints.  Symbols tend
 	to get lost in the translation.
 
-	Additional option:
+	Additional options:
 	ignoreicons	-	don't convert icons to waypoints
+	merge		-	(USR output) merge all tracks into a single
+					track with segments
+	break		-	(USR input) break track segments into separate
+					tracks
 
     XMap
 
