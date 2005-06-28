@@ -1,7 +1,7 @@
 /*
     Perform various operations on waypoints.
 
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -129,6 +129,8 @@ waypt_new(void)
 
 	wpt = (waypoint *) xcalloc(sizeof (*wpt), 1);
 	wpt->altitude = unknown_alt;
+	wpt->course = -999.0;
+	wpt->speed = -999.0;
 
 	return wpt;
 }
