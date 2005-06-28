@@ -1139,6 +1139,25 @@ write_gpx_url(const waypoint *waypointp)
 	}
 }
 
+/*
+ * Write optional accuracty information for a given (way|track|route)point
+ * to the output stream.  Done in one place since it's common for all three.
+ * Order counts.
+ */
+static void
+gpx_write_accuracy(const waypoint *waypointp)
+{
+	if (waypointp->hdop) {
+		fprintf(ofd, "  <hdop>%d</hdop>\n", waypointp->hdop);
+	}
+	if (waypointp->vdop) {
+		fprintf(ofd, "  <vdop>%d</vdop>\n", waypointp->vdop);
+	}
+	if (waypointp->pdop) {
+		fprintf(ofd, "  <pdop>%d</pdop>\n", waypointp->pdop);
+	}
+}
+
 static void
 gpx_waypt_pr(const waypoint *waypointp)
 {
@@ -1179,6 +1198,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 	write_gpx_url(waypointp);
 
 	write_optional_xml_entity(ofd, "  ", "sym", waypointp->icon_descr);
+	gpx_write_accuracy(waypointp);
 
 	fprint_xml_chain( waypointp->gpx_extras, waypointp );
 	fprintf(ofd, "</wpt>\n");
@@ -1220,6 +1240,7 @@ gpx_track_disp(const waypoint *waypointp)
 	write_optional_xml_entity(ofd, "  ", "desc", waypointp->notes);
 	write_gpx_url(waypointp);
 	write_optional_xml_entity(ofd, "  ", "sym", waypointp->icon_descr);
+	gpx_write_accuracy(waypointp);
 	fprintf(ofd, "</trkpt>\n");
 }
 
@@ -1265,6 +1286,7 @@ gpx_route_disp(const waypoint *waypointp)
 	write_optional_xml_entity(ofd, "    ", "cmt", waypointp->description);
 	write_optional_xml_entity(ofd, "    ", "desc", waypointp->notes);
 	write_optional_xml_entity(ofd, "    ", "sym", waypointp->icon_descr);
+	gpx_write_accuracy(waypointp);
 	fprintf(ofd, "  </rtept>\n");
 }
 
