@@ -268,7 +268,7 @@ ce_cdata(void *dta, const XML_Char *s, int len)
 					strncpy(secString, currentMark->created+13, 2);
 					secString[2] = '\0';
 					t.tm_sec = atoi(secString);
-					currentMark->wp->creation_time = mktime(&t) + get_tz_offset();
+					currentMark->wp->creation_time = mkgmtime(&t);
 				}
 			}
 			else if (inRoute) {

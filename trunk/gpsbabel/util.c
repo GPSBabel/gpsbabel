@@ -477,6 +477,7 @@ si_round( double d )
 /*
  *  Return a time_t suitable for adding to a time_t that is in GMT to
  *  make it a local time.
+ *  Obsolete: to use mkgmtime instead.
  */
 signed int 
 get_tz_offset(void)
@@ -490,6 +491,54 @@ get_tz_offset(void)
 		return (signed int) difftime(now, later);
 	}
 }
+
+/*
+	mkgmtime -- convert tm struct in UTC to time_t
+
+	works just like mktime but without all the mucking
+	around with timezones and daylight savings
+
+	obsoletes get_tz_offset()
+
+	Borrowed from lynx GPL source code
+	http://lynx.isc.org/release/lynx2-8-5/src/mktime.c
+
+	Written by Philippe De Muyter <phdm@macqel.be>.
+*/
+
+time_t
+mkgmtime(struct tm *t)
+{
+	short  month, year;
+	time_t result;
+	static int      m_to_d[12] =
+		{0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
+
+	month = t->tm_mon;
+	year = t->tm_year + month / 12 + 1900;
+	month %= 12;
+	if (month < 0)
+	{
+		year -= 1;
+		month += 12;
+	}
+	result = (year - 1970) * 365 + m_to_d[month];
+	if (month <= 1)
+		year -= 1;
+	result += (year - 1968) / 4;
+	result -= (year - 1900) / 100;
+	result += (year - 1600) / 400;
+	result += t->tm_mday;
+	result -= 1;
+	result *= 24;
+	result += t->tm_hour;
+	result *= 60;
+	result += t->tm_min;
+	result *= 60;
+	result += t->tm_sec;
+	return(result);
+}
+
 
 /*
  * A wrapper for time(2) that allows us to "freeze" time for testing.

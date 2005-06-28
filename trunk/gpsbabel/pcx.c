@@ -149,7 +149,7 @@ data_read(void)
 			tm.tm_mon = month_lookup(month);
 			tm.tm_year = atoi(date + 7) + 100;
 			wpt_tmp = waypt_new();
-			wpt_tmp->creation_time = mktime(&tm) + get_tz_offset();
+			wpt_tmp->creation_time = mkgmtime(&tm);
 			wpt_tmp->latitude = lat;
 			wpt_tmp->longitude = lon;
 			wpt_tmp->altitude = alt;

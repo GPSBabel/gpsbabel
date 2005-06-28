@@ -570,7 +570,7 @@ psit_track_r(FILE *psit_file, route_head **trk)
 					&(tmTime.tm_sec));
 
 			tmTime.tm_isdst = 0;
-			dateTime = mktime(&tmTime) + get_tz_offset();
+			dateTime = mkgmtime(&tmTime);
 
 			psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), whitespace);
 

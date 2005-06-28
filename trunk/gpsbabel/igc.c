@@ -165,7 +165,7 @@ static void igc_task_rec(const char *rec)
 	    tm.tm_year += 100;
 	}
 	tm.tm_isdst = 0;
-	creation = mktime(&tm) + get_tz_offset();
+	creation = mkgmtime(&tm);
 
 	// Create a route to store the task data in.
 	rte_head = route_head_alloc();
@@ -297,7 +297,7 @@ static void data_read(void)
 		    tm.tm_year += 100;
 		}
 		tm.tm_isdst = 0;
-		date = mktime(&tm) + get_tz_offset();
+		date = mkgmtime(&tm);
 	    } else {
 		// Store other header data in the track descriptions
 		if (strlen(trk_desc) < MAXDESCLEN) {
