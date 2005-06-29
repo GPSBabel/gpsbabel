@@ -1083,6 +1083,13 @@ DEL %TMPDIR%\pathaway*
 @echo.
 CALL :COMPARE %TMPDIR%\pathaway.gpx reference\track\pathaway.gpx
 
+@echo on
+@echo Testing...
+%PNAME% -w -r -t -i gdb -f reference\gdb-sample.gdb -x track,pack -o gpx -F %TMPDIR%\gdb-sample.gpx
+@echo off
+@echo.
+REM compare ${TMPDIR}/gdb-sample.ref ${TMPDIR}/gdb-sample.new
+
 REM 
 REM Vito Navigator II .smt tests
 REM 
@@ -1092,13 +1099,13 @@ DEL %TMPDIR%\vitosmt*
 %PNAME%    -i vitosmt -f reference\vitosmt.smt -o gpx -F %TMPDIR%\vitosmt.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\vitosmt.gpx reference\vitosmt.gpx
+REM compare ${TMPDIR}/vitosmt.gpx reference/vitosmt.gpx
 @echo on
 @echo Testing...
 %PNAME% -t -i vitosmt -f reference\vitosmt.smt -o gpx -F %TMPDIR%\vitosmt_t.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\vitosmt_t.gpx reference\track\vitosmt_t.gpx
+REM compare ${TMPDIR}/vitosmt_t.gpx reference/track/vitosmt_t.gpx
 
 REM 
 REM tracks filter tests
@@ -1112,4 +1119,27 @@ DEL %TMPDIR%\trackfilter*
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\trackfilter.ref %TMPDIR%\trackfilter.new
+
+REM 
+REM Map&Guide Motorrad Routenplaner .bcr files test
+REM 
+DEL %TMPDIR%\bcr*
+@echo on
+@echo Testing...
+%PNAME% -r -i bcr -f reference\route\bcr-sample.bcr -o gpx -F %TMPDIR%\bcr-sample.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\route\bcr-sample.gpx %TMPDIR%\bcr-sample.gpx
+@echo on
+@echo Testing...
+%PNAME% -r -i gpx -f reference\route\bcr-sample.gpx -o bcr -F %TMPDIR%\bcr-sample2.bcr
+@echo off
+@echo.
+CALL :COMPARE reference\route\bcr-sample2.bcr %TMPDIR%\bcr-sample2.bcr
+@echo on
+@echo Testing...
+%PNAME% -r -i bcr -f %TMPDIR%\bcr-sample2.bcr -o gpx -F %TMPDIR%\bcr-sample2.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\route\bcr-sample.gpx %TMPDIR%\bcr-sample2.gpx
 
