@@ -84,6 +84,7 @@ extern ff_vecs_t tef_xml_vecs;
 extern ff_vecs_t ppdb_vecs;
 extern ff_vecs_t vitosmt_vecs;
 extern ff_vecs_t gdb_vecs;
+extern ff_vecs_t bcr_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -411,6 +412,12 @@ vecs_t vec_list[] = {
 		"gdb",
 		"Garmin Database",
 		"gdb"
+	},	
+	{
+		&bcr_vecs,
+		"bcr",
+		"Motorrad Routenplaner (Map&Guide) .bcr files",
+		"bcr"
 	},	
 	{
 		NULL,

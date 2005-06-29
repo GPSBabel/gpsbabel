@@ -28,7 +28,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
-	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o
+	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o trackfilter.o
 
@@ -250,6 +250,7 @@ vcf.o: vcf.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 vecs.o: vecs.c defs.h queue.h gbtypes.h csv_util.h
 vitosmt.o: vitosmt.c defs.h queue.h gbtypes.h
+bcr.o: defs.h queue.h gbtypes.h garmin_tables.h
 vmem.o: vmem.c defs.h queue.h gbtypes.h
 waypt.o: waypt.c defs.h queue.h gbtypes.h
 xcsv.o: xcsv.c defs.h queue.h gbtypes.h csv_util.h
