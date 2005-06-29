@@ -13,31 +13,37 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2001-07-15T21:38:41Z</time>
     <name>TAKEOFF</name>
     <cmt>LashamClubhouse</cmt>
+    <desc>LashamClubhouse</desc>
   </rtept>
   <rtept lat="51.169650000" lon="-1.044066667">
 <time>2001-07-15T21:38:41Z</time>
     <name>START</name>
     <cmt>LashamStart S Start</cmt>
+    <desc>LashamStart S Start</desc>
   </rtept>
   <rtept lat="52.151533333" lon="-2.920450000">
 <time>2001-07-15T21:38:41Z</time>
     <name>TURN01</name>
     <cmt>Sarnesfield TP1</cmt>
+    <desc>Sarnesfield TP1</desc>
   </rtept>
   <rtept lat="52.502450000" lon="-0.293533333">
 <time>2001-07-15T21:38:41Z</time>
     <name>TURN02</name>
     <cmt>NormanCross TP2</cmt>
+    <desc>NormanCross TP2</desc>
   </rtept>
   <rtept lat="51.169650000" lon="-1.044066667">
 <time>2001-07-15T21:38:41Z</time>
     <name>FINISH</name>
     <cmt>LashamStart S Finish</cmt>
+    <desc>LashamStart S Finish</desc>
   </rtept>
   <rtept lat="51.189316667" lon="-1.031650000">
 <time>2001-07-15T21:38:41Z</time>
     <name>LANDING</name>
     <cmt>LashamClubhouse</cmt>
+    <desc>LashamClubhouse</desc>
   </rtept>
 </rte>
 <trk>
