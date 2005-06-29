@@ -92,16 +92,62 @@ gdb_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 	return DEFAULTICONDESCR;
 }
 
+#ifndef UTF8_SUPPORT
+char *gdb_garmin_to_utf8(const char *s)
+{
+	int len;
+	char *res;
+	unsigned char c;
+	char *src, *dst;
+
+	if (s == NULL) return NULL;
+
+	len = 0;
+	src = (char *)s;
+	while ('\0' != (c = *src++))
+	{
+	    len++;
+	    if (c & 0x80) len++;
+	    if (c == 0x80) len++;
+	}
+
+	src = (char *)s;
+	dst = res = (void *) xmalloc(len + 1);
+	while ('\0' != (c = *src++))
+	{
+	    if (c == 0x80)
+	    {
+		*dst++ = 0xe2;
+		*dst++ = 0x82;
+		*dst++ = 0xac;
+	    }
+	    else if (c & 0x80)
+	    {
+		*dst++ = (0xc0 | (c >> 6));
+		*dst++ = (c & 0xbf);
+	    }
+	    else
+	    {
+		*dst++ = c;
+	    }
+	}
+	*dst = '\0';
+	return res;
+}
+#endif
+
 /* %%% local functions (read support) %%% */
 
 char *
 gdb_convert_name_buff(char *buff, size_t buffsize)
 {
 #ifdef UTF8_SUPPORT
-	char *tmp = str_garmin_to_utf8(buff);	
+	char *tmp = str_garmin_to_utf8(buff);
+#else
+	char *tmp = gdb_garmin_to_utf8(buff);
+#endif	
 	strncpy(buff, tmp, buffsize);
 	xfree(tmp);
-#endif	
 	return buff;
 }
 
@@ -145,11 +191,11 @@ gdb_create_rte_wpt(const char *name, double lat, double lon, double alt)
 }
 
 
-static unsigned int
+static int
 gdb_fread_str(FILE *fin, char *dest, size_t maxlen)
 {
 	int c;
-	unsigned int res = 0;
+	int res = 0;
 	
 	while (maxlen-- > 0)
 	{
@@ -170,7 +216,7 @@ gdb_fread_str(FILE *fin, char *dest, size_t maxlen)
 }
 
 static int
-gdb_fread_le(FILE *fin, void *dest, size_t size, unsigned int bit_count, const char *field)
+gdb_fread_le(FILE *fin, void *dest, size_t size, int bit_count, const char *field)
 {
 	char buff[32];
 	unsigned char *c = dest;
@@ -218,8 +264,7 @@ static void
 gdb_read_file_header(void)
 {
 	char buff[128];
-	int i; 
-	unsigned int reclen;
+	int i, reclen;
 	
 	i = gdb_fread_str(fin, buff, sizeof(buff));
 	if ( i != 5 )
@@ -271,7 +316,9 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	short xcat;
 	double xdepth = unknown_alt;
 	double xalt = unknown_alt;
+	waypoint *res;
 
+	char *ctmp;
 	char buff[128];
 	
 	size_t pos, delta;
@@ -390,7 +437,7 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	
 	*wptclass = xclass;
 	
-	waypoint *res = waypt_new();
+	res = waypt_new();
 	res->shortname = xstrdup(xname);
 	res->description = xstrdup(xdesc);
 	res->notes = xstrdup(xnotes);
@@ -404,24 +451,25 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	return res;
 }
 
-static void
+route_head *
 gdb_read_route(void)
 {
 	char xname[MPSNAMEBUFFERLEN];
 	char xwptname[MPSNAMEBUFFERLEN];
 	int xclass;
 	double xalt;
-	double xlat = 0.0, xlon = 0.0;
+	double xlat, xlon;
 	
 	char buff[256];
 	int count;
+	int checked;
 	int isteps, ilink;
 	int semilat, semilon;
 	
 	route_head *route;
 	waypoint *wpt;
 	
-	unsigned int i, j;
+	int i, j;
 	size_t curpos;
 	
 	gdb_is_valid(gdb_fread_str(fin, xname, sizeof(xname)) > 0, "route start");
@@ -451,7 +499,7 @@ gdb_read_route(void)
 	printf(MYNAME " - route: \"%s\" with %d point(s)\n", route->rte_name, count);
 #endif
 	
-	if (count <= 0) return;
+	if (count <= 0) return route;
 	
 	count--;
 	
@@ -477,7 +525,7 @@ gdb_read_route(void)
 	    
 	    gdb_fread_le(fin, &isteps, sizeof(isteps), 32, "isteps");
 	    
-	    if (isteps <= 0) return;	
+	    if (isteps <= 0) return route;	
 	    
 	    gdb_fread_le(fin, &semilat, sizeof(semilat), 32, "semilat");
 	    gdb_fread_le(fin, &semilon, sizeof(semilon), 32, "semilon");
@@ -541,7 +589,7 @@ gdb_read_route(void)
 	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
 	    memset(buff, 0, sizeof(buff));
-	    int checked = 0;
+	    checked = 0;
 
 	    j = 18;
 	    while (checked == 0 && j-- > 0)
@@ -586,7 +634,7 @@ gdb_read_route(void)
 	wpt = gdb_create_rte_wpt(xwptname, xlat, xlon, xalt);
 	route_add_wpt(route, wpt);
 	
-	return;
+	return route;
 }
 
 
@@ -667,7 +715,7 @@ gdb_read_track(const size_t max_file_pos)
 static void
 gdb_read_data(void)
 {
-	int reclen, done;
+	int i, reclen, done;
 	char typ;
 	size_t curpos, deltapos;
 	waypoint *wpt;
