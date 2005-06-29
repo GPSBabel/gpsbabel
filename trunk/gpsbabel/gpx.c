@@ -92,6 +92,9 @@ typedef enum {
 	tt_wpt_urlname,
 	tt_wpt_link, 		/* New in GPX 1.1 */
 	tt_wpt_link_text, 	/* New in GPX 1.1 */
+	tt_pdop,		/* PDOPS are common for all three */
+	tt_hdop,		/* PDOPS are common for all three */
+	tt_vdop,		/* PDOPS are common for all three */
 	tt_cache,
 	tt_cache_name,
 	tt_cache_container,
@@ -133,6 +136,8 @@ typedef enum {
 	tt_trk_trkseg_trkpt_desc,
 	tt_trk_trkseg_trkpt_ele,
 	tt_trk_trkseg_trkpt_time,
+	tt_trk_trkseg_trkpt_course,	
+	tt_trk_trkseg_trkpt_speed,
 } tag_type;
 
 typedef struct tag_mapping {
@@ -209,6 +214,19 @@ tag_mapping tag_path_map[] = {
 	{ tt_trk_trkseg_trkpt_url, 0, "/gpx/trk/trkseg/trkpt/url" },
 	{ tt_trk_trkseg_trkpt_urlname, 0, "/gpx/trk/trkseg/trkpt/urlname" },
 	{ tt_trk_trkseg_trkpt_sym, 0, "/gpx/trk/trkseg/trkpt/sym" },
+	{ tt_trk_trkseg_trkpt_course, 0, "/gpx/trk/trkseg/trkpt/course" },
+	{ tt_trk_trkseg_trkpt_speed, 0, "/gpx/trk/trkseg/trkpt/speed" },
+
+	/* Common to tracks, routes, and waypts */
+	{ tt_pdop, 0, "/gpx/wpt/pdop" },
+	{ tt_pdop, 0, "/gpx/trk/trkseg/trkpt/pdop" },
+	{ tt_pdop, 0, "/gpx/rte/rtept/pdop" },
+	{ tt_hdop, 0, "/gpx/wpt/hdop" },
+	{ tt_hdop, 0, "/gpx/trk/trkseg/trkpt/hdop" },
+	{ tt_hdop, 0, "/gpx/rte/rtept/hdop" },
+	{ tt_vdop, 0, "/gpx/wpt/vdop" },
+	{ tt_vdop, 0, "/gpx/trk/trkseg/trkpt/vdop" },
+	{ tt_vdop, 0, "/gpx/rte/rtept/hdop" },
 	{0}
 };
 
@@ -757,6 +775,12 @@ gpx_end(void *data, const char *el)
 	case tt_trk_number:
 		trk_head->rte_num = atoi(cdatastrp);
 		break;
+	case tt_trk_trkseg_trkpt_course:
+		wpt_tmp->course = atof(cdatastrp);
+		break;
+	case tt_trk_trkseg_trkpt_speed:
+		wpt_tmp->speed = atof(cdatastrp);
+		break;
 
 	/*
 	 * Items that are actually in multiple categories.
@@ -791,6 +815,15 @@ gpx_end(void *data, const char *el)
 	case tt_trk_trkseg_trkpt_desc:
 	case tt_rte_rtept_desc:
 		wpt_tmp->notes = xstrdup(cdatastrp);
+		break;
+	case tt_pdop:
+		wpt_tmp->pdop = atof(cdatastrp);
+		break;
+	case tt_hdop:
+		wpt_tmp->hdop = atof(cdatastrp);
+		break;
+	case tt_vdop:
+		wpt_tmp->vdop = atof(cdatastrp);
 		break;
 	case tt_unknown:
 		end_something_else();
@@ -1242,7 +1275,7 @@ gpx_track_disp(const waypoint *waypointp)
 	if (gpx_wversion_num == 10) {
 		if (waypointp->course >= 0) {
 			fprintf(ofd, "  <course>%f</course>\n", 
-				waypointp->pdop);
+				waypointp->course);
 		}
 		if (waypointp->speed >= 0) {
 			fprintf(ofd, "  <speed>%f</speed>\n", 
