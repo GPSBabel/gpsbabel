@@ -885,9 +885,9 @@ THE FORMATS
 	An example with all options:
 	
 	gpsbabel -r \
-	         -i bcr,index=1,name="From A to B",radius=6371012 \
-		 -f a_to_b.bcr \
-		 -o gpx -F out.gpx
+		 -i gpx -f in.gpx
+	         -o bcr,index=1,name="From A to B",radius=6371012 \
+		 -F a_to_b.bcr
 	  
 
 DATA FILTERS

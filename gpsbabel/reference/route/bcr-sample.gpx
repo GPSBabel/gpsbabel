@@ -66,46 +66,55 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.492706401" lon="12.105471361">
     <name>STATION1</name>
     <cmt>bei D 08527,Neundorf,,0,</cmt>
+    <desc>bei D 08527,Neundorf,,0,</desc>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.494102371" lon="12.107252018">
     <name>STATION2</name>
     <cmt>bei D 08523,Plauen/Possig,,0,</cmt>
+    <desc>bei D 08523,Plauen/Possig,,0,</desc>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.497986840" lon="12.105885049">
     <name>STATION3</name>
     <cmt>bei D 08523,Plauen/Westend,,0,</cmt>
+    <desc>bei D 08523,Plauen/Westend,,0,</desc>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.688914683" lon="12.327792655">
     <name>STATION4</name>
     <cmt>bei D 08427,Fraureuth/Beiersdorf,,0,</cmt>
+    <desc>bei D 08427,Fraureuth/Beiersdorf,,0,</desc>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.864403822" lon="12.429074255">
     <name>STATION5</name>
     <cmt>bei D 04639,Ponitz/Merlach,,0,</cmt>
+    <desc>bei D 04639,Ponitz/Merlach,,0,</desc>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.971321599" lon="12.452645474">
     <name>STATION6</name>
     <cmt>bei D 04600,Altenburg/Paditz,,0,</cmt>
+    <desc>bei D 04600,Altenburg/Paditz,,0,</desc>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.171165953" lon="12.492485421">
     <name>STATION7</name>
     <cmt>bei D 04552,Borna/Gestewitz,,0,</cmt>
+    <desc>bei D 04552,Borna/Gestewitz,,0,</desc>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.238200898" lon="12.388856592">
     <name>STATION8</name>
     <cmt>bei D 04564,Boehlen/Grossdeuben,,0,</cmt>
+    <desc>bei D 04564,Boehlen/Grossdeuben,,0,</desc>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.314684001" lon="12.409118308">
     <name>STATION9</name>
     <cmt>bei D 04317,Leipzig/Thonberg,,0,</cmt>
+    <desc>bei D 04317,Leipzig/Thonberg,,0,</desc>
     <sym>Waypoint</sym>
   </rtept>
 </rte>
