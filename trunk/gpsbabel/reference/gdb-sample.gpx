@@ -5,7 +5,7 @@ creator="GPSBabel - http://www.gpsbabel.org"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>2005-06-28T15:26:12Z</time>
+<time>1970-01-01T00:00:00Z</time>
 <bounds minlat="50.492618987" minlon ="12.105448823" maxlat="51.314520836" maxlon="12.435919438" />
 <wpt lat="50.877340632" lon="12.433888670">
   <name>3</name>
@@ -94,6 +94,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-02-26T09:03:15Z</time>
     <name>Liebknechtstras</name>
     <cmt>Liebknechtstrasse 90</cmt>
+    <desc>Liebknechtstrasse 90</desc>
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.493836962" lon="12.106101271">
@@ -109,6 +110,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-02-26T09:02:20Z</time>
     <name>Jahnstrasse11</name>
     <cmt>Jahnstrasse 11</cmt>
+    <desc>Jahnstrasse 11</desc>
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.493662786" lon="12.107152529">
@@ -223,6 +225,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-02-26T08:59:59Z</time>
     <name>Elsterberg</name>
     <cmt>Piehlerstrasse</cmt>
+    <desc>Piehlerstrasse</desc>
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.610795189" lon="12.173802238">
@@ -286,6 +289,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-02-26T08:57:04Z</time>
     <name>Greiz</name>
     <cmt>August-Bebel-Strasse</cmt>
+    <desc>August-Bebel-Strasse</desc>
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.654762965" lon="12.204956934">
@@ -430,6 +434,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-02-26T09:10:47Z</time>
     <name>Gosel</name>
     <cmt>Gosel</cmt>
+    <desc>Gosel</desc>
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.844125664" lon="12.408756875">
@@ -465,6 +470,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.877340632" lon="12.433888670">
     <name>3</name>
     <cmt>B93</cmt>
+    <desc>B93</desc>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.877340548" lon="12.433888670">

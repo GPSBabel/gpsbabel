@@ -716,10 +716,12 @@ rm -f ${TMPDIR}/pathaway*
 ${PNAME} -t -i pathaway -f reference/track/pathaway.pdb -o gpx -F ${TMPDIR}/pathaway.gpx
 compare ${TMPDIR}/pathaway.gpx reference/track/pathaway.gpx
 
-${PNAME} -w -r -t -i gdb -f reference/gdb-sample.gdb -x track,pack -o gpx -F ${TMPDIR}/gdb-sample.gpx
-grep -v "<time>" reference/gdb-sample.gpx > ${TMPDIR}/gdb-sample.ref
-grep -v "<time>" ${TMPDIR}/gdb-sample.gpx > ${TMPDIR}/gdb-sample.new
-compare ${TMPDIR}/gdb-sample.ref ${TMPDIR}/gdb-sample.new
+#
+# Garmin GPS Database .gdb read test
+#
+rm -f ${TMPDIR}/gdb-*
+${PNAME} -w -r -t -i gdb -f reference/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
+compare reference/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
 
 #
 # Vito Navigator II .smt tests
