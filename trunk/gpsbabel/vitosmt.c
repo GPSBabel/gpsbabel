@@ -27,13 +27,14 @@
 #define MYNAME "vitosmt"
 #include "defs.h"
 
-
 FILE			*infile	=0;
 FILE			*ofs	=0;
-gbuint32		count	=0;
+unsigned long	count	=0;
 
-#define	VITOSMT_HEADER	24
-#define	VITOSMT_DATA	64
+const size_t vitosmt_headersize		=24;
+const size_t vitosmt_datasize		=64;
+const double mile2km		=1.609344;		/* mile/h to kilometer/h */
+const double mph2mps 		=0.447039259;	/* mile/h to m/s     */
 
 static unsigned long
 ReadLong(FILE * f)
@@ -84,6 +85,7 @@ WriteDouble(void* ptr, double d)
   return;
 }
 
+
 static void
 rd_init(const char *fname)
 {
@@ -99,34 +101,36 @@ rd_deinit(void)
 static void
 vitosmt_read(void)
 {
-	gbuint32 	version			=2;
-	gbuint32 	subversion		=1000;
-	const size_t 	recsize			=VITOSMT_DATA;
-	route_head	*track_head		=0; 
-	waypoint	*wpt_tmp		=0;
-	double		latrad			=0;
-	double		lonrad			=0;
-	double		elev			=0;
+	unsigned short version			=0;
+	unsigned short	stringlen		=0;
+	route_head		*route_head		=0; 
+	waypoint		*wpt_tmp		=0;
+	double			latrad			=0;
+	double			lonrad			=0;
+	double			elev			=0;
 	unsigned char*	timestamp		=0;
-	struct tm	tmStruct		={0,0,0,0,0,0,0,0,0};
-	double		seconds			=0.0;
-	double		speed			=0.0;
-	double		heading			=0.0;
-	double		dop			=0.0;
-	unsigned char*	unknown			=0;
-	char		shortname[10]		="\0";
-	char		description[40]		="\0";
-	int		serial			=0;
+	struct tm		tmStruct		={0,0,0,0,0,0,0,0,0};
+	double			seconds			=0.0;
+	double			speed			=0.0;
+	double			course			=0.0;
+	double			pdop 			=0.0;
+	unsigned char	gpsfix			=0;
+	unsigned char	gpsvalid		=0;
+	unsigned char	gpssats			=0;
+	int				serial			=0;
+	xml_tag *		xml_curr		=0;
+	char			buffer[80]		="\0";
 
+		
 	/* 
 	 * 24 bytes header 
 	 */
-	version = ReadLong(infile);		/* 2	*/
-	subversion = ReadLong(infile);		/* 1000	*/
-	count = ReadLong(infile);		/* total trackpoints */
-	ReadLong(infile);			/* first trackpoint  */
-	ReadLong(infile);			/* last trackpoint   */
-	ReadLong(infile);			/* total trackpoints */
+	version = ReadLong(infile);	/* 2	*/
+	ReadLong(infile);			/* 1000	*/
+	count = ReadLong(infile);	/* 600	*/
+	ReadLong(infile);			/* 0	*/
+	ReadLong(infile);			/* 599	*/
+	ReadLong(infile);			/* 600	*/
 
 	while (count) {
 		/*
@@ -134,19 +138,20 @@ vitosmt_read(void)
 		 */
 		if (feof(infile)||ferror(infile)) 
 		{
-			fatal("%s reading input file.  Error was '%s'.\n",
-				MYNAME, strerror(errno));
+			break;
 		}
 
 		latrad		=ReadDouble(infile);	/* WGS84 latitude in radians */
 		lonrad		=ReadDouble(infile);	/* WGS84 longitude in radians */
 		elev		=ReadDouble(infile);	/* elevation in meters */
-		timestamp	=ReadRecord(infile,5);	/* local time */
+		timestamp	=ReadRecord(infile,5);	/* UTC time yr/mo/dy/hr/mi */
 		seconds		=ReadDouble(infile);	/* seconds */
-		speed		=ReadDouble(infile);    /* possibly ground speed, unknown units*/
-		heading		=ReadDouble(infile);	/* heading in degrees */
-		dop		=ReadDouble(infile);	/* dilution of precision */
-		unknown		=ReadRecord(infile,3); 	/* remainder, unknown fmt */
+		speed		=ReadDouble(infile);    /* speed in miles per hour */
+		course		=ReadDouble(infile);	/* course in degrees */
+		pdop     	=ReadDouble(infile);	/* dilution of precision */
+		gpsfix		=fgetc(infile);			/* fix type x08,x10, x20  */	
+		gpsvalid	=fgetc(infile);			/* fix is valid */
+     	gpssats	=fgetc(infile);				/* number of sats */
 
 		wpt_tmp = waypt_new();
 		
@@ -165,36 +170,65 @@ vitosmt_read(void)
 		wpt_tmp->creation_time = mkgmtime(&tmStruct);
 		wpt_tmp->centiseconds = fmod(100*seconds+0.5,100);
 	
-		snprintf(shortname, sizeof shortname-1 , "WP%04d", ++serial);
-		snprintf(description, sizeof description-1, 
-			"Spd=%.1lf Hdg=%03.0lf DoP=%.1lf Flg=%02x%02x%02x", 
-			speed,heading,dop,unknown[0],unknown[1],unknown[2]);
-		
-		wpt_tmp->shortname = xstrdup(shortname);
-		wpt_tmp->wpt_flags.shortname_is_synthetic = 1;
-		wpt_tmp->notes = xstrdup(description);
+		wpt_tmp->shortname	=xcalloc(16,1);
+		snprintf(wpt_tmp->shortname, 15 , "WP%04d", ++serial);
 
-		switch (global_opts.objective)
+		wpt_tmp->speed	= speed*mph2mps; /* meters per second */
+		wpt_tmp->course = course;
+		wpt_tmp->pdop	= pdop;
+
+		/* 
+			GPS Fix data
+		*/
+		if (gpsvalid&0x7) {
+			
+			wpt_tmp->gpx_extras		=(xml_tag *)xcalloc(sizeof(xml_tag),1);
+				
+			/* <fix> */
+			xml_curr				=wpt_tmp->gpx_extras;
+			xml_curr->tagname		=xstrdup("fix");
+			if		(gpsfix&0x8)	
+				xml_curr->cdata		=xstrdup("2d");
+			else if	(gpsfix&0x10)	
+				xml_curr->cdata		=xstrdup("3d");
+			else if	(gpsfix&0x20)	
+				xml_curr->cdata		=xstrdup("dgps");
+			else
+				xml_curr->cdata		=xstrdup("none");
+			xml_curr->cdatalen 		=strlen(xml_curr->cdata);
+			
+			/* <sat> */
+			xml_curr->sibling		=(xml_tag *)xcalloc(sizeof(xml_tag),1);
+			xml_curr				=xml_curr->sibling;
+			xml_curr->tagname		=xstrdup("sat");
+			snprintf(buffer, sizeof(buffer), "%d", gpssats);
+			xml_curr->cdata			=xstrdup(buffer);
+			xml_curr->cdatalen 		=strlen(xml_curr->cdata);
+			
+		}
+
+		if (doing_wpts)			/* process as waypoints */
 		{
-			case wptdata:
-				waypt_add(wpt_tmp);
-				break;
-			case trkdata:
-				if (track_head == NULL) {
-					track_head = route_head_alloc();
-					track_add_head(track_head);
-				}
-				route_add_wpt(track_head, wpt_tmp);
-				break;
-			default:
-				fatal(MYNAME ": This file type only supports "
-					"waypoint or track (-w or -t) mode.");
-
-				break;
+					waypt_add(wpt_tmp);
+		} 
+		else if (doing_rtes)	/* process as route */
+		{
+			if (route_head == NULL)	{
+				route_head = route_head_alloc();
+				route_add_head(route_head);
+			}
+			route_add_wpt(route_head, wpt_tmp);
+		}
+		else					/* default track mode */
+		{
+			if (route_head == NULL)	{
+				route_head = route_head_alloc();
+				track_add_head(route_head);
+			}
+			route_add_wpt(route_head, wpt_tmp);
 		}
 
 		xfree(timestamp);
-		xfree(unknown);
 
 		count--;
 	}
@@ -214,19 +248,29 @@ wr_deinit(void)
 
 }
 
+xml_tag *xml_find( xml_tag *cur, char *tagname ) 
+{
+	xml_tag *result = cur;
+	while ( result && case_ignore_strcmp( result->tagname, tagname ))
+	{
+		result = result->sibling;
+	} ;
+	return result;
+}
+
 
 static void
 vitosmt_waypt_pr(const waypoint *waypointp)
 {
-	const size_t	recsize				=VITOSMT_DATA;
-	unsigned char	workbuffer[VITOSMT_DATA]	="\0";
-	size_t		position			=0;
-	struct tm*	tmstructp			=0;
-	double		seconds				=0;
-	double		worknum				=0;
+	unsigned char *	workbuffer		=0;
+	size_t			position		=0;
+	struct tm*		tmstructp		=0;
+	double			seconds			=0;
+	double			worknum			=0;
+	xml_tag*		xmltagp			=0;
 
 	++count;
-	memset(workbuffer,0,recsize);
+	workbuffer = xcalloc(vitosmt_datasize,1);
 
 	WriteDouble(&workbuffer[position], (M_PI*waypointp->latitude)/180 ); 
 	position += sizeof(double);
@@ -247,49 +291,87 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 	WriteDouble(&workbuffer[position], seconds );
 	position += sizeof(double);
 
-	if (fwrite(workbuffer,recsize,1,ofs)!=1)
+	/* speed */
+	WriteDouble(&workbuffer[position], waypointp->speed / mph2mps );
+	position += sizeof(double);
+	
+	/* course */
+	WriteDouble(&workbuffer[position], waypointp->course );
+	position += sizeof(double);
+
+
+	/* pdop */
+	WriteDouble(&workbuffer[position], waypointp->pdop );
+	position += sizeof(double);
+
+
+	/* fix type */
+	xmltagp = xml_find(waypointp->gpx_extras,"fix");
+	if (xmltagp) {
+		if		(case_ignore_strcmp(xmltagp->cdata,"dgps"))
+			workbuffer[position++] = (unsigned char) 0x20;
+		else if	(case_ignore_strcmp(xmltagp->cdata,"3d"))
+			workbuffer[position++] = (unsigned char) 0x10;
+		else if	(case_ignore_strcmp(xmltagp->cdata,"2d"))
+			workbuffer[position++] = (unsigned char) 0x08;
+		else
+			workbuffer[position++] = (unsigned char) 0;
+	}	
+	
+	workbuffer[position++] = 0x7;
+	
+	xmltagp = xml_find(waypointp->gpx_extras,"sat");
+	if (xmltagp) {
+		workbuffer[position++] = (unsigned char) atoi(xmltagp->cdata);
+	}	
+
+	
+	if (fwrite(workbuffer,vitosmt_datasize,1,ofs)!=1)
 	{
 		fatal("%s writing output file.  Error was '%s'.\n",
 			MYNAME, strerror(errno));
 	}
-
+	
+	xfree(workbuffer);
 }
 
-static void
-vitosmt_track_hdr(const route_head *rte)
-{
-}
-
-static void
-vitosmt_track_tlr(const route_head *rte)
-{
-}
 
 void
 vitosmt_write(void)
 {
-	time_t 		now 				= 0;
-	const size_t 	recsize				=VITOSMT_HEADER;
-	const gbuint32 	version				=2;
-	const gbuint32 	subversion			=1000;
-	unsigned char	workbuffer[VITOSMT_HEADER]	="\0";
-	size_t		position			=0;
+	time_t now = 0;
+	const unsigned short version				=2;
+	const unsigned short subversion				=1000;
+	unsigned char *	workbuffer					=0;
+	size_t			position					=0;
+
+	workbuffer = xcalloc(vitosmt_headersize,1);
 
 	now = current_time();
 	count = 0;
 	position = 0;
 
 	/* leave a spacer for the header */
-	memset(workbuffer,0,recsize);
-	if (fwrite(workbuffer,recsize,1,ofs)!=1)
+	memset(workbuffer,0,vitosmt_headersize);
+	if (fwrite(workbuffer,vitosmt_headersize,1,ofs)!=1)
 	{
 		fatal("%s writing output file.  Error was '%s'.\n",
 			MYNAME, strerror(errno));
 	}
 
-	/* dump waypoints and tracks */
-	waypt_disp_all(vitosmt_waypt_pr);
-	track_disp_all(vitosmt_track_hdr, vitosmt_track_tlr, vitosmt_waypt_pr);
+	if 	(doing_wpts)	/* process as waypoints */
+	{
+		waypt_disp_all(vitosmt_waypt_pr);
+	} 
+	else if (doing_rtes)	/* process as route */
+	{
+		route_disp_all(NULL, NULL, vitosmt_waypt_pr);
+	}
+	else			/* default track mode */
+	{
+		track_disp_all(NULL, NULL, vitosmt_waypt_pr);
+	}
+
 
 	/* write the complete the header */
 	le_write32(&workbuffer[position],version);
@@ -306,18 +388,18 @@ vitosmt_write(void)
 	position += sizeof(gbuint32);
 
 	rewind(ofs);
-	if (fwrite(workbuffer,recsize,1,ofs)!=1)
+	if (fwrite(workbuffer,vitosmt_headersize,1,ofs)!=1)
 	{
 		fatal("%s writing output file.  Error was '%s'.\n",
 			MYNAME, strerror(errno));
 	}
 
-
+	xfree(workbuffer);
 }
 
 ff_vecs_t vitosmt_vecs = {
 	ff_type_file,
-	{ ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write, ff_cap_none},
+	FF_CAP_RW_ALL,
 	rd_init,
 	wr_init,
 	rd_deinit,
