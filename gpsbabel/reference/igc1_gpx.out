@@ -12,22 +12,27 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="-30.675866667" lon="150.609033333">
     <name>TAKEOFF</name>
     <cmt>BORAH </cmt>
+    <desc>BORAH </desc>
   </rtept>
   <rtept lat="-30.675866667" lon="150.609033333">
     <name>START</name>
     <cmt>BORAH </cmt>
+    <desc>BORAH </desc>
   </rtept>
   <rtept lat="-30.729933333" lon="150.649200000">
     <name>TURN01</name>
     <cmt>BALDWI</cmt>
+    <desc>BALDWI</desc>
   </rtept>
   <rtept lat="-30.763683333" lon="150.723200000">
     <name>FINISH</name>
     <cmt>MANAIR</cmt>
+    <desc>MANAIR</desc>
   </rtept>
   <rtept lat="-30.763683333" lon="150.723200000">
     <name>LANDING</name>
     <cmt>MANAIR</cmt>
+    <desc>MANAIR</desc>
   </rtept>
 </rte>
 <trk>

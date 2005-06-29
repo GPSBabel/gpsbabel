@@ -1140,16 +1140,13 @@ write_gpx_url(const waypoint *waypointp)
 }
 
 /*
- * Write optional information for a given (way|track|route)point
+ * Write optional accuracy information for a given (way|track|route)point
  * to the output stream.  Done in one place since it's common for all three.
  * Order counts.
  */
 static void
-gpx_write_common(const waypoint *waypointp, const char *indent)
+gpx_write_common_acc(const waypoint *waypointp, const char *indent)
 {
-	write_gpx_url(waypointp);
-	write_optional_xml_entity(ofd, indent , "sym", waypointp->icon_descr);
-
 	if (waypointp->hdop) {
 		fprintf(ofd, "%s<hdop>%f</hdop>\n", indent, waypointp->hdop);
 	}
@@ -1159,16 +1156,32 @@ gpx_write_common(const waypoint *waypointp, const char *indent)
 	if (waypointp->pdop) {
 		fprintf(ofd, "%s<pdop>%f</pdop>\n", indent, waypointp->pdop);
 	}
-	if (gpx_wversion_num > 10) {
-		if (waypointp->course >= 0) {
-			fprintf(ofd, "%s<course>%f</course>\n", 
-				indent, waypointp->pdop);
-		}
-		if (waypointp->speed >= 0) {
-			fprintf(ofd, "%s<speed>%f</speed>\n", 
-				indent, waypointp->speed);
-		}
+}
+
+static void
+gpx_write_common_position(const waypoint *waypointp, const char *indent)
+{
+	if (waypointp->altitude != unknown_alt) {
+		fprintf(ofd, "%s<ele>%f</ele>\n",
+			 indent, waypointp->altitude);
 	}
+	if (waypointp->creation_time) {
+		xml_write_time(ofd, waypointp->creation_time, "time");
+	}
+}
+
+static void
+gpx_write_common_description(const waypoint *waypointp, const char *indent,
+	const char *oname)
+{
+	write_optional_xml_entity(ofd, indent, "name", oname);
+	write_optional_xml_entity(ofd, indent, "cmt", waypointp->description);
+	if (waypointp->notes && waypointp->notes[0])
+		write_xml_entity(ofd, indent, "desc", waypointp->notes);
+	else
+		write_optional_xml_entity(ofd, indent, "desc", waypointp->description);
+	write_gpx_url(waypointp);
+	write_optional_xml_entity(ofd, indent , "sym", waypointp->icon_descr);
 }
 
 static void
@@ -1195,22 +1208,10 @@ gpx_waypt_pr(const waypoint *waypointp)
 	fprintf(ofd, "<wpt lat=\"" FLT_FMT "\" lon=\"" FLT_FMT "\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
-	if (waypointp->altitude != unknown_alt) {
-		fprintf(ofd, "  <ele>%f</ele>\n",
-			 waypointp->altitude);
-	}
-	if (waypointp->creation_time) {
-		xml_write_time(ofd, waypointp->creation_time, "time");
-	}
-	write_optional_xml_entity(ofd, "  ", "name", oname);
-	write_optional_xml_entity(ofd, "  ", "cmt", waypointp->description);
-	if (waypointp->notes && waypointp->notes[0])
-		write_xml_entity(ofd, "  ", "desc", waypointp->notes);
-	else
-		write_optional_xml_entity(ofd, "  ", "desc", waypointp->description);
-	write_gpx_url(waypointp);
 
-	gpx_write_common(waypointp, "  ");
+	gpx_write_common_position(waypointp, "  ");
+	gpx_write_common_description(waypointp, "  ", oname);
+	gpx_write_common_acc(waypointp, "  ");
 
 	fprint_xml_chain( waypointp->gpx_extras, waypointp );
 	fprintf(ofd, "</wpt>\n");
@@ -1234,23 +1235,29 @@ gpx_track_disp(const waypoint *waypointp)
 	fprintf(ofd, "<trkpt lat=\"" FLT_FMT_T "\" lon=\"" FLT_FMT_T "\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
-	if (waypointp->altitude != unknown_alt) {
-		fprintf(ofd, "  <ele>%f</ele>\n",
-			 waypointp->altitude);
-	}
-	if (waypointp->creation_time) {
-		xml_write_time(ofd, waypointp->creation_time,"time");
+
+	gpx_write_common_position(waypointp, "  ");
+
+	/* These were accidentally removed from 1.1 */
+	if (gpx_wversion_num == 10) {
+		if (waypointp->course >= 0) {
+			fprintf(ofd, "  <course>%f</course>\n", 
+				waypointp->pdop);
+		}
+		if (waypointp->speed >= 0) {
+			fprintf(ofd, "  <speed>%f</speed>\n", 
+				waypointp->speed);
+		}
 	}
 
 	/* GPX doesn't require a name on output, so if we made one up
 	 * on input, we might as well say nothing.
 	 */
-	if (!waypointp->wpt_flags.shortname_is_synthetic) {
-		write_optional_xml_entity(ofd, "  ", "name", 
-			waypointp->shortname);
-	}
-	write_optional_xml_entity(ofd, "  ", "desc", waypointp->notes);
-	gpx_write_common(waypointp, "  ");
+	gpx_write_common_description(waypointp, "  ", 
+		waypointp->wpt_flags.shortname_is_synthetic ? 
+			NULL : waypointp->shortname);
+	gpx_write_common_acc(waypointp, "  ");
+
 	fprintf(ofd, "</trkpt>\n");
 }
 
@@ -1285,17 +1292,9 @@ gpx_route_disp(const waypoint *waypointp)
 		waypointp->latitude,
 		waypointp->longitude);
 
-	if (waypointp->altitude != unknown_alt) {
-		fprintf(ofd, "    <ele>%f</ele>\n",
-			 waypointp->altitude);
-	}
-	if (waypointp->creation_time) {
-		xml_write_time(ofd, waypointp->creation_time,"time");
-	}
-	write_optional_xml_entity(ofd, "    ", "name", waypointp->shortname);
-	write_optional_xml_entity(ofd, "    ", "cmt", waypointp->description);
-	write_optional_xml_entity(ofd, "    ", "desc", waypointp->notes);
-	gpx_write_common(waypointp, "    ");
+	gpx_write_common_position(waypointp, "    ");
+	gpx_write_common_description(waypointp, "    ", waypointp->shortname);
+	gpx_write_common_acc(waypointp, "    ");
 	fprintf(ofd, "  </rtept>\n");
 }
 
