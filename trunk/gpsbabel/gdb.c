@@ -448,6 +448,8 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	/* might need to change this to handle version dependent icon handling */
 	res->icon_descr = gdb_find_desc_from_icon_number(xicon, MAPSOURCE);
 	
+	gdb_is_valid(fabs(res->latitude) <= 90.0 && fabs(res->longitude) <= 180.0, " - wpt read: invalid lat or lon");
+
 	return res;
 }
 
@@ -532,8 +534,7 @@ gdb_read_route(void)
 	    xlat = GPS_Math_Semi_To_Deg(semilat);
 	    xlon = GPS_Math_Semi_To_Deg(semilon);
 	    
-	    gdb_is_valid(fabs(xlat) < 180.0 && fabs(xlon) < 180.0, " - rte: read loop: invalid lat or lon");
-	    gdb_is_valid(fabs(xlat) > 1 && fabs(xlon) > 1, " - rte: read loop: invalid lat or lon");
+	    gdb_is_valid(fabs(xlat) <= 90.0 && fabs(xlon) <= 180.0, " - rte: read loop: invalid lat or lon");
 	    
 	    xalt = unknown_alt;
 	    fread(buff, 1, 1, fin);				/* altitude flag */
@@ -541,7 +542,6 @@ gdb_read_route(void)
 	    {
 		gdb_fread_le(fin, &xalt, sizeof(xalt), 64, "xalt");
 	    }
-	    gdb_is_valid(xlat > 1 && xlon > 1, " - rte: read loop");
 
 	    wpt = gdb_create_rte_wpt(xwptname, xlat, xlon, xalt);
 	    route_add_wpt(route, wpt);
@@ -554,7 +554,7 @@ gdb_read_route(void)
 		if (buff[0] == 1) gdb_fread_le(fin, &xalt, sizeof(xalt), 64, "xalt");
 		xlat = GPS_Math_Semi_To_Deg(semilat);
 		xlon = GPS_Math_Semi_To_Deg(semilon);
-		gdb_is_valid(xlat > 1 && xlon > 1, " - rte/ils: read loop: invalid lat or lon");
+		gdb_is_valid(fabs(xlat) <= 90.0 && fabs(xlon) <= 180.0, " - rte/ils: read loop: invalid lat or lon");
 	    }
 	    
 	    fread(buff, 1, 1, fin);			/* NULL */
@@ -691,11 +691,6 @@ gdb_read_track(const size_t max_file_pos)
 	    if (buff[0] == 1)
 		gdb_fread_le(fin, &xtemp, sizeof(xtemp), 64, "xtemp");
 	    
-#if GDB_DEBUG
-	    printf("trk: %g - %g (%08x - %08x)\n", 
-		GPS_Math_Semi_To_Deg(xlat), GPS_Math_Semi_To_Deg(xlon), xlat, xlon);
-#endif
-
 	    wpt = waypt_new();
 	    
 	    wpt->latitude = GPS_Math_Semi_To_Deg(xlat);
@@ -704,6 +699,8 @@ gdb_read_track(const size_t max_file_pos)
 	    wpt->centiseconds = 0;
 	    wpt->altitude = xalt;
 	    wpt->depth = xdepth;
+	    
+	    gdb_is_valid(fabs(wpt->latitude) <= 90.0 && fabs(wpt->longitude) <= 180.0, " - trk read loop: invalid lat or lon");
 	    
 	    route_add_wpt(track, wpt);
 	}
