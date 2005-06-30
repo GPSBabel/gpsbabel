@@ -392,7 +392,9 @@ gpgsa_parse(char *ibuf)
 	char fix;
 	int  prn[12];
 	int  cnt;
-	float pdop,hdop,vdop;
+	float pdop = 0;
+	float hdop = 0;
+	float vdop = 0;
 
 	sscanf(ibuf,"$GPGSA,%c,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f",
 		&fixauto, &fix,
@@ -406,10 +408,9 @@ gpgsa_parse(char *ibuf)
 			if 	(fix=='3')	curr_waypt->fix=fix_3d;
 			else if (fix=='2')	curr_waypt->fix=fix_2d;
 		}
-	
-		curr_waypt->pdop = pdop;
-		curr_waypt->hdop = hdop;
-		curr_waypt->vdop = vdop;
+		if (pdop > 0) curr_waypt->pdop = pdop;
+		if (hdop > 0) curr_waypt->hdop = hdop;
+		if (vdop > 0) curr_waypt->vdop = vdop;
 		
 		if (curr_waypt->sat  <= 0)	{
 			for (cnt=0;cnt<12;cnt++)
@@ -426,9 +427,9 @@ gpvtg_parse(char *ibuf)
 	char	ct;
 	float	magcourse;
 	char	cm;
-	double	speed_n;
+	float	speed_n;
 	char	cn;
-	double	speed_k;
+	float	speed_k;
 	char	ck;	
       
 	sscanf(ibuf,"$GPVTG,%f,%c,%f,%c,%f,%c,%f,%c",
