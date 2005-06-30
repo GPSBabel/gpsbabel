@@ -141,7 +141,7 @@ vecs_t vec_list[] = {
 		&mps_vecs,
 		"mapsource",
 		"Garmin Mapsource",
-		NULL
+		"mps"
 	},
 	{
 		&gpsutil_vecs,
