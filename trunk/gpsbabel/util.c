@@ -952,6 +952,48 @@ char * str_utf8_to_ascii( const char * str )
 	return result;
 }
 
+/*
+ * str_iso8859_1_to_utf8
+ *
+ * converts the single byte charset ISO8859-1 (latin1) to UTF-8
+ */
+
+char *
+str_iso8859_1_to_utf8(const char *s)
+{
+	int len;
+	char *res;
+	unsigned char c;
+	char *src, *dst;
+
+	if (s == NULL) return NULL;
+
+	len = 0;
+	src = (char *)s;
+	while ('\0' != (c = *src++))
+	{
+	    len++;
+	    if (c & 0x80) len++;
+	}
+
+	src = (char *)s;
+	dst = res = (void *) xmalloc(len + 1);
+	while ('\0' != (c = *src++))
+	{
+	    if (c & 0x80)
+	    {
+		*dst++ = (0xc0 | (c >> 6));
+		*dst++ = (c & 0xbf);
+	    }
+	    else
+	    {
+		*dst++ = c;
+	    }
+	}
+	*dst = '\0';
+	return res;
+}
+
 /* 
  * Get rid of potentially nasty HTML that would influence another record
  * that includes;
