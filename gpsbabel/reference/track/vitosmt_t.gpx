@@ -28,7 +28,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>105.400000</ele>
 <time>2005-05-09T20:09:13Z</time>
   <course>251.259995</course>
-  <speed>1.233828</speed>
+  <speed>1.419867</speed>
   <name>WP0003</name>
   <pdop>1.400000</pdop>
 </trkpt>
@@ -36,7 +36,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>104.600000</ele>
 <time>2005-05-09T20:09:23Z</time>
   <course>260.420013</course>
-  <speed>1.260651</speed>
+  <speed>1.450733</speed>
   <name>WP0004</name>
   <pdop>2.400000</pdop>
 </trkpt>
@@ -44,7 +44,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>102.500000</ele>
 <time>2005-05-09T20:09:44Z</time>
   <course>232.600006</course>
-  <speed>0.290576</speed>
+  <speed>0.334389</speed>
   <name>WP0005</name>
   <pdop>2.400000</pdop>
 </trkpt>
@@ -52,7 +52,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>108.900000</ele>
 <time>2005-05-09T20:10:04Z</time>
   <course>297.440002</course>
-  <speed>0.961134</speed>
+  <speed>1.106055</speed>
   <name>WP0006</name>
   <pdop>2.200000</pdop>
 </trkpt>
@@ -60,7 +60,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>108.400000</ele>
 <time>2005-05-09T20:11:22Z</time>
   <course>290.190002</course>
-  <speed>1.010309</speed>
+  <speed>1.162644</speed>
   <name>WP0007</name>
   <pdop>1.000000</pdop>
 </trkpt>
@@ -68,7 +68,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>110.600000</ele>
 <time>2005-05-09T20:11:50Z</time>
   <course>30.709999</course>
-  <speed>0.965605</speed>
+  <speed>1.111200</speed>
   <name>WP0008</name>
   <pdop>1.400000</pdop>
 </trkpt>
@@ -76,7 +76,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>106.200000</ele>
 <time>2005-05-09T20:14:00Z</time>
   <course>32.630001</course>
-  <speed>0.160934</speed>
+  <speed>0.185200</speed>
   <name>WP0009</name>
   <pdop>1.000000</pdop>
 </trkpt>
@@ -92,7 +92,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>-22.300000</ele>
 <time>2005-06-03T21:36:06Z</time>
   <course>150.550003</course>
-  <speed>1.283003</speed>
+  <speed>1.476456</speed>
   <name>WP0011</name>
   <pdop>2.600000</pdop>
 </trkpt>
@@ -100,7 +100,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>-34.800000</ele>
 <time>2005-06-03T21:36:08Z</time>
   <course>140.809998</course>
-  <speed>1.332177</speed>
+  <speed>1.533044</speed>
   <name>WP0012</name>
   <pdop>3.400000</pdop>
 </trkpt>
@@ -108,7 +108,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>-28.700000</ele>
 <time>2005-06-03T21:36:09Z</time>
   <course>165.830002</course>
-  <speed>1.166772</speed>
+  <speed>1.342700</speed>
   <name>WP0013</name>
   <pdop>2.600000</pdop>
 </trkpt>
@@ -116,7 +116,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>-21.000000</ele>
 <time>2005-06-03T21:36:17Z</time>
   <course>166.179993</course>
-  <speed>0.639266</speed>
+  <speed>0.735656</speed>
   <name>WP0014</name>
   <pdop>3.800000</pdop>
 </trkpt>
@@ -124,14 +124,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>-25.300000</ele>
 <time>2005-06-03T21:36:31Z</time>
   <course>114.070000</course>
-  <speed>1.309825</speed>
+  <speed>1.507322</speed>
   <name>WP0015</name>
 </trkpt>
 <trkpt lat="45.491944984" lon="-75.717474974">
   <ele>43.400000</ele>
 <time>2005-06-03T21:36:45Z</time>
   <course>79.120003</course>
-  <speed>1.318766</speed>
+  <speed>1.517611</speed>
   <name>WP0016</name>
   <pdop>3.800000</pdop>
 </trkpt>
@@ -139,7 +139,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>39.300000</ele>
 <time>2005-06-03T21:36:51Z</time>
   <course>65.169998</course>
-  <speed>1.198065</speed>
+  <speed>1.378711</speed>
   <name>WP0017</name>
   <pdop>1.600000</pdop>
 </trkpt>
@@ -147,7 +147,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>48.300000</ele>
 <time>2005-06-03T21:36:58Z</time>
   <course>87.449997</course>
-  <speed>1.095246</speed>
+  <speed>1.260389</speed>
   <name>WP0018</name>
   <pdop>1.600000</pdop>
 </trkpt>
@@ -155,7 +155,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>44.500000</ele>
 <time>2005-06-03T21:37:07Z</time>
   <course>88.230003</course>
-  <speed>1.283003</speed>
+  <speed>1.476456</speed>
   <name>WP0019</name>
   <pdop>1.600000</pdop>
 </trkpt>
@@ -163,7 +163,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>39.900000</ele>
 <time>2005-06-03T21:37:18Z</time>
   <course>68.449997</course>
-  <speed>1.354529</speed>
+  <speed>1.558767</speed>
   <name>WP0020</name>
   <pdop>2.600000</pdop>
 </trkpt>
@@ -171,7 +171,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>23.600000</ele>
 <time>2005-06-03T21:37:26Z</time>
   <course>140.080002</course>
-  <speed>0.120701</speed>
+  <speed>0.138900</speed>
   <name>WP0021</name>
   <pdop>2.600000</pdop>
 </trkpt>
@@ -179,7 +179,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>46.700000</ele>
 <time>2005-06-03T21:37:46Z</time>
   <course>114.720001</course>
-  <speed>0.169875</speed>
+  <speed>0.195489</speed>
   <name>WP0022</name>
   <pdop>4.000000</pdop>
 </trkpt>
@@ -187,7 +187,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>61.300000</ele>
 <time>2005-06-03T21:37:52Z</time>
   <course>128.500000</course>
-  <speed>0.147523</speed>
+  <speed>0.169767</speed>
   <name>WP0023</name>
   <pdop>1.600000</pdop>
 </trkpt>
@@ -195,7 +195,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>74.600000</ele>
 <time>2005-06-03T21:38:16Z</time>
   <course>0.890000</course>
-  <speed>0.227990</speed>
+  <speed>0.262367</speed>
   <name>WP0024</name>
   <pdop>4.000000</pdop>
 </trkpt>
@@ -203,7 +203,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>63.600000</ele>
 <time>2005-06-03T21:38:50Z</time>
   <course>214.169998</course>
-  <speed>0.125171</speed>
+  <speed>0.144044</speed>
   <name>WP0025</name>
   <pdop>2.200000</pdop>
 </trkpt>
@@ -211,7 +211,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>83.600000</ele>
 <time>2005-06-03T21:55:06Z</time>
   <course>156.059998</course>
-  <speed>0.178816</speed>
+  <speed>0.205778</speed>
   <name>WP0026</name>
   <pdop>5.200000</pdop>
 </trkpt>
@@ -219,7 +219,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>76.200000</ele>
 <time>2005-06-03T21:55:14Z</time>
   <course>136.899994</course>
-  <speed>0.071526</speed>
+  <speed>0.082311</speed>
   <name>WP0027</name>
   <pdop>5.200000</pdop>
 </trkpt>
@@ -227,7 +227,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>76.300000</ele>
 <time>2005-06-03T21:57:31Z</time>
   <course>151.399994</course>
-  <speed>0.093878</speed>
+  <speed>0.108033</speed>
   <name>WP0028</name>
   <pdop>10.600000</pdop>
 </trkpt>
@@ -259,7 +259,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>34.300000</ele>
 <time>2005-06-04T23:14:43Z</time>
   <course>157.210007</course>
-  <speed>0.031293</speed>
+  <speed>0.036011</speed>
   <name>WP0032</name>
   <pdop>28.200001</pdop>
 </trkpt>
@@ -267,7 +267,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>70.800000</ele>
 <time>2005-06-04T23:15:39Z</time>
   <course>31.549999</course>
-  <speed>0.102819</speed>
+  <speed>0.118322</speed>
   <name>WP0033</name>
   <pdop>1.800000</pdop>
 </trkpt>
@@ -275,7 +275,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>61.200000</ele>
 <time>2005-06-04T23:16:38Z</time>
   <course>160.520004</course>
-  <speed>0.907490</speed>
+  <speed>1.044322</speed>
   <name>WP0034</name>
   <pdop>2.000000</pdop>
 </trkpt>
@@ -283,14 +283,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>62.400000</ele>
 <time>2005-06-04T23:17:21Z</time>
   <course>162.570007</course>
-  <speed>0.089408</speed>
+  <speed>0.102889</speed>
   <name>WP0035</name>
 </trkpt>
 <trkpt lat="45.492479984" lon="-75.718403307">
   <ele>54.200000</ele>
 <time>2005-06-04T23:22:58Z</time>
   <course>66.839996</course>
-  <speed>0.357631</speed>
+  <speed>0.411556</speed>
   <name>WP0036</name>
   <pdop>6.800000</pdop>
 </trkpt>
@@ -322,7 +322,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>74.800000</ele>
 <time>2005-06-04T23:39:19Z</time>
   <course>51.320000</course>
-  <speed>0.075997</speed>
+  <speed>0.087456</speed>
   <name>WP0040</name>
   <pdop>1.000000</pdop>
 </trkpt>
@@ -330,7 +330,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>95.100000</ele>
 <time>2005-06-04T23:44:29Z</time>
   <course>22.510000</course>
-  <speed>0.080467</speed>
+  <speed>0.092600</speed>
   <name>WP0041</name>
   <pdop>1.600000</pdop>
 </trkpt>
@@ -338,7 +338,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>69.100000</ele>
 <time>2005-06-04T23:50:38Z</time>
   <course>272.899994</course>
-  <speed>1.050542</speed>
+  <speed>1.208944</speed>
   <name>WP0042</name>
   <pdop>1.000000</pdop>
 </trkpt>
@@ -346,7 +346,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>71.300000</ele>
 <time>2005-06-04T23:52:35Z</time>
   <course>304.450012</course>
-  <speed>1.032661</speed>
+  <speed>1.188367</speed>
   <name>WP0043</name>
   <pdop>1.000000</pdop>
 </trkpt>
@@ -354,7 +354,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>71.300000</ele>
 <time>2005-06-04T23:52:43Z</time>
   <course>321.899994</course>
-  <speed>1.157832</speed>
+  <speed>1.332411</speed>
   <name>WP0044</name>
   <pdop>1.400000</pdop>
 </trkpt>
@@ -362,7 +362,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>71.300000</ele>
 <time>2005-06-04T23:53:15Z</time>
   <course>346.209991</course>
-  <speed>0.742085</speed>
+  <speed>0.853978</speed>
   <name>WP0045</name>
   <pdop>1.400000</pdop>
 </trkpt>
@@ -370,7 +370,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>70.700000</ele>
 <time>2005-06-04T23:53:25Z</time>
   <course>31.530001</course>
-  <speed>0.035763</speed>
+  <speed>0.041156</speed>
   <name>WP0046</name>
   <pdop>1.400000</pdop>
 </trkpt>
@@ -378,7 +378,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>68.400000</ele>
 <time>2005-06-04T23:56:24Z</time>
   <course>124.980003</course>
-  <speed>0.701852</speed>
+  <speed>0.807678</speed>
   <name>WP0047</name>
   <pdop>1.200000</pdop>
 </trkpt>
@@ -386,7 +386,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>72.900000</ele>
 <time>2005-06-04T23:56:54Z</time>
   <course>301.549988</course>
-  <speed>1.131009</speed>
+  <speed>1.301544</speed>
   <name>WP0048</name>
   <pdop>1.200000</pdop>
 </trkpt>
@@ -394,7 +394,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>71.400000</ele>
 <time>2005-06-04T23:57:12Z</time>
   <course>312.899994</course>
-  <speed>0.424687</speed>
+  <speed>0.488722</speed>
   <name>WP0049</name>
   <pdop>1.000000</pdop>
 </trkpt>
@@ -402,7 +402,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>71.200000</ele>
 <time>2005-06-04T23:57:43Z</time>
   <course>54.860001</course>
-  <speed>0.067056</speed>
+  <speed>0.077167</speed>
   <name>WP0050</name>
   <pdop>1.000000</pdop>
 </trkpt>
@@ -410,7 +410,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>71.600000</ele>
 <time>2005-06-04T23:58:26Z</time>
   <course>338.209991</course>
-  <speed>1.582519</speed>
+  <speed>1.821133</speed>
   <name>WP0051</name>
   <pdop>1.400000</pdop>
 </trkpt>
@@ -418,21 +418,21 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>71.000000</ele>
 <time>2005-06-04T00:00:00Z</time>
   <course>300.459991</course>
-  <speed>0.549858</speed>
+  <speed>0.632767</speed>
   <name>WP0052</name>
 </trkpt>
 <trkpt lat="45.494091651" lon="-75.736254974">
   <ele>72.100000</ele>
 <time>2005-06-05T00:00:11Z</time>
   <course>306.429993</course>
-  <speed>0.920901</speed>
+  <speed>1.059756</speed>
   <name>WP0053</name>
 </trkpt>
 <trkpt lat="45.494156651" lon="-75.736351640">
   <ele>72.700000</ele>
 <time>2005-06-05T00:00:20Z</time>
   <course>284.540009</course>
-  <speed>0.840434</speed>
+  <speed>0.967156</speed>
   <name>WP0054</name>
   <pdop>6.200000</pdop>
 </trkpt>
@@ -440,28 +440,28 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>72.200000</ele>
 <time>2005-06-05T00:00:48Z</time>
   <course>310.510010</course>
-  <speed>0.563269</speed>
+  <speed>0.648200</speed>
   <name>WP0055</name>
 </trkpt>
 <trkpt lat="45.494326651" lon="-75.736839974">
   <ele>72.500000</ele>
 <time>2005-06-05T00:00:59Z</time>
   <course>208.550003</course>
-  <speed>0.460450</speed>
+  <speed>0.529878</speed>
   <name>WP0056</name>
 </trkpt>
 <trkpt lat="45.494348318" lon="-75.737104974">
   <ele>73.000000</ele>
 <time>2005-06-05T00:01:09Z</time>
   <course>292.980011</course>
-  <speed>1.367940</speed>
+  <speed>1.574200</speed>
   <name>WP0057</name>
 </trkpt>
 <trkpt lat="45.494411651" lon="-75.737268307">
   <ele>73.300000</ele>
 <time>2005-06-05T00:01:44Z</time>
   <course>348.260010</course>
-  <speed>1.224888</speed>
+  <speed>1.409578</speed>
   <name>WP0058</name>
   <pdop>19.400000</pdop>
 </trkpt>
@@ -469,7 +469,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>78.100000</ele>
 <time>2005-06-05T00:01:58Z</time>
   <course>357.940002</course>
-  <speed>1.175713</speed>
+  <speed>1.352989</speed>
   <name>WP0059</name>
   <pdop>6.000000</pdop>
 </trkpt>
@@ -477,7 +477,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>77.000000</ele>
 <time>2005-06-05T00:02:16Z</time>
   <course>341.100006</course>
-  <speed>0.786789</speed>
+  <speed>0.905422</speed>
   <name>WP0060</name>
   <pdop>4.200000</pdop>
 </trkpt>
@@ -485,7 +485,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>75.500000</ele>
 <time>2005-06-05T00:02:25Z</time>
   <course>11.500000</course>
-  <speed>0.187756</speed>
+  <speed>0.216067</speed>
   <name>WP0061</name>
   <pdop>4.200000</pdop>
 </trkpt>
@@ -493,7 +493,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>71.000000</ele>
 <time>2005-06-05T00:02:42Z</time>
   <course>26.420000</course>
-  <speed>0.701852</speed>
+  <speed>0.807678</speed>
   <name>WP0062</name>
   <pdop>12.400000</pdop>
 </trkpt>
@@ -501,7 +501,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>75.800000</ele>
 <time>2005-06-05T00:03:21Z</time>
   <course>37.529999</course>
-  <speed>1.032661</speed>
+  <speed>1.188367</speed>
   <name>WP0063</name>
   <pdop>4.200000</pdop>
 </trkpt>
@@ -509,7 +509,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>72.600000</ele>
 <time>2005-06-05T00:03:31Z</time>
   <course>48.630001</course>
-  <speed>1.327707</speed>
+  <speed>1.527900</speed>
   <name>WP0064</name>
   <pdop>1.600000</pdop>
 </trkpt>
@@ -517,7 +517,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>70.300000</ele>
 <time>2005-06-05T00:03:53Z</time>
   <course>26.750000</course>
-  <speed>0.920901</speed>
+  <speed>1.059756</speed>
   <name>WP0065</name>
   <pdop>2.800000</pdop>
 </trkpt>
@@ -525,7 +525,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>74.600000</ele>
 <time>2005-06-05T00:04:31Z</time>
   <course>201.380005</course>
-  <speed>0.733144</speed>
+  <speed>0.843689</speed>
   <name>WP0066</name>
   <pdop>1.800000</pdop>
 </trkpt>
@@ -533,7 +533,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>76.300000</ele>
 <time>2005-06-05T00:05:05Z</time>
   <course>117.099998</course>
-  <speed>0.397865</speed>
+  <speed>0.457856</speed>
   <name>WP0067</name>
   <pdop>1.600000</pdop>
 </trkpt>
@@ -541,7 +541,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>72.100000</ele>
 <time>2005-06-05T00:05:45Z</time>
   <course>130.149994</course>
-  <speed>0.129641</speed>
+  <speed>0.149189</speed>
   <name>WP0068</name>
   <pdop>5.200000</pdop>
 </trkpt>
@@ -549,7 +549,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>80.900000</ele>
 <time>2005-06-05T00:06:19Z</time>
   <course>129.250000</course>
-  <speed>0.272694</speed>
+  <speed>0.313811</speed>
   <name>WP0069</name>
   <pdop>4.000000</pdop>
 </trkpt>
@@ -557,7 +557,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>89.500000</ele>
 <time>2005-06-05T00:06:25Z</time>
   <course>87.769997</course>
-  <speed>0.053645</speed>
+  <speed>0.061733</speed>
   <name>WP0070</name>
   <pdop>4.000000</pdop>
 </trkpt>
@@ -565,7 +565,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>102.100000</ele>
 <time>2005-06-05T00:37:53Z</time>
   <course>164.850006</course>
-  <speed>0.107289</speed>
+  <speed>0.123467</speed>
   <name>WP0071</name>
   <pdop>2.200000</pdop>
 </trkpt>
@@ -573,7 +573,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>102.800000</ele>
 <time>2005-06-11T00:38:21Z</time>
   <course>244.000000</course>
-  <speed>0.344220</speed>
+  <speed>0.396122</speed>
   <name>WP0072</name>
   <pdop>13.400000</pdop>
 </trkpt>
@@ -581,7 +581,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>94.100000</ele>
 <time>2005-06-11T00:38:55Z</time>
   <course>86.839996</course>
-  <speed>0.706322</speed>
+  <speed>0.812822</speed>
   <name>WP0073</name>
   <pdop>1.600000</pdop>
 </trkpt>
@@ -589,7 +589,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>93.300000</ele>
 <time>2005-06-11T00:39:44Z</time>
   <course>216.110001</course>
-  <speed>0.102819</speed>
+  <speed>0.118322</speed>
   <name>WP0074</name>
   <pdop>1.600000</pdop>
 </trkpt>
@@ -597,21 +597,21 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>83.800000</ele>
 <time>2005-06-11T00:40:44Z</time>
   <course>250.699997</course>
-  <speed>1.041601</speed>
+  <speed>1.198656</speed>
   <name>WP0075</name>
 </trkpt>
 <trkpt lat="45.496204984" lon="-75.734474974">
   <ele>85.100000</ele>
 <time>2005-06-11T00:41:04Z</time>
   <course>238.919998</course>
-  <speed>1.439466</speed>
+  <speed>1.656511</speed>
   <name>WP0076</name>
 </trkpt>
 <trkpt lat="45.496191651" lon="-75.734614974">
   <ele>85.600000</ele>
 <time>2005-06-11T00:41:11Z</time>
   <course>235.460007</course>
-  <speed>1.493111</speed>
+  <speed>1.718244</speed>
   <name>WP0077</name>
   <pdop>16.000000</pdop>
 </trkpt>
@@ -619,14 +619,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>85.900000</ele>
 <time>2005-06-11T00:41:19Z</time>
   <course>248.250000</course>
-  <speed>1.166772</speed>
+  <speed>1.342700</speed>
   <name>WP0078</name>
 </trkpt>
 <trkpt lat="45.496108318" lon="-75.734911640">
   <ele>85.200000</ele>
 <time>2005-06-11T00:41:27Z</time>
   <course>260.279999</course>
-  <speed>0.862786</speed>
+  <speed>0.992878</speed>
   <name>WP0079</name>
   <pdop>2.400000</pdop>
 </trkpt>
@@ -634,7 +634,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>87.100000</ele>
 <time>2005-06-11T00:41:43Z</time>
   <course>215.869995</course>
-  <speed>1.104187</speed>
+  <speed>1.270678</speed>
   <name>WP0080</name>
   <pdop>3.200000</pdop>
 </trkpt>
@@ -642,7 +642,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>82.300000</ele>
 <time>2005-06-11T00:41:51Z</time>
   <course>238.919998</course>
-  <speed>0.952194</speed>
+  <speed>1.095767</speed>
   <name>WP0081</name>
   <pdop>1.200000</pdop>
 </trkpt>
@@ -650,7 +650,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>78.800000</ele>
 <time>2005-06-11T00:42:00Z</time>
   <course>235.889999</course>
-  <speed>0.862786</speed>
+  <speed>0.992878</speed>
   <name>WP0082</name>
   <pdop>2.400000</pdop>
 </trkpt>
@@ -658,7 +658,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>75.500000</ele>
 <time>2005-06-11T00:42:14Z</time>
   <course>228.059998</course>
-  <speed>0.858315</speed>
+  <speed>0.987733</speed>
   <name>WP0083</name>
   <pdop>1.400000</pdop>
 </trkpt>
@@ -666,7 +666,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>74.100000</ele>
 <time>2005-06-11T00:42:25Z</time>
   <course>322.799988</course>
-  <speed>1.001368</speed>
+  <speed>1.152356</speed>
   <name>WP0084</name>
   <pdop>2.000000</pdop>
 </trkpt>
@@ -674,14 +674,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>72.500000</ele>
 <time>2005-06-11T00:42:50Z</time>
   <course>333.309998</course>
-  <speed>0.406806</speed>
+  <speed>0.468144</speed>
   <name>WP0085</name>
 </trkpt>
 <trkpt lat="45.495931651" lon="-75.735779974">
   <ele>74.000000</ele>
 <time>2005-06-11T00:43:01Z</time>
   <course>154.389999</course>
-  <speed>1.108657</speed>
+  <speed>1.275822</speed>
   <name>WP0086</name>
   <pdop>40.599998</pdop>
 </trkpt>
@@ -689,7 +689,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>74.700000</ele>
 <time>2005-06-11T00:43:09Z</time>
   <course>197.889999</course>
-  <speed>1.072894</speed>
+  <speed>1.234667</speed>
   <name>WP0087</name>
   <pdop>2.000000</pdop>
 </trkpt>
@@ -697,21 +697,21 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>72.300000</ele>
 <time>2005-06-11T00:43:38Z</time>
   <course>194.039993</course>
-  <speed>0.317398</speed>
+  <speed>0.365256</speed>
   <name>WP0088</name>
 </trkpt>
 <trkpt lat="45.495711651" lon="-75.735599974">
   <ele>72.200000</ele>
 <time>2005-06-11T00:44:05Z</time>
   <course>237.380005</course>
-  <speed>0.675029</speed>
+  <speed>0.776811</speed>
   <name>WP0089</name>
 </trkpt>
 <trkpt lat="45.495679984" lon="-75.735724974">
   <ele>73.000000</ele>
 <time>2005-06-11T00:44:11Z</time>
   <course>272.200012</course>
-  <speed>0.759967</speed>
+  <speed>0.874556</speed>
   <name>WP0090</name>
   <pdop>38.200001</pdop>
 </trkpt>
@@ -719,14 +719,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>74.400000</ele>
 <time>2005-06-11T00:44:23Z</time>
   <course>214.550003</course>
-  <speed>0.151993</speed>
+  <speed>0.174911</speed>
   <name>WP0091</name>
 </trkpt>
 <trkpt lat="45.495756651" lon="-75.735824974">
   <ele>81.200000</ele>
 <time>2005-06-11T00:44:43Z</time>
   <course>209.389999</course>
-  <speed>0.187756</speed>
+  <speed>0.216067</speed>
   <name>WP0092</name>
   <pdop>37.200001</pdop>
 </trkpt>
@@ -734,7 +734,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>70.100000</ele>
 <time>2005-06-11T00:44:47Z</time>
   <course>256.739990</course>
-  <speed>0.585621</speed>
+  <speed>0.673922</speed>
   <name>WP0093</name>
   <pdop>9.400000</pdop>
 </trkpt>
@@ -742,21 +742,21 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>64.400000</ele>
 <time>2005-06-11T00:45:02Z</time>
   <course>294.750000</course>
-  <speed>0.710792</speed>
+  <speed>0.817967</speed>
   <name>WP0094</name>
 </trkpt>
 <trkpt lat="45.495683318" lon="-75.736064974">
   <ele>64.000000</ele>
 <time>2005-06-11T00:45:35Z</time>
   <course>174.509995</course>
-  <speed>0.536447</speed>
+  <speed>0.617333</speed>
   <name>WP0095</name>
 </trkpt>
 <trkpt lat="45.495584984" lon="-75.736138307">
   <ele>64.600000</ele>
 <time>2005-06-11T00:46:07Z</time>
   <course>122.470001</course>
-  <speed>0.625855</speed>
+  <speed>0.720222</speed>
   <name>WP0096</name>
   <pdop>23.000000</pdop>
 </trkpt>
@@ -764,7 +764,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>67.300000</ele>
 <time>2005-06-11T00:46:36Z</time>
   <course>189.600006</course>
-  <speed>0.111760</speed>
+  <speed>0.128611</speed>
   <name>WP0097</name>
   <pdop>5.200000</pdop>
 </trkpt>
@@ -772,7 +772,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>71.400000</ele>
 <time>2005-06-11T00:48:44Z</time>
   <course>182.949997</course>
-  <speed>0.093878</speed>
+  <speed>0.108033</speed>
   <name>WP0098</name>
   <pdop>43.599998</pdop>
 </trkpt>
@@ -780,7 +780,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>71.700000</ele>
 <time>2005-06-11T00:49:14Z</time>
   <course>52.070000</course>
-  <speed>0.143053</speed>
+  <speed>0.164622</speed>
   <name>WP0099</name>
   <pdop>24.200001</pdop>
 </trkpt>
@@ -788,7 +788,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>72.300000</ele>
 <time>2005-06-11T00:51:19Z</time>
   <course>155.990005</course>
-  <speed>0.098349</speed>
+  <speed>0.113178</speed>
   <name>WP0100</name>
   <pdop>2.200000</pdop>
 </trkpt>
@@ -796,7 +796,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>81.200000</ele>
 <time>2005-06-11T00:51:31Z</time>
   <course>97.730003</course>
-  <speed>0.965605</speed>
+  <speed>1.111200</speed>
   <name>WP0101</name>
   <pdop>36.400002</pdop>
 </trkpt>
@@ -804,14 +804,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>74.500000</ele>
 <time>2005-06-11T00:51:43Z</time>
   <course>50.860001</course>
-  <speed>1.412644</speed>
+  <speed>1.625644</speed>
   <name>WP0102</name>
 </trkpt>
 <trkpt lat="45.495689984" lon="-75.735704974">
   <ele>74.700000</ele>
 <time>2005-06-11T00:51:53Z</time>
   <course>44.029999</course>
-  <speed>1.171243</speed>
+  <speed>1.347844</speed>
   <name>WP0103</name>
   <pdop>13.600000</pdop>
 </trkpt>
@@ -819,7 +819,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>76.200000</ele>
 <time>2005-06-11T00:52:08Z</time>
   <course>82.080002</course>
-  <speed>0.621385</speed>
+  <speed>0.715078</speed>
   <name>WP0104</name>
   <pdop>50.000000</pdop>
 </trkpt>
@@ -827,7 +827,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>77.900000</ele>
 <time>2005-06-11T00:52:19Z</time>
   <course>80.239998</course>
-  <speed>0.648207</speed>
+  <speed>0.745944</speed>
   <name>WP0105</name>
   <pdop>26.400000</pdop>
 </trkpt>
@@ -835,7 +835,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>78.600000</ele>
 <time>2005-06-11T00:52:27Z</time>
   <course>47.939999</course>
-  <speed>1.506522</speed>
+  <speed>1.733678</speed>
   <name>WP0106</name>
   <pdop>50.000000</pdop>
 </trkpt>
@@ -843,7 +843,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>80.700000</ele>
 <time>2005-06-11T00:52:37Z</time>
   <course>62.310001</course>
-  <speed>0.970075</speed>
+  <speed>1.116344</speed>
   <name>WP0107</name>
   <pdop>1.600000</pdop>
 </trkpt>
@@ -851,14 +851,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>84.400000</ele>
 <time>2005-06-11T00:52:54Z</time>
   <course>59.770000</course>
-  <speed>1.247240</speed>
+  <speed>1.435300</speed>
   <name>WP0108</name>
 </trkpt>
 <trkpt lat="45.496214984" lon="-75.734634974">
   <ele>92.600000</ele>
 <time>2005-06-11T00:53:33Z</time>
   <course>57.660000</course>
-  <speed>1.095246</speed>
+  <speed>1.260389</speed>
   <name>WP0109</name>
   <pdop>2.000000</pdop>
 </trkpt>
@@ -866,7 +866,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>95.800000</ele>
 <time>2005-06-11T00:53:43Z</time>
   <course>55.730000</course>
-  <speed>1.215947</speed>
+  <speed>1.399289</speed>
   <name>WP0110</name>
   <pdop>5.000000</pdop>
 </trkpt>
@@ -874,7 +874,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>94.700000</ele>
 <time>2005-06-11T00:53:53Z</time>
   <course>28.459999</course>
-  <speed>1.117598</speed>
+  <speed>1.286111</speed>
   <name>WP0111</name>
   <pdop>0.800000</pdop>
 </trkpt>
@@ -882,7 +882,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>59.200000</ele>
 <time>2005-06-11T14:39:26Z</time>
   <course>245.169998</course>
-  <speed>0.844904</speed>
+  <speed>0.972300</speed>
   <name>WP0112</name>
   <pdop>9.400000</pdop>
 </trkpt>
@@ -890,7 +890,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>55.200000</ele>
 <time>2005-06-12T14:39:42Z</time>
   <course>240.100006</course>
-  <speed>1.350059</speed>
+  <speed>1.553622</speed>
   <name>WP0113</name>
   <pdop>6.000000</pdop>
 </trkpt>
@@ -898,7 +898,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>56.100000</ele>
 <time>2005-06-12T14:40:08Z</time>
   <course>238.809998</course>
-  <speed>1.099717</speed>
+  <speed>1.265533</speed>
   <name>WP0114</name>
   <pdop>7.600000</pdop>
 </trkpt>
@@ -906,7 +906,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>54.500000</ele>
 <time>2005-06-12T14:40:16Z</time>
   <course>242.740005</course>
-  <speed>1.028190</speed>
+  <speed>1.183222</speed>
   <name>WP0115</name>
   <pdop>11.800000</pdop>
 </trkpt>
@@ -914,14 +914,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>48.700000</ele>
 <time>2005-06-12T14:40:33Z</time>
   <course>236.539993</course>
-  <speed>0.871727</speed>
+  <speed>1.003167</speed>
   <name>WP0116</name>
 </trkpt>
 <trkpt lat="45.495801651" lon="-75.735363307">
   <ele>43.700000</ele>
 <time>2005-06-12T14:41:02Z</time>
   <course>261.720001</course>
-  <speed>1.488641</speed>
+  <speed>1.713100</speed>
   <name>WP0117</name>
   <pdop>7.200000</pdop>
 </trkpt>
@@ -929,14 +929,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>45.100000</ele>
 <time>2005-06-12T14:41:16Z</time>
   <course>298.739990</course>
-  <speed>1.099717</speed>
+  <speed>1.265533</speed>
   <name>WP0118</name>
 </trkpt>
 <trkpt lat="45.495833318" lon="-75.735654974">
   <ele>44.600000</ele>
 <time>2005-06-12T14:41:24Z</time>
   <course>313.660004</course>
-  <speed>1.032661</speed>
+  <speed>1.188367</speed>
   <name>WP0119</name>
   <pdop>16.600000</pdop>
 </trkpt>
@@ -944,21 +944,21 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>44.100000</ele>
 <time>2005-06-12T14:41:31Z</time>
   <course>330.829987</course>
-  <speed>1.171243</speed>
+  <speed>1.347844</speed>
   <name>WP0120</name>
 </trkpt>
 <trkpt lat="45.495956651" lon="-75.735839974">
   <ele>43.000000</ele>
 <time>2005-06-12T14:41:40Z</time>
   <course>334.989990</course>
-  <speed>1.041601</speed>
+  <speed>1.198656</speed>
   <name>WP0121</name>
 </trkpt>
 <trkpt lat="45.496036651" lon="-75.735908307">
   <ele>42.000000</ele>
 <time>2005-06-12T14:41:48Z</time>
   <course>341.049988</course>
-  <speed>1.466289</speed>
+  <speed>1.687378</speed>
   <name>WP0122</name>
   <pdop>7.200000</pdop>
 </trkpt>
@@ -966,7 +966,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>41.400000</ele>
 <time>2005-06-12T14:41:55Z</time>
   <course>1.620000</course>
-  <speed>1.385822</speed>
+  <speed>1.594778</speed>
   <name>WP0123</name>
   <pdop>6.800000</pdop>
 </trkpt>
@@ -974,7 +974,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>41.600000</ele>
 <time>2005-06-12T14:42:05Z</time>
   <course>18.180000</course>
-  <speed>0.961134</speed>
+  <speed>1.106055</speed>
   <name>WP0124</name>
   <pdop>6.800000</pdop>
 </trkpt>
@@ -982,14 +982,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>41.600000</ele>
 <time>2005-06-12T14:42:14Z</time>
   <course>10.700000</course>
-  <speed>1.139950</speed>
+  <speed>1.311833</speed>
   <name>WP0125</name>
 </trkpt>
 <trkpt lat="45.496608318" lon="-75.735874974">
   <ele>41.600000</ele>
 <time>2005-06-12T14:42:31Z</time>
   <course>333.260010</course>
-  <speed>0.666089</speed>
+  <speed>0.766522</speed>
   <name>WP0126</name>
   <pdop>7.000000</pdop>
 </trkpt>
@@ -997,42 +997,42 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>41.600000</ele>
 <time>2005-06-12T14:42:44Z</time>
   <course>348.489990</course>
-  <speed>0.979016</speed>
+  <speed>1.126633</speed>
   <name>WP0127</name>
 </trkpt>
 <trkpt lat="45.496854984" lon="-75.735886640">
   <ele>41.600000</ele>
 <time>2005-06-12T14:42:50Z</time>
   <course>335.130005</course>
-  <speed>0.961134</speed>
+  <speed>1.106055</speed>
   <name>WP0128</name>
 </trkpt>
 <trkpt lat="45.496996651" lon="-75.735931640">
   <ele>41.600000</ele>
 <time>2005-06-12T14:43:03Z</time>
   <course>356.950012</course>
-  <speed>1.506522</speed>
+  <speed>1.733678</speed>
   <name>WP0129</name>
 </trkpt>
 <trkpt lat="45.497081651" lon="-75.735889974">
   <ele>41.600000</ele>
 <time>2005-06-12T14:43:06Z</time>
   <course>344.679993</course>
-  <speed>0.849375</speed>
+  <speed>0.977444</speed>
   <name>WP0130</name>
 </trkpt>
 <trkpt lat="45.497164984" lon="-75.735838307">
   <ele>41.600000</ele>
 <time>2005-06-12T14:43:15Z</time>
   <course>69.209999</course>
-  <speed>1.077365</speed>
+  <speed>1.239811</speed>
   <name>WP0131</name>
 </trkpt>
 <trkpt lat="45.497229984" lon="-75.735719974">
   <ele>41.600000</ele>
 <time>2005-06-12T14:43:24Z</time>
   <course>83.389999</course>
-  <speed>1.296414</speed>
+  <speed>1.491889</speed>
   <name>WP0132</name>
   <pdop>7.400000</pdop>
 </trkpt>
@@ -1040,7 +1040,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>41.700000</ele>
 <time>2005-06-12T14:43:34Z</time>
   <course>93.379997</course>
-  <speed>1.363470</speed>
+  <speed>1.569056</speed>
   <name>WP0133</name>
   <pdop>33.799999</pdop>
 </trkpt>
@@ -1048,7 +1048,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>41.700000</ele>
 <time>2005-06-12T14:43:41Z</time>
   <course>105.099998</course>
-  <speed>1.591460</speed>
+  <speed>1.831422</speed>
   <name>WP0134</name>
   <pdop>6.800000</pdop>
 </trkpt>
@@ -1056,14 +1056,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>41.800000</ele>
 <time>2005-06-12T14:43:54Z</time>
   <course>63.990002</course>
-  <speed>1.193595</speed>
+  <speed>1.373567</speed>
   <name>WP0135</name>
 </trkpt>
 <trkpt lat="45.497329984" lon="-75.734973307">
   <ele>42.300000</ele>
 <time>2005-06-12T14:44:06Z</time>
   <course>67.769997</course>
-  <speed>1.537815</speed>
+  <speed>1.769689</speed>
   <name>WP0136</name>
   <pdop>21.799999</pdop>
 </trkpt>
@@ -1071,7 +1071,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>45.200000</ele>
 <time>2005-06-12T14:44:53Z</time>
   <course>108.410004</course>
-  <speed>1.180184</speed>
+  <speed>1.358133</speed>
   <name>WP0137</name>
   <pdop>7.000000</pdop>
 </trkpt>
@@ -1079,7 +1079,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>46.700000</ele>
 <time>2005-06-12T14:45:30Z</time>
   <course>104.510002</course>
-  <speed>1.059483</speed>
+  <speed>1.219233</speed>
   <name>WP0138</name>
   <pdop>8.400000</pdop>
 </trkpt>
@@ -1087,7 +1087,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>47.400000</ele>
 <time>2005-06-12T14:45:44Z</time>
   <course>260.720001</course>
-  <speed>0.889608</speed>
+  <speed>1.023744</speed>
   <name>WP0139</name>
   <pdop>8.600000</pdop>
 </trkpt>
@@ -1095,28 +1095,28 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>48.300000</ele>
 <time>2005-06-12T14:45:55Z</time>
   <course>274.910004</course>
-  <speed>1.215947</speed>
+  <speed>1.399289</speed>
   <name>WP0140</name>
 </trkpt>
 <trkpt lat="45.497506651" lon="-75.733146640">
   <ele>49.000000</ele>
 <time>2005-06-12T14:46:07Z</time>
   <course>252.429993</course>
-  <speed>0.697381</speed>
+  <speed>0.802533</speed>
   <name>WP0141</name>
 </trkpt>
 <trkpt lat="45.497499984" lon="-75.733361640">
   <ele>49.400000</ele>
 <time>2005-06-12T14:46:22Z</time>
   <course>174.869995</course>
-  <speed>0.438098</speed>
+  <speed>0.504156</speed>
   <name>WP0142</name>
 </trkpt>
 <trkpt lat="45.497463318" lon="-75.733511640">
   <ele>49.900000</ele>
 <time>2005-06-12T14:46:37Z</time>
   <course>223.550003</course>
-  <speed>0.728674</speed>
+  <speed>0.838544</speed>
   <name>WP0143</name>
   <pdop>8.200000</pdop>
 </trkpt>
@@ -1124,7 +1124,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>49.500000</ele>
 <time>2005-06-12T14:47:06Z</time>
   <course>255.070007</course>
-  <speed>1.081835</speed>
+  <speed>1.244956</speed>
   <name>WP0144</name>
   <pdop>6.400000</pdop>
 </trkpt>
@@ -1132,7 +1132,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>55.000000</ele>
 <time>2005-06-12T14:47:31Z</time>
   <course>267.149994</course>
-  <speed>0.938782</speed>
+  <speed>1.080333</speed>
   <name>WP0145</name>
   <pdop>9.400000</pdop>
 </trkpt>
@@ -1140,7 +1140,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>56.600000</ele>
 <time>2005-06-12T14:47:40Z</time>
   <course>158.740005</course>
-  <speed>0.661618</speed>
+  <speed>0.761378</speed>
   <name>WP0146</name>
   <pdop>5.400000</pdop>
 </trkpt>
@@ -1148,7 +1148,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>56.100000</ele>
 <time>2005-06-12T14:48:17Z</time>
   <course>233.080002</course>
-  <speed>0.974546</speed>
+  <speed>1.121489</speed>
   <name>WP0147</name>
   <pdop>10.000000</pdop>
 </trkpt>
@@ -1156,14 +1156,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>56.700000</ele>
 <time>2005-06-12T14:48:37Z</time>
   <course>150.190002</course>
-  <speed>0.147523</speed>
+  <speed>0.169767</speed>
   <name>WP0148</name>
 </trkpt>
 <trkpt lat="45.497241651" lon="-75.734263307">
   <ele>70.600000</ele>
 <time>2005-06-12T14:49:04Z</time>
   <course>155.179993</course>
-  <speed>0.795730</speed>
+  <speed>0.915711</speed>
   <name>WP0149</name>
   <pdop>5.200000</pdop>
 </trkpt>
@@ -1171,7 +1171,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>75.600000</ele>
 <time>2005-06-12T14:49:14Z</time>
   <course>137.089996</course>
-  <speed>0.496214</speed>
+  <speed>0.571033</speed>
   <name>WP0150</name>
   <pdop>5.000000</pdop>
 </trkpt>
@@ -1179,7 +1179,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>76.100000</ele>
 <time>2005-06-12T14:49:29Z</time>
   <course>356.690002</course>
-  <speed>0.196697</speed>
+  <speed>0.226356</speed>
   <name>WP0151</name>
   <pdop>10.600000</pdop>
 </trkpt>
@@ -1187,7 +1187,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>77.400000</ele>
 <time>2005-06-12T14:49:49Z</time>
   <course>233.190002</course>
-  <speed>0.804671</speed>
+  <speed>0.926000</speed>
   <name>WP0152</name>
   <pdop>6.400000</pdop>
 </trkpt>
@@ -1195,28 +1195,28 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>84.500000</ele>
 <time>2005-06-12T14:50:10Z</time>
   <course>66.459999</course>
-  <speed>0.934312</speed>
+  <speed>1.075189</speed>
   <name>WP0153</name>
 </trkpt>
 <trkpt lat="45.497056651" lon="-75.734181640">
   <ele>90.200000</ele>
 <time>2005-06-12T14:50:25Z</time>
   <course>285.640015</course>
-  <speed>0.742085</speed>
+  <speed>0.853978</speed>
   <name>WP0154</name>
 </trkpt>
 <trkpt lat="45.497098318" lon="-75.734301640">
   <ele>93.200000</ele>
 <time>2005-06-12T14:50:45Z</time>
   <course>250.550003</course>
-  <speed>1.055013</speed>
+  <speed>1.214089</speed>
   <name>WP0155</name>
 </trkpt>
 <trkpt lat="45.497131651" lon="-75.734461640">
   <ele>94.400000</ele>
 <time>2005-06-12T14:50:55Z</time>
   <course>245.679993</course>
-  <speed>0.956664</speed>
+  <speed>1.100911</speed>
   <name>WP0156</name>
   <pdop>6.400000</pdop>
 </trkpt>
@@ -1224,14 +1224,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>95.400000</ele>
 <time>2005-06-12T14:51:04Z</time>
   <course>244.559998</course>
-  <speed>1.032661</speed>
+  <speed>1.188367</speed>
   <name>WP0157</name>
 </trkpt>
 <trkpt lat="45.497011651" lon="-75.734718307">
   <ele>96.500000</ele>
 <time>2005-06-12T14:51:16Z</time>
   <course>262.299988</course>
-  <speed>1.452878</speed>
+  <speed>1.671944</speed>
   <name>WP0158</name>
   <pdop>6.200000</pdop>
 </trkpt>
@@ -1239,14 +1239,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>96.300000</ele>
 <time>2005-06-12T14:51:38Z</time>
   <course>207.820007</course>
-  <speed>0.929842</speed>
+  <speed>1.070044</speed>
   <name>WP0159</name>
 </trkpt>
 <trkpt lat="45.496978318" lon="-75.734936640">
   <ele>97.000000</ele>
 <time>2005-06-12T14:51:47Z</time>
   <course>269.070007</course>
-  <speed>1.220417</speed>
+  <speed>1.404433</speed>
   <name>WP0160</name>
   <pdop>6.200000</pdop>
 </trkpt>
@@ -1254,14 +1254,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>96.900000</ele>
 <time>2005-06-12T14:51:57Z</time>
   <course>229.419998</course>
-  <speed>0.853845</speed>
+  <speed>0.982589</speed>
   <name>WP0161</name>
 </trkpt>
 <trkpt lat="45.496956651" lon="-75.735244974">
   <ele>98.200000</ele>
 <time>2005-06-12T14:52:10Z</time>
   <course>242.610001</course>
-  <speed>0.634796</speed>
+  <speed>0.730511</speed>
   <name>WP0162</name>
   <pdop>6.200000</pdop>
 </trkpt>
@@ -1269,7 +1269,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>98.600000</ele>
 <time>2005-06-12T14:52:24Z</time>
   <course>220.550003</course>
-  <speed>1.300884</speed>
+  <speed>1.497033</speed>
   <name>WP0163</name>
   <pdop>6.200000</pdop>
 </trkpt>
@@ -1277,14 +1277,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>98.400000</ele>
 <time>2005-06-12T14:52:38Z</time>
   <course>237.889999</course>
-  <speed>0.961134</speed>
+  <speed>1.106055</speed>
   <name>WP0164</name>
 </trkpt>
 <trkpt lat="45.496764984" lon="-75.735634974">
   <ele>98.200000</ele>
 <time>2005-06-12T14:52:51Z</time>
   <course>253.720001</course>
-  <speed>1.256180</speed>
+  <speed>1.445589</speed>
   <name>WP0165</name>
   <pdop>6.200000</pdop>
 </trkpt>
@@ -1292,7 +1292,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>97.000000</ele>
 <time>2005-06-12T14:53:04Z</time>
   <course>224.910004</course>
-  <speed>2.186022</speed>
+  <speed>2.515633</speed>
   <name>WP0166</name>
   <pdop>6.200000</pdop>
 </trkpt>
@@ -1300,7 +1300,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>96.600000</ele>
 <time>2005-06-12T14:53:12Z</time>
   <course>204.449997</course>
-  <speed>2.136848</speed>
+  <speed>2.459044</speed>
   <name>WP0167</name>
   <pdop>13.400000</pdop>
 </trkpt>
@@ -1308,7 +1308,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>96.100000</ele>
 <time>2005-06-12T14:53:17Z</time>
   <course>185.449997</course>
-  <speed>1.882035</speed>
+  <speed>2.165811</speed>
   <name>WP0168</name>
   <pdop>3.200000</pdop>
 </trkpt>
@@ -1316,7 +1316,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>94.800000</ele>
 <time>2005-06-12T14:53:25Z</time>
   <course>157.490005</course>
-  <speed>1.756864</speed>
+  <speed>2.021767</speed>
   <name>WP0169</name>
   <pdop>13.400000</pdop>
 </trkpt>
@@ -1324,7 +1324,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>95.200000</ele>
 <time>2005-06-12T14:53:30Z</time>
   <course>137.639999</course>
-  <speed>1.533345</speed>
+  <speed>1.764544</speed>
   <name>WP0170</name>
   <pdop>13.600000</pdop>
 </trkpt>
@@ -1332,7 +1332,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>93.600000</ele>
 <time>2005-06-12T14:53:51Z</time>
   <course>83.290001</course>
-  <speed>1.265121</speed>
+  <speed>1.455878</speed>
   <name>WP0171</name>
   <pdop>8.800000</pdop>
 </trkpt>
@@ -1340,7 +1340,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>92.400000</ele>
 <time>2005-06-12T14:53:56Z</time>
   <course>86.800003</course>
-  <speed>0.777848</speed>
+  <speed>0.895133</speed>
   <name>WP0172</name>
   <pdop>3.000000</pdop>
 </trkpt>
@@ -1348,7 +1348,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>91.200000</ele>
 <time>2005-06-12T14:54:07Z</time>
   <course>79.180000</course>
-  <speed>0.719733</speed>
+  <speed>0.828256</speed>
   <name>WP0173</name>
   <pdop>3.000000</pdop>
 </trkpt>
@@ -1356,7 +1356,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>92.400000</ele>
 <time>2005-06-12T14:54:19Z</time>
   <course>82.589996</course>
-  <speed>0.666089</speed>
+  <speed>0.766522</speed>
   <name>WP0174</name>
   <pdop>6.200000</pdop>
 </trkpt>
@@ -1364,7 +1364,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>94.400000</ele>
 <time>2005-06-12T14:54:46Z</time>
   <course>67.809998</course>
-  <speed>0.831493</speed>
+  <speed>0.956867</speed>
   <name>WP0175</name>
   <pdop>2.800000</pdop>
 </trkpt>
@@ -1372,7 +1372,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>92.800000</ele>
 <time>2005-06-12T14:55:02Z</time>
   <course>43.900002</course>
-  <speed>1.095246</speed>
+  <speed>1.260389</speed>
   <name>WP0176</name>
   <pdop>2.800000</pdop>
 </trkpt>
@@ -1380,7 +1380,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>94.900000</ele>
 <time>2005-06-12T14:55:11Z</time>
   <course>81.980003</course>
-  <speed>0.992427</speed>
+  <speed>1.142067</speed>
   <name>WP0177</name>
   <pdop>9.000000</pdop>
 </trkpt>
@@ -1388,7 +1388,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>95.600000</ele>
 <time>2005-06-12T14:55:21Z</time>
   <course>109.800003</course>
-  <speed>0.049174</speed>
+  <speed>0.056589</speed>
   <name>WP0178</name>
   <pdop>2.800000</pdop>
 </trkpt>
@@ -1396,7 +1396,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>96.300000</ele>
 <time>2005-06-12T14:55:43Z</time>
   <course>206.750000</course>
-  <speed>0.545388</speed>
+  <speed>0.627622</speed>
   <name>WP0179</name>
   <pdop>9.200000</pdop>
 </trkpt>
@@ -1404,14 +1404,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>96.300000</ele>
 <time>2005-06-12T14:56:17Z</time>
   <course>186.479996</course>
-  <speed>0.639266</speed>
+  <speed>0.735656</speed>
   <name>WP0180</name>
 </trkpt>
 <trkpt lat="45.496306651" lon="-75.734371640">
   <ele>98.800000</ele>
 <time>2005-06-12T14:56:27Z</time>
   <course>185.270004</course>
-  <speed>0.420217</speed>
+  <speed>0.483578</speed>
   <name>WP0181</name>
   <pdop>2.600000</pdop>
 </trkpt>
@@ -1419,7 +1419,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>97.900000</ele>
 <time>2005-06-12T14:57:10Z</time>
   <course>166.690002</course>
-  <speed>5.346590</speed>
+  <speed>6.152756</speed>
   <name>WP0182</name>
   <pdop>9.600000</pdop>
 </trkpt>
@@ -1427,77 +1427,77 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>97.600000</ele>
 <time>2005-06-12T14:57:13Z</time>
   <course>166.690002</course>
-  <speed>5.346590</speed>
+  <speed>6.152756</speed>
   <name>WP0183</name>
 </trkpt>
 <trkpt lat="45.494281651" lon="-75.733509974">
   <ele>97.300000</ele>
 <time>2005-06-12T14:57:44Z</time>
   <course>166.690002</course>
-  <speed>5.346590</speed>
+  <speed>6.152756</speed>
   <name>WP0184</name>
 </trkpt>
 <trkpt lat="45.491526651" lon="-75.730496640">
   <ele>97.500000</ele>
 <time>2005-06-12T14:58:20Z</time>
   <course>131.520004</course>
-  <speed>21.422121</speed>
+  <speed>24.652178</speed>
   <name>WP0185</name>
 </trkpt>
 <trkpt lat="45.490809984" lon="-75.728584974">
   <ele>97.700000</ele>
 <time>2005-06-12T14:58:21Z</time>
   <course>135.419998</course>
-  <speed>20.219585</speed>
+  <speed>23.268322</speed>
   <name>WP0186</name>
 </trkpt>
 <trkpt lat="45.489388318" lon="-75.725018307">
   <ele>98.100000</ele>
 <time>2005-06-12T14:58:24Z</time>
   <course>144.899994</course>
-  <speed>18.270494</speed>
+  <speed>21.025345</speed>
   <name>WP0187</name>
 </trkpt>
 <trkpt lat="45.488314984" lon="-75.722894974">
   <ele>98.200000</ele>
 <time>2005-06-12T14:58:28Z</time>
   <course>147.210007</course>
-  <speed>17.948626</speed>
+  <speed>20.654945</speed>
   <name>WP0188</name>
 </trkpt>
 <trkpt lat="45.487204984" lon="-75.721489974">
   <ele>98.200000</ele>
 <time>2005-06-12T14:58:34Z</time>
   <course>147.210007</course>
-  <speed>17.948626</speed>
+  <speed>20.654945</speed>
   <name>WP0189</name>
 </trkpt>
 <trkpt lat="45.487416651" lon="-75.720791640">
   <ele>97.900000</ele>
 <time>2005-06-12T14:58:42Z</time>
   <course>160.369995</course>
-  <speed>13.093780</speed>
+  <speed>15.068078</speed>
   <name>WP0190</name>
 </trkpt>
 <trkpt lat="45.488398318" lon="-75.721109974">
   <ele>97.800000</ele>
 <time>2005-06-12T14:58:43Z</time>
   <course>182.169998</course>
-  <speed>8.583154</speed>
+  <speed>9.877334</speed>
   <name>WP0191</name>
 </trkpt>
 <trkpt lat="45.490408318" lon="-75.722254974">
   <ele>101.300000</ele>
 <time>2005-06-12T14:58:46Z</time>
   <course>174.380005</course>
-  <speed>6.920168</speed>
+  <speed>7.963600</speed>
   <name>WP0192</name>
 </trkpt>
 <trkpt lat="45.491743318" lon="-75.723359974">
   <ele>105.300000</ele>
 <time>2005-06-12T14:58:52Z</time>
   <course>179.320007</course>
-  <speed>7.233095</speed>
+  <speed>8.323711</speed>
   <name>WP0193</name>
   <pdop>10.000000</pdop>
 </trkpt>
@@ -1505,42 +1505,42 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>105.600000</ele>
 <time>2005-06-12T14:58:54Z</time>
   <course>183.029999</course>
-  <speed>7.183921</speed>
+  <speed>8.267122</speed>
   <name>WP0194</name>
 </trkpt>
 <trkpt lat="45.491213318" lon="-75.723554974">
   <ele>105.700000</ele>
 <time>2005-06-12T14:59:01Z</time>
   <course>183.029999</course>
-  <speed>7.183921</speed>
+  <speed>8.267122</speed>
   <name>WP0195</name>
 </trkpt>
 <trkpt lat="45.490278318" lon="-75.723608307">
   <ele>104.700000</ele>
 <time>2005-06-12T14:59:15Z</time>
   <course>126.190002</course>
-  <speed>4.237932</speed>
+  <speed>4.876933</speed>
   <name>WP0196</name>
 </trkpt>
 <trkpt lat="45.490369984" lon="-75.723388307">
   <ele>103.600000</ele>
 <time>2005-06-12T14:59:17Z</time>
   <course>83.410004</course>
-  <speed>12.467925</speed>
+  <speed>14.347856</speed>
   <name>WP0197</name>
 </trkpt>
 <trkpt lat="45.490526651" lon="-75.721809974">
   <ele>101.300000</ele>
 <time>2005-06-12T14:59:24Z</time>
   <course>84.290001</course>
-  <speed>12.016416</speed>
+  <speed>13.828267</speed>
   <name>WP0198</name>
 </trkpt>
 <trkpt lat="45.490071651" lon="-75.720394974">
   <ele>99.900000</ele>
 <time>2005-06-12T14:59:29Z</time>
   <course>109.540001</course>
-  <speed>13.858217</speed>
+  <speed>15.947778</speed>
   <name>WP0199</name>
   <pdop>2.600000</pdop>
 </trkpt>
@@ -1548,70 +1548,70 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>98.100000</ele>
 <time>2005-06-12T14:59:40Z</time>
   <course>115.199997</course>
-  <speed>12.825557</speed>
+  <speed>14.759411</speed>
   <name>WP0200</name>
 </trkpt>
 <trkpt lat="45.488024984" lon="-75.715301640">
   <ele>97.900000</ele>
 <time>2005-06-12T14:59:54Z</time>
   <course>105.970001</course>
-  <speed>14.694180</speed>
+  <speed>16.909788</speed>
   <name>WP0201</name>
 </trkpt>
 <trkpt lat="45.487381651" lon="-75.712531640">
   <ele>97.700000</ele>
 <time>2005-06-12T15:00:08Z</time>
   <course>105.970001</course>
-  <speed>14.694180</speed>
+  <speed>16.909788</speed>
   <name>WP0202</name>
 </trkpt>
 <trkpt lat="45.487396651" lon="-75.711828307">
   <ele>97.700000</ele>
 <time>2005-06-12T15:00:12Z</time>
   <course>87.070000</course>
-  <speed>12.342754</speed>
+  <speed>14.203811</speed>
   <name>WP0203</name>
 </trkpt>
 <trkpt lat="45.487534984" lon="-75.711744974">
   <ele>97.700000</ele>
 <time>2005-06-12T15:00:13Z</time>
   <course>85.029999</course>
-  <speed>12.271228</speed>
+  <speed>14.121500</speed>
   <name>WP0204</name>
 </trkpt>
 <trkpt lat="45.487728318" lon="-75.711471640">
   <ele>97.500000</ele>
 <time>2005-06-12T15:00:15Z</time>
   <course>84.540001</course>
-  <speed>16.191761</speed>
+  <speed>18.633179</speed>
   <name>WP0205</name>
 </trkpt>
 <trkpt lat="45.487859984" lon="-75.710994974">
   <ele>97.300000</ele>
 <time>2005-06-12T15:00:17Z</time>
   <course>84.480003</course>
-  <speed>16.558334</speed>
+  <speed>19.055021</speed>
   <name>WP0206</name>
 </trkpt>
 <trkpt lat="45.488128318" lon="-75.708784974">
   <ele>97.100000</ele>
 <time>2005-06-12T15:00:26Z</time>
   <course>84.480003</course>
-  <speed>16.558334</speed>
+  <speed>19.055021</speed>
   <name>WP0207</name>
 </trkpt>
 <trkpt lat="45.488351651" lon="-75.705628307">
   <ele>97.000000</ele>
 <time>2005-06-12T15:00:39Z</time>
   <course>84.480003</course>
-  <speed>16.558334</speed>
+  <speed>19.055021</speed>
   <name>WP0208</name>
 </trkpt>
 <trkpt lat="45.488748318" lon="-75.704488307">
   <ele>97.100000</ele>
 <time>2005-06-12T15:00:43Z</time>
   <course>86.349998</course>
-  <speed>6.540184</speed>
+  <speed>7.526322</speed>
   <name>WP0209</name>
   <pdop>6.400000</pdop>
 </trkpt>
@@ -1619,7 +1619,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>97.200000</ele>
 <time>2005-06-12T15:00:52Z</time>
   <course>103.959999</course>
-  <speed>0.143053</speed>
+  <speed>0.164622</speed>
   <name>WP0210</name>
   <pdop>6.400000</pdop>
 </trkpt>
@@ -1627,7 +1627,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>97.100000</ele>
 <time>2005-06-12T15:00:56Z</time>
   <course>198.320007</course>
-  <speed>0.151993</speed>
+  <speed>0.174911</speed>
   <name>WP0211</name>
   <pdop>6.400000</pdop>
 </trkpt>
@@ -1635,28 +1635,28 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>96.900000</ele>
 <time>2005-06-12T15:01:14Z</time>
   <course>2.360000</course>
-  <speed>0.800200</speed>
+  <speed>0.920856</speed>
   <name>WP0212</name>
 </trkpt>
 <trkpt lat="45.489364984" lon="-75.702803307">
   <ele>96.900000</ele>
 <time>2005-06-12T15:01:37Z</time>
   <course>81.510002</course>
-  <speed>12.834497</speed>
+  <speed>14.769700</speed>
   <name>WP0213</name>
 </trkpt>
 <trkpt lat="45.489553318" lon="-75.700098307">
   <ele>97.300000</ele>
 <time>2005-06-12T15:01:45Z</time>
   <course>94.290001</course>
-  <speed>3.665722</speed>
+  <speed>4.218444</speed>
   <name>WP0214</name>
 </trkpt>
 <trkpt lat="45.489698318" lon="-75.698621640">
   <ele>97.200000</ele>
 <time>2005-06-12T15:01:59Z</time>
   <course>90.029999</course>
-  <speed>1.260651</speed>
+  <speed>1.450733</speed>
   <name>WP0215</name>
   <pdop>6.400000</pdop>
 </trkpt>
@@ -1664,77 +1664,77 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>97.200000</ele>
 <time>2005-06-12T15:02:04Z</time>
   <course>91.970001</course>
-  <speed>1.242769</speed>
+  <speed>1.430156</speed>
   <name>WP0216</name>
 </trkpt>
 <trkpt lat="45.489761651" lon="-75.698398307">
   <ele>97.100000</ele>
 <time>2005-06-12T15:02:12Z</time>
   <course>93.570000</course>
-  <speed>13.648108</speed>
+  <speed>15.705989</speed>
   <name>WP0217</name>
 </trkpt>
 <trkpt lat="45.489583318" lon="-75.695093307">
   <ele>97.400000</ele>
 <time>2005-06-12T15:02:28Z</time>
   <course>93.570000</course>
-  <speed>13.648108</speed>
+  <speed>15.705989</speed>
   <name>WP0218</name>
 </trkpt>
 <trkpt lat="45.489726651" lon="-75.693488307">
   <ele>97.500000</ele>
 <time>2005-06-12T15:02:36Z</time>
   <course>76.129997</course>
-  <speed>12.512629</speed>
+  <speed>14.399300</speed>
   <name>WP0219</name>
 </trkpt>
 <trkpt lat="45.489909984" lon="-75.693386640">
   <ele>97.500000</ele>
 <time>2005-06-12T15:02:37Z</time>
   <course>75.209999</course>
-  <speed>12.664622</speed>
+  <speed>14.574211</speed>
   <name>WP0220</name>
 </trkpt>
 <trkpt lat="45.490408318" lon="-75.692841640">
   <ele>97.500000</ele>
 <time>2005-06-12T15:02:41Z</time>
   <course>75.209999</course>
-  <speed>12.664622</speed>
+  <speed>14.574211</speed>
   <name>WP0221</name>
 </trkpt>
 <trkpt lat="45.490608318" lon="-75.692348307">
   <ele>97.400000</ele>
 <time>2005-06-12T15:02:44Z</time>
   <course>75.209999</course>
-  <speed>12.664622</speed>
+  <speed>14.574211</speed>
   <name>WP0222</name>
 </trkpt>
 <trkpt lat="45.491079984" lon="-75.690218307">
   <ele>97.400000</ele>
 <time>2005-06-12T15:02:56Z</time>
   <course>90.370003</course>
-  <speed>11.435265</speed>
+  <speed>13.159489</speed>
   <name>WP0223</name>
 </trkpt>
 <trkpt lat="45.491288318" lon="-75.688778307">
   <ele>97.300000</ele>
 <time>2005-06-12T15:03:04Z</time>
   <course>111.029999</course>
-  <speed>11.971711</speed>
+  <speed>13.776822</speed>
   <name>WP0224</name>
 </trkpt>
 <trkpt lat="45.491183318" lon="-75.688611640">
   <ele>97.300000</ele>
 <time>2005-06-12T15:03:05Z</time>
   <course>126.019997</course>
-  <speed>13.473763</speed>
+  <speed>15.505356</speed>
   <name>WP0225</name>
 </trkpt>
 <trkpt lat="45.490993318" lon="-75.688663307">
   <ele>99.000000</ele>
 <time>2005-06-12T15:03:06Z</time>
   <course>171.699997</course>
-  <speed>9.217950</speed>
+  <speed>10.607844</speed>
   <name>WP0226</name>
   <pdop>2.000000</pdop>
 </trkpt>
@@ -1742,14 +1742,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>99.300000</ele>
 <time>2005-06-12T15:03:16Z</time>
   <course>154.520004</course>
-  <speed>5.686339</speed>
+  <speed>6.543733</speed>
   <name>WP0227</name>
 </trkpt>
 <trkpt lat="45.489516651" lon="-75.688719974">
   <ele>99.200000</ele>
 <time>2005-06-12T15:03:20Z</time>
   <course>159.869995</course>
-  <speed>0.116230</speed>
+  <speed>0.133756</speed>
   <name>WP0228</name>
   <pdop>2.000000</pdop>
 </trkpt>
@@ -1757,7 +1757,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>99.000000</ele>
 <time>2005-06-12T15:03:26Z</time>
   <course>169.960007</course>
-  <speed>0.134112</speed>
+  <speed>0.154333</speed>
   <name>WP0229</name>
   <pdop>2.000000</pdop>
 </trkpt>
@@ -1765,7 +1765,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>98.600000</ele>
 <time>2005-06-12T15:03:53Z</time>
   <course>167.100006</course>
-  <speed>1.001368</speed>
+  <speed>1.152356</speed>
   <name>WP0230</name>
   <pdop>2.000000</pdop>
 </trkpt>
@@ -1773,35 +1773,35 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>98.300000</ele>
 <time>2005-06-12T15:04:12Z</time>
   <course>318.260010</course>
-  <speed>0.751026</speed>
+  <speed>0.864267</speed>
   <name>WP0231</name>
 </trkpt>
 <trkpt lat="45.489688318" lon="-75.688884974">
   <ele>98.000000</ele>
 <time>2005-06-12T15:04:34Z</time>
   <course>76.680000</course>
-  <speed>1.430526</speed>
+  <speed>1.646222</speed>
   <name>WP0232</name>
 </trkpt>
 <trkpt lat="45.489699984" lon="-75.688648307">
   <ele>98.200000</ele>
 <time>2005-06-12T15:04:37Z</time>
   <course>47.889999</course>
-  <speed>2.825288</speed>
+  <speed>3.251289</speed>
   <name>WP0233</name>
 </trkpt>
 <trkpt lat="45.489858318" lon="-75.688149974">
   <ele>98.400000</ele>
 <time>2005-06-12T15:04:43Z</time>
   <course>47.889999</course>
-  <speed>2.825288</speed>
+  <speed>3.251289</speed>
   <name>WP0234</name>
 </trkpt>
 <trkpt lat="45.489979984" lon="-75.687781640">
   <ele>98.400000</ele>
 <time>2005-06-12T15:04:51Z</time>
   <course>240.000000</course>
-  <speed>0.107289</speed>
+  <speed>0.123467</speed>
   <name>WP0235</name>
   <pdop>2.000000</pdop>
 </trkpt>
@@ -1809,14 +1809,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <ele>98.100000</ele>
 <time>2005-06-12T15:05:11Z</time>
   <course>159.000000</course>
-  <speed>0.111760</speed>
+  <speed>0.128611</speed>
   <name>WP0236</name>
 </trkpt>
 <trkpt lat="45.490004984" lon="-75.684934974">
   <ele>97.400000</ele>
 <time>2005-06-12T15:05:30Z</time>
   <course>247.240005</course>
-  <speed>0.290576</speed>
+  <speed>0.334389</speed>
   <name>WP0237</name>
 </trkpt>
 </trkseg>

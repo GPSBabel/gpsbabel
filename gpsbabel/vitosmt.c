@@ -34,6 +34,7 @@ unsigned long	count	=0;
 const size_t vitosmt_headersize		=24;
 const size_t vitosmt_datasize		=64;
 const double mile2km		=1.609344;		/* mile/h to kilometer/h */
+const double kts2mps =0.51444444444444444; 	/* knots to m/s */
 const double mph2mps 		=0.447039259;	/* mile/h to m/s     */
 
 static unsigned long
@@ -146,7 +147,7 @@ vitosmt_read(void)
 		elev		=ReadDouble(infile);	/* elevation in meters */
 		timestamp	=ReadRecord(infile,5);	/* UTC time yr/mo/dy/hr/mi */
 		seconds		=ReadDouble(infile);	/* seconds */
-		speed		=ReadDouble(infile);    /* speed in miles per hour */
+		speed		=ReadDouble(infile);    /* speed in knots */
 		course		=ReadDouble(infile);	/* course in degrees */
 		pdop     	=ReadDouble(infile);	/* dilution of precision */
 		gpsfix		=fgetc(infile);			/* fix type x08,x10, x20  */	
@@ -173,7 +174,7 @@ vitosmt_read(void)
 		wpt_tmp->shortname	=xcalloc(16,1);
 		snprintf(wpt_tmp->shortname, 15 , "WP%04d", ++serial);
 
-		wpt_tmp->speed	= speed*mph2mps; /* meters per second */
+		wpt_tmp->speed	= speed*kts2mps; /* meters per second */
 		wpt_tmp->course = course;
 		wpt_tmp->pdop	= pdop;
 
