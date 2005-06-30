@@ -770,6 +770,7 @@ lowranceusr_route_hdr(const route_head *rte)
 	text_len = strlen(name);
 	my_fwrite4(&text_len, file_out);
 	fwrite(name, 1, text_len, file_out);
+	xfree(name);
 
 	/* num legs */
 	num_legs = (short) rte->rte_waypt_ct;
