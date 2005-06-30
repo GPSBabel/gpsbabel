@@ -125,7 +125,6 @@ static void
 maggeo_waypt_pr(const waypoint *waypointp)
 {
 	char obuf[4096];
-	char dtbuf[10];
 	double ilon, ilat;
 	double lon, lat;
 	int lon_deg, lat_deg;
@@ -216,7 +215,6 @@ strconsume(char *instr, int *eaten)
 	const char *origstr = instr;
 	char *s = instr;
 	char *e = instr;
-	int ct;
 
 	while (e && *e && *e != ',')
 		*e++;

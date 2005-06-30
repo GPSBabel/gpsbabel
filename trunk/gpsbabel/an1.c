@@ -277,6 +277,7 @@ static an1_waypoint_record *Alloc_AN1_Waypoint( ) {
 	result = (an1_waypoint_record *)xcalloc( sizeof(*result), 1 );
 	result->base.copy = Copy_AN1_Waypoint;
 	result->base.destroy = Destroy_AN1_Waypoint; 
+	return result;
 }
 	
 static an1_vertex_record *Alloc_AN1_Vertex();
@@ -297,6 +298,7 @@ static an1_vertex_record *Alloc_AN1_Vertex() {
 	result = (an1_vertex_record *)xcalloc( sizeof( *result), 1 );
 	result->base.copy = Copy_AN1_Vertex;
 	result->base.destroy = Destroy_AN1_Vertex;
+	return result;
 }
 			
 
@@ -320,6 +322,7 @@ static an1_line_record *Alloc_AN1_Line( ) {
 	result = (an1_line_record *)xcalloc( sizeof(*result), 1 );
 	result->base.copy = Copy_AN1_Line;
 	result->base.destroy = Destroy_AN1_Line;
+	return result;
 }
 
 
@@ -451,7 +454,7 @@ static void Write_AN1_Line( FILE *f, an1_line_record *line ) {
 	len = strlen( line->name );
 	WriteShort( f, len );
 	WriteString( f, line->name );
-	WriteShort( f, line->lineweight );
+	WriteShort( f, (short) line->lineweight );
 	WriteLong( f, line->linestyle );
 	WriteLong( f, line->linecolor );
 	WriteLong( f, line->unk5 );
@@ -507,7 +510,7 @@ static void Read_AN1_Header( FILE *f ) {
 
 static void Write_AN1_Header( FILE *f ) {
 	WriteShort( f, 11557 );
-	WriteShort( f, atoi( output_type ) );
+	WriteShort( f, (short) atoi( output_type ) );
 }
 
 static void Read_AN1_Bitmaps( FILE *f ) {
@@ -632,7 +635,7 @@ static void Read_AN1_Lines( FILE *f ) {
                 rte_head = route_head_alloc();
 		rte_head->an1_extras = (an1_base *)(void *)rec;
                 route_add_head(rte_head);
-		for (j = 0; j < rec->pointcount; j++ ) {
+		for (j = 0; j < (unsigned) rec->pointcount; j++ ) {
 			vert = Alloc_AN1_Vertex();
 			Read_AN1_Vertex( f, vert );
 			

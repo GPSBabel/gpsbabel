@@ -395,8 +395,7 @@ bcr_route_header(const route_head *route)
 	char buff[128], symbol[32];
 	
 	curr_rte_num++;
-	if (curr_rte_num != target_rte_num) return;
-	
+	if (curr_rte_num != target_rte_num) return;	
 	
 	bcr_write_line(fout, "[CLIENT]", NULL, NULL);			/* client section */
 
@@ -481,7 +480,7 @@ bcr_data_write(void)
 	    if (rtenum_opt != NULL)
 	    {
 		target_rte_num = atoi(rtenum_opt);
-		if ((target_rte_num > route_count()) || (target_rte_num < 1))
+		if (((unsigned)target_rte_num > route_count()) || (target_rte_num < 1))
 		    fatal(MYNAME ": invalid route number %d (1..%d))!\n", 
 			target_rte_num, route_count());
 	    }

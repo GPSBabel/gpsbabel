@@ -71,8 +71,9 @@ typedef enum {
 } gpsdata_type;
 
 typedef enum {
-	fix_unknown,
-	fix_2d,	
+	fix_unknown=-1,
+	fix_none=0,
+	fix_2d=1,	
 	fix_3d,
 	fix_dgps,
 	fix_pps
@@ -556,6 +557,7 @@ char *strsub(const char *s, const char *search, const char *replace);
 char *gstrsub(const char *s, const char *search, const char *replace);
 void rtrim(char *s);
 signed int get_tz_offset(void);
+time_t mkgmtime(struct tm *t);
 time_t current_time(void);
 signed int month_lookup(const char *m);
 const char *get_cache_icon(const waypoint *waypointp);

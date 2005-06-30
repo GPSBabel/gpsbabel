@@ -446,12 +446,12 @@ mps_fileHeader_w(FILE *mps_file, int mps_ver)
 	strcpy(hdr+7,"Oct 20 1999");
 	strcpy(hdr+19,"12:50:33");
 	if (mps_ver == 4) {
-		hdr[1] = 0x96;					/* equates to V4.06 */
+		hdr[1] = (char) 0x96;					/* equates to V4.06 */
 		strcpy(hdr+7,"Oct 22 2001");
 		strcpy(hdr+19,"15:45:33");
 	}
 	if (mps_ver == 5) {
-		hdr[1] = 0xF4;					/* equates to V5.0 */
+		hdr[1] = (char) 0xF4;					/* equates to V5.0 */
 		strcpy(hdr+7,"Jul  3 2003");
 		strcpy(hdr+19,"08:35:33");
 	}
