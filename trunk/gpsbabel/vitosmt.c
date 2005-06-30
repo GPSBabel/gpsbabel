@@ -119,7 +119,6 @@ vitosmt_read(void)
 	unsigned char	gpsvalid		=0;
 	unsigned char	gpssats			=0;
 	int				serial			=0;
-	xml_tag *		xml_curr		=0;
 	char			buffer[80]		="\0";
 
 		
@@ -183,29 +182,16 @@ vitosmt_read(void)
 		*/
 		if (gpsvalid&0x7) {
 			
-			wpt_tmp->gpx_extras		=(xml_tag *)xcalloc(sizeof(xml_tag),1);
-				
 			/* <fix> */
-			xml_curr				=wpt_tmp->gpx_extras;
-			xml_curr->tagname		=xstrdup("fix");
 			if		(gpsfix&0x8)	
-				xml_curr->cdata		=xstrdup("2d");
+				wpt_tmp->fix = fix_2d;
 			else if	(gpsfix&0x10)	
-				xml_curr->cdata		=xstrdup("3d");
+				wpt_tmp->fix = fix_3d;
 			else if	(gpsfix&0x20)	
-				xml_curr->cdata		=xstrdup("dgps");
-			else
-				xml_curr->cdata		=xstrdup("none");
-			xml_curr->cdatalen 		=strlen(xml_curr->cdata);
+				wpt_tmp->fix = fix_dgps;
 			
 			/* <sat> */
-			xml_curr->sibling		=(xml_tag *)xcalloc(sizeof(xml_tag),1);
-			xml_curr				=xml_curr->sibling;
-			xml_curr->tagname		=xstrdup("sat");
-			snprintf(buffer, sizeof(buffer), "%d", gpssats);
-			xml_curr->cdata			=xstrdup(buffer);
-			xml_curr->cdatalen 		=strlen(xml_curr->cdata);
-			
+			wpt_tmp->sat = gpssats;
 		}
 
 		if (doing_wpts)			/* process as waypoints */
@@ -249,17 +235,6 @@ wr_deinit(void)
 
 }
 
-xml_tag *xml_find( xml_tag *cur, char *tagname ) 
-{
-	xml_tag *result = cur;
-	while ( result && case_ignore_strcmp( result->tagname, tagname ))
-	{
-		result = result->sibling;
-	} ;
-	return result;
-}
-
-
 static void
 vitosmt_waypt_pr(const waypoint *waypointp)
 {
@@ -268,7 +243,6 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 	struct tm*		tmstructp		=0;
 	double			seconds			=0;
 	double			worknum			=0;
-	xml_tag*		xmltagp			=0;
 
 	++count;
 	workbuffer = xcalloc(vitosmt_datasize,1);
@@ -307,25 +281,23 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 
 
 	/* fix type */
-	xmltagp = xml_find(waypointp->gpx_extras,"fix");
-	if (xmltagp) {
-		if		(case_ignore_strcmp(xmltagp->cdata,"dgps"))
+	switch (waypointp->fix) {
+		case fix_dgps:
 			workbuffer[position++] = (unsigned char) 0x20;
-		else if	(case_ignore_strcmp(xmltagp->cdata,"3d"))
+			break;
+		case fix_3d:
 			workbuffer[position++] = (unsigned char) 0x10;
-		else if	(case_ignore_strcmp(xmltagp->cdata,"2d"))
+			break;
+		case fix_2d:
 			workbuffer[position++] = (unsigned char) 0x08;
-		else
+			break;
+		default:
 			workbuffer[position++] = (unsigned char) 0;
-	}	
+			break;
+	}
 	
 	workbuffer[position++] = 0x7;
-	
-	xmltagp = xml_find(waypointp->gpx_extras,"sat");
-	if (xmltagp) {
-		workbuffer[position++] = (unsigned char) atoi(xmltagp->cdata);
-	}	
-
+	workbuffer[position++] = (unsigned char) waypointp->sat;
 	
 	if (fwrite(workbuffer,vitosmt_datasize,1,ofs)!=1)
 	{
