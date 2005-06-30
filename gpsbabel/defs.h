@@ -259,7 +259,8 @@ typedef struct {
 	float pdop;		
 	float course;	/* Optional: degrees true */
 	float speed;   	/* Optional: meters per second. */
-	char fix, sat;
+	fix_type fix;	/* Optional: 3d, 2d, etc. */
+	int  sat;	/* Optional: number of sats used for fix */
 	
 	geocache_data gc_data;
 	xml_tag *gpx_extras;

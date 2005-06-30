@@ -95,6 +95,8 @@ typedef enum {
 	tt_pdop,		/* PDOPS are common for all three */
 	tt_hdop,		/* PDOPS are common for all three */
 	tt_vdop,		/* PDOPS are common for all three */
+	tt_fix,
+	tt_sat,
 	tt_cache,
 	tt_cache_name,
 	tt_cache_container,
@@ -218,6 +220,12 @@ tag_mapping tag_path_map[] = {
 	{ tt_trk_trkseg_trkpt_speed, 0, "/gpx/trk/trkseg/trkpt/speed" },
 
 	/* Common to tracks, routes, and waypts */
+	{ tt_fix,  0, "/gpx/wpt/fix" },
+	{ tt_fix,  0, "/gpx/trk/trkseg/trkpt/fix" },
+	{ tt_fix,  0, "/gpx/rte/rtept/fix" },
+	{ tt_sat,  0, "/gpx/wpt/sat" },
+	{ tt_sat,  0, "/gpx/trk/trkseg/trkpt/sat" },
+	{ tt_sat,  0, "/gpx/rte/rtept/sat" },
 	{ tt_pdop, 0, "/gpx/wpt/pdop" },
 	{ tt_pdop, 0, "/gpx/trk/trkseg/trkpt/pdop" },
 	{ tt_pdop, 0, "/gpx/rte/rtept/pdop" },
@@ -825,6 +833,12 @@ gpx_end(void *data, const char *el)
 	case tt_vdop:
 		wpt_tmp->vdop = atof(cdatastrp);
 		break;
+	case tt_sat:
+		wpt_tmp->sat = atof(cdatastrp);
+		break;
+	case tt_fix:
+		wpt_tmp->fix = atof(cdatastrp);
+		break;
 	case tt_unknown:
 		end_something_else();
 		*s = 0;
@@ -1180,6 +1194,28 @@ write_gpx_url(const waypoint *waypointp)
 static void
 gpx_write_common_acc(const waypoint *waypointp, const char *indent)
 {
+	char *fix = NULL;
+
+	switch (waypointp->fix) {
+		case fix_2d:
+			fix = "2d";
+			break;
+		case fix_3d:
+			fix = "3d";
+			break;
+		case fix_dgps:
+			fix = "dgps";
+			break;
+		case fix_pps:
+			fix = "pps";
+			break;
+	}
+	if (fix) {
+		fprintf(ofd, "%s<fix>%s</fix>\n", indent, fix);
+	}
+	if (waypointp->sat) {
+		fprintf(ofd, "%s<sat>%d</sat>\n", indent, waypointp->sat);
+	}
 	if (waypointp->hdop) {
 		fprintf(ofd, "%s<hdop>%f</hdop>\n", indent, waypointp->hdop);
 	}
