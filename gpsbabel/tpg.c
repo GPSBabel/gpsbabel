@@ -185,7 +185,8 @@ tpg_read(void)
     	    
     	    stringsize = buff[0];
     	    
-    	    tpg_fread(&buff[0], stringsize, 1, tpg_file_in);
+    	    if (stringsize)
+		tpg_fread(&buff[0], stringsize, 1, tpg_file_in);
     	    buff[stringsize] = '\0';
     	    
     	    wpt_tmp->description = xstrdup(buff);
