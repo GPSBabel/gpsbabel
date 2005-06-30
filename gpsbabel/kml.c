@@ -139,7 +139,7 @@ static
 void
 kml_rd_init(const char *fname)
 {
-	xml_init(fname, kml_map);
+	xml_init(fname, kml_map, NULL);
 }
 
 static

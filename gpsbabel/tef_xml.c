@@ -269,7 +269,7 @@ tef_point(const char *args, const char **attrv)
 static void 
 tef_xml_rd_init(const char *fname)
 {
-	xml_init(fname, tef_xml_map);
+	xml_init(fname, tef_xml_map, NULL);
 }
 
 /*

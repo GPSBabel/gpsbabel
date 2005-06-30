@@ -57,7 +57,7 @@ static xg_tag_mapping gl_map[] = {
 void
 glogbook_rd_init(const char *fname)
 {
-	xml_init(fname, gl_map);
+	xml_init(fname, gl_map, NULL);
 }
 
 void

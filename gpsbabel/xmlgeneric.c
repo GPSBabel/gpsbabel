@@ -232,7 +232,7 @@ void xml_readstring( char *str )
 }
 
 void
-xml_init(const char *fname, xg_tag_mapping *tbl)
+xml_init(const char *fname, xg_tag_mapping *tbl, const char *encoding)
 {
 	if (fname) {
 		ifd = xfopen(fname, "r", MYNAME);
@@ -241,7 +241,7 @@ xml_init(const char *fname, xg_tag_mapping *tbl)
 	current_tag = vmem_alloc(1,0);
 	*((char *)current_tag.mem) = '\0';
 
-	psr = XML_ParserCreate(NULL);
+	psr = XML_ParserCreate((const XML_Char *)encoding);
 	if (!psr) {
 		fatal(MYNAME ": Cannot create XML Parser\n");
 	}

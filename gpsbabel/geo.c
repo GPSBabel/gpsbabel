@@ -133,7 +133,7 @@ void wpt_coord(const char *args, const char **attrv)
 void
 geo_rd_init(const char *fname)
 {
-	xml_init(fname, loc_map);
+	xml_init(fname, loc_map, NULL);
 }
 
 void

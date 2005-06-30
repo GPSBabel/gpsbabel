@@ -167,7 +167,7 @@ void goog_poly_e( const char *args, const char **unused )
 void
 google_rd_init(const char *fname)
 {
-	xml_init(fname, google_map);
+	xml_init(fname, google_map, "ISO-8859-1" );
 }
 
 void
@@ -184,7 +184,7 @@ google_read(void)
 			if ( end ) {
 				*end = '\0';
 				xml_deinit();
-				xml_init( NULL, google_map );
+				xml_init( NULL, google_map, NULL );
 				xml_readstring( xml );
 			}
 		}
