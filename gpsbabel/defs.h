@@ -564,8 +564,14 @@ char * xml_entitize(const char * str);
 char * html_entitize(const char * str);
 char * strip_html(const utf_string*);
 char * strip_nastyhtml(const char * in);
-char * str_utf8_to_cp1252( const char * str );
-char * str_utf8_to_ascii( const char * str );
+
+/* 
+ * Character encoding transformations.
+ */
+char * str_utf8_to_cp1252(const char * str);
+char * str_utf8_to_ascii(const char * str);
+char * str_iso8859_1_to_utf8(const char *str );
+
 
 /* this lives in gpx.c */
 time_t xml_parse_time( const char *cdatastr );

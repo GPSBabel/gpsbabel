@@ -124,44 +124,6 @@ bcr_find_waypt(const char *name, route_head *route)		/* find a waypt by name, cr
 	return wpt;
 }
 
-#ifndef UTF8_SUPPORT
-char *
-bcr_iso8859_1_to_utf8(const char *s)
-{
-	int len;
-	char *res;
-	unsigned char c;
-	char *src, *dst;
-
-	if (s == NULL) return NULL;
-
-	len = 0;
-	src = (char *)s;
-	while ('\0' != (c = *src++))
-	{
-	    len++;
-	    if (c & 0x80) len++;
-	}
-
-	src = (char *)s;
-	dst = res = (void *) xmalloc(len + 1);
-	while ('\0' != (c = *src++))
-	{
-	    if (c & 0x80)
-	    {
-		*dst++ = (0xc0 | (c >> 6));
-		*dst++ = (c & 0xbf);
-	    }
-	    else
-	    {
-		*dst++ = c;
-	    }
-	}
-	*dst = '\0';
-	return res;
-}
-#endif
-
 void
 bcr_create_waypts_from_route(route_head *route)
 {
@@ -281,11 +243,7 @@ bcr_data_read(void)
 	    }
 	    if (src != NULL) xfree(src);
 	    
-#ifdef UTF8_SUPPORT
 	    src = str_iso8859_1_to_utf8(buff);
-#else
-	    src = bcr_iso8859_1_to_utf8(buff);	/* internal copy str_iso8859_1_to_utf8 */
-#endif
 	    /* !! buff is now free and can be used */
 	    
 	    c = bcr_next_char(src);		/* skip spaces */
