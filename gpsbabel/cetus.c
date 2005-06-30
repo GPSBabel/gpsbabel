@@ -164,6 +164,7 @@ data_read(void)
 
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
 		waypoint *wpt_tmp;
+		int i;
 
 		wpt_tmp = waypt_new();
 
@@ -177,6 +178,23 @@ data_read(void)
 			
 		wpt_tmp->longitude = be_read32(&rec->longitude) / 10000000.0; 
 		wpt_tmp->latitude = be_read32(&rec->latitude) / 10000000.0;
+		
+		if (rec->sat != 0xff)
+			wpt_tmp->sat = rec->sat;
+
+		i = be_read16(&rec->pdop);
+		if (i != 0xffff) wpt_tmp->pdop = i / 100.0;
+		i = be_read16(&rec->hdop);
+		if (i != 0xffff) wpt_tmp->hdop = i / 100.0;
+		i = be_read16(&rec->vdop);
+		if (i != 0xffff) wpt_tmp->vdop = i / 100.0;
+
+		switch (rec->type) {
+			case WptGPS2D:  wpt_tmp->fix = fix_2d; break;
+			case WptGPS3D:  wpt_tmp->fix = fix_3d; break;
+			case WptDGPS2D: wpt_tmp->fix = fix_dgps; break;
+			case WptDGPS3D: wpt_tmp->fix = fix_dgps; break;
+		}
 	        	
 		if (be_read16(&rec->year) != 0xff) {
 			struct tm tm;
@@ -247,9 +265,9 @@ cetus_writewpt(const waypoint *wpt)
 		be_write32(&rec->elevation, (unsigned int) (wpt->altitude * 100.0));
 	}
 	
-	be_write16( &rec->pdop, 0xffff );
-	be_write16( &rec->hdop, 0xffff );
-	be_write16( &rec->vdop, 0xffff );
+	be_write16( &rec->pdop, wpt->pdop ? wpt->pdop * 100 : 0xffff );
+	be_write16( &rec->hdop, wpt->hdop ? wpt->hdop * 100 : 0xffff );
+	be_write16( &rec->vdop, wpt->vdop ? wpt->vdop * 100 : 0xffff );
 	be_write16( &rec->dgpstime, 0xffff );	
 	be_write32( &rec->distance, 0xffffffff );
 	
@@ -260,7 +278,7 @@ cetus_writewpt(const waypoint *wpt)
 	rec->vmon = 0xff;
 	be_write16(&rec->vyear, 0xff);
 	
-	rec->sat = 0xff;
+	rec->sat = wpt->sat ? wpt->sat : 0xff;
 
 	vdata = (char *)rec + sizeof(*rec);
 	if ( wpt->shortname ) {
