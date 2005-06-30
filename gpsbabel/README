@@ -788,11 +788,19 @@ THE FORMATS
         XHTML beyond recognition so use a better browser to save the
         pages such as Firefox or Mozilla.
 
-    TourExchangeFormat
+    TEF
 
-        XML based export format, used by Map&Guide
-        "Motorrad-Routenplaner". This software can only export routing
-        data.  So we don't support writing.
+        TEF, internal called "TourExchangeFormat", is a XML based 
+	export format, used by Map&Guide "Motorrad-Routenplaner 2005/06".
+	Another posibility to exchange data with this are the .bcr files,
+	which are sopprted by GPSbabel in both directions (see BCR).
+	Via XML this software can only export routing data.  
+	So we don't support writing. 
+	
+	With the option "routevia" you can eliminate calculated route
+	points from tef source file.
+	
+	gpsbabel -r -i tef,routevia -f in.xml -o gpx -F out.gpx
 
     PathAway
 
