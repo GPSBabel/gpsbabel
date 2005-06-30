@@ -67,6 +67,35 @@
    '	10   300504			Date 30/05-2004
    '  11   Empty field	Magnetic variation
 
+      GSA - GPS DOP and active satellites
+      $GPGSA,A,3,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39
+           A            Auto selection of 2D or 3D fix (M = manual)
+           3            3D fix
+           04,05...     PRNs of satellites used for fix (space for 12)
+           2.5          PDOP (dilution of precision)
+           1.3          Horizontal dilution of precision (HDOP)
+           2.1          Vertical dilution of precision (VDOP)
+             DOP is an indication of the effect of satellite geometry on
+             the accuracy of the fix.
+
+      VTG - Track made good and ground speed
+      $GPVTG,054.7,T,034.4,M,005.5,N,010.2,K
+           054.7,T      True track made good
+           034.4,M      Magnetic track made good
+           005.5,N      Ground speed, knots
+           010.2,K      Ground speed, Kilometers per hour
+
+      WPL - waypoint location
+      $GPWPL,4917.16,N,12310.64,W,003*65
+           4917.16,N    Latitude of waypoint
+           12310.64,W   Longitude of waypoint
+           003          Waypoint ID
+             When a route is active, this sentence is sent once for each
+             waypoint in the route, in sequence. When all waypoints have
+             been reported, GPR00 is sent in the next data set. In any
+             group of sentences, only one WPL sentence, or an R00
+             sentence, will be sent.
+
 
    ' The optional checksum field consists of a "*" and two hex digits repre-
    ' senting the exclusive OR of all characters between, but not including,
@@ -93,8 +122,12 @@ static route_head *trk_head;
 static void *mkshort_handle;
 static preferred_posn_type posn_type;
 static time_t creation_time;
+static waypoint * curr_waypt	=NULL;
 
 #define MYNAME "nmea"
+
+static const double kts2mps =0.51444444444444444; /* knots to m/s */
+static const double kmh2mps =0.27777777777777778; /* km/h to m/s  */ 
 
 /*
  * Slightly different than the Magellan checksum fn.
@@ -178,6 +211,7 @@ gpgll_parse(char *ibuf)
 	if (lngdir == 'W') lngdeg = -lngdeg;
 	waypt->longitude = ddmm2degrees(lngdeg);
 
+	curr_waypt = waypt;
 	route_add_wpt(trk_head, waypt);
 }
 
@@ -187,11 +221,11 @@ gpgga_parse(char *ibuf)
 	double latdeg, lngdeg;
 	char lngdir, latdir;
 	double hms;
-	int fix = 0;
-	int nsats;
-	double hdop;
 	struct tm tm;
 	double alt;
+	int fix;
+	int nsats;
+	double hdop;
 	char altunits;
 	waypoint *waypt;
 
@@ -207,8 +241,9 @@ gpgga_parse(char *ibuf)
 		&lngdeg,&lngdir,
 		&fix,&nsats,&hdop,&alt,&altunits);
 
-	if (fix == 0)
+	if (fix == 0) {
 		return;
+	}
 
 	tm.tm_sec = (long) hms % 100;
 	hms = hms / 100;
@@ -227,7 +262,22 @@ gpgga_parse(char *ibuf)
 	waypt->longitude = ddmm2degrees(lngdeg);
 
 	waypt->altitude = alt;
+
+	waypt->sat 	= nsats;
+
+	waypt->hdop 	= hdop;
+
+	if (fix==1) {
+		waypt->fix  = (nsats>4)?(fix_3d):(fix_2d);
+	}
+	else if (fix==2)
+	{
+		waypt->fix  = fix_dgps;
+	}
+
+	curr_waypt = waypt;
 	route_add_wpt(trk_head, waypt);
+
 
 }
 
@@ -237,10 +287,10 @@ gprmc_parse(char *ibuf)
 	double latdeg, lngdeg;
 	char lngdir, latdir;
 	double hms;
-	double speed, course;
 	char fix;
 	unsigned int dmy;
 	struct tm tm;
+	double speed,course;
 	waypoint *waypt;
 
 	if (trk_head == NULL) {
@@ -254,9 +304,7 @@ gprmc_parse(char *ibuf)
 		&hms, &fix, &latdeg, &latdir,
 		&lngdeg, &lngdir,
 		&speed, &course, &dmy);
-
-	if (fix != 'A')
-		return;
+	
 	tm.tm_sec = (long) hms % 100;
 	hms = hms / 100;
 	tm.tm_min = (long) hms % 100;
@@ -274,6 +322,11 @@ gprmc_parse(char *ibuf)
 		return;
 
 	waypt  = waypt_new();
+
+	waypt->speed 	= speed*kts2mps;
+
+	waypt->course 	= course;
+	
 	waypt->creation_time = creation_time;
 
 	if (latdir == 'S') latdeg = -latdeg;
@@ -282,6 +335,7 @@ gprmc_parse(char *ibuf)
 	if (lngdir == 'W') lngdeg = -lngdeg;
 	waypt->longitude = ddmm2degrees(lngdeg);
 
+	curr_waypt = waypt;
 	route_add_wpt(trk_head, waypt);
 }
 
@@ -307,6 +361,7 @@ gpwpl_parse(char *ibuf)
 
 	waypt->shortname = xstrdup(sname);
 
+	curr_waypt = NULL; /* waypoints won't be updated with GPS fixes */
 	waypt_add(waypt);
 
 }
@@ -331,6 +386,68 @@ gpzda_parse(char *ibuf)
 }
 
 static void
+gpgsa_parse(char *ibuf)
+{
+	char fixauto;
+	char fix;
+	int  prn[12];
+	int  cnt;
+	float pdop,hdop,vdop;
+
+	sscanf(ibuf,"$GPGSA,%c,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f",
+		&fixauto, &fix,
+		&prn[0],&prn[1],&prn[2],&prn[3],&prn[4],&prn[5],
+		&prn[6],&prn[7],&prn[8],&prn[9],&prn[10],&prn[11],
+		&pdop,&hdop,&vdop);
+
+	if (curr_waypt) {
+
+		if (curr_waypt->fix!=fix_dgps) {
+			if 	(fix=='3')	curr_waypt->fix=fix_3d;
+			else if (fix=='2')	curr_waypt->fix=fix_2d;
+		}
+	
+		curr_waypt->pdop = pdop;
+		curr_waypt->hdop = hdop;
+		curr_waypt->vdop = vdop;
+		
+		if (curr_waypt->sat  <= 0)	{
+			for (cnt=0;cnt<12;cnt++)
+				curr_waypt->sat += (prn[cnt]>0)?(1):(0);
+		}
+	}	
+	
+}
+
+static void
+gpvtg_parse(char *ibuf)
+{
+	float 	course;
+	char	ct;
+	float	magcourse;
+	char	cm;
+	double	speed_n;
+	char	cn;
+	double	speed_k;
+	char	ck;	
+      
+	sscanf(ibuf,"$GPVTG,%f,%c,%f,%c,%f,%c,%f,%c",
+		&course,&ct,&magcourse,&cm,&speed_n,&cn,&speed_k,&ck);
+		
+	if (curr_waypt) {
+		curr_waypt->course = course;		
+		
+		if (speed_k>0)
+			curr_waypt->speed = speed_k*kmh2mps;
+		else
+			curr_waypt->speed = speed_n*kts2mps;
+
+	}	
+	
+}
+
+
+static void
 nmea_read(void)
 {
 	char ibuf[1024];
@@ -339,6 +456,8 @@ nmea_read(void)
 	struct tm tm;
 
 	creation_time = mkgmtime(&tm) + current_time();
+
+	curr_waypt = NULL; 
 
 	while (fgets(ibuf, sizeof(ibuf), file_in)) {
 		ck = strrchr(ibuf, '*');
@@ -380,9 +499,16 @@ nmea_read(void)
 		} else
 		if (0 == strncmp(ibuf, "$GPZDA,",7)) {
 			gpzda_parse(ibuf);
+		} else
+		if (0 == strncmp(ibuf, "$GPVTG,",7)) {
+			gpvtg_parse(ibuf); /* speed and course */
+		} else
+		if (0 == strncmp(ibuf, "$GPGSA,",7)) {
+			gpgsa_parse(ibuf); /* GPS fix */
 		}
 	}
 }
+
 
 static void
 nmea_wayptpr(const waypoint *wpt)
@@ -428,14 +554,36 @@ nmea_trackpt_pr(const waypoint *wpt)
 		hms = 0;
 	}
 
-	snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%08.3f,%c,%09.3f,%c,04,0,0,%.3f,M,0.0,M,,",
+	snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,0.0,M,,",
 			hms,
 			fabs(lat), lat < 0 ? 'S' : 'N',
 			fabs(lon), lon < 0 ? 'W' : 'E',
+			(wpt->fix==fix_dgps)?('2'):('1'),
+			wpt->sat,
+			wpt->hdop,
 			wpt->altitude == unknown_alt ? 0 : wpt->altitude);
-
 	cksum = nmea_cksum(obuf);
 	fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+
+	if (	(wpt->course>=0) ||
+		(wpt->speed>0)	   )
+	{
+		snprintf(obuf,sizeof(obuf),"$GPVTG,%f,T,0,M,%f,N,%f,K",
+		wpt->course,
+		wpt->speed / kts2mps,
+		wpt->speed / kmh2mps);
+	}
+		
+	if (wpt->fix!=fix_unknown) {
+		snprintf(obuf,sizeof(obuf),"$GPGSA,A,%c,,,,,,,,,,,,,%f,%f,%f",
+			((wpt->fix==fix_dgps)||(wpt->fix==fix_3d))?'3':'2',
+			wpt->pdop,
+			wpt->hdop,
+			wpt->vdop);
+		cksum = nmea_cksum(obuf);
+		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+	}
+
 }
 
 static void

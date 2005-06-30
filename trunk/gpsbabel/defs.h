@@ -70,6 +70,14 @@ typedef enum {
 	rtedata
 } gpsdata_type;
 
+typedef enum {
+	fix_unknown,
+	fix_2d,	
+	fix_3d,
+	fix_dgps,
+	fix_pps
+} fix_type;
+
 #define NOTHINGMASK		0
 #define WPTDATAMASK		1
 #define TRKDATAMASK		2
@@ -251,6 +259,7 @@ typedef struct {
 	float pdop;		
 	float course;	/* Optional: degrees true */
 	float speed;   	/* Optional: meters per second. */
+	char fix, sat;
 	
 	geocache_data gc_data;
 	xml_tag *gpx_extras;
