@@ -1213,7 +1213,7 @@ gpx_write_common_acc(const waypoint *waypointp, const char *indent)
 	if (fix) {
 		fprintf(ofd, "%s<fix>%s</fix>\n", indent, fix);
 	}
-	if (waypointp->sat) {
+	if (waypointp->sat > 0) {
 		fprintf(ofd, "%s<sat>%d</sat>\n", indent, waypointp->sat);
 	}
 	if (waypointp->hdop) {
