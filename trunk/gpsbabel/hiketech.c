@@ -76,7 +76,7 @@ static xg_tag_mapping ht_map[] = {
 void
 hiketech_rd_init(const char *fname)
 {
-	xml_init(fname, ht_map);
+	xml_init(fname, ht_map, NULL);
 }
 
 void

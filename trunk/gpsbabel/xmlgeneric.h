@@ -54,7 +54,7 @@ void xml_fill_in_time(char *time_string, const time_t timep,
 		int long_or_short);
 void write_xml_header(FILE *ofd);
 
-void xml_init(const char *fname, xg_tag_mapping *tbl);
+void xml_init(const char *fname, xg_tag_mapping *tbl,const char *encoding);
 void xml_read(void);
 void xml_readstring(char *str);
 void xml_deinit(void);
