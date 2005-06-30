@@ -27,15 +27,17 @@
 #define MYNAME "vitosmt"
 #include "defs.h"
 
-FILE			*infile	=0;
-FILE			*ofs	=0;
-unsigned long	count	=0;
+static FILE				*infile	=0;
+static FILE				*ofs	=0;
+static long				count	=0;
 
-const size_t vitosmt_headersize		=24;
-const size_t vitosmt_datasize		=64;
-const double mile2km		=1.609344;		/* mile/h to kilometer/h */
-const double kts2mps =0.51444444444444444; 	/* knots to m/s */
-const double mph2mps 		=0.447039259;	/* mile/h to m/s     */
+const long				vitosmt_version			=2;
+const long				vitosmt_subversion		=1000;
+const size_t			vitosmt_headersize		=24;
+const size_t			vitosmt_datasize		=64;
+const double mile2km	=1.609344;				/* mile/h to kilometer/h */
+const double kts2mps	=0.5144444444444444444;	/* knots to m/s */
+const double mph2mps 	=0.447039259;			/* mile/h to m/s     */
 
 static unsigned long
 ReadLong(FILE * f)
@@ -75,7 +77,7 @@ Skip(FILE * f,
 	fseek(f, distance, SEEK_CUR);
 }
 
-void
+static void
 WriteDouble(void* ptr, double d)
 {
   unsigned char result[8]="\0\0\0\0\0\0\0\0";
@@ -102,7 +104,11 @@ rd_deinit(void)
 static void
 vitosmt_read(void)
 {
-	unsigned short version			=0;
+	long			version			=0;
+	long			subversion		=0;
+	long			check1			=-1;
+	long			check2			=-2;
+	long			check3			=-3;
 	unsigned short	stringlen		=0;
 	route_head		*route_head		=0; 
 	waypoint		*wpt_tmp		=0;
@@ -119,18 +125,40 @@ vitosmt_read(void)
 	unsigned char	gpsvalid		=0;
 	unsigned char	gpssats			=0;
 	int				serial			=0;
+	xml_tag *		xml_curr		=0;
 	char			buffer[80]		="\0";
 
 		
 	/* 
 	 * 24 bytes header 
 	 */
-	version = ReadLong(infile);	/* 2	*/
-	ReadLong(infile);			/* 1000	*/
-	count = ReadLong(infile);	/* 600	*/
-	ReadLong(infile);			/* 0	*/
-	ReadLong(infile);			/* 599	*/
-	ReadLong(infile);			/* 600	*/
+	version		= ReadLong(infile);	/* 2	*/
+	subversion	= ReadLong(infile);	/* 1000	*/
+	count		= ReadLong(infile);	/* n	*/
+	check1		= ReadLong(infile);	/* 0	*/
+	check2		= ReadLong(infile);	/* n-1	*/
+	check3		= ReadLong(infile);	/* n	*/
+
+	if (version!=vitosmt_version) {
+	
+		fatal("%s (%d) reading file.  Unsupported version %ld.%ld\n",
+			MYNAME, __LINE__, version, subversion );
+	}
+
+	if (subversion!=vitosmt_subversion) {
+		warning("%s (%d) reading file.  Unsafe version %ld.%ld\n",
+			MYNAME, __LINE__, version, subversion );
+	}
+
+	if ((count!=check3)		||
+	    (check1!=count-1)	||
+		(check2!=0)			||
+		(check3!=count)		) {
+
+		fatal("%s (%d) reading file. Invalid file header\n", 
+			MYNAME, __LINE__ );
+
+	}
 
 	while (count) {
 		/*
@@ -138,6 +166,8 @@ vitosmt_read(void)
 		 */
 		if (feof(infile)||ferror(infile)) 
 		{
+			warning("%s (%d) reading file.  Unexpected end of file %s\n",
+				MYNAME, __LINE__, strerror(errno) );
 			break;
 		}
 
@@ -181,22 +211,26 @@ vitosmt_read(void)
 			GPS Fix data
 		*/
 		if (gpsvalid&0x7) {
-			
-			/* <fix> */
+			if		(gpsfix==0)	
+				wpt_tmp->fix 		=fix_none;
 			if		(gpsfix&0x8)	
-				wpt_tmp->fix = fix_2d;
+				wpt_tmp->fix 		=fix_2d;
 			else if	(gpsfix&0x10)	
-				wpt_tmp->fix = fix_3d;
+				wpt_tmp->fix 		=fix_3d;
 			else if	(gpsfix&0x20)	
-				wpt_tmp->fix = fix_dgps;
+				wpt_tmp->fix 		=fix_dgps;
+			else
+				wpt_tmp->fix 		=fix_unknown;
 			
 			/* <sat> */
 			wpt_tmp->sat = gpssats;
 		}
+		else
+			wpt_tmp->fix 		=fix_unknown;
 
 		if (doing_wpts)			/* process as waypoints */
 		{
-					waypt_add(wpt_tmp);
+			waypt_add(wpt_tmp);
 		} 
 		else if (doing_rtes)	/* process as route */
 		{
@@ -224,7 +258,7 @@ vitosmt_read(void)
 static void
 wr_init(const char *fname)
 {
-	warning(MYNAME ":format is experimental and may crash Vito Navigator II.\n");
+	warning(MYNAME " write: format is experimental and may crash Vito Navigator II.\n");
 	ofs = xfopen(fname, "wb", MYNAME);
 }
 
@@ -243,6 +277,7 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 	struct tm*		tmstructp		=0;
 	double			seconds			=0;
 	double			worknum			=0;
+	xml_tag*		xmltagp			=0;
 
 	++count;
 	workbuffer = xcalloc(vitosmt_datasize,1);
@@ -251,7 +286,8 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 	position += sizeof(double);
 	WriteDouble(&workbuffer[position], (M_PI*waypointp->longitude)/180 );
 	position += sizeof(double);
-	WriteDouble(&workbuffer[position], waypointp->altitude );
+	if ( waypointp->altitude-1 > unknown_alt)
+		WriteDouble(&workbuffer[position], waypointp->altitude );
 	position += sizeof(double);
 
 	tmstructp =  gmtime(&waypointp->creation_time);
@@ -267,54 +303,60 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 	position += sizeof(double);
 
 	/* speed */
-	WriteDouble(&workbuffer[position], waypointp->speed / mph2mps );
+	if (waypointp->speed>0) 
+		WriteDouble(&workbuffer[position], waypointp->speed / mph2mps );
 	position += sizeof(double);
 	
 	/* course */
-	WriteDouble(&workbuffer[position], waypointp->course );
+	if ((waypointp->course>=-360.0)&&(waypointp->course<=360.0))
+		WriteDouble(&workbuffer[position], waypointp->course );
 	position += sizeof(double);
 
-
 	/* pdop */
-	WriteDouble(&workbuffer[position], waypointp->pdop );
+	if (waypointp->pdop>0)
+		WriteDouble(&workbuffer[position], waypointp->pdop );
 	position += sizeof(double);
 
 
 	/* fix type */
-	switch (waypointp->fix) {
-		case fix_dgps:
-			workbuffer[position++] = (unsigned char) 0x20;
-			break;
-		case fix_3d:
-			workbuffer[position++] = (unsigned char) 0x10;
-			break;
-		case fix_2d:
-			workbuffer[position++] = (unsigned char) 0x08;
-			break;
-		default:
-			workbuffer[position++] = (unsigned char) 0;
-			break;
+	switch (waypointp->fix)
+	{
+	case fix_2d:
+			workbuffer[position++] = 0x08;
+		break;
+	case fix_3d:
+			workbuffer[position++] = 0x10;
+		break;
+	case fix_dgps:
+			workbuffer[position++] = 0x20;
+		break;
+	default:
+			workbuffer[position++] = 0;
+		break;
 	}
+
+	/* Assume position is valid */
+	workbuffer[position++] = 0x07;
 	
-	workbuffer[position++] = 0x7;
-	workbuffer[position++] = (unsigned char) waypointp->sat;
+	if ((waypointp->sat>0)&&(waypointp->sat<128))
+		workbuffer[position++] = waypointp->sat;
+	else
+		workbuffer[position++] = 0;
 	
 	if (fwrite(workbuffer,vitosmt_datasize,1,ofs)!=1)
 	{
-		fatal("%s writing output file.  Error was '%s'.\n",
-			MYNAME, strerror(errno));
+		fatal("%s (%d) writing output file.  Error was '%s'.\n",
+			MYNAME, __LINE__, strerror(errno));
 	}
 	
 	xfree(workbuffer);
 }
 
 
-void
+static void
 vitosmt_write(void)
 {
 	time_t now = 0;
-	const unsigned short version				=2;
-	const unsigned short subversion				=1000;
 	unsigned char *	workbuffer					=0;
 	size_t			position					=0;
 
@@ -328,8 +370,8 @@ vitosmt_write(void)
 	memset(workbuffer,0,vitosmt_headersize);
 	if (fwrite(workbuffer,vitosmt_headersize,1,ofs)!=1)
 	{
-		fatal("%s writing output file.  Error was '%s'.\n",
-			MYNAME, strerror(errno));
+		fatal("%s (%d) writing output file.  Error was '%s'.\n",
+			MYNAME, __LINE__, strerror(errno));
 	}
 
 	if 	(doing_wpts)	/* process as waypoints */
@@ -347,9 +389,9 @@ vitosmt_write(void)
 
 
 	/* write the complete the header */
-	le_write32(&workbuffer[position],version);
+	le_write32(&workbuffer[position],vitosmt_version);
 	position += sizeof(gbuint32);
-	le_write32(&workbuffer[position],subversion);
+	le_write32(&workbuffer[position],vitosmt_subversion);
 	position += sizeof(gbuint32);
 	le_write32(&workbuffer[position],count);
 	position += sizeof(gbuint32);
@@ -363,8 +405,8 @@ vitosmt_write(void)
 	rewind(ofs);
 	if (fwrite(workbuffer,vitosmt_headersize,1,ofs)!=1)
 	{
-		fatal("%s writing output file.  Error was '%s'.\n",
-			MYNAME, strerror(errno));
+		fatal("%s (%d) writing output file.  Error was '%s'.\n",
+			MYNAME, __LINE__, strerror(errno));
 	}
 
 	xfree(workbuffer);

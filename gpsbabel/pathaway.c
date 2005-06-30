@@ -79,22 +79,24 @@ is_fatal(int is, const char *msg, ... )
 
 #if PPDB_DEBUG
 static void
-internal_debug(const char *filename, int fileline, const char *format, ... )
+internal_debug1(const char *filename, int fileline)
+{
+	static int ct=1;
+	printf("DBG(%d): file %s, line %d: ", ct++, filename, fileline);
+}
+static void
+internal_debug2(const char *format, ... )
 {
 	va_list args;
-	char *buff;
-	static int ct;
-	
-	buff = (char *) xmalloc(1024);
+
 	va_start(args, format);
-	vsnprintf(buff, 1023, format, args);
-	printf("DBG(%d): %s in file %s, line %d\n", ct++, buff, filename, fileline);
+	vprintf(format, args);
+	puts("");
 	va_end(args);
-	xfree(buff);
 }
-#define DBG(fmt, args...) internal_debug (__FILE__, __LINE__, fmt, ## args )
+#define DBG	internal_debug1(__FILE__, __LINE__);internal_debug2
 #else
-#define DBG(fmt, args...)
+#define DBG	# ;
 #endif
 
 
@@ -131,8 +133,8 @@ char *ppdb_strcat(char *dest, char *src, char *def, int *size)
 
 #define STR_POOL_SIZE 16	/* !!! any power of 2 !!! */
 
-static char *str_pool[STR_POOL_SIZE] = {};
-static size_t str_pool_s[STR_POOL_SIZE] = {};
+static char *str_pool[STR_POOL_SIZE];
+static size_t str_pool_s[STR_POOL_SIZE];
 static int str_poolp = -1;
 
 void str_pool_init(void)
@@ -220,7 +222,7 @@ char *ppdb_fmt_float(const double val)
 char *ppdb_fmt_degrees(char dir, double val)
 {
 	char *str = str_pool_get(32);
-	int deg = abs(val);
+	int deg = fabs(val);
 	double min = 60.0 * (fabs(val) - deg);
 	int power = 0;
 	double fx = min;
@@ -602,7 +604,7 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	    buff = ppdb_strcat(buff, tmp, "", &len);
 
 	len = strlen(buff) + 1;
-	rec = new_Record(0, 0, ct++, len, (const ubyte *) buff);
+	rec = new_Record(0, 0, (udword)ct++, (uword)len, (const ubyte *) buff);
 
 	if (rec == NULL) 
 	    fatal(MYNAME ": libpdb couldn't create record\n");

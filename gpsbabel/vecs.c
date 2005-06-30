@@ -726,7 +726,6 @@ disp_formats(int version)
 {
 	vecs_t **svp;
 	vecs_t *vec;
-	style_vecs_t *svec;
 	int i, vc = 0;
 
 	switch(version) {
