@@ -47,7 +47,7 @@
 /* %%% local vars %%% */
 
 FILE *fin;
-static char *fin_name;
+static char *filename;
 static int gdb_ver = 1;
 static int gdb_debug = 0;
 route_head *gdb_hidden;
@@ -190,6 +190,17 @@ gdb_create_rte_wpt(const char *name, double lat, double lon, double alt)
 	return wpt;
 }
 
+static size_t
+gdb_fread(void *target, size_t size, size_t count, FILE *fin)
+{
+	size_t result;
+	result = fread(target, size, count, fin);
+	if (result < 0)
+	    fatal(MYNAME ": error %d occured during read from \"%s\"!\n", +result, filename);
+	else if (result < count)
+	    fatal(MYNAME ": unexpected end of file \"%s\"!\n", filename);
+	return result;
+}
 
 static int
 gdb_fread_str(FILE *fin, char *dest, size_t maxlen)
@@ -202,6 +213,8 @@ gdb_fread_str(FILE *fin, char *dest, size_t maxlen)
 	    c = fgetc(fin);
 	    if ( c != EOF )
 	    {
+		if (c < 0)
+		    fatal(MYNAME ": I/O error (%d) while read from \"%s\"!\n", +c, filename);
 		*dest++ = c;
 		if ( c == 0 ) return res;
 		res++;
@@ -230,22 +243,22 @@ gdb_fread_le(FILE *fin, void *dest, size_t size, int bit_count, const char *fiel
 	switch(bit_count)
 	{
 	    case 8:
-		fread(c, sizeof(*c), 1, fin);
+		gdb_fread(c, sizeof(*c), 1, fin);
 		if (gdb_debug) printf(MYNAME ": gdb_fread_le : %d -> %s (0x%x))\n", *c, field, *c);
 		return *c;
 	    case 16:
 		if (sizeof(*sh) != size) fatal(MYNAME ": internal decl.!\n");
-		fread(sh, sizeof(*sh), 1, fin);
+		gdb_fread(sh, sizeof(*sh), 1, fin);
 		*sh = le_read16(sh);
 		if (gdb_debug) printf(MYNAME ": gdb_fread_le : %d -> %s (0x%x))\n", *sh, field, *sh);
 		return *sh;
 	    case 32:
-		fread(li, 4, 1, fin);
+		gdb_fread(li, 4, 1, fin);
 		*li = le_read32(li);
 		if (gdb_debug) printf(MYNAME ": gdb_fread_le : %d -> %s (0x%x)\n", *li, field, *li);
 		return *li;
 	    case 64:
-		fread(buff, sizeof(*db), 1, fin);
+		gdb_fread(buff, sizeof(*db), 1, fin);
 		le_read64(db, buff);
 		if (gdb_debug) printf(MYNAME ": gdb_fread_le : %g -> %s\n", *db, field);
 		return 0;
@@ -265,15 +278,26 @@ gdb_read_file_header(void)
 {
 	char buff[128];
 	int i, reclen;
+
+/* 
+	We starts with standard binary read.
+	A gdb_fread_str works too, but if we get a wrong file as input,
+	the file validation my be comes too late. For example a XML base file normally 
+	has no binary zeros inside and produce, if big enought, a buffer overflow. 
+	The following message "local buffer overflow detected..." could be
+	misinterpreted.
+*/
 	
-	i = gdb_fread_str(fin, buff, sizeof(buff));
-	if ( i != 5 )
-	    fatal(MYNAME ": invalid database!\n");
+	i = fread(buff, 1, 6, fin);
+	if (i < 0)
+	    fatal(MYNAME ": I/O error (%d) on file \"%s\"!\n", +i, filename);
+	else if ( i != 6 )
+	    fatal(MYNAME ": invalid file \"%s\"!\n", filename);
 	    
 	if (strcmp(buff, "MsRcf") != 0)
-	    fatal(MYNAME ": invalid database!\n");
+	    fatal(MYNAME ": invalid file \"%s\"!\n", filename);
 	    
-	fread(&reclen, 4, 1, fin);
+	gdb_fread(&reclen, 4, 1, fin);
 	reclen = le_read32(&reclen);
 	
 	gdb_is_valid(reclen == gdb_fread_str(fin, buff, sizeof(buff)), "header");
@@ -294,10 +318,10 @@ gdb_read_file_header(void)
 	if (global_opts.verbose_status > 0)
 	    printf(MYNAME ": found Garmin GPS Database version %d\n", gdb_ver);
 	
-	fread(&reclen, 4, 1, fin);
+	gdb_fread(&reclen, 4, 1, fin);
 	reclen = le_read32(&reclen);
 	gdb_is_valid(reclen < sizeof(buff), "header");
-	fread(buff, reclen, 1, fin);
+	gdb_fread(buff, reclen, 1, fin);
 	
 	gdb_is_valid(0 == gdb_fread_str(fin, buff, sizeof(buff)), "header");
 	
@@ -358,11 +382,11 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	gdb_fread_le(fin, &xclass, sizeof(xclass), 32, "xclass");
 	gdb_fread_str(fin, buff, sizeof(buff));				/* country */
 	
-	fread(buff, 22, 1, fin);
+	gdb_fread(buff, 22, 1, fin);
 	xlat = gdb_fread_le(fin, &xlat, sizeof(xlat), 32, "xlat");	/* latitude */
 	xlon = gdb_fread_le(fin, &xlon, sizeof(xlon), 32, "xlon");	/* latitude */
 	
-	fread(buff, 1, 1, fin);
+	gdb_fread(buff, 1, 1, fin);
 	if (buff[0] == 1)						/* altitude flag */
 	{
 	    gdb_fread_le(fin, &xalt, sizeof(xalt), 64, "xalt");		/* altitude */
@@ -371,10 +395,10 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	gdb_fread_str(fin, xdesc, sizeof(xdesc));
 	gdb_convert_name_buff(xdesc, sizeof(xdesc));
 	
-	fread(buff, 1, 1, fin);						/* proximity flag */
+	gdb_fread(buff, 1, 1, fin);					/* proximity flag */
 	if (buff[0] == 1) 
 	{
-	    fread(buff, 8, 1, fin);					/* proximity */
+	    gdb_fread(buff, 8, 1, fin);					/* proximity */
 	}
 	
 	xdisplay = gdb_fread_le(fin, &xdisplay, sizeof(xdisplay), 32, "xdisplay");
@@ -386,32 +410,32 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	gdb_fread_str(fin, buff, sizeof(buff));				/* city */
 	gdb_fread_str(fin, buff, sizeof(buff));				/* state */
 	gdb_fread_str(fin, buff, sizeof(buff));				/* facility */
-	fread(buff, 1, 1, fin);						/* unknown */
+	gdb_fread(buff, 1, 1, fin);					/* unknown */
 	
-	fread(buff, 1, 1, fin);						/* depth flag */
+	gdb_fread(buff, 1, 1, fin);					/* depth flag */
 	if (buff[0] == 1) 
 	{
 	    gdb_fread_le(fin, &xdepth, sizeof(xdepth), 64, "xdepth");	/* depth */
 	}
 	
-	fread(buff, 1, 1, fin);
-	fread(buff, 1, 1, fin);
-	fread(buff, 1, 1, fin);
+	gdb_fread(buff, 1, 1, fin);
+	gdb_fread(buff, 1, 1, fin);
+	gdb_fread(buff, 1, 1, fin);
 	
 	if (buff[0] != 0)
-	    fread(buff, 3, 1, fin);
+	    gdb_fread(buff, 3, 1, fin);
 	else
-	    fread(buff, 4, 1, fin);
+	    gdb_fread(buff, 4, 1, fin);
 
 	gdb_fread_str(fin, xnotes, sizeof(xnotes));
 	gdb_convert_name_buff(xnotes, sizeof(xnotes));
 	
 	xcat = gdb_fread_le(fin, &xcat, sizeof(xcat), 16, "xcat");
 	
-	fread(buff, 1, 1, fin);					/* temperature flag */
+	gdb_fread(buff, 1, 1, fin);					/* temperature flag */
 	if (buff[0] == 1) 
 	{
-	    fread(buff, 8, 1, fin);				/* temperature */
+	    gdb_fread(buff, 8, 1, fin);					/* temperature */
 	}
 
 	/* Here comes 1 .. 6 unknown bytes
@@ -425,7 +449,7 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	xtime = 0;
 	if (xclass == 0) 
 	{
-	    fread(buff, 1, 1, fin);
+	    gdb_fread(buff, 1, 1, fin);
 	    if (buff[0] == 1)
 	    {
 		gdb_is_valid(delta==5, "??? waypoint time ???");
@@ -481,13 +505,13 @@ gdb_read_route(void)
 	gdb_fread_le(fin, buff, 4, 32, "max_lat");
 	gdb_fread_le(fin, buff, 4, 32, "max_lon");
 	
-	fread(buff, 1, 1, fin);
+	gdb_fread(buff, 1, 1, fin);
 	if (buff[0] == 1) gdb_fread_le(fin, buff, 8, 64, "max_alt");
 	    
 	gdb_fread_le(fin, buff, 4, 32, "min_lat");
 	gdb_fread_le(fin, buff, 4, 32, "min_lon");
 
-	fread(buff, 1, 1, fin);
+	gdb_fread(buff, 1, 1, fin);
 	if (buff[0] == 1) gdb_fread_le(fin, buff, 8, 64, "min_alt");
 	    
 	gdb_fread_le(fin, &count, sizeof(count), 32, "rte_count");
@@ -513,17 +537,17 @@ gdb_read_route(void)
 	    gdb_fread_le(fin, &xclass, sizeof(xclass), 32, "xclass");	/* class */
 	    gdb_fread_str(fin, buff, sizeof(buff));			/* country */
 	    
-	    fread(buff, 22, 1, fin);					/* sub class data */
+	    gdb_fread(buff, 22, 1, fin);				/* sub class data */
 	    i = 0;
 	    while (i < sizeof(buff))
 	    {
-		fread(&buff[i], 1, 1, fin);
+		gdb_fread(&buff[i], 1, 1, fin);
 		if (buff[i] == 0) break;
 		i++;
 	    } 
 
 	    /* The next thing is the unknown 0x03 0x00 .. 0x00 (18 bytes) */
-	    fread(buff, 18, 1, fin);
+	    gdb_fread(buff, 18, 1, fin);
 	    
 	    gdb_fread_le(fin, &isteps, sizeof(isteps), 32, "isteps");
 	    
@@ -537,7 +561,7 @@ gdb_read_route(void)
 	    gdb_is_valid(fabs(xlat) <= 90.0 && fabs(xlon) <= 180.0, " - rte: read loop: invalid lat or lon");
 	    
 	    xalt = unknown_alt;
-	    fread(buff, 1, 1, fin);				/* altitude flag */
+	    gdb_fread(buff, 1, 1, fin);				/* altitude flag */
 	    if (buff[0] == 1)
 	    {
 		gdb_fread_le(fin, &xalt, sizeof(xalt), 64, "xalt");
@@ -550,30 +574,30 @@ gdb_read_route(void)
 	    {
 		gdb_fread_le(fin, &semilat, sizeof(semilat), 32, "semilat");
 		gdb_fread_le(fin, &semilon, sizeof(semilon), 32, "semilon");
-		fread(buff, 1, 1, fin);				/* altitude flag */
+		gdb_fread(buff, 1, 1, fin);				/* altitude flag */
 		if (buff[0] == 1) gdb_fread_le(fin, &xalt, sizeof(xalt), 64, "xalt");
 		xlat = GPS_Math_Semi_To_Deg(semilat);
 		xlon = GPS_Math_Semi_To_Deg(semilon);
 		gdb_is_valid(fabs(xlat) <= 90.0 && fabs(xlon) <= 180.0, " - rte/ils: read loop: invalid lat or lon");
 	    }
 	    
-	    fread(buff, 1, 1, fin);			/* NULL */
+	    gdb_fread(buff, 1, 1, fin);			/* NULL */
 	    gdb_is_valid(buff[0] == 0, "should be zero byte");
 
-	    fread(buff, 4, 1, fin);			/* link max lat */
-	    fread(buff, 4, 1, fin);			/* link max lon */
-	    fread(buff, 1, 1, fin);
+	    gdb_fread(buff, 4, 1, fin);				/* link max lat */
+	    gdb_fread(buff, 4, 1, fin);				/* link max lon */
+	    gdb_fread(buff, 1, 1, fin);
 	    if (buff[0] == 1) 
 	    {
-		fread(buff, 8, 1, fin);	/* link max alt validity + alt */
+		gdb_fread(buff, 8, 1, fin);			/* link max alt validity + alt */
 	    }
-	    fread(buff, 4, 1, fin);			/* link min lat */
-	    fread(buff, 4, 1, fin);			/* link min lon */
+	    gdb_fread(buff, 4, 1, fin);				/* link min lat */
+	    gdb_fread(buff, 4, 1, fin);				/* link min lon */
 
-	    fread(buff, 1, 1, fin);
+	    gdb_fread(buff, 1, 1, fin);
 	    if (buff[0] == 1) 
 	    {
-		fread(buff, 8, 1, fin);	/* link min alt validity + alt */
+		gdb_fread(buff, 8, 1, fin);			/* link min alt validity + alt */
 	    }
 
 	    /* find the end of the record */
@@ -595,7 +619,7 @@ gdb_read_route(void)
 	    while (checked == 0 && j-- > 0)
 	    {
 		for (i=1; i<8; i++) buff[i-1] = buff[i];
-		fread(&buff[7], 1, 1, fin);
+		gdb_fread(&buff[7], 1, 1, fin);
 		for (i=0; i<8; i++)
 		{
 		    if (buff[i] != -1) break;
@@ -611,7 +635,7 @@ gdb_read_route(void)
 	    {
 		while (1)
 		{
-		    fread(buff, 1, 1, fin);
+		    gdb_fread(buff, 1, 1, fin);
 		    if (buff[0] != -1)
 		    {
 			fseek(fin, ftell(fin)-1, SEEK_SET);
@@ -622,14 +646,14 @@ gdb_read_route(void)
 	    }
 	}
 	
-	gdb_fread_str(fin, xwptname, sizeof(xwptname));		/* name */
+	gdb_fread_str(fin, xwptname, sizeof(xwptname));			/* name */
 	gdb_convert_name_buff(xwptname, sizeof(xwptname));
 	    
 #if GDB_DEBUG
 	printf(MYNAME " - rte/fin: \"%s\"\n", xwptname);
 #endif
 	gdb_fread_le(fin, &xclass, sizeof(xclass), 32, "xclass");	/* class */
-	gdb_fread_str(fin, buff, sizeof(buff));			/* country */
+	gdb_fread_str(fin, buff, sizeof(buff));				/* country */
 	    
 	wpt = gdb_create_rte_wpt(xwptname, xlat, xlon, xalt);
 	route_add_wpt(route, wpt);
@@ -675,19 +699,19 @@ gdb_read_track(const size_t max_file_pos)
 	    gdb_fread_le(fin, &xlat, sizeof(xlat), 32, "xlat");
 	    gdb_fread_le(fin, &xlon, sizeof(xlon), 32, "xlon");
 	    
-	    fread(buff, 1, 1, fin);				/* altitude flag */
+	    gdb_fread(buff, 1, 1, fin);					/* altitude flag */
 	    if (buff[0] == 1)
 		gdb_fread_le(fin, &xalt, sizeof(xalt), 64, "xalt");
 	    
-	    fread(buff, 1, 1, fin);				/* date/time flag */
+	    gdb_fread(buff, 1, 1, fin);					/* date/time flag */
 	    if (buff[0] == 1)
 		gdb_fread_le(fin, &xtime, sizeof(xtime), 32, "xtime");
 	    	    
-	    fread(buff, 1, 1, fin);				/* depth flag */
+	    gdb_fread(buff, 1, 1, fin);					/* depth flag */
 	    if (buff[0] == 1)
 		gdb_fread_le(fin, &xdepth, sizeof(xdepth), 64, "xdepth");
 	    
-	    fread(buff, 1, 1, fin);
+	    gdb_fread(buff, 1, 1, fin);
 	    if (buff[0] == 1)
 		gdb_fread_le(fin, &xtemp, sizeof(xtemp), 64, "xtemp");
 	    
@@ -712,7 +736,7 @@ gdb_read_track(const size_t max_file_pos)
 static void
 gdb_read_data(void)
 {
-	int i, reclen, done;
+	int reclen, done;
 	char typ;
 	size_t curpos, deltapos;
 	waypoint *wpt;
@@ -724,7 +748,8 @@ gdb_read_data(void)
 
 	    gdb_fread_le(fin, &reclen, sizeof(reclen), 32, "reclen");
 	    gdb_is_valid(reclen > 0 && reclen < 0x1F00000, "gdb data loop");
-	    fread(&typ, 1, 1, fin);
+	    gdb_fread(&typ, 1, 1, fin);
+	    
 	    curpos = ftell(fin);
 	    
 	    switch(typ)
@@ -762,7 +787,7 @@ gdb_read_data(void)
 
 static void gdb_rd_init(const char *fname)
 {
-	fin_name = xstrdup(fname);
+	filename = xstrdup(fname);
 	fin = xfopen(fname, "rb", MYNAME);
 	gdb_hidden = route_head_alloc();
 	track_add_head(gdb_hidden);
@@ -772,7 +797,7 @@ static void gdb_rd_deinit(void)
 {
 	track_del_head(gdb_hidden);
 	fclose(fin);
-	xfree(fin_name);
+	xfree(filename);
 }
 
 static void gdb_read(void)
@@ -784,7 +809,7 @@ static void gdb_read(void)
 
 ff_vecs_t gdb_vecs = {
 	ff_type_file,
-	{ ff_cap_read, ff_cap_read, ff_cap_read },	/* FF_CAP_RW_ALL, */
+	{ ff_cap_read, ff_cap_read, ff_cap_read },	/* FF_CAP_RW_ALL, !!! I hope !!! */
 	gdb_rd_init,	
 	NULL,		/* gdb_wr_init, */
 	gdb_rd_deinit,
