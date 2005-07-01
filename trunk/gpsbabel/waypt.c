@@ -36,6 +36,9 @@ waypt_init(void)
 waypoint *
 waypt_dupe(const waypoint *wpt) 
 {
+	/*
+	 * This and waypt_free should be closely synced.
+	 */
 	waypoint * tmp;
 	tmp = waypt_new();
 	memcpy(tmp, wpt, sizeof(waypoint));
@@ -60,6 +63,10 @@ waypt_dupe(const waypoint *wpt)
 		tmp->gc_data.desc_long.utfstring = 
 			xstrdup(tmp->gc_data.desc_long.utfstring);
 	}
+	if (wpt->gc_data.placer) {
+                tmp->gc_data.placer = xstrdup(wpt->gc_data.placer);
+        }
+
 	/*
 	 * It's important that this duplicated waypoint not appear
 	 * on the master Q.
@@ -249,6 +256,9 @@ find_waypt_by_name(const char *name)
 void 
 waypt_free( waypoint *wpt )
 {
+	/*
+	 * This and waypt_dupe should be closely synced.
+	 */
 	if (wpt->shortname) {
 		xfree(wpt->shortname);
 	}
