@@ -36,6 +36,9 @@
 #  define M_PI 3.14159265358979323846
 #endif
 
+#define FEET_TO_METERS(feetsies) ((feetsies) * 0.3048)
+#define METERS_TO_FEET(meetsies) ((meetsies) * 3.2808399)
+
 /*
  * Snprintf is in SUS (so it's in most UNIX-like substance) and it's in 
  * C99 (albeit with slightly different semantics) but it isn't in C89.   

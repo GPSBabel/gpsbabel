@@ -297,7 +297,7 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	lowranceusr_fread(&buff[0], 4, 1, file_in);
 	wpt_tmp->longitude = lon_mm_to_deg(le_read32(&buff[0]));
 	lowranceusr_fread(&buff[0], 4, 1, file_in);
-	wpt_tmp->altitude = le_read32(&buff[0]);
+	wpt_tmp->altitude = FEET_TO_METERS(le_read32(&buff[0]));
 	lowranceusr_fread(&buff[0], 4, 1, file_in);
 	TextLen = buff[0];
 	lowranceusr_fread(&buff[0], TextLen, 1, file_in);
@@ -591,7 +591,7 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 	short int WayptType;
 	char *name;
 	char *comment;
-	int alt = wpt->altitude;
+	int alt = METERS_TO_FEET(wpt->altitude);
 	time_t base_time_secs = mktime(&base_time);
 
 	Lat = lat_deg_to_mm(wpt->latitude);
