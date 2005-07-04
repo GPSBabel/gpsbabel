@@ -138,6 +138,8 @@ waypt_new(void)
 	wpt->altitude = unknown_alt;
 	wpt->course = -999.0;
 	wpt->speed = -999.0;
+	wpt->fix = fix_unknown;
+	wpt->sat = -1;
 
 	return wpt;
 }

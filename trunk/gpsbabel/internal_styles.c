@@ -389,6 +389,8 @@ static char s_and_t[] =
 "#\n"
 
 "DESCRIPTION 		Microsoft Streets and Trips 2002-2005\n"
+"EXTENSION               txt\n"
+
 
 "#\n"
 "# FILE LAYOUT DEFINITIIONS:\n"

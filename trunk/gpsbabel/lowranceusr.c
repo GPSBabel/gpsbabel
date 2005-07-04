@@ -228,7 +228,8 @@ arglist_t lowranceusr_args[] = {
 	{"merge", &merge, "(USR output) Merge into one segmented track",
 	NULL, ARGTYPE_BOOL },
 	{"break", &seg_break, "(USR input) Break segments into separate tracks",
-	NULL, ARGTYPE_BOOL }
+	NULL, ARGTYPE_BOOL },
+	{NULL, NULL, NULL, NULL, 0}
 };
 
 static void
