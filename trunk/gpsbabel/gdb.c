@@ -47,7 +47,7 @@
 /* %%% local vars %%% */
 
 FILE *fin;
-static char *filename;
+static char *fin_name;
 static int gdb_ver = 1;
 static int gdb_debug = 0;
 route_head *gdb_hidden;
@@ -194,11 +194,15 @@ static size_t
 gdb_fread(void *target, size_t size, size_t count, FILE *fin)
 {
 	size_t result;
+
 	result = fread(target, size, count, fin);
-	if (result < 0)
-	    fatal(MYNAME ": error %d occured during read from \"%s\"!\n", +result, filename);
-	else if (result < count)
-	    fatal(MYNAME ": unexpected end of file \"%s\"!\n", filename);
+	if (result < count)
+	{
+	    if (feof(fin) != 0)
+		fatal(MYNAME ": unexpected end of file \"%s\"!\n", fin_name);
+	    else
+		fatal(MYNAME ": I/O error occured during read from \"%s\"!\n", fin_name);
+	}
 	return result;
 }
 
@@ -214,7 +218,7 @@ gdb_fread_str(FILE *fin, char *dest, size_t maxlen)
 	    if ( c != EOF )
 	    {
 		if (c < 0)
-		    fatal(MYNAME ": I/O error (%d) while read from \"%s\"!\n", +c, filename);
+		    fatal(MYNAME ": I/O error (%d) while read from \"%s\"!\n", +c, fin_name);
 		*dest++ = c;
 		if ( c == 0 ) return res;
 		res++;
@@ -288,14 +292,11 @@ gdb_read_file_header(void)
 	misinterpreted.
 */
 	
-	i = fread(buff, 1, 6, fin);
-	if (i < 0)
-	    fatal(MYNAME ": I/O error (%d) on file \"%s\"!\n", +i, filename);
-	else if ( i != 6 )
-	    fatal(MYNAME ": invalid file \"%s\"!\n", filename);
+	if (6 != fread(buff, 1, 6, fin))
+	    fatal(MYNAME ": invalid file \"%s\"!\n", fin_name);
 	    
 	if (strcmp(buff, "MsRcf") != 0)
-	    fatal(MYNAME ": invalid file \"%s\"!\n", filename);
+	    fatal(MYNAME ": invalid file \"%s\"!\n", fin_name);
 	    
 	gdb_fread(&reclen, 4, 1, fin);
 	reclen = le_read32(&reclen);
@@ -787,7 +788,7 @@ gdb_read_data(void)
 
 static void gdb_rd_init(const char *fname)
 {
-	filename = xstrdup(fname);
+	fin_name = xstrdup(fname);
 	fin = xfopen(fname, "rb", MYNAME);
 	gdb_hidden = route_head_alloc();
 	track_add_head(gdb_hidden);
@@ -797,7 +798,7 @@ static void gdb_rd_deinit(void)
 {
 	track_del_head(gdb_hidden);
 	fclose(fin);
-	xfree(filename);
+	xfree(fin_name);
 }
 
 static void gdb_read(void)
