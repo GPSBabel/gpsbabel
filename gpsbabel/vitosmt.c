@@ -125,7 +125,6 @@ vitosmt_read(void)
 	unsigned char	gpsvalid		=0;
 	unsigned char	gpssats			=0;
 	int				serial			=0;
-	xml_tag *		xml_curr		=0;
 	char			buffer[80]		="\0";
 
 		
@@ -136,7 +135,7 @@ vitosmt_read(void)
 	subversion	= ReadLong(infile);	/* 1000	*/
 	count		= ReadLong(infile);	/* n	*/
 	check1		= ReadLong(infile);	/* 0	*/
-	check2		= ReadLong(infile);	/* n-1	*/
+	check2		= ReadLong(infile);	/* not sure */
 	check3		= ReadLong(infile);	/* n	*/
 
 	if (version!=vitosmt_version) {
@@ -152,7 +151,6 @@ vitosmt_read(void)
 
 	if ((count!=check3)		||
 	    (check1!=count-1)	||
-		(check2!=0)			||
 		(check3!=count)		) {
 
 		fatal("%s (%d) reading file. Invalid file header\n", 
@@ -277,7 +275,6 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 	struct tm*		tmstructp		=0;
 	double			seconds			=0;
 	double			worknum			=0;
-	xml_tag*		xmltagp			=0;
 
 	++count;
 	workbuffer = xcalloc(vitosmt_datasize,1);
