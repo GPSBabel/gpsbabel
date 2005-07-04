@@ -13,6 +13,8 @@
 #
 
 DESCRIPTION 		Microsoft Streets and Trips 2002-2005
+EXTENSION               txt
+
 
 #
 # FILE LAYOUT DEFINITIIONS:
