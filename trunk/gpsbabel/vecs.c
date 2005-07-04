@@ -644,6 +644,7 @@ sort_and_unify_vecs(int *ctp)
 		svp[i] = xcalloc(1, sizeof **svp);
 		svp[i]->name = svec->name;
 		svp[i]->vec = xmalloc(sizeof(*svp[i]->vec));
+		svp[i]->extension = xcsv_file.extension;
 		*svp[i]->vec = *vec_list[0].vec; /* Interits xcsv opts */
 		/* Reset file type to inherit ff_type from xcsv for everything
 		 * except the xcsv format itself, which we leave as "internal"
