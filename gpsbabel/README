@@ -507,8 +507,10 @@ THE FORMATS
 
     s_and_t
 
-	This is a CSV format for Microsoft Streets and Trips.   Detailed
-	instructions on how to import to it, preserving hyperlinks, are at
+        This is a format for importing into Microsoft Streets and Trips.
+        It's been exercised on versions 2003, 2004, and 2005.  Detailed
+        instructions on how to use it, including preserving hyperlinks,
+        are at
 
 	http://www.gpsbabel.org/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html
 
