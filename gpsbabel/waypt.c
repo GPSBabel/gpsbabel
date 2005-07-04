@@ -57,11 +57,11 @@ waypt_dupe(const waypoint *wpt)
 		tmp->icon_descr = xstrdup(wpt->icon_descr);
 	if (wpt->gc_data.desc_short.utfstring) {
 		tmp->gc_data.desc_short.utfstring = 
-			xstrdup(tmp->gc_data.desc_short.utfstring);
+			xstrdup(wpt->gc_data.desc_short.utfstring);
 	}
 	if (wpt->gc_data.desc_long.utfstring) {
 		tmp->gc_data.desc_long.utfstring = 
-			xstrdup(tmp->gc_data.desc_long.utfstring);
+			xstrdup(wpt->gc_data.desc_long.utfstring);
 	}
 	if (wpt->gc_data.placer) {
                 tmp->gc_data.placer = xstrdup(wpt->gc_data.placer);
