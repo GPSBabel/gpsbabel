@@ -1,3 +1,5 @@
+VERSIONU=1_2_6-beta06162005b-isaac
+VERSIOND=1.2.6_beta06162005b-isaac
 
 # If you do not have libexpat and you have no use for reading any input
 # type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
@@ -8,8 +10,14 @@ LIBEXPAT=-lexpat # -lefence
 # USB may required non-standard libraries (like libusb) be installed
 # and may not be available on all OSes.  Uncomment this to remove the key
 # parts of USB from the build.
-INHIBIT_USB=#-DNO_USB
 LIBUSB=-lusb
+
+# Space is significant, because MSVC wants no space between switch and arg (-Fofoo.o)
+# but cc/gcc does:
+#  $(OUTPUT_SWITCH)main.o
+#  becomes -o main.o (gcc)
+#   or     -Fomain.o (cl.exe)
+OUTPUT_SWITCH=-o #
 
 #
 # Enable either or both of these as you wish.
@@ -52,7 +60,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
 OBJS = main.o $(LIBOBJS)
 
 .c.o:
-	$(CC) -c $(CFLAGS) $< -o $@
+	$(CC) -c $(CFLAGS) $< $(OUTPUT_SWITCH)$@
 
 all: gpsbabel
 
@@ -63,13 +71,11 @@ all: gpsbabel
 usbfree:
 	make LIBUSB= INHIBIT_USB=-DNO_USB
 
-
-
 gpsbabel: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o gpsbabel $(LIBEXPAT) $(LIBUSB) -lm
+	$(CC) $(CFLAGS) $(OBJS) $(LIBEXPAT) $(LIBUSB) -lm $(OUTPUT_SWITCH)$@
 
 main.o:
-	$(CC) -c $(CFLAGS) -DVERSION=\"$(VERSIOND)\" $<
+	$(CC) -c $(CFLAGS) -DVERSION=\"$(VERSIOND)\" $< $(OUTPUT_SWITCH)$@
 
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
@@ -100,10 +106,6 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-VERSIONU=1_2_6-beta06162005b-isaac
-VERSIOND=1.2.6_beta06162005b-isaac
-# VERSIONU=1_2_5
-# VERSIOND=1.2.5
 
 release:
 	cvs commit
@@ -131,6 +133,11 @@ mac-release:
 	cp README* COPYING usr/share/gpsbabel/doc
 	tar cvzf gpsbabel-osx.tgz usr/bin/gpsbabel
 	curl -u anonymous:anonymous --upload-file gpsbabel-osx.tgz ftp://upload.sf.net/incoming/
+
+msvc-build:
+	make CC=@CL.EXE DEBUGGING="" EXTRA_CFLAGS="-nologo -W3 -WL -D__WIN32__ -I msvc/expat " OUTPUT_SWITCH="-Fo" $(OBJS)
+	echo $(OBJS) > objs.lst
+	LINK.EXE /NOLOGO @objs.lst ./msvc/expat/libexpat.lib /out:gpsbabel.exe 
 
 # Machine generated from here down.  
 
