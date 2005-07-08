@@ -268,7 +268,7 @@ gpgga_parse(char *ibuf)
 	waypt->hdop 	= hdop;
 
 	if (fix==1) {
-		waypt->fix  = (nsats>4)?(fix_3d):(fix_2d);
+		waypt->fix  = (nsats>3)?(fix_3d):(fix_2d);
 	}
 	else if (fix==2)
 	{
@@ -318,9 +318,17 @@ gprmc_parse(char *ibuf)
 	tm.tm_mday = dmy;
 	creation_time = mkgmtime(&tm);
 
-	if (posn_type == gpgga)
+	if (posn_type == gpgga) {
+		/* capture useful data update and exit */
+		if (curr_waypt) {
+			if (curr_waypt->speed<=0) 
+				curr_waypt->speed 	= speed*kts2mps;
+			if (curr_waypt->course<=0)
+				curr_waypt->course 	= course;
+		}
 		return;
-
+	}
+		
 	waypt  = waypt_new();
 
 	waypt->speed 	= speed*kts2mps;
@@ -391,16 +399,30 @@ gpgsa_parse(char *ibuf)
 	char fixauto;
 	char fix;
 	int  prn[12];
-	int  cnt;
-	float pdop = 0;
-	float hdop = 0;
-	float vdop = 0;
+	int  scn,cnt;
+	float pdop=0,hdop=0,vdop=0;
+	char*	tok=0;
 
-	sscanf(ibuf,"$GPGSA,%c,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f",
+	memset(prn,0xff,sizeof(prn));
+
+	scn = sscanf(ibuf,"$GPGSA,%c,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
 		&fixauto, &fix,
 		&prn[0],&prn[1],&prn[2],&prn[3],&prn[4],&prn[5],
-		&prn[6],&prn[7],&prn[8],&prn[9],&prn[10],&prn[11],
-		&pdop,&hdop,&vdop);
+		&prn[6],&prn[7],&prn[8],&prn[9],&prn[10],&prn[11]);
+
+	/* 
+		sscanf has scanned all the leftmost elements
+		we'll rescan by skipping 15 commas to the dops
+	*/
+	tok = ibuf;
+	for (cnt=0;(tok)&&(cnt<15);cnt++)
+	{
+		tok = strchr(tok,',');
+		if (!tok) break;
+		tok++;
+	}
+	if (tok) sscanf(tok,"%f,%f,%f",&pdop,&hdop,&vdop);
+	
 
 	if (curr_waypt) {
 
@@ -408,9 +430,10 @@ gpgsa_parse(char *ibuf)
 			if 	(fix=='3')	curr_waypt->fix=fix_3d;
 			else if (fix=='2')	curr_waypt->fix=fix_2d;
 		}
-		if (pdop > 0) curr_waypt->pdop = pdop;
-		if (hdop > 0) curr_waypt->hdop = hdop;
-		if (vdop > 0) curr_waypt->vdop = vdop;
+	
+		curr_waypt->pdop = pdop;
+		curr_waypt->hdop = hdop;
+		curr_waypt->vdop = vdop;
 		
 		if (curr_waypt->sat  <= 0)	{
 			for (cnt=0;cnt<12;cnt++)
@@ -427,12 +450,12 @@ gpvtg_parse(char *ibuf)
 	char	ct;
 	float	magcourse;
 	char	cm;
-	float	speed_n;
+	double	speed_n;
 	char	cn;
-	float	speed_k;
+	double	speed_k;
 	char	ck;	
       
-	sscanf(ibuf,"$GPVTG,%f,%c,%f,%c,%f,%c,%f,%c",
+	sscanf(ibuf,"$GPVTG,%f,%c,%f,%c,%lf,%c,%lf,%c",
 		&course,&ct,&magcourse,&cm,&speed_n,&cn,&speed_k,&ck);
 		
 	if (curr_waypt) {
@@ -539,6 +562,7 @@ void
 nmea_trackpt_pr(const waypoint *wpt)
 {
 	char obuf[200];
+	char fix='0';
 	double lat,lon;
 	int cksum;
 	struct tm *tm;
@@ -555,13 +579,26 @@ nmea_trackpt_pr(const waypoint *wpt)
 		hms = 0;
 	}
 
+	switch (wpt->fix) 
+	{
+	case fix_dgps: 
+		fix='2';
+		/* or */
+	case fix_3d:
+	case fix_2d:
+		fix='1';
+		break;
+	default:
+		fix='0';
+	}
+
 	snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,0.0,M,,",
 			hms,
 			fabs(lat), lat < 0 ? 'S' : 'N',
 			fabs(lon), lon < 0 ? 'W' : 'E',
-			(wpt->fix==fix_dgps)?('2'):('1'),
-			wpt->sat,
-			wpt->hdop,
+			fix,
+			(wpt->sat>0)?(wpt->sat):(0),
+			(wpt->hdop>0)?(wpt->hdop):(0.0),
 			wpt->altitude == unknown_alt ? 0 : wpt->altitude);
 	cksum = nmea_cksum(obuf);
 	fprintf(file_out, "$%s*%02X\n", obuf, cksum);
@@ -569,18 +606,36 @@ nmea_trackpt_pr(const waypoint *wpt)
 	if (	(wpt->course>=0) ||
 		(wpt->speed>0)	   )
 	{
-		snprintf(obuf,sizeof(obuf),"$GPVTG,%f,T,0,M,%f,N,%f,K",
-		wpt->course,
-		wpt->speed / kts2mps,
-		wpt->speed / kmh2mps);
+
+		snprintf(obuf,sizeof(obuf),"GPVTG,%.3f,T,0,M,%.3f,N,%.3f,K",
+			(wpt->course>=0)?(wpt->course):(0),	
+			(wpt->speed>0)?(wpt->speed / kts2mps):(0),
+			(wpt->speed>0)?(wpt->speed / kmh2mps):(0) );
+
+		cksum = nmea_cksum(obuf);
+		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
 		
 	if (wpt->fix!=fix_unknown) {
-		snprintf(obuf,sizeof(obuf),"$GPGSA,A,%c,,,,,,,,,,,,,%f,%f,%f",
-			((wpt->fix==fix_dgps)||(wpt->fix==fix_3d))?'3':'2',
-			wpt->pdop,
-			wpt->hdop,
-			wpt->vdop);
+
+		switch (wpt->fix) 
+		{
+		case fix_dgps: 
+			/* or */
+		case fix_3d:
+			fix='3';
+			break;
+		case fix_2d:
+			fix='2';
+			break;
+		default:
+			fix=0;
+		}
+		snprintf(obuf,sizeof(obuf),"GPGSA,A,%s,,,,,,,,,,,,,%.1f,%.1f,%.1f",
+			fix,
+			(wpt->pdop>0)?(wpt->pdop):(0),
+			(wpt->hdop>0)?(wpt->hdop):(0),
+			(wpt->vdop>0)?(wpt->vdop):(0) );
 		cksum = nmea_cksum(obuf);
 		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
