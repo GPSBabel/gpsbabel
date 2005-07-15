@@ -291,6 +291,9 @@ waypt_free( waypoint *wpt )
 	if (wpt->gc_data.placer) {
 		xfree(wpt->gc_data.placer);
 	}
+	if (wpt->gc_data.hint) {
+		xfree (wpt->gc_data.hint);
+	} 
 	if ( wpt->an1_extras ) {
 		(*(wpt->an1_extras->destroy))((void *)wpt->an1_extras );
 		xfree( wpt->an1_extras );
