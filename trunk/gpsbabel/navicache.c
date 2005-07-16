@@ -256,7 +256,7 @@ nav_write(void)
 
 ff_vecs_t navicache_vecs = {
 	ff_type_file,
-	FF_CAP_RW_WPT,
+	{ ff_cap_read, ff_cap_none, ff_cap_none },
 	nav_rd_init,	
 	nav_wr_init,	
 	nav_rd_deinit,
