@@ -105,7 +105,7 @@ gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
 	unsigned char *obuf = buf;
 	int r = -1, tsz = 0;
 
-	r = usb_interrupt_read(udev, gusb_intr_in_ep, buf, sz, TMOUT_I);
+	r = usb_interrupt_read(udev, gusb_intr_in_ep, (char *) buf, sz, TMOUT_I);
 
 	tsz = r;
 

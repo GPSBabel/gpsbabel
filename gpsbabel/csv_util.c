@@ -24,6 +24,7 @@
 #include "defs.h"
 #include "csv_util.h"
 #include "grtcirc.h"
+#include "strptime.h"
 
 #define MYNAME "CSV_UTIL"
 
@@ -631,6 +632,92 @@ yyyymmdd_to_time(const char *s)
 	return mktime(&tm);
 }
 
+
+
+/*
+ * sscanftime - Parse a date buffer using strftime format
+ */
+static
+time_t
+sscanftime( const char *s, const char *format, const int gmt )
+{
+	struct tm stm = {0,0,0,0,0,0,0,0,0};
+	if ( strptime( s, format, &stm ) )
+	{
+		stm.tm_isdst = -1;
+		if (gmt)
+			return mkgmtime(&stm);
+		else
+			return mktime(&stm);		
+	}
+	
+	return -1;
+}
+static
+time_t
+addhms( const char *s, const char *format )
+{
+	time_t tt =0;
+	int  hour =0;
+	int  min  =0;
+	int  sec  =0;
+	char * ampm = NULL;
+	
+	ampm = xmalloc( strlen(s) );
+	if (sscanf(s, format, &hour, &min, &sec, ampm))
+	   tt = ((tolower(ampm[0])=='P')?43200:0)+3600*hour+60*min+sec;
+    	xfree(ampm);
+    	
+	return tt;
+}
+
+static 
+int 
+writetime(char * buff, size_t bufsize, const char * format, time_t t, int gmt )
+{
+	static struct tm * stmp;
+
+	if (gmt)
+		stmp = gmtime(&t);
+	else
+		stmp = localtime(&t);
+
+	return strftime(buff, bufsize, format, stmp );
+}
+
+static 
+int 
+writeisotime(char * buff, size_t bufsize, const char * format, time_t t)
+{
+	static struct tm * stmp;
+	char * ibuff = NULL;
+	int i;
+	
+	ibuff = xmalloc(bufsize);
+	stmp = gmtime(&t);
+	strftime(ibuff, bufsize, format, stmp );
+	i = snprintf(buff, bufsize, format, ibuff );
+	xfree(ibuff);
+	return i;
+}
+
+
+static 
+int 
+writehms(char * buff, size_t bufsize, const char * format, time_t t, int gmt )
+{
+	static struct tm * stmp;
+
+	if (gmt)
+		stmp = gmtime(&t);
+	else
+		stmp = localtime(&t);
+
+	return snprintf(buff, bufsize, format, 
+		stmp->tm_hour, stmp->tm_min, stmp->tm_sec, 
+		(stmp->tm_hour>=12?"PM":"AM") );
+}
+
 static 
 long 
 time_to_yyyymmdd(time_t t)
@@ -758,7 +845,22 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     if (strcmp(fmp->key, "YYYYMMDD_TIME") == 0) {
 	wpt->creation_time = yyyymmdd_to_time(s);
     } else
-    if (strcmp(fmp->key, "GEOCACHE_LAST_FOUND") == 0) {
+    if (strcmp(fmp->key, "GMT_TIME") == 0) {
+	wpt->creation_time = sscanftime(s, fmp->printfc, 1);
+    } else
+    if (strcmp(fmp->key, "LOCAL_TIME") == 0) {
+	wpt->creation_time = sscanftime(s, fmp->printfc, 0);
+    } else
+    /* Useful when time and date are in separate fields 
+    	GMT / Local offset is handled by the two cases above */
+    if ((strcmp(fmp->key, "HMSG_TIME") == 0)||
+    	(strcmp(fmp->key, "HMSL_TIME") == 0) ) {
+	wpt->creation_time += addhms(s, fmp->printfc);
+    } else
+    if (strcmp(fmp->key, "ISO_TIME") == 0) {
+	wpt->creation_time = xml_parse_time(s);
+    } else
+	if (strcmp(fmp->key, "GEOCACHE_LAST_FOUND") == 0) {
 	wpt->gc_data.last_found = yyyymmdd_to_time(s);
     } else
 
@@ -1128,6 +1230,21 @@ xcsv_waypt_pr(const waypoint *wpt)
         } else
         if (strcmp(fmp->key, "YYYYMMDD_TIME") == 0) {
 	    writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->creation_time));
+	} else
+	if (strcmp(fmp->key, "GMT_TIME") == 0) {
+	    writetime(buff, sizeof buff, fmp->printfc, wpt->creation_time, 1 );
+	} else
+        if (strcmp(fmp->key, "LOCAL_TIME") == 0) {
+            writetime(buff, sizeof buff, fmp->printfc, wpt->creation_time, 0 );
+	} else
+        if (strcmp(fmp->key, "HMSG_TIME") == 0) {
+            writehms(buff, sizeof buff, fmp->printfc, wpt->creation_time, 1 );
+	} else
+        if (strcmp(fmp->key, "HMSL_TIME") == 0) {
+            writehms(buff, sizeof buff, fmp->printfc, wpt->creation_time, 0 );
+	} else
+	if (strcmp(fmp->key, "ISO_TIME") == 0) {
+            writetime(buff, sizeof buff, "%Y-%m-%dT%H:%M:%SZ", wpt->creation_time, 1 );
 	} else
         if (strcmp(fmp->key, "GEOCACHE_LAST_FOUND") == 0) {
 	    writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->gc_data.last_found));
