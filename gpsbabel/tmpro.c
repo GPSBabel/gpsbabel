@@ -109,7 +109,9 @@ data_read(void)
 			*/
 			holder = csv_stringtrim(s, "", 0);
 			if (strlen(holder))
-		    	wpt_tmp->description = holder;
+				wpt_tmp->description = holder;
+			else 
+				xfree(holder);
 		    break;
 		case 3:
 		    wpt_tmp->latitude = atof(s);
@@ -142,6 +144,8 @@ data_read(void)
 			holder = csv_stringtrim(s, "", 0);
 			if (strstr(holder, "http:") != NULL)
 				wpt_tmp->url = holder;
+			else 
+				xfree(holder);
 			break;
 		default:
 		    /* whoa! nelly */

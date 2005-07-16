@@ -266,7 +266,7 @@ static void kml_output_tailer()
     fprintf(ofd, "\t</Placemark>\n");
   }
   
-  free(point3d_list);
+  xfree(point3d_list);
   point3d_list = NULL;
   
   fprintf(ofd, "</Folder>\n");

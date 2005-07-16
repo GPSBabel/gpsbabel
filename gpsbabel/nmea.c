@@ -169,6 +169,7 @@ static  void
 nmea_wr_deinit(void)
 {
 	fclose(file_out);
+	mkshort_del_handle(mkshort_handle);
 }
 
 void
