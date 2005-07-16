@@ -120,6 +120,7 @@ data_read(void)
 				break;
 			case 7:
 				wpt_tmp->icon_descr = (char *) pread();
+				wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
 				break;
 			case 8:  /* NULL Terminated (vs. pascal) descr */
 				bbufp = bbuf;
