@@ -55,7 +55,7 @@ COLDSYNC=coldsync/util.o coldsync/pdb.o
 SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
 
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
-          csv_util.o grtcirc.o vmem.o util_crc.o xmlgeneric.o uuid.o \
+          csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o uuid.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(FMTS) $(FILTERS)
 OBJS = main.o $(LIBOBJS)
 
@@ -153,7 +153,7 @@ cetus.o: cetus.c defs.h queue.h gbtypes.h coldsync/palm.h coldsync/pdb.h
 coastexp.o: coastexp.c defs.h queue.h gbtypes.h xmlgeneric.h uuid.h
 copilot.o: copilot.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
-csv_util.o: csv_util.c defs.h queue.h gbtypes.h csv_util.h grtcirc.h
+csv_util.o: csv_util.c defs.h queue.h gbtypes.h csv_util.h grtcirc.h strptime.h
 delgpl.o: delgpl.c defs.h queue.h gbtypes.h
 duplicate.o: duplicate.c defs.h queue.h gbtypes.h
 easygps.o: easygps.c defs.h queue.h gbtypes.h
@@ -229,6 +229,7 @@ shape.o: shape.c defs.h queue.h gbtypes.h shapelib/shapefil.h
 smplrout.o: smplrout.c defs.h queue.h gbtypes.h grtcirc.h
 sort.o: sort.c defs.h queue.h gbtypes.h
 stackfilter.o: stackfilter.c defs.h queue.h gbtypes.h
+strptime.o: strptime.c strptime.h
 tef_xml.o: tef_xml.c defs.h queue.h gbtypes.h xmlgeneric.h
 text.o: text.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h jeeps/gpssend.h \

@@ -350,6 +350,46 @@ The fields used by the XCSV parser are as follows:
 
    example: IFIELD YYYYMMDD_TIME,"","%ld"
 
+ o GMT_TIME
+   GMT_TIME is the waypoint's creation time, in UTC time zone.  It uses the
+   strptime conversion format tags.  
+
+   example: IFIELD GMT_TIME,"","%m/%d/%Y %I:%M:%D %p"
+
+   Search the web for 'strptime man page' for details strptime, but one 
+   such page can be found at
+
+   http://www.die.net/doc/linux/man/man3/strptime.3.html
+
+ o LOCAL_TIME LOCAL_TIME is the waypoint's creation time, in the local
+ time zone.  It uses strptime conversion format tags.
+
+   example: IFIELD LOCAL_TIME,"","%y-%m-%d"
+
+ o HMSG_TIME
+   HMSG_TIME parses up to three time parts and am/pm string to add
+   this value to the previously parsed *_TIME field that contains 
+   only a date.  On output, will print the time in UTC.
+   
+   example: IFIELD HMSG_TIME,"","%d:%d:%d %s"
+ 
+ o HMSL_TIME
+   HMSG_TIME parses up to three time parts and am/pm string to add
+   this value to the previously parsed *_TIME field that contains 
+   only a date.  On output, will print the time in local time.
+   
+   example: IFIELD HMSL_TIME,"","%dh%dm"
+ 
+ o ISO_TIME
+   ISO_TIME is the waypoint's creation time, in ISO 8601 format, 
+   which include time zone information. 
+   It is expected to be in the format yyyy-mm-ddThh:mm:sszzzzz
+   where zzzzzz is the local time offset or the character Z
+   for UTC time.
+   On output, UTC 'Z' time zone will always be used.
+   
+   example: IFIELD ISO_TIME,"","%s"
+ 
  o GEOCACHE_DIFF
    GEOCACHE_DIFF is valid only for geocaches and represents a DOUBLE 
    PRECISION FLOAT.  A "three and a half star" cache would therefore be "3.5"
