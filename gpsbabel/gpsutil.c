@@ -57,7 +57,7 @@ static void
 data_read(void)
 {
 	char ibuf[100];
-	char name[9], desc[30];
+	char name[9], desc[31];
 	double lat,lon;
 	char latdir, londir;
 	int ilat, ilon;
