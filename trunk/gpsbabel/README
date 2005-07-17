@@ -172,6 +172,13 @@ THE FORMATS
 
 		gpsbabel -D9 -i garmin -f usb: -o gpx -F blah.gpx
 
+        Custom icons are supported on units that support that.  Neither
+        GPSBabel nor your firmware know what is associated with any
+        given slot number.  They don't know that the picture you placed
+        in the first slot is a happy face, they only know they're in the
+        lowest numbered slot.  GPSBabel names the them consistently with
+        Mapsource, so they are named 'Custom 0' through 'Custom 23'.
+
     GPSMAN
 
 	GPS Manager can read and write formats that this converter doesn't
