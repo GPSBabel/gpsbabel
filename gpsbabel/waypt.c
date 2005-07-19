@@ -92,7 +92,6 @@ waypt_add(waypoint *wpt)
 	 * try to be sure that we have these fields even if just by
 	 * copying them from elsewhere.
 	 */
-#if 0
 	if (wpt->shortname == NULL) {
 		if (wpt->description) {
 			wpt->shortname = xstrdup(wpt->description);
@@ -117,7 +116,6 @@ waypt_add(waypoint *wpt)
 			}
 		}
 	}
-#endif
 }
 
 void
