@@ -832,6 +832,14 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        /* altitude in meters as a decimal value */
        wpt->altitude = atof(s);
     } else
+    
+    /* PATH CONVERSIONS ************************************************/
+    if (strcmp(fmp->key, "PATH_SPEED") == 0) {
+	wpt->speed = atof(s);
+    } else
+    if (strcmp(fmp->key, "PATH_COURSE") == 0) {
+	wpt->course = atof(s);
+    } else
 
     /* TIME CONVERSIONS ***************************************************/
     if (strcmp(fmp->key, "EXCEL_TIME") == 0) {
@@ -885,6 +893,33 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     } else
     if (strcmp(fmp->key, "GEOCACHE_PLACER") == 0) {
        wpt->gc_data.placer = csv_stringtrim(s, "", 0);
+    } else
+	
+    /* GPS STUFF *******************************************************/
+    if (strcmp(fmp->key, "GPS_HDOP") == 0) {
+	 wpt->hdop = atof(s);
+    } else
+    if (strcmp(fmp->key, "GPS_VDOP") == 0) {
+	wpt->vdop = atof(s);
+    } else
+    if (strcmp(fmp->key, "GPS_PDOP") == 0) {
+        wpt->pdop = atof(s);
+    } else
+    if (strcmp(fmp->key, "GPS_SAT") == 0) {
+	wpt->sat = atoi(s);
+    } else
+    if (strcmp(fmp->key, "GPS_FIX") == 0) {
+	wpt->fix = atoi(s)-1;
+	if ( wpt->fix < fix_2d) {
+	if (!strcasecmp(s, "none"))
+		wpt->fix = fix_none;
+	else if (!strcasecmp(s, "dgps"))
+		wpt->fix = fix_dgps;
+	else if (!strcasecmp(s, "pps"))
+		wpt->fix = fix_pps;
+	else
+		wpt->fix = fix_unknown;
+	}
     } else
 	
     /* OTHER STUFF ***************************************************/
@@ -1218,6 +1253,12 @@ xcsv_waypt_pr(const waypoint *wpt)
             /* path (route/track) distance in  */
             writebuff( buff, fmp->printfc, pathdist * 5280*12*2.54/100/1000 );
 	} else
+	if (strcmp(fmp->key, "PATH_SPEED") == 0) {
+            writebuff( buff, fmp->printfc, wpt->speed );
+	} else
+	if (strcmp(fmp->key, "PATH_COURSE") == 0) {
+            writebuff( buff, fmp->printfc, wpt->course );
+	} else
 
         /* TIME CONVERSIONS**************************************************/
         if (strcmp(fmp->key, "EXCEL_TIME") == 0) {
@@ -1272,9 +1313,50 @@ xcsv_waypt_pr(const waypoint *wpt)
         } else 
 	if (strcmp(fmp->key, "GEOCACHE_PLACER") == 0) {
 	    writebuff(buff, fmp->printfc, NONULL(wpt->gc_data.placer));
-        } else {
-           /* this should probably never happen */
+        } else
+	
+	/* GPS STUFF *******************************************************/
+	if (strcmp(fmp->key, "GPS_HDOP") == 0) {
+            writebuff(buff, fmp->printfc, wpt->hdop);
+        } else
+	if (strcmp(fmp->key, "GPS_VDOP") == 0) {
+            writebuff(buff, fmp->printfc, wpt->vdop);
+        } else
+	if (strcmp(fmp->key, "GPS_PDOP") == 0) {
+            writebuff(buff, fmp->printfc, wpt->pdop);
+        } else
+	if (strcmp(fmp->key, "GPS_SAT") == 0) {
+            writebuff(buff, fmp->printfc, wpt->sat);
+        } else
+	if (strcmp(fmp->key, "GPS_FIX") == 0) {
+		char *fix = NULL;
+		switch (wpt->fix) {
+			case fix_unknown:
+				fix = "Unknown";
+				break;
+			case fix_none:
+				fix = "None";
+				break;
+			case fix_2d:
+				fix = "2d";
+				break;
+			case fix_3d:
+				fix = "3d";
+				break;
+			case fix_dgps:
+				fix = "dgps";
+				break;
+			case fix_pps:
+				fix = "pps";
+				break;
+		}
+		writebuff(buff, fmp->printfc, fix);
+        } else
+
+	{
+		/* this should probably never happen */
         }
+	
 
         obuff = csv_stringclean(buff, xcsv_file.badchars);
         fprintf (xcsv_file.xcsvfp, "%s", obuff);
