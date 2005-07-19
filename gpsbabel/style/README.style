@@ -449,6 +449,34 @@ The fields used by the XCSV parser are as follows:
    PATH_DISTANCE_KM is like PATH_DISTANCE_MILES except it outputs the 
    length in kilometers.  
 
+ o PATH_SPEED
+   Speed in meters per second. Gpsbabel does NOT calculate this data, it is
+   read from the input file if present.
+
+   example: PATH_SPEED,"","%f"
+
+ o PATH_COURSE
+   Course in degerees.  Gpsbabel does NOT calculate this data, it is
+   read from the input file if present.
+
+   example: PATH_COURSE,"","%f"
+
+ o GPS_HDOP, GPS_VDOP, GPS_PDOP
+   GPS distorsion of position parameters. Needs float conversion.
+
+   example: GPS_HDOP,"","%f"
+
+ o GPS_SAT
+   Number of satellites used for determination of the position. Needs
+   interger conversion.
+
+   example: GPS_SAT,"","%d"
+
+ o GPS_FIX
+   Type of fix (see GPX spec). Needs string conversion.
+
+   example: GPS_FIX,"","%s"
+
 EXAMPLES:
 --------
 For examples on using the XCSV module, please see the *.style files in
