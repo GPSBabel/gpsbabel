@@ -199,7 +199,7 @@ static void kml_output_header(const route_head *header)
 	write_optional_xml_entity(ofd, "  ", "name", header->rte_name);
 	write_optional_xml_entity(ofd, "  ", "desc", header->rte_desc);
 
-        if (export_points) {
+        if (export_points && header->rte_waypt_ct > 0) {
           // Put the points in a subfolder
           fprintf(ofd, "  <Folder>\n");
           fprintf(ofd, "    <visibility>1</visibility>\n");
@@ -238,16 +238,16 @@ static void kml_output_point(const waypoint *waypointp, const char *style)
 }
 
 
-static void kml_output_tailer()
+static void kml_output_tailer(const route_head *header)
 {
   int i;
 
-  if (export_points) {
+  if (export_points && point3d_list_len > 0) {
     fprintf(ofd, "  </Folder>\n");
   }
   
   // Add a linestring for this track?
-  if (export_lines) {
+  if (export_lines && point3d_list_len > 0) {
     fprintf(ofd, "\t<Placemark>\n");
     fprintf(ofd, "\t  <styleUrl>#lineStyle</styleUrl>\n");
     fprintf(ofd, "\t  <name>Path</name>\n");
@@ -321,7 +321,7 @@ static void kml_track_disp(const waypoint *waypointp)
 
 static void kml_track_tlr(const route_head *header) 
 {
-  kml_output_tailer();
+  kml_output_tailer(header);
 }
 
 /*
@@ -340,7 +340,7 @@ static void kml_route_disp(const waypoint *waypointp)
 
 static void kml_route_tlr(const route_head *header) 
 {
-        kml_output_tailer();
+        kml_output_tailer(header);
 }
 
 void kml_write(void)
