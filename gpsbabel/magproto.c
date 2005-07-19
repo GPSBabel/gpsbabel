@@ -35,7 +35,7 @@ int wptcmtcnt_max;
 
 static char * termread(char *ibuf, int size);
 static void termwrite(char *obuf, int size);
-static void mag_readmsg(void);
+static void mag_readmsg(gpsdata_type objective);
 static void mag_handon(void);
 static void mag_handoff(void);
 static void *mkshort_handle = NULL;
@@ -277,7 +277,7 @@ mag_writemsg(const char * const buf)
 	termwrite(obuf, i);
 	if (magrxstate == mrs_handon || magrxstate == mrs_awaiting_ack) {
 		magrxstate = mrs_awaiting_ack;
-		mag_readmsg();
+		mag_readmsg(trkdata);
 		if (last_rx_csum != osum) {
 			if (debug_serial) {
 				warning("COMM ERROR: Expected %02x, got %02x", 
@@ -378,7 +378,7 @@ mag_verparse(char *ibuf)
 #define IS_TKN(x) (strncmp(ibuf,x, sizeof(x)-1) == 0)
 
 static void
-mag_readmsg(void)
+mag_readmsg(gpsdata_type objective)
 {
 	char ibuf[200];
 	int isz;
@@ -445,7 +445,7 @@ retry:
 			waypt_status_disp(waypoint_read_count, 
 					waypoint_read_count);
 		}
-		switch (global_opts.objective)
+		switch (objective)
 		{
 			case wptdata:
 				waypt_add(wpt);
@@ -763,7 +763,7 @@ mag_rd_init(const char *portname)
 	}
 
 	while (!got_version) {
-		mag_readmsg();
+		mag_readmsg(trkdata);
 		if (current_time() > later) {
 			fatal(MYNAME ": No acknowledgment from GPS on %s\n",
 				portname);
@@ -782,7 +782,7 @@ mag_rd_init(const char *portname)
 	if (nukewpt) {
 		/* The unit will send us an "end" message upon completion */
 		mag_writemsg("PMGNCMD,DELETE,WAYPOINT");
-		mag_readmsg();
+		mag_readmsg(trkdata);
 		if (!found_done) {
 			fatal(MYNAME ": Unexpected response to waypoint delete command.\n");
 		}
@@ -1121,58 +1121,52 @@ mag_read(void)
 {
 	found_done = 0;
 
-	switch (global_opts.objective)
-	{
-		case trkdata:
-			if (!is_file) 
-				mag_writemsg("PMGNCMD,TRACK,2");
+        if (global_opts.masked_objective & TRKDATAMASK) {
+          if (!is_file) 
+            mag_writemsg("PMGNCMD,TRACK,2");
+          
+          while (!found_done) {
+            mag_readmsg(trkdata);
+          }
+        }
 
-			while (!found_done) {
-				mag_readmsg();
-			}
+        if (global_opts.masked_objective & WPTDATAMASK) {
+          if (!is_file) 
+            mag_writemsg("PMGNCMD,WAYPOINT");
+          
+          while (!found_done) {
+            mag_readmsg(wptdata);
+          }
+        }
 
-			break;
-		case wptdata:
-			if (!is_file) 
-				mag_writemsg("PMGNCMD,WAYPOINT");
-
-			while (!found_done) {
-				mag_readmsg();
-			}
-
-			break;
-		case rtedata:
-			if (!is_file) {
-				/* 
-				 * serial routes require waypoint & routes 
-				 * messages commands.
-				 */
-				mag_writemsg("PMGNCMD,WAYPOINT");
-
-				while (!found_done) {
-					mag_readmsg();
-				}
-
-				mag_writemsg("PMGNCMD,ROUTE");
-
-				found_done = 0;
-				while (!found_done) {
-					mag_readmsg();
-				}
-			} else {
-				/*
-				 * SD routes are a stream of PMGNWPL and 
-				 * PMGNRTE messages, in that order.
-				 */
-				while (!found_done) {
-					mag_readmsg();
-				}
-			}
-
-			break;
-		default:
-			fatal(MYNAME ": Unknown objective\n");
-	}
+        if (global_opts.masked_objective & RTEDATAMASK) {
+          if (!is_file) {
+            /* 
+             * serial routes require waypoint & routes 
+             * messages commands.
+             */
+            mag_writemsg("PMGNCMD,WAYPOINT");
+            
+            while (!found_done) {
+              mag_readmsg(rtedata);
+            }
+            
+            mag_writemsg("PMGNCMD,ROUTE");
+            
+            found_done = 0;
+            while (!found_done) {
+              mag_readmsg(rtedata);
+            }
+          } else {
+            /*
+             * SD routes are a stream of PMGNWPL and 
+             * PMGNRTE messages, in that order.
+             */
+            while (!found_done) {
+              mag_readmsg(rtedata);
+            }
+          }
+        }          
 }
 
 static
