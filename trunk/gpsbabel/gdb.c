@@ -447,18 +447,21 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	delta = fileofs - pos;
 	gdb_is_valid(delta > 0, "waypoint final");
 	
-	xtime = 0;
-	if (xclass == 0) 
+	if ((delta & 1) == 0)
 	{
 	    gdb_fread(buff, 1, 1, fin);
-	    if (buff[0] == 1)
-	    {
-		gdb_is_valid(delta==5, "??? waypoint time ???");
-		gdb_fread_le(fin, &xtime, sizeof(xtime), 32, "xtime");
-	    }
+	    delta--;
+	}
+	
+	xtime = 0;
+	gdb_fread(buff, 1, 1, fin);
+	if (buff[0] == 1)
+	{
+	    gdb_is_valid(delta==5, "??? waypoint time ???");
+	    gdb_fread_le(fin, &xtime, sizeof(xtime), 32, "xtime");
+	}
 	    else
 		gdb_is_valid(delta==1, "no waypoint time");
-	}
 	
 	*wptclass = xclass;
 	
