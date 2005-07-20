@@ -18,11 +18,20 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+ 
+ /* 
+    2005-07-20: implemented interval option from Etienne Tasse
+ */
+ 
 #include <stdio.h>
 #include <time.h>
 #include "defs.h"
 
 #define MYNAME "tracks"
+
+#define TRACKFILTER_PACK_OPTION		"pack"
+#define TRACKFILTER_SPLIT_OPTION	"split"
+#define TRACKFILTER_TITLE_OPTION	"title"
 
 #undef TRACKF_DBG
 
@@ -32,13 +41,17 @@ static char *opt_title = NULL;
 
 static
 arglist_t trackfilter_args[] = {
-	{"pack", &opt_pack, "Pack all tracks into one", NULL, ARGTYPE_BOOL},
-	{"split", &opt_split, "Split track by day", NULL, ARGTYPE_BOOL},
-	{"title", &opt_title, "Basic title for new track(s)", NULL, ARGTYPE_STRING},
+	{TRACKFILTER_PACK_OPTION,  &opt_pack,  "Pack all tracks into one", 
+	    NULL, ARGTYPE_BOOL},
+	{TRACKFILTER_SPLIT_OPTION, &opt_split, "Split track by date or by time interval (see README)", 
+	    NULL, ARGTYPE_STRING},
+	{TRACKFILTER_TITLE_OPTION, &opt_title, "Basic title for new track(s)", 
+	    NULL, ARGTYPE_STRING},
 	{0, 0, 0, 0, 0}
 };
 
-typedef struct trkflt
+
+typedef struct trkflt_s
 {
 	route_head *track;
 	time_t first_time;
@@ -47,6 +60,7 @@ typedef struct trkflt
 
 static trkflt_t *track_list = NULL;
 static int track_ct = 0;
+static int opt_interval = 0;
 
 /*- dummy callbacks for track_disp_all ---------------------------------------------------*/
 
@@ -88,10 +102,16 @@ trackfilter_fill_track_list_cb(const route_head *trk) 	/* callback for track_dis
 	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp)
 	{
 	    wpt = (waypoint *)elem;
-	    if (wpt->creation_time == 0) fatal(MYNAME ": Found track point without time!\n");
+	    if (wpt->creation_time == 0)
+		fatal(MYNAME ": Found track point without time!\n");
+
 	    i++;
-	    if (i == 1) track_list[track_ct].first_time = wpt->creation_time;
-	    else if (i == trk->rte_waypt_ct) track_list[track_ct].last_time = wpt->creation_time;
+	    if (i == 1) 
+		track_list[track_ct].first_time = wpt->creation_time;
+	    else 
+	    if (i == trk->rte_waypt_ct)
+		track_list[track_ct].last_time = wpt->creation_time;
+		
 	    if ((prev != NULL) && (prev->creation_time > wpt->creation_time))
 		fatal(MYNAME ": Track points bad ordered (timestamp)!\n");
 	    prev = wpt;
@@ -108,9 +128,6 @@ trackfilter_init(const char *args)
 	int count = track_count();
 	trkflt_t prev;
 	
-#ifdef TRACKF_DBG
-	printf(MYNAME ": init...\n");
-#endif
 	if (count > 0)
 	{
 	    track_list = (trkflt_t *) xcalloc(count, sizeof(*track_list));
@@ -132,9 +149,6 @@ trackfilter_init(const char *args)
 static void
 trackfilter_deinit(void) 
 {
-#ifdef TRACKF_DBG
-	printf(MYNAME ": deinit...\n");
-#endif
 	if (track_list != NULL)
 	{
 	    xfree(track_list);
@@ -142,44 +156,40 @@ trackfilter_deinit(void)
 	}
 }
 
-#if 0
-static int 
-compare_wpt_time(const void *a, const void *b)
-{
-	const waypoint *pa = a;
-	const waypoint *pb = b;
-
-	if (pa->creation_time < pb->creation_time ) return -1;
-	else if (pa->creation_time > pb->creation_time ) return +1;
-	else return 0;
-}
-#endif
-
-static void
-trackfilter_init_rte_name(route_head *track, const time_t time)
+void
+trackfilter_split_init_rte_name(route_head *track, const time_t time)
 {
 	char buff[128], tbuff[128];
 	struct tm tm;
+	size_t tlen;
 	
 	tm = *localtime(&time);
+ 
+	(opt_interval != 0) ? 
+	    strftime(tbuff, sizeof(tbuff), "%Y%m%d%H%M%S", &tm) :
+	    strftime(tbuff, sizeof(tbuff), "%Y%m%d", &tm);
 	
-	strftime(tbuff, sizeof(tbuff), "%Y%m%d", &tm);
-	
-	if (opt_title != NULL) 
+	if ((opt_title != NULL) && (strlen(opt_title) > 0)) 
 	{
-	    if (strchr(opt_title, '%') != NULL)
+	    if (strchr(opt_title, '%') != NULL) {
 		strftime(buff, sizeof(buff), opt_title, &tm);
-	    else
+	    }
+	    else {
 		snprintf(buff, sizeof(buff), "%s-%s", opt_title, tbuff);
+	    }
 	}
-	else
+	else if ((track->rte_name != NULL ) && (strlen(track->rte_name) > 0))
 	{
 	    snprintf(buff, sizeof(buff), "%s-%s", track->rte_name, tbuff);
+	} 
+	else {
+	    strncpy(buff, tbuff, sizeof(buff));
 	}
 	
-	if (track->rte_name != NULL) xfree(track->rte_name);
+	if (track->rte_name != NULL) {
+	    xfree(track->rte_name);
+	}
 	track->rte_name = xstrdup(buff);
-	
 }
 
 /*******************************************************************************************
@@ -188,29 +198,45 @@ trackfilter_init_rte_name(route_head *track, const time_t time)
 * 
 *******************************************************************************************/
 
+void
+trackfilter_pack_init_rte_name(route_head *track, const time_t time)
+{
+	char buff[128], tbuff[128];
+	struct tm tm;
+	
+	tm = *localtime(&time);
+
+	if ((opt_title != NULL) && (strlen(opt_title) > 0))
+	{
+	    if (strchr(opt_title, '%') != NULL)
+		strftime(tbuff, sizeof(tbuff), opt_title, &tm);
+	    else
+		strncpy(tbuff, opt_title, sizeof(tbuff));
+		    
+	    if (track->rte_name != NULL) xfree(track->rte_name);
+	    track->rte_name = xstrdup(tbuff);
+	}
+}
+
 static void
 trackfilter_pack(void)
 {
 	int i, j, ct;
+	char tbuff[128];
 	route_head *master, *curr;
 	queue *elem, *tmp;
 	waypoint *wpt;
 	waypoint **buff;
 	
-#ifdef TRACKF_DBG
-	printf(MYNAME ": packing tracks...\n");
-#endif
-	/* we fill up the first track by all others */
+	/* we fill up the first track by all other track points */
 	
 	master = track_list[0].track;
-	
-	if (opt_title != NULL)
-	{
-	    if (master->rte_name != NULL)
-		xfree(master->rte_name);
-	    master->rte_name = xstrdup(opt_title);
-	}
-	
+
+	/* at this point we cannot set a new title, because track 0
+	   can be an empty track. If the title option is set, 
+	   we do this as final step in here
+	 */
+	   
 	for (i=1; i<track_ct; i++)
 	{
 	    curr = track_list[i].track;
@@ -237,6 +263,12 @@ trackfilter_pack(void)
 	    
 	    track_del_head(curr);
 	}
+
+	if ((opt_split == NULL) && (master->rte_waypt_ct > 0))
+	{
+	    wpt = (waypoint *) QUEUE_FIRST((queue *)&master->waypoint_list);
+	    trackfilter_pack_init_rte_name(master, wpt->creation_time);
+	}
 }
 
 /*******************************************************************************************
@@ -256,15 +288,69 @@ trackfilter_split(void)
 	waypoint *wpt;
 	queue *elem, *tmp;
 	int i, j;
-	struct tm t1, t2;
-	
+	float interval = -1;
+
 	if (count <= 1) return;
+
+	/* check additional options */
 	
+	opt_interval = (0 != strcmp(opt_split, TRACKFILTER_SPLIT_OPTION));
+
+	if (opt_interval != 0)
+	{
+	    float  base;
+	    char   dhms;
+	    
+	    switch(strlen(opt_split))
+	    {
+		case 0:
+		    fatal(MYNAME ": No time interval specified.\n");
+		    break; /* ? */
+		    
+		case 1:
+		    dhms = *opt_split;
+		    interval = 1;
+		    break;
+		    
+		default:
+		    i = sscanf(opt_split,"%f%c", &interval, &dhms);
+		    if (i == 0) 
+		    {
+			/* test reverse order */
+			i = sscanf(opt_split,"%c%f", &interval, &dhms);
+		    }
+		    if ((i != 2) || (interval <= 0))
+		    {
+			fatal(MYNAME ": invalid time interval specified, must be one a positive number.\n");
+		    }
+		    break;
+	    }
+
+	    switch(tolower(dhms))
+	    {
+		case 's':
+		    base = 1;
+		    break;
+		case 'm':
+		    base = 60;
+		    break;
+		case 'h':
+		    base = 60 * 60;
+		    break;
+		case 'd':
+		    base = 24 * 60 * 60;
+		    break;
+		default:
+		    fatal(MYNAME ": invalid time interval specified, must be one of [dhms].\n");
+		    break;
+	    }
 #ifdef TRACKF_DBG
-	printf(MYNAME ": splitting track...\n");
+	    printf(MYNAME ": dhms \"%c\", interval %g -> %g\n", dhms, interval, base * interval);
 #endif
-	
-	trackfilter_init_rte_name(master, track_list[0].first_time);
+	    interval *= base;
+	}
+
+	trackfilter_split_init_rte_name(master, track_list[0].first_time);
 	
 	buff = (waypoint **) xcalloc(count, sizeof(*buff));
 	
@@ -275,21 +361,41 @@ trackfilter_split(void)
 	    buff[i++] = wpt;
 	}
 	
-	curr = NULL;
+	curr = NULL;	/* will be set by first new track */
 	
 	for (i=0, j=1; j<count; i++, j++)
 	{
-	    t1 = *localtime(&buff[i]->creation_time);
-	    t2 = *localtime(&buff[j]->creation_time);
-	    if ((t1.tm_year != t2.tm_year) || 
-		(t1.tm_mon != t2.tm_mon) || (t1.tm_mday != t2.tm_mday))
+	    int new_track_flag;
+	    
+	    if (opt_interval == 0)
 	    {
-#ifdef TRACKF_DBG
-		printf(MYNAME ": new day %02d.%02d.%04d\n", t2.tm_mday, t2.tm_mon+1, t2.tm_year+1900);
-#endif
-		curr = (route_head *) route_head_alloc();
-		trackfilter_init_rte_name(curr, buff[j]->creation_time);
+		struct tm t1, t2;
 		
+		t1 = *localtime(&buff[i]->creation_time);
+		t2 = *localtime(&buff[j]->creation_time);
+		
+		new_track_flag = ((t1.tm_year != t2.tm_year) || (t1.tm_mon != t2.tm_mon) || 
+			          (t1.tm_mday != t2.tm_mday));
+#ifdef TRACKF_DBG
+		if (new_track_flag != 0)
+		    printf(MYNAME ": new day %02d.%02d.%04d\n", t2.tm_mday, t2.tm_mon+1, t2.tm_year+1900);
+#endif
+	    }
+	    else
+	    {
+		float tr_interval;
+		
+		tr_interval = difftime(buff[j]->creation_time,buff[i]->creation_time);
+		new_track_flag = ( tr_interval > interval );
+#ifdef TRACKF_DBG
+		if (new_track_flag != 0)
+		    printf(MYNAME ": split, %g > %g\n", tr_interval, interval );
+#endif
+	    }
+	    if (new_track_flag != 0)
+	    {
+		curr = (route_head *) route_head_alloc();
+		trackfilter_split_init_rte_name(curr, buff[j]->creation_time);
 		track_add_head(curr);
 	    }
 	    if (curr != NULL)
@@ -300,7 +406,6 @@ trackfilter_split(void)
 		buff[j] = wpt;
 	    }
 	}
-	
 	xfree(buff);
 }
 
@@ -317,7 +422,6 @@ trackfilter_process(void)
 	    return;
 	}
 
-	
 	if (opt_pack != 0 && track_ct > 0)
 	{
 	    trackfilter_pack();
