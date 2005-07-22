@@ -54,7 +54,7 @@ usage(const char *pname, int shorter)
 "    -t               Process track information\n"
 "    -w               Process waypoint information [default]\n"
 "    -N               No smart icons on output\n"
-"    -x filtername    Invoke filter\n"
+"    -x filtername    Invoke filter (place between inputs and output) \n"
 "    -D level         Set debug level [%d]\n"
 "    -h, -?           Print detailed help and exit\n"
 "    -V               Print GPSBabel version and exit\n"
@@ -153,6 +153,9 @@ main(int argc, char *argv[])
 				optarg = argv[argn][2]
 					? argv[argn]+2 : argv[++argn];
 				ovecs = find_vec(optarg, &ovec_opts);
+				if (ovecs == NULL) {
+					fatal ("Output type '%s' not recognized\n", optarg);
+				}
 				break;
 			case 'f':
 				optarg = argv[argn][2]
