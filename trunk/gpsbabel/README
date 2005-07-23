@@ -464,6 +464,12 @@ THE FORMATS
         GpsDrive way.txt file format. A space seperated format file. Tested
         against GpsDrive v 1.30 found @ http://www.kraftvoll.at/software.
         Contributed by Alan Curry.
+	
+    GPSDRIVETRACK
+    
+        Format used by GpsDrive to save tracks. Like GPSDRIVE a space
+	seperated format file. See above for a link to GpsDrive.
+	Contributed by Tobias Minich.
 
     Geocaching DB
 
@@ -905,7 +911,15 @@ THE FORMATS
 		 -i gpx -f in.gpx
 	         -o bcr,index=1,name="From A to B",radius=6371012 \
 		 -F a_to_b.bcr
-	  
+	
+    OPENOFFICE
+	Tab seperated export-all (except geocahing data) file format. 
+	Intended to serve as source for number-processing applications
+	like OpenOffice, Ploticus and others. Tab was chosen as delimiter
+	because it is a) supported by both OpenOffice and Ploticus and
+	b) is not ',', so you can use 'sed -i "s/./,/g" <x>.csv' to adapt it to
+	locales where ',' is used as decimal seperator.
+	Contributed by Tobias Minich.
 
 DATA FILTERS
 
@@ -1251,3 +1265,31 @@ DATA FILTERS
 			-i gpx -f in.gpx \ 
 			-x track,pack,split=4h,title="LOG # %c" \ 
 			-o gpx -F out.gpx
+
+    DOP
+
+        This filter 'fixes' gps data by discarding points with a hdop
+        and/or vdop over a set limit. If you give both the hdop and a
+        vdop options, by default points that exceed EITHER are discarded
+        (OR). This filter processes waypoints, tracks, and routes.
+
+        HDOP (float)
+
+            Points with a hdop exceeding the given value are discarded.
+
+        VDOP (float)
+
+            Points with a vdop exceeding the given value are discarded.
+
+        HDOPANDVDOP
+
+            Only useful if both hdop and vdop are given. Now logical AND
+            is used, i.e. only points exceeding both given values are
+            discarded.
+
+            Example: gpsbabel \ 
+		-i gpx -f in.gpx \
+		-x fix,hdop=10,vdop=20,hdopandvdop \ 
+		-o gpx -F out.gpx
+
+        Contributed by Tobias Minich.
