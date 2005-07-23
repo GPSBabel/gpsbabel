@@ -6,14 +6,13 @@
 #
 #
 
-DESCRIPTION		Custom "Everything" Style
+DESCRIPTION		Tab delimitered csv useful for OpenOffice, Ploticus etc.
 
 # FILE LAYOUT DEFINITIIONS:
 #
 FIELD_DELIMITER		TAB
 RECORD_DELIMITER	NEWLINE
 BADCHARS		TAB
-FORMAT_TYPE		INTERNAL
 
 #
 # HEADER STUFF:

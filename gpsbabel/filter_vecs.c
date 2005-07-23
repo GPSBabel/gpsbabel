@@ -38,6 +38,7 @@ extern filter_vecs_t reverse_route_vecs;
 extern filter_vecs_t sort_vecs;
 extern filter_vecs_t stackfilt_vecs;
 extern filter_vecs_t trackfilter_vecs;
+extern filter_vecs_t fix_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -90,6 +91,11 @@ fl_vecs_t filter_vec_list[] = {
 		&trackfilter_vecs,
 		"track",
 		"Manipulate track lists"
+	},
+	{
+		&fix_vecs,
+		"dop",
+		"Remove unreliable points with high hdop or vdop."
 	},
         {
 		NULL,
