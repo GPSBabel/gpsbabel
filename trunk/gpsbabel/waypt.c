@@ -66,6 +66,9 @@ waypt_dupe(const waypoint *wpt)
 	if (wpt->gc_data.placer) {
                 tmp->gc_data.placer = xstrdup(wpt->gc_data.placer);
         }
+	if (wpt->gc_data.hint) {
+                tmp->gc_data.hint = xstrdup(wpt->gc_data.hint);
+        }
 
 	/*
 	 * It's important that this duplicated waypoint not appear
