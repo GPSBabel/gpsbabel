@@ -1416,7 +1416,7 @@ gpx_write(void)
 
 	setshort_length(mkshort_handle, short_length);
 
-	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
+	fprintf(ofd, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", global_opts.charset_name);
 	fprintf(ofd, "<gpx\n version=\"%s\"\n", gpx_wversion);
 	fprintf(ofd, "creator=\"GPSBabel - http://www.gpsbabel.org\"\n");
 	fprintf(ofd, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
@@ -1481,4 +1481,5 @@ ff_vecs_t gpx_vecs = {
 	gpx_write,
 	NULL, 
 	gpx_args,
+	CET_CHARSET_UTF8, 1	/* fixed */
 };

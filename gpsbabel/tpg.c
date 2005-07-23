@@ -364,5 +364,7 @@ ff_vecs_t tpg_vecs = {
 	tpg_wr_deinit,
 	tpg_read,
 	tpg_write,
-	NULL
+	NULL,
+	NULL,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

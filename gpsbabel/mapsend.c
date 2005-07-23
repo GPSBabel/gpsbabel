@@ -335,14 +335,14 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	 * them into the Mapsend file.
 	 */
 
-	tmp = str_utf8_to_ascii(sn);
+	tmp = xstrdup(sn);
 	c = tmp ? strlen(tmp) : 0;
 	fwrite(&c, 1, 1, mapsend_file_out);
 	fwrite(tmp, c, 1, mapsend_file_out);
 	if (tmp)
 		xfree(tmp);
 
-	tmp = str_utf8_to_ascii(waypointp->description);
+	tmp = waypointp->description;
 	if (tmp)
 		c = strlen(tmp);
 	else
@@ -351,8 +351,6 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	if (c > 30) c = 30;
 	fwrite(&c, 1, 1, mapsend_file_out);
 	fwrite(tmp, c, 1, mapsend_file_out);
-	if (tmp)
-		xfree(tmp);
 
 	/* #, icon, status */
 	n = ++cnt;
@@ -613,5 +611,7 @@ ff_vecs_t mapsend_vecs = {
 	mapsend_wr_deinit,
 	mapsend_read,
 	mapsend_wpt_write,
-	NULL
+	NULL,
+	NULL,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

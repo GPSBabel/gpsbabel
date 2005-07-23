@@ -571,5 +571,6 @@ ff_vecs_t xcsv_vecs = {
     xcsv_data_read,
     xcsv_data_write,
     NULL, 
-    xcsv_args
+    xcsv_args,
+    CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

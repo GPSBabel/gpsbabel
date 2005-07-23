@@ -634,4 +634,5 @@ ff_vecs_t coastexp_vecs = {
 	ce_write,
 	NULL,
 	NULL,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

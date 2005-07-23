@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <gpx
  version="1.0"
 creator="GPSBabel - http://www.gpsbabel.org"
@@ -64,8 +64,8 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </wpt>
 <wpt lat="51.314520836" lon="12.409143448">
 <time>2005-06-24T00:36:57Z</time>
-  <name>V&#xf6;lkerschlachtdenkmal</name>
-  <cmt>P+R Am V&#xf6;lkerschlachtdenkmal</cmt>
+  <name>Völkerschlachtdenkmal</name>
+  <cmt>P+R Am Völkerschlachtdenkmal</cmt>
   <desc>http://Voelkerschlachtdenkmal</desc>
   <sym>Waypoint</sym>
 </wpt>
@@ -698,8 +698,8 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   </rtept>
   <rtept lat="51.314520836" lon="12.409143448">
 <time>2005-06-24T00:36:57Z</time>
-    <name>V&#xf6;lkerschlachtdenkmal</name>
-    <cmt>P+R Am V&#xf6;lkerschlachtdenkmal</cmt>
+    <name>Völkerschlachtdenkmal</name>
+    <cmt>P+R Am Völkerschlachtdenkmal</cmt>
     <desc>http://Voelkerschlachtdenkmal</desc>
     <sym>Waypoint</sym>
   </rtept>

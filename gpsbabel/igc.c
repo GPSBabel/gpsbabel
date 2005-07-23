@@ -902,5 +902,6 @@ ff_vecs_t igc_vecs = {
     data_read,
     data_write,
     NULL, 
-    igc_args
+    igc_args,
+    CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

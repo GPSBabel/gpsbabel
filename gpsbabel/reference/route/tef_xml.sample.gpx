@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <gpx
  version="1.0"
 creator="GPSBabel - http://www.gpsbabel.org"
@@ -13,7 +13,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <desc>B2 Hofer Strasse</desc>
 </wpt>
 <wpt lat="50.393720000" lon="11.867560000">
-  <name>bei D 95183 T&#xf6;pen </name>
+  <name>bei D 95183 Töpen </name>
   <cmt>B2\Hofer Strasse</cmt>
   <desc>B2\Hofer Strasse</desc>
 </wpt>
@@ -43,12 +43,12 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <desc>L2357</desc>
 </wpt>
 <wpt lat="50.558740000" lon="11.736880000">
-  <name>bei D 07907 Schleiz/M&#xf6;schlitz </name>
+  <name>bei D 07907 Schleiz/Möschlitz </name>
   <cmt>L2357</cmt>
   <desc>L2357</desc>
 </wpt>
 <wpt lat="50.608090000" lon="11.653350000">
-  <name>bei D 07924 Ziegenr&#xfc;ck </name>
+  <name>bei D 07924 Ziegenrück </name>
   <cmt>L2350\Plothental</cmt>
   <desc>L2350\Plothental</desc>
 </wpt>
@@ -64,13 +64,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </wpt>
 <wpt lat="50.568210000" lon="11.907330000">
   <name>bei D 07907 Schleiz/Langenbuch </name>
-  <cmt>K304\L&#xf6;ssauer Strasse</cmt>
-  <desc>K304\L&#xf6;ssauer Strasse</desc>
+  <cmt>K304\Lössauer Strasse</cmt>
+  <desc>K304\Lössauer Strasse</desc>
 </wpt>
 <wpt lat="50.575210000" lon="11.991270000">
   <name>bei D 07952 Pausa/Oberreichenau </name>
-  <cmt>S316\Am M&#xfc;hlgraben</cmt>
-  <desc>S316\Am M&#xfc;hlgraben</desc>
+  <cmt>S316\Am Mühlgraben</cmt>
+  <desc>S316\Am Mühlgraben</desc>
 </wpt>
 <wpt lat="50.541330000" lon="12.081960000">
   <name>bei D 08548 Syrau </name>
@@ -78,7 +78,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <desc>B282/E49\Hauptstrasse</desc>
 </wpt>
 <wpt lat="50.504660000" lon="12.142140000">
-  <name>bei D 08525 Plauen/Prei&#xdf;elp&#xf6;hl </name>
+  <name>bei D 08525 Plauen/Preißelpöhl </name>
   <cmt>Martin-Luther-Strasse</cmt>
   <desc>Martin-Luther-Strasse</desc>
 </wpt>
@@ -88,14 +88,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <desc>B173\Hauptstrasse</desc>
 </wpt>
 <wpt lat="50.546070000" lon="12.218730000">
-  <name>bei D 08543 P&#xf6;hl/Helmsgr&#xfc;n </name>
-  <cmt>K7880\Helmsgr&#xfc;n-Dorfstrasse</cmt>
-  <desc>K7880\Helmsgr&#xfc;n-Dorfstrasse</desc>
+  <name>bei D 08543 Pöhl/Helmsgrün </name>
+  <cmt>K7880\Helmsgrün-Dorfstrasse</cmt>
+  <desc>K7880\Helmsgrün-Dorfstrasse</desc>
 </wpt>
 <wpt lat="50.566740000" lon="12.226250000">
-  <name>bei D 08543 Herlasgr&#xfc;n </name>
-  <cmt>K7811\Herlasgr&#xfc;n-Dorfstrasse</cmt>
-  <desc>K7811\Herlasgr&#xfc;n-Dorfstrasse</desc>
+  <name>bei D 08543 Herlasgrün </name>
+  <cmt>K7811\Herlasgrün-Dorfstrasse</cmt>
+  <desc>K7811\Herlasgrün-Dorfstrasse</desc>
 </wpt>
 <wpt lat="50.624630000" lon="12.202870000">
   <name>bei D 07985 Elsterberg/Reuth </name>
@@ -128,7 +128,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <desc>B173</desc>
 </wpt>
 <wpt lat="50.676090000" lon="12.405090000">
-  <name>D 08115 Sch&#xf6;nfels </name>
+  <name>D 08115 Schönfels </name>
   <cmt>K9351\Zwickauer Strasse</cmt>
   <desc>K9351\Zwickauer Strasse</desc>
 </wpt>
@@ -154,23 +154,23 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </wpt>
 <wpt lat="50.508270000" lon="12.397900000">
   <name>bei D 08209 Auerbach </name>
-  <cmt>B169\G&#xf6;ltzschtalstrasse</cmt>
-  <desc>B169\G&#xf6;ltzschtalstrasse</desc>
+  <cmt>B169\Göltzschtalstrasse</cmt>
+  <desc>B169\Göltzschtalstrasse</desc>
 </wpt>
 <wpt lat="50.479200000" lon="12.424870000">
   <name>bei D 08209 Auerbach/Beerheide </name>
-  <cmt>K7833\Rempesgr&#xfc;ner Strasse</cmt>
-  <desc>K7833\Rempesgr&#xfc;ner Strasse</desc>
+  <cmt>K7833\Rempesgrüner Strasse</cmt>
+  <desc>K7833\Rempesgrüner Strasse</desc>
 </wpt>
 <wpt lat="50.503030000" lon="12.533360000">
-  <name>D 08304 Sch&#xf6;nheide </name>
+  <name>D 08304 Schönheide </name>
   <cmt>S278\Hauptstrasse</cmt>
   <desc>S278\Hauptstrasse</desc>
 </wpt>
 <wpt lat="50.458250000" lon="12.488440000">
-  <name>bei D 08262 Tannenbergsthal/J&#xe4;gersgr&#xfc;n </name>
-  <cmt>B283\Sch&#xf6;nheider Strasse</cmt>
-  <desc>B283\Sch&#xf6;nheider Strasse</desc>
+  <name>bei D 08262 Tannenbergsthal/Jägersgrün </name>
+  <cmt>B283\Schönheider Strasse</cmt>
+  <desc>B283\Schönheider Strasse</desc>
 </wpt>
 <wpt lat="50.434530000" lon="12.461120000">
   <name>bei D 08262 Tannenbergsthal </name>
@@ -178,22 +178,22 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <desc>B283\Klingenthaler Strasse</desc>
 </wpt>
 <wpt lat="50.384530000" lon="12.456220000">
-  <name>bei D 08248 Klingenthal/Brunnd&#xf6;bra </name>
+  <name>bei D 08248 Klingenthal/Brunndöbra </name>
   <cmt>S304\Falkensteiner Strasse</cmt>
   <desc>S304\Falkensteiner Strasse</desc>
 </wpt>
 <wpt lat="50.419640000" lon="12.399730000">
-  <name>bei D 08223 Gr&#xfc;nbach-Muldenberg </name>
+  <name>bei D 08223 Grünbach-Muldenberg </name>
   <cmt>S302/S304</cmt>
   <desc>S302/S304</desc>
 </wpt>
 <wpt lat="50.446180000" lon="12.364590000">
-  <name>bei D 08223 Gr&#xfc;nbach </name>
+  <name>bei D 08223 Grünbach </name>
   <cmt>S304\Bahnhofstrasse</cmt>
   <desc>S304\Bahnhofstrasse</desc>
 </wpt>
 <wpt lat="50.400420000" lon="12.337200000">
-  <name>bei D 08261 Sch&#xf6;neck </name>
+  <name>bei D 08261 Schöneck </name>
   <cmt>S301</cmt>
   <desc>S301</desc>
 </wpt>
@@ -203,7 +203,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <desc>B283</desc>
 </wpt>
 <wpt lat="50.271540000" lon="12.321940000">
-  <name>bei D 08258 Landw&#xfc;st </name>
+  <name>bei D 08258 Landwüst </name>
   <cmt>K7844\Rauner Strasse</cmt>
   <desc>K7844\Rauner Strasse</desc>
 </wpt>
@@ -223,7 +223,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <desc>K7854\Oelsnitzer Strasse</desc>
 </wpt>
 <wpt lat="50.404490000" lon="12.063910000">
-  <name>bei D 08538 Burgstein/Dr&#xf6;da </name>
+  <name>bei D 08538 Burgstein/Dröda </name>
   <cmt>S310\Bobenneukirchener Strasse</cmt>
   <desc>S310\Bobenneukirchener Strasse</desc>
 </wpt>
@@ -256,7 +256,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>B2</desc>
   </rtept>
   <rtept lat="50.393720000" lon="11.867560000">
-    <name>bei D 95183 T&#xf6;pen </name>
+    <name>bei D 95183 Töpen </name>
     <cmt>B2\Hofer Strasse</cmt>
     <desc>B2\Hofer Strasse</desc>
   </rtept>
@@ -289,19 +289,19 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <name>rechts abbiegen</name>
   </rtept>
   <rtept lat="50.475460000" lon="11.652270000">
-    <name>in Sch&#xf6;nbrunn links abbiegen auf Sch&#xf6;nbrunn</name>
-    <cmt>Sch&#xf6;nbrunn</cmt>
-    <desc>Sch&#xf6;nbrunn</desc>
+    <name>in Schönbrunn links abbiegen auf Schönbrunn</name>
+    <cmt>Schönbrunn</cmt>
+    <desc>Schönbrunn</desc>
   </rtept>
   <rtept lat="50.475750000" lon="11.652890000">
-    <name>links abbiegen auf Sch&#xf6;nbrunn</name>
-    <cmt>Sch&#xf6;nbrunn</cmt>
-    <desc>Sch&#xf6;nbrunn</desc>
+    <name>links abbiegen auf Schönbrunn</name>
+    <cmt>Schönbrunn</cmt>
+    <desc>Schönbrunn</desc>
   </rtept>
   <rtept lat="50.476670000" lon="11.652930000">
-    <name>halb rechts halten auf Sch&#xf6;nbrunn</name>
-    <cmt>Sch&#xf6;nbrunn</cmt>
-    <desc>Sch&#xf6;nbrunn</desc>
+    <name>halb rechts halten auf Schönbrunn</name>
+    <cmt>Schönbrunn</cmt>
+    <desc>Schönbrunn</desc>
   </rtept>
   <rtept lat="50.477110000" lon="11.653620000">
     <name>geradeaus weiter auf L1095 </name>
@@ -415,7 +415,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>L2357</desc>
   </rtept>
   <rtept lat="50.558740000" lon="11.736880000">
-    <name>bei D 07907 Schleiz/M&#xf6;schlitz </name>
+    <name>bei D 07907 Schleiz/Möschlitz </name>
     <cmt>L2357</cmt>
     <desc>L2357</desc>
   </rtept>
@@ -423,9 +423,9 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <name>links abbiegen</name>
   </rtept>
   <rtept lat="50.570230000" lon="11.729630000">
-    <name>in Grochwitz halb rechts halten auf M&#xfc;hlenstrasse</name>
-    <cmt>M&#xfc;hlenstrasse</cmt>
-    <desc>M&#xfc;hlenstrasse</desc>
+    <name>in Grochwitz halb rechts halten auf Mühlenstrasse</name>
+    <cmt>Mühlenstrasse</cmt>
+    <desc>Mühlenstrasse</desc>
   </rtept>
   <rtept lat="50.571140000" lon="11.730220000">
     <name>geradeaus weiter auf Sackgasse</name>
@@ -461,7 +461,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>L1103</desc>
   </rtept>
   <rtept lat="50.605660000" lon="11.651000000">
-    <name>in Ziegenr&#xfc;ck halb links halten auf Schleizer Strasse (L1103)</name>
+    <name>in Ziegenrück halb links halten auf Schleizer Strasse (L1103)</name>
     <cmt>Schleizer Strasse (L1103)</cmt>
     <desc>Schleizer Strasse (L1103)</desc>
   </rtept>
@@ -471,7 +471,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Plothental (L2350)</desc>
   </rtept>
   <rtept lat="50.608090000" lon="11.653350000">
-    <name>bei D 07924 Ziegenr&#xfc;ck </name>
+    <name>bei D 07924 Ziegenrück </name>
     <cmt>L2350\Plothental</cmt>
     <desc>L2350\Plothental</desc>
   </rtept>
@@ -526,25 +526,25 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>B2</desc>
   </rtept>
   <rtept lat="50.603620000" lon="11.823910000">
-    <name>in Oettersdorf links abbiegen auf L&#xf6;hmaer Weg  (K301)</name>
-    <cmt>L&#xf6;hmaer Weg  (K301)</cmt>
-    <desc>L&#xf6;hmaer Weg  (K301)</desc>
+    <name>in Oettersdorf links abbiegen auf Löhmaer Weg  (K301)</name>
+    <cmt>Löhmaer Weg  (K301)</cmt>
+    <desc>Löhmaer Weg  (K301)</desc>
   </rtept>
   <rtept lat="50.604720000" lon="11.825820000">
-    <name>rechts abbiegen auf L&#xf6;hmaer Weg  (K301)</name>
-    <cmt>L&#xf6;hmaer Weg  (K301)</cmt>
-    <desc>L&#xf6;hmaer Weg  (K301)</desc>
+    <name>rechts abbiegen auf Löhmaer Weg  (K301)</name>
+    <cmt>Löhmaer Weg  (K301)</cmt>
+    <desc>Löhmaer Weg  (K301)</desc>
   </rtept>
   <rtept lat="50.602840000" lon="11.828100000">
-    <name>links abbiegen auf L&#xf6;hmaer Weg (K301)</name>
-    <cmt>L&#xf6;hmaer Weg (K301)</cmt>
-    <desc>L&#xf6;hmaer Weg (K301)</desc>
+    <name>links abbiegen auf Löhmaer Weg (K301)</name>
+    <cmt>Löhmaer Weg (K301)</cmt>
+    <desc>Löhmaer Weg (K301)</desc>
   </rtept>
   <rtept lat="50.614300000" lon="11.849910000">
     <name>rechts abbiegen</name>
   </rtept>
   <rtept lat="50.611660000" lon="11.851660000">
-    <name>in L&#xf6;hma links abbiegen auf Ortsstrasse</name>
+    <name>in Löhma links abbiegen auf Ortsstrasse</name>
     <cmt>Ortsstrasse</cmt>
     <desc>Ortsstrasse</desc>
   </rtept>
@@ -592,12 +592,12 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Dorfstrasse</desc>
   </rtept>
   <rtept lat="50.587800000" lon="11.886210000">
-    <name>in L&#xf6;ssau links abbiegen</name>
+    <name>in Lössau links abbiegen</name>
   </rtept>
   <rtept lat="50.568210000" lon="11.907330000">
     <name>bei D 07907 Schleiz/Langenbuch </name>
-    <cmt>K304\L&#xf6;ssauer Strasse</cmt>
-    <desc>K304\L&#xf6;ssauer Strasse</desc>
+    <cmt>K304\Lössauer Strasse</cmt>
+    <desc>K304\Lössauer Strasse</desc>
   </rtept>
   <rtept lat="50.566910000" lon="11.907870000">
     <name>in Langenbuch links abbiegen auf Thierbacher Strasse (L2348)</name>
@@ -616,14 +616,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Plauensche Strasse (S316)</desc>
   </rtept>
   <rtept lat="50.576240000" lon="11.990570000">
-    <name>in Oberreichenau halb links halten auf Am M&#xfc;hlgraben (S316)</name>
-    <cmt>Am M&#xfc;hlgraben (S316)</cmt>
-    <desc>Am M&#xfc;hlgraben (S316)</desc>
+    <name>in Oberreichenau halb links halten auf Am Mühlgraben (S316)</name>
+    <cmt>Am Mühlgraben (S316)</cmt>
+    <desc>Am Mühlgraben (S316)</desc>
   </rtept>
   <rtept lat="50.575210000" lon="11.991270000">
     <name>bei D 07952 Pausa/Oberreichenau </name>
-    <cmt>S316\Am M&#xfc;hlgraben</cmt>
-    <desc>S316\Am M&#xfc;hlgraben</desc>
+    <cmt>S316\Am Mühlgraben</cmt>
+    <desc>S316\Am Mühlgraben</desc>
   </rtept>
   <rtept lat="50.542020000" lon="12.081040000">
     <name>in Syrau halb rechts halten auf B282/E49 Hauptstrasse</name>
@@ -651,7 +651,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Martin-Luther-Strasse</desc>
   </rtept>
   <rtept lat="50.504660000" lon="12.142140000">
-    <name>bei D 08525 Plauen/Prei&#xdf;elp&#xf6;hl </name>
+    <name>bei D 08525 Plauen/Preißelpöhl </name>
     <cmt>Martin-Luther-Strasse</cmt>
     <desc>Martin-Luther-Strasse</desc>
   </rtept>
@@ -666,9 +666,9 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>B173 Hammerstrasse</desc>
   </rtept>
   <rtept lat="50.497700000" lon="12.182310000">
-    <name>links abbiegen auf Voigtsgr&#xfc;ner Weg (K6605)</name>
-    <cmt>Voigtsgr&#xfc;ner Weg (K6605)</cmt>
-    <desc>Voigtsgr&#xfc;ner Weg (K6605)</desc>
+    <name>links abbiegen auf Voigtsgrüner Weg (K6605)</name>
+    <cmt>Voigtsgrüner Weg (K6605)</cmt>
+    <desc>Voigtsgrüner Weg (K6605)</desc>
   </rtept>
   <rtept lat="50.506420000" lon="12.194890000">
     <name>rechts abbiegen auf Zum Plom</name>
@@ -709,17 +709,17 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>B173 Hauptstrasse</desc>
   </rtept>
   <rtept lat="50.524530000" lon="12.244410000">
-    <name>links abbiegen auf Gansgr&#xfc;ner Strasse (K7880)</name>
-    <cmt>Gansgr&#xfc;ner Strasse (K7880)</cmt>
-    <desc>Gansgr&#xfc;ner Strasse (K7880)</desc>
+    <name>links abbiegen auf Gansgrüner Strasse (K7880)</name>
+    <cmt>Gansgrüner Strasse (K7880)</cmt>
+    <desc>Gansgrüner Strasse (K7880)</desc>
   </rtept>
   <rtept lat="50.524640000" lon="12.244230000">
-    <name>links abbiegen auf Gansgr&#xfc;ner Strasse (K7880)</name>
-    <cmt>Gansgr&#xfc;ner Strasse (K7880)</cmt>
-    <desc>Gansgr&#xfc;ner Strasse (K7880)</desc>
+    <name>links abbiegen auf Gansgrüner Strasse (K7880)</name>
+    <cmt>Gansgrüner Strasse (K7880)</cmt>
+    <desc>Gansgrüner Strasse (K7880)</desc>
   </rtept>
   <rtept lat="50.528170000" lon="12.221450000">
-    <name>in Gansgr&#xfc;n links abbiegen auf Dorfstrasse</name>
+    <name>in Gansgrün links abbiegen auf Dorfstrasse</name>
     <cmt>Dorfstrasse</cmt>
     <desc>Dorfstrasse</desc>
   </rtept>
@@ -737,37 +737,37 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <name>halb links halten</name>
   </rtept>
   <rtept lat="50.546070000" lon="12.218730000">
-    <name>bei D 08543 P&#xf6;hl/Helmsgr&#xfc;n </name>
-    <cmt>K7880\Helmsgr&#xfc;n-Dorfstrasse</cmt>
-    <desc>K7880\Helmsgr&#xfc;n-Dorfstrasse</desc>
+    <name>bei D 08543 Pöhl/Helmsgrün </name>
+    <cmt>K7880\Helmsgrün-Dorfstrasse</cmt>
+    <desc>K7880\Helmsgrün-Dorfstrasse</desc>
   </rtept>
   <rtept lat="50.548640000" lon="12.219230000">
-    <name>in Helmsgr&#xfc;n halb rechts halten</name>
+    <name>in Helmsgrün halb rechts halten</name>
   </rtept>
   <rtept lat="50.566180000" lon="12.225640000">
-    <name>in Herlasgr&#xfc;n rechts abbiegen auf Herlasgr&#xfc;n-Dorfstrasse (K7811)</name>
-    <cmt>Herlasgr&#xfc;n-Dorfstrasse (K7811)</cmt>
-    <desc>Herlasgr&#xfc;n-Dorfstrasse (K7811)</desc>
+    <name>in Herlasgrün rechts abbiegen auf Herlasgrün-Dorfstrasse (K7811)</name>
+    <cmt>Herlasgrün-Dorfstrasse (K7811)</cmt>
+    <desc>Herlasgrün-Dorfstrasse (K7811)</desc>
   </rtept>
   <rtept lat="50.566740000" lon="12.226250000">
-    <name>bei D 08543 Herlasgr&#xfc;n </name>
-    <cmt>K7811\Herlasgr&#xfc;n-Dorfstrasse</cmt>
-    <desc>K7811\Herlasgr&#xfc;n-Dorfstrasse</desc>
+    <name>bei D 08543 Herlasgrün </name>
+    <cmt>K7811\Herlasgrün-Dorfstrasse</cmt>
+    <desc>K7811\Herlasgrün-Dorfstrasse</desc>
   </rtept>
   <rtept lat="50.567370000" lon="12.227000000">
-    <name>links abbiegen auf Herlasgr&#xfc;n-Christgr&#xfc;ner Strasse</name>
-    <cmt>Herlasgr&#xfc;n-Christgr&#xfc;ner Strasse</cmt>
-    <desc>Herlasgr&#xfc;n-Christgr&#xfc;ner Strasse</desc>
+    <name>links abbiegen auf Herlasgrün-Christgrüner Strasse</name>
+    <cmt>Herlasgrün-Christgrüner Strasse</cmt>
+    <desc>Herlasgrün-Christgrüner Strasse</desc>
   </rtept>
   <rtept lat="50.569600000" lon="12.224910000">
-    <name>geradeaus weiter auf Christgr&#xfc;ner Strasse</name>
-    <cmt>Christgr&#xfc;ner Strasse</cmt>
-    <desc>Christgr&#xfc;ner Strasse</desc>
+    <name>geradeaus weiter auf Christgrüner Strasse</name>
+    <cmt>Christgrüner Strasse</cmt>
+    <desc>Christgrüner Strasse</desc>
   </rtept>
   <rtept lat="50.575660000" lon="12.221830000">
-    <name>rechts abbiegen auf Drecksch&#xe4;nke (S297)</name>
-    <cmt>Drecksch&#xe4;nke (S297)</cmt>
-    <desc>Drecksch&#xe4;nke (S297)</desc>
+    <name>rechts abbiegen auf Dreckschänke (S297)</name>
+    <cmt>Dreckschänke (S297)</cmt>
+    <desc>Dreckschänke (S297)</desc>
   </rtept>
   <rtept lat="50.578200000" lon="12.231830000">
     <name>links abbiegen auf S298</name>
@@ -775,13 +775,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>S298</desc>
   </rtept>
   <rtept lat="50.590870000" lon="12.216020000">
-    <name>in Reimersgr&#xfc;n links abbiegen</name>
+    <name>in Reimersgrün links abbiegen</name>
   </rtept>
   <rtept lat="50.598770000" lon="12.198880000">
     <name>halb rechts halten</name>
   </rtept>
   <rtept lat="50.605680000" lon="12.187530000">
-    <name>in Cosch&#xfc;tz rechts abbiegen auf Friedensstrasse (K7887)</name>
+    <name>in Coschütz rechts abbiegen auf Friedensstrasse (K7887)</name>
     <cmt>Friedensstrasse (K7887)</cmt>
     <desc>Friedensstrasse (K7887)</desc>
   </rtept>
@@ -841,9 +841,9 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>B173/B94 Klinkhardtstrasse</desc>
   </rtept>
   <rtept lat="50.624730000" lon="12.291980000">
-    <name>links abbiegen auf B173/B94 Dr.-K&#xfc;lz-Strasse</name>
-    <cmt>B173/B94 Dr.-K&#xfc;lz-Strasse</cmt>
-    <desc>B173/B94 Dr.-K&#xfc;lz-Strasse</desc>
+    <name>links abbiegen auf B173/B94 Dr.-Külz-Strasse</name>
+    <cmt>B173/B94 Dr.-Külz-Strasse</cmt>
+    <desc>B173/B94 Dr.-Külz-Strasse</desc>
   </rtept>
   <rtept lat="50.628460000" lon="12.285400000">
     <name>rechts abbiegen auf B173 Friedensstrasse</name>
@@ -871,7 +871,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>B173</desc>
   </rtept>
   <rtept lat="50.676760000" lon="12.408650000">
-    <name>in Sch&#xf6;nfels links abbiegen auf Stenner Strasse</name>
+    <name>in Schönfels links abbiegen auf Stenner Strasse</name>
     <cmt>Stenner Strasse</cmt>
     <desc>Stenner Strasse</desc>
   </rtept>
@@ -881,7 +881,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Zwickauer Strasse (K9351)</desc>
   </rtept>
   <rtept lat="50.676090000" lon="12.405090000">
-    <name>D 08115 Sch&#xf6;nfels </name>
+    <name>D 08115 Schönfels </name>
     <cmt>K9351\Zwickauer Strasse</cmt>
     <desc>K9351\Zwickauer Strasse</desc>
   </rtept>
@@ -916,9 +916,9 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>B173 Dr.-Friedrichs-Ring</desc>
   </rtept>
   <rtept lat="50.714820000" lon="12.499450000">
-    <name>geradeaus weiter auf B173 Gl&#xfc;ck-Auf-Br&#xfc;cke/&#xc4;ussere Dresdner Strasse</name>
-    <cmt>B173 Gl&#xfc;ck-Auf-Br&#xfc;cke/&#xc4;ussere Dresdner Strasse</cmt>
-    <desc>B173 Gl&#xfc;ck-Auf-Br&#xfc;cke/&#xc4;ussere Dresdner Strasse</desc>
+    <name>geradeaus weiter auf B173 Glück-Auf-Brücke/Äussere Dresdner Strasse</name>
+    <cmt>B173 Glück-Auf-Brücke/Äussere Dresdner Strasse</cmt>
+    <desc>B173 Glück-Auf-Brücke/Äussere Dresdner Strasse</desc>
   </rtept>
   <rtept lat="50.745140000" lon="12.596660000">
     <name>rechts abbiegen auf Dresdner Strasse</name>
@@ -926,9 +926,9 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Dresdner Strasse</desc>
   </rtept>
   <rtept lat="50.747100000" lon="12.606600000">
-    <name>geradeaus weiter auf &#xc4;ussere Zwickauer Strasse</name>
-    <cmt>&#xc4;ussere Zwickauer Strasse</cmt>
-    <desc>&#xc4;ussere Zwickauer Strasse</desc>
+    <name>geradeaus weiter auf Äussere Zwickauer Strasse</name>
+    <cmt>Äussere Zwickauer Strasse</cmt>
+    <desc>Äussere Zwickauer Strasse</desc>
   </rtept>
   <rtept lat="50.754700000" lon="12.626850000">
     <name>in Lichtenstein/Sa. geradeaus weiter auf Innere Zwickauer Strasse</name>
@@ -1050,12 +1050,12 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>B169 Kobaltstrasse</desc>
   </rtept>
   <rtept lat="50.546590000" lon="12.576330000">
-    <name>in Hundsh&#xfc;bel halb rechts halten auf B169 Hauptstrasse</name>
+    <name>in Hundshübel halb rechts halten auf B169 Hauptstrasse</name>
     <cmt>B169 Hauptstrasse</cmt>
     <desc>B169 Hauptstrasse</desc>
   </rtept>
   <rtept lat="50.533910000" lon="12.527210000">
-    <name>in St&#xfc;tzengr&#xfc;n rechts abbiegen auf B169 Auerbacher Strasse</name>
+    <name>in Stützengrün rechts abbiegen auf B169 Auerbacher Strasse</name>
     <cmt>B169 Auerbacher Strasse</cmt>
     <desc>B169 Auerbacher Strasse</desc>
   </rtept>
@@ -1076,13 +1076,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   </rtept>
   <rtept lat="50.508270000" lon="12.397900000">
     <name>bei D 08209 Auerbach </name>
-    <cmt>B169\G&#xf6;ltzschtalstrasse</cmt>
-    <desc>B169\G&#xf6;ltzschtalstrasse</desc>
+    <cmt>B169\Göltzschtalstrasse</cmt>
+    <desc>B169\Göltzschtalstrasse</desc>
   </rtept>
   <rtept lat="50.502860000" lon="12.397930000">
-    <name>in Auerbach/Vogtl. links abbiegen auf B169 G&#xf6;ltzschtalstrasse</name>
-    <cmt>B169 G&#xf6;ltzschtalstrasse</cmt>
-    <desc>B169 G&#xf6;ltzschtalstrasse</desc>
+    <name>in Auerbach/Vogtl. links abbiegen auf B169 Göltzschtalstrasse</name>
+    <cmt>B169 Göltzschtalstrasse</cmt>
+    <desc>B169 Göltzschtalstrasse</desc>
   </rtept>
   <rtept lat="50.489000000" lon="12.393790000">
     <name>in Ellefeld links abbiegen auf Neuberg</name>
@@ -1106,8 +1106,8 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   </rtept>
   <rtept lat="50.479200000" lon="12.424870000">
     <name>bei D 08209 Auerbach/Beerheide </name>
-    <cmt>K7833\Rempesgr&#xfc;ner Strasse</cmt>
-    <desc>K7833\Rempesgr&#xfc;ner Strasse</desc>
+    <cmt>K7833\Rempesgrüner Strasse</cmt>
+    <desc>K7833\Rempesgrüner Strasse</desc>
   </rtept>
   <rtept lat="50.478470000" lon="12.425460000">
     <name>in Beerheide links abbiegen auf Strasse des Friedens (K7826)</name>
@@ -1115,7 +1115,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Strasse des Friedens (K7826)</desc>
   </rtept>
   <rtept lat="50.485670000" lon="12.433050000">
-    <name>in Hohengr&#xfc;n rechts abbiegen auf Klingenthaler Strasse (S300)</name>
+    <name>in Hohengrün rechts abbiegen auf Klingenthaler Strasse (S300)</name>
     <cmt>Klingenthaler Strasse (S300)</cmt>
     <desc>Klingenthaler Strasse (S300)</desc>
   </rtept>
@@ -1128,17 +1128,17 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Schallerbachstrasse (K7822)</desc>
   </rtept>
   <rtept lat="50.500210000" lon="12.435830000">
-    <name>in Brunn rechts abbiegen auf Sch&#xf6;nheider Strasse (S278)</name>
-    <cmt>Sch&#xf6;nheider Strasse (S278)</cmt>
-    <desc>Sch&#xf6;nheider Strasse (S278)</desc>
+    <name>in Brunn rechts abbiegen auf Schönheider Strasse (S278)</name>
+    <cmt>Schönheider Strasse (S278)</cmt>
+    <desc>Schönheider Strasse (S278)</desc>
   </rtept>
   <rtept lat="50.505090000" lon="12.522040000">
-    <name>in Sch&#xf6;nheide halb rechts halten auf Hauptstrasse (S278)</name>
+    <name>in Schönheide halb rechts halten auf Hauptstrasse (S278)</name>
     <cmt>Hauptstrasse (S278)</cmt>
     <desc>Hauptstrasse (S278)</desc>
   </rtept>
   <rtept lat="50.503030000" lon="12.533360000">
-    <name>D 08304 Sch&#xf6;nheide </name>
+    <name>D 08304 Schönheide </name>
     <cmt>S278\Hauptstrasse</cmt>
     <desc>S278\Hauptstrasse</desc>
   </rtept>
@@ -1163,14 +1163,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Am Filz</desc>
   </rtept>
   <rtept lat="50.462790000" lon="12.490730000">
-    <name>geradeaus weiter auf B283 Sch&#xf6;nheider Strasse</name>
-    <cmt>B283 Sch&#xf6;nheider Strasse</cmt>
-    <desc>B283 Sch&#xf6;nheider Strasse</desc>
+    <name>geradeaus weiter auf B283 Schönheider Strasse</name>
+    <cmt>B283 Schönheider Strasse</cmt>
+    <desc>B283 Schönheider Strasse</desc>
   </rtept>
   <rtept lat="50.458250000" lon="12.488440000">
-    <name>bei D 08262 Tannenbergsthal/J&#xe4;gersgr&#xfc;n </name>
-    <cmt>B283\Sch&#xf6;nheider Strasse</cmt>
-    <desc>B283\Sch&#xf6;nheider Strasse</desc>
+    <name>bei D 08262 Tannenbergsthal/Jägersgrün </name>
+    <cmt>B283\Schönheider Strasse</cmt>
+    <desc>B283\Schönheider Strasse</desc>
   </rtept>
   <rtept lat="50.434530000" lon="12.461120000">
     <name>bei D 08262 Tannenbergsthal </name>
@@ -1193,12 +1193,12 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Falkensteiner Strasse (S304)</desc>
   </rtept>
   <rtept lat="50.384530000" lon="12.456220000">
-    <name>bei D 08248 Klingenthal/Brunnd&#xf6;bra </name>
+    <name>bei D 08248 Klingenthal/Brunndöbra </name>
     <cmt>S304\Falkensteiner Strasse</cmt>
     <desc>S304\Falkensteiner Strasse</desc>
   </rtept>
   <rtept lat="50.419640000" lon="12.399730000">
-    <name>bei D 08223 Gr&#xfc;nbach-Muldenberg </name>
+    <name>bei D 08223 Grünbach-Muldenberg </name>
     <cmt>S302/S304</cmt>
     <desc>S302/S304</desc>
   </rtept>
@@ -1208,37 +1208,37 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>S304</desc>
   </rtept>
   <rtept lat="50.446180000" lon="12.364590000">
-    <name>bei D 08223 Gr&#xfc;nbach </name>
+    <name>bei D 08223 Grünbach </name>
     <cmt>S304\Bahnhofstrasse</cmt>
     <desc>S304\Bahnhofstrasse</desc>
   </rtept>
   <rtept lat="50.449330000" lon="12.362170000">
-    <name>in Gr&#xfc;nbach links abbiegen auf Neust&#xe4;dter Strasse (K7835)</name>
-    <cmt>Neust&#xe4;dter Strasse (K7835)</cmt>
-    <desc>Neust&#xe4;dter Strasse (K7835)</desc>
+    <name>in Grünbach links abbiegen auf Neustädter Strasse (K7835)</name>
+    <cmt>Neustädter Strasse (K7835)</cmt>
+    <desc>Neustädter Strasse (K7835)</desc>
   </rtept>
   <rtept lat="50.449520000" lon="12.361460000">
-    <name>links abbiegen auf Siehdichf&#xfc;rer Strasse (K7835)</name>
-    <cmt>Siehdichf&#xfc;rer Strasse (K7835)</cmt>
-    <desc>Siehdichf&#xfc;rer Strasse (K7835)</desc>
+    <name>links abbiegen auf Siehdichfürer Strasse (K7835)</name>
+    <cmt>Siehdichfürer Strasse (K7835)</cmt>
+    <desc>Siehdichfürer Strasse (K7835)</desc>
   </rtept>
   <rtept lat="50.442120000" lon="12.331960000">
-    <name>in Neudorf links abbiegen auf Sch&#xf6;necker Strasse (S301)</name>
-    <cmt>Sch&#xf6;necker Strasse (S301)</cmt>
-    <desc>Sch&#xf6;necker Strasse (S301)</desc>
+    <name>in Neudorf links abbiegen auf Schönecker Strasse (S301)</name>
+    <cmt>Schönecker Strasse (S301)</cmt>
+    <desc>Schönecker Strasse (S301)</desc>
   </rtept>
   <rtept lat="50.438410000" lon="12.333160000">
-    <name>links abbiegen auf Sch&#xf6;necker Strasse (S301)</name>
-    <cmt>Sch&#xf6;necker Strasse (S301)</cmt>
-    <desc>Sch&#xf6;necker Strasse (S301)</desc>
+    <name>links abbiegen auf Schönecker Strasse (S301)</name>
+    <cmt>Schönecker Strasse (S301)</cmt>
+    <desc>Schönecker Strasse (S301)</desc>
   </rtept>
   <rtept lat="50.400420000" lon="12.337200000">
-    <name>bei D 08261 Sch&#xf6;neck </name>
+    <name>bei D 08261 Schöneck </name>
     <cmt>S301</cmt>
     <desc>S301</desc>
   </rtept>
   <rtept lat="50.396910000" lon="12.337530000">
-    <name>in Sch&#xf6;neck/Vogtl. rechts abbiegen auf Falkensteiner Strasse (S301/S302)</name>
+    <name>in Schöneck/Vogtl. rechts abbiegen auf Falkensteiner Strasse (S301/S302)</name>
     <cmt>Falkensteiner Strasse (S301/S302)</cmt>
     <desc>Falkensteiner Strasse (S301/S302)</desc>
   </rtept>
@@ -1256,9 +1256,9 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <name>einfahren in Kreisverkehr </name>
   </rtept>
   <rtept lat="50.389490000" lon="12.349660000">
-    <name>2. M&#xf6;glichkeit aus Kreisverkehr ausfahren auf K&#xe4;rnerstrasse (S305)</name>
-    <cmt>K&#xe4;rnerstrasse (S305)</cmt>
-    <desc>K&#xe4;rnerstrasse (S305)</desc>
+    <name>2. Möglichkeit aus Kreisverkehr ausfahren auf Kärnerstrasse (S305)</name>
+    <cmt>Kärnerstrasse (S305)</cmt>
+    <desc>Kärnerstrasse (S305)</desc>
   </rtept>
   <rtept lat="50.343070000" lon="12.370580000">
     <name>rechts abbiegen auf B283</name>
@@ -1281,9 +1281,9 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Am Bahnhof </desc>
   </rtept>
   <rtept lat="50.307980000" lon="12.302170000">
-    <name>links abbiegen auf Str&#xe4;ssler Berg</name>
-    <cmt>Str&#xe4;ssler Berg</cmt>
-    <desc>Str&#xe4;ssler Berg</desc>
+    <name>links abbiegen auf Strässler Berg</name>
+    <cmt>Strässler Berg</cmt>
+    <desc>Strässler Berg</desc>
   </rtept>
   <rtept lat="50.304230000" lon="12.298880000">
     <name>geradeaus weiter auf Siebenbrunner Strasse</name>
@@ -1291,24 +1291,24 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Siebenbrunner Strasse</desc>
   </rtept>
   <rtept lat="50.298960000" lon="12.297280000">
-    <name>in Str&#xe4;ssel links abbiegen auf B&#xf6;hmische Strasse (K7846)</name>
-    <cmt>B&#xf6;hmische Strasse (K7846)</cmt>
-    <desc>B&#xf6;hmische Strasse (K7846)</desc>
+    <name>in Strässel links abbiegen auf Böhmische Strasse (K7846)</name>
+    <cmt>Böhmische Strasse (K7846)</cmt>
+    <desc>Böhmische Strasse (K7846)</desc>
   </rtept>
   <rtept lat="50.284250000" lon="12.313970000">
-    <name>in Sch&#xf6;nlind rechts abbiegen auf Markneukirchner Strasse (K7843)</name>
+    <name>in Schönlind rechts abbiegen auf Markneukirchner Strasse (K7843)</name>
     <cmt>Markneukirchner Strasse (K7843)</cmt>
     <desc>Markneukirchner Strasse (K7843)</desc>
   </rtept>
   <rtept lat="50.284020000" lon="12.314200000">
-    <name>links abbiegen auf Landw&#xfc;ster Strasse (K7846)</name>
-    <cmt>Landw&#xfc;ster Strasse (K7846)</cmt>
-    <desc>Landw&#xfc;ster Strasse (K7846)</desc>
+    <name>links abbiegen auf Landwüster Strasse (K7846)</name>
+    <cmt>Landwüster Strasse (K7846)</cmt>
+    <desc>Landwüster Strasse (K7846)</desc>
   </rtept>
   <rtept lat="50.271330000" lon="12.328640000">
-    <name>in Landw&#xfc;st halb rechts halten auf Sch&#xf6;nlinder Strasse (K7844)</name>
-    <cmt>Sch&#xf6;nlinder Strasse (K7844)</cmt>
-    <desc>Sch&#xf6;nlinder Strasse (K7844)</desc>
+    <name>in Landwüst halb rechts halten auf Schönlinder Strasse (K7844)</name>
+    <cmt>Schönlinder Strasse (K7844)</cmt>
+    <desc>Schönlinder Strasse (K7844)</desc>
   </rtept>
   <rtept lat="50.271090000" lon="12.328480000">
     <name>rechts abbiegen auf Rauner Strasse (K7844)</name>
@@ -1316,7 +1316,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Rauner Strasse (K7844)</desc>
   </rtept>
   <rtept lat="50.271540000" lon="12.321940000">
-    <name>bei D 08258 Landw&#xfc;st </name>
+    <name>bei D 08258 Landwüst </name>
     <cmt>K7844\Rauner Strasse</cmt>
     <desc>K7844\Rauner Strasse</desc>
   </rtept>
@@ -1403,7 +1403,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <name>links abbiegen</name>
   </rtept>
   <rtept lat="50.399460000" lon="12.095840000">
-    <name>in B&#xf6;senbrunn rechts abbiegen auf S310</name>
+    <name>in Bösenbrunn rechts abbiegen auf S310</name>
     <cmt>S310</cmt>
     <desc>S310</desc>
   </rtept>
@@ -1413,7 +1413,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>S310</desc>
   </rtept>
   <rtept lat="50.402190000" lon="12.064050000">
-    <name>in Dr&#xf6;da rechts abbiegen auf Hauptstrasse/Bobenneukirchener Strasse (S310)</name>
+    <name>in Dröda rechts abbiegen auf Hauptstrasse/Bobenneukirchener Strasse (S310)</name>
     <cmt>Hauptstrasse/Bobenneukirchener Strasse (S310)</cmt>
     <desc>Hauptstrasse/Bobenneukirchener Strasse (S310)</desc>
   </rtept>
@@ -1423,7 +1423,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>Bobenneukirchener Strasse (S310)</desc>
   </rtept>
   <rtept lat="50.404490000" lon="12.063910000">
-    <name>bei D 08538 Burgstein/Dr&#xf6;da </name>
+    <name>bei D 08538 Burgstein/Dröda </name>
     <cmt>S310\Bobenneukirchener Strasse</cmt>
     <desc>S310\Bobenneukirchener Strasse</desc>
   </rtept>
@@ -1433,9 +1433,9 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <desc>B173 Hofer Strasse</desc>
   </rtept>
   <rtept lat="50.427520000" lon="12.070870000">
-    <name>links abbiegen auf Zur Pirkm&#xfc;hle (K7859)</name>
-    <cmt>Zur Pirkm&#xfc;hle (K7859)</cmt>
-    <desc>Zur Pirkm&#xfc;hle (K7859)</desc>
+    <name>links abbiegen auf Zur Pirkmühle (K7859)</name>
+    <cmt>Zur Pirkmühle (K7859)</cmt>
+    <desc>Zur Pirkmühle (K7859)</desc>
   </rtept>
   <rtept lat="50.429200000" lon="12.061160000">
     <name>bei D 08538 Burgstein/Pirk </name>
@@ -1479,7 +1479,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <name>links abbiegen</name>
   </rtept>
   <rtept lat="50.388740000" lon="11.996920000">
-    <name>in Heinersgr&#xfc;n halb links halten auf An der Kapelle (K7855)</name>
+    <name>in Heinersgrün halb links halten auf An der Kapelle (K7855)</name>
     <cmt>An der Kapelle (K7855)</cmt>
     <desc>An der Kapelle (K7855)</desc>
   </rtept>

@@ -340,4 +340,5 @@ ff_vecs_t tomtom_vecs = {
 	data_write,
 	NULL,
 	tomtom_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

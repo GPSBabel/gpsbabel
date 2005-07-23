@@ -136,5 +136,6 @@ ff_vecs_t vcf_vecs = {
 	NULL,
 	data_write,
 	NULL, 
-	vcf_args
+	vcf_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
