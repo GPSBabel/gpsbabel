@@ -395,7 +395,7 @@ void kml_write(void)
 
 ff_vecs_t kml_vecs = {
 	ff_type_file,
-	FF_CAP_RW_WPT, /* Format can do RW_ALL */
+	FF_CAP_RW_ALL, /* Format can do RW_ALL */
 	kml_rd_init,	
 	kml_wr_init,	
 	kml_rd_deinit,
