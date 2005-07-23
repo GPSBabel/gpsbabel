@@ -491,7 +491,7 @@ bcr_data_write(void)
 
 ff_vecs_t bcr_vecs = {
 	ff_type_file,
-	{ ff_cap_none, ff_cap_read || ff_cap_write, ff_cap_none },
+	{ ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none },
 	bcr_rd_init,
 	bcr_wr_init,
 	bcr_rd_deinit,
