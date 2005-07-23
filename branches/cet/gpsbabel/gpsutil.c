@@ -109,7 +109,7 @@ gpsutil_disp(const waypoint *wpt)
 {
 	double lon,lat;
 	const char *icon_token;
-	char *tdesc = str_utf8_to_ascii(wpt->description);
+	char *tdesc = xstrdup(wpt->description);
 
 	icon_token = mag_find_token_from_descr(wpt->icon_descr);
 
@@ -149,5 +149,7 @@ ff_vecs_t gpsutil_vecs = {
 	wr_deinit,
 	data_read,
 	data_write,
-	NULL
+	NULL,
+	NULL,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

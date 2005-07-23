@@ -617,7 +617,8 @@ ff_vecs_t palmdoc_vecs = {
 	NULL,
 	data_write,
 	NULL, 
-	palmdoc_args
+	palmdoc_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
 
 

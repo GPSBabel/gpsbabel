@@ -946,5 +946,6 @@ ff_vecs_t lowranceusr_vecs = {
 	data_read,
 	data_write,
 	NULL, 
-	lowranceusr_args
+	lowranceusr_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

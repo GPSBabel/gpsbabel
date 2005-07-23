@@ -1075,7 +1075,7 @@ xcsv_waypt_pr(const waypoint *wpt)
  	    description = shortname;
     } else if (description) {
 	    char *odesc = description;
-	    description = str_utf8_to_ascii(odesc);
+	    description = xstrdup(odesc);
 	    xfree(odesc);
     }
 

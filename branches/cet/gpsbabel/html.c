@@ -266,5 +266,6 @@ ff_vecs_t html_vecs = {
 	NULL,
 	data_write,
 	NULL, 
-	html_args
+	html_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

@@ -660,5 +660,6 @@ ff_vecs_t nmea_vecs = {
 	nmea_read,
 	nmea_write,
 	NULL,
-	NULL
+	NULL,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

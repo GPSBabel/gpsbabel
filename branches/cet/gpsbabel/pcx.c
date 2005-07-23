@@ -274,5 +274,6 @@ ff_vecs_t pcx_vecs = {
 	data_read,
 	data_write,
 	NULL,
-	pcx_args
+	pcx_args,
+	CET_CHARSET_ASCII, 1	/* CET-REVIEW */
 };

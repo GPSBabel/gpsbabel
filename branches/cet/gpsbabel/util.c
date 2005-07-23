@@ -749,251 +749,6 @@ rot13( const char *s )
 	return result;
 }
 
-void utf8_to_int( const char *cp, int *bytes, int *value ) 
-{
-	if ( (*cp & 0xe0) == 0xc0 ) {
-		if ( (*(cp+1) & 0xc0) != 0x80 ) goto dodefault;
-		*bytes = 2;
-		*value = ((*cp & 0x1f) << 6) | 
-			(*(cp+1) & 0x3f); 
-	}
-	else if ( (*cp & 0xf0) == 0xe0 ) {
-		if ( (*(cp+1) & 0xc0) != 0x80 ) goto dodefault;
-		if ( (*(cp+2) & 0xc0) != 0x80 ) goto dodefault;
-		*bytes = 3;
-		*value = ((*cp & 0x0f) << 12) | 
-			((*(cp+1) & 0x3f) << 6) | 
-			(*(cp+2) & 0x3f); 
-	}
-	else if ( (*cp & 0xf8) == 0xf0 ) {
-		if ( (*(cp+1) & 0xc0) != 0x80 ) goto dodefault;
-		if ( (*(cp+2) & 0xc0) != 0x80 ) goto dodefault;
-		if ( (*(cp+3) & 0xc0) != 0x80 ) goto dodefault;
-		*bytes = 4;
-		*value = ((*cp & 0x07) << 18) | 
-			((*(cp+1) & 0x3f) << 12) | 
-			((*(cp+2) & 0x3f) << 6) | 
-			(*(cp+3) & 0x3f); 
-	}
-	else if ( (*cp & 0xfc) == 0xf8 ) {
-		if ( (*(cp+1) & 0xc0) != 0x80 ) goto dodefault;
-		if ( (*(cp+2) & 0xc0) != 0x80 ) goto dodefault;
-		if ( (*(cp+3) & 0xc0) != 0x80 ) goto dodefault;
-		if ( (*(cp+4) & 0xc0) != 0x80 ) goto dodefault;
-		*bytes = 5;
-		*value = ((*cp & 0x03) << 24) | 
-			((*(cp+1) & 0x3f) << 18) | 
-			((*(cp+2) & 0x3f) << 12) | 
-			((*(cp+3) & 0x3f) << 6) |
-			(*(cp+4) & 0x3f); 
-	}
-	else if ( (*cp & 0xfe) == 0xfc ) {
-		if ( (*(cp+1) & 0xc0) != 0x80 ) goto dodefault;
-		if ( (*(cp+2) & 0xc0) != 0x80 ) goto dodefault;
-		if ( (*(cp+3) & 0xc0) != 0x80 ) goto dodefault;
-		if ( (*(cp+4) & 0xc0) != 0x80 ) goto dodefault;
-		if ( (*(cp+5) & 0xc0) != 0x80 ) goto dodefault;
-		*bytes = 6;
-		*value = ((*cp & 0x01) << 30) | 
-			((*(cp+1) & 0x3f) << 24) | 
-			((*(cp+2) & 0x3f) << 18) | 
-			((*(cp+3) & 0x3f) << 12) |
-			((*(cp+4) & 0x3f) << 6) |
-			(*(cp+5) & 0x3f); 
-	}
-	else {
-dodefault:
-		*bytes = 1;
-		*value = (unsigned char)*cp;
-	}
-}
-
-char * str_utf8_to_cp1252( const char * str )
-{
-	char *result = xstrdup( str );
-	char *cur = result;
-	
-	while ( cur && *cur ) {
-		if ( *cur & 0x80 ) {
-			int bytes;
-			int value;
-			utf8_to_int( cur, &bytes, &value );
-			if ( value > 0xff ) {
-				switch (value) {
-					case 0x20AC: value = 0x80; break;
-					case 0x201A: value = 0x82; break;
-					case 0x0192: value = 0x83; break;
-					case 0x201E: value = 0x84; break;
-					case 0x2026: value = 0x85; break;
-					case 0x2020: value = 0x86; break;
-					case 0x2021: value = 0x87; break;
-					case 0x02C6: value = 0x88; break;
-					case 0x2030: value = 0x89; break;
-					case 0x0160: value = 0x8A; break;
-					case 0x2039: value = 0x8B; break;
-					case 0x0152: value = 0x8C; break;
-					case 0x017D: value = 0x8E; break;
-					case 0x2018: value = 0x91; break;
-					case 0x2019: value = 0x92; break;
-					case 0x201C: value = 0x93; break;
-					case 0x201D: value = 0x94; break;
-					case 0x2022: value = 0x95; break;
-					case 0x2013: value = 0x96; break;
-					case 0x2014: value = 0x97; break;
-					case 0x02DC: value = 0x98; break;
-					case 0x2122: value = 0x99; break;
-					case 0x0161: value = 0x9A; break;
-					case 0x203A: value = 0x9B; break;
-					case 0x0153: value = 0x9C; break;
-					case 0x017E: value = 0x9E; break;
-					case 0x0178: value = 0x9F; break;
-					/* default is the generic "currency  */
-					/* sign" because question marks  */
-					/* just look stupid. */
-					default: value = 0xA4; break;
-				}
-			}
-			*cur = (char)value;
-			memmove(cur+1, cur+bytes, strlen(cur+bytes) + 1);
-		}
-		cur++;
-	}
-	return result;
-}
-
-#if 0
-/*
- * Convert to ISO 8859-1 (LATIN-1). The result is never longer than 
- * the source.  
- */
-char * 
-str_utf8_to_8859_1( const char * str )
-{
-	char *result = xstrdup( str );
-	char *cur = result;
-	unsigned char c;
-
-	while (c = *str++) {
-		if (c < 0x80) {
-			*cur++ = c;
-			continue;
-		} 
-		if ((c & 0xFE) == 0xC2) {
-			*cur++ = ((c & 0x03) << 6) | (*str++ & 0x3f);
-		}
-	}
-
-	return result;
-}
-#endif
-
-char * str_utf8_to_ascii( const char * str )
-{
-	char *result;
-	char *cur;
-
-	if (!str) return NULL;
-
-	result = xstrdup( str );
-	cur = result;
-	
-	while ( cur && *cur ) {
-		if ( *cur & 0x80 ) {
-			int bytes;
-			int value;
-			char *strvalue = NULL;
-			utf8_to_int( cur, &bytes, &value );
-			switch (value) {
-				case 0x2026: strvalue = "..."; break;
-				case 0x201c: value = '\"'; break;
-				case 0x201d: value = '\"'; break;
-				case 0xb4:
-				case 0x2018: value = '`'; break;
-				case 0x2019: value = '\''; break;
-					    
-				case 0xf2: 
-				case 0xf3: 
-				case 0xf4: 
-				case 0xf5: 
-				case 0xf6: value = 'o'; break;
-
-				case 0xe0:
-				case 0xe1:
-				case 0xe2:
-				case 0xe3:
-				case 0xe4:
-				case 0xe5: value = 'a'; break;
-
-				case 0xe8:
-				case 0xe9:
-				case 0xea:
-				case 0xeb: value = 'e'; break;
-
-				case 0xc0:
-				case 0xc1:
-				case 0xc2:
-				case 0xc3:
-				case 0xc4:
-				case 0xc5: value = 'A'; break;
-
-				case 0xf8: value = '0'; break;
-				default: value='?'; break;;
-			}
-			if (strvalue) {
-				memcpy(cur, strvalue, bytes);
-				cur += bytes - 1;
-			} else {
-				*cur = (char)value;
-				memmove(cur+1, cur+bytes, strlen(cur+bytes));
-			}
-		}
-		cur++;
-	}
-	return result;
-}
-
-/*
- * str_iso8859_1_to_utf8
- *
- * converts the single byte charset ISO8859-1 (latin1) to UTF-8
- */
-
-char *
-str_iso8859_1_to_utf8(const char *s)
-{
-	int len;
-	char *res;
-	unsigned char c;
-	char *src, *dst;
-
-	if (s == NULL) return NULL;
-
-	len = 0;
-	src = (char *)s;
-	while ('\0' != (c = *src++))
-	{
-	    len++;
-	    if (c & 0x80) len++;
-	}
-
-	src = (char *)s;
-	dst = res = (void *) xmalloc(len + 1);
-	while ('\0' != (c = *src++))
-	{
-	    if (c & 0x80)
-	    {
-		*dst++ = (0xc0 | (c >> 6));
-		*dst++ = (c & 0xbf);
-	    }
-	    else
-	    {
-		*dst++ = c;
-	    }
-	}
-	*dst = '\0';
-	return res;
-}
-
 /* 
  * Get rid of potentially nasty HTML that would influence another record
  * that includes;
@@ -1167,15 +922,17 @@ entitize(const char * str, int is_html)
 	
 	/* figure the same for other than standard entities (i.e. anything
 	 * that isn't in the range U+0000 to U+007F */
+	
+#if 0
 	for ( cp = str; *cp; cp++ ) {
 		if ( *cp & 0x80 ) {
-			
-			utf8_to_int( cp, &bytes, &value );
+			cet_utf8_to_ucs4( cp, &bytes, &value );
 			cp += bytes-1;
 			elen += sprintf( tmpsub, "&#x%x;", value ) - bytes;
 		        nsecount++;	
 		}
 	}
+#endif
 
 	/* enough space for the whole string plus entity replacements, if any */
 	tmp = xcalloc((strlen(str) + elen + 1), 1);
@@ -1210,7 +967,7 @@ entitize(const char * str, int is_html)
 		p = tmp;
 		while (*p) {
 			if ( *p & 0x80 ) {
-				utf8_to_int( p, &bytes, &value );
+				cet_utf8_to_ucs4( p, &bytes, &value );
 				if ( p[bytes] ) {
 					xstr = xstrdup( p + bytes );
 				}

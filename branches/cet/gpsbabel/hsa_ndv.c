@@ -352,7 +352,8 @@ ff_vecs_t HsaEndeavourNavigator_vecs = {
 	hsa_ndv_read,
 	hsa_ndv_write,
 	NULL, 
-	hsa_ndv_args
+	hsa_ndv_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
 
 //////////////////////////////////////////////////////////////////////////
