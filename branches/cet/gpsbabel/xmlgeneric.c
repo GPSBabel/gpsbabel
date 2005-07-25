@@ -259,9 +259,9 @@ xml_init(const char *fname, xg_tag_mapping *tbl, const char *encoding)
 
 	xg_tag_tbl = tbl;
 
+	XML_SetUnknownEncodingHandler(psr, cet_lib_expat_UnknownEncodingHandler, NULL);
 	XML_SetElementHandler(psr, xml_start, xml_end);
 	XML_SetCharacterDataHandler(psr, xml_cdata);
-	XML_SetUnknownEncodingHandler(psr, cet_UnknownEncodingHandler, NULL);
 }
 
 void

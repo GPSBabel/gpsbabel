@@ -151,7 +151,7 @@ brauniger_iq.o: brauniger_iq.c defs.h queue.h gbtypes.h jeeps/gpsserial.h \
   jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
   jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 cetus.o: cetus.c defs.h queue.h gbtypes.h coldsync/palm.h coldsync/pdb.h
-coastexp.o: coastexp.c defs.h queue.h gbtypes.h xmlgeneric.h uuid.h
+coastexp.o: coastexp.c defs.h queue.h gbtypes.h xmlgeneric.h uuid.h cet_util.h
 copilot.o: copilot.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
 csv_util.o: csv_util.c defs.h queue.h gbtypes.h csv_util.h grtcirc.h strptime.h
@@ -177,11 +177,11 @@ gpilots.o: gpilots.c defs.h queue.h gbtypes.h coldsync/palm.h \
 gpspilot.o: gpspilot.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
 gpsutil.o: gpsutil.c defs.h queue.h gbtypes.h magellan.h
-gpx.o: gpx.c defs.h queue.h gbtypes.h xmlgeneric.h
+gpx.o: gpx.c defs.h queue.h gbtypes.h xmlgeneric.h cet_util.h
 grtcirc.o: grtcirc.c defs.h queue.h gbtypes.h
 hiketech.o: hiketech.c defs.h queue.h gbtypes.h xmlgeneric.h
 holux.o: holux.c defs.h queue.h gbtypes.h holux.h
-hsa_ndv.o: hsa_ndv.c defs.h queue.h gbtypes.h
+hsa_ndv.o: hsa_ndv.c defs.h queue.h gbtypes.h cet_util.h
 html.o: html.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h jeeps/gpssend.h \
   jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
@@ -202,7 +202,7 @@ mapsource.o: mapsource.c defs.h queue.h gbtypes.h garmin_tables.h
 gdb.o: gdb.c defs.h queue.h gbtypes.h garmin_tables.h \
     jeeps/gpsmath.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h gbtypes.h
-navicache.o: navicache.c defs.h queue.h gbtypes.h
+navicache.o: navicache.c defs.h queue.h gbtypes.h cet_util.h
 netstumbler.o: netstumbler.c defs.h queue.h gbtypes.h csv_util.h
 nmea.o: nmea.c defs.h queue.h gbtypes.h
 overlay.o: overlay.c defs.h queue.h gbtypes.h grtcirc.h
