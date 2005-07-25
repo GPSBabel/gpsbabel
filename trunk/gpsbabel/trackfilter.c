@@ -161,7 +161,6 @@ trackfilter_split_init_rte_name(route_head *track, const time_t time)
 {
 	char buff[128], tbuff[128];
 	struct tm tm;
-	size_t tlen;
 	
 	tm = *localtime(&time);
  
@@ -201,7 +200,7 @@ trackfilter_split_init_rte_name(route_head *track, const time_t time)
 void
 trackfilter_pack_init_rte_name(route_head *track, const time_t time)
 {
-	char buff[128], tbuff[128];
+	char tbuff[128];
 	struct tm tm;
 	
 	tm = *localtime(&time);
@@ -222,7 +221,6 @@ static void
 trackfilter_pack(void)
 {
 	int i, j, ct;
-	char tbuff[128];
 	route_head *master, *curr;
 	queue *elem, *tmp;
 	waypoint *wpt;
