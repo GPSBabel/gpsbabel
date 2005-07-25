@@ -21,6 +21,7 @@
 
 #include "defs.h"
 #include "xmlgeneric.h"
+#include "cet_util.h"
 #ifndef NO_EXPAT
 	#include <expat.h>
 	static XML_Parser psr;
@@ -933,6 +934,8 @@ gpx_rd_init(const char *fname)
 	if (!psr) {
 		fatal(MYNAME ": Cannot create XML Parser\n");
 	}
+	XML_SetUnknownEncodingHandler(psr, cet_lib_expat_UnknownEncodingHandler, NULL);
+
 	cdatastr = vmem_alloc(1, 0);
 	*((char *)cdatastr.mem) = '\0';
 
@@ -1481,5 +1484,5 @@ ff_vecs_t gpx_vecs = {
 	gpx_write,
 	NULL, 
 	gpx_args,
-	CET_CHARSET_UTF8, 1	/* fixed */
+	CET_CHARSET_UTF8, 0	/* non-fixed to create non UTF-8 XML's for testing | CET-REVIEW */
 };

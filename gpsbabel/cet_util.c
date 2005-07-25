@@ -112,34 +112,35 @@ cet_str_cp1252_to_utf8(const char *src)
  *
  */
  
-int XMLCALL cet_UnknownEncodingHandler(void *data, const XML_Char *encoding, XML_Encoding *info)
+int XMLCALL cet_lib_expat_UnknownEncodingHandler(void *data, const XML_Char *encoding, XML_Encoding *info)
 {
 	cet_cs_vec_t *cs;
-	int i;
-	
+	int i, c, ucs4_def;
+
 	cs = cet_find_cs_by_name(encoding);
 	if (cs == NULL) return XML_STATUS_ERROR;	/* fatal(MYNAME ": Unknown character set \"%s\"!\n", encoding); */
 	
-	for (i = 0; i < 256; i++)
-		info->map[i] = CET_NOT_CONVERTABLE_DEFAULT;
-		
-	for (i = 0; i < cs->ucs4_offset; i++)
-		info->map[i] = i;
-		
-	for (i = cs->ucs4_offset; i < (cs->ucs4_offset + cs->ucs4_count - 1); i++)
-		info->map[i] = cs->ucs4_link[i].origin;
-		
+	cet_char_to_ucs4(CET_NOT_CONVERTABLE_DEFAULT, cs, &ucs4_def);
+	
+	for (i = 0; i < cs->ucs4_offset; i++) info->map[i] = i;					/* equal to ascii part */
+	for (i = 0; i < cs->ucs4_count; i++)							/* mixed table */
+	{
+	    c = cs->ucs4_map[i];
+	    if (c == -1) c = ucs4_def;
+	    info->map[i + cs->ucs4_offset] = c;
+	}
+	for (i = cs->ucs4_offset + cs->ucs4_count; i < 256; i++) info->map[i] = ucs4_def;	/* non convertable trailer */
+
 	info->data = NULL;
 	info->convert = NULL;
 	info->release = NULL;
 
-	cet_convert_init(encoding, 1);
+	cet_convert_init(CET_CHARSET_UTF8, 1);		/* We do not need to transform any string */
 		
 	if (global_opts.verbose_status > 0)
-	    printf(MYNAME ": XML parser - encoding for \"%s\" established.\n", encoding);
+	    printf(MYNAME ": XML parser - encoding handler for character set \"%s\" established.\n", encoding);
 	    
 	return XML_STATUS_OK;
-	
 }
 
 
@@ -147,7 +148,7 @@ char *
 cet_str_uni_to_any(const short *src, int length, const cet_cs_vec_t *dest_vec)
 {
 	char *res, *c;
-	cet_cs_vec_t *cs = (dest_vec != NULL) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
+	const cet_cs_vec_t *cs = (dest_vec != NULL) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
 	
 	res = cet_str_uni_to_utf8(src, length);
 	if (cs != &cet_cs_vec_utf8)
@@ -159,20 +160,16 @@ cet_str_uni_to_any(const short *src, int length, const cet_cs_vec_t *dest_vec)
 	return res;
 }
 
-#if 0
-
 /* %%% cet_str_any_to_any %%% 
- * !!! NOT FINISHED !!! 
  *
  * -->> for use in mkshort */
-
 
 char *
 cet_str_any_to_any(const char *src, const cet_cs_vec_t *src_vec, const cet_cs_vec_t *dest_vec)
 {
 	char *c0, *c1;
-	cet_cs_vec_t *v_in =  (src_vec != NULL )  ? src_vec :  &cet_cs_vec_ansi_x3_4_1968;
-	cet_cs_vec_t *v_out = (dest_vec != NULL ) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
+	const cet_cs_vec_t *v_in =  (src_vec != NULL )  ? src_vec :  &cet_cs_vec_ansi_x3_4_1968;
+	const cet_cs_vec_t *v_out = (dest_vec != NULL ) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
 	
 	if (src == NULL) 
 		return NULL;
@@ -186,8 +183,6 @@ cet_str_any_to_any(const char *src, const cet_cs_vec_t *src_vec, const cet_cs_ve
 	return c1;
 }
 
-#endif
-
 /* %%% cet_valid_char %%%
  *
  * returnes 1 if convertable otherwise 0
@@ -198,11 +193,9 @@ int
 cet_valid_char(const char *src, const cet_cs_vec_t *vec)
 {
 	int value;
-	int result;
-	cet_cs_vec_t *v = (vec != NULL) ? (cet_cs_vec_t *)vec : (cet_cs_vec_t *)&cet_cs_vec_ansi_x3_4_1968;
-	result = cet_char_to_ucs4(src, v, &value);
-	return result;
 
+	const cet_cs_vec_t *v = (vec != NULL) ? vec : &cet_cs_vec_ansi_x3_4_1968;
+	return cet_char_to_ucs4(*src, v, &value);
 }
 
 /* %%% include character set headers %%% */
@@ -323,7 +316,7 @@ cet_valid_char(const char *src, const cet_cs_vec_t *vec)
 #ifdef DEBUG_MEM
 
 void
-cet_check_cs(cet_cs_vec_t *vec)	/* test well sorted links & extra links */
+cet_check_cs(cet_cs_vec_t *vec)	/* test well sorted link & extra tables */
 {
 	cet_ucs4_link_t *link;
 	
@@ -851,7 +844,6 @@ cet_deregister(void)
 	for (i = 0; i < j; i++)
 	    xfree(p[i].name);
 	xfree(p);
-	
 }
 
 /* gpsbabel additions */
@@ -907,7 +899,7 @@ cet_convert_init(const char *cs_name, const int force)
 	{
 	    cet_convert_deinit();
 	    if (0 == cet_validate_cs(cs_name, &global_opts.charset, &global_opts.charset_name))
-		fatal("Unsupported (internal!!!)  character set \"%s\"!\n", cs_name);
+		fatal("Unsupported character set \"%s\"!\n", cs_name);
 	}
 }
 
