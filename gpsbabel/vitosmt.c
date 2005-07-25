@@ -71,13 +71,6 @@ ReadRecord(FILE * f,
 }
 
 static void
-Skip(FILE * f,
-     size_t distance)
-{
-	fseek(f, distance, SEEK_CUR);
-}
-
-static void
 WriteDouble(void* ptr, double d)
 {
   unsigned char result[8]="\0\0\0\0\0\0\0\0";
@@ -109,7 +102,6 @@ vitosmt_read(void)
 	long			check1			=-1;
 	long			check2			=-2;
 	long			check3			=-3;
-	unsigned short	stringlen		=0;
 	route_head		*route_head		=0; 
 	waypoint		*wpt_tmp		=0;
 	double			latrad			=0;
@@ -125,7 +117,6 @@ vitosmt_read(void)
 	unsigned char	gpsvalid		=0;
 	unsigned char	gpssats			=0;
 	int				serial			=0;
-	char			buffer[80]		="\0";
 
 		
 	/* 
@@ -274,7 +265,6 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 	size_t			position		=0;
 	struct tm*		tmstructp		=0;
 	double			seconds			=0;
-	double			worknum			=0;
 
 	++count;
 	workbuffer = xcalloc(vitosmt_datasize,1);
