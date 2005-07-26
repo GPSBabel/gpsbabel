@@ -143,6 +143,7 @@ msvc-build:
 
 an1.o: an1.c defs.h queue.h gbtypes.h an1sym.h
 arcdist.o: arcdist.c defs.h queue.h gbtypes.h grtcirc.h
+bcr.o: bcr.c defs.h queue.h gbtypes.h garmin_tables.h
 brauniger_iq.o: brauniger_iq.c defs.h queue.h gbtypes.h jeeps/gpsserial.h \
   jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h \
   jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
@@ -153,8 +154,10 @@ cetus.o: cetus.c defs.h queue.h gbtypes.h coldsync/palm.h coldsync/pdb.h
 coastexp.o: coastexp.c defs.h queue.h gbtypes.h xmlgeneric.h uuid.h
 copilot.o: copilot.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
-csv_util.o: csv_util.c defs.h queue.h gbtypes.h csv_util.h grtcirc.h strptime.h
+csv_util.o: csv_util.c defs.h queue.h gbtypes.h csv_util.h grtcirc.h \
+  strptime.h
 delgpl.o: delgpl.c defs.h queue.h gbtypes.h
+dopfilt.o: dopfilt.c defs.h queue.h gbtypes.h
 duplicate.o: duplicate.c defs.h queue.h gbtypes.h
 easygps.o: easygps.c defs.h queue.h gbtypes.h
 filter_vecs.o: filter_vecs.c defs.h queue.h gbtypes.h
@@ -166,6 +169,12 @@ garmin.o: garmin.c defs.h queue.h gbtypes.h jeeps/gps.h jeeps/../defs.h \
   jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h garmin_tables.h
 garmin_tables.o: garmin_tables.c garmin_tables.h
 gcdb.o: gcdb.c defs.h queue.h gbtypes.h coldsync/palm.h coldsync/pdb.h
+gdb.o: gdb.c defs.h queue.h gbtypes.h garmin_tables.h jeeps/gpsmath.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 geo.o: geo.c defs.h queue.h gbtypes.h xmlgeneric.h
 geoniche.o: geoniche.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
@@ -198,8 +207,6 @@ magproto.o: magproto.c defs.h queue.h gbtypes.h magellan.h
 main.o: main.c defs.h queue.h gbtypes.h
 mapsend.o: mapsend.c defs.h queue.h gbtypes.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h gbtypes.h garmin_tables.h
-gdb.o: gdb.c defs.h queue.h gbtypes.h garmin_tables.h \
-    jeeps/gpsmath.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h gbtypes.h
 navicache.o: navicache.c defs.h queue.h gbtypes.h
 netstumbler.o: netstumbler.c defs.h queue.h gbtypes.h csv_util.h
@@ -246,7 +253,7 @@ tpg.o: tpg.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsnmea.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
   jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
-trackfilter.o: trackfilter.c defs.h queue.h gbtypes.h
+trackfilter.o: trackfilter.c defs.h queue.h gbtypes.h strptime.h
 util.o: util.c defs.h queue.h gbtypes.h
 util_crc.o: util_crc.c
 uuid.o: uuid.c uuid.h
@@ -258,7 +265,6 @@ vcf.o: vcf.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 vecs.o: vecs.c defs.h queue.h gbtypes.h csv_util.h
 vitosmt.o: vitosmt.c defs.h queue.h gbtypes.h
-bcr.o: defs.h queue.h gbtypes.h garmin_tables.h
 vmem.o: vmem.c defs.h queue.h gbtypes.h
 waypt.o: waypt.c defs.h queue.h gbtypes.h
 xcsv.o: xcsv.c defs.h queue.h gbtypes.h csv_util.h
@@ -350,5 +356,5 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h jeeps/../defs.h \
   jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 shapelib/dbfopen.o: shapelib/dbfopen.c shapelib/shapefil.h
 shapelib/shpopen.o: shapelib/shpopen.c shapelib/shapefil.h
-internal_styles.c: mkstyle.sh style/README.style style/arc.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/s_and_t.style style/saplus.style style/tabsep.style style/xmap.style style/xmapwpt.style
+internal_styles.c: mkstyle.sh style/README.style style/arc.style style/csv.style style/custom.style style/dna.style style/fugawi.style style/gpsdrive.style style/gpsdrivetrack.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/openoffice.style style/s_and_t.style style/saplus.style style/tabsep.style style/xmap.style style/xmapwpt.style
 	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)

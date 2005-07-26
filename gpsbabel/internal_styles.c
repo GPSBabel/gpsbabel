@@ -411,14 +411,13 @@ static char openoffice[] =
 "#\n"
 "#\n"
 
-"DESCRIPTION		Custom \"Everything\" Style\n"
+"DESCRIPTION		Tab delimitered csv useful for OpenOffice, Ploticus etc.\n"
 
 "# FILE LAYOUT DEFINITIIONS:\n"
 "#\n"
 "FIELD_DELIMITER		TAB\n"
 "RECORD_DELIMITER	NEWLINE\n"
 "BADCHARS		TAB\n"
-"FORMAT_TYPE		INTERNAL\n"
 
 "#\n"
 "# HEADER STUFF:\n"

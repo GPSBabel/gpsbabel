@@ -1,4 +1,5 @@
 /*
+
     Track manipulation filter
 
     Copyright (C) 2005 Olaf Klein, o.b.klein@t-online.de
@@ -21,32 +22,51 @@
  
  /* 
     2005-07-20: implemented interval option from Etienne Tasse
+    2005-07-26: implemented range option
  */
  
 #include <stdio.h>
 #include <time.h>
+#include <ctype.h>
 #include "defs.h"
+#include "strptime.h"
 
-#define MYNAME "tracks"
+#define MYNAME "trackfilter"
 
 #define TRACKFILTER_PACK_OPTION		"pack"
 #define TRACKFILTER_SPLIT_OPTION	"split"
 #define TRACKFILTER_TITLE_OPTION	"title"
+#define TRACKFILTER_MERGE_OPTION	"merge"
+#define TRACKFILTER_STOP_OPTION		"stop"
+#define TRACKFILTER_START_OPTION	"start"
+#define TRACKFILTER_MOVE_OPTION		"move"
 
 #undef TRACKF_DBG
 
+static char *opt_merge = NULL;
 static char *opt_pack = NULL;
 static char *opt_split = NULL;
+static char *opt_move = NULL;
 static char *opt_title = NULL;
+static char *opt_start = NULL;
+static char *opt_stop = NULL;
 
 static
 arglist_t trackfilter_args[] = {
-	{TRACKFILTER_PACK_OPTION,  &opt_pack,  "Pack all tracks into one", 
-	    NULL, ARGTYPE_BOOL},
-	{TRACKFILTER_SPLIT_OPTION, &opt_split, "Split track by date or by time interval (see README)", 
-	    NULL, ARGTYPE_STRING},
-	{TRACKFILTER_TITLE_OPTION, &opt_title, "Basic title for new track(s)", 
-	    NULL, ARGTYPE_STRING},
+	{TRACKFILTER_MOVE_OPTION, &opt_move, 
+	    "Correct trackpoint timestamps by a delta", NULL, ARGTYPE_STRING},
+	{TRACKFILTER_PACK_OPTION,  &opt_pack,  
+	    "Pack all tracks into one", NULL, ARGTYPE_BOOL},
+	{TRACKFILTER_SPLIT_OPTION, &opt_split, 
+	    "Split track by date or by time interval (see README)", NULL, ARGTYPE_STRING},
+	{TRACKFILTER_MERGE_OPTION, &opt_merge, 
+	    "Merge multiple tracks for the same way", NULL, ARGTYPE_STRING | ARGTYPE_HIDDEN},
+	{TRACKFILTER_START_OPTION, &opt_start, 
+	    "Use only track points after this timestamp", NULL, ARGTYPE_INT},
+	{TRACKFILTER_STOP_OPTION, &opt_stop, 
+	    "Use only track points before this timestamp", NULL, ARGTYPE_INT},
+	{TRACKFILTER_TITLE_OPTION, &opt_title, 
+	    "Basic title for new track(s)", NULL, ARGTYPE_STRING},
 	{0, 0, 0, 0, 0}
 };
 
@@ -60,9 +80,12 @@ typedef struct trkflt_s
 
 static trkflt_t *track_list = NULL;
 static int track_ct = 0;
+static int track_pts = 0;
 static int opt_interval = 0;
 
-/*- dummy callbacks for track_disp_all ---------------------------------------------------*/
+/*******************************************************************************
+* dummy callbacks for track_disp_all
+*******************************************************************************/
 
 static void 
 trackfilter_noop_w(const waypoint *w)
@@ -74,10 +97,62 @@ trackfilter_noop_t(const route_head *h)
 {
 }
 
-/*----------------------------------------------------------------------------------------*/
+/*******************************************************************************
+* helpers
+*******************************************************************************/
+
+int
+trackfilter_opt_count(void)
+{
+	int res = 0;
+	arglist_t *a = trackfilter_args;
+	
+	while (a->argstring)
+	{
+	    if (*a->argval != NULL) res++;
+	    a++;
+	}
+	return res;	
+}
+
+int
+trackfilter_parse_time_opt(const char *arg)
+{
+	time_t t0, t1;
+	int sign = 1;
+	char *cin = (char *)arg;
+	char c;
+		
+	t0 = t1 = 0;
+	
+	while ((c = *cin++))
+	{
+	    time_t seconds;
+	    
+	    if (c >= '0' && c <= '9')
+	    {
+		t1 = (t1 * 10) + (c - '0');	
+		continue;
+	    }
+	    switch(tolower(c))
+	    {
+		case 'd': seconds = (24 * 60 * 60); break;
+		case 'h': seconds = (60 * 60); break;
+		case 'm': seconds = 60; break;
+		case 's': seconds = 1; break;
+		case '+': sign = +1; continue;
+		case '-': sign = -1; continue;
+		default: fatal(MYNAME "-time: invalid character in time option!\n");
+	    }
+	    t0 += (t1 * seconds);
+	    t1 = 0;
+	}
+	t0 += t1;
+	return t0 * sign;
+}
 
 static int
-trackfilter_qsort_cb(const void *a, const void *b)
+trackfilter_init_qsort_cb(const void *a, const void *b)
 {
 	const trkflt_t *ra = a;
 	const trkflt_t *rb = b;
@@ -85,76 +160,61 @@ trackfilter_qsort_cb(const void *a, const void *b)
 	return ra->first_time - rb->first_time;
 }
 
-/*----------------------------------------------------------------------------------------*/
+static int
+trackfilter_merge_qsort_cb(const void *a, const void *b)
+{
+	const waypoint *wa = *(waypoint **)a;
+	const waypoint *wb = *(waypoint **)b;
+
+	return wa->creation_time - wb->creation_time;
+}
 
 static void
-trackfilter_fill_track_list_cb(const route_head *trk) 	/* callback for track_disp_all */
+trackfilter_fill_track_list_cb(const route_head *track) 	/* callback for track_disp_all */
 {
 	int i;
 	waypoint *wpt, *prev;
 	queue *elem, *tmp;
 	
-	track_list[track_ct].track = (route_head *)trk;
-
+	if (track->rte_waypt_ct == 0) 
+	{
+	    track_del_head(track);
+	    return;
+	}
+	
+	track_list[track_ct].track = (route_head *)track;
+	
 	i = 0;
 	prev = NULL;
 	
-	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp)
+	QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp)
 	{
+	    track_pts++;
+	    
 	    wpt = (waypoint *)elem;
 	    if (wpt->creation_time == 0)
-		fatal(MYNAME ": Found track point without time!\n");
+		fatal(MYNAME "-init: Found track point without time!\n");
 
 	    i++;
 	    if (i == 1) 
 		track_list[track_ct].first_time = wpt->creation_time;
 	    else 
-	    if (i == trk->rte_waypt_ct)
+	    if (i == track->rte_waypt_ct)
 		track_list[track_ct].last_time = wpt->creation_time;
 		
 	    if ((prev != NULL) && (prev->creation_time > wpt->creation_time))
-		fatal(MYNAME ": Track points bad ordered (timestamp)!\n");
+	    {
+		if (opt_merge == NULL)
+		    fatal(MYNAME "-init: Track points badly ordered (timestamp)!\n");
+	    }
 	    prev = wpt;
 	}
 	track_ct++;
 }
 
-/*- global callbacks ---------------------------------------------------------------------*/
-
-static void
-trackfilter_init(const char *args) 
-{
-	int i, j;
-	int count = track_count();
-	trkflt_t prev;
-	
-	if (count > 0)
-	{
-	    track_list = (trkflt_t *) xcalloc(count, sizeof(*track_list));
-
-	    /* check all tracks for time and order */
-	
-	    track_ct = 0;
-	    track_disp_all(trackfilter_fill_track_list_cb, trackfilter_noop_t, trackfilter_noop_w);
-	    qsort(track_list, track_ct, sizeof(*track_list), trackfilter_qsort_cb);
-
-	    for (i=1, j=0; i<track_ct; i++, j++)
-	    {
-		prev = track_list[j];
-		if (prev.last_time >= track_list[i].first_time) fatal(MYNAME " Tracks overlaps in time!\n");
-	    }
-	}
-}
-
-static void
-trackfilter_deinit(void) 
-{
-	if (track_list != NULL)
-	{
-	    xfree(track_list);
-	    track_list = NULL;
-	}
-}
+/*******************************************************************************
+* track title producers
+*******************************************************************************/
 
 void
 trackfilter_split_init_rte_name(route_head *track, const time_t time)
@@ -191,91 +251,173 @@ trackfilter_split_init_rte_name(route_head *track, const time_t time)
 	track->rte_name = xstrdup(buff);
 }
 
-/*******************************************************************************************
-*
-* option "pack" (default)
-* 
-*******************************************************************************************/
+void
+trackfilter_pack_init_rte_name(route_head *track, const time_t default_time)
+{
+	char buff[128];
+
+	if (strchr(opt_title, '%') != NULL)
+	{
+	    struct tm tm;
+	    waypoint *wpt;
+		
+	    if (track->rte_waypt_ct == 0)
+	    {
+		tm = *localtime(&default_time);
+	    }
+	    else
+	    {
+		wpt = (waypoint *) QUEUE_FIRST((queue *)&track->waypoint_list);
+		tm = *localtime(&wpt->creation_time);
+	    }
+	    strftime(buff, sizeof(buff), opt_title, &tm);
+	}
+	else
+	    strncpy(buff, opt_title, sizeof(buff));
+		    
+	if (track->rte_name != NULL)
+	    xfree(track->rte_name);
+	track->rte_name = xstrdup(buff);
+}
+
+/*******************************************************************************
+* option "title"
+*******************************************************************************/
 
 void
-trackfilter_pack_init_rte_name(route_head *track, const time_t time)
+trackfilter_title(void)
 {
-	char tbuff[128];
-	struct tm tm;
+	int i;
 	
-	tm = *localtime(&time);
+	if (opt_title == NULL) return;
 
-	if ((opt_title != NULL) && (strlen(opt_title) > 0))
+	if (strlen(opt_title) == 0) {
+	    fatal(MYNAME "-title: Missing your title!\n");
+	}
+	for (i = 0; i < track_ct; i++)
 	{
-	    if (strchr(opt_title, '%') != NULL)
-		strftime(tbuff, sizeof(tbuff), opt_title, &tm);
-	    else
-		strncpy(tbuff, opt_title, sizeof(tbuff));
-		    
-	    if (track->rte_name != NULL) xfree(track->rte_name);
-	    track->rte_name = xstrdup(tbuff);
+	    route_head *track = track_list[i].track;
+	    trackfilter_pack_init_rte_name(track, 0);
 	}
 }
 
-static void
+/*******************************************************************************
+* option "pack" (default)
+*******************************************************************************/
+
+void
 trackfilter_pack(void)
 {
-	int i, j, ct;
-	route_head *master, *curr;
-	queue *elem, *tmp;
-	waypoint *wpt;
-	waypoint **buff;
+	int i, j;
+	trkflt_t prev;
+	route_head *master;
+	
+	for (i = 1, j = 0; i < track_ct; i++, j++)
+	{
+	    prev = track_list[j];
+	    if (prev.last_time >= track_list[i].first_time) 
+		fatal(MYNAME "-pack: Tracks overlap in time!\n");
+	}
 	
 	/* we fill up the first track by all other track points */
 	
 	master = track_list[0].track;
-
-	/* at this point we cannot set a new title, because track 0
-	   can be an empty track. If the title option is set, 
-	   we do this as final step in here
-	 */
 	   
-	for (i=1; i<track_ct; i++)
+	for (i = 1; i < track_ct; i++)
 	{
-	    curr = track_list[i].track;
-	    
-	    ct = curr->rte_waypt_ct;
-	    buff = (waypoint **)xcalloc(ct, sizeof(*buff));
-	    
-	    j = 0;
+	    queue *elem, *tmp;
+	    route_head *curr = track_list[i].track;
+		
 	    QUEUE_FOR_EACH((queue *)&curr->waypoint_list, elem, tmp)
 	    {
-		wpt = (waypoint *)elem;
-		buff[j] = wpt;
-		j++;
+		waypoint *wpt = (waypoint *)elem;
+		route_add_wpt(master, waypt_dupe(wpt));
 	    }
-
-	    for (j=0; j<ct; j++)
-	    {
-		wpt = waypt_dupe(buff[j]);
-		route_del_wpt(curr, buff[j]);
-		route_add_wpt(master, wpt);
-	    }
-	    
-	    xfree(buff);
-	    
 	    track_del_head(curr);
+	    track_list[i].track = NULL;
 	}
-
-	if ((opt_split == NULL) && (master->rte_waypt_ct > 0))
-	{
-	    wpt = (waypoint *) QUEUE_FIRST((queue *)&master->waypoint_list);
-	    trackfilter_pack_init_rte_name(master, wpt->creation_time);
-	}
+	track_ct = 1;
 }
 
-/*******************************************************************************************
-*
-* option "split"
-* 
-*******************************************************************************************/
+/*******************************************************************************
+* "hidden" option "merge"
+*******************************************************************************/
+/* 
+	MERGE
+	    
+	    Merge puts all track points into one single track and
+	    sort them by time. Points with identical time stamp 
+	    will be dropped !!!
+	    
+	    If you want to merge tracks from different devices 
+	    but from same trip, use this:
+	    
+	    gpsbabel -t \
+		     -i gpx -f john.gpx \
+		     -i gpx -f doe.gpx \
+		     -x track,merge,title="COMBINED LOG" \
+		     -o gpx -F john_doe.gpx
+*/	    
 
-static void
+void
+trackfilter_merge(void)
+{
+	int i, j, dropped;
+	
+	queue *elem, *tmp;
+	waypoint **buff;
+	waypoint *prev, *wpt;
+	route_head *master = track_list[0].track;
+	
+	if (track_pts < 1) return;
+	
+	buff = xcalloc(track_pts, sizeof(*buff));
+
+	j = 0;
+	for (i = 0; i < track_ct; i++)		/* put all points into temp buffer */
+	{
+	    route_head *track = track_list[i].track;
+	    QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp)
+	    {
+		wpt = (waypoint *)elem;
+		buff[j++] = waypt_dupe(wpt);
+		route_del_wpt(track, wpt);
+	    }
+	    if (track != master) 		/* i > 0 */
+		track_del_head(track);
+	}
+	track_ct = 1;
+	
+	qsort(buff, track_pts, sizeof(*buff), trackfilter_merge_qsort_cb);
+	
+	dropped = 0;
+	prev = NULL;
+	
+	for (i = 0; i < track_pts; i++)
+	{
+	    wpt = buff[i];
+	    if ((prev == NULL) || (prev->creation_time != wpt->creation_time))
+	    {
+		route_add_wpt(master, wpt);
+		prev = wpt;
+	    }
+	    else
+	    {
+		waypt_free(wpt);
+		dropped++;
+	    }
+	}
+	xfree(buff);
+
+	if (global_opts.verbose_status > 0) 
+	    printf(MYNAME "-merge: %d track point(s) merged, %d dropped.\n", track_pts - dropped, dropped);
+}
+
+/*******************************************************************************
+* option "split"
+*******************************************************************************/
+
+void
 trackfilter_split(void)
 {
 	route_head *curr;
@@ -315,7 +457,7 @@ trackfilter_split(void)
 		    if (i == 0) 
 		    {
 			/* test reverse order */
-			i = sscanf(opt_split,"%c%f", &interval, &dhms);
+			i = sscanf(opt_split,"%c%f", &dhms, &interval);
 		    }
 		    if ((i != 2) || (interval <= 0))
 		    {
@@ -407,31 +549,217 @@ trackfilter_split(void)
 	xfree(buff);
 }
 
-/******************************************************************************************/
+/*******************************************************************************
+* option "move"
+*******************************************************************************/
+
+void
+trackfilter_move(void)
+{
+	int i;
+	queue *elem, *tmp;
+	waypoint *wpt;
+	time_t delta;
+	
+	delta = trackfilter_parse_time_opt(opt_move);
+	if (delta == 0) return;
+
+	for (i = 0; i < track_ct; i++)
+	{
+	    route_head *track = track_list[i].track;
+	    QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp)
+	    {
+		wpt = (waypoint *)elem;
+		wpt->creation_time += delta;
+	    }
+	    track_list[i].first_time += delta;
+	    track_list[i].last_time += delta;
+	}
+}
+
+/*******************************************************************************
+* option: "start" / "stop"
+*******************************************************************************/
+
+time_t
+trackfilter_range_check(const char *timestr)
+{
+	int i;
+	char fmt[20];
+	char c;
+	char *cin;
+	struct tm time;
+
+	
+	i = 0;
+	strncpy(fmt, "00000101000000", sizeof(fmt));
+	cin = (char *)timestr;
+	
+	while ((c = *cin++))
+	{
+	    if (fmt[i] == '\0') fatal(MYNAME "-range: parameter too long \"%s\"!\n", timestr);
+	    if (isdigit(c) == 0) fatal(MYNAME "-range: invalid character \"%c\"!\n", c);
+	    fmt[i++] = c;
+	}
+	cin = strptime(fmt, "%Y%m%d%H%M%S", &time);
+	if ((cin != NULL) && (*cin != '\0'))
+	    fatal(MYNAME "-range-check: Invalid time stamp (stopped at %s of %s)!\n", cin, fmt);
+
+	return mkgmtime(&time);
+}
+
+int
+trackfilter_range(void)		/* returns number of track points left after filtering */
+{
+	time_t start, stop;
+	queue *elem, *tmp;
+	int i, dropped;
+	
+	if (opt_start != 0)
+	    start = trackfilter_range_check(opt_start);
+	else
+	    start = 0;
+	    
+	if (opt_stop != 0)
+	    stop = trackfilter_range_check(opt_stop);
+	else
+	    stop = (unsigned long)-1;
+
+	dropped = 0;
+	
+	for (i = 0; i < track_ct; i++)
+	{
+	    route_head *track = track_list[i].track;
+	    
+	    QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp)
+	    {
+		waypoint *wpt = (waypoint *)elem;
+
+		if ((wpt->creation_time < start) || (wpt->creation_time > stop))
+		{
+		    route_del_wpt(track, wpt);
+		    dropped++;
+		}
+	    }
+	    
+	    if (track->rte_waypt_ct == 0)
+	    {
+		track_del_head(track);
+		track_list[i].track = NULL;
+	    }
+	}
+	
+	if ((track_pts > 0) && (dropped == track_pts))
+	    warning(MYNAME "-range: All %d track points have been dropped!\n", track_pts);
+	    
+	return track_pts - dropped;
+}
+
+/*******************************************************************************
+* global cb's
+*******************************************************************************/
+
+static void
+trackfilter_init(const char *args) 
+{
+	
+	int count = track_count();
+
+	track_ct = 0;
+	track_pts = 0;
+	
+	if (count > 0)
+	{
+	    track_list = (trkflt_t *) xcalloc(count, sizeof(*track_list));
+
+	    /* check all tracks for time and order (except merging) */
+	
+	    track_disp_all(trackfilter_fill_track_list_cb, trackfilter_noop_t, trackfilter_noop_w);
+	    qsort(track_list, track_ct, sizeof(*track_list), trackfilter_init_qsort_cb);
+	}
+}
+
+static void
+trackfilter_deinit(void) 
+{
+	if (track_list != NULL)
+	{
+	    xfree(track_list);
+	    track_list = NULL;
+	}
+	track_ct = 0;
+	track_pts = 0;
+}
+
+/*******************************************************************************
+* trackfilter_process: called from gpsbabel central engine
+*******************************************************************************/
 
 static void 
 trackfilter_process(void)
 {
-	if (track_ct == 0) return;
+	int opts, something_done;
+	
+	if (track_ct == 0) return;		/* no track(s), no fun */
+	
+	opts = trackfilter_opt_count();
+	if (opts == 0) opts = -1;		/* flag for do "pack" by default */
 
-	if (opt_pack == NULL && opt_split == NULL)
+	if (opt_move != NULL)			/* Correct timestamps before any other op */
+	{
+	    trackfilter_move();
+	    if (--opts == 0) return;
+	}
+
+	if ((opt_stop != NULL) || (opt_start != NULL))
+	{
+	    if (opt_start != NULL) opts--;
+	    if (opt_stop != NULL) opts--;
+	    
+	    trackfilter_range();
+
+	    if (opts == 0) return;
+	    
+	    trackfilter_deinit();	/* reinitialize */
+	    trackfilter_init(NULL);
+	    
+	}
+	
+	if (opt_title != NULL)
+	{
+	    if (--opts == 0)
+	    {
+		trackfilter_title();
+		return;
+	    }
+	}
+		
+	something_done = 0;
+	
+	if ((opt_pack != NULL) || (opts == -1))	/* call our default option */
 	{
 	    trackfilter_pack();
+	    something_done = 1;
+	}
+	else if (opt_merge != NULL)
+	{
+	    trackfilter_merge();
+	    something_done = 1;
+	}
+	
+	if ((something_done == 1) && (--opts <= 0))
+	{
+	    if (opt_title != NULL)
+		trackfilter_title();
 	    return;
 	}
-
-	if (opt_pack != 0 && track_ct > 0)
+	
+	if (opt_split != NULL)
 	{
-	    trackfilter_pack();
-	    trackfilter_deinit();
-	    trackfilter_init(NULL);
-	}
-	if (opt_split != 0 && track_ct > 0)
-	{
-	    if (track_ct > 1) fatal(MYNAME ": Cannot split more than one track, please pack before!\n");
+	    if (track_ct > 1) 
+		fatal(MYNAME "-split: Cannot split more than one track, please pack (or merge) before!\n");
+		
 	    trackfilter_split();
-	    trackfilter_deinit();
-	    trackfilter_init(NULL);
 	}
 }
 
@@ -444,3 +772,5 @@ filter_vecs_t trackfilter_vecs = {
 	NULL,
 	trackfilter_args
 };
+
+/******************************************************************************************/

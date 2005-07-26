@@ -539,8 +539,7 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	static int ct;
 	struct tm tm;
 	
-	buff = xmalloc(REC_SIZE);
-	memset(buff, 0, REC_SIZE);
+	buff = xcalloc(REC_SIZE, 1);
 
 	if (wpt->latitude < 0)
 	    latdir = 'S';
@@ -645,8 +644,7 @@ static void ppdb_write(void)
 	
 	if (global_opts.objective != wptdata)	/* Waypoint target do not need appinfo block */
 	{
-	    appinfo = xmalloc(PPDB_APPINFO_SIZE);
-	    memset(appinfo, 0, PPDB_APPINFO_SIZE);
+	    appinfo = xcalloc(PPDB_APPINFO_SIZE, 1);
 	    
 	    pdb_out->appinfo = (void *)appinfo;
 	    pdb_out->appinfo_len = PPDB_APPINFO_SIZE;
