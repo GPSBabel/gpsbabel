@@ -632,7 +632,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 		default:
 			fix=0;
 		}
-		snprintf(obuf,sizeof(obuf),"GPGSA,A,%s,,,,,,,,,,,,,%.1f,%.1f,%.1f",
+		snprintf(obuf,sizeof(obuf),"GPGSA,A,%c,,,,,,,,,,,,,%.1f,%.1f,%.1f",
 			fix,
 			(wpt->pdop>0)?(wpt->pdop):(0),
 			(wpt->hdop>0)?(wpt->hdop):(0),
