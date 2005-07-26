@@ -76,10 +76,6 @@ void
 fix_process(void)
 {
 	waypoint * waypointp;
-
-	int tc = track_count();
-	int rc = route_count();
-	
 	queue *elem, *tmp;
 	extern queue waypt_head;
 	
@@ -111,12 +107,10 @@ fix_process(void)
 	}
 	
 	// Filter tracks
-	if (tc > 0)
-	    track_disp_all(fix_process_track, NULL, NULL);
+	track_disp_all(fix_process_track, NULL, NULL);
 	
 	// And routes
-	if (rc > 0)
-	    route_disp_all(fix_process_track, NULL, NULL);
+	route_disp_all(fix_process_track, NULL, NULL);
 	
 }
 
