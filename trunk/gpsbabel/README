@@ -1202,8 +1202,10 @@ DATA FILTERS
 
     TRACK
 
-        The track filter is a tool for manipulating track lists.  The
-        following options are available:
+	( !!! This filter always drops empty tracks !!! )
+	
+        The track filter is a tool for manipulating track lists. 
+	The following options are available:
 
         TITLE
 
@@ -1216,7 +1218,38 @@ DATA FILTERS
 		-i gpx -f in.gpx  \
 	          -x track,pack,split,title="ACTIVE LOG-%D" \ 
 		-o gpx -F out.gpx PACK
+		
+	MOVE
+	
+	    Change the time of all trackpoints. This is useful if
+	    your track has moved by one or more hours through a
+	    time zone problem.   The following example will shift
+	    your track to be one hour later.
 
+	    gpsbabel -t \
+		     -i gpx -f in.gpx \
+		     -x track,move=+1h,pack,title="ACTIVE LOG" \
+		     -o gpx -F out.gpx
+		     
+	START / STOP
+	
+	    Filter tracks against time borders. All points outside
+	    this range will be dropped. The date-time paramters
+	    have to be in form of YYYYMMDDHHMMSS; but you may specify
+ 	    only the most significant portion represented in the the 
+	    leftmost fields.  See the example, where the time is 
+	    specified only through the hour.
+	    
+	    If you only want to get a track mapped on 20 july 2005 from
+	    10 am to 6pm, you should use this:
+	    
+	    gpsbabel -t \
+		     -i gpx -f in.gpx \
+		     -x track,start=2005072010,stop=2005072018 \
+		     -o gpx -F out.gpx
+	    
+	PACK
+	
             With this default option all tracks from input will be
             packed into one track. If tracks overlaps in time, the
             filter stops working.   To pack all the tracks together
