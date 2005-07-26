@@ -129,6 +129,20 @@ static waypoint * curr_waypt	=NULL;
 static const double kts2mps =0.51444444444444444; /* knots to m/s */
 static const double kmh2mps =0.27777777777777778; /* km/h to m/s  */ 
 
+static char *dogprmc = NULL;
+static char *nogpgga = NULL;
+static char *nogpvtg = NULL;
+static char *nogpgsa = NULL;
+
+arglist_t nmea_args[] = {
+	{"gprmc", &dogprmc, "Write GPRMC sentences", NULL, ARGTYPE_BOOL },
+	{"nogpgga", &nogpgga, "Don't write GPGGA sentences", NULL, ARGTYPE_BOOL },
+	{"nogpvtg", &nogpvtg, "Don't write GPVTG sentences", NULL, ARGTYPE_BOOL },
+	{"nogpgsa", &nogpgsa, "Don't write GPGSA sentences", NULL, ARGTYPE_BOOL },
+	{0, 0, 0, 0 }
+};
+
+
 /*
  * Slightly different than the Magellan checksum fn.
  */
@@ -593,21 +607,31 @@ nmea_trackpt_pr(const waypoint *wpt)
 		fix='0';
 	}
 
-	snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,0.0,M,,",
-			hms,
-			fabs(lat), lat < 0 ? 'S' : 'N',
-			fabs(lon), lon < 0 ? 'W' : 'E',
-			fix,
-			(wpt->sat>0)?(wpt->sat):(0),
-			(wpt->hdop>0)?(wpt->hdop):(0.0),
-			wpt->altitude == unknown_alt ? 0 : wpt->altitude);
-	cksum = nmea_cksum(obuf);
-	fprintf(file_out, "$%s*%02X\n", obuf, cksum);
-
-	if (	(wpt->course>=0) ||
-		(wpt->speed>0)	   )
-	{
-
+	if (dogprmc) {
+		snprintf(obuf, sizeof(obuf), "GPRMC,%06d,%c,%08.3f,%c,%09.3f,%c,%.2f,%.2f,%06d,,",
+				hms,
+				fix=='0' ? 'V' : 'A',
+				fabs(lat), lat < 0 ? 'S' : 'N',
+				fabs(lon), lon < 0 ? 'W' : 'E',
+				(wpt->speed>0)?(wpt->speed / kts2mps):(0),
+				(wpt->course>=0)?(wpt->course):(0),
+				tm->tm_mday*10000+(tm->tm_mon+1)*100+tm->tm_year);
+		cksum = nmea_cksum(obuf);
+		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+	}
+	if (!nogpgga) {
+		snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,0.0,M,,",
+				hms,
+				fabs(lat), lat < 0 ? 'S' : 'N',
+				fabs(lon), lon < 0 ? 'W' : 'E',
+				fix,
+				(wpt->sat>0)?(wpt->sat):(0),
+				(wpt->hdop>0)?(wpt->hdop):(0.0),
+				wpt->altitude == unknown_alt ? 0 : wpt->altitude);
+		cksum = nmea_cksum(obuf);
+		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+	}
+	if ((!nogpvtg) && ((wpt->course>=0) || (wpt->speed>0))) {
 		snprintf(obuf,sizeof(obuf),"GPVTG,%.3f,T,0,M,%.3f,N,%.3f,K",
 			(wpt->course>=0)?(wpt->course):(0),	
 			(wpt->speed>0)?(wpt->speed / kts2mps):(0),
@@ -616,8 +640,8 @@ nmea_trackpt_pr(const waypoint *wpt)
 		cksum = nmea_cksum(obuf);
 		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
-		
-	if (wpt->fix!=fix_unknown) {
+			
+	if ((!nogpgsa) && (wpt->fix!=fix_unknown)) {
 
 		switch (wpt->fix) 
 		{
@@ -640,7 +664,6 @@ nmea_trackpt_pr(const waypoint *wpt)
 		cksum = nmea_cksum(obuf);
 		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
-
 }
 
 static void
@@ -660,5 +683,5 @@ ff_vecs_t nmea_vecs = {
 	nmea_read,
 	nmea_write,
 	NULL,
-	NULL
+	nmea_args
 };
