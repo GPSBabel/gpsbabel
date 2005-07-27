@@ -36,7 +36,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
-	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o
+	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o trackfilter.o dopfilt.o
 

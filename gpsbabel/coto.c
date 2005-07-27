@@ -322,9 +322,13 @@ coto_wpt_write(const waypoint *wpt)
 	setshort_whitespace_ok(mkshort_wr_handle, 1);
 	
 	if ((global_opts.synthesize_shortnames && wpt->description) || (!wpt->shortname)) {
+#if 0
 		if (wpt->shortname)
 			xfree(wpt->shortname);
 		wpt->shortname = mkshort_from_wpt(mkshort_wr_handle, wpt);
+#else
+abort();
+#endif
 	}
 	if ((wpt->description) && ((strlen(wpt->description) > MAX_MARKER_NAME_LENGTH) || (strcmp(wpt->description, wpt->shortname)))) {
 		if ((wpt->notes) && (strcmp(wpt->description, wpt->notes))) {
