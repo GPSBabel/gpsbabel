@@ -752,4 +752,16 @@ compare reference/route/bcr-sample2.bcr ${TMPDIR}/bcr-sample2.bcr
 ${PNAME} -r -i bcr -f ${TMPDIR}/bcr-sample2.bcr -o gpx -F ${TMPDIR}/bcr-sample2.gpx
 compare reference/route/bcr-sample.gpx ${TMPDIR}/bcr-sample2.gpx
 
+#
+# Garmin logbook.   This format has an extra section (lap data with things
+# like heartbeat and calories burned) that we don't know what to do with,
+# so we convert it to gpx, convert it to itself, convert THAT to gpx, and
+# compare those.
+#
+rm -f ${TMPDIR}/glogbook*
+${PNAME} -i glogbook -f reference/track/garmin_logbook.xml -o gpx -F ${TMPDIR}/glog1.gpx
+${PNAME} -i glogbook -f reference/track/garmin_logbook.xml -o glogbook -F ${TMPDIR}/glog.xml
+${PNAME} -i glogbook -f ${TMPDIR}/glog.xml -o gpx -F ${TMPDIR}/glog2.gpx
+compare ${TMPDIR}/glog1.gpx ${TMPDIR}/glog2.gpx
+
 exit 0
