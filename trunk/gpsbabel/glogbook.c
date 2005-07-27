@@ -87,37 +87,39 @@ glogbook_wr_deinit(void)
 static void
 glogbook_waypt_pr(const waypoint *wpt)
 {	
-	fprintf(ofd, "<Trackpoint>\n");
-	fprintf(ofd, "\t<Position>\n");
-	fprintf(ofd, "\t<Latitude>%f</Latitude>\n", wpt->latitude);
-	fprintf(ofd, "\t<Longitude>%f</Longitude>\n", wpt->longitude);
+	fprintf(ofd, "            <Trackpoint>\n");
+	fprintf(ofd, "                <Position>\n");
+	fprintf(ofd, "                    <Latitude>%.5f</Latitude>\n", wpt->latitude);
+	fprintf(ofd, "                    <Longitude>%.5f</Longitude>\n", wpt->longitude);
 	if (wpt->altitude != unknown_alt) {
-		fprintf(ofd, "\t<Altitude>%f</Altitude>\n", wpt->altitude);
+		fprintf(ofd, "                    <Altitude>%.3f</Altitude>\n", wpt->altitude);
 	}
+	fprintf(ofd, "                </Position>\n");
+	fprintf(ofd, "                ");
 	xml_write_time(ofd, wpt->creation_time, "Time");
-	fprintf(ofd, "\t</Position>\n");
-	fprintf(ofd, "</Trackpoint>\n");
+	fprintf(ofd, "            </Trackpoint>\n");
 }
 
 void
 glogbook_hdr( const route_head *rte)
 {
-	fprintf(ofd, "<Track>\n");
+	fprintf(ofd, "        <Track>\n");
 }
 
 void
 glogbook_ftr(const route_head *rte)
 {
-	fprintf(ofd, "</Track>\n");
+	fprintf(ofd, "        </Track>\n");
 }
 
 void
 glogbook_write(void)
 {
+	fprintf(ofd, "<?xml version=\"1.0\" ?>\n");
 	fprintf(ofd, "<History xmlns=\"http://www.garmin.com/xmlschemas/ForerunnerLogbook\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/ForerunnerLogbook http://www.garmin.com/xmlschemas/ForerunnerLogbookv1.xsd\" version=\"1\">\n");
-	fprintf(ofd, "<Run>\n");
+	fprintf(ofd, "    <Run>\n");
 	track_disp_all(glogbook_hdr, glogbook_ftr, glogbook_waypt_pr);
-	fprintf(ofd, "</Run>\n");
+	fprintf(ofd, "    </Run>\n");
 	fprintf(ofd, "</History>\n");
 }
 
