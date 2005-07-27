@@ -55,7 +55,7 @@ free_xte( struct xte *xte_rec )
 	xfree(xte_rec->intermed);
 }
 
-#define HUGEVAL 9e9;
+#define HUGEVAL 2000000000
 
 static struct xte_intermed *tmpprev = NULL;
 static int xte_count = 0;
@@ -112,6 +112,13 @@ compare_xte( const void *a, const void *b )
 		          ((struct xte *)b)->distance;
 	int priodiff = ((struct xte *)a)->intermed->wpt->route_priority -
 		       ((struct xte *)b)->intermed->wpt->route_priority;
+	
+	if (HUGEVAL == ((struct xte *)a)->distance)
+		return -1;
+	
+	if (HUGEVAL == ((struct xte *)b)->distance)
+		return 1;
+
 	if ( priodiff < 0 ) return 1;
 	if ( priodiff > 0 ) return -1;
 	if ( distdiff < 0 ) return 1;
