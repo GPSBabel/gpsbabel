@@ -42,7 +42,7 @@ extern char *xcsv_urlbase;
 extern char *prefer_shortnames;
 
 extern const char *gs_get_container(geocache_container t);
-extern geocache_container gs_mktype(const char *t);
+extern geocache_type gs_mktype(const char *t);
 extern geocache_container gs_mkcont(const char *t);
 
 static double pathdist = 0;
