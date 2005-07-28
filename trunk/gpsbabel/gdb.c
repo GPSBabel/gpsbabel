@@ -519,7 +519,7 @@ gdb_read_route(void)
 	if (buff[0] == 1) gdb_fread_le(fin, buff, 8, 64, "min_alt");
 	    
 	gdb_fread_le(fin, &count, sizeof(count), 32, "rte_count");
-	if (count <= 0) return;
+	if (count <= 0) return NULL;
 	
 	route = route_head_alloc();
 	route->rte_name = xstrdup(xname);
