@@ -180,11 +180,6 @@ xml_cdata(void *dta, const XML_Char *s, int len)
 	estr = (char *) cdatastr.mem + strlen(cdatastr.mem);
 	memcpy(estr, s, len);
 	estr[len]  = 0;
-
-	cb = xml_tbl_lookup(current_tag.mem, cb_cdata);
-	if (cb) {
-		(*cb)(estr, NULL);
-	}
 }
 
 static void
@@ -195,6 +190,10 @@ xml_end(void *data, const char *el)
 
 	if (strcmp(s + 1, el)) {
 		fprintf(stderr, "Mismatched tag %s\n", el);
+	}
+	cb = xml_tbl_lookup(current_tag.mem, cb_cdata);
+	if (cb) {
+		(*cb)( (char *) cdatastr.mem, NULL);
 	}
 
 	cb = xml_tbl_lookup(current_tag.mem, cb_end);

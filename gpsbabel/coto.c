@@ -282,6 +282,7 @@ data_read(void)
 static void
 coto_prepare_wpt_write(struct pdb *opdb)
 {
+	struct appinfo *ai;
 	opdb->name[PDB_DBNAMELEN-1] = 0;
 	opdb->attributes = PDB_ATTR_BACKUP;
 	opdb->type = MYTYPEWPT;  
@@ -293,7 +294,7 @@ coto_prepare_wpt_write(struct pdb *opdb)
 	opdb->appinfo_len = APPINFO_PACKED_SIZE;
 	opdb->appinfo = xcalloc(APPINFO_PACKED_SIZE,1);
 	
-	struct appinfo *ai = (struct appinfo *) opdb->appinfo;
+	ai = (struct appinfo *) opdb->appinfo;
 	
 	ai->renamedCategories = 31; // Don't ask me why...
 	if (zerocat)
