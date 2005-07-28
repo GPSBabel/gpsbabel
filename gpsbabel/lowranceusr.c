@@ -141,7 +141,7 @@ static void *mkshort_handle;
 static unsigned short waypt_out_count;
 static unsigned int trail_count, lowrance_route_count;
 static int trail_point_count;
-static int continuous = 1;
+static char continuous = 1;
 static short num_section_points;
 static route_head *trk_head;
 static route_head *rte_head;
@@ -707,7 +707,7 @@ lowranceusr_track_hdr(const route_head *trk)
 	int text_len;
 	char *name, tmp_name[20];
 	short num_trail_points, max_trail_size;
-	int visible=1;
+	char visible=1;
 
 	++trail_count;
 	if (trk->rte_name) {
@@ -839,7 +839,7 @@ static void
 lowranceusr_merge_track_tlr(const route_head *trk)
 {
 	short num_trail_points, max_trail_size;
-	int visible=1;
+	char visible=1;
 
 	if (trail_count == track_count())	/* last trail */
 	{
