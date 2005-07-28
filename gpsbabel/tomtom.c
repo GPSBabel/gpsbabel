@@ -143,8 +143,8 @@ compare_lat(const void *a, const void *b)
 	if ( difference ) {
 		return 1;
 	}
-	if ( wa->wpt->longitude - wa->wpt->longitude == 0 ) {
-		return 0;
+	if ( wa->wpt->longitude - wb->wpt->longitude == 0 ) {
+		return strcmp(wa->wpt->shortname, wb->wpt->shortname);
 	}
 	return compare_lon(a,b);
 }
@@ -163,8 +163,8 @@ compare_lon(const void *a, const void *b)
 	if ( difference ) {
 		return 1;
 	}
-	if ( wa->wpt->latitude - wa->wpt->latitude == 0 ) {
-		return 0;
+	if ( wa->wpt->latitude - wb->wpt->latitude == 0 ) {
+		return strcmp(wa->wpt->shortname, wb->wpt->shortname);
 	}
 	return compare_lat(a,b);
 }
