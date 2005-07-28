@@ -127,6 +127,8 @@ struct hdr{
 	waypoint *wpt;
 };
 
+static int compare_lon(const void *a, const void *b);
+
 static
 int 
 compare_lat(const void *a, const void *b)
@@ -141,7 +143,10 @@ compare_lat(const void *a, const void *b)
 	if ( difference ) {
 		return 1;
 	}
-	return 0;
+	if ( wa->wpt->longitude - wa->wpt->longitude == 0 ) {
+		return 0;
+	}
+	return compare_lon(a,b);
 }
 
 static
@@ -158,7 +163,10 @@ compare_lon(const void *a, const void *b)
 	if ( difference ) {
 		return 1;
 	}
-	return 0;
+	if ( wa->wpt->latitude - wa->wpt->latitude == 0 ) {
+		return 0;
+	}
+	return compare_lat(a,b);
 }
 
 static void 
