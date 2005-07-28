@@ -755,7 +755,7 @@ lowranceusr_route_hdr(const route_head *rte)
 	int text_len;
 	char *name, tmp_name[20];
 	short num_legs;
-	int route_reversed=0;
+	char route_reversed=0;
 
 	/* route name */
 	if (rte->rte_name) {
