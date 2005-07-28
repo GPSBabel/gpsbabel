@@ -1,5 +1,5 @@
 /*
-    Suppress points based on high Degree of Precision (DOP) values.
+    Discard points based on high Degree of Precision (DOP) values.
 
     Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
 
@@ -132,7 +132,7 @@ fix_deinit(void)
 {
 }
 
-filter_vecs_t fix_vecs = {
+filter_vecs_t discard_vecs = {
 	fix_init,
 	fix_process,
 	fix_deinit,

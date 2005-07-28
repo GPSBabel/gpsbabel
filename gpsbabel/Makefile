@@ -38,7 +38,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o
 
-FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o trackfilter.o dopfilt.o
+FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o trackfilter.o discard.o
 
 OSJEEPS=jeeps/gpslibusb.o
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
@@ -157,7 +157,7 @@ copilot.o: copilot.c defs.h queue.h gbtypes.h coldsync/palm.h \
 csv_util.o: csv_util.c defs.h queue.h gbtypes.h csv_util.h grtcirc.h \
   strptime.h
 delgpl.o: delgpl.c defs.h queue.h gbtypes.h
-dopfilt.o: dopfilt.c defs.h queue.h gbtypes.h
+discard.o: discard.c defs.h queue.h gbtypes.h
 duplicate.o: duplicate.c defs.h queue.h gbtypes.h
 easygps.o: easygps.c defs.h queue.h gbtypes.h
 filter_vecs.o: filter_vecs.c defs.h queue.h gbtypes.h

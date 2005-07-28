@@ -1323,7 +1323,7 @@ DATA FILTERS
 			-x track,pack,split=4h,title="LOG # %c" \ 
 			-o gpx -F out.gpx
 
-    DOP
+    DISCARD
 
         This filter 'fixes' gps data by discarding points with a hdop
         and/or vdop over a set limit. If you give both the hdop and a
@@ -1346,7 +1346,7 @@ DATA FILTERS
 
             Example: gpsbabel \ 
 		-i gpx -f in.gpx \
-		-x fix,hdop=10,vdop=20,hdopandvdop \ 
+		-x discard,hdop=10,vdop=20,hdopandvdop \ 
 		-o gpx -F out.gpx
 
         Contributed by Tobias Minich.
