@@ -183,7 +183,7 @@ vecs_t vec_list[] = {
 	{
 		&magnav_vec,
 		"magnav",
-		"Magellan NAV Companion for PalmOS", 
+		"Magellan NAV Companion for Palm/OS", 
 		NULL
 	},
 	{
@@ -399,7 +399,7 @@ vecs_t vec_list[] = {
 	{
 		&ppdb_vecs,
 		"pathaway",
-		"PathAway Palm Database",
+		"PathAway Database for Palm/OS",
 		"pdb"
 	},
 	{
@@ -423,7 +423,7 @@ vecs_t vec_list[] = {
 	{
 		&coto_vecs,
 		"coto",
-		"cotoGPS for PalmOS", 
+		"cotoGPS for Palm/OS", 
 		NULL
 	},
 	{
