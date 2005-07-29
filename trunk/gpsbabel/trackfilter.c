@@ -25,6 +25,7 @@
     2005-07-26: implemented range option
     2005-07-26: implemented move option
     2005-07-26: implemented merge option
+    2005-07-29: warning fixes
  */
  
 #include <stdio.h>
@@ -180,7 +181,7 @@ trackfilter_fill_track_list_cb(const route_head *track) 	/* callback for track_d
 	
 	if (track->rte_waypt_ct == 0) 
 	{
-	    track_del_head(track);
+	    track_del_head((route_head *)track);
 	    return;
 	}
 	
