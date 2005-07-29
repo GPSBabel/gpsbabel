@@ -23,6 +23,8 @@
  /* 
     2005-07-20: implemented interval option from Etienne Tasse
     2005-07-26: implemented range option
+    2005-07-26: implemented move option
+    2005-07-26: implemented merge option
  */
  
 #include <stdio.h>
@@ -60,7 +62,7 @@ arglist_t trackfilter_args[] = {
 	{TRACKFILTER_SPLIT_OPTION, &opt_split, 
 	    "Split track by date or by time interval (see README)", NULL, ARGTYPE_STRING},
 	{TRACKFILTER_MERGE_OPTION, &opt_merge, 
-	    "Merge multiple tracks for the same way", NULL, ARGTYPE_STRING | ARGTYPE_HIDDEN},
+	    "Merge multiple tracks for the same way", NULL, ARGTYPE_STRING},
 	{TRACKFILTER_START_OPTION, &opt_start, 
 	    "Use only track points after this timestamp", NULL, ARGTYPE_INT},
 	{TRACKFILTER_STOP_OPTION, &opt_stop, 
@@ -340,24 +342,8 @@ trackfilter_pack(void)
 }
 
 /*******************************************************************************
-* "hidden" option "merge"
+* option "merge"
 *******************************************************************************/
-/* 
-	MERGE
-	    
-	    Merge puts all track points into one single track and
-	    sort them by time. Points with identical time stamp 
-	    will be dropped !!!
-	    
-	    If you want to merge tracks from different devices 
-	    but from same trip, use this:
-	    
-	    gpsbabel -t \
-		     -i gpx -f john.gpx \
-		     -i gpx -f doe.gpx \
-		     -x track,merge,title="COMBINED LOG" \
-		     -o gpx -F john_doe.gpx
-*/	    
 
 void
 trackfilter_merge(void)
