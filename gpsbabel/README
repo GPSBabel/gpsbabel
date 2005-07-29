@@ -873,10 +873,20 @@ THE FORMATS
 
     GDB
 
-        Support for the "Garmin GPS Database" format used by default
-        in MapSource versions 6.1 and later. With this first step you
-        should be able to read waypoints, routes and tracks from .gdb
-        files.
+        Support for the "Garmin GPS Database" format used by default in
+        MapSource versions since release 6.0. By default we create gdb's
+        of version 2.  Version 2 is used in Mapsource 6.3 and 6.5.
+
+        Garmin GPS database is an undocumented file format. The
+        basic info for this module comes from the existing MapSource
+        conversion code.
+
+        Additional options:
+
+            ver - set the data format version of the output file
+            (currently 1 or 2); 2 is our default.
+	     via - Drop hidden route points (means calculated stuff) 
+	    cat - default category on output (1..16)
 
     BCR
     

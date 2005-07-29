@@ -715,11 +715,17 @@ ${PNAME} -t -i pathaway -f reference/track/pathaway.pdb -o gpx -F ${TMPDIR}/path
 compare ${TMPDIR}/pathaway.gpx reference/track/pathaway.gpx
 
 #
-# Garmin GPS Database .gdb read test
+# Garmin GPS Database .gdb tests
 #
 rm -f ${TMPDIR}/gdb-*
 ${PNAME} -w -r -t -i gdb -f reference/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
 compare reference/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
+${PNAME} -w -r -t -i gpx -f reference/gdb-sample.gpx -o gdb,ver=1 -F ${TMPDIR}/gdb-sample.gdb
+${PNAME} -w -r -t -i gdb -f ${TMPDIR}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
+#
+# Because of Garmin coordinates storage gpx is not good for this test
+# compare reference/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
+#
 
 #
 # Vito Navigator II .smt tests
