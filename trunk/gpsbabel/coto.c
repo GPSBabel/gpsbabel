@@ -313,6 +313,7 @@ coto_wpt_write(const waypoint *wpt)
 	struct pdb_record *opdb_rec;
 	static void *mkshort_wr_handle;
 	char *notes = NULL;
+	char *shortname = NULL;
 	char *vdata;
 	int size = sizeof(*rec);
 	ubyte cat = 0;
@@ -322,15 +323,11 @@ coto_wpt_write(const waypoint *wpt)
 	setshort_length(mkshort_wr_handle, MAX_MARKER_NAME_LENGTH);
 	setshort_whitespace_ok(mkshort_wr_handle, 1);
 	
-	if ((global_opts.synthesize_shortnames && wpt->description) || (!wpt->shortname)) {
-#if 0
-		if (wpt->shortname)
-			xfree(wpt->shortname);
-		wpt->shortname = mkshort_from_wpt(mkshort_wr_handle, wpt);
-#else
-abort();
-#endif
-	}
+	if ((global_opts.synthesize_shortnames && wpt->description) || (!wpt->shortname))
+		shortname = mkshort_from_wpt(mkshort_wr_handle, wpt);
+	else
+		shortname = xstrdup(wpt->shortname);
+	
 	if ((wpt->description) && ((strlen(wpt->description) > MAX_MARKER_NAME_LENGTH) || (strcmp(wpt->description, wpt->shortname)))) {
 		if ((wpt->notes) && (strcmp(wpt->description, wpt->notes))) {
 			size+=strlen(wpt->description)+strlen(wpt->notes)+9;
@@ -347,7 +344,7 @@ abort();
 	rec = xcalloc(size,1);
 	pdb_write_double(&rec->lon, -2.0*M_PI*wpt->longitude/360.0);
 	pdb_write_double(&rec->lat, 2.0*M_PI*wpt->latitude/360.0);
-	snprintf((char *) &rec->name, MAX_MARKER_NAME_LENGTH, "%s", wpt->shortname);
+	snprintf((char *) &rec->name, MAX_MARKER_NAME_LENGTH, "%s", shortname);
 	
 	if (notes) {
 		vdata = (char *) rec + sizeof(*rec);
@@ -380,6 +377,7 @@ abort();
 	if (pdb_AppendRecord(opdb, opdb_rec)) {
 		fatal(MYNAME ": libpdb couldn't append record\n");
 	}
+	xfree(shortname);
 	xfree(rec);
 	
 	mkshort_del_handle(mkshort_wr_handle);
