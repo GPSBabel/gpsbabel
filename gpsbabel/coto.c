@@ -162,7 +162,7 @@ coto_track_read(struct pdb *pdb)
 	trk_head = route_head_alloc();
 	track_add_head(trk_head);
 		
-	trk_head->rte_name = xstrdup(loctrackname);
+	trk_head->rte_name = loctrackname;
 	
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
 		waypoint *wpt_tmp;
@@ -292,7 +292,7 @@ coto_prepare_wpt_write(struct pdb *opdb)
 	strncpy(opdb->name, "cotoGPS MarkerDB", PDB_DBNAMELEN);
 	
 	opdb->appinfo_len = APPINFO_PACKED_SIZE;
-	opdb->appinfo = xcalloc(APPINFO_PACKED_SIZE,1);
+	opdb->appinfo = calloc(APPINFO_PACKED_SIZE,1);
 	
 	ai = (struct appinfo *) opdb->appinfo;
 	
