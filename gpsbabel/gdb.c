@@ -31,6 +31,7 @@
 			new option "via"
 			new option "ver"
 			fixed compiler warnings
+	    2005/07/29: fixed compiler warnings
 */
 
 #include <stdio.h>
@@ -407,7 +408,6 @@ void
 gdb_is_validf(int is, const char *prefix, const char *format, ...)
 {
 	va_list args;
-	char buff[256];
 	
 	if (is != 0) return;
 	
@@ -416,12 +416,11 @@ gdb_is_validf(int is, const char *prefix, const char *format, ...)
 	    printf(MYNAME "-%s: Reading from database \"%s\"\n", prefix, fin_name);
 	else
 	    printf(MYNAME "-%s: Writing to database \"%s\"\n", prefix, fout_name);
-	printf(MYNAME "-%s: ");
+	printf(MYNAME "-%s: ", prefix);
 	vprintf(format, args);
-	puts("");
-	
 	va_end(args);
-	fatal("");
+
+	fatal("\n");
 }
 
 /********************************************************************************************************/
@@ -648,7 +647,7 @@ gdb_read_route(void)
 	
 	char buff[256];
 	int count, origin;
-	int isteps, ilink;
+	int isteps;
 	int semilat, semilon;
 	int maxlat, maxlon, minlon, minlat;
 	char auto_name;
@@ -1140,9 +1139,9 @@ gdb_write_file_header(const struct tm *tm)
 #if 0
 	strncpy(buff, "A].SQA*Dec 27 2004*17:40:51", sizeof(buff));		/* MapSource V6.5 */
 #else
-	/* This is our "Watermark" to show this file was not created by MapSource */
+	/* This is our "Watermark" to show this file was created by GPSbabel */
 	/* !!! We should define the date use through Makefile !!! */
-	strncpy(buff, "A].GPSBabel*Jul 29 2005*09:52:51", sizeof(buff));	/* gpsbabel V1.2.6 */
+	strncpy(buff, "A].GPSBabel_1.2.6*Jul 29 2005*21:37:51", sizeof(buff));	/* gpsbabel V1.2.6 */
 #endif
 	len = strlen(buff);
 	buff[2] = 2;
