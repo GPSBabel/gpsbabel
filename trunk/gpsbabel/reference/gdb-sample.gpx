@@ -79,16 +79,26 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <sym>Residence</sym>
   </rtept>
   <rtept lat="50.492606163" lon="12.105431557">
+<time>2005-04-26T14:27:21Z</time>
     <name>416</name>
+    <desc>Fahren Sie auf die Luis-Ferdinand-Sch&#xf6;nherr-Strasse nach Norden</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.492606163" lon="12.105431557">
+<time>2005-04-26T14:27:21Z</time>
     <name>417</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.494279861" lon="12.105131149">
+<time>2005-04-26T14:27:21Z</time>
     <name>418</name>
+    <desc>Biegen Sie rechts ab auf die Liebknechtstrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.493836962" lon="12.106101271">
+<time>2005-04-26T14:27:21Z</time>
     <name>419</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.493837046" lon="12.106101019">
 <time>2005-02-26T09:03:15Z</time>
@@ -98,13 +108,21 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.493836962" lon="12.106101271">
+<time>2005-04-26T14:27:21Z</time>
     <name>420</name>
+    <desc>Fahren Sie auf die Liebknechtstrasse nach S&#xfc;dosten</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.493378639" lon="12.107105255">
+<time>2005-04-26T14:27:21Z</time>
     <name>421</name>
+    <desc>Biegen Sie links ab auf die Jahnstrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.493662786" lon="12.107152529">
+<time>2005-04-26T14:27:21Z</time>
     <name>422</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.493662870" lon="12.107152529">
 <time>2005-02-26T09:02:20Z</time>
@@ -114,112 +132,195 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.493662786" lon="12.107152529">
+<time>2005-04-26T14:27:21Z</time>
     <name>423</name>
+    <desc>Fahren Sie auf die Jahnstrasse nach Norden</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.494666100" lon="12.107319832">
+<time>2005-04-26T14:27:21Z</time>
     <name>424</name>
+    <desc>Biegen Sie links ab auf die Neundorfer Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.494666100" lon="12.106633186">
+<time>2005-04-26T14:27:21Z</time>
     <name>425</name>
+    <desc>Biegen Sie rechts ab auf die Scharnhorststrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.496554375" lon="12.105002403">
+<time>2005-04-26T14:27:21Z</time>
     <name>426</name>
+    <desc>Biegen Sie rechts ab auf die Schminckestrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.497756004" lon="12.106332779">
+<time>2005-04-26T14:27:21Z</time>
     <name>427</name>
+    <desc>Biegen Sie links ab auf die Kopernikusstrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.499987602" lon="12.103672028">
+<time>2005-04-26T14:27:21Z</time>
     <name>428</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.499987602" lon="12.103672028">
+<time>2005-04-26T14:27:21Z</time>
     <name>429</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.500202179" lon="12.103500366">
+<time>2005-04-26T14:27:21Z</time>
     <name>430</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.502090454" lon="12.102470398">
+<time>2005-04-26T14:27:21Z</time>
     <name>431</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.503549576" lon="12.099037170">
+<time>2005-04-26T14:27:21Z</time>
     <name>432</name>
+    <desc>Ordnen Sie sich rechts ein in Richtung Talstrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.510201454" lon="12.092342377">
+<time>2005-04-26T14:27:21Z</time>
     <name>433</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.512003899" lon="12.090926170">
+<time>2005-04-26T14:27:21Z</time>
     <name>434</name>
+    <desc>Biegen Sie rechts ab auf die Zwoschwitzer Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.512475967" lon="12.091741562">
+<time>2005-04-26T14:27:21Z</time>
     <name>435</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.520200729" lon="12.091612816">
+<time>2005-04-26T14:27:21Z</time>
     <name>436</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.523333549" lon="12.092986107">
+<time>2005-04-26T14:27:21Z</time>
     <name>437</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.524277687" lon="12.093672752">
+<time>2005-04-26T14:27:21Z</time>
     <name>438</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.525264740" lon="12.093973160">
+<time>2005-04-26T14:27:21Z</time>
     <name>439</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.525865555" lon="12.094359398">
+<time>2005-04-26T14:27:21Z</time>
     <name>440</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.526509285" lon="12.094831467">
+<time>2005-04-26T14:27:21Z</time>
     <name>441</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.530071259" lon="12.098007202">
+<time>2005-04-26T14:27:21Z</time>
     <name>442</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.534362793" lon="12.104401588">
+<time>2005-04-26T14:27:21Z</time>
     <name>443</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.534491539" lon="12.104487419">
+<time>2005-04-26T14:27:21Z</time>
     <name>444</name>
+    <desc>Biegen Sie links ab auf die An Der Sch&#xf6;psdrehe</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.534920692" lon="12.103457451">
+<time>2005-04-26T14:27:21Z</time>
     <name>445</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.535736084" lon="12.100839615">
+<time>2005-04-26T14:27:21Z</time>
     <name>446</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.535778999" lon="12.100667953">
+<time>2005-04-26T14:27:21Z</time>
     <name>447</name>
+    <desc>Biegen Sie rechts ab auf die Elsterberger Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.537710190" lon="12.102599144">
+<time>2005-04-26T14:27:21Z</time>
     <name>448</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.544619560" lon="12.105388641">
+<time>2005-04-26T14:27:21Z</time>
     <name>449</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.591139793" lon="12.138476372">
+<time>2005-04-26T14:27:21Z</time>
     <name>450</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.591440201" lon="12.138905525">
+<time>2005-04-26T14:27:21Z</time>
     <name>451</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.605859756" lon="12.154955864">
+<time>2005-04-26T14:27:21Z</time>
     <name>452</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.605387688" lon="12.160363197">
+<time>2005-04-26T14:27:21Z</time>
     <name>453</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.607104301" lon="12.168259621">
+<time>2005-04-26T14:27:21Z</time>
     <name>454</name>
+    <desc>Biegen Sie rechts ab auf die Robert-Schenker-Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.606160164" lon="12.168302536">
+<time>2005-04-26T14:27:21Z</time>
     <name>455</name>
+    <desc>Biegen Sie links ab auf die Rosa-Luxemburg-Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.607061386" lon="12.172594070">
+<time>2005-04-26T14:27:21Z</time>
     <name>456</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.609421730" lon="12.175040245">
+<time>2005-04-26T14:27:21Z</time>
     <name>457</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.610795189" lon="12.173802238">
+<time>2005-04-26T14:27:21Z</time>
     <name>458</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.610795273" lon="12.173802154">
 <time>2005-02-26T08:59:59Z</time>
@@ -229,61 +330,104 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.610795189" lon="12.173802238">
+<time>2005-04-26T14:27:22Z</time>
     <name>459</name>
+    <desc>Fahren Sie auf die Piehlerstrasse nach Nordwesten</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.612468719" lon="12.168731689">
+<time>2005-04-26T14:27:22Z</time>
     <name>460</name>
+    <desc>Biegen Sie rechts ab auf die Greizer Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.616717339" lon="12.170190811">
+<time>2005-04-26T14:27:22Z</time>
     <name>461</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.619249344" lon="12.172937393">
+<time>2005-04-26T14:27:22Z</time>
     <name>462</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.623326302" lon="12.176756859">
+<time>2005-04-26T14:27:22Z</time>
     <name>463</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.623583794" lon="12.180147171">
+<time>2005-04-26T14:27:22Z</time>
     <name>464</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.633797646" lon="12.192077637">
+<time>2005-04-26T14:27:22Z</time>
     <name>465</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.634012222" lon="12.192249298">
+<time>2005-04-26T14:27:22Z</time>
     <name>466</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.637145042" lon="12.191991806">
+<time>2005-04-26T14:27:22Z</time>
     <name>467</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.646672249" lon="12.195553780">
+<time>2005-04-26T14:27:22Z</time>
     <name>468</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.647916794" lon="12.194480896">
+<time>2005-04-26T14:27:22Z</time>
     <name>469</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.647959709" lon="12.194480896">
+<time>2005-04-26T14:27:22Z</time>
     <name>470</name>
+    <desc>Halten Sie sich rechts in Richtung Carolinenstrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.655169487" lon="12.198171616">
+<time>2005-04-26T14:27:22Z</time>
     <name>471</name>
+    <desc>Biegen Sie rechts ab auf die Gartenweg</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.654611588" lon="12.199459076">
+<time>2005-04-26T14:27:22Z</time>
     <name>472</name>
+    <desc>Biegen Sie links ab auf die  B94</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.655384064" lon="12.201776505">
+<time>2005-04-26T14:27:22Z</time>
     <name>473</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.655512810" lon="12.202463150">
+<time>2005-04-26T14:27:22Z</time>
     <name>474</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.655469894" lon="12.202720642">
+<time>2005-04-26T14:27:22Z</time>
     <name>475</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.654911995" lon="12.204480171">
+<time>2005-04-26T14:27:22Z</time>
     <name>476</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.654762965" lon="12.204956934">
+<time>2005-04-26T14:27:22Z</time>
     <name>477</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.654763049" lon="12.204956766">
 <time>2005-02-26T08:57:04Z</time>
@@ -293,142 +437,245 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.654762965" lon="12.204956934">
+<time>2005-04-26T14:27:22Z</time>
     <name>478</name>
+    <desc>Fahren Sie auf die August-Bebel-Strasse nach S&#xfc;dosten</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.653924942" lon="12.207655907">
+<time>2005-04-26T14:27:22Z</time>
     <name>479</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.652594566" lon="12.211861610">
+<time>2005-04-26T14:27:22Z</time>
     <name>480</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.652036667" lon="12.227139473">
+<time>2005-04-26T14:27:22Z</time>
     <name>481</name>
+    <desc>Biegen Sie links ab auf die Werdauer Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.652594566" lon="12.227997780">
+<time>2005-04-26T14:27:22Z</time>
     <name>482</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.653667450" lon="12.231731415">
+<time>2005-04-26T14:27:22Z</time>
     <name>483</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.655684471" lon="12.242288589">
+<time>2005-04-26T14:27:22Z</time>
     <name>484</name>
+    <desc>Halten Sie sich rechts in Richtung Werdauer Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.656456947" lon="12.247138023">
+<time>2005-04-26T14:27:22Z</time>
     <name>485</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.657229424" lon="12.248253822">
+<time>2005-04-26T14:27:22Z</time>
     <name>486</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.668387413" lon="12.262930870">
+<time>2005-04-26T14:27:22Z</time>
     <name>487</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.671992302" lon="12.270097733">
+<time>2005-04-26T14:27:22Z</time>
     <name>488</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.675039291" lon="12.277135849">
+<time>2005-04-26T14:27:22Z</time>
     <name>489</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.675640106" lon="12.282586098">
+<time>2005-04-26T14:27:22Z</time>
     <name>490</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.675683022" lon="12.282757759">
+<time>2005-04-26T14:27:22Z</time>
     <name>491</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.678043365" lon="12.292113304">
+<time>2005-04-26T14:27:22Z</time>
     <name>492</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.684738159" lon="12.316360474">
+<time>2005-04-26T14:27:22Z</time>
     <name>493</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.695896149" lon="12.340135574">
+<time>2005-04-26T14:27:22Z</time>
     <name>494</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.697956085" lon="12.341938019">
+<time>2005-04-26T14:27:22Z</time>
     <name>495</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.698599815" lon="12.344083786">
+<time>2005-04-26T14:27:22Z</time>
     <name>496</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.698857307" lon="12.344899178">
+<time>2005-04-26T14:27:22Z</time>
     <name>497</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.706324577" lon="12.361764908">
+<time>2005-04-26T14:27:22Z</time>
     <name>498</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.714221001" lon="12.371807098">
+<time>2005-04-26T14:27:22Z</time>
     <name>499</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.714993477" lon="12.372364998">
+<time>2005-04-26T14:27:22Z</time>
     <name>500</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.716238022" lon="12.373266220">
+<time>2005-04-26T14:27:22Z</time>
     <name>501</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.724606514" lon="12.373137474">
+<time>2005-04-26T14:27:22Z</time>
     <name>502</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.728297234" lon="12.374081612">
+<time>2005-04-26T14:27:22Z</time>
     <name>503</name>
+    <desc>Halten Sie sich links in Richtung Marienstrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.731773376" lon="12.374167442">
+<time>2005-04-26T14:27:22Z</time>
     <name>504</name>
+    <desc>Biegen Sie links ab auf die Uferstrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.739798546" lon="12.376356125">
+<time>2005-04-26T14:27:22Z</time>
     <name>505</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.775847435" lon="12.368073463">
+<time>2005-04-26T14:27:22Z</time>
     <name>506</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.812239647" lon="12.388501167">
+<time>2005-04-26T14:27:22Z</time>
     <name>507</name>
+    <desc>Biegen Sie links ab auf die Querstrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.812325478" lon="12.387084961">
+<time>2005-04-26T14:27:22Z</time>
     <name>508</name>
+    <desc>Biegen Sie rechts ab auf die Carth&#xe4;userstrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.812454224" lon="12.386956215">
+<time>2005-04-26T14:27:22Z</time>
     <name>509</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.813097954" lon="12.386569977">
+<time>2005-04-26T14:27:22Z</time>
     <name>510</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.814642906" lon="12.385797501">
+<time>2005-04-26T14:27:22Z</time>
     <name>511</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.816531181" lon="12.385239601">
+<time>2005-04-26T14:27:22Z</time>
     <name>512</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.817217827" lon="12.385926247">
+<time>2005-04-26T14:27:22Z</time>
     <name>513</name>
+    <desc>Halten Sie sich links in Richtung S54</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.818977356" lon="12.385969162">
+<time>2005-04-26T14:27:22Z</time>
     <name>514</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.825457573" lon="12.387986183">
+<time>2005-04-26T14:27:22Z</time>
     <name>515</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.826058388" lon="12.388329506">
+<time>2005-04-26T14:27:22Z</time>
     <name>516</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.842709541" lon="12.393994331">
+<time>2005-04-26T14:27:22Z</time>
     <name>517</name>
+    <desc>Biegen Sie rechts ab auf die Leipziger Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.844254494" lon="12.397599220">
+<time>2005-04-26T14:27:22Z</time>
     <name>518</name>
+    <desc>Biegen Sie rechts ab auf die Leipziger Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.842108727" lon="12.400431633">
+<time>2005-04-26T14:27:22Z</time>
     <name>519</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.841979980" lon="12.400732040">
+<time>2005-04-26T14:27:22Z</time>
     <name>520</name>
+    <desc>Biegen Sie links ab auf die Ponitzer Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.843696594" lon="12.406182289">
+<time>2005-04-26T14:27:22Z</time>
     <name>521</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.843997002" lon="12.408328056">
+<time>2005-04-26T14:27:22Z</time>
     <name>522</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.844125664" lon="12.408756875">
+<time>2005-04-26T14:27:22Z</time>
     <name>523</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.844125748" lon="12.408757210">
 <time>2005-02-26T09:10:47Z</time>
@@ -438,34 +685,57 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.844125664" lon="12.408756875">
+<time>2005-04-26T14:27:22Z</time>
     <name>524</name>
+    <desc>Fahren Sie auf die Gosel nach Nordosten</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.844254494" lon="12.409186363">
+<time>2005-04-26T14:27:22Z</time>
     <name>525</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.846185684" lon="12.412233353">
+<time>2005-04-26T14:27:22Z</time>
     <name>526</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.856056213" lon="12.423348427">
+<time>2005-04-26T14:27:22Z</time>
     <name>527</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.858330727" lon="12.424507141">
+<time>2005-04-26T14:27:22Z</time>
     <name>528</name>
+    <desc>Biegen Sie rechts ab auf die G&#xf6;ssnitzer Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.860562325" lon="12.427039146">
+<time>2005-04-26T14:27:22Z</time>
     <name>529</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.872192383" lon="12.434377670">
+<time>2005-04-26T14:27:22Z</time>
     <name>530</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.875239372" lon="12.435235977">
+<time>2005-04-26T14:27:22Z</time>
     <name>531</name>
+    <desc>Biegen Sie links ab auf die Altenburger Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.876870155" lon="12.434163094">
+<time>2005-04-26T14:27:22Z</time>
     <name>532</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.877340548" lon="12.433888670">
+<time>2005-04-26T14:27:22Z</time>
     <name>533</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.877340632" lon="12.433888670">
     <name>3</name>
@@ -474,76 +744,129 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.877340548" lon="12.433888670">
+<time>2005-04-26T14:27:23Z</time>
     <name>534</name>
+    <desc>Fahren Sie auf die Altenburger Strasse nach Norden</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.879616737" lon="12.432918549">
+<time>2005-04-26T14:27:23Z</time>
     <name>535</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.880904198" lon="12.432188988">
+<time>2005-04-26T14:27:23Z</time>
     <name>536</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.881419182" lon="12.431759834">
+<time>2005-04-26T14:27:23Z</time>
     <name>537</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.887727737" lon="12.430858612">
+<time>2005-04-26T14:27:23Z</time>
     <name>538</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.888371468" lon="12.432703972">
+<time>2005-04-26T14:27:23Z</time>
     <name>539</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.888543129" lon="12.433948517">
+<time>2005-04-26T14:27:23Z</time>
     <name>540</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.901160240" lon="12.440814972">
+<time>2005-04-26T14:27:23Z</time>
     <name>541</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.902791023" lon="12.440428734">
+<time>2005-04-26T14:27:23Z</time>
     <name>542</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.905494690" lon="12.439956665">
+<time>2005-04-26T14:27:23Z</time>
     <name>543</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.910258293" lon="12.441716194">
+<time>2005-04-26T14:27:23Z</time>
     <name>544</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.911631584" lon="12.442531586">
+<time>2005-04-26T14:27:23Z</time>
     <name>545</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.920085907" lon="12.444977760">
+<time>2005-04-26T14:27:23Z</time>
     <name>546</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.924978256" lon="12.443475723">
+<time>2005-04-26T14:27:23Z</time>
     <name>547</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.933046341" lon="12.429485321">
+<time>2005-04-26T14:27:23Z</time>
     <name>548</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.935878754" lon="12.426309586">
+<time>2005-04-26T14:27:23Z</time>
     <name>549</name>
+    <desc>Biegen Sie links ab auf die Hauptstrasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.933132172" lon="12.420730591">
+<time>2005-04-26T14:27:23Z</time>
     <name>550</name>
+    <desc>Biegen Sie rechts ab auf die K61</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.933818817" lon="12.419013977">
+<time>2005-04-26T14:27:23Z</time>
     <name>551</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.938711166" lon="12.414765358">
+<time>2005-04-26T14:27:23Z</time>
     <name>552</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.941715240" lon="12.413306236">
+<time>2005-04-26T14:27:23Z</time>
     <name>553</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.942659378" lon="12.412362099">
+<time>2005-04-26T14:27:23Z</time>
     <name>554</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.949354172" lon="12.405452728">
+<time>2005-04-26T14:27:23Z</time>
     <name>555</name>
+    <desc>Biegen Sie rechts ab auf die Schm&#xf6;llner Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.956048965" lon="12.410302162">
+<time>2005-04-26T14:27:23Z</time>
     <name>556</name>
+    <desc>Halten Sie sich rechts in Richtung Stra&#xdf;e</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.964955157" lon="12.435919270">
+<time>2005-04-26T14:27:23Z</time>
     <name>557</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.964955240" lon="12.435919438">
 <time>2005-06-24T00:50:24Z</time>
@@ -553,148 +876,251 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.964955157" lon="12.435919270">
+<time>2005-04-26T14:27:23Z</time>
     <name>558</name>
+    <desc>Fahren Sie auf die Stra&#xdf;e nach Nordosten</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.999994278" lon="12.470340729">
+<time>2005-04-26T14:27:23Z</time>
     <name>559</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.999994278" lon="12.470340729">
+<time>2005-04-26T14:27:23Z</time>
     <name>560</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.011323929" lon="12.454934120">
+<time>2005-04-26T14:27:23Z</time>
     <name>561</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.023340225" lon="12.456436157">
+<time>2005-04-26T14:27:23Z</time>
     <name>562</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.025185585" lon="12.457680702">
+<time>2005-04-26T14:27:23Z</time>
     <name>563</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.026730537" lon="12.458109856">
+<time>2005-04-26T14:27:23Z</time>
     <name>564</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.037459373" lon="12.458624840">
+<time>2005-04-26T14:27:23Z</time>
     <name>565</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.043510437" lon="12.455277443">
+<time>2005-04-26T14:27:23Z</time>
     <name>566</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.043682098" lon="12.455277443">
+<time>2005-04-26T14:27:23Z</time>
     <name>567</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.050333977" lon="12.454290390">
+<time>2005-04-26T14:27:23Z</time>
     <name>568</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.050977707" lon="12.454075813">
+<time>2005-04-26T14:27:23Z</time>
     <name>569</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.052565575" lon="12.453346252">
+<time>2005-04-26T14:27:23Z</time>
     <name>570</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.053166389" lon="12.453131676">
+<time>2005-04-26T14:27:23Z</time>
     <name>571</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.053895950" lon="12.453432083">
+<time>2005-04-26T14:27:23Z</time>
     <name>572</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.054925919" lon="12.453861237">
+<time>2005-04-26T14:27:23Z</time>
     <name>573</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.058444977" lon="12.454719543">
+<time>2005-04-26T14:27:23Z</time>
     <name>574</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.062393188" lon="12.454032898">
+<time>2005-04-26T14:27:23Z</time>
     <name>575</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.065225601" lon="12.453517914">
+<time>2005-04-26T14:27:23Z</time>
     <name>576</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.072306633" lon="12.460212708">
+<time>2005-04-26T14:27:23Z</time>
     <name>577</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.075139046" lon="12.463688850">
+<time>2005-04-26T14:27:23Z</time>
     <name>578</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.081104279" lon="12.465276718">
+<time>2005-04-26T14:27:23Z</time>
     <name>579</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.086254120" lon="12.468323708">
+<time>2005-04-26T14:27:23Z</time>
     <name>580</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.088700294" lon="12.469439507">
+<time>2005-04-26T14:27:23Z</time>
     <name>581</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.093463898" lon="12.473216057">
+<time>2005-04-26T14:27:23Z</time>
     <name>582</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.107110977" lon="12.489309311">
+<time>2005-04-26T14:27:23Z</time>
     <name>583</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.110973358" lon="12.490983009">
+<time>2005-04-26T14:27:23Z</time>
     <name>584</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.118955612" lon="12.484116554">
+<time>2005-04-26T14:27:23Z</time>
     <name>585</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.120371819" lon="12.485876083">
+<time>2005-04-26T14:27:23Z</time>
     <name>586</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.122260094" lon="12.489266396">
+<time>2005-04-26T14:27:23Z</time>
     <name>587</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.127624512" lon="12.504329681">
+<time>2005-04-26T14:27:23Z</time>
     <name>588</name>
+    <desc>Biegen Sie links ab auf die Leipziger Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.131916046" lon="12.505788803">
+<time>2005-04-26T14:27:23Z</time>
     <name>589</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.133460999" lon="12.506861687">
+<time>2005-04-26T14:27:23Z</time>
     <name>590</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.135735512" lon="12.508449554">
+<time>2005-04-26T14:27:23Z</time>
     <name>591</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.191182137" lon="12.470211983">
+<time>2005-04-26T14:27:23Z</time>
     <name>592</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.194314957" lon="12.462058067">
+<time>2005-04-26T14:27:23Z</time>
     <name>593</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.230278015" lon="12.388458252">
+<time>2005-04-26T14:27:23Z</time>
     <name>594</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.275467873" lon="12.383222580">
+<time>2005-04-26T14:27:23Z</time>
     <name>595</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.299843788" lon="12.376141548">
+<time>2005-04-26T14:27:23Z</time>
     <name>596</name>
+    <desc>Fahren Sie rechts ab auf die Prinz-Eugen-Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.301903725" lon="12.375884056">
+<time>2005-04-26T14:27:23Z</time>
     <name>597</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.302890778" lon="12.375154495">
+<time>2005-04-26T14:27:23Z</time>
     <name>598</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.303405762" lon="12.374296188">
+<time>2005-04-26T14:27:23Z</time>
     <name>599</name>
+    <desc>Biegen Sie rechts ab auf die Wolfgang-Heinze-Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.304135323" lon="12.374124527">
+<time>2005-04-26T14:27:23Z</time>
     <name>600</name>
+    <desc>Biegen Sie rechts ab auf die Meusdorfer Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.309285164" lon="12.387299538">
+<time>2005-04-26T14:27:23Z</time>
     <name>601</name>
+    <desc>Biegen Sie rechts ab auf die Arno-Nitzsche-Strasse</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.310272217" lon="12.396268845">
+<time>2005-04-26T14:27:23Z</time>
     <name>602</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.314005852" lon="12.406268120">
+<time>2005-04-26T14:27:23Z</time>
     <name>603</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.314606667" lon="12.408971786">
+<time>2005-04-26T14:27:23Z</time>
     <name>604</name>
+    <desc>Ordnen Sie sich rechts ein in Richtung Strasse Des 18. Oktober</desc>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.314536594" lon="12.409158535">
+<time>2005-04-26T14:27:23Z</time>
     <name>605</name>
+    <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.314520836" lon="12.409143448">
 <time>2005-06-24T00:36:57Z</time>
