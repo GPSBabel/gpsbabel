@@ -141,7 +141,7 @@ vecs_t vec_list[] = {
 	{
 		&mps_vecs,
 		"mapsource",
-		"Garmin Mapsource",
+		"Garmin Mapsource - mps",
 		"mps"
 	},
 	{
@@ -189,7 +189,7 @@ vecs_t vec_list[] = {
 	{
 		&garmin_vecs,
 		"garmin",
-		"Garmin serial protocol", 
+		"Garmin serial/USB protocol", 
 		NULL
 	},
 	{
@@ -225,8 +225,8 @@ vecs_t vec_list[] = {
 	{
 		&easygps_vecs,
 		"easygps",
-		"EasyGPS",
-		NULL
+		"EasyGPS binary format",
+		".loc"
 	},
 	{
 		&quovadis_vecs,
@@ -411,7 +411,7 @@ vecs_t vec_list[] = {
 	{
 		&gdb_vecs,
 		"gdb",
-		"Garmin Database",
+		"Garmin Mapsource - gdb",
 		"gdb"
 	},	
 	{
