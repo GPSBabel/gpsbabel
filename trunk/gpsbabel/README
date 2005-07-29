@@ -1323,6 +1323,21 @@ DATA FILTERS
 			-x track,pack,split=4h,title="LOG # %c" \ 
 			-o gpx -F out.gpx
 
+ 	MERGE
+ 	    
+ 	    Merge puts all track points into one single track and
+ 	    sort them by time. Points with identical time stamp 
+ 	    will be dropped !!!
+ 	    
+ 	    If you want to merge tracks from different devices 
+ 	    but from same trip, use this:
+ 	    
+ 	    gpsbabel -t \
+ 		     -i gpx -f john.gpx \
+ 		     -i gpx -f doe.gpx \
+ 		     -x track,merge,title="COMBINED LOG" \
+ 		     -o gpx -F john_doe.gpx
+
     DISCARD
 
         This filter 'fixes' gps data by discarding points with a hdop
