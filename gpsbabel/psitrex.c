@@ -62,6 +62,7 @@ arglist_t psit_args[] = {
 };
 
 /* Taken from PsiTrex 1.13 */
+static
 const psit_icon_mapping_t psit_icon_value_table[] = {
 	{   0x00, "anchor" },
 	{   0x06, "dollar" },
@@ -144,7 +145,7 @@ const psit_icon_mapping_t psit_icon_value_table[] = {
 	{     -1, NULL }
 };
 
-const char *
+static const char *
 psit_find_desc_from_icon_number(const int icon)
 {
 	const psit_icon_mapping_t *i;
@@ -157,7 +158,7 @@ psit_find_desc_from_icon_number(const int icon)
 	return "";
 }
 
-int
+static int
 psit_find_icon_number_from_desc(const char *desc)
 {
 	const psit_icon_mapping_t *i;

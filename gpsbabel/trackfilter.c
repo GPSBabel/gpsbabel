@@ -104,7 +104,7 @@ trackfilter_noop_t(const route_head *h)
 * helpers
 *******************************************************************************/
 
-int
+static int
 trackfilter_opt_count(void)
 {
 	int res = 0;
@@ -118,7 +118,7 @@ trackfilter_opt_count(void)
 	return res;	
 }
 
-int
+static int
 trackfilter_parse_time_opt(const char *arg)
 {
 	time_t t0, t1;
@@ -219,7 +219,7 @@ trackfilter_fill_track_list_cb(const route_head *track) 	/* callback for track_d
 * track title producers
 *******************************************************************************/
 
-void
+static void
 trackfilter_split_init_rte_name(route_head *track, const time_t time)
 {
 	char buff[128], tbuff[128];
@@ -254,7 +254,7 @@ trackfilter_split_init_rte_name(route_head *track, const time_t time)
 	track->rte_name = xstrdup(buff);
 }
 
-void
+static void
 trackfilter_pack_init_rte_name(route_head *track, const time_t default_time)
 {
 	char buff[128];
@@ -287,7 +287,7 @@ trackfilter_pack_init_rte_name(route_head *track, const time_t default_time)
 * option "title"
 *******************************************************************************/
 
-void
+static void
 trackfilter_title(void)
 {
 	int i;
@@ -308,7 +308,7 @@ trackfilter_title(void)
 * option "pack" (default)
 *******************************************************************************/
 
-void
+static void
 trackfilter_pack(void)
 {
 	int i, j;
@@ -346,7 +346,7 @@ trackfilter_pack(void)
 * option "merge"
 *******************************************************************************/
 
-void
+static void
 trackfilter_merge(void)
 {
 	int i, j, dropped;
@@ -404,7 +404,7 @@ trackfilter_merge(void)
 * option "split"
 *******************************************************************************/
 
-void
+static void
 trackfilter_split(void)
 {
 	route_head *curr;
@@ -540,7 +540,7 @@ trackfilter_split(void)
 * option "move"
 *******************************************************************************/
 
-void
+static void
 trackfilter_move(void)
 {
 	int i;
@@ -568,7 +568,7 @@ trackfilter_move(void)
 * option: "start" / "stop"
 *******************************************************************************/
 
-time_t
+static time_t
 trackfilter_range_check(const char *timestr)
 {
 	int i;
@@ -595,7 +595,7 @@ trackfilter_range_check(const char *timestr)
 	return mkgmtime(&time);
 }
 
-int
+static int
 trackfilter_range(void)		/* returns number of track points left after filtering */
 {
 	time_t start, stop;

@@ -104,14 +104,14 @@ static arglist_t gdb_args[] = {
  * Add a waypoint that we've already written out to our list
  *
  */
-void
+static void
 gdb_add_to_hidden(const waypoint *wpt)
 {
 	waypoint *tmp = waypt_dupe(wpt);
 	route_add_wpt(gdb_hidden, tmp);
 }
 
-waypoint *
+static waypoint *
 gdb_find_wpt_q_by_name(const queue *whichQueue, const char *name)
 {
 	queue *elem, *tmp;
@@ -126,7 +126,7 @@ gdb_find_wpt_q_by_name(const queue *whichQueue, const char *name)
 	return NULL;
 }
 
-const char *
+static const char *
 gdb_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 {
 	static char custom[] = "Custom 63";
@@ -156,7 +156,7 @@ gdb_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 	return DEFAULTICONDESCR;
 }
 
-int
+static int
 gdb_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
 {
 	icon_mapping_t *i;
@@ -191,7 +191,7 @@ gdb_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
 	return def_icon;
 }
 
-int
+static int
 gdb_detect_rtept_class(const waypoint *wpt)
 {
 	if (gdb_find_wpt_q_by_name((queue *)&gdb_hidden->waypoint_list, wpt->shortname) == NULL)
@@ -202,7 +202,7 @@ gdb_detect_rtept_class(const waypoint *wpt)
 
 
 #ifndef UTF8_SUPPORT
-char *gdb_garmin_to_utf8(const char *s)
+static char *gdb_garmin_to_utf8(const char *s)
 {
 	int len;
 	char *res;
@@ -247,7 +247,7 @@ char *gdb_garmin_to_utf8(const char *s)
 
 /* %%% local functions (read support) %%% */
 
-char *
+static char *
 gdb_convert_name_buff(char *buff, size_t buffsize)
 {
 #ifdef UTF8_SUPPORT
@@ -275,7 +275,7 @@ gdb_print_buff(const char *buff, int count, const char *comment)
 }
 #endif
 
-waypoint *
+static waypoint *
 gdb_create_rte_wpt(const char *name, double lat, double lon, double alt)
 {
 	waypoint *wpt;
@@ -300,7 +300,7 @@ gdb_create_rte_wpt(const char *name, double lat, double lon, double alt)
 	return wpt;
 }
 
-size_t
+static size_t
 gdb_fread(void *target, size_t size)
 {
 	size_t result;
@@ -316,7 +316,7 @@ gdb_fread(void *target, size_t size)
 	return result;
 }
 
-int
+static int
 gdb_fread_str(char *dest, size_t maxlen)
 {
 	int c;
@@ -342,7 +342,7 @@ gdb_fread_str(char *dest, size_t maxlen)
 	fatal(MYNAME ": local buffer overflow detected, please report!\n");
 }
 
-int
+static int
 gdb_fread_le(void *dest, size_t size, int bit_count, const char *prefix, const char *field)
 {
 	char buff[32];
@@ -385,7 +385,7 @@ gdb_fread_le(void *dest, size_t size, int bit_count, const char *prefix, const c
 	}
 }
 
-int
+static int
 gdb_fread_flag(const char value)	/* read one byte and compare to value */
 {
 	char c;
@@ -394,7 +394,7 @@ gdb_fread_flag(const char value)	/* read one byte and compare to value */
 	return (c == value);
 }
 
-void
+static void
 gdb_is_valid(int is, const char *prefix, const char *comment)
 {
 	if (is == 0) 
@@ -404,7 +404,7 @@ gdb_is_valid(int is, const char *prefix, const char *comment)
 	}
 }
 
-void
+static void
 gdb_is_validf(int is, const char *prefix, const char *format, ...)
 {
 	va_list args;
@@ -427,7 +427,7 @@ gdb_is_validf(int is, const char *prefix, const char *format, ...)
 /* %%%                                   read file header                                               */
 /********************************************************************************************************/
 
-void
+static void
 gdb_read_file_header(void)
 {
 	char buff[128];
@@ -486,7 +486,7 @@ gdb_read_file_header(void)
 /* %%%                                     read waypoint                                               */
 /********************************************************************************************************/
 
-waypoint *
+static waypoint *
 gdb_read_wpt(const size_t fileofs, int *wptclass)
 {
 	char xname[GDB_NAME_BUFFERLEN];
@@ -635,7 +635,7 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 /* %%%                                     read route                                                   */
 /********************************************************************************************************/
 
-route_head *
+static route_head *
 gdb_read_route(void)
 {
 	char xname[GDB_NAME_BUFFERLEN];
@@ -785,7 +785,7 @@ gdb_read_route(void)
 }
 
 
-route_head *
+static route_head *
 gdb_read_track(const size_t max_file_pos)
 {
 	char xname[GDB_NAME_BUFFERLEN];
@@ -860,7 +860,7 @@ gdb_read_track(const size_t max_file_pos)
 
 /*******************************************************************************/
 
-void
+static void
 gdb_read_data(void)
 {
 	int reclen, warnings;
@@ -984,7 +984,7 @@ gdb_read_data(void)
 
 /* helpers */
 
-waypoint **
+static waypoint **
 gdb_route_point_list(const route_head *route, int *count)
 {
 	waypoint **result;
@@ -1015,13 +1015,13 @@ gdb_route_point_list(const route_head *route, int *count)
 	return result;
 }
 
-void 
+static void 
 gdb_fwrite(const void *data, const size_t size)
 {
 	fwrite(data, size, 1, fout);
 }
 
-void 
+static void 
 gdb_fwrite_str(const char *str, const int len)
 {
 
@@ -1035,7 +1035,7 @@ gdb_fwrite_str(const char *str, const int len)
 	}
 }
 
-void 
+static void 
 gdb_fwrite_le(const void *data, const size_t size)
 {
 	int i;
@@ -1070,7 +1070,7 @@ gdb_fwrite_le(const void *data, const size_t size)
 	}
 }
 
-void
+static void
 gdb_fwrite_alt(const double alt, const double unknown_value)
 {
 	char c0 = 0;
@@ -1085,13 +1085,13 @@ gdb_fwrite_alt(const double alt, const double unknown_value)
 	    gdb_fwrite(&c0, 1);		/* no value */
 }
 
-void 
+static void 
 gdb_fwrite_int(const int data)
 {
 	gdb_fwrite_le(&data, sizeof(data));
 }
 
-void 
+static void 
 gdb_fwrite_icon(const waypoint *wpt)	/* partly taken from mapsource.c */
 {
 	int icon;
@@ -1122,7 +1122,7 @@ gdb_fwrite_icon(const waypoint *wpt)	/* partly taken from mapsource.c */
 /* %%%                       write file header                             %%% */
 /*-----------------------------------------------------------------------------*/
 
-void
+static void
 gdb_write_file_header(const struct tm *tm)
 {
 	char buff[128];
@@ -1159,7 +1159,7 @@ gdb_write_file_header(const struct tm *tm)
 /* %%%                         write waypoints                             %%% */
 /*-----------------------------------------------------------------------------*/
 
-void 
+static void 
 gdb_write_waypt(const waypoint *wpt, const int hidden)
 {
 	int i;
@@ -1289,7 +1289,7 @@ gdb_write_rtewpt_cb(const waypoint *wpt)		/* called by waypt_disp (route points)
 /* %%%                         write routes                                %%% */
 /*-----------------------------------------------------------------------------*/
 
-void
+static void
 gdb_write_route(const route_head *route, const waypoint **list, const int count)
 {
 	int i, wpt_class;
@@ -1474,7 +1474,7 @@ gdb_write_route_cb(const route_head *route)
 /* %%%                          write tracks                               %%% */
 /*-----------------------------------------------------------------------------*/
 
-void 
+static void 
 gdb_write_track(const route_head *track)
 {
 	char buff[128];
@@ -1540,7 +1540,7 @@ gdb_write_track_cb(const route_head *track)			/* called from track_disp_all */
 
 /*******************************************************************************/
 
-void
+static void
 gdb_write_data(void)
 {
 	char c1 = 1;
@@ -1571,7 +1571,7 @@ gdb_write_data(void)
 
 /*******************************************************************************/
 
-void
+static void
 gdb_init_opts(const char op)	/* 1 = read; 2 = write */
 {
 	gdb_via = 0;
