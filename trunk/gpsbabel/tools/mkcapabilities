@@ -1,4 +1,4 @@
-./gpsbabel -^2 | 's/\&amp;/\&/'` | awk  -F'\t' '
+./gpsbabel -^2 | sed 's/\&amp;/\&/' | awk  -F'\t' '
 function getcap(type, cap, sname, lname) {
 	if (type == "internal") return
 	print "<tr>"
