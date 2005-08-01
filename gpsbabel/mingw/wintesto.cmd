@@ -1054,7 +1054,7 @@ REM
 @echo.
 
 REM 
-REM TourExchangeFormat tef (read only)
+REM tef "TourExchangeFormat" read test
 REM 
 DEL %TMPDIR%\tef_xml*
 @echo on
@@ -1062,7 +1062,7 @@ DEL %TMPDIR%\tef_xml*
 %PNAME% -r -i tef -f reference\route\tef_xml.sample.xml -o gpx -F %TMPDIR%\tef_xml.sample.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\tef_xml.sample.gpx.ref %TMPDIR%\tef_xml.sample.gpx.new
+CALL :COMPARE reference\route\tef_xml.sample.gpx %TMPDIR%\tef_xml.sample.gpx
 
 REM 
 REM PathAway Palm Database .pdb tests
@@ -1083,12 +1083,26 @@ DEL %TMPDIR%\pathaway*
 @echo.
 CALL :COMPARE %TMPDIR%\pathaway.gpx reference\track\pathaway.gpx
 
+REM 
+REM Garmin GPS Database .gdb tests
+REM 
+DEL %TMPDIR%\gdb-*
 @echo on
 @echo Testing...
-%PNAME% -w -r -t -i gdb -f reference\gdb-sample.gdb -x track,pack -o gpx -F %TMPDIR%\gdb-sample.gpx
+%PNAME% -w -r -t -i gdb -f reference\gdb-sample.gdb -o gpx -F %TMPDIR%\gdb-sample.gpx
 @echo off
 @echo.
-REM compare ${TMPDIR}/gdb-sample.ref ${TMPDIR}/gdb-sample.new
+CALL :COMPARE reference\gdb-sample.gpx %TMPDIR%\gdb-sample.gpx
+@echo on
+@echo Testing...
+%PNAME% -w -r -t -i gpx -f reference\gdb-sample.gpx -o gdb,ver=1 -F %TMPDIR%\gdb-sample.gdb
+%PNAME% -w -r -t -i gdb -f %TMPDIR%\gdb-sample.gdb -o gpx -F %TMPDIR%\gdb-sample.gpx
+@echo off
+@echo.
+REM 
+REM Because of Garmin coordinates storage gpx is not good for this test
+REM compare reference/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
+REM 
 
 REM 
 REM Vito Navigator II .smt tests
@@ -1099,13 +1113,13 @@ DEL %TMPDIR%\vitosmt*
 %PNAME%    -i vitosmt -f reference\vitosmt.smt -o gpx -F %TMPDIR%\vitosmt.gpx
 @echo off
 @echo.
-REM compare ${TMPDIR}/vitosmt.gpx reference/vitosmt.gpx
+CALL :COMPARE %TMPDIR%\vitosmt.gpx reference\vitosmt.gpx
 @echo on
 @echo Testing...
 %PNAME% -t -i vitosmt -f reference\vitosmt.smt -o gpx -F %TMPDIR%\vitosmt_t.gpx
 @echo off
 @echo.
-REM compare ${TMPDIR}/vitosmt_t.gpx reference/track/vitosmt_t.gpx
+CALL :COMPARE %TMPDIR%\vitosmt_t.gpx reference\track\vitosmt_t.gpx
 
 REM 
 REM tracks filter tests
@@ -1142,4 +1156,63 @@ CALL :COMPARE reference\route\bcr-sample2.bcr %TMPDIR%\bcr-sample2.bcr
 @echo off
 @echo.
 CALL :COMPARE reference\route\bcr-sample.gpx %TMPDIR%\bcr-sample2.gpx
+
+REM 
+REM Garmin logbook.   This format has an extra section (lap data with things
+REM like heartbeat and calories burned) that we don't know what to do with,
+REM so we convert it to gpx, convert it to itself, convert THAT to gpx, and
+REM compare those.
+REM 
+DEL %TMPDIR%\glogbook*
+@echo on
+@echo Testing...
+%PNAME% -i glogbook -f reference\track\garmin_logbook.xml -o gpx -F %TMPDIR%\glog1.gpx
+%PNAME% -i glogbook -f reference\track\garmin_logbook.xml -o glogbook -F %TMPDIR%\glog.xml
+%PNAME% -i glogbook -f %TMPDIR%\glog.xml -o gpx -F %TMPDIR%\glog2.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\glog1.gpx %TMPDIR%\glog2.gpx
+
+REM 
+REM Dop filter test
+REM 
+DEL %TMPDIR%\dop*
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f reference\dop-test.gpx -x discard,hdop=50 -o openoffice -F - | sed 's\RPT...\\g'> %TMPDIR%\dop-hdop.fil
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\dop-hdop.ref %TMPDIR%\dop-hdop.fil
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f reference\dop-test.gpx -x discard,vdop=50 -o openoffice -F - | sed 's\RPT...\\g'> %TMPDIR%\dop-vdop.fil
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\dop-vdop.ref %TMPDIR%\dop-vdop.fil
+
+REM 
+REM cotoGPS test
+REM 
+DEL %TMPDIR%\coto*
+REM Track reading
+@echo on
+@echo Testing...
+%PNAME% -i coto -f reference\cototesttrack.pdb -o openoffice -F %TMPDIR%\cototrack.csv
+@echo off
+@echo.
+CALL :COMPARE reference\cototesttrack.csv %TMPDIR%\cototrack.csv
+REM Marker read/write
+@echo on
+@echo Testing...
+%PNAME% -i coto -f reference\cototestmarker.pdb -o openoffice -F %TMPDIR%\cotomarker.csv
+%PNAME% -i gpx -f reference\cototestmarker.gpx -o openoffice -F %TMPDIR%\cotomarkergpx.csv
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\cotomarker.csv %TMPDIR%\cotomarkergpx.csv
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f reference\cototestmarker.gpx -o coto -F %TMPDIR%\cotomarker.pdb
+@echo off
+@echo.
+CALL :COMPARE reference\cototestmarker.pdb %TMPDIR%\cotomarker.pdb
 
