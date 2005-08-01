@@ -786,11 +786,11 @@ compare ${TMPDIR}/dop-vdop.ref ${TMPDIR}/dop-vdop.fil
 #
 rm -f ${TMPDIR}/coto*
 # Track reading
-${PNAME} -i coto -f reference/cototesttrack.pdb -o openoffice -F ${TMPDIR}/cototrack.csv
+${PNAME} -i coto -f reference/cototesttrack.pdb -o xcsv,style=reference/cototest.style -F ${TMPDIR}/cototrack.csv
 compare reference/cototesttrack.csv ${TMPDIR}/cototrack.csv
 # Marker read/write
-${PNAME} -i coto -f reference/cototestmarker.pdb -o openoffice -F ${TMPDIR}/cotomarker.csv
-${PNAME} -i gpx -f reference/cototestmarker.gpx -o openoffice -F ${TMPDIR}/cotomarkergpx.csv
+${PNAME} -i coto -f reference/cototestmarker.pdb -o xcsv,style=reference/cototest.style -F ${TMPDIR}/cotomarker.csv
+${PNAME} -i gpx -f reference/cototestmarker.gpx -o xcsv,style=reference/cototest.style -F ${TMPDIR}/cotomarkergpx.csv
 compare ${TMPDIR}/cotomarker.csv ${TMPDIR}/cotomarkergpx.csv
 ${PNAME} -i gpx -f reference/cototestmarker.gpx -o coto -F ${TMPDIR}/cotomarker.pdb
 compare reference/cototestmarker.pdb ${TMPDIR}/cotomarker.pdb
