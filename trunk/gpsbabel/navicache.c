@@ -40,19 +40,19 @@ arglist_t nav_args[] = {
 #define MY_CBUF 4096
 
 #if NO_EXPAT
-void
+static void
 nav_rd_init(const char *fname)
 {
 	fatal(MYNAME ": This build excluded GPX support because expat was not installed.\n");
 }
 
-void
+static void
 nav_read(void)
 {
 }
 #else
 
-struct
+static struct
 nc_type_mapping{
 	geocache_type type;
 	const char *name;
@@ -64,7 +64,7 @@ nc_type_mapping{
 	{ gt_event, "event" }
 };
 
-struct
+static struct
 nc_container_mapping{
 	geocache_container type;
 	const char *name;
@@ -198,7 +198,7 @@ nav_end(void *data, const char *el)
 {
 }
 
-void
+static void
 nav_rd_init(const char *fname)
 {
 	fd = xfopen(fname, "r", MYNAME);
@@ -211,7 +211,7 @@ nav_rd_init(const char *fname)
 	XML_SetElementHandler(psr, nav_start, nav_end);
 }
 
-void
+static void
 nav_read(void)
 {
 	int len;
@@ -230,26 +230,26 @@ nav_read(void)
 
 #endif
 
-void
+static void
 nav_rd_deinit(void)
 {
 	fclose(fd);
 }
 
-void
+static void
 nav_wr_init(const char *fname)
 {
 	fatal(MYNAME ": Does not support writing Navicache files.\n");
 	ofd = xfopen(fname, "w", MYNAME);
 }
 
-void
+static void
 nav_wr_deinit(void)
 {
 	fclose(ofd);
 }
 
-void
+static void
 nav_write(void)
 {
 }

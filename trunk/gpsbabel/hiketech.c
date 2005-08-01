@@ -73,7 +73,7 @@ static xg_tag_mapping ht_map[] = {
 	{ NULL, 	0,         NULL}
 };
 
-void
+static void
 hiketech_rd_init(const char *fname)
 {
 	xml_init(fname, ht_map, NULL);
@@ -115,7 +115,7 @@ hiketech_trk_tlr(const route_head *rte)
 	fprintf(ofd, "</trk>\n");
 }
 
-void
+static void
 hiketech_print_utc(time_t tm, const char *indent, const char *tag)
 {
 	char tbuf[80];
@@ -156,7 +156,7 @@ hiketech_waypt_pr(const waypoint *wpt)
 	fprintf(ofd, "</wpt>\n");
 }
 
-void
+static void
 hiketech_write(void)
 {
 	fprintf(ofd, "<hiketech version=\"1.2\" url=\"http://www.hiketech.com\">\n");
@@ -168,69 +168,82 @@ hiketech_write(void)
 	fprintf(ofd, "</hiketech>\n");
 }
 
+static
 void	 ht_wpt_s(const char *args, const char **unused)
 {
 	wpt_tmp = waypt_new();
 }
 
+static
 void  	ht_ident(const char *args, const char **unused)
 {
 	wpt_tmp->shortname = xstrdup(args);
 }
 
+static
 void 	ht_sym(const char *args, const char **unused)
 {
 	wpt_tmp->icon_descr = xstrdup(args);
 	wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
 }
 
+static
 void  	ht_lat(const char *args, const char **unused)
 {
 	wpt_tmp->latitude = atof(args);
 }
 
+static
 void  	ht_long(const char *args, const char **unused)
 {
 	wpt_tmp->longitude = atof(args);
 }
 
+static
 void  	ht_alt(const char *args, const char **unused)
 {
 	wpt_tmp->altitude = atof(args);
 }
 
+static
 void  	ht_wpt_e(const char *args, const char **unused)
 {
 	waypt_add(wpt_tmp);
 	wpt_tmp = NULL;
 }
 
+static
 void	ht_trk_s(const char *args, const char **unused)
 {
 	trk_head = route_head_alloc();
 	track_add_head(trk_head);
 }
 
+static
 void	ht_trk_e(const char *args, const char **unused)
 {
 
 }
 
+static
 void	ht_trk_ident(const char *args, const char **unused)
 {
 	trk_head->rte_name = xstrdup(args);
 }
 
+static
 void	ht_trk_pnt_s(const char *args, const char **unused)
 {
 	wpt_tmp = waypt_new();
 }
 
+static
 void	ht_trk_pnt_e(const char *args, const char **unused)
 {
 	route_add_wpt(trk_head, wpt_tmp);
 }
 
+static
 void	ht_trk_utc(const char *args, const char **unused)
 {
 	struct tm tm;
@@ -249,16 +262,19 @@ void	ht_trk_utc(const char *args, const char **unused)
 	wpt_tmp->creation_time = utc;
 }
 
+static
 void	ht_trk_lat(const char *args, const char **unused)
 {
 	wpt_tmp->latitude = atof(args);
 }
 
+static
 void	ht_trk_long(const char *args, const char **unused)
 {
 	wpt_tmp->longitude = atof(args);
 }
 
+static
 void	ht_trk_alt(const char *args, const char **unused)
 {
 	wpt_tmp->altitude = atof(args);

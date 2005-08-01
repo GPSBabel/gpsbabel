@@ -149,6 +149,7 @@ static int isKeyword(char *str,char **keys)
 
 /*----------------------------------------------*/
 
+static
 void ovl_rd_init(char const *fname)
 {
   fpin = xfopen(fname, "rt", MYNAME);
@@ -167,7 +168,7 @@ static  struct _group {
                 } *groups;
 static  int    groups_cnt;
 
-void ovl_add_group(int aktgrp,char *akttxt)
+static void ovl_add_group(int aktgrp,char *akttxt)
 {
   int i;
 
@@ -187,7 +188,7 @@ void ovl_add_group(int aktgrp,char *akttxt)
 /*
   The name of route is stored in a 'Text'-symbol with identical 'Group'-number.
 */
-void route_add_name(const route_head *hd)
+static void route_add_name(const route_head *hd)
 {
   int grp;
   int i;
@@ -211,7 +212,7 @@ void route_add_name(const route_head *hd)
   strcpy(route->rte_name,name);
 }
 
-void ovl_read(void)
+static void ovl_read(void)
 {
   char    line[MAXLINE];
   int     isSection;
@@ -391,7 +392,7 @@ void ovl_read(void)
   xfree(groups);
 }
 
-void ovl_rd_deinit(void)
+static void ovl_rd_deinit(void)
 {
   fclose(fpin);
 }
@@ -440,7 +441,7 @@ void ovl_read_parameter(char *fname)
   }
 }
 
-void ovl_wr_init(const char *fname)
+static void ovl_wr_init(const char *fname)
 {
   fpout = xfopen(fname, "wt", MYNAME);
   govl_sum_n = 0.0;
@@ -489,7 +490,7 @@ void ovl_wr_init(const char *fname)
   }
 }
 
-void ovl_wr_deinit(void)
+static void ovl_wr_deinit(void)
 {
   fprintf(fpout,"[Overlay]\n");
   fprintf(fpout,"Symbols=%d\n",govl_symbol_cnt);
@@ -512,7 +513,7 @@ void ovl_wr_deinit(void)
   fclose(fpout);
 }
 
-void symbol_init(const route_head *hd)
+static void symbol_init(const route_head *hd)
 {
   fprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
   fprintf(fpout,"Typ=3\n");                            // Linie
@@ -527,7 +528,7 @@ void symbol_init(const route_head *hd)
   govl_group_cnt++;
 }
 
-void symbol_text(double east,double north,char *text,int group)
+static void symbol_text(double east,double north,char *text,int group)
 {
   fprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
   fprintf(fpout,"Typ=2\n");                           // Text
@@ -544,7 +545,7 @@ void symbol_text(double east,double north,char *text,int group)
   govl_symbol_cnt++;
 }
 
-void symbol_point(const waypoint *wpt)
+static void symbol_point(const waypoint *wpt)
 {
   double east,north;
 
@@ -563,7 +564,7 @@ void symbol_point(const waypoint *wpt)
 }
 
 
-void symbol_deinit(const route_head *hd)
+static void symbol_deinit(const route_head *hd)
 {
   queue *elem, *tmp;
   waypoint *waypointp;
@@ -670,7 +671,7 @@ static void overlay_waypt_pr(const waypoint *waypointp)
 
 }
 
-void ovl_write(void)
+static void ovl_write(void)
 {
   waypt_disp_all(overlay_waypt_pr);
   track_disp_all(symbol_init, symbol_deinit, symbol_point);

@@ -106,6 +106,7 @@ internal_debug2(const char *format, ... )
  * utilities
  */
 
+static
 char *ppdb_strcat(char *dest, char *src, char *def, int *size)
 {
 	int len;
@@ -137,6 +138,7 @@ static char *str_pool[STR_POOL_SIZE];
 static size_t str_pool_s[STR_POOL_SIZE];
 static int str_poolp = -1;
 
+static
 void str_pool_init(void)
 {
 	int i;
@@ -147,6 +149,7 @@ void str_pool_init(void)
 	}
 }
 
+static
 void str_pool_deinit(void)
 {
 	int i;
@@ -160,6 +163,7 @@ void str_pool_deinit(void)
 	    }
 }
 
+static
 char *str_pool_get(size_t size)
 {
 	char *tmp;
@@ -180,6 +184,7 @@ char *str_pool_get(size_t size)
 	return tmp;
 }
 
+static
 char *str_pool_getcpy(char *src, char *def)
 {
 	char *res;
@@ -199,6 +204,7 @@ char *str_pool_getcpy(char *src, char *def)
  * decoding/formatting functions
  */
  
+static
 char *ppdb_fmt_float(const double val)
 {
 	char *str = str_pool_get(32);
@@ -219,6 +225,7 @@ char *ppdb_fmt_float(const double val)
 	return str;
 }
 
+static
 char *ppdb_fmt_degrees(char dir, double val)
 {
 	char *str = str_pool_get(32);
@@ -251,6 +258,7 @@ char *ppdb_fmt_degrees(char dir, double val)
 	return str;
 }
 
+static
 double ppdb_decode_coord(const char *str)
 {
 	double val;
@@ -284,6 +292,7 @@ double ppdb_decode_coord(const char *str)
 	return val;
 }
 
+static
 int ppdb_decode_tm(char *str, struct tm *tm)
 {
 	int msec, d1, d2, d3, d4;
@@ -334,7 +343,8 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 	return 1;
 }
 
-static int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_rec, route_head *head)
+static 
+int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_rec, route_head *head)
 {
 	char *data, *str;
 	double altfeet;
