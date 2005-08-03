@@ -1,5 +1,5 @@
-VERSIONU=1_2_6-beta07312005-levine
-VERSIOND=1.2.6_beta07312005-levine
+VERSIONU=1_2_6
+VERSIOND=1.2.6
 
 # If you do not have libexpat and you have no use for reading any input
 # type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
