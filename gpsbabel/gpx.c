@@ -839,11 +839,11 @@ gpx_end(void *data, const char *el)
 	case tt_fix:
 		wpt_tmp->fix = atoi(cdatastrp)-1;
 		if ( wpt_tmp->fix < fix_2d) {
-			if (!strcasecmp(cdatastrp, "none"))
+			if (!case_ignore_strcmp(cdatastrp, "none"))
 				wpt_tmp->fix = fix_none;
-			else if (!strcasecmp(cdatastrp, "dgps"))
+			else if (!case_ignore_strcmp(cdatastrp, "dgps"))
 				wpt_tmp->fix = fix_dgps;
-			else if (!strcasecmp(cdatastrp, "pps"))
+			else if (!case_ignore_strcmp(cdatastrp, "pps"))
 				wpt_tmp->fix = fix_pps;
 			else
 				wpt_tmp->fix = fix_unknown;
