@@ -1,0 +1,35 @@
+# Format: Mapopolis.com Mapconverter
+# Author: Gary Paulson
+#   Date: 01/13/2003
+# Requires unsupported mapconverter.exe from mapopolis.com.
+#
+# Modifications by Alex Mottram documented 6/30/2003
+# Change %-40.40s on description output to %-.40s to stop padding.
+# Add QUOTE as badchars, remove COMMA.
+# Removed Mapconverter.exe's README information from style file.
+# Changed OFIELD to IFIELD in case you ever want to read one of these things.
+#
+#
+DESCRIPTION		Mapopolis.com Mapconverter CSV
+EXTENSION		txt
+
+# FILE LAYOUT DEFINITIIONS:
+
+FIELD_DELIMITER   COMMASPACE
+RECORD_DELIMITER  NEWLINE
+BADCHARS          ",
+
+# Map Info Record (header):
+PROLOGUE M, "Geocaches", "GPSBabel", Geocaches, __FILE__
+#
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+# L Records:
+IFIELD  CONSTANT, "L", "%s"		# [L]ANDMARK
+IFIELD  CONSTANT, "Geocaches", "%s"     # Category for Landmark Searches
+IFIELD  DESCRIPTION, "", "%-.40s"       # Name
+IFIELD  CONSTANT, "1", "%s"		# View at Zoom Level 1 (1-4)
+IFIELD  LON_DECIMAL, "", "%08.5f"       # Longitude
+IFIELD  LAT_DECIMAL, "", "%08.5f"       # Latitude

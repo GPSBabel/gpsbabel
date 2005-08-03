@@ -1,0 +1,21 @@
+# gpsbabel XCSV style file
+#
+# Format: GPSBabel arc filter format
+# Author: Ron Parker
+#   Date: 17 July 2003
+#
+
+DESCRIPTION		GPSBabel arc filter file
+EXTENSION		txt
+
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		TAB
+RECORD_DELIMITER	NEWLINE
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	LAT_DECIMAL, "", "%08.5f"
+IFIELD	LON_DECIMAL, "", "%08.5f"
