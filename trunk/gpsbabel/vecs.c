@@ -420,12 +420,14 @@ vecs_t vec_list[] = {
 		"Motorrad Routenplaner (Map&Guide) .bcr files",
 		"bcr"
 	},	
+#if 0
 	{
 		&coto_vecs,
 		"coto",
 		"cotoGPS for Palm/OS", 
 		NULL
 	},
+#endif
 	{
 		NULL,
 		NULL,
