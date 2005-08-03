@@ -4,7 +4,7 @@ checkit() {
 	export ECODE
 	TYPE=$1
 	STY=$2
-	if ! grep -q $TYPE ~/src/babelweb/capabilities.html
+	if ! grep -q $TYPE ~/src/babelweb/capabilities.html ~/src/babelweb/capabilities.inc
 	then
 		echo $STY $TYPE is not documented in capabilities.html.
 		ECODE=1
