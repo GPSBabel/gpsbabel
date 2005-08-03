@@ -911,11 +911,11 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     if (strcmp(fmp->key, "GPS_FIX") == 0) {
 	wpt->fix = atoi(s)-1;
 	if ( wpt->fix < fix_2d) {
-	if (!strcasecmp(s, "none"))
+	if (!case_ignore_strcmp(s, "none"))
 		wpt->fix = fix_none;
-	else if (!strcasecmp(s, "dgps"))
+	else if (!case_ignore_strcmp(s, "dgps"))
 		wpt->fix = fix_dgps;
-	else if (!strcasecmp(s, "pps"))
+	else if (!case_ignore_strcmp(s, "pps"))
 		wpt->fix = fix_pps;
 	else
 		wpt->fix = fix_unknown;
