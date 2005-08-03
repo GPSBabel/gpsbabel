@@ -290,7 +290,7 @@ static void write_bookmarks( void ) {
 		bookmark_tail = oldmark->next;
 		
 		be_write32( &rec.offset, oldmark->offset );
-		memset( rec.text, 16, 0 );
+		memset( rec.text, 0, 16 );
 		strncpy( rec.text, oldmark->text, 16 );
 		
 		opdb_rec = new_Record( 0, 0, ct++, 
