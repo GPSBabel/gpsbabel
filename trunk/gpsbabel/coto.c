@@ -66,7 +66,8 @@ struct record_track {
 
 #define MAX_MARKER_NAME_LENGTH 20
 struct record_wpt {
-     double lon, lat;
+     char lon[8];
+     char lat[8];
      char name[MAX_MARKER_NAME_LENGTH];
 };
 
@@ -295,8 +296,7 @@ coto_prepare_wpt_write(struct pdb *opdb)
 	opdb->appinfo = calloc(APPINFO_PACKED_SIZE,1);
 	
 	ai = (struct appinfo *) opdb->appinfo;
-	
-	ai->renamedCategories = 31; // Don't ask me why...
+	be_write16(&ai->renamedCategories, 31); // Don't ask me why...
 	if (zerocat)
 		strncpy(ai->categories[0], zerocat, 16);
 	else
