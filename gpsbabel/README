@@ -77,10 +77,21 @@ COMMON USAGE
 
 ADVANCED USAGE
 
-	Argument are processed in the order they appear on the command line.
-	Input is cumulative.  The input file type remains unchanged until a 
-	new -i argument is seen.  Files are read in the order they appear.  
-	So you could merge three input files into one output file with:
+	Argument are processed in the order they appear on the command line
+	and are translated internally into a pipeline that data flows
+	through when executed. Normally one would:
+	- read from one input
+	- optionally apply filters
+	- write into one output
+
+        but GPSBabel is flexible enough to allow more complicated
+        operations such as reading from several files (potentially of
+        different types), applying a filter, reading more data, then
+        write the merged data to multiple destinations.
+
+	The input file type remains unchanged until a new -i argument 
+	is seen.  Files are read in the order they appear. So you could 
+	merge three input files into one output file with:
 	
 	gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc
 
@@ -94,13 +105,31 @@ ADVANCED USAGE
 
 ROUTE AND TRACK MODES
 
-        The presence of "-t" on the command line tells us to work with
-        tracks.  The presence of "-r" tells us to work with routes.
-        Tracks and routes are advanced features and don't try to
-        handle every possible hazard that can be encountered during a
-        conversion.  If you're merging or converting files of similar
-        limitations, things work very well.  The presence of "-s" on
-        the command line tends to creat havoc because tracks and routes.
+	Most formats will make reasonable attempt to work transparently
+	with waypoints, tracks, and routes.  Some formats, like 'garmin'
+	and 'magellan' require the '-t' flag to work with tracks and
+	'-r' to work with routes. '-w' is for waypoints, and is the
+	default. So if you wanted to read all data from your unit into
+	a gpx file, you might use a command like:
+
+		gpsbabel -t -r -w -i magellan -f com1:  -o gpx -F backup.gpx
+
+	Tracks and routes are advanced features and don't try to
+	handle every possible hazard that can be encountered during a
+	conversion.  If you're merging or converting files of similar
+	limitations, things work very well.
+
+        Tracks and routes will sometimes be converted to a list of
+        waypoints when necessary, f.i. when writing into one of the CSV
+        formats. The inverse operation is not supported right now, so
+        reading the converted track back from CSV will always result in
+        a list of waypoints, not the original track.   
+
+        The presence of "-s" on the command line tends to creats havoc
+        on tracks and routes since many of these formats rely on
+        internal linkages between such points and renaming them may
+        break those linkages.  In general, don't use "-s" when tracks or
+        routes are present.
 
 THE FORMATS
 
@@ -943,14 +972,22 @@ THE FORMATS
 	
 DATA FILTERS
 
-	GPSBabel supports data filtering.  Data filters are invoked from
-	the command line via the '-x' option.  It should be noted that
-	data filters are invoked in the order they appear on the command
-	line and can be used in intermittently between several variations
-	of input and output functions.  It should also be noted that
-	filtering data from different input types can sometimes produce
-	undesirable results due to differences in the native data formats.
+        GPSBabel supports data filtering.  Data filters are invoked from
+        the command line via the '-x' option.  It should be noted that
+        data filters are invoked in the internal pipeline at the point
+        that corresponds to their position on the command. This implies
+        that specifying a filter before reading any data ('-x <filter>
+        -f <file>'), despite being legal, will not have any effect. The
+        advantage is that filters can be used intermittently between
+        several variations of input and output functions.  It should
+        also be noted that filtering data from different input types can
+        sometimes produce undesirable results due to differences in the
+        native data formats.
 
+        Beware that most filters only apply to a certain kind of
+        data. This is usually indicated below by referring to points,
+        tracks or routes in the first sentence which describes each
+        filter or in the table at http://www.gpsbabel.org/capabilities.html .
 
     POSITION
 
