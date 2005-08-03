@@ -105,7 +105,7 @@ data_read(void)
 		char *vdata;
 		struct tm tm;
 
-		memset (&tm, sizeof(tm), 0);
+		memset (&tm, 0, sizeof(tm));
 		wpt_tmp = waypt_new();
 		rec = (struct record *) pdb_rec->data;
 		wpt_tmp->altitude = be_read32(&rec->elevation); 
