@@ -17,7 +17,8 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-06-24T00:50:24Z</time>
   <name>Altenburg-Umgehung</name>
   <cmt>abgu (cmt)</cmt>
-  <desc>abgu (notes)</desc>
+  <desc>abgu (cmt)</desc>
+  <url>abgu (notes)</url>
   <sym>Golf Course</sym>
 </wpt>
 <wpt lat="50.610795273" lon="12.173802154">
@@ -59,14 +60,16 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-06-24T00:48:39Z</time>
   <name>NARVA</name>
   <cmt>Plauen (cmt)</cmt>
-  <desc>Wir bei NARVA (notes)</desc>
+  <desc>Plauen (cmt)</desc>
+  <url>Wir bei NARVA (notes)</url>
   <sym>Residence</sym>
 </wpt>
 <wpt lat="51.314520836" lon="12.409143448">
 <time>2005-06-24T00:36:57Z</time>
   <name>V&#xf6;lkerschlachtdenkmal</name>
   <cmt>P+R Am V&#xf6;lkerschlachtdenkmal</cmt>
-  <desc>http://Voelkerschlachtdenkmal</desc>
+  <desc>P+R Am V&#xf6;lkerschlachtdenkmal</desc>
+  <url>http://Voelkerschlachtdenkmal</url>
   <sym>Waypoint</sym>
 </wpt>
 <rte>
@@ -75,13 +78,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-06-24T00:48:39Z</time>
     <name>NARVA</name>
     <cmt>Plauen (cmt)</cmt>
-    <desc>Wir bei NARVA (notes)</desc>
+    <desc>Plauen (cmt)</desc>
+  <url>Wir bei NARVA (notes)</url>
     <sym>Residence</sym>
   </rtept>
   <rtept lat="50.492606163" lon="12.105431557">
 <time>2005-04-26T14:27:21Z</time>
     <name>416</name>
-    <desc>Fahren Sie auf die Luis-Ferdinand-Sch&#xf6;nherr-Strasse nach Norden</desc>
+  <url>Fahren Sie auf die Luis-Ferdinand-Sch&#xf6;nherr-Strasse nach Norden</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.492606163" lon="12.105431557">
@@ -92,7 +96,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.494279861" lon="12.105131149">
 <time>2005-04-26T14:27:21Z</time>
     <name>418</name>
-    <desc>Biegen Sie rechts ab auf die Liebknechtstrasse</desc>
+  <url>Biegen Sie rechts ab auf die Liebknechtstrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.493836962" lon="12.106101271">
@@ -110,13 +114,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.493836962" lon="12.106101271">
 <time>2005-04-26T14:27:21Z</time>
     <name>420</name>
-    <desc>Fahren Sie auf die Liebknechtstrasse nach S&#xfc;dosten</desc>
+  <url>Fahren Sie auf die Liebknechtstrasse nach S&#xfc;dosten</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.493378639" lon="12.107105255">
 <time>2005-04-26T14:27:21Z</time>
     <name>421</name>
-    <desc>Biegen Sie links ab auf die Jahnstrasse</desc>
+  <url>Biegen Sie links ab auf die Jahnstrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.493662786" lon="12.107152529">
@@ -134,31 +138,31 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.493662786" lon="12.107152529">
 <time>2005-04-26T14:27:21Z</time>
     <name>423</name>
-    <desc>Fahren Sie auf die Jahnstrasse nach Norden</desc>
+  <url>Fahren Sie auf die Jahnstrasse nach Norden</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.494666100" lon="12.107319832">
 <time>2005-04-26T14:27:21Z</time>
     <name>424</name>
-    <desc>Biegen Sie links ab auf die Neundorfer Strasse</desc>
+  <url>Biegen Sie links ab auf die Neundorfer Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.494666100" lon="12.106633186">
 <time>2005-04-26T14:27:21Z</time>
     <name>425</name>
-    <desc>Biegen Sie rechts ab auf die Scharnhorststrasse</desc>
+  <url>Biegen Sie rechts ab auf die Scharnhorststrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.496554375" lon="12.105002403">
 <time>2005-04-26T14:27:21Z</time>
     <name>426</name>
-    <desc>Biegen Sie rechts ab auf die Schminckestrasse</desc>
+  <url>Biegen Sie rechts ab auf die Schminckestrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.497756004" lon="12.106332779">
 <time>2005-04-26T14:27:21Z</time>
     <name>427</name>
-    <desc>Biegen Sie links ab auf die Kopernikusstrasse</desc>
+  <url>Biegen Sie links ab auf die Kopernikusstrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.499987602" lon="12.103672028">
@@ -184,7 +188,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.503549576" lon="12.099037170">
 <time>2005-04-26T14:27:21Z</time>
     <name>432</name>
-    <desc>Ordnen Sie sich rechts ein in Richtung Talstrasse</desc>
+  <url>Ordnen Sie sich rechts ein in Richtung Talstrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.510201454" lon="12.092342377">
@@ -195,7 +199,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.512003899" lon="12.090926170">
 <time>2005-04-26T14:27:21Z</time>
     <name>434</name>
-    <desc>Biegen Sie rechts ab auf die Zwoschwitzer Strasse</desc>
+  <url>Biegen Sie rechts ab auf die Zwoschwitzer Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.512475967" lon="12.091741562">
@@ -246,7 +250,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.534491539" lon="12.104487419">
 <time>2005-04-26T14:27:21Z</time>
     <name>444</name>
-    <desc>Biegen Sie links ab auf die An Der Sch&#xf6;psdrehe</desc>
+  <url>Biegen Sie links ab auf die An Der Sch&#xf6;psdrehe</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.534920692" lon="12.103457451">
@@ -262,7 +266,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.535778999" lon="12.100667953">
 <time>2005-04-26T14:27:21Z</time>
     <name>447</name>
-    <desc>Biegen Sie rechts ab auf die Elsterberger Strasse</desc>
+  <url>Biegen Sie rechts ab auf die Elsterberger Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.537710190" lon="12.102599144">
@@ -298,13 +302,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.607104301" lon="12.168259621">
 <time>2005-04-26T14:27:21Z</time>
     <name>454</name>
-    <desc>Biegen Sie rechts ab auf die Robert-Schenker-Strasse</desc>
+  <url>Biegen Sie rechts ab auf die Robert-Schenker-Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.606160164" lon="12.168302536">
 <time>2005-04-26T14:27:21Z</time>
     <name>455</name>
-    <desc>Biegen Sie links ab auf die Rosa-Luxemburg-Strasse</desc>
+  <url>Biegen Sie links ab auf die Rosa-Luxemburg-Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.607061386" lon="12.172594070">
@@ -332,13 +336,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.610795189" lon="12.173802238">
 <time>2005-04-26T14:27:22Z</time>
     <name>459</name>
-    <desc>Fahren Sie auf die Piehlerstrasse nach Nordwesten</desc>
+  <url>Fahren Sie auf die Piehlerstrasse nach Nordwesten</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.612468719" lon="12.168731689">
 <time>2005-04-26T14:27:22Z</time>
     <name>460</name>
-    <desc>Biegen Sie rechts ab auf die Greizer Strasse</desc>
+  <url>Biegen Sie rechts ab auf die Greizer Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.616717339" lon="12.170190811">
@@ -389,19 +393,19 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.647959709" lon="12.194480896">
 <time>2005-04-26T14:27:22Z</time>
     <name>470</name>
-    <desc>Halten Sie sich rechts in Richtung Carolinenstrasse</desc>
+  <url>Halten Sie sich rechts in Richtung Carolinenstrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.655169487" lon="12.198171616">
 <time>2005-04-26T14:27:22Z</time>
     <name>471</name>
-    <desc>Biegen Sie rechts ab auf die Gartenweg</desc>
+  <url>Biegen Sie rechts ab auf die Gartenweg</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.654611588" lon="12.199459076">
 <time>2005-04-26T14:27:22Z</time>
     <name>472</name>
-    <desc>Biegen Sie links ab auf die  B94</desc>
+  <url>Biegen Sie links ab auf die  B94</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.655384064" lon="12.201776505">
@@ -439,7 +443,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.654762965" lon="12.204956934">
 <time>2005-04-26T14:27:22Z</time>
     <name>478</name>
-    <desc>Fahren Sie auf die August-Bebel-Strasse nach S&#xfc;dosten</desc>
+  <url>Fahren Sie auf die August-Bebel-Strasse nach S&#xfc;dosten</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.653924942" lon="12.207655907">
@@ -455,7 +459,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.652036667" lon="12.227139473">
 <time>2005-04-26T14:27:22Z</time>
     <name>481</name>
-    <desc>Biegen Sie links ab auf die Werdauer Strasse</desc>
+  <url>Biegen Sie links ab auf die Werdauer Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.652594566" lon="12.227997780">
@@ -471,7 +475,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.655684471" lon="12.242288589">
 <time>2005-04-26T14:27:22Z</time>
     <name>484</name>
-    <desc>Halten Sie sich rechts in Richtung Werdauer Strasse</desc>
+  <url>Halten Sie sich rechts in Richtung Werdauer Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.656456947" lon="12.247138023">
@@ -567,13 +571,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.728297234" lon="12.374081612">
 <time>2005-04-26T14:27:22Z</time>
     <name>503</name>
-    <desc>Halten Sie sich links in Richtung Marienstrasse</desc>
+  <url>Halten Sie sich links in Richtung Marienstrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.731773376" lon="12.374167442">
 <time>2005-04-26T14:27:22Z</time>
     <name>504</name>
-    <desc>Biegen Sie links ab auf die Uferstrasse</desc>
+  <url>Biegen Sie links ab auf die Uferstrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.739798546" lon="12.376356125">
@@ -589,13 +593,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.812239647" lon="12.388501167">
 <time>2005-04-26T14:27:22Z</time>
     <name>507</name>
-    <desc>Biegen Sie links ab auf die Querstrasse</desc>
+  <url>Biegen Sie links ab auf die Querstrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.812325478" lon="12.387084961">
 <time>2005-04-26T14:27:22Z</time>
     <name>508</name>
-    <desc>Biegen Sie rechts ab auf die Carth&#xe4;userstrasse</desc>
+  <url>Biegen Sie rechts ab auf die Carth&#xe4;userstrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.812454224" lon="12.386956215">
@@ -621,7 +625,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.817217827" lon="12.385926247">
 <time>2005-04-26T14:27:22Z</time>
     <name>513</name>
-    <desc>Halten Sie sich links in Richtung S54</desc>
+  <url>Halten Sie sich links in Richtung S54</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.818977356" lon="12.385969162">
@@ -642,13 +646,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.842709541" lon="12.393994331">
 <time>2005-04-26T14:27:22Z</time>
     <name>517</name>
-    <desc>Biegen Sie rechts ab auf die Leipziger Strasse</desc>
+  <url>Biegen Sie rechts ab auf die Leipziger Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.844254494" lon="12.397599220">
 <time>2005-04-26T14:27:22Z</time>
     <name>518</name>
-    <desc>Biegen Sie rechts ab auf die Leipziger Strasse</desc>
+  <url>Biegen Sie rechts ab auf die Leipziger Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.842108727" lon="12.400431633">
@@ -659,7 +663,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.841979980" lon="12.400732040">
 <time>2005-04-26T14:27:22Z</time>
     <name>520</name>
-    <desc>Biegen Sie links ab auf die Ponitzer Strasse</desc>
+  <url>Biegen Sie links ab auf die Ponitzer Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.843696594" lon="12.406182289">
@@ -687,7 +691,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.844125664" lon="12.408756875">
 <time>2005-04-26T14:27:22Z</time>
     <name>524</name>
-    <desc>Fahren Sie auf die Gosel nach Nordosten</desc>
+  <url>Fahren Sie auf die Gosel nach Nordosten</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.844254494" lon="12.409186363">
@@ -708,7 +712,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.858330727" lon="12.424507141">
 <time>2005-04-26T14:27:22Z</time>
     <name>528</name>
-    <desc>Biegen Sie rechts ab auf die G&#xf6;ssnitzer Strasse</desc>
+  <url>Biegen Sie rechts ab auf die G&#xf6;ssnitzer Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.860562325" lon="12.427039146">
@@ -724,7 +728,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.875239372" lon="12.435235977">
 <time>2005-04-26T14:27:22Z</time>
     <name>531</name>
-    <desc>Biegen Sie links ab auf die Altenburger Strasse</desc>
+  <url>Biegen Sie links ab auf die Altenburger Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.876870155" lon="12.434163094">
@@ -746,7 +750,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.877340548" lon="12.433888670">
 <time>2005-04-26T14:27:23Z</time>
     <name>534</name>
-    <desc>Fahren Sie auf die Altenburger Strasse nach Norden</desc>
+  <url>Fahren Sie auf die Altenburger Strasse nach Norden</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.879616737" lon="12.432918549">
@@ -822,13 +826,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.935878754" lon="12.426309586">
 <time>2005-04-26T14:27:23Z</time>
     <name>549</name>
-    <desc>Biegen Sie links ab auf die Hauptstrasse</desc>
+  <url>Biegen Sie links ab auf die Hauptstrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.933132172" lon="12.420730591">
 <time>2005-04-26T14:27:23Z</time>
     <name>550</name>
-    <desc>Biegen Sie rechts ab auf die K61</desc>
+  <url>Biegen Sie rechts ab auf die K61</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.933818817" lon="12.419013977">
@@ -854,13 +858,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.949354172" lon="12.405452728">
 <time>2005-04-26T14:27:23Z</time>
     <name>555</name>
-    <desc>Biegen Sie rechts ab auf die Schm&#xf6;llner Strasse</desc>
+  <url>Biegen Sie rechts ab auf die Schm&#xf6;llner Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.956048965" lon="12.410302162">
 <time>2005-04-26T14:27:23Z</time>
     <name>556</name>
-    <desc>Halten Sie sich rechts in Richtung Stra&#xdf;e</desc>
+  <url>Halten Sie sich rechts in Richtung Stra&#xdf;e</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.964955157" lon="12.435919270">
@@ -872,13 +876,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-06-24T00:50:24Z</time>
     <name>Altenburg-Umgehung</name>
     <cmt>abgu (cmt)</cmt>
-    <desc>abgu (notes)</desc>
+    <desc>abgu (cmt)</desc>
+  <url>abgu (notes)</url>
     <sym>Golf Course</sym>
   </rtept>
   <rtept lat="50.964955157" lon="12.435919270">
 <time>2005-04-26T14:27:23Z</time>
     <name>558</name>
-    <desc>Fahren Sie auf die Stra&#xdf;e nach Nordosten</desc>
+  <url>Fahren Sie auf die Stra&#xdf;e nach Nordosten</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.999994278" lon="12.470340729">
@@ -1029,7 +1034,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="51.127624512" lon="12.504329681">
 <time>2005-04-26T14:27:23Z</time>
     <name>588</name>
-    <desc>Biegen Sie links ab auf die Leipziger Strasse</desc>
+  <url>Biegen Sie links ab auf die Leipziger Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.131916046" lon="12.505788803">
@@ -1070,7 +1075,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="51.299843788" lon="12.376141548">
 <time>2005-04-26T14:27:23Z</time>
     <name>596</name>
-    <desc>Fahren Sie rechts ab auf die Prinz-Eugen-Strasse</desc>
+  <url>Fahren Sie rechts ab auf die Prinz-Eugen-Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.301903725" lon="12.375884056">
@@ -1086,19 +1091,19 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="51.303405762" lon="12.374296188">
 <time>2005-04-26T14:27:23Z</time>
     <name>599</name>
-    <desc>Biegen Sie rechts ab auf die Wolfgang-Heinze-Strasse</desc>
+  <url>Biegen Sie rechts ab auf die Wolfgang-Heinze-Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.304135323" lon="12.374124527">
 <time>2005-04-26T14:27:23Z</time>
     <name>600</name>
-    <desc>Biegen Sie rechts ab auf die Meusdorfer Strasse</desc>
+  <url>Biegen Sie rechts ab auf die Meusdorfer Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.309285164" lon="12.387299538">
 <time>2005-04-26T14:27:23Z</time>
     <name>601</name>
-    <desc>Biegen Sie rechts ab auf die Arno-Nitzsche-Strasse</desc>
+  <url>Biegen Sie rechts ab auf die Arno-Nitzsche-Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.310272217" lon="12.396268845">
@@ -1114,7 +1119,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="51.314606667" lon="12.408971786">
 <time>2005-04-26T14:27:23Z</time>
     <name>604</name>
-    <desc>Ordnen Sie sich rechts ein in Richtung Strasse Des 18. Oktober</desc>
+  <url>Ordnen Sie sich rechts ein in Richtung Strasse Des 18. Oktober</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="51.314536594" lon="12.409158535">
@@ -1126,7 +1131,8 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-06-24T00:36:57Z</time>
     <name>V&#xf6;lkerschlachtdenkmal</name>
     <cmt>P+R Am V&#xf6;lkerschlachtdenkmal</cmt>
-    <desc>http://Voelkerschlachtdenkmal</desc>
+    <desc>P+R Am V&#xf6;lkerschlachtdenkmal</desc>
+  <url>http://Voelkerschlachtdenkmal</url>
     <sym>Waypoint</sym>
   </rtept>
 </rte>
