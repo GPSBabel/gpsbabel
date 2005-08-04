@@ -53,8 +53,8 @@
 #define GDB_HIDDENROUTEWPTCLASS		8
 
 #define GDB_NAME_BUFFERLEN	1024
-#define GDB_NOTES_BUFFERLEN	4096
-#define GDB_DESCR_BUFFERLEN	4096
+#define GDB_URL_BUFFERLEN	4096	/* Safety first */
+#define GDB_NOTES_BUFFERLEN	4096	/* (likewise)   */
 
 #define DEFAULTICONVALUE	18
 #define DEFAULTICONDESCR	"Waypoint"
@@ -490,8 +490,8 @@ static waypoint *
 gdb_read_wpt(const size_t fileofs, int *wptclass)
 {
 	char xname[GDB_NAME_BUFFERLEN];
-	char xdesc[GDB_DESCR_BUFFERLEN];
 	char xnotes[GDB_NOTES_BUFFERLEN];
+	char xurl[GDB_URL_BUFFERLEN];
 	int xclass;
 	int xlat, xlon, xdisplay, xcolour, xicon, xtime;
 	short xcat;
@@ -546,8 +546,8 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	if (gdb_fread_flag(1)) 						/* altitude flag */
 	    gdb_fread_le(&xalt, sizeof(xalt), 64, prefix, "altitude");
 	
-	gdb_fread_str(xdesc, sizeof(xdesc));				/* description */
-	gdb_convert_name_buff(xdesc, sizeof(xdesc));
+	gdb_fread_str(xnotes, sizeof(xnotes));				/* notes */
+	gdb_convert_name_buff(xnotes, sizeof(xnotes));
 	
 	if (gdb_fread_flag(1))						/* proximity flag */
 	    gdb_fread_le(&xproximity, sizeof(xproximity), 64, prefix, "proximity");
@@ -573,8 +573,8 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	else
 	    gdb_fread(buff, 3);
 
-	gdb_fread_str(xnotes, sizeof(xnotes));
-	gdb_convert_name_buff(xnotes, sizeof(xnotes));
+	gdb_fread_str(xurl, sizeof(xurl));
+	gdb_convert_name_buff(xurl, sizeof(xurl));
 	
 	xcat = gdb_fread_le(&xcat, sizeof(xcat), 16, prefix, "category");
 	
@@ -608,8 +608,8 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	
 	res = waypt_new();
 	res->shortname = xstrdup(xname);
-	res->description = xstrdup(xdesc);
-	res->notes = xstrdup(xnotes);
+	if (xurl[0] != '\0') res->url = xstrdup(xurl);
+	if (xnotes[0] != '\0') res->notes = xstrdup(xnotes);
 	res->latitude = GPS_Math_Semi_To_Deg(xlat);
 	res->longitude = GPS_Math_Semi_To_Deg(xlon);
 	res->altitude = xalt;
@@ -1188,7 +1188,8 @@ gdb_write_waypt(const waypoint *wpt, const int hidden)
 	gdb_fwrite_int(GPS_Math_Deg_To_Semi(wpt->longitude));
 	
 	gdb_fwrite_alt(wpt->altitude, unknown_alt);	/* altitude */
-	gdb_fwrite_str(wpt->description, -1);		/* description */
+	
+	gdb_fwrite_str((wpt->notes != NULL) ? wpt->notes : wpt->description, -1);	/* notes/comment/descr */
 	gdb_fwrite_alt(wpt->proximity, unknown_alt);	/* proximity */
 	
 #if 0
@@ -1208,7 +1209,7 @@ gdb_write_waypt(const waypoint *wpt, const int hidden)
 	gdb_fwrite(zbuf, 3);				/* three unknown bytes */
 	gdb_fwrite(zbuf, 4);				/* four unknown bytes */
 
-	gdb_fwrite_str(wpt->notes, -1);			/* notes */
+	gdb_fwrite_str(wpt->url, -1);			/* URL */
 
 #if 0
 	if (gdb_opt_category != NULL)			/* category */

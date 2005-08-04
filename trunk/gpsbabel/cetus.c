@@ -203,7 +203,8 @@ read_tracks(const struct pdb *pdb)
 {
 	struct pdb_record *pdb_rec;
 	int reclen, records, total, points, dropped;
-	char descr[DESCSZ];
+	char descr[(2 * TRACK_POINT_SIZE) + 1];
+	char temp_descr[TRACK_POINT_SIZE + 1];
 	cetus_track_head_t *head;
 	waypoint *wpt, *prev;
 	route_head *track;
@@ -250,11 +251,12 @@ read_tracks(const struct pdb *pdb)
 			break;
 			
 		    case 1: 	/* first part of description */
-			strncpy(descr, c, 25);
+			strncpy(descr, c, TRACK_POINT_SIZE);
 			break;	
 			
 		    case 2: 	/* continued description */
-			strncat(descr, c, sizeof(descr) - strlen(descr) - 1);
+			strncpy(temp_descr, c, TRACK_POINT_SIZE);
+			strcat(descr, temp_descr);	/* here is no need to check target size */
 			if (strlen(descr) > 0)
 			    track->rte_desc = xstrdup(descr);
 			break;	
