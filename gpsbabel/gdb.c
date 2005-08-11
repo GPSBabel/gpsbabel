@@ -65,6 +65,12 @@
 # define GDB_UTF8_ENABLED 0
 #endif
 
+typedef enum {
+	GDB_DISPLAY_SYMBOL_ONLY = 0,
+	GDB_DISPLAY_SYMBOL_AND_NAME = 1,
+	GDB_DISPLAY_SYMBOL_AND_COMMENT = 2,
+} gdb_display_type;
+
 /* %%% local vars %%% */
 
 FILE *fin, *fout;
@@ -1196,8 +1202,8 @@ gdb_write_waypt(const waypoint *wpt, const int hidden)
 	gdb_fwrite_int((wpt->garmin_data != NULL) ? wpt->garmin_data->display : 0);	/* display */
 	gdb_fwrite_int((wpt->garmin_data != NULL) ? wpt->garmin_data->colour : 0);	/* colour */
 #else
-	gdb_fwrite_int(0);								/* display */
-	gdb_fwrite_int(0);								/* colour */
+	gdb_fwrite_int(GDB_DISPLAY_SYMBOL_AND_NAME);	/* display */
+	gdb_fwrite_int(0);				/* colour */
 #endif
 	gdb_fwrite_icon(wpt);				/* icon    */	
 	gdb_fwrite_str("", -1);				/* city */
