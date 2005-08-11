@@ -69,6 +69,7 @@ html_disp(const waypoint *wpt)
 	int32 utmz;
 	double utme, utmn;
 	char utmzc;
+	fs_xml *fs_gpx = NULL;
 	
 	lonint = abs((int) wpt->longitude);
 	latint = abs((int) wpt->latitude);
@@ -126,8 +127,14 @@ html_disp(const waypoint *wpt)
 	else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
 		fprintf (file_out, "<p class=\"notes\">%s</p>\n", wpt->notes);
 	}
-	if ( includelogs && wpt->gpx_extras ) {
-		xml_tag *root = wpt->gpx_extras;
+	
+        fs_gpx = NULL;
+        if ( includelogs ) {
+		fs_gpx = (fs_xml *)fs_chain_find( wpt->fs, FS_GPX);
+	}
+
+        if ( fs_gpx && fs_gpx->tag ) {
+	        xml_tag *root = fs_gpx->tag;
 		xml_tag *curlog = NULL;
 		xml_tag *logpart = NULL;
 		curlog = xml_findfirst( root, "groundspeak:log" );
