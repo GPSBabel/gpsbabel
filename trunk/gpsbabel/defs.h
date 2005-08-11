@@ -171,12 +171,32 @@ typedef struct xml_tag {
 	struct xml_tag *child;
 } xml_tag ;
 
-typedef void (*an1_destroy)(void *);
-typedef void (*an1_copy)(void **, void *);
-typedef struct {
-	an1_destroy destroy;
-	an1_copy copy;
-} an1_base;
+typedef void (*fs_destroy)(void *);
+typedef void (*fs_copy)(void **, void *);
+typedef struct format_specific_data {
+	long type;
+	struct format_specific_data *next;
+	
+	fs_destroy destroy;
+	fs_copy copy;
+} format_specific_data;
+
+format_specific_data *fs_chain_copy( format_specific_data *source );
+void fs_chain_destroy( format_specific_data *chain );
+format_specific_data *fs_chain_find( format_specific_data *chain, long type );
+void fs_chain_add( format_specific_data **chain, format_specific_data *data );
+
+typedef struct fs_xml {
+	format_specific_data fs;
+	xml_tag *tag;
+} fs_xml;
+
+fs_xml *fs_xml_alloc( long type );
+
+#define FS_GPX 0x67707800L
+#define FS_AN1W 0x616e3177L
+#define FS_AN1L 0x616e316cL
+#define FS_AN1V 0x616e3176L
 
 /*
  * Misc bitfields inside struct waypoint;
@@ -267,8 +287,7 @@ typedef struct {
 	int  sat;	/* Optional: number of sats used for fix */
 	
 	geocache_data gc_data;
-	xml_tag *gpx_extras;
-	an1_base *an1_extras;
+	format_specific_data *fs;
 	void *extra_data;	/* Extra data added by, say, a filter. */
 } waypoint;
 
@@ -279,7 +298,7 @@ typedef struct {
 	char *rte_desc;
 	int rte_num;
 	int rte_waypt_ct;		/* # waypoints in waypoint list */
-	an1_base *an1_extras;
+	format_specific_data *fs;
 } route_head;
 
 /*

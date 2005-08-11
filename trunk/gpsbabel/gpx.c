@@ -58,6 +58,7 @@ static char *urlbase = NULL;
 static route_head *trk_head;
 static route_head *rte_head;
 
+
 #define MYNAME "GPX"
 #define MY_CBUF 4096
 #define DEFAULT_XSI_SCHEMA_LOC "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
@@ -329,6 +330,7 @@ start_something_else(const char *el, const char **attrv)
 	char **avcp = NULL;
 	int attr_count = 0;
 	xml_tag *new_tag;
+	fs_xml *fs_gpx = NULL;
        
 	if ( !wpt_tmp ) {
 		return;
@@ -369,8 +371,10 @@ start_something_else(const char *el, const char **attrv)
 		}
 	}
 	else {
-		if ( wpt_tmp->gpx_extras ) {
-			cur_tag = wpt_tmp->gpx_extras;
+		fs_gpx = (fs_xml *)fs_chain_find( wpt_tmp->fs, FS_GPX );
+	       	
+		if ( fs_gpx && fs_gpx->tag ) {
+			cur_tag = fs_gpx->tag;
 			while ( cur_tag->sibling ) {
 				cur_tag = cur_tag->sibling;
 			}
@@ -378,7 +382,9 @@ start_something_else(const char *el, const char **attrv)
 			new_tag->parent = NULL;
 		}
 		else {
-			wpt_tmp->gpx_extras = new_tag;
+			fs_gpx = fs_xml_alloc(FS_GPX);
+			fs_gpx->tag = new_tag;
+			fs_chain_add( &(wpt_tmp->fs), (format_specific_data *)fs_gpx );
 			new_tag->parent = NULL;
 		}
 	}
@@ -1268,6 +1274,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 {
 	const char *oname;
 	char *odesc;
+	fs_xml *fs_gpx = NULL;
 
 	/*
 	 * Desparation time, try very hard to get a good shortname
@@ -1292,7 +1299,10 @@ gpx_waypt_pr(const waypoint *waypointp)
 	gpx_write_common_description(waypointp, "  ", oname);
 	gpx_write_common_acc(waypointp, "  ");
 
-	fprint_xml_chain( waypointp->gpx_extras, waypointp );
+	fs_gpx = (fs_xml *)fs_chain_find( waypointp->fs, FS_GPX );
+	if ( fs_gpx ) {
+		fprint_xml_chain( fs_gpx->tag, waypointp );
+	}
 	fprintf(ofd, "</wpt>\n");
 }
 
