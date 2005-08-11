@@ -63,6 +63,11 @@ void copy_xml_tag( xml_tag **copy, xml_tag *src, xml_tag *parent ) {
 	char **ap = NULL;
 	char **ap2 = NULL;
 	int count = 0;
+
+	if ( !src ) {
+		*copy = NULL;
+		return;
+	}
 	
 	res = xcalloc( 1, sizeof(xml_tag));
 	*copy = res;
