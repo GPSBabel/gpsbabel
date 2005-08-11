@@ -98,7 +98,7 @@ void fs_xml_destroy( void *fs ) {
 	if ( xml ) {
 		free_xml_tag( xml->tag );
 	}
-	free( fs );
+	xfree( fs );
 }
 
 void fs_xml_copy( void **copy, void *source ) {
