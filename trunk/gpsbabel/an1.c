@@ -261,6 +261,7 @@ void Destroy_AN1_Waypoint( void *vwpt ) {
 	an1_waypoint_record *wpt = (an1_waypoint_record *)vwpt;
 	xfree( wpt->name );
 	xfree( wpt->fontname );
+	xfree( vwpt );
 }
 
 void Copy_AN1_Waypoint( void **vdwpt, void *vwpt ) {
@@ -284,7 +285,7 @@ static an1_waypoint_record *Alloc_AN1_Waypoint( ) {
 static an1_vertex_record *Alloc_AN1_Vertex();
 
 void Destroy_AN1_Vertex( void *vvertex ) {
-	/* do nothing */
+	xfree( vvertex );
 }
 
 void Copy_AN1_Vertex( void **vdvert, void *vvert ) {
@@ -309,6 +310,7 @@ static an1_line_record *Alloc_AN1_Line();
 void Destroy_AN1_Line( void *vline ) {
 	an1_line_record *line = (an1_line_record *)vline;
 	xfree( line->name );
+	xfree( vline );
 }
 
 void Copy_AN1_Line( void **vdline, void *vline ) {
@@ -613,7 +615,6 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 	Write_AN1_Waypoint( outfile, rec );
 	if ( local ) {
 		Destroy_AN1_Waypoint( rec );
-		xfree( rec );
 	}
 }
 
@@ -753,7 +754,6 @@ Write_One_AN1_Line( const route_head *rte )
 	Write_AN1_Line( outfile, rec );
 	if ( local ) {
 		Destroy_AN1_Line( rec );
-		xfree( rec );
 	}
 }
 
@@ -781,7 +781,6 @@ Write_One_AN1_Vertex( const waypoint *wpt )
 	Write_AN1_Vertex( outfile, rec );
 	if ( local ) {
 		Destroy_AN1_Vertex( rec );
-		xfree( rec );
 	}
 }
 
