@@ -619,10 +619,10 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	res->latitude = GPS_Math_Semi_To_Deg(xlat);
 	res->longitude = GPS_Math_Semi_To_Deg(xlon);
 	res->altitude = xalt;
-	res->depth = xdepth;
-	res->proximity = xproximity;
 	res->creation_time = xtime;
 #if 0
+	res->depth = xdepth;
+	res->proximity = xproximity;
 	res->garmin_data = xcalloc(1, sizeof(garmin_data_t));
 	res->garmin_data->colour = xcolour;
 	res->garmin_data->category = xcat;
@@ -1147,7 +1147,7 @@ gdb_write_file_header(const struct tm *tm)
 #else
 	/* This is our "Watermark" to show this file was created by GPSbabel */
 	/* !!! We should define the date use through Makefile !!! */
-	strncpy(buff, "A].GPSBabel_1.2.6*Jul 29 2005*21:37:51", sizeof(buff));	/* gpsbabel V1.2.6 */
+	strncpy(buff, "A].GPSBabel_1.2.7-beta*Aug 12 2005*19:55:05", sizeof(buff));	/* gpsbabel V1.2.7 BETA */
 #endif
 	len = strlen(buff);
 	buff[2] = 2;
@@ -1196,12 +1196,21 @@ gdb_write_waypt(const waypoint *wpt, const int hidden)
 	gdb_fwrite_alt(wpt->altitude, unknown_alt);	/* altitude */
 	
 	gdb_fwrite_str((wpt->notes != NULL) ? wpt->notes : wpt->description, -1);	/* notes/comment/descr */
-	gdb_fwrite_alt(wpt->proximity, unknown_alt);	/* proximity */
 	
 #if 0
-	gdb_fwrite_int((wpt->garmin_data != NULL) ? wpt->garmin_data->display : 0);	/* display */
-	gdb_fwrite_int((wpt->garmin_data != NULL) ? wpt->garmin_data->colour : 0);	/* colour */
+	if (garmin_data != NULL)
+	{
+		gdb_fwrite_alt(garmin_data->proximity, 0);		/* proximity */
+		gdb_fwrite_int(garmin_data->display);			/* display */
+		gdb_fwrite_int(garmin_data->colour);			/* colour */
+	{
+		gdb_fwrite(&c0, 1);					/* NO proximity */
+		gdb_fwrite_int(GDB_DISPLAY_SYMBOL_AND_NAME);		/* display */
+		gdb_fwrite_int(0);					/* colour */
+	
+	}
 #else
+	gdb_fwrite(&c0, 1);				/* NO proximity */
 	gdb_fwrite_int(GDB_DISPLAY_SYMBOL_AND_NAME);	/* display */
 	gdb_fwrite_int(0);				/* colour */
 #endif
@@ -1210,8 +1219,11 @@ gdb_write_waypt(const waypoint *wpt, const int hidden)
 	gdb_fwrite_str("", -1);				/* state */
 	gdb_fwrite_str("", -1);				/* facility */
 	gdb_fwrite(zbuf, 1);				/* unknown */
-	gdb_fwrite_alt(wpt->depth, unknown_alt);	/* depth */
-
+#if 0
+	gdb_fwrite_alt((garmin_data != NULL) ? garmin_data->depth : 0, 0);	/* depth */
+#else
+	gdb_fwrite(&c0, 1);				/* NO depth */
+#endif
 	gdb_fwrite(zbuf, 3);				/* three unknown bytes */
 	gdb_fwrite(zbuf, 4);				/* four unknown bytes */
 
