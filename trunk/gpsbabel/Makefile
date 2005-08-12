@@ -1,5 +1,5 @@
-VERSIONU=1_2_7-beta08042005
-VERSIOND=1.2.7-beta08042005
+VERSIONU=1_2_7-beta08122005
+VERSIOND=1.2.7-beta08122005
 
 # If you do not have libexpat and you have no use for reading any input
 # type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
