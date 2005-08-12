@@ -360,7 +360,8 @@ main(int argc, char *argv[])
 	}
 	if (ovecs == NULL)
 	{
-		cet_convert_strings(NULL, &cet_cs_vec_ansi_x3_4_1968, NULL);
+		cet_convert_init(CET_CHARSET_ASCII, 1);
+		cet_convert_strings(NULL, global_opts.charset, NULL);
 		waypt_disp_all(waypt_disp);
 	}
 
