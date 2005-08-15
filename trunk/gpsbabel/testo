@@ -795,4 +795,18 @@ compare ${TMPDIR}/dop-vdop.ref ${TMPDIR}/dop-vdop.fil
 # ${PNAME} -i gpx -f reference/cototestmarker.gpx -o coto -F ${TMPDIR}/cotomarker.pdb
 # compare reference/cototestmarker.pdb ${TMPDIR}/cotomarker.pdb
 
+#
+# Fugawi test cases
+rm -f ${TMPDIR}/fugawi*
+${PNAME}  -i fugawi -f reference/fugawi.notime.txt -o fugawi -F ${TMPDIR}/fugawi1.txt
+compare reference/fugawi.ref.txt ${TMPDIR}/fugawi1.txt
+${PNAME}  -i geo -f geocaching.loc -o fugawi -F ${TMPDIR}/fugawi2.txt
+compare reference/fugawi.ref.txt ${TMPDIR}/fugawi2.txt
+${PNAME}  -i fugawi -f ${TMPDIR}/fugawi2.txt -o fugawi -F ${TMPDIR}/fugawi3.txt
+compare ${TMPDIR}/fugawi2.txt ${TMPDIR}/fugawi3.txt
+${PNAME}  -i fugawi -f reference/fugawi.time.txt  -o fugawi -F ${TMPDIR}/fugawi4.txt
+compare reference/fugawi.time.ref.txt ${TMPDIR}/fugawi4.txt
+${PNAME} -i gpx -f reference/track/tracks.gpx  -o fugawi -F ${TMPDIR}/fugawi5.txt
+compare reference/track/fugawi.txt ${TMPDIR}/fugawi5.txt
+
 exit 0

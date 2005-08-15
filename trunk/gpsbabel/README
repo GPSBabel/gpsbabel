@@ -579,8 +579,24 @@ THE FORMATS
 
     Fugawi
 
-	This was a requested CSV format.   It's unknown which version of
-	which software it works with.
+	This was a requested CSV format, *not* the proprietary binary format
+        used by Fugawi. Like any other CSV format, GPSBabel cannot read tracks
+        in this format, but converting a track into it and then importing as
+        track in Fugawi works.
+
+        It is known to work with Fugawi V3.1.4.635. When importing/exporting
+        waypoints, one has to specify the order of fields as follows (names of
+        fields may depend on the language used by Fugawi):
+        - Name
+        - Comment
+        - Description
+        - Latidude
+        - Longitude
+        - Altitude (metres)
+        - Date (yyyymmdd/yymmdd)
+        - Time of day (hhmmss)
+        When importing tracks, use "[ignore]" instead of "Name", "Comment" and
+        "Description".
 
 	http://www.fugawi.com/
 

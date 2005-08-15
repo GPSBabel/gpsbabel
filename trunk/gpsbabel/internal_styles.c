@@ -141,8 +141,8 @@ static char fugawi[] =
 "# fugawi XCSV style file\n"
 "#\n"
 "# Format: Fugawi\n"
-"# Author: Robert Lipe\n"
-"#   Date: 03/10/2003\n"
+"# Author: Robert Lipe, Patrick Ohly\n"
+"#   Date: 07/24/2005\n"
 "#\n"
 "# \n"
 
@@ -166,7 +166,7 @@ static char fugawi[] =
 "PROLOGUE \\# Waypoint description\n"
 "PROLOGUE \\# Latitude in Degree and decimals (soutern hemisphere has neg. degrees)\n"
 "PROLOGUE \\# Longitude in degree and decimals (neg. numbers: west of Greenwich)\n"
-"PROLOGUE \\# Height in meters\n"
+"PROLOGUE \\# Height in meters [optional when importing, always present when exporting: Date (GMT) as ISO YYYYMMDD, Time of the day relative to the date as HHMMSS\n"
 
 "#\n"
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
@@ -177,6 +177,8 @@ static char fugawi[] =
 "IFIELD	LAT_DECIMAL, \"\", \"%-.7f\"\n"
 "IFIELD	LON_DECIMAL, \"\", \"%-.7f\"\n"
 "IFIELD	ALT_METERS, \"\", \"%-7.1f\"\n"
+"IFIELD  GMT_TIME, \"\", \"%Y%m%d\"\n"
+"IFIELD  HMSG_TIME, \"\", \"%02d%02d%02d\"\n"
 ;
 static char gpsdrive[] = 
 "# gpsbabel XCSV style file\n"
