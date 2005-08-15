@@ -1,5 +1,5 @@
 /* 
-	Support for Keyhole "kml" format.
+	Support for Google Earth & Keyhole "kml" format.
 
 	Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
 	Updates by Andrew Kirmse, akirmse at google.com
@@ -84,15 +84,14 @@ static xg_callback	wpt_name, wpt_desc, wpt_coord;
 
 static 
 xg_tag_mapping kml_map[] = {
-	{ wpt_s, 	cb_start, 	"/Folder/Placemark" },
-	{ wpt_e, 	cb_end, 	"/Folder/Placemark" },
-//	{ wpt_name_s, 	cb_start, 	"/Folder/Placemark/name" },
-	{ wpt_name, 	cb_cdata, 	"/Folder/Placemark/name" },
-	{ wpt_desc, 	cb_cdata, 	"/Folder/Placemark/description" },
+	{ wpt_s, 	cb_start, 	"/Document/Folder/Placemark" },
+	{ wpt_e, 	cb_end, 	"/Document/Folder/Placemark" },
+	{ wpt_name, 	cb_cdata, 	"/Document/Folder/Placemark/name" },
+	{ wpt_desc, 	cb_cdata, 	"/Document/Folder/Placemark/description" },
 //	{ wpt_type, 	cb_cdata, 	"/Folder/Placemark/type" },
 //	{ wpt_link_s, 	cb_start, 	"/Folder/Placemark/link" },
 //	{ wpt_link, 	cb_cdata, 	"/Folder/Placemark/link" },
-	{ wpt_coord, 	cb_cdata, 	"/Folder/Placemark/Point/coordinates" },
+	{ wpt_coord, 	cb_cdata, 	"/Document/Folder/Placemark/Point/coordinates" },
 	{ NULL, 	0, 		NULL }
 };
 
@@ -220,7 +219,7 @@ static void kml_output_point(const waypoint *waypointp, const char *style)
   point3d_list_len++;
   pt->longitude = waypointp->longitude;
   pt->latitude = waypointp->latitude;
-  pt->altitude = unknown_alt ? 0.0 : waypointp->altitude;
+  pt->altitude = waypointp->altitude == unknown_alt ? 0.0 : waypointp->altitude;
 
   if (export_points) {
 	fprintf(ofd, "\t<Placemark>\n");
