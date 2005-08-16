@@ -101,6 +101,7 @@ icon_mapping_t garmin_icon_table[] = {
 	{    12,    12, "Light" },
 	{    90,  8221, "Live Theater" },
 	{    59,   173, "Lodging" },
+	{    59,   173, "Hotel" },
 	{    20,    21, "Man Overboard" },
 	{     0,     0, "Marina" },
 	{    43,   156, "Medical Facility" },
