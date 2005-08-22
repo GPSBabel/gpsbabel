@@ -481,7 +481,7 @@ void mapsend_track_hdr(const route_head * trk)
 		case 20: verstring = "30"; break;
 		case 30: verstring = "34"; break;
 		case 40: verstring = "36"; break;
-		default: fatal("Unknown track version."); break;
+		default: fatal("Unknown track version.\n"); break;
 	}
 
 	hdr.ms_version[0] = verstring[0];

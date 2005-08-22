@@ -124,7 +124,7 @@ gusb_open(const char *pname)
 
 	if(!DeviceIoControl(usb_handle, IOCTL_GARMIN_USB_BULK_OUT_PACKET_SIZE, NULL, 0,
 			&usb_tx_packet_size, GARMIN_USB_INTERRUPT_DATA_SIZE, &size, NULL)) {
-		fatal("Couldn't get USB packet size");
+		fatal("Couldn't get USB packet size.\n");
 	}
 
 	if (pdd) {
@@ -192,7 +192,7 @@ gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
 	if(!DeviceIoControl(usb_handle, IOCTL_GARMIN_USB_INTERRUPT_IN, NULL, 0,
 			buf, GARMIN_USB_INTERRUPT_DATA_SIZE, &rxed, NULL)) {
 		GPS_Serial_Error("Ioctl");
-		fatal("ioctl");
+		fatal("ioctl\n");
 	}
 		buf += rxed;
 		sz  -= rxed;

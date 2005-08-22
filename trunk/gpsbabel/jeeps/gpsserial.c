@@ -213,7 +213,7 @@ int32 GPS_Serial_Write(int32 ignored, const void *obuf, int size)
 	}
 	WriteFile (comport, obuf, size, &len, NULL);
 	if (len != (DWORD) size) {
-		fatal ("Write error.   Wrote %d of %d bytes.", len, size);
+		fatal ("Write error.   Wrote %d of %d bytes.\n", len, size);
 	}
 	return len;
 }

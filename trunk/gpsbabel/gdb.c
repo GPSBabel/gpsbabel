@@ -156,7 +156,7 @@ gdb_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 					return i->icon;
 				break;
 			default:
-				fatal(MYNAME ": unknown garmin format");
+				fatal(MYNAME ": unknown garmin format.\n");
 		}
 	}
 	return DEFAULTICONDESCR;
@@ -190,7 +190,7 @@ gdb_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
 			case GARMIN_SERIAL:
 				return i->pcxsymnum;
 			default:
-				fatal(MYNAME ": unknown garmin format");
+				fatal(MYNAME ": unknown garmin format.\n");
 			}
 		}
 	}
