@@ -48,7 +48,7 @@ reverse_route_init(const char *args)
 		case trkdata: break;
 		default:
 			fatal(MYNAME ": This filter only works in track "
-					"or route (-t or -r) mode.");
+					"or route (-t or -r) mode.\n");
 	}
 }
 

@@ -68,7 +68,7 @@ maggeo_wr_deinit(void)
 static void
 maggeo_read(void)
 {
-	fatal("Not implemented yet.");
+	fatal("Reading maggeo is not implemented yet.\n");
 }
 
 /*

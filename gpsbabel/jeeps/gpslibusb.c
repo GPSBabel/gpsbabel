@@ -91,7 +91,7 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 	if (r != sz) {
 		fprintf(stderr, "Bad cmdsend r %d sz %d\n", r, sz);
 		if (r < 0) {
-			fatal("usb_bulk_write failed. '%s'", 
+			fatal("usb_bulk_write failed. '%s'\n", 
 				usb_strerror());
 		}
 	}
@@ -156,12 +156,12 @@ garmin_usb_start(struct usb_device *dev)
 
 	udev = usb_open(dev);
 	atexit(garmin_usb_teardown);
-	if (!udev) { fatal("usb_open failed"); }
+	if (!udev) { fatal("usb_open failed\n"); }
 	/*
 	 * Hrmph.  No iManufacturer or iProduct headers....
 	 */
 	if (usb_set_configuration(udev, 1) < 0) {
-		fatal("usb_set_configuration failed");
+		fatal("usb_set_configuration failed\n");
 	}
 
 	if (usb_claim_interface(udev, 0) < 0) {

@@ -240,7 +240,7 @@ routesimple_init(const char *args) {
 		count = atol(countopt);
 	}
 	else {
-		fatal( MYNAME ": You must specify a maximum size for the new route");
+		fatal( MYNAME ": You must specify a maximum size for the new route with 'count' option.\n");
 	}
 }
 
