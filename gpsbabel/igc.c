@@ -101,7 +101,7 @@ static igc_rec_type_t get_record(char *rec)
 	}
     }
     len = strlen(rec);
-    if (len < 3 || rec[len - 2] != '\r' || rec[len - 1] != '\n' || rec[0] < 'A' || rec[0] > 'Z') {
+    if (len < 3 || rec[0] < 'A' || rec[0] > 'Z') {
 	warning(MYNAME " bad input record: '%s'\n", rec);
 	return rec_bad;
     }
