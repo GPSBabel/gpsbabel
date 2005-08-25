@@ -214,7 +214,7 @@ data_read(void)
 	int		icon;
 	char		*notes;
 	char		gid[6+1];
-	struct tm	tm;
+	struct tm	tm  = {0};
 
 	wpt = waypt_new();
 	if (!wpt)

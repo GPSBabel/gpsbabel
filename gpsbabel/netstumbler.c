@@ -74,7 +74,7 @@ data_read(void)
 	int stealth_num = 0, whitespace_num = 0;
 	long flags = 0;
 	int speed = 0, channel = 0;
-	struct tm tm;
+	struct tm tm = {0};
 
 	for(; fgets(ibuf, sizeof(ibuf), file_in);) {
 		char *field;
