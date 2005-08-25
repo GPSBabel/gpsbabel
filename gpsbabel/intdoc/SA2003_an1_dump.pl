@@ -77,9 +77,20 @@ END
 while ( $bitmapcount ) {
   ($rec_type) = shiftunpack( 's' );
   if ( $rec_type == 0x4c49 ) { # 'IL'
-    # I don't know what this structure is, but it appears twice in my test files.
-    ($unk10101, $unke, $unkc, $unk18_1, $unk18_2, $unkneg1_1,
-     $unk20, $unkneg1_2, $unkneg1_3) = shiftunpack( 'lsssslsll');
+    # This is a Windows ImageList stream.  It actually includes the
+    # 'BM' structures following in the stream, so we could be smarter
+    # about how many we expect to find. (2 if bit 0 of ilflags is set,
+    # 1 otherwise.  That bit is ILD_MASK.) For now, though, this works 
+    # just fine.  Newer versions of the IL structure supposedly contain
+    # more overlay indices, but SA always seems to use the 0x101 version.
+
+    # Documentation on the stream format is hard to come by.  I found
+    # mine in the form of the WINE project's reimplementation of comctl32.
+
+    ($ilVersion, $ilCount, $ilMax, $ilGrow, $ilcx, $ilcy,
+	$ilbkColor, $ilflags, $ilovl1, $ilovl2, $ilovl3, $ilovl4 ) =
+    shiftunpack( 'sssssslsssss' );
+    printf( "ver %x count %d   max %d grow %d   cx %d cy %d  bkcolor %x  flags %x\n", $ilVersion, $ilCount, $ilMax, $ilGrow, $ilcx, $ilcy, $ilbkColor, $ilflags );
   }
   elsif ( $rec_type == 0x4d42 ) { # 'BM'
     # This is a standard BMP file, documented in MSDN.
@@ -114,7 +125,7 @@ while ( $bitmapcount ) {
     # fix the hotspot X coord
     $hotspotx = $rec_type + 0x10000*$hotspotxhi;
 
-    printf( "Image: %2d %2d %s $name\n", $hotspotx, $hotspoty, decodeGuid( $guid ) );
+    printf( "Image: %2d %2d %s %x $name\n", $hotspotx, $hotspoty, decodeGuid( $guid ), $unk1 );
     $imagenames{$guid} = $name;
     $bitmapcount--; 
   }
