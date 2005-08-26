@@ -1,0 +1,4 @@
+This is a subset of Shapelib v1.2.10 from http://shapelib.maptools.org/
+
+The source is unmodified.  It's subsetted here only to reduce the amount of
+size in our tree that it takes and to reduce ongoing merge maintenance.
