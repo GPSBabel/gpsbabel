@@ -377,9 +377,9 @@ void readVersion4( FILE* pFile)
 {
 	while( TRUE )
 	{
-		char recData[256];
+		char recData[256] = {0};
 		// get the position
-		double  lat2, lng2;
+		double  lat2, lng2 = 0;
 
 		// set the pointer to the time stamp depending
 		// on whether we have a sounding array or not
@@ -393,7 +393,7 @@ void readVersion4( FILE* pFile)
 		char attr[1024];
 		int Vertex;
 
-		memset(attr, 0, 1024);
+		memset(attr, 0, sizeof(attr));
 
 		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
 		wpt_tmp->altitude = unknown_alt;
@@ -521,7 +521,8 @@ int readPositionRecord( FILE* pFile, double* lat, double* lng,
 						long* timeStamp)
 {
 	// read the lat record
-	char recData[256];
+	char recData[256] = {0};
+
 	if( !readRecord( pFile, EF_LAT_REC, recData) )
 		// no lat record then finished
 		return FALSE;
