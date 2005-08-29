@@ -207,64 +207,7 @@ gdb_detect_rtept_class(const waypoint *wpt)
 }
 
 
-#ifndef UTF8_SUPPORT
-static char *gdb_garmin_to_utf8(const char *s)
-{
-	int len;
-	char *res;
-	unsigned char c;
-	char *src, *dst;
-
-	if (s == NULL) return NULL;
-
-	len = 0;
-	src = (char *)s;
-	while ('\0' != (c = *src++))
-	{
-	    len++;
-	    if (c & 0x80) len++;
-	    if (c == 0x80) len++;
-	}
-
-	src = (char *)s;
-	dst = res = (void *) xmalloc(len + 1);
-	while ('\0' != (c = *src++))
-	{
-	    if (c == 0x80)
-	    {
-		*dst++ = 0xe2;
-		*dst++ = 0x82;
-		*dst++ = 0xac;
-	    }
-	    else if (c & 0x80)
-	    {
-		*dst++ = (0xc0 | (c >> 6));
-		*dst++ = (c & 0xbf);
-	    }
-	    else
-	    {
-		*dst++ = c;
-	    }
-	}
-	*dst = '\0';
-	return res;
-}
-#endif
-
 /* %%% local functions (read support) %%% */
-
-static char *
-gdb_convert_name_buff(char *buff, size_t buffsize)
-{
-#ifdef UTF8_SUPPORT
-	char *tmp = str_garmin_to_utf8(buff);
-#else
-	char *tmp = gdb_garmin_to_utf8(buff);
-#endif	
-	strncpy(buff, tmp, buffsize);
-	xfree(tmp);
-	return buff;
-}
 
 #ifdef GDB_DEBUG
 static void
@@ -540,7 +483,6 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 /********************************************************************************************************/
 
 	gdb_is_valid(gdb_fread_str(xname, sizeof(xname)) > 0, prefix, "new waypoint");
-	gdb_convert_name_buff(xname, sizeof(xname));
 
 	gdb_fread_le(&xclass, sizeof(xclass), 32, prefix, "class");
 	gdb_fread_str(buff, sizeof(buff));				/* country */
@@ -553,7 +495,6 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	    gdb_fread_le(&xalt, sizeof(xalt), 64, prefix, "altitude");
 	
 	gdb_fread_str(xnotes, sizeof(xnotes));				/* notes */
-	gdb_convert_name_buff(xnotes, sizeof(xnotes));
 	
 	if (gdb_fread_flag(1))						/* proximity flag */
 	    gdb_fread_le(&xproximity, sizeof(xproximity), 64, prefix, "proximity");
@@ -575,12 +516,17 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	gdb_fread(buff, 1);
 
 	if (gdb_fread_flag(0))
-	    gdb_fread(buff, 4);
-	else
 	    gdb_fread(buff, 3);
+	else
+	    gdb_fread(buff, 2);
+	
+	do								/* undocumented & unused string */
+	{
+	    gdb_fread(buff, 1);
+	}
+	while (buff[0] != 0);
 
-	gdb_fread_str(xurl, sizeof(xurl));
-	gdb_convert_name_buff(xurl, sizeof(xurl));
+	gdb_fread_str(xurl, sizeof(xurl));				/* URL */
 	
 	xcat = gdb_fread_le(&xcat, sizeof(xcat), 16, prefix, "category");
 	
@@ -667,7 +613,6 @@ gdb_read_route(void)
 	const char *prefix3 = "rte_read_final";
 	
 	gdb_is_valid(gdb_fread_str(xname, sizeof(xname)) > 0, prefix, "Route has no name");
-	gdb_convert_name_buff(xname, sizeof(xname));
 	
 	gdb_fread_le(&auto_name, sizeof(auto_name), 8, prefix, "auto name");
 	if (gdb_fread_flag(0))					/* max. data flag */
@@ -703,7 +648,6 @@ gdb_read_route(void)
 	while (count--)
 	{
 	    gdb_fread_str(xwptname, sizeof(xwptname));			/* waypoint name */
-	    gdb_convert_name_buff(xwptname, sizeof(xwptname));
 	
 	    gdb_fread_le(&xclass, sizeof(xclass), 32, prefix1, "class");	/* class */
 	    gdb_fread_str(buff, sizeof(buff));					/* country */
@@ -814,7 +758,6 @@ gdb_read_track(const size_t max_file_pos)
 	const char *prefix = "trk_read_loop";
 	
 	gdb_fread_str(xname, sizeof(xname));
-	gdb_convert_name_buff(xname, sizeof(xname));
 	
 	gdb_fread_le(&xdisplay, sizeof(xdisplay), 8, prefix0, "display");
 	gdb_fread_le(&xcolour, sizeof(xcolour), 32, prefix0, "colour");

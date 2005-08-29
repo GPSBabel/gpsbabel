@@ -39,7 +39,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-07-14T10:43:00Z</time>
   <name>CS</name>
   <cmt>Ovládací, Prohlížení lokální síte</cmt>
-  <desc> Czechia (cz) </desc>
+  <desc>Ovládací, Prohlížení lokální síte</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="56.011734009" lon="9.847869873">
@@ -53,14 +53,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-07-14T09:41:43Z</time>
   <name>DE</name>
   <cmt>Himmelmühle, ä,ö,ü,Ä,Ö,Ü,ß</cmt>
-  <desc>ermany (de)</desc>
+  <desc>Himmelmühle, ä,ö,ü,Ä,Ö,Ü,ß</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="50.495280828" lon="13.027644670">
 <time>2005-07-14T13:20:14Z</time>
   <name>EO</name>
   <cmt>Trasercado de la loka ret</cmt>
-  <desc>?? (oe)</desc>
+  <desc>Trasercado de la loka ret</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="37.007446289" lon="-6.558837891">
@@ -81,7 +81,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-07-14T09:28:22Z</time>
   <name>HR</name>
   <cmt>Pregledavanje lokalne mreže</cmt>
-  <desc>roatia (local name: Hrvatska) (hr)</desc>
+  <desc>Pregledavanje lokalne mreže</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="46.491394043" lon="18.424072266">
@@ -102,7 +102,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <time>2005-07-14T09:34:53Z</time>
   <name>SK</name>
   <cmt>Ovládacie centrum</cmt>
-  <desc>ei D09544,Neuhausen/Cämmerswalde</desc>
+  <desc>Ovládacie centrum</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="50.497970581" lon="13.027725220">
