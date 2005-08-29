@@ -402,5 +402,6 @@ ff_vecs_t kml_vecs = {
 	kml_read,
 	kml_write,
 	NULL, 
-	kml_args
+	kml_args,
+	CET_CHARSET_UTF8, 1	/* CET-REVIEW */
 };

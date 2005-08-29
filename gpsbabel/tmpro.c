@@ -255,6 +255,8 @@ ff_vecs_t tmpro_vecs = {
     wr_deinit,
     data_read,
     data_write,
-    NULL
+    NULL,
+    NULL,
+    CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
 

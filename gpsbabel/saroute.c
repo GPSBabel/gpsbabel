@@ -278,5 +278,6 @@ ff_vecs_t saroute_vecs = {
 	my_read,
 	NULL,
 	NULL, 
-	saroute_args
+	saroute_args,
+	CET_CHARSET_UTF8, 1	/* do nothing | CET-REVIEW */
 };

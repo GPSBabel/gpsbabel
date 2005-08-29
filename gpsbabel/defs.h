@@ -27,6 +27,8 @@
 #include <stddef.h>
 #include "queue.h"
 #include "gbtypes.h"
+#include "cet.h"
+#include "cet_util.h"
 
 
 /*
@@ -100,7 +102,9 @@ typedef struct {
 	unsigned int	masked_objective;
 	int verbose_status;	/* set by GUI wrappers for status */
 	int no_smart_icons;	
-	int no_smart_names;	
+	int no_smart_names;
+	cet_cs_vec_t *charset;
+	char *charset_name;
 } global_options;
 
 extern global_options global_opts;
@@ -348,6 +352,8 @@ void free_gpx_extras (xml_tag * tag);
 void xcsv_setup_internal_style(const char *style_buf);
 void xcsv_read_internal_style(const char *style_buf);
 waypoint * find_waypt_by_name(const char *name);
+void waypt_backup(unsigned int *count, queue **head_bak);
+void waypt_restore(unsigned int count, queue *head_bak);
 
 route_head *route_head_alloc(void);
 void route_add (waypoint *);
@@ -366,6 +372,10 @@ void route_flush_all(void);
 unsigned int route_waypt_count(void);
 unsigned int route_count(void);
 unsigned int track_count(void);
+void route_backup(unsigned int *count, queue **head_bak);
+void route_restore(unsigned int count, queue *head_bak);
+void track_backup(unsigned int *count, queue **head_bak);
+void track_restore(unsigned int count, queue *head_bak);
 
 /*
  * All shortname functions take a shortname handle as the first arg.
@@ -481,6 +491,8 @@ typedef struct ff_vecs {
 	ff_write write;
 	ff_exit exit;
 	arglist_t *args;
+	char *encode;
+	int fixed_encode;
 } ff_vecs_t;
 
 typedef struct style_vecs {
@@ -592,10 +604,17 @@ char * strip_nastyhtml(const char * in);
 /* 
  * Character encoding transformations.
  */
-char * str_utf8_to_cp1252(const char * str);
-char * str_utf8_to_ascii(const char * str);
-char * str_iso8859_1_to_utf8(const char *str );
 
+#define CET_NOT_CONVERTABLE_DEFAULT '$'
+#define CET_CHARSET_ASCII	"US-ASCII"
+#define CET_CHARSET_UTF8	"UTF-8"
+#define CET_CHARSET_MS_ANSI	"MS-ANSI"
+
+#define str_utf8_to_cp1252(str) cet_str_utf8_to_cp1252((str)) 
+#define str_cp1252_to_utf8(str) cet_str_cp1252_to_utf8((str))
+
+#define str_utf8_to_iso8859_1(str) cet_str_utf8_to_iso8859_1((str)) 
+#define str_iso8859_1_to_utf8(str) cet_str_iso8859_1_to_utf8((str))
 
 /* this lives in gpx.c */
 time_t xml_parse_time( const char *cdatastr );

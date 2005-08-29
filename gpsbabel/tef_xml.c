@@ -304,5 +304,6 @@ ff_vecs_t tef_xml_vecs = {
 	tef_xml_read,
 	NULL,
 	NULL, 
-	tef_xml_args
+	tef_xml_args,
+	CET_CHARSET_UTF8, 1
 };

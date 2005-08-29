@@ -177,6 +177,6 @@ ff_vecs_t glogbook_vecs = {
         glogbook_read,
         glogbook_write,
         NULL,
-        glogbook_args
+        glogbook_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
-

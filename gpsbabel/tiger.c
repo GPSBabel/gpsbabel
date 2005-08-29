@@ -173,13 +173,16 @@ tiger_disp(const waypoint *wpt)
 
 	fprintf(file_out, "%f,%f:%s", lon, lat, pin);
 	if (!nolabels) {
+		char *temp = NULL;
 		char *desc = csv_stringclean(wpt->description, ":");
-		char *adesc = str_utf8_to_ascii(desc);
 		if (global_opts.synthesize_shortnames)
-			adesc = mkshort(mkshort_whandle, adesc);
-		fprintf(file_out, ":%s", adesc);
+		{
+			temp = desc;
+			desc = mkshort(mkshort_whandle, desc);
+		}
+		fprintf(file_out, ":%s", desc);
+		if (temp != NULL) desc = temp;
 		xfree(desc);
-		xfree(adesc);
 	}
 	fprintf(file_out, "\n");
 }
@@ -286,4 +289,5 @@ ff_vecs_t tiger_vecs = {
 	data_write,
 	NULL, 
 	tiger_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

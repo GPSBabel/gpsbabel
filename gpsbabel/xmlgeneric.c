@@ -21,6 +21,7 @@
 
 #include "defs.h"
 #include "xmlgeneric.h"
+#include "cet_util.h"
 
 #ifndef NO_EXPAT
 	#include <expat.h>
@@ -39,7 +40,14 @@ static xg_tag_mapping *xg_tag_tbl;
 void
 write_xml_header(FILE *ofd)
 {
-	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
+	char buff[128];
+	cet_cs_vec_t *cs = cet_find_cs_by_name(CET_CHARSET_ASCII);
+
+	if ((global_opts.charset != NULL) && (global_opts.charset != cs))
+	    snprintf(buff, sizeof(buff), " encoding=\"%s\"", global_opts.charset_name);
+	else
+	    buff[0] = 0;
+	fprintf(ofd, "<?xml version=\"1.0\"%s?>\n", buff);
 }
 
 void
@@ -250,6 +258,7 @@ xml_init(const char *fname, xg_tag_mapping *tbl, const char *encoding)
 
 	xg_tag_tbl = tbl;
 
+	XML_SetUnknownEncodingHandler(psr, cet_lib_expat_UnknownEncodingHandler, NULL);
 	XML_SetElementHandler(psr, xml_start, xml_end);
 	XML_SetCharacterDataHandler(psr, xml_cdata);
 }

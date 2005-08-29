@@ -457,5 +457,6 @@ ff_vecs_t gpilots_vecs = {
 	data_read,
 	data_write,
 	NULL, 
-	my_args
+	my_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

@@ -301,5 +301,6 @@ ff_vecs_t netstumbler_vecs = {
 	data_read,
 	NULL,
 	NULL,
-	netstumbler_args
+	netstumbler_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

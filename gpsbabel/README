@@ -75,6 +75,7 @@ COMMON USAGE
 	gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0 
 	gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1
 
+
 ADVANCED USAGE
 
 	Argument are processed in the order they appear on the command line
@@ -102,6 +103,17 @@ ADVANCED USAGE
 	You can write the same data in different output formats:
 
 	gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx 1.wpt
+	
+	If you want to change the character set of input or/and output
+	side you can do this with the option -c <character set>. You can get
+	a complete list of supported character sets with "gpsbabel -l".
+	To change the character set on both sides you should do this:
+	
+	gpsbabel -i xcsv,style=foo.style -c latin1 -f foo 
+	         -o xcsv,style=bar.style -c ms-ansi -F bar
+		 
+	Note, that some formats has a fixed character set and ignore this option.
+	
 
 ROUTE AND TRACK MODES
 

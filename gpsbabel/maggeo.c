@@ -111,7 +111,7 @@ append(char *buf, const char *str)
 		return;
 	}
 
-	cleansed1 = str_utf8_to_ascii(str);
+	cleansed1 = xstrdup(str);
 	cleansed2 = m330_cleanse(cleansed1);
 
 	strcat(buf, cleansed2);
@@ -235,4 +235,7 @@ ff_vecs_t maggeo_vecs = {
 	maggeo_wr_deinit,
 	maggeo_read,
 	maggeo_write,
+	NULL,
+	NULL,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

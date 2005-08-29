@@ -120,5 +120,7 @@ ff_vecs_t gpl_vecs = {
 	gpl_wr_deinit,	
 	gpl_read,
 	gpl_write,
-	NULL
+	NULL,
+	NULL,
+	CET_CHARSET_UTF8, 1	/* there is no need to convert anything | CET-REVIEW */
 };

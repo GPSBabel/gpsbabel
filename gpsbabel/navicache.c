@@ -17,6 +17,7 @@
 
  */
 #include "defs.h"
+#include "cet_util.h"
 #if !NO_EXPAT
 #include <expat.h>
 static XML_Parser psr;
@@ -208,6 +209,7 @@ nav_rd_init(const char *fname)
 		fatal(MYNAME ":Cannot create XML parser\n");
 	}
 
+	XML_SetUnknownEncodingHandler(psr, cet_lib_expat_UnknownEncodingHandler, NULL);
 	XML_SetElementHandler(psr, nav_start, nav_end);
 }
 
@@ -265,4 +267,5 @@ ff_vecs_t navicache_vecs = {
 	nav_write,
 	NULL, 
 	nav_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

@@ -1688,7 +1688,8 @@ ff_vecs_t gdb_vecs = {
 	gdb_read,
 	gdb_write,
 	NULL, 
-	gdb_args
+	gdb_args,
+	CET_CHARSET_MS_ANSI, 1				/* CET-REVIEW */
 };
 
 /*******************************************************************************/

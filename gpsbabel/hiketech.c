@@ -292,6 +292,7 @@ ff_vecs_t hiketech_vecs = {
         hiketech_read,
         hiketech_write,
         NULL,
-        hiketech_args
+        hiketech_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
 
