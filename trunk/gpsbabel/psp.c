@@ -21,6 +21,7 @@
  */
 
 #include "defs.h"
+#include "cet_util.h"
 #include <ctype.h>
 
 #define MYNAME	"PSP"
@@ -154,6 +155,7 @@ valid_psp_header(char * header)
 static char *
 buffer_washer(char * buff, int buffer_len)
 {
+/* original code
     int i;
 
     for (i = 0 ; i < buffer_len - 1; i++) {
@@ -164,6 +166,11 @@ buffer_washer(char * buff, int buffer_len)
 	}
     }
 
+    return (buff);
+*/
+    char *c = cet_str_uni_to_any((const short *)buff, buffer_len >> 1, global_opts.charset);
+    strncpy(buff, c, buffer_len);
+    xfree(c);
     return (buff);
 }
 
@@ -466,5 +473,7 @@ ff_vecs_t psp_vecs = {
 	psp_wr_deinit,
 	psp_read,
 	psp_write,
-	NULL
+	NULL,
+	NULL,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

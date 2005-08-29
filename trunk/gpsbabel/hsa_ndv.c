@@ -17,6 +17,7 @@
 
  */
 #include "defs.h"
+#include "cet_util.h"
 #if !NO_EXPAT
 #include <expat.h>
 static XML_Parser psr;
@@ -236,6 +237,7 @@ hsa_ndv_rd_init(const char *fname)
 		fatal(MYNAME ":Cannot create XML parser\n");
 	}
 
+	XML_SetUnknownEncodingHandler(psr, cet_lib_expat_UnknownEncodingHandler, NULL);
 	XML_SetElementHandler(psr, hsa_ndv_start, hsa_ndv_end);
 	cdatastr = xcalloc(MY_CBUF,1);
 	XML_SetCharacterDataHandler(psr, hsa_ndv_cdata);
@@ -352,7 +354,8 @@ ff_vecs_t HsaEndeavourNavigator_vecs = {
 	hsa_ndv_read,
 	hsa_ndv_write,
 	NULL, 
-	hsa_ndv_args
+	hsa_ndv_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
 
 //////////////////////////////////////////////////////////////////////////

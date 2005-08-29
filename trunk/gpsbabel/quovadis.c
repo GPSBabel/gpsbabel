@@ -293,5 +293,6 @@ ff_vecs_t quovadis_vecs = {
 	data_read,
 	data_write,
 	NULL, 
-	quovadis_args
+	quovadis_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

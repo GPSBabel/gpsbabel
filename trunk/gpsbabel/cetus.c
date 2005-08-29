@@ -477,7 +477,7 @@ cetus_writewpt(const waypoint *wpt)
 
 	vdata = (char *)rec + sizeof(*rec);
 	if ( wpt->shortname ) {
-			char *sn = str_utf8_to_cp1252(wpt->shortname);
+			char *sn = xstrdup(wpt->shortname);
 		        strncpy( vdata, sn, 16 );
 		        vdata[15] = '\0';
 			xfree(sn);
@@ -490,7 +490,7 @@ cetus_writewpt(const waypoint *wpt)
 	if (wpt->gc_data.desc_short.utfstring) {
 		char *stripped_html = strip_html(&wpt->gc_data.desc_short);
 		desc_short = xstrdup("\n\n");
-		desc_short = xstrappend(desc_short, str_utf8_to_cp1252(stripped_html));
+		desc_short = xstrappend(desc_short, xstrdup(stripped_html));
 		xfree(stripped_html);
 	} else {
 		desc_short = xstrdup("");
@@ -499,13 +499,13 @@ cetus_writewpt(const waypoint *wpt)
 	if (wpt->gc_data.desc_long.utfstring) {
 		char *stripped_html = strip_html(&wpt->gc_data.desc_long);
 		desc_long = xstrdup("\n\n");
-		desc_long = xstrappend(desc_long, str_utf8_to_cp1252(stripped_html));
+		desc_long = xstrappend(desc_long, xstrdup(stripped_html));
 		xfree(stripped_html);
 	} else {
 		desc_long = xstrdup("");
 	}
 
-	desc = wpt->description ? str_utf8_to_cp1252(wpt->description) : 
+	desc = wpt->description ? xstrdup(wpt->description) : 
 		xstrdup("");
 
 	snprintf(vdata, DESCSZ, "%s%s%s", 
@@ -529,7 +529,7 @@ cetus_writewpt(const waypoint *wpt)
 	vdata += strlen( vdata ) + 1;
 
 	if (wpt->gc_data.hint) {
-		char *hint = str_utf8_to_cp1252(wpt->gc_data.hint);
+		char *hint = xstrdup(wpt->gc_data.hint);
 		rec->type = WptCache;
 		strncpy( vdata, hint, NOTESZ + 1 ) ;
 		xfree(hint);
@@ -638,4 +638,5 @@ ff_vecs_t cetus_vecs = {
 	data_write,
 	NULL,
 	cetus_args,
+	CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
 };

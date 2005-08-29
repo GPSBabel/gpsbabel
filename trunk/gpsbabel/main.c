@@ -19,6 +19,8 @@
 
 
 #include "defs.h"
+#include "cet.h"
+#include "cet_util.h"
 #include <ctype.h>
 
 global_options global_opts;
@@ -53,9 +55,11 @@ usage(const char *pname, int shorter)
 "    -r               Process route information\n"
 "    -t               Process track information\n"
 "    -w               Process waypoint information [default]\n"
+"    -c               Character set for next operation\n"
 "    -N               No smart icons on output\n"
 "    -x filtername    Invoke filter (place between inputs and output) \n"
 "    -D level         Set debug level [%d]\n"
+"    -l               Print GPSBabel builtin character sets and exit\n"
 "    -h, -?           Print detailed help and exit\n"
 "    -V               Print GPSBabel version and exit\n"
 "\n"
@@ -93,9 +97,13 @@ main(int argc, char *argv[])
 	int opt_version = 0;
 	int did_something = 0;
 	const char *prog_name = argv[0]; /* argv is modified during processing */
+	queue *wpt_head_bak, *rte_head_bak, *trk_head_bak;	/* #ifdef UTF8_SUPPORT */
+	unsigned int wpt_ct_bak, rte_ct_bak, trk_ct_bak;	/* #ifdef UTF8_SUPPORT */
 
 	global_opts.objective = wptdata;
 	global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
+	global_opts.charset = NULL;			/* #ifdef UTF8_SUPPORT */
+	global_opts.charset_name = NULL;			/* #ifdef UTF8_SUPPORT */
 
 #ifdef DEBUG_MEM
 	debug_mem_open();
@@ -106,6 +114,7 @@ main(int argc, char *argv[])
 	debug_mem_output( "\n" );
 #endif
 	
+	cet_register();
 	waypt_init();
 	route_init();
 
@@ -144,6 +153,10 @@ main(int argc, char *argv[])
 		}
 
 		switch (c) {
+			case 'c':
+				optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
+				cet_convert_init(optarg, 1);
+				break;
 			case 'i': 
 				optarg = argv[argn][2]
 					? argv[argn]+2 : argv[++argn];
@@ -169,9 +182,16 @@ main(int argc, char *argv[])
 				}
 				/* simulates the default behaviour of waypoints */
 				if (doing_nothing) global_opts.masked_objective |= WPTDATAMASK;
+			
+				cet_convert_init(ivecs->encode, ivecs->fixed_encode);	/* init by module vec */
+
 				ivecs->rd_init(fname);
 				ivecs->read();
 				ivecs->rd_deinit();
+				
+				cet_convert_strings(global_opts.charset, NULL, NULL);
+				cet_convert_deinit();
+				
 				did_something = 1;
 				break;
 			case 'F':
@@ -185,9 +205,31 @@ main(int argc, char *argv[])
 					if (ovecs->wr_init == NULL) {
 						fatal ("Format does not support writing.\n");
 					}
+					
+					cet_convert_init(ovecs->encode, ovecs->fixed_encode);
+
+					wpt_ct_bak = -1;
+					rte_ct_bak = -1;
+					trk_ct_bak = -1;
+
+					if (global_opts.charset != &cet_cs_vec_utf8)
+					{
+					    waypt_backup(&wpt_ct_bak, &wpt_head_bak);
+					    route_backup(&rte_ct_bak, &rte_head_bak);
+					    track_backup(&trk_ct_bak, &trk_head_bak);
+					    
+					    cet_convert_strings(NULL, global_opts.charset, NULL);
+					}
+
 					ovecs->wr_init(ofname);
 					ovecs->write();
 					ovecs->wr_deinit();
+					
+					cet_convert_deinit();
+					
+					if (wpt_ct_bak != -1) waypt_restore(wpt_ct_bak, wpt_head_bak);
+					if (rte_ct_bak != -1) route_restore(rte_ct_bak, rte_head_bak);
+					if (trk_ct_bak != -1) track_restore(trk_ct_bak, trk_head_bak);
 				}
 				break;
 			case 's':
@@ -270,6 +312,10 @@ main(int argc, char *argv[])
 			case '?':
 				usage(argv[0],0);
 				exit(0);
+			case 'l':
+				cet_disp_character_set_names(stdout);
+				exit(0);
+
 		}
 	}
 
@@ -286,13 +332,26 @@ main(int argc, char *argv[])
 		did_something = 1;
 		/* simulates the default behaviour of waypoints */
 		if (doing_nothing) global_opts.masked_objective |= WPTDATAMASK;
+					
+		cet_convert_init(ivecs->encode, 1);
+
 		ivecs->rd_init(argv[0]);
 		ivecs->read();
 		ivecs->rd_deinit();
-		if (argc == 2 && ovecs) {
+		
+		cet_convert_strings(global_opts.charset, NULL, NULL);
+		cet_convert_deinit();
+		
+		if (argc == 2 && ovecs) 
+		{
+			cet_convert_init(ovecs->encode, 1);
+			cet_convert_strings(NULL, global_opts.charset, NULL);
+			
 			ovecs->wr_init(argv[1]);
 			ovecs->write();
 			ovecs->wr_deinit();
+			
+			cet_convert_deinit();
 		}
 	}
 	else if (argc) {
@@ -300,11 +359,16 @@ main(int argc, char *argv[])
 		exit(0);
 	}
 	if (ovecs == NULL)
+	{
+		cet_convert_init(CET_CHARSET_ASCII, 1);
+		cet_convert_strings(NULL, global_opts.charset, NULL);
 		waypt_disp_all(waypt_disp);
+	}
 
 	if (!did_something)
 		fatal ("Nothing to do!  Use '%s -h' for command-line options.\n", prog_name);
 
+	cet_deregister();
 	waypt_flush_all();
 	route_flush_all();
 	exit_vecs();

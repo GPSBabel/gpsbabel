@@ -24,6 +24,7 @@
 static XML_Parser psr;
 #endif
 #include <time.h>
+#include "cet_util.h"
 
 #include "uuid.h"
 
@@ -306,6 +307,7 @@ ce_rd_init(const char *fname)
 		fatal(MYNAME ":Cannot create XML parser\n");
 	}
 
+	XML_SetUnknownEncodingHandler(psr, cet_lib_expat_UnknownEncodingHandler, NULL);
 	XML_SetElementHandler(psr, ce_start, ce_end);
 	cdatastr = xcalloc(MY_CBUF,1);
 	element = xcalloc(MY_CBUF,1);
@@ -634,4 +636,5 @@ ff_vecs_t coastexp_vecs = {
 	ce_write,
 	NULL,
 	NULL,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

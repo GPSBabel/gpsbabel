@@ -534,5 +534,6 @@ ff_vecs_t geoniche_vecs =
 	data_read,
 	data_write,
 	NULL, 
-	Args
+	Args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

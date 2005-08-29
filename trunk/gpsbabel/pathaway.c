@@ -697,5 +697,6 @@ ff_vecs_t ppdb_vecs = {
 	ppdb_read,
 	ppdb_write,
 	NULL, 
-	ppdb_args
+	ppdb_args,
+	"ISO-8859-1"
 };

@@ -58,7 +58,7 @@ SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
 
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
-          uuid.o formspec.o xmltag.o \
+          uuid.o formspec.o xmltag.o cet.o cet_util.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(FMTS) $(FILTERS)
 OBJS = main.o $(LIBOBJS)
 
@@ -153,7 +153,7 @@ brauniger_iq.o: brauniger_iq.c defs.h queue.h gbtypes.h jeeps/gpsserial.h \
   jeeps/gpsnmea.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
   jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 cetus.o: cetus.c defs.h queue.h gbtypes.h coldsync/palm.h coldsync/pdb.h
-coastexp.o: coastexp.c defs.h queue.h gbtypes.h xmlgeneric.h uuid.h
+coastexp.o: coastexp.c defs.h queue.h gbtypes.h xmlgeneric.h uuid.h cet_util.h
 copilot.o: copilot.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
 coto.o: coto.c defs.h queue.h gbtypes.h csv_util.h coldsync/palm.h \
@@ -190,11 +190,11 @@ gpilots.o: gpilots.c defs.h queue.h gbtypes.h coldsync/palm.h \
 gpspilot.o: gpspilot.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
 gpsutil.o: gpsutil.c defs.h queue.h gbtypes.h magellan.h
-gpx.o: gpx.c defs.h queue.h gbtypes.h xmlgeneric.h
+gpx.o: gpx.c defs.h queue.h gbtypes.h xmlgeneric.h cet_util.h
 grtcirc.o: grtcirc.c defs.h queue.h gbtypes.h
 hiketech.o: hiketech.c defs.h queue.h gbtypes.h xmlgeneric.h
 holux.o: holux.c defs.h queue.h gbtypes.h holux.h
-hsa_ndv.o: hsa_ndv.c defs.h queue.h gbtypes.h
+hsa_ndv.o: hsa_ndv.c defs.h queue.h gbtypes.h cet_util.h
 html.o: html.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h jeeps/gpssend.h \
   jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
@@ -213,7 +213,7 @@ main.o: main.c defs.h queue.h gbtypes.h
 mapsend.o: mapsend.c defs.h queue.h gbtypes.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h queue.h gbtypes.h garmin_tables.h
 mkshort.o: mkshort.c defs.h queue.h gbtypes.h
-navicache.o: navicache.c defs.h queue.h gbtypes.h
+navicache.o: navicache.c defs.h queue.h gbtypes.h cet_util.h
 netstumbler.o: netstumbler.c defs.h queue.h gbtypes.h csv_util.h
 nmea.o: nmea.c defs.h queue.h gbtypes.h
 overlay.o: overlay.c defs.h queue.h gbtypes.h grtcirc.h
@@ -230,7 +230,7 @@ pcx.o: pcx.c defs.h queue.h gbtypes.h garmin_tables.h
 polygon.o: polygon.c defs.h queue.h gbtypes.h
 position.o: position.c defs.h queue.h gbtypes.h grtcirc.h
 psitrex.o: psitrex.c defs.h queue.h gbtypes.h garmin_tables.h
-psp.o: psp.c defs.h queue.h gbtypes.h
+psp.o: psp.c defs.h queue.h gbtypes.h cet_util.h
 queue.o: queue.c queue.h
 quovadis.o: quovadis.c quovadis.h defs.h queue.h gbtypes.h \
   coldsync/palm.h coldsync/pdb.h
@@ -273,8 +273,37 @@ vitosmt.o: vitosmt.c defs.h queue.h gbtypes.h
 vmem.o: vmem.c defs.h queue.h gbtypes.h
 waypt.o: waypt.c defs.h queue.h gbtypes.h
 xcsv.o: xcsv.c defs.h queue.h gbtypes.h csv_util.h
-xmlgeneric.o: xmlgeneric.c defs.h queue.h gbtypes.h xmlgeneric.h
-xmltag.o: xmltag.c defs.h queue.h gbtypes.h
+xmlgeneric.o: xmlgeneric.c defs.h queue.h gbtypes.h cet_util.h xmlgeneric.h
+cet.o: cet.h cet.c defs.h
+cet_util.o: cet_util.h cet_util.c cet.h defs.h \
+    cet/ansi_x3_4_1968.h cet/atarist.h cet/baltic.h cet/bs_4730.h \
+    cet/bs_viewdata.h cet/cp1250.h cet/cp1251.h cet/cp1252.h \
+    cet/cp1253.h cet/cp1254.h cet/cp1255.h cet/cp1256.h \
+    cet/cp1257.h cet/csa_z243_4_1985_1.h cet/csa_z243_4_1985_2.h cet/csa_z243_4_1985_gr.h \
+    cet/csn_369103.h cet/cwi.h cet/dec_mcs.h cet/din_66003.h \
+    cet/ds_2089.h cet/ecma_cyrillic.h cet/es.h cet/es2.h \
+    cet/gb_1988_80.h cet/gost_19768_87.h cet/hp_roman8.h cet/ibm037.h \
+    cet/ibm1004.h cet/ibm1026.h cet/ibm1047.h cet/ibm256.h \
+    cet/ibm273.h cet/ibm277.h cet/ibm278.h cet/ibm280.h \
+    cet/ibm284.h cet/ibm285.h cet/ibm297.h cet/ibm437.h \
+    cet/ibm500.h cet/ibm850.h cet/ibm851.h cet/ibm852.h \
+    cet/ibm855.h cet/ibm857.h cet/ibm860.h cet/ibm861.h \
+    cet/ibm862.h cet/ibm863.h cet/ibm864.h cet/ibm865.h \
+    cet/ibm868.h cet/ibm869.h cet/ibm871.h cet/ibm891.h \
+    cet/ibm903.h cet/ibm904.h cet/iec_p27_1.h cet/iso_10367_box.h \
+    cet/iso_5427.h cet/iso_646_irv.h cet/iso_6937_2_25.h cet/iso_8859_1.h \
+    cet/iso_8859_10.h cet/iso_8859_13.h cet/iso_8859_14.h cet/iso_8859_15.h \
+    cet/iso_8859_2.h cet/iso_8859_3.h cet/iso_8859_4.h cet/iso_8859_5.h \
+    cet/iso_8859_6.h cet/iso_8859_7.h cet/iso_8859_8.h cet/iso_8859_9.h \
+    cet/iso_8859_supp.h cet/it.h cet/jis_c6220_1969_ro.h cet/jis_x0201.h \
+    cet/jus_i_b1_002.h cet/jus_i_b1_003_mac.h cet/jus_i_b1_003_serb.h cet/keybcs2.h \
+    cet/koi8_r.h cet/koi8_ru.h cet/koi8_u.h cet/koi_7.h \
+    cet/koi_8.h cet/koi_8_cs2.h cet/ksc5636.h cet/latin_greek_1.h \
+    cet/mac_is.h cet/macintosh.h cet/macintosh_ce.h cet/msz_7795_3.h \
+    cet/nats_dano.h cet/nats_sefi.h cet/nc_nc00_10.h cet/nextstep.h \
+    cet/nf_z_62_010.h cet/nf_z_62_010__1973_.h cet/ns_4551_1.h cet/ns_4551_2.h \
+    cet/pt.h cet/pt2.h cet/sami.h cet/sen_850200_b.h \
+    cet/sen_850200_c.h cet/tcvn.h cet/viscii.h cet/vps.h
 coldsync/pdb.o: coldsync/pdb.c coldsync/config.h coldsync/palm.h \
   coldsync/pdb.h
 coldsync/util.o: coldsync/util.c coldsync/config.h coldsync/pconn/util.h \

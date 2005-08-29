@@ -199,5 +199,6 @@ ff_vecs_t shape_vecs = {
 	my_read,
 	my_write,
 	NULL,
-	NULL
+	NULL,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include "defs.h"
+#include "cet_util.h"
 
 queue waypt_head;
 static unsigned int waypt_ct;
@@ -165,7 +166,7 @@ waypt_disp(const waypoint *wpt)
 	printposn(wpt->longitude,0);
 
 	if ( wpt->description ) {	
-		tmpdesc = str_utf8_to_ascii( wpt->description);
+		tmpdesc = xstrdup( wpt->description);
 		printf("%s/%s", 
 			global_opts.synthesize_shortnames ? 
 			mkshort(mkshort_handle, tmpdesc) : 
@@ -312,4 +313,41 @@ waypt_flush_all()
 		mkshort_del_handle( mkshort_handle );
 	}
 	waypt_flush(&waypt_head);
+}
+
+void
+waypt_backup(unsigned int *count, queue **head_bak)
+{
+	queue *elem, *tmp, *qbackup;
+	waypoint *wpt;
+	int no;
+
+	qbackup = (queue *) xcalloc(1, sizeof(*qbackup));
+	QUEUE_INIT(qbackup);
+	
+	QUEUE_MOVE(qbackup, &waypt_head);
+	QUEUE_INIT(&waypt_head);
+
+	waypt_ct = 0;
+
+	QUEUE_FOR_EACH(qbackup, elem, tmp)
+	{
+	    wpt = (waypoint *)elem;
+	    waypt_add(waypt_dupe(wpt));
+	}
+
+	*head_bak = qbackup;
+	*count = no;
+}
+
+void
+waypt_restore(unsigned int count, queue *head_bak)
+{
+	if (head_bak == NULL) return;
+	
+	waypt_flush(&waypt_head);
+	QUEUE_INIT(&waypt_head);
+	QUEUE_MOVE(&waypt_head, head_bak);
+	waypt_ct = count;
+	xfree(head_bak);
 }

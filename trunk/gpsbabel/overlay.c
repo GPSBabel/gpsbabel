@@ -698,5 +698,6 @@ ff_vecs_t overlay_vecs = {
        ovl_read,
        ovl_write,
         NULL,
-       ovl_args
+       ovl_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

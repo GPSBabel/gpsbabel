@@ -409,5 +409,6 @@ ff_vecs_t vitosmt_vecs = {
 	vitosmt_read,
 	vitosmt_write,
 	NULL, 
-	NULL
+	NULL,
+	CET_CHARSET_UTF8, 1	/* do nothing | CET-REVIEW */
 };

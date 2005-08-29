@@ -794,5 +794,6 @@ ff_vecs_t psit_vecs = {
 	psit_read,
 	psit_write,
 	NULL, 
-	psit_args
+	psit_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

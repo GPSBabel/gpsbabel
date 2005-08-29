@@ -204,3 +204,148 @@ route_flush_all()
 	route_flush(&my_track_head);
 }
 
+void
+route_backup(unsigned int *count, queue **head_bak)
+{
+	queue *elem, *tmp, *elem2, *tmp2;
+	queue *qbackup;
+	route_head *rte_new;
+	unsigned int no;
+
+	no = route_count();
+	
+	qbackup = xcalloc(1, sizeof(*qbackup));
+	QUEUE_INIT(qbackup);
+	
+	QUEUE_MOVE(qbackup, &my_route_head);
+	QUEUE_INIT(&my_route_head);
+	
+	rte_head_ct = 0;
+	rte_waypts = 0;
+	
+	QUEUE_FOR_EACH(qbackup, elem, tmp)
+	{
+	    route_head *rte_old = (route_head *)elem;
+	    
+	    rte_new = route_head_alloc();
+	    if (rte_old->rte_name != NULL)
+		rte_new->rte_name = xstrdup(rte_old->rte_name);
+	    if (rte_old->rte_desc != NULL)
+		rte_new->rte_desc = xstrdup(rte_old->rte_desc);
+	    if (rte_old->fs)
+		rte_new->fs = fs_chain_copy(rte_old->fs);
+
+	    route_add_head(rte_new);
+	    rte_new->rte_num = rte_old->rte_num;
+	    
+	    QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2)
+	    {
+		waypoint *wpt = waypt_dupe((waypoint *)elem2);
+		route_add_wpt(rte_new, wpt);
+	    }
+	}
+	*head_bak = qbackup;
+	*count = no;
+}
+
+static void
+route_restore_hdr(const route_head *rte)
+{
+	rte_head_ct++;
+}
+
+static void
+track_restore_hdr(const route_head *trk)
+{
+	trk_head_ct++;
+}
+
+static void
+route_restore_tlr(const route_head *rte)
+{
+}
+
+static void
+route_restore_wpt(const waypoint *wpt)
+{
+	rte_waypts++;
+}
+
+void
+common_restore_finish(void)
+{
+	rte_head_ct = 0;
+	trk_head_ct = 0;
+	rte_waypts = 0;
+	route_disp_all(route_restore_hdr, route_restore_tlr, route_restore_wpt);
+	track_disp_all(track_restore_hdr, route_restore_tlr, route_restore_wpt);
+}
+
+void
+route_restore(unsigned int count, queue *head_bak)
+{
+	if (head_bak == NULL) return;
+	
+	route_flush(&my_route_head);
+	QUEUE_INIT(&my_route_head);
+	QUEUE_MOVE(&my_route_head, head_bak);
+	xfree(head_bak);
+	
+	common_restore_finish();
+}
+
+void
+track_backup(unsigned int *count, queue **head_bak)
+{
+	queue *elem, *tmp, *elem2, *tmp2;
+	queue *qbackup;
+	route_head *trk_new;
+	unsigned int no;
+	
+	no = track_count();
+	
+	qbackup = xcalloc(1, sizeof(*qbackup));
+	QUEUE_INIT(qbackup);
+	
+	QUEUE_MOVE(qbackup, &my_track_head);
+	QUEUE_INIT(&my_track_head);
+	
+	trk_head_ct = 0;
+	
+	QUEUE_FOR_EACH(qbackup, elem, tmp)
+	{
+	    route_head *trk_old = (route_head *)elem;
+	    
+	    trk_new = route_head_alloc();
+	    if (trk_old->rte_name != NULL)
+		trk_new->rte_name = xstrdup(trk_old->rte_name);
+	    if (trk_old->rte_desc != NULL)
+		trk_new->rte_desc = xstrdup(trk_old->rte_desc);
+	    if (trk_old->fs)
+		trk_new->fs = fs_chain_copy(trk_old->fs);
+
+	    track_add_head(trk_new);
+	    trk_new->rte_num = trk_old->rte_num;
+	    
+	    QUEUE_FOR_EACH(&trk_old->waypoint_list, elem2, tmp2)
+	    {
+		waypoint *wpt = waypt_dupe((waypoint *)elem2);
+		route_add_wpt(trk_new, wpt);
+	    }
+	}
+	*head_bak = qbackup;
+	*count = no;
+}
+
+void
+track_restore(unsigned int count, queue *head_bak)
+{
+	if (head_bak == NULL) return;
+	
+	route_flush(&my_track_head);
+	QUEUE_INIT(&my_track_head);
+	QUEUE_MOVE(&my_track_head, head_bak);
+	xfree(head_bak);
+	
+	common_restore_finish();
+}

@@ -221,5 +221,6 @@ ff_vecs_t google_vecs = {
 	google_read,
 	NULL,
 	NULL, 
-	NULL
+	NULL,
+	CET_CHARSET_UTF8, 1	/* CET-REVIEW */
 };

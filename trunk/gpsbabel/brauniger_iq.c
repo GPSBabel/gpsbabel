@@ -276,5 +276,6 @@ ff_vecs_t brauniger_iq_vecs = {
     data_read,
     NULL,
     NULL, 
-    brauniger_iq_args
+    brauniger_iq_args,
+    CET_CHARSET_UTF8, 1		/* master process: don't convert anything | CET-REVIEW */
 };

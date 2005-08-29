@@ -255,5 +255,6 @@ ff_vecs_t gpspilot_vecs = {
 	data_read,
 	data_write,
 	NULL, 
-	gpspilot_args
+	gpspilot_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

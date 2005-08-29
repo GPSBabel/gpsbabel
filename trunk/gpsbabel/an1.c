@@ -846,5 +846,6 @@ ff_vecs_t an1_vecs = {
 	my_read,
 	my_write,
 	NULL, 
-	an1_args
+	an1_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

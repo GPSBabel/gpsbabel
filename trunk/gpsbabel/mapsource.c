@@ -690,7 +690,7 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	icon = mps_converted_icon_number(icon, mps_ver, MAPSOURCE);
 
 	/* two NULL (0x0) bytes at end of each string */
-	ascii_description = wpt->description ? str_utf8_to_ascii(wpt->description) : xstrdup("");
+	ascii_description = wpt->description ? xstrdup(wpt->description) : xstrdup("");
 	reclen = strlen(ident) + strlen(ascii_description) + 2;	
 	if ((mps_ver == 4) || (mps_ver == 5)) {
 		/* v4.06 & V5.0*/
@@ -2179,5 +2179,6 @@ ff_vecs_t mps_vecs = {
 	mps_read,
 	mps_write,
 	NULL,
-	mps_args
+	mps_args,
+	CET_CHARSET_MS_ANSI	/* CET-REVIEW */
 };

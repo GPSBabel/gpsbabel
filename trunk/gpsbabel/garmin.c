@@ -662,7 +662,8 @@ ff_vecs_t garmin_vecs = {
 	data_read,
 	data_write,
 	NULL,
-	garmin_args
+	garmin_args,
+	CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
 };
 
 static const char *d103_icons[16] = {

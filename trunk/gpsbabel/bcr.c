@@ -26,12 +26,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
+#include "cet_util.h"
 
 #define MYNAME "bcr"
 
-#define BCR_DEBUG
-// #undef  BCR_DEBUG
+#undef BCR_DEBUG
     
 #define SEC_UNKNOWN	0
 #define SEC_CLIENT 	1
@@ -243,7 +242,7 @@ bcr_data_read(void)
 	    }
 	    if (src != NULL) xfree(src);
 	    
-	    src = str_iso8859_1_to_utf8(buff);
+	    src = xstrdup(buff);
 	    /* !! buff is now free and can be used */
 	    
 	    c = bcr_next_char(src);		/* skip spaces */
@@ -378,10 +377,14 @@ void bcr_write_line(FILE *fout, const char *key, int *index, const char *value)
 	}
 	else
 	{
+	    char *tmp;
+	    
+	    tmp = (value != NULL) ? xstrdup(value) : xstrdup("");
 	    if (index != NULL)
-		fprintf(fout, "%s%d=%s\x0d\n", key, *index, value);
+		fprintf(fout, "%s%d=%s\x0d\n", key, *index, tmp);
 	    else
-		fprintf(fout, "%s=%s\x0d\n", key, value);
+		fprintf(fout, "%s=%s\x0d\n", key, tmp);
+	    xfree(tmp);
 	}
 }
 
@@ -499,6 +502,6 @@ ff_vecs_t bcr_vecs = {
 	bcr_data_read,
 	bcr_data_write,
 	NULL,
-	bcr_args
+	bcr_args,
+	CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
 };
-
