@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <gpx
  version="1.0"
 creator="GPSBabel - http://www.gpsbabel.org"
@@ -66,9 +66,9 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </wpt>
 <wpt lat="51.314520836" lon="12.409143448">
 <time>2005-06-24T00:36:57Z</time>
-  <name>V&#xf6;lkerschlachtdenkmal</name>
-  <cmt>P+R Am V&#xf6;lkerschlachtdenkmal</cmt>
-  <desc>P+R Am V&#xf6;lkerschlachtdenkmal</desc>
+  <name>Völkerschlachtdenkmal</name>
+  <cmt>P+R Am Völkerschlachtdenkmal</cmt>
+  <desc>P+R Am Völkerschlachtdenkmal</desc>
   <url>http://Voelkerschlachtdenkmal</url>
   <sym>Waypoint</sym>
 </wpt>
@@ -85,7 +85,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.492606163" lon="12.105431557">
 <time>2005-04-26T14:27:21Z</time>
     <name>416</name>
-  <url>Fahren Sie auf die Luis-Ferdinand-Sch&#xf6;nherr-Strasse nach Norden</url>
+  <url>Fahren Sie auf die Luis-Ferdinand-Schönherr-Strasse nach Norden</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.492606163" lon="12.105431557">
@@ -114,7 +114,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.493836962" lon="12.106101271">
 <time>2005-04-26T14:27:21Z</time>
     <name>420</name>
-  <url>Fahren Sie auf die Liebknechtstrasse nach S&#xfc;dosten</url>
+  <url>Fahren Sie auf die Liebknechtstrasse nach Südosten</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.493378639" lon="12.107105255">
@@ -250,7 +250,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.534491539" lon="12.104487419">
 <time>2005-04-26T14:27:21Z</time>
     <name>444</name>
-  <url>Biegen Sie links ab auf die An Der Sch&#xf6;psdrehe</url>
+  <url>Biegen Sie links ab auf die An Der Schöpsdrehe</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.534920692" lon="12.103457451">
@@ -443,7 +443,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.654762965" lon="12.204956934">
 <time>2005-04-26T14:27:22Z</time>
     <name>478</name>
-  <url>Fahren Sie auf die August-Bebel-Strasse nach S&#xfc;dosten</url>
+  <url>Fahren Sie auf die August-Bebel-Strasse nach Südosten</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.653924942" lon="12.207655907">
@@ -599,7 +599,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.812325478" lon="12.387084961">
 <time>2005-04-26T14:27:22Z</time>
     <name>508</name>
-  <url>Biegen Sie rechts ab auf die Carth&#xe4;userstrasse</url>
+  <url>Biegen Sie rechts ab auf die Carthäuserstrasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.812454224" lon="12.386956215">
@@ -712,7 +712,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.858330727" lon="12.424507141">
 <time>2005-04-26T14:27:22Z</time>
     <name>528</name>
-  <url>Biegen Sie rechts ab auf die G&#xf6;ssnitzer Strasse</url>
+  <url>Biegen Sie rechts ab auf die Gössnitzer Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.860562325" lon="12.427039146">
@@ -858,13 +858,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.949354172" lon="12.405452728">
 <time>2005-04-26T14:27:23Z</time>
     <name>555</name>
-  <url>Biegen Sie rechts ab auf die Schm&#xf6;llner Strasse</url>
+  <url>Biegen Sie rechts ab auf die Schmöllner Strasse</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.956048965" lon="12.410302162">
 <time>2005-04-26T14:27:23Z</time>
     <name>556</name>
-  <url>Halten Sie sich rechts in Richtung Stra&#xdf;e</url>
+  <url>Halten Sie sich rechts in Richtung Straße</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.964955157" lon="12.435919270">
@@ -883,7 +883,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <rtept lat="50.964955157" lon="12.435919270">
 <time>2005-04-26T14:27:23Z</time>
     <name>558</name>
-  <url>Fahren Sie auf die Stra&#xdf;e nach Nordosten</url>
+  <url>Fahren Sie auf die Straße nach Nordosten</url>
     <sym>Waypoint</sym>
   </rtept>
   <rtept lat="50.999994278" lon="12.470340729">
@@ -1129,9 +1129,9 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   </rtept>
   <rtept lat="51.314520836" lon="12.409143448">
 <time>2005-06-24T00:36:57Z</time>
-    <name>V&#xf6;lkerschlachtdenkmal</name>
-    <cmt>P+R Am V&#xf6;lkerschlachtdenkmal</cmt>
-    <desc>P+R Am V&#xf6;lkerschlachtdenkmal</desc>
+    <name>Völkerschlachtdenkmal</name>
+    <cmt>P+R Am Völkerschlachtdenkmal</cmt>
+    <desc>P+R Am Völkerschlachtdenkmal</desc>
   <url>http://Voelkerschlachtdenkmal</url>
     <sym>Waypoint</sym>
   </rtept>
