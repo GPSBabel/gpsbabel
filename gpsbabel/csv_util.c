@@ -928,7 +928,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     } else
     if ( strcmp( fmp->key, "HEART_RATE") == 0) {
       wpt->heartrate = atoi(s); 
-    }
+    } else
     if ( strcmp( fmp->key, "PATH_DISTANCE_KM") == 0 ) {
        /* Ignored on input */
     } else {
