@@ -27,6 +27,7 @@ static FILE *file_in;
 static FILE *file_out;
 static void *mkshort_handle;
 static char *deficon = NULL;
+static int read_as_degrees;
 
 #define MYNAME "PCX"
 
@@ -81,6 +82,7 @@ data_read(void)
 	int n; 
 	char lathemi, lonhemi;
 
+	read_as_degrees  = 0;
 
 	for(;fgets(ibuf, sizeof(ibuf), file_in);) {
 		switch (ibuf[0]) {
@@ -102,8 +104,13 @@ data_read(void)
 
 			if (latdir == 'S') lat = -lat;
 			if (londir == 'W') lon = -lon;
-			wpt_tmp->longitude = ddmm2degrees(lon);
-			wpt_tmp->latitude = ddmm2degrees(lat);
+			if (read_as_degrees) {
+				wpt_tmp->longitude = lon;
+				wpt_tmp->latitude = lat;
+			} else {
+				wpt_tmp->longitude = ddmm2degrees(lon);
+				wpt_tmp->latitude = ddmm2degrees(lat);
+			}
 			waypt_add(wpt_tmp);
 			break;
 		case 'H':
@@ -160,6 +167,9 @@ data_read(void)
 				track_add_head(track_head);
 			}
 			route_add_wpt(track_head, wpt_tmp);
+		case 'U': 
+ 			read_as_degrees = ! strncmp("LAT LON DEG", ibuf + 3, 11);
+			break;
 		default:
 			;
 		}
