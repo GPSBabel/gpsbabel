@@ -287,6 +287,7 @@ track_read(void)
 		wpt->longitude = array[i]->lon;
 		wpt->latitude = array[i]->lat;
 		wpt->altitude = array[i]->alt;
+		wpt->heartrate = array[i]->heartrate;
 		wpt->shortname = xstrdup(array[i]->trk_ident);
 		wpt->creation_time = array[i]->Time;
 		

@@ -327,6 +327,12 @@ The fields used by the XCSV parser are as follows:
    ALT_METERS is identical to ALT_FEET with the exception that the altitude
    is in METERS.
 
+ o HEART_RATE
+   Heart rate, measured in beats per minute.  Only valid for units with 
+   heart rate monitor features (i.e. Garmin Forerunner 301).
+
+   example: IFIELD HEART_RATE,"","%d"
+
  o EXCEL_TIME
    EXCEL_TIME is the waypoint's creation time, if any.  This is actually
    the decimal days since 1/1/1900 and is handled internally as a DOUBLE

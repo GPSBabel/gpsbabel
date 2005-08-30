@@ -289,7 +289,8 @@ typedef struct {
 	float speed;   	/* Optional: meters per second. */
 	fix_type fix;	/* Optional: 3d, 2d, etc. */
 	int  sat;	/* Optional: number of sats used for fix */
-	
+
+	int heartrate;	 /* Beats per minute: likely to get moved to fs. */
 	geocache_data gc_data;
 	format_specific_data *fs;
 	void *extra_data;	/* Extra data added by, say, a filter. */
