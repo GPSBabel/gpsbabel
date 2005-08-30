@@ -681,7 +681,12 @@ THE FORMATS
         process will remove the points corresponding to turns only after
         it has removed all other route points.
 
-        Both options only apply to route files from newer versions of 
+        The 'split' option causes GPSBabel to create separate routes for 
+        each street, creating a new route at each turn point.  For obvious
+        reasons, 'split' cannot be used at the same time as the 'turns_only'
+        or 'turns_important' options.
+
+        All options only apply to route files from newer versions of 
         DeLorme software; older versions didn't store the turn information
         with the route.
 

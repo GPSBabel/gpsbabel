@@ -30,6 +30,7 @@ FILE *infile;
 
 char *turns_important = NULL;
 char *turns_only = NULL;
+char *split = NULL;
 
 static
 arglist_t saroute_args[] = {
@@ -38,6 +39,8 @@ arglist_t saroute_args[] = {
 		NULL, ARGTYPE_BOOL },
 	{"turns_only", &turns_only, "Only read turns; skip all other points",
 		NULL, ARGTYPE_BOOL },
+	{"split", &split, "Split into multiple routes at turns",
+       		NULL, ARGTYPE_BOOL },
 	{0, 0, 0, 0 }
 };
 
@@ -80,6 +83,10 @@ static void
 rd_init(const char *fname)
 {
 	infile = xfopen(fname, "rb", MYNAME);
+	if ( split && (turns_important || turns_only )) {
+		fatal( MYNAME 
+		      ": turns options are not compatible with split\n" );
+	}
 }
 
 static void
@@ -104,7 +111,8 @@ my_read(void)
 		gbint32 lon;
 	} *latlon;
 	unsigned short coordcount;
-	route_head *track_head;
+	route_head *track_head = NULL;
+	route_head *old_track_head = NULL;
 	waypoint *wpt_tmp;
 
 	ReadShort(infile);		/* magic */
@@ -207,10 +215,26 @@ my_read(void)
 			route_add_head(track_head);
 		}
 		while (count) {
+			old_track_head = NULL;
 			ReadShort(infile);
 			recsize = ReadLong(infile);
 			record = ReadRecord(infile, recsize);
 			stringlen = le_read16((unsigned short *)record);
+			if ( split && stringlen ) {
+			    if ( track_head->rte_waypt_ct ) {
+				old_track_head = track_head;
+				track_head = route_head_alloc();
+				route_add_head( track_head );
+			    } // end if
+			    if ( !track_head->rte_name ) {
+		   		track_head->rte_name = 
+					(char *)xmalloc(stringlen+1);
+				strncpy( track_head->rte_name, 
+					record+2, stringlen );
+				track_head->rte_name[stringlen] = '\0';
+			    } 
+			}
+				
 			coordcount = le_read16((unsigned short *)
 					(record + 2 + stringlen + 0x3c));
 			latlon = (struct ll *)(record + 2 + stringlen + 0x3c + 2);
@@ -238,8 +262,15 @@ my_read(void)
 					wpt_tmp->route_priority=1;
 				sprintf( wpt_tmp->shortname, "\\%5.5x", 
 						serial++ );
-				if ( !turns_only || stringlen ) 
+				if ( !turns_only || stringlen ) {
 					route_add_wpt(track_head, wpt_tmp);
+					if ( old_track_head ) {
+						route_add_wpt(old_track_head,
+					           waypt_dupe(wpt_tmp));
+						old_track_head = NULL;
+					}
+				}
+				
 	
 				latlon++;
 				coordcount--;
