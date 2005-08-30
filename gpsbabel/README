@@ -906,13 +906,30 @@ THE FORMATS
         In this case, the merged data will contain all of the properties
         of the original data.
 
-        Currently, GPSBabel only writes drawing layers, as opposed to road, 
-        track, and other specialized layers.  If your input file is a road, 
-        track, trail, or waypoint layer, you should not attempt to write to 
-        an .an1 file as the results may be unpredictable.  Note that this 
-        also applies to merging files, so you can't currently merge two road
-        layers with GPSBabel (officially; there is an unsupported "type" 
-        option that works in limited cases.)
+        GPSBabel has limited experimental support for other types of layers
+        besides the default "drawing" layer with the use of two options:
+
+        The "type" option specifies the type of the drawing layer to be 
+        created.  The supported values are "drawing", "road", "trail", 
+        "waypoint", or "track".  If you do not specify a type, the default
+        will be either the type of the previous an1 file or "drawing" if 
+        there is no previous file.  This lets you merge, for example, two
+        road layers without having to specify "type=road" for the output.
+
+        If you are creating a road layer, you may also use the "road" option,
+        which allows you to change the types of roads based on their names.
+        You can change multiple roads at the same time.  Currently supported
+        types are "limited", "toll", "us", "state", "major", and "local".
+        This option has a special format that is best demonstrated by example:
+
+        "type=limited|I-599|major|Beecher St." 
+
+        This option will cause any road named "I-599" to become a limited- 
+        access highway and any road named "Beecher St." to become a major
+        connector.  Note that roads that have had their types changed in 
+        this way might not be editable in Street Atlas, so make sure they
+        are where you want them before you change them, and make sure to keep
+        a backup of your original road layer.
 
     TomTom
 

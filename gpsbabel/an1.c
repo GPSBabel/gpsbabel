@@ -30,15 +30,27 @@ FILE *infile;
 FILE *outfile;
 
 static char *output_type = NULL;
-long output_type_num = 0;
+static char *road_changes = NULL;
+short output_type_num = 0;
+
+short last_read_type = 0;
 
 static long serial=10000;
 static long rtserial=1;
 
+typedef struct roadchange {
+	long type;
+	char *name;
+} roadchange;
+
+roadchange *roadchanges = NULL;
+
 static
 arglist_t an1_args[] = {
-	{"type", &output_type, "Type of .an1 file (0=drawing)", 
-		"0", ARGTYPE_HIDDEN | ARGTYPE_INT },
+	{"type", &output_type, "Type of .an1 file (see README)", 
+		"", ARGTYPE_STRING },
+	{"road", &road_changes, "Road type changes (see README)",
+		"", ARGTYPE_HIDDEN | ARGTYPE_STRING },
 	{0, 0, 0, 0 }
 };
 
@@ -236,8 +248,7 @@ typedef struct {
 
 typedef struct {
 	format_specific_data fs;
-	short magic;
-	short unk1;
+	long roadtype;
 	short serial;
 	long unk2;
 	short unk3;
@@ -426,8 +437,7 @@ static void Read_AN1_Line( FILE *f, an1_line_record *line ) {
 	
 	short len;
 	
-	line->magic = ReadShort( f );
-	line->unk1 = ReadShort( f );
+	line->roadtype = ReadLong( f );
 	line->serial = ReadShort( f );
 	line->unk2 = ReadLong( f );
 	line->unk3 = ReadShort( f );
@@ -449,8 +459,7 @@ static void Read_AN1_Line( FILE *f, an1_line_record *line ) {
 static void Write_AN1_Line( FILE *f, an1_line_record *line ) {
 	short len;
 	
-	WriteShort( f, line->magic );
-	WriteShort( f, line->unk1 );
+	WriteLong( f, line->roadtype );
 	WriteShort( f, line->serial );
 	WriteLong( f, line->unk2 );
 	WriteShort( f, line->unk3 );
@@ -511,11 +520,13 @@ static void Read_AN1_Header( FILE *f ) {
 	
 	magic = ReadShort( f );
 	type = ReadShort( f );
+	
+	last_read_type = type;
 }
 
 static void Write_AN1_Header( FILE *f ) {
 	WriteShort( f, 11557 );
-	WriteShort( f, (short) atoi( output_type ) );
+	WriteShort( f, output_type_num );
 }
 
 static void Read_AN1_Bitmaps( FILE *f ) {
@@ -660,6 +671,27 @@ static void Read_AN1_Lines( FILE *f ) {
 }
 
 static void
+Make_Road_Changes( an1_line_record *rec ) {
+	int i = 0;
+	
+	if ( !rec ) {
+		return;
+	}
+	
+	if ( !roadchanges ) {
+		return;
+	}
+	
+	while ( roadchanges[i].name ) {
+		if ( !case_ignore_strcmp(roadchanges[i].name, rec->name )) {
+			rec->roadtype = roadchanges[i].type;
+			break;
+		}
+		i++;
+	}
+}
+	
+static void
 Write_One_AN1_Line( const route_head *rte )
 {
 	an1_line_record *rec;
@@ -677,12 +709,12 @@ Write_One_AN1_Line( const route_head *rte )
 					rec = Alloc_AN1_Line();
 					memcpy( rec, fs, sizeof(an1_line_record));
 					local = 1;
-					rec->magic = 4112;
-					rec->unk1 = 4359;
+					rec->roadtype = 0x11100541;
 					rec->unk2 = 655360;
 					rec->type = 14;
 					rec->unk8 = 2;
 				} // end if
+				Make_Road_Changes( rec );
 				break;
 			case 2:
 				if ( rec->type != 15 ) {
@@ -705,27 +737,26 @@ Write_One_AN1_Line( const route_head *rte )
 	else {
 		rec = Alloc_AN1_Line();
 		local = 1;
+		rec->name = NULL;
 		switch (output_type_num) {
 			/*  drawing road trail waypoint track  */
 			case 1: /* road */
-				rec->magic = 4112;
-				rec->unk1 = 4359;
+				rec->roadtype = 0x11100541;
 				rec->unk2 = 655360;
 				rec->type = 14;
 				rec->unk8 = 2;
+				rec->name = xstrdup( rte->rte_name ); 
 				break;
 				
 			case 2: /* trail */
-				rec->magic = 7248;
-				rec->unk1 = 4359;
+				rec->roadtype = 0x11071c50;
 				rec->unk2 = 917504;
 				rec->type = 15;
 				rec->unk8 = 2;
 				break;
 				
 			case 4: /* track */
-				rec->magic = 21;
-				rec->unk1 = 18560;
+				rec->roadtype = 0x48800015;
 				rec->unk2 = 917504;
 				rec->type = 16;
 				rec->unk4 = 2;
@@ -735,8 +766,7 @@ Write_One_AN1_Line( const route_head *rte )
 			case 0: /* drawing */
 			case 3: /* waypoint - shouldn't have lines */
 			default:
-				rec->magic = 21;
-				rec->unk1 = 18560;
+				rec->roadtype = 0x48800015;
 				rec->unk2 = 1048576;
 				rec->type = 2;
 				rec->unk4 = 2;
@@ -746,7 +776,9 @@ Write_One_AN1_Line( const route_head *rte )
 				rec->unk8 = 2;
 				break;
 		}
-		rec->name = xstrdup( "" );
+		if ( !rec->name ) {
+			rec->name = xstrdup( "" );
+		}
 				
 	}
 	rec->serial = serial++;
@@ -793,10 +825,132 @@ static void Write_AN1_Lines( FILE *f ) {
 }
 
 static void
+Init_Output_Type( void )
+{
+	if ( !output_type || !output_type[0]) {
+		output_type_num = last_read_type;
+		return;
+	}
+	if ( (output_type[0] & 0xf0 ) == 0x30) {
+		output_type_num = atoi( output_type );
+	}
+	else {
+		output_type_num = 0;
+		if ( !case_ignore_strcmp(output_type, "drawing")) {
+			output_type_num = 0;
+		}
+		else if ( !case_ignore_strcmp(output_type, "road")) {
+			output_type_num = 1;
+		}
+		else if ( !case_ignore_strcmp(output_type, "trail")) {
+			output_type_num = 2;
+		}
+		else if ( !case_ignore_strcmp(output_type, "waypoint")) {
+			output_type_num = 3;
+		}
+		else if ( !case_ignore_strcmp(output_type, "track")) {
+			output_type_num = 4;
+		}
+		else {
+			fatal(MYNAME ": type must be "
+			    "drawing, road, trail, waypoint, or track\n");
+		}	
+	}
+	last_read_type = output_type_num;
+}
+
+static long 
+Parse_Change_Type( char *type ) {
+	long retval = 0x11100541;
+	
+	if ( !case_ignore_strcmp( type, "limited" )) {
+		retval = 0x11070430;
+	}
+	else if ( !case_ignore_strcmp( type, "toll" )) {
+		retval = 0x11070470;
+	}
+	else if ( !case_ignore_strcmp( type, "us" )) {
+		retval = 0x11070870;
+	}
+	else if ( !case_ignore_strcmp( type, "state" )) {
+		retval = 0x11070c10;
+	}
+	else if ( !case_ignore_strcmp( type, "major" )) {
+		retval = 0x11070c30;
+	}
+	else {
+		fatal( MYNAME ": unknown road type for road changes\n" );
+	}
+	return retval;
+}
+
+static void 
+Free_Road_Changes( void )
+{
+	int i = 0;
+	if ( roadchanges ) {
+		while ( roadchanges[i].name ) {
+			xfree(roadchanges[i].name );
+			i++;
+		}
+		xfree( roadchanges );
+	}
+	roadchanges = NULL;
+}		
+
+static void
+Init_Road_Changes( void )
+{
+	int count = 0;
+	char *strType = NULL;
+	char *name = NULL;
+	char *bar = NULL;
+	char *copy = NULL;
+	Free_Road_Changes();
+	
+	if ( !road_changes || !road_changes[0] ) {
+		return;
+	}
+	bar = strchr( road_changes, '|' );
+	while ( bar ) {
+		count++;
+		bar = strchr( bar+1, '|' );
+	}
+	if ( !(count&1)) {
+		fatal( MYNAME ": invalid format for road changes\n" );
+	}
+	count = 1 + count / 2;
+	roadchanges = (roadchange *)xmalloc( (count+1) * sizeof(roadchange));
+	
+	roadchanges[count].type = 0;
+	roadchanges[count].name = NULL;
+	
+	copy = xstrdup( road_changes );
+	bar = copy;
+	
+        while ( count ) {
+		count--;
+		name = bar;
+		bar = strchr( name, '|' );
+		*bar = '\0';
+		bar++;
+		strType = bar;
+		bar = strchr( strType, '|' );
+		if ( bar ) {
+			*bar = '\0';
+			bar++;
+		}	
+		roadchanges[count].name = xstrdup( name );
+		roadchanges[count].type = Parse_Change_Type( strType ); 
+	}		
+	
+	xfree( copy );
+}
+
+static void
 rd_init(const char *fname)
 {
 	infile = xfopen(fname, "rb", MYNAME);
-	output_type_num = atoi( output_type );
 }
 
 static void
@@ -818,12 +972,14 @@ static void
 wr_init(const char *fname)
 {
 	outfile = xfopen( fname, "wb", MYNAME );
-	output_type_num = atoi( output_type );
+	Init_Output_Type();
+	Init_Road_Changes();
 }
 
 static void
 wr_deinit( void ) 
 {
+	Free_Road_Changes();
 	fclose(outfile);
 }
 
