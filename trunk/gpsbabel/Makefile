@@ -38,7 +38,8 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
-	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o
+	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
+	ignrando.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o trackfilter.o discard.o
 
@@ -202,6 +203,7 @@ html.o: html.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
   jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 igc.o: igc.c defs.h queue.h gbtypes.h
+ignrando.o: ignrando.c defs.h queue.h gbtypes.h xmlgeneric.h
 internal_styles.o: internal_styles.c defs.h queue.h gbtypes.h
 kml.o: kml.c defs.h queue.h gbtypes.h xmlgeneric.h
 lowranceusr.o: lowranceusr.c defs.h queue.h gbtypes.h

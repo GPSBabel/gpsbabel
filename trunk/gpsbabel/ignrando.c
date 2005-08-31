@@ -1,0 +1,417 @@
+/* 
+
+	Support for IGN Rando track files, 
+	
+	Copyright (C) 2005 Olaf Klein, o.b.klein@t-online.de
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
+*/
+
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#include "defs.h"
+#include "cet_util.h"
+
+#if !NO_EXPAT
+#include <expat.h>
+static XML_Parser psr;
+#endif
+
+FILE *fin, *fout;
+
+static route_head *track;
+static waypoint *wpt;
+static int track_points;
+static int track_index;		/* index of track we'll write */
+static int track_num;		/* current index of track within track_disp_all */
+
+static int xmlpoints;
+static char xmldir[1024];
+static int xmltag;
+
+/* options */
+static char *index_opt = NULL;
+
+static arglist_t ignr_args[] = 
+{
+	{"index", &index_opt, "Index of track to write (if more the one in source)", NULL, ARGTYPE_INT },
+	{0, 0, 0, 0 }
+};
+
+#define MYNAME "IGNRando"
+
+#define READ_BUFFER_SIZE 16384
+
+typedef struct ignr_xmldir_s 
+{
+	int tag;
+	char *name;
+} ignr_xmldir_t;
+
+static ignr_xmldir_t ignr_xmldir[] =
+{
+	{ 0, "/" },
+	{ 1, "/RANDONNEE/" },
+	{ 2, "/RANDONNEE/INFORMATIONS/NB_ETAPES/" },
+	{ 3, "/RANDONNEE/INFORMATIONS/DESCRIPTION/" },
+	{ 4, "/RANDONNEE/ETAPE/" },
+	{ 5, "/RANDONNEE/ETAPE/POSITION/" },
+	{ 6, "/RANDONNEE/ETAPE/ALTITUDE/" },
+
+/*
+	{ , "/RANDONNEE/ENTETE/" },
+	{ , "/RANDONNEE/ENTETE/VERSION_XML/" },
+	{ , "/RANDONNEE/ENTETE/VERSION_BASE/" },
+	{ , "/RANDONNEE/ENTETE/DATE/" },
+	{ , "/RANDONNEE/ENTETE/HEURE/" },
+	{ , "/RANDONNEE/INFORMATIONS/" },
+	{ , "/RANDONNEE/INFORMATIONS/TYPE/" },
+	{ , "/RANDONNEE/INFORMATIONS/DISTANCE/" },
+	{ , "/RANDONNEE/INFORMATIONS/DUREE/" },
+	{ , "/RANDONNEE/INFORMATIONS/DENIVELE_MONTE/" },
+	{ , "/RANDONNEE/INFORMATIONS/DENIVELE_DESCENTE/" },
+	{ , "/RANDONNEE/INFORMATIONS/DIFFICULTE/" },
+	{ , "/RANDONNEE/INFORMATIONS/INTERET/" },
+	{ , "/RANDONNEE/INFORMATIONS/EMPRISE/" },
+	{ , "/RANDONNEE/INFORMATIONS/COULEUR/" },
+	{ , "/RANDONNEE/INFORMATIONS/EPAISSEUR/" },
+	{ , "/RANDONNEE/INFORMATIONS/STYLE_DE_TRAIT/" },
+	{ , "/RANDONNEE/INFORMATIONS/COULEUR_BANDE_CENTRALE/" },
+	{ , "/RANDONNEE/INFORMATIONS/EPAISSEUR_BANDE_CENTRALE/" },
+	{ , "/RANDONNEE/INFORMATIONS/STYLE_DE_TRAIT_BANDE_CENTRALE/" },
+	{ , "/RANDONNEE/INFORMATIONS/PROFIL/" },
+	{ , "/RANDONNEE/INFORMATIONS/PROFIL/PROFIL_NOM/" },
+	{ , "/RANDONNEE/INFORMATIONS/PROFIL/PROFIL_DESCENTE/" },
+	{ , "/RANDONNEE/INFORMATIONS/PROFIL/PROFIL_PLAT/" },
+	{ , "/RANDONNEE/INFORMATIONS/PROFIL/PROFIL_MONTEE/" },
+	{ , "/RANDONNEE/INFORMATIONS/PROFIL/PROFIL_READONLY/" },
+	{ , "/RANDONNEE/INFORMATIONS/DISTANCE_PLAT/" },
+	{ , "/RANDONNEE/INFORMATIONS/IMPRIMER_INSTRUCTIONS/" },
+	{ , "/RANDONNEE/ETAPE/ETAPE_REMARQUABLE/" },
+*/
+	{ -1, NULL }
+};
+
+#if NO_EXPAT
+void
+ignr_rd_init(const char *fname)
+{
+	fatal(MYNAME ": This build excluded " MYNAME " support because expat was not installed.\n");
+}
+
+void
+ignr_read(void)
+{
+}
+
+#else
+
+static void
+ignr_strcat(char *dest, const char *src, size_t dest_size)
+{
+	int len, left;
+	
+	len = strlen(dest);
+	left = dest_size - len - 1;
+	if (left > 0)
+		strncpy(dest+len, src, left);
+}
+
+static int
+ignr_find_tag(const char *xmldir)
+{
+	int iter = 0;
+	char *c;
+
+	while ((c = ignr_xmldir[iter].name))
+	{
+		if (case_ignore_strcmp(xmldir, c) == 0) return iter;
+		iter++;
+	}
+	return -1;
+}
+
+static route_head *
+ignr_track(void)
+{
+	if (track == NULL)
+	{
+		track = route_head_alloc();
+		track_add_head(track);
+	}
+	return track;
+}
+
+static void
+ignr_start(void *data, const char *el, const char **attr)
+{
+	ignr_strcat(xmldir, el, sizeof(xmldir));
+	ignr_strcat(xmldir, "/", sizeof(xmldir));
+	
+	xmltag = ignr_find_tag(xmldir);	
+
+	if (xmltag == 4)
+	{
+		wpt = waypt_new();
+	}
+}
+
+static void
+ignr_end(void *data, const char *el)
+{
+	char *c, *cend;
+	
+
+	if ((xmltag == 4) && (wpt != NULL))
+	{
+		route_add_wpt(ignr_track(), wpt);
+		wpt = NULL;
+		track_points++;
+	}
+
+	cend = xmldir + strlen(xmldir) - 1;
+	if (cend <= xmldir) fatal(MYNAME ": Error in XML structure!\n");
+	
+	*cend = '\0';
+	c = cend;
+	while (*c != '/') c--;
+	c++;
+	
+	if (strcmp(c, el) != 0) fatal(MYNAME ": Error in XML structure!\n");
+	*c = '\0';
+
+	xmltag = ignr_find_tag(xmldir);	
+}
+
+static void
+ignr_cdata(void *dta, const XML_Char *s, int len)
+{
+	char *c;
+	
+	if (len < 0) return;
+	
+	c = xmalloc(len + 1);
+	memcpy(c, s, len);
+	c[len] = '\0';
+	
+	switch(xmltag)
+	{
+		case 2:
+			xmlpoints = atoi(c);
+			break;
+		case 3:
+			if (len > 0)
+				ignr_track()->rte_desc = xstrdup(c);
+			break;
+			
+		case 5:
+			if (wpt == NULL)
+				fatal(MYNAME ": Error in XML structure!\n");
+			if (2 != sscanf(c, "%lf,%lf", &wpt->latitude, &wpt->longitude))
+				fatal(MYNAME ": Invalid coordinates \"%s\"!\n", c);
+			break;
+		case 6:
+			if (wpt == NULL)
+				fatal(MYNAME ": Error in XML structure!\n");
+			if (1 != sscanf(c, "%lf", &wpt->altitude))
+				fatal(MYNAME ": Invalid altitude \"%s\"!\n", c);
+			break;
+	}
+	xfree(c);
+}
+
+static void 
+ignr_rd_init(const char *fname)
+{
+	track = NULL;
+	wpt = NULL;
+	track_points = 0;
+	strcpy(xmldir, "/");
+	xmltag = -1;
+	xmlpoints = -1;
+
+	fin = xfopen(fname, "r", MYNAME);
+	if ((psr = XML_ParserCreate(NULL)) == NULL)
+		fatal(MYNAME ": Could not create XML parser\n");
+
+	XML_SetUnknownEncodingHandler(psr, cet_lib_expat_UnknownEncodingHandler, NULL);
+	XML_SetElementHandler(psr, ignr_start, ignr_end);
+	XML_SetCharacterDataHandler(psr, ignr_cdata);
+}
+
+static void 
+ignr_read(void)
+{
+	int len;
+	char *buff;
+	
+	buff = xmalloc(READ_BUFFER_SIZE);
+	
+	while ((len = fread(buff, 1, READ_BUFFER_SIZE, fin))) 
+	{
+		if (XML_Parse(psr, buff, len, feof(fin)) == 0) 
+		{
+			fatal(MYNAME ": XML-Parser error at %d: %s\n", 
+				XML_GetCurrentLineNumber(psr),
+				XML_ErrorString(XML_GetErrorCode(psr)));
+		}
+	}
+	
+	xfree(buff);
+}
+
+#endif
+
+static void 
+ignr_rd_deinit(void)
+{
+	XML_ParserFree(psr);
+	psr = NULL;
+	
+	if ((xmlpoints != -1) && (xmlpoints != track_points))
+		fatal(MYNAME ": Number of defined points differs to present number!\n");
+	
+}
+
+/* write support */
+
+static void
+ignr_fprintf(FILE *f, const char *fmt, ...)
+{
+	char buff[256];
+	char *temp = buff;
+	va_list args;
+	int i;
+	
+	va_start(args, fmt);
+	
+	i = vsnprintf(buff, sizeof(buff), fmt, args);
+	if (i >= sizeof(buff))
+	{
+		temp = xmalloc(i + 1);
+		i = vsnprintf(temp, i + 1, fmt, args);
+	}
+	if (i < 0)
+	{
+		fatal(MYNAME ": error in vsnprintf.\n");	
+	}
+	else if (i > 0)
+	{
+		char eol = temp[i - 1];
+		if (eol == '\n') i--;
+		fwrite(temp, 1, i, f);
+		if (eol == '\n') fprintf(f, "\x0D\n");
+	}
+	
+	if (temp != buff) xfree(temp);
+	va_end(args);
+}
+
+static void 
+ignr_rw_init(const char *fname)
+{
+	fout = xfopen(fname, "w", MYNAME);
+}
+
+static void 
+ignr_rw_deinit(void)
+{
+	fclose(fout);
+}
+
+static void
+ignr_write_track_hdr(const route_head *track)
+{
+	track_num++;
+
+	if (track_num != track_index) return;
+	
+	ignr_fprintf(fout, "\t<INFORMATIONS>\n");
+	ignr_fprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track->rte_waypt_ct);
+	if (track->rte_desc != NULL)
+		ignr_fprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", track->rte_desc);
+	ignr_fprintf(fout, "\t</INFORMATIONS>\n");
+}
+
+static void
+ignr_write_track_trl(const route_head *track)
+{
+}
+
+static void
+ignr_write_waypt(const waypoint *wpt)
+{
+	if (track_num != track_index) return;
+
+	ignr_fprintf(fout, "\t<ETAPE>\n");
+	ignr_fprintf(fout, "\t\t<POSITION>%3.6f,%3.6f</POSITION>\n", wpt->latitude, wpt->longitude);
+	if (wpt->altitude != unknown_alt)
+		ignr_fprintf(fout, "\t\t<ALTITUDE>%3.6f</ALTITUDE>\n", wpt->altitude);
+	ignr_fprintf(fout, "\t</ETAPE>\n");
+}
+
+static void 
+ignr_write(void)
+{
+	time_t now;
+	struct tm tm;
+	char buff[32];
+	
+	if (index_opt != NULL)
+	{
+		track_index = atoi(index_opt);
+		if ((track_index < 1) || (track_index > track_count()))
+		    fatal(MYNAME ": Invalid track index %d (we have currently %d track(s))!\n", 
+			track_index, track_count());
+	}	    
+	else
+		track_index = 1;
+	track_num = 0;
+
+        now = current_time();
+	tm = *localtime(&now);
+	
+	ignr_fprintf(fout, "<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n");
+	ignr_fprintf(fout, "<RANDONNEE>\n");
+	ignr_fprintf(fout, "\t<ENTETE>\n");
+	ignr_fprintf(fout, "\t\t<VERSION_XML>1.1</VERSION_XML>\n");
+	ignr_fprintf(fout, "\t\t<VERSION_BASE>IHA03AA</VERSION_BASE>\n");
+	
+	strftime(buff, sizeof(buff), "%d/%m/%Y", &tm);
+	ignr_fprintf(fout, "\t\t<DATE>%s</DATE>\n", buff);
+	strftime(buff, sizeof(buff), "%H:%M:%S", &tm);
+	ignr_fprintf(fout, "\t\t<HEURE>%s</HEURE>\n", buff);
+	
+	ignr_fprintf(fout, "\t</ENTETE>\n");
+	track_disp_all(ignr_write_track_hdr, ignr_write_track_trl, ignr_write_waypt);
+	ignr_fprintf(fout, "</RANDONNEE>\n");
+}
+
+ff_vecs_t ignr_vecs = {
+	ff_type_file,
+	{ ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none },
+	ignr_rd_init,	
+	ignr_rw_init,	
+	ignr_rd_deinit,
+	ignr_rd_deinit,
+	ignr_read,
+	ignr_write,
+	NULL, 
+	ignr_args,
+	CET_CHARSET_MS_ANSI, 1
+};
