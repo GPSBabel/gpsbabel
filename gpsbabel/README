@@ -1026,6 +1026,17 @@ THE FORMATS
 	structure.  Export to this format is not possible, as this format 
 	has too many fields that we never get populated by any other format.
 	
+    IGNRando
+
+        Input and output support for IGN Rando track files.  IGN Rando
+        is a program mainly used in France for Topo maps.  The files
+        are XML based and are "windows-1252" encoded.  Trackpoints come
+        without timestamp.
+
+	Options:
+  	
+	index - Use track number <index> from input data for output.
+		The range is 1 to number of tracks in input.
 	
 DATA FILTERS
 

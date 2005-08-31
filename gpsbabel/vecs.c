@@ -86,6 +86,7 @@ extern ff_vecs_t vitosmt_vecs;
 extern ff_vecs_t gdb_vecs;
 extern ff_vecs_t bcr_vecs;
 extern ff_vecs_t coto_vecs;
+extern ff_vecs_t ignr_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -428,6 +429,12 @@ vecs_t vec_list[] = {
 		NULL
 	},
 #endif
+	{
+		&ignr_vecs,
+		"ignrando",
+		"IGN Rando track files",
+		"rdn"
+	},	
 	{
 		NULL,
 		NULL,
