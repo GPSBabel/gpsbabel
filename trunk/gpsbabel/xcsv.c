@@ -323,6 +323,12 @@ xcsv_parse_style_line(const char *sbuff)
 	    xcsv_epilogue_add(xstrdup(&sbuff[9]));
 	} else
 
+	if (ISSTOKEN(sbuff, "ENCODING")) {
+	    p = csv_stringtrim(&sbuff[8], "\"", 1);
+	    cet_convert_init(p, 1);
+	    xfree(p);
+	} else
+	
 	if (ISSTOKEN(sbuff, "IFIELD")) {
 	    key = val = pfc = NULL;
 	    

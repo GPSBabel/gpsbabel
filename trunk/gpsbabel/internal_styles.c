@@ -216,6 +216,57 @@ static char garmin301[] =
 "#EPILOGUE	Epilogue Line 1\n"
 "#EPILOGUE	Epilogue Line 2\n"
 ;
+static char geonet[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: GEOnet Names Server (GNS) (http://earth-info.nga.mil/gns/html/cntry_files.html)\n"
+"# Author: Olaf Klein\n"
+"#   Date: 08/20/2002\n"
+"#\n"
+
+"DESCRIPTION		GEOnet Names Server (GNS)\n"
+"EXTENSION		txt\n"
+
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+
+"FIELD_DELIMITER		TAB\n"
+"RECORD_DELIMITER	CRNEWLINE\n"
+"BADCHARS		TAB\n"
+"ENCODING		UTF-8\n"
+
+"PROLOGUE		RC	UFI	UNI	LAT	LONG	DMS_LAT	DMS_LONG	UTM	JOG	FC	DSG	PC	CC1	ADM1	ADM2	DIM	CC2	NT	LC	SHORT_FORM	GENERIC	SORT_NAME	FULL_NAME	FULL_NAME_ND	MODIFY_DATE\n"
+
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# RC		( http://earth-info.nga.mil/gns/html/gis_contryfiles.html )\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# UFI\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# UNI\n"
+"IFIELD	LAT_DECIMAL, \"\", \"%03.7f\"	# LAT\n"
+"IFIELD	LON_DECIMAL, \"\", \"%03.7f\"	# LONG\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# DMS_LAT\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# DMS_LONG\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# UTM\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# JOG\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# FC\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# DSG\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# PC\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# CC1\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# ADM1\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# ADM2\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# DIM\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# CC2\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# NT\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# LC\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# SHORT_FORM\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# GENERIC\n"
+"IFIELD	SHORTNAME, \"\", \"%s\"		# SHORT_NAME\n"
+"IFIELD	DESCRIPTION, \"\", \"%s\"		# FULL_NAME\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# FULL_NAME_ND\n"
+"IFIELD	IGNORE, \"\", \"%s\"		# MOD_DATE\n"
+;
 static char gpsdrive[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -686,5 +737,5 @@ static char xmapwpt[] =
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 18;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 19;
