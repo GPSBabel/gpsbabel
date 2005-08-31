@@ -180,6 +180,42 @@ static char fugawi[] =
 "IFIELD  GMT_TIME, \"\", \"%Y%m%d\"\n"
 "IFIELD  HMSG_TIME, \"\", \"%02d%02d%02d\"\n"
 ;
+static char garmin301[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: Garmin 301 Position + Heartrate data\n"
+"# Author: Jeff Kalikstein\n"
+"#   Date: 08/29/2005\n"
+"#\n"
+
+"DESCRIPTION		Garmin 301 Custom position and heartrate\n"
+
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		COMMA\n"
+"RECORD_DELIMITER	NEWLINE\n"
+"BADCHARS		COMMA\n"
+"#FORMAT_TYPE		INTERNAL\n"
+
+"#\n"
+"# HEADER STUFF:\n"
+"#\n"
+"PROLOGUE	Garmin 301 data __FILE__ \n"
+"PROLOGUE	Timestamp,Latitude, Longitude, Atlitude(ft), heart rate\n"
+"#\n"
+"# INDIVIDUAL DATA FIELDS:\n"
+"#\n"
+"IFIELD	TIMET_TIME,\"\",\"%ld\"\n"
+"IFIELD	LAT_DECIMAL, \"\", \"%f\"\n"
+"IFIELD	LON_DECIMAL, \"\", \"%f\"\n"
+"IFIELD	ALT_FEET, \"\", \"%fF\"\n"
+"IFIELD  HEART_RATE,\"\",\" %d\"	# beats per minute\n"
+
+
+"# EPILOGUE: \n"
+"#EPILOGUE	Epilogue Line 1\n"
+"#EPILOGUE	Epilogue Line 2\n"
+;
 static char gpsdrive[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -650,5 +686,5 @@ static char xmapwpt[] =
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 17;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 18;
