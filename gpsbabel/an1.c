@@ -911,10 +911,10 @@ Init_Road_Changes( void )
 	if ( !road_changes || !road_changes[0] ) {
 		return;
 	}
-	bar = strchr( road_changes, '|' );
+	bar = strchr( road_changes, '!' );
 	while ( bar ) {
 		count++;
-		bar = strchr( bar+1, '|' );
+		bar = strchr( bar+1, '!' );
 	}
 	if ( !(count&1)) {
 		fatal( MYNAME ": invalid format for road changes\n" );
@@ -931,11 +931,11 @@ Init_Road_Changes( void )
         while ( count ) {
 		count--;
 		name = bar;
-		bar = strchr( name, '|' );
+		bar = strchr( name, '!' );
 		*bar = '\0';
 		bar++;
 		strType = bar;
-		bar = strchr( strType, '|' );
+		bar = strchr( strType, '!' );
 		if ( bar ) {
 			*bar = '\0';
 			bar++;

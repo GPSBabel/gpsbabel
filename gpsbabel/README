@@ -927,7 +927,7 @@ THE FORMATS
         types are "limited", "toll", "us", "state", "major", and "local".
         This option has a special format that is best demonstrated by example:
 
-        "type=limited|I-599|major|Beecher St." 
+        "type=limited!I-599!major!Beecher St." 
 
         This option will cause any road named "I-599" to become a limited- 
         access highway and any road named "Beecher St." to become a major
