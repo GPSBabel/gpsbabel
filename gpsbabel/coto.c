@@ -412,4 +412,5 @@ ff_vecs_t coto_vecs = {
 	data_write,
 	NULL,
 	coto_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
