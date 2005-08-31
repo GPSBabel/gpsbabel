@@ -373,7 +373,7 @@ gpwpl_parse(char *ibuf)
 	sscanf(ibuf,"$GPWPL,%lf,%c,%lf,%c,%[^*]",
 		&latdeg,&latdir,
 		&lngdeg,&lngdir,
-		&sname);
+		sname);
 
 	waypt  = waypt_new();
 

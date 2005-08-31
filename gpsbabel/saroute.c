@@ -230,7 +230,7 @@ my_read(void)
 		   		track_head->rte_name = 
 					(char *)xmalloc(stringlen+1);
 				strncpy( track_head->rte_name, 
-					record+2, stringlen );
+					(const char *) record+2, stringlen );
 				track_head->rte_name[stringlen] = '\0';
 			    } 
 			}
