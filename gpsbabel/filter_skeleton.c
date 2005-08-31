@@ -2,7 +2,7 @@
 
     Filter skeleton: 
     
-    Simple copy this file to <your_filter_name>.c and 
+    Simply copy this file to <your_filter_name>.c and 
     rename all filter_skeleton tokens to <your_filter_name>. Replace 
     the stupid name and address in the Copyright few lines below.
     To active your new filter you have to create a new section in 
