@@ -31,6 +31,7 @@
 #endif
 
 cet_cs_vec_t *cet_find_cs_by_name(const char *name);
+void cet_register(void);
 void cet_deregister(void);
 
 /* short hand transmissions */
