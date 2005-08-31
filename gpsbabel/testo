@@ -829,4 +829,10 @@ compare reference/fugawi.time.ref.txt ${TMPDIR}/fugawi4.txt
 ${PNAME} -i gpx -f reference/track/tracks.gpx  -o fugawi -F ${TMPDIR}/fugawi5.txt
 compare reference/track/fugawi.txt ${TMPDIR}/fugawi5.txt
 
+#
+# Magellan Explorist geocaching format (write-only).
+#
+${PNAME} -i gpx -f reference/gc/GC7FA4.gpx -f reference/gc/GCGCA8.gpx -o maggeo -F ${TMPDIR}/maggeo.gs
+compare reference/gc/maggeo.gs ${TMPDIR}/maggeo.gs
+
 exit 0
