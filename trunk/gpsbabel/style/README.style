@@ -69,6 +69,13 @@ file being described and not specific data within the file itself.
 
    This directive gives the filename extension generally associated with
    this file.
+ 
+ o ENCODING:
+
+   Describes the character set used by this format.  The value given
+   must be one listed by 'gpsbabel -l'.    example:
+
+   ENCODING             UTF-8	# Use UTF-8 for input and output.
 
 GPSBABEL BEHAVIOR DIRECTIVES:
 -----------------------------
