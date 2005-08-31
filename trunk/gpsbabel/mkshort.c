@@ -372,7 +372,7 @@ mkshort(void *h, const char *istring)
 	 * Walk in the Woods 2.
 	 */
 	np = ostring + strlen(ostring);
-	while (*(np-1) && isdigit(*(np-1) )) {
+	while ((np != ostring) && *(np-1) && isdigit(*(np-1) )) {
 		np--;
 	}
 	if (np) {
