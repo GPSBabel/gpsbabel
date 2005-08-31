@@ -610,6 +610,7 @@ char * strip_nastyhtml(const char * in);
 #define CET_CHARSET_ASCII	"US-ASCII"
 #define CET_CHARSET_UTF8	"UTF-8"
 #define CET_CHARSET_MS_ANSI	"MS-ANSI"
+#define CET_CHARSET_LATIN1	"ISO-8859-1"
 
 #define str_utf8_to_cp1252(str) cet_str_utf8_to_cp1252((str)) 
 #define str_cp1252_to_utf8(str) cet_str_cp1252_to_utf8((str))

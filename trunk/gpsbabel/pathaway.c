@@ -698,5 +698,5 @@ ff_vecs_t ppdb_vecs = {
 	ppdb_write,
 	NULL, 
 	ppdb_args,
-	"ISO-8859-1"
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
