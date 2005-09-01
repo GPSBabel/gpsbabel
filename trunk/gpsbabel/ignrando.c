@@ -25,24 +25,23 @@
 #include <time.h>
 
 #include "defs.h"
-#include "cet_util.h"
+#include "xmlgeneric.h"
 
 #if !NO_EXPAT
 #include <expat.h>
 static XML_Parser psr;
 #endif
 
+#define MYNAME "IGNRando"
+
 FILE *fin, *fout;
 
 static route_head *track;
 static waypoint *wpt;
-static int track_points;
 static int track_index;		/* index of track we'll write */
 static int track_num;		/* current index of track within track_disp_all */
 
 static int xmlpoints;
-static char xmldir[1024];
-static int xmltag;
 
 /* options */
 static char *index_opt = NULL;
@@ -53,240 +52,140 @@ static arglist_t ignr_args[] =
 	{0, 0, 0, 0 }
 };
 
-#define MYNAME "IGNRando"
+static xg_callback	ignr_start;
+static xg_callback	ignr_nb_etapes, ignr_descr;
+static xg_callback	ignr_etape_begin, ignr_etape_end;
+static xg_callback	ignr_etape_pos, ignr_etape_alt;
 
-#define READ_BUFFER_SIZE 16384
-
-typedef struct ignr_xmldir_s 
+static 
+xg_tag_mapping ignr_xml_map[] = 
 {
-	int tag;
-	char *name;
-} ignr_xmldir_t;
-
-static ignr_xmldir_t ignr_xmldir[] =
-{
-	{ 0, "/" },
-	{ 1, "/RANDONNEE/" },
-	{ 2, "/RANDONNEE/INFORMATIONS/NB_ETAPES/" },
-	{ 3, "/RANDONNEE/INFORMATIONS/DESCRIPTION/" },
-	{ 4, "/RANDONNEE/ETAPE/" },
-	{ 5, "/RANDONNEE/ETAPE/POSITION/" },
-	{ 6, "/RANDONNEE/ETAPE/ALTITUDE/" },
-
-/*
-	{ , "/RANDONNEE/ENTETE/" },
-	{ , "/RANDONNEE/ENTETE/VERSION_XML/" },
-	{ , "/RANDONNEE/ENTETE/VERSION_BASE/" },
-	{ , "/RANDONNEE/ENTETE/DATE/" },
-	{ , "/RANDONNEE/ENTETE/HEURE/" },
-	{ , "/RANDONNEE/INFORMATIONS/" },
-	{ , "/RANDONNEE/INFORMATIONS/TYPE/" },
-	{ , "/RANDONNEE/INFORMATIONS/DISTANCE/" },
-	{ , "/RANDONNEE/INFORMATIONS/DUREE/" },
-	{ , "/RANDONNEE/INFORMATIONS/DENIVELE_MONTE/" },
-	{ , "/RANDONNEE/INFORMATIONS/DENIVELE_DESCENTE/" },
-	{ , "/RANDONNEE/INFORMATIONS/DIFFICULTE/" },
-	{ , "/RANDONNEE/INFORMATIONS/INTERET/" },
-	{ , "/RANDONNEE/INFORMATIONS/EMPRISE/" },
-	{ , "/RANDONNEE/INFORMATIONS/COULEUR/" },
-	{ , "/RANDONNEE/INFORMATIONS/EPAISSEUR/" },
-	{ , "/RANDONNEE/INFORMATIONS/STYLE_DE_TRAIT/" },
-	{ , "/RANDONNEE/INFORMATIONS/COULEUR_BANDE_CENTRALE/" },
-	{ , "/RANDONNEE/INFORMATIONS/EPAISSEUR_BANDE_CENTRALE/" },
-	{ , "/RANDONNEE/INFORMATIONS/STYLE_DE_TRAIT_BANDE_CENTRALE/" },
-	{ , "/RANDONNEE/INFORMATIONS/PROFIL/" },
-	{ , "/RANDONNEE/INFORMATIONS/PROFIL/PROFIL_NOM/" },
-	{ , "/RANDONNEE/INFORMATIONS/PROFIL/PROFIL_DESCENTE/" },
-	{ , "/RANDONNEE/INFORMATIONS/PROFIL/PROFIL_PLAT/" },
-	{ , "/RANDONNEE/INFORMATIONS/PROFIL/PROFIL_MONTEE/" },
-	{ , "/RANDONNEE/INFORMATIONS/PROFIL/PROFIL_READONLY/" },
-	{ , "/RANDONNEE/INFORMATIONS/DISTANCE_PLAT/" },
-	{ , "/RANDONNEE/INFORMATIONS/IMPRIMER_INSTRUCTIONS/" },
-	{ , "/RANDONNEE/ETAPE/ETAPE_REMARQUABLE/" },
-*/
-	{ -1, NULL }
+	{ ignr_start,		cb_start,	"/RANDONNEE" },
+	{ ignr_nb_etapes,   	cb_cdata,	"/RANDONNEE/INFORMATIONS/NB_ETAPES" },
+	{ ignr_descr,   	cb_cdata,	"/RANDONNEE/INFORMATIONS/DESCRIPTION" },
+	{ ignr_etape_begin, 	cb_start, 	"/RANDONNEE/ETAPE" },
+	{ ignr_etape_end, 	cb_end, 	"/RANDONNEE/ETAPE" },
+	{ ignr_etape_pos,	cb_cdata,	"/RANDONNEE/ETAPE/POSITION" },
+	{ ignr_etape_alt,	cb_cdata,	"/RANDONNEE/ETAPE/ALTITUDE" },
+	{ NULL, 		0, 		NULL }
 };
 
 #if NO_EXPAT
-void
+
+static void
 ignr_rd_init(const char *fname)
 {
-	fatal(MYNAME ": This build excluded " MYNAME " support because expat was not installed.\n");
+	fatal(MYNAME ": This build excluded \"" MYNAME "\" input support because expat was not installed.\n");
 }
 
-void
+static void
 ignr_read(void)
+{
+}
+
+static void
+ignr_rd_deinit(void)
 {
 }
 
 #else
 
 static void
-ignr_strcat(char *dest, const char *src, size_t dest_size)
+ignr_xml_error(int condition)
 {
-	int len, left;
-	
-	len = strlen(dest);
-	left = dest_size - len - 1;
-	if (left > 0)
-		strncpy(dest+len, src, left);
+	if (condition != 0)
+		fatal(MYNAME ": Error in XML structure!\n");
 }
 
-static int
-ignr_find_tag(const char *xmldir)
-{
-	int iter = 0;
-	char *c;
+/* xmlgeneric callbacks */
 
-	while ((c = ignr_xmldir[iter].name))
-	{
-		if (case_ignore_strcmp(xmldir, c) == 0) return iter;
-		iter++;
-	}
-	return -1;
+static xg_callback	ignr_start;
+static xg_callback	ignr_nb_etapes, ignr_descr;
+static xg_callback	ignr_etape_begin, ignr_etape_end;
+
+static void 
+ignr_start(const char *args, const char **attrv)
+{
+	ignr_xml_error((track != NULL));
+	
+	track = route_head_alloc();
+	track_add_head(track);
 }
 
-static route_head *
-ignr_track(void)
+static void 
+ignr_nb_etapes(const char *args, const char **attrv)
 {
-	if (track == NULL)
-	{
-		track = route_head_alloc();
-		track_add_head(track);
-	}
-	return track;
+	xmlpoints = atoi(args);
 }
 
-static void
-ignr_start(void *data, const char *el, const char **attr)
+static void 
+ignr_descr(const char *args, const char **attrv)
 {
-	ignr_strcat(xmldir, el, sizeof(xmldir));
-	ignr_strcat(xmldir, "/", sizeof(xmldir));
-	
-	xmltag = ignr_find_tag(xmldir);	
+	ignr_xml_error((track == NULL));
 
-	if (xmltag == 4)
-	{
-		wpt = waypt_new();
-	}
+	if ((args != NULL) && (strlen(args) > 0))
+		track->rte_desc = xstrdup(args);
 }
 
-static void
-ignr_end(void *data, const char *el)
+static void 
+ignr_etape_begin(const char *args, const char **attrv)
 {
-	char *c, *cend;
+	ignr_xml_error((wpt != NULL));
 	
+	wpt = waypt_new();
+}
 
-	if ((xmltag == 4) && (wpt != NULL))
-	{
-		route_add_wpt(ignr_track(), wpt);
-		wpt = NULL;
-		track_points++;
-	}
-
-	cend = xmldir + strlen(xmldir) - 1;
-	if (cend <= xmldir) fatal(MYNAME ": Error in XML structure!\n");
+static void 
+ignr_etape_end(const char *args, const char **attrv)
+{
+	ignr_xml_error((track == NULL) || (wpt == NULL));
 	
-	*cend = '\0';
-	c = cend;
-	while (*c != '/') c--;
-	c++;
-	
-	if (strcmp(c, el) != 0) fatal(MYNAME ": Error in XML structure!\n");
-	*c = '\0';
-
-	xmltag = ignr_find_tag(xmldir);	
+	route_add_wpt(track, wpt);
+	wpt = NULL;
 }
 
 static void
-ignr_cdata(void *dta, const XML_Char *s, int len)
+ignr_etape_pos(const char *args, const char **attrv)
 {
-	char *c;
-	
-	if (len < 0) return;
-	
-	c = xmalloc(len + 1);
-	memcpy(c, s, len);
-	c[len] = '\0';
-	
-	switch(xmltag)
-	{
-		case 2:
-			xmlpoints = atoi(c);
-			break;
-		case 3:
-			if (len > 0)
-				ignr_track()->rte_desc = xstrdup(c);
-			break;
-			
-		case 5:
-			if (wpt == NULL)
-				fatal(MYNAME ": Error in XML structure!\n");
-			if (2 != sscanf(c, "%lf,%lf", &wpt->latitude, &wpt->longitude))
-				fatal(MYNAME ": Invalid coordinates \"%s\"!\n", c);
-			break;
-		case 6:
-			if (wpt == NULL)
-				fatal(MYNAME ": Error in XML structure!\n");
-			if (1 != sscanf(c, "%lf", &wpt->altitude))
-				fatal(MYNAME ": Invalid altitude \"%s\"!\n", c);
-			break;
-	}
-	xfree(c);
+	ignr_xml_error((wpt == NULL) || (args == NULL));
+
+	if (2 != sscanf(args, "%lf,%lf", &wpt->latitude, &wpt->longitude))
+				fatal(MYNAME ": Invalid coordinates \"%s\"!\n", args);
 }
+
+static void
+ignr_etape_alt(const char *args, const char **attrv)
+{
+	ignr_xml_error((wpt == NULL));
+	if (args == NULL) return;
+	
+	if (1 != sscanf(args, "%lf", &wpt->altitude))
+		fatal(MYNAME ": Invalid altitude \"%s\"!\n", args);
+}
+
+/* callbacks registered in ignr_vecs */
 
 static void 
 ignr_rd_init(const char *fname)
 {
-	track = NULL;
+	xml_init(fname, ignr_xml_map, NULL);
 	wpt = NULL;
-	track_points = 0;
-	strcpy(xmldir, "/");
-	xmltag = -1;
-	xmlpoints = -1;
+	track = NULL;
+}
 
-	fin = xfopen(fname, "r", MYNAME);
-	if ((psr = XML_ParserCreate(NULL)) == NULL)
-		fatal(MYNAME ": Could not create XML parser\n");
-
-	XML_SetUnknownEncodingHandler(psr, cet_lib_expat_UnknownEncodingHandler, NULL);
-	XML_SetElementHandler(psr, ignr_start, ignr_end);
-	XML_SetCharacterDataHandler(psr, ignr_cdata);
+static void 
+ignr_rd_deinit(void)
+{
+	xml_deinit();	
 }
 
 static void 
 ignr_read(void)
 {
-	int len;
-	char *buff;
-	
-	buff = xmalloc(READ_BUFFER_SIZE);
-	
-	while ((len = fread(buff, 1, READ_BUFFER_SIZE, fin))) 
-	{
-		if (XML_Parse(psr, buff, len, feof(fin)) == 0) 
-		{
-			fatal(MYNAME ": XML-Parser error at %d: %s\n", 
-				XML_GetCurrentLineNumber(psr),
-				XML_ErrorString(XML_GetErrorCode(psr)));
-		}
-	}
-	
-	xfree(buff);
+	xml_read();
 }
 
 #endif
-
-static void 
-ignr_rd_deinit(void)
-{
-	XML_ParserFree(psr);
-	psr = NULL;
-	
-	if ((xmlpoints != -1) && (xmlpoints != track_points))
-		fatal(MYNAME ": Number of defined points differs to present number!\n");
-	
-}
 
 /* write support */
 
@@ -321,6 +220,8 @@ ignr_fprintf(FILE *f, const char *fmt, ...)
 	if (temp != buff) xfree(temp);
 	va_end(args);
 }
+
+/* callbacks registered in ignr_vecs */
 
 static void 
 ignr_rw_init(const char *fname)
