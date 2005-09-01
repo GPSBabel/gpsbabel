@@ -835,4 +835,11 @@ compare reference/track/fugawi.txt ${TMPDIR}/fugawi5.txt
 ${PNAME} -i gpx -f reference/gc/GC7FA4.gpx -f reference/gc/GCGCA8.gpx -o maggeo -F ${TMPDIR}/maggeo.gs
 compare reference/gc/maggeo.gs ${TMPDIR}/maggeo.gs
 
+#
+# IGN Rando tests
+#
+${PNAME} -i ignrando -f reference/track/ignrando-sample.rdn -o ignrando -F ${TMPDIR}/ignrando-sample.rdn
+${PNAME} -i ignrando -f ${TMPDIR}/ignrando-sample.rdn -o gpx -F ${TMPDIR}/ignrando-sample.gpx
+compare ${TMPDIR}/ignrando-sample.gpx reference/track/ignrando-sample.gpx
+
 exit 0
