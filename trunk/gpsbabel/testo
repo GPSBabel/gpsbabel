@@ -842,4 +842,15 @@ ${PNAME} -i ignrando -f reference/track/ignrando-sample.rdn -o ignrando -F ${TMP
 ${PNAME} -i ignrando -f ${TMPDIR}/ignrando-sample.rdn -o gpx -F ${TMPDIR}/ignrando-sample.gpx
 compare ${TMPDIR}/ignrando-sample.gpx reference/track/ignrando-sample.gpx
 
+#
+# STMwpp "Suunto Track Manager" WaypointPlus format tests
+#
+rm -f ${TMPDIR}/stmwpp-*
+${PNAME} -i stmwpp -f reference/track/stmwpp-track.txt -o gpx -F ${TMPDIR}/stmwpp-track.gpx
+compare ${TMPDIR}/stmwpp-track.gpx reference/track/stmwpp-track.gpx
+${PNAME} -i stmwpp -f reference/route/stmwpp-route.txt -o gpx -F ${TMPDIR}/stmwpp-route.gpx
+compare ${TMPDIR}/stmwpp-route.gpx reference/route/stmwpp-route.gpx
+${PNAME} -i stmwpp -f reference/route/stmwpp-route.txt -o stmwpp -F ${TMPDIR}/stmwpp-route.txt
+compare ${TMPDIR}/stmwpp-route.txt reference/route/stmwpp-route.txt
+
 exit 0

@@ -39,7 +39,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
-	ignrando.o
+	ignrando.o stmwpp.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o trackfilter.o discard.o
 
@@ -244,6 +244,7 @@ smplrout.o: smplrout.c defs.h queue.h gbtypes.h grtcirc.h
 sort.o: sort.c defs.h queue.h gbtypes.h
 stackfilter.o: stackfilter.c defs.h queue.h gbtypes.h
 strptime.o: strptime.c strptime.h
+stmwpp.o: stmwpp.c defs.h queue.h gbtypes.h csv_util.h
 tef_xml.o: tef_xml.c defs.h queue.h gbtypes.h xmlgeneric.h
 text.o: text.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h jeeps/gpssend.h \

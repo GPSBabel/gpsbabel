@@ -1037,7 +1037,20 @@ THE FORMATS
   	
 	index - Use track number <index> from input data for output.
 		The range is 1 to number of tracks in input.
+
+    STMwpp
+    
+	Support for Suunto Track Manager (STM) WaypointPlus format..
+	Simple structure with coordinates and timestamp. Route points
+	(waypoints) have additionaly shortname.
+	The files can only contain one route or one track.
 	
+	http://www.suunto.fi
+		
+	Options:
+  	
+	index - Use route/track number <index> from input data for output.
+
 DATA FILTERS
 
         GPSBabel supports data filtering.  Data filters are invoked from
