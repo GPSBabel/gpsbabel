@@ -62,6 +62,7 @@ static void
 maggeo_wr_deinit(void)
 {
 	maggeo_writemsg("PMGNCMD,END");
+	mkshort_del_handle(desc_handle);
 	fclose(maggeofile_out);
 }
 
@@ -197,6 +198,7 @@ maggeo_waypt_pr(const waypoint *waypointp)
 
 	if (lfounddate) xfree(lfounddate);
 	if (placeddate) xfree(placeddate);
+	if (cname) xfree(cname);
 
 	maggeo_writemsg(obuf);
 

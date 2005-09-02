@@ -41,7 +41,7 @@ vmem_alloc(size_t size, int flags)
 void
 vmem_free(vmem_t *vm)
 {
-	xfree(vm->mem);
+	if (vm->mem) xfree(vm->mem);
 	vm->mem = NULL;
 	vm->size = 0;
 	return;
