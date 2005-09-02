@@ -87,6 +87,7 @@ extern ff_vecs_t gdb_vecs;
 extern ff_vecs_t bcr_vecs;
 extern ff_vecs_t coto_vecs;
 extern ff_vecs_t ignr_vecs;
+extern ff_vecs_t stmwpp_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -434,7 +435,13 @@ vecs_t vec_list[] = {
 		"ignrando",
 		"IGN Rando track files",
 		"rdn"
-	},	
+	},
+	{
+		&stmwpp_vecs,
+		"stmwpp",
+		"Suunto Track Manager (STM) WaypointPlus files",
+		"txt"
+	},
 	{
 		NULL,
 		NULL,
