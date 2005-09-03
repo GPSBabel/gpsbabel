@@ -201,7 +201,7 @@ maggeo_waypt_pr(const waypoint *waypointp)
 	if (cname) xfree(cname);
 
 	maggeo_writemsg(obuf);
-
+	xfree(cname);
 }
 
 static void
