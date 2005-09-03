@@ -168,6 +168,7 @@ mkshort_del_handle(void *h)
 			xfree(s);
 		}
 	}
+	setshort_badchars(h, NULL);
 	xfree(hdr);
 }
 
@@ -234,6 +235,9 @@ void
 setshort_badchars(void *h, const char *s)
 {
 	mkshort_handle *hdl = h;
+
+	if ((hdl->badchars != NULL) && (hdl->badchars != DEFAULT_BADCHARS))
+		xfree(hdl->badchars);
 	if (s == NULL) {
 		hdl->badchars = DEFAULT_BADCHARS;
 	} else {
