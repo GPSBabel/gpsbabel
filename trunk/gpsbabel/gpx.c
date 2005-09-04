@@ -36,7 +36,7 @@ static const char *gpx_version;
 static char *gpx_wversion;
 static int gpx_wversion_num;
 static const char *gpx_creator;
-static char *xsi_schema_loc;
+static char *xsi_schema_loc = NULL;
 
 static char *gpx_email = NULL;
 static char *gpx_author = NULL;
@@ -702,6 +702,7 @@ gpx_end(void *data, const char *el)
 		wpt_tmp = NULL;
 		break;
 	case tt_cache_name:
+		if (wpt_tmp->notes != NULL) xfree(wpt_tmp->notes);
 		wpt_tmp->notes = xstrdup(cdatastrp);
 		break;
 	case tt_cache_container:
@@ -829,6 +830,7 @@ gpx_end(void *data, const char *el)
 	case tt_wpt_desc:
 	case tt_trk_trkseg_trkpt_desc:
 	case tt_rte_rtept_desc:
+		if (wpt_tmp->notes != NULL) xfree(wpt_tmp->notes);
 		wpt_tmp->notes = xstrdup(cdatastrp);
 		break;
 	case tt_pdop:
@@ -945,12 +947,8 @@ gpx_rd_init(const char *fname)
 	cdatastr = vmem_alloc(1, 0);
 	*((char *)cdatastr.mem) = '\0';
 
-	/* We don't use xstrdup here because we' know we don't free
-	 * this across reads and we unlock the safety belt from the 
-	 * leak tester.
-	 */
 	if (!xsi_schema_loc) {
-		xsi_schema_loc = strdup(DEFAULT_XSI_SCHEMA_LOC);
+		xsi_schema_loc = xstrdup(DEFAULT_XSI_SCHEMA_LOC);
 	}
 	if (!xsi_schema_loc) {
 		fatal("gpx: Unable to allocate %d bytes of memory.\n", strlen(DEFAULT_XSI_SCHEMA_LOC) + 1);
@@ -972,11 +970,14 @@ gpx_rd_deinit(void)
 	 * this across reads or else merges/copies of files with different 
 	 * schemas won't retain the headers.
 	 *
-	if ( xsi_schema_loc ) {
+	 *  moved to gpx_exit
+
+	if ( xsi_schema_loc ) {		
 		xfree(xsi_schema_loc);
 		xsi_schema_loc = NULL;
 	}
-	*/ 
+	*/
+	 
 	if ( gpx_email ) {
 		xfree(gpx_email);
 		gpx_email = NULL;
@@ -1466,6 +1467,15 @@ gpx_write(void)
 	fprintf(ofd, "</gpx>\n");
 }
 
+static void
+gpx_exit(void)
+{
+	if ( xsi_schema_loc ) {
+		xfree(xsi_schema_loc);
+		xsi_schema_loc = NULL;
+	}
+}
+
 static
 arglist_t gpx_args[] = {
 	{ "snlen", &snlen, "Length of generated shortnames", 
@@ -1492,7 +1502,7 @@ ff_vecs_t gpx_vecs = {
 	gpx_wr_deinit,	
 	gpx_read,
 	gpx_write,
-	NULL, 
+	gpx_exit, 
 	gpx_args,
 	CET_CHARSET_UTF8, 0	/* non-fixed to create non UTF-8 XML's for testing | CET-REVIEW */
 };
