@@ -1051,6 +1051,13 @@ THE FORMATS
   	
 	index - Use route/track number <index> from input data for output.
 
+    MSroute
+    
+	Input support for Microsoft AutoRoute 2002 .axe files. 
+	These files contains only routes. We can extract the coordinates
+	and the names of the points within route. An export to this format
+	will not be supported.
+
 DATA FILTERS
 
         GPSBabel supports data filtering.  Data filters are invoked from
