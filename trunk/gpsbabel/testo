@@ -853,4 +853,10 @@ compare ${TMPDIR}/stmwpp-route.gpx reference/route/stmwpp-route.gpx
 ${PNAME} -i stmwpp -f reference/route/stmwpp-route.txt -o stmwpp -F ${TMPDIR}/stmwpp-route.txt
 compare ${TMPDIR}/stmwpp-route.txt reference/route/stmwpp-route.txt
 
+#
+# Microsoft AutoRoute 2002 test (read-only)
+#
+${PNAME} -i msroute -f reference/route/msroute-sample.axe -o gpx -F ${TMPDIR}/msroute-sample.gpx
+compare ${TMPDIR}/msroute-sample.gpx reference/route/msroute-sample.gpx
+
 exit 0

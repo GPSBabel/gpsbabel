@@ -89,6 +89,8 @@ extern ff_vecs_t coto_vecs;
 extern ff_vecs_t ignr_vecs;
 extern ff_vecs_t stmwpp_vecs;
 
+extern ff_vecs_t msroute_vecs;
+
 static
 vecs_t vec_list[] = {
 	/* XCSV must be the first entry in this table. */
@@ -441,6 +443,12 @@ vecs_t vec_list[] = {
 		"stmwpp",
 		"Suunto Track Manager (STM) WaypointPlus files",
 		"txt"
+	},
+	{
+		&msroute_vecs,
+		"msroute",
+		"MS AutoRoute 2002",
+		"axe"
 	},
 	{
 		NULL,
