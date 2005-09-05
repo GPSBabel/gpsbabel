@@ -80,7 +80,7 @@ static char custom[] =
 "#\n"
 "# INDIVIDUAL DATA FIELDS:\n"
 "#\n"
-"IFIELD	CONSTANT, \"\", \"CONSTANT\"\n"
+"IFIELD	CONSTANT, \"CONSTANT\", \"%s\"\n"
 "IFIELD	INDEX, \"\", \"%d\"\n"
 "IFIELD	LAT_DECIMAL, \"\", \"%f\"\n"
 "IFIELD	LAT_DIR, \"\", \"%c\"\n"
