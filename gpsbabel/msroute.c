@@ -44,7 +44,7 @@ typedef struct msroute_head_s
 	char masm[4];		/* "MASM " */
 	gbuint32 U2;
 	gbuint32 U3;
-	gbuint32 waypts;
+	gbint32 waypts;
 	gbuint32 U5;
 	gbuint32 U6;
 	gbuint32 U7;
@@ -92,21 +92,21 @@ typedef struct ole_head_s
 	char clsid[16];
 	gbuint16 rev;			/* offset 0x18 */
 	gbuint16 ver;			/* offset 0x1a */
-	gbuint16 byte_order;		/* offset 0x1c */
+	gbint16 byte_order;		/* offset 0x1c */
 	gbuint16 fat1_size_shift;	/* offset 0x1e */
 	gbuint16 fat2_size_shift;	/* offset 0x20 */
 	gbuint16 U7;			/* offset 0x22 */
 	gbuint32 U8;			/* offset 0x24 */
 	gbuint32 U9;			/* offset 0x28 */
-	gbuint32 fat1_blocks;		/* offset 0x2c */
-	gbuint32 prop_start;		/* offset 0x30 */
+	gbint32 fat1_blocks;		/* offset 0x2c */
+	gbint32 prop_start;		/* offset 0x30 */
 	gbuint32 U12;			/* offset 0x34 */
 	gbuint32 fat1_min_size;		/* offset 0x38 */
-	gbuint32 fat2_start;		/* offset 0x3c */
-	gbuint32 fat2_blocks;		/* offset 0x40 */
-	gbuint32 fat1_extra_start;	/* offset 0x44 */
-	gbuint32 fat1_extra_ct;		/* offset 0x48 */
-	gbuint32 fat1[OLE_HEAD_FAT1_CT];	/* offset 0x4c */
+	gbint32 fat2_start;		/* offset 0x3c */
+	gbint32 fat2_blocks;		/* offset 0x40 */
+	gbint32 fat1_extra_start;	/* offset 0x44 */
+	gbint32 fat1_extra_ct;		/* offset 0x48 */
+	gbint32 fat1[OLE_HEAD_FAT1_CT];	/* offset 0x4c */
 } ole_head_t;
 
 typedef struct ole_prop_s
@@ -127,8 +127,8 @@ typedef struct ole_prop_s
 	gbuint32 U11;			/* offset 0x68 */
 	gbuint32 U12;			/* offset 0x6c */
 	gbuint32 U13;			/* offset 0x70 */
-	gbuint32 first_sector;		/* offset 0x74 */
-	gbuint32 length;		/* offset 0x78 */
+	gbint32 first_sector;		/* offset 0x74 */
+	gbint32 length;			/* offset 0x78 */
 	gbuint32 U16;			/* offset 0x7c */
 } ole_prop_t;
 
@@ -139,8 +139,8 @@ static int sector_size = 512;
 #define min(a,b) ((a) < (b)) ? (a) : (b)
 #define max(a,b) ((a) > (b)) ? (a) : (b)
 
-static int *ole_fat1 = NULL;
-static int *ole_fat2 = NULL;
+static gbint32 *ole_fat1 = NULL;
+static gbint32 *ole_fat2 = NULL;
 static int ole_fat1_ct;
 static int ole_fat2_ct;
 static int ole_size1;
@@ -439,11 +439,11 @@ ole_init(void)
 	is_fatal((ole_size1 != 512), "Unsupported sector size %d", ole_size1);
 #endif
 	ole_fat1 = xmalloc(head.fat1_blocks * sector_size);
-	ole_fat1_ct = (head.fat1_blocks * sector_size) / sizeof(int);
+	ole_fat1_ct = (head.fat1_blocks * sector_size) / sizeof(gbint32);
 	
 #ifdef OLE_DEBUG
 	printf(MYNAME "-big fat: %d maximum sectors, size in memory %d, max. datasize %d bytes\n", 
-		ole_fat1_ct, head.fat1_blocks * sector_size, head.fat1_blocks * sector_size * sector_size / sizeof(int));
+		ole_fat1_ct, head.fat1_blocks * sector_size, head.fat1_blocks * sector_size * sector_size / sizeof(gbint32));
 #endif
 
 	i_offs = 0;				/* load "big fat" into memory */
@@ -504,7 +504,7 @@ ole_init(void)
 	    	}
 		while (sector >= 0);
 		
-		ole_fat2_ct = (count * sector_size) / sizeof(int);
+		ole_fat2_ct = (count * sector_size) / sizeof(gbint32);
 		if (ole_fat2_ct > 0)
 			le_read32_buff(&ole_fat2[0], ole_fat2_ct);
 	}
@@ -631,7 +631,7 @@ msroute_read_journey(void)
 			len = *cin;			/* skip wide-string 'name' */
 			cin += (len * 2) + 1;
 				
-			cin += (5 * sizeof(int));	/* five unknown DWORDs */
+			cin += (5 * sizeof(gbint32));	/* five unknown DWORDs */
 				
 			/* offs 12 !!!! Latitude int32 LE	*/
 			/* offs 16 !!!! Longitude int32 LE 	*/
@@ -639,7 +639,7 @@ msroute_read_journey(void)
 			lat = GPS_Math_Semi_To_Deg(le_read32(cin+12));
 			lon = GPS_Math_Semi_To_Deg(le_read32(cin+16));
 
-			cin += (23 * sizeof(int));
+			cin += (23 * sizeof(gbint32));
 			cin += 3;
 
 			count++;
