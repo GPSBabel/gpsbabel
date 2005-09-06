@@ -28,9 +28,11 @@ static char *opt_export_lines = NULL;
 static char *opt_export_points = NULL;
 static char *opt_line_width = NULL;
 static char *opt_line_color = NULL;
+static char *opt_floating = NULL;
 
 static int export_lines;
 static int export_points;
+static int floating;
 
 static waypoint *wpt_tmp;
 
@@ -61,6 +63,9 @@ arglist_t kml_args[] = {
 	{"line_color", &opt_line_color, 
          "Line color, specified in hex AABBGGRR",
          "64eeee17", ARGTYPE_BOOL },
+	{"floating", &opt_floating, 
+	 "Altitudes are absolute and not clamped to ground", 
+	 "0", ARGTYPE_BOOL },
 	{0, 0, 0, 0, 0}
 };
 
@@ -225,6 +230,9 @@ static void kml_output_point(const waypoint *waypointp, const char *style)
 	fprintf(ofd, "\t<Placemark>\n");
 	fprintf(ofd, "\t  <styleUrl>%s</styleUrl>\n", style);
 	fprintf(ofd, "\t  <Point>\n");
+        if (floating) {
+          fprintf(ofd, "\t    <altitudeMode>absolute</altitudeMode>\n");
+        }
 	fprintf(ofd, "\t    <coordinates>%f,%f,%f</coordinates>\n",
 		pt->longitude, pt->latitude, pt->altitude);
 	fprintf(ofd, "\t  </Point>\n");
@@ -252,6 +260,9 @@ static void kml_output_tailer(const route_head *header)
     fprintf(ofd, "\t  <name>Path</name>\n");
     fprintf(ofd, "\t  <MultiGeometry>\n");
     fprintf(ofd, "\t    <LineString>\n");
+    if (floating) {
+      fprintf(ofd, "\t      <altitudeMode>absolute</altitudeMode>\n");
+    }
     fprintf(ofd, "\t      <coordinates>\n");
     for (i = 0; i < point3d_list_len; ++i)
       fprintf(ofd, "%f,%f,%f ", 
@@ -347,6 +358,7 @@ void kml_write(void)
   // Parse options
   export_lines = (0 == strcmp("1", opt_export_lines));
   export_points = (0 == strcmp("1", opt_export_points));
+  floating = (!! strcmp("0", opt_floating));
 
 	fprintf(ofd, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 	fprintf(ofd, "<Document xmlns:xlink=\"http://www.w3/org/1999/xlink\">\n");
