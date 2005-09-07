@@ -88,8 +88,8 @@ extern ff_vecs_t bcr_vecs;
 extern ff_vecs_t coto_vecs;
 extern ff_vecs_t ignr_vecs;
 extern ff_vecs_t stmwpp_vecs;
-
 extern ff_vecs_t msroute_vecs;
+extern ff_vecs_t cst_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -449,6 +449,12 @@ vecs_t vec_list[] = {
 		"msroute",
 		"MS AutoRoute 2002",
 		"axe"
+	},
+	{
+		&cst_vecs,
+		"cst",
+		"CarteSurTable data file",
+		"cst"
 	},
 	{
 		NULL,

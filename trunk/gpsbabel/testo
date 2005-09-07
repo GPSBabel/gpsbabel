@@ -859,4 +859,11 @@ compare ${TMPDIR}/stmwpp-route.txt reference/route/stmwpp-route.txt
 ${PNAME} -i msroute -f reference/route/msroute-sample.axe -o gpx -F ${TMPDIR}/msroute-sample.gpx
 compare ${TMPDIR}/msroute-sample.gpx reference/route/msroute-sample.gpx
 
+#
+# CarteSurTable read test
+#
+rm -f ${TMPDIR}/cst-*
+${PNAME} -i cst -f reference/route/cst-sample.cst -o gpx -F ${TMPDIR}/cst-sample.gpx
+compare ${TMPDIR}/cst-sample.gpx reference/route/cst-sample.gpx
+
 exit 0
