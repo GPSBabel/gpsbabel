@@ -1073,6 +1073,15 @@ THE FORMATS
 	and the names of the points within route. An export to this format
 	will not be supported.
 
+    CST
+    
+	With this format we can read CarteSurTable data files.
+	CarteSurTable is a shareware program widely used in France.
+	The data inside have to be seen as a mixture of a waypoints list,
+	one route and several tracks.
+	
+	http://phgiraud.free.fr/CarteSurTable/CarteSurTable.htm
+	
 DATA FILTERS
 
         GPSBabel supports data filtering.  Data filters are invoked from
