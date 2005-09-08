@@ -22,6 +22,8 @@
 static char *encoded_points = NULL;
 static char *encoded_levels = NULL;
 static char *script = NULL;
+static route_head *track_head;
+static void *desc_handle;
 
 FILE *fd;
 
@@ -44,6 +46,7 @@ google_read(void)
 #else
 
 static xg_callback      goog_points, goog_levels, goog_poly_e, goog_script;
+static xg_callback	goog_segment_s, goog_segment;
 
 static 
 xg_tag_mapping google_map[] = {
@@ -51,6 +54,8 @@ xg_tag_mapping google_map[] = {
 	{ goog_levels,  cb_cdata,       "/page/directions/polyline/levels" },
 	{ goog_poly_e,  cb_end,         "/page/directions/polyline" },
 	{ goog_script,  cb_cdata,       "/html/head/script" },
+	{ goog_segment_s, cb_start,      "/page/directions/segments/segment" },
+	{ goog_segment, cb_cdata,      "/page/directions/segments/segment" },
 	{ NULL,         0,              NULL }
 };
 
@@ -99,6 +104,36 @@ void goog_levels( const char *args, const char **unused )
 	}
 }
 
+static char goog_segname[7];
+
+/*
+ * The segments contain an index into the points array.  We use that
+ * index to find the waypoint and insert a better name for it.
+ */
+void goog_segment_s( const char *args, const char **attrv )
+{
+        const char **avp = &attrv[0];
+        while (*avp) {
+                if (0 == strcmp(avp[0], "pointIndex")) {
+			snprintf(goog_segname, sizeof(goog_segname), "\\%5.5x", atoi(avp[1]));
+		}
+		avp += 2;
+	}
+
+}
+
+void goog_segment( const char *args, const char **unused )
+{
+	waypoint *wpt_tmp;
+
+	wpt_tmp = route_find_waypt_by_name( track_head, goog_segname);
+	if (wpt_tmp) {
+		xfree(wpt_tmp->shortname);
+		wpt_tmp->shortname = mkshort(desc_handle,args);
+		wpt_tmp->description = xstrdup(args);
+	}
+}
+
 static long decode_goog64( char **str )
 {
 	long result = 0;
@@ -128,8 +163,8 @@ void goog_poly_e( const char *args, const char **unused )
 	long level2 = -9999;
         char *str = encoded_points;
 	char *lstr = encoded_levels;
-	
-	route_head *track_head = route_head_alloc();
+
+	track_head = route_head_alloc();
 	route_add_head(track_head);
 
 	while ( str && *str ) 
@@ -179,6 +214,9 @@ void goog_poly_e( const char *args, const char **unused )
 void
 google_rd_init(const char *fname)
 {
+	desc_handle = mkshort_new_handle();
+	setshort_length(desc_handle, 12);
+
 	xml_init(fname, google_map, "ISO-8859-1" );
 }
 
@@ -209,6 +247,7 @@ void
 google_rd_deinit(void)
 {
 	xml_deinit();
+	mkshort_del_handle(desc_handle);
 }
 
 ff_vecs_t google_vecs = {
