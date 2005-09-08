@@ -108,6 +108,20 @@ route_add_wpt(route_head *rte, waypoint *wpt)
 	}
 }
 
+waypoint *
+route_find_waypt_by_name( route_head *rh, const char *name )
+{
+	queue *elem, *tmp;
+
+	QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
+		waypoint *waypointp = (waypoint *) elem;
+		if (0 == strcmp(waypointp->shortname, name)) {
+			return waypointp;
+		}
+	}
+	return NULL;
+}
+
 void 
 route_del_wpt( route_head *rte, waypoint *wpt)
 {
