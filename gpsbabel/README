@@ -942,14 +942,16 @@ THE FORMATS
         types are "limited", "toll", "us", "state", "major", and "local".
         This option has a special format that is best demonstrated by example:
 
-        "type=limited!I-599!major!Beecher St." 
+        "road=I-599!limited!Beecher St.!major" 
 
         This option will cause any road named "I-599" to become a limited- 
         access highway and any road named "Beecher St." to become a major
         connector.  Note that roads that have had their types changed in 
         this way might not be editable in Street Atlas, so make sure they
         are where you want them before you change them, and make sure to keep
-        a backup of your original road layer.
+        a backup of your original road layer.  Note that the ! is a shell 
+        metacharacter in bash and possibly other shells, so you may have to 
+        use single quotes or some other escape mechanism.
 
     TomTom
 
