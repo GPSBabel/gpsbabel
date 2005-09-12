@@ -220,7 +220,7 @@ gpsutil_disp(const waypoint *wpt)
 static void
 pcx_track_hdr(const route_head *trk)
 {
-	fprintf(file_out, "\n\nH  TN %s\n", trk->rte_name);
+	fprintf(file_out, "\n\nH  TN %s\n", trk->rte_name ? trk->rte_name: "UNKNOWN");
 	fprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT\n");
 
 }
@@ -265,12 +265,11 @@ fprintf(file_out,
 "U  LAT LON DM\n"
 "\n"
 "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
-	setshort_length(mkshort_handle, 6);
-	waypt_disp_all(gpsutil_disp);
 
-	if (global_opts.objective == trkdata) {
-		track_disp_all(pcx_track_hdr, NULL, pcx_track_disp);
-	}
+	setshort_length(mkshort_handle, 6);
+
+	waypt_disp_all(gpsutil_disp);
+	track_disp_all(pcx_track_hdr, NULL, pcx_track_disp);
 }
 
 
