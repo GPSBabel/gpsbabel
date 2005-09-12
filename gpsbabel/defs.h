@@ -400,6 +400,8 @@ void setshort_goodchars(void *, const char *);
 void setshort_mustupper(void *, int n);
 void setshort_mustuniq(void *, int n);
 void setshort_whitespace_ok(void *, int n);
+void setshort_repeating_whitespace_ok(void *, int n);
+void setshort_defname(void *, const char *s);
 
 /*
  *  Vmem flags values.

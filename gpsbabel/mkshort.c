@@ -1,7 +1,7 @@
 /*
     Generate unique short names.
 
-    Copyright (C) 2003, 2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2003, 2004, 2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,9 +41,11 @@ static const char vowels[] = "aeiouAEIOU";
 typedef struct {
 	int mustupper;
 	int whitespaceok;
+	int repeating_whitespaceok;
 	unsigned int target_len;
 	char *badchars;
 	char *goodchars;
+	char *defname;
 	int must_uniq;
 	queue namelist[PRIME];
 	int depth[PRIME];
@@ -85,6 +87,7 @@ mkshort_new_handle()
 	h->badchars = DEFAULT_BADCHARS;
 	h->target_len = DEFAULT_TARGET_LEN;
 	h->must_uniq=1;
+	h->defname = xstrdup("WPT");
 
 	return h;
 }
@@ -169,6 +172,9 @@ mkshort_del_handle(void *h)
 		}
 	}
 	setshort_badchars(h, NULL);
+	if (hdr->defname) {
+		xfree(hdr->defname);
+	}
 	xfree(hdr);
 }
 
@@ -219,11 +225,41 @@ setshort_length(void *h, int l)
 	}
 }
 
+/*
+ * Call with L nonzero if whitespace in the generated shortname is wanted.
+ */
+ 
 void
 setshort_whitespace_ok(void *h, int l)
 {
 	mkshort_handle *hdl = h;
 	hdl->whitespaceok = l;
+}
+
+/*
+ * Call with L nonzero if multiple consecutive whitespace in the 
+ * generated shortname is wanted.
+ */
+
+void
+setshort_repeating_whitespace_ok(void *h, int l)
+{
+	mkshort_handle *hdl = h;
+	hdl->repeating_whitespaceok = l;
+}
+
+/*
+ * Set default name given to a waypoint if no valid is possible
+ * becuase it was filtered by charsets or null or whatever.
+ */
+void
+setshort_defname(void *h, const char *s)
+{
+	mkshort_handle *hdl = h;
+	if (s == NULL) {
+		fatal("setshort_defname called without a valid name.");
+	}
+	hdl->defname = xstrdup(s);
 }
 
 /*
@@ -244,6 +280,11 @@ setshort_badchars(void *h, const char *s)
 		hdl->badchars = xstrdup(s);
 	}
 }
+
+/*
+ * Only characters that appear in *s are "whitelisted" to appear 
+ * in generated names.
+ */
 void
 setshort_goodchars(void *h, const char *s)
 {
@@ -252,6 +293,9 @@ setshort_goodchars(void *h, const char *s)
 	hdl->goodchars = xstrdup(s);
 }
 
+/*
+ *  Call with i non-zero if generated names must be uppercase only.
+ */
 void
 setshort_mustupper(void *h, int i)
 {
@@ -259,6 +303,11 @@ setshort_mustupper(void *h, int i)
 	hdl->mustupper = i;
 }
 
+
+/* 
+ *  Call with i zero if the generated names don't have to be unique.
+ *  (By default, they are.)
+ */
 void
 setshort_mustuniq(void *h, int i)
 {
@@ -324,13 +373,12 @@ mkshort(void *h, const char *istring)
 	}
 	/*
 	 * Eliminate chars on the blacklist.
-	 * Characters that aren't ASCII are never OK.
  	 */
 	tstring = xxstrdup(ostring, file, line);
 	l = strlen (tstring);
 	cp = ostring;
 	for (i=0;i<l;i++) {
-		if (strchr(hdl->badchars, tstring[i]) || !isascii(tstring[i]))
+		if (strchr(hdl->badchars, tstring[i]))
 			continue;
 		if (hdl->goodchars && (!strchr(hdl->goodchars, tstring[i])))
 			continue;
@@ -343,9 +391,11 @@ mkshort(void *h, const char *istring)
 	 * Eliminate repeated whitespace.  This can only shorten the string
  	 * so we do it in place.
 	 */
-	for (i = 0; i < l-1; i++) {
-		if (ostring[i] == ' ' && ostring[i+1] == ' ') {
-			memmove(&ostring[i], &ostring[i+1], l-i);
+	if (!hdl->repeating_whitespaceok) {
+		for (i = 0; i < l-1; i++) {
+			if (ostring[i] == ' ' && ostring[i+1] == ' ') {
+				memmove(&ostring[i], &ostring[i+1], l-i);
+			}
 		}
 	}
 	
@@ -397,7 +447,7 @@ mkshort(void *h, const char *istring)
 	 */
 	if (ostring[0] == '\0') {
 		xfree(ostring);
-		ostring = xstrdup("WPT");
+		ostring = xstrdup(hdl->defname);
 	}
 
 	if (hdl->must_uniq) {
