@@ -39,16 +39,17 @@ static const char vowels[] = "aeiouAEIOU";
 #define PRIME 37
 
 typedef struct {
-	int mustupper;
-	int whitespaceok;
-	int repeating_whitespaceok;
 	unsigned int target_len;
 	char *badchars;
 	char *goodchars;
 	char *defname;
-	int must_uniq;
 	queue namelist[PRIME];
-	int depth[PRIME];
+
+	/* Various internal flags at end to allow alignment flexibility. */
+	unsigned int mustupper:1;
+	unsigned int whitespaceok:1;
+	unsigned int repeating_whitespaceok:1;
+	unsigned int must_uniq:1;
 } mkshort_handle;
 
 typedef struct {
@@ -86,7 +87,7 @@ mkshort_new_handle()
 	h->whitespaceok = 1;
 	h->badchars = DEFAULT_BADCHARS;
 	h->target_len = DEFAULT_TARGET_LEN;
-	h->must_uniq=1;
+	h->must_uniq = 1;
 	h->defname = xstrdup("WPT");
 
 	return h;
@@ -174,7 +175,8 @@ mkshort_del_handle(void *h)
 	setshort_badchars(h, NULL);
 	if (hdr->defname) {
 		xfree(hdr->defname);
-	}
+	} 
+
 	xfree(hdr);
 }
 
