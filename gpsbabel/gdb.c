@@ -81,8 +81,8 @@ static int gdb_debug = 0;
 static int gdb_via;		/* 0 = read and write hidden points too; 1 = drop */
 static int gdb_category;
 
-route_head *gdb_hidden = NULL;
-
+static route_head *gdb_hidden = NULL;
+static void *gdb_short_handle;
 
 #define GDB_OPT_VER		"ver"
 #define GDB_OPT_VIA		"via"
@@ -1090,7 +1090,7 @@ gdb_write_file_header(const struct tm *tm)
 #else
 	/* This is our "Watermark" to show this file was created by GPSbabel */
 	/* !!! We should define the date use through Makefile !!! */
-	strncpy(buff, "A].GPSBabel_1.2.7-beta*Aug 12 2005*19:55:05", sizeof(buff));	/* gpsbabel V1.2.7 BETA */
+	strncpy(buff, "A].GPSBabel_1.2.7-beta*Sep 13 2005*20:10:00", sizeof(buff));	/* gpsbabel V1.2.7 BETA */
 #endif
 	len = strlen(buff);
 	buff[2] = 2;
@@ -1102,6 +1102,22 @@ gdb_write_file_header(const struct tm *tm)
 	gdb_fwrite_str(buff, len + 1);
 
 	gdb_fwrite_str("MapSource", -1);			/* MapSource magic */
+}
+
+static void
+gdb_reset_short_handle(void)
+{
+	if (gdb_short_handle != NULL)
+	    mkshort_del_handle(gdb_short_handle);
+	    
+	gdb_short_handle = mkshort_new_handle();
+	
+	setshort_length(gdb_short_handle, GDB_NAME_BUFFERLEN);
+	setshort_badchars(gdb_short_handle, "");
+	setshort_mustupper(gdb_short_handle, 0);
+	setshort_mustuniq(gdb_short_handle, 1);
+	setshort_whitespace_ok(gdb_short_handle, 1);
+	setshort_repeating_whitespace_ok(gdb_short_handle, 1);
 }
 
 /*******************************************************************************/
@@ -1216,7 +1232,7 @@ gdb_write_waypt_cb(const waypoint *wpt)			/* called by waypt_disp over all waypo
 	
 	fseek(fout, pos + reclen, SEEK_SET);
 
-	route_add_wpt(gdb_hidden, waypt_dupe(wpt));	/* add tis point to our internal queue */
+	route_add_wpt(gdb_hidden, waypt_dupe(wpt));	/* add this point to our internal queue */
 }
 
 static void
@@ -1243,7 +1259,7 @@ gdb_write_rtewpt_cb(const waypoint *wpt)		/* called by waypt_disp (route points)
 	
 	    fseek(fout, pos + reclen, SEEK_SET);
 
-	    route_add_wpt(gdb_hidden, waypt_dupe(wpt));	/* add tis point to our internal queue */
+	    route_add_wpt(gdb_hidden, waypt_dupe(wpt));	/* add this point to our internal queue */
 	}
 }
 
@@ -1285,13 +1301,20 @@ gdb_write_route(const route_head *route, const waypoint **list, const int count)
 	    }
 	}
 
-	if (route->rte_name == NULL)
 	{
-	    snprintf(buff, sizeof(buff), "Route%04d", route->rte_num);
-	    gdb_fwrite_str(buff, -1);
+	    char *cname;
+	    
+	    if (route->rte_name == NULL)
+	    {
+		snprintf(buff, sizeof(buff), "Route%04d", route->rte_num);
+		cname = mkshort(gdb_short_handle, buff);
+	    }
+	    else
+		cname = mkshort(gdb_short_handle, route->rte_name);
+	    
+	    gdb_fwrite_str(cname, -1);
+	    xfree(cname);
 	}
-	else
-	    gdb_fwrite_str(route->rte_name, -1);
 
 	gdb_fwrite(&c0, 1);					/* auto_name */
 	
@@ -1445,12 +1468,21 @@ gdb_write_track(const route_head *track)
 	queue *elem, *tmp;
 	int count = track->rte_waypt_ct;
 	
-	if (track->rte_name == NULL)
-	    snprintf(buff, sizeof(buff), "Track%04d", track->rte_num);
-	else 
-	    strncpy(buff, track->rte_name, sizeof(buff));
+	{
+	    char *cname;
 	    
-	gdb_fwrite_str(buff, -1);
+	    if (track->rte_name == NULL)
+	    {
+		snprintf(buff, sizeof(buff), "Track%04d", track->rte_num);
+		cname = mkshort(gdb_short_handle, buff);
+	    }
+	    else
+		cname = mkshort(gdb_short_handle, track->rte_name);
+		
+	    gdb_fwrite_str(cname, -1);
+	    xfree(cname);
+	}
+	
 	gdb_fwrite(&c0, 1);				/* display */
 	gdb_fwrite_int(0);				/* xcolour */
 	gdb_fwrite_int(count);
@@ -1510,9 +1542,14 @@ gdb_write_data(void)
 	gdb_hidden = route_head_alloc();	/* contains all written waypts & rtepts */
 	track_add_head(gdb_hidden);		/* tracks comes later and we drop this before */
 
-	if (doing_wpts) waypt_disp_all(gdb_write_waypt_cb);
+	if (doing_wpts) 
+	{
+	    waypt_disp_all(gdb_write_waypt_cb);
+	}
 	if (doing_rtes)
 	{
+	    gdb_reset_short_handle();
+	    setshort_defname(gdb_short_handle, "Route");
 	    
 	    if (gdb_via == 0) 
 	    {
@@ -1524,7 +1561,12 @@ gdb_write_data(void)
 
 	track_del_head(gdb_hidden);		/* vaporize our temporary queue */
 
-	if (doing_trks) track_disp_all(gdb_write_track_cb, NULL, NULL);
+	if (doing_trks)
+	{
+	    gdb_reset_short_handle();
+	    setshort_defname(gdb_short_handle, "Track");
+	    track_disp_all(gdb_write_track_cb, NULL, NULL);
+	}
 
 	gdb_fwrite_int(2);			/* finalize gdb with empty map segment */
 	gdb_fwrite_str("V", -1);
@@ -1587,6 +1629,8 @@ gdb_wr_init(const char *fname)
 	
 	fout_name = xstrdup(fname);
 	fout = xfopen(fname, "wb", MYNAME);
+	gdb_short_handle = NULL;
+	gdb_hidden = NULL;
 }
 
 static void 
@@ -1603,6 +1647,7 @@ gdb_wr_deinit(void)
 	fclose(fout);
 	xfree(fout_name);
 	fout_name = NULL;
+	mkshort_del_handle(gdb_short_handle);
 }
 
 static void 

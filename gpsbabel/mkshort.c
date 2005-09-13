@@ -173,6 +173,7 @@ mkshort_del_handle(void *h)
 		}
 	}
 	setshort_badchars(h, NULL);
+	setshort_goodchars(h, NULL);
 	if (hdr->defname) {
 		xfree(hdr->defname);
 	} 
@@ -261,6 +262,8 @@ setshort_defname(void *h, const char *s)
 	if (s == NULL) {
 		fatal("setshort_defname called without a valid name.");
 	}
+	if (hdl->defname != NULL)
+		xfree(hdl->defname);
 	hdl->defname = xstrdup(s);
 }
 
@@ -292,7 +295,12 @@ setshort_goodchars(void *h, const char *s)
 {
 	mkshort_handle *hdl = h;
 
-	hdl->goodchars = xstrdup(s);
+	if (hdl->goodchars != NULL)
+		xfree(hdl->goodchars);
+	if (s != NULL)
+		hdl->goodchars = xstrdup(s);
+	else
+		hdl->goodchars = NULL;
 }
 
 /*
