@@ -20,6 +20,7 @@
 #include "xmlgeneric.h"
 
 static char *deficon = NULL;
+static char *nuke_placer;
 
 static waypoint *wpt_tmp;
 
@@ -29,6 +30,7 @@ FILE *ofd;
 static
 arglist_t geo_args[] = {
 	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
+	{"nuke_placer", &nuke_placer, "Omit Placer name", NULL, ARGTYPE_BOOL },
 	{0, 0, 0, 0, 0}
 };
 
@@ -89,7 +91,15 @@ void wpt_name_s(const char *args, const char **attrv)
 
 void wpt_name(const char *args, const char **unused)
 {
-	if (args) wpt_tmp->description = xstrappend(wpt_tmp->description,args);
+	if (!args) return;
+
+	wpt_tmp->description = xstrappend(wpt_tmp->description,args);
+	if (nuke_placer) {
+		char *s = strstr(wpt_tmp->description, " by ");
+		if (s) {
+			*s = '\0';
+		}
+	}
 }
 
 void wpt_link_s(const char *args, const char **attrv)
