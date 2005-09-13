@@ -69,12 +69,6 @@ static arglist_t ppdb_args[] =
 	{0, 0, 0, 0, 0 }
 };
 
-static void 
-is_fatal(int is, const char *msg, ... )
-{
-    if (is) fatal(MYNAME ": %s\n", msg);
-}
-
 #define PPDB_DEBUG 1
 
 #if PPDB_DEBUG

@@ -523,6 +523,12 @@ void fatal(const char *, ...)
 	__attribute__((noreturn))
 #endif
 	;
+void is_fatal(const int condition, const char *, ...);
+#if __GNUC__
+	__attribute__ ((__format__ (__printf__, 1, 2)))
+	__attribute__((noreturn))
+#endif
+
 void warning(const char *, ...)
 #if __GNUC__
 	__attribute__ ((__format__ (__printf__, 1, 2)))
@@ -595,6 +601,7 @@ char *strsub(const char *s, const char *search, const char *replace);
 char *gstrsub(const char *s, const char *search, const char *replace);
 char *xstrrstr(const char *s1, const char *s2);
 void rtrim(char *s);
+char * lrtrim(char *s);
 signed int get_tz_offset(void);
 time_t mkgmtime(struct tm *t);
 time_t current_time(void);

@@ -866,4 +866,11 @@ rm -f ${TMPDIR}/cst-*
 ${PNAME} -i cst -f reference/route/cst-sample.cst -o gpx -F ${TMPDIR}/cst-sample.gpx
 compare ${TMPDIR}/cst-sample.gpx reference/route/cst-sample.gpx
 
+#
+# Navigon Mobile Navigator 5 .pdb (read-only)
+#
+rm -f ${TMPDIR}/nmn5-sample*
+# ${PNAME} -i nmn5 -f reference/route/nmn5-sample.pdb -o gpx -F ${TMPDIR}/nmn5-sample.gpx
+# compare ${TMPDIR}/nmn5-sample.gpx reference/route/nmn5-sample.gpx
+
 exit 0
