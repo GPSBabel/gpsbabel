@@ -179,16 +179,16 @@ static void nmn5_read(void)
 
 	
 	pdb_in = pdb_Read(fileno(fd_in));
-	is_fatal((pdb_in == NULL), "read failed.");
+	is_fatal((pdb_in == NULL), MYNAME ": read failed.");
 	    
 	is_fatal((pdb_in->creator != NMN5_MAGIC),	/* identify the database */
-		"Not a NMN5 pdb file (0x%08x).", pdb_in->creator);
+		MYNAME ": Not a NMN5 pdb file (0x%08x).", pdb_in->creator);
 
 	is_fatal((pdb_in->version != 0), 		/* only version "0" currently seen and tested */
-		"This file is from an unsupported version (%d) of NMN5 and is unsupported.", pdb_in->version + 5);
+		MYNAME ": This file is from an unsupported version (%d) of NMN5 and is unsupported.", pdb_in->version + 5);
 
 	is_fatal((pdb_in->type != NMN5_ROUTE),
-		"Unknown pdb data type (0x%08x).", pdb_in->type);
+		MYNAME ": Unknown pdb data type (0x%08x).", pdb_in->type);
 
 	for (pdb_rec = pdb_in->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) 
 	{
