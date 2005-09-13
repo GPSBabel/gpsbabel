@@ -727,6 +727,22 @@ gstrsub(const char *s, const char *search, const char *replace)
 	return o;
 }
 
+/*
+ * Like strstr, but starts from back of string.
+ */
+char *
+xstrrstr(const char *s1, const char *s2) 
+{
+	char *r = NULL, *next = NULL; 
+
+	while (next = strstr(s1, s2)) {
+		r = next;
+		s1 = next + 1;
+	}
+	return r;
+}
+
+
 char *
 rot13( const char *s )
 {

@@ -95,7 +95,7 @@ void wpt_name(const char *args, const char **unused)
 
 	wpt_tmp->description = xstrappend(wpt_tmp->description,args);
 	if (nuke_placer) {
-		char *s = strstr(wpt_tmp->description, " by ");
+		char *s = xstrrstr(wpt_tmp->description, " by ");
 		if (s) {
 			*s = '\0';
 		}
