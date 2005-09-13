@@ -90,6 +90,7 @@ extern ff_vecs_t ignr_vecs;
 extern ff_vecs_t stmwpp_vecs;
 extern ff_vecs_t msroute_vecs;
 extern ff_vecs_t cst_vecs;
+extern ff_vecs_t nmn4_vecs;
 extern ff_vecs_t nmn5_vecs;
 
 static
@@ -456,6 +457,12 @@ vecs_t vec_list[] = {
 		"cst",
 		"CarteSurTable data file",
 		"cst"
+	},
+	{
+		&nmn4_vecs,
+		"nmn4",
+		"Navigon Mobile Navigator .rte files",
+		"rte"
 	},
 	{
 		&nmn5_vecs,

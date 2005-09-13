@@ -39,7 +39,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
-	ignrando.o stmwpp.o msroute.o cst.o nmn5.o
+	ignrando.o stmwpp.o msroute.o cst.o nmn4.o nmn5.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o trackfilter.o discard.o
 
@@ -220,6 +220,7 @@ msroute.o: msroute.c defs.h queue.h gbtypes.h
 navicache.o: navicache.c defs.h queue.h gbtypes.h cet_util.h
 netstumbler.o: netstumbler.c defs.h queue.h gbtypes.h csv_util.h
 nmea.o: nmea.c defs.h queue.h gbtypes.h
+nmn4.o: nmn4.c defs.h queue.h gbtypes.h
 nmn5.o: nmn5.c defs.h queue.h gbtypes.h coldsync/palm.h coldsync/pdb.h \
   jeeps/gpsmath.h
 overlay.o: overlay.c defs.h queue.h gbtypes.h grtcirc.h
