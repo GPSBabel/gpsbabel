@@ -36,7 +36,7 @@ char *routeName = "ROUTENAME";
 #define ATTR_OBJECTNAME						"OBJNAM"
 #define ATTR_SHIPNAME						"shpnam"
 
-void readVersion4( FILE* pFile);
+static void readVersion4( FILE* pFile);
 
 FILE *fd;
 FILE *ofd;
@@ -54,13 +54,13 @@ arglist_t hsa_ndv_args[] = {
 
 
 #if NO_EXPAT
-void
+static void
 hsa_ndv_rd_init(const char *fname)
 {
 	fatal(MYNAME ": This build excluded HSA Endeavour support because expat was not installed.\n");
 }
 
-void
+static void
 hsa_ndv_read(void)
 {
 }
@@ -227,7 +227,7 @@ hsa_ndv_cdata(void *dta, const XML_Char *s, int len)
 	memcpy(estr, s, len); 
 }
 
-void
+static void
 hsa_ndv_rd_init(const char *fname)
 {
 	fd = xfopen(fname, "r", MYNAME);
@@ -243,7 +243,7 @@ hsa_ndv_rd_init(const char *fname)
 	XML_SetCharacterDataHandler(psr, hsa_ndv_cdata);
 }
 
-void
+static void
 hsa_ndv_read(void)
 {
 	int len;
@@ -277,7 +277,7 @@ hsa_ndv_read(void)
 
 #endif
 
-void
+static void
 hsa_ndv_rd_deinit(void)
 {
 	if ( cdatastr ) {
@@ -286,13 +286,13 @@ hsa_ndv_rd_deinit(void)
 	fclose(fd);
 }
 
-void
+static void
 hsa_ndv_wr_init(const char *fname)
 {
 	ofd = xfopen(fname, "w", MYNAME);
 }
 
-void
+static void
 hsa_ndv_wr_deinit(void)
 {
 	fclose(ofd);
@@ -322,7 +322,7 @@ hsa_ndv_waypt_pr(const waypoint *waypointp)
 	legNum++;
 }
 
-void
+static void
 hsa_ndv_write(void)
 {
 	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
@@ -373,10 +373,10 @@ ff_vecs_t HsaEndeavourNavigator_vecs = {
 #define INVALID_TIME -1L
 #define SOUNDARRAY_CHAR 'S'
 
-int readRecord( FILE* pFile, const char* pRecName, char *recData);
-int readPositionRecord( FILE* pFile, double* lat, double* lng, long* timeStamp);
+static int readRecord( FILE* pFile, const char* pRecName, char *recData);
+static int readPositionRecord( FILE* pFile, double* lat, double* lng, long* timeStamp);
 
-void readVersion4( FILE* pFile)
+static void readVersion4( FILE* pFile)
 {
 	while( TRUE )
 	{
@@ -475,7 +475,7 @@ void readVersion4( FILE* pFile)
 }
 
 // read a record to a file
-int readRecord( FILE* pFile, const char* pRecName, char *recData)
+static int readRecord( FILE* pFile, const char* pRecName, char *recData)
 {
 	// get the rec name
 	int len;
@@ -520,7 +520,7 @@ int readRecord( FILE* pFile, const char* pRecName, char *recData)
 }
 
 // read position
-int readPositionRecord( FILE* pFile, double* lat, double* lng, 
+static int readPositionRecord( FILE* pFile, double* lat, double* lng, 
 						long* timeStamp)
 {
 	// read the lat record

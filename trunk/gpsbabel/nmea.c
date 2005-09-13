@@ -186,7 +186,7 @@ nmea_wr_deinit(void)
 	mkshort_del_handle(mkshort_handle);
 }
 
-void
+static void
 gpgll_parse(char *ibuf)
 {
 	double latdeg, lngdeg;

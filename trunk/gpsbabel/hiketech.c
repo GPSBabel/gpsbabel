@@ -79,24 +79,24 @@ hiketech_rd_init(const char *fname)
 	xml_init(fname, ht_map, NULL);
 }
 
-void
+static void
 hiketech_read(void)
 {
 	xml_read();
 }
 
-void
+static void
 hiketech_rd_deinit(void)
 {
 }
 
-void
+static void
 hiketech_wr_init(const char *fname)
 {
         ofd = xfopen(fname, "w", MYNAME);
 }
 
-void
+static void
 hiketech_wr_deinit(void)
 {
         fclose(ofd);

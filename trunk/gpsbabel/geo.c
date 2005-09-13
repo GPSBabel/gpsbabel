@@ -38,7 +38,7 @@ arglist_t geo_args[] = {
 #define MY_CBUF 4096
 
 #if NO_EXPAT
-void
+static void
 geo_rd_init(const char *fname)
 {
 	fatal(MYNAME ": This build excluded GEO support because expat was not installed.\n");
@@ -143,32 +143,32 @@ void wpt_coord(const char *args, const char **attrv)
         }
 }
 
-void
+static void
 geo_rd_init(const char *fname)
 {
 	xml_init(fname, loc_map, NULL);
 }
 
-void
+static void
 geo_read(void)
 {
 	xml_read();
 }
 #endif
 
-void
+static void
 geo_rd_deinit(void)
 {
 	xml_deinit();
 }
 
-void
+static void
 geo_wr_init(const char *fname)
 {
 	ofd = xfopen(fname, "w", MYNAME);
 }
 
-void
+static void
 geo_wr_deinit(void)
 {
 	fclose(ofd);
@@ -201,7 +201,7 @@ geo_waypt_pr(const waypoint *waypointp)
 	fprintf(ofd, "</waypoint>\n");
 }
 
-void
+static void
 geo_write(void)
 {
 	fprintf(ofd, "<?xml version=\"1.0\"?><loc version=\"1.0\" src=\"EasyGPS\">\n");

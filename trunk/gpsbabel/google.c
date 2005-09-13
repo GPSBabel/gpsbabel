@@ -33,13 +33,13 @@ static int serial = 0;
 #define MY_CBUF 4096
 
 #if NO_EXPAT
-void
+static void
 google_rd_init(const char *fname)
 {
 	fatal(MYNAME ": This build excluded Google Maps support because expat was not installed.\n");
 }
 
-void
+static void
 google_read(void)
 {
 }
@@ -211,7 +211,7 @@ void goog_poly_e( const char *args, const char **unused )
 	}
 }
 
-void
+static void
 google_rd_init(const char *fname)
 {
 	desc_handle = mkshort_new_handle();
@@ -220,7 +220,7 @@ google_rd_init(const char *fname)
 	xml_init(fname, google_map, "ISO-8859-1" );
 }
 
-void
+static void
 google_read(void)
 {
 	xml_read();
@@ -243,7 +243,7 @@ google_read(void)
 }
 #endif
 
-void
+static void
 google_rd_deinit(void)
 {
 	xml_deinit();
