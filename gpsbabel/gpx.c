@@ -1230,6 +1230,13 @@ gpx_write_common_acc(const waypoint *waypointp, const char *indent)
 		case fix_pps:
 			fix = "pps";
 			break;
+		case fix_none:
+			fix = "none";
+			break;
+		/* GPX spec says omit if we don't know. */
+		case fix_unknown:
+		default:
+			break;
 	}
 	if (fix) {
 		fprintf(ofd, "%s<fix>%s</fix>\n", indent, fix);
