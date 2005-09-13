@@ -183,9 +183,9 @@ ole_read_sector(const int sector, void *target)
 	int res;
 	
 	res = fseek(fin, (sector + 1) * sector_size, SEEK_SET);
-	is_fatal((res != 0), "Could not seek file to sector %d!", sector + 1);
+	is_fatal((res != 0), MYNAME ": Could not seek file to sector %d!", sector + 1);
 	res = fread(target, 1, sector_size, fin);
-	is_fatal((res < sector_size), "Read error (%d, sector %d) on file \"%s\"!", res, sector, fin_name);
+	is_fatal((res < sector_size), MYNAME ": Read error (%d, sector %d) on file \"%s\"!", res, sector, fin_name);
 }
 
 static ole_prop_t *
@@ -209,7 +209,7 @@ ole_find_property(const char *property)
 		if (case_ignore_strcmp(buff, property) == 0)
 			return item;
 	}
-	is_fatal((1), "\"%s\" not in property catalog!", property);
+	is_fatal((1), MYNAME ": \"%s\" not in property catalog!", property);
 }
 
 static char *
@@ -254,7 +254,7 @@ ole_read_stream(const ole_prop_t *property)
 			if (left > 0)
 			{
 				sector = fat[sector];
-				is_fatal((sector < 0), "Broken stream (%s)!", action);
+				is_fatal((sector < 0), MYNAME ": Broken stream (%s)!", action);
 			}
 		}
 	}
@@ -271,13 +271,13 @@ ole_read_stream(const ole_prop_t *property)
 			char *temp;
 			int block_offs;
 
-			is_fatal((chain < 0), "Broken stream (%s)!", action);
+			is_fatal((chain < 0), MYNAME ": Broken stream (%s)!", action);
 			
 			sector = chain / blocks_per_sector;
-			is_fatal((sector >= ole_root_sec_ct), "Broken stream (%s)!", action);
+			is_fatal((sector >= ole_root_sec_ct), MYNAME ": Broken stream (%s)!", action);
 			
 			temp = ole_root_sec[sector];
-			is_fatal((temp == NULL), "Broken stream (%s)!", action);
+			is_fatal((temp == NULL), MYNAME ": Broken stream (%s)!", action);
 			
 			block_offs = (chain % blocks_per_sector) * blocksize;
 			
@@ -357,7 +357,7 @@ ole_test_properties()
 						printf(MYNAME "-new sector: %d\n", sector);
 				}
 			}
-			is_fatal((length != 0), "Error in fat1 chain, sector = %d, %d bytes (=%d blocks) left!", 
+			is_fatal((length != 0), MYNAME ": Error in fat1 chain, sector = %d, %d bytes (=%d blocks) left!", 
 				sector, length, BLOCKS(length, block_size));
 		}
 	}
@@ -376,12 +376,12 @@ ole_init(void)
 	
 	sector_size = 512;	/* fixed for the moment */
 	
-	is_fatal((sizeof(head) != sector_size), "(!) internal error - invalid header size (%d)!", sizeof(head));
+	is_fatal((sizeof(head) != sector_size), MYNAME ": (!) internal error - invalid header size (%d)!", sizeof(head));
 	
 	memset(&head, 0, sizeof(head));
 	fread(&head, sizeof(head), 1, fin);
 	
-	is_fatal((strncmp(head.magic, ole_magic, sizeof(ole_magic)) != 0), "No MS document.");
+	is_fatal((strncmp(head.magic, ole_magic, sizeof(ole_magic)) != 0), MYNAME ": No MS document.");
 
 	head.rev = le_read16(&head.rev);
 	head.ver = le_read16(&head.ver);
@@ -416,12 +416,12 @@ ole_init(void)
 	printf(MYNAME "-head: additional big fat start sector = %d (0x%x)\n", head.fat1_extra_start, (head.fat1_extra_start + 1) * 512);
 #endif
 
-	is_fatal((head.byte_order != -2), "Unsupported byte-order %d", head.byte_order);
+	is_fatal((head.byte_order != -2), MYNAME ": Unsupported byte-order %d", head.byte_order);
 #if 0
 	sector_size = ole_size1;	/* i'll implement this, if i get an MS-doc (ole) 	*/
 					/* with "sector_size" other than 512			*/
 #else
-	is_fatal((ole_size1 != 512), "Unsupported sector size %d", ole_size1);
+	is_fatal((ole_size1 != 512), MYNAME ": Unsupported sector size %d", ole_size1);
 #endif
 	ole_fat1 = xmalloc(head.fat1_blocks * sector_size);
 	ole_fat1_ct = (head.fat1_blocks * sector_size) / sizeof(gbint32);
@@ -463,7 +463,7 @@ ole_init(void)
 			if (left > 0)
 				sector = fat1_extra[127];
 		}
-		is_fatal((left > 0), "Broken stream!");
+		is_fatal((left > 0), MYNAME ": Broken stream!");
 	}
 	if (ole_fat1_ct > 0)
 		le_read32_buff(&ole_fat1[0], ole_fat1_ct);
@@ -497,7 +497,7 @@ ole_init(void)
 	/* load directory (property catalog) */
 	
 	sector = head.prop_start;			
-	is_fatal((sector < 0), "Invalid file (no property catalog)!");
+	is_fatal((sector < 0), MYNAME ": Invalid file (no property catalog)!");
 
 	count = 0;
 	while (sector >= 0)
@@ -585,7 +585,7 @@ msroute_read_journey(void)
 		route_head *route;
 		waypoint *wpt;
 			
-		is_fatal((strncmp(head->masm, "MASM", 4) != 0), "Invalid or unknown data!");
+		is_fatal((strncmp(head->masm, "MASM", 4) != 0), MYNAME ": Invalid or unknown data!");
 				
 		cin = buff + 71; // sizeof(msroute_head_t);
 			
@@ -600,7 +600,7 @@ msroute_read_journey(void)
 			short test;
 				
 			/* tested, but undocumented */
-			is_fatal(((*cin != 0x23) && (*cin != 0x24)), "Invalid or unknown data!");
+			is_fatal(((*cin != 0x23) && (*cin != 0x24)), MYNAME ": Invalid or unknown data!");
 			cin++;
 			
 			len = *cin++;
@@ -609,7 +609,7 @@ msroute_read_journey(void)
 
 			cin += len + 1;
 			test = le_read16(cin);
-			is_fatal((test != -2), "Unsupported byte order within data (%d).", test);
+			is_fatal((test != -2), MYNAME ": Unsupported byte order within data (%d).", test);
 			
 			cin += 2;
 			
