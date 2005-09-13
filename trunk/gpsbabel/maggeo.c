@@ -209,24 +209,6 @@ maggeo_write(void)
 	waypt_disp_all(maggeo_waypt_pr);
 }
 
-static
-char *
-strconsume(char *instr, int *eaten)
-{
-	const char *origstr = instr;
-	char *s = instr;
-	char *e = instr;
-
-	while (e && *e && *e != ',')
-		*e++;
-
-	*eaten = e - s;
-	
-	return (xstrndup(instr, e-s));
-	
-}
-
-
 ff_vecs_t maggeo_vecs = {
 	ff_type_file,
 	{ ff_cap_read, ff_cap_none, ff_cap_none },
