@@ -1076,22 +1076,32 @@ THE FORMATS
 	will not be supported.
 
     CST
-    
-	With this format we can read CarteSurTable data files.
-	CarteSurTable is a shareware program widely used in France.
-	The data inside have to be seen as a mixture of a waypoints list,
-	one route and several tracks.
-	
-	http://phgiraud.free.fr/CarteSurTable/CarteSurTable.htm
-	
+
+        With this format we can read CarteSurTable data files.
+        CarteSurTable is a shareware program widely used in France.  The
+        data inside have to be seen as a mixture of a waypoints list,
+        one route and several tracks.
+
+        http://phgiraud.free.fr/CarteSurTable/CarteSurTable.htm
+
+    nmn4
+
+        Support for Navigon Mobile Navigator route (.rte) files.  This
+        is a very simple text format that only requires coordinates, but
+        has fields for many other things.  We only write coordinates as
+        fields like 'city' and 'street' cannot typically be populated
+        from other formats.
+
+        http://www.navigon.com
+
     nmn5
-    
-	Support for Navigon Mobile Navigator 5 Palm/OS files.
-	This is a route-only format. 
-	
-	http://www.navigon.com
-	
-	
+
+        Support for Navigon Mobile Navigator 5 Palm/OS files.  This is a
+        route-only format.
+
+        http://www.navigon.com
+
+
 DATA FILTERS
 
         GPSBabel supports data filtering.  Data filters are invoked from
