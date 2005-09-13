@@ -54,31 +54,31 @@ static xg_tag_mapping gl_map[] = {
  { NULL, 	0,         NULL}
 };
 
-void
+static void
 glogbook_rd_init(const char *fname)
 {
 	xml_init(fname, gl_map, NULL);
 }
 
-void
+static void
 glogbook_read(void)
 {
 	xml_read();
 }
 
-void
+static void
 glogbook_rd_deinit(void)
 {
 	xml_deinit();
 }
 
-void
+static void
 glogbook_wr_init(const char *fname)
 {
         ofd = xfopen(fname, "w", MYNAME);
 }
 
-void
+static void
 glogbook_wr_deinit(void)
 {
         fclose(ofd);
@@ -100,19 +100,19 @@ glogbook_waypt_pr(const waypoint *wpt)
 	fprintf(ofd, "            </Trackpoint>\n");
 }
 
-void
+static void
 glogbook_hdr( const route_head *rte)
 {
 	fprintf(ofd, "        <Track>\n");
 }
 
-void
+static void
 glogbook_ftr(const route_head *rte)
 {
 	fprintf(ofd, "        </Track>\n");
 }
 
-void
+static void
 glogbook_write(void)
 {
 	fprintf(ofd, "<?xml version=\"1.0\" ?>\n");

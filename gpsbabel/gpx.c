@@ -873,7 +873,7 @@ gpx_end(void *data, const char *el)
 }
 
 #if NO_EXPAT
-void
+static void
 gpx_rd_init(const char *fname)
 {
 	fatal(MYNAME ": This build excluded GPX support because expat was not installed.\n");
@@ -922,7 +922,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 		*cdatalen += len;
 }
 
-void
+static void
 gpx_rd_init(const char *fname)
 {
 	if ( fname[0] ) {
@@ -994,7 +994,7 @@ gpx_rd_deinit(void)
 	psr = NULL;
 }
 
-void
+static void
 gpx_wr_init(const char *fname)
 {
 	mkshort_handle = mkshort_new_handle();
@@ -1405,7 +1405,7 @@ void gpx_route_pr()
 	route_disp_all(gpx_route_hdr, gpx_route_tlr, gpx_route_disp);
 }
 
-void
+static void
 gpx_write(void)
 {
 	time_t now = 0;

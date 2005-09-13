@@ -72,13 +72,13 @@ arglist_t kml_args[] = {
 #define MYNAME "kml"
 
 #if NO_EXPAT
-void
+static void
 kml_rd_init(const char *fname)
 {
 	fatal(MYNAME ": This build excluded KML support because expat was not installed.\n");
 }
 
-void
+static void
 kml_read(void)
 {
 }
@@ -154,19 +154,19 @@ kml_read(void)
 }
 #endif
 
-void
+static void
 kml_rd_deinit(void)
 {
 	xml_deinit();
 }
 
-void
+static void
 kml_wr_init(const char *fname)
 {
 	ofd = xfopen(fname, "w", MYNAME);
 }
 
-void
+static void
 kml_wr_deinit(void)
 {
 	fclose(ofd);
