@@ -155,21 +155,6 @@ static int ole_root_sec_ct;
 /* local helpers */
 
 static void
-is_fatal(const int condition, const char *fmt, ...)
-{
-	va_list args;
-	char buff[128];
-	
-	if (condition == 0) return;
-	
-	va_start(args, fmt);
-	vsnprintf(buff, sizeof(buff), fmt, args);
-	va_end(args);
-	
-	fatal(MYNAME ": %s\n", buff);
-}
-
-static void
 print_buff(const char *buff, int count, const char *comment)
 {
 	int i;

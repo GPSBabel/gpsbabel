@@ -312,6 +312,23 @@ rtrim(char *s)
 }
 
 /*
+ * Like trim, but trims whitespace from both beginning and end.
+ */
+char *
+lrtrim(char *buff)
+{
+	char *c;
+
+	c = buff + strlen(buff);
+	while ((c >= buff) && ((unsigned char)*c <= ' ')) *c-- = '\0';
+
+	c = buff;
+	while ((*c != '\0') && ((unsigned char)*c <= ' ')) c++;
+
+	return c;
+}
+
+/*
  *   Like strcmp, but case insensitive.  Like Berkeley's strcasecmp.
  */
 
@@ -360,6 +377,21 @@ fatal(const char *fmt, ...)
 	vfprintf(stderr, fmt, ap);
 	va_end(ap);
 	exit(1);
+}
+
+void
+is_fatal(const int condition, const char *fmt, ...)
+{
+	va_list args;
+	char buff[128];
+
+	if (condition == 0) return;
+
+	va_start(args, fmt);
+	vsnprintf(buff, sizeof(buff), fmt, args);
+	va_end(args);
+
+	fatal("%s\n", buff);
 }
 
 void

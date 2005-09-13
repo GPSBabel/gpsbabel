@@ -52,20 +52,6 @@ arglist_t cst_args[] = {
 
 /* helpers */
 
-static char *
-cst_trim_buff(char *buff)
-{
-	char *c;
-	
-	c = buff + strlen(buff);
-	while ((c >= buff) && ((unsigned char)*c <= ' ')) *c-- = '\0';
-
-	c = buff;
-	while ((*c != '\0') && ((unsigned char)*c <= ' ')) c++;
-	
-	return c;
-}
-
 static void
 cst_add_wpt(const route_head *track, waypoint *wpt)
 {
@@ -188,7 +174,7 @@ cst_data_read(void)
 		char *cin = buff;
 		
 		line++;
-		cin = cst_trim_buff(buff);
+		cin = lrtrim(buff);
 		if (strlen(cin) == 0) continue;
 		
 		if (strncmp(cin, "; ", 2) == 0) continue;
@@ -224,7 +210,7 @@ cst_data_read(void)
 					
 					if (strncmp(cin + 2, "bitmap", 6) == 0)
 					{
-						cin = cst_trim_buff(cin + 8);
+						cin = lrtrim(cin + 8);
 						if (*cin != '\0')
 							wpt->url = cst_make_url(cin);
 					}
@@ -232,13 +218,13 @@ cst_data_read(void)
 					while (NULL != fgets(buff, sizeof(buff), fin))
 					{
 						line++;
-						cin = cst_trim_buff(buff);
+						cin = lrtrim(buff);
 						
 						if (strcmp(cin + 2, "note") == 0)
 						{
 							fgets(buff, sizeof(buff), fin);
 							line++;
-							cin = cst_trim_buff(buff);
+							cin = lrtrim(buff);
 							if (*cin != '\0')
 								wpt->notes = xstrdup(cin);
 						}
@@ -300,7 +286,7 @@ cst_data_read(void)
 					{
 						struct tm tm;
 						
-						pow = cst_trim_buff(++pow);
+						pow = lrtrim(++pow);
 						strptime(pow, "%Y %m %d %H:%M:%S", &tm);
 						
 						wpt->creation_time = mkgmtime(&tm);

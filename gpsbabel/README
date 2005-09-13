@@ -1084,6 +1084,14 @@ THE FORMATS
 	
 	http://phgiraud.free.fr/CarteSurTable/CarteSurTable.htm
 	
+    nmn5
+    
+	Support for Navigon Mobile Navigator 5 Palm/OS files.
+	This is a route-only format. 
+	
+	http://www.navigon.com
+	
+	
 DATA FILTERS
 
         GPSBabel supports data filtering.  Data filters are invoked from
