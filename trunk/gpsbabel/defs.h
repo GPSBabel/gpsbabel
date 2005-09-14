@@ -153,8 +153,8 @@ typedef struct {
 	int id; /* The decimal cache number */
 	geocache_type type:5;
 	geocache_container container:4;
-	int diff:6; /* (multiplied by ten internally) */
-	int terr:6; /* (likewise) */
+	unsigned int diff:6; /* (multiplied by ten internally) */
+	unsigned int terr:6; /* (likewise) */
 	time_t exported;
 	time_t last_found;
 	char *placer; /* Placer name */
