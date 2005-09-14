@@ -926,6 +926,14 @@ THE FORMATS
         In this case, the merged data will contain all of the properties
         of the original data.
 
+        If your original data contains geocaching-specific information such
+        as difficulty and terrain, GPSBabel will automatically include that
+        information in the waypoint descriptions in the generated drawing
+        file.  If you do not want that, specify the "nogc" option on the
+        command line:
+  
+        gpsbabel -i gpx -f 12345.gpx -o an1,nogc -F 12345.an1
+
         GPSBabel has limited experimental support for other types of layers
         besides the default "drawing" layer with the use of two options:
 
