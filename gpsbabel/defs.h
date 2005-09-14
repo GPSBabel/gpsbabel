@@ -56,6 +56,17 @@
 #pragma warning(disable:4244)
 #endif
 
+/* 
+ *  Toss in some GNU C-specific voodoo for checking.
+ */
+#if __GNUC__ 
+#  define PRINTFLIKE(x,y) __attribute__ ((__format__ (__printf__, (x), (y))))
+#  define NORETURN void __attribute__ ((__noreturn__))
+#else
+#  define PRINTFLIKE(x,y)
+#  define NORETURN void
+#endif
+
 /*
  * Common definitions.   There should be no protocol or file-specific
  * data in this file.
@@ -517,24 +528,11 @@ void waypt_init(void);
 void route_init(void);
 void waypt_disp(const waypoint *);
 void waypt_status_disp(int total_ct, int myct);
-void fatal(const char *, ...)
-#if __GNUC__
-	__attribute__ ((__format__ (__printf__, 1, 2)))
-	__attribute__((noreturn))
-#endif
-	;
 
-void is_fatal(const int condition, const char *, ...)
-#if __GNUC__
-	__attribute__ ((__format__ (__printf__, 2, 3)))
-#endif
-;
+NORETURN fatal(const char *, ...) PRINTFLIKE(1, 2);
+void is_fatal(const int condition, const char *, ...) PRINTFLIKE(2, 3);
+void warning(const char *, ...) PRINTFLIKE(1, 2);
 
-void warning(const char *, ...)
-#if __GNUC__
-	__attribute__ ((__format__ (__printf__, 1, 2)))
-#endif
-;
 ff_vecs_t *find_vec(char * const, char **);
 void disp_vecs(void);
 void exit_vecs(void);
