@@ -31,6 +31,7 @@ FILE *outfile;
 
 static char *output_type = NULL;
 static char *road_changes = NULL;
+static char *nogc = NULL;
 short output_type_num = 0;
 
 short last_read_type = 0;
@@ -51,6 +52,8 @@ arglist_t an1_args[] = {
 		"", ARGTYPE_STRING },
 	{"road", &road_changes, "Road type changes (see README)",
 		"", ARGTYPE_HIDDEN | ARGTYPE_STRING },
+	{"nogc", &nogc, "Do not add geocache data to description",
+		NULL, ARGTYPE_BOOL },
 	{0, 0, 0, 0 }
 };
 
@@ -568,6 +571,7 @@ static void Read_AN1_Waypoints( FILE *f ) {
 	an1_waypoint_record *rec = NULL;
 	waypoint *wpt_tmp;	
 	char *icon = NULL;
+	char *url = NULL;
 	ReadShort( f );
 	count = ReadLong( f );
 	for (i = 0; i < count; i++ ) {
@@ -578,6 +582,12 @@ static void Read_AN1_Waypoints( FILE *f ) {
 		wpt_tmp->longitude = -DecodeOrd( rec->lon );
 		wpt_tmp->latitude = DecodeOrd( rec->lat );
 		wpt_tmp->description = xstrdup( rec->name );
+		if ( NULL != (url=strstr(wpt_tmp->description, "{URL="))) {
+			*url = '\0';
+			url += 5;
+			url[strlen(url)-1] = '\0';
+			wpt_tmp->url = xstrdup( url );
+		}	
 		
 		if (FindIconByGuid(&rec->guid, &icon)) {
 			wpt_tmp->icon_descr = icon;
@@ -615,6 +625,25 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 		rec->fontsize = 10;
 	}
 	rec->name = xstrdup( wpt->description );
+	
+	if ( !nogc && wpt->gc_data.id ) {
+		char *extra = xmalloc( 25 + strlen(wpt->gc_data.placer) + strlen( wpt->shortname ));
+		sprintf( extra, "\r\nBy %s\r\n%s (%1.1f/%1.1f)",
+			wpt->gc_data.placer, 
+			wpt->shortname, wpt->gc_data.diff/10.0, 
+			wpt->gc_data.terr/10.0);
+		rec->name = xstrappend( rec->name, extra );
+		xfree( extra );
+	}
+	
+	if ( wpt->url ) {
+		int len = 7+strlen(wpt->url);
+		char *extra = (char *)xmalloc( len );
+		sprintf( extra, "{URL=%s}", wpt->url );
+		rec->name = xstrappend( rec->name, extra );
+		xfree( extra );
+	}
+
 	rec->lat = EncodeOrd( wpt->latitude );
 	rec->lon = EncodeOrd( -wpt->longitude );
 	rec->serial = serial++;
