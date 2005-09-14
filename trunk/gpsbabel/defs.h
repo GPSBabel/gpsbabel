@@ -523,17 +523,18 @@ void fatal(const char *, ...)
 	__attribute__((noreturn))
 #endif
 	;
-void is_fatal(const int condition, const char *, ...);
+
+void is_fatal(const int condition, const char *, ...)
 #if __GNUC__
-	__attribute__ ((__format__ (__printf__, 1, 2)))
-	__attribute__((noreturn))
+	__attribute__ ((__format__ (__printf__, 2, 3)))
 #endif
+;
 
 void warning(const char *, ...)
 #if __GNUC__
 	__attribute__ ((__format__ (__printf__, 1, 2)))
 #endif
-	;
+;
 ff_vecs_t *find_vec(char * const, char **);
 void disp_vecs(void);
 void exit_vecs(void);
