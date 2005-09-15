@@ -116,6 +116,8 @@ int32 GPS_Math_UTM_EN_To_WGS84(double *lat, double *lon, double E,
 int32 GPS_Math_UTM_EN_To_NAD83(double *lat, double *lon, double E,
 			       double N, int32 zone, char zc);
 
+int32 GPS_Lookup_Datum_Index(const char *n);
+
 #endif
 
 #ifdef __cplusplus

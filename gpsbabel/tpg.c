@@ -33,8 +33,16 @@
 static FILE *tpg_file_in;
 static FILE *tpg_file_out;
 static void *mkshort_handle;
+static char *tpg_datum_opt;
+static int tpg_datum_idx;
 
 static unsigned int waypt_out_count;
+
+static
+arglist_t tpg_args[] = {
+	{"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING },
+	{0, 0, 0, 0, 0}
+};
 
 static int
 tpg_fread(void *buff, size_t size, size_t members, FILE * fp) 
@@ -86,8 +94,18 @@ valid_tpg_header(char * header, int len)
 }
 
 static void
+tpg_common_init(void)
+{
+	tpg_datum_idx = GPS_Lookup_Datum_Index(tpg_datum_opt);
+	if (tpg_datum_idx < 0) {
+		fatal(MYNAME ": Datum '%s' is not recognized.\n", tpg_datum_opt);
+	}
+}
+
+static void
 tpg_rd_init(const char *fname)
 {
+	tpg_common_init();
 	tpg_file_in = xfopen(fname, "rb", MYNAME);
 }
 
@@ -100,6 +118,7 @@ tpg_rd_deinit(void)
 static void
 tpg_wr_init(const char *fname)
 {
+	tpg_common_init();
 	tpg_file_out = xfopen(fname, "wb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 	waypt_out_count = 0;
@@ -172,7 +191,7 @@ tpg_read(void)
                 &wpt_tmp->latitude,
                 &wpt_tmp->longitude,
                 &amt,
-                78);
+                tpg_datum_idx);
 
             wpt_tmp->altitude = elev;
             
@@ -255,7 +274,7 @@ tpg_waypt_pr(const waypoint *wpt)
                 &lat,
                 &lon,
                 &amt,
-                78);
+                tpg_datum_idx);
         
 
         /* swap the sign back *after* the datum conversion */
@@ -365,6 +384,6 @@ ff_vecs_t tpg_vecs = {
 	tpg_read,
 	tpg_write,
 	NULL,
-	NULL,
+	tpg_args,
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
