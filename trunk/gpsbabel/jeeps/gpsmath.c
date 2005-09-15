@@ -1797,3 +1797,16 @@ int32 GPS_Math_UTM_EN_To_WGS84(double *lat, double *lon, double E,
 
     return 1;
 }
+
+int32 GPS_Lookup_Datum_Index(const char *n)
+{
+	GPS_PDatum dp;
+
+	for (dp = GPS_Datum; dp->name; dp++) {
+		if (0 == case_ignore_strcmp(dp->name, n)) {
+			return dp - GPS_Datum;
+		}
+	}
+
+	return -1;
+}

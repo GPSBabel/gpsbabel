@@ -470,6 +470,12 @@ THE FORMATS
 	National Geographic Topo! Waypoint Format.  This filter 
 	reads and writes .TPG files created by various editions of NG Topo! 
 	This filter will *not* work with the newer combined .TPO files.  
+
+        The option 'datum="datum name"' can be used to override the
+        default of NAD27 ("N. America 1927 mean") which is correct
+        for the continental U.S. Points in Hawaii should use "Old
+        Hawaiian_mean"
+
 	Contributed by Alex Mottram.
 
     HOLUX
