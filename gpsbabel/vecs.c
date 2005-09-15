@@ -49,6 +49,7 @@ extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t holux_vecs;
 extern ff_vecs_t xcsv_vecs;
 extern ff_vecs_t tpg_vecs;
+extern ff_vecs_t tpo_vecs;
 extern ff_vecs_t magnav_vec;
 extern ff_vecs_t tmpro_vecs;
 extern ff_vecs_t gcdb_vecs;
@@ -209,6 +210,12 @@ vecs_t vec_list[] = {
 		"tpg",
 		"National Geographic Topo .tpg",
 		"tpg"
+	},
+	{
+		&tpo_vecs,
+		"tpo",
+		"National Geographic Topo .tpo (tracks)",
+		"tpo"
 	},
 	{
 		&tmpro_vecs,
