@@ -851,6 +851,7 @@ magX_wr_init(const char *portname)
 	wpt_len = 20;
 	mag_wr_init_common(portname);
 	setshort_length(mkshort_handle, wpt_len);
+	setshort_whitespace_ok(mkshort_handle, 1);
 }
 
 static void
@@ -858,6 +859,12 @@ mag_wr_init(const char *portname)
 {
 	wpt_len = 8;
 	mag_wr_init_common(portname);
+	/* 
+	 * Whitespace is actually legal, but since waypoint name length is
+	 * only 8 bytes, we'll conserve them.
+	 */
+
+	setshort_whitespace_ok(mkshort_handle, 0);
 }
 
 static void
@@ -1401,12 +1408,6 @@ mag_route_pr()
 static void
 mag_write(void)
 {
-	/* 
-	 * Whitespace is actually legal, but since waypoint name length is
-	 * only 8 bytes, we'll conserve them.
-	 */
-
-	setshort_whitespace_ok(mkshort_handle, 0);
 
 	wptcmtcnt = 0;
 
