@@ -154,7 +154,8 @@ data_read(void)
 			strncpy(month, date+3, 3);
 			month[3] = 0;
 			tm.tm_mon = month_lookup(month);
-			tm.tm_year = atoi(date + 7) + 100;
+			tm.tm_year = atoi(date + 7);
+			if (tm.tm_year < 70) tm.tm_year += 100;
 			wpt_tmp = waypt_new();
 			wpt_tmp->creation_time = mkgmtime(&tm);
 			wpt_tmp->latitude = lat;
