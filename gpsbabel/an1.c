@@ -904,8 +904,24 @@ Parse_Change_Type( char *type ) {
 	else if ( !case_ignore_strcmp( type, "state" )) {
 		retval = 0x11070c10;
 	}
+	else if ( !case_ignore_strcmp( type, "primary" )) {
+		/* primary state/provincial routes */
+		retval = 0x11070840;
+	}
 	else if ( !case_ignore_strcmp( type, "major" )) {
 		retval = 0x11070c30;
+	}
+	else if ( !case_ignore_strcmp( type, "local" )) {
+		retval = 0x11071010;
+	}
+	else if ( !case_ignore_strcmp( type, "ramp" )) {
+		retval = 0x11070cb0;
+	}
+	else if ( !case_ignore_strcmp( type, "ferry" )) {
+		retval = 0x11070ca0;
+	}
+	else if ( !case_ignore_strcmp( type, "editable" )) {
+		retval = 0x11100541;
 	}
 	else {
 		fatal( MYNAME ": unknown road type for road changes\n" );
