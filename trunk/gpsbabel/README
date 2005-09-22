@@ -953,7 +953,23 @@ THE FORMATS
         If you are creating a road layer, you may also use the "road" option,
         which allows you to change the types of roads based on their names.
         You can change multiple roads at the same time.  Currently supported
-        types are "limited", "toll", "us", "state", "major", and "local".
+        types are 
+
+          limited   Limited-access freeways
+          toll      Limited-access toll highways
+          ramp      Access ramps for limited-access highways
+          us        National highways (e.g. US routes)
+          primary   Primary State/Provincial routes
+          state     State/Provincial routes
+          major     Major Connectors
+          ferry     Ferry Routes
+          local     Local Roads
+          editable  User-drawn Roads
+
+        GPSBabel defaults to creating editable roads.  These are routed just 
+        like local roads, but may be edited with the drawing tools in Street 
+        Atlas.  
+
         This option has a special format that is best demonstrated by example:
 
         "road=I-599!limited!Beecher St.!major" 
@@ -961,8 +977,8 @@ THE FORMATS
         This option will cause any road named "I-599" to become a limited- 
         access highway and any road named "Beecher St." to become a major
         connector.  Note that roads that have had their types changed in 
-        this way might not be editable in Street Atlas, so make sure they
-        are where you want them before you change them, and make sure to keep
+        this way are not editable in Street Atlas, so make sure they are 
+        where you want them before you change them, and make sure to keep
         a backup of your original road layer.  Note that the ! is a shell 
         metacharacter in bash and possibly other shells, so you may have to 
         use single quotes or some other escape mechanism.
