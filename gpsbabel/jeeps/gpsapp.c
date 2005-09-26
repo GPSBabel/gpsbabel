@@ -430,6 +430,13 @@ static void GPS_A001(GPS_PPacket packet)
 			 */
 		    continue;
 	    }
+	    else if (data < 1100)
+	    {
+		    	/* Stupid Garmin undocumented "A100[2345]" packets
+			 * as returned by Forerunner 301.
+			 */
+		    continue;
+	    }
 	    else
 	    {
 		GPS_Protocol_Error(tag,data);
