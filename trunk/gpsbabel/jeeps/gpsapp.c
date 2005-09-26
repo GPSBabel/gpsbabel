@@ -154,7 +154,7 @@ int32 GPS_Init(const char *port)
 
     ret = GPS_A000(port);
     if(ret<0) return ret;
-    if (gps_is_usb) return 1;    
+
     gps_save_time = GPS_Command_Get_Time(port);
     if(!gps_save_time) {
 	return FRAMING_ERROR;
