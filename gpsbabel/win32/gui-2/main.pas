@@ -78,6 +78,8 @@ type
     mnuReadme: TMenuItem;
     acHelpReadme: TAction;
     N1: TMenuItem;
+    mnuOptions: TMenuItem;
+    mnuSynthesizeShortNames: TMenuItem;
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure OpenButtonClick(Sender: TObject);
@@ -98,6 +100,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure chbOutputDeviceClick(Sender: TObject);
     procedure acHelpReadmeExecute(Sender: TObject);
+    procedure mnuSynthesizeShortNamesClick(Sender: TObject);
   private
     { Private-Deklarationen }
     FCaps: TCapabilities;
@@ -371,6 +374,8 @@ begin
   if cbWaypoints.Checked then cmdline := cmdline + ' -w';
   if cbRoutes.Checked then cmdline := cmdline + ' -r';
   if cbTracks.Checked then cmdline := cmdline + ' -t';
+  
+  if mnuSynthesizeShortNames.Checked then cmdline := cmdline + ' -s';
 
   if chbInputDevice.Checked then
     s := SysUtils.AnsiLowerCase(cbInputDevice.Text) + ':'
@@ -564,6 +569,11 @@ end;
 procedure TfrmMain.acHelpReadmeExecute(Sender: TObject);
 begin
   frmReadme.ShowModal;
+end;
+
+procedure TfrmMain.mnuSynthesizeShortNamesClick(Sender: TObject);
+begin
+  mnuSynthesizeShortNames.Checked := not(mnuSynthesizeShortNames.Checked);
 end;
 
 end.

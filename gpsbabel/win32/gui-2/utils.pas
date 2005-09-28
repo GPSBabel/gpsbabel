@@ -33,9 +33,12 @@ function ReadProfile(const Tag: Integer): string;
 function BackupProperties(Instance: TObject; Properties: TStrings; Backup: TStringList): Boolean;
 procedure RestoreProperties(Instance: TObject; Backup: TStringList);
 
+procedure FixStaticText(AComponent: TComponent);
+
 implementation
 
 uses
+  StdCtrls,
   common;
 
 function GetShortName(const PathName: string): string;
@@ -65,24 +68,17 @@ begin
    
   sCmd := SysUtils.Format('%s %s ', [gpsbabel_exe, CommandLine]);
 
-{  i := WinExec(PChar(sCmd), SW_SHOWNORMAL);
-  if (i <> 33) then
-  begin
-    MessageBox(0, 'There was an error.', 'Uhps', MB_OK);
-    Exit;
-  end;
-}
   SecurityAttr.nLength := sizeof (TSECURITYATTRIBUTES);
   SecurityAttr.bInheritHandle := true;
   SecurityAttr.lpSecurityDescriptor := nil;
 
   if not CreatePipe(hRead, hWrite, @SecurityAttr, 0) then
-    raise eGPSBabelError.Create('Konnte "NamedPipe" nicht anlegen!');
+    raise eGPSBabelError.Create(_('Error WINAPI: Could not create "NamedPipe"!'));
 
   try
 
     if not FileExists(gpsbabel_exe) then
-      raise eGPSBabelError.Create('gpsbabel.exe wurde nicht gefunden!');
+      raise eGPSBabelError.Create(_('"gpsbabel.exe" not found!!!'));
 
     FillChar (StartupInfo, Sizeof (StartupInfo), #0);
 
@@ -95,31 +91,19 @@ begin
 
     FillChar(ProcessInfo, SizeOf(ProcessInfo), #0);
 
-    if not CreateProcess (
-      nil,                // lpApplicationName    // pointer to name of executable module
-      // sCmd includes both the exec name and the command line parms in this call
-      pchar (sCmd),       // lpCommandLine,       // pointer to command line string
-      nil,                // lpProcessAttributes, // pointer to process security attributes
-      nil,                // lpThreadAttributes,  // pointer to thread security attributes
-      true,               // bInheritHandles,     // handle inheritance flag
-      CREATE_NEW_CONSOLE, // dwCreationFlags,     // creation flags
-      nil,                // lpEnvironment,       // pointer to new environment block
-      nil,                // lpCurrentDirectory,  // pointer to current directory name
-      StartupInfo,        // lpStartupInfo,       // pointer to STARTUPINFO
-      ProcessInfo)        // lpProcessInformation // pointer to PROCESS_INFORMATION
-      then
+    if not CreateProcess(nil,
+      pchar(sCmd), nil, nil, true, CREATE_NEW_CONSOLE, // dwCreationFlags,     // creation flags
+      nil, nil, StartupInfo, ProcessInfo) then
     begin
       Error := GetLastError;
       raise eGPSBabelError.CreateFmt(
-        'gpsbabel.exe konnte nicht gestartet werden (Fehler %d).', [Error]);
+        _('Could not run "gpsbabel.exe" (Error %d)!'), [Error]);
     end;
-
     while (WaitforSingleObject (ProcessInfo.hProcess, 0)) <> WAIT_OBJECT_0 do sleep(100);
-
     if not GetExitCodeProcess(ProcessInfo.hProcess, Error) then Error := 0;
 
     if ((Error <> 0) and (Error <> 1)) then
-      raise eGPSBabelError.CreateFmt('Schade, "gpsbabel.exe" verlies uns mit Fehler 0x%x (%d)', [Error, Error]);
+      raise eGPSBabelError.CreateFmt(_('"gpsbabel.exe" returned error 0x%x (%d)'), [Error, Error]);
 
     s := '';
 
@@ -205,6 +189,30 @@ end;
 
 procedure RestoreProperties(Instance: TObject; Backup: TStringList);
 begin
+end;
+
+procedure FixStaticText(AComponent: TComponent);
+var
+  i, j: Integer;
+  c: TComponent;
+  s: TStaticText;
+begin
+  j := AComponent.ComponentCount;
+  for i := 0 to j - 1 do
+  begin
+    c := AComponent.Components[i];
+    if (c.ComponentCount > 0) then FixStaticText(c);
+
+    if not c.InheritsFrom(TStaticText) then Continue;
+
+    s := c as TStaticText;
+    if (s.BorderStyle = sbsNone) then Continue;
+
+    if (s.Alignment = taLeftJustify) then
+      s.Caption := '   ' + s.Caption
+    else if (s.Alignment = taRightJustify) then
+      s.Caption := s.Caption + '  ';
+  end;
 end;
 
 end.
