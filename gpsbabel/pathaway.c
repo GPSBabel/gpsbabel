@@ -69,7 +69,7 @@ static arglist_t ppdb_args[] =
 	{0, 0, 0, 0, 0 }
 };
 
-#define PPDB_DEBUG 1
+#undef PPDB_DEBUG
 
 #if PPDB_DEBUG
 static void
@@ -90,7 +90,7 @@ internal_debug2(const char *format, ... )
 }
 #define DBG	internal_debug1(__FILE__, __LINE__);internal_debug2
 #else
-#define DBG	# ;
+#define DBG	;
 #endif
 
 
