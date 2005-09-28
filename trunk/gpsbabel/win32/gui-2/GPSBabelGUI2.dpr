@@ -33,17 +33,10 @@ uses
 
 {$R *.RES}
 
-(*
-!!!
-gpsbabel.exe -w -i gdb -f "C:\TEMP\2005 Pfunds total.gdb" -x duplicate,shortname -o pathaway -F "C:\TEMP\2005 Pfunds total.pdb"
-gpsbabel: Unable to allocate -16056 bytes of memory.
-!!!
-*)
-
 begin
   AddDomainForResourceString('delphi');
 
-  UseLanguage('en');                 // for testing
+//  UseLanguage('en');                 // for testing
 
   Application.Initialize;
   Application.CreateForm(TfrmMain, frmMain);

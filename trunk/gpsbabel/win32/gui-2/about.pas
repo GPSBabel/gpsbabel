@@ -23,19 +23,24 @@ interface
 uses
   gnugettextD4,
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, Buttons, ExtCtrls;
+  StdCtrls, Buttons, ExtCtrls,
+  common;
 
 type
   TfrmAbout = class(TForm)
     pnClient: TPanel;
     Image1: TImage;
-    StaticText1: TStaticText;
-    StaticText2: TStaticText;
     pnBottom: TPanel;
     BitBtn1: TBitBtn;
+    StaticText3: TStaticText;
+    Panel1: TPanel;
+    StaticText1: TStaticText;
+    StaticText2: TStaticText;
+    Image2: TImage;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
+    FTitle: string;
   public
     { Public declarations }
   end;
@@ -45,12 +50,18 @@ var
 
 implementation
 
+uses
+  utils;
+  
 {$R *.DFM}
 
 procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
   gnugettextD4.TranslateComponent(SELF);
+  FTitle := Caption;
+  Caption := FTitle + ' GPSBabelGUI-2';
+
+  FixStaticText(Self);
 end;
 
 end.
- 
