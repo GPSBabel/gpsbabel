@@ -599,8 +599,6 @@ msroute_read_journey(void)
 			double lat, lon;
 			short test;
 				
-			/* tested, but undocumented */
-			is_fatal(((*cin != 0x23) && (*cin != 0x24)), MYNAME ": Invalid or unknown data!");
 			cin++;
 			
 			len = *cin++;
