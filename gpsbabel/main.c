@@ -23,14 +23,11 @@
 #include "cet_util.h"
 #include <ctype.h>
 
-global_options global_opts;
-const char gpsbabel_version[] = VERSION;
-
 static void
 usage(const char *pname, int shorter)
 {
 	printf("GPSBabel Version %s.  http://www.gpsbabel.org\n\n",
-			VERSION );
+			gpsbabel_version );
 	printf(
 "Usage:\n"
 "    %s [options] -i INTYPE -f INFILE -o OUTTYPE -F OUTFILE\n"
@@ -137,7 +134,7 @@ main(int argc, char *argv[])
 		}
 		
 		if (argv[argn][1] == 'V' ) {
-			 printf("\nGPSBabel Version %s\n\n", VERSION );
+			 printf("\nGPSBabel Version %s\n\n", gpsbabel_version );
 			 exit(0);
 		}
 
@@ -284,7 +281,7 @@ main(int argc, char *argv[])
 				 * When debugging, announce version.
 				 */
 				if (global_opts.debug_level > 0)  {
-					warning("GPSBabel Version: " VERSION "\n" );
+					warning("GPSBabel Version: %s \n", gpsbabel_version );
 				}
 
 				break;

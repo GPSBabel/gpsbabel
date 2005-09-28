@@ -61,7 +61,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
           uuid.o formspec.o xmltag.o cet.o cet_util.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(FMTS) $(FILTERS)
-OBJS = main.o $(LIBOBJS)
+OBJS = main.o globals.o $(LIBOBJS)
 
 .c.o:
 	$(CC) -c $(CFLAGS) $< $(OUTPUT_SWITCH)$@
@@ -78,7 +78,7 @@ usbfree:
 gpsbabel: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBEXPAT) $(LIBUSB) -lm $(OUTPUT_SWITCH)$@
 
-main.o:
+globals.o:
 	$(CC) -c $(CFLAGS) -DVERSION=\"$(VERSIOND)\" $< $(OUTPUT_SWITCH)$@
 
 clean:
@@ -185,6 +185,7 @@ gdb.o: gdb.c defs.h queue.h gbtypes.h garmin_tables.h jeeps/gpsmath.h \
 geo.o: geo.c defs.h queue.h gbtypes.h xmlgeneric.h
 geoniche.o: geoniche.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
+globals.o: globals.c defs.h queue.h gbtypes.h
 glogbook.o: glogbook.c defs.h queue.h gbtypes.h xmlgeneric.h
 google.o: google.c defs.h queue.h gbtypes.h xmlgeneric.h
 gpilots.o: gpilots.c defs.h queue.h gbtypes.h coldsync/palm.h \
