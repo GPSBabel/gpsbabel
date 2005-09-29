@@ -61,7 +61,7 @@ static route_head *rte_head;
 
 
 #define MYNAME "GPX"
-#define MY_CBUF 4096
+#define MY_CBUF_SZ 4096
 #define DEFAULT_XSI_SCHEMA_LOC "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
 #define DEFAULT_XSI_SCHEMA_LOC_FMT "\"http://www.topografix.com/GPX/%c/%c http://www.topografix.com/GPX/%c/%c/gpx.xsd\""
 
@@ -1015,7 +1015,7 @@ gpx_read(void)
 #ifndef NO_EXPAT
 	int len;
 	int done = 0;
-	char buf[MY_CBUF];
+	char *buf = xmalloc(MY_CBUF_SZ);
 	int result = 0;
 
 	while (!done) {
@@ -1029,19 +1029,20 @@ gpx_read(void)
 			 * them not validate which croaks expat and torments
 			 * users.
 			 *
-			 * Look for '&' in the last 6 chars.   If we find
-			 * it, strip it, then read byte-at-a-time until
-			 * we find a non-entity.
+			 * Look for '&' in the last maxentlength chars.   If 
+			 * we find it, strip it, then read byte-at-a-time 
+			 * until we find a non-entity.
 			 */
 			char *badchar;
 			char *semi;
-			len = fread(buf, 1, sizeof(buf)-7, fd);
+			int maxentlength = 8;
+			len = fread(buf, 1, MY_CBUF_SZ - maxentlength, fd);
 			done = feof(fd) || !len;
 			buf[len] = '\0';
-			badchar = buf+len-7;
+			badchar = buf+len-maxentlength;
 			badchar = strchr( badchar, '&' );
 			while ( badchar ) {
-				int extra = 7;
+				int extra = maxentlength-1; /* for terminator */
 				semi = strchr( badchar, ';');
 				while ( extra && !semi ) {
 					len += fread( buf+len, 1, 1, fd);
@@ -1094,6 +1095,7 @@ gpx_read(void)
 				XML_ErrorString(XML_GetErrorCode(psr)));
 		}
 	}
+	xfree(buf);
 #endif /* NO_EXPAT */
 }
 
