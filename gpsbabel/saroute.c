@@ -30,7 +30,10 @@ FILE *infile;
 
 char *turns_important = NULL;
 char *turns_only = NULL;
+char *controls = NULL;
 char *split = NULL;
+
+int control = 0;
 
 static
 arglist_t saroute_args[] = {
@@ -41,6 +44,8 @@ arglist_t saroute_args[] = {
 		NULL, ARGTYPE_BOOL },
 	{"split", &split, "Split into multiple routes at turns",
        		NULL, ARGTYPE_BOOL },
+	{"controls", &controls, "Read control points as waypoint/route/none",
+		"none", ARGTYPE_STRING },
 	{0, 0, 0, 0 }
 };
 
@@ -87,6 +92,17 @@ rd_init(const char *fname)
 		fatal( MYNAME 
 		      ": turns options are not compatible with split\n" );
 	}
+	if ( controls ) {
+	    switch( controls[0] ) {
+		case 'n': control = 0; break;
+		case 'r': control = 1; break;
+		case 'w': control = 2; break;
+		default:
+		    fatal( MYNAME
+			": unrecognized value for 'controls'\n" );
+		    break;
+	    }
+	}
 }
 
 static void
@@ -114,6 +130,7 @@ my_read(void)
 	route_head *track_head = NULL;
 	route_head *old_track_head = NULL;
 	waypoint *wpt_tmp;
+	char *routename = NULL;
 
 	ReadShort(infile);		/* magic */
 	version = ReadShort(infile);
@@ -137,6 +154,11 @@ my_read(void)
 	record = ReadRecord(infile, recsize);
 
 	stringlen = le_read16((unsigned short *)(record + 0x1a));
+	if ( stringlen ) {
+		routename = (char *)xmalloc( stringlen + 1 );
+		routename[stringlen] = '\0';
+		memcpy( routename, record+0x1c, stringlen );
+	}
 	Skip(infile, stringlen - 4);
 	xfree(record);
 
@@ -147,18 +169,24 @@ my_read(void)
 	/*
 	 * here lie the route description records 
 	 */
-	if ( version < 6 ) {
+	if ( version < 6 || (control == 1)) {
 		track_head = route_head_alloc();
 		route_add_head(track_head);
+		if ( control ) {
+		    track_head->rte_name = xstrdup("control points");
+		}
+		else {
+		    track_head->rte_name = xstrdup( routename );
+		}
 	}
 	count = ReadLong(infile);
 	while (count) {
 		ReadShort(infile);
 		recsize = ReadLong(infile);
-		if (version < 6) {
+		if (version < 6 || control) {
 			double lat;
 			double lon;
-
+			
 			record = ReadRecord(infile, recsize);
 			latlon = (struct ll *)(record);
 
@@ -170,10 +198,40 @@ my_read(void)
 			wpt_tmp = waypt_new();
 			wpt_tmp->latitude = lat;
 			wpt_tmp->longitude = -lon;
-			wpt_tmp->shortname = (char *) xmalloc(7);
-			sprintf( wpt_tmp->shortname, "\\%5.5x", serial++ );
-			route_add_wpt(track_head, wpt_tmp);
+			if ( control ) {
+			    int addrlen = le_read16((short *)
+				(((char *)record)+18));
+			    int cmtlen = le_read16((short *)
+				(((char *)record)+20+addrlen));
+			    wpt_tmp->notes = (char *)xmalloc(cmtlen+1);
+			    wpt_tmp->shortname = (char *)xmalloc(addrlen+1);
+			    wpt_tmp->notes[cmtlen] = '\0';
+			    wpt_tmp->shortname[addrlen]='\0';
+			    memcpy(wpt_tmp->notes, 
+				   ((char *)record)+22+addrlen,
+				   cmtlen );
+			    memcpy(wpt_tmp->shortname,
+				   ((char *)record)+20,
+				   addrlen );
+			}
+			else {
+			    wpt_tmp->shortname = (char *) xmalloc(7);
+		    	    sprintf( wpt_tmp->shortname, "\\%5.5x", serial++ );
+			}
+			if ( control == 2 ) {
+			    waypt_add( wpt_tmp );
+			}
+			else {
+			    route_add_wpt(track_head, wpt_tmp);
+			}
 			xfree(record);
+			if (version >= 6 ) {
+			    /*
+    			     * two longs of scrap after each record, don't know why 
+			     */
+			    ReadLong(infile);
+			    ReadLong(infile);
+			}
 		} else {
 			Skip(infile, recsize);
 			/*
@@ -213,6 +271,9 @@ my_read(void)
 		if ( count ) {
 			track_head = route_head_alloc();
 			route_add_head(track_head);
+			if ( routename && !split ) {
+			    track_head->rte_name = xstrdup( routename );
+			}
 		}
 		while (count) {
 			old_track_head = NULL;
@@ -257,11 +318,20 @@ my_read(void)
 
 				wpt_tmp->latitude = lat;
 				wpt_tmp->longitude = -lon;
-				wpt_tmp->shortname = (char *) xmalloc(7);
+				if ( stringlen && ((coordcount>1) || count)) {
+				    wpt_tmp->shortname = xmalloc(stringlen+1);
+				    wpt_tmp->shortname[stringlen] = '\0';
+				    memcpy( wpt_tmp->shortname, 
+				            ((char *)record)+2,
+					    stringlen );
+				}
+				else {
+    				    wpt_tmp->shortname = (char *) xmalloc(7);
+				    sprintf( wpt_tmp->shortname, "\\%5.5x", 
+						serial++ );
+				}
 				if ( turns_important && stringlen ) 
 					wpt_tmp->route_priority=1;
-				sprintf( wpt_tmp->shortname, "\\%5.5x", 
-						serial++ );
 				if ( !turns_only || stringlen ) {
 					route_add_wpt(track_head, wpt_tmp);
 					if ( old_track_head ) {
@@ -289,6 +359,9 @@ my_read(void)
 		 * end of routing 
 		 */
 		outercount--;
+	}
+	if ( routename ) {
+		xfree( routename );
 	}
 
 }
