@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-09-30 03:39\n"
-"PO-Revision-Date: 2005-09-30 03:39\n"
+"POT-Creation-Date: 2005-10-01 00:49\n"
+"PO-Revision-Date: 2005-10-01 00:49\n"
 "Last-Translator: Somebody <your.email@address.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,14 +22,12 @@ msgstr ""
 
 #. frmAbout..Font.Name
 #: about.dfm:12
-#. frmAbout..pnClient..Panel1..StaticText1..Font.Name
-#: about.dfm:125
-#. frmAbout..pnClient..Panel1..StaticText4..Font.Name
-#: about.dfm:154
-#. frmAbout..pnClient..Panel1..StaticText5..Font.Name
-#: about.dfm:168
-#. frmAbout..pnClient..Panel1..StaticText6..Font.Name
-#: about.dfm:182
+#. frmAbout..pnClient..pnCenter..lbURL..Font.Name
+#: about.dfm:100
+#. frmAbout..pnClient..pnCenter..lbSFURL..Font.Name
+#: about.dfm:131
+#. frmAbout..pnClient..pnCenter..stLicense..Font.Name
+#: about.dfm:166
 #. frmFilter..Font.Name
 #: filter.dfm:13
 #. frmMain..Font.Name
@@ -41,45 +39,62 @@ msgstr ""
 msgid "MS Sans Serif"
 msgstr ""
 
-#. frmAbout..pnClient..StaticText3..Caption
-#: about.dfm:105
-msgid "... under construction"
+#. frmAbout..pnClient..pnCenter..lbHint1..Caption
+#: about.dfm:74
+msgid "This program is part of the GPSBabel project, hosted "
+"on"
 msgstr ""
 
-#. frmAbout..pnClient..Panel1..StaticText1..Caption
-#: about.dfm:121
-msgid "GPSBabelGUI-2:"
+#. frmAbout..pnClient..pnCenter..lbVersion..Caption
+#: about.dfm:82
+msgid "Version 0.2"
 msgstr ""
 
-#. frmAbout..pnClient..Panel1..StaticText2..Caption
-#: about.dfm:139
+#. frmAbout..pnClient..pnCenter..lbTranslators..Caption
+#: about.dfm:89
+msgid "Translations"
+msgstr ""
+
+#. frmAbout..pnClient..pnCenter..lbURL..Caption
+#: about.dfm:96
+msgid "www.gpsbabel.org"
+msgstr ""
+
+#. frmAbout..pnClient..pnCenter..lbCopyRight..Caption
+#: about.dfm:112
+msgid "Copyright (C) 2005 Olaf Klein (O.B.Klein@T-Online.de)"
+msgstr ""
+
+#. frmAbout..pnClient..pnCenter..lbMoreInfo..Caption
+#: about.dfm:119
+msgid "Find more info at"
+msgstr ""
+
+#. frmAbout..pnClient..pnCenter..lbSFURL..Caption
+#: about.dfm:126
+msgid "SourceForge.net"
+msgstr ""
+
+#. frmAbout..pnClient..pnCenter..stDescription..Caption
+#: about.dfm:147
 msgid "The frontend for gpsbabel command line "
 "program"
 msgstr ""
 
-#. frmAbout..pnClient..Panel1..StaticText4..Caption
-#: about.dfm:150
-msgid "Copyright:"
+#. frmAbout..pnClient..pnCenter..stLicense..Caption
+#: about.dfm:161
+msgid "THIS SOFTWARE MAY ONLY BE LICENSED FREE OF "
+"CHARGE"
 msgstr ""
 
-#. frmAbout..pnClient..Panel1..StaticText5..Caption
-#: about.dfm:164
-msgid "Licence:"
+#. frmAbout..pnClient..pnCenter..lbxTranslators....Items.Strings
+#: about.dfm:183
+msgid "German by Olaf Klein"
 msgstr ""
 
-#. frmAbout..pnClient..Panel1..StaticText6..Caption
-#: about.dfm:178
-msgid "Translations:"
-msgstr ""
-
-#. frmAbout..pnClient..Panel1..StaticText7..Caption
-#: about.dfm:196
-msgid "Olaf Klein (O.B.Klein@T-Online.de)"
-msgstr ""
-
-#. frmAbout..pnClient..Panel1..StaticText8..Caption
-#: about.dfm:211
-msgid "Open Source"
+#. frmAbout..pnClient..pnCenter..lbxTranslators....Items.Strings
+#: about.dfm:184
+msgid "French by Lilian Morinon"
 msgstr ""
 
 #. frmFilter..Caption
@@ -324,6 +339,8 @@ msgstr ""
 
 #. frmMain..Caption
 #: main.dfm:6
+#. Programmer's name for it: SGPSBabelTitle
+#: common.pas:28
 msgid "GPSBabelGUI-2"
 msgstr ""
 
@@ -503,6 +520,15 @@ msgstr ""
 msgid "-"
 msgstr ""
 
+#: about.pas:76
+msgid "Version"
+msgstr ""
+
+#. Programmer's name for it: SGPSBabelURL
+#: common.pas:27
+msgid "http://www.gpsbabel.org"
+msgstr ""
+
 #: filter.pas:159
 msgid "Value (%s) out of range (%g to %g)!"
 msgstr ""
@@ -524,40 +550,48 @@ msgstr ""
 msgid "Kilometer"
 msgstr ""
 
-#: main.pas:152
-msgid " (Preview)"
+#: main.pas:165
+msgid "BETA"
 msgstr ""
 
-#: main.pas:259
+#: main.pas:167
+msgid "Private release"
+msgstr ""
+
+#: main.pas:169
+msgid "Special release"
+msgstr ""
+
+#: main.pas:277
 msgid "All files|*.*"
 msgstr ""
 
-#: main.pas:348
+#: main.pas:366
 msgid "|All files|*.*"
 msgstr ""
 
-#: main.pas:389
+#: main.pas:407
 msgid "File %s not found."
 msgstr ""
 
-#: main.pas:406
+#: main.pas:424
 msgid "File \"%s\" exists ! Overwrite ?"
 msgstr ""
 
-#: main.pas:407
+#: main.pas:425
 msgid "Warning"
 msgstr ""
 
-#: main.pas:432
+#: main.pas:450
 msgid "Could not run \"gpsbabel.exe\"!"
 msgstr ""
 
-#: main.pas:441
+#: main.pas:459
 msgid "Converted successfully from \"%s\" to "
 "\"%s\"."
 msgstr ""
 
-#: main.pas:442
+#: main.pas:460
 msgid "Success"
 msgstr ""
 

@@ -23,6 +23,14 @@ interface
 uses
   Windows, SysUtils, Classes, Messages;
 
+resourcestring
+  SGPSBabelURL = 'http://www.gpsbabel.org';
+  SGPSBabelTitle = 'GPSBabelGUI-2';
+
+var
+  SGPSBabelGUIVersion: string;
+  CFixedFileinfo: TVSFixedFileInfo;
+
 const
   WM_STARTUP = WM_USER + 1;
 
@@ -262,8 +270,53 @@ begin
   end;
 end;
 
+function GetFileVersion(const Filename: string): string;
+var
+  buff: PChar;
+  hdl: DWORD;
+  len: DWORD;
+  sub: PChar;
+  sublen: UINT;
+  fix: PVSFixedFileInfo;
+  i:   Integer;
+begin
+  Result := '?.?';
+
+  FillChar(CFixedFileinfo, SizeOf(CFixedFileinfo), #0);
+
+  len := GetFileVersionInfoSize(PChar(Filename), hdl);
+  if not(len > 0) then exit;
+
+  GetMem(buff, len);
+  try
+
+    if not GetFileVersionInfo(PChar(FileName), 0, len, buff) then Exit;
+
+    fix := Pointer(buff);
+    i := len - SizeOf(fix^);
+    while (i > 0) do
+    begin
+      Dec(i);
+      if (fix.dwSignature = $feef04bd) then
+      begin
+        CFixedFileinfo := fix^;
+        Break;
+      end;
+      PChar(fix) := PChar(fix) + 1; 
+    end;
+
+    if not VerQueryValue(buff, PChar('\\StringFileInfo\\040904E4\\FileVersion'),
+      Pointer(sub), sublen) then Exit;
+    if not(sublen > 0) then Exit;
+    Result := string(sub);
+  finally
+    FreeMem(buff);
+  end;
+end;
+  
 initialization
 
   gpsbabel_exe := SysUtils.ExtractFilePath(ParamStr(0)) + 'gpsbabel.exe';
+  SGPSBabelGUIVersion := GetFileVersion(ParamStr(0));
 
 end.

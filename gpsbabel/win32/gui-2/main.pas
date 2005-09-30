@@ -149,7 +149,25 @@ var
 begin
   gnugettextD4.TranslateComponent(SELF);
 
-  Caption := Caption + _(' (Preview)');
+// VS_FF_DEBUG	The file contains debugging information or is compiled with debugging features enabled.
+// VS_FF_INFOINFERRED	The file's version structure was created dynamically;
+//                      therefore, some of the members in this structure may be empty or incorrect.
+//                      This flag should never be set in a file's VS_VERSION_INFO data.
+// VS_FF_PATCHED	The file has been modified and is not identical to the original shipping file of the same version number.
+// VS_FF_PRERELEASE	The file is a development version, not a commercially released product.
+// VS_FF_PRIVATEBUILD	The file was not built using standard release procedures. If this flag is set,
+//                      the StringFileInfo structure should contain a PrivateBuild entry.
+// VS_FF_SPECIALBUILD	The file was built by the original company using standard release procedures
+//                      but is a variation of the normal file of the same version number.
+//                      If this flag is set, the StringFileInfo structure should contain a SpecialBuild
+
+  if (CFixedFileinfo.dwFileFlags and VS_FF_PRERELEASE <> 0) then
+    Caption := Format('%s (%s)', [Caption, _('BETA')])
+  else if (CFixedFileinfo.dwFileFlags and VS_FF_PRIVATEBUILD <> 0) then
+    Caption := Format('%s (%s)', [Caption, _('Private release')])
+  else if (CFixedFileinfo.dwFileFlags and VS_FF_SPECIALBUILD <> 0) then
+    Caption := Format('%s (%s)', [Caption, _('Special release')]);
+
 
   FCaps := TCapabilities.Create;
 
