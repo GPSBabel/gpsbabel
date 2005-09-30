@@ -239,7 +239,11 @@ begin
 
   i := FCaps.GetCaps(s);
   if (i > 0) then
-    Target.Text := s;
+  begin
+    i := Target.Items.IndexOf(s);
+    if (i >= 0) then
+      Target.ItemIndex := i;
+  end;
   ComboChange(Target);
 end;
 

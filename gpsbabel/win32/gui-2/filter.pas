@@ -72,7 +72,13 @@ type
     cbTrackPack: TCheckBox;
     cbTrackMerge: TCheckBox;
     BitBtn1: TBitBtn;
-    Image1: TImage;
+    cbWayptRadius: TCheckBox;
+    edWayptRadius: TEdit;
+    cobWayptRadius: TComboBox;
+    lbWayptRadiusLat: TLabel;
+    lbWayptRadiusLon: TLabel;
+    edWayptRadiusLat: TEdit;
+    edWayptRadiusLon: TEdit;
     procedure cbTrackTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure cbTrackTitleClick(Sender: TObject);
@@ -84,6 +90,9 @@ type
     procedure cbTrackMergeClick(Sender: TObject);
     procedure cbWayptMergeDistanceClick(Sender: TObject);
     procedure cbWayptMergeDupsClick(Sender: TObject);
+    procedure cbWayptRadiusClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure FormShow(Sender: TObject);
   private
     { Private-Deklarationen }
     lTrackTimeList: TList;
@@ -92,11 +101,16 @@ type
     procedure EnableList(List: TList; Enable: Boolean = True);
     procedure SetTracksEnabled(const Value: Boolean);
     function AllValid: Boolean;
+    function ValidateNumerical(AEdit: TEdit; AMin, AMax: Extended): Boolean;
+    procedure ChangeCheckBoxesChecked(AComponent: TComponent; Restore: Boolean = False);
   public
     { Public-Deklarationen }
     function CmdLine: string;
     property TracksEnabled: Boolean read FTracksEnabled write SetTracksEnabled;
   end;
+
+type
+  eOutOfRange = class(Exception);
 
 var
   frmFilter: TfrmFilter = nil;
@@ -110,6 +124,42 @@ begin
   AControl.Left := LeftFromMe.Left + LeftFromMe.Width;
   if (IsText) then
     AControl.Left := AControl.Left + 4;
+end;
+
+function TfrmFilter.ValidateNumerical(AEdit: TEdit; AMin, AMax: Extended): Boolean;
+var
+  s: string;
+  v: Extended;
+begin
+  Result := True;
+  if not(AEdit.Enabled) then Exit;
+  if (ModalResult <> mrOK)  then Exit;
+
+  Result := False;
+  s := Trim(AEdit.Text);
+  if (s = '') then s := '0';
+  while (Pos(',', s) <> 0) do
+    s[Pos(',', s)] := '.';
+
+  AEdit.Text := s;
+
+  try
+    v := SysUtils.StrToFloat(s);
+  except
+    on E: EConvertError do
+    begin
+      AEdit.SetFocus;
+      raise;
+    end;
+  end;
+
+  if (v < AMin) or (v > AMax) then
+  begin
+    AEdit.SetFocus;
+    raise eOutOfRange.CreateFmt(_('Value (%s) out of range (%g to %g)!'),
+      [s, AMin, AMax]);
+  end;
+  Result := True;
 end;
 
 procedure TfrmFilter.cbTrackTimeClick(Sender: TObject);
@@ -160,7 +210,19 @@ begin
   FixPosition(udTimeSeconds, edTrackTimeSeconds, False);
   FixPosition(lbTimeSeconds, udTimeSeconds, True);
 
-  cobWayptMergeDist.Text := _('Miles');
+  FixPosition(lbWayptRadiusLat, cobWayptRadius, True);
+  FixPosition(edWayptRadiusLat, lbWayptRadiusLat, True);
+  FixPosition(lbWayptRadiusLon, edWayptRadiusLat, True);
+  FixPosition(edWayptRadiusLon, lbWayptRadiusLon, True);
+
+  // will not be translated, fill by hand
+  cobWayptMergeDist.Items.Add(_('Feet'));
+  cobWayptMergeDist.Items.Add(_('Meter'));
+  cobWayptMergeDist.ItemIndex := 0;
+
+  cobWayptRadius.Items.Add(_('Miles'));
+  cobWayptRadius.Items.Add(_('Kilometer'));
+  cobWayptRadius.ItemIndex := 0;
 end;
 
 procedure TfrmFilter.cbTrackTitleClick(Sender: TObject);
@@ -194,9 +256,23 @@ begin
         Result := Format('%s,%s', [Result, 'shortname']);
       if cbWayptMergeDupLoc.Checked then
         Result := Format('%s,%s', [Result, 'location']);
-
-      SimpleOption(Result, cbWayptSort, 'sort');
     end;
+    if cbWayptMergeDistance.Checked then
+    begin
+      Result := Format('%s -x position,distance=%s', [Result, edWayptMergeDist.Text]);
+      if (cobWayptMergeDist.ItemIndex = 0) then
+        Result := Result + 'f' else
+        Result := Result + 'm';
+    end;
+    if cbWayptRadius.Checked then
+    begin
+      Result := Format('%s -x radius,distance=%s', [Result, edWayptRadius.Text]);
+      if (cobWayptRadius.ItemIndex = 0) then
+        Result := Result + 'M' else
+        Result := Result + 'K';
+      Result := Format('%s,lat=%s,lon=%s', [Result, edWayptRadiusLat.Text, edWayptRadiusLon.Text]);
+    end;
+    SimpleOption(Result, cbWayptSort, 'sort');
   end;
 
   if AnyChecked(gbTracks) then
@@ -318,6 +394,56 @@ procedure TfrmFilter.cbWayptMergeDupsClick(Sender: TObject);
 begin
   cbWayptMergeDupLoc.Enabled := cbWayptMergeDups.Checked;
   cbWayptMergeDupNames.Enabled := cbWayptMergeDups.Checked;
+end;
+
+procedure TfrmFilter.cbWayptRadiusClick(Sender: TObject);
+begin
+  edWayptRadius.Enabled := cbWayptRadius.Checked;
+  cobWayptRadius.Enabled := cbWayptRadius.Checked;
+  edWayptRadiusLat.Enabled := cbWayptRadius.Checked;
+  edWayptRadiusLon.Enabled := cbWayptRadius.Checked;
+end;
+
+procedure TfrmFilter.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if (ModalResult <> mrOK) then
+  begin
+    ChangeCheckBoxesChecked(Self, True);
+    CanClose := True;
+    Exit;
+  end;
+  CanClose :=
+    ValidateNumerical(edWayptRadius, 0, 99999) and
+    ValidateNumerical(edWayptRadiusLat, -180, 180) and
+    ValidateNumerical(edWayptRadiusLon, -90, 90) and
+    ValidateNumerical(edWayptMergeDist, 0, 99999999);
+  ChangeCheckBoxesChecked(Self, False);
+end;
+
+procedure TfrmFilter.FormShow(Sender: TObject);
+begin
+  ChangeCheckBoxesChecked(Self);
+end;
+
+procedure TfrmFilter.ChangeCheckBoxesChecked(AComponent: TComponent; Restore: Boolean = False);
+var
+  i, j: Integer;
+  c: TComponent;
+begin
+  j := AComponent.ComponentCount;
+  for i := 0 to j - 1 do
+  begin
+    c := AComponent.Components[i];
+    if (c is TCheckBox) then
+    begin
+      if (Restore) then
+        TCheckBox(c).Checked := (c.Tag <> 0) else
+        c.Tag := Integer(TCheckBox(c).Checked);
+    end
+    else if (c.ComponentCount > 0) then
+      ChangeCheckBoxesChecked(c);
+  end;
 end;
 
 end.

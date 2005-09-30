@@ -37,6 +37,11 @@ type
     StaticText1: TStaticText;
     StaticText2: TStaticText;
     Image2: TImage;
+    StaticText4: TStaticText;
+    StaticText5: TStaticText;
+    StaticText6: TStaticText;
+    StaticText7: TStaticText;
+    StaticText8: TStaticText;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
