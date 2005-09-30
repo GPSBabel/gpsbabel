@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPSBabel 1.2.6\n"
 "POT-Creation-Date: 2005-08-12 14:50\n"
-"PO-Revision-Date: 2005-09-30 03:51+0100\n"
+"PO-Revision-Date: 2005-10-01 00:50+0100\n"
 "Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -19,19 +19,17 @@ msgid "About"
 msgstr "Über"
 
 #. frmAbout..Font.Name
-#. frmAbout..pnClient..Panel1..StaticText1..Font.Name
-#. frmAbout..pnClient..Panel1..StaticText4..Font.Name
-#. frmAbout..pnClient..Panel1..StaticText5..Font.Name
-#. frmAbout..pnClient..Panel1..StaticText6..Font.Name
+#. frmAbout..pnClient..pnCenter..lbURL..Font.Name
+#. frmAbout..pnClient..pnCenter..lbSFURL..Font.Name
+#. frmAbout..pnClient..pnCenter..stLicense..Font.Name
 #. frmFilter..Font.Name
 #. frmMain..Font.Name
 #. frmMain..Panel2..lbWhat..Font.Name
 #. frmReadme..Font.Name
 #: about.dfm:12
-#: about.dfm:125
-#: about.dfm:154
-#: about.dfm:168
-#: about.dfm:182
+#: about.dfm:100
+#: about.dfm:131
+#: about.dfm:166
 #: filter.dfm:13
 #: main.dfm:11
 #: main.dfm:244
@@ -39,45 +37,60 @@ msgstr "Über"
 msgid "MS Sans Serif"
 msgstr "MS Sans Serif"
 
-#. frmAbout..pnClient..StaticText3..Caption
-#: about.dfm:105
-msgid "... under construction"
-msgstr "... in Bearbeitung"
+#. frmAbout..pnClient..pnCenter..lbHint1..Caption
+#: about.dfm:74
+msgid "This program is part of the GPSBabel project, hosted on"
+msgstr "Dieses Programm ist Bestandteil des Projektes \"GPSBabel\", zu finden auf"
 
-#. frmAbout..pnClient..Panel1..StaticText1..Caption
-#: about.dfm:121
-msgid "GPSBabelGUI-2:"
-msgstr "GPSBabelGUI-2:"
+#. frmAbout..pnClient..pnCenter..lbVersion..Caption
+#: about.dfm:82
+msgid "Version 0.2"
+msgstr "Version 0.2"
 
-#. frmAbout..pnClient..Panel1..StaticText2..Caption
-#: about.dfm:139
+#. frmAbout..pnClient..pnCenter..lbTranslators..Caption
+#: about.dfm:89
+msgid "Translations"
+msgstr "Übersetzung"
+
+#. frmAbout..pnClient..pnCenter..lbURL..Caption
+#: about.dfm:96
+msgid "www.gpsbabel.org"
+msgstr "www.gpsbabel.org"
+
+#. frmAbout..pnClient..pnCenter..lbCopyRight..Caption
+#: about.dfm:112
+msgid "Copyright (C) 2005 Olaf Klein (O.B.Klein@T-Online.de)"
+msgstr "Copyright (C) 2005 Olaf Klein (O.B.Klein@T-Online.de)"
+
+#. frmAbout..pnClient..pnCenter..lbMoreInfo..Caption
+#: about.dfm:119
+msgid "Find more info at"
+msgstr "Mehr Info's unter"
+
+#. frmAbout..pnClient..pnCenter..lbSFURL..Caption
+#: about.dfm:126
+msgid "SourceForge.net"
+msgstr "SourceForge.net"
+
+#. frmAbout..pnClient..pnCenter..stDescription..Caption
+#: about.dfm:147
 msgid "The frontend for gpsbabel command line program"
 msgstr "Das Windows-Fontend für \"gpsbabel.exe\""
 
-#. frmAbout..pnClient..Panel1..StaticText4..Caption
-#: about.dfm:150
-msgid "Copyright:"
-msgstr "Copyright:"
+#. frmAbout..pnClient..pnCenter..stLicense..Caption
+#: about.dfm:161
+msgid "THIS SOFTWARE MAY ONLY BE LICENSED FREE OF CHARGE"
+msgstr "DIESE SOFTWARE KANN UND DARF NUR KOSTENLOS WEITERGEGEBEN WERDEN"
 
-#. frmAbout..pnClient..Panel1..StaticText5..Caption
-#: about.dfm:164
-msgid "Licence:"
-msgstr "Lizenz:"
+#. frmAbout..pnClient..pnCenter..lbxTranslators....Items.Strings
+#: about.dfm:183
+msgid "German by Olaf Klein"
+msgstr "Deutsch von Olaf Klein"
 
-#. frmAbout..pnClient..Panel1..StaticText6..Caption
-#: about.dfm:178
-msgid "Translations:"
-msgstr "Übersetzung:"
-
-#. frmAbout..pnClient..Panel1..StaticText7..Caption
-#: about.dfm:196
-msgid "Olaf Klein (O.B.Klein@T-Online.de)"
-msgstr "Olaf Klein (O.B.Klein@T-Online.de)"
-
-#. frmAbout..pnClient..Panel1..StaticText8..Caption
-#: about.dfm:211
-msgid "Open Source"
-msgstr "Open Source"
+#. frmAbout..pnClient..pnCenter..lbxTranslators....Items.Strings
+#: about.dfm:184
+msgid "French by Lilian Morinon"
+msgstr "Französich von Lilian Morinon"
 
 #. frmFilter..Caption
 #: filter.dfm:6
@@ -314,7 +327,9 @@ msgid "Radius"
 msgstr "Radius"
 
 #. frmMain..Caption
+#. Programmer's name for it: SGPSBabelTitle
 #: main.dfm:6
+#: common.pas:28
 msgid "GPSBabelGUI-2"
 msgstr "GPSBabelGUI-2"
 
@@ -492,6 +507,15 @@ msgstr "&Hilfe"
 msgid "-"
 msgstr "-"
 
+#: about.pas:76
+msgid "Version"
+msgstr "Version"
+
+#. Programmer's name for it: SGPSBabelURL
+#: common.pas:27
+msgid "http://www.gpsbabel.org"
+msgstr "http://www.gpsbabel.org"
+
 #: filter.pas:159
 msgid "Value (%s) out of range (%g to %g)!"
 msgstr "Wert (%s) liegt außerhalb des zulässigen Bereiches  (%g to %g)!"
@@ -513,39 +537,47 @@ msgstr "Meilen"
 msgid "Kilometer"
 msgstr "Kilometer"
 
-#: main.pas:152
-msgid " (Preview)"
-msgstr " (Vorschau)"
+#: main.pas:165
+msgid "BETA"
+msgstr "BETA"
 
-#: main.pas:259
+#: main.pas:167
+msgid "Private release"
+msgstr "Private Version"
+
+#: main.pas:169
+msgid "Special release"
+msgstr "Spezial-Version"
+
+#: main.pas:277
 msgid "All files|*.*"
 msgstr "Alle Dateien|*.*"
 
-#: main.pas:348
+#: main.pas:366
 msgid "|All files|*.*"
 msgstr "|Alle Dateien|*.*"
 
-#: main.pas:389
+#: main.pas:407
 msgid "File %s not found."
 msgstr "Datei \"%s\" nicht gefunden."
 
-#: main.pas:406
+#: main.pas:424
 msgid "File \"%s\" exists ! Overwrite ?"
 msgstr "Datei \"%s\" existiert bereits! Überschreiben?"
 
-#: main.pas:407
+#: main.pas:425
 msgid "Warning"
 msgstr "Warnung"
 
-#: main.pas:432
+#: main.pas:450
 msgid "Could not run \"gpsbabel.exe\"!"
 msgstr "Konnte \"gpsbabel.exe\" nicht ausführen!"
 
-#: main.pas:441
+#: main.pas:459
 msgid "Converted successfully from \"%s\" to \"%s\"."
 msgstr "Erfolgreich konvertiert von \"%s\" zu \"%s\"."
 
-#: main.pas:442
+#: main.pas:460
 msgid "Success"
 msgstr "Erfolg"
 
