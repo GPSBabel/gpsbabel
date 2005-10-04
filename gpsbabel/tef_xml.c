@@ -34,8 +34,8 @@ static int waypoints = 0;
 
 static route_head *route = NULL;
 
-FILE *fd;
-FILE *ofd;
+static FILE *fd;
+static FILE *ofd;
 
 static char *routevia = NULL;
 

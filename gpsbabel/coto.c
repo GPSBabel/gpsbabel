@@ -88,7 +88,7 @@ static FILE *file_in;
 static FILE *file_out;
 static const char *out_fname;
 static const char *in_fname; /* We might need that for naming tracks */
-struct pdb *opdb;
+static struct pdb *opdb;
 
 static char *trackname = NULL;
 static char *zerocat = NULL;

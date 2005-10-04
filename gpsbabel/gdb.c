@@ -73,7 +73,7 @@ typedef enum {
 
 /* %%% local vars %%% */
 
-FILE *fin, *fout;
+static FILE *fin, *fout;
 static char *fin_name, *fout_name;
 
 static int gdb_ver = 1;

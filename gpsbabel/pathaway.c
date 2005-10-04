@@ -38,12 +38,12 @@
 #define PPDB_MAGIC_WPT  0x506f4c69		/* PoLi */
 #define PPDB_MAGIC	0x4b6e5772 		/* KwNr */
 
-FILE *fd_in, *fd_out;
-struct pdb *pdb_in, *pdb_out;
-char *fname_in, *fname_out;
+static FILE *fd_in, *fd_out;
+static struct pdb *pdb_in, *pdb_out;
+static char *fname_in, *fname_out;
 static void *mkshort_handle;
 static gpsdata_type ppdb_type;
-unsigned char german_release = 0;
+static unsigned char german_release = 0;
 
 typedef struct ppdb_appdata
 {

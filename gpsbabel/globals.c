@@ -22,7 +22,7 @@
 
 #include "defs.h"
 
-global_options global_opts;
+global_options global_opts = {};
 const char gpsbabel_version[] = VERSION;
 
 

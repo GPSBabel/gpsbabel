@@ -34,7 +34,7 @@ static XML_Parser psr;
 
 #define MYNAME "IGNRando"
 
-FILE *fin, *fout;
+static FILE *fin, *fout;
 
 static route_head *track;
 static waypoint *wpt;

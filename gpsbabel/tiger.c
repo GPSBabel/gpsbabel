@@ -30,7 +30,7 @@ static void *mkshort_whandle;
 #define MYNAME "GPSUTIL"
 
 static double maxlat, maxlon, minlat, minlon;
-int rec_cnt;
+static int rec_cnt;
 static char *nolabels = NULL;
 static char *genurl = NULL;
 static char *suppresswhite = NULL;
@@ -45,9 +45,9 @@ static char *oldmarker  = NULL;
 static char *newmarker  = NULL;
 static char *unfoundmarker  = NULL;
 
-int scalev;
-int short_length;
-double thresh_days;
+static int scalev;
+static int short_length;
+static double thresh_days;
 
 /*
  *   The code bracketed by CLICKMAP is to generate clickable image maps

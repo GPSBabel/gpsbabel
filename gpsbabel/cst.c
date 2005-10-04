@@ -38,10 +38,10 @@
 #define CST_REFERENCE	4
 #define CST_VERSION	5
 
-static FILE *fin, *fout;
-char *fin_name, *fout_name;
+static FILE *fin;
+static char *fin_name;
 
-route_head *temp_route;
+static route_head *temp_route;
 
 /* placeholders for options */
 

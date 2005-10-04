@@ -46,8 +46,8 @@
 */
 
 static FILE *fin, *fout;
-char *filename;
-int curr_rte_num, target_rte_num;
+static char *filename;
+static int curr_rte_num, target_rte_num;
 static double radius;
 
 /* placeholders for options */

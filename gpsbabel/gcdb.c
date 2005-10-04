@@ -50,8 +50,8 @@ struct dbrec {
 static FILE *file_in;
 static FILE *file_out;
 static const char *out_fname;
-struct pdb *opdb;
-struct pdb_record *opdb_rec;
+static struct pdb *opdb;
+static struct pdb_record *opdb_rec;
 
 static char *tbuf = NULL;
 static char *tbufp = NULL;

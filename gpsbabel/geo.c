@@ -24,8 +24,8 @@ static char *nuke_placer;
 
 static waypoint *wpt_tmp;
 
-FILE *fd;
-FILE *ofd;
+static FILE *fd;
+static FILE *ofd;
 
 static
 arglist_t geo_args[] = {

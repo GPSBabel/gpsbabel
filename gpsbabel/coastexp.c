@@ -28,8 +28,8 @@ static XML_Parser psr;
 
 #include "uuid.h"
 
-FILE *fd;
-FILE *ofd;
+static FILE *fd;
+static FILE *ofd;
 
 #define MYNAME "coastexp"
 #define MY_CBUF 4096

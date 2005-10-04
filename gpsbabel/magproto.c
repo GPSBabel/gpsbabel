@@ -25,9 +25,9 @@
 #include "defs.h"
 #include "magellan.h"
 
-int bitrate = 4800;
-int wptcmtcnt;
-int wptcmtcnt_max;
+static int bitrate = 4800;
+static int wptcmtcnt;
+static int wptcmtcnt_max;
 #define MYNAME "MAGPROTO"
 #define MAXCMTCT 200
 

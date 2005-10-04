@@ -38,6 +38,12 @@
 #define EXCEL_TO_TIMET(a) ((a - 25569.0) * 86400.0)
 #define TIMET_TO_EXCEL(a) ((a / 86400.0) + 25569.0)
 
+
+/****************************************************************************/
+/* obligatory global struct                                                 */
+/****************************************************************************/
+xcsv_file_t xcsv_file = {};
+
 extern char *xcsv_urlbase;
 extern char *prefer_shortnames;
 

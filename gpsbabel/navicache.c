@@ -25,8 +25,8 @@ static XML_Parser psr;
 
 static waypoint *wpt_tmp;
 
-FILE *fd;
-FILE *ofd;
+static FILE *fd;
+static FILE *ofd;
 
 static char *noretired = NULL;
 

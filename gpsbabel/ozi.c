@@ -58,7 +58,7 @@ arglist_t ozi_args[] = {
 	{0, 0, 0, 0, 0}
 };
 
-gpsdata_type ozi_objective;
+static gpsdata_type ozi_objective;
 
 static char *ozi_ofname = NULL;
 

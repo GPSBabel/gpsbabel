@@ -26,15 +26,15 @@
 #define MYNAME "an1"
 #include "defs.h"
 
-FILE *infile;
-FILE *outfile;
+static FILE *infile;
+static FILE *outfile;
 
 static char *output_type = NULL;
 static char *road_changes = NULL;
 static char *nogc = NULL;
-short output_type_num = 0;
+static short output_type_num = 0;
 
-short last_read_type = 0;
+static short last_read_type = 0;
 
 static long serial=10000;
 static long rtserial=1;

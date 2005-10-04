@@ -23,7 +23,7 @@
 #include "defs.h"
 #include "cet_util.h"
 
-queue waypt_head;
+queue waypt_head = {};
 static unsigned int waypt_ct;
 static void *mkshort_handle;
 

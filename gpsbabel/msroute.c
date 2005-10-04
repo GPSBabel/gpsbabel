@@ -28,8 +28,8 @@
 
 #undef OLE_DEBUG
 
-FILE *fin;
-char *fin_name;
+static FILE *fin;
+static char *fin_name;
 
 static arglist_t msroute_args[] = 
 {
