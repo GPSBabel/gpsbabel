@@ -19,10 +19,9 @@
 
  */
 #include "defs.h"
+#include "filterdefs.h"
 
 #define MYNAME "Polygon filter"
-
-extern queue waypt_head;
 
 static char *polyfileopt = NULL;
 static char *exclopt = NULL;

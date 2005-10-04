@@ -19,6 +19,7 @@
 
 
 #include "defs.h"
+#include "filterdefs.h"
 #include "cet.h"
 #include "cet_util.h"
 #include <ctype.h>

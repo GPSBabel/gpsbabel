@@ -20,8 +20,7 @@
  */
 #include <stdio.h>
 #include "defs.h"
-
-extern queue waypt_head;
+#include "filterdefs.h"
 
 static char *snopt = NULL;
 static char *lcopt = NULL;
@@ -159,7 +158,8 @@ compare(const void *a, const void *b)
 
 }
 
-void
+
+static void
 duplicate_process(void)
 {
 	waypoint * waypointp;
@@ -172,7 +172,6 @@ duplicate_process(void)
 	int i, ct = waypt_count();
 	wpt_ptr *htable, *bh;
 	queue *elem, *tmp;
-	extern queue waypt_head;
 
 	htable = (wpt_ptr *) xmalloc(ct * sizeof(*htable));
 	bh = htable;
@@ -250,20 +249,10 @@ duplicate_process(void)
 	}
 }
 
-void
-duplicate_init(const char *args) 
-{
-}
-
-void
-duplicate_deinit(void) 
-{
-}
-
 filter_vecs_t duplicate_vecs = {
-	duplicate_init,
+	NULL,
 	duplicate_process,
-	duplicate_deinit,
+	NULL,
 	NULL,
 	dup_args
 };

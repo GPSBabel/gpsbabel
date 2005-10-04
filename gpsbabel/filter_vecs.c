@@ -19,8 +19,8 @@
 
  */
 
-#include <stdio.h>
 #include "defs.h"
+#include "filterdefs.h"
 
 typedef struct {
 	filter_vecs_t *vec;

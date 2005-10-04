@@ -18,12 +18,11 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-#include <stdio.h>
+
 #include "defs.h"
+#include "filterdefs.h"
 
 #define MYNAME "Stack filter"
-
-extern queue waypt_head;
 
 static char *opt_push = NULL;
 static char *opt_copy = NULL;
