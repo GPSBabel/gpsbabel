@@ -92,9 +92,11 @@ data_read(void)
 				date, time, &alt);
 			sscanf(&ibuf[60], "%40c", 
 				desc);
+			symnum = 18;
 			sscanf(&ibuf[116], "%d", 
 				&symnum);
 			desc[sizeof(desc)-1] = '\0';
+			rtrim(desc);
 			name[sizeof(name)-1] = '\0';
 			wpt_tmp = waypt_new();
 			wpt_tmp->altitude = alt;
