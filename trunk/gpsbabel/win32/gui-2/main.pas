@@ -101,10 +101,12 @@ type
     procedure chbOutputDeviceClick(Sender: TObject);
     procedure acHelpReadmeExecute(Sender: TObject);
     procedure mnuSynthesizeShortNamesClick(Sender: TObject);
+    procedure edOutputFileKeyPress(Sender: TObject; var Key: Char);
   private
     { Private-Deklarationen }
     FCaps: TCapabilities;
     FFirstShow: Boolean;
+    FOutHandmade: Boolean;
     procedure AddToOutput(const Str: string);
     procedure AddToOutputFmt(const Format: string; const Args: array of const);
     procedure InitCombo(Target: TComboBox; ForRead, ForDevice: Boolean);
@@ -141,6 +143,15 @@ begin
     Control.Left := Right - Control.Width - ShiftLeft;
 end;
 
+function ComboBoxSelect(AComboBox: TComboBox; const Item: string): Boolean;
+var
+  i: Integer;
+begin
+  i := AComboBox.Items.IndexOf(Item);
+  AComboBox.ItemIndex := i;
+  Result := (i >= 0);
+end;
+
 { TfrmMain }
 
 procedure TfrmMain.FormCreate(Sender: TObject);
@@ -174,16 +185,10 @@ begin
   OpenDialog.InitialDir := ReadProfile(OpenDialog.Tag);
   SaveDialog.InitialDir := ReadProfile(SaveDialog.Tag);
 
-  s := ReadProfile(cbInputDevice.Tag);
-  if (s <> '') then
-    cbInputDevice.Text := s
-  else
+  if not ComboBoxSelect(cbInputDevice, ReadProfile(cbInputDevice.Tag)) then
     cbInputDevice.ItemIndex := 0;
 
-  s := ReadProfile(cbOutputDevice.Tag);
-  if (s <> '') then
-    cbOutputDevice.Text := s
-  else
+  if not ComboBoxSelect(cbOutputDevice, ReadProfile(cbOutputDevice.Tag)) then
     cbOutputDevice.ItemIndex := 0;
 
   FFirstShow := True;
@@ -229,7 +234,7 @@ begin
   LoadVersion;
   LoadFileFormats;
   
-  // README form
+  // ? valid README form
 
   acHelpReadme.Enabled := (frmReadme.Memo.Lines.Count > 0);
 end;
@@ -254,14 +259,8 @@ begin
   end;
 
   s := ReadProfile(Target.Tag);
+  ComboBoxSelect(Target, s);
 
-  i := FCaps.GetCaps(s);
-  if (i > 0) then
-  begin
-    i := Target.Items.IndexOf(s);
-    if (i >= 0) then
-      Target.ItemIndex := i;
-  end;
   ComboChange(Target);
 end;
 
@@ -289,6 +288,11 @@ var
 begin
   caps := FCaps.GetCaps(TComboBox(Sender).Text);
   ext := FCaps.GetExt(TComboBox(Sender).Text);
+  if FOutHandmade and (ext = '') then
+  begin
+    ext := SysUtils.ExtractFileExt(edOutputFile.Text);
+    if (ext <> '') and (ext[1] = '.') then Delete(ext, 1, 1);
+  end;
 
   if (Sender = cbInputFormat) then
   begin
@@ -301,8 +305,9 @@ begin
     wptOutputOK.Enabled := (caps and 2 <> 0);
     trkOutputOK.Enabled := (caps and 8 <> 0);
     rteOutputOK.Enabled := (caps and 32 <> 0);
-    if (edOutputFile.Text <> '') and (ext <> '') then
+    if (edOutputFile.Text <> '') then
     begin
+      if (ext <> '') then FOutHandmade := False;
       edOutputFile.Text := SysUtils.ChangeFileExt(edOutputFile.Text, '.' + ext);
     end;
   end;
@@ -363,7 +368,7 @@ begin
 
   if (cbOutputFormat.Text <> '') then
     s := cbOutputFormat.Text + '|*.' + FCaps.GetExt(cbOutputFormat.Text) + '|';
-  s := s + _('|All files|*.*');
+  s := s + _('All files|*.*');
 
   SaveDialog.Filter := s;
   if not SELF.SaveDialog.Execute then Exit;
@@ -596,6 +601,11 @@ end;
 procedure TfrmMain.mnuSynthesizeShortNamesClick(Sender: TObject);
 begin
   mnuSynthesizeShortNames.Checked := not(mnuSynthesizeShortNames.Checked);
+end;
+
+procedure TfrmMain.edOutputFileKeyPress(Sender: TObject; var Key: Char);
+begin
+  FOutHandmade := True;
 end;
 
 end.

@@ -79,6 +79,7 @@ type
     lbWayptRadiusLon: TLabel;
     edWayptRadiusLat: TEdit;
     edWayptRadiusLon: TEdit;
+    cbTrackRangeTimeZone: TCheckBox;
     procedure cbTrackTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure cbTrackTitleClick(Sender: TObject);
@@ -182,9 +183,16 @@ begin
 end;
 
 procedure TfrmFilter.FormCreate(Sender: TObject);
+var
+  CurrentTime: TDateTime;
+
 begin
   gnugettextD4.TranslateComponent(SELF);
-  
+
+  CurrentTime := SysUtils.Now;
+  dtpTrackStartDate.DateTime := Int(CurrentTime);
+  dtpTrackStopDate.DateTime := Int(CurrentTime);
+
   lTrackTimeList := TList.Create;
   
   lTrackTimeList.Add(edTrackTimeDays);
@@ -216,6 +224,7 @@ begin
   FixPosition(edWayptRadiusLon, lbWayptRadiusLon, True);
 
   // will not be translated, fill by hand
+
   cobWayptMergeDist.Items.Add(_('Feet'));
   cobWayptMergeDist.Items.Add(_('Meter'));
   cobWayptMergeDist.ItemIndex := 0;
@@ -223,6 +232,8 @@ begin
   cobWayptRadius.Items.Add(_('Miles'));
   cobWayptRadius.Items.Add(_('Kilometer'));
   cobWayptRadius.ItemIndex := 0;
+
+  dtpTrackStopTime.Time := 1 - (1.0 / (24*60*60));
 end;
 
 procedure TfrmFilter.cbTrackTitleClick(Sender: TObject);
@@ -240,6 +251,9 @@ function TfrmFilter.CmdLine: string;
 
 var
   s: string;
+  tz_Info: TTimeZoneInformation;
+  dt: TDateTime;
+  dt_bias: TDateTime;
 begin
   Result := '';
   if not AnyChecked(Self) then Exit;
@@ -298,16 +312,30 @@ begin
     if cbTrackSplit.Checked then
       Result := Format('%s,split', [Result]);
 
+    if (cbTrackRangeTimeZone.Enabled and cbTrackRangeTimeZone.Checked) then
+    begin
+      Windows.GetTimeZoneInformation(tz_Info);
+      tz_Info.Bias := tz_Info.Bias + tz_Info.DaylightBias;
+      dt_bias := tz_Info.Bias / (24*60);
+    end
+    else
+      dt_bias := 0.0;
+
+
     if cbTrackStart.Checked then
+    begin
+      dt := Int(dtpTrackStartDate.DateTime) + Frac(dtpTrackStartTime.DateTime) + dt_bias;
       Result := Format('%s,start=%s', [
         Result,
-        FormatDateTime('yyyymmddhhnnss',
-          Int(dtpTrackStartDate.DateTime) + Frac(dtpTrackStartTime.DateTime))]);
+        FormatDateTime('yyyymmddhhnnss', dt)]);
+    end;
     if cbTrackStop.Checked then
+    begin
+      dt := Int(dtpTrackStopDate.DateTime) + Frac(dtpTrackStopTime.DateTime) + dt_bias;
       Result := Format('%s,stop=%s', [
         Result,
-        FormatDateTime('yyyymmddhhnnss',
-          Int(dtpTrackStopDate.DateTime) + Frac(dtpTrackStopTime.DateTime))]);
+        FormatDateTime('yyyymmddhhnnss', dt)]);
+    end;
   end;
 
   if AnyChecked(gbRoutes) then
@@ -360,12 +388,16 @@ procedure TfrmFilter.cbTrackStartClick(Sender: TObject);
 begin
   dtpTrackStartDate.Enabled := cbTrackStart.Checked;
   dtpTrackStartTime.Enabled := cbTrackStart.Checked;
+  cbTrackRangeTimeZone.Enabled :=
+    cbTrackStart.Checked or cbTrackStop.Checked;
 end;
 
 procedure TfrmFilter.cbTrackStopClick(Sender: TObject);
 begin
   dtpTrackStopDate.Enabled := cbTrackStop.Checked;
   dtpTrackStopTime.Enabled := cbTrackStop.Checked;
+  cbTrackRangeTimeZone.Enabled :=
+    cbTrackStart.Checked or cbTrackStop.Checked;
 end;
 
 procedure TfrmFilter.cbRouteSimplifyClick(Sender: TObject);
