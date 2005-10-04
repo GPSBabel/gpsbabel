@@ -40,7 +40,7 @@ static char *xsi_schema_loc = NULL;
 
 static char *gpx_email = NULL;
 static char *gpx_author = NULL;
-vmem_t current_tag;
+static vmem_t current_tag;
 
 static waypoint *wpt_tmp;
 static int cache_descr_is_html;

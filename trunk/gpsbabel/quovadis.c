@@ -24,7 +24,7 @@
 static FILE *file_in;
 static FILE *file_out;
 static const char *out_fname;
-struct pdb *opdb;
+static struct pdb *opdb;
 
 static int ct;
 static ubyte* rec_ptr = NULL;

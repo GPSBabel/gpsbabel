@@ -41,8 +41,8 @@ struct record {
 static FILE *file_in;
 static FILE *file_out;
 static const char *out_fname;
-struct pdb *opdb;
-struct pdb_record *opdb_rec;
+static struct pdb *opdb;
+static struct pdb_record *opdb_rec;
 
 static void
 rd_init(const char *fname)

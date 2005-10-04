@@ -25,7 +25,7 @@ static char *script = NULL;
 static route_head *track_head;
 static void *desc_handle;
 
-FILE *fd;
+static FILE *fd;
 
 static int serial = 0;
 

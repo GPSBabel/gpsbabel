@@ -29,7 +29,7 @@ static int in_ChartWork = 0;
 static int in_Object = 0;
 
 static waypoint *wpt_tmp;
-char *routeName = "ROUTENAME";
+static char *routeName = "ROUTENAME";
 
 #define REPLACEMENT_SIRIUS_ATTR_SEPARATOR	';'
 #define ATTR_USRMRK							"usrmrk"
@@ -38,8 +38,8 @@ char *routeName = "ROUTENAME";
 
 static void readVersion4( FILE* pFile);
 
-FILE *fd;
-FILE *ofd;
+static FILE *fd;
+static FILE *ofd;
 
 static
 arglist_t hsa_ndv_args[] = {

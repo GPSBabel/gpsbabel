@@ -36,8 +36,8 @@ static int floating;
 
 static waypoint *wpt_tmp;
 
-FILE *fd;
-FILE *ofd;
+static FILE *fd;
+static FILE *ofd;
 
 typedef struct {
   double latitude;

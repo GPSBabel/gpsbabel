@@ -33,7 +33,7 @@
 #define NMN5_MAGIC	0x766d6170 		/* vmap */
 #define NMN5_ROUTE	0x49444154		/* IDAT */
 
-FILE *fd_in;
+static FILE *fd_in;
 static struct pdb *pdb_in;
 static char *fname_in;
 

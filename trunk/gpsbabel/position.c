@@ -38,7 +38,7 @@ static char *nosort = NULL;
 static char *maxctarg = NULL;
 static int maxct;
 
-waypoint * home_pos;
+static waypoint * home_pos;
 
 typedef struct {
 	double distance;
