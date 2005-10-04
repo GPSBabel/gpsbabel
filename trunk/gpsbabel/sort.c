@@ -19,8 +19,7 @@
 
  */
 #include "defs.h"
-
-extern queue waypt_head;
+#include "filterdefs.h"
 
 typedef enum {
 	sm_unknown = 0,

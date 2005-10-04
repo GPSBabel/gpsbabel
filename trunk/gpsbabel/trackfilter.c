@@ -28,10 +28,9 @@
     2005-07-29: warning fixes
  */
  
-#include <stdio.h>
-#include <time.h>
 #include <ctype.h>
 #include "defs.h"
+#include "filterdefs.h"
 #include "strptime.h"
 
 #define MYNAME "trackfilter"
@@ -85,20 +84,6 @@ static trkflt_t *track_list = NULL;
 static int track_ct = 0;
 static int track_pts = 0;
 static int opt_interval = 0;
-
-/*******************************************************************************
-* dummy callbacks for track_disp_all
-*******************************************************************************/
-
-static void 
-trackfilter_noop_w(const waypoint *w)
-{
-}
-
-static void 
-trackfilter_noop_t(const route_head *h)
-{
-}
 
 /*******************************************************************************
 * helpers
@@ -661,7 +646,7 @@ trackfilter_init(const char *args)
 
 	    /* check all tracks for time and order (except merging) */
 	
-	    track_disp_all(trackfilter_fill_track_list_cb, trackfilter_noop_t, trackfilter_noop_w);
+	    track_disp_all(trackfilter_fill_track_list_cb, NULL, NULL);
 	    qsort(track_list, track_ct, sizeof(*track_list), trackfilter_init_qsort_cb);
 	}
 }

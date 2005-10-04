@@ -516,14 +516,6 @@ typedef struct style_vecs {
 } style_vecs_t;
 extern style_vecs_t style_list[];
 
-typedef struct filter_vecs {
-	filter_init f_init;
-	filter_process f_process;
-	filter_deinit f_deinit;
-	filter_exit f_exit;
-	arglist_t *args;
-} filter_vecs_t;
-
 void waypt_init(void);
 void route_init(void);
 void waypt_disp(const waypoint *);
@@ -538,12 +530,6 @@ void disp_vecs(void);
 void exit_vecs(void);
 void disp_formats(int version);
 void printposn(const double c, int is_lat);
-
-filter_vecs_t * find_filter_vec(char * const, char **);
-void free_filter_vec(filter_vecs_t *);
-void disp_filters(int version);
-void disp_filter_vecs(void);
-void exit_filter_vecs(void);
 
 #ifndef DEBUG_MEM
 void *xcalloc(size_t nmemb, size_t size);

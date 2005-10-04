@@ -19,13 +19,13 @@
 
  */
 #include "defs.h"
+#include "filterdefs.h"
 #include "grtcirc.h"
 
 #ifndef M_PI
 #  define M_PI 3.14159265358979323846
 #endif
 
-extern queue waypt_head;
 static route_head *cur_rte = NULL;
 
 static double pos_dist;

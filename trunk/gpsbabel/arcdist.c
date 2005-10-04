@@ -18,13 +18,11 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-#include <stdio.h>
 #include "defs.h"
+#include "filterdefs.h"
 #include "grtcirc.h"
 
 #define MYNAME "Arc filter"
-
-extern queue waypt_head;
 
 static double pos_dist;
 static char *distopt = NULL;

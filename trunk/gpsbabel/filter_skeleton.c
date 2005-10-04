@@ -46,7 +46,7 @@ arglist_t filter_skeleton_args[] = {
 *******************************************************************************/
 
 static void
-filter_skeleton_init(const char *args) 	/* optional */
+filter_skeleton_init(const char *args) 	/* optional.  If not needed, delete and replace entry in vecs with NULL  */
 {
 }
 
@@ -60,7 +60,7 @@ filter_skeleton_process(void)	/* this procedure must be present in vecs */
 }
 
 static void
-filter_skeleton_deinit(void) 		/* optional */
+filter_skeleton_deinit(void) 		/* optional.   If not needed, delete and replace entry in vecs with NULL*/
 {
 }
 
