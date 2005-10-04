@@ -595,7 +595,7 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
 	if (opt_stop != 0)
 	    stop = trackfilter_range_check(opt_stop);
 	else
-	    stop = (unsigned long)-1;
+	    stop = 0x7FFFFFFF;
 
 	dropped = 0;
 	
@@ -694,6 +694,8 @@ trackfilter_process(void)
 	    
 	    trackfilter_deinit();	/* reinitialize */
 	    trackfilter_init(NULL);
+	    
+	    if (track_ct == 0) return;		/* no more track(s), no more fun */
 	    
 	}
 	
