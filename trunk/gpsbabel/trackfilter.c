@@ -26,6 +26,9 @@
     2005-07-26: implemented move option
     2005-07-26: implemented merge option
     2005-07-29: warning fixes
+    2005-08-01: Add 'static' qualifier when we can (RJL)
+    2005-10-04: Add filterdefs to hold protos for filter functions... (RJL)
+    2005-10-04: Fix range-check max. value; exit filter, if no more tracks left
  */
  
 #include <ctype.h>
