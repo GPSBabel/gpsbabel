@@ -26,8 +26,10 @@
 static FILE *file_in;
 static FILE *file_out;
 static void *mkshort_handle;
+static void *mkshort_handle2;	/* for track and route names */
 static char *deficon = NULL;
 static int read_as_degrees;
+static int route_ctr;
 
 #define MYNAME "PCX"
 
@@ -55,6 +57,7 @@ wr_init(const char *fname)
 {
 	file_out = xfopen(fname, "w", MYNAME);
 	mkshort_handle = mkshort_new_handle();
+	mkshort_handle2 = mkshort_new_handle();
 }
 
 static void
@@ -62,6 +65,7 @@ wr_deinit(void)
 {
 	fclose(file_out);
 	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(mkshort_handle2);
 }
 
 static void
@@ -76,32 +80,46 @@ data_read(void)
 	char time[9];
 	char month[4];
 	waypoint *wpt_tmp;
-	char ibuf[122];
+	char buff[122];
 	struct tm tm;
-	route_head *track_head = NULL;
+	route_head *track = NULL;
+	route_head *route = NULL;
 	int n; 
 	char lathemi, lonhemi;
 
 	read_as_degrees  = 0;
 
-	for(;fgets(ibuf, sizeof(ibuf), file_in);) {
+	for(;fgets(buff, sizeof(buff), file_in);) 
+	{
+		char *ibuf = lrtrim(buff);
+		char *cp;
+		
 		switch (ibuf[0]) {
 		case 'W': 
 			sscanf(ibuf, "W  %6c %c%lf %c%lf %s %s %ld", 
 				name, &latdir, &lat, &londir, &lon, 
 				date, time, &alt);
+			if (alt = -9999) {
+				alt = unknown_alt;
+			}
 			sscanf(&ibuf[60], "%40c", 
 				desc);
 			symnum = 18;
 			sscanf(&ibuf[116], "%d", 
 				&symnum);
 			desc[sizeof(desc)-1] = '\0';
-			rtrim(desc);
 			name[sizeof(name)-1] = '\0';
+			
 			wpt_tmp = waypt_new();
 			wpt_tmp->altitude = alt;
-			wpt_tmp->shortname = xstrdup(name);
-			wpt_tmp->description = xstrdup(desc);
+			cp = lrtrim(name);
+			if (*cp != '\0') {
+				wpt_tmp->shortname = xstrdup(cp);
+			}
+			cp = lrtrim(desc);
+			if (*cp != '\0') {
+				wpt_tmp->description = xstrdup(cp);
+			}
 			wpt_tmp->icon_descr = mps_find_desc_from_icon_number(symnum, PCX);
 
 			if (latdir == 'S') lat = -lat;
@@ -113,6 +131,8 @@ data_read(void)
 				wpt_tmp->longitude = ddmm2degrees(lon);
 				wpt_tmp->latitude = ddmm2degrees(lat);
 			}
+			if (route != NULL)
+				route_add_wpt(route, waypt_dupe(wpt_tmp));
 			waypt_add(wpt_tmp);
 			break;
 		case 'H':
@@ -122,14 +142,21 @@ data_read(void)
 			  H(2 chars)TN(tracknane\0)
   			*/
 			if (ibuf[3] == 'L' && ibuf[4] == 'A') {
-				track_head = route_head_alloc();
-				track_head->rte_name = strdup("track");
-				track_add_head(track_head);
+				track = route_head_alloc();
+				track->rte_name = strdup("track");
+				track_add_head(track);
 			} else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
-				track_head = route_head_alloc();
-				track_head->rte_name = strdup(&ibuf[6]);
-				track_add_head(track_head);
+				track = route_head_alloc();
+				track->rte_name = strdup(&ibuf[6]);
+				track_add_head(track);
 			}
+			break;
+		case 'R':
+			n = 1;
+			while (ibuf[n] == ' ') n++;
+			route = route_head_alloc();
+			route->rte_name = xstrdup(&ibuf[n]);
+			route_add_head(route);
 			break;
 		case 'T':
 			n = sscanf(ibuf, "T %lf %lf %s %s %ld", 
@@ -164,12 +191,12 @@ data_read(void)
 			wpt_tmp->longitude = lon;
 			wpt_tmp->altitude = alt;
 			/* Did we get a track point before a track header? */
-			if (track_head == NULL) {
-				track_head = route_head_alloc();
-				track_head->rte_name = strdup("Default");
-				track_add_head(track_head);
+			if (track == NULL) {
+				track = route_head_alloc();
+				track->rte_name = strdup("Default");
+				track_add_head(track);
 			}
-			route_add_wpt(track_head, wpt_tmp);
+			route_add_wpt(track, wpt_tmp);
 		case 'U': 
  			read_as_degrees = ! strncmp("LAT LON DEG", ibuf + 3, 11);
 			break;
@@ -215,7 +242,7 @@ gpsutil_disp(const waypoint *wpt)
 		fabs(lon),
 		tbuf, 
 		-9999,
-		wpt->description,
+		(wpt->description != NULL) ? wpt->description : "",
 		0.0,
 		icon_token);
 }
@@ -223,9 +250,32 @@ gpsutil_disp(const waypoint *wpt)
 static void
 pcx_track_hdr(const route_head *trk)
 {
-	fprintf(file_out, "\n\nH  TN %s\n", trk->rte_name ? trk->rte_name: "UNKNOWN");
-	fprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT\n");
+	char *name;
+	char buff[20];
+	
+	route_ctr++;
+	snprintf(buff, sizeof(buff)-1, "Trk%03d", route_ctr);
+	
+	name = mkshort(mkshort_handle2, (trk->rte_name != NULL) ? trk->rte_name : buff);
+	fprintf(file_out, "\n\nH  TN %s\n", name);
+	fprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT  ;track\n");
 
+}
+
+static void
+pcx_route_hdr(const route_head *rte)
+{
+	char *name;
+	char buff[20];
+	
+	route_ctr++;
+	snprintf(buff, sizeof(buff)-1, "Rte%03d", route_ctr);
+	
+	name = mkshort(mkshort_handle2, (rte->rte_name != NULL) ? rte->rte_name : buff);
+		
+	fprintf(file_out, "\n\nR  %s\n", name);
+	fprintf(file_out, "\n"
+"H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
 }
 
 void
@@ -265,20 +315,38 @@ fprintf(file_out,
 "M  G WGS 84               121 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00\n"
 "\n"
 "H  COORDINATE SYSTEM\n"
-"U  LAT LON DM\n"
+"U  LAT LON DM\n");
+
+	setshort_length(mkshort_handle, 6);
+	
+	setshort_length(mkshort_handle2, 20);	/* for track and route names */
+	setshort_whitespace_ok(mkshort_handle2, 0);
+	setshort_mustuniq(mkshort_handle2, 0);
+
+	if (global_opts.objective == wptdata)
+	{
+		fprintf(file_out,
 "\n"
 "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
 
-	setshort_length(mkshort_handle, 6);
-
-	waypt_disp_all(gpsutil_disp);
-	track_disp_all(pcx_track_hdr, NULL, pcx_track_disp);
+		waypt_disp_all(gpsutil_disp);
+	}
+	else if (global_opts.objective == trkdata)
+	{
+		route_ctr = 0;
+		track_disp_all(pcx_track_hdr, NULL, pcx_track_disp);
+	}
+	else if (global_opts.objective == rtedata)
+	{
+		route_ctr = 0;
+		route_disp_all(pcx_route_hdr, NULL, gpsutil_disp);
+	}
 }
 
 
 ff_vecs_t pcx_vecs = {
 	ff_type_file,
-	{ ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write, ff_cap_none },
+	FF_CAP_RW_ALL,
 	rd_init,
 	wr_init,
 	rd_deinit,
