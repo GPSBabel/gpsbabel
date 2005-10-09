@@ -217,7 +217,7 @@ waypt_read(void)
 		 */
 		if ((way[i]->alt == (float) (1U<<31)) || 
 		     (way[i]->alt == INT_MAX) ||
-		     (way[i]->alt == 1.0e25)
+		     (way[i]->alt == (float) 1.0e25)
 		     ) {
 			wpt_tmp->altitude = unknown_alt;
 		} else {
