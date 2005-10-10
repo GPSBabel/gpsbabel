@@ -239,7 +239,6 @@ cst_data_read(void)
 				}
 				else
 				{
-					double d1, d2;
 					int interp, i;
 					char name[256];
 					char *pow;

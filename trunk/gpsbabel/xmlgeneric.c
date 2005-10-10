@@ -182,7 +182,6 @@ static void
 xml_cdata(void *dta, const XML_Char *s, int len)
 {
 	char *estr;
-	xg_callback *cb;
 
 	vmem_realloc(&cdatastr,  1 + len + strlen(cdatastr.mem));
 	estr = (char *) cdatastr.mem + strlen(cdatastr.mem);

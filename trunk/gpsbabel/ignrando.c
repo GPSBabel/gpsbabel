@@ -276,7 +276,7 @@ ignr_write(void)
 	if (index_opt != NULL)
 	{
 		track_index = atoi(index_opt);
-		if ((track_index < 1) || (track_index > track_count()))
+		if ((track_index < 1) || (track_index > (int) track_count()))
 		    fatal(MYNAME ": Invalid track index %d (we have currently %d track(s))!\n", 
 			track_index, track_count());
 	}	    

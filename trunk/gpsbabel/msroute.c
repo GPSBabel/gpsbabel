@@ -136,8 +136,12 @@ typedef struct ole_prop_s
 
 static int sector_size = 512;
 
+#ifndef min
 #define min(a,b) ((a) < (b)) ? (a) : (b)
+#endif
+#ifndef max
 #define max(a,b) ((a) > (b)) ? (a) : (b)
+#endif
 
 static gbint32 *ole_fat1 = NULL;
 static gbint32 *ole_fat2 = NULL;
@@ -210,6 +214,7 @@ ole_find_property(const char *property)
 			return item;
 	}
 	is_fatal((1), MYNAME ": \"%s\" not in property catalog!", property);
+	return 0;
 }
 
 static char *

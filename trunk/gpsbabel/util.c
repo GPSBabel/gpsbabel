@@ -951,7 +951,6 @@ entitize(const char * str, int is_html)
 	const char * cp;
 	char * p, * tmp, * xstr;
 
-	char tmpsub[20];
 	int bytes = 0;
 	int value = 0;
 	ep = stdentities;

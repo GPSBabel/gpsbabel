@@ -23,7 +23,7 @@
 #include "defs.h"
 #include "cet_util.h"
 
-queue waypt_head = {};
+queue waypt_head;
 static unsigned int waypt_ct;
 static void *mkshort_handle;
 
@@ -320,7 +320,8 @@ waypt_backup(unsigned int *count, queue **head_bak)
 {
 	queue *elem, *tmp, *qbackup;
 	waypoint *wpt;
-	int no;
+    // BUG(akirmse): no was not initialized.  Set to 0 for now to compile it.
+    int no = 0;
 
 	qbackup = (queue *) xcalloc(1, sizeof(*qbackup));
 	QUEUE_INIT(qbackup);
