@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-10-04 23:50\n"
-"PO-Revision-Date: 2005-10-04 23:50\n"
+"POT-Creation-Date: 2005-10-10 23:37\n"
+"PO-Revision-Date: 2005-10-10 23:37\n"
 "Last-Translator: Somebody <your.email@address.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +33,7 @@ msgstr ""
 #. frmMain..Font.Name
 #: main.dfm:11
 #. frmMain..Panel2..lbWhat..Font.Name
-#: main.dfm:245
+#: main.dfm:273
 #. frmReadme..Font.Name
 #: readme.dfm:11
 msgid "MS Sans Serif"
@@ -95,7 +95,7 @@ msgstr ""
 #. frmFilter..gbTracks..Caption
 #: filter.dfm:29
 #. frmMain..Panel2..cbTracks..Caption
-#: main.dfm:400
+#: main.dfm:428
 msgid "&Tracks"
 msgstr ""
 
@@ -266,7 +266,7 @@ msgstr ""
 #. frmFilter..gbWaypoints..Caption
 #: filter.dfm:437
 #. frmMain..Panel2..cbWaypoints..Caption
-#: main.dfm:380
+#: main.dfm:408
 msgid "&Waypoints"
 msgstr ""
 
@@ -380,163 +380,170 @@ msgstr ""
 msgid "Output f&ormat"
 msgstr ""
 
+#. frmMain..Panel1..lbInputOpts..Caption
+#: main.dfm:108
+#. frmMain..Panel1..lbOutputOpts..Caption
+#: main.dfm:116
+msgid "Options"
+msgstr ""
+
 #. frmMain..Panel1..chbInputDevice..Caption
-#: main.dfm:153
+#: main.dfm:167
 #. frmMain..Panel1..chbOutputDevice..Caption
-#: main.dfm:205
+#: main.dfm:217
 msgid "Device"
 msgstr ""
 
 #. frmMain..Panel1..cbInputDevice....Items.Strings
-#: main.dfm:166
+#: main.dfm:180
 #. frmMain..Panel1..cbOutputDevice....Items.Strings
-#: main.dfm:218
+#: main.dfm:230
 msgid "USB"
 msgstr ""
 
 #. frmMain..Panel1..cbInputDevice....Items.Strings
-#: main.dfm:167
+#: main.dfm:181
 #. frmMain..Panel1..cbOutputDevice....Items.Strings
-#: main.dfm:219
+#: main.dfm:231
 msgid "COM1"
 msgstr ""
 
 #. frmMain..Panel1..cbInputDevice....Items.Strings
-#: main.dfm:168
+#: main.dfm:182
 #. frmMain..Panel1..cbOutputDevice....Items.Strings
-#: main.dfm:220
+#: main.dfm:232
 msgid "COM2"
 msgstr ""
 
 #. frmMain..Panel1..cbInputDevice....Items.Strings
-#: main.dfm:169
+#: main.dfm:183
 #. frmMain..Panel1..cbOutputDevice....Items.Strings
-#: main.dfm:221
+#: main.dfm:233
 msgid "COM3"
 msgstr ""
 
 #. frmMain..Panel1..cbInputDevice....Items.Strings
-#: main.dfm:170
+#: main.dfm:184
 #. frmMain..Panel1..cbOutputDevice....Items.Strings
-#: main.dfm:222
+#: main.dfm:234
 msgid "COM4"
 msgstr ""
 
 #. frmMain..Panel2..lbWhat..Caption
-#: main.dfm:241
+#: main.dfm:269
 msgid "What ?"
 msgstr ""
 
 #. frmMain..Panel2..cbRoutes..Caption
-#: main.dfm:391
+#: main.dfm:419
 msgid "&Routes"
 msgstr ""
 
 #. frmMain..Panel2..btnFilter..Caption
-#: main.dfm:411
+#: main.dfm:439
 #. frmMain..ActionList1..acFilterSelect..Caption
-#: main.dfm:917
+#: main.dfm:946
 msgid "&Filter"
 msgstr ""
 
 #. frmMain..Panel2..btnProcess..Caption
-#: main.dfm:435
+#: main.dfm:463
 #. frmMain..ActionList1..acConvert..Caption
-#: main.dfm:910
+#: main.dfm:939
 msgid "let's go"
 msgstr ""
 
 #. frmMain..memoOutput..Font.Name
-#: main.dfm:462
+#: main.dfm:491
 msgid "Fixedsys"
 msgstr ""
 
 #. frmMain..stbMain........Text
-#: main.dfm:482
+#: main.dfm:511
 msgid "http://www.gpsbabel.org (http://sourceforge.net/projects/gpsbabel)"
 msgstr ""
 
 #. frmMain..OpenDialog..Filter
-#: main.dfm:489
+#: main.dfm:518
 msgid "Garmin Mapsource mps|*.mps|All files|*.*"
 msgstr ""
 
 #. frmMain..SaveDialog..Filter
-#: main.dfm:495
+#: main.dfm:524
 msgid "All file(s)|*.*|Garmin MapSource mps|*.mps"
 msgstr ""
 
 #. frmMain..ActionList1..acConvert..Category
-#: main.dfm:909
+#: main.dfm:938
 #. frmMain..ActionList1..acFilterSelect..Category
-#: main.dfm:916
+#: main.dfm:945
 msgid "Babel"
 msgstr ""
 
 #. frmMain..ActionList1..acFileExit..Category
-#: main.dfm:922
+#: main.dfm:951
 msgid "File"
 msgstr ""
 
 #. frmMain..ActionList1..acFileExit..Caption
-#: main.dfm:923
+#: main.dfm:952
 msgid "E&xit"
 msgstr ""
 
 #. frmMain..ActionList1..acHelpAbout..Category
-#: main.dfm:928
+#: main.dfm:957
 #. frmMain..ActionList1..acHelpIntro..Category
-#: main.dfm:933
+#: main.dfm:962
 #. frmMain..ActionList1..acHelpReadme..Category
-#: main.dfm:937
+#: main.dfm:966
 msgid "Help"
 msgstr ""
 
 #. frmMain..ActionList1..acHelpAbout..Caption
-#: main.dfm:929
+#: main.dfm:958
 msgid "&About"
 msgstr ""
 
 #. frmMain..ActionList1..acHelpIntro..Caption
-#: main.dfm:934
+#: main.dfm:963
 msgid "&Intro"
 msgstr ""
 
 #. frmMain..ActionList1..acHelpReadme..Caption
-#: main.dfm:938
+#: main.dfm:967
 #. frmReadme..Caption
 #: readme.dfm:6
 msgid "GPSBabel README"
 msgstr ""
 
 #. frmMain..MainMenu1..mnuFile..Caption
-#: main.dfm:947
+#: main.dfm:976
 msgid "&File"
 msgstr ""
 
 #. frmMain..MainMenu1..mnuOptions..Caption
-#: main.dfm:953
+#: main.dfm:982
 msgid "&Options"
 msgstr ""
 
 #. frmMain..MainMenu1..mnuOptions..mnuSynthesizeShortNames..Caption
-#: main.dfm:955
+#: main.dfm:984
 msgid "Synthesize short names"
 msgstr ""
 
 #. frmMain..MainMenu1..mnuOptions..mnuSynthesizeShortNames....Hint
-#: main.dfm:958
+#: main.dfm:987
 msgid "Ignore \"short\" names from source data and synthesize them from the "
 "long name"
 msgstr ""
 
 #. frmMain..MainMenu1..mnuHelp..Caption
-#: main.dfm:964
+#: main.dfm:996
 msgid "&Help"
 msgstr ""
 
 #. frmMain..MainMenu1..mnuHelp..N1..Caption
-#: main.dfm:972
+#: main.dfm:1004
 msgid "-"
 msgstr ""
 
@@ -577,45 +584,45 @@ msgstr ""
 msgid "Kilometer"
 msgstr ""
 
-#: main.pas:167
+#: main.pas:181
 msgid "BETA"
 msgstr ""
 
-#: main.pas:169
+#: main.pas:183
 msgid "Private release"
 msgstr ""
 
-#: main.pas:171
+#: main.pas:185
 msgid "Special release"
 msgstr ""
 
-#: main.pas:279
-#: main.pas:374
+#: main.pas:281
+#: main.pas:376
 msgid "All files|*.*"
 msgstr ""
 
-#: main.pas:415
+#: main.pas:417
 msgid "File %s not found."
 msgstr ""
 
-#: main.pas:432
+#: main.pas:438
 msgid "File \"%s\" exists ! Overwrite ?"
 msgstr ""
 
-#: main.pas:433
+#: main.pas:439
 msgid "Warning"
 msgstr ""
 
-#: main.pas:458
+#: main.pas:468
 msgid "Could not run \"gpsbabel.exe\"!"
 msgstr ""
 
-#: main.pas:467
+#: main.pas:477
 msgid "Converted successfully from \"%s\" to "
 "\"%s\"."
 msgstr ""
 
-#: main.pas:468
+#: main.pas:478
 msgid "Success"
 msgstr ""
 
