@@ -99,7 +99,7 @@ data_read(void)
 			sscanf(ibuf, "W  %6c %c%lf %c%lf %s %s %ld", 
 				name, &latdir, &lat, &londir, &lon, 
 				date, time, &alt);
-			if (alt = -9999) {
+			if (alt == -9999) {
 				alt = unknown_alt;
 			}
 			sscanf(&ibuf[60], "%40c", 
