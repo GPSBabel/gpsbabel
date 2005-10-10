@@ -80,6 +80,11 @@ type
     N1: TMenuItem;
     mnuOptions: TMenuItem;
     mnuSynthesizeShortNames: TMenuItem;
+    edInputOpts: TEdit;
+    lbInputOpts: TLabel;
+    lbOutputOpts: TLabel;
+    edOutputOpts: TEdit;
+    Filter1: TMenuItem;
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure OpenButtonClick(Sender: TObject);
@@ -195,14 +200,14 @@ begin
 
   FixAlign(sbOpenFile, 8);
   FixAlign(sbSaveFile, 8);
-  FixAlign(cbInputFormat, 8);
-  FixAlign(cbInputFormatDevice, 8);
-  FixAlign(cbOutputFormat, 8);
+  edInputOpts.Left := lbInputOpts.Left + lbInputOpts.Width + 8;
+  edOutputOpts.Left := lbOutputOpts.Left + lbOutputOpts.Width + 8;
+  FixAlign(edInputOpts, 8);
+  FixAlign(edOutputOpts, 8);
   FixAlign(btnProcess, 8);
   FixAlign(btnFilter, 16, btnProcess);
   FixAlign(edInputFile, 8, sbOpenFile);
   FixAlign(edOutputFile, 8, sbSaveFile);
-  FixAlign(cbOutputFormatDevice, 8);
 end;
 
 procedure TfrmMain.LoadFileFormats;
@@ -233,7 +238,7 @@ procedure TfrmMain.WMSTARTUP(var Msg: TMessage);
 begin
   LoadVersion;
   LoadFileFormats;
-  
+
   // ? valid README form
 
   acHelpReadme.Enabled := (frmReadme.Memo.Lines.Count > 0);
@@ -401,7 +406,7 @@ begin
   if cbWaypoints.Checked then cmdline := cmdline + ' -w';
   if cbRoutes.Checked then cmdline := cmdline + ' -r';
   if cbTracks.Checked then cmdline := cmdline + ' -t';
-  
+
   if mnuSynthesizeShortNames.Checked then cmdline := cmdline + ' -s';
 
   if chbInputDevice.Checked then
@@ -413,8 +418,12 @@ begin
     s := '"' + s + '"';
   end;
 
-  cmdline := Format('%s -i %s -f %s',
-    [ cmdline, IFormat, s]);
+  if (Trim(edInputOpts.Text) <> '') then
+    cmdline := Format('%s -i %s,%s -f %s',
+      [cmdline, IFormat, Trim(edInputOpts.Text), s])
+  else
+    cmdline := Format('%s -i %s -f %s',
+      [cmdline, IFormat, s]);
 
   cmdline := cmdline + frmFilter.CmdLine;
 
@@ -437,8 +446,12 @@ begin
     s := '"' + s + '"';
   end;
 
-  cmdline := Format('%s -o %s -F %s',
-    [ cmdline, OFormat, s]);
+  if (Trim(edOutputOpts.Text) <> '') then
+    cmdline := Format('%s -o %s,%s -F %s',
+      [cmdline, OFormat, Trim(edOutputOpts.Text), s])
+  else
+    cmdline := Format('%s -o %s -F %s',
+      [cmdline, OFormat, s]);
 
   while (cmdline[1] = ' ') do System.Delete(cmdline, 1, 1);
 
