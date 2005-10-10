@@ -70,7 +70,6 @@ static void
 stmwpp_data_read(void)
 {
 	char buff[1024];
-	char *c;
 	
 	what = STM_NOTHING;
 	fgets(buff, sizeof(buff), fin);

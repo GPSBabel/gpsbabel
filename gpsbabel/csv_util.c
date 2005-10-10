@@ -42,7 +42,7 @@
 /****************************************************************************/
 /* obligatory global struct                                                 */
 /****************************************************************************/
-xcsv_file_t xcsv_file = {};
+xcsv_file_t xcsv_file;
 
 extern char *xcsv_urlbase;
 extern char *prefer_shortnames;

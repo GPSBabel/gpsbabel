@@ -101,7 +101,7 @@ nmn4_concat(char *arg0, ...)
 static char *
 nmn4_read_line(char *buff, size_t buffsize, FILE *fin)
 {
-	char *res, *c;
+	char *res;
 	
 	while ((res = fgets(buff, buffsize, fin)))
 	{
@@ -252,7 +252,7 @@ nmn4_route_tlr(const route_head *rte)
 static void
 nmn4_write_waypt(const waypoint *wpt)
 {
-	char buff[1024], city[128], street[128], zipc[32], number[32];
+	char city[128], street[128], zipc[32], number[32];
 	int zip = -1;
 	
 	if (curr_rte_num != target_rte_num) return;
@@ -287,7 +287,7 @@ nmn4_write_data(void)
 	if (index_opt != NULL)
 	{
 		target_rte_num = atoi(index_opt);
-	    	is_fatal(((target_rte_num > route_count()) || (target_rte_num < 1)),
+		is_fatal(((target_rte_num > (int) route_count()) || (target_rte_num < 1)),
 			MYNAME ": invalid route number %d (1..%d))!\n", target_rte_num, route_count());
 	}
 	

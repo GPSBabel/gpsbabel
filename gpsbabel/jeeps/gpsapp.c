@@ -3818,7 +3818,6 @@ void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
     uint32 t;
     uint32 raw_lat, raw_lon;
     int lat_undefined, lon_undefined;
-    int i;
     
     p=data;
     

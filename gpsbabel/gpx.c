@@ -891,7 +891,7 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 	size_t slen = strlen(cdatastr.mem);
 
 	vmem_realloc(&cdatastr,  1 + len + slen);
-	estr = (char *) (cdatastr.mem + slen);
+	estr = ((char *) cdatastr.mem) + slen;
 	memcpy(estr, s, len);
 	estr[len]  = 0;
 

@@ -146,6 +146,9 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
+                RelativePath="..\an1.c">
+            </File>
+            <File
 				RelativePath="..\arcdist.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -167,9 +170,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\bcr.c">
+            </File>
+            <File
 				RelativePath="..\brauniger_iq.c">
 			</File>
 			<File
+                RelativePath="..\cet.c">
+            </File>
+            <File
+                RelativePath="..\cet_util.c">
+            </File>
+            <File
 				RelativePath="..\cetus.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -215,6 +227,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\cst.c">
+            </File>
+            <File
 				RelativePath="..\csv_util.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -257,6 +272,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\discard.c">
+            </File>
+            <File
 				RelativePath="..\duplicate.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -299,6 +317,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\filter_skeleton.c">
+            </File>
+            <File
 				RelativePath="..\filter_vecs.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -320,6 +341,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\formspec.c">
+            </File>
+            <File
 				RelativePath="..\garmin.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -365,6 +389,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\gdb.c">
+            </File>
+            <File
 				RelativePath="..\geo.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -407,6 +434,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\globals.c">
+            </File>
+            <File
 				RelativePath="..\glogbook.c">
 			</File>
 			<File
@@ -569,6 +599,9 @@
 				RelativePath="..\igc.c">
 			</File>
 			<File
+                RelativePath="..\ignrando.c">
+            </File>
+            <File
 				RelativePath="..\internal_styles.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -599,6 +632,9 @@
 				RelativePath="..\lowranceusr.c">
 			</File>
 			<File
+                RelativePath="..\maggeo.c">
+            </File>
+            <File
 				RelativePath="..\magnav.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -746,6 +782,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\msroute.c">
+            </File>
+            <File
 				RelativePath="..\navicache.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -809,6 +848,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\nmn4.c">
+            </File>
+            <File
+                RelativePath="..\nmn5.c">
+            </File>
+            <File
 				RelativePath="..\overlay.c">
 			</File>
 			<File
@@ -854,6 +899,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\pathaway.c">
+            </File>
+            <File
 				RelativePath="..\pcx.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1112,6 +1160,15 @@
 				RelativePath="..\stackfilter.c">
 			</File>
 			<File
+                RelativePath="..\stmwpp.c">
+            </File>
+            <File
+                RelativePath="..\strptime.c">
+            </File>
+            <File
+                RelativePath="..\tef_xml.c">
+            </File>
+            <File
 				RelativePath="..\text.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1175,6 +1232,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\tomtom.c">
+            </File>
+            <File
 				RelativePath="..\tpg.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1196,6 +1256,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\tpo.c">
+            </File>
+            <File
+                RelativePath="..\trackfilter.c">
+            </File>
+            <File
 				RelativePath="..\util.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1265,6 +1331,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+                RelativePath="..\vitosmt.c">
+            </File>
+            <File
 				RelativePath="..\vmem.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1330,6 +1399,9 @@
 			<File
 				RelativePath="..\xmlgeneric.c">
 			</File>
+            <File
+                RelativePath="..\xmltag.c">
+            </File>
 			<Filter
 				Name="Jeeps"
 				Filter="">

@@ -289,6 +289,7 @@ gdb_fread_str(char *dest, size_t maxlen)
 	    }
 	}
 	fatal(MYNAME ": local buffer overflow detected, please report!\n");
+	return 0;
 }
 
 static int
@@ -332,6 +333,7 @@ gdb_fread_le(void *dest, size_t size, int bit_count, const char *prefix, const c
 	    default:
 		fatal(MYNAME "%s: unsupported bit count (%d) in gdb_le_read!\n", prefix, bit_count);	    
 	}
+	return 0;
 }
 
 static int
@@ -732,6 +734,7 @@ gdb_read_route(void)
 	/* This should normally never happen; end of route is handled in main loop before this */
 	
 	fatal(MYNAME "-%s: Unexpected end of route \"%s\"!", prefix1, xname);
+    return 0;
 }
 
 
