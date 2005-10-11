@@ -93,9 +93,6 @@ xg_tag_mapping kml_map[] = {
 	{ wpt_e, 	cb_end, 	"/Document/Folder/Placemark" },
 	{ wpt_name, 	cb_cdata, 	"/Document/Folder/Placemark/name" },
 	{ wpt_desc, 	cb_cdata, 	"/Document/Folder/Placemark/description" },
-//	{ wpt_type, 	cb_cdata, 	"/Folder/Placemark/type" },
-//	{ wpt_link_s, 	cb_start, 	"/Folder/Placemark/link" },
-//	{ wpt_link, 	cb_cdata, 	"/Folder/Placemark/link" },
 	{ wpt_coord, 	cb_cdata, 	"/Document/Folder/Placemark/Point/coordinates" },
 	{ NULL, 	0, 		NULL }
 };
@@ -295,11 +292,16 @@ static void kml_waypt_pr(const waypoint *waypointp)
 	// Description
 	if (waypointp->url) {
 		char * odesc = xml_entitize(waypointp->url);
-		fprintf(ofd, "\t  <description>");
-		fputs("\n", ofd);
-		fputs(odesc, ofd);
-		xfree(odesc);
+		fprintf(ofd, "\t  <description>\n");
+		if (waypointp->url_link_text)  {
+			char *olink = xml_entitize(waypointp->url_link_text);
+			fprintf(ofd, "<a href=\"%s\">%s</a>", odesc, olink);
+			xfree(olink);
+		}
+		else
+			fputs(odesc, ofd);
 		fprintf(ofd, "\n\t</description>\n");
+		xfree(odesc);
 	}
 
 	// Location
