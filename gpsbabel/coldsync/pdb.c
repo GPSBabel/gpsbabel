@@ -6,7 +6,7 @@
  *	You may distribute this file under the terms of the Artistic
  *	License, as specified in the README file.
  *
- * $Id: pdb.c,v 1.7 2005-03-18 03:56:35 robertl Exp $
+ * $Id: pdb.c,v 1.8 2005-10-13 22:08:01 robertl Exp $
  */
 /* XXX - The way zero-length records are handled is a bit of a kludge. They
  * shouldn't normally exist, with the exception of expunged records. But,
@@ -1523,7 +1523,7 @@ pdb_LoadAppBlock(int fd,
 	int err;
 	udword next_off;		/* Offset of the next thing in the file
 				 * after the AppInfo block */
-	udword offset;		/* Offset into file, for checking */
+	off_t offset;		/* Offset into file, for checking */
 
 	/* Check to see if there even *is* an AppInfo block */
 	if (db->appinfo_offset == 0L)
@@ -1584,7 +1584,7 @@ pdb_LoadAppBlock(int fd,
 	 * we've already passed the beginning of the AppInfo block, as
 	 * given by its offset in the header.
 	 */
-	offset = (udword) lseek(fd, 0L, SEEK_CUR);	/* Find out where we are */
+	offset = lseek(fd, 0L, SEEK_CUR);	/* Find out where we are */
 	if (offset != db->appinfo_offset)
 	{
 		if (offset > db->appinfo_offset)
@@ -1640,7 +1640,7 @@ pdb_LoadSortBlock(int fd,
 	int err;
 	localID next_off;		/* Offset of the next thing in the file
 				 * after the sort block */
-	localID offset;		/* Offset into file, for checking */
+	off_t offset;		/* Offset into file, for checking */
 
 	/* Check to see if there even *is* a sort block */
 	if (db->sortinfo_offset == 0L)
@@ -1697,7 +1697,7 @@ pdb_LoadSortBlock(int fd,
 	 * we've already passed the beginning of the sort block, as given
 	 * by its offset in the header.
 	 */
-	offset = (udword) lseek(fd, 0L, SEEK_CUR);	/* Find out where we are */
+	offset = lseek(fd, 0L, SEEK_CUR);	/* Find out where we are */
 	if (offset != db->sortinfo_offset)
 	{
 		if (offset > db->sortinfo_offset)
@@ -1757,7 +1757,7 @@ pdb_LoadResources(int fd,
 	     i < db->numrecs;
 	     i++, rsrc = rsrc->next)
 	{
-		udword offset;		/* Current offset, for checking */
+		off_t offset;		/* Current offset, for checking */
 		udword next_off;	/* Offset of next resource in file */
 
 		/* Sanity check: make sure we haven't stepped off the end
@@ -1787,7 +1787,7 @@ pdb_LoadResources(int fd,
 		 * whether we've already passed the beginning of the
 		 * resource, as given by its offset in the resource index.
 		 */
-		offset = (udword) lseek(fd, 0L, SEEK_CUR);
+		offset = lseek(fd, 0L, SEEK_CUR);
 					/* Find out where we are now */
 		if (offset != rsrc->offset)
 		{
@@ -1895,7 +1895,7 @@ pdb_LoadRecords(int fd,
 	     i < db->numrecs;
 	     i++, rec = rec->next)
 	{
-		udword offset;		/* Current offset, for checking */
+		off_t offset;		/* Current offset, for checking */
 		localID next_off;	/* Offset of next resource in file */
 
 		/* Sanity check: make sure we haven't stepped off the end
@@ -1920,7 +1920,7 @@ pdb_LoadRecords(int fd,
 		 * whether we've already passed the beginning of the
 		 * record, as given by its offset in the record index.
 		 */
-		offset = (udword) lseek(fd, 0L, SEEK_CUR);
+		offset = lseek(fd, 0L, SEEK_CUR);
 					/* Find out where we are now */
 		if (offset != rec->offset)
 		{
