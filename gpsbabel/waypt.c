@@ -320,8 +320,7 @@ waypt_backup(unsigned int *count, queue **head_bak)
 {
 	queue *elem, *tmp, *qbackup;
 	waypoint *wpt;
-    // BUG(akirmse): no was not initialized.  Set to 0 for now to compile it.
-    int no = 0;
+	int no = 0;
 
 	qbackup = (queue *) xcalloc(1, sizeof(*qbackup));
 	QUEUE_INIT(qbackup);
@@ -335,6 +334,7 @@ waypt_backup(unsigned int *count, queue **head_bak)
 	{
 	    wpt = (waypoint *)elem;
 	    waypt_add(waypt_dupe(wpt));
+	    no++;
 	}
 
 	*head_bak = qbackup;
