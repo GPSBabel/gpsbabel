@@ -230,7 +230,7 @@ google_read(void)
 		char *end = NULL;
 		if ( xml ) {
 			xml++;
-			end = strrchr( xml, '\'' );
+			end = strchr( xml+1, '\'' );
 			if ( end ) {
 				*end = '\0';
 				xml_deinit();
