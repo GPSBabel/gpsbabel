@@ -34,6 +34,15 @@ static double *polybufz;
 static const char *ofname;
 static int nameidx;
 
+static char *opt_name = NULL;
+
+static
+arglist_t shp_args[] = {
+	{"name", &opt_name, "Index of name field in .dbf",
+		NULL, ARGTYPE_INT },
+	{ 0, 0, 0, 0}
+};
+
 static void
 my_rd_init(const char *fname)
 {
@@ -47,9 +56,19 @@ my_rd_init(const char *fname)
 		fatal(MYNAME ":Cannot open dbf file %s for reading\n", fname);
 	}
 
-	nameidx = DBFGetFieldIndex( ihandledb, "NAME" );
-	if (nameidx == -1) {
-//		fatal(MYNAME ":dbf file for %s doesn't have 'NAME'\n", fname);
+	if ( opt_name ) {
+		if ( strchr(opt_name, '+')) {
+			nameidx = -2;
+		}
+		else {
+			nameidx = atoi( opt_name );
+		}
+	}
+	else {
+		nameidx = DBFGetFieldIndex( ihandledb, "NAME" );
+		if (nameidx == -1) {
+//			fatal(MYNAME ":dbf file for %s doesn't have 'NAME' field.\n  Please specify the name index with the 'name' option.\n", fname);
+		}
 	}
 }
 
@@ -64,9 +83,33 @@ my_read(void)
 		SHPObject *shp;
 		waypoint *wpt;
 		const char *name;
+		char *tmpName = NULL;
+		char *tmpIndex = opt_name;
 
 		shp = SHPReadObject(ihandle, npts-1);
-		name = DBFReadStringAttribute(ihandledb, npts-1, nameidx);
+		if ( nameidx >0 ) {
+			name = DBFReadStringAttribute(ihandledb, npts-1, nameidx);
+		}
+		else {
+			if ( nameidx == -1 ) {
+				name = "";
+			}
+			else if (nameidx == -2 ) {
+				tmpName = xstrdup( "" );
+				tmpIndex = opt_name;
+				while ( tmpIndex ) {
+					name = DBFReadStringAttribute( 
+						ihandledb, npts-1, atoi(tmpIndex));
+					tmpName = xstrappend(tmpName, name );
+					tmpIndex = strchr( tmpIndex, '+' );
+					if ( tmpIndex ) {
+						tmpIndex++;
+						tmpName = xstrappend( tmpName, " / " );
+					}
+				}
+				name = tmpName;
+			}
+		}
 		if (shp->nSHPType == SHPT_ARC) {
 			int j;
 			route_head *track_head = route_head_alloc();
@@ -91,6 +134,10 @@ my_read(void)
 		SHPDestroyObject(shp);
 
 		npts--;
+		if ( tmpName ) {
+			xfree( tmpName );
+			tmpName = NULL;
+		}
 	}
 
 }
@@ -199,6 +246,6 @@ ff_vecs_t shape_vecs = {
 	my_read,
 	my_write,
 	NULL,
-	NULL,
+	shp_args,
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
