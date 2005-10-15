@@ -32,6 +32,7 @@ static FILE *outfile;
 static char *output_type = NULL;
 static char *road_changes = NULL;
 static char *nogc = NULL;
+static char *opt_symbol = NULL;
 static short output_type_num = 0;
 
 static short last_read_type = 0;
@@ -54,6 +55,8 @@ arglist_t an1_args[] = {
 		"", ARGTYPE_HIDDEN | ARGTYPE_STRING },
 	{"nogc", &nogc, "Do not add geocache data to description",
 		NULL, ARGTYPE_BOOL },
+	{"symbol", &opt_symbol, "Symbol to use for point data",
+		"Red Flag", ARGTYPE_STRING },
 	{0, 0, 0, 0 }
 };
 
@@ -621,7 +624,7 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 		rec->unk2 = 3;
 		rec->unk3 = 18561;
 		rec->fontname = xstrdup( "Arial" );
-		FindIconByName( "Red Flag", &rec->guid );
+		FindIconByName( opt_symbol, &rec->guid );
 		rec->fontsize = 10;
 	}
 	rec->name = xstrdup( wpt->description );
