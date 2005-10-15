@@ -102,7 +102,7 @@ type
     procedure EnableList(List: TList; Enable: Boolean = True);
     procedure SetTracksEnabled(const Value: Boolean);
     function AllValid: Boolean;
-    function ValidateNumerical(AEdit: TEdit; AMin, AMax: Extended): Boolean;
+    function ValidateNumerical(AEdit: TCustomEdit; AMin, AMax: Extended): Boolean;
     procedure ChangeCheckBoxesChecked(AComponent: TComponent; Restore: Boolean = False);
   public
     { Public-Deklarationen }
@@ -127,7 +127,7 @@ begin
     AControl.Left := AControl.Left + 4;
 end;
 
-function TfrmFilter.ValidateNumerical(AEdit: TEdit; AMin, AMax: Extended): Boolean;
+function TfrmFilter.ValidateNumerical(AEdit: TCustomEdit; AMin, AMax: Extended): Boolean;
 var
   s: string;
   v: Extended;
@@ -449,7 +449,8 @@ begin
     ValidateNumerical(edWayptRadius, 0, 99999) and
     ValidateNumerical(edWayptRadiusLat, -180, 180) and
     ValidateNumerical(edWayptRadiusLon, -90, 90) and
-    ValidateNumerical(edWayptMergeDist, 0, 99999999);
+    ValidateNumerical(edWayptMergeDist, 0, 99999999) and
+    ValidateNumerical(edRoutesSimplifyMaxPoints, 1, 9999);
   ChangeCheckBoxesChecked(Self, False);
 end;
 
