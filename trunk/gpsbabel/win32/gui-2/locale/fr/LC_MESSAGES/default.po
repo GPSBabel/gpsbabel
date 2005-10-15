@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
-msgstr "Project-Id-Version: French version\n"
+msgstr ""
+"Project-Id-Version: French version\n"
 "POT-Creation-Date: 2005-09-22 23:44\n"
-"PO-Revision-Date: 2005-10-05 00:36+0100\n"
-"Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
+"PO-Revision-Date: 2005-10-16 01:00+0100\n"
+"Last-Translator: Lilian Morinon <lilian_morinon@yahoo.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,6 +17,7 @@ msgstr "Project-Id-Version: French version\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: FRANCE\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: s\n"
 
 #. frmAbout..Caption
 #: about.dfm:5
@@ -24,29 +25,28 @@ msgid "About"
 msgstr "A propos"
 
 #. frmAbout..Font.Name
-#: about.dfm:12
 #. frmAbout..pnClient..pnCenter..lbURL..Font.Name
-#: about.dfm:100
 #. frmAbout..pnClient..pnCenter..lbSFURL..Font.Name
-#: about.dfm:131
 #. frmAbout..pnClient..pnCenter..stLicense..Font.Name
-#: about.dfm:166
 #. frmFilter..Font.Name
-#: filter.dfm:13
 #. frmMain..Font.Name
-#: main.dfm:11
 #. frmMain..Panel2..lbWhat..Font.Name
-#: main.dfm:273
 #. frmReadme..Font.Name
+#: about.dfm:12
+#: about.dfm:100
+#: about.dfm:131
+#: about.dfm:166
+#: filter.dfm:13
+#: main.dfm:11
+#: main.dfm:273
 #: readme.dfm:11
 msgid "MS Sans Serif"
 msgstr "MS Sans Serif"
 
 #. frmAbout..pnClient..pnCenter..lbHint1..Caption
 #: about.dfm:74
-msgid "This program is part of the GPSBabel project, hosted "
-"on"
-msgstr ""
+msgid "This program is part of the GPSBabel project, hosted on"
+msgstr "CE program fait partie du projet GPSBable, hébergé sur"
 
 # +++ IGNORE +++
 #. frmAbout..pnClient..pnCenter..lbVersion..Caption
@@ -57,7 +57,7 @@ msgstr ""
 #. frmAbout..pnClient..pnCenter..lbTranslators..Caption
 #: about.dfm:89
 msgid "Translations"
-msgstr ""
+msgstr "Traductions"
 
 #. frmAbout..pnClient..pnCenter..lbURL..Caption
 #: about.dfm:96
@@ -72,7 +72,7 @@ msgstr ""
 #. frmAbout..pnClient..pnCenter..lbMoreInfo..Caption
 #: about.dfm:119
 msgid "Find more info at"
-msgstr ""
+msgstr "Plus d'infos sur"
 
 #. frmAbout..pnClient..pnCenter..lbSFURL..Caption
 #: about.dfm:126
@@ -81,15 +81,13 @@ msgstr "SourceForge.net"
 
 #. frmAbout..pnClient..pnCenter..stDescription..Caption
 #: about.dfm:147
-msgid "The frontend for gpsbabel command line "
-"program"
+msgid "The frontend for gpsbabel command line program"
 msgstr "L'interface graphique de gpsbabel"
 
 #. frmAbout..pnClient..pnCenter..stLicense..Caption
 #: about.dfm:161
-msgid "THIS SOFTWARE MAY ONLY BE LICENSED FREE OF "
-"CHARGE"
-msgstr ""
+msgid "THIS SOFTWARE MAY ONLY BE LICENSED FREE OF CHARGE"
+msgstr "Ce prgramme ne peut être utilisé que sous license gratuite"
 
 #. frmFilter..Caption
 #: filter.dfm:6
@@ -97,8 +95,8 @@ msgid "Filter"
 msgstr "Filtre"
 
 #. frmFilter..gbTracks..Caption
-#: filter.dfm:29
 #. frmMain..Panel2..cbTracks..Caption
+#: filter.dfm:29
 #: main.dfm:428
 msgid "&Tracks"
 msgstr "&Traces"
@@ -145,10 +143,8 @@ msgstr "ACTIVE LOG # %Y%m%d"
 
 #. frmFilter..gbTracks..cbTrackSplit..Hint
 #: filter.dfm:93
-msgid "Split track into several tracks depending on date of "
-"trackpoint"
-msgstr "Scinder la trace en plusieurs traces en fonction de la date des "
-"points"
+msgid "Split track into several tracks depending on date of trackpoint"
+msgstr "Scinder la trace en plusieurs traces en fonction de la date des points"
 
 #. frmFilter..gbTracks..cbTrackSplit..Caption
 #: filter.dfm:94
@@ -168,8 +164,7 @@ msgstr "&Déplacer"
 #. frmFilter..gbTracks..cbTrackStart..Hint
 #: filter.dfm:195
 msgid "Take only trackpoints starting at"
-msgstr "Utiliser seulement les points commençant "
-"à"
+msgstr "Utiliser seulement les points commençant à"
 
 #. frmFilter..gbTracks..cbTrackStart..Caption
 #: filter.dfm:196
@@ -183,10 +178,8 @@ msgstr "Arrêter à"
 
 #. frmFilter..gbTracks..cbTrackPack..Hint
 #: filter.dfm:274
-msgid "Pack all tracks into one track (No duplicate "
-"timestamps)"
-msgstr "Fusionner toutes les traces en une seule (pas de duplication de "
-"l'horodatage)"
+msgid "Pack all tracks into one track (No duplicate timestamps)"
+msgstr "Fusionner toutes les traces en une seule (pas de duplication de l'horodatage)"
 
 #. frmFilter..gbTracks..cbTrackPack..Caption
 #: filter.dfm:275
@@ -206,7 +199,7 @@ msgstr "Fusionner"
 #. frmFilter..gbTracks..cbTrackRangeTimeZone..Hint
 #: filter.dfm:294
 msgid "Shift start/stop by local timezone offset"
-msgstr ""
+msgstr "Décaler le début/fin en fonction du décalage horaire local"
 
 #. frmFilter..gbTracks..cbTrackRangeTimeZone..Caption
 #: filter.dfm:295
@@ -230,10 +223,8 @@ msgstr ""
 
 #. frmFilter..gbRoutes..cbRouteSimplify..Hint
 #: filter.dfm:329
-msgid "Simplify routes and tracks by limited number of "
-"points"
-msgstr "Simplifier les routes et traces en limitant le nombre de "
-"points"
+msgid "Simplify routes and tracks by limited number of points"
+msgstr "Simplifier les routes et traces en limitant le nombre de points"
 
 #. frmFilter..gbRoutes..cbRouteSimplify..Caption
 #: filter.dfm:330
@@ -242,10 +233,8 @@ msgstr "Simplifier"
 
 #. frmFilter..gbRoutes..edRoutesSimplifyMaxPoints..Hint
 #: filter.dfm:339
-msgid "Upper limit of points for routes and "
-"tracks"
-msgstr "Limite maximum du nombre de points pour les routes et "
-"traces"
+msgid "Upper limit of points for routes and tracks"
+msgstr "Limite maximum du nombre de points pour les routes et traces"
 
 #. frmFilter..gbRoutes..edRoutesSimplifyMaxPoints..Text
 #: filter.dfm:344
@@ -273,8 +262,8 @@ msgid "File based filters"
 msgstr "Filtres de fichiers"
 
 #. frmFilter..gbWaypoints..Caption
-#: filter.dfm:437
 #. frmMain..Panel2..cbWaypoints..Caption
+#: filter.dfm:437
 #: main.dfm:408
 msgid "&Waypoints"
 msgstr ""
@@ -292,8 +281,7 @@ msgstr ""
 #. frmFilter..gbWaypoints..cbWayptMergeDupLoc..Hint
 #: filter.dfm:462
 msgid "Merge waypoints with duplicate locations"
-msgstr "Fusionner les waypoints avec les positions en "
-"doublon"
+msgstr "Fusionner les waypoints avec les positions en doublon"
 
 #. frmFilter..gbWaypoints..cbWayptMergeDupLoc..Caption
 #: filter.dfm:463
@@ -302,21 +290,18 @@ msgstr "positions"
 
 #. frmFilter..gbWaypoints..cbWayptMergeDupNames..Hint
 #: filter.dfm:472
-msgid "Merge waypoints with duplicate \"short "
-"name\""
-msgstr "Fusionner les waypoints avec les doublons \"short "
-"name\""
+msgid "Merge waypoints with duplicate \"short name\""
+msgstr "Fusionner les waypoints avec les doublons \"short name\""
 
 #. frmFilter..gbWaypoints..cbWayptMergeDupNames..Caption
 #: filter.dfm:473
 msgid "\"short names\""
-msgstr ""
+msgstr "\"noms courts\""
 
 #. frmFilter..gbWaypoints..cbWayptMergeDistance..Hint
 #: filter.dfm:482
 msgid "Merge waypoints separated by less then"
-msgstr "Fusionner les waypoints séparé par moins "
-"de"
+msgstr "Fusionner les waypoints séparé par moins de"
 
 #. frmFilter..gbWaypoints..cbWayptMergeDistance..Caption
 #: filter.dfm:483
@@ -325,10 +310,8 @@ msgstr ""
 
 #. frmFilter..gbWaypoints..cbWayptSort..Hint
 #: filter.dfm:511
-msgid "Sort waypoints by \"short name\" or by "
-"description"
-msgstr "Trier les waypoints par \"short name\" ou par "
-"description"
+msgid "Sort waypoints by \"short name\" or by description"
+msgstr "Trier les waypoints par \"short name\" ou par description"
 
 #. frmFilter..gbWaypoints..cbWayptSort..Caption
 #: filter.dfm:512
@@ -347,9 +330,8 @@ msgstr "Doublons"
 
 #. frmFilter..gbWaypoints..cbWayptRadius..Hint
 #: filter.dfm:530
-msgid "Include points based on their proximity to central "
-"point"
-msgstr ""
+msgid "Include points based on their proximity to central point"
+msgstr "Inclure les points en fonction de la proximité d'un point central"
 
 #. frmFilter..gbWaypoints..cbWayptRadius..Caption
 #: filter.dfm:531
@@ -359,16 +341,16 @@ msgstr "Rayon"
 #. frmFilter..gbWaypoints..edWayptRadiusLat..Hint
 #: filter.dfm:559
 msgid "Latitude of central point"
-msgstr ""
+msgstr "Latitude du point central"
 
 #. frmFilter..gbWaypoints..edWayptRadiusLon..Hint
 #: filter.dfm:569
 msgid "Longitude of central point"
-msgstr ""
+msgstr "Longitude du point central"
 
 #. frmMain..Caption
-#: main.dfm:6
 #. Programmer's name for it: SGPSBabelTitle
+#: main.dfm:6
 #: common.pas:28
 msgid "GPSBabelGUI-2"
 msgstr "GPSBabelGUI-2"
@@ -394,50 +376,50 @@ msgid "Output f&ormat"
 msgstr "Format ci&ble"
 
 #. frmMain..Panel1..lbInputOpts..Caption
-#: main.dfm:108
 #. frmMain..Panel1..lbOutputOpts..Caption
+#: main.dfm:108
 #: main.dfm:116
 msgid "Options"
 msgstr ""
 
 #. frmMain..Panel1..chbInputDevice..Caption
-#: main.dfm:167
 #. frmMain..Panel1..chbOutputDevice..Caption
+#: main.dfm:167
 #: main.dfm:217
 msgid "Device"
 msgstr "Périphérique"
 
 #. frmMain..Panel1..cbInputDevice....Items.Strings
-#: main.dfm:180
 #. frmMain..Panel1..cbOutputDevice....Items.Strings
+#: main.dfm:180
 #: main.dfm:230
 msgid "USB"
 msgstr "USB"
 
 #. frmMain..Panel1..cbInputDevice....Items.Strings
-#: main.dfm:181
 #. frmMain..Panel1..cbOutputDevice....Items.Strings
+#: main.dfm:181
 #: main.dfm:231
 msgid "COM1"
 msgstr "COM1"
 
 #. frmMain..Panel1..cbInputDevice....Items.Strings
-#: main.dfm:182
 #. frmMain..Panel1..cbOutputDevice....Items.Strings
+#: main.dfm:182
 #: main.dfm:232
 msgid "COM2"
 msgstr "COM2"
 
 #. frmMain..Panel1..cbInputDevice....Items.Strings
-#: main.dfm:183
 #. frmMain..Panel1..cbOutputDevice....Items.Strings
+#: main.dfm:183
 #: main.dfm:233
 msgid "COM3"
 msgstr "COM3"
 
 #. frmMain..Panel1..cbInputDevice....Items.Strings
-#: main.dfm:184
 #. frmMain..Panel1..cbOutputDevice....Items.Strings
+#: main.dfm:184
 #: main.dfm:234
 msgid "COM4"
 msgstr "COM4"
@@ -453,110 +435,109 @@ msgid "&Routes"
 msgstr ""
 
 #. frmMain..Panel2..btnFilter..Caption
-#: main.dfm:439
 #. frmMain..ActionList1..acFilterSelect..Caption
-#: main.dfm:946
+#: main.dfm:439
+#: main.dfm:968
 msgid "&Filter"
 msgstr "&Filtre"
 
 #. frmMain..Panel2..btnProcess..Caption
-#: main.dfm:463
 #. frmMain..ActionList1..acConvert..Caption
-#: main.dfm:939
+#: main.dfm:485
+#: main.dfm:961
 msgid "let's go"
 msgstr "Lancer"
 
 #. frmMain..memoOutput..Font.Name
-#: main.dfm:491
+#: main.dfm:513
 msgid "Fixedsys"
 msgstr "Fixedsys"
 
 #. frmMain..stbMain........Text
-#: main.dfm:511
+#: main.dfm:533
 msgid "http://www.gpsbabel.org (http://sourceforge.net/projects/gpsbabel)"
 msgstr "http://www.gpsbabel.org (http://sourceforge.net/projects/gpsbabel)"
 
 #. frmMain..OpenDialog..Filter
-#: main.dfm:518
+#: main.dfm:540
 msgid "Garmin Mapsource mps|*.mps|All files|*.*"
-msgstr ""
+msgstr "Garmin Mapsource mps|*.mps|Tous les fichiers|*.*"
 
 #. frmMain..SaveDialog..Filter
-#: main.dfm:524
+#: main.dfm:546
 msgid "All file(s)|*.*|Garmin MapSource mps|*.mps"
-msgstr ""
+msgstr "Tous les fichier(s)|*.*|Garmin MapSource mps|*.mps"
 
 #. frmMain..ActionList1..acConvert..Category
-#: main.dfm:938
 #. frmMain..ActionList1..acFilterSelect..Category
-#: main.dfm:945
+#: main.dfm:960
+#: main.dfm:967
 msgid "Babel"
 msgstr "Babel"
 
 #. frmMain..ActionList1..acFileExit..Category
-#: main.dfm:951
+#: main.dfm:973
 msgid "File"
 msgstr "Fichier"
 
 #. frmMain..ActionList1..acFileExit..Caption
-#: main.dfm:952
+#: main.dfm:974
 msgid "E&xit"
 msgstr "F&ermer"
 
 #. frmMain..ActionList1..acHelpAbout..Category
-#: main.dfm:957
 #. frmMain..ActionList1..acHelpIntro..Category
-#: main.dfm:962
 #. frmMain..ActionList1..acHelpReadme..Category
-#: main.dfm:966
+#: main.dfm:979
+#: main.dfm:984
+#: main.dfm:988
 msgid "Help"
 msgstr "Aide"
 
 #. frmMain..ActionList1..acHelpAbout..Caption
-#: main.dfm:958
+#: main.dfm:980
 msgid "&About"
 msgstr "&A propos"
 
 #. frmMain..ActionList1..acHelpIntro..Caption
-#: main.dfm:963
+#: main.dfm:985
 msgid "&Intro"
 msgstr "&Introduction"
 
 #. frmMain..ActionList1..acHelpReadme..Caption
-#: main.dfm:967
 #. frmReadme..Caption
+#: main.dfm:989
 #: readme.dfm:6
 msgid "GPSBabel README"
 msgstr "GPSBabel README"
 
 #. frmMain..MainMenu1..mnuFile..Caption
-#: main.dfm:976
+#: main.dfm:998
 msgid "&File"
 msgstr "&Fichier"
 
 #. frmMain..MainMenu1..mnuOptions..Caption
-#: main.dfm:982
+#: main.dfm:1004
 msgid "&Options"
 msgstr ""
 
 #. frmMain..MainMenu1..mnuOptions..mnuSynthesizeShortNames..Caption
-#: main.dfm:984
+#: main.dfm:1006
 msgid "Synthesize short names"
-msgstr ""
+msgstr "Générer les nom courts"
 
 #. frmMain..MainMenu1..mnuOptions..mnuSynthesizeShortNames....Hint
-#: main.dfm:987
-msgid "Ignore \"short\" names from source data and synthesize them from the "
-"long name"
-msgstr ""
+#: main.dfm:1009
+msgid "Ignore \"short\" names from source data and synthesize them from the long name"
+msgstr "Ingorer les noms  \"courts\"  de la source de données et les générer à partir des noms longs"
 
 #. frmMain..MainMenu1..mnuHelp..Caption
-#: main.dfm:996
+#: main.dfm:1018
 msgid "&Help"
 msgstr "&Aide"
 
 #. frmMain..MainMenu1..mnuHelp..N1..Caption
-#: main.dfm:1004
+#: main.dfm:1026
 msgid "-"
 msgstr "-"
 
@@ -566,11 +547,11 @@ msgstr ""
 
 #: about.pas:83
 msgid "German by Olaf Klein"
-msgstr ""
+msgstr "Allemand par Olaf Klein"
 
 #: about.pas:84
 msgid "French by Lilian Morinon"
-msgstr ""
+msgstr "Français par Lilian Morinon"
 
 #. Programmer's name for it: SGPSBabelURL
 #: common.pas:27
@@ -579,15 +560,15 @@ msgstr "http://www.gpsbabel.org"
 
 #: filter.pas:160
 msgid "Value (%s) out of range (%g to %g)!"
-msgstr ""
+msgstr "Valeurs (%s) en dehors des limites (%g à %g)!"
 
 #: filter.pas:228
 msgid "Feet"
-msgstr ""
+msgstr "Pieds"
 
 #: filter.pas:229
 msgid "Meter"
-msgstr ""
+msgstr "Mètre"
 
 #: filter.pas:232
 msgid "Miles"
@@ -595,7 +576,7 @@ msgstr ""
 
 #: filter.pas:233
 msgid "Kilometer"
-msgstr ""
+msgstr "Kilomètre"
 
 #: main.pas:181
 msgid "BETA"
@@ -603,11 +584,11 @@ msgstr "BETA"
 
 #: main.pas:183
 msgid "Private release"
-msgstr ""
+msgstr "Version privée"
 
 #: main.pas:185
 msgid "Special release"
-msgstr ""
+msgstr "Version spéciale"
 
 #: main.pas:281
 #: main.pas:376
@@ -620,8 +601,7 @@ msgstr "Fichier%s non trouvé."
 
 #: main.pas:438
 msgid "File \"%s\" exists ! Overwrite ?"
-msgstr "Le fichier \"%s\" existe déjà ! Ecraser "
-"?"
+msgstr "Le fichier \"%s\" existe déjà ! Ecraser ?"
 
 #: main.pas:439
 msgid "Warning"
@@ -632,8 +612,7 @@ msgid "Could not run \"gpsbabel.exe\"!"
 msgstr "Impossible d'éxécuter \"gpsbabel.exe\"!"
 
 #: main.pas:477
-msgid "Converted successfully from \"%s\" to "
-"\"%s\"."
+msgid "Converted successfully from \"%s\" to \"%s\"."
 msgstr "Conversion de \"%s\" à \"%s\" réussie."
 
 #: main.pas:478
@@ -642,19 +621,18 @@ msgstr "Succès"
 
 #: utils.pas:76
 msgid "Error WINAPI: Could not create \"NamedPipe\"!"
-msgstr ""
+msgstr "Erreur WIANPI: Ne peut pas créer \"NamedPipe\"!"
 
 #: utils.pas:81
 msgid "\"gpsbabel.exe\" not found!!!"
-msgstr ""
+msgstr "\"gpsbabel.exe\" non trouvé!!!"
 
 #. dwCreationFlags,     // creation flags
 #: utils.pas:100
-msgid "Could not run \"gpsbabel.exe\" (Error "
-"%d)!"
-msgstr ""
+msgid "Could not run \"gpsbabel.exe\" (Error %d)!"
+msgstr "Impossible d'éxecuter \"gpsbabel.exe\" (Error %d)!"
 
 #: utils.pas:106
 msgid "\"gpsbabel.exe\" returned error 0x%x (%d)"
-msgstr ""
+msgstr "\"gpsbabel.exe\" a renvoyé l'erreur 0x%x (%d)"
 
