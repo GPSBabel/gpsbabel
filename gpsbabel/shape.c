@@ -84,7 +84,7 @@ my_read(void)
 			wpt = waypt_new();
 			wpt->latitude = shp->dfYMin;
 			wpt->longitude = shp->dfXMin;
-			wpt->shortname = strdup(name);
+			wpt->shortname = xstrdup(name);
 			waypt_add(wpt);
 		}
 
