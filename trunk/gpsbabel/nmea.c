@@ -282,12 +282,16 @@ gpgga_parse(char *ibuf)
 
 	waypt->hdop 	= hdop;
 
-	if (fix==1) {
-		waypt->fix  = (nsats>3)?(fix_3d):(fix_2d);
-	}
-	else if (fix==2)
-	{
-		waypt->fix  = fix_dgps;
+	switch (fix) {
+		case 1:
+			waypt->fix  = (nsats>3)?(fix_3d):(fix_2d);
+			break;
+		case 2:
+			waypt->fix = fix_dgps;
+			break;
+		case 3:
+			waypt->fix = fix_pps
+			break;
 	}
 
 	curr_waypt = waypt;
@@ -602,6 +606,9 @@ nmea_trackpt_pr(const waypoint *wpt)
 	case fix_3d:
 	case fix_2d:
 		fix='1';
+		break;
+	case fix_pps:
+		fix='3';
 		break;
 	default:
 		fix='0';
