@@ -27,11 +27,11 @@ typedef struct queue {
 void enqueue(queue *new_el, queue *old);
 queue * dequeue(queue *element);
 
-#define QUEUE_INIT(head) (head)->next = (head)->prev = head
-#define QUEUE_FIRST(head) (head)->next
-#define QUEUE_NEXT(element) (element)->next
-#define QUEUE_LAST(head) (head)->prev
-#define QUEUE_EMPTY (head)->next == head
+#define QUEUE_INIT(head) (head)->next = ((head)->prev = head)
+#define QUEUE_FIRST(head) ((head)->next)
+#define QUEUE_NEXT(element) ((element)->next)
+#define QUEUE_LAST(head) ((head)->prev)
+#define QUEUE_EMPTY ((head)->next == (head))
 #define QUEUE_MOVE(newhead,oldhead) \
         if ( (oldhead)->next == (oldhead) ) {\
 		(newhead)->next = (newhead)->prev = (newhead); \
