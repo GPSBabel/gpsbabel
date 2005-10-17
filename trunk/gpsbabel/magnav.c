@@ -52,7 +52,7 @@ struct record {
 static FILE *file_in;
 static FILE *file_out;
 static const char *out_fname;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 
 static struct pdb *opdb;
 static struct pdb_record *opdb_rec;
@@ -82,7 +82,7 @@ static void
 wr_deinit(void)
 {
 	fclose(file_out);
-	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(&mkshort_handle);
 }
 
 static void

@@ -41,7 +41,7 @@
 static FILE *fd_in, *fd_out;
 static struct pdb *pdb_in, *pdb_out;
 static char *fname_in, *fname_out;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 static gpsdata_type ppdb_type;
 static unsigned char german_release = 0;
 
@@ -522,7 +522,7 @@ static void ppdb_wr_init(const char *fname)
 
 static void ppdb_wr_deinit(void)
 {
-	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(&mkshort_handle);
 	fclose(fd_out);
 	str_pool_deinit();
 	xfree(fname_out);

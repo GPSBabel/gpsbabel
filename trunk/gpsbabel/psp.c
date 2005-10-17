@@ -31,7 +31,7 @@
 
 static FILE *psp_file_in;
 static FILE *psp_file_out;
-static FILE *mkshort_handle;
+static short_handle mkshort_handle;
 
 static int
 psp_fread(void *buff, size_t size, size_t members, FILE * fp) 
@@ -196,7 +196,7 @@ psp_wr_init(const char *fname)
 static void
 psp_wr_deinit(void)
 {
-	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(&mkshort_handle);
 	fclose(psp_file_out);
 }
 

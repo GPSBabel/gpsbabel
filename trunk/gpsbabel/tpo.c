@@ -41,7 +41,7 @@ arglist_t tpo_args[] = {
 
 static FILE *tpo_file_in;
 static FILE *tpo_file_out;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 
 static double output_track_lon_scale;
 static double output_track_lat_scale;

@@ -27,7 +27,7 @@
 
 #define MYNAME "GARMIN" 
 static const char *portname;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 static GPS_PWay *tx_routelist;
 static GPS_PWay *cur_tx_routelist_entry;
 static GPS_PTrack *tx_tracklist;
@@ -154,8 +154,7 @@ static void
 rw_deinit(void)
 {
 	if (mkshort_handle) {
-		mkshort_del_handle(mkshort_handle);
-		mkshort_handle = NULL;
+		mkshort_del_handle(&mkshort_handle);
 	}
 }
 

@@ -136,7 +136,7 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
 
 static FILE *file_in;
 static FILE *file_out;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 
 static unsigned short waypt_out_count;
 static unsigned int trail_count, lowrance_route_count;
@@ -256,7 +256,7 @@ static void
 wr_deinit(void)
 {
 	fclose(file_out);
-	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(&mkshort_handle);
 }
 
 /**

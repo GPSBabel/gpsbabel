@@ -25,7 +25,7 @@
 
 queue waypt_head;
 static unsigned int waypt_ct;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 
 void
 waypt_init(void)
@@ -310,7 +310,7 @@ void
 waypt_flush_all()
 {
 	if ( mkshort_handle ) {
-		mkshort_del_handle( mkshort_handle );
+		mkshort_del_handle( &mkshort_handle );
 	}
 	waypt_flush(&waypt_head);
 }

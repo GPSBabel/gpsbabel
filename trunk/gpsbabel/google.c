@@ -23,7 +23,7 @@ static char *encoded_points = NULL;
 static char *encoded_levels = NULL;
 static char *script = NULL;
 static route_head *track_head;
-static void *desc_handle;
+static short_handle desc_handle;
 
 static FILE *fd;
 
@@ -247,7 +247,7 @@ static void
 google_rd_deinit(void)
 {
 	xml_deinit();
-	mkshort_del_handle(desc_handle);
+	mkshort_del_handle(&desc_handle);
 }
 
 ff_vecs_t google_vecs = {

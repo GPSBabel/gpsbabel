@@ -32,7 +32,7 @@
 
 static FILE *file_in;
 static FILE *file_out;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 static route_head *trk_head;
 static route_head *rte_head;
 
@@ -267,7 +267,7 @@ rd_deinit(void)
 {
     fclose(file_in);
     file_in = NULL;
-    mkshort_del_handle(mkshort_handle);
+    mkshort_del_handle(&mkshort_handle);
 }
 
 static void
@@ -312,7 +312,7 @@ wr_deinit(void)
     file_out = NULL;
     ozi_ofname = NULL;
 
-    mkshort_del_handle(mkshort_handle);
+    mkshort_del_handle(&mkshort_handle);
 }
 
 static void

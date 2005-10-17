@@ -28,7 +28,7 @@
 
 static FILE *maggeofile_in;
 static FILE *maggeofile_out;
-static void *desc_handle = NULL;
+static short_handle desc_handle = NULL;
 
 static void
 maggeo_writemsg(const char * const buf)
@@ -62,7 +62,7 @@ static void
 maggeo_wr_deinit(void)
 {
 	maggeo_writemsg("PMGNCMD,END");
-	mkshort_del_handle(desc_handle);
+	mkshort_del_handle(&desc_handle);
 	fclose(maggeofile_out);
 }
 

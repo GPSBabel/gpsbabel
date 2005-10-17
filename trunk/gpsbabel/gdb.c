@@ -82,7 +82,7 @@ static int gdb_via;		/* 0 = read and write hidden points too; 1 = drop */
 static int gdb_category;
 
 static route_head *gdb_hidden = NULL;
-static void *gdb_short_handle;
+static short_handle gdb_short_handle;
 
 #define GDB_OPT_VER		"ver"
 #define GDB_OPT_VIA		"via"
@@ -1111,7 +1111,7 @@ static void
 gdb_reset_short_handle(void)
 {
 	if (gdb_short_handle != NULL)
-	    mkshort_del_handle(gdb_short_handle);
+	    mkshort_del_handle(&gdb_short_handle);
 	    
 	gdb_short_handle = mkshort_new_handle();
 	
@@ -1650,7 +1650,7 @@ gdb_wr_deinit(void)
 	fclose(fout);
 	xfree(fout_name);
 	fout_name = NULL;
-	mkshort_del_handle(gdb_short_handle);
+	mkshort_del_handle(&gdb_short_handle);
 }
 
 static void 

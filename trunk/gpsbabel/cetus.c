@@ -141,7 +141,7 @@ static FILE *file_out;
 static const char *out_fname;
 static struct pdb *opdb;
 static struct pdb_record *opdb_rec;
-static void *mkshort_wr_handle;
+static short_handle mkshort_wr_handle;
 
 static char *dbname = NULL;
 static char *appendicon = NULL;
@@ -623,7 +623,7 @@ data_write(void)
 
 	pdb_Write(opdb, fileno(file_out));
 	xfree(htable);
-	mkshort_del_handle(mkshort_wr_handle);
+	mkshort_del_handle(&mkshort_wr_handle);
 }
 
 

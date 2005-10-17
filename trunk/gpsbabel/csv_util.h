@@ -122,7 +122,7 @@ typedef struct {
     char * description;		/* Description for help text */
     char * extension;		/* preferred filename extension (for wrappers)*/
     
-    void * mkshort_handle;	/* handle for mkshort() */
+    short_handle mkshort_handle;/* handle for mkshort() */
     ff_type type;		/* format type for GUI wrappers. */
     
 } xcsv_file_t;

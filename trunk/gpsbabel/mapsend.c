@@ -27,7 +27,7 @@
 
 static FILE *mapsend_file_in;
 static FILE *mapsend_file_out;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 
 static int route_wp_count;
 static int mapsend_infile_version;
@@ -101,7 +101,7 @@ static void
 mapsend_wr_deinit(void)
 {
 	fclose(mapsend_file_out);
-	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(&mkshort_handle);
 }
 
 static void

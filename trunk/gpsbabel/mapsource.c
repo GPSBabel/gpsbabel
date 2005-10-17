@@ -31,7 +31,7 @@
 static	FILE	*mps_file_in;
 static	FILE	*mps_file_out;
 static	FILE	*mps_file_temp;
-static	void	*mkshort_handle;
+static	short_handle mkshort_handle;
 
 static	int		mps_ver_in = 0;
 static	int		mps_ver_out = 0;
@@ -45,11 +45,11 @@ static	const waypoint	*prevRouteWpt;
 /* Private queues of written out waypoints */
 static queue written_wpt_head;
 static queue written_route_wpt_head;
-static void *written_wpt_mkshort_handle;
+static short_handle written_wpt_mkshort_handle;
 
 /* Private queue of read in waypoints assumed to be used only for routes */
 static queue read_route_wpt_head;
-static void *read_route_wpt_mkshort_handle;
+static short_handle read_route_wpt_mkshort_handle;
 
 #define MPSDEFAULTWPTCLASS		0
 #define MPSHIDDENROUTEWPTCLASS	8
@@ -287,7 +287,7 @@ mps_rd_deinit(void)
 {
 	fclose(mps_file_in);
 	if ( read_route_wpt_mkshort_handle ) {
-		mkshort_del_handle( read_route_wpt_mkshort_handle );
+		mkshort_del_handle( &read_route_wpt_mkshort_handle );
 	}
 	/* flush the "private" queue of waypoints read for routes */
 	mps_wpt_q_deinit(&read_route_wpt_head);
@@ -339,7 +339,7 @@ mps_wr_deinit(void)
 	}
 
 	if ( written_wpt_mkshort_handle ) {
-		mkshort_del_handle( written_wpt_mkshort_handle );
+		mkshort_del_handle( &written_wpt_mkshort_handle );
 	}
 	/* flush the "private" queue of waypoints written */
 	mps_wpt_q_deinit(&written_wpt_head);
@@ -2165,7 +2165,7 @@ mps_write(void)
 	}
 	else mps_mapsetname_w(mps_file_out, mps_ver_out);
 
-	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(&mkshort_handle);
 
 }
 
