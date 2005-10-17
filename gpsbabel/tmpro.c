@@ -40,7 +40,7 @@
 
 static FILE *file_in;
 static FILE *file_out;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 
 static void 
 rd_init(const char *fname)
@@ -243,7 +243,7 @@ data_write(void)
 	fprintf(file_out, "Group\tsID\tsDescription\tfLat\tfLong\tfEasting\tfNorthing\tfAlt\tiColour\tiSymbol\tsHyperLink\n");
 
     waypt_disp_all(tmpro_waypt_pr);
-    mkshort_del_handle(mkshort_handle);
+    mkshort_del_handle(&mkshort_handle);
 }
 
 ff_vecs_t tmpro_vecs = {

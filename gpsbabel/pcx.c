@@ -25,8 +25,8 @@
 
 static FILE *file_in;
 static FILE *file_out;
-static void *mkshort_handle;
-static void *mkshort_handle2;	/* for track and route names */
+static short_handle mkshort_handle;
+static short_handle mkshort_handle2;	/* for track and route names */
 static char *deficon = NULL;
 static int read_as_degrees;
 static int route_ctr;
@@ -64,8 +64,8 @@ static void
 wr_deinit(void)
 {
 	fclose(file_out);
-	mkshort_del_handle(mkshort_handle);
-	mkshort_del_handle(mkshort_handle2);
+	mkshort_del_handle(&mkshort_handle);
+	mkshort_del_handle(&mkshort_handle2);
 }
 
 static void

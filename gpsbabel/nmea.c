@@ -119,7 +119,7 @@ typedef enum {
 static FILE *file_in;
 static FILE *file_out;
 static route_head *trk_head;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 static preferred_posn_type posn_type;
 static time_t creation_time;
 static waypoint * curr_waypt	=NULL;
@@ -183,7 +183,7 @@ static  void
 nmea_wr_deinit(void)
 {
 	fclose(file_out);
-	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(&mkshort_handle);
 }
 
 static void

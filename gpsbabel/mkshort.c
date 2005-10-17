@@ -149,12 +149,12 @@ mkshort_add_to_list(mkshort_handle *h, char *name)
 }
 
 void
-mkshort_del_handle(void *h)
+mkshort_del_handle(short_handle *h)
 {
-	mkshort_handle *hdr = h;
+	mkshort_handle *hdr = (mkshort_handle*) *h;
 	int i;
 
-	if (!hdr)
+	if (!h || !hdr)
 		return;
 
 	for (i = 0; i < PRIME; i++) {
@@ -172,13 +172,14 @@ mkshort_del_handle(void *h)
 			xfree(s);
 		}
 	}
-	setshort_badchars(h, NULL);
-	setshort_goodchars(h, NULL);
+	setshort_badchars(*h, NULL);
+	setshort_goodchars(*h, NULL);
 	if (hdr->defname) {
 		xfree(hdr->defname);
 	} 
 
 	xfree(hdr);
+	*h = NULL;
 }
 
 /*
@@ -218,9 +219,9 @@ delete_last_vowel(int start, char *istring, int *replaced)
  * strings returned by mkshort().  0 resets to default.
  */
 void
-setshort_length(void *h, int l)
+setshort_length(short_handle h, int l)
 {
-	mkshort_handle *hdl = h;
+	mkshort_handle *hdl = (mkshort_handle *) h;
 	if (l == 0) {
 		hdl->target_len = DEFAULT_TARGET_LEN;
 	} else {
@@ -233,9 +234,9 @@ setshort_length(void *h, int l)
  */
  
 void
-setshort_whitespace_ok(void *h, int l)
+setshort_whitespace_ok(short_handle h, int l)
 {
-	mkshort_handle *hdl = h;
+	mkshort_handle *hdl = (mkshort_handle *) h;
 	hdl->whitespaceok = l;
 }
 
@@ -245,9 +246,9 @@ setshort_whitespace_ok(void *h, int l)
  */
 
 void
-setshort_repeating_whitespace_ok(void *h, int l)
+setshort_repeating_whitespace_ok(short_handle h, int l)
 {
-	mkshort_handle *hdl = h;
+	mkshort_handle *hdl = (mkshort_handle *) h;
 	hdl->repeating_whitespaceok = l;
 }
 
@@ -256,9 +257,9 @@ setshort_repeating_whitespace_ok(void *h, int l)
  * becuase it was filtered by charsets or null or whatever.
  */
 void
-setshort_defname(void *h, const char *s)
+setshort_defname(short_handle h, const char *s)
 {
-	mkshort_handle *hdl = h;
+	mkshort_handle *hdl = (mkshort_handle *) h;
 	if (s == NULL) {
 		fatal("setshort_defname called without a valid name.");
 	}
@@ -273,9 +274,9 @@ setshort_defname(void *h, const char *s)
  * resets to default.
  */
 void
-setshort_badchars(void *h, const char *s)
+setshort_badchars(short_handle h, const char *s)
 {
-	mkshort_handle *hdl = h;
+	mkshort_handle *hdl = (mkshort_handle *) h;
 
 	if ((hdl->badchars != NULL) && (hdl->badchars != DEFAULT_BADCHARS))
 		xfree(hdl->badchars);
@@ -291,9 +292,9 @@ setshort_badchars(void *h, const char *s)
  * in generated names.
  */
 void
-setshort_goodchars(void *h, const char *s)
+setshort_goodchars(short_handle h, const char *s)
 {
-	mkshort_handle *hdl = h;
+	mkshort_handle *hdl = (mkshort_handle *) h;
 
 	if (hdl->goodchars != NULL)
 		xfree(hdl->goodchars);
@@ -307,9 +308,9 @@ setshort_goodchars(void *h, const char *s)
  *  Call with i non-zero if generated names must be uppercase only.
  */
 void
-setshort_mustupper(void *h, int i)
+setshort_mustupper(short_handle h, int i)
 {
-	mkshort_handle *hdl = h;
+	mkshort_handle *hdl = (mkshort_handle *) h;
 	hdl->mustupper = i;
 }
 
@@ -319,17 +320,17 @@ setshort_mustupper(void *h, int i)
  *  (By default, they are.)
  */
 void
-setshort_mustuniq(void *h, int i)
+setshort_mustuniq(short_handle h, int i)
 {
-	mkshort_handle *hdl = h;
+	mkshort_handle *hdl = (mkshort_handle *) h;
 	hdl->must_uniq = i;
 }
 
 char *
 #ifdef DEBUG_MEM
-MKSHORT(void *h, const char *istring, DEBUG_PARAMS )
+MKSHORT(short_handle h, const char *istring, DEBUG_PARAMS )
 #else
-mkshort(void *h, const char *istring)
+mkshort(short_handle h, const char *istring)
 #endif
 {
 	char *ostring = xxstrdup(istring, file, line);
@@ -338,7 +339,7 @@ mkshort(void *h, const char *istring)
 	char *cp;
 	char *np;
 	int i, l, nlen, replaced;
-	mkshort_handle *hdl = h;
+	mkshort_handle *hdl = (mkshort_handle *) h;
 
 	/* 
 	 * Whack leading "[Tt]he",
@@ -471,7 +472,7 @@ mkshort(void *h, const char *istring)
  * the code that considers the alternate sources.
  */
 char *
-mkshort_from_wpt(void *h, const waypoint *wpt)
+mkshort_from_wpt(short_handle h, const waypoint *wpt)
 {
 	/* This probably came from a Groundspeak Pocket Query
 	 * so use the 'cache name' instead of the description field

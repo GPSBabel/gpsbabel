@@ -46,7 +46,7 @@ static waypoint *wpt_tmp;
 static int cache_descr_is_html;
 static FILE *fd;
 static FILE *ofd;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 
 static const char *input_string = NULL;
 static int input_string_len = 0;
@@ -1006,7 +1006,7 @@ static void
 gpx_wr_deinit(void)
 {
 	fclose(ofd);
-	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(&mkshort_handle);
 }
 
 void

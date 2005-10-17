@@ -28,7 +28,7 @@
 #include "defs.h"
 #include "grtcirc.h"
 
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 
 #define MYNAME         "overlay"
 #define PARAMETER_FILE "overlay.def"

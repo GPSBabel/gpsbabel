@@ -311,7 +311,7 @@ coto_wpt_write(const waypoint *wpt)
 	struct appinfo *ai = (struct appinfo *) opdb->appinfo;
 	static int ct;
 	struct pdb_record *opdb_rec;
-	static void *mkshort_wr_handle;
+	static short_handle  mkshort_wr_handle;
 	char *notes = NULL;
 	char *shortname = NULL;
 	char *vdata;
@@ -380,7 +380,7 @@ coto_wpt_write(const waypoint *wpt)
 	xfree(shortname);
 	xfree(rec);
 	
-	mkshort_del_handle(mkshort_wr_handle);
+	mkshort_del_handle(&mkshort_wr_handle);
 	
 }
 

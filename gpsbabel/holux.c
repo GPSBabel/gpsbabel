@@ -34,7 +34,7 @@ History:
 
 static  FILE *file_in;
 static 	unsigned char *HxWFile;
-static  void *mkshort_handle;
+static  short_handle mkshort_handle;
 static  char fOutname[256];
 #define MYNAME "Holux"
 
@@ -70,7 +70,7 @@ wr_init(const char *fname)
 
 static void wr_deinit(void)
 {   
-        mkshort_del_handle(mkshort_handle);
+        mkshort_del_handle(&mkshort_handle);
 
 }
 

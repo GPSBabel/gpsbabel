@@ -43,7 +43,7 @@ typedef struct psit_icon_mapping {
 
 static FILE *psit_file_in;
 static FILE *psit_file_out;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 
 /* 2 = not written any tracks out
    1 = change of track to write out track header
@@ -780,7 +780,7 @@ psit_write(void)
 		track_disp_all(psit_trackhdr_w_wrapper, psit_noop, psit_trackdatapoint_w_wrapper);
 	}
 
-	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(&mkshort_handle);
 
 }
 

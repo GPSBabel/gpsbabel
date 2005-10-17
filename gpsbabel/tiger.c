@@ -24,8 +24,8 @@
 
 static FILE *file_in;
 static FILE *file_out;
-static void *mkshort_handle;
-static void *mkshort_whandle;
+static short_handle mkshort_handle;
+static short_handle mkshort_whandle;
 
 #define MYNAME "GPSUTIL"
 
@@ -108,7 +108,7 @@ static void
 rd_deinit(void)
 {
 	fclose(file_in);
-	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(&mkshort_handle);
 }
 
 static void
@@ -274,7 +274,7 @@ data_write(void)
 #endif
 	}
 
-	mkshort_del_handle(mkshort_whandle);
+	mkshort_del_handle(&mkshort_whandle);
 }
 
 

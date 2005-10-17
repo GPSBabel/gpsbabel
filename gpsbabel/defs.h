@@ -394,25 +394,26 @@ void track_restore(unsigned int count, queue *head_bak);
  * All shortname functions take a shortname handle as the first arg.
  * This is an opaque pointer.  Callers must not fondle the contents of it.
  */
+typedef struct short_handle * short_handle;
 #ifndef DEBUG_MEM 
-char *mkshort (void *, const char *);
+char *mkshort (short_handle,  const char *);
 void *mkshort_new_handle(void);
 #else
-char *MKSHORT(void *, const char *, DEBUG_PARAMS);
+char *MKSHORT(short_handle,  const char *, DEBUG_PARAMS);
 void *MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
 #define mkshort( a, b) MKSHORT(a,b,__FILE__, __LINE__)
 #define mkshort_new_handle() MKSHORT_NEW_HANDLE(__FILE__,__LINE__)
 #endif
-char *mkshort_from_wpt(void *h, const waypoint *wpt);
-void mkshort_del_handle(void *h);
-void setshort_length(void *, int n);
-void setshort_badchars(void *, const char *);
-void setshort_goodchars(void *, const char *);
-void setshort_mustupper(void *, int n);
-void setshort_mustuniq(void *, int n);
-void setshort_whitespace_ok(void *, int n);
-void setshort_repeating_whitespace_ok(void *, int n);
-void setshort_defname(void *, const char *s);
+char *mkshort_from_wpt(short_handle h, const waypoint *wpt);
+void mkshort_del_handle(short_handle *h);
+void setshort_length(short_handle, int n);
+void setshort_badchars(short_handle,  const char *);
+void setshort_goodchars(short_handle,  const char *);
+void setshort_mustupper(short_handle,  int n);
+void setshort_mustuniq(short_handle,  int n);
+void setshort_whitespace_ok(short_handle,  int n);
+void setshort_repeating_whitespace_ok(short_handle,  int n);
+void setshort_defname(short_handle, const char *s);
 
 /*
  *  Vmem flags values.

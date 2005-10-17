@@ -32,7 +32,7 @@
 
 static FILE *tpg_file_in;
 static FILE *tpg_file_out;
-static void *mkshort_handle;
+static short_handle mkshort_handle;
 static char *tpg_datum_opt;
 static int tpg_datum_idx;
 
@@ -127,7 +127,7 @@ tpg_wr_init(const char *fname)
 static void
 tpg_wr_deinit(void)
 {
-	mkshort_del_handle(mkshort_handle);
+	mkshort_del_handle(&mkshort_handle);
 	fclose(tpg_file_out);
 }
 

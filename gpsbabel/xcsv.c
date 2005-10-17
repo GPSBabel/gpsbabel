@@ -159,7 +159,7 @@ xcsv_destroy_style(void)
         xfree(xcsv_file.extension);
 
     if (xcsv_file.mkshort_handle)
-        mkshort_del_handle(xcsv_file.mkshort_handle);
+        mkshort_del_handle(&xcsv_file.mkshort_handle);
 
     /* return everything to zeros */
     internal = xcsv_file.is_internal;

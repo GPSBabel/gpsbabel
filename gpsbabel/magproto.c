@@ -38,7 +38,7 @@ static void termwrite(char *obuf, int size);
 static void mag_readmsg(gpsdata_type objective);
 static void mag_handon(void);
 static void mag_handoff(void);
-static void *mkshort_handle = NULL;
+static short_handle mkshort_handle = NULL;
 static char *deficon = NULL;
 static char *bs = NULL;
 static char *cmts = NULL;
@@ -876,8 +876,7 @@ mag_deinit(void)
 		fclose(magfile_in);
 	magfile_in = NULL;
 	if(mkshort_handle)
-		mkshort_del_handle(mkshort_handle);
-	mkshort_handle = NULL;
+		mkshort_del_handle(&mkshort_handle);
 
 	waypt_flush(&rte_wpt_tmp);
 }
