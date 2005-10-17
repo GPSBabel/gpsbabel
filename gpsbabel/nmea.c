@@ -290,7 +290,7 @@ gpgga_parse(char *ibuf)
 			waypt->fix = fix_dgps;
 			break;
 		case 3:
-			waypt->fix = fix_pps
+			waypt->fix = fix_pps;
 			break;
 	}
 
