@@ -1,7 +1,7 @@
 /*
     Misc utilities.
 
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -370,16 +370,6 @@ printposn(const double c, int is_lat)
 }
 
 void
-fatal(const char *fmt, ...)
-{
-	va_list ap;
-	va_start(ap, fmt);
-	vfprintf(stderr, fmt, ap);
-	va_end(ap);
-	exit(1);
-}
-
-void
 is_fatal(const int condition, const char *fmt, ...)
 {
 	va_list args;
@@ -392,15 +382,6 @@ is_fatal(const int condition, const char *fmt, ...)
 	va_end(args);
 
 	fatal("%s\n", buff);
-}
-
-void
-warning(const char *fmt, ...)
-{
-	va_list ap;
-	va_start(ap, fmt);
-	vfprintf(stderr, fmt, ap);
-	va_end(ap);
 }
 
 /*
