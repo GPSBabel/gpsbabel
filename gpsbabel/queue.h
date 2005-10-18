@@ -1,7 +1,7 @@
 /*
     Generic queueing utilities.
 
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ queue * dequeue(queue *element);
 #define QUEUE_FIRST(head) ((head)->next)
 #define QUEUE_NEXT(element) ((element)->next)
 #define QUEUE_LAST(head) ((head)->prev)
-#define QUEUE_EMPTY ((head)->next == (head))
+#define QUEUE_EMPTY(head) ((head)->next == (head))
 #define QUEUE_MOVE(newhead,oldhead) \
         if ( (oldhead)->next == (oldhead) ) {\
 		(newhead)->next = (newhead)->prev = (newhead); \
