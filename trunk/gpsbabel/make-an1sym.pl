@@ -199,12 +199,12 @@ sub DoImage {
     "f276f6b3", "", # ???
     "91d242c8", "Running",
     "8b0078db", "Transportation",
-    "0599f6c9", "Fishing",
+    "0599f6c9", "Fishing 2",
     "7389128c", "Automotive",
     "0362b593", "Cloudy",
     "f0717a94", "Partly Cloudy",
     "14486bbc", "Mostly Cloudy",
-    "7a258c70", "Tornado",
+    "7a258c70", "Hurricane",
     "eff260d4", "Lightning",
     "c3d70220", "Rain",
     # everything else is defined
