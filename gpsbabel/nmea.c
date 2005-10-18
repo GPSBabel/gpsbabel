@@ -1,22 +1,22 @@
 /*
-    Read files containing selected NMEA 0183 sentences.
-    Based on information by Eino Uikkanenj
+	Read files containing selected NMEA 0183 sentences.
+	Based on information by Eino Uikkanenj
 
-    Copyright (C) 2004 Robert Lipe, robertlipe@usa.net
+	Copyright (C) 2004-2005 Robert Lipe, robertlipe@usa.net
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
 
@@ -67,34 +67,34 @@
    '	10   300504			Date 30/05-2004
    '  11   Empty field	Magnetic variation
 
-      GSA - GPS DOP and active satellites
-      $GPGSA,A,3,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39
-           A            Auto selection of 2D or 3D fix (M = manual)
-           3            3D fix
-           04,05...     PRNs of satellites used for fix (space for 12)
-           2.5          PDOP (dilution of precision)
-           1.3          Horizontal dilution of precision (HDOP)
-           2.1          Vertical dilution of precision (VDOP)
-             DOP is an indication of the effect of satellite geometry on
-             the accuracy of the fix.
+	  GSA - GPS DOP and active satellites
+	  $GPGSA,A,3,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39
+	       A            Auto selection of 2D or 3D fix (M = manual)
+	       3            3D fix
+	       04,05...     PRNs of satellites used for fix (space for 12)
+	       2.5          PDOP (dilution of precision)
+	       1.3          Horizontal dilution of precision (HDOP)
+	       2.1          Vertical dilution of precision (VDOP)
+	         DOP is an indication of the effect of satellite geometry on
+	         the accuracy of the fix.
 
-      VTG - Track made good and ground speed
-      $GPVTG,054.7,T,034.4,M,005.5,N,010.2,K
-           054.7,T      True track made good
-           034.4,M      Magnetic track made good
-           005.5,N      Ground speed, knots
-           010.2,K      Ground speed, Kilometers per hour
+	  VTG - Track made good and ground speed
+	  $GPVTG,054.7,T,034.4,M,005.5,N,010.2,K
+	       054.7,T      True track made good
+	       034.4,M      Magnetic track made good
+	       005.5,N      Ground speed, knots
+	       010.2,K      Ground speed, Kilometers per hour
 
-      WPL - waypoint location
-      $GPWPL,4917.16,N,12310.64,W,003*65
-           4917.16,N    Latitude of waypoint
-           12310.64,W   Longitude of waypoint
-           003          Waypoint ID
-             When a route is active, this sentence is sent once for each
-             waypoint in the route, in sequence. When all waypoints have
-             been reported, GPR00 is sent in the next data set. In any
-             group of sentences, only one WPL sentence, or an R00
-             sentence, will be sent.
+	  WPL - waypoint location
+	  $GPWPL,4917.16,N,12310.64,W,003*65
+	       4917.16,N    Latitude of waypoint
+	       12310.64,W   Longitude of waypoint
+	       003          Waypoint ID
+	         When a route is active, this sentence is sent once for each
+	         waypoint in the route, in sequence. When all waypoints have
+	         been reported, GPR00 is sent in the next data set. In any
+	         group of sentences, only one WPL sentence, or an R00
+	         sentence, will be sent.
 
 
    ' The optional checksum field consists of a "*" and two hex digits repre-
@@ -108,6 +108,28 @@
  * same position fix. If we see a single GGA, start ignoring GLL's and RMC's.
  *	GLL's will also be ignored if RMC's are found and GGA's not found.
  */
+
+/* 
+Zmarties notes:
+
+In practice, all fields of the NMEA sentences should be treated as optional -
+if the data is not available, then the field can be omitted (hence leading
+to the output of two consecutive commas).
+
+An NMEA recording can start anywhere in the stream of data.  It is therefore
+necessary to discard sentences until sufficient data has been processed to
+have all the necessary data to construct a waypoint.  In practice, this means
+discarding data until we have had the first sentence that provides the date.
+(We could scan forwards in the stream of data to find the first date, and
+then back apply it to all previous sentences, but that is probably more
+complexity that is necessary - the lost of one waypoint at the start of the
+stream can normally be tolerated.)
+
+If a sentence is received without a checksum, but previous sentences have
+had checksums, it is best to discard that sentence.  In practice, the only
+time I have seen this is when the recording stops suddenly, where the last
+sentence is truncated - and missing part of the line, including the checksum.
+*/
  
 typedef enum {
 	gp_unknown = 0,
@@ -121,8 +143,10 @@ static FILE *file_out;
 static route_head *trk_head;
 static short_handle mkshort_handle;
 static preferred_posn_type posn_type;
-static time_t creation_time;
-static waypoint * curr_waypt	=NULL;
+static struct tm tm;
+static waypoint * curr_waypt = NULL;
+
+static int had_date = 0;
 
 #define MYNAME "nmea"
 
@@ -193,15 +217,12 @@ gpgll_parse(char *ibuf)
 	char lngdir, latdir;
 	int hms;
 	char valid;
-	struct tm tm;
 	waypoint *waypt;
 
 	if (trk_head == NULL) {
 		trk_head = route_head_alloc();
 		track_add_head(trk_head);
 	}
-
-	memset(&tm, 0, sizeof(tm));
 
 	sscanf(ibuf,"$GPGLL,%lf,%c,%lf,%c,%d,%c,",
 		&latdeg,&latdir,
@@ -218,7 +239,7 @@ gpgll_parse(char *ibuf)
 
 	waypt = waypt_new();
 
-	waypt->creation_time = creation_time;
+	waypt->creation_time = mkgmtime(&tm);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -236,7 +257,6 @@ gpgga_parse(char *ibuf)
 	double latdeg, lngdeg;
 	char lngdir, latdir;
 	double hms;
-	struct tm tm;
 	double alt;
 	int fix;
 	int nsats;
@@ -248,8 +268,6 @@ gpgga_parse(char *ibuf)
 		trk_head = route_head_alloc();
 		track_add_head(trk_head);
 	}
-
-	memset(&tm, 0, sizeof(tm));
 
 	sscanf(ibuf,"$GPGGA,%lf,%lf,%c,%lf,%c,%d,%d,%lf,%lf,%c",
 		&hms, &latdeg,&latdir,
@@ -268,7 +286,7 @@ gpgga_parse(char *ibuf)
 
 	waypt  = waypt_new();
 
-	waypt->creation_time = creation_time;
+	waypt->creation_time = mkgmtime(&tm);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -296,8 +314,6 @@ gpgga_parse(char *ibuf)
 
 	curr_waypt = waypt;
 	route_add_wpt(trk_head, waypt);
-
-
 }
 
 static void
@@ -308,7 +324,6 @@ gprmc_parse(char *ibuf)
 	double hms;
 	char fix;
 	unsigned int dmy;
-	struct tm tm;
 	double speed,course;
 	waypoint *waypt;
 
@@ -317,12 +332,15 @@ gprmc_parse(char *ibuf)
 		track_add_head(trk_head);
 	}
 
-	memset(&tm, 0, sizeof(tm));
-
 	sscanf(ibuf,"$GPRMC,%lf,%c,%lf,%c,%lf,%c,%lf,%lf,%u",
 		&hms, &fix, &latdeg, &latdir,
 		&lngdeg, &lngdir,
 		&speed, &course, &dmy);
+
+	if (fix != 'A') {
+		/* ignore this fix - it is invalid */
+		return;
+	}
 	
 	tm.tm_sec = (long) hms % 100;
 	hms = hms / 100;
@@ -335,7 +353,8 @@ gprmc_parse(char *ibuf)
 	tm.tm_mon  = dmy % 100 - 1;
 	dmy = dmy / 100;
 	tm.tm_mday = dmy;
-	creation_time = mkgmtime(&tm);
+
+	had_date = 1;
 
 	if (posn_type == gpgga) {
 		/* capture useful data update and exit */
@@ -354,7 +373,7 @@ gprmc_parse(char *ibuf)
 
 	waypt->course 	= course;
 	
-	waypt->creation_time = creation_time;
+	waypt->creation_time = mkgmtime(&tm);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -398,9 +417,7 @@ gpzda_parse(char *ibuf)
 {
 	double hms;
 	int dd, mm, yy, lclhrs, lclmins;
-	struct tm tm;
 
-	memset(&tm, 0, sizeof(tm));
 	sscanf(ibuf,"$GPZDA,%lf,%d,%d,%d,%d,%d", 
 		&hms, &dd, &mm, &yy, &lclhrs, &lclmins);
 	tm.tm_sec  = (int) hms % 100;
@@ -409,7 +426,8 @@ gpzda_parse(char *ibuf)
 	tm.tm_mday = dd;
 	tm.tm_mon  = mm - 1;
 	tm.tm_year = yy - 1900;
-	creation_time = mkgmtime(&tm);
+
+	had_date = 1;
 }
 
 static void
@@ -473,7 +491,7 @@ gpvtg_parse(char *ibuf)
 	char	cn;
 	double	speed_k;
 	char	ck;	
-      
+
 	sscanf(ibuf,"$GPVTG,%f,%c,%f,%c,%lf,%c,%lf,%c",
 		&course,&ct,&magcourse,&cm,&speed_n,&cn,&speed_k,&ck);
 		
@@ -496,59 +514,94 @@ nmea_read(void)
 	char ibuf[1024];
 	char *ck;
 	int ckval, ckcmp;
-	struct tm tm;
+	int had_checksum = 0;
 
-	creation_time = mkgmtime(&tm) + current_time();
+	had_date = 0;
 
 	curr_waypt = NULL; 
 
 	while (fgets(ibuf, sizeof(ibuf), file_in)) {
-		ck = strrchr(ibuf, '*');
+	char *tbuf = ibuf;
+
+		ck = strrchr(tbuf, '*');
 		if (ck != NULL) {
 			*ck = '\0';
-			ckval = nmea_cksum(&ibuf[1]);
+			ckval = nmea_cksum(&tbuf[1]);
 			*ck = '*';
 			ck++;
 			sscanf(ck, "%2X", &ckcmp);
 			if (ckval != ckcmp) {
 #if 0
 				printf("ckval %X, %X, %s\n", ckval, ckcmp, ck);
-				printf("NMEA %s\n", ibuf);
+				printf("NMEA %s\n", tbuf);
 #endif
 				continue;
 			}
+
+			had_checksum = 1;
 		}
-		if (0 == strncmp(ibuf, "$GPWPL,", 7)) {
-			gpwpl_parse(ibuf);
+	else if (had_checksum) {
+	/* we have had a checksum on all previous sentences, but not on this
+	one, which probably indicates this line is truncated */
+	had_checksum = 0;
+	continue;
+	}
+
+	/* Only GPRMC and GPZDA sentences have dates in them, so we discard all 
+	   sentences until we see one of those 
+	*/
+	if (!had_date && 
+		(0 != strncmp(tbuf, "$GPRMC,", 7)) &&
+		(0 != strncmp(tbuf, "$GPZDA,", 7))) {
+		continue;
+	}
+
+	/* @@@ zmarties: The parse routines all assume all fields are present, but 
+	   the NMEA format allows any field to be missed out if there is no data
+	   for that field.  Rather than change all the parse routines, we first
+	   substitute a default value of zero for any missing field.
+	*/
+	if (strstr(tbuf, ",,"))
+	{
+	  tbuf = gstrsub(tbuf, ",,", ",0,");
+	}
+
+		if (0 == strncmp(tbuf, "$GPWPL,", 7)) {
+			gpwpl_parse(tbuf);
 		} else
-		if (0 == strncmp(ibuf, "$GPGGA,", 7)) {
+		if (0 == strncmp(tbuf, "$GPGGA,", 7)) {
 			posn_type = gpgga;
-			gpgga_parse(ibuf);
+			gpgga_parse(tbuf);
 		} else
-		if (0 == strncmp(ibuf, "$GPRMC,", 7)) {
+		if (0 == strncmp(tbuf, "$GPRMC,", 7)) {
 			if (posn_type != gpgga) {
 				posn_type = gprmc;
 			}			
 			/*			
-			 * Allways call gprmc_parse() because like GPZDA
+			 * Always call gprmc_parse() because like GPZDA
 			 * it contains the full date.
 			 */			
-			gprmc_parse(ibuf);
+			gprmc_parse(tbuf);
 		} else
-		if (0 == strncmp(ibuf, "$GPGLL,", 7)) {
+		if (0 == strncmp(tbuf, "$GPGLL,", 7)) {
 			if ((posn_type != gpgga) && (posn_type != gprmc)) {
-				gpgll_parse(ibuf);
+				gpgll_parse(tbuf);
 			}
 		} else
-		if (0 == strncmp(ibuf, "$GPZDA,",7)) {
-			gpzda_parse(ibuf);
+		if (0 == strncmp(tbuf, "$GPZDA,",7)) {
+			gpzda_parse(tbuf);
 		} else
-		if (0 == strncmp(ibuf, "$GPVTG,",7)) {
-			gpvtg_parse(ibuf); /* speed and course */
+		if (0 == strncmp(tbuf, "$GPVTG,",7)) {
+			gpvtg_parse(tbuf); /* speed and course */
 		} else
-		if (0 == strncmp(ibuf, "$GPGSA,",7)) {
-			gpgsa_parse(ibuf); /* GPS fix */
+		if (0 == strncmp(tbuf, "$GPGSA,",7)) {
+			gpgsa_parse(tbuf); /* GPS fix */
 		}
+
+	if (tbuf != ibuf) {
+	  /* clear up the dynamic buffer we used because substition was required */
+		xfree(tbuf);
+	}
 	}
 }
 
