@@ -1,12 +1,12 @@
 # gpsbabel XCSV style file
 #
-# Format: Tab delimitered csv useful for OpenOffice, Ploticus etc.
+# Format: Tab delimited useful for OpenOffice, Ploticus etc.
 # Author: Tobias Minich
 #   Date: 07/18/2005
 #
 #
 
-DESCRIPTION		Tab delimitered csv useful for OpenOffice, Ploticus etc.
+DESCRIPTION		Tab delimited fields useful for OpenOffice, Ploticus etc.
 
 # FILE LAYOUT DEFINITIIONS:
 #
