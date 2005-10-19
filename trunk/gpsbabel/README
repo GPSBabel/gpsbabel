@@ -949,11 +949,21 @@ THE FORMATS
   
         gpsbabel -i gpx -f 12345.gpx -o an1,nogc -F 12345.an1
 
-        The "symbol" option allows you to specify which symbol to use for
+        The "deficon" option allows you to specify which symbol to use for
         points that don't have a symbol already.  It defaults to "Red Flag" 
         but it accepts any symbol name you can put in a DeLorme export file.
         To find the name of a specific symbol in Street Atlas, let the mouse
         pointer hover over it for a few seconds and the name will be displayed.
+
+	The "color" option allows you to specify the color for line data.
+	It accepts color names of the form "#FF0000" (red) or any of the 16 
+	common color names from the Cascading Style Sheets specification.i
+
+	The "zoom" option specifies at what zoom level Street Atlas will begin
+	showing reduced versions of your symbols.  The default is 10.  Setting
+	zoom to 0 will disable this feature.  Setting it to anything but the 
+        default will override the zoom level specified on any waypoints that
+	were read from an existing an1 file; this is by design.  
 
         GPSBabel has limited experimental support for other types of layers
         besides the default "drawing" layer with the use of two options:
