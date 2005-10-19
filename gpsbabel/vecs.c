@@ -167,7 +167,7 @@ vecs_t vec_list[] = {
 		&lowranceusr_vecs,
 		"lowranceusr",
 		"Lowrance USR",
-		NULL
+		"usr"
 	},
 	{
 		&cetus_vecs,
@@ -365,7 +365,7 @@ vecs_t vec_list[] = {
                 &kml_vecs,
                 "kml",
                 "Keyhole Markup Language",
-                NULL
+                "kml"
 	},
 	{
                 &vcf_vecs,
