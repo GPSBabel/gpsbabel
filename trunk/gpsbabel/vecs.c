@@ -173,25 +173,25 @@ vecs_t vec_list[] = {
 		&cetus_vecs,
 		"cetus",
 		"Cetus for Palm/OS", 
-		NULL
+		"pdb"
 	},
 	{
 		&copilot_vecs,
 		"copilot",
 		"CoPilot Flight Planner for Palm/OS", 
-		NULL
+		"pdb"
 	},
 	{
 		&gpspilot_vecs,
 		"gpspilot",
 		"GPSPilot Tracker for Palm/OS", 
-		NULL
+		"pdb"
 	},
 	{
 		&magnav_vec,
 		"magnav",
 		"Magellan NAV Companion for Palm/OS", 
-		NULL
+		"pdb"
 	},
 	{
 		&garmin_vecs,
@@ -227,7 +227,7 @@ vecs_t vec_list[] = {
 		&gcdb_vecs,
 		"gcdb",
 		"GeocachingDB for Palm/OS", 
-		NULL
+		"pdb"
 	},
 	{
 		&tiger_vecs,
@@ -245,13 +245,13 @@ vecs_t vec_list[] = {
 		&quovadis_vecs,
 		"quovadis",
 		"Quovadis",
-		NULL
+		"pdb"	
 	},
 	{
 		&gpilots_vecs,
 		"gpilots",
 		"GpilotS",
-		NULL
+		"pdb"
 	},
 	{
 		&saroute_vecs,
@@ -281,19 +281,19 @@ vecs_t vec_list[] = {
 		&shape_vecs,
 		"shape",
 		"ESRI shapefile",
-		NULL
+		"shp"
 	},
 	{
 		&geoniche_vecs,
 		"geoniche",
 		"GeoNiche .pdb",
-		NULL
+		"pdb"
 	},
 	{
 		&gpl_vecs,
 		"gpl",
 		"DeLorme GPL",
-		NULL
+		"gpl"
 	},
 	{
 		&ozi_vecs,
@@ -311,19 +311,19 @@ vecs_t vec_list[] = {
 		&text_vecs,
 		"text",
 		"Textual Output",
-		NULL
+		"txt"
 	},
 	{
 		&html_vecs,
 		"html",
 		"HTML Output",
-		NULL
+		"html"	
 	},
 	{
 		&palmdoc_vecs,
 		"palmdoc",
 		"PalmDoc Output",
-		NULL
+		"pdb"
 	},
 	{
 		&netstumbler_vecs,
@@ -438,7 +438,7 @@ vecs_t vec_list[] = {
 		&coto_vecs,
 		"coto",
 		"cotoGPS for Palm/OS", 
-		NULL
+		"pdb"
 	},
 #endif
 	{
