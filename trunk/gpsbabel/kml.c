@@ -35,6 +35,7 @@ static int export_points;
 static int floating;
 
 static waypoint *wpt_tmp;
+static int wpt_tmp_queued;
 
 static FILE *fd;
 static FILE *ofd;
@@ -85,27 +86,39 @@ kml_read(void)
 #else
 
 static xg_callback	wpt_s, wpt_e;
-static xg_callback	wpt_name, wpt_desc, wpt_coord;
+static xg_callback	wpt_name, wpt_desc, wpt_coord, trk_coord;
 
 static 
 xg_tag_mapping kml_map[] = {
-	{ wpt_s, 	cb_start, 	"/Document/Folder/Placemark" },
-	{ wpt_e, 	cb_end, 	"/Document/Folder/Placemark" },
-	{ wpt_name, 	cb_cdata, 	"/Document/Folder/Placemark/name" },
-	{ wpt_desc, 	cb_cdata, 	"/Document/Folder/Placemark/description" },
-	{ wpt_coord, 	cb_cdata, 	"/Document/Folder/Placemark/Point/coordinates" },
+	{ wpt_s, 	cb_start, 	"/Placemark" },
+	{ wpt_e, 	cb_end, 	"/Placemark" },
+	{ wpt_name, 	cb_cdata, 	"/Placemark/name" },
+	{ wpt_desc, 	cb_cdata, 	"/Placemark/description" },
+	{ wpt_coord, 	cb_cdata, 	"/Placemark/Point/coordinates" },
+	{ trk_coord, 	cb_cdata, 	"/Placemark/MultiGeometry/LineString/coordinates" },
 	{ NULL, 	0, 		NULL }
+};
+
+static 
+const char * kml_tags_to_ignore[] = {
+	"kml",
+	"Document",
+	"Folder",
+	NULL,
 };
 
 void wpt_s(const char *args, const char **unused) 
 { 
 	wpt_tmp = waypt_new();
-//	wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+	wpt_tmp_queued = 0;
 }
 
 void wpt_e(const char *args, const char **unused)
 {
-	waypt_add(wpt_tmp);
+	if (wpt_tmp_queued) {
+		waypt_add(wpt_tmp);
+	}
+	wpt_tmp_queued = 0;
 }
 
 #if 0
@@ -134,6 +147,28 @@ void wpt_desc(const char *args, const char **unused)
 void wpt_coord(const char *args, const char **attrv)
 {
 	sscanf(args, "%lf,%lf,%lf", &wpt_tmp->longitude, &wpt_tmp->latitude, &wpt_tmp->altitude);
+	wpt_tmp_queued = 1;
+}
+
+void trk_coord(const char *args, const char **attrv)
+{
+	int consumed = 0;
+	double lat, lon, alt;
+	waypoint *trkpt;
+
+	route_head *trk_head = route_head_alloc();
+	track_add_head(trk_head);
+	
+	while (3 == sscanf(args,"%lf,%lf,%lf %n", &lon, &lat, &alt, &consumed)){
+		trkpt = waypt_new();	
+		trkpt->latitude = lat;
+		trkpt->longitude = lon;
+		trkpt->altitude = alt;
+
+		route_add_wpt(trk_head, trkpt);
+
+		args += consumed;
+	}
 }
 
 static 
@@ -141,6 +176,7 @@ void
 kml_rd_init(const char *fname)
 {
 	xml_init(fname, kml_map, NULL);
+	xml_ignore_tags(kml_tags_to_ignore);
 }
 
 static

@@ -32,6 +32,7 @@ static vmem_t current_tag;
 static vmem_t cdatastr;
 static FILE *ifd;
 static xg_tag_mapping *xg_tag_tbl;
+static const char **xg_ignore_taglist;
 
 #define MY_CBUF 4096
 
@@ -155,6 +156,27 @@ xml_tbl_lookup(const char *tag, xg_cb_type cb_type)
 	return NULL;
 }
 
+/*
+ * See if tag element 't' is in our list of things to ignore.
+ * Returns 0 if it is not on the list.
+ */
+static int
+xml_consider_ignoring(const char *t)
+{
+	const char **il;
+
+	if (!xg_ignore_taglist) {
+		return 0;
+	}
+
+	for (il = xg_ignore_taglist; *il; il++) {
+		if (0 == strcmp(*il, t)) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
 
 static void
 xml_start(void *data, const char *el, const char **attr)
@@ -162,6 +184,9 @@ xml_start(void *data, const char *el, const char **attr)
 	char *e;
 	char *ep;
 	xg_callback *cb;
+
+	if (xml_consider_ignoring(el))
+		return;
 
 	vmem_realloc(&current_tag, strlen(current_tag.mem) + 2 + strlen(el));
 
@@ -194,6 +219,9 @@ xml_end(void *data, const char *el)
 {
 	char *s = strrchr(current_tag.mem, '/');
 	xg_callback *cb;
+
+	if (xml_consider_ignoring(el))
+		return;
 
 	if (strcmp(s + 1, el)) {
 		fprintf(stderr, "Mismatched tag %s\n", el);
@@ -237,6 +265,11 @@ void xml_readstring( char *str )
 	XML_ParserFree(psr);
 }
 
+void xml_ignore_tags(const char **taglist)
+{
+	xg_ignore_taglist = taglist;
+}
+
 void
 xml_init(const char *fname, xg_tag_mapping *tbl, const char *encoding)
 {
@@ -271,6 +304,7 @@ xml_deinit(void)
 		fclose(ifd);
 		ifd = NULL;
 	}
+	xg_ignore_taglist = NULL;
 }
 
 /******************************************/
