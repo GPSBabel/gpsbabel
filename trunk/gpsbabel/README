@@ -1149,12 +1149,13 @@ THE FORMATS
 
         http://www.navigon.com
 
-    nmn5
+    mag_pdb
 
-        Support for Navigon Mobile Navigator 5 Palm/OS files.  This is a
-        route-only format.
-
-        http://www.navigon.com
+        With this format we support the Palm/OS export for
+	Map&Guide based products like "PowerRoute", "Motorrad-Routenplaner"
+	and (maybe) other software. The exported files can contain maps 
+	and/or route descriptions. The reader for this format has been
+	tested with PowerRoute 5+6, Motorrad-Routenplaner 2002(-2006).
 
 
 DATA FILTERS

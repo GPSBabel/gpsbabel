@@ -876,10 +876,10 @@ ${PNAME} -i gpx -f reference/route/nmn4-sample.gpx -o nmn4 -F ${TMPDIR}/nmn4-sam
 compare reference/route/nmn4-sample-out.rte ${TMPDIR}/nmn4-sample-out.rte
 
 #
-# Navigon Mobile Navigator 5 .pdb (read-only)
+# Map&Guide Palm/OS .pdb files (read-only)
 #
-rm -f ${TMPDIR}/nmn5-sample*
-# ${PNAME} -i nmn5 -f reference/route/nmn5-sample.pdb -o gpx -F ${TMPDIR}/nmn5-sample.gpx
-# compare reference/route/nmn5-sample.gpx ${TMPDIR}/nmn5-sample.gpx
+rm -f ${TMPDIR}/mag_pdb-*
+${PNAME} -i mag_pdb -f reference/route/mag_pdb-sample.pdb -o gpx -F ${TMPDIR}/mag_pdb-sample.gpx
+compare ${TMPDIR}/mag_pdb-sample.gpx reference/route/mag_pdb-sample.gpx
 
 exit 0

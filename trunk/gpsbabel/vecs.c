@@ -92,7 +92,7 @@ extern ff_vecs_t stmwpp_vecs;
 extern ff_vecs_t msroute_vecs;
 extern ff_vecs_t cst_vecs;
 extern ff_vecs_t nmn4_vecs;
-extern ff_vecs_t nmn5_vecs;
+extern ff_vecs_t magpdb_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -472,9 +472,9 @@ vecs_t vec_list[] = {
 		"rte"
 	},
 	{
-		&nmn5_vecs,
-		"nmn5",
-		"Navigon Mobile Navigator 5 .pdb",
+		&magpdb_vecs,
+		"mag_pdb",
+		"Map&Guide to Palm/OS exported files (.pdb)",
 		"pdb"
 	},
 	{
