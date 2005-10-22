@@ -361,6 +361,8 @@ coto_wpt_write(const waypoint *wpt)
 	{
 		notes = xstrdup(wpt->notes);
 	}
+
+	size = sizeof(*rec);
 	if (notes != NULL)
 		size += strlen(notes);
 	rec = xcalloc(size, 1);
