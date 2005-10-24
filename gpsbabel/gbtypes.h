@@ -19,6 +19,10 @@
 
  */
 
+#ifndef gb_types_h_included
+#define gb_types_h_included
+
+
 /*
  *  If this is a problem and any interesting system doesn't have the C99-ism
  *  of <stdint.h> we'll come up with something more clever that'll likely
@@ -46,3 +50,5 @@ typedef  int32_t 	 gbint32;
 typedef  int16_t	 gbint16;
 
 #endif // defined(_MSC_VER)
+
+#endif /* gb_types_h_included */
