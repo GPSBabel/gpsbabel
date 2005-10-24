@@ -5,18 +5,20 @@
  *	You may distribute this file under the terms of the Artistic
  *	License, as specified in the README file.
  *
- * $Id: palm.h,v 1.1 2002-08-16 06:13:10 robertl Exp $
+ * $Id: palm.h,v 1.2 2005-10-24 18:26:30 robertl Exp $
  */
 #ifndef _palm_h_
 #define _palm_h_
 
+#include "../gbtypes.h"
+
 /* Convenience types */
 typedef signed   char  byte;		/* Signed 8-bit quantity */
 typedef unsigned char  ubyte;		/* Unsigned 8-bit quantity */
-typedef signed   short word;		/* Signed 16-bit quantity */
-typedef unsigned short uword;		/* Unsigned 16-bit quantity */
-typedef signed   long  dword;		/* Signed 32-bit quantity */
-typedef unsigned long  udword;		/* Unsigned 32-bit quantity */
+typedef gbint16  word;			/* Signed 16-bit quantity */
+typedef gbuint16 uword;			/* Unsigned 16-bit quantity */
+typedef gbint32  dword;			/* Signed 32-bit quantity */
+typedef gbuint32 udword;		/* Unsigned 32-bit quantity */
 
 typedef udword chunkID;			/* Those IDs made up of four
 					 * characters stuck together into a
