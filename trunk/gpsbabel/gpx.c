@@ -64,6 +64,10 @@ static route_head *rte_head;
 #define MY_CBUF_SZ 4096
 #define DEFAULT_XSI_SCHEMA_LOC "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
 #define DEFAULT_XSI_SCHEMA_LOC_FMT "\"http://www.topografix.com/GPX/%c/%c http://www.topografix.com/GPX/%c/%c/gpx.xsd\""
+#ifndef CREATOR_NAME_URL
+#  define CREATOR_NAME_URL "GPSBabel - http://www.gpsbabel.org"
+#endif
+
 
 /* 
  * Format used for floating point formats.  Put in one place to make it
@@ -992,6 +996,8 @@ gpx_rd_deinit(void)
 	}
 	XML_ParserFree(psr);
 	psr = NULL;
+	wpt_tmp = NULL;
+	cur_tag = NULL;
 }
 
 static void
@@ -1442,7 +1448,7 @@ gpx_write(void)
 
 	fprintf(ofd, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", global_opts.charset_name);
 	fprintf(ofd, "<gpx\n version=\"%s\"\n", gpx_wversion);
-	fprintf(ofd, "creator=\"GPSBabel - http://www.gpsbabel.org\"\n");
+	fprintf(ofd, "creator=\"" CREATOR_NAME_URL "\"\n");
 	fprintf(ofd, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
 	if (xsi_schema_loc) {
