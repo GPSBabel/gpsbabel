@@ -94,6 +94,35 @@ track_del_head(route_head *rte)
 	trk_head_ct--;
 }
 
+static 
+route_head *
+common_route_by_name(queue *routes, const char *name)
+{
+	queue *elem, *tmp;
+	route_head *rte;
+
+	QUEUE_FOR_EACH(routes, elem, tmp) {
+		rte = (route_head *) elem;
+		if (0 == strcmp(rte->rte_name, name)) {
+			return rte;
+		}
+	}
+
+	return NULL;
+}
+
+route_head *
+route_find_route_by_name(const char *name)
+{
+	return common_route_by_name(&my_route_head, name);
+}
+
+route_head *
+route_find_track_by_name(const char *name)
+{
+	return common_route_by_name(&my_track_head, name);
+}
+
 void
 route_add_wpt(route_head *rte, waypoint *wpt)
 {
@@ -216,6 +245,9 @@ route_flush_all()
 {
 	route_flush(&my_route_head);
 	route_flush(&my_track_head);
+	rte_head_ct = 0;
+	trk_head_ct = 0;
+	rte_waypts = 0;
 }
 
 void
