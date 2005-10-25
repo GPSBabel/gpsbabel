@@ -1002,14 +1002,14 @@ cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, cons
 	    cs_name_from = (char *)source->name;
 	}
 	
-	if (global_opts.verbose_status > 0)
+	if (global_opts.debug_level > 0)
 	    printf(MYNAME ": Converting from \"%s\" to \"%s\"", cs_name_from, cs_name_to);
 
 	waypt_disp_all(cet_convert_waypt);
 	route_disp_all(cet_convert_route_hdr, cet_convert_route_tlr, cet_convert_waypt);
 	track_disp_all(cet_convert_route_hdr, cet_convert_route_tlr, cet_convert_waypt);
 
-	if (global_opts.verbose_status > 0)
+	if (global_opts.debug_level > 0)
 	    printf(", done.\n");
 }
 
