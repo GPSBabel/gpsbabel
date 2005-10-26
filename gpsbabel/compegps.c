@@ -92,7 +92,7 @@ arglist_t compegps_args[] = {
 		NULL, ARGTYPE_STRING},
 	{"index", &option_index, "Index of route/track to write (if more the one in source)", 
 		NULL, ARGTYPE_INT},
-	{"radius", &option_radius, "Give points (waypoints/route points) a default radius", 
+	{"radius", &option_radius, "Give points (waypoints/route points) a default radius (proximity)", 
 		NULL, ARGTYPE_FLOAT},
 	{"snlen", &option_snlen, "Length of generated shortnames (default 16)", 
 		NULL, ARGTYPE_INT},
@@ -434,7 +434,7 @@ write_waypt_cb(const waypoint *wpt)
 	{
 		char *icon = option_icon;
 		
-		if (wpt->icon_descr != NULL) icon = wpt->icon_descr;
+		if (wpt->icon_descr != NULL) icon = (char *) wpt->icon_descr;
 			
 		fprintf(fout, "w  %s,0,0.0,16777215,255,1,7,,%.1f\n",
 			(icon != NULL) ? icon : "Waypoint",
@@ -491,7 +491,7 @@ write_trkpt_cb(const waypoint *wpt)
 	
 	if (wpt->creation_time != 0)
 	{
-		char *cx = &buff;
+		char *cx = buff;
 		tm = *gmtime(&wpt->creation_time);
 		strftime(buff, sizeof(buff), "%d-%b-%y %H:%M:%S", &tm);
 		while (*cx != '\0')
