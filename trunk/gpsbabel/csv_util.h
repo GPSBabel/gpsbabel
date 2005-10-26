@@ -30,6 +30,9 @@ CSV_STRINGTRIM(const char *string, const char *enclosure, int strip_max, DEBUG_P
 char *
 csv_lineparse(const char *stringstart, const char *delimited_by, const char *enclosed_in, const int line_no);
 
+void
+human_to_dec( const char *instr, double *outlat, double *outlon, int which );
+
 char *
 #ifndef DEBUG_MEM
 csv_stringclean(const char *string, const char *chararray);

@@ -349,7 +349,7 @@ decdir_to_dec(const char * decdir)
  *        which: 0-no preference    1-prefer lat    2-prefer lon
  *****************************************************************************/
 
-static void
+void
 human_to_dec( const char *instr, double *outlat, double *outlon, int which )
 {
     double unk[3] = {999,999,999};

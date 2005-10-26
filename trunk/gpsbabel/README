@@ -1178,6 +1178,25 @@ THE FORMATS
 	and (maybe) other software. The exported files can contain maps 
 	and/or route descriptions. The reader for this format has been
 	tested with PowerRoute 5+6, Motorrad-Routenplaner 2002(-2006).
+	
+    CompeGPS
+    
+	Support for CompeGPS data files.
+	These data files are "character" separated text files like the pcx
+	format. "Character" means special data lines can have their own
+	separator. 
+	
+	Since release 6.1 GPX is a also a supported import/export format for
+	waypoints, routes and tracks.
+	
+	For more information please have a look at
+	
+	    http://www.compegps.com
+	
+	Options:
+	
+	    index: Index of route/track 
+	    snlen: Length of generated short names (default 16)
 
 
 DATA FILTERS

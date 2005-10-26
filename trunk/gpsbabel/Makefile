@@ -39,7 +39,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
-	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o
+	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o trackfilter.o discard.o
 
@@ -155,6 +155,7 @@ brauniger_iq.o: brauniger_iq.c defs.h queue.h gbtypes.h jeeps/gpsserial.h \
   jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 cetus.o: cetus.c defs.h queue.h gbtypes.h coldsync/palm.h coldsync/pdb.h
 coastexp.o: coastexp.c defs.h queue.h gbtypes.h xmlgeneric.h uuid.h cet_util.h
+compegps.o: compegps.c defs.h queue.h gbtypes.h csv_util.h
 copilot.o: copilot.c defs.h queue.h gbtypes.h coldsync/palm.h \
   coldsync/pdb.h
 coto.o: coto.c defs.h queue.h gbtypes.h csv_util.h coldsync/palm.h \

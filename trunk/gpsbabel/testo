@@ -884,4 +884,26 @@ rm -f ${TMPDIR}/mag_pdb-*
 ${PNAME} -i mag_pdb -f reference/route/mag_pdb-sample.pdb -o gpx -F ${TMPDIR}/mag_pdb-sample.gpx
 compare ${TMPDIR}/mag_pdb-sample.gpx reference/route/mag_pdb-sample.gpx
 
+#
+# CompeGPS I/O tests
+#
+rm -f ${TMPDIR}/compegps*
+# read (CompeGPS)
+${PNAME} -i compegps -f reference/compegps.wpt -o gpx -F ${TMPDIR}/compegps-wpt.gpx
+compare reference/compegps-wpt.gpx ${TMPDIR}/compegps-wpt.gpx
+${PNAME} -i compegps -f reference/route/compegps.rte -o gpx -F ${TMPDIR}/compegps-rte.gpx
+compare reference/route/compegps-rte.gpx ${TMPDIR}/compegps-rte.gpx
+${PNAME} -i compegps -f reference/track/compegps.trk -o gpx -F ${TMPDIR}/compegps-trk.gpx
+compare reference/track/compegps-trk.gpx ${TMPDIR}/compegps-trk.gpx
+# write (CompeGPS)
+${PNAME} -i compegps -f reference/compegps.wpt -o compegps -F ${TMPDIR}/compegps.wpt
+${PNAME} -i compegps -f ${TMPDIR}/compegps.wpt -o gpx -F ${TMPDIR}/compegps-wpt2.gpx
+compare reference/compegps-wpt.gpx ${TMPDIR}/compegps-wpt2.gpx
+${PNAME} -t -i compegps -f reference/track/compegps.trk -o compegps -F ${TMPDIR}/compegps.trk
+${PNAME} -i compegps -f ${TMPDIR}/compegps.trk -o gpx -F ${TMPDIR}/compegps-trk2.gpx
+compare reference/track/compegps-trk.gpx ${TMPDIR}/compegps-trk2.gpx
+${PNAME} -r -i compegps -f reference/route/compegps.rte -o compegps -F ${TMPDIR}/compegps.rte
+${PNAME} -i compegps -f ${TMPDIR}/compegps.rte -o gpx -F ${TMPDIR}/compegps-rte2.gpx
+compare reference/route/compegps-rte.gpx ${TMPDIR}/compegps-rte2.gpx
+
 exit 0
