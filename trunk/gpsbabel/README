@@ -1186,7 +1186,7 @@ THE FORMATS
 	format. "Character" means special data lines can have their own
 	separator. 
 	
-	Since release 6.1 GPX is a also a supported import/export format for
+	Since release 6.1 GPX is also a supported import/export format for
 	waypoints, routes and tracks.
 	
 	For more information please have a look at
@@ -1195,8 +1195,11 @@ THE FORMATS
 	
 	Options:
 	
-	    index: Index of route/track 
-	    snlen: Length of generated short names (default 16)
+            deficon: Default icon name
+	    index:   Use route/track number <index> from input data for output.
+	    radius:  Give points (waypoints/route points) 
+	             a default radius (proximity)
+	    snlen:   Length of generated short names (default 16)
 
 
 DATA FILTERS
