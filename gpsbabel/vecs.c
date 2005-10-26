@@ -93,6 +93,7 @@ extern ff_vecs_t msroute_vecs;
 extern ff_vecs_t cst_vecs;
 extern ff_vecs_t nmn4_vecs;
 extern ff_vecs_t magpdb_vecs;
+extern ff_vecs_t compegps_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -474,6 +475,12 @@ vecs_t vec_list[] = {
 		"mag_pdb",
 		"Map&Guide to Palm/OS exported files (.pdb)",
 		"pdb"
+	},
+	{
+		&compegps_vecs,
+		"compegps",
+		"CompeGPS data files (.wpt/.trk/.rte)",
+		NULL
 	},
 	{
 		NULL,
