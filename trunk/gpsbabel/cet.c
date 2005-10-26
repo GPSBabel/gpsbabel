@@ -72,10 +72,10 @@ int
 cet_ucs4_to_utf8(char *dest, size_t dest_size, int value)
 {
 	int result;
-	char trash[16];
+	unsigned char trash[16];
 	unsigned char *c;
 	
-	c = (dest != NULL) ? dest : trash;
+	c = (dest != NULL) ? (unsigned char *) dest : trash;
 
 	if ((value & 0xffffff80) == 0)			/* <= 7 bits */
 	{
