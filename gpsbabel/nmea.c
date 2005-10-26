@@ -363,6 +363,9 @@ gprmc_parse(char *ibuf)
 				curr_waypt->speed 	= speed*kts2mps;
 			if (curr_waypt->course<=0)
 				curr_waypt->course 	= course;
+			/* The change of date wasn't recorded when 
+			 * going from 235959 to 000000. */
+			curr_waypt->creation_time = mkgmtime(&tm);
 		}
 		return;
 	}
