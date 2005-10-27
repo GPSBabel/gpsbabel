@@ -494,13 +494,13 @@ static char nima[] =
 static char openoffice[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
-"# Format: Tab delimitered csv useful for OpenOffice, Ploticus etc.\n"
+"# Format: Tab delimited useful for OpenOffice, Ploticus etc.\n"
 "# Author: Tobias Minich\n"
 "#   Date: 07/18/2005\n"
 "#\n"
 "#\n"
 
-"DESCRIPTION		Tab delimitered csv useful for OpenOffice, Ploticus etc.\n"
+"DESCRIPTION		Tab delimited fields useful for OpenOffice, Ploticus etc.\n"
 
 "# FILE LAYOUT DEFINITIIONS:\n"
 "#\n"

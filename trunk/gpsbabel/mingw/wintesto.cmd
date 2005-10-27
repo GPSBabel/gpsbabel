@@ -54,7 +54,6 @@ IF NOT EXIST %PNAME%.EXE ECHO Can't find %PNAME%&& GOTO :EOF
 
 
 
-
 REM Geocaching .loc
 DEL %TMPDIR%\gl.loc
 @echo on
@@ -627,7 +626,6 @@ REM CoastalExplorer..
 %PNAME% -r -i coastexp -f reference\coastexp.nob -o gpx -F %TMPDIR%\coastexp.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\coastexp.gpx reference\coastexp.ref
 @echo on
 @echo Testing...
 %PNAME% -r -i gpx -f %TMPDIR%\coastexp.gpx -o coastexp -F %TMPDIR%\coastexp.nob
@@ -639,7 +637,6 @@ CALL :COMPARE %TMPDIR%\coastexp.nob reference\coastexp.ref2
 %PNAME% -w -i coastexp -f reference\coastexp.nob -o gpx -F %TMPDIR%\coastexp.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\coastexp.gpx reference\coastexp.ref3
 @echo on
 @echo Testing...
 %PNAME% -w -i gpx -f %TMPDIR%\coastexp.gpx -o coastexp -F %TMPDIR%\coastexp.nob
@@ -834,7 +831,6 @@ CALL :COMPARE %TMPDIR%\igc_sed.out reference\igc1_igc.out
 %PNAME% -i igc -f %TMPDIR%\igc.out -o gpx -F %TMPDIR%\igc.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\igc.gpx reference\igc1_gpx.out
 
 @echo on
 @echo Testing...
@@ -858,7 +854,6 @@ CALL :COMPARE %TMPDIR%\igc_sed.out reference\igc1_3d.out
 %PNAME% -i igc -f reference\igc2.igc -o gpx -F %TMPDIR%\igc.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\igc.gpx reference\igc2_gpx.out
 
 @echo on
 @echo Testing...
@@ -873,7 +868,6 @@ CALL :COMPARE %TMPDIR%\igc_sed.out reference\igc2_igc.out
 %PNAME% -i igc -f %TMPDIR%\igc.out -o gpx -F %TMPDIR%\igc.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\igc.gpx reference\igc2_gpx.out
 
 REM 
 REM Google Maps XML test
@@ -1062,7 +1056,7 @@ DEL %TMPDIR%\tef_xml*
 %PNAME% -r -i tef -f reference\route\tef_xml.sample.xml -o gpx -F %TMPDIR%\tef_xml.sample.gpx
 @echo off
 @echo.
-CALL :COMPARE reference\route\tef_xml.sample.gpx %TMPDIR%\tef_xml.sample.gpx
+CALL :COMPARE %TMPDIR%\tef_xml.sample.gpx reference\route\tef_xml.sample.gpx 
 
 REM 
 REM PathAway Palm Database .pdb tests
@@ -1081,7 +1075,6 @@ DEL %TMPDIR%\pathaway*
 %PNAME% -t -i pathaway -f reference\track\pathaway.pdb -o gpx -F %TMPDIR%\pathaway.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\pathaway.gpx reference\track\pathaway.gpx
 
 REM 
 REM Garmin GPS Database .gdb tests
@@ -1103,6 +1096,7 @@ REM
 REM Because of Garmin coordinates storage gpx is not good for this test
 REM compare reference/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
 REM 
+REM compare ${TMPDIR}/gdb-sample.gpx reference/gdb-sample.gpx 
 
 REM 
 REM Vito Navigator II .smt tests
@@ -1113,13 +1107,11 @@ DEL %TMPDIR%\vitosmt*
 %PNAME%    -i vitosmt -f reference\vitosmt.smt -o gpx -F %TMPDIR%\vitosmt.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\vitosmt.gpx reference\vitosmt.gpx
 @echo on
 @echo Testing...
 %PNAME% -t -i vitosmt -f reference\vitosmt.smt -o gpx -F %TMPDIR%\vitosmt_t.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\vitosmt_t.gpx reference\track\vitosmt_t.gpx
 
 REM 
 REM tracks filter tests
@@ -1129,10 +1121,9 @@ DEL %TMPDIR%\trackfilter*
 
 @echo on
 @echo Testing...
-%PNAME% -t -i gpx -f reference\track\trackfilter.gpx -x track,pack,split,title=LOG-%%Y%%m%%d -o gpx -F %TMPDIR%\trackfilter-new.gpx
+%PNAME% -t -i gpx -f reference\track\trackfilter.gpx -x track,pack,split,title=LOG-%%Y%%m%%d -o gpx -F %TMPDIR%\trackfilter.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\trackfilter.ref %TMPDIR%\trackfilter.new
 
 REM 
 REM Map&Guide Motorrad Routenplaner .bcr files test
@@ -1143,7 +1134,6 @@ DEL %TMPDIR%\bcr*
 %PNAME% -r -i bcr -f reference\route\bcr-sample.bcr -o gpx -F %TMPDIR%\bcr-sample.gpx
 @echo off
 @echo.
-CALL :COMPARE reference\route\bcr-sample.gpx %TMPDIR%\bcr-sample.gpx
 @echo on
 @echo Testing...
 %PNAME% -r -i gpx -f reference\route\bcr-sample.gpx -o bcr -F %TMPDIR%\bcr-sample2.bcr
@@ -1155,7 +1145,41 @@ CALL :COMPARE reference\route\bcr-sample2.bcr %TMPDIR%\bcr-sample2.bcr
 %PNAME% -r -i bcr -f %TMPDIR%\bcr-sample2.bcr -o gpx -F %TMPDIR%\bcr-sample2.gpx
 @echo off
 @echo.
-CALL :COMPARE reference\route\bcr-sample.gpx %TMPDIR%\bcr-sample2.gpx
+
+REM 
+REM cet - Character encoding transformation tests
+REM 
+DEL %TMPDIR%\cet-sample*
+@echo on
+@echo Testing...
+%PNAME% -w -i gdb -f reference\cet\cet-sample.gdb -o gpx -F %TMPDIR%\cet-sample.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\cet-sample.gpx reference\cet\cet-sample.gpx
+@echo on
+@echo Testing...
+%PNAME% -w -i gpx -f %TMPDIR%\cet-sample.gpx -o tmpro -c Latin1 -F %TMPDIR%\cet-sample.latin1.txt
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\cet-sample.latin1.txt reference\cet\cet-sample.latin1.txt
+@echo on
+@echo Testing...
+%PNAME% -w -i gdb -f reference\cet\cet-sample.gdb -o tmpro -c Latin2 -F %TMPDIR%\cet-sample.latin2.txt
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\cet-sample.latin2.txt reference\cet\cet-sample.latin2.txt
+@echo on
+@echo Testing...
+%PNAME% -w -i gdb -f reference\cet\cet-sample.gdb -o tmpro -c cp1250 -F %TMPDIR%\cet-sample.cp1250.txt
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\cet-sample.cp1250.txt reference\cet\cet-sample.cp1250.txt
+@echo on
+@echo Testing...
+%PNAME% -w -i gdb -f reference\cet\cet-sample.gdb -o tmpro -c macroman -F %TMPDIR%\cet-sample.macroman.txt
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\cet-sample.macroman.txt reference\cet\cet-sample.macroman.txt
 
 REM 
 REM Garmin logbook.   This format has an extra section (lap data with things
@@ -1191,28 +1215,161 @@ CALL :COMPARE %TMPDIR%\dop-hdop.ref %TMPDIR%\dop-hdop.fil
 CALL :COMPARE %TMPDIR%\dop-vdop.ref %TMPDIR%\dop-vdop.fil
 
 REM 
-REM cotoGPS test
+REM cotoGPS tests
 REM 
 DEL %TMPDIR%\coto*
 REM Track reading
 @echo on
 @echo Testing...
-%PNAME% -i coto -f reference\cototesttrack.pdb -o openoffice -F %TMPDIR%\cototrack.csv
+%PNAME% -i coto -f reference\cototesttrack.pdb -o xcsv,style=reference\cototest.style -F %TMPDIR%\cototrack.csv
 @echo off
 @echo.
 CALL :COMPARE reference\cototesttrack.csv %TMPDIR%\cototrack.csv
-REM Marker read/write
+REM Marker read
 @echo on
 @echo Testing...
-%PNAME% -i coto -f reference\cototestmarker.pdb -o openoffice -F %TMPDIR%\cotomarker.csv
-%PNAME% -i gpx -f reference\cototestmarker.gpx -o openoffice -F %TMPDIR%\cotomarkergpx.csv
+%PNAME% -i coto -f reference\cototestmarker.pdb -o gpx -F %TMPDIR%\cotomarker.gpx
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\cotomarker.csv %TMPDIR%\cotomarkergpx.csv
+CALL :COMPARE reference\cototestmarker.gpx %TMPDIR%\cotomarker.gpx
+REM Marker write
 @echo on
 @echo Testing...
 %PNAME% -i gpx -f reference\cototestmarker.gpx -o coto -F %TMPDIR%\cotomarker.pdb
 @echo off
 @echo.
-CALL :COMPARE reference\cototestmarker.pdb %TMPDIR%\cotomarker.pdb
+REM bincompare reference/cototestmarker.pdb ${TMPDIR}/cotomarker.pdb
+@echo on
+@echo Testing...
+%PNAME% -i coto -f %TMPDIR%\cotomarker.pdb -o gpx -F %TMPDIR%\cotomarker.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\cototestmarker.gpx %TMPDIR%\cotomarker.gpx
+
+REM 
+REM Fugawi test cases
+DEL %TMPDIR%\fugawi*
+@echo on
+@echo Testing...
+%PNAME%  -i fugawi -f reference\fugawi.notime.txt -o fugawi -F %TMPDIR%\fugawi1.txt
+@echo off
+@echo.
+CALL :COMPARE reference\fugawi.ref.txt %TMPDIR%\fugawi1.txt
+@echo on
+@echo Testing...
+%PNAME%  -i geo -f geocaching.loc -o fugawi -F %TMPDIR%\fugawi2.txt
+@echo off
+@echo.
+CALL :COMPARE reference\fugawi.ref.txt %TMPDIR%\fugawi2.txt
+@echo on
+@echo Testing...
+%PNAME%  -i fugawi -f %TMPDIR%\fugawi2.txt -o fugawi -F %TMPDIR%\fugawi3.txt
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\fugawi2.txt %TMPDIR%\fugawi3.txt
+@echo on
+@echo Testing...
+%PNAME%  -i fugawi -f reference\fugawi.time.txt  -o fugawi -F %TMPDIR%\fugawi4.txt
+@echo off
+@echo.
+CALL :COMPARE reference\fugawi.time.ref.txt %TMPDIR%\fugawi4.txt
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f reference\track\tracks.gpx  -o fugawi -F %TMPDIR%\fugawi5.txt
+@echo off
+@echo.
+CALL :COMPARE reference\track\fugawi.txt %TMPDIR%\fugawi5.txt
+
+REM 
+REM Magellan Explorist geocaching format (write-only).
+REM 
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f reference\gc\GC7FA4.gpx -f reference\gc\GCGCA8.gpx -o maggeo -F %TMPDIR%\maggeo.gs
+@echo off
+@echo.
+CALL :COMPARE reference\gc\maggeo.gs %TMPDIR%\maggeo.gs
+
+REM 
+REM IGN Rando tests
+REM 
+@echo on
+@echo Testing...
+%PNAME% -i ignrando -f reference\track\ignrando-sample.rdn -o ignrando -F %TMPDIR%\ignrando-sample.rdn
+%PNAME% -i ignrando -f %TMPDIR%\ignrando-sample.rdn -o gpx -F %TMPDIR%\ignrando-sample.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\ignrando-sample.gpx reference\track\ignrando-sample.gpx
+
+REM 
+REM STMwpp "Suunto Track Manager" WaypointPlus format tests
+REM 
+DEL %TMPDIR%\stmwpp-*
+@echo on
+@echo Testing...
+%PNAME% -i stmwpp -f reference\track\stmwpp-track.txt -o gpx -F %TMPDIR%\stmwpp-track.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\stmwpp-track.gpx reference\track\stmwpp-track.gpx
+@echo on
+@echo Testing...
+%PNAME% -i stmwpp -f reference\route\stmwpp-route.txt -o gpx -F %TMPDIR%\stmwpp-route.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\stmwpp-route.gpx reference\route\stmwpp-route.gpx
+@echo on
+@echo Testing...
+%PNAME% -i stmwpp -f reference\route\stmwpp-route.txt -o stmwpp -F %TMPDIR%\stmwpp-route.txt
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\stmwpp-route.txt reference\route\stmwpp-route.txt
+
+REM 
+REM Microsoft AutoRoute 2002 test (read-only)
+REM 
+@echo on
+@echo Testing...
+%PNAME% -i msroute -f reference\route\msroute-sample.axe -o gpx -F %TMPDIR%\msroute-sample.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\msroute-sample.gpx reference\route\msroute-sample.gpx
+
+REM 
+REM CarteSurTable read test
+REM 
+DEL %TMPDIR%\cst-*
+@echo on
+@echo Testing...
+%PNAME% -i cst -f reference\route\cst-sample.cst -o gpx -F %TMPDIR%\cst-sample.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\cst-sample.gpx reference\route\cst-sample.gpx
+
+REM 
+REM Navigon Mobile Navigator .rte tests
+REM 
+DEL %TMPDIR%\nmn4-sample*
+@echo on
+@echo Testing...
+%PNAME% -i nmn4 -f reference\route\nmn4-sample.rte -o gpx -F %TMPDIR%\nmn4-sample.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\route\nmn4-sample.gpx %TMPDIR%\nmn4-sample.gpx
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f reference\route\nmn4-sample.gpx -o nmn4 -F %TMPDIR%\nmn4-sample-out.rte
+@echo off
+@echo.
+CALL :COMPARE reference\route\nmn4-sample-out.rte %TMPDIR%\nmn4-sample-out.rte
+
+REM 
+REM Map&Guide Palm/OS .pdb files (read-only)
+REM 
+DEL %TMPDIR%\mag_pdb-*
+@echo on
+@echo Testing...
+%PNAME% -i mag_pdb -f reference\route\mag_pdb-sample.pdb -o gpx -F %TMPDIR%\mag_pdb-sample.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\mag_pdb-sample.gpx reference\route\mag_pdb-sample.gpx
 
