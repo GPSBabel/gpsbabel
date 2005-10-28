@@ -208,6 +208,8 @@ begin
   FixAlign(btnFilter, 16, btnProcess);
   FixAlign(edInputFile, 8, sbOpenFile);
   FixAlign(edOutputFile, 8, sbSaveFile);
+
+  edInputFile.Text := ReadProfile(edInputFile.Tag);
 end;
 
 procedure TfrmMain.LoadFileFormats;
@@ -390,6 +392,7 @@ var
   s: string;
   i: Integer;
   IFormat, OFormat: string;
+  Fatal: Boolean;
 
 begin
   cmdline := '';
@@ -464,7 +467,7 @@ begin
     Application.ProcessMessages;
     Sleep(50);
 
-    if not gpsbabel(cmdline, list) then
+    if not gpsbabel(cmdline, list, @Fatal) then
       raise eGPSBabelError.Create(_('Could not run "gpsbabel.exe"!'));
 
     if (list.Count > 0) then
@@ -473,9 +476,14 @@ begin
       AddToOutput(string(list.GetText));
     end;
 
-    MessageBox(SELF.Handle,
-      PChar(Format(_('Converted successfully from "%s" to "%s".'), [IFormat, OFormat])),
-      PChar(_('Success')), MB_OK);
+    if (Fatal) then
+      MessageBox(SELF.Handle,
+        PChar(_('Sorry, gpsbabel.exe reported problems!')),
+        PChar(_('Error')), MB_OK)
+    else
+      MessageBox(SELF.Handle,
+        PChar(Format(_('Converted successfully from "%s" to "%s".'), [IFormat, OFormat])),
+        PChar(_('Success')), MB_OK);
 
   finally
 
@@ -577,7 +585,9 @@ begin
   StoreProfile(cbInputDevice.Tag, cbInputDevice.Text);
   StoreProfile(cbInputFormatDevice.Tag, cbInputFormatDevice.Text); 
   StoreProfile(cbOutputDevice.Tag, cbOutputDevice.Text);
-  StoreProfile(cbOutputFormatDevice.Tag, cbOutputFormatDevice.Text); 
+  StoreProfile(cbOutputFormatDevice.Tag, cbOutputFormatDevice.Text);
+  StoreProfile(edInputFile.Tag, edInputFile.Text);
+  StoreProfile(edOutputFile.Tag, edOutputFile.Text);
 end;
 
 procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
