@@ -18,13 +18,21 @@ unit utils;
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 }
 
+{
+    function gpsbabel created from old gui GPSBabelGUIDialogU.pas
+}
+
 interface
 
 uses
   gnugettextD4,
   Windows, SysUtils, Classes, Registry;
 
-function gpsbabel(const CommandLine: string; Output: TStrings): Boolean;
+type
+  PBoolean = ^Boolean;
+
+function gpsbabel(const CommandLine: string; Output: TStrings;
+  Fatal: PBoolean = nil): Boolean;
 
 function GetShortName(const PathName: string): string;
 procedure StoreProfile(const Tag: Integer; const Value: string);
@@ -50,7 +58,8 @@ begin
   SetString(Result, buffer, len);
 end;
 
-function gpsbabel(const CommandLine: string; Output: TStrings): Boolean;
+function gpsbabel(const CommandLine: string; Output: TStrings;
+  Fatal: PBoolean = nil): Boolean;
 var
   hRead, hWrite: THandle;
   ProcessInfo: TProcessInformation;
@@ -65,7 +74,8 @@ var
 
 begin
   Result := False;
-   
+  if (Fatal <> nil) then Fatal^ := False;
+
   sCmd := SysUtils.Format('%s %s ', [gpsbabel_exe, CommandLine]);
 
   SecurityAttr.nLength := sizeof (TSECURITYATTRIBUTES);
@@ -102,7 +112,7 @@ begin
     while (WaitforSingleObject (ProcessInfo.hProcess, 0)) <> WAIT_OBJECT_0 do sleep(100);
     if not GetExitCodeProcess(ProcessInfo.hProcess, Error) then Error := 0;
 
-    if ((Error <> 0) and (Error <> 1)) then
+    if (Error <> 0) and (Error <> 1) then
       raise eGPSBabelError.CreateFmt(_('"gpsbabel.exe" returned error 0x%x (%d)'), [Error, Error]);
 
     s := '';
@@ -122,6 +132,8 @@ begin
     Output.SetText(PChar(s));
 
     Result := True;
+    if (Fatal <> nil) then
+      Fatal^ := (Error = 1);
 
   finally
     CloseHandle (hRead);

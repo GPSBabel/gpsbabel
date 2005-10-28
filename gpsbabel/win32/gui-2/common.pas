@@ -47,8 +47,11 @@ const
   SREG_SOURCE_SER = 'Source:DeviceFormat';
   SREG_TARGET_SER = 'Target:DeviceFormat';
 
+  SREG_TARGET_FILE = 'Target:File';
+  SREG_SOURCE_FILE = 'Source:File';
+
 const
-  Profile: array[0..8] of string =
+  Profile: array[0..10] of string =
   ('?',
    SREG_SOURCE_DIR,
    SREG_SOURCE_FMT,
@@ -57,7 +60,9 @@ const
    SREG_TARGET_DIR,
    SREG_TARGET_FMT,
    SREG_TARGET_DEV,
-   SREG_TARGET_SER);
+   SREG_TARGET_SER,
+   SREG_TARGET_FILE,
+   SREG_SOURCE_FILE);
 
 type
   PFileInfo = ^TFileInfo;
