@@ -110,8 +110,18 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
+# Doc targets have large external requirements.
+# Requires saxon6, not saxon8.  Saxon requires Java.
+# Requires hardcoded pathnames to installed docbook both in the 
+# source file and on this command like.  (Ick.)
+# Requires CLASSPATH be exported to include full path to saxon.jar.
+# (typically /usr/share/java on a Linux system.)
+readme.html: readme.xml
+	java  com.icl.saxon.StyleSheet  $<  /usr/share/sgml/docbook/xsl-stylesheets-1.68.1-1/xhtml/docbook.xsl > $@
 
-release:
+doc: readme.html
+
+release: 
 	cvs commit
 	./chkdoc
 	make clean &&  cd mingw ; make clean 
