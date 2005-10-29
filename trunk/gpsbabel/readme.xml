@@ -3,7 +3,7 @@
   SYSTEM "/usr/share/sgml/docbook/xml-dtd-4.1.2-1.0-26/docbookx.dtd">
 <article>
    <articleinfo>
-      <title>gpsbabel</title>
+      <title>GPSBabel documentation</title>
       <revhistory>
          <revision>
             <revnumber>1.0</revnumber>
@@ -103,9 +103,8 @@ data from geocaching.com to my Magellan so my waypoints have "real"
 names instead of the 'GC1234' ones that are optimized for NMEA-only
 receivers.  A geocacher with a Magellan receiver may thus find
 commands like this useful.</para>
-      <screen format="linespecific">
-gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0  
-gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1</screen>
+      <screen format="linespecific">gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0  </screen>
+      <screen format="linespecific">gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1</screen>
    </section>
    <section>
       <title>ADVANCED USAGE</title>
@@ -126,19 +125,17 @@ merged data to multiple destinations.
 <parameter moreinfo="none">-i</parameter> argument is seen.  Files are read in the
 order they appear. So you could merge three input files into one
 output file with: </para>
-      <screen format="linespecific">
-gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc</screen>
+      <screen format="linespecific">gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc</screen>
       <para>You can merge files of different types:</para>
-      <para>gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx \ 
--o gpsutil -F big.gps</para>
+      <screen format="linespecific">gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx \ 
+-o gpsutil -F big.gps</screen>
       <para> You can write the same data in different output formats:</para>
       <screen format="linespecific">gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx 1.wpt</screen>
       <para>If you want to change the character set of input or/and output
 	side you can do this with the option -c &lt;character set&gt;. You can get
 	a complete list of supported character sets with "gpsbabel -l".
 	To change the character set on both sides you should do this:</para>
-      <screen format="linespecific">	
-gpsbabel -i xcsv,style=foo.style -c latin1 -f foo  \
+      <screen format="linespecific">gpsbabel -i xcsv,style=foo.style -c latin1 -f foo  \
 	         -o xcsv,style=bar.style -c ms-ansi -F bar</screen>
       <para>Note, that some formats has a fixed character set and ignore this option.</para>
    </section>
@@ -151,8 +148,7 @@ tracks and <parameter moreinfo="none">-r</parameter> to work with
 routes. <parameter moreinfo="none">-w</parameter> is for waypoints, and is the
 default. So if you wanted to read all data from your unit into a gpx
 file, you might use a command like:</para>
-      <screen format="linespecific">
-gpsbabel -t -r -w -i magellan -f com1:  -o gpx -F backup.gpx</screen>
+      <screen format="linespecific">gpsbabel -t -r -w -i magellan -f com1:  -o gpx -F backup.gpx</screen>
       <para> Tracks and routes are advanced features and don't try to handle
 every possible hazard that can be encountered during a conversion.  If
 you're merging or converting files of similar limitations, things work
@@ -256,9 +252,7 @@ waypoints that were read from an existing an1 file; this is by design.
                <para>
 
         This option has a special format that is best demonstrated by example:</para>
-               <screen format="linespecific">
-
-        "road=I-599!limited!Beecher St.!major" </screen>
+               <screen format="linespecific">"road=I-599!limited!Beecher St.!major" </screen>
                <para>
         This option will cause any road named "I-599" to become a limited- 
         access highway and any road named "Beecher St." to become a major
@@ -313,8 +307,7 @@ radius - Overwrites the default value of 6371000.0 meters for the
        earth radius. My be this can help to reduce
        differences.</screen>
                <para> An example with all options:</para>
-               <screen format="linespecific">
-gpsbabel -r \
+               <screen format="linespecific">gpsbabel -r \
 	 -i gpx -f in.gpx
          -o bcr,index=1,name="From A to B",radius=6371012 \
 	 -F a_to_b.bcr
@@ -569,10 +562,8 @@ GPSBabel names the them consistently with Mapsource, so they are named
                existing MapSource conversion code.
 </para>
                <para> Additional options:</para>
-               <screen format="linespecific"> ver - set the data format version of the output file (currently
-1 or 2); 2 is our default.  </screen>
-               <screen format="linespecific">via - Drop hidden route points (means
-calculated stuff)</screen>
+               <screen format="linespecific">ver - set the data format version of the output file (currently 1 or 2); 2 is our default.  </screen>
+               <screen format="linespecific">via - Drop hidden route points (means calculated stuff)</screen>
                <screen format="linespecific">cat - default category on output (1..16)</screen>
             </glossdef>
          </glossentry>
@@ -831,8 +822,7 @@ such as Firefox or Mozilla.
 extensions and writes an HTML file with encrypted hints that is
 rendered using a custom stylesheet:
 </para>
-               <screen format="linespecific">  
-gpsbabel -i gpx -f 12345.gpx \
+               <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx \
      -o html,stylesheet=green.css,encrypt -F 12345.html
 </screen>
             </glossdef>
@@ -1047,9 +1037,7 @@ to pilots than to hikers.</para>
                implemented by Robert Lipe and Mark Bradley.</para>
                <para>Additional options:</para>
                <screen format="linespecific">snlen - set the length of generated shortnames </screen>
-               <screen format="linespecific">
-mpsverout -	set the data format version    
-    of the output file 	(3,4 or 5) 	  </screen>
+               <screen format="linespecific">mpsverout - set the data format version of the output file 	(3,4 or 5) 	  </screen>
                <screen format="linespecific">mpsmergeout - if the output file already exists, then the
 output is merged with it. This allows MapSource sections not being
 handled to remain intact (e.g. map sets)</screen>
@@ -1453,8 +1441,7 @@ this one.
   don't support writing.
 	With the option "routevia" you can eliminate calculated route
 	points from tef source file.</para>
-               <screen format="linespecific">
-gpsbabel -r -i tef,routevia -f in.xml -o gpx -F out.gpx</screen>
+               <screen format="linespecific">gpsbabel -r -i tef,routevia -f in.xml -o gpx -F out.gpx</screen>
             </glossdef>
          </glossentry>
          <glossentry id="text">
@@ -1695,8 +1682,8 @@ filter supports two options that specify how duplicates will be
 recognized, "<parameter moreinfo="none">shortname</parameter>" and
 "<parameter moreinfo="none">location</parameter>".  Generally, at least one of these
 options is REQUIRED.  For example:</para>
-            <screen format="linespecific">
-gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname  \	         -o gpx -F merged_with_no_dupes.gpx</screen>
+            <screen format="linespecific">gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname  \
+-o gpx -F merged_with_no_dupes.gpx</screen>
             <para> would remove points that have duplicate shortnames *AND*
 duplicate locations.  The result would be a GPX file that more than
 likely contains only unique points and point data.</para>
@@ -1873,7 +1860,6 @@ gpsbabel -r -i saroute -f RoadTrip.anr -x simplify,count=50 \
  current list of waypoints; the previous contents of the current list
  are discarded.</para>
             <screen format="linespecific">
-                  
 -x stack,pop 
 -x stack,pop,discard
 -x stack,pop,append
@@ -1937,8 +1923,7 @@ following options are available:</para>
             with the date the new track. Special formats (see UNIX
             date or strftime for details) are possible.
 </para>
-            <screen format="linespecific">
-gpsbabel -t \
+            <screen format="linespecific">gpsbabel -t \
 	-i gpx -f in.gpx  \
 	-x track,pack,split,title="ACTIVE LOG-%D" \ 
 	-o gpx -F out.gpx PACK
@@ -1962,8 +1947,7 @@ gpsbabel -t  -i gpx -f in.gpx  \
       the example, where the time is specified only through the hour.
       If you only want to get a track mapped on 20 july 2005 from 10
       am to 6pm, you should use this: </para>
-            <screen format="linespecific">
-gpsbabel -t -i gpx -f in.gpx -x \
+            <screen format="linespecific">gpsbabel -t -i gpx -f in.gpx -x \
       track,start=2005072010,stop=2005072018 \
       -o gpx -F out.gpx </screen>
             <para>PACK</para>
@@ -2014,8 +1998,7 @@ gpsbabel -t \
  	    
  	    If you want to merge tracks from different devices 
  	    but from same trip, use this:</para>
-            <screen format="linespecific">
-gpsbabel -t \
+            <screen format="linespecific">gpsbabel -t \
      -i gpx -f john.gpx \
      -i gpx -f doe.gpx \
      -x track,merge,title="COMBINED LOG" \
@@ -2041,8 +2024,7 @@ discarded.</para>
 used, i.e. only points exceeding both given values are discarded.
 </para>
             <para>            Example: </para>
-            <screen format="linespecific">
-gpsbabel \ 
+            <screen format="linespecific">gpsbabel \ 
 	-i gpx -f in.gpx \
 	-x discard,hdop=10,vdop=20,hdopandvdop \ 
 	-o gpx -F out.gpx
