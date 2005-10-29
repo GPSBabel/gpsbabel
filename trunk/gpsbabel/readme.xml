@@ -79,7 +79,7 @@ so it's very portable.
       <title>COMMON USAGE</title>
       <para>Invocation was meant to be flexible.  Unfortunately, that can
 sometimes lead to unwieldy command lines.</para>
-      <screen format="linespecific">gpsbabel -? </screen>
+      <Xscreen format="linespecific"><command>gpsbabel</command> -? </Xscreen>
       <para>will always show you the supported file types.  To use this
 program, just tell it what you're reading, where to read it from, what
 you're writing, and what to write it to.  For example:</para>
@@ -294,16 +294,16 @@ waypoints that were read from an existing an1 file; this is by design.
 	Options:
 </para>
                <screen format="linespecific">
-index - If more then one route are present in source data, with this
+<parameter>index</parameter> - If more then one route are present in source data, with this
        option you can determine, which of this should used for the
        output. The range is 1 to number routes in input.  If you don't
        use this, only the first route will be converted.
 </screen>
                <screen format="linespecific">
-name - Not every input format has a real name for routes in their
+<parameter>name</parameter> - Not every input format has a real name for routes in their
        data. So you can give the route a nice name.</screen>
                <screen format="linespecific">
-radius - Overwrites the default value of 6371000.0 meters for the
+<parameter>radius</parameter> - Overwrites the default value of 6371000.0 meters for the
        earth radius. My be this can help to reduce
        differences.</screen>
                <para> An example with all options:</para>
@@ -562,9 +562,9 @@ GPSBabel names the them consistently with Mapsource, so they are named
                existing MapSource conversion code.
 </para>
                <para> Additional options:</para>
-               <screen format="linespecific">ver - set the data format version of the output file (currently 1 or 2); 2 is our default.  </screen>
-               <screen format="linespecific">via - Drop hidden route points (means calculated stuff)</screen>
-               <screen format="linespecific">cat - default category on output (1..16)</screen>
+               <screen format="linespecific"><parameter>ver</parameter> - set the data format version of the output file (currently 1 or 2); 2 is our default.  </screen>
+               <screen format="linespecific"><parameter>via</parameter> - Drop hidden route points (means calculated stuff)</screen>
+               <screen format="linespecific"><parameter>cat</parameter> - default category on output (1..16)</screen>
             </glossdef>
          </glossentry>
          <glossentry id="geo">
@@ -937,7 +937,7 @@ to pilots than to hikers.</para>
                a serial port.</para>
                <para> Communication errors are handled robustly and
                verification of data is enabled.</para>
-               <para> Additional sub options: <parameter moreinfo="none">baud:</parameter>
+               <para> Additional suboptions: <parameter moreinfo="none">baud</parameter>
 	may be 1200, 2400, 4800, 9600, 19200, but must match
 	receiver.</para>
             </glossdef>
@@ -1036,9 +1036,9 @@ to pilots than to hikers.</para>
                provided by Ian Cowley and Mark Bradley.  The code was
                implemented by Robert Lipe and Mark Bradley.</para>
                <para>Additional options:</para>
-               <screen format="linespecific">snlen - set the length of generated shortnames </screen>
-               <screen format="linespecific">mpsverout - set the data format version of the output file 	(3,4 or 5) 	  </screen>
-               <screen format="linespecific">mpsmergeout - if the output file already exists, then the
+               <screen format="linespecific"><parameter>snlen</parameter> - set the length of generated shortnames </screen>
+               <screen format="linespecific"><parameter>mpsverout</parameter> - set the data format version of the output file 	(3,4 or 5) 	  </screen>
+               <screen format="linespecific"><parameter>mpsmergeout</parameter> - if the output file already exists, then the
 output is merged with it. This allows MapSource sections not being
 handled to remain intact (e.g. map sets)</screen>
             </glossdef>
@@ -1101,15 +1101,15 @@ handled to remain intact (e.g. map sets)</screen>
                Import only.
 </para>
                <para> Additional options:</para>
-               <screen format="linespecific"> nseicon - Name of icon used for non-stealth encrypted access
+               <screen format="linespecific"> <parameter>nseicon</parameter> - Name of icon used for non-stealth encrypted access
 points</screen>
-               <screen format="linespecific"> nsneicon - Name of icon used for non-stealth non-encrypted
+               <screen format="linespecific"> <parameter>nsneicon</parameter> - Name of icon used for non-stealth non-encrypted
 access points</screen>
-               <screen format="linespecific"> seicon - Name of icon used for stealth encrypted access
+               <screen format="linespecific"> <parameter>seicon</parameter> - Name of icon used for stealth encrypted access
 points</screen>
-               <screen format="linespecific"> sneicon - Name of icon used for stealth non-encrypted access
+               <screen format="linespecific"> <parameter>sneicon</parameter> - Name of icon used for stealth non-encrypted access
 points</screen>
-               <screen format="linespecific">snmac - Always use the MAC address as the shortname.</screen>
+               <screen format="linespecific"><parameter>snmac</parameter> - Always use the MAC address as the shortname.</screen>
             </glossdef>
          </glossentry>
          <glossentry id="nima">
@@ -1369,22 +1369,22 @@ this one.
                <para> This is a catch-all used by many Delorme mapping
                products and reads the anr, rte, and rtd formats as
                either tracks or routes.</para>
-               <para> The 'turns_only' option causes GPSBabel to read
+               <para> The <parameter>turns_only</parameter> option causes GPSBabel to read
                only the waypoints associated with named turns.  This
                should create a list of waypoints that correspond to
                the itinerary from Street Atlas.</para>
-               <para> The 'turns_important' option only makes sense in
+               <para> The <parameter>turns_important</parameter> option only makes sense in
                conjunction with the 'simplify' filter.  It ensures
                that the route simplification process will remove the
                points corresponding to turns only after it has removed
                all other route points.
 </para>
-               <para>The 'split' option causes GPSBabel to create
+               <para>The <parameter>split</parameter> option causes GPSBabel to create
                separate routes for each street, creating a new route
                at each turn point.  For obvious reasons, 'split'
                cannot be used at the same time as the 'turns_only' or
                'turns_important' options.</para>
-               <para>The 'controls' option lets you read the control
+               <para>The <parameter>controls</parameter> option lets you read the control
                points (start, end, vias, and stops) for your route as
                well as the route itself.  The default for this option
                is 'none', which won't read the control points.  You
@@ -1575,12 +1575,12 @@ crash VitoNavigator II on the Pocket PC.</para>
                in the GPSBabel directory.  This module was contributed
                to GPSBabel by Alex Mottram.</para>
                <para>	Additional Options: </para>
-               <screen format="linespecific">style	-	**REQUIRED** Path to XCSV style file.</screen>
-               <screen format="linespecific">snlen	-	Maximum length of synthesized shortnames.  </screen>
-               <screen format="linespecific">snwhite	-	Switch defining whether or not to allow whitespace
+               <screen format="linespecific"><parameter>style</parameter>-	**REQUIRED** Path to XCSV style file.</screen>
+               <screen format="linespecific"><parameter>snlen</parameter>-	Maximum length of synthesized shortnames.  </screen>
+               <screen format="linespecific"><parameter>snwhite</parameter>-	Switch defining whether or not to allow whitespace
 			in synthesized shortnames.  			
                         (0 = NO WHITESPACE, 1 = WHITESPACE OK). </screen>
-               <screen format="linespecific">snupper	-	Switch defining whether or not to 
+               <screen format="linespecific"><parameter>snupper</parameter>-	Switch defining whether or not to 
                         force uppercase  in shortnames. 
                         (0 = LEAVE AS IS, 1 = UPPERCASE ALL). 	 	
    NOTE: sn* options require use of the '-s' command line option.</screen>
