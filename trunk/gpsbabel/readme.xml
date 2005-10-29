@@ -26,6 +26,10 @@
             <revremark>Update to Add toc for formats &amp; brief format description
             </revremark>
          </revision>
+	<revision><revnumber>1.3</revnumber><date>2005-10-29</date>
+	<authorinitials>Robert Lipe</authorinitials>
+	<revremark>Update to 1.145 to pick up CompeGPS</revremark>
+	</revision>
 
       </revhistory>
    </articleinfo>
@@ -326,6 +330,24 @@ gpsbabel -r \
                is a program for Palm/OS.  Working with Ron Parker and
                Kjeld Jensen, we can now read and write files for that
                program.</para>
+            </glossdef>
+         </glossentry>
+
+         <glossentry id="CompeGPS">
+            <glossterm>CompeGPS</glossterm>
+            <glossdef>
+              <para role="desc">Suppport for CompeGPS data files</para>
+               <para>
+		These data files are "character" separated text files like the pcx
+		format. "Character" means special data lines can have their own
+		separator.</para>
+		<para>
+Since release 6.1 of CompeGPS,  GPX is also a supported import/export format for
+waypoints, routes and tracks.
+For more information please have a look at
+<ulink
+               url="http://www.compegps.com">http://www.compegps.com</ulink>
+</para>
             </glossdef>
          </glossentry>
          <glossentry id="coastexp">
