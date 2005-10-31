@@ -44,7 +44,7 @@ static
 arglist_t garmin_args[] = {
 	{ "snlen", &snlen, "Length of generated shortnames", NULL, 
 		ARGTYPE_INT },
-	{ "snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames",
+	{ "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
 		NULL, ARGTYPE_BOOL},
 	{ "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
 	{ "get_posn", &getposn, "Return current position as a waypoint", 

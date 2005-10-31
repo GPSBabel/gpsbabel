@@ -32,7 +32,7 @@ static char *output_state = NULL;
   
 static
 arglist_t tpo_args[] = {
-	{ "dumpheader", &dumpheader, "(0/1) Display the file header bytes", 
+	{ "dumpheader", &dumpheader, "Display the file header bytes", 
 		"0", ARGTYPE_BOOL} , 
 	{ "state", &output_state, "State map format to write, default=CA", 
 	  "CA", ARGTYPE_STRING} , 

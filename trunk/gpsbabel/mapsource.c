@@ -75,7 +75,7 @@ char *mpsuseprox = NULL;
 static
 arglist_t mps_args[] = {
 	{"snlen", &snlen, "Length of generated shortnames", NULL, ARGTYPE_INT },
-	{ "snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames",
+	{ "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
 		NULL, ARGTYPE_BOOL},
 	{"mpsverout", &mpsverout, 
 		"Version of mapsource file to generate (3,4,5)", NULL,
