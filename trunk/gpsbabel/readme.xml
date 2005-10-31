@@ -1906,9 +1906,7 @@ LOG-%D" \ -o gpx -F out.gpx PACK
 gpsbabel -t  -i gpx -f in.gpx  \
     -x track,move=+1h,pack,title="ACTIVE LOG"  \
     -o gpx -F out.gpx 	</screen>
-      </section>
-      <section>
-         <title> START / STOP </title>
+         <para> START / STOP </para>
          <para>Filter tracks against time borders. All points outside
          this range will be dropped. The date-time paramters have to
          be in form of YYYYMMDDHHMMSS; but you may specify only the
@@ -1928,9 +1926,7 @@ gpsbabel -t -i gpx -f in.gpx -x \
          <screen format="linespecific">	    
 gpsbabel -t  -i gpx -f in.gpx  	-x track,pack,title="ACTIVE LOG"  \
 		     -o gpx -F out.gpx 	</screen>
-      </section>
-      <section>
-         <title>SPLIT </title>
+         <para>SPLIT </para>
          <para> The input track will be split into several tracks
          depending on date of track points. If there is more than one
          track, use the pack option before before using this.  To
@@ -1963,9 +1959,7 @@ gpsbabel -t \
      -x track,pack,split=4h,title="LOG # %c" \ 
      -o gpx -F out.gpx
 </screen>
-      </section>
-      <section>
-         <title> MERGE</title>
+         <para> MERGE</para>
          <para> Merge puts all track points into one single track and
          sort them by time. Points with identical time stamp will be
          dropped !!!</para>
