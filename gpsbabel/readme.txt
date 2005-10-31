@@ -119,9 +119,6 @@ GSPBabel Documentation
         SORT
         STACK
         TRACK
-        START / STOP 
-        SPLIT 
-        MERGE
         DISCARD
 
    List of Examples
@@ -1468,9 +1465,6 @@ ChapterÂ 4.Â DATA FILTERS
    SORT
    STACK
    TRACK
-   START / STOP 
-   SPLIT 
-   MERGE
    DISCARD
 
    GPSBabel supports data filtering. Data filters are invoked from the command
@@ -1762,7 +1756,7 @@ gpsbabel -t  -i gpx -f in.gpx  \
     -x track,move=+1h,pack,title="ACTIVE LOG"  \
     -o gpx -F out.gpx
 
-START / STOP
+   START / STOP
 
    Filter tracks against time borders. All points outside this range will be
    dropped. The date-time paramters have to be in form of YYYYMMDDHHMMSS; but
@@ -1783,7 +1777,7 @@ gpsbabel -t -i gpx -f in.gpx -x \
 gpsbabel -t  -i gpx -f in.gpx   -x track,pack,title="ACTIVE LOG"  \
                      -o gpx -F out.gpx
 
-SPLIT
+   SPLIT
 
    The input track will be split into several tracks depending on date of track
    points. If there is more than one track, use the pack option before before
@@ -1813,7 +1807,7 @@ gpsbabel -t \
      -x track,pack,split=4h,title="LOG # %c" \
      -o gpx -F out.gpx
 
-MERGE
+   MERGE
 
    Merge puts all track points into one single track and sort them by time.
    Points with identical time stamp will be dropped !!!
