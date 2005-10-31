@@ -26,7 +26,6 @@
  * on it, so we've set the format type to 'ff_type_internal' to make it
  * disappear from the various lists...
  */
- */
 
 
 #include "defs.h"
