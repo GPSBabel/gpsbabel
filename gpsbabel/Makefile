@@ -116,10 +116,15 @@ dep:
 # source file and on this command like.  (Ick.)
 # Requires CLASSPATH be exported to include full path to saxon.jar.
 # (typically /usr/share/java on a Linux system.)
-readme.html: readme.xml
-	java  com.icl.saxon.StyleSheet  $<  /usr/share/sgml/docbook/xsl-stylesheets-1.68.1-1/xhtml/docbook.xsl > $@
+readme.html: readme.xml 
+	java  com.icl.saxon.StyleSheet $< \
+	/usr/share/sgml/docbook/xsl-stylesheets-1.68.1-1/xhtml/docbook.xsl \
+	html.stylesheet="http://www.gpsbabel.org/style3.css" > $@
 
-doc: readme.html
+readme.txt: readme.html
+	lynx -nolist -dump readme.html  > $@
+
+doc: readme.html readme.txt
 
 release: 
 	cvs commit
