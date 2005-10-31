@@ -20,6 +20,15 @@
 
  */
 
+
+/*
+ ***** This format has problems and the author hasn't returned emails
+ * on it, so we've set the format type to 'ff_type_internal' to make it
+ * disappear from the various lists...
+ */
+ */
+
+
 #include "defs.h"
 #include <string.h>
 #include <ctype.h>
@@ -668,7 +677,7 @@ tpo_track_disp(const waypoint *waypointp)
 	double lat, lon, amt, x, y, z;
 	short lat_delta, lon_delta;
     unsigned char temp_buffer[2];
-	
+// fprintf(stderr, "%f/%f\n", waypointp->latitude, waypointp->longitude);
 	/* convert lat/lon position to XYZ meters */
 	GPS_Math_WGS84LatLonH_To_XYZ(
 		waypointp->latitude, 
@@ -708,6 +717,7 @@ tpo_track_disp(const waypoint *waypointp)
 	/* latitude delta from first route point */
 	lat_delta = (short)((first_track_waypoint_lat - lat) / output_track_lat_scale);
 	le_write16(temp_buffer, lat_delta);
+fprintf(stderr, "%f %f: %x %x - %f %f %f / %f\n", lon, lat, lon_delta, lat_delta, first_track_waypoint_lat, lat, output_track_lat_scale, (first_track_waypoint_lat - lat) );
 	fwrite(temp_buffer, 1, 2, tpo_file_out);
 }
 
@@ -791,7 +801,7 @@ tpo_write(void)
 
 /* TPO format can read and write tracks only */
 ff_vecs_t tpo_vecs = {
-	ff_type_file,
+ff_type_internal, //	ff_type_file,
 	{ ff_cap_none | ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none | ff_cap_none },
 	tpo_rd_init,
 	tpo_wr_init,
