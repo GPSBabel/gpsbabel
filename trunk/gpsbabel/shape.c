@@ -39,7 +39,7 @@ static char *opt_name = NULL;
 static
 arglist_t shp_args[] = {
 	{"name", &opt_name, "Index of name field in .dbf",
-		NULL, ARGTYPE_INT },
+		NULL, ARGTYPE_INT, "0", NULL },
 	{ 0, 0, 0, 0}
 };
 

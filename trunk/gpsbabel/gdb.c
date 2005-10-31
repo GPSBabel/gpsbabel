@@ -94,9 +94,9 @@ static char *gdb_opt_via = NULL;
 
 static arglist_t gdb_args[] = {
 	{GDB_OPT_CATEGORY, &gdb_opt_category, 
-	    "Default category on output (1..16)", NULL, ARGTYPE_INT},
+	    "Default category on output (1..16)", NULL, ARGTYPE_INT, "1", "16"},
 	{GDB_OPT_VER, &gdb_opt_ver, 
-	    "Version of gdb file to generate (1,2)", "2", ARGTYPE_INT},
+	    "Version of gdb file to generate (1,2)", "2", ARGTYPE_INT, "1", "2"},
 	{GDB_OPT_VIA, &gdb_opt_via, 
 	    "Drop route points, if they don't have an aquivalent waypoint (hidden points)", NULL, ARGTYPE_BOOL},
 	{0, 0, 0, 0, 0}

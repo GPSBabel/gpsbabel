@@ -58,7 +58,7 @@ static char *radius_opt;
 
 static
 arglist_t bcr_args[] = {
-	{"index", &rtenum_opt, "Index of route to write (if more the one in source)", NULL, ARGTYPE_INT },
+	{"index", &rtenum_opt, "Index of route to write (if more the one in source)", NULL, ARGTYPE_INT, "1", NULL },
 	{"name", &rtename_opt, "New name for the route", NULL, ARGTYPE_STRING },
 	{"radius", &radius_opt, "Radius of our big earth (default 6371000 meters)", NULL, ARGTYPE_FLOAT },
 	{0, 0, 0, 0, 0}

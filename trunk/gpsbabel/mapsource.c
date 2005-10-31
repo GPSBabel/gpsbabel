@@ -74,7 +74,7 @@ char *mpsuseprox = NULL;
 
 static
 arglist_t mps_args[] = {
-	{"snlen", &snlen, "Length of generated shortnames", NULL, ARGTYPE_INT },
+	{"snlen", &snlen, "Length of generated shortnames", "10", ARGTYPE_INT, "1", NULL },
 	{ "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
 		NULL, ARGTYPE_BOOL},
 	{"mpsverout", &mpsverout, 
@@ -1916,10 +1916,7 @@ mps_write(void)
 
 	unsigned char	copybuf[8192];
 
-	if (snlen)
-		short_length = atoi(snlen);
-	else
-		short_length = 10;
+	short_length = atoi(snlen);
 
 	if (mpsmergeout) {
 		/* need to skip over the merging header and test merge version */

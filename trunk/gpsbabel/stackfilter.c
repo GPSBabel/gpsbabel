@@ -53,7 +53,7 @@ arglist_t stackfilt_args[] = {
 	{"replace", &opt_replace, "(pop) Replace list (default)", 
 		NULL, ARGTYPE_END_EXCL | ARGTYPE_BOOL},
 	{"depth", &opt_depth, "(swap) Item to use (default=1)", 
-		NULL, ARGTYPE_INT},
+		NULL, ARGTYPE_INT, "0", NULL},
 	{"nowarn", &nowarn, "Suppress cleanup warning", NULL, 
 		ARGTYPE_BOOL | ARGTYPE_HIDDEN},
 	{0, 0, 0, 0, 0}

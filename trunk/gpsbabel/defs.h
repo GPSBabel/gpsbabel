@@ -470,7 +470,9 @@ typedef struct arglist {
 	char **argval;
 	char *helpstring;
 	char *defaultvalue;
-	long argtype;
+	gbuint32 argtype;
+	char *minvalue;		/* minimum value for numeric options */
+	char *maxvalue;		/* maximum value for numeric options */
 } arglist_t;
 
 typedef enum {
