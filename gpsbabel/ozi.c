@@ -48,7 +48,7 @@ static char *snuniqueopt = NULL;
 static
 arglist_t ozi_args[] = {
 	{"snlen", &snlenopt, "Max synthesized shortname length",
-		NULL, ARGTYPE_INT},
+		"32", ARGTYPE_INT, "1", NULL},
 	{"snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
 		NULL, ARGTYPE_BOOL},
 	{"snupper", &snupperopt, "UPPERCASE synth. shortnames",
@@ -286,10 +286,7 @@ wr_init(const char *fname)
     /* set mkshort options from the command line if applicable */
     if (global_opts.synthesize_shortnames) {
 
-        if (snlenopt)
-            setshort_length(mkshort_handle, atoi(snlenopt));
-        else 
-            setshort_length(mkshort_handle, 32);
+        setshort_length(mkshort_handle, atoi(snlenopt));
 
         if (snwhiteopt)
             setshort_whitespace_ok(mkshort_handle, atoi(snwhiteopt));

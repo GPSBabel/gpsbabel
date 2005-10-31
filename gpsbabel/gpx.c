@@ -1435,10 +1435,7 @@ gpx_write(void)
 	
         now = current_time();
 
-	if (snlen)
-		short_length = atoi(snlen);
-	else
-		short_length = 32;
+	short_length = atoi(snlen);
 
 	if (suppresswhite) {
 		setshort_whitespace_ok(mkshort_handle, 0);
@@ -1495,7 +1492,7 @@ gpx_exit(void)
 static
 arglist_t gpx_args[] = {
 	{ "snlen", &snlen, "Length of generated shortnames", 
-		NULL, ARGTYPE_INT },
+		"32", ARGTYPE_INT, "1", NULL },
 	{ "suppresswhite", &suppresswhite, 
 		"Suppress whitespace in generated shortnames", 
 		NULL, ARGTYPE_BOOL },

@@ -30,7 +30,7 @@ static char *countopt = NULL;
 static
 arglist_t routesimple_args[] = {
 	{"count", &countopt,  "Maximum number of points in route", 
-		NULL, ARGTYPE_INT | ARGTYPE_REQUIRED},
+		NULL, ARGTYPE_INT | ARGTYPE_REQUIRED, "1", NULL},
 	{0, 0, 0, 0, 0}
 };
 

@@ -45,7 +45,7 @@ arglist_t xcsv_args[] = {
 	{"style", &styleopt, "Full path to XCSV style file", NULL,
 		ARGTYPE_FILE | ARGTYPE_REQUIRED },
 	{"snlen", &snlenopt, "Max synthesized shortname length", NULL,
-		ARGTYPE_INT},
+		ARGTYPE_INT, "1", NULL},
 	{"snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
 		NULL, ARGTYPE_BOOL},
 	{"snupper", &snupperopt, "UPPERCASE synth. shortnames",

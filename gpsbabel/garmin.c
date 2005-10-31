@@ -43,7 +43,7 @@ static char valid_waypt_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789";
 static
 arglist_t garmin_args[] = {
 	{ "snlen", &snlen, "Length of generated shortnames", NULL, 
-		ARGTYPE_INT },
+		ARGTYPE_INT, "1", NULL },
 	{ "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
 		NULL, ARGTYPE_BOOL},
 	{ "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },

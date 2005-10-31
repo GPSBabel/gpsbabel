@@ -67,7 +67,7 @@ arglist_t radius_args[] = {
 	{"nosort", &nosort,    "Inhibit sort by distance to center.",
 		NULL, ARGTYPE_BOOL },
 	{"maxcount", &maxctarg,"Output no more than this number of points",
-		NULL, ARGTYPE_INT },
+		NULL, ARGTYPE_INT, "1", NULL },
 	{0, 0, 0, 0, 0}
 };
 

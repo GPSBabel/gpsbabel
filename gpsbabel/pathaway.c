@@ -65,7 +65,7 @@ static arglist_t ppdb_args[] =
 {
 	{"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING},
 	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING},
-	{"snlen", &snlen_opt, "Length of generated shortnames", NULL, ARGTYPE_INT },
+	{"snlen", &snlen_opt, "Length of generated shortnames", "10", ARGTYPE_INT, "1", NULL },
 	{0, 0, 0, 0, 0 }
 };
 
@@ -509,10 +509,7 @@ static void ppdb_wr_init(const char *fname)
 	
 	if (global_opts.synthesize_shortnames != 0)
 	{
-	    if (snlen_opt != NULL)
-		len = atoi(snlen_opt);
-	    else
-		len = 10;
+	    len = atoi(snlen_opt);
 	    setshort_length(mkshort_handle, len);
 	    setshort_mustupper(mkshort_handle, 1);
 	    setshort_badchars(mkshort_handle, ",");

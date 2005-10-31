@@ -69,7 +69,7 @@ arglist_t tiger_args[] = {
 	{"margin", &margin, "Margin for map.  Degrees or percentage.",
 		"15%", ARGTYPE_FLOAT},
 	{"snlen", &snlen, "Max shortname length when used with -s.",
-		NULL, ARGTYPE_INT},
+		"10", ARGTYPE_INT, "1", NULL},
 	{"oldthresh", &oldthresh, 
 		"Days after which points are considered old.",
 		"14", ARGTYPE_INT},
@@ -228,10 +228,7 @@ data_write(void)
 	minlon = 9999.0;
 	rec_cnt = 0;
 
-	if (snlen)
-		short_length = atoi(snlen);
-	else
-		short_length = 10;
+	short_length = atoi(snlen);
 	mkshort_whandle = mkshort_new_handle();
 
 	if (suppresswhite) {

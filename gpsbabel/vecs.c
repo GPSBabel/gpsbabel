@@ -783,6 +783,43 @@ disp_v2(ff_vecs_t *v)
 	putchar('\t');
 }
 
+const char *
+name_option(long type)
+{
+	const char *at[] = {
+		"unknown",
+		"integer",
+		"float",
+		"string",
+		"boolean",
+		"file",
+		"outfile"
+	};
+
+	if ((type & ARGTYPE_TYPEMASK) <= 6) {
+		return at[type & ARGTYPE_TYPEMASK];
+	}
+	return at[0];
+}
+
+static void 
+disp_v3(vecs_t *vec)
+{
+	arglist_t *ap;
+
+	for (ap = vec->vec->args; ap && ap->argstring; ap++) {
+		if ( !(ap->argtype & ARGTYPE_HIDDEN))
+			printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+			vec->name, 
+			ap->argstring, 
+			ap->helpstring, 
+			name_option(ap->argtype),
+			ap->defaultvalue? ap->defaultvalue : "",
+			ap->minvalue? ap->minvalue : "",
+			ap->maxvalue? ap->maxvalue : "");
+	}
+}
+
 /*
  *  Display the available formats in a format that's easy to machine
  *  parse.   Typically invoked by programs like graphical wrappers to
@@ -799,6 +836,7 @@ disp_formats(int version)
 	case 0:
 	case 1:
 	case 2:
+	case 3:
 		svp = sort_and_unify_vecs(&vc);
 		for (i=0;i<vc;i++,vec++) {
 			vec = svp[i];
@@ -818,6 +856,9 @@ disp_formats(int version)
 			printf("%s\t%s\t%s\n", vec->name, 
 				vec->extension? vec->extension : "", 
 				vec->desc);
+			if (version >= 3) {
+				disp_v3(vec);
+			}
 		}
 		xfree (svp);	
 		break;
