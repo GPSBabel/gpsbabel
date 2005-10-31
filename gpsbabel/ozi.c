@@ -49,11 +49,11 @@ static
 arglist_t ozi_args[] = {
 	{"snlen", &snlenopt, "Max synthesized shortname length",
 		NULL, ARGTYPE_INT},
-	{"snwhite", &snwhiteopt, "(0/1) Allow whitespace synth. shortnames",
+	{"snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
 		NULL, ARGTYPE_BOOL},
-	{"snupper", &snupperopt, "(0/1) UPPERCASE synth. shortnames",
+	{"snupper", &snupperopt, "UPPERCASE synth. shortnames",
 	        NULL, ARGTYPE_BOOL},
-	{"snunique", &snuniqueopt, "(0/1) Make synth. shortnames unique",
+	{"snunique", &snuniqueopt, "Make synth. shortnames unique",
 		NULL, ARGTYPE_BOOL},
 	{0, 0, 0, 0, 0}
 };
