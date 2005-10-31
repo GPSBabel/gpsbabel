@@ -712,8 +712,16 @@ sort_and_unify_vecs(int *ctp)
 		/* Reset file type to inherit ff_type from xcsv for everything
 		 * except the xcsv format itself, which we leave as "internal"
 		 */
-		if (strcmp(svec->name, "xcsv"))
+		if (strcmp(svec->name, "xcsv")) {
+			int n;
 			svp[i]->vec->type = xcsv_file.type;
+			/* Skip over the first help entry for all but the
+			 * actual 'xcsv' format - so we don't expose the
+			 * 'full path to xcsv style file' argument to any
+			 * GUIs for an internal format.
+			 */
+			svp[i]->vec->args++;
+		}
 		
 		svp[i]->desc = xcsv_file.description;
 	}
