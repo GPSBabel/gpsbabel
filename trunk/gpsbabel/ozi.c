@@ -367,6 +367,7 @@ ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp)
         break;
     case 13:
         /* proximity distance - meters */
+	wpt_tmp->proximity = atof(str);
         break;
     case 14:
         /* altitude in feet */
@@ -657,9 +658,14 @@ ozi_waypt_pr(const waypoint * wpt)
     index++;
 
     fprintf(file_out,
-            "%d,%s,%.6f,%.6f,%.5f,%d,%d,%d,%d,%d,%s,%d,%d,%d,%.0f,%d,%d,%d\r\n",
+            "%d,%s,%.6f,%.6f,%.5f,%d,%d,%d,%d,%d,%s,%d,%d,",
             index, shortname, wpt->latitude, wpt->longitude, ozi_time, 0,
-            1, 3, 0, 65535, description, 0, 0, 0, alt_feet, 6, 0, 17);
+            1, 3, 0, 65535, description, 0, 0);
+    if (wpt->proximity > 0)
+	fprintf(file_out, "%.1f,", wpt->proximity);
+    else
+	fprintf(file_out,"0,");
+    fprintf(file_out, "%.0f,%d,%d,%d\r\n", alt_feet, 6, 0, 17);
 
     xfree(description);
     xfree(shortname);
