@@ -69,8 +69,13 @@ ozi_openfile(char *fname) {
     char buff[32];
     
     /* if we're doing multi-track output, sequence the filenames like:
-     * mytrack.plt, mytrack-1.plt...
+     * mytrack.plt, mytrack-1.plt...unless we're writing to stdout.
      */
+
+    if (0 == strcmp(fname, "-")) {
+	file_out = xfopen(fname, "wb", MYNAME);
+	return;
+    }
 
     if ((track_out_count) && (ozi_objective == trkdata)) {
         sprintf(buff, "-%d", track_out_count);
