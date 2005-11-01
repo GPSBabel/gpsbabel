@@ -32,7 +32,7 @@ static char *noretired = NULL;
 
 static
 arglist_t nav_args[] = {
-	{"noretired", &noretired, "Suppress retired geocaches.",
+	{"noretired", &noretired, "Suppress retired geocaches",
 		NULL, ARGTYPE_BOOL },
 	{0, 0, 0, 0, 0}
 };
