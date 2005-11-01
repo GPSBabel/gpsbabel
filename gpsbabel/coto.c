@@ -102,8 +102,8 @@ static char *internals = NULL;
 
 static
 arglist_t coto_args[] = {
-	{"zerocat", &zerocat, "Name of the 'unassigned' category.", NULL, ARGTYPE_STRING },
-	{"internals", &internals, "Export some internal stuff to notes.", NULL, ARGTYPE_STRING | ARGTYPE_HIDDEN },
+	{"zerocat", &zerocat, "Name of the 'unassigned' category", NULL, ARGTYPE_STRING },
+	{"internals", &internals, "Export some internal stuff to notes", NULL, ARGTYPE_STRING | ARGTYPE_HIDDEN },
 	{0, 0, 0, 0, 0 }
 };
 
