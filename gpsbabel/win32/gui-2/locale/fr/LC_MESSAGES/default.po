@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French version\n"
 "POT-Creation-Date: 2005-09-22 23:44\n"
-"PO-Revision-Date: 2005-10-29 01:02+0100\n"
-"Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
+"PO-Revision-Date: 2005-11-01 19:32+0100\n"
+"Last-Translator: Lilian Morinon <lilian_morinon@yahoo.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,7 +31,7 @@ msgstr "A propos"
 #: about.dfm:74
 #: test/about.dfm:74
 msgid "This program is part of the GPSBabel project, hosted on"
-msgstr "CE program fait partie du projet GPSBable, hébergé sur"
+msgstr "Ce programme fait partie du projet GPSBabel, hébergé sur"
 
 # +++ IGNORE +++
 #. frmAbout..pnClient..pnCenter..lbVersion..Caption
@@ -451,12 +451,12 @@ msgstr "Longitude du point central"
 #. frmMain..Panel1..sbOpenFile..Hint
 #: main.dfm:35
 msgid "Start the file open dialog"
-msgstr ""
+msgstr "Menu de d'ouverture de fichier"
 
 #. frmMain..Panel1..sbSaveFile..Hint
 #: main.dfm:58
 msgid "Start the file save dialog"
-msgstr ""
+msgstr "Menu de sauvegarde de fichier"
 
 #. frmMain..Panel1..lbInputFile..Caption
 #. frmMain..Panel1..lbInputFile..Caption
@@ -500,27 +500,27 @@ msgstr ""
 #. frmMain..Panel1..cbInputFormat..Hint
 #: main.dfm:128
 msgid "Format for input from file"
-msgstr ""
+msgstr "Format d'entrée depuis un fichier"
 
 #. frmMain..Panel1..cbOutputFormat..Hint
 #: main.dfm:141
 msgid "Format for output to file"
-msgstr ""
+msgstr "Format de sortie vers un fichier"
 
 #. frmMain..Panel1..edOutputFile..Hint
 #: main.dfm:154
 msgid "Write data to given filename"
-msgstr ""
+msgstr "Ecrire les données dans un fichier"
 
 #. frmMain..Panel1..edInputFile..Hint
 #: main.dfm:166
 msgid "Read data from given filename"
-msgstr ""
+msgstr "Lire les données de puis un fichier"
 
 #. frmMain..Panel1..chbInputDevice..Hint
 #: main.dfm:176
 msgid "Read data from device instead from file"
-msgstr ""
+msgstr "Lire les données depuis un périphérique plutôt qu'un fichier"
 
 #. frmMain..Panel1..chbInputDevice..Caption
 #. frmMain..Panel1..chbOutputDevice..Caption
@@ -536,7 +536,7 @@ msgstr "Périphérique"
 #. frmMain..Panel1..cbInputDevice..Hint
 #: main.dfm:187
 msgid "Read data from device ..."
-msgstr ""
+msgstr "Lire les données depuis le périphérique"
 
 #. frmMain..Panel1..cbInputDevice....Items.Strings
 #. frmMain..Panel1..cbOutputDevice....Items.Strings
@@ -552,32 +552,32 @@ msgstr "USB"
 #. frmMain..Panel1..cbInputFormatDevice..Hint
 #: main.dfm:205
 msgid "Format for input from device"
-msgstr ""
+msgstr "Format d'entrée depuis le périphérique"
 
 #. frmMain..Panel1..cbOutputFormatDevice..Hint
 #: main.dfm:219
 msgid "Format for ouput to device"
-msgstr ""
+msgstr "Format de sortie vers le périphérique"
 
 #. frmMain..Panel1..chbOutputDevice..Hint
 #: main.dfm:230
 msgid "Write data to device instead to file"
-msgstr ""
+msgstr "Ecrire les données sur le périphérique plutôt que dans un fichier"
 
 #. frmMain..Panel1..cbOutputDevice..Hint
 #: main.dfm:241
 msgid "Write data to device ..."
-msgstr ""
+msgstr "Ecrire les données sur le périphérique"
 
 #. frmMain..Panel1..edInputOpts..Hint
 #: main.dfm:258
 msgid "Options for the selected input format"
-msgstr ""
+msgstr "Options du format d'entrée sélectionné"
 
 #. frmMain..Panel1..edOutputOpts..Hint
 #: main.dfm:267
 msgid "Options for the selected output format"
-msgstr ""
+msgstr "Options du format de sortie sélectionné"
 
 #. frmMain..Panel2..lbWhat..Caption
 #. frmMain..Panel2..lbWhat..Caption
@@ -589,12 +589,12 @@ msgstr "Quoi ?"
 #. frmMain..Panel2..cbWaypoints..Hint
 #: main.dfm:425
 msgid "Include waypoints"
-msgstr ""
+msgstr "Inclure les waypoints"
 
 #. frmMain..Panel2..cbRoutes..Hint
 #: main.dfm:437
 msgid "Include routes"
-msgstr ""
+msgstr "Inclure les routes"
 
 #. frmMain..Panel2..cbRoutes..Caption
 #. frmMain..Panel2..cbRoutes..Caption
@@ -606,12 +606,12 @@ msgstr ""
 #. frmMain..Panel2..cbTracks..Hint
 #: main.dfm:447
 msgid "Include tracks"
-msgstr ""
+msgstr "Inclure les traces"
 
 #. frmMain..Panel2..btnFilter..Hint
 #: main.dfm:457
 msgid "Filter incomming data before writing them to file or device"
-msgstr ""
+msgstr "Filtrer les données envoyées avant de les écrire sur un périphérique ou dans un fichier"
 
 #. frmMain..Panel2..btnFilter..Caption
 #. frmMain..ActionList1..acFilterSelect..Caption
@@ -627,7 +627,7 @@ msgstr "&Filtre"
 #. frmMain..Panel2..btnProcess..Hint
 #: main.dfm:504
 msgid "Start data conversion"
-msgstr ""
+msgstr "Démarrer la conversion de données"
 
 #. frmMain..Panel2..btnProcess..Caption
 #. frmMain..ActionList1..acConvert..Caption
@@ -852,11 +852,11 @@ msgstr "Impossible d'éxécuter \"gpsbabel.exe\"!"
 
 #: main.pas:481
 msgid "Sorry, gpsbabel.exe reported problems!"
-msgstr ""
+msgstr "Désolé, GPSBabel a reporté un problème !"
 
 #: main.pas:482
 msgid "Error"
-msgstr ""
+msgstr "Erreur"
 
 #: main.pas:485
 #: test/main.pas:477
