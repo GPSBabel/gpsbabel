@@ -57,7 +57,7 @@ AutoIncBuild=0
 MajorVer=0
 MinorVer=2
 Release=1
-Build=0
+Build=4
 Debug=0
 PreRelease=1
 Special=0
@@ -68,7 +68,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=GPSBabel Makers
 FileDescription=GPSBabel Windows Frontend
-FileVersion=0.2.1.0
+FileVersion=0.2.1.4
 InternalName=GPSBabelGUI-2
 LegalCopyright=(C) 2005 Olaf Klein (O.B.Klein@T-Online.de)
 LegalTrademarks=
