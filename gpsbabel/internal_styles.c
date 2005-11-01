@@ -216,6 +216,39 @@ static char garmin301[] =
 "#EPILOGUE	Epilogue Line 1\n"
 "#EPILOGUE	Epilogue Line 2\n"
 ;
+static char garmin_poi[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: Garmin POI\n"
+"# Author: Robert Lipe\n"
+"# Date: 10/07/2005\n"
+"# Reference: http://forums.groundspeak.com/GC/index.php?showtopic=110641&st=0&#entry1752204\n"
+"#\n"
+"DESCRIPTION Garmin POI database\n"
+"#\n"
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER COMMA\n"
+"RECORD_DELIMITER NEWLINE\n"
+"BADCHARS COMMA\n"
+"SHORTLEN 24\n"
+"# PROLOGUE Longitude,Latitude,Name, comment\n"
+
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD LON_HUMAN_READABLE, \"\", \"%08.5f\"\n"
+"IFIELD LAT_HUMAN_READABLE, \"\", \"%08.5f\"\n"
+"IFIELD SHORTNAME, \"\", \"%s\"\n"
+"IFIELD DESCRIPTION, \"\", \"%s\"\n"
+
+"OFIELD LON_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD LAT_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD SHORTNAME, \"\", \"%-.24s\"\n"
+"OFIELD DESCRIPTION, \"\", \"%-.50s\"\n"
+
+;
 static char geonet[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -737,5 +770,5 @@ static char xmapwpt[] =
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 19;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 20;
