@@ -155,6 +155,20 @@ typedef struct GPS_SWay
     time_t   Time;		/* Unix time */
 } GPS_OWay, *GPS_PWay;
 
+/*
+ * Forerunner Lap data.
+ */
+typedef struct GPS_SLap_Data {
+	time_t	start_time;
+	uint32	total_time;	/* Hundredths of a second */
+	float	total_distance;	/* In meters */
+	double	begin_lat; 
+	double	begin_lon; 
+	double	end_lat;
+	double	end_lon;
+	int16	calories;
+	UC	track_index;
+} GPS_OLap_Data, *GPS_PLap_Data;
 
 
 
