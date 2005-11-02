@@ -234,6 +234,12 @@ int32 gps_position_type;
 
 int32 gps_pvt_type;
 
+/*
+ * Lap Data Type
+ */
+#define pD906 906
+
+int32 gps_lap_type;
 
 /*
  * Link protocol type

@@ -606,8 +606,11 @@ static void GPS_A001(GPS_PPacket packet)
 	         */
 		continue;
 	    }
-
-
+	    else if (lasta < 1000)
+	    {
+		if (data == 906)
+		    gps_lap_type = pD906;
+	    }
 	}
     }
 
@@ -5838,6 +5841,49 @@ void GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data *pvt)
     return;
 }
 
+/* @func GPS_D906_Get ******************************************************
+**
+** Convert packet to lap structure
+**
+** @param [r] packet [GPS_PPacket] packet
+** @param [w] pvt [GPS_PLap_Data *] lap structure
+**
+** @return [void]
+************************************************************************/
+void GPS_D906_Get(GPS_PPacket packet, GPS_PLap_Data *Lap)
+{
+    UC *p;
+    uint32 t;
+    
+    p = packet->data;
+
+    t = GPS_Util_Get_Uint(p);
+    (*Lap)->start_time = GPS_Math_Gtime_To_Utime((time_t)t);
+    p+=sizeof(uint32);
+
+    (*Lap)->total_time = GPS_Util_Get_Int(p);
+    p+=sizeof(int32);
+
+    (*Lap)->total_distance = GPS_Util_Get_Float(p);
+    p+=sizeof(float);
+
+
+    (*Lap)->begin_lat = GPS_Math_Semi_To_Deg(GPS_Util_Get_Int(p));
+    p+=sizeof(int32);
+    (*Lap)->begin_lon = GPS_Math_Semi_To_Deg(GPS_Util_Get_Int(p));
+    p+=sizeof(int32);
+    (*Lap)->end_lat = GPS_Math_Semi_To_Deg(GPS_Util_Get_Int(p));
+    p+=sizeof(int32);
+    (*Lap)->end_lon = GPS_Math_Semi_To_Deg(GPS_Util_Get_Int(p));
+    p+=sizeof(int32);
+
+    (*Lap)->calories = GPS_Util_Get_Short(p);
+    p+=sizeof(int16);
+
+    (*Lap)->track_index = *p++;
+
+    return;
+}
 
 /* 
  *  It's unfortunate that these aren't constant and therefore switchable,
