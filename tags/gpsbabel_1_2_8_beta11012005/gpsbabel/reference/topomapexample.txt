@@ -1,0 +1,8 @@
+Group	sID	sDescription	fLat	fLong	fEasting	fNorthing	fAlt	iColour	iSymbol	sHyperLink
+new	HOME	Close to Home	-43.556459	172.644418	2481280	5738940		255	1	http://www.automata.co.nz
+new	Work	The place I love to be :)	-43.528788	172.604622	2478050	5742000		255	1	http://www.copyland.co.nz
+new	SQUARE		-43.530962	172.636401	2480620	5741770		255	1	http://www.ccc.govt.nz
+new	MGD	I have a cache near here	-43.579588	172.673997	2483680	5736380		255	1	http://www.geocacghing.com/seek/cache_details.aspx?ID=19000
+new	MAGOBS	Magnetic Observatory	-43.422331	172.352275	2457560	5753700		255	1	http://magobs.co.nz
+new	MAPA	Farm	-43.360444	172.549087	2473460	5760680		255	1	
+new	BOTTLE	Bottle Lake	-43.462214	172.672152	2483480	5749420		255	1	http://www.bottlelake.co.nz
