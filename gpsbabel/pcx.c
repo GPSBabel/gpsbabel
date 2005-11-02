@@ -289,7 +289,7 @@ pcx_track_disp(const waypoint *wpt)
 	lon = degrees2ddmm(wpt->longitude);
 	lat = degrees2ddmm(wpt->latitude);
 
-	tm = localtime(&wpt->creation_time);
+	tm = gmtime(&wpt->creation_time);
 
 	strftime(tbuf, sizeof(tbuf), "%d-%b-%y %T", tm);
 	for (tp = tbuf; *tp; tp++) {
