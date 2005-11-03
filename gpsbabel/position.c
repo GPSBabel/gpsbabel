@@ -36,6 +36,7 @@ static char *lonopt = NULL;
 static char *exclopt = NULL;
 static char *nosort = NULL;
 static char *maxctarg = NULL;
+static char *routename = NULL;
 static int maxct;
 
 static waypoint * home_pos;
@@ -68,6 +69,8 @@ arglist_t radius_args[] = {
 		NULL, ARGTYPE_BOOL },
 	{"maxcount", &maxctarg,"Output no more than this number of points",
 		NULL, ARGTYPE_INT, "1", NULL },
+	{"asroute", &routename,"Put resulting waypoints in route of this name",
+		NULL, ARGTYPE_STRING, NULL, NULL },
 	{0, 0, 0, 0, 0}
 };
 
@@ -274,6 +277,7 @@ radius_process(void)
 	waypoint ** comp;
 	int i, wc;
 	queue temp_head;
+	route_head *rte_head;
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		extra_data *ed;
@@ -322,6 +326,12 @@ radius_process(void)
 		qsort(comp, wc, sizeof(waypoint *), dist_comp);
 	}
 
+	if (routename) {
+		rte_head = route_head_alloc();
+		rte_head->rte_name = xstrdup(routename);
+		route_add_head(rte_head);
+	}
+
 	/*
 	 * The comp array is now sorted by distance.   As we run through it,
 	 * we push them back onto the master wp list, letting us pass them
@@ -336,7 +346,11 @@ radius_process(void)
 		if (maxctarg && i >= maxct) {
 			continue;
 		}
-		waypt_add(wp);
+		if (routename) {
+			route_add_wpt(rte_head, wp);
+		} else {
+			waypt_add(wp);
+		}
 	}
 
 	xfree(comp);
