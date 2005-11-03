@@ -98,7 +98,7 @@ static arglist_t gdb_args[] = {
 	{GDB_OPT_VER, &gdb_opt_ver, 
 	    "Version of gdb file to generate (1,2)", "2", ARGTYPE_INT, "1", "2"},
 	{GDB_OPT_VIA, &gdb_opt_via, 
-	    "Drop route points, if they don't have an aquivalent waypoint (hidden points)", NULL, ARGTYPE_BOOL},
+	    "Drop route points that do not have an equivalent waypoint (hidden points)", NULL, ARGTYPE_BOOL},
 	{0, 0, 0, 0, 0}
 };
 
