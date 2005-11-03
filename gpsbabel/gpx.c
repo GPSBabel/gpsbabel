@@ -59,6 +59,7 @@ static char *urlbase = NULL;
 static route_head *trk_head;
 static route_head *rte_head;
 
+static format_specific_data **fs_ptr;
 
 #define MYNAME "GPX"
 #define MY_CBUF_SZ 4096
@@ -298,6 +299,7 @@ tag_wpt(const char **attrv)
 		}
 		avp+=2;
 	}
+	fs_ptr = &wpt_tmp->fs;
 }
 
 static void
@@ -335,9 +337,9 @@ start_something_else(const char *el, const char **attrv)
 	char **avcp = NULL;
 	int attr_count = 0;
 	xml_tag *new_tag;
-	fs_xml *fs_gpx = NULL;
+	fs_xml *fs_gpx;
        
-	if ( !wpt_tmp ) {
+	if ( !fs_ptr ) {
 		return;
 	}
 	
@@ -376,7 +378,7 @@ start_something_else(const char *el, const char **attrv)
 		}
 	}
 	else {
-		fs_gpx = (fs_xml *)fs_chain_find( wpt_tmp->fs, FS_GPX );
+		fs_gpx = (fs_xml *)fs_chain_find( *fs_ptr, FS_GPX );
 	       	
 		if ( fs_gpx && fs_gpx->tag ) {
 			cur_tag = fs_gpx->tag;
@@ -389,7 +391,7 @@ start_something_else(const char *el, const char **attrv)
 		else {
 			fs_gpx = fs_xml_alloc(FS_GPX);
 			fs_gpx->tag = new_tag;
-			fs_chain_add( &(wpt_tmp->fs), (format_specific_data *)fs_gpx );
+			fs_chain_add( fs_ptr, (format_specific_data *)fs_gpx );
 			new_tag->parent = NULL;
 		}
 	}
@@ -477,6 +479,7 @@ gpx_start(void *data, const char *el, const char **attr)
 	case tt_rte:
 		rte_head = route_head_alloc();
 		route_add_head(rte_head);
+		fs_ptr = &rte_head->fs;
 		break;
 	case tt_rte_rtept:
 		tag_wpt(attr);
@@ -484,6 +487,7 @@ gpx_start(void *data, const char *el, const char **attr)
 	case tt_trk:
 		trk_head = route_head_alloc();
 		track_add_head(trk_head);
+		fs_ptr = &trk_head->fs;
 		break;
 	case tt_trk_trkseg_trkpt:
 		tag_wpt(attr);
@@ -771,6 +775,7 @@ gpx_end(void *data, const char *el)
 		break;
 	case tt_rte_rtept:
 		route_add_wpt(rte_head, wpt_tmp);
+		wpt_tmp = NULL;
 		break;
 	case tt_rte_desc:
 		rte_head->rte_desc = xstrdup(cdatastrp);
@@ -788,6 +793,7 @@ gpx_end(void *data, const char *el)
 		break;
 	case tt_trk_trkseg_trkpt:
 		route_add_wpt(trk_head, wpt_tmp);
+		wpt_tmp = NULL;
 		break;
 	case tt_trk_desc:
 		trk_head->rte_desc = xstrdup(cdatastrp);
@@ -1141,12 +1147,12 @@ fprint_xml_chain( xml_tag *tag, const waypoint *wpt )
 			if ( tag->child ) {
 				fprint_xml_chain(tag->child, wpt);
 			}
-			if ( strcmp(tag->tagname, "groundspeak:cache" ) == 0 
-					&& wpt->gc_data.exported) {
+			if ( wpt && wpt->gc_data.exported &&
+			    strcmp(tag->tagname, "groundspeak:cache" ) == 0 ) {
 				xml_write_time( ofd, wpt->gc_data.exported, 
 						"groundspeak:exported" );
 			}
-			fprintf( ofd, "</%s>", tag->tagname);
+			fprintf( ofd, "</%s>\n", tag->tagname);
 		}
 		if ( tag->parentcdata ) {
 			tmp_ent = xml_entitize(tag->parentcdata);
@@ -1296,7 +1302,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 {
 	const char *oname;
 	char *odesc;
-	fs_xml *fs_gpx = NULL;
+	fs_xml *fs_gpx;
 
 	/*
 	 * Desparation time, try very hard to get a good shortname
@@ -1331,6 +1337,8 @@ gpx_waypt_pr(const waypoint *waypointp)
 static void
 gpx_track_hdr(const route_head *rte)
 {
+	fs_xml *fs_gpx;
+
 	fprintf(ofd, "<trk>\n");
 	write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
 	write_optional_xml_entity(ofd, "  ", "desc", rte->rte_desc);
@@ -1338,11 +1346,18 @@ gpx_track_hdr(const route_head *rte)
 		fprintf(ofd, "<number>%d</number>\n", rte->rte_num);
 	}
 	fprintf(ofd, "<trkseg>\n");
+
+	fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
+	if ( fs_gpx ) {
+		fprint_xml_chain( fs_gpx->tag, NULL );
+	}
 }
 
 static void
 gpx_track_disp(const waypoint *waypointp)
 {
+	fs_xml *fs_gpx;
+
 	fprintf(ofd, "<trkpt lat=\"" FLT_FMT_T "\" lon=\"" FLT_FMT_T "\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
@@ -1369,6 +1384,11 @@ gpx_track_disp(const waypoint *waypointp)
 			NULL : waypointp->shortname);
 	gpx_write_common_acc(waypointp, "  ");
 
+	fs_gpx = (fs_xml *)fs_chain_find( waypointp->fs, FS_GPX );
+	if ( fs_gpx ) {
+		fprint_xml_chain( fs_gpx->tag, waypointp );
+	}
+
 	fprintf(ofd, "</trkpt>\n");
 }
 
@@ -1388,17 +1408,26 @@ void gpx_track_pr()
 static void
 gpx_route_hdr(const route_head *rte)
 {
+	fs_xml *fs_gpx;
+
 	fprintf(ofd, "<rte>\n");
 	write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
 	write_optional_xml_entity(ofd, "  ", "desc", rte->rte_desc);
 	if (rte->rte_num) {
 		fprintf(ofd, "  <number>%d</number>\n", rte->rte_num);
 	}
+
+	fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
+	if ( fs_gpx ) {
+		fprint_xml_chain( fs_gpx->tag, NULL );
+	}
 }
 
 static void
 gpx_route_disp(const waypoint *waypointp)
 {
+	fs_xml *fs_gpx;
+
 	fprintf(ofd, "  <rtept lat=\"" FLT_FMT_R "\" lon=\"" FLT_FMT_R "\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
@@ -1406,6 +1435,12 @@ gpx_route_disp(const waypoint *waypointp)
 	gpx_write_common_position(waypointp, "    ");
 	gpx_write_common_description(waypointp, "    ", waypointp->shortname);
 	gpx_write_common_acc(waypointp, "    ");
+
+	fs_gpx = (fs_xml *)fs_chain_find( waypointp->fs, FS_GPX );
+	if ( fs_gpx ) {
+		fprint_xml_chain( fs_gpx->tag, waypointp );
+	}
+
 	fprintf(ofd, "  </rtept>\n");
 }
 
