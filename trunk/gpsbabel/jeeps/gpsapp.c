@@ -5840,6 +5840,83 @@ void GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data *pvt)
     
     return;
 }
+#if XXX /*   FIXME/PLACEHOLDER */
+
+/* @func GPS_A906_Get ******************************************************
+**
+** Get lap data from GPS
+**
+** @param [r] port [const char *] serial port
+** @param [w] trk [GPS_PLap_Data **] lap array
+**
+** @return [int32] number of lap entries
+************************************************************************/
+
+int32 GPS_A906_Get(const char *port, GPS_OLap_Data **lap)
+{
+    static UC data[2];
+    int32 fd;
+    GPS_PPacket lappkt;
+    GPS_PPacket recpkt;
+    int32 i, n;
+
+    if (gps_lap_transfer == -1)
+	return GPS_UNSUPPORTED;
+
+    if (!GPS_Serial_On(port, &fd))
+	return gps_errno;
+
+    if (!(lappkt = GPS_Packet_New() ) || !(recpkt = GPS_Packet_New()))
+       return MEMORY_ERROR;
+
+    GPS_Util_Put_Short(data,
+                       COMMAND_ID[gps_device_command].Cmnd_Transfer_Lap);
+    GPS_Make_Packet(&lappkt, LINK_ID[gps_link_type].Pid_Command_Data,
+                    data,2);
+    if(!GPS_Write_Packet(fd,lappkt))
+        return gps_errno;
+    if(!GPS_Get_Ack(fd, &lappkt, &recpkt))
+        return gps_errno;
+    if(!GPS_Packet_Read(fd, &recpkt))
+        return gps_errno;
+    if(!GPS_Send_Ack(fd, &lappkt, &recpkt))
+        return gps_errno;
+
+    n = GPS_Util_Get_Short(recpkt->data);
+
+    if(n)
+        if(!((*lap)=(GPS_PLap *)malloc(n*sizeof(GPS_PLap))))
+        {
+            GPS_Error("A906_Get: Insufficient memory");
+            return MEMORY_ERROR;
+        }
+
+    for(i=0;i<n;++i)
+        if(!((*trk)[i]=GPS_Track_New()))
+            return MEMORY_ERROR;
+
+    switch(gps_lap_type) {
+	case pD906:
+	    ret = GPS_D906_Get(*lap, n, fd);
+	    if (ret < 0) return ret;
+	    break;
+	default:
+	    GPS_Error("A906_Get: Unknown Lap protocol %d\n", gps_lap_type);
+	    return PROTOCOL_ERROR;
+    }
+    if (ret != n) {
+	GPS_Error("A906_Get: got %d lap entries.  Expected %d\n", ret, n);
+	return FRAMING_ERROR;
+    }
+    GPS_Packet_Del(&lap);
+    GPS_Packet_Del(&rec);
+
+    if (!GPS_Serial_Off(port, fd))
+	return gps_errno;
+
+    return ret;
+}
+#endif /* FIXME */
 
 /* @func GPS_D906_Get ******************************************************
 **

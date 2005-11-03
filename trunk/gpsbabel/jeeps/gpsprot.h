@@ -63,6 +63,7 @@ struct COMMANDDATA
     UC Cmnd_Turn_Off_Pwr;
     UC Cmnd_Start_Pvt_Data;
     UC Cmnd_Stop_Pvt_Data;
+    UC Cmnd_Transfer_Lap;
 }
 ;
 
@@ -124,7 +125,12 @@ int32 gps_position_transfer;
 #define pA800 800
 int32 gps_pvt_transfer;
 
+/*
+ * Lap Data Transfer
+ */
+#define pA906 906
 
+int32 gps_lap_transfer;
 
 
 
