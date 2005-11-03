@@ -1023,6 +1023,7 @@ gpx_read(void)
 	int done = 0;
 	char *buf = xmalloc(MY_CBUF_SZ);
 	int result = 0;
+	int extra;
 
 	while (!done) {
 		if ( fd ) {
@@ -1047,7 +1048,8 @@ gpx_read(void)
 			buf[len] = '\0';
 			badchar = buf+len-maxentlength;
 			badchar = strchr( badchar, '&' );
-			while ( badchar ) {
+			extra = maxentlength - 1; /* for terminator */
+			while ( badchar && len < MY_CBUF_SZ-1) {
 				int extra = maxentlength-1; /* for terminator */
 				semi = strchr( badchar, ';');
 				while ( extra && !semi ) {
