@@ -41,7 +41,9 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
 	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o
 
-FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o reverse_route.o sort.o stackfilter.o trackfilter.o discard.o
+FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o \
+	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
+	nukedata.o
 
 OSJEEPS=jeeps/gpslibusb.o
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
@@ -65,6 +67,10 @@ OBJS = main.o globals.o $(LIBOBJS)
 
 .c.o:
 	$(CC) -c $(CFLAGS) $< $(OUTPUT_SWITCH)$@
+
+# Directory of web doc 
+WEB=../babelweb/
+
 
 all: gpsbabel
 
@@ -120,11 +126,13 @@ readme.html: readme.xml
 	java  com.icl.saxon.StyleSheet $< \
 	/usr/share/sgml/docbook/xsl-stylesheets-1.68.1-1/xhtml/docbook.xsl \
 	html.stylesheet="http://www.gpsbabel.org/style3.css" > $@
+	cp readme.html $(WEB)/readme.xhtml
+	tools/mkcapabilities
 
 readme.txt: readme.html
 	lynx -nolist -dump readme.html  > $@
 
-doc: readme.html readme.txt
+doc: readme.html # readme.txt
 
 release: 
 	cvs commit
