@@ -218,7 +218,7 @@ tmpro_waypt_pr(const waypoint * wpt)
 	    wpt->altitude,
 	    colour,
 	    icon,
-	    wpt->url
+	    wpt->url ? wpt->url : ""
 	);
 	    
 
