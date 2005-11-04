@@ -39,6 +39,7 @@ extern filter_vecs_t sort_vecs;
 extern filter_vecs_t stackfilt_vecs;
 extern filter_vecs_t trackfilter_vecs;
 extern filter_vecs_t discard_vecs;
+extern filter_vecs_t nuke_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -96,6 +97,11 @@ fl_vecs_t filter_vec_list[] = {
 		&discard_vecs,
 		"discard",
 		"Remove unreliable points with high hdop or vdop"
+	},
+	{
+		&nuke_vecs,
+		"nuketypes",
+		"Remove all waypoints, tracks, or routes"
 	},
         {
 		NULL,
