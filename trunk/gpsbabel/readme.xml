@@ -247,11 +247,11 @@ Limited-access toll highways</member>
                <parameter moreinfo="none">ramp</parameter>      Access
 ramps for limited-access highways</member>
 	<member>
-               <parameter moreinfo="none">us</parameter>
-National highways (e.g. US routes)</member>
+               <parameter moreinfo="none">us</parameter> National
+highways (e.g. US routes)</member>
 	<member>
-               <parameter moreinfo="none">primary</parameter>
-Primary State/Provincial routes</member>
+               <parameter moreinfo="none">primary</parameter> Primary
+State/Provincial routes</member>
 	<member>
                <parameter moreinfo="none">state</parameter>
 State/Provincial routes</member>
@@ -359,7 +359,7 @@ own separator.</para>
 format for waypoints, routes and tracks.</para>
       <para> For more information please have a look at <ulink
 url="http://www.compegps.com">http://www.compegps.com</ulink></para>
-         <para>
+      <para>
          Options: </para>
       <para><option>deficon</option> Default Icon name.</para>
       <para><option>index</option> Use route/track number
@@ -442,9 +442,9 @@ Deluxe</subtitle>
       </sectioninfo>
       <title>CSV</title>
       <para> There are a billion variants of Comma Separated Value
-data.  This is the one that makes Delorme S&amp;A Deluxe 9 happy.
-It's also a very simple program and useful for many other programs
-like spreadsheets.</para>
+data.  This is the one that makes Delorme S&amp;A Deluxe 9 happy. It's
+also a very simple program and useful for many other programs like
+spreadsheets.</para>
       <para> CSV is also the correct format for Lowrance MapCreate,
 their commercial mapping program, or GDM6 (their free waypoint
 manager) for iFinder which is available at <ulink
@@ -560,6 +560,29 @@ numbered slot.  GPSBabel names the them consistently with Mapsource,
 so they are named 'Custom 0' through 'Custom 23'.
 </para>
     </section>
+
+    <section id="garmin_poi">
+      <sectioninfo>
+        <subtitle>Garmin POI Database.</subtitle>
+      </sectioninfo>
+      <title>garmin_poi</title>
+      <para>The <ulink
+url="http://www.garmin.com/support/agree.jsp?id=927"> Garmin POI
+loader</ulink> loads custom points of interest into certain models of
+Garmin GPS receivers.  (As of this writing, only the models introduced
+in 2005 and later are supported.  See Garmin's site for more info.)
+This is the format readable that that program.</para>
+    </section>
+
+    <section id="garmin301">
+      <sectioninfo><subtitle>Garmin 301 data.</subtitle></sectioninfo>
+      <title>garmin301</title> <para>This is a very simple format that
+is most useful for exporting data from a Garmin301 to other programs
+for analysis.   It's a simple comma delimited format that includes the
+timestamp, 3D position information and heart rate so you can pull it
+into a spreadsheet or graphing program. </para>
+    </section>
+
     <section id="gcdb">
       <sectioninfo>
 	<subtitle>GeocachingDB format</subtitle>
@@ -610,8 +633,8 @@ is very well supported.</para>
       </sectioninfo>
       <title>Geocaching DB</title>
       <para> This is a PDA file format.  It was tested against version
-2 of GeocachingDB and a development snapshot of version 3.
-Information on the file format came from Dougs Brat and Ron Parker.  A
+2 of GeocachingDB and a development snapshot of version 3. Information
+on the file format came from Dougs Brat and Ron Parker.  A
 particularly handy way to use GPSBabel on these files is to use
 GPSBabel to read a GPX file with Groundspeak (geocaching.com)
 extensions and let it write you a GeocachingDB file that contains the
@@ -831,7 +854,7 @@ extension)</para>
 waypoints in the input file.  It supports a number of Geocaching GPX
 extensions, as well as filters out potentially harmful HTML from the
 input file while maintaining almost all of the source HTML formatting.
- Use the 'stylesheet' option to specify a CSS stylesheet to be used
+Use the 'stylesheet' option to specify a CSS stylesheet to be used
 with the resulting HTML file.  Use the 'encrypt' option to encrypt
 hints from Groundspeak GPX files.  Use the 'logs' option to include
 Groundspeak cache logs.
@@ -1121,7 +1144,7 @@ url="http://homepages.tig.com.au/~robk/datalogger.html">homepages.tig.com.au</ul
          </para>
       <para>
             <ulink url="http://www.gpstm.com/eng/features_eng.htm
-       ">gpstm.com</ulink>
+">gpstm.com</ulink>
          </para>
       <para>
             <ulink url="http://www.gpsmaster.nl/
@@ -1198,7 +1221,7 @@ use the 'nosep' option.  To specify a name for the document, use the
 Groundspeak GPX files.  Use the 'logs' option to include Groundspeak
 cache logs.  If you would like the generated bookmarks to start with
 the short name for the waypoint, specify the 'bookmarks_short' option.
- This is particularly useful when used in combination with the 'sort'
+This is particularly useful when used in combination with the 'sort'
 filter.
 </para>
       <para> The following command line reads a GPX file with
@@ -1300,9 +1323,9 @@ revision.</para>
       </sectioninfo>
       <title>s_and_t</title>
       <para> This is a format for importing into Microsoft Streets and
-Trips.  It's been exercised on versions 2003, 2004, and 2005.
-Detailed instructions on how to use it, including preserving
-hyperlinks, are at <ulink
+Trips.  It's been exercised on versions 2003, 2004, and 2005. Detailed
+instructions on how to use it, including preserving hyperlinks, are at
+<ulink
 url="http://www.gpsbabel.org/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html">gpsbabel.org</ulink>
          </para>
     </section>
@@ -1426,7 +1449,7 @@ text,encrypt -F 12345.txt
       </sectioninfo>
       <title>TIGER</title>
       <para>The U.S. Census Bureau provides online mapping facilities.
- This format is described at: <ulink
+This format is described at: <ulink
 url="http://tiger.census.gov/instruct.html">tiger.census.gov</ulink>.
 Do notice that this format is not the actual Tiger line mapping
 records, but rather the interface to their online mapping
@@ -1514,7 +1537,7 @@ may crash VitoNavigator II on the Pocket PC.</para>
 handle at least a few thousand of the billion CSV variants available.
 By itself, it doesn't comply to any format, however *most* CSV
 variants can be described as a "style" and fine-tuned by the end user.
- For more information on it's use, please see README.style in the
+For more information on it's use, please see README.style in the
 style/ sub-directory of <command moreinfo="none">GPSBabel</command>.
 For an example of using the XCSV module within your C program, look at
 the <filename moreinfo="none">ozi.c</filename>, <filename
@@ -1554,9 +1577,9 @@ xcsv,style=foo.style -f foo \ -o xcsv,style=bar.style \ -F bar
       <title>XMap</title>
       <para>Delorme TopoUSA/XMap Conduit is one of the billion CSV
 variants mentioned above.  It's just like S&amp;A with the addition of
-a completely pointless line at the beginning and end of the file.
-This is the format used to hot-sync to XMap from withing TopoUSA.
-Done with help of Dan Edwards.</para>
+a completely pointless line at the beginning and end of the file. This
+is the format used to hot-sync to XMap from withing TopoUSA. Done with
+help of Dan Edwards.</para>
     </section>
     <section id="xmapwpt">
       <sectioninfo>
