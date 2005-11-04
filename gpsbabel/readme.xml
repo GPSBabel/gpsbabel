@@ -274,8 +274,7 @@ routed just like local roads, but may be edited with the drawing tools
 in Street Atlas.</para>
       <para> This option has a special format that is best
 demonstrated by example:</para>
-      <screen format="linespecific">"road=I-599!limited!Beecher
-St.!major" </screen>
+      <screen format="linespecific">"road=I-599!limited!Beecher St.!major" </screen>
       <para>
         This option will cause any road named "I-599" to become a
 limited- access highway and any road named "Beecher St." to become a
@@ -304,7 +303,7 @@ create a three dimensional IGC file. </para>
       </sectioninfo>
       <title>BCR</title>
       <para> This file format (extension .bcr) is used in "Motorrad
-Routenplaner 2002-..." by Map&amp;amp;Guide. It is a route-onle
+Routenplaner 2002-..." by Map&amp;Guide. It is a route-onle
 format. If you own a newer release (2005...) you can also use the XML
 export and convert via <command moreinfo="none">gpsbabel ... -i tef
 ...</command> to your preferred format.  May be there are other
@@ -331,8 +330,10 @@ differences.</para>
       <para/>
       <example>
 	<title>An example with all options</title>
-	<screen format="linespecific">gpsbabel -r \ -i gpx -f in.gpx
--o bcr,index=1,name="From A to B",radius=6371012 \ -F a_to_b.bcr
+	<screen format="linespecific"><para>gpsbabel -r \</para>
+		<para> -i gpx -f in.gpx
+-o bcr,index=1,name="From A to B",radius=6371012 \</para><para> -F a_to_b.bcr
+</para>
 </screen>
       </example>
     </section>
@@ -683,20 +684,20 @@ url="http://www.garmin.com">http://www.garmin.com</ulink>
       </sectioninfo>
       <title>GOOGLE</title>
       <para> This format is designed to read the XML emitted when you
-tack "&amp;amp;output=js" onto the end of a Google Maps route URL (use
+tack "&amp;output=js" onto the end of a Google Maps route URL (use
 the "link to this page" option to get a usable URL.)  This allows you
 to plan a route using Google Maps, then download it and use it in your
 own mapping program or GPS receiver.  If you use a Unix-compatible
 operating system, this shell script might be useful:
 </para>
-      <screen format="linespecific"> #!/bin/sh FROM="233 S. Upper
-Wacker Dr, Chicago, IL" TO="1060 W. Addison St, Chicago, IL" wget -O -
-"http://maps.google.com/maps?q=$FROM to $TO&amp;amp;output=js" \
-2&amp;gt;/dev/null &amp;gt;google_map.js
-</screen>
-      <screen format="linespecific"> gpsbabel -i google -f
-google_map.js -o gpx -F google_map.gpx
-</screen>
+      <programlisting>
+#!/bin/sh 
+FROM="233 S. Upper Wacker Dr, Chicago, IL" 
+TO="1060 W. Addison St, Chicago, IL" 
+wget -O - "http://maps.google.com/maps?q=$FROM to $TO&amp;output=js" \
+2&amp;&gt;/dev/null &gt;google_map.js
+gpsbabel -i google -f google_map.js -o gpx -F google_map.gpx
+</programlisting>
       <para> Note that Internet Explorer has been observed to damage
 the XHTML beyond recognition so use a better browser to save the pages
 such as Firefox or Mozilla.
@@ -863,8 +864,8 @@ Groundspeak cache logs.
 Groundspeak extensions and writes an HTML file with encrypted hints
 that is rendered using a custom stylesheet:
 </para>
-      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx \ -o
-html,stylesheet=green.css,encrypt -F 12345.html
+      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx \
+	 -o html,stylesheet=green.css,encrypt -F 12345.html
 </screen>
     </section>
     <section id="igc">
@@ -941,7 +942,7 @@ tracks</para>
     </section>
     <section id="mag_pdb">
       <sectioninfo>
-	<subtitle>Palm OS for Map&amp;Guide format</subtitle>
+	<subtitle><para>Palm OS for Map &amp; Guide format</para></subtitle>
       </sectioninfo>
       <title>mag_pdb</title>
       <para> With this format we support the Palm/OS export for
@@ -1229,7 +1230,8 @@ Groundspeak extensions and writes a Palm document with encrypted hints
 and logs:
 </para>
       <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx \ -o
-"palmdoc,dbname=Unfound Geocaches,encrypt,logs" \ -F 12345.pdb
+	"palmdoc,dbname=Unfound Geocaches,encrypt,logs" \ 
+	-F 12345.pdb
 </screen>
     </section>
     <section id="pathaway">
@@ -1563,8 +1565,9 @@ whether or not to force uppercase  in shortnames. (0 = LEAVE AS IS, 1
 line option.</para>
       <example>
 	<title> Example Usage: </title>
-	<screen format="linespecific"> gpsbabel -i
-xcsv,style=foo.style -f foo \ -o xcsv,style=bar.style \ -F bar
+	<screen format="linespecific"> gpsbabel -i xcsv,style=foo.style -f foo \
+ -o xcsv,style=bar.style \
+ -F bar
 </screen>
 	<screen format="linespecific"> gpsbabel -s -i gpx -f foo.gpx \
 -o xcsv,style=my.style,snlen=8 -F bar</screen>
@@ -1653,7 +1656,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
             <title>	For example:</title>
             <screen format="linespecific">gpsbabel -i geo -f 1.loc \
    -x radius,distance=1.5M,lat=30.0,lon=-90.0   \	         
-   -o mapsend 
+   -o mapsend  \
    -F 2.wpt</screen>
          </example>
          <para> would include only points within 1.5 miles of N30.000
@@ -1670,7 +1673,8 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          one of these options is REQUIRED.  </para>
          <example>
             <title>For example:</title>
-            <screen format="linespecific"> gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname  \	         -o gpx -F merged_with_no_dupes.gpx</screen>
+            <screen format="linespecific"> gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname  \
+	         -o gpx -F merged_with_no_dupes.gpx</screen>
          </example>
          <para> would remove points that have duplicate shortnames
          *AND* duplicate locations.  The result would be a GPX file
@@ -1796,8 +1800,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
 </para>
          <screen format="linespecific">gpsbabel -r -i saroute -f RoadTrip.anr \
    -x simplify,count=50 \
-   -o magellan 
-    -F grocery.rte
+   -o magellan  -F grocery.rte
 </screen>
       </section>
       <section>
@@ -1921,8 +1924,9 @@ following options are available:</para>
          UNIX date or strftime for details) are possible.
 </para>
          <screen format="linespecific">
-gpsbabel -t \ -i gpx -f in.gpx \ -x track,pack,split,title="ACTIVE
-LOG-%D" \ -o gpx -F out.gpx PACK
+gpsbabel -t \
+ -i gpx -f in.gpx \ -x track,pack,split,title="ACTIVE LOG-%D" \ 
+-o gpx -F out.gpx PACK
 	</screen>
          <para>MOVE</para>
          <para>Change the time of all trackpoints. This is useful if
@@ -2027,6 +2031,24 @@ gpsbabel -t \
 	-o gpx -F out.gpx
 </screen>
          <para> Contributed by Tobias Minich.</para>
+      </section>
+      <section>
+         <title>NUKETYPES</title>
+	<para>
+	There are three main types of data that GPSBabel deals with:
+	waypoints, tracks, and routes.   The nuketypes filter allows
+	removing all the data of any or all of those three types.
+	</para>
+	<para><option>waypoints</option> - Removes all waypoints.</para>
+	<para><option>tracks</option> - Removes all routes.</para>
+	<para><option>routes</option> - Removes all routes.</para>
+	<para>
+	For example, if you have a GPX file that contains routes, tracks, and
+	waypoints and you want a GPX file that contains only tracks,
+	you can use this filter to remove the waypoints with this command:
+	</para>
+        <screen format="linespecific">gpsbabel -i gpx -f bigfile.gpx -x nuketypes,waypoints,routes -o gpx -F tracksonly.gpx
+	</screen>
       </section>
    </chapter>
 </book>
