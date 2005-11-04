@@ -86,7 +86,7 @@ kml_read(void)
 #else
 
 static xg_callback	wpt_s, wpt_e;
-static xg_callback	wpt_name, wpt_desc, wpt_coord, trk_coord;
+static xg_callback	wpt_name, wpt_desc, wpt_coord, wpt_icon, trk_coord;
 
 static 
 xg_tag_mapping kml_map[] = {
@@ -95,6 +95,7 @@ xg_tag_mapping kml_map[] = {
 	{ wpt_name, 	cb_cdata, 	"/Placemark/name" },
 	{ wpt_desc, 	cb_cdata, 	"/Placemark/description" },
 	{ wpt_coord, 	cb_cdata, 	"/Placemark/Point/coordinates" },
+	{ wpt_icon, 	cb_cdata, 	"/Placemark/Style/Icon/href" },
 	{ trk_coord, 	cb_cdata, 	"/Placemark/MultiGeometry/LineString/coordinates" },
 	{ NULL, 	0, 		NULL }
 };
@@ -148,6 +149,14 @@ void wpt_coord(const char *args, const char **attrv)
 {
 	sscanf(args, "%lf,%lf,%lf", &wpt_tmp->longitude, &wpt_tmp->latitude, &wpt_tmp->altitude);
 	wpt_tmp_queued = 1;
+}
+
+void wpt_icon(const char *args, const char **unused)
+{
+	if (wpt_tmp)  {
+		wpt_tmp->icon_descr = xstrdup(args);
+		wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
+	}
 }
 
 void trk_coord(const char *args, const char **attrv)
@@ -321,6 +330,8 @@ static void kml_output_tailer(const route_head *header)
 
 static void kml_waypt_pr(const waypoint *waypointp)
 {
+	const char *icon;
+
 	fprintf(ofd, "\t<Placemark>\n");
 	write_optional_xml_entity(ofd, "\t", "name", waypointp->shortname);
 	fprintf(ofd, "\t  <styleUrl>#waypoint</styleUrl>\n");
@@ -346,6 +357,14 @@ static void kml_waypt_pr(const waypoint *waypointp)
 		waypointp->longitude, waypointp->latitude, 
 		waypointp->altitude == unknown_alt ? 0.0 : waypointp->altitude);
 	fprintf(ofd, "\t  </Point>\n");
+
+	// Icon - but only if it looks like a URL.
+	icon = opt_deficon ? opt_deficon : waypointp->icon_descr;
+	if (icon && strstr(icon, "://")) {
+		fprintf(ofd, "\t  <Style>\n");
+		fprintf(ofd, "\t\t<icon>%s</icon>\n", icon);
+		fprintf(ofd, "\t  </Style>\n");
+	}
 
 	// Timestamp
 	kml_output_timestamp(waypointp);
