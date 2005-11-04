@@ -927,4 +927,17 @@ ${PNAME} -r -i compegps -f reference/route/compegps.rte -o compegps -F ${TMPDIR}
 ${PNAME} -i compegps -f ${TMPDIR}/compegps.rte -o gpx -F ${TMPDIR}/compegps-rte2.gpx
 compare reference/route/compegps-rte.gpx ${TMPDIR}/compegps-rte2.gpx
 
+#
+# Testing the 'nuketypes' filter is funky.
+# Convert a GPX file to GPX to eliminate jitter.
+# Then nuke the all but the three individual types, merge the result together
+# and verify we got the original back.
+#
+${PNAME} -i gpx -f reference/gdb-sample.gpx -o gpx -F ${TMPDIR}/alltypes.gpx
+${PNAME} -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,tracks,routes -o gpx -F ${TMPDIR}/wpts.gpx
+${PNAME} -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,waypoints,routes -o gpx -F ${TMPDIR}/trks.gpx
+${PNAME} -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,waypoints,tracks -o gpx -F ${TMPDIR}/rtes.gpx
+${PNAME} -i gpx -f ${TMPDIR}/wpts.gpx -f ${TMPDIR}/trks.gpx -f ${TMPDIR}/rtes.gpx -o gpx -F ${TMPDIR}/merged.gpx
+compare ${TMPDIR}/alltypes.gpx ${TMPDIR}/merged.gpx
+
 exit 0
