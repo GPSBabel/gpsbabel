@@ -42,6 +42,17 @@ compare_gpx()
 	sed -e '1d' $2 > $TMPDIR/comp_gpx2
 	compare $TMPDIR/comp_gpx1 $TMPDIR/comp_gpx2
 }
+
+# Some formats are just too boring to test.   The ones that
+# are xcsv include 
+# garmin301 
+# garmin_poi 
+# gpsdrivetrack
+# nima 
+# mapconverter
+# geonet
+# saplus
+# s_and_t
 	
 # Geocaching .loc
 rm -f ${TMPDIR}/gl.loc
@@ -130,9 +141,18 @@ ${PNAME} -i geo -f geocaching.loc -o pcx -F ${TMPDIR}/mm.pcx
 ${PNAME} -i pcx -f ${TMPDIR}/mm.pcx -o gpsutil -F ${TMPDIR}/pcx.gps
 compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 
+#
 # Magellan file format
+#
 ${PNAME} -i magellan -f reference/magfile -o magellan -F ${TMPDIR}/magfile
 compare ${TMPDIR}/magfile reference/magfile
+
+#
+# Magellanx is just like, but with longer names. (which this admittedly
+# doesn't actually exercise...)
+#
+${PNAME} -i magellan -f reference/magfile -o magellanx -F ${TMPDIR}/magfile2
+compare ${TMPDIR}/magfile2 reference/magfile
 
 # Navitrak DNA marker format
 ${PNAME} -i dna -f reference/dnatest.txt -o dna -F ${TMPDIR}/dnatest.txt
@@ -355,6 +375,7 @@ rm -f ${TMPDIR}/magellan.rte
 ${PNAME} -r -i magellan -f reference/route/magellan.rte -o magellan \
          -F ${TMPDIR}/magellan.rte
 compare ${TMPDIR}/magellan.rte reference/route/magellan.rte
+
 
 #
 # GPX routes -- since GPX contains a date stamp, tests will always
