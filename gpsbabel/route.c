@@ -228,8 +228,8 @@ track_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
 	common_disp_all(&my_track_head, rh, rt, wc);
 }
 
-void
-route_flush(queue *head)
+static void
+route_flush_q(queue *head)
 {
 	queue *elem, *tmp;
 	queue *q;
@@ -241,13 +241,25 @@ route_flush(queue *head)
 }
 
 void
+route_flush_all_routes(void)
+{
+	route_flush_q(&my_route_head);
+	rte_head_ct = 0;
+	rte_waypts = 0;
+}
+
+void
+route_flush_all_tracks(void)
+{
+	route_flush_q(&my_track_head);
+	trk_head_ct = 0;
+}
+
+void
 route_flush_all()
 {
-	route_flush(&my_route_head);
-	route_flush(&my_track_head);
-	rte_head_ct = 0;
-	trk_head_ct = 0;
-	rte_waypts = 0;
+	route_flush_all_tracks();
+	route_flush_all_routes();
 }
 
 void
@@ -332,7 +344,7 @@ route_restore(unsigned int count, queue *head_bak)
 {
 	if (head_bak == NULL) return;
 	
-	route_flush(&my_route_head);
+	route_flush_q(&my_route_head);
 	QUEUE_INIT(&my_route_head);
 	QUEUE_MOVE(&my_route_head, head_bak);
 	xfree(head_bak);
@@ -388,7 +400,7 @@ track_restore(unsigned int count, queue *head_bak)
 {
 	if (head_bak == NULL) return;
 	
-	route_flush(&my_track_head);
+	route_flush_q(&my_track_head);
 	QUEUE_INIT(&my_track_head);
 	QUEUE_MOVE(&my_track_head, head_bak);
 	xfree(head_bak);
