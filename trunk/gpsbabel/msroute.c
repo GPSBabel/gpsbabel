@@ -207,7 +207,7 @@ ole_find_property(const char *property)
 		len = min(OLE_MAX_NAME_LENGTH, item->name_size / 2);
 		
 		for (j = 0; j < len; j++)
-			buff[j] = item->name[j];
+			buff[j] = le_read16(&item->name[j]);
 		buff[j] = '\0';
 		
 		if (case_ignore_strcmp(buff, property) == 0)
