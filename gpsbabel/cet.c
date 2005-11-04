@@ -345,14 +345,14 @@ cet_str_uni_to_utf8(const short *src, const int length)
 	cin = (unsigned short *)src;
 
 	while (i-- > 0)
-	    len += cet_ucs4_to_utf8(NULL, 6, *cin++);
+	    len += cet_ucs4_to_utf8(NULL, 6, le_read16(cin++));
 	
 	res = cout = xmalloc(len + 1);
 	cin = (unsigned short *)src;
 	i = length;
 
 	while (i-- > 0)
-	    cout += cet_ucs4_to_utf8(cout, 6, *cin++);
+	    cout += cet_ucs4_to_utf8(cout, 6, le_read16(cin++));
 	    
 	*cout = '\0';
 
