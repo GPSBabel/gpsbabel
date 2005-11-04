@@ -49,6 +49,6 @@ typedef uint16_t	gbuint16;
 typedef  int32_t 	 gbint32;
 typedef  int16_t	 gbint16;
 
-#endif // defined(_MSC_VER)
+#endif /* defined(_MSC_VER) */
 
 #endif /* gb_types_h_included */
