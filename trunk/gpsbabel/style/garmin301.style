@@ -18,7 +18,7 @@ BADCHARS		COMMA
 # HEADER STUFF:
 #
 PROLOGUE	Garmin 301 data __FILE__ 
-PROLOGUE	Timestamp,Latitude, Longitude, Atlitude(ft), heart rate
+PROLOGUE	Timestamp,Latitude, Longitude, Altitude(ft), heart rate
 #
 # INDIVIDUAL DATA FIELDS:
 #
