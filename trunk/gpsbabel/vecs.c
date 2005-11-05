@@ -329,7 +329,7 @@ vecs_t vec_list[] = {
 	{
 		&netstumbler_vecs,
 		"netstumbler",
-		"NetStumbler Summary File",
+		"NetStumbler Summary File (text)",
 		NULL
 	},
 	{
