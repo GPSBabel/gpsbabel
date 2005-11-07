@@ -1,5 +1,10 @@
-VERSIONU=1_2_8-beta11062005
-VERSIOND=1.2.8-beta11062005
+
+VERSU=1_2_8
+VERSD=1.2.8
+RELEASE=-beta11072005
+VERSIONU=$(VERSU)$(RELEASE)
+VERSIOND=$(VERSD)$(RELEASE)
+
 # VERSIONU=1_2_7
 # VERSIOND=1.2.7
 
@@ -147,6 +152,13 @@ release:
 	cd /tmp/gpsbabel-$(VERSIOND)/mingw ; make
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).tar.gz ftp://upload.sf.net/incoming/
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).zip ftp://upload.sf.net/incoming/
+
+rpm: clean
+	tools/mkrpm $(VERSD) $(RELEASE)
+
+rpmrelease:
+	curl -u anonymous:anonymous --upload-file /usr/src/redhat/SRPMS/gpsbabel-$(VERSIOND).src.rpm  ftp://upload.sf.net/incoming/ 
+	curl -u anonymous:anonymous --upload-file /usr/src/redhat/RPMS/i386/gpsbabel-$(VERSIOND).i386.rpm  ftp://upload.sf.net/incoming/ 
 
 mac-usbfree:
 	make LIBEXPAT=/sw/lib/libexpat.a EXTRA_CFLAGS="-I/sw/include" LIBUSB= INHIBIT_USB=-DNO_USB

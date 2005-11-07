@@ -1,0 +1,92 @@
+#!/bin/sh
+#
+
+SPEC=gpsbabel.spec
+TAR_IGNORE="--exclude CVS"
+VERSION=$1
+RELEASE=$2
+
+if test -x /usr/bin/rpmbuild; then 
+	RPM=rpmbuild
+else
+	RPM=rpm
+fi
+
+DIR=`pwd`
+TEMPDIR=/tmp/gpsbabel-rpm.$$
+mkdir -p $TEMPDIR
+trap "cd $DIR; rm -fr $TEMPDIR" 0 1 2 3 15
+
+function addspec()
+{
+	echo "$*" >> $SPEC
+}
+
+# create spec file needed for rpm generation
+function mkspec()
+{
+	local REL=`echo $RELEASE | sed 's/^-//'`
+	test "$REL" == "" && REL=0
+
+	echo -n "" > $SPEC # create the file
+	
+	addspec "Summary:   GPSBabel"
+	addspec "Name:      gpsbabel"
+	addspec "Version:   $VERSION"
+	addspec "Release:   $REL"
+	addspec "License:   GPL"
+	addspec "Group:     File tools"
+	addspec "Source:    %{name}-%{version}.tar.bz2"
+	addspec "BuildRoot: %{_tmppath}/%{name}-%{version}-build"
+	addspec "URL:       http://www.gpsbabel.org"
+	addspec ""
+	
+	addspec "%description"
+	addspec "Converts GPS waypoint, route and track data from one format type to another."
+	addspec ""
+	
+	addspec "Authors:"
+	addspec "--------"
+	
+	cat $DIR/AUTHORS >> gpsbabel.spec
+	
+	addspec ""
+	addspec "%prep"
+	addspec "%setup -q"
+	addspec ""
+	
+	addspec "%build"
+	addspec "make"
+	addspec ""
+	addspec "%install"
+	addspec "rm -rf "
+	addspec "mkdir -p %{buildroot}/usr/bin "
+	addspec "install -m 555 gpsbabel %{buildroot}/usr/bin/gpsbabel "
+	addspec ""
+	
+	addspec "%files"
+	addspec "%defattr(-,root,root)"
+	addspec "/usr/bin/gpsbabel"
+	addspec "%doc README* COPYING CHANGELOG AUTHORS"
+	addspec ""
+	addspec "%changelog"
+}
+
+cd $TEMPDIR
+
+ln -sf $DIR gpsbabel-$VERSION
+
+mkspec
+
+cat ~/src/babelweb/changes.html | $DIR/tools/mkchangelog > gpsbabel-$VERSION/CHANGELOG
+cat gpsbabel-$VERSION/CHANGELOG >> gpsbabel.spec
+
+cp gpsbabel.spec gpsbabel-$VERSION/
+rm -f gpsbabel.spec
+
+tar -cj $TAR_IGNORE -f gpsbabel-$VERSION.tar.bz2  gpsbabel-$VERSION/.
+rm -f gpsbabel-$VERSION
+
+${RPM} -ta gpsbabel-$VERSION.tar.bz2
+
+cd $DIR
