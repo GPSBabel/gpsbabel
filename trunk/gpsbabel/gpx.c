@@ -967,6 +967,7 @@ gpx_rd_init(const char *fname)
 
 	XML_SetElementHandler(psr, gpx_start, gpx_end);
 	XML_SetCharacterDataHandler(psr, gpx_cdata);
+	fs_ptr = NULL;
 }
 #endif
 
