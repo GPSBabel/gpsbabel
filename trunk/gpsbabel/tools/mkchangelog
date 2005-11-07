@@ -3,11 +3,11 @@
 # creates a RPM compatible ChangeLog file from babelweb/changes.html 
 # (published at http://www.gpsbabel.org)
 #
-# !!! requires changes.html in current directory !!!
-# output results to stdout
+# !!! input from stdin and output to stdout !!!
 #
 
-cat changes.html |
+LANG='POSIX'; export LANG > /dev/null
+
 sed -e :a -e 's/<[^<]*>/ /g;/</{N;s/\n/ /;ba;}' | # remove most html tags
 sed -e 's/&nbsp;/ /g' -e 's/&amp;/\&/g' -e 's/&gt;/\>/g' -e 's/&lt;/\</g'| # replace HTML special chars
 sed -e 's/^[ \t]*//;s/[ \t]*$//' | # trim leading and trailing spaces
