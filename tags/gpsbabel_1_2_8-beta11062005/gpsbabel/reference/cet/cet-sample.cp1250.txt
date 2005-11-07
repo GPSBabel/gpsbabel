@@ -1,0 +1,17 @@
+Group	sID	sDescription	fLat	fLong	fEasting	fNorthing	fAlt	iColour	iSymbol	sHyperLink
+new	01	Hohndorf	50.738297	12.683029			-99999999.00	255	1	
+new	0x9E	 - latin small letter z with caron	50.497971	13.027725			-99999999.00	255	1	
+new	0xC9	É - latin capital letter e with circumflex	50.497971	13.027725			-99999999.00	255	1	
+new	0xF0	ğ - latin small letter eth (icelandic)	50.497971	13.027725			-99999999.00	255	1	
+new	CS	Ovládací Prohlíení lokální síte	50.514406	13.638634			-99999999.00	255	1	
+new	DA	Tåning netværkssøgning áâãäåæéë	56.011734	9.847870			-99999999.00	255	1	
+new	DE	Himmelmühle äöüÄÖÜß	50.625865	13.060611			-99999999.00	255	1	
+new	EO	Trasercado de la loka ret	50.495281	13.027645			-99999999.00	255	1	
+new	ES	Matalascañas Navegación Táliga	37.007446	-6.558838			-99999999.00	255	1	
+new	FR	Boissière-École Contrôle  réseau Mâle	48.679047	1.652069			-99999999.00	255	1	
+new	HR	Pregledavanje lokalne mree	50.477937	12.510391			-99999999.00	255	1	
+new	HU	Hõgyész Vezérlõközpont Hálózat	46.491394	18.424072			-99999999.00	255	1	
+new	IS	Borgarfjörğur	65.522461	-13.823547			-99999999.00	255	1	
+new	SK	Ovládacie centrum	50.724214	13.524871			-99999999.00	255	1	
+new	X1	ğÉéÀàÈèÙùÂâÊêÎîÄäËëÖöÜüÆæÅåØøÇçÑñ²³½É×	50.497971	13.027725			-99999999.00	255	1	
+new	X2	ğÉéÀàÈèÙùÂâÊêÎîÄäËëÖöÜüÆæÅåØøÇçÑñ²³½É×	50.497971	13.027725			-99999999.00	255	1	
