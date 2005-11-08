@@ -1,0 +1,28 @@
+# gpsbabel XCSV style file
+#
+# Format: 
+# Author: Jim Bensman
+#   Date: 02/22/04
+#
+
+DESCRIPTION             DeLorme Street Atlas Plus
+
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER         COMMA
+RECORD_DELIMITER        NEWLINE
+BADCHARS                ,"
+
+PROLOGUE        Name 2,Name,Latitude,Longitude,URL,Type
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD  DESCRIPTION, "", "%s"           # Name 2 (Big Description)
+IFIELD  SHORTNAME, "", "%s"             # Name
+IFIELD  LAT_DECIMAL, "", "%f"           # Latitude
+IFIELD  LON_DECIMAL, "", "%f"           # Longitude
+IFIELD  URL, "", "%s"                   # URL
+IFIELD  IGNORE, "", ""                  # Holder for Geocache Type
+
