@@ -1,7 +1,7 @@
 /*
     Read Netstumbler data files.
 
-    Copyright (C) 2004 Robert Lipe, robertlipe@usa.net and
+    Copyright (C) 2004, 2005 Robert Lipe, robertlipe@usa.net and
     John Temples; gpsns@xargs.com
 
     This program is free software; you can redistribute it and/or modify
@@ -30,6 +30,7 @@ static char *nsneicon = NULL;
 static char *seicon = NULL;
 static char *sneicon = NULL;
 static char *snmac = NULL;
+static int macstumbler;
 
 static void	fix_netstumbler_dupes(void);
 
@@ -53,6 +54,7 @@ static void
 rd_init(const char *fname)
 {
 	file_in = xfopen(fname, "r", MYNAME);
+	macstumbler = 0;
 }
 
 static void
@@ -91,6 +93,14 @@ data_read(void)
 				tm.tm_mday = atoi(&ibuf[20]);
 			}
 
+			/*
+			 * Mac stumbler files are the same, except
+			 * use DDMM.mmm instad of DD.DDDD.
+			 */
+			if (strstr(ibuf, "Creator: MacStumbler")) {
+				macstumbler = 1;
+			}
+
 			continue;
 		}
 
@@ -104,12 +114,18 @@ data_read(void)
 					lat = atof(&field[2]);
 					if (field[0] == 'S')
 						lat = -lat;
+					if (macstumbler) {
+						lat = ddmm2degrees(lat);
+					}
 					break;
 
 				case 1:				/* long */
 					lon = atof(&field[2]);
 					if (field[0] == 'W')
 						lon = -lon;
+					if (macstumbler) {
+						lon = ddmm2degrees(lon);
+					}
 					break;
 
 				case 2:				/* ( SSID ) */

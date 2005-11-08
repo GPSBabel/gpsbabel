@@ -285,6 +285,8 @@ of your original road layer.  Note that the ! is a shell metacharacter
 in bash and possibly other shells, so you may have to use single
 quotes or some other escape mechanism.
 </para>
+	<para>There is a tutorial <ulink url="http://www.gpsbabel.org/formats/delorme-new-interstate/"> how to create an onramp for a limited access highway in Street Atlas USA using GPSBabel.</ulink>
+	</para>
     </section>
 
     <section id="baroiq">
@@ -1105,6 +1107,7 @@ SSID in the description.  Different icons are assigned to encrypted,
 non-encrypted, stealth, and non-stealth access points; these may be
 changed with options. Import only.
 </para>
+<para>This format also works with MacStumbler.</para>
       <para> Additional options:</para>
       <para>
             <option>nsneicon</option> - Name of icon used for
