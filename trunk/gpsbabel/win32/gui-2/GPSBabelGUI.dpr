@@ -1,4 +1,4 @@
-program GPSBabelGUI2;
+program GPSBabelGUI;
 {
     Copyright (C) 2005 Olaf Klein, o.k.klein@t-online.de
 
@@ -36,7 +36,7 @@ uses
 begin
   AddDomainForResourceString('delphi');
 
-//  UseLanguage('en');                 // for testing
+//  UseLanguage('fr');                 // for testing
 
   Application.Initialize;
   Application.CreateForm(TfrmMain, frmMain);
