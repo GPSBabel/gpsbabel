@@ -535,7 +535,8 @@ begin
       if (Copy(AnsiUpperCase(s), 1, 8) = 'GPSBABEL') then
       begin
         stbMain.Panels[0].Text := s;
-        stbMain.Panels[0].Width := stbMain.Canvas.TextWidth(s) + 32;
+        stbMain.Panels[0].Width := stbMain.Canvas.TextWidth(s) +
+          Trunc((Length(s)* 1.5));
       end;
     end;
 
