@@ -46,6 +46,7 @@ procedure FixStaticText(AComponent: TComponent);
 implementation
 
 uses
+  Forms,
   StdCtrls,
   common;
 
@@ -70,6 +71,7 @@ var
   BytesRead, BytesDone: DWORD;
   buffer: packed array[0..512] of Char;
   Error: DWORD;
+  Wait_Result: DWORD;
   s: string;
 
 begin
@@ -109,24 +111,28 @@ begin
       raise eGPSBabelError.CreateFmt(
         _('Could not run "gpsbabel.exe" (Error %d)!'), [Error]);
     end;
-    while (WaitforSingleObject (ProcessInfo.hProcess, 0)) <> WAIT_OBJECT_0 do sleep(100);
+
+    s := '';
+
+    repeat
+      Wait_Result := WaitforSingleObject(ProcessInfo.hProcess, 50);
+      if PeekNamedPipe(hRead, nil, 0, nil, @BytesRead, nil) then
+      begin
+        Application.ProcessMessages;
+        while (BytesRead > 0) do
+        begin
+          ReadFile(hRead, Buffer, SizeOf(buffer)-1, BytesDone, nil);
+          buffer[BytesDone] := #0;
+          s := s + string(buffer);
+          Dec(BytesRead, BytesDone);
+        end;
+      end;
+    until (Wait_Result = WAIT_OBJECT_0);
+
     if not GetExitCodeProcess(ProcessInfo.hProcess, Error) then Error := 0;
 
     if (Error <> 0) and (Error <> 1) then
       raise eGPSBabelError.CreateFmt(_('"gpsbabel.exe" returned error 0x%x (%d)'), [Error, Error]);
-
-    s := '';
-
-    PeekNamedPipe(hRead, nil, 0, nil, @BytesRead, nil);
-
-    while (BytesRead > 0) do
-    begin
-      ReadFile(hRead, Buffer, SizeOf(buffer)-1, BytesDone, nil);
-      buffer[BytesDone] := #0;
-      s := s + string(buffer);
-
-      Dec(BytesRead, BytesDone);
-    end;
 
     Output.Clear;
     Output.SetText(PChar(s));
