@@ -211,7 +211,7 @@ maggeo_write(void)
 
 ff_vecs_t maggeo_vecs = {
 	ff_type_file,
-	{ ff_cap_read, ff_cap_none, ff_cap_none },
+	{ ff_cap_write, ff_cap_none, ff_cap_none },
 	maggeo_rd_init,
 	maggeo_wr_init,
 	maggeo_rd_deinit,
