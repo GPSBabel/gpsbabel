@@ -29,6 +29,7 @@ static FILE *file_out;
 static short_handle mkshort_handle;
 static short_handle mkshort_handle2;	/* for track and route names */
 static char *deficon = NULL;
+static char *cartoexplorer;
 static int read_as_degrees;
 static int route_ctr;
 
@@ -37,6 +38,9 @@ static int route_ctr;
 static
 arglist_t pcx_args[] = {
 	{"deficon", &deficon, "Default icon name", "Waypoint", 
+		ARGTYPE_STRING },
+	{"cartoexplorer", &cartoexplorer,
+		"Write tracks compatible with CartoExploreror", "",
 		ARGTYPE_STRING },
 	{0, 0, 0, 0, 0}
 };
@@ -227,9 +231,13 @@ gpsutil_disp(const waypoint *wpt)
 		tp++;
 	}
 
-	icon_token = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
-	if (get_cache_icon(wpt)) {
-		icon_token = mps_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
+	if (deficon) {
+		icon_token = atoi(deficon);
+	} else {
+		icon_token = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
+		if (get_cache_icon(wpt)) {
+			icon_token = mps_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
+		}
 	}
 
 
@@ -258,7 +266,12 @@ pcx_track_hdr(const route_head *trk)
 	snprintf(buff, sizeof(buff)-1, "Trk%03d", route_ctr);
 	
 	name = mkshort(mkshort_handle2, (trk->rte_name != NULL) ? trk->rte_name : buff);
-	fprintf(file_out, "\n\nH  TN %s\n", name);
+	/* Cartoexplorer (popular in France) chokes on trackname headers,
+	 * so provide option to supppress these.
+	 */
+	if (!cartoexplorer) {
+		fprintf(file_out, "\n\nH  TN %s\n", name);
+	}
 	fprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT  ;track\n");
 
 }
