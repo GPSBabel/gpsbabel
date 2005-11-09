@@ -157,9 +157,11 @@ static char *dogprmc = NULL;
 static char *nogpgga = NULL;
 static char *nogpvtg = NULL;
 static char *nogpgsa = NULL;
+static char *snlenopt = NULL;
 
 arglist_t nmea_args[] = {
 	{"gprmc", &dogprmc, "Write GPRMC sentences", NULL, ARGTYPE_BOOL },
+	{"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64" },
 	{"nogpgga", &nogpgga, "Don't write GPGGA sentences", NULL, ARGTYPE_BOOL },
 	{"nogpvtg", &nogpvtg, "Don't write GPVTG sentences", NULL, ARGTYPE_BOOL },
 	{"nogpgsa", &nogpgsa, "Don't write GPGSA sentences", NULL, ARGTYPE_BOOL },
@@ -200,7 +202,7 @@ nmea_wr_init(const char *portname)
 	file_out = xfopen(portname, "w+", MYNAME);
 	
 	mkshort_handle = mkshort_new_handle();
-	setshort_length(mkshort_handle, 6);
+	setshort_length(mkshort_handle, atoi(snlenopt));
 }
 
 static  void
@@ -394,7 +396,7 @@ gpwpl_parse(char *ibuf)
 	waypoint *waypt;
 	double latdeg, lngdeg;
 	char latdir, lngdir;
-	char sname[7];
+	char sname[99];
 
 	sscanf(ibuf,"$GPWPL,%lf,%c,%lf,%c,%[^*]",
 		&latdeg,&latdir,
@@ -619,7 +621,11 @@ nmea_wayptpr(const waypoint *wpt)
 
 	lat = degrees2ddmm(wpt->latitude);
 	lon = degrees2ddmm(wpt->longitude);
-	s = mkshort(mkshort_handle, wpt->shortname);
+	if (global_opts.synthesize_shortnames) 
+		s = mkshort_from_wpt(mkshort_handle, wpt);
+	else {
+		s = mkshort(mkshort_handle, wpt->shortname);
+	}
 
 	snprintf(obuf, sizeof(obuf),  "GPWPL,%08.3f,%c,%09.3f,%c,%s", 
 			fabs(lat), lat < 0 ? 'S' : 'N',
