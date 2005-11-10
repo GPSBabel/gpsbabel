@@ -773,6 +773,9 @@ gpx_end(void *data, const char *el)
 		break;
 	case tt_email:
 		gpx_add_to_global(&gpx_global->email, cdatastrp);
+		if (gpx_email == NULL) {
+			gpx_email = xstrdup(cdatastrp);
+		}
 		break;
 	case tt_url:
 		gpx_add_to_global(&gpx_global->url, cdatastrp);
