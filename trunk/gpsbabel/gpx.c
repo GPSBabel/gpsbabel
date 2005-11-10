@@ -83,10 +83,15 @@ static format_specific_data **fs_ptr;
 typedef enum {
 	tt_unknown = 0,
 	tt_gpx,
-	tt_author,
+
+	tt_name,		/* Optional file-level info */
 	tt_desc,
+	tt_author,
 	tt_email,
-	tt_time,
+	tt_url,
+	tt_urlname,
+	tt_keywords,
+
 	tt_wpt,
 	tt_wpt_cmt,
 	tt_wpt_desc,
@@ -149,6 +154,82 @@ typedef enum {
 	tt_trk_trkseg_trkpt_speed,
 } tag_type;
 
+typedef struct {
+	queue queue;
+	char *tagdata;
+} gpx_global_entry;
+
+/*
+ * The file-level information.
+ */
+static 
+struct gpx_global {
+	gpx_global_entry name;
+	gpx_global_entry desc;
+	gpx_global_entry author;
+	gpx_global_entry email;
+	gpx_global_entry url;
+	gpx_global_entry urlname;
+	gpx_global_entry keywords;
+	/* time and bounds aren't here; they're recomputed. */
+} *gpx_global ;
+
+static void
+gpx_add_to_global(gpx_global_entry *ge, char *cdata) 
+{
+	queue *elem, *tmp;
+	gpx_global_entry * gep;
+
+	QUEUE_FOR_EACH(&ge->queue, elem, tmp) {
+		gep = BASE_STRUCT(elem, gpx_global_entry, queue);
+		if (0 == strcmp(cdata, gep->tagdata))
+			return;
+	}
+
+	gep = xcalloc(sizeof(*gep), 1);
+	QUEUE_INIT(&gep->queue);
+	gep->tagdata = xstrdup(cdata);
+	ENQUEUE_TAIL(&ge->queue, &gep->queue);
+}
+
+static void
+gpx_rm_from_global(gpx_global_entry *ge)
+{
+	queue *elem, *tmp;
+	gpx_global_entry * gep;
+
+	QUEUE_FOR_EACH(&ge->queue, elem, tmp) {
+		gpx_global_entry *g = (gpx_global_entry *) dequeue(elem);
+		xfree(g->tagdata);
+		xfree(g);
+	}
+}
+
+static void
+gpx_write_gdata(gpx_global_entry *ge, char *tag)
+{
+	queue *elem, *tmp;
+	gpx_global_entry * gep;
+
+	if (!gpx_global || QUEUE_EMPTY(&ge->queue)) {
+		return;
+	}
+
+	fprintf(ofd, "<%s>", tag);
+	QUEUE_FOR_EACH(&ge->queue, elem, tmp) {
+		gep = BASE_STRUCT(elem, gpx_global_entry, queue);
+		fprintf(ofd, "%s", gep->tagdata);
+		/* Some tags we just output once. */
+		if ((0 == strcmp(tag, "url")) ||
+			(0 == strcmp(tag, "email"))) {
+			break;
+		}
+		fprintf(ofd, " ");
+	}
+	fprintf(ofd, "</%s>\n", tag);
+}
+
+
 typedef struct tag_mapping {
 	tag_type tag_type;		/* enum from above for this tag */
 	int tag_passthrough;		/* true if we don't generate this */
@@ -163,11 +244,13 @@ typedef struct tag_mapping {
 
 tag_mapping tag_path_map[] = {
 	{ tt_gpx, 0, "/gpx" },
-	{ tt_time, 0, "/gpx/time" },
+	{ tt_name, 0, "/gpx/name" },
+	{ tt_desc, 0, "/gpx/desc" },
 	{ tt_author, 0, "/gpx/author" },
 	{ tt_email, 0, "/gpx/email" },
-	{ tt_time, 0, "/gpx/time" },
-	{ tt_desc, 0, "/gpx/desc" },
+	{ tt_url, 0, "/gpx/url" },
+	{ tt_urlname, 0, "/gpx/urlname" },
+	{ tt_keywords, 0, "/gpx/keywords" },
 
 	{ tt_wpt, 0, "/gpx/wpt" },
 	{ tt_wpt_ele, 0, "/gpx/wpt/ele" },
@@ -679,20 +762,28 @@ gpx_end(void *data, const char *el)
 	/*
 	 * First, the tags that are file-global.
 	 */
-	case tt_time:
-		file_time = xml_parse_time(cdatastrp);
+	case tt_name:
+		gpx_add_to_global(&gpx_global->name, cdatastrp);
 		break;
-	case tt_email:
-		if (gpx_email) xfree(gpx_email);
-		gpx_email = xstrdup(cdatastrp);
+	case tt_desc:
+		gpx_add_to_global(&gpx_global->desc, cdatastrp);
 		break;
 	case tt_author:
-		if (gpx_author) xfree(gpx_author);
-		gpx_author = xstrdup(cdatastrp);
+		gpx_add_to_global(&gpx_global->author, cdatastrp);
 		break;
-	case tt_gpx:
-		/* Could invoke release code here */
+	case tt_email:
+		gpx_add_to_global(&gpx_global->email, cdatastrp);
 		break;
+	case tt_url:
+		gpx_add_to_global(&gpx_global->url, cdatastrp);
+		break;
+	case tt_urlname:
+		gpx_add_to_global(&gpx_global->urlname, cdatastrp);
+		break;
+	case tt_keywords:
+		gpx_add_to_global(&gpx_global->keywords, cdatastrp);
+		break;
+
 	/*
 	 * Waypoint-specific tags.
 	 */
@@ -963,6 +1054,17 @@ gpx_rd_init(const char *fname)
 	}
 	if (!xsi_schema_loc) {
 		fatal("gpx: Unable to allocate %d bytes of memory.\n", strlen(DEFAULT_XSI_SCHEMA_LOC) + 1);
+	}
+
+	if (NULL == gpx_global) {
+		gpx_global = xcalloc(sizeof(*gpx_global), 1);
+		QUEUE_INIT(&gpx_global->name.queue);
+		QUEUE_INIT(&gpx_global->desc.queue);
+		QUEUE_INIT(&gpx_global->author.queue);
+		QUEUE_INIT(&gpx_global->email.queue);
+		QUEUE_INIT(&gpx_global->url.queue);
+		QUEUE_INIT(&gpx_global->urlname.queue);
+		QUEUE_INIT(&gpx_global->keywords.queue);
 	}
 
 	XML_SetElementHandler(psr, gpx_start, gpx_end);
@@ -1498,7 +1600,20 @@ gpx_write(void)
 	if (gpx_wversion_num > 10) {	
 		fprintf(ofd, "<metadata>\n");
 	}
+	gpx_write_gdata(&gpx_global->name, "name");
+	gpx_write_gdata(&gpx_global->desc, "desc");
+	/* In GPX 1.1, author changed from a string to a PersonType.
+ 	 * since it's optional, we just drop it instead of rewriting it.
+	 */
+	if (gpx_wversion_num < 11) {
+		gpx_write_gdata(&gpx_global->author, "author");
+	}
+	gpx_write_gdata(&gpx_global->email, "email");
+	gpx_write_gdata(&gpx_global->url, "url");
+	gpx_write_gdata(&gpx_global->urlname, "urlname");
 	xml_write_time( ofd, now, "time" );
+	gpx_write_gdata(&gpx_global->keywords, "keywords");
+
 	waypt_compute_bounds(&bounds);
 	if (bounds.max_lat  > -360) {
 		fprintf(ofd, "<bounds minlat=\"%0.9f\" minlon =\"%0.9f\" "
@@ -1518,12 +1633,31 @@ gpx_write(void)
 	fprintf(ofd, "</gpx>\n");
 }
 
+
+static void
+gpx_free_gpx_global(void)
+{
+	gpx_rm_from_global(&gpx_global->name);
+	gpx_rm_from_global(&gpx_global->desc);
+	gpx_rm_from_global(&gpx_global->author);
+	gpx_rm_from_global(&gpx_global->email);
+	gpx_rm_from_global(&gpx_global->url);
+	gpx_rm_from_global(&gpx_global->urlname);
+	gpx_rm_from_global(&gpx_global->keywords);
+	xfree(gpx_global);
+}
+
 static void
 gpx_exit(void)
 {
 	if ( xsi_schema_loc ) {
 		xfree(xsi_schema_loc);
 		xsi_schema_loc = NULL;
+	}
+
+	if (gpx_global) {
+		gpx_free_gpx_global();
+		gpx_global = NULL;
 	}
 }
 
