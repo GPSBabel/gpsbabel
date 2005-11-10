@@ -11,6 +11,8 @@ function getcap(type, cap, sname, lname) {
 		printf "<a href=\"/tips/browser.html\">Yes</a>"
 	} else if (sname == "s_and_t") {
 		printf "<a href=\"/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html\">[1]</a><a href=\"http://www.gpsbabel.org/formats/s_and_t/TripPlanning.html\">[2]</a>"
+	} else if (sname == "an1") {
+		printf "<a href=\"/formats/delorme-new-interstate\">Yes</a>"
 	}
 	print "</td>"
 
