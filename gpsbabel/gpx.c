@@ -1162,7 +1162,6 @@ gpx_read(void)
 			badchar = strchr( badchar, '&' );
 			extra = maxentlength - 1; /* for terminator */
 			while ( badchar && len < MY_CBUF_SZ-1) {
-				int extra = maxentlength-1; /* for terminator */
 				semi = strchr( badchar, ';');
 				while ( extra && !semi ) {
 					len += fread( buf+len, 1, 1, fd);
