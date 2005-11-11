@@ -802,7 +802,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        human_to_dec( s, &wpt->latitude, &wpt->longitude, 1 );
     } else
     if ( strcmp(fmp->key, "LAT_NMEA") == 0) {
-	wpt->latitude = ddmm2degrees(wpt->latitude);
+	wpt->latitude = ddmm2degrees(atof(s));
     } else
     /* LONGITUDE CONVERSIONS ***********************************************/
     if (strcmp(fmp->key, "LON_DECIMAL") == 0) {
@@ -822,7 +822,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        human_to_dec( s, &wpt->latitude, &wpt->longitude, 2 );
     } else
     if ( strcmp(fmp->key, "LON_NMEA") == 0) {
-	wpt->latitude = ddmm2degrees(wpt->longitude);
+	wpt->longitude = ddmm2degrees(atof(s));
     } else
     /* LAT AND LON CONVERSIONS ********************************************/
     if ( strcmp(fmp->key, "LATLON_HUMAN_READABLE") == 0) {
