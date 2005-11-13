@@ -140,6 +140,9 @@ rm -f ${TMPDIR}/mm.pcx ${TMPDIR}/pcx.gps
 ${PNAME} -i geo -f geocaching.loc -o pcx -F ${TMPDIR}/mm.pcx
 ${PNAME} -i pcx -f ${TMPDIR}/mm.pcx -o gpsutil -F ${TMPDIR}/pcx.gps
 compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
+${PNAME} -t -i gpx -f reference/track/tracks.gpx -o pcx -F ${TMPDIR}/pcx.trk
+${PNAME} -t -i pcx -f reference/track/pcx.trk -o pcx -F ${TMPDIR}/pcx2.trk
+compare ${TMPDIR}/pcx.trk ${TMPDIR}/pcx2.trk 
 
 #
 # Magellan file format

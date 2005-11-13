@@ -148,11 +148,11 @@ data_read(void)
   			*/
 			if (ibuf[3] == 'L' && ibuf[4] == 'A') {
 				track = route_head_alloc();
-				track->rte_name = strdup("track");
+				track->rte_name = xstrdup("track");
 				track_add_head(track);
 			} else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
 				track = route_head_alloc();
-				track->rte_name = strdup(&ibuf[6]);
+				track->rte_name = xstrdup(&ibuf[6]);
 				track_add_head(track);
 			}
 			break;
@@ -192,13 +192,18 @@ data_read(void)
 			if (tm.tm_year < 70) tm.tm_year += 100;
 			wpt_tmp = waypt_new();
 			wpt_tmp->creation_time = mkgmtime(&tm);
-			wpt_tmp->latitude = lat;
-			wpt_tmp->longitude = lon;
+			if (read_as_degrees) {
+				wpt_tmp->longitude = lon;
+				wpt_tmp->latitude = lat;
+			} else {
+				wpt_tmp->longitude = ddmm2degrees(lon);
+				wpt_tmp->latitude = ddmm2degrees(lat);
+			}
 			wpt_tmp->altitude = alt;
 			/* Did we get a track point before a track header? */
 			if (track == NULL) {
 				track = route_head_alloc();
-				track->rte_name = strdup("Default");
+				track->rte_name = xstrdup("Default");
 				track_add_head(track);
 			}
 			route_add_wpt(track, wpt_tmp);
@@ -272,8 +277,8 @@ pcx_track_hdr(const route_head *trk)
 	if (!cartoexplorer) {
 		fprintf(file_out, "\n\nH  TN %s\n", name);
 	}
+	xfree(name);
 	fprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT  ;track\n");
-
 }
 
 static void
@@ -305,7 +310,7 @@ pcx_track_disp(const waypoint *wpt)
 
 	tm = gmtime(&wpt->creation_time);
 
-	strftime(tbuf, sizeof(tbuf), "%d-%b-%y %T", tm);
+	strftime(tbuf, sizeof(tbuf), "%d-%b-%y %H:%M:%S", tm);	/* currently ...%T does nothing under Windows */
 	for (tp = tbuf; *tp; tp++) {
 		*tp = toupper(*tp);
 	}
