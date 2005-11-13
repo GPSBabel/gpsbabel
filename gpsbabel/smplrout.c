@@ -25,12 +25,24 @@
 #define MYNAME "Route simplification filter"
 
 static int count = 0;
+static double totalerror = 0;
+static double error = 0;
+
 static char *countopt = NULL;
+static char *erroropt = NULL;
+static char *xteopt = NULL;
+static char *lenopt = NULL;
 
 static
 arglist_t routesimple_args[] = {
 	{"count", &countopt,  "Maximum number of points in route", 
-		NULL, ARGTYPE_INT | ARGTYPE_REQUIRED, "1", NULL},
+		NULL, ARGTYPE_INT | ARGTYPE_BEGIN_REQ | ARGTYPE_BEGIN_EXCL, "1", NULL},
+	{"error", &erroropt, "Maximum error", NULL,
+		ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", NULL},
+	{"crosstrack", &xteopt, "Use cross-track error (default)", NULL, 
+		ARGTYPE_BOOL | ARGTYPE_BEGIN_EXCL, NULL, NULL },
+	{"length", &lenopt, "Use arclength error", NULL, 
+		ARGTYPE_BOOL | ARGTYPE_END_EXCL, NULL, NULL },
 	{0, 0, 0, 0, 0}
 };
 
@@ -98,10 +110,21 @@ compute_xte( struct xte *xte_rec ) {
 	}
 	wpt2 = xte_rec->intermed->next->wpt;
 	
-	xte_rec->distance = linedist( 
+	if ( xteopt || !lenopt ) {
+		xte_rec->distance = tomiles(linedist( 
 			wpt1->latitude, wpt1->longitude, 
 			wpt2->latitude, wpt2->longitude,
-			wpt3->latitude, wpt3->longitude );
+			wpt3->latitude, wpt3->longitude ));
+	} 
+	else {
+		xte_rec->distance = tomiles( 
+		       gcdist( wpt1->latitude, wpt1->longitude, 
+			       wpt3->latitude, wpt3->longitude ) +
+		       gcdist( wpt3->latitude, wpt3->longitude,
+			       wpt2->latitude, wpt2->longitude ) -
+		       gcdist( wpt1->latitude, wpt1->longitude,
+			       wpt2->latitude, wpt2->longitude ));
+	}
 }
 
 
@@ -133,9 +156,10 @@ routesimple_head( const route_head *rte )
    	/* build array of XTE/wpt xref records */
         xte_count = 0;
 	tmpprev = NULL;
+	totalerror = 0;
 	
 	/* short-circuit if we already have fewer than the max points */
-	if ( count >= rte->rte_waypt_ct) return;
+	if ( countopt && count >= rte->rte_waypt_ct) return;
 	
 	xte_recs = (struct xte *) xcalloc(  rte->rte_waypt_ct, sizeof (struct xte));
 	cur_rte = rte;
@@ -196,9 +220,22 @@ routesimple_tail( const route_head *rte )
 		xte_recs[i].intermed->xte_rec = xte_recs+i;
 	}
 	/* while we still have too many records... */
-	while ( count < xte_count ) {
+	while ( (countopt && count < xte_count) || (erroropt && error < totalerror) ) {
 		i = xte_count - 1;
 		/* remove the record with the lowest XTE */
+		if ( erroropt ) {
+			if ( xteopt ) {
+				if ( i > 1 ) {
+					totalerror = xte_recs[i-1].distance;
+				}
+				else {
+					totalerror = xte_recs[i].distance;
+				}
+			}
+			if ( lenopt ) {
+				totalerror += xte_recs[i].distance;
+			}
+		}
 		route_del_wpt( (route_head *)(void *)rte,
 				(waypoint *)(void *)(xte_recs[i].intermed->wpt));
               	
@@ -235,12 +272,28 @@ routesimple_process( void )
 void
 routesimple_init(const char *args) {
 	count = 0;
+	char *fm = NULL;
 
+	if ( !!countopt == !!erroropt ) {
+		fatal( MYNAME ": You must specify either count or error, but not both.\n");
+	}
+	if ( xteopt && lenopt ) {
+		fatal( MYNAME ": crosstrack and length may not be used together.\n");
+	}
+	if ( !xteopt && !lenopt ) {
+		xteopt = (char *)xmalloc( 1 );
+	}
+		
 	if (countopt) {
 		count = atol(countopt);
 	}
-	else {
-		fatal( MYNAME ": You must specify a maximum size for the new route with 'count' option.\n");
+	if (erroropt) {
+               error = strtod(erroropt, &fm);
+
+               if ((*fm == 'k') || (*fm == 'K')) {
+	            /* distance is kilometers, convert to miles */
+	            error *= .6214;
+	       }
 	}
 }
 
