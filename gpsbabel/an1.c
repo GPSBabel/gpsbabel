@@ -35,9 +35,11 @@ static char *nogc = NULL;
 static char *opt_symbol = NULL;
 static char *opt_color = NULL;
 static char *opt_zoom  = NULL;
+static char *opt_wpt_type = NULL;
 static short output_type_num = 0;
 static short opt_zoom_num = 0;
 static long opt_color_num = 0;
+static short wpt_type_num = 0;
 static short last_read_type = 0;
 
 static long serial=10000;
@@ -60,10 +62,12 @@ arglist_t an1_args[] = {
 		NULL, ARGTYPE_BOOL },
 	{"deficon", &opt_symbol, "Symbol to use for point data",
 		"Red Flag", ARGTYPE_STRING },
-	{"color", &opt_color, "Color to use for line data",
+	{"color", &opt_color, "Color for lines or mapnotes",
 		"red", ARGTYPE_STRING },
 	{"zoom", &opt_zoom, "Zoom level to reduce points",
 		NULL, ARGTYPE_INT },
+	{"wpt_type", &opt_wpt_type, "Waypoint type (marker,text,mapnote)", 
+		"", ARGTYPE_STRING },
 	{0, 0, 0, 0 }
 };
 
@@ -629,9 +633,14 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 		rec = Alloc_AN1_Waypoint();
 		local = 1;
 		rec->magic = 1;
-		rec->type = 1;
+		rec->type = wpt_type_num;
 		rec->unk2 = 3;
 		rec->unk3 = 18561;
+		rec->radius = 528;
+		rec->fillcolor = opt_color_num; 
+		rec->fillflags = 3;
+		rec->height = -50;
+		rec->width = 20;
 		rec->fontname = xstrdup( "Arial" );
 		FindIconByName( opt_symbol, &rec->guid );
 		rec->fontsize = 10;
@@ -864,6 +873,34 @@ static void Write_AN1_Lines( FILE *f ) {
 	
 	route_disp_all( Write_One_AN1_Line, NULL, Write_One_AN1_Vertex );
 	track_disp_all( Write_One_AN1_Line, NULL, Write_One_AN1_Vertex );
+}
+
+static void 
+Init_Wpt_Type( void )
+{
+	if ( !opt_wpt_type || !opt_wpt_type[0] ) {
+		wpt_type_num = 1; /* marker */
+		return;
+	}
+	if ((output_type[0] & 0xf0) == 0x30) {
+		wpt_type_num = atoi( opt_wpt_type );
+	}
+	else {
+		wpt_type_num = 1; /* marker */
+		if ( !case_ignore_strcmp( opt_wpt_type, "marker" )) {
+			wpt_type_num = 1;
+		}
+		else if ( !case_ignore_strcmp( opt_wpt_type, "text" )) {
+			wpt_type_num = 4;
+		}
+		else if ( !case_ignore_strcmp( opt_wpt_type, "mapnote" )) {
+			wpt_type_num = 6;
+		}
+		else {
+			fatal( MYNAME ": wpt_type must be "
+			    "marker, text, or mapnote\n" );
+		}
+	}
 }
 
 static void
@@ -1114,6 +1151,7 @@ wr_init(const char *fname)
 	Init_Output_Type();
 	Init_Road_Changes();
 	Init_Color();
+	Init_Wpt_Type();
 	if ( opt_zoom ) {
 		opt_zoom_num = atoi(opt_zoom);
 	}
