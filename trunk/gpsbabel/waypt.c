@@ -208,6 +208,40 @@ waypt_disp_all(waypt_cb cb)
 	}
 }
 
+void
+waypt_init_bounds(bounds *bounds)
+{
+	/* Set data out of bounds so that even one waypoint will reset */
+	bounds->max_lat = -9999;
+	bounds->max_lon = -9999;
+	bounds->min_lat = 9999;
+	bounds->min_lon = 9999;
+}
+
+int
+waypt_bounds_valid(bounds *bounds)
+{
+	/* Returns true if bb has any 'real' data in it */
+	return bounds->max_lat > -9999;
+}
+
+/*
+ * Recompund bounding box based on new position point.
+ */
+void 
+waypt_add_to_bounds(bounds *bounds, const waypoint *waypointp)
+{
+	if (waypointp->latitude > bounds->max_lat)
+		bounds->max_lat = waypointp->latitude;
+	if (waypointp->longitude > bounds->max_lon)
+		bounds->max_lon = waypointp->longitude;
+	if (waypointp->latitude < bounds->min_lat)
+		bounds->min_lat = waypointp->latitude;
+	if (waypointp->longitude < bounds->min_lon)
+		bounds->min_lon = waypointp->longitude;
+}
+
+
 /*
  *  Makes another pass over the data to compute bounding
  *  box data and populates bounding box information.
@@ -219,22 +253,11 @@ waypt_compute_bounds(bounds *bounds)
 	queue *elem, *tmp;
 	waypoint *waypointp;
 
-	/* Set data out of bounds so that even one waypoint will reset */
-	bounds->max_lat = -9999;
-	bounds->max_lon = -9999;
-	bounds->min_lat = 9999;
-	bounds->min_lon = 9999;
+	waypt_init_bounds(bounds);
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypointp = (waypoint *) elem;
-		if (waypointp->latitude > bounds->max_lat)
-			bounds->max_lat = waypointp->latitude;
-		if (waypointp->longitude > bounds->max_lon)
-			bounds->max_lon = waypointp->longitude;
-		if (waypointp->latitude < bounds->min_lat)
-			bounds->min_lat = waypointp->latitude;
-		if (waypointp->longitude < bounds->min_lon)
-			bounds->min_lon = waypointp->longitude;
+		waypt_add_to_bounds(bounds, waypointp);
 	}
 }
 
