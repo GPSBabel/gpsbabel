@@ -6,7 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
-<bounds minlat="50.271540000" minlon ="11.642810000" maxlat="50.756270000" maxlon="12.671250000" />
+<bounds minlat="50.268830000" minlon ="11.640990000" maxlat="50.756540000" maxlon="12.696920000" />
 <wpt lat="50.362350000" lon="11.903730000">
   <name>in Zedtwitz halb rechts halten auf B2 Hofer Strasse</name>
   <cmt>B2 Hofer Strasse</cmt>

@@ -58,6 +58,8 @@ static char *suppresswhite = NULL;
 static char *urlbase = NULL;
 static route_head *trk_head;
 static route_head *rte_head;
+/* used for bounds calculation on output */
+static bounds all_bounds;
 
 static format_specific_data **fs_ptr;
 
@@ -196,7 +198,6 @@ static void
 gpx_rm_from_global(gpx_global_entry *ge)
 {
 	queue *elem, *tmp;
-	gpx_global_entry * gep;
 
 	QUEUE_FOR_EACH(&ge->queue, elem, tmp) {
 		gpx_global_entry *g = (gpx_global_entry *) dequeue(elem);
@@ -1563,11 +1564,33 @@ void gpx_route_pr()
 }
 
 static void
+gpx_waypt_bound_calc(const waypoint *waypointp)
+{
+	waypt_add_to_bounds(&all_bounds, waypointp);
+}
+
+static void
+gpx_write_bounds(void)
+{
+	waypt_init_bounds(&all_bounds);
+
+	waypt_disp_all(gpx_waypt_bound_calc);
+	route_disp_all(NULL, NULL, gpx_waypt_bound_calc);
+	track_disp_all(NULL, NULL, gpx_waypt_bound_calc);
+
+	if (waypt_bounds_valid(&all_bounds)) {
+		fprintf(ofd, "<bounds minlat=\"%0.9f\" minlon =\"%0.9f\" "
+			       "maxlat=\"%0.9f\" maxlon=\"%0.9f\" />\n",
+			       all_bounds.min_lat, all_bounds.min_lon, 
+			       all_bounds.max_lat, all_bounds.max_lon);
+	}
+}
+
+static void
 gpx_write(void)
 {
 	time_t now = 0;
 	int short_length;
-	bounds bounds;
 
 	gpx_wversion_num = strtod(gpx_wversion, NULL) * 10;
 
@@ -1616,13 +1639,7 @@ gpx_write(void)
 	xml_write_time( ofd, now, "time" );
 	gpx_write_gdata(&gpx_global->keywords, "keywords");
 
-	waypt_compute_bounds(&bounds);
-	if (bounds.max_lat  > -360) {
-		fprintf(ofd, "<bounds minlat=\"%0.9f\" minlon =\"%0.9f\" "
-			       "maxlat=\"%0.9f\" maxlon=\"%0.9f\" />\n",
-			       bounds.min_lat, bounds.min_lon, 
-			       bounds.max_lat, bounds.max_lon);
-	}
+	gpx_write_bounds();
 
 	if (gpx_wversion_num > 10) {	
 		fprintf(ofd, "</metadata>\n");

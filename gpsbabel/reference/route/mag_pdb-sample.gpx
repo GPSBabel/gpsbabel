@@ -6,7 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
-<bounds minlat="49.469250000" minlon ="11.046166667" maxlat="49.935527778" maxlon="11.476083333" />
+<bounds minlat="49.445861111" minlon ="11.044861111" maxlat="49.935944444" maxlon="11.481583333" />
 <wpt lat="49.718250000" lon="11.066416667">
   <name>Jägersburg in Forchheim geradeaus weiter auf Eisenbahnstrasse</name>
   <cmt>Jägersburg in Forchheim geradeaus weiter auf Eisenbahnstrasse</cmt>
