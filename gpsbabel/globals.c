@@ -1,5 +1,5 @@
 /*
-    Global data for GSPBabel.
+    Global data for GPSBabel.
    
     Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
 
