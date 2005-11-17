@@ -271,8 +271,8 @@ routesimple_process( void )
 
 void
 routesimple_init(const char *args) {
-	count = 0;
 	char *fm = NULL;
+	count = 0;
 
 	if ( !!countopt == !!erroropt ) {
 		fatal( MYNAME ": You must specify either count or error, but not both.\n");
