@@ -220,7 +220,7 @@ routesimple_tail( const route_head *rte )
 		xte_recs[i].intermed->xte_rec = xte_recs+i;
 	}
 	/* while we still have too many records... */
-	while ( (countopt && count < xte_count) || (erroropt && error < totalerror) ) {
+	while ( (countopt && count < xte_count) || (erroropt && totalerror < error) ) {
 		i = xte_count - 1;
 		/* remove the record with the lowest XTE */
 		if ( erroropt ) {
