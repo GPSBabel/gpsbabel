@@ -18,6 +18,39 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+
+/* The following comments are from an email I wrote to Paul Fox in November
+ * 2005 in an attempt to explain how the cross track error minimization method
+ * works  (RLP 2005):
+ * 
+ * It's pretty simple, really: for each triplet of vertices A-B-C, we compute 
+ * how much cross-track error we'd introduce by going straight from A to C 
+ * (the maximum cross-track error for that segment is the height of the 
+ * triangle ABC, measured between vertex B and edge AC.)  If we need to remove 
+ * 40 points, we just sort the points by that metric and remove the 40 
+ * smallest ones.
+ * 
+ * It's actually a little more complicated than that, because removing a 
+ * point changes the result for its two nearest neighbors.  When we remove 
+ * one, we recompute the neighbors and then sort them back into the list 
+ * at their new locations.
+ * 
+ * As you can see, this hasn't been shown to be an optimal algorithm.  After 
+ * all, removing one high-xte point might create two very low-xte neighbors 
+ * that more than make up for the high xte of the original point.  I believe 
+ * the optimal algorithm would be NP-complete, but I haven't proven it.  This 
+ * is really more of a heuristic than anything, but it seems to work well for 
+ * the routes I've fed it.
+ *
+ * Not in that email was an explanation of how the pathlength-based calculation
+ * works: instead of computing the height of the triangle, we just compute
+ * the difference in pathlength from taking the direct route.  This case,
+ * too, is only a heuristic, as it's possible that a different combination or
+ * order of point removals could lead to a smaller number of points with less
+ * reduction in path length.  In the case of pathlength, error is cumulative.
+ */
+
+
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
