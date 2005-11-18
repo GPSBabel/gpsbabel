@@ -51,11 +51,11 @@ arglist_t polygon_args[] = {
 
 static void polytest ( double lat1, double lon1,
 		double lat2, double lon2,
-		double lat3, double lon3,
+		double wlat, double wlon,
 		unsigned short *state, int first, int last ) {
 	
-	if ( lat1 == lat3 ) {
-	    if ( lat2 < lat3 ) {
+	if ( lat1 == wlat ) {
+	    if ( lat2 < wlat ) {
 		/* going down */
 		if (*state & LIMBO) {
 		    if ( *state & LIMBO_UP ) {
@@ -74,12 +74,12 @@ static void polytest ( double lat1, double lon1,
 			*state = *state & ~LIMBO_BEGIN & ~BEGIN_UP;
 		    }
 		}
-	        else if ( first && (lon1 > lon3)) {
+	        else if ( first && (lon1 > wlon)) {
 		    *state |= LIMBO_BEGIN;
 		}
 	    }
-	    else if ( lat2 == lat3 ) {
-		if ( first & (lon1 > lon3 || lon2 > lon3)) {
+	    else if ( lat2 == wlat ) {
+		if ( first & (lon1 > wlon || lon2 > wlon)) {
 		    *state |= LIMBO_BEGIN | BEGIN_HOR;
 		}
 		else if (last && (*state & LIMBO_BEGIN) && (*state & LIMBO)) {
@@ -93,7 +93,7 @@ static void polytest ( double lat1, double lon1,
 		    /* do nothing */
 		}
 		else {
-	            if ( lon1 <= lon3 && lon2 > lon3 ) {
+	            if ( lon1 <= wlon && lon2 > wlon ) {
 		        if ( *state & UP ) {
 			    *state = *state | LIMBO_UP & ~UP;
 			}
@@ -120,25 +120,25 @@ static void polytest ( double lat1, double lon1,
 			*state = *state & ~LIMBO_BEGIN & ~BEGIN_UP;
 		    }
 		}
-		else if ( first && (lon1 > lon3)) {
+		else if ( first && (lon1 > wlon)) {
 		    *state |= LIMBO_BEGIN | BEGIN_UP;
         	}
 	    }
 	    *state = *state & ~UP;
 	}
-	else if ( lat2 == lat3 ) {
-	    if ( lat1 < lat3 ) {
+	else if ( lat2 == wlat ) {
+	    if ( lat1 < wlat ) {
 		if ( last ) {
 		    if ( *state & BEGIN_UP ) {
 			*state = *state ^ INSIDE;
 		    }
 		    *state = *state & ~LIMBO_BEGIN & ~BEGIN_UP;
 		}
-		else if ( lon2 > lon3 ) {
+		else if ( lon2 > wlon ) {
 		    *state |= LIMBO;
 		}
 	    }
-	    /* no case for lat1==lat3; that's above */
+	    /* no case for lat1==wlat; that's above */
 	    else {
 		if ( last ) {
 		    if ( !(*state & BEGIN_UP) ) {
@@ -146,7 +146,7 @@ static void polytest ( double lat1, double lon1,
 		    }
 		    *state = *state & ~LIMBO_BEGIN & ~BEGIN_UP;
 		}
-		else if ( lon2 > lon3 ) {
+		else if ( lon2 > wlon ) {
 		    *state |= LIMBO | LIMBO_UP;
 		}
 		else {
@@ -155,16 +155,16 @@ static void polytest ( double lat1, double lon1,
 	    }
 	}
 	else {
-	    if ( (lat1 > lat3 && lat2 < lat3) ||
-	         (lat1 < lat3 && lat2 > lat3)) {
+	    if ( (lat1 > wlat && lat2 < wlat) ||
+	         (lat1 < wlat && lat2 > wlat)) {
 		/* we only care if the lines might intersect */
-		if ( lon1 > lon3 && lon2 > lon3 ) {
+		if ( lon1 > wlon && lon2 > wlon ) {
 		    *state = *state ^ INSIDE;
 		}
-		else if (!(lon1 <= lon3 && lon2 <= lon3)) {
+		else if (!(lon1 <= wlon && lon2 <= wlon)) {
 		    /* we're inside the bbox of a diagonal line.  math time. */
-		    double loni = lon1+(lon2-lon1)/(lat2-lat1)*(lat3-lat1);
-		    if ( loni > lon3 ) {
+		    double loni = lon1+(lon2-lon1)/(lat2-lat1)*(wlat-lat1);
+		    if ( loni > wlon ) {
 		        *state = *state ^ INSIDE;
 		    }
 		}
