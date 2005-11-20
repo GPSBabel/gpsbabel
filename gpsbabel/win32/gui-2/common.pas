@@ -21,18 +21,27 @@ unit common;
 interface
 
 uses
-  Windows, SysUtils, Classes, Messages;
+  Windows, SysUtils, Classes, Messages, Controls, StdCtrls;
 
+const
+  OTypes: array[0..6] of PChar =
+    ('unknown', 'integer', 'float', 'string', 'boolean', 'file', 'outfile');
+    
 resourcestring
   SGPSBabelURL = 'http://www.gpsbabel.org';
   SGPSBabelTitle = 'GPSBabelGUI-2';
 
 var
+  gpsbabel_exe: string;
+  gpsbabel_version: string;        // 1.101.010-beta...
+  gpsbabel_vfmt: string;           // 001.101.010
+  gpsbabel_minor, gpsbabel_major, gpsbabel_release: Integer;
   SGPSBabelGUIVersion: string;
   CFixedFileinfo: TVSFixedFileInfo;
 
 const
   WM_STARTUP = WM_USER + 1;
+  WM_OPTIONS_CHANGED = WM_USER + 2;
 
 const
   SREG_TARGET_DIR = 'Target:Directory';
@@ -74,6 +83,37 @@ type
   end;
 
 type
+  TOption = record
+    format: string;
+    name:   string;
+    hint:   string;
+    otype:  Byte;
+    def:    PChar;
+    min:    PChar;
+    max:    PChar;
+    chb:    TCheckBox;
+    edit:   TControl;
+  end;
+  POption = ^TOption;
+
+type
+  TCapabilities = class;
+  
+  TOptions = class(TStringList)
+  private
+    FCaps: TCapabilities;
+    procedure SetList(const Value: TStrings);
+  protected
+  public
+    constructor Create(ACapabilities: TCapabilities);
+    procedure AddOptionLine(const ALine: string);
+    procedure DebugGetHints(List: TStringList);
+    function FormatOpts(const Descr: string): TStringList;
+    function HasFormatOpts(const Format: string): Boolean;
+  property
+    List: TStrings write SetList;
+  end;
+
   TCapabilities = class(TStringList)
   private
     FList: TStrings;
@@ -96,10 +136,188 @@ type
 type
   eGPSBabelError = class(Exception);
 
-var
-  gpsbabel_exe: string;
+function atoi(str: PChar): Integer;
 
 implementation
+
+function atoi(str: PChar): Integer;
+begin
+  Result := 0;
+  while (str^ <> #0) do
+  begin
+    if ((str^ < '0') or (str^ > '9')) then Break;
+    Result := (Result * 10) + (Ord(str^) - Ord('0'));
+    str := str + 1;
+  end;
+end;
+
+function GetFileVersion(const Filename: string): string;
+var
+  buff: PChar;
+  hdl: DWORD;
+  len: DWORD;
+  sub: PChar;
+  sublen: UINT;
+  fix: PVSFixedFileInfo;
+  i:   Integer;
+begin
+  Result := '?.?';
+
+  FillChar(CFixedFileinfo, SizeOf(CFixedFileinfo), #0);
+
+  len := GetFileVersionInfoSize(PChar(Filename), hdl);
+  if not(len > 0) then exit;
+
+  GetMem(buff, len);
+  try
+
+    if not GetFileVersionInfo(PChar(FileName), 0, len, buff) then Exit;
+
+    fix := Pointer(buff);
+    i := len - SizeOf(fix^);
+    while (i > 0) do
+    begin
+      Dec(i);
+      if (fix.dwSignature = $feef04bd) then
+      begin
+        CFixedFileinfo := fix^;
+        Break;
+      end;
+      PChar(fix) := PChar(fix) + 1; 
+    end;
+
+    if not VerQueryValue(buff, PChar('\\StringFileInfo\\040904E4\\FileVersion'),
+      Pointer(sub), sublen) then Exit;
+    if not(sublen > 0) then Exit;
+    Result := string(sub);
+  finally
+    FreeMem(buff);
+  end;
+end;
+
+{ TOptions }
+
+constructor TOptions.Create(ACapabilities: TCapabilities);
+begin
+  inherited Create;
+  FCaps := ACapabilities;
+  Sorted := False;
+end;
+
+procedure TOptions.AddOptionLine(const ALine: string);
+var
+  buff: array[0..1023] of Char;
+  cin, cend: PChar;
+  index: Integer;
+  opt: POption;
+  list: TStringList;
+  i: Integer;
+begin
+  StrPCopy(buff, ALine);
+  StrCat(buff, #9);
+
+  cin := @buff;
+  index := 0;
+  while (true) do
+  begin
+    cend := StrScan(cin, #9);
+    if (cend = nil) then break;
+    cend^ := #0;
+
+    case index of
+      0:
+        if (StrIComp(cin, 'option') <> 0) then
+          Exit else
+        begin
+          New(opt);
+          FillChar(opt^, SizeOf(opt^), #0);
+        end;
+      1:
+        opt.format := string(cin);
+      2:
+        opt.name := string(cin);
+      3:
+        opt.hint := string(cin);
+      4:
+        for i := 0 to high(OTypes) do
+          if (StrIComp(cin, OTypes[i]) = 0) then
+          begin
+            opt.otype := i;
+            Break;
+          end;
+      5:
+        if (cin^ <> #0) then
+          opt.def := StrNew(cin);
+      6:
+        if (cin^ <> #0) then
+          opt.min := StrNew(cin);
+      7:
+        if (cin^ <> #0) then
+          opt.max := StrNew(cin);
+    end;
+    
+    index := index + 1;
+    cin := cend + 1;
+  end;
+
+  index := Self.IndexOf(opt.format);
+  if (index >= 0) then
+    list := TStringList(Self.Objects[index])
+  else begin
+    list := TStringList.Create;
+    list.Sorted := True;
+    Self.AddObject(opt.format, list);
+  end;
+  list.AddObject(opt.name, Pointer(opt));
+end;
+
+procedure TOptions.DebugGetHints(List: TStringList);
+var
+  i, j, k: Integer;
+  l: TStrings;
+  o: POption;
+begin
+  List.Clear;
+  List.Sorted := True;
+  for i := 0 to Count - 1 do
+  begin
+    l := Pointer(Objects[i]);
+    for j := 0 to l.Count - 1 do
+    begin
+      o := Pointer(l.Objects[j]);
+      k := List.IndexOf(o.hint);
+      if (k < 0) then
+        List.Add(o.hint);
+    end;
+  end;
+end;
+
+function TOptions.FormatOpts(const Descr: string): TStringList;
+var
+  i: Integer;
+  s: string;
+begin
+  s := FCaps.GetName(Descr);
+  if (s <> '') and Self.Find(s, i) then
+    Result := TStringList(Self.Objects[i])
+  else
+    Result := nil;
+end;
+
+function TOptions.HasFormatOpts(const Format: string): Boolean;
+begin
+  Result := (FormatOpts(Format) <> nil);
+end;
+
+procedure TOptions.SetList(const Value: TStrings);
+var
+  i: Integer;
+begin
+  Clear;
+  for i := 0 to Value.Count - 1 do
+    AddOptionLine(Value[i]);
+  Sorted := True;
+end;
 
 { TCapabilities }
 
@@ -115,7 +333,7 @@ var
   comment: string;
   name: string;
   internal: string;
-  
+
   caps: Integer;
 
   info: PFileInfo;
@@ -134,10 +352,17 @@ begin
     cend^ := #0;
 
     case index of
-      0: internal := StrPas(cin);
-      1: scaps := StrPas(cin);
-      2: name := StrPas(cin);
-      3: ext := StrPas(cin);
+      0:
+        if (StrIComp(cin, 'option') = 0) then
+          Exit
+        else
+          internal := StrPas(cin);
+      1:
+        scaps := StrPas(cin);
+      2:
+          name := StrPas(cin);
+      3:
+        ext := StrPas(cin);
     else
       begin
         comment := StrPas(cin);
@@ -275,50 +500,6 @@ begin
   end;
 end;
 
-function GetFileVersion(const Filename: string): string;
-var
-  buff: PChar;
-  hdl: DWORD;
-  len: DWORD;
-  sub: PChar;
-  sublen: UINT;
-  fix: PVSFixedFileInfo;
-  i:   Integer;
-begin
-  Result := '?.?';
-
-  FillChar(CFixedFileinfo, SizeOf(CFixedFileinfo), #0);
-
-  len := GetFileVersionInfoSize(PChar(Filename), hdl);
-  if not(len > 0) then exit;
-
-  GetMem(buff, len);
-  try
-
-    if not GetFileVersionInfo(PChar(FileName), 0, len, buff) then Exit;
-
-    fix := Pointer(buff);
-    i := len - SizeOf(fix^);
-    while (i > 0) do
-    begin
-      Dec(i);
-      if (fix.dwSignature = $feef04bd) then
-      begin
-        CFixedFileinfo := fix^;
-        Break;
-      end;
-      PChar(fix) := PChar(fix) + 1; 
-    end;
-
-    if not VerQueryValue(buff, PChar('\\StringFileInfo\\040904E4\\FileVersion'),
-      Pointer(sub), sublen) then Exit;
-    if not(sublen > 0) then Exit;
-    Result := string(sub);
-  finally
-    FreeMem(buff);
-  end;
-end;
-  
 initialization
 
   gpsbabel_exe := SysUtils.ExtractFilePath(ParamStr(0)) + 'gpsbabel.exe';

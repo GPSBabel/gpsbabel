@@ -25,23 +25,26 @@ unit utils;
 interface
 
 uses
-  gnugettextD4,
-  Windows, SysUtils, Classes, Registry;
+  gnugettext,
+  Windows, SysUtils, Classes, Registry, ShellAPI;
 
 type
   PBoolean = ^Boolean;
 
 function gpsbabel(const CommandLine: string; Output: TStrings;
-  Fatal: PBoolean = nil): Boolean;
+  Fatal: PBoolean = nil; OEMStrings: Boolean = True): Boolean;
 
 function GetShortName(const PathName: string): string;
 procedure StoreProfile(const Tag: Integer; const Value: string);
-function ReadProfile(const Tag: Integer): string;
+function ReadProfile(const Tag: Integer; const Default: string = ''): string; overload;
+function ReadProfile(const Name: string; const Default: string = ''): string; overload;
 
 function BackupProperties(Instance: TObject; Properties: TStrings; Backup: TStringList): Boolean;
 procedure RestoreProperties(Instance: TObject; Backup: TStringList);
 
 procedure FixStaticText(AComponent: TComponent);
+
+procedure WinOpenFile(const Name: string);
 
 implementation
 
@@ -60,7 +63,13 @@ begin
 end;
 
 function gpsbabel(const CommandLine: string; Output: TStrings;
-  Fatal: PBoolean = nil): Boolean;
+  Fatal: PBoolean; OEMStrings: Boolean): Boolean;
+
+// bigger buffer_size speeds up conversion to screen
+
+const
+  BUFFER_SIZE = $20000;
+
 var
   hRead, hWrite: THandle;
   ProcessInfo: TProcessInformation;
@@ -69,22 +78,33 @@ var
   sCmd: string;
 
   BytesRead, BytesDone: DWORD;
-  buffer: packed array[0..512] of Char;
+  buffer_string: string;
+  buffer: PChar;
   Error: DWORD;
   Wait_Result: DWORD;
   s: string;
 
 begin
   Result := False;
+
+  // strings are released automatical
+  // so we don't need a try/finally construct for our read buffer
+
+  SetLength(buffer_string, BUFFER_SIZE);
+  buffer := PChar(buffer_string);
+
   if (Fatal <> nil) then Fatal^ := False;
 
-  sCmd := SysUtils.Format('%s %s ', [gpsbabel_exe, CommandLine]);
+  if (Copy(CommandLine, 1, 1) = '~') then
+    sCmd := System.Copy(CommandLine, 2, Length(CommandLine) - 1)
+  else
+    sCmd := SysUtils.Format('%s %s ', [gpsbabel_exe, CommandLine]);
 
-  SecurityAttr.nLength := sizeof (TSECURITYATTRIBUTES);
+  SecurityAttr.nLength := sizeof(TSECURITYATTRIBUTES);
   SecurityAttr.bInheritHandle := true;
   SecurityAttr.lpSecurityDescriptor := nil;
 
-  if not CreatePipe(hRead, hWrite, @SecurityAttr, 0) then
+  if not CreatePipe(hRead, hWrite, @SecurityAttr, $8000) then
     raise eGPSBabelError.Create(_('Error WINAPI: Could not create "NamedPipe"!'));
 
   try
@@ -115,16 +135,21 @@ begin
     s := '';
 
     repeat
-      Wait_Result := WaitforSingleObject(ProcessInfo.hProcess, 50);
+      Wait_Result := WaitforSingleObject(ProcessInfo.hProcess, 10);
       if PeekNamedPipe(hRead, nil, 0, nil, @BytesRead, nil) then
       begin
-        Application.ProcessMessages;
+        if (BytesRead > 0) then Application.ProcessMessages;
         while (BytesRead > 0) do
         begin
-          ReadFile(hRead, Buffer, SizeOf(buffer)-1, BytesDone, nil);
-          buffer[BytesDone] := #0;
-          s := s + string(buffer);
-          Dec(BytesRead, BytesDone);
+          ReadFile(hRead, buffer^, BUFFER_SIZE - 1, BytesDone, nil);
+          if (BytesDone > 0) then
+          begin
+            buffer[BytesDone] := #0;
+            if OEMStrings then
+              OemToCharBuff(buffer, buffer, BytesDone);
+            s := s + string(buffer);
+            Dec(BytesRead, BytesDone);
+          end;
         end;
       end;
     until (Wait_Result = WAIT_OBJECT_0);
@@ -167,31 +192,34 @@ begin
   end;
 end;
 
-function ReadProfile(const Tag: Integer): string;
+function ReadProfile(const Tag: Integer; const Default: string): string; // overload;
 var
-  reg: TRegistry;
   str: string;
 begin
   if (Tag <= 0) or (Tag > High(Profile)) then Exit;
-
   str := Profile[Tag];
+  Result := ReadProfile(str, Default);
+end;
 
+function ReadProfile(const Name: string; const Default: string = ''): string; // overload;
+var
+  reg: TRegistry;
+begin
   reg := TRegistry.Create;
   try
     reg.RootKey := HKEY_CURRENT_USER;
     if reg.OpenKey('\SOFTWARE\GPSBabel', True) then
     begin
       try
-        Result := reg.ReadString(str);
+        Result := reg.ReadString(Name);
       except
-        Result := '';
+        Result := Default;
       end;
     end;
   finally
     reg.Free;
   end;
 end;
-
 
 function BackupProperties(Instance: TObject; Properties: TStrings; Backup: TStringList): Boolean;
 var
@@ -231,6 +259,11 @@ begin
     else if (s.Alignment = taRightJustify) then
       s.Caption := s.Caption + '  ';
   end;
+end;
+
+procedure WinOpenFile(const Name: string);
+begin
+  ShellExecute(0, 'open', PChar(Name), nil, '', 0);
 end;
 
 end.

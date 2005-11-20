@@ -21,16 +21,19 @@ unit readme;
 interface
 
 uses
+  gnugettextDx,
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   ExtCtrls, StdCtrls, Buttons;
 
 type
   TfrmReadme = class(TForm)
     Memo: TMemo;
-    Panel1: TPanel;
-    BitBtn1: TBitBtn;
+    pnBottom: TPanel;
+    btnOK: TBitBtn;
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     FStr: TStream;
@@ -52,12 +55,20 @@ end;
 
 procedure TfrmReadme.FormCreate(Sender: TObject);
 begin
+  btnOK.Left := pnBottom.Width - btnOK.Width - 8;
   try
     FStr := TFileStream.Create('README', fmOpenRead);
     Memo.Lines.LoadFromStream(FStr);
   except
     FStr := nil;
   end;
+end;
+
+procedure TfrmReadme.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = 27) then
+    ModalResult := mrOK;
 end;
 
 end.

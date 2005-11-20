@@ -19,7 +19,6 @@ program GPSBabelGUI;
 
 uses
   gnugettext in 'gnugettext.pas',
-  gnugettextD4 in 'gnugettextD4.pas',
   Windows,
   SysUtils,
   classes,
@@ -29,19 +28,24 @@ uses
   common in 'common.pas',
   filter in 'filter.pas' {frmFilter},
   about in 'about.pas' {frmAbout},
-  readme in 'readme.pas' {frmReadme};
+  readme in 'readme.pas' {frmReadme},
+  options in 'options.pas' {frmOptions};
 
 {$R *.RES}
 
+var
+  lang: string;
+
 begin
   AddDomainForResourceString('delphi');
-
+  lang := ReadProfile('Global:Language', '');
+  if (lang <> '') then
+    UseLanguage(lang);
+{$IFOPT D+}
 //  UseLanguage('fr');                 // for testing
-
+{$ENDIF}
   Application.Initialize;
   Application.CreateForm(TfrmMain, frmMain);
   Application.CreateForm(TfrmReadme, frmReadme);
-  Application.CreateForm(TfrmFilter, frmFilter);
-  Application.CreateForm(TfrmAbout, frmAbout);
   Application.Run;
 end.
