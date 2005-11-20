@@ -21,9 +21,10 @@ unit filter;
 interface
 
 uses
-  gnugettextD4,
+  gnugettextDx,
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ComCtrls, Buttons, Mask, ExtCtrls;
+  StdCtrls, ComCtrls, Buttons, Mask, ExtCtrls,
+  common;
 
 type
   TfrmFilter = class(TForm)
@@ -94,10 +95,13 @@ type
     procedure cbWayptRadiusClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private-Deklarationen }
     lTrackTimeList: TList;
     FTracksEnabled: Boolean;
+    FInitialValues: string;
     function AnyChecked(Control: TWinControl): Boolean;
     procedure EnableList(List: TList; Enable: Boolean = True);
     procedure SetTracksEnabled(const Value: Boolean);
@@ -125,6 +129,92 @@ begin
   AControl.Left := LeftFromMe.Left + LeftFromMe.Width;
   if (IsText) then
     AControl.Left := AControl.Left + 4;
+end;
+
+procedure EnableAll(Parent: TWinControl; Enable: Boolean);
+var
+  i: Integer;
+  c: TComponent;
+  master: TComponent;
+  ctrl: TControl;
+begin
+  if (Parent = nil) then Exit;
+  master := Parent.Owner;
+  if (master = nil) then Exit;
+  for i := 0 to master.ComponentCount - 1 do
+  begin
+    c := master.Components[i];
+    if not(c.InheritsFrom(TControl)) then Continue;
+    ctrl := Pointer(c);
+    if not(ctrl.Parent = Parent) then Continue;
+    ctrl.Enabled := Enable;
+  end;
+end;
+
+{ TfrmFilter }
+
+procedure TfrmFilter.FormCreate(Sender: TObject);
+var
+  CurrentTime: TDateTime;
+
+begin
+  TranslateComponent(SELF);
+
+  CurrentTime := SysUtils.Now;
+  dtpTrackStartDate.DateTime := Int(CurrentTime);
+  dtpTrackStopDate.DateTime := Int(CurrentTime);
+
+  lTrackTimeList := TList.Create;
+  
+  lTrackTimeList.Add(edTrackTimeDays);
+  lTrackTimeList.Add(edTrackTimeHours);
+  lTrackTimeList.Add(edTrackTimeMinutes);
+  lTrackTimeList.Add(edTrackTimeSeconds);
+
+  EnableList(lTrackTimeList, False);
+
+  FixPosition(edTrackTimeDays, lbTimePlusMinus, True);
+  FixPosition(udTimeDays, edTrackTimeDays, False);
+  FixPosition(lbTimeDays, udTimeDays, True);
+
+  FixPosition(edTrackTimeHours, lbTimeDays, True);
+  FixPosition(udTimeHours, edTrackTimeHours, False);
+  FixPosition(lbTimeHours, udTimeHours, True);
+
+  FixPosition(edTrackTimeMinutes, lbTimeHours, True);
+  FixPosition(udTimeMinutes, edTrackTimeMinutes, False);
+  FixPosition(lbTimeMinutes, udTimeMinutes, True);
+
+  FixPosition(edTrackTimeSeconds, lbTimeMinutes, True);
+  FixPosition(udTimeSeconds, edTrackTimeSeconds, False);
+  FixPosition(lbTimeSeconds, udTimeSeconds, True);
+
+  FixPosition(lbWayptRadiusLat, cobWayptRadius, True);
+  FixPosition(edWayptRadiusLat, lbWayptRadiusLat, True);
+  FixPosition(lbWayptRadiusLon, edWayptRadiusLat, True);
+  FixPosition(edWayptRadiusLon, lbWayptRadiusLon, True);
+
+  // will not be translated, fill by hand
+
+  cobWayptMergeDist.Items.Add(_('Feet'));
+  cobWayptMergeDist.Items.Add(_('Meter'));
+  cobWayptMergeDist.ItemIndex := 0;
+
+  cobWayptRadius.Items.Add(_('Miles'));
+  cobWayptRadius.Items.Add(_('Kilometer'));
+  cobWayptRadius.ItemIndex := 0;
+
+  dtpTrackStopTime.Time := 1 - (1.0 / (24*60*60));
+
+  // Enable/Disable depending on gpsbabel.exe version
+
+  if (common.gpsbabel_vfmt < '001.002.007') then
+  begin
+    EnableAll(gbTracks, False);
+    gbTracks.Hint := Format(_('Not supported by gpsbabel.exe, release %s!'), [
+      gpsbabel_version]);
+    gbTracks.ShowHint := True;
+  end;
 end;
 
 function TfrmFilter.ValidateNumerical(AEdit: TCustomEdit; AMin, AMax: Extended): Boolean;
@@ -180,60 +270,6 @@ begin
       with o as TControl do
         Enabled := Enable;
   end;
-end;
-
-procedure TfrmFilter.FormCreate(Sender: TObject);
-var
-  CurrentTime: TDateTime;
-
-begin
-  gnugettextD4.TranslateComponent(SELF);
-
-  CurrentTime := SysUtils.Now;
-  dtpTrackStartDate.DateTime := Int(CurrentTime);
-  dtpTrackStopDate.DateTime := Int(CurrentTime);
-
-  lTrackTimeList := TList.Create;
-  
-  lTrackTimeList.Add(edTrackTimeDays);
-  lTrackTimeList.Add(edTrackTimeHours);
-  lTrackTimeList.Add(edTrackTimeMinutes);
-  lTrackTimeList.Add(edTrackTimeSeconds);
-
-  EnableList(lTrackTimeList, False);
-
-  FixPosition(edTrackTimeDays, lbTimePlusMinus, True);
-  FixPosition(udTimeDays, edTrackTimeDays, False);
-  FixPosition(lbTimeDays, udTimeDays, True);
-
-  FixPosition(edTrackTimeHours, lbTimeDays, True);
-  FixPosition(udTimeHours, edTrackTimeHours, False);
-  FixPosition(lbTimeHours, udTimeHours, True);
-
-  FixPosition(edTrackTimeMinutes, lbTimeHours, True);
-  FixPosition(udTimeMinutes, edTrackTimeMinutes, False);
-  FixPosition(lbTimeMinutes, udTimeMinutes, True);
-
-  FixPosition(edTrackTimeSeconds, lbTimeMinutes, True);
-  FixPosition(udTimeSeconds, edTrackTimeSeconds, False);
-  FixPosition(lbTimeSeconds, udTimeSeconds, True);
-
-  FixPosition(lbWayptRadiusLat, cobWayptRadius, True);
-  FixPosition(edWayptRadiusLat, lbWayptRadiusLat, True);
-  FixPosition(lbWayptRadiusLon, edWayptRadiusLat, True);
-  FixPosition(edWayptRadiusLon, lbWayptRadiusLon, True);
-
-  // will not be translated, fill by hand
-
-  cobWayptMergeDist.Items.Add(_('Feet'));
-  cobWayptMergeDist.Items.Add(_('Meter'));
-  cobWayptMergeDist.ItemIndex := 0;
-
-  cobWayptRadius.Items.Add(_('Miles'));
-  cobWayptRadius.Items.Add(_('Kilometer'));
-  cobWayptRadius.ItemIndex := 0;
-
-  dtpTrackStopTime.Time := 1 - (1.0 / (24*60*60));
 end;
 
 procedure TfrmFilter.cbTrackTitleClick(Sender: TObject);
@@ -457,6 +493,7 @@ end;
 procedure TfrmFilter.FormShow(Sender: TObject);
 begin
   ChangeCheckBoxesChecked(Self);
+  FInitialValues := CmdLine;
 end;
 
 procedure TfrmFilter.ChangeCheckBoxesChecked(AComponent: TComponent; Restore: Boolean = False);
@@ -477,6 +514,23 @@ begin
     else if (c.ComponentCount > 0) then
       ChangeCheckBoxesChecked(c);
   end;
+end;
+
+procedure TfrmFilter.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  str: string;
+begin
+  if (Key <> 27) then Exit;
+
+
+  str := Self.CmdLine;
+  if (str <> FInitialValues) then
+  begin
+    if not(MessageDlg(_('Discard changes?'), mtWarning, mbOKCancel, 0) = mrOK) then
+      Exit;
+  end;
+  ModalResult := mrCancel;
 end;
 
 end.

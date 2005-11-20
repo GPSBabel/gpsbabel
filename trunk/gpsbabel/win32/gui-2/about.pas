@@ -21,9 +21,9 @@ unit about;
 interface
 
 uses
-  gnugettextD4,
+  gnugettextDx,
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, Buttons, ExtCtrls, ShellApi,
+  StdCtrls, Buttons, ExtCtrls, 
   common;
 
 type
@@ -43,12 +43,16 @@ type
     lbCopyRight: TLabel;
     lbMoreInfo: TLabel;
     lbSFURL: TLabel;
+    btnNewLanguage: TButton;
     procedure FormCreate(Sender: TObject);
     procedure lbURLMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure pnCenterMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure lbURLClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnNewLanguageClick(Sender: TObject);
   private
     { Private declarations }
     FTitle: string;
@@ -69,7 +73,7 @@ uses
 
 procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
-  gnugettextD4.TranslateComponent(SELF);
+  TranslateComponent(SELF);
   FTitle := Caption;
   Caption := FTitle + ' ' + SGPSBabelTitle;
 
@@ -82,6 +86,7 @@ begin
 
   lbxTranslators.Items.Add(_('German by Olaf Klein'));
   lbxTranslators.Items.Add(_('French by Lilian Morinon'));
+
 end;
 
 procedure TfrmAbout.lbURLMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -106,12 +111,26 @@ begin
 end;
 
 procedure TfrmAbout.lbURLClick(Sender: TObject);
-var
-  url: string;
 begin
   TLabel(Sender).Font.Color := clBlue;
-  url := 'http://' + TLabel(Sender).Caption;
-  ShellExecute(Self.Handle, 'open', PChar(url), nil, '', 0);
+  WinOpenFile('http://' + TLabel(Sender).Caption);
+end;
+
+procedure TfrmAbout.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = 27) then
+    ModalResult := mrOK;
+end;
+
+procedure TfrmAbout.btnNewLanguageClick(Sender: TObject);
+begin
+  ShowMessage(
+  _('Please have a look at the file README.GUI.'#13#10#10 +
+  'There you will find all information you need to'#13#10 +
+  'get GPSBabelGUI working in your own language.')
+ );
 end;
 
 end.
+ 
