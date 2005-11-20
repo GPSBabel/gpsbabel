@@ -3,8 +3,8 @@ unit gnugettext;
 (*                                                            *)
 (*  (C) Copyright by Lars B. Dybdahl and others               *)
 (*  E-mail: Lars@dybdahl.dk, phone +45 70201241               *)
-(*  File version: $Date: 2005-09-28 00:33:08 $                *)
-(*  Revision: $Revision: 1.1 $                          *)
+(*  File version: $Date: 2005-11-20 21:24:43 $                *)
+(*  Revision: $Revision: 1.2 $                          *)
 (*                                                            *)
 (*  Contributors: Peter Thornqvist, Troy Wolbrink,            *)
 (*                Frank Andreas de Groot, Igor Siticov,       *)
@@ -49,6 +49,7 @@ interface
 {$endif}
 {$ifdef VER120}
   // Delphi 4
+  {$DEFINE DELPHI4OROLDER}
   {$DEFINE DELPHI5OROLDER}
   {$DEFINE DELPHI6OROLDER}
 {$endif}
@@ -84,8 +85,13 @@ interface
 {$endif}
 
 uses
-{$ifdef DELPHI5OROLDER}
-  gnugettextD4, 
+  TypInfo,
+{$ifdef DELPHI4OROLDER}
+  gnugettextD4,
+{$else}
+  {$ifdef DELPHI5OROLDER}
+    gnugettextD5,
+  {$endif}
 {$endif}
 
 {$ifdef MSWINDOWS}
@@ -93,7 +99,7 @@ uses
 {$else}
   Libc,
 {$endif}
-  Classes, SysUtils, TypInfo;
+  Classes, SysUtils;
 
 (*****************************************************************************)
 (*                                                                           *)
@@ -345,14 +351,6 @@ type
 
 var
   DefaultInstance:TGnuGettextInstance;
-
-// DELPHI 4
-
-function GetStrProp(Instance: TObject; const Name: string): string; overload;
-function GetStrProp(Instance: TObject; Info: PPropInfo): string; overload;
-
-procedure SetStrProp(Instance: TObject; const Name, Value: string); overload;
-procedure SetStrProp(Instance: TObject; Info: PPropInfo; const Value: string); overload;
 
 implementation
 
@@ -2379,7 +2377,7 @@ begin
   // Find TMoFile object
   MoFilesCS.BeginWrite;
   try
-    idxname:=realfilename+#0+IntToStr(offset);
+    idxname:=realfilename+#1+IntToStr(offset);
     if MoFiles.Find(idxname, idx) then begin
       Result:=MoFiles.Objects[idx] as TMoFile;
     end else begin
@@ -2792,66 +2790,6 @@ begin
       step := step shr 1;
     end;
   end;
-end;
-
-// DELPHI4
-
-function GetPropInfo(Instance: TObject; const Name: string; var PropInfo: TPropInfo): Boolean;
-var
-  Props: PPropList;
-  TypeData: PTypeData;
-  Info: PPropInfo;
-  i: Integer;
-begin
-  TypeData := GetTypeData(Instance.ClassInfo);
-  if ((TypeData <> nil) and (TypeData^.PropCount > 0)) then
-  begin
-    GetMem(Props, TypeData^.PropCount * sizeof(Pointer));
-    try
-      GetPropInfos(Instance.ClassInfo, Props);
-      for i := 0 to TypeData.PropCount - 1 do
-      begin
-        Info := Props[i];
-        if (AnsiCompareText(Info.Name, Name) = 0) then
-        begin
-          PropInfo := Info^;
-          Result := True;
-          Exit;
-        end
-      end;
-    finally
-      FreeMem(Props);
-    end;
-  end;
-  Result := False;
-end;
-
-function GetStrProp(Instance: TObject; Info: PPropInfo): string;
-begin
-  Result := TypInfo.GetStrProp(Instance, Info);
-end;
-
-function GetStrProp(Instance: TObject; const Name: string): string;
-var
-  Info: TPropInfo;
-begin
-  if GetPropInfo(Instance, Name, Info) then
-    Result := TypInfo.GetStrProp(Instance, @Info)
-  else
-    Result := '';
-end;
-
-procedure SetStrProp(Instance: TObject; const Name, Value: string);
-var
-  Info: TPropInfo;
-begin
-  if GetPropInfo(Instance, Name, Info) then
-    SetStrProp(Instance, @Info, Value);
-end;
-
-procedure SetStrProp(Instance: TObject; Info: PPropInfo; const Value: string);
-begin
-  TypInfo.SetStrProp(Instance, Info, Value);
 end;
 
 initialization
