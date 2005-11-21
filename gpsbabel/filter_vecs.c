@@ -225,6 +225,24 @@ alpha (const void *a, const void *b)
         return case_ignore_strcmp(ap->desc , bp->desc);
 }
 
+static void
+disp_v1(const fl_vecs_t *vec)
+{
+	arglist_t *ap;
+	
+	for (ap = vec->vec->args; ap && ap->argstring; ap++) {
+		if ( !(ap->argtype & ARGTYPE_HIDDEN))
+			printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+				vec->name, 
+				ap->argstring, 
+				ap->helpstring, 
+				name_option(ap->argtype),
+				ap->defaultvalue? ap->defaultvalue : "",
+				ap->minvalue? ap->minvalue : "",
+				ap->maxvalue? ap->maxvalue : "");
+	}
+}
+
 /*
  *  Display the available formats in a format that's easy to machine
  *  parse.   Typically invoked by programs like graphical wrappers to
@@ -243,8 +261,11 @@ disp_filters(int version)
 
 	switch(version) {
 	case 0:
+	case 1:
 		for (vec = filter_vec_list; vec->vec; vec++) {
 			printf("%s\t%s\n", vec->name, vec->desc);
+			if (version > 0)
+				disp_v1(vec);
 		}
 		break;
 	default:
