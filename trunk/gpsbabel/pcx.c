@@ -207,6 +207,7 @@ data_read(void)
 				track_add_head(track);
 			}
 			route_add_wpt(track, wpt_tmp);
+			break;
 		case 'U': 
  			read_as_degrees = ! strncmp("LAT LON DEG", ibuf + 3, 11);
 			break;
