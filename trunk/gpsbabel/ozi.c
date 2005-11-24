@@ -310,8 +310,11 @@ wr_init(const char *fname)
 static void
 wr_deinit(void)
 {
-    fclose(file_out);
-    file_out = NULL;
+    if (file_out != NULL) {
+    
+	fclose(file_out);
+	file_out = NULL;
+    }
     ozi_ofname = NULL;
 
     mkshort_del_handle(&mkshort_handle);
