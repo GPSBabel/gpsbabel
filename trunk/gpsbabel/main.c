@@ -210,6 +210,8 @@ main(int argc, char *argv[])
 					rte_ct_bak = -1;
 					trk_ct_bak = -1;
 
+					ovecs->wr_init(ofname);
+
 					if (global_opts.charset != &cet_cs_vec_utf8)
 					{
 					    waypt_backup(&wpt_ct_bak, &wpt_head_bak);
@@ -219,7 +221,6 @@ main(int argc, char *argv[])
 					    cet_convert_strings(NULL, global_opts.charset, NULL);
 					}
 
-					ovecs->wr_init(ofname);
 					ovecs->write();
 					ovecs->wr_deinit();
 					
