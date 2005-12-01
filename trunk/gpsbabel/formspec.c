@@ -31,6 +31,8 @@ format_specific_data *fs_chain_copy( format_specific_data *source ) {
 	format_specific_data **copy = &result;
 	while ( source ) {
 		source->copy( (void **)copy, (void *)source );
+		/* prevent segfaults from badly-behaved copy functions */
+		(*copy)->next = NULL; 
 		copy = &((*copy)->next);
 		source = source->next;
 	} 
