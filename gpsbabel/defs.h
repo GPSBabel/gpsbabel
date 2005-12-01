@@ -212,6 +212,7 @@ fs_xml *fs_xml_alloc( long type );
 #define FS_AN1W 0x616e3177L
 #define FS_AN1L 0x616e316cL
 #define FS_AN1V 0x616e3176L
+#define FS_OZI 0x6f7a6900L
 
 /*
  * Misc bitfields inside struct waypoint;
