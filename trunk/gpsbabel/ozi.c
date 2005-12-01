@@ -29,6 +29,12 @@
 
 #define MYNAME        "OZI"
 
+typedef struct {
+	format_specific_data fs;
+	int fgcolor;
+	int bgcolor;
+} ozi_fsdata;
+
 
 static FILE *file_in;
 static FILE *file_out;
@@ -61,6 +67,37 @@ arglist_t ozi_args[] = {
 static gpsdata_type ozi_objective;
 
 static char *ozi_ofname = NULL;
+
+static void
+ozi_copy_fsdata(ozi_fsdata **dest, ozi_fsdata *src) 
+{
+	/* No strings to mess with.  Straight forward copy. */
+	*dest = (void *)xmalloc(sizeof(*src));
+	**dest = *src;
+	(*dest)->fs.next = NULL;
+}
+
+static void
+ozi_free_fsdata(void *fsdata)
+{
+	xfree(fsdata);
+}
+
+static
+ozi_fsdata *
+ozi_alloc_fsdata(void) 
+{
+	ozi_fsdata *fsdata = xcalloc(sizeof(*fsdata), 1);
+	fsdata->fs.type = FS_OZI;
+	fsdata->fs.copy = (fs_copy) ozi_copy_fsdata;
+	fsdata->fs.destroy = ozi_free_fsdata;
+
+	/* Provide reasonable defaults */
+	fsdata->fgcolor = 0;
+	fsdata->bgcolor = 65535;
+
+	return fsdata;
+}
 
 static void
 ozi_openfile(char *fname) {
@@ -321,7 +358,7 @@ wr_deinit(void)
 }
 
 static void
-ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp)
+ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp, ozi_fsdata *fsdata)
 {
     double alt;
 
@@ -356,9 +393,11 @@ ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp)
         break;
     case 8:
         /* foreground color (0=black) */
+	fsdata->fgcolor = atoi(str);
         break;
     case 9:
         /* background color (65535=yellow) */
+	fsdata->bgcolor = atoi(str);
         break;
     case 10:
         /* Description */
@@ -562,7 +601,7 @@ data_read(void)
 	}
 
         if ((strlen(buff)) && (strstr(buff, ",") != NULL)) {
-
+	    ozi_fsdata *fsdata = ozi_alloc_fsdata();
             wpt_tmp = waypt_new();
 
             /* data delimited by commas, possibly enclosed in quotes.  */
@@ -584,7 +623,7 @@ data_read(void)
 
                     break;
                 case wptdata:
-                    ozi_parse_waypt(i, s, wpt_tmp);
+                    ozi_parse_waypt(i, s, wpt_tmp, fsdata);
                     break;
                 }
                 i++;
@@ -605,10 +644,13 @@ data_read(void)
                     waypt_free(wpt_tmp);
                 break;
             case wptdata:
-                if (linecount > 4)  /* skipping over file header */
+                if (linecount > 4) {  /* skipping over file header */ 
+		    fs_chain_add(&(wpt_tmp->fs), 
+			(format_specific_data *) fsdata);
                     waypt_add(wpt_tmp);
-                else
+                } else {
                     waypt_free(wpt_tmp);
+		}
                 break;
             }
 
@@ -627,6 +669,15 @@ ozi_waypt_pr(const waypoint * wpt)
     double ozi_time;
     char *description;
     char *shortname;
+    int faked_fsdata = 0;
+    ozi_fsdata *fs = NULL;
+
+    fs = (ozi_fsdata *) fs_chain_find(wpt->fs, FS_OZI);
+
+    if (!fs) {
+	fs = ozi_alloc_fsdata();
+	faked_fsdata = 1;
+    }
 
     ozi_time = (wpt->creation_time / 86400.0) + 25569.0;
 
@@ -665,7 +716,7 @@ ozi_waypt_pr(const waypoint * wpt)
     fprintf(file_out,
             "%d,%s,%.6f,%.6f,%.5f,%d,%d,%d,%d,%d,%s,%d,%d,",
             index, shortname, wpt->latitude, wpt->longitude, ozi_time, 0,
-            1, 3, 0, 65535, description, 0, 0);
+            1, 3, fs->fgcolor, fs->bgcolor, description, 0, 0);
     if (wpt->proximity > 0)
 	fprintf(file_out, "%.1f,", wpt->proximity);
     else
@@ -675,6 +726,9 @@ ozi_waypt_pr(const waypoint * wpt)
     xfree(description);
     xfree(shortname);
 
+    if (faked_fsdata) {
+	xfree(fs);
+    }
 }
 
 static void
