@@ -41,7 +41,7 @@ arglist_t pcx_args[] = {
 		ARGTYPE_STRING },
 	{"cartoexplorer", &cartoexplorer,
 		"Write tracks compatible with CartoExplorer", "",
-		ARGTYPE_STRING },
+		ARGTYPE_BOOL },
 	{0, 0, 0, 0, 0}
 };
 
