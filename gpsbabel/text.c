@@ -235,6 +235,6 @@ ff_vecs_t text_vecs = {
 	data_write,
 	NULL, 
 	text_args,
-	CET_CHARSET_ASCII, 1	/* CET-REVIEW */
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 
 };
