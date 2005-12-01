@@ -337,10 +337,10 @@ static void kml_waypt_pr(const waypoint *waypointp)
 	fprintf(ofd, "\t  <styleUrl>#waypoint</styleUrl>\n");
 
 	// Description
-	if (waypointp->url) {
+	if (waypointp->url && waypointp->url[0]) {
 		char * odesc = xml_entitize(waypointp->url);
 		fprintf(ofd, "\t  <description>\n");
-		if (waypointp->url_link_text)  {
+		if (waypointp->url_link_text && waypointp->url_link_text[0])  {
 			char *olink = xml_entitize(waypointp->url_link_text);
 			fprintf(ofd, "<a href=\"%s\">%s</a>", odesc, olink);
 			xfree(olink);
