@@ -1042,87 +1042,6 @@ Init_Road_Changes( void )
 	xfree( copy );
 }
 
-int HexDigit( char hex ) {
-	const char *Digits = "0123456789ABCDEF";
-	const char *digits = "0123456789abcdef";
-	char * ofs = strchr( digits, hex );
-	if ( ofs ) {
-		return ofs-digits;
-	}
-	
-	ofs = strchr( Digits, hex );
-	if ( ofs ) {
-		return ofs-Digits;
-	}
-	return 0;
-}
-
-int HexByte( char* hex ) {
-	int b =  (HexDigit(hex[0])<<4)+HexDigit(hex[1]);
-	return b;
-}
-
-void Init_Color( void ) {
-	if ( opt_color[0] == '#' ) {
-		opt_color_num = (HexByte( opt_color+1 )) +    // red
-			        (HexByte( opt_color+3 )<<8) + // green
-				(HexByte( opt_color+5 )<<16); // blue
-	}
-	else if ( !case_ignore_strcmp( opt_color, "aqua" ) ||
-		  !case_ignore_strcmp( opt_color, "cyan" )) {
-		opt_color_num = 0xffff00;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "black" )) {
-		opt_color_num = 0x000000;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "blue" )) {
-		opt_color_num = 0xff0000;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "fuchsia" ) ||
-		  !case_ignore_strcmp( opt_color, "magenta" )) {
-		opt_color_num = 0xff00ff;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "gray" )) {
-		opt_color_num = 0x808080;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "green" )) {
-		opt_color_num = 0x008000;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "lime" )) {
-		opt_color_num = 0x00ff00;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "maroon" )) {
-		opt_color_num = 0x000080;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "navy" )) {
-		opt_color_num = 0x800000;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "olive" )) {
-		opt_color_num = 0x008080;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "purple" )) {
-		opt_color_num = 0x800080;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "red" )) {
-		opt_color_num = 0x0000ff;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "silver" )) {
-		opt_color_num = 0xc0c0c0;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "teal" )) {
-		opt_color_num = 0x808000;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "white" )) {
-		opt_color_num = 0xffffff;
-	}
-	else if ( !case_ignore_strcmp( opt_color, "yellow" )) {
-		opt_color_num = 0x00ffff;
-	}
-	else {
-		fatal( MYNAME ": unrecognized color name\n" );
-	}
-}
-
 static void
 rd_init(const char *fname)
 {
@@ -1150,7 +1069,7 @@ wr_init(const char *fname)
 	outfile = xfopen( fname, "wb", MYNAME );
 	Init_Output_Type();
 	Init_Road_Changes();
-	Init_Color();
+	opt_color_num = color_to_bbggrr(opt_color);
 	Init_Wpt_Type();
 	if ( opt_zoom ) {
 		opt_zoom_num = atoi(opt_zoom);
