@@ -50,6 +50,10 @@ static char *snlenopt = NULL;
 static char *snwhiteopt = NULL;
 static char *snupperopt = NULL;
 static char *snuniqueopt = NULL;
+static char *wptfgcolor = NULL;
+static char *wptbgcolor = NULL;
+
+
 
 static
 arglist_t ozi_args[] = {
@@ -61,6 +65,10 @@ arglist_t ozi_args[] = {
 	        NULL, ARGTYPE_BOOL},
 	{"snunique", &snuniqueopt, "Make synth. shortnames unique",
 		NULL, ARGTYPE_BOOL},
+	{"wptfgcolor", &wptfgcolor, "Waypoint foreground color",
+		"black", ARGTYPE_INT},
+	{"wptbgcolor", &wptbgcolor, "Waypoint background color",
+		"yellow", ARGTYPE_INT},
 	{0, 0, 0, 0, 0}
 };
 
@@ -92,9 +100,9 @@ ozi_alloc_fsdata(void)
 	fsdata->fs.copy = (fs_copy) ozi_copy_fsdata;
 	fsdata->fs.destroy = ozi_free_fsdata;
 
-	/* Provide reasonable defaults */
-	fsdata->fgcolor = 0;
-	fsdata->bgcolor = 65535;
+	/* Provide defaults via command line defaults */
+	fsdata->fgcolor = color_to_bbggrr(wptfgcolor);
+	fsdata->bgcolor = color_to_bbggrr(wptbgcolor);
 
 	return fsdata;
 }

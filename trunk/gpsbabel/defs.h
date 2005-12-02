@@ -684,6 +684,11 @@ double degrees2ddmm(double deg_val);
 unsigned long get_crc32(const void * data, int datalen);
 
 /*
+ * Color helpers.
+ */
+int color_to_bbggrr(char *cname);
+
+/*
  * A constant for unknown altitude.   It's tempting to just use zero
  * but that's not very nice for the folks near sea level.
  */
