@@ -360,7 +360,7 @@ vecs_t vec_list[] = {
                 &glogbook_vecs,
                 "glogbook",
                 "Garmin Logbook XML",
-                NULL
+                "xml"
         },
         {
                 &kml_vecs,
