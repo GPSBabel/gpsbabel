@@ -66,7 +66,7 @@ SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
 
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
-          uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o \
+          uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS)
 
