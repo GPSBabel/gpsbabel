@@ -201,7 +201,7 @@ static char garmin301[] =
 "# HEADER STUFF:\n"
 "#\n"
 "PROLOGUE	Garmin 301 data __FILE__ \n"
-"PROLOGUE	Timestamp,Latitude, Longitude, Atlitude(ft), heart rate\n"
+"PROLOGUE	Timestamp,Latitude, Longitude, Altitude(ft), heart rate\n"
 "#\n"
 "# INDIVIDUAL DATA FIELDS:\n"
 "#\n"
@@ -456,7 +456,7 @@ static char mxf[] =
 "#\n"
 "FIELD_DELIMITER		COMMASPACE\n"
 "RECORD_DELIMITER	NEWLINE\n"
-"BADCHARS		\",\n"
+"BADCHARS		,\"\n"
 
 "#\n"
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"

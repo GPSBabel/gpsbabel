@@ -1379,7 +1379,15 @@ xcsv_waypt_pr(const waypoint *wpt)
 	
 
         obuff = csv_stringclean(buff, xcsv_file.badchars);
-        fprintf (xcsv_file.xcsvfp, "%s", obuff);
+	/* As a special case (pronounced "horrible hack") we allow
+ 	 * ""%s"" to smuggle bad characters through.
+	 */
+	if (0 == strcmp(fmp->printfc, "\"%s\"")) {
+		fprintf (xcsv_file.xcsvfp, "\"%s\"", obuff);
+	} else {
+		fprintf (xcsv_file.xcsvfp, "%s", obuff);
+	}
+
 	xfree(obuff);
     }
 
