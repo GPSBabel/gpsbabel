@@ -752,6 +752,10 @@ time_to_yyyymmdd(time_t t)
 static void
 xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
 {
+    char *enclosure = "";
+    if (0 == strcmp(fmp->printfc, "\"%s\"")) {
+	enclosure = "\"";
+    }
     if (strcmp(fmp->key, "IGNORE") == 0) {
        /* IGNORE -- Categorically ignore this... */
     } else
@@ -765,10 +769,10 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
        /* IGNORE -- Calculated Sequence # For Ouput*/
     } else
     if (strcmp(fmp->key, "SHORTNAME") == 0) {
-       wpt->shortname = csv_stringtrim(s, "", 0);
+       wpt->shortname = csv_stringtrim(s, enclosure, 0);
     } else
     if (strcmp(fmp->key, "DESCRIPTION") == 0) {
-       wpt->description = csv_stringtrim(s, "", 0);
+       wpt->description = csv_stringtrim(s, enclosure, 0);
     } else
     if (strcmp(fmp->key, "NOTES") == 0) {
        wpt->notes = csv_stringtrim(s, "", 0);
