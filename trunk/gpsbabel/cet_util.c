@@ -46,6 +46,7 @@ typedef struct cet_cs_alias_s
 static cet_cs_alias_t *cet_cs_alias;
 static int cet_cs_alias_ct = 0;
 static int cet_cs_vec_ct = 0;
+static int cet_output = 0;
 
 /* %%% short hand strings transmission for main character sets %%% */
 
@@ -946,6 +947,10 @@ cet_convert_waypt(const waypoint *wpt)
 {
 	waypoint *w = (waypoint *)wpt;
 	
+	if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) return;
+	
+	w->wpt_flags.cet_converted = 1;
+	
 	w->shortname = cet_convert_string(wpt->shortname);
 	w->description = cet_convert_string(wpt->description);
 	w->notes = cet_convert_string(wpt->notes);
@@ -959,6 +964,11 @@ static void
 cet_convert_route_hdr(const route_head *route)
 {
 	route_head *rte = (route_head *)route;
+
+	if ((cet_output == 0) && (rte->cet_converted != 0)) return;
+	
+	rte->cet_converted = 1;
+	
 	rte->rte_name = cet_convert_string(route->rte_name);
 	rte->rte_desc = cet_convert_string(route->rte_desc);
 }
@@ -989,6 +999,8 @@ cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, cons
 	{
 	    if ((target == NULL) || (target == &cet_cs_vec_utf8)) return;	/* Nothing to do */
 	    
+	    cet_output = 1;
+
 	    converter = cet_convert_from_utf8;
 	    cs_name_from = (char *)cet_cs_vec_utf8.name;
 	    cs_name_to = (char *)target->name;
@@ -1009,6 +1021,8 @@ cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, cons
 	route_disp_all(cet_convert_route_hdr, cet_convert_route_tlr, cet_convert_waypt);
 	track_disp_all(cet_convert_route_hdr, cet_convert_route_tlr, cet_convert_waypt);
 
+	cet_output = 0;
+	
 	if (global_opts.debug_level > 0)
 	    printf(", done.\n");
 }
