@@ -220,6 +220,7 @@ fs_xml *fs_xml_alloc( long type );
 typedef struct {
 	unsigned int icon_descr_is_dynamic:1; 
 	unsigned int shortname_is_synthetic:1;
+	unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
 } wp_flags;
 
 /*
@@ -316,6 +317,7 @@ typedef struct {
 	int rte_num;
 	int rte_waypt_ct;		/* # waypoints in waypoint list */
 	format_specific_data *fs;
+	unsigned short cet_converted;	/* strings are converted to UTF8; interesting only for input */
 } route_head;
 
 /*
