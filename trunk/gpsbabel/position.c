@@ -65,7 +65,7 @@ arglist_t radius_args[] = {
 		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
 	{"exclude", &exclopt,  "Exclude points close to center",
 		NULL, ARGTYPE_BOOL },
-	{"nosort", &nosort,    "Inhibit sort by distance to center.",
+	{"nosort", &nosort,    "Inhibit sort by distance to center",
 		NULL, ARGTYPE_BOOL },
 	{"maxcount", &maxctarg,"Output no more than this number of points",
 		NULL, ARGTYPE_INT, "1", NULL },
