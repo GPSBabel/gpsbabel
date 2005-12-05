@@ -29,11 +29,11 @@ static char *nukewpts, *nuketrks, *nukertes;
 
 static
 arglist_t nuke_args[] = {
-	{"waypoints", &nukewpts, "Remove all waypoints from data stream.", 
+	{"waypoints", &nukewpts, "Remove all waypoints from data stream", 
 	   "0", ARGTYPE_BOOL} , 
-	{"tracks", &nuketrks, "Remove all tracks from data stream.", 
+	{"tracks", &nuketrks, "Remove all tracks from data stream", 
 	   "0", ARGTYPE_BOOL} , 
-	{"routes", &nukertes, "Remove all routes from data stream.", 
+	{"routes", &nukertes, "Remove all routes from data stream", 
 	   "0", ARGTYPE_BOOL} , 
 	{0, 0, 0, 0, 0}
 };
