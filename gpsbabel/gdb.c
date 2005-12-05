@@ -32,6 +32,18 @@
 			new option "ver"
 			fixed compiler warnings
 	    2005/07/29: fixed compiler warnings
+	    2005/08/04: Read/write URL (reference data changed)
+	    2005/08/11: Display sym and name in GDB
+	    2005/08/12: Neuter proximity and depth for now
+	    2005/08/29: big CET merge
+	    2005/09/13: Make sure routes have unique wpt names
+	    2005/10/10: MSVC fixes from Andrew
+	    2005/10/17: RJL: Tighten up types of a short handle.  It's now a "real" type and not a void *
+	    2005/10/31: RJL: Add v3 format, min/max, provide defaults, data types, etc
+	    2005/11/09: RJL: Clarify help text for dropping via points
+	    2005/12/01: changed waypt's URL to descr for hidden waypoints (-> reference data changed)
+	                removed unused procedure gdb_add_to_hidden
+	    2005/12/04: additional testo sequences
 */
 
 #include <stdio.h>
@@ -105,17 +117,6 @@ static arglist_t gdb_args[] = {
 /********************************************************************************************************/
 
 /* %%% 1-1 functions from mapsource, should by shared!!! %%% */
-
-/*
- * Add a waypoint that we've already written out to our list
- *
- */
-static void
-gdb_add_to_hidden(const waypoint *wpt)
-{
-	waypoint *tmp = waypt_dupe(wpt);
-	route_add_wpt(gdb_hidden, tmp);
-}
 
 static waypoint *
 gdb_find_wpt_q_by_name(const queue *whichQueue, const char *name)
@@ -235,8 +236,11 @@ gdb_create_rte_wpt(const char *name, double lat, double lon, double alt)
 	    if (gdb_via != 0) return NULL;
 	    wpt = gdb_find_wpt_q_by_name((queue *)&gdb_hidden->waypoint_list, name);
 	}
-	if (wpt != NULL) 
-		wpt = waypt_dupe(wpt);
+	if (wpt != NULL)
+	{
+	    wpt = waypt_dupe(wpt);
+	    wpt->creation_time = 0;
+	}
 	else
 	{
 	    wpt = waypt_new();
@@ -562,7 +566,13 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	
 	res = waypt_new();
 	res->shortname = xstrdup(xname);
-	if (xurl[0] != '\0') res->url = xstrdup(xurl);
+	if (xurl[0] != '\0')
+	{
+	    if (xclass == 0)
+		res->url = xstrdup(xurl);
+	    else
+		res->description = xstrdup(xurl);
+	}
 	if (xnotes[0] != '\0') res->notes = xstrdup(xnotes);
 	res->latitude = GPS_Math_Semi_To_Deg(xlat);
 	res->longitude = GPS_Math_Semi_To_Deg(xlon);
@@ -1189,7 +1199,10 @@ gdb_write_waypt(const waypoint *wpt, const int hidden)
 	gdb_fwrite(zbuf, 3);				/* three unknown bytes */
 	gdb_fwrite(zbuf, 4);				/* four unknown bytes */
 
-	gdb_fwrite_str(wpt->url, -1);			/* URL */
+	if (hidden != 0)
+	    gdb_fwrite_str(wpt->url, -1);		/* URL */
+	else
+	    gdb_fwrite_str(wpt->description, -1);	/* description for hidden waypoints */
 
 #if 0
 	if (gdb_opt_category != NULL)			/* category */
