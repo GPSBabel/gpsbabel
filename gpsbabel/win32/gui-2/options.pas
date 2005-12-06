@@ -141,7 +141,7 @@ begin
   TranslateComponent(Self);
   FCanvas := Main.frmMain.stbMain.Canvas;
   mmWarning.Lines.Add(_('Be aware, that most options are made for the output side. '));
-  mmWarning.Lines.Add(_('Currently we don''t have a flag which tells us which direction is used the options.'));
+  mmWarning.Lines.Add(_('Currently we don''t have a flag which tells us which direction is used by the options.'));
 end;
 
 procedure TfrmOptions.SetOpts(AList: TStringList);
