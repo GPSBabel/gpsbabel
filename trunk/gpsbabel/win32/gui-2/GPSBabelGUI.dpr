@@ -19,6 +19,8 @@ program GPSBabelGUI;
 
 uses
   gnugettext in 'gnugettext.pas',
+  gnugettextDx in 'gnugettextDx.pas',
+  delphi in 'delphi.pas',
   Windows,
   SysUtils,
   classes,
@@ -29,7 +31,8 @@ uses
   filter in 'filter.pas' {frmFilter},
   about in 'about.pas' {frmAbout},
   readme in 'readme.pas' {frmReadme},
-  options in 'options.pas' {frmOptions};
+  options in 'options.pas' {frmOptions},
+  select in 'select.pas' {frmSelect};
 
 {$R *.RES}
 
