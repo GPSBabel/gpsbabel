@@ -1,6 +1,6 @@
 unit gnugettextD4;
-(*  File version: $Date: 2005-11-20 21:28:09 $ *)
-(*  Revision: $Revision: 1.2 $ *)
+(*  File version: $Date: 2005-12-06 00:25:47 $ *)
+(*  Revision: $Revision: 1.3 $ *)
 // Delphi 5 optimized interface for gnugettext.pas
 // This unit must only be used on Delphi 5. When you upgrade to Delphi 6 or
 // later, you should remove this unit and replace all reference to gnugettextD5
@@ -10,7 +10,7 @@ interface
 
 uses
   Classes, TypInfo;
-  
+
 // Ansistring versions of the api
 function _(const szMsgId: string): string;
 function gettext(const szMsgId: string): string;
@@ -42,11 +42,6 @@ function Utf8Encode(const WS: WideString): UTF8String;
 procedure FreeAndNil(var P);
 function IncludeTrailingBackSlash(const Path: string): string;
 function ExcludeTrailingBackslash(const Path: string): string;
-
-function GetStrProp(Instance: TObject; const Name: string): string; overload;
-function GetStrProp(Instance: TObject; Info: PPropInfo): string; overload;
-procedure SetStrProp(Instance: TObject; const Name, Value: string); overload;
-procedure SetStrProp(Instance: TObject; Info: PPropInfo; const Value: string); overload;
 
 implementation
 
@@ -290,64 +285,6 @@ begin
   Len := Length(Path);
   while (Len > 0) and (Path[Len] in ['/', '\']) do Dec(Len);
   SetString(Result, PChar(Path), Len);
-end;
-
-function GetPropInfo(Instance: TObject; const Name: string; var PropInfo: TPropInfo): Boolean;
-var
-  Props: PPropList;
-  TypeData: PTypeData;
-  Info: PPropInfo;
-  i: Integer;
-begin
-  TypeData := GetTypeData(Instance.ClassInfo);
-  if ((TypeData <> nil) and (TypeData^.PropCount > 0)) then
-  begin
-    GetMem(Props, TypeData^.PropCount * sizeof(Pointer));
-    try
-      GetPropInfos(Instance.ClassInfo, Props);
-      for i := 0 to TypeData.PropCount - 1 do
-      begin
-        Info := Props[i];
-        if (AnsiCompareText(Info.Name, Name) = 0) then
-        begin
-          PropInfo := Info^;
-          Result := True;
-          Exit;
-        end
-      end;
-    finally
-      FreeMem(Props);
-    end;
-  end;
-  Result := False;
-end;
-
-function GetStrProp(Instance: TObject; Info: PPropInfo): string;
-begin
-  Result := TypInfo.GetStrProp(Instance, Info);
-end;
-
-function GetStrProp(Instance: TObject; const Name: string): string;
-var
-  Info: TPropInfo;
-begin
-  if GetPropInfo(Instance, Name, Info) then
-    Result := TypInfo.GetStrProp(Instance, @Info)
-  else
-    Result := '';
-end;
-
-procedure SetStrProp(Instance: TObject; const Name, Value: string);
-var
-  Info: TPropInfo;
-begin
-  if GetPropInfo(Instance, Name, Info) then
-    SetStrProp(Instance, @Info, Value);
-end;
-
-procedure SetStrProp(Instance: TObject; Info: PPropInfo; const Value: string);
-begin
-  TypInfo.SetStrProp(Instance, Info, Value);
 end;
 
 end.

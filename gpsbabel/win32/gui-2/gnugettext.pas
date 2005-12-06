@@ -3,8 +3,8 @@ unit gnugettext;
 (*                                                            *)
 (*  (C) Copyright by Lars B. Dybdahl and others               *)
 (*  E-mail: Lars@dybdahl.dk, phone +45 70201241               *)
-(*  File version: $Date: 2005-11-20 21:24:43 $                *)
-(*  Revision: $Revision: 1.2 $                          *)
+(*  File version: $Date: 2005-12-06 00:25:47 $                *)
+(*  Revision: $Revision: 1.3 $                          *)
 (*                                                            *)
 (*  Contributors: Peter Thornqvist, Troy Wolbrink,            *)
 (*                Frank Andreas de Groot, Igor Siticov,       *)
@@ -96,6 +96,7 @@ uses
 
 {$ifdef MSWINDOWS}
   Windows,
+  Delphi,
 {$else}
   Libc,
 {$endif}
