@@ -46,6 +46,11 @@ procedure FixStaticText(AComponent: TComponent);
 
 procedure WinOpenFile(const Name: string);
 
+procedure UniWrite(Target: TStream; const Str: WideString);
+procedure UniWriteLn(Target: TStream; const Str: WideString);
+
+procedure MakeFirstTranslation(AComponent: TComponent);
+
 implementation
 
 uses
@@ -264,6 +269,40 @@ end;
 procedure WinOpenFile(const Name: string);
 begin
   ShellExecute(0, 'open', PChar(Name), nil, '', 0);
+end;
+
+procedure UniWrite(Target: TStream; const Str: WideString);
+const
+  UniHeader: array[0..1] of Byte = ($FF, $FE);
+var
+  len: Integer;
+begin
+  if (Target.Size = 0) then Target.Write(UniHeader, SizeOf(UniHeader));
+  len := Length(Str);
+  if (len > 0) then
+    Target.Write(PWideChar(Str)^, len * 2);
+end;
+
+procedure UniWriteLn(Target: TStream; const Str: WideString);
+begin
+  UniWrite(Target, Str);
+  UniWrite(Target, #13#10);
+end;
+
+procedure MakeFirstTranslation(AComponent: TComponent);
+var
+  lang: string;
+begin
+// !!! TRICK !!!
+  lang := GetCurrentLanguage;
+  UseLanguage('en');
+  TranslateComponent(AComponent);
+  if (Copy(lang, 1, 2) <> 'en') then
+  begin
+    UseLanguage(lang);
+    ReTranslateComponent(AComponent);
+  end;
+// !!! TRICK !!!
 end;
 
 end.

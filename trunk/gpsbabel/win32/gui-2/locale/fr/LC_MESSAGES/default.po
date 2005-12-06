@@ -1,13 +1,10 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: French version\n"
+"Project-Id-Version: GPSBabelGUI 0.2.2\n"
 "POT-Creation-Date: 2005-09-22 23:44\n"
-"PO-Revision-Date: 2005-11-20 21:14+0100\n"
+"PO-Revision-Date: 2005-12-06 18:02+0100\n"
 "Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,7 +12,6 @@ msgstr ""
 "X-Generator: dxgettext 1.2\n"
 "Language-Team: Utagawa VTT <contact@utagawavtt.com>\n"
 "X-Poedit-Language: French\n"
-"X-Poedit-Country: FRANCE\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: s\n"
 
@@ -68,7 +64,7 @@ msgstr "Ce prgramme ne peut être utilisé que sous license gratuite"
 #. frmAbout..pnClient..pnCenter..btnNewLanguage..Caption
 #: about.dfm:192
 msgid "Adding a new language"
-msgstr ""
+msgstr "Ajouter une nouvelle langue"
 
 #. frmFilter..Caption
 #: filter.dfm:6
@@ -78,7 +74,7 @@ msgstr "Filtre"
 #. frmFilter..gbTracks..Caption
 #. frmMain..pnBottom..cbTracks..Caption
 #: filter.dfm:31
-#: main.dfm:587
+#: main.dfm:589
 msgid "&Tracks"
 msgstr "&Traces"
 
@@ -235,7 +231,7 @@ msgstr "Filtres de fichiers"
 #. frmFilter..gbWaypoints..Caption
 #. frmMain..pnBottom..cbWaypoints..Caption
 #: filter.dfm:437
-#: main.dfm:561
+#: main.dfm:563
 msgid "&Waypoints"
 msgstr ""
 
@@ -321,8 +317,10 @@ msgstr "Longitude du point central"
 
 #. frmMain..pnTop..gbInput..Caption
 #: main.dfm:38
-#: main.pas:285
-#: main.pas:431
+#: main.pas:269
+#: main.pas:274
+#: main.pas:460
+#: main.pas:842
 msgid "Input"
 msgstr "Entrée"
 
@@ -337,17 +335,17 @@ msgstr "Menu de d'ouverture de fichier"
 #. frmMain..ActionList1..acOptionsTargetFormat..Category
 #. frmMain..ActionList1..acOptionsEnableCharactersetTransformation..Category
 #: main.dfm:68
-#: main.dfm:232
-#: main.dfm:1426
-#: main.dfm:1431
-#: main.dfm:1445
+#: main.dfm:233
+#: main.dfm:1428
+#: main.dfm:1433
+#: main.dfm:1447
 msgid "Options"
 msgstr ""
 
 #. frmMain..pnTop..gbInput..lbInputFormat..Caption
 #. frmMain..pnTop..gbOutput..lbOutputFormat..Caption
 #: main.dfm:76
-#: main.dfm:262
+#: main.dfm:263
 msgid "Format"
 msgstr ""
 
@@ -357,14 +355,16 @@ msgstr ""
 #. frmMain..ActionList1..acFileClearMemo..Category
 #. frmMain..ActionList1..acFileOutputToScreen..Category
 #. frmMain..ActionList1..acFileChangeLanguage..Category
+#. frmMain..ActionList1..acFileExportCSV..Category
 #: main.dfm:83
-#: main.dfm:269
-#: main.dfm:1407
-#: main.dfm:1436
-#: main.dfm:1451
-#: main.dfm:1463
-#: main.pas:805
-#: main.pas:855
+#: main.dfm:270
+#: main.dfm:1409
+#: main.dfm:1438
+#: main.dfm:1453
+#: main.dfm:1465
+#: main.dfm:1470
+#: main.pas:839
+#: main.pas:893
 msgid "File"
 msgstr "Fichier"
 
@@ -376,7 +376,7 @@ msgstr "Lire les données depuis un périphérique plutôt qu'un fichier"
 #. frmMain..pnTop..gbInput..chbInputDevice..Caption
 #. frmMain..pnTop..gbOutput..chbOutputDevice..Caption
 #: main.dfm:115
-#: main.dfm:302
+#: main.dfm:303
 msgid "Device"
 msgstr "Périphérique"
 
@@ -398,7 +398,7 @@ msgstr "Code de caractères pour l'entrée"
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
 #: main.dfm:152
-#: main.dfm:366
+#: main.dfm:367
 msgid "- default -"
 msgstr "- défaut -"
 
@@ -408,221 +408,233 @@ msgid "Read data from device ..."
 msgstr "Lire les données depuis le périphérique"
 
 #. frmMain..pnTop..gbInput..cbInputFormatDevice..Hint
-#: main.dfm:197
+#: main.dfm:198
 msgid "Format for input from device"
 msgstr "Format d'entrée depuis le périphérique"
 
 #. frmMain..pnTop..gbInput..cbInputFormat..Hint
-#: main.dfm:211
+#: main.dfm:212
 msgid "Format for input from file"
 msgstr "Format d'entrée depuis un fichier"
 
 #. frmMain..pnTop..gbOutput..Caption
-#: main.dfm:225
-#: main.pas:286
-#: main.pas:440
+#: main.dfm:226
+#: main.pas:270
+#: main.pas:275
+#: main.pas:469
+#: main.pas:896
 msgid "Output"
 msgstr ""
 
 #. frmMain..pnTop..gbOutput..sbSaveFile..Hint
-#: main.dfm:276
+#: main.dfm:277
 msgid "Start the file save dialog"
 msgstr "Menu de sauvegarde de fichier"
 
 #. frmMain..pnTop..gbOutput..chbOutputDevice..Hint
-#: main.dfm:299
+#: main.dfm:300
 msgid "Write data to device instead to file"
 msgstr "Ecrire les données sur le périphérique plutôt que dans un fichier"
 
 #. frmMain..pnTop..gbOutput..cbOutputFormatDevice..Hint
-#: main.dfm:312
+#: main.dfm:313
 msgid "Format for ouput to device"
 msgstr "Format de sortie vers le périphérique"
 
 #. frmMain..pnTop..gbOutput..edOutputOpts..Hint
-#: main.dfm:324
+#: main.dfm:325
 msgid "Options for the selected output format"
 msgstr "Options du format de sortie sélectionné"
 
 #. frmMain..pnTop..gbOutput..cbOutputFormat..Hint
-#: main.dfm:335
+#: main.dfm:336
 msgid "Format for output to file"
 msgstr "Format de sortie vers un fichier"
 
 #. frmMain..pnTop..gbOutput..edOutputFile..Hint
-#: main.dfm:348
+#: main.dfm:349
 msgid "Write data to given filename"
 msgstr "Ecrire les données dans un fichier"
 
 #. frmMain..pnTop..gbOutput..cbOutputLang..Hint
-#: main.dfm:360
+#: main.dfm:361
 msgid "Characterset for output data"
 msgstr "Code de caractères pour la sortie"
 
 #. frmMain..pnTop..gbOutput..cbOutputDevice..Hint
-#: main.dfm:393
+#: main.dfm:394
 msgid "Write data to device ..."
 msgstr "Ecrire les données sur le périphérique"
 
 #. frmMain..pnBottom..lbWhat..Caption
-#: main.dfm:421
+#: main.dfm:423
 msgid "What ?"
 msgstr "Quoi ?"
 
 #. frmMain..pnBottom..cbWaypoints..Hint
-#: main.dfm:560
-msgid "Include waypoints"
+#: main.dfm:562
+msgid "Process waypoint information"
 msgstr "Inclure les waypoints"
 
 #. frmMain..pnBottom..cbRoutes..Hint
-#: main.dfm:574
-msgid "Include routes"
+#: main.dfm:576
+msgid "Process route information"
 msgstr "Inclure les routes"
 
 #. frmMain..pnBottom..cbRoutes..Caption
-#: main.dfm:575
+#: main.dfm:577
 msgid "&Routes"
 msgstr ""
 
 #. frmMain..pnBottom..cbTracks..Hint
-#: main.dfm:586
-msgid "Include tracks"
+#: main.dfm:588
+msgid "Process track information"
 msgstr "Inclure les traces"
 
 #. frmMain..pnBottom..btnFilter..Caption
 #. frmMain..ActionList1..acFilterSelect..Caption
-#: main.dfm:600
-#: main.dfm:1401
+#: main.dfm:602
+#: main.dfm:1403
 msgid "&Filter"
 msgstr "&Filtre"
 
 #. frmMain..pnBottom..btnProcess..Hint
-#: main.dfm:644
+#: main.dfm:646
 msgid "Start data conversion"
 msgstr "Démarrer la conversion de données"
 
 #. frmMain..pnBottom..btnProcess..Caption
 #. frmMain..ActionList1..acConvert..Caption
-#: main.dfm:647
-#: main.dfm:1394
+#: main.dfm:649
+#: main.dfm:1396
 msgid "let's go"
 msgstr "Lancer"
 
 #. frmMain..OpenDialog..Filter
-#: main.dfm:709
+#: main.dfm:711
 msgid "Garmin Mapsource mps|*.mps|All files|*.*"
 msgstr "Garmin Mapsource mps|*.mps|Tous les fichiers|*.*"
 
 #. frmMain..SaveDialog..Filter
-#: main.dfm:715
+#: main.dfm:717
 msgid "All file(s)|*.*|Garmin MapSource mps|*.mps"
 msgstr "Tous les fichier(s)|*.*|Garmin MapSource mps|*.mps"
 
 #. frmMain..ActionList1..acConvert..Category
 #. frmMain..ActionList1..acFilterSelect..Category
-#: main.dfm:1393
-#: main.dfm:1400
+#: main.dfm:1395
+#: main.dfm:1402
 msgid "Babel"
 msgstr "Babel"
 
 #. frmMain..ActionList1..acFilterSelect..Hint
-#: main.dfm:1402
+#: main.dfm:1404
 msgid "Filter incomming data before writing them to file or device"
 msgstr "Filtrer les données envoyées avant de les écrire sur un périphérique ou dans un fichier"
 
 #. frmMain..ActionList1..acFileExit..Caption
-#: main.dfm:1408
+#: main.dfm:1410
 msgid "E&xit"
 msgstr "F&ermer"
 
 #. frmMain..ActionList1..acHelpAbout..Category
 #. frmMain..ActionList1..acHelpIntro..Category
 #. frmMain..ActionList1..acHelpReadme..Category
-#: main.dfm:1412
-#: main.dfm:1417
-#: main.dfm:1421
+#: main.dfm:1414
+#: main.dfm:1419
+#: main.dfm:1423
 msgid "Help"
 msgstr "Aide"
 
 #. frmMain..ActionList1..acHelpAbout..Caption
-#: main.dfm:1413
+#: main.dfm:1415
 msgid "&About"
 msgstr "&A propos"
 
 #. frmMain..ActionList1..acHelpIntro..Caption
-#: main.dfm:1418
+#: main.dfm:1420
 msgid "&Intro"
 msgstr "&Introduction"
 
 #. frmMain..ActionList1..acHelpReadme..Caption
 #. frmReadme..Caption
-#: main.dfm:1422
+#: main.dfm:1424
 #: readme.dfm:6
 msgid "GPSBabel README"
 msgstr "GPSBabel README"
 
 #. frmMain..ActionList1..acOptionsSourceFormat..Caption
-#: main.dfm:1427
+#: main.dfm:1429
 msgid "... for source format"
 msgstr "... pour le format source"
 
 #. frmMain..ActionList1..acOptionsTargetFormat..Caption
-#: main.dfm:1432
+#: main.dfm:1434
 msgid "... for target format"
 msgstr "... pour le format cible"
 
 #. frmMain..ActionList1..acFileClearMemo..Caption
-#: main.dfm:1437
+#: main.dfm:1439
 msgid "Clear output"
 msgstr "Effacer la sortie"
 
 #. frmMain..ActionList1..acFileClearMemo..Hint
-#: main.dfm:1438
+#: main.dfm:1440
 msgid "Clear messages"
 msgstr "Effacer les messages"
 
 #. frmMain..ActionList1..acOptionsEnableCharactersetTransformation..Caption
-#: main.dfm:1446
+#: main.dfm:1448
 msgid "Enable characterset transformation"
 msgstr "Activer la transformation du code de caractères"
 
 #. frmMain..ActionList1..acFileOutputToScreen..Caption
-#: main.dfm:1452
+#: main.dfm:1454
 msgid "Output to screen"
 msgstr "Afficher sur l'écran"
 
 #. frmMain..ActionList1..acFileChangeLanguage..Caption
-#: main.dfm:1464
+#: main.dfm:1466
 msgid "Change language"
+msgstr "Changer de langue"
+
+#. frmMain..ActionList1..acFileExportCSV..Caption
+#: main.dfm:1471
+msgid "Export gpsbabel.csv (unicode)"
 msgstr ""
 
 #. frmMain..MainMenu1..mnuFile..Caption
-#: main.dfm:1473
+#: main.dfm:1479
 msgid "&File"
 msgstr "&Fichier"
 
+#. frmMain..MainMenu1..mnuFile..File1..Caption
+#: main.dfm:1487
+msgid "Export"
+msgstr ""
+
 #. frmMain..MainMenu1..mnuOptions..Caption
-#: main.dfm:1494
+#: main.dfm:1508
 msgid "&Options"
 msgstr ""
 
 #. frmMain..MainMenu1..mnuOptions..mnuSynthesizeShortNames..Caption
-#: main.dfm:1496
-msgid "Synthesize short names"
+#: main.dfm:1510
+msgid "Synthesize shortnames"
 msgstr "Générer les nom courts"
 
 #. frmMain..MainMenu1..mnuOptions..mnuSynthesizeShortNames....Hint
-#: main.dfm:1499
-msgid "Ignore \"short\" names from source data and synthesize them from the long name"
+#: main.dfm:1513
+msgid "Ignore shortnames from source data and synthesize them from description or notes"
 msgstr "Ingorer les noms  \"courts\"  de la source de données et les générer à partir des noms longs"
 
 #. frmMain..MainMenu1..mnuOptions..mnuOptionsForceDataType..Caption
-#: main.dfm:1503
+#: main.dfm:1517
 msgid "Force selected GPS data types (nuketypes filter)"
 msgstr "Forcer le type de données GPS selctionné (filtre nuketypes)"
 
 #. frmMain..MainMenu1..mnuHelp..Caption
-#: main.dfm:1538
+#: main.dfm:1558
 msgid "&Help"
 msgstr "&Aide"
 
@@ -630,6 +642,11 @@ msgstr "&Aide"
 #: options.dfm:5
 msgid "Options for ..."
 msgstr "Options pour ..."
+
+#. frmSelect..pnBottom..btnCancel..Caption
+#: select.dfm:66
+msgid "Abort"
+msgstr ""
 
 #: about.pas:87
 msgid "German by Olaf Klein"
@@ -676,115 +693,128 @@ msgid "Value (%s) out of range (%g to %g)!"
 msgstr "Valeurs (%s) en dehors des limites (%g à %g)!"
 
 #: filter.pas:530
-#: options.pas:575
+#: options.pas:654
 msgid "Discard changes?"
 msgstr "Ne pas tenir compte des changements?"
 
-#: main.pas:238
+#: main.pas:243
 msgid "Internal development release"
 msgstr "Version interne"
 
-#: main.pas:240
+#: main.pas:245
 msgid "BETA"
 msgstr "BETA"
 
-#: main.pas:242
+#: main.pas:247
 msgid "Private release"
 msgstr "Version privée"
 
-#: main.pas:244
+#: main.pas:249
 msgid "Special release"
 msgstr "Version spéciale"
 
-#: main.pas:313
+#: main.pas:340
 msgid "The file \"gpsbabel.exe\" found in current directory is too old!"
 msgstr "Le fichier \"gpsbabel.exe\" présent dans le répertoir courant est trop vieux!"
 
-#: main.pas:382
-#: main.pas:510
+#: main.pas:409
+#: main.pas:543
 msgid "All files|*.*"
 msgstr "Tous les fichiers|*.*"
 
-#: main.pas:448
+#: main.pas:477
 msgid "Select and edit options for \"%s\""
 msgstr "Selctionner et éditer les options pour \"%s\""
 
-#: main.pas:452
+#: main.pas:481
 msgid "No options available for \"%s\""
 msgstr "Pas d'option disponible pour \"%s\""
 
-#: main.pas:557
+#: main.pas:590
 msgid "File %s not found."
 msgstr "Fichier%s non trouvé."
 
-#: main.pas:615
+#: main.pas:648
 msgid "File \"%s\" exists ! Overwrite ?"
 msgstr "Le fichier \"%s\" existe déjà ! Ecraser ?"
 
-#: main.pas:616
+#: main.pas:649
 msgid "Warning"
 msgstr "Attention"
 
-#: main.pas:649
+#: main.pas:682
 msgid "Could not run \"gpsbabel.exe\"!"
 msgstr "Impossible d'éxécuter \"gpsbabel.exe\"!"
 
-#: main.pas:658
+#: main.pas:691
 msgid "Sorry, gpsbabel.exe reported problems!"
 msgstr "Désolé, GPSBabel a reporté un problème !"
 
-#: main.pas:660
+#: main.pas:693
 msgid "Converted successfully from \"%s\" to \"%s\"."
 msgstr "Conversion de \"%s\" à \"%s\" réussie."
 
-#: main.pas:761
+#: main.pas:794
 msgid "GPSBabel, version %s"
 msgstr ""
 
-#: main.pas:795
-#: main.pas:846
+#: main.pas:828
+#: main.pas:883
 msgid "Port"
 msgstr ""
 
-#: main.pas:937
+#: main.pas:980
 msgid "Options for \"%s\""
 msgstr "Options pour \"%s\""
 
+#: main.pas:1169
+#: main.pas:1239
+msgid "Choose language"
+msgstr ""
+
+#: main.pas:1169
+msgid "for GUIBabelGUI"
+msgstr ""
+
+#: main.pas:1239
+msgid "for export"
+msgstr ""
+
 #. override;
-#: options.pas:86
+#: options.pas:143
 msgid "Be aware, that most options are made for the output side. "
 msgstr "Attention, la plupart des options sont faites pour le format de sortie."
 
-#: options.pas:87
-msgid "Currently we don't have a flag which tells us which direction is used the options."
+#: options.pas:144
+msgid "Currently we don't have a flag which tells us which direction is used by the options."
 msgstr "Nous n'avons pour l'instant pas de drapeau indiquant dans quelle direction sont utilisées les options."
 
-#: options.pas:145
+#: options.pas:204
 msgid "Short \"%s\""
 msgstr "Raccourci \"%s\""
 
-#: options.pas:246
+#: options.pas:325
 msgid "Invalid line format!"
 msgstr "Format de ligne invalide"
 
-#: options.pas:267
+#: options.pas:346
 msgid "Unknown option \"%s\"!"
 msgstr "Option inconnue \"%s\""
 
-#: utils.pas:108
+#: utils.pas:113
 msgid "Error WINAPI: Could not create \"NamedPipe\"!"
 msgstr "Erreur WIANPI: Ne peut pas créer \"NamedPipe\"!"
 
-#: utils.pas:113
+#: utils.pas:118
 msgid "\"gpsbabel.exe\" not found!!!"
 msgstr "\"gpsbabel.exe\" non trouvé!!!"
 
 #. dwCreationFlags,     // creation flags
-#: utils.pas:132
+#: utils.pas:137
 msgid "Could not run \"gpsbabel.exe\" (Error %d)!"
 msgstr "Impossible d'éxecuter \"gpsbabel.exe\" (Error %d)!"
 
-#: utils.pas:160
+#: utils.pas:165
 msgid "\"gpsbabel.exe\" returned error 0x%x (%d)"
 msgstr "\"gpsbabel.exe\" a renvoyé l'erreur 0x%x (%d)"
 

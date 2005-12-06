@@ -59,8 +59,10 @@ const
   SREG_TARGET_FILE = 'Target:File';
   SREG_SOURCE_FILE = 'Source:File';
 
+  SREG_GLOBAL_LANG = 'Global:Language';
+  
 const
-  Profile: array[0..10] of string =
+  Profile: array[0..11] of string =
   ('?',
    SREG_SOURCE_DIR,
    SREG_SOURCE_FMT,
@@ -71,7 +73,11 @@ const
    SREG_TARGET_DEV,
    SREG_TARGET_SER,
    SREG_TARGET_FILE,
-   SREG_SOURCE_FILE);
+   SREG_SOURCE_FILE,
+   SREG_GLOBAL_LANG);
+
+const
+  GPSBabel_Domain = 'gpsbabel';
 
 type
   PFileInfo = ^TFileInfo;
@@ -102,6 +108,7 @@ type
   TOptions = class(TStringList)
   private
     FCaps: TCapabilities;
+    function GetList: TStrings;
     procedure SetList(const Value: TStrings);
   protected
   public
@@ -111,7 +118,7 @@ type
     function FormatOpts(const Descr: string): TStringList;
     function HasFormatOpts(const Format: string): Boolean;
   property
-    List: TStrings write SetList;
+    List: TStrings read GetList write SetList;
   end;
 
   TCapabilities = class(TStringList)
@@ -302,6 +309,11 @@ begin
     Result := TStringList(Self.Objects[i])
   else
     Result := nil;
+end;
+
+function TOptions.GetList: TStrings;
+begin
+  Result := Self;
 end;
 
 function TOptions.HasFormatOpts(const Format: string): Boolean;

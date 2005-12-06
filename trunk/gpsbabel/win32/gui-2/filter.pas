@@ -21,7 +21,7 @@ unit filter;
 interface
 
 uses
-  gnugettextDx,
+  gnugettext, gnugettextDx,
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, ComCtrls, Buttons, Mask, ExtCtrls,
   common;
