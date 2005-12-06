@@ -21,7 +21,7 @@ unit main;
 interface
 
 uses
-  TypInfo, gnugettext, gnugettextDx,
+  gnugettext, TypInfo, delphi, 
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, Buttons, ExtCtrls,
   common, utils, ImgList, ActnList, Menus, ComCtrls, ToolWin;
@@ -112,6 +112,11 @@ type
     acFileChangeLanguage: TAction;
     Changelanguage1: TMenuItem;
     N5: TMenuItem;
+    acFileExportCSV: TAction;
+    Createoptionscsv1: TMenuItem;
+    File1: TMenuItem;
+    Createoptionscsv2: TMenuItem;
+    sdOptional: TSaveDialog;
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure OpenButtonClick(Sender: TObject);
@@ -148,6 +153,9 @@ type
     procedure acFileOutputToScreenExecute(Sender: TObject);
     procedure acDebugCreatePoExecute(Sender: TObject);
     procedure acFileChangeLanguageExecute(Sender: TObject);
+    procedure acFileExportCSVExecute(Sender: TObject);
+    procedure cbOutputDeviceChange(Sender: TObject);
+    procedure cbInputDeviceChange(Sender: TObject);
   private
     { Private-Deklarationen }
     FCaps: TCapabilities;
@@ -155,6 +163,7 @@ type
     FLang: TStringList;
     FFirstShow: Boolean;
     FOutHandmade: Boolean;
+    FFmtIn, FFmtOut: string;
     procedure AddToOutput(const Str: string);
     procedure AddToOutputFmt(const Format: string; const Args: array of const);
     procedure ComboBoxChanged(const Format: string; IsInput, IsFile: Boolean);
@@ -162,11 +171,13 @@ type
     procedure EnableOptions(const Version: string);
     function HandleOptions(const Format: string; AObject: TObject; IsInput: Boolean): Boolean;
     function HandleOptionsDlg(const Format: string; var str: string; IsInput: Boolean): Boolean;
+    procedure HandleParams;
     procedure HistoryChanged(Box: TComboBox; Swap: Boolean = False);
     procedure InitCombo(Target: TComboBox; IsInput, ForDevice: Boolean);
     procedure LoadLanguages;
     procedure LoadFileFormats;
     procedure LoadVersion;
+    procedure RefreshDesign(FirstTime: Boolean = False);
     procedure WMOPTIONSCHANGED(var Msg: TMessage); message WM_OPTIONS_CHANGED;
     procedure WMSTARTUP(var Msg: TMessage); message WM_STARTUP;
     procedure StoreProfiles;
@@ -180,7 +191,7 @@ var
 implementation
 
 uses
-  filter, about, readme, options;
+  filter, about, readme, options, select;
 
 {$R *.DFM}
 
@@ -211,16 +222,10 @@ end;
 
 { TfrmMain }
 
-procedure TfrmMain.FormCreate(Sender: TObject);
+procedure TfrmMain.RefreshDesign(FirstTime: Boolean);
 begin
-  TP_Ignore(mnuDebug, 'mnuDebug');
-{$IFOPT D-}
-  mnuDebug.Visible := False;
-{$ENDIF}
-  TranslateComponent(SELF);
-  LoadLanguages;
-
-  FFirstShow := True;
+  if not(FirstTime) then
+    ReTranslateComponent(SELF);
 
 // VS_FF_DEBUG	The file contains debugging information or is compiled with debugging features enabled.
 // VS_FF_INFOINFERRED	The file's version structure was created dynamically;
@@ -243,20 +248,6 @@ begin
   else if (CFixedFileinfo.dwFileFlags and VS_FF_SPECIALBUILD <> 0) then
     Caption := Format('%s (%s)', [Caption, _('Special release')]);
 
-  memoOutput.Lines.Clear;
-
-  FCaps := TCapabilities.Create;
-  FOpts := TOptions.Create(FCaps);
-
-  OpenDialog.InitialDir := ReadProfile(OpenDialog.Tag);
-  SaveDialog.InitialDir := ReadProfile(SaveDialog.Tag);
-
-  if not ComboBoxSelect(cbInputDevice, ReadProfile(cbInputDevice.Tag)) then
-    cbInputDevice.ItemIndex := 0;
-
-  if not ComboBoxSelect(cbOutputDevice, ReadProfile(cbOutputDevice.Tag)) then
-    cbOutputDevice.ItemIndex := 0;
-
   FixAlign(sbOpenFile, 8);
   FixAlign(sbSaveFile, 8);
   FixAlign(edInputFile, 8, sbOpenFile);
@@ -275,6 +266,44 @@ begin
   FixAlign(btnProcess, 8);
   FixAlign(btnFilter, 16, btnProcess);
 
+  gbInput.Caption := '>>> ' + _('Input');
+  gbOutput.Caption := '<<< ' + _('Output');
+  chbInputDevice.Caption := '[' + chbInputDevice.Caption + ']';
+  chbOutputDevice.Caption := '[' + chbOutputDevice.Caption + ']';
+
+  acOptionsSourceFormat.Caption := _('Input') + ': ' + FFmtIn;
+  acOptionsTargetFormat.Caption := _('Output') + ': ' + FFmtOut;
+
+  btnInputOpts.Caption := '';
+  btnOutputOpts.Caption := '';
+end;
+
+procedure TfrmMain.FormCreate(Sender: TObject);
+begin
+  MakeFirstTranslation(Self);
+
+  FFirstShow := True;
+
+  TP_Ignore(mnuDebug, 'mnuDebug');
+{$IFOPT D-}
+  mnuDebug.Visible := False;
+{$ENDIF}
+  LoadLanguages;
+
+  memoOutput.Lines.Clear;
+
+  FCaps := TCapabilities.Create;
+  FOpts := TOptions.Create(FCaps);
+
+  OpenDialog.InitialDir := ReadProfile(OpenDialog.Tag);
+  SaveDialog.InitialDir := ReadProfile(SaveDialog.Tag);
+
+  if not ComboBoxSelect(cbInputDevice, ReadProfile(cbInputDevice.Tag)) then
+    cbInputDevice.ItemIndex := 0;
+
+  if not ComboBoxSelect(cbOutputDevice, ReadProfile(cbOutputDevice.Tag)) then
+    cbOutputDevice.ItemIndex := 0;
+
   edInputFile.Text := ReadProfile(edInputFile.Tag);
 
   cbInputLang.ItemIndex := 0;
@@ -282,11 +311,8 @@ begin
 
   Application.OnIdle := Self.DoOnIdle;
 
-  gbInput.Caption := '>>> ' + _('Input');
-  gbOutput.Caption := '<<< ' + _('Output');
-
-  chbInputDevice.Caption := '[' + chbInputDevice.Caption + ']';
-  chbOutputDevice.Caption := '[' + chbOutputDevice.Caption + ']';
+  RefreshDesign(True);
+  HandleParams;
 end;
 
 procedure TfrmMain.LoadLanguages;
@@ -294,7 +320,8 @@ begin
   FLang := TStringList.Create;
 
   DefaultInstance.GetListOfLanguages('default', FLang);
-  if (FLang.IndexOf('en') < 0) then FLang.Add('en');
+  if (FLang.IndexOf('en') < 0) then
+    FLang.Add('en');
   acFileChangeLanguage.Visible := (FLang.Count > 1);
 end;
 
@@ -404,12 +431,14 @@ begin
 
   if IsInput then
   begin
+    FFmtIn := Format;
     wptInputOK.Enabled := (caps and 1 <> 0);
     trkInputOK.Enabled := (caps and 4 <> 0);
     rteInputOK.Enabled := (caps and 16 <> 0);
   end
     else
   begin
+    FFmtOut := Format;
     wptOutputOK.Enabled := (caps and 2 <> 0);
     trkOutputOK.Enabled := (caps and 8 <> 0);
     rteOutputOK.Enabled := (caps and 32 <> 0);
@@ -461,6 +490,9 @@ end;
 procedure TfrmMain.CheckInput;
 begin
   acConvert.Enabled :=
+  (cbWaypoints.Checked or cbRoutes.Checked or cbTracks.Checked)
+  and
+   (
     ((chbInputDevice.Checked and
     (cbInputDevice.Text <> '') and
     (cbInputFormatDevice.Text <> ''))
@@ -475,7 +507,8 @@ begin
   or
     (not(chbOutputDevice.Checked) and
     (edOutputFile.Text <> '') and
-    (cbOutputFormat.Text <> '')));
+    (cbOutputFormat.Text <> '')))
+   );
 end;
 
 procedure TfrmMain.edOutputFileChange(Sender: TObject);
@@ -638,9 +671,9 @@ begin
     s := 'gpsbabel.exe ' + cmdline;
     AddToOutput(s);
 
+    CSave := Cursor;
     list := TStringList.Create;
     try
-      CSave := Cursor;
       Cursor := crHourGlass;
       Application.ProcessMessages;
       Sleep(50);
@@ -793,6 +826,7 @@ begin
     cbInputDevice.Visible := True;
     cbInputFormatDevice.Visible := True;
     lbInputFile.Caption := _('Port');
+    FFmtIn := cbInputFormatDevice.Text;
   end
     else
   begin
@@ -803,7 +837,10 @@ begin
     cbInputDevice.Visible := False;
     sbOpenFile.Visible := True;
     lbInputFile.Caption := _('File');
+    FFmtIn := cbInputFormat.Text;
   end;
+  acOptionsSourceFormat.Caption := _('Input') + ': ' + FFmtIn;
+  acOptionsSourceFormat.Enabled := (FOpts.FormatOpts(FFmtIn) <> nil);
   CheckInput;
 end;
 
@@ -844,6 +881,7 @@ begin
     sbSaveFile.Visible := False;
     cbOutputFormat.Visible := False;
     lbOutputFile.Caption := _('Port');
+    FFmtOut := cbOutputFormatDevice.Text;
   end
     else
   begin
@@ -853,12 +891,17 @@ begin
    cbOutputDevice.Visible := False;
     cbOutputFormatDevice.Visible := False;
     lbOutputFile.Caption := _('File');
+    FFmtOut := cbOutputFormat.Text;
   end;
+  acOptionsTargetFormat.Caption := _('Output') + ': ' + FFmtOut;
+  acOptionsTargetFormat.Enabled := (FOpts.FormatOpts(FFmtOut) <> nil);
   CheckInput;
 end;
 
 procedure TfrmMain.acHelpReadmeExecute(Sender: TObject);
 begin
+  if (frmReadme = nil) then
+    Application.CreateForm(TfrmReadme, frmReadme);
   frmReadme.ShowModal;
 end;
 
@@ -1021,16 +1064,36 @@ begin
     HistoryChanged(edOutputFile);
     edOutputFile.Text := '-';
     edOutputFile.Enabled := False;
+    edOutputFile.Color := clInactiveBorder;
     sbSaveFile.Enabled := False;
   end
     else
   begin
+    edOutputFile.Color := edInputFile.Color;
     chbOutputDevice.Enabled := True;
     edOutputFile.Enabled := True;
     HistoryChanged(edOutputFile, True);
     sbSaveFile.Enabled := True;
   end;
   CheckInput;
+end;
+
+procedure TfrmMain.HandleParams;
+var
+  i: Integer;
+  s: string;
+begin
+  for i := 1 to ParamCount do
+  begin
+    s := ParamStr(i);
+    if (i = 0) then
+      edInputFile.Text := s
+    else begin
+      if (i = 1) then
+        edInputFile.Items.Add(edInputFile.Text);
+      edInputFile.Items.Add(s);
+    end;
+  end;
 end;
 
 procedure TfrmMain.HistoryChanged(Box: TComboBox; Swap: Boolean);
@@ -1057,16 +1120,22 @@ var
   i, j, len: Integer;
   s: string;
   f: TFileStream;
+
+  procedure WriteLn(Str: string);
+  begin
+    Str := Str + #13#10;
+    f.Write(PChar(Str)^, Length(Str));
+  end;
+
 begin
   l := TStringList.Create;
   try
     FOpts.DebugGetHints(l);
-    f := TFileStream.Create('options\options.inc', fmCreate);
+    f := TFileStream.Create('..\gpsbabel.po', fmCreate);
     try
-      s := '{gnugetext: scan-all text-domain=''options''}'#13#10#13#10;
-      f.Write(PChar(s)^, Length(s));
-      s := 'const'#13#10;
-      f.Write(PChar(s)^, Length(s));
+      WriteLn('msgid ""');
+      WriteLn('msgstr ""');
+      WriteLn('');
 
       for i := 0 to l.Count - 1 do
       begin
@@ -1074,17 +1143,15 @@ begin
         len := Length(s);
         for j := len downto 1 do
         begin
-          if (s[j] = '''') then
+          if (s[j] = '"') then
           begin
-            Insert('''', s, j);
+            Insert('\', s, j);
           end;
         end;
-        s := Format('resourcestring option_%d=''%s'';'#13#10, [i, s]);
-        f.Write(PChar(s)^, Length(s));
+        WriteLn('msgid "' + s + '"');
+        WriteLn('msgstr ""');
+        WriteLn('');
       end;
-
-      s := #13#10'{gnugettext: reset }'#13#10;
-      f.Write(PChar(s)^, Length(s));
     finally
       f.Free;
     end;
@@ -1095,15 +1162,148 @@ end;
 
 procedure TfrmMain.acFileChangeLanguageExecute(Sender: TObject);
 var
-  i: Integer;
-  s: string;
+  lang: string;
+  form: TForm;
+  title: string;
 begin
-  for i := 0 to FLang.Count - 1 do
+  Title := _('Choose language') + ' ' + _('for GUIBabelGUI');
+  if SelectLanguage(Title, FLang, lang) and
+    (CompareText(lang, Copy(GetCurrentLanguage, 1, 2)) <> 0) then
   begin
-    s := FLang.Strings[i];
-    if (s = '') then
-      Halt(1);
+    StoreProfile(11, lang);
+    UseLanguage(lang);
+    RefreshDesign;
+    form := frmFilter;
+    frmFilter := nil;
+    if (Form <> nil) then Form.Release;
+    form := frmReadme;
+    frmReadme := nil;
+    if (Form <> nil) then Form.Release;
+    form := frmAbout;
+    frmAbout := nil;
+    if (Form <> nil) then Form.Release;
   end;
+end;
+
+procedure TfrmMain.acFileExportCSVExecute(Sender: TObject);
+const
+  init_dir: string = '';
+  file_name: string = 'gpsbabel.csv';
+var
+  i, j, len: Integer;
+  s, lang, curr_lang: string;
+  o: POption;
+  f: TFileStream;
+  l: TStrings;
+
+  function _translate(const Domain, MsgID: string): WideString;
+  var
+    i: Integer;
+    tmp: WideString;
+    boo: Boolean;
+  begin
+    tmp := MsgID;
+    Result := dgettext(Domain, tmp);
+    if (Result = tmp) then
+      Result := _(MsgID);
+    if (Result = tmp) then
+      Result := ''
+    else begin
+      boo := False;
+      i := Length(Result);
+      while (i >= 1) do
+      begin
+        if (Result[i] = '"') then
+        begin
+          Insert('"', Result, i);
+          boo := True;
+        end;
+        Dec(i);
+      end;
+      if (boo) then
+      begin
+        memoOutput.Lines.Add('Warning: ''"'' found in translation!');
+        memoOutput.Lines.Add(Result);
+      end;
+    end;
+  end;
+
+  procedure _line(const Prefix, MsgID: string);
+  begin
+    UniWriteLn(f, Prefix + ',"' + MsgID + '","' +
+                  _translate(GPSBabel_Domain, MsgID) + '"');
+  end;
+
+begin
+  if not SelectLanguage(
+    _('Choose language') + ' ' + _('for export'),
+    FLang, lang) then Exit;
+
+  if (sdOptional.InitialDir = '') then
+    GetDir(0, init_dir);
+
+  sdOptional.InitialDir := init_dir;
+  sdOptional.FileName := file_name;
+
+  if not(sdOptional.Execute) then Exit;
+
+  init_dir := sdOptional.InitialDir;
+  file_name := sdOptional.FileName;
+  
+  curr_lang := GetCurrentLanguage;
+  try
+
+    UseLanguage(lang);
+
+    f := TFileStream.Create(sdOptional.FileName, fmCreate);
+    try
+
+      UniWriteLn(f, Format('code,en,%s', [lang]));
+
+      _line('options:-w', 'Process waypoint information');
+      _line('options:-r', 'Process route information');
+      _line('options:-t', 'Process track information');
+
+      _line('options:-s', 'Synthesize shortnames');
+      _line('options:-c', 'Character set for next operation');
+
+
+      for i := 0 to FCaps.Count - 1 do
+      begin
+        if not FCaps.IsFile(i) then Continue;
+
+        s := FCaps.GetDescr(i);
+        UniWrite(f, Format('format:%s,', [FCaps.GetName(s)]));
+        UniWriteLn(f, '"' + s + '","' + _translate(GPSBabel_Domain, s) + '"');
+
+        l := FOpts.FormatOpts(s);
+        if (l = nil) then Continue;
+
+        for j := 0 to l.Count - 1 do
+        begin
+          o := Pointer(l.Objects[j]);
+          UniWrite(f, Format('format:%s:%s,', [o.format, o.name]));
+          UniWriteLn(f, '"' + o.hint + '","' + _translate(GPSBabel_Domain, o.hint) + '"');
+        end;
+      end;
+
+    finally
+      f.Free;
+    end;
+
+  finally
+    UseLanguage(curr_lang);
+  end;
+end;
+
+procedure TfrmMain.cbOutputDeviceChange(Sender: TObject);
+begin
+  CheckInput;
+end;
+
+procedure TfrmMain.cbInputDeviceChange(Sender: TObject);
+begin
+  CheckInput;
 end;
 
 end.
