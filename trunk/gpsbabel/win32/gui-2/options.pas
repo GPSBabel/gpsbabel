@@ -24,7 +24,7 @@ uses
   TypInfo, gnugettext, gnugettextDx,
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, ExtCtrls, ComCtrls, Buttons,
-  Common;
+  Common, delphi;
 
 type
   TfrmOptions = class(TForm)
@@ -78,6 +78,63 @@ uses
 
 {$R *.DFM}
 
+// returns "BottomRight" of Controls rect
+
+function SetCaption(Control: TControl; const ACaption: string): TPoint;
+var
+  s: TStaticText;
+  auto, info: PPropInfo;
+  font: TFont;
+  parentf: Boolean;
+begin
+  Result := Control.BoundsRect.BottomRight;
+
+  info := GetPropInfo(Control, 'Caption');
+  if (info = nil) then Exit;
+
+  SetStrProp(Control, 'Caption', ACaption);
+
+  auto := GetPropInfo(Control, 'AutoSize');
+  if (auto <> nil) then
+  begin
+    SetOrdProp(Control, auto, Integer(True));
+    Result := Control.BoundsRect.BottomRight;
+    Exit;
+  end;
+
+  info := GetPropInfo(Control, 'Font');
+  if (info = nil) then Exit;
+
+  font := Pointer(GetObjectProp(Control, info));
+
+  info := GetPropInfo(Control, 'ParentFont');
+  if (info <> nil) then
+    parentf := Boolean(GetOrdProp(Control, info)) else
+    parentf := False;
+
+// Controls with Caption but without AutoSize
+// TCheckBox, TRadioButton
+
+  s := TStaticText.Create(Control.Owner);
+  try
+    s.Font := font;
+    s.ParentFont := parentf;
+    s.Visible := False;
+    s.Parent := Control.Parent;
+    s.BoundsRect := Control.BoundsRect;
+    s.AutoSize := True;
+    s.Caption := ACaption;
+    Control.Width := 18 + s.Width;
+    if (Control.Height < s.Height) then
+      Control.Height := s.Height;
+    Result := Control.BoundsRect.BottomRight;
+  finally
+    s.Free;
+  end;
+end;
+
+{ TfrmOptions }
+
 constructor TfrmOptions.Create(AOwner: TComponent); // override;
 begin
   inherited Create(AOwner);
@@ -94,10 +151,12 @@ var
   wc: TControl;
   o: POption;
   chb: TCheckBox;
-  xy: TPoint;
+  xy, _xy: TPoint;
   xmax: Integer;
   lb: TLabel;
 begin
+  if (AList = nil) then Exit;
+  
   FOpts := AList;
 
   xy.x := 0;
@@ -134,23 +193,28 @@ begin
     InsertComponent(chb);
 
     chb.ParentFont := False;
-    chb.Font := Main.frmMain.stbMain.Font;
+    chb.Font := pnOptions.Font;
     chb.Left := 8;
     chb.Top := xy.y;
-    chb.Caption := dgettext('Options', o.Hint);
+    _xy := SetCaption(chb, dgettext(GPSBabel_Domain, o.Hint));
     chb.Alignment := taRightJustify;
     chb.Checked := False;
     chb.Parent := pnOptions;
 
     chb.Hint := SysUtils.Format(_('Short "%s"'), [o.name]);
     chb.ShowHint := True;
-    chb.Width := 21 + Trunc(FCanvas.TextWidth(chb.Caption) * 1.25);
 
     xy.y := xy.y + chb.Height + 8;
     if (o.otype <> 4) then
       if (chb.Width > xy.x) then xy.x := chb.Width;
     if (chb.Width > xy.x) then
       xmax := chb.Width;
+
+    if (o.otype = 4) and (o.def <> nil) and (atoi(o.def) <> 0) then
+    begin
+      chb.AllowGrayed := True;
+      chb.State := cbGrayed;
+    end;
   end;
 
   xy.y := 8;
@@ -174,7 +238,7 @@ begin
     end;
     if (o.edit <> nil) then
       o.edit.Enabled := False;
-    xy.y := xy.y + chb.Height + 8;
+    xy.y := xy.y + o.chb.Height + 8;
   end;
 
   xy.X := 0;
@@ -216,11 +280,26 @@ begin
   for i := 0 to FOpts.Count - 1 do
   begin
     o := Pointer(FOpts.Objects[i]);
-    if (o.chb = nil) or not(o.chb.Checked) then Continue;
+    if (o.chb = nil) then Continue;
+
+    if o.chb.AllowGrayed then
+    begin
+      if (o.chb.State = cbGrayed) then Continue
+    end
+    else if not(o.chb.Checked) then Continue;
+    
     if (Result <> '') then
       Result := Result + ',';
     Result := Result + o.name;
-    if (o.edit = nil) then Continue;
+
+    if (o.edit = nil) then
+    begin
+      if o.chb.Checked then
+        Result := Result + '=1'
+      else
+        Result := Result + '=0';
+      Continue;
+    end;
     s := GetStrProp(o.edit, 'Text');
     if (Pos(' ', s) <> 0) or (Pos('"', s) <> 0) or (Pos(',', s) <> 0) then
       s := SysUtils.AnsiQuotedStr(s, '"');
