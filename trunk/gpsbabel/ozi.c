@@ -66,9 +66,9 @@ arglist_t ozi_args[] = {
 	{"snunique", &snuniqueopt, "Make synth. shortnames unique",
 		NULL, ARGTYPE_BOOL},
 	{"wptfgcolor", &wptfgcolor, "Waypoint foreground color",
-		"black", ARGTYPE_INT},
+		"black", ARGTYPE_STRING},
 	{"wptbgcolor", &wptbgcolor, "Waypoint background color",
-		"yellow", ARGTYPE_INT},
+		"yellow", ARGTYPE_STRING},
 	{0, 0, 0, 0, 0}
 };
 
