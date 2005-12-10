@@ -501,6 +501,11 @@ exit_vecs( void )
 		}
 		if ( vec->vec->args ) {
 			for ( ap = vec->vec->args; ap->argstring; ap++ ) {
+				if ( ap->defaultvalue && 
+					( ap->argtype == ARGTYPE_INT ) &&
+					! isdigit(ap->defaultvalue[0])) {
+					warning("%s: not an integer\n", ap->argstring);
+				}
 				if ( ap->argval && *ap->argval ) {
 					xfree(*ap->argval);
 					*ap->argval = NULL;
