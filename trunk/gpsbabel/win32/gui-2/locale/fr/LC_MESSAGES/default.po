@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPSBabelGUI 0.2.2\n"
 "POT-Creation-Date: 2005-09-22 23:44\n"
-"PO-Revision-Date: 2005-12-06 18:02+0100\n"
+"PO-Revision-Date: 2005-12-12 22:57+0100\n"
 "Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,7 +29,7 @@ msgstr "Ce programme fait partie du projet GPSBabel, hébergé sur"
 #: about.dfm:84
 #: about.pas:80
 msgid "Version"
-msgstr ""
+msgstr "Version"
 
 #. frmAbout..pnClient..pnCenter..lbTranslators..Caption
 #: about.dfm:91
@@ -44,7 +44,7 @@ msgstr "www.gpsbabel.org"
 #. frmAbout..pnClient..pnCenter..lbCopyRight..Caption
 #: about.dfm:114
 msgid "Copyright (C) 2005 Olaf Klein (O.B.Klein@T-Online.de)"
-msgstr ""
+msgstr "Copyright (C) 2005 Olaf Klein (O.B.Klein@T-Online.de)"
 
 #. frmAbout..pnClient..pnCenter..lbMoreInfo..Caption
 #: about.dfm:121
@@ -176,7 +176,7 @@ msgstr "Décaler le début/fin en fonction du décalage horaire local"
 #. frmFilter..gbTracks..cbTrackRangeTimeZone..Caption
 #: filter.dfm:297
 msgid "TZ"
-msgstr ""
+msgstr "TZ"
 
 #. frmFilter..gbRoutes..Caption
 #: filter.dfm:308
@@ -191,7 +191,7 @@ msgstr "limiter à"
 #. frmFilter..gbRoutes..lbRouteSimplifyText..Caption
 #: filter.dfm:324
 msgid "Points"
-msgstr ""
+msgstr "Points"
 
 #. frmFilter..gbRoutes..cbRouteSimplify..Hint
 #: filter.dfm:331
@@ -233,17 +233,17 @@ msgstr "Filtres de fichiers"
 #: filter.dfm:437
 #: main.dfm:563
 msgid "&Waypoints"
-msgstr ""
+msgstr "&Waypoints"
 
 #. frmFilter..gbWaypoints..lbWayptRadiusLat..Caption
 #: filter.dfm:446
 msgid "Latitude"
-msgstr ""
+msgstr "Latitude"
 
 #. frmFilter..gbWaypoints..lbWayptRadiusLon..Caption
 #: filter.dfm:454
 msgid "Longitude"
-msgstr ""
+msgstr "Longitude"
 
 #. frmFilter..gbWaypoints..cbWayptMergeDupLoc..Hint
 #: filter.dfm:462
@@ -273,7 +273,7 @@ msgstr "Fusionner les waypoints séparé par moins de"
 #. frmFilter..gbWaypoints..cbWayptMergeDistance..Caption
 #: filter.dfm:483
 msgid "Position"
-msgstr ""
+msgstr "Position"
 
 #. frmFilter..gbWaypoints..cbWayptSort..Hint
 #: filter.dfm:511
@@ -340,14 +340,14 @@ msgstr "Menu de d'ouverture de fichier"
 #: main.dfm:1433
 #: main.dfm:1447
 msgid "Options"
-msgstr ""
+msgstr "Options"
 
 #. frmMain..pnTop..gbInput..lbInputFormat..Caption
 #. frmMain..pnTop..gbOutput..lbOutputFormat..Caption
 #: main.dfm:76
 #: main.dfm:263
 msgid "Format"
-msgstr ""
+msgstr "Format"
 
 #. frmMain..pnTop..gbInput..lbInputFile..Caption
 #. frmMain..pnTop..gbOutput..lbOutputFile..Caption
@@ -424,7 +424,7 @@ msgstr "Format d'entrée depuis un fichier"
 #: main.pas:469
 #: main.pas:896
 msgid "Output"
-msgstr ""
+msgstr "Sortie"
 
 #. frmMain..pnTop..gbOutput..sbSaveFile..Hint
 #: main.dfm:277
@@ -484,7 +484,7 @@ msgstr "Inclure les routes"
 #. frmMain..pnBottom..cbRoutes..Caption
 #: main.dfm:577
 msgid "&Routes"
-msgstr ""
+msgstr "&Routes"
 
 #. frmMain..pnBottom..cbTracks..Hint
 #: main.dfm:588
@@ -601,7 +601,7 @@ msgstr "Changer de langue"
 #. frmMain..ActionList1..acFileExportCSV..Caption
 #: main.dfm:1471
 msgid "Export gpsbabel.csv (unicode)"
-msgstr ""
+msgstr "Export gpsbabel.csv (unicode)"
 
 #. frmMain..MainMenu1..mnuFile..Caption
 #: main.dfm:1479
@@ -611,12 +611,12 @@ msgstr "&Fichier"
 #. frmMain..MainMenu1..mnuFile..File1..Caption
 #: main.dfm:1487
 msgid "Export"
-msgstr ""
+msgstr "Export"
 
 #. frmMain..MainMenu1..mnuOptions..Caption
 #: main.dfm:1508
 msgid "&Options"
-msgstr ""
+msgstr "&Options"
 
 #. frmMain..MainMenu1..mnuOptions..mnuSynthesizeShortNames..Caption
 #: main.dfm:1510
@@ -646,7 +646,7 @@ msgstr "Options pour ..."
 #. frmSelect..pnBottom..btnCancel..Caption
 #: select.dfm:66
 msgid "Abort"
-msgstr ""
+msgstr "Annuler"
 
 #: about.pas:87
 msgid "German by Olaf Klein"
@@ -678,7 +678,7 @@ msgstr "Mètre"
 
 #: filter.pas:203
 msgid "Miles"
-msgstr ""
+msgstr "Miles"
 
 #: filter.pas:204
 msgid "Kilometer"
@@ -756,12 +756,12 @@ msgstr "Conversion de \"%s\" à \"%s\" réussie."
 
 #: main.pas:794
 msgid "GPSBabel, version %s"
-msgstr ""
+msgstr "GPSBabel, version %s"
 
 #: main.pas:828
 #: main.pas:883
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: main.pas:980
 msgid "Options for \"%s\""
@@ -770,15 +770,15 @@ msgstr "Options pour \"%s\""
 #: main.pas:1169
 #: main.pas:1239
 msgid "Choose language"
-msgstr ""
+msgstr "Choisir la langue"
 
 #: main.pas:1169
 msgid "for GUIBabelGUI"
-msgstr ""
+msgstr "pour GPSBabelGUI"
 
 #: main.pas:1239
 msgid "for export"
-msgstr ""
+msgstr "pour export"
 
 #. override;
 #: options.pas:143
