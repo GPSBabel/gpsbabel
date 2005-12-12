@@ -1,11 +1,8 @@
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: GPSBabel 1.2.7\n"
 "POT-Creation-Date: 2005-11-19 01:14\n"
-"PO-Revision-Date: 2005-12-06 17:37+0100\n"
+"PO-Revision-Date: 2005-12-12 23:08+0100\n"
 "Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -318,8 +315,8 @@ msgstr "Linienhöhe in Pixel"
 msgid "Write GPRMC sentences"
 msgstr "Schreibe GPRMC Sequenzen"
 
-msgid "Write tracks compatible with CartoExplorer"
-msgstr "Erzeuge Tracks ohne Titel (kompatibel zu \"CartoExplorer\")"
+msgid "Write tracks compatible with Carto Exploreur"
+msgstr "Erzeuge Tracks ohne Titel (kompatibel zu \"Carto Exploreur\")"
 
 msgid "zoom factor of map in %"
 msgstr "Zoomfaktor (Karte) in %"
