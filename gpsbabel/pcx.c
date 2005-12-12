@@ -39,8 +39,8 @@ static
 arglist_t pcx_args[] = {
 	{"deficon", &deficon, "Default icon name", "Waypoint", 
 		ARGTYPE_STRING },
-	{"cartoexplorer", &cartoexplorer,
-		"Write tracks compatible with CartoExplorer", "",
+	{"cartoexploreur", &cartoexploreur,
+		"Write tracks compatible with Carto Exploreur", "",
 		ARGTYPE_BOOL },
 	{0, 0, 0, 0, 0}
 };
@@ -272,10 +272,10 @@ pcx_track_hdr(const route_head *trk)
 	snprintf(buff, sizeof(buff)-1, "Trk%03d", route_ctr);
 	
 	name = mkshort(mkshort_handle2, (trk->rte_name != NULL) ? trk->rte_name : buff);
-	/* Cartoexplorer (popular in France) chokes on trackname headers,
+	/* Carto Exploreur (popular in France) chokes on trackname headers,
 	 * so provide option to supppress these.
 	 */
-	if (!cartoexplorer) {
+	if (!cartoexploreur) {
 		fprintf(file_out, "\n\nH  TN %s\n", name);
 	}
 	xfree(name);
@@ -292,8 +292,11 @@ pcx_route_hdr(const route_head *rte)
 	snprintf(buff, sizeof(buff)-1, "Rte%03d", route_ctr);
 	
 	name = mkshort(mkshort_handle2, (rte->rte_name != NULL) ? rte->rte_name : buff);
-		
-	fprintf(file_out, "\n\nR  %s\n", name);
+	
+	/* see pcx_track_hdr */
+	if (!cartoexploreur) {
+		fprintf(file_out, "\n\nR  %s\n", name);
+	}
 	fprintf(file_out, "\n"
 "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
 }
