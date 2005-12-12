@@ -33,11 +33,17 @@ arglist_t yahoo_args[] = {
 };
 
 static xg_callback	wpt_s, wpt_lat, wpt_lon, wpt_e;
+static xg_callback 	wpt_addr, wpt_city, wpt_state, wpt_zip, wpt_country;
 
 static xg_tag_mapping gl_map[] = {
  { wpt_s,	cb_start, "/ResultSet/Result" },
  { wpt_lat,	cb_cdata, "/ResultSet/Result/Latitude" },
  { wpt_lon,	cb_cdata, "/ResultSet/Result/Longitude" },
+ { wpt_addr,	cb_cdata, "/ResultSet/Result/Address" },
+ { wpt_addr,	cb_cdata, "/ResultSet/Result/City" },
+ { wpt_addr,	cb_cdata, "/ResultSet/Result/State" },
+ { wpt_addr,	cb_cdata, "/ResultSet/Result/Zip" },
+ { wpt_addr,	cb_cdata, "/ResultSet/Result/Country" },
  { wpt_e,	cb_end,   "/ResultSet/Result" },
  { NULL, 	0,         NULL}
 };
@@ -85,6 +91,14 @@ void	wpt_lat(const char *args, const char **unused)
 void	wpt_lon(const char *args, const char **unused)
 {
 	wpt_tmp->longitude = atof(args);
+}
+
+void	wpt_addr(const char *args, const char **unused)
+{
+	if (wpt_tmp->notes) {
+		wpt_tmp->notes = xstrappend(wpt_tmp->notes, ", ");
+	}
+	wpt_tmp->notes = xstrappend(wpt_tmp->notes, args);
 }
 
 ff_vecs_t yahoo_vecs = {
