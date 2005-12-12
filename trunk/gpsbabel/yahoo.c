@@ -24,12 +24,16 @@
 
 static FILE *ifd;
 static waypoint *wpt_tmp;
+static char *as;
 
 #define MYNAME "yahoo"
 
 static
 arglist_t yahoo_args[] = {
-	{0, 0, 0, 0, 0}
+	{"addrsep", &as, 
+	"String to separate concatenated address fields (default=\", \")", 
+	", ", ARGTYPE_STRING },
+
 };
 
 static xg_callback	wpt_s, wpt_lat, wpt_lon, wpt_e;
@@ -96,7 +100,7 @@ void	wpt_lon(const char *args, const char **unused)
 void	wpt_addr(const char *args, const char **unused)
 {
 	if (wpt_tmp->notes) {
-		wpt_tmp->notes = xstrappend(wpt_tmp->notes, ", ");
+		wpt_tmp->notes = xstrappend(wpt_tmp->notes, as);
 	}
 	wpt_tmp->notes = xstrappend(wpt_tmp->notes, args);
 }
