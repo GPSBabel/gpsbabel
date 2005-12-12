@@ -94,6 +94,7 @@ extern ff_vecs_t cst_vecs;
 extern ff_vecs_t nmn4_vecs;
 extern ff_vecs_t magpdb_vecs;
 extern ff_vecs_t compegps_vecs;
+extern ff_vecs_t yahoo_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -480,6 +481,12 @@ vecs_t vec_list[] = {
 		&compegps_vecs,
 		"compegps",
 		"CompeGPS data files (.wpt/.trk/.rte)",
+		NULL
+	},
+	{
+		&yahoo_vecs,
+		"yahoo",
+		"Yahoo Geocode API data",
 		NULL
 	},
 	{
