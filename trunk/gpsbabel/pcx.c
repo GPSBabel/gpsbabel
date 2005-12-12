@@ -29,7 +29,7 @@ static FILE *file_out;
 static short_handle mkshort_handle;
 static short_handle mkshort_handle2;	/* for track and route names */
 static char *deficon = NULL;
-static char *cartoexplorer;
+static char *cartoexploreur;
 static int read_as_degrees;
 static int route_ctr;
 
