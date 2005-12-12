@@ -161,6 +161,9 @@ main(int argc, char *argv[])
 				ivecs = find_vec(optarg, &ivec_opts);
 				break;
 			case 'o':
+				if (ivecs == NULL) {
+					warning ("-o appeared before -i.   This is probably not what you want to do.\n");
+				}
 				optarg = argv[argn][2]
 					? argv[argn]+2 : argv[++argn];
 				ovecs = find_vec(optarg, &ovec_opts);
