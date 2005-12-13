@@ -135,6 +135,7 @@ int argc,
 			f_outputLine(pfTestoOut, "REM Simple Windows NT/2000/XP .cmd version of GPSBabel testo script");
 			f_outputLine(pfTestoOut, "REM");
 			f_outputLine(pfTestoOut, "");
+			f_outputLine(pfTestoOut, "SET GPSBABEL_FREEZE_TIME=y");
 			f_outputLine(pfTestoOut, "SET TMPDIR=%TEMP%\\WINTESTO");
 			f_outputLine(pfTestoOut, "MKDIR %TMPDIR% 2>NUL:");
 			f_outputLine(pfTestoOut, "");
