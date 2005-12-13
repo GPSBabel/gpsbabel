@@ -36,11 +36,14 @@ static char *opt_symbol = NULL;
 static char *opt_color = NULL;
 static char *opt_zoom  = NULL;
 static char *opt_wpt_type = NULL;
+static char *opt_radius = NULL;
+
 static short output_type_num = 0;
 static short opt_zoom_num = 0;
 static long opt_color_num = 0;
 static short wpt_type_num = 0;
 static short last_read_type = 0;
+static double radius = 0.0;
 
 static long serial=10000;
 static long rtserial=1;
@@ -66,8 +69,11 @@ arglist_t an1_args[] = {
 		"red", ARGTYPE_STRING },
 	{"zoom", &opt_zoom, "Zoom level to reduce points",
 		NULL, ARGTYPE_INT },
-	{"wpt_type", &opt_wpt_type, "Waypoint type (marker,text,mapnote)", 
+	{"wpt_type", &opt_wpt_type, 
+		"Waypoint type (marker,text,mapnote,circle)", 
 		"", ARGTYPE_STRING },
+	{"radius", &opt_radius, "Radius for circles", 
+		NULL, ARGTYPE_STRING },
 	{0, 0, 0, 0 }
 };
 
@@ -239,7 +245,7 @@ typedef struct {
 	unsigned char create_zoom;
 	unsigned char visible_zoom;
 	short unk5;
-	double radius;
+	double radius; /* in km */
 	char *name;
 	char *fontname;
 	GUID guid;
@@ -286,6 +292,7 @@ typedef struct {
 static an1_waypoint_record *Alloc_AN1_Waypoint( );
 
 void Destroy_AN1_Waypoint( void *vwpt ) {
+	
 	an1_waypoint_record *wpt = (an1_waypoint_record *)vwpt;
 	xfree( wpt->name );
 	xfree( wpt->fontname );
@@ -619,9 +626,9 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 	an1_waypoint_record *rec;
 	int local;
 	format_specific_data *fs = NULL;
+	waypoint *wpt2 = (waypoint *)(void *)wpt;
 	
 	fs = fs_chain_find( wpt->fs, FS_AN1W );
-	
 	if ( fs ) {
 		rec = (an1_waypoint_record *)fs;
 		xfree( rec->name );
@@ -636,9 +643,10 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 		rec->type = wpt_type_num;
 		rec->unk2 = 3;
 		rec->unk3 = 18561;
-		rec->radius = 528;
+		rec->radius = radius;
 		rec->fillcolor = opt_color_num; 
 		rec->fillflags = 3;
+		if ( wpt_type_num == 5 ) rec->fillflags = 0x8200;
 		rec->height = -50;
 		rec->width = 20;
 		rec->fontname = xstrdup( "Arial" );
@@ -748,6 +756,7 @@ Write_One_AN1_Line( const route_head *rte )
 	an1_line_record *rec;
 	int local;
 	format_specific_data *fs = NULL;
+	route_head *rte2 = (route_head *)(void *)rte;
 	
 	fs = fs_chain_find( rte->fs, FS_AN1L );
 	
@@ -846,6 +855,7 @@ Write_One_AN1_Vertex( const waypoint *wpt )
 	an1_vertex_record *rec;
 	int local;
 	format_specific_data *fs = NULL;
+	waypoint *wpt2 = (waypoint *)(void *)wpt;
 	
 	fs = fs_chain_find( wpt->fs, FS_AN1V );
 	
@@ -882,7 +892,7 @@ Init_Wpt_Type( void )
 		wpt_type_num = 1; /* marker */
 		return;
 	}
-	if ((output_type[0] & 0xf0) == 0x30) {
+	if ((opt_wpt_type[0] & 0xf0) == 0x30) {
 		wpt_type_num = atoi( opt_wpt_type );
 	}
 	else {
@@ -896,9 +906,12 @@ Init_Wpt_Type( void )
 		else if ( !case_ignore_strcmp( opt_wpt_type, "mapnote" )) {
 			wpt_type_num = 6;
 		}
+	        else if ( !case_ignore_strcmp( opt_wpt_type, "circle" )) {
+			wpt_type_num = 5;
+		}	
 		else {
 			fatal( MYNAME ": wpt_type must be "
-			    "marker, text, or mapnote\n" );
+			    "marker, text, mapnote, or circle\n" );
 		}
 	}
 }
@@ -1073,6 +1086,13 @@ wr_init(const char *fname)
 	Init_Wpt_Type();
 	if ( opt_zoom ) {
 		opt_zoom_num = atoi(opt_zoom);
+	}
+	radius = .1609344; /* 1/10 mi */
+	if ( opt_radius ) {
+		radius = atof(opt_radius);
+		if ( !strchr(opt_radius,'k') && !strchr(opt_radius,'K')) {
+			radius *= 5280*12*2.54/100000; 
+		}
 	}
 }
 
