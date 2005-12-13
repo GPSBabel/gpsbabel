@@ -640,15 +640,15 @@ compare ${TMPDIR}/an1.out reference/an1-in.ref
 
 rm -f ${TMPDIR}/an1.out
 ${PNAME} -i an1 -f reference/foo.an1 -o an1 -F ${TMPDIR}/an1.out
-compare ${TMPDIR}/an1.out reference/an1-an1.ref
+bincompare ${TMPDIR}/an1.out reference/an1-an1.ref
 
 rm -f ${TMPDIR}/an1.out
 ${PNAME} -i xmap -f reference/xmap -o an1 -F ${TMPDIR}/an1.out 
-compare ${TMPDIR}/an1.out reference/an1-out.ref
+bincompare ${TMPDIR}/an1.out reference/an1-out.ref
 
 rm -f ${TMPDIR}/an1.out
 ${PNAME} -i google -f reference/google.js -o an1 -F ${TMPDIR}/an1.out
-compare ${TMPDIR}/an1.out reference/an1-line-out.ref
+bincompare ${TMPDIR}/an1.out reference/an1-line-out.ref
 
 #
 # TomTom .ov2 tests
