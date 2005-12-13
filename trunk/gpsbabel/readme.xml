@@ -217,8 +217,12 @@ line or mapnote data.  It accepts color names of the form "#FF0000" (red) or any
 of the 16 common color names from the Cascading Style Sheets
 specification.i</para>
       <para>The "wpt_type" option specifies how to represent point data
-in the draw file.  Valid waypoint types are "marker", "text", and "mapnote".
-The default is "marker". </para> 
+in the draw file.  Valid waypoint types are "marker", "text", "mapnote",
+and "circle".  The default is "marker". </para> 
+      <para>If the waypoint type is "circle", the "radius" option specifies
+the radius of the circles.  By default, this is in miles, but it may be 
+specified in kilometers by adding a 'k'.  The default radius is 1/10 mile.
+</para>
       <para>The "zoom" option specifies at what zoom level Street
 Atlas will begin showing reduced versions of your symbols. The default
 is 10.  Setting zoom to 0 will disable this feature.  Setting it to
