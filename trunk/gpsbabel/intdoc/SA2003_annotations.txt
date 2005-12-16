@@ -32,7 +32,7 @@ I've also added notes to indicate where SA 2005 puts extra data
 
 -- end of routefile header --
 
- 03 00 00 00  count
+ 03 00 00 00  count of control points
 
  01 00       	type?
  64 00 00 00  	size

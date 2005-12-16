@@ -143,8 +143,8 @@ while ( $wptcount ) {
 
   ($magic, $unk1, $lon, $lat, $type, $height, $width, $unk2, $unk3, $serial, 
    $unk4, $create_zoom, $visible_zoom, $unk5, $circle_radius, $name, $font, 
-   $guid, $fontcolor, $fontstyle, $fontsize, $unk6, $outlinecolor, $unk7, 
-   $fillcolor, $unk8, $unk9 ) = 
+   $guid, $fontcolor, $fontstyle, $fontsize, $outlineweight, $outlinecolor, 
+   $outlineflags, $fillcolor, $unk6, $fillflags ) = 
    shiftunpack( 'slllsllssssCCsds/a*s/a*a[16]lllllllll' );
 
    # fontcolor is BGR (i.e. pure blue is 0xff00000, pure red is 0x0000ff)
@@ -170,7 +170,9 @@ while ( $wptcount ) {
   $rect_width = $width/0x800000;
 
   printf ( "$magic -- %x %x %x %x %x %x %x %x %x -- $type $types[$type]  $lat  $lon  %s $imagenames{$guid}  '$name'\n", 
-      $unk1,  $unk2,  $unk3,  $unk4,  $unk5,  $unk6,  $unk7, $unk8, $unk9, decodeGuid( $guid ) );
+      $unk1,  $unk2,  $unk3,  $unk4,  $unk5,  $unk6,  decodeGuid( $guid ) );
+
+	printf ("   %d height   %d width   %x fill %x outline %x fillstyle\n", $height, $width, $fillcolor, $outlinecolor, $fillflags);
 
   $wptcount--;
 } 
