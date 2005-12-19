@@ -33,12 +33,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#if defined (__WIN32__) || defined (__CYGWIN__)
-#define CRLF "\n"
-#else
-#define CRLF "\r\n"
-#endif
-
 static FILE *fin;
 static FILE *fout;
 static char *fin_name, *fout_name;
@@ -279,9 +273,9 @@ nmn4_write_waypt(const waypoint *wpt)
 	   implementing a simple data exchange.
 	 */
 
-	fprintf(fout, "-|-|-|-|%s|%s|%s|%s|%s|-|-|%.5f|%.5f|-|-|%s",
+	fprintf(fout, "-|-|-|-|%s|%s|%s|%s|%s|-|-|%.5f|%.5f|-|-|\r\n",
 		zipc, city, zipc, street, number,
-		wpt->longitude, wpt->latitude, CRLF);
+		wpt->longitude, wpt->latitude);
 }
 
 static void
@@ -327,7 +321,7 @@ nmn4_read(void)
 static void
 nmn4_wr_init(const char *fname)
 {
-	fout = xfopen(fname, "w", MYNAME);
+	fout = xfopen(fname, "wb", MYNAME);
 	fout_name = xstrdup(fname);
 }
 

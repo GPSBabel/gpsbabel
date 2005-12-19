@@ -33,12 +33,6 @@ static waypoint *wpt;
 
 #define MYNAME "STMwpp"
 
-#if defined (__WIN32__) || defined (__CYGWIN__)
-#define CRLF "\n"
-#else
-#define CRLF "\r\n"
-#endif
-
 #define STM_NOTHING	0
 #define STM_WAYPT 	1
 #define STM_TRKPT 	2
@@ -185,7 +179,7 @@ stmwpp_data_read(void)
 static void
 stmwpp_rw_init(const char *fname)
 {
-	fout = xfopen(fname, "w", MYNAME);
+	fout = xfopen(fname, "wb", MYNAME);
 }
 
 static void
@@ -254,7 +248,7 @@ stmwpp_waypt_cb(const waypoint *wpt)
 			fprintf(fout, ".%03d", wpt->centiseconds * 10);
 			break;
 	}
-	fprintf(fout, ",%s", CRLF);
+	fprintf(fout, ",\r\n");
 }
 
 static void
@@ -266,7 +260,7 @@ stmwpp_data_write(void)
 	else
 		track_index = 1;
 		
-	fprintf(fout, "Datum,WGS 84,WGS 84,0,0,0,0,0%s", CRLF);
+	fprintf(fout, "Datum,WGS 84,WGS 84,0,0,0,0,0\r\n");
 	
 	switch(global_opts.objective)
 	{

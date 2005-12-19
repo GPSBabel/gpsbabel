@@ -40,12 +40,6 @@
 
 #define R_EARTH		6371000		/* radius of our big blue ball */
 
-#if defined (__WIN32__) || defined (__CYGWIN__)
-#define CRLF "\n"
-#else
-#define CRLF "\r\n"
-#endif
-
 /*  
     6371014 would be a better value when converting to f.e. to mapsoure,
     but this seems to be used by Map&Guide when exporting to XML. 
@@ -354,7 +348,7 @@ static void
 bcr_wr_init(const char *fname)
 {
 	filename = xstrdup(fname);
-	fout = xfopen(fname, "w", MYNAME);
+	fout = xfopen(fname, "wb", MYNAME);
 	bcr_init_radius();
 }
 
@@ -379,7 +373,7 @@ void bcr_write_line(FILE *fout, const char *key, int *index, const char *value)
 {
 	if (value == NULL)				/* this is mostly used in the world of windows */
 	{						/* so we respectfully add a CR/LF on each line */
-	    fprintf(fout, "%s%s", key, CRLF);
+	    fprintf(fout, "%s\r\n", key);
 	}
 	else
 	{
@@ -387,9 +381,9 @@ void bcr_write_line(FILE *fout, const char *key, int *index, const char *value)
 	    
 	    tmp = (value != NULL) ? xstrdup(value) : xstrdup("");
 	    if (index != NULL)
-		fprintf(fout, "%s%d=%s%s", key, *index, tmp, CRLF);
+		fprintf(fout, "%s%d=%s\r\n", key, *index, tmp);
 	    else
-		fprintf(fout, "%s=%s%s", key, tmp, CRLF);
+		fprintf(fout, "%s=%s\r\n", key, tmp);
 	    xfree(tmp);
 	}
 }
