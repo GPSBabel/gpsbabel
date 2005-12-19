@@ -214,7 +214,7 @@ ignr_fprintf(FILE *f, const char *fmt, ...)
 		char eol = temp[i - 1];
 		if (eol == '\n') i--;
 		fwrite(temp, 1, i, f);
-		if (eol == '\n') fprintf(f, "\x0D\n");
+		if (eol == '\n') fprintf(f, "\r\n");
 	}
 	
 	if (temp != buff) xfree(temp);
@@ -226,7 +226,7 @@ ignr_fprintf(FILE *f, const char *fmt, ...)
 static void 
 ignr_rw_init(const char *fname)
 {
-	fout = xfopen(fname, "w", MYNAME);
+	fout = xfopen(fname, "wb", MYNAME);
 }
 
 static void 
