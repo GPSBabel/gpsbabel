@@ -103,6 +103,9 @@ main(int argc, char *argv[])
 	global_opts.charset = NULL;			/* #ifdef UTF8_SUPPORT */
 	global_opts.charset_name = NULL;			/* #ifdef UTF8_SUPPORT */
 
+	gpsbabel_now = time(NULL);			/* gpsbabel startup-time */
+	gpsbabel_time = current_time();			/* same like gpsbabel_now, but freezed to zero during testo */
+	
 #ifdef DEBUG_MEM
 	debug_mem_open();
 	debug_mem_output( "command line: " );

@@ -24,5 +24,6 @@
 
 global_options global_opts;
 const char gpsbabel_version[] = VERSION;
-
+time_t gpsbabel_now;	/* gpsbabel startup-time; initialized in main.c with time() */
+time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
 
