@@ -151,8 +151,8 @@ int argc,
 			f_outputLine(pfTestoOut, "FOR /f \"delims=\" %%a IN ('fc %PARAM1% %PARAM2%') DO IF \"x%%a\"==\"xFC: no differences encountered\" GOTO :EOF");
 			f_outputLine(pfTestoOut, "REM Show the first 5 lines of difference");
 			f_outputLine(pfTestoOut, "fc %1 /LB5 %PARAM1% %PARAM2%");
-			f_outputLine(pfTestoOut, "ECHO %* are not the same (first 5 differences above) - pausing. ^C to quit if required");
-			f_outputLine(pfTestoOut, "PAUSE");
+			f_outputLine(pfTestoOut, "if errorlevel 1 ECHO %* are not the same (first 5 differences above) - pausing. ^C to quit if required");
+			f_outputLine(pfTestoOut, "if errorlevel 1 PAUSE");
 			f_outputLine(pfTestoOut, "GOTO :EOF");
 			f_outputLine(pfTestoOut, "");
 			f_outputLine(pfTestoOut, "REM ==================================");
