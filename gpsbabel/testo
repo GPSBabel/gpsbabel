@@ -565,6 +565,9 @@ ${PNAME} -i geoniche -f reference/geoniche.pdb -o geoniche -F ${TMPDIR}/gn.pdb
 ${PNAME} -i geoniche -f reference/geoniche.pdb -o gpx -F ${TMPDIR}/1.gpx
 ${PNAME} -i geoniche -f ${TMPDIR}/gn.pdb -o gpx -F ${TMPDIR}/2.gpx
 compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
+#
+${PNAME} -i geoniche -f reference/gn-targets.pdb -o gpx -F ${TMPDIR}/gn-targets.gpx
+compare ${TMPDIR}/gn-targets.gpx reference/gn-targets.gpx
 
 #
 # saroute covers *.anr, *.rte, and *.rtd, but I only have an .anr for testing.
