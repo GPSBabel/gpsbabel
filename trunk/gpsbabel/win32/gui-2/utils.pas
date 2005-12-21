@@ -305,4 +305,17 @@ begin
 // !!! TRICK !!!
 end;
 
+var
+  hMutex: THandle;
+  
+initialization
+
+  // Flag for InnoSetup
+  hMutex := CreateMutex(nil, True, 'GPSBabelGUI_mutex');
+
+finalization
+
+  if (hMutex <> 0) then
+    CloseHandle(hMutex);
+
 end.
