@@ -64,7 +64,7 @@ Name: fr; MessagesFile: compiler:Languages\French.isl
 Name: {group}\GPSBabelGUI; Filename: {app}\GPSBabelGUI.exe; WorkingDir: {app}; IconFilename: {app}\GPSBabelGUI.exe; IconIndex: 0; Flags: useapppaths
 Name: {group}\{cm:UninstallProgram, GPSBabel}; Filename: {uninstallexe}
 Name: {userdesktop}\GPSBabelGUI; Filename: {app}\GPSBabelGUI.exe; WorkingDir: {app}; Tasks: desktopicon; IconIndex: 0
-Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\Medical Archive; Filename: {app}\GPSBabelGUI.exe; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\GPSBabelGUI.exe; IconIndex: 0
+Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\GPSBabelGUI; Filename: {app}\GPSBabelGUI.exe; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\GPSBabelGUI.exe; IconIndex: 0
 
 [Run]
 Filename: {app}\GPSBabelGUI.exe; WorkingDir: {app}; Flags: postinstall unchecked skipifsilent; Description: {cm:LaunchProgram,GPSBabelBUI}
