@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 void
-uuid_generate(uuid_t uu)
+gb_uuid_generate(uuid_t uu)
 {
 	unsigned char *cp;
 	int i;

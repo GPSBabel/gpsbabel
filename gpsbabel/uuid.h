@@ -19,4 +19,4 @@
 
 typedef unsigned char uuid_t[16];
 
-void uuid_generate(uuid_t uu);
+void gb_uuid_generate(uuid_t uu);
