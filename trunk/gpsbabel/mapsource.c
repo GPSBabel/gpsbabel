@@ -68,7 +68,8 @@ static short_handle read_route_wpt_mkshort_handle;
 char *snlen = NULL;
 char *snwhiteopt = NULL;
 char *mpsverout = NULL;
-char *mpsmergeout = NULL;
+char *mpsmergeouts = NULL;
+int   mpsmergeout;
 char *mpsusedepth = NULL;
 char *mpsuseprox = NULL;
 
@@ -80,7 +81,7 @@ arglist_t mps_args[] = {
 	{"mpsverout", &mpsverout, 
 		"Version of mapsource file to generate (3,4,5)", NULL,
 		ARGTYPE_INT },
-	{"mpsmergeout", &mpsmergeout, "Merge output with existing file", 
+	{"mpsmergeout", &mpsmergeouts, "Merge output with existing file", 
 		NULL, ARGTYPE_BOOL },
 	{"mpsusedepth", &mpsusedepth, 
 		"Use depth values on output (default is ignore)", NULL,
@@ -296,10 +297,14 @@ mps_rd_deinit(void)
 static void
 mps_wr_init(const char *fname)
 {
+	if (mpsmergeouts) {
+		mpsmergeout = atoi(mpsmergeouts);
+	}
+
 	if (mpsmergeout) {
 		mps_file_out = xfopen(fname, "rb", MYNAME);
 		if (mps_file_out == NULL) {
-			mpsmergeout = NULL;
+			mpsmergeout = 0;
 		}
 		else {
 			fclose(mps_file_out);
