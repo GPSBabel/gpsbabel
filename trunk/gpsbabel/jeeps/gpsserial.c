@@ -67,18 +67,22 @@ static HANDLE comport;
 /*
  * Display an error from the serial subsystem.
  */
-void GPS_Serial_Error(char *hdr)
+void GPS_Serial_Error(char *mb, ...)
 {
+	va_list ap;
 	char msg[200];
 	char *s;
+	int b;
 
-	strcpy(msg, hdr);
-	s = msg + strlen(hdr);
+	va_start(ap, mb);
+//	strcpy(msg, msg);
+	b = vsnprintf(msg, sizeof(msg), mb, ap);
+	s = msg + b;
 	*s++ = ':';
 	*s++ = ' ';
 
 	FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM, 0, 
-			GetLastError(), 0, s, sizeof(msg) - strlen(hdr) - 2, 0 );
+			GetLastError(), 0, s, sizeof(msg) - b - 2, 0 );
 	GPS_Error(msg);
 }
 
@@ -99,7 +103,7 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
 					  OPEN_EXISTING, 0, NULL);
 
 	if (comport == INVALID_HANDLE_VALUE) {
-		GPS_Serial_Error("CreateFile");
+		GPS_Serial_Error("CreateFile on '%s' failed", port);
 		gps_errno = SERIAL_ERROR;
 		return 0;
 	}
@@ -125,7 +129,7 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
 	tio.StopBits = ONESTOPBIT;
 
 	if (!SetCommState (comport, &tio)) {
-		GPS_Serial_Error("SetCommState");
+		GPS_Serial_Error("SetCommState on port '%s' failed", port);
 		CloseHandle(comport);
 		comport = INVALID_HANDLE_VALUE;
 		gps_errno = SERIAL_ERROR;
@@ -259,7 +263,7 @@ int32 GPS_Serial_Savetty(const char *port)
     {
 	perror("open");
 	gps_errno = SERIAL_ERROR;
-	GPS_Error("SERIAL: Cannot open serial port");
+	GPS_Error("SERIAL: Cannot open serial port '%s'", port);
 	return 0;
     }
     
@@ -301,7 +305,7 @@ int32 GPS_Serial_Restoretty(const char *port)
     {
 	perror("open");
 	gps_errno = HARDWARE_ERROR;
-	GPS_Error("SERIAL: Cannot open serial port");
+	GPS_Error("SERIAL: Cannot open serial port '%s'", port);
 	return 0;
     }
     
@@ -341,7 +345,7 @@ int32 GPS_Serial_Open(int32 *fd, const char *port)
     if((*fd = open(port, O_RDWR))==-1)
     {
 	perror("open");
-	GPS_Error("SERIAL: Cannot open serial port");
+	GPS_Error("SERIAL: Cannot open serial port '%s'", port);
 	gps_errno = SERIAL_ERROR;
 	return 0;
     }
@@ -545,14 +549,14 @@ int32 GPS_Serial_On(const char *port, int32 *fd)
     }
     if(!GPS_Serial_Savetty(port))
     {
-	GPS_Error("Cannot access serial port");
+	GPS_Error("Cannot access serial port '%s'", port);
 	gps_errno = SERIAL_ERROR;
 	return 0;
     }
     
     if(!GPS_Serial_Open(fd,port))
     {
-	GPS_Error("Cannot open serial port");
+	GPS_Error("Cannot open serial port '%s'", port);
 	gps_errno = SERIAL_ERROR;
 	return 0;
     }
@@ -669,14 +673,14 @@ int32 GPS_Serial_On_NMEA(const char *port, int32 *fd)
 
     if(!GPS_Serial_Savetty(port))
     {
-	GPS_Error("Cannot access serial port");
+	GPS_Error("Cannot access serial port '%s'", port);
 	gps_errno = SERIAL_ERROR;
 	return 0;
     }
     
     if(!GPS_Serial_Open_NMEA(fd,port))
     {
-	GPS_Error("Cannot open serial port");
+	GPS_Error("Cannot open serial port '%s'", port);
 	gps_errno = SERIAL_ERROR;
 	return 0;
     }

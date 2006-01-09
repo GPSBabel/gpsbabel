@@ -499,14 +499,20 @@ void GPS_Fatal(char *s)
 ** @@
 ****************************************************************************/
 
-void GPS_Error(char *s)
+void GPS_Error(char *fmt, ...)
 {
+    va_list argp;
+    va_start(argp, fmt);
+
     if(!gps_error)
 	return;
 
-    fprintf(stderr,"[ERROR] %s\n",s);
-    fflush(stderr);
 
+    fprintf(stderr, "[ERROR] ");
+    vfprintf(stderr, fmt, argp);
+    fprintf(stderr, "\n");
+
+    va_end(argp);
     return;
 }
 

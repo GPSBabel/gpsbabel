@@ -88,6 +88,7 @@ gusb_open(const char *pname)
 
 	if (hdevinfo == INVALID_HANDLE_VALUE) {
 		GPS_Serial_Error("SetupDiGetClassDevs failed");
+		warning("Is the Garmin driver installed?");
 		return 0;
 	}
 
@@ -118,7 +119,7 @@ gusb_open(const char *pname)
 	usb_handle = CreateFile(pdd->DevicePath, GENERIC_READ|GENERIC_WRITE, 
 			0, NULL, OPEN_EXISTING, 0, NULL );
 	if (usb_handle == INVALID_HANDLE_VALUE) {
-		GPS_Serial_Error("CreateFile failed");
+		GPS_Serial_Error("CreateFile on '%' failed", pdd->DevicePath);
 		return 0;
 	}
 
