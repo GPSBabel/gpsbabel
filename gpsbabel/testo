@@ -1,6 +1,10 @@
 GPSBABEL_FREEZE_TIME=y
 export GPSBABEL_FREEZE_TIME
 
+# Turn on GNU libc instrumentation.
+MALLOC_CHECK_=2
+export MALLOC_CHECK_
+
 PNAME=${PNAME:-./gpsbabel}
 DIFF=${DIFF:-diff}
 OD=${OD:-od -Ax -txC -v}
