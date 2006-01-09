@@ -310,11 +310,11 @@ google_read(void)
 	              *(end+1) = '\0';
 		      end = panel;
 		      while ( (end = strstr( end, "\\\"" ))) {
-		        strcpy( end, end+1 );
+		        memmove( end, end+1, strlen(end)+1 );
 		      }
 		      end = panel;
 		      while ( (end = strstr( end, "\\'" ))) {
-			strcpy( end, end+1 );
+			memmove( end, end+1, strlen(end)+1 );
 		      }
 		      xml_deinit();
 		      xml_init( NULL, google_map, NULL );
