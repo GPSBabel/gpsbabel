@@ -128,7 +128,7 @@ xml_write_time(FILE *ofd, const time_t timep, char *elname)
 {
 	char time_string[64];
 	xml_fill_in_time(time_string, timep, XML_LONG_TIME);
-	if (time_string) {
+	if (time_string[0]) {
 		fprintf(ofd, "<%s>%s</%s>\n",
 			elname,
 			time_string,
