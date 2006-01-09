@@ -105,8 +105,10 @@ xml_fill_in_time(char *time_string, const time_t timep, int long_or_short)
 	struct tm *tm = gmtime(&timep);
 	char *format;
 	
-	if (!tm)
+	if (!tm) {
+		*time_string = 0;
 		return;
+	}
 	
 	if (long_or_short == XML_LONG_TIME)
 		format = "%02d-%02d-%02dT%02d:%02d:%02dZ";
@@ -126,11 +128,13 @@ xml_write_time(FILE *ofd, const time_t timep, char *elname)
 {
 	char time_string[64];
 	xml_fill_in_time(time_string, timep, XML_LONG_TIME);
-	fprintf(ofd, "<%s>%s</%s>\n",
-		elname,
-		time_string,
-		elname
-	);
+	if (time_string) {
+		fprintf(ofd, "<%s>%s</%s>\n",
+			elname,
+			time_string,
+			elname
+		);
+	}
 
 }
 
