@@ -46,7 +46,8 @@ google_read(void)
 #else
 
 static xg_callback      goog_points, goog_levels, goog_poly_e, goog_script;
-static xg_callback	goog_segment_s, goog_segment;
+static xg_callback	goog_segment_s, goog_segment, goog_td_s, goog_td_b;
+static xg_callback	goog_td_e;
 
 static 
 xg_tag_mapping google_map[] = {
@@ -56,6 +57,9 @@ xg_tag_mapping google_map[] = {
 	{ goog_script,  cb_cdata,       "/html/head/script" },
 	{ goog_segment_s, cb_start,      "/page/directions/segments/segment" },
 	{ goog_segment, cb_cdata,      "/page/directions/segments/segment" },
+	{ goog_td_s,    cb_start,      "/div/table/tr/td" },
+	{ goog_td_b,      cb_cdata,      "/div/table/tr/td/b" },
+	{ goog_td_e,    cb_end,        "/div/table/tr/td" },
 	{ NULL,         0,              NULL }
 };
 
@@ -105,6 +109,7 @@ void goog_levels( const char *args, const char **unused )
 }
 
 static char goog_segname[7];
+static char *goog_realname = NULL;
 
 /*
  * The segments contain an index into the points array.  We use that
@@ -131,6 +136,45 @@ void goog_segment( const char *args, const char **unused )
 		xfree(wpt_tmp->shortname);
 		wpt_tmp->shortname = mkshort(desc_handle,args);
 		wpt_tmp->description = xstrdup(args);
+	}
+}
+
+void goog_td_s( const char *args, const char **attrv )
+{
+	const char **avp = &attrv[0];
+	int isdesc = 0;
+	while (*avp) {
+		if ( 0 == strcmp(avp[0], "class" )) {
+			isdesc = !strcmp(avp[1], "desc" );
+		}
+		else if ( isdesc && (0 == strcmp( avp[0], "id" ))) {
+			snprintf( goog_segname, sizeof(goog_segname),
+				"\\%5.5x",
+				atoi(avp[1] + 6 ));
+		}
+		avp += 2;
+	}
+}
+	
+void goog_td_b( const char *args, const char **attrv ) {
+	if ( goog_segname[0] == '\\' && !strchr( args, '\xa0')) {
+		if ( goog_realname ) {
+			xfree( goog_realname );
+			goog_realname = NULL;
+		}
+		goog_realname = xmalloc( strlen(args)+1);
+		strcpy( goog_realname, args );
+	}
+}
+void goog_td_e( const char *args, const char **attrv ) 
+{
+	if ( goog_segname[0] == '\\' && goog_realname ) {
+		goog_segment( goog_realname, attrv );
+	}
+	goog_segname[0] = '\0';
+	if ( goog_realname ) {
+		xfree( goog_realname );
+		goog_realname = NULL;
 	}
 }
 
@@ -227,8 +271,11 @@ google_read(void)
 	if ( script ) 
 	{
 		char *xml = strchr( script, '\'' );
+		char *dict = strstr( script, "({" );
+		
 		char *end = NULL;
-		if ( xml ) {
+		
+		if ( xml && (!dict || (xml < dict ))) {
 			xml++;
 			end = strchr( xml+1, '\'' );
 			if ( end ) {
@@ -237,6 +284,43 @@ google_read(void)
 				xml_init( NULL, google_map, NULL );
 				xml_readstring( xml );
 			}
+		}
+		else if ( dict ) {
+		  encoded_points = strstr( dict, "points: '" );
+		  encoded_levels = strstr( dict, "levels: '" );
+		  char *panel = strstr( dict, "panel: '" );
+		  
+		  if ( encoded_points && encoded_levels ) {
+	            encoded_points += 9;
+		    encoded_levels += 9;
+		    end = strchr( encoded_points, '\'' );
+		    if ( end ) {
+	              *end = '\0';
+		      end = strchr( encoded_levels, '\'' );
+		      if ( end ) {
+			*end = '\0';
+			goog_poly_e( NULL, NULL );
+		      }
+		    }		      
+		  }
+	          if ( panel ) {
+		    panel += 8;
+		    end = strstr( panel, ">'," );
+		    if ( end ) {
+	              *(end+1) = '\0';
+		      end = panel;
+		      while ( (end = strstr( end, "\\\"" ))) {
+		        strcpy( end, end+1 );
+		      }
+		      end = panel;
+		      while ( (end = strstr( end, "\\'" ))) {
+			strcpy( end, end+1 );
+		      }
+		      xml_deinit();
+		      xml_init( NULL, google_map, NULL );
+		      xml_readstring( panel );
+		    }
+		  }
 		}
 		xfree( script );
 	}
