@@ -243,16 +243,6 @@ void goog_poly_e( const char *args, const char **unused )
 		}
 	}
 	
-	if ( encoded_points ) 
-	{
-		xfree( encoded_points );
-		encoded_points = NULL;
-	}
-	if ( encoded_levels )
-	{
-		xfree( encoded_levels );
-		encoded_levels = NULL;
-	}
 }
 
 static void
@@ -283,6 +273,16 @@ google_read(void)
 				xml_deinit();
 				xml_init( NULL, google_map, NULL );
 				xml_readstring( xml );
+				if ( encoded_points ) 
+				{
+					xfree( encoded_points );
+					encoded_points = NULL;
+				}
+				if ( encoded_levels )
+				{
+					xfree( encoded_levels );
+					encoded_levels = NULL;
+				}
 			}
 		}
 		else if ( dict ) {
