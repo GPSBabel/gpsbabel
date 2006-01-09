@@ -25,7 +25,7 @@ void   GPS_Util_Put_Uint(UC *s, const uint32 v);
 uint32 GPS_Util_Get_Uint(const UC *s);
 
 void   GPS_Warning(char *s);
-void   GPS_Error(char *s);
+void   GPS_Error(char *fmt, ...);
 void   GPS_Fatal(char *s);
 void   GPS_Enable_Error(void);
 void   GPS_Enable_Warning(void);

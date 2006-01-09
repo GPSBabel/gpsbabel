@@ -24,7 +24,7 @@ int32  GPS_Serial_Flush(int32 fd);
 int32  GPS_Serial_On_NMEA(const char *port, int32 *fd);
 int32  GPS_Serial_Read(int32 ignored, void *ibuf, int size);
 int32  GPS_Serial_Write(int32 ignored, const void *obuf, int size);
-void   GPS_Serial_Error(char *hdr);
+void   GPS_Serial_Error(char *hdr, ...);
 
 
 #endif
