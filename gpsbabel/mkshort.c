@@ -172,7 +172,10 @@ mkshort_del_handle(short_handle *h)
 			xfree(s);
 		}
 	}
-	setshort_badchars(*h, NULL);
+	/* setshort_badchars(*h, NULL); ! currently setshort_badchars() always allocates something ! */
+	if (hdr->badchars != NULL) {
+		xfree(hdr->badchars);
+	}
 	setshort_goodchars(*h, NULL);
 	if (hdr->defname) {
 		xfree(hdr->defname);
