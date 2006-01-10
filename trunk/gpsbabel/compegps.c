@@ -420,9 +420,9 @@ write_waypt_cb(const waypoint *wpt)
 	
 	fprintf(fout, "W  %s A ", name);
 	fprintf(fout, "%.10f%c%c ",
-		wpt->latitude, 0xBA, (wpt->latitude >= 0) ? 'N' : 'S');
+		fabs(wpt->latitude), 0xBA, (wpt->latitude >= 0) ? 'N' : 'S');
 	fprintf(fout, "%.10f%c%c ",
-		wpt->longitude, 0xBA, (wpt->longitude >= 0) ? 'E' : 'W');
+		fabs(wpt->longitude), 0xBA, (wpt->longitude >= 0) ? 'E' : 'W');
 	fprintf(fout, "27-MAR-62 00:00:00 %.6f", 
 		(wpt->altitude != unknown_alt) ? wpt->altitude : 0.0);
 	if (wpt->description != NULL)
@@ -502,8 +502,8 @@ write_trkpt_cb(const waypoint *wpt)
 	}
 	
 	fprintf(fout, "T  A %.10f%c%c %.10f%c%c ",
-		wpt->latitude, 0xBA, (wpt->latitude >= 0) ? 'N' : 'S',
-		wpt->longitude, 0xBA, (wpt->longitude >= 0) ? 'E' : 'W');
+		fabs(wpt->latitude), 0xBA, (wpt->latitude >= 0) ? 'N' : 'S',
+		fabs(wpt->longitude), 0xBA, (wpt->longitude >= 0) ? 'E' : 'W');
 	fprintf(fout, "%s s %.1f %.1f %.1f %.1f %d ",
 		buff,
 		wpt->altitude,
