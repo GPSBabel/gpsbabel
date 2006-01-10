@@ -286,9 +286,9 @@ google_read(void)
 			}
 		}
 		else if ( dict ) {
+		  char *panel = strstr( dict, "panel: '" );
 		  encoded_points = strstr( dict, "points: '" );
 		  encoded_levels = strstr( dict, "levels: '" );
-		  char *panel = strstr( dict, "panel: '" );
 		  
 		  if ( encoded_points && encoded_levels ) {
 	            encoded_points += 9;
