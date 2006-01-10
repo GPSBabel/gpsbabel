@@ -94,7 +94,7 @@ internal_debug2(const char *format, ... )
 #endif
 
 
-#define CHECK_INP(i, j) is_fatal((i != j), "Error in data structure.")
+#define CHECK_INP(i, j, k) is_fatal((i != j), "Error in data structure (%s).", (k))
 
 /*
  * utilities
@@ -261,7 +261,7 @@ double ppdb_decode_coord(const char *str)
 	
 	if (*str < 'A') 	/* only numeric */
 	{
-	    CHECK_INP(1, sscanf(str,"%lf", &val));
+	    CHECK_INP(1, sscanf(str,"%lf", &val), "decode_coord(1)");
 	    return val;
 	}
 	else
@@ -273,12 +273,12 @@ double ppdb_decode_coord(const char *str)
 	    tmp = strchr(str, ' ');
 	    if ((tmp) && (tmp - str < 4))
 	    {
-		CHECK_INP(3, sscanf(str,"%c%d %lf", &dir, &deg, &val));
+		CHECK_INP(3, sscanf(str,"%c%d %lf", &dir, &deg, &val), "decode_coord(2)");
 		val = deg + (val / 60.0);
 	    }
 	    else
 	    {
-		CHECK_INP(2, sscanf(str,"%c%lf", &dir, &val));
+		CHECK_INP(2, sscanf(str,"%c%lf", &dir, &val), "decode_coord(3)");
 	    }
 	    if ((dir == 'S') || (dir == 'W'))
 		val = -val;
@@ -300,13 +300,13 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 	{
 	    CHECK_INP(8, sscanf(str, "%02d%02d%02d.%d %02d%02d%02d%02d",
 		&tm->tm_hour, &tm->tm_min, &tm->tm_sec,
-		&msec, &d1, &d2, &d3, &d4));
+		&msec, &d1, &d2, &d3, &d4), "decode_tm(1)");
 	}
 	else
 	{
 	    CHECK_INP(7, sscanf(str, "%02d%02d%02d %02d%02d%02d%02d",
 		&tm->tm_hour, &tm->tm_min, &tm->tm_sec,
-		&d1, &d2, &d3, &d4));
+		&d1, &d2, &d3, &d4), "decode_tm(2)");
 	}
 
 	tnow = current_time();
@@ -365,7 +365,7 @@ int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_rec, ro
 			case 3:
 			    if (*str != '\0')
 			    {
-				CHECK_INP(1, sscanf(str, "%lf", &altfeet));
+				CHECK_INP(1, sscanf(str, "%lf", &altfeet), "altitude");
 				if (altfeet != -9999) 
 				    wpt_tmp->altitude = altfeet / 3.2808;
 			    }
