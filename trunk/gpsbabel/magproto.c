@@ -730,6 +730,9 @@ arglist_t mag_sargs[] = {
 static
 arglist_t mag_fargs[] = {
 	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
+	{"maxcmts", &cmts, "Max number of comments to write (maxcmts=200)", 
+		NULL, ARGTYPE_INT },
+	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
 	{0, 0, 0, 0, 0}
 };
 
@@ -1471,6 +1474,6 @@ ff_vecs_t magX_fvecs = {
 	mag_read,
 	mag_write,
 	NULL,
-	NULL,
+	mag_fargs,
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
