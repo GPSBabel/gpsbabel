@@ -27,6 +27,7 @@
 
 static char *action;
 static route_head *my_trk_head;
+time_t tmstart;
 
 static
 arglist_t cvttype_skeleton_args[] = {
@@ -34,6 +35,7 @@ arglist_t cvttype_skeleton_args[] = {
 		ARGTYPE_STRING} , 
 	{0, 0, 0, 0, 0}
 };
+
 
 static void
 cvttype_skeleton_init(const char *args) 	
@@ -54,6 +56,10 @@ cvttype_skeleton_process(void)
 
 // if action == to trk
 		waypt_del(wpt);
+		/* If no timestamp, fake one. */
+		if (wpt->creation_time <= 0) { 
+			wpt->creation_time  = ++tmstart; 
+		}
 		route_add_wpt(my_trk_head, wpt);
 // if action == to rte
 //		waypt_del(wpt);
