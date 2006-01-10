@@ -26,6 +26,9 @@
 
 #define MYNAME "maggeo"
 
+/* Turn this on (remove) after 5.2 becomes widespread. */
+#define FIRMWARE_DOES_88591 0		
+
 static FILE *maggeofile_in;
 static FILE *maggeofile_out;
 static short_handle desc_handle = NULL;
@@ -113,7 +116,12 @@ append(char *buf, const char *str)
 	}
 
 	cleansed1 = xstrdup(str);
+#if FIRMWARE_DOES_88591
+/* Actually, this function needs needs refactored... */
+	cleansed2 = xstrdup(cleansed1);
+#else
 	cleansed2 = m330_cleanse(cleansed1);
+#endif
 
 	strcat(buf, cleansed2);
 
@@ -220,5 +228,9 @@ ff_vecs_t maggeo_vecs = {
 	maggeo_write,
 	NULL,
 	NULL,
+#if FIRMWARE_DOES_88591
+	CET_CHARSET_LATIN1, 0	/* CET-REVIEW */
+#else
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+#endif
 };
