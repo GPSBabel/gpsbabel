@@ -535,7 +535,7 @@ ozi_parse_routepoint(int field, char *str, waypoint * wpt_tmp)
         break;
     case 13:
         /* description */
-        wpt_tmp->description = csv_stringclean(str, BADCHARS);
+        wpt_tmp->description = csv_stringclean(str, ",");
         break;
     default:
         break;
