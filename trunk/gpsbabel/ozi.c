@@ -28,6 +28,7 @@
 #include <math.h>                /* for floor */
 
 #define MYNAME        "OZI"
+#define BADCHARS	",\n"
 
 typedef struct {
 	format_specific_data fs;
@@ -534,7 +535,7 @@ ozi_parse_routepoint(int field, char *str, waypoint * wpt_tmp)
         break;
     case 13:
         /* description */
-        wpt_tmp->description = csv_stringclean(str, ",");
+        wpt_tmp->description = csv_stringclean(str, BADCHARS);
         break;
     default:
         break;
@@ -700,23 +701,23 @@ ozi_waypt_pr(const waypoint * wpt)
             if (global_opts.synthesize_shortnames)
                 shortname = mkshort_from_wpt(mkshort_handle, wpt);
             else
-                shortname = csv_stringclean(wpt->description, ",");
+                shortname = csv_stringclean(wpt->description, BADCHARS);
         } else {
             /* no description available */
             shortname = xstrdup("");
         }
     } else {
-        shortname = csv_stringclean(wpt->shortname, ",");
+        shortname = csv_stringclean(wpt->shortname, BADCHARS);
     }
 
     if (!wpt->description) {
         if (shortname) {
-            description = csv_stringclean(shortname, ",");
+            description = csv_stringclean(shortname, BADCHARS);
         } else {
             description = xstrdup("");
         }
     } else {
-        description = csv_stringclean(wpt->description, ",");
+        description = csv_stringclean(wpt->description, BADCHARS);
     }
 
     index++;
