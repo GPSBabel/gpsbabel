@@ -346,6 +346,14 @@ differences.</para>
 </screen>
       </example>
     </section>
+    <section id="cambridge">
+      <sectioninfo>
+	<subtitle>Cambridge/Winpilot flight analysis and planning software.</subtitle>
+      </sectioninfo>
+      <title>Cambridge</title>
+      <para>Support for Cambridge/Winpilot flight analysis and planning software for
+	glider pilots.  </para>
+    </section>
     <section id="cetus">
       <sectioninfo>
 	<subtitle>Cetus, for Palm OS</subtitle>

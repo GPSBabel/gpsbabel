@@ -24,6 +24,26 @@ static char arc[] =
 "IFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
 "IFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
 ;
+static char cambridge[] = 
+"DESCRIPTION     Cambridge/Winpilot glider software\n"
+"SHORTLEN        8\n"
+"EXTENSION dat\n"
+"#\n"
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER         COMMA\n"
+"RECORD_DELIMITER        NEWLINE\n"
+"BADCHARS                COMMA\n"
+
+"IFIELD INDEX,\"1\",\"%d\"\n"
+"IFIELD LAT_HUMAN_READABLE,\"\",\"%d:%06.3f%c\"\n"
+"IFIELD LON_HUMAN_READABLE,\"\",\"%03d:%06.3f%c\"\n"
+"IFIELD ALT_METERS,\"\",\"%dM\"\n"
+"IFIELD CONSTANT,\"\",\"T\"\n"
+"IFIELD SHORTNAME,\"\",\"%s\"\n"
+"IFIELD DESCRIPTION,\"\",\"%s\"\n"
+;
 static char csv[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -52,6 +72,54 @@ static char csv[] =
 "OFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
 "OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
 "OFIELD	DESCRIPTION, \"\", \"%s\"\n"
+;
+static char cup[] = 
+"#\n"
+"# (c) 2006, Robert Lipe, based on  sample files by Krzysztof Wojtas\n"
+"# Reference info: http://www.seeyou.ws/thankyou.php?fname=cup_format.pdf\n"
+"#\n"
+
+"DESCRIPTION      See You flight analysis data\n"
+"SHORTLEN  8\n"
+"EXTENSION cup\n"
+"#\n"
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER         COMMA\n"
+"RECORD_DELIMITER        NEWLINE\n"
+"BADCHARS                ,\"\n"
+"PROLOGUE name,code,country,lat,lon,elev,style,rwdir,rwlen,freq,desc\n"
+"EPILOGUE -----Related Tasks-----\n"
+
+
+"IFIELD SHORTNAME,\"\", \"\"%s\"\"\n"
+"IFIELD SHORTNAME,\"\", \"%s\"\n"
+"IFIELD CONSTANT,\"\", \"\"\n"
+"IFIELD LAT_NMEA, \"%f\", \"%08.3f\", \"absolute\"\n"
+"IFIELD LON_NMEA, \"%f\", \"%09.3f\", \"absolute\"\n"
+"IFIELD ALT_METERS,\"\", \"%dm\"\n"
+"IFIELD CONSTANT,\"\", \"1\"\n"
+"IFIELD CONSTANT,\"\", \"\"\n"
+"IFIELD CONSTANT,\"\", \"\"\n"
+"IFIELD CONSTANT,\"\", \"\"\n"
+"IFIELD DESCRIPTION,\"\", \"\"%s\"\"\n"
+
+"OFIELD SHORTNAME,\"\", \"\"%s\"\"\n"
+"OFIELD SHORTNAME,\"\", \"%s\"\n"
+"OFIELD CONSTANT,\"\", \"\"\n"
+"OFIELD LAT_NMEA, \"%f\", \"%08.3f\", \"absolute\"\n"
+"OFIELD LAT_DIR, \"\", \"%c\", \"no_delim_before\"\n"
+"OFIELD LON_NMEA, \"%f\", \"%09.3f\", \"absolute\"\n"
+"OFIELD LON_DIR, \"\", \"%c\", \"no_delim_before\"\n"
+"OFIELD ALT_METERS,\"\", \"%3.1fm\"\n"
+"OFIELD CONSTANT,\"\", \"1\"\n"
+"OFIELD CONSTANT,\"\", \"\"\n"
+"OFIELD CONSTANT,\"\", \"\"\n"
+"OFIELD CONSTANT,\"\", \"\"\n"
+"OFIELD DESCRIPTION,\"\", \"\"%s\"\"\n"
+
+
 ;
 static char custom[] = 
 "# gpsbabel XCSV style file\n"
@@ -770,5 +838,5 @@ static char xmapwpt[] =
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "csv", csv } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 20;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 22;
