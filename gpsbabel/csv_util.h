@@ -60,7 +60,7 @@ void
 xcsv_ifield_add(char *, char *, char *);
 
 void 
-xcsv_ofield_add(char *, char *, char *);
+xcsv_ofield_add(char *, char *, char *, int options);
 
 void 
 xcsv_destroy_style(void);
@@ -73,11 +73,14 @@ xcsv_get_char_from_constant_table(char *key);
 /****************************************************************************/
 
 /* something to map fields to waypts */
+#define OPTIONS_NODELIM 1
+#define OPTIONS_ABSOLUTE 2
 typedef struct field_map {
 	queue Q;
 	char * key;
 	char * val;
 	char * printfc;
+	int options;
 } field_map_t;
 
 /* a queuing struct for prologues / epilogues */
