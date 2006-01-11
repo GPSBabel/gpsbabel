@@ -330,6 +330,7 @@ xcsv_parse_style_line(const char *sbuff)
 	} else
 	
 	if (ISSTOKEN(sbuff, "IFIELD")) {
+	    int nodelim = 0;
 	    key = val = pfc = NULL;
 	    
 	    s = csv_lineparse(&sbuff[6], ",", "", linecount);
@@ -367,6 +368,7 @@ xcsv_parse_style_line(const char *sbuff)
 	 * change the world on ifield vs ofield format later..
 	 */
 	if (ISSTOKEN(sbuff, "OFIELD")) {
+	    int options = 0;
 	    key = val = pfc = NULL;
 
 	    s = csv_lineparse(&sbuff[6], ",", "", linecount);
@@ -386,6 +388,14 @@ xcsv_parse_style_line(const char *sbuff)
 		    /* printf conversion */
 		    pfc = csv_stringtrim(s, "\"", 1);
 		    break;
+		case 3:
+		     /* Any additional options. */
+		     if (strstr(s, "no_delim_before")) {
+			options |= OPTIONS_NODELIM;
+		     }
+		     if (strstr(s, "absolute")) {
+			options |= OPTIONS_ABSOLUTE;
+		     }
 		default:
 		    break;
 		}
@@ -393,7 +403,7 @@ xcsv_parse_style_line(const char *sbuff)
 		s = csv_lineparse(NULL, ",", "", linecount);
 	    }
 
-	    xcsv_ofield_add(key, val, pfc);
+	    xcsv_ofield_add(key, val, pfc, options);
 	}
     }
 }

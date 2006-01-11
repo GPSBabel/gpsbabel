@@ -164,12 +164,21 @@ IFIELDS are use as both input and output.  The existence of OFIELDS is
 primarily to allow more flexible mapping of GPSBabel data to output data 
 (say, for instance, to map the internal GPSBabel "description" variable to 
 two or more fields on output).  For all practical purposes, IFIELDS and 
-OFIELDS are defined the same way in the style file.
+OFIELDS are defined the same way in the style file.  The following options
+are defined:
+
+   o  "no_delim_before" is supported on OFIELD tags to specify that this
+	field should be written without a field delimiter before it.  It's
+	useful for limited field concatenation.
+   o  "absolute" is supported on OFIELD tags for lat and lon to indicate
+	that only absolute values (never negative) are to be printed.
+
 
 There are several different types of fields that may be defined.  Each field 
 consists of three pieces of information: the FIELD TYPE, a DEFAULT VALUE, and 
 a PRINTF CONVERSION (for output).  In many cases, not all pieces are used,
-but all 3 pieces are required.
+but all 3 pieces are required.   Additionally, an fourth field is supported
+that modifies the behaviour of the field being described.
 
 FIELDS should be defined in the style file in the logical order that they
 appear in the data, from left to right.  This is the order in which they are

@@ -581,13 +581,14 @@ xcsv_ifield_add(char *key, char *val, char *pfc)
 /* usage: xcsv_ofield_add("LAT_DECIMAL", "", "%08.5lf")                      */
 /*****************************************************************************/
 void
-xcsv_ofield_add(char *key, char *val, char *pfc)
+xcsv_ofield_add(char *key, char *val, char *pfc, int options)
 {
     field_map_t *fmp = xcalloc(sizeof(*fmp), 1);
     
     fmp->key = key;
     fmp->val = val;
     fmp->printfc = pfc;
+    fmp->options = options;
     
     ENQUEUE_TAIL(xcsv_file.ofield, &fmp->Q);
     xcsv_file.ofield_ct++;
@@ -1103,9 +1104,16 @@ xcsv_waypt_pr(const waypoint *wpt)
     QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
 	char *obuff;
         fmp = (field_map_t *) elem;
+	double lat = wpt->latitude;
+	double lon = wpt->longitude;
 
-        if (i != 0) 
+        if ((i != 0) && !(fmp->options & OPTIONS_NODELIM))  
             fprintf (xcsv_file.xcsvfp, write_delimiter);
+
+	if (fmp->options & OPTIONS_ABSOLUTE) {
+		lat = fabs(lat);
+		lon = fabs(lon);
+	}
 
         i++;
 #define writebuff(b, fmt, data) snprintf(b, sizeof(b), fmt, data)
@@ -1180,76 +1188,76 @@ xcsv_waypt_pr(const waypoint *wpt)
         /* LATITUDE CONVERSION***********************************************/
         if (strcmp(fmp->key, "LAT_DECIMAL") == 0) {
             /* latitude as a pure decimal value */
-            writebuff(buff, fmp->printfc, wpt->latitude);
+            writebuff(buff, fmp->printfc, lat);
         } else
         if (strcmp(fmp->key, "LAT_DECIMALDIR") == 0) {
             /* latitude as a decimal value with N/S after it */
-            snprintf(buff, sizeof(buff), fmp->printfc, fabs(wpt->latitude), 
-              LAT_DIR(wpt->latitude));
+            snprintf(buff, sizeof(buff), fmp->printfc, fabs(lat), 
+              LAT_DIR(lat));
         } else
         if (strcmp(fmp->key, "LAT_DIRDECIMAL") == 0) {
             /* latitude as a decimal value with N/S before it */
             snprintf(buff, sizeof(buff), fmp->printfc, 
-              LAT_DIR(wpt->latitude),
-              fabs(wpt->latitude));
+              LAT_DIR(lat),
+              fabs(lat));
         } else
         if (strcmp(fmp->key, "LAT_INT32DEG") == 0) {
             /* latitude as an integer offset from 0 degrees */
             writebuff(buff, fmp->printfc,
-              dec_to_intdeg(wpt->latitude, 1));
+              dec_to_intdeg(lat, 1));
         } else
 	if (strcmp(fmp->key, "LAT_HUMAN_READABLE") == 0) {
-	    dec_to_human( buff, fmp->printfc, "SN", wpt->latitude );
+	    dec_to_human( buff, fmp->printfc, "SN", lat );
 	} else
 	if (strcmp(fmp->key, "LAT_NMEA") == 0) {
-		writebuff(buff, fmp->printfc, degrees2ddmm(wpt->latitude));
+		writebuff(buff, fmp->printfc, degrees2ddmm(lat));
 	} else
 
         /* LONGITUDE CONVERSIONS*********************************************/
         if (strcmp(fmp->key, "LON_DECIMAL") == 0) {
             /* longitude as a pure decimal value */
-            writebuff(buff, fmp->printfc, wpt->longitude);
+            writebuff(buff, fmp->printfc, lon);
         } else
         if (strcmp(fmp->key, "LON_DECIMALDIR") == 0) {
             /* latitude as a decimal value with N/S after it */
             snprintf(buff, sizeof(buff),  fmp->printfc,
-              fabs(wpt->longitude), 
-              LON_DIR(wpt->longitude));
+              fabs(lon), 
+              LON_DIR(lon));
         } else
         if (strcmp(fmp->key, "LON_DIRDECIMAL") == 0) {
             /* latitude as a decimal value with N/S before it */
             snprintf(buff, sizeof(buff), fmp->printfc,
-              LON_DIR(wpt->longitude),
-              fabs(wpt->longitude));
+              LON_DIR(lon),
+              fabs(lon));
         } else
         if (strcmp(fmp->key, "LON_INT32DEG") == 0) {
             /* longitudee as an integer offset from 0 degrees */
             writebuff(buff, fmp->printfc,
-              dec_to_intdeg(wpt->longitude, 0));
+              dec_to_intdeg(lon, 0));
         } else
 	if (strcmp(fmp->key, "LON_HUMAN_READABLE") == 0) {
-	    dec_to_human( buff, fmp->printfc, "WE", wpt->longitude );
+	    dec_to_human( buff, fmp->printfc, "WE", lon );
 	} else
 	if (strcmp(fmp->key, "LATLON_HUMAN_READABLE") == 0) {
-	    dec_to_human( buff, fmp->printfc, "SN", wpt->latitude );
+	    dec_to_human( buff, fmp->printfc, "SN", lat );
 	    if ( !isspace(buff[strlen(buff)])) strcat( buff, " " );
 	    dec_to_human( buff+strlen(buff), fmp->printfc, "WE", 
-			    wpt->longitude );
+			    lon );
 	} else
 	if (strcmp(fmp->key, "LON_NMEA") == 0) {
-		writebuff(buff, fmp->printfc, degrees2ddmm(wpt->longitude));
+		writebuff(buff, fmp->printfc, degrees2ddmm(lon));
 	} else
 
         /* DIRECTIONS *******************************************************/
         if (strcmp(fmp->key, "LAT_DIR") == 0) {
             /* latitude N/S as a char */
             writebuff(buff, fmp->printfc,
-            LAT_DIR(wpt->latitude));
+            LAT_DIR(lat));
         } else
         if (strcmp(fmp->key, "LON_DIR") == 0) {
             /* longitude E/W as a char */
             writebuff(buff, fmp->printfc,
-              LON_DIR(wpt->longitude));
+              LON_DIR(lon));
         } else
 
         /* ALTITUDE CONVERSIONS**********************************************/
