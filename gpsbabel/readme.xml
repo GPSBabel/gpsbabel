@@ -1394,6 +1394,16 @@ versions of DeLorme software; older versions didn't store the turn
 information with the route.
 </para>
     </section>
+    <section id="seeyou">
+      <sectioninfo>
+	<subtitle>SeeYou flight analysis and planning software.</subtitle>
+      </sectioninfo>
+      <title>SeeYou</title>
+      <para>Support for SeeYou flight analysis and planning software for
+	glider pilots.  Tasks, runway info, and most other data specific
+	for glider pilots is not preserved, but this is a convenient way
+	to get your flight data in other programs.  <ulink url="http://www.seeyou.ws/">www.seeyou.ws</ulink></para>
+    </section>
     <section id="stmwpp">
       <sectioninfo>
 	<subtitle>Suunto Track Manager WaypointPlus format.</subtitle>
