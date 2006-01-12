@@ -947,4 +947,12 @@ ${PNAME} -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,waypoints,tracks -o gpx -
 ${PNAME} -i gpx -f ${TMPDIR}/wpts.gpx -f ${TMPDIR}/trks.gpx -f ${TMPDIR}/rtes.gpx -o gpx -F ${TMPDIR}/merged.gpx
 compare ${TMPDIR}/alltypes.gpx ${TMPDIR}/merged.gpx
 
+#
+# Universal CSV - unicsv
+#
+echo "lat,lon,descr,name,notes,unk,unk" > ${TMPDIR}/unicsv.txt
+cat reference/mxf.mxf >> ${TMPDIR}/unicsv.txt
+${PNAME} -i unicsv -f ${TMPDIR}/unicsv.txt -o gpx -F ${TMPDIR}/unicsv.gpx
+compare ${TMPDIR}/unicsv.gpx reference/unicsv.gpx
+
 exit 0

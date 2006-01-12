@@ -29,12 +29,11 @@
 
 #if !NO_EXPAT
 #include <expat.h>
-static XML_Parser psr;
 #endif
 
 #define MYNAME "IGNRando"
 
-static FILE *fin, *fout;
+static FILE *fout;
 
 static route_head *track;
 static waypoint *wpt;
