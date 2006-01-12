@@ -80,12 +80,59 @@ while ( $bitmapcount ) {
     # This is a Windows ImageList stream.  It actually includes the
     # 'BM' structures following in the stream, so we could be smarter
     # about how many we expect to find. (2 if bit 0 of ilflags is set,
-    # 1 otherwise.  That bit is ILD_MASK.) For now, though, this works 
+    # 1 otherwise.  That bit is ILC_MASK.) For now, though, this works 
     # just fine.  Newer versions of the IL structure supposedly contain
     # more overlay indices, but SA always seems to use the 0x101 version.
 
     # Documentation on the stream format is hard to come by.  I found
-    # mine in the form of the WINE project's reimplementation of comctl32.
+    # mine in the form of the WINE project's reimplementation of comctl32r:
+
+    # http://cvs.winehq.org/cvsweb/wine/dlls/comctl32/#dirlist
+    # typedef struct _ILHEAD
+    # {
+    #     USHORT	usMagic;         (RLP: this is 'IL', 0x4c49)
+    #     USHORT	usVersion;       (RLP: SA likes 0x0101)
+    #     WORD		cCurImage;       (RLP: image count)
+    #     WORD		cMaxImage;       (RLP: max before grow)
+    #     WORD		cGrow;
+    #     WORD		cx;
+    #     WORD		cy;
+    #     COLORREF	bkcolor;         (RLP: DWORD, 0x00bbggrr)
+    #     WORD		flags;           (RLP: ILC_*; See below)
+    #     SHORT		ovls[4];
+    # } ILHEAD;
+
+    # #define ILC_MASK                0x00000001
+    # #define ILC_COLOR               0x00000000
+    # #define ILC_COLORDDB            0x000000FE
+    # #define ILC_COLOR4              0x00000004
+    # #define ILC_COLOR8              0x00000008
+    # #define ILC_COLOR16             0x00000010
+    # #define ILC_COLOR24             0x00000018
+    # #define ILC_COLOR32             0x00000020
+    # See Windows SDK ImageList_Create for the meanings of these flags.
+    # Street Atlas appears to use ILC_COLOR32, both with and without ILC_MASK.
+ 
+    # * The format is like this:
+    # * 	ILHEAD 			ilheadstruct;
+    # *
+    # * for the color image part:
+    # * 	BITMAPFILEHEADER	bmfh;
+    # * 	BITMAPINFOHEADER	bmih;
+    # * only if it has a palette:
+    # * 	RGBQUAD 		rgbs[nr_of_paletted_colors];
+    # *
+    # * 	BYTE			colorbits[imagesize];
+    # *
+    # * the following only if the ILC_MASK bit is set in ILHEAD.ilFlags:
+    # * 	BITMAPFILEHEADER	bmfh_mask;
+    # * 	BITMAPINFOHEADER	bmih_mask;
+    # * only if it has a palette (it usually does not):
+    # * 	RGBQUAD		  	rgbs[nr_of_paletted_colors];
+    # *
+    # * 	BYTE			maskbits[imagesize];
+    # *
+    # * CAVEAT: Those images are within a NxM bitmap, not the 1xN we expect.
 
     ($ilVersion, $ilCount, $ilMax, $ilGrow, $ilcx, $ilcy,
 	$ilbkColor, $ilflags, $ilovl1, $ilovl2, $ilovl3, $ilovl4 ) =
@@ -150,9 +197,11 @@ while ( $wptcount ) {
    # fontcolor is BGR (i.e. pure blue is 0xff00000, pure red is 0x0000ff)
    # fontstyle is 0x10-bold, 0x20-italic, 0x80-underline
 
-   # width/height are in pixels for mapnotes and represent the offset of the mapnote
-   #    from the point (i.e. the dimensions of the tail.)
+   # width/height are in pixels for mapnotes and represent the offset of the 
+   #     mapnote from the point (i.e. the dimensions of the tail.)
    # width/height are in degrees times 0x800000 for rectangles
+
+   # circle_radius is in kilometers.
 
    # Note that type appears to be shared with lines.
    # type   desc
