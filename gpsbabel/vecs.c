@@ -95,6 +95,7 @@ extern ff_vecs_t nmn4_vecs;
 extern ff_vecs_t magpdb_vecs;
 extern ff_vecs_t compegps_vecs;
 extern ff_vecs_t yahoo_vecs;
+extern ff_vecs_t unicsv_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -487,6 +488,12 @@ vecs_t vec_list[] = {
 		&yahoo_vecs,
 		"yahoo",
 		"Yahoo Geocode API data",
+		NULL
+	},
+	{
+		&unicsv_vecs,
+		"unicsv",
+		"Universal csv with field structure in first line",
 		NULL
 	},
 	{

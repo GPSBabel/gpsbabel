@@ -22,7 +22,6 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static FILE *ifd;
 static waypoint *wpt_tmp;
 static char *as;
 

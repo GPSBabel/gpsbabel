@@ -45,7 +45,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
 	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o \
-	yahoo.o
+	yahoo.o unicsv.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
@@ -305,6 +305,7 @@ tpg.o: tpg.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
   jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 trackfilter.o: trackfilter.c defs.h queue.h gbtypes.h strptime.h
+unicsv.o: unicsv.c defs.h queue.h gbtypes.h csv_util.h
 util.o: util.c defs.h queue.h gbtypes.h
 util_crc.o: util_crc.c
 uuid.o: uuid.c uuid.h
