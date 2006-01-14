@@ -714,15 +714,17 @@ ${PNAME} -i geo -f geocaching.loc -x stack,push,copy,nowarn -x stack,push,copy -
 # it.
 #
 
-${PNAME} -i geo -f geocaching.loc  -o tabsep -F - | ${PNAME} -i tabsep -f - -o geo -F ${TMPDIR}/tabsep.out
+${PNAME} -i geo -f geocaching.loc  -o tabsep -F ${TMPDIR}/tabsep.in
+${PNAME} -i tabsep -f ${TMPDIR}/tabsep.in -o geo -F ${TMPDIR}/tabsep.out
 ${PNAME} -i geo -f geocaching.loc  -o geo -F ${TMPDIR}/geotabsep.out
+compare ${TMPDIR}/tabsep.out ${TMPDIR}/geotabsep.out
 
 # 
 # Now do the same for custom - it has the same issues.
 #
 
-compare ${TMPDIR}/tabsep.out ${TMPDIR}/geotabsep.out
-${PNAME} -i geo -f geocaching.loc  -o custom -F - | ${PNAME} -i custom -f - -o geo -F ${TMPDIR}/custom.out
+${PNAME} -i geo -f geocaching.loc  -o custom -F ${TMPDIR}/custom.in
+${PNAME} -i custom -f ${TMPDIR}/custom.in -o geo -F ${TMPDIR}/custom.out
 ${PNAME} -i geo -f geocaching.loc  -o geo -F ${TMPDIR}/geocustom.out
 
 #
