@@ -1,7 +1,7 @@
 /*
     Access Magellan Mapsend files.
 
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2006 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 static FILE *mapsend_file_in;
 static FILE *mapsend_file_out;
 static short_handle mkshort_handle;
+static short_handle wpt_handle;
 
 static int route_wp_count;
 static int mapsend_infile_version;
@@ -94,6 +95,11 @@ mapsend_wr_init(const char *fname)
 {
 	mapsend_file_out = xfopen(fname, "wb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
+
+	wpt_handle = mkshort_new_handle();
+	setshort_whitespace_ok(wpt_handle, 1);
+	setshort_length(wpt_handle, 8);
+
 	route_wp_count = 0;
 }
 
@@ -102,6 +108,7 @@ mapsend_wr_deinit(void)
 {
 	fclose(mapsend_file_out);
 	mkshort_del_handle(&mkshort_handle);
+	mkshort_del_handle(&wpt_handle);
 }
 
 static void
@@ -335,7 +342,8 @@ mapsend_waypt_pr(const waypoint *waypointp)
 	 * them into the Mapsend file.
 	 */
 
-	tmp = xstrdup(sn);
+	
+	tmp = mkshort(wpt_handle, sn);
 	c = tmp ? strlen(tmp) : 0;
 	fwrite(&c, 1, 1, mapsend_file_out);
 	fwrite(tmp, c, 1, mapsend_file_out);
