@@ -258,6 +258,16 @@ static void
 google_read(void)
 {
 	xml_read();
+	if ( encoded_points ) 
+	{
+		xfree( encoded_points );
+		encoded_points = NULL;
+	}
+	if ( encoded_levels )
+	{
+		xfree( encoded_levels );
+		encoded_levels = NULL;
+	}
 	if ( script ) 
 	{
 		char *xml = strchr( script, '\'' );
