@@ -26,16 +26,11 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static char *deficon = NULL;
-
 static waypoint *wpt_tmp = NULL;
 static int item_count = -1;
 static int waypoints = 0;
 
 static route_head *route = NULL;
-
-static FILE *fd;
-static FILE *ofd;
 
 static char *routevia = NULL;
 

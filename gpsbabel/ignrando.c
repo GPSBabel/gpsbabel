@@ -308,7 +308,7 @@ ff_vecs_t ignr_vecs = {
 	ignr_rd_init,	
 	ignr_rw_init,	
 	ignr_rd_deinit,
-	ignr_rd_deinit,
+	ignr_rw_deinit,
 	ignr_read,
 	ignr_write,
 	NULL, 
