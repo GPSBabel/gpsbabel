@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
+#include "jeeps/gpsmath.h"
 #include "garmin_tables.h"
 
 #include <math.h>
@@ -434,17 +435,14 @@ static void
 geoniche_read_bin(const struct pdb *pdb)
 {
     struct pdb_record *pdb_rec;
-    int ct = 0;
-    waypoint *waypt;
 
     /* Process records */
     
     for (pdb_rec = pdb->rec_index.rec; pdb_rec != NULL; pdb_rec = pdb_rec->next)
     {
 	char *vdata = (char *) pdb_rec->data;
-	int vlen = pdb_rec->data_len;
 	struct tm created, visited;
-	int i, icon_nr, selected;
+	int icon_nr, selected;
 	int latdeg, londeg;
 	double lat, lon, altitude;
 	waypoint *waypt;

@@ -391,6 +391,8 @@ void track_disp_all(route_hdr, route_trl, waypt_cb);
 void route_free (route_head *);
 void route_flush( queue *);
 void route_flush_all(void);
+void route_flush_all_routes(void);
+void route_flush_all_tracks(void);
 route_head * route_find_route_by_name(const char *name);
 route_head * route_find_track_by_name(const char *name);
 unsigned int route_waypt_count(void);

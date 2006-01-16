@@ -37,7 +37,6 @@ static FILE *fin;
 static FILE *fout;
 static char *fin_name, *fout_name;
 static int curr_rte_num, target_rte_num;
-static int iter;
 
 #define MYNAME "navigon"
 
@@ -253,7 +252,6 @@ static void
 nmn4_write_waypt(const waypoint *wpt)
 {
 	char city[128], street[128], zipc[32], number[32];
-	int zip = -1;
 	
 	if (curr_rte_num != target_rte_num) return;
 
