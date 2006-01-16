@@ -60,7 +60,7 @@ arglist_t format_skeleton_args[] = {
 static void
 format_skeleton_rd_init(const char *fname)
 {
-//	fin = xfopen("r", fname);
+//	fin = xfopen(fname, "r", MYNAME);
 }
 
 static void 
@@ -77,13 +77,13 @@ format_skeleton_read(void)
 }
 
 static void
-format_skeleton_rw_init(const char *fname)
+format_skeleton_wr_init(const char *fname)
 {
-//	fout = xfopen("w", fname);
+//	fout = xfopen(fname, "w", MYNAME);
 }
 
 static void
-format_skeleton_rw_deinit(void)
+format_skeleton_wr_deinit(void)
 {
 //	fclose(fout);
 }
