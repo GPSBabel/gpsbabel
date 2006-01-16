@@ -204,7 +204,6 @@ cst_data_read(void)
 				if (*cin == ';')
 				{
 					int data = 0;
-					int note = 0;
 					
 					if (*(cin+1) != '\xA4') continue;
 					
@@ -242,7 +241,6 @@ cst_data_read(void)
 					int interp, i;
 					char name[256];
 					char *pow;
-					int column = 0;
 					
 					if (data_lines < 0)
 					{
@@ -265,7 +263,7 @@ cst_data_read(void)
 						&wpt->longitude, 
 						&wpt->latitude, 
 						&wpt->altitude,
-						&interp, &name))
+						&interp, name))
 					{
 						fatal(MYNAME ": Could not interprete line %d!\n", line);
 					}
