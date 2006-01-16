@@ -105,7 +105,7 @@ static waypoint*
 parse_wpt(char *buff)
 {
 	int col = -1;
-	char *c, *cend, *cx;
+	char *c, *cx;
 	waypoint *wpt = waypt_new();
 
 	c = strstr(buff, "A ");
@@ -331,7 +331,7 @@ compegps_data_read(void)
 {
 	char buff[1024];
 	int line = 0;
-	waypoint *wpt;
+	waypoint *wpt = NULL;
 	route_head *route = NULL;
 	route_head *track = NULL;
 	

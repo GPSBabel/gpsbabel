@@ -221,7 +221,7 @@ gdb.o: gdb.c defs.h queue.h gbtypes.h garmin_tables.h jeeps/gpsmath.h \
   jeeps/gpsproj.h jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 geo.o: geo.c defs.h queue.h gbtypes.h xmlgeneric.h
 geoniche.o: geoniche.c defs.h queue.h gbtypes.h coldsync/palm.h \
-  coldsync/pdb.h
+  coldsync/pdb.h jeeps/gpsmath.h
 globals.o: globals.c defs.h queue.h gbtypes.h
 glogbook.o: glogbook.c defs.h queue.h gbtypes.h xmlgeneric.h
 google.o: google.c defs.h queue.h gbtypes.h xmlgeneric.h
