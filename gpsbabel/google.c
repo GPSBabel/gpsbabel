@@ -183,6 +183,10 @@ static long decode_goog64( char **str )
 	long result = 0;
 	unsigned char c = 0;
 	unsigned char shift = 0;
+
+        if ( !(**str)) {
+		return 0;
+	}
 	
 	do 
 	{
@@ -306,9 +310,17 @@ google_read(void)
 		    end = strchr( encoded_points, '\'' );
 		    if ( end ) {
 	              *end = '\0';
+		      end = encoded_points;
+		      while ( (end = strstr(end, "\\\\" ))) {
+			memmove( end, end+1, strlen(end)+1 );
+		      }
 		      end = strchr( encoded_levels, '\'' );
 		      if ( end ) {
 			*end = '\0';
+		        end = encoded_levels;
+  		        while ( (end = strstr(end, "\\\\" ))) {
+			  memmove( end, end+1, strlen(end)+1 );
+		        }
 			goog_poly_e( NULL, NULL );
 		      }
 		    }		      
