@@ -88,7 +88,7 @@ gusb_open(const char *pname)
 
 	if (hdevinfo == INVALID_HANDLE_VALUE) {
 		GPS_Serial_Error("SetupDiGetClassDevs failed");
-		warning("Is the Garmin driver installed?");
+		warning("Is the Garmin USB driver installed?");
 		return 0;
 	}
 
@@ -97,7 +97,7 @@ gusb_open(const char *pname)
 	if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL, (GUID *) &GARMIN_GUID, 
 			0, &devinterface)) {
 		GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
-		warning("Is the unit powered up and connected?");
+		warning("Is the Garmin USB unit powered up and connected?");
 		return 0;
 	}
 
