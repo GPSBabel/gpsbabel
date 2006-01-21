@@ -257,7 +257,7 @@ mkshort.o: mkshort.c defs.h queue.h gbtypes.h
 msroute.o: msroute.c defs.h queue.h gbtypes.h
 navicache.o: navicache.c defs.h queue.h gbtypes.h cet_util.h
 netstumbler.o: netstumbler.c defs.h queue.h gbtypes.h csv_util.h
-nmea.o: nmea.c defs.h queue.h gbtypes.h
+nmea.o: nmea.c defs.h queue.h gbtypes.h strptime.h
 nmn4.o: nmn4.c defs.h queue.h gbtypes.h
 mag_pdb.o: mag_pdb.c defs.h queue.h gbtypes.h coldsync/palm.h coldsync/pdb.h \
   jeeps/gpsmath.h

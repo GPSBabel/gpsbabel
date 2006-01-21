@@ -2,7 +2,7 @@
 	Read files containing selected NMEA 0183 sentences.
 	Based on information by Eino Uikkanenj
 
-	Copyright (C) 2004-2005 Robert Lipe, robertlipe@usa.net
+	Copyright (C) 2004-2006 Robert Lipe, robertlipe@usa.net
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <time.h>
 
 #include "defs.h"
+#include "strptime.h"
 
 /**********************************************************
 
@@ -130,6 +131,8 @@ had checksums, it is best to discard that sentence.  In practice, the only
 time I have seen this is when the recording stops suddenly, where the last
 sentence is truncated - and missing part of the line, including the checksum.
 */
+
+#define SECONDS_PER_DAY (24L*60*60)
  
 typedef enum {
 	gp_unknown = 0,
@@ -146,7 +149,8 @@ static preferred_posn_type posn_type;
 static struct tm tm;
 static waypoint * curr_waypt = NULL;
 
-static int had_date = 0;
+static int without_date;	/* number of created trackpoints without a valid date */
+static struct tm opt_tm;	/* converted "date" parameter */
 
 #define MYNAME "nmea"
 
@@ -158,6 +162,7 @@ static char *nogpgga = NULL;
 static char *nogpvtg = NULL;
 static char *nogpgsa = NULL;
 static char *snlenopt = NULL;
+static char *optdate = NULL;
 
 arglist_t nmea_args[] = {
 	{"gprmc", &dogprmc, "Write GPRMC sentences", NULL, ARGTYPE_BOOL },
@@ -165,9 +170,9 @@ arglist_t nmea_args[] = {
 	{"nogpgga", &nogpgga, "Don't write GPGGA sentences", NULL, ARGTYPE_BOOL },
 	{"nogpvtg", &nogpvtg, "Don't write GPVTG sentences", NULL, ARGTYPE_BOOL },
 	{"nogpgsa", &nogpgsa, "Don't write GPGSA sentences", NULL, ARGTYPE_BOOL },
+	{"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT },
 	{0, 0, 0, 0 }
 };
-
 
 /*
  * Slightly different than the Magellan checksum fn.
@@ -213,6 +218,29 @@ nmea_wr_deinit(void)
 }
 
 static void
+nmea_set_waypoint_time(waypoint *wpt, struct tm *time)
+{
+	if (time->tm_year == 0)
+	{
+		wpt->creation_time = ((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec;
+		if (wpt->centiseconds == 0)
+		{
+			 wpt->centiseconds++;
+			 without_date++;
+		}
+	}
+	else
+	{
+		wpt->creation_time = mkgmtime(time);
+		if (wpt->centiseconds != 0)
+		{
+			wpt->centiseconds = 0;
+			without_date--;
+		}
+	}
+}
+
+static void
 gpgll_parse(char *ibuf)
 {
 	double latdeg, lngdeg;
@@ -241,7 +269,7 @@ gpgll_parse(char *ibuf)
 
 	waypt = waypt_new();
 
-	waypt->creation_time = mkgmtime(&tm);
+	nmea_set_waypoint_time(waypt, &tm);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -288,7 +316,7 @@ gpgga_parse(char *ibuf)
 
 	waypt  = waypt_new();
 
-	waypt->creation_time = mkgmtime(&tm);
+	nmea_set_waypoint_time(waypt, &tm);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -356,8 +384,6 @@ gprmc_parse(char *ibuf)
 	dmy = dmy / 100;
 	tm.tm_mday = dmy;
 
-	had_date = 1;
-
 	if (posn_type == gpgga) {
 		/* capture useful data update and exit */
 		if (curr_waypt) {
@@ -367,7 +393,7 @@ gprmc_parse(char *ibuf)
 				curr_waypt->course 	= course;
 			/* The change of date wasn't recorded when 
 			 * going from 235959 to 000000. */
-			curr_waypt->creation_time = mkgmtime(&tm);
+			 nmea_set_waypoint_time(curr_waypt, &tm);
 		}
 		return;
 	}
@@ -378,7 +404,7 @@ gprmc_parse(char *ibuf)
 
 	waypt->course 	= course;
 	
-	waypt->creation_time = mkgmtime(&tm);
+	nmea_set_waypoint_time(waypt, &tm);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -431,8 +457,6 @@ gpzda_parse(char *ibuf)
 	tm.tm_mday = dd;
 	tm.tm_mon  = mm - 1;
 	tm.tm_year = yy - 1900;
-
-	had_date = 1;
 }
 
 static void
@@ -512,6 +536,72 @@ gpvtg_parse(char *ibuf)
 	
 }
 
+static void
+nmea_fix_timestamps(route_head *track)
+{
+	if ((trk_head == NULL) || (without_date == 0)) return;
+	
+	if (tm.tm_year == 0)
+	{
+		queue *elem, *temp;
+		waypoint *prev = NULL;
+		time_t delta_tm;
+		
+		if (optdate == NULL)
+		{
+			warning(MYNAME ": No date found within track (all points dropped)!\n");
+			warning(MYNAME ": Please use option \"date\" to preset a valid date for thoose tracks.\n");
+			track_del_head(track);
+			return;
+		}
+		delta_tm = mkgmtime(&opt_tm);
+		
+		QUEUE_FOR_EACH(&track->waypoint_list, elem, temp)
+		{
+			waypoint *wpt = (waypoint *)elem;
+			
+			wpt->creation_time += delta_tm;
+			if ((prev != NULL) && (prev->creation_time > wpt->creation_time))	/* go over midnight ? */
+			{
+				delta_tm += SECONDS_PER_DAY;
+				wpt->creation_time += SECONDS_PER_DAY;
+			}
+			prev = wpt;
+		}
+	}
+	else
+	{
+		queue *elem, *temp;
+		time_t prev;
+		
+		tm.tm_hour = 23;	/* last date found */
+		tm.tm_min = 59;
+		tm.tm_sec = 59;
+		
+		prev = mkgmtime(&tm);
+		
+		/* go backward through the track and complete timestamps */
+
+		for (elem = QUEUE_LAST(&track->waypoint_list); elem != &track->waypoint_list; elem=elem->prev)
+		{
+			waypoint *wpt = (waypoint *)elem;
+			
+			if (wpt->centiseconds != 0)
+			{
+				time_t dt;
+				struct tm time;
+				
+				wpt->centiseconds = 0;		/* reset flag */
+
+				dt = (prev / SECONDS_PER_DAY) * SECONDS_PER_DAY;
+				wpt->creation_time += dt;
+				if (wpt->creation_time > prev)
+						wpt->creation_time+=SECONDS_PER_DAY;
+			}
+			prev = wpt->creation_time;
+		}
+	}
+}
 
 static void
 nmea_read(void)
@@ -521,13 +611,30 @@ nmea_read(void)
 	int ckval, ckcmp;
 	int had_checksum = 0;
 
-	had_date = 0;
+	posn_type = gp_unknown;
+	trk_head = NULL;
+	without_date = 0;
+	memset(&tm, 0, sizeof(tm));
+	opt_tm = tm;
+	
+	if (optdate)
+	{
+		memset(&opt_tm, 0, sizeof(opt_tm));
+		
+		ck = (char *)strptime(optdate, "%Y%m%d", &opt_tm);
+		if ((ck == NULL) || (*ck != '\0') || (strlen(optdate) != 8))
+			fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
+		else if (opt_tm.tm_year < 70)
+			fatal(MYNAME ": Date \"%s\" is out of range (have to be 19700101 or later)!\n", optdate);
+	}
 
 	curr_waypt = NULL; 
 
-	while (fgets(ibuf, sizeof(ibuf), file_in)) {
-	char *tbuf = ibuf;
-
+	while (fgets(ibuf, sizeof(ibuf), file_in)) 
+	{
+		char *tbuf = lrtrim(ibuf);
+		if (*tbuf != '$') continue;
+		
 		ck = strrchr(tbuf, '*');
 		if (ck != NULL) {
 			*ck = '\0';
@@ -545,31 +652,22 @@ nmea_read(void)
 
 			had_checksum = 1;
 		}
-	else if (had_checksum) {
-	/* we have had a checksum on all previous sentences, but not on this
-	one, which probably indicates this line is truncated */
-	had_checksum = 0;
-	continue;
-	}
+		else if (had_checksum) {
+			/* we have had a checksum on all previous sentences, but not on this
+			one, which probably indicates this line is truncated */
+			had_checksum = 0;
+			continue;
+		}
 
-	/* Only GPRMC and GPZDA sentences have dates in them, so we discard all 
-	   sentences until we see one of those 
-	*/
-	if (!had_date && 
-		(0 != strncmp(tbuf, "$GPRMC,", 7)) &&
-		(0 != strncmp(tbuf, "$GPZDA,", 7))) {
-		continue;
-	}
-
-	/* @@@ zmarties: The parse routines all assume all fields are present, but 
-	   the NMEA format allows any field to be missed out if there is no data
-	   for that field.  Rather than change all the parse routines, we first
-	   substitute a default value of zero for any missing field.
-	*/
-	if (strstr(tbuf, ",,"))
-	{
-	  tbuf = gstrsub(tbuf, ",,", ",0,");
-	}
+		/* @@@ zmarties: The parse routines all assume all fields are present, but 
+		   the NMEA format allows any field to be missed out if there is no data
+		   for that field.  Rather than change all the parse routines, we first
+		   substitute a default value of zero for any missing field.
+		*/
+		if (strstr(tbuf, ",,"))
+		{
+			tbuf = gstrsub(tbuf, ",,", ",0,");
+		}
 
 		if (0 == strncmp(tbuf, "$GPWPL,", 7)) {
 			gpwpl_parse(tbuf);
@@ -603,11 +701,13 @@ nmea_read(void)
 			gpgsa_parse(tbuf); /* GPS fix */
 		}
 
-	if (tbuf != ibuf) {
-	  /* clear up the dynamic buffer we used because substition was required */
-		xfree(tbuf);
+		if (tbuf != ibuf) {
+		  /* clear up the dynamic buffer we used because substition was required */
+			xfree(tbuf);
+		}
 	}
-	}
+	/* try to complete date-less trackpoints */
+	nmea_fix_timestamps(trk_head);
 }
 
 
@@ -647,17 +747,19 @@ nmea_trackpt_pr(const waypoint *wpt)
 	double lat,lon;
 	int cksum;
 	struct tm *tm;
-	int hms;
+	time_t hms;
+	time_t ymd;
 
 	lat = degrees2ddmm(wpt->latitude);
 	lon = degrees2ddmm(wpt->longitude);
 
 	tm = gmtime(&wpt->creation_time);
 	if ( tm ) {
-		hms = tm->tm_hour * 10000 + tm->tm_min  * 100 +
-		tm->tm_sec;
+		hms = tm->tm_hour * 10000 + tm->tm_min * 100 + tm->tm_sec;
+		ymd = tm->tm_mday * 10000 + tm->tm_mon * 100 + tm->tm_year;
 	} else {
 		hms = 0;
+		ymd = 0;
 	}
 
 	switch (wpt->fix) 
@@ -684,7 +786,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 				fabs(lon), lon < 0 ? 'W' : 'E',
 				(wpt->speed>0)?(wpt->speed / kts2mps):(0),
 				(wpt->course>=0)?(wpt->course):(0),
-				tm->tm_mday*10000+(tm->tm_mon+1)*100+tm->tm_year);
+				ymd);
 		cksum = nmea_cksum(obuf);
 		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
