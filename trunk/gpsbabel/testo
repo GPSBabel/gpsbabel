@@ -957,4 +957,10 @@ cat reference/mxf.mxf >> ${TMPDIR}/unicsv.txt
 ${PNAME} -i unicsv -f ${TMPDIR}/unicsv.txt -o gpx -F ${TMPDIR}/unicsv.gpx
 compare ${TMPDIR}/unicsv.gpx reference/unicsv.gpx
 
+#
+# Basic NMEA tests
+#
+${PNAME} -i nmea -f reference/track/nmea -o gpx -F ${TMPDIR}/nmea.gpx
+compare ${TMPDIR}/nmea.gpx reference/track/nmea.gpx
+
 exit 0
