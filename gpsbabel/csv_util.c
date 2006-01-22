@@ -1103,9 +1103,10 @@ xcsv_waypt_pr(const waypoint *wpt)
     i = 0;
     QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
 	char *obuff;
-        fmp = (field_map_t *) elem;
 	double lat = wpt->latitude;
 	double lon = wpt->longitude;
+
+        fmp = (field_map_t *) elem;
 
         if ((i != 0) && !(fmp->options & OPTIONS_NODELIM))  
             fprintf (xcsv_file.xcsvfp, write_delimiter);
