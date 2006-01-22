@@ -334,8 +334,8 @@ int argc,
 					}
 					/* Is this one of the test sequences where we prepare some data by using sed? */
 					/* we only cater for sed that removes lines - this is only windows after all  */
-					if (strncmp("sed '/^L",acLineIn,8) == 0) {
-						pcTerm = strstr(acLineIn+8,"/d'");
+					if (strncmp("sed '/",acLineIn,6) == 0) {
+						pcTerm = strstr(acLineIn+6,"/d'");
 
 						/* Did we find a terminator in the string? */
 						if ((pcTerm != NULL) && ((pcTerm - acLineIn) < LINELENGTH)) {
@@ -344,10 +344,10 @@ int argc,
 								f_outputLine(pfTestoOut, "@echo.");
 								iEchoLevel = 0;
 							}
-							iStart = 8;
-							strcat(acLineOut, "FINDSTR /V \"");
-							iTarget = 12;
-							for (iThisChar=8; iThisChar<(pcTerm - acLineIn); iThisChar++) {
+							iStart = 6;
+							strcat(acLineOut, "FINDSTR /V /R /C:\"");
+							iTarget = 18;
+							for (iThisChar=6; iThisChar<(pcTerm - acLineIn); iThisChar++) {
 								acLineOut[iTarget++] = acLineIn[iStart++];
 							}
 							acLineOut[iTarget++] = (char)0;
