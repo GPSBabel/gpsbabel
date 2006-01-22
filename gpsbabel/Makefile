@@ -68,6 +68,7 @@ SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
           uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
+	  inifile \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS)
 
@@ -243,6 +244,7 @@ html.o: html.c defs.h queue.h gbtypes.h jeeps/gpsmath.h jeeps/gps.h \
   jeeps/gpsnmeafmt.h jeeps/gpsnmeaget.h
 igc.o: igc.c defs.h queue.h gbtypes.h
 ignrando.o: ignrando.c defs.h queue.h gbtypes.h xmlgeneric.h
+inifile.o: inifile.c inifile.h defs.h queue.h gbtypes.h
 internal_styles.o: internal_styles.c defs.h queue.h gbtypes.h
 kml.o: kml.c defs.h queue.h gbtypes.h xmlgeneric.h
 lowranceusr.o: lowranceusr.c defs.h queue.h gbtypes.h
