@@ -321,6 +321,17 @@ int argc,
 						iTranslateQuotes = 1;
 						iQuoteCount = 1;
 					}
+					/* Is this one of the test sequences where we prepare some data? */
+					if (strncmp("cat ",acLineIn,4) == 0) {
+						if (iEchoLevel > 0) {
+							f_outputLine(pfTestoOut, "@echo off");
+							f_outputLine(pfTestoOut, "@echo.");
+							iEchoLevel = 0;
+						}
+						iStart = 4;
+						strcat(acLineOut, "TYPE ");
+						iTarget = 5;
+					}
 					/* Is this one of the test sequences where we prepare some data by using sed? */
 					/* we only cater for sed that removes lines - this is only windows after all  */
 					if (strncmp("sed '/^L",acLineIn,8) == 0) {
