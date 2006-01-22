@@ -183,7 +183,7 @@ msvc-build:
 # Machine generated from here down.  
 an1.o: an1.c defs.h queue.h gbtypes.h an1sym.h
 arcdist.o: arcdist.c defs.h queue.h gbtypes.h grtcirc.h
-bcr.o: bcr.c defs.h queue.h gbtypes.h garmin_tables.h
+bcr.o: bcr.c defs.h queue.h gbtypes.h garmin_tables.h inifile.h
 brauniger_iq.o: brauniger_iq.c defs.h queue.h gbtypes.h jeeps/gpsserial.h \
   jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h \
   jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
