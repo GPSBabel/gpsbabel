@@ -31,7 +31,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-#define	LINELENGTH	200
+#define	LINELENGTH	256
 #define	MYNAME		"MkWinTesto"
 
 /* ------------------------------------------------------------------------------------ */
