@@ -3,6 +3,7 @@ REM
 REM Simple Windows NT/2000/XP .cmd version of GPSBabel testo script
 REM
 
+SET GPSBABEL_FREEZE_TIME=y
 SET TMPDIR=%TEMP%\WINTESTO
 MKDIR %TMPDIR% 2>NUL:
 
@@ -18,8 +19,8 @@ FOR %%A IN (%3) DO IF "d--------"=="%%~aA" SET PARAM2=%3\*
 FOR /f "delims=" %%a IN ('fc %PARAM1% %PARAM2%') DO IF "x%%a"=="xFC: no differences encountered" GOTO :EOF
 REM Show the first 5 lines of difference
 fc %1 /LB5 %PARAM1% %PARAM2%
-ECHO %* are not the same (first 5 differences above) - pausing. ^C to quit if required
-PAUSE
+if errorlevel 1 ECHO %* are not the same (first 5 differences above) - pausing. ^C to quit if required
+if errorlevel 1 PAUSE
 GOTO :EOF
 
 REM ==================================
@@ -47,6 +48,8 @@ REM ==================================
 :REALSTART
 
 
+REM Turn on GNU libc instrumentation.
+
 SET PNAME=.\gpsbabel
 IF NOT EXIST %PNAME%.EXE ECHO Can't find %PNAME%&& GOTO :EOF
 
@@ -54,6 +57,16 @@ IF NOT EXIST %PNAME%.EXE ECHO Can't find %PNAME%&& GOTO :EOF
 
 
 
+REM Some formats are just too boring to test.   The ones that
+REM are xcsv include 
+REM garmin301 
+REM garmin_poi 
+REM gpsdrivetrack
+REM nima 
+REM mapconverter
+REM geonet
+REM saplus
+REM s_and_t
 REM Geocaching .loc
 DEL %TMPDIR%\gl.loc
 @echo on
@@ -196,14 +209,34 @@ DEL %TMPDIR%\mm.pcx %TMPDIR%\pcx.gps
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\mm.gps %TMPDIR%\gu.wpt
+@echo on
+@echo Testing...
+%PNAME% -t -i gpx -f reference\track\tracks.gpx -o pcx -F %TMPDIR%\pcx.trk
+%PNAME% -t -i pcx -f reference\track\pcx.trk -o pcx -F %TMPDIR%\pcx2.trk
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\pcx.trk %TMPDIR%\pcx2.trk 
 
+REM 
 REM Magellan file format
+REM 
 @echo on
 @echo Testing...
 %PNAME% -i magellan -f reference\magfile -o magellan -F %TMPDIR%\magfile
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\magfile reference\magfile
+
+REM 
+REM Magellanx is just like, but with longer names. (which this admittedly
+REM doesn't actually exercise...)
+REM 
+@echo on
+@echo Testing...
+%PNAME% -i magellan -f reference\magfile -o magellanx -F %TMPDIR%\magfile2
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\magfile2 reference\magfile
 
 REM Navitrak DNA marker format
 @echo on
@@ -522,6 +555,7 @@ DEL %TMPDIR%\magellan.rte
 @echo.
 CALL :COMPARE %TMPDIR%\magellan.rte reference\route\magellan.rte
 
+
 REM 
 REM GPX routes -- since GPX contains a date stamp, tests will always
 REM fail, so we use magellan as an interim format...
@@ -626,6 +660,7 @@ REM CoastalExplorer..
 %PNAME% -r -i coastexp -f reference\coastexp.nob -o gpx -F %TMPDIR%\coastexp.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\coastexp.gpx reference\coastexp.ref
 @echo on
 @echo Testing...
 %PNAME% -r -i gpx -f %TMPDIR%\coastexp.gpx -o coastexp -F %TMPDIR%\coastexp.nob
@@ -637,6 +672,7 @@ CALL :COMPARE %TMPDIR%\coastexp.nob reference\coastexp.ref2
 %PNAME% -w -i coastexp -f reference\coastexp.nob -o gpx -F %TMPDIR%\coastexp.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\coastexp.gpx reference\coastexp.ref3
 @echo on
 @echo Testing...
 %PNAME% -w -i gpx -f %TMPDIR%\coastexp.gpx -o coastexp -F %TMPDIR%\coastexp.nob
@@ -777,6 +813,13 @@ DEL %TMPDIR%\gn.pdb %TMPDIR%\1.gpx %TMPDIR%\2.gpx
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\1.gpx %TMPDIR%\2.gpx
+REM 
+@echo on
+@echo Testing...
+%PNAME% -i geoniche -f reference\gn-targets.pdb -o gpx -F %TMPDIR%\gn-targets.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\gn-targets.gpx reference\gn-targets.gpx
 
 REM 
 REM saroute covers *.anr, *.rte, and *.rtd, but I only have an .anr for testing.
@@ -831,6 +874,7 @@ CALL :COMPARE %TMPDIR%\igc_sed.out reference\igc1_igc.out
 %PNAME% -i igc -f %TMPDIR%\igc.out -o gpx -F %TMPDIR%\igc.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\igc.gpx reference\igc1_gpx.out
 
 @echo on
 @echo Testing...
@@ -854,6 +898,7 @@ CALL :COMPARE %TMPDIR%\igc_sed.out reference\igc1_3d.out
 %PNAME% -i igc -f reference\igc2.igc -o gpx -F %TMPDIR%\igc.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\igc.gpx reference\igc2_gpx.out
 
 @echo on
 @echo Testing...
@@ -868,6 +913,7 @@ CALL :COMPARE %TMPDIR%\igc_sed.out reference\igc2_igc.out
 %PNAME% -i igc -f %TMPDIR%\igc.out -o gpx -F %TMPDIR%\igc.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\igc.gpx reference\igc2_gpx.out
 
 REM 
 REM Google Maps XML test
@@ -875,18 +921,26 @@ REM
 DEL %TMPDIR%\google.out
 @echo on
 @echo Testing...
-%PNAME% -i google -f reference\google.xml -o arc -F %TMPDIR%\google.out
+%PNAME% -i google -f reference\google.xml -o csv -F %TMPDIR%\google.out
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\google.out reference\google.arc
+CALL :COMPARE %TMPDIR%\google.out reference\google.csv
 
 DEL %TMPDIR%\google.out
 @echo on
 @echo Testing...
-%PNAME% -i google -f reference\google.js -o arc -F %TMPDIR%\google.out
+%PNAME% -i google -f reference\google.js -o csv -F %TMPDIR%\google.out
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\google.out reference\google.arc
+CALL :COMPARE %TMPDIR%\google.out reference\google.csv
+
+DEL %TMPDIR%\google.out
+@echo on
+@echo Testing...
+%PNAME% -i google -f reference\google_jan_06.html -o csv -F %TMPDIR%\google.out
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\google.out reference\google_jan_06.csv
 
 REM 
 REM DeLorme .an1 tests
@@ -905,7 +959,7 @@ DEL %TMPDIR%\an1.out
 %PNAME% -i an1 -f reference\foo.an1 -o an1 -F %TMPDIR%\an1.out
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\an1.out reference\an1-an1.ref
+CALL :BINCOMPARE %TMPDIR%\an1.out reference\an1-an1.ref
 
 DEL %TMPDIR%\an1.out
 @echo on
@@ -913,7 +967,7 @@ DEL %TMPDIR%\an1.out
 %PNAME% -i xmap -f reference\xmap -o an1 -F %TMPDIR%\an1.out 
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\an1.out reference\an1-out.ref
+CALL :BINCOMPARE %TMPDIR%\an1.out reference\an1-out.ref
 
 DEL %TMPDIR%\an1.out
 @echo on
@@ -921,7 +975,7 @@ DEL %TMPDIR%\an1.out
 %PNAME% -i google -f reference\google.js -o an1 -F %TMPDIR%\an1.out
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\an1.out reference\an1-line-out.ref
+CALL :BINCOMPARE %TMPDIR%\an1.out reference\an1-line-out.ref
 
 REM 
 REM TomTom .ov2 tests
@@ -1021,19 +1075,21 @@ REM
 
 @echo on
 @echo Testing...
-%PNAME% -i geo -f geocaching.loc  -o tabsep -F - | %PNAME% -i tabsep -f - -o geo -F %TMPDIR%\tabsep.out
+%PNAME% -i geo -f geocaching.loc  -o tabsep -F %TMPDIR%\tabsep.in
+%PNAME% -i tabsep -f %TMPDIR%\tabsep.in -o geo -F %TMPDIR%\tabsep.out
 %PNAME% -i geo -f geocaching.loc  -o geo -F %TMPDIR%\geotabsep.out
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\tabsep.out %TMPDIR%\geotabsep.out
 
 REM 
 REM Now do the same for custom - it has the same issues.
 REM 
 
-CALL :COMPARE %TMPDIR%\tabsep.out %TMPDIR%\geotabsep.out
 @echo on
 @echo Testing...
-%PNAME% -i geo -f geocaching.loc  -o custom -F - | %PNAME% -i custom -f - -o geo -F %TMPDIR%\custom.out
+%PNAME% -i geo -f geocaching.loc  -o custom -F %TMPDIR%\custom.in
+%PNAME% -i custom -f %TMPDIR%\custom.in -o geo -F %TMPDIR%\custom.out
 %PNAME% -i geo -f geocaching.loc  -o geo -F %TMPDIR%\geocustom.out
 @echo off
 @echo.
@@ -1075,6 +1131,7 @@ DEL %TMPDIR%\pathaway*
 %PNAME% -t -i pathaway -f reference\track\pathaway.pdb -o gpx -F %TMPDIR%\pathaway.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\pathaway.gpx reference\track\pathaway.gpx
 
 REM 
 REM Garmin GPS Database .gdb tests
@@ -1082,7 +1139,7 @@ REM
 DEL %TMPDIR%\gdb-*
 @echo on
 @echo Testing...
-%PNAME% -w -r -t -i gdb -f reference\gdb-sample.gdb -o gpx -F %TMPDIR%\gdb-sample.gpx
+%PNAME% -w -r -t -i gdb,via -f reference\gdb-sample.gdb -o gpx -F %TMPDIR%\gdb-sample.gpx
 @echo off
 @echo.
 CALL :COMPARE reference\gdb-sample.gpx %TMPDIR%\gdb-sample.gpx
@@ -1107,11 +1164,13 @@ DEL %TMPDIR%\vitosmt*
 %PNAME%    -i vitosmt -f reference\vitosmt.smt -o gpx -F %TMPDIR%\vitosmt.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\vitosmt.gpx reference\vitosmt.gpx
 @echo on
 @echo Testing...
 %PNAME% -t -i vitosmt -f reference\vitosmt.smt -o gpx -F %TMPDIR%\vitosmt_t.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\vitosmt_t.gpx reference\track\vitosmt_t.gpx
 
 REM 
 REM tracks filter tests
@@ -1124,6 +1183,7 @@ DEL %TMPDIR%\trackfilter*
 %PNAME% -t -i gpx -f reference\track\trackfilter.gpx -x track,pack,split,title=LOG-%%Y%%m%%d -o gpx -F %TMPDIR%\trackfilter.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\trackfilter.gpx reference\track\trackfilter.gpx
 
 REM 
 REM Map&Guide Motorrad Routenplaner .bcr files test
@@ -1134,6 +1194,7 @@ DEL %TMPDIR%\bcr*
 %PNAME% -r -i bcr -f reference\route\bcr-sample.bcr -o gpx -F %TMPDIR%\bcr-sample.gpx
 @echo off
 @echo.
+CALL :COMPARE %TMPDIR%\bcr-sample.gpx reference\route\bcr-sample.gpx 
 @echo on
 @echo Testing...
 %PNAME% -r -i gpx -f reference\route\bcr-sample.gpx -o bcr -F %TMPDIR%\bcr-sample2.bcr
@@ -1372,4 +1433,78 @@ DEL %TMPDIR%\mag_pdb-*
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\mag_pdb-sample.gpx reference\route\mag_pdb-sample.gpx
+
+REM 
+REM CompeGPS I/O tests
+REM 
+DEL %TMPDIR%\compegps*
+REM read (CompeGPS)
+@echo on
+@echo Testing...
+%PNAME% -i compegps -f reference\compegps.wpt -o gpx -F %TMPDIR%\compegps-wpt.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\compegps-wpt.gpx %TMPDIR%\compegps-wpt.gpx
+@echo on
+@echo Testing...
+%PNAME% -i compegps -f reference\route\compegps.rte -o gpx -F %TMPDIR%\compegps-rte.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\route\compegps-rte.gpx %TMPDIR%\compegps-rte.gpx
+@echo on
+@echo Testing...
+%PNAME% -i compegps -f reference\track\compegps.trk -o gpx -F %TMPDIR%\compegps-trk.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\track\compegps-trk.gpx %TMPDIR%\compegps-trk.gpx
+REM write (CompeGPS)
+@echo on
+@echo Testing...
+%PNAME% -i compegps -f reference\compegps.wpt -o compegps -F %TMPDIR%\compegps.wpt
+%PNAME% -i compegps -f %TMPDIR%\compegps.wpt -o gpx -F %TMPDIR%\compegps-wpt2.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\compegps-wpt.gpx %TMPDIR%\compegps-wpt2.gpx
+@echo on
+@echo Testing...
+%PNAME% -t -i compegps -f reference\track\compegps.trk -o compegps -F %TMPDIR%\compegps.trk
+%PNAME% -i compegps -f %TMPDIR%\compegps.trk -o gpx -F %TMPDIR%\compegps-trk2.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\track\compegps-trk.gpx %TMPDIR%\compegps-trk2.gpx
+@echo on
+@echo Testing...
+%PNAME% -r -i compegps -f reference\route\compegps.rte -o compegps -F %TMPDIR%\compegps.rte
+%PNAME% -i compegps -f %TMPDIR%\compegps.rte -o gpx -F %TMPDIR%\compegps-rte2.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\route\compegps-rte.gpx %TMPDIR%\compegps-rte2.gpx
+
+REM 
+REM Testing the 'nuketypes' filter is funky.
+REM Convert a GPX file to GPX to eliminate jitter.
+REM Then nuke the all but the three individual types, merge the result together
+REM and verify we got the original back.
+REM 
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f reference\gdb-sample.gpx -o gpx -F %TMPDIR%\alltypes.gpx
+%PNAME% -i gpx -f %TMPDIR%\alltypes.gpx -x nuketypes,tracks,routes -o gpx -F %TMPDIR%\wpts.gpx
+%PNAME% -i gpx -f %TMPDIR%\alltypes.gpx -x nuketypes,waypoints,routes -o gpx -F %TMPDIR%\trks.gpx
+%PNAME% -i gpx -f %TMPDIR%\alltypes.gpx -x nuketypes,waypoints,tracks -o gpx -F %TMPDIR%\rtes.gpx
+%PNAME% -i gpx -f %TMPDIR%\wpts.gpx -f %TMPDIR%\trks.gpx -f %TMPDIR%\rtes.gpx -o gpx -F %TMPDIR%\merged.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\alltypes.gpx %TMPDIR%\merged.gpx
+
+REM 
+REM Universal CSV - unicsv
+REM 
+ECHO lat,lon,descr,name,notes,unk,unk> %TMPDIR%\unicsv.txt
+@echo on
+@echo Testing...
+%PNAME% -i unicsv -f %TMPDIR%\unicsv.txt -o gpx -F %TMPDIR%\unicsv.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\unicsv.gpx reference\unicsv.gpx
 

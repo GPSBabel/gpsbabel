@@ -688,6 +688,7 @@ double degrees2ddmm(double deg_val);
  *  From util_crc.c
  */
 unsigned long get_crc32(const void * data, int datalen);
+unsigned long get_crc32_s(const void * data);
 
 /*
  * Color helpers.
