@@ -235,6 +235,7 @@ typedef struct tag_mapping {
 	tag_type tag_type;		/* enum from above for this tag */
 	int tag_passthrough;		/* true if we don't generate this */
 	const char *tag_name;		/* xpath-ish tag name */
+	unsigned long crc;		/* Crc32 of tag_name */
 } tag_mapping;
 
 /*
@@ -333,14 +334,25 @@ static tag_type
 get_tag(const char *t, int *passthrough)
 {
 	tag_mapping *tm;
+	unsigned long tcrc = get_crc32_s(t);
+
 	for (tm = tag_path_map; tm->tag_type != 0; tm++) {
-		if (0 == strcmp(tm->tag_name, t)) {
+		if ((tcrc == tm->crc) && (0 == strcmp(tm->tag_name, t))) {
 			*passthrough = tm->tag_passthrough;
 			return tm->tag_type;
 		}
 	}
 	*passthrough = 1;
 	return tt_unknown;
+}
+
+static void
+prescan_tags(void)
+{
+	tag_mapping *tm;
+	for (tm = tag_path_map; tm->tag_type != 0; tm++) {
+		tm->crc = get_crc32_s(tm->tag_name);
+	}
 }
 
 static void
@@ -1043,6 +1055,8 @@ gpx_rd_init(const char *fname)
 	file_time = 0;
 	current_tag = vmem_alloc(1, 0);
 	*((char *)current_tag.mem) = '\0';
+
+	prescan_tags();
 	
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {

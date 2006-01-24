@@ -79,3 +79,18 @@ get_crc32(const void * data, int datalen)
 
 	return (crc ^ 0xFFFFFFFF);
 }
+
+/*
+ * As above, but on null-terminated string.
+ */
+unsigned long
+get_crc32_s(const void *data)
+{
+	unsigned long crc = 0xFFFFFFFF;
+	const unsigned char* cp = (unsigned char *)data;
+
+	for (;*cp;cp++) {
+		crc = ((crc >> 8) & 0x00FFFFFF) ^ crc32_table[(crc ^ *cp) &0xFF];
+	}
+	return (crc ^ 0xFFFFFFFF);
+}
