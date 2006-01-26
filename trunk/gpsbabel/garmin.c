@@ -60,7 +60,9 @@ static int d103_icon_number_from_symbol(const char *s);
 static void
 rw_init(const char *fname)
 {
-	int short_length;
+	int receiver_short_length;
+	int receiver_must_upper = 1;
+	char * receiver_charset = NULL;
 
 	if (!mkshort_handle)
 		mkshort_handle = mkshort_new_handle();
@@ -92,7 +94,7 @@ rw_init(const char *fname)
 	 * Fortunately, getting this "wrong" only results in ugly names
 	 * when we're using the synthesize_shortname path.
 	 */
-	short_length = 10;
+	receiver_short_length = 10;
 
 	switch ( gps_waypt_type )	/* waypoint type as defined by jeeps */
 	{
@@ -108,18 +110,31 @@ rw_init(const char *fname)
 		case 152:
 		case 154:
 		case 155:
-			short_length = 6;
+			receiver_short_length = 6;
 			break;
 		case 106:	/* Waypoint types with variable ident length */
 		case 108: 	/* Need GPSr id to know the actual length */
 		case 109:                   
+		case 110:                   
 			switch ( gps_save_id )
 			{
 				case 130:	/* Garmin Etrex (yellow) */
-					short_length = 6;
+					receiver_short_length = 6;
 					break;
 				case 155:	/* Garmin V */
-					short_length = 20;
+				case 404:	/* SP2720 */
+					receiver_short_length = 20;
+					break;
+				case 292: /* 60CSX series */
+					receiver_short_length = 14;
+					snwhiteopt = "1";
+					receiver_must_upper = 0;
+					/* This might be 8859-1 */
+					receiver_charset = "MS-ANSI";
+"
+					break;
+				case 231: /* Quest */
+					receiver_charset = "MS-ANSI";
 					break;
 				default:
 					break;
@@ -132,7 +147,7 @@ rw_init(const char *fname)
 	if (global_opts.debug_level > 0)  {
 		fprintf(stderr, "Waypoint type: %d\n"
 			"Chosen waypoint length %d\n",
-			 gps_waypt_type, short_length);
+			 gps_waypt_type, receiver_short_length);
 	}
 	/*
 	 * If the user provided a short_length, override the calculated value.
@@ -140,14 +155,22 @@ rw_init(const char *fname)
 	if (snlen)
 		setshort_length(mkshort_handle, atoi(snlen));
 	else
-		setshort_length(mkshort_handle, short_length);
+		setshort_length(mkshort_handle, receiver_short_length);
 
 	if (snwhiteopt)
 		setshort_whitespace_ok(mkshort_handle, atoi(snwhiteopt));
 
-	setshort_goodchars(mkshort_handle, valid_waypt_chars);
-	setshort_mustupper(mkshort_handle, 1);
+	/* 
+	 * Until Garmins documents how to determine valid character space
+	 * for the new models, we just release this safety check manually.
+	 */
+	if (!receiver_must_upper)
+		setshort_goodchars(mkshort_handle, valid_waypt_chars);
 
+	setshort_mustupper(mkshort_handle, receiver_must_upper);
+
+	if (receiver_charset)
+		cet_convert_init(receiver_charset, 1);
 }
 
 static void
@@ -216,7 +239,7 @@ waypt_read(void)
 		 */
 		if ((way[i]->alt == (float) (1U<<31)) || 
 		     (way[i]->alt == INT_MAX) ||
-		     (way[i]->alt == (float) 1.0e25)
+		     (way[i]->alt >= (float) 1.0e20)
 		     ) {
 			wpt_tmp->altitude = unknown_alt;
 		} else {
@@ -528,6 +551,10 @@ route_hdr_pr(const route_head *rte)
 {
 	(*cur_tx_routelist_entry)->rte_num = rte->rte_num;
 	(*cur_tx_routelist_entry)->isrte = 1;
+	if (rte->rte_name) {
+		strncpy((*cur_tx_routelist_entry)->rte_ident, rte->rte_name, 
+			sizeof ((*cur_tx_routelist_entry)->rte_ident));
+	}
 }
 
 static void
@@ -542,6 +569,8 @@ route_waypt_pr(const waypoint *wpt)
 	 * we just double them up (sigh) and do that here.
 	 */
 	rte->islink = 1;
+	rte->lon = wpt->longitude;
+	rte->lat = wpt->latitude;
 	cur_tx_routelist_entry++;
 	rte = *cur_tx_routelist_entry;
 
@@ -663,7 +692,7 @@ ff_vecs_t garmin_vecs = {
 	data_write,
 	NULL,
 	garmin_args,
-	CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
+	CET_CHARSET_ASCII, 0
 };
 
 static const char *d103_icons[16] = {
