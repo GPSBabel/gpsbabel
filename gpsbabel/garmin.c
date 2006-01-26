@@ -130,11 +130,10 @@ rw_init(const char *fname)
 					snwhiteopt = "1";
 					receiver_must_upper = 0;
 					/* This might be 8859-1 */
-					receiver_charset = "MS-ANSI";
-"
+					receiver_charset = CET_CHARSET_MS_ANSI;
 					break;
 				case 231: /* Quest */
-					receiver_charset = "MS-ANSI";
+					receiver_charset = CET_CHARSET_MS_ANSI;
 					break;
 				default:
 					break;
