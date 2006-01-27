@@ -991,9 +991,8 @@ gdb_fwrite_str(const char *str, const int len)
 	    gdb_fwrite(str, len);	/* write a string with fixed length */
 	else
 	{
-	    char *tmp = str_utf8_to_cp1252((str != NULL) ? str : "");
+	    char *tmp = (str != NULL) ? (char *)str : "";
 	    gdb_fwrite(tmp, strlen(tmp) + 1);
-	    xfree(tmp);
 	}
 }
 
