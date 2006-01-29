@@ -4,6 +4,7 @@
 ** @author Copyright (C) 1999 Alan Bleasby
 ** @version 1.0 
 ** @modified Dec 28 1999 Alan Bleasby. First version
+** @modified 2004, 2005, 2006 Robert Lipe
 ** @@
 ** 
 ** This library is free software; you can redistribute it and/or
@@ -309,29 +310,20 @@ static void GPS_A001(GPS_PPacket packet)
     
     for(i=0;i<entries;++i,p+=3)
     {
-	char pb[256];
 	tag = *p;
 	data = GPS_Util_Get_Short(p+1);
 
-	sprintf(pb, "Capability '%c'.  Type %d", tag, data);
-	GPS_User(pb);
-	
+	switch (tag) {
 	/* Only one type of P[hysical] so far */
-	if(tag == 'P')
-	{
+	case 'P':
 	    if(data!=0)
 		GPS_Protocol_Error(tag,data);
-	    continue;
-	}
-
-	if(tag == 'L')
-	{
+	    break;
+	case 'L':
 	    gps_link_type = data;
-	    continue;
-	}
-
-	if(tag == 'A')
-	{
+	    break;
+	case 'A':
+	    GPS_User("\nCapability %c%d:", tag, data);
 	    lasta = data;
 	    if(data<100)
 	    {
@@ -441,10 +433,10 @@ static void GPS_A001(GPS_PPacket packet)
 	    {
 		GPS_Protocol_Error(tag,data);
 	    }
-	}
+	    break;
 
-	if(tag == 'D')
-	{
+	case 'D':
+	    GPS_User(" %c%d", tag, data);
 	    if(lasta<200)
 	    {
 		if(data<=110 && data>=100)
@@ -532,7 +524,7 @@ static void GPS_A001(GPS_PPacket packet)
 
 	    else if(lasta<500)
 	    {
-		if(data<=109 && data>=100)
+		if(data<=110 && data>=100)
 		{
 		    gps_prx_waypt_type = data;
 		    continue;
@@ -613,6 +605,8 @@ static void GPS_A001(GPS_PPacket packet)
 	    }
 	}
     }
+
+    GPS_User("\n");
 
     return;
 }
@@ -734,7 +728,7 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
 	    GPS_D155_Get(&((*way)[i]),rec->data);
 	    break;
 	default:
-	    GPS_Error("A100_GET: Unknown waypoint protocol");
+	    GPS_Error("A100_GET: Unknown waypoint protocol: %d", gps_waypt_type);
 	    return PROTOCOL_ERROR;
 	}
 	/* Issue callback for status updates. */
@@ -750,7 +744,7 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
 
     if(rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt)
     {
-	GPS_Error("A100_GET: Error transferring waypoints");
+	GPS_Error("A100_GET: Error transferring waypoints.  Expected %d completion code.  Got %d", LINK_ID[gps_link_type].Pid_Xfer_Cmplt, rec->type);
 	return FRAMING_ERROR;
     }
 

@@ -545,7 +545,7 @@ int32 GPS_Serial_Wait(int32 fd)
 int32 GPS_Serial_On(const char *port, int32 *fd)
 {
     if (gps_is_usb) {
-	    return gusb_init();
+	    return gusb_init(port);
     }
     if(!GPS_Serial_Savetty(port))
     {
