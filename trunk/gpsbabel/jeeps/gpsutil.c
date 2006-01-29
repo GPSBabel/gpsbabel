@@ -591,15 +591,17 @@ void GPS_Disable_Warning(void)
 ** @@
 ****************************************************************************/
 
-void GPS_User(char *s)
+void GPS_User(const char *fmt, ...)
 {
-    if(!gps_user)
-	return;
+    va_list  argp;
+    va_start (argp, fmt);
 
-    fprintf(stdout,"%s\n",s);
-    fflush(stdout);
+    if (gps_user) {
+	vfprintf(stdout, fmt, argp);
+	fflush(stdout);
+    }
     
-    return;
+    va_end(argp);
 }
 
 /* @func GPS_Disable_User ***********************************************
