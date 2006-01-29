@@ -53,7 +53,7 @@ static void garmin_usb_scan(void);
 static void garmin_usb_syncup(void);
 
 int
-gusb_init(void)
+gusb_init(const char *portname)
 {
 // usb_set_debug(99);
 	usb_init();
