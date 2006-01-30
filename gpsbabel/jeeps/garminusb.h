@@ -57,3 +57,10 @@ int gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz);
 int gusb_open(const char *portname);
 int gusb_close(const char *portname);
 int gusb_init(const char *portname);
+
+/*
+ * New packet types in USB.
+ */
+#define GUSB_SESSION_START 5	/* We request units attention */
+#define GUSB_SESSION_ACK   6	/* Unit responds that we have its attention */ 
+#define GUSB_REQUEST_BULK  2	/* Unit requests we read from bulk pipe */
