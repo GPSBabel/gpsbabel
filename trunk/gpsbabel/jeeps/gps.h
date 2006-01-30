@@ -130,6 +130,7 @@ typedef struct GPS_SWay
     int32  colour;
     char   cc[2];
     UC     wpt_class;
+    UC     alt_is_unknown;
     float  alt;
     char   city[24];
     char   state[2];

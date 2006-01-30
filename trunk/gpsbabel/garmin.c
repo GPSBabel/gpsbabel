@@ -163,7 +163,7 @@ rw_init(const char *fname)
 	 * Until Garmins documents how to determine valid character space
 	 * for the new models, we just release this safety check manually.
 	 */
-	if (!receiver_must_upper)
+	if (receiver_must_upper)
 		setshort_goodchars(mkshort_handle, valid_waypt_chars);
 
 	setshort_mustupper(mkshort_handle, receiver_must_upper);
@@ -523,6 +523,7 @@ waypoint_write(void)
 		}
 		way[i]->smbl = icon;
 		if (wpt->altitude == unknown_alt) {
+			way[i]->alt_is_unknown = 1;
 			way[i]->alt = 0;
 		} else {
 			way[i]->alt = wpt->altitude;

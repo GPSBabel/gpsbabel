@@ -23,6 +23,7 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
+#include "garminusb.h"
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -209,14 +210,11 @@ static int32 GPS_A000(const char *port)
     version = GPS_Util_Get_Short((rec->data)+2);
 
     (void) strcpy(gps_save_string,(char *)rec->data+4);
-    GPS_User((char *)rec->data+4);
-    (void) sprintf(tstr,"ID:\t\t%d\n",id);
     gps_save_id = id;
-    GPS_User(tstr);
     gps_save_version = (double)((double)version/(double)100.);
-    (void) sprintf(tstr,
-		   "Version:\t%.2f\n",gps_save_version);
-    GPS_User(tstr);
+
+    GPS_User("Unit:\t%s\nID:\t%d\nVersion:\t%.2f", 
+	gps_save_string, gps_save_id, gps_save_version);
 
 
     gps_date_time_transfer = pA600;
@@ -241,21 +239,30 @@ static int32 GPS_A000(const char *port)
     }
     else
     {
-        int maxct = 3;
+        int i;
 	/*
 	 * The unit may return more than one packet, so read and
-	 * discard all but the product inquiry response.
+	 * discard all but the product inquiry response.  We have
+	 * no way of knowing how many we'll get, so we have to keep
+	 * reading until we incur a timeout.
 	 */
-	while (maxct--) {
-		(void) GPS_Packet_Read(fd, &rec);
-		GPS_Send_Ack(fd, &tra, &rec);
-		if (rec->type == 0xfd) {
-			GPS_A001(rec);
-			break;
-		}
+	for (i = 0; i < 25; i++) {
+	    rec->type = 0;
+	    
+	    if (GPS_Packet_Read(fd, &rec) < 0) {
+		    goto carry_on;
+	    }
+
+	    GPS_Send_Ack(fd, &tra, &rec);
+
+	    if (rec->type == 0xfd) {
+		    GPS_A001(rec);
+	    }
 	}
+	fatal("Failed to find a product inquiry response.\n");
     }
 
+carry_on:
     /* Make sure PVT is off as some GPS' have it on by default */
     if(gps_pvt_transfer != -1)
 	GPS_A800_Off(port,&fd);
@@ -1998,7 +2005,11 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len, int protoid)
     p+=sizeof(int32);
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lon));
     p+=sizeof(int32);
-    GPS_Util_Put_Float(p,way->alt);
+    if (way->alt_is_unknown) {
+	GPS_Util_Put_Float(p,1.0e25);
+    } else {
+	GPS_Util_Put_Float(p,way->alt);
+    }
     p+=sizeof(float);
     GPS_Util_Put_Float(p,way->dpth);
     p+=sizeof(float);
@@ -5290,7 +5301,6 @@ time_t GPS_A600_Get(const char *port)
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
 	return MEMORY_ERROR;
 
-
     GPS_Util_Put_Short(data,
 		       COMMAND_ID[gps_device_command].Cmnd_Transfer_Time);
     GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -6021,5 +6031,11 @@ Get_Pkt_Type(unsigned char p, unsigned char d0, const char **xinfo)
 		return "PRDREQ";
 	if (p == LT.Pid_Product_Data)
 		return "PRDDAT";
+	if (p == GUSB_REQUEST_BULK) 
+		return "REQBLK";
+	if (p == GUSB_SESSION_START)
+		return "SESREQ";
+	if (p == GUSB_SESSION_ACK)
+		return "SESACK";
 	return "UNKNOWN";
 }
