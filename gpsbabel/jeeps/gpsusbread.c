@@ -35,6 +35,13 @@ int32 GPS_Packet_Read_usb(int32 fd, GPS_PPacket *packet)
 	memset(&pkt, 0, sizeof(pkt));
 	n = gusb_cmd_get(&pkt, sizeof(pkt));
 
+	if ( n <= 0 ) {
+// FIXME: revisit why we're intermittend getting read errors here...
+// fprintf(stderr, "Eeek %d\n", n);
+		(*packet)->n = (UC) 0;
+		return n;
+	}
+
 	if (1 && gps_show_bytes) {
 		GPS_Diag("\nRx Data:[%d]",n);
 		for (i = 0; i < n; i++)
