@@ -245,11 +245,18 @@ static int32 GPS_A000(const char *port)
 	 * discard all but the product inquiry response.  We have
 	 * no way of knowing how many we'll get, so we have to keep
 	 * reading until we incur a timeout.
+	 * Worse still, the serial layer assumes a read timeout is a
+	 * fatal error, while the USB layer (correctly) returns that error
+	 * to the caller.  So we call GPS_Serial_Wait which spins into 
+	 * a delay/select for the serial system and a NOP for USB.
 	 */
 	for (i = 0; i < 25; i++) {
 	    rec->type = 0;
 	    
-	    if (GPS_Packet_Read(fd, &rec) < 0) {
+	    if(!GPS_Serial_Wait(fd))
+		    goto carry_on;
+
+	    if (GPS_Packet_Read(fd, &rec) <= 0) {
 		    goto carry_on;
 	    }
 
@@ -679,15 +686,11 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
     {
 	if(!((*way)[i]=GPS_Way_New()))
 	    return MEMORY_ERROR;
-again:	
+
 	if(!GPS_Packet_Read(fd, &rec))
 	    return gps_errno;
 	if(!GPS_Send_Ack(fd, &tra, &rec))
 	    return gps_errno;
-/* Temp: just retry on read error. */
-	if (rec->n == 0) {
-		goto again;
-	}
 
 	switch(gps_waypt_type)
 	{
