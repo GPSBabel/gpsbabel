@@ -679,11 +679,16 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
     {
 	if(!((*way)[i]=GPS_Way_New()))
 	    return MEMORY_ERROR;
-	
+again:	
 	if(!GPS_Packet_Read(fd, &rec))
 	    return gps_errno;
 	if(!GPS_Send_Ack(fd, &tra, &rec))
 	    return gps_errno;
+/* Temp: just retry on read error. */
+	if (rec->n == 0) {
+		goto again;
+	}
+
 	switch(gps_waypt_type)
 	{
 	case pD100:
