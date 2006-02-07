@@ -36,6 +36,7 @@ CFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -Icoldsync $(INHIBIT_EXPAT) $(INHIBIT_USB) $
 INSTALL_TARGETDIR=/usr/local/
 
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
+	gtm.o \
 	gpsutil.o pcx.o cetus.o copilot.o gpspilot.o magnav.o \
 	psp.o holux.o garmin.o tmpro.o tpg.o tpo.o \
 	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
