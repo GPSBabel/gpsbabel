@@ -25,12 +25,13 @@ typedef enum {
 	sm_unknown = 0,
 	sm_gcid,
 	sm_shortname,
-	sm_description
+	sm_description,
+	sm_time
 } sort_mode_;
 
 sort_mode_ sort_mode = sm_shortname;	/* How are we sorting these? */
 
-static char *opt_sm_gcid, *opt_sm_shortname, *opt_sm_description;
+static char *opt_sm_gcid, *opt_sm_shortname, *opt_sm_description, *opt_sm_time;
 
 static
 arglist_t sort_args[] = {
@@ -39,6 +40,8 @@ arglist_t sort_args[] = {
 	{"shortname", &opt_sm_shortname, "Sort by waypoint short name", 
 		NULL, ARGTYPE_BOOL },
 	{"description", &opt_sm_description, "Sort by waypoint description", 
+		NULL, ARGTYPE_BOOL },
+	{"time", &opt_sm_time, "Sort by time", 
 		NULL, ARGTYPE_BOOL },
 	{0, 0, 0, 0, 0}
 };
@@ -53,6 +56,7 @@ sort_comp(const void * a, const void * b)
 	   case sm_gcid: return x1->gc_data.id > x2->gc_data.id;
 	   case sm_shortname: return strcmp (x1->shortname, x2->shortname);
 	   case sm_description: return strcmp (x1->description, x2->description);
+	   case sm_time: return x1->creation_time > x2->creation_time;
 	   default: abort(); /* Internal caller error. */
 	}
 }
@@ -96,6 +100,8 @@ sort_init(const char *args)
 		sort_mode = sm_shortname;
 	if (opt_sm_description)
 		sort_mode = sm_description;
+	if (opt_sm_time)
+		sort_mode = sm_time;
 }
 
 filter_vecs_t sort_vecs = {
