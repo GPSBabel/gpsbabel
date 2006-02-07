@@ -811,6 +811,16 @@ supported by EasyGPS, ExpertGPS, and many other programs described at
 url="http://www.topografix.com/gpx_resources.asp">topografix.com</ulink>
          </para>
     </section>
+    <section id="GTM">
+      <sectioninfo>
+	<subtitle>GPS TrackMaker format.</subtitle>
+      </sectioninfo>
+      <title>GTM</title>
+      <para>Input and output support for waypoints, tracks and routes in
+	     the <ulink url="http://www.gpstm.com">GPS TrackMaker </ulink>
+	      binary format.</para>
+      <para>Code implemented by Gustavo Niemeyer.</para>
+    </section>
     <section id="hiketech">
       <sectioninfo>
 	<subtitle>Mac OS HikeTech formats. TopoDraw, Link2GPS &amp;

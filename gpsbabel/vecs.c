@@ -30,72 +30,73 @@ typedef struct {
 	const char *extension;
 } vecs_t;
 
+extern ff_vecs_t an1_vecs;
+extern ff_vecs_t bcr_vecs;
+extern ff_vecs_t brauniger_iq_vecs;
+extern ff_vecs_t cetus_vecs;
+extern ff_vecs_t coastexp_vecs;
+extern ff_vecs_t compegps_vecs;
+extern ff_vecs_t copilot_vecs;
+extern ff_vecs_t coto_vecs;
+extern ff_vecs_t cst_vecs;
+extern ff_vecs_t easygps_vecs;
+extern ff_vecs_t garmin_vecs;
+extern ff_vecs_t gcdb_vecs;
+extern ff_vecs_t gdb_vecs;
+extern ff_vecs_t geoniche_vecs;
 extern ff_vecs_t geo_vecs;
+extern ff_vecs_t glogbook_vecs;
+extern ff_vecs_t google_vecs;
+extern ff_vecs_t gpilots_vecs;
+extern ff_vecs_t gpl_vecs;
+extern ff_vecs_t gpspilot_vecs;
+extern ff_vecs_t gpsutil_vecs;
 extern ff_vecs_t gpx_vecs;
-extern ff_vecs_t mag_svecs;
+extern ff_vecs_t gtm_vecs;
+extern ff_vecs_t hiketech_vecs;
+extern ff_vecs_t holux_vecs;
+extern ff_vecs_t HsaEndeavourNavigator_vecs;
+extern ff_vecs_t html_vecs;
+extern ff_vecs_t igc_vecs;
+extern ff_vecs_t ignr_vecs;
+extern ff_vecs_t kml_vecs;
+extern ff_vecs_t lowranceusr_vecs;
 extern ff_vecs_t mag_fvecs;
+extern ff_vecs_t maggeo_vecs;
+extern ff_vecs_t magnav_vec;
+extern ff_vecs_t magpdb_vecs;
+extern ff_vecs_t mag_svecs;
 extern ff_vecs_t magX_fvecs;
 extern ff_vecs_t mapsend_vecs;
 extern ff_vecs_t mps_vecs;
-extern ff_vecs_t gpsutil_vecs;
-extern ff_vecs_t tiger_vecs;
+extern ff_vecs_t msroute_vecs;
+extern ff_vecs_t navicache_vecs;
+extern ff_vecs_t netstumbler_vecs;
+extern ff_vecs_t nmea_vecs;
+extern ff_vecs_t nmn4_vecs;
+extern ff_vecs_t overlay_vecs;
+extern ff_vecs_t ozi_vecs;
+extern ff_vecs_t palmdoc_vecs;
 extern ff_vecs_t pcx_vecs;
-extern ff_vecs_t lowranceusr_vecs;
-extern ff_vecs_t cetus_vecs;
-extern ff_vecs_t gpspilot_vecs;
-extern ff_vecs_t copilot_vecs;
+extern ff_vecs_t ppdb_vecs;
+extern ff_vecs_t psit_vecs;             /* MRCB */
 extern ff_vecs_t psp_vecs;
-extern ff_vecs_t garmin_vecs;
-extern ff_vecs_t holux_vecs;
-extern ff_vecs_t xcsv_vecs;
+extern ff_vecs_t quovadis_vecs;
+extern ff_vecs_t saroute_vecs;
+extern ff_vecs_t shape_vecs;
+extern ff_vecs_t stmwpp_vecs;
+extern ff_vecs_t tef_xml_vecs;
+extern ff_vecs_t text_vecs;
+extern ff_vecs_t tiger_vecs;
+extern ff_vecs_t tmpro_vecs;
+extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo_vecs;
-extern ff_vecs_t magnav_vec;
-extern ff_vecs_t tmpro_vecs;
-extern ff_vecs_t gcdb_vecs;
-extern ff_vecs_t easygps_vecs;
-extern ff_vecs_t quovadis_vecs;
-extern ff_vecs_t gpilots_vecs;
-extern ff_vecs_t saroute_vecs;
-extern ff_vecs_t navicache_vecs;
-extern ff_vecs_t coastexp_vecs;
-extern ff_vecs_t psit_vecs;             /* MRCB */
-extern ff_vecs_t shape_vecs;
-extern ff_vecs_t geoniche_vecs;
-extern ff_vecs_t gpl_vecs;
-extern ff_vecs_t ozi_vecs;
-extern ff_vecs_t nmea_vecs;
-extern ff_vecs_t text_vecs;
-extern ff_vecs_t palmdoc_vecs;
-extern ff_vecs_t html_vecs;
-extern ff_vecs_t netstumbler_vecs;
-extern ff_vecs_t HsaEndeavourNavigator_vecs;
-extern ff_vecs_t igc_vecs;
-extern ff_vecs_t brauniger_iq_vecs;
-extern ff_vecs_t hiketech_vecs;
-extern ff_vecs_t glogbook_vecs;
-extern ff_vecs_t vcf_vecs;
-extern ff_vecs_t overlay_vecs;
-extern ff_vecs_t kml_vecs;
-extern ff_vecs_t google_vecs;
-extern ff_vecs_t maggeo_vecs;
-extern ff_vecs_t an1_vecs;
-extern ff_vecs_t tomtom_vecs;
-extern ff_vecs_t tef_xml_vecs;
-extern ff_vecs_t ppdb_vecs;
-extern ff_vecs_t vitosmt_vecs;
-extern ff_vecs_t gdb_vecs;
-extern ff_vecs_t bcr_vecs;
-extern ff_vecs_t coto_vecs;
-extern ff_vecs_t ignr_vecs;
-extern ff_vecs_t stmwpp_vecs;
-extern ff_vecs_t msroute_vecs;
-extern ff_vecs_t cst_vecs;
-extern ff_vecs_t nmn4_vecs;
-extern ff_vecs_t magpdb_vecs;
-extern ff_vecs_t compegps_vecs;
-extern ff_vecs_t yahoo_vecs;
 extern ff_vecs_t unicsv_vecs;
+extern ff_vecs_t vcf_vecs;
+extern ff_vecs_t vitosmt_vecs;
+extern ff_vecs_t xcsv_vecs;
+extern ff_vecs_t yahoo_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -495,6 +496,12 @@ vecs_t vec_list[] = {
 		"unicsv",
 		"Universal csv with field structure in first line",
 		NULL
+	},
+	{
+		&gtm_vecs,
+		"gtm",
+		"GPS TrackMaker",
+		"gtm"
 	},
 	{
 		NULL,

@@ -1201,6 +1201,15 @@ THE FORMATS
 	             a default radius (proximity)
 	    snlen:   Length of generated short names (default 16)
 
+    GTM
+    
+	Input and output support for waypoints, tracks and routes in
+	the GPS TrackMaker binary format. For more information check:
+
+	    http://www.gpstm.com
+
+	Code implemented by Gustavo Niemeyer.
+
 
 DATA FILTERS
 

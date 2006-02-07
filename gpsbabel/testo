@@ -76,6 +76,14 @@ ${PNAME} -i geo -f geocaching.loc -o gpx -F ${TMPDIR}/gl.gpx
 ${PNAME} -i gpx -f ${TMPDIR}/gl.gpx -o gpsutil -F ${TMPDIR}/gpx.gpx
 compare ${TMPDIR}/gpx.gpx ${TMPDIR}/gu.wpt
 
+# GTM
+rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
+${PNAME} -i gtm -f reference/sample.gtm -o gpx -F ${TMPDIR}/gtm1.gpx
+${PNAME} -i gpx -f ${TMPDIR}/gtm1.gpx -o gtm -F ${TMPDIR}/gtm.gtm
+${PNAME} -i gtm -f ${TMPDIR}/gtm.gtm -o gpx -F ${TMPDIR}/gtm2.gpx
+compare ${TMPDIR}/gtm1.gpx ${TMPDIR}/gtm2.gpx
+compare ${TMPDIR}/gtm.gtm reference/sample.gtm
+
 # Magellan Mapsend
 rm -f ${TMPDIR}/mm.mapsend ${TMPDIR}/mm.gps
 ${PNAME} -i geo -f geocaching.loc -o mapsend -F ${TMPDIR}/mm.mapsend
