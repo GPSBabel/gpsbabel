@@ -112,12 +112,25 @@ static char *
 fread_string(FILE *fd)
 {
 	int len = fread_integer(fd);
-	char *val = xmalloc(len+1);
+	char *val;
+	
+	if (len == 0) return NULL;
+	
+	val = xmalloc(len+1);
 	fread(val, 1, len, fd);
 	while (len != 0 && val[len-1] == ' ')
 		len--;
 	val[len] = 0;
 	return val;
+}
+
+static void
+fread_string_discard(FILE *fd)
+{
+	char *temp = fread_string(fd);
+	if (temp != NULL) {
+		xfree(temp);
+	}
 }
 
 static char *
@@ -436,7 +449,7 @@ gtm_rd_init(const char *fname)
 		fatal(MYNAME ": Invalid file format\n");
 	if (version != 211)
 		fatal(MYNAME ": Invalid format version\n");
-	free(name);
+	xfree(name);
 
 	/* Header */
 	fread_discard(fd, 15);
@@ -449,10 +462,10 @@ gtm_rd_init(const char *fname)
 	im_count = fread_long(fd);
 	ts_count = fread_long(fd);
 	fread_discard(fd, 28);
-	fread_string(fd);
-	fread_string(fd);
-	fread_string(fd);
-	fread_string(fd);
+	fread_string_discard(fd);
+	fread_string_discard(fd);
+	fread_string_discard(fd);
+	fread_string_discard(fd);
 
 	/* User Grid and Datum */
 	fread_discard(fd, 34);
@@ -544,8 +557,8 @@ gtm_read(void)
 
 	/* Image information */
 	for (i = 0; i != im_count; i++) {
-		fread_string(fd);
-		fread_string(fd);
+		fread_string_discard(fd);
+		fread_string_discard(fd);
 		fread_discard(fd, 30);
 	}
 
@@ -576,7 +589,7 @@ gtm_read(void)
 	if (wp_count) {
 		for (i = 0; i != ws_count; i++) {
 			fread_discard(fd, 4);
-			fread_string(fd);
+			fread_string_discard(fd);
 			fread_discard(fd, 24);
 		}
 	}
@@ -638,7 +651,7 @@ gtm_read(void)
 			route_add_head(rte_head);
 		}
 		else {
-			free(route_name);
+			xfree(route_name);
 		}
 		route_add_wpt(rte_head, wpt);
 	}
