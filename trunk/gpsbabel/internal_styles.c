@@ -319,8 +319,6 @@ static char garmin_poi[] =
 "OFIELD GEOCACHE_DIFF, \"\", \"(%3.1f\", \"no_delim_before,optional\"\n"
 "OFIELD GEOCACHE_TERR, \"\", \"/%3.1f)\", \"no_delim_before,optional\"\n"
 "OFIELD DESCRIPTION, \"\", \"%-.50s\"\n"
-"# OFIELD GEOCACHE_PLACER, \"\", \" %s\", \"no_delim_before,optional\"\n"
-
 ;
 static char geonet[] = 
 "# gpsbabel XCSV style file\n"
@@ -672,7 +670,7 @@ static char s_and_t[] =
 "RECORD_DELIMITER	NEWLINE\n"
 "BADCHARS		,\"\n"
 
-"PROLOGUE	Name	Latitude	Longitude	Name2	URL	Type	Container	Diff	Terr\n"
+"PROLOGUE	Name	Latitude	Longitude	Description	URL	Type	Container	Diff	Terr\n"
 
 "#\n"
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
