@@ -440,7 +440,7 @@ gtm_rd_init(const char *fname)
 	char buf[256];
 	int version;
 	char *name;
-	fd = xfopen(fname, "r", MYNAME);
+	fd = xfopen(fname, "rb", MYNAME);
 	version = fread_integer(fd);
 	name = fread_fixedstring(fd, 10);
 	if (version == -29921)
@@ -489,7 +489,7 @@ gtm_wr_init(const char *fname)
 	track_disp_all(NULL, NULL, count_track_waypts);
 	route_disp_all(NULL, NULL, count_route_waypts);
 
-	ofd = xfopen(fname, "w", MYNAME);
+	ofd = xfopen(fname, "wb", MYNAME);
 
 	/* Header */
 	fwrite_integer(ofd, 211);
