@@ -193,8 +193,7 @@ waypoints from another source, it will currently create "Red Flag"
 symbols for waypoints, and thick red lines for routes or tracks.  It
 is possible to merge two drawing layers by doing something like this:
 </para>
-      <screen format="linespecific">gpsbabel -i an1 -f one.an1 -f
-two.an1 -o an1 -F merged.an1
+      <screen format="linespecific">gpsbabel -i an1 -f one.an1 -f two.an1 -o an1 -F merged.an1
 </screen>
       <para> In this case, the merged data will contain all of the
 properties of the original data.
@@ -204,8 +203,7 @@ information such as difficulty and terrain, GPSBabel will
 automatically include that information in the waypoint descriptions in
 the generated drawing file.  If you do not want that, specify the
 "nogc" option on the command line:</para>
-      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx -o
-an1,nogc -F 12345.an1</screen>
+      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx -o an1,nogc -F 12345.an1</screen>
       <para>The "deficon" option allows you to specify which symbol to
 use for points that don't have a symbol already.  It defaults to "Red
 Flag" but it accepts any symbol name you can put in a DeLorme export
@@ -339,9 +337,7 @@ differences.</para>
       <para/>
       <example>
 	<title>An example with all options</title>
-	<screen format="linespecific"><para>gpsbabel -r \</para>
-		<para> -i gpx -f in.gpx
--o bcr,index=1,name="From A to B",radius=6371012 \</para><para> -F a_to_b.bcr
+	<screen format="linespecific"><para>gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr
 </para>
 </screen>
       </example>
