@@ -1105,6 +1105,13 @@ xcsv_waypt_pr(const waypoint *wpt)
 	char *obuff;
 	double lat = wpt->latitude;
 	double lon = wpt->longitude;
+	/*
+	 * A klunky concept.   This should evaluate to true for any
+	 * field if we think we don't have realistic value for it.
+	 * This is used by the 'optional' attribute for suppressing
+	 * fields on output.
+	 */
+	int field_is_unknown = 0;
 
         fmp = (field_map_t *) elem;
 
@@ -1211,7 +1218,7 @@ xcsv_waypt_pr(const waypoint *wpt)
 	    dec_to_human( buff, fmp->printfc, "SN", lat );
 	} else
 	if (strcmp(fmp->key, "LAT_NMEA") == 0) {
-		writebuff(buff, fmp->printfc, degrees2ddmm(lat));
+	    writebuff(buff, fmp->printfc, degrees2ddmm(lat));
 	} else
 
         /* LONGITUDE CONVERSIONS*********************************************/
@@ -1328,43 +1335,54 @@ xcsv_waypt_pr(const waypoint *wpt)
         if (strcmp(fmp->key, "GEOCACHE_DIFF") == 0) {
             /* Geocache Difficulty as a double */
             writebuff(buff, fmp->printfc, wpt->gc_data.diff / 10.0);
+	    field_is_unknown = !wpt->gc_data.diff;
         } else
         if (strcmp(fmp->key, "GEOCACHE_TERR") == 0) {
             /* Geocache Terrain as a double */
             writebuff(buff, fmp->printfc, wpt->gc_data.terr / 10.0);
+	    field_is_unknown = !wpt->gc_data.terr;
         } else
         if (strcmp(fmp->key, "GEOCACHE_CONTAINER") == 0) {
             /* Geocache Container */
             writebuff(buff, fmp->printfc, gs_get_container(wpt->gc_data.container));
+	    field_is_unknown = wpt->gc_data.container == gc_unknown;
 	} else
 	if (strcmp(fmp->key, "GEOCACHE_TYPE") == 0) {
             /* Geocache Type */
             writebuff(buff, fmp->printfc, gs_get_cachetype(wpt->gc_data.type));
+	    field_is_unknown = wpt->gc_data.type == gt_unknown;
         } else 
 	if (strcmp(fmp->key, "GEOCACHE_HINT") == 0) {
 	    writebuff(buff, fmp->printfc, NONULL(wpt->gc_data.hint));
+	    field_is_unknown = !wpt->gc_data.hint;
         } else 
 	if (strcmp(fmp->key, "GEOCACHE_PLACER") == 0) {
 	    writebuff(buff, fmp->printfc, NONULL(wpt->gc_data.placer));
+	    field_is_unknown = !wpt->gc_data.placer;
         } else
 	
 	/* GPS STUFF *******************************************************/
 	if (strcmp(fmp->key, "GPS_HDOP") == 0) {
             writebuff(buff, fmp->printfc, wpt->hdop);
+	    field_is_unknown = !wpt->hdop;
         } else
 	if (strcmp(fmp->key, "GPS_VDOP") == 0) {
             writebuff(buff, fmp->printfc, wpt->vdop);
+	    field_is_unknown = !wpt->vdop;
         } else
 	if (strcmp(fmp->key, "GPS_PDOP") == 0) {
             writebuff(buff, fmp->printfc, wpt->pdop);
+	    field_is_unknown = !wpt->pdop;
         } else
 	if (strcmp(fmp->key, "GPS_SAT") == 0) {
             writebuff(buff, fmp->printfc, wpt->sat);
+	    field_is_unknown = !wpt->sat;
         } else
 	if (strcmp(fmp->key, "GPS_FIX") == 0) {
 		char *fix = NULL;
 		switch (wpt->fix) {
 			case fix_unknown:
+				field_is_unknown = 1;
 				fix = "Unknown";
 				break;
 			case fix_none:
@@ -1392,6 +1410,12 @@ xcsv_waypt_pr(const waypoint *wpt)
 	
 
         obuff = csv_stringclean(buff, xcsv_file.badchars);
+
+	if (field_is_unknown && fmp->options & OPTIONS_OPTIONAL) {
+		goto next;
+	}
+
+
 	/* As a special case (pronounced "horrible hack") we allow
  	 * ""%s"" to smuggle bad characters through.
 	 */
@@ -1401,6 +1425,7 @@ xcsv_waypt_pr(const waypoint *wpt)
 		fprintf (xcsv_file.xcsvfp, "%s", obuff);
 	}
 
+next:
 	xfree(obuff);
     }
 

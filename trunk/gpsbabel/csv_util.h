@@ -75,6 +75,7 @@ xcsv_get_char_from_constant_table(char *key);
 /* something to map fields to waypts */
 #define OPTIONS_NODELIM 1
 #define OPTIONS_ABSOLUTE 2
+#define OPTIONS_OPTIONAL 3
 typedef struct field_map {
 	queue Q;
 	char * key;
