@@ -396,6 +396,9 @@ xcsv_parse_style_line(const char *sbuff)
 		     if (strstr(s, "absolute")) {
 			options |= OPTIONS_ABSOLUTE;
 		     }
+		     if (strstr(s, "optional")) {
+			options |= OPTIONS_OPTIONAL;
+		     }
 		default:
 		    break;
 		}
