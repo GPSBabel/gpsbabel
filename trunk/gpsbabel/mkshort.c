@@ -1,7 +1,7 @@
 /*
     Generate unique short names.
 
-    Copyright (C) 2003, 2004, 2005 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2003, 2004, 2005, 2006 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -57,6 +57,23 @@ typedef struct {
 	char *orig_shortname;
 	int conflictctr;
 } uniq_shortname;
+
+static struct replacements {
+	const char *orig;
+	const char *replacement;
+} replacements[] = {
+	{"zero", 	"0"},
+	{"one", 	"1"},
+	{"two", 	"2"},
+	{"three", 	"3"},
+	{"four", 	"4"},
+	{"five", 	"5"},
+	{"six", 	"6"},
+	{"seven", 	"7"},
+	{"eight", 	"8"},
+	{"nine", 	"9"},
+	{NULL, 		NULL}
+};
 
 /* 
  * We hash all strings as upper case.
@@ -214,8 +231,33 @@ delete_last_vowel(int start, char *istring, int *replaced)
 		}
 	}
 	return istring;
-
 }
+
+/*
+ * Open the slippery slope of literal replacement.   Right now, replacements
+ * are made only at the end of the string.
+ */
+char *
+replace_constants(char *s)
+{
+	struct replacements *r;
+	int origslen = strlen(s);
+
+	for (r = replacements; r->orig; r++) {
+		int rl = strlen(r->orig);
+		/*
+		 * If word is in replacement list and preceeded by a 
+		 * space, replace it.
+		 */
+		if ((origslen - rl > 1) && 
+		    (0 == case_ignore_strcmp(r->orig, &s[origslen - rl])) &&
+		    (s[origslen - rl - 1] == ' ')) {
+			strcpy(&s[origslen - rl], r->replacement);
+			return ;
+}
+	}
+}
+
 
 /*
  * Externally callable function to set the max length of the
@@ -381,6 +423,13 @@ mkshort(short_handle h, const char *istring)
 			*tstring = toupper(*tstring);
 		}
 	}
+
+	/* Before we do any of the vowel or character removal, look for
+	 * constants to replace.
+	 */
+	
+	replace_constants(ostring);
+
 	/*
 	 * Eliminate chars on the blacklist.
  	 */
@@ -435,6 +484,7 @@ mkshort(short_handle h, const char *istring)
 	 * Walk in the Woods 1.
 	 * Walk in the Woods 2.
 	 */
+
 	np = ostring + strlen(ostring);
 	while ((np != ostring) && *(np-1) && isdigit(*(np-1) )) {
 		np--;
@@ -446,9 +496,14 @@ mkshort(short_handle h, const char *istring)
 	/*
 	 * Now brutally truncate the resulting string, preserve trailing 
 	 * numeric data.
+	 * If the numeric component alone is longer than our target string
+	 * length, use only what'll fit.
  	 */
 	if ((/*i = */strlen(ostring)) > hdl->target_len) {
-		strcpy(&ostring[hdl->target_len] - strlen(np), np);
+		char *dp = &ostring[hdl->target_len] - strlen(np);
+		if (dp < ostring) dp = ostring;
+		memmove(dp, np, strlen(np));
+		dp[strlen(np)] = 0;
 	}
 
 	/* 
