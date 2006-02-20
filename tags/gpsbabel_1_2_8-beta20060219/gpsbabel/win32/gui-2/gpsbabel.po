@@ -1,0 +1,323 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2005-12-05 16:08+0100\n"
+"Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "(integer sec or 'auto') Barograph to GPS time diff"
+msgstr ""
+
+msgid "(USR input) Break segments into separate tracks"
+msgstr ""
+
+msgid "(USR output) Merge into one segmented track"
+msgstr ""
+
+msgid "Allow whitespace synth. shortnames"
+msgstr ""
+
+msgid "Altitudes are absolute and not clamped to ground"
+msgstr ""
+
+msgid "Append icon_descr to description"
+msgstr ""
+
+msgid "Base URL for link tag in output"
+msgstr ""
+
+msgid "Basename prepended to URL on output"
+msgstr ""
+
+msgid "Category name (Cache)"
+msgstr ""
+
+msgid "Color for lines or mapnotes"
+msgstr ""
+
+msgid "color index [1-9] for routes"
+msgstr ""
+
+msgid "color index [1-9] for waypoint names"
+msgstr ""
+
+msgid "Command unit to power itself down"
+msgstr ""
+
+msgid "Create waypoints from geocache log entries"
+msgstr ""
+
+msgid "Database name"
+msgstr ""
+
+msgid "Database name (filename)"
+msgstr ""
+
+msgid "Datum (default=NAD27)"
+msgstr ""
+
+msgid "Days after which points are considered old"
+msgstr ""
+
+msgid "Default category on output (1..16)"
+msgstr ""
+
+msgid "Default icon name"
+msgstr ""
+
+msgid "Delete all waypoints"
+msgstr ""
+
+msgid "dimmer factor of map in %"
+msgstr ""
+
+msgid "Display the file header bytes"
+msgstr ""
+
+msgid "Do not add geocache data to description"
+msgstr ""
+
+msgid "Don't write GPGGA sentences"
+msgstr ""
+
+msgid "Don't write GPGSA sentences"
+msgstr ""
+
+msgid "Don't write GPVTG sentences"
+msgstr ""
+
+msgid "Drop route points that do not have an equivalent waypoint (hidden points)"
+msgstr ""
+
+msgid "Encrypt hints using ROT13"
+msgstr ""
+
+msgid "Encrypt hints with ROT13"
+msgstr ""
+
+msgid "Export linestrings for tracks and routes"
+msgstr ""
+
+msgid "Export placemarks for tracks and routes"
+msgstr ""
+
+msgid "font index [1-] for waypoint names"
+msgstr ""
+
+msgid "Full path to XCSV style file"
+msgstr ""
+
+msgid "Generate file with lat/lon for centering map"
+msgstr ""
+
+msgid "Give points (waypoints/route points) a default radius (proximity)"
+msgstr ""
+
+msgid "Height in pixels of map"
+msgstr ""
+
+msgid "Ignore event marker icons"
+msgstr ""
+
+msgid "Include groundspeak logs if present"
+msgstr ""
+
+msgid "Include only via stations in route"
+msgstr ""
+
+msgid "Include short name in bookmarks"
+msgstr ""
+
+msgid "Index of name field in .dbf"
+msgstr ""
+
+msgid "Index of route to write (if more the one in source)"
+msgstr ""
+
+msgid "Index of route/track to write (if more the one in source)"
+msgstr ""
+
+msgid "Index of track to write (if more the one in source)"
+msgstr ""
+
+msgid "Keep turns if simplify filter is used"
+msgstr ""
+
+msgid "Length of generated shortnames"
+msgstr ""
+
+msgid "Length of generated shortnames (default 16)"
+msgstr ""
+
+msgid "Line color, specified in hex AABBGGRR"
+msgstr ""
+
+msgid "Make synth. shortnames unique"
+msgstr ""
+
+msgid "Margin for map.  Degrees or percentage"
+msgstr ""
+
+msgid "Marker type for new points"
+msgstr ""
+
+msgid "Marker type for old points"
+msgstr ""
+
+msgid "Marker type for unfound points"
+msgstr ""
+
+msgid "Max length of waypoint name to write"
+msgstr ""
+
+msgid "Max number of comments to write (maxcmts=200)"
+msgstr ""
+
+msgid "Max shortname length when used with -s"
+msgstr ""
+
+msgid "Max synthesized shortname length"
+msgstr ""
+
+msgid "Merge output with existing file"
+msgstr ""
+
+msgid "name of map"
+msgstr ""
+
+msgid "Name of the 'unassigned' category"
+msgstr ""
+
+msgid "New name for the route"
+msgstr ""
+
+msgid "Non-stealth encrypted icon name"
+msgstr ""
+
+msgid "Non-stealth non-encrypted icon name"
+msgstr ""
+
+msgid "Numeric value of bitrate (baud=4800)"
+msgstr ""
+
+msgid "Omit Placer name"
+msgstr ""
+
+msgid "Only read turns; skip all other points"
+msgstr ""
+
+msgid "Path to HTML style sheet"
+msgstr ""
+
+msgid "Radius of our big earth (default 6371000 meters)"
+msgstr ""
+
+msgid "Read control points as waypoint/route/none"
+msgstr ""
+
+msgid "Return current position as a waypoint"
+msgstr ""
+
+msgid "set text background to transparent"
+msgstr ""
+
+msgid "Shortname is MAC address"
+msgstr ""
+
+msgid "size index [101-] for routes"
+msgstr ""
+
+msgid "Split into multiple routes at turns"
+msgstr ""
+
+msgid "State map format to write, default=CA"
+msgstr ""
+
+msgid "Stealth encrypted icon name"
+msgstr ""
+
+msgid "Stealth non-encrypted icon name"
+msgstr ""
+
+msgid "Suppress labels on generated pins"
+msgstr ""
+
+msgid "Suppress retired geocaches"
+msgstr ""
+
+msgid "Suppress separator lines between waypoints"
+msgstr ""
+
+msgid "Suppress use of handshaking in name of speed"
+msgstr ""
+
+msgid "Suppress whitespace in generated shortnames"
+msgstr ""
+
+msgid "Symbol to use for point data"
+msgstr ""
+
+msgid "Target GPX version for output"
+msgstr ""
+
+msgid "text size [101-] for waypoint names"
+msgstr ""
+
+msgid "The icon description is already the marker"
+msgstr ""
+
+msgid "Type of .an1 file (see README)"
+msgstr ""
+
+msgid "UPPERCASE synth. shortnames"
+msgstr ""
+
+msgid "Use depth values on output (default is ignore)"
+msgstr ""
+
+msgid "use file of parameters (parameters on command line overwrites file parameters)"
+msgstr ""
+
+msgid "Use proximity values on output (default is ignore)"
+msgstr ""
+
+msgid "Use shortname instead of description"
+msgstr ""
+
+msgid "Version of gdb file to generate (1,2)"
+msgstr ""
+
+msgid "Version of mapsource file to generate (3,4,5)"
+msgstr ""
+
+msgid "Waypoint background color"
+msgstr ""
+
+msgid "Waypoint foreground color"
+msgstr ""
+
+msgid "Waypoint type (marker,text,mapnote)"
+msgstr ""
+
+msgid "Width in pixels of map"
+msgstr ""
+
+msgid "Width of lines, in pixels"
+msgstr ""
+
+msgid "Write GPRMC sentences"
+msgstr ""
+
+msgid "Write tracks compatible with CartoExplorer"
+msgstr ""
+
+msgid "zoom factor of map in %"
+msgstr ""
+
+msgid "Zoom level to reduce points"
+msgstr ""
+
