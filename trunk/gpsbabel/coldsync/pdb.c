@@ -6,7 +6,7 @@
  *	You may distribute this file under the terms of the Artistic
  *	License, as specified in the README file.
  *
- * $Id: pdb.c,v 1.8 2005-10-13 22:08:01 robertl Exp $
+ * $Id: pdb.c,v 1.9 2006-02-20 21:59:19 robertl Exp $
  */
 /* XXX - The way zero-length records are handled is a bit of a kludge. They
  * shouldn't normally exist, with the exception of expunged records. But,
@@ -35,6 +35,10 @@
  */
 #if defined (__WIN32__)
 #include <io.h>
+#define lseek _lseek
+#define write _write
+#define read _read
+#define close _close
 #else
 #include <unistd.h>
 #endif
@@ -1587,7 +1591,7 @@ pdb_LoadAppBlock(int fd,
 	offset = lseek(fd, 0L, SEEK_CUR);	/* Find out where we are */
 	if (offset != db->appinfo_offset)
 	{
-		if (offset > db->appinfo_offset)
+		if (offset > (off_t) db->appinfo_offset)
 		{
 			/* Oops! We're in the wrong place */
 			fprintf(stderr, _("Warning: AppInfo block in \"%.*s\" "
@@ -1700,7 +1704,7 @@ pdb_LoadSortBlock(int fd,
 	offset = lseek(fd, 0L, SEEK_CUR);	/* Find out where we are */
 	if (offset != db->sortinfo_offset)
 	{
-		if (offset > db->sortinfo_offset)
+		if (offset > (off_t) db->sortinfo_offset)
 		{
 			/* Oops! We're in the wrong place */
 			fprintf(stderr, _("Warning: sort block in \"%.*s\" "
@@ -1791,7 +1795,7 @@ pdb_LoadResources(int fd,
 					/* Find out where we are now */
 		if (offset != rsrc->offset)
 		{
-			if (offset > rsrc->offset)
+			if (offset > (off_t) rsrc->offset)
 			{
 				fprintf(stderr, _("Warning: resource %d in "
 						  "\"%.*s\" isn't where "
@@ -1924,7 +1928,7 @@ pdb_LoadRecords(int fd,
 					/* Find out where we are now */
 		if (offset != rec->offset)
 		{
-			if (offset > rec->offset)
+			if (offset > (off_t) rec->offset)
 			{
 				fprintf(stderr, _("Warning: record %d in "
 						  "\"%.*s\" isn't where "

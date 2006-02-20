@@ -19,6 +19,7 @@
 */
 
 #include "defs.h"
+#include "jeeps/gpsmath.h"
 
 static FILE *fd, *ofd;
 static int indatum;
@@ -215,7 +216,7 @@ fwrite_string(FILE *fd, const char *str)
 	}
 }
 
-static char *
+void
 fwrite_fixedstring(FILE *fd, const char *str, int fieldlen)
 {
 	int len = str ? strlen(str) : 0;
@@ -437,7 +438,6 @@ void convert_datum(double *lat, double *lon)
 static void
 gtm_rd_init(const char *fname)
 {
-	char buf[256];
 	int version;
 	char *name;
 	fd = xfopen(fname, "rb", MYNAME);

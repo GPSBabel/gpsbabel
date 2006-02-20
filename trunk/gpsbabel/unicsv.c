@@ -39,7 +39,7 @@ struct {
 	int urlcol;
 } unicsv_fieldpos;
 
-static float unicsv_altscale;
+static double unicsv_altscale;
 static char *unicsv_fieldsep;
 
 static
@@ -183,7 +183,7 @@ unicsv_parse_one_line(char *ibuf)
 }
 
 static void 
-unicsv_rd()
+unicsv_rd(void)
 {
 	char buff[1024];
 

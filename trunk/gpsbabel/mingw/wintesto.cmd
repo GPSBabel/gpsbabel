@@ -112,6 +112,18 @@ DEL %TMPDIR%\gl.gpx %TMPDIR%\gpx.gpx
 @echo.
 CALL :COMPARE %TMPDIR%\gpx.gpx %TMPDIR%\gu.wpt
 
+REM GTM
+DEL %TMPDIR%\gl.gpx %TMPDIR%\gpx.gpx
+@echo on
+@echo Testing...
+%PNAME% -i gtm -f reference\sample.gtm -o gpx -F %TMPDIR%\gtm1.gpx
+%PNAME% -i gpx -f %TMPDIR%\gtm1.gpx -o gtm -F %TMPDIR%\gtm.gtm
+%PNAME% -i gtm -f %TMPDIR%\gtm.gtm -o gpx -F %TMPDIR%\gtm2.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\gtm1.gpx %TMPDIR%\gtm2.gpx
+CALL :COMPARE %TMPDIR%\gtm.gtm reference\sample.gtm
+
 REM Magellan Mapsend
 DEL %TMPDIR%\mm.mapsend %TMPDIR%\mm.gps
 @echo on

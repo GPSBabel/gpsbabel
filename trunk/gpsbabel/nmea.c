@@ -571,8 +571,8 @@ nmea_fix_timestamps(route_head *track)
 	}
 	else
 	{
-		queue *elem, *temp;
 		time_t prev;
+		queue *elem;
 		
 		tm.tm_hour = 23;	/* last date found */
 		tm.tm_min = 59;
@@ -589,7 +589,6 @@ nmea_fix_timestamps(route_head *track)
 			if (wpt->centiseconds != 0)
 			{
 				time_t dt;
-				struct tm time;
 				
 				wpt->centiseconds = 0;		/* reset flag */
 
