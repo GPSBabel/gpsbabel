@@ -424,11 +424,11 @@ void ovl_read_parameter(char *fname)
               pstr = strtok(NULL,"\n");
               if (p->argtype==ARGTYPE_BOOL)
               {
-                *(p->argval) = atoi(pstr) ? strdup(pstr) : NULL;
+                *(p->argval) = atoi(pstr) ? xstrdup(pstr) : NULL;
               }
               else
               {
-                *(p->argval) = strdup(pstr);
+                *(p->argval) = xstrdup(pstr);
               }
               break;
             }
