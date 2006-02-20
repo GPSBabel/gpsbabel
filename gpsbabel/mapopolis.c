@@ -164,13 +164,13 @@ decode(char *buf)
 				be_read16(&rec->lon1d) / LONDIV2; 
 
 			vdata = (char *) rec + sizeof(*rec);
-			wpt_tmp->description = strdup(vdata);
+			wpt_tmp->description = xstrdup(vdata);
 			vdata += strlen(wpt_tmp->description) + 1 + 6;
 
 			while (*vdata == 0x40)
 				vdata++;
 			decode(vdata);
-			wpt_tmp->notes = strdup(vdata);
+			wpt_tmp->notes = xstrdup(vdata);
 			vdata += strlen(wpt_tmp->notes) + 1;
 
 			waypt_add(wpt_tmp);
