@@ -739,7 +739,6 @@ sort_and_unify_vecs(int *ctp)
 		 * except the xcsv format itself, which we leave as "internal"
 		 */
 		if (strcmp(svec->name, "xcsv")) {
-			int n;
 			svp[i]->vec->type = xcsv_file.type;
 			/* Skip over the first help entry for all but the
 			 * actual 'xcsv' format - so we don't expose the
