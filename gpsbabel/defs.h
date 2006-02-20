@@ -49,11 +49,13 @@
 #if __WIN32__
 #  define snprintf _snprintf
 #  define vsnprintf _vsnprintf
+#  define fileno _fileno
 #endif
 
 /* Turn off numeric conversion warning */
 #if __WIN32__
-#pragma warning(disable:4244)
+#  pragma warning(disable:4244)
+#  define _CRT_SECURE_NO_DEPRECATE 1
 #endif
 
 /* 
@@ -545,6 +547,7 @@ ff_vecs_t *find_vec(char * const, char **);
 void disp_vecs(void);
 void exit_vecs(void);
 void disp_formats(int version);
+const char * name_option(long type);
 void printposn(const double c, int is_lat);
 
 #ifndef DEBUG_MEM
