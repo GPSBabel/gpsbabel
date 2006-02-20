@@ -237,7 +237,7 @@ delete_last_vowel(int start, char *istring, int *replaced)
  * Open the slippery slope of literal replacement.   Right now, replacements
  * are made only at the end of the string.
  */
-char *
+void
 replace_constants(char *s)
 {
 	struct replacements *r;
