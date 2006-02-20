@@ -264,6 +264,11 @@ static int32 GPS_A000(const char *port)
 
 	    if (rec->type == 0xfd) {
 		    GPS_A001(rec);
+/* XXX This is wrong.   Since we don't have a timeout on a read in Windows 
+ * (!) and this phase of the protocol is one of the very rare ones where we
+ * don't know how many packets to expect, we have a big problem here.
+ */
+goto carry_on;
 	    }
 	}
 	fatal("Failed to find a product inquiry response.\n");
@@ -620,7 +625,14 @@ static void GPS_A001(GPS_PPacket packet)
 	}
     }
 
-    GPS_User("\n");
+    GPS_User("\nLink_type %d  Device_command %d\n", 
+	gps_link_type, gps_device_command);
+    GPS_User("Waypoint: Transfer %d Type %d\n",
+	gps_waypt_transfer, gps_waypt_type);
+    GPS_User("Route:    Transfer %d Header %d Type %d\n",
+	gps_route_transfer, gps_rte_hdr_type, gps_rte_type);
+    GPS_User("Track:    Transfer %d Type %d\n",
+	gps_trk_transfer, gps_trk_type);
 
     return;
 }
