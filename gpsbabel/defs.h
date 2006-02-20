@@ -50,6 +50,7 @@
 #  define snprintf _snprintf
 #  define vsnprintf _vsnprintf
 #  define fileno _fileno
+#  define strdup _strdup
 #endif
 
 /* Turn off numeric conversion warning */

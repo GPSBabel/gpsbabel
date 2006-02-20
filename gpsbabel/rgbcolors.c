@@ -244,5 +244,5 @@ color_to_bbggrr( char *opt_color )
 	}
 
 	fatal( "unrecognized color name %s\n", opt_color );
-
+	return -1;
 }

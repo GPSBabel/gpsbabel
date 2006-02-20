@@ -10,6 +10,11 @@ load the workspace and hit "build all.")  If you load these files in to
 Visual Studio .NET, you may be asked to convert them to the new format; 
 In that case, you should do so.
 
+Note that the "Microsoft Platform SDK" is required in addition to
+the actual compiler package.  If you're using the Express editions,
+you must also reconfigure MSVC to use that as described at:
+	http://msdn.microsoft.com/vstudio/express/visualc/usingpsdk/
+
 The "Expat" directory contains the import library and header file for the
 Expat DLL.  This may or may not be the latest build of Expat; you might 
 want to check http://expat.sourceforge.net to see if there is a more recent
