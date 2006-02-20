@@ -57,7 +57,7 @@ sort_comp(const void * a, const void * b)
 	   case sm_shortname: return strcmp (x1->shortname, x2->shortname);
 	   case sm_description: return strcmp (x1->description, x2->description);
 	   case sm_time: return x1->creation_time > x2->creation_time;
-	   default: abort(); /* Internal caller error. */
+	   default: abort(); return 0; /* Internal caller error. */
 	}
 }
 
