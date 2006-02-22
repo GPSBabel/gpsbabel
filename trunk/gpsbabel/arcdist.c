@@ -90,20 +90,6 @@ arcdist_process(void)
   	      QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 
 		waypointp = (waypoint *)elem;
-		if ( ptsopt ) {
-		   dist = gcdist( lat2*M_PI/180.0, lon2*M_PI/180.0, 
-				   waypointp->latitude*M_PI/180.0, 
-				   waypointp->longitude*M_PI/180.0 );
-		}
-		else {
-		   dist = linedist(lat1, lon1, lat2, lon2, 
-				waypointp->latitude,
-				waypointp->longitude );
-		}
-
-		/* convert radians to float point statute miles */
-		dist = tomiles(dist);
-
 		if ( waypointp->extra_data ) {
 			ed = (extra_data *) waypointp->extra_data;
 		}
@@ -111,10 +97,26 @@ arcdist_process(void)
 			ed = (extra_data *) xcalloc(1, sizeof(*ed));
 			ed->distance = BADVAL;
 		}
-		if ( ed->distance > dist ) {
+		if ( ed->distance == BADVAL || ed->distance >= pos_dist ) {
+		   if ( ptsopt ) {
+		      dist = gcdist( lat2*M_PI/180.0, lon2*M_PI/180.0, 
+				   waypointp->latitude*M_PI/180.0, 
+				   waypointp->longitude*M_PI/180.0 );
+		   }
+		   else {
+		      dist = linedist(lat1, lon1, lat2, lon2, 
+				waypointp->latitude,
+				waypointp->longitude );
+		   }
+
+		   /* convert radians to float point statute miles */
+		   dist = tomiles(dist);
+
+		   if ( ed->distance > dist ) {
 			ed->distance = dist;
+		   }
+		   waypointp->extra_data = ed;
 		}
-		waypointp->extra_data = ed;
 	      }
 	    }
 	    lat1 = lat2;
