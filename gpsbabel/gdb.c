@@ -684,8 +684,7 @@ gdb_read_route(void)
 		if (gdb_ver > 1)
 		    gdb_fread(buff, 8);					/* Unknown 8 bytes since gdb v2 */
 
-		gdb_fread(buff, 1);
-		gdb_is_valid((buff[0] == 0), prefix3, "last seq.(2)");
+		gdb_fread_str(xname, sizeof(xname));			/* route url link */
 		
 		wpt = gdb_create_rte_wpt(xwptname, xlat, xlon, xalt);
 		if (wpt != NULL)
