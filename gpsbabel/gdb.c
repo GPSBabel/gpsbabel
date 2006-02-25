@@ -44,6 +44,8 @@
 	    2005/12/01: changed waypt's URL to descr for hidden waypoints (-> reference data changed)
 	                removed unused procedure gdb_add_to_hidden
 	    2005/12/04: additional testo sequences
+	    2006/02/24: last field of a route is rte url
+	    2006/02/25: rte_read_loop: zero check replaced with a dummy read (8 unknown bytes)
 */
 
 #include <stdio.h>
@@ -54,9 +56,13 @@
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
 
-#define MYNAME "gdb"
-
 #undef GDB_DEBUG
+
+#ifdef GDB_DEBUG
+# include "cet_util.h"
+#endif
+
+#define MYNAME "gdb"
 
 #define GDB_VER_MIN			1
 #define GDB_VER_MAX			2
@@ -653,7 +659,8 @@ gdb_read_route(void)
 	route_add_head(route);
 
 #ifdef GDB_DEBUG
-	printf(MYNAME " - route: \"%s\" with %d point(s)\n", xname, count);
+	printf(MYNAME " - route: \"%s\" with %d point(s)\n", 
+	    cet_str_cp1252_to_utf8(xname), count);
 #endif
 	origin = count;
 	
@@ -666,7 +673,12 @@ gdb_read_route(void)
 	    
 	    gdb_fread(buff, 22);						/* sub class data */
 	    gdb_fread(buff, 1);
-	    gdb_is_valid(buff[0] == 0, prefix1, "Should by zero byte (1)");
+	    if (buff[0] != 0) {							/* 0x00 or 0xFF */
+		gdb_fread(buff, 8);						/* unknown 8 bytes */
+#ifdef GDB_DEBUG
+		gdb_print_buff(buff, 8, "Unknown bytes within rte_reed_loop");
+#endif
+	    }
 
 	    /* The next thing is the unknown 0x03 0x00 .. 0x00 (18 bytes) */
 	    /* OK: this should be, but i've seen exceptions (...cannot verify the first byte */
