@@ -43,7 +43,7 @@ gusb_open(const char *portname)
 }
 
 int
-gusb_init()
+gusb_init(const char *portname)
 {
 	fatal(no_usb);
 }
