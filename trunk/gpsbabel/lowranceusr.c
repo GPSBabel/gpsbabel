@@ -2,7 +2,7 @@
 	Access to Lowrance USR files.
 	Contributed to gpsbabel by Jason Rust (jrust at rustyparts.com)
 
-	Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
+	Copyright (C) 2005, 2006 Robert Lipe, robertlipe@usa.net
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -131,6 +131,30 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
 	{ 10019, "Shower" },		/* person */
 	{ DEF_ICON, "Tunnel" },
 
+	/* This list comes from 'wifinder' from ifinder H20 Color */
+	
+        { 10062, "Interesting Land Feature" },
+        { 10063, "Global Location" },
+        { 10064, "Note" },
+        { 10065, "Ghost" },
+        { 10066, "Letter" },
+        { 10067, "Multi-Treasure" },
+        { 10068, "Mystery Or Puzzle" },
+        { 10069, "Treasure" },
+        { 10070, "Webmail" },
+        { 10071, "Sun" },
+        { 10072, "Musical Note" },
+        { 10073, "Camera/Movie Theater" },
+        { 10074, "Star" },
+        { 10075, "Coffee Mug" },
+        { 10076, "Books" },
+        { 10077, "Historical Marker" },
+        { 10078, "Tools/Repair" },
+        { 10079, "Favorite" },
+        { 10080, "Arena" },
+        { 10081, "Golf Course" },
+        { 10082, "Money/Atm" },
+
 	{	 -1, NULL }
 };
 
@@ -156,6 +180,7 @@ static char *seg_break;
 #define DEGREESTORADIANS	0.017453292
 #define SECSTO2000			946713600
 #define MAX_TRAIL_POINTS 9999
+#define UNKNOWN_USR_ALTITUDE	-3048  /* -10000ft is how the unit stores unknown */
 
 /* Jan 1, 2000 00:00:00 */
 struct tm base_time = { 0, 0, 0, 1, 0, 100, 5, 1, -1 };
@@ -194,10 +219,21 @@ long int
 lowranceusr_find_icon_number_from_desc(const char *desc)
 {
 	const lowranceusr_icon_mapping_t *i;
+	int n;
 
 	if (!desc) {
 		return DEF_ICON;
 	}
+
+	/*
+	 * If we were given a numeric icon number as a description 
+	 * (i.e. 8255), just return that.
+	 */
+	n = atoi(desc);
+	if (n)  {
+		return n;
+	}
+
 
 	for (i = lowranceusr_icon_value_table; i->icon; i++) {
 		if (case_ignore_strcmp(desc,i->icon) == 0) {
@@ -298,6 +334,9 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	wpt_tmp->longitude = lon_mm_to_deg(le_read32(&buff[0]));
 	lowranceusr_fread(&buff[0], 4, 1, file_in);
 	wpt_tmp->altitude = FEET_TO_METERS(le_read32(&buff[0]));
+	if (wpt_tmp->altitude <= UNKNOWN_USR_ALTITUDE) {
+		wpt_tmp->altitude = unknown_alt;
+	}
 	lowranceusr_fread(&buff[0], 4, 1, file_in);
 	TextLen = buff[0];
 	lowranceusr_fread(&buff[0], TextLen, 1, file_in);
@@ -332,6 +371,12 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	/* Symbol ID */
 	lowranceusr_fread(&buff[0], 4, 1, file_in);
 	wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(le_read32(&buff[0]));
+	if (!wpt_tmp->icon_descr[0]) {
+		char nbuf[10];
+		snprintf(nbuf, sizeof(nbuf), "%d", le_read32(buff));
+		wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
+		wpt_tmp->icon_descr = xstrdup(nbuf);
+	}
 
 	/* Waypoint Type (USER, TEMPORARY, POINT_OF_INTEREST) */
 	lowranceusr_fread(&buff[0], 2, 1, file_in);
@@ -593,6 +638,10 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 	char *comment;
 	int alt = METERS_TO_FEET(wpt->altitude);
 	time_t base_time_secs = mktime(&base_time);
+
+	if (alt == unknown_alt) {
+		alt = UNKNOWN_USR_ALTITUDE;
+	}
 
 	Lat = lat_deg_to_mm(wpt->latitude);
 	my_fwrite4(&Lat, file_out);
