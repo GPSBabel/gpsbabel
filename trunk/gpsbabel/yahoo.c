@@ -31,8 +31,8 @@ static
 arglist_t yahoo_args[] = {
 	{"addrsep", &as, 
 	"String to separate concatenated address fields (default=\", \")", 
-	", ", ARGTYPE_STRING },
-	{0, 0, 0, 0, 0}
+	", ", ARGTYPE_STRING, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 static xg_callback	wpt_s, wpt_lat, wpt_lon, wpt_e;

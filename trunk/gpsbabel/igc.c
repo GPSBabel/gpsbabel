@@ -888,8 +888,8 @@ static void data_write(void)
 static arglist_t igc_args[] = {
     {"timeadj", &timeadj,
      "(integer sec or 'auto') Barograph to GPS time diff", 
-     NULL, ARGTYPE_STRING},
-    {0, 0, 0, 0, 0}
+     NULL, ARGTYPE_STRING, ARG_NOMINMAX},
+    ARG_TERMINATOR
 };
 
 ff_vecs_t igc_vecs = {

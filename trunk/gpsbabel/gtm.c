@@ -750,7 +750,7 @@ gtm_write(void)
 
 static
 arglist_t gtm_args[] = {
-	{ 0, 0, 0, 0, 0 }
+	ARG_TERMINATOR
 };
 
 ff_vecs_t gtm_vecs = {

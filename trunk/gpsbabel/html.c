@@ -36,12 +36,12 @@ static char *includelogs = NULL;
 static
 arglist_t html_args[] = {
 	{ "stylesheet", &stylesheet, 
-		"Path to HTML style sheet", NULL, ARGTYPE_STRING },
+		"Path to HTML style sheet", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
 	{ "encrypt", &encrypt,
-		"Encrypt hints using ROT13", NULL, ARGTYPE_BOOL },
+		"Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "logs", &includelogs, 
-		"Include groundspeak logs if present", NULL, ARGTYPE_BOOL },
-	{0, 0, 0, 0, 0}
+		"Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 

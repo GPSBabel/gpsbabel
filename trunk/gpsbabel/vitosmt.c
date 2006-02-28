@@ -108,7 +108,7 @@ vitosmt_read(void)
 	double			lonrad			=0;
 	double			elev			=0;
 	unsigned char*	timestamp		=0;
-	struct tm		tmStruct		={0,0,0,0,0,0,0,0,0};
+	struct tm		tmStruct;
 	double			seconds			=0.0;
 	double			speed			=0.0;
 	double			course			=0.0;
@@ -118,7 +118,8 @@ vitosmt_read(void)
 	unsigned char	gpssats			=0;
 	int				serial			=0;
 
-		
+	
+	memset(&tmStruct, 0, sizeof(tmStruct));
 	/* 
 	 * 24 bytes header 
 	 */

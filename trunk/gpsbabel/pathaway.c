@@ -63,10 +63,10 @@ static char *snlen_opt = NULL;
 
 static arglist_t ppdb_args[] = 
 {
-	{"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING},
-	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING},
+	{"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
+	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	{"snlen", &snlen_opt, "Length of generated shortnames", "10", ARGTYPE_INT, "1", NULL },
-	{0, 0, 0, 0, 0 }
+	ARG_TERMINATOR
 };
 
 #undef PPDB_DEBUG

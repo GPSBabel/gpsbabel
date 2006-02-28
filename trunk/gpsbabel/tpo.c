@@ -41,10 +41,10 @@ static char *output_state = NULL;
 static
 arglist_t tpo_args[] = {
 	{ "dumpheader", &dumpheader, "Display the file header bytes", 
-		"0", ARGTYPE_BOOL} , 
+		"0", ARGTYPE_BOOL, ARG_NOMINMAX} , 
 	{ "state", &output_state, "State map format to write, default=CA", 
-	  "CA", ARGTYPE_STRING} , 
-	{0, 0, 0, 0, 0}
+	  "CA", ARGTYPE_STRING, ARG_NOMINMAX} , 
+	ARG_TERMINATOR
 };
 
 static FILE *tpo_file_in;

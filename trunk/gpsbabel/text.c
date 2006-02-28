@@ -37,12 +37,12 @@ static
 arglist_t text_args[] = {
 	{ "nosep", &suppresssep, 
 		"Suppress separator lines between waypoints", 
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "encrypt", &encrypt,
-		"Encrypt hints using ROT13", NULL, ARGTYPE_BOOL },
+		"Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "logs", &includelogs,
-		 "Include groundspeak logs if present", NULL, ARGTYPE_BOOL },
-	{0, 0, 0, 0, 0}
+		 "Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 

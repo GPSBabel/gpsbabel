@@ -39,24 +39,24 @@ static int  swapdepth = 0;
 static
 arglist_t stackfilt_args[] = {
 	{"push", &opt_push, "Push waypoint list onto stack", NULL, 
-		ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL},
+		ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"pop", &opt_pop, "Pop waypoint list from stack", NULL,
-		ARGTYPE_BOOL},
+		ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"swap", &opt_swap, "Swap waypoint list with <depth> item on stack", 
-		NULL, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_BOOL},
+		NULL, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"copy", &opt_copy, "(push) Copy waypoint list", NULL,
-		ARGTYPE_BOOL},
+		ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"append", &opt_append, "(pop) Append list", NULL,
-		ARGTYPE_BEGIN_EXCL | ARGTYPE_BOOL},
+		ARGTYPE_BEGIN_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"discard", &opt_discard, "(pop) Discard top of stack", 
-		NULL, ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"replace", &opt_replace, "(pop) Replace list (default)", 
-		NULL, ARGTYPE_END_EXCL | ARGTYPE_BOOL},
+		NULL, ARGTYPE_END_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"depth", &opt_depth, "(swap) Item to use (default=1)", 
 		NULL, ARGTYPE_INT, "0", NULL},
 	{"nowarn", &nowarn, "Suppress cleanup warning", NULL, 
-		ARGTYPE_BOOL | ARGTYPE_HIDDEN},
-	{0, 0, 0, 0, 0}
+		ARGTYPE_BOOL | ARGTYPE_HIDDEN, ARG_NOMINMAX},
+	ARG_TERMINATOR
 };
 
 struct stack_elt {

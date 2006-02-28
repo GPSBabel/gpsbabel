@@ -43,7 +43,7 @@ static FILE *ofd;
 
 static
 arglist_t hsa_ndv_args[] = {
-	{0, 0, 0, 0, 0}
+	ARG_TERMINATOR
 };
 
 #define MYNAME "HsaNdv"

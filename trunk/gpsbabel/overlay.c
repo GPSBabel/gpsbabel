@@ -82,11 +82,11 @@ static arglist_t ovl_args[] = {
        { "size", &govl_size_s, "size index [101-] for routes",
         NULL, ARGTYPE_INT, "101", NULL },
        { "mapname", &govl_mapname, "name of map",
-        NULL, ARGTYPE_STRING },
+        NULL, ARGTYPE_STRING, ARG_NOMINMAX },
        { "zoomfc", &govl_zoomfc_s, "zoom factor of map in %",
-        NULL, ARGTYPE_INT },
+        NULL, ARGTYPE_INT, ARG_NOMINMAX },
        { "dimmfc", &govl_dimmfc_s, "dimmer factor of map in %",
-        NULL, ARGTYPE_INT },
+        NULL, ARGTYPE_INT, ARG_NOMINMAX },
        { "txtcol", &govl_txtcol_s, "color index [1-9] for waypoint names",
         NULL, ARGTYPE_INT, "1", "9" },
        { "txtsize", &govl_txtsize_s, "text size [101-] for waypoint names",
@@ -94,10 +94,10 @@ static arglist_t ovl_args[] = {
        { "font", &govl_font_s, "font index [1-] for waypoint names",
         NULL, ARGTYPE_INT, "1", NULL },
        { "txttrans", &govl_txttrans_s, "set text background to transparent",
-        NULL, ARGTYPE_BOOL },
+        NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
        { "file", &govl_file_s, "use file of parameters (parameters on command line overwrites file parameters)",
-        NULL, ARGTYPE_STRING },
-       { 0, 0, 0, 0, 0 }
+        NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+       ARG_TERMINATOR
 };
 
 

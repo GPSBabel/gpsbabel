@@ -32,8 +32,8 @@ time_t tmstart;
 static
 arglist_t cvttype_skeleton_args[] = {
 	{"action", &action, "Type of conversion to perform", "wpttotrk", 
-		ARGTYPE_STRING} , 
-	{0, 0, 0, 0, 0}
+		ARGTYPE_STRING, ARG_NOMINMAX} , 
+	ARG_TERMINATOR
 };
 
 

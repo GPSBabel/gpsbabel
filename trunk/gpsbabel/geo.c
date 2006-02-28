@@ -29,9 +29,9 @@ static FILE *ofd;
 
 static
 arglist_t geo_args[] = {
-	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
-	{"nuke_placer", &nuke_placer, "Omit Placer name", NULL, ARGTYPE_BOOL },
-	{0, 0, 0, 0, 0}
+	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+	{"nuke_placer", &nuke_placer, "Omit Placer name", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 #define MYNAME "geo"

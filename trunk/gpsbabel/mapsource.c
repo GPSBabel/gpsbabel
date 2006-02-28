@@ -77,19 +77,19 @@ static
 arglist_t mps_args[] = {
 	{"snlen", &snlen, "Length of generated shortnames", "10", ARGTYPE_INT, "1", NULL },
 	{ "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-		NULL, ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"mpsverout", &mpsverout, 
 		"Version of mapsource file to generate (3,4,5)", NULL,
-		ARGTYPE_INT },
+		ARGTYPE_INT, ARG_NOMINMAX },
 	{"mpsmergeout", &mpsmergeouts, "Merge output with existing file", 
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"mpsusedepth", &mpsusedepth, 
 		"Use depth values on output (default is ignore)", NULL,
-		ARGTYPE_BOOL },
+		ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"mpsuseprox", &mpsuseprox, 
 		"Use proximity values on output (default is ignore)", 
-		NULL, ARGTYPE_BOOL },
-	{0, 0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 /*

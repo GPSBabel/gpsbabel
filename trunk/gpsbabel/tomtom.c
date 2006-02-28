@@ -41,7 +41,7 @@ static FILE *file_out;
 
 static
 arglist_t tomtom_args[] = {
-	{0, 0, 0, 0 }
+	ARG_TERMINATOR
 };
 
 static void

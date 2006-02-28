@@ -61,16 +61,16 @@ arglist_t ozi_args[] = {
 	{"snlen", &snlenopt, "Max synthesized shortname length",
 		"32", ARGTYPE_INT, "1", NULL},
 	{"snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-		NULL, ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"snupper", &snupperopt, "UPPERCASE synth. shortnames",
-	        NULL, ARGTYPE_BOOL},
+	        NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"snunique", &snuniqueopt, "Make synth. shortnames unique",
-		NULL, ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"wptfgcolor", &wptfgcolor, "Waypoint foreground color",
-		"black", ARGTYPE_STRING},
+		"black", ARGTYPE_STRING, ARG_NOMINMAX},
 	{"wptbgcolor", &wptbgcolor, "Waypoint background color",
-		"yellow", ARGTYPE_STRING},
-	{0, 0, 0, 0, 0}
+		"yellow", ARGTYPE_STRING, ARG_NOMINMAX},
+	ARG_TERMINATOR
 };
 
 static gpsdata_type ozi_objective;

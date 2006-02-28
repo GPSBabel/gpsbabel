@@ -59,20 +59,20 @@ static char *opt_stop = NULL;
 static
 arglist_t trackfilter_args[] = {
 	{TRACKFILTER_MOVE_OPTION, &opt_move, 
-	    "Correct trackpoint timestamps by a delta", NULL, ARGTYPE_STRING},
+	    "Correct trackpoint timestamps by a delta", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	{TRACKFILTER_PACK_OPTION,  &opt_pack,  
-	    "Pack all tracks into one", NULL, ARGTYPE_BOOL},
+	    "Pack all tracks into one", NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{TRACKFILTER_SPLIT_OPTION, &opt_split, 
-	    "Split track by date or by time interval (see README)", NULL, ARGTYPE_STRING},
+	    "Split track by date or by time interval (see README)", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	{TRACKFILTER_MERGE_OPTION, &opt_merge, 
-	    "Merge multiple tracks for the same way", NULL, ARGTYPE_STRING},
+	    "Merge multiple tracks for the same way", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	{TRACKFILTER_START_OPTION, &opt_start, 
-	    "Use only track points after this timestamp", NULL, ARGTYPE_INT},
+	    "Use only track points after this timestamp", NULL, ARGTYPE_INT, ARG_NOMINMAX},
 	{TRACKFILTER_STOP_OPTION, &opt_stop, 
-	    "Use only track points before this timestamp", NULL, ARGTYPE_INT},
+	    "Use only track points before this timestamp", NULL, ARGTYPE_INT, ARG_NOMINMAX},
 	{TRACKFILTER_TITLE_OPTION, &opt_title, 
-	    "Basic title for new track(s)", NULL, ARGTYPE_STRING},
-	{0, 0, 0, 0, 0}
+	    "Basic title for new track(s)", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
+	ARG_TERMINATOR
 };
 
 

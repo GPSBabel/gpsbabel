@@ -44,7 +44,7 @@ static char *unicsv_fieldsep;
 
 static
 arglist_t unicsv_args[] = {
-	{0, 0, 0, 0, 0}
+	ARG_TERMINATOR
 };
 
 /* helpers */

@@ -37,14 +37,14 @@ typedef struct {
 static
 arglist_t arcdist_args[] = {
 	{"file", &arcfileopt,  "File containing vertices of arc", 
-		NULL, ARGTYPE_FILE | ARGTYPE_REQUIRED},
+		NULL, ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX},
 	{"distance", &distopt, "Maximum distance from arc", 
-		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED},
+		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX},
 	{"exclude", &exclopt, "Exclude points close to the arc", NULL,
-		ARGTYPE_BOOL},
+		ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"points", &ptsopt, "Use distance from vertices not lines", 
-		NULL, ARGTYPE_BOOL},
-	{0, 0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	ARG_TERMINATOR
 };
 
 #define BADVAL 999999

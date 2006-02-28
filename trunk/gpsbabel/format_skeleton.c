@@ -49,8 +49,8 @@
 static
 arglist_t format_skeleton_args[] = {
 // {"foo", &fooopt, "The text of the foo option in help", 
-//   "default", ARGYTPE_STRING} , 
-	{0, 0, 0, 0, 0}
+//   "default", ARGYTPE_STRING, ARG_NOMINMAX} , 
+	ARG_TERMINATOR
 };
 
 /*******************************************************************************

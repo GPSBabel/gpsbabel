@@ -33,8 +33,8 @@ static char *encrypt = NULL;
 static
 arglist_t vcf_args[] = {
 	{ "encrypt", &encrypt,
-		"Encrypt hints using ROT13", NULL, ARGTYPE_BOOL },
-	{0, 0, 0, 0, 0}
+		"Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 static void

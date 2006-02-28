@@ -43,21 +43,21 @@ static const char *intstylebuf = NULL;
 static
 arglist_t xcsv_args[] = {
 	{"style", &styleopt, "Full path to XCSV style file", NULL,
-		ARGTYPE_FILE | ARGTYPE_REQUIRED },
+		ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX },
 	{"snlen", &snlenopt, "Max synthesized shortname length", NULL,
 		ARGTYPE_INT, "1", NULL},
 	{"snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-		NULL, ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"snupper", &snupperopt, "UPPERCASE synth. shortnames",
-	        NULL, ARGTYPE_BOOL},
+	        NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"snunique", &snuniqueopt, "Make synth. shortnames unique",
-		NULL, ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"urlbase", &xcsv_urlbase, "Basename prepended to URL on output",
-	        NULL, ARGTYPE_STRING},
+	        NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	{"prefer_shortnames", &prefer_shortnames, 
 		"Use shortname instead of description", 
-		NULL, ARGTYPE_BOOL },
-	{0, 0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 /* a table of config file constants mapped to chars */

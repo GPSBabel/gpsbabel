@@ -40,8 +40,8 @@ static unsigned int waypt_out_count;
 
 static
 arglist_t tpg_args[] = {
-	{"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING },
-	{0, 0, 0, 0, 0}
+	{"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 static int

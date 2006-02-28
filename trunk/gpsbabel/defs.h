@@ -478,6 +478,9 @@ void 	vmem_realloc(vmem_t*, size_t);
 #define ARGTYPE_TYPEMASK 0x00000fff
 #define ARGTYPE_FLAGMASK 0xfffff000
 
+#define ARG_NOMINMAX NULL, NULL
+#define ARG_TERMINATOR {0, 0, 0, 0, 0, ARG_NOMINMAX}
+
 typedef struct arglist {
 	char *argstring;
 	char **argval;

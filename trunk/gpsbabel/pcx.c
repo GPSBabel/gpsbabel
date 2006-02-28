@@ -38,11 +38,11 @@ static int route_ctr;
 static
 arglist_t pcx_args[] = {
 	{"deficon", &deficon, "Default icon name", "Waypoint", 
-		ARGTYPE_STRING },
+		ARGTYPE_STRING, ARG_NOMINMAX },
 	{"cartoexploreur", &cartoexploreur,
 		"Write tracks compatible with Carto Exploreur", "",
-		ARGTYPE_BOOL },
-	{0, 0, 0, 0, 0}
+		ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 static void

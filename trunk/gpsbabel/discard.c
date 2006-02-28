@@ -31,12 +31,12 @@ static double vdopf;
 static
 arglist_t fix_args[] = {
 	{"hdop", &hdopopt, "Suppress waypoints with higher hdop",
-		"-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT},
+		"-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX},
 	{"vdop", &vdopopt, "Suppress waypoints with higher vdop",
-		"-1.0", ARGTYPE_END_REQ | ARGTYPE_FLOAT},
+		"-1.0", ARGTYPE_END_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX},
 	{"hdopandvdop", &andopt, "Link hdop and vdop supression with AND",
-		NULL, ARGTYPE_BOOL},
-	{0, 0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	ARG_TERMINATOR
 };
 
 /*

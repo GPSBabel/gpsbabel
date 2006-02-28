@@ -58,7 +58,7 @@ static
 arglist_t psit_args[] = {
 /*	{"snlen", &snlen, "Length of generated shortnames", 
  	NULL, ARGTYPE_INT, "1", NULL }, */
-	{0, 0, 0, 0, 0}
+	ARG_TERMINATOR
 };
 
 /* Taken from PsiTrex 1.13 */

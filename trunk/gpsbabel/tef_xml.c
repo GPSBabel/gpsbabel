@@ -36,8 +36,8 @@ static char *routevia = NULL;
 
 static arglist_t tef_xml_args[] = 
 {
-	{"routevia", &routevia, "Include only via stations in route", NULL, ARGTYPE_BOOL},
-	{0, 0, 0, 0 }
+	{"routevia", &routevia, "Include only via stations in route", NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	ARG_TERMINATOR
 };
 
 #define MYNAME "TourExchangeFormat"
