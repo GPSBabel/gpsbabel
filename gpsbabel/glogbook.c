@@ -31,7 +31,7 @@ static route_head *trk_head;
 
 static
 arglist_t glogbook_args[] = {
-	{0, 0, 0, 0, 0}
+	ARG_TERMINATOR
 };
 
 /* Tracks */

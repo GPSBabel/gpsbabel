@@ -47,7 +47,7 @@ static route_head *temp_route;
 
 static
 arglist_t cst_args[] = {
-	{0, 0, 0, 0, 0}
+	ARG_TERMINATOR
 };
 
 /* helpers */

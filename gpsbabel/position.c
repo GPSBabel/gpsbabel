@@ -48,30 +48,30 @@ typedef struct {
 static
 arglist_t position_args[] = {
 	{"distance", &distopt, "Maximum positional distance",
-		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX },
 	{"all", &purge_duplicates, 
 		"Suppress all points close to other points", 
-		NULL, ARGTYPE_BOOL }, 
-	{0, 0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX }, 
+	ARG_TERMINATOR
 };
 
 static
 arglist_t radius_args[] = {
 	{"lat", &latopt,       "Latitude for center point (D.DDDDD)",
-		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX },
 	{"lon", &lonopt,       "Longitude for center point (D.DDDDD)",
-		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX },
 	{"distance", &distopt, "Maximum distance from center",
-		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED },
+		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX },
 	{"exclude", &exclopt,  "Exclude points close to center",
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"nosort", &nosort,    "Inhibit sort by distance to center",
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"maxcount", &maxctarg,"Output no more than this number of points",
 		NULL, ARGTYPE_INT, "1", NULL },
 	{"asroute", &routename,"Put resulting waypoints in route of this name",
 		NULL, ARGTYPE_STRING, NULL, NULL },
-	{0, 0, 0, 0, 0}
+	ARG_TERMINATOR
 };
 
 static double

@@ -63,37 +63,37 @@ static char *clickmap = NULL;
 static
 arglist_t tiger_args[] = {
 	{"nolabels", &nolabels, "Suppress labels on generated pins",
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"genurl", &genurl, "Generate file with lat/lon for centering map",
-		NULL, ARGTYPE_OUTFILE },
+		NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX },
 	{"margin", &margin, "Margin for map.  Degrees or percentage",
-		"15%", ARGTYPE_FLOAT},
+		"15%", ARGTYPE_FLOAT, ARG_NOMINMAX},
 	{"snlen", &snlen, "Max shortname length when used with -s",
 		"10", ARGTYPE_INT, "1", NULL},
 	{"oldthresh", &oldthresh, 
 		"Days after which points are considered old",
-		"14", ARGTYPE_INT},
+		"14", ARGTYPE_INT, ARG_NOMINMAX},
 	{"oldmarker", &oldmarker, "Marker type for old points",
-		"redpin", ARGTYPE_STRING},
+		"redpin", ARGTYPE_STRING, ARG_NOMINMAX},
 	{"newmarker", &newmarker, "Marker type for new points",
-		"greenpin", ARGTYPE_STRING},
+		"greenpin", ARGTYPE_STRING, ARG_NOMINMAX},
 	{"suppresswhite", &suppresswhite,
 		"Suppress whitespace in generated shortnames", 
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"unfoundmarker", &unfoundmarker, "Marker type for unfound points",
-		"bluepin", ARGTYPE_STRING},
+		"bluepin", ARGTYPE_STRING, ARG_NOMINMAX},
 	{"xpixels", &xpixels, "Width in pixels of map",
-		"768", ARGTYPE_INT},
+		"768", ARGTYPE_INT, ARG_NOMINMAX},
 	{"ypixels", &ypixels, "Height in pixels of map",
-		"768", ARGTYPE_INT},
+		"768", ARGTYPE_INT, ARG_NOMINMAX},
 	{"iconismarker", &iconismarker,
 		"The icon description is already the marker", NULL,
-		ARGTYPE_BOOL },
+		ARGTYPE_BOOL, ARG_NOMINMAX },
 #if CLICKMAP
 	{"clickmap", &clickmap, "Generate Clickable map web page",
-		NULL, ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 #endif
-	{0, 0, 0, 0, 0}
+	ARG_TERMINATOR
 };
 
 

@@ -39,14 +39,14 @@ static
 arglist_t saroute_args[] = {
 	{"turns_important", &turns_important, 
 		"Keep turns if simplify filter is used", 
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"turns_only", &turns_only, "Only read turns; skip all other points",
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"split", &split, "Split into multiple routes at turns",
-       		NULL, ARGTYPE_BOOL },
+       		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"controls", &controls, "Read control points as waypoint/route/none",
-		"none", ARGTYPE_STRING },
-	{0, 0, 0, 0 }
+		"none", ARGTYPE_STRING, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 unsigned short

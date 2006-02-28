@@ -40,7 +40,7 @@ static char *fname_in;
 
 static arglist_t magpdb_args[] = 
 {
-	{0, 0, 0, 0, 0 }
+	ARG_TERMINATOR
 };
 
 static double

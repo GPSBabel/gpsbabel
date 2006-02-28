@@ -33,7 +33,7 @@ static char *fin_name;
 
 static arglist_t msroute_args[] = 
 {
-	{0, 0, 0, 0, 0 }
+	ARG_TERMINATOR
 };
 
 /* MS-AutoRoute structures */

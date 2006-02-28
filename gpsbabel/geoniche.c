@@ -48,10 +48,10 @@ static char *Arg_category = NULL;
 static
 arglist_t Args[] = {
 	{"dbname", &Arg_dbname,
-	    "Database name (filename)", NULL, ARGTYPE_STRING },
+	    "Database name (filename)", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
 	{"category", &Arg_category,
-	    "Category name (Cache)", NULL, ARGTYPE_STRING },
-	{0, 0, 0, 0, 0 }
+	    "Category name (Cache)", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 #define	ARG_FREE(X) do { if (X) { xfree(X); X = NULL; } } while (0)
@@ -215,7 +215,9 @@ geoniche_read_asc(const struct pdb *pdb)
 	int		icon;
 	char		*notes;
 	char		gid[6+1];
-	struct tm	tm  = {0};
+	struct tm	tm;
+	
+	memset(&tm, 0, sizeof(tm));
 
 	wpt = waypt_new();
 	if (!wpt)

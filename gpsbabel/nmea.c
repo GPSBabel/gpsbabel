@@ -165,13 +165,13 @@ static char *snlenopt = NULL;
 static char *optdate = NULL;
 
 arglist_t nmea_args[] = {
-	{"gprmc", &dogprmc, "Write GPRMC sentences", NULL, ARGTYPE_BOOL },
+	{"gprmc", &dogprmc, "Write GPRMC sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64" },
-	{"nogpgga", &nogpgga, "Don't write GPGGA sentences", NULL, ARGTYPE_BOOL },
-	{"nogpvtg", &nogpvtg, "Don't write GPVTG sentences", NULL, ARGTYPE_BOOL },
-	{"nogpgsa", &nogpgsa, "Don't write GPGSA sentences", NULL, ARGTYPE_BOOL },
-	{"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT },
-	{0, 0, 0, 0 }
+	{"nogpgga", &nogpgga, "Don't write GPGGA sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"nogpvtg", &nogpvtg, "Don't write GPVTG sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"nogpgsa", &nogpgsa, "Don't write GPGSA sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 /*

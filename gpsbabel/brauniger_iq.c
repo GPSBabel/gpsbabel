@@ -263,7 +263,7 @@ static void data_read(void)
 }
 
 static arglist_t brauniger_iq_args[] = {
-    {0, 0, 0, 0, 0}
+    ARG_TERMINATOR
 };
 
 ff_vecs_t brauniger_iq_vecs = {

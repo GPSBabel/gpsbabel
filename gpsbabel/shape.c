@@ -40,7 +40,7 @@ static
 arglist_t shp_args[] = {
 	{"name", &opt_name, "Index of name field in .dbf",
 		NULL, ARGTYPE_INT, "0", NULL },
-	{ 0, 0, 0, 0}
+	ARG_TERMINATOR
 };
 
 static void

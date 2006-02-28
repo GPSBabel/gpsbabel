@@ -648,7 +648,9 @@ static
 time_t
 sscanftime( const char *s, const char *format, const int gmt )
 {
-	struct tm stm = {0,0,0,0,0,0,0,0,0};
+	struct tm stm;
+	memset(&stm, 0, sizeof(stm));
+
 	if ( strptime( s, format, &stm ) )
 	{
 		stm.tm_isdst = -1;

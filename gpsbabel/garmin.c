@@ -45,13 +45,13 @@ arglist_t garmin_args[] = {
 	{ "snlen", &snlen, "Length of generated shortnames", NULL, 
 		ARGTYPE_INT, "1", NULL },
 	{ "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-		NULL, ARGTYPE_BOOL},
-	{ "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	{ "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
 	{ "get_posn", &getposn, "Return current position as a waypoint", 
-		NULL, ARGTYPE_BOOL},
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{ "power_off", &poweroff, "Command unit to power itself down", 
-		NULL, ARGTYPE_BOOL},
-	{ 0, 0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	ARG_TERMINATOR
 };
 
 static const char * d103_symbol_from_icon_number(unsigned int n);

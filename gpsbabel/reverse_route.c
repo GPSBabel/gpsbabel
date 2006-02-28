@@ -25,7 +25,7 @@
 
 static
 arglist_t reverse_route_args[] = {
-	{0, 0, 0, 0, 0}
+	ARG_TERMINATOR
 };
 
 void 

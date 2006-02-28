@@ -51,23 +51,23 @@ static point3d *point3d_list;
 
 static
 arglist_t kml_args[] = {
-	{"deficon", &opt_deficon, "Default icon name", NULL, ARGTYPE_STRING },
+	{"deficon", &opt_deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
 	{"lines", &opt_export_lines, 
          "Export linestrings for tracks and routes",
-         "1", ARGTYPE_BOOL },
+         "1", ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"points", &opt_export_points, 
          "Export placemarks for tracks and routes",
-         "1", ARGTYPE_BOOL },
+         "1", ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"line_width", &opt_line_width, 
          "Width of lines, in pixels",
-         "6", ARGTYPE_INT },
+         "6", ARGTYPE_INT, ARG_NOMINMAX },
 	{"line_color", &opt_line_color, 
          "Line color, specified in hex AABBGGRR",
-         "64eeee17", ARGTYPE_STRING },
+         "64eeee17", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"floating", &opt_floating, 
 	 "Altitudes are absolute and not clamped to ground", 
-	 "0", ARGTYPE_BOOL },
-	{0, 0, 0, 0, 0}
+	 "0", ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 #define MYNAME "kml"

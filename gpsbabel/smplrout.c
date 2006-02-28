@@ -73,10 +73,10 @@ arglist_t routesimple_args[] = {
 	{"error", &erroropt, "Maximum error", NULL,
 		ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", NULL},
 	{"crosstrack", &xteopt, "Use cross-track error (default)", NULL, 
-		ARGTYPE_BOOL | ARGTYPE_BEGIN_EXCL, NULL, NULL },
+		ARGTYPE_BOOL | ARGTYPE_BEGIN_EXCL, ARG_NOMINMAX },
 	{"length", &lenopt, "Use arclength error", NULL, 
-		ARGTYPE_BOOL | ARGTYPE_END_EXCL, NULL, NULL },
-	{0, 0, 0, 0, 0}
+		ARGTYPE_BOOL | ARGTYPE_END_EXCL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 struct xte_intermed;

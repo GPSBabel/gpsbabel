@@ -58,23 +58,23 @@ roadchange *roadchanges = NULL;
 static
 arglist_t an1_args[] = {
 	{"type", &output_type, "Type of .an1 file (see README)", 
-		"", ARGTYPE_STRING },
+		"", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"road", &road_changes, "Road type changes (see README)",
-		"", ARGTYPE_HIDDEN | ARGTYPE_STRING },
+		"", ARGTYPE_HIDDEN | ARGTYPE_STRING, ARG_NOMINMAX },
 	{"nogc", &nogc, "Do not add geocache data to description",
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"deficon", &opt_symbol, "Symbol to use for point data",
-		"Red Flag", ARGTYPE_STRING },
+		"Red Flag", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"color", &opt_color, "Color for lines or mapnotes",
-		"red", ARGTYPE_STRING },
+		"red", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"zoom", &opt_zoom, "Zoom level to reduce points",
-		NULL, ARGTYPE_INT },
+		NULL, ARGTYPE_INT, ARG_NOMINMAX },
 	{"wpt_type", &opt_wpt_type, 
 		"Waypoint type (marker,text,mapnote,circle)", 
-		"", ARGTYPE_STRING },
+		"", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"radius", &opt_radius, "Radius for circles", 
-		NULL, ARGTYPE_STRING },
-	{0, 0, 0, 0 }
+		NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 typedef struct guid {

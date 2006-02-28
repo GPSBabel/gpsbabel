@@ -39,15 +39,16 @@ static void	fix_netstumbler_dupes(void);
 static
 arglist_t netstumbler_args[] = {
 	{"nseicon", &nseicon, "Non-stealth encrypted icon name", 
-		"Red Square", ARGTYPE_STRING },
+		"Red Square", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"nsneicon", &nsneicon, "Non-stealth non-encrypted icon name", 
-		"Green Square", ARGTYPE_STRING },
+		"Green Square", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"seicon", &seicon, "Stealth encrypted icon name", 
-		"Red Diamond", ARGTYPE_STRING },
+		"Red Diamond", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"sneicon", &sneicon, "Stealth non-encrypted icon name", 
-		"Green Diamond", ARGTYPE_STRING },
-	{"snmac", &snmac, "Shortname is MAC address", NULL, ARGTYPE_BOOL },
-	{0, 0, 0, 0, 0}
+		"Green Diamond", ARGTYPE_STRING, ARG_NOMINMAX },
+	{"snmac", &snmac, "Shortname is MAC address", NULL, ARGTYPE_BOOL, 
+		ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 static void
@@ -76,7 +77,9 @@ data_read(void)
 	int stealth_num = 0, whitespace_num = 0;
 	long flags = 0;
 	int speed = 0, channel = 0;
-	struct tm tm = {0};
+	struct tm tm;
+
+	memset(&tm, 0, sizeof(tm));
 
 	for(; fgets(ibuf, sizeof(ibuf), file_in);) {
 		char *field;

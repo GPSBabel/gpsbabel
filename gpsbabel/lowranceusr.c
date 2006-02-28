@@ -183,7 +183,7 @@ static char *seg_break;
 #define UNKNOWN_USR_ALTITUDE	-3048  /* -10000ft is how the unit stores unknown */
 
 /* Jan 1, 2000 00:00:00 */
-struct tm base_time = { 0, 0, 0, 1, 0, 100, 5, 1, -1 };
+struct tm base_time = { 0, 0, 0, 1, 0, 100, 5, 1, -1, 0, 0 };
 
 static
 size_t
@@ -260,12 +260,12 @@ lowranceusr_fread(void *buff, size_t size, size_t members, FILE * fp)
 static
 arglist_t lowranceusr_args[] = {
 	{"ignoreicons", &ignoreicons, "Ignore event marker icons",
-	 NULL, ARGTYPE_BOOL },
+	 NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"merge", &merge, "(USR output) Merge into one segmented track",
-	NULL, ARGTYPE_BOOL },
+	NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"break", &seg_break, "(USR input) Break segments into separate tracks",
-	NULL, ARGTYPE_BOOL },
-	{NULL, NULL, NULL, NULL, 0}
+	NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 static void

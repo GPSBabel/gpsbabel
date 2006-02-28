@@ -36,14 +36,14 @@ static char *opt_sm_gcid, *opt_sm_shortname, *opt_sm_description, *opt_sm_time;
 static
 arglist_t sort_args[] = {
 	{"gcid", &opt_sm_gcid, "Sort by numeric geocache ID", 
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"shortname", &opt_sm_shortname, "Sort by waypoint short name", 
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"description", &opt_sm_description, "Sort by waypoint description", 
-		NULL, ARGTYPE_BOOL },
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"time", &opt_sm_time, "Sort by time", 
-		NULL, ARGTYPE_BOOL },
-	{0, 0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 static int

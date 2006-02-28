@@ -68,15 +68,15 @@ static
 arglist_t palmdoc_args[] = {
 	{ "nosep", &suppresssep, 
 		"Suppress separator lines between waypoints", NULL,
-		ARGTYPE_BOOL },
-	{"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING },
+		ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
 	{"encrypt", &encrypt, "Encrypt hints with ROT13", NULL,
-		ARGTYPE_BOOL },
+		ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "logs", &includelogs,
-		"Include groundspeak logs if present", NULL, ARGTYPE_BOOL },
+		"Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "bookmarks_short", &bmid, "Include short name in bookmarks", 
-		NULL, ARGTYPE_BOOL },
-	{0, 0, 0, 0, 0}
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
 };
 
 static struct buffer buf;

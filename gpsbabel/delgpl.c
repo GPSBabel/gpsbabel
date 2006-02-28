@@ -97,7 +97,9 @@ gpl_trackpt(const waypoint *wpt)
 {
 	double alt_feet = wpt->altitude / .3048;
 	int status = 3;
-	gpl_point_t gp = {0};
+	gpl_point_t gp;
+	
+	memset(&gp, 0, sizeof(gp));
 	le_write32(&gp.status, status);
 	le_read64(&gp.lat, &wpt->latitude);
 	le_read64(&gp.lon, &wpt->longitude);

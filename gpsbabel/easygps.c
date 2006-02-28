@@ -33,7 +33,7 @@ static
 arglist_t easygps_args[] = {
 /*	{"deficon", &deficon, "Default icon name", "Waypoint", 
   	ARGTYPE_STRING}, */
-	{0, 0, 0, 0 }
+	ARG_TERMINATOR
 };
 
 static void
