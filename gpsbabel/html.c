@@ -95,14 +95,14 @@ html_disp(const waypoint *wpt)
 	if (strcmp(wpt->description, wpt->shortname)) {
 		if (wpt->url) {
 			char *d = html_entitize(wpt->description);
-			fprintf(file_out, "<a href=\"%s\">%s</a></h3>\n", wpt->url, d);
+			fprintf(file_out, "<a href=\"%s\">%s</a>", wpt->url, d);
 			xfree(d);
 		}
 		else {
-			fprintf(file_out, "%s</h3>\n", wpt->description);
+			fprintf(file_out, "%s", wpt->description);
 		}		
-		
 	}
+	fprintf(file_out, "</h3>\n");
 	if (wpt->gc_data.terr) {
 	        if (wpt->gc_data.desc_short.utfstring) {
 			char *tmpstr = strip_nastyhtml(wpt->gc_data.desc_short.utfstring);
@@ -244,6 +244,7 @@ data_write(void)
 	fprintf(file_out, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
 	fprintf(file_out, "<html>\n");
 	fprintf(file_out, "<head>\n");
+	fprintf(file_out, " <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n");
 	fprintf(file_out, " <title>GPSBabel HTML Output</title>\n");
 	fprintf(file_out, " <meta name=\"Generator\" content=\"GPSBabel\">\n");
 	if (stylesheet) 
@@ -274,5 +275,5 @@ ff_vecs_t html_vecs = {
 	data_write,
 	NULL, 
 	html_args,
-	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+	CET_CHARSET_UTF8, 0	/* CET-REVIEW */
 };
