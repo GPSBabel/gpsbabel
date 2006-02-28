@@ -220,11 +220,20 @@ main(int argc, char *argv[])
 
 					if (global_opts.charset != &cet_cs_vec_utf8)
 					{
+					/* 
+					 * Push and pop verbose_status so 
+                          		 * we don't get dual progress bars 
+					 * when doing characterset 
+					 * transformation. 
+					 */
+					    int saved_status = global_opts.verbose_status;
+					    global_opts.verbose_status = 0;
 					    waypt_backup(&wpt_ct_bak, &wpt_head_bak);
 					    route_backup(&rte_ct_bak, &rte_head_bak);
 					    track_backup(&trk_ct_bak, &trk_head_bak);
 					    
 					    cet_convert_strings(NULL, global_opts.charset, NULL);
+					    global_opts.verbose_status = saved_status;
 					}
 
 					ovecs->write();
@@ -365,9 +374,16 @@ main(int argc, char *argv[])
 	}
 	if (ovecs == NULL)
 	{
+		/* 
+		 * Push and pop verbose_status so we don't get dual
+		 * progress bars when doing characterset transformation. 
+		 */
+		int saved_status = global_opts.verbose_status;
+		global_opts.verbose_status = 0;
 		cet_convert_init(CET_CHARSET_ASCII, 1);
 		cet_convert_strings(NULL, global_opts.charset, NULL);
 		waypt_disp_all(waypt_disp);
+		global_opts.verbose_status = saved_status;
 	}
 
 	if (!did_something)
