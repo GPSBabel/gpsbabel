@@ -263,7 +263,7 @@ route_flush_all()
 }
 
 void
-route_backup(unsigned int *count, queue **head_bak)
+route_backup(signed int *count, queue **head_bak)
 {
 	queue *elem, *tmp, *elem2, *tmp2;
 	queue *qbackup;
@@ -340,7 +340,7 @@ common_restore_finish(void)
 }
 
 void
-route_restore(unsigned int count, queue *head_bak)
+route_restore(signed int count, queue *head_bak)
 {
 	if (head_bak == NULL) return;
 	
@@ -353,7 +353,7 @@ route_restore(unsigned int count, queue *head_bak)
 }
 
 void
-track_backup(unsigned int *count, queue **head_bak)
+track_backup(signed int *count, queue **head_bak)
 {
 	queue *elem, *tmp, *elem2, *tmp2;
 	queue *qbackup;
@@ -396,7 +396,7 @@ track_backup(unsigned int *count, queue **head_bak)
 }
 
 void
-track_restore(unsigned int count, queue *head_bak)
+track_restore(signed int count, queue *head_bak)
 {
 	if (head_bak == NULL) return;
 	

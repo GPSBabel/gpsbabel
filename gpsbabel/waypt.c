@@ -341,7 +341,7 @@ waypt_flush_all()
 }
 
 void
-waypt_backup(unsigned int *count, queue **head_bak)
+waypt_backup(signed int *count, queue **head_bak)
 {
 	queue *elem, *tmp, *qbackup;
 	waypoint *wpt;
@@ -367,7 +367,7 @@ waypt_backup(unsigned int *count, queue **head_bak)
 }
 
 void
-waypt_restore(unsigned int count, queue *head_bak)
+waypt_restore(signed int count, queue *head_bak)
 {
 	if (head_bak == NULL) return;
 	

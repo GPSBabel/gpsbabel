@@ -309,6 +309,7 @@ typedef struct {
 	int  sat;	/* Optional: number of sats used for fix */
 
 	int heartrate;	 /* Beats per minute: likely to get moved to fs. */
+	float temperature; /* Degrees celsius */
 	geocache_data gc_data;
 	format_specific_data *fs;
 	void *extra_data;	/* Extra data added by, say, a filter. */
@@ -375,8 +376,8 @@ void free_gpx_extras (xml_tag * tag);
 void xcsv_setup_internal_style(const char *style_buf);
 void xcsv_read_internal_style(const char *style_buf);
 waypoint * find_waypt_by_name(const char *name);
-void waypt_backup(unsigned int *count, queue **head_bak);
-void waypt_restore(unsigned int count, queue *head_bak);
+void waypt_backup(signed int *count, queue **head_bak);
+void waypt_restore(signed int count, queue *head_bak);
 
 route_head *route_head_alloc(void);
 void route_add (waypoint *);
@@ -401,10 +402,10 @@ route_head * route_find_track_by_name(const char *name);
 unsigned int route_waypt_count(void);
 unsigned int route_count(void);
 unsigned int track_count(void);
-void route_backup(unsigned int *count, queue **head_bak);
-void route_restore(unsigned int count, queue *head_bak);
-void track_backup(unsigned int *count, queue **head_bak);
-void track_restore(unsigned int count, queue *head_bak);
+void route_backup(signed int *count, queue **head_bak);
+void route_restore(signed int count, queue *head_bak);
+void track_backup(signed int *count, queue **head_bak);
+void track_restore(signed int count, queue *head_bak);
 
 /*
  * All shortname functions take a shortname handle as the first arg.
