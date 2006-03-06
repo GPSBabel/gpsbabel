@@ -30,7 +30,7 @@ OUTPUT_SWITCH=-o #
 #
 # Enable either or both of these as you wish.
 #
-OPTIMIZATION=-O -W $(EXTRA_OPTIMIZATION)
+OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
 DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
 CFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -Icoldsync $(INHIBIT_EXPAT) $(INHIBIT_USB) $(OPTIMIZATION)
