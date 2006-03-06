@@ -1552,8 +1552,8 @@ Hawaiian_mean"</para>
 	</para>
 	<para>
 	The list of keywords include "lat", "lon", "desc", "name", 
-	"notes", "alt", and "url".   Fuller spellings (i.e. "longitude") may
-	be used.
+	"notes", "alt", "urm z", "utm n", "utm e", and "url".   
+	Fuller spellings (i.e. "longitude") may be used.
 	</para>
 	<para>
 	A typical file may be:

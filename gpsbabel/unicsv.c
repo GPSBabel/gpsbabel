@@ -37,6 +37,9 @@ struct {
 	int notescol;
 	int altcol;
 	int urlcol;
+	int utmzcol; /* Zone */
+	int utmncol; /* Northing */
+	int utmecol; /* Easting */
 } unicsv_fieldpos;
 
 static double unicsv_altscale;
@@ -70,7 +73,7 @@ static void
 unicsv_fondle_header(char *ibuf)
 {
 	char *s;
-	int i;
+	unsigned int i;
 	int *ip = &unicsv_fieldpos.firstval;
 
 	for (i = 0; i < sizeof(unicsv_fieldpos) / sizeof(int); i++, ip++) {
@@ -116,8 +119,17 @@ unicsv_fondle_header(char *ibuf)
 				unicsv_altscale = 0.3048;
 			}
 		}
-		else if (UNICSV_IS("url")) {
+		else if (UNICSV_CONTAINS("url")) {
 			unicsv_fieldpos.urlcol = i;
+		}
+		else if (UNICSV_CONTAINS("utm z")) {
+			unicsv_fieldpos.utmzcol = i;
+		}
+		else if (UNICSV_CONTAINS("utm n")) {
+			unicsv_fieldpos.utmncol = i;
+		}
+		else if (UNICSV_CONTAINS("utm e")) {
+			unicsv_fieldpos.utmecol = i;
 		}
 /* todo: speed, course, hdop, sat, date, time, maybe a few others */
 	}
@@ -150,6 +162,9 @@ unicsv_parse_one_line(char *ibuf)
 	char *s;
 	waypoint *wpt;
 	int i;
+	int  utmz = -9999;
+	double utme;
+	double utmn;
 
 	s = csv_lineparse(ibuf, unicsv_fieldsep, "", 0);
 	if (s == NULL) return;
@@ -178,6 +193,19 @@ unicsv_parse_one_line(char *ibuf)
 		else if (i == unicsv_fieldpos.altcol) {
 			wpt->altitude = atof(s) * unicsv_altscale;
 		}
+		else if (i == unicsv_fieldpos.utmzcol) {
+			utmz = atoi(s);
+		}
+		else if (i == unicsv_fieldpos.utmecol) {
+			utme = atof(s);
+		}
+		else if (i == unicsv_fieldpos.utmncol) {
+			utmn = atof(s);
+		}
+	}
+	if (utmz  != -9999) {
+		GPS_Math_UTM_EN_To_WGS84(&wpt->latitude, &wpt->longitude,
+			utme, utmn, utmz, 'N');
 	}
 	waypt_add(wpt);
 }
