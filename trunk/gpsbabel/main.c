@@ -96,7 +96,7 @@ main(int argc, char *argv[])
 	int did_something = 0;
 	const char *prog_name = argv[0]; /* argv is modified during processing */
 	queue *wpt_head_bak, *rte_head_bak, *trk_head_bak;	/* #ifdef UTF8_SUPPORT */
-	unsigned int wpt_ct_bak, rte_ct_bak, trk_ct_bak;	/* #ifdef UTF8_SUPPORT */
+	signed int wpt_ct_bak, rte_ct_bak, trk_ct_bak;	/* #ifdef UTF8_SUPPORT */
 
 	global_opts.objective = wptdata;
 	global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */

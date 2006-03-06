@@ -844,7 +844,7 @@ strip_html(const utf_string *in)
 	char *outstring, *out;
 	char *instr = in->utfstring;
 	char tag[8];
-	short int taglen;
+	unsigned short int taglen = 0;
 	
 	if (!in->is_html)
 		return xstrdup(in->utfstring);
