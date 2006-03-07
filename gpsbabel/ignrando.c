@@ -199,7 +199,7 @@ ignr_fprintf(FILE *f, const char *fmt, ...)
 	va_start(args, fmt);
 	
 	i = vsnprintf(buff, sizeof(buff), fmt, args);
-	if (i >= sizeof(buff))
+	if (i >= (int) sizeof(buff))
 	{
 		temp = xmalloc(i + 1);
 		i = vsnprintf(temp, i + 1, fmt, args);

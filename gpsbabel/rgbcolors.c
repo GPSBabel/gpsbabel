@@ -219,7 +219,7 @@ int
 color_to_bbggrr( char *opt_color ) 
 {
 	int color_num;
-	int i;
+	unsigned int i;
 	char *ep;
 	
 	color_num = strtol(opt_color, &ep, 10);

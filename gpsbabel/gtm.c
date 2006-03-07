@@ -552,7 +552,7 @@ gtm_read(void)
 	waypoint *wpt;
 	int real_tr_count = 0;
 	char *route_name;
-	int icon;
+	unsigned int icon;
 	int i;
 
 	/* Image information */
