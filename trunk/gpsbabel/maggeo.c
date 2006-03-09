@@ -160,7 +160,15 @@ maggeo_waypt_pr(const waypoint *waypointp)
 	lon = (lon_deg * 100.0 + lon);
 	lat = (lat_deg * 100.0 + lat);
 
-	ctype = gs_get_cachetype(waypointp->gc_data.type);
+	/* 
+	 * For some reason, Magellan used exactly the GPX spellings of 
+	 * everything except this one...
+	 */
+	if (waypointp->gc_data.type == gt_suprise) {
+		ctype = "Mystery Cache";
+	} else {
+		ctype = gs_get_cachetype(waypointp->gc_data.type);
+	}
 	placeddate = maggeo_fmtdate(waypointp->creation_time);
 	lfounddate = maggeo_fmtdate(waypointp->gc_data.last_found);
 	cname = mkshort(desc_handle, waypointp->notes ? waypointp->notes : waypointp->shortname);
