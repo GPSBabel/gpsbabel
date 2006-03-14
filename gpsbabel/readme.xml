@@ -212,7 +212,7 @@ mouse pointer hover over it for a few seconds and the name will be
 displayed.</para>
       <para>The "color" option allows you to specify the color for
 line or mapnote data.  It accepts color names of the form "#FF0000" (red) or any
-of the 16 common color names from the Cascading Style Sheets
+of the color names from the Cascading Style Sheets (CSS)
 specification.i</para>
       <para>The "wpt_type" option specifies how to represent point data
 in the draw file.  Valid waypoint types are "marker", "text", "mapnote",
@@ -1403,6 +1403,10 @@ named 'control points' containing just the control points in order.
 Note that if your goal is to create an arc or other CSV file, you
 should use 'none' (or not use this option, which is the same
 thing.)</para>
+      <para>The 'times' option causes GPSBabel to read the route as if
+it were a track, synthesizing times starting from the current time, using
+the estimated travel times specified in your route file (you can change your
+travel speeds in the DeLorme product you used to create the route file.)</para>
       <para> All options only apply to route files from newer (anr)
 versions of DeLorme software; older versions didn't store the turn
 information with the route.

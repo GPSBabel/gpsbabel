@@ -25,6 +25,7 @@
 
 #define MYNAME "saroute"
 #include "defs.h"
+#include "grtcirc.h"
 
 FILE *infile;
 
@@ -32,6 +33,7 @@ char *turns_important = NULL;
 char *turns_only = NULL;
 char *controls = NULL;
 char *split = NULL;
+char *times = NULL;
 
 int control = 0;
 
@@ -46,6 +48,8 @@ arglist_t saroute_args[] = {
        		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"controls", &controls, "Read control points as waypoint/route/none",
 		"none", ARGTYPE_STRING, ARG_NOMINMAX },
+	{"times", &times, "Synthesize track times",
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -131,6 +135,13 @@ my_read(void)
 	route_head *old_track_head = NULL;
 	waypoint *wpt_tmp;
 	char *routename = NULL;
+	double seglen = 0.0;
+	long  starttime = 0;
+	long  transittime = 0;
+	double totaldist = 0.0;
+	double oldlat = 0;
+	double oldlon = 0;
+	int first = 0;
 
 	ReadShort(infile);		/* magic */
 	version = ReadShort(infile);
@@ -171,7 +182,12 @@ my_read(void)
 	 */
 	if ( version < 6 || (control == 1)) {
 		track_head = route_head_alloc();
-		route_add_head(track_head);
+		if ( times ) {
+			track_add_head(track_head);
+		}
+		else {			
+			route_add_head(track_head);
+		}
 		if ( control ) {
 		    track_head->rte_name = xstrdup("control points");
 		}
@@ -270,7 +286,12 @@ my_read(void)
 		count = ReadLong(infile);
 		if ( count ) {
 			track_head = route_head_alloc();
-			route_add_head(track_head);
+			if ( times ) {
+				track_add_head(track_head);
+			}
+			else {
+				route_add_head(track_head);
+			}
 			if ( routename && !split ) {
 			    track_head->rte_name = xstrdup( routename );
 			}
@@ -285,7 +306,12 @@ my_read(void)
 			    if ( track_head->rte_waypt_ct ) {
 				old_track_head = track_head;
 				track_head = route_head_alloc();
-				route_add_head( track_head );
+				if ( times ) {
+					track_add_head( track_head );
+				}
+				else {
+					route_add_head( track_head );
+				}
 			    } // end if
 			    if ( !track_head->rte_name ) {
 		   		track_head->rte_name = 
@@ -295,6 +321,16 @@ my_read(void)
 				track_head->rte_name[stringlen] = '\0';
 			    } 
 			}
+			
+			if ( times ) {
+	                        le_read64( &seglen, 
+					   record + 2 + stringlen + 0x08 );
+				starttime = le_read32((unsigned long *)
+					(record + 2 + stringlen + 0x30 ));
+				transittime = le_read32((unsigned long *)
+					(record + 2 + stringlen + 0x10 ));
+				seglen /= 5280*12*2.54/100000; /* to miles */
+			}
 				
 			coordcount = le_read16((unsigned short *)
 					(record + 2 + stringlen + 0x3c));
@@ -303,6 +339,9 @@ my_read(void)
 			if (count) {
 				coordcount--;
 			}
+			
+			first = 1;
+			
 			while (coordcount) {
 				double lat;
 				double lon;
@@ -330,6 +369,28 @@ my_read(void)
 				    sprintf( wpt_tmp->shortname, "\\%5.5x", 
 						serial++ );
 				}
+				if ( times ) {
+					if ( !first ) {
+					   double dist = tomiles(gcdist( 
+						lat*M_PI/180, -lon*M_PI/180, 
+						oldlat*M_PI/180, 
+						-oldlon*M_PI/180 ));	
+					   totaldist += dist;
+					   if ( totaldist > seglen ) {
+						   totaldist = seglen;
+					   }
+					   wpt_tmp->creation_time = 
+					       gpsbabel_time+starttime+
+					       transittime * totaldist/seglen;
+					}
+					else {
+					   wpt_tmp->creation_time = 
+					       gpsbabel_time+starttime;
+					   totaldist = 0;
+					}
+					oldlat = lat;
+					oldlon = lon;
+				}
 				if ( turns_important && stringlen ) 
 					wpt_tmp->route_priority=1;
 				if ( !turns_only || stringlen ) {
@@ -340,7 +401,6 @@ my_read(void)
 						old_track_head = NULL;
 					}
 				}
-				
 	
 				latlon++;
 				coordcount--;
@@ -349,6 +409,7 @@ my_read(void)
 				if ( coordcount == 1 && count == 0 ) {
 					stringlen = 1;
 				}
+				first = 0;
 			}
 			if ( version > 10 ) {
 				Skip(infile,2*sizeof(gbuint32));
