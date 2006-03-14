@@ -33,7 +33,8 @@ static const route_head *rte_active;
 static int start_new;
 
 #define MYNAME "GTM"
-#define EPOCH89DIFF 631076400
+#define EPOCH89DIFF 631065600
+/* was 631076400 but that seems to include a three-hour bias */
 #define WAYPOINTSTYLES \
 	"\xf5\xff\xff\xff\x0f\x00Times New Roman\x00\x00\x00\x00\x00\x90\x01"\
 	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"\
