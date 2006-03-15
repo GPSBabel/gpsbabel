@@ -43,7 +43,7 @@ usage(const char *pname, int shorter)
 "    In the second form of the command, INFILE and OUTFILE are the\n"
 "    first and second positional (non-option) arguments.\n"
 "\n"
-"    INTYPE and OUTTYPE must be one of the file types listed below, and\n"
+"    INTYPE and OUTTYPE must be one of the supported file types and\n"
 "    may include options valid for that file type.  For example:\n"
 "      'gpx', 'gpx,snlen=10' and 'ozi,snlen=10,snwhite=1'\n"
 "    (without the quotes) are all valid file type specifications.\n"
