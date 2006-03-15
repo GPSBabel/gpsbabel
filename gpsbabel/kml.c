@@ -97,6 +97,7 @@ xg_tag_mapping kml_map[] = {
 	{ wpt_coord, 	cb_cdata, 	"/Placemark/Point/coordinates" },
 	{ wpt_icon, 	cb_cdata, 	"/Placemark/Style/Icon/href" },
 	{ trk_coord, 	cb_cdata, 	"/Placemark/MultiGeometry/LineString/coordinates" },
+	{ trk_coord, 	cb_cdata, 	"/Placemark/LineString/coordinates" },
 	{ NULL, 	0, 		NULL }
 };
 
