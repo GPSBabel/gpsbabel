@@ -100,7 +100,8 @@ on will open theObject
 	
 end will open
 
-on will close theObject
+-- to work around the NSReceiverEvaluationScriptError we need to use should close instead of will close
+on should close theObject
 	log "will close - " & name of theObject
 	if theObject is window "SelectGPS" then
 		-- store user defaults for this window
@@ -112,7 +113,16 @@ on will close theObject
 		-- unhide MacGPSBabel window
 		set visible of window "MacGPSBabel" to true
 	end if
-end will close
+	
+	if theObject is window "filterWindow" then
+		set the title of button "filterButton" of window "MacGPSBabel" to "Setup Filters"
+	end if
+	
+	-- workarund NSReceiverEvaluationScriptError bug
+	set visible of theObject to false
+	return false
+	
+end should close
 
 
 -- handler for the File>Open menu item
@@ -728,6 +738,7 @@ on showFilters()
 		set the title of button "filterButton" of window "MacGPSBabel" to "Setup Filters"
 	end if
 end showFilters
+
 -- create the filter code
 on applyFilters()
 	set filterText to ""
