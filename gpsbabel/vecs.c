@@ -218,7 +218,7 @@ vecs_t vec_list[] = {
 	{
 		&tpo_vecs,
 		"tpo",
-		"National Geographic Topo .tpo (tracks)",
+		"National Geographic Topo (pre 3.0) .tpo (tracks)",
 		"tpo"
 	},
 	{
