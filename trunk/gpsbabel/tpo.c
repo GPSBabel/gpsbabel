@@ -128,6 +128,7 @@ tpo_check_version_string()
 		/* seek back to the beginning of the file */
 		fseek(tpo_file_in, -(string_size+1), SEEK_CUR);
 	}
+	xfree(string_buffer);
 
 }
 
@@ -716,7 +717,7 @@ tpo_track_disp(const waypoint *waypointp)
 	/* latitude delta from first route point */
 	lat_delta = (short)((first_track_waypoint_lat - lat) / output_track_lat_scale);
 	le_write16(temp_buffer, lat_delta);
-fprintf(stderr, "%f %f: %x %x - %f %f %f / %f\n", lon, lat, lon_delta, lat_delta, first_track_waypoint_lat, lat, output_track_lat_scale, (first_track_waypoint_lat - lat) );
+// fprintf(stderr, "%f %f: %x %x - %f %f %f / %f\n", lon, lat, lon_delta, lat_delta, first_track_waypoint_lat, lat, output_track_lat_scale, (first_track_waypoint_lat - lat) );
 	fwrite(temp_buffer, 1, 2, tpo_file_out);
 }
 
