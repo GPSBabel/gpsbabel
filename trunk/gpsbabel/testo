@@ -200,6 +200,17 @@ ${PNAME} -i tpg -f ${TMPDIR}/geo.tpg -o mxf -F ${TMPDIR}/tpg.mxf
 ${PNAME} -i tpg -f reference/tpg.tpg -o mxf -F ${TMPDIR}/topo.mxf
 compare ${TMPDIR}/tpg.mxf ${TMPDIR}/topo.mxf
 
+# TPO (NG Topo!) file format
+# This is hard to test as the datum conversions create minute
+# inconsistencies in the coordinates. We have four reference files:
+# sample1.tpo, sample1.gpx, sample2.gpx, and sample2.tpo.  These are
+# used to check the conversion to/from TPO format.
+rm -f ${TMPDIR}/sample1.gpx ${TMPDIR}/sample2.tpo
+${PNAME} -t -i tpo -f reference/track/sample1.tpo -o gpx -F ${TMPDIR}/sample1.gpx
+compare ${TMPDIR}/sample1.gpx reference/track/sample1.gpx
+${PNAME} -t -i gpx -f reference/track/sample2.gpx -o tpo -F ${TMPDIR}/sample2.tpo
+bincompare ${TMPDIR}/sample2.tpo reference/track/sample2.tpo
+
 # OZI (OziExplorer 1.1) file format
 rm -f ${TMPDIR}/oz.wpt ${TMPDIR}/ozi.wpt
 ${PNAME} -i ozi -f reference/ozi.wpt -o ozi -F ${TMPDIR}/oz.wpt
