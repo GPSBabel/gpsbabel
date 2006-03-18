@@ -724,7 +724,7 @@ tpo_track_disp(const waypoint *waypointp)
 static void
 tpo_track_tlr(const route_head *rte)
 {
-	unsigned char temp_buffer[2];
+	unsigned char temp_buffer[4];
 
 	unsigned char unknown1[] = { 0x06, 0x00 };
 
