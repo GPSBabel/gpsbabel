@@ -27,6 +27,38 @@
  * disappear from the various lists...
  */
 
+/*
+ TPO format notes:
+ -----------------
+ Most of the ASCII strings embedded in the text will have a
+ byte-count prepended to the string.  Unknown yet whether other
+ fields have this same byte-count, but so far it doesn't look like
+ it.
+
+ New format (3.x and later) begins with a string byte-count byte
+ and then a string starting with "TOPO! Ver. 3.", like "TOPO! Ver.
+ 3.3.4".  Can contain routes/tracks/waypoints.
+
+ Older (pre-3.0) format does not have the above string.  Contains
+ only tracks (routes too?).  Waypoints are saved in a separate .TPG
+ file.
+
+ May contain these other strings:
+    Frmt:   String:
+    -----   --------------------------------
+    2.x     "CTopoSymbol"
+    2.x     "CTopoBookmark"
+    2.x     "CTopoRoute".  The actual routes we parse here.
+    2.x     "CTopoWaypoint".  Saved in .tpg files.
+    2.x/3.x "CTopoText"
+    3.x     "Notes"
+    3.x     "PNG."  Embedded PNG image containing 2 rows of 40
+              symbols each.  Starts with signature: 89 50 4e 47 0d
+              0a 1a 0a, ends with signature 49 45 4e 44 ae 42 60 82.
+    3.x     "shapes"
+    3.x     "arrows"
+    3.x     "recreation"
+*/
 
 #include "defs.h"
 #include <string.h>
@@ -101,6 +133,9 @@ tpo_fwrite_double(double x, FILE *fp)
 	fwrite(cbuf, 8, 1, fp);
 }
 
+/* Define a global here that we can query from multiple places */
+float tpo_version = 0.0;
+
 /* tpo_check_version_string()
    Check the first bytes of the file for a version 3.0 header. */
 static void
@@ -123,13 +158,25 @@ tpo_check_version_string()
 	if (strncmp(v3_id_string, string_buffer, strlen(v3_id_string)) == 0)
 	{
 		fatal(MYNAME ": gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer);
+
+/*
+fprintf(stderr,"gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer);
+*/
+
+		fseek(tpo_file_in, -(string_size+1), SEEK_CUR);
+        xfree(string_buffer);
+        tpo_version = 3.0;  /* Really any 3.x version */
+        return;
+	
 	}
 	else {
+        /* We found a version 1.x or 2.x file */
 		/* seek back to the beginning of the file */
 		fseek(tpo_file_in, -(string_size+1), SEEK_CUR);
-	}
 	xfree(string_buffer);
-
+        tpo_version = 2.0;  /* Really any 1.x or 2.x version */
+        return;
+    }
 }
 
 static void
@@ -162,9 +209,10 @@ tpo_dump_header_bytes(int header_size)
 
 /* tpo_read_until_section()
    Keep reading bytes from the file until the section name is encountered,
-   then seek backwards to the start of the section data. */
+   then go seek_bytes forwards (+) or backwards (-) to the start of
+   the section data. */
 static void
-tpo_read_until_section(const char* section_name)
+tpo_read_until_section(const char* section_name, int seek_bytes)
 {
 	char byte;
 	unsigned int match_index = 0;
@@ -177,13 +225,16 @@ tpo_read_until_section(const char* section_name)
 		if (byte == section_name[match_index]) {
 			match_index++;
 			if (match_index == strlen(section_name)) {
-				fseek(tpo_file_in, -18, SEEK_CUR);
-				header_size -= 18;
+/*fprintf(stderr,"Found %s\n", section_name);*/
+				fseek(tpo_file_in, seek_bytes, SEEK_CUR);
+				header_size += seek_bytes;
+
 				if (dumpheader && dumpheader[0] == '1') {
 					fseek(tpo_file_in, -header_size, SEEK_CUR);
 					tpo_dump_header_bytes(header_size);
 				}
 				return;
+
 			}
 		}
 		else {
@@ -202,7 +253,23 @@ tpo_rd_init(const char *fname)
 	
 	tpo_file_in = xfopen(fname, "rb", MYNAME);
 	tpo_check_version_string();
-	tpo_read_until_section("CTopoRoute");
+
+    if (tpo_version == 2.0)
+    {
+/*fprintf(stderr,"Version 2.x, Looking for CTopoRoute\n"); */
+        /* Back up 18 bytes if this section found */
+    	tpo_read_until_section("CTopoRoute", -18);
+    }
+    else if (tpo_version == 3.0)
+    {
+/*fprintf(stderr,"Version 3.x, Looking for IEND\n"); */
+        /* Go forward four more bytes if this section found.  "IEND"
+         * plus four bytes is the end of the embedded PNG image */
+        tpo_read_until_section("IEND", 4);
+    }
+    else {
+		fatal(MYNAME ": gpsbabel can only read TPO versions through 3.x.x\n");
+    }
 }
 
 static void
@@ -225,6 +292,8 @@ tpo_read(void)
 	/* track count */
 	tpo_fread(&buff[0], 1, 2, tpo_file_in);
 	track_count = le_read16(&buff[0]);
+	
+/*fprintf(stderr,"track_count:%d\n", track_count);*/
 	
 	/* 4 unknown bytes */
 	tpo_fread(&buff[0], 1, 4, tpo_file_in);
@@ -677,7 +746,9 @@ tpo_track_disp(const waypoint *waypointp)
 	double lat, lon, amt, x, y, z;
 	short lat_delta, lon_delta;
     unsigned char temp_buffer[2];
-// fprintf(stderr, "%f/%f\n", waypointp->latitude, waypointp->longitude);
+
+/* fprintf(stderr, "%f/%f\n", waypointp->latitude, waypointp->longitude); */
+
 	/* convert lat/lon position to XYZ meters */
 	GPS_Math_WGS84LatLonH_To_XYZ(
 		waypointp->latitude, 
@@ -717,7 +788,11 @@ tpo_track_disp(const waypoint *waypointp)
 	/* latitude delta from first route point */
 	lat_delta = (short)((first_track_waypoint_lat - lat) / output_track_lat_scale);
 	le_write16(temp_buffer, lat_delta);
-// fprintf(stderr, "%f %f: %x %x - %f %f %f / %f\n", lon, lat, lon_delta, lat_delta, first_track_waypoint_lat, lat, output_track_lat_scale, (first_track_waypoint_lat - lat) );
+
+/*
+fprintf(stderr, "%f %f: %x %x - %f %f %f / %f\n", lon, lat, lon_delta, lat_delta, first_track_waypoint_lat, lat, output_track_lat_scale, (first_track_waypoint_lat - lat) );
+*/
+
 	fwrite(temp_buffer, 1, 2, tpo_file_out);
 }
 
@@ -801,8 +876,9 @@ tpo_write(void)
 
 /* TPO format can read and write tracks only */
 ff_vecs_t tpo_vecs = {
-ff_type_internal, //	ff_type_file,
-	{ ff_cap_none | ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none | ff_cap_none },
+    ff_type_file,   /* ff_type_internal */
+/*    { ff_cap_none | ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none | ff_cap_none }, */
+    { ff_cap_none | ff_cap_none, ff_cap_read, ff_cap_none | ff_cap_none },
 	tpo_rd_init,
 	tpo_wr_init,
 	tpo_rd_deinit,
