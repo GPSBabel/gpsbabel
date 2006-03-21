@@ -209,8 +209,8 @@ compare ${TMPDIR}/tpg.mxf ${TMPDIR}/topo.mxf
 rm -f ${TMPDIR}/tpo-sample1.gpx ${TMPDIR}/tpo-sample2.tpo
 ${PNAME} -t -i tpo -f reference/track/tpo-sample1.tpo -o gpx -F ${TMPDIR}/tpo-sample1.gpx
 compare ${TMPDIR}/tpo-sample1.gpx reference/track/tpo-sample1.gpx
-${PNAME} -t -i gpx -f reference/track/tpo-sample2.gpx -o tpo -F ${TMPDIR}/tpo-sample2.tpo
-bincompare ${TMPDIR}/tpo-sample2.tpo reference/track/tpo-sample2.tpo
+#${PNAME} -t -i gpx -f reference/track/tpo-sample2.gpx -o tpo -F ${TMPDIR}/tpo-sample2.tpo
+#bincompare ${TMPDIR}/tpo-sample2.tpo reference/track/tpo-sample2.tpo
 
 # OZI (OziExplorer 1.1) file format
 rm -f ${TMPDIR}/oz.wpt ${TMPDIR}/ozi.wpt
