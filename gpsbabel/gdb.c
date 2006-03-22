@@ -1572,31 +1572,27 @@ gdb_write_data(void)
 	gdb_hidden = route_head_alloc();	/* contains all written waypts & rtepts */
 	track_add_head(gdb_hidden);		/* tracks comes later and we drop this before */
 
-	if (doing_wpts) 
+	/* (doing_wpts) */
+	
+	waypt_disp_all(gdb_write_waypt_cb);
+	
+	/* (doing_rtes) */
+	
+	gdb_reset_short_handle();
+	setshort_defname(gdb_short_handle, "Route");
+	if (gdb_via == 0)
 	{
-	    waypt_disp_all(gdb_write_waypt_cb);
+	    /* find out all route points we have to write as a "HIDDEN CLASS" waypoint */
+	    route_disp_all(NULL, NULL, gdb_write_rtewpt_cb);
 	}
-	if (doing_rtes)
-	{
-	    gdb_reset_short_handle();
-	    setshort_defname(gdb_short_handle, "Route");
-	    
-	    if (gdb_via == 0) 
-	    {
-		/* find out all route points we have to write as a "HIDDEN CLASS" waypoint */
-		route_disp_all(NULL, NULL, gdb_write_rtewpt_cb);
-	    }
-	    route_disp_all(gdb_write_route_cb, NULL, NULL);
-	}
-
+	route_disp_all(gdb_write_route_cb, NULL, NULL);
 	track_del_head(gdb_hidden);		/* vaporize our temporary queue */
 
-	if (doing_trks)
-	{
-	    gdb_reset_short_handle();
-	    setshort_defname(gdb_short_handle, "Track");
-	    track_disp_all(gdb_write_track_cb, NULL, NULL);
-	}
+	/* (doing_trks) */
+	
+	gdb_reset_short_handle();
+	setshort_defname(gdb_short_handle, "Track");
+	track_disp_all(gdb_write_track_cb, NULL, NULL);
 
 	gdb_fwrite_int(2);			/* finalize gdb with empty map segment */
 	gdb_fwrite_str("V", -1);
