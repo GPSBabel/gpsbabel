@@ -429,10 +429,10 @@ static char gpsdrivetrack[] =
 "#\n"
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
 
-"OFIELD	LAT_DECIMAL, \"\", \"%10.6f\"\n"
-"OFIELD	LON_DECIMAL, \"\", \"%10.6f\"\n"
-"OFIELD	ALT_METERS, \"\", \"%10.0f\"\n"
-"OFIELD	GMT_TIME, \"\", \"%a %b %d %T %Y\"\n"
+"IFIELD	LAT_DECIMAL, \"\", \"%10.6f\"\n"
+"IFIELD	LON_DECIMAL, \"\", \"%10.6f\"\n"
+"IFIELD	ALT_METERS, \"\", \"%10.0f\"\n"
+"IFIELD	GMT_TIME, \"\", \"%a %b %d %T %Y\"\n"
 ;
 static char gpsman[] = 
 "# gpsbabel XCSV style file\n"
