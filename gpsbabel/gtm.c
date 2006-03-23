@@ -660,9 +660,9 @@ gtm_read(void)
 
 int icon_from_descr(const char *descr)
 {
-	int i = 0;
 	if (descr) {
-		for (; i != sizeof(icon_descr)/sizeof(char*); i++)
+		int i;
+		for (i = 0; icon_descr[i]; i++)
 			if (strcmp(icon_descr[i], descr) == 0)
 				return i;
 	}
