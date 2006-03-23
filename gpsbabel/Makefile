@@ -133,7 +133,7 @@ dep:
 # (typically /usr/share/java on a Linux system.)
 readme.html: readme.xml 
 	java  com.icl.saxon.StyleSheet $< \
-	/usr/share/sgml/docbook/xsl-stylesheets-1.68.1-1/xhtml/docbook.xsl \
+	/usr/share/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl \
 	html.stylesheet="http://www.gpsbabel.org/style3.css" > $@
 	cp readme.html $(WEB)/readme.xhtml
 	tools/mkcapabilities
