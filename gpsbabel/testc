@@ -10,6 +10,7 @@
 
 TMPD=/tmp/babeltest.$$
 GB="./gpsbabel"
+GB="valgrind -q ./gpsbabel"
 
 mkdir $TMPD
 
