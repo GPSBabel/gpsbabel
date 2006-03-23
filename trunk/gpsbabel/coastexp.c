@@ -514,6 +514,8 @@ static char *
 ce_gen_uuid(void)
 {
 	uuid_t uu;
+
+	memset(&uu, 0, sizeof(uu));
 	gb_uuid_generate(uu);
 	sprintf(uuid_buffer, "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
 		uu[0], uu[1], uu[2], uu[3], uu[4], uu[5], uu[6], uu[7],
