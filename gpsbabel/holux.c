@@ -90,6 +90,7 @@ static void data_read(void)
 	struct tm tm;
 	struct tm *ptm;
 
+    memset(&tm, 0, sizeof(tm));
 
     HxWpt = xcalloc(GM100_WPO_FILE_SIZE, 1);
 
