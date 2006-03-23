@@ -635,6 +635,7 @@ gs_container_mapping{
 	const char *name;
 } gs_container_map[] = {
 	{ gc_other, "Unknown" },
+	{ gc_other, "Other" }, /* Synonym on read. */
 	{ gc_micro, "Micro" },
 	{ gc_regular, "Regular" },
 	{ gc_large, "Large" },
