@@ -113,6 +113,7 @@ my_read(void)
 		if (shp->nSHPType == SHPT_ARC) {
 			int j;
 			route_head *track_head = route_head_alloc();
+			track_head->rte_name = xstrdup(name);
 			route_add_head(track_head);
 			for (j = 0; j < shp->nVertices; j++) {
 				wpt = waypt_new();
