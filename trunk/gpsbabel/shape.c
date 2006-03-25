@@ -33,12 +33,16 @@ static double *polybufy;
 static double *polybufz;
 static const char *ofname;
 static int nameidx;
+static int urlidx;
 
 static char *opt_name = NULL;
+static char *opt_url = NULL;
 
 static
 arglist_t shp_args[] = {
 	{"name", &opt_name, "Index of name field in .dbf",
+		NULL, ARGTYPE_STRING, "0", NULL },
+	{"url", &opt_url, "Index of URL field in .dbf",
 		NULL, ARGTYPE_INT, "0", NULL },
 	ARG_TERMINATOR
 };
@@ -70,6 +74,12 @@ my_rd_init(const char *fname)
 //			fatal(MYNAME ":dbf file for %s doesn't have 'NAME' field.\n  Please specify the name index with the 'name' option.\n", fname);
 		}
 	}
+	if ( opt_url ) {
+		urlidx = atoi( opt_url );
+	}
+	else {
+		urlidx = DBFGetFieldIndex( ihandledb, "URL" );
+	}
 }
 
 void
@@ -83,6 +93,7 @@ my_read(void)
 		SHPObject *shp;
 		waypoint *wpt;
 		const char *name;
+		const char *url;
 		char *tmpName = NULL;
 		char *tmpIndex = opt_name;
 
@@ -110,6 +121,13 @@ my_read(void)
 				name = tmpName;
 			}
 		}
+		if ( urlidx > 0 ) {
+			url = DBFReadStringAttribute( ihandledb, npts-1, urlidx);
+		}
+		else {
+			url = NULL;
+		}
+			
 		if (shp->nSHPType == SHPT_ARC) {
 			int j;
 			route_head *track_head = route_head_alloc();
@@ -129,6 +147,9 @@ my_read(void)
 			wpt->latitude = shp->dfYMin;
 			wpt->longitude = shp->dfXMin;
 			wpt->shortname = xstrdup(name);
+			if ( url ) {
+				wpt->url = xstrdup(url);
+			}
 			waypt_add(wpt);
 		}
 
