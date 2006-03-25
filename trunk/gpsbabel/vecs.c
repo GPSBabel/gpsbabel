@@ -95,6 +95,7 @@ extern ff_vecs_t tpo_vecs;
 extern ff_vecs_t unicsv_vecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t vitosmt_vecs;
+extern ff_vecs_t wfff_xml_vecs;
 extern ff_vecs_t xcsv_vecs;
 extern ff_vecs_t yahoo_vecs;
 
@@ -425,6 +426,12 @@ vecs_t vec_list[] = {
 		"Vito Navigator II tracks",
 		"smt"
 	},	
+	{
+		&wfff_xml_vecs,
+		"wfff",
+		"WiFiFoFum 2.0 for PocketPC XML",
+		"xml"
+	},
 	{
 		&gdb_vecs,
 		"gdb",
