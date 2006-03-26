@@ -182,13 +182,10 @@ typedef struct GPS_SLap_Data {
 #include "gpscom.h"
 #include "gpsfmt.h"
 #include "gpsmath.h"
-#include "gpsnmea.h"
 #include "gpsmem.h"
 #include "gpsrqst.h"
 #include "gpsinput.h"
 #include "gpsproj.h"
-#include "gpsnmeafmt.h"
-#include "gpsnmeaget.h"
 
 time_t gps_save_time;
 double gps_save_lat;
