@@ -144,14 +144,15 @@ XSTRNDUP(const char *str, size_t sz, DEBUG_PARAMS )
 xstrndup(const char *str, size_t sz)
 #endif
 {
-	size_t newlen;
+	size_t newlen = 0;
+	char *cin = (char *)str;
 	char *newstr;
 
-	newlen = strlen(str);
-	if (newlen > sz) {
-		newlen = sz;
+	while ((newlen < sz) && (*cin != '\0')) {
+		newlen++;
+		cin++;
 	}
-
+	
 	newstr = (char *) xmalloc(newlen + 1);
 	memcpy(newstr, str, newlen);    
 	newstr[newlen] = 0;
@@ -170,17 +171,18 @@ XSTRNDUPT(const char *str, size_t sz, DEBUG_PARAMS )
 xstrndupt(const char *str, size_t sz)
 #endif
 {
-	size_t newlen;
+	size_t newlen = 0;
+	char *cin = (char *)str;
 	char *newstr;
 
-	newlen = strlen(str);
-	if (newlen > sz) {
-		newlen = sz;
+	while ((newlen < sz) && (*cin != '\0')) {
+		newlen++;
+		cin++;
 	}
-
+	
 	newstr = (char *) xmalloc(newlen + 1);
-	memcpy(newstr, str, newlen);
-	newstr[newlen] = '\0';
+	memcpy(newstr, str, newlen);    
+	newstr[newlen] = 0;
 	rtrim(newstr);
 
 	return newstr;
