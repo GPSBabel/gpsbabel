@@ -213,14 +213,14 @@ void wfff_e(const char *args, const char **unused)
 		wpt_tmp->fix = fix_unknown;
 
 		wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
-		if (strncasecmp(ap_wep,"On",2)==0) {
-			if (strncasecmp(ap_type,"AP",2)==0) {
+		if (case_ignore_strncmp(ap_wep,"On",2)==0) {
+			if (case_ignore_strncmp(ap_type,"AP",2)==0) {
 				wpt_tmp->icon_descr = xstrdup(aicicon); /* Infra Closed */
 			} else {
 				wpt_tmp->icon_descr = xstrdup(ahcicon); /* AdHoc Closed */
 			}
 		} else {
-			if (strncasecmp(ap_type,"AP",2)==0) {
+			if (case_ignore_strncmp(ap_type,"AP",2)==0) {
 				wpt_tmp->icon_descr = xstrdup(aioicon); /* Infra Open */
 			} else {
 				wpt_tmp->icon_descr = xstrdup(ahoicon);	/* AdHoc Open */
