@@ -183,7 +183,7 @@ static char *seg_break;
 #define UNKNOWN_USR_ALTITUDE	-3048  /* -10000ft is how the unit stores unknown */
 
 /* Jan 1, 2000 00:00:00 */
-struct tm base_time = { 0, 0, 0, 1, 0, 100, 5, 1, -1, 0, 0 };
+const time_t base_time_secs = 946706400;
 
 static
 size_t
@@ -326,7 +326,6 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	long int TextLen;
 	time_t waypt_time;
 	short waypt_type;
-	time_t base_time_secs = mktime(&base_time);
 
 	lowranceusr_fread(&buff[0], 4, 1, file_in);
 	wpt_tmp->latitude = lat_mm_to_deg(le_read32(&buff[0]));
@@ -637,7 +636,6 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 	char *name;
 	char *comment;
 	int alt = METERS_TO_FEET(wpt->altitude);
-	time_t base_time_secs = mktime(&base_time);
 
 	if (alt == unknown_alt) {
 		alt = UNKNOWN_USR_ALTITUDE;
