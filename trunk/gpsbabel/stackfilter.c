@@ -96,6 +96,7 @@ stackfilt_process(void)
 		tmp = NULL;
 		route_backup( &(tmp_elt->route_count), &tmp );
 		QUEUE_MOVE( &(tmp_elt->routes), tmp );
+		xfree( tmp );
 		if ( !opt_copy ) {
 			route_flush_all_routes();
 		}
@@ -103,6 +104,7 @@ stackfilt_process(void)
 		tmp = NULL;
 	        track_backup( &(tmp_elt->track_count), &tmp );
 		QUEUE_MOVE( &(tmp_elt->tracks), tmp );
+		xfree( tmp );
 		if ( !opt_copy ) {
 			route_flush_all_tracks();
 		}
@@ -156,12 +158,14 @@ stackfilt_process(void)
 		tmp = NULL;
 		route_backup( &(tmp_elt->route_count), &tmp);
 		QUEUE_MOVE(&(tmp_elt->routes), tmp );
+		xfree( tmp );
 		route_restore( &tmp_queue );
 		
 		QUEUE_MOVE(&tmp_queue, &(tmp_elt->tracks));
 		tmp = NULL;
 		track_backup( &(tmp_elt->track_count), &tmp);
 		QUEUE_MOVE(&(tmp_elt->tracks), tmp );
+		xfree( tmp );
 		track_restore( &tmp_queue );
 		
 		tmp_count = waypt_count();
