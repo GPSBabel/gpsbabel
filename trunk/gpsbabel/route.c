@@ -102,23 +102,6 @@ track_del_head(route_head *rte)
 	trk_head_ct--;
 }
 
-void
-route_debug_count( char *str, queue *q )
-{
-	queue *elem, *tmp;
-	int count = 0;
-	QUEUE_FOR_EACH( q, elem, tmp ) {
-		count++;
-	}
-	fprintf( stderr, "%s %d\n", str, count );
-}
-
-void 
-route_debug_count_main( char *str ) 
-{
-	route_debug_count( str, &my_route_head );
-}
-
 static 
 route_head *
 common_route_by_name(queue *routes, const char *name)
@@ -153,12 +136,14 @@ any_route_add_wpt(route_head *rte, waypoint *wpt, int *ct )
 {
 	ENQUEUE_TAIL(&rte->waypoint_list, &wpt->Q);
 	rte->rte_waypt_ct++;	/* waypoints in this route */
-	(*ct)++;
-	if (wpt->shortname == NULL) {
-		char tmpnam[10];
-		snprintf(tmpnam, sizeof(tmpnam), "RPT%03d",*ct);
-		wpt->shortname = xstrdup(tmpnam);
-		wpt->wpt_flags.shortname_is_synthetic = 1;
+	if ( ct ) {
+		(*ct)++;
+		if (wpt->shortname == NULL) {
+			char tmpnam[10];
+			snprintf(tmpnam, sizeof(tmpnam), "RPT%03d",*ct);
+			wpt->shortname = xstrdup(tmpnam);
+			wpt->wpt_flags.shortname_is_synthetic = 1;
+		}
 	}
 }
 
@@ -166,6 +151,12 @@ void
 route_add_wpt( route_head *rte, waypoint *wpt )
 {
 	any_route_add_wpt( rte, wpt, &rte_waypts );
+}
+
+void 
+track_add_wpt( route_head *rte, waypoint *wpt )
+{
+	any_route_add_wpt( rte, wpt, NULL );
 }
 
 waypoint *

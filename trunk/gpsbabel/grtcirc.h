@@ -25,3 +25,9 @@ double linedist(double lat1, double lon1,
 		double lat3, double lon3 );
 
 double tomiles( double rads );
+
+void linepart(double lat1, double lon1,
+               double lat2, double lon2,
+               double frac,
+               double *reslat, double *reslon ); 
+	

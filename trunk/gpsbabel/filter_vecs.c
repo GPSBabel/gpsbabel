@@ -40,6 +40,7 @@ extern filter_vecs_t stackfilt_vecs;
 extern filter_vecs_t trackfilter_vecs;
 extern filter_vecs_t discard_vecs;
 extern filter_vecs_t nuke_vecs;
+extern filter_vecs_t interpolatefilt_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -102,6 +103,11 @@ fl_vecs_t filter_vec_list[] = {
 		&nuke_vecs,
 		"nuketypes",
 		"Remove all waypoints, tracks, or routes"
+	},
+	{
+		&interpolatefilt_vecs,
+		"interpolate",
+		"Interpolate between trackpoints"
 	},
         {
 		NULL,

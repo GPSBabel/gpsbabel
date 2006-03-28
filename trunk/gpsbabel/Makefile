@@ -51,7 +51,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
-	nukedata.o
+	nukedata.o interpolate.o
 
 OSJEEPS=jeeps/gpslibusb.o
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
@@ -182,7 +182,7 @@ msvc-build:
 	echo $(OBJS) > objs.lst
 	LINK.EXE /NOLOGO @objs.lst ./msvc/expat/libexpat.lib /out:gpsbabel.exe 
 
-# Machine generated from here down.  
+# Machine generated from here down. 
 an1.o: an1.c defs.h queue.h gbtypes.h cet.h cet_util.h an1sym.h
 arcdist.o: arcdist.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   filterdefs.h grtcirc.h
@@ -195,8 +195,6 @@ brauniger_iq.o: brauniger_iq.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
   jeeps/gpsproj.h
 cet.o: cet.c defs.h queue.h gbtypes.h cet.h cet_util.h
-cetus.o: cetus.c defs.h queue.h gbtypes.h cet.h cet_util.h \
-  coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
 cet_util.o: cet_util.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   cet/iso_8859_1.h cet/iso_8859_15.h cet/ansi_x3_4_1968.h cet/cp1252.h \
   cet/atarist.h cet/baltic.h cet/bs_4730.h cet/bs_viewdata.h cet/cp1250.h \
@@ -224,6 +222,8 @@ cet_util.o: cet_util.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   cet/nextstep.h cet/nf_z_62_010.h cet/nf_z_62_010__1973_.h \
   cet/ns_4551_1.h cet/ns_4551_2.h cet/pt.h cet/pt2.h cet/sami.h \
   cet/sen_850200_b.h cet/sen_850200_c.h cet/tcvn.h cet/viscii.h cet/vps.h
+cetus.o: cetus.c defs.h queue.h gbtypes.h cet.h cet_util.h \
+  coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
 coastexp.o: coastexp.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   xmlgeneric.h uuid.h
 compegps.o: compegps.c defs.h queue.h gbtypes.h cet.h cet_util.h \
@@ -299,18 +299,20 @@ ignrando.o: ignrando.c defs.h queue.h gbtypes.h cet.h cet_util.h \
 inifile.o: inifile.c defs.h queue.h gbtypes.h cet.h cet_util.h inifile.h
 internal_styles.o: internal_styles.c defs.h queue.h gbtypes.h cet.h \
   cet_util.h
+interpolate.o: interpolate.c defs.h queue.h gbtypes.h cet.h cet_util.h \
+  filterdefs.h grtcirc.h
 kml.o: kml.c defs.h queue.h gbtypes.h cet.h cet_util.h xmlgeneric.h
 lowranceusr.o: lowranceusr.c defs.h queue.h gbtypes.h cet.h cet_util.h
-maggeo.o: maggeo.c defs.h queue.h gbtypes.h cet.h cet_util.h xmlgeneric.h \
-  magellan.h
-magnav.o: magnav.c defs.h queue.h gbtypes.h cet.h cet_util.h \
-  coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
 mag_pdb.o: mag_pdb.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h jeeps/gpsmath.h \
   jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h \
   jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
   jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+maggeo.o: maggeo.c defs.h queue.h gbtypes.h cet.h cet_util.h xmlgeneric.h \
+  magellan.h
+magnav.o: magnav.c defs.h queue.h gbtypes.h cet.h cet_util.h \
+  coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
 magproto.o: magproto.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   magellan.h
 main.o: main.c defs.h queue.h gbtypes.h cet.h cet_util.h filterdefs.h
@@ -390,8 +392,8 @@ tpo.o: tpo.c defs.h queue.h gbtypes.h cet.h cet_util.h jeeps/gpsmath.h \
 trackfilter.o: trackfilter.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   filterdefs.h strptime.h
 unicsv.o: unicsv.c defs.h queue.h gbtypes.h cet.h cet_util.h csv_util.h
-util_crc.o: util_crc.c
 util.o: util.c defs.h queue.h gbtypes.h cet.h cet_util.h
+util_crc.o: util_crc.c
 uuid.o: uuid.c uuid.h
 vcf.o: vcf.c defs.h queue.h gbtypes.h cet.h cet_util.h jeeps/gpsmath.h \
   jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h \
@@ -494,5 +496,5 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h jeeps/../defs.h \
   jeeps/gpsinput.h jeeps/gpsproj.h
 shapelib/dbfopen.o: shapelib/dbfopen.c shapelib/shapefil.h
 shapelib/shpopen.o: shapelib/shpopen.c shapelib/shapefil.h
-internal_styles.c: mkstyle.sh style/arc.style style/cambridge.style style/csv.style style/cup.style style/custom.style style/dna.style style/fugawi.style style/garmin301.style style/garmin_poi.style style/geonet.style style/gpsdrive.style style/gpsdrivetrack.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/openoffice.style style/README.style style/s_and_t.style style/saplus.style style/tabsep.style style/xmap.style style/xmapwpt.style
+internal_styles.c: mkstyle.sh style/README.style style/arc.style style/cambridge.style style/csv.style style/cup.style style/custom.style style/dna.style style/fugawi.style style/garmin301.style style/garmin_poi.style style/geonet.style style/gpsdrive.style style/gpsdrivetrack.style style/gpsman.style style/mapconverter.style style/mxf.style style/nima.style style/openoffice.style style/s_and_t.style style/saplus.style style/tabsep.style style/xmap.style style/xmapwpt.style
 	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)
