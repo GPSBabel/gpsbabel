@@ -215,6 +215,7 @@ main(int argc, char *argv[])
 					wpt_ct_bak = -1;
 					rte_ct_bak = -1;
 					trk_ct_bak = -1;
+					rte_head_bak = trk_head_bak = NULL;
 
 					ovecs->wr_init(ofname);
 
@@ -242,8 +243,14 @@ main(int argc, char *argv[])
 					cet_convert_deinit();
 					
 					if (wpt_ct_bak != -1) waypt_restore(wpt_ct_bak, wpt_head_bak);
-					if (rte_ct_bak != -1) route_restore(rte_ct_bak, rte_head_bak);
-					if (trk_ct_bak != -1) track_restore(trk_ct_bak, trk_head_bak);
+					if (rte_ct_bak != -1) {
+						route_restore( rte_head_bak);
+						xfree( rte_head_bak );
+					}
+					if (trk_ct_bak != -1) {
+						track_restore( trk_head_bak);
+						xfree( trk_head_bak );
+					}
 				}
 				break;
 			case 's':

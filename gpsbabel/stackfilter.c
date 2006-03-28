@@ -61,7 +61,11 @@ arglist_t stackfilt_args[] = {
 
 struct stack_elt {
 	queue waypts;
+        queue routes;
+        queue tracks;	
 	unsigned int waypt_ct;
+	int route_count;
+	int track_count;
 	struct stack_elt *next;
 } *stack = NULL;
 
@@ -77,6 +81,7 @@ stackfilt_process(void)
 	
 	if ( opt_push ) {
 		tmp_elt = (struct stack_elt *)xmalloc(sizeof(struct stack_elt));
+		
 		QUEUE_MOVE(&(tmp_elt->waypts), &waypt_head);
 		tmp_elt->waypt_ct = waypt_count();
 		set_waypt_count(0);
@@ -87,6 +92,21 @@ stackfilt_process(void)
 				waypt_add( waypt_dupe((waypoint *)elem));
 			}
 		}	
+		
+		tmp = NULL;
+		route_backup( &(tmp_elt->route_count), &tmp );
+		QUEUE_MOVE( &(tmp_elt->routes), tmp );
+		if ( !opt_copy ) {
+			route_flush_all_routes();
+		}
+		
+		tmp = NULL;
+	        track_backup( &(tmp_elt->track_count), &tmp );
+		QUEUE_MOVE( &(tmp_elt->tracks), tmp );
+		if ( !opt_copy ) {
+			route_flush_all_tracks();
+		}
+		
 	}
 	else if ( opt_pop ) { 
 		tmp_elt = stack;
@@ -97,15 +117,25 @@ stackfilt_process(void)
 			QUEUE_FOR_EACH( &(stack->waypts), elem, tmp ) {
 				waypt_add( (waypoint *)elem);
 			}
+			route_append( &(stack->routes));
+			route_flush( &(stack->routes));
+			track_append( &(stack->tracks));
+			route_flush( &(stack->tracks));
 		}
 		else if ( opt_discard ) {
-			waypt_flush( &(stack->waypts) );
+			waypt_flush( &(stack->waypts));
+			route_flush( &(stack->routes));
+			route_flush( &(stack->tracks));
 		}
 		else {
 			waypt_flush( &waypt_head );
 			QUEUE_MOVE(&(waypt_head), &(stack->waypts) );
 			set_waypt_count(stack->waypt_ct);
-		}
+			
+			route_restore( &(stack->routes));
+			track_restore( &(stack->tracks));
+		} 
+
 		stack = tmp_elt->next;
 		xfree( tmp_elt );
 	}
@@ -121,6 +151,18 @@ stackfilt_process(void)
 		QUEUE_MOVE(&tmp_queue, &(tmp_elt->waypts) );
 		QUEUE_MOVE(&(tmp_elt->waypts), &waypt_head );
 		QUEUE_MOVE(&waypt_head, &tmp_queue );
+		
+		QUEUE_MOVE(&tmp_queue, &(tmp_elt->routes));
+		tmp = NULL;
+		route_backup( &(tmp_elt->route_count), &tmp);
+		QUEUE_MOVE(&(tmp_elt->routes), tmp );
+		route_restore( &tmp_queue );
+		
+		QUEUE_MOVE(&tmp_queue, &(tmp_elt->tracks));
+		tmp = NULL;
+		track_backup( &(tmp_elt->track_count), &tmp);
+		QUEUE_MOVE(&(tmp_elt->tracks), tmp );
+		track_restore( &tmp_queue );
 		
 		tmp_count = waypt_count();
 		set_waypt_count( tmp_elt->waypt_ct );
