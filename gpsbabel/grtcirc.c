@@ -203,3 +203,83 @@ double linedist(double lat1, double lon1,
   return 0;
 }
 
+/* 
+ * Compute the position of a point partially along the geodesic from 
+ * lat1,lon1 to lat2,lon2
+ * 
+ * Ref: http://mathworld.wolfram.com/RotationFormula.html
+ */
+
+void linepart(double lat1, double lon1,
+		double lat2, double lon2,
+		double frac,
+		double *reslat, double *reslon ) {
+
+  double x1,y1,z1;
+  double x2,y2,z2;
+  double xa,ya,za,la;
+  double xr, yr, zr;
+  double xx, yx, zx;
+  
+  double theta = 0;
+  double phi = 0;
+  double cosphi = 0;
+  double sinphi = 0;
+  
+  /* degrees to radians */
+  lat1 *= M_PI/180.0;  lon1 *= M_PI/180.0;
+  lat2 *= M_PI/180.0;  lon2 *= M_PI/180.0;
+
+  /* polar to ECEF rectangular */
+  x1 = cos(lon1)*cos(lat1); y1 = sin(lat1); z1 = sin(lon1)*cos(lat1);
+  x2 = cos(lon2)*cos(lat2); y2 = sin(lat2); z2 = sin(lon2)*cos(lat2);
+
+  /* 'a' is the axis; the line that passes through the center of the earth
+   * and is perpendicular to the great circle through point 1 and point 2 
+   * It is computed by taking the cross product of the '1' and '2' vectors.*/
+  crossproduct( x1, y1, z1, x2, y2, z2, &xa, &ya, &za );
+  la = sqrt(xa*xa+ya*ya+za*za);
+
+  if ( la ) {
+    xa /= la;
+    ya /= la;
+    za /= la;
+  }
+  *reslat = lat1;
+  *reslon = lon1;
+  /* if la is zero, the points are either equal or directly opposite 
+   * each other.  Either way, there's no single geodesic, so we punt. */
+  if ( la ) {
+    crossproduct( x1, y1, z1, xa, ya, za, &xx, &yx, &zx );
+   
+    
+    theta = atan2( dotproduct(xx,yx,zx,x2,y2,z2),
+		   dotproduct(x1,y1,z1,x2,y2,z2));
+    
+    phi = frac * theta;
+    cosphi = cos(phi);
+    sinphi = sin(phi);
+    
+    
+    /* The second term of the formula from the mathworld reference is always
+     * zero, because r (lat1,lon1) is always perpendicular to n (a here) */
+    xr = x1*cosphi + xx * sinphi;
+    yr = y1*cosphi + yx * sinphi;
+    zr = z1*cosphi + zx * sinphi;
+    
+    if ( xr > 1 ) xr = 1;
+    if ( xr < -1 ) xr = -1;
+    if ( yr > 1 ) yr = 1;
+    if ( yr < -1 ) yr = -1;
+    if ( zr > 1 ) zr = 1;
+    if ( zr < -1 ) zr = -1;
+    
+    *reslat = asin(yr) * 180 / M_PI;   
+    if( xr == 0 && zr == 0 ) {
+      *reslon = 0;
+    }
+    else {
+      *reslon = atan2( zr, xr ) * 180 / M_PI;
+    } 
+  }
+}

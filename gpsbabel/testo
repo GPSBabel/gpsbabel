@@ -425,7 +425,7 @@ compare ${TMPDIR}/maggpx.trk ${TMPDIR}/gpxtrack.gpx
 rm -f ${TMPDIR}/route.mapsend
 ${PNAME} -r -i mapsend -f reference/route/route.mapsend -o mapsend \
          -F ${TMPDIR}/route.mapsend
-compare ${TMPDIR}/route.mapsend reference/route/
+bincompare ${TMPDIR}/route.mapsend reference/route/route.mapsend
 
 #
 # MAPSEND track format 
@@ -968,6 +968,15 @@ ${PNAME} -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,waypoints,routes -o gpx -
 ${PNAME} -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,waypoints,tracks -o gpx -F ${TMPDIR}/rtes.gpx
 ${PNAME} -i gpx -f ${TMPDIR}/wpts.gpx -f ${TMPDIR}/trks.gpx -f ${TMPDIR}/rtes.gpx -o gpx -F ${TMPDIR}/merged.gpx
 compare ${TMPDIR}/alltypes.gpx ${TMPDIR}/merged.gpx
+
+#
+# Interpolate filter
+# 
+
+${PNAME} -i gpx -f reference/track/simpletrack.gpx -x interpolate,distance=50m -o gpx -F ${TMPDIR}/interp.gpx
+compare reference/track/interptrack.gpx ${TMPDIR}/interp.gpx 
+${PNAME} -i gpx -f reference/track/simpletrack.gpx -x interpolate,time=1 -o gpx -F ${TMPDIR}/tinterp.gpx
+compare reference/track/tinterptrack.gpx ${TMPDIR}/tinterp.gpx 
 
 #
 # Universal CSV - unicsv
