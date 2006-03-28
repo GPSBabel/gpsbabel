@@ -402,10 +402,14 @@ route_head * route_find_track_by_name(const char *name);
 unsigned int route_waypt_count(void);
 unsigned int route_count(void);
 unsigned int track_count(void);
+void route_copy( int *dst_count, int *dst_wpt_count, queue **dst, queue *src );
 void route_backup(signed int *count, queue **head_bak);
-void route_restore(signed int count, queue *head_bak);
+void route_restore( queue *head_bak);
+void route_append( queue *src );
 void track_backup(signed int *count, queue **head_bak);
-void track_restore(signed int count, queue *head_bak);
+void track_restore( queue *head_bak);
+void track_append( queue *src );
+void route_flush( queue *head );
 
 /*
  * All shortname functions take a shortname handle as the first arg.
