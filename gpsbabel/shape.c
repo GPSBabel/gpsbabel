@@ -130,15 +130,15 @@ my_read(void)
 			
 		if (shp->nSHPType == SHPT_ARC) {
 			int j;
-			route_head *track_head = route_head_alloc();
-			track_head->rte_name = xstrdup(name);
-			route_add_head(track_head);
+			route_head *routehead = route_head_alloc();
+			routehead->rte_name = xstrdup(name);
+			route_add_head(routehead);
 			for (j = 0; j < shp->nVertices; j++) {
 				wpt = waypt_new();
 				wpt->latitude = shp->padfY[j];
 				wpt->longitude = shp->padfX[j];
 				wpt->altitude = shp->padfZ[j];
-				route_add_wpt(track_head, wpt);
+				route_add_wpt(routehead, wpt);
 			}
 		}
 
