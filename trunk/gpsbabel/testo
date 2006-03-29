@@ -992,4 +992,10 @@ compare ${TMPDIR}/unicsv.gpx reference/unicsv.gpx
 ${PNAME} -i nmea -f reference/track/nmea -o gpx -F ${TMPDIR}/nmea.gpx
 compare ${TMPDIR}/nmea.gpx reference/track/nmea.gpx
 
+#
+# Wfff.
+#
+${PNAME} -i wfff -f reference/wfff.xml -o gpsutil -F ${TMPDIR}/wfff.gpu
+compare ${TMPDIR}/wfff.gpu reference/wfff.gpu
+
 exit 0

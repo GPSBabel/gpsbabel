@@ -312,6 +312,22 @@ DEL %TMPDIR%\topo.mxf %TMPDIR%\tpg.mxf %TMPDIR%\geo.tpg
 @echo.
 CALL :COMPARE %TMPDIR%\tpg.mxf %TMPDIR%\topo.mxf
 
+REM TPO (NG Topo!) file format
+REM This is hard to test as the datum conversions create minute
+REM inconsistencies in the coordinates. We have four reference files:
+REM tpo-sample1.tpo, tpo-sample1.gpx, tpo-sample2.gpx, and
+REM tpo-sample2.tpo.  These are used to check the conversion to/from
+REM TPO format.
+DEL %TMPDIR%\tpo-sample1.gpx %TMPDIR%\tpo-sample2.tpo
+@echo on
+@echo Testing...
+%PNAME% -t -i tpo -f reference\track\tpo-sample1.tpo -o gpx -F %TMPDIR%\tpo-sample1.gpx
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\tpo-sample1.gpx reference\track\tpo-sample1.gpx
+REM ${PNAME} -t -i gpx -f reference/track/tpo-sample2.gpx -o tpo -F ${TMPDIR}/tpo-sample2.tpo
+REM bincompare ${TMPDIR}/tpo-sample2.tpo reference/track/tpo-sample2.tpo
+
 REM OZI (OziExplorer 1.1) file format
 DEL %TMPDIR%\oz.wpt %TMPDIR%\ozi.wpt
 @echo on

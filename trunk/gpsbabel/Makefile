@@ -134,7 +134,7 @@ dep:
 readme.html: readme.xml 
 	java  com.icl.saxon.StyleSheet $< \
 	/usr/share/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl \
-	html.stylesheet="http://www.gpsbabel.org/style3.css" > $@
+	html.stylesheet="http://www.gpsbabel.org/style3.css" > $@ || rm $@
 	cp readme.html $(WEB)/readme.xhtml
 	tools/mkcapabilities
 
