@@ -22,7 +22,7 @@
 static char *encoded_points = NULL;
 static char *encoded_levels = NULL;
 static char *script = NULL;
-static route_head *route_head;
+static route_head *routehead;
 static short_handle desc_handle;
 
 static FILE *fd;
@@ -131,7 +131,7 @@ void goog_segment( const char *args, const char **unused )
 {
 	waypoint *wpt_tmp;
 
-	wpt_tmp = route_find_waypt_by_name( route_head, goog_segname);
+	wpt_tmp = route_find_waypt_by_name( routehead, goog_segname);
 	if (wpt_tmp) {
 		xfree(wpt_tmp->shortname);
 		wpt_tmp->shortname = mkshort(desc_handle,args);
@@ -212,8 +212,8 @@ void goog_poly_e( const char *args, const char **unused )
         char *str = encoded_points;
 	char *lstr = encoded_levels;
 
-	route_head = route_head_alloc();
-	route_add_head(route_head);
+	routehead = route_head_alloc();
+	route_add_head(routehead);
 
 	while ( str && *str ) 
 	{
@@ -243,7 +243,7 @@ void goog_poly_e( const char *args, const char **unused )
 			wpt_tmp->route_priority=level;
 			wpt_tmp->shortname = (char *) xmalloc(7);
 			sprintf( wpt_tmp->shortname, "\\%5.5x", serial++ );
-			route_add_wpt(route_head, wpt_tmp);
+			route_add_wpt(routehead, wpt_tmp);
 		}
 	}
 	
