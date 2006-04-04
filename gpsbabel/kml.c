@@ -175,7 +175,7 @@ void trk_coord(const char *args, const char **attrv)
 		trkpt->longitude = lon;
 		trkpt->altitude = alt;
 
-		route_add_wpt(trk_head, trkpt);
+		track_add_wpt(trk_head, trkpt);
 
 		args += consumed;
 	}

@@ -278,7 +278,7 @@ gpgll_parse(char *ibuf)
 	waypt->longitude = ddmm2degrees(lngdeg);
 
 	curr_waypt = waypt;
-	route_add_wpt(trk_head, waypt);
+	track_add_wpt(trk_head, waypt);
 }
 
 static void
@@ -343,7 +343,7 @@ gpgga_parse(char *ibuf)
 	}
 
 	curr_waypt = waypt;
-	route_add_wpt(trk_head, waypt);
+	track_add_wpt(trk_head, waypt);
 }
 
 static void
@@ -413,7 +413,7 @@ gprmc_parse(char *ibuf)
 	waypt->longitude = ddmm2degrees(lngdeg);
 
 	curr_waypt = waypt;
-	route_add_wpt(trk_head, waypt);
+	track_add_wpt(trk_head, waypt);
 }
 
 static void

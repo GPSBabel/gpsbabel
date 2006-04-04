@@ -238,7 +238,7 @@ coto_track_read(struct pdb *pdb)
 			rec->time -= 2082844800U;
 			wpt_tmp->creation_time = rec->time;
 		}
-		route_add_wpt(trk_head, wpt_tmp);
+		track_add_wpt(trk_head, wpt_tmp);
 	} 
 }
 

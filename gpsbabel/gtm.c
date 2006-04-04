@@ -615,7 +615,7 @@ gtm_read(void)
 			if (!first_trk_head)
 				first_trk_head = trk_head;
 		}
-		route_add_wpt(trk_head, wpt);
+		track_add_wpt(trk_head, wpt);
 	}
 
 	/* Tracklog styles */

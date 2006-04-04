@@ -142,7 +142,7 @@ void	gl_trk_pnt_s(const char *args, const char **unused)
 
 void	gl_trk_pnt_e(const char *args, const char **unused)
 {
-	route_add_wpt(trk_head, wpt_tmp);
+	track_add_wpt(trk_head, wpt_tmp);
 }
 
 void	gl_trk_utc(const char *args, const char **unused)

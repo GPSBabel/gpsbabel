@@ -823,7 +823,7 @@ gdb_read_track(const size_t max_file_pos)
 	    
 	    gdb_is_validf(fabs(wpt->latitude) <= 90.0, prefix, "Invalid latitude (%f)", wpt->latitude);
 	    
-	    route_add_wpt(track, wpt);
+	    track_add_wpt(track, wpt);
 	}
 	
 	gdb_fread(buff, 1);
@@ -873,7 +873,7 @@ gdb_read_data(void)
 		    if (wptclass == 0)
 		        waypt_add(wpt);
 		    else if (gdb_via == 0)
-		        route_add_wpt(gdb_hidden, wpt);
+		        track_add_wpt(gdb_hidden, wpt);
 		    else
 			waypt_free(wpt);
 		}
@@ -1262,7 +1262,7 @@ gdb_write_waypt_cb(const waypoint *wpt)			/* called by waypt_disp over all waypo
 	
 	fseek(fout, pos + reclen, SEEK_SET);
 
-	route_add_wpt(gdb_hidden, waypt_dupe(wpt));	/* add this point to our internal queue */
+	track_add_wpt(gdb_hidden, waypt_dupe(wpt));	/* add this point to our internal queue */
 }
 
 static void
@@ -1289,7 +1289,7 @@ gdb_write_rtewpt_cb(const waypoint *wpt)		/* called by waypt_disp (route points)
 	
 	    fseek(fout, pos + reclen, SEEK_SET);
 
-	    route_add_wpt(gdb_hidden, waypt_dupe(wpt));	/* add this point to our internal queue */
+	    track_add_wpt(gdb_hidden, waypt_dupe(wpt));	/* add this point to our internal queue */
 	}
 }
 

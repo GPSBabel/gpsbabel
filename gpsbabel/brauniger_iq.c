@@ -206,7 +206,7 @@ static int process_data(const unsigned char *data)
 	wpt->creation_time = creation;
 	creation += interval;
 	wpt->altitude = (data[0] << 8) + data[1];
-	route_add_wpt(track, wpt);
+	track_add_wpt(track, wpt);
 	if (global_opts.debug_level >= 2) {
 	    printf(MYNAME ": remaining=%d, Altitude=%fm, ", remaining, wpt->altitude);
 	}

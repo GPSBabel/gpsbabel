@@ -139,7 +139,7 @@ ignr_etape_end(const char *args, const char **attrv)
 {
 	ignr_xml_error((track == NULL) || (wpt == NULL));
 	
-	route_add_wpt(track, wpt);
+	track_add_wpt(track, wpt);
 	wpt = NULL;
 }
 

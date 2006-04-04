@@ -69,7 +69,7 @@ gpl_read(void)
 		le_read64(&alt_feet, &gp.alt);
 		wpt_tmp->altitude = alt_feet * .3048;
 		wpt_tmp->creation_time = le_read32(&gp.tm);
-		route_add_wpt(track_head, wpt_tmp);
+		track_add_wpt(track_head, wpt_tmp);
 	}
 }
 

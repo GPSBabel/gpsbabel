@@ -73,7 +73,7 @@ cst_add_wpt(const route_head *track, waypoint *wpt)
 		}
 		route_add_wpt(temp_route, waypt_dupe(wpt));
 	}
-	route_add_wpt((route_head *)track, (waypoint *)wpt);
+	track_add_wpt((route_head *)track, (waypoint *)wpt);
 }
 
 static char *

@@ -240,7 +240,7 @@ void	ht_trk_pnt_s(const char *args, const char **unused)
 static
 void	ht_trk_pnt_e(const char *args, const char **unused)
 {
-	route_add_wpt(trk_head, wpt_tmp);
+	track_add_wpt(trk_head, wpt_tmp);
 }
 
 static

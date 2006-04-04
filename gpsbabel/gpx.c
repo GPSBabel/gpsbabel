@@ -900,7 +900,7 @@ gpx_end(void *data, const char *el)
 	case tt_trk:
 		break;
 	case tt_trk_trkseg_trkpt:
-		route_add_wpt(trk_head, wpt_tmp);
+		track_add_wpt(trk_head, wpt_tmp);
 		wpt_tmp = NULL;
 		break;
 	case tt_trk_desc:

@@ -569,7 +569,7 @@ if (global_opts.debug_level >= 1)
 					track_add_head(trk_tmp);
 					trk_head = trk_tmp;
 				}
-				route_add_wpt(trk_head, wpt_tmp);
+				track_add_wpt(trk_head, wpt_tmp);
 			
 if (global_opts.debug_level >= 1)
 	printf("LOWRANCE parse_trails: Trail pt lat %f lon %f\n", wpt_tmp->latitude, wpt_tmp->longitude);
