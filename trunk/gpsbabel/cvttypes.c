@@ -60,7 +60,7 @@ cvttype_skeleton_process(void)
 		if (wpt->creation_time <= 0) { 
 			wpt->creation_time  = ++tmstart; 
 		}
-		route_add_wpt(my_trk_head, wpt);
+		track_add_wpt(my_trk_head, wpt);
 // if action == to rte
 //		waypt_del(wpt);
 //		route_add_wpt(my_rte_head, wpt);

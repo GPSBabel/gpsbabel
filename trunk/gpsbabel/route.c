@@ -179,13 +179,19 @@ any_route_del_wpt( route_head *rte, waypoint *wpt, int *ct)
 	dequeue( &wpt->Q );
 	waypt_free( wpt );
 	rte->rte_waypt_ct--;
-	(*ct)--;
+	if ( ct ) (*ct)--;
 }
 
 void 
 route_del_wpt( route_head *rte, waypoint *wpt )
 {
 	any_route_del_wpt( rte, wpt, &rte_waypts );
+}
+
+void 
+track_del_wpt( route_head *rte, waypoint *wpt )
+{
+	any_route_del_wpt( rte, wpt, NULL );
 }
 
 void

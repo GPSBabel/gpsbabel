@@ -182,12 +182,7 @@ my_read(void)
 	 */
 	if ( version < 6 || (control == 1)) {
 		track_head = route_head_alloc();
-		if ( times ) {
-			track_add_head(track_head);
-		}
-		else {			
-			route_add_head(track_head);
-		}
+		route_add_head(track_head);
 		if ( control ) {
 		    track_head->rte_name = xstrdup("control points");
 		}
@@ -394,10 +389,21 @@ my_read(void)
 				if ( turns_important && stringlen ) 
 					wpt_tmp->route_priority=1;
 				if ( !turns_only || stringlen ) {
-					route_add_wpt(track_head, wpt_tmp);
+					if ( times ) {
+					    track_add_wpt(track_head,wpt_tmp);
+					}
+					else {
+					    route_add_wpt(track_head, wpt_tmp);
+					}
 					if ( old_track_head ) {
-						route_add_wpt(old_track_head,
+						if ( times ) {
+						  track_add_wpt(old_track_head,
+						   waypt_dupe(wpt_tmp));
+						}
+						else {
+					 	  route_add_wpt(old_track_head,
 					           waypt_dupe(wpt_tmp));
+						}
 						old_track_head = NULL;
 					}
 				}

@@ -338,7 +338,7 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 }
 
 static 
-int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_rec, route_head *head)
+int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_rec, route_head *head, int isRoute)
 {
 	char *data, *str;
 	double altfeet;
@@ -394,8 +394,10 @@ int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_rec, ro
 		    str = csv_lineparse(NULL, ",", """", line++);
 		}
 		
-		if (head)
+		if (head && isRoute )
 		    route_add_wpt(head, wpt_tmp);
+		else if (head)
+                    track_add_wpt(head, wpt_tmp);
 		else
 		    waypt_add(wpt_tmp);
 
@@ -478,16 +480,16 @@ static void ppdb_read(void)
 		track_head = route_head_alloc();
 		track_add_head(track_head);
 		track_head->rte_name = xstrdup(pdb_in->name);
-		ppdb_read_wpt(pdb_in, pdb_rec, track_head);
+		ppdb_read_wpt(pdb_in, pdb_rec, track_head, 0);
 		break;
 	    case rtedata:
 		route_head = route_head_alloc();
 		route_add_head(route_head);
 		route_head->rte_name = xstrdup(pdb_in->name);
-		ppdb_read_wpt(pdb_in, pdb_rec, route_head);
+		ppdb_read_wpt(pdb_in, pdb_rec, route_head, 1);
 		break;
 	    case wptdata:
-		ppdb_read_wpt(pdb_in, pdb_rec, NULL);
+		ppdb_read_wpt(pdb_in, pdb_rec, NULL, 0);
 		break;
 	}
 	

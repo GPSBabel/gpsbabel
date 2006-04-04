@@ -1636,7 +1636,7 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 		thisWaypoint->centiseconds = 0;
 		thisWaypoint->altitude = mps_altitude;
 		thisWaypoint->depth = mps_depth;
-		route_add_wpt(track_head, thisWaypoint);
+		track_add_wpt(track_head, thisWaypoint);
 
 	}		/* while (trk_count--) */
 

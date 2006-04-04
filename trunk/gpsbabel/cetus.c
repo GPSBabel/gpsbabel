@@ -266,7 +266,7 @@ read_tracks(const struct pdb *pdb)
 			wpt = read_track_point((cetus_track_point_t *)c, basetime);
 			if (wpt != NULL)
 			{
-			    route_add_wpt(track, wpt);
+			    track_add_wpt(track, wpt);
 			    points++;
 			    
 			    /* Did we run over midnight ? */

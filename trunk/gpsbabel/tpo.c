@@ -387,7 +387,7 @@ tpo_read(void)
 			/* there is no elevation data for the waypoints */
 			waypoint_temp->altitude = 0;
 
-			route_add_wpt(track_temp, waypoint_temp);
+			track_add_wpt(track_temp, waypoint_temp);
 		}	
 
 		/* free temporary memory */

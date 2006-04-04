@@ -358,7 +358,7 @@ static void data_read(void)
 	    } else {
 		pres_wpt->altitude = unknown_alt;
 	    }
-	    route_add_wpt(pres_head, pres_wpt);
+	    track_add_wpt(pres_head, pres_wpt);
 
 	    // Add the same waypoint with GNSS altitude to the second
 	    // track
@@ -370,7 +370,7 @@ static void data_read(void)
 	    } else {
 		gnss_wpt->altitude = unknown_alt;
 	    }
-	    route_add_wpt(gnss_head, gnss_wpt);
+	    track_add_wpt(gnss_head, gnss_wpt);
 	    break;
 
 	case rec_task:

@@ -383,6 +383,8 @@ route_head *route_head_alloc(void);
 void route_add (waypoint *);
 void route_add_wpt(route_head *rte, waypoint *wpt);
 void route_del_wpt(route_head *rte, waypoint *wpt);
+void track_add_wpt(route_head *rte, waypoint *wpt);
+void track_del_wpt(route_head *rte, waypoint *wpt);
 void route_add_head(route_head *rte);
 void route_del_head(route_head *rte);
 void route_reverse(const route_head *rte_hd);

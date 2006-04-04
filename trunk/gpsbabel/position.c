@@ -169,6 +169,9 @@ position_runqueue(queue *q, int nelems, int qtype)
 					del = !!purge_duplicates;
 					break;
 				case trkdata:
+					track_del_wpt(cur_rte, comp[i]);
+					del = !!purge_duplicates;
+					break;
 				case rtedata:
 					route_del_wpt(cur_rte, comp[i]);
 					del = !!purge_duplicates;
@@ -185,6 +188,9 @@ position_runqueue(queue *q, int nelems, int qtype)
 					del = 0;
 					break;
 				case trkdata:
+					track_del_wpt(cur_rte, comp[i]);
+					del = !!purge_duplicates;
+					break;
 				case rtedata:
 					route_del_wpt(cur_rte, comp[i]);
 					del = 0;
@@ -203,6 +209,8 @@ position_runqueue(queue *q, int nelems, int qtype)
 				waypt_free(comp[nelems-1]);
 				break;
 			case trkdata:
+				track_del_wpt(cur_rte, comp[i]);
+				break;
 			case rtedata:
 				route_del_wpt(cur_rte, comp[i]);
 				break;

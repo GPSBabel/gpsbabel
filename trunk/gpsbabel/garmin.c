@@ -312,7 +312,7 @@ track_read(void)
 		wpt->shortname = xstrdup(array[i]->trk_ident);
 		wpt->creation_time = array[i]->Time;
 		
-		route_add_wpt(trk_head, wpt);
+		track_add_wpt(trk_head, wpt);
 	}
 
 	while(ntracks) {

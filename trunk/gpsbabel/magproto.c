@@ -467,7 +467,7 @@ retry:
 			track_add_head(trk_head);
 		}
 
-		route_add_wpt(trk_head, wpt);
+		track_add_wpt(trk_head, wpt);
 	}
 	if (strncmp(ibuf, "$PMGNRTE,", 7) == 0) {
 		mag_rteparse(ibuf);

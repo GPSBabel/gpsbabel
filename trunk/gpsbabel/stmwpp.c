@@ -168,7 +168,7 @@ stmwpp_data_read(void)
 						track = route_head_alloc();
 						track_add_head(track);
 					}
-					route_add_wpt(track, wpt);
+					track_add_wpt(track, wpt);
 					break;
 			}
 			wpt = NULL;

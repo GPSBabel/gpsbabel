@@ -272,7 +272,7 @@ mapsend_track_read(void)
 		wpt_tmp->creation_time = time;
 		wpt_tmp->centiseconds = centisecs;
 		wpt_tmp->altitude = wpt_alt;
-		route_add_wpt(track_head, wpt_tmp);
+		track_add_wpt(track_head, wpt_tmp);
 	}
 }
 
@@ -600,7 +600,6 @@ mapsend_wpt_write(void)
 		}
 		
 		n = route_count();
-
 		my_fwrite4(&n, mapsend_file_out);
 	
 		if (n)

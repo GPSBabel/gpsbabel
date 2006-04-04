@@ -333,7 +333,7 @@ data_read(void)
 				  wpt_tmp->creation_time = be_read32(&tp_cust->time) + 631065600;
 				  fi.i = be_read32(&tp_cust->alt);
 				  wpt_tmp->altitude = fi.f;
-				  route_add_wpt(track_head, wpt_tmp);
+				  track_add_wpt(track_head, wpt_tmp);
 				  tp_cust++;
 				}
 				break;
@@ -364,7 +364,7 @@ data_read(void)
 				  lat = be_read32(&tp_comp->lat);
 				  wpt_tmp->longitude = lon / 2147483648.0 * 180.0;
 				  wpt_tmp->latitude = lat / 2147483648.0 * 180.0;
-				  route_add_wpt(track_head, wpt_tmp);
+				  track_add_wpt(track_head, wpt_tmp);
 				  tp_comp++;
 				}
 				break;

@@ -642,7 +642,7 @@ data_read(void)
             switch (ozi_objective) {
             case trkdata:
                 if (linecount > 6) /* skipping over file header */
-                    route_add_wpt(trk_head, wpt_tmp);
+                    track_add_wpt(trk_head, wpt_tmp);
                 else
                     waypt_free(wpt_tmp);
                 break;

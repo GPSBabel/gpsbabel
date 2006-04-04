@@ -236,7 +236,7 @@ vitosmt_read(void)
 				route_head = route_head_alloc();
 				track_add_head(route_head);
 			}
-			route_add_wpt(route_head, wpt_tmp);
+			track_add_wpt(route_head, wpt_tmp);
 		}
 
 		xfree(timestamp);

@@ -356,7 +356,7 @@ trackfilter_merge(void)
 	    {
 		wpt = (waypoint *)elem;
 		buff[j++] = waypt_dupe(wpt);
-		route_del_wpt(track, wpt);
+		track_del_wpt(track, wpt);
 	    }
 	    if (track != master) 		/* i > 0 */
 		track_del_head(track);
@@ -516,8 +516,8 @@ trackfilter_split(void)
 	    if (curr != NULL)
 	    {
 		wpt = waypt_dupe(buff[j]);
-		route_del_wpt(master, buff[j]);
-		route_add_wpt(curr, wpt);
+		track_del_wpt(master, buff[j]);
+		track_add_wpt(curr, wpt);
 		buff[j] = wpt;
 	    }
 	}
@@ -612,7 +612,7 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
 
 		if ((wpt->creation_time < start) || (wpt->creation_time > stop))
 		{
-		    route_del_wpt(track, wpt);
+		    track_del_wpt(track, wpt);
 		    dropped++;
 		}
 	    }
