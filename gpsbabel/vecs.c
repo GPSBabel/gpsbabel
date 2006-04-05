@@ -22,6 +22,9 @@
 #include <stdio.h>
 #include "defs.h"
 #include "csv_util.h"
+#include "inifile.h"
+
+#define MYNAME "vecs.c"
 
 typedef struct {
 	ff_vecs_t *vec;
@@ -41,6 +44,7 @@ extern ff_vecs_t coto_vecs;
 extern ff_vecs_t cst_vecs;
 extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t garmin_vecs;
+extern ff_vecs_t garmin_txt_vecs;
 extern ff_vecs_t gcdb_vecs;
 extern ff_vecs_t gdb_vecs;
 extern ff_vecs_t geoniche_vecs;
@@ -153,7 +157,7 @@ vecs_t vec_list[] = {
 	{
 		&mps_vecs,
 		"mapsource",
-		"Garmin Mapsource - mps",
+		"Garmin MapSource - mps",
 		"mps"
 	},
 	{
@@ -435,7 +439,7 @@ vecs_t vec_list[] = {
 	{
 		&gdb_vecs,
 		"gdb",
-		"Garmin Mapsource - gdb",
+		"Garmin MapSource - gdb",
 		"gdb"
 	},	
 	{
@@ -510,6 +514,12 @@ vecs_t vec_list[] = {
 		"GPS TrackMaker",
 		"gtm"
 	},
+        {
+		&garmin_txt_vecs,
+		"garmin_txt",
+		"Garmin MapSource - txt (tab delimited)",
+		"txt"
+	},
 	{
 		NULL,
 		NULL,
@@ -544,6 +554,83 @@ exit_vecs( void )
 	}
 }
 
+void
+assign_option(const char *module, arglist_t *ap, const char *val)
+{
+	char *c;
+	
+	if (*ap->argval != NULL) {
+		xfree(*ap->argval);
+		*ap->argval = NULL;
+	}
+	if (val == NULL) return;
+
+	if (case_ignore_strcmp(val, ap->argstring) == 0) c = "";
+	else c = (char *)val;
+
+	switch(ap->argtype & ARGTYPE_TYPEMASK) {
+		case ARGTYPE_INT:
+			if (*c == '\0') c = "0";
+			else {
+				int test;
+				is_fatal(1 != sscanf(c, "%d", &test), 
+					"%s: Invalid parameter value %s for option %s", module, val, ap->argstring);
+			}
+			break;
+		case ARGTYPE_FLOAT:
+			if (*c == '\0') c = "0";
+			else {
+				double test;
+				is_fatal(1 != sscanf(c, "%lf", &test), 
+					"%s: Invalid parameter value %s for option %s", module, val, ap->argstring);
+			}
+			break;
+		case ARGTYPE_BOOL:
+			if (*c == '\0') c = "1";
+			else {
+				switch(*c) {
+					case 'Y':
+					case 'y': c = "1"; break;
+					case 'N':
+					case 'n': c = "0"; break;
+					default:
+						if isdigit(*c) {
+							if (*c == '0') c = "0";
+							else c = "1";
+						}
+						else {
+							warning(MYNAME ": Invalid logical value '%s' (%s)!\n", c, module);
+							c = "0";
+						}
+						break;
+				}
+			}
+			break;
+	}
+
+	/* for bool options without default: don't set argval if "FALSE" */
+	
+	if (((ap->argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) && 
+	    (*c == '0') && (ap->defaultvalue == NULL)) {
+		return;
+	}
+	*ap->argval = xstrdup(c);
+}
+
+void
+disp_vec_options(const char *vecname, arglist_t *ap)
+{
+	for (ap = ap; ap->argstring; ap++) {
+		if (*ap->argval && ap->argval) {
+			printf("options: module/option=value: %s/%s=\"%s\"", 
+				vecname, ap->argstring, *ap->argval);
+			if (ap->defaultvalue && (strcmp(ap->defaultvalue, *ap->argval) == 0)) 
+				printf(" (=default)");
+			printf("\n");
+		}
+	}
+}
+
 ff_vecs_t *
 find_vec(char *const vecname, char **opts)
 {
@@ -564,42 +651,32 @@ find_vec(char *const vecname, char **opts)
 		res = strchr(vecname, ',');
 		if (res) {
 			*opts = strchr(vecname, ',')+1;
-
-			if (vec->vec->args) {
-				for (ap = vec->vec->args; ap->argstring; ap++){
-					char *opt = NULL; 
-					if ( *ap->argval ) xfree(*ap->argval);
-					
-					opt = get_option(*opts, ap->argstring);
-					if ( opt ) {
-						*ap->argval = opt;
-					}
-					else if ( ap->defaultvalue ) {
-						*ap->argval = xstrdup( 
-							ap->defaultvalue );
-					}
-					else {
-						*ap->argval = NULL;
-					}
-				}
-			}
 		} else {
 			*opts = NULL;
-			if (vec->vec->args) {
-				for (ap = vec->vec->args; ap->argstring; ap++){
-					if ( *ap->argval ) xfree(*ap->argval);
-					
-					if ( ap->defaultvalue ) {
-						*ap->argval = xstrdup( 
-							ap->defaultvalue );
-					}
-					else {
-						*ap->argval = NULL;
+		}
+		
+		if (vec->vec->args) {
+			for (ap = vec->vec->args; ap->argstring; ap++) {
+				char *opt;
+				
+				if ( res ) {
+					opt = get_option(*opts, ap->argstring);
+					if ( opt ) {
+						assign_option(svecname, ap, opt);
+						xfree(opt);
+						continue;
 					}
 				}
+				opt = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
+				if (opt == NULL) opt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
+				if (opt == NULL) opt = ap->defaultvalue;
+				assign_option(vec->name, ap, opt);
 			}
 		}
 
+		if (global_opts.debug_level >= 1)
+			disp_vec_options(vec->name, vec->vec->args);
+		
 		xcsv_setup_internal_style( NULL );
 		xfree(v);
 		return vec->vec;
@@ -622,14 +699,31 @@ find_vec(char *const vecname, char **opts)
 		res = strchr(vecname, ',');
 		if (res) {
 			*opts = strchr(vecname, ',') + 1;
-			if (vec_list[0].vec->args) {
-				for (ap = vec_list[0].vec->args; ap->argstring; ap++) {
-					*ap->argval = get_option(*opts, ap->argstring);
-				}
-			}
 		} else {
 			*opts = NULL;
 		}
+		
+		if (vec_list[0].vec->args) {
+			for (ap = vec_list[0].vec->args; ap->argstring; ap++) {
+				char *opt;
+				
+				if ( res ) {
+					opt = get_option(*opts, ap->argstring);
+					if ( opt ) {
+						assign_option(svecname, ap, opt);
+						xfree(opt);
+						continue;
+					}
+				}
+				opt = inifile_readstr(global_opts.inifile, svec->name, ap->argstring);
+				if (opt == NULL) opt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
+				if (opt == NULL) opt = ap->defaultvalue;
+				assign_option(svec->name, ap, opt);
+			}
+		}
+		if (global_opts.debug_level >= 1)
+			disp_vec_options(svec->name, vec_list[0].vec->args);
+		
 		xcsv_setup_internal_style(svec->style_buf);
 
 		xfree(v);
@@ -669,7 +763,7 @@ get_option(const char *iarglist, const char *argname)
 	arglist = xstrdup(iarglist);
 
 	for (arg = arglist; argp = strtok(arg, ","); arg = NULL) {
-		if (0 == strncmp(argp, argname, arglen)) {
+		if (0 == case_ignore_strncmp(argp, argname, arglen)) {
 			/*
 			 * If we have something of the form "foo=bar"
 			 * return "bar".   Otherwise, we assume we have
