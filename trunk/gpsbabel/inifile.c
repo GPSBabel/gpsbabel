@@ -113,8 +113,8 @@ open_gpsbabel_inifile(void)
 		if (res == NULL) res = try_open_gpsbabel_inifile("/usr/local/etc");
 		if (res == NULL) res = try_open_gpsbabel_inifile("/etc");
 #endif
-		if (res == NULL) return NULL;
 	}
+	return res;
 }
 
 static void
