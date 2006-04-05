@@ -58,6 +58,7 @@ route_head_alloc(void)
 	route_head *rte_head;
 	rte_head = (route_head *) xcalloc(sizeof (*rte_head), 1);
 	QUEUE_INIT(&rte_head->Q);
+        QUEUE_INIT(&rte_head->waypoint_list);
 	return rte_head;
 }
 
@@ -65,7 +66,6 @@ route_head_alloc(void)
 void
 any_route_add_head( route_head *rte, queue *head ) {
         ENQUEUE_TAIL( head, &rte->Q );
-        QUEUE_INIT(&rte->waypoint_list);
 }
 
 void
@@ -203,6 +203,9 @@ any_route_free(route_head *rte)
 	if ( rte->rte_desc ) {
 		xfree(rte->rte_desc);
 	}
+ 	if ( rte->rte_url ) {
+ 		xfree(rte->rte_url);
+ 	}
 	waypt_flush(&rte->waypoint_list);
 	if ( rte->fs ) {
 		fs_chain_destroy( rte->fs );
@@ -212,8 +215,8 @@ any_route_free(route_head *rte)
 
 void route_free( route_head *rte )
 {
-	any_route_free( rte );
 	rte_waypts -= rte->rte_waypt_ct;
+	any_route_free( rte );
 }
 
 void
@@ -334,6 +337,7 @@ route_copy( int *dst_count, int *dst_wpt_count, queue **dst, queue *src ) {
 		rte_new = route_head_alloc();
 		rte_new->rte_name = xstrdup( rte_old->rte_name );
 		rte_new->rte_desc = xstrdup( rte_old->rte_desc );
+		rte_new->rte_url = xstrdup( rte_old->rte_url );
 		rte_new->fs = fs_chain_copy( rte_old->fs );
 		rte_new->rte_num = rte_old->rte_num;
 		any_route_add_head( rte_new, *dst );

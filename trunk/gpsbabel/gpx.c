@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 #include "cet_util.h"
+#include "garmin_fs.h"
 #ifndef NO_EXPAT
 	#include <expat.h>
 	static XML_Parser psr;
@@ -124,6 +125,16 @@ typedef enum {
 	tt_cache_log_type,
 	tt_cache_log_date,
 	tt_cache_placer,
+	
+	tt_garmin_extension,		/* don't change this order */
+	tt_garmin_waypt_extension,
+	tt_garmin_proximity,
+	tt_garmin_temperature,
+	tt_garmin_depth,
+	tt_garmin_display_mode,
+	tt_garmin_categories,
+	tt_garmin_category,		/* don't change this order */
+
 	tt_rte,
 	tt_rte_name,
 	tt_rte_desc,
@@ -266,6 +277,7 @@ tag_mapping tag_path_map[] = {
 	{ tt_wpt_link_text, 0, "/gpx/wpt/link/text", 0UL },		/* GPX 1.1 */
 	{ tt_wpt_sym, 0, "/gpx/wpt/sym", 0UL },
 	{ tt_wpt_type, 1, "/gpx/wpt/type", 0UL },
+	
 	{ tt_cache, 1, "/gpx/wpt/groundspeak:cache", 0UL },
 	{ tt_cache_name, 1, "/gpx/wpt/groundspeak:cache/groundspeak:name", 0UL },
 	{ tt_cache_container, 1, "/gpx/wpt/groundspeak:cache/groundspeak:container", 0UL },
@@ -279,6 +291,15 @@ tag_mapping tag_path_map[] = {
 	{ tt_cache_log_type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type", 0UL },
 	{ tt_cache_log_date, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date", 0UL },
 	{ tt_cache_placer, 1, "/gpx/wpt/groundspeak:cache/groundspeak:owner", 0UL },
+	
+	{ tt_garmin_extension, 0, "/gpx/wpt/extensions", 0UL },
+	{ tt_garmin_waypt_extension, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension", 0UL },
+	{ tt_garmin_proximity, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:Proximity", 0UL },
+	{ tt_garmin_temperature, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:Temperature", 0UL },
+	{ tt_garmin_depth, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:Depth", 0UL },
+	{ tt_garmin_display_mode, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:DisplayMode", 0UL },
+	{ tt_garmin_categories, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:Categories", 0UL },
+	{ tt_garmin_category, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:Categories/gpxx:Category", 0UL },
 
 	{ tt_rte, 0, "/gpx/rte", 0UL },
 	{ tt_rte_name, 0, "/gpx/rte/name", 0UL },
@@ -767,12 +788,14 @@ gpx_end(void *data, const char *el)
 	char *cdatastrp = cdatastr.mem;
 	int passthrough;
 	static time_t gc_log_date;
+	tag_type tag;
 
 	if (strcmp(s + 1, el)) {
 		fprintf(stderr, "Mismatched tag %s\n", el);
 	}
 
-	switch (get_tag(current_tag.mem, &passthrough)) {
+	tag = get_tag(current_tag.mem, &passthrough);
+	switch(tag) {
 	/*
 	 * First, the tags that are file-global.
 	 */
@@ -873,6 +896,18 @@ gpx_end(void *data, const char *el)
 		}
 		gc_log_date = 0;
 		break;
+		
+	/*
+	 * Garmin-waypoint-specific tags.
+ 	 */
+	case tt_garmin_proximity:
+	case tt_garmin_temperature:
+	case tt_garmin_depth:
+	case tt_garmin_display_mode:
+	case tt_garmin_category: 
+		garmin_fs_xml_convert(tt_garmin_extension, tag, cdatastrp, wpt_tmp);
+		break;
+
 	/*
 	 * Route-specific tags.
  	 */
@@ -984,8 +1019,9 @@ gpx_end(void *data, const char *el)
 		break;
 	}
 
-	if (passthrough)
+	if (passthrough) {
 		end_something_else();
+	}
 
 	*s = 0;
 }
@@ -1451,6 +1487,9 @@ gpx_waypt_pr(const waypoint *waypointp)
 	fs_gpx = (fs_xml *)fs_chain_find( waypointp->fs, FS_GPX );
 	if ( fs_gpx ) {
 		fprint_xml_chain( fs_gpx->tag, waypointp );
+	}
+	if (gpx_wversion_num > 10) {
+		garmin_fs_xml_fprint(ofd, waypointp);
 	}
 	fprintf(ofd, "</wpt>\n");
 }
