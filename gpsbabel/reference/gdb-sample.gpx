@@ -76,6 +76,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>NARVA-Leipzig</name>
   <rtept lat="50.492618987" lon="12.105448823">
     <ele>391.000000</ele>
+<time>2005-11-08T23:03:32Z</time>
     <name>NARVA</name>
     <cmt>Start</cmt>
     <desc>Start</desc>
@@ -83,30 +84,35 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <sym>Flag, Green</sym>
   </rtept>
   <rtept lat="50.493837046" lon="12.106101019">
+<time>2005-02-26T09:03:15Z</time>
     <name>Liebknechtstrasse</name>
     <cmt>Liebknechtstrasse 90</cmt>
     <desc>Liebknechtstrasse 90</desc>
     <sym>Exit</sym>
   </rtept>
   <rtept lat="50.493662870" lon="12.107152529">
+<time>2005-02-26T09:02:20Z</time>
     <name>Jahnstrasse</name>
     <cmt>Jahnstrasse 11</cmt>
     <desc>Jahnstrasse 11</desc>
     <sym>Exit</sym>
   </rtept>
   <rtept lat="50.610795273" lon="12.173802154">
+<time>2005-02-26T08:59:59Z</time>
     <name>Elsterberg</name>
     <cmt>Piehlerstrasse</cmt>
     <desc>Piehlerstrasse</desc>
     <sym>Exit</sym>
   </rtept>
   <rtept lat="50.654763049" lon="12.204956766">
+<time>2005-02-26T08:57:04Z</time>
     <name>Greiz</name>
     <cmt>August-Bebel-Strasse</cmt>
     <desc>August-Bebel-Strasse</desc>
     <sym>Exit</sym>
   </rtept>
   <rtept lat="50.844125748" lon="12.408757210">
+<time>2005-02-26T09:10:47Z</time>
     <name>Gosel</name>
     <cmt>Gosel</cmt>
     <desc>Gosel</desc>
@@ -119,12 +125,14 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
     <sym>Exit</sym>
   </rtept>
   <rtept lat="50.964955240" lon="12.435919438">
+<time>2005-06-24T00:50:24Z</time>
     <name>Altenburg-Umgehung</name>
     <cmt>Altenburg-Umgehung</cmt>
     <desc>Altenburg-Umgehung</desc>
     <sym>Exit</sym>
   </rtept>
   <rtept lat="51.314520836" lon="12.409143448">
+<time>2005-06-24T00:36:57Z</time>
     <name>Völkerschlachtdenkmal</name>
     <cmt>P+R Am Völkerschlachtdenkmal</cmt>
     <desc>P+R Am Völkerschlachtdenkmal</desc>
