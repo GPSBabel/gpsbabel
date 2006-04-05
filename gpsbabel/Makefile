@@ -36,6 +36,9 @@ DEBUGGING=-g $(EXTRA_DEBUGGING)
 CFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -Icoldsync $(INHIBIT_EXPAT) $(INHIBIT_USB) $(OPTIMIZATION)
 INSTALL_TARGETDIR=/usr/local/
 
+#OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
+OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
+
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	gtm.o \
 	gpsutil.o pcx.o cetus.o copilot.o gpspilot.o magnav.o \
@@ -165,10 +168,10 @@ rpmrelease:
 	curl -u anonymous:anonymous --upload-file /usr/src/redhat/RPMS/i386/gpsbabel-$(VERSIOND).i386.rpm  ftp://upload.sf.net/incoming/ 
 
 mac-usbfree:
-	make LIBEXPAT=/sw/lib/libexpat.a EXTRA_CFLAGS="-I/sw/include" LIBUSB= INHIBIT_USB=-DNO_USB
+	make LIBEXPAT=$(OTHER_ROOT)/lib/libexpat.a EXTRA_CFLAGS="-I$(OTHER_ROOT)/include" LIBUSB= INHIBIT_USB=-DNO_USB
 
 mac-build:
-	make LIBEXPAT=/sw/lib/libexpat.a EXTRA_CFLAGS="-I/sw/include" LIBUSB="/sw/lib/libusb.a -lIOKit  -lBSDPClient -framework CoreFoundation"
+	make LIBEXPAT=$(OTHER_ROOT)/lib/libexpat.a EXTRA_CFLAGS="-I$(OTHER_ROOT)/include" LIBUSB="$(OTHER_ROOT)/lib/libusb.a -lIOKit  -lBSDPClient -framework CoreFoundation"
 
 mac-release:
 	mkdir -p usr/bin usr/share/gpsbabel/doc
