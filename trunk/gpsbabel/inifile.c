@@ -48,6 +48,75 @@ typedef struct inifile_section_s
 #define START_BUFSIZE 257
 #define DELTA_BUFSIZE 128
 
+#define GPSBABEL_INIFILE "gpsbabel.ini"
+
+static FILE *
+try_open_gpsbabel_inifile(const char *path)		/* can be empty or NULL */
+{
+	FILE *result;
+	char *buff;
+	int len;
+
+	if (path == NULL) return NULL;
+		
+	len = strlen(path);
+	buff = xmalloc(len + 1 + strlen(GPSBABEL_INIFILE) + 1);
+	strcpy(buff, path);
+	if (len > 0) {
+		char test = buff[len - 1];
+#ifdef __WIN32__
+		if ((test != '\\') && (test != ':'))
+			strcat(buff, "\\");
+#else
+		if (test != '/')
+			strcat(buff, "/");
+#endif
+	}
+	strcat(buff, GPSBABEL_INIFILE);
+	result = fopen(buff, "r");
+	xfree(buff);
+	
+	return result;
+}
+
+static FILE *
+open_gpsbabel_inifile(void)
+{
+	FILE *res;
+	char *envstr;
+	
+	envstr = getenv("GPSBABELINI");
+	if (envstr != NULL) {
+		res = fopen(envstr, "r");
+		if (res == NULL) {
+			warning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
+			return NULL;
+		}
+		return res;
+	}
+	res = try_open_gpsbabel_inifile("");	/* PWD */
+	if (res == NULL) {
+#ifdef __WIN32__
+		res = try_open_gpsbabel_inifile(getenv("APPDATA"));
+		if (res == NULL) res = try_open_gpsbabel_inifile(getenv("WINDIR"));
+		if (res == NULL) res = try_open_gpsbabel_inifile(getenv("SYSTEMROOT"));
+#else
+		if ((envstr = getenv("HOME")) != NULL) {
+			char *path;
+			
+			path = xmalloc(strlen(envstr) + 11);
+			strcpy(path, envstr);
+			strcat(path, "/.gpsbabel");
+			res = try_open_gpsbabel_inifile(path);
+			xfree(path);
+		}
+		if (res == NULL) res = try_open_gpsbabel_inifile("/usr/local/etc");
+		if (res == NULL) res = try_open_gpsbabel_inifile("/etc");
+#endif
+		if (res == NULL) return NULL;
+	}
+}
+
 static void
 inifile_load_file(FILE *fin, inifile_t *inifile, const char *myname)
 {
@@ -70,7 +139,8 @@ inifile_load_file(FILE *fin, inifile_t *inifile, const char *myname)
 		}
 		
 		cin = lrtrim(buf);
-		if (*cin == '\0') continue;
+		if (*cin == '\0') continue;			/* skip empty lines */
+		if ((*cin == '#') || (*cin == ';')) continue;	/* skip comments */
 		
 		if (*cin == '[')
 		{
@@ -130,6 +200,8 @@ inifile_find_value(const inifile_t *inifile, const char *sec_name, const char *k
 {
 	queue *elem, *tmp;
 	
+	if (inifile == NULL) return NULL;
+	
 	QUEUE_FOR_EACH(&inifile->secs, elem, tmp)
 	{
 		inifile_section_t *sec = (inifile_section_t *) elem;
@@ -158,14 +230,20 @@ inifile_find_value(const inifile_t *inifile, const char *sec_name, const char *k
 	inifile_init:
 	  reads inifile filename into memory
 	  myname represents the calling module
+	  
+	  filename == NULL: try to open global gpsbabel.ini
  */
 inifile_t *
 inifile_init(const char *filename, const char *myname)
 {
 	inifile_t *result;
-	FILE *fin;
+	FILE *fin = NULL;
 	
-	fin = xfopen(filename, "r", myname);
+	if (filename == NULL) {
+		fin = open_gpsbabel_inifile();
+		if (fin == NULL) return NULL;
+	}
+	else fin = xfopen(filename, "r", myname);
 	
 	result = xcalloc(1, sizeof(*result));
 	QUEUE_INIT(&result->secs);
