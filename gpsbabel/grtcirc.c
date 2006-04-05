@@ -18,6 +18,7 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+#include <errno.h>
 #include <stdio.h>
 #include "defs.h"
 
@@ -51,7 +52,13 @@ double tomiles( double rads ) {
 }
 
 double gcdist( double lat1, double lon1, double lat2, double lon2 ) {
-  return acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2));
+  double res;
+  res = acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2));
+  if (errno == EDOM) { /* Math argument out of domain of function */
+    errno = 0;
+    return 0;
+  }
+  return res;
 }
  
 double linedist(double lat1, double lon1,
