@@ -224,8 +224,8 @@ waypt_read(void)
 			wpt_tmp->icon_descr = d103_symbol_from_icon_number(
 					way[i]->smbl);
 		} else {
-			wpt_tmp->icon_descr = mps_find_desc_from_icon_number(
-					way[i]->smbl, PCX);
+			wpt_tmp->icon_descr = gt_find_desc_from_icon_number(
+					way[i]->smbl, PCX, NULL);
 		}
 		/*
 		 * If a unit doesn't store altitude info (i.e. a D103)
@@ -506,12 +506,12 @@ waypoint_write(void)
 		way[i]->lat = wpt->latitude;
 
 		if (deficon) {
-			icon = mps_find_icon_number_from_desc(deficon, PCX);
+			icon = gt_find_icon_number_from_desc(deficon, PCX);
 		} else {
 			if (get_cache_icon(wpt)) {
-				icon = mps_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
+				icon = gt_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
 			} else {
-				icon = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
+				icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
 			}
 		}
 
@@ -576,7 +576,7 @@ route_waypt_pr(const waypoint *wpt)
 
 	rte->lon = wpt->longitude;
 	rte->lat = wpt->latitude;
-	rte->smbl = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
+	rte->smbl = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
 	if (wpt->altitude != unknown_alt) {
 		rte->alt = wpt->altitude;
 	}
