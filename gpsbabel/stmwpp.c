@@ -266,12 +266,12 @@ stmwpp_data_write(void)
 	{
 		case wptdata:
 			what = STM_WAYPT;
-			track_index = track_num;
+			track_index = track_num;	/* disable filter */
 			waypt_disp_all(stmwpp_waypt_cb);
 			break;
 		case rtedata:
 			what = STM_WAYPT;
-			track_disp_all(stmwpp_track_hdr, stmwpp_track_tlr, stmwpp_waypt_cb);
+			route_disp_all(stmwpp_track_hdr, stmwpp_track_tlr, stmwpp_waypt_cb);
 			break;
 		case trkdata:
 			what = STM_TRKPT;
