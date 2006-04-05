@@ -594,7 +594,7 @@ assign_option(const char *module, arglist_t *ap, const char *val)
 					case 'N':
 					case 'n': c = "0"; break;
 					default:
-						if isdigit(*c) {
+						if (isdigit(*c)) {
 							if (*c == '0') c = "0";
 							else c = "1";
 						}
