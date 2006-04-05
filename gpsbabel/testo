@@ -774,10 +774,10 @@ compare ${TMPDIR}/pathaway.gpx reference/track/pathaway.gpx
 # Garmin GPS Database .gdb tests
 #
 rm -f ${TMPDIR}/gdb-*
-${PNAME} -w -r -t -i gdb,via -f reference/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
+${PNAME} -i gdb,via -f reference/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
 compare reference/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
-${PNAME} -w -r -t -i gpx -f reference/gdb-sample.gpx -o gdb,ver=1 -F ${TMPDIR}/gdb-sample.gdb
-${PNAME} -w -r -t -i gdb -f ${TMPDIR}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
+${PNAME} -i gpx -f reference/gdb-sample.gpx -o gdb,ver=1 -F ${TMPDIR}/gdb-sample.gdb
+${PNAME} -i gdb -f ${TMPDIR}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
 #
 # Because of Garmin coordinates storage gpx is not good for this test
 # compare reference/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
@@ -997,5 +997,18 @@ compare ${TMPDIR}/nmea.gpx reference/track/nmea.gpx
 #
 ${PNAME} -i wfff -f reference/wfff.xml -o gpsutil -F ${TMPDIR}/wfff.gpu
 compare ${TMPDIR}/wfff.gpu reference/wfff.gpu
+
+#
+# Garmin MapSource tab delimited text files - garmin_txt
+#
+rm -f ${TMPDIR}/garmin_txt*
+#
+# !!! garmin_txt timestamps are stored in localtime !!!
+#
+${PNAME} -i gdb -f reference/gdb-sample2.gdb -o garmin_txt,utc,prec=9 -F ${TMPDIR}/garmin_txt.txt
+compare reference/garmin_txt.txt ${TMPDIR}/garmin_txt.txt 
+${PNAME} -i garmin_txt -f reference/garmin_txt.txt -o garmin_txt,prec=9 -F ${TMPDIR}/garmin_txt-2.txt
+${PNAME} -i garmin_txt -f ${TMPDIR}/garmin_txt-2.txt -o garmin_txt,prec=9 -F ${TMPDIR}/garmin_txt-3.txt
+compare ${TMPDIR}/garmin_txt-2.txt ${TMPDIR}/garmin_txt-3.txt
 
 exit 0
