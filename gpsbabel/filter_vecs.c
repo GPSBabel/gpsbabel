@@ -21,6 +21,7 @@
 
 #include "defs.h"
 #include "filterdefs.h"
+#include "inifile.h"
 
 typedef struct {
 	filter_vecs_t *vec;
@@ -132,41 +133,39 @@ find_filter_vec(char *const vecname, char **opts)
 			continue;
 		}
 
+		/* step 1: initialize by inifile or default values */
+		if (vec->vec->args) {
+			for (ap = vec->vec->args; ap->argstring; ap++) {
+				char *temp;
+				
+				temp = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
+				if (temp == NULL) temp = inifile_readstr(global_opts.inifile, "Common filter settings", ap->argstring);
+				if (temp == NULL) temp = ap->defaultvalue;
+				assign_option(vec->name, ap, temp);
+			}
+		}
+		
+		/* step 2: override settings with command-line values */
 		res = strchr(vecname, ',');
 		if (res) {
 			*opts = res+1;
 
 			if (vec->vec->args) {
 				for (ap = vec->vec->args; ap->argstring; ap++){
-					char *opt = get_option(*opts, 
-							ap->argstring);
-					if ( opts ) {
-						*ap->argval = opt;
-					}
-					else if ( ap->defaultvalue ) {
-						*ap->argval = xstrdup(
-							ap->defaultvalue);
-					}
-					else {
-						*ap->argval = NULL;
-					}
-				}
-			}
-		} else {
-			*opts = NULL;
-			if (vec->vec->args) {
-				for (ap = vec->vec->args; ap->argstring; ap++){
-					if ( ap->defaultvalue ) {
-						*ap->argval = xstrdup(
-							ap->defaultvalue);
-					}
-					else {
-						*ap->argval = NULL;
+					char *opt;
+					
+					opt = get_option(*opts, ap->argstring);
+					if ( opt ) {
+						assign_option(vec->name, ap, opt);
+						xfree(opt);
 					}
 				}
 			}
 		}
 
+		if (global_opts.debug_level >= 1)
+			disp_vec_options(vec->name, vec->vec->args);
+			
 		xfree(v);
 		return vec->vec;
 		
@@ -182,7 +181,10 @@ free_filter_vec( filter_vecs_t *fvec )
 	
 	if ( fvec->args ) {
 		for ( ap = fvec->args; ap->argstring; ap++) {
-			if (ap->argval && *ap->argval) xfree(*ap->argval);
+			if (ap->argval && *ap->argval) {
+				xfree(*ap->argval);
+				*ap->argval = NULL;
+			}
 		}
 	}
 }

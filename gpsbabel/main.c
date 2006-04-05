@@ -22,7 +22,10 @@
 #include "filterdefs.h"
 #include "cet.h"
 #include "cet_util.h"
+#include "inifile.h"
 #include <ctype.h>
+
+#define MYNAME "main"
 
 static void
 usage(const char *pname, int shorter)
@@ -49,6 +52,7 @@ usage(const char *pname, int shorter)
 "    (without the quotes) are all valid file type specifications.\n"
 "\n"
 "Options:\n"
+"    -p               Prereferences file (gpsbabel.ini)\n"
 "    -s               Synthesize shortnames\n"
 "    -r               Process route information\n"
 "    -t               Process track information\n"
@@ -100,8 +104,9 @@ main(int argc, char *argv[])
 
 	global_opts.objective = wptdata;
 	global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
-	global_opts.charset = NULL;			/* #ifdef UTF8_SUPPORT */
-	global_opts.charset_name = NULL;			/* #ifdef UTF8_SUPPORT */
+	global_opts.charset = NULL;
+	global_opts.charset_name = NULL;
+	global_opts.inifile = NULL;
 
 	gpsbabel_now = time(NULL);			/* gpsbabel startup-time */
 	gpsbabel_time = current_time();			/* same like gpsbabel_now, but freezed to zero during testo */
@@ -114,6 +119,9 @@ main(int argc, char *argv[])
 	}
 	debug_mem_output( "\n" );
 #endif
+	if (gpsbabel_time != 0) {	/* within testo ? */
+		global_opts.inifile = inifile_init(NULL, MYNAME);
+	}
 	
 	cet_register();
 	waypt_init();
@@ -336,6 +344,14 @@ main(int argc, char *argv[])
 			case 'l':
 				cet_disp_character_set_names(stdout);
 				exit(0);
+			case 'p':
+				optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
+				inifile_done(global_opts.inifile);
+				if (strcmp(optarg, "") == 0)	/* from GUI to preserve inconsistent options */
+					global_opts.inifile = NULL;
+				else
+					global_opts.inifile = inifile_init(optarg, MYNAME);
+				break;
 
 		}
 	}
@@ -401,6 +417,7 @@ main(int argc, char *argv[])
 	route_flush_all();
 	exit_vecs();
 	exit_filter_vecs();
+	inifile_done(global_opts.inifile);
 
 #ifdef DEBUG_MEM
 	debug_mem_close();
