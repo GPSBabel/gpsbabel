@@ -84,7 +84,10 @@ interpfilt_process(void)
 				waypoint *wpt_new = waypt_dupe(wpt);
 				wpt_new->creation_time = timen;
 				xfree(wpt_new->shortname);
-				xfree(wpt_new->description);
+				if (wpt_new->description) {
+				    xfree(wpt_new->description);
+				    wpt_new->description = NULL;
+				}
 				wpt_new->shortname = wpt_new->description = 0;
 				linepart( lat1, lon1, 
 					  wpt->latitude, wpt->longitude,
@@ -110,7 +113,10 @@ interpfilt_process(void)
 				wpt_new->creation_time = distn/curdist*
 					(wpt->creation_time - time1) + time1;
 				xfree(wpt_new->shortname);
-				xfree(wpt_new->description);
+				if (wpt_new->description) {
+				    xfree(wpt_new->description);
+				    wpt_new->description = NULL;
+				}
 				wpt_new->shortname = wpt_new->description = 0;
 				linepart( lat1, lon1, 
 					  wpt->latitude, wpt->longitude,
