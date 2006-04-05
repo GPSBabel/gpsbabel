@@ -29,6 +29,7 @@
 #include "gbtypes.h"
 #include "cet.h"
 #include "cet_util.h"
+#include "inifile.h"
 
 
 /*
@@ -119,6 +120,7 @@ typedef struct {
 	int no_smart_names;
 	cet_cs_vec_t *charset;
 	char *charset_name;
+	inifile_t *inifile;
 } global_options;
 
 extern global_options global_opts;
@@ -218,6 +220,7 @@ fs_xml *fs_xml_alloc( long type );
 #define FS_AN1L 0x616e316cL
 #define FS_AN1V 0x616e3176L
 #define FS_OZI 0x6f7a6900L
+#define FS_GMSD 0x474d5344L	/* GMSD = Garmin specific data */
 
 /*
  * Misc bitfields inside struct waypoint;
@@ -320,6 +323,7 @@ typedef struct {
 	queue waypoint_list;	/* List of child waypoints */
 	char *rte_name;
 	char *rte_desc;
+	char *rte_url;
 	int rte_num;
 	int rte_waypt_ct;		/* # waypoints in waypoint list */
 	format_specific_data *fs;
@@ -555,6 +559,8 @@ void is_fatal(const int condition, const char *, ...) PRINTFLIKE(2, 3);
 void warning(const char *, ...) PRINTFLIKE(1, 2);
 
 ff_vecs_t *find_vec(char * const, char **);
+void assign_vec_option(const char *vecname, arglist_t *ap, const char *val);
+void disp_vec_options(const char *vecname, arglist_t *ap);
 void disp_vecs(void);
 void exit_vecs(void);
 void disp_formats(int version);
