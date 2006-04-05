@@ -172,11 +172,12 @@ ozi_track_hdr(const route_head * rte)
         "WGS 84\r\n"
         "Altitude is in Feet\r\n"
         "Reserved 3\r\n" 
-        "0,2,255,ComplimentsOfGPSBabel,0,0,2,8421376\r\n"
+        "0,2,255,%s,0,0,2,8421376\r\n"
         "0\r\n";
 
     ozi_openfile(ozi_ofname);
-    fprintf(file_out, ozi_trk_header);
+    fprintf(file_out, ozi_trk_header, 
+	rte->rte_name ? rte->rte_name : "ComplimentsOfGPSBabel");
 
     track_out_count++;
 }
