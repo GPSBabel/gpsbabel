@@ -50,7 +50,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
 	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o \
-	yahoo.o unicsv.o wfff_xml.o
+	yahoo.o unicsv.o wfff_xml.o garmin_txt.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
@@ -73,7 +73,7 @@ SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
           uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
-	  inifile.o \
+	  inifile.o garmin_fs.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS)
 
@@ -246,7 +246,7 @@ duplicate.o: duplicate.c defs.h queue.h gbtypes.h cet.h cet_util.h \
 easygps.o: easygps.c defs.h queue.h gbtypes.h cet.h cet_util.h
 fatal.o: fatal.c defs.h queue.h gbtypes.h cet.h cet_util.h
 filter_vecs.o: filter_vecs.c defs.h queue.h gbtypes.h cet.h cet_util.h \
-  filterdefs.h
+  filterdefs.h inifile.h
 formspec.o: formspec.c defs.h queue.h gbtypes.h cet.h cet_util.h
 garmin.o: garmin.c defs.h queue.h gbtypes.h cet.h cet_util.h jeeps/gps.h \
   jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h jeeps/gps.h \
@@ -254,7 +254,10 @@ garmin.o: garmin.c defs.h queue.h gbtypes.h cet.h cet_util.h jeeps/gps.h \
   jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
   garmin_tables.h
-garmin_tables.o: garmin_tables.c garmin_tables.h
+garmin_fs.o: garmin_fs.c garmin_fs.h defs.h garmin_tables.h inifile.h
+garmin_tables.o: garmin_tables.c garmin_tables.h defs.h
+garmin_txt.o: garmin_txt.c defs.h strptime.h cet_util.h csv_util.h \
+  garmin_fs.h inifile.h jeeps/gpsmath.h garmin_tables.h grtcirc.h
 gcdb.o: gcdb.c defs.h queue.h gbtypes.h cet.h cet_util.h coldsync/palm.h \
   coldsync/../gbtypes.h coldsync/pdb.h
 gdb.o: gdb.c defs.h queue.h gbtypes.h cet.h cet_util.h garmin_tables.h \
@@ -280,7 +283,8 @@ gpilots.o: gpilots.c defs.h queue.h gbtypes.h cet.h cet_util.h \
 gpspilot.o: gpspilot.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
 gpsutil.o: gpsutil.c defs.h queue.h gbtypes.h cet.h cet_util.h magellan.h
-gpx.o: gpx.c defs.h queue.h gbtypes.h cet.h cet_util.h xmlgeneric.h
+gpx.o: gpx.c defs.h queue.h gbtypes.h cet.h cet_util.h xmlgeneric.h \
+  garmin_fs.h
 grtcirc.o: grtcirc.c defs.h queue.h gbtypes.h cet.h cet_util.h
 gtm.o: gtm.c defs.h queue.h gbtypes.h cet.h cet_util.h jeeps/gpsmath.h \
   jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h \
@@ -318,7 +322,7 @@ magnav.o: magnav.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
 magproto.o: magproto.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   magellan.h
-main.o: main.c defs.h queue.h gbtypes.h cet.h cet_util.h filterdefs.h
+main.o: main.c defs.h queue.h gbtypes.h cet.h cet_util.h filterdefs.h inifile.h
 mapsend.o: mapsend.c defs.h queue.h gbtypes.h cet.h cet_util.h mapsend.h \
   magellan.h
 mapsource.o: mapsource.c defs.h queue.h gbtypes.h cet.h cet_util.h \
@@ -403,7 +407,7 @@ vcf.o: vcf.c defs.h queue.h gbtypes.h cet.h cet_util.h jeeps/gpsmath.h \
   jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
   jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
-vecs.o: vecs.c defs.h queue.h gbtypes.h cet.h cet_util.h csv_util.h
+vecs.o: vecs.c defs.h queue.h gbtypes.h cet.h cet_util.h csv_util.h inifile.h
 vitosmt.o: vitosmt.c defs.h queue.h gbtypes.h cet.h cet_util.h
 vmem.o: vmem.c defs.h queue.h gbtypes.h cet.h cet_util.h
 waypt.o: waypt.c defs.h queue.h gbtypes.h cet.h cet_util.h
