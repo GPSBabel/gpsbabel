@@ -22,6 +22,9 @@
 
 #include "garmin_tables.h"
 #include <stdio.h>
+#include <string.h>
+
+#define MYNAME "garmin_tables"
 
 /* MapSource 4.13 */
 icon_mapping_t garmin_icon_table[] = {
@@ -242,3 +245,399 @@ icon_mapping_t garmin_icon_table[] = {
 	
 	{    -1,    -1, NULL },
 };
+
+/* ICAO coutry code table */
+
+/* source: http://en.wikipedia.org/wiki/ICAO_airport_code */
+
+gt_country_code_t gt_country_codes[] = 
+{
+	{ "ZM,", "Mongolia" }, 
+	{ "ZK,", "North Korea" }, 
+	{ "Z*,", "China" }, 
+	{ "Y*,", "Australia" }, 
+	{ "WS,", "Singapore" }, 
+	{ "WM,", "Brunei/Malaysia" }, 
+	{ "WB,", "Malaysia" }, 
+	{ "WA,WI,WQ,WR,", "Indonesia" }, 
+	{ "VV,", "Vietnam" }, 
+	{ "VT,", "Thailand" }, 
+	{ "VR,", "Maldives" }, 
+	{ "VQ,", "Bhutan" }, 
+	{ "VN,", "Nepal" }, 
+	{ "VM,", "Macau" }, 
+	{ "VL,", "Laos" }, 
+	{ "VH,", "Hong Kong" }, 
+	{ "VG,", "Bangladesh" }, 
+	{ "VD,", "Kampuchea" }, 
+	{ "VC,", "Sri Lanka" }, 
+	{ "VB,VY,", "Myanmar/Burma" }, 
+	{ "VA,VE,VI,VO,", "India" }, 
+	{ "UR,", "Kazakhstan/Russia" }, 
+	{ "UT,", "Kazakhstan/Tadzhikistan/Turkmenistan/Uzbekistan" }, 
+	{ "UM,", "Belorussia/Russia" }, 
+	{ "UK,", "Ukraine" }, 
+	{ "UB,", "Azerbaijan" }, 
+	{ "UA,", "Kazakhstan/Kirgizia" }, 
+	{ "U*,", "Russia" }, 
+	{ "TX,", "Bermuda" }, 
+	{ "TV,", "St Vincent and the Grenadines" }, 
+	{ "TU,", "British Virgin Islands" }, 
+	{ "TT,", "Trinidad and Tobago" }, 
+	{ "TR,", "Montserrat Island" }, 
+	{ "TQ,", "Anguilla" }, 
+	{ "TN,", "Aruba/Neth Antilles" }, 
+	{ "TL,", "St Lucia" }, 
+	{ "TK,", "St Kitts/Nevis Islands" }, 
+	{ "TJ,", "Puerto Rico" }, 
+	{ "TG,", "Grenada" }, 
+	{ "TF,", "Guadeloupe/Martinique" }, 
+	{ "TD,", "Dominica" }, 
+	{ "TB,", "Barbados" }, 
+	{ "TA,", "Antigua" }, 
+	{ "SY,", "Guyana" }, 
+	{ "SV,", "Venezuela" }, 
+	{ "SU,", "Uruguay" }, 
+	{ "SP,", "Peru" }, 
+	{ "SO,", "French Guiana" }, 
+	{ "SM,", "Suriname" }, 
+	{ "SL,", "Bolivia" }, 
+	{ "SK,", "Colombia/San Andres" }, 
+	{ "SG,", "Paraguay" }, 
+	{ "SF,", "Falkland Islands" }, 
+	{ "SE,", "Ecuador" }, 
+	{ "SC,", "Chile/Easter Island" }, 
+	{ "SB,SD,SN,SS,SW,", "Brazil" }, 
+	{ "SA,", "Argentina" }, 
+	{ "S1,", "Antarctica (Argentina/Chile)" }, 
+	{ "RP,", "Philippines" }, 
+	{ "RK,", "South Korea" }, 
+	{ "RJ,", "Japan" }, 
+	{ "RC,", "Taiwan" }, 
+	{ "PW,", "Wake Island" }, 
+	{ "PT,", "Caroline Islands/Micronesia/Palau" }, 
+	{ "PM,", "Midway Islands" }, 
+	{ "PK,", "Marshall Islands" }, 
+	{ "PJ,", "Johnston Atoll" }, 
+	{ "PG,", "Guam/Mariana Islands/Northern Mariana Islands" }, 
+	{ "PC,", "Kiribati" }, 
+	{ "P",   "Oakland Octa" }, 
+	{ "OY,", "Yemen Arab Rep" }, 
+	{ "OT,", "Qatar" }, 
+	{ "OS,", "Syria" }, 
+	{ "OR,", "Iraq" }, 
+	{ "OP,", "Pakistan" }, 
+	{ "OO,", "Oman" }, 
+	{ "OM,", "United Arab Emirates" }, 
+	{ "OL,", "Lebanon" }, 
+	{ "OK,", "Kuwait" }, 
+	{ "OJ,", "Jordan" }, 
+	{ "OI,", "Iran" }, 
+	{ "OE,", "Saudi Arabia" }, 
+	{ "OB,", "Bahrain" }, 
+	{ "OA,", "Afghanistan" }, 
+	{ "NZ,PL,", "New Zealand" }, 
+	{ "NW,", "New Caledonia" }, 
+	{ "NV,", "Vanuatu" }, 
+	{ "NT,", "French Polynesia/Society Islands/Tuamotu Islands" }, 
+	{ "NS,", "American Samoa/Western Samoa" }, 
+	{ "NL,", "Futuna Island/Wallis Island" }, 
+	{ "NI,", "Niue" }, 
+	{ "NG,", "Kiribati/Tuvalu" }, 
+	{ "NF,", "Fiji Island/Tonga" }, 
+	{ "NC,", "Cook Islands" }, 
+	{ "MZ,", "Belize" }, 
+	{ "MY,", "Bahamas" }, 
+	{ "MW,", "Cayman Islands" }, 
+	{ "MU,", "Cuba" }, 
+	{ "MT,", "Haiti" }, 
+	{ "MS,", "El Salvador" }, 
+	{ "MR,", "Costa rica" }, 
+	{ "MP,", "Panama" }, 
+	{ "MN,", "Nicaragua" }, 
+	{ "MM,", "Mexico" }, 
+	{ "MK,", "Jamaica" }, 
+	{ "MI,TI,", "Virgin Islands (U.S.)" }, 
+	{ "MH,", "Honduras" }, 
+	{ "MG,", "Guatemala" }, 
+	{ "MD,", "Dominican Republic" }, 
+	{ "MB,", "Turks Island/Caicos Island" }, 
+	{ "LZ,", "Slovakia" }, 
+	{ "LY,", "Yugoslavia" }, 
+	{ "LX,", "Gibraltar" }, 
+	{ "LW,", "Macedonia" }, 
+	{ "LV,", "Gaza" }, 
+	{ "LU,", "Moldova" }, 
+	{ "LT,", "Turkey" }, 
+	{ "LS,", "Switzerland" }, 
+	{ "LR,", "Romania" }, 
+	{ "LQ,", "Bosnia-Herzegovina" }, 
+	{ "LP,", "Portugal/Azores/Madeira Islands" }, 
+	{ "LO,", "Austria" }, 
+	{ "LN,", "Monaco" }, 
+	{ "LM,", "Malta" }, 
+	{ "LL,", "Israel/Jerusalem" }, 
+	{ "LK,", "Czech" }, 
+	{ "LI,", "Italy" }, 
+	{ "LH,", "Hungary" }, 
+	{ "LG,", "Slovenia" }, 
+	{ "LG,", "Greece" }, 
+	{ "LF,", "France" }, 
+	{ "LF,", "Miquelon Island/St Pierre Island" }, 
+	{ "LE,", "Spain" }, 
+	{ "LD,", "Croatia" }, 
+	{ "LC,", "Cyprus/Turkey (Northern Cyprus)" }, 
+	{ "LB,", "Bulgaria" }, 
+	{ "LA,", "Albania" }, 
+	{ "K*,X*,PA,PB,PF,PJ,PL,PM,PO,PP,PH,PW,", "United States of America" }, 
+	{ "HU,", "Uganda" }, 
+	{ "HT,", "Tanzania" }, 
+	{ "HS,", "Sudan" }, 
+	{ "HR,", "Rwanda" }, 
+	{ "HL,", "Libya, Spa Jamahiriya" }, 
+	{ "HK,", "Kenya" }, 
+	{ "HH,", "Eritrea" }, 
+	{ "HE,", "Egypt" }, 
+	{ "HD,HF,", "Djibouti" }, 
+	{ "HC,", "Somalia" }, 
+	{ "HB,", "Burundi" }, 
+	{ "HA,", "Ethiopia" }, 
+	{ "GV,", "Cape Verde" }, 
+	{ "GU,", "Guinea Tepublic" }, 
+	{ "GQ,", "Mauritania" }, 
+	{ "GO,", "Senegal" }, 
+	{ "GM,", "Morocco/Ad Dakhla/La'Youn" }, 
+	{ "GL,", "Liberia" }, 
+	{ "GG,", "Guinea-Bissau" }, 
+	{ "GF,", "Sierra Leone" }, 
+	{ "GE,", "Melilla" }, 
+	{ "GC,", "Canary Island" }, 
+	{ "GB,", "Gambia" }, 
+	{ "GA,", "Mali" }, 
+	{ "FZ,", "Democratic Republic of Congo" }, 
+	{ "FY,", "Namibia" }, 
+	{ "FX,", "Lesotho" }, 
+	{ "FW,", "Malawi" }, 
+	{ "FV,", "Zimbabwe" }, 
+	{ "FT,", "Chad" }, 
+	{ "FS,", "Seychelles" }, 
+	{ "FQ,", "Mozambique" }, 
+	{ "FP,", "Sao Tome & Principe" }, 
+	{ "FO,", "Gabon" }, 
+	{ "FN,", "Angola" }, 
+	{ "FM,", "Madagascar/Comoros/Reunion/Mayotte Islands" }, 
+	{ "FL,", "Zambia" }, 
+	{ "FK,", "Cameroon" }, 
+	{ "FJ,", "Chagos Archipelago/British Indian Ocean Territory" }, 
+	{ "FI,", "Mauritius" }, 
+	{ "FH,", "Ascension Island/St Helena Island" }, 
+	{ "FG,", "Equitorial Guinea" }, 
+	{ "FE,", "Central African Republic" }, 
+	{ "FD,", "Swaziland" }, 
+	{ "FC,", "Congo" }, 
+	{ "FB,", "Botswana" }, 
+	{ "FA,", "South African Republic" }, 
+	{ "EY,", "Lithuania" }, 
+	{ "EV,", "Latvia" }, 
+	{ "ES,", "Sweden" }, 
+	{ "EP,", "Poland" }, 
+	{ "EN,", "Norway" }, 
+	{ "EL,", "Luxembourg" }, 
+	{ "EK,", "Denmark/Faroe Island" }, 
+	{ "EI,", "Ireland" }, 
+	{ "EH,", "Netherlands" }, 
+	{ "EG,LX,", "United Kingdom" }, 
+	{ "EF,", "Finland" }, 
+	{ "EE,", "Estonia" }, 
+	{ "ED,ET,", "Germany" }, 
+	{ "EB,", "Belgium" }, 
+	{ "DX,", "Togo" }, 
+	{ "DT,", "Tunisia" }, 
+	{ "DR,", "Niger" }, 
+	{ "DN,", "Nigeria" }, 
+	{ "DI,", "Ivory Coast" }, 
+	{ "DG,", "Ghana" }, 
+	{ "DF,", "Burkina Faso" }, 
+	{ "DB,", "Benin" }, 
+	{ "DA,", "Algeria" }, 
+	{ "C*,", "Canada" }, 
+	{ "BI,", "Iceland" }, 
+	{ "BG,", "Greenland" }, 
+	{ "AY,", "Papua New Guinea" }, 
+	{ "AN,", "Nauru" }, 
+	{ "AG,", "Solomon Island" }, 
+	{ NULL, NULL }
+};
+
+/* gt_waypt_classes: gdb internal order */
+char *gt_waypt_class_names[] = {
+	"User Waypoint",
+	"Airport",
+	"Intersection",
+	"NDB",
+	"VOR",
+	"Runway Threshold",
+	"Airport Intersection",
+	"Airport NDB",
+	"Map Point",
+	"Map Area",
+	"Map Intersection",
+	"Map Address",
+	"Map Line",
+	NULL
+};
+
+/* gt_display_mode_names: this order is used by most devices */
+char *gt_display_mode_names[] = {
+	"Symbol & Name",
+	"Symbol",
+	"Symbol & Description"
+};
+
+char *
+gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, int *dynamic)
+{
+	icon_mapping_t *i;
+	char custom[] = "Custom 63";
+
+	if ((garmin_format == GDB) && (icon >= 500) && (icon <= 563))
+	{
+		snprintf(custom, sizeof(custom), "Custom %d", icon - 500);
+		*dynamic = 1;
+		return xstrdup(custom);
+	}
+
+	if (dynamic) *dynamic = 0;
+	
+	for (i = garmin_icon_table; i->icon; i++) {
+		switch (garmin_format) {
+			case MAPSOURCE:
+			case GDB:
+				if (icon == i->mpssymnum)
+					return (char *)i->icon;
+				break;
+			case PCX:
+			case GARMIN_SERIAL:
+				if (icon == i->pcxsymnum)
+					return (char *)i->icon;
+				break;
+			default:
+				fatal(MYNAME ": unknown garmin format.\n");
+		}
+	}
+	return DEFAULT_ICON_DESCR;
+}
+
+int gt_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
+{
+	icon_mapping_t *i;
+	int def_icon = DEFAULT_ICON_VALUE;
+	int n;
+
+	if (!desc)
+		return def_icon;
+
+	/*
+	 * If we were given a numeric icon number as a description 
+	 * (i.e. 8255), just return that.
+	 */
+	n = atoi(desc);
+	if (n)  {
+		return n;
+	}
+
+	if ((garmin_format == GDB) && (case_ignore_strncmp(desc, "Custom ", 7) == 0)) {
+		n = atoi((char *)desc + 7);
+		if ((n >= 0) && (n <= 63))
+			return n+500;
+	}
+	for (i = garmin_icon_table; i->icon; i++) {
+		if (case_ignore_strcmp(desc,i->icon) == 0) {
+			switch (garmin_format) {
+			case MAPSOURCE:
+			case GDB:
+				return i->mpssymnum;
+			case PCX:
+			case GARMIN_SERIAL:
+				return i->pcxsymnum;
+			default:
+				fatal(MYNAME ": unknown garmin format.\n");
+			}
+		}
+	}
+	return def_icon;
+}
+
+char *
+gt_get_icao_country(const char *cc)
+{
+	gt_country_code_t *x = &gt_country_codes[0];
+
+	if ((cc == NULL) || (*cc == '\0')) return NULL;
+
+	do {
+		char *ccx = x->cc;
+		while (ccx != NULL) {
+			if (strncmp(ccx, cc, 2) == 0) return x->country;
+			if ((ccx[0] == cc[0]) && (ccx[1] == '*'))  return x->country;
+			ccx = strchr(ccx, ',');
+			if (ccx == NULL) break;
+			ccx++;
+		}
+		x++;
+	} while (x->cc != NULL);
+	return NULL;
+}
+
+char *
+gt_get_icao_cc(const char *country, const char *shortname)
+{
+	static char res[3];
+	gt_country_code_t *x = &gt_country_codes[0];
+
+	if ((country == NULL) || (*country == '\0')) {
+		char *test;
+		if (shortname == NULL) return NULL;
+		switch(strlen(shortname)) {
+			case 3: strncpy(res, shortname, 1); break;
+			case 4: strncpy(res, shortname, 2); break;
+			default: return NULL;
+		}
+		test = gt_get_icao_country(res);
+		if (test != NULL) 
+			return res;
+		else
+			return NULL;
+	}
+
+	do {
+		if (case_ignore_strcmp(country, x->country) != 0) {
+			x++;
+			continue;
+		}
+		
+		if (strlen(x->cc) <= 3) {
+			strncpy(res, x->cc, 3);
+			if (res[1] == '*')
+				res[1] = '\0';
+			else
+				res[2] = '\0';
+			return res;
+		}
+		if (shortname && (strlen(shortname) == 4)) {
+			char *ccx = x->cc;
+			
+			strncpy(res, shortname, 2);
+			res[2] = '\0';
+			while (ccx != NULL) {
+				if (strncmp(ccx, res, 2) == 0) return res;
+				if ((ccx[0] == res[0]) && (ccx[1] == '*')) return res;
+				ccx = strchr(ccx, ',');
+				if (ccx == NULL) break;
+				ccx++;
+			}
+		}
+		return NULL;
+	} while (x->country != NULL);
+	return NULL;
+}

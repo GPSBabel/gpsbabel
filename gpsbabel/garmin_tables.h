@@ -20,19 +20,74 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
  */
 
+#ifndef GARMIN_TABLES_H
+#define GARMIN_TABLES_H
+
+#include "defs.h"
+
+#define DEFAULT_ICON_DESCR "Waypoint"
+#define DEFAULT_ICON_VALUE 18
+
 typedef struct icon_mapping {
 	const int mpssymnum;
 	const int pcxsymnum;
 	const char *icon;
 } icon_mapping_t;
 
-typedef enum {MAPSOURCE, PCX, GARMIN_SERIAL} garmin_formats_e;
+typedef enum {MAPSOURCE, PCX, GARMIN_SERIAL, GDB} garmin_formats_e;
 
-extern const 
-char *mps_find_desc_from_icon_number(const int icon, 
-	garmin_formats_e garmin_format);
-extern int
-mps_find_icon_number_from_desc(const char *desc, 
-	garmin_formats_e garmin_format);
+char *gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, int *dynamic);
+int gt_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format);
 
 extern icon_mapping_t garmin_icon_table[];
+
+typedef enum {
+	gt_waypt_class_user_waypoint = 0,
+	gt_waypt_class_airport,
+	gt_waypt_class_intersection,
+	gt_waypt_class_ndb,
+	gt_waypt_class_vor,
+	gt_waypt_class_runway_threshold,
+	gt_waypt_class_airport_intersection,
+	gt_waypt_class_airport_ndb,
+	gt_waypt_class_map_point,
+	gt_waypt_class_map_area,
+	gt_waypt_class_map_intersection,
+	gt_waypt_class_map_address,
+	gt_waypt_class_map_line
+} gt_waypt_classes_e;
+
+extern char *gt_waypt_class_names[];
+
+typedef struct gt_country_code_s 
+{ 
+	char *cc; 
+	char *country; 
+} gt_country_code_t;
+
+extern gt_country_code_t gt_country_codes[];
+
+char *gt_get_icao_country(const char *cc);
+char *gt_get_icao_cc(const char *country, const char *shortname);
+
+/* this order is used by most devices */
+typedef enum {
+	gt_display_mode_symbol_and_name = 0,
+	gt_display_mode_symbol,
+	gt_display_mode_symbol_and_comment
+} gt_display_modes_e;
+	
+extern char *gt_display_mode_names[];
+
+#define GT_DISPLAY_MODE_MIN gt_display_mode_symbol_and_name
+#define GT_DISPLAY_MODE_MAX gt_display_mode_symbol_and_comment
+
+typedef enum {
+	gt_gdb_display_mode_symbol = 0,
+	gt_gdb_display_mode_symbol_and_name,
+	gt_gdb_display_mode_symbol_and_comment
+} gt_gdb_display_modes_e;
+
+unsigned char gt_convert_category(const char *name, int *category);
+
+#endif

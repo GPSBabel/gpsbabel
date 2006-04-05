@@ -183,9 +183,9 @@ bcr_data_read(void)
 			}
 			
 			if (case_ignore_strcmp(str, "Standort") == 0)
-			    wpt->icon_descr = mps_find_desc_from_icon_number(18, MAPSOURCE);
+			    wpt->icon_descr = gt_find_desc_from_icon_number(18, MAPSOURCE, NULL);
 			else if (case_ignore_strcmp(str, "Town") == 0)
-			    wpt->icon_descr = mps_find_desc_from_icon_number(69, MAPSOURCE);
+			    wpt->icon_descr = gt_find_desc_from_icon_number(69, MAPSOURCE, NULL);
 			else
 			    warning(MYNAME ": Unknown icon \"%s\" found. Please report.\n", str);
 		}
@@ -279,7 +279,7 @@ bcr_route_header(const route_head *route)
 	    strncpy(symbol, "Standort", sizeof(symbol));
 	    if (wpt->icon_descr != 0)
 	    {
-		icon = mps_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
+		icon = gt_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
 		if ((icon >= 69) && (icon <= 72))
 		    strncpy(symbol, "Town", sizeof(symbol));
 	    }

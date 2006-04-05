@@ -125,7 +125,7 @@ data_read(void)
 			if (*cp != '\0') {
 				wpt_tmp->description = xstrdup(cp);
 			}
-			wpt_tmp->icon_descr = mps_find_desc_from_icon_number(symnum, PCX);
+			wpt_tmp->icon_descr = gt_find_desc_from_icon_number(symnum, PCX, NULL);
 
 			if (latdir == 'S') lat = -lat;
 			if (londir == 'W') lon = -lon;
@@ -240,9 +240,9 @@ gpsutil_disp(const waypoint *wpt)
 	if (deficon) {
 		icon_token = atoi(deficon);
 	} else {
-		icon_token = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
+		icon_token = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
 		if (get_cache_icon(wpt)) {
-			icon_token = mps_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
+			icon_token = gt_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
 		}
 	}
 

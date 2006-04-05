@@ -171,65 +171,8 @@ mps_wpt_q_add(const queue *whichQueue, const waypoint *wpt)
 	ENQUEUE_TAIL(whichQueue, &written_wpt->Q);
 }
 
-const char *
-mps_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
-{
-	icon_mapping_t *i;
-
-	for (i = garmin_icon_table; i->icon; i++) {
-		switch (garmin_format) {
-			case MAPSOURCE:
-				if (icon == i->mpssymnum)
-					return i->icon;
-				break;
-			case PCX:
-			case GARMIN_SERIAL:
-				if (icon == i->pcxsymnum)
-					return i->icon;
-				break;
-			default:
-				fatal(MYNAME ": unknown garmin format.\n");
-		}
-	}
-	return DEFAULTICONDESCR;
-}
-
-int
-mps_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
-{
-	icon_mapping_t *i;
-	int def_icon = DEFAULTICONVALUE;
-	int n;
-
-	if (!desc)
-		return def_icon;
-
-	/*
-	 * If we were given a numeric icon number as a description 
-	 * (i.e. 8255), just return that.
-	 */
-	n = atoi(desc);
-	if (n)  {
-		return n;
-	}
-
-	for (i = garmin_icon_table; i->icon; i++) {
-		if (case_ignore_strcmp(desc,i->icon) == 0) {
-			switch (garmin_format) {
-			case MAPSOURCE:
-				return i->mpssymnum;
-			case PCX:
-			case GARMIN_SERIAL:
-				return i->pcxsymnum;
-			default:
-				fatal(MYNAME ": unknown garmin format.\n");
-			}
-		}
-	}
-	return def_icon;
-}
-
-int mps_converted_icon_number(const int icon_num, const int mpsver, garmin_formats_e garmin_format)
+static int 
+mps_converted_icon_number(const int icon_num, const int mpsver, garmin_formats_e garmin_format)
 {
 	int def_icon = DEFAULTICONVALUE;
 
@@ -559,6 +502,7 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 	int lat;
 	int lon;
 	int	icon;
+	int dynamic;
 
  	waypoint	*thisWaypoint = NULL;
 	double	mps_altitude = unknown_alt;
@@ -643,7 +587,8 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 	thisWaypoint->depth = mps_depth;
 
 	/* might need to change this to handle version dependent icon handling */
-	thisWaypoint->icon_descr = mps_find_desc_from_icon_number(icon, MAPSOURCE);
+	thisWaypoint->icon_descr = gt_find_desc_from_icon_number(icon, MAPSOURCE, &dynamic);
+	thisWaypoint->wpt_flags.icon_descr_is_dynamic = dynamic;
 
 	/* The following Now done elsewhere since it can be useful to read in and 
 	  perhaps not add to the list */
@@ -686,10 +631,10 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	memset(ffbuf, 0xff, sizeof(ffbuf));
 
 	/* might need to change this to handle version dependent icon handling */
-	icon = mps_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
+	icon = gt_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
 
 	if (get_cache_icon(wpt) /* && wpt->icon_descr && (strcmp(wpt->icon_descr, "Geocache Found") != 0)*/) {
-		icon = mps_find_icon_number_from_desc(get_cache_icon(wpt), MAPSOURCE);
+		icon = gt_find_icon_number_from_desc(get_cache_icon(wpt), MAPSOURCE);
 	}
 
 	icon = mps_converted_icon_number(icon, mps_ver, MAPSOURCE);
