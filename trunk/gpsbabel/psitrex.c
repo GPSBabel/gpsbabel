@@ -313,7 +313,7 @@ psit_waypoint_r(FILE *psit_file, waypoint **wpt)
 		/* since PsiTrex only deals with Garmins, let's use the "proper" Garmin icon name */
 		/* convert the PsiTrex name to the number, which is the PCX one; from there to Garmin desc */
 		garmin_icon_num = psit_find_icon_number_from_desc(psit_current_token);
-		thisWaypoint->icon_descr = mps_find_desc_from_icon_number(garmin_icon_num, PCX);
+		thisWaypoint->icon_descr = gt_find_desc_from_icon_number(garmin_icon_num, PCX, NULL);
 
 		waypt_add(thisWaypoint);
 
@@ -347,10 +347,10 @@ psit_waypoint_w(FILE *psit_file, const waypoint *wpt)
 				wpt->shortname;
 
 	fprintf(psit_file, " %-6s, ", ident);
-	icon = mps_find_icon_number_from_desc(wpt->icon_descr, PCX);
+	icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
 
 	if (get_cache_icon(wpt) && wpt->icon_descr && (strcmp(wpt->icon_descr, "Geocache Found") != 0)) {
-		icon = mps_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
+		icon = gt_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
 	}
 
 	ident = psit_find_desc_from_icon_number(icon);
@@ -434,7 +434,7 @@ psit_route_r(FILE *psit_file, route_head **rte)
 			/* since PsiTrex only deals with Garmins, let's use the "proper" Garmin icon name */
 			/* convert the PsiTrex name to the number, which is the PCX one; from there to Garmin desc */
 			garmin_icon_num = psit_find_icon_number_from_desc(psit_current_token);
-			thisWaypoint->icon_descr = mps_find_desc_from_icon_number(garmin_icon_num, PCX);
+			thisWaypoint->icon_descr = gt_find_desc_from_icon_number(garmin_icon_num, PCX, NULL);
 
 			route_add_wpt(rte_head, thisWaypoint);
 
