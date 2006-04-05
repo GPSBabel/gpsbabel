@@ -41,13 +41,13 @@ arglist_t nuke_args[] = {
 static void 
 nuke_process(void)
 {
-	if (nukewpts) {
+	if (*nukewpts != '0') {
 		waypt_flush_all();
 	}
-	if (nuketrks) {
+	if (*nuketrks != '0') {
 		route_flush_all_tracks();
 	}
-	if (nukertes) {
+	if (*nukertes != '0') {
 		route_flush_all_routes();
 	}
 }

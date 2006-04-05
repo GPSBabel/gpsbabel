@@ -409,7 +409,7 @@ trackfilter_split(void)
 
 	/* check additional options */
 	
-	opt_interval = (0 != strcmp(opt_split, TRACKFILTER_SPLIT_OPTION));
+	opt_interval = ((strlen(opt_split) > 0) && (0 != strcmp(opt_split, TRACKFILTER_SPLIT_OPTION)));
 
 	if (opt_interval != 0)
 	{
