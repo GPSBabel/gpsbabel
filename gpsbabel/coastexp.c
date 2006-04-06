@@ -19,10 +19,11 @@
 
 #include "defs.h"
 #if HAVE_LIBEXPAT
-#include "xmlgeneric.h"
-#include <expat.h>
-static XML_Parser psr;
+#  include "xmlgeneric.h"
+#  include <expat.h>
+   static XML_Parser psr;
 #endif
+
 #include <time.h>
 #include "cet_util.h"
 
@@ -37,7 +38,7 @@ static FILE *ofd;
 #define MY_TBUF 64
 #define MY_XBUF 128
 
-#if NO_EXPAT
+#if !HAVE_LIBEXPAT
 void
 ce_rd_init(const char *fname)
 {

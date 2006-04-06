@@ -326,6 +326,10 @@ void xml_deinit(void)
 {
 }
 
+void xml_readstring(const char *)
+{
+}
+
 #endif /* HAVE_LIBEXPAT */
 
 /******************************************/
