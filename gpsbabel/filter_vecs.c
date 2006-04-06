@@ -1,7 +1,7 @@
 /*
     Describe vectors containing filter operations.
  
-    Copyright (C) 2002,2004,2005 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002,2004,2005,2006 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -123,6 +123,7 @@ find_filter_vec(char *const vecname, char **opts)
 	fl_vecs_t *vec = filter_vec_list;
 	char *v = xstrdup(vecname);
 	char *svecname = strtok(v, ",");
+	int found = 0;
 
 	while (vec->vec) {
 		arglist_t *ap;
@@ -156,11 +157,15 @@ find_filter_vec(char *const vecname, char **opts)
 					
 					opt = get_option(*opts, ap->argstring);
 					if ( opt ) {
+						found = 1;
 						assign_option(vec->name, ap, opt);
 						xfree(opt);
 					}
 				}
 			}
+		}
+		if (opts && opts[0] && !found) {
+			warning("'%s' is an unknown option to %s.\n", *opts, vec->name);
 		}
 
 		if (global_opts.debug_level >= 1)
