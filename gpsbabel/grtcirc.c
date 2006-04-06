@@ -46,7 +46,7 @@ static double dotproduct( double x1, double y1, double z1,
  * time, so why not leave the expression human-readable?
  */
 
-double tomiles( double rads ) {
+double radtomiles( double rads ) {
     const double radmiles = 6378137.0*100.0/2.54/12.0/5280.0;
     return (rads*radmiles);
 }
