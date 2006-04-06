@@ -180,7 +180,7 @@ static char *seg_break;
 #define DEGREESTORADIANS	0.017453292
 #define SECSTO2000			946713600
 #define MAX_TRAIL_POINTS 9999
-#define UNKNOWN_USR_ALTITUDE	-3048  /* -10000ft is how the unit stores unknown */
+#define UNKNOWN_USR_ALTITUDE	METERS_TO_FEET(-10000) /* -10000ft is how the unit stores unknown */
 
 /* Jan 1, 2000 00:00:00 */
 const time_t base_time_secs = 946706400;

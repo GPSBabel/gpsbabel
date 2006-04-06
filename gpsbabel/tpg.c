@@ -181,7 +181,7 @@ tpg_read(void)
 	    
             /* 2 bytes - elevation in feet */
     	    tpg_fread(&buff[0], 2, 1, tpg_file_in);
-    	    elev = (le_read16(&buff[0]) * .3048); /* feets to meters */
+    	    elev = FEET_TO_METERS(le_read16(&buff[0]));
 
             /* convert incoming NAD27/CONUS coordinates to WGS84 */
             GPS_Math_Known_Datum_To_WGS84_M(
