@@ -1,4 +1,3 @@
-#if HAVE_LIBUSB
 /*
     Physical/OS USB layer to talk to libusb.
 
@@ -24,6 +23,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <usb.h>
+#include "../config.h"
 #include "gps.h"
 #include "garminusb.h"
 
@@ -254,5 +254,3 @@ void garmin_usb_scan(void)
 		fatal("Found no Garmin USB devices.\n");
 	}
 }
-
-#endif /* HAVE_LIBUSB */
