@@ -2423,6 +2423,10 @@ echo $ECHO_N "checking for libusb... $ECHO_C" >&6
 if test "$with_libusb" = no ; then
 	echo "$as_me:$LINENO: result: check not done" >&5
 echo "${ECHO_T}check not done" >&6
+	cat >>confdefs.h <<\_ACEOF
+#define NO_USB "1"
+_ACEOF
+
 else
 
 echo "$as_me:$LINENO: checking for usb_open in -lusb" >&5
