@@ -179,7 +179,7 @@ bcr_data_read(void)
 			
 			xalt = atof(cx);
 			if (xalt != 999999999) {
-				wpt->altitude = xalt / 3.2808;	/* convert feet to meters */
+				wpt->altitude = FEET_TO_METERS(xalt);
 			}
 			
 			if (case_ignore_strcmp(str, "Standort") == 0)
