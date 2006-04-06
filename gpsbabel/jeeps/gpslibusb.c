@@ -1,4 +1,4 @@
-#if !defined(NO_USB)
+#if HAVE_LIBUSB
 /*
     Physical/OS USB layer to talk to libusb.
 
@@ -255,4 +255,4 @@ void garmin_usb_scan(void)
 	}
 }
 
-#endif /* !defined(NO_USB) */
+#endif /* HAVE_LIBUSB */
