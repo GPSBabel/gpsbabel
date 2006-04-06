@@ -619,7 +619,8 @@ DEL %TMPDIR%\route.mapsend
 %PNAME% -r -i mapsend -f reference\route\route.mapsend -o mapsend -F %TMPDIR%\route.mapsend
 @echo off
 @echo.
-CALL :COMPARE %TMPDIR%\route.mapsend reference\route
+CALL :BINCOMPARE %TMPDIR%\route.mapsend reference\route\route.mapsend
+
 REM 
 REM MAPSEND track format 
 REM 
@@ -1167,14 +1168,14 @@ REM
 DEL %TMPDIR%\gdb-*
 @echo on
 @echo Testing...
-%PNAME% -w -r -t -i gdb,via -f reference\gdb-sample.gdb -o gpx -F %TMPDIR%\gdb-sample.gpx
+%PNAME% -i gdb,via -f reference\gdb-sample.gdb -o gpx -F %TMPDIR%\gdb-sample.gpx
 @echo off
 @echo.
 CALL :COMPARE reference\gdb-sample.gpx %TMPDIR%\gdb-sample.gpx
 @echo on
 @echo Testing...
-%PNAME% -w -r -t -i gpx -f reference\gdb-sample.gpx -o gdb,ver=1 -F %TMPDIR%\gdb-sample.gdb
-%PNAME% -w -r -t -i gdb -f %TMPDIR%\gdb-sample.gdb -o gpx -F %TMPDIR%\gdb-sample.gpx
+%PNAME% -i gpx -f reference\gdb-sample.gpx -o gdb,ver=1 -F %TMPDIR%\gdb-sample.gdb
+%PNAME% -i gdb -f %TMPDIR%\gdb-sample.gdb -o gpx -F %TMPDIR%\gdb-sample.gpx
 @echo off
 @echo.
 REM 
@@ -1528,6 +1529,23 @@ REM
 CALL :COMPARE %TMPDIR%\alltypes.gpx %TMPDIR%\merged.gpx
 
 REM 
+REM Interpolate filter
+REM 
+
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f reference\track\simpletrack.gpx -x interpolate,distance=50m -o gpx -F %TMPDIR%\interp.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\track\interptrack.gpx %TMPDIR%\interp.gpx 
+@echo on
+@echo Testing...
+%PNAME% -i gpx -f reference\track\simpletrack.gpx -x interpolate,time=1 -o gpx -F %TMPDIR%\tinterp.gpx
+@echo off
+@echo.
+CALL :COMPARE reference\track\tinterptrack.gpx %TMPDIR%\tinterp.gpx 
+
+REM 
 REM Universal CSV - unicsv
 REM 
 ECHO lat,lon,descr,name,notes,unk,unk> %TMPDIR%\unicsv.txt
@@ -1548,4 +1566,35 @@ REM
 @echo off
 @echo.
 CALL :COMPARE %TMPDIR%\nmea.gpx reference\track\nmea.gpx
+
+REM 
+REM Wfff.
+REM 
+@echo on
+@echo Testing...
+%PNAME% -i wfff -f reference\wfff.xml -o gpsutil -F %TMPDIR%\wfff.gpu
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\wfff.gpu reference\wfff.gpu
+
+REM 
+REM Garmin MapSource tab delimited text files - garmin_txt
+REM 
+DEL %TMPDIR%\garmin_txt*
+REM 
+REM !!! garmin_txt timestamps are stored in localtime !!!
+REM 
+@echo on
+@echo Testing...
+%PNAME% -i gdb -f reference\gdb-sample2.gdb -o garmin_txt,utc,prec=9 -F %TMPDIR%\garmin_txt.txt
+@echo off
+@echo.
+CALL :COMPARE reference\garmin_txt.txt %TMPDIR%\garmin_txt.txt 
+@echo on
+@echo Testing...
+%PNAME% -i garmin_txt -f reference\garmin_txt.txt -o garmin_txt,prec=9 -F %TMPDIR%\garmin_txt-2.txt
+%PNAME% -i garmin_txt -f %TMPDIR%\garmin_txt-2.txt -o garmin_txt,prec=9 -F %TMPDIR%\garmin_txt-3.txt
+@echo off
+@echo.
+CALL :COMPARE %TMPDIR%\garmin_txt-2.txt %TMPDIR%\garmin_txt-3.txt
 
