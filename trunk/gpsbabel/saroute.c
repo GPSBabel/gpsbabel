@@ -366,7 +366,7 @@ my_read(void)
 				}
 				if ( times ) {
 					if ( !first ) {
-					   double dist = tomiles(gcdist( 
+					   double dist = radtomiles(gcdist( 
 						lat*M_PI/180, -lon*M_PI/180, 
 						oldlat*M_PI/180, 
 						-oldlon*M_PI/180 ));	

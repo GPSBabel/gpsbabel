@@ -104,7 +104,7 @@ interpfilt_process(void)
 			    rt2 = wpt->latitude * M_PI / 180;
 			    rn2 = wpt->longitude * M_PI / 180;
 			    curdist = gcdist( rt1, rn1, rt2, rn2 );
-		            curdist = tomiles(curdist);
+		            curdist = radtomiles(curdist);
 			    if ( curdist > dist ) {	
   			      for ( distn = dist; 
 					distn < curdist;

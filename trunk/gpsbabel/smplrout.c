@@ -144,13 +144,13 @@ compute_xte( struct xte *xte_rec ) {
 	wpt2 = xte_rec->intermed->next->wpt;
 	
 	if ( xteopt || !lenopt ) {
-		xte_rec->distance = tomiles(linedist( 
+		xte_rec->distance = radtomiles(linedist( 
 			wpt1->latitude, wpt1->longitude, 
 			wpt2->latitude, wpt2->longitude,
 			wpt3->latitude, wpt3->longitude ));
 	} 
 	else {
-		xte_rec->distance = tomiles( 
+		xte_rec->distance = radtomiles( 
 		       gcdist( wpt1->latitude, wpt1->longitude, 
 			       wpt3->latitude, wpt3->longitude ) +
 		       gcdist( wpt3->latitude, wpt3->longitude,

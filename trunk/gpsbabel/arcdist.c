@@ -110,7 +110,7 @@ arcdist_process(void)
 		   }
 
 		   /* convert radians to float point statute miles */
-		   dist = tomiles(dist);
+		   dist = radtomiles(dist);
 
 		   if ( ed->distance > dist ) {
 			ed->distance = dist;
