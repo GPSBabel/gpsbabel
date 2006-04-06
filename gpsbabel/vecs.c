@@ -638,6 +638,7 @@ find_vec(char *const vecname, char **opts)
 	style_vecs_t *svec = style_list;
 	char *v = xstrdup(vecname);
 	char *svecname = strtok(v, ",");
+	int found = 0;
 
 	while (vec->vec) {
 		arglist_t *ap;
@@ -662,6 +663,7 @@ find_vec(char *const vecname, char **opts)
 				if ( res ) {
 					opt = get_option(*opts, ap->argstring);
 					if ( opt ) {
+						found = 1;
 						assign_option(svecname, ap, opt);
 						xfree(opt);
 						continue;
@@ -672,6 +674,9 @@ find_vec(char *const vecname, char **opts)
 				if (opt == NULL) opt = ap->defaultvalue;
 				assign_option(vec->name, ap, opt);
 			}
+		}
+		if (opts && opts[0] && !found) {
+			warning("'%s' is an unknown option to %s.\n", *opts, vec->name);
 		}
 
 		if (global_opts.debug_level >= 1)
@@ -710,6 +715,7 @@ find_vec(char *const vecname, char **opts)
 				if ( res ) {
 					opt = get_option(*opts, ap->argstring);
 					if ( opt ) {
+						found = 1;
 						assign_option(svecname, ap, opt);
 						xfree(opt);
 						continue;
@@ -721,6 +727,11 @@ find_vec(char *const vecname, char **opts)
 				assign_option(svec->name, ap, opt);
 			}
 		}
+
+		if (opts && opts[0] && !found) {
+			warning("'%s' is an unknown option to %s.\n", *opts, svec->name);
+		}
+
 		if (global_opts.debug_level >= 1)
 			disp_vec_options(svec->name, vec_list[0].vec->args);
 		
