@@ -267,7 +267,7 @@ position_init(const char *args) {
 
 		if ((*fm == 'm') || (*fm == 'M')) {
 			 /* distance is meters */
-			pos_dist *= 3.2802;
+			 pos_dist *= 3.2802;
 		}
 	}
 }

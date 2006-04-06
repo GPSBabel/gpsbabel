@@ -116,7 +116,7 @@ unicsv_fondle_header(char *ibuf)
 		else if (UNICSV_CONTAINS("alt")) {
 			unicsv_fieldpos.altcol = i;
 			if (UNICSV_CONTAINS("ft") || UNICSV_CONTAINS("feet")) {
-				unicsv_altscale = 0.3048;
+				unicsv_altscale = FEET_TO_METERS(1);
 			}
 		}
 		else if (UNICSV_CONTAINS("url")) {

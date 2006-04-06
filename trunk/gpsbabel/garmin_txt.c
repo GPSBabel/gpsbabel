@@ -541,7 +541,7 @@ print_distance(const double distance, const int no_scale, const int with_tab)
 	double dist = distance;
 	
 	if (gtxt_flags.metric == 0) {
-		dist = dist / (double)0.3048;
+		dist = METERS_TO_FEET(dist);
 	
 		if ((dist < 5280) || no_scale)
 			fprintf(fout, "%.f ft", dist);
@@ -963,7 +963,7 @@ parse_distance(const char *str, double *value)
 		*value = x;
 	} 
 	else if (case_ignore_strcmp(buff, "ft") == 0) {		/* feet */
-		*value = x * (double)0.3048;
+		*value = FEET_TO_METERS(x);
 	}
 	else if (case_ignore_strcmp(buff, "nm") == 0) {		/* mile (nautical / geographical) */
 		*value = x * (double)1852.0;

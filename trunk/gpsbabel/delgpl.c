@@ -67,7 +67,7 @@ gpl_read(void)
 		le_read64(&wpt_tmp->latitude, &gp.lat);
 		le_read64(&wpt_tmp->longitude, &gp.lon);
 		le_read64(&alt_feet, &gp.alt);
-		wpt_tmp->altitude = alt_feet * .3048;
+		wpt_tmp->altitude = FEET_TO_METERS(alt_feet);
 		wpt_tmp->creation_time = le_read32(&gp.tm);
 		track_add_wpt(track_head, wpt_tmp);
 	}
@@ -95,7 +95,7 @@ gpl_wr_deinit(void)
 static void
 gpl_trackpt(const waypoint *wpt)
 {
-	double alt_feet = wpt->altitude / .3048;
+	double alt_feet = METERS_TO_FEET(wpt->altitude);
 	int status = 3;
 	gpl_point_t gp;
 	

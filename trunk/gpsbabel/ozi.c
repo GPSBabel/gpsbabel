@@ -193,7 +193,7 @@ ozi_track_disp(const waypoint * waypointp)
     if (waypointp->altitude == unknown_alt) {
         alt_feet = -777;
     } else {
-        alt_feet = (waypointp->altitude * 3.2808);
+        alt_feet = METERS_TO_FEET(waypointp->altitude);
     }
 
     fprintf(file_out, "%.6f,%.6f,0,%.0f,%.5f,,\r\n",
@@ -260,7 +260,7 @@ ozi_route_disp(const waypoint * waypointp)
     if (waypointp->altitude == unknown_alt) {
         alt_feet = -777;
     } else {
-        alt_feet = (waypointp->altitude * 3.2808);
+        alt_feet = METERS_TO_FEET(waypointp->altitude);
     }
 
 /*
@@ -429,7 +429,7 @@ ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp, ozi_fsdata *fsdata)
         if (alt == -777) {
             wpt_tmp->altitude = unknown_alt;
         } else {
-            wpt_tmp->altitude = alt * .3048;
+            wpt_tmp->altitude = FEET_TO_METERS(alt);
         }
         break;
     case 15:
@@ -474,7 +474,7 @@ ozi_parse_track(int field, char *str, waypoint * wpt_tmp)
         if (alt == -777) {
             wpt_tmp->altitude = unknown_alt;
         } else {
-            wpt_tmp->altitude = alt * .3048;
+            wpt_tmp->altitude = FEET_TO_METERS(alt);
         }
         break;
     case 4:
@@ -694,7 +694,7 @@ ozi_waypt_pr(const waypoint * wpt)
     if (wpt->altitude == unknown_alt) {
         alt_feet = -777;
     } else {
-        alt_feet = (wpt->altitude * 3.2808);
+        alt_feet = METERS_TO_FEET(wpt->altitude);
     }
 
     if ((!wpt->shortname) || (global_opts.synthesize_shortnames)) {
