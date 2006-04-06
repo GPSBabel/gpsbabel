@@ -759,10 +759,10 @@ tpo_track_disp(const waypoint *waypointp)
 		&z);
 
 	/* increase the track length by the 3D length of last track segment in feet */
-	track_length += 3.2808 * sqrt(
+	track_length += METERS_TO_FEET(sqrt(
 		(x - last_waypoint_x) * (x - last_waypoint_x) + 
 		(y - last_waypoint_y) * (y - last_waypoint_y) +
-		(z - last_waypoint_z) * (z - last_waypoint_z));
+		(z - last_waypoint_z) * (z - last_waypoint_z)));
 	last_waypoint_x = x;
 	last_waypoint_y = y;
 	last_waypoint_z = z;

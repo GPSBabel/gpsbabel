@@ -1274,7 +1274,7 @@ xcsv_waypt_pr(const waypoint *wpt)
         if (strcmp(fmp->key, "ALT_FEET") == 0) {
             /* altitude in feet as a decimal value */
             writebuff(buff, fmp->printfc,
-              (wpt->altitude * 3.2808));
+              METERS_TO_FEET(wpt->altitude));
         } else
         if (strcmp(fmp->key, "ALT_METERS") == 0) {
             /* altitude in meters as a decimal value */

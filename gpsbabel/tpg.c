@@ -281,7 +281,7 @@ tpg_waypt_pr(const waypoint *wpt)
         lon *= -1.0;
 
         /* convert meters back to feets */
-        elev = (short int) (wpt->altitude * 3.2808);
+        elev = (short int) METERS_TO_FEET(wpt->altitude);
 
         /* 1 bytes stringsize for shortname */
         c = strlen(shortname);
