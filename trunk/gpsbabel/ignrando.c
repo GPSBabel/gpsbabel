@@ -27,7 +27,7 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-#if !NO_EXPAT
+#if HAVE_LIBEXPAT
 #include <expat.h>
 #endif
 
@@ -69,7 +69,7 @@ xg_tag_mapping ignr_xml_map[] =
 	{ NULL, 		0, 		NULL }
 };
 
-#if NO_EXPAT
+#if ! HAVE_LIBEXPAT
 
 static void
 ignr_rd_init(const char *fname)
