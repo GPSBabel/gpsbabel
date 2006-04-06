@@ -45,7 +45,7 @@ arglist_t wfff_xml_args[] = {
 #define MYNAME "wfff_xml"
 #define MY_CBUF 4096
 
-#if NO_EXPAT
+#if ! HAVE_LIBEXPAT
 void
 wfff_xml_rd_init(const char *fname)
 {

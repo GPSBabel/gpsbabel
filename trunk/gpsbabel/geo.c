@@ -37,7 +37,7 @@ arglist_t geo_args[] = {
 #define MYNAME "geo"
 #define MY_CBUF 4096
 
-#if NO_EXPAT
+#if ! HAVE_LIBEXPAT
 static void
 geo_rd_init(const char *fname)
 {

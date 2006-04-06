@@ -24,12 +24,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "defs.h"
 #include "cet.h"
 #include "cet_util.h"
 
-#ifndef NO_EXPAT
+#if HAVE_LIBEXPAT
 # include <expat.h>
 #endif
 
@@ -112,7 +113,7 @@ cet_str_cp1252_to_utf8(const char *src)
  *
  *
  */
- 
+#if HAVE_LIBEXPAT
 int XMLCALL cet_lib_expat_UnknownEncodingHandler(void *data, const XML_Char *encoding, XML_Encoding *info)
 {
 	cet_cs_vec_t *cs;
@@ -143,6 +144,7 @@ int XMLCALL cet_lib_expat_UnknownEncodingHandler(void *data, const XML_Char *enc
 	    
 	return XML_STATUS_OK;
 }
+#endif
 
 
 char *
@@ -1098,7 +1100,7 @@ int cet_vfprintf(FILE *stream, const cet_cs_vec_t *src_vec, const char *fmt, va_
 	int res, ct;
 	va_list args2;		/* vsnprintf makes args unusable for a second try */
 	
-	va_copy(args2, args);
+	__va_copy(args2, args);
 	ct = vsnprintf(buff, sizeof(buff), fmt, args);
 	if (ct >= (int)sizeof(buff)) {
 	    cout = xmalloc(ct + 1);

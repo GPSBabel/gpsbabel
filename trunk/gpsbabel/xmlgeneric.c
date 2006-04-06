@@ -23,7 +23,7 @@
 #include "xmlgeneric.h"
 #include "cet_util.h"
 
-#ifndef NO_EXPAT
+#if HAVE_LIBEXPAT
 	#include <expat.h>
 	static XML_Parser psr;
 #endif
@@ -207,6 +207,7 @@ xml_start(void *data, const char *el, const char **attr)
 	}
 }
 
+#if HAVE_LIBEXPAT
 static void
 xml_cdata(void *dta, const XML_Char *s, int len)
 {
@@ -310,5 +311,21 @@ xml_deinit(void)
 	}
 	xg_ignore_taglist = NULL;
 }
+#else /* HAVE_LIBEXPAT */
+void
+xml_init(const char *fname, xg_tag_mapping *tbl, const char *encoding)
+{
+	fatal("This format does not support reading XML files as libexpat was not present.");
+}
+
+void xml_read(void)
+{
+}
+
+void xml_deinit(void)
+{
+}
+
+#endif /* HAVE_LIBEXPAT */
 
 /******************************************/

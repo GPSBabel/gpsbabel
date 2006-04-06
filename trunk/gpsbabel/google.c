@@ -32,7 +32,7 @@ static int serial = 0;
 #define MYNAME "google"
 #define MY_CBUF 4096
 
-#if NO_EXPAT
+#if ! HAVE_LIBEXPAT
 static void
 google_rd_init(const char *fname)
 {

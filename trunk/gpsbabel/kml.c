@@ -72,7 +72,7 @@ arglist_t kml_args[] = {
 
 #define MYNAME "kml"
 
-#if NO_EXPAT
+#if ! HAVE_LIBEXPAT
 static void
 kml_rd_init(const char *fname)
 {

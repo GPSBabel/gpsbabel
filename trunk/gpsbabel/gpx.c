@@ -23,7 +23,7 @@
 #include "xmlgeneric.h"
 #include "cet_util.h"
 #include "garmin_fs.h"
-#ifndef NO_EXPAT
+#if HAVE_LIBEXPAT
 	#include <expat.h>
 	static XML_Parser psr;
 #endif
@@ -1026,11 +1026,16 @@ gpx_end(void *data, const char *el)
 	*s = 0;
 }
 
-#if NO_EXPAT
+#if ! HAVE_LIBEXPAT
 static void
 gpx_rd_init(const char *fname)
 {
 	fatal(MYNAME ": This build excluded GPX support because expat was not installed.\n");
+}
+
+static void 
+gpx_rd_deinit(void) 
+{
 }
 
 #else /* NO_EXPAT */
@@ -1126,7 +1131,6 @@ gpx_rd_init(const char *fname)
 	XML_SetCharacterDataHandler(psr, gpx_cdata);
 	fs_ptr = NULL;
 }
-#endif
 
 static 
 void 
@@ -1163,6 +1167,7 @@ gpx_rd_deinit(void)
 	wpt_tmp = NULL;
 	cur_tag = NULL;
 }
+#endif
 
 static void
 gpx_wr_init(const char *fname)
@@ -1182,7 +1187,7 @@ gpx_wr_deinit(void)
 void
 gpx_read(void)
 {
-#ifndef NO_EXPAT
+#if HAVE_LIBEXPAT
 	int len;
 	int done = 0;
 	char *buf = xmalloc(MY_CBUF_SZ);
@@ -1267,7 +1272,7 @@ gpx_read(void)
 		}
 	}
 	xfree(buf);
-#endif /* NO_EXPAT */
+#endif /* HAVE_LIBEXPAT */
 }
 
 static void
