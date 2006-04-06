@@ -42,7 +42,7 @@ static arglist_t tef_xml_args[] =
 
 #define MYNAME "TourExchangeFormat"
 
-#if NO_EXPAT
+#if ! HAVE_LIBEXPAT
 void
 tef_xml_rd_init(const char *fname)
 {

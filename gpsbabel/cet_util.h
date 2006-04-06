@@ -24,9 +24,10 @@
 
 #include <ctype.h>
 #include <stdio.h>
+#include "config.h"
 #include "cet.h"
 
-#ifndef NO_EXPAT
+#if HAVE_LIBEXPAT
 # include <expat.h>
 #endif
 
@@ -88,7 +89,9 @@ extern cet_cs_vec_t cet_cs_vec_utf8;
 #endif
 #endif  /* not defined XMLCALL */
 
+#if HAVE_LIBEXPAT
 int XMLCALL cet_lib_expat_UnknownEncodingHandler(void *data, const XML_Char *encoding, XML_Encoding *info);
+#endif
 
 /* helpers */
 

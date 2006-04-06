@@ -18,7 +18,7 @@
  */
 #include "defs.h"
 #include "cet_util.h"
-#if !NO_EXPAT
+#if HAVE_LIBEXPAT
 #include <expat.h>
 static XML_Parser psr;
 #endif
@@ -40,7 +40,7 @@ arglist_t nav_args[] = {
 #define MYNAME "navicache"
 #define MY_CBUF 4096
 
-#if NO_EXPAT
+#if ! HAVE_LIBEXPAT
 static void
 nav_rd_init(const char *fname)
 {

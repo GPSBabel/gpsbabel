@@ -25,6 +25,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stddef.h>
+#include "config.h"
 #include "queue.h"
 #include "gbtypes.h"
 #include "cet.h"

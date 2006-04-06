@@ -18,7 +18,7 @@
  */
 #include "defs.h"
 #include "cet_util.h"
-#if !NO_EXPAT
+#if HAVE_LIBEXPAT
 #include <expat.h>
 static XML_Parser psr;
 #endif
@@ -53,7 +53,7 @@ arglist_t hsa_ndv_args[] = {
 #define FALSE	0
 
 
-#if NO_EXPAT
+#if ! HAVE_LIBEXPAT
 static void
 hsa_ndv_rd_init(const char *fname)
 {
