@@ -29,12 +29,14 @@
     2005-08-01: Add 'static' qualifier when we can (RJL)
     2005-10-04: Add filterdefs to hold protos for filter functions... (RJL)
     2005-10-04: Fix range-check max. value; exit filter, if no more tracks left
+    2006-04-06: Add fix, course, and speed options
  */
  
 #include <ctype.h>
 #include "defs.h"
 #include "filterdefs.h"
 #include "strptime.h"
+#include "grtcirc.h"
 
 #define MYNAME "trackfilter"
 
@@ -45,6 +47,9 @@
 #define TRACKFILTER_STOP_OPTION		"stop"
 #define TRACKFILTER_START_OPTION	"start"
 #define TRACKFILTER_MOVE_OPTION		"move"
+#define TRACKFILTER_FIX_OPTION          "fix"
+#define TRACKFILTER_COURSE_OPTION       "course"
+#define TRACKFILTER_SPEED_OPTION        "speed"
 
 #undef TRACKF_DBG
 
@@ -55,23 +60,38 @@ static char *opt_move = NULL;
 static char *opt_title = NULL;
 static char *opt_start = NULL;
 static char *opt_stop = NULL;
+static char *opt_fix = NULL;
+static char *opt_course = NULL;
+static char *opt_speed = NULL;
 
 static
 arglist_t trackfilter_args[] = {
 	{TRACKFILTER_MOVE_OPTION, &opt_move, 
-	    "Correct trackpoint timestamps by a delta", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
+	    "Correct trackpoint timestamps by a delta", NULL, ARGTYPE_STRING, 
+	    ARG_NOMINMAX},
 	{TRACKFILTER_PACK_OPTION,  &opt_pack,  
 	    "Pack all tracks into one", NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{TRACKFILTER_SPLIT_OPTION, &opt_split, 
-	    "Split track by date or by time interval (see README)", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
+	    "Split track by date or by time interval (see README)", NULL, 
+	    ARGTYPE_STRING, ARG_NOMINMAX},
 	{TRACKFILTER_MERGE_OPTION, &opt_merge, 
-	    "Merge multiple tracks for the same way", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
+	    "Merge multiple tracks for the same way", NULL, ARGTYPE_STRING, 
+	    ARG_NOMINMAX},
 	{TRACKFILTER_START_OPTION, &opt_start, 
-	    "Use only track points after this timestamp", NULL, ARGTYPE_INT, ARG_NOMINMAX},
+	    "Use only track points after this timestamp", NULL, ARGTYPE_INT, 
+	    ARG_NOMINMAX},
 	{TRACKFILTER_STOP_OPTION, &opt_stop, 
-	    "Use only track points before this timestamp", NULL, ARGTYPE_INT, ARG_NOMINMAX},
+	    "Use only track points before this timestamp", NULL, ARGTYPE_INT, 
+	    ARG_NOMINMAX},
 	{TRACKFILTER_TITLE_OPTION, &opt_title, 
 	    "Basic title for new track(s)", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
+	{TRACKFILTER_FIX_OPTION, &opt_fix,
+	    "Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE)", NULL,
+	    ARGTYPE_STRING, ARG_NOMINMAX },
+	{TRACKFILTER_COURSE_OPTION, &opt_course, "Synthesize course",
+	    NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{TRACKFILTER_SPEED_OPTION, &opt_speed, "Synthesize speed",
+            NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -158,6 +178,30 @@ trackfilter_merge_qsort_cb(const void *a, const void *b)
 	const waypoint *wb = *(waypoint **)b;
 
 	return wa->creation_time - wb->creation_time;
+}
+
+static fix_type
+trackfilter_parse_fix()
+{
+	if ( !opt_fix ) {
+		return fix_unknown;
+	}
+	if ( !case_ignore_strcmp( opt_fix, "pps" )) {
+		return fix_pps;
+	}
+	if ( !case_ignore_strcmp( opt_fix, "dgps" )) {
+		return fix_dgps;
+	}
+	if ( !case_ignore_strcmp( opt_fix, "3d" )) {
+		return fix_3d;
+	}
+	if ( !case_ignore_strcmp( opt_fix, "2d" )) {
+		return fix_2d;
+	}
+	if ( !case_ignore_strcmp( opt_fix, "none" )) {
+		return fix_none;
+	}
+	fatal( MYNAME ": invalid fix type\n" );
 }
 
 static void
@@ -553,6 +597,70 @@ trackfilter_move(void)
 }
 
 /*******************************************************************************
+* options "fix", "course", "speed"
+*******************************************************************************/
+
+static void
+trackfilter_synth(void)
+{
+	int i;
+	queue *elem, *tmp;
+	waypoint *wpt;
+	
+	double oldlat = -999;
+	double oldlon = -999;
+	time_t oldtime = 0;
+	int first = 1;
+	fix_type fix;
+	
+	fix = trackfilter_parse_fix();
+	
+	for (i = 0; i < track_ct; i++)
+	{
+	    route_head *track = track_list[i].track;
+	    first = 1;
+	    QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp)
+	    {
+		wpt = (waypoint *)elem;
+		if ( opt_fix ) {
+			wpt->fix = fix;
+		}
+		if ( first ) {
+			if ( opt_course ) {
+				wpt->course = 0;
+			}
+			if ( opt_speed ) {
+				wpt->speed = 0;
+			}
+			first = 0;
+		}
+		else {
+			if ( opt_course ) {
+				wpt->course = heading( oldlat, oldlon,
+					wpt->latitude, wpt->longitude );
+			}
+			if ( opt_speed ) {
+				if ( oldtime != wpt->creation_time ) {
+					wpt->speed = radtometers(gcdist( 
+					    RAD(oldlat), RAD(oldlon), 
+					    RAD(wpt->latitude), 
+					    RAD(wpt->longitude))) /
+					    labs(wpt->creation_time-oldtime);
+				}	
+				else {
+					wpt->speed = -999.0;
+				}
+			}
+		}
+		oldlat = wpt->latitude;
+		oldlon = wpt->longitude;
+		oldtime = wpt->creation_time;
+	    }
+	}
+}
+
+
+/*******************************************************************************
 * option: "start" / "stop"
 *******************************************************************************/
 
@@ -637,7 +745,7 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
 static void
 trackfilter_init(const char *args) 
 {
-	
+
 	int count = track_count();
 
 	track_ct = 0;
@@ -679,11 +787,19 @@ trackfilter_process(void)
 	
 	opts = trackfilter_opt_count();
 	if (opts == 0) opts = -1;		/* flag for do "pack" by default */
-
+	
 	if (opt_move != NULL)			/* Correct timestamps before any other op */
 	{
 	    trackfilter_move();
 	    if (--opts == 0) return;
+	}
+	
+	if ( opt_speed || opt_course || opt_fix ) {
+	    trackfilter_synth();
+	    if ( opt_speed ) opts--;
+	    if ( opt_course ) opts--;
+	    if ( opt_fix ) opts--;
+	    if ( !opts ) return;
 	}
 
 	if ((opt_stop != NULL) || (opt_start != NULL))
