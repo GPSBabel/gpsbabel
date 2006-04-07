@@ -22,6 +22,8 @@
 #include <stdio.h>
 #include "defs.h"
 
+static const double EARTH_RAD = 6378137.0;
+
 static void crossproduct( double x1, double y1, double z1, 
 		   double x2, double y2, double z2,
 		   double *xa, double *ya, double *za ) {
@@ -47,8 +49,12 @@ static double dotproduct( double x1, double y1, double z1,
  */
 
 double radtomiles( double rads ) {
-    const double radmiles = 6378137.0*100.0/2.54/12.0/5280.0;
+    const double radmiles = EARTH_RAD*100.0/2.54/12.0/5280.0;
     return (rads*radmiles);
+}
+
+double radtometers( double rads ) {
+    return ( rads * EARTH_RAD );
 }
 
 double gcdist( double lat1, double lon1, double lat2, double lon2 ) {
@@ -60,6 +66,19 @@ double gcdist( double lat1, double lon1, double lat2, double lon2 ) {
   }
   return res;
 }
+
+/* This value is the heading you'd leave point 1 at to arrive at point 2. */
+double heading( double lat1, double lon1, double lat2, double lon2 ) {
+  double v1, v2;
+  v1 = sin(lon1 - lon2) * cos(lat2);
+  v2 = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon1 - lon2);
+  /* rounding error protection */
+  if (fabs(v1) < 1e-15) v1 = 0.0;
+  if (fabs(v2) < 1e-15) v2 = 0.0;     
+  return atan2(v1, v2);
+}
+
+	
  
 double linedist(double lat1, double lon1,
 		double lat2, double lon2,
