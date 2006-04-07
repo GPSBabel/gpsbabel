@@ -290,20 +290,9 @@ distance(double lat1, double lon1, double lat2, double lon2)	/* nearly MapSource
 }
 
 static double
-course_rad(double lat1, double lon1, double lat2, double lon2)
-{
-	double v1, v2;
-	v1 = sin(lon1 - lon2) * cos(lat2);
-	v2 = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon1 - lon2);
-	if (fabs(v2) < 0.000000000000001) v2 = 0.0;	/* fix calculation diff. between 32- and 64-bit systems */
-	if (fabs(v1) < 0.000000000000001) v1 = 0.0;	/* fix calculation diff. between 32- and 64-bit systems */
-	return atan2(v1, v2);
-}
-
-static double
 course_deg(double lat1, double lon1, double lat2, double lon2)
 {
-	return r2d(course_rad(d2r(lat1), d2r(lon1), d2r(lat2), d2r(lon2)));
+	return r2d(heading(d2r(lat1), d2r(lon1), d2r(lat2), d2r(lon2)));
 }
 
 static double
