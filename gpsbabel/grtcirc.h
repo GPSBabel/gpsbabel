@@ -19,15 +19,20 @@
 
  */
 double gcdist( double lat1, double lon1, double lat2, double lon2 );
+double heading( double lat1, double lon1, double lat2, double lon2 );
 
 double linedist(double lat1, double lon1,
 		double lat2, double lon2,
 		double lat3, double lon3 );
 
+double radtometers( double rads );
 double radtomiles( double rads );
 
 void linepart(double lat1, double lon1,
                double lat2, double lon2,
                double frac,
                double *reslat, double *reslon ); 
-	
+
+
+#define DEG(x) ((x)*180.0/M_PI)
+#define RAD(x) ((x)*M_PI/180.0)
