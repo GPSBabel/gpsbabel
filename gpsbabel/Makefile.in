@@ -13,7 +13,7 @@ VERSIOND=$(VERSD)$(RELEASE)
 # type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
 # INHIBIT_EXPAT and coment out LIBEXPAT on just to get a build working quickly.
 # INHIBIT_EXPAT=-DNO_EXPAT
-LIBEXPAT=-lexpat # -lefence
+LIBEXPAT=@EXPAT_LIB@  # -lefence
 
 # Space is significant, because MSVC wants no space between switch and arg (-Fofoo.o)
 # but cc/gcc does:
@@ -28,7 +28,8 @@ OUTPUT_SWITCH=-o #
 OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
 DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
-CFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -Icoldsync $(INHIBIT_EXPAT) $(INHIBIT_USB) $(OPTIMIZATION)  -I/sw/include
+GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -Icoldsync \
+	$(INHIBIT_USB) $(OPTIMIZATION) @CFLAGS@
 INSTALL_TARGETDIR=/usr/local/
 
 # OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
@@ -51,12 +52,12 @@ FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
 	nukedata.o interpolate.o
 
-OSJEEPS=jeeps/gpslibusb.o
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
 	jeeps/gpsprot.o jeeps/gpsread.o \
 	jeeps/gpsrqst.o jeeps/gpssend.o jeeps/gpsserial.o jeeps/gpsutil.o \
-	jeeps/gpsusbread.o jeeps/gpsusbsend.o $(OSJEEPS) 
+	jeeps/gpsusbread.o jeeps/gpsusbsend.o @OSJEEPS@
+
 # Extra modules in Jeeps that we don't use
 # 	jeeps/gpsfmt.o jeeps/gpsinput.o jeeps/gpsproj.o
 
@@ -73,7 +74,9 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
 OBJS = main.o globals.o $(LIBOBJS)
 
 .c.o:
-	@CC@  -c $(CFLAGS) $< $(OUTPUT_SWITCH)$@
+	@CC@  -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
+
+
 
 # Directory of web doc 
 WEB=../babelweb/
@@ -81,18 +84,14 @@ WEB=../babelweb/
 
 all: gpsbabel
 
-#
-# Alternate makefile target for the case when you have no libusb and no 
-# need for Garmin/USB (60, 76C, VistaC, Quest, etc.) support.
-#
-#usbfree:
-#	make LIBUSB= INHIBIT_USB=-DNO_USB
-
 gpsbabel: $(OBJS)
-	@CC@  $(CFLAGS) $(OBJS) @LIBS@ $(OUTPUT_SWITCH)$@
+	@CC@  $(CFLAGS) $(OBJS) @LIBS@ @USB_LIBS@ $(LIBEXPAT) $(OUTPUT_SWITCH)$@
 
 globals.o:
-	@CC@  -c $(CFLAGS) -DVERSION=\"$(VERSIOND)\" $< $(OUTPUT_SWITCH)$@
+	@CC@  -c $(GBCFLAGS) -DVERSION=\"$(VERSIOND)\" $< $(OUTPUT_SWITCH)$@
+
+jeeps/gpslibusb.o: 
+	@CC@  -c $(GBCFLAGS) @USB_CFLAGS@ jeeps/gpslibusb.c $(OUTPUT_SWITCH)$@
 
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
@@ -161,12 +160,6 @@ rpm: clean
 rpmrelease:
 	curl -u anonymous:anonymous --upload-file /usr/src/redhat/SRPMS/gpsbabel-$(VERSIOND).src.rpm  ftp://upload.sf.net/incoming/ 
 	curl -u anonymous:anonymous --upload-file /usr/src/redhat/RPMS/i386/gpsbabel-$(VERSIOND).i386.rpm  ftp://upload.sf.net/incoming/ 
-
-#mac-usbfree:
-#	make LIBEXPAT=$(OTHER_ROOT)/lib/libexpat.a EXTRA_CFLAGS="-I$(OTHER_ROOT)/include" LIBUSB= INHIBIT_USB=-DNO_USB
-#
-#mac-build:
-#	make LIBEXPAT=$(OTHER_ROOT)/lib/libexpat.a EXTRA_CFLAGS="-I$(OTHER_ROOT)/include" LIBUSB="$(OTHER_ROOT)/lib/libusb.a -lIOKit  -lBSDPClient -framework CoreFoundation"
 
 mac-release:
 	mkdir -p usr/bin usr/share/gpsbabel/doc
