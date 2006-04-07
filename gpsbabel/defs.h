@@ -712,6 +712,11 @@ unsigned long get_crc32(const void * data, int datalen);
 unsigned long get_crc32_s(const void * data);
 
 /*
+ * From gbsleep.c
+ */
+void gb_sleep(unsigned long microseconds);
+
+/*
  * Color helpers.
  */
 int color_to_bbggrr(char *cname);
