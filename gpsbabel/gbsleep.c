@@ -35,8 +35,8 @@ gb_sleep(unsigned long microseconds)
 gb_sleep(unsigned long microseconds)
 {
 	struct timespec req;
-	req.tv_sec  = 0;
-	req.tv_nsec = microseconds * 1000;
+	req.tv_sec  = microseconds / 1000000;
+	req.tv_nsec = (microseconds * 1000) % 1000000000;
 	nanosleep(&req, NULL);
 }
 #endif

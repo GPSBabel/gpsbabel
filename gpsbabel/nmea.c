@@ -163,6 +163,10 @@ static char *nogpvtg = NULL;
 static char *nogpgsa = NULL;
 static char *snlenopt = NULL;
 static char *optdate = NULL;
+static char *opt_sleep = NULL;
+static long sleepus = 0;
+
+static time_t last_time = -1;
 
 arglist_t nmea_args[] = {
 	{"gprmc", &dogprmc, "Write GPRMC sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
@@ -171,6 +175,8 @@ arglist_t nmea_args[] = {
 	{"nogpvtg", &nogpvtg, "Don't write GPVTG sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"nogpgsa", &nogpgsa, "Don't write GPGSA sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX },
+	{"pause", &opt_sleep, "Pause between groups of strings", NULL, 
+			ARGTYPE_STRING, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -205,6 +211,15 @@ static void
 nmea_wr_init(const char *portname)
 {
 	file_out = xfopen(portname, "w+", MYNAME);
+
+	if ( opt_sleep ) {
+		if ( *opt_sleep ) {
+			sleepus = 1e6 * atof(opt_sleep);
+		}
+		else {
+			sleepus = -1;
+		}
+	}
 	
 	mkshort_handle = mkshort_new_handle();
 	setshort_length(mkshort_handle, atoi(snlenopt));
@@ -738,6 +753,12 @@ nmea_wayptpr(const waypoint *wpt)
 	
 }
 
+void 
+nmea_track_init(const route_head *rte)
+{
+	last_time = -1;
+}
+
 void
 nmea_trackpt_pr(const waypoint *wpt)
 {
@@ -748,6 +769,21 @@ nmea_trackpt_pr(const waypoint *wpt)
 	struct tm *tm;
 	time_t hms;
 	time_t ymd;
+
+	if ( opt_sleep ) {
+	    if ( last_time > 0 ) {
+		if ( sleepus >= 0 ) {
+		    gb_sleep( sleepus );
+		}
+		else {
+	    	    long wait_time = wpt->creation_time - last_time;
+		    if ( wait_time > 0 ) {
+			gb_sleep( wait_time * 1000000 );
+		    }
+		}
+	    }
+	    last_time = wpt->creation_time;
+	}
 
 	lat = degrees2ddmm(wpt->latitude);
 	lon = degrees2ddmm(wpt->longitude);
@@ -840,7 +876,7 @@ static void
 nmea_write(void)
 {
 	waypt_disp_all(nmea_wayptpr);
-	track_disp_all(NULL, NULL, nmea_trackpt_pr);
+	track_disp_all(nmea_track_init, NULL, nmea_trackpt_pr);
 }
 
 ff_vecs_t nmea_vecs = {
