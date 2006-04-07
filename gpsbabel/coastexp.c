@@ -38,18 +38,6 @@ static FILE *ofd;
 #define MY_TBUF 64
 #define MY_XBUF 128
 
-#if !HAVE_LIBEXPAT
-void
-ce_rd_init(const char *fname)
-{
-	fatal(MYNAME ": This build excluded CoastalExplorer support because expat was not installed.\n");
-}
-
-void
-ce_read(void)
-{
-}
-#else
 
 static char *element; // Current element being parsed
 static char *cdatastr; // Current XML character data being built up (until a <lf>)
@@ -127,6 +115,19 @@ ce_free_route(ce_route *route)
 	xfree(route);
 	// Don't free the waypoint since this is done elsewhere
 }
+
+#if !HAVE_LIBEXPAT
+void
+ce_rd_init(const char *fname)
+{
+	fatal(MYNAME ": This build excluded CoastalExplorer support because expat was not installed.\n");
+}
+
+void
+ce_read(void)
+{
+}
+#else
 
 /* Start processing an XML item */
 static void
