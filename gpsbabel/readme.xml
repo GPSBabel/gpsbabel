@@ -2021,7 +2021,7 @@ gpsbabel -i gpx -f indiana.gpx \
 </screen>
       </section>
       <section>
-         <title> TRACK</title>
+         <title>TRACK</title>
          <para> ( !!! This filter always drops empty tracks !!! )
          </para>
          <para>The track filter is a tool for manipulating track lists.  The
@@ -2112,6 +2112,36 @@ gpsbabel -t \
      -x track,merge,title="COMBINED LOG" \
      -o gpx -F john_doe.gpx
 </screen>
+	<para>FIX</para>
+	<para>Fix forces the GPS fix status for all trackpoints to the 
+        specified value.  The value may be PPS, DGPS, 3D, 2D, or NONE.
+	</para>
+	<screen format="linespecific">
+	gpsbabel -i gpx -f trk.gpx -x track,fix=3D -o nmea -F -
+	</screen>
+
+	<para>COURSE</para>
+	<para>Course computes a value for the GPS heading at each trackpoint.
+	This is most useful with trackpoints from formats that don't support
+	heading information or for trackpoints synthesized by the interpolate
+	filter.  The heading at each trackpoint is simply the course from the
+	previous trackpoint in the track.  The first trackpoint in each track
+        is arbitrarily assigned a heading of 0 degrees.</para>
+	<screen format="linespecific">
+	gpsbabel -i gpx -f trk.gpx -x track,course,speed -o nmea -F -
+	</screen>
+
+	<para>SPEED</para>
+	<para>Course computes a value for the GPS speed at each trackpoint.
+	This is most useful with trackpoints from formats that don't support
+	speed information or for trackoints synthesized by the interpolate
+	filter.  The speed at each trackpoint is the average speed from the
+	previous trackpoint (distance/time).  The first trackpoint in each
+	track is assigned a speed of "unknown."</para>
+	<screen format="linespecific">
+	gpsbabel -i gpx -f trk.gpx -x track,course,speed -o nmea -F -
+	</screen>
+
       </section>
       <section>
          <title>DISCARD</title>
