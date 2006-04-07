@@ -28,9 +28,24 @@ AC_CHECK_LIB([m], [cos])
 AC_MSG_CHECKING(for libusb)
 if test "$with_libusb" = no ; then
 	AC_MSG_RESULT(check not done)
-	AC_DEFINE(NO_USB, "1")
 else
-	AC_CHECK_LIB([usb], [usb_open])
+	AC_CHECK_PROG(LIBUSBCONFIG, libusb-config, true, false)
+    	if test "$LIBUSBCONFIG" = false; then
+       	   	AC_MSG_ERROR([libusb-config not found in $PATH])
+    	fi;
+	OLDFLAGS=$LDFLAGS
+	OCFLAGS=$CFLAGS
+	LDFLAGS="$LDFLAGS `libusb-config --libs`"
+	CFLAGS="$OCFLAGS `libusb-config --cflags`"
+
+	AC_CHECK_LIB([usb], [usb_interrupt_read],
+		[USB_FLAGS="`libusb-config --cflags`"]
+		[LDFLAGS="$LDFLAGS `libusb-config --libs`"],
+		[AC_MSG_ERROR([libusb >= 0.1.8 is needed])]
+		)
+	CFLAGS="$OCFLAGS"
+	LIBS="$LIBS `libusb-config --libs`"
+	AC_CHECK_LIB([usb], [usb_interrupt_read])
 fi
 
 AC_MSG_CHECKING(for random stuff to make you feel better)
@@ -40,7 +55,10 @@ AC_MSG_CHECKING(for libexpat)
 if test "$with_libexpat" = no ; then
 	AC_MSG_RESULT(check not done)
 else
-	AC_CHECK_LIB([expat], [XML_ParserCreate])
+#	AC_CHECK_LIB([expat], [XML_ParserCreate])
+	AC_CHECK_LIB(expat, XML_ParserCreate, EXPAT_LIB="-lexpat",
+	AC_CHECK_LIB(expat, XML_ParserCreate, EXPAT_LIB="-lexpat", [], "-L/sw/lib -I/sw/include"), "-L/sw/lib -I/sw/include")
+	AC_CHECK_LIB(expat, XML_ParserCreate)
 fi
 
 # Checks for header files.
@@ -72,5 +90,4 @@ AC_HEADER_STDC
 #                 doc/Makefile
 #                 mingw/Makefile])
 AC_CONFIG_FILES([Makefile])
-# AC_CONFIG_HEADER(config.h)
 AC_OUTPUT

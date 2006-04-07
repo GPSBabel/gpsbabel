@@ -51,24 +51,6 @@ static arglist_t ignr_args[] =
 	ARG_TERMINATOR
 };
 
-static xg_callback	ignr_start;
-static xg_callback	ignr_nb_etapes, ignr_descr;
-static xg_callback	ignr_etape_begin, ignr_etape_end;
-static xg_callback	ignr_etape_pos, ignr_etape_alt;
-
-static 
-xg_tag_mapping ignr_xml_map[] = 
-{
-	{ ignr_start,		cb_start,	"/RANDONNEE" },
-	{ ignr_nb_etapes,   	cb_cdata,	"/RANDONNEE/INFORMATIONS/NB_ETAPES" },
-	{ ignr_descr,   	cb_cdata,	"/RANDONNEE/INFORMATIONS/DESCRIPTION" },
-	{ ignr_etape_begin, 	cb_start, 	"/RANDONNEE/ETAPE" },
-	{ ignr_etape_end, 	cb_end, 	"/RANDONNEE/ETAPE" },
-	{ ignr_etape_pos,	cb_cdata,	"/RANDONNEE/ETAPE/POSITION" },
-	{ ignr_etape_alt,	cb_cdata,	"/RANDONNEE/ETAPE/ALTITUDE" },
-	{ NULL, 		0, 		NULL }
-};
-
 #if ! HAVE_LIBEXPAT
 
 static void
@@ -88,6 +70,25 @@ ignr_rd_deinit(void)
 }
 
 #else
+
+
+static xg_callback	ignr_start;
+static xg_callback	ignr_nb_etapes, ignr_descr;
+static xg_callback	ignr_etape_begin, ignr_etape_end;
+static xg_callback	ignr_etape_pos, ignr_etape_alt;
+
+static 
+xg_tag_mapping ignr_xml_map[] = 
+{
+	{ ignr_start,		cb_start,	"/RANDONNEE" },
+	{ ignr_nb_etapes,   	cb_cdata,	"/RANDONNEE/INFORMATIONS/NB_ETAPES" },
+	{ ignr_descr,   	cb_cdata,	"/RANDONNEE/INFORMATIONS/DESCRIPTION" },
+	{ ignr_etape_begin, 	cb_start, 	"/RANDONNEE/ETAPE" },
+	{ ignr_etape_end, 	cb_end, 	"/RANDONNEE/ETAPE" },
+	{ ignr_etape_pos,	cb_cdata,	"/RANDONNEE/ETAPE/POSITION" },
+	{ ignr_etape_alt,	cb_cdata,	"/RANDONNEE/ETAPE/ALTITUDE" },
+	{ NULL, 		0, 		NULL }
+};
 
 static void
 ignr_xml_error(int condition)

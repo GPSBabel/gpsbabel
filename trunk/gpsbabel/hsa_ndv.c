@@ -37,6 +37,7 @@ static char *routeName = "ROUTENAME";
 #define ATTR_SHIPNAME						"shpnam"
 
 static void readVersion4( FILE* pFile);
+static void getAttr(const char *data, const char *attr, char **val, char seperator);
 
 static FILE *fd;
 static FILE *ofd;
@@ -89,33 +90,6 @@ hsa_ndv_start(void *data, const char *el, const char **attr)
 	}
 	//reset data :)
 	memset(cdatastr,0, MY_CBUF);
-}
-
-static void getAttr(const char *data, const char *attr, char **val, char seperator)
-{
-	char *start;
-	if ((start = strstr(data, attr)) != NULL)
-	{
-		char *end;
-		int len;
-
-		end = strchr(start, seperator);
-		if (end == NULL)
-		{
-			end = start + strlen(start);//assume we are teh last attr
-		}
-
-		len = end-start - strlen(attr);
-
-		*val = xcalloc(len+1, 1);
-		memcpy(*val, start+strlen(attr), len);
-		(*val)[len] = '\0';
-	}
-	else
-	{
-		*val = xcalloc(1, 1);
-		(*val)[0] = '\0';
-	}
 }
 
 static void
@@ -277,6 +251,32 @@ hsa_ndv_read(void)
 
 #endif
 
+static void getAttr(const char *data, const char *attr, char **val, char seperator)
+{
+	char *start;
+	if ((start = strstr(data, attr)) != NULL)
+	{
+		char *end;
+		int len;
+
+		end = strchr(start, seperator);
+		if (end == NULL)
+		{
+			end = start + strlen(start);//assume we are teh last attr
+		}
+
+		len = end-start - strlen(attr);
+
+		*val = xcalloc(len+1, 1);
+		memcpy(*val, start+strlen(attr), len);
+		(*val)[len] = '\0';
+	}
+	else
+	{
+		*val = xcalloc(1, 1);
+		(*val)[0] = '\0';
+	}
+}
 static void
 hsa_ndv_rd_deinit(void)
 {

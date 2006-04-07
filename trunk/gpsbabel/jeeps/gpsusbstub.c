@@ -19,9 +19,9 @@
 
  */
 
-#if NO_USB
 
 #include "garminusb.h"
+#if !HAVE_LIBUSB
 
 const char no_usb[] = "USB suport is not available in this build.\n";
 int

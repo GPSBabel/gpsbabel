@@ -15,11 +15,6 @@ VERSIOND=$(VERSD)$(RELEASE)
 # INHIBIT_EXPAT=-DNO_EXPAT
 LIBEXPAT=-lexpat # -lefence
 
-# USB may required non-standard libraries (like libusb) be installed
-# and may not be available on all OSes.  Uncomment this to remove the key
-# parts of USB from the build.
-LIBUSB=-lusb
-
 # Space is significant, because MSVC wants no space between switch and arg (-Fofoo.o)
 # but cc/gcc does:
 #  $(OUTPUT_SWITCH)main.o
@@ -33,11 +28,11 @@ OUTPUT_SWITCH=-o #
 OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
 DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
-CFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -Icoldsync $(INHIBIT_EXPAT) $(INHIBIT_USB) $(OPTIMIZATION)
+CFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -Icoldsync $(INHIBIT_EXPAT) $(INHIBIT_USB) $(OPTIMIZATION)  -I/sw/include
 INSTALL_TARGETDIR=/usr/local/
 
-#OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
-OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
+# OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
+# OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
 
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	gtm.o \
@@ -61,7 +56,7 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
 	jeeps/gpsprot.o jeeps/gpsread.o \
 	jeeps/gpsrqst.o jeeps/gpssend.o jeeps/gpsserial.o jeeps/gpsutil.o \
-	jeeps/gpsusbread.o jeeps/gpsusbsend.o jeeps/gpsusbstub.o $(OSJEEPS)
+	jeeps/gpsusbread.o jeeps/gpsusbsend.o $(OSJEEPS) 
 # Extra modules in Jeeps that we don't use
 # 	jeeps/gpsfmt.o jeeps/gpsinput.o jeeps/gpsproj.o
 
