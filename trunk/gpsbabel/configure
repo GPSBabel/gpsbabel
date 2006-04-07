@@ -273,7 +273,7 @@ PACKAGE_VERSION='VERSION'
 PACKAGE_STRING='FULL-PACKAGE-NAME VERSION'
 PACKAGE_BUGREPORT='BUG-REPORT-ADDRESS'
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE CPP EGREP LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE LIBUSBCONFIG CPP EGREP LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -2423,15 +2423,56 @@ echo $ECHO_N "checking for libusb... $ECHO_C" >&6
 if test "$with_libusb" = no ; then
 	echo "$as_me:$LINENO: result: check not done" >&5
 echo "${ECHO_T}check not done" >&6
-	cat >>confdefs.h <<\_ACEOF
-#define NO_USB "1"
-_ACEOF
-
 else
+	# Extract the first word of "libusb-config", so it can be a program name with args.
+set dummy libusb-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_LIBUSBCONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$LIBUSBCONFIG"; then
+  ac_cv_prog_LIBUSBCONFIG="$LIBUSBCONFIG" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_LIBUSBCONFIG="true"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
 
-echo "$as_me:$LINENO: checking for usb_open in -lusb" >&5
-echo $ECHO_N "checking for usb_open in -lusb... $ECHO_C" >&6
-if test "${ac_cv_lib_usb_usb_open+set}" = set; then
+  test -z "$ac_cv_prog_LIBUSBCONFIG" && ac_cv_prog_LIBUSBCONFIG="false"
+fi
+fi
+LIBUSBCONFIG=$ac_cv_prog_LIBUSBCONFIG
+if test -n "$LIBUSBCONFIG"; then
+  echo "$as_me:$LINENO: result: $LIBUSBCONFIG" >&5
+echo "${ECHO_T}$LIBUSBCONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+    	if test "$LIBUSBCONFIG" = false; then
+       	   	{ { echo "$as_me:$LINENO: error: libusb-config not found in $PATH" >&5
+echo "$as_me: error: libusb-config not found in $PATH" >&2;}
+   { (exit 1); exit 1; }; }
+    	fi;
+	OLDFLAGS=$LDFLAGS
+	OCFLAGS=$CFLAGS
+	LDFLAGS="$LDFLAGS `libusb-config --libs`"
+	CFLAGS="$OCFLAGS `libusb-config --cflags`"
+
+	echo "$as_me:$LINENO: checking for usb_interrupt_read in -lusb" >&5
+echo $ECHO_N "checking for usb_interrupt_read in -lusb... $ECHO_C" >&6
+if test "${ac_cv_lib_usb_usb_interrupt_read+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -2449,11 +2490,11 @@ extern "C"
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
-char usb_open ();
+char usb_interrupt_read ();
 int
 main ()
 {
-usb_open ();
+usb_interrupt_read ();
   ;
   return 0;
 }
@@ -2480,20 +2521,97 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_usb_usb_open=yes
+  ac_cv_lib_usb_usb_interrupt_read=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_lib_usb_usb_open=no
+ac_cv_lib_usb_usb_interrupt_read=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_usb_usb_open" >&5
-echo "${ECHO_T}$ac_cv_lib_usb_usb_open" >&6
-if test $ac_cv_lib_usb_usb_open = yes; then
+echo "$as_me:$LINENO: result: $ac_cv_lib_usb_usb_interrupt_read" >&5
+echo "${ECHO_T}$ac_cv_lib_usb_usb_interrupt_read" >&6
+if test $ac_cv_lib_usb_usb_interrupt_read = yes; then
+  USB_FLAGS="`libusb-config --cflags`"
+		LDFLAGS="$LDFLAGS `libusb-config --libs`"
+else
+  { { echo "$as_me:$LINENO: error: libusb >= 0.1.8 is needed" >&5
+echo "$as_me: error: libusb >= 0.1.8 is needed" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+	CFLAGS="$OCFLAGS"
+	LIBS="$LIBS `libusb-config --libs`"
+
+echo "$as_me:$LINENO: checking for usb_interrupt_read in -lusb" >&5
+echo $ECHO_N "checking for usb_interrupt_read in -lusb... $ECHO_C" >&6
+if test "${ac_cv_lib_usb_usb_interrupt_read+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lusb  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char usb_interrupt_read ();
+int
+main ()
+{
+usb_interrupt_read ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_usb_usb_interrupt_read=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_usb_usb_interrupt_read=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_usb_usb_interrupt_read" >&5
+echo "${ECHO_T}$ac_cv_lib_usb_usb_interrupt_read" >&6
+if test $ac_cv_lib_usb_usb_interrupt_read = yes; then
   cat >>confdefs.h <<_ACEOF
 #define HAVE_LIBUSB 1
 _ACEOF
@@ -2515,6 +2633,144 @@ if test "$with_libexpat" = no ; then
 	echo "$as_me:$LINENO: result: check not done" >&5
 echo "${ECHO_T}check not done" >&6
 else
+#	AC_CHECK_LIB([expat], [XML_ParserCreate])
+	echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
+echo $ECHO_N "checking for XML_ParserCreate in -lexpat... $ECHO_C" >&6
+if test "${ac_cv_lib_expat_XML_ParserCreate+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lexpat "-L/sw/lib -I/sw/include" $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char XML_ParserCreate ();
+int
+main ()
+{
+XML_ParserCreate ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_expat_XML_ParserCreate=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_expat_XML_ParserCreate=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_expat_XML_ParserCreate" >&5
+echo "${ECHO_T}$ac_cv_lib_expat_XML_ParserCreate" >&6
+if test $ac_cv_lib_expat_XML_ParserCreate = yes; then
+  EXPAT_LIB="-lexpat"
+else
+  echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
+echo $ECHO_N "checking for XML_ParserCreate in -lexpat... $ECHO_C" >&6
+if test "${ac_cv_lib_expat_XML_ParserCreate+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lexpat "-L/sw/lib -I/sw/include" $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char XML_ParserCreate ();
+int
+main ()
+{
+XML_ParserCreate ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_expat_XML_ParserCreate=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_expat_XML_ParserCreate=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_expat_XML_ParserCreate" >&5
+echo "${ECHO_T}$ac_cv_lib_expat_XML_ParserCreate" >&6
+if test $ac_cv_lib_expat_XML_ParserCreate = yes; then
+  EXPAT_LIB="-lexpat"
+fi
+
+fi
+
 
 echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
 echo $ECHO_N "checking for XML_ParserCreate in -lexpat... $ECHO_C" >&6
@@ -3036,7 +3292,6 @@ fi
 #                 mingw/Makefile])
           ac_config_files="$ac_config_files Makefile"
 
-# AC_CONFIG_HEADER(config.h)
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -3659,6 +3914,7 @@ s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
 s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
 s,@INSTALL_DATA@,$INSTALL_DATA,;t t
 s,@SET_MAKE@,$SET_MAKE,;t t
+s,@LIBUSBCONFIG@,$LIBUSBCONFIG,;t t
 s,@CPP@,$CPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
