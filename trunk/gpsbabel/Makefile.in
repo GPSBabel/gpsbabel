@@ -129,9 +129,13 @@ dep:
 # Requires CLASSPATH be exported to include full path to saxon.jar.
 # (typically /usr/share/java on a Linux system.)
 readme.html: readme.xml 
-	java  com.icl.saxon.StyleSheet $< \
-	/usr/share/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl \
-	html.stylesheet="http://www.gpsbabel.org/style3.css" > $@ || rm $@
+	xsltproc --stringparam html.stylesheet \
+	  "http://www.gpsbabel.org/style3.css" \
+	  http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
+	  $< > $@ || rm $@
+#	java  com.icl.saxon.StyleSheet $< \
+#	/usr/share/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl \
+#	html.stylesheet="http://www.gpsbabel.org/style3.css" > $@ || rm $@
 	cp readme.html $(WEB)/readme.xhtml
 	tools/mkcapabilities
 
