@@ -132,8 +132,6 @@ time I have seen this is when the recording stops suddenly, where the last
 sentence is truncated - and missing part of the line, including the checksum.
 */
 
-#define SECONDS_PER_DAY (24L*60*60)
- 
 typedef enum {
 	gp_unknown = 0,
 	gpgga,
