@@ -22,7 +22,7 @@
 
 #if __WIN32__
 
-#include <winbase.h>
+#include <windows.h>
 void
 gb_sleep(unsigned long microseconds)
 {
@@ -32,11 +32,20 @@ gb_sleep(unsigned long microseconds)
 #elif defined HAVE_NANOSLEEP
 
 #include <time.h>
+void
 gb_sleep(unsigned long microseconds)
 {
 	struct timespec req;
 	req.tv_sec  = microseconds / 1000000;
 	req.tv_nsec = (microseconds * 1000) % 1000000000;
 	nanosleep(&req, NULL);
+}
+#elif defined HAVE_SLEEP
+/* Amazingly underachieving, but probably "good enough" */
+#include <unistd.h>
+void
+gbsleep(unsigned long microseconds)
+{
+	sleep(microseconds / 1000000);
 }
 #endif
