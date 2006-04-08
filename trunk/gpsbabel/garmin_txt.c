@@ -88,10 +88,6 @@ static int header_ct[unknown_header + 1];
 #define IS_VALID_ALT(a) (((a) != unknown_alt) && ((a) < GARMIN_UNKNOWN_ALT))
 #define DUPSTR(a) (((a) != NULL) && ((a)[0] != 0)) ? xstrdup((a)) : NULL
 
-#define mod(y,x) (y) - (x) * floor((y)/(x))
-#define d2r(a) ((double)((a) * M_PI) / (double)180.0)
-#define r2d(a) ((a) * (double)180 / M_PI)
-
 static char *opt_datum = NULL;
 static char *opt_dist = NULL;
 static char *opt_temp = NULL;
@@ -284,15 +280,17 @@ init_date_and_time_format(void)
 }
 
 static double
-distance(double lat1, double lon1, double lat2, double lon2)	/* nearly MapSource compatible */
+distance(double lat1, double lon1, double lat2, double lon2)
 {
-	return r2d(gcdist(d2r(lat1), d2r(lon1), d2r(lat2), d2r(lon2))) * 111.32 * 1000.0;
+	double res = radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
+	if (res < 0.1) res = 0;	/* calc. diffs on 32- and 64-bit hosts */
+	return res;
 }
 
 static double
 course_deg(double lat1, double lon1, double lat2, double lon2)
 {
-	return r2d(heading(d2r(lat1), d2r(lon1), d2r(lat2), d2r(lon2)));
+	return DEG(heading(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
 }
 
 static double
@@ -536,7 +534,7 @@ print_distance(const double distance, const int no_scale, const int with_tab)
 		if ((dist < 5280) || no_scale)
 			fprintf(fout, "%.f ft", dist);
 		else {
-			dist = (distance / 1609.344);
+			dist = METERS_TO_MILES(distance);
 			if (dist < (double)100)
 				fprintf(fout, "%.1f mi", dist);
 			else
@@ -566,14 +564,14 @@ print_speed(double *distance, time_t *time)
 	char *unit;
 
 	if (!gtxt_flags.metric) {
-		dist = dist / (double)1.609344;
+		dist = METERS_TO_MILES(dist) * 1000.0;
 		unit = "mph";
 	}
 	else unit = "kph";
 	idist = si_round(dist);
 	
 	if ((time != 0) && (idist > 0)) {
-		double speed = dist / (double)*time * (double)3.600;
+		double speed = dist / (double)*time * SECONDS_PER_HOUR / 1000;
 		int ispeed = si_round(speed);
 		
 		if (speed < (double)0.01)
@@ -956,13 +954,13 @@ parse_distance(const char *str, double *value)
 		*value = FEET_TO_METERS(x);
 	}
 	else if (case_ignore_strcmp(buff, "nm") == 0) {		/* mile (nautical / geographical) */
-		*value = x * (double)1852.0;
+		*value = NMILES_TO_METERS(x);
 	}
 	else if (case_ignore_strcmp(buff, "mi") == 0) {		/* mile (statute) */
-		*value = x * (double)1609.344;
+		*value = MILES_TO_METERS(x);
 	}
 	else if (case_ignore_strcmp(buff, "fa") == 0) {		/* fathom */
-		*value = x * (double)1.8288;
+		*value = FATHOMS_TO_METERS(x);
 	}
 	else
 		fatal(MYNAME ": Unknown distance unit \"%s\" at line %d!\n", str, current_line);
@@ -1035,7 +1033,7 @@ parse_temperature(const char *str, double *temperature)
 		unit = toupper(unit);
 		switch(unit) {
 			case 'C': *temperature = value; break;
-			case 'F': *temperature = (value - 32) / 1.8; break;
+			case 'F': *temperature = FAHRENHEIT_TO_CELSIUS(value); break;
 			default:
 				fatal(MYNAME ": Unknown temperature unit \"%c\" at line %d!\n", unit, current_line);
 		}
