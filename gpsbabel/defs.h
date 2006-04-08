@@ -43,6 +43,16 @@
 #define FEET_TO_METERS(feetsies) ((feetsies) * 0.3048)
 #define METERS_TO_FEET(meetsies) ((meetsies) * 3.2808399)
 
+#define NMILES_TO_METERS(a) ((a) * 1852.0)	/* nautical miles */
+#define MILES_TO_METERS(a) ((a) * 1609.344)
+#define METERS_TO_MILES(a) ((a) / 1609.344)
+#define FATHOMS_TO_METERS(a) ((a) * 1.8288)
+
+#define FAHRENHEIT_TO_CELSIUS(a) (((a) - 32) / 1.8)
+
+#define SECONDS_PER_HOUR (60L*60)
+#define SECONDS_PER_DAY (24L*60*60)
+
 /*
  * Snprintf is in SUS (so it's in most UNIX-like substance) and it's in 
  * C99 (albeit with slightly different semantics) but it isn't in C89.   
