@@ -41,7 +41,7 @@ Route Waypoint	003	189 m	188 m	353° true
 Route Waypoint	004	274 m	85 m	126° true
 Route Waypoint	Liebknechtstrasse	274 m	0 m	298° true
 Route Waypoint	005	274 m	0 m	118° true
-Route Waypoint	006	362 m	88 m	126° true
+Route Waypoint	006	361 m	88 m	126° true
 Route Waypoint	007	393 m	32 m	6° true
 Route Waypoint	Jahnstrasse	394 m	1 m	351° true
 
