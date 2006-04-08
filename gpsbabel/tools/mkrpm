@@ -67,7 +67,7 @@ function mkspec()
 	addspec "%files"
 	addspec "%defattr(-,root,root)"
 	addspec "/usr/bin/gpsbabel"
-	addspec "%doc README* COPYING CHANGELOG AUTHORS"
+	addspec "%doc README* COPYING CHANGELOG AUTHORS readme.xml"
 	addspec ""
 	addspec "%changelog"
 }
