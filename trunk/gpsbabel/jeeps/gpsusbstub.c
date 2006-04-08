@@ -21,7 +21,7 @@
 
 
 #include "garminusb.h"
-#include "../config.h"
+#include "config.h"
 #if !HAVE_LIBUSB
 
 const char no_usb[] = "USB suport is not available in this build.\n";
