@@ -6,6 +6,10 @@ AC_INIT(GPSBabel, VERSION, BUG-REPORT-ADDRESS)
 # AC_CONFIG_SRCDIR([nmea.c])
 AC_CONFIG_HEADER([config.h])
 
+dnl Detect the canonical host and target build environment
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
@@ -25,10 +29,18 @@ AC_CHECK_LIB([m], [cos])
 # FIXME: Replace `main' with a function in `-lusb':
 # AC_CHECK_LIB([usb], [usb_open])
 
+ 
+    
 AC_MSG_CHECKING(for libusb)
 if test "$with_libusb" = no ; then
 	AC_MSG_RESULT(check not done)
-	OSJEEPS=jeeps/gpsusbstub.o
+	case "$target" in
+	    *-*-cygwin* | *-*-mingw32*)
+		OSJEEPS=jeeps/gpsusbwin.o
+		USB_LIBS=-lsetupapi;;
+	    *)
+		OSJEEPS=jeeps/gpsusbstub.o
+	esac;
 else
 	AC_CHECK_PROG(LIBUSBCONFIG, libusb-config, true, false)
     	if test "$LIBUSBCONFIG" = false; then
