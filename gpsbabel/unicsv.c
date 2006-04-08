@@ -20,6 +20,7 @@
 
 #include "defs.h"
 #include "csv_util.h"
+#include "jeeps/gpsmath.h"
 
 #define MYNAME "unicsv"
 
