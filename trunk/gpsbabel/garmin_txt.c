@@ -162,7 +162,9 @@ init_date_and_time_format(void)
 	strncpy(buff, origin, sizeof(buff));
 	
 	src = lrtrim(buff);
-	for (c = src; *c; c++) *c = toupper(*c);
+	for (c = src; *c; c++) {
+		*c = toupper(*c);
+	}
 	
 	Y = 0;
 	prev = '\0';
@@ -1053,8 +1055,9 @@ parse_header(void)
 	
 	while ((str = csv_lineparse(NULL, "\t", "", column++))) {
 		header_lines[unknown_header][column] = xstrdup(str);
-		str = header_lines[unknown_header][column];
-		while (*str) *str++ = toupper(*str);
+		for (str = header_lines[unknown_header][column]; *str; str++) {
+			*str = toupper(*str);
+		}
 		header_ct[unknown_header]++;
 		if (header_ct[unknown_header] >= MAX_HEADER_FIELDS) break;
 	}
@@ -1093,8 +1096,9 @@ bind_fields(const header_type ht)
 	fields = xmalloc(i + 2);
 	strcpy(fields, headers[ht]);
 	strcat(fields, "\t");
-	c = fields;
-	while (*c) *c++ = toupper(*c);
+	for (c = fields; *c; c++) {
+		*c = toupper(*c);
+	}
 	c = fields;
 	while ((c = strchr(c, '\t'))) *c++ = '\0';
 	
