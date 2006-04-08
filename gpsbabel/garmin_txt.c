@@ -148,12 +148,10 @@ get_option_val(char *option, char *def)
 static void
 init_date_and_time_format(void)
 {
-	struct tm tm;
 	char *c, *origin, *src, *dest, prev;
 	char buff[64], timef[32], datef[32];
 	static char format[128];
 	int offs, Y, H;
-	time_t time;
 	
 	memset(&datef, 0, sizeof(datef));
 	memset(&timef, 0, sizeof(timef));
@@ -461,7 +459,7 @@ print_position(const waypoint *wpt)
 static void
 print_date_and_time(const time_t time, const int time_only)
 {
-	struct tm tm, tm2;
+	struct tm tm;
 	char tbuf[32];
 	
 	if (time_only) {
@@ -516,7 +514,6 @@ print_course(const waypoint *A, const waypoint *B)		/* seems to be okay */
 {
 	if ((A != NULL) && (B != NULL) && (A != B)) {
 		int course;
-		char buff[32];
 		course = si_round((double)360 - course_deg(A->latitude, A->longitude, B->latitude, B->longitude));
 		if (course >= 360) {
 			course -= 360;
@@ -792,8 +789,6 @@ track_disp_wpt_cb(const waypoint *wpt)
 static void
 garmin_txt_wr_init(const char *fname)
 {
-	char *temp;
-	
 	memset(&gtxt_flags, 0, sizeof(gtxt_flags));
 	
 	fout = xfopen(fname, "wb", MYNAME);
@@ -977,6 +972,7 @@ parse_date_and_time(char *str, time_t *value)
 	struct tm tm;
 	char *cerr, *cin;
 	
+	memset(&tm, 0, sizeof(tm));
 	cin = lrtrim(str);
 	if (*cin == '\0') return 0;
 	
