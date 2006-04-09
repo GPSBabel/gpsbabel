@@ -48,6 +48,7 @@
 #define METERS_TO_MILES(a) ((a) / 1609.344)
 #define FATHOMS_TO_METERS(a) ((a) * 1.8288)
 
+#define CELSIUS_TO_FAHRENHEIT(a) (((a) * 1.8) + 32)
 #define FAHRENHEIT_TO_CELSIUS(a) (((a) - 32) / 1.8)
 
 #define SECONDS_PER_HOUR (60L*60)
