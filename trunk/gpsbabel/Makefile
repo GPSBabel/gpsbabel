@@ -1,8 +1,9 @@
 
+
 VERSU=1_2_8
 VERSD=1.2.8
 # YYYYMMDD, please, if beta.
-RELEASE=-beta20060219
+RELEASE=-beta20060405
 VERSIONU=$(VERSU)$(RELEASE)
 VERSIOND=$(VERSD)$(RELEASE)
 
@@ -13,12 +14,7 @@ VERSIOND=$(VERSD)$(RELEASE)
 # type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
 # INHIBIT_EXPAT and coment out LIBEXPAT on just to get a build working quickly.
 # INHIBIT_EXPAT=-DNO_EXPAT
-LIBEXPAT=-lexpat # -lefence
-
-# USB may required non-standard libraries (like libusb) be installed
-# and may not be available on all OSes.  Uncomment this to remove the key
-# parts of USB from the build.
-LIBUSB=-lusb
+LIBEXPAT= -L/usr/lib -lusb -lexpat  # -lefence
 
 # Space is significant, because MSVC wants no space between switch and arg (-Fofoo.o)
 # but cc/gcc does:
@@ -33,11 +29,12 @@ OUTPUT_SWITCH=-o #
 OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
 DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
-CFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -Icoldsync $(INHIBIT_EXPAT) $(INHIBIT_USB) $(OPTIMIZATION)
+GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I./coldsync \
+	$(INHIBIT_USB) $(OPTIMIZATION) -g -O2
 INSTALL_TARGETDIR=/usr/local/
 
-#OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
-OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
+# OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
+# OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
 
 FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	gtm.o \
@@ -56,12 +53,12 @@ FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
 	nukedata.o interpolate.o
 
-OSJEEPS=jeeps/gpslibusb.o
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
 	jeeps/gpsprot.o jeeps/gpsread.o \
 	jeeps/gpsrqst.o jeeps/gpssend.o jeeps/gpsserial.o jeeps/gpsutil.o \
-	jeeps/gpsusbread.o jeeps/gpsusbsend.o jeeps/gpsusbstub.o $(OSJEEPS)
+	jeeps/gpsusbread.o jeeps/gpsusbsend.o jeeps/gpslibusb.o
+
 # Extra modules in Jeeps that we don't use
 # 	jeeps/gpsfmt.o jeeps/gpsinput.o jeeps/gpsproj.o
 
@@ -78,26 +75,24 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
 OBJS = main.o globals.o $(LIBOBJS)
 
 .c.o:
-	$(CC) -c $(CFLAGS) $< $(OUTPUT_SWITCH)$@
+	gcc  -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
+
+
 
 # Directory of web doc 
 WEB=../babelweb/
 
 
-all: gpsbabel
+all: gpsbabel$(EXEEXT)
 
-#
-# Alternate makefile target for the case when you have no libusb and no 
-# need for Garmin/USB (60, 76C, VistaC, Quest, etc.) support.
-#
-usbfree:
-	make LIBUSB= INHIBIT_USB=-DNO_USB
-
-gpsbabel: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBEXPAT) $(LIBUSB) -lm $(OUTPUT_SWITCH)$@
+gpsbabel$(EXEEXT): $(OBJS)
+	gcc  $(CFLAGS) $(OBJS) -lm  -L/usr/lib -lusb $(LIBEXPAT) $(OUTPUT_SWITCH)$@
 
 globals.o:
-	$(CC) -c $(CFLAGS) -DVERSION=\"$(VERSIOND)\" $< $(OUTPUT_SWITCH)$@
+	gcc  -c $(GBCFLAGS) -DVERSION=\"$(VERSIOND)\" $< $(OUTPUT_SWITCH)$@
+
+jeeps/gpslibusb.o: 
+	gcc  -c $(GBCFLAGS)  jeeps/gpslibusb.c $(OUTPUT_SWITCH)$@
 
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
@@ -135,9 +130,13 @@ dep:
 # Requires CLASSPATH be exported to include full path to saxon.jar.
 # (typically /usr/share/java on a Linux system.)
 readme.html: readme.xml 
-	java  com.icl.saxon.StyleSheet $< \
-	/usr/share/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl \
-	html.stylesheet="http://www.gpsbabel.org/style3.css" > $@ || rm $@
+	xsltproc --stringparam html.stylesheet \
+	  "http://www.gpsbabel.org/style3.css" \
+	  http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
+	  $< > $@ || rm $@
+#	java  com.icl.saxon.StyleSheet $< \
+#	/usr/share/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl \
+#	html.stylesheet="http://www.gpsbabel.org/style3.css" > $@ || rm $@
 	cp readme.html $(WEB)/readme.xhtml
 	tools/mkcapabilities
 
@@ -166,12 +165,6 @@ rpm: clean
 rpmrelease:
 	curl -u anonymous:anonymous --upload-file /usr/src/redhat/SRPMS/gpsbabel-$(VERSIOND).src.rpm  ftp://upload.sf.net/incoming/ 
 	curl -u anonymous:anonymous --upload-file /usr/src/redhat/RPMS/i386/gpsbabel-$(VERSIOND).i386.rpm  ftp://upload.sf.net/incoming/ 
-
-mac-usbfree:
-	make LIBEXPAT=$(OTHER_ROOT)/lib/libexpat.a EXTRA_CFLAGS="-I$(OTHER_ROOT)/include" LIBUSB= INHIBIT_USB=-DNO_USB
-
-mac-build:
-	make LIBEXPAT=$(OTHER_ROOT)/lib/libexpat.a EXTRA_CFLAGS="-I$(OTHER_ROOT)/include" LIBUSB="$(OTHER_ROOT)/lib/libusb.a -lIOKit  -lBSDPClient -framework CoreFoundation"
 
 mac-release:
 	mkdir -p usr/bin usr/share/gpsbabel/doc
@@ -246,7 +239,7 @@ duplicate.o: duplicate.c defs.h queue.h gbtypes.h cet.h cet_util.h \
 easygps.o: easygps.c defs.h queue.h gbtypes.h cet.h cet_util.h
 fatal.o: fatal.c defs.h queue.h gbtypes.h cet.h cet_util.h
 filter_vecs.o: filter_vecs.c defs.h queue.h gbtypes.h cet.h cet_util.h \
-  filterdefs.h inifile.h
+  filterdefs.h
 formspec.o: formspec.c defs.h queue.h gbtypes.h cet.h cet_util.h
 garmin.o: garmin.c defs.h queue.h gbtypes.h cet.h cet_util.h jeeps/gps.h \
   jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h jeeps/gps.h \
@@ -254,10 +247,7 @@ garmin.o: garmin.c defs.h queue.h gbtypes.h cet.h cet_util.h jeeps/gps.h \
   jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
   garmin_tables.h
-garmin_fs.o: garmin_fs.c garmin_fs.h defs.h garmin_tables.h inifile.h
-garmin_tables.o: garmin_tables.c garmin_tables.h defs.h
-garmin_txt.o: garmin_txt.c defs.h strptime.h cet_util.h csv_util.h \
-  garmin_fs.h inifile.h jeeps/gpsmath.h garmin_tables.h grtcirc.h
+garmin_tables.o: garmin_tables.c garmin_tables.h
 gcdb.o: gcdb.c defs.h queue.h gbtypes.h cet.h cet_util.h coldsync/palm.h \
   coldsync/../gbtypes.h coldsync/pdb.h
 gdb.o: gdb.c defs.h queue.h gbtypes.h cet.h cet_util.h garmin_tables.h \
@@ -283,8 +273,7 @@ gpilots.o: gpilots.c defs.h queue.h gbtypes.h cet.h cet_util.h \
 gpspilot.o: gpspilot.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
 gpsutil.o: gpsutil.c defs.h queue.h gbtypes.h cet.h cet_util.h magellan.h
-gpx.o: gpx.c defs.h queue.h gbtypes.h cet.h cet_util.h xmlgeneric.h \
-  garmin_fs.h
+gpx.o: gpx.c defs.h queue.h gbtypes.h cet.h cet_util.h xmlgeneric.h
 grtcirc.o: grtcirc.c defs.h queue.h gbtypes.h cet.h cet_util.h
 gtm.o: gtm.c defs.h queue.h gbtypes.h cet.h cet_util.h jeeps/gpsmath.h \
   jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsserial.h \
@@ -322,7 +311,7 @@ magnav.o: magnav.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
 magproto.o: magproto.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   magellan.h
-main.o: main.c defs.h queue.h gbtypes.h cet.h cet_util.h filterdefs.h inifile.h
+main.o: main.c defs.h queue.h gbtypes.h cet.h cet_util.h filterdefs.h
 mapsend.o: mapsend.c defs.h queue.h gbtypes.h cet.h cet_util.h mapsend.h \
   magellan.h
 mapsource.o: mapsource.c defs.h queue.h gbtypes.h cet.h cet_util.h \
@@ -407,7 +396,7 @@ vcf.o: vcf.c defs.h queue.h gbtypes.h cet.h cet_util.h jeeps/gpsmath.h \
   jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
   jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
-vecs.o: vecs.c defs.h queue.h gbtypes.h cet.h cet_util.h csv_util.h inifile.h
+vecs.o: vecs.c defs.h queue.h gbtypes.h cet.h cet_util.h csv_util.h
 vitosmt.o: vitosmt.c defs.h queue.h gbtypes.h cet.h cet_util.h
 vmem.o: vmem.c defs.h queue.h gbtypes.h cet.h cet_util.h
 waypt.o: waypt.c defs.h queue.h gbtypes.h cet.h cet_util.h

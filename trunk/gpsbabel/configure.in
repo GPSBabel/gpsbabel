@@ -14,53 +14,45 @@ AC_CANONICAL_TARGET
 AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
+AC_EXEEXT
+AC_SUBST(AC_EXEEXT)
 
 # Checks for libraries.
-# FIXME: Replace `main' with a function in `-lBSDPClient':
-# AC_CHECK_LIB([BSDPClient], [main])
-# FIXME: Replace `main' with a function in `-lIOKit':
-# AC_CHECK_LIB([IOKit], [main])
-# FIXME: Replace `main' with a function in `-lexpat':
-# AC_CHECK_LIB([expat], [XML_ParserCreate])
-# FIXME: Replace `main' with a function in `-lm':
 AC_CHECK_LIB([m], [cos])
-# FIXME: Replace `main' with a function in `-lsetupapi':
-# AC_CHECK_LIB([setupapi], [main])
-# FIXME: Replace `main' with a function in `-lusb':
-# AC_CHECK_LIB([usb], [usb_open])
 
  
-    
-AC_MSG_CHECKING(for libusb)
-if test "$with_libusb" = no ; then
-	AC_MSG_RESULT(check not done)
-	case "$target" in
-	    *-*-cygwin* | *-*-mingw32*)
-		OSJEEPS=jeeps/gpsusbwin.o
-		USB_LIBS=-lsetupapi;;
-	    *)
+case "$target" in
+    *-*-cygwin* | *-*-mingw32*)
+	OSJEEPS=jeeps/gpsusbwin.o
+	USB_LIBS=-lsetupapi
+	;;
+    *)
+	AC_MSG_CHECKING(for libusb)
+	if test "$with_libusb" = no ; then
+		AC_MSG_RESULT(check not done)
 		OSJEEPS=jeeps/gpsusbstub.o
-	esac;
-else
-	AC_CHECK_PROG(LIBUSBCONFIG, libusb-config, true, false)
-    	if test "$LIBUSBCONFIG" = false; then
-       	   	AC_MSG_ERROR([libusb-config not found in $PATH])
-    	fi;
-	OLDFLAGS=$LDFLAGS
-	OCFLAGS=$CFLAGS
-	LDFLAGS="$LDFLAGS `libusb-config --libs`"
-	CFLAGS="$OCFLAGS `libusb-config --cflags`"
+	else
+		AC_CHECK_PROG(LIBUSBCONFIG, libusb-config, true, false)
+		if test "$LIBUSBCONFIG" = false; then
+			AC_MSG_ERROR([libusb-config not found in $PATH])
+		fi;
+		OLDFLAGS=$LDFLAGS
+		OCFLAGS=$CFLAGS
+		LDFLAGS="$LDFLAGS `libusb-config --libs`"
+		CFLAGS="$OCFLAGS `libusb-config --cflags`"
 
-	AC_CHECK_LIB([usb], [usb_interrupt_read],
-		AC_DEFINE(HAVE_LIBUSB, 1, [Defined if you have libusb])
-		[USB_CFLAGS="`libusb-config --cflags`"]
-		[USB_LIBS="`libusb-config --libs`"],
-		[AC_MSG_ERROR([libusb >= 0.1.8 is needed])]
-		)
-	OSJEEPS=jeeps/gpslibusb.o
-	CFLAGS="$OCFLAGS"
-#	LIBS="$LIBS `libusb-config --libs`"
-fi
+		AC_CHECK_LIB([usb], [usb_interrupt_read],
+			AC_DEFINE(HAVE_LIBUSB, 1, [Defined if you have libusb])
+			[USB_CFLAGS="`libusb-config --cflags`"]
+			[USB_LIBS="`libusb-config --libs`"],
+			[AC_MSG_ERROR([libusb >= 0.1.8 is needed])]
+			)
+		OSJEEPS=jeeps/gpslibusb.o
+		CFLAGS="$OCFLAGS"
+	#	LIBS="$LIBS `libusb-config --libs`"
+	fi
+    ;;
+esac
 
 AC_SUBST(USB_LIBS)
 AC_SUBST(USB_CFLAGS)
@@ -114,9 +106,7 @@ AC_SUBST(EXPAT_LIB)
 # AC_CHECK_FUNCS([atexit floor localtime_r memmove memset pow select sqrt strchr strcspn strdup strerror strncasecmp strrchr strspn strstr strtol strtoul])
 AC_CHECK_FUNCS([nanosleep sleep])
 
-#AC_CONFIG_FILES([Makefile
-#                 coldsync/Makefile
-#                 doc/Makefile
-#                 mingw/Makefile])
-AC_CONFIG_FILES([Makefile])
+# coldsync, shapelib, and jeeps  are here just so the target directories are
+# created.
+AC_CONFIG_FILES([Makefile shapelib/Makefile coldsync/Makefile jeeps/Makefile])
 AC_OUTPUT

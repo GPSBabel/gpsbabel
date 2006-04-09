@@ -12,10 +12,10 @@
  * native format, convert them to Palm (big-endian) format, and write
  * them to a ubyte string.
  *
- * $Id: util.c,v 1.4 2005-03-18 03:56:35 robertl Exp $
+ * $Id: util.c,v 1.5 2006-04-09 02:11:34 robertl Exp $
  */
 
-#include "config.h"
+#include "cs-config.h"
 #include <stdio.h>
 #include <ctype.h>	/* For isprint() */
 #include <pconn/util.h>

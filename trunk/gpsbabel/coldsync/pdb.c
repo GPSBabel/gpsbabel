@@ -6,7 +6,7 @@
  *	You may distribute this file under the terms of the Artistic
  *	License, as specified in the README file.
  *
- * $Id: pdb.c,v 1.9 2006-02-20 21:59:19 robertl Exp $
+ * $Id: pdb.c,v 1.10 2006-04-09 02:11:34 robertl Exp $
  */
 /* XXX - The way zero-length records are handled is a bit of a kludge. They
  * shouldn't normally exist, with the exception of expunged records. But,
@@ -22,7 +22,7 @@
  * Debugging messages should go to 'FILE *pdb_logfile'.
  */
 
-#include "config.h"
+#include "cs-config.h"
 #include <stdio.h>
 #include <fcntl.h>		/* For open() */
 #include <sys/types.h>

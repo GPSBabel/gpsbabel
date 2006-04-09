@@ -273,7 +273,7 @@ PACKAGE_VERSION='VERSION'
 PACKAGE_STRING='GPSBabel VERSION'
 PACKAGE_BUGREPORT='BUG-REPORT-ADDRESS'
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE LIBUSBCONFIG USB_LIBS USB_CFLAGS OSJEEPS EXPAT_LIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE  LIBUSBCONFIG USB_LIBS USB_CFLAGS OSJEEPS EXPAT_LIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -790,6 +790,11 @@ Fine tuning of the installation directories:
 _ACEOF
 
   cat <<\_ACEOF
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+  --target=TARGET   configure for building compilers for TARGET [HOST]
 _ACEOF
 fi
 
@@ -1259,6 +1264,114 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # AC_CONFIG_SRCDIR([nmea.c])
           ac_config_headers="$ac_config_headers config.h"
 
+
+ac_aux_dir=
+for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
+  if test -f $ac_dir/install-sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install-sh -c"
+    break
+  elif test -f $ac_dir/install.sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install.sh -c"
+    break
+  elif test -f $ac_dir/shtool; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/shtool install -c"
+    break
+  fi
+done
+if test -z "$ac_aux_dir"; then
+  { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&5
+echo "$as_me: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+ac_config_guess="$SHELL $ac_aux_dir/config.guess"
+ac_config_sub="$SHELL $ac_aux_dir/config.sub"
+ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
+
+# Make sure we can run config.sub.
+$ac_config_sub sun4 >/dev/null 2>&1 ||
+  { { echo "$as_me:$LINENO: error: cannot run $ac_config_sub" >&5
+echo "$as_me: error: cannot run $ac_config_sub" >&2;}
+   { (exit 1); exit 1; }; }
+
+echo "$as_me:$LINENO: checking build system type" >&5
+echo $ECHO_N "checking build system type... $ECHO_C" >&6
+if test "${ac_cv_build+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_build_alias=$build_alias
+test -z "$ac_cv_build_alias" &&
+  ac_cv_build_alias=`$ac_config_guess`
+test -z "$ac_cv_build_alias" &&
+  { { echo "$as_me:$LINENO: error: cannot guess build type; you must specify one" >&5
+echo "$as_me: error: cannot guess build type; you must specify one" >&2;}
+   { (exit 1); exit 1; }; }
+ac_cv_build=`$ac_config_sub $ac_cv_build_alias` ||
+  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_build_alias failed" >&5
+echo "$as_me: error: $ac_config_sub $ac_cv_build_alias failed" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+echo "$as_me:$LINENO: result: $ac_cv_build" >&5
+echo "${ECHO_T}$ac_cv_build" >&6
+build=$ac_cv_build
+build_cpu=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+build_vendor=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+build_os=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+
+
+echo "$as_me:$LINENO: checking host system type" >&5
+echo $ECHO_N "checking host system type... $ECHO_C" >&6
+if test "${ac_cv_host+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_host_alias=$host_alias
+test -z "$ac_cv_host_alias" &&
+  ac_cv_host_alias=$ac_cv_build_alias
+ac_cv_host=`$ac_config_sub $ac_cv_host_alias` ||
+  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_host_alias failed" >&5
+echo "$as_me: error: $ac_config_sub $ac_cv_host_alias failed" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+echo "$as_me:$LINENO: result: $ac_cv_host" >&5
+echo "${ECHO_T}$ac_cv_host" >&6
+host=$ac_cv_host
+host_cpu=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+host_vendor=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+host_os=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+
+
+echo "$as_me:$LINENO: checking target system type" >&5
+echo $ECHO_N "checking target system type... $ECHO_C" >&6
+if test "${ac_cv_target+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_target_alias=$target_alias
+test "x$ac_cv_target_alias" = "x" &&
+  ac_cv_target_alias=$ac_cv_host_alias
+ac_cv_target=`$ac_config_sub $ac_cv_target_alias` ||
+  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_target_alias failed" >&5
+echo "$as_me: error: $ac_config_sub $ac_cv_target_alias failed" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+echo "$as_me:$LINENO: result: $ac_cv_target" >&5
+echo "${ECHO_T}$ac_cv_target" >&6
+target=$ac_cv_target
+target_cpu=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+target_vendor=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+target_os=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+
+
+# The aliases save the names the user supplied, while $host etc.
+# will get canonicalized.
+test -n "$target_alias" &&
+  test "$program_prefix$program_suffix$program_transform_name" = \
+    NONENONEs,x,x, &&
+  program_prefix=${target_alias}-
 
 # Checks for programs.
 ac_ext=c
@@ -2191,31 +2304,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-ac_aux_dir=
-for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
-  if test -f $ac_dir/install-sh; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install-sh -c"
-    break
-  elif test -f $ac_dir/install.sh; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install.sh -c"
-    break
-  elif test -f $ac_dir/shtool; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/shtool install -c"
-    break
-  fi
-done
-if test -z "$ac_aux_dir"; then
-  { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&5
-echo "$as_me: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-ac_config_guess="$SHELL $ac_aux_dir/config.guess"
-ac_config_sub="$SHELL $ac_aux_dir/config.sub"
-ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
-
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
 # incompatible versions:
@@ -2325,14 +2413,9 @@ echo "${ECHO_T}no" >&6
 fi
 
 
+
+
 # Checks for libraries.
-# FIXME: Replace `main' with a function in `-lBSDPClient':
-# AC_CHECK_LIB([BSDPClient], [main])
-# FIXME: Replace `main' with a function in `-lIOKit':
-# AC_CHECK_LIB([IOKit], [main])
-# FIXME: Replace `main' with a function in `-lexpat':
-# AC_CHECK_LIB([expat], [XML_ParserCreate])
-# FIXME: Replace `main' with a function in `-lm':
 
 
 echo "$as_me:$LINENO: checking for cos in -lm" >&5
@@ -2408,19 +2491,22 @@ _ACEOF
 
 fi
 
-# FIXME: Replace `main' with a function in `-lsetupapi':
-# AC_CHECK_LIB([setupapi], [main])
-# FIXME: Replace `main' with a function in `-lusb':
-# AC_CHECK_LIB([usb], [usb_open])
 
-echo "$as_me:$LINENO: checking for libusb" >&5
+
+case "$target" in
+    *-*-cygwin* | *-*-mingw32*)
+	OSJEEPS=jeeps/gpsusbwin.o
+	USB_LIBS=-lsetupapi
+	;;
+    *)
+	echo "$as_me:$LINENO: checking for libusb" >&5
 echo $ECHO_N "checking for libusb... $ECHO_C" >&6
-if test "$with_libusb" = no ; then
-	echo "$as_me:$LINENO: result: check not done" >&5
+	if test "$with_libusb" = no ; then
+		echo "$as_me:$LINENO: result: check not done" >&5
 echo "${ECHO_T}check not done" >&6
-	OSJEEPS=jeeps/gpsusbstub.o
-else
-	# Extract the first word of "libusb-config", so it can be a program name with args.
+		OSJEEPS=jeeps/gpsusbstub.o
+	else
+		# Extract the first word of "libusb-config", so it can be a program name with args.
 set dummy libusb-config; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
@@ -2456,17 +2542,17 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
-    	if test "$LIBUSBCONFIG" = false; then
-       	   	{ { echo "$as_me:$LINENO: error: libusb-config not found in $PATH" >&5
+		if test "$LIBUSBCONFIG" = false; then
+			{ { echo "$as_me:$LINENO: error: libusb-config not found in $PATH" >&5
 echo "$as_me: error: libusb-config not found in $PATH" >&2;}
    { (exit 1); exit 1; }; }
-    	fi;
-	OLDFLAGS=$LDFLAGS
-	OCFLAGS=$CFLAGS
-	LDFLAGS="$LDFLAGS `libusb-config --libs`"
-	CFLAGS="$OCFLAGS `libusb-config --cflags`"
+		fi;
+		OLDFLAGS=$LDFLAGS
+		OCFLAGS=$CFLAGS
+		LDFLAGS="$LDFLAGS `libusb-config --libs`"
+		CFLAGS="$OCFLAGS `libusb-config --cflags`"
 
-	echo "$as_me:$LINENO: checking for usb_interrupt_read in -lusb" >&5
+		echo "$as_me:$LINENO: checking for usb_interrupt_read in -lusb" >&5
 echo $ECHO_N "checking for usb_interrupt_read in -lusb... $ECHO_C" >&6
 if test "${ac_cv_lib_usb_usb_interrupt_read+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -2536,8 +2622,8 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBUSB 1
 _ACEOF
 
-		USB_CFLAGS="`libusb-config --cflags`"
-		USB_LIBS="`libusb-config --libs`"
+			USB_CFLAGS="`libusb-config --cflags`"
+			USB_LIBS="`libusb-config --libs`"
 else
   { { echo "$as_me:$LINENO: error: libusb >= 0.1.8 is needed" >&5
 echo "$as_me: error: libusb >= 0.1.8 is needed" >&2;}
@@ -2545,10 +2631,12 @@ echo "$as_me: error: libusb >= 0.1.8 is needed" >&2;}
 
 fi
 
-	OSJEEPS=jeeps/gpslibusb.o
-	CFLAGS="$OCFLAGS"
-#	LIBS="$LIBS `libusb-config --libs`"
-fi
+		OSJEEPS=jeeps/gpslibusb.o
+		CFLAGS="$OCFLAGS"
+	#	LIBS="$LIBS `libusb-config --libs`"
+	fi
+    ;;
+esac
 
 
 
@@ -2778,11 +2866,9 @@ fi
 done
 
 
-#AC_CONFIG_FILES([Makefile
-#                 coldsync/Makefile
-#                 doc/Makefile
-#                 mingw/Makefile])
-          ac_config_files="$ac_config_files Makefile"
+# coldsync, shapelib, and jeeps  are here just so the target directories are
+# created.
+                                        ac_config_files="$ac_config_files Makefile shapelib/Makefile coldsync/Makefile jeeps/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3310,6 +3396,9 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+  "shapelib/Makefile" ) CONFIG_FILES="$CONFIG_FILES shapelib/Makefile" ;;
+  "coldsync/Makefile" ) CONFIG_FILES="$CONFIG_FILES coldsync/Makefile" ;;
+  "jeeps/Makefile" ) CONFIG_FILES="$CONFIG_FILES jeeps/Makefile" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -3395,6 +3484,18 @@ s,@ECHO_C@,$ECHO_C,;t t
 s,@ECHO_N@,$ECHO_N,;t t
 s,@ECHO_T@,$ECHO_T,;t t
 s,@LIBS@,$LIBS,;t t
+s,@build@,$build,;t t
+s,@build_cpu@,$build_cpu,;t t
+s,@build_vendor@,$build_vendor,;t t
+s,@build_os@,$build_os,;t t
+s,@host@,$host,;t t
+s,@host_cpu@,$host_cpu,;t t
+s,@host_vendor@,$host_vendor,;t t
+s,@host_os@,$host_os,;t t
+s,@target@,$target,;t t
+s,@target_cpu@,$target_cpu,;t t
+s,@target_vendor@,$target_vendor,;t t
+s,@target_os@,$target_os,;t t
 s,@CC@,$CC,;t t
 s,@CFLAGS@,$CFLAGS,;t t
 s,@LDFLAGS@,$LDFLAGS,;t t
