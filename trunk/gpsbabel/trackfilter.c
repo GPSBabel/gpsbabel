@@ -147,19 +147,20 @@ trackfilter_parse_time_opt(const char *arg)
 	    }
 	    switch(tolower(c))
 	    {
-		case 'd': seconds = (24 * 60 * 60); break;
-		case 'h': seconds = (60 * 60); break;
+		case 'd': seconds = SECONDS_PER_DAY; break;
+		case 'h': seconds = SECONDS_PER_HOUR; break;
 		case 'm': seconds = 60; break;
 		case 's': seconds = 1; break;
 		case '+': sign = +1; continue;
 		case '-': sign = -1; continue;
 		default: fatal(MYNAME "-time: invalid character in time option!\n");
 	    }
-	    t0 += (t1 * seconds);
+	    t0 += (t1 * seconds * sign);
+	    sign = +1;
 	    t1 = 0;
 	}
 	t0 += t1;
-	return t0 * sign;
+	return t0;
 }
 
 static int
