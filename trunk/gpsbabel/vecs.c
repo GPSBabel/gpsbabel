@@ -463,7 +463,7 @@ vecs_t vec_list[] = {
 	{
 		&stmwpp_vecs,
 		"stmwpp",
-		"Suunto Track Manager (STM) WaypointPlus files",
+		"Suunto Trek Manager (STM) WaypointPlus files",
 		"txt"
 	},
 	{

@@ -1,6 +1,6 @@
  /*
 
-    Support for "Suunto Track Manager" (STM) WaypointPlus files,
+    Support for "Suunto Trek Manager" (STM) WaypointPlus files,
     see homepage "http://www.suunto.fi" for more details,
 
     Copyright (C) 2005 Olaf Klein, o.b.klein@t-online.de
