@@ -44,7 +44,7 @@ gb_sleep(unsigned long microseconds)
 /* Amazingly underachieving, but probably "good enough" */
 #include <unistd.h>
 void
-gbsleep(unsigned long microseconds)
+gb_sleep(unsigned long microseconds)
 {
 	sleep(microseconds / 1000000);
 }
