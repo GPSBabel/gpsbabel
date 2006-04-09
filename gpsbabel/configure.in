@@ -23,8 +23,13 @@ AC_CHECK_LIB([m], [cos])
  
 case "$target" in
     *-*-cygwin* | *-*-mingw32*)
-	OSJEEPS=jeeps/gpsusbwin.o
-	USB_LIBS=-lsetupapi
+	if test "$with_libusb" = no ; then
+		AC_MSG_RESULT(USB skipped)
+		OSJEEPS=jeeps/gpsusbstub.o
+	else
+		OSJEEPS=jeeps/gpsusbwin.o
+		USB_LIBS=-lsetupapi
+	fi
 	;;
     *)
 	AC_MSG_CHECKING(for libusb)

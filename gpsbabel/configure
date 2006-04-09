@@ -2495,8 +2495,14 @@ fi
 
 case "$target" in
     *-*-cygwin* | *-*-mingw32*)
-	OSJEEPS=jeeps/gpsusbwin.o
-	USB_LIBS=-lsetupapi
+	if test "$with_libusb" = no ; then
+		echo "$as_me:$LINENO: result: USB skipped" >&5
+echo "${ECHO_T}USB skipped" >&6
+		OSJEEPS=jeeps/gpsusbstub.o
+	else
+		OSJEEPS=jeeps/gpsusbwin.o
+		USB_LIBS=-lsetupapi
+	fi
 	;;
     *)
 	echo "$as_me:$LINENO: checking for libusb" >&5
