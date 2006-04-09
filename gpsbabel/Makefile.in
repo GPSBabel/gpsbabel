@@ -29,7 +29,7 @@ OUTPUT_SWITCH=-o #
 OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
 DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
-GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I@srcdir@/coldsync \
+GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I. -I@srcdir@/coldsync \
 	$(INHIBIT_USB) $(OPTIMIZATION) @CFLAGS@
 INSTALL_TARGETDIR=/usr/local/
 
@@ -75,7 +75,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
 OBJS = main.o globals.o $(LIBOBJS)
 
 .c.o:
-	@CC@  -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
+	@CC@  @CPPFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
 
 
 
@@ -83,16 +83,16 @@ OBJS = main.o globals.o $(LIBOBJS)
 WEB=../babelweb/
 
 
-all: gpsbabel
+all: gpsbabel@EXEEXT@
 
-gpsbabel: $(OBJS)
+gpsbabel@EXEEXT@: $(OBJS)
 	@CC@  $(CFLAGS) $(OBJS) @LIBS@ @USB_LIBS@ $(LIBEXPAT) $(OUTPUT_SWITCH)$@
 
 globals.o:
-	@CC@  -c $(GBCFLAGS) -DVERSION=\"$(VERSIOND)\" $< $(OUTPUT_SWITCH)$@
+	@CC@  @CPPFLAGS@ -c $(GBCFLAGS) -DVERSION=\"$(VERSIOND)\" $< $(OUTPUT_SWITCH)$@
 
 jeeps/gpslibusb.o: 
-	@CC@  -c $(GBCFLAGS) @USB_CFLAGS@ jeeps/gpslibusb.c $(OUTPUT_SWITCH)$@
+	@CC@  @CPPFLAGS@ -c $(GBCFLAGS) @USB_CFLAGS@ @srcdir@/jeeps/gpslibusb.c $(OUTPUT_SWITCH)$@
 
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
@@ -123,20 +123,11 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-# Doc targets have large external requirements.
-# Requires saxon6, not saxon8.  Saxon requires Java.
-# Requires hardcoded pathnames to installed docbook both in the 
-# source file and on this command like.  (Ick.)
-# Requires CLASSPATH be exported to include full path to saxon.jar.
-# (typically /usr/share/java on a Linux system.)
 readme.html: readme.xml 
 	xsltproc --stringparam html.stylesheet \
 	  "http://www.gpsbabel.org/style3.css" \
 	  http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
 	  $< > $@ || rm $@
-#	java  com.icl.saxon.StyleSheet $< \
-#	/usr/share/sgml/docbook/xsl-stylesheets/xhtml/docbook.xsl \
-#	html.stylesheet="http://www.gpsbabel.org/style3.css" > $@ || rm $@
 	cp readme.html $(WEB)/readme.xhtml
 	tools/mkcapabilities
 
@@ -407,9 +398,9 @@ xmlgeneric.o: xmlgeneric.c defs.h queue.h gbtypes.h cet.h cet_util.h \
   xmlgeneric.h
 xmltag.o: xmltag.c defs.h queue.h gbtypes.h cet.h cet_util.h
 yahoo.o: yahoo.c defs.h queue.h gbtypes.h cet.h cet_util.h xmlgeneric.h
-coldsync/pdb.o: coldsync/pdb.c coldsync/config.h coldsync/palm.h \
+coldsync/pdb.o: coldsync/pdb.c coldsync/cs-config.h coldsync/palm.h \
   coldsync/../gbtypes.h coldsync/pdb.h
-coldsync/util.o: coldsync/util.c coldsync/config.h coldsync/pconn/util.h \
+coldsync/util.o: coldsync/util.c coldsync/cs-config.h coldsync/pconn/util.h \
   coldsync/palm.h coldsync/../gbtypes.h
 jeeps/gpsapp.o: jeeps/gpsapp.c jeeps/gps.h jeeps/../defs.h \
   jeeps/../queue.h jeeps/../gbtypes.h jeeps/../cet.h jeeps/../cet_util.h \

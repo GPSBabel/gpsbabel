@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <ctype.h>
-#include "../config.h"
+#include "config.h"
 #if HAVE_LIBUSB
 #include <usb.h>
 #include "gps.h"
