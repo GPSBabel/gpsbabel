@@ -1394,7 +1394,7 @@ REM
 CALL :COMPARE %TMPDIR%\ignrando-sample.gpx reference\track\ignrando-sample.gpx
 
 REM 
-REM STMwpp "Suunto Track Manager" WaypointPlus format tests
+REM STMwpp "Suunto Trek Manager" WaypointPlus format tests
 REM 
 DEL %TMPDIR%\stmwpp-*
 @echo on

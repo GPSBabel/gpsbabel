@@ -895,7 +895,7 @@ ${PNAME} -i ignrando -f ${TMPDIR}/ignrando-sample.rdn -o gpx -F ${TMPDIR}/ignran
 compare ${TMPDIR}/ignrando-sample.gpx reference/track/ignrando-sample.gpx
 
 #
-# STMwpp "Suunto Track Manager" WaypointPlus format tests
+# STMwpp "Suunto Trek Manager" WaypointPlus format tests
 #
 rm -f ${TMPDIR}/stmwpp-*
 ${PNAME} -i stmwpp -f reference/track/stmwpp-track.txt -o gpx -F ${TMPDIR}/stmwpp-track.gpx

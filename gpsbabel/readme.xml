@@ -1463,10 +1463,10 @@ information with the route.
     </section>
     <section id="stmwpp">
       <sectioninfo>
-	<subtitle>Suunto Track Manager WaypointPlus format.</subtitle>
+	<subtitle>Suunto Trek Manager WaypointPlus format.</subtitle>
       </sectioninfo>
       <title>STMwpp</title>
-      <para>Support for Suunto Track Manager (STM) WaypointPlus
+      <para>Support for Suunto Trek Manager (STM) WaypointPlus
 format..  Simple structure with coordinates and timestamp. Route
 points (waypoints) have additionaly shortname.  The files can only
 contain one route or one track.  <ulink
