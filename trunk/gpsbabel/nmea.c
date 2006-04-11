@@ -746,6 +746,10 @@ nmea_wayptpr(const waypoint *wpt)
 	);
 	cksum = nmea_cksum(obuf);
 	fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+	if (sleepus >= 0) {
+		fflush(file_out);
+		gb_sleep(sleepus);
+	}
 	
 	xfree(s);
 	
