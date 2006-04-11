@@ -74,6 +74,25 @@ format_skeleton_read(void)
 {
 //	your special code to extract waypoint, route and track
 //	information from file "fin"
+// For waypoints:
+//         while (have waypoints) {
+//                 waypoint = waypt_new()
+//                 populate waypoint
+//                 waypt_add(waypoint);
+//         }
+// 
+// For routes:
+// 
+//          route = route_head_alloc();
+//          populate struct route_hdr
+//         while (have more routepoints) {
+//                 waypoint = waypt_new()
+//                 populate waypoint
+//                 route_add_head(route, waypoint)
+//         }
+// 
+// Tracks are just like routes, except the word "track" replaces "routes".
+//
 }
 
 static void
