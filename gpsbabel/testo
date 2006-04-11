@@ -1014,4 +1014,13 @@ ${PNAME} -i garmin_txt -f ${TMPDIR}/garmin_txt-2.txt -o garmin_txt,prec=9 -F ${T
 # 
 ## compare ${TMPDIR}/garmin_txt-2.txt ${TMPDIR}/garmin_txt-3.txt
 
+#
+# hiketech tests
+#
+rm -f ${TMPDIR}/hiketech*
+${PNAME} -i gpx -f reference/expertgps.gpx -o hiketech -F ${TMPDIR}/hiketech.out
+compare ${TMPDIR}/hiketech.out reference/hiketech.ref
+${PNAME} -i hiketech -f reference/hiketech.ref -o gpx -F ${TMPDIR}/hiketech.gpx
+compare ${TMPDIR}/hiketech.gpx reference/hiketech.gpx
+
 exit 0
