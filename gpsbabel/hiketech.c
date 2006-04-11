@@ -88,6 +88,7 @@ hiketech_read(void)
 static void
 hiketech_rd_deinit(void)
 {
+	xml_deinit();
 }
 
 static void
