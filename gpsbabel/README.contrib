@@ -9,6 +9,9 @@ libraries vastly simplifies the XML parsers while increasing their
 robustness plus those libraries are ubiquitous.  So I consider it OK to
 require expat.
 
+You may find format_skeleton.c and filter_skeleton.c in the source tree
+to be helpful examples. Just add meat!
+
 If you are creating a new target you should submit patches (use 
 "cvs diff -uN" to create patches) to the following files:
 * Yourcode.c and/or Yourcode.h - this is the code required to do your
