@@ -769,6 +769,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 	time_t ymd;
 
 	if ( opt_sleep ) {
+	    fflush( file_out );
 	    if ( last_time > 0 ) {
 		if ( sleepus >= 0 ) {
 		    gb_sleep( sleepus );
