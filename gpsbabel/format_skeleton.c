@@ -83,12 +83,13 @@ format_skeleton_read(void)
 // 
 // For routes:
 // 
-//          route = route_head_alloc();
-//          populate struct route_hdr
+//         route = route_head_alloc();
+//         populate struct route_hdr
+//	   route_add_head(route);      
 //         while (have more routepoints) {
 //                 waypoint = waypt_new()
 //                 populate waypoint
-//                 route_add_head(route, waypoint)
+//                 route_add_wpt(route, waypoint)
 //         }
 // 
 // Tracks are just like routes, except the word "track" replaces "routes".
