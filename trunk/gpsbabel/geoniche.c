@@ -2,6 +2,7 @@
     Read and write GeoNiche files.
 
     Copyright (C) 2003 Rick Richardson <rickr@mn.rr.com>
+    Copyright (C) 2006 Robert Lipe <robertlipe@usa.net>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -580,11 +581,55 @@ wpt2icon(const waypoint *wpt)
     else if (strstr(desc, "hyb")) return 47;
     else if (strstr(desc, "unk")) return 48;
     else if (strstr(desc, "cam")) return 49;
-    else return 0;
+
+    switch (wpt->gc_data.type) {
+	case gt_traditional: return 43;
+	case gt_multi: return 44;
+	case gt_locationless: return 45;
+	case gt_earth: return 45;
+	case gt_virtual: return 45;
+	case gt_letterbox: return 46;
+	case gt_event: return 47;
+	case gt_cito: return 47;
+	case gt_suprise: return 48;
+	case gt_webcam: return 49;
+    }
+
+    return 0;
+}
+
+static char *
+geoniche_geostuff(const waypoint *wpt)
+{
+	char *gs = NULL, *tmp1, *tmp2;
+	char tbuf[10240];
+
+	if (!wpt->gc_data.terr) {
+		return NULL;
+	}
+
+	snprintf(tbuf, sizeof(tbuf), "\n%s by %s\n", gs_get_cachetype(wpt->gc_data.type), wpt->gc_data.placer);
+	gs = xstrappend(gs, tbuf);
+
+	snprintf(tbuf, sizeof(tbuf), "Waypoint: %s %s\n", wpt->shortname, wpt->description);	
+	gs = xstrappend(gs, tbuf);
+
+	snprintf(tbuf, sizeof(tbuf), "Difficulty %3.1f, Terrain: %3.1f\n", wpt->gc_data.diff/10.0, wpt->gc_data.terr/10.0);
+	gs = xstrappend(gs, tbuf);
+
+	tmp1 = strip_html(&wpt->gc_data.desc_short);
+	tmp2 = strip_html(&wpt->gc_data.desc_long);
+	gs = xstrappend(gs, tmp1);
+	gs = xstrappend(gs, tmp2);
+
+	xfree(tmp1);
+	xfree(tmp2);
+
+	return enscape(gs);
 }
 
 static void
-copilot_writewpt(const waypoint *wpt)
+geoniche_writewpt(const waypoint *wpt)
 {
     static int		ct = 0;
     struct pdb_record	*opdb_rec;
@@ -633,6 +678,8 @@ copilot_writewpt(const waypoint *wpt)
 	notes = xstrdup(title);
     else
 	notes = enscape(wpt->notes);
+
+    notes = xstrappend(notes, geoniche_geostuff(wpt));
 
     vdata = (ubyte *) xmalloc(vsize);
     if (vdata == NULL)
@@ -708,7 +755,7 @@ data_write(void)
     PdbOut->version = 0;
     PdbOut->modnum = 1;
 
-    waypt_disp_all(copilot_writewpt);
+    waypt_disp_all(geoniche_writewpt);
     
     pdb_Write(PdbOut, fileno(FileOut));
 

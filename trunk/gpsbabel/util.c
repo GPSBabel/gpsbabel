@@ -223,6 +223,9 @@ xstrappend(char *src, const char *newd)
 	if (!src) {
 		return xxstrdup(newd, file, line);
 	}
+	if (!newd) {
+		return xxstrdup(src, file, line);
+	}
 
 	newsz = strlen(src) + strlen(newd) + 1;
 	src = xxrealloc(src, newsz, file, line);
