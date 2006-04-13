@@ -44,12 +44,15 @@ procedure RestoreProperties(Instance: TObject; Backup: TStringList);
 
 procedure FixStaticText(AComponent: TComponent);
 
-procedure WinOpenFile(const Name: string);
+function WinOpenFile(const AFile, AParams: string): Boolean;
+procedure WinOpenURL(const AURL: string);
 
 procedure UniWrite(Target: TStream; const Str: WideString);
 procedure UniWriteLn(Target: TStream; const Str: WideString);
 
 procedure MakeFirstTranslation(AComponent: TComponent);
+
+function readme_html_path: string;
 
 implementation
 
@@ -88,6 +91,7 @@ var
   Error: DWORD;
   Wait_Result: DWORD;
   s: string;
+  i: Integer;
 
 begin
   Result := False;
@@ -146,7 +150,9 @@ begin
         if (BytesRead > 0) then Application.ProcessMessages;
         while (BytesRead > 0) do
         begin
-          ReadFile(hRead, buffer^, BUFFER_SIZE - 1, BytesDone, nil);
+          BytesDone := BytesRead;
+          if (BytesDone > (BUFFER_SIZE - 1)) then BytesDone := BUFFER_SIZE - 1;
+          ReadFile(hRead, buffer^, BytesDone, BytesDone, nil);
           if (BytesDone > 0) then
           begin
             buffer[BytesDone] := #0;
@@ -165,6 +171,12 @@ begin
       raise eGPSBabelError.CreateFmt(_('"gpsbabel.exe" returned error 0x%x (%d)'), [Error, Error]);
 
     Output.Clear;
+    while True do
+    begin
+      i := Pos(#13#13, s);
+      if (i <> 0) then System.Delete(s, i, 1)
+      else break;
+    end;
     Output.SetText(PChar(s));
 
     Result := True;
@@ -266,9 +278,79 @@ begin
   end;
 end;
 
-procedure WinOpenFile(const Name: string);
+function WinOpenFile(const AFile, AParams: string): Boolean;
+var
+  p: PChar;
 begin
-  ShellExecute(0, 'open', PChar(Name), nil, '', 0);
+  if (AParams = '') then
+    p := nil else
+    p := PChar(AParams);
+  Result := (ShellExecute(0, 'open', PChar(AFile), p, nil, SW_SHOW) > 32);
+end;
+
+procedure WinOpenURL(const AURL: string);
+var
+  i: Integer;
+  reg: TRegistry;
+  cmd: string;
+  prg: string;
+  url: string;
+begin
+  url := AURL;
+  reg := TRegistry.Create;
+  try
+    reg.RootKey := HKEY_LOCAL_MACHINE;
+    if reg.OpenKeyReadOnly('Software\Classes\HTTP\Shell\Open\Command') then
+    begin
+      prg := reg.ReadString('');
+      if (prg <> '') then
+      begin
+        i := Pos('%1', prg);
+        if (i <> 0) then
+        begin
+          System.Delete(prg, i, 2);
+          System.Insert(url, prg, i);
+          url := '';
+        end;
+
+        if (prg[1] = '"') then
+        begin
+          i := Pos('"', Copy(prg, 2, Length(prg)));
+          if (i = 0) then Exit;
+          cmd := Copy(prg, 2, i - 1);
+          Delete(prg, 1, i + 1);
+          prg := Trim(prg);
+          if (url <> '') then
+          begin
+            if (prg = '') then
+              prg := URL else
+              prg := prg + ' ' + URL;
+          end;
+          if WinOpenFile(cmd, PChar(prg)) then Exit
+        end
+          else
+        if (Pos(' ', prg) <> 0) then
+        begin
+          i := Pos(' ', prg);
+          cmd := Trim(Copy(prg, 1, i - 1));
+          prg := Trim(Copy(prg, i + 1, Length(prg)));
+          if (url <> '') then
+          begin
+            if (prg = '') then
+              prg := URL
+            else
+              prg := Trim(prg) + ' ' + URL;
+          end;
+          if WinOpenFile(cmd, PChar(prg)) then Exit;
+        end
+        else
+          if WinOpenFile(prg, PChar(URL)) then Exit;
+      end;
+    end;
+  finally
+    reg.Free;
+  end;
+  WinOpenFile(AURL, '');
 end;
 
 procedure UniWrite(Target: TStream; const Str: WideString);
@@ -303,6 +385,19 @@ begin
     ReTranslateComponent(AComponent);
   end;
 // !!! TRICK !!!
+end;
+
+function readme_html_path: string;
+begin
+  Result := ExtractFilePath(ParamStr(0)) + 'readme.html';
+  if FileExists(Result) then
+  begin
+    while (Pos('\', Result) <> 0) do
+      Result[Pos('\', Result)] := '/';
+    Result := 'file:///' + Result;
+  end
+  else
+    Result := SGPSBabelURL + '/readme.html';
 end;
 
 var
