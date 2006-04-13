@@ -21,12 +21,15 @@ unit common;
 interface
 
 uses
-  Windows, SysUtils, Classes, Messages, Controls, StdCtrls;
+  Windows, SysUtils, Classes, Messages, Controls, StdCtrls, Inifiles;
 
 const
   OTypes: array[0..6] of PChar =
     ('unknown', 'integer', 'float', 'string', 'boolean', 'file', 'outfile');
-    
+
+  gpsbabel_knows_inifile: Boolean = False;
+  gpsbabel_ini: TInifile = nil;
+  
 resourcestring
   SGPSBabelURL = 'http://www.gpsbabel.org';
   SGPSBabelTitle = 'GPSBabelGUI-2';
@@ -394,6 +397,12 @@ begin
          
          i := SELF.Add(name);
          SELF.PutObject(i, Pointer(info));
+
+         if (name = 'garmin_txt') then
+         begin
+           gpsbabel_knows_inifile := True;
+           // add -p "" to command-line
+         end;
          break;
        end;
     end;

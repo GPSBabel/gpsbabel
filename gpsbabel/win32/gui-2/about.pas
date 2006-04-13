@@ -113,7 +113,7 @@ end;
 procedure TfrmAbout.lbURLClick(Sender: TObject);
 begin
   TLabel(Sender).Font.Color := clBlue;
-  WinOpenFile('http://' + TLabel(Sender).Caption);
+  WinOpenFile('http://' + TLabel(Sender).Caption, '');
 end;
 
 procedure TfrmAbout.FormKeyDown(Sender: TObject; var Key: Word;

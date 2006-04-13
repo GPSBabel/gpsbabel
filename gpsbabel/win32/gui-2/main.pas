@@ -23,7 +23,7 @@ interface
 uses
   gnugettext, TypInfo, delphi, 
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, Buttons, ExtCtrls,
+  StdCtrls, Buttons, ExtCtrls, 
   common, utils, ImgList, ActnList, Menus, ComCtrls, ToolWin;
 
 type
@@ -337,6 +337,7 @@ begin
     else if (gpsbabel_vfmt >= '001.002.005') then
       gpsbabel('-^2', l)
     else begin
+      MessageBox(0, PChar(gpsbabel_vfmt), 'Release info', MB_OK);
       MessageDlg(_('The file "gpsbabel.exe" found in current directory is too old!'),
         mtError, [mbOK], 0);
       Halt(1);
@@ -362,14 +363,17 @@ begin
 end;
 
 procedure TfrmMain.WMSTARTUP(var Msg: TMessage);
+var
+  s: string;
 begin
+//  gpsbabel_ini := TIniFile.Create('gpsbabel.ini');
   LoadVersion;
   EnableOptions(gpsbabel_vfmt);
   LoadFileFormats;
 
   // ? valid README form
-
-  acHelpReadme.Enabled := (frmReadme.Memo.Lines.Count > 0);
+  s := ExtractFilePath(ParamStr(0)) + 'readme.html';
+  acHelpReadme.Enabled := FileExists(s) or (frmReadme.Memo.Lines.Count > 0);
 end;
 
 procedure TfrmMain.InitCombo(Target: TComboBox; IsInput, ForDevice: Boolean);
@@ -566,6 +570,7 @@ begin
     acFinalizeDropDownsExecute(nil);
 
     cmdline := '';
+    if gpsbabel_knows_inifile then cmdline := '-p ""';
 
     if chbInputDevice.Checked then
       IFormat := FCaps.GetName(cbInputFormatDevice.Text)
@@ -766,7 +771,7 @@ begin
   
   l := TStringList.Create;
   try
-    if not gpsbabel('-V', l) then Exit;
+    if not gpsbabel('-p "" -V', l) then Exit;
 
     for i := 0 to l.Count - 1 do
     begin
@@ -899,10 +904,17 @@ begin
 end;
 
 procedure TfrmMain.acHelpReadmeExecute(Sender: TObject);
+var
+  s: string;
 begin
-  if (frmReadme = nil) then
-    Application.CreateForm(TfrmReadme, frmReadme);
-  frmReadme.ShowModal;
+  s := ExtractFilePath(ParamStr(0)) + 'readme.html';
+  if FileExists(s) then
+    WinOpenFile(s, '')   // new readme.html
+  else begin // show the old readme
+    if (frmReadme = nil) then
+      Application.CreateForm(TfrmReadme, frmReadme);
+    frmReadme.ShowModal;
+  end;
 end;
 
 procedure TfrmMain.mnuSynthesizeShortNamesClick(Sender: TObject);
@@ -1152,6 +1164,7 @@ begin
         WriteLn('msgstr ""');
         WriteLn('');
       end;
+      MessageDlg('..\gpsbabel.po created!', mtInformation, [mbok], 0);
     finally
       f.Free;
     end;
