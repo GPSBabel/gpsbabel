@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define Version "1.2.8"
-#define Release "-beta12012005"
+#define Release "-beta20060405"
 
 [Setup]
 AppName=GPSBabel
@@ -42,8 +42,10 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 Source: GPSBabelGUI.exe; DestDir: {app}; Flags: replacesameversion
 Source: README.gui; DestDir: {app}
 Source: ..\..\mingw\libexpat.dll; DestDir: {app}
-Source: ..\..\mingw\gpsbabel.exe; DestDir: {app}; Flags: comparetimestamp ignoreversion; Languages: 
-Source: ..\..\README; DestDir: {app}
+; Source: ..\..\mingw\sqlite3.dll; DestDir: {app}
+Source: ..\..\gpsbabel.exe; DestDir: {app}; Flags: comparetimestamp ignoreversion; Languages: 
+Source: ..\..\README.xml; DestDir: {app}
+Source: ..\..\README.html; DestDir: {app}
 Source: ..\..\COPYING; DestDir: {app}
 Source: ..\..\README.contrib; DestDir: {app}
 Source: ..\..\README.igc; DestDir: {app}
