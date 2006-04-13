@@ -23,7 +23,7 @@ U=0
 V=0
 W=0
 X=1
-Y=0
+Y=2
 Z=1
 ShowHints=0
 ShowWarnings=0
@@ -56,8 +56,8 @@ IncludeVerInfo=1
 AutoIncBuild=0
 MajorVer=0
 MinorVer=2
-Release=2
-Build=21
+Release=3
+Build=1
 Debug=0
 PreRelease=1
 Special=0
@@ -68,11 +68,17 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=GPSBabel Makers
 FileDescription=GPSBabel Windows Frontend
-FileVersion=0.2.2.21
+FileVersion=0.2.3.1
 InternalName=GPSBabelGUI-2
 LegalCopyright=(C) 2005 Olaf Klein (O.B.Klein@T-Online.de)
 LegalTrademarks=
 OriginalFilename=GPSBabelGUI.exe
 ProductName=GPSBabel
-ProductVersion=1.2.8-beta11102005
+ProductVersion=1.2.8-beta01182006
 Comments=internal test build
+[HistoryLists\hlConditionals]
+Count=1
+Item0=MSWINDOWS
+[HistoryLists\hlUnitAliases]
+Count=1
+Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
