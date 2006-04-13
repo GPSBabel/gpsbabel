@@ -24,7 +24,7 @@ uses
   gnugettext, gnugettextDx,
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, ComCtrls, Buttons, Mask, ExtCtrls,
-  common;
+  common, utils;
 
 type
   TfrmFilter = class(TForm)
@@ -81,6 +81,7 @@ type
     edWayptRadiusLat: TEdit;
     edWayptRadiusLon: TEdit;
     cbTrackRangeTimeZone: TCheckBox;
+    BitBtn2: TBitBtn;
     procedure cbTrackTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure cbTrackTitleClick(Sender: TObject);
@@ -97,6 +98,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure BitBtn2Click(Sender: TObject);
   private
     { Private-Deklarationen }
     lTrackTimeList: TList;
@@ -531,6 +533,11 @@ begin
       Exit;
   end;
   ModalResult := mrCancel;
+end;
+
+procedure TfrmFilter.BitBtn2Click(Sender: TObject);
+begin
+  WinOpenURL(readme_html_path + '#id274853');
 end;
 
 end.

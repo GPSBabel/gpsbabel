@@ -172,7 +172,7 @@ begin
     if (FFormat = '') then
     begin
       FFormat := o.format;
-      btnHelp.Hint := 'http://www.gpsbabel.org/readme.html#' + FFormat;
+      btnHelp.Hint := readme_html_path + '#' + FFormat;
       btnHelp.ShowHint := True;
     end;
 
@@ -462,7 +462,7 @@ end;
 
 procedure TfrmOptions.btnHelpClick(Sender: TObject);
 begin
-  WinOpenFile('http://www.gpsbabel.org/readme.html#' + FFormat);
+  WinOpenURL(readme_html_path + '#' + FFormat);
 end;
 
 procedure TfrmOptions.CreateFileOption(const x, y, tag: Integer; o: POption; IsInput: Boolean; xmax: Integer = -1);
