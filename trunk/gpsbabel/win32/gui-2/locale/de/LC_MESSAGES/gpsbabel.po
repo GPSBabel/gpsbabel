@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPSBabel 1.2.7\n"
 "POT-Creation-Date: 2005-11-19 01:14\n"
-"PO-Revision-Date: 2005-12-12 23:08+0100\n"
+"PO-Revision-Date: 2006-04-14 13:51+0100\n"
 "Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -20,6 +20,12 @@ msgstr "USR Eingabe: Segmente in seperate Tracks aufteilen"
 
 msgid "(USR output) Merge into one segmented track"
 msgstr "USR-Ausgabe: zu einem segmentierten Track zusammenfassen"
+
+msgid "Ad-hoc closed icon name"
+msgstr "Icon allgemein für \"geschlossen\""
+
+msgid "Ad-hoc open icon name"
+msgstr "Icon allgemein für \"offen\""
 
 msgid "Allow whitespace synth. shortnames"
 msgstr "Erlaube Leerzeichen in Kurznamen"
@@ -51,6 +57,9 @@ msgstr "Farbindex[1-9] für Wegpunkte"
 msgid "Command unit to power itself down"
 msgstr "Gerät im Anschluß abschalten"
 
+msgid "Complete date-free tracks with given date (YYYYMMDD)."
+msgstr "Komplettiere Tracks ohne Datumsangaben mit Datum ... (YYYYMMDD)"
+
 msgid "Create waypoints from geocache log entries"
 msgstr "Erzeuge Wegpunkte aus Geocache Log-Einträgen"
 
@@ -80,6 +89,9 @@ msgstr "Dimmfaktor der Karte in %"
 
 msgid "Display the file header bytes"
 msgstr "Zeige die Bytes des Dateikopfes an"
+
+msgid "Distance unit [m=metric, s=statue]"
+msgstr "Entfernungsangaben (m=Metrisch, s=Statue)"
 
 msgid "Do not add geocache data to description"
 msgstr "Keine Geocache-Daten zur Beschreibung hinzufügen"
@@ -120,6 +132,9 @@ msgstr "Erzeuge Datei mit Breiten- und Längengradwerten (für Kartenzentrierung
 msgid "Give points (waypoints/route points) a default radius (proximity)"
 msgstr "Gebe Wegpunkten/Routenpunkten diesen Radius "
 
+msgid "GPS datum (def. WGS 84)"
+msgstr "GPS-Datum (Vorgabe: WGS 84)"
+
 msgid "Height in pixels of map"
 msgstr "Kartenhöhe in Pixel"
 
@@ -146,6 +161,15 @@ msgstr "Route oder Track-Index (wenn mehrere vorhanden)"
 
 msgid "Index of track to write (if more the one in source)"
 msgstr "Track-Index (wenn mehrere vorhanden)"
+
+msgid "Index of URL field in .dbf"
+msgstr "Index der URL innerhalb der .dbf"
+
+msgid "Infrastructure closed icon name"
+msgstr "Icon \"Komplex (Infrastruktur) geschlossen\""
+
+msgid "Infrastructure open icon name"
+msgstr "Icon \"Komplex (Infrastruktur) offen\""
 
 msgid "Keep turns if simplify filter is used"
 msgstr "Erhalte Abbiegungen bei Benutzung des Simplify-Filters (Vereinfachen)"
@@ -216,11 +240,26 @@ msgstr "Lese nur Abbiegungen und ignoriere alle sonstigen Punkte"
 msgid "Path to HTML style sheet"
 msgstr "Pfad zum HTML-Style-Sheet"
 
+msgid "Pause between groups of strings"
+msgstr "Pause zwischen Gruppen von Zeichenketten"
+
+msgid "Precision of coordinates"
+msgstr "Präzision der Koordinaten (Anzahl Nachkommastellen)"
+
+msgid "Radius for circles"
+msgstr "Kreisradius"
+
 msgid "Radius of our big earth (default 6371000 meters)"
 msgstr "Erdradius in Meter (Vorgabe: 6371000 Meter)"
 
 msgid "Read control points as waypoint/route/none"
 msgstr "Lese Kontrollpunkte als Wegpunkt/Route/nichts"
+
+msgid "Read/Write date format (i.e. yyyy/mm/dd)"
+msgstr "Datumsformat (z.B. DD.MM.YYYY)"
+
+msgid "Read/Write time format (i.e. HH:mm:ss xx)"
+msgstr "Zeitformat (z.B. HH:mm:ss xx)"
 
 msgid "Return current position as a waypoint"
 msgstr "Übertrage aktuelle Position als Wegpunkt"
@@ -246,6 +285,9 @@ msgstr "Unsichtbar verschlüsselter Symbolname"
 msgid "Stealth non-encrypted icon name"
 msgstr "Unsichtbarer unverschlüsselter Symbolname"
 
+msgid "String to separate concatenated address fields (default=\", \")"
+msgstr "Trennzeichen für zusammengefügte Adressfelder (Vorgabe: \", \")"
+
 msgid "Suppress labels on generated pins"
 msgstr "Unterdücke Kennzeichnung für erzeugte Pins"
 
@@ -264,8 +306,14 @@ msgstr "Leerzeichen in Kurznamen unterdrücken"
 msgid "Symbol to use for point data"
 msgstr "Symbol für Punkte"
 
+msgid "Synthesize track times"
+msgstr "Erzeuge Tracknamen"
+
 msgid "Target GPX version for output"
 msgstr "Schreibe in GPX-Version (1.0 oder 1.1)"
+
+msgid "Temperature unit [c=celsius, f=fahrenheit]"
+msgstr "Temperatureinheit (c=Celsius, F=Fahrenheit)"
 
 msgid "text size [101-] for waypoint names"
 msgstr "Textgröße für Wegpunktnamen (101-...)"
@@ -303,8 +351,8 @@ msgstr "Wegpunkt Hintergrundfarbe"
 msgid "Waypoint foreground color"
 msgstr "Wegpunkt Vordergrundfarbe"
 
-msgid "Waypoint type (marker,text,mapnote)"
-msgstr "Wegpunkttyp (Markierung,Text,Kartenangabe)"
+msgid "Waypoint type (marker,text,mapnote,circle)"
+msgstr "Wegpunkttyp (Markierung,Text,Kartenangabe,Kreis)"
 
 msgid "Width in pixels of map"
 msgstr "Kartenbreite in Pixel"
@@ -314,6 +362,9 @@ msgstr "Linienhöhe in Pixel"
 
 msgid "Write GPRMC sentences"
 msgstr "Schreibe GPRMC Sequenzen"
+
+msgid "Write timestamps with offset x to UTC time"
+msgstr "Schreibe Zeitstempel relativ zur UTC + x"
 
 msgid "Write tracks compatible with Carto Exploreur"
 msgstr "Erzeuge Tracks ohne Titel (kompatibel zu \"Carto Exploreur\")"
