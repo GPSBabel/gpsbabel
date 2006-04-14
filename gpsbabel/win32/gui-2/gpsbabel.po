@@ -1,13 +1,5 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2005-12-05 16:08+0100\n"
-"Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
-"Content-Transfer-Encoding: 8bit\n"
 
 msgid "(integer sec or 'auto') Barograph to GPS time diff"
 msgstr ""
@@ -16,6 +8,12 @@ msgid "(USR input) Break segments into separate tracks"
 msgstr ""
 
 msgid "(USR output) Merge into one segmented track"
+msgstr ""
+
+msgid "Ad-hoc closed icon name"
+msgstr ""
+
+msgid "Ad-hoc open icon name"
 msgstr ""
 
 msgid "Allow whitespace synth. shortnames"
@@ -48,6 +46,9 @@ msgstr ""
 msgid "Command unit to power itself down"
 msgstr ""
 
+msgid "Complete date-free tracks with given date (YYYYMMDD)."
+msgstr ""
+
 msgid "Create waypoints from geocache log entries"
 msgstr ""
 
@@ -76,6 +77,9 @@ msgid "dimmer factor of map in %"
 msgstr ""
 
 msgid "Display the file header bytes"
+msgstr ""
+
+msgid "Distance unit [m=metric, s=statue]"
 msgstr ""
 
 msgid "Do not add geocache data to description"
@@ -117,6 +121,9 @@ msgstr ""
 msgid "Give points (waypoints/route points) a default radius (proximity)"
 msgstr ""
 
+msgid "GPS datum (def. WGS 84)"
+msgstr ""
+
 msgid "Height in pixels of map"
 msgstr ""
 
@@ -142,6 +149,15 @@ msgid "Index of route/track to write (if more the one in source)"
 msgstr ""
 
 msgid "Index of track to write (if more the one in source)"
+msgstr ""
+
+msgid "Index of URL field in .dbf"
+msgstr ""
+
+msgid "Infrastructure closed icon name"
+msgstr ""
+
+msgid "Infrastructure open icon name"
 msgstr ""
 
 msgid "Keep turns if simplify filter is used"
@@ -213,10 +229,25 @@ msgstr ""
 msgid "Path to HTML style sheet"
 msgstr ""
 
+msgid "Pause between groups of strings"
+msgstr ""
+
+msgid "Precision of coordinates"
+msgstr ""
+
+msgid "Radius for circles"
+msgstr ""
+
 msgid "Radius of our big earth (default 6371000 meters)"
 msgstr ""
 
 msgid "Read control points as waypoint/route/none"
+msgstr ""
+
+msgid "Read/Write date format (i.e. yyyy/mm/dd)"
+msgstr ""
+
+msgid "Read/Write time format (i.e. HH:mm:ss xx)"
 msgstr ""
 
 msgid "Return current position as a waypoint"
@@ -243,6 +274,9 @@ msgstr ""
 msgid "Stealth non-encrypted icon name"
 msgstr ""
 
+msgid "String to separate concatenated address fields (default=\", \")"
+msgstr ""
+
 msgid "Suppress labels on generated pins"
 msgstr ""
 
@@ -261,7 +295,13 @@ msgstr ""
 msgid "Symbol to use for point data"
 msgstr ""
 
+msgid "Synthesize track times"
+msgstr ""
+
 msgid "Target GPX version for output"
+msgstr ""
+
+msgid "Temperature unit [c=celsius, f=fahrenheit]"
 msgstr ""
 
 msgid "text size [101-] for waypoint names"
@@ -300,7 +340,7 @@ msgstr ""
 msgid "Waypoint foreground color"
 msgstr ""
 
-msgid "Waypoint type (marker,text,mapnote)"
+msgid "Waypoint type (marker,text,mapnote,circle)"
 msgstr ""
 
 msgid "Width in pixels of map"
@@ -312,7 +352,10 @@ msgstr ""
 msgid "Write GPRMC sentences"
 msgstr ""
 
-msgid "Write tracks compatible with CartoExplorer"
+msgid "Write timestamps with offset x to UTC time"
+msgstr ""
+
+msgid "Write tracks compatible with Carto Exploreur"
 msgstr ""
 
 msgid "zoom factor of map in %"
