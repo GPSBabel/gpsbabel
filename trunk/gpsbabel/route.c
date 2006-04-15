@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include "defs.h"
+#include "grtcirc.h"
 
 static queue my_route_head;
 static queue my_track_head;
@@ -435,4 +436,32 @@ track_restore( queue *head_bak)
 	QUEUE_MOVE(&my_track_head, head_bak);
 	
 	common_restore_finish();
+}
+
+/*
+ * This really makes more sense for tracks than routes.
+ * Run over all the trackpoints, computing heading (course), speed, and
+ * and so on.
+ */
+void track_recompute(route_head *trk)
+{
+	waypoint first;
+	waypoint *this;
+	waypoint *prev = &first;
+	queue *elem, *tmp;
+
+	first.latitude = 0;
+	first.longitude = 0;
+	first.creation_time = 0;
+
+	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
+		this = (waypoint *)elem;
+		this->course = heading(prev->latitude, prev->longitude,
+			this->latitude, this->longitude);
+		this->speed = radtometers(gcdist(
+			RAD(prev->latitude), RAD(prev->longitude),
+			RAD(this->latitude), RAD(this->longitude))) /
+			labs(this->creation_time - prev->creation_time);
+		prev = this;
+	}
 }
