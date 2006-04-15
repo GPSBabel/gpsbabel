@@ -456,12 +456,18 @@ void track_recompute(route_head *trk)
 
 	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
 		this = (waypoint *)elem;
-		this->course = heading(prev->latitude, prev->longitude,
-			this->latitude, this->longitude);
-		this->speed = radtometers(gcdist(
-			RAD(prev->latitude), RAD(prev->longitude),
-			RAD(this->latitude), RAD(this->longitude))) /
+		double tlat, tlon, plat, plon, dist;
+		/* gcdist and headin want radians, not degrees */
+		tlat = RAD(this->latitude);
+		tlon = RAD(this->longitude);
+		plat = RAD(prev->latitude);
+		plon = RAD(prev->longitude);
+		this->course = DEG(heading(plat, plon,
+			tlat, tlon));
+		dist = radtometers(gcdist(plat, plon, tlat, tlon));
+		this->speed = dist / 
 			labs(this->creation_time - prev->creation_time);
+
 		prev = this;
 	}
 }
