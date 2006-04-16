@@ -31,8 +31,12 @@ const
   gpsbabel_ini: TInifile = nil;
   
 resourcestring
-  SGPSBabelURL = 'http://www.gpsbabel.org';
-  SGPSBabelTitle = 'GPSBabelGUI-2';
+  SGPSBabelURL =         'http://www.gpsbabel.org';
+  SGPSBabelTitle =       'GPSBabelGUI-2';
+
+const
+  SGPSBabelIniFilename = 'gpsbabel.ini';
+  SGPSBabelExeFilename = 'gpsbabel.exe';
 
 var
   gpsbabel_exe: string;
@@ -41,6 +45,7 @@ var
   gpsbabel_minor, gpsbabel_major, gpsbabel_release: Integer;
   SGPSBabelGUIVersion: string;
   CFixedFileinfo: TVSFixedFileInfo;
+  gpsbabel_inifile: TInifile;
 
 const
   WM_STARTUP = WM_USER + 1;
@@ -97,7 +102,8 @@ type
     name:   string;
     hint:   string;
     otype:  Byte;
-    def:    PChar;
+    def:    PChar;       // default value from gpsbabel or ini-file
+    gbdef:  PChar;       // default value from gpsbabel       
     min:    PChar;
     max:    PChar;
     chb:    TCheckBox;
@@ -222,6 +228,7 @@ var
   opt: POption;
   list: TStringList;
   i: Integer;
+  s: string;
 begin
   StrPCopy(buff, ALine);
   StrCat(buff, #9);
@@ -245,7 +252,12 @@ begin
       1:
         opt.format := string(cin);
       2:
-        opt.name := string(cin);
+        begin
+          opt.name := string(cin);
+          s := gpsbabel_ini.ReadString(opt.Format, opt.Name, #01);
+          if (s <> #01) then
+            opt.def := StrNew(PChar(s));
+        end;
       3:
         opt.hint := string(cin);
       4:
@@ -257,7 +269,11 @@ begin
           end;
       5:
         if (cin^ <> #0) then
-          opt.def := StrNew(cin);
+        begin
+          opt.gbdef := StrNew(cin);
+          if (opt.def = nil) then
+            opt.def := opt.gbdef;
+        end;
       6:
         if (cin^ <> #0) then
           opt.min := StrNew(cin);
@@ -521,9 +537,23 @@ begin
   end;
 end;
 
+function Open_gpsbabel_ini(): TInifile;
+var
+  s: string;
+begin
+  s := SysUtils.ExpandFileName(SGPSBabelIniFilename);
+  if not(SysUtils.FileExists(s)) then
+    s := SysUtils.ExtractFilePath(ParamStr(0)) + SGPSBabelIniFilename;
+  if not(SysUtils.FileExists(s)) then
+    Result := TIniFile.Create(SGPSBabelIniFilename)
+  else
+    Result := TIniFile.Create(s)
+end;
+
 initialization
 
-  gpsbabel_exe := SysUtils.ExtractFilePath(ParamStr(0)) + 'gpsbabel.exe';
+  gpsbabel_exe := SysUtils.ExtractFilePath(ParamStr(0)) + SGPSBabelExeFilename;
   SGPSBabelGUIVersion := GetFileVersion(ParamStr(0));
+  gpsbabel_ini := Open_gpsbabel_ini();
 
 end.
