@@ -173,7 +173,7 @@ arglist_t nmea_args[] = {
 	{"nogpvtg", &nogpvtg, "Don't write GPVTG sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"nogpgsa", &nogpgsa, "Don't write GPGSA sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX },
-	{"pause", &opt_sleep, "Pause between groups of strings", NULL, 
+	{"pause", &opt_sleep, "Decimal seconds to pause between groups of strings", NULL, 
 			ARGTYPE_STRING, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
