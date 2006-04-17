@@ -158,7 +158,8 @@ void GPS_Math_Deg_To_DegMinSec(double v, int32 *d, int32 *m, double *s)
     
     *d = (int32)v;
     t  = (v -(double)*d) * (double)60.0;
-    *s = (t-(double)*m) * (double)60.0;
+    *m = (v-(double)*d) * (double)60.0;
+    *s = (t - (int32)t) * (double)60.0;
 
     if(*s>(double)59.999)
     {
