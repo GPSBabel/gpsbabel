@@ -30,7 +30,7 @@ compare()
 {
 	${DIFF} $* ||  {
 		echo ERROR comparing $*
-#		exit 1
+		exit 1
 	} 
 }
 
