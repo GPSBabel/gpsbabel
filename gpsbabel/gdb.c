@@ -814,7 +814,9 @@ gdb_read_track(const size_t max_file_pos)
 	    track_add_wpt(track, wpt);
 	}
 	
-	gdb_fread(buff, 1);
+	gdb_fread_str(xname, sizeof(xname));
+	if (xname[0] != '\0')
+		track->rte_url = xstrdup(xname);
 	
 	return track;
 }
@@ -1107,8 +1109,9 @@ gdb_write_file_header(const struct tm *tm)
 	
 	/* history:
 	strncpy(buff, "A].GPSBabel_1.2.7-beta*Sep 13 2005*20:10:00", sizeof(buff));	gpsbabel V1.2.7 BETA 
+	strncpy(buff, "A].GPSBabel_1.2.8-beta*Jan 18 2006*20:11:00", sizeof(buff));  /* gpsbabel 1.2.8-beta01182006_clyde
 	 */
-	strncpy(buff, "A].GPSBabel_1.2.8-beta*Jan 18 2006*20:11:00", sizeof(buff));  /* gpsbabel 1.2.8-beta01182006_clyde */
+	strncpy(buff, "A].GPSBabel_1.2.8-beta*Apr 18 2006*20:12:00", sizeof(buff));  /* gpsbabel 1.2.8-beta20060405 */
 #endif
 	len = strlen(buff);
 	buff[2] = 2;
