@@ -469,8 +469,14 @@ vecs_t vec_list[] = {
 	{
 		&msroute_vecs,
 		"msroute",
-		"MS AutoRoute 2002",
+		"Microsoft AutoRoute 2002 (pin/route reader)",
 		"axe"
+	},
+	{
+		&msroute_vecs,
+		"msroute",
+		"Microsoft Streets and Trips (pin/route reader)" ,
+		"est"
 	},
 	{
 		&cst_vecs,
