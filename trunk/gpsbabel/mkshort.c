@@ -472,8 +472,16 @@ mkshort(short_handle h, const char *istring)
 	/*
 	 * Delete vowels starting from the end.  If it fits, quit stomping
 	 * them.  If we run out of string, give up.
+	 * 
+	 * Skip this test is our target length is arbitrarily considered 
+	 * "long" as it turns out a truncated string of full words is easier
+	 * to read than a full string of vowelless words. 
+	 *
+	 * It also helps units with speech synthesis.
 	 */
-	replaced = 1;
+	if ( hdl->target_len < 15) {
+		replaced = 1;
+	}
 	while (replaced && strlen(ostring) > hdl->target_len) {
 		ostring = delete_last_vowel(2, ostring, &replaced);
 	}
