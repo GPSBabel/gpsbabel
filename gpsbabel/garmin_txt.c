@@ -745,6 +745,7 @@ track_disp_hdr_cb(const route_head *track)
 	print_date_and_time(cur_info->time, 1);
 	print_distance(cur_info->length, 0, 1);
 	print_speed(&cur_info->length, &cur_info->time);
+	fprintf(fout, "%s", (track->rte_url != NULL) ? track->rte_url : "");
 	fprintf(fout, "\r\n\r\nHeader\t%s\r\n\r\n", headers[trkpt_header]);
 }
 
