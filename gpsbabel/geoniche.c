@@ -630,7 +630,10 @@ geoniche_geostuff(const waypoint *wpt)
 	xfree(tmp2);
 	xfree(tmp3);
 
-	return enscape(gs);
+	tmp1 = enscape(gs);
+	xfree(gs);
+
+	return tmp1;
 }
 
 static void
@@ -687,10 +690,8 @@ geoniche_writewpt(const waypoint *wpt)
 
     gs = geoniche_geostuff(wpt);
     if (gs) {
-	char *newnotes = xstrappend(notes, gs);
-	xfree (notes);
+	notes = xstrappend(notes, gs);
 	xfree (gs);
-	notes = newnotes;
     }
 
     vdata = (ubyte *) xmalloc(vsize);
