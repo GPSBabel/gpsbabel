@@ -1529,7 +1529,7 @@ gdb_write_track(const route_head *track)
 	    gdb_fwrite_alt(wpt->depth, unknown_alt);	/* depth */
 	    gdb_fwrite(&c0, 1);				/* temperature */
 	}
-	gdb_fwrite(&c0, 1);
+	gdb_fwrite_str(track->rte_url, -1);
 }
 
 static void
