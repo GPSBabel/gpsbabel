@@ -481,7 +481,10 @@ mkshort(short_handle h, const char *istring)
 	 */
 	if ( hdl->target_len < 15) {
 		replaced = 1;
+	} else {
+		replaced = 0;
 	}
+	
 	while (replaced && strlen(ostring) > hdl->target_len) {
 		ostring = delete_last_vowel(2, ostring, &replaced);
 	}

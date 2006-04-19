@@ -228,6 +228,7 @@ hsa_ndv_read(void)
 	{
 		char *bad;
 
+		buf[len] = 0;
 		if (NULL != strstr(buf, "nver=1"))
 		{//its the older format, not xml
 			fseek(fd, 0, SEEK_SET);
