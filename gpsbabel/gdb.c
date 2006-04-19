@@ -47,6 +47,8 @@
 	    2006/02/24: last field of a route is rte url
 	    2006/02/25: rte_read_loop: zero check replaced with a dummy read (8 unknown bytes)
 	    2006/03/05: first implementation of Garmin special data (garmin_fs)
+	    2006/04/04: Use track_add_wpt for all tracks
+	    2006/04/19: add url i/o to tracks and routes
 */
 
 #include <stdio.h>
@@ -1448,7 +1450,7 @@ gdb_write_route(const route_head *route, const waypoint **list, const int count)
 	if (gdb_ver > 1)
 	    gdb_fwrite(ffbuff, 8);
 	    
-	gdb_fwrite(&c0, 1);
+	gdb_fwrite_str(route->rte_url, -1);
 }
 
 static void
