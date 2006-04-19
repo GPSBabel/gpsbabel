@@ -648,6 +648,7 @@ geoniche_writewpt(const waypoint *wpt)
     char		*notes;
     int			id;
     time_t		tx;
+    char 		*gs;
 
     if (ct == 0)
     {
@@ -684,7 +685,13 @@ geoniche_writewpt(const waypoint *wpt)
     else
 	notes = enscape(wpt->notes);
 
-    notes = xstrappend(notes, geoniche_geostuff(wpt));
+    gs = geoniche_geostuff(wpt);
+    if (gs) {
+	char *newnotes = xstrappend(notes, gs);
+	xfree (notes);
+	xfree (gs);
+	notes = newnotes;
+    }
 
     vdata = (ubyte *) xmalloc(vsize);
     if (vdata == NULL)
