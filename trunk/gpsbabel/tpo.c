@@ -1,8 +1,15 @@
 /*
-    National Geographic Topo! Waypoint
-    Contributed to gpsbabel by Steve Chamberlin
+    National Geographic Topo! TPO file support.
+    2.x support contributed to gpsbabel by Steve Chamberlin.
+    3.x support contributed to gpsbabel by Curt Mills.
+
+    Topo! version 2.x:  Tracks are implemented.
+    Topo! version 3.x:  Reading of Tracks/Waypoints/Routes is
+                        implemented.  Also extracts Map Notes/
+                        Symbols/Text Labels as Waypoints.
     
     Copyright (C) 2005 Steve Chamberlin, slc at alum.mit.edu
+    Portions Copyright (C) 2006 Curtis E. Mills, archer at eskimo dot com
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,22 +42,25 @@
  fields have this same byte-count, but so far it doesn't look like
  it.
 
- New format (3.x and later) begins with a string byte-count byte
- and then a string starting with "TOPO! Ver. 3.", like "TOPO! Ver.
- 3.3.4".  Can contain routes/tracks/waypoints.
+ New format (3.x and later) files begin with a string byte-count
+ byte and then a string starting with "TOPO! Ver. 3.", like "TOPO!
+ Ver.  3.3.4".  Can contain routes/tracks/waypoints, embedded
+ images, Map Notes, Symbols, Text Labels, Compass symbols, and
+ several others.
 
  Older (pre-3.0) format does not have the above string.  Contains
- only tracks (routes too?).  Waypoints are saved in a separate .TPG
- file.
+ only tracks.  Waypoints are saved in a separate .TPG file.
 
- May contain these other strings:
+ May contain these strings:
     Frmt:   String:
     -----   --------------------------------
-    2.x     "CTopoSymbol"
+    2.x     "CTopoAzimuth"
     2.x     "CTopoBookmark"
-    2.x     "CTopoRoute".  The actual routes we parse here.
-    2.x     "CTopoWaypoint".  Saved in .tpg files.
+    2.x     "CTopoGpsRoute".  Saved in .tpg files (see tpg.c)
+    2.x     "CTopoRoute".  The actual tracks we parse here.
+    2.x     "CTopoSymbol"
     2.x/3.x "CTopoText"
+    2.x     "CTopoWaypoint".  Saved in .tpg files (see tpg.c)
     3.x     "Notes"
     3.x     "PNG."  Embedded PNG image containing 2 rows of 40
               symbols each.  Starts with signature: 89 50 4e 47 0d
@@ -157,11 +167,8 @@ tpo_check_version_string()
 	/* check for the presence of a 3.0-style id string */
 	if (strncmp(v3_id_string, string_buffer, strlen(v3_id_string)) == 0)
 	{
-		fatal(MYNAME ": gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer);
-
-/*
-fprintf(stderr,"gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer);
-*/
+/*		fatal(MYNAME ": gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer); */
+//fprintf(stderr,"gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer);
 
 		fseek(tpo_file_in, -(string_size+1), SEEK_CUR);
         xfree(string_buffer);
@@ -173,7 +180,7 @@ fprintf(stderr,"gpsbabel can only read TPO version 2.7.7 or below; this file is 
         /* We found a version 1.x or 2.x file */
 		/* seek back to the beginning of the file */
 		fseek(tpo_file_in, -(string_size+1), SEEK_CUR);
-	xfree(string_buffer);
+        xfree(string_buffer);
         tpo_version = 2.0;  /* Really any 1.x or 2.x version */
         return;
     }
@@ -246,26 +253,26 @@ tpo_read_until_section(const char* section_name, int seek_bytes)
 static void
 tpo_rd_init(const char *fname)
 {
-	if (doing_wpts || doing_rtes)
-	{
-		fatal(MYNAME ": this file format only supports tracks, not waypoints or routes.\n");
-	}
-	
+
 	tpo_file_in = xfopen(fname, "rb", MYNAME);
 	tpo_check_version_string();
 
     if (tpo_version == 2.0)
     {
+    	if (doing_wpts || doing_rtes) {
+    		fatal(MYNAME ": this file format only supports tracks, not waypoints or routes.\n");
+        }
+	
 /*fprintf(stderr,"Version 2.x, Looking for CTopoRoute\n"); */
         /* Back up 18 bytes if this section found */
     	tpo_read_until_section("CTopoRoute", -18);
     }
     else if (tpo_version == 3.0)
     {
-/*fprintf(stderr,"Version 3.x, Looking for IEND\n"); */
+/*fprintf(stderr,"Version 3.x, Looking for 'Red Without Arrow'\n"); */
         /* Go forward four more bytes if this section found.  "IEND"
          * plus four bytes is the end of the embedded PNG image */
-        tpo_read_until_section("IEND", 4);
+        tpo_read_until_section("Red Without Arrow", 17);
     }
     else {
 		fatal(MYNAME ": gpsbabel can only read TPO versions through 3.x.x\n");
@@ -278,8 +285,22 @@ tpo_rd_deinit(void)
 	fclose(tpo_file_in);
 }
 
-static void
-tpo_read(void)
+
+
+
+
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+
+
+
+
+
+// Decoder for version 2.x files.  This one does tracks only, as
+// that is the only type of data available in the version 2.x TPO
+// files.
+//
+void tpo_read_2_x(void)
 {
 	char buff[16];
 	short track_count, waypoint_count;
@@ -395,6 +416,1010 @@ tpo_read(void)
 		xfree(lat_delta);
 	}
 }
+
+
+
+
+
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+
+
+
+
+
+// Read one 8-bit value from the input file.
+//
+// For version 3.x files.
+//
+int tpo_read_8()
+{
+    int val = 0;
+
+    tpo_fread(&val, 1, 1, tpo_file_in);
+    return(val);
+}
+
+
+
+
+
+// Read one 16-bit value in little-endian format from the input
+// file.  Takes care of processor endian-ness.
+//
+// For version 3.x files.
+//
+int tpo_read_16()
+{
+    unsigned char buf[2];
+    int val = 0;
+
+    tpo_fread(&buf[0], 1, 2, tpo_file_in);
+    val = le_read16(&buf[0]);
+    return(val);
+}
+
+
+
+
+
+// Read one 32-bit value in little-endian format from the input
+// file.  Takes care of processor endian-ness.
+//
+// For version 3.x files.
+//
+int tpo_read_32()
+{
+    unsigned char buf[4];
+    int val = 0;
+
+    tpo_fread(&buf[0], 1, 4, tpo_file_in);
+    val = le_read32(&buf[0]);
+    return(val);
+}
+
+
+
+
+
+// This will read 8/16/32 bits in little-endian format depending
+// upon the value of the first byte.
+//
+// For version 3.x files.
+//
+int tpo_read_int()
+{
+    unsigned char buff[4];
+    int val = 0;     // Init to zero to clear higher bytes
+
+
+    val = tpo_read_8();
+
+    switch (val) {
+
+        case 0xff:  // 32-bit value
+//printf("Found 32-bit value indicator: %x\n", val);
+            return( tpo_read_32() );
+            break;
+
+        case 0xfe:  // 16-bit value
+//printf("Found 16-bit value indicator: %x\n", val);
+            return( tpo_read_16() );
+            break;
+
+        default:    // 8-bit value
+//printf("Found 8-bit value: %x\n", val);
+            return( val );
+            break;
+    }
+}
+
+
+
+
+
+// Find variable block of interest in the file.  Leaves the file
+// pointer pointing after the two 4-byte type/pointer bytes.  The
+// file pointer should be pointing at the first data byte of the
+// block after calling this, which is normally an 8/16/32-bit value
+// specifying the number of elements in the block.
+//
+// Returns -1 if block not found
+//          0 if block found
+//
+// For version 3.x files.
+//
+int tpo_find_block(unsigned int block_desired)
+{
+	char buff[4];
+    int block_type;
+    int block_offset;
+
+
+    // Skip 512 byte fixed-length header
+    block_offset = 512;
+
+    do {
+
+        // Seek to offset from start of file
+        fseek(tpo_file_in, block_offset, SEEK_SET);
+	
+        // Read record type
+        block_type = tpo_read_32();
+//printf("Block: %x\n", block_type);
+
+        // Read offset to next record
+        block_offset = tpo_read_32();
+    }
+    while (block_type != block_desired && block_offset != 0);
+
+    if (block_type == block_desired)
+        return(0);
+    else
+        return(-1);
+}
+
+
+
+
+
+// Convert lat/long to normal values, save in waypoint struct
+//
+// For version 3.x files.
+//
+waypoint *tpo_convert_ll(int lat, int lon) {
+    double latitude;
+    double longitude;
+    double height;
+    waypoint *waypoint_temp;
+
+
+    waypoint_temp = waypt_new();
+
+    latitude =  (double)lat / 0x800000;
+    longitude = (double)lon / 0x800000;
+
+//printf("lat: %f\tlon: %f\n", latitude, longitude);
+
+/*
+    // Note:  We shouldn't need this section of code as the version
+    // 3.x files are already in WGS84 datum.
+    //
+    // Convert incoming NAD27/CONUS coordinates to WGS84, Molodensky
+    // transform.
+    //
+    GPS_Math_Known_Datum_To_WGS84_M(
+        latitude,                   // Source latitude
+        longitude,                  // Source longitude
+        0.0,                        // Source height (meters)
+        &waypoint_temp->latitude,   // Dest latitude
+        &waypoint_temp->longitude,  // Dest longitude
+        &height,                    // Dest height (meters)
+        78);
+*/
+
+    waypoint_temp->latitude = latitude;
+    waypoint_temp->longitude = longitude;
+
+//printf("lat: %f\tlon: %f\tNew Height: %f\n", waypoint_temp->latitude, waypoint_temp->longitude, height);
+
+    return(waypoint_temp);
+}
+
+
+
+
+
+// Track decoder for version 3.x files.  This block contains tracks
+// (called "freehand routes" or just "routes" in Topo).
+//
+void tpo_process_tracks(void)
+{
+    unsigned int track_count;
+    unsigned int ii;
+
+
+//printf("Processing Tracks...\n");
+
+    // Find block 0x060000 (free-hand routes)
+    if (tpo_find_block(0x060000))
+        return;
+
+    // Read the number of tracks.  Can be 8/16/32-bit value.
+    track_count = tpo_read_int();
+
+//printf("Total Tracks: %d\n", track_count);
+
+    if (track_count == 0)
+        return;
+
+    // Read/process each track in the file
+    //
+    for (ii = 0; ii < track_count; ii++) {
+        unsigned int line_type;
+        unsigned int track_number;
+        unsigned int track_length;
+        unsigned int name_length;
+        char *track_name;
+        unsigned int track_byte_count;
+        int llvalid;
+        unsigned char *buf;
+        int lonscale;
+        int latscale;
+        int waypoint_count = 0;
+        unsigned int jj;
+        route_head* track_temp;
+
+
+        // Allocate the track struct
+		track_temp = route_head_alloc();
+		track_add_head(track_temp);
+
+//UNKNOWN DATA LENGTH
+        line_type = tpo_read_int();
+
+        // Can be 8/16/32-bit value
+        track_number = tpo_read_int();
+
+        // Can be 8/16/32-bit value
+        track_length = tpo_read_int();
+
+//UNKNOWN DATA LENGTH 
+        name_length = tpo_read_int();
+
+        if (name_length) {
+            track_name = malloc(name_length+1);
+            track_name[0] = '\0';
+            tpo_fread(track_name, 1, name_length, tpo_file_in);
+            track_name[name_length] = '\0';  // Terminator
+        }
+        else {  // Assign a generic track name
+            track_name = malloc(15);
+            sprintf(track_name, "TRK %d", ii+1);
+        }
+		track_temp->rte_name = track_name;
+//printf("Track Name: %s\n", track_name);
+
+        // Route description
+//        track_temp->rte_desc = NULL;
+
+        // Route number
+        track_temp->rte_num = ii+1;
+
+//UNKNOWN DATA LENGTH	
+        track_byte_count = tpo_read_int();
+
+        // Read the number of bytes specified for the track.  These
+        // contain scaling factors, long/lat's, and offsets from
+        // those long/lat's.  First will be a long/lat (8 bytes).
+        // Keep track of the bytes as we go so that we know how many
+        // we've read.  We need to do this so that we start at the
+        // proper place for the next track.
+
+        // Read the track bytes into a buffer
+        buf = malloc(track_byte_count);
+        tpo_fread(buf, 1, track_byte_count, tpo_file_in);
+
+        latscale=0;
+        lonscale=0;
+
+        // Process the track bytes
+        llvalid = 0;
+        for (jj = 0; jj < track_byte_count; ) {
+            waypoint* waypoint_temp;
+            int lat;
+            int lon;
+
+ 
+            // Time to read a new latlong?
+            if (!llvalid) {
+
+                lon = le_read32(buf+jj);
+                jj+=4;
+
+                lat = le_read32(buf+jj);
+                jj+=4;
+
+                // Peek to see if next is a lonscale
+                if(jj+3<track_byte_count && !buf[jj+3] && buf[jj] !=
+                        0x88 && buf[jj+1] != 0x88 && buf[jj+2] != 0x88) {
+
+                    lonscale = le_read32(buf+jj);
+                    jj+=4;
+                }
+                // Peek to see if next is a latscale
+                if(jj+3<track_byte_count && !buf[jj+3] && buf[jj] !=
+                        0x88 && buf[jj+1] != 0x88 && buf[jj+2] != 0x88) {
+
+                    latscale = le_read32(buf+jj);
+                    jj+=4;
+                }
+                llvalid = 1;
+
+//printf("LL");
+
+                waypoint_temp = tpo_convert_ll(lat, lon);
+                route_add_wpt(track_temp, waypoint_temp);
+                waypoint_count++;
+            }
+
+            // We have a lonlat, let's see if it's time to get a new
+            // one
+            else if (buf[jj] == 0x88) {
+                jj++;
+                llvalid = 0;
+            }
+
+            else if (buf[jj] == 0x00) {
+                jj++;
+                llvalid = 0;
+            }
+
+            // Process the delta
+            else {
+                int scarray[] = {0,1,2,3,4,5,6,7,0,-7,-6,-5,-4,-3,-2,-1};
+
+ 
+                if (buf[jj] == 0) {
+                    printf("Found unexpected ZERO\n");
+                    exit(1);
+                }
+
+                if (latscale == 0 || lonscale == 0) {
+                    printf("Found bad scales lonscale=0x%x latscale=0x%x\n", lonscale, latscale);
+                    exit(1);
+                }
+
+                lon+=lonscale*scarray[buf[jj]>>4];
+                lat+=latscale*scarray[(buf[jj]&0xf)];
+//printf(".");
+                jj++;
+
+                waypoint_temp = tpo_convert_ll(lat, lon);
+                route_add_wpt(track_temp, waypoint_temp);
+                waypoint_count++;
+            }
+        }
+        track_temp->rte_waypt_ct = waypoint_count;
+	
+        free(buf);
+    }
+//printf("\n");
+}
+
+
+
+
+
+// Global index to waypoints, needed for routes, filled in by
+// tpo_process_waypoints.
+//
+// For version 3.x files.
+//
+waypoint** tpo_wp_index;
+unsigned int tpo_index_ptr = 0;
+ 
+
+
+
+
+// Waypoint decoder for version 3.x files.
+//
+void tpo_process_waypoints(void)
+{
+    unsigned int waypoint_count;
+    unsigned int ii;
+ 
+
+//printf("Processing Waypoints...\n");
+
+    // Find block 0x0e0000 (GPS-Waypoints)
+    if (tpo_find_block(0x0e0000))
+        return;
+
+    // Read the number of waypoints.  8/16/32-bit value.
+    waypoint_count = tpo_read_int();
+
+//printf("Total Waypoints: %d\n", waypoint_count);
+
+    // Fetch storage for the waypoint index (needed later for
+    // routes)
+    tpo_wp_index = (waypoint **)malloc(sizeof(waypoint *) * waypoint_count);
+
+    if (waypoint_count == 0)
+        return;
+
+    // Read/process each waypoint in the file
+    for (ii = 0; ii < waypoint_count; ii++) {
+        waypoint* waypoint_temp;
+        waypoint* waypoint_temp2;
+        unsigned int name_length;
+        char *waypoint_name;
+        int lat;
+        int lon;
+        int altitude;
+ 
+ 
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int(); // 0x00
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int(); // 0x00
+
+//UNKNOWN DATA LENGTH
+        // Fetch name length
+        name_length = tpo_read_int();
+        if (name_length) {
+            waypoint_name = malloc(name_length+1);
+            waypoint_name[0] = '\0';
+            tpo_fread(waypoint_name, 1, name_length, tpo_file_in);
+            waypoint_name[name_length] = '\0';  // Terminator
+        }
+        else {  // Assign a generic waypoint name
+            waypoint_name = malloc(15);
+            sprintf(waypoint_name, "WPT %d", ii+1);
+        }
+//printf("Waypoint Name: %s\n", waypoint_name);
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+        lon = tpo_read_32();
+        lat = tpo_read_32();
+
+        // Allocate space for waypoint and store lat/lon 
+        waypoint_temp = tpo_convert_ll(lat, lon);
+
+		// Assign the waypoint name
+		waypoint_temp->shortname = waypoint_name;
+
+        // Grab the altitude in meters 
+        altitude = tpo_read_32();
+        if (altitude == 0xfffd000c) // Unknown altitude
+            altitude = 0;
+        waypoint_temp->altitude = altitude / 100;   // Meters
+//printf("Altitude: %d\n", waypoint_temp->altitude);
+
+//UNKNOWN DATA LENGTH
+        // Fetch comment length
+        name_length = tpo_read_int();
+        if (name_length) {
+            char *comment;
+ 
+            comment = malloc(name_length+1);
+            comment[0] = '\0';
+            tpo_fread(comment, 1, name_length, tpo_file_in);
+            comment[name_length] = '\0';  // Terminator
+            waypoint_temp->description = comment;
+//printf("Comment: %s\n", waypoint_name);
+        }
+        else {
+//            waypoint_temp->description = NULL;
+        }
+
+//        waypoint_temp->notes = NULL;
+//        waypoint_temp->url = NULL;
+//        waypoint_temp->url_link_text = NULL;
+ 
+        // For routes (later), we need a duplicate of each waypoint
+        // indexed by the order we read them in.
+        waypoint_temp2 = waypt_dupe(waypoint_temp);
+
+        // Attach the copy to our index
+        tpo_wp_index[tpo_index_ptr++] = waypoint_temp2;
+
+        // Add the original waypoint to the chain of waypoints
+        waypt_add(waypoint_temp);
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+    }
+}
+
+
+
+
+
+// Map Notes decoder for version 3.x files.
+//
+void tpo_process_map_notes(void)
+{
+    unsigned int waypoint_count;
+    unsigned int ii;
+ 
+
+//printf("Processing Map Notes...\n");
+
+    // Find block 0x090000 (Map Notes)
+    if (tpo_find_block(0x090000)) {
+        return;
+    }
+
+    // Read the number of waypoints.  8/16/32-bit value.
+    waypoint_count = tpo_read_int();
+
+//printf("Elements: %d\n", waypoint_count);
+
+    if (!waypoint_count) {
+        return;
+    }
+
+    // Process each waypoint
+    for (ii = 0; ii < waypoint_count; ii++) {
+        int lat;
+        int lon;
+        unsigned int name_length;
+        char *waypoint_name;
+        waypoint* waypoint_temp;
+        unsigned int num_bytes;
+        int jj;
+
+ 
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+        lon = tpo_read_32();
+        lat = tpo_read_32();
+
+        // Allocate space for waypoint and store lat/lon 
+        waypoint_temp = tpo_convert_ll(lat, lon);
+
+        // Assign a generic waypoint name
+        waypoint_name = malloc(15);
+        sprintf(waypoint_name, "NOTE %d", ii+1);
+//printf("Waypoint Name: %s\t\t", waypoint_name);
+		waypoint_temp->shortname = waypoint_name;
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+//UNKNOWN DATA LENGTH
+        // Fetch comment length
+        name_length = tpo_read_int();
+        if (name_length) {
+            char *comment;
+ 
+            comment = malloc(name_length+1);
+            comment[0] = '\0';
+            tpo_fread(comment, 1, name_length, tpo_file_in);
+            comment[name_length] = '\0';  // Terminator
+            waypoint_temp->description = comment;
+//printf("Comment: %s\n", comment);
+        }
+        else {
+//            waypoint_temp->description = NULL;
+        }
+
+//        waypoint_temp->url_link_text = NULL;
+
+        // Length of text for external path.  If non-zero, skip past
+        // the text.
+//UNKNOWN DATA LENGTH
+        name_length = tpo_read_int();
+//printf("name_length: %x\n", name_length);
+        if (name_length) {
+            char *notes;
+ 
+            notes = malloc(name_length+1);
+            notes[0] = '\0';
+            tpo_fread(notes, 1, name_length, tpo_file_in);
+            notes[name_length] = '\0';  // Terminator
+            waypoint_temp->url = notes;
+//printf("Notes: %s\n", notes);
+        }
+
+        // Length of text for image path.  If non-zero, skip past
+        // the text.
+//UNKNOWN DATA LENGTH
+        name_length = tpo_read_int();
+        if (name_length) {
+            char *notes;
+ 
+            notes = malloc(name_length+1);
+            notes[0] = '\0';
+            tpo_fread(notes, 1, name_length, tpo_file_in);
+            notes[name_length] = '\0';  // Terminator
+            waypoint_temp->url = notes;
+//printf("Notes: %s\n", notes);
+        }
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+        // Number of bytes to skip until next element or end of
+        // block.  May be 8/16/32 bits.
+        num_bytes = tpo_read_int();
+//printf("num_bytes: %x\n", num_bytes);
+        for (jj = 0; jj < num_bytes; jj++) {
+            (void)tpo_read_8(); // Skip bytes
+        }
+
+        // Can be 8/16/32 bits
+        (void)tpo_read_int();
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+        // Add the waypoint to the chain of waypoints
+        waypt_add(waypoint_temp);
+    }
+}
+
+
+
+
+
+// Symbols decoder for version 3.x files.
+//
+void tpo_process_symbols(void)
+{
+    unsigned int waypoint_count;
+    unsigned int ii;
+
+ 
+//printf("Processing Symbols...\n");
+
+    // Find block 0x040000 (Symbols)
+    if (tpo_find_block(0x040000))
+        return;
+
+    // Read the number of waypoints.  8/16/32-bit value.
+    waypoint_count = tpo_read_int();
+
+//printf("Elements: %d\n", waypoint_count);
+
+    if (!waypoint_count) {
+        return;
+    }
+
+    // Process each waypoint
+    for (ii = 0; ii < waypoint_count; ii++) {
+        int lat;
+        int lon;
+        char *waypoint_name;
+        waypoint* waypoint_temp;
+
+ 
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+        lon = tpo_read_32();
+        lat = tpo_read_32();
+
+        // Allocate space for waypoint and store lat/lon 
+        waypoint_temp = tpo_convert_ll(lat, lon);
+
+        // Assign a generic waypoint name
+        waypoint_name = malloc(15);
+        sprintf(waypoint_name, "SYM %d", ii+1);
+//printf("Waypoint Name: %s\n", waypoint_name);
+		waypoint_temp->shortname = waypoint_name;
+
+//        waypoint_temp->description = NULL;
+//        waypoint_temp->notes = NULL;
+//        waypoint_temp->url = NULL;
+//        waypoint_temp->url_link_text = NULL;
+
+        // Add the waypoint to the chain of waypoints
+        waypt_add(waypoint_temp);
+    }
+}
+
+
+
+
+
+// Text Labels decoder for version 3.x files.
+//
+void tpo_process_text_labels(void)
+{
+    unsigned int waypoint_count;
+    unsigned int ii;
+
+ 
+//printf("Processing Text Labels...\n");
+
+    // Find block 0x080000 (Text Labels)
+    if (tpo_find_block(0x080000))
+        return;
+
+    // Read the number of waypoints.  8/16/32-bit value.
+    waypoint_count = tpo_read_int();
+
+//printf("Elements: %d\n", waypoint_count);
+
+    if (!waypoint_count) {
+        return;
+    }
+
+    // Process each waypoint
+    for (ii = 0; ii < waypoint_count; ii++) {
+        int jj;
+        int lat;
+        int lon;
+        unsigned int name_length;
+        char *waypoint_name;
+        char *comment;
+        waypoint* waypoint_temp;
+
+ 
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+
+        lon = tpo_read_32();
+        lat = tpo_read_32();
+
+        // Allocate space for waypoint and store lat/lon 
+        waypoint_temp = tpo_convert_ll(lat, lon);
+
+        // Assign a generic waypoint name
+        waypoint_name = malloc(15);
+        sprintf(waypoint_name, "TXT %d", ii+1);
+//printf("Waypoint Name: %s\t\t", waypoint_name);
+		waypoint_temp->shortname = waypoint_name;
+
+        for (jj = 0; jj < 16; jj++) {
+//UNKNOWN DATA LENGTH
+            (void)tpo_read_8();
+        }
+
+        // Fetch comment length
+//UNKNOWN DATA LENGTH
+        name_length = tpo_read_int();
+        if (name_length) {
+            char *comment;
+ 
+            comment = malloc(name_length+1);
+            comment[0] = '\0';
+            tpo_fread(comment, 1, name_length, tpo_file_in);
+            comment[name_length] = '\0';  // Terminator
+            waypoint_temp->description = comment;
+//printf("Comment: %s\n", comment);
+        }
+        else {
+//            waypoint_temp->description = NULL;
+        }
+
+//        waypoint_temp->notes = NULL;
+//        waypoint_temp->url = NULL;
+//        waypoint_temp->url_link_text = NULL;
+
+        // Add the waypoint to the chain of waypoints
+        waypt_add(waypoint_temp);
+    }
+}
+
+
+
+
+
+// Route decoder for version 3.x files.
+//
+// We depend on tpo_wp_index[] having been malloc'ed and filled-in
+// with pointers to waypoint objects by tpo_process_waypoints()
+// function above.
+//
+void tpo_process_routes(void)
+{
+    unsigned int route_count;
+    unsigned int ii;
+ 
+
+//printf("Processing Routes...\n");
+
+    // Find block 0x0f0000 (GPS-Routes)
+    if (tpo_find_block(0x0f0000))
+        return;
+
+    // Read the number of routes.  8/16/32-bit value
+    route_count = tpo_read_int();
+
+//printf("Total Routes: %d\n", route_count);
+
+    if (route_count == 0)
+        return;
+
+    // Read/process each route in the file
+    //
+    for (ii = 0; ii < route_count; ii++) {
+        unsigned int name_length = 0;
+        char *route_name;
+        unsigned int jj;
+        unsigned int waypoint_cnt;
+        route_head* route_temp;
+
+
+        // Allocate the route struct
+        route_temp = route_head_alloc();
+		route_add_head(route_temp);
+
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+ 
+//UNKNOWN DATA LENGTH
+        (void)tpo_read_int();
+ 
+//UNKNOWN DATA LENGTH
+        // Fetch name length 
+        name_length = tpo_read_int();
+        if (name_length) {
+            route_name = malloc(name_length+1);
+            route_name[0] = '\0';
+            tpo_fread(route_name, 1, name_length, tpo_file_in);
+            route_name[name_length] = '\0';  // Terminator
+        }
+        else {  // Assign a generic route name
+            route_name = malloc(15);
+            sprintf(route_name, "RTE %d", ii+1);
+        }
+        route_temp->rte_name = route_name;
+//printf("Route Name: %s\n", route_name);
+
+//UNKNOWN DATA LENGTH 
+        // Comment?
+        (void)tpo_read_int();
+//        (void)tpo_read_8();
+//        route_temp->rte_desc = NULL;
+
+        route_temp->rte_num = ii+1;
+
+        // Fetch the number of waypoints in this route.  8/16/32-bit
+        // value.
+        waypoint_cnt = tpo_read_int();
+
+        route_temp->rte_waypt_ct = waypoint_cnt;
+
+        // Run through the list of waypoints, look up each in our
+        // index, then add the waypoint to this route.
+        //
+        for (jj = 0; jj < waypoint_cnt; jj++) {
+            waypoint* waypoint_temp;
+            unsigned char val;
+
+
+//UNKNOWN DATA LENGTH
+            // Fetch the index to the waypoint
+            val = tpo_read_int();
+//printf("val: %x\t\t", val);
+
+            // Duplicate a waypoint from our index of waypoints.
+            waypoint_temp = waypt_dupe(tpo_wp_index[val-1]);
+
+            // Add the waypoint to the route
+            route_add_wpt(route_temp, waypoint_temp); 
+        }
+//printf("\n");
+    }
+
+    // Free the waypoint index, we don't need it anymore.
+    for (ii = 0; ii < tpo_index_ptr; ii++) {
+        free(tpo_wp_index[ii]);
+    }
+
+    // Free the index array itself
+    free(tpo_wp_index);
+}
+
+
+
+
+
+// Compass decoder for version 3.x files.
+//
+void tpo_process_compass(void)
+{
+
+    // Not implemented yet
+}
+
+
+
+
+
+// Decoder for version 3.x files.  These files have "tracks"
+// (called "freehand routes" or just "routes" in Topo), "waypoints",
+// and "gps-routes".  We intend to read all three types.
+//
+void tpo_read_3_x(void)
+{
+
+    if (doing_trks) { 
+//printf("Processing Tracks\n");
+        tpo_process_tracks();
+    }
+
+    if (doing_wpts || doing_rtes) {
+//printf("Processing Waypoints\n");
+        tpo_process_waypoints();
+    }
+
+    if (doing_rtes) {
+        //
+        // Note:  To process routes we _MUST_ process waypoints
+        // first!  This creates the index of waypoints that we need
+        // for routes.
+        //
+//printf("Processing Routes\n");
+        tpo_process_routes();
+    }
+
+    if (doing_wpts) {
+        //
+        // Other blocks in the file have waypoint-type information
+        // in them.  Map Notes, Symbols, and Text Labels.  We
+        // process those here and add them to the end of the
+        // waypoint list.
+        //
+//printf("Processing Map Notes\n");
+        tpo_process_map_notes();
+
+//printf("Processing Symbols\n");
+        tpo_process_symbols();
+
+//printf("Processing Text Labels\n");
+        tpo_process_text_labels();
+
+//printf("Processing Compass Symbols\n");
+//        tpo_process_compass();
+
+    }
+}
+
+
+
+
+
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+
+
+
+
+
+static void
+tpo_read(void)
+{
+
+    if (tpo_version == 2.0) {
+//printf("\nFound a version 2.x file\n");
+        tpo_read_2_x();
+    }
+    else if (tpo_version == 3.0) {
+//printf("\nFound a version 3.x file\n");
+        tpo_read_3_x();
+    }
+    else {
+		fatal(MYNAME ": gpsbabel can only read TPO versions through 3.x.x\n");
+    }
+}
+
+
+
+
 
 /*******************************************************************************/
 /*                                     WRITE                                   */
