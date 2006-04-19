@@ -66,7 +66,7 @@ html_disp(const waypoint *wpt)
 	int latint, lonint;
 	char tbuf[1024];
 	time_t tm = wpt->creation_time;
-	int32 utmz;
+	gbint32 utmz;
 	double utme, utmn;
 	char utmzc;
 	fs_xml *fs_gpx = NULL;
@@ -83,7 +83,7 @@ html_disp(const waypoint *wpt)
 
 	fprintf(file_out, "<hr>\n");
 	fprintf(file_out, "<a name=\"%s\"></a><table width=\"100%%\"><tr><td>\n", wpt->shortname);
-	fprintf(file_out, "<h3 class=\"waypoint\">%s - %c%d&deg;%06.3f %c%d&deg;%06.3f (%ld%c %6.0f %7.0f)",
+	fprintf(file_out, "<h3 class=\"waypoint\">%s - %c%d&deg;%06.3f %c%d&deg;%06.3f (%d%c %6.0f %7.0f)",
 		(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname,
 		wpt->latitude < 0 ? 'S' : 'N',  latint, 60.0 * (fabs(wpt->latitude) - latint), 
 		wpt->longitude < 0 ? 'W' : 'E', lonint, 60.0 * (fabs(wpt->longitude) - lonint),
