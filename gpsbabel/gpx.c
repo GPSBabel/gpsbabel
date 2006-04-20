@@ -1744,7 +1744,7 @@ arglist_t gpx_args[] = {
 	{ "snlen", &snlen, "Length of generated shortnames", 
 		"32", ARGTYPE_INT, "1", NULL },
 	{ "suppresswhite", &suppresswhite, 
-		"Suppress whitespace in generated shortnames", 
+		"No whitespace in generated shortnames", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "logpoint", &opt_logpoint, 
 		"Create waypoints from geocache log entries", 
