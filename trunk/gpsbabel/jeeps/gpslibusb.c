@@ -26,7 +26,6 @@
 #if HAVE_LIBUSB
 #include <usb.h>
 #include "gps.h"
-#include "gpslibusb.h"
 #include "garminusb.h"
 #include "gpsusbcommon.h"
 
@@ -44,6 +43,9 @@
 #define TMOUT_I 3000 /*  Milliseconds to timeout intr pipe access. */
 #define TMOUT_B 3000 /*  Milliseconds to timeout bulk pipe access. */
 
+typedef struct {
+	struct usb_bus *busses;
+} libusb_unit_data;
 
 /* 
  * TODO: this should all be moved into libusbdata in gpslibusb.h,
