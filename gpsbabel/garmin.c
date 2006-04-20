@@ -1,7 +1,7 @@
 /*
     Jeeps wrapper for Garmin serial protocol.
   
-    Copyright (C) 2002, 2003, 2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004, 2005, 2006  Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -98,6 +98,11 @@ rw_init(const char *fname)
 
 	switch ( gps_waypt_type )	/* waypoint type as defined by jeeps */
 	{
+		case 0:
+			fatal("Garmin unit %d does not support waypoint xfer.",
+				 gps_save_id);
+
+			break;
 		case 100:	/* The GARMIN GPS Interface Specification, */
 		case 101:	/* says these waypoint types use an ident */
 		case 102:	/* length of 6.  Waypoint types 106, 108 */
@@ -125,9 +130,14 @@ rw_init(const char *fname)
 				case 404:	/* SP2720 */
 					receiver_short_length = 20;
 					break;
-				case 292: /* 60CSX series */
+				case 382: 	/* C320 */
+					receiver_short_length = 30;
+					receiver_must_upper = 0;
+					break;
+				case 292: /* (60|76)C[s]X series */
+				case 421: /* Vista|Legend CX */
 					receiver_short_length = 14;
-					snwhiteopt = "1";
+					snwhiteopt = xstrdup("1");
 					receiver_must_upper = 0;
 					/* This might be 8859-1 */
 					receiver_charset = CET_CHARSET_MS_ANSI;
@@ -135,6 +145,7 @@ rw_init(const char *fname)
 				case 231: /* Quest */
 					receiver_charset = CET_CHARSET_MS_ANSI;
 					break;
+				case 260: /* GPSMap 296 */
 				default:
 					break;
 			}
@@ -147,6 +158,11 @@ rw_init(const char *fname)
 		fprintf(stderr, "Waypoint type: %d\n"
 			"Chosen waypoint length %d\n",
 			 gps_waypt_type, receiver_short_length);
+	if (gps_category_type) {
+		fprintf(stderr, "Waypoint category type: %d\n",
+		gps_category_type);
+	}
+
 	}
 	/*
 	 * If the user provided a short_length, override the calculated value.
@@ -163,8 +179,11 @@ rw_init(const char *fname)
 	 * Until Garmins documents how to determine valid character space
 	 * for the new models, we just release this safety check manually.
 	 */
-	if (receiver_must_upper)
+	if (receiver_must_upper) {
 		setshort_goodchars(mkshort_handle, valid_waypt_chars);
+	} else {
+		setshort_badchars(mkshort_handle, "");
+	}
 
 	setshort_mustupper(mkshort_handle, receiver_must_upper);
 
@@ -244,8 +263,9 @@ waypt_read(void)
 		} else {
 			wpt_tmp->altitude = way[i]->alt;
 		}
-		if (way[i]->time_populated)
+		if (way[i]->time_populated) {
 			wpt_tmp->creation_time = way[i]->time;
+		}
 		
 		waypt_add(wpt_tmp);
 		GPS_Way_Del(&way[i]);
@@ -303,6 +323,9 @@ track_read(void)
 			track_add_head(trk_head);
 		}
 
+		if (array[i]->no_latlon) {
+			continue;
+		}
 		wpt = waypt_new();
 
 		wpt->longitude = array[i]->lon;
@@ -528,7 +551,10 @@ waypoint_write(void)
 		} else {
 			way[i]->alt = wpt->altitude;
 		}
-		way[i]->time = wpt->creation_time;
+		if (wpt->creation_time) {
+			way[i]->time = wpt->creation_time;
+			way[i]->time_populated = 1;
+		}
 		i++;
 	}
 
