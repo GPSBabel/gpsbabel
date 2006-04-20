@@ -455,8 +455,8 @@ void track_recompute(route_head *trk)
 	first.creation_time = 0;
 
 	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
-		this = (waypoint *)elem;
 		double tlat, tlon, plat, plon, dist;
+		this = (waypoint *)elem;
 		/* gcdist and headin want radians, not degrees */
 		tlat = RAD(this->latitude);
 		tlon = RAD(this->longitude);

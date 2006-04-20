@@ -57,7 +57,10 @@ char *rxdata[] = {
 #if defined (__WIN32__) || defined (__CYGWIN__)
 
 #include <windows.h>
-#include "gpsserial_win.h"
+
+typedef struct {
+        HANDLE comport;
+} win_serial_data;
 
 /*
  * Display an error from the serial subsystem.
