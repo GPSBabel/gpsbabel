@@ -39,6 +39,7 @@ typedef struct filter_vecs {
 filter_vecs_t * find_filter_vec(char * const, char **);
 void free_filter_vec(filter_vecs_t *);
 void disp_filters(int version);
+void disp_filter( const char *vecname );
 void disp_filter_vecs(void);
 void exit_filter_vecs(void);
 

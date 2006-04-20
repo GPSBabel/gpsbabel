@@ -574,6 +574,7 @@ ff_vecs_t *find_vec(char * const, char **);
 void assign_option(const char *vecname, arglist_t *ap, const char *val);
 void disp_vec_options(const char *vecname, arglist_t *ap);
 void disp_vecs(void);
+void disp_vec( const char *vecname );
 void exit_vecs(void);
 void disp_formats(int version);
 const char * name_option(long type);

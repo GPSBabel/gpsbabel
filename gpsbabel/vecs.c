@@ -875,6 +875,7 @@ sort_and_unify_vecs(int *ctp)
 	return svp;
 }
 
+#define VEC_FMT "	%-20.20s  %-.50s\n"
 
 void
 disp_vecs(void)
@@ -885,9 +886,36 @@ disp_vecs(void)
 	int i = 0;
 
 	svp = sort_and_unify_vecs(&vc);
-#define VEC_FMT "	%-20.20s  %-.50s\n"
 	for (i=0;i<vc;i++) {
 		if ( svp[i]->vec->type == ff_type_internal )  {
+			continue;
+		}
+		printf(VEC_FMT, svp[i]->name, svp[i]->desc);
+		for (ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
+			if ( !(ap->argtype & ARGTYPE_HIDDEN)) 
+				printf("	  %-18.18s    %s%-.50s %s\n",
+				ap->argstring, 
+				(ap->argtype & ARGTYPE_TYPEMASK) == 
+					ARGTYPE_BOOL ? "(0/1) " : "",
+				ap->helpstring,
+				(ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
+		}
+	}
+	xfree (svp);	
+	return;
+}
+
+void
+disp_vec( const char *vecname )
+{
+	vecs_t **svp;
+	arglist_t *ap;
+	int vc;
+	int i = 0;
+
+	svp = sort_and_unify_vecs(&vc);
+	for (i=0;i<vc;i++) {
+		if ( case_ignore_strcmp( svp[i]->name, vecname ))  {
 			continue;
 		}
 		printf(VEC_FMT, svp[i]->name, svp[i]->desc);

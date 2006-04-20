@@ -28,7 +28,7 @@
 #define MYNAME "main"
 
 static void
-usage(const char *pname, int shorter)
+usage(const char *pname, int shorter )
 {
 	printf("GPSBabel Version %s.  http://www.gpsbabel.org\n\n",
 			gpsbabel_version );
@@ -81,7 +81,13 @@ usage(const char *pname, int shorter)
 	}
 }
 
-
+static void 
+spec_usage( const char *vec ) {
+	printf( "\n" );
+	disp_vec( vec );
+	disp_filter_vec ( vec );
+	printf( "\n" );
+}
 
 int
 main(int argc, char *argv[])
@@ -151,7 +157,12 @@ main(int argc, char *argv[])
 		}
 
 		if (argv[argn][1] == '?' || argv[argn][1] == 'h') {
-			usage(argv[0],0);
+			if ( argn < argc-1 ) {
+				spec_usage( argv[argn+1] );
+			}
+			else {
+				usage(argv[0],0);
+			}
 			exit(0);
 		}
 
