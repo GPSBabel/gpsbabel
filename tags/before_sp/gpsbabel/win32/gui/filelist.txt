@@ -1,0 +1,17 @@
+AboutDialogU.ddp
+AboutDialogU.dfm
+AboutDialogU.pas
+filelist.txt
+GPSBabel Windows GUI 2.00.00 Project Plan.pdf
+GPSBabelGUI.cfg
+GPSBabelGUI.dof
+GPSBabelGUI.dpr
+GPSBabelGUI.exe
+GPSBabelGUI.ico
+GPSBabelGUI.res
+GPSBabelGUI.todo
+GPSBabelGUIDialogU.ddp
+GPSBabelGUIDialogU.dfm
+GPSBabelGUIDialogU.pas
+README.txt
+VersionInfo.pas
