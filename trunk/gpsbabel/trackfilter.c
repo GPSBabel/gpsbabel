@@ -72,7 +72,7 @@ arglist_t trackfilter_args[] = {
 	{TRACKFILTER_PACK_OPTION,  &opt_pack,  
 	    "Pack all tracks into one", NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{TRACKFILTER_SPLIT_OPTION, &opt_split, 
-	    "Split track by date or by time interval (see README)", NULL, 
+	    "Split by date or time interval (see README)", NULL, 
 	    ARGTYPE_STRING, ARG_NOMINMAX},
 	{TRACKFILTER_MERGE_OPTION, &opt_merge, 
 	    "Merge multiple tracks for the same way", NULL, ARGTYPE_STRING, 

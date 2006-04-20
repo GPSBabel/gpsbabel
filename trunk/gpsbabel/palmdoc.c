@@ -67,7 +67,7 @@ struct buffer {
 static
 arglist_t palmdoc_args[] = {
 	{ "nosep", &suppresssep, 
-		"Suppress separator lines between waypoints", NULL,
+		"No separator lines between waypoints", NULL,
 		ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"dbname", &dbname, "Database name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
 	{"encrypt", &encrypt, "Encrypt hints with ROT13", NULL,
