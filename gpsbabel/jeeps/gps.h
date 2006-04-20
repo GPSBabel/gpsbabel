@@ -86,9 +86,12 @@ typedef struct GPS_STrack
     time_t   Time;		/* Unix time */
     float    alt;		/* Altitude */
     float    dpth;		/* Depth    */
+    float    temperature;	/* Temperature.  Degrees Celsius. */
+    int      temperature_populated; /* True if above is valid. */
     int32    heartrate;		/* Heatrate as in Garmin 301 */
-    int32    tnew;		/* New track? */
-    int32    ishdr;		/* Track header? */
+    unsigned int   tnew:1;	/* New track? */
+    unsigned int   ishdr:1;	/* Track header? */
+    unsigned int   no_latlon:1;	/* True if no valid lat/lon found. */
     int32    dspl;		/* Display on map? */
     int32    colour;		/* Colour */
     char     trk_ident[256];	/* Track identifier */
@@ -152,8 +155,12 @@ typedef struct GPS_SWay
     char   rte_link_subclass[18];
     char   rte_link_ident[256];
 
-    char     Time_populated;	/* 1 if true */
-    time_t   Time;		/* Unix time */
+    char     time_populated;	/* 1 if true */
+    time_t   time;		/* Unix time */
+    char     temperature_populated;
+    float    temperature;		/* Degrees celsius. */
+    uint16   category;
+     
 } GPS_OWay, *GPS_PWay;
 
 /*
@@ -173,7 +180,7 @@ typedef struct GPS_SLap_Data {
 
 
 
-#include "gpsserial.h"
+#include "gpsdevice.h"
 #include "gpssend.h"
 #include "gpsread.h"
 #include "gpsutil.h"

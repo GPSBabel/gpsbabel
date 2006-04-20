@@ -12,6 +12,7 @@ extern "C"
 int32  GPS_Init(const char *port);
 
 int32  GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int ct, GPS_PWay *));
+int32 GPS_A101_Get(const char *port);
 int32  GPS_A100_Send(const char *port, GPS_PWay *way, int32 n, int (*cb)(GPS_PWay *));
 
 int32  GPS_A200_Get(const char *port, GPS_PWay **way);
@@ -24,7 +25,7 @@ int32  GPS_A301_Get(const char *port, GPS_PTrack **trk);
 int32  GPS_A300_Send(const char *port, GPS_PTrack *trk, int32 n);
 int32  GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n);
 
-int32  GPS_D300_Get(GPS_PTrack *trk, int32 entries, int32 fd);
+int32  GPS_D300_Get(GPS_PTrack *trk, int32 entries, gpsdevh *h);
 void   GPS_D300b_Get(GPS_PTrack *trk, UC *data);
 void   GPS_D301b_Get(GPS_PTrack *trk, UC *data);
 void   GPS_D302b_Get(GPS_PTrack *trk, UC *data);
@@ -51,9 +52,9 @@ int32  GPS_A700_Send(const char *port, double lat, double lon);
 void   GPS_D700_Get(GPS_PPacket packet, double *lat, double *lon);
 void   GPS_D700_Send(GPS_PPacket *packet, double lat, double lon);
 
-int32  GPS_A800_On(const char *port, int32 *fd);
-int32  GPS_A800_Off(const char *port, int32 *fd);
-int32  GPS_A800_Get(int32 *fd, GPS_PPvt_Data *packet);
+int32  GPS_A800_On(const char *port, gpsdevh **fd);
+int32  GPS_A800_Off(const char *port, gpsdevh **fd);
+int32  GPS_A800_Get(gpsdevh **fd, GPS_PPvt_Data *packet);
 void   GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data *pvt);
 
 const char * Get_Pkt_Type(unsigned char p, unsigned char d0, const char **xinfo);

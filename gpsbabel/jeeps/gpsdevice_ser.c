@@ -1,9 +1,7 @@
 /*
-    Definitions for internal functions of Garmin USB implementation.
-    These symbols should not be publicly used.  They're "friend" functions
-    of USB details internal to jeeps.
+    Serial operations.
 
-    Copyright (C) 2005, 2006 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2006 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,7 +19,19 @@
 
  */
 
-int32 GPS_Packet_Read_usb(gpsdevh *fd, GPS_PPacket *packet, int eatbulk);
-void  GPS_Make_Packet_usb(GPS_PPacket *packet, UC type, UC *data, int16 n);
-int32 GPS_Write_Packet_usb(gpsdevh *fd, GPS_PPacket packet);
+#include "gpsdevice.h"
+#include "gpsserial.h"
+#include "gpsread.h"
 
+gps_device_ops  gps_serial_ops = {
+	GPS_Serial_On,
+	GPS_Serial_Off,
+	GPS_Serial_Chars_Ready,
+	GPS_Serial_Wait,
+	GPS_Serial_Flush,
+	GPS_Serial_Send_Ack,
+	GPS_Serial_Get_Ack,
+	GPS_Serial_Packet_Read,
+	GPS_Serial_Make_Packet,
+	GPS_Serial_Write_Packet,
+};

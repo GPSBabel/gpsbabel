@@ -9,8 +9,8 @@ extern "C"
 
 #include "gps.h"
 
-int32 GPS_Rqst_Send_Time(int32 fd, time_t Time);
-int32 GPS_Rqst_Send_Position(int32 fd, double lat, double lon);
+int32 GPS_Rqst_Send_Time(gpsdevh *fd, time_t Time);
+int32 GPS_Rqst_Send_Position(gpsdevh *fd, double lat, double lon);
 
 
 #endif

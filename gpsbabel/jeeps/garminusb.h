@@ -1,7 +1,7 @@
 /*
     Definitions for Garmin USB protocol and implementation.
 
-    Copyright (C) 2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004, 2005, 2006 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -56,9 +56,8 @@ struct garmin_unit_info {
 
 int gusb_cmd_send(const garmin_usb_packet *obuf, size_t sz);
 int gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz);
-int gusb_open(const char *portname);
-int gusb_close(const char *portname);
-int gusb_init(const char *portname);
+int gusb_init(const char *portname, gpsdevh **dh);
+int gusb_close(gpsdevh *);
 
 /*
  * New packet types in USB.

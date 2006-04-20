@@ -4,6 +4,7 @@
 ** @author Copyright (C) 1999 Alan Bleasby
 ** @version 1.0 
 ** @modified Dec 28 1999 Alan Bleasby. First version
+** @modified Copyright (C) 2006 Robert Lipe
 ** @@
 ** 
 ** This library is free software; you can redistribute it and/or
@@ -24,8 +25,8 @@
 #include "gps.h"
 
 
-static int32 GPS_A600_Rqst(int32 fd, time_t Time);
-static int32 GPS_A700_Rqst(int32 fd, double lat, double lon);    
+static int32 GPS_A600_Rqst(gpsdevh *fd, time_t Time);
+static int32 GPS_A700_Rqst(gpsdevh *fd, double lat, double lon);    
 
 
 
@@ -39,7 +40,7 @@ static int32 GPS_A700_Rqst(int32 fd, double lat, double lon);
 ** @return [int32] true if OK
 ************************************************************************/
 
-int32 GPS_Rqst_Send_Time(int32 fd, time_t Time)
+int32 GPS_Rqst_Send_Time(gpsdevh *fd, time_t Time)
 {
     time_t ret=0;
 
@@ -67,7 +68,7 @@ int32 GPS_Rqst_Send_Time(int32 fd, time_t Time)
 **
 ** @return [int32] success
 ************************************************************************/
-static int32 GPS_A600_Rqst(int32 fd, time_t Time)
+static int32 GPS_A600_Rqst(gpsdevh *fd, time_t Time)
 {
     GPS_PPacket tra;
     GPS_PPacket rec;
@@ -110,7 +111,7 @@ static int32 GPS_A600_Rqst(int32 fd, time_t Time)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Rqst_Send_Position(int32 fd, double lat, double lon)
+int32 GPS_Rqst_Send_Position(gpsdevh *fd, double lat, double lon)
 {
     int32 ret=0;
 
@@ -139,7 +140,7 @@ int32 GPS_Rqst_Send_Position(int32 fd, double lat, double lon)
 **
 ** @return [int32] success
 ************************************************************************/
-static int32 GPS_A700_Rqst(int32 fd, double lat, double lon)
+static int32 GPS_A700_Rqst(gpsdevh *fd, double lat, double lon)
 {
     GPS_PPacket tra;
     GPS_PPacket rec;
