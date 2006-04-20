@@ -1571,7 +1571,7 @@ the same name (not including the extension) as the .ov2 file.
       <title>TPG</title>
       <para>National Geographic Topo! Waypoint and Route Format.  This module
 reads and writes .TPG files created by various editions of NG Topo!
-Reading/writing of route data is not supported yet. This filter will *not* work with the newer combined .TPO files.
+Reading/writing of route data is not supported yet.
 Contributed by Alex Mottram.</para>
       <para>The option 'datum="datum name"' can be used to override
 the default of NAD27 ("N. America 1927 mean") which is correct for the
@@ -1584,24 +1584,13 @@ Hawaiian_mean"</para>
 	  <subtitle>National Geographic Topo! Track Format.</subtitle>
 	</sectioninfo>
 	<title>TPO</title>
-	<para>This module reads and writes
-    .TPO files created by various editions of NG Topo! version 2.7.7 or
-    earlier. This format will *not* work with the newer .TPO files
-    (version 3.0 and later) that have the TPG data combined into them.</para>
-	<para>When writing TPO files, note that every TOPO! state edition 
-	employs a slightly different data format, so you will need to 
-	specify which state edition to generate output for.  The current 
-	supported states are CA, NY, NJ, MA, CT, RI, NH, VT, ME. It's 
-	fairly easy to add support for additional states. Instructions are 
-	in the source code.</para>
-      <para>	Additional Options: </para>
-        <para>
-	  <option>dumpheader</option> (0/1)  Display the file header bytes (useful when adding support for a new state)
-	</para>
-        <para>
-	  <option>state</option>  State map format to write, default=CA.
-	</para>
-	<para>Contributed by Steve Chamberlin.</para>
+	<para>This module reads .TPO files created by various editions
+of NG Topo!.  For version 2.x files it will only read tracks.  For
+version 3.x files it will read Tracks/Routes/Waypoints/Map
+Notes/Symbols/Text Notes.  The latter three are converted to
+waypoints.</para>
+	<para>2.x support contributed by Steve Chamberlin.  3.x support
+contributed by Curt Mills.</para>
 
    </section>
 	<section id="unicsv">
