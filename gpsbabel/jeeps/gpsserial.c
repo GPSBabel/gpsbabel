@@ -223,7 +223,11 @@ int32 GPS_Serial_Read(gpsdevh * dh, void *ibuf, int size)
 #include <sys/time.h>
 #include <termios.h>
 #include <unistd.h>
-#include "gpsserial_posix.h"
+
+typedef struct {
+        int fd;		/* File descriptor */
+	struct termios gps_ttysave;
+} posix_serial_data;
 
 /* @func GPS_Serial_Restoretty ***********************************************
 **
