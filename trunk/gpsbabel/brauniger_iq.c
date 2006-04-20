@@ -27,6 +27,8 @@ static char *port;
 
 #define MYNAME "BRAUNIGER-IQ"
 #define PRESTRKNAME "PRESALTTRK"
+#define GPS_Serial_On(a, b) 0
+#define GPS_Serial_Off(a, b) 0
 
 static enum {
     st_sync,

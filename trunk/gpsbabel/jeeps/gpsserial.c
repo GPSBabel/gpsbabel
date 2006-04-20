@@ -229,51 +229,6 @@ typedef struct {
 	struct termios gps_ttysave;
 } posix_serial_data;
 
-/* @func GPS_Serial_Restoretty ***********************************************
-**
-** Save tty information for the serial post to be used
-**
-** @param [r] port [const char *] port e.g. ttyS1
-**
-** @return [int32] false upon error
-************************************************************************/
-
-static int32 GPS_Serial_Savetty(int32 fd)
-{
-    if(tcgetattr(fd,&gps_ttysave)==-1)
-    {
-	gps_errno = HARDWARE_ERROR;
-	GPS_Serial_Error("SERIAL: tcgetattr error");
-	return 0;
-    }
-
-    return 1;
-}
-
-
-/* @func GPS_Serial_Restoretty ***********************************************
-**
-** Restore serial post to condition before AJBGPS called
-**
-** @param [r] port [const char *] port e.g. ttyS1
-**
-** @return [int32] false upon error
-************************************************************************/
-
-static int32 GPS_Serial_Restoretty(int fd)
-{
-    if(tcsetattr(fd, TCSAFLUSH, &gps_ttysave)==-1)
-    {
-	gps_errno = HARDWARE_ERROR;
-	GPS_Serial_Error("SERIAL: tcsetattr error");
-	return 0;
-    }
-
-    return 1;
-}
-
-#endif
-
 /* @func GPS_Serial_Open ***********************************************
 **
 ** Open a serial port 8bits 1 stop bit 9600 baud
