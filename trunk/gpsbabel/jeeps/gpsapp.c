@@ -4,7 +4,7 @@
 ** @author Copyright (C) 1999 Alan Bleasby
 ** @version 1.0 
 ** @modified Dec 28 1999 Alan Bleasby. First version
-** @modified 2004, 2005, 2006 Robert Lipe
+** @modified Copyright (C) 2004, 2005, 2006 Robert Lipe
 ** @@
 ** 
 ** This library is free software; you can redistribute it and/or
@@ -23,12 +23,18 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-#include "garminusb.h"
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
 #include <ctype.h>
+
+/*
+ * This violates the layering design, but is needed for device discovery.
+ * See the use of gps_is_usb and GPS_Packet_Read_usb below.
+ */
+#include "garminusb.h"
+#include "gpsusbint.h"
 
 #define XMIN(a,b) (a < b? a : b)
 
@@ -74,6 +80,8 @@ static void   GPS_D152_Send(UC *data, GPS_PWay way, int32 *len);
 static void   GPS_D154_Send(UC *data, GPS_PWay way, int32 *len);
 static void   GPS_D155_Send(UC *data, GPS_PWay way, int32 *len);
 
+static void   GPS_D120_Get(int n, char *data);
+
 static void   GPS_D200_Get(GPS_PWay *way, UC *s);
 static void   GPS_D201_Get(GPS_PWay *way, UC *s);
 static void   GPS_D202_Get(GPS_PWay *way, UC *s);
@@ -90,10 +98,10 @@ static void   GPS_D400_Send(UC *data, GPS_PWay way, int32 *len);
 static void   GPS_D403_Send(UC *data, GPS_PWay way, int32 *len);
 static void   GPS_D450_Send(UC *data, GPS_PWay way, int32 *len);
 
-static int32    GPS_D500_Get(GPS_PAlmanac *alm, int32 entries, int32 fd);
-static int32    GPS_D501_Get(GPS_PAlmanac *alm, int32 entries, int32 fd);
-static int32    GPS_D550_Get(GPS_PAlmanac *alm, int32 entries, int32 fd);
-static int32    GPS_D551_Get(GPS_PAlmanac *alm, int32 entries, int32 fd);
+static int32    GPS_D500_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd);
+static int32    GPS_D501_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd);
+static int32    GPS_D550_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd);
+static int32    GPS_D551_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd);
 static void   GPS_D500_Send(UC *data, GPS_PAlmanac alm);
 static void   GPS_D501_Send(UC *data, GPS_PAlmanac alm);
 static void   GPS_D550_Send(UC *data, GPS_PAlmanac alm);
@@ -148,17 +156,16 @@ int32 GPS_Init(const char *port)
     
     (void) GPS_Util_Little();    
 
-    /*
-     *  Decide here if the portname refers to a USB device and set the 
-     *  global that's used as in inflection point for other decisions later.
-     */
-    gps_is_usb = (0 == strncmp(port, "usb:", 4));
-
     ret = GPS_A000(port);
     if(ret<0) return ret;
-
     gps_save_time = GPS_Command_Get_Time(port);
-    if(!gps_save_time) {
+
+    /*
+     * Some units may be unable to return time, such as a C320 when in 
+     * charging mode.  Only consider it fatal if the unit returns an error,
+     * not just absence of returning a time.
+     */
+    if(gps_save_time < 0) {
 	return FRAMING_ERROR;
     }
 
@@ -180,16 +187,16 @@ int32 GPS_Init(const char *port)
 ************************************************************************/
 static int32 GPS_A000(const char *port)
 {
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int16 version;
     int16 id;
 
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
-    if(!gps_is_usb && !GPS_Serial_Flush(fd))
+    if(!GPS_Device_Flush(fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -215,11 +222,17 @@ static int32 GPS_A000(const char *port)
     GPS_User("Unit:\t%s\nID:\t%d\nVersion:\t%.2f", 
 	gps_save_string, gps_save_id, gps_save_version);
 
-
+#if 0
     gps_date_time_transfer = pA600;
     gps_date_time_type     = pD600;  /* All models so far */
     gps_position_transfer  = pA700;
     gps_position_type      = pD700;  /* All models so far */
+#else
+    gps_date_time_transfer = -1;
+    gps_date_time_type     = -1;
+    gps_position_transfer  = -1;
+    gps_position_type      = -1;
+#endif
     gps_pvt_transfer       = -1;
     gps_pvt_type           = -1;
     gps_prx_waypt_transfer = -1;
@@ -229,7 +242,7 @@ static int32 GPS_A000(const char *port)
     gps_trk_hdr_type       = -1;
     gps_rte_link_type      = -1;
     
-    if(!GPS_Serial_Wait(fd))
+    if(!GPS_Device_Wait(fd))
     {
 	GPS_Warning("A001 protocol not supported");
 	id = GPS_Protocol_Version_Change(id,version);
@@ -246,28 +259,47 @@ static int32 GPS_A000(const char *port)
 	 * reading until we incur a timeout.
 	 * Worse still, the serial layer assumes a read timeout is a
 	 * fatal error, while the USB layer (correctly) returns that error
-	 * to the caller.  So we call GPS_Serial_Wait which spins into 
+	 * to the caller.  So we call GPS_Device_Wait which spins into 
 	 * a delay/select for the serial system and a NOP for USB.
+	 *
+	 * Worse _yet_, this is the one place in all of Garmin Protocolsville
+	 * where we don't know a priori how many packets will be sent in
+	 * response.   Since we want the lower levels of the USB handler
+	 * to handle the ugliness of the "return to interrupt" packets, we
+	 * reach behind that automation here and hand that ourselves.
 	 */
 	for (i = 0; i < 25; i++) {
 	    rec->type = 0;
-	    
-	    if(!GPS_Serial_Wait(fd))
-		    goto carry_on;
 
-	    if (GPS_Packet_Read(fd, &rec) <= 0) {
-		    goto carry_on;
+	    if (gps_is_usb) {
+		GPS_Packet_Read_usb(fd, &rec, 0);
+	    } else {
+		if(!GPS_Device_Wait(fd))
+			goto carry_on;
+
+		if (GPS_Packet_Read(fd, &rec) <= 0) {
+			goto carry_on;
+		}
+
+		GPS_Send_Ack(fd, &tra, &rec);
 	    }
 
-	    GPS_Send_Ack(fd, &tra, &rec);
-
 	    if (rec->type == 0xfd) {
-		    GPS_A001(rec);
-/* XXX This is wrong.   Since we don't have a timeout on a read in Windows 
- * (!) and this phase of the protocol is one of the very rare ones where we
- * don't know how many packets to expect, we have a big problem here.
- */
-goto carry_on;
+		GPS_A001(rec);
+		goto carry_on;
+	    }
+
+	   /*
+ 	    * If a 296 has previously been interrupted, it's going to
+	    * ignore the session request (grrrr) and continue to send 
+	    * us left over packets.   So if we see anything that isn't
+ 	    * part of our A000 discovery  cycle, reset the counter and
+	    * continue to loop.
+	    *
+	    * Garmin acknowledges this is a firmware defect.
+	    */
+	    if (rec->type < 0xf8) {
+		i = 0;
 	    }
 	}
 	fatal("Failed to find a product inquiry response.\n");
@@ -278,11 +310,10 @@ carry_on:
     if(gps_pvt_transfer != -1)
 	GPS_A800_Off(port,&fd);
     
-
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return 1;
@@ -343,113 +374,50 @@ static void GPS_A001(GPS_PPacket packet)
 	case 'A':
 	    GPS_User("\nCapability %c%d:", tag, data);
 	    lasta = data;
-	    if(data<100)
-	    {
-		if(data==10)
+	    switch (data) {
+		case 10:
 		    gps_device_command = pA010-10;
-		else if(data==11)
-		    gps_device_command = pA011-10;
-		else	
-		    GPS_Protocol_Error(tag,data);
-		continue;
-	    }
-	    else if(data<200)
-	    {
-		if(data==100)
+		    break;
+		case 11:
+		    gps_device_command = pA010-10;
+		    break;
+		case 100:
 		    gps_waypt_transfer = pA100;
-		/* Ignore A101 Waypoint Category Transfer Protocol. */
-		continue;
-	    }
-	    else if(data<300)
-	    {
-		if(data==200)
+		    break;
+		case 101:
+		    gps_category_transfer = pA101;
+		    break;
+		case 200:
 		    gps_route_transfer = pA200;
-		else if(data==201)
+		    break;
+		case 201:
 		    gps_route_transfer = pA201;
-		else
-		    GPS_Protocol_Error(tag,data);		
-		continue;
-	    }
-	    else if(data<400)
-	    {
-		    switch (data) {
-		    case 300: 
-			    gps_trk_transfer = pA300;
-			    break;
-		    case 301:
-			    gps_trk_transfer = pA301;
-			    break;
-		    case 302:
-			    gps_trk_transfer = pA302;
-			    break;
-		    default:
-			    GPS_Protocol_Error(tag,data);
-		    }
-		continue;
-	    }
-	    else if(data<500)
-	    {
-		if(data!=400)
-		    GPS_Protocol_Error(tag,data);
-		else
+		    break;
+		case 300: 
+		    gps_trk_transfer = pA300;
+		    break;
+		case 301:
+		    gps_trk_transfer = pA301;
+		    break;
+		case 302:
+		    gps_trk_transfer = pA302;
+		    break;
+		case 400:
 		    gps_prx_waypt_transfer = pA400;
-		continue;
-	    }
-	    else if(data<600)
-	    {
-		if(data!=500)
-		    GPS_Protocol_Error(tag,data);
-		else
+		    break;
+		case 500:
 		    gps_almanac_transfer = pA500;
-		continue;
-	    }
-	    else if(data<700)
-	    {
-		if (data == 600)
+		    break;
+		case 600:
 		    gps_date_time_transfer = pA600;
-		else {
-		    /* Stupid  undocumented 60C packets */
-		    /* GPS_Protocol_Error(tag,data); */
-	  	     continue;
-		}
-		continue;
-	    }
-	    else if(data<800)
-	    {
-		if(data!=700)
-		    GPS_Protocol_Error(tag,data);
-		gps_position_transfer = pA700;
-		continue;
-	    }
-	    else if(data<900)
-	    {
-		if (data == 800)
+		    break;
+		case 700:
+		    gps_position_transfer = pA700;
+		    break;
+		case 800:
 		    gps_pvt_transfer = pA800;
-		/*
-		 * Undocumented A802 packets introduced on Vista 3.60 f/w.
-		 * else  
-		 *  GPS_Protocol_Error(tag,data);
-		 */
-		continue;
-	    }
-	    else if (data < 1000)
-	    {
-		    	/* Stupid Garmin undocumented "A900" packets
-			 * as returned by GPS76, Emap, III, and V in 
-			 * later firmware.
-			 */
-		    continue;
-	    }
-	    else if (data < 1100)
-	    {
-		    	/* Stupid Garmin undocumented "A100[2345]" packets
-			 * as returned by Forerunner 301.
-			 */
-		    continue;
-	    }
-	    else
-	    {
-		GPS_Protocol_Error(tag,data);
+		    break;
+
 	    }
 	    break;
 
@@ -457,28 +425,50 @@ static void GPS_A001(GPS_PPacket packet)
 	    GPS_User(" %c%d", tag, data);
 	    if(lasta<200)
 	    {
-		if(data<=110 && data>=100)
-		{
-		    gps_waypt_type = data;
-		    continue;
+		switch (data) {
+			case 100:
+			case 101:
+			case 102:
+			case 103:
+			case 104:
+			case 105:
+			case 106:
+			case 107:
+			case 108:
+			case 109:
+			case 110:
+			/* 15x is panel-mount aviation */
+			case 150:
+			case 151:
+			case 152:
+			/* 153 not documented */
+			case 154:
+			case 155:
+				gps_waypt_type = data;
+				break;
+
+			/* 
+			 * Observered on Quest 3.0, 27xx, 27x, 29x.
+			 */
+			case 120:
+				gps_category_type = data;
+				break;
+
+			case 200:
+			case 201:
+			case 202:
+				gps_rte_hdr_type = data;
+				break;
+			
+			/* 210 Link packets appear in newer models, but the
+			 * doc isn't sufficiently clear on what they really
+			 * mean.
+			 */
+			case 210:
+				gps_rte_link_type = data;
+				break;
+			
 		}
-		if(data<153 && data>=150)
-		{
-		    gps_waypt_type = data;
-		    continue;
-		}
-		if(data<156 && data>=154)
-		{
-		    gps_waypt_type = data;
-		    continue;
-		}
-		if (data == 120) 
-		{
-			/* Quest 3.0 has a D120  for Wpt category ignore it*/
-			continue;
-		}
-		else
-		    GPS_Protocol_Error(tag,data);
 	    }
 	    
 
@@ -531,6 +521,7 @@ static void GPS_A001(GPS_PPacket packet)
 			    case 301: gps_trk_type = pD301; break;
 			    case 302: gps_trk_type = pD302; break;
 			    case 303: gps_trk_type = pD303; break;
+			    case 304: gps_trk_type = pD304; break;
 			    case 310: gps_trk_hdr_type = pD310; break;
 			    case 311: gps_trk_hdr_type = pD311; break;
 			    case 312: gps_trk_hdr_type = pD312; break;
@@ -651,14 +642,14 @@ static void GPS_A001(GPS_PPacket packet)
 int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
 {
     static UC data[2];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 n;
     int32 i;
 
 
-    if(!GPS_Serial_On(port,&fd))
+    if(!GPS_Device_On(port,&fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -698,10 +689,13 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
 	if(!((*way)[i]=GPS_Way_New()))
 	    return MEMORY_ERROR;
 
-	if(!GPS_Packet_Read(fd, &rec))
+	if(!GPS_Packet_Read(fd, &rec)) {
 	    return gps_errno;
-	if(!GPS_Send_Ack(fd, &tra, &rec))
+	}
+
+	if(!GPS_Send_Ack(fd, &tra, &rec)) {
 	    return gps_errno;
+	}
 
 	switch(gps_waypt_type)
 	{
@@ -770,7 +764,7 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
 
     if(rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt)
     {
-	GPS_Error("A100_GET: Error transferring waypoints.  Expected %d completion code.  Got %d", LINK_ID[gps_link_type].Pid_Xfer_Cmplt, rec->type);
+	GPS_Error("A100_GET: Error transferring waypoints.  Expected %d completion code.  Got %d.  %d of %d received", LINK_ID[gps_link_type].Pid_Xfer_Cmplt, rec->type, i, n);
 	return FRAMING_ERROR;
     }
 
@@ -783,7 +777,7 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return n;
@@ -806,13 +800,13 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
 int32 GPS_A100_Send(const char *port, GPS_PWay *way, int32 n, int (*cb)(GPS_PWay *))
 {
     UC data[GPS_ARB_LEN];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 i;
     int32 len;
 
-    if(!GPS_Serial_On(port,&fd))
+    if(!GPS_Device_On(port,&fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -919,13 +913,84 @@ int32 GPS_A100_Send(const char *port, GPS_PWay *way, int32 n, int (*cb)(GPS_PWay
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return 1;
 }
 
 
+/*
+ * Get the list of waypoint categories from the receiver.
+ */
+int32 GPS_A101_Get(const char *port)
+{
+    static UC data[2];
+    gpsdevh *fd;
+    GPS_PPacket tra;
+    GPS_PPacket rec;
+    int32 n;
+    int32 i;
+
+
+    if(!GPS_Device_On(port,&fd))
+	return gps_errno;
+
+    if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
+	return MEMORY_ERROR;
+
+    GPS_Util_Put_Short(data,
+		       COMMAND_ID[gps_device_command].Cmnd_Transfer_Wpt_Cats);
+    GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
+		    data,2);
+
+    if(!GPS_Write_Packet(fd,tra))
+    {
+	GPS_Error("A101_Get: Cannot write packet");
+	return FRAMING_ERROR;
+    }
+    
+    if(!GPS_Get_Ack(fd, &tra, &rec))
+    {
+	GPS_Error("A101_Get: No acknowledge");	
+	return FRAMING_ERROR;
+    }
+
+    GPS_Packet_Read(fd, &rec);
+    GPS_Send_Ack(fd, &tra, &rec);
+
+    n = GPS_Util_Get_Short(rec->data);
+    for (i = 0; i < n; ++i) {
+        if(!GPS_Packet_Read(fd, &rec)) {
+            return gps_errno;
+        }
+        if(!GPS_Send_Ack(fd, &tra, &rec)) {
+            return gps_errno;
+        }
+	switch(gps_category_type) {
+	case pD120:
+	    GPS_D120_Get(i,(char *) rec->data);
+	    break;
+	}
+    }
+    if(!GPS_Packet_Read(fd, &rec))
+        return gps_errno;
+    if(!GPS_Send_Ack(fd, &tra, &rec))
+        return gps_errno;
+
+    if(rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt)
+    {
+        GPS_Error("A101_Get: Error transferring waypoints.  Expected %d completion code.  Got %d.  %d of %d received", LINK_ID[gps_link_type].Pid_Xfer_Cmplt, rec->type, i, n);
+        return FRAMING_ERROR;
+    }
+
+
+    if(!GPS_Device_Off(fd))
+	return gps_errno;
+
+    return 1;
+
+}
 
 /* @funcstatic GPS_D100_Get *********************************************
 **
@@ -1325,7 +1390,7 @@ static void GPS_D109_Get(GPS_PWay *way, UC *s, int protoid)
 
     p=s;
 
-    (*way)->prot = 109;
+    (*way)->prot = protoid;
     (*way)->wpt_class = *p++;
     (*way)->colour    = *p++;
     (*way)->dspl      = *p++;
@@ -1352,9 +1417,26 @@ static void GPS_D109_Get(GPS_PWay *way, UC *s, int protoid)
 
     p += 4; /* Skip over "outbound link ete in seconds */
     if (protoid == 110) {
-	p += 4; /* skip float temp */
-	p += 4;  /* skip longword time */
-	p += 2; /* skip int "category membership " */
+	float gps_temp;
+	int gps_time;
+	gps_temp = GPS_Util_Get_Float(p);
+	p+=4;
+	if (gps_temp <= 1.0e24) {
+		(*way)->temperature_populated = 1;
+		(*way)->temperature = gps_temp;
+	}
+
+	gps_time = GPS_Util_Get_Uint(p);
+	p+=4;
+	/* The spec says that 0xffffffff is unknown, but the 60CSX with
+	 * firmware 2.5.0 writes zero.
+	 */
+	if (gps_time != 0xffffffff && gps_time != 0) {
+		(*way)->time_populated = 1;
+		(*way)->time = GPS_Math_Gtime_To_Utime(gps_time);
+	}
+	(*way)->category = GPS_Util_Get_Short(p);
+	p += 2;
     }
 
     q = (UC *) (*way)->ident;
@@ -1622,6 +1704,32 @@ static void GPS_D155_Get(GPS_PWay *way, UC *s)
     return;
 }
 
+/*
+ * We'll cheat for now.  We know there are no more than 16 categories
+ * as of this writing for no data type exposes more than 16 bits in the
+ * bitmask of categories.  
+ */
+static char categories[16][17];
+/* 
+ * Read descriptor s into category number N;
+ */
+static
+void GPS_D120_Get(int cat_num, char *s)
+{
+	/* we're guaranteed to have no more than 16 chars plus a 
+	 * null terminator. 
+	 * 
+	 * If the unit returned no string, the user has not configured one,
+	 * so mimic the behaviour of the 276/296.
+	 */
+
+	if (*s) {
+		strncpy(categories[cat_num], s, sizeof (categories[0]));
+	} else {
+		snprintf(categories[cat_num], sizeof (categories[0]), 
+			"Category %d", cat_num+1);
+	}
+}
 
 
 /* @funcstatic GPS_D100_Send *******************************************
@@ -2044,14 +2152,15 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len, int protoid)
 	GPS_Util_Put_Float(p, temp);
 	p += 4;
 
-	if (way->Time_populated) {
-		GPS_Util_Put_Uint(p,GPS_Math_Utime_To_Gtime(way->Time));
+	if (way->time_populated) {
+		GPS_Util_Put_Uint(p,GPS_Math_Utime_To_Gtime(way->time));
 		p+=sizeof(uint32);
 	} else {
 		for(i=0;i<4;++i) *p++ = 0xff; /* unknown time*/
 	}
 
-	for(i=0;i<2;++i) *p++ = 0x00; /* D110 category */
+	GPS_Util_Put_Short(p, (US) way->category);; /* D110 category */
+	p += 2;
     }
 
     q = (UC *) way->ident;
@@ -2334,14 +2443,14 @@ static void GPS_D155_Send(UC *data, GPS_PWay way, int32 *len)
 int32 GPS_A200_Get(const char *port, GPS_PWay **way)
 {
     static UC data[2];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 n;
     int32 i;
 
 
-    if(!GPS_Serial_On(port,&fd))
+    if(!GPS_Device_On(port,&fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -2489,7 +2598,7 @@ int32 GPS_A200_Get(const char *port, GPS_PWay **way)
     GPS_Packet_Del(&rec);
 
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return n;
@@ -2509,14 +2618,14 @@ int32 GPS_A200_Get(const char *port, GPS_PWay **way)
 int32 GPS_A201_Get(const char *port, GPS_PWay **way)
 {
     static UC data[2];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 n;
     int32 i;
 
 
-    if(!GPS_Serial_On(port,&fd))
+    if(!GPS_Device_On(port,&fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -2682,7 +2791,7 @@ int32 GPS_A201_Get(const char *port, GPS_PWay **way)
     GPS_Packet_Del(&rec);
 
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return n;
@@ -2703,14 +2812,14 @@ int32 GPS_A201_Get(const char *port, GPS_PWay **way)
 int32 GPS_A200_Send(const char *port, GPS_PWay *way, int32 n)
 {
     UC data[GPS_ARB_LEN];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 i;
     int32 len;
     UC  method;
 
-    if(!GPS_Serial_On(port,&fd))
+    if(!GPS_Device_On(port,&fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -2831,7 +2940,7 @@ int32 GPS_A200_Send(const char *port, GPS_PWay *way, int32 n)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return 1;
@@ -2852,14 +2961,14 @@ int32 GPS_A200_Send(const char *port, GPS_PWay *way, int32 n)
 int32 GPS_A201_Send(const char *port, GPS_PWay *way, int32 n)
 {
     UC data[GPS_ARB_LEN];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 i;
     int32 len;
     UC  method;
 
-    if(!GPS_Serial_On(port,&fd))
+    if(!GPS_Device_On(port,&fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -3000,7 +3109,7 @@ int32 GPS_A201_Send(const char *port, GPS_PWay *way, int32 n)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return 1;
@@ -3232,7 +3341,7 @@ static void GPS_D210_Send(UC *data, GPS_PWay way, int32 *len)
 int32 GPS_A300_Get(const char *port, GPS_PTrack **trk)
 {
     static UC data[2];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 n;
@@ -3250,7 +3359,7 @@ int32 GPS_A300_Get(const char *port, GPS_PTrack **trk)
 	return GPS_UNSUPPORTED;
     }
     
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -3281,7 +3390,6 @@ int32 GPS_A300_Get(const char *port, GPS_PTrack **trk)
     for(i=0;i<n;++i)
 	if(!((*trk)[i]=GPS_Track_New()))
 	    return MEMORY_ERROR;
-    
 
     switch(gps_trk_type)
     {
@@ -3303,7 +3411,7 @@ int32 GPS_A300_Get(const char *port, GPS_PTrack **trk)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return ret;
@@ -3324,7 +3432,7 @@ int32 GPS_A300_Get(const char *port, GPS_PTrack **trk)
 int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 {
     static UC data[2];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 n;
@@ -3340,7 +3448,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 	return GPS_UNSUPPORTED;
     }
     
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -3372,14 +3480,12 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 	if(!((*trk)[i]=GPS_Track_New()))
 	    return MEMORY_ERROR;
     
-
     for(i=0;i<n;++i)
     {
 	if(!GPS_Packet_Read(fd, &rec))
 	    return gps_errno;
 	if(!GPS_Send_Ack(fd, &tra, &rec))
 	    return gps_errno;
-
 	if(rec->type == LINK_ID[gps_link_type].Pid_Trk_Hdr)
 	{
 	    switch(gps_trk_hdr_type)
@@ -3419,6 +3525,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 	    GPS_D302b_Get(&((*trk)[i]),rec->data);
 	    break;
 	case pD303:
+	case pD304:
 	    GPS_D303b_Get(&((*trk)[i]),rec->data);
 	    break;
 	default:
@@ -3431,7 +3538,6 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 	return gps_errno;
     if(!GPS_Send_Ack(fd, &tra, &rec))
 	return gps_errno;
-
     if(rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt)
     {
 	GPS_Error("A301_Get: Error transferring tracks");
@@ -3447,7 +3553,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return n;
@@ -3470,7 +3576,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 int32 GPS_A300_Send(const char *port, GPS_PTrack *trk, int32 n)
 {
     UC data[GPS_ARB_LEN];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 i;
@@ -3486,7 +3592,7 @@ int32 GPS_A300_Send(const char *port, GPS_PTrack *trk, int32 n)
 	return GPS_UNSUPPORTED;
     }
     
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -3543,7 +3649,7 @@ int32 GPS_A300_Send(const char *port, GPS_PTrack *trk, int32 n)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return 1;
@@ -3564,7 +3670,7 @@ int32 GPS_A300_Send(const char *port, GPS_PTrack *trk, int32 n)
 int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 {
     UC data[GPS_ARB_LEN];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 i;
@@ -3581,7 +3687,7 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 	return GPS_UNSUPPORTED;
     }
     
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -3665,7 +3771,7 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return 1;
@@ -3683,7 +3789,7 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 **
 ** @return [int32] number of entries read
 ************************************************************************/
-int32 GPS_D300_Get(GPS_PTrack *trk, int32 entries, int32 fd)
+int32 GPS_D300_Get(GPS_PTrack *trk, int32 entries, gpsdevh *fd)
 {
     GPS_PPacket tra;
     GPS_PPacket rec;
@@ -3795,7 +3901,7 @@ void GPS_D302b_Get(GPS_PTrack *trk, UC *data)
 {
     UC *p;
     uint32 t;
-    double temp;
+    double gps_temp;
     
     p=data;
     
@@ -3821,7 +3927,12 @@ void GPS_D302b_Get(GPS_PTrack *trk, UC *data)
     /* The only difference between 302 and 301 is the presence of temp
      * in the middle.   Nice planning, eh?
      */
-    temp = GPS_Util_Get_Float(p);
+    gps_temp = GPS_Util_Get_Float(p);
+    if (gps_temp <= 1.0e24) {
+	    (*trk)->temperature_populated = 1;
+	    (*trk)->temperature = gps_temp;
+    }
+
     p+=sizeof(float);
 
     (*trk)->tnew = *p;
@@ -3845,7 +3956,7 @@ void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
     uint32 t;
     uint32 raw_lat, raw_lon;
     int lat_undefined, lon_undefined;
-    
+int i;    
     p=data;
     
     /* Latitude and longitude are sometimes invalid (0x7fffffff or 
@@ -3869,10 +3980,19 @@ void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
 	(*trk)->lon = GPS_Math_Semi_To_Deg(raw_lon);
     p+=sizeof(int32);
 
+    /*
+     * Let the caller decide if it wants to toss trackpionts with only
+     * hear and/or time data.
+     */
+    if (lat_undefined || lon_undefined) {
+	(*trk)->no_latlon = 1;
+    }
+
     if (lat_undefined != lon_undefined) 
 	GPS_Warning("GPS_D303b_Get: assumption (lat_undefined == lon_undefined) violated");
 
     t = GPS_Util_Get_Uint(p);
+
     if(!t || t==0x7fffffff || t==0xffffffff)
 	(*trk)->Time=0;
     else
@@ -3886,12 +4006,23 @@ void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
     p+=sizeof(float);
 
     /* Heartrate is reported as 0 if there is no signal from 
-     * a heartrate monitor.  A uint32 is a bit overkill, even 
-     * for me in my state of fitness. Perhaps this is actually 
-     * a char or uint16, leaving room for a trk_seg bool at the end? 
+     * a heartrate monitor.  
+     *  305 and 304 are identical until now. 
      */
-    (*trk)->heartrate = GPS_Util_Get_Uint(p);
-    p+=sizeof(uint32);
+    switch (gps_trk_type) {
+    case pD304:
+	p+=4; /* A float indicating number of meters travelled. */
+	(*trk)->heartrate = (*p++);
+	/* crank cadence, RPM, 0xff if invalid.  */
+	p++;
+	/* sensor present.  Boolean */
+	p++;
+	
+	break;
+    case pD303:
+	(*trk)->heartrate = *p++;
+	break;
+    }
 	
     /* There doesn't seem to be a trk_seg bool, or at least I've not 
      * observed it yet.  One possibility is to start a new segment 
@@ -3948,6 +4079,7 @@ void GPS_D311_Get(GPS_PTrack *trk, UC *s)
     /* Forerunner */
     identifier = GPS_Util_Get_Short(s);
     sprintf((*trk)->trk_ident, "%d", identifier);
+    (*trk)->tnew = 1;
 
     return;
 }
@@ -4111,7 +4243,7 @@ static void GPS_A300_Encode(UC *s, GPS_PTrack trk)
 int32 GPS_A400_Get(const char *port, GPS_PWay **way)
 {
     static UC data[2];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 n;
@@ -4121,7 +4253,7 @@ int32 GPS_A400_Get(const char *port, GPS_PWay **way)
 	return GPS_UNSUPPORTED;
 
 
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -4137,13 +4269,13 @@ int32 GPS_A400_Get(const char *port, GPS_PWay **way)
     if(!GPS_Get_Ack(fd, &tra, &rec))
 	return gps_errno;
 
-    if(!GPS_Serial_Chars_Ready(fd))
+    if(!GPS_Device_Chars_Ready(fd))
     {
 	GPS_Warning("A400 (ppx) protocol not supported");
 	GPS_Packet_Del(&rec);
 	GPS_Packet_Del(&tra);
 
-	if(!GPS_Serial_Off(port, fd))
+	if(!GPS_Device_Off(fd))
 	    return gps_errno;
 
 	return GPS_UNSUPPORTED;
@@ -4253,7 +4385,7 @@ int32 GPS_A400_Get(const char *port, GPS_PWay **way)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return n;
@@ -4274,7 +4406,7 @@ int32 GPS_A400_Get(const char *port, GPS_PWay **way)
 int32 GPS_A400_Send(const char *port, GPS_PWay *way, int32 n)
 {
     UC data[GPS_ARB_LEN];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 i;
@@ -4283,7 +4415,7 @@ int32 GPS_A400_Send(const char *port, GPS_PWay *way, int32 n)
     if(gps_prx_waypt_transfer == -1)
 	return GPS_UNSUPPORTED;
 
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -4380,7 +4512,7 @@ int32 GPS_A400_Send(const char *port, GPS_PWay *way, int32 n)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return 1;
@@ -4637,14 +4769,14 @@ static void GPS_D450_Send(UC *data, GPS_PWay way, int32 *len)
 int32 GPS_A500_Get(const char *port, GPS_PAlmanac **alm)
 {
     static UC data[2];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 n;
     int32 i;
     int32 ret;
     
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -4708,7 +4840,7 @@ int32 GPS_A500_Get(const char *port, GPS_PAlmanac **alm)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return ret;
@@ -4731,7 +4863,7 @@ int32 GPS_A500_Get(const char *port, GPS_PAlmanac **alm)
 int32 GPS_A500_Send(const char *port, GPS_PAlmanac *alm, int32 n)
 {
     UC data[GPS_ARB_LEN];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 i;
@@ -4740,7 +4872,7 @@ int32 GPS_A500_Send(const char *port, GPS_PAlmanac *alm, int32 n)
     int32 posnsent;
     int32 ret;
     
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -4829,7 +4961,7 @@ int32 GPS_A500_Send(const char *port, GPS_PAlmanac *alm, int32 n)
      *  the time. Note that the time sent is held in gps_save_time
      *  global
      */
-    if(GPS_Serial_Wait(fd))
+    if(GPS_Device_Wait(fd))
     {
 	if(!GPS_Packet_Read(fd, &rec))
 	    return gps_errno;
@@ -4855,7 +4987,7 @@ int32 GPS_A500_Send(const char *port, GPS_PAlmanac *alm, int32 n)
      *  the position. Note that the posn sent is held in gps_save_lat
      *  and gps_save_lon global!
      */
-    if(GPS_Serial_Wait(fd))
+    if(GPS_Device_Wait(fd))
     {
 	if(!GPS_Packet_Read(fd, &rec))
 	    return gps_errno;
@@ -4891,7 +5023,7 @@ int32 GPS_A500_Send(const char *port, GPS_PAlmanac *alm, int32 n)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return 1;
@@ -4909,7 +5041,7 @@ int32 GPS_A500_Send(const char *port, GPS_PAlmanac *alm, int32 n)
 **
 ** @return [int32] number of entries read
 ************************************************************************/
-static int32 GPS_D500_Get(GPS_PAlmanac *alm, int32 entries, int32 fd)
+static int32 GPS_D500_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd)
 {
     GPS_PPacket tra;
     GPS_PPacket rec;
@@ -4961,7 +5093,7 @@ static int32 GPS_D500_Get(GPS_PAlmanac *alm, int32 entries, int32 fd)
 **
 ** @return [int32] number of entries read
 ************************************************************************/
-static int32 GPS_D501_Get(GPS_PAlmanac *alm, int32 entries, int32 fd)
+static int32 GPS_D501_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd)
 {
     GPS_PPacket tra;
     GPS_PPacket rec;
@@ -5013,7 +5145,7 @@ static int32 GPS_D501_Get(GPS_PAlmanac *alm, int32 entries, int32 fd)
 **
 ** @return [int32] number of entries read
 ************************************************************************/
-static int32 GPS_D550_Get(GPS_PAlmanac *alm, int32 entries, int32 fd)
+static int32 GPS_D550_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd)
 {
     GPS_PPacket tra;
     GPS_PPacket rec;
@@ -5064,7 +5196,7 @@ static int32 GPS_D550_Get(GPS_PAlmanac *alm, int32 entries, int32 fd)
 **
 ** @return [int32] number of entries read
 ************************************************************************/
-static int32 GPS_D551_Get(GPS_PAlmanac *alm, int32 entries, int32 fd)
+static int32 GPS_D551_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd)
 {
     GPS_PPacket tra;
     GPS_PPacket rec;
@@ -5309,12 +5441,12 @@ static void GPS_A500_Encode(UC *s, GPS_PAlmanac alm)
 time_t GPS_A600_Get(const char *port)
 {
     static UC data[2];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     time_t ret;
     
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -5347,7 +5479,7 @@ time_t GPS_A600_Get(const char *port)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return ret;
@@ -5368,13 +5500,13 @@ time_t GPS_A600_Get(const char *port)
 ************************************************************************/
 int32 GPS_A600_Send(const char *port, time_t Time)
 {
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     int32 posnsent=0;
     int32 ret=0;
     
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -5401,7 +5533,7 @@ int32 GPS_A600_Send(const char *port, time_t Time)
      *  the position. Note that the posn sent is held in gps_save_lat
      *  and gps_save_lon globals!
      */
-    if(GPS_Serial_Wait(fd))
+    if(GPS_Device_Wait(fd))
     {
 	if(!GPS_Packet_Read(fd, &rec))
 	    return gps_errno;
@@ -5431,7 +5563,7 @@ int32 GPS_A600_Send(const char *port, time_t Time)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return 1;
@@ -5520,11 +5652,11 @@ void GPS_D600_Send(GPS_PPacket *packet, time_t Time)
 int32 GPS_A700_Get(const char *port, double *lat, double *lon)
 {
     static UC data[2];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -5558,7 +5690,7 @@ int32 GPS_A700_Get(const char *port, double *lat, double *lon)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return 1;
@@ -5578,11 +5710,11 @@ int32 GPS_A700_Get(const char *port, double *lat, double *lon)
 ************************************************************************/
 int32 GPS_A700_Send(const char *port, double lat, double lon)
 {
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
     
-    if(!GPS_Serial_On(port, &fd))
+    if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -5608,7 +5740,7 @@ int32 GPS_A700_Send(const char *port, double lat, double lon)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Serial_Off(port, fd))
+    if(!GPS_Device_Off(fd))
 	return gps_errno;
 
     return 1;
@@ -5687,13 +5819,13 @@ void GPS_D700_Send(GPS_PPacket *packet, double lat, double lon)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A800_On(const char *port, int32 *fd)
+int32 GPS_A800_On(const char *port, gpsdevh **fd)
 {
     static UC data[2];
     GPS_PPacket tra;
     GPS_PPacket rec;
     
-    if(!GPS_Serial_On(port, fd))
+    if(!GPS_Device_On(port, fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -5729,7 +5861,7 @@ int32 GPS_A800_On(const char *port, int32 *fd)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A800_Off(const char *port, int32 *fd)
+int32 GPS_A800_Off(const char *port, gpsdevh **fd)
 {
     static UC data[2];
     GPS_PPacket tra;
@@ -5755,8 +5887,8 @@ int32 GPS_A800_Off(const char *port, int32 *fd)
     GPS_Packet_Del(&rec);
     GPS_Packet_Del(&tra);
 
-    if(!GPS_Serial_Off(port, *fd))
-	return gps_errno;
+//    if(!GPS_Device_Off(*fd))
+//	return gps_errno;
 
     return 1;
 }
@@ -5771,7 +5903,7 @@ int32 GPS_A800_Off(const char *port, int32 *fd)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A800_Get(int32 *fd, GPS_PPvt_Data *packet)
+int32 GPS_A800_Get(gpsdevh **fd, GPS_PPvt_Data *packet)
 {
     GPS_PPacket tra;
     GPS_PPacket rec;
@@ -5878,7 +6010,7 @@ void GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data *pvt)
 int32 GPS_A906_Get(const char *port, GPS_OLap_Data **lap)
 {
     static UC data[2];
-    int32 fd;
+    gpsdevh *fd;
     GPS_PPacket lappkt;
     GPS_PPacket recpkt;
     int32 i, n;
@@ -5886,7 +6018,7 @@ int32 GPS_A906_Get(const char *port, GPS_OLap_Data **lap)
     if (gps_lap_transfer == -1)
 	return GPS_UNSUPPORTED;
 
-    if (!GPS_Serial_On(port, &fd))
+    if (!GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if (!(lappkt = GPS_Packet_New() ) || !(recpkt = GPS_Packet_New()))
@@ -5934,7 +6066,7 @@ int32 GPS_A906_Get(const char *port, GPS_OLap_Data **lap)
     GPS_Packet_Del(&lap);
     GPS_Packet_Del(&rec);
 
-    if (!GPS_Serial_Off(port, fd))
+    if (!GPS_Device_Off(fd))
 	return gps_errno;
 
     return ret;
@@ -6012,6 +6144,7 @@ Get_Pkt_Type(unsigned char p, unsigned char d0, const char **xinfo)
 			case 50: *xinfo = "Xfer PVT Stop"; break;
 			case 92: *xinfo = "Flight Records"; break;
 			case 117: *xinfo = "Xfer Laps"; break;
+			case 121: *xinfo = "Xfer Categories"; break;
 			default: *xinfo = "Unknown";
 		}
 		return "CMDDAT";
@@ -6056,5 +6189,7 @@ Get_Pkt_Type(unsigned char p, unsigned char d0, const char **xinfo)
 		return "SESREQ";
 	if (p == GUSB_SESSION_ACK)
 		return "SESACK";
+	if (p == 152)
+		return "WPTCAT";
 	return "UNKNOWN";
 }

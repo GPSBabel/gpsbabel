@@ -1,7 +1,7 @@
 /*
-    Stubs to keep build happy when USB just isn't available to us.
+    USB operations.
 
-    Copyright (C) 2004, 2006 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2006 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,39 +19,41 @@
 
  */
 
-
-#include "config.h"
-#if !HAVE_LIBUSB 
+#include "gpsdevice.h"
 #include "garminusb.h"
+#include "gpsusbint.h"
+#include "gpsusbcommon.h"
 
-const char no_usb[] = "USB suport is not available in this build.\n";
-int
-gusb_cmd_send(const garmin_usb_packet *obuf, size_t sz)
+static int32 success_stub(void)
 {
-	fatal(no_usb);
+	return 1;
 }
 
-int
-gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
+static int32 gdu_on(const char *port, gpsdevh **fd)
 {
-	fatal(no_usb);
+	return gusb_init(port, fd);
 }
 
-int
-gusb_open(const char *portname)
+static int32 gdu_off(gpsdevh *dh)
 {
-	fatal(no_usb);
+	return gusb_close(dh);
 }
 
-int
-gusb_init(const char *portname)
+static int32  gdu_read(gpsdevh *fd, GPS_PPacket *packet)
 {
-	fatal(no_usb);
+	/* Default is to eat bulk request packets. */
+	return GPS_Packet_Read_usb(fd, packet, 1);
 }
 
-int 
-gusb_close(const char *portname)
-{
-	return 0;
-}
-#endif /* defined(NO_USB) */
+gps_device_ops gps_usb_ops = {
+	gdu_on,
+	gdu_off,
+	(gps_device_op) success_stub,
+	(gps_device_op) success_stub,
+	(gps_device_op) success_stub,
+	(gps_device_op10) success_stub,
+	(gps_device_op10) success_stub,
+	gdu_read,
+	GPS_Make_Packet_usb,
+	GPS_Write_Packet_usb
+};

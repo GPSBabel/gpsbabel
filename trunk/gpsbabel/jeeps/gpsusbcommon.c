@@ -20,10 +20,9 @@
 
  */
 
-#include <usb.h>
 #include "gps.h"
 #include "garminusb.h"
-
+#include "gpsusbcommon.h"
 
 /*
  * This receive logic is a little convoluted as we go to some efforts here
@@ -36,17 +35,47 @@ enum {
 	rs_frombulk
 } receive_state;
 
+static gusb_llops_t *gusb_llops;
+
+/* Decide when to truncate packets for debug output */
+#define DEBUG_THRESH  ((global_opts.debug_level < 5) && (i > 10))
+
+/* Called from OS layer to register its low-level entry points. */
+void
+gusb_register_ll(gusb_llops_t *p)
+{
+	gusb_llops = p;
+}
+
 int
-gusb_close(const char *portname)
+gusb_close(gpsdevh *dh)
 {
 	garmin_usb_packet scratch;
+
+	memset(&scratch, 0, sizeof(scratch));
+
 	switch (receive_state) {
 	case rs_frombulk:
 		gusb_cmd_get(&scratch, sizeof(scratch));
 		break;
+	default:
+		break;
+	}
+
+	gusb_llops->llop_close(dh);
+	return 1;
+
+#if BOOGER
+	garmin_usb_packet scratch = {0};
+abort();
+	switch (receive_state) {
+	case rs_frombulk:
+		gusb_cmd_get(dh, &scratch, sizeof(scratch));
+		break;
 	}
 
 	return 1;
+#endif
 }
 
 
@@ -55,18 +84,18 @@ gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
 {
 	int rv;
 	unsigned char *buf = (unsigned char *) &ibuf->dbuf;
-
+	int orig_receive_state;
 top:
+	orig_receive_state = receive_state;
 	switch (receive_state) {
 	case rs_fromintr:
-			rv = gusb_cmd_get_os(ibuf, sz);
-			break;
+		rv = gusb_llops->llop_get_intr(ibuf, sz);
+		break;
 	case rs_frombulk:
-			rv = gusb_cmd_get_os_bulk(ibuf, sz);
-			if (rv == 0) {
-				receive_state = rs_fromintr;
-			}
-			break;
+		rv = gusb_llops->llop_get_bulk(ibuf, sz);
+		break;
+	default:
+		fatal("Unknown receiver state %d\n", receive_state);
 	}
 
 	if (gps_show_bytes) {
@@ -76,20 +105,43 @@ top:
 		GPS_Diag("RX (%s) [%d]:", 
 			receive_state == rs_fromintr ? "intr" : "bulk", rv);
 
-		for(i=0;i<rv;i++)
+		for(i=0;i<rv;i++) {
+			if (DEBUG_THRESH) {
+				GPS_Diag("[...]");
+				break;
+			}
 			GPS_Diag("%02x ", buf[i]);
+		}
 
-		for(i=0;i<rv;i++)
+		for(i=0;i<rv;i++) {
+			if (DEBUG_THRESH) {
+				GPS_Diag("[...]");
+				break;
+			}
 			GPS_Diag("%c", isalnum(buf[i])? buf[i] : '.');
+		}
 
 		m1 = Get_Pkt_Type(ibuf->gusb_pkt.pkt_id[0], 
 			ibuf->gusb_pkt.databuf[0], &m2);
+if ((rv == 0)  &&  (receive_state == rs_frombulk) ) {m1= "RET2INTR";m2=NULL;};
 		GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
 	}
 
-	if (ibuf->gusb_pkt.pkt_id[0] == GUSB_REQUEST_BULK) {
+	/* Adjust internal state and retry the read */
+	if ((rv > 0) && (ibuf->gusb_pkt.pkt_id[0] == GUSB_REQUEST_BULK)) {
 		receive_state = rs_frombulk;
 		goto top;
+	}
+	/*
+	 * If we were reading from the bulk pipe and we just got
+	 * a zero request, adjust our internal state.
+	 * It's tempting to retry the read here to hide this "stray"
+	 * packet from our callers, but that only works when you know
+	 * there's another packet coming.   That works in every case
+	 * except the A000 discovery sequence.
+	*/
+	if ((receive_state == rs_frombulk) && (rv <= 0)) {
+		receive_state = rs_fromintr;
 	}
 
 	return rv;
@@ -98,12 +150,12 @@ top:
 int 
 gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 {
-	int rv, i;
+	unsigned int rv, i;
 
 	unsigned char *obuf = (unsigned char *) &opkt->dbuf;
 	const char *m1, *m2;
 
-	rv = gusb_cmd_send_os(opkt, sz);
+	rv = gusb_llops->llop_send(opkt, sz);
 
 	if (gps_show_bytes) {
 		GPS_Diag("TX [%d]:", sz);
@@ -129,36 +181,43 @@ gusb_list_units()
 	
 	for (i = 0; i < GUSB_MAX_UNITS; i++) {
 		if (garmin_unit_info[i].serial_number) {
-			printf("%d %u %s\n", i, 
+			printf("%d %lu %lu %s\n", i, 
 				garmin_unit_info[i].serial_number,
+				garmin_unit_info[i].unit_id,
 				garmin_unit_info[i].product_identifier
 			);
 		}
 	}
 }
 
-char * 
-gusb_id_unit(void) 
+void
+gusb_id_unit(struct garmin_unit_info *gu) 
 {
 	static const char  oid[12] = 
 		{20, 0, 0, 0, 0xfe, 0, 0, 0, 0, 0, 0, 0};
 	garmin_usb_packet iresp;
 	int i;
-	char *rv = NULL;
 
 	gusb_cmd_send((garmin_usb_packet *)oid, sizeof(oid));
 
 	for (i = 0; i < 25; i++) {
 		iresp.gusb_pkt.type = 0;
 		if (gusb_cmd_get(&iresp, sizeof(iresp)) < 0) {
-			return rv;
+			return;
 		}
 		if (le_read16(iresp.gusb_pkt.pkt_id) == 0xff) {
-			rv = strdup((char *) iresp.gusb_pkt.databuf+4);
+			gu->product_identifier = xstrdup((char *) iresp.gusb_pkt.databuf+4);
+			gu->unit_id = le_read16(iresp.gusb_pkt.databuf+0);
+			gu->unit_version = le_read16(iresp.gusb_pkt.databuf+2);
 		}
+		/* 
+		 * My goodnesss, this is fragile.  During command syncup,
+		 * we need to know if we're at the end.  The 0xfd packet
+		 * is promised by Garmin engineering to be the last.  
+		 */
+		if (le_read16(iresp.gusb_pkt.pkt_id) == 0xfd) return;
 	}
-fatal("eek!");
-	
+	fatal("Unable to sync with Garmin USB device in %d attempts.", i);
 } 
 
 void
@@ -169,6 +228,11 @@ gusb_syncup(void)
 		{0, 0, 0, 0, GUSB_SESSION_START, 0, 0, 0, 0, 0, 0, 0};
 	garmin_usb_packet iresp;
 	int i;
+
+	/*
+	 * This is our first communication with the unit.
+	 */
+	receive_state = rs_fromintr;
 
 	for(i = 0; i < 25; i++) {
 		le_write16(&iresp.gusb_pkt.pkt_id, 0);
@@ -182,7 +246,7 @@ gusb_syncup(void)
 			(le_read32(iresp.gusb_pkt.datasz) == 4)) {
 			unsigned serial_number = le_read32(iresp.gusb_pkt.databuf);
 			garmin_unit_info[unit_number].serial_number = serial_number;
-			garmin_unit_info[unit_number].product_identifier = gusb_id_unit();
+			gusb_id_unit(&garmin_unit_info[unit_number]);
 
 			unit_number++;
 

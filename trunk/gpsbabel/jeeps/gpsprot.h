@@ -33,6 +33,7 @@ struct LINKDATA
     UC Pid_Protocol_Array;
     UC Pid_Product_Rqst;
     UC Pid_Product_Data;
+    UC Pid_Wpt_Cat_Data;
 }
 ;
 
@@ -63,7 +64,9 @@ struct COMMANDDATA
     UC Cmnd_Turn_Off_Pwr;
     UC Cmnd_Start_Pvt_Data;
     UC Cmnd_Stop_Pvt_Data;
+    UC Cmnd_FlightBook_Transfer;
     UC Cmnd_Transfer_Lap;
+    UC Cmnd_Transfer_Wpt_Cats;
 }
 ;
 
@@ -76,6 +79,11 @@ struct COMMANDDATA
 #define pA100 100
 int32 gps_waypt_transfer;
 
+/*
+ * Waypoint category transfer protocol
+ */
+#define pA101 101
+int32 gps_category_transfer;
 
 /*
  * Route Transfer Protocol
@@ -90,6 +98,7 @@ int32 gps_route_transfer;
 #define pA300 300
 #define pA301 301
 #define pA302 302
+#define pA304 304
 int32 gps_trk_transfer;
 
 /*
@@ -157,6 +166,11 @@ int32 gps_lap_transfer;
 int32 gps_rte_type;
 int32 gps_waypt_type;
 
+/*
+ * Waypoint category types
+ */
+#define pD120 120
+int32 gps_category_type;
 
 /*
  * Rte Header Type
@@ -181,6 +195,7 @@ int32 gps_rte_link_type;
 #define pD301 301
 #define pD302 302
 #define pD303 303
+#define pD304 304
 int32 gps_trk_type;
 
 

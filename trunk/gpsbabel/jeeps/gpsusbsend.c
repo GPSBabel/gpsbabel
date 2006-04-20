@@ -1,7 +1,7 @@
 /*
     Form GarminUSB packets to send.
 
-    Copyright (C) 2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004, 2005, 2006 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ GPS_Make_Packet_usb(GPS_PPacket *packet, UC type, UC *data, int16 n)
 }
 
 int32
-GPS_Write_Packet_usb(int32 fd, GPS_PPacket packet)
+GPS_Write_Packet_usb(gpsdevh *dh, GPS_PPacket packet)
 {
 	garmin_usb_packet gp;
 	memset(&gp, 0, sizeof(gp));

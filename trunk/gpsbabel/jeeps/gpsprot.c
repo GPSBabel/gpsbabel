@@ -4,6 +4,7 @@
 ** @author Copyright (C) 1999 Alan Bleasby
 ** @version 1.0 
 ** @modified Dec 28 1999 Alan Bleasby. First version
+** @modified Copyright (C) 2006 Robert Lipe
 ** @@
 ** 
 ** This library is free software; you can redistribute it and/or
@@ -36,7 +37,7 @@ static int32 gps_n_tag_unknown = 0;
 struct COMMANDDATA COMMAND_ID[2]=
 {
     {
-	0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x31,0x32
+	0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x31,0x32,92,117,121
     }
     ,
     {

@@ -1,7 +1,7 @@
 /*
     Physical/OS USB layer to talk to libusb.
 
-    Copyright (C) 2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004, 2005, 2006 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,9 @@
 #if HAVE_LIBUSB
 #include <usb.h>
 #include "gps.h"
+#include "gpslibusb.h"
 #include "garminusb.h"
+#include "gpsusbcommon.h"
 
 #define GARMIN_VID 0x91e
 
@@ -39,57 +41,30 @@
  * coalescion into packets anyway becuase of their serial background) will
  * compensate.
  */
-#define TMOUT_I 0100 /*  Milliseconds to timeout intr pipe access. */
+#define TMOUT_I 3000 /*  Milliseconds to timeout intr pipe access. */
+#define TMOUT_B 3000 /*  Milliseconds to timeout bulk pipe access. */
 
-int gusb_intr_in_ep;
-int gusb_bulk_out_ep;
-int gusb_bulk_in_ep;
 
-static const char  oinit[12] = {0, 0, 0, 0, 0x05, 0, 0, 0, 0, 0, 0, 0};
-garmin_usb_packet iresp;
+/* 
+ * TODO: this should all be moved into libusbdata in gpslibusb.h,
+ * allocated once here in gusb_start, and deallocated at the end.
+ */
+static int gusb_intr_in_ep;
+static int gusb_bulk_out_ep;
+static int gusb_bulk_in_ep;
 
-static struct usb_bus *busses;
-static	usb_dev_handle *udev;
-static void garmin_usb_scan(void);
-static void garmin_usb_syncup(void);
+// static struct usb_bus *busses;
+static usb_dev_handle *udev;
+static void garmin_usb_scan(libusb_unit_data *, int);
 
-int
-gusb_init(const char *portname)
-{
-// usb_set_debug(99);
-	usb_init();
-	usb_find_busses();
-	usb_find_devices();
-	busses = usb_get_busses();
-	garmin_usb_scan();
-
-	return 1;
-}
-
-static void dump(char *msg, const unsigned char *in, int r)
-{
-	int i;
-	printf("%s: %d\n", msg, r);
-	for (i = 0; i < r; i++) {
-		printf ("%02x ", in[i]);
-	}
-	if (r) printf("\n");
-	for (i = 0; i < r; i++) {
-		printf ("%c", isalnum(in[i]) ? in[i] : '.');
-	}
-	if (r) printf("\n");
-}
-
-int
-gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
+static int
+gusb_libusb_send(const garmin_usb_packet *opkt, size_t sz)
 {
 	int r;
+	
+	r = usb_bulk_write(udev, gusb_bulk_out_ep, (char *)(void *)opkt->dbuf, sz, TMOUT_B);
 
-        r = usb_bulk_write(udev, gusb_bulk_out_ep, (char *)(void *)opkt->dbuf, sz, TMOUT_I);
-        if (gps_show_bytes) {
-		dump ("Sent", &opkt->dbuf[0], r);
-	}
-	if (r != sz) {
+	if (r != (int) sz) {
 		fprintf(stderr, "Bad cmdsend r %d sz %d\n", r, sz);
 		if (r < 0) {
 			fatal("usb_bulk_write failed. '%s'\n", 
@@ -99,42 +74,37 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 	return r;
 }
 
-int
-gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
+static int
+gusb_libusb_get(garmin_usb_packet *ibuf, size_t sz)
 {
 	unsigned char *buf = &ibuf->dbuf[0];
-	unsigned char *obuf = buf;
-	int r = -1, tsz = 0;
+	int r = -1;
 
 	r = usb_interrupt_read(udev, gusb_intr_in_ep, (char *) buf, sz, TMOUT_I);
-
-	tsz = r;
-
-        if (gps_show_bytes) {
-		int i;
-                const char *m1, *m2;
-                printf("RX [%d]:", tsz);
-                for(i=0;i<tsz;i++)
-                        GPS_Diag("%02x ", obuf[i]);
-                for(i=0;i<tsz;i++)
-                        GPS_Diag("%c", isalnum(obuf[i])? obuf[i] : '.');
-
-                m1 = Get_Pkt_Type(ibuf->gusb_pkt.pkt_id[0], ibuf->gusb_pkt.databuf[0], &m2);
-                GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
-                printf("\n");
-        }
-
-	return (r);
+	return r;
 }
 
-void
-garmin_usb_teardown(void)
+static int
+gusb_libusb_get_bulk(garmin_usb_packet *ibuf, size_t sz)
+{
+	int r;
+	unsigned char *buf = &ibuf->dbuf[0];
+
+	r = usb_bulk_read(udev, gusb_bulk_in_ep, (char *) buf, sz, TMOUT_B);
+
+	return r;
+}
+
+
+static int
+gusb_teardown(const char *pname)
 {
 	if (udev) {
 		usb_release_interface(udev, 0);
 		usb_close(udev);
 		udev = NULL;
 	}
+	return 0; 
 }
 
 void
@@ -143,11 +113,10 @@ garmin_usb_start(struct usb_device *dev)
 	int i;
 
 	if (udev) return;
-
 	/*
-	 * Linux _requires_ the reset.   OSX doesn't work if we DO reset it.
-	 * I really should study this more, but for now, we'll just avoid the
-	 * reset on Apple's OSX.
+	 * Linux _requires_ the reset.   OSX doesn't work if we 
+	 * DO reset it.  I really should study this more, but for 
+	 * now, we'll just avoid the reset on Apple's OSX.
 	 */
 #if !defined (__APPLE__)
 	udev = usb_open(dev);
@@ -156,19 +125,19 @@ garmin_usb_start(struct usb_device *dev)
 #endif /* APPLE */
 
 	udev = usb_open(dev);
-	atexit(garmin_usb_teardown);
+	atexit((void(*)())gusb_teardown);
+
 	if (!udev) { fatal("usb_open failed\n"); }
 	/*
 	 * Hrmph.  No iManufacturer or iProduct headers....
 	 */
 	if (usb_set_configuration(udev, 1) < 0) {
-		fatal("usb_set_configuration failed\n");
+		fatal("usb_set_configuration failed: %s\n", usb_strerror());
 	}
 
 	if (usb_claim_interface(udev, 0) < 0) {
-//		abort();
+		fatal("Claim interfaced failed: %s\n", usb_strerror());
 	}
-
 
 
 	for (i = 0; i < dev->config->interface->altsetting->bNumEndpoints; i++) {
@@ -194,49 +163,22 @@ garmin_usb_start(struct usb_device *dev)
 	 * that loop without non-zero values for all three, we're hosed.
 	 */
 	if (gusb_intr_in_ep && gusb_bulk_in_ep && gusb_bulk_out_ep) {
-		garmin_usb_syncup();
-	} else {
-		fatal("Could not identify endpoints on USB device.\nFound endpoints Intr In %d Bulk Out %d Bulk In %d\n", gusb_intr_in_ep, gusb_bulk_out_ep, gusb_bulk_in_ep);
+		gusb_syncup();
+		return;
 	}
 
-	return;
-}
-
-void
-garmin_usb_syncup(void)
-{
-	int maxct = 5;
-	int maxtries;
-
-	for (maxtries = maxct; maxtries; maxtries--) {
-
-                le_write16(&iresp.gusb_pkt.pkt_id, 0);
-                le_write32(&iresp.gusb_pkt.datasz, 0);
-                le_write32(&iresp.gusb_pkt.databuf, 0);
-
-		gusb_cmd_send((const garmin_usb_packet *) oinit, sizeof(oinit));
-		gusb_cmd_get(&iresp, sizeof(iresp));
-
-                if ((le_read16(iresp.gusb_pkt.pkt_id) == 6) &&
-                        (le_read32(iresp.gusb_pkt.datasz) == 4)) {
-			if (gps_show_bytes) {
-				fprintf(stderr, "Synced in %d\n", maxct - maxtries);
-			}
-//			fprintf(stderr, "Unit number %u\n", iresp[15] << 24 | iresp[14] << 16 | iresp[13] << 8 | iresp[12]);
-			return;
-		}
-	}
-return;
-	fatal("Cannot sync up with receiver\n");
+	fatal("Could not identify endpoints on USB device.\n"
+		"Found endpoints Intr In 0x%x Bulk Out 0x%x Bulk In %0xx\n", 
+		gusb_intr_in_ep, gusb_bulk_out_ep, gusb_bulk_in_ep);
 }
 
 static
-void garmin_usb_scan(void)
+void garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
 {
-	int initted = 0;
+	int found_devices = 0;
 	struct usb_bus *bus;
 
-	for (bus = busses; bus; bus = bus->next) {
+	for (bus = lud->busses; bus; bus = bus->next) {
 		struct usb_device *dev;
 
 		for (dev = bus->devices; dev; dev = dev->next) {
@@ -245,14 +187,58 @@ void garmin_usb_scan(void)
 			 * we just take the easy way out for now.
 			 */
 			if (dev->descriptor.idVendor == GARMIN_VID) {
-				garmin_usb_start(dev);	
-				initted++;
+				/* Nuvi */
+				if (dev->descriptor.idProduct == 0x19) 
+					continue;
+				if (req_unit_number < 0) {
+					garmin_usb_start(dev);	
+					gusb_teardown(NULL);
+				} else 
+				if (req_unit_number == found_devices)
+					garmin_usb_start(dev);	
+				found_devices++;
 			}
 		}
 	}
 
-	if (0 == initted) {
+	if (req_unit_number < 0) {
+		gusb_list_units();
+		exit (0);
+	}
+	if (0 == found_devices) {
 		fatal("Found no Garmin USB devices.\n");
 	}
 }
+
+static gusb_llops_t libusb_llops = {
+	gusb_libusb_get,
+	gusb_libusb_get_bulk,
+	gusb_libusb_send,
+	gusb_teardown
+};
+
+int
+gusb_init(const char *portname, gpsdevh **dh)
+{
+	int req_unit_number = 0;
+	libusb_unit_data *lud = xcalloc(sizeof (libusb_unit_data), 1);
+	*dh = (gpsdevh*) lud;
+
+// usb_set_debug(99);
+	usb_init();
+	gusb_register_ll(&libusb_llops);
+
+	/* if "usb:N", read "N" to be the unit number. */
+	if (strlen(portname) > 4) {
+		req_unit_number = atoi(portname + 4);
+	}
+
+	usb_find_busses();
+	usb_find_devices();
+	lud->busses = usb_get_busses();
+	garmin_usb_scan(lud, req_unit_number);
+
+	return 1;
+}
+
 #endif /* HAVE_LIBUSB */

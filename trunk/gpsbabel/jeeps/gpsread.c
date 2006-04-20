@@ -4,6 +4,7 @@
 ** @author Copyright (C) 1999 Alan Bleasby
 ** @version 1.0 
 ** @modified Dec 28 1999 Alan Bleasby. First version
+** @modified Copyright (C) 2006 Robert Lipe
 ** @@
 ** 
 ** This library is free software; you can redistribute it and/or
@@ -22,7 +23,7 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-#include "gpsusbint.h"
+#include "gpsserial.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -57,7 +58,7 @@ time_t GPS_Time_Now(void)
 
 
 
-/* @func GPS_Packet_Read ***********************************************
+/* @func GPS_Serial_Packet_Read ***********************************************
 **
 ** Read a packet
 **
@@ -67,7 +68,7 @@ time_t GPS_Time_Now(void)
 ** @return [int32] number of bytes read
 **********************************************************************/
 
-int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
+int32 GPS_Serial_Packet_Read(gpsdevh *fd, GPS_PPacket *packet)
 {
     time_t start;
     int32  n;
@@ -84,10 +85,6 @@ int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
     isDLE = gpsFalse;
     p = (*packet)->data;
 
-    if (gps_is_usb) {
-	    return GPS_Packet_Read_usb(fd, packet);
-    }
-    
     start = GPS_Time_Now();
     GPS_Diag("Rx Data:");
     while(GPS_Time_Now() < start+GPS_TIME_OUT)
@@ -109,7 +106,7 @@ int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
 		(*packet)->dle = u;
 		if(u != DLE)
 		{
-		    (void) fprintf(stderr,"GPS_Packet_Read: No DLE\n");
+		    (void) fprintf(stderr,"GPS_Packet_Read: No DLE.  Data received, but probably not a garmin packet.\n");
 		    (void) fflush(stderr);
 		    return 0;
 		}
@@ -166,6 +163,14 @@ int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
 		    }
 		    
 		    m1 = Get_Pkt_Type((*packet)->type, (*packet)->data[0], &m2);
+		    if (gps_show_bytes) {
+			GPS_Diag(" ");
+			for (i = 0; i < (*packet)->n; i++) {
+			   char c = (*packet)->data[i];
+		   	   GPS_Diag("%c", isalnum(c) ? c  : '.');
+			}
+			GPS_Diag(" ");
+		    }
 		    GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
 		    return (*packet)->n;
 		}
@@ -175,7 +180,7 @@ int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
     }
     
 	    
-    GPS_Error("GPS_Packet_Read: Time-out");
+    GPS_Error("GPS_Packet_Read: Timeout.  No data received.");
     gps_errno = SERIAL_ERROR;
 
     return 0;
@@ -194,13 +199,9 @@ int32 GPS_Packet_Read(int32 fd, GPS_PPacket *packet)
 ** @return [int32] true if ACK
 **********************************************************************/
 
-int32 GPS_Get_Ack(int32 fd, GPS_PPacket *tra, GPS_PPacket *rec)
+int32 GPS_Serial_Get_Ack(gpsdevh *fd, GPS_PPacket *tra, GPS_PPacket *rec)
 {
-    if (gps_is_usb) {
-	    return 1;
-    }
-
-    if(!GPS_Packet_Read(fd, rec))
+    if(!GPS_Serial_Packet_Read(fd, rec))
 	return 0;
 
     if(LINK_ID[0].Pid_Ack_Byte != (*rec)->type)

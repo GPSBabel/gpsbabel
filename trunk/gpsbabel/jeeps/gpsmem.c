@@ -5,6 +5,7 @@
 ** @version 1.0 
 ** @modified December 28th 1999 Alan Bleasby. First version
 ** @modified June 29th 2000 Alan Bleasby. NMEA additions
+** @modified Copyright (C) 2006 Robert Lipe
 ** @@
 ** 
 ** This library is free software; you can redistribute it and/or
@@ -23,7 +24,6 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-#include "garminusb.h"
 #include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
@@ -61,7 +61,6 @@ GPS_PPacket GPS_Packet_New(void)
 
     return ret;
 }
-
 
 
 /* @func GPS_Packet_Del ***********************************************
