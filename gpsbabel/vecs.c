@@ -217,13 +217,13 @@ vecs_t vec_list[] = {
 	{
 		&tpg_vecs,
 		"tpg",
-		"National Geographic Topo .tpg",
+		"National Geographic Topo .tpg (waypoints)",
 		"tpg"
 	},
 	{
 		&tpo_vecs,
 		"tpo",
-		"National Geographic Topo (pre 3.0) .tpo (tracks)",
+		"National Geographic Topo .tpo",
 		"tpo"
 	},
 	{
