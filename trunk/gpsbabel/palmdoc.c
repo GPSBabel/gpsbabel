@@ -83,13 +83,13 @@ static struct buffer buf;
 
 struct doc_record0                   /* 16 bytes total */
 {
-    unsigned short version;          /* 1 = plain text, 2 = compressed */
-    unsigned short reserved1;
-    unsigned long  doc_size;         /* in bytes, when uncompressed */
-    unsigned short num_records;      /* PDB header numRecords - 1 */
-    unsigned short rec_size;         /* usually RECORD_SIZE_MAX */
-    unsigned long  reserved2;
-    unsigned short recsizes[1];
+    gbuint16 version;          /* 1 = plain text, 2 = compressed */
+    gbuint16 reserved1;
+    gbuint32 doc_size;         /* in bytes, when uncompressed */
+    gbuint16 num_records;      /* PDB header numRecords - 1 */
+    gbuint16 rec_size;         /* usually RECORD_SIZE_MAX */
+    gbuint32 reserved2;
+    gbuint16 recsizes[1];
 };
 
 static struct recordsize {
@@ -105,7 +105,7 @@ static struct bookmark {
 
 struct bookmark_record {
 	char text[16];
-	unsigned long offset;
+	gbuint32 offset;
 };
 
 static void put_byte(struct buffer *b, unsigned char c, int *space)
@@ -448,7 +448,7 @@ palmdoc_disp(const waypoint *wpt)
 		tm = time(NULL);
 	strftime(tbuf, sizeof(tbuf), "%d-%b-%Y", localtime(&tm));
 
-	docprintf(300, "%-16s  %c%d %06.3f  %c%d %06.3f  (%ld%c %6.0f %7.0f)",
+	docprintf(300, "%-16s  %c%d %06.3f  %c%d %06.3f  (%d%c %6.0f %7.0f)",
 		(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname,
 		wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), 
 		wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint),
