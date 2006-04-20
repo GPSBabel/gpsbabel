@@ -202,7 +202,11 @@ gusb_init(const char *pname, gpsdevh **dh)
 	gusb_register_ll(&win_llops);
 
 	if (strlen(pname) > 4) {
-		req_unit_number = atoi(pname+4);
+		if (0 == strcmp(portname+4, "list")) {
+			req_unit_number = -1;
+		} else {
+			req_unit_number = atoi(pname+4);
+		}
 	}
 
 	hdevinfo = SetupDiGetClassDevs( (GUID *) &GARMIN_GUID, NULL, NULL, 

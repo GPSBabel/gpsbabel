@@ -232,7 +232,11 @@ gusb_init(const char *portname, gpsdevh **dh)
 
 	/* if "usb:N", read "N" to be the unit number. */
 	if (strlen(portname) > 4) {
-		req_unit_number = atoi(portname + 4);
+		if (0 == strcmp(portname+4, "list")) {
+			req_unit_number = -1;
+		} else {
+			req_unit_number = atoi(portname + 4);
+		}
 	}
 
 	usb_find_busses();
