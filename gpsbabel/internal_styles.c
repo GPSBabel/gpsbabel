@@ -659,7 +659,7 @@ static char s_and_t[] =
 "# GC171C,44.70605,-85.62265,The Michigan Frog by RealDcoy & LRB,http://www.geocaching.com/seek/cache_details.aspx?ID=5916,Traditional Cache\n"
 "#\n"
 
-"DESCRIPTION 		Microsoft Streets and Trips 2002-2005\n"
+"DESCRIPTION 		Microsoft Streets and Trips 2002-2006\n"
 "EXTENSION               txt\n"
 
 
