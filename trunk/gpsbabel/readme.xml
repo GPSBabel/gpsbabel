@@ -67,7 +67,7 @@ mechanism.
       <para> GPSBabel is distributed in source format that will work on
 about any operating system and as ready-to-run binaries for some
 operating systems, notably Windows.  See the "OS-Specific notes" at
-<ulink url="http://www.gpsbabel.org ">gpsbabel.org</ulink>for
+<ulink url="http://www.gpsbabel.org ">gpsbabel.org</ulink> for
 instructions on those binary kits.
 </para>
       <para> For operating systems where no binary is provided, you will
@@ -336,7 +336,7 @@ name.</para>
 differences.</para>
       <para/>
       <example>
-	<title>An example with all options</title>
+	<title>Sample BCR command with all options</title>
 	<screen format="linespecific"><para>gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr
 </para>
 </screen>
@@ -618,7 +618,7 @@ be solved with the options 'date' and 'time'.
       <para><option>time</option> -  input/output time format (Windows-like For example, "hh:mm:ss xx")</para>
       <para><option>utc</option> -   write timestamps x hours relative to UTC</para>
       <example>
-        <title>garmin_txt example with all options:</title>
+        <title>Command showing garmin_txt output with all options</title>
 	<screen format="linespecific">gpsbabel -i garmin_txt,date="MM/DD/YYYY",time="hh:mm:ss xx" \
    -f in.txt \
    -o garmin_txt,date="DD.MM.YYYY",datum="WGS 72",dist=m,prec=6,temp=c,time="HH:mm:ss",utc=+2 \
@@ -1691,7 +1691,7 @@ whether or not to force uppercase  in shortnames. (0 = LEAVE AS IS, 1
 = UPPERCASE ALL). NOTE: sn* options require use of the '-s' command
 line option.</para>
       <example>
-	<title> Example Usage: </title>
+	<title>xcsv Command options</title>
 	<screen format="linespecific"> gpsbabel -i xcsv,style=foo.style -f foo \
  -o xcsv,style=bar.style \
  -F bar
@@ -1755,7 +1755,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          The default is zero feet, essentially a duplicate position.
          </para>
          <example>
-            <title> An example</title>
+            <title>Using position filter to suppress close points</title>
             <screen format="linespecific">gpsbabel -i geo -f 1.loc -f 2.loc -x position,distance=1f  	\
          -o mapsend -F 3.wpt</screen>
          </example>
@@ -1780,7 +1780,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          further from the center are kept and closer points are
          discarded.</para>
          <example>
-            <title>	For example:</title>
+            <title>Using radius filter to identify points close to a given point </title>
             <screen format="linespecific">gpsbabel -i geo -f 1.loc \
    -x radius,distance=1.5M,lat=30.0,lon=-90.0   \	         
    -o mapsend  \
@@ -1791,7 +1791,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
 </para>
       </section>
       <section>
-         <title> DUPLICATE</title>
+         <title>DUPLICATE</title>
          <para> The duplicate filter is designed to remove duplicate
          points based on their shortname (traditionally a waypoint's
          name on the GPS receiver), and/or their location (to a
@@ -1799,7 +1799,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          that specify how duplicates will be recognized, "<parameter moreinfo="none">shortname</parameter>" and "<parameter moreinfo="none">location</parameter>".  Generally, at least
          one of these options is REQUIRED.  </para>
          <example>
-            <title>For example:</title>
+            <title>Using duplicate filter to suppress points with same name and locations</title>
             <screen format="linespecific"> gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname  \
 	         -o gpx -F merged_with_no_dupes.gpx</screen>
          </example>
