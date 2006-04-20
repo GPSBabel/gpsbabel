@@ -56,8 +56,10 @@ FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o \
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
 	jeeps/gpsprot.o jeeps/gpsread.o \
+	jeeps/gpsdevice.o jeeps/gpsdevice_ser.o jeeps/gpsdevice_usb.o \
 	jeeps/gpsrqst.o jeeps/gpssend.o jeeps/gpsserial.o jeeps/gpsutil.o \
-	jeeps/gpsusbread.o jeeps/gpsusbsend.o @OSJEEPS@
+	jeeps/gpsusbread.o jeeps/gpsusbsend.o \
+	jeeps/gpsusbcommon.o @OSJEEPS@
 
 # Extra modules in Jeeps that we don't use
 # 	jeeps/gpsfmt.o jeeps/gpsinput.o jeeps/gpsproj.o
