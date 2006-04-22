@@ -91,8 +91,10 @@ csv_stringclean(const char *string, const char *chararray)
                 /* we don't want this character! */
 		memmove(p1, p1 + 1, (p2 - p1));
                 p1[p2 - p1] = '\0';
+		p2--;
             }
-            p1++;
+	    else
+		p1++;
         }
         cp++;
     }
@@ -147,7 +149,7 @@ csv_stringtrim(const char *string, const char *enclosure, int strip_max)
     if (elen) {
 	while (
 	       (stripped < strip_max) &&
-	       ((size_t) (p2 - p1) >= elen) &&
+	       ((size_t) (p2 - p1 + 1) >= (elen * 2)) &&
 	       (strncmp(p1, enclosure, elen) == 0) &&
 	       (strncmp((p2 - elen + 1), enclosure, elen) == 0)) {
 	    p2 -= elen;
@@ -179,7 +181,7 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
     const char *sp;
     static const char *p = NULL;
     static char *tmp = NULL;
-    size_t dlen = 0, elen = 0;
+    size_t dlen = 0, elen = 0, efound = 0;
     int enclosedepth = 0;
     short int dfound;
     short int hyper_whitespace_delimiter = 0;
@@ -221,15 +223,18 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
         dlen = strlen(delimited_by);
     if (enclosed_in)
         elen = strlen(enclosed_in);
-    
     dfound = 0;
 
     while ((*p) && (!dfound)) {
-        if ((elen) && (strncmp(p, enclosed_in, elen) == 0)) {
+        if ((elen) && (strncmp(p, enclosed_in, elen) == 0))
+	{
+	    efound = 1;
+	    p+=elen;
 	    if (enclosedepth)
 		enclosedepth--;
 	    else
 		enclosedepth++;
+	    continue;
 	}
 
 	if (!enclosedepth) {
@@ -243,6 +248,9 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
 	        p++;
 	    }
 	}
+	else {
+	    p++;
+	}
     }
     
     /* allocate enough space for this data field */
@@ -250,6 +258,12 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
 
     strncpy(tmp, sp, (p - sp));
     tmp[p - sp] = '\0'; 
+
+    if (elen && efound) {
+	char *c = csv_stringtrim(tmp, enclosed_in, 0);
+	xfree(tmp);
+	tmp = c;
+    }
 
     if (dfound) {
 	/* skip over the delimited_by */
@@ -264,7 +278,6 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
 		": Warning- Unbalanced Field Enclosures (%s) on line %d\n",
 	        enclosed_in, line_no);
     }
-
     return (tmp);
 }
 
@@ -362,9 +375,19 @@ human_to_dec( const char *instr, double *outlat, double *outlon, int which )
     const char *cur;
     double *numres = unk;
     int numind = 0;
+    char *buff;
     
-    cur = instr;
-       
+    if (strchr(instr, ',') != NULL) {
+        char *c;
+        buff = xstrdup(instr);
+	while ((c = strchr(buff, ','))) *c = '.';
+    }
+    else {
+        buff = (char *)instr;
+    }
+    
+    cur = buff;
+
     while ( cur && *cur ) {
 	switch (*cur) {
 	    case 'n': case 's': case 'N': case 'S':
@@ -410,9 +433,10 @@ human_to_dec( const char *instr, double *outlat, double *outlon, int which )
 		cur++;
 		break;
 	    case '1': case '2': case '3': case '4': case '5':
-	    case '6': case '7': case '8': case '9': case '0': case '.':
+	    case '6': case '7': case '8': case '9': case '0': 
+	    case '.': case ',':
 		numres[numind] = atof(cur);
-		while (cur && *cur && strchr("1234567890.",*cur)) cur++;
+		while (cur && *cur && strchr("1234567890.,",*cur)) cur++;
 		break;
 	    case '-':
 		unksign = -1;
@@ -453,6 +477,9 @@ human_to_dec( const char *instr, double *outlat, double *outlon, int which )
 	if ( lon[1] != 999 ) *outlon += lon[1]/60.0;
 	if ( lon[2] != 999 ) *outlon += lon[2]/3600.0;
 	if ( lonsign ) *outlon *= lonsign;
+    }
+    if (buff != instr) {
+        xfree(buff);
     }
 }
 
