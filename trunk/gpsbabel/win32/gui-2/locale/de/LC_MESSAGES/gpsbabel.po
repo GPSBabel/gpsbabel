@@ -222,6 +222,12 @@ msgstr "Name der 'unassigned'-Kategorie"
 msgid "New name for the route"
 msgstr "Name der neuen Route"
 
+msgid "No separator lines between waypoints"
+msgstr "keine Trennlinien zwischen den Wegpunkten"
+
+msgid "No whitespace in generated shortnames"
+msgstr "Leerzeichen in Kurznamen unterdrücken"
+
 msgid "Non-stealth encrypted icon name"
 msgstr "Sichtbar verschlüsselter Symbolname"
 
@@ -294,14 +300,8 @@ msgstr "Unterdücke Kennzeichnung für erzeugte Pins"
 msgid "Suppress retired geocaches"
 msgstr "Unterdrücke zurückgezogene (?) Geocaches"
 
-msgid "Suppress separator lines between waypoints"
-msgstr "keine Trennlinien zwischen den Wegpunkten"
-
 msgid "Suppress use of handshaking in name of speed"
 msgstr "Kein 'Handshaking' (im Namen der Geschwindigkeit)"
-
-msgid "Suppress whitespace in generated shortnames"
-msgstr "Leerzeichen in Kurznamen unterdrücken"
 
 msgid "Symbol to use for point data"
 msgstr "Symbol für Punkte"
