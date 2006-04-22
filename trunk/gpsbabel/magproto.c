@@ -1,7 +1,7 @@
 /*
     Communicate Thales/Magellan serial protocol.
 
-    Copyright (C) 2002, 2003, 2004, 2005 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004, 2005, 2006 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 static int bitrate = 4800;
 static int wptcmtcnt;
 static int wptcmtcnt_max;
+static int explorist;
 #define MYNAME "MAGPROTO"
 #define MAXCMTCT 200
 
@@ -68,6 +69,7 @@ typedef struct mag_rte_elem {
  */
 typedef struct mag_rte_head {
 	queue Q;			/* Queue head for child rte_elems */
+	char *rte_name;
 	int nelems;
 } mag_rte_head;
 
@@ -663,7 +665,7 @@ terminit(const char *portname, int create_ok)
 
         magfile_in = xfopen(portname, "rb", MYNAME);
 
-	is_file = !isatty(fileno(magfile_in));
+	is_file = !isatty(fileno(magfile_in)) || explorist;
 	if (is_file) {
 		icon_mapping = map330_icon_table;
 		mag_cleanse = m330_cleanse;
@@ -741,7 +743,7 @@ arglist_t mag_fargs[] = {
 };
 
 static void
-mag_rd_init(const char *portname)
+mag_rd_init_common(const char *portname)
 {
 	time_t now, later;
 	waypoint_read_count = 0;
@@ -802,6 +804,20 @@ mag_rd_init(const char *portname)
 }
 
 static void
+mag_rd_init(const char *portname)
+{
+	explorist = 0;
+	mag_rd_init_common(portname);
+}
+
+static void
+magX_rd_init(const char *portname)
+{
+	explorist = 1;
+	mag_rd_init_common(portname);
+}
+
+static void
 mag_wr_init_common(const char *portname)
 {
 	if (bs) {
@@ -820,7 +836,7 @@ mag_wr_init_common(const char *portname)
 	}
 #else
 	magfile_out = xfopen(portname, "w+b", MYNAME);
-	is_file = !isatty(fileno(magfile_out));
+	is_file = !isatty(fileno(magfile_out)) || explorist;
 #endif
 
 	if (!mkshort_handle) {
@@ -856,6 +872,7 @@ static void
 magX_wr_init(const char *portname)
 {
 	wpt_len = 20;
+	explorist = 1;
 	mag_wr_init_common(portname);
 	setshort_length(mkshort_handle, wpt_len);
 	setshort_whitespace_ok(mkshort_handle, 1);
@@ -864,6 +881,7 @@ magX_wr_init(const char *portname)
 static void
 mag_wr_init(const char *portname)
 {
+	explorist = 0;
 	wpt_len = 8;
 	mag_wr_init_common(portname);
 	/* 
@@ -959,11 +977,26 @@ mag_rteparse(char *rtemsg)
 	static mag_rte_head *mag_rte_head;
 	mag_rte_elem *rte_elem;
 	char *p;
+	char *rte_name;
 	
 	descr[0] = 0;
-
+#if 0
 	sscanf(rtemsg,"$PMGNRTE,%d,%d,%c,%d%n", 
 		&frags,&frag,xbuf,&rtenum,&n);
+#else
+	sscanf(rtemsg,"$PMGNRTE,%d,%d,%c,%d%n", 
+		&frags,&frag,xbuf,&rtenum,&n);
+
+	/* Explorist has a route name here */
+	if (explorist) {
+		char rten[1024];
+		int n2;
+		sscanf(rtemsg + n, ",%[^,]%n", rten, &n2);
+		n += n2;
+		rte_name = xstrdup(rten);
+	}
+
+#endif
 
 	/*
 	 * This is the first component of a route.  Allocate a new
@@ -1012,6 +1045,7 @@ mag_rteparse(char *rtemsg)
 		rte_head = route_head_alloc();
 		route_add_head(rte_head);
 		rte_head->rte_num = rtenum;
+		rte_head->rte_name = xstrdup(rte_name);
 
 		/* 
 		 * It is quite feasible that we have 200 waypoints,
@@ -1384,10 +1418,16 @@ mag_route_trl(const route_head * rte)
 		
 		if ((tmp == &rte->waypoint_list) || ((i % 2) == 0)) {
 			thisline++;
-
-			sprintf(obuff, "PMGNRTE,%d,%d,c,%d,%s,%s", 
+			char expbuf[1024];
+			expbuf[0] = 0;
+			if (explorist) {
+				snprintf(expbuf, sizeof(expbuf), "%s,",
+					rte->rte_name ? rte->rte_name : "");
+			}
+			sprintf(obuff, "PMGNRTE,%d,%d,c,%d,%s%s,%s", 
 				numlines, thisline, 
 				rte->rte_num ? rte->rte_num : route_out_count,
+				expbuf,
 				buff1, buff2);
 
 			mag_writemsg(obuff);
@@ -1471,7 +1511,7 @@ ff_vecs_t mag_fvecs = {
 ff_vecs_t magX_fvecs = {
 	ff_type_file,
 	FF_CAP_RW_ALL,
-	mag_rd_init,	
+	magX_rd_init,	
 	magX_wr_init,	
 	mag_deinit,	
 	mag_deinit,	
