@@ -977,7 +977,7 @@ mag_rteparse(char *rtemsg)
 	static mag_rte_head *mag_rte_head;
 	mag_rte_elem *rte_elem;
 	char *p;
-	char *rte_name;
+	char *rte_name = NULL;
 	
 	descr[0] = 0;
 #if 0
