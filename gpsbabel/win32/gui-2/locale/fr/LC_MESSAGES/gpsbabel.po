@@ -221,6 +221,12 @@ msgstr "Nom de la catégorie 'non assignée'"
 msgid "New name for the route"
 msgstr "Nouveau nom pour la route"
 
+msgid "No separator lines between waypoints"
+msgstr "Supprimer les lignes de séparation en les waypoints"
+
+msgid "No whitespace in generated shortnames"
+msgstr "Supprimer les espaces dans les noms courts générés"
+
 msgid "Non-stealth encrypted icon name"
 msgstr "Ne pas récupérer les noms d'icones encryptés"
 
@@ -293,14 +299,8 @@ msgstr "Supprimer les labels des points créés"
 msgid "Suppress retired geocaches"
 msgstr "Suypprimer les géocaches désactivées"
 
-msgid "Suppress separator lines between waypoints"
-msgstr "Supprimer les lignes de séparation en les waypoints"
-
 msgid "Suppress use of handshaking in name of speed"
 msgstr "Supprimer les controles pour améliorer les performances"
-
-msgid "Suppress whitespace in generated shortnames"
-msgstr "Supprimer les espaces dans les noms courts générés"
 
 msgid "Symbol to use for point data"
 msgstr "Symbole à utiliser pour les données de type point"
