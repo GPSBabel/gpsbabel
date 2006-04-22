@@ -188,9 +188,8 @@ static void holux_disp(const waypoint *wpt)
 
 
     /* round it to increase the accuracy */
-    lon += (double)((int)lon/abs((int)lon)) * .5;
-    lat += (double)((int)lat/abs((int)lat)) * .5;
-
+    if (lon != 0) lon += (double)((int)lon/abs((int)lon)) * .5;
+    if (lat != 0) lat += (double)((int)lat/abs((int)lat)) * .5;
 
     sIndex =  le_read16(&((WPTHDR *)HxWFile)->num);
     ((WPTHDR *)HxWFile)->idx[sIndex] = sIndex;         /* set the waypoint index  */
