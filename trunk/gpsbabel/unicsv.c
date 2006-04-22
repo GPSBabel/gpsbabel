@@ -167,12 +167,12 @@ unicsv_parse_one_line(char *ibuf)
 	double utme;
 	double utmn;
 
-	s = csv_lineparse(ibuf, unicsv_fieldsep, "", 0);
+	s = csv_lineparse(ibuf, unicsv_fieldsep, "\"", 0);
 	if (s == NULL) return;
 	
 	wpt = waypt_new();
 
-	for (i=0; s; i++, s = csv_lineparse(NULL, unicsv_fieldsep, "", 0)) {
+	for (i=0; s; i++, s = csv_lineparse(NULL, unicsv_fieldsep, "\"", 0)) {
 		if (i == unicsv_fieldpos.latcol) {
 			human_to_dec( s, &wpt->latitude, &wpt->longitude, 1 );
 		}
