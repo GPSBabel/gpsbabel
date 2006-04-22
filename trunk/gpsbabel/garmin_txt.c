@@ -585,6 +585,23 @@ print_speed(double *distance, time_t *time)
 	fprintf(fout, "\t");
 }
 
+static void
+print_string(const char *fmt, const char *string)
+{
+	char *c;
+	char *buff;
+	
+	buff = xstrdup(string);
+	/* remove unwanted characters from source string */
+	for (c = buff; *c; c++) {
+		if (iscntrl(*c)) {
+			*c = ' ';
+		}
+	}
+	fprintf(fout, fmt, buff);
+	xfree(buff);
+}
+
 
 /* main cb's */
 
@@ -621,7 +638,7 @@ write_waypt(const waypoint *wpt)
 			else
 				temp = "";
 		}
-		fprintf(fout, "%s\t", temp);
+		print_string("%s\t", temp);
 	}
 	else
 		fprintf(fout, "\t");
@@ -659,16 +676,16 @@ write_waypt(const waypoint *wpt)
 		icon = gt_find_icon_number_from_desc(wpt->icon_descr, GDB);
 	}
 	icon_descr = gt_find_desc_from_icon_number(icon, GDB, &dynamic);
-	fprintf(fout, "%s\t", icon_descr);
+	print_string("%s\t", icon_descr);
 	if (dynamic) xfree(icon_descr);
 	
-	fprintf(fout, "%s\t", GMSD_GET(facility, ""));
-	fprintf(fout, "%s\t", GMSD_GET(city, ""));
-	fprintf(fout, "%s\t", GMSD_GET(state, ""));
+	print_string("%s\t", GMSD_GET(facility, ""));
+	print_string("%s\t", GMSD_GET(city, ""));
+	print_string("%s\t", GMSD_GET(state, ""));
 	country = gt_get_icao_country(GMSD_GET(cc, ""));
-	fprintf(fout, "%s\t", (country != NULL) ? country : "");
+	print_string("%s\t", (country != NULL) ? country : "");
 	print_date_and_time(wpt->creation_time, 0);
-	fprintf(fout, "%s\t", wpt->url ? wpt->url : ""); 
+	print_string("%s\t", wpt->url ? wpt->url : ""); 
 	print_categories(GMSD_GET(category, 0));
 	
 	fprintf(fout, "\r\n");
@@ -688,11 +705,11 @@ route_disp_hdr_cb(const route_head *rte)
 		fprintf(fout, "\r\n\r\nHeader\t%s\r\n", headers[route_header]);
 	}
 
-	fprintf(fout, "\r\nRoute\t%s\t", current_trk->rte_name ? current_trk->rte_name : "");
+	print_string("\r\nRoute\t%s\t", current_trk->rte_name ? current_trk->rte_name : "");
 	print_distance(cur_info->length, 0, 1);
 	print_course(cur_info->first_wpt, cur_info->last_wpt);
 	fprintf(fout, "\t%d waypoints\t", cur_info->count);
-	fprintf(fout, "%s\r\n", rte->rte_url ? rte->rte_url : "");
+	print_string("%s\r\n", rte->rte_url ? rte->rte_url : "");
 	fprintf(fout, "\r\nHeader\t%s\r\n\r\n", headers[rtept_header]);
 }
 
@@ -740,12 +757,12 @@ track_disp_hdr_cb(const route_head *track)
 		fprintf(fout, "\r\n\r\nHeader\t%s\r\n", headers[track_header]);
 	}
 		
-	fprintf(fout, "\r\nTrack\t%s\t", current_trk->rte_name ? current_trk->rte_name : "");
+	print_string("\r\nTrack\t%s\t", current_trk->rte_name ? current_trk->rte_name : "");
 	print_date_and_time(cur_info->start, 0);
 	print_date_and_time(cur_info->time, 1);
 	print_distance(cur_info->length, 0, 1);
 	print_speed(&cur_info->length, &cur_info->time);
-	fprintf(fout, "%s", (track->rte_url != NULL) ? track->rte_url : "");
+	print_string("%s", (track->rte_url != NULL) ? track->rte_url : "");
 	fprintf(fout, "\r\n\r\nHeader\t%s\r\n\r\n", headers[trkpt_header]);
 }
 
