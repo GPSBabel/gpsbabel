@@ -228,7 +228,7 @@ geoniche_read_asc(const struct pdb *pdb)
 
 	/* Field 1: Target */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 1.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 1 (target).\n");
 	if (strcmp(p, "Route") == 0)
 	    fatal(MYNAME ": Route record type is not implemented.\n");
 	if (strcmp(p, "Target"))
@@ -237,93 +237,93 @@ geoniche_read_asc(const struct pdb *pdb)
 
 	/* Field 2: Import ID number */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 2.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 2 (ID).\n");
 	id = atoi(p);
 	xfree(p);
 
 	/* Field 3: Title */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 3.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 3 (Title).\n");
 	title = p;
 
 	/* Field 4: Route ID number */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 4.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 4 (Route ID).\n");
 	route_id = atoi(p);
 	xfree(p);
 
 	/* Field 5: Category */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 5.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 5 (Category).\n");
 	category = p;
 
 	/* Field 6: Latitude */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 6.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 6 (Latitude).\n");
 	lat = atof(p);
 	xfree(p);
 
 	/* Field 7: Longitude */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 7.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 7 (Longitude).\n");
 	lon = atof(p);
 	xfree(p);
 
 	/* Field 8: Altitude */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 8.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 8 (Altitude).\n");
 	alt = atof(p);
 	xfree(p);
 
 	/* Field 9: Creation date */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 9.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 9 (Creation date).\n");
 	datestr = p;
 
 	/* Field 10: Creation time */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 10.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 10 (Creation time).\n");
 	timestr = p;
 
 	/* Field 11: Visited date */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 11.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 11 (Visited date).\n");
 	xfree(p);
 
 	/* Field 12: Visited time */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 12.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 12 (Visited time).\n");
 	xfree(p);
 
 	/* Field 13: Icon color (R G B) */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 13.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 13 (Icon color).\n");
 	xfree(p);
 
 	/* Field 14: icon number */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 14.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 14 (Icon number).\n");
 	icon = atoi(p);
 	xfree(p);
 
 	/* Field 15: unused */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 15.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 15 (unused1).\n");
 	xfree(p);
 
 	/* Field 16: unused */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 16.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 16 (unused2).\n");
 	xfree(p);
 
 	/* Field 17: unused */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 17.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 17 (unused3).\n");
 	xfree(p);
 
 	/* Field 18: Notes */
 	p = field(&vdata, &vlen);
-	if (!p) fatal(MYNAME ": Premature EOD processing field 18.\n");
+	if (!p) fatal(MYNAME ": Premature EOD processing field 18 (Notes).\n");
 	notes = p;
 
 	sscanf(datestr, "%d/%d/%d", &tm.tm_mon, &tm.tm_mday, &tm.tm_year);
@@ -553,8 +553,14 @@ enscape(char *s)
     for (; *s; ++s)
     {
 	if (*s == '\\' || *s == ',')
+	{
 	    *d++ = '\\';
-	*d++ = *s;
+	    *d++ = *s;
+	}
+	else if ((*s == '\r') || (*s == '\n'))	/* substitute unwanted CR/LF's with SPACE */
+	    *d++ = ' ';
+	else
+	    *d++ = *s;
     }
 
     *d = 0;
@@ -662,7 +668,7 @@ geoniche_writewpt(const waypoint *wpt)
 	    fatal(MYNAME ": libpdb couldn't append record\n");
     }
 
-    if (wpt->description[0])
+    if ( wpt->description && wpt->description[0] )
 	title = enscape(wpt->description);
     else
 	title = enscape(wpt->shortname);
@@ -687,12 +693,14 @@ geoniche_writewpt(const waypoint *wpt)
 	notes = xstrdup(title);
     else
 	notes = enscape(wpt->notes);
-
+	
     gs = geoniche_geostuff(wpt);
     if (gs) {
 	notes = xstrappend(notes, gs);
 	xfree (gs);
     }
+    /* last chance to fill notes with something */
+    if (*notes == '\0') notes = xstrappend(notes, "(notes)");
 
     vdata = (ubyte *) xmalloc(vsize);
     if (vdata == NULL)
