@@ -338,7 +338,8 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	}
 	lowranceusr_fread(&buff[0], 4, 1, file_in);
 	TextLen = buff[0];
-	lowranceusr_fread(&buff[0], TextLen, 1, file_in);
+	if (TextLen)
+		lowranceusr_fread(&buff[0], TextLen, 1, file_in);
 	buff[TextLen] = '\0';
 	wpt_tmp->shortname = xstrdup(buff);
 
