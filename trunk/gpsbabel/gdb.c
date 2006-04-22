@@ -49,6 +49,7 @@
 	    2006/03/05: first implementation of Garmin special data (garmin_fs)
 	    2006/04/04: Use track_add_wpt for all tracks
 	    2006/04/19: add url i/o to tracks and routes
+	    2006/04/19: check for empty waypoint shortnames (paranioa)
 */
 
 #include <stdio.h>
@@ -1156,6 +1157,7 @@ gdb_write_waypt(const waypoint *wpt, const int hidden)
 	char c1 = 1;
 	garmin_fs_t *gmsd;
 	unsigned char wpt_class;
+	char *ident;
 	
 	gmsd = GMSD_FIND(wpt);
 	
@@ -1165,7 +1167,12 @@ gdb_write_waypt(const waypoint *wpt, const int hidden)
 	memset(ffbuf, 0xFF, sizeof(ffbuf));
 	memset(zbuf, 0x00, sizeof(zbuf));
 	
-	gdb_fwrite_str(wpt->shortname, -1);
+	ident = wpt->shortname;	/* paranoia */
+	if (global_opts.synthesize_shortnames || (ident == NULL) || (*ident == '\0'))
+	{
+		ident = mkshort_from_wpt(gdb_short_handle, wpt);
+	}
+	gdb_fwrite_str(ident, -1);
 
 	wpt_class = GMSD_GET(wpt_class, (hidden != 0) ? GDB_HIDDENROUTEWPTCLASS : GDB_DEFAULTWPTCLASS);
 	gdb_fwrite_int(wpt_class);			/* class */
@@ -1568,6 +1575,7 @@ gdb_write_data(void)
 
 	/* (doing_wpts) */
 	
+	gdb_reset_short_handle();
 	waypt_disp_all(gdb_write_waypt_cb);
 	
 	/* (doing_rtes) */
