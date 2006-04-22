@@ -163,6 +163,12 @@ compare ${TMPDIR}/magfile ${REFERENCE}/magfile
 ${PNAME} -i magellan -f ${REFERENCE}/magfile -o magellanx -F ${TMPDIR}/magfile2
 compare ${TMPDIR}/magfile2 ${REFERENCE}/magfile
 
+# Magellanx routes, however, have an extra 'name' field in them.
+${PNAME} -r -i magellanx -f ${REFERENCE}/route/magexplorist.rte -o magellanx -F ${TMPDIR}/magxfile.rte
+${PNAME} -r -i magellanx -f ${TMPDIR}/magxfile.rte -o magellanx -F ${TMPDIR}/magxfile2.rte
+compare ${TMPDIR}/magxfile2.rte ${REFERENCE}/route/magexplorist.rte
+
+
 # Navitrak DNA marker format
 ${PNAME} -i dna -f ${REFERENCE}/dnatest.txt -o dna -F ${TMPDIR}/dnatest.txt
 compare ${TMPDIR}/dnatest.txt ${REFERENCE}/dnatest.txt
