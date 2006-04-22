@@ -303,7 +303,6 @@ track_read(void)
 			if (!trk_name)
 				trk_name = "";
 			trk_seg_num = 1;
-			continue;
 		}
 
 
@@ -323,7 +322,7 @@ track_read(void)
 			track_add_head(trk_head);
 		}
 
-		if (array[i]->no_latlon) {
+		if (array[i]->no_latlon || array[i]->ishdr) {
 			continue;
 		}
 		wpt = waypt_new();
