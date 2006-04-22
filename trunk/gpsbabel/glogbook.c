@@ -169,7 +169,7 @@ void	gl_trk_alt(const char *args, const char **unused)
 
 ff_vecs_t glogbook_vecs = {
         ff_type_file,
-	FF_CAP_RW_ALL,
+	{ ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none},
         glogbook_rd_init,
         glogbook_wr_init,
         glogbook_rd_deinit,
