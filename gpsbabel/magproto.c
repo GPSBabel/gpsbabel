@@ -1417,8 +1417,8 @@ mag_route_trl(const route_head * rte)
 		xfree(owpt);
 		
 		if ((tmp == &rte->waypoint_list) || ((i % 2) == 0)) {
-			thisline++;
 			char expbuf[1024];
+			thisline++;
 			expbuf[0] = 0;
 			if (explorist) {
 				snprintf(expbuf, sizeof(expbuf), "%s,",
