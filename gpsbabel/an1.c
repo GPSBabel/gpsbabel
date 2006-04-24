@@ -205,14 +205,14 @@ Skip(FILE * f,
 static double
 DecodeOrd( long ord )
 {
-	return (double)(0x80000000-ord)/(0x800000);
+	return ((double)(long)(0x80000000L-ord))/(0x800000);
 }
 
 static long
 EncodeOrd( double ord )
 {
-	unsigned long tmp = ord * 0x800000;
-	return 0x80000000UL-tmp;
+	long tmp = ord * 0x800000;
+	return 0x80000000L-tmp;
 }
 
 static int
