@@ -22,6 +22,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
+#include <limits.h>
 
 #define MYNAME "an1"
 #include "defs.h"
@@ -205,14 +206,13 @@ Skip(FILE * f,
 static double
 DecodeOrd( long ord )
 {
-	return ((double)(long)(0x80000000L-ord))/(0x800000);
+	return (double)((gbint32)(0x80000000 - ord)) / 0x800000;
 }
 
 static long
 EncodeOrd( double ord )
 {
-	long tmp = ord * 0x800000;
-	return 0x80000000L-tmp;
+	return (gbint32)(0x80000000 - (gbint32)(ord * 0x800000));
 }
 
 static int
