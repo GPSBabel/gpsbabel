@@ -143,7 +143,16 @@ void wpt_name(const char *args, const char **unused)
 
 void wpt_desc(const char *args, const char **unused)
 {
-	if (args) wpt_tmp->description = xstrappend(wpt_tmp->description, args);
+	if (args) {
+		char *tmp, *c;
+		
+		tmp = xstrdup((char *)args);
+		c = lrtrim(tmp);
+		if (*c) {
+			wpt_tmp->description = xstrappend(wpt_tmp->description, c);
+		}
+		xfree(tmp);
+	}
 }
 
 void wpt_coord(const char *args, const char **attrv)
