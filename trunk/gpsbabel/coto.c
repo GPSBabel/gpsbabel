@@ -22,6 +22,8 @@
     
  */
 
+#include <string.h>
+
 #include "defs.h"
 #include "csv_util.h"
 #include "coldsync/palm.h"
@@ -253,6 +255,7 @@ coto_wpt_read(struct pdb *pdb)
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next)
 	{
 		waypoint *wpt_tmp;
+		char *c;
 		
 		wpt_tmp = waypt_new();
 
@@ -266,8 +269,15 @@ coto_wpt_read(struct pdb *pdb)
 		wpt_tmp->icon_descr = coto_get_icon_descr(pdb_rec->category, app);
 		if (wpt_tmp->icon_descr)
 			wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1; 
-		
-		wpt_tmp->notes = xstrdup(rec->notes);
+	
+		if ((c = strstr(rec->notes, "\nNotes:\n"))) {	/* remove our contruct */
+			wpt_tmp->notes = xstrdup(c + 8);
+			if (c != rec->notes) {
+				wpt_tmp->description = xstrndup(rec->notes, c - rec->notes);
+			}
+		} else {
+			wpt_tmp->notes = xstrdup(rec->notes);
+		}
 		
 		waypt_add(wpt_tmp);
 	}
