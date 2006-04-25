@@ -61,42 +61,4 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <cmt>Völkerschlachtdenkmal</cmt>
   <desc>Völkerschlachtdenkmal</desc>
 </wpt>
-<rte>
-  <rtept lat="50.492618900" lon="12.105448700">
-<time>2005-09-03T00:00:00Z</time>
-    <name>NARVA</name>
-  </rtept>
-  <rtept lat="50.493836900" lon="12.106101000">
-<time>2005-09-03T00:00:00Z</time>
-    <name>Liebknechtstras</name>
-  </rtept>
-  <rtept lat="50.493662800" lon="12.107152400">
-<time>2005-09-03T00:00:00Z</time>
-    <name>Jahnstrasse11</name>
-  </rtept>
-  <rtept lat="50.610795200" lon="12.173802200">
-<time>2005-09-03T00:00:00Z</time>
-    <name>Elsterberg</name>
-  </rtept>
-  <rtept lat="50.654763000" lon="12.204956700">
-<time>2005-09-03T00:00:00Z</time>
-    <name>Greiz</name>
-  </rtept>
-  <rtept lat="50.844125600" lon="12.408757200">
-<time>2005-09-03T00:00:00Z</time>
-    <name>Gosel</name>
-  </rtept>
-  <rtept lat="50.877340500" lon="12.433888700">
-<time>2005-09-03T00:00:00Z</time>
-    <name>3</name>
-  </rtept>
-  <rtept lat="50.964955100" lon="12.435919300">
-<time>2005-09-03T00:00:00Z</time>
-    <name>Altenburg-Umgehung</name>
-  </rtept>
-  <rtept lat="51.314520700" lon="12.409143300">
-<time>2005-09-03T00:00:00Z</time>
-    <name>Völkerschlachtdenkmal</name>
-  </rtept>
-</rte>
 </gpx>

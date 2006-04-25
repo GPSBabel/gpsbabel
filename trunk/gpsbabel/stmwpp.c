@@ -36,6 +36,7 @@ static waypoint *wpt;
 #define STM_NOTHING	0
 #define STM_WAYPT 	1
 #define STM_TRKPT 	2
+#define STM_RTEPT 	3
 
 static int track_index;
 static int track_num;
@@ -152,14 +153,16 @@ stmwpp_data_read(void)
 
 			switch(what)
 			{
-				case STM_WAYPT:
-					waypt_add(waypt_dupe(wpt));
-					if (route == NULL)
-					{
-						route = route_head_alloc();
-						route_add_head(route);
+				case STM_RTEPT:
+					if (route == NULL) {
+					    route = route_head_alloc();
+					    route_add_head(route);
 					}
 					route_add_wpt(route, wpt);
+					break;
+					
+				case STM_WAYPT:
+					waypt_add(wpt);
 					break;
 					
 				case STM_TRKPT:
@@ -270,7 +273,7 @@ stmwpp_data_write(void)
 			waypt_disp_all(stmwpp_waypt_cb);
 			break;
 		case rtedata:
-			what = STM_WAYPT;
+			what = STM_RTEPT;
 			route_disp_all(stmwpp_track_hdr, stmwpp_track_tlr, stmwpp_waypt_cb);
 			break;
 		case trkdata:
