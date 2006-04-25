@@ -1077,6 +1077,7 @@ mag_rteparse(char *rtemsg)
 		}
 		xfree(mag_rte_head);
 	}
+	if (rte_name) xfree(rte_name);
 }
 
 const char *
