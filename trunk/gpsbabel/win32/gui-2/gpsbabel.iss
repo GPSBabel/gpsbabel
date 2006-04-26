@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define Version "1.2.8"
-#define Release "-beta20060405"
+#define Release "-beta20060420_ds"
 
 [Setup]
 AppName=GPSBabel

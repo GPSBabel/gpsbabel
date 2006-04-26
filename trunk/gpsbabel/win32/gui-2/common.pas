@@ -21,14 +21,14 @@ unit common;
 interface
 
 uses
-  Windows, SysUtils, Classes, Messages, Controls, StdCtrls, Inifiles;
+  Windows, SysUtils, Classes, Messages, Controls, StdCtrls;
 
 const
   OTypes: array[0..6] of PChar =
     ('unknown', 'integer', 'float', 'string', 'boolean', 'file', 'outfile');
 
   gpsbabel_knows_inifile: Boolean = False;
-  gpsbabel_ini: TInifile = nil;
+//gpsbabel_ini: TInifile = nil;
   
 resourcestring
   SGPSBabelURL =         'http://www.gpsbabel.org';
@@ -45,7 +45,6 @@ var
   gpsbabel_minor, gpsbabel_major, gpsbabel_release: Integer;
   SGPSBabelGUIVersion: string;
   CFixedFileinfo: TVSFixedFileInfo;
-  gpsbabel_inifile: TInifile;
 
 const
   WM_STARTUP = WM_USER + 1;
@@ -252,12 +251,7 @@ begin
       1:
         opt.format := string(cin);
       2:
-        begin
-          opt.name := string(cin);
-          s := gpsbabel_ini.ReadString(opt.Format, opt.Name, #01);
-          if (s <> #01) then
-            opt.def := StrNew(PChar(s));
-        end;
+        opt.name := string(cin);
       3:
         opt.hint := string(cin);
       4:
@@ -281,9 +275,15 @@ begin
         if (cin^ <> #0) then
           opt.max := StrNew(cin);
     end;
-    
+
     index := index + 1;
     cin := cend + 1;
+  end;
+
+  if (opt.name = 'snlen') and (opt.gbdef = nil) then
+  begin
+    opt.gbdef := StrNew('10');
+    opt.def := opt.gbdef;
   end;
 
   index := Self.IndexOf(opt.format);
@@ -537,6 +537,7 @@ begin
   end;
 end;
 
+(*
 function Open_gpsbabel_ini(): TInifile;
 var
   s: string;
@@ -549,11 +550,12 @@ begin
   else
     Result := TIniFile.Create(s)
 end;
+*)
 
 initialization
 
   gpsbabel_exe := SysUtils.ExtractFilePath(ParamStr(0)) + SGPSBabelExeFilename;
   SGPSBabelGUIVersion := GetFileVersion(ParamStr(0));
-  gpsbabel_ini := Open_gpsbabel_ini();
+//gpsbabel_ini := Open_gpsbabel_ini();
 
 end.

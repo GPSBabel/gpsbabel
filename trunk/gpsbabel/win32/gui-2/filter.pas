@@ -23,14 +23,14 @@ interface
 uses
   gnugettext, gnugettextDx,
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ComCtrls, Buttons, Mask, ExtCtrls,
+  StdCtrls, ComCtrls, Buttons, Mask, ExtCtrls, Registry,
   common, utils;
 
 type
   TfrmFilter = class(TForm)
     gbTracks: TGroupBox;
     cbTrackTitle: TCheckBox;
-    edTrackTitle: TEdit;
+    edTrackTitleValue: TEdit;
     cbTrackSplit: TCheckBox;
     cbTrackTime: TCheckBox;
     udTimeHours: TUpDown;
@@ -82,6 +82,9 @@ type
     edWayptRadiusLon: TEdit;
     cbTrackRangeTimeZone: TCheckBox;
     BitBtn2: TBitBtn;
+    cbTrackFixes: TCheckBox;
+    cbTrackCourse: TCheckBox;
+    cbTrackSpeed: TCheckBox;
     procedure cbTrackTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure cbTrackTitleClick(Sender: TObject);
@@ -110,6 +113,10 @@ type
     function AllValid: Boolean;
     function ValidateNumerical(AEdit: TCustomEdit; AMin, AMax: Extended): Boolean;
     procedure ChangeCheckBoxesChecked(AComponent: TComponent; Restore: Boolean = False);
+    procedure LoadSettingsFromInifile();
+    procedure LoadSettingsFromRegistry();
+    procedure StoreSettingsToInifile();
+    procedure StoreSettingsToRegistry();
   public
     { Public-Deklarationen }
     function CmdLine: string;
@@ -217,6 +224,15 @@ begin
       gpsbabel_version]);
     gbTracks.ShowHint := True;
   end;
+
+  if not(gpsbabel_knows_inifile) then
+  begin
+    cbTrackFixes.Enabled := False;
+    cbTrackCourse.Enabled := False;
+    cbTrackSpeed.Enabled := False;
+  end;
+//LoadSettingsFromInifile();
+  LoadSettingsFromRegistry();
 end;
 
 function TfrmFilter.ValidateNumerical(AEdit: TCustomEdit; AMin, AMax: Extended): Boolean;
@@ -276,7 +292,7 @@ end;
 
 procedure TfrmFilter.cbTrackTitleClick(Sender: TObject);
 begin
-  edTrackTitle.Enabled := cbTrackTitle.Checked;
+  edTrackTitleValue.Enabled := cbTrackTitle.Checked;
 end;
 
 function TfrmFilter.CmdLine: string;
@@ -331,7 +347,7 @@ begin
   begin
     Result := Format('%s -x %s', [Result, 'track']);
     if cbTrackTitle.Checked then
-      Result := Format('%s,title="%s"', [Result, edTrackTitle.Text]);
+      Result := Format('%s,title="%s"', [Result, edTrackTitleValue.Text]);
 
     if cbTrackTime.Checked then
     begin
@@ -359,7 +375,6 @@ begin
     else
       dt_bias := 0.0;
 
-
     if cbTrackStart.Checked then
     begin
       dt := Int(dtpTrackStartDate.DateTime) + Frac(dtpTrackStartTime.DateTime) + dt_bias;
@@ -374,6 +389,12 @@ begin
         Result,
         FormatDateTime('yyyymmddhhnnss', dt)]);
     end;
+    if cbTrackFixes.Checked then
+      Result := Format('%s,fix', [Result]);
+    if cbTrackCourse.Checked then
+      Result := Format('%s,course', [Result]);
+    if cbTrackSpeed.Checked then
+      Result := Format('%s,speed', [Result]);
   end;
 
   if AnyChecked(gbRoutes) then
@@ -419,7 +440,12 @@ end;
 
 procedure TfrmFilter.btnOKClick(Sender: TObject);
 begin
-  if AllValid then ModalResult := mrOK;
+  if AllValid then
+  begin
+//  StoreSettingsToInifile();
+    StoreSettingsToRegistry();
+    ModalResult := mrOK;
+  end;
 end;
 
 procedure TfrmFilter.cbTrackStartClick(Sender: TObject);
@@ -537,7 +563,134 @@ end;
 
 procedure TfrmFilter.BitBtn2Click(Sender: TObject);
 begin
-  WinOpenURL(readme_html_path + '#id274853');
+  WinOpenURL(readme_html_path + '#filters');
+end;
+
+procedure TfrmFilter.LoadSettingsFromInifile();
+var
+  c: TComponent;
+  i: Integer;
+  l: TStrings;
+  s: string;
+begin
+(*
+  l := TStringList.Create;
+  try
+    gpsbabel_ini.ReadSection('GPSBabelGUI', l);
+    for i := 0 to l.Count - 1 do
+    begin
+      s := l.Strings[i];
+      c := SELF.FindComponent('cb' + s);
+      if (c <> nil) and (c is TCheckbox) then
+        TCheckbox(c).Checked := (gpsbabel_ini.ReadString('GPSBabelGUI', s, '0') <> '0');
+    end;
+    edTrackTitleValue.Text := gpsbabel_ini.ReadString('track', 'title',
+      edTrackTitleValue.Text);
+    edRoutesSimplifyMaxPoints.Text := gpsbabel_ini.ReadString('simplify', 'count',
+      edRoutesSimplifyMaxPoints.Text);
+  finally
+    l.Free;
+  end;
+*)
+end;
+
+procedure TfrmFilter.StoreSettingsToInifile();
+var
+  i: Integer;
+  c: TComponent;
+begin
+(*
+  for i := 0 to SELF.ComponentCount - 1 do
+  begin
+    c := SELF.Components[i];
+    if (c is TCheckBox) then
+    begin
+      if TCheckBox(c).Checked then
+        gpsbabel_ini.WriteString('GPSBabelGUI', Copy(TCheckbox(c).Name, 3, 256), '1')
+      else
+        gpsbabel_ini.DeleteKey('GPSBabelGUI', Copy(TCheckbox(c).Name, 3, 256));
+    end;
+  end;
+
+  if cbTrackTitle.Checked then
+    gpsbabel_ini.WriteString('track', 'title', edTrackTitleValue.Text)
+  else
+    gpsbabel_ini.DeleteKey('track', 'title');
+
+  if cbRouteSimplify.Checked then
+    gpsbabel_ini.WriteString('simplify', 'count', edRoutesSimplifyMaxPoints.Text)
+  else
+    gpsbabel_ini.DeleteKey('simplify', 'count');
+*)
+end;
+
+procedure TfrmFilter.StoreSettingsToRegistry();
+var
+  i: Integer;
+  c: TComponent;
+  r: TRegistry;
+begin
+  r := TRegistry.Create;
+  try
+    r.RootKey := HKEY_CURRENT_USER;
+    if not(r.OpenKey('\SOFTWARE\GPSBabel', True)) then Exit;
+
+    for i := 0 to SELF.ComponentCount - 1 do
+    begin
+      c := SELF.Components[i];
+      if (c is TCheckbox) then
+        r.WriteBool('filter:' + Copy(c.Name, 3, 256), TCheckBox(c).Checked)
+      else if (c is TEdit) then
+        r.WriteString('filter:' + Copy(c.Name, 3, 256), TEdit(c).Text);
+    end;
+  finally
+    r.Free;
+  end;
+end;
+
+procedure TfrmFilter.LoadSettingsFromRegistry();
+var
+  i: Integer;
+  c: TComponent;
+  r: TRegistry;
+  s: string;
+  u: TUpDown;
+  
+  function ReadString(R: TRegistry; const Key, Def: string): string;
+  begin
+    if R.ValueExists(Key) then
+      Result := R.ReadString(Key)
+    else
+      Result := Def;
+  end;
+
+begin
+  r := TRegistry.Create;
+  try
+    r.RootKey := HKEY_CURRENT_USER;
+    if not(r.OpenKey('\SOFTWARE\GPSBabel', True)) then Exit;
+
+    for i := 0 to SELF.ComponentCount - 1 do
+    begin
+      c := SELF.Components[i];
+      try
+        if (c is TCheckbox) then
+          TCheckBox(c).Checked := r.ReadBool('filter:' + Copy(c.Name, 3, 256))
+        else if (c is TEdit) then
+        begin
+          s := ReadString(r, 'filter:' + Copy(c.Name, 3, 256), TEdit(c).Text);
+          if HasUpDown(TEdit(c), u) then
+            u.Position := StrToInt(s)
+          else
+            TEdit(c).Text := s;
+        end;
+      except
+        on E: Exception do ;
+      end;
+    end;
+  finally
+    r.Free;
+  end;
 end;
 
 end.
