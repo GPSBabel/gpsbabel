@@ -23,7 +23,7 @@ interface
 uses
   TypInfo, gnugettext, gnugettextDx,
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls, Buttons,
+  StdCtrls, ExtCtrls, ComCtrls, Buttons, Registry,
   Common, delphi;
 
 type
@@ -39,6 +39,7 @@ type
     procedure btnHelpClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure btnOKClick(Sender: TObject);
   private
     { Private declarations }
     FOpts: TStringList;
@@ -54,6 +55,9 @@ type
     function ParseOptsLine(const Line: string; List: TStrings): Integer;
     procedure SetOpts(AList: TStringList);
     procedure SetOptsStr(const AValue: string);
+    procedure StoreOptionsToInifile();
+    procedure StoreOptionsToRegistry();
+    procedure LoadSettingsFromRegistry();
   public
     { Public declarations }
     FFormat: string;
@@ -198,7 +202,7 @@ begin
     chb.Top := xy.y;
     _xy := SetCaption(chb, dgettext(GPSBabel_Domain, o.Hint));
     chb.Alignment := taRightJustify;
-    chb.Checked := False;
+//  chb.Checked := (gpsbabel_ini.ReadString(o.format, o.name, #1) <> #1);
     chb.Parent := pnOptions;
 
     chb.Hint := SysUtils.Format(_('Short "%s"'), [o.name]);
@@ -267,6 +271,8 @@ begin
   i := btnCancel.Left - btnOK.Left;
   btnCancel.Left := pnBottom.Width - btnCancel.Width - btnHelp.Left;
   btnOK.Left := btnCancel.Left - i;
+
+  LoadSettingsFromRegistry();
 end;
 
 function TfrmOptions.GetOptsStr: string;
@@ -655,6 +661,159 @@ begin
       Exit; 
   end;
   ModalResult := mrCancel;
+end;
+
+procedure TfrmOptions.StoreOptionsToInifile();
+var
+  i: Integer;
+  o: POption;
+  c: TComponent;
+  s, value: string;
+begin
+(*
+  for i := 0 to FOpts.Count - 1 do
+  begin
+    o := Pointer(FOpts.Objects[i]);
+    if (o.chb = nil) then Continue;
+
+    if o.chb.AllowGrayed then
+    begin
+      if (o.chb.State = cbGrayed) then
+      begin
+        gpsbabel_ini.DeleteKey(o.format, o.name);
+        Continue;
+      end;
+    end
+    else if not(o.chb.Checked) then
+    begin
+      gpsbabel_ini.DeleteKey(o.format, o.name);
+      Continue;
+    end;
+
+    if (o.edit = nil) then
+    begin
+      if o.chb.Checked then
+        value := '1'
+      else
+        value := '0';
+    end
+      else value := GetStrProp(o.edit, 'Text');
+    if (o.gbdef <> nil) and (StrPas(o.gbdef) = value) then
+      gpsbabel_ini.DeleteKey(o.format, o.name)
+    else
+      gpsbabel_ini.WriteString(o.format, o.name, value);
+  end;
+*)
+end;
+
+procedure TfrmOptions.StoreOptionsToRegistry();
+var
+  i: Integer;
+  o: POption;
+  c: TComponent;
+  s, key, value: string;
+  r: TRegistry;
+begin
+  r := TRegistry.Create;
+  try
+    r.RootKey := HKEY_CURRENT_USER;
+    if not(r.OpenKey('\Software\GPSBabel', True)) then Exit;
+
+    for i := 0 to FOpts.Count - 1 do
+    begin
+      o := Pointer(FOpts.Objects[i]);
+      if (o.chb = nil) then Continue;
+
+      key := o.format + ':' + o.name;
+
+      if o.chb.AllowGrayed then
+      begin
+        if (o.chb.State = cbGrayed) then
+        begin
+          r.DeleteValue(key);
+          Continue;
+        end;
+      end
+      else if not(o.chb.Checked) then
+      begin
+        r.DeleteValue(key);
+        Continue;
+      end;
+
+      if (o.edit = nil) then
+      begin
+        if o.chb.Checked then
+          value := '1'
+        else
+          value := '0';
+      end
+        else value := GetStrProp(o.edit, 'Text');
+      if (o.gbdef <> nil) and (StrPas(o.gbdef) = value) then
+        r.WriteString(key, '(default)')
+      else
+        r.WriteString(key, value);
+    end;
+  finally
+    r.Free;
+  end;
+end;
+
+procedure TfrmOptions.LoadSettingsFromRegistry();
+var
+  i: Integer;
+  o: POption;
+  c: TComponent;
+  s, key, value: string;
+  r: TRegistry;
+  u: TUpDown;
+begin
+  r := TRegistry.Create;
+  try
+    r.RootKey := HKEY_CURRENT_USER;
+    if not(r.OpenKeyReadOnly('\Software\GPSBabel')) then Exit;
+
+    for i := 0 to FOpts.Count - 1 do
+    begin
+      o := Pointer(FOpts.Objects[i]);
+      if (o.chb = nil) then Continue;
+
+      key := o.format + ':' + o.name;
+      if not r.ValueExists(key) then Continue;
+
+      Value := r.ReadString(key);
+      if (o.edit = nil) then
+      begin
+        if o.chb.AllowGrayed then
+        begin
+          if (value = '1') then
+            o.chb.State := cbChecked
+          else
+            o.chb.State := cbUnChecked;
+        end
+          else o.chb.Checked := True;
+      end
+        else
+      begin
+        o.chb.Checked := True;
+        if (value <> '(default)') then
+        begin
+          if HasUpDown(TEdit(o.edit), u) then
+            u.Position := StrToInt(value)
+          else
+            SetStrProp(o.edit, 'Text', value);
+        end;
+        o.edit.Enabled := True;
+      end;
+    end;
+  finally
+    r.Free;
+  end;
+end;
+
+procedure TfrmOptions.btnOKClick(Sender: TObject);
+begin
+//StoreOptionsToInifile();
+  StoreOptionsToRegistry();
 end;
 
 end.

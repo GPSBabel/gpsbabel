@@ -26,7 +26,8 @@ interface
 
 uses
   gnugettext,
-  Windows, SysUtils, Classes, Registry, ShellAPI;
+  Windows, SysUtils, Classes, StdCtrls, ComCtrls,
+  Registry, ShellAPI;
 
 type
   PBoolean = ^Boolean;
@@ -54,11 +55,12 @@ procedure MakeFirstTranslation(AComponent: TComponent);
 
 function readme_html_path: string;
 
+function HasUpDown(E: TEdit; var UpDown: TUpdown): Boolean;
+
 implementation
 
 uses
   Forms,
-  StdCtrls,
   common;
 
 function GetShortName(const PathName: string): string;
@@ -125,7 +127,7 @@ begin
 
     StartupInfo.cb := Sizeof (StartupInfo);
     StartupInfo.dwFlags := STARTF_USESHOWWINDOW or STARTF_USESTDHANDLES;
-    StartupInfo.wShowWindow := SW_HIDE and SW_SHOWMINNOACTIVE;
+    StartupInfo.wShowWindow := {SW_HIDE or} SW_SHOWMINNOACTIVE;
     StartupInfo.hStdInput := GetStdHandle (STD_INPUT_HANDLE);
     StartupInfo.hStdOutput:= hWrite;
     StartupInfo.hStdError := hWrite;
@@ -142,12 +144,14 @@ begin
     end;
 
     s := '';
+    Error := 0;
 
     repeat
       Wait_Result := WaitforSingleObject(ProcessInfo.hProcess, 10);
       if PeekNamedPipe(hRead, nil, 0, nil, @BytesRead, nil) then
       begin
-        if (BytesRead > 0) then Application.ProcessMessages;
+        if (BytesRead > 0) then
+          Application.ProcessMessages;
         while (BytesRead > 0) do
         begin
           BytesDone := BytesRead;
@@ -161,11 +165,12 @@ begin
             s := s + string(buffer);
             Dec(BytesRead, BytesDone);
           end;
-        end;
+        end
       end;
     until (Wait_Result = WAIT_OBJECT_0);
 
-    if not GetExitCodeProcess(ProcessInfo.hProcess, Error) then Error := 0;
+    if (Error = 0) then
+      if not GetExitCodeProcess(ProcessInfo.hProcess, Error) then Error := 0;
 
     if (Error <> 0) and (Error <> 1) then
       raise eGPSBabelError.CreateFmt(_('"gpsbabel.exe" returned error 0x%x (%d)'), [Error, Error]);
@@ -399,6 +404,27 @@ begin
   else
     Result := SGPSBabelURL + '/readme.html';
 end;
+
+function HasUpDown(E: TEdit; var UpDown: TUpdown): Boolean;
+var
+  i: Integer;
+  c: TComponent;
+  o: TComponent;
+begin
+  Result := False;
+  o := E.Owner;
+  for i := 0 to o.ComponentCount - 1 do
+  begin
+    c := o.Components[i];
+    if (c is TUpDown) and (TUpDown(c).Associate = E) then
+    begin
+      UpDown := TUpDown(c);
+      Result := True;
+      Exit;
+    end;
+  end;
+end;
+
 
 var
   hMutex: THandle;
