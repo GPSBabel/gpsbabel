@@ -61,11 +61,32 @@ my_rd_init(const char *fname)
 	}
 
 	if ( opt_name ) {
+		if ( opt_name[0] == '?' ) {
+			int nFields = 0;
+			int i = 0;
+			char name[12];
+			char *txt = xstrdup("  Database fields\n");
+			nFields = DBFGetFieldCount( ihandledb );
+			for ( i = 0; i < nFields; i++ ) {
+				char txtName[50];
+				DBFGetFieldInfo( ihandledb, i, name, NULL, NULL);
+				sprintf( txtName,"%2d %s\n", i, name );
+				txt = xstrappend( txt, txtName  );
+			}
+			txt = xstrappend( txt,  "\n" );
+			fatal( txt );
+		}
 		if ( strchr(opt_name, '+')) {
 			nameidx = -2;
 		}
-		else {
+		else if ( opt_name[0] >= '0' && opt_name[0] <= '9' ) {
 			nameidx = atoi( opt_name );
+		}
+		else {
+			nameidx = DBFGetFieldIndex( ihandledb, opt_name );
+			if (nameidx == -1) {
+				fatal(MYNAME ":dbf file for %s doesn't have '%s' field.\n", fname, opt_name);
+			}
 		}
 	}
 	else {
@@ -75,7 +96,12 @@ my_rd_init(const char *fname)
 		}
 	}
 	if ( opt_url ) {
-		urlidx = atoi( opt_url );
+		if ( opt_url[0] >= '0' && opt_url[0] <= '9' ) {
+			urlidx = atoi( opt_url );
+		}
+		else {
+			urlidx = DBFGetFieldIndex( ihandledb, opt_url );
+		}
 	}
 	else {
 		urlidx = DBFGetFieldIndex( ihandledb, "URL" );
@@ -109,12 +135,27 @@ my_read(void)
 				tmpName = xstrdup( "" );
 				tmpIndex = opt_name;
 				while ( tmpIndex ) {
-					name = DBFReadStringAttribute( 
-						ihandledb, npts-1, atoi(tmpIndex));
-					tmpName = xstrappend(tmpName, name );
-					tmpIndex = strchr( tmpIndex, '+' );
+					char *tmp2 = tmpIndex;
+			    		tmpIndex = strchr(tmpIndex,'+');
 					if ( tmpIndex ) {
+						*tmpIndex = '\0';
 						tmpIndex++;
+			    		}			
+					if( tmp2[0]>='0' && tmp2[0]<='9' ) {
+	    				    name = DBFReadStringAttribute( 
+						ihandledb, npts-1, atoi(tmp2));
+					}
+					else {
+					    int idx = 0;
+					    idx = DBFGetFieldIndex( ihandledb, tmp2);
+					    if ( idx >= 0 ) {
+						name = DBFReadStringAttribute(
+						    ihandledb, npts-1, idx);
+					    }
+					}
+
+					tmpName = xstrappend(tmpName, name );
+					if ( tmpIndex ) {
 						tmpName = xstrappend( tmpName, " / " );
 					}
 				}
