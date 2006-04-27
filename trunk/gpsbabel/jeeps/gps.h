@@ -88,7 +88,8 @@ typedef struct GPS_STrack
     float    dpth;		/* Depth    */
     float    temperature;	/* Temperature.  Degrees Celsius. */
     int      temperature_populated; /* True if above is valid. */
-    int32    heartrate;		/* Heatrate as in Garmin 301 */
+    unsigned char  heartrate;		/* Heartrate as in Garmin 301 */
+    unsigned char  cadence;		/* Crank cadence as in Edge 305 */
     unsigned int   tnew:1;	/* New track? */
     unsigned int   ishdr:1;	/* Track header? */
     unsigned int   no_latlon:1;	/* True if no valid lat/lon found. */

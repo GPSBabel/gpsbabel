@@ -331,6 +331,7 @@ track_read(void)
 		wpt->latitude = array[i]->lat;
 		wpt->altitude = array[i]->alt;
 		wpt->heartrate = array[i]->heartrate;
+		wpt->cadence = array[i]->cadence;
 		wpt->shortname = xstrdup(array[i]->trk_ident);
 		wpt->creation_time = array[i]->Time;
 		
