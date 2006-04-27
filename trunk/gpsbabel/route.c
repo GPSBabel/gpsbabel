@@ -26,6 +26,7 @@ static queue my_track_head;
 static int rte_head_ct;
 static int rte_waypts;
 static int trk_head_ct;
+static int trk_waypts;
 
 void
 route_init(void)
@@ -48,6 +49,13 @@ route_count(void)
 }
 
 unsigned int
+track_waypt_count(void)
+{
+	/* totaly waypoint count -- all tracks */
+	return trk_waypts;
+}
+
+unsigned int
 track_count(void)
 {
 	return trk_head_ct;	/* total # of tracks */
@@ -63,6 +71,25 @@ route_head_alloc(void)
 	return rte_head;
 }
 
+void
+any_route_free(route_head *rte)
+{
+	if ( rte->rte_name ) {
+		xfree(rte->rte_name);
+	}
+	if ( rte->rte_desc ) {
+		xfree(rte->rte_desc);
+	}
+ 	if ( rte->rte_url ) {
+ 		xfree(rte->rte_url);
+ 	}
+	waypt_flush(&rte->waypoint_list);
+	if ( rte->fs ) {
+		fs_chain_destroy( rte->fs );
+	}
+	xfree(rte);
+}
+
 
 void
 any_route_add_head( route_head *rte, queue *head ) {
@@ -72,7 +99,7 @@ any_route_add_head( route_head *rte, queue *head ) {
 void
 any_route_del_head( route_head *rte ) {
 	dequeue( &rte->Q );
-	route_free( rte );
+	any_route_free( rte );
 }
 
 void
@@ -133,31 +160,31 @@ route_find_track_by_name(const char *name)
 }
 
 void
-any_route_add_wpt(route_head *rte, waypoint *wpt, int *ct )
+any_route_add_wpt(route_head *rte, waypoint *wpt, int *ct, int synth )
 {
 	ENQUEUE_TAIL(&rte->waypoint_list, &wpt->Q);
 	rte->rte_waypt_ct++;	/* waypoints in this route */
 	if ( ct ) {
 		(*ct)++;
-		if (wpt->shortname == NULL) {
-			char tmpnam[10];
-			snprintf(tmpnam, sizeof(tmpnam), "RPT%03d",*ct);
-			wpt->shortname = xstrdup(tmpnam);
-			wpt->wpt_flags.shortname_is_synthetic = 1;
-		}
+	}
+	if ( synth && !wpt->shortname ) {
+		char tmpnam[10];
+		snprintf(tmpnam, sizeof(tmpnam), "RPT%03d",*ct);
+		wpt->shortname = xstrdup(tmpnam);
+		wpt->wpt_flags.shortname_is_synthetic = 1;
 	}
 }
 
 void 
 route_add_wpt( route_head *rte, waypoint *wpt )
 {
-	any_route_add_wpt( rte, wpt, &rte_waypts );
+	any_route_add_wpt( rte, wpt, &rte_waypts, 1 );
 }
 
 void 
 track_add_wpt( route_head *rte, waypoint *wpt )
 {
-	any_route_add_wpt( rte, wpt, NULL );
+	any_route_add_wpt( rte, wpt, &trk_waypts, 0 );
 }
 
 waypoint *
@@ -192,32 +219,7 @@ route_del_wpt( route_head *rte, waypoint *wpt )
 void 
 track_del_wpt( route_head *rte, waypoint *wpt )
 {
-	any_route_del_wpt( rte, wpt, NULL );
-}
-
-void
-any_route_free(route_head *rte)
-{
-	if ( rte->rte_name ) {
-		xfree(rte->rte_name);
-	}
-	if ( rte->rte_desc ) {
-		xfree(rte->rte_desc);
-	}
- 	if ( rte->rte_url ) {
- 		xfree(rte->rte_url);
- 	}
-	waypt_flush(&rte->waypoint_list);
-	if ( rte->fs ) {
-		fs_chain_destroy( rte->fs );
-	}
-	xfree(rte);
-}
-
-void route_free( route_head *rte )
-{
-	rte_waypts -= rte->rte_waypt_ct;
-	any_route_free( rte );
+	any_route_del_wpt( rte, wpt, &trk_waypts );
 }
 
 void
@@ -279,7 +281,7 @@ route_flush_q(queue *head)
 
 	QUEUE_FOR_EACH(head, elem, tmp) {
 		q = dequeue(elem);
-		route_free((route_head *) q);
+		any_route_free((route_head *) q);
 	}
 }
 
@@ -296,6 +298,7 @@ route_flush_all_tracks(void)
 {
 	route_flush_q(&my_track_head);
 	trk_head_ct = 0;
+	trk_waypts = 0;
 }
 
 void
@@ -344,7 +347,7 @@ route_copy( int *dst_count, int *dst_wpt_count, queue **dst, queue *src ) {
 		any_route_add_head( rte_new, *dst );
 		QUEUE_FOR_EACH( &rte_old->waypoint_list, elem2, tmp2 ) 
 		{
-			any_route_add_wpt( rte_new, waypt_dupe((waypoint *)elem2), dst_wpt_count);
+			any_route_add_wpt( rte_new, waypt_dupe((waypoint *)elem2), dst_wpt_count, 0);
 		}
 		(*dst_count)++;
 	}
@@ -361,7 +364,7 @@ void
 track_append( queue *src )
 {
 	queue *dst = &my_track_head;
-	route_copy( &trk_head_ct, NULL, &dst, src );
+	route_copy( &trk_head_ct, &trk_waypts, &dst, src );
 }
 
 void
@@ -396,6 +399,7 @@ route_restore_wpt(const waypoint *wpt)
 static void
 track_restore_wpt(const waypoint *wpt)
 {
+	trk_waypts++;
 }
 
 void
@@ -404,6 +408,7 @@ common_restore_finish(void)
 	rte_head_ct = 0;
 	trk_head_ct = 0;
 	rte_waypts = 0;
+	trk_waypts = 0;
 	route_disp_all(route_restore_hdr, route_restore_tlr, route_restore_wpt);
 	track_disp_all(track_restore_hdr, route_restore_tlr, track_restore_wpt);
 }
