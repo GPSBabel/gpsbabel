@@ -5918,6 +5918,10 @@ int32 GPS_A800_Get(gpsdevh **fd, GPS_PPvt_Data *packet)
     
     if(!GPS_Send_Ack(*fd, &tra, &rec))
 	return gps_errno;
+
+    if (rec->type != LINK_ID[gps_link_type].Pid_Pvt_Data) {
+	return 0;
+    }
     
     switch(gps_pvt_type)
     {
