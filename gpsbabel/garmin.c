@@ -669,10 +669,7 @@ static void
 track_write(void)
 {
 	int i;
-        /* Headers plus trackpoints. Trackpoints are added by
-         * route_add_waypt so get route_waypt_count() 
-         */
-	int n = route_waypt_count() + track_count();
+	int n = track_waypt_count() + track_count();
 
 	tx_tracklist = xcalloc(n, sizeof(GPS_PTrack));
 	cur_tx_tracklist_entry = tx_tracklist;
