@@ -239,7 +239,7 @@ my_write_wpt(const waypoint *wpt)
 void
 poly_init(const route_head *h)
 {
-	int ct = route_waypt_count();
+	int ct = track_waypt_count();
 	polybufx = xcalloc(ct, sizeof(double));
 	polybufy = xcalloc(ct, sizeof(double));
 	polybufz = xcalloc(ct, sizeof(double));
@@ -259,7 +259,7 @@ void
 poly_deinit(const route_head *h)
 {
 	SHPObject *shpobject;
-	shpobject = SHPCreateSimpleObject(SHPT_ARC, route_waypt_count(), 
+	shpobject = SHPCreateSimpleObject(SHPT_ARC, track_waypt_count(), 
 			polybufx, polybufy, polybufz);
 	SHPWriteObject(ohandle, -1,  shpobject);
 	SHPDestroyObject(shpobject);
