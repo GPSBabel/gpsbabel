@@ -4012,9 +4012,13 @@ int i;
     switch (gps_trk_type) {
     case pD304:
 	p+=4; /* A float indicating number of meters travelled. */
+	
 	(*trk)->heartrate = (*p++);
 	/* crank cadence, RPM, 0xff if invalid.  */
-	p++;
+	if (*p != 0xff) {
+		(*trk)->cadence = (*p);
+	}
+
 	/* sensor present.  Boolean */
 	p++;
 	

@@ -323,7 +323,8 @@ typedef struct {
 	fix_type fix;	/* Optional: 3d, 2d, etc. */
 	int  sat;	/* Optional: number of sats used for fix */
 
-	int heartrate;	 /* Beats per minute: likely to get moved to fs. */
+	unsigned char heartrate; /* Beats/min. likely to get moved to fs. */
+	unsigned char cadence;	 /* revolutions per minute */
 	float temperature; /* Degrees celsius */
 	geocache_data gc_data;
 	format_specific_data *fs;
