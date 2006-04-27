@@ -40,7 +40,7 @@ GPS_PPacket GPS_Packet_New(void)
 {
     GPS_PPacket ret;
     int hdr_size = sizeof(GPS_OPacket) ;
-    if(!(ret=(GPS_PPacket )malloc(hdr_size)))
+    if(!(ret=(GPS_PPacket )calloc(1, hdr_size)))
     
     {
 	perror("malloc");
@@ -48,7 +48,7 @@ GPS_PPacket GPS_Packet_New(void)
 	fflush(stderr);
 	return NULL;
     }
-    if(!(ret->data = (UC *)malloc(MAX_GPS_PACKET_SIZE*sizeof(UC))))
+    if(!(ret->data = (UC *)calloc(1, MAX_GPS_PACKET_SIZE*sizeof(UC))))
     {
 	perror("malloc");
 	fprintf(stderr,"GPS_Packet_New: Insufficient data memory");
@@ -93,7 +93,7 @@ GPS_PPvt_Data GPS_Pvt_New(void)
 {
     GPS_PPvt_Data ret;
     
-    if(!(ret=(GPS_PPvt_Data)malloc(sizeof(GPS_OPvt_Data))))
+    if(!(ret=(GPS_PPvt_Data)calloc(1, sizeof(GPS_OPvt_Data))))
     {
 	perror("malloc");
 	fprintf(stderr,"GPS_Pvt_New: Insufficient memory");
@@ -135,7 +135,7 @@ GPS_PAlmanac GPS_Almanac_New(void)
 {
     GPS_PAlmanac ret;
     
-    if(!(ret=(GPS_PAlmanac)malloc(sizeof(GPS_OAlmanac))))
+    if(!(ret=(GPS_PAlmanac)calloc(1, sizeof(GPS_OAlmanac))))
     {
 	perror("malloc");
 	fprintf(stderr,"GPS_Almanac_New: Insufficient memory");
