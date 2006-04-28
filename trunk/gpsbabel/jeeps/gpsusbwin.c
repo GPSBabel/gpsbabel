@@ -56,8 +56,8 @@ typedef struct {
 static HANDLE *usb_handle = INVALID_HANDLE_VALUE;
 static int usb_tx_packet_size ;
 
-int 
-gusb_win_close(const char *portname)
+static int 
+gusb_win_close(gpsdevh *handle)
 {
 	if (usb_handle != INVALID_HANDLE_VALUE) {
 		CloseHandle(usb_handle);
@@ -252,7 +252,7 @@ gusb_init(const char *pname, gpsdevh **dh)
 		}
 		/* We've matched.  Now start the specific unit. */
 		garmin_usb_start(hdevinfo, &devinterface);
-		gusb_close("blah");
+		gusb_close(NULL);
 	}
 	gusb_list_units();
 	exit (0);

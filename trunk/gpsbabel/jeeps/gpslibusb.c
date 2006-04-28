@@ -99,7 +99,7 @@ gusb_libusb_get_bulk(garmin_usb_packet *ibuf, size_t sz)
 
 
 static int
-gusb_teardown(const char *pname)
+gusb_teardown(gpsdevh *dh)
 {
 	if (udev) {
 		usb_release_interface(udev, 0);
