@@ -1057,6 +1057,7 @@ parse_temperature(const char *str, double *temperature)
 	}
 	else
 		fatal(MYNAME ": Invalid temperature \"%s\" at line %d!\n", str, current_line);
+	return 0;
 }
 
 static void
@@ -1091,6 +1092,7 @@ parse_display(const char *str, int *val)
 		}
 	}
 	warning(MYNAME ": Unknown display mode \"%s\" at line %d.\n", str, current_line);
+	return 0;
 }
 
 static void
