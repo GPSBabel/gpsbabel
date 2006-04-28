@@ -448,7 +448,7 @@ track_restore( queue *head_bak)
  * Run over all the trackpoints, computing heading (course), speed, and
  * and so on.
  */
-void track_recompute(route_head *trk)
+void track_recompute(const route_head *trk)
 {
 	waypoint first;
 	waypoint *this;
