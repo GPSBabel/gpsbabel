@@ -489,7 +489,6 @@ int tpo_read_32()
 //
 int tpo_read_int()
 {
-    unsigned char buff[4];
     int val = 0;     // Init to zero to clear higher bytes
 
 
@@ -531,7 +530,6 @@ int tpo_read_int()
 //
 int tpo_find_block(unsigned int block_desired)
 {
-	char buff[4];
     int block_type;
     int block_offset;
 
@@ -570,7 +568,6 @@ int tpo_find_block(unsigned int block_desired)
 waypoint *tpo_convert_ll(int lat, int lon) {
     double latitude;
     double longitude;
-    double height;
     waypoint *waypoint_temp;
 
 
@@ -961,7 +958,7 @@ void tpo_process_map_notes(void)
         char *waypoint_name;
         waypoint* waypoint_temp;
         unsigned int num_bytes;
-        int jj;
+        unsigned int jj;
 
  
 //UNKNOWN DATA LENGTH
@@ -1160,7 +1157,6 @@ void tpo_process_text_labels(void)
         int lon;
         unsigned int name_length;
         char *waypoint_name;
-        char *comment;
         waypoint* waypoint_temp;
 
  

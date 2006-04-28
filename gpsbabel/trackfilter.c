@@ -203,6 +203,7 @@ trackfilter_parse_fix()
 		return fix_none;
 	}
 	fatal( MYNAME ": invalid fix type\n" );
+	return 0;
 }
 
 static void

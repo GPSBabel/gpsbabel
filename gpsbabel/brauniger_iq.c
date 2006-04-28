@@ -66,12 +66,14 @@ static void rd_init(const char *fname)
 
 static void rd_deinit(void)
 {
+#if BOOGER
     if (!GPS_Serial_Off(port, fd)) {
 	fatal(MYNAME ": Can't shut down port '%s'\n", port);
     }
     if (!GPS_Serial_Close(fd, port)) {
 	fatal(MYNAME ": Can't close port '%s'\n", port);
     }
+#endif /* BOOGER */
     xfree(port);
 }
 
@@ -230,6 +232,7 @@ static int process_data(const unsigned char *data)
 
 static void data_read(void)
 {
+#if BOOGER
     unsigned char ibuf[25];
     int32 rd_cnt, ofs;
 
@@ -262,6 +265,7 @@ static void data_read(void)
 	}
     } while (GPS_Serial_Wait(fd));
     fatal(MYNAME ": Incomplete download\n");
+#endif
 }
 
 static arglist_t brauniger_iq_args[] = {
