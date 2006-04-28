@@ -21,7 +21,7 @@ RECORD_DELIMITER	NEWLINE
 # FILE HEADER
 #
 PROLOGUE //Kartex Track File created by GPSBabel
-PROLOGUE &KWF 2.0,sweref 99 lat long,1
+PROLOGUE &KTF 2.0,sweref 99 lat long,1
 #
 #
 # INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
