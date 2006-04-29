@@ -59,10 +59,18 @@ double radtometers( double rads ) {
 
 double gcdist( double lat1, double lon1, double lat2, double lon2 ) {
   double res;
-  res = acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2));
-  if (errno == EDOM) { /* Math argument out of domain of function */
-    errno = 0;
-    return 0;
+
+  errno = 0;
+
+  res = sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2);
+  if (res > 1.0) res = 1.0;
+  else if (res < -1.0) res = -1.0;
+
+  res = acos(res);
+
+  if ((isnan(res)) || (errno == EDOM)) { /* this should never happen: */
+    errno = 0;                           /* Math argument out of domain of function, */
+    return 0;                            /* or value returned is not a number */
   }
   return res;
 }
