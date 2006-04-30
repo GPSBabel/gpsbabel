@@ -3340,7 +3340,7 @@ static void GPS_D210_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [int32] number of track entries
 ************************************************************************/
-int32 GPS_A300_Get(const char *port, GPS_PTrack **trk)
+int32 GPS_A300_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
 {
     static UC data[2];
     gpsdevh *fd;
@@ -3469,7 +3469,7 @@ drain_run_cmd(gpsdevh *fd)
 **
 ** @return [int32] number of track entries
 ************************************************************************/
-int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
+int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
 {
     static UC data[2];
     gpsdevh *fd;
@@ -3477,6 +3477,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
     GPS_PPacket rec;
     int32 n;
     int32 i;
+    int ntrkpts;
 
     if(gps_trk_transfer == -1)
 	return GPS_UNSUPPORTED;
@@ -3576,6 +3577,8 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
 	    GPS_Error("A301_GET: Unknown track protocol");
 	    return PROTOCOL_ERROR;
 	}
+	/* Cheat and don't _really_ pass the trkpt back */
+	cb(n, NULL);
     }
 
     if(!GPS_Packet_Read(fd, &rec))
