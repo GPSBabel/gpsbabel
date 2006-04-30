@@ -1393,9 +1393,11 @@ static void GPS_D109_Get(GPS_PWay *way, UC *s, int protoid)
     p=s;
 
     (*way)->prot = protoid;
+
+    p++;				/* data packet type */
     (*way)->wpt_class = *p++;
-    (*way)->colour    = *p++;
-    (*way)->dspl      = *p++;
+    (*way)->colour    = *p & 0x1f;
+    (*way)->dspl      = (*p++ >> 5) & 3;
     (*way)->attr      = *p++;
     (*way)->smbl = GPS_Util_Get_Short(p);
     p+=sizeof(int16);
@@ -2116,11 +2118,13 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len, int protoid)
     int32 i;
     
     p = data;
-    *p++ = 1 /* way->wpt_class */;   	/* For D109, the class must be 1 */
-    *p++ = 0 /* way->colour*/ ;		/* If non-zero, the waypoint is in 
-					   invisible ink on the V. */
-    *p++ = way->dspl;
-    if (protoid == 109) {
+
+    *p++ = 1; /* data packet type; must be 1 for D109 and D110 */
+    *p++ = 0; // way->wpt_class;
+    
+    *p++ = ((way->dspl & 3) << 5) | 0x1f;	/* colour & display */
+
+    if (protoid == 109) {	/* attr */
 	*p++ = 0x70;
     } else if (protoid == 110) {
 	*p++  = 0x80;
