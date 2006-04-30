@@ -115,21 +115,11 @@ garmin_usb_start(struct usb_device *dev)
 	int i;
 
 	if (udev) return;
-	/*
-	 * Linux _requires_ the reset.   OSX doesn't work if we 
-	 * DO reset it.  I really should study this more, but for 
-	 * now, we'll just avoid the reset on Apple's OSX.
-	 */
-#if !defined (__APPLE__)
-	udev = usb_open(dev);
-	usb_reset(udev);
-	usb_close(udev);
-#endif /* APPLE */
 
 	udev = usb_open(dev);
 	atexit((void(*)())gusb_teardown);
 
-	if (!udev) { fatal("usb_open failed\n"); }
+	if (!udev) { fatal("usb_open failed: %s\n", usb_strerror()); }
 	/*
 	 * Hrmph.  No iManufacturer or iProduct headers....
 	 */
@@ -194,7 +184,13 @@ void garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
 					continue;
 				if (req_unit_number < 0) {
 					garmin_usb_start(dev);	
-					gusb_teardown(NULL);
+					/* 
+					 * It's important to call _close
+					 * here since the bulk/intr models
+				  	 * may have a "dangling" packet that
+					 * needs to be drained.
+					 */ 		
+					gusb_close(NULL);
 				} else 
 				if (req_unit_number == found_devices)
 					garmin_usb_start(dev);	
