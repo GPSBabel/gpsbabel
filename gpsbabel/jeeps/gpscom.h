@@ -25,7 +25,7 @@ int32  GPS_Command_Pvt_Get(gpsdevh **fd, GPS_PPvt_Data *pvt);
 int32  GPS_Command_Get_Almanac(const char *port, GPS_PAlmanac **alm);
 int32  GPS_Command_Send_Almanac(const char *port, GPS_PAlmanac *alm, int32 n);
 
-int32  GPS_Command_Get_Track(const char *port, GPS_PTrack **trk);
+int32  GPS_Command_Get_Track(const char *port, GPS_PTrack **trk, int (*cb)(int, struct GPS_SWay **));
 int32  GPS_Command_Send_Track(const char *port, GPS_PTrack *trk, int32 n);
 
 int32  GPS_Command_Get_Waypoint(const char *port, GPS_PWay **way,int (*cb)(int, struct GPS_SWay **));

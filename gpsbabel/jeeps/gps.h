@@ -179,7 +179,7 @@ typedef struct GPS_SLap_Data {
 	UC	track_index;
 } GPS_OLap_Data, *GPS_PLap_Data;
 
-
+typedef int (*pcb_fn) (int, struct GPS_SWay **);
 
 #include "gpsdevice.h"
 #include "gpssend.h"
