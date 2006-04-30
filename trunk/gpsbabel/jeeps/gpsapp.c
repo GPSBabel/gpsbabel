@@ -3430,6 +3430,7 @@ int32 GPS_A300_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
  *
  * Hopefully, this won't be needed forever.
  */
+int 
 drain_run_cmd(gpsdevh *fd)
 {
     GPS_PPacket tra;
@@ -3458,6 +3459,7 @@ drain_run_cmd(gpsdevh *fd)
 	    break;
 	}
     }
+  return 0;
 }
 
 /* @func GPS_A301_Get ******************************************************
@@ -3477,7 +3479,6 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
     GPS_PPacket rec;
     int32 n;
     int32 i;
-    int ntrkpts;
 
     if(gps_trk_transfer == -1)
 	return GPS_UNSUPPORTED;

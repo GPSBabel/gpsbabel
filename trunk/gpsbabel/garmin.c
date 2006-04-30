@@ -285,7 +285,7 @@ track_read(void)
 	char trk_seg_num_buf[10];
 	char *trk_name = "";
 
-	ntracks = GPS_Command_Get_Track(portname, &array);
+	ntracks = GPS_Command_Get_Track(portname, &array, waypt_read_cb);
 
 	if ( ntracks <= 0 )
 		return;
