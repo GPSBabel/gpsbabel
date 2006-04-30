@@ -252,3 +252,56 @@ garmin_fs_merge_category(const char *category_name, waypoint *waypt)
 	GMSD_SET(category, cat);
 	return 1;
 }
+
+void 
+garmin_fs_garmin_after_read(const GPS_PWay way, waypoint *wpt, const int protoid)
+{
+	garmin_fs_t *gmsd = NULL;
+	
+	gmsd = garmin_fs_alloc(protoid);
+	fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+	
+	/* nothing happens until gmsd is allocated some lines above */
+
+	/* !!! class needs protocol specific conversion !!! (ToDo)
+	GMSD_SET(wpt_class, way[i]->wpt_class);
+	*/
+	/* flagged data fields */
+	GMSD_SET(display, gt_switch_display_mode_value(way->dspl, gps_waypt_type, 1));
+	if (way->category != 0) GMSD_SET(category, way->category);
+	if (way->dst < 1.0e25f) GMSD_SET(proximity, way->dst);
+	if (way->temperature_populated) GMSD_SET(temperature, way->temperature);
+	if (way->dpth < 1.0e25f) GMSD_SET(depth, way->dpth);
+	GMSD_SETNSTR(cc, way->cc, sizeof(way->cc));
+	GMSD_SETNSTR(state, way->state, sizeof(way->state));
+	GMSD_SETSTR(city, way->city);
+	GMSD_SETSTR(facility, way->facility);
+	GMSD_SETSTR(cross_road, way->cross_road);
+	GMSD_SETSTR(addr, way->addr);
+}
+
+void 
+garmin_fs_garmin_before_write(const waypoint *wpt, GPS_PWay way, const int protoid)
+{
+	garmin_fs_t *gmsd = GMSD_FIND(wpt);
+	
+	if (gmsd == NULL) return;
+
+	/* ToDo: protocol specific conversion of class
+	way[i]->wpt_class = GMSD_GET(wpt_class, way[i]->wpt_class); 
+		*/
+	way->dspl = gt_switch_display_mode_value(
+		GMSD_GET(display, way->dspl), gps_waypt_type, 0);
+	way->category = GMSD_GET(category, way->category);
+	way->dpth = GMSD_GET(depth, way->dpth);
+ 	way->dst = GMSD_GET(proximity, way->dpth);
+ 	way->temperature = GMSD_GET(temperature, way->temperature);
+	
+	GMSD_GETNSTR(cc, way->cc, sizeof(way->cc));
+	GMSD_GETNSTR(city, way->city, sizeof(way->city));
+	GMSD_GETNSTR(state, way->state, sizeof(way->state));
+	GMSD_GETNSTR(facility, way->facility, sizeof(way->facility));
+	GMSD_GETNSTR(cross_road, way->cross_road, sizeof(way->cross_road));
+	GMSD_GETNSTR(addr, way->addr, sizeof(way->addr));
+}
+
