@@ -101,6 +101,7 @@ top:
 	if (gps_show_bytes) {
 		int i;
 		const char *m1, *m2;
+		unsigned short pkttype = le_read16(&ibuf->gusb_pkt.databuf[0]);
 
 		GPS_Diag("RX (%s) [%d]:", 
 			receive_state == rs_fromintr ? "intr" : "bulk", rv);
@@ -121,8 +122,7 @@ top:
 			GPS_Diag("%c", isalnum(buf[i])? buf[i] : '.');
 		}
 
-		m1 = Get_Pkt_Type(ibuf->gusb_pkt.pkt_id[0], 
-			ibuf->gusb_pkt.databuf[0], &m2);
+		m1 = Get_Pkt_Type(ibuf->gusb_pkt.pkt_id[0], pkttype, &m2);
 if ((rv == 0)  &&  (receive_state == rs_frombulk) ) {m1= "RET2INTR";m2=NULL;};
 		GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
 	}
@@ -158,6 +158,7 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 	rv = gusb_llops->llop_send(opkt, sz);
 
 	if (gps_show_bytes) {
+		unsigned short pkttype = le_read16(&opkt->gusb_pkt.databuf[0]);
 		GPS_Diag("TX [%d]:", sz);
 
 		for(i=0;i<sz;i++)
@@ -166,8 +167,7 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 		for(i=0;i<sz;i++)
 			GPS_Diag("%c", isalnum(obuf[i])? obuf[i] : '.');
 
-		m1 = Get_Pkt_Type(opkt->gusb_pkt.pkt_id[0], 
-			opkt->gusb_pkt.databuf[0], &m2);
+		m1 = Get_Pkt_Type(opkt->gusb_pkt.pkt_id[0], pkttype, &m2);
 
 		GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
         }

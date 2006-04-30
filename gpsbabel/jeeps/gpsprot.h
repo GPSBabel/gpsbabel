@@ -53,20 +53,21 @@ int32 gps_device_command;
 
 struct COMMANDDATA
 {
-    UC Cmnd_Abort_Transfer;
-    UC Cmnd_Transfer_Alm;
-    UC Cmnd_Transfer_Posn;
-    UC Cmnd_Transfer_Prx;
-    UC Cmnd_Transfer_Rte;
-    UC Cmnd_Transfer_Time;
-    UC Cmnd_Transfer_Trk;
-    UC Cmnd_Transfer_Wpt;
-    UC Cmnd_Turn_Off_Pwr;
-    UC Cmnd_Start_Pvt_Data;
-    UC Cmnd_Stop_Pvt_Data;
-    UC Cmnd_FlightBook_Transfer;
-    UC Cmnd_Transfer_Lap;
-    UC Cmnd_Transfer_Wpt_Cats;
+    US Cmnd_Abort_Transfer;
+    US Cmnd_Transfer_Alm;
+    US Cmnd_Transfer_Posn;
+    US Cmnd_Transfer_Prx;
+    US Cmnd_Transfer_Rte;
+    US Cmnd_Transfer_Time;
+    US Cmnd_Transfer_Trk;
+    US Cmnd_Transfer_Wpt;
+    US Cmnd_Turn_Off_Pwr;
+    US Cmnd_Start_Pvt_Data;
+    US Cmnd_Stop_Pvt_Data;
+    US Cmnd_FlightBook_Transfer;
+    US Cmnd_Transfer_Lap;
+    US Cmnd_Transfer_Wpt_Cats;
+    US Cmnd_Transfer_Runs;
 }
 ;
 
@@ -138,8 +139,10 @@ int32 gps_pvt_transfer;
  * Lap Data Transfer
  */
 #define pA906 906
-
 int32 gps_lap_transfer;
+
+#define pA1000 1000
+int32 gps_run_transfer;
 
 
 
