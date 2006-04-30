@@ -1,5 +1,5 @@
 /* 
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2006 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -460,8 +460,11 @@ void track_recompute(const route_head *trk)
 	first.creation_time = 0;
 
 	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
+		time_t timed;
 		double tlat, tlon, plat, plon, dist;
+
 		this = (waypoint *)elem;
+		timed = this->creation_time - prev->creation_time;
 		/* gcdist and headin want radians, not degrees */
 		tlat = RAD(this->latitude);
 		tlon = RAD(this->longitude);
@@ -470,8 +473,9 @@ void track_recompute(const route_head *trk)
 		this->course = DEG(heading(plat, plon,
 			tlat, tlon));
 		dist = radtometers(gcdist(plat, plon, tlat, tlon));
-		this->speed = dist / 
-			labs(this->creation_time - prev->creation_time);
+		if (timed) {
+			this->speed = dist / labs(timed);
+		}
 
 		prev = this;
 	}
