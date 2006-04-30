@@ -24,6 +24,7 @@
 #include "defs.h"
 #include "jeeps/gps.h"
 #include "garmin_tables.h"
+#include "garmin_fs.h"
 
 #define MYNAME "GARMIN" 
 static const char *portname;
@@ -143,6 +144,8 @@ rw_init(const char *fname)
 					receiver_charset = CET_CHARSET_MS_ANSI;
 					break;
 				case 231: /* Quest */
+					receiver_must_upper = 0;
+					receiver_short_length = 30;
 					receiver_charset = CET_CHARSET_MS_ANSI;
 					break;
 				case 260: /* GPSMap 296 */
@@ -266,7 +269,9 @@ waypt_read(void)
 		if (way[i]->time_populated) {
 			wpt_tmp->creation_time = way[i]->time;
 		}
-		
+#if 0
+		garmin_fs_garmin_after_read(way[i], wpt_tmp, gps_waypt_type);
+#endif		
 		waypt_add(wpt_tmp);
 		GPS_Way_Del(&way[i]);
 	}
@@ -555,6 +560,9 @@ waypoint_write(void)
 			way[i]->time = wpt->creation_time;
 			way[i]->time_populated = 1;
 		}
+#if 0
+		garmin_fs_garmin_before_write(wpt, way[i], gps_waypt_type);
+#endif
 		i++;
 	}
 
