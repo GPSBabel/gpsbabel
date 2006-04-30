@@ -25,6 +25,7 @@
 
 #include <ctype.h>
 #include "defs.h"
+#include "jeeps/gps.h"
 
 /* this order is used by most devices */
 /* typedef enum {
@@ -116,5 +117,8 @@ unsigned char garmin_fs_convert_category(const char *category_name, gbuint16 *ca
 unsigned char garmin_fs_merge_category(const char *category_name, waypoint *waypt);
 
 #define GMSD_SECTION_CATEGORIES "Garmin Categories"
+
+void garmin_fs_garmin_after_read(const GPS_PWay way, waypoint *wpt, const int protoid);
+void garmin_fs_garmin_before_write(const waypoint *wpt, GPS_PWay way, const int protoid);
 
 #endif
