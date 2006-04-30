@@ -417,7 +417,9 @@ static void GPS_A001(GPS_PPacket packet)
 		case 800:
 		    gps_pvt_transfer = pA800;
 		    break;
-
+		case 1000:
+		    gps_run_transfer = pA1000;
+		    break;
 	    }
 	    break;
 
@@ -3417,8 +3419,46 @@ int32 GPS_A300_Get(const char *port, GPS_PTrack **trk)
     return ret;
 }
 
+/*
+ * This is to get around a problem with the x305 sporting units.
+ * The unit will not "finalize" a track unless the operator manually
+ * does it from the pushbutton panel OR until the device has gone through
+ * a 'get runs' cycle.  Garmin's Training Center, of course, does this
+ * because it actually uses that data.   Here we just go through the 
+ * mechanics of building and sending the requests and then throwing away
+ * all the data in order to finalize that.
+ *
+ * Hopefully, this won't be needed forever.
+ */
+drain_run_cmd(gpsdevh *fd)
+{
+    GPS_PPacket tra;
+    GPS_PPacket rec;
+    static UC data[2];
 
+    if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
+	return MEMORY_ERROR;
 
+    GPS_Util_Put_Short(data,
+		       COMMAND_ID[gps_device_command].Cmnd_Transfer_Runs);
+    GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
+		    data,2);
+
+    if(!GPS_Write_Packet(fd,tra))
+	return gps_errno;
+    if(!GPS_Get_Ack(fd, &tra, &rec))
+	return gps_errno;
+
+    for(;;) {
+	if(!GPS_Packet_Read(fd, &rec))
+	    return gps_errno;
+	if(!GPS_Send_Ack(fd, &tra, &rec))
+	    return gps_errno;
+    	if(rec->type == LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+	    break;
+	}
+    }
+}
 
 /* @func GPS_A301_Get ******************************************************
 **
@@ -3450,6 +3490,10 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk)
     
     if(!GPS_Device_On(port, &fd))
 	return gps_errno;
+
+    if ((gps_trk_type == pD304) && gps_run_transfer) {
+	drain_run_cmd(fd);
+    }
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
 	return MEMORY_ERROR;
@@ -6130,7 +6174,7 @@ void GPS_D906_Get(GPS_PPacket packet, GPS_PLap_Data *Lap)
  */
 
 const char *
-Get_Pkt_Type(unsigned char p, unsigned char d0, const char **xinfo)
+Get_Pkt_Type(unsigned char p, unsigned short d0, const char **xinfo)
 {
 	*xinfo = NULL;
 #define LT LINK_ID[gps_link_type]
@@ -6152,6 +6196,11 @@ Get_Pkt_Type(unsigned char p, unsigned char d0, const char **xinfo)
 			case 92: *xinfo = "Flight Records"; break;
 			case 117: *xinfo = "Xfer Laps"; break;
 			case 121: *xinfo = "Xfer Categories"; break;
+			case 450: *xinfo = "Xfer Runs"; break;
+			case 451: *xinfo = "Xfer Workouts"; break;
+			case 452: *xinfo = "Xfer Wkt Occurrences"; break;
+			case 453: *xinfo = "Xfer User Profile "; break;
+			case 454: *xinfo = "Xfer Wkt Limits"; break;
 			default: *xinfo = "Unknown";
 		}
 		return "CMDDAT";
