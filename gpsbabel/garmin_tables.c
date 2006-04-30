@@ -494,6 +494,52 @@ char *gt_display_mode_names[] = {
 	"Symbol & Description"
 };
 
+unsigned char
+gt_switch_display_mode_value(const unsigned char display_mode, const int protoid, const char device)
+{
+	if (device) {
+		switch(protoid) {
+		
+		case 103: 
+		case 107: 
+		case 108: 
+		case 109: 
+		case 110: return display_mode & 3; 
+		case 104:
+			switch(display_mode) {
+				case 0:
+				case 1: return gt_display_mode_symbol;
+				case 3: return gt_display_mode_symbol_and_name;
+				case 5: return gt_display_mode_symbol_and_comment;
+			}
+		case 155:
+			switch(display_mode) {
+				case 1: return gt_display_mode_symbol;
+				case 3: return gt_display_mode_symbol_and_name;
+				case 5: return gt_display_mode_symbol_and_comment;
+			}
+		}
+		return gt_display_mode_symbol_and_name;
+	} else {
+		switch(protoid) {
+		
+		case 103: 
+		case 107: 
+		case 108: 
+		case 109: 
+		case 110: return display_mode & 3;
+		case 104:
+		case 155:
+			switch(display_mode) {
+				case gt_display_mode_symbol: return 1;
+				case gt_display_mode_symbol_and_name: return 3;
+				case gt_display_mode_symbol_and_comment: return 5;
+			}
+		}
+		return 0;
+	}
+}
+
 char *
 gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, int *dynamic)
 {

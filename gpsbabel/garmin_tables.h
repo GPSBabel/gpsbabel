@@ -90,4 +90,6 @@ typedef enum {
 
 unsigned char gt_convert_category(const char *name, int *category);
 
+unsigned char gt_switch_display_mode_value(const unsigned char display_mode, const int protoid, const char device);
+
 #endif
