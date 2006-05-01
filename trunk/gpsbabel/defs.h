@@ -429,6 +429,7 @@ void track_backup(signed int *count, queue **head_bak);
 void track_restore( queue *head_bak);
 void track_append( queue *src );
 void route_flush( queue *head );
+void track_recompute( const route_head *trk);
 
 /*
  * All shortname functions take a shortname handle as the first arg.
