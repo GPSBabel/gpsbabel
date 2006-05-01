@@ -615,6 +615,88 @@ nmea_fix_timestamps(route_head *track)
 	}
 }
 
+void
+nmea_parse_one_line(char *ibuf)
+{
+	int had_checksum = 0;
+	char *ck;
+	int ckval, ckcmp;
+	char *tbuf = lrtrim(ibuf);
+
+	if (*tbuf != '$') return;
+	
+	ck = strrchr(tbuf, '*');
+	if (ck != NULL) {
+		*ck = '\0';
+		ckval = nmea_cksum(&tbuf[1]);
+		*ck = '*';
+		ck++;
+		sscanf(ck, "%2X", &ckcmp);
+		if (ckval != ckcmp) {
+#if 0
+			printf("ckval %X, %X, %s\n", ckval, ckcmp, ck);
+			printf("NMEA %s\n", tbuf);
+#endif
+			return;
+		}
+
+		had_checksum = 1;
+	}
+	else if (had_checksum) {
+		/* we have had a checksum on all previous sentences, but not on this
+		one, which probably indicates this line is truncated */
+		had_checksum = 0;
+		return;
+	}
+
+	/* @@@ zmarties: The parse routines all assume all fields are present, but 
+	   the NMEA format allows any field to be missed out if there is no data
+	   for that field.  Rather than change all the parse routines, we first
+	   substitute a default value of zero for any missing field.
+	*/
+	if (strstr(tbuf, ",,"))
+	{
+		tbuf = gstrsub(tbuf, ",,", ",0,");
+	}
+
+	if (0 == strncmp(tbuf, "$GPWPL,", 7)) {
+		gpwpl_parse(tbuf);
+	} else
+	if (0 == strncmp(tbuf, "$GPGGA,", 7)) {
+		posn_type = gpgga;
+		gpgga_parse(tbuf);
+	} else
+	if (0 == strncmp(tbuf, "$GPRMC,", 7)) {
+		if (posn_type != gpgga) {
+			posn_type = gprmc;
+		}			
+		/*			
+		 * Always call gprmc_parse() because like GPZDA
+		 * it contains the full date.
+		 */			
+		gprmc_parse(tbuf);
+	} else
+	if (0 == strncmp(tbuf, "$GPGLL,", 7)) {
+		if ((posn_type != gpgga) && (posn_type != gprmc)) {
+			gpgll_parse(tbuf);
+		}
+	} else
+	if (0 == strncmp(tbuf, "$GPZDA,",7)) {
+		gpzda_parse(tbuf);
+	} else
+	if (0 == strncmp(tbuf, "$GPVTG,",7)) {
+		gpvtg_parse(tbuf); /* speed and course */
+	} else
+	if (0 == strncmp(tbuf, "$GPGSA,",7)) {
+		gpgsa_parse(tbuf); /* GPS fix */
+	}
+
+	if (tbuf != ibuf) {
+	  /* clear up the dynamic buffer we used because substition was required */
+		xfree(tbuf);
+	}
+}
+
 static void
 nmea_read(void)
 {
@@ -642,82 +724,10 @@ nmea_read(void)
 
 	curr_waypt = NULL; 
 
-	while (fgets(ibuf, sizeof(ibuf), file_in)) 
-	{
-		char *tbuf = lrtrim(ibuf);
-		if (*tbuf != '$') continue;
-		
-		ck = strrchr(tbuf, '*');
-		if (ck != NULL) {
-			*ck = '\0';
-			ckval = nmea_cksum(&tbuf[1]);
-			*ck = '*';
-			ck++;
-			sscanf(ck, "%2X", &ckcmp);
-			if (ckval != ckcmp) {
-#if 0
-				printf("ckval %X, %X, %s\n", ckval, ckcmp, ck);
-				printf("NMEA %s\n", tbuf);
-#endif
-				continue;
-			}
-
-			had_checksum = 1;
-		}
-		else if (had_checksum) {
-			/* we have had a checksum on all previous sentences, but not on this
-			one, which probably indicates this line is truncated */
-			had_checksum = 0;
-			continue;
-		}
-
-		/* @@@ zmarties: The parse routines all assume all fields are present, but 
-		   the NMEA format allows any field to be missed out if there is no data
-		   for that field.  Rather than change all the parse routines, we first
-		   substitute a default value of zero for any missing field.
-		*/
-		if (strstr(tbuf, ",,"))
-		{
-			tbuf = gstrsub(tbuf, ",,", ",0,");
-		}
-
-		if (0 == strncmp(tbuf, "$GPWPL,", 7)) {
-			gpwpl_parse(tbuf);
-		} else
-		if (0 == strncmp(tbuf, "$GPGGA,", 7)) {
-			posn_type = gpgga;
-			gpgga_parse(tbuf);
-		} else
-		if (0 == strncmp(tbuf, "$GPRMC,", 7)) {
-			if (posn_type != gpgga) {
-				posn_type = gprmc;
-			}			
-			/*			
-			 * Always call gprmc_parse() because like GPZDA
-			 * it contains the full date.
-			 */			
-			gprmc_parse(tbuf);
-		} else
-		if (0 == strncmp(tbuf, "$GPGLL,", 7)) {
-			if ((posn_type != gpgga) && (posn_type != gprmc)) {
-				gpgll_parse(tbuf);
-			}
-		} else
-		if (0 == strncmp(tbuf, "$GPZDA,",7)) {
-			gpzda_parse(tbuf);
-		} else
-		if (0 == strncmp(tbuf, "$GPVTG,",7)) {
-			gpvtg_parse(tbuf); /* speed and course */
-		} else
-		if (0 == strncmp(tbuf, "$GPGSA,",7)) {
-			gpgsa_parse(tbuf); /* GPS fix */
-		}
-
-		if (tbuf != ibuf) {
-		  /* clear up the dynamic buffer we used because substition was required */
-			xfree(tbuf);
-		}
+	while (fgets(ibuf, sizeof(ibuf), file_in)) {
+		nmea_parse_one_line(ibuf);
 	}
+
 	/* try to complete date-less trackpoints */
 	nmea_fix_timestamps(trk_head);
 }
