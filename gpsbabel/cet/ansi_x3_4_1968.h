@@ -28,10 +28,10 @@
 
 const char *cet_cs_alias_ansi_x3_4_1968[] = 
 {
-	"ANSI_X3.4-1968", "367/CR-LF", "ANSI_X3.4-1986", "ASCII", 
-	"CP367/CR-LF", "csASCII", "IBM367/CR-LF", "ISO646-US", 
+	"ANSI_X3.4-1968", "367", "ANSI_X3.4-1986", "ASCII", 
+	"CP367", "csASCII", "IBM367", "ISO646-US", 
 	"ISO646.1991-IRV", "iso-ir-6", "ISO_646.irv:1991", "us", 
-	"US-ASCII", NULL
+	NULL
 };
 
 #define cet_ucs4_ofs_ansi_x3_4_1968 128

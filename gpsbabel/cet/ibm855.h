@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm855[] = 
 {
-	"IBM855/CR-LF", "855/CR-LF", "CP855/CR-LF", NULL
+	"IBM855", "855", "CP855", NULL
 };
 
 #define cet_ucs4_ofs_ibm855 128

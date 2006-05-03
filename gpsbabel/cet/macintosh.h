@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_macintosh[] = 
 {
-	"macintosh/CR", "csMacintosh", "mac/CR", "MacRoman",
+	"macintosh", "csMacintosh", "mac", "MacRoman",
 	NULL
 };
 

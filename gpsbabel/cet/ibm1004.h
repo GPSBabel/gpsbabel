@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm1004[] = 
 {
-	"IBM1004/CR-LF", "1004/CR-LF", "CP1004/CR-LF", "os2latin1",
+	"IBM1004", "1004", "CP1004", "os2latin1",
 	NULL
 };
 

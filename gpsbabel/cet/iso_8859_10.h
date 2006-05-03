@@ -29,8 +29,8 @@
 const char *cet_cs_alias_iso_8859_10[] = 
 {
 	"ISO-8859-10", "csISOLatin6", "ISO8859-10", "iso-ir-157", 
-	"ISO_8859-10", "ISO_8859-10:1992", "ISO_8859-10:1993", "L6", 
-	"latin6", NULL
+	"ISO_8859-10", "ISO_8859-10:1992", "ISO_8859-10:1993", 
+	"l6", "lat6", "latin6", NULL
 };
 
 #define cet_ucs4_ofs_iso_8859_10 161

@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_macintosh_ce[] = 
 {
-	"macintosh_ce/CR", "macce/CR", NULL
+	"macintosh_ce", "macce", NULL
 };
 
 #define cet_ucs4_ofs_macintosh_ce 128

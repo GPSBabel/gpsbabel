@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm500[] = 
 {
-	"IBM500/CR-LF", "500/CR-LF", "500V1", "CP500/CR-LF", 
+	"IBM500", "500", "500V1", "CP500", 
 	"ebcdic-cp-be", "ebcdic-cp-ch", NULL
 };
 

@@ -28,9 +28,9 @@
 
 const char *cet_cs_alias_iso_8859_2[] = 
 {
-	"ISO-8859-2", "912/CR-LF", "CP912/CR-LF", "csISOLatin2", 
-	"IBM912/CR-LF", "ISO8859-2", "iso-ir-101", "ISO_8859-2", 
-	"ISO_8859-2:1987", "l2", "latin2", NULL
+	"ISO-8859-2", "912", "CP912", "csISOLatin2", 
+	"IBM912", "ISO8859-2", "iso-ir-101", "ISO_8859-2", 
+	"ISO_8859-2:1987", "l2", "lat2", "latin2", NULL
 };
 
 #define cet_ucs4_ofs_iso_8859_2 161

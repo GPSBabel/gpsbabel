@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm852[] = 
 {
-	"IBM852/CR-LF", "852/CR-LF", "CP852/CR-LF", "pcl2", 
+	"IBM852", "852", "CP852", "pcl2", 
 	"pclatin2", NULL
 };
 

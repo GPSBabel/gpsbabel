@@ -29,8 +29,8 @@
 const char *cet_cs_alias_iso_8859_13[] = 
 {
 	"ISO-8859-13", "ISO8859-13", "iso-baltic", "ISO-IR-179", 
-	"iso-ir-179a", "ISO_8859-13", "ISO_8859-13:1998", "l7", 
-	"latin7", NULL
+	"iso-ir-179a", "ISO_8859-13", "ISO_8859-13:1998", 
+	"l7", "lat7", "latin7", NULL
 };
 
 #define cet_ucs4_ofs_iso_8859_13 165

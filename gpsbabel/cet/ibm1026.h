@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm1026[] = 
 {
-	"IBM1026/CR-LF", "1026/CR-LF", "CP1026/CR-LF", NULL
+	"IBM1026", "1026", "CP1026", NULL
 };
 
 #define cet_ucs4_ofs_ibm1026 4

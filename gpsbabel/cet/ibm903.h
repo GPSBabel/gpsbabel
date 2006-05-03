@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm903[] = 
 {
-	"IBM903/CR-LF", "903/CR-LF", "CP903/CR-LF", NULL
+	"IBM903", "903", "CP903", NULL
 };
 
 #define cet_ucs4_ofs_ibm903 128

@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm278[] = 
 {
-	"IBM278/CR-LF", "278/CR-LF", "CP278/CR-LF", "ebcdic-cp-fi", 
+	"IBM278", "278", "CP278", "ebcdic-cp-fi", 
 	"ebcdic-cp-se", NULL
 };
 

@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_cp1256[] = 
 {
-	"CP1256/CR-LF", "1256/CR-LF", "ms-arab", "windows-1256", "WIN-CP1256",
+	"CP1256", "1256", "ms-arab", "windows-1256", "WIN-CP1256",
 	NULL
 };
 

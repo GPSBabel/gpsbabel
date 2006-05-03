@@ -28,8 +28,8 @@
 
 const char *cet_cs_alias_iso_8859_1[] = 
 {
-	"ISO-8859-1", "819/CR-LF", "CP819/CR-LF", "csISOLatin1", 
-	"IBM819/CR-LF", "ISO8859-1", "iso-ir-100", "ISO_8859-1", 
+	"ISO-8859-1", "819", "CP819", "csISOLatin1", 
+	"IBM819", "ISO8859-1", "iso-ir-100", "ISO_8859-1", 
 	"ISO_8859-1:1987", "l1", "lat1", "latin1", 
 	"Latin-1", NULL
 };
