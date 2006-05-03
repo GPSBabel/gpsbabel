@@ -79,7 +79,7 @@ ln -sf $DIR gpsbabel-$VERSION
 
 mkspec
 
-cat ../babelweb/changes.html | $DIR/tools/mkchangelog > gpsbabel-$VERSION/CHANGELOG
+cat $DIR/../babelweb/changes.html | $DIR/tools/mkchangelog > gpsbabel-$VERSION/CHANGELOG
 cat gpsbabel-$VERSION/CHANGELOG >> gpsbabel.spec
 
 cp gpsbabel.spec gpsbabel-$VERSION/
