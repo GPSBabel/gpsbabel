@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm864[] = 
 {
-	"IBM864/CR-LF", "864/CR-LF", "CP864/CR-LF", NULL
+	"IBM864", "864", "CP864", NULL
 };
 
 #define cet_ucs4_ofs_ibm864 128

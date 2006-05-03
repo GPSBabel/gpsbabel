@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm273[] = 
 {
-	"IBM273/CR-LF", "273/CR-LF", "CP273/CR-LF", NULL
+	"IBM273", "273", "CP273", NULL
 };
 
 #define cet_ucs4_ofs_ibm273 4

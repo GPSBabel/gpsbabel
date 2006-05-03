@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm1047[] = 
 {
-	"IBM1047/CR-LF", "1047/CR-LF", "CP1047/CR-LF", NULL
+	"IBM1047", "1047", "CP1047", NULL
 };
 
 #define cet_ucs4_ofs_ibm1047 4

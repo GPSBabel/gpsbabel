@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm869[] = 
 {
-	"IBM869/CR-LF", "869/CR-LF", "CP869/CR-LF", "cp-gr",
+	"IBM869", "869", "CP869", "cp-gr",
 	NULL
 };
 

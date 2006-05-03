@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm297[] = 
 {
-	"IBM297/CR-LF", "297/CR-LF", "CP297/CR-LF", "ebcdic-cp-fr",
+	"IBM297", "297", "CP297", "ebcdic-cp-fr",
 	NULL
 };
 

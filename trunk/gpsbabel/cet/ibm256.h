@@ -28,7 +28,7 @@
 
 const char *cet_cs_alias_ibm256[] = 
 {
-	"IBM256/CR-LF", "256/CR-LF", "CP256/CR-LF", "EBCDIC-INT1",
+	"IBM256", "256", "CP256", "EBCDIC-INT1",
 	NULL
 };
 

@@ -29,7 +29,7 @@
 const char *cet_cs_alias_iso_8859_14[] = 
 {
 	"ISO-8859-14", "ISO8859-14", "iso-celtic", "iso-ir-199", 
-	"ISO_8859-14", "ISO_8859-14:1998", "l8", "latin8",
+	"ISO_8859-14", "ISO_8859-14:1998", "l8", "lat8", "latin8",
 	NULL
 };
 
