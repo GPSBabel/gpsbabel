@@ -947,6 +947,7 @@ static void
 cet_convert_waypt(const waypoint *wpt)
 {
 	waypoint *w = (waypoint *)wpt;
+	format_specific_data *fs;
 	
 	if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) return;
 	
@@ -957,6 +958,14 @@ cet_convert_waypt(const waypoint *wpt)
 	w->notes = cet_convert_string(wpt->notes);
 	w->url = cet_convert_string(wpt->url);
 	w->url_link_text = cet_convert_string(wpt->url_link_text);
+	
+	fs = wpt->fs;
+	while (fs != NULL)
+	{
+		if (fs->convert != NULL)
+			fs->convert(fs);
+		fs = fs->next;
+	}
 }
 
 /* cet_convert_route_hdr: internal used within cet_convert_strings process */
@@ -993,8 +1002,6 @@ cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, cons
 {
 	char *cs_name_from, *cs_name_to;
 	
-//	printf("cet_convert_strings: enter\n"); fflush(stdout);
-	
 	converter = NULL;
 	
 	if ((source == NULL) || (source == &cet_cs_vec_utf8))
@@ -1022,7 +1029,7 @@ cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, cons
 	waypt_disp_all(cet_convert_waypt);
 	route_disp_all(cet_convert_route_hdr, cet_convert_route_tlr, cet_convert_waypt);
 	track_disp_all(cet_convert_route_hdr, cet_convert_route_tlr, cet_convert_waypt);
-
+	
 	cet_output = 0;
 	
 	if (global_opts.debug_level > 0)

@@ -314,6 +314,7 @@ static an1_waypoint_record *Alloc_AN1_Waypoint( ) {
 	result->fs.type = FS_AN1W;
 	result->fs.copy = Copy_AN1_Waypoint;
 	result->fs.destroy = Destroy_AN1_Waypoint;
+	result->fs.convert = NULL;
 	return result;
 }
 	
@@ -336,6 +337,7 @@ static an1_vertex_record *Alloc_AN1_Vertex() {
 	result->fs.type = FS_AN1V;
 	result->fs.copy = Copy_AN1_Vertex;
 	result->fs.destroy = Destroy_AN1_Vertex;
+	result->fs.convert = NULL;
 	return result;
 }
 			
@@ -362,6 +364,7 @@ static an1_line_record *Alloc_AN1_Line( ) {
 	result->fs.type = FS_AN1L;
 	result->fs.copy = Copy_AN1_Line;
 	result->fs.destroy = Destroy_AN1_Line;
+	result->fs.convert = NULL;
 	return result;
 }
 

@@ -36,6 +36,7 @@ garmin_fs_alloc(const int protocol)
 	result->fs.type = FS_GMSD;
 	result->fs.copy = (fs_copy) garmin_fs_copy;
 	result->fs.destroy = garmin_fs_destroy;
+	result->fs.convert = NULL;
 	result->fs.next = NULL;
 	
 	result->protocol = protocol;

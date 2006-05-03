@@ -96,6 +96,25 @@ void copy_xml_tag( xml_tag **copy, xml_tag *src, xml_tag *parent ) {
 	copy_xml_tag( &(res->child), src->child, res );
 }
 
+static void 
+convert_xml_tag( xml_tag *tag ) {
+	char **ap = NULL;
+	
+	if (tag == NULL) return;
+	
+	tag->cdata = cet_convert_string(tag->cdata);
+	tag->parentcdata = cet_convert_string(tag->parentcdata);
+	
+	ap = tag->attributes;
+	while (*ap)
+	{
+		*ap = cet_convert_string(*ap);
+		ap++;
+	}
+	convert_xml_tag(tag->sibling);
+	convert_xml_tag(tag->child);
+}
+
 fs_xml *fs_xml_alloc( long type );
 
 void fs_xml_destroy( void *fs ) {
@@ -117,6 +136,12 @@ void fs_xml_copy( void **copy, void *source ) {
 	copy_xml_tag( &(((fs_xml *)(*copy))->tag), src->tag, NULL );
 }
 
+void fs_xml_convert( void *fs ) {
+	fs_xml *xml = (fs_xml *)fs;
+	if ( xml ) {
+		convert_xml_tag( xml->tag );
+	}
+}
 
 fs_xml *fs_xml_alloc( long type ) {
 	fs_xml *result = NULL;
@@ -125,7 +150,7 @@ fs_xml *fs_xml_alloc( long type ) {
 	result->fs.type = type;
 	result->fs.copy = fs_xml_copy;
 	result->fs.destroy = fs_xml_destroy;
+	result->fs.convert = fs_xml_convert;
 	return result;
 }
-
 
