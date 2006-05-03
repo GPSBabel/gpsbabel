@@ -207,12 +207,15 @@ typedef struct xml_tag {
 
 typedef void (*fs_destroy)(void *);
 typedef void (*fs_copy)(void **, void *);
+typedef void (*fs_convert)(void *);
+
 typedef struct format_specific_data {
 	long type;
 	struct format_specific_data *next;
 	
 	fs_destroy destroy;
 	fs_copy copy;
+	fs_convert convert;
 } format_specific_data;
 
 format_specific_data *fs_chain_copy( format_specific_data *source );

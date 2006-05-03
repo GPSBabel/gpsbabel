@@ -102,6 +102,9 @@ int cet_valid_char(const char *src, const cet_cs_vec_t *vec);
 int cet_vfprintf(FILE *stream, const cet_cs_vec_t *src_vec, const char *fmt, va_list args);
 int cet_fprintf(FILE *stream, const cet_cs_vec_t *src_vec, const char *fmt, ...);
 
+/* cet_convert_string: !!! ONLY VALID WITHIN 'cet_convert_strings' process !!! */
+char *cet_convert_string(char *str);
+
 /* gpsbabel extensions */
 
 void cet_convert_init(const char *cs_name, const int force);
