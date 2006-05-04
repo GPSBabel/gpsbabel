@@ -232,6 +232,7 @@ stmwpp_waypt_cb(const waypoint *wpt)
 	switch(what)
 	{
 		case STM_WAYPT:
+		case STM_RTEPT:
 			fprintf(fout, "WP,D,%s,", wpt->shortname);
 			break;
 			
@@ -245,6 +246,7 @@ stmwpp_waypt_cb(const waypoint *wpt)
 	switch(what)
 	{
 		case STM_WAYPT:
+		case STM_RTEPT:
 			fprintf(fout, ".%02d", wpt->centiseconds);
 			break;
 		case STM_TRKPT:
