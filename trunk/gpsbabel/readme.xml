@@ -1891,7 +1891,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          island or a hole, just append it to the main polygon.
 </para>
          <para> As with the arc filter, you specify a polygon by
-         specifying the name of the polygon that contains it, using
+         specifying the name of the file that contains it, using
          the file option.  You can also specify the exclude option,
          which reverses the operation of the filter so that it only
          includes points that are NOT in the polygon.
