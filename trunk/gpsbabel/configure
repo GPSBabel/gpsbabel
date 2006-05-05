@@ -804,6 +804,11 @@ if test -n "$ac_init_help"; then
    esac
   cat <<\_ACEOF
 
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+--with-cet=(default,all,minimal)
+
 Some influential environment variables:
   CC          C compiler command
   CFLAGS      C compiler flags
@@ -2492,6 +2497,31 @@ _ACEOF
 fi
 
 
+#AC_ARG_ENABLE(allcet, "Enable all character sets", AC_DEFINE(WANT_ALLCET, 1, [Define if you want support for all known character sets]))
+#AC_ARG_ENABLE(cet, "Enable character sets=(default,all,minimal)")
+
+# Check whether --with-cet or --without-cet was given.
+if test "${with_cet+set}" = set; then
+  withval="$with_cet"
+  cet="$withval"
+else
+  cet="default"
+fi;
+
+if test "$cet" = "all"; then
+
+cat >>confdefs.h <<\_ACEOF
+#define CET_WANTED 1
+_ACEOF
+
+fi
+if test "$cet" = "default"; then
+
+cat >>confdefs.h <<\_ACEOF
+#define CET_WANTED 0
+_ACEOF
+
+fi
 
 case "$target" in
     *-*-cygwin* | *-*-mingw32*)
@@ -2637,11 +2667,19 @@ echo "$as_me: error: libusb >= 0.1.8 is needed" >&2;}
 
 fi
 
+		# Override libusb for Darwin to reduce external
+		# runtime requirement.
+		case "$target" in
+		*-*-darwin*)
+		  if test "x$ac_cv_lib_usb_usb_interrupt_read" = "xyes" ; then
+			USB_LIBS="`libusb-config --prefix`/lib/libusb.a -framework  IOKit -framework CoreFoundation"
+		  fi
+		esac
 		OSJEEPS=jeeps/gpslibusb.o
 		CFLAGS="$OCFLAGS"
 	#	LIBS="$LIBS `libusb-config --libs`"
 	fi
-    ;;
+	;;
 esac
 
 
@@ -2661,14 +2699,22 @@ echo "${ECHO_T}check not done" >&6
 else
 
 # Special case fink test.
-	if test -f /sw/include/expat.h; then
-		CFLAGS="$CFLAGS -I/sw/include"
-	fi
-	if test -f /sw/include/expat.h; then
-		LDFLAGS="$LDFLAGS -L/sw/lib"
-	fi
+	case "$target" in
+	*-*-darwin*)
+		if test -f /sw/include/expat.h -a -f /sw/include/expat.h; then
+			CFLAGS="$CFLAGS -I/sw/include"
+			LDFLAGS="$LDFLAGS -L/sw/lib"
+			# Static link against expat archive, not dyn lib.
 
-	echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_LIBEXPAT 1
+_ACEOF
+
+			EXPAT_LIB=/sw/lib/libexpat.a
+		fi
+		;;
+	*)
+		echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
 echo $ECHO_N "checking for XML_ParserCreate in -lexpat... $ECHO_C" >&6
 if test "${ac_cv_lib_expat_XML_ParserCreate+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -2738,9 +2784,12 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBEXPAT 1
 _ACEOF
 
-		EXPAT_LIB="$LDFLAGS -lexpat"
+			EXPAT_LIB="$LDFLAGS -lexpat"
 fi
 
+
+		;;
+	esac
 fi
 
 

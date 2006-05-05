@@ -1,5 +1,8 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
+/* "0 for most-used character sets" */
+#undef CET_WANTED
+
 /* Defined if you have libexpat */
 #undef HAVE_LIBEXPAT
 
