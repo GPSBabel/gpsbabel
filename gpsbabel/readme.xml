@@ -1085,6 +1085,12 @@ the file README.mapconverter.</para>
       <title>MAPSEND</title>
       <para>Magellan was smart enough to document their file format to
 make creating software like this possible.</para>
+      <para>Additional options:</para>
+      <para>
+      	<option>trkver</option> - set the MapSend version to generate TRK files, 
+since new MapSend versions can't open V3 files. Options are 3 (MapSend v3.0) or
+4 (MapSend v4.0 and v4.1).
+      </para>
     </section>
     <section id="mapsource">
       <sectioninfo>
