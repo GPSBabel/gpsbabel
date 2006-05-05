@@ -393,21 +393,21 @@ is_fatal(const int condition, const char *fmt, ...)
  * Read 4 bytes in big-endian.   Return as "int" in native endianness.
  */
 signed int
-be_read32(void *p)
+be_read32(const void *p)
 {
 	unsigned char *i = (unsigned char *) p;
 	return i[0] << 24 | i[1] << 16  | i[2] << 8 | i[3];
 }
 
 signed int
-be_read16(void *p)
+be_read16(const void *p)
 {
 	unsigned char *i = (unsigned char *) p;
 	return i[0] << 8 | i[1];
 }
 
 void
-be_write16(void *addr, unsigned value)
+be_write16(void *addr, const unsigned value)
 {
 	unsigned char *p = addr;
 	p[0] = value >> 8;
@@ -416,7 +416,7 @@ be_write16(void *addr, unsigned value)
 }
 
 void
-be_write32(void *pp, unsigned i)
+be_write32(void *pp, const unsigned i)
 {
 	char *p = (char *)pp;
 
@@ -427,16 +427,16 @@ be_write32(void *pp, unsigned i)
 }
 
 signed int
-le_read16(void *addr)
+le_read16(const void *addr)
 {
-	unsigned char *p = addr;
+	const unsigned char *p = addr;
 	return p[0] | (p[1] << 8);
 }
 
 signed int
-le_read32(void *addr)
+le_read32(const void *addr)
 {
-	unsigned char *p = addr;
+	const unsigned char *p = addr;
 	return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
 }
 
@@ -463,7 +463,7 @@ le_read64(void *dest, const void *src)
 }
 
 void
-le_write16(void *addr, unsigned value)
+le_write16(void *addr, const unsigned value)
 {
 	unsigned char *p = addr;
 	p[0] = value;
@@ -472,7 +472,7 @@ le_write16(void *addr, unsigned value)
 }
 
 void 
-le_write32(void *addr, unsigned value)
+le_write32(void *addr, const unsigned value)
 {
 	unsigned char *p = addr;
 	p[0] = value;
