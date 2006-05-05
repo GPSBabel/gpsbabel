@@ -330,7 +330,6 @@ xcsv_parse_style_line(const char *sbuff)
 	} else
 	
 	if (ISSTOKEN(sbuff, "IFIELD")) {
-	    int nodelim = 0;
 	    key = val = pfc = NULL;
 	    
 	    s = csv_lineparse(&sbuff[6], ",", "", linecount);

@@ -45,7 +45,6 @@ static char *oldmarker  = NULL;
 static char *newmarker  = NULL;
 static char *unfoundmarker  = NULL;
 
-static int scalev;
 static int short_length;
 static double thresh_days;
 
