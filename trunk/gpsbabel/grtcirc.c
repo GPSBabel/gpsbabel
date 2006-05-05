@@ -68,7 +68,12 @@ double gcdist( double lat1, double lon1, double lat2, double lon2 ) {
 
   res = acos(res);
 
-  if ((isnan(res)) || (errno == EDOM)) { /* this should never happen: */
+  if (
+#if defined isnan
+	  /* This is a C99-ism. */
+	  (isnan(res)) || 
+#endif 
+	  (errno == EDOM)) { /* this should never happen: */
     errno = 0;                           /* Math argument out of domain of function, */
     return 0;                            /* or value returned is not a number */
   }
