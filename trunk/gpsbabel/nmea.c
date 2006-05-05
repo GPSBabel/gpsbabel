@@ -156,22 +156,23 @@ static const double kts2mps =0.51444444444444444; /* knots to m/s */
 static const double kmh2mps =0.27777777777777778; /* km/h to m/s  */ 
 
 static char *dogprmc = NULL;
-static char *nogpgga = NULL;
-static char *nogpvtg = NULL;
-static char *nogpgsa = NULL;
+static char *dogpgga = NULL;
+static char *dogpvtg = NULL;
+static char *dogpgsa = NULL;
 static char *snlenopt = NULL;
 static char *optdate = NULL;
 static char *opt_sleep = NULL;
 static long sleepus = 0;
 
 static time_t last_time = -1;
+static double last_read_time;   /* Last timestamp of GGA or PRMC */
 
 arglist_t nmea_args[] = {
-	{"gprmc", &dogprmc, "Write GPRMC sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64" },
-	{"nogpgga", &nogpgga, "Don't write GPGGA sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-	{"nogpvtg", &nogpvtg, "Don't write GPVTG sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-	{"nogpgsa", &nogpgsa, "Don't write GPGSA sentences", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"gprmc", &dogprmc, "Read/write GPRMC sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"gpgga", &dogpgga, "Read/write GPGGA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"gpvtg", &dogpvtg, "Read/write GPVTG sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"gpgsa", &dogpgsa, "Read/write GPGSA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX },
 	{"pause", &opt_sleep, "Decimal seconds to pause between groups of strings", NULL, 
 			ARGTYPE_STRING, ARG_NOMINMAX },
@@ -274,11 +275,14 @@ gpgll_parse(char *ibuf)
 
 	if (valid != 'A')
 		return;
+
 	tm.tm_sec = hms % 100;
 	hms = hms / 100;
 	tm.tm_min = hms % 100;
 	hms = hms / 100;
 	tm.tm_hour = hms % 100;
+
+	last_read_time = hms;
 
 	waypt = waypt_new();
 
@@ -291,7 +295,6 @@ gpgll_parse(char *ibuf)
 	waypt->longitude = ddmm2degrees(lngdeg);
 
 	curr_waypt = waypt;
-	track_add_wpt(trk_head, waypt);
 }
 
 static void
@@ -320,6 +323,8 @@ gpgga_parse(char *ibuf)
 	if (fix == 0) {
 		return;
 	}
+
+	last_read_time = hms;
 
 	tm.tm_sec = (long) hms % 100;
 	hms = hms / 100;
@@ -356,7 +361,6 @@ gpgga_parse(char *ibuf)
 	}
 
 	curr_waypt = waypt;
-	track_add_wpt(trk_head, waypt);
 }
 
 static void
@@ -384,6 +388,8 @@ gprmc_parse(char *ibuf)
 		/* ignore this fix - it is invalid */
 		return;
 	}
+
+	last_read_time = hms;
 	
 	tm.tm_sec = (long) hms % 100;
 	hms = hms / 100;
@@ -426,7 +432,6 @@ gprmc_parse(char *ibuf)
 	waypt->longitude = ddmm2degrees(lngdeg);
 
 	curr_waypt = waypt;
-	track_add_wpt(trk_head, waypt);
 }
 
 static void
@@ -662,11 +667,11 @@ nmea_parse_one_line(char *ibuf)
 	if (0 == strncmp(tbuf, "$GPWPL,", 7)) {
 		gpwpl_parse(tbuf);
 	} else
-	if (0 == strncmp(tbuf, "$GPGGA,", 7)) {
+	if (dogpgga && (0 == strncmp(tbuf, "$GPGGA,", 7))) {
 		posn_type = gpgga;
 		gpgga_parse(tbuf);
 	} else
-	if (0 == strncmp(tbuf, "$GPRMC,", 7)) {
+	if (dogprmc && (0 == strncmp(tbuf, "$GPRMC,", 7))) {
 		if (posn_type != gpgga) {
 			posn_type = gprmc;
 		}			
@@ -684,10 +689,10 @@ nmea_parse_one_line(char *ibuf)
 	if (0 == strncmp(tbuf, "$GPZDA,",7)) {
 		gpzda_parse(tbuf);
 	} else
-	if (0 == strncmp(tbuf, "$GPVTG,",7)) {
+	if (dogpvtg && (0 == strncmp(tbuf, "$GPVTG,",7))) {
 		gpvtg_parse(tbuf); /* speed and course */
 	} else
-	if (0 == strncmp(tbuf, "$GPGSA,",7)) {
+	if (dogpgsa && (0 == strncmp(tbuf, "$GPGSA,",7))) {
 		gpgsa_parse(tbuf); /* GPS fix */
 	}
 
@@ -702,6 +707,7 @@ nmea_read(void)
 {
 	char ibuf[1024];
 	char *ck;
+	double lt = -1;
 
 	posn_type = gp_unknown;
 	trk_head = NULL;
@@ -724,6 +730,10 @@ nmea_read(void)
 
 	while (fgets(ibuf, sizeof(ibuf), file_in)) {
 		nmea_parse_one_line(ibuf);
+		if (lt < last_read_time && curr_waypt && trk_head) {
+			track_add_wpt(trk_head, curr_waypt);
+			lt = last_read_time;	
+		}
 	}
 
 	/* try to complete date-less trackpoints */
@@ -836,7 +846,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 		cksum = nmea_cksum(obuf);
 		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
-	if (!nogpgga) {
+	if (dogpgga) {
 		snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,0.0,M,,",
 				(int) hms,
 				fabs(lat), lat < 0 ? 'S' : 'N',
@@ -848,7 +858,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 		cksum = nmea_cksum(obuf);
 		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
-	if ((!nogpvtg) && ((wpt->course>=0) || (wpt->speed>0))) {
+	if ((dogpvtg) && ((wpt->course>=0) || (wpt->speed>0))) {
 		snprintf(obuf,sizeof(obuf),"GPVTG,%.3f,T,0,M,%.3f,N,%.3f,K",
 			(wpt->course>=0)?(wpt->course):(0),	
 			(wpt->speed>0)?(wpt->speed / kts2mps):(0),
@@ -858,7 +868,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
 			
-	if ((!nogpgsa) && (wpt->fix!=fix_unknown)) {
+	if ((dogpgsa) && (wpt->fix!=fix_unknown)) {
 
 		switch (wpt->fix) 
 		{
