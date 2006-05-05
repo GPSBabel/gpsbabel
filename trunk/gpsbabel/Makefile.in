@@ -129,12 +129,12 @@ $(WEB)/htmldoc/readme.html: readme.xml
 	xmlwf $<   #check for well-formedness
 	xmllint --noout --valid $<    #validate
 	xsltproc --stringparam html.stylesheet \
-         "http://www.gpsbabel.org/style3.css" \
-         --stringparam base.dir "$(WEB)/htmldoc/"    \
-         --stringparam use.id.as.filename 1   \
-         --stringparam root.filename "readme" \
-	http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk.xsl \
-         $<
+	"http://www.gpsbabel.org/style3.css" \
+	 --stringparam base.dir "$(WEB)/htmldoc/"    \
+	 --stringparam use.id.as.filename 1   \
+	 --stringparam root.filename "readme" \
+	 babelmain.xsl \
+	 $<
 	tools/mkcapabilities
 
 readme.txt: readme.html
