@@ -183,11 +183,16 @@ xml_consider_ignoring(const char *t)
 
 
 static void
-xml_start(void *data, const char *el, const char **attr)
+xml_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 {
 	char *e;
 	char *ep;
 	xg_callback *cb;
+	const char *el;
+	const char **attrs;
+
+	el = xml_convert_to_char_string(xml_el);
+	attrs = xml_convert_attrs_to_char_string(xml_attr);
 
 	if (xml_consider_ignoring(el))
 		return;
@@ -203,26 +208,31 @@ xml_start(void *data, const char *el, const char **attr)
 
 	cb = xml_tbl_lookup(e, cb_start);
 	if (cb) {
-		(*cb)(NULL, attr);
+		(*cb)(NULL, attrs);
 	}
+	xml_free_converted_string(el);
+	xml_free_converted_attrs(attrs);
 }
 
 #if HAVE_LIBEXPAT
 static void
-xml_cdata(void *dta, const XML_Char *s, int len)
+xml_cdata(void *dta, const XML_Char *xml_s, int len)
 {
 	char *estr;
+	const char *s = xml_convert_to_char_string(xml_s);
 
 	vmem_realloc(&cdatastr,  1 + len + strlen(cdatastr.mem));
 	estr = (char *) cdatastr.mem + strlen(cdatastr.mem);
 	memcpy(estr, s, len);
 	estr[len]  = 0;
+	xml_free_converted_string(s);
 }
 
 static void
-xml_end(void *data, const char *el)
+xml_end(void *data, const XML_Char *xml_el)
 {
 	char *s = strrchr(current_tag.mem, '/');
+	const char *el = xml_convert_to_char_string(xml_el);
 	xg_callback *cb;
 
 	if (xml_consider_ignoring(el))
@@ -241,6 +251,7 @@ xml_end(void *data, const char *el)
 		(*cb)(el, NULL);
 	}
 	*s = 0;
+	xml_free_converted_string(el);
 }
 
 void xml_read(void)

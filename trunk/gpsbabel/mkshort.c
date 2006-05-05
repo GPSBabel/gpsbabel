@@ -28,7 +28,7 @@
 static const char vowels[] = "aeiouAEIOU";
 
 #define DEFAULT_TARGET_LEN 8
-#define DEFAULT_BADCHARS "\"$.,'!-"
+static const char *DEFAULT_BADCHARS = "\"$.,'!-";
 
 /*
  * Hash table tunings.   The reality is that our hash doesn't have to be 

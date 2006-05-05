@@ -108,8 +108,13 @@ nc_mkcont(const char *t)
 }
 
 static void
-nav_start(void *data, const char *el, const char **attr)
+nav_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 {
+	const char *el;
+	const char **attr;
+
+	el = xml_convert_to_char_string(xml_el);
+	attr = xml_convert_attrs_to_char_string(xml_attr);
 	if (0 == strcmp(el, "CacheDetails")) {
 		const char **ap;
 		wpt_tmp = waypt_new();
@@ -192,10 +197,13 @@ nav_start(void *data, const char *el, const char **attr)
 		}
 		waypt_add(wpt_tmp);
 	}
+
+	xml_free_converted_attrs(attr);
+	xml_free_converted_string(el);
 }
 
 static void
-nav_end(void *data, const char *el)
+nav_end(void *data, const XML_Char *el)
 {
 }
 

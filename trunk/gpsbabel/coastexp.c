@@ -131,9 +131,13 @@ ce_read(void)
 
 /* Start processing an XML item */
 static void
-ce_start(void *data, const char *el, const char **attr)
+ce_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 {
+	const char *el = xml_convert_to_char_string(xml_el);
 	const char **ap;
+	const char **attr;
+
+	attr = xml_convert_attrs_to_char_string(xml_attr);
 	strcpy(element, el);
 	if (0 == strcmp(el, "Route")) {
 		inRoute = 1;
@@ -165,12 +169,15 @@ ce_start(void *data, const char *el, const char **attr)
 			}
 		}
 	}
+	xml_free_converted_string(el);
+	xml_free_converted_attrs(attr);
 }
 
 /* Finish processing an XML item */
 static void
-ce_end(void *data, const char *el)
+ce_end(void *data, const XML_Char *xml_el)
 {
+	const char *el = xml_convert_to_char_string(xml_el);
 	if (0 == strcmp(el, "Route")) {
 		if (!doing_rtes)
 			ce_free_route(currentRoute);
@@ -178,12 +185,14 @@ ce_end(void *data, const char *el)
 	}
 	else if (0 == strcmp(el, "Mark"))
 		inMark = 0;
+	xml_free_converted_string(el);
 }
 
 /* Process some XML character data for the current item */
 static void
-ce_cdata(void *dta, const XML_Char *s, int len)
+ce_cdata(void *dta, const XML_Char *xml_s, int len)
 {
+	const char *s = xml_convert_to_char_string(xml_s);
 	if (*s != '\n') {
 		char *edatastr;
 		// We buffer up characters in 'cdatastr' until a single <lf> is received
@@ -294,6 +303,8 @@ ce_cdata(void *dta, const XML_Char *s, int len)
 		// Start building a new string since we are done with this one
 		cdatastr[0] = '\0';
 	}
+
+	xml_free_converted_string(s);
 }
 
 /* Set up reading the CE input file */

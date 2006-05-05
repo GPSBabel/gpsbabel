@@ -455,13 +455,13 @@ start_something_else(const char *el, const char **attrv)
 	int attr_count = 0;
 	xml_tag *new_tag;
 	fs_xml *fs_gpx;
-       
+
 	if ( !fs_ptr ) {
 		return;
 	}
 	
-        new_tag = (xml_tag *)xcalloc(sizeof(xml_tag),1);
-        new_tag->tagname = xstrdup(el);
+	new_tag = (xml_tag *)xcalloc(sizeof(xml_tag),1);
+	new_tag->tagname = xstrdup(el);
 	
 	/* count attributes */
 	while (*avp) {
@@ -562,11 +562,13 @@ tag_log_wpt(const char **attrv)
 }
 
 static void
-gpx_start(void *data, const char *el, const char **attr)
+gpx_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 {
 	char *e;
 	char *ep;
 	int passthrough;
+	const char *el = xml_convert_to_char_string(xml_el);
+	const char **attr = xml_convert_attrs_to_char_string(xml_attr);
 
 	vmem_realloc(&current_tag, strlen(current_tag.mem) + 2 + strlen(el));
 	e = current_tag.mem;
@@ -629,6 +631,8 @@ gpx_start(void *data, const char *el, const char **attr)
 	if (passthrough) {
 		start_something_else(el, attr);
 	}
+	xml_free_converted_string(el);
+	xml_free_converted_attrs(attr);
 }
 
 struct
@@ -775,14 +779,15 @@ xml_parse_time( const char *cdatastr )
 	
 	rv = mkgmtime(&tm) - off_sign*off_hr*3600 - off_sign*off_min*60;
 	
-        xfree(timestr);
+	xfree(timestr);
 	
 	return rv;
 }
 
 static void
-gpx_end(void *data, const char *el)
+gpx_end(void *data, const XML_Char *xml_el)
 {
+	const char *el = xml_convert_to_char_string(xml_el);
 	char *s = strrchr(current_tag.mem, '/');
 	float x;
 	char *cdatastrp = cdatastr.mem;
@@ -1024,6 +1029,7 @@ gpx_end(void *data, const char *el)
 	}
 
 	*s = 0;
+	xml_free_converted_string(el);
 }
 
 #if ! HAVE_LIBEXPAT
@@ -1341,7 +1347,7 @@ void free_gpx_extras( xml_tag *tag )
 			xfree(tag->parentcdata);
 		}
 		if (tag->tagname) {
-        		xfree(tag->tagname);
+			xfree(tag->tagname);
 		}
 		if (tag->attributes) {
 			ap = tag->attributes;
@@ -1657,7 +1663,7 @@ gpx_write(void)
 		fatal(MYNAME ": gpx version number of '%s' not valid.\n", gpx_wversion);
 	}
 	
-        now = current_time();
+	now = current_time();
 
 	short_length = atoi(snlen);
 
