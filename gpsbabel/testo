@@ -438,7 +438,7 @@ bincompare ${TMPDIR}/route.mapsend ${REFERENCE}/route/route.mapsend
 # MAPSEND track format 
 #
 rm -f ${TMPDIR}/mapsend.trk
-${PNAME} -t -i mapsend -f ${REFERENCE}/track/mapsend.trk -o mapsend \
+${PNAME} -t -i mapsend -f ${REFERENCE}/track/mapsend.trk -o mapsend,trkver=3 \
          -F ${TMPDIR}/mapsend.trk
 compare ${TMPDIR}/mapsend.trk ${REFERENCE}/track/
 
