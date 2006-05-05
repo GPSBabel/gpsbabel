@@ -470,6 +470,83 @@ static char gpsman[] =
 
 "# gpsman.c likes mkshort len = 8, whitespace = 0.\n"
 ;
+static char ktf2[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: Kartex KTF 2.0 Degrees with decimals\n"
+"# Author: Harald Nordius\n"
+"#   Date: 4/13 2006\n"
+"#\n"
+"# \n"
+"DESCRIPTION	Kartex 5 Track File\n"
+"EXTENSION	ktf\n"
+"SHORTLEN	10\n"
+"SHORTWHITE	1\n"
+"#\n"
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		COMMA\n"
+"RECORD_DELIMITER	CRNEWLINE\n"
+"#\n"
+"#\n"
+"# FILE HEADER\n"
+"#\n"
+"PROLOGUE //Kartex Track File created by GPSBabel\n"
+"PROLOGUE &KTF 2.0,sweref 99 lat long,0\n"
+"#\n"
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	CONSTANT, %, \"%s\"\n"
+"IFIELD	INDEX, \"\", \"%d\"\n"
+"IFIELD	LATLON_HUMAN_READABLE, \"\", \"%c%f°\"\n"
+"IFIELD	ALT_METERS, \"\", \"%.2f\"\n"
+"IFIELD	GMT_TIME, \"\", \"%Y-%m-%d %H:%M:%S\"\n"
+"IFIELD	IGNORE, \"\", \"%s\" #Empty field\n"
+"IFIELD	IGNORE, \"\", \"%s\" #Empty field\n"
+"IFIELD	CONSTANT, \"$\", \"%s\"\n"
+;
+static char kwf2[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: Kartex KWF 2.0 Degrees with decimals\n"
+"# Author: Harald Nordius\n"
+"#   Date: 12/08 2004\n"
+"#\n"
+"# \n"
+"DESCRIPTION	Kartex 5 Waypoint File\n"
+"EXTENSION	kwf\n"
+"SHORTLEN	10\n"
+"SHORTWHITE	1\n"
+"#\n"
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		COMMA\n"
+"RECORD_DELIMITER	CRNEWLINE\n"
+"ENCODING		CP1252\n"
+"#\n"
+"#\n"
+"# FILE HEADER\n"
+"#\n"
+"PROLOGUE //Kartex Waypoint File created by GPSBabel\n"
+"PROLOGUE &KWF 2.0,sweref 99 lat long,0\n"
+"#\n"
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	CONSTANT, \\#, \"%s\"\n"
+"IFIELD	INDEX,\"\",\"%d\"\n"
+"IFIELD	SHORTNAME,\"\",\"%s\"\n"
+"IFIELD	LATLON_HUMAN_READABLE,\"\",\"%c%f°\"\n"
+"IFIELD	ALT_METERS,\"\",\"%.2f\"\n"
+"IFIELD	IGNORE, \"\",\"%s\" #Empty field\n"
+"IFIELD	IGNORE, \"\",\"%s\" #Empty field\n"
+"IFIELD	CONSTANT, \"0\",\"%s\" #Waypoint symbol code\n"
+"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
+"IFIELD	CONSTANT, \"$\", \"%s\"\n"
+;
 static char mapconverter[] = 
 "# Format: Mapopolis.com Mapconverter\n"
 "# Author: Gary Paulson\n"
@@ -774,6 +851,45 @@ static char tabsep[] =
 "IFIELD  GEOCACHE_PLACER,\"\",\"%s\"\n"
 "IFIELD  YYYYMMDD_TIME,\"\",\"%ld\"\n"
 ;
+static char xmap2006[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: DeLorme Xmap/Street Atlas Handheld 2006 Conduit\n"
+"# Author: Pasha Phares\n"
+"#   Date: 5/5/2006\n"
+"#\n"
+"# Amazingly, 2006 won't read the \"COMMASPACE\" that we used in \n"
+"# in Xmap prior to this and versions before 2006 won't read files\n"
+"# separated by only a comma.\n"
+"# \n"
+
+"DESCRIPTION			DeLorme XMap/SAHH 2006 Native .TXT\n"
+"EXTENSION			txt\n"
+
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		COMMA\n"
+"RECORD_DELIMITER	NEWLINE\n"
+"BADCHARS			COMMA\n"
+
+"PROLOGUE	BEGIN SYMBOL\n"
+"EPILOGUE	END\n"
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD				LAT_HUMAN_READABLE, \"\", \"%.12g\"\n"
+"IFIELD				LON_HUMAN_READABLE, \"\", \"%.12g\"\n"
+"IFIELD				SHORTNAME, \"\", \"%s\"\n"
+
+"OFIELD				LAT_DECIMAL, \"\", \"%.12g\"\n"
+"OFIELD				LON_DECIMAL, \"\", \"%.12g\"\n"
+"OFIELD				SHORTNAME, \"\", \"%s\"\n"
+
+
+
+
+;
 static char xmap[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -841,5 +957,5 @@ static char xmapwpt[] =
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
 #include "defs.h"
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 22;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "xmap2006", xmap2006 } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 25;
