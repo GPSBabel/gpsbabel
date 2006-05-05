@@ -1729,6 +1729,7 @@ help of Dan Edwards.</para>
 	different. The completely pointless header and footer lines 
 	are the same, at least. Use this to create the XMapHHWptsSend.txt 
 	file needed to sync to Street Atlas Handheld 2006.</para>
+	<para>Note that in order to keep from creating duplicates on your handheld, you must first remove the file "XMapWptsDB" from your handheld, restart SAHH2006 on the handheld to create an empty database, and THEN sync the new file. </para>
     </section>
     <section id="xmapwpt">
       <sectioninfo>
