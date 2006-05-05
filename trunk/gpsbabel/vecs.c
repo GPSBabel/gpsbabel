@@ -630,7 +630,7 @@ disp_vec_options(const char *vecname, arglist_t *ap)
 		if (*ap->argval && ap->argval) {
 			printf("options: module/option=value: %s/%s=\"%s\"", 
 				vecname, ap->argstring, *ap->argval);
-			if (ap->defaultvalue && (strcmp(ap->defaultvalue, *ap->argval) == 0)) 
+			if (ap->defaultvalue && (case_ignore_strcmp(ap->defaultvalue, *ap->argval) == 0)) 
 				printf(" (=default)");
 			printf("\n");
 		}
@@ -650,7 +650,7 @@ find_vec(char *const vecname, char **opts)
 		arglist_t *ap;
 		char *res;
 
-		if (strcmp(svecname, vec->name)) {
+		if (case_ignore_strcmp(svecname, vec->name)) {
 			vec++;
 			continue;
 		}
@@ -702,7 +702,7 @@ find_vec(char *const vecname, char **opts)
 		arglist_t *ap;
 		char *res;
 
-		if (strcmp(svecname, svec->name)) {
+		if (case_ignore_strcmp(svecname, svec->name)) {
 			svec++;
 			continue;
 		}
@@ -856,7 +856,7 @@ sort_and_unify_vecs(int *ctp)
 		/* Reset file type to inherit ff_type from xcsv for everything
 		 * except the xcsv format itself, which we leave as "internal"
 		 */
-		if (strcmp(svec->name, "xcsv")) {
+		if (case_ignore_strcmp(svec->name, "xcsv")) {
 			svp[i]->vec->type = xcsv_file.type;
 			/* Skip over the first help entry for all but the
 			 * actual 'xcsv' format - so we don't expose the
