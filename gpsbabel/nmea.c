@@ -702,8 +702,6 @@ nmea_read(void)
 {
 	char ibuf[1024];
 	char *ck;
-	int ckval, ckcmp;
-	int had_checksum = 0;
 
 	posn_type = gp_unknown;
 	trk_head = NULL;
@@ -828,19 +826,19 @@ nmea_trackpt_pr(const waypoint *wpt)
 
 	if (dogprmc) {
 		snprintf(obuf, sizeof(obuf), "GPRMC,%06d,%c,%08.3f,%c,%09.3f,%c,%.2f,%.2f,%06d,,",
-				hms,
+				(int) hms,
 				fix=='0' ? 'V' : 'A',
 				fabs(lat), lat < 0 ? 'S' : 'N',
 				fabs(lon), lon < 0 ? 'W' : 'E',
 				(wpt->speed>0)?(wpt->speed / kts2mps):(0),
 				(wpt->course>=0)?(wpt->course):(0),
-				ymd);
+				(int) ymd);
 		cksum = nmea_cksum(obuf);
 		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
 	if (!nogpgga) {
 		snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,0.0,M,,",
-				hms,
+				(int) hms,
 				fabs(lat), lat < 0 ? 'S' : 'N',
 				fabs(lon), lon < 0 ? 'W' : 'E',
 				fix,
