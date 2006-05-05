@@ -125,12 +125,16 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile and bring in /tmp/dep
 
-readme.html: readme.xml 
+$(WEB)/htmldoc/readme.html: readme.xml 
+	xmlwf $<   #check for well-formedness
+	xmllint --noout --valid $<    #validate
 	xsltproc --stringparam html.stylesheet \
-	  "http://www.gpsbabel.org/style3.css" \
-	  http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
-	  $< > $@ || rm $@
-	cp readme.html $(WEB)/readme.xhtml
+         "http://www.gpsbabel.org/style3.css" \
+         --stringparam base.dir "$(WEB)/htmldoc/"    \
+         --stringparam use.id.as.filename 1   \
+         --stringparam root.filename "readme" \
+	http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk.xsl \
+         $<
 	tools/mkcapabilities
 
 readme.txt: readme.html
