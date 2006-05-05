@@ -337,8 +337,7 @@ differences.</para>
       <para/>
       <example>
 	<title>Sample BCR command with all options</title>
-	<screen format="linespecific"><para>gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr
-</para>
+	<screen format="linespecific">gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr
 </screen>
       </example>
     </section>
@@ -596,18 +595,18 @@ This is the format readable that that program.</para>
       <para>
   garmin_txt is a format that contains nearly all information as in the MapSource main format, GDB.
 garmin_txt has some computed values like distances between routepoints and trackpoints, speed, and course (heading) in addition to the standard data fields.
-      <para>
+      </para>
       <para>
 The main goal of garmin_txt is to make aviation data more available. Because 
 MapSource supports only the export, GPSBabel gives you the possibility to 
 bring aviation data into MapSource.
       </para>
+      <para>
 During the export with MapSource, some fields are written using local settings
 of MapSource and Windows. These include grid format, gps datum, distance and
 temperature units, and the representation of date and time fields. GPSBabel 
 tries to read all items automatically. Problems with date and time format can 
 be solved with the options 'date' and 'time'.
-      </para>
       </para>
       <para>Options:</para>
       <para><option>date</option> -  input/output date format (Windows-like. For example  "YYYY/MM/DD")</para>
@@ -1004,7 +1003,7 @@ tracks</para>
     </section>
     <section id="mag_pdb">
       <sectioninfo>
-	<subtitle><para>Palm OS for Map &amp; Guide format</para></subtitle>
+	<subtitle>Palm OS for Map &amp; Guide format</subtitle>
       </sectioninfo>
       <title>mag_pdb</title>
       <para> With this format we support the Palm/OS export for
@@ -1658,6 +1657,7 @@ may crash VitoNavigator II on the Pocket PC.</para>
 	<sectioninfo>
 	   <subtitle> Aspecto Software's WiFiFoFum </subtitle>
 	</sectioninfo>
+        <title>wfff</title>
 	<para> WFFF is the export format for Aspecto Software's WiFiFoFum 2.0 for Windows Mobile PCs.</para>
 	<para>It is a simple XML format that is read-only to GPSBabel and stores information about a WiFi stumbling session.</para>
 	<para>All WiFi-specific elements are written in the description  field, similar to the netstumbler format.</para>
@@ -1844,7 +1844,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          file, while keeping all of the other details from the larger
          file.</para>
       </section>
-      <section>
+      <section id="arc">
          <title>DISTANCE FROM A ROUTE (ARC) ARC</title>
          <para> The arc filter is designed to include points based on
          their proximity to an arc, which is a series of connected
