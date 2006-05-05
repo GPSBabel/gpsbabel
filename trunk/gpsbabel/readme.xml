@@ -1763,7 +1763,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
       filter or in the table at <ulink url="http://www.gpsbabel.org/capabilities.html">gpsbabel.org</ulink>
       .
 </para>
-      <section>
+      <section id="position">
          <title>POSITION</title>
          <para> The position filter is designed to remove points based
          on their proximity to each other.  Distances can be passed on
@@ -1783,7 +1783,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          <para> You can also specify the "all" option, which would
          remove all of the points rather than leaving one.</para>
       </section>
-      <section>
+      <section id="radius">
          <title>RADIUS</title>
          <para> The radius filter is designed to include points based
          on their proximity to a central point.  Distances and the
@@ -1809,7 +1809,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
       W90.000
 </para>
       </section>
-      <section>
+      <section id="duplicate">
          <title>DUPLICATE</title>
          <para> The duplicate filter is designed to remove duplicate
          points based on their shortname (traditionally a waypoint's
@@ -1890,8 +1890,8 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          <para> would include only points within one mile of the
          section of Lima Road covered by the arc.</para>
       </section>
-      <section>
-         <title> POLYGON</title>
+      <section id="polygon">
+         <title>POLYGON</title>
          <para> The polygon filter includes points if they are inside
          of a polygon.  A polygon file looks like an arc file, except
          that the arc it describes must be a closed cycle.  That is,
@@ -1926,8 +1926,8 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          <screen format="linespecific">	gpsbabel -i geo -f 1.loc -x polygon,file=mycounty.txt  	  	 \
 -o mapsend -F 2.wpt</screen>
       </section>
-      <section>
-         <title> SIMPLIFY</title>
+      <section id="simplify">
+         <title>SIMPLIFY</title>
          <para> The Simplify filter is used to simplify routes and
          tracks for use with formats that limit the number of points
          they can contain or just to reduce the complexity of a route.</para>
@@ -1959,8 +1959,8 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
    -o magellan  -F grocery.rte
 </screen>
       </section>
-      <section>
-         <title>    REVERSE</title>
+      <section id="reverse">
+         <title>REVERSE</title>
          <para> The reverse filter is used to reverse tracks and routes.
 	It's mostly useful for those few formats where track/route
 	sequence matters and there isn't a way to reverse them using
@@ -1978,15 +1978,15 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          timestamps
 </para>
       </section>
-      <section>
-         <title> SORT</title>
+      <section id="sort">
+         <title>SORT</title>
          <para> This simple filter allows you to alphabetize waypoints
          by shortname or by description.  It has a special suboption
          (gcid) to sort by geocaching.com waypoint ID's when the input
          comes from a GPX file that has GC numbers in it.
 </para>
       </section>
-      <section>
+      <section id="stack">
          <title>STACK</title>
          <para> This filter is designed to solve advanced problems
          that involve shuffling multiple lists of waypoints.  It has
@@ -2067,7 +2067,7 @@ gpsbabel -i gpx -f indiana.gpx \
  
 </screen>
       </section>
-      <section>
+      <section id="track">
          <title>TRACK</title>
          <para> ( !!! This filter always drops empty tracks !!! )
          </para>
@@ -2190,7 +2190,7 @@ gpsbabel -t \
 	</screen>
 
       </section>
-      <section>
+      <section id="discard">
          <title>DISCARD</title>
          <para> This filter 'fixes' gps data by discarding points with
          a hdop and/or vdop over a set limit. If you give both the
@@ -2218,7 +2218,7 @@ gpsbabel -t \
 </screen>
          <para> Contributed by Tobias Minich.</para>
       </section>
-      <section>
+      <section id="nuketypes">
          <title>NUKETYPES</title>
 	<para>
 	There are three main types of data that GPSBabel deals with:
@@ -2236,7 +2236,7 @@ gpsbabel -t \
         <screen format="linespecific">gpsbabel -i gpx -f bigfile.gpx -x nuketypes,waypoints,routes -o gpx -F tracksonly.gpx
 	</screen>
       </section>
-      <section>
+      <section id="interpolate">
           <title>INTERPOLATE</title>
        <para>
        This filter modifies any tracks so that either the distance or the time
