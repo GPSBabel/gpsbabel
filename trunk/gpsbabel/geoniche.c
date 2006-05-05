@@ -552,13 +552,22 @@ enscape(char *s)
     buf = d = xmalloc(strlen(s) * 2 + 1);
     for (; *s; ++s)
     {
-	if (*s == '\\' || *s == ',')
+
+/*
+ * 3 May 06: need to escape single quotes for v1.40 release
+ */
+
+	if (*s == '\\' || *s == ',' || *s == '\'')
 	{
 	    *d++ = '\\';
 	    *d++ = *s;
 	}
-	else if ((*s == '\r') || (*s == '\n'))	/* substitute unwanted CR/LF's with SPACE */
-	    *d++ = ' ';
+
+/* 3 May 06: stop stripping for better readability
+ *
+ *	else if ((*s == '\r') || (*s == '\n'))
+ *	*d++ = ' ';
+ */
 	else
 	    *d++ = *s;
     }
@@ -617,10 +626,17 @@ geoniche_geostuff(const waypoint *wpt)
 	snprintf(tbuf, sizeof(tbuf), "\n%s by %s\n\n", gs_get_cachetype(wpt->gc_data.type), wpt->gc_data.placer);
 	gs = xstrappend(gs, tbuf);
 
-	snprintf(tbuf, sizeof(tbuf), "Waypoint: %s %s\n", wpt->shortname, wpt->description);	
-	gs = xstrappend(gs, tbuf);
+/*
+ * 3 May 06: Removed duplicated information
+ *
+ * 	snprintf(tbuf, sizeof(tbuf), "Waypoint: %s %s\n", wpt->shortname, wpt->description);	
+ *	gs = xstrappend(gs, tbuf);
+ */
 
-	snprintf(tbuf, sizeof(tbuf), "Difficulty %3.1f\nTerrain: %3.1f\n\n", wpt->gc_data.diff/10.0, wpt->gc_data.terr/10.0);
+/*
+ * 3 May 06: Added container type
+ */
+	snprintf(tbuf, sizeof(tbuf), "Container: %s\nDifficulty: %3.1f\nTerrain: %3.1f\n\n", gs_get_container(wpt->gc_data.container), wpt->gc_data.diff/10.0, wpt->gc_data.terr/10.0);
 	gs = xstrappend(gs, tbuf);
 
 	tmp1 = strip_html(&wpt->gc_data.desc_short);
@@ -676,7 +692,7 @@ geoniche_writewpt(const waypoint *wpt)
     id = gid2id(wpt->shortname);
     if (id < 0)
 	id = ct;
-
+	
     tx = (wpt->creation_time != 0) ? wpt->creation_time : gpsbabel_time;
     if (tx == 0) {	/* maybe zero during testo (freezed time) */
 	strcpy(datestr, "01/01/1904");	/* this seems to be the uninitialized date value for geoniche */
