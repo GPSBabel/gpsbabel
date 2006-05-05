@@ -1,6 +1,6 @@
 # gpsbabel XCSV style file
 #
-# Format: Kartex KTF 2.0 Degrees plus Minutes with decimals
+# Format: Kartex KTF 2.0 Degrees with decimals
 # Author: Harald Nordius
 #   Date: 4/13 2006
 #
@@ -9,27 +9,26 @@ DESCRIPTION	Kartex 5 Track File
 EXTENSION	ktf
 SHORTLEN	10
 SHORTWHITE	1
-ENCODING	CP1252
 #
 #
 # FILE LAYOUT DEFINITIIONS:
 #
-FIELD_DELIMITER	COMMA
-RECORD_DELIMITER	NEWLINE
+FIELD_DELIMITER		COMMA
+RECORD_DELIMITER	CRNEWLINE
 #
 #
 # FILE HEADER
 #
 PROLOGUE //Kartex Track File created by GPSBabel
-PROLOGUE &KTF 2.0,sweref 99 lat long,1
+PROLOGUE &KTF 2.0,sweref 99 lat long,0
 #
 #
 # INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
 #
 IFIELD	CONSTANT, %, "%s"
 IFIELD	INDEX, "", "%d"
-IFIELD	LATLON_HUMAN_READABLE,"","%c%d°%f'"
-IFIELD	ALT_METERS,"0.00","%.2f"
+IFIELD	LATLON_HUMAN_READABLE, "", "%c%f°"
+IFIELD	ALT_METERS, "", "%.2f"
 IFIELD	GMT_TIME, "", "%Y-%m-%d %H:%M:%S"
 IFIELD	IGNORE, "", "%s" #Empty field
 IFIELD	IGNORE, "", "%s" #Empty field
