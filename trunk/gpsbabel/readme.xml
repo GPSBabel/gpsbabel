@@ -1711,6 +1711,19 @@ a completely pointless line at the beginning and end of the file. This
 is the format used to hot-sync to XMap from withing TopoUSA. Done with
 help of Dan Edwards.</para>
     </section>
+    <section id="xmap2006">
+      <sectioninfo>
+	<subtitle>
+	  Delorme XMap/Street Atlas 2006 Handheld Conduit format
+	</subtitle>
+      </sectioninfo>
+      <title>XMap2006</title>
+      <para>Delorme XMap2006 Conduit is just like XMap, except there are 
+	no spaces between fields and the coordinate format is slightly 
+	different. The completely pointless header and footer lines 
+	are the same, at least. Use this to create the XMapHHWptsSend.txt 
+	file needed to sync to Street Atlas Handheld 2006.</para>
+    </section>
     <section id="xmapwpt">
       <sectioninfo>
 	<subtitle>Delorme XMapHandHeld street Atlas format.</subtitle>
