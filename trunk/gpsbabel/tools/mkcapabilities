@@ -3,7 +3,8 @@ function getcap(type, cap, sname, lname) {
 	if (type == "internal") return
 	print "<tr>"
 	print "<td class=\"fmtline\">" lname "</td>"
-	print "<td class=\"c4\">" sname "</td>"
+
+	print "<td class=\"c4\"> <a href=\"" sname ".html\">" sname "</a></td>"
 	# This is bad...
 	
 	printf "<td class=\"c4\">"
@@ -25,5 +26,6 @@ function getcap(type, cap, sname, lname) {
 	}
 	print "</tr>"
 }
+
 getcap($1, $2, $3, $5)
 ' > ../babelweb/capabilities.inc > ../babelweb/capabilities.inc
