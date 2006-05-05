@@ -22,8 +22,7 @@
 #include "defs.h"
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
-
-static double conv = 180.0 / M_PI;
+#include "grtcirc.h"
 
 #define MYNAME		"CoPilot Waypoint"
 #define MYTYPE 		0x77617970  	/* wayp */
@@ -92,9 +91,9 @@ data_read(void)
 
 		rec = (struct record *) pdb_rec->data;
 		wpt_tmp->longitude =
-		  -pdb_read_double(&rec->longitude) * conv;
+		  DEG(-pdb_read_double(&rec->longitude));
 		wpt_tmp->latitude =
-		  pdb_read_double(&rec->latitude) * conv;
+		  DEG(pdb_read_double(&rec->latitude));
 		wpt_tmp->altitude =
 		  pdb_read_double(&rec->elevation) * .3048;
 
@@ -124,9 +123,8 @@ copilot_writewpt(const waypoint *wpt)
 
 	rec = xcalloc(sizeof(*rec)+1141,1);
 
-	pdb_write_double(&rec->latitude, wpt->latitude / conv);
-	pdb_write_double(&rec->longitude,
-		-wpt->longitude / conv);
+	pdb_write_double(&rec->latitude, RAD(wpt->latitude));
+	pdb_write_double(&rec->longitude, RAD(-wpt->longitude));
 	pdb_write_double(&rec->elevation,
 		wpt->altitude / .3048);
 	pdb_write_double(&rec->magvar, 0);

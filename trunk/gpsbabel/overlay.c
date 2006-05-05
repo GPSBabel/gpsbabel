@@ -580,8 +580,8 @@ static void symbol_deinit(const route_head *hd)
   QUEUE_FOR_EACH(&(hd->waypoint_list), elem, tmp)
   {
     waypointp = (waypoint *) elem;
-    lat2 = waypointp->latitude *M_PI/180.0 ;
-    lon2 = waypointp->longitude*M_PI/180.0 ;
+    lat2 = RAD(waypointp->latitude);
+    lon2 = RAD(waypointp->longitude);
     if (i)
     {
       d   = gcdist(lat1, lon1, lat2, lon2 );
@@ -604,8 +604,8 @@ static void symbol_deinit(const route_head *hd)
   while (elem!=&(hd->waypoint_list) && dd<dist/2.0)
   {
     waypointp = (waypoint *) elem;
-    lat2 = waypointp->latitude *M_PI/180.0;
-    lon2 = waypointp->longitude*M_PI/180.0;
+    lat2 = RAD(waypointp->latitude);
+    lon2 = RAD(waypointp->longitude);
     if (i)
     {
       d   = gcdist(lat1, lon1, lat2, lon2 );
@@ -621,7 +621,7 @@ static void symbol_deinit(const route_head *hd)
 //  d = acos( sin(lats)*sin(late)+cos(lats)*cos(late)*cos(lone-lons) );
   dd = acos( (sin(late) - sin(lats)*cos(d))/(cos(lats)*sin(d)) );
   if (lone<lons) dd = -dd;   // correction because the ambiguity of acos function
-  dd = dd * 180.0/M_PI;      // azimuth
+  dd = DEG(dd);              // azimuth
   dd = 360.0 - (dd + 270.0); // make it anticlockwise and start counting on x-axis
   dd = dd <   0.0 ? dd + 360.0 : dd; // normalizing
   dd = dd > 360.0 ? dd - 360.0 : dd; // normalizing
@@ -629,7 +629,7 @@ static void symbol_deinit(const route_head *hd)
   /* name of route */
   /* plot text at the last point of route */
   govl_dir = dd;  // approximated text rotation, correct value must be the azimuth in UTM
-  symbol_text(lon1*180.0/M_PI,lat1*180.0/M_PI,hd->rte_name,govl_group_cnt);
+  symbol_text(DEG(lon1),DEG(lat1),hd->rte_name,govl_group_cnt);
   govl_dir = 0.0; // restore
 }
 

@@ -367,9 +367,9 @@ my_read(void)
 				if ( times ) {
 					if ( !first ) {
 					   double dist = radtomiles(gcdist( 
-						lat*M_PI/180, -lon*M_PI/180, 
-						oldlat*M_PI/180, 
-						-oldlon*M_PI/180 ));	
+						RAD(lat), RAD(-lon), 
+						RAD(oldlat), 
+						RAD(-oldlon) ));	
 					   totaldist += dist;
 					   if ( totaldist > seglen ) {
 						   totaldist = seglen;
