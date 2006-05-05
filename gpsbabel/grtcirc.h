@@ -18,6 +18,10 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+ 
+#ifndef GRTCIRC_H
+#define GRTCIRC_H
+
 double gcdist( double lat1, double lon1, double lat2, double lon2 );
 double heading( double lat1, double lon1, double lat2, double lon2 );
 
@@ -36,3 +40,5 @@ void linepart(double lat1, double lon1,
 
 #define DEG(x) ((x)*180.0/M_PI)
 #define RAD(x) ((x)*M_PI/180.0)
+
+#endif

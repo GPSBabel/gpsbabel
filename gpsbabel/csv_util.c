@@ -1083,8 +1083,8 @@ xcsv_waypt_pr(const waypoint *wpt)
     queue *elem, *tmp;
     
     if ( oldlon < 900 ) {
-	pathdist += radtomiles(gcdist(oldlat*M_PI/180,oldlon*M_PI/180,
-			wpt->latitude*M_PI/180,wpt->longitude*M_PI/180));
+	pathdist += radtomiles(gcdist(RAD(oldlat),RAD(oldlon),
+			RAD(wpt->latitude),RAD(wpt->longitude)));
     }
     oldlon = wpt->longitude;
     oldlat = wpt->latitude;

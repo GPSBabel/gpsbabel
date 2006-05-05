@@ -96,10 +96,10 @@ interpfilt_process(void)
 			    }
 			}
 			else if ( opt_dist ) {
-			    rt1 = lat1 * M_PI / 180;
-			    rn1 = lon1 * M_PI / 180;
-			    rt2 = wpt->latitude * M_PI / 180;
-			    rn2 = wpt->longitude * M_PI / 180;
+			    rt1 = RAD(lat1);
+			    rn1 = RAD(lon1);
+			    rt2 = RAD(wpt->latitude);
+			    rn2 = RAD(wpt->longitude);
 			    curdist = gcdist( rt1, rn1, rt2, rn2 );
 		            curdist = radtomiles(curdist);
 			    if ( curdist > dist ) {	

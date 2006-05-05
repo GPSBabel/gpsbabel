@@ -23,6 +23,7 @@
 #include "defs.h"
 #include "cet_util.h"
 #include <ctype.h>
+#include "grtcirc.h"
 
 #define MYNAME	"PSP"
 
@@ -238,11 +239,11 @@ psp_read(void)
 
             /* 8 bytes - latitude in radians */
 	    radians = psp_fread_double(psp_file_in);
-            lat = (radians * 180.0) / M_PI;
+            lat = DEG(radians);
 
             /* 8 bytes - longitude in radians */
 	    radians = psp_fread_double(psp_file_in);
-            lon = (radians * 180.0) / M_PI;
+            lon = DEG(radians);
 
             /* since we don't know the origin of this PSP file, we use  */
             /* the grid byte adjust longitude, if necessary, mimicing   */
@@ -356,8 +357,8 @@ psp_waypt_pr(const waypoint *wpt)
         }
 
         /* convert lat/long back to radians */
-	lat = (wpt->latitude * M_PI) / 180.0;
-        lon = (wpt->longitude * M_PI) / 180.0;
+	lat = RAD(wpt->latitude);
+        lon = RAD(wpt->longitude);
         
 	pindex++;
 	le_write16(tbuf, pindex);

@@ -28,6 +28,7 @@
 #include "csv_util.h"
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
+#include "grtcirc.h"
 
 #define MYNAME "cotoGPS"
 
@@ -194,8 +195,8 @@ coto_track_read(struct pdb *pdb)
 
 		rec = (struct record_track *) pdb_rec->data;
 		
-		wpt_tmp->longitude = -pdb_read_double(&rec->longitude)*360.0/(2.0*M_PI); 
-		wpt_tmp->latitude = pdb_read_double(&rec->latitude)*360.0/(2.0*M_PI);
+		wpt_tmp->longitude = DEG(-pdb_read_double(&rec->longitude));
+		wpt_tmp->latitude = DEG(pdb_read_double(&rec->latitude));
 
 		// It's not the course, so leave it out for now
 		// wpt_tmp->course = pdb_read_double(&rec->arc);
@@ -261,8 +262,8 @@ coto_wpt_read(struct pdb *pdb)
 
 		rec = (struct record_wpt *) pdb_rec->data;
 			
-		wpt_tmp->longitude = -pdb_read_double(&rec->lon)*360.0/(2.0*M_PI); 
-		wpt_tmp->latitude = pdb_read_double(&rec->lat)*360.0/(2.0*M_PI);
+		wpt_tmp->longitude = DEG(-pdb_read_double(&rec->lon));
+		wpt_tmp->latitude = DEG(pdb_read_double(&rec->lat));
 		
 		wpt_tmp->shortname = xstrndup(rec->name, sizeof(rec->name));
 		
@@ -379,8 +380,8 @@ coto_wpt_write(const waypoint *wpt)
 		size += strlen(notes);
 	rec = xcalloc(size, 1);
 	
-	pdb_write_double(&rec->lon, -2.0*M_PI*wpt->longitude/360.0);
-	pdb_write_double(&rec->lat, 2.0*M_PI*wpt->latitude/360.0);
+	pdb_write_double(&rec->lon, RAD(-wpt->longitude));
+	pdb_write_double(&rec->lat, RAD(wpt->latitude));
 	strncpy(rec->name, shortname, MAX_MARKER_NAME_LENGTH);
 	
 	if (notes)

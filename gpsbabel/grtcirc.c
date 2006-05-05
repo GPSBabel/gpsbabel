@@ -21,6 +21,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include "defs.h"
+#include "grtcirc.h"
 
 static const double EARTH_RAD = 6378137.0;
 
@@ -120,9 +121,9 @@ double linedist(double lat1, double lon1,
   int newpoints;
   
   /* degrees to radians */
-  lat1 *= M_PI/180.0;  lon1 *= M_PI/180.0;
-  lat2 *= M_PI/180.0;  lon2 *= M_PI/180.0;
-  lat3 *= M_PI/180.0;  lon3 *= M_PI/180.0;
+  lat1 = RAD(lat1);  lon1 = RAD(lon1);
+  lat2 = RAD(lat2);  lon2 = RAD(lon2);
+  lat3 = RAD(lat3);  lon3 = RAD(lon3);
 
   newpoints = 1;
   if ( lat1 == _lat1 && lat2 == _lat2 && lon1 == _lon1 && lon2 == _lon2) {
@@ -266,8 +267,8 @@ void linepart(double lat1, double lon1,
   double sinphi = 0;
   
   /* degrees to radians */
-  lat1 *= M_PI/180.0;  lon1 *= M_PI/180.0;
-  lat2 *= M_PI/180.0;  lon2 *= M_PI/180.0;
+  lat1 = RAD(lat1);  lon1 = RAD(lon1);
+  lat2 = RAD(lat2);  lon2 = RAD(lon2);
 
   /* polar to ECEF rectangular */
   x1 = cos(lon1)*cos(lat1); y1 = sin(lat1); z1 = sin(lon1)*cos(lat1);
@@ -313,12 +314,12 @@ void linepart(double lat1, double lon1,
     if ( zr > 1 ) zr = 1;
     if ( zr < -1 ) zr = -1;
     
-    *reslat = asin(yr) * 180 / M_PI;   
+    *reslat = DEG(asin(yr));
     if( xr == 0 && zr == 0 ) {
       *reslon = 0;
     }
     else {
-      *reslon = atan2( zr, xr ) * 180 / M_PI;
+      *reslon = DEG(atan2( zr, xr ));
     } 
   }
 }

@@ -99,9 +99,9 @@ arcdist_process(void)
 		}
 		if ( ed->distance == BADVAL || ed->distance >= pos_dist ) {
 		   if ( ptsopt ) {
-		      dist = gcdist( lat2*M_PI/180.0, lon2*M_PI/180.0, 
-				   waypointp->latitude*M_PI/180.0, 
-				   waypointp->longitude*M_PI/180.0 );
+		      dist = gcdist( RAD(lat2), RAD(lon2), 
+				   RAD(waypointp->latitude), 
+				   RAD(waypointp->longitude) );
 		   }
 		   else {
 		      dist = linedist(lat1, lon1, lat2, lon2, 

@@ -78,10 +78,10 @@ static double
 gc_distance(double lat1, double lon1, double lat2, double lon2)
 {
 	return gcdist( 
-	    (lat1 * M_PI) / 180.0,
-	    (lon1 * M_PI) / 180.0,
-	    (lat2 * M_PI) / 180.0,
-	    (lon2 * M_PI) / 180.0
+	    RAD(lat1),
+	    RAD(lon1),
+	    RAD(lat2),
+	    RAD(lon2)
 	    );
 }
 

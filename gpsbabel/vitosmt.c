@@ -26,6 +26,7 @@
 
 #define MYNAME "vitosmt"
 #include "defs.h"
+#include "grtcirc.h"
 
 static FILE				*infile	=0;
 static FILE				*ofs	=0;
@@ -175,8 +176,8 @@ vitosmt_read(void)
 
 		wpt_tmp = waypt_new();
 		
-		wpt_tmp->latitude	=(latrad * 180) / M_PI;
-		wpt_tmp->longitude	=(lonrad * 180) / M_PI;
+		wpt_tmp->latitude	=DEG(latrad);
+		wpt_tmp->longitude	=DEG(lonrad);
 		wpt_tmp->altitude	=elev;
 
 		tmStruct.tm_year	=timestamp[0]+100;
@@ -270,9 +271,9 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 	++count;
 	workbuffer = xcalloc(vitosmt_datasize,1);
 
-	WriteDouble(&workbuffer[position], (M_PI*waypointp->latitude)/180 ); 
+	WriteDouble(&workbuffer[position], RAD(waypointp->latitude) ); 
 	position += sizeof(double);
-	WriteDouble(&workbuffer[position], (M_PI*waypointp->longitude)/180 );
+	WriteDouble(&workbuffer[position], RAD(waypointp->longitude) );
 	position += sizeof(double);
 	if ( waypointp->altitude-1 > unknown_alt)
 		WriteDouble(&workbuffer[position], waypointp->altitude );
