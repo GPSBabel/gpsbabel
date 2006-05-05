@@ -128,10 +128,8 @@ dep:
 $(WEB)/htmldoc/readme.html: readme.xml 
 	xmlwf $<   #check for well-formedness
 	xmllint --noout --valid $<    #validate
-	xsltproc --stringparam html.stylesheet \
-	"http://www.gpsbabel.org/style3.css" \
+	xsltproc   \
 	 --stringparam base.dir "$(WEB)/htmldoc/"    \
-	 --stringparam use.id.as.filename 1   \
 	 --stringparam root.filename "readme" \
 	 babelmain.xsl \
 	 $<
@@ -140,7 +138,7 @@ $(WEB)/htmldoc/readme.html: readme.xml
 readme.txt: readme.html
 	lynx -nolist -dump readme.html  > $@
 
-doc: readme.html # readme.txt
+doc: $(WEB)/htmldoc/readme.html # readme.txt
 
 release: 
 	cvs commit
