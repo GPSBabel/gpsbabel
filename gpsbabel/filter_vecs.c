@@ -129,7 +129,7 @@ find_filter_vec(char *const vecname, char **opts)
 		arglist_t *ap;
 		char *res;
 
-		if (strcmp(svecname, vec->name)) {
+		if (case_ignore_strcmp(svecname, vec->name)) {
 			vec++;
 			continue;
 		}
