@@ -114,11 +114,13 @@ cet_str_cp1252_to_utf8(const char *src)
  *
  */
 #if HAVE_LIBEXPAT
-int XMLCALL cet_lib_expat_UnknownEncodingHandler(void *data, const XML_Char *encoding, XML_Encoding *info)
+int XMLCALL cet_lib_expat_UnknownEncodingHandler(void *data, const XML_Char *xml_encoding, XML_Encoding *info)
 {
 	cet_cs_vec_t *cs;
 	int i, c, ucs4_def;
+	const char *encoding;
 
+	encoding = xml_convert_to_char_string(xml_encoding);
 	cs = cet_find_cs_by_name(encoding);
 	if (cs == NULL) return XML_STATUS_ERROR;	/* fatal(MYNAME ": Unknown character set \"%s\"!\n", encoding); */
 	
@@ -142,6 +144,7 @@ int XMLCALL cet_lib_expat_UnknownEncodingHandler(void *data, const XML_Char *enc
 	if (global_opts.verbose_status > 0)
 	    printf(MYNAME ": XML parser - encoding handler for character set \"%s\" established.\n", encoding);
 	    
+	xml_free_converted_string(encoding);
 	return XML_STATUS_OK;
 }
 #endif
@@ -1147,4 +1150,60 @@ int cet_fprintf(FILE *stream, const cet_cs_vec_t *src_vec, const char *fmt, ...)
 	va_end(args);
 	
 	return res;
+}
+
+
+const char *xml_convert_to_char_string(const XML_Char *str)
+{
+#ifdef XML_UNICODE  
+	return cet_str_uni_to_utf8(str, wcslen(str));
+#else
+	return str;
+#endif  
+}
+
+void xml_free_converted_string(const char *str)
+{
+#ifdef XML_UNICODE  
+	xfree(str);
+#endif  
+}
+
+const char **xml_convert_attrs_to_char_string(const XML_Char **xml_attr)
+{
+#ifdef XML_UNICODE
+  // First count size of array
+  int size = 0;
+  int i;
+  const XML_Char **ptr;
+  const char **char_attrs;
+
+  if (xml_attr == NULL)
+    return NULL;
+
+  for (ptr = xml_attr; *ptr != NULL; ++ptr)
+    ++size;
+
+  // Allocate space
+  char_attrs = xmalloc((size + 1) * sizeof(char *));
+
+  // Duplicate strings
+  for (i = 0; i < size; ++i)
+    char_attrs[i] = xml_convert_to_char_string(xml_attr[i]);
+  char_attrs[size] = NULL;
+
+  return char_attrs;
+#else
+  return xml_attr;
+#endif
+}
+
+void xml_free_converted_attrs(const char **attr)
+{
+#ifdef XML_UNICODE  
+	while (attr != NULL && *attr != NULL) {
+		xfree(*attr);
+		++attr;
+	}
+#endif
 }

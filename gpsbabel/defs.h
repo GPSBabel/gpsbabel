@@ -32,6 +32,10 @@
 #include "cet_util.h"
 #include "inifile.h"
 
+// Turn on Unicode in expat?
+#ifdef _UNICODE
+#  define XML_UNICODE
+#endif
 
 /*
  * Amazingly, this constant is not specified in the standard...

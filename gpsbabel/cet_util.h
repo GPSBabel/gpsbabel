@@ -113,4 +113,18 @@ void cet_convert_deinit(void);
 
 void cet_disp_character_set_names(FILE *fout);
 
+/*
+ * Conversion from XML_Char string to char string.  If XML_Char is the
+ * same as char, these routines do nothing.  If XML_Char is a wide
+ * character, xml_convert_to_char_string converts the string to a
+ * newly allocated char string, and xml_free_converted_string frees
+ * it.
+ */
+
+const char *xml_convert_to_char_string(const XML_Char *str);
+void xml_free_converted_string(const char *str);
+
+const char **xml_convert_attrs_to_char_string(const XML_Char **xml_attr);
+void xml_free_converted_attrs(const char **attr);
+
 #endif

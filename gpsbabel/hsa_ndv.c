@@ -68,8 +68,10 @@ hsa_ndv_read(void)
 #else
 
 static void
-hsa_ndv_start(void *data, const char *el, const char **attr)
+hsa_ndv_start(void *data, const XML_Char *xml_el, const XML_Char **attr)
 {
+	const char *el = xml_convert_to_char_string(xml_el);
+  
 //	printf("<%s>\n", el);
 	if (strcmp(el, "Export") == 0)
 	{//should only be one
@@ -90,11 +92,13 @@ hsa_ndv_start(void *data, const char *el, const char **attr)
 	}
 	//reset data :)
 	memset(cdatastr,0, MY_CBUF);
+	xml_free_converted_string(el);
 }
 
 static void
-hsa_ndv_end(void *data, const char *el)
+hsa_ndv_end(void *data, const XML_Char *xml_el)
 {
+	const char *el = xml_convert_to_char_string(xml_el);
 	if (in_Route)
 	{
 		if (strcmp(el, "Version") == 0)
@@ -191,6 +195,7 @@ hsa_ndv_end(void *data, const char *el)
 	{
 		in_ChartWork--;
 	}
+	xml_free_converted_string(el);
 }
 
 static void
