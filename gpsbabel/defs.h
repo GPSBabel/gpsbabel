@@ -707,15 +707,15 @@ typedef struct {
  * Protypes for Endianness helpers.
  */
 
-signed int be_read16(void *p);
-signed int be_read32(void *p);
-signed int le_read16(void *p);
-signed int le_read32(void *p);
+signed int be_read16(const void *p);
+signed int be_read32(const void *p);
+signed int le_read16(const void *p);
+signed int le_read32(const void *p);
 void le_read64(void *dest, const void *src);
-void be_write16(void *pp, unsigned i);
-void be_write32(void *pp, unsigned i);
-void le_write16(void *pp, unsigned i);
-void le_write32(void *pp, unsigned i);
+void be_write16(void *pp, const unsigned i);
+void be_write32(void *pp, const unsigned i);
+void le_write16(void *pp, const unsigned i);
+void le_write32(void *pp, const unsigned i);
 double pdb_read_double(void *p);
 void pdb_write_double(void *pp, double d);
 
