@@ -4,7 +4,7 @@ function getcap(type, cap, sname, lname) {
 	print "<tr>"
 	print "<td class=\"fmtline\">" lname "</td>"
 
-	print "<td class=\"c4\"> <a href=\"" sname ".html\">" sname "</a></td>"
+	print "<td class=\"c4\"> <a href=\"htmldoc-development/" sname ".html\">" sname "</a></td>"
 	# This is bad...
 	
 	printf "<td class=\"c4\">"

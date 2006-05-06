@@ -6,6 +6,7 @@ VERSD=1.2.8
 RELEASE=-beta20060423_GSAK
 VERSIONU=$(VERSU)$(RELEASE)
 VERSIOND=$(VERSD)$(RELEASE)
+DOCVERSION=development
 
 # VERSIONU=1_2_7
 # VERSIOND=1.2.7
@@ -81,7 +82,7 @@ OBJS = main.o globals.o $(LIBOBJS)
 
 
 
-# Directory of web doc 
+# Directory of local web doc.  Traditionally a sibling to the GPSBabel tree.
 WEB=../babelweb/
 
 
@@ -89,6 +90,9 @@ all: gpsbabel@EXEEXT@
 
 gpsbabel@EXEEXT@: $(OBJS)
 	@CC@  $(CFLAGS) $(OBJS) @LIBS@ @USB_LIBS@ $(LIBEXPAT) $(OUTPUT_SWITCH)$@
+
+Makefile: Makefile.in config.status
+	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
 
 globals.o:
 	@CC@  @CPPFLAGS@ -c $(GBCFLAGS) -DVERSION=\"$(VERSIOND)\" $< $(OUTPUT_SWITCH)$@
@@ -125,11 +129,11 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile.in and bring in /tmp/dep
 
-$(WEB)/htmldoc/readme.html: readme.xml 
-	xmlwf $<   #check for well-formedness
-	xmllint --noout --valid $<    #validate
-	xsltproc   \
-	 --stringparam base.dir "$(WEB)/htmldoc/"    \
+$(WEB)/htmldoc-$(DOCVERSION)/readme.html: readme.xml babelmain.xsl
+	xmlwf $<   			#check for well-formedness
+	xmllint --noout --valid $<    	#validate
+	xsltproc \
+	 --stringparam base.dir "$(WEB)/htmldoc-$(DOCVERSION)/" \
 	 --stringparam root.filename "readme" \
 	 babelmain.xsl \
 	 $<
@@ -138,7 +142,7 @@ $(WEB)/htmldoc/readme.html: readme.xml
 readme.txt: readme.html
 	lynx -nolist -dump readme.html  > $@
 
-doc: $(WEB)/htmldoc/readme.html # readme.txt
+doc: $(WEB)/htmldoc-$(DOCVERSION)/readme.html # readme.txt
 
 release: 
 	cvs commit

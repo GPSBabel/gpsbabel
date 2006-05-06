@@ -13,7 +13,8 @@
   <xsl:text>
 
   </xsl:text>
-  <xsl:comment>#include virtual="doc-header.inc" </xsl:comment>
+  <xsl:comment>#include virtual="../navbar.inc" </xsl:comment>
+  <xsl:comment>#include virtual="../doc-header.inc" </xsl:comment>
   <xsl:text>
 
   </xsl:text>
@@ -23,7 +24,7 @@
   <xsl:text>
 
   </xsl:text>
-  <xsl:comment>#include virtual="doc-footer.inc" </xsl:comment>
+  <xsl:comment>#include virtual="../doc-footer.inc" </xsl:comment>
   <xsl:text>
 
   </xsl:text>
