@@ -99,7 +99,7 @@ be downloaded from <ulink url="http://expat.sourceforge.net">http://expat.source
          to the first serial port on a Linux system (device names will
          vary on other OSes) and write them as a geocaching loc file.
          The second command does the same for windows.</para>
-         <screen format="linespecific">gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc 	</screen>
+         <screen format="linespecific">gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</screen>
          <screen format="linespecific">gpsbabel -i magellan -f com1 -o geo -F mag.loc</screen>
          <para>Optionally, you may specify <parameter moreinfo="none">"-s"</parameter> in any command line.  This
          causes the program to ignore any "short" names that may be
@@ -193,8 +193,7 @@ waypoints from another source, it will currently create "Red Flag"
 symbols for waypoints, and thick red lines for routes or tracks.  It
 is possible to merge two drawing layers by doing something like this:
 </para>
-      <screen format="linespecific">gpsbabel -i an1 -f one.an1 -f two.an1 -o an1 -F merged.an1
-</screen>
+      <screen format="linespecific">gpsbabel -i an1 -f one.an1 -f two.an1 -o an1 -F merged.an1 </screen>
       <para> In this case, the merged data will contain all of the
 properties of the original data.
 </para>
@@ -337,8 +336,7 @@ differences.</para>
       <para/>
       <example>
 	<title>Sample BCR command with all options</title>
-	<screen format="linespecific">gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr
-</screen>
+	<screen format="linespecific">gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr </screen>
       </example>
     </section>
     <section id="cambridge">
@@ -557,14 +555,12 @@ supported.  The device name to use on the command line is "usb:" Thus,
 to read the waypoints from a Garmin USB unit and write them to a GPX
 file:
 </para>
-      <screen format="linespecific">gpsbabel -i garmin -f usb: -o gpx
--F blah.gpx</screen>
+      <screen format="linespecific">gpsbabel -i garmin -f usb: -o gpx -F blah.gpx</screen>
       <para> When reporting problems with Garmin, be sure to include
 the full unit model, firmware version, and be prepared to offer
 debugging dumps by adding "-D9" to the command line, like:
 </para>
-      <screen format="linespecific"> gpsbabel -D9 -i garmin -f usb: -o
-gpx -F blah.gpx</screen>
+      <screen format="linespecific"> gpsbabel -D9 -i garmin -f usb: -o gpx -F blah.gpx</screen>
       <para> Custom icons are supported on units that support that.
 Neither GPSBabel nor your firmware know what is associated with any
 given slot number.  They don't know that the picture you placed in the
@@ -1524,8 +1520,7 @@ which are supported by GPSbabel in both directions (see BCR).
       <para>Via XML this software can only export routing data.  So we
 don't support writing.  With the option "routevia" you can eliminate
 calculated route points from tef source file.</para>
-      <screen format="linespecific"> gpsbabel -r -i tef,routevia -f
-in.xml -o gpx -F out.gpx</screen>
+      <screen format="linespecific"> gpsbabel -r -i tef,routevia -f in.xml -o gpx -F out.gpx</screen>
     </section>
     <section id="text">
       <sectioninfo>
@@ -1541,8 +1536,7 @@ option to suppress the lines of dashes between entries.  Use the
       <para> The following command line reads a GPX file with
 Groundspeak extensions and writes a text file with encrypted hints:
 </para>
-      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx -o
-text,encrypt -F 12345.txt
+      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx -o text,encrypt -F 12345.txt
 </screen>
     </section>
     <section id="tiger">
@@ -1904,8 +1898,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          <para>	For example, assuming the arc above is in a file called <filename moreinfo="none">lima_rd.txt</filename>:</para>
          <screen format="linespecific">	gpsbabel -i geo -f 1.loc 
    -x arc,file=lima_rd.txt,distance=1  	\
-   -o mapsend 
-    -F 2.wpt</screen>
+   -o mapsend -F 2.wpt</screen>
          <para> would include only points within one mile of the
          section of Lima Road covered by the arc.</para>
       </section>
@@ -2032,7 +2025,6 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          replaces the current list of waypoints; the previous contents
          of the current list are discarded.</para>
          <screen format="linespecific">
-                  
 -x stack,pop 
 -x stack,pop,discard
 -x stack,pop,append
