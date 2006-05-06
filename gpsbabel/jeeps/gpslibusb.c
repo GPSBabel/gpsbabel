@@ -55,7 +55,6 @@ static int gusb_intr_in_ep;
 static int gusb_bulk_out_ep;
 static int gusb_bulk_in_ep;
 
-// static struct usb_bus *busses;
 static usb_dev_handle *udev;
 static void garmin_usb_scan(libusb_unit_data *, int);
 
@@ -63,7 +62,6 @@ static int
 gusb_libusb_send(const garmin_usb_packet *opkt, size_t sz)
 {
 	int r;
-	
 	r = usb_bulk_write(udev, gusb_bulk_out_ep, (char *)(void *)opkt->dbuf, sz, TMOUT_B);
 
 	if (r != (int) sz) {
@@ -107,6 +105,91 @@ gusb_teardown(gpsdevh *dh)
 		udev = NULL;
 	}
 	return 0; 
+}
+
+/*
+ * This is a function of great joy to discover.
+ *
+ * It turns out that as of 5/2006, every Garmin USB product has a problem
+ * where the device does not reset the data toggles after a configuration
+ * set.   After a reset, the toggles both match.  So we tear through the
+ * conversation and life is good.  Unfortunately, the second time through,
+ * if we had an odd number of transactions in the previous conversation,
+ * we send a configuration set and reset the toggle on the HCI but the 
+ * toggle on the device's end of the pipe is now out of whack which means
+ * that the subsequent transaction will hang.
+ * 
+ * This isn't a problem in Windows since the configuration set is done only
+ * once there.
+ * 
+ * This code has been tested in loops of 1000 cycles on Linux and OS/X and
+ * it seems to cure this at a mere cost of complexity and startup time.  I'll
+ * be delighted when all the firmware gets revved and updated and we can
+ * remove this.
+ *  
+ */
+static void 
+gusb_reset_toggles(void)
+{
+	static const char  oinit[12] = 
+		{0, 0, 0, 0, GUSB_SESSION_START, 0, 0, 0, 0, 0, 0, 0};
+	static const char  oid[12] = 
+		{20, 0, 0, 0, 0xfe, 0, 0, 0, 0, 0, 0, 0};
+	garmin_usb_packet iresp;
+	int t;
+
+	/* Start off with three session starts.
+	 * #1 resets the bulk out toggle.  It may not make it to the device.
+	 * #2 resets the the intr in toggle.  It will make it to the device
+	 *	since #1 reset the the bulk out toggle.   The device will
+	 *      respond on the intr in pipe which will clear its toggle.
+	 * #3 actually starts the session now that the above are both clear.
+ 	 */
+
+	gusb_cmd_send((const garmin_usb_packet *) oinit, sizeof(oinit));
+	gusb_cmd_send((const garmin_usb_packet *) oinit, sizeof(oinit));
+	gusb_cmd_send((const garmin_usb_packet *) oinit, sizeof(oinit));
+
+	t = 10;
+	while(1) {
+		le_write16(&iresp.gusb_pkt.pkt_id, 0);
+		le_write32(&iresp.gusb_pkt.datasz, 0);
+		le_write32(&iresp.gusb_pkt.databuf, 0);
+
+		gusb_cmd_get(&iresp, sizeof(iresp));
+
+		if ((le_read16(iresp.gusb_pkt.pkt_id) == GUSB_SESSION_ACK) &&
+                        (le_read32(iresp.gusb_pkt.datasz) == 4)) {
+				break;
+		}
+		if (t-- <= 0) {
+			fatal("Could not start session in a reasonable number of tries.\n");
+		}
+	}
+
+	/*
+	 * Now that the bulk out and intr in packets are good, we send
+	 * a product ID.    On devices that respond totally on the intr
+	 * pipe, this does nothing interesting, but on devices that respon
+	 * on the bulk pipe this will reset the toggles on the bulk in.
+ 	 */
+	t = 10;
+	gusb_cmd_send((const garmin_usb_packet *) oid, sizeof(oid));
+	while(1) {
+		le_write16(&iresp.gusb_pkt.pkt_id, 0);
+		le_write32(&iresp.gusb_pkt.datasz, 0);
+		le_write32(&iresp.gusb_pkt.databuf, 0);
+
+		gusb_cmd_get(&iresp, sizeof(iresp));
+
+		if ((le_read16(iresp.gusb_pkt.pkt_id) == GUSB_SESSION_ACK) &&
+                        (le_read32(iresp.gusb_pkt.datasz) == 4)) {
+		}
+		if (le_read16(iresp.gusb_pkt.pkt_id) == 0xfd) return;
+		if (t-- <= 0) {
+			fatal("Could not start session in a reasonable number of tries.\n");
+		}
+	}
 }
 
 void
@@ -155,6 +238,7 @@ garmin_usb_start(struct usb_device *dev)
 	 * that loop without non-zero values for all three, we're hosed.
 	 */
 	if (gusb_intr_in_ep && gusb_bulk_in_ep && gusb_bulk_out_ep) {
+		gusb_reset_toggles();
 		gusb_syncup();
 		return;
 	}
