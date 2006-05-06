@@ -158,7 +158,7 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 	rv = gusb_llops->llop_send(opkt, sz);
 
 	if (gps_show_bytes) {
-		unsigned short pkttype = le_read16(&opkt->gusb_pkt.databuf[0]);
+		const unsigned short pkttype = le_read16(&opkt->gusb_pkt.databuf[0]);
 		GPS_Diag("TX [%d]:", sz);
 
 		for(i=0;i<sz;i++)
