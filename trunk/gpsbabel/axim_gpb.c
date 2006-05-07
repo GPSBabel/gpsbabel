@@ -141,7 +141,7 @@ axim_gpb_read(void)
 	char buff[RECORD_LEN];
 	route_head *track = NULL;
 	size_t bytes;
-	off_t filesize, left;
+	long filesize, left;
 
 	fseek(fin, 0, SEEK_END);
 	filesize = ftell(fin);
