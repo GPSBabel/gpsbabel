@@ -273,7 +273,7 @@ PACKAGE_VERSION='VERSION'
 PACKAGE_STRING='GPSBabel VERSION'
 PACKAGE_BUGREPORT='BUG-REPORT-ADDRESS'
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE  LIBUSBCONFIG USB_LIBS USB_CFLAGS OSJEEPS EXPAT_LIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE  LIBUSBCONFIG USB_LIBS USB_CFLAGS OSJEEPS GBSER EXPAT_LIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -2534,6 +2534,9 @@ _ACEOF
 
 case "$target" in
     *-*-cygwin* | *-*-mingw32*)
+
+	GBSER=gbser_win.o
+
 	if test "$with_libusb" = no ; then
 		echo "$as_me:$LINENO: result: USB skipped" >&5
 echo "${ECHO_T}USB skipped" >&6
@@ -2544,6 +2547,7 @@ echo "${ECHO_T}USB skipped" >&6
 	fi
 	;;
     *)
+	GBSER=gbser_posix.o
 	echo "$as_me:$LINENO: checking for libusb" >&5
 echo $ECHO_N "checking for libusb... $ECHO_C" >&6
 	if test "$with_libusb" = no ; then
@@ -2690,6 +2694,7 @@ fi
 	fi
 	;;
 esac
+
 
 
 
@@ -3570,6 +3575,7 @@ s,@LIBUSBCONFIG@,$LIBUSBCONFIG,;t t
 s,@USB_LIBS@,$USB_LIBS,;t t
 s,@USB_CFLAGS@,$USB_CFLAGS,;t t
 s,@OSJEEPS@,$OSJEEPS,;t t
+s,@GBSER@,$GBSER,;t t
 s,@EXPAT_LIB@,$EXPAT_LIB,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
