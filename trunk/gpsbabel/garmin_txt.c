@@ -569,7 +569,7 @@ print_speed(double *distance, time_t *time)
 	else unit = "kph";
 	idist = si_round(dist);
 	
-	if ((time != 0) && (idist > 0)) {
+	if ((*time != 0) && (idist > 0)) {
 		double speed = dist / (double)*time * SECONDS_PER_HOUR / 1000;
 		int ispeed = si_round(speed);
 		
