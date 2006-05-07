@@ -1046,4 +1046,11 @@ compare ${REFERENCE}/track/kartex-out.ktf ${TMPDIR}/kartex-2a.ktf
 ${PNAME} -i ktf2 -f ${REFERENCE}/track/trackDMm.ktf -o ktf2 -F ${TMPDIR}/kartex-2b.ktf
 compare ${TMPDIR}/kartex-2a.ktf ${TMPDIR}/kartex-2b.ktf
 
+#
+# Dell Axim Navigation System 'axim_gpb' test
+#
+rm -f ${TMPDIR}/axim-*
+${PNAME} -i axim_gpb -f ${REFERENCE}/track/axim-sample.gpb -o gpx -F ${TMPDIR}/axim-sample.gpx
+compare ${REFERENCE}/track/axim-sample.gpx ${TMPDIR}/axim-sample.gpx
+
 exit 0
