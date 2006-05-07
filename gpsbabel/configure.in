@@ -24,11 +24,14 @@ AC_ARG_WITH(cet,[--with-cet=(default,all,minimal)],
              cet="$withval", cet="default")
 
 if test "$cet" = "all"; then
-   AC_DEFINE(CET_WANTED, 1, "1 for all character sets")
+   AC_DEFINE(CET_WANTED, 1, [1 for all character sets])
 fi
 if test "$cet" = "default"; then
-   AC_DEFINE(CET_WANTED, 0, "0 for most-used character sets")
+   AC_DEFINE(CET_WANTED, 0, [0 for most-used character sets])
 fi
+
+AC_DEFINE(SHAPELIB_ENABLED, 1, [1 to enable shapefile support])
+AC_DEFINE(PDBFMTS_ENABLED, 1, [1 to enable Palm PDB support])
  
 case "$target" in
     *-*-cygwin* | *-*-mingw32*)
@@ -135,7 +138,5 @@ AC_SUBST(EXPAT_LIB)
 # AC_CHECK_FUNCS([atexit floor localtime_r memmove memset pow select sqrt strchr strcspn strdup strerror strncasecmp strrchr strspn strstr strtol strtoul])
 AC_CHECK_FUNCS([nanosleep sleep])
 
-# coldsync, shapelib, and jeeps  are here just so the target directories are
-# created.
-AC_CONFIG_FILES([Makefile shapelib/Makefile coldsync/Makefile jeeps/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

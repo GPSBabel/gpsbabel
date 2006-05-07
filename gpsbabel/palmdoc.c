@@ -23,6 +23,7 @@
 
 
 #include "defs.h"
+#if PDBFMTS_ENABLED
 #include "jeeps/gpsmath.h"
 #include <ctype.h>
 #include "coldsync/palm.h"
@@ -628,3 +629,4 @@ ff_vecs_t palmdoc_vecs = {
 };
 
 
+#endif

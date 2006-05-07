@@ -20,6 +20,7 @@
  */
 
 #include "defs.h"
+#if PDBFMTS_ENABLED
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
 #include "garmin_tables.h"
@@ -460,3 +461,4 @@ ff_vecs_t gpilots_vecs = {
 	my_args,
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
+#endif

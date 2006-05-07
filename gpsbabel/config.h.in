@@ -1,6 +1,6 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
-/* "0 for most-used character sets" */
+/* 0 for most-used character sets */
 #undef CET_WANTED
 
 /* Defined if you have libexpat */
@@ -32,3 +32,9 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* 1 to enable Palm PDB support */
+#undef PDBFMTS_ENABLED
+
+/* 1 to enable shapefile support */
+#undef SHAPELIB_ENABLED

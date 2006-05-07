@@ -2521,6 +2521,17 @@ _ACEOF
 
 fi
 
+
+cat >>confdefs.h <<\_ACEOF
+#define SHAPELIB_ENABLED 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define PDBFMTS_ENABLED 1
+_ACEOF
+
+
 case "$target" in
     *-*-cygwin* | *-*-mingw32*)
 	if test "$with_libusb" = no ; then
@@ -2919,9 +2930,7 @@ fi
 done
 
 
-# coldsync, shapelib, and jeeps  are here just so the target directories are
-# created.
-                                        ac_config_files="$ac_config_files Makefile shapelib/Makefile coldsync/Makefile jeeps/Makefile"
+          ac_config_files="$ac_config_files Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3449,9 +3458,6 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-  "shapelib/Makefile" ) CONFIG_FILES="$CONFIG_FILES shapelib/Makefile" ;;
-  "coldsync/Makefile" ) CONFIG_FILES="$CONFIG_FILES coldsync/Makefile" ;;
-  "jeeps/Makefile" ) CONFIG_FILES="$CONFIG_FILES jeeps/Makefile" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

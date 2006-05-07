@@ -25,6 +25,7 @@
 #include <math.h>
 
 #include "defs.h"
+#if PDBFMTS_ENABLED
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
 #include "jeeps/gpsmath.h"
@@ -239,3 +240,4 @@ ff_vecs_t magpdb_vecs = {
 	magpdb_args,
 	CET_CHARSET_MS_ANSI, 1	/* CET-REVIEW */
 };
+#endif

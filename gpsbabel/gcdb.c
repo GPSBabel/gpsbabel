@@ -20,6 +20,7 @@
  */
 
 #include "defs.h"
+#if PDBFMTS_ENABLED
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
 
@@ -342,3 +343,4 @@ ff_vecs_t gcdb_vecs = {
 	NULL,
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
+#endif

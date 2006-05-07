@@ -28,6 +28,7 @@
 
 #include <ctype.h>
 #include "defs.h"
+#if PDBFMTS_ENABLED
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
 #include "csv_util.h"
@@ -693,3 +694,4 @@ ff_vecs_t ppdb_vecs = {
 	ppdb_args,
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
+#endif

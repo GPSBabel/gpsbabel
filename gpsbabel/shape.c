@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "shapelib/shapefil.h"
 
+#if SHAPELIB_ENABLED
 static SHPHandle ihandle;
 static DBFHandle ihandledb;
 static SHPHandle ohandle;
@@ -312,3 +313,4 @@ ff_vecs_t shape_vecs = {
 	shp_args,
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
+#endif /* SHAPELIB_ENABLED */

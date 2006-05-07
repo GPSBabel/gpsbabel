@@ -21,6 +21,7 @@
 
 #include "quovadis.h"
 
+#if PDBFMTS_ENABLED
 static FILE *file_in;
 static FILE *file_out;
 static const char *out_fname;
@@ -296,3 +297,4 @@ ff_vecs_t quovadis_vecs = {
 	quovadis_args,
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
+#endif
