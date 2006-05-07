@@ -5,7 +5,7 @@ creator="GPSBabel - http://www.gpsbabel.org"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>2006-05-07T15:48:26Z</time>
+<time>1970-01-01T00:00:00Z</time>
 <bounds minlat="50.877340632" minlon ="12.433738670" maxlat="50.877348965" maxlon="12.433888670" />
 <trk>
 <trkseg>
