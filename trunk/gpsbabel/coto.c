@@ -22,9 +22,9 @@
     
  */
 
-#include <string.h>
 
 #include "defs.h"
+#if PDBFMTS_ENABLED
 #include "csv_util.h"
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
@@ -456,3 +456,4 @@ ff_vecs_t coto_vecs = {
 	coto_args,
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
+#endif

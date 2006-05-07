@@ -178,6 +178,7 @@ vecs_t vec_list[] = {
 		"Lowrance USR",
 		"usr"
 	},
+#if PDBFMTS_ENABLED
 	{
 		&cetus_vecs,
 		"cetus",
@@ -202,6 +203,7 @@ vecs_t vec_list[] = {
 		"Magellan NAV Companion for Palm/OS", 
 		"pdb"
 	},
+#endif /* PDBFMTS_ENABLED */
 	{
 		&garmin_vecs,
 		"garmin",
@@ -232,12 +234,14 @@ vecs_t vec_list[] = {
 		"TopoMapPro Places File",
 		"tmpro"
 	},
+#if PDBFMTS_ENABLED
 	{
 		&gcdb_vecs,
 		"gcdb",
 		"GeocachingDB for Palm/OS", 
 		"pdb"
 	},
+#endif
 	{
 		&tiger_vecs,
 		"tiger",
@@ -250,6 +254,7 @@ vecs_t vec_list[] = {
 		"EasyGPS binary format",
 		".loc"
 	},
+#if PDBFMTS_ENABLED
 	{
 		&quovadis_vecs,
 		"quovadis",
@@ -262,6 +267,7 @@ vecs_t vec_list[] = {
 		"GpilotS",
 		"pdb"
 	},
+#endif
 	{
 		&saroute_vecs,
 		"saroute",
@@ -286,6 +292,7 @@ vecs_t vec_list[] = {
 		"KuDaTa PsiTrex text",
 		NULL
 	},
+#if SHAPELIB_ENABLED
 	{
 		&shape_vecs,
 		"shape",
@@ -298,6 +305,7 @@ vecs_t vec_list[] = {
 		"GeoNiche .pdb",
 		"pdb"
 	},
+#endif
 	{
 		&gpl_vecs,
 		"gpl",
@@ -328,12 +336,14 @@ vecs_t vec_list[] = {
 		"HTML Output",
 		"html"	
 	},
+#if PDBFMTS_ENABLED
 	{
 		&palmdoc_vecs,
 		"palmdoc",
 		"PalmDoc Output",
 		"pdb"
 	},
+#endif
 	{
 		&netstumbler_vecs,
 		"netstumbler",
@@ -418,12 +428,14 @@ vecs_t vec_list[] = {
 		"Map&Guide 'TourExchangeFormat' XML",
 		"xml"
 	},
+#if PDBFMTS_ENABLED
 	{
 		&ppdb_vecs,
 		"pathaway",
 		"PathAway Database for Palm/OS",
 		"pdb"
 	},
+#endif
 	{
 		&vitosmt_vecs,
 		"vitosmt",
@@ -448,12 +460,14 @@ vecs_t vec_list[] = {
 		"Motorrad Routenplaner (Map&Guide) .bcr files",
 		"bcr"
 	},	
+#if PDBFMTS_ENABLED
 	{
 		&coto_vecs,
 		"coto",
 		"cotoGPS for Palm/OS", 
 		"pdb"
 	},
+#endif
 	{
 		&ignr_vecs,
 		"ignrando",
@@ -490,12 +504,14 @@ vecs_t vec_list[] = {
 		"Navigon Mobile Navigator .rte files",
 		"rte"
 	},
+#if PDBFMTS_ENABLED
 	{
 		&magpdb_vecs,
 		"mag_pdb",
 		"Map&Guide to Palm/OS exported files (.pdb)",
 		"pdb"
 	},
+#endif
 	{
 		&compegps_vecs,
 		"compegps",

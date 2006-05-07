@@ -29,6 +29,7 @@
 */
     
 #include "defs.h"
+#if PDBFMTS_ENABLED
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
 #
@@ -641,3 +642,4 @@ ff_vecs_t cetus_vecs = {
 	cetus_args,
 	CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
 };
+#endif

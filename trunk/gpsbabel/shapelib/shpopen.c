@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: shpopen.c,v 1.2 2004-09-27 01:13:58 robertl Exp $
+ * $Id: shpopen.c,v 1.3 2006-05-07 02:14:35 robertl Exp $
  *
  * Project:  Shapelib
  * Purpose:  Implementation of core Shapefile read/write functions.
@@ -34,6 +34,9 @@
  ******************************************************************************
  *
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2004/09/27 01:13:58  robertl
+ * warning fixes in shapelib.  From Alexander Stohr.
+ *
  * Revision 1.1  2004/09/20 17:21:22  robertl
  * Check in shapelib and experimental prototype of crude shapefile support.
  *
@@ -162,9 +165,11 @@
  */
 
 static char rcsid[] = 
-  "$Id: shpopen.c,v 1.2 2004-09-27 01:13:58 robertl Exp $";
+  "$Id: shpopen.c,v 1.3 2006-05-07 02:14:35 robertl Exp $";
 
 #include "shapefil.h"
+#include "config.h"
+#if SHAPELIB_ENABLED
 
 #include <math.h>
 #include <limits.h>
@@ -1867,3 +1872,4 @@ SHPRewindObject( SHPHandle hSHP, SHPObject * psObject )
 
     return bAltered;
 }
+#endif

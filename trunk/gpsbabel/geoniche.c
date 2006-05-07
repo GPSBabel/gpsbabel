@@ -21,6 +21,7 @@
  */
 
 #include "defs.h"
+#if PDBFMTS_ENABLED
 #include "coldsync/palm.h"
 #include "coldsync/pdb.h"
 #include "jeeps/gpsmath.h"
@@ -814,3 +815,4 @@ ff_vecs_t geoniche_vecs =
 	Args,
 	CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
 };
+#endif
