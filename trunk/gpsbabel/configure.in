@@ -32,9 +32,12 @@ fi
 
 AC_DEFINE(SHAPELIB_ENABLED, 1, [1 to enable shapefile support])
 AC_DEFINE(PDBFMTS_ENABLED, 1, [1 to enable Palm PDB support])
- 
+
 case "$target" in
     *-*-cygwin* | *-*-mingw32*)
+
+	GBSER=gbser_win.o
+
 	if test "$with_libusb" = no ; then
 		AC_MSG_RESULT(USB skipped)
 		OSJEEPS=jeeps/gpsusbstub.o
@@ -44,6 +47,7 @@ case "$target" in
 	fi
 	;;
     *)
+	GBSER=gbser_posix.o
 	AC_MSG_CHECKING(for libusb)
 	if test "$with_libusb" = no ; then
 		AC_MSG_RESULT(check not done)
@@ -82,6 +86,7 @@ esac
 AC_SUBST(USB_LIBS)
 AC_SUBST(USB_CFLAGS)
 AC_SUBST(OSJEEPS)
+AC_SUBST(GBSER)
 
 AC_MSG_CHECKING(for random stuff to make you feel better)
 AC_MSG_RESULT(failed)
