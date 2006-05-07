@@ -94,6 +94,14 @@
 #define BASE_STRUCT(memberp, struct_type, member_name) \
    ((struct_type *)((char *)(memberp) - offsetof(struct_type, member_name)))
 
+typedef enum {
+	fix_unknown=-1,
+	fix_none=0,
+	fix_2d=1,	
+	fix_3d,
+	fix_dgps,
+	fix_pps
+} fix_type;
 
 /*
  * Define globally on which kind of data gpsbabel is working.
@@ -105,15 +113,6 @@ typedef enum {
 	wptdata,
 	rtedata
 } gpsdata_type;
-
-typedef enum {
-	fix_unknown=-1,
-	fix_none=0,
-	fix_2d=1,	
-	fix_3d,
-	fix_dgps,
-	fix_pps
-} fix_type;
 
 #define NOTHINGMASK		0
 #define WPTDATAMASK		1
@@ -351,6 +350,19 @@ typedef struct {
 } route_head;
 
 /*
+ *  Structure of recomputed track/roue data.
+ */
+typedef struct {
+	double	distance_meters;
+	double	max_alt;
+	double	min_alt;
+	double	max_spd;
+	double	min_spd;
+	time_t	start;		/* Min time */
+	time_t	end;		/* Max time */
+} computed_trkdata;
+
+/*
  *  Bounding box information.
  */
 typedef struct {
@@ -436,7 +448,7 @@ void track_backup(signed int *count, queue **head_bak);
 void track_restore( queue *head_bak);
 void track_append( queue *src );
 void route_flush( queue *head );
-void track_recompute( const route_head *trk);
+void track_recompute( const route_head *trk, computed_trkdata **);
 
 /*
  * All shortname functions take a shortname handle as the first arg.
