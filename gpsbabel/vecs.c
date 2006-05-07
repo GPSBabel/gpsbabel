@@ -34,6 +34,7 @@ typedef struct {
 } vecs_t;
 
 extern ff_vecs_t an1_vecs;
+extern ff_vecs_t axim_gpb_vecs;
 extern ff_vecs_t bcr_vecs;
 extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t cetus_vecs;
@@ -541,6 +542,12 @@ vecs_t vec_list[] = {
 		"garmin_txt",
 		"Garmin MapSource - txt (tab delimited)",
 		"txt"
+	},
+        {
+		&axim_gpb_vecs,
+		"axim_gpb",
+		"Dell Axim Navigation System (.gpb) file format",
+		"gpb"
 	},
 	{
 		NULL,

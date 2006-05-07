@@ -48,7 +48,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
 	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o \
-	yahoo.o unicsv.o wfff_xml.o garmin_txt.o
+	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
@@ -182,6 +182,7 @@ an1.o: an1.c defs.h config.h queue.h gbtypes.h cet.h cet_util.h inifile.h \
   an1sym.h
 arcdist.o: arcdist.c defs.h config.h queue.h gbtypes.h cet.h cet_util.h \
   inifile.h filterdefs.h grtcirc.h
+axim_gpb.o: axim_gpb.c defs.h queue.h gbtypes.h
 bcr.o: bcr.c defs.h config.h queue.h gbtypes.h cet.h cet_util.h inifile.h \
   garmin_tables.h
 brauniger_iq.o: brauniger_iq.c defs.h config.h queue.h gbtypes.h cet.h \
