@@ -447,17 +447,26 @@ track_restore( queue *head_bak)
  * This really makes more sense for tracks than routes.
  * Run over all the trackpoints, computing heading (course), speed, and
  * and so on.
+ * 
+ * If trkdatap is non-null upon entry, a pointer to an allocated collection
+ * (hopefully interesting) statistics about the track will be placed there.
  */
-void track_recompute(const route_head *trk)
+void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 {
 	waypoint first;
 	waypoint *this;
 	waypoint *prev = &first;
 	queue *elem, *tmp;
+	computed_trkdata *tdata = xcalloc(1, sizeof (computed_trkdata));
+
+	if (trkdatap) {
+		*trkdatap = tdata;
+	}
 
 	first.latitude = 0;
 	first.longitude = 0;
 	first.creation_time = 0;
+	tdata->min_alt = 999999;
 
 	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
 		time_t timed;
@@ -465,7 +474,10 @@ void track_recompute(const route_head *trk)
 
 		this = (waypoint *)elem;
 		timed = this->creation_time - prev->creation_time;
-		/* gcdist and headin want radians, not degrees */
+
+		/* 
+		 * gcdist and heading want radians, not degrees.
+		 */
 		tlat = RAD(this->latitude);
 		tlon = RAD(this->longitude);
 		plat = RAD(prev->latitude);
@@ -473,10 +485,47 @@ void track_recompute(const route_head *trk)
 		this->course = DEG(heading(plat, plon,
 			tlat, tlon));
 		dist = radtometers(gcdist(plat, plon, tlat, tlon));
-		if (timed) {
-			this->speed = dist / labs(timed);
+
+		/* 
+		 * Avoid that 6300 miles as we move from 0,0.
+		 */
+		if (plat && plon) {
+			tdata->distance_meters += dist;
 		}
 
+		/*
+		 * If we've moved, recompute speed.
+		 */
+		if (timed) {
+			this->speed = dist / labs(timed);
+			if (this->speed > tdata->max_spd) {
+				tdata->max_spd = this->speed;
+			}
+			if (this->speed < tdata->min_spd) {
+				tdata->min_spd = this->speed;
+			}
+		}
+
+		if ((this->altitude > 0) && (this->altitude < tdata->min_alt)) {
+			tdata->min_alt = this->altitude;
+		}
+		if (this->altitude > tdata->max_alt) {
+			tdata->max_alt = this->altitude;
+		}
+
+		if (this->creation_time && (this->creation_time < tdata->start)) {
+			tdata->start = this->creation_time;
+		}
+
+		if (this->creation_time > tdata->end) {
+			tdata->end = this->creation_time;
+			if (tdata->start == 0) {
+				tdata->start = tdata->end;
+			}
+		}
 		prev = this;
+	}
+	if (!trkdatap) {
+		xfree(tdata);
 	}
 }
