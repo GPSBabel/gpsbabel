@@ -457,6 +457,8 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 	waypoint *this;
 	waypoint *prev = &first;
 	queue *elem, *tmp;
+	int tkpt = 0;
+	char tkptname[100];
 	computed_trkdata *tdata = xcalloc(1, sizeof (computed_trkdata));
 
 	if (trkdatap) {
@@ -467,6 +469,7 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 	first.longitude = 0;
 	first.creation_time = 0;
 	tdata->min_alt = 999999;
+	
 
 	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
 		time_t timed;
@@ -524,6 +527,12 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 			}
 		}
 		prev = this;
+		if (!this->shortname || !this->shortname[0] ) {
+			snprintf(tkptname, sizeof(tkptname), "%s-%d", 
+				trk->rte_name ? trk->rte_name : "" , tkpt);
+			this->shortname = xstrdup(tkptname);
+		}
+		tkpt++;
 	}
 	if (!trkdatap) {
 		xfree(tdata);
