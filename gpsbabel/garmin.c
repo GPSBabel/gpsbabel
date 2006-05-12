@@ -26,6 +26,8 @@
 #include "garmin_tables.h"
 #include "garmin_fs.h"
 
+#define SOON 1
+
 #define MYNAME "GARMIN" 
 static const char *portname;
 static short_handle mkshort_handle;
@@ -38,6 +40,8 @@ static char *poweroff = NULL;
 static char *snlen = NULL;
 static char *snwhiteopt = NULL;
 static char *deficon = NULL;
+static char *category = NULL;
+
 /* Technically, even this is a little loose as spaces arent allowed */
 static char valid_waypt_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789";
 
@@ -52,6 +56,8 @@ arglist_t garmin_args[] = {
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{ "power_off", &poweroff, "Command unit to power itself down", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	{ "category", &category, "Command unit to power itself down", 
+		NULL, ARGTYPE_INT, "0", "15"},
 	ARG_TERMINATOR
 };
 
@@ -246,8 +252,10 @@ waypt_read(void)
 			wpt_tmp->icon_descr = d103_symbol_from_icon_number(
 					way[i]->smbl);
 		} else {
+			int dyn = 0;
 			wpt_tmp->icon_descr = gt_find_desc_from_icon_number(
-					way[i]->smbl, PCX, NULL);
+					way[i]->smbl, PCX, &dyn);
+			wpt_tmp->wpt_flags.icon_descr_is_dynamic = dyn;
 		}
 		/*
 		 * If a unit doesn't store altitude info (i.e. a D103)
@@ -269,7 +277,7 @@ waypt_read(void)
 		if (way[i]->time_populated) {
 			wpt_tmp->creation_time = way[i]->time;
 		}
-#if 0
+#if SOON
 		garmin_fs_garmin_after_read(way[i], wpt_tmp, gps_waypt_type);
 #endif		
 		waypt_add(wpt_tmp);
@@ -560,7 +568,10 @@ waypoint_write(void)
 			way[i]->time = wpt->creation_time;
 			way[i]->time_populated = 1;
 		}
-#if 0
+		if (category) {
+			way[i]->category = 1 << atoi(category);
+		}
+#if SOON
 		garmin_fs_garmin_before_write(wpt, way[i], gps_waypt_type);
 #endif
 		i++;
