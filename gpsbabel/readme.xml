@@ -292,6 +292,18 @@ quotes or some other escape mechanism.
 	<para>There is a tutorial <ulink url="http://www.gpsbabel.org/formats/delorme-new-interstate/"> how to create an onramp for a limited access highway in Street Atlas USA using GPSBabel.</ulink>
 	</para>
     </section>
+    <section id="axim_gdb">
+      <sectioninfo>
+	<subtitle>Dell Axim Navigation System tracklogs</subtitle>
+      </sectioninfo>
+      <title>axim_gdb</title>
+	<para> This reads the binary .gpb tracks recorded by Dell Axim.</para> 
+	<para> The structure has a fixed record length with 
+	  many unknown bytes, but we can extract the common gps data
+	  we need to create nice tracks in any format.   For this reason, 
+	  this track format is read-only.
+	</para>
+    </section>
 
     <section id="baroiq">
       <sectioninfo>
@@ -1140,13 +1152,25 @@ sections not being handled to remain intact (e.g. map sets)</para>
     </section>
     <section id="msroute">
       <sectioninfo>
-	<subtitle>Microsoft Autoroute 2002 format</subtitle>
+	<subtitle>Microsoft Autoroute 2002-2006 reader</subtitle>
+	<subtitle>Microsoft Streets and Trips reader</subtitle>
       </sectioninfo>
       <title>MSroute</title>
-      <para> Input support for Microsoft AutoRoute 2002 .axe files.
+      <para> Input support for Microsoft AutoRoute 2002-2006 .axe files
+and Microsoft Streets and Trips .est files.
 These files contains only routes. We can extract the coordinates and
 the names of the points within route. An export to this format will
-not be supported.
+not be supported.</para>
+      <para>Only the start, stops, and end points are stored in the 
+.est/.axe/.ptm files. Turn-by-turn route data is not stored in the 
+.est/.axe/.ptm files, and is recalculated by the Microsoft title each 
+time on opening the file. This means that the output of GPSBabel will 
+not contain turns needed for driving directions.</para>
+	<para>One possible approach to achieve similar results is to 
+use the Streets and Trips drawing tools to trace a line over the 
+interesting parts of the route to capture intersections or key turns.
+GPSBabel will capture stops in the route and insert those as turns, so 
+adding stops at intersections can also improve the results when converting.
 </para>
     </section>
     <section id="mxf">
