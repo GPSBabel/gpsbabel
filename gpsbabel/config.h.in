@@ -3,6 +3,12 @@
 /* 0 for most-used character sets */
 #undef CET_WANTED
 
+/* 1 to enable the CSV formats support */
+#undef CSVFMTS_ENABLED
+
+/* 1 to enable all the filters. */
+#undef FILTERS_ENABLED
+
 /* Defined if you have libexpat */
 #undef HAVE_LIBEXPAT
 

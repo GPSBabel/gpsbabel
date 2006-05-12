@@ -22,6 +22,7 @@
  
 #include "defs.h"
 
+#if CSVFMTS_ENABLED
 #include <math.h>
 #include <time.h>
 #include <ctype.h>
@@ -500,7 +501,8 @@ print_categories(gbuint16 categories)
 				
 			fprintf(fout, "%s", (count++ > 0) ? "," : "");
 			if (c == NULL)
-				fprintf(fout, "Category %d", i+1);
+//				fprintf(fout, "Category %d", i+1);
+				fprintf(fout, "%s", gps_categories[i]);
 			else
 				fprintf(fout, "%s", c);
 			
@@ -1388,3 +1390,5 @@ ff_vecs_t garmin_txt_vecs = {
 	garmin_txt_args,
 	CET_CHARSET_MS_ANSI, 0
 };
+
+#endif // CSVFMTS_ENABLED

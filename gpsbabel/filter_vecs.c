@@ -45,6 +45,37 @@ extern filter_vecs_t interpolatefilt_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
+#if FILTERS_ENABLED
+        {
+		&arcdist_vecs,
+	        "arc",
+	        "Include Only Points Within Distance of Arc",
+	},
+	{
+		&discard_vecs,
+		"discard",
+		"Remove unreliable points with high hdop or vdop"
+	},
+	{
+		&duplicate_vecs, 
+		"duplicate",
+		"Remove Duplicates",
+	},
+	{
+		&interpolatefilt_vecs,
+		"interpolate",
+		"Interpolate between trackpoints"
+	},
+	{
+		&nuke_vecs,
+		"nuketypes",
+		"Remove all waypoints, tracks, or routes"
+	},
+	{
+		&polygon_vecs,
+		"polygon",
+		"Include Only Points Inside Polygon",
+	},
 	{
 		&position_vecs, 
 		"position",
@@ -56,29 +87,9 @@ fl_vecs_t filter_vec_list[] = {
 		"Include Only Points Within Radius",
 	}, 
 	{
-		&duplicate_vecs, 
-		"duplicate",
-		"Remove Duplicates",
-	},
-        {
-		&arcdist_vecs,
-	        "arc",
-	        "Include Only Points Within Distance of Arc",
-	},
-	{
-		&polygon_vecs,
-		"polygon",
-		"Include Only Points Inside Polygon",
-	},
-	{
 		&routesimple_vecs,
 		"simplify",
 		"Simplify routes",
-	},
-	{
-		&reverse_route_vecs,
-		"reverse",
-		"Reverse stops within routes",
 	},
 	{
 		&sort_vecs,
@@ -91,25 +102,16 @@ fl_vecs_t filter_vec_list[] = {
 		"Save and restore waypoint lists"
 	},
 	{
+		&reverse_route_vecs,
+		"reverse",
+		"Reverse stops within routes",
+	},
+	{
 		&trackfilter_vecs,
 		"track",
 		"Manipulate track lists"
 	},
-	{
-		&discard_vecs,
-		"discard",
-		"Remove unreliable points with high hdop or vdop"
-	},
-	{
-		&nuke_vecs,
-		"nuketypes",
-		"Remove all waypoints, tracks, or routes"
-	},
-	{
-		&interpolatefilt_vecs,
-		"interpolate",
-		"Interpolate between trackpoints"
-	},
+#endif
         {
 		NULL,
 		NULL,

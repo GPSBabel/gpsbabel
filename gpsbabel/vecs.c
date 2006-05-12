@@ -106,6 +106,7 @@ extern ff_vecs_t yahoo_vecs;
 
 static
 vecs_t vec_list[] = {
+#if CSVFMTS_ENABLED
 	/* XCSV must be the first entry in this table. */
 	{
 		&xcsv_vecs,
@@ -113,6 +114,7 @@ vecs_t vec_list[] = {
 		"? Character Separated Values",
 		NULL
 	},
+#endif
 	{
 		&geo_vecs, 
 		"geo",
@@ -513,12 +515,14 @@ vecs_t vec_list[] = {
 		"pdb"
 	},
 #endif
+#if CSVFMTS_ENABLED
 	{
 		&compegps_vecs,
 		"compegps",
 		"CompeGPS data files (.wpt/.trk/.rte)",
 		NULL
 	},
+#endif //CSVFMTS_ENABLED
 	{
 		&yahoo_vecs,
 		"yahoo",
@@ -537,12 +541,14 @@ vecs_t vec_list[] = {
 		"GPS TrackMaker",
 		"gtm"
 	},
+#if CSVFMTS_ENABLED
         {
 		&garmin_txt_vecs,
 		"garmin_txt",
 		"Garmin MapSource - txt (tab delimited)",
 		"txt"
 	},
+#endif // CSVFMTS_ENABLED
         {
 		&axim_gpb_vecs,
 		"axim_gpb",
@@ -668,6 +674,10 @@ find_vec(char *const vecname, char **opts)
 	char *v = xstrdup(vecname);
 	char *svecname = strtok(v, ",");
 	int found = 0;
+
+	if (vecname == NULL) {
+		fatal("A format name is required.\n");
+	}
 
 	while (vec->vec) {
 		arglist_t *ap;

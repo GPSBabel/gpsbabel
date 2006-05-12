@@ -7,7 +7,7 @@ FILES=gpsbabel.exe libexpat.dll ../win32/GPSBabelGUI.exe ../win32/gui-2/README.g
 gpsbabel.exe:  wintesto.cmd
 
 include ../Makefile
-CFLAGS=-Iinclude -I../coldsync -O $(INHIBIT_USB)
+CFLAGS=-Iinclude -I../coldsync -O $(INHIBIT_USB) $(EXTRA_CFLAGS)
 #
 # Must define empty (don't comment out the whole line) if you want to 
 # override INHIBIT_USB from the parent Makefile.

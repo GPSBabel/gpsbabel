@@ -192,7 +192,8 @@ ce_end(void *data, const XML_Char *xml_el)
 static void
 ce_cdata(void *dta, const XML_Char *xml_s, int len)
 {
-	const char *s = xml_convert_to_char_string(xml_s);
+	const char *origs = xml_convert_to_char_string_n(xml_s, &len);
+	const char *s = origs;
 	if (*s != '\n') {
 		char *edatastr;
 		// We buffer up characters in 'cdatastr' until a single <lf> is received
@@ -304,7 +305,7 @@ ce_cdata(void *dta, const XML_Char *xml_s, int len)
 		cdatastr[0] = '\0';
 	}
 
-	xml_free_converted_string(s);
+	xml_free_converted_string(origs);
 }
 
 /* Set up reading the CE input file */

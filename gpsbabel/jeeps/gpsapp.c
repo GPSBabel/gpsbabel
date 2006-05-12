@@ -1713,7 +1713,7 @@ static void GPS_D155_Get(GPS_PWay *way, UC *s)
  * as of this writing for no data type exposes more than 16 bits in the
  * bitmask of categories.  
  */
-static char categories[16][17];
+char gps_categories[16][17];
 /* 
  * Read descriptor s into category number N;
  */
@@ -1728,9 +1728,9 @@ void GPS_D120_Get(int cat_num, char *s)
 	 */
 
 	if (*s) {
-		strncpy(categories[cat_num], s, sizeof (categories[0]));
+		strncpy(gps_categories[cat_num], s, sizeof (gps_categories[0]));
 	} else {
-		snprintf(categories[cat_num], sizeof (categories[0]), 
+		snprintf(gps_categories[cat_num], sizeof (gps_categories[0]), 
 			"Category %d", cat_num+1);
 	}
 }

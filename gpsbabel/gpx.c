@@ -1047,13 +1047,14 @@ gpx_rd_deinit(void)
 #else /* NO_EXPAT */
 
 static void
-gpx_cdata(void *dta, const XML_Char *s, int len)
+gpx_cdata(void *dta, const XML_Char *xml_el, int len)
 {
 	char *estr;
 	int *cdatalen;
 	char **cdata;
 	xml_tag *tmp_tag;
 	size_t slen = strlen(cdatastr.mem);
+	const char *s = xml_convert_to_char_string_n(xml_el, &len);
 
 	vmem_realloc(&cdatastr,  1 + len + slen);
 	estr = ((char *) cdatastr.mem) + slen;
@@ -1085,6 +1086,8 @@ gpx_cdata(void *dta, const XML_Char *s, int len)
 		memcpy( estr, s, len );
 		*(estr+len) = '\0';
 		*cdatalen += len;
+
+	xml_free_converted_string(s);
 }
 
 static void

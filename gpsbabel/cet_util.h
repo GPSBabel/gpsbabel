@@ -121,6 +121,7 @@ void cet_disp_character_set_names(FILE *fout);
  * it.
  */
 
+const char *xml_convert_to_char_string_n(const XML_Char *str, int *nbytes);
 const char *xml_convert_to_char_string(const XML_Char *str);
 void xml_free_converted_string(const char *str);
 

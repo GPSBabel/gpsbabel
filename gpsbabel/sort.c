@@ -21,6 +21,8 @@
 #include "defs.h"
 #include "filterdefs.h"
 
+#if FILTERS_ENABLED
+
 typedef enum {
 	sm_unknown = 0,
 	sm_gcid,
@@ -111,3 +113,4 @@ filter_vecs_t sort_vecs = {
 	NULL,
 	sort_args
 };
+#endif FILTERS_ENABLED

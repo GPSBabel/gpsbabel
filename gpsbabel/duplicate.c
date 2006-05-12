@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "filterdefs.h"
 
+#if FILTERS_ENABLED
 static char *snopt = NULL;
 static char *lcopt = NULL;
 static char *purge_duplicates = NULL;
@@ -256,3 +257,4 @@ filter_vecs_t duplicate_vecs = {
 	NULL,
 	dup_args
 };
+#endif

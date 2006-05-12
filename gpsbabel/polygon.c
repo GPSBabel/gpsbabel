@@ -21,6 +21,7 @@
 #include "defs.h"
 #include "filterdefs.h"
 
+#if FILTERS_ENABLED
 #define MYNAME "Polygon filter"
 
 static char *polyfileopt = NULL;
@@ -295,3 +296,4 @@ filter_vecs_t polygon_vecs = {
 	NULL,
 	polygon_args
 };
+#endif // FILTERS_ENABLED

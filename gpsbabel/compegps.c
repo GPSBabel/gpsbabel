@@ -58,6 +58,7 @@
 #include "defs.h"
 #include "csv_util.h"
 
+#if CSVFMTS_ENABLED
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -637,3 +638,4 @@ ff_vecs_t compegps_vecs = {
 	compegps_args,
 	CET_CHARSET_MS_ANSI, 1
 };
+#endif /* CSVFMTS_ENABLED */

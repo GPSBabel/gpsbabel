@@ -23,6 +23,7 @@
 #include "filterdefs.h"
 #include "grtcirc.h"
 
+#if FILTERS_ENABLED
 #define MYNAME "Interpolate filter"
 
 static char *opt_interval = NULL;
@@ -162,3 +163,4 @@ filter_vecs_t interpolatefilt_vecs = {
 	NULL,
 	interpfilt_args
 };
+#endif FILTERS_ENABLED

@@ -23,6 +23,7 @@
 #include "defs.h"
 #include "filterdefs.h"
 
+#if FILTERS_ENABLED
 #define MYNAME "nukedata"
 
 static char *nukewpts, *nuketrks, *nukertes;
@@ -60,3 +61,4 @@ filter_vecs_t nuke_vecs = {
 	nuke_args
 };
 
+#endif

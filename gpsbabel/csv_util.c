@@ -280,6 +280,7 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
     return (tmp);
 }
 
+#if CSVFMTS_ENABLED
 /*****************************************************************************/
 /* dec_to_intdeg() - convert decimal degrees to integer degreees             */
 /*    usage: i = dec_to_intdeg(31.1234, 1);                                  */
@@ -351,7 +352,7 @@ decdir_to_dec(const char * decdir)
     
     return(rval * sign);
 }
-
+#endif
 
 /*****************************************************************************
  * human_to_dec() - convert a "human-readable" lat and/or lon to decimal
@@ -482,6 +483,7 @@ human_to_dec( const char *instr, double *outlat, double *outlon, int which )
     }
 }
 
+#if CSVFMTS_ENABLED
 /*
  * dec_to_human - convert decimal degrees to human readable
  */
@@ -1514,4 +1516,4 @@ xcsv_data_write(void)
         fprintf (xcsv_file.xcsvfp, "%s%s", ogp->val, xcsv_file.record_delimiter);
     }
 }
-
+#endif

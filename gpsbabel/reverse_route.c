@@ -21,6 +21,8 @@
 #include "defs.h"
 #include "filterdefs.h"
 
+#if FILTERS_ENABLED
+
 #define MYNAME "Route reversal filter"
 
 static
@@ -65,3 +67,4 @@ filter_vecs_t reverse_route_vecs = {
 	NULL,
 	reverse_route_args
 };
+#endif

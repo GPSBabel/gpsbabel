@@ -22,6 +22,8 @@
 #include "filterdefs.h"
 #include "grtcirc.h"
 
+#if FILTERS_ENABLED
+
 #ifndef M_PI
 #  define M_PI 3.14159265358979323846
 #endif
@@ -414,3 +416,4 @@ filter_vecs_t radius_vecs = {
 	NULL,
 	radius_args
 };
+#endif // FILTERS_ENABLED
