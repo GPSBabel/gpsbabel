@@ -219,7 +219,7 @@ static void
 xml_cdata(void *dta, const XML_Char *xml_s, int len)
 {
 	char *estr;
-	const char *s = xml_convert_to_char_string(xml_s);
+	const char *s = xml_convert_to_char_string_n(xml_s, &len);
 
 	vmem_realloc(&cdatastr,  1 + len + strlen(cdatastr.mem));
 	estr = (char *) cdatastr.mem + strlen(cdatastr.mem);

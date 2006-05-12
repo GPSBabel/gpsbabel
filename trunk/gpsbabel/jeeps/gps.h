@@ -33,6 +33,7 @@ extern int32 gps_warning;
 extern int32 gps_error;
 extern int32 gps_user;
 extern int32 gps_show_bytes;
+extern char gps_categories[16][17];
 
 
 typedef struct GPS_SPacket

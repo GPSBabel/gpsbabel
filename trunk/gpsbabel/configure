@@ -804,10 +804,20 @@ if test -n "$ac_init_help"; then
    esac
   cat <<\_ACEOF
 
+Optional Features:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-shapefile=(yes)|no
+  --enable-pdb=(yes)|no
+  --enable-csv=(yes)|no
+  --enable-filters=(yes)|no
+
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
---with-cet=(default,all,minimal)
+  --with-cet=(default,all,minimal)
+  --with-expathdr=DIR   Use this to specify the location of expat.h
+  --with-libexpat=DIR   Use this to specify expat library .
 
 Some influential environment variables:
   CC          C compiler command
@@ -2521,15 +2531,93 @@ _ACEOF
 
 fi
 
+echo "$as_me:$LINENO: checking whether to support shapefiles" >&5
+echo $ECHO_N "checking whether to support shapefiles... $ECHO_C" >&6
+# Check whether --enable-shapefile or --disable-shapefile was given.
+if test "${enable_shapefile+set}" = set; then
+  enableval="$enable_shapefile"
+   enable_shapefile="$enableval"
+else
+  enable_shapefile="yes"
+fi;
+    if test "$enable_shapefile" != "no" ; then
 
 cat >>confdefs.h <<\_ACEOF
 #define SHAPELIB_ENABLED 1
 _ACEOF
 
+	echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+	echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+
+echo "$as_me:$LINENO: checking whether to support Palm/OS pdb formats" >&5
+echo $ECHO_N "checking whether to support Palm/OS pdb formats... $ECHO_C" >&6
+# Check whether --enable-pdb or --disable-pdb was given.
+if test "${enable_pdb+set}" = set; then
+  enableval="$enable_pdb"
+   enable_pdb="$enableval"
+else
+  enable_pdb="yes"
+fi;
+    if test "$enable_pdb" != "no" ; then
 
 cat >>confdefs.h <<\_ACEOF
 #define PDBFMTS_ENABLED 1
 _ACEOF
+
+	echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+	echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+
+echo "$as_me:$LINENO: checking whether to support csv formats" >&5
+echo $ECHO_N "checking whether to support csv formats... $ECHO_C" >&6
+# Check whether --enable-csv or --disable-csv was given.
+if test "${enable_csv+set}" = set; then
+  enableval="$enable_csv"
+   enable_csv="$enableval"
+else
+  enable_csv="yes"
+fi;
+    if test "$enable_csv" != "no" ; then
+
+cat >>confdefs.h <<\_ACEOF
+#define CSVFMTS_ENABLED 1
+_ACEOF
+
+	echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+	echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+
+echo "$as_me:$LINENO: checking whether to support csv formats" >&5
+echo $ECHO_N "checking whether to support csv formats... $ECHO_C" >&6
+# Check whether --enable-filters or --disable-filters was given.
+if test "${enable_filters+set}" = set; then
+  enableval="$enable_filters"
+   enable_filters="$enableval"
+else
+  enable_filters="yes"
+fi;
+    if test "$enable_filters" != "no" ; then
+
+cat >>confdefs.h <<\_ACEOF
+#define FILTERS_ENABLED 1
+_ACEOF
+
+	echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+	echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
 
 
 case "$target" in
@@ -2705,30 +2793,55 @@ echo $ECHO_N "checking for random stuff to make you feel better... $ECHO_C" >&6
 echo "$as_me:$LINENO: result: failed" >&5
 echo "${ECHO_T}failed" >&6
 
-echo "$as_me:$LINENO: checking for libexpat" >&5
-echo $ECHO_N "checking for libexpat... $ECHO_C" >&6
-if test "$with_libexpat" = no ; then
-	echo "$as_me:$LINENO: result: check not done" >&5
-echo "${ECHO_T}check not done" >&6
+
+# Check whether --with-expathdr or --without-expathdr was given.
+if test "${with_expathdr+set}" = set; then
+  withval="$with_expathdr"
+   xpathdr="$withval"
 else
 
-# Special case fink test.
 	case "$target" in
 	*-*-darwin*)
-		if test -f /sw/include/expat.h -a -f /sw/include/expat.h; then
-			CFLAGS="$CFLAGS -I/sw/include"
-			LDFLAGS="$LDFLAGS -L/sw/lib"
-			# Static link against expat archive, not dyn lib.
+		if test -f /sw/include/expat.h ; then
+			xpathdr=/sw/include/
+		fi
+		;;
+	*) 	;;
+	esac
 
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_LIBEXPAT 1
-_ACEOF
 
+fi;
+
+if test "x-$xpathdr " != "x-" ; then
+	CFLAGS="$CFLAGS -I$xpathdr"
+fi
+
+echo "$as_me:$LINENO: checking for libexpat" >&5
+echo $ECHO_N "checking for libexpat... $ECHO_C" >&6
+
+# Check whether --with-libexpat or --without-libexpat was given.
+if test "${with_libexpat+set}" = set; then
+  withval="$with_libexpat"
+   EXPAT_LIB="-L$withval -lexpat"
+else
+
+	case "$target" in
+	*-*-darwin*)
+		if test -f /sw/lib/libexpat.a ; then
 			EXPAT_LIB=/sw/lib/libexpat.a
 		fi
 		;;
 	*)
-		echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
+			EXPAT_LIB=-lexpat
+		;;
+	esac
+
+
+fi;
+echo "$as_me:$LINENO: result: $EXPAT_LIB" >&5
+echo "${ECHO_T}$EXPAT_LIB" >&6
+
+echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
 echo $ECHO_N "checking for XML_ParserCreate in -lexpat... $ECHO_C" >&6
 if test "${ac_cv_lib_expat_XML_ParserCreate+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -2798,14 +2911,12 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBEXPAT 1
 _ACEOF
 
-			EXPAT_LIB="$LDFLAGS -lexpat"
+
+#  [EXPAT_LIB="$LDFLAGS -lexpat"]
+
 fi
 
-
-		;;
-	esac
-fi
-
+echo $EXPAT_LIB
 
 # Checks for header files.
 # AC_HEADER_STDC

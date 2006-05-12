@@ -20,7 +20,7 @@ AC_SUBST(AC_EXEEXT)
 # Checks for libraries.
 AC_CHECK_LIB([m], [cos])
 
-AC_ARG_WITH(cet,[--with-cet=(default,all,minimal)],
+AC_ARG_WITH(cet,[  --with-cet=(default,all,minimal)],
              cet="$withval", cet="default")
 
 if test "$cet" = "all"; then
@@ -30,8 +30,50 @@ if test "$cet" = "default"; then
    AC_DEFINE(CET_WANTED, 0, [0 for most-used character sets])
 fi
 
-AC_DEFINE(SHAPELIB_ENABLED, 1, [1 to enable shapefile support])
-AC_DEFINE(PDBFMTS_ENABLED, 1, [1 to enable Palm PDB support])
+AC_MSG_CHECKING(whether to support shapefiles)
+AC_ARG_ENABLE(shapefile,
+  [  --enable-shapefile=[(yes)|no]],
+  [ enable_shapefile="$enableval"],[enable_shapefile="yes"])
+    if test "$enable_shapefile" != "no" ; then
+        AC_DEFINE(SHAPELIB_ENABLED, 1, [1 to enable shapefile support])
+	AC_MSG_RESULT(yes)
+    else
+	AC_MSG_RESULT(no)
+    fi
+
+AC_MSG_CHECKING(whether to support Palm/OS pdb formats)
+AC_ARG_ENABLE(pdb,
+  [  --enable-pdb=[(yes)|no]],
+  [ enable_pdb="$enableval"],[enable_pdb="yes"])
+    if test "$enable_pdb" != "no" ; then
+        AC_DEFINE(PDBFMTS_ENABLED, 1, [1 to enable Palm PDB support])
+	AC_MSG_RESULT(yes)
+    else
+	AC_MSG_RESULT(no)
+    fi
+
+AC_MSG_CHECKING(whether to support csv formats)
+AC_ARG_ENABLE(csv,
+  [  --enable-csv=[(yes)|no]],
+  [ enable_csv="$enableval"],[enable_csv="yes"])
+    if test "$enable_csv" != "no" ; then
+        AC_DEFINE(CSVFMTS_ENABLED, 1, [1 to enable the CSV formats support])
+	AC_MSG_RESULT(yes)
+    else
+	AC_MSG_RESULT(no)
+    fi
+
+AC_MSG_CHECKING(whether to support csv formats)
+AC_ARG_ENABLE(filters,
+  [  --enable-filters=[(yes)|no]],
+  [ enable_filters="$enableval"],[enable_filters="yes"])
+    if test "$enable_filters" != "no" ; then
+	AC_DEFINE(FILTERS_ENABLED, 1, [1 to enable all the filters.])
+	AC_MSG_RESULT(yes)
+    else
+	AC_MSG_RESULT(no)
+    fi
+
 
 case "$target" in
     *-*-cygwin* | *-*-mingw32*)
@@ -91,31 +133,48 @@ AC_SUBST(GBSER)
 AC_MSG_CHECKING(for random stuff to make you feel better)
 AC_MSG_RESULT(failed)
 
-AC_MSG_CHECKING(for libexpat)
-if test "$with_libexpat" = no ; then
-	AC_MSG_RESULT(check not done)
-else
-
-# Special case fink test.
+AC_ARG_WITH(expathdr,
+  [  --with-expathdr[=DIR]   Use this to specify the location of expat.h],
+  [ xpathdr="$withval" ], [
 	case "$target" in
 	*-*-darwin*)
-		if test -f /sw/include/expat.h -a -f /sw/include/expat.h; then
-			CFLAGS="$CFLAGS -I/sw/include"
-			LDFLAGS="$LDFLAGS -L/sw/lib"
-			# Static link against expat archive, not dyn lib.
-			AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
+		if test -f /sw/include/expat.h ; then
+			xpathdr=/sw/include/
+		fi
+		;;
+	*) 	;;
+	esac
+]
+)
+
+if test "x-$xpathdr " != "x-" ; then
+	CFLAGS="$CFLAGS -I$xpathdr"
+fi
+
+AC_MSG_CHECKING(for libexpat)
+AC_ARG_WITH(libexpat,
+  [  --with-libexpat[=DIR]   Use this to specify expat library .],
+  [ EXPAT_LIB="-L$withval -lexpat"], [
+	case "$target" in
+	*-*-darwin*)
+		if test -f /sw/lib/libexpat.a ; then
 			EXPAT_LIB=/sw/lib/libexpat.a
 		fi
 		;;
 	*)
-		AC_CHECK_LIB([expat], [XML_ParserCreate], 
-			AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
-			[EXPAT_LIB="$LDFLAGS -lexpat"])
-
+			EXPAT_LIB=-lexpat
 		;;
 	esac
-fi
-AC_SUBST(EXPAT_LIB)
+  ]
+)
+AC_MSG_RESULT($EXPAT_LIB)
+
+AC_CHECK_LIB([expat], [XML_ParserCreate], 
+  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
+  AC_SUBST(EXPAT_LIB)
+#  [EXPAT_LIB="$LDFLAGS -lexpat"]
+)
+echo $EXPAT_LIB
 
 # Checks for header files.
 # AC_HEADER_STDC

@@ -19,7 +19,6 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
- 
  /* 
     2005-07-20: implemented interval option from Etienne Tasse
     2005-07-26: implemented range option
@@ -38,6 +37,7 @@
 #include "strptime.h"
 #include "grtcirc.h"
 
+#if FILTERS_ENABLED
 #define MYNAME "trackfilter"
 
 #define TRACKFILTER_PACK_OPTION		"pack"
@@ -870,3 +870,4 @@ filter_vecs_t trackfilter_vecs = {
 };
 
 /******************************************************************************************/
+#endif // FILTERS_ENABLED

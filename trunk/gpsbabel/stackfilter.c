@@ -22,6 +22,8 @@
 #include "defs.h"
 #include "filterdefs.h"
 
+#if FILTERS_ENABLED
+
 #define MYNAME "Stack filter"
 
 static char *opt_push = NULL;
@@ -244,3 +246,5 @@ filter_vecs_t stackfilt_vecs = {
 	stackfilt_exit,
 	stackfilt_args
 };
+
+#endif // FILTERS_ENABLED

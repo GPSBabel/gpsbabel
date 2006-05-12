@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "filterdefs.h"
 
+#if FILTERS_ENABLED
 static char *hdopopt = NULL;
 static char *vdopopt = NULL;
 static char *andopt = NULL;
@@ -114,3 +115,4 @@ filter_vecs_t discard_vecs = {
 	NULL,
 	fix_args
 };
+#endif

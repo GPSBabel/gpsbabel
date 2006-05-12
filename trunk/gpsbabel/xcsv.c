@@ -27,6 +27,7 @@
 #include "defs.h"
 #include "csv_util.h"
 
+#if CSVFMTS_ENABLED
 #define MYNAME	"XCSV"
 #define ISSTOKEN(a,b) (strncmp(a,b, strlen(b)) == 0)
 
@@ -592,3 +593,7 @@ ff_vecs_t xcsv_vecs = {
     xcsv_args,
     CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
+#else
+void xcsv_read_internal_style(const char *style_buf) {}
+void xcsv_setup_internal_style(const char *style_buf) {}
+#endif //CSVFMTS_ENABLED

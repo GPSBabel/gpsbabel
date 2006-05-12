@@ -22,6 +22,7 @@
 #include "filterdefs.h"
 #include "grtcirc.h"
 
+#if FILTERS_ENABLED
 #define MYNAME "Arc filter"
 
 static double pos_dist;
@@ -168,3 +169,4 @@ filter_vecs_t arcdist_vecs = {
 	NULL,
 	arcdist_args
 };
+#endif FILTERS_ENABLED

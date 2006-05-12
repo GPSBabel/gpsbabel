@@ -173,41 +173,15 @@ icon_mapping_t garmin_icon_table[] = {
 	{    35,    36, "White Dot" },
 	{    88,  8219, "Zoo" },
 
-	/* These are experimental and for the custom icons in the new "C"
-	 * models.   As of this writing, firmware problems impair their 
-	 * general use.   
-	 * 
-	 * "Quest" supports more icons than this, but other problems
-	 * prohibit us from running with that model, so we stop at 24.
- 	 * 
-	 * Mapsource doesn't yet know how to do these, so we made the icon
-	 * numbers "-2" to signify that as a problem until we can create
-	 * these in a .mps or .gdb file and see their representation there.
+	/* Custom icons.   The spec reserves 7680-8191 for the custom
+	 * icons on the C units, Quest, 27xx, 276, 296,  and other units.
+	 * Note that firmware problems on the earlier unit result in these
+	 * being mangled, so be sure you're on a version from at least 
+	 * late 2005.
+	 * {    -2,  7680, "Custom 0" },
+	 * ....
+	 * {    -2,  8192, "Custom 511" },
 	 */
-	{    -2,  7680, "Custom 0" },
-	{    -2,  7681, "Custom 1" },
-	{    -2,  7682, "Custom 2" },
-	{    -2,  7683, "Custom 3" },
-	{    -2,  7684, "Custom 4" },
-	{    -2,  7685, "Custom 5" },
-	{    -2,  7686, "Custom 6" },
-	{    -2,  7687, "Custom 7" },
-	{    -2,  7688, "Custom 8" },
-	{    -2,  7689, "Custom 9" },
-	{    -2,  7690, "Custom 10" },
-	{    -2,  7691, "Custom 11" },
-	{    -2,  7692, "Custom 12" },
-	{    -2,  7693, "Custom 13" },
-	{    -2,  7694, "Custom 14" },
-	{    -2,  7695, "Custom 15" },
-	{    -2,  7696, "Custom 16" },
-	{    -2,  7697, "Custom 17" },
-	{    -2,  7698, "Custom 18" },
-	{    -2,  7699, "Custom 19" },
-	{    -2,  7700, "Custom 20" },
-	{    -2,  7701, "Custom 21" },
-	{    -2,  7702, "Custom 22" },
-	{    -2,  7703, "Custom 23" },
 
 	{    92,  8227, "Micro-Cache" },   	/* icon for "Toll Booth" */
 	{    48,   161, "Virtual cache" }, 	/* icon for "Scenic Area" */
@@ -544,11 +518,17 @@ char *
 gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, int *dynamic)
 {
 	icon_mapping_t *i;
-	char custom[] = "Custom 63";
+	char custom[] = "Custom 63 ";
 
 	if ((garmin_format == GDB) && (icon >= 500) && (icon <= 563))
 	{
 		snprintf(custom, sizeof(custom), "Custom %d", icon - 500);
+		*dynamic = 1;
+		return xstrdup(custom);
+	}
+
+  	if ((garmin_format == PCX) && (icon >= 7680) && (icon <= 8191)) {
+		snprintf(custom, sizeof(custom), "Custom %d", icon - 7680);
 		*dynamic = 1;
 		return xstrdup(custom);
 	}
@@ -592,11 +572,16 @@ int gt_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_form
 		return n;
 	}
 
-	if ((garmin_format == GDB) && (case_ignore_strncmp(desc, "Custom ", 7) == 0)) {
-		n = atoi((char *)desc + 7);
-		if ((n >= 0) && (n <= 63))
-			return n+500;
+	if (0 == case_ignore_strncmp(desc, "Custom ", 7)) {
+		int base = 0;
+		if (garmin_format == GDB) base = 500;
+		if (garmin_format == PCX) base = 7680;
+		if (base) {
+			n = atoi(&desc[7]);
+			return n + base;
+		}
 	}
+
 	for (i = garmin_icon_table; i->icon; i++) {
 		if (case_ignore_strcmp(desc,i->icon) == 0) {
 			switch (garmin_format) {

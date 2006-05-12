@@ -1160,20 +1160,85 @@ int cet_fprintf(FILE *stream, const cet_cs_vec_t *src_vec, const char *fmt, ...)
 	return res;
 }
 
+/*
+ * 'str'  points to an array of XML_Chars which may be UNICODE16
+ * words in native endianness.
+ */
 
-const char *xml_convert_to_char_string(const XML_Char *str)
+const char *xml_convert_to_char_string_n(const XML_Char *src, int *n)
 {
 #ifdef XML_UNICODE  
-	return cet_str_uni_to_utf8(str, wcslen(str));
+	char *utf8;
+	char *utf8b;
+	int i, j;
+
+	/* 
+	 * '*n' is the number of source bytes.
+	 * Walk over that, converting each character and 
+	 * discarding it, but tallying 'i' as the number of
+	 * bytes in the destination string.
+	 */
+	i = 0;
+	for (j = 0; j < *n; j++) {
+		i += cet_ucs4_to_utf8(NULL, 6, src[j]);
+	}
+
+	/* Update output byte count in caller. */
+	*n = i;
+	
+	/* Appropriately size (not zero terminated) buffer */
+	utf8 = utf8b = xmalloc(i);
+
+	for (j = 0; utf8 < utf8b + i; j++) {
+		utf8 += cet_ucs4_to_utf8(utf8, 6, src[j]);
+	}
+
+	return utf8b;
+#else 
+	return src;
+#endif 
+}
+
+/*
+ * 'str'  points to NULL terminated string of XML_Chars which 
+ * may be UNICODE16 words in native endianness.
+ */
+
+const char *xml_convert_to_char_string(const XML_Char *src)
+{
+#ifdef XML_UNICODE  
+	char *utf8;
+	char *utf8b;
+	int i, j;
+	const XML_Char *in = src;
+
+	/* Walk source array until we find source terminator */
+	i = 0;
+	for (j = 0; src[j]; j++) {
+		i += cet_ucs4_to_utf8(NULL, 6, src[j]);
+	}
+
+	/* We return a NUL terminated string. */
+	utf8 = utf8b = xmalloc(i + 1);
+	in = src;
+
+	for (j = 0; utf8 < utf8b + i; j++) {
+		utf8 += cet_ucs4_to_utf8(utf8, 6, src[j]);
+	}
+	*utf8 = '\0';
+
+	return utf8b;
+	
 #else
-	return str;
+	return src;
 #endif  
 }
+
 
 void xml_free_converted_string(const char *str)
 {
 #ifdef XML_UNICODE  
-	xfree(str);
+	xfree((void *) str);
 #endif  
 }
 
@@ -1210,7 +1275,7 @@ void xml_free_converted_attrs(const char **attr)
 {
 #ifdef XML_UNICODE  
 	while (attr != NULL && *attr != NULL) {
-		xfree(*attr);
+		xfree((void *)*attr);
 		++attr;
 	}
 #endif
