@@ -358,7 +358,7 @@ main(int argc, char *argv[])
 			case 'p':
 				optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
 				inifile_done(global_opts.inifile);
-				if (strcmp(optarg, "") == 0)	/* from GUI to preserve inconsistent options */
+				if (!optarg || strcmp(optarg, "") == 0)	/* from GUI to preserve inconsistent options */
 					global_opts.inifile = NULL;
 				else
 					global_opts.inifile = inifile_init(optarg, MYNAME);
