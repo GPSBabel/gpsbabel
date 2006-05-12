@@ -163,4 +163,4 @@ filter_vecs_t interpolatefilt_vecs = {
 	NULL,
 	interpfilt_args
 };
-#endif FILTERS_ENABLED
+#endif // FILTERS_ENABLED

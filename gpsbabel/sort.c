@@ -113,4 +113,4 @@ filter_vecs_t sort_vecs = {
 	NULL,
 	sort_args
 };
-#endif FILTERS_ENABLED
+#endif // FILTERS_ENABLED

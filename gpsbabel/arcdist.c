@@ -169,4 +169,4 @@ filter_vecs_t arcdist_vecs = {
 	NULL,
 	arcdist_args
 };
-#endif FILTERS_ENABLED
+#endif // FILTERS_ENABLED
