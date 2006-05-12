@@ -356,8 +356,8 @@ typedef struct {
 	double	distance_meters;
 	double	max_alt;
 	double	min_alt;
-	double	max_spd;
-	double	min_spd;
+	double	max_spd;	/* Meters/sec */
+	double	min_spd;	/* Meters/sec */
 	time_t	start;		/* Min time */
 	time_t	end;		/* Max time */
 } computed_trkdata;
@@ -552,6 +552,7 @@ typedef enum {
 	ff_cap_read = 1,
 	ff_cap_write = 2
 } ff_cap;
+
 #define FF_CAP_RW_ALL \
 	{ ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write }
 
@@ -744,6 +745,19 @@ double degrees2ddmm(double deg_val);
  */
 unsigned long get_crc32(const void * data, int datalen);
 unsigned long get_crc32_s(const void * data);
+
+/*
+ *  From units.c
+ */
+typedef enum {
+	units_unknown = 0,
+	units_statue = 1,
+	units_metric =2
+} fmt_units;
+
+int    fmt_setunits(fmt_units);
+double fmt_distance(const double, char **tag);
+double fmt_speed(const double, char **tag);
 
 /*
  * From gbsleep.c
