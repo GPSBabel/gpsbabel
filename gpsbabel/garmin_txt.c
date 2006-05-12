@@ -501,8 +501,8 @@ print_categories(gbuint16 categories)
 				
 			fprintf(fout, "%s", (count++ > 0) ? "," : "");
 			if (c == NULL)
-//				fprintf(fout, "Category %d", i+1);
-				fprintf(fout, "%s", gps_categories[i]);
+				fprintf(fout, "Category %d", i+1);
+//				fprintf(fout, "%s", gps_categories[i]);
 			else
 				fprintf(fout, "%s", c);
 			
