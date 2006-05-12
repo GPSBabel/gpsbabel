@@ -187,6 +187,7 @@ pid_to_model_t pid_to_model[] =
 	{ mm_sportrak, 44, "Sportrak Topo" },
 	{ mm_sportrak, 45, "Mystic" },
 	{ mm_meridian, 46, "MobileMapper" },
+	{ mm_meridian, 110, "Explorist 100" },
 	{ mm_unknown, 0, NULL }
 };
 
