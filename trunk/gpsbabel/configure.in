@@ -147,7 +147,7 @@ AC_ARG_WITH(expathdr,
 ]
 )
 
-if test "x-$xpathdr " != "x-" ; then
+if test "x-$xpathdr" != "x-" ; then
 	CFLAGS="$CFLAGS -I$xpathdr"
 fi
 

@@ -2812,7 +2812,7 @@ else
 
 fi;
 
-if test "x-$xpathdr " != "x-" ; then
+if test "x-$xpathdr" != "x-" ; then
 	CFLAGS="$CFLAGS -I$xpathdr"
 fi
 
