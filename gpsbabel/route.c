@@ -468,8 +468,8 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 	first.latitude = 0;
 	first.longitude = 0;
 	first.creation_time = 0;
-	tdata->min_alt = 999999;
-	
+	tdata->min_alt =  999999999;
+	tdata->max_alt = -999999999;
 
 	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
 		time_t timed;
@@ -490,16 +490,16 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 		dist = radtometers(gcdist(plat, plon, tlat, tlon));
 
 		/* 
-		 * Avoid that 6300 miles as we move from 0,0.
+		 * Avoid that 6300 mile jump as we move from 0,0.
 		 */
 		if (plat && plon) {
 			tdata->distance_meters += dist;
 		}
 
 		/*
-		 * If we've moved, recompute speed.
+		 * If we've moved as much as a meter, recompute speed.
 		 */
-		if (timed) {
+		if (timed && (dist > 1)) {
 			this->speed = dist / labs(timed);
 			if (this->speed > tdata->max_spd) {
 				tdata->max_spd = this->speed;

@@ -11,11 +11,7 @@ DOCVERSION=development
 # VERSIONU=1_2_7
 # VERSIOND=1.2.7
 
-# If you do not have libexpat and you have no use for reading any input
-# type that is XML-ish (i.e. gpx or geocaching.com's/loc) you can uncomment
-# INHIBIT_EXPAT and coment out LIBEXPAT on just to get a build working quickly.
-# INHIBIT_EXPAT=-DNO_EXPAT
-LIBEXPAT=@EXPAT_LIB@  # -lefence
+#EXTRA_LIBS -lefence
 
 # Space is significant, because MSVC wants no space between switch and arg (-Fofoo.o)
 # but cc/gcc does:
@@ -31,7 +27,7 @@ OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
 DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
 GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I. -I@srcdir@/coldsync \
-	$(INHIBIT_USB) $(OPTIMIZATION) @CFLAGS@
+	$(OPTIMIZATION) @CFLAGS@
 INSTALL_TARGETDIR=/usr/local/
 
 # OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
@@ -73,7 +69,7 @@ SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
           uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
-	  inifile.o garmin_fs.o gbsleep.o \
+	  inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS)
 
@@ -89,7 +85,7 @@ WEB=../babelweb/
 all: gpsbabel@EXEEXT@
 
 gpsbabel@EXEEXT@: $(OBJS)
-	@CC@  $(CFLAGS) $(OBJS) @LIBS@ @USB_LIBS@ $(LIBEXPAT) $(OUTPUT_SWITCH)$@
+	@CC@  $(CFLAGS) $(OBJS) @LIBS@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 Makefile: Makefile.in config.status
 	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
