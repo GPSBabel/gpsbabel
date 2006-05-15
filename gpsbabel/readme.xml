@@ -3,8 +3,8 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
 
-<book>
-   <bookinfo>
+<book id="GPSBabel_Documentation_Book">
+   <bookinfo id="GPSBabel_Documentation">
       <title>GPSBabel Documentation</title>
 <!--
       <revhistory>
@@ -40,8 +40,8 @@
    </bookinfo><?formats?>
    <preface>
       <title>Introduction</title>
-      <section>
-         <title>THE PROBLEM</title>
+      <section id="The_Problem">
+         <title>The Problem</title>
          <para> There are simply too many gratuitously different file formats
 to hold waypoint, track, and route information in various programs
 used by computers.  GPX (http://www.topografix.com/gpx.asp) defines a
@@ -62,8 +62,8 @@ mechanism.
 </para>
       </section>
    </preface>
-   <chapter>
-      <title>GETTING IT  and BUILDING IT</title>
+   <chapter id="Getting_and_Building">
+      <title>Getting it  and Building it</title>
       <para> GPSBabel is distributed in source format that will work on
 about any operating system and as ready-to-run binaries for some
 operating systems, notably Windows.  See the "OS-Specific notes" at
@@ -81,9 +81,9 @@ the compiler where it is or install it in a sensible place.  Expat can
 be downloaded from <ulink url="http://expat.sourceforge.net">http://expat.sourceforge.net</ulink> and is part of Apache so it's very portable.
 </para>
    </chapter>
-   <chapter>
-      <title>USAGE</title>
-      <sect1>
+   <chapter id="Usage">
+      <title>Usage</title>
+      <sect1 id="Invocation">
          <title>Invocation</title>
          <para>Invocation was meant to be flexible.  Unfortunately,
          that can sometimes lead to unwieldy command lines.</para>
@@ -180,7 +180,7 @@ merged data to multiple destinations.
       </sect1>
    </chapter>
    <chapter id="formats">
-    <title>THE FORMATS</title>
+    <title>The Formats</title>
     <section id="an1">
       <sectioninfo>
 	<subtitle>DeLorme format</subtitle>
@@ -346,7 +346,7 @@ name.</para>
 6371000.0 meters for the earth radius. My be this can help to reduce
 differences.</para>
       <para/>
-      <example>
+      <example id="sample_bcr_command">
 	<title>Sample BCR command with all options</title>
 	<screen format="linespecific">gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr </screen>
       </example>
@@ -624,7 +624,7 @@ be solved with the options 'date' and 'time'.
       <para><option>temp</option> -  output unit for temperature values, C (=celsius) or F (=fahrenheit)</para>
       <para><option>time</option> -  input/output time format (Windows-like For example, "hh:mm:ss xx")</para>
       <para><option>utc</option> -   write timestamps x hours relative to UTC</para>
-      <example>
+      <example id="all_garmin_txt_options">
         <title>Command showing garmin_txt output with all options</title>
 	<screen format="linespecific">gpsbabel -i garmin_txt,date="MM/DD/YYYY",time="hh:mm:ss xx" \
    -f in.txt \
@@ -1732,7 +1732,7 @@ WHITESPACE, 1 = WHITESPACE OK). </para>
 whether or not to force uppercase  in shortnames. (0 = LEAVE AS IS, 1
 = UPPERCASE ALL). NOTE: sn* options require use of the '-s' command
 line option.</para>
-      <example>
+      <example id="xcsv_command_options">
 	<title>xcsv Command options</title>
 	<screen format="linespecific"> gpsbabel -i xcsv,style=foo.style -f foo \
  -o xcsv,style=bar.style \
@@ -1810,7 +1810,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          meters (<parameter moreinfo="none">distance=1m</parameter>).
          The default is zero feet, essentially a duplicate position.
          </para>
-         <example>
+         <example id="posn_to_suppress_close_points">
             <title>Using position filter to suppress close points</title>
             <screen format="linespecific">gpsbabel -i geo -f 1.loc -f 2.loc -x position,distance=1f  	\
          -o mapsend -F 3.wpt</screen>
@@ -1835,7 +1835,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          specified to reverse the effect of the filter, so that points
          further from the center are kept and closer points are
          discarded.</para>
-         <example>
+         <example id="radius_to_find_points_close">
             <title>Using radius filter to identify points close to a given point </title>
             <screen format="linespecific">gpsbabel -i geo -f 1.loc \
    -x radius,distance=1.5M,lat=30.0,lon=-90.0   \	         
@@ -1854,7 +1854,7 @@ mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
          precision of 6 decimals).  This filter supports two options
          that specify how duplicates will be recognized, "<parameter moreinfo="none">shortname</parameter>" and "<parameter moreinfo="none">location</parameter>".  Generally, at least
          one of these options is REQUIRED.  </para>
-         <example>
+         <example id="duplicate_to_suppress_points">
             <title>Using duplicate filter to suppress points with same name and locations</title>
             <screen format="linespecific"> gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname  \
 	         -o gpx -F merged_with_no_dupes.gpx</screen>
