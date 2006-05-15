@@ -1,6 +1,8 @@
 /*
     National Geographic Topo! TPG file support (Waypoints/Routes)
     Contributed to gpsbabel by Alex Mottram
+
+    For Topo! version 2.x.  Routes are currently not implemented.
     
     Copyright (C) 2002 Alex Mottram, geo_alexm at cox-internet.com
 
