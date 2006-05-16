@@ -538,7 +538,7 @@ typedef struct arglist {
 typedef enum {
 	ff_type_file = 1,	/* normal format: useful to a GUI. */
 	ff_type_internal,	/* fmt not useful with default options */
-	ff_type_serial,		/* format describes a serial protoco (GUI can display port names) */
+	ff_type_serial		/* format describes a serial protocol (GUI can display port names) */
 } ff_type;
 
 typedef enum {
