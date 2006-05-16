@@ -724,14 +724,14 @@ termwrite(char *obuf, int size)
  */
 static
 arglist_t mag_sargs[] = {
-	{"baud", &bs, "Numeric value of bitrate (baud=4800)", NULL,
-		ARGTYPE_INT, ARG_NOMINMAX },
-	{"maxcmts", &cmts, "Max number of comments to write (maxcmts=200)", 
-		NULL, ARGTYPE_INT, ARG_NOMINMAX },
-	{"noack", &noack, "Suppress use of handshaking in name of speed",
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING,
 		ARG_NOMINMAX },
+	{"maxcmts", &cmts, "Max number of comments to write (maxcmts=200)", 
+		NULL, ARGTYPE_INT, ARG_NOMINMAX },
+	{"baud", &bs, "Numeric value of bitrate (baud=4800)", NULL,
+		ARGTYPE_INT, ARG_NOMINMAX },
+	{"noack", &noack, "Suppress use of handshaking in name of speed",
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"nukewpt", &nukewpt, "Delete all waypoints", NULL, ARGTYPE_BOOL,
 		ARG_NOMINMAX },
 	ARG_TERMINATOR
@@ -743,8 +743,6 @@ arglist_t mag_fargs[] = {
 		ARG_NOMINMAX },
 	{"maxcmts", &cmts, "Max number of comments to write (maxcmts=200)", 
 		NULL, ARGTYPE_INT, ARG_NOMINMAX },
-	{"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING,
-		ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
