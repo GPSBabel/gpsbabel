@@ -8,6 +8,8 @@
 
 <xsl:param name="html.stylesheet">http://www.gpsbabel.org/style3.css</xsl:param>
 <xsl:param name="use.id.as.filename">1</xsl:param>
+<xsl:param name="chunk.first.sections">1</xsl:param>
+<xsl:param name="toc.section.depth">1</xsl:param>
 
 <xsl:template name="user.header.navigation">
   <xsl:text>
