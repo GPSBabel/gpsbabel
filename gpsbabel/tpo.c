@@ -91,7 +91,7 @@ arglist_t tpo_args[] = {
 
 static FILE *tpo_file_in;
 static FILE *tpo_file_out;
-static short_handle mkshort_handle;
+//static short_handle mkshort_handle;
 
 static double output_track_lon_scale;
 static double output_track_lat_scale;
@@ -152,7 +152,7 @@ static void
 tpo_check_version_string()
 {
 
-	char string_size;
+	unsigned char string_size;
 	char* string_buffer;
 	char* v3_id_string = "TOPO! Ver";
 
@@ -161,7 +161,7 @@ tpo_check_version_string()
 	string_buffer = xmalloc(string_size+1);
 	tpo_fread(string_buffer, 1, string_size, tpo_file_in);
 	
-	/* terminate the strig */
+	/* terminate the string */
 	string_buffer[string_size] = 0;
 
 	/* check for the presence of a 3.0-style id string */
@@ -489,7 +489,7 @@ int tpo_read_32()
 //
 int tpo_read_int()
 {
-    int val = 0;     // Init to zero to clear higher bytes
+    unsigned char val;
 
 
     val = tpo_read_8();
@@ -508,7 +508,7 @@ int tpo_read_int()
 
         default:    // 8-bit value
 //printf("Found 8-bit value: %x\n", val);
-            return( val );
+            return( (int)val );
             break;
     }
 }
@@ -665,13 +665,13 @@ void tpo_process_tracks(void)
         name_length = tpo_read_int();
 
         if (name_length) {
-            track_name = malloc(name_length+1);
+            track_name = xmalloc(name_length+1);
             track_name[0] = '\0';
             tpo_fread(track_name, 1, name_length, tpo_file_in);
             track_name[name_length] = '\0';  // Terminator
         }
         else {  // Assign a generic track name
-            track_name = malloc(15);
+            track_name = xmalloc(15);
             sprintf(track_name, "TRK %d", ii+1);
         }
 		track_temp->rte_name = track_name;
@@ -694,7 +694,7 @@ void tpo_process_tracks(void)
         // proper place for the next track.
 
         // Read the track bytes into a buffer
-        buf = malloc(track_byte_count);
+        buf = xmalloc(track_byte_count);
         tpo_fread(buf, 1, track_byte_count, tpo_file_in);
 
         latscale=0;
@@ -779,7 +779,7 @@ void tpo_process_tracks(void)
         }
         track_temp->rte_waypt_ct = waypoint_count;
 	
-        free(buf);
+        xfree(buf);
     }
 //printf("\n");
 }
@@ -821,7 +821,7 @@ void tpo_process_waypoints(void)
 
     // Fetch storage for the waypoint index (needed later for
     // routes)
-    tpo_wp_index = (waypoint **)malloc(sizeof(waypoint *) * waypoint_count);
+    tpo_wp_index = (waypoint **)xmalloc(sizeof(waypoint *) * waypoint_count);
 
     if (waypoint_count == 0)
         return;
@@ -847,13 +847,13 @@ void tpo_process_waypoints(void)
         // Fetch name length
         name_length = tpo_read_int();
         if (name_length) {
-            waypoint_name = malloc(name_length+1);
+            waypoint_name = xmalloc(name_length+1);
             waypoint_name[0] = '\0';
             tpo_fread(waypoint_name, 1, name_length, tpo_file_in);
             waypoint_name[name_length] = '\0';  // Terminator
         }
         else {  // Assign a generic waypoint name
-            waypoint_name = malloc(15);
+            waypoint_name = xmalloc(15);
             sprintf(waypoint_name, "WPT %d", ii+1);
         }
 //printf("Waypoint Name: %s\n", waypoint_name);
@@ -883,7 +883,7 @@ void tpo_process_waypoints(void)
         if (name_length) {
             char *comment;
  
-            comment = malloc(name_length+1);
+            comment = xmalloc(name_length+1);
             comment[0] = '\0';
             tpo_fread(comment, 1, name_length, tpo_file_in);
             comment[name_length] = '\0';  // Terminator
@@ -971,7 +971,7 @@ void tpo_process_map_notes(void)
         waypoint_temp = tpo_convert_ll(lat, lon);
 
         // Assign a generic waypoint name
-        waypoint_name = malloc(15);
+        waypoint_name = xmalloc(15);
         sprintf(waypoint_name, "NOTE %d", ii+1);
 //printf("Waypoint Name: %s\t\t", waypoint_name);
 		waypoint_temp->shortname = waypoint_name;
@@ -991,7 +991,7 @@ void tpo_process_map_notes(void)
         if (name_length) {
             char *comment;
  
-            comment = malloc(name_length+1);
+            comment = xmalloc(name_length+1);
             comment[0] = '\0';
             tpo_fread(comment, 1, name_length, tpo_file_in);
             comment[name_length] = '\0';  // Terminator
@@ -1012,7 +1012,7 @@ void tpo_process_map_notes(void)
         if (name_length) {
             char *notes;
  
-            notes = malloc(name_length+1);
+            notes = xmalloc(name_length+1);
             notes[0] = '\0';
             tpo_fread(notes, 1, name_length, tpo_file_in);
             notes[name_length] = '\0';  // Terminator
@@ -1027,7 +1027,7 @@ void tpo_process_map_notes(void)
         if (name_length) {
             char *notes;
  
-            notes = malloc(name_length+1);
+            notes = xmalloc(name_length+1);
             notes[0] = '\0';
             tpo_fread(notes, 1, name_length, tpo_file_in);
             notes[name_length] = '\0';  // Terminator
@@ -1108,7 +1108,7 @@ void tpo_process_symbols(void)
         waypoint_temp = tpo_convert_ll(lat, lon);
 
         // Assign a generic waypoint name
-        waypoint_name = malloc(15);
+        waypoint_name = xmalloc(15);
         sprintf(waypoint_name, "SYM %d", ii+1);
 //printf("Waypoint Name: %s\n", waypoint_name);
 		waypoint_temp->shortname = waypoint_name;
@@ -1173,7 +1173,7 @@ void tpo_process_text_labels(void)
         waypoint_temp = tpo_convert_ll(lat, lon);
 
         // Assign a generic waypoint name
-        waypoint_name = malloc(15);
+        waypoint_name = xmalloc(15);
         sprintf(waypoint_name, "TXT %d", ii+1);
 //printf("Waypoint Name: %s\t\t", waypoint_name);
 		waypoint_temp->shortname = waypoint_name;
@@ -1189,7 +1189,7 @@ void tpo_process_text_labels(void)
         if (name_length) {
             char *comment;
  
-            comment = malloc(name_length+1);
+            comment = xmalloc(name_length+1);
             comment[0] = '\0';
             tpo_fread(comment, 1, name_length, tpo_file_in);
             comment[name_length] = '\0';  // Terminator
@@ -1263,13 +1263,13 @@ void tpo_process_routes(void)
         // Fetch name length 
         name_length = tpo_read_int();
         if (name_length) {
-            route_name = malloc(name_length+1);
+            route_name = xmalloc(name_length+1);
             route_name[0] = '\0';
             tpo_fread(route_name, 1, name_length, tpo_file_in);
             route_name[name_length] = '\0';  // Terminator
         }
         else {  // Assign a generic route name
-            route_name = malloc(15);
+            route_name = xmalloc(15);
             sprintf(route_name, "RTE %d", ii+1);
         }
         route_temp->rte_name = route_name;
@@ -1313,11 +1313,15 @@ void tpo_process_routes(void)
 
     // Free the waypoint index, we don't need it anymore.
     for (ii = 0; ii < tpo_index_ptr; ii++) {
-        free(tpo_wp_index[ii]);
+        if (tpo_wp_index[ii]->shortname)
+            xfree(tpo_wp_index[ii]->shortname);
+        if (tpo_wp_index[ii]->description)
+            xfree(tpo_wp_index[ii]->description);
+        xfree(tpo_wp_index[ii]);
     }
 
     // Free the index array itself
-    free(tpo_wp_index);
+    xfree(tpo_wp_index);
 }
 
 
@@ -1441,7 +1445,7 @@ tpo_read(void)
    to add support. National Geographic MapXchange (http://maps.nationalgeographic.com/topo/search.cfm) 
    is a good source of .tpo files.
    2. Run gpsbabel using the "dumpheader" option of the TPO format converter, and
-   specifying a dummy ouput file. For example:
+   specifying a dummy output file. For example:
      gpsbabel -t -i tpo,dumpheader=1 -f sample_file.tpo -o csv -F dummy.txt
    This will write a snippet of C code containing the header bytes to the shell window.  
    3. Add a new if() clause to tpo_write_file_header(). Copy the header bytes definition 
