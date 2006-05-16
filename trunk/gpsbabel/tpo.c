@@ -434,7 +434,7 @@ void tpo_read_2_x(void)
 //
 int tpo_read_8()
 {
-    int val = 0;
+    char val = 0;
 
     tpo_fread(&val, 1, 1, tpo_file_in);
     return(val);
