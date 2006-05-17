@@ -97,7 +97,8 @@ extern ff_vecs_t tiger_vecs;
 extern ff_vecs_t tmpro_vecs;
 extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t tpg_vecs;
-extern ff_vecs_t tpo_vecs;
+extern ff_vecs_t tpo2_vecs;
+extern ff_vecs_t tpo3_vecs;
 extern ff_vecs_t unicsv_vecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t vitosmt_vecs;
@@ -227,9 +228,15 @@ vecs_t vec_list[] = {
 		"tpg"
 	},
 	{
-		&tpo_vecs,
-		"tpo",
-		"National Geographic Topo .tpo",
+		&tpo2_vecs,
+		"tpo2",
+		"National Geographic Topo 2.x .tpo",
+		"tpo"
+	},
+	{
+		&tpo3_vecs,
+		"tpo3",
+		"National Geographic Topo 3.x .tpo",
 		"tpo"
 	},
 	{
