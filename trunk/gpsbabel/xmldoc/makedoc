@@ -113,8 +113,9 @@ END
      $going = 1;
    }
    elsif ($going && ($line[0] eq 'option')) {
+     $nid = 'fmt_'.$id.'_o_'.$line[2];
      print FILE <<END;
-  <section id="fmt_$id_o_$line[2]">
+  <section id="$nid">
     <title>$line[2] option</title>
     <para>
       $line[3].
