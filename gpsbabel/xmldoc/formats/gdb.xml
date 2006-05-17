@@ -1,22 +1,11 @@
-
-      
-      
-      <para> Support for the "Garmin GPS Database" format used by
-default in MapSource versions since release 6.0. By default we create
-gdb's of version 2.  Version 2 is used in Mapsource 6.3 and 6.5.
+<para> 
+Support for the "Garmin GPS Database" format used by
+default in MapSource versions since release 6.0. By default GPSBabel creates
+gdb files of version 2.  Version 2 is used in Mapsource 6.3 and 6.5.
 </para>
-      <para> Garmin GPS database is an undocumented file format. The
-basic info for this module comes from the existing MapSource
+<para> 
+Garmin GPS database is an undocumented file format. The
+basic info for this module came from the existing MapSource
 conversion code.
 </para>
-      <para> Additional options:</para>
-      <para>
-            <option>ver</option> - set the data format version of the
-output file (currently 1 or 2); 2 is our default.  </para>
-      <para>
-            <option>via</option> - Drop hidden route points (means
-calculated stuff)</para>
-      <para>
-            <option>cat</option> - default category on output
-(1..16)</para>
     
