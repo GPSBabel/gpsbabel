@@ -73,6 +73,7 @@ print FORMATS qq(<!-- This document is automatically generated. -->\n);
 @formats = `gpsbabel -^3`;
 
 $going = 0;
+$dooptions = 0;
 
 for (@formats) {
    chomp;
@@ -87,9 +88,12 @@ for (@formats) {
        close FILE;
        $going = 0;
      }
+     if ( $line[5] eq 'xcsv' ) {
+       $line[0] = 'file';
+     }
    }
 
-   elsif (($line[0] eq 'file') || ($line[0] eq 'serial')) {
+   if (($line[0] eq 'file') || ($line[0] eq 'serial')) {
      if ($going) {
        print FILE "</section>\n";
        close FILE;
@@ -111,8 +115,20 @@ END
      print FILE expandoptions($line[1]);
      include($id,'formats');
      $going = 1;
+     $dooptions = 1;
+     if ( defined($line[5]) && ($line[5] ne $line[2]) ) {
+       print FILE <<END;
+<para>
+This format is derived from the <link linkend="fmt_$line[5]">$line[5]</link>
+format, so it has all of the same objects as that format.
+</para>
+END
+       if ($line[5] eq 'xcsv' ) {
+         $dooptions=0;
+       }
+     }
    }
-   elsif ($going && ($line[0] eq 'option')) {
+   elsif ($going && $dooptions && ($line[0] eq 'option')) {
      $nid = 'fmt_'.$id.'_o_'.$line[2];
      print FILE <<END;
   <section id="$nid">
