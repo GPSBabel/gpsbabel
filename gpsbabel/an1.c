@@ -61,7 +61,7 @@ arglist_t an1_args[] = {
 	{"type", &output_type, "Type of .an1 file (see README)", 
 		"", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"road", &road_changes, "Road type changes (see README)",
-		"", ARGTYPE_HIDDEN | ARGTYPE_STRING, ARG_NOMINMAX },
+		"", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"nogc", &nogc, "Do not add geocache data to description",
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"deficon", &opt_symbol, "Symbol to use for point data",
