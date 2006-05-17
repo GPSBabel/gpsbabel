@@ -120,7 +120,7 @@ END
        print FILE <<END;
 <para>
 This format is derived from the <link linkend="fmt_$line[5]">$line[5]</link>
-format, so it has all of the same objects as that format.
+format, so it has all of the same options as that format.
 </para>
 END
        if ($line[5] eq 'xcsv' ) {
