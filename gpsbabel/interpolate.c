@@ -30,6 +30,7 @@ static char *opt_interval = NULL;
 int interval = 0;
 static char *opt_dist = NULL;
 double dist = 0;
+static char *opt_route = NULL;
 
 static
 arglist_t interpfilt_args[] = {
@@ -39,6 +40,8 @@ arglist_t interpfilt_args[] = {
 	{"distance", &opt_dist, "Distance interval in miles or kilometers", 
 		NULL, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_STRING, 
 		ARG_NOMINMAX },
+	{"route", &opt_route, "Interpolate routes instead", NULL,
+		ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -56,9 +59,15 @@ interpfilt_process(void)
 	double distn;
 	double curdist;
 	double rt1, rn1, rt2, rn2;
-	
-	track_backup( &count, &backuproute );
-        route_flush_all_tracks();
+
+        if ( opt_route ) {
+		route_backup( &count, &backuproute );
+		route_flush_all_routes();
+	}
+	else {	
+		track_backup( &count, &backuproute );
+	        route_flush_all_tracks();
+	}
         QUEUE_FOR_EACH( backuproute, elem, tmp )
 	{
 		route_head *rte_old = (route_head *)elem;
@@ -68,7 +77,12 @@ interpfilt_process(void)
 		rte_new->rte_desc = xstrdup( rte_old->rte_desc );
 		rte_new->fs = fs_chain_copy( rte_old->fs );
 		rte_new->rte_num = rte_old->rte_num;
-		track_add_head( rte_new );
+		if ( opt_route ) {
+			route_add_head( rte_new );
+		}
+		else {
+			track_add_head( rte_new );
+		}
 		first = 1;
 		QUEUE_FOR_EACH( &rte_old->waypoint_list, elem2, tmp2 ) 
 		{
@@ -93,7 +107,10 @@ interpfilt_process(void)
 					  (double)(wpt->creation_time-time1),
 					  &wpt_new->latitude,
 					  &wpt_new->longitude );
-				track_add_wpt( rte_new, wpt_new);
+				if (opt_route)
+					route_add_wpt( rte_new, wpt_new);
+				else
+					track_add_wpt( rte_new, wpt_new);
 			    }
 			}
 			else if ( opt_dist ) {
@@ -118,12 +135,20 @@ interpfilt_process(void)
 					  distn/curdist,
 					  &wpt_new->latitude,
 					  &wpt_new->longitude );
-				track_add_wpt( rte_new, wpt_new);
+				if (opt_route)
+					route_add_wpt( rte_new, wpt_new );
+				else
+					track_add_wpt( rte_new, wpt_new);
 			      }
 			    }
 			}
 		    }
-		    track_add_wpt( rte_new, waypt_dupe(wpt));
+		    if ( opt_route ) {
+			    route_add_wpt( rte_new, waypt_dupe(wpt));
+		    }
+		    else {
+			    track_add_wpt( rte_new, waypt_dupe(wpt));
+		    }
 		    
 		    lat1 = wpt->latitude;
 		    lon1 = wpt->longitude;
@@ -140,6 +165,9 @@ interpfilt_init(const char *args) {
         char *fm;
 	if ( opt_interval && opt_dist ) {
 		fatal( MYNAME ": Can't interpolate on both time and distance.\n");
+	}
+	else if (opt_interval && opt_route ) {
+		fatal( MYNAME ": Can't interpolate routes on time.\n" );
 	}
 	else if ( opt_interval ) {
 		interval = atoi(opt_interval);
