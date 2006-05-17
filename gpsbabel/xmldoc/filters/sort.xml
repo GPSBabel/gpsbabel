@@ -1,0 +1,8 @@
+
+         
+         <para> This simple filter allows you to alphabetize waypoints
+         by shortname or by description.  It has a special suboption
+         (gcid) to sort by geocaching.com waypoint ID's when the input
+         comes from a GPX file that has GC numbers in it.
+</para>
+      

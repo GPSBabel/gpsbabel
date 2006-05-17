@@ -1,0 +1,7 @@
+
+      
+      
+      <para>geocaching.com spits up geocaching.loc files that are
+XML-ish but not quite GPX.  Becuase it's so close to GPX, this format
+is very well supported.</para>
+    

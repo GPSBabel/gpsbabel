@@ -1,0 +1,9 @@
+
+      
+      
+      <para>The SD card format used by the Magellan Explorist 400,
+500, and 600.  It's identical to the Magellan SD format used by
+Meridian, but allows longer waypoint names.</para>
+      <para> You should name any file created with this format with a
+".upt" extension so the firmware can read it.</para>
+    
