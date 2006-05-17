@@ -125,20 +125,22 @@ dep:
 	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
 	echo Edit Makefile.in and bring in /tmp/dep
 
-$(WEB)/htmldoc-$(DOCVERSION)/readme.html: readme.xml babelmain.xsl
-	xmlwf $<   			#check for well-formedness
-	xmllint --noout --valid $<    	#validate
+$(WEB)/htmldoc-$(DOCVERSION)/readme.html: FORCE
+	xmlwf xmldoc/readme.xml		#check for well-formedness
+	xmllint --noout --valid xmldoc/readme.xml    	#validate
 	xsltproc \
 	 --stringparam base.dir "$(WEB)/htmldoc-$(DOCVERSION)/" \
 	 --stringparam root.filename "readme" \
-	 babelmain.xsl \
-	 $<
+	 xmldoc/babelmain.xsl \
+	 xmldoc/readme.xml
 	tools/mkcapabilities
 
 readme.txt: readme.html
 	lynx -nolist -dump readme.html  > $@
 
 doc: $(WEB)/htmldoc-$(DOCVERSION)/readme.html # readme.txt
+
+FORCE:
 
 release: 
 	cvs commit
