@@ -216,15 +216,15 @@ compare ${TMPDIR}/tpg.mxf ${TMPDIR}/topo.mxf
 #
 # Version 2.x tests
 rm -f ${TMPDIR}/tpo-sample1.gpx ${TMPDIR}/tpo-sample2.tpo
-${PNAME} -t -i tpo -f reference/track/tpo-sample1.tpo -o gpx -F ${TMPDIR}/tpo-sample1.gpx
+${PNAME} -t -i tpo2 -f reference/track/tpo-sample1.tpo -o gpx -F ${TMPDIR}/tpo-sample1.gpx
 compare ${TMPDIR}/tpo-sample1.gpx reference/track/tpo-sample1.gpx
-#${PNAME} -t -i gpx -f reference/track/tpo-sample2.gpx -o tpo -F ${TMPDIR}/tpo-sample2.tpo
+#${PNAME} -t -i gpx -f reference/track/tpo-sample2.gpx -o tpo2 -F ${TMPDIR}/tpo-sample2.tpo
 #bincompare ${TMPDIR}/tpo-sample2.tpo reference/track/tpo-sample2.tpo
 #
 # Version 3.x tests.  Remove the timestamp from the generated file
 # so that the compare will succeed.
 rm -f ${TMPDIR}/tpo-sample3.gpx ${TMPDIR}/tpo-sample3.gpx2
-${PNAME} -t -r -w -i tpo -f reference/tpo-sample3.tpo -o gpx -F ${TMPDIR}/tpo-sample3.gpx
+${PNAME} -t -r -w -i tpo3 -f reference/tpo-sample3.tpo -o gpx -F ${TMPDIR}/tpo-sample3.gpx
 # Remove the timestamp
 grep -v time <${TMPDIR}/tpo-sample3.gpx >${TMPDIR}/tpo-sample3.gpx2
 compare ${TMPDIR}/tpo-sample3.gpx2 reference/tpo-sample3.gpx

@@ -80,14 +80,33 @@
 static char *dumpheader = NULL;
 static char *output_state = NULL;
   
+/*
 static
-arglist_t tpo_args[] = {
+arglist_t tpo2_args[] = {
 	{ "dumpheader", &dumpheader, "Display the file header bytes", 
 		"0", ARGTYPE_BOOL, ARG_NOMINMAX} , 
 	{ "state", &output_state, "State map format to write, default=CA", 
 	  "CA", ARGTYPE_STRING, ARG_NOMINMAX} , 
 	ARG_TERMINATOR
 };
+*/
+//
+// Note that we've disabled the write capabilites for the tpo2
+// format at present.  The "testo" tests were failing on some
+// platforms and there wasn't anyone willing to work on the problem.
+// If this is fixed in the future we can go back to the tpo2_args[]
+// above.
+//
+static
+arglist_t tpo2_args[] = {
+	ARG_TERMINATOR
+};
+
+static
+arglist_t tpo3_args[] = {
+	ARG_TERMINATOR
+};
+
 
 static FILE *tpo_file_in;
 static FILE *tpo_file_out;
@@ -1899,8 +1918,8 @@ tpo_write(void)
 	track_disp_all(tpo_track_hdr, tpo_track_tlr, tpo_track_disp);
 }
 
-/* TPO format can read and write tracks only */
-ff_vecs_t tpo_vecs = {
+/* TPO 2.x format can read tracks only */
+ff_vecs_t tpo2_vecs = {
     ff_type_file,   /* ff_type_internal */
 /*    { ff_cap_none | ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none | ff_cap_none }, */
     { ff_cap_none | ff_cap_none, ff_cap_read, ff_cap_none | ff_cap_none },
@@ -1911,6 +1930,23 @@ ff_vecs_t tpo_vecs = {
 	tpo_read,
 	tpo_write,
 	NULL,
-	tpo_args,
+	tpo2_args,
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
+
+/* TPO 3.x format can read waypoints/tracks/routes */
+ff_vecs_t tpo3_vecs = {
+    ff_type_file,   /* ff_type_internal */
+/*    { ff_cap_none | ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none | ff_cap_none }, */
+    { ff_cap_none | ff_cap_none, ff_cap_read, ff_cap_none | ff_cap_none },
+	tpo_rd_init,
+	tpo_wr_init,
+	tpo_rd_deinit,
+	tpo_wr_deinit,
+	tpo_read,
+	tpo_write,
+	NULL,
+	tpo3_args,
+	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+};
+
