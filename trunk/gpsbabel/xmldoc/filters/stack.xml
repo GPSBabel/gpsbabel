@@ -1,55 +1,25 @@
-
-         
-         <para> This filter is designed to solve advanced problems
-         that involve shuffling multiple lists of waypoints.  It has
-         three distinct sets of suboptions:</para>
-         <para>PUSH</para>
-         <para>Pushes the current list of waypoints onto the stack.
-         If the 'copy' suboption is specified, a copy of the current
-         list is pushed onto the stack; otherwise, the current list is
-         cleared.</para>
-         <screen format="linespecific">
--x stack,push
--x stack,push,copy
-</screen>
-         <para>POP</para>
-         <para> 'Pops' the top list of waypoints off of the stack.
-         What is done with that list depends on the suboption
-         specified.  If the 'append' suboption is specified, the top
-         list of waypoints from the stack is added to the end of the
-         current list of waypoints.  If the 'discard' option is
-         specified, the top list of waypoints is removed from the
-         stack and discarded, leaving the current list of waypoints
-         unchanged.  If the 'replace' option is specified, or if no
-         option is specified, the top list of waypoints from the stack
-         replaces the current list of waypoints; the previous contents
-         of the current list are discarded.</para>
-         <screen format="linespecific">
--x stack,pop 
--x stack,pop,discard
--x stack,pop,append
-</screen>
-         <para>SWAP</para>
-         <para> Swaps the current list of waypoints with a list from
-         the stack.  If no further options are specified, the current
-         list is swapped with the top list on the stack.  If the
-         'depth' option is specified, it indicates which item on the
-         stack should be swapped.  </para>
-         <screen format="linespecific">
--x stack,swap        
--x stack,swap,depth=2 
-</screen>
-         <para> The stack can be used in conjunction with other
-         filters to implement a "union" or "logical or" functionality.
-         The basic idea is to use the stack to store copies of the
-         original list of waypoints, then use the 'swap' function to
-         replace each copy with a filtered list.  Finally, append all
-         of the filtered lists to create one big list, which is then
-         output.  The following example finds a list of all points
-         that are either inside county A or inside county B.  Any
-         points that are inside both counties are duplicated (but the
-         duplicates can be removed with the DUPLICATE filter; see
-         above.)
+<para> 
+This filter is designed to solve advanced problems that involve shuffling 
+multiple lists of waypoints, tracks, or routes.  
+</para>
+<para>
+The stack filter can be used to save the current state of the entire
+collection of data.  That state is placed on top of a stack of collections,
+so you can simultaneously have as many stored collections of data as you
+can fit in your computer's memory.
+</para>
+<para> 
+ The stack filter can be used in conjunction with other
+ filters to implement a "union" or "logical or" functionality.
+ The basic idea is to use the stack to store copies of the
+ original list of waypoints, then use the 'swap' function to
+ replace each copy with a filtered list.  Finally, append all
+ of the filtered lists to create one big list, which is then
+ output.  The following example finds a list of all points
+ that are either inside county A or inside county B.  Any
+ points that are inside both counties are duplicated (but the
+ duplicates can be removed with the DUPLICATE filter; see
+ above.)
 </para>
          <screen format="linespecific">           
 gpsbabel -i gpx -f in.gpx \
@@ -75,6 +45,5 @@ gpsbabel -i gpx -f indiana.gpx \
          -o palmdoc,dbname=Indianapolis -F indianapolis.pdb \
          -x stack,pop,append \
          -o magellan -F fwaind.wpt
- 
 </screen>
       
