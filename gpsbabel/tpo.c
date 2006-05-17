@@ -1937,8 +1937,7 @@ ff_vecs_t tpo2_vecs = {
 /* TPO 3.x format can read waypoints/tracks/routes */
 ff_vecs_t tpo3_vecs = {
     ff_type_file,   /* ff_type_internal */
-/*    { ff_cap_none | ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none | ff_cap_none }, */
-    { ff_cap_none | ff_cap_none, ff_cap_read, ff_cap_none | ff_cap_none },
+    { ff_cap_read, ff_cap_read, ff_cap_read },
 	tpo_rd_init,
 	tpo_wr_init,
 	tpo_rd_deinit,
