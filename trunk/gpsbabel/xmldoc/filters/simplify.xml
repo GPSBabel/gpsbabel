@@ -1,0 +1,33 @@
+
+         
+         <para> The Simplify filter is used to simplify routes and
+         tracks for use with formats that limit the number of points
+         they can contain or just to reduce the complexity of a route.</para>
+         <para>The Simplify filter attempts to remove points from each 
+         route until the number of points or the error is within the given 
+         bounds, while also attempting to preserve the shape of the original 
+         route as much as possible.  </para>
+         <para>You must specify either the "count" option or the "error" option.
+         The count option requires a number, which is the maximum number
+         of points that will appear in the simplified track.  The error 
+         option takes a distance, optionally followed by an 'm' for miles or
+         a 'k' for kilometers.  That distance specifies the maximum error;
+         how that error is determined depends on the simplification method,
+         described next.</para>
+         <para>You may also specify the method by which the filter chooses
+         which points to remove.  The options are "length", which tries to
+         remove points that have the smallest effect on the overall length
+         of the route, or "crosstrack", which tries to remove points that 
+         have the smallest overall effect on the shape of the route.  The
+         default, if you don't specify either option, is "crosstrack". </para>
+         <para> The quality of the results will vary depending on the
+         density of points in the original route and the length of the
+         original route.</para>
+         <para> For example, suppose you have a route from Street
+         Atlas 2003 that you wish to use with a Magellan GPS receiver
+         that only supports up to 50 points in a route:</para>
+         <screen format="linespecific">gpsbabel -r -i saroute -f RoadTrip.anr \
+   -x simplify,count=50 \
+   -o magellan  -F grocery.rte
+</screen>
+      

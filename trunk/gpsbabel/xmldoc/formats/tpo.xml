@@ -1,0 +1,12 @@
+
+       
+	
+	<para>This module reads .TPO files created by various editions
+of NG Topo!.  For version 2.x files it will only read tracks.  For
+version 3.x files it will read Tracks/Routes/Waypoints/Map
+Notes/Symbols/Text Notes.  The latter three are converted to
+waypoints.</para>
+	<para>2.x support contributed by Steve Chamberlin.  3.x support
+contributed by Curt Mills.</para>
+
+   

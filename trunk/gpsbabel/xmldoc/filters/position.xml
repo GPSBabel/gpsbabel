@@ -1,0 +1,20 @@
+
+         
+         <para> The position filter is designed to remove points based
+         on their proximity to each other.  Distances can be passed on
+         the command line by passing the <parameter moreinfo="none">distance=XXX</parameter> option to the
+         filter.  Distance options may be expressed in feet
+         (<parameter moreinfo="none">distance=3f</parameter>) or
+         meters (<parameter moreinfo="none">distance=1m</parameter>).
+         The default is zero feet, essentially a duplicate position.
+         </para>
+         <example id="posn_to_suppress_close_points">
+            <title>Using position filter to suppress close points</title>
+            <screen format="linespecific">gpsbabel -i geo -f 1.loc -f 2.loc -x position,distance=1f  	\
+         -o mapsend -F 3.wpt</screen>
+         </example>
+         <para> would remove multiple points that are within 1 foot of
+         each other, leaving just one.</para>
+         <para> You can also specify the "all" option, which would
+         remove all of the points rather than leaving one.</para>
+      

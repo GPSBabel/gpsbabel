@@ -1,0 +1,23 @@
+
+      
+      
+      <para> This format is designed to read the XML emitted when you
+tack "&amp;output=js" onto the end of a Google Maps route URL (use
+the "link to this page" option to get a usable URL.)  This allows you
+to plan a route using Google Maps, then download it and use it in your
+own mapping program or GPS receiver.  If you use a Unix-compatible
+operating system, this shell script might be useful:
+</para>
+      <programlisting format="linespecific">
+#!/bin/sh 
+FROM="233 S. Upper Wacker Dr, Chicago, IL" 
+TO="1060 W. Addison St, Chicago, IL" 
+wget -O - "http://maps.google.com/maps?q=$FROM to $TO&amp;output=js" \
+2&amp;&gt;/dev/null &gt;google_map.js
+gpsbabel -i google -f google_map.js -o gpx -F google_map.gpx
+</programlisting>
+      <para> Note that Internet Explorer has been observed to damage
+the XHTML beyond recognition so use a better browser to save the pages
+such as Firefox or Mozilla.
+</para>
+    

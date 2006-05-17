@@ -1,0 +1,28 @@
+
+      
+      
+      <para> NetStumbler 0.4 Summary File -- Another CSV format file.
+The default behavior when creating waypoints is to use the SSID for
+the short name, and information about the access point for the
+description.  When the SSID is not unique, is not available, or
+consists of whitespace, a shortname is synthesized.  The snmac option
+uses the MAC address for the shortname, and includes the unmodified
+SSID in the description.  Different icons are assigned to encrypted,
+non-encrypted, stealth, and non-stealth access points; these may be
+changed with options. Import only.
+</para>
+<para>This format also works with MacStumbler.</para>
+      <para> Additional options:</para>
+      <para>
+            <option>nsneicon</option> - Name of icon used for
+non-stealth non-encrypted access points</para>
+      <para>
+            <option>seicon</option> - Name of icon used for stealth
+encrypted access points</para>
+      <para>
+            <option>sneicon</option> - Name of icon used for stealth
+non-encrypted access points</para>
+      <para>
+            <option>snmac</option> - Always use the MAC address as the
+shortname.</para>
+    

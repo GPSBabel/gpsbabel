@@ -1,0 +1,14 @@
+
+      
+      
+      <para>Waypoint serial upload and download works reliably to the
+315, 330, Meridian, and SportTrak family.  I expect it to work on any
+modern Magellan unit.</para>
+      <para> As of 08/30/02, GPSBabel can also read and write the
+files that can be stuck on the SD memory cards with the Meridian
+models.  Simply specify a file instead of a serial port.</para>
+      <para> Communication errors are handled robustly and
+verification of data is enabled.</para>
+      <para> Additional suboptions: <parameter moreinfo="none">baud:</parameter> may be 1200, 2400, 4800, 9600,
+19200, but must match receiver.</para>
+    

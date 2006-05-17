@@ -1,0 +1,26 @@
+
+      
+      
+      <para> KML, the Keyhole Markup Language, is used by Keyhole and
+Google Earth.  (Google Earth uses GPSBabel internally for receiver
+communications and several file format imports and exports. There are
+features in this file format that we don't support such as camera
+views, but waypoints, tracks, and routes work well.</para>
+      <para>Additional options:</para>
+      <para>
+            <option>lines=n</option> (default n=1) Draws lines between
+points in tracks and routes when n is non-zero.</para>
+      <para>
+            <option>points=n</option> (default n=1) Draws placemarks
+for tracks and routes when n is non-zero.</para>
+      <para>
+            <option>line_width=n</option> (default n=6) Width of drawn
+lines, in pixels.</para>
+      <para>
+            <option>line_color=n</option> (default=65eeee17) Line
+colour specified in hex AABBGGRR.</para>
+      <para>
+            <option>floating=n</option> (default n=0) Altitudes are
+not clamped to ground when n is non-zero.  This option is more useful
+to pilots than to hikers.</para>
+    

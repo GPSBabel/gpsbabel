@@ -1,0 +1,16 @@
+
+      
+      
+      <para>Support for Suunto Trek Manager (STM) WaypointPlus
+format..  Simple structure with coordinates and timestamp. Route
+points (waypoints) have additionaly shortname.  The files can only
+contain one route or one track.  <ulink url="http://www.suunto.fi">www.suunto.fi</ulink>
+         </para>
+      <para>
+ Options:
+  </para>
+      <para>
+            <option>index</option> - Use route/track number
+&lt;index&gt; from input data for output.
+</para>
+    

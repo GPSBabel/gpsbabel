@@ -1,0 +1,98 @@
+   <chapter id="Usage">
+      <title>Usage</title>
+      <sect1 id="Invocation">
+         <title>Invocation</title>
+         <para>Invocation was meant to be flexible.  Unfortunately,
+         that can sometimes lead to unwieldy command lines.</para>
+         <screen format="linespecific">gpsbabel -? </screen>
+         <para>will always show you the supported file types.  To use
+         this program, just tell it what you're reading, where to read
+         it from, what you're writing, and what to write it to.  For
+         example:</para>
+         <screen format="linespecific">gpsbabel -i geo -f /tmp/geocaching.loc -o gpx -F /tmp/geocaching.gpx</screen>
+         <para>tells it to read the first file in geocaching.com
+         format and create a new file in GPX format.</para>
+         <para> This command will read from a Magellan unit attached
+         to the first serial port on a Linux system (device names will
+         vary on other OSes) and write them as a geocaching loc file.
+         The second command does the same for windows.</para>
+         <screen format="linespecific">gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</screen>
+         <screen format="linespecific">gpsbabel -i magellan -f com1 -o geo -F mag.loc</screen>
+         <para>Optionally, you may specify <parameter moreinfo="none">"-s"</parameter> in any command line.  This
+         causes the program to ignore any "short" names that may be
+         present in the source data format and synthesize one from the
+         long name.  This is particularly useful if you're writing to
+         a target format that isn't the lowest common denominator but
+         the source data was written for the lowest common
+         denominator.  I use this for writing data from geocaching.com
+         to my Magellan so my waypoints have "real" names instead of
+         the 'GC1234' ones that are optimized for NMEA-only receivers.
+         A geocacher with a Magellan receiver may thus find commands
+         like this useful.</para>
+         <screen format="linespecific"> gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0  </screen>
+	<screen format="linespecific"> gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1</screen>
+      </sect1>
+      <sect1 id="Advanced_Usage">
+         <title>Advanced Usage</title>
+         <para>Argument are processed in the order they appear on the command
+line and are translated internally into a pipeline that data flows
+through when executed. Normally one would: </para>
+         <simplelist type="vert">
+            <member>read from one input</member>
+            <member>optionally apply filters </member>
+            <member>write into one output</member>
+         </simplelist>
+         <para> but GPSBabel is flexible enough to allow more complicated
+operations such as reading from several files (potentially of
+different types), applying a filter, reading more data, then write the
+merged data to multiple destinations.
+</para>
+         <para>The input file type remains unchanged until a new
+         <parameter moreinfo="none">-i</parameter> argument is seen.
+         Files are read in the order they appear. So you could merge
+         three input files into one output file with: </para>
+         <screen format="linespecific">gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc</screen>
+         <para>You can merge files of different types:</para>
+         <screen format="linespecific">gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx \ 
+-o gpsutil -F big.gps</screen>
+         <para> You can write the same data in different output formats:</para>
+         <screen format="linespecific">gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx 1.wpt</screen>
+         <para>If you want to change the character set of input or/and
+         output side you can do this with the option <option>-c
+         &lt;character set&gt;</option>. You can get a complete list
+         of supported character sets with "gpsbabel -l".  To change
+         the character set on both sides you should do this:</para>
+         <screen format="linespecific">gpsbabel -i xcsv,style=foo.style -c latin1 -f foo  \
+	         -o xcsv,style=bar.style -c ms-ansi -F bar</screen>
+         <para>Note, that some formats has a fixed character set and ignore this option.</para>
+      </sect1>
+      <sect1 id="Route_And_Track_Modes">
+         <title>Route and Track Modes</title>
+         <para> Most formats will make reasonable attempt to work
+         transparently with waypoints, tracks, and routes.  Some
+         formats, like 'garmin' and 'magellan' require the <parameter moreinfo="none">-t</parameter> flag to work with tracks and
+         <parameter moreinfo="none">-r</parameter> to work with
+         routes. <parameter moreinfo="none">-w</parameter> is for
+         waypoints, and is the default. So if you wanted to read all
+         data from your unit into a gpx file, you might use a command
+         like:</para>
+         <screen format="linespecific"> gpsbabel -t -r -w -i magellan -f com1:  -o gpx -F backup.gpx</screen>
+         <para> Tracks and routes are advanced features and don't try
+         to handle every possible hazard that can be encountered
+         during a conversion.  If you're merging or converting files
+         of similar limitations, things work very well.</para>
+         <para> Tracks and routes will sometimes be converted to a
+         list of waypoints when necessary, f.i. when writing into one
+         of the CSV formats. The inverse operation is not supported
+         right now, so reading the converted track back from CSV will
+         always result in a list of waypoints, not the original track.
+</para>
+         <para> The presence of <parameter moreinfo="none">-s</parameter> on the command line tends to
+         creats havoc on tracks and routes since many of these formats
+         rely on internal linkages between such points and renaming
+         them may break those linkages.  In general, don't use
+         <parameter moreinfo="none">-s</parameter> when tracks or
+         routes are present.
+</para>
+      </sect1>
+   </chapter>

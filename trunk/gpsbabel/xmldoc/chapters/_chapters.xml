@@ -1,0 +1,6 @@
+<!ENTITY allchapters SYSTEM "allchapters.xml">
+<!ENTITY chap_preface SYSTEM "preface.xml">
+<!ENTITY chap_build SYSTEM "build.xml">
+<!ENTITY chap_use SYSTEM "use.xml">
+<!ENTITY chap_formats SYSTEM "formats.xml">
+<!ENTITY chap_filters SYSTEM "filters.xml">

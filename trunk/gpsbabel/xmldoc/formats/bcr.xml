@@ -1,0 +1,34 @@
+
+      
+      
+      <para> This file format (extension .bcr) is used in "Motorrad
+Routenplaner 2002-..." by Map&amp;Guide. It is a route-onle
+format. If you own a newer release (2005...) you can also use the XML
+export and convert via <command moreinfo="none">gpsbabel ... -i tef
+...</command> to your preferred format.  May be there are other
+products from Map&amp;Guide using the format.
+</para>
+      <para> Coordinates are stored in Mercator format. The
+calculation between this and our internal format can result in visible
+differences.  Experience reports are welcome.</para>
+      <para>	Options:</para>
+      <para>
+            <option>index</option> - If more then one route are
+present in source data, with this option you can determine, which of
+this should used for the output. The range is 1 to number routes in
+input.  If you don't use this, only the first route will be converted.
+</para>
+      <para>
+            <option>name</option> - Not every input format has a real
+name for routes in their data. So you can give the route a nice
+name.</para>
+      <para>
+            <option>radius</option> - Overwrites the default value of
+6371000.0 meters for the earth radius. My be this can help to reduce
+differences.</para>
+      <para/>
+      <example id="sample_bcr_command">
+	<title>Sample BCR command with all options</title>
+	<screen format="linespecific">gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr </screen>
+      </example>
+    

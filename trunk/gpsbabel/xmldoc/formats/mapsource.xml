@@ -1,0 +1,31 @@
+
+      
+      
+      <para> Garmin Mapsource format appears compatible with the
+various members of that product family.  Icon mapping is attempted
+between different MapSource versions.  Altitude is supported, but
+proximity and depth are not.  Naming files *.mps will allow
+file-&gt;open in Mapsource to find the files more easily.  Versions 3,
+4 and 5 of the Mapsource data format are handled automatically on
+input and by default the output is version 5.  (Until 3/2004, it was
+version 3, but since Mapsource updates are free, the convenience of
+having modern icon sets outweighs the backward compatibility concern.
+Users of other versions can either upgrade or specify the switches to
+get get output in a compatible format.)  Waypoints, routes and
+tracklogs are all handled, but maps sets are ignored.
+</para>
+      <para> Information on the Garmin Mapsource format was provided
+by Ian Cowley and Mark Bradley.  The code was implemented by Robert
+Lipe and Mark Bradley.</para>
+      <para>Additional options:</para>
+      <para>
+            <option>snlen</option> - set the length of generated
+shortnames </para>
+      <para>
+            <option>mpsverout</option> - set the data format version
+of the output file (3,4 or 5) </para>
+      <para>
+            <option>mpsmergeout</option> - if the output file already
+exists, then the output is merged with it. This allows MapSource
+sections not being handled to remain intact (e.g. map sets)</para>
+    

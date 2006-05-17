@@ -1,0 +1,36 @@
+
+         
+         <para> The polygon filter includes points if they are inside
+         of a polygon.  A polygon file looks like an arc file, except
+         that the arc it describes must be a closed cycle.  That is,
+         for a simple polygon, the first and last points must be the
+         same.  Here's a square:
+</para>
+         <screen format="linespecific">
+          # A square (not really) polygon
+          41.0000       -85.0000
+          41.0000       -86.0000
+          42.0000       -86.0000
+          42.0000       -85.0000
+          41.0000       -85.0000
+</screen>
+         <para> Polygons may include islands and holes.  To specify an
+         island or a hole, just append it to the main polygon.
+</para>
+         <para> As with the arc filter, you specify a polygon by
+         specifying the name of the file that contains it, using
+         the file option.  You can also specify the exclude option,
+         which reverses the operation of the filter so that it only
+         includes points that are NOT in the polygon.
+</para>
+         <para> Note that this filter currently will not work properly
+         if your polygon contains one or both poles or if it spans the
+         line of 180 degrees east or west longitude.
+</para>
+         <para> For example, assume you have a polygon file that
+         defines the border of your county, called mycounty.txt.  This
+         command line will give you only the points in your county:
+</para>
+         <screen format="linespecific">	gpsbabel -i geo -f 1.loc -x polygon,file=mycounty.txt  	  	 \
+-o mapsend -F 2.wpt</screen>
+      

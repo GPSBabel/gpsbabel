@@ -1,0 +1,16 @@
+
+      
+      
+      <para>Input and output support for IGN Rando track files. IGN
+Rando is a program mainly used in France for Topo maps. The files are
+XML based and are "windows-1252" encoded. Trackpoints come without
+timestamp.</para>
+      <para>
+ Options:
+  </para>
+      <para>
+            <option>index</option> - Use track number &lt;index&gt;
+from input data for output.  The range is 1 to number of tracks in
+input.
+</para>
+    
