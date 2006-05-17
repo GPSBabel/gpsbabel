@@ -1,34 +1,7 @@
-
-      
-      
-      <para> This is a catch-all used by many Delorme mapping products
-and reads the anr, rte, and rtd formats as either tracks or
+<para> 
+This format reads route files from many Delorme mapping products.
+It supports the anr, rte, and rtd formats as either tracks or
 routes.</para>
-      <para> The 'turns_only' option causes GPSBabel to read only the
-waypoints associated with named turns.  This should create a list of
-waypoints that correspond to the itinerary from Street Atlas.</para>
-      <para> The 'turns_important' option only makes sense in
-conjunction with the 'simplify' filter.  It ensures that the route
-simplification process will remove the points corresponding to turns
-only after it has removed all other route points.
-</para>
-      <para>The 'split' option causes GPSBabel to create separate
-routes for each street, creating a new route at each turn point.  For
-obvious reasons, 'split' cannot be used at the same time as the
-'turns_only' or 'turns_important' options.</para>
-      <para>The 'controls' option lets you read the control points
-(start, end, vias, and stops) for your route as well as the route
-itself.  The default for this option is 'none', which won't read the
-control points.  You may also specify 'waypoints', which reads the
-control points as waypoints, or 'route', which creates an extra route
-named 'control points' containing just the control points in order.
-Note that if your goal is to create an arc or other CSV file, you
-should use 'none' (or not use this option, which is the same
-thing.)</para>
-      <para>The 'times' option causes GPSBabel to read the route as if
-it were a track, synthesizing times starting from the current time, using
-the estimated travel times specified in your route file (you can change your
-travel speeds in the DeLorme product you used to create the route file.)</para>
       <para> All options only apply to route files from newer (anr)
 versions of DeLorme software; older versions didn't store the turn
 information with the route.
