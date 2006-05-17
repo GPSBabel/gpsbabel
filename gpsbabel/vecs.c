@@ -31,6 +31,7 @@ typedef struct {
 	const char *name;
 	const char *desc;
 	const char *extension;
+	const char *parent;
 } vecs_t;
 
 extern ff_vecs_t an1_vecs;
@@ -395,12 +396,14 @@ vecs_t vec_list[] = {
                 "Vcard Output (for iPod)",
                 "vcf",
         },
+#if 0
 	{
 		&overlay_vecs,
 		"overlay",
 		"GeoGrid-Viewer",
 		"ovl"
 	},
+#endif
 	{
 		&google_vecs,
 		"google",
@@ -876,6 +879,9 @@ sort_and_unify_vecs(int *ctp)
 	/* Normal vecs are easy; populate the first part of the array. */
 	for (vec = vec_list; vec->vec; vec++, i++) {
 		svp[i] = vec;
+		if (svp[i]->parent == NULL) {
+			svp[i]->parent = svp[i]->name;
+		}
 	}
 
 	/* Walk the style list, parse the entries, dummy up a "normal" vec */
@@ -900,6 +906,7 @@ sort_and_unify_vecs(int *ctp)
 		}
 		
 		svp[i]->desc = xcsv_file.description;
+		svp[i]->parent = "xcsv";
 	}
 	/* Now that we have everything in an array, alphabetize them */
 	qsort(svp, vc, sizeof(*svp), alpha);
@@ -1065,9 +1072,11 @@ disp_formats(int version)
 			if (version >= 2) {
 				disp_v2(vec->vec);
 			}
-			printf("%s\t%s\t%s\n", vec->name, 
+			printf("%s\t%s\t%s%s%s\n", vec->name, 
 				vec->extension? vec->extension : "", 
-				vec->desc);
+				vec->desc,
+				version >= 3 ? "\t" : "",
+				version >= 3 ? vec->parent : "");
 			if (version >= 3) {
 				disp_v3(vec);
 			}
