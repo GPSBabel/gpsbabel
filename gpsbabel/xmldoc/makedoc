@@ -41,6 +41,9 @@ sub include {
 
    $name2 = $name;
    $name2 =~ s/-/_/g;
+   $d2 = $dir2;
+   $d2 =~ s:/.*::;
+   $name2 = $d2.'_'.$name2;
    print PARTS qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
    print FILE "\&inc_$name2;\n";
    if (! -e "$dir/$dir2/$name.xml") {
