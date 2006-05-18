@@ -37,14 +37,14 @@ sub expandoptions {
 
 sub include {
    my $name=shift;
-   my $dir=shift;
+   my $dir2=shift;
 
    $name2 = $name;
    $name2 =~ s/-/_/g;
-   print PARTS qq(<!ENTITY inc_$name2 SYSTEM "../$dir/$name.xml">\n);
+   print PARTS qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
    print FILE "\&inc_$name2;\n";
-   if (! -e "$dir/$name.xml") {
-     open TMP, ">$dir/$name.xml";
+   if (! -e "$dir/$dir2/$name.xml") {
+     open TMP, ">$dir/$dir2/$name.xml";
      print TMP "\n";
      close TMP;
    }
@@ -61,19 +61,23 @@ sub includef {
 
 
 
+$dir = $0;
+$dir =~ s:/.*$::;
 
-open PARTS, ">autogen/_parts.xml";
+
+open PARTS, ">$dir/autogen/_parts.xml";
 print PARTS qq(<!-- This document is automatically generated. -->\n);
 print PARTS qq(<!ENTITY formats SYSTEM "_formats.xml">\n);
 print PARTS qq(<!ENTITY filters SYSTEM "_filters.xml">\n);
 
-open FORMATS, ">autogen/_formats.xml";
+open FORMATS, ">$dir/autogen/_formats.xml";
 print FORMATS qq(<!-- This document is automatically generated. -->\n);
 
 @formats = `gpsbabel -^3`;
 
 $going = 0;
 $dooptions = 0;
+
 
 for (@formats) {
    chomp;
@@ -106,14 +110,14 @@ for (@formats) {
        $fmts{$id} = 1;
      }
      includef( 'fmt_'.$id );
-     open FILE, ">autogen/fmt_$id.xml";
+     open FILE, ">$dir/autogen/fmt_$id.xml";
      print FILE <<END;
 <!-- This document is automatically generated. -->
 <section id="fmt_$id">
   <title>$line[4] ($line[2])</title>
 END
      print FILE expandoptions($line[1]);
-     include($id,'formats');
+     include($id,"formats");
      $going = 1;
      $dooptions = 1;
      if ( defined($line[5]) && ($line[5] ne $line[2]) ) {
@@ -137,7 +141,7 @@ END
       $line[3].
     </para>
 END
-     include($id.'-'.$line[2],'formats/options');
+     include($id.'-'.$line[2],"formats/options");
      print FILE <<END;
   </section>
 END
@@ -151,7 +155,7 @@ if ($going) {
 }
 
 
-open FORMATS, ">autogen/_filters.xml";
+open FORMATS, ">$dir/autogen/_filters.xml";
 print FORMATS qq(<!-- This document is automatically generated. -->\n);
 
 @filters = `gpsbabel -%1`;
@@ -173,7 +177,7 @@ for (@filters) {
       $line[3].
     </para>
 END
-     include($line[1].'-'.$line[2],'filters/options');
+     include($line[1].'-'.$line[2],"filters/options");
      print FILE <<END;
   </section>
 END
@@ -184,13 +188,13 @@ END
        close FILE;
      }
      includef( 'filter_'.$line[0] );
-     open FILE, ">autogen/filter_$line[0].xml";
+     open FILE, ">$dir/autogen/filter_$line[0].xml";
      print FILE <<END;
 <!-- This document is automatically generated. -->
 <section id="filter_$line[0]">
   <title>$line[1] ($line[0])</title>
 END
-     include($line[0],'filters');
+     include($line[0],"filters");
      $going = $line[0];
    }
 }
