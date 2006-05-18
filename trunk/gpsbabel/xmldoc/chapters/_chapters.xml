@@ -4,3 +4,4 @@
 <!ENTITY chap_use SYSTEM "use.xml">
 <!ENTITY chap_formats SYSTEM "formats.xml">
 <!ENTITY chap_filters SYSTEM "filters.xml">
+<!ENTITY app_datums  SYSTEM "datums.xml">
