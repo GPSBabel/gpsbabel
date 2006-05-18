@@ -101,9 +101,9 @@ static
 arglist_t garmin_txt_args[] = {
 	{"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", NULL, ARGTYPE_STRING, ARG_NOMINMAX}, 
 	{"datum", &opt_datum, 	    "GPS datum (def. WGS 84)", "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX}, 
-	{"dist",  &opt_dist,        "Distance unit [m=metric, s=statue]", "m", ARGTYPE_STRING, ARG_NOMINMAX},
+	{"dist",  &opt_dist,        "Distance unit [m=metric, s=statute]", "m", ARGTYPE_STRING, ARG_NOMINMAX},
 	{"prec",  &opt_precision,   "Precision of coordinates", "3", ARGTYPE_INT, ARG_NOMINMAX},
-	{"temp",  &opt_temp,        "Temperature unit [c=celsius, f=fahrenheit]", "c", ARGTYPE_STRING, ARG_NOMINMAX}, 
+	{"temp",  &opt_temp,        "Temperature unit [c=Celsius, f=Fahrenheit]", "c", ARGTYPE_STRING, ARG_NOMINMAX}, 
 	{"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	{"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", NULL, ARGTYPE_INT, "-23", "+23"},
 	ARG_TERMINATOR
