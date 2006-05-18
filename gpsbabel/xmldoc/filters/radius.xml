@@ -1,26 +1,17 @@
-
-         
-         <para> The radius filter is designed to include points based
-         on their proximity to a central point.  Distances and the
-         central point are declared on the command line by passing the
-         <option>distance=X.XX</option>,
-         <option>lat=X.XX</option>, and
-         <option>lon=X.XX</option> options to
-         the filter.  Distance options may be expressed in miles
-         (<option>distance=3M</option>) or
-         kilometers (<option>distance=3K</option>).  The default is
-         zero miles.  Additionally, the exclude option may be
-         specified to reverse the effect of the filter, so that points
-         further from the center are kept and closer points are
-         discarded.</para>
-         <example id="radius_to_find_points_close">
-            <title>Using radius filter to identify points close to a given point </title>
-            <screen format="linespecific">gpsbabel -i geo -f 1.loc \
-   -x radius,distance=1.5M,lat=30.0,lon=-90.0   \	         
-   -o mapsend  \
-   -F 2.wpt</screen>
-         </example>
-         <para> would include only points within 1.5 miles of N30.000
-      W90.000
+<para> 
+This filter includes or excludes waypoints based on their proximity to a 
+central point.  All waypoints more than the specified distance from the 
+specified point will be removed from the dataset.
 </para>
+<para>
+By default, all remaining points are sorted so that points closer to the 
+center appear earlier in the output file.
+</para>
+<example id="radius_to_find_points_close">
+ <title>Using the radius filter to find points close to a given point</title>
+ <para>This example command line would include only points within 1 1/2 miles
+       of N30.000 W 90.000</para>
+
+<screen format="linespecific">gpsbabel -i geo -f 1.loc -x radius,distance=1.5M,lat=30.0,lon=-90.0 -o mapsend -F 2.wpt</screen>
+</example>
       
