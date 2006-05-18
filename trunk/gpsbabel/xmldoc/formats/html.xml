@@ -1,20 +1,11 @@
-
-      
-      
       <para> HTML output generates a single HTML file of all of the
-waypoints in the input file.  It supports a number of Geocaching GPX
+waypoints in the input file.  It supports a number of Groundspeak GPX
 extensions, as well as filters out potentially harmful HTML from the
 input file while maintaining almost all of the source HTML formatting.
-Use the 'stylesheet' option to specify a CSS stylesheet to be used
-with the resulting HTML file.  Use the 'encrypt' option to encrypt
-hints from Groundspeak GPX files.  Use the 'logs' option to include
-Groundspeak cache logs.
 </para>
       <para> The following command line reads a GPX file with
 Groundspeak extensions and writes an HTML file with encrypted hints
 that is rendered using a custom stylesheet:
 </para>
-      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx \
-	 -o html,stylesheet=green.css,encrypt -F 12345.html
-</screen>
+<screen format="linespecific">gpsbabel -i gpx -f 12345.gpx -o html,stylesheet=green.css,encrypt -F 12345.html</screen>
     

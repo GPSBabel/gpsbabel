@@ -1,15 +1,8 @@
-
-      
-      
       <para> This is a simple human readable version of the data file,
-handy for listings of any type of waypoint files.  Use the 'nosep'
-option to suppress the lines of dashes between entries.  Use the
-'encrypt' option to encrypt hints from Groundspeak GPX files.  Use the
-'logs' option to include Groundspeak cache logs.
+handy for listings of any type of waypoint files.
 </para>
       <para> The following command line reads a GPX file with
 Groundspeak extensions and writes a text file with encrypted hints:
 </para>
-      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx -o text,encrypt -F 12345.txt
-</screen>
+<screen format="linespecific">gpsbabel -i gpx -f 12345.gpx -o text,encrypt -F 12345.txt</screen>
     
