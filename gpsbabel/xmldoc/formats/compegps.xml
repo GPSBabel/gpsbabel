@@ -1,20 +1,14 @@
-
-      
-      
-      <para>Suppport for CompeGPS data files.</para>
-      <para>These data files are "character" separated text files like
+<para>
+These data files are "character" separated text files like
 the pcx format. "Character" means special data lines can have their
-own separator.</para>
-      <para> Since release 6.1 GPX is also a supported import/export
-format for waypoints, routes and tracks.</para>
-      <para> For more information please have a look at <ulink url="http://www.compegps.com">http://www.compegps.com</ulink></para>
-      <para>
-         Options: </para>
-      <para><option>deficon</option> Default Icon name.</para>
-      <para><option>index</option> Use route/track number
-&lt;index&gt; from input data for output.</para>
-      <para><option>radius</option> Give points (waypoints/route
-points)  a default radius (proximity)</para>
-      <para><option>snlen</option> Length of generated short names
-(default 16).</para>
+own separator.
+</para>
+<para> 
+Since release 6.1 of <productname>CompeGPS</productname>, GPX is also a 
+supported import/export format for waypoints, routes and tracks.
+</para>
+<para> 
+For more information please have a look at 
+<ulink url="http://www.compegps.com">http://www.compegps.com</ulink>
+</para>
     
