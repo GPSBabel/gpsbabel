@@ -1,5 +1,5 @@
 <para>
-This options instructs GPSBabel to use a different value for the radius of 
+This option instructs GPSBabel to use a different value for the radius of 
 the earth when converting between the Mercator projection and geographic 
 coordinates.  The default value is 6371000.0 meters.
 </para>

@@ -1,12 +1,8 @@
-
-      
-      
-      <para>Magellan was smart enough to document their file format to
-make creating software like this possible.</para>
-      <para>Additional options:</para>
-      <para>
-      	<option>trkver</option> - set the MapSend version to generate TRK files, 
-since new MapSend versions can't open V3 files. Options are 3 (MapSend v3.0) or
-4 (MapSend v4.0 and v4.1).
-      </para>
-    
+<para>
+This format supports the Magellan <productname>MapSend</productname> native
+file format.
+</para>
+<para>
+Kudos to Magellan for having the foresight to document their file formats,
+making software like this possible.
+</para>
