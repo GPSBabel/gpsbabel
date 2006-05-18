@@ -126,6 +126,7 @@ dep:
 	echo Edit Makefile.in and bring in /tmp/dep
 
 $(WEB)/htmldoc-$(DOCVERSION)/readme.html: FORCE
+	perl xmldoc/makedoc
 	xmlwf xmldoc/readme.xml		#check for well-formedness
 	xmllint --noout --valid xmldoc/readme.xml    	#validate
 	xsltproc \
