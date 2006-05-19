@@ -1,5 +1,8 @@
 <appendix id="Styles">
 <title>GPSBabel XCSV Style Files</title>
+
+<section id="styles_intro">
+<title>Introduction</title>
 <para>
 The format of an XCSV style file is quite simple and designed to be easily
 implemented by non-programmers to handle "one-off" babel-ization of various
@@ -15,6 +18,8 @@ file is laid out itself.  The format is:
 Where &lt;whitespace&gt; is a space, tab, spaces, tabs, etc...  There should
 be nothing before the directive.  (i.e. not "  DIRECTIVE  VALUE")
 </para>
+</section> <!-- intro -->
+
 <section id="styles_internal_const">
 <title>Internal Constants</title>
 <para>
@@ -22,32 +27,55 @@ A few internal constants are defined in the XCSV parser to make the style
 file simpler.  They may or may not be used and are optional in most cases. 
 Note that only certain style file directives map these constants.
 </para>
-<table id="internal_csv_constants">
-<title>Internal Constants for XCSV</title>
-<tgroup cols="2">
-<colspec colnum="2" colname="col2" align="center" />
-<thead>
-<row><entry>STYLE CONSTANT</entry>  <entry>  MAPS TO CHAR(s)</entry></row>
-</thead>
-<tbody>
-<row><entry>COMMA</entry>  <entry>,</entry></row>
-<row><entry>COMMASPACE</entry>  <entry>,&lt;space&gt;</entry></row>
-<row><entry>SINGLEQUOTE</entry>  <entry>'</entry></row>
-<row><entry>DOUBLEQUOTE</entry>  <entry>"</entry></row>
-<row><entry>COLON</entry>  <entry>:</entry></row>
-<row><entry>SEMICOLON</entry>  <entry>;</entry></row>
-<row><entry>NEWLINE</entry>  <entry>\n</entry></row>
-<row><entry>CR</entry>  <entry>\r</entry></row>
-<row><entry>CRNEWLINE  </entry>  <entry>\r\n</entry></row>
-<row><entry>TAB  </entry>  <entry>\t</entry></row>
-<row><entry>SPACE  </entry>  <entry>&lt;space&gt;</entry></row>
-<row><entry>HASH  </entry>  <entry>#</entry></row>
-<row><entry>PIPE  </entry>  <entry>|</entry></row>
-<row><entry>WHITESPACE	*** SEE WHITESPACE NOTES BELOW ***</entry></row>
-</tbody>
-</tgroup>
-</table>
-
+<para>
+<segmentedlist>
+<?dbhtml list-presentation="table"?>
+<segtitle>Style Constant</segtitle>
+<segtitle>Maps to Char(s)</segtitle>
+<seglistitem>
+<seg>COMMA</seg><seg>,</seg>
+</seglistitem>
+<seglistitem>
+<seg>COMMASPACE</seg><seg>,&lt;space&gt;</seg>
+</seglistitem>
+<seglistitem>
+<seg>SINGLEQUOTE</seg><seg>'</seg>
+</seglistitem>
+<seglistitem>
+<seg>DOUBLEQUOTE</seg><seg>"</seg>
+</seglistitem>
+<seglistitem>
+<seg>COLON</seg><seg>:</seg>
+</seglistitem>
+<seglistitem>
+<seg>SEMICOLON</seg><seg>;</seg>
+</seglistitem>
+<seglistitem>
+<seg>NEWLINE</seg><seg>\n</seg>
+</seglistitem>
+<seglistitem>
+<seg>CR</seg><seg>\r</seg>
+</seglistitem>
+<seglistitem>
+<seg>CRNEWLINE</seg><seg>\r\n</seg>
+</seglistitem>
+<seglistitem>
+<seg>TAB</seg><seg>\t</seg>
+</seglistitem>
+<seglistitem>
+<seg>SPACE</seg><seg>&lt;space&gt;</seg>
+</seglistitem>
+<seglistitem>
+<seg>HASH</seg><seg>#</seg>
+</seglistitem>
+<seglistitem>
+<seg>PIPE</seg><seg>|</seg>
+</seglistitem>
+<seglistitem>
+<seg>WHITESPACE</seg><seg>see below</seg>
+</seglistitem>
+</segmentedlist>
+</para>
 <section id="style_const_whitespace">
 <title>WHITESPACE</title>
 <para>
@@ -58,14 +86,12 @@ writing data, WHITESPACE is always a single SPACE.
 <para>
 For example, the following line:
 </para>
-<screen format="linespecific">
-SOME_NAME       30.1208 -91.1365    SOME OTHER NAME
+<screen format="linespecific">SOME_NAME       30.1208 -91.1365    SOME OTHER NAME
 </screen>
 <para>
 Parses into the following data fields: 
 </para>
-<screen format="linespecific">
-SOME_NAME,30.1208,-91.1365,SOME,OTHER,NAME
+<screen format="linespecific">SOME_NAME,30.1208,-91.1365,SOME,OTHER,NAME
 </screen>
 </section>
 
@@ -74,8 +100,7 @@ SOME_NAME,30.1208,-91.1365,SOME,OTHER,NAME
 <para>
 Anything after a hash (#) on a line is not parsed.  For example:
 </para>
-<screen format="linespecific">
-#THIS ENTIRE LINE IS A COMMENT.
+<screen format="linespecific">#THIS ENTIRE LINE IS A COMMENT.
 #FIELD	LAT_DECIMAL, "", "%f"   THIS ENTIRE LINE IS A COMMENT
 FIELD LAT_DECIMAL, "", "%f"  # ONLY THIS SENTENCE IS A COMMENT.
 </screen>
@@ -108,8 +133,7 @@ this file.
 Describes the character set used by this format.  The value given
 must be one listed by 'gpsbabel -l'.    example:
 </para>
-<screen format="linespecific">
-   ENCODING             UTF-8	# Use UTF-8 for input and output.
+<screen format="linespecific">   ENCODING             UTF-8	# Use UTF-8 for input and output.
 </screen>
 </section>
 </section> <!-- global -->
@@ -129,8 +153,7 @@ processing functions of GPSbabel.
 <para>
    example:
 </para>
-<screen format="linespecific">
-   SHORTLEN	16	# shortnames will be at most 16 characters long.
+<screen format="linespecific">   SHORTLEN	16	# shortnames will be at most 16 characters long.
 </screen>
 </section>
 
@@ -143,8 +166,7 @@ processing functions of GPSbabel.
 <para>
    example:
 </para>
-<screen format="linespecific">
-   SHORTWHITE	0	# Do not allow whitespace in shortname.
+<screen format="linespecific">   SHORTWHITE	0	# Do not allow whitespace in shortname.
    SHORTWHITE   1	# Allow whitespace in shortname.
 </screen>
 </section>
@@ -167,8 +189,7 @@ The first few directives define the layout the physical file itself:
 <para>
    examples: 
 </para>
-<screen format="linespecific">
-   FIELD_DELIMITER    COMMA
+<screen format="linespecific">   FIELD_DELIMITER    COMMA
    FIELD_DELIMITER    ~
 </screen>
 <para>
@@ -187,8 +208,7 @@ The first few directives define the layout the physical file itself:
 <para>
    examples:
 </para>
-<screen format="linespecific">
-   RECORD_DELIMITER    NEWLINE
+<screen format="linespecific">   RECORD_DELIMITER    NEWLINE
    RECORD_DELIMITER    |
 </screen>
 <para>
@@ -207,8 +227,7 @@ The first few directives define the layout the physical file itself:
 <para>
    examples: 
 </para>
-<screen format="linespecific">
-  BADCHARS    COMMA
+<screen format="linespecific">  BADCHARS    COMMA
   BADCHARS    ~|
 </screen>
 <para>
@@ -228,8 +247,7 @@ The first few directives define the layout the physical file itself:
 <para>
    examples: 
 </para>
-<screen format="linespecific">
-  PROLOGUE	OziExplorer Waypoint File Version 1.1
+<screen format="linespecific">  PROLOGUE	OziExplorer Waypoint File Version 1.1
   PROLOGUE	WGS 84
   PROLOGUE	Symbol,Name,Latitude,Longitude
 </screen>
@@ -299,8 +317,7 @@ The fields used by the XCSV parser are as follows:
 <para>
 examples:
 </para>
-<screen format="linespecific">
-   IFIELD IGNORE,"","%14.14s"   # (writes a 14 character blank field)
+<screen format="linespecific">   IFIELD IGNORE,"","%14.14s"   # (writes a 14 character blank field)
    IFIELD IGNORE,"","%s"        # (writes a blank field on output)
 </screen>
 </section>
@@ -315,8 +332,7 @@ examples:
 <para>
 examples:
 </para>
-<screen format="linespecific">
-   IFIELD CONSTANT,"FFFFFF","%s"   # (writes "FFFFFF" in the field)
+<screen format="linespecific">   IFIELD CONSTANT,"FFFFFF","%s"   # (writes "FFFFFF" in the field)
    IFIELD CONSTANT,"01/01/70","%s" # (a constant date field)
 </screen>
 </section>
@@ -334,8 +350,7 @@ examples:
 <para>
 examples:
 </para>
-<screen format="linespecific">
-   IFIELD INDEX,"0","%04d"     # (Starts counting at zero)
+<screen format="linespecific">   IFIELD INDEX,"0","%04d"     # (Starts counting at zero)
    IFIELD INDEX,"","%04d"      # (Starts counting at zero)
    IFIELD INDEX,"1","%04d"     # (Starts counting at one)
 </screen>
@@ -351,8 +366,7 @@ examples:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD SHORTNAME,"","%s"   # (write shortname in the output file)
+<screen format="linespecific">   IFIELD SHORTNAME,"","%s"   # (write shortname in the output file)
 </screen>
 </section>
 
@@ -366,8 +380,7 @@ example:
 <para>
 examples:
 </para>
-<screen format="linespecific">
-   IFIELD DESCRIPTION,"","%s" # (write description in the output file)
+<screen format="linespecific">   IFIELD DESCRIPTION,"","%s" # (write description in the output file)
 </screen>
 </section>
 
@@ -389,8 +402,7 @@ examples:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD URL,"","%s" #	(writes the URL in the output file)
+<screen format="linespecific">   IFIELD URL,"","%s" #	(writes the URL in the output file)
 </screen>
 </section>
 
@@ -404,8 +416,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD URL_LINK_TEXT,"","%s" # (writes link text in the output file)
+<screen format="linespecific">   IFIELD URL_LINK_TEXT,"","%s" # (writes link text in the output file)
 </screen>
 </section>
 
@@ -419,8 +430,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD ICON_DESCR,"","%s" # (writes link text in the output file)
+<screen format="linespecific">   IFIELD ICON_DESCR,"","%s" # (writes link text in the output file)
 </screen>
 </section>
 
@@ -434,8 +444,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD LAT_DECIMAL,"","%f"
+<screen format="linespecific">   IFIELD LAT_DECIMAL,"","%f"
 </screen>
 </section>
 
@@ -457,8 +466,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD LAT_INT32DEG,"","%ld"
+<screen format="linespecific">   IFIELD LAT_INT32DEG,"","%ld"
 </screen>
 </section>
 
@@ -483,8 +491,7 @@ example:
 <para>
 examples:
 </para>
-<screen format="linespecific">
-   IFIELD LAT_DECIMALDIR,"","%f %c"     #  (writes 31.333 N)
+<screen format="linespecific">   IFIELD LAT_DECIMALDIR,"","%f %c"     #  (writes 31.333 N)
    IFIELD LAT_DIRDECIMAL,"","%c %f"     #  (writes N 31.333)
 </screen>
 </section>
@@ -518,8 +525,7 @@ examples:
 <para>
 examples:
 </para>
-<screen format="linespecific">
-   IFIELD LAT_HUMAN_READABLE,"","%c %d %f"   # (writes N 31 40.000)
+<screen format="linespecific">   IFIELD LAT_HUMAN_READABLE,"","%c %d %f"   # (writes N 31 40.000)
    IFIELD LAT_HUMAN_READABLE,"","%d deg %f min %c"
                               #  (writes "31 deg 40.000 min N")
           #  Note that this string will confuse the reading routine due 
@@ -547,8 +553,7 @@ examples:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD LATLON_HUMAN_READABLE,"","%c %d %f"
+<screen format="linespecific">   IFIELD LATLON_HUMAN_READABLE,"","%c %d %f"
            # (writes "N 31 40.126 W 85 09.62" as a single field)
 </screen>
 </section>
@@ -562,8 +567,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD  LAT_NMEA, "%f", "%08.3f"     # (writes  3558.322)
+<screen format="linespecific">   IFIELD  LAT_NMEA, "%f", "%08.3f"     # (writes  3558.322)
 </screen>
 </section>
 
@@ -576,8 +580,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD  LON_NMEA, "%f", "%010.3f"  # (writes -08708.082)
+<screen format="linespecific">   IFIELD  LON_NMEA, "%f", "%010.3f"  # (writes -08708.082)
 </screen>
 </section>
 
@@ -591,8 +594,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD ALT_FEET,"","%.0f"
+<screen format="linespecific">   IFIELD ALT_FEET,"","%.0f"
 </screen>
 </section>
 
@@ -613,8 +615,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD HEART_RATE,"","%d"
+<screen format="linespecific">   IFIELD HEART_RATE,"","%d"
 </screen>
 </section>
 
@@ -628,8 +629,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD EXCEL_TIME,"","%11.5f"
+<screen format="linespecific">   IFIELD EXCEL_TIME,"","%11.5f"
 </screen>
 </section>
 
@@ -644,8 +644,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD TIMET_TIME,"","%ld"
+<screen format="linespecific">   IFIELD TIMET_TIME,"","%ld"
 </screen>
 </section>
 
@@ -660,8 +659,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD YYYYMMDD_TIME,"","%ld"
+<screen format="linespecific">   IFIELD YYYYMMDD_TIME,"","%ld"
 </screen>
 </section>
 
@@ -674,8 +672,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD GMT_TIME,"","%m/%d/%Y %I:%M:%D %p"
+<screen format="linespecific">   IFIELD GMT_TIME,"","%m/%d/%Y %I:%M:%D %p"
 </screen>
 <para>
    Search the web for 'strptime man page' for details strptime, but one 
@@ -694,8 +691,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD LOCAL_TIME,"","%y-%m-%d"
+<screen format="linespecific">   IFIELD LOCAL_TIME,"","%y-%m-%d"
 </screen>
 </section>
 
@@ -709,8 +705,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD HMSG_TIME,"","%d:%d:%d %s"
+<screen format="linespecific">   IFIELD HMSG_TIME,"","%d:%d:%d %s"
 </screen>
 </section>
  
@@ -724,8 +719,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD HMSL_TIME,"","%dh%dm"
+<screen format="linespecific">   IFIELD HMSL_TIME,"","%dh%dm"
 </screen>
 </section>
  
@@ -742,8 +736,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD ISO_TIME,"","%s"
+<screen format="linespecific">   IFIELD ISO_TIME,"","%s"
 </screen>
 </section>
  
@@ -757,8 +750,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD GEOCACHE_DIFF,"","%3.1f"
+<screen format="linespecific">   IFIELD GEOCACHE_DIFF,"","%3.1f"
 </screen>
 </section>
 
@@ -772,8 +764,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   IFIELD GEOCACHE_TERR,"","%3.1f"
+<screen format="linespecific">   IFIELD GEOCACHE_TERR,"","%3.1f"
 </screen>
 </section>
 
@@ -787,8 +778,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   GEOCACHE_CONTAINER,"","%s"
+<screen format="linespecific">   GEOCACHE_CONTAINER,"","%s"
 </screen>
 </section>
 
@@ -802,8 +792,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   GEOCACHE_TYPE,"","%s"
+<screen format="linespecific">   GEOCACHE_TYPE,"","%s"
 </screen>
 </section>
 
@@ -816,8 +805,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   GEOCACHE_PLACER,"","%s"
+<screen format="linespecific">   GEOCACHE_PLACER,"","%s"
 </screen>
 </section>
 
@@ -830,8 +818,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   GEOCACHE_LAST_FOUND,"","%ld"
+<screen format="linespecific">   GEOCACHE_LAST_FOUND,"","%ld"
 </screen>
 </section>
 
@@ -844,8 +831,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   GEOCACHE_HINT,"","%s"
+<screen format="linespecific">   GEOCACHE_HINT,"","%s"
 </screen>
 </section>
 
@@ -867,8 +853,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   PATH_DISTANCE_MILES,"","%f"
+<screen format="linespecific">   PATH_DISTANCE_MILES,"","%f"
 </screen>
 </section>
 
@@ -891,8 +876,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   PATH_SPEED,"","%f"
+<screen format="linespecific">   PATH_SPEED,"","%f"
 </screen>
 </section>
 
@@ -906,8 +890,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   PATH_COURSE,"","%f"
+<screen format="linespecific">   PATH_COURSE,"","%f"
 </screen>
 </section>
 
@@ -920,8 +903,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   GPS_HDOP,"","%f"
+<screen format="linespecific">   GPS_HDOP,"","%f"
 </screen>
 </section>
 
@@ -934,8 +916,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">
-   GPS_SAT,"","%d"
+<screen format="linespecific">   GPS_SAT,"","%d"
 </screen>
 </section>
 
@@ -948,8 +929,7 @@ filter). Needs string conversion.
 <para>
 example:
 </para>
-<screen format="linespecific">
-   GPS_FIX,"","%s"
+<screen format="linespecific">   GPS_FIX,"","%s"
 </screen>
 </section>
 </section> <!-- definitions -->
