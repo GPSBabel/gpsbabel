@@ -182,7 +182,7 @@ arglist_t nmea_args[] = {
 /*
  * Slightly different than the Magellan checksum fn.
  */
-static int
+int
 nmea_cksum(const char *const buf)
 {
 	int x = 0 ;

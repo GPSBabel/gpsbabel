@@ -55,6 +55,7 @@ extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t google_vecs;
 extern ff_vecs_t gpilots_vecs;
 extern ff_vecs_t gpl_vecs;
+extern ff_vecs_t gpssim_vecs;
 extern ff_vecs_t gpspilot_vecs;
 extern ff_vecs_t gpsutil_vecs;
 extern ff_vecs_t gpx_vecs;
@@ -550,6 +551,12 @@ vecs_t vec_list[] = {
 		"gtm",
 		"GPS TrackMaker",
 		"gtm"
+	},
+	{
+		&gpssim_vecs,
+		"gpssim",
+		"Franson GPSGate Simulation",
+		"gpssim"
 	},
 #if CSVFMTS_ENABLED
         {

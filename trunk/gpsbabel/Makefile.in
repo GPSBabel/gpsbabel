@@ -44,7 +44,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
 	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o \
-	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o
+	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o
 
 FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
