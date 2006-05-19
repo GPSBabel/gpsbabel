@@ -1063,4 +1063,13 @@ rm -f ${TMPDIR}/axim-*
 ${PNAME} -i axim_gpb -f ${REFERENCE}/track/axim-sample.gpb -o gpx -F ${TMPDIR}/axim-sample.gpx
 compare ${REFERENCE}/track/axim-sample.gpx ${TMPDIR}/axim-sample.gpx
 
+#
+# Franson GPSGate simulation
+#
+${PNAME} -i geo -f ${REFERENCE}/../geocaching.loc -o gpssim -F ${TMPDIR}/waypoints.gpssim
+compare ${TMPDIR}/waypoints.gpssim ${REFERENCE}
+${PNAME} -i gpx -f ${REFERENCE}/track/tracks.gpx -o gpssim -F ${TMPDIR}/tracks.gpssim
+compare ${TMPDIR}/tracks.gpssim ${REFERENCE}/track
+
+
 exit 0

@@ -765,6 +765,11 @@ double fmt_speed(const double, char **tag);
 void gb_sleep(unsigned long microseconds);
 
 /*
+ * From nmea.c
+ */
+int nmea_cksum(const char *const buf);
+
+/*
  * Color helpers.
  */
 int color_to_bbggrr(char *cname);
