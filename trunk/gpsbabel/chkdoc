@@ -4,6 +4,8 @@ checkit() {
 	export ECODE
 	TYPE=$1
 	STY=$2
+	DIR=${2}s
+
 	if ! grep -q $TYPE ~/src/babelweb/capabilities.html ~/src/babelweb/capabilities.inc
 	then
 		echo $STY $TYPE is not documented in capabilities.html.
@@ -15,10 +17,11 @@ checkit() {
 		echo $STY $TYPE is not documented in changes.html.
 		ECODE=1
 	fi
-	
-	if ! grep -qi "$TYPE" readme.xml 
+
+	DOCF=xmldoc/$DIR/${TYPE}.xml	
+	if ! test  -f $DOCF ;
 	then
-		echo $STY $TYPE is not documented in readme.xml.
+		echo $STY $TYPE is not documented in $DOCF
 		ECODE=1
 	fi
 
