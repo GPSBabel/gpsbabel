@@ -4,39 +4,48 @@ allows you to change the types of roads based on their names.  You can
 change multiple roads at the same time.  Currently supported types are 
 </para>
 
-      <simplelist type="vert">
-        <member>
-               <parameter moreinfo="none">limited</parameter>
-		Limited-access freeways</member>
-        <member>
-               <parameter moreinfo="none">toll</parameter>
-		Limited-access toll highways</member>
-        <member>
-               <parameter moreinfo="none">ramp</parameter>      
-		Access ramps for limited-access highways</member>
-        <member>
-               <parameter moreinfo="none">us</parameter> 
-		National highways (e.g. US routes)</member>
-        <member>
-               <parameter moreinfo="none">primary</parameter> 
-		Primary State/Provincial routes</member>
-        <member>
-               <parameter moreinfo="none">state</parameter>
-		State/Provincial routes</member>
-        <member>
-               <parameter moreinfo="none">major</parameter>     
-		Major Connectors</member>
-        <member>
-               <parameter moreinfo="none">ferry</parameter>     
-		Ferry Routes</member>
-        <member>
-               <parameter moreinfo="none">local</parameter>     
-		Local Roads</member>
-        <member>
-               <parameter moreinfo="none">editable</parameter>
-		User-drawn Roads
-	</member>
-      </simplelist>
+      <variablelist termlength="20">
+        <varlistentry>
+               <term>limited</term>
+	       <listitem><simpara>Limited-access freeways</simpara></listitem>
+        </varlistentry>
+        <varlistentry>
+               <term>toll</term>
+               <listitem><simpara>Limited-access toll highways</simpara></listitem>
+        </varlistentry>
+        <varlistentry>
+               <term>ramp</term>      
+               <listitem><simpara>Access ramps for limited-access highways</simpara></listitem>
+        </varlistentry>
+        <varlistentry>
+               <term>us</term> 
+               <listitem><simpara>National highways (e.g. US routes)</simpara></listitem>
+        </varlistentry>
+        <varlistentry>
+               <term>primary</term> 
+               <listitem><simpara>Primary State/Provincial routes</simpara></listitem>
+        </varlistentry>
+        <varlistentry>
+               <term>state</term>
+               <listitem><simpara>State/Provincial routes</simpara></listitem>
+        </varlistentry>
+        <varlistentry>
+               <term>major</term>     
+               <listitem><simpara>Major Connectors</simpara></listitem>
+        </varlistentry>
+        <varlistentry>
+               <term>ferry</term>     
+               <listitem><simpara>Ferry Routes</simpara></listitem>
+        </varlistentry>
+        <varlistentry>
+               <term>local</term>     
+               <listitem><simpara>Local Roads</simpara></listitem>
+        </varlistentry>
+        <varlistentry>
+               <term>editable</term>
+               <listitem><simpara>User-drawn Roads</simpara></listitem>
+        </varlistentry>
+      </variablelist>
 
 <para>
 GPSBabel defaults to creating editable roads.  These are routed just like 
