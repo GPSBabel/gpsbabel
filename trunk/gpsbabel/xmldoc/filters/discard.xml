@@ -1,28 +1,12 @@
-
-         
-         <para> This filter 'fixes' gps data by discarding points with
-         a hdop and/or vdop over a set limit. If you give both the
-         hdop and a vdop options, by default points that exceed EITHER
-         are discarded (OR). This filter processes waypoints, tracks,
-         and routes.
+<para>
+This filter is used to "fix" unreliable GPS data by discarding points
+with HDOP and/or VDOP above a specified limit.  HDOP and VDOP are 
+measures of the best possible horizontal or vertical precision 
+for a given configuration of GPS satellites.
 </para>
-         <para>HDOP (float)</para>
-         <para>Points with a hdop exceeding the given value are
-         discarded.
-</para>
-         <para>VDOP (float)</para>
-         <para>Points with a vdop exceeding the given value are
-         discarded.</para>
-         <para>HDOPANDVDOP</para>
-         <para>Only useful if both hdop and vdop are given. Now
-         logical AND is used, i.e. only points exceeding both given
-         values are discarded.
-</para>
-         <para>            Example: </para>
-         <screen format="linespecific"> gpsbabel \ 
-	-i gpx -f in.gpx \
-	-x discard,hdop=10,vdop=20,hdopandvdop \ 
-	-o gpx -F out.gpx
-</screen>
-         <para> Contributed by Tobias Minich.</para>
+<example id="example_discard_filter">
+<title>Using the discard filter</title>
+<screen format="linespecific"> gpsbabel -i gpx -f in.gpx -x discard,hdop=10,vdop=20,hdopandvdop -o gpx -F out.gpx</screen>
+</example>
+<para> Contributed by Tobias Minich.</para>
       
