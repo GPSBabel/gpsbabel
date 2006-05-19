@@ -5,3 +5,5 @@
 <!ENTITY chap_formats SYSTEM "formats.xml">
 <!ENTITY chap_filters SYSTEM "filters.xml">
 <!ENTITY app_datums  SYSTEM "datums.xml">
+<!ENTITY app_styles  SYSTEM "styles.xml">
+
