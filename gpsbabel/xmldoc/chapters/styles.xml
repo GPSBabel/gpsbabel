@@ -22,24 +22,32 @@ A few internal constants are defined in the XCSV parser to make the style
 file simpler.  They may or may not be used and are optional in most cases. 
 Note that only certain style file directives map these constants.
 </para>
-<screen format="linespecific">
-STYLE CONSTANT  MAPS TO CHAR(s)
----------------------------------------
-COMMA		,
-COMMASPACE	,&lt;space&gt;
-SINGLEQUOTE	'
-DOUBLEQUOTE	"
-COLON		:
-SEMICOLON	;
-NEWLINE		\n
-CR		\r
-CRNEWLINE  	\r\n
-TAB  		\t
-SPACE  		&lt;space&gt;
-HASH  		#
-PIPE  		|
-WHITESPACE	*** SEE WHITESPACE NOTES BELOW ***
-</screen>
+<table id="internal_csv_constants">
+<title>Internal Constants for XCSV</title>
+<tgroup cols="2">
+<colspec colnum="2" colname="col2" align="center" />
+<thead>
+<row><entry>STYLE CONSTANT</entry>  <entry>  MAPS TO CHAR(s)</entry></row>
+</thead>
+<tbody>
+<row><entry>COMMA</entry>  <entry>,</entry></row>
+<row><entry>COMMASPACE</entry>  <entry>,&lt;space&gt;</entry></row>
+<row><entry>SINGLEQUOTE</entry>  <entry>'</entry></row>
+<row><entry>DOUBLEQUOTE</entry>  <entry>"</entry></row>
+<row><entry>COLON</entry>  <entry>:</entry></row>
+<row><entry>SEMICOLON</entry>  <entry>;</entry></row>
+<row><entry>NEWLINE</entry>  <entry>\n</entry></row>
+<row><entry>CR</entry>  <entry>\r</entry></row>
+<row><entry>CRNEWLINE  </entry>  <entry>\r\n</entry></row>
+<row><entry>TAB  </entry>  <entry>\t</entry></row>
+<row><entry>SPACE  </entry>  <entry>&lt;space&gt;</entry></row>
+<row><entry>HASH  </entry>  <entry>#</entry></row>
+<row><entry>PIPE  </entry>  <entry>|</entry></row>
+<row><entry>WHITESPACE	*** SEE WHITESPACE NOTES BELOW ***</entry></row>
+</tbody>
+</tgroup>
+</table>
+
 <section id="style_const_whitespace">
 <title>WHITESPACE</title>
 <para>
