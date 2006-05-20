@@ -1,4 +1,4 @@
-<para>When this options is specified, GPSBabel will split 
+<para>When this option is specified, GPSBabel will split 
         split the output into multiple files using the output filename
         as a base.  For example, if you specify an output file of 'mytrip',
 <simplelist type="vert">
