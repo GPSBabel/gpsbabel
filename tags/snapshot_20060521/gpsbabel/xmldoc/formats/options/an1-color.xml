@@ -1,0 +1,4 @@
+ <para>This option allows you to specify the color for
+line or mapnote data.  It accepts color names of the form "#FF0000" (red) or any
+of the color names from the Cascading Style Sheets (CSS)
+specification.</para>

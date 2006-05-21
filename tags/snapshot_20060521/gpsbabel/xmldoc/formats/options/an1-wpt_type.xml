@@ -1,0 +1,5 @@
+<para>
+This option specifies how to represent point data in the draw file.  
+Valid waypoint types are "marker", "text", "mapnote", and "circle".  
+The default is "marker". 
+</para>

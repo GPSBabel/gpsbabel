@@ -1,0 +1,26 @@
+
+	
+        
+	<para>
+	Unicsv examines the first line of a file to determine the field
+	order and field separator in that file.   It is thus read-only format.
+	</para>
+	<para>
+	If the first line contains any tabs, the data lines are assumed 
+	to be tab separated.   Otherwise the fields are assumed to be 
+	separated by commas.
+	</para>
+	<para>
+	The list of keywords include "lat", "lon", "desc", "name", 
+	"notes", "alt", "urm z", "utm n", "utm e", and "url".   
+	Fuller spellings (i.e. "longitude") may be used.
+	</para>
+	<para>
+	A typical file may be:
+	<screen format="linespecific">
+	Name, Latitude, Longitude, Description 
+	GCEBB,35.972033,-87.134700,Mountain Bike Heaven by susy1313
+ 	GC1A37,36.090683,-86.679550,The Troll by a182pilot &amp; Family
+	</screen>
+	</para>
+	

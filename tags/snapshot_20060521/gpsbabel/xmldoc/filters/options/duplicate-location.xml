@@ -1,0 +1,9 @@
+<para>
+This option causes the duplicate filter to remove any additional waypoint 
+that has the same coordinates (to six decimal degrees) as a waypoint that 
+came before.  This option may be used to remove duplicate waypoints if the 
+names are not expected to be the same.  It also might be used along with the
+<option>shortname</option> option to remove duplicate waypoints if the names 
+of several unrelated groups of waypoints might be the same.
+</para>
+

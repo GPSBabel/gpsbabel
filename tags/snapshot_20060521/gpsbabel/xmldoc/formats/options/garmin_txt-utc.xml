@@ -1,0 +1,5 @@
+<para>
+This option specifies the local time zone to use when writing times.  It
+is specified as an offset from Universal Coordinated Time (UTC) in hours.  
+Valid values are from -23 to +23.
+</para>  

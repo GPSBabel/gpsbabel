@@ -1,0 +1,24 @@
+   <preface id="Introduction">
+      <title>Introduction</title>
+      <section id="The_Problem">
+         <title>The Problem</title>
+         <para> There are simply too many gratuitously different file formats
+to hold waypoint, track, and route information in various programs
+used by computers.  GPX (http://www.topografix.com/gpx.asp) defines a
+standard in XML to contain all the data, but there are too many
+programs that don't understand it yet and too much data that are in an
+alternate formats.
+</para>
+      </section>
+      <section id="The_Solution">
+         <title>The Solution</title>
+         <para> I needed to convert waypoints between a couple of formats, so I
+whipped up a converter and based it on an extensible foundation so
+that it was easy to add new formats.  Most file formats added so far
+have taken under 200 lines of reasonable ISO C so they can be stamped
+out pretty trivially.  Formats that are ASCII text delimited in some
+fixed way can be added with no programming at all via our 'style'
+mechanism.
+</para>
+      </section>
+   </preface>

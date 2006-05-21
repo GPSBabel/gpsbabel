@@ -1,0 +1,56 @@
+<para> 
+	GPSBabel supports a wide variety of Garmin hardware via serial
+	on most operating systems and USB on Windows, Linux, and OS X.
+</para>
+
+<para> 
+	For serial models, be sure the GPS is set for "Garmin
+	mode" in setup and that nothing else (PDA hotsync programs, gpsd,
+	getty, pppd, etc.) is using the serial port.
+</para>
+
+<para> 
+	Supported models on USB include VistaC, SummitC, 60C, 60CS, 76C, 
+	76CS, 96C, Quest, 2610, 2620, 2650, 2720, 2730, 2820, Foretrex 201,
+	Foretrex 301, Forerunner 201, Forerunner 205, Forerunner 301, 
+	Forerunner 305,  Edge 205, Edge 305, and most serial units.
+</para>
+
+<para> 
+	To communicate with a unit serially, use the name of that
+	serial port such as "COM1" or  "/dev/cu.serial".  
+</para>
+<para>
+	To communicate via USB use "usb:" as the filename on all OSes.   
+	Thus, to read the waypoints from a Garmin USB unit and write 
+	them to a GPX file:
+
+      <screen format="linespecific">gpsbabel -i garmin -f usb: -o gpx -F blah.gpx</screen>
+
+</para>
+<para>
+	If you have multiple units attached via USB, you may provide 
+	a unit number, with zero being the implied default.  So if you 
+	have three USB models on your system, they can be addressed as 
+	"usb:0", "usb:1", and "usb:2".  To get a list of recognized devices,
+	specifiy a negative number such as:
+</para>
+	<screen format="linespecific">gpsbabel -i garmin -f usb:-1</screen>
+ 
+<para> 
+When reporting problems with the Garmin format, be sure to include
+the full unit model, firmware version, and be prepared to offer
+debugging dumps by adding "-D9" to the command line, like:
+</para>
+
+      <screen format="linespecific"> gpsbabel -D9 -i garmin -f usb: -o gpx -F blah.gpx</screen>
+
+<para> 
+Custom icons are supported on units that support that.
+Neither GPSBabel nor your firmware know what is associated with any
+given slot number.  They don't know that the picture you placed in the
+first slot is a happy face, they only know they're in the lowest
+numbered slot.  GPSBabel names the them consistently with Mapsource,
+so they are named 'Custom 0' through 'Custom 511'.
+</para>
+

@@ -1,0 +1,536 @@
+<?xml version="1.0"?>
+<Export>
+	<Route>
+		<Version>1.0000000</Version>
+		<Name>ROUTENAME</Name>
+		<LastModified>0</LastModified>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMEdward Islandlegnum0usrmrkEdward Islandselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-20.226667</Latitude>
+			<Longitude>149.205000</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMScawfell Islandlegnum1usrmrkScawfell Islandselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-20.850000</Latitude>
+			<Longitude>149.641667</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMMiddle Islandlegnum2usrmrkMiddle Islandselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-21.680097</Latitude>
+			<Longitude>150.176053</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMClara Grouplegnum3usrmrkClara Groupselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-22.318424</Latitude>
+			<Longitude>150.747716</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMCape Capricornlegnum4usrmrkCape Capricornselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-23.448417</Latitude>
+			<Longitude>151.322716</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGladstone FWBlegnum5usrmrkGladstone FWBselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-23.890914</Latitude>
+			<Longitude>151.516050</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMHigh Peaklegnum6usrmrkHigh Peakselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-21.951659</Latitude>
+			<Longitude>150.754996</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMPenrith Islandlegnum7usrmrkPenrith Islandselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-20.988434</Latitude>
+			<Longitude>149.929385</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMPinnacle Pointlegnum8usrmrkPinnacle Pointselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-20.081093</Latitude>
+			<Longitude>149.064390</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMTink Shoallegnum9usrmrkTink Shoalselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-19.375083</Latitude>
+			<Longitude>147.819367</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMPeloruslegnum10usrmrkPelorusselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-18.433464</Latitude>
+			<Longitude>146.549413</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMEva Islandlegnum11usrmrkEva Islandselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-18.213466</Latitude>
+			<Longitude>146.409414</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMLittle Fitzroy Islandlegnum12usrmrkLittle Fitzroy Islandselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-16.913473</Latitude>
+			<Longitude>146.059410</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMCairns FWBlegnum13usrmrkCairns FWBselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-16.731975</Latitude>
+			<Longitude>145.889412</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMLow Isleslegnum14usrmrkLow Islesselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-16.465144</Latitude>
+			<Longitude>145.637746</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMPickersgill Reeflegnum15usrmrkPickersgill Reefselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-15.921814</Latitude>
+			<Longitude>145.481079</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGubbinslegnum16usrmrkGubbinsselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-15.708466</Latitude>
+			<Longitude>145.382746</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMThree Isleslegnum17usrmrkThree Islesselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-15.110152</Latitude>
+			<Longitude>145.402742</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMPalfreylegnum18usrmrkPalfreyselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.673488</Latitude>
+			<Longitude>145.417740</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMNymph Islandlegnum19usrmrkNymph Islandselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.626822</Latitude>
+			<Longitude>145.251075</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMCoquetlegnum20usrmrkCoquetselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.546823</Latitude>
+			<Longitude>145.061077</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMHowicklegnum21usrmrkHowickselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.483491</Latitude>
+			<Longitude>144.979411</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMMegaeralegnum22usrmrkMegaeraselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.483491</Latitude>
+			<Longitude>144.932745</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMWatsonlegnum23usrmrkWatsonselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.451825</Latitude>
+			<Longitude>144.902745</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMBarrowlegnum24usrmrkBarrowselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.361826</Latitude>
+			<Longitude>144.686081</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMRocky Pointlegnum25usrmrkRocky Pointselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.195161</Latitude>
+			<Longitude>144.604414</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMPiponlegnum26usrmrkPiponselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.138495</Latitude>
+			<Longitude>144.511082</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMKing Islandlegnum27usrmrkKing Islandselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.060163</Latitude>
+			<Longitude>144.331083</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMClack Islandlegnum28usrmrkClack Islandselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.101829</Latitude>
+			<Longitude>144.244418</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMWharton Reeflegnum29usrmrkWharton Reefselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.101831</Latitude>
+			<Longitude>143.977754</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMEdenlegnum30usrmrkEdenselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.065164</Latitude>
+			<Longitude>143.917755</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMStainer Reeflegnum31usrmrkStainer Reefselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-13.981832</Latitude>
+			<Longitude>143.834422</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMPelicanlegnum32usrmrkPelicanselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-13.915166</Latitude>
+			<Longitude>143.812755</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMMagpielegnum33usrmrkMagpieselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-13.815167</Latitude>
+			<Longitude>143.734423</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMFifelegnum34usrmrkFifeselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-13.656834</Latitude>
+			<Longitude>143.704422</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMHeath Reeflegnum35usrmrkHeath Reefselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-13.475169</Latitude>
+			<Longitude>143.671088</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMBow Reeflegnum36usrmrkBow Reefselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-13.341836</Latitude>
+			<Longitude>143.671088</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMOsbornelegnum37usrmrkOsborneselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-13.096838</Latitude>
+			<Longitude>143.611087</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMChapmanlegnum38usrmrkChapmanselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-12.886839</Latitude>
+			<Longitude>143.594420</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMWye Reeflegnum39usrmrkWye Reefselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-12.818506</Latitude>
+			<Longitude>143.586087</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMEel Reeflegnum40usrmrkEel Reefselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-12.415159</Latitude>
+			<Longitude>143.362754</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMPiperlegnum41usrmrkPiperselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-12.236844</Latitude>
+			<Longitude>143.247755</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMMoodylegnum42usrmrkMoodyselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-12.085178</Latitude>
+			<Longitude>143.239421</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMClerkelegnum43usrmrkClerkeselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-11.963512</Latitude>
+			<Longitude>143.317753</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMHanniballegnum44usrmrkHannibalselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-11.586849</Latitude>
+			<Longitude>142.981088</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMHalfwaylegnum45usrmrkHalfwayselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-11.378517</Latitude>
+			<Longitude>142.986088</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMCairncrosslegnum46usrmrkCairncrossselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-11.231851</Latitude>
+			<Longitude>142.954421</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMWybornlegnum47usrmrkWybornselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.806855</Latitude>
+			<Longitude>142.804421</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMAlbany Rocklegnum48usrmrkAlbany Rockselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.741855</Latitude>
+			<Longitude>142.676089</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMAlpha Rocklegnum49usrmrkAlpha Rockselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.601857</Latitude>
+			<Longitude>142.552756</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMHerald Patcheslegnum50usrmrkHerald Patchesselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.501858</Latitude>
+			<Longitude>142.377758</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMEast Strait Leadslegnum51usrmrkEast Strait Leadsselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.480192</Latitude>
+			<Longitude>142.334425</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMShadwell Pointlegnum52usrmrkShadwell Pointselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.495192</Latitude>
+			<Longitude>142.282759</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMNardanalegnum53usrmrkNardanaselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.508525</Latitude>
+			<Longitude>142.251093</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMHammondlegnum54usrmrkHammondselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.510192</Latitude>
+			<Longitude>142.202760</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMHarrisonlegnum55usrmrkHarrisonselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.561859</Latitude>
+			<Longitude>142.126094</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMB1legnum56usrmrkB1select2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.568517</Latitude>
+			<Longitude>141.909433</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMRed Bankslegnum57usrmrkRed Banksselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.829182</Latitude>
+			<Longitude>141.659173</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMDuyfken Ptlegnum58usrmrkDuyfken Ptselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-12.568516</Latitude>
+			<Longitude>141.501109</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMWeipa Leadslegnum59usrmrkWeipa Leadsselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-12.705000</Latitude>
+			<Longitude>141.661667</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMWeipa FWBlegnum60usrmrkWeipa FWBselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-12.700000</Latitude>
+			<Longitude>141.688333</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGannetlegnum61usrmrkGannetselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.590757</Latitude>
+			<Longitude>141.875120</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMB2legnum62usrmrkB2select2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-10.575158</Latitude>
+			<Longitude>141.891066</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMMid Decaplegnum63usrmrkMid Decapselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.965864</Latitude>
+			<Longitude>145.407427</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMTurtlelegnum64usrmrkTurtleselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.632647</Latitude>
+			<Longitude>145.189250</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMNewtonlegnum65usrmrkNewtonselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>-14.517175</Latitude>
+			<Longitude>144.911974</Longitude>
+		</Object>
+	</Route>
+</Export>

@@ -1,0 +1,7 @@
+<para>
+This option causes GPSBabel to use the short name of the waypoint instead
+of the description.  This overrides the style file.
+</para>
+<para>
+Valid values for this option are 0 (off) and 1 (on).
+</para>

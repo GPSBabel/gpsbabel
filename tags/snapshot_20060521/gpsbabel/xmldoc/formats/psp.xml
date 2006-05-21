@@ -1,0 +1,19 @@
+
+      
+      
+      <para> Microsoft's PocketStreets 2002 Pushpin (.PSP) format is
+not yet completely documented.  THE .PSP MODULE DOES NOT WORK WITH MS
+STREETS &amp; TRIPS 2002 .EST FILES.  To create .PSP files from
+Streets &amp; Trips 2002, you will need to have PocketStreets support
+installed.
+         </para>
+      <para>Please note that MS Streets &amp; Trips only *EXPORTS*
+.PSP files. It does not import them.  MS Streets &amp; Trips 2002 only
+imports CSV files.  To use .PSP files, simply copy them over to the
+same folder on the mobile device as the map (.MPS), and open
+PocketStreets.  It should also be noted that in the case a pushpin is
+outside of the exported map area, the pin will be "grayed-out" and
+unused in PocketStreets. This is a good thing as it allows us to
+create one big .PSP file that covers multiple .MPS files.
+Unfortunately, you need one .PSP file for every .MPS file. :(</para>
+    
