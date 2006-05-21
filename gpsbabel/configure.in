@@ -154,7 +154,9 @@ fi
 AC_MSG_CHECKING(for libexpat)
 AC_ARG_WITH(libexpat,
   [  --with-libexpat[=DIR]   Use this to specify expat library .],
-  [ EXPAT_LIB="-L$withval -lexpat"], [
+  [ CFLAGS="$CFLAGS -L$withval"
+    EXPAT_LIB="-L$withval -lexpat"
+  ], [
 	case "$target" in
 	*-*-darwin*)
 		if test -f /sw/lib/libexpat.a ; then

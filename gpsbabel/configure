@@ -2822,7 +2822,9 @@ echo $ECHO_N "checking for libexpat... $ECHO_C" >&6
 # Check whether --with-libexpat or --without-libexpat was given.
 if test "${with_libexpat+set}" = set; then
   withval="$with_libexpat"
-   EXPAT_LIB="-L$withval -lexpat"
+   CFLAGS="$CFLAGS -L$withval"
+    EXPAT_LIB="-L$withval -lexpat"
+
 else
 
 	case "$target" in
