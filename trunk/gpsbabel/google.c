@@ -313,6 +313,7 @@ google_read(void)
 		      end = encoded_points;
 		      while ( (end = strstr(end, "\\\\" ))) {
 			memmove( end, end+1, strlen(end)+1 );
+			end++;
 		      }
 		      end = strchr( encoded_levels, '\'' );
 		      if ( end ) {
