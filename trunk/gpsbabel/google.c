@@ -321,6 +321,7 @@ google_read(void)
 		        end = encoded_levels;
   		        while ( (end = strstr(end, "\\\\" ))) {
 			  memmove( end, end+1, strlen(end)+1 );
+			  end++;
 		        }
 			goog_poly_e( NULL, NULL );
 		      }
