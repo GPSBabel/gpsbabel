@@ -1,4 +1,3 @@
-#if !defined(NO_USB)
 /*
     Windows layer of Garmin/USB protocol.
 
@@ -258,4 +257,3 @@ gusb_init(const char *pname, gpsdevh **dh)
 	exit (0);
 }
 
-#endif /* !defined(NO_USB) */

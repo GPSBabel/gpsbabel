@@ -31,4 +31,4 @@ gusb_init(const char *portname)
 	fatal(no_usb);
 }
 
-#endif /* defined(NO_USB) */
+#endif /* defined(HAVE_LIBUSB) */

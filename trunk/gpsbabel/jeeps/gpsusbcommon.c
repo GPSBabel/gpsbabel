@@ -1,4 +1,3 @@
-#if !defined(NO_USB)
 /*
     Garmin USB layer - OS independent component.
 
@@ -255,6 +254,3 @@ gusb_syncup(void)
 	}
 	fatal("Unable to establish USB syncup\n");
 }
-
-
-#endif /* !defined(NO_USB) */
