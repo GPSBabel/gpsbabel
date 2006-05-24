@@ -120,7 +120,6 @@ for (@formats) {
   <title>$line[4] ($line[2])</title>
 END
      print FILE expandoptions($line[1]);
-     include($id,"formats");
      $going = 1;
      $dooptions = 1;
      if ( defined($line[5]) && ($line[5] ne $line[2]) ) {
@@ -134,6 +133,7 @@ END
          $dooptions=0;
        }
      }
+     include($id,"formats");
    }
    elsif ($going && $dooptions && ($line[0] eq 'option')) {
      $nid = 'fmt_'.$id.'_o_'.$line[2];
