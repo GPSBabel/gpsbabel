@@ -22,26 +22,8 @@
 
 #include "config.h"
 #if !HAVE_LIBUSB 
-#include "garminusb.h"
 
 const char no_usb[] = "USB suport is not available in this build.\n";
-int
-gusb_cmd_send(const garmin_usb_packet *obuf, size_t sz)
-{
-	fatal(no_usb);
-}
-
-int
-gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
-{
-	fatal(no_usb);
-}
-
-int
-gusb_open(const char *portname)
-{
-	fatal(no_usb);
-}
 
 int
 gusb_init(const char *portname)
@@ -49,9 +31,4 @@ gusb_init(const char *portname)
 	fatal(no_usb);
 }
 
-int 
-gusb_close(const char *portname)
-{
-	return 0;
-}
 #endif /* defined(NO_USB) */
