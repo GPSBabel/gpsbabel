@@ -1,4 +1,3 @@
-#if !defined(NO_USB)
 /*
     Garmin USB layer - OS independent component.
 
@@ -43,4 +42,3 @@ void gusb_list_units(void);
 /* Provided by the OS layers */
 // int gusb_init(const char *portname, gpsdev **dh);
 
-#endif
