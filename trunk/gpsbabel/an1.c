@@ -813,7 +813,7 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 	rec->lon = EncodeOrd( -wpt->longitude );
 	rec->serial = serial++;
 	
-	if ( wpt_type_num == 0x12 ) {  /* image */
+	if ( rec->type == 0x12 ) {  /* image */
 		if ( strstr( wpt->icon_descr, ":\\" )) {
 			rec->image_name = xstrdup( wpt->icon_descr );
 			rec->height = -244;
