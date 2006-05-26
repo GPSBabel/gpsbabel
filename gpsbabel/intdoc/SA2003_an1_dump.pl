@@ -31,8 +31,9 @@
 sub decode {
    my $foo = shift;
 
-   my $deg = (0x80000000-$foo)/(0x800000);
-   sprintf( "%d %06.3f", $deg, 60*($deg-int($deg)));
+   my $intermed = 0x80000000-$foo;
+   my $deg = $intermed/(0x800000);
+   sprintf( "%8.8x %8.8x %d %06.3f", $foo, $intermed, $deg, 60*($deg-int($deg)));
 }
 
 
@@ -182,8 +183,9 @@ while ( $bitmapcount ) {
 
 ($magic, $wptcount) = shiftunpack( 'sl' );
 
-@types = qw(none marker line polygon text circle mapnote highlight unknown8 arc spline rectangle
-         unknown12 unknown13 road trail track waypoint);
+@types = qw(none marker line polygon text circle mapnote highlight 
+            unknown8 arc spline rectangle unknown12 unknown13 road 
+            trail track waypoint photo);
 
 print( "$wptcount waypoints\n" );
 while ( $wptcount ) {
@@ -211,6 +213,9 @@ while ( $wptcount ) {
    #   6     mapnote
    #  11     rectangle
    #  17     waypoint
+   #  18     photo
+
+   
 
   $lat = decode( $lat );
   $lon = decode( $lon );
@@ -221,7 +226,7 @@ while ( $wptcount ) {
   printf ( "$magic -- %x %x %x %x %x %x %x %x %x -- $type $types[$type]  $lat  $lon  %s $imagenames{$guid}  '$name'\n", 
       $unk1,  $unk2,  $unk3,  $unk4,  $unk5,  $unk6,  decodeGuid( $guid ) );
 
-	printf ("   %d height   %d width   %x fill %x outline %x fillstyle\n", $height, $width, $fillcolor, $outlinecolor, $fillflags);
+	printf ("   %d height   %d width   %x fill %x outline %x fillstyle font %s\n", $height, $width, $fillcolor, $outlinecolor, $fillflags, $font);
 
   $wptcount--;
 } 
