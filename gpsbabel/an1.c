@@ -58,9 +58,9 @@ roadchange *roadchanges = NULL;
 
 static
 arglist_t an1_args[] = {
-	{"type", &output_type, "Type of .an1 file (see README)", 
+	{"type", &output_type, "Type of .an1 file", 
 		"", ARGTYPE_STRING, ARG_NOMINMAX },
-	{"road", &road_changes, "Road type changes (see README)",
+	{"road", &road_changes, "Road type changes",
 		"", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"nogc", &nogc, "Do not add geocache data to description",
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
@@ -71,7 +71,7 @@ arglist_t an1_args[] = {
 	{"zoom", &opt_zoom, "Zoom level to reduce points",
 		NULL, ARGTYPE_INT, ARG_NOMINMAX },
 	{"wpt_type", &opt_wpt_type, 
-		"Waypoint type (marker,text,mapnote,circle)", 
+		"Waypoint type", 
 		"", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"radius", &opt_radius, "Radius for circles", 
 		NULL, ARGTYPE_STRING, ARG_NOMINMAX },
@@ -258,6 +258,14 @@ typedef struct {
 	long fillcolor;
 	long unk6;
 	long fillflags;
+
+        /* Added in SA2006/Topo 6.0 */
+	short unk6_1;	
+	char *url;
+	char *comment;
+	long creation_time;
+	long modification_time;
+        char *image_name; 
 } an1_waypoint_record;
 
 typedef struct {
@@ -296,6 +304,9 @@ void Destroy_AN1_Waypoint( void *vwpt ) {
 	an1_waypoint_record *wpt = (an1_waypoint_record *)vwpt;
 	xfree( wpt->name );
 	xfree( wpt->fontname );
+	xfree( wpt->url );
+	xfree( wpt->comment );
+	xfree( wpt->image_name );
 	xfree( vwpt );
 }
 
@@ -305,6 +316,9 @@ void Copy_AN1_Waypoint( void **vdwpt, void *vwpt ) {
 	memcpy( dwpt, wpt, sizeof( an1_waypoint_record ));
 	dwpt->name = xstrdup( wpt->name );
 	dwpt->fontname = xstrdup( wpt->fontname );
+	dwpt->url = xstrdup( wpt->url );
+	dwpt->comment = xstrdup( wpt->comment );
+	dwpt->image_name = xstrdup( wpt->image_name );
 	*vdwpt = (void *)dwpt;
 }
 
@@ -393,8 +407,53 @@ static void Read_AN1_Waypoint( FILE *f, an1_waypoint_record *wpt ) {
 	wpt->radius = ReadDouble( f );
         len = ReadShort( f );
         wpt->name = ReadString( f, len );
-        len = ReadShort( f );
-        wpt->fontname = ReadString( f, len );
+	
+	if ( len != strlen(wpt->name)) {
+		/* This happens in 06/6.0 files that put extra data in the 
+		 * name record for backward compatibility's sake */
+		char *ofs = wpt->name + strlen( wpt->name ) + 1;
+		wpt->unk6_1 = le_read16( ofs );  
+		ofs += 2;
+		
+		len = le_read16( ofs );          
+		ofs += 2;
+
+		if ( len ) {
+			wpt->url = xcalloc( len+1, 1 );
+			memcpy( wpt->url, ofs, len );
+			ofs += len;
+		}
+		
+		len = le_read16( ofs ); 
+		ofs += 2;
+		
+		if ( len  ) {
+			wpt->comment = xcalloc( len+1, 1 );
+			memcpy( wpt->comment, ofs, len );
+			ofs += len;
+		}
+		
+		/* these are quadwords, presumably for year-2038 compat. */
+		wpt->creation_time = le_read32( ofs );
+		ofs += 8;
+		
+		wpt->modification_time = le_read32( ofs );
+		ofs += 8;
+	}
+	
+	if ( wpt->type == 0x12 ) {
+		/* 'image' type */
+		ReadShort( f );  /* length of font + filename */
+		len = ReadShort( f );
+		wpt->fontname = ReadString( f, len );
+		len = ReadShort( f );
+		wpt->image_name = ReadString( f, len );
+	}
+	else {
+	        len = ReadShort( f );
+        	wpt->fontname = ReadString( f, len );
+		wpt->image_name = NULL;
+	}
 	ReadGuid( f, &wpt->guid );
         wpt->fontcolor = ReadLong( f );
 	wpt->fontstyle = ReadLong( f );
@@ -425,12 +484,64 @@ static void Write_AN1_Waypoint( FILE *f, an1_waypoint_record *wpt ) {
 	WriteChar( f, wpt->visible_zoom );
 	WriteShort( f, wpt->unk5 );
 	WriteDouble( f, wpt->radius );
-	len = strlen( wpt->name );
+	
+	len = strlen( wpt->name ) + 1 + 2 + 2 + 
+		(wpt->url ? strlen( wpt->url ) : 0) + 2 + 
+		(wpt->comment ? strlen( wpt->comment ) : 0) + 8 + 8;	
 	WriteShort( f, len );
         WriteString( f, wpt->name );
-	len = strlen( wpt->fontname );
-	WriteShort( f, len );
-        WriteString( f, wpt->fontname );
+	WriteChar( f, 0 );  /* name string terminator */
+	
+	WriteShort( f, wpt->unk6_1 );
+	
+	if ( wpt->url ) {
+		WriteShort( f, strlen(wpt->url));
+		WriteString( f, wpt->url );
+	}
+	else {
+		WriteShort( f, 0 );
+	}
+	
+	if ( wpt->comment ) {
+		WriteShort( f, strlen(wpt->comment));
+		WriteString( f, wpt->comment );
+	}
+	else {
+		WriteShort( f, 0 );
+	}
+	
+	WriteLong( f, wpt->creation_time );
+	WriteLong( f, 0 );
+	
+	WriteLong( f, wpt->modification_time );
+	WriteLong( f, 0 );			
+		
+	if ( wpt->type == 0x12 ) { /* image */
+		len = 2 + (wpt->fontname ? strlen( wpt->fontname ) : 0 ) + 
+		      2 + (wpt->image_name ? strlen( wpt->image_name ) : 0 );
+		WriteShort( f, len );
+		if ( wpt->fontname ) {
+			len = strlen( wpt->fontname );
+			WriteShort( f, len );
+			WriteString( f, wpt->fontname );
+		}
+		else {
+			WriteShort( f, 0 );
+		}
+		if ( wpt->image_name ) {
+			len = strlen( wpt->image_name );
+			WriteShort( f, len );
+			WriteString( f, wpt->image_name );
+		}
+		else {
+			WriteShort( f, 0 );
+		}
+	}
+	else {
+		len = strlen( wpt->fontname );
+		WriteShort( f, len );
+	        WriteString( f, wpt->fontname );
+	}
 	WriteGuid( f, &wpt->guid );
         WriteLong( f, wpt->fontcolor );
 	WriteLong( f, wpt->fontstyle );
@@ -603,17 +714,27 @@ static void Read_AN1_Waypoints( FILE *f ) {
 		Read_AN1_Waypoint( f, rec );
 		wpt_tmp = waypt_new();
 		
+		if ( rec->creation_time ) {
+			wpt_tmp->creation_time = rec->creation_time;
+		}
 		wpt_tmp->longitude = -DecodeOrd( rec->lon );
 		wpt_tmp->latitude = DecodeOrd( rec->lat );
+		wpt_tmp->notes = xstrdup( rec->comment );
 		wpt_tmp->description = xstrdup( rec->name );
-		if ( NULL != (url=strstr(wpt_tmp->description, "{URL="))) {
+		if ( rec->url ) {
+			wpt_tmp->url = xstrdup( rec->url );
+		}
+		else if ( NULL != (url=strstr(wpt_tmp->description, "{URL="))) {
 			*url = '\0';
 			url += 5;
 			url[strlen(url)-1] = '\0';
 			wpt_tmp->url = xstrdup( url );
 		}	
 		
-		if (FindIconByGuid(&rec->guid, &icon)) {
+		if ( rec->image_name ) {
+			wpt_tmp->icon_descr = xstrdup( rec->image_name );
+		}
+		else if (FindIconByGuid(&rec->guid, &icon)) {
 			wpt_tmp->icon_descr = icon;
 		}
 	
@@ -656,6 +777,7 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 		FindIconByName( opt_symbol, &rec->guid );
 		rec->fontsize = 10;
 		rec->visible_zoom = opt_zoom?opt_zoom_num:10;
+		rec->unk6_1 = 1;
 	}
 	rec->name = xstrdup( wpt->description );
 	
@@ -675,13 +797,30 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 		sprintf( extra, "{URL=%s}", wpt->url );
 		rec->name = xstrappend( rec->name, extra );
 		xfree( extra );
+		rec->url = xstrdup( wpt->url );
 	}
-
+	
+	if ( wpt->notes ) {
+		if ( rec->comment ) {
+			xfree( rec->comment );
+		}
+		rec->comment = xstrdup( wpt->notes );
+	}
+	
+	
+	rec->creation_time = rec->modification_time = wpt->creation_time;
 	rec->lat = EncodeOrd( wpt->latitude );
 	rec->lon = EncodeOrd( -wpt->longitude );
 	rec->serial = serial++;
 	
-	if ( wpt->icon_descr ) {
+	if ( wpt_type_num == 0x12 ) {  /* image */
+		if ( strstr( wpt->icon_descr, ":\\" )) {
+			rec->image_name = xstrdup( wpt->icon_descr );
+			rec->height = -244;
+			rec->width = -1;
+		}
+	}
+	if ( !rec->image_name && wpt->icon_descr ) {
 		FindIconByName( (char *)(void *)wpt->icon_descr, &rec->guid );
 	}
 	
@@ -903,6 +1042,9 @@ Init_Wpt_Type( void )
 		if ( !case_ignore_strcmp( opt_wpt_type, "marker" )) {
 			wpt_type_num = 1;
 		}
+		else if ( !case_ignore_strcmp( opt_wpt_type, "symbol" )) {
+			wpt_type_num = 1; /* symbol and marker are synonyms */
+		}
 		else if ( !case_ignore_strcmp( opt_wpt_type, "text" )) {
 			wpt_type_num = 4;
 		}
@@ -911,10 +1053,13 @@ Init_Wpt_Type( void )
 		}
 	        else if ( !case_ignore_strcmp( opt_wpt_type, "circle" )) {
 			wpt_type_num = 5;
+		}
+		else if ( !case_ignore_strcmp( opt_wpt_type, "image" )) {
+			wpt_type_num = 18;
 		}	
 		else {
 			fatal( MYNAME ": wpt_type must be "
-			    "marker, text, mapnote, or circle\n" );
+			    "symbol, text, mapnote, circle, or image\n" );
 		}
 	}
 }
