@@ -340,7 +340,7 @@ nmn4_write(void)
 
 ff_vecs_t nmn4_vecs = {
 	ff_type_file,
-	{ ff_cap_none, ff_cap_read || ff_cap_write, ff_cap_none },
+	{ ff_cap_none, ff_cap_none, ff_cap_read | ff_cap_write},
 	nmn4_rd_init,
 	nmn4_wr_init,
 	nmn4_rd_deinit,
