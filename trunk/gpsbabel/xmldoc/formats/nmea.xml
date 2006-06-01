@@ -1,33 +1,36 @@
-
-      
-      
-      <para> This format is the file representation of the NMEA0183
-log and waypoint format.  Representative programs include:</para>
-      <para>
-            <ulink url="http://www.genimap.fi/kuluttajatuotteet/alue2.asp?folder=38&amp;subfolder=16662&amp;2057">genimap.fi</ulink>
-         </para>
-      <para>
-            <ulink url="http://homepages.tig.com.au/~robk/datalogger.html">homepages.tig.com.au</ulink>
-         </para>
-      <para>
-            <ulink url="http://www.gpstm.com/eng/features_eng.htm ">gpstm.com</ulink>
-         </para>
-      <para>
-            <ulink url="http://www.gpsmaster.nl/ ">gpsmaster.nl</ulink>
-         </para>
-      <para>
-            <ulink url="http://www.silcom.com/~rwhately/index.html">silcom.com/~rwhately</ulink>
-         </para>
-      <para>
-            <ulink url="http://www.visualgps.net/VisualGPSce/default.htm">visualgps.net</ulink>
-         </para>
-      <para>
-            <ulink url="http://www.gpsu.co.uk/">gpsu.co.uk</ulink>
-         </para>
-      <para>
-            <ulink url="http://www.kolumbus.fi/eino.uikkanen/geoconvgb/index.htm">kolumbus.fi</ulink>
-         </para>
-      <para>
-            <ulink url="http://www.commlinx.com.au/GPS_recorder.htm">commlinkx.com</ulink>
-         </para>
     
+      
+<para> This format is the file representation of the NMEA 
+(National Marine Electronics Association) 0183
+log and waypoint format for GPS devices.  Some hardware and software
+that work with NMEA-0183 formatted data include:
+</para>
+<simplelist columns="3">
+<member>
+  <ulink url="http://homepages.tig.com.au/~robk/datalogger.html">GPS Data Logger</ulink>
+</member>
+<member>
+  <ulink url="http://www.gpstm.com/eng/features_eng.htm ">GPS TrackMaker</ulink>
+</member>
+<member>
+  <ulink url="http://www.gpsmaster.nl/ ">GPSMaster</ulink>
+</member>
+<member>
+  <ulink url="http://www.silcom.com/~rwhately/index.html">NMEAlog</ulink>
+</member>
+<member>
+  <ulink url="http://www.visualgps.net/VisualGPSce/default.htm">VisualGPS</ulink>
+</member>
+<member>
+  <ulink url="http://www.gpsu.co.uk/">GPS Utility</ulink>
+</member>
+<member>
+  <ulink url="http://www.kolumbus.fi/eino.uikkanen/geoconvgb/index.htm">GeoConv</ulink>
+</member>
+<member>
+  <ulink url="http://www.commlinx.com.au/GPS_recorder.htm">CommLinx GPS recorder</ulink>
+</member>
+<member>
+  <ulink url="http://www.sparkfun.com/commerce/product_info.php?products_id=671">SparkFun GPS Datalogger</ulink>
+</member>
+</simplelist>  
