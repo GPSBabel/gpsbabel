@@ -4,18 +4,60 @@
          <title>Invocation</title>
          <para>Invocation was meant to be flexible.  Unfortunately,
          that can sometimes lead to unwieldy command lines.</para>
-         <screen format="linespecific">gpsbabel -? </screen>
-         <para>will always show you the supported file types.  To use
+
+<para>
+If you're using GPSBabel, you will need to know how to do at least two things:
+read data from a file, and write it to another file.  There are four basic
+commands you need to know to do those things:
+</para>
+<segmentedlist>
+<?dbhtml list-presentation="table"?>
+<segtitle>Command</segtitle>
+<segtitle>Meaning</segtitle>
+<seglistitem>
+  <seg><option>-i</option> <parameter class="command">format</parameter></seg>
+  <seg>Set input format</seg>
+</seglistitem>
+<seglistitem>
+  <seg><option>-f</option> <parameter class="command">filename</parameter></seg>
+  <seg>Read file</seg>
+</seglistitem>
+<seglistitem>
+  <seg><option>-o</option> <parameter class="command">format</parameter></seg>
+  <seg>Set output format</seg>
+</seglistitem>
+<seglistitem>
+  <seg><option>-F</option> <parameter class="command">filename</parameter></seg>
+  <seg>Write output File</seg>
+</seglistitem>
+</segmentedlist>
+
+<para>
+The <parameter class="command">format</parameter> parameters in the above list
+refer to the names of formats or file types supported by GPSBabel. 
+</para>
+<screen format="linespecific">gpsbabel -? </screen>
+<para>will always show you the supported file types.  In this document, the
+various supported formats are listed in <xref linkend="The_Formats" />.  The 
+name that you would use on the command line follows the format name in 
+parentheses.
+</para>
+<para>
+The <parameter class="command">filename</parameter> parameters specify the 
+name of a file to be read or written.
+</para>
+
+<para>To use
          this program, just tell it what you're reading, where to read
          it from, what you're writing, and what to write it to.  For
          example:</para>
          <screen format="linespecific">gpsbabel -i geo -f /tmp/geocaching.loc -o gpx -F /tmp/geocaching.gpx</screen>
-         <para>tells it to read the first file in geocaching.com
+         <para>tells it to read the file "/tmp/geocaching.loc" in geocaching.com
          format and create a new file in GPX format.</para>
          <para> This command will read from a Magellan unit attached
          to the first serial port on a Linux system (device names will
          vary on other OSes) and write them as a geocaching loc file.
-         The second command does the same for windows.</para>
+         The second command does the same on Microsoft Windows.</para>
          <screen format="linespecific">gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</screen>
          <screen format="linespecific">gpsbabel -i magellan -f com1 -o geo -F mag.loc</screen>
          <para>Optionally, you may specify <parameter moreinfo="none">"-s"</parameter> in any command line.  This
