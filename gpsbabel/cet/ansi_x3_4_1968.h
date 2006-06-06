@@ -43,38 +43,203 @@ const int cet_ucs4_map_ansi_x3_4_1968[cet_ucs4_cnt_ansi_x3_4_1968];
 
 const cet_ucs4_link_t cet_ucs4_to_ansi_x3_4_1968_links[cet_ucs4_to_ansi_x3_4_1968_ct];
 
-#define cet_ucs4_to_ansi_x3_4_1968_extra_ct 25
+// #define cet_ucs4_to_ansi_x3_4_1968_extra_ct 200
 
-const cet_ucs4_link_t cet_ucs4_to_ansi_x3_4_1968_extra[cet_ucs4_to_ansi_x3_4_1968_extra_ct] = 
+const cet_ucs4_link_t cet_ucs4_to_ansi_x3_4_1968_extra[] = 
 /* ------------------------------------------*/
 /* !!!      sorted by UCS-4 value        !!! */
 /* ------------------------------------------*/
 {
-	{0x00c0, (unsigned char) 'A'}, 
-	{0x00c1, (unsigned char) 'A'}, 
-	{0x00c2, (unsigned char) 'A'}, 
-	{0x00c3, (unsigned char) 'A'}, 
-	{0x00c4, (unsigned char) 'A'}, 
-	{0x00c5, (unsigned char) 'A'},
-	{0x00e0, (unsigned char) 'a'}, 
-	{0x00e1, (unsigned char) 'a'}, 
-	{0x00e2, (unsigned char) 'a'}, 
-	{0x00e3, (unsigned char) 'a'}, 
-	{0x00e4, (unsigned char) 'a'}, 
-	{0x00e5, (unsigned char) 'a'},
-	{0x00e8, (unsigned char) 'e'}, 
-	{0x00e9, (unsigned char) 'e'}, 
-	{0x00ea, (unsigned char) 'e'}, 
-	{0x00eb, (unsigned char) 'e'},
-	{0x00f2, (unsigned char) 'o'}, 
-	{0x00f3, (unsigned char) 'o'}, 
-	{0x00f4, (unsigned char) 'o'}, 
-	{0x00f5, (unsigned char) 'o'}, 
-	{0x00f6, (unsigned char) 'o'},
-	{0x00fc, (unsigned char) 'u'}, 
-	{0x1e94, (unsigned char) 'u'},
-	{0x201c, (unsigned char) '"'}, 
-	{0x201d, (unsigned char) '"'}
+  {0x00c0, (unsigned char) 'A'}, // latin capital letter a with grave
+  {0x00c1, (unsigned char) 'A'}, // latin capital letter a with acute
+  {0x00C2, (unsigned char) 'A'}, // latin capital letter a with circumflex
+  {0x00C3, (unsigned char) 'A'}, // latin capital letter a with tilde
+  {0x00C4, (unsigned char) 'A'}, // latin capital letter a with diaeresis
+  {0x00C5, (unsigned char) 'A'}, // latin capital letter a with ring above
+  {0x00C7, (unsigned char) 'C'}, // latin capital letter c with cedilla
+  {0x00C8, (unsigned char) 'E'}, // latin capital letter e with grave
+  {0x00C9, (unsigned char) 'E'}, // latin capital letter e with acute
+  {0x00CA, (unsigned char) 'E'}, // latin capital letter e with circumflex
+  {0x00CB, (unsigned char) 'E'}, // latin capital letter e with diaeresis
+  {0x00CC, (unsigned char) 'I'}, // latin capital letter i with grave
+  {0x00CD, (unsigned char) 'I'}, // latin capital letter i with acute
+  {0x00CE, (unsigned char) 'I'}, // latin capital letter i with circumflex
+  {0x00CF, (unsigned char) 'I'}, // latin capital letter i with diaeresis
+  {0x00D1, (unsigned char) 'N'}, // latin capital letter n with tilde
+  {0x00D2, (unsigned char) 'O'}, // latin capital letter o with grave
+  {0x00D3, (unsigned char) 'O'}, // latin capital letter o with acute
+  {0x00D4, (unsigned char) 'O'}, // latin capital letter o with circumflex
+  {0x00D5, (unsigned char) 'O'}, // latin capital letter o with tilde
+  {0x00D6, (unsigned char) 'O'}, // latin capital letter o with diaeresis
+  {0x00D8, (unsigned char) 'O'}, // latin capital letter o with stroke
+  {0x00D9, (unsigned char) 'U'}, // latin capital letter u with grave
+  {0x00DA, (unsigned char) 'U'}, // latin capital letter u with acute
+  {0x00DB, (unsigned char) 'U'}, // latin capital letter u with circumflex
+  {0x00DC, (unsigned char) 'U'}, // latin capital letter u with diaeresis
+  {0x00DD, (unsigned char) 'Y'}, // latin capital letter y with acute
+  {0x00E0, (unsigned char) 'a'}, // latin small letter a with grave
+  {0x00E1, (unsigned char) 'a'}, // latin small letter a with acute
+  {0x00E2, (unsigned char) 'a'}, // latin small letter a with circumflex
+  {0x00E3, (unsigned char) 'a'}, // latin small letter a with tilde
+  {0x00E4, (unsigned char) 'a'}, // latin small letter a with diaeresis
+  {0x00E5, (unsigned char) 'a'}, // latin small letter a with ring above
+  {0x00E7, (unsigned char) 'c'}, // latin small letter c with cedilla
+  {0x00E8, (unsigned char) 'e'}, // latin small letter e with grave
+  {0x00E9, (unsigned char) 'e'}, // latin small letter e with acute
+  {0x00EA, (unsigned char) 'e'}, // latin small letter e with circumflex
+  {0x00EB, (unsigned char) 'e'}, // latin small letter e with diaeresis
+  {0x00EC, (unsigned char) 'i'}, // latin small letter i with grave
+  {0x00ED, (unsigned char) 'i'}, // latin small letter i with acute
+  {0x00EE, (unsigned char) 'i'}, // latin small letter i with circumflex
+  {0x00EF, (unsigned char) 'i'}, // latin small letter i with diaeresis
+  {0x00F1, (unsigned char) 'n'}, // latin small letter n with tilde
+  {0x00F2, (unsigned char) 'o'}, // latin small letter o with grave
+  {0x00F3, (unsigned char) 'o'}, // latin small letter o with acute
+  {0x00F4, (unsigned char) 'o'}, // latin small letter o with circumflex
+  {0x00F5, (unsigned char) 'o'}, // latin small letter o with tilde
+  {0x00F6, (unsigned char) 'o'}, // latin small letter o with diaeresis
+  {0x00F8, (unsigned char) 'o'}, // latin small letter o with stroke
+  {0x00F9, (unsigned char) 'u'}, // latin small letter u with grave
+  {0x00FA, (unsigned char) 'u'}, // latin small letter u with acute
+  {0x00FB, (unsigned char) 'u'}, // latin small letter u with circumflex
+  {0x00FC, (unsigned char) 'u'}, // latin small letter u with diaeresis
+  {0x00FD, (unsigned char) 'y'}, // latin small letter y with acute
+  {0x00FF, (unsigned char) 'y'}, // latin small letter y with diaeresis
+  {0x0100, (unsigned char) 'A'}, // latin capital letter a with macron
+  {0x0101, (unsigned char) 'a'}, // latin small letter a with macron
+  {0x0102, (unsigned char) 'A'}, // latin capital letter a with breve
+  {0x0103, (unsigned char) 'a'}, // latin small letter a with breve
+  {0x0104, (unsigned char) 'A'}, // latin capital letter a with ogonek
+  {0x0105, (unsigned char) 'a'}, // latin small letter a with ogonek
+  {0x0106, (unsigned char) 'C'}, // latin capital letter c with acute
+  {0x0107, (unsigned char) 'c'}, // latin small letter c with acute
+  {0x0108, (unsigned char) 'C'}, // latin capital letter c with circumflex
+  {0x0109, (unsigned char) 'c'}, // latin small letter c with circumflex
+  {0x010A, (unsigned char) 'C'}, // latin capital letter c with dot above
+  {0x010B, (unsigned char) 'c'}, // latin small letter c with dot above
+  {0x010C, (unsigned char) 'C'}, // latin capital letter c with caron
+  {0x010D, (unsigned char) 'c'}, // latin small letter c with caron
+  {0x010E, (unsigned char) 'D'}, // latin capital letter d with caron
+  {0x010F, (unsigned char) 'd'}, // latin small letter d with caron
+  {0x0110, (unsigned char) 'D'}, // latin capital letter d with stroke
+  {0x0111, (unsigned char) 'd'}, // latin small letter d with stroke
+  {0x0112, (unsigned char) 'E'}, // latin capital letter e with macron
+  {0x0113, (unsigned char) 'e'}, // latin small letter e with macron
+  {0x0116, (unsigned char) 'E'}, // latin capital letter e with dot above
+  {0x0117, (unsigned char) 'e'}, // latin small letter e with dot above
+  {0x0118, (unsigned char) 'E'}, // latin capital letter e with ogonek
+  {0x0119, (unsigned char) 'e'}, // latin small letter e with ogonek
+  {0x011A, (unsigned char) 'E'}, // latin capital letter e with caron
+  {0x011B, (unsigned char) 'e'}, // latin small letter e with caron
+  {0x011C, (unsigned char) 'G'}, // latin capital letter g with circumflex
+  {0x011D, (unsigned char) 'g'}, // latin small letter g with circumflex
+  {0x011E, (unsigned char) 'G'}, // latin capital letter g with breve
+  {0x011F, (unsigned char) 'g'}, // latin small letter g with breve
+  {0x0120, (unsigned char) 'G'}, // latin capital letter g with dot above
+  {0x0121, (unsigned char) 'g'}, // latin small letter g with dot above
+  {0x0122, (unsigned char) 'G'}, // latin capital letter g with cedilla
+  {0x0123, (unsigned char) 'g'}, // latin small letter g with cedilla
+  {0x0124, (unsigned char) 'H'}, // latin capital letter h with circumflex
+  {0x0125, (unsigned char) 'h'}, // latin small letter h with circumflex
+  {0x0126, (unsigned char) 'H'}, // latin capital letter h with stroke
+  {0x0127, (unsigned char) 'h'}, // latin small letter h with stroke
+  {0x0128, (unsigned char) 'I'}, // latin capital letter i with tilde
+  {0x0129, (unsigned char) 'i'}, // latin small letter i with tilde
+  {0x012A, (unsigned char) 'I'}, // latin capital letter i with macron
+  {0x012B, (unsigned char) 'i'}, // latin small letter i with macron
+  {0x012E, (unsigned char) 'I'}, // latin capital letter i with ogonek
+  {0x012F, (unsigned char) 'i'}, // latin small letter i with ogonek
+  {0x0130, (unsigned char) 'I'}, // latin capital letter i with dot above
+  {0x0134, (unsigned char) 'J'}, // latin capital letter j with circumflex
+  {0x0135, (unsigned char) 'j'}, // latin small letter j with circumflex
+  {0x0136, (unsigned char) 'K'}, // latin capital letter k with cedilla
+  {0x0137, (unsigned char) 'k'}, // latin small letter k with cedilla
+  {0x0139, (unsigned char) 'L'}, // latin capital letter l with acute
+  {0x013A, (unsigned char) 'l'}, // latin small letter l with acute
+  {0x013B, (unsigned char) 'L'}, // latin capital letter l with cedilla
+  {0x013C, (unsigned char) 'l'}, // latin small letter l with cedilla
+  {0x013D, (unsigned char) 'L'}, // latin capital letter l with caron
+  {0x013E, (unsigned char) 'l'}, // latin small letter l with caron
+  {0x0141, (unsigned char) 'L'}, // latin capital letter l with stroke
+  {0x0142, (unsigned char) 'l'}, // latin small letter l with stroke
+  {0x0143, (unsigned char) 'N'}, // latin capital letter n with acute
+  {0x0144, (unsigned char) 'n'}, // latin small letter n with acute
+  {0x0145, (unsigned char) 'N'}, // latin capital letter n with cedilla
+  {0x0146, (unsigned char) 'n'}, // latin small letter n with cedilla
+  {0x0147, (unsigned char) 'N'}, // latin capital letter n with caron
+  {0x0148, (unsigned char) 'n'}, // latin small letter n with caron
+  {0x014C, (unsigned char) 'O'}, // latin capital letter o with macron
+  {0x014D, (unsigned char) 'o'}, // latin small letter o with macron
+  {0x0150, (unsigned char) 'O'}, // latin capital letter o with double acute
+  {0x0151, (unsigned char) 'o'}, // latin small letter o with double acute
+  {0x0154, (unsigned char) 'R'}, // latin capital letter r with acute
+  {0x0155, (unsigned char) 'r'}, // latin small letter r with acute
+  {0x0156, (unsigned char) 'R'}, // latin capital letter r with cedilla
+  {0x0157, (unsigned char) 'r'}, // latin small letter r with cedilla
+  {0x0158, (unsigned char) 'R'}, // latin capital letter r with caron
+  {0x0159, (unsigned char) 'r'}, // latin small letter r with caron
+  {0x015A, (unsigned char) 'S'}, // latin capital letter s with acute
+  {0x015B, (unsigned char) 's'}, // latin small letter s with acute
+  {0x015C, (unsigned char) 'S'}, // latin capital letter s with circumflex
+  {0x015D, (unsigned char) 's'}, // latin small letter s with circumflex
+  {0x015E, (unsigned char) 'S'}, // latin capital letter s with cedilla
+  {0x015F, (unsigned char) 's'}, // latin small letter s with cedilla
+  {0x0160, (unsigned char) 'S'}, // latin capital letter s with caron
+  {0x0161, (unsigned char) 's'}, // latin small letter s with caron
+  {0x0162, (unsigned char) 'T'}, // latin capital letter t with cedilla
+  {0x0163, (unsigned char) 't'}, // latin small letter t with cedilla
+  {0x0164, (unsigned char) 'T'}, // latin capital letter t with caron
+  {0x0165, (unsigned char) 't'}, // latin small letter t with caron
+  {0x0166, (unsigned char) 'T'}, // latin capital letter t with stroke
+  {0x0167, (unsigned char) 't'}, // latin small letter t with stroke
+  {0x0168, (unsigned char) 'U'}, // latin capital letter u with tilde
+  {0x0169, (unsigned char) 'u'}, // latin small letter u with tilde
+  {0x016A, (unsigned char) 'U'}, // latin capital letter u with macron
+  {0x016B, (unsigned char) 'u'}, // latin small letter u with macron
+  {0x016C, (unsigned char) 'U'}, // latin capital letter u with breve
+  {0x016D, (unsigned char) 'u'}, // latin small letter u with breve
+  {0x016E, (unsigned char) 'U'}, // latin capital letter u with ring above
+  {0x016F, (unsigned char) 'u'}, // latin small letter u with ring above
+  {0x0170, (unsigned char) 'U'}, // latin capital letter u with double acute
+  {0x0171, (unsigned char) 'u'}, // latin small letter u with double acute
+  {0x0172, (unsigned char) 'U'}, // latin capital letter u with ogonek
+  {0x0173, (unsigned char) 'u'}, // latin small letter u with ogonek
+  {0x0174, (unsigned char) 'W'}, // latin capital letter w with circumflex
+  {0x0175, (unsigned char) 'w'}, // latin small letter w with circumflex
+  {0x0176, (unsigned char) 'Y'}, // latin capital letter y with circumflex
+  {0x0177, (unsigned char) 'y'}, // latin small letter y with circumflex
+  {0x0178, (unsigned char) 'Y'}, // latin capital letter y with diaeresis
+  {0x0179, (unsigned char) 'Z'}, // latin capital letter z with acute
+  {0x017A, (unsigned char) 'z'}, // latin small letter z with acute
+  {0x017B, (unsigned char) 'Z'}, // latin capital letter z with dot above
+  {0x017C, (unsigned char) 'z'}, // latin small letter z with dot above
+  {0x017D, (unsigned char) 'Z'}, // latin capital letter z with caron
+  {0x017E, (unsigned char) 'z'}, // latin small letter z with caron
+  {0x1E02, (unsigned char) 'B'}, // latin capital letter b with dot above
+  {0x1E03, (unsigned char) 'b'}, // latin small letter b with dot above
+  {0x1E0A, (unsigned char) 'D'}, // latin capital letter d with dot above
+  {0x1E0B, (unsigned char) 'd'}, // latin small letter d with dot above
+  {0x1E1E, (unsigned char) 'F'}, // latin capital letter f with dot above
+  {0x1E1F, (unsigned char) 'f'}, // latin small letter f with dot above
+  {0x1E40, (unsigned char) 'M'}, // latin capital letter m with dot above
+  {0x1E41, (unsigned char) 'm'}, // latin small letter m with dot above
+  {0x1E56, (unsigned char) 'P'}, // latin capital letter p with dot above
+  {0x1E57, (unsigned char) 'p'}, // latin small letter p with dot above
+  {0x1E60, (unsigned char) 'S'}, // latin capital letter s with dot above
+  {0x1E61, (unsigned char) 's'}, // latin small letter s with dot above
+  {0x1E6A, (unsigned char) 'T'}, // latin capital letter t with dot above
+  {0x1E6B, (unsigned char) 't'}, // latin small letter t with dot above
+  {0x1E80, (unsigned char) 'W'}, // latin capital letter w with grave
+  {0x1E81, (unsigned char) 'w'}, // latin small letter w with grave
+  {0x1E82, (unsigned char) 'W'}, // latin capital letter w with acute
+  {0x1E83, (unsigned char) 'w'}, // latin small letter w with acute
+  {0x1E84, (unsigned char) 'W'}, // latin capital letter w with diaeresis
+  {0x1E85, (unsigned char) 'w'}, // latin small letter w with diaeresis
+  {0x1e94, (unsigned char) 'u'},
+  {0x1EF2, (unsigned char) 'Y'}, // latin capital letter y with grave
+  {0x1EF3, (unsigned char) 'y'}, // latin small letter y with grave
+  {0x201c, (unsigned char) '"'}, 
+  {0x201d, (unsigned char) '"'}
 };
 
 cet_cs_vec_t cet_cs_vec_ansi_x3_4_1968 =	/* defined in cet.h */
@@ -93,7 +258,7 @@ cet_cs_vec_t cet_cs_vec_ansi_x3_4_1968 =	/* defined in cet.h */
 	cet_ucs4_to_ansi_x3_4_1968_ct,		/* number of links		*/
 
 	cet_ucs4_to_ansi_x3_4_1968_extra,	/* hand made UCS-4 links	*/
-	cet_ucs4_to_ansi_x3_4_1968_extra_ct,	/* number of extra links	*/
+	sizeof(cet_ucs4_to_ansi_x3_4_1968_extra) / sizeof(cet_ucs4_to_ansi_x3_4_1968_extra[0]), 				/* number of extra links */
 
 	NULL	/* for internal use */
 };
