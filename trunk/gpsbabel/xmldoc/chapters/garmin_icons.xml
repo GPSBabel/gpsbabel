@@ -1,0 +1,192 @@
+<appendix id="GarminIcons">
+<title>Garmin Icons</title>
+<para>
+Following is a list of the valid values for the 
+<link linkend="fmt_garmin">garmin</link> <option>deficon</option> option.
+These values are also used internally by the 
+<link linkend="fmt_gdb">GDB</link>,
+<link linkend="fmt_bcr">BCR</link>,
+<link linkend="fmt_mapsource">Mapsource</link>,
+<link linkend="fmt_geoniche">Geoniche</link>,
+<link linkend="fmt_gpilots">GPilotS</link>,
+<link linkend="fmt_pcx">PCX</link>, and
+<link linkend="fmt_psitrex">PSITrex</link> 
+formats.
+</para>
+
+<simplelist columns="5">
+<member>Airport</member>
+<member>Amusement Park</member>
+<member>Anchor Prohibited</member>
+<member>Ball Park</member>
+<member>Bank</member>
+<member>Bar</member>
+<member>Beach</member>
+<member>Beacon</member>
+<member>Bell</member>
+<member>Bike Trail</member>
+<member>Boat Ramp</member>
+<member>Bowling</member>
+<member>Bridge</member>
+<member>Building</member>
+<member>Campground</member>
+<member>Car</member>
+<member>Car Rental</member>
+<member>Car Repair</member>
+<member>Cemetery</member>
+<member>Church</member>
+<member>Circle with X</member>
+<member>City (Capitol)</member>
+<member>City (Large)</member>
+<member>City (Medium)</member>
+<member>City (Small)</member>
+<member>Civil</member>
+<member>Coast Guard</member>
+<member>Contact, Afro</member>
+<member>Contact, Alien</member>
+<member>Contact, Ball Cap</member>
+<member>Contact, Big Ears</member>
+<member>Contact, Biker</member>
+<member>Contact, Bug</member>
+<member>Contact, Cat</member>
+<member>Contact, Dog</member>
+<member>Contact, Dreadlocks</member>
+<member>Contact, Female1</member>
+<member>Contact, Female2</member>
+<member>Contact, Female3</member>
+<member>Contact, Goatee</member>
+<member>Contact, Kung-Fu</member>
+<member>Contact, Pig</member>
+<member>Contact, Pirate</member>
+<member>Contact, Ranger</member>
+<member>Contact, Smiley</member>
+<member>Contact, Spike</member>
+<member>Contact, Sumo</member>
+<member>Controlled Area</member>
+<member>Convenience Store</member>
+<member>Crossing</member>
+<member>Dam</member>
+<member>Danger Area</member>
+<member>Department Store</member>
+<member>Diamond, Blue</member>
+<member>Diamond, Green</member>
+<member>Diamond, Red</member>
+<member>Diver Down Flag 1</member>
+<member>Diver Down Flag 2</member>
+<member>Dock</member>
+<member>Drinking Water</member>
+<member>Dropoff</member>
+<member>Event Cache</member>
+<member>Exit</member>
+<member>Fast Food</member>
+<member>Fishing Area</member>
+<member>Fishing Hot Spot Facility</member>
+<member>Fitness Center</member>
+<member>Flag</member>
+<member>Flag, Blue</member>
+<member>Flag, Green</member>
+<member>Flag, Red</member>
+<member>Forest</member>
+<member>Gas Station</member>
+<member>Geocache</member>
+<member>Geocache Found</member>
+<member>Ghost Town</member>
+<member>Glider Area</member>
+<member>Golf Course</member>
+<member>Green Diamond</member>
+<member>Green Square</member>
+<member>Heliport</member>
+<member>Horn</member>
+<member>Hotel</member>
+<member>House</member>
+<member>Hunting Area</member>
+<member>Ice Skating</member>
+<member>Information</member>
+<member>Levee</member>
+<member>Light</member>
+<member>Live Theater</member>
+<member>Locationless (Reverse) Cache</member>
+<member>Lodging</member>
+<member>Man Overboard</member>
+<member>Marina</member>
+<member>Medical Facility</member>
+<member>Micro-Cache</member>
+<member>Mile Marker</member>
+<member>Military</member>
+<member>Mine</member>
+<member>Movie Theater</member>
+<member>Multi-Cache</member>
+<member>Museum</member>
+<member>Navaid, Amber</member>
+<member>Navaid, Black</member>
+<member>Navaid, Blue</member>
+<member>Navaid, Green</member>
+<member>Navaid, Green/Red</member>
+<member>Navaid, Green/White</member>
+<member>Navaid, Orange</member>
+<member>Navaid, Red</member>
+<member>Navaid, Red/Green</member>
+<member>Navaid, Red/White</member>
+<member>Navaid, Violet</member>
+<member>Navaid, White</member>
+<member>Navaid, White/Green</member>
+<member>Navaid, White/Red</member>
+<member>Oil Field</member>
+<member>Parachute Area</member>
+<member>Park</member>
+<member>Parking Area</member>
+<member>Pharmacy</member>
+<member>Picnic Area</member>
+<member>Pin, Blue</member>
+<member>Pin, Green</member>
+<member>Pin, Red</member>
+<member>Pizza</member>
+<member>Police Station</member>
+<member>Post Office</member>
+<member>Post Office</member>
+<member>Private Field</member>
+<member>Radio Beacon</member>
+<member>Red Diamond</member>
+<member>Red Square</member>
+<member>Reef</member>
+<member>Residence</member>
+<member>Restaurant</member>
+<member>Restricted Area</member>
+<member>Restroom</member>
+<member>RV Park</member>
+<member>Scales</member>
+<member>Scenic Area</member>
+<member>School</member>
+<member>Seaplane Base</member>
+<member>Shipwreck</member>
+<member>Shopping Center</member>
+<member>Short Tower</member>
+<member>Shower</member>
+<member>Ski Resort</member>
+<member>Skiing Area</member>
+<member>Skull and Crossbones</member>
+<member>Small City</member>
+<member>Soft Field</member>
+<member>Stadium</member>
+<member>Summit</member>
+<member>Swimming Area</member>
+<member>Tall Tower</member>
+<member>Telephone</member>
+<member>Toll Booth</member>
+<member>TracBack Point</member>
+<member>Trail Head</member>
+<member>Truck Stop</member>
+<member>Tunnel</member>
+<member>Ultralight Area</member>
+<member>Unknown Cache</member>
+<member>Virtual cache</member>
+<member>Water Hydrant</member>
+<member>Waypoint</member>
+<member>Webcam Cache</member>
+<member>Weed Bed</member>
+<member>White Buoy</member>
+<member>White Dot</member>
+<member>Wrecker</member>
+<member>Zoo</member>
+</simplelist>
+</appendix>
