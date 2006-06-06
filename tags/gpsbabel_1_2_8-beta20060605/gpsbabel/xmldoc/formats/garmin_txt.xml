@@ -1,0 +1,23 @@
+<para>
+This is a textual format that contains nearly all of the information 
+contained in the MapSource main format, <link linkend="fmt_gdb">GDB</link>.
+This format also contains some computed values such as distances between 
+routepoints and trackpoints, speed, and course (heading).
+</para>
+<para>
+The main goal of garmin_txt is to make aviation data more available. Because 
+MapSource supports only the export, GPSBabel gives you the possibility to 
+bring aviation data into MapSource.
+</para>
+<para>
+During the export with MapSource, some fields are written using local settings
+of MapSource and Windows. These include grid format, gps datum, distance and
+temperature units, and the representation of date and time fields. GPSBabel 
+tries to read all items automatically. Problems with date and time format can 
+be solved with the 'date' and 'time' options.
+</para>
+<example id="all_garmin_txt_options">
+  <title>Command showing garmin_txt output with all options</title>
+  <screen format="linespecific">gpsbabel -i garmin_txt,date="MM/DD/YYYY",time="hh:mm:ss xx" -f in.txt -o garmin_txt,date="DD.MM.YYYY",datum="WGS 72",dist=m,prec=6,temp=c,time="HH:mm:ss",utc=+2 -F out.txt</screen>
+</example>
+    

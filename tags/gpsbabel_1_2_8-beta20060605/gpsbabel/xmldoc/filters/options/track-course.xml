@@ -1,0 +1,10 @@
+<para>
+This option computes (or recomputes) a value for the GPS heading at each 
+trackpoint.  This is most useful with trackpoints from formats that don't 
+support heading information or for trackpoints synthesized by the 
+<link linkend="filter_interpolate">interpolate</link>
+filter.  The heading at each trackpoint is simply the course from the
+previous trackpoint in the track.  The first trackpoint in each track
+is arbitrarily assigned a heading of 0 degrees.
+</para>
+

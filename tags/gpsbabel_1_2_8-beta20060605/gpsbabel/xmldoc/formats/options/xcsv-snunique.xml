@@ -1,0 +1,8 @@
+<para>
+When this option is specified, GPSBabel will ensure that all short names are
+unique within the output file.  This option overrides the style file.
+</para>
+<para>
+Valid values for this option are 0 (off) and 1 (on).
+</para>
+

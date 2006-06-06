@@ -1,0 +1,11 @@
+<para>
+This option instructs GPSBabel to remove points that have the smallest 
+overall effect on the overall shape of the route.  Using this method, the
+first point to be removed will be the one that is closest to a line drawn 
+between the two points adjacent to it.
+</para>
+<para>
+If neither this option nor the <option>length</option> option is specified,
+this is the default.
+</para>
+

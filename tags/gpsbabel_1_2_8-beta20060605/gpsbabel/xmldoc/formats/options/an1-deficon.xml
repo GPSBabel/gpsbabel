@@ -1,0 +1,7 @@
+<para>
+This option allows you to specify which symbol to use for points that 
+don't have a symbol already.  It defaults to "Red Flag" but it accepts 
+any symbol name you can put in a DeLorme export file.  To find the name 
+of a specific symbol in Street Atlas, let the mouse pointer hover over 
+it for a few seconds and the name will be displayed.
+</para>

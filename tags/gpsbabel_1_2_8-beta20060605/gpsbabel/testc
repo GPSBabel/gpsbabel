@@ -1,0 +1,57 @@
+#!/bin/bash
+
+#
+# try to read and write all combinations we can.  Don't try to 
+# be terribly portable and don't test for correctness.  This test
+# is meant for code coverage.  
+#
+
+# Exercise read and write of waypoint/track/route in every format.
+
+TMPD=/tmp/babeltest.$$
+GB="./gpsbabel"
+GB="valgrind -q ./gpsbabel"
+
+mkdir $TMPD
+
+rwall() {
+	name=$1
+	cap=$2
+
+	REFFILE=reference/expertgps.gpx
+
+	if [ $(echo $cap | grep -s w) ]; then
+		$GB -i gpx -f $REFFILE -o $name -F $TMPD/$name
+		if [ $(echo $cap | grep -s r) ]; then
+			$GB -i $name -f $TMPD/$name -o gpx -F /dev/null
+		fi
+	fi
+}
+
+#
+# Given a Geocache as input, verify we can write it.
+#
+wgc() {
+	name=$1
+	cap=$2
+
+	REFDIR=reference/gc
+	if [ $(echo $cap | grep -s '^.w') ]; then
+		$GB -i gpx -f $REFDIR/GC7FA4.gpx -o $name -F $TMPD/$name-gc1
+		$GB -i gpx -f $REFDIR/GCGCA8.gpx -o $name -F $TMPD/$name-gc2
+	fi
+}
+
+
+$GB -^2 | while read fmt cap name  junk
+do
+	if [ "$fmt" != "file" ]; then
+		continue;
+	fi
+	
+	rwall $name $cap
+	wgc $name $cap
+
+	echo $name
+	
+done

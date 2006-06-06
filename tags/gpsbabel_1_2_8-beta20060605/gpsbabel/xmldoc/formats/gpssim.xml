@@ -1,0 +1,9 @@
+  <para>
+        This is a write-only format used to feed waypoints, tracks, and routes
+        into <ulink url="http://franson.com/">Franson Technolgies'</ulink>
+        <ulink url="http://franson.com/gpsgate/">GpsGate simulator</ulink>.
+  </para>
+  <para>
+        To use these files in GpsGate, select 'Simulator' and then
+        "File->Open".
+  </para>

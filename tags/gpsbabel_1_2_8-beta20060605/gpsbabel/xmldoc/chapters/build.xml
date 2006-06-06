@@ -1,0 +1,19 @@
+   <chapter id="Getting_and_Building">
+      <title>Getting it  and Building it</title>
+      <para> GPSBabel is distributed in source format that will work on
+about any operating system and as ready-to-run binaries for some
+operating systems, notably Windows.  See the "OS-Specific notes" at
+<ulink url="http://www.gpsbabel.org ">gpsbabel.org</ulink> for
+instructions on those binary kits.
+</para>
+      <para> For operating systems where no binary is provided, you will
+have to build it.  The code should be compilable on any system with
+ISO C89 compilers.  It's been tested on UnixWare, OpenServer, OS/X,
+Linux, Solaris, and a variety of processors and compilers.
+</para>
+      <para> Libexpat is required for source builds.  If you get errors
+about expat.h being missing, you must either edit the Makefile to tell
+the compiler where it is or install it in a sensible place.  Expat can
+be downloaded from <ulink url="http://expat.sourceforge.net">http://expat.sourceforge.net</ulink> and is part of Apache so it's very portable.
+</para>
+   </chapter>

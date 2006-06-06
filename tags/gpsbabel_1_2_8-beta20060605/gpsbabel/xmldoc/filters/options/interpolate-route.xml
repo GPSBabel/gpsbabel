@@ -1,0 +1,5 @@
+<para>
+If this option is specified, the interpolate filter interpolates routes 
+rather than tracks.  Because route points do not have time stamps, it is an
+error to use this option with the <option>time</option> option.
+</para>

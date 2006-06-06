@@ -1,0 +1,9 @@
+<para>
+This option specifies the minimum allowable distance between two points.  If 
+two points are closer than this distance, only one of them is kept.
+</para>
+<para>
+Distances may be expressed in feet (30f) or meters (10m).  If no unit is 
+specified, the distance is assumed to be in feet.
+</para>
+

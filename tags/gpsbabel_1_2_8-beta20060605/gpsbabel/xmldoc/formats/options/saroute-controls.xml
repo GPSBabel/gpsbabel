@@ -1,0 +1,10 @@
+<para>This option lets you read the control points
+(start, end, vias, and stops) for your route as well as the route
+itself.  The default for this option is 'none', which won't read the
+control points.  You may also specify 'waypoints', which reads the
+control points as waypoints, or 'route', which creates an extra route
+named 'control points' containing just the control points in order.
+Note that if your goal is to create an arc or other CSV file, you
+should use 'none' (or not use this option, which is the same
+thing.)</para>
+    
