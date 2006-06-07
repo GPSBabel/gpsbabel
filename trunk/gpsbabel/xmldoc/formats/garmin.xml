@@ -10,10 +10,57 @@
 </para>
 
 <para> 
-	Supported models on USB include VistaC, SummitC, 60C, 60CS, 76C, 
-	76CS, 96C, Quest, 2610, 2620, 2650, 2720, 2730, 2820, Foretrex 201,
-	Foretrex 301, Forerunner 201, Forerunner 205, Forerunner 301, 
-	Forerunner 305,  Edge 205, Edge 305, and most serial units.
+	Supported models on USB include 
+	<simplelist columns="5">
+<member>Edge 205</member> 
+<member>Edge 305</member> 
+<member>eTrex Legend C</member> 
+<member>eTrex LegendCX</member>  
+<member>eTrex Venture C</member> 
+<member>eTrex Venture CX</member> 
+<member>eTrex VistaC</member> 
+<member>eTrex Vista CX</member> 
+<member>Forerunner 201</member> 
+<member>Forerunner 205</member> 
+<member>Forerunner 301</member> 
+<member>Forerunner 305</member>  
+<member>Foretrex 201</member>
+<member>Foretrex 301</member> 
+<member>GPSMAP 276C</member> 
+<member>GPSMAP 296C</member> 
+<member>GPSMAP 378</member> 
+<member>GPSMAP 478</member> 
+<member>GPSMAP 60C</member> 
+<member>GPSMAP 60CS</member> 
+<member>GPSMAP 60CSX</member> 
+<member>GPSMAP 60CX</member> 
+<member>GPSMAP 76C</member> 
+<member>GPSMAP 76CS</member> 
+<member>GPSMAP 76CSX</member> 
+<member>GPSMAP 76CX</member> 
+<member>GPSMAP 96C</member> 
+<member>Quest II</member>
+<member>Quest</member>
+<member>StreetPilot 2610</member> 
+<member>StreetPilot 2620</member> 
+<member>StreetPilot 2650</member> 
+<member>StreetPilot 2720</member> 
+<member>StreetPilot 2730</member> 
+<member>StreetPilot 2820</member> 
+<member>StreetPilot 7200</member> 
+<member>StreetPilot 7500</member> 
+<member>StreetPilot c310</member>
+<member>StreetPilot c320</member>
+<member>StreetPilot c330</member>
+<member>StreetPilot c340</member>
+<member>StreetPilot c510</member>
+<member>StreetPilot c530</member>
+<member>StreetPilot c550</member>
+<member>StreetPilot i2</member>
+<member>StreetPilot i3</member>
+<member>StreetPilot i5</member>
+<member>and most serial units</member>
+</simplelist>
 </para>
 
 <para> 
