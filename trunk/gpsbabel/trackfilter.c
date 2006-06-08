@@ -29,6 +29,7 @@
     2005-10-04: Add filterdefs to hold protos for filter functions... (RJL)
     2005-10-04: Fix range-check max. value; exit filter, if no more tracks left
     2006-04-06: Add fix, course, and speed options
+    2006-06-01: Add name option
  */
  
 #include <ctype.h>
@@ -44,6 +45,7 @@
 #define TRACKFILTER_SPLIT_OPTION	"split"
 #define TRACKFILTER_TITLE_OPTION	"title"
 #define TRACKFILTER_MERGE_OPTION	"merge"
+#define TRACKFILTER_NAME_OPTION		"name"
 #define TRACKFILTER_STOP_OPTION		"stop"
 #define TRACKFILTER_START_OPTION	"start"
 #define TRACKFILTER_MOVE_OPTION		"move"
@@ -63,6 +65,7 @@ static char *opt_stop = NULL;
 static char *opt_fix = NULL;
 static char *opt_course = NULL;
 static char *opt_speed = NULL;
+static char *opt_name = NULL;
 
 static
 arglist_t trackfilter_args[] = {
@@ -76,6 +79,9 @@ arglist_t trackfilter_args[] = {
 	    ARGTYPE_STRING, ARG_NOMINMAX},
 	{TRACKFILTER_MERGE_OPTION, &opt_merge, 
 	    "Merge multiple tracks for the same way", NULL, ARGTYPE_STRING, 
+	    ARG_NOMINMAX},
+	{TRACKFILTER_NAME_OPTION, &opt_name, 
+	    "Use only track(s) where title matches given name", NULL, ARGTYPE_STRING, 
 	    ARG_NOMINMAX},
 	{TRACKFILTER_START_OPTION, &opt_start, 
 	    "Use only track points after this timestamp", NULL, ARGTYPE_INT, 
@@ -217,6 +223,16 @@ trackfilter_fill_track_list_cb(const route_head *track) 	/* callback for track_d
 	{
 	    track_del_head((route_head *)track);
 	    return;
+	}
+	
+	if (opt_name != NULL)
+	{
+		if ((track->rte_name == NULL) ||
+		    (case_ignore_str_match(track->rte_name, opt_name) == 0))
+		{
+			track_del_head((route_head *)track);
+			return;
+		}
 	}
 	
 	track_list[track_ct].track = (route_head *)track;
@@ -790,6 +806,11 @@ trackfilter_process(void)
 	
 	opts = trackfilter_opt_count();
 	if (opts == 0) opts = -1;		/* flag for do "pack" by default */
+	
+	if (opt_name != NULL)
+	{
+	    if (--opts == 0) return;
+	}
 	
 	if (opt_move != NULL)			/* Correct timestamps before any other op */
 	{
