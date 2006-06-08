@@ -362,6 +362,128 @@ case_ignore_strncmp(const char *s1, const char *s2, int n)
 	return rv;
 }
 
+/*
+ * compare str with match
+ * match may contain wildcards "*" and "?"
+ *
+ * examples:
+ *		str_match("ABCDE", "*BC*") ->	1
+ *		str_match("ABCDE", "A*C*E") ->	1
+ *		str_match("?ABCDE", "\\?A*") ->	1
+ *		str_match("", "*A") -> 		0
+ */
+ 
+int
+str_match(const char *str, const char *match)
+{
+	char *m, *s;
+	
+	s = (char *)str;
+	m = (char *)match; 
+	
+	while (*m || *s)
+	{
+		switch(*m) 
+		{
+			
+			case '\0':
+				/* there is something left in s, FAIL */
+				return 0;
+
+			case '*':
+				/* skip all wildcards */
+				while ((*m == '*') || (*m == '?')) m++;
+				if (*m == '\0') return 1;
+				
+				if (*m == '\\')				/* ? escaped ? */
+				{
+					m++;
+					if (*m == '\0') return 0;
+				}
+
+				do
+				{
+					char *mx, *sx;
+					
+					while (*s && (*s != *m)) s++;
+					if (*s == '\0') return 0;
+					
+					sx = s + 1;
+					mx = m + 1;
+					
+					while (*sx)
+					{
+						if (*mx == '\\')	/* ? escaped ? */
+						{
+							mx++;
+							if (*mx == '\0') return 0;
+							
+						}
+						if (*sx == *mx)
+						{
+							sx++;
+							mx++;
+						}
+						else
+							break;
+					}
+					if (*mx == '\0')		/* end of match */
+					{
+						if (*sx == '\0') return 1;
+						s++;
+					}
+					else if ((*mx == '?') || (*mx == '*'))
+					{
+						s = sx;
+						m = mx;
+						break;
+					}
+					else
+						s++;
+				} while (*s);
+				break;
+				
+			case '?':
+				if (*s == '\0') return 0;	/* no character left */
+				m++;
+				s++;
+				break;
+				
+			case '\\':
+				m++;
+				if (*m == '\0') return 0; /* incomplete escape sequence */
+				/* pass-through next character */
+				
+			default:
+				if (*m != *s) return 0;
+				m++;
+				s++;
+		}
+	}
+	return ((*s == '\0') && (*m == '\0'));
+}
+
+/*
+ * as str_match, but case insensitive 
+ */
+ 
+int
+case_ignore_str_match(const char *str, const char *match)
+{
+	char *s1, *s2, *c;
+	int res;
+	
+	s1 = xstrdup(str);
+	for (c = s1; *c; c++) *c = toupper(*c);
+	s2 = xstrdup(match);
+	for (c = s2; *c; c++) *c = toupper(*c);
+	res = str_match(s1, s2);
+	xfree(s1);
+	xfree(s2);
+	
+	return res;
+}
+
 void
 printposn(const double c, int is_lat)
 {
