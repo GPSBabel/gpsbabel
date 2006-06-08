@@ -18,7 +18,7 @@
 <cmdsynopsis>
 <command>gpsbabel</command>
 <arg choice="opt">
-  <option>iofFxh</option>
+  <option>iofFxsh</option>
 </arg>
 <arg choice="opt" rep="repeat">file</arg>
 </cmdsynopsis>
@@ -60,8 +60,12 @@ It contains extensive data manipulation abilities making it a convenient for ser
       <listitem> <para>Invoke an internal <replaceable>filter</replaceable> on the data.</para> </listitem>
 </varlistentry>
 <varlistentry>
-      <term><option>-h</option></term>
-      <listitem> <para>Display help.</para> </listitem>
+      <term><option>-s</option></term>
+      <listitem> <para>Generate smart names for waypoints on output.</para> </listitem>
+</varlistentry>
+<varlistentry>
+      <term><option>-h</option> <arg choice="opt">format</arg></term>
+      <listitem> <para>Display help that is more exhaustive than this page.  If <replaceable>format</replaceable> is given, provide help for only that format.</para> </listitem>
 </varlistentry>
 </variablelist>
 <para>Lists of filters and formats are given in the doc at http://www.gpsbabel.org. </para>
