@@ -149,135 +149,17 @@ get_option_val(char *option, char *def)
 static void
 init_date_and_time_format(void)
 {
-	char *c, *origin, *src, *dest, prev;
-	char buff[64], timef[32], datef[32];
-	static char format[128];
-	int offs, Y, H;
+	char *f, *c;
 	
-	memset(&datef, 0, sizeof(datef));
-	memset(&timef, 0, sizeof(timef));
+	f = get_option_val(opt_date_format, DEFAULT_DATE_FORMAT);
+	date_time_format = convert_human_date_format(f);
 	
-	origin = get_option_val(opt_date_format, DEFAULT_DATE_FORMAT);
-	strncpy(buff, origin, sizeof(buff));
+	date_time_format = xstrappend(date_time_format, " ");
 	
-	src = lrtrim(buff);
-	for (c = src; *c; c++) {
-		*c = toupper(*c);
-	}
-	
-	Y = 0;
-	prev = '\0';
-	offs = (src - buff);
-	dest = datef;
-	
-	for (c = src; *c; c++, offs++) {
-		if (isalpha(*c)) {
-			switch(*c) {
-			case 'J':
-			case 'Y':
-				if (prev != 'Y') { 
-					strcat(dest, "%y"); 
-					dest += 2;
-					prev = 'Y'; 
-				}
-				Y++;
-				if (Y > 2) *(dest-1) = 'Y';
-				break;
-			case 'M':
-				if (prev != 'M') {
-					strcat(dest, "%m");
-					dest += 2;
-					prev = 'M';
-				}
-				break;
-			case 'D':
-			case 'T': 
-				if (prev != 'D') {
-					strcat(dest, "%d");
-					dest += 2;
-					prev = 'D';
-				}
-				break;
-			default:
-				fatal(MYNAME ": Invalid character \"%c\" in date format!\n", origin[offs]);
-			}
-		}
-		else if (ispunct(*c)) {
-			*dest++ = *c;
-		}
-	}
-	
-	origin = get_option_val(opt_time_format, DEFAULT_TIME_FORMAT);
-	strncpy(buff, origin, sizeof(buff));
-	
-	src = lrtrim(buff);
-	H = 0;
-	prev = '\0';
-	offs = (src - buff);
-	dest = timef;
-	
-	for (c = src; *c; c++, offs++) {
-		if (isalpha(*c)) {
-			switch(*c) {
-			case 'S':
-			case 's':
-				if (prev != 'S') { 
-					strcat(dest, "%S"); 
-					dest += 2;
-					prev = 'S'; 
-				}
-				break;
-			case 'M':
-			case 'm':
-				if (prev != 'M') { 
-					strcat(dest, "%M"); 
-					dest += 2;
-					prev = 'M'; 
-				}
-				break;
-			case 'h':	/* 12-hour-clock */
-				if (prev != 'H') {
-					strcat(dest, "%l");
-					dest += 2;
-					prev = 'H';
-				}
-				else *(dest-1) = 'I';
-				break;
-			case 'H':	/* 24-hour-clock */
-				if (prev != 'H') {
-					strcat(dest, "%l");
-					dest += 2;
-					prev = 'H';
-				}
-				else *(dest-1) = 'H';
-				break;
-			case 'x':
-				if (prev != 'X') {
-					strcat(dest, "%P");
-					dest += 2;
-					prev = 'X';
-				}
-				else *(dest-1) = 'P';
-				break;
-			case 'X':
-				if (prev != 'X') {
-					strcat(dest, "%p");
-					dest += 2;
-					prev = 'X';
-				}
-				else *(dest-1) = 'p';
-				break;
-			default:
-				fatal(MYNAME ": Invalid character \"%c\" in time format!\n", origin[offs]);
-			}
-		}
-		else *dest++ = *c;
-	}
-	
-	strcpy(format, datef);
-	strcat(format, " ");
-	strcat(format, timef);
-	date_time_format = format;
+	f = get_option_val(opt_time_format, DEFAULT_TIME_FORMAT);
+	c = convert_human_time_format(f);
+	date_time_format = xstrappend(date_time_format, c);
+	xfree(c);
 }
 
 static double
@@ -839,6 +721,7 @@ static void
 garmin_txt_wr_deinit(void)
 {
 	fclose(fout);
+	xfree(date_time_format);
 }
 
 static void
@@ -1341,6 +1224,7 @@ garmin_rd_deinit(void)
 		free_header(h);
 	}
 	fclose(fin);
+	xfree(date_time_format);
 }
 
 static void
