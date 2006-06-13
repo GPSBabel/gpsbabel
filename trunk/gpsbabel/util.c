@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <errno.h>
+#include <stdarg.h>
 
 static int i_am_little_endian = -1;
 static int doswap(void);
@@ -279,6 +280,30 @@ xfputs(const char *errtxt, const char *s, FILE *stream)
 		fatal("%s Writing output file.  Error was '%s'.\n",
 				errtxt, strerror(errno));
 	}
+}
+
+/*
+ * Allocate a string using a format list with optional arguments
+ */
+
+int
+xasprintf(char **strp, const char *fmt, ...)
+{
+	va_list args;
+	int res;
+	
+	va_start(args, fmt);
+	res = vsnprintf((char *)NULL, 0, fmt, args);
+	*strp = xmalloc(res + 1);
+	va_end(args);
+	
+	va_start(args, fmt);
+	res = vsnprintf(*strp, res + 1, fmt, args);
+	va_end(args);
+
+	is_fatal(res < 0, "(internal): vsnprintf returned %d!", res);
+	
+	return res;
 }
 
 /* 
@@ -901,6 +926,165 @@ rot13( const char *s )
 		}
 		else if ( *cur == ']' ) flip = 1;
 		cur++;
+	}
+	return result;
+}
+
+/*
+ * Convert a human readable date format (i.e. "YYYY/MM/DD") into
+ * a format usable for strftime and others 
+ */
+ 
+char *
+convert_human_date_format(const char *human_datef)
+{
+	char *result, *cin, *cout;
+	char prev;
+	int ylen;
+	
+	result = xcalloc((2*strlen(human_datef)) + 1, 1);
+	cout = result;
+	prev = '\0';
+	ylen = 0;
+	
+	for (cin = (char *)human_datef; *cin; cin++)
+	{
+		char okay = 1;
+		
+		if (toupper(*cin) != 'Y') ylen = 0;
+		if (isalpha(*cin)) 
+		{
+			switch(*cin) 
+			{
+			case 'y': case 'Y':
+				if (prev != 'Y')
+				{ 
+					strcat(cout, "%y"); 
+					cout += 2;
+					prev = 'Y'; 
+				}
+				ylen++;
+				if (ylen > 2) *(cout-1) = 'Y';
+				break;
+			case 'm': case 'M':
+				if (prev != 'M')
+				{
+					strcat(cout, "%m");
+					cout += 2;
+					prev = 'M';
+				}
+				break;
+			case 'd': case 'D':
+				if (prev != 'D')
+				{
+					strcat(cout, "%d");
+					cout += 2;
+					prev = 'D';
+				}
+				break;
+			default:
+				okay = 0;
+			}
+		}
+		else if (ispunct(*cin))
+		{
+			*cout++ = *cin;
+			prev = '\0';
+		}
+		else okay = 0;
+		
+		is_fatal(okay == 0, "Invalid character \"%c\" in date format!", *cin);
+	}
+	return result;
+}
+
+/*
+ * Convert a human readable time format (i.e. "HH:mm:ss") into
+ * a format usable for strftime and others
+ */
+
+char *
+convert_human_time_format(const char *human_timef)
+{
+	char *result, *cin, *cout;
+	char prev;
+	
+	result = xcalloc((2*strlen(human_timef)) + 1, 1);
+	cout = result;
+	prev = '\0';
+	
+	for (cin = (char *)human_timef; *cin; cin++)
+	{
+		int okay = 1;
+		
+		if (isalpha(*cin))
+		{
+			switch(*cin)
+			{
+			case 'S': case 's':
+				if (prev != 'S') { 
+					strcat(cout, "%S"); 
+					cout += 2;
+					prev = 'S'; 
+				}
+				break;
+				
+			case 'M': case 'm':
+				if (prev != 'M') { 
+					strcat(cout, "%M"); 
+					cout += 2;
+					prev = 'M'; 
+				}
+				break;
+				
+			case 'h':				/* 12-hour-clock */
+				if (prev != 'H') {
+					strcat(cout, "%l");	/* 1 .. 12 */
+					cout += 2;
+					prev = 'H';
+				}
+				else *(cout-1) = 'I';		/* 01 .. 12 */
+				break;
+				
+			case 'H':				/* 24-hour-clock */
+				if (prev != 'H') {
+					strcat(cout, "%k");
+					cout += 2;
+					prev = 'H';
+				}
+				else *(cout-1) = 'H';
+				break;
+				
+			case 'x':
+				if (prev != 'X') {
+					strcat(cout, "%P");
+					cout += 2;
+					prev = 'X';
+				}
+				else *(cout-1) = 'P';
+				break;
+				
+			case 'X':
+				if (prev != 'X') {
+					strcat(cout, "%p");
+					cout += 2;
+					prev = 'X';
+				}
+				else *(cout-1) = 'p';
+				break;
+				
+			default:
+				okay = 0;
+			}
+		}
+		else if (ispunct(*cin) || isspace(*cin))
+		{
+			*cout++ = *cin;
+			prev = '\0';
+		}
+		else okay = 0;
+		
+		is_fatal(okay == 0, "Invalid character \"%c\" in time format!", *cin);
 	}
 	return result;
 }

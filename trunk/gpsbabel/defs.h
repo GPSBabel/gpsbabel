@@ -660,6 +660,7 @@ char *gstrsub(const char *s, const char *search, const char *replace);
 char *xstrrstr(const char *s1, const char *s2);
 void rtrim(char *s);
 char * lrtrim(char *s);
+int xasprintf(char **strp, const char *fmt, ...);
 signed int get_tz_offset(void);
 time_t mkgmtime(struct tm *t);
 time_t current_time(void);
@@ -671,6 +672,8 @@ char * xml_entitize(const char * str);
 char * html_entitize(const char * str);
 char * strip_html(const utf_string*);
 char * strip_nastyhtml(const char * in);
+char * convert_human_date_format(const char *human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
+char * convert_human_time_format(const char *human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
 
 /* 
  * Character encoding transformations.
