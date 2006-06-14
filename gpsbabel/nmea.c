@@ -146,6 +146,7 @@ static short_handle mkshort_handle;
 static preferred_posn_type posn_type;
 static struct tm tm;
 static waypoint * curr_waypt = NULL;
+static waypoint * last_waypt = NULL;
 
 static int without_date;	/* number of created trackpoints without a valid date */
 static struct tm opt_tm;	/* converted "date" parameter */
@@ -197,6 +198,8 @@ nmea_cksum(const char *const buf)
 static void
 nmea_rd_init(const char *fname)
 {
+	curr_waypt = NULL;
+	last_waypt = NULL;
 	file_in = xfopen(fname, "r", MYNAME);
 }
 
@@ -731,7 +734,10 @@ nmea_read(void)
 	while (fgets(ibuf, sizeof(ibuf), file_in)) {
 		nmea_parse_one_line(ibuf);
 		if (lt < last_read_time && curr_waypt && trk_head) {
-			track_add_wpt(trk_head, curr_waypt);
+			if (curr_waypt != last_waypt) {
+				track_add_wpt(trk_head, curr_waypt);
+				last_waypt = curr_waypt;
+			}
 			lt = last_read_time;	
 		}
 	}
