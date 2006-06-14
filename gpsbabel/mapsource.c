@@ -866,7 +866,7 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	char wptname[MPSNAMEBUFFERLEN];
 	int lat;
 	int lon;
-	short int	rte_autoname = 0;
+	char rte_autoname;
 	int	interlinkStepCount;
 	int	thisInterlinkStep;
 	unsigned int	mpsclass;
@@ -885,35 +885,38 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	fprintf(stderr, "mps_route_r: reading route %s\n", rtename);
 #endif
 
-	fread(&rte_autoname, 2, 1, mps_file);	/* autoname flag */
-	rte_autoname = le_read16(&rte_autoname);
+	fread(&rte_autoname, 1, 1, mps_file);	/* autoname flag */
 
-	fread(&lat, 4, 1, mps_file); 
-	fread(&lon, 4, 1, mps_file); 
-	lat = le_read32(&lat);			/* max lat of whole route */
-	lon = le_read32(&lon);			/* max lon of whole route */
+	fread(tbuf, 1, 1, mps_file);		/* skip min/max values */
+	if (tbuf[0] == 0) {
 
-	fread(tbuf, 1, 1, mps_file);			/* altitude validity */
-	if (tbuf[0] == 1) {
-		le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);	/* max alt of the whole route */
-	}
-	else {
-		mps_altitude = unknown_alt;
-		le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
-	}
+		fread(&lat, 4, 1, mps_file); 
+		fread(&lon, 4, 1, mps_file); 
+		lat = le_read32(&lat);			/* max lat of whole route */
+		lon = le_read32(&lon);			/* max lon of whole route */
 
-	fread(&lat, 4, 1, mps_file); 
-	fread(&lon, 4, 1, mps_file); 
-	lat = le_read32(&lat);			/* min lat of whole route */
-	lon = le_read32(&lon);			/* min lon of whole route */
+		fread(tbuf, 1, 1, mps_file);			/* altitude validity */
+		if (tbuf[0] == 1) {
+			le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);	/* max alt of the whole route */
+		}
+		else {
+			mps_altitude = unknown_alt;
+			le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
+		}
 
-	fread(tbuf, 1, 1, mps_file);			/* altitude validity */
-	if (tbuf[0] == 1) {
-		le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);	/* min alt of the whole route */
-	}
-	else {
-		mps_altitude = unknown_alt;
-		le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
+		fread(&lat, 4, 1, mps_file); 
+		fread(&lon, 4, 1, mps_file); 
+		lat = le_read32(&lat);			/* min lat of whole route */
+		lon = le_read32(&lon);			/* min lon of whole route */
+
+		fread(tbuf, 1, 1, mps_file);			/* altitude validity */
+		if (tbuf[0] == 1) {
+			le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);	/* min alt of the whole route */
+		}
+		else {
+			mps_altitude = unknown_alt;
+			le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
+		}
 	}
 
 	fread(&rte_count, 4, 1, mps_file);			/* number of waypoints in route */
