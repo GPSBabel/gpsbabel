@@ -251,7 +251,7 @@ double GPS_Math_Feet_To_Metres(double v)
 
 int32 GPS_Math_Deg_To_Semi(double v)
 {
-    return ((1U<<31) / 180) * v;
+    return ( (double)(1U<<31) / (double)180) * v;
 }
 
 
@@ -267,7 +267,7 @@ int32 GPS_Math_Deg_To_Semi(double v)
 
 double GPS_Math_Semi_To_Deg(int32 v)
 {
-    return (double) (((double)v/(double)(1U<<31)) * (double)180);
+    return (double) (((double)v / (double)(1U<<31)) * (double)180);
 }
 
 
