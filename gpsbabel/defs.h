@@ -661,6 +661,8 @@ char *xstrrstr(const char *s1, const char *s2);
 void rtrim(char *s);
 char * lrtrim(char *s);
 int xasprintf(char **strp, const char *fmt, ...);
+char *strupper(char *src);
+char *strlower(char *src);
 signed int get_tz_offset(void);
 time_t mkgmtime(struct tm *t);
 time_t current_time(void);
