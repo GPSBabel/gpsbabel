@@ -223,7 +223,6 @@ gpsutil_disp(const waypoint *wpt)
 	double lon,lat;
 	int icon_token = 0;
 	char tbuf[1024];
-	char *tp = tbuf;
 	time_t tm = wpt->creation_time;
 
 	lon = degrees2ddmm(wpt->longitude);
@@ -232,10 +231,7 @@ gpsutil_disp(const waypoint *wpt)
 	if (tm == 0) 
 		tm = current_time();
 	strftime(tbuf, sizeof(tbuf), "%d-%b-%y %I:%M:%S", localtime(&tm));
-	while (*tp) {
-		*tp = toupper(*tp);
-		tp++;
-	}
+	strupper(tbuf);
 
 	if (deficon) {
 		icon_token = atoi(deficon);

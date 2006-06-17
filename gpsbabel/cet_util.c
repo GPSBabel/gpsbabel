@@ -866,7 +866,6 @@ int
 cet_validate_cs(const char *cs, cet_cs_vec_t **vec, char **cs_name)
 {
 	char buff[128];
-	char *c;
 	cet_cs_vec_t *v;
 
 	if ((cs == NULL) || (strlen(cs) == 0))		/* set default us-ascii */
@@ -879,14 +878,7 @@ cet_validate_cs(const char *cs, cet_cs_vec_t **vec, char **cs_name)
 	v = cet_find_cs_by_name(cs);
 	if (v != NULL)
 	{
-	    strncpy(buff, v->name, sizeof(buff));
-	    c = buff;
-	    while (*c != '\0')
-	    {
-		*c = toupper(*c);
-		c++;
-	    }
-	    *cs_name = xstrdup(buff);
+	    *cs_name = strupper(xstrdup(v->name));
 	    *vec = v;
 	    return 1;
 	}

@@ -1476,12 +1476,8 @@ tpo_read(void)
 static void
 tpo_write_file_header()
 {
-	int i;
-	
 	/* force upper-case state name */
-	for (i=0; i<(int)strlen(output_state); i++) {
-		output_state[i] = toupper(output_state[i]);
-	}
+	strupper(output_state);
 	
 	if (strncmp("CA", output_state, 2) == 0) {
 

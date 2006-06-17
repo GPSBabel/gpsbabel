@@ -954,10 +954,7 @@ parse_header(void)
 	free_header(unknown_header);
 	
 	while ((str = csv_lineparse(NULL, "\t", "", column++))) {
-		header_lines[unknown_header][column] = xstrdup(str);
-		for (str = header_lines[unknown_header][column]; *str; str++) {
-			*str = toupper(*str);
-		}
+		header_lines[unknown_header][column] = strupper(xstrdup(str));
 		header_ct[unknown_header]++;
 		if (header_ct[unknown_header] >= MAX_HEADER_FIELDS) break;
 	}
@@ -997,10 +994,7 @@ bind_fields(const header_type ht)
 	fields = xmalloc(i + 2);
 	strcpy(fields, headers[ht]);
 	strcat(fields, "\t");
-	for (c = fields; *c; c++) {
-		*c = toupper(*c);
-	}
-	c = fields;
+	c = strupper(fields);
 	while ((c = strchr(c, '\t'))) *c++ = '\0';
 	
 	for (i = 0; i < header_ct[unknown_header]; i++) {

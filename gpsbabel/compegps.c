@@ -1,6 +1,6 @@
 /*
 
-    Support for CompeGPS waypoint (.wpt), route (.rte)  and track (.trk) files,
+    Support for CompeGPS waypoint (.wpt), route (.rte) and track (.trk) files,
 
     Copyright (C) 2005 Olaf Klein, o.b.klein@t-online.de
 
@@ -492,14 +492,9 @@ write_trkpt_cb(const waypoint *wpt)
 	
 	if (wpt->creation_time != 0)
 	{
-		char *cx = buff;
 		tm = *gmtime(&wpt->creation_time);
 		strftime(buff, sizeof(buff), "%d-%b-%y %H:%M:%S", &tm);
-		while (*cx != '\0')
-		{
-			*cx = toupper(*cx);
-			cx++;
-		}
+		strupper(buff);
 	}
 	
 	fprintf(fout, "T  A %.10f%c%c %.10f%c%c ",
