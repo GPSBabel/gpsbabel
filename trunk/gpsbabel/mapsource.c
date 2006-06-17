@@ -26,6 +26,7 @@
 
 #include "defs.h"
 #include "garmin_tables.h"
+#include "jeeps/gpsmath.h"
 #include <ctype.h>
 
 static	FILE	*mps_file_in;
@@ -38,8 +39,8 @@ static	int		mps_ver_out = 0;
 static	int		mps_ver_temp = 0;
 
 /* Temporary pathname used when merging gpsbabel output with an existing file */
-static	char	tempname[256];
-static	char	origname[256];
+static char *tempname;
+static char *fin_name;
 
 static	const waypoint	*prevRouteWpt;
 /* Private queues of written out waypoints */
@@ -240,6 +241,7 @@ mps_rd_deinit(void)
 static void
 mps_wr_init(const char *fname)
 {
+	fin_name = xstrdup(fname);
 	if (mpsmergeouts) {
 		mpsmergeout = atoi(mpsmergeouts);
 	}
@@ -257,14 +259,13 @@ mps_wr_init(const char *fname)
 				/* create a temporary name  based on a random char and the existing name */
 				/* then test if it already exists, if so try again with another rand num */
 				/* yeah, yeah, so there's probably a library function for this           */
-				sprintf(tempname, "%s.%08x", fname, rand());
+				xasprintf(&tempname, "%s.%08x", fname, rand());
 				mps_file_temp = fopen(tempname, "rb");
 				if (mps_file_temp == NULL) break;
 				fclose(mps_file_temp);
 			}
 			rename(fname, tempname);
 			mps_file_temp = xfopen(tempname, "rb", MYNAME);
-			strcpy(origname, fname);	/* save in case we need to revert the renamed file */
 		}
 	}
 
@@ -284,6 +285,7 @@ mps_wr_deinit(void)
 	if (mpsmergeout) {
 		fclose(mps_file_temp);
 		remove(tempname);
+		xfree(tempname);
 	}
 
 	if ( written_wpt_mkshort_handle ) {
@@ -292,6 +294,7 @@ mps_wr_deinit(void)
 	/* flush the "private" queue of waypoints written */
 	mps_wpt_q_deinit(&written_wpt_head);
 	mps_wpt_q_deinit(&written_route_wpt_head);
+	xfree(fin_name);
 }
 
 /*
@@ -580,8 +583,8 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 	thisWaypoint->shortname = xstrdup(wptname);
 	thisWaypoint->description = xstrdup(wptdesc);
 	thisWaypoint->notes = xstrdup(wptnotes);
-	thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
-	thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
+	thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
+	thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
 	thisWaypoint->altitude = mps_altitude;
 	thisWaypoint->proximity = mps_proximity;
 	thisWaypoint->depth = mps_depth;
@@ -606,9 +609,8 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 {
 	unsigned char hdr[100];
 	int reclen;
-	int lat = wpt->latitude  / 180.0 * 2147483648.0;
-	int lon = wpt->longitude  / 180.0 * 2147483648.0;
-	int	icon;
+	int lat, lon;
+	int icon;
 	char *src;
 	char *ident;
 	char *ascii_description;
@@ -621,6 +623,9 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	double	mps_proximity = (mpsuseprox ? wpt->proximity : unknown_alt);
 	double	mps_depth = (mpsusedepth ? wpt->depth : unknown_alt);
 	
+	lat = GPS_Math_Deg_To_Semi(wpt->latitude);
+	lon = GPS_Math_Deg_To_Semi(wpt->longitude);
+
 	if(wpt->description) src = wpt->description;
 	if(wpt->notes) src = wpt->notes;
 	ident = global_opts.synthesize_shortnames ?
@@ -1020,8 +1025,8 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 #endif
 				thisWaypoint = waypt_new();
 				thisWaypoint->shortname = xstrdup(wptname);
-				thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
-				thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
+				thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
+				thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
 				thisWaypoint->altitude = mps_altitude;
 				thisWaypoint->depth = mps_depth;
 			}
@@ -1110,8 +1115,8 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 			/* should never reach here, but we do need a fallback position */
 			thisWaypoint = waypt_new();
 			thisWaypoint->shortname = xstrdup(wptname);
-			thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
-			thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
+			thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
+			thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
 			thisWaypoint->altitude = mps_altitude;
 		}
 	}
@@ -1238,8 +1243,8 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 		hdr[2] = 0;						/* MSB of don't autoname */
 		fwrite(hdr, 3, 1, mps_file);	/* NULL string terminator + route autoname flag */
 
-		lat = maxlat / 180.0 * 2147483648.0;
-		lon = maxlon / 180.0 * 2147483648.0;
+		lat = GPS_Math_Deg_To_Semi(maxlat);
+		lon = GPS_Math_Deg_To_Semi(maxlon);
 
 		le_write32(&lat, lat);
 		le_write32(&lon, lon);
@@ -1256,8 +1261,8 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 			le_fwrite64(&maxalt, 8 , 1, mps_file);
 		}
 
-		lat = minlat / 180.0 * 2147483648.0;
-		lon = minlon / 180.0 * 2147483648.0;
+		lat = GPS_Math_Deg_To_Semi(minlat);
+		lon = GPS_Math_Deg_To_Semi(minlon);
 
 		le_write32(&lat, lat);
 		le_write32(&lon, lon);
@@ -1323,8 +1328,8 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 		fwrite(&reclen, 4, 1, mps_file);
 
 		/* output end point 1 */
-		lat = prevRouteWpt->latitude  / 180.0 * 2147483648.0;
-		lon = prevRouteWpt->longitude  / 180.0 * 2147483648.0;
+		lat = GPS_Math_Deg_To_Semi(prevRouteWpt->latitude);
+		lon = GPS_Math_Deg_To_Semi(prevRouteWpt->longitude);
 		le_write32(&lat, lat);
 		le_write32(&lon, lon);
 
@@ -1342,8 +1347,8 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 		}
 
 		/* output end point 2 */
-		lat = rtewpt->latitude  / 180.0 * 2147483648.0;
-		lon = rtewpt->longitude  / 180.0 * 2147483648.0;
+		lat = GPS_Math_Deg_To_Semi(rtewpt->latitude);
+		lon = GPS_Math_Deg_To_Semi(rtewpt->longitude);
 		le_write32(&lat, lat);
 		le_write32(&lon, lon);
 
@@ -1361,21 +1366,21 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 		}
 
 		if (rtewpt->latitude > prevRouteWpt->latitude) {
-			maxlat = rtewpt->latitude  / 180.0 * 2147483648.0;
-			minlat = prevRouteWpt->latitude  / 180.0 * 2147483648.0;
+			maxlat = GPS_Math_Deg_To_Semi(rtewpt->latitude);
+			minlat = GPS_Math_Deg_To_Semi(prevRouteWpt->latitude);
 		}
 		else {
-			minlat = rtewpt->latitude  / 180.0 * 2147483648.0;
-			maxlat = prevRouteWpt->latitude  / 180.0 * 2147483648.0;
+			minlat = GPS_Math_Deg_To_Semi(rtewpt->latitude);
+			maxlat = GPS_Math_Deg_To_Semi(prevRouteWpt->latitude);
 		}
 
 		if (rtewpt->longitude > prevRouteWpt->longitude) {
-			maxlon = rtewpt->longitude  / 180.0 * 2147483648.0;
-			minlon = prevRouteWpt->longitude  / 180.0 * 2147483648.0;
+			maxlon = GPS_Math_Deg_To_Semi(rtewpt->longitude);
+			minlon = GPS_Math_Deg_To_Semi(prevRouteWpt->longitude);
 		}
 		else {
-			minlon = rtewpt->longitude  / 180.0 * 2147483648.0;
-			maxlon = prevRouteWpt->longitude  / 180.0 * 2147483648.0;
+			minlon = GPS_Math_Deg_To_Semi(rtewpt->longitude);
+			maxlon = GPS_Math_Deg_To_Semi(prevRouteWpt->longitude);
 		}
 
 		if (rtewpt->altitude != unknown_alt) maxalt = rtewpt->altitude;
@@ -1578,8 +1583,8 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 		}
 
 		thisWaypoint = waypt_new();
-		thisWaypoint->latitude = lat / 2147483648.0 * 180.0;
-		thisWaypoint->longitude = lon / 2147483648.0 * 180.0;
+		thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
+		thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
 		thisWaypoint->creation_time = le_read32(&dateTime);
 		thisWaypoint->centiseconds = 0;
 		thisWaypoint->altitude = mps_altitude;
@@ -1676,13 +1681,15 @@ static void
 mps_trackdatapoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 {
 	unsigned char hdr[10];
-	int lat = wpt->latitude  / 180.0 * 2147483648.0;
-	int lon = wpt->longitude  / 180.0 * 2147483648.0;
+	int lat, lon;
 	time_t	t = wpt->creation_time;
 	char zbuf[10];
 
 	double	mps_altitude = wpt->altitude;
 	double	mps_depth = (mpsusedepth ? wpt->depth : unknown_alt);
+
+	lat = GPS_Math_Deg_To_Semi(wpt->latitude);
+	lon = GPS_Math_Deg_To_Semi(wpt->longitude);
 
 	memset(zbuf, 0, sizeof(zbuf));
 
@@ -1882,8 +1889,8 @@ mps_write(void)
 				/* then delete the "real" file and rename the temporarily renamed file back */
 				fclose(mps_file_temp);
 				fclose(mps_file_out);
-				remove(origname);
-				rename(tempname,origname);
+				remove(fin_name);
+				rename(tempname, fin_name);
 				fatal (MYNAME ": merge source version is %d, requested out version is %d\n", mps_ver_temp, atoi(mpsverout));
 			}
 		}
