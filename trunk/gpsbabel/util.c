@@ -495,13 +495,11 @@ str_match(const char *str, const char *match)
 int
 case_ignore_str_match(const char *str, const char *match)
 {
-	char *s1, *s2, *c;
+	char *s1, *s2;
 	int res;
 	
-	s1 = xstrdup(str);
-	for (c = s1; *c; c++) *c = toupper(*c);
-	s2 = xstrdup(match);
-	for (c = s2; *c; c++) *c = toupper(*c);
+	s1 = strupper(xstrdup(str));
+	s2 = strupper(xstrdup(match));
 	res = str_match(s1, s2);
 	xfree(s1);
 	xfree(s2);
@@ -907,6 +905,33 @@ xstrrstr(const char *s1, const char *s2)
 	return r;
 }
 
+/*
+ *
+ */
+char *
+strupper(char *src)
+{
+	char *c;
+	
+	for (c = src; *c; c++) {
+		*c = toupper(*c);
+	}
+	return src;
+}
+
+/*
+ *
+ */
+char *
+strlower(char *src)
+{
+	char *c;
+	
+	for (c = src; *c; c++) {
+		*c = tolower(*c);
+	}
+	return src;
+}
 
 char *
 rot13( const char *s )
@@ -1103,12 +1128,8 @@ strip_nastyhtml(const char * in)
 	char *lcstr, *lcp;
 	
 	sp = returnstr = xstrdup(in);
-	lcp = lcstr = xstrdup(in);
+	lcp = lcstr = strlower(xstrdup(in));
 	
-	while (*lcp) {
-		*lcp = tolower(*lcp);
-		lcp++;
-	}
 	while (lcp = strstr(lcstr, "<body")) {   /* becomes <---- */
 		sp = returnstr + (lcp - lcstr) ;
 		sp++; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
