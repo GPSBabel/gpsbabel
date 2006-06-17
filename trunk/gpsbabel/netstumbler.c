@@ -274,7 +274,7 @@ fix_netstumbler_dupes(void)
 	queue *elem, *tmp;
 	extern queue waypt_head;
 	const char *snptr;
-	char *tmp_sn, *tmp_ptr;
+	char *tmp_sn;
 	unsigned long last_crc;
 	char ssid[32 + 5 + 1];
 
@@ -285,9 +285,7 @@ fix_netstumbler_dupes(void)
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		bh->wpt = (waypoint *) elem;
 		snptr = bh->wpt->shortname;
-		tmp_sn = xstrdup(snptr);
-		for (tmp_ptr = tmp_sn; *tmp_ptr; tmp_ptr++)
-			*tmp_ptr = tolower(*tmp_ptr);
+		tmp_sn = strlower(xstrdup(snptr));
 		bh->crc = get_crc32(tmp_sn, strlen(snptr));
 		xfree(tmp_sn);
 		i ++;
