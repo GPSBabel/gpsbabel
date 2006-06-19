@@ -106,6 +106,7 @@ extern ff_vecs_t vitosmt_vecs;
 extern ff_vecs_t wfff_xml_vecs;
 extern ff_vecs_t xcsv_vecs;
 extern ff_vecs_t yahoo_vecs;
+extern ff_vecs_t wbt_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -378,6 +379,12 @@ vecs_t vec_list[] = {
                 &brauniger_iq_vecs,
                 "baroiq",
                 "Brauniger IQ Series Barograph Download",
+                NULL
+        },
+        {
+                &wbt_vecs,
+                "wbt",
+                "Wintec WBT-100/200 GPS Download",
                 NULL
         },
         {

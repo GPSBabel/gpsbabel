@@ -175,6 +175,9 @@
             <File
 				RelativePath="..\brauniger_iq.c">
 			</File>
+            <File
+				RelativePath="..\wbt-200.c">
+			</File>
 			<File
                 RelativePath="..\cet.c">
             </File>

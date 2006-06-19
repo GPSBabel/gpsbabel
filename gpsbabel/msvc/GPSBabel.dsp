@@ -315,6 +315,10 @@ SOURCE=..\brauniger_iq.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\wbt-200.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\cetus.c
 # End Source File
 # Begin Source File
