@@ -266,7 +266,7 @@ static void
 mag_writemsg(const char * const buf)
 {
 	unsigned int osum = mag_checksum(buf);
-	int retry_cnt = 20;
+	int retry_cnt = 5;
 	int i;
 	char obuf[1000];
 
@@ -671,7 +671,7 @@ terminit(const char *portname, int create_ok)
 
         magfile_in = xfopen(portname, "rb", MYNAME);
 
-	is_file = !isatty(fileno(magfile_in)) || explorist;
+	is_file = (0 == strcmp(portname,"-")) || !isatty(fileno(magfile_in)) || explorist;
 	if (is_file) {
 		icon_mapping = map330_icon_table;
 		mag_cleanse = m330_cleanse;
@@ -840,7 +840,7 @@ mag_wr_init_common(const char *portname)
 	}
 #else
 	magfile_out = xfopen(portname, "w+b", MYNAME);
-	is_file = !isatty(fileno(magfile_out)) || explorist;
+	is_file =  (0 == strcmp(portname,"-")) || !isatty(fileno(magfile_out)) || explorist;
 #endif
 
 	if (!mkshort_handle) {
