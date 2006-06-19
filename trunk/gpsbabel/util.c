@@ -1194,7 +1194,9 @@ strip_html(const utf_string *in)
 		}
 		
 		if (! tag[0]) {
-			if (*instr != '\n')
+			if (*instr == '\n')
+				*out++ = ' ';
+			else
 				*out++ = *instr;
 		}
 		else {
