@@ -264,7 +264,6 @@ static void data_read(void) {
 		
     		wpt->latitude	    = lat;;
     		wpt->longitude	    = lon;
-    		wpt->altitude	    = 0.0;
     		wpt->creation_time  = rtim;
     		wpt->centiseconds   = 0;
 		
