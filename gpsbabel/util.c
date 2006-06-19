@@ -1194,10 +1194,15 @@ strip_html(const utf_string *in)
 		}
 		
 		if (! tag[0]) {
-			if (*instr == '\n')
+			if (*instr == '\n') {
 				*out++ = ' ';
-			else
+				do {
+					instr++;
+				} while (isspace(*instr));
+				continue;
+			} else {
 				*out++ = *instr;
+			}
 		}
 		else {
 			if (taglen < (sizeof(tag)-1)) {
