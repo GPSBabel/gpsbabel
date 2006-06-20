@@ -137,6 +137,15 @@ $(WEB)/htmldoc-$(DOCVERSION)/readme.html: FORCE
 	 xmldoc/readme.xml
 	tools/mkcapabilities
 
+gpsbabel-onepage.html: FORCE
+	xsltproc \
+	  --stringparam toc.section.depth "1" \
+	  --stringparam html.stylesheet \
+	  "http://www.gpsbabel.org/style3.css" \
+	  http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
+	xmldoc/readme.xml > $@ || rm $@
+
+
 readme.txt: readme.html
 	lynx -nolist -dump readme.html  > $@
 
