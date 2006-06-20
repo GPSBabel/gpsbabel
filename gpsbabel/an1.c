@@ -154,7 +154,9 @@ static unsigned char
 ReadChar( FILE *f )
 {
 	unsigned char result = 0;
-	fread( &result, 1, 1, f );
+	if (fread( &result, 1, 1, f ) < 1) {
+		fatal( MYNAME ": error reading an1 file.  Perhaps this isn't really an an1 file.");
+	}
 	return result;
 }
 
