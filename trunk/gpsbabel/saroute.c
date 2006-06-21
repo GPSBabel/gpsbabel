@@ -201,10 +201,11 @@ my_read(void)
 			record = ReadRecord(infile, recsize);
 			latlon = (struct ll *)(record);
 
+			/* These records are backwards for some reason */
 			lat = (0x80000000UL -
-			       le_read32(&latlon->lat)) / (double)(0x800000);
-			lon = (0x80000000UL -
 			       le_read32(&latlon->lon)) / (double)(0x800000);
+			lon = (0x80000000UL -
+			       le_read32(&latlon->lat)) / (double)(0x800000);
 	
 			wpt_tmp = waypt_new();
 			wpt_tmp->latitude = lat;
