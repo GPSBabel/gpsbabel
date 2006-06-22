@@ -20,7 +20,6 @@
 <member>eTrex Venture CX</member> 
 <member>eTrex VistaC</member> 
 <member>eTrex Vista CX</member> 
-<member>Forerunner 201</member> 
 <member>Forerunner 205</member> 
 <member>Forerunner 301</member> 
 <member>Forerunner 305</member>  
@@ -39,8 +38,12 @@
 <member>GPSMAP 76CSX</member> 
 <member>GPSMAP 76CX</member> 
 <member>GPSMAP 96C</member> 
-<member>Quest II</member>
+<member>Nuvi 300<footnote id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.</para></footnote></member>
+<member>Nuvi 310<footnoteref linkend="gpx"/></member>
+<member>Nuvi 350<footnoteref linkend="gpx"/></member>
+<member>Nuvi 360<footnoteref linkend="gpx"/></member>
 <member>Quest</member>
+<member>Quest II</member>
 <member>StreetPilot 2610</member> 
 <member>StreetPilot 2620</member> 
 <member>StreetPilot 2650</member> 
@@ -53,14 +56,56 @@
 <member>StreetPilot c320</member>
 <member>StreetPilot c330</member>
 <member>StreetPilot c340</member>
-<member>StreetPilot c510</member>
-<member>StreetPilot c530</member>
-<member>StreetPilot c550</member>
+<member>StreetPilot c510<footnoteref linkend="gpx"/></member>
+<member>StreetPilot c530<footnoteref linkend="gpx"/></member>
+<member>StreetPilot c550<footnoteref linkend="gpx"/></member>
 <member>StreetPilot i2</member>
 <member>StreetPilot i3</member>
 <member>StreetPilot i5</member>
-<member>and most serial units</member>
 </simplelist>
+</para>
+
+<para>and most serial units including:
+<simplelist columns="5">
+<member>eMap</member>
+<member>eTrex Camo</member>
+<member>eTrex Legend</member>
+<member>eTrex Summit</member>
+<member>eTrex Venture</member>
+<member>eTrex Vista</member>
+<member>eTrex Yellow</member>
+<member>Forerunner 201</member> 
+<member>Foretrex 201</member> 
+<member>Geko 201</member> 
+<member>Geko 301</member> 
+<member>GPS 12CX </member> 
+<member>GPS 12Map </member> 
+<member>GPS 12 </member> 
+<member>GPS 12XL </member> 
+<member>GPS III </member> 
+<member>GPS III+ </member> 
+<member>GPS II </member> 
+<member>GPS II+ </member> 
+<member>GPS V</member> 
+<member>StreetPilot III</member> 
+<member>StreetPilot III+</member> 
+</simplelist>
+</para>
+
+<para>
+	None of the GPSBabel developers has access to every model on that
+	list, but we've received reports of success and/or have reasonable
+	expectations that the above models work. If you succeed with
+	a model that is not on that list, please send a message to the
+	gpsbabel-misc mailing list with the details so that we may add it.
+</para>
+
+<para>
+	Not every feature on every model is supported.  For example, 
+	while we do extract data such as heart rate and temperature from
+	tracks on the sporting models like Edge and Forerunner, GPSBabel
+	is not a fitness program at its core and does not support features 
+	like courses or calorie/fitness zone data.
 </para>
 
 <para> 
