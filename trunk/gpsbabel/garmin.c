@@ -56,7 +56,7 @@ arglist_t garmin_args[] = {
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{ "power_off", &poweroff, "Command unit to power itself down", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
-	{ "category", &category, "Command unit to power itself down", 
+	{ "category", &category, "Category number to use for written waypoints", 
 		NULL, ARGTYPE_INT, "0", "15"},
 	ARG_TERMINATOR
 };
