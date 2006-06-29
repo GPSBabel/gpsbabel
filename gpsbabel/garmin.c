@@ -57,7 +57,7 @@ arglist_t garmin_args[] = {
 	{ "power_off", &poweroff, "Command unit to power itself down", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{ "category", &category, "Category number to use for written waypoints", 
-		NULL, ARGTYPE_INT, "0", "15"},
+		NULL, ARGTYPE_INT, "1", "16"},
 	ARG_TERMINATOR
 };
 
@@ -569,7 +569,7 @@ waypoint_write(void)
 			way[i]->time_populated = 1;
 		}
 		if (category) {
-			way[i]->category = 1 << atoi(category);
+			way[i]->category = 1 << (atoi(category) - 1);
 		}
 #if SOON
 		garmin_fs_garmin_before_write(wpt, way[i], gps_waypt_type);
