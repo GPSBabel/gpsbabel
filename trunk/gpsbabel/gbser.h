@@ -23,3 +23,7 @@ void *gbser_init(const char *name);
 void gbser_deinit (void *);
 int  gbser_read(void *handle, char *ibuf, int sz);
 int  gbser_setspeed(void *handle, unsigned speed);
+
+#if __WIN32__
+char * fix_win_serial_name(const char *comname);
+#endif
