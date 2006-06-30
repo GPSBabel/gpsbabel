@@ -58,7 +58,9 @@ ReadShort(FILE * f)
 {
 	gbuint16 result = 0;
 
-	fread(&result, sizeof (result), 1, f);
+	if (!fread(&result, sizeof (result), 1, f)) {
+		fatal(MYNAME ": Attempt to read past EOF");
+	}
 	return le_read16(&result);
 }
 
@@ -67,7 +69,8 @@ ReadLong(FILE * f)
 {
 	gbuint32 result = 0;
 
-	fread(&result, sizeof (result), 1, f);
+	if (!fread(&result, sizeof (result), 1, f))
+		fatal(MYNAME ": Attempt to read past EOF");
 	return le_read32(&result);
 }
 
@@ -77,7 +80,8 @@ ReadRecord(FILE * f,
 {
 	unsigned char *result = (unsigned char *) xmalloc(size);
 
-	fread(result, size, 1, f);
+	if (!fread(result, size, 1, f))
+		fatal(MYNAME ": Attempt to read past EOF");
 	return result;
 }
 
