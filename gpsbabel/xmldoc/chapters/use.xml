@@ -198,15 +198,15 @@ merged data to multiple destinations.
 
     <para>
       By default, GPSBabel tries at startup to load the file named 
-	'gpsbabel.ini' from the following locations:
+	<filename>gpsbabel.ini</filename> from the following locations:
     </para>
     <itemizedlist>
       <listitem><para>current working directory</para></listitem>
       <listitem><para>Windows: all paths "APPDATA", "WINDIR", "SYSTEMROOT" declared in environment.</para></listitem>
-      <listitem><para>Unix like OS'ses: "${HOME}/.gpsbabel/", "/usr/local/etc/" and "/etc/"</para></listitem>
+      <listitem><para>Unix like OS'ses: <filename>${HOME}/.gpsbabel/</filename>, <filename>/usr/local/etc/</filename> and <filename>/etc/</filename></para></listitem>
     </itemizedlist>
 	<para>
-      If the '-p' option is specified, the above locations are not searched.
+      If the <option>-p</option> option is specified, the above locations are not searched.
       Only the filename specified by that option will be used.
 	</para>
     <para>
