@@ -136,5 +136,84 @@ merged data to multiple destinations.
          <parameter moreinfo="none">-s</parameter> when tracks or
          routes are present.
 </para>
-      </sect1>
-   </chapter>
+</sect1>
+<sect1 id="inifile">
+  <title>Working with predefined options</title>
+    <para>
+      GPSBabel can read a file on startup to set defaults for options. All
+      module and filter options may be set this way. 
+    </para>
+
+    <para>
+      The format of the file is identical to the inifile-format often seen 
+	on Windows.  Here is an example:
+    </para>
+<!--I don't know what the best "DOCbook-ese" is for this, but it's probably
+  not a simplelist... rjl -->
+    <simplelist columns="1">
+      <member>[Common format settings]</member>
+      <member>snupper=Y</member>
+      <member>snlen=10</member>
+      <member>[gpx]</member>
+      <member>gpxver=1.1</member>
+      <member>[magellan]</member>
+      <member>baud=115200</member>
+      <member>[tiger]</member>
+      <member>[Garmin categories]</member>
+      <member>0=fixed waypoints</member>
+      <member>1=temporary waypoints</member>
+    </simplelist>
+    <para>
+      Each section of the file starts with a '[section]' header followed by any
+      number of lines formatted option=value. Leading and trailing whitespace
+	will be
+      automatically removed from header, option and value items. 
+<!--Are there any other lines? If not, why name them?  rjl -->
+      Lines starting 
+      with '#' or ';' will be treated as comments and ignored.
+    </para>
+
+    <para>
+	There are three optional sections.
+	<itemizedlist>
+	<listitem>
+	<para>"Common format settings"</para>
+	<para>  Any option from any of the formats listed here will be used by
+		GPSBabel unless explictly provided on the command line.
+	</para>
+	</listitem>
+	<listitem>
+	<para>"Common filter settings"</para>
+	<para>As above, but for filters.</para>
+	</listitem>
+	<listitem>
+	<para>Garmin categories</para>
+	<para>This allows you to give readable names to the numeric categories
+	used internally in some Garmin devices and the Mapsource formats
+	such as GDB and MPS.  This is information is also used by our GPX 
+	and garmin_txt formats as well.</para>
+	</listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      By default, GPSBabel tries at startup to load the file named 
+	'gpsbabel.ini' from the following locations:
+    </para>
+    <itemizedlist>
+      <listitem><para>current working directory</para></listitem>
+      <listitem><para>Windows: all paths "APPDATA", "WINDIR", "SYSTEMROOT" declared in environment.</para></listitem>
+      <listitem><para>Unix like OS'ses: "${HOME}/.gpsbabel/", "/usr/local/etc/" and "/etc/"</para></listitem>
+    </itemizedlist>
+	<para>
+      If the '-p' option is specified, the above locations are not searched.
+      Only the filename specified by that option will be used.
+	</para>
+    <para>
+      There may be situations where predefined values are not useable 
+      (i.e. wrapper applications using GPSBabel in the background). 
+       The inifile mechanism can be disabled with an empty filename.
+    </para>
+    <screen format="linespecific">gpsbabel -p "" -i gpx -f something.gpx -o tiger -O -</screen>
+</sect1>
+</chapter>
