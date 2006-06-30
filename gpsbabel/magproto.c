@@ -48,6 +48,7 @@ static char *nukewpt = NULL;
 static int route_out_count;
 static int waypoint_read_count;
 static int wpt_len = 8;
+static const char *curfname;
 
 typedef enum {
 	mrs_handoff = 0,
@@ -467,6 +468,24 @@ retry:
 		 */
 		if (trk_head == NULL) {
 			trk_head = route_head_alloc();
+			/* These tracks don't have names, so derive one
+			 * from input filename.
+			 */
+			const char *s = strrchr(curfname, GB_PATHSEP);
+			char *e;
+			if (s) {
+				s++; /* Skip path delim */
+			}  else {
+				s = curfname;/* use name intact */
+			}
+
+			/* Whack trailing extension if present. */
+			trk_head->rte_name = xstrdup(s);
+			e = strrchr(trk_head->rte_name, '.');
+			if (e) {
+				*e = '\0';
+			}
+			
 			track_add_head(trk_head);
 		}
 
@@ -525,14 +544,15 @@ int
 terminit(const char *portname, int create_ok)
 {
 	DCB tio;	
-	char *xname = xstrdup("\\\\.\\\\");
+//	char *xname = xstrdup("\\\\.\\\\");
+	char *xname = fix_win_serial_name(portname);
 	COMMTIMEOUTS timeout;
 
     is_file = 0;
 
-	xname = xstrappend(xname, portname);
-	if (xname[strlen(xname)-1] == ':')
-		xname[strlen(xname)-1] = 0;
+//	xname = xstrappend(xname, portname);
+//	if (xname[strlen(xname)-1] == ':')
+//		xname[strlen(xname)-1] = 0;
 
 	xCloseHandle(comport);
 
@@ -751,6 +771,7 @@ mag_rd_init_common(const char *portname)
 {
 	time_t now, later;
 	waypoint_read_count = 0;
+	curfname = portname;
 
 	if (bs) {
 		bitrate=atoi(bs);
@@ -908,6 +929,8 @@ mag_deinit(void)
 		mkshort_del_handle(&mkshort_handle);
 
 	waypt_flush(&rte_wpt_tmp);
+
+	trk_head = NULL;
 }
 
 

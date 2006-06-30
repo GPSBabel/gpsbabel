@@ -76,6 +76,13 @@
 #  define _CRT_SECURE_NO_DEPRECATE 1
 #endif
 
+/* Pathname separator character */
+#if __WIN32__
+#  define GB_PATHSEP '\\'
+#else
+#  define GB_PATHSEP '/'
+#endif
+
 /* 
  *  Toss in some GNU C-specific voodoo for checking.
  */

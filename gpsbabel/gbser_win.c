@@ -36,16 +36,17 @@ gbser_init(const char *portname)
 //	DCB tio;	
 	COMMTIMEOUTS timeout;
 	HANDLE comport;
-	char *xname= xstrdup("\\\\.\\\\");
+//	char *xname= xstrdup("\\\\.\\\\");
+	char *xname = fix_win_serial_name(portname);
 	gbser_win_handle* handle = xcalloc(1, sizeof(*handle));;
 
-	/* Amazingly, windows will fail the open below unless we
-	 * prepend \\.\ to the name.   It also then fails the open
-	 * unless we strip the colon from the name.  Aaaaargh!
-	 */
-	xname = xstrappend(xname, portname);
-	if (xname[strlen(xname)-1] == ':')
-		xname[strlen(xname)-1] = 0;
+//	/* Amazingly, windows will fail the open below unless we
+//	 * prepend \\.\ to the name.   It also then fails the open
+//	 * unless we strip the colon from the name.  Aaaaargh!
+//	 */
+//	xname = xstrappend(xname, portname);
+//	if (xname[strlen(xname)-1] == ':')
+//		xname[strlen(xname)-1] = 0;
 //	xCloseHandle(comport);
 
 	comport = CreateFile(xname, GENERIC_READ|GENERIC_WRITE, 
@@ -175,4 +176,37 @@ gbser_deinit(void *handle)
 {
 	gbser_win_handle *h = (gbser_win_handle *) handle;
 	xfree(h);
+}
+
+
+
+
+/*
+ * This isn't part of the above abstraction; it's just a helper for 
+ * the other serial modules in the tree.
+ *
+ * Windows does a weird thing with serial ports.  
+ * COM ports 1 - 9 are "COM1:" through "COM9:"
+ * The one after that is \\.\\com10 - this function tries to plaster over
+ * that.
+ * It returns a pointer to a staticly allocated buffer and is therefore not
+ * thread safe.   The buffer pointed to remains valid only until the next
+ * call to this function.
+ */
+static char gb_com_buffer[100];
+
+char *
+fix_win_serial_name(const char *comname)
+{
+	/* If in the form 'COMx:', use it in place */
+	if ((strlen(comname) == 5) && (comname[4] == ':')) {
+		strcpy(gb_com_buffer, comname);
+	} else {
+		snprintf(gb_com_buffer, sizeof(gb_com_buffer),
+			"\\\\.\\\\%s", comname);
+		if (gb_com_buffer[strlen(gb_com_buffer) - 1 ] == ':') {
+			gb_com_buffer[strlen(gb_com_buffer) - 1] = 0;
+		}
+	}
+	return gb_com_buffer;
 }
