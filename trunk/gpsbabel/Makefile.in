@@ -162,33 +162,38 @@ WINFILES = gpsbabel.exe mingw/libexpat.dll win32/GPSBabelGUI.exe win32/gui-2/REA
 # in and tagged.
 #
 release-sourcecheck:
-	cvs commit
+#rjl	cvs commit
 	./chkdoc
 	make clean
 	rm -fr gpsbabel-$(VERSIOND)
-	make gpsbabel doc gpsbabel.html
+#rjl	make gpsbabel doc gpsbabel.html
 	@(. tools/functions && ask "Enter 'y' to tag the tree." "y") && cvs tag -F gpsbabel_$(VERSIONU) ; exit 0
-	cvs export -r gpsbabel_$(VERSIONU) -d /tmp/gpsbabel-$(VERSIOND) gpsbabel
-	touch /tmp/gpsbabel-$(VERSIOND)/internal_styles.c
+	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
+	touch gpsbabel-$(VERSIOND)/internal_styles.c
 
 #
 # Build the release tarball from the exported CVS tree, tweaking 
 # timestamps and including generated filess as needed.
 #
 release-tarball: gpsbabel.html
-#	rm -fr /tmp/gpsbabel-$(VERSIOND)
-	cp -ap gpsbabel.html /tmp/gpsbabel-$(VERSIOND)/
-	cd /tmp ; tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
+#	rm -fr gpsbabel-$(VERSIOND)
+	cp -ap gpsbabel.html gpsbabel-$(VERSIOND)/
+	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
 #	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
 
 
 #
 # The Windows executables are cross compiled from the exported CVS image.
 # Do the build of that here  and make a zip file for distribution.
+# Do this build in a temporary tree that was a copy of the tagged one
+# to avoid scribbling in the "real" one.
 #
 release-winbuild:
-	cd /tmp/gpsbabel-$(VERSIOND) ; \
-	  LDFLAGS="-s" ./configure --target=i386-pc-mingw32 --with-cet=all && make mingw32-cross-build ; \
+	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
+	cp -a gpsbabel-$(VERSIOND) /tmp/gpsbabel-$(VERSIOND)-cross
+	cd /tmp/gpsbabel-$(VERSIOND)-cross ; \
+	  LDFLAGS="-s" ./configure --target=i386-pc-mingw32 --with-cet=all --with-expathdr=mingw/include --with-libexpat=mingw/lib && make mingw32-cross-build && make \
+	
 	  zip -j /tmp/gpsbabel-$(VERSIOND).zip $(WINFILES)
 
 release-upload:
@@ -216,13 +221,6 @@ msvc-build:
 	make CC=@CL.EXE DEBUGGING="" EXTRA_CFLAGS="-nologo -W3 -WL -D__WIN32__ -I msvc/expat " OUTPUT_SWITCH="-Fo" $(OBJS)
 	echo $(OBJS) > objs.lst
 	LINK.EXE /NOLOGO @objs.lst ./msvc/expat/libexpat.lib /out:gpsbabel.exe 
-
-# under linux: ./configure --target=i386-pc-mingw32 && make mingw32-cross-build
-mingw32-cross-build: 
-	make \
-	  CC=i386-mingw32-gcc \
-	  EXEEXT=.exe \
-	  EXTRA_LDFLAGS="-Lmingw/lib -Imingw/include " 
 
 # Machine generated from here down. 
 an1.o: an1.c defs.h config.h queue.h gbtypes.h cet.h cet_util.h inifile.h \

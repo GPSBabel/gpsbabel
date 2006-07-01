@@ -467,12 +467,13 @@ retry:
 		 * Allow lazy allocation of track head.
 		 */
 		if (trk_head == NULL) {
-			trk_head = route_head_alloc();
 			/* These tracks don't have names, so derive one
 			 * from input filename.
 			 */
 			const char *s = strrchr(curfname, GB_PATHSEP);
 			char *e;
+
+			trk_head = route_head_alloc();
 			if (s) {
 				s++; /* Skip path delim */
 			}  else {
