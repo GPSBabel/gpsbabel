@@ -18,6 +18,7 @@ formats.
 <member>Airport</member>
 <member>Amusement Park</member>
 <member>Anchor Prohibited</member>
+<member>Asian Food</member>
 <member>Ball Park</member>
 <member>Bank</member>
 <member>Bar</member>
@@ -25,7 +26,29 @@ formats.
 <member>Beacon</member>
 <member>Bell</member>
 <member>Bike Trail</member>
+<member>Blue Circle</member>
+<member>Blue Diamond</member>
+<member>Blue Letter A</member>
+<member>Blue Letter B</member>
+<member>Blue Letter C</member>
+<member>Blue Letter D</member>
+<member>Blue Number 0</member>
+<member>Blue Number 1</member>
+<member>Blue Number 2</member>
+<member>Blue Number 3</member>
+<member>Blue Number 4</member>
+<member>Blue Number 5</member>
+<member>Blue Number 6</member>
+<member>Blue Number 7</member>
+<member>Blue Number 8</member>
+<member>Blue Number 9</member>
+<member>Blue Oval</member>
+<member>Blue Rectangle</member>
+<member>Blue Square</member>
+<member>Blue Triangle</member>
 <member>Boat Ramp</member>
+<member>Border Crossing (Port Of Entry)</member>
+<member>Bottom Conditions</member>
 <member>Bowling</member>
 <member>Bridge</member>
 <member>Building</member>
@@ -67,6 +90,7 @@ formats.
 <member>Crossing</member>
 <member>Dam</member>
 <member>Danger Area</member>
+<member>Deli</member>
 <member>Department Store</member>
 <member>Diamond, Blue</member>
 <member>Diamond, Green</member>
@@ -76,9 +100,12 @@ formats.
 <member>Dock</member>
 <member>Drinking Water</member>
 <member>Dropoff</member>
+<member>Elevation point</member>
 <member>Event Cache</member>
 <member>Exit</member>
+<member>Exit without services</member>
 <member>Fast Food</member>
+<member>First approach fix</member>
 <member>Fishing Area</member>
 <member>Fishing Hot Spot Facility</member>
 <member>Fitness Center</member>
@@ -87,14 +114,36 @@ formats.
 <member>Flag, Green</member>
 <member>Flag, Red</member>
 <member>Forest</member>
+<member>Gambling/casino</member>
 <member>Gas Station</member>
 <member>Geocache</member>
 <member>Geocache Found</member>
+<member>Geographic place name, land</member>
+<member>Geographic place name, Man-made</member>
+<member>Geographic place name, water</member>
 <member>Ghost Town</member>
 <member>Glider Area</member>
 <member>Golf Course</member>
+<member>Green circle</member>
 <member>Green Diamond</member>
+<member>Green Letter A</member>
+<member>Green Letter B</member>
+<member>Green Letter C</member>
+<member>Green Letter D</member>
+<member>Green Number 0</member>
+<member>Green Number 1</member>
+<member>Green Number 2</member>
+<member>Green Number 3</member>
+<member>Green Number 4</member>
+<member>Green Number 5</member>
+<member>Green Number 6</member>
+<member>Green Number 7</member>
+<member>Green Number 8</member>
+<member>Green Number 9</member>
+<member>Green Oval</member>
+<member>Green Rectangle</member>
 <member>Green Square</member>
+<member>Green Triangle</member>
 <member>Heliport</member>
 <member>Horn</member>
 <member>Hotel</member>
@@ -102,9 +151,16 @@ formats.
 <member>Hunting Area</member>
 <member>Ice Skating</member>
 <member>Information</member>
+<member>Intersection</member>
+<member>Intl freeway hwy</member>
+<member>Intl national hwy</member>
+<member>Italian food</member>
+<member>Large exit without services</member>
+<member>Large Ramp intersection</member>
 <member>Levee</member>
 <member>Light</member>
 <member>Live Theater</member>
+<member>Localizer Outer Marker</member>
 <member>Locationless (Reverse) Cache</member>
 <member>Lodging</member>
 <member>Man Overboard</member>
@@ -114,6 +170,7 @@ formats.
 <member>Mile Marker</member>
 <member>Military</member>
 <member>Mine</member>
+<member>Missed approach point</member>
 <member>Movie Theater</member>
 <member>Multi-Cache</member>
 <member>Museum</member>
@@ -131,7 +188,10 @@ formats.
 <member>Navaid, White</member>
 <member>Navaid, White/Green</member>
 <member>Navaid, White/Red</member>
+<member>Non-directional beacon</member>
+<member>Null</member>
 <member>Oil Field</member>
+<member>Open 24 Hours</member>
 <member>Parachute Area</member>
 <member>Park</member>
 <member>Parking Area</member>
@@ -146,8 +206,27 @@ formats.
 <member>Post Office</member>
 <member>Private Field</member>
 <member>Radio Beacon</member>
+<member>Ramp intersection</member>
+<member>Red circle</member>
 <member>Red Diamond</member>
+<member>Red Letter A</member>
+<member>Red Letter B</member>
+<member>Red Letter C</member>
+<member>Red Letter D</member>
+<member>Red Number 0</member>
+<member>Red Number 1</member>
+<member>Red Number 2</member>
+<member>Red Number 3</member>
+<member>Red Number 4</member>
+<member>Red Number 5</member>
+<member>Red Number 6</member>
+<member>Red Number 7</member>
+<member>Red Number 8</member>
+<member>Red Number 9</member>
+<member>Red Oval</member>
+<member>Red Rectangle</member>
 <member>Red Square</member>
+<member>Red Triangle</member>
 <member>Reef</member>
 <member>Residence</member>
 <member>Restaurant</member>
@@ -157,6 +236,7 @@ formats.
 <member>Scales</member>
 <member>Scenic Area</member>
 <member>School</member>
+<member>Seafood</member>
 <member>Seaplane Base</member>
 <member>Shipwreck</member>
 <member>Shopping Center</member>
@@ -168,18 +248,29 @@ formats.
 <member>Small City</member>
 <member>Soft Field</member>
 <member>Stadium</member>
+<member>State Hwy</member>
+<member>Steak</member>
+<member>Street Intersection</member>
 <member>Summit</member>
 <member>Swimming Area</member>
+<member>TACAN</member>
 <member>Tall Tower</member>
 <member>Telephone</member>
+<member>Tide/Current PRediction Station</member>
 <member>Toll Booth</member>
 <member>TracBack Point</member>
 <member>Trail Head</member>
 <member>Truck Stop</member>
 <member>Tunnel</member>
+<member>U Marina</member>
+<member>U stump</member>
 <member>Ultralight Area</member>
 <member>Unknown Cache</member>
+<member>US hwy</member>
+<member>VHF Omni-range</member>
 <member>Virtual cache</member>
+<member>VOR-DME</member>
+<member>VOR/TACAN</member>
 <member>Water Hydrant</member>
 <member>Waypoint</member>
 <member>Webcam Cache</member>
