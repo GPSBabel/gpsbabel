@@ -8,12 +8,16 @@ tbl_ent(int n, ...)
 	char *t;
 	va_list args;
 	va_start(args, n);
-
+#if 0
 	for (i = 0; i < n; i++) {
 		t = va_arg(args, char *);
 printf("%s%s", i > 0 ? "," : "", t);
 		
 	}
+#else
+	t = va_arg(args, char*);
+	printf("<member>%s</member>", t);
+#endif
 printf("\n");
 	va_end(args);
 	
