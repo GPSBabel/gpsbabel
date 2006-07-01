@@ -4,7 +4,8 @@
          <title>The Problem</title>
          <para> There are simply too many gratuitously different file formats
 to hold waypoint, track, and route information in various programs
-used by computers.  GPX (http://www.topografix.com/gpx.asp) defines a
+used by computers and GPS receivers.  
+<ulink url="http://www.topografix.com/gpx.asp">GPX</ulink>  defines a
 standard in XML to contain all the data, but there are too many
 programs that don't understand it yet and too much data that are in an
 alternate formats.
