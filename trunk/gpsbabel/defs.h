@@ -66,7 +66,9 @@
 #if __WIN32__
 #  define snprintf _snprintf
 #  define vsnprintf _vsnprintf
-#  define fileno _fileno
+#  ifndef fileno
+#    define fileno _fileno
+#  endif
 #  define strdup _strdup
 #endif
 
