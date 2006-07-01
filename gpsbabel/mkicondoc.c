@@ -1,6 +1,12 @@
 #include <stdarg.h>
 #include <stdio.h>
-#include "garmin_tables.h"
+#include "fatal.c"
+#include "util.c"
+#include "cet.c"
+#define VERSION "1"
+#include "globals.c"
+
+
 
 tbl_ent(int n, ...)
 {
@@ -24,6 +30,7 @@ printf("\n");
 	
 }
 
+#include "garmin_tables.c"
 sort_garmin(const void *a, const void *b)
 {
 	const icon_mapping_t *ap = a;
