@@ -2774,6 +2774,8 @@ fi
 		*-*-darwin*)
 		  if test "x$ac_cv_lib_usb_usb_interrupt_read" = "xyes" ; then
 			USB_LIBS="`libusb-config --prefix`/lib/libusb.a -framework  IOKit -framework CoreFoundation"
+			LDFLAGS=$OLDFLAGS
+			CDFLAGS=$OCDFLAGS
 		  fi
 		esac
 		OSJEEPS=jeeps/gpslibusb.o
@@ -2831,6 +2833,12 @@ else
 	*-*-darwin*)
 		if test -f /sw/lib/libexpat.a ; then
 			EXPAT_LIB=/sw/lib/libexpat.a
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_LIBEXPAT 1
+_ACEOF
+
+
 		fi
 		;;
 	*)
