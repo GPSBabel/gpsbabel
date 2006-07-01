@@ -167,8 +167,9 @@ release-sourcecheck:
 	make clean
 	rm -fr gpsbabel-$(VERSIOND)
 	make gpsbabel doc gpsbabel.html
-	cvs tag -F gpsbabel_$(VERSIONU)
-	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
+	@(. tools/functions && ask "Enter 'y' to tag the tree." "y") && cvs tag -F gpsbabel_$(VERSIONU) ; exit 0
+	cvs export -r gpsbabel_$(VERSIONU) -d /tmp/gpsbabel-$(VERSIOND) gpsbabel
+	touch /tmp/gpsbabel-$(VERSIOND)/internal_styles.c
 
 #
 # Build the release tarball from the exported CVS tree, tweaking 
@@ -176,9 +177,8 @@ release-sourcecheck:
 #
 release-tarball: gpsbabel.html
 #	rm -fr /tmp/gpsbabel-$(VERSIOND)
-	touch /tmp/gpsbabel-$(VERSIOND)/internal_styles.c
 	cp -ap gpsbabel.html /tmp/gpsbabel-$(VERSIOND)/
-	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
+	cd /tmp ; tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
 #	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
 
 
@@ -220,7 +220,7 @@ msvc-build:
 # under linux: ./configure --target=i386-pc-mingw32 && make mingw32-cross-build
 mingw32-cross-build: 
 	make \
-	  CC=/usr/local/bin/i386-mingw32-gcc \
+	  CC=i386-mingw32-gcc \
 	  EXEEXT=.exe \
 	  EXTRA_LDFLAGS="-Lmingw/lib -Imingw/include " 
 
