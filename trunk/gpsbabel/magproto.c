@@ -825,6 +825,17 @@ mag_rd_init_common(const char *portname)
 
 	QUEUE_INIT(&rte_wpt_tmp);
 
+	/* find the location of the tail of the path name,
+	 * make a copy of it, then lop off the file extension
+	 */
+
+	curfname = strrchr(portname, '/');
+	if (curfname) {
+		curfname++;  /* skip over path delimiter */
+	} 
+	
+	
+
 	return;
 }
 
