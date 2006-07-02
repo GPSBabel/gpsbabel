@@ -1,0 +1,4 @@
+<para>
+This option specifies the input and output format for the date.  The format 
+is written similarly to those in Windows.  An example format is "YYMMDD".
+</para>

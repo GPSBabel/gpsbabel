@@ -1,0 +1,8 @@
+<para>
+When this option is specified, GPSBabel will make all short names contain
+only UPPERCASE characters.  This option overrides the style file.
+</para>
+<para>
+Valid values for this option are 0 (off) and 1 (on).
+</para>
+

@@ -1,0 +1,13 @@
+<para>
+This option is required.
+</para>
+<para>
+This option specifies the maximum distance a point may be from the central
+point in order to remain in the dataset.  Points closer than this distance
+will be kept and points further away will be removed (unless the 
+<option>exclude</option> option is specified.)
+</para>
+<para>
+Distances may be expressed in miles (3M) or kilometers (4K).  If no units
+are provided, the distance is assumed to be in miles.
+</para>

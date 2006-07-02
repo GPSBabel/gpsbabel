@@ -1,0 +1,9 @@
+<para>
+This format is not actually used by any real product.  It is most useful
+for debugging purposes when developing a new format module for GPSBabel.
+</para>
+<para>
+To understand the contents of this file, look at the 
+<filename>style/custom.style</filename> file in the GPSBabel source
+distribution as well as <xref linkend="Styles" />.
+</para>

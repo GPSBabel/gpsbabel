@@ -1,0 +1,5 @@
+<para>
+This option causes GPSBabel to write depth values for waypoints.  Most 
+input formats do not support depth values, so the default is to not write
+them.
+</para>
