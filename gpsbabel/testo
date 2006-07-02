@@ -51,9 +51,6 @@ sort_and_compare()
 # geonet
 # saplus
 # s_and_t
-# xmap2006
-# cambridge
-# cup
 	
 # Geocaching .loc
 rm -f ${TMPDIR}/gl.loc
