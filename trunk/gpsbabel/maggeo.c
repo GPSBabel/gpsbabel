@@ -1,7 +1,7 @@
 /*
     Magellan ".gs" files as they appear on USB of Explorist 400,500,600.
 
-    Copyright (C) 2005, robertlipe@usa.net
+    Copyright (C) 2005, 2006 robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -55,6 +55,9 @@ maggeo_rd_deinit(void)
 static void
 maggeo_wr_init(const char *fname)
 {
+	if (waypt_count() >= 200) {
+		fatal(MYNAME ": Magellan firmware does not support more than 200 waypoints in one .gs file.\n");
+	}
 	maggeofile_out = xfopen(fname, "wb", MYNAME);
 	desc_handle = mkshort_new_handle();
 	setshort_length(desc_handle, 20);
@@ -72,7 +75,7 @@ maggeo_wr_deinit(void)
 static void
 maggeo_read(void)
 {
-	fatal("Reading maggeo is not implemented yet.\n");
+	fatal(MYNAME ": Reading maggeo is not implemented yet.\n");
 }
 
 /*
