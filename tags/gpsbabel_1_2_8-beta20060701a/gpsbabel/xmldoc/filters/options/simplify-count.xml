@@ -1,0 +1,8 @@
+<para>
+This option specifies the maximum number of points which may appear in the
+simplified route.  For example, if you specify "count=50", all resulting
+routes will contain 50 points or fewer.  
+</para>
+<para>
+You must specify either this option or the <option>error</option> option.
+</para>

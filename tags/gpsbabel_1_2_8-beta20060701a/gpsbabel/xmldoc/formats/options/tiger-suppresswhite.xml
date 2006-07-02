@@ -1,0 +1,4 @@
+<para>
+When set, this options tells the '-s' smartname generator to not allow 
+any spaces in the labels generated for markers.
+</para>

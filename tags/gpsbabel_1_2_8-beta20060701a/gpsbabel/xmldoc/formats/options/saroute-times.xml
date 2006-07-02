@@ -1,0 +1,5 @@
+      <para>This option causes GPSBabel to read the route as if
+it were a track, synthesizing times starting from the current time, using
+the estimated travel times specified in your route file (you can change your
+travel speeds in the DeLorme product you used to create the route file.)</para>
+    

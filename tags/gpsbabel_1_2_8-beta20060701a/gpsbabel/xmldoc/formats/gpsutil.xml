@@ -1,0 +1,8 @@
+
+      
+      
+      <para>GPSUtil has a simple file format of this program that runs
+on POSIX- compliant OSes like UNIX and Linux.  Reads and writes of
+this format are reliable.  (I've also contributed to this program.)
+It's available at <ulink url="http://www.cs.uakron.edu/~hennings/gpsutil">cs.uakron.edu</ulink>.</para>
+    

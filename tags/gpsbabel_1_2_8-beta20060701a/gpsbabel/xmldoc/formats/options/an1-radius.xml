@@ -1,0 +1,5 @@
+<para>
+If the waypoint type is "circle", the "radius" option specifies
+the radius of the circles.  By default, this is in miles, but it may be
+specified in kilometers by adding a 'k'.  The default radius is 1/10 mile.
+</para>

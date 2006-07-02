@@ -1,0 +1,14 @@
+<para>
+This option is not required, but if it is not specified the distance 
+defaults to zero miles, which isn't very useful.
+</para>
+<para>
+This option specifies the maximum distance a point may be from the arc 
+without being discarded.  Points that are closer to the arc are kept, while
+points that are further away are discarded.
+</para>
+<para>
+Distances may be specified in miles (3M) or kilometers (5K).  If no units
+are specified, the distance is assumed to be in miles.
+</para>
+

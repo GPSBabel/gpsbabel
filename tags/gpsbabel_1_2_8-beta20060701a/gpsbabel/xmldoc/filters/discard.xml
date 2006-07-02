@@ -1,0 +1,12 @@
+<para>
+This filter is used to "fix" unreliable GPS data by discarding points
+with HDOP and/or VDOP above a specified limit.  HDOP and VDOP are 
+measures of the best possible horizontal or vertical precision 
+for a given configuration of GPS satellites.
+</para>
+<example id="example_discard_filter">
+<title>Using the discard filter</title>
+<screen format="linespecific"> gpsbabel -i gpx -f in.gpx -x discard,hdop=10,vdop=20,hdopandvdop -o gpx -F out.gpx</screen>
+</example>
+<para> Contributed by Tobias Minich.</para>
+      
