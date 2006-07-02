@@ -181,6 +181,24 @@ release-tarball: gpsbabel.html
 	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
 #	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
 
+release-rpm:
+	test -f gpsbabel.html
+	mkdir -p /tmp/dist/BUILD \
+	  /tmp/dist/RPMS /tmp/dist/SPECS \
+	  /tmp/dist/SOURCES /tmp/dist/SRPMS \
+	  /tmp/dist/TMP /tmp/dist/install 
+	tools/mkspec $(VERSD) $(RELEASE) $(WEB) > /tmp/dist/SPECS/gpsbabel.spec
+	cp -ap gpsbabel.html gpsbabel-$(VERSIOND)/
+	cp -ap CHANGELOG gpsbabel-$(VERSIOND)/
+	rm -rf /tmp/dist/TMP/gpsbabel-$(VERSD)
+	rm -rf /tmp/dist/SOURCES/gpsbabel-$(VERSD).tgz
+	cp -apr gpsbabel-$(VERSIOND) /tmp/dist/TMP/gpsbabel-$(VERSD)
+	cd /tmp/dist/TMP ; tar --owner=0 --group=0 -czf ../SOURCES/gpsbabel-$(VERSD).tgz gpsbabel-$(VERSD)
+	rpmbuild -ba \
+	  --define "_topdir /tmp/dist" \
+	  --define "buildroot /tmp/dist/install" \
+	  /tmp/dist/SPECS/gpsbabel.spec
+
 
 #
 # The Windows executables are cross compiled from the exported CVS image.
