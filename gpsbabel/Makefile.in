@@ -187,7 +187,7 @@ release-rpm:
 	  /tmp/dist/RPMS /tmp/dist/SPECS \
 	  /tmp/dist/SOURCES /tmp/dist/SRPMS \
 	  /tmp/dist/TMP /tmp/dist/install 
-	tools/mkspec $(VERSD) $(RELEASE) $(WEB) > /tmp/dist/SPECS/gpsbabel.spec
+	tools/mkspec $(WEB) $(VERSD) $(RELEASE) > /tmp/dist/SPECS/gpsbabel.spec
 	cp -ap gpsbabel.html gpsbabel-$(VERSIOND)/
 	cp -ap CHANGELOG gpsbabel-$(VERSIOND)/
 	rm -rf /tmp/dist/TMP/gpsbabel-$(VERSD)
