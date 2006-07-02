@@ -358,15 +358,12 @@ var
   buff: array[0..1023] of Char;
   cin, cend: PChar;
   i: Integer;
-
   scaps: string;
   ext: string;
   comment: string;
   name: string;
   internal: string;
-
   caps: Integer;
-
   info: PFileInfo;
 
 begin
@@ -399,7 +396,7 @@ begin
         comment := StrPas(cin);
         if (Length(comment) = 0) or (Length(name) = 0) then break;
         
-        if (comment[1] = '?') then break;
+//      if (comment[1] = '?') then break;
         
         caps := 0;
         for i := 1 to Length(scaps) do
@@ -519,6 +516,7 @@ end;
 function TCapabilities.IsFile(Index: Integer): Boolean;
 var
   info: PFileInfo;
+  name: string;
 begin
   info := PFileInfo(Objects[Index]);
   Result := (AnsiCompareText(info.Internal, 'file') = 0);

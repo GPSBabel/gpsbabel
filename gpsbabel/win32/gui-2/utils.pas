@@ -394,7 +394,7 @@ end;
 
 function readme_html_path: string;
 begin
-  Result := ExtractFilePath(ParamStr(0)) + 'readme.html';
+  Result := ExtractFilePath(ParamStr(0)) + 'gpsbabel.html';
   if FileExists(Result) then
   begin
     while (Pos('\', Result) <> 0) do
@@ -402,7 +402,7 @@ begin
     Result := 'file:///' + Result;
   end
   else
-    Result := SGPSBabelURL + '/readme.html';
+    Result := SGPSBabelURL + '/gpsbabel.html';
 end;
 
 function HasUpDown(E: TEdit; var UpDown: TUpdown): Boolean;

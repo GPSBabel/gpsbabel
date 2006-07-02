@@ -372,7 +372,7 @@ begin
   LoadFileFormats;
 
   // ? valid README form
-  s := ExtractFilePath(ParamStr(0)) + 'readme.html';
+  s := ExtractFilePath(ParamStr(0)) + 'gpsbabel.html';
   acHelpReadme.Enabled := FileExists(s) or (frmReadme.Memo.Lines.Count > 0);
 end;
 
@@ -907,9 +907,9 @@ procedure TfrmMain.acHelpReadmeExecute(Sender: TObject);
 var
   s: string;
 begin
-  s := ExtractFilePath(ParamStr(0)) + 'readme.html';
+  s := ExtractFilePath(ParamStr(0)) + 'gpsbabel.html';
   if FileExists(s) then
-    WinOpenFile(s, '')   // new readme.html
+    WinOpenFile(s, '')   // new gpsbabel.html
   else begin // show the old readme
     if (frmReadme = nil) then
       Application.CreateForm(TfrmReadme, frmReadme);

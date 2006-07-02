@@ -237,7 +237,8 @@ begin
       1: CreateIntegerOption(xy.X, xy.Y - 2, i + 1, o, xmax);
       2, 3: CreateStringOption(xy.X, xy.Y - 2, i + 1, o, xmax);
       4: ;
-      5: if FIsInput then CreateFileOption(xy.X, xy.Y - 2, i + 1, o, True, xmax);
+      5: // ??? if FIsInput then
+        CreateFileOption(xy.X, xy.Y - 2, i + 1, o, True, xmax);
       6: if not FIsInput then CreateFileOption(xy.X, xy.Y - 2, i + 1, o, False, xmax);
     end;
     if (o.edit <> nil) then
@@ -468,7 +469,7 @@ end;
 
 procedure TfrmOptions.btnHelpClick(Sender: TObject);
 begin
-  WinOpenURL(readme_html_path + '#' + FFormat);
+  WinOpenURL(readme_html_path + '#fmt_' + FFormat);
 end;
 
 procedure TfrmOptions.CreateFileOption(const x, y, tag: Integer; o: POption; IsInput: Boolean; xmax: Integer = -1);
