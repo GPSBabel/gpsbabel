@@ -1111,10 +1111,11 @@ gdb_write_file_header(const struct tm *tm)
 	/* !!! We should define the date use through Makefile !!! */
 	
 	/* history:
-	strncpy(buff, "A].GPSBabel_1.2.7-beta*Sep 13 2005*20:10:00", sizeof(buff));	gpsbabel V1.2.7 BETA 
-	strncpy(buff, "A].GPSBabel_1.2.8-beta*Jan 18 2006*20:11:00", sizeof(buff));  /* gpsbabel 1.2.8-beta01182006_clyde
+	strncpy(buff, "A].GPSBabel_1.2.7-beta*Sep 13 2005*20:10:00", sizeof(buff));  // gpsbabel V1.2.7 BETA 
+	strncpy(buff, "A].GPSBabel_1.2.8-beta*Jan 18 2006*20:11:00", sizeof(buff));  // gpsbabel 1.2.8-beta01182006_clyde
+	strncpy(buff, "A].GPSBabel_1.2.8-beta*Apr 18 2006*20:12:00", sizeof(buff));  // gpsbabel 1.2.8-beta20060405
 	 */
-	strncpy(buff, "A].GPSBabel_1.2.8-beta*Apr 18 2006*20:12:00", sizeof(buff));  /* gpsbabel 1.2.8-beta20060405 */
+	strncpy(buff, "A].GPSBabel-1.3*Jul 02 2006*20:13:00", sizeof(buff));  // gpsbabel 1.3
 #endif
 	len = strlen(buff);
 	buff[2] = 2;
