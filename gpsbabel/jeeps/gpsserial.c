@@ -25,6 +25,7 @@
 ********************************************************************/
 #include "gps.h"
 #include "gpsserial.h"
+#include "../gbser.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>

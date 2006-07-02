@@ -24,6 +24,7 @@
 
 #include "defs.h"
 #include "magellan.h"
+#include "gbser.h"
 
 static int bitrate = 4800;
 static int wptcmtcnt;
