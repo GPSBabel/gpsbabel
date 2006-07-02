@@ -1,0 +1,7 @@
+<para>
+This option will add the icon description to the end of the waypoint
+description on output.  This can be useful if the icon is used to convey
+important information about the waypoint.  For example, the icon might be 
+"found geocache" or "unfound geocache"; it might be useful to know that when
+looking at a list of icons in Cetus.
+</para>

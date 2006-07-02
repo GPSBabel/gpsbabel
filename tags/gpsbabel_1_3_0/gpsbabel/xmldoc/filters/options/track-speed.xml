@@ -1,0 +1,9 @@
+<para>
+This option computes a value for the GPS speed at each trackpoint.
+This is most useful with trackpoints from formats that don't support
+speed information or for trackoints synthesized by the 
+<link linkend="filter_interpolate">interpolate</link>
+filter.  The speed at each trackpoint is the average speed from the
+previous trackpoint (distance divided by time).  The first trackpoint 
+in each track is assigned a speed of "unknown."
+</para>

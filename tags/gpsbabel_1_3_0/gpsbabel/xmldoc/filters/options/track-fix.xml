@@ -1,0 +1,9 @@
+<para>
+This option sets the GPS fix status for all trackpoints to the specified
+value.  Valid values for this option are PPS, DGPS, 3D, 2D, or NONE.
+</para>
+<para>
+This option is most useful when converting from a format that doesn't 
+contain GPS fix status to one that requires it.
+</para>
+

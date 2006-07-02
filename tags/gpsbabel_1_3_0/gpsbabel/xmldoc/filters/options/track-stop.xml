@@ -1,0 +1,15 @@
+<para>
+This option is used in conjunction with the <option>start</option> option to 
+discard all trackpoints outside of a given period of time.  This option 
+defines the end of the time period.
+</para>
+<para>
+If this option is not specified, the time period is assumed to end at the 
+end of civilization as we know it or the year 2038, whichever comes first.
+The time for this option is expressed in UTC.
+</para>
+<para>
+See the <option>start</option> option for the format of this value and an 
+example of usage.
+</para>
+

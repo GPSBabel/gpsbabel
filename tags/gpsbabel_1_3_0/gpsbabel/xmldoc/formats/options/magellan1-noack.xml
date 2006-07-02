@@ -1,0 +1,17 @@
+<para>
+Magellan's protocol specification strongly encourages the use of software
+acknowledgements on every packets.   This is a simple "this is what I think
+I heard.  If you agree that I heard it correctly, let's go to the next packet"
+handshake that is used to ensure the integrity of the data transfer.
+</para>
+<para>
+Certain firmware versions have problems handling this which makes transfers
+unnecessarily slow.  Transfers on all units at high serial speeds  are also
+severely restricted by this process. 
+</para>
+<para>
+In controlled environments (good cables, low electrical noise, receiving
+from the unit, not doing donuts with the unit set to "track up" at a 150
+mile scale with 500 waypoints on the screen) it is sometimes useful to 
+release that safety belt by using the "noack" suboption.
+</para>
