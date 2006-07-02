@@ -1,0 +1,41 @@
+function trim_filelist()
+{
+    sort |
+    uniq |				# remove duplicate lines
+    sed 's/^[ \t]*//;s/[ \t]*$//' |	# remove leading and trailing whitespaces
+    sed '/^$/d'				# drop empty lines
+}
+
+function check_filelist() # check presence of all files
+{
+    while read f; do 
+	[ -e "$f" ] && continue
+	echo missing: "$f"; exit 1
+    done
+    exit 0
+}
+
+function ask_mrproper()
+{
+    echo ""
+    echo "--------------------------------------------------"
+    echo "!!! WARNING !!! WARNING !!! WARNING !!!WARNING !!!"
+    echo "--------------------------------------------------"
+    echo "All files they are not part of the CVS source tree"
+    echo "    and they not registered in .filelist-devel"
+    echo "                will be killed."
+    echo ""
+    echo -n "Please type yyeess if you are know what you do: "
+    read answer
+    test "$answer" != "yyeess" && exit 1
+    exit 0
+}
+
+function ask() # $1=Question $2=Answer for TRUE
+{
+    echo ""
+    echo -n "$1 : "
+    read answer
+    test "$answer" != "$2" && exit 1
+    exit 0
+}
