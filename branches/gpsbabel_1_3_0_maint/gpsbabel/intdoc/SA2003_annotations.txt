@@ -1,0 +1,419 @@
+This is an annotated hex dump of a Street Atlas 2003 .anr file.  
+I've also added notes to indicate where SA 2005 puts extra data
+
+ 2D 32        						magic
+ 07 00        						version
+ 02 00 00 00  						unknown
+ 01 00 00 00  						unknown (version 7+ only)
+ 01 00 00 00  						unknown (version 7+ only)
+
+-- end of header --
+
+ 0A 00        						record type?
+ 44 00 00 00  						record size - strlen
+ 20 04 0F 11  						???
+ 01 00 00 00  						???
+ 01 00 00 00  						???
+ 01 00 00 00  						???
+ 00 00 00 00  						???
+ 00 00  						???
+ 14 40 00 00 						???
+ 15 00 							strlen of route name
+ 68 6F 6D 65 20 74 6F 20 77 6F 72 6B 20 62 61 63  6B 20 77 61 79    
+							route name (home to work back way)
+ 00 00  						???
+ 29 5C 8F C2 F5 28 05 40 				= 2.645000 (distance in km)
+ 6B 01 00 00             				= 363 = 6:03 (total time)
+ 07 A8 35 6F 7B 03 69 40 				= 200.108818 (overall heading)
+ 79 29 0F 3F 						??? = 0.559227 
+ 98 38 0F 3F 						??? = 0.559457
+ 20 00 00 00 						???
+ 01 00 							???
+
+-- end of routefile header --
+
+ 03 00 00 00  count of control points
+
+ 01 00       	type?
+ 64 00 00 00  	size
+ E9 F0 6B 55	lon 85.1567105054855	(actual point)
+ 84 43 6C 6B 	lat 41.1542053222656
+ 11 04 82 08 
+ 30 04 0F 11 
+ 13 00 00 00   (19)
+ 16 00        strlen of address
+ 38 30 32 35 20 53 69 6C 76 65 72 20 53 70 72 69 6E 67 73 20 50 6C    address (8025 Silver Springs Pl)
+ 16 00        strlen of comment
+ 38 30 32 35 20 53 69 6C 76 65 72 20 53 70 72 69 6E 67 73 20 50 6C    comment (8025 Silver Springs Pl)
+ 02 00 		START?
+ 9B FF FF FF 	(-101)
+ 9B FF FF FF 	(-101)
+ 01 00 
+ 7B F4 6B 55 	lon 85.1566015481949	(point on closest road)
+ B3 43 6C 6B 	lat 41.1541839838028
+ 14 00 00 00    (20)
+ 14 00 00 00 	(20)
+ 00 00 00 00 
+------------
+ 00 00 00 00 
+ 00 00 00 00 
+------------
+ 01 00 							type?
+ 4E 00 00 00 						size
+ 8A B7 6B 55 	lon 85.1584613323212  			(actual point)
+ 9D 65 6C 6B 	lat 41.1531490087509
+ 13 04 82 08 
+ 30 04 0F 11 
+ 1D 00 00 00    					(29)
+ 0B 00 							strlen of address
+ 4D 61 79 66 69 65 6C 64 20 50 6C  			address (Mayfield Pl)
+ 0B 00							strlen of comment
+ 4D 61 79 66 69 65 6C 64 20 50 6C   			comment (Mayfield Pl)
+ 01 00 							VIA?
+ 9B FF FF FF 
+ 9B FF FF FF
+ 01 00 
+ 93 B7 6B 55 	lon 85.1584602594376 			(point on closest road)
+ 46 65 6C 6B 	lat 41.1531593799591
+ 14 00 00 00 
+ 14 00 00 00 
+ 00 00 00 00 
+------------
+ 00 00 00 00 
+ 00 00 00 00
+------------
+SA 2005 contains something like this here:
+  00 00 00 00 
+  00 00 
+  F0 BF 00 00 
+  00 00 00 00 
+  F0 BF 00 00 
+------------
+ 01 00 							type?
+ 72 00 00 00 						size
+ F3 72 6B 55 	lon 85.1605545282364			(actual point)
+ E2 4D 6D 6B 	lat 41.1460607051849			/
+ 15 04 82 08 
+ 30 04 0F 11 
+ 18 00 00 00   						??? (24)
+ 1D 00 							strlen of address
+ 37 32 35 20 41 69 72 70 6F 72 74 20 4E 6F 72 74 68 20 4F 66 66 69 63 65 20 50 61 72 6B 	
+							address (725 Airport North Office Park)
+ 1D 00 							strlen of comment
+ 37 32 35 20 41 69 72 70 6F 72 74 20 4E 6F 72 74 68 20 4F 66 66 69 63 65 20 50 61 72 6B 	
+							comment (725 Airport North Office Park)
+ 03 00 							STOP?
+ 9B FF FF FF    					??? (-101)
+ 9B FF FF FF    					??? (-101)
+ 01 00 							Is this a count of latlon points to follow?  Should I worry?
+ D2 71 6B 55    lon 85.1605889797211			(point on closest road)
+ 71 50 6D 6B    lat 41.1459826231003			/
+ 14 00 00 00 						??? (20)
+ 14 00 00 00 						??? (20)
+ 00 00 00 00 						??? (0)
+------------
+ 00 00 00 00 
+ 00 00 00 00 
+------------
+SA 2005 contains something like this here:
+  00 00 00 00 
+  00 00 
+  F0 BF 00 00 
+  00 00 00 00 
+  F0 BF 00 00 
+------------ beginning of route coordinates
+ 01 00 00 00  route leg count
+------------ beginning of leg 1
+ 0A 00 							type?
+ 32 00 00 00 						size
+ 00 00 00 00 						???
+ 1F 00 00 00 						???
+ 00 00 							???
+ 06 00 00 00 						???
+ 04 00 00 00 						???
+ 29 5C 8F C2 F5 28 05 40   				2.645000   (distance in km)
+ 6B 01 00 00              			 	363 = 6:03 (total time)
+ 07 A8 35 6F 7B 03 69 40  			 	200.108818 (overall heading)
+ 00 00 00 00 						??? always? 0
+ 00 00 00 00 						??? always? 0
+ 00 00 00 00 						??? always? 0
+------------ 
+ 0B 00 00 00						leg segment count
+------------ 1 SS Pl
+ 0A 00 							type?
+ 61 00 00 00 						size
+ 11 00 							strlen of street
+ 53 69 6C 76 65 72 20 53 70 72 69 6E 67 73 20 50 6C   	street (Silver Springs Pl)
+ 09 00 00 00    					road type (local road)
+ 01 00 00 00 						??? seems to be 0 or 1
+ DB F9 7E 6A BC 74 93 3F = .019    			length (km)
+ 02 00 00 00   						end time
+ 06 00 00 00 						???
+ 56 F3 93 DD A6 FD 66 40 = 183.927  			heading (degrees)
+ 00 00 00 00  						??? always? 0
+ 00 00 00 00  						??? always? 0
+ 00 00 00 00  						??? always? 0
+ 00 00 00 00 						??? usually -1, but on first record it seems to be 0
+ 00 00 00 00   						transit time
+ 00 00 00 00 00 00 00 00  = 0.00  			distance at start (km)
+ 02 00 							coord pair count
+   B3 43 6C 6B 						\
+   7B F4 6B 55 						 \ coord
+   50 49 6C 6B 						 / pairs
+   F8 F3 6B 55 						/
+------------
+SA 2005 contains something like this here (and at the end of every leg; I haven't pasted them anywhere else):
+  07 00 00 00 
+  00 00 00 00 
+------------ 2 SS Ct
+ 0A 00 
+ 61 00 00 00 
+ 11 00 
+ 53 69 6C 76 65 72 20 53  70 72 69 6E 67 73 20 43 74 
+ 09 00 00 00    road type (local road)
+ 01 00 00 00 
+ FC A9 F1 D2 4D 62 B0 3F = .064    length (km)
+ 09 00 00 00    end time
+ 00 00 00 00 
+ 29 C8 2B 53 7B 9C 70 40 =  265.780  heading (degrees)
+ 00 00 00 00 
+ 00 00 00 00 
+ 00 00 00 00 
+ FF FF FF FF 
+ 02 00 00 00    transit time
+ DB F9 7E 6A BC 74 93 3F  = 0.019  distance at start (km)
+ 02 00 
+   50 49 6C 6B 
+   F8 F3 6B 55 
+   B8 4A 6C 6B 
+   A8 DA 6B 55 
+------------ 3 SS Run
+ 0A 00 
+ 62 00 00 00 
+ 12 00 
+ 53 69 6C 76 65 72 20 53  70 72 69 6E 67 73 20 52 75 6E 
+ 09 00 00 00    road type (local road)
+ 01 00 00 00 
+ 11 58 39 B4 C8 76 BE 3F  = .119    length (km)
+ 11 00 00 00 	end time
+ 02 00 00 00 
+ 7B D1 CA 13 65 7C C5 3E =   0.000003  heading (degrees)
+ 00 00 00 00 
+ 00 00 00 00 
+ 00 00 00 00 
+ FF FF FF FF 
+ 0B 00 00 00    transit time
+ 73 68 91 ED 7C 3F B5 3F  = .083  distance at start (km)
+ 02 00 
+   B8 4A 6C 6B 
+   A8 DA 6B 55 
+   90 27 6C 6B 
+   A8 DA 6B 55 
+------------ 4 Oak Bay Run
+ 0A 00 
+ 63 00 00 00 
+ 0B 00 
+ 4F 61 6B 20 42 61 79 20 52 75 6E 
+ 09 00 00 00    road type (local road)
+ 01 00 00 00 
+ 06 81 95 43 8B 6C D7 3F =  0.366000    length (km)
+ 36 00 00 00    end time
+ 00 00 00 00 
+ EC 69 A6 26 E4 F7 70 40 = 271.493201  heading (degrees)
+ 00 00 00 00 
+ 00 00 00 00 
+ 00 00 00 00 
+ FF FF FF FF 
+ 1C 00 00 00    transit time
+ 42 60 E5 D0 22 DB C9 3F =  0.202000  distance at start (km)
+ 03 00 
+   90 27 6C 6B 
+   A8 DA 6B 55 
+   90 27 6C 6B 
+   C8 C9 6B 55 
+   C0 24 6C 6B 
+   38 4B 6B 55 
+------------ 5 Northland
+ 0A 00 
+ 66 00 00 00 
+ 0E 00 
+ 4E 6F 72 74 68 6C 61 6E 64 20 42 6C 76 64 
+ 09 00 00 00    road type (local road)
+ 01 00 00 00 
+ 83 C0 CA A1 45 B6 D3 3F 
+ 2D 00 00 00 
+ 00 00 00 00 
+ 64 6E 6C F9 04 E0 70 40 
+ 00 00 00 00 
+ 00 00 00 00 
+ 00 00 00 00 
+ FF FF FF FF 
+ 52 00 00 00 
+ 94 18 04 56 0E 2D E2 3F 
+ 03 00 
+   C0 24 6C 6B 
+   38 4B 6B 55 
+   C0 24 6C 6B 
+   98 45 6B 55 
+   C0 24 6C 6B 
+   48 D2 6A 55  
+------------ 6 SR 3
+ 0A 00 
+ 5E 00 00 00 
+ 0E 00 
+ 53 52 20 33 20 28 4C 69 6D 61 20 52 64 29 
+ 03 00 00 00    road type (primary state/prov rte)
+ 00 00 00 00 
+ 23 DB F9 7E 6A BC C4 3F 
+ 08 00 00 00 
+ 06 00 00 00 
+ C4 97 99 D0 11 7F 66 40 
+ 00 00 00 00 
+ 00 00 00 00  
+ 00 00 00 00 
+ FF FF FF FF 
+ 7F 00 00 00 
+ D6 78 E9 26 31 08 EC 3F 
+ 02 00 
+   C0 24 6C 6B 
+   48 D2 6A 55 
+   90 54 6C 6B 
+   48 D2 6A 55 
+------------ 7 N Mayfield Pl
+ 0A 00 
+ 65 00 00 00 
+ 0D 00 
+ 4E 20 4D 61 79 66 69 65 6C 64 20 50 6C 
+ 09 00 00 00 
+ 01 00 00 00 
+ 17 D9 CE F7 53 E3 C5 3F 
+ 19 00 00 00 
+ 04 00 00 00 
+ 59 EC C0 84 35 5B 59 40 
+ 00 00 00 00 
+ 00 00 00 00 
+ 00 00 00 00 
+ FF FF FF FF 
+ 87 00 00 00 
+ CF F7 53 E3 A5 9B F0 3F 
+ 03 00 
+   90 54 6C 6B 
+   48 D2 6A 55 
+   90 54 6C 6B 
+   A0 F2 6A 55 
+   68 5E 6C 6B 
+   F8 12 6B 55 
+------------ 8 Mayfield Pl
+ 0A 00 
+ 73 00 00 00 
+ 0B 00 
+ 4D 61 79 66 69 65 6C 64 20 50 6C 
+ 09 00 00 00 
+ 01 00 00 00 
+ 87 16 D9 CE F7 53 DB 3F 
+ 3F 00 00 00 
+ 04 00 00 00 
+ 13 45 4F 28 4E 4C 57 40 
+ 00 00 00 00 
+ 00 00 00 00 
+ 00 00 00 00 
+ FF FF FF FF 
+ A0 00 00 00 
+ F2 D2 4D 62 10 58 F3 3F 
+ 05 00 
+   68 5E 6C 6B 
+   F8 12 6B 55 
+   68 5E 6C 6B 
+   30 44 6B 55 
+   46 65 6C 6B 
+   93 B7 6B 55 
+   46 65 6C 6B 
+   93 B7 6B 55 
+   70 65 6C 6B 
+   50 BA 6B 55
+------------ 9 Woodbine Ave
+ 0A 00 
+ 64 00 00 00 
+ 0C 00 
+ 57 6F 6F 64 62 69 6E 65 20 41 76 65 
+ 09 00 00 00 
+ 01 00 00 00 
+ 8D 97 6E 12 83 C0 E6 3F 
+ 6A 00 00 00 
+ 06 00 00 00 
+ 8A C6 FD 0A AE 51 66 40 
+ 00 00 00 00 
+ 00 00 00 00 
+ 00 00 00 00 
+ FF FF FF FF 
+ DF 00 00 00 
+ 94 18 04 56 0E 2D FA 3F 
+ 03 00 
+   70 65 6C 6B 
+   50 BA 6B 55 
+   00 8A 6C 6B
+   50 BA 6B 55 
+   F8 36 6D 6B 
+   58 C1 6B 55 
+------------ a W Cook Rd
+ 0A 00 
+ 59 00 00 00
+ 09 00 
+ 57 20 43 6F 6F 6B 20 52 64 
+ 09 00 00 00 
+ 00 00 00 00 
+ CF F7 53 E3 A5 9B C4 3F 
+ 0E 00 00 00 
+ 00 00 00 00 
+ 5B 80 08 FA F6 C4 70 40 
+ 00 00 00 00 
+ 00 00 00 00 
+ 00 00 00 00 
+ FF FF FF FF 
+ 49 01 00 00 
+ 2D B2 9D EF A7 C6 02 40 
+ 02 00 
+   F8 36 6D 6B 
+   58 C1 6B 55 
+   60 38 6D 6B 
+   10 82 6B 55 
+------------ b Airport North Office Park
+ 0A 00 
+ 79 00 00 00 
+ 19 00 
+ 41 69 72 70 6F 72 74 20 4E 6F 72 74 68 20 4F 66 66 69 63 65 20 50  61 72 6B 
+ 09 00 00 00 
+ 01 00 00 00 
+ F0 A7 C6 4B 37 89 C1 3F 
+ 14 00 00 00 
+ 07 00 00 00 
+ 7C E9 DD FE 17 DE 69 40 
+ 00 00 00 00 
+ 00 00 00 00 
+ 00 00 00 00
+ FF FF FF FF 
+ 57 01 00 00 
+ AA F1 D2 4D 62 10 04 40 
+ 04 00 
+   60 38 6D 6B 
+   10 82 6B 55 
+   70 46 6D 6B 
+   10 82 6B 55 
+   80 54 6D 6B 
+   10 82 6B 55 
+   71 50 6D 6B 
+   D2 71 6B 55 
+------------ end of leg, end of route
+ 4C 00 00 00 		record size
+ 42 60 E5 D0 22 9B 23 40 =  9.803000
+ 00 00 00 00 00 00 E0 3F =  0.500000
+ 9F AB AD D8 5F B6 46 40 =  45.424800
+ 00 00 00 00 00 00 D0 3F =  0.250000
+ 04 00 00 00 
+ 00 00 00 00  
+ 00 00 00 00 
+ 80 70 00 00 
+ 08 07 00 00 
+ 4C 37 89 41 60 25 89 40  = 804.672000
+ 3D 2C D4 9A E6 1D 54 40  = 80.467200
+ 02 00 00 00

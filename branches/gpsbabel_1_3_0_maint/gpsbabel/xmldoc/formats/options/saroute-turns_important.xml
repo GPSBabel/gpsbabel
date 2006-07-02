@@ -1,0 +1,6 @@
+      <para> This option only makes sense in
+conjunction with the 'simplify' filter.  It ensures that the route
+simplification process will remove the points corresponding to turns
+only after it has removed all other route points.
+</para>
+    

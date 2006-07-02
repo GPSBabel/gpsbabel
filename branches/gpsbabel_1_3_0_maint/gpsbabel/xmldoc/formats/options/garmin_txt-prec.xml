@@ -1,0 +1,5 @@
+<para>
+This option specifies the precision to be used when writing coordinate values.
+Precision is the number of digits after the decimal point.  The default
+precision is 3.
+</para>

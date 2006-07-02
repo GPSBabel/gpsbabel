@@ -1,0 +1,21 @@
+
+      
+      
+      <para> QuoVadis for Palm OS <ulink url="http://www.marcosoft.com/">marcosoft.com</ulink> is a program for
+Palm/OS. Working with record definitions provided by MarcoSoft and
+further experimentation by Bruce Thompson and "Fuzzy" from the
+Geocaching Forums to nail down the format precisely.</para>
+      <para> Should work fine for import and export.</para>
+      <para> One thing of note, QuoVadis stores all waypoints in a
+single Palm Database without using categories. This means that it may
+be difficult to keep personal waypoints separate from generated
+waypoints. What Bruce recommends is taking the QuoVadisMarkerDB.PDB
+file synced down from your Palm Powered device and extract the
+waypoints you personally set to a GPX file. Then using GPSBabel's
+joining capabilities generate a new PDB file from the personal file
+and the other waypoint files of interest.</para>
+      <para> Currently the selection of icons to display and the scale
+at which to display them is hardcoded. Also there is no support for
+notes associated with waypoints. This will be addressed in a future
+revision.</para>
+    

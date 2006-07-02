@@ -1,0 +1,11 @@
+BEGIN SYMBOL
+41.14415, -85.14415, Historic Iron Bridges by Genoist (1/2 of TeamSJ1) Locationless (Reverse) Cache (1/1)
+41.15900, -85.15418, Craftily Concealed Containers by Warm Fuzzies Multi-Cache (4/2)
+41.10757, -85.13087, Swonderful by Genoist and The Zymurgist Traditional Cache (2/5)
+41.10417, -85.15167, Clue by Warm Fuzzies Multi-Cache (3.5/2)
+41.10823, -85.16212, Son of Pez by Enos Shenk Traditional Cache (1.5/1.5)
+41.09278, -85.14073, Urbana #3: Dodgy Deals by Enos Shenk Traditional Cache (2.5/1.5)
+41.08748, -85.13762, A King's Ransom by Team ABC and The GeoStars Team Traditional Cache (1.5/1)
+41.08427, -85.13597, Urbana #4: The City She Loves Me by Enos Shenk & Athena Traditional Cache (3.5/2)
+41.06353, -85.13400, Sky High by Enos Shenk Virtual Cache (1/3)
+END

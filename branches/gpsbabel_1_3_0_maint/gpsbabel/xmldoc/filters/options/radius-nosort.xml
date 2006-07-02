@@ -1,0 +1,6 @@
+<para>
+If this option is specified, the radius filter will not sort the remaining
+points by distance from the center.  They will remain in whatever order they
+were originally.
+</para>
+

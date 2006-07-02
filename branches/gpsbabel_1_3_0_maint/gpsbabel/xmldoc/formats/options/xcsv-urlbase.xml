@@ -1,0 +1,5 @@
+<para>
+This option specifies the base name to prepend to a URL on output.  This 
+might be useful if an input file contains URLs in a relative format and you
+need them to be in an absolute format.
+</para>
