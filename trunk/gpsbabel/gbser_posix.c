@@ -137,8 +137,9 @@ gbser_read(void *handle, char *ibuf, int size)
 	char *c;
 	char tbuf[256];
 	char *tp = tbuf;
-ibuf[0] = 0;
 	gbser_posix_handle *h = (gbser_posix_handle *) handle;
+
+	ibuf[0] = 0;
 	assert(h->magic == MYMAGIC);
 
 //	n = read(h->fd, ibuf, size);
