@@ -546,21 +546,15 @@ int
 terminit(const char *portname, int create_ok)
 {
 	DCB tio;	
-//	char *xname = xstrdup("\\\\.\\\\");
 	char *xname = fix_win_serial_name(portname);
 	COMMTIMEOUTS timeout;
 
-    is_file = 0;
-
-//	xname = xstrappend(xname, portname);
-//	if (xname[strlen(xname)-1] == ':')
-//		xname[strlen(xname)-1] = 0;
+	is_file = 0;
 
 	xCloseHandle(comport);
 
 	comport = CreateFile(xname, GENERIC_READ|GENERIC_WRITE, 0, NULL,
 			  OPEN_EXISTING, 0, NULL);
-	fprintf(stderr, "Comport: %p %s\n", comport, xname);
 	if (comport == INVALID_HANDLE_VALUE) {
 		goto try_as_file;
 	}
@@ -774,7 +768,6 @@ mag_rd_init_common(const char *portname)
 	time_t now, later;
 	waypoint_read_count = 0;
 	curfname = portname;
-
 	if (bs) {
 		bitrate=atoi(bs);
 	}
@@ -831,7 +824,7 @@ mag_rd_init_common(const char *portname)
 	 * make a copy of it, then lop off the file extension
 	 */
 
-	curfname = strrchr(portname, '/');
+	curfname = strrchr(portname, GB_PATHSEP);
 	if (curfname) {
 		curfname++;  /* skip over path delimiter */
 	} 
