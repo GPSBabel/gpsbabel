@@ -767,7 +767,7 @@ mag_rd_init_common(const char *portname)
 {
 	time_t now, later;
 	waypoint_read_count = 0;
-	curfname = portname;
+	
 	if (bs) {
 		bitrate=atoi(bs);
 	}
@@ -827,9 +827,9 @@ mag_rd_init_common(const char *portname)
 	curfname = strrchr(portname, GB_PATHSEP);
 	if (curfname) {
 		curfname++;  /* skip over path delimiter */
-	} 
-	
-	
+	} else {
+		curfname = portname;
+	}
 
 	return;
 }
@@ -955,6 +955,7 @@ mag_trkparse(char *trkmsg)
 	int dmy;
 	int hms;
 	int fracsecs;
+	char tname[100];
 	struct tm tm;
 	waypoint *waypt;
 
@@ -962,10 +963,10 @@ mag_trkparse(char *trkmsg)
 
 	memset(&tm, 0, sizeof(tm));
 
-	sscanf(trkmsg,"$PMGNTRK,%lf,%c,%lf,%c,%d,%c,%d.%d,A,,%d", 
+	sscanf(trkmsg,"$PMGNTRK,%lf,%c,%lf,%c,%d,%c,%d.%d,A,%[^,],%d", 
 		&latdeg,&latdir,
 		&lngdeg,&lngdir,
-		&alt,&altunits,&hms,&fracsecs,&dmy);
+		&alt,&altunits,&hms,&fracsecs,&tname,&dmy);
 
 	tm.tm_sec = hms % 100;
 	hms = hms / 100;
