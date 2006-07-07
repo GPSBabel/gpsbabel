@@ -329,9 +329,9 @@ google_read(void)
 		  }
 	          if ( panel ) {
 		    panel += 8;
-		    end = strstr( panel, ">'," );
+		    end = strstr( panel, "/div><'," );
 		    if ( end ) {
-	              *(end+1) = '\0';
+	              strcpy(end,"</div>");
 		      end = panel;
 		      while ( (end = strstr( end, "\\\"" ))) {
 		        memmove( end, end+1, strlen(end)+1 );
