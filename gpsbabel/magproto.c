@@ -939,6 +939,33 @@ mag_deinit(void)
 	trk_head = NULL;
 }
 
+/*
+ * I'm tired of arguing with scanf about optional fields .  Detokenize 
+ * an incoming string that may contain empty fields.
+ * 
+ * Probably should be cleaned up and moved to common code, but
+ * making it deal with an arbitrary number of fields of arbitrary
+ * size is icky.  We don't have to solve the general case here...
+ */
+
+static char ifield[20][100];
+static
+void parse_istring(char *istring)
+{
+	int f = 0;
+	int n,x;
+	while (istring[0]) {
+		x = sscanf(istring, "%[^,]%n", &ifield[f], &n);
+		f++;
+		if (x) {
+			istring += n;
+			/* IF more in this string, skip delim */
+			if (istring[0]) istring++;
+		} else {
+			istring ++;
+		}
+	}
+}
 
 /*
  * Given an incoming track messages of the form:
@@ -955,7 +982,6 @@ mag_trkparse(char *trkmsg)
 	int dmy;
 	int hms;
 	int fracsecs;
-	char tname[100];
 	struct tm tm;
 	waypoint *waypt;
 
@@ -963,10 +989,21 @@ mag_trkparse(char *trkmsg)
 
 	memset(&tm, 0, sizeof(tm));
 
-	sscanf(trkmsg,"$PMGNTRK,%lf,%c,%lf,%c,%d,%c,%d.%d,A,%[^,],%d", 
-		&latdeg,&latdir,
-		&lngdeg,&lngdir,
-		&alt,&altunits,&hms,&fracsecs,&tname,&dmy);
+	/* 
+	 * As some of the fields are optional, sscanf works badly
+	 * for us.
+	 */
+	parse_istring(trkmsg);
+	latdeg = atof(ifield[1]);
+	latdir = ifield[2][0];
+	lngdeg = atof(ifield[3]);
+	lngdir = ifield[4][0];
+	alt = atof(ifield[5]);
+	altunits = ifield[6][0];
+	sscanf(ifield[7], "%d.%d", &hms, &fracsecs);
+	/* Field 8 is constant */
+	/* Field nine is optional track name */
+	dmy = atoi(ifield[10]);
 
 	tm.tm_sec = hms % 100;
 	hms = hms / 100;
