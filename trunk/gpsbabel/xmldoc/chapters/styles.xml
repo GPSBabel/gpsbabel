@@ -12,7 +12,7 @@ GPSBabel style file.
 </para>
 <para>
 For a format to be described by a style file, it must be predictable and 
-generally readable by humants.  Formats with binary or unreadable content 
+generally readable by humant.  Formats with binary or unreadable content 
 are not good fits for this scheme.  It should have:
 <simplelist>
 <member>A fixed header at the beginning, if it has any at all. This is called a 'prologue'.</member>
@@ -35,8 +35,8 @@ your expectations.  If not, you could continue to tweak
 command each time.  If 'mystyle' is a format 
 that describes a popular program or is likely to be of use to others, you can
 then share <filename>mystyle.style</filename> with other GPSBabel users.
-Send it along with a coherent descripton to the GPSBabel mailing list for
-consideration to be included in a future version.
+Send it along with a coherent descripton to the GPSBabel-misc mailing 
+list for consideration to be included in a future version.
 </para>
 </section>
 <section id="style_intro2">
@@ -348,7 +348,7 @@ OFIELDS are defined the same way in the style file.</para>
 <itemizedlist>
 <listitem>
 <para>
-   "no_delim_before" is supported on OFIELD tags to specify that this
+   "no_delim_before" is supported on in OFIELD tags to specify that this
    field should be written without a field delimiter before it.  It's
    useful for limited field concatenation.
 </para>
@@ -369,7 +369,7 @@ OFIELDS are defined the same way in the style file.</para>
 </para>
 <para>
    This attribute is most useful when paired with "no_delim_before" as
-   it allows you to concatenate fields without concern on whether those
+   it allows you to concatenate fields without concern for whether those
    fields are actually populated or not.
 </para>
 </listitem>
