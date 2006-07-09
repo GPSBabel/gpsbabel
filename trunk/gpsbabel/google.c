@@ -347,6 +347,7 @@ google_read(void)
 		  }
 		}
 		xfree( script );
+		script = NULL;
 	}
 }
 #endif
@@ -356,6 +357,8 @@ google_rd_deinit(void)
 {
 	xml_deinit();
 	mkshort_del_handle(&desc_handle);
+	encoded_points = NULL;
+	encoded_levels = NULL;
 }
 
 ff_vecs_t google_vecs = {
