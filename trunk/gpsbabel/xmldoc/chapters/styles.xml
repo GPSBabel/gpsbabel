@@ -4,19 +4,90 @@
 <section id="styles_intro">
 <title>Introduction</title>
 <para>
-The format of an XCSV style file is quite simple and designed to be easily
-implemented by non-programmers to handle "one-off" babel-ization of various
-XCSV (whatever separated values) text files.  The format and usage of the 
-various style directives are described below.
+Often it is desirable to add a new file format for "one-off" work (perhaps
+you want to export something to a spreadsheet or graphing program) or to read
+a format that GPSBabel does not yet support.   For suitably simple formats,
+this can be done by a user with no programming experience by providing a 
+GPSBabel style file.
 </para>
 <para>
-The first and foremost important step is understanding how the config
+For a format to be described by a style file, it must be predictable and 
+generally readable by humants.  Formats with binary or unreadable content 
+are not good fits for this scheme.  It should have:
+<simplelist>
+<member>A fixed header at the beginning, if it has any at all. This is called a 'prologue'.</member>
+<member>Waypoints that are grouped by fixed separators, often a newline.  In style file parlance, this is called a 'record'.</member>
+<member>Traits of that waypoint described in that record.  In the style files, these are called 'fields' and examples may include longitude or a name.</member>
+<member>Fields that are grouped by fixed separators, often a comma or a tab.  In the style files, this is called the field separator.</member>
+<member>A fixed footer at the end, if it has any at all.  This is called the 'epilogue'.</member>
+</simplelist>
+</para>
+<para>
+Once you have created a style file that describes the file format you have
+or want, you must tell GPSBabel to use the xcsv format and have the xcsv 
+format use that file.  If you created a new style file called 
+"mystyle.style" and you want to write the  waypoints from
+a GPX file named "mine.gpx" to it, you would issue a command like:
+<screen format="linespecific">gpsbabel -i gpx -f mine.gpx -o xcsv,style=mystyle.style -f mine.new</screen>
+You might then examine <filename>mine.new</filename> to see if it met
+your expectations.  If not, you could continue to tweak 
+<filename>mystyle.style</filename> until it did, rerunning the above
+command each time.  If 'mystyle' is a format 
+that describes a popular program or is likely to be of use to others, you can
+then share <filename>mystyle.style</filename> with other GPSBabel users.
+Send it along with a coherent descripton to the GPSBabel mailing list for
+consideration to be included in a future version.
+</para>
+</section>
+<section id="style_intro2">
+<title>Style file overview</title>
+<para>
+The first and foremost important step is understanding how the style
 file is laid out itself.  The format is:
 </para>
 <screen format="linespecific">DIRECTIVE&lt;whitespace&gt;VALUE</screen>
 <para>
-Where &lt;whitespace&gt; is a space, tab, spaces, tabs, etc...  There should
-be nothing before the directive.  (i.e. not "  DIRECTIVE  VALUE")
+Where &lt;whitespace&gt; is one or more spaces or tabs.  There should
+be no spaces or tabs at the beginning of the line; all directives start
+at the left edge in column zero.
+</para>
+<para>
+An example style format is shown here:
+<literallayout>
+
+# Format: MS S&amp;T 2002/2003
+# Author: Alex Mottram
+#   Date: 12/09/2002
+#
+
+DESCRIPTION 		Microsoft Streets and Trips 2002-2006
+EXTENSION               txt
+
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		TAB
+RECORD_DELIMITER	NEWLINE
+BADCHARS		,"
+
+PROLOGUE	Name	Latitude	Longitude	Description	URL	Type	Container	Diff	Terr
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+# NOTE: MS S&amp;T ONLY IMPORTS DATA, IT DOESN'T EXPORT THIS ANYWHERE SO WE CAN
+#       HAVE OUR WAY WITH THE FORMATTING. 
+#
+IFIELD	SHORTNAME, "", "%s"		# Name
+IFIELD	LAT_DECIMAL, "", "%f"		# Latitude
+IFIELD	LON_DECIMAL, "", "%f"		# Longitude
+IFIELD	DESCRIPTION, "", "%s"		# Name 2 (Big Description)
+IFIELD	URL, "", "%s"			# URL
+IFIELD	GEOCACHE_TYPE, "", "%s"		# Geocache Type
+IFIELD	GEOCACHE_CONTAINER, "", "%s"	# Geocache Type
+IFIELD	GEOCACHE_DIFF, "", "%3.1f"	# Geocache Type
+IFIELD	GEOCACHE_TERR, "", "%3.1f"	# Geocache Type
+</literallayout>
+Each of these lines will be explained in the following sections.
 </para>
 </section> <!-- intro -->
 
@@ -271,8 +342,8 @@ IFIELDS are use as both input and output.  The existence of OFIELDS is
 primarily to allow more flexible mapping of GPSBabel data to output data 
 (say, for instance, to map the internal GPSBabel "description" variable to 
 two or more fields on output).  For all practical purposes, IFIELDS and 
-OFIELDS are defined the same way in the style file.  The following options
-are defined:
+OFIELDS are defined the same way in the style file.</para>
+<para>The following per-field options are defined:
 </para>
 <itemizedlist>
 <listitem>
@@ -289,6 +360,20 @@ are defined:
    that only absolute values (never negative) are to be printed.
 </para>
 </listitem>
+
+<listitem>
+<para>
+   "optional" is supported only OFIELD tags and indicates that the
+   field may or may not be available in the source data.  If the
+   field is absent, no trailing field separator is written.
+</para>
+<para>
+   This attribute is most useful when paired with "no_delim_before" as
+   it allows you to concatenate fields without concern on whether those
+   fields are actually populated or not.
+</para>
+</listitem>
+
 </itemizedlist>
 
 <para>
@@ -937,9 +1022,55 @@ example:
 <section id="style_examples">
 <title>Examples</title>
 <para>
-For examples on using the XCSV module, please see the 
+Here is one example style file from the GPSBabel source.
+<literallayout>
+# gpsbabel XCSV style file
+#
+# Format: Garmin POI
+# Author: Robert Lipe
+# Date: 10/07/2005
+# Reference: http://forums.groundspeak.com/GC/index.php?showtopic=110641&amp;st=0&amp;#entry1752204
+#
+DESCRIPTION Garmin POI database
+#
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER COMMA
+RECORD_DELIMITER NEWLINE
+BADCHARS COMMA
+SHORTLEN 24
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD LON_HUMAN_READABLE, "", "%08.5f"
+IFIELD LAT_HUMAN_READABLE, "", "%08.5f"
+IFIELD SHORTNAME, "", "%s"
+IFIELD DESCRIPTION, "", "%s"
+
+OFIELD LON_DECIMAL, "", "%08.5f"
+OFIELD LAT_DECIMAL, "", "%08.5f"
+OFIELD SHORTNAME, "", "%-.24s"
+OFIELD GEOCACHE_TYPE, "", " %-.4s", "no_delim_before,optional"
+OFIELD GEOCACHE_CONTAINER, "", "/%-.4s ", "no_delim_before,optional"
+OFIELD GEOCACHE_DIFF, "", "(%3.1f", "no_delim_before,optional"
+OFIELD GEOCACHE_TERR, "", "/%3.1f)", "no_delim_before,optional"
+OFIELD DESCRIPTION, "", "%-.50s"
+</literallayout>
+When used on a Groundspeak Pocket Query, it will output lines that
+look like:
+<literallayout>
+-76.76234,38.39123,GC5370 Loca/Virt (1.0/1.0),Dude.. Wheres my Limo??
+-90.42345,38.55234,GCC8B Trad/Regu (2.0/2.0),Sweet Reward
+-90.81456,38.62456,GC3091 Trad/Regu (1.5/2.0),Matson Hill
+</literallayout>
+that are suitable for Garmin's POI loader.
+</para>
+<para>
+For additional examples, please see the 
 <filename>*.style</filename> files in the 
-<filename>style/</filename> subdirectory of GPSBabel.  
+<filename>style/</filename> subdirectory of GPSBabel or at the <ulink url="http://gpsbabel.cvs.sourceforge.net/gpsbabel/gpsbabel/style/">online source tree</ulink>.
 </para>
 </section> <!-- examples -->
 
