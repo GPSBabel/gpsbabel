@@ -1631,7 +1631,7 @@ gdb_init_opts(const char op)	/* 1 = read; 2 = write */
 		gdb_category = atoi(gdb_opt_category);
 		if ((gdb_category < 1) || (gdb_category > 16))
 		    fatal(MYNAME ": Unsupported category \"%s\"!\n", gdb_opt_category);
-		gdb_category = 1 << --gdb_category;
+		gdb_category = 1 << (gdb_category - 1);
 	    }
 	    
 	    gdb_ver = atoi(gdb_opt_ver);
