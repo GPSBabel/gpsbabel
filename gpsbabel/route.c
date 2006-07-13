@@ -71,7 +71,7 @@ route_head_alloc(void)
 	return rte_head;
 }
 
-void
+static void
 any_route_free(route_head *rte)
 {
 	if ( rte->rte_name ) {
@@ -91,12 +91,12 @@ any_route_free(route_head *rte)
 }
 
 
-void
+static void
 any_route_add_head( route_head *rte, queue *head ) {
         ENQUEUE_TAIL( head, &rte->Q );
 }
 
-void
+static void
 any_route_del_head( route_head *rte ) {
 	dequeue( &rte->Q );
 	any_route_free( rte );
@@ -159,7 +159,7 @@ route_find_track_by_name(const char *name)
 	return common_route_by_name(&my_track_head, name);
 }
 
-void
+static void
 any_route_add_wpt(route_head *rte, waypoint *wpt, int *ct, int synth )
 {
 	ENQUEUE_TAIL(&rte->waypoint_list, &wpt->Q);
@@ -201,7 +201,7 @@ route_find_waypt_by_name( route_head *rh, const char *name )
 	return NULL;
 }
 
-void 
+static void 
 any_route_del_wpt( route_head *rte, waypoint *wpt, int *ct)
 {
 	dequeue( &wpt->Q );
@@ -248,7 +248,7 @@ route_reverse(const route_head *rte_hd)
 	}
 }
 
-void
+static void
 common_disp_all(queue *qh, route_hdr rh, route_trl rt, waypt_cb wc)
 {
 	queue *elem, *tmp;
@@ -402,7 +402,7 @@ track_restore_wpt(const waypoint *wpt)
 	trk_waypts++;
 }
 
-void
+static void
 common_restore_finish(void)
 {
 	rte_head_ct = 0;
@@ -442,6 +442,38 @@ track_restore( queue *head_bak)
 	
 	common_restore_finish();
 }
+
+/*
+ * Move the entire track queue onto the route queue making no attempt
+ * at all to "fix" anything in the process.
+ */
+void
+routes_to_tracks(void)
+{
+	queue *elem, *tmp;
+
+	QUEUE_FOR_EACH(&my_route_head, elem, tmp) {
+		route_head *trk = (route_head *) elem;
+		dequeue(&trk->Q);
+		ENQUEUE_TAIL(&my_track_head, &trk->Q);
+	}
+}
+
+/*
+ * Same, but in opposite direction.
+ */
+void
+tracks_to_routes(void)
+{
+	queue *elem, *tmp;
+
+	QUEUE_FOR_EACH(&my_track_head, elem, tmp) {
+		route_head *trk = (route_head *) elem;
+		dequeue(&trk->Q);
+		ENQUEUE_TAIL(&my_route_head, &trk->Q);
+	}
+}
+
 
 /*
  * This really makes more sense for tracks than routes.
