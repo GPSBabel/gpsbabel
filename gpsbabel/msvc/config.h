@@ -18,5 +18,5 @@
 #undef  PDBFMTS_ENABLED 
 
 /* 1 to enable shapefile support */
-#undef SHAPELIB_ENABLED 1
+#undef SHAPELIB_ENABLED
 

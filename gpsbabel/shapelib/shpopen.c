@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: shpopen.c,v 1.3 2006-05-07 02:14:35 robertl Exp $
+ * $Id: shpopen.c,v 1.4 2006-07-13 03:27:54 robertl Exp $
  *
  * Project:  Shapelib
  * Purpose:  Implementation of core Shapefile read/write functions.
@@ -34,6 +34,9 @@
  ******************************************************************************
  *
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/05/07 02:14:35  robertl
+ * Make shapefile and all palm pdb formats deselectable at build time.
+ *
  * Revision 1.2  2004/09/27 01:13:58  robertl
  * warning fixes in shapelib.  From Alexander Stohr.
  *
@@ -164,8 +167,8 @@
  *
  */
 
-static char rcsid[] = 
-  "$Id: shpopen.c,v 1.3 2006-05-07 02:14:35 robertl Exp $";
+/*static char rcsid[] = 
+  "$Id: shpopen.c,v 1.4 2006-07-13 03:27:54 robertl Exp $";*/
 
 #include "shapefil.h"
 #include "config.h"

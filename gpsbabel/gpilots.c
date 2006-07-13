@@ -204,7 +204,7 @@ data_read(void)
 	struct record *rec;
 	struct pdb *pdb;
 	struct pdb_record *pdb_rec;
-	route_head *track_head;
+	route_head *track_head = NULL;
 
 	if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
 		fatal(MYNAME ": pdb_Read failed\n");

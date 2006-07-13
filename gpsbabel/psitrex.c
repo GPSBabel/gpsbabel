@@ -208,7 +208,7 @@ psit_wr_deinit(void)
 static void
 psit_getToken(FILE *psit_file, char *buf, size_t sz, psit_tokenSep_type delimType)
 {
-	int c;
+	int c = -1;
 
 	*buf = 0;
 
@@ -458,7 +458,7 @@ psit_routehdr_w(FILE *psit_file, const route_head *rte)
 	char		*rname;
 
 	waypoint	*testwpt;
-	time_t		uniqueValue;
+	time_t		uniqueValue = 0;
 	int			allWptNameLengths;
 
 	queue *elem, *tmp;
@@ -482,7 +482,7 @@ psit_routehdr_w(FILE *psit_file, const route_head *rte)
 
 		/* route name */
 		if (!rte->rte_name) {
-			sprintf(hdr, "Route%04x", uniqueValue);
+			sprintf(hdr, "Route%04x", (unsigned) uniqueValue);
 			rname = xstrdup(hdr);
 		}
 		else
@@ -514,7 +514,7 @@ psit_track_r(FILE *psit_file, route_head **trk)
 
 	struct tm tmTime;
 	time_t	dateTime = 0;
-	route_head *track_head;
+	route_head *track_head = NULL;
 	unsigned int trk_count;
 
 	waypoint	*thisWaypoint;
@@ -613,7 +613,7 @@ psit_trackhdr_w(FILE *psit_file, const route_head *trk)
 	unsigned int trk_datapoints;
 	char		*tname;
 	waypoint	*testwpt;
-	time_t		uniqueValue;
+	time_t		uniqueValue = 0;
 
 	queue *elem, *tmp;
 
@@ -635,7 +635,7 @@ psit_trackhdr_w(FILE *psit_file, const route_head *trk)
 
 			/* track name */
 			if (!trk->rte_name) {
-				sprintf(hdr, "Track%04x", uniqueValue);
+				sprintf(hdr, "Track%04x", (unsigned) uniqueValue);
 				tname = xstrdup(hdr);
 			}
 			else

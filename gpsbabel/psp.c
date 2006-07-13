@@ -42,7 +42,8 @@ psp_fread(void *buff, size_t size, size_t members, FILE * fp)
     br = fread(buff, size, members, fp);
 
     if (br != members) {
-        fatal(MYNAME ": requested to read %d bytes, read %d bytes.\n", members, br);
+        fatal(MYNAME ": requested to read %ld bytes, read %ld bytes.\n", 
+                            (unsigned long) members, (unsigned long) br);
     }
 
     return (br);

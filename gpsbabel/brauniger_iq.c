@@ -22,7 +22,7 @@
 #include "jeeps/gpsserial.h"
 #include <errno.h>
 
-static int32 fd;
+/*static int32 fd;*/
 static char *port;
 
 #define MYNAME "BRAUNIGER-IQ"
@@ -30,6 +30,7 @@ static char *port;
 #define GPS_Serial_On(a, b) 0
 #define GPS_Serial_Off(a, b) 0
 
+#if 0
 static enum {
     st_sync,
     st_fl_num,
@@ -51,6 +52,7 @@ static enum {
 } state;
 
 static const int reqd_bytes[num_states] = { 6, 1, 2, 2, 25, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1 };
+#endif
 
 static void rd_init(const char *fname)
 {
@@ -77,6 +79,7 @@ static void rd_deinit(void)
     xfree(port);
 }
 
+#if 0
 /**
  * Process a data record.
  * @return zero when all expected data has been received
@@ -229,6 +232,7 @@ static int process_data(const unsigned char *data)
     state++;
     return remaining;
 }
+#endif
 
 static void data_read(void)
 {

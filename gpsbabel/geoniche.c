@@ -609,6 +609,8 @@ wpt2icon(const waypoint *wpt)
 	case gt_cito: return 47;
 	case gt_suprise: return 48;
 	case gt_webcam: return 49;
+	case gt_unknown: return 0;
+	case gt_benchmark: return 0;
     }
 
     return 0;

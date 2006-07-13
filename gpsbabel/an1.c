@@ -217,12 +217,6 @@ EncodeOrd( double ord )
 	return (gbint32)(0x80000000 - (gbint32)(ord * 0x800000));
 }
 
-static int
-IsGuidEqual( GUID *a, GUID *b ) 
-{
-	return !memcmp( a, b, sizeof( GUID ));
-}
-
 typedef struct {
 	short hotspotxhi;
 	long hotspoty;
@@ -752,7 +746,6 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 	an1_waypoint_record *rec;
 	int local;
 	format_specific_data *fs = NULL;
-	waypoint *wpt2 = (waypoint *)(void *)wpt;
 	
 	fs = fs_chain_find( wpt->fs, FS_AN1W );
 	if ( fs ) {
@@ -865,7 +858,7 @@ static void Read_AN1_Lines( FILE *f ) {
                         wpt_tmp->latitude = DecodeOrd( vert->lat );
 		        wpt_tmp->longitude = -DecodeOrd( vert->lon );
 		        wpt_tmp->shortname = (char *) xmalloc(7);
-		        sprintf( wpt_tmp->shortname, "\\%5.5x", rtserial++ );
+		        sprintf( wpt_tmp->shortname, "\\%5.5lx", rtserial++ );
 			fs_chain_add( &wpt_tmp->fs,
 				(format_specific_data *)vert );
 		        route_add_wpt(rte_head, wpt_tmp);
@@ -900,7 +893,6 @@ Write_One_AN1_Line( const route_head *rte )
 	an1_line_record *rec;
 	int local;
 	format_specific_data *fs = NULL;
-	route_head *rte2 = (route_head *)(void *)rte;
 	
 	fs = fs_chain_find( rte->fs, FS_AN1L );
 	
@@ -999,7 +991,6 @@ Write_One_AN1_Vertex( const waypoint *wpt )
 	an1_vertex_record *rec;
 	int local;
 	format_specific_data *fs = NULL;
-	waypoint *wpt2 = (waypoint *)(void *)wpt;
 	
 	fs = fs_chain_find( wpt->fs, FS_AN1V );
 	

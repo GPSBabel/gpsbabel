@@ -105,7 +105,7 @@ html_disp(const waypoint *wpt)
 	fprintf(file_out, "</h3>\n");
 	if (wpt->gc_data.terr) {
 		fprintf(file_out, "<p class=\"cachetype\">%s</p>\n", 
-			gs_get_cachetype(wpt->gc_data.type), gs_get_container(wpt->gc_data.container));
+			gs_get_cachetype(wpt->gc_data.type));
 		fprintf(file_out, "<p class=\"cachecontainer\">%s</>\n", 
 			gs_get_container(wpt->gc_data.container));
 	        if (wpt->gc_data.desc_short.utfstring) {

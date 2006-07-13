@@ -192,14 +192,6 @@ static void do_simple(const char *cmd, char *buf, int len) {
     do_cmd(cmd, cmd, buf, len);
 }
 
-static void hd(const void *d, int len) {
-    const unsigned char *dd = d;
-    while (len-- > 0) {
-        db(3, "%02x ", *dd++);
-    }
-    db(3, "\n");
-}
-
 static void rd_buf(void *buf, int len) {
     char *bp = buf;
     
@@ -220,9 +212,9 @@ static void data_read(void) {
      */
     char        line_buf[100];
     int         count, d;
-    gbuint32    tim, ptim;
+    gbuint32    tim, ptim = 0;
     double      lat, lon;
-    double      plat, plon;     /* previous point */
+    double      plat = 0, plon = 0;     /* previous point */
     struct tm   t;
     time_t      rtim;
 	route_head	*route_head = NULL; 

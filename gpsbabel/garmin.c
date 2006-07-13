@@ -364,7 +364,11 @@ route_read(void)
 	int32 nroutepts;
 	int i;
 	GPS_PWay *array;
-  route_head *rte_head;
+    /* TODO: Fixes warning but is it right? 
+     * RJL:  No, the warning isn't right; GCC's flow analysis is broken.
+     * still, it's good taste...
+     */
+    route_head *rte_head = NULL;
 
 	nroutepts = GPS_Command_Get_Route(portname, &array);
 
@@ -381,11 +385,11 @@ route_read(void)
 				case 202: csrc = array[i]->rte_ident; break;
 				default: break;
 			}
-      rte_head = route_head_alloc();
-      route_add_head(rte_head);
-      if (csrc) {
-        rte_head->rte_name = xstrdup(csrc);
-      }
+            rte_head = route_head_alloc();
+            route_add_head(rte_head);
+            if (csrc) {
+                rte_head->rte_name = xstrdup(csrc);
+            }
 		} else { 
 			if (array[i]->islink)  {
 				continue; 

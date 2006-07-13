@@ -1122,7 +1122,8 @@ gpx_rd_init(const char *fname)
 		xsi_schema_loc = xstrdup(DEFAULT_XSI_SCHEMA_LOC);
 	}
 	if (!xsi_schema_loc) {
-		fatal("gpx: Unable to allocate %d bytes of memory.\n", strlen(DEFAULT_XSI_SCHEMA_LOC) + 1);
+		fatal("gpx: Unable to allocate %ld bytes of memory.\n", 
+		        (unsigned long) strlen(DEFAULT_XSI_SCHEMA_LOC) + 1);
 	}
 
 	if (NULL == gpx_global) {
@@ -1276,7 +1277,7 @@ gpx_read(void)
 		}
 		if (!result) {
 			fatal(MYNAME ": XML parse error at %d: %s\n", 
-				XML_GetCurrentLineNumber(psr),
+				(int) XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
 		}
 	}

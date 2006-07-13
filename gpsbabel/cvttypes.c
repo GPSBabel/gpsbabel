@@ -2,7 +2,7 @@
 
     Convert data between waypoints, tracks, and routes.   
     
-    Copyright (C) 2005 Robert Lipe   <robertlipe@usa.net>
+    Copyright (C) 2005, 2006 Robert Lipe   <robertlipe@usa.net>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 
 static char *action;
 static route_head *my_trk_head;
-time_t tmstart;
+static time_t tmstart;
 
 static
 arglist_t cvttype_skeleton_args[] = {
@@ -61,6 +61,7 @@ cvttype_skeleton_process(void)
 			wpt->creation_time  = ++tmstart; 
 		}
 		track_add_wpt(my_trk_head, wpt);
+
 // if action == to rte
 //		waypt_del(wpt);
 //		route_add_wpt(my_rte_head, wpt);

@@ -75,7 +75,7 @@ xmalloc(size_t size)
 			obj, size, file, line );
 #endif
 	if (!obj) {
-		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n", size);
+		fatal("gpsbabel: Unable to allocate %ld bytes of memory.\n", (unsigned long) size);
 	}
 
 	return obj;
@@ -95,7 +95,7 @@ xcalloc(size_t nmemb, size_t size)
 #endif
 
 	if (!obj) {
-		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n", size);
+		fatal("gpsbabel: Unable to allocate %ld bytes of memory.\n", (unsigned long) size);
 	}
 
 	return obj;
@@ -129,7 +129,7 @@ xstrdup(const char *s)
 #endif
 
 	if (!o) {
-		fatal("gpsbabel: Unable to allocate %d bytes of memory.\n", strlen(s));
+		fatal("gpsbabel: Unable to allocate %ld bytes of memory.\n", (unsigned long) strlen(s));
 	}
 
 	return o;
@@ -203,7 +203,7 @@ xrealloc(void *p, size_t s)
 #endif
 
 	if (!o) {
-		fatal("gpsbabel: Unable to realloc %d bytes of memory.\n", s);
+		fatal("gpsbabel: Unable to realloc %ld bytes of memory.\n", (unsigned long) s);
 	}
 
 	return o;
@@ -898,7 +898,7 @@ xstrrstr(const char *s1, const char *s2)
 {
 	char *r = NULL, *next = NULL; 
 
-	while (next = strstr(s1, s2)) {
+	while (next = strstr(s1, s2), NULL != next) {
 		r = next;
 		s1 = next + 1;
 	}
@@ -1130,32 +1130,32 @@ strip_nastyhtml(const char * in)
 	sp = returnstr = xstrdup(in);
 	lcp = lcstr = strlower(xstrdup(in));
 	
-	while (lcp = strstr(lcstr, "<body")) {   /* becomes <---- */
+	while (lcp = strstr(lcstr, "<body"), NULL != lcp) {   /* becomes <---- */
 		sp = returnstr + (lcp - lcstr) ;
 		sp++; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
 		*lcp = '*';         /* so we wont find it again */
 	}
-	while (lcp = strstr(lcstr, "</body")) {
+	while (lcp = strstr(lcstr, "</body"), NULL != lcp) {
 		sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
 		sp++; sp++; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
 		*lcp = '*';         /* so we wont find it again */
 	}
-	while (lcp = strstr(lcstr, "</html")) {
+	while (lcp = strstr(lcstr, "</html"), NULL != lcp) {
 		sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
 		sp++; sp++; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
 		*lcp = '*';         /* so we wont find it again */
 	}
-	while (lcp = strstr(lcstr, "<style")) {
+	while (lcp = strstr(lcstr, "<style"), NULL != lcp) {
 		sp = returnstr + (lcp - lcstr) ; /* becomes <!--   */
 		sp++; *sp++ = '!'; *sp++ = '-'; *sp++ = '-';  *sp++ = ' '; *sp++ = ' '; *sp = ' ';
 		*lcp = '*';         /* so we wont find it again */
 	}
-	while (lcp = strstr(lcstr, "</style>")) {
+	while (lcp = strstr(lcstr, "</style>"), NULL != lcp) {
 		sp = returnstr + (lcp - lcstr) ; /* becomes    --> */
 		*sp++ = ' '; *sp++ = ' '; *sp++ = ' '; *sp++ = ' '; *sp++ = ' '; *sp++ = '-'; *sp++ = '-'; 
 		*lcp = '*';         /* so we wont find it again */
 	}
-	while (lcp = strstr(lcstr, "<image")) {
+	while (lcp = strstr(lcstr, "<image"), NULL != lcp) {
 		sp = returnstr + (lcp - lcstr) ; /* becomes <img */
 		sp+=3; *sp++ = 'g'; *sp++ = ' '; *sp++ = ' ';
 		*lcp = '*';

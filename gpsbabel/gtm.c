@@ -64,6 +64,8 @@ fread_byte(FILE *fd)
 	return buf[0];
 }
 
+#if 0
+/* not used */
 static short int
 fread_bool(FILE *fd)
 {
@@ -71,6 +73,7 @@ fread_bool(FILE *fd)
 	fread(buf, 2, 1, fd);
 	return le_read16(buf) ? 1 : 0;
 }
+#endif
 
 static short int
 fread_integer(FILE *fd)

@@ -96,6 +96,10 @@ static void polytest ( double lat1, double lon1,
 		else {
 	            if ( lon1 <= wlon && lon2 > wlon ) {
 		        if ( *state & UP ) {
+		        /* TODO: I assume this intends to set LIMBO_UP and
+		         * clear UP - but & has higher precendence so it
+		         * actually leaves *state unaltered.
+		         */
 			    *state = *state | LIMBO_UP & ~UP;
 			}
 			*state = *state | LIMBO;
@@ -108,6 +112,10 @@ static void polytest ( double lat1, double lon1,
 		    if ( !(*state & LIMBO_UP) ) {
 			*state = *state ^ INSIDE;
 		    }
+	        /* TODO: I assume this intends to set LIMBO_UP and
+	         * clear UP - but & has higher precendence so it
+	         * actually leaves *state unaltered.
+	         */
 		    *state = *state & ~LIMBO & ~LIMBO_UP;
 		}
 		else if (*state & LIMBO_BEGIN) {

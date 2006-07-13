@@ -23,6 +23,10 @@ AC_CHECK_LIB([m], [cos])
 AC_ARG_WITH(cet,[  --with-cet=(default,all,minimal)],
              cet="$withval", cet="default")
 
+if test $GCC = yes; then
+ CFLAGS="$CFLAGS -Wall"
+fi
+
 if test "$cet" = "all"; then
    AC_DEFINE(CET_WANTED, 1, [1 for all character sets])
 fi

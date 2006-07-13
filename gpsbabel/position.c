@@ -287,7 +287,7 @@ radius_process(void)
 	waypoint ** comp;
 	int i, wc;
 	queue temp_head;
-	route_head *rte_head;
+	route_head *rte_head = NULL;
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		extra_data *ed;

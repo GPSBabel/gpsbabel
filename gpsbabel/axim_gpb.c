@@ -29,8 +29,7 @@
 
 #define RECORD_LEN	344
 
-static FILE *fin, *fout;
-static char dbginfo = 1;
+static FILE *fin;
 
 static
 arglist_t axim_gpb_args[] = {

@@ -36,7 +36,7 @@ arglist_t yahoo_args[] = {
 };
 
 static xg_callback	wpt_s, wpt_lat, wpt_lon, wpt_e;
-static xg_callback 	wpt_addr, wpt_city, wpt_state, wpt_zip, wpt_country;
+static xg_callback 	wpt_addr /*, wpt_city, wpt_state, wpt_zip, wpt_country*/;
 
 static xg_tag_mapping gl_map[] = {
  { wpt_s,	cb_start, "/ResultSet/Result" },

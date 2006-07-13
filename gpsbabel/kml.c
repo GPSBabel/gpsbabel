@@ -37,7 +37,6 @@ static int floating;
 static waypoint *wpt_tmp;
 static int wpt_tmp_queued;
 
-static FILE *fd;
 static FILE *ofd;
 
 typedef struct {

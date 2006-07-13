@@ -133,10 +133,6 @@ gbser_setspeed(void *handle, unsigned speed)
 int
 gbser_read(void *handle, char *ibuf, int size)
 {
-	int n;
-	char *c;
-	char tbuf[256];
-	char *tp = tbuf;
 	gbser_posix_handle *h = (gbser_posix_handle *) handle;
 
 	ibuf[0] = 0;

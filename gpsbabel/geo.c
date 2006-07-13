@@ -24,7 +24,6 @@ static char *nuke_placer;
 
 static waypoint *wpt_tmp;
 
-static FILE *fd;
 static FILE *ofd;
 
 static

@@ -836,7 +836,7 @@ get_option(const char *iarglist, const char *argname)
 	arglen = strlen(argname);
 	arglist = xstrdup(iarglist);
 
-	for (arg = arglist; argp = strtok(arg, ","); arg = NULL) {
+	for (arg = arglist; argp = strtok(arg, ","), NULL != argp; arg = NULL) {
 		if (0 == case_ignore_strncmp(argp, argname, arglen)) {
 			/*
 			 * If we have something of the form "foo=bar"
