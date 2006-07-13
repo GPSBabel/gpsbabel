@@ -251,7 +251,8 @@ lowranceusr_fread(void *buff, size_t size, size_t members, FILE * fp)
 	br = fread(buff, size, members, fp);
 
 	if (br != members) {
-		fatal(MYNAME ": requested to read %d bytes, read %d bytes.\n", members, br);
+		fatal(MYNAME ": requested to read %lu bytes, read %lu bytes.\n", 
+		            (unsigned long) members, (unsigned long) br);
 	}
 
 	return (br);

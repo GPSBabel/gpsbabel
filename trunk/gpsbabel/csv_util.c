@@ -729,6 +729,8 @@ writetime(char * buff, size_t bufsize, const char * format, time_t t, int gmt )
 	return strftime(buff, bufsize, format, stmp );
 }
 
+#if 0
+/* not used */
 static 
 int 
 writeisotime(char * buff, size_t bufsize, const char * format, time_t t)
@@ -744,6 +746,7 @@ writeisotime(char * buff, size_t bufsize, const char * format, time_t t)
 	xfree(ibuff);
 	return i;
 }
+#endif
 
 
 static 

@@ -865,7 +865,6 @@ cet_deregister(void)
 int
 cet_validate_cs(const char *cs, cet_cs_vec_t **vec, char **cs_name)
 {
-	char buff[128];
 	cet_cs_vec_t *v;
 
 	if ((cs == NULL) || (strlen(cs) == 0))		/* set default us-ascii */

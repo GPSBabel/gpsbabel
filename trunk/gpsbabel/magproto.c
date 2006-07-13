@@ -955,7 +955,8 @@ void parse_istring(char *istring)
 	int f = 0;
 	int n,x;
 	while (istring[0]) {
-		x = sscanf(istring, "%[^,]%n", &ifield[f], &n);
+	    char *fp = ifield[f];
+		x = sscanf(istring, "%[^,]%n", fp, &n);
 		f++;
 		if (x) {
 			istring += n;

@@ -53,8 +53,8 @@ interpfilt_process(void)
 	route_head *rte_new;
 	int count = 0;
 	int first = 0;
-	double lat1, lon1;
-	int time1;
+	double lat1 = 0, lon1 = 0;
+	int time1 = 0;
 	int timen;
 	double distn;
 	double curdist;

@@ -84,7 +84,6 @@ gpssim_wr_deinit(void)
 static void 
 gpssim_write_sentence(const char *const s)
 {
-	int cksum;
 	fprintf(fout, "$%s*%02X\r\n", s, nmea_cksum(s));
 }
 
@@ -141,7 +140,7 @@ gpssim_trk_hdr(const route_head *rh)
 		char *ofname = xstrdup(fnamestr);
 		
 		if (fout) {
-			fatal(MYNAME, ": output file already open.\n");
+			fatal(MYNAME ": output file already open.\n");
 		}
 
 		snprintf(c, sizeof(c), "%s%04d.gpssim", 

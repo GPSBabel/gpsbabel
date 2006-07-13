@@ -164,8 +164,8 @@ unicsv_parse_one_line(char *ibuf)
 	waypoint *wpt;
 	int i;
 	int  utmz = -9999;
-	double utme;
-	double utmn;
+	double utme = 0;
+	double utmn = 0;
 
 	s = csv_lineparse(ibuf, unicsv_fieldsep, "\"", 0);
 	if (s == NULL) return;

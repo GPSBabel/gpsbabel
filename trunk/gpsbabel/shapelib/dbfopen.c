@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: dbfopen.c,v 1.2 2006-05-07 02:14:35 robertl Exp $
+ * $Id: dbfopen.c,v 1.3 2006-07-13 03:27:54 robertl Exp $
  *
  * Project:  Shapelib
  * Purpose:  Implementation of .dbf access API documented in dbf_api.html.
@@ -34,6 +34,9 @@
  ******************************************************************************
  *
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/05/07 02:14:35  robertl
+ * Make shapefile and all palm pdb formats deselectable at build time.
+ *
  * Revision 1.1  2004/09/20 17:21:22  robertl
  * Check in shapelib and experimental prototype of crude shapefile support.
  *
@@ -185,8 +188,8 @@
  * Added header.
  */
 
-static char rcsid[] = 
-  "$Id: dbfopen.c,v 1.2 2006-05-07 02:14:35 robertl Exp $";
+/*static char rcsid[] = 
+  "$Id: dbfopen.c,v 1.3 2006-07-13 03:27:54 robertl Exp $";*/
 
 #include "shapefil.h"
 #include "config.h"

@@ -262,7 +262,7 @@ void xml_read(void)
 	while ((len = fread(buf, 1, sizeof(buf), ifd))) {
 		if (!XML_Parse(psr, buf, len, feof(ifd))) {
 			fatal(MYNAME ":Parse error at %d: %s\n",
-				XML_GetCurrentLineNumber(psr),
+				(int) XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
 		}
 	}
@@ -275,7 +275,7 @@ void xml_readstring( char *str )
 	int len = strlen(str);
 	if (!XML_Parse(psr, str, len, 1)) {
 		fatal( MYNAME ":Parse error at %d: %s\n",
-				XML_GetCurrentLineNumber(psr),
+				(int) XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
 	}
 	XML_ParserFree(psr);

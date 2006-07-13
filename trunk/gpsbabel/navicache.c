@@ -230,7 +230,7 @@ nav_read(void)
 	while ((len = fread(buf, 1, sizeof(buf), fd))) {
 		if (!XML_Parse(psr, buf, len, feof(fd))) {
 			fatal(MYNAME ":Parse error at %d: %s\n", 
-				XML_GetCurrentLineNumber(psr),
+				(int) XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
 		}
 	}

@@ -663,6 +663,8 @@ void tpo_process_tracks(void)
         int lonscale;
         int latscale;
         int waypoint_count = 0;
+	int lat = 0;
+	int lon = 0;
         unsigned int jj;
         route_head* track_temp;
 
@@ -723,10 +725,7 @@ void tpo_process_tracks(void)
         llvalid = 0;
         for (jj = 0; jj < track_byte_count; ) {
             waypoint* waypoint_temp;
-            int lat;
-            int lon;
 
- 
             // Time to read a new latlong?
             if (!llvalid) {
 

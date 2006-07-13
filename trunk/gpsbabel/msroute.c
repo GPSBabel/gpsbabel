@@ -159,19 +159,6 @@ static int ole_root_sec_ct;
 /* local helpers */
 
 static void
-print_buff(const char *buff, int count, const char *comment)
-{
-	int i;
-	printf(MYNAME ": dump of %s : ", comment);
-	for (i = 0; i < count; i++)
-	{
-	    printf("%02x ", buff[i] & 0xFF);
-	}
-	printf("\n");
-	fflush(stdout);
-}
-
-static void
 le_read32_buff(int *buff, const int count)
 {
 	int i;
@@ -381,7 +368,9 @@ ole_init(void)
 	
 	sector_size = 512;	/* fixed for the moment */
 	
-	is_fatal((sizeof(head) != sector_size), MYNAME ": (!) internal error - invalid header size (%d)!", sizeof(head));
+	is_fatal((sizeof(head) != sector_size), 
+	    MYNAME ": (!) internal error - invalid header size (%lu)!", 
+	                    (unsigned long) sizeof(head));
 	
 	memset(&head, 0, sizeof(head));
 	fread(&head, sizeof(head), 1, fin);

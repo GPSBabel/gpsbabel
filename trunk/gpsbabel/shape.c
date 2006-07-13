@@ -119,7 +119,7 @@ my_read(void)
 	while (npts) {
 		SHPObject *shp;
 		waypoint *wpt;
-		const char *name;
+		const char *name = "";
 		const char *url;
 		char *tmpName = NULL;
 		char *tmpIndex = opt_name;

@@ -422,7 +422,8 @@ mps_mapsegment_r(FILE *mps_file, int mps_ver)
 {
 	int reclen;
 
-	/* At the moment we're not doing anything with map segments, but here's the template code as if we were
+#if 0
+	/* At the moment we're not doing anything with map segments, but here's the template code as if we were */
 	char hdr[100];
 	fread(&CDid, 4, 1, mps_file);
 	reclen = le_read32(&CDid);
@@ -435,6 +436,7 @@ mps_mapsegment_r(FILE *mps_file, int mps_ver)
 	mps_readstr(mps_file, CDAreaName, sizeof(CDAreaName));
 
 	fread(hdr, 4, 1, mps_file); /* trailing long value */
+#endif	
 	
 	fseek(mps_file, -5, SEEK_CUR);
 	fread(&reclen, 4, 1, mps_file);
@@ -611,7 +613,7 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	int reclen;
 	int lat, lon;
 	int icon;
-	char *src;
+	char *src = "";         /* default to empty string */
 	char *ident;
 	char *ascii_description;
 	char zbuf[25];
@@ -1139,11 +1141,11 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 	char		*rname;
 	char		hdr[20];
 	char		zbuf[20];
-	char		*src;
+	char		*src = "";
 	char		*ident;
 
 	waypoint	*testwpt;
-	time_t		uniqueValue;
+	time_t		uniqueValue = 0;
 	int			allWptNameLengths;
 
 	double		maxlat=-90.0;
@@ -1199,7 +1201,7 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 
 		/* route name */
 		if (!rte->rte_name) {
-			sprintf(hdr, "Route%04x", uniqueValue);
+			sprintf(hdr, "Route%04x", (unsigned) uniqueValue);
 			rname = xstrdup(hdr);
 		}
 		else
@@ -1304,7 +1306,7 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 	int			lon;
 	char		zbuf[20];
 	char		ffbuf[20];
-	char		*src;
+	char		*src = "";
 	char		*ident;
 	int			reclen;
 
@@ -1611,7 +1613,7 @@ mps_trackhdr_w(FILE *mps_file, int mps_ver, const route_head *trk)
 	char		*tname;
 	char		hdr[20];
 	waypoint	*testwpt;
-	time_t		uniqueValue;
+	time_t		uniqueValue = 0;
 
 	queue *elem, *tmp;
 
@@ -1632,7 +1634,7 @@ mps_trackhdr_w(FILE *mps_file, int mps_ver, const route_head *trk)
 
 		/* track name */
 		if (!trk->rte_name) {
-			sprintf(hdr, "Track%04x", uniqueValue);
+			sprintf(hdr, "Track%04x", (unsigned) uniqueValue);
 			tname = xstrdup(hdr);
 		}
 		else
@@ -1867,7 +1869,8 @@ mps_write(void)
 
 	char			recType;
 	int				reclen;
-	int				reclen2;
+    /* TODO: This kills a compiler warning but I'm not sure it's right */
+	int				reclen2 = 0;
 	unsigned int	tocopy;
 	unsigned int	block;
 	

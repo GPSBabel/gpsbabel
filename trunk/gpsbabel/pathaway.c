@@ -76,7 +76,8 @@ static arglist_t ppdb_args[] =
 	ARG_TERMINATOR
 };
 
-#undef PPDB_DEBUG
+/*#undef PPDB_DEBUG*/
+#define PPDB_DEBUG 1
 
 #if PPDB_DEBUG
 static void
@@ -95,9 +96,9 @@ internal_debug2(const char *format, ... )
 	puts("");
 	va_end(args);
 }
-#define DBG	internal_debug1(__FILE__, __LINE__);internal_debug2
+#define DBG(args)	internal_debug1(__FILE__, __LINE__);internal_debug2 args
 #else
-#define DBG	;
+#define DBG(args)	;
 #endif
 
 
@@ -622,7 +623,7 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	if (global_opts.synthesize_shortnames != 0)
 	{
 	    tmp = mkshort_from_wpt(mkshort_handle, wpt);
-	    DBG("shortname %s from %s", tmp, wpt->shortname);
+	    DBG(("shortname %s from %s", tmp, wpt->shortname));
 	}
 	else
 	{

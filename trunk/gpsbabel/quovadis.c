@@ -198,8 +198,8 @@ quovadis_writewpt(waypoint *wpt)
     xfree(rec);
 
     if (rec_index == MAXRECORDS) {
-	fatal(MYNAME ": cannot store more than %d records at this time.\n",
-	      MAXRECORDS);
+	fatal(MYNAME ": cannot store more than %lu records at this time.\n",
+	      (unsigned long) MAXRECORDS);
     }
 }
 

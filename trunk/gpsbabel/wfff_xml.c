@@ -273,7 +273,7 @@ wfff_xml_rd_deinit(void)
 	xml_deinit();
 
 	if (tosscount) {
-		warning("Warning: %s reading file. Threw away %d invalid entries.\n",
+		warning("Warning: %s reading file. Threw away %ld invalid entries.\n",
 			MYNAME, tosscount );
 	}
 

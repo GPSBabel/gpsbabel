@@ -1034,7 +1034,8 @@ gdb_fwrite_le(const void *data, const size_t size)
 		break;
 		
 	    default:
-		fatal(MYNAME "-write_le: Unsupported data size (%ld)!\n", size);
+		fatal(MYNAME "-write_le: Unsupported data size (%lu)!\n",
+		                    (unsigned long) size);
 	}
 }
 

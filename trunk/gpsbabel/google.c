@@ -25,8 +25,6 @@ static char *script = NULL;
 static route_head *routehead;
 static short_handle desc_handle;
 
-static FILE *fd;
-
 static int serial = 0;
 
 #define MYNAME "google"
