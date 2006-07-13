@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="GPSBabel"
-	ProjectGUID="{EB2609DB-5800-45B2-BCB2-06D72F389DCA}"
+	ProjectGUID="{D81B30A1-C560-42BC-AE80-257FDDD484D8}"
 	>
 	<Platforms>
 		<Platform
@@ -45,7 +45,7 @@
 				Optimization="0"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="expat,..\coldsync;."
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;__WIN32__;VERSION=\&quot;1.2.1_beta01072004_msvc\&quot;;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;__WIN32__;VERSION=\&quot;1.3.0\&quot;;_CRT_SECURE_NO_DEPRECATE"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -139,7 +139,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="expat,..\coldsync;."
-				PreprocessorDefinitions="WIN32;__WIN32__;_DEBUG;_CONSOLE;VERSION=\&quot;1.2.1_beta01072004_msvc\&quot;;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;__WIN32__;_DEBUG;_CONSOLE;VERSION=\&quot;1.3.0\&quot;;_CRT_SECURE_NO_DEPRECATE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
@@ -497,6 +497,10 @@
 			</File>
 			<File
 				RelativePath="..\garmin_tables.c"
+				>
+			</File>
+			<File
+				RelativePath="..\gbser.c"
 				>
 			</File>
 			<File
@@ -1544,6 +1548,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\textfile.c"
+				>
+			</File>
+			<File
 				RelativePath="..\tiger.c"
 				>
 				<FileConfiguration
@@ -2248,6 +2256,14 @@
 			</File>
 			<File
 				RelativePath="..\garmin_tables.h"
+				>
+			</File>
+			<File
+				RelativePath="..\gbser.h"
+				>
+			</File>
+			<File
+				RelativePath="..\gbser_private.h"
 				>
 			</File>
 			<File

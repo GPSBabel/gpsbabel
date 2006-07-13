@@ -35,7 +35,7 @@ static int explorist;
 
 #define debug_serial  (global_opts.debug_level > 1)
 
-static char * termread(char *ibuf, int size);
+static char *termread(char *ibuf, int size);
 static void termwrite(char *obuf, int size);
 static void mag_readmsg(gpsdata_type objective);
 static void mag_handon(void);
@@ -77,9 +77,7 @@ typedef struct mag_rte_head {
 
 static queue rte_wpt_tmp; /* temporary PGMNWPL msgs for routes */
 
-static FILE *magfile_in;
-static FILE *magfile_out;
-static int magfd;
+static FILE *magfile_h;
 static mag_rxstate magrxstate;
 static int mag_error;
 static unsigned int last_rx_csum;
@@ -507,7 +505,7 @@ retry:
 		ignore_unable = 0;
 		return;
 	}
-	if (IS_TKN("$PMGNCMD,END") || (is_file && (feof(magfile_in)))) {
+	if (IS_TKN("$PMGNCMD,END") || (is_file && (feof(magfile_h)))) {
 		found_done = 1;
 		return;
 	} 
@@ -515,225 +513,64 @@ retry:
 		mag_writeack(isum);
 }
 
-/* 
- * termio on Cygwin is apparently broken, so we revert to Windows serial.
- */
-#if defined (__WIN32__) || defined (__CYGWIN__)
+static void *serial_handle = NULL;
 
-#include <windows.h>
-
-DWORD 
-mkspeed(bitrate)
-{
-	switch (bitrate) {
-		case 1200: return CBR_1200;
-		case 2400: return CBR_2400;
-		case 4800: return CBR_4800;
-		case 9600: return CBR_9600;
-		case 19200: return CBR_19200;
-		case 57600: return CBR_57600;
-		case 115200: return CBR_115200;
-		default: return CBR_4800;
-	}
-}
-
-HANDLE comport = NULL;
-
-#define xCloseHandle(a) if (a) { CloseHandle(a); } a = NULL;
-
-static
-int
-terminit(const char *portname, int create_ok)
-{
-	DCB tio;	
-	char *xname = fix_win_serial_name(portname);
-	COMMTIMEOUTS timeout;
-
-	is_file = 0;
-
-	xCloseHandle(comport);
-
-	comport = CreateFile(xname, GENERIC_READ|GENERIC_WRITE, 0, NULL,
-			  OPEN_EXISTING, 0, NULL);
-	if (comport == INVALID_HANDLE_VALUE) {
-		goto try_as_file;
-	}
-	tio.DCBlength = sizeof(DCB);
-	GetCommState (comport, &tio);
-	tio.BaudRate = mkspeed(bitrate);
-	tio.fBinary = TRUE;
-	tio.fParity = TRUE;
-	tio.fOutxCtsFlow = FALSE;
-	tio.fOutxDsrFlow = FALSE;
-	tio.fDtrControl = DTR_CONTROL_ENABLE;
-	tio.fDsrSensitivity = FALSE;
-	tio.fTXContinueOnXoff = TRUE;
-	tio.fOutX = FALSE;
-	tio.fInX = FALSE;
-	tio.fErrorChar = FALSE;
-	tio.fNull = FALSE;
-	tio.fRtsControl = RTS_CONTROL_ENABLE;
-	tio.fAbortOnError = FALSE;
-	tio.ByteSize = 8;
-	tio.Parity = NOPARITY;
-	tio.StopBits = ONESTOPBIT;
-
-	if (!SetCommState (comport, &tio)) {
-		xCloseHandle(comport);
-
-		/*
-		 *  Probably not a com port.   Try it as a file.
-		 */
-try_as_file:
-		magfile_in = xfopen(portname, create_ok ? "w+b" : "rb", MYNAME);
+static int terminit(const char *portname, int create_ok) {
+	if (gbser_is_serial(portname)) {
+		if (serial_handle = gbser_init(portname), NULL != serial_handle) {
+			int rc;
+			if (rc = gbser_set_port(serial_handle, bitrate, 8, 0, 1), gbser_OK != rc) {
+				fatal(MYNAME ": Can't configure port\n");
+			}
+		}
+		is_file = 0;
+		return 1;
+	} else {
+		/* Does this check for an error? */
+		magfile_h = xfopen(portname, create_ok ? "w+b" : "rb", MYNAME);
 		is_file = 1;
 		icon_mapping = map330_icon_table;
 		mag_cleanse = m330_cleanse;
 		got_version = 1;
 		return 0;
 	}
-
-	GetCommTimeouts (comport, &timeout);
-	/* We basically do single character reads and simulate line input
-	 * mode, so these values are kind of fictional.
-	 */
-	timeout.ReadIntervalTimeout = 1000;
-	timeout.ReadTotalTimeoutMultiplier = 1000;
-	timeout.ReadTotalTimeoutConstant = 1000;
-	timeout.WriteTotalTimeoutMultiplier = 1000;
-	timeout.WriteTotalTimeoutConstant = 1000;
-	if (!SetCommTimeouts (comport, &timeout)) {
-		xCloseHandle (comport);
-		fatal(MYNAME ": set timeouts\n");
-	}
-	return 1;
 }
 
-static char * 
-termread(char *ibuf, int size)
-{
-	int i=0;
-	DWORD cnt;
-
+static char *termread(char *ibuf, int size) {
 	if (is_file) {
-		return fgets(ibuf, size, magfile_in);
+		return fgets(ibuf, size, magfile_h);
+	} else {
+		int rc = gbser_read_line(serial_handle, ibuf, size, 2000, '\x0a', '\x0d');
+		if (rc != gbser_OK) {
+			fatal(MYNAME ": Read error\n");
+		}
+		return ibuf;
 	}
-
-	ibuf[i]='a';
-	for(;i < size;i++) {
-		if (ReadFile (comport, &ibuf[i], 1, &cnt, NULL) != TRUE)
-			break;
-		if (cnt < 1) 
-			return NULL;
-		if (ibuf[i] == '\n') 
-			break;
-	}
-	ibuf[i] = 0;
-	return ibuf;
 }
 
-static void
-termwrite(char *obuf, int size)
-{
-	DWORD len;
-
+static void termwrite(char *obuf, int size) {
 	if (is_file) {
-		fwrite(obuf, size, 1, magfile_out);
-		return;
-	}
-	WriteFile (comport, obuf, size, &len, NULL);
-	if ((int) len != size) {
-		fatal(MYNAME ":.  Wrote %d of %d bytes.\n", len, size);
-	}
-}
-
-static
-void
-termdeinit()
-{
-        xCloseHandle(comport);
-}
-
-#else
-
-#include <termios.h>
-#include <unistd.h>
-
-speed_t 
-mkspeed(unsigned br)
-{
-	switch (br) {
-		case 1200: return B1200;
-		case 2400: return B2400;
-		case 4800: return B4800;
-		case 9600: return B9600;
-		case 19200: return B19200;
-#if defined B57600
-		case 57600: return B57600;
-#endif
-#if defined B115200
-		case 115200: return B115200;
-#endif
-		default: return B4800;
+		size_t nw;
+		if (nw = fwrite(obuf, 1, size, magfile_h), nw < (size_t) size) {
+			fatal(MYNAME ": Write error");
+		}
+	} else {
+		int rc;
+		if (rc = gbser_write(serial_handle, obuf, size), rc < 0) {
+			fatal(MYNAME ": Write error");
+		}
 	}
 }
 
-
-static struct termios orig_tio;
-static void
-terminit(const char *portname, int create_ok)
-{
-	struct termios new_tio;
-
-        magfile_in = xfopen(portname, "rb", MYNAME);
-
-	is_file = (0 == strcmp(portname,"-")) || !isatty(fileno(magfile_in)) || explorist;
+static void termdeinit() {
 	if (is_file) {
-		icon_mapping = map330_icon_table;
-		mag_cleanse = m330_cleanse;
-		got_version = 1;
-		return;
-	} 
-
-	magfile_out = xfopen(portname, "w+b", MYNAME);
-	magfd = fileno(magfile_in);
-
-	tcgetattr(magfd, &orig_tio);
-	new_tio = orig_tio;
-	new_tio.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|
-		IGNCR|ICRNL|IXON);
-	new_tio.c_oflag &= ~OPOST;
-	new_tio.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-	new_tio.c_cflag &= ~(CSIZE|PARENB);
-	new_tio.c_cflag |= CS8;
-	new_tio.c_cc[VTIME] = 10;
-	new_tio.c_cc[VMIN] = 0;
-
-	cfsetospeed(&new_tio, mkspeed(bitrate));
-	cfsetispeed(&new_tio, mkspeed(bitrate));
-	tcsetattr(magfd, TCSAFLUSH, &new_tio);
-}
-
-static void
-termdeinit()
-{
-	if (!is_file) {
-		tcsetattr(magfd, TCSANOW, &orig_tio);
+		fclose(magfile_h);
+		magfile_h = NULL;
+	} else {
+		gbser_deinit(serial_handle);
+		serial_handle = NULL;
 	}
 }
-
-static char * 
-termread(char *ibuf, int size)
-{
-	return fgets(ibuf, size, magfile_in);
-}
-
-static void
-termwrite(char *obuf, int size)
-{
-	fwrite(obuf, size, 1, magfile_out);
-}
-#endif
 
 /*
  *  Arg tables are doubled up so that -? can output appropriate help
@@ -861,38 +698,12 @@ mag_wr_init_common(const char *portname)
 		wptcmtcnt_max = MAXCMTCT ;
 	}
 
-#if __WIN32__
-	if (!terminit(portname, 1)) {
-		is_file = 1;
-	}
-#else
-	magfile_out = xfopen(portname, "w+b", MYNAME);
-	is_file =  (0 == strcmp(portname,"-")) || !isatty(fileno(magfile_out)) || explorist;
-#endif
+	terminit(portname, 1);
 
 	if (!mkshort_handle) {
 		mkshort_handle = mkshort_new_handle();
 	}
-	if (is_file) {
-		magfile_out = xfopen(portname, "w+b", MYNAME);
-		icon_mapping = map330_icon_table;
-		mag_cleanse = m330_cleanse;
-		got_version = 1;
-	} else {
-		/*
-		 *  This is a serial device.   The line has to be open for
-		 *  reading and writing, so we let rd_init do the dirty work.
-		 */
-		if (magfile_out) {
-			fclose(magfile_out);
-		}
-#if __WIN32__
-		if (comport) {
-			xCloseHandle(comport);
-		}
-#endif
-		mag_rd_init(portname);
-	}
+
 	QUEUE_INIT(&rte_wpt_tmp);
 }
 
@@ -928,9 +739,6 @@ mag_deinit(void)
 {
 	mag_handoff();
 	termdeinit();
-	if(magfile_in)
-		fclose(magfile_in);
-	magfile_in = NULL;
 	if(mkshort_handle)
 		mkshort_del_handle(&mkshort_handle);
 
@@ -1240,8 +1048,8 @@ static void
 mag_read(void)
 {
 	found_done = 0;
-
         if (global_opts.masked_objective & TRKDATAMASK) {
+		  magrxstate = mrs_handoff;
           if (!is_file) 
             mag_writemsg("PMGNCMD,TRACK,2");
           
@@ -1251,6 +1059,7 @@ mag_read(void)
         }
 
         if (global_opts.masked_objective & WPTDATAMASK) {
+		  magrxstate = mrs_handoff;
           if (!is_file) 
             mag_writemsg("PMGNCMD,WAYPOINT");
           
@@ -1260,6 +1069,7 @@ mag_read(void)
         }
 
         if (global_opts.masked_objective & RTEDATAMASK) {
+		  magrxstate = mrs_handoff;
           if (!is_file) {
             /* 
              * serial routes require waypoint & routes 

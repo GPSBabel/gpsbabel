@@ -66,13 +66,13 @@ data_read(void)
 	char icon[3] = {0};
 	waypoint *wpt_tmp;
 	textfile_t *tin;
-	
-	tin = textfile_init(file_in);
 	/*
 	 * Make sure that all waypoints in single read have same 
 	 * timestamp.
 	 */
 	time_t now = current_time();
+	
+	tin = textfile_init(file_in);
 
 	while ((ibuf = textfile_read(tin))) {
 	/*  A sharp in column zero or an blank line is a comment */

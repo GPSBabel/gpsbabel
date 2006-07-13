@@ -19,9 +19,12 @@
  */
 
 #include "defs.h"
-#include "jeeps/gpsserial.h"
+#include "gbser.h"
 #include "grtcirc.h"
 #include <errno.h>
+
+#define BAUD        9600
+#define TIMEOUT     1500
 
 /*
     A conversation looks like this
@@ -39,13 +42,21 @@
     << $PFST,NORMAL,*02
 */
 
-static gpsdevh *fd;
+/*static gpsdevh *fd;*/
+static void *fd;
+static FILE *fl;
 static char *port;
 static char *erase;
 
 #define MYNAME      "WBT-100/200"
-#define PRESTRKNAME "PRESALTTRK"
 #define NL          "\x0D\x0A"
+
+struct read_state {
+	route_head	*route_head; 
+    double      plat, plon;     /* previous point */
+    time_t      ptim;
+    unsigned    wpn;
+};
 
 /* Number of lines to skip while waiting for an ACK from a command. I've seen
  * conversations with up to 30 lines of cruft before the response so 50 isn't
@@ -62,92 +73,63 @@ static void db(int l, const char *msg, ...) {
     va_end(ap);
 }
 
-/* Read a single character from the serial port. Kind of gross but we do
- * it like this so we can use Jeeps (which doesn't have an equivalent
- * function). Returns -1 if no char is available, -2 on error or the
- * retrieved char.
- */
-static int rd_char() {
-    if (GPS_Serial_Chars_Ready(fd)) {
-        unsigned char c;
-        if (GPS_Serial_Read(fd, &c, 1) != 1) {
-            return -2;
-        } else {
-            return c;
-        }
-    } else {
-        return -1;
+static void rd_drain() {
+    if (gbser_flush(fd)) {
+        fatal(MYNAME ": Comm error\n");
     }
 }
 
-/* Blocking version of above. It would be nicer to use select on the fd
- * rather than spinning in a loop here - but we're trying to stay platform
- * independent.
- */
-static int rd_char_b() {
-    int c = rd_char();
-    while (c == -1) {
-        c = rd_char();
+static void rd_line(char *buf, int len) {
+    int rc;
+    if (rc = gbser_read_line(fd, buf, len, TIMEOUT, 0x0A, 0x0D), rc != gbser_OK) {
+        fatal(MYNAME ": Read error (%d)\n", rc);
     }
-    
-    return c;
 }
 
-/* Swallow any pending output from GPS */
-
-static int rd_drain() {
-    int c = rd_char();
-    while (c >= 0) {
-        c = rd_char();
+static void wr_cmd(const char *cmd) {
+    int rc;
+    db(3, "Sending: %s\n", cmd);
+    if (rc = gbser_print(fd, cmd), gbser_OK != rc) {
+        fatal(MYNAME ": Write error (%d)\n", rc);
     }
-    
-    return c == -1 ? 0 : c;
-}
-
-/* Read a line (up to 0x0A). Carriage returns are filtered out. Always tries to
- * read an entire line but discards any characters beyond len (because we're
- * only ever interested in fairly short lines.
- *
- * Returns the number of characters read or -2 on error. The buffer will contain
- * the (possibly truncated) string without any line terminator characters. The
- * buffer will always be null terminated.
- */
-static int rd_line(char *buf, int len) {
-    int c, pos = 0, nr = 0;
-    c = rd_char_b();
-    while (c >= 0 && c != 0x0A) {
-        nr++;
-        if (c != 0x0D && pos < len-1) {
-            buf[pos++] = (unsigned char) c;
-        }
-        c = rd_char_b();
-    }
-    
-    buf[pos] = '\0';
-    
-    return c < 0 ? c : nr;
-}
-
-static int wr_cmd(const char *cmd) {
-    return GPS_Serial_Write(fd, cmd, strlen(cmd));
 }
 
 static void rd_init(const char *fname) {
     port = xstrdup(fname);
 
     db(1, "Opening port...\n");
-    if (!GPS_Serial_On(port, &fd)) {
-        fatal(MYNAME ": Can't initialise port '%s'\n", port);
+    if ((fd = gbser_init(port), NULL == fd) ||
+        gbser_set_port(fd, BAUD, 8, 0, 1)) {
+        fatal(MYNAME ": Can't initialise port \"%s\"\n", port);
     }
 }
 
 static void rd_deinit(void) {
     db(1, "Closing port...\n");
-    if (!GPS_Serial_Off(fd)) {
-        fatal(MYNAME ": Can't shut down port '%s'\n", port);
-    }
-
+    gbser_deinit(fd);
+    fd = NULL;
     xfree(port);
+}
+
+static void rd_buf(void *buf, int len) {
+    int rc;
+    if (rc = gbser_read_wait(fd, buf, len, TIMEOUT), rc < 0) {
+        fatal(MYNAME ": Read error (%d)\n", rc);
+    } else if (rc < len) {
+        fatal(MYNAME ": Read timout\n");
+    }
+}
+
+static void file_init(const char *fname) {
+    db(1, "Opening file...\n");
+    if (fl = fopen(fname, "rb"), NULL == fl) {
+        fatal(MYNAME ": Can't open file '%s'\n", fname);
+    }
+}
+
+static void file_deinit(void) {
+    db(1, "Closing file...\n");
+    fclose(fl);
 }
 
 static int starts_with(const char *buf, const char *pat) {
@@ -159,12 +141,9 @@ static int starts_with(const char *buf, const char *pat) {
  */
  
 static void do_cmd(const char *cmd, const char *expect, char *buf, int len) {
-    int rc, try;
+    int try;
 
-    if (rd_drain() < 0) {
-        fatal(MYNAME ": Read error\n");
-    }
-
+    rd_drain();
     wr_cmd(cmd); 
     wr_cmd(NL);
 
@@ -175,9 +154,7 @@ static void do_cmd(const char *cmd, const char *expect, char *buf, int len) {
      * middle of an NMEA sentence when we start listening.
      */
     for (try = 0; try < RETRIES; try++) {
-        if (rc = rd_line(buf, len), rc < 0) {
-            fatal(MYNAME ": Read error\n");
-        }
+        rd_line(buf, len);
         if (starts_with(buf, expect)) {
             db(2, "Got: %s\n", buf);
             return;
@@ -192,16 +169,80 @@ static void do_simple(const char *cmd, char *buf, int len) {
     do_cmd(cmd, cmd, buf, len);
 }
 
-static void rd_buf(void *buf, int len) {
-    char *bp = buf;
+static void data_chunk(struct read_state *st, const void *buf) {
+    char        wp_name[20];
+    gbuint32    tim;
+    double      lat, lon;
+    struct tm   t;
+    time_t      rtim;
+	waypoint	*wpt        = NULL;
+	const char *bp = buf;
     
-    while (len > 0) {
-        int rc = GPS_Serial_Read(fd, bp, len);
-        if (rc < 0) {
-            fatal(MYNAME ": Read error\n");
-        }
-        len -= rc;
-        bp  += rc;
+    tim = le_read32(bp + 0);
+    
+    lat = (double) ((gbint32) le_read32(bp + 4)) / 10000000;
+    lon = (double) ((gbint32) le_read32(bp + 8)) / 10000000;
+    
+    t.tm_sec    = ((tim >>  0) & 0x3F);
+    t.tm_min    = ((tim >>  6) & 0x3F);
+    t.tm_hour   = ((tim >> 12) & 0x1F);
+    t.tm_mday   = ((tim >> 17) & 0x1F);
+    t.tm_mon    = ((tim >> 22) & 0x0F) - 1;
+    t.tm_year   = ((tim >> 26) & 0x3F) + 100;
+    
+    rtim = mkgmtime(&t);
+
+    if (lat >= 100) {
+        /* Start new track */
+        lat -= 100;
+        st->route_head = NULL;
+    } else {
+		wpt = waypt_new();
+	
+		wpt->latitude	    = lat;;
+		wpt->longitude	    = lon;
+		wpt->creation_time  = rtim;
+		wpt->centiseconds   = 0;
+	
+		/* OK to reuse buffer now */
+		sprintf(wp_name, "WP%04d", ++st->wpn);
+		wpt->shortname      = xstrdup(wp_name);
+		
+		wpt->speed          = radtometers(
+	                            gcdist(RAD(st->plat), RAD(st->plon), 
+	                                   RAD(lat), RAD(lon))) /
+		                      (rtim - st->ptim);
+		wpt->course         = DEG(heading(RAD(st->plat), RAD(st->plon),
+	                                      RAD(lat), RAD(lon)));
+		wpt->pdop	        = 0;
+		wpt->fix 		    = fix_unknown;
+
+		if (NULL == st->route_head)	{
+		    db(1, "New Track\n");
+			st->route_head = route_head_alloc();
+			track_add_head(st->route_head);
+		}
+
+		track_add_wpt(st->route_head, wpt);
+    }
+	
+	st->ptim = rtim;
+	st->plat = lat;
+	st->plon = lon;
+}
+
+static void file_read(void) {
+    char                buf[12];
+    int                 rc;
+    struct read_state   st;
+    
+    st.route_head = NULL;
+    st.wpn = 0;
+    
+    rc = fread(buf, sizeof(buf), 1, fl);
+    while (rc == 1) {
+        data_chunk(&st, buf);
+        rc = fread(buf, sizeof(buf), 1, fl);
     }
 }
 
@@ -210,15 +251,12 @@ static void data_read(void) {
      * Actually, it's OK because rd_line can read arbitrarily
      * long lines returning only the first N characters
      */
-    char        line_buf[100];
-    int         count, d;
-    gbuint32    tim, ptim = 0;
-    double      lat, lon;
-    double      plat = 0, plon = 0;     /* previous point */
-    struct tm   t;
-    time_t      rtim;
-	route_head	*route_head = NULL; 
-	waypoint	*wpt        = NULL;
+    char                line_buf[100];
+    int                 count, d;
+    struct read_state   st;
+    
+    st.route_head = NULL;
+    st.wpn = 0;
 
     do_simple("$PFST,FIRMWAREVERSION", line_buf, sizeof(line_buf));
     do_simple("$PFST,NORMAL",          line_buf, sizeof(line_buf));
@@ -230,61 +268,11 @@ static void data_read(void) {
     if (count == 0x10000) {
         count = 0;
     }
+    
     db(1, "Reading %d data\n", count);
     for (d = 0; d < count; d++) {
         rd_buf(line_buf, 12);       /* twelve byte record */
-        tim = le_read32(line_buf + 0);
-        
-        lat = (double) ((gbint32) le_read32(line_buf + 4)) / 10000000;
-        lon = (double) ((gbint32) le_read32(line_buf + 8)) / 10000000;
-        
-        t.tm_sec    = ((tim >>  0) & 0x3F);
-        t.tm_min    = ((tim >>  6) & 0x3F);
-        t.tm_hour   = ((tim >> 12) & 0x1F);
-        t.tm_mday   = ((tim >> 17) & 0x1F);
-        t.tm_mon    = ((tim >> 22) & 0x0F) - 1;
-        t.tm_year   = ((tim >> 26) & 0x3F) + 100;
-        
-        rtim = mkgmtime(&t);
-
-        if (lat >= 100) {
-            /* Start new track */
-            lat -= 100;
-            route_head = NULL;
-        } else {
-    		wpt = waypt_new();
-		
-    		wpt->latitude	    = lat;;
-    		wpt->longitude	    = lon;
-    		wpt->creation_time  = rtim;
-    		wpt->centiseconds   = 0;
-		
-    		/* OK to reuse buffer now */
-    		sprintf(line_buf, "WP%04d", d + 1);
-    		wpt->shortname      = xstrdup(line_buf);
-    		
-			wpt->speed          = radtometers(
-		                            gcdist(RAD(plat), RAD(plon), 
-		                                   RAD(lat),  RAD(lon))) /
-			                      (rtim - ptim);
-			wpt->course         = DEG(heading(RAD(plat), RAD(plon),
-		                                      RAD(lat),  RAD(lon)));
-    		wpt->pdop	        = 0;
-    		wpt->fix 		    = fix_unknown;
-    		wpt->sat            = 0;
-
-    		if (NULL == route_head)	{
-    		    db(1, "New Track\n");
-    			route_head = route_head_alloc();
-    			track_add_head(route_head);
-    		}
-
-    		track_add_wpt(route_head, wpt);
-        }
-		
-		ptim = rtim;
-		plat = lat;
-		plon = lon;
+        data_chunk(&st, line_buf);
     }
     
     /* Erase data? */
@@ -307,13 +295,13 @@ static void data_read(void) {
     
 }
 
-static arglist_t wbt_args[] = {
+static arglist_t wbt_sargs[] = {
     { "erase", &erase, "Erase device data after download", 
         "0", ARGTYPE_BOOL, ARG_NOMINMAX },
     ARG_TERMINATOR
 };
 
-ff_vecs_t wbt_vecs = {
+ff_vecs_t wbt_svecs = {
     ff_type_serial,
     { ff_cap_none, ff_cap_read, ff_cap_none },
     rd_init,
@@ -323,6 +311,24 @@ ff_vecs_t wbt_vecs = {
     data_read,
     NULL,
     NULL, 
-    wbt_args,
+    wbt_sargs,
+    CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
+};
+
+static arglist_t wbt_fargs[] = {
+    ARG_TERMINATOR
+};
+
+ff_vecs_t wbt_fvecs = {
+    ff_type_file,
+    { ff_cap_none, ff_cap_read, ff_cap_none },
+    file_init,
+    NULL,
+    file_deinit,
+    NULL,
+    file_read,
+    NULL,
+    NULL, 
+    wbt_fargs,
     CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
 };
