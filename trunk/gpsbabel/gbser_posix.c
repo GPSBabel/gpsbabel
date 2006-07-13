@@ -1,6 +1,6 @@
 /*
-    Serial interface - POSIX layer.
-
+    Serial interface for POSIX tty handling.
+    
     Copyright (C) 2006  Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
@@ -21,129 +21,397 @@
 
 #include "defs.h"
 #include "gbser.h"
-#include <assert.h>
+#include "gbser_private.h"
+
+#include <sys/time.h>
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 
-#define MYMAGIC 0x91827364
+#include <assert.h>
+#include <stdarg.h>
+
 typedef struct {
-	struct termios orig_tio;
-	struct termios my_tio;
-	FILE *fh;
-	int fd;
-	unsigned long magic;
-} gbser_posix_handle;
+	struct termios  old_tio;
+	struct termios  new_tio;
+	int             fd;
+	unsigned        vmin, vtime;
+	unsigned long   magic;
 
-static 
-speed_t
-mkspeed(unsigned br)
-{
-        switch (br) {
-                case 1200: return B1200;
-                case 2400: return B2400;
-                case 4800: return B4800;
-                case 9600: return B9600;
-                case 19200: return B19200;
+	unsigned char   inbuf[BUFSIZE];
+	unsigned        inbuf_used;
+} gbser_handle;
+
+/* Wrapper to safely cast a void * into a gbser_handle */
+static gbser_handle *gbser__get_handle(void *p) {
+    gbser_handle *h = (gbser_handle *) p;
+	assert(h->magic == MYMAGIC);
+    return h;
+}
+
+static speed_t mkspeed(unsigned br) {
+    switch (br) {
+    case   1200: return  B1200;
+    case   2400: return  B2400;
+    case   4800: return  B4800;
+    case   9600: return  B9600;
+    case  19200: return  B19200;
 #if defined B57600
-                case 57600: return B57600;
+    case  57600: return  B57600;
 #endif
 #if defined B115200
-                case 115200: return B115200;
+    case 115200: return B115200;
 #endif
-                default: return B4800;
-        }
+    default:
+        fatal("Unsupported serial speed: %d\n", br);
+        return 0;   /* keep compiler happy */
+    }
 }
 
-/*
-gbser_istty(void *handle)
-{
-	gbser_posix_handle *h = (gbser_posix_handle *) handle;
-	assert(h->magic == MYMAGIC);
+typedef struct timeval hp_time;
 
-	return isatty(h->fd);
+static void get_time(hp_time *tv) {
+    gettimeofday(tv, NULL);
 }
-*/
 
-void *
-gbser_init(const char *name)
-{
-	gbser_posix_handle *h;
+static double elapsed(hp_time *tv) {
+    hp_time now;
+    double ot = (double) tv->tv_sec  * 1000 +
+                (double) tv->tv_usec / 1000;
+    double nt;
+    gettimeofday(&now, NULL);
+    nt = (double) now.tv_sec  * 1000 + 
+         (double) now.tv_usec / 1000;
+    /*printf("elapsed -> %f\n", nt - ot);*/
+    return nt - ot;
+}
+
+static int set_rx_timeout(gbser_handle *h, unsigned vmin, unsigned vtime) {
+    if (vmin  > 255) { vmin  = 255; }
+    if (vtime > 255) { vtime = 255; }
+    if (vmin != h->vmin || vtime != h->vtime) {
+        h->vmin  = h->new_tio.c_cc[VMIN]  = vmin;
+        h->vtime = h->new_tio.c_cc[VTIME] = vtime;
+
+        /*printf("VMIN=%d, VTIME=%d\n", h->vmin, h->vtime);*/
+
+    	return tcsetattr(h->fd, TCSANOW, &h->new_tio) ? gbser_ERROR : gbser_OK;
+    } else {
+        return 0;
+    }
+}
+
+/* Open a serial port. |port_name| is the (platform specific) name
+ * of the serial device to open. Under WIN32 familiar DOS port names
+ * ('com1:') are translated into the equivalent name required by
+ * WIN32
+ */
+void *gbser_init(const char *port_name) {
+	gbser_handle *h;
+
+	gbser__db(4, "gbser_init(\"%s\")\n", port_name);
 
 	h = xcalloc(sizeof *h, 1);
 	h->magic = MYMAGIC;
+	h->vmin = h->vtime = 0;
 
-	h->fh = xfopen(name,  "rb", "serial layer");
-	h->fd = fileno(h->fh);
-// h->fd = open(name, O_RDWR | O_EXCL | O_SYNC);
-	
+    if (h->fd = open(port_name, O_RDWR | O_NOCTTY), h->fd == -1) {
+		gbser__db(1, "Failed to open port (%s)\n", strerror(errno));	
+        goto failed;
+    }
+
 	if (!isatty(h->fd)) { 
-		goto open_fail;
+		gbser__db(1, "%s is not a TTY\n");
+		goto failed;
 	}
 
-	tcgetattr(h->fd, &h->orig_tio);
-
-	h->my_tio = h->orig_tio;
-	h->my_tio.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|
-		IGNCR|IGNCR|IXON);
-        h->my_tio.c_cflag &= ~(CSIZE|PARENB);
-        h->my_tio.c_cflag |= CS8;
-        h->my_tio.c_oflag = 0;
-        h->my_tio.c_lflag = 0;
-        h->my_tio.c_iflag = 0;
-        h->my_tio.c_cc[VTIME] = 10;	/* Time out after one second */
-        h->my_tio.c_cc[VMIN] = 255;
+	if (gbser_set_port(h, 4800, 8, 0, 1)) {
+		gbser__db(1, "gbser_set_port() failed\n");
+	    goto failed;
+	}
 
 	return h;
 
-open_fail:
-	if (h->fh) {
-		fclose(h->fh);
+failed:
+	if (h->fd != -1) {
+	    close(h->fd);
 	}
+	
 	xfree(h);
+	
 	return NULL;
 }
 
-void 
-gbser_deinit(void *handle)
-{
-	gbser_posix_handle *h = (gbser_posix_handle *) handle;
-	assert(h->magic == MYMAGIC);
+/* Close a serial port
+ */
+void gbser_deinit(void *handle) {
+	gbser_handle *h = gbser__get_handle(handle);
 
-	tcsetattr(h->fd, TCSAFLUSH, &h->orig_tio);
-	fclose(h->fh);
-	xfree(handle);
+	tcsetattr(h->fd, TCSAFLUSH, &h->old_tio);
+	close(h->fd);
+
+	xfree(h);
 }
 
-int
-gbser_setspeed(void *handle, unsigned speed)
-{
+int gbser_set_port(void *handle, unsigned speed, unsigned bits, unsigned parity, unsigned stop) {
+	gbser_handle *h = gbser__get_handle(handle);
 	speed_t s;
-	gbser_posix_handle *h = (gbser_posix_handle *) handle;
-	assert(h->magic == MYMAGIC);
+	
+	static unsigned bit_flags[] = {
+		0, 0, 0, 0, 0, CS5, CS6, CS7, CS8
+	};
+
+    if (bits < 5 || bits > 8) {
+        fatal("Unsupported bits setting: %d\n", bits);
+    }
+
+    if (parity > 2) {
+        fatal("Unsupported parity setting: %d\n", parity);
+    }
+    
+    if (stop < 1 || stop > 2) {
+        fatal("Unsupported stop setting: %d\n", stop);
+    }
 
 	s = mkspeed(speed);
 
-	cfsetospeed(&h->my_tio, s);
-	cfsetispeed(&h->my_tio, s);
+	/* TODO: We don't /fully/ initialise the port's stat here... */
 
-	return !tcsetattr(h->fd, TCSAFLUSH, &h->my_tio);
+	tcgetattr(h->fd, &h->old_tio);
+
+	h->new_tio = h->old_tio;
+
+	/* clear bits */
+	cfmakeraw(&h->new_tio);
+
+	h->new_tio.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP |
+                			INLCR  | IGNCR  | IXON);
+	h->new_tio.c_cflag &= ~(CSIZE  | PARENB | PARODD | CSTOPB);
+    
+	/* set data bits, */
+	h->new_tio.c_cflag |= bit_flags[bits];
+
+	/* stop bits and... */
+	if (stop == 2) {
+		h->new_tio.c_cflag |= CSTOPB;
+	}
+    
+	/* parity */
+	if (parity != 0) {
+		h->new_tio.c_cflag |= PARENB;
+		if (parity == 1) {
+			h->new_tio.c_cflag |= PARODD;
+		}
+	}
+    
+	h->new_tio.c_oflag = 0;
+	h->new_tio.c_lflag = 0;
+
+	h->new_tio.c_cc[VMIN]  = h->vmin;
+	h->new_tio.c_cc[VTIME] = h->vtime;
+
+	cfsetospeed(&h->new_tio, s);
+	cfsetispeed(&h->new_tio, s);
+
+	return tcsetattr(h->fd, TCSADRAIN, &h->new_tio) ? gbser_ERROR : gbser_OK;
 }
 
-int
-gbser_read(void *handle, char *ibuf, int size)
-{
-	gbser_posix_handle *h = (gbser_posix_handle *) handle;
+unsigned gbser__read_buffer(void *handle, void **buf, unsigned *len) {
+	gbser_handle *h = gbser__get_handle(handle);
+    unsigned count = *len;
+    unsigned char *cp = *buf;
+    if (count > h->inbuf_used) {
+        count = h->inbuf_used;
+    }
+    
+    memcpy(cp, h->inbuf, count);
+    memmove(h->inbuf, h->inbuf + count, 
+                      h->inbuf_used - count);
+    h->inbuf_used -= count;
+    *len -= count;
+    cp   += count;
+    *buf = (void *) cp;
+    return count;
+}
 
-	ibuf[0] = 0;
-	assert(h->magic == MYMAGIC);
+/* Return when the input buffer contains at least |want| bytes or |*ms|
+ * milliseconds have elapsed. |ms| may be NULL or |*ms| may be zero to
+ * poll the port for available bytes and return immediately. |*ms| will
+ * be updated to indicate the remaining time on exit.
+ * Returns the number of bytes available (>=0) or an error code (<0).
+ */
+int gbser__fill_buffer(void *handle, unsigned want, unsigned *ms) {
+    int rc;
+	gbser_handle *h = gbser__get_handle(handle);
+    
+    if (want > BUFSIZE) {
+        want = BUFSIZE;
+    }
 
-//	n = read(h->fd, ibuf, size);
-// printf("Returning %d\n", n);
-redo:
-	fgets(ibuf, size, h->fh);
-// rtrim(ibuf);
-if (strlen(ibuf) == 0)
-  goto redo;
-	return 1;
+    /* Already got enough bytes? */
+    if (h->inbuf_used >= want) {
+        return h->inbuf_used;
+    }
+
+    if (NULL == ms || 0 == *ms) {
+        if ((rc = set_rx_timeout(h, 0, 0), rc < 0) ||
+            (rc = read(h->fd, h->inbuf + h->inbuf_used, 
+                              want - h->inbuf_used), rc < 0)) {
+            return gbser_ERROR;
+        }
+        h->inbuf_used += rc;
+        /*printf("Got %d bytes\n", rc);*/
+    } else {
+        hp_time tv;
+        get_time(&tv);
+        double time_left = *ms;
+        
+        for (;;) {
+            fd_set rec;
+            struct timeval t;
+            
+            time_left = *ms - elapsed(&tv);
+            if (time_left <= 0 || h->inbuf_used >= want) {
+                break;
+            }
+
+            FD_ZERO(&rec);
+            FD_SET(h->fd, &rec);
+
+            t.tv_sec  = (time_t) time_left / 1000;
+            t.tv_usec = (suseconds_t) ((unsigned) time_left % 1000) * 1000;
+
+            if (select(h->fd + 1, &rec, NULL, NULL, &t) < 0) {
+                return gbser_ERROR;
+            }
+
+            time_left = *ms - elapsed(&tv);
+        
+            if (FD_ISSET(h->fd, &rec)) {
+                unsigned vmin = 0, vtime = 0;
+                if (time_left >= 100) {
+                    vmin  = want - h->inbuf_used;
+                    vtime = (unsigned) time_left / 100;
+                }
+                if ((rc = set_rx_timeout(h, vmin, vtime), rc < 0) ||
+                    (rc = read(h->fd, h->inbuf + h->inbuf_used, 
+                                      want - h->inbuf_used), rc < 0)) {
+                    return gbser_ERROR;
+                }
+                h->inbuf_used += rc;
+                /*printf("Got %d bytes\n", rc);*/
+            }
+        }
+        *ms = (time_left < 0) ? 0 : time_left;
+    }
+
+    return h->inbuf_used;
+}
+
+/* Discard any pending input on the serial port.
+ */                    
+int gbser_flush(void *handle) {
+	gbser_handle *h = gbser__get_handle(handle);
+	h->inbuf_used = 0;
+    if (tcflush(h->fd, TCIFLUSH)) {
+        return gbser_ERROR;
+    }
+
+    return gbser_OK;
+}
+
+/* Write |len| bytes from |buf| to the serial port.
+ */
+int gbser_write(void *handle, const void *buf, unsigned len) {
+	gbser_handle *h = gbser__get_handle(handle);
+    const char *bp = buf;
+    int rc;
+    while (len > 0) {
+        /*printf("write(%d, %p, %d)\n", h->fd, bp, len);*/
+        if (rc = write(h->fd, bp, len), rc < 0) {
+            printf("rc = %d, errno = %d (%s)\n", rc, errno, strerror(errno));
+            return gbser_ERROR;
+        }
+        len -= rc;
+        bp  += rc;
+    }
+    return gbser_OK;
+}
+
+/* Return true if a port name seems to refer to a serial port.
+ * On Windows this tests the filename (against the regex
+ * /^(\\\\\.\\\\)?com\d+:?$/i). On Posix it returns the value of
+ * isatty()
+ */
+
+int gbser_is_serial(const char *port_name) {
+	int fd;
+	int is_port = 0;
+
+    if (fd = open(port_name, O_RDWR | O_NOCTTY), fd == -1) {
+		gbser__db(1, "Failed to open port (%s) to check its type\n", strerror(errno));
+		return 0;
+    }
+
+	is_port = isatty(fd);
+
+	close(fd);
+
+	return is_port;
+}
+
+/* This isn't part of the above abstraction; it's just a helper for 
+ * the other serial modules in the tree.
+ *
+ * Windows does a weird thing with serial ports.  
+ * COM ports 1 - 9 are "COM1:" through "COM9:"
+ * The one after that is \\.\\com10 - this function tries to plaster over
+ * that.
+ * It returns a pointer to a staticly allocated buffer and is therefore not
+ * thread safe.   The buffer pointed to remains valid only until the next
+ * call to this function.
+ */
+
+const char *fix_win_serial_name_r(const char *comname, char *obuf, size_t len) {
+    strncpy(obuf, comname, len);
+    return obuf;
+}
+
+static char gb_com_buffer[100];
+
+const char *fix_win_serial_name(const char *comname) {
+	return fix_win_serial_name_r(comname, gb_com_buffer, sizeof(gb_com_buffer));
+}
+
+/* Read from the serial port until the specified |eol| character is
+ * found. Any character matching |discard| will be discarded. To
+ * read lines terminated by 0x0A0x0D discarding linefeeds use
+ * gbser_read_line(h, buf, len, 1000, 0x0D, 0x0A);
+ */
+int gbser_read_line(void *handle, void *buf, 
+                    unsigned len, unsigned ms,
+                    int eol, int discard) {
+    char *bp = buf;
+    unsigned pos = 0;
+    hp_time tv;
+    get_time(&tv);
+    bp[pos] = '\0';
+    for (;;) {
+        unsigned time_left = ms - elapsed(&tv);
+        int c;
+        if (time_left <= 0) {
+            return gbser_TIMEOUT;
+        }
+        c = gbser_readc_wait(handle, time_left);
+        if (c == gbser_ERROR) {
+            return c;
+        } else if (c == eol) {
+            return gbser_OK;
+        }
+        if (c != gbser_NOTHING && c != discard && pos < len - 1) {
+            bp[pos++] = c;
+            bp[pos]   = '\0';
+        }
+    }
 }

@@ -89,7 +89,7 @@ int32 GPS_Serial_On(const char *port, gpsdevh **dh)
 	DCB tio;
 	COMMTIMEOUTS timeout;
 	HANDLE comport;
-	char *xname = fix_win_serial_name(port);
+	const char *xname = fix_win_serial_name(port);
 	win_serial_data *wsd = xcalloc(sizeof (win_serial_data), 1);
 	*dh = (gpsdevh*) wsd;
 

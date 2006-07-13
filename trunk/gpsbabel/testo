@@ -1074,5 +1074,13 @@ compare ${TMPDIR}/waypoints.gpssim ${REFERENCE}
 ${PNAME} -i gpx -f ${REFERENCE}/track/tracks.gpx -o gpssim -F ${TMPDIR}/tracks.gpssim
 compare ${TMPDIR}/tracks.gpssim ${REFERENCE}/track
 
+#
+# WBT-200 tests
+#
+rm -f ${TMPDIR}/wbt-200.*
+${PNAME} -i wbt-bin -f ${REFERENCE}/wbt-200.bin -o gpx -F ${TMPDIR}/wbt-200.gpx
+# Remove the timestamp
+grep -v time <${TMPDIR}/wbt-200.gpx >${TMPDIR}/wbt-200.gpx2
+compare ${TMPDIR}/wbt-200.gpx2 ${REFERENCE}/wbt-200.gpx
 
 exit 0
