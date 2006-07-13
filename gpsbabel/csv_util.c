@@ -994,20 +994,20 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
 void
 xcsv_data_read(void)
 {
-    char buff[8192];
+    char *buff;
     char *s;
     waypoint *wpt_tmp;
     int linecount = 0;
     queue *elem, *tmp;
     field_map_t *fmp;
     ogue_t *ogp;
+    textfile_t *tin;
+    
+    tin = textfile_init(xcsv_file.xcsvfp);
 
-    do {
+    while ((buff = textfile_read(tin))) {
         linecount++;
-        memset(buff, '\0', sizeof(buff));
-        fgets(buff, sizeof(buff), xcsv_file.xcsvfp);
-
-        rtrim(buff);
+        buff = lrtrim(buff);
 
         /* skip over x many lines on the top for the prologue... */
         if ((xcsv_file.prologue_lines) && ((linecount - 1) <
@@ -1060,7 +1060,8 @@ xcsv_data_read(void)
             waypt_add(wpt_tmp);
         }
 
-    } while (!feof(xcsv_file.xcsvfp));
+    }
+    textfile_done(tin);
 }
 
 static void

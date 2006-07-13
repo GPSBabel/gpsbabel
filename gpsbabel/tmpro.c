@@ -45,7 +45,7 @@ static short_handle mkshort_handle;
 static void 
 rd_init(const char *fname)
 {
-    file_in = xfopen(fname, "r", MYNAME);
+    file_in = xfopen(fname, "rb", MYNAME);
 }
 
 static void 
@@ -69,17 +69,18 @@ wr_deinit(void)
 static void 
 data_read(void)
 {
-    char buff[1024];
+    char *buff;
     char *s;
     char *holder;
     waypoint *wpt_tmp;
     int i;
     int linecount = 0;
-
-    do {
+    textfile_t *tin;
+    
+    tin = textfile_init(file_in);
+    
+    while ((buff = textfile_read(tin))) {
         linecount++;
-	memset(&buff, '\0', sizeof(buff));
-	fgets(buff, sizeof(buff), file_in);
 
 	/* skip the line if it contains "sHyperLink" as it is a header (I hope :) */
 	if ((strlen(buff)) && (strstr(buff, "sHyperLink") == NULL)) {
@@ -170,7 +171,8 @@ data_read(void)
             /* empty line */
 	}
 
-    } while (!feof(file_in));
+    }
+    textfile_done(tin);
 }
 
 static void 

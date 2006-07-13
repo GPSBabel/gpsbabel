@@ -247,7 +247,7 @@ hsa_ndv_read(void)
 		}
 		if (!XML_Parse(psr, buf, len, feof(fd))) {
 			fatal(MYNAME ":Parse error at %d: %s\n", 
-				XML_GetCurrentLineNumber(psr),
+				(int) XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
 		}
 	}

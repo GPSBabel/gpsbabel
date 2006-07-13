@@ -1224,11 +1224,13 @@ garmin_rd_deinit(void)
 static void
 garmin_txt_read(void)
 {
-	char buff[1024];
+	char *buff;
+	textfile_t *tin;
 
 	current_line = 0;
+	tin = textfile_init(fin);
 
-	while ((fgets(buff, sizeof(buff), fin))) {
+	while ((buff = textfile_read(tin))) {
 		char *cin;
 		
 		current_line++;
@@ -1253,6 +1255,7 @@ garmin_txt_read(void)
 		/* flush pending data */
 		while (csv_lineparse(NULL, "\t", "", 0));
 	}
+	textfile_done(tin);
 }
 
 ff_vecs_t garmin_txt_vecs = {

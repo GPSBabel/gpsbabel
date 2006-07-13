@@ -99,7 +99,7 @@ arglist_t tiger_args[] = {
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "r", MYNAME);
+	file_in = xfopen(fname, "rb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 }
 
@@ -129,10 +129,13 @@ data_read(void)
 	double lat,lon;
 	char desc[100];
 	char icon[100];
-	char ibuf[1024];
+	char *ibuf;
 	waypoint *wpt_tmp;
+	textfile_t *tin;
 
-	while (fgets(ibuf, sizeof(ibuf), file_in)) {
+	tin = textfile_init(file_in);
+	
+	while ((ibuf = textfile_read(tin))) {
 		if( sscanf(ibuf, "%lf,%lf:%100[^:]:%100[^\n]", 
 				&lon, &lat, icon, desc)) {
 			wpt_tmp = waypt_new();
@@ -145,6 +148,7 @@ data_read(void)
 			waypt_add(wpt_tmp);
 		}
 	}
+	textfile_done(tin);
 }
 
 static void

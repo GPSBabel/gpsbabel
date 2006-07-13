@@ -25,6 +25,7 @@
 #define MYNAME "unicsv"
 
 static FILE *fin;
+static textfile_t *tin;
 
 /* This structure must contain only ints.  Firstval must be first.
  * This is block initialized.
@@ -55,11 +56,11 @@ arglist_t unicsv_args[] = {
 
 /* fread_buff: returns only left and right trimmed non-empty lines or NULL */
 static char *
-fread_buff(char *buff, const size_t buff_size, FILE *fin)
+fread_buff(textfile_t *tin)
 {
 	char *result;
 	
-	while ((result = fgets(buff, buff_size, fin)))
+	while ((result = textfile_read(tin)))
 	{
 		result = lrtrim(result);
 		if (*result != '\0') break;
@@ -139,13 +140,14 @@ unicsv_fondle_header(char *ibuf)
 static void
 unicsv_rd_init(const char *fname)
 {
-	char ibuf[1024];
+	char *c;
 	unicsv_altscale = 1.0;
 
-	fin = xfopen(fname, "r", MYNAME);
+	fin = xfopen(fname, "rb", MYNAME);
+	tin = textfile_init(fin);
 
-	if (NULL != fread_buff(ibuf, sizeof(ibuf), fin))
-		unicsv_fondle_header(ibuf);
+	if ((c = textfile_read(tin)))
+		unicsv_fondle_header(c);
 	else
 		unicsv_fieldsep = NULL;
 }
@@ -153,8 +155,8 @@ unicsv_rd_init(const char *fname)
 static void
 unicsv_rd_deinit(void)
 {
+	textfile_done(tin);
 	fclose(fin);
-	fin = NULL;
 }
 
 static void
@@ -214,12 +216,14 @@ unicsv_parse_one_line(char *ibuf)
 static void 
 unicsv_rd(void)
 {
-	char buff[1024];
+	char *buff;
 
 	if (unicsv_fieldsep == NULL) return;
 	
-	while (fread_buff(buff, sizeof(buff), fin)) {
-		unicsv_parse_one_line(buff);
+	while ((buff = textfile_read(tin))) {
+	    	buff = lrtrim(buff);
+		if (*buff)
+			unicsv_parse_one_line(buff);
 	}
 }
 

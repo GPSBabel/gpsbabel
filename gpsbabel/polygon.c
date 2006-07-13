@@ -195,17 +195,16 @@ polygon_process(void)
 	int fileline = 0;
 	int first = 1;
 	int last = 0;
+	char *line;
+	textfile_t *tin;
 
-	FILE *polyfile = xfopen( polyfileopt, "r", MYNAME );
+	tin = textfile_open_read(polyfileopt, MYNAME );
 	
         olat = olon = lat1 = lon1 = lat2 = lon2 = BADVAL;
-	while ( !feof(polyfile)) {
-	    char line[200];
+	while ((line = textfile_read(tin))) {
 	    char *pound = NULL;
 	    int argsfound = 0;
 	    
-	    fgets( line, sizeof(line), polyfile );
-	   
 	    fileline++;
 	    
 	    pound = strchr( line, '#' );
@@ -268,9 +267,7 @@ polygon_process(void)
 	        lon1 = lon2;
 	    }
 	}
-	    
-	fclose(polyfile);
-
+	textfile_done(tin);
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypoint *wp = (waypoint *) elem;

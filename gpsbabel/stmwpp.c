@@ -56,7 +56,7 @@ arglist_t stmwpp_args[] =
 static void
 stmwpp_rd_init(const char *fname)
 {
-	fin = xfopen(fname, "r", MYNAME);
+	fin = xfopen(fname, "rb", MYNAME);
 	track = NULL;
 	route = NULL;
 	wpt = NULL;
@@ -71,15 +71,19 @@ stmwpp_rd_deinit(void)
 static void
 stmwpp_data_read(void)
 {
-	char buff[1024];
+	char *buff;
+	textfile_t *tin;
+	
+	tin = textfile_init(fin);
 	
 	what = STM_NOTHING;
-	fgets(buff, sizeof(buff), fin);
+	buff = textfile_read(tin);
+	buff = (buff == NULL) ? "" : buff;
 	
 	if (strncmp(buff, "Datum,WGS 84,WGS 84,", 20) != 0)
 		fatal(MYNAME ": Invalid GPS datum or not \"WaypointPlus\"\" file!\n");
 	
-	while (fgets(buff, sizeof(buff), fin) != NULL)
+	while ((buff = textfile_read(tin)))
 	{
 		char *c;
 		int column = -1;
@@ -177,6 +181,7 @@ stmwpp_data_read(void)
 			wpt = NULL;
 		}
 	}
+	textfile_done(tin);
 }
 
 static void

@@ -97,20 +97,6 @@ nmn4_concat(char *arg0, ...)
 	return res;
 }
 
-static char *
-nmn4_read_line(char *buff, size_t buffsize, FILE *fin)
-{
-	char *res;
-	
-	while ((res = fgets(buff, buffsize, fin)))
-	{
-		res = lrtrim(res);
-		if (*res == '\0') continue;
-		return res;
-	}
-	return NULL;
-}
-
 static void
 nmn4_check_line(char *line)
 {
@@ -128,19 +114,24 @@ nmn4_check_line(char *line)
 static void
 nmn4_read_data(void)
 {
-	char buff[1024];
+	char *buff;
 	char *str, *c;
 	int column;
 
 	char *zip1, *zip2, *city, *street, *number;	
 	route_head *route;
 	waypoint *wpt;
+	textfile_t *tin;
 	
 	route = route_head_alloc();
 	route_add_head(route);
 	
-	while ((str = nmn4_read_line(buff, sizeof(buff), fin)))
+	tin = textfile_init(fin);
+	while ((buff = textfile_read(tin)))
 	{
+		str = buff = lrtrim(buff);
+		if (*buff == '\0') continue;
+		
 		nmn4_check_line(buff);
 
 		/* for a quiet compiler */
@@ -235,6 +226,7 @@ nmn4_read_data(void)
 		}
 		route_add_wpt(route, wpt);
 	}
+	textfile_done(tin);
 }
 
 static void 
@@ -299,7 +291,7 @@ nmn4_write_data(void)
 static void
 nmn4_rd_init(const char *fname)
 {
-	fin = xfopen(fname, "r", MYNAME);
+	fin = xfopen(fname, "rb", MYNAME);
 	fin_name = xstrdup(fname);
 }
 

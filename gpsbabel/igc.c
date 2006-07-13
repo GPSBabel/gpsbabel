@@ -26,11 +26,11 @@
 #include "defs.h"
 #include <errno.h>
 
-static FILE *file_in;
 static FILE *file_out;
 static char manufacturer[4];
 static const route_head *head;
 static char *timeadj = NULL;
+static textfile_t* tin;
 
 #define MYNAME "IGC"
 #define MAXRECLEN 79		// Includes null terminator and CR/LF
@@ -88,42 +88,37 @@ static unsigned char coords_match(double lat1, double lon1, double lat2, double 
  * @param  rec  Caller allocated storage for the record.  At least MAXRECLEN chars must be allocated.
  * @return the record type.  rec_none on EOF, rec_bad on fgets() or parse error.
  */
-static igc_rec_type_t get_record(char *rec)
+static igc_rec_type_t get_record(char **rec)
 {
     size_t len;
+    char *c;
 
-    if (fgets(rec, MAXRECLEN, file_in) == NULL) {
-	if (feof(file_in)) {
-	    return rec_none;
-	} else {
-	    warning(MYNAME " fgets(): %s\n", strerror(errno));
-	    return rec_bad;
-	}
-    }
-    len = strlen(rec);
-    if (len < 3 || rec[0] < 'A' || rec[0] > 'Z') {
-	warning(MYNAME " bad input record: '%s'\n", rec);
+    *rec = c = textfile_read(tin);
+    if (c == NULL) return rec_none;
+
+    len = strlen(c);
+    if (len < 3 || c[0] < 'A' || c[0] > 'Z') {
+	warning(MYNAME " bad input record: '%s'\n", c);
 	return rec_bad;
     }
-    rec[len - 2] = '\0';
-    return (igc_rec_type_t) rec[0];
+    return (igc_rec_type_t) c[0];
 }
 
 static void rd_init(const char *fname)
 {
-    char ibuf[MAXRECLEN];
+    char *ibuf;
 
-    file_in = xfopen(fname, "rb", MYNAME);
+    tin = textfile_open_read(fname, MYNAME);
 
     // File must begin with a manufacturer/ID record
-    if (get_record(ibuf) != rec_manuf_id || sscanf(ibuf, "A%3[A-Z]", manufacturer) != 1) {
+    if (get_record(&ibuf) != rec_manuf_id || sscanf(ibuf, "A%3[A-Z]", manufacturer) != 1) {
 	fatal(MYNAME ": %s is not an IGC file\n", fname);
     }
 }
 
 static void rd_deinit(void)
 {
-    fclose(file_in);
+    textfile_done(tin);
 }
 
 /**
@@ -240,7 +235,7 @@ static void igc_task_rec(const char *rec)
 
 static void data_read(void)
 {
-    char ibuf[MAXRECLEN];
+    char *ibuf;
     igc_rec_type_t rec_type;
     unsigned int hours, mins, secs;
     unsigned int lat_deg, lat_min, lat_frac;
@@ -266,7 +261,7 @@ static void data_read(void)
     strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
     while (1) {
-	rec_type = get_record(ibuf);
+	rec_type = get_record(&ibuf);
 	switch (rec_type) {
 	case rec_manuf_id:
 	    // Manufacturer/ID record already found in rd_init().

@@ -73,7 +73,7 @@ try_open_gpsbabel_inifile(const char *path)		/* can be empty or NULL */
 #endif
 	}
 	strcat(buff, GPSBABEL_INIFILE);
-	result = fopen(buff, "r");
+	result = fopen(buff, "rb");
 	xfree(buff);
 	
 	return result;
@@ -87,7 +87,7 @@ open_gpsbabel_inifile(void)
 	
 	envstr = getenv("GPSBABELINI");
 	if (envstr != NULL) {
-		res = fopen(envstr, "r");
+		res = fopen(envstr, "rb");
 		if (res == NULL) {
 			warning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
 			return NULL;
@@ -121,24 +121,15 @@ static void
 inifile_load_file(FILE *fin, inifile_t *inifile, const char *myname)
 {
 	char *buf;
-	size_t bufsize = START_BUFSIZE;
 	inifile_section_t *sec = NULL;
+	textfile_t *tin;
 
-	buf = xmalloc(bufsize);
+	tin = textfile_init(fin);
 	
-	while ((fgets(buf, bufsize, fin)))
+	while ((buf = textfile_read(tin)))
 	{
-		char *cin;
-	
-		while (strchr(buf, '\n') == NULL)
-		{
-			buf = xrealloc(buf, bufsize + DELTA_BUFSIZE);
-			cin = fgets(buf + bufsize - 1, DELTA_BUFSIZE + 1, fin);
-			bufsize+=DELTA_BUFSIZE;
-			if (cin == NULL) break;
-		}
+		char *cin = lrtrim(buf);
 		
-		cin = lrtrim(buf);
 		if (*cin == '\0') continue;			/* skip empty lines */
 		if ((*cin == '#') || (*cin == ';')) continue;	/* skip comments */
 		
@@ -192,7 +183,7 @@ inifile_load_file(FILE *fin, inifile_t *inifile, const char *myname)
 				entry->val = xstrdup("");
 		}
 	}
-	xfree(buf);
+	textfile_done(tin);
 }
 
 static char *
@@ -243,7 +234,7 @@ inifile_init(const char *filename, const char *myname)
 		fin = open_gpsbabel_inifile();
 		if (fin == NULL) return NULL;
 	}
-	else fin = xfopen(filename, "r", myname);
+	else fin = xfopen(filename, "rb", myname);
 	
 	result = xcalloc(1, sizeof(*result));
 	QUEUE_INIT(&result->secs);

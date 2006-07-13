@@ -310,7 +310,7 @@ ozi_route_pr()
 static void
 rd_init(const char *fname)
 {
-    file_in = xfopen(fname, "r", MYNAME);
+    file_in = xfopen(fname, "rb", MYNAME);
 
     mkshort_handle = mkshort_new_handle();
 }
@@ -577,16 +577,17 @@ ozi_parse_routeheader(int field, char *str, waypoint * wpt_tmp)
 static void
 data_read(void)
 {
-    char buff[1024];
+    char *buff;
     char *s;
     waypoint *wpt_tmp;
     int i;
     int linecount = 0;
+    textfile_t *tin;
+    
+    tin = textfile_init(file_in);
 
-    do {
+    while ((buff = textfile_read(tin))) {
         linecount++;
-        memset(buff, '\0', sizeof(buff));
-        fgets(buff, sizeof(buff), file_in);
 
         /* 
          * this is particularly nasty.  use the first line of the file
@@ -669,7 +670,8 @@ data_read(void)
             /* empty line */
         }
 
-    } while (!feof(file_in));
+    }
+    textfile_done(tin);
 }
 
 static void

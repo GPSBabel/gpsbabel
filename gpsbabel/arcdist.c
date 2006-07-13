@@ -59,17 +59,16 @@ arcdist_process(void)
 	extra_data *ed;
         double lat1, lon1, lat2, lon2;
 	int fileline = 0;
+	char *line;
+	textfile_t *tin;
 
-	FILE *arcfile = xfopen( arcfileopt, "r", MYNAME );
+	tin = textfile_open_read(arcfileopt, MYNAME );
 	
         lat1 = lon1 = lat2 = lon2 = BADVAL;
-	while ( !feof(arcfile)) {
-	    char line[200];
+	while ((line = textfile_read(tin))) {
 	    char *pound = NULL;
 	    int argsfound = 0;
 	    
-	    fgets( line, sizeof(line), arcfile );
-	   
 	    fileline++;
 	    
 	    pound = strchr( line, '#' );
@@ -124,8 +123,7 @@ arcdist_process(void)
 	    lon1 = lon2;
 	}
 	    
-	fclose(arcfile);
-
+	textfile_done(tin);
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypoint *wp = (waypoint *) elem;
