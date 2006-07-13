@@ -440,17 +440,17 @@ xcsv_parse_style_buff(const char *sbuff)
 static void
 xcsv_read_style(const char *fname)
 {
-    char sbuff[8192];
+    char *sbuff;
     FILE *fp;
+    textfile_t *tin;
 
     xcsv_file_init();
 
-    fp = xfopen(fname, "r", MYNAME);
+    fp = xfopen(fname, "rb", MYNAME);
+    tin = textfile_init(fp);
 
-    do {
-        memset(sbuff, '\0', sizeof(sbuff));
-        fgets(sbuff, sizeof(sbuff), fp);
-        rtrim(sbuff);
+    while ((sbuff = textfile_read(tin))) {
+        sbuff = lrtrim(sbuff);
 	xcsv_parse_style_line(sbuff);
     } while (!feof(fp));
 
@@ -461,7 +461,7 @@ xcsv_read_style(const char *fname)
         xcsv_file.ofield = &xcsv_file.ifield;
         xcsv_file.ofield_ct = xcsv_file.ifield_ct;
     }
-
+    textfile_done(tin);
     fclose(fp);
 }
 

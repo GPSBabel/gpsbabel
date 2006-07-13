@@ -54,7 +54,7 @@ arglist_t netstumbler_args[] = {
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "r", MYNAME);
+	file_in = xfopen(fname, "rb", MYNAME);
 	macstumbler = 0;
 }
 
@@ -67,7 +67,7 @@ rd_deinit(void)
 static void
 data_read(void)
 {
-	char ibuf[512];
+	char *ibuf;
 	char ssid[2 + 32 + 2 + 1];			/* "( " + SSID + " )" + null */
 	char mac[2 + 17 + 2 + 1];			/* "( " + MAC + " )" + null */
 	char desc[sizeof ssid - 1 + 15 + 1];	/* room for channel/speed */
@@ -78,13 +78,16 @@ data_read(void)
 	long flags = 0;
 	int speed = 0, channel = 0;
 	struct tm tm;
-
+	textfile_t *tin;
+	
+	tin = textfile_init(file_in);
 	memset(&tm, 0, sizeof(tm));
 
-	for(; fgets(ibuf, sizeof(ibuf), file_in);) {
+	while ((ibuf = textfile_read(tin))) {
 		char *field;
 		int field_num, len, i, stealth = 0;
 		
+		ibuf = lrtrim(ibuf);
         /* A sharp in column zero might be a comment.  Or it might be
          * something useful, like the date.
 	 */
@@ -221,7 +224,7 @@ data_read(void)
 
 		waypt_add(wpt_tmp);
 	}
-
+	textfile_done(tin);
 	fix_netstumbler_dupes();
 }
 

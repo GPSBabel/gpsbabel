@@ -140,7 +140,7 @@ static void
 cst_rd_init(const char *fname)
 {
 	fin_name = xstrdup(fname);
-	fin = xfopen(fname, "r", MYNAME);
+	fin = xfopen(fname, "rb", MYNAME);
 	
 	temp_route = NULL;
 }
@@ -157,7 +157,7 @@ cst_rd_deinit(void)
 static void
 cst_data_read(void)
 {
-	char buff[1024];
+	char *buff;
 	int line = 0;
 	int data_lines = -1;
 	int line_of_count = -1;
@@ -167,9 +167,11 @@ cst_data_read(void)
 	int cst_points = -1;
 	route_head *track = NULL;
 	waypoint *wpt = NULL;
+	textfile_t *tin;
 	
+	tin = textfile_init(fin);
 	
-	while (NULL != fgets(buff, sizeof(buff), fin))
+	while ((buff = textfile_read(tin)))
 	{
 		char *cin = buff;
 		
@@ -214,14 +216,15 @@ cst_data_read(void)
 							wpt->url = cst_make_url(cin);
 					}
 					
-					while (NULL != fgets(buff, sizeof(buff), fin))
+					while ((buff = textfile_read(tin)))
 					{
 						line++;
 						cin = lrtrim(buff);
 						
 						if (strcmp(cin + 2, "note") == 0)
 						{
-							fgets(buff, sizeof(buff), fin);
+							buff = textfile_read(tin);
+							if (buff == NULL) buff = "";
 							line++;
 							cin = lrtrim(buff);
 							if (*cin != '\0')
@@ -315,6 +318,8 @@ cst_data_read(void)
 	
 	if ((cst_points >= 0) && (data_lines != cst_points))
 		warning(MYNAME ": Loaded %d point(s), but line %d says %d!\n", data_lines, line_of_count, cst_points);
+	
+	textfile_done(tin);
 }
 
 #if 0

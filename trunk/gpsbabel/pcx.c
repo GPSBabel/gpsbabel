@@ -48,7 +48,7 @@ arglist_t pcx_args[] = {
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "r", MYNAME);
+	file_in = xfopen(fname, "rb", MYNAME);
 }
 
 static void
@@ -85,16 +85,18 @@ data_read(void)
 	char time[9];
 	char month[4];
 	waypoint *wpt_tmp;
-	char buff[122];
+	char *buff;
 	struct tm tm;
 	route_head *track = NULL;
 	route_head *route = NULL;
 	int n; 
 	char lathemi, lonhemi;
+	textfile_t *tin;
 
 	read_as_degrees  = 0;
+	tin = textfile_init(file_in);
 
-	for(;fgets(buff, sizeof(buff), file_in);) 
+	while ((buff = textfile_read(tin)))
 	{
 		char *ibuf = lrtrim(buff);
 		char *cp;
@@ -215,6 +217,7 @@ data_read(void)
 			;
 		}
 	}
+	textfile_done(tin);
 }
 
 static void

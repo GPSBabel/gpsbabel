@@ -200,7 +200,7 @@ nmea_rd_init(const char *fname)
 {
 	curr_waypt = NULL;
 	last_waypt = NULL;
-	file_in = xfopen(fname, "r", MYNAME);
+	file_in = xfopen(fname, "rb", MYNAME);
 }
 
 static  void
@@ -708,9 +708,10 @@ nmea_parse_one_line(char *ibuf)
 static void
 nmea_read(void)
 {
-	char ibuf[1024];
+	char *ibuf;
 	char *ck;
 	double lt = -1;
+	textfile_t *tin;
 
 	posn_type = gp_unknown;
 	trk_head = NULL;
@@ -730,8 +731,9 @@ nmea_read(void)
 	}
 
 	curr_waypt = NULL; 
+	tin = textfile_init(file_in);
 
-	while (fgets(ibuf, sizeof(ibuf), file_in)) {
+	while ((ibuf = textfile_read(tin))) {
 		nmea_parse_one_line(ibuf);
 		if (lt < last_read_time && curr_waypt && trk_head) {
 			if (curr_waypt != last_waypt) {
@@ -744,6 +746,8 @@ nmea_read(void)
 
 	/* try to complete date-less trackpoints */
 	nmea_fix_timestamps(trk_head);
+	
+	textfile_done(tin);
 }
 
 

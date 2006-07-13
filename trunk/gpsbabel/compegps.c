@@ -318,7 +318,7 @@ static void
 compegps_rd_init(const char *fname)
 {
 	fin_name = (char *)fname;
-	fin = xfopen(fname, "r", MYNAME);
+	fin = xfopen(fname, "rb", MYNAME);
 }
 
 static void
@@ -330,13 +330,15 @@ compegps_rd_deinit(void)
 static void
 compegps_data_read(void)
 {
-	char buff[1024];
+	textfile_t *tin;
+	char *buff;
 	int line = 0;
 	waypoint *wpt = NULL;
 	route_head *route = NULL;
 	route_head *track = NULL;
 	
-	while (NULL != fgets(buff, sizeof(buff), fin))
+	tin = textfile_init(fin);
+	while ((buff = textfile_read(tin)))
 	{
 		char *cin = buff;
 		char *ctail, *cx;
@@ -405,7 +407,8 @@ compegps_data_read(void)
 					parse_track_info(ctail, track);
 				break;
 		}
-	}	  
+	}
+	textfile_done(tin);
 }
 
 /* ----------------------------------------------------------- */
