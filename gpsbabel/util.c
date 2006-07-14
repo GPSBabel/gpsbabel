@@ -1240,7 +1240,7 @@ strip_html(const utf_string *in)
 			
 		      tag[0] = 0;
 		}
-		*instr++;
+		instr++;
 	}
 	*out++ = 0;
 	return (outstring);

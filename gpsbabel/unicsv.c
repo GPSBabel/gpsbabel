@@ -54,20 +54,6 @@ arglist_t unicsv_args[] = {
 
 /* helpers */
 
-/* fread_buff: returns only left and right trimmed non-empty lines or NULL */
-static char *
-fread_buff(textfile_t *tin)
-{
-	char *result;
-	
-	while ((result = textfile_read(tin)))
-	{
-		result = lrtrim(result);
-		if (*result != '\0') break;
-	}
-	return result;
-}
-
 #define UNICSV_IS(f) (0 == strcmp(s, f))
 #define UNICSV_CONTAINS(f) (0 != strstr(s, f))
 

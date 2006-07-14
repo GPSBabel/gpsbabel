@@ -125,15 +125,25 @@ static void data_read(void)
   		wpt_tmp->creation_time = 0;
         if (pWptHxTmp->date.year)
         {
+#if 0
+	/* Unless there's some endian swapping that I don't see,
+	 * this can't be right.  Then again, the definition of the
+	 * the structure itself has a pretty serious disregard for
+	 * host word size issues... - rjl
+	 */
             ptm = gmtime((time_t*)&pWptHxTmp->time);
-		    tm.tm_hour = ptm->tm_hour; 
-            tm.tm_min = ptm->tm_min;
-		    tm.tm_sec = ptm->tm_sec;
+#else
+		time_t wt = le_read32(&pWptHxTmp->time);
+		ptm = gmtime(&wt);
+#endif
+		tm.tm_hour = ptm->tm_hour; 
+		tm.tm_min = ptm->tm_min;
+		tm.tm_sec = ptm->tm_sec;
 
-            tm.tm_mday = pWptHxTmp->date.day;
-		    tm.tm_mon = pWptHxTmp->date.month - 1;
-		    tm.tm_year = pWptHxTmp->date.year - 1900;
-            wpt_tmp->creation_time = mktime(&tm); 
+		tm.tm_mday = pWptHxTmp->date.day;
+		tm.tm_mon = pWptHxTmp->date.month - 1;
+		tm.tm_year = pWptHxTmp->date.year - 1900;
+		wpt_tmp->creation_time = mktime(&tm); 
         }
 
         lon = le_read32(&pWptHxTmp->pt.iLongitude) / 36000.0; 
