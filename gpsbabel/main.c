@@ -52,7 +52,7 @@ usage(const char *pname, int shorter )
 "    (without the quotes) are all valid file type specifications.\n"
 "\n"
 "Options:\n"
-"    -p               Prereferences file (gpsbabel.ini)\n"
+"    -p               Preferences file (gpsbabel.ini)\n"
 "    -s               Synthesize shortnames\n"
 "    -r               Process route information\n"
 "    -t               Process track information\n"
