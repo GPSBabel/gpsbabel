@@ -9,120 +9,120 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <trk>
 <trkseg>
 <trkpt lat="54.786918600" lon="-2.344296200">
-  <speed>0.556136</speed>
+  <speed>0.000000</speed>
   <name>WP0001</name>
 </trkpt>
 <trkpt lat="54.786917800" lon="-2.344315400">
   <course>94.133018</course>
-  <speed>0.247108</speed>
+  <speed>0.000000</speed>
   <name>WP0002</name>
 </trkpt>
 <trkpt lat="54.786918500" lon="-2.344317400">
   <course>58.742805</course>
-  <speed>0.026882</speed>
+  <speed>0.000000</speed>
   <name>WP0003</name>
 </trkpt>
 <trkpt lat="54.786921300" lon="-2.344313000">
-  <speed>0.085008</speed>
+  <speed>0.000000</speed>
   <name>WP0004</name>
 </trkpt>
 <trkpt lat="54.786923900" lon="-2.344310300">
-  <speed>0.065847</speed>
+  <speed>0.000000</speed>
   <name>WP0005</name>
 </trkpt>
 <trkpt lat="54.786926200" lon="-2.344311600">
   <course>18.051563</course>
-  <speed>0.050291</speed>
+  <speed>0.000000</speed>
   <name>WP0006</name>
 </trkpt>
 <trkpt lat="54.786925900" lon="-2.344315900">
   <course>96.898911</course>
-  <speed>0.053764</speed>
+  <speed>0.000000</speed>
   <name>WP0007</name>
 </trkpt>
 <trkpt lat="54.786924000" lon="-2.344320400">
   <course>126.213005</course>
-  <speed>0.071123</speed>
+  <speed>0.000000</speed>
   <name>WP0008</name>
 </trkpt>
 <trkpt lat="54.786922100" lon="-2.344322900">
   <course>142.812088</course>
-  <speed>0.050291</speed>
+  <speed>0.000000</speed>
   <name>WP0009</name>
 </trkpt>
 <trkpt lat="54.786919800" lon="-2.344325500">
   <course>146.902481</course>
-  <speed>0.060110</speed>
+  <speed>0.000000</speed>
   <name>WP0010</name>
 </trkpt>
 <trkpt lat="54.786917100" lon="-2.344328300">
   <course>149.121628</course>
-  <speed>0.068536</speed>
+  <speed>0.000000</speed>
   <name>WP0011</name>
 </trkpt>
 <trkpt lat="54.786913900" lon="-2.344332500">
   <course>142.881119</course>
-  <speed>0.087107</speed>
+  <speed>0.000000</speed>
   <name>WP0012</name>
 </trkpt>
 <trkpt lat="54.786910500" lon="-2.344337100">
   <course>142.041077</course>
-  <speed>0.095042</speed>
+  <speed>0.000000</speed>
   <name>WP0013</name>
 </trkpt>
 <trkpt lat="54.786907000" lon="-2.344341500">
   <course>144.061920</course>
-  <speed>0.095042</speed>
+  <speed>0.000000</speed>
   <name>WP0014</name>
 </trkpt>
 <trkpt lat="54.786904000" lon="-2.344345500">
   <course>142.445999</course>
-  <speed>0.082855</speed>
+  <speed>0.000000</speed>
   <name>WP0015</name>
 </trkpt>
 <trkpt lat="54.786901500" lon="-2.344348100">
   <course>149.049561</course>
-  <speed>0.063043</speed>
+  <speed>0.000000</speed>
   <name>WP0016</name>
 </trkpt>
 <trkpt lat="54.786899100" lon="-2.344349500">
   <course>161.409058</course>
-  <speed>0.057025</speed>
+  <speed>0.000000</speed>
   <name>WP0017</name>
 </trkpt>
 <trkpt lat="54.786896800" lon="-2.344349800">
   <course>175.698807</course>
-  <speed>0.050291</speed>
+  <speed>0.000000</speed>
   <name>WP0018</name>
 </trkpt>
 <trkpt lat="54.786894700" lon="-2.344350500">
   <course>169.120071</course>
-  <speed>0.050291</speed>
+  <speed>0.000000</speed>
   <name>WP0019</name>
 </trkpt>
 <trkpt lat="54.786893000" lon="-2.344352300">
   <course>148.594345</course>
-  <speed>0.046561</speed>
+  <speed>0.000000</speed>
   <name>WP0020</name>
 </trkpt>
 <trkpt lat="54.786891400" lon="-2.344354300">
   <course>144.216919</course>
-  <speed>0.042504</speed>
+  <speed>0.000000</speed>
   <name>WP0021</name>
 </trkpt>
 <trkpt lat="54.786889700" lon="-2.344355900">
   <course>151.511292</course>
-  <speed>0.046561</speed>
+  <speed>0.000000</speed>
   <name>WP0022</name>
 </trkpt>
 <trkpt lat="54.786888400" lon="-2.344356700">
   <course>160.463150</course>
-  <speed>0.026882</speed>
+  <speed>0.000000</speed>
   <name>WP0023</name>
 </trkpt>
 <trkpt lat="54.786887400" lon="-2.344356700">
   <course>180.000000</course>
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0024</name>
 </trkpt>
 <trkpt lat="54.786886600" lon="-2.344357000">
@@ -149,496 +149,496 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>WP0029</name>
 </trkpt>
 <trkpt lat="54.786877300" lon="-2.344355400">
-  <speed>0.167877</speed>
+  <speed>0.000000</speed>
   <name>WP0030</name>
 </trkpt>
 <trkpt lat="54.786875900" lon="-2.344370000">
   <course>99.441742</course>
-  <speed>0.190083</speed>
+  <speed>0.000000</speed>
   <name>WP0031</name>
 </trkpt>
 <trkpt lat="54.786883500" lon="-2.344370000">
   <course>0.000000</course>
-  <speed>0.170016</speed>
+  <speed>0.000000</speed>
   <name>WP0032</name>
 </trkpt>
 <trkpt lat="54.786881400" lon="-2.344368600">
-  <speed>0.053764</speed>
+  <speed>0.000000</speed>
   <name>WP0033</name>
 </trkpt>
 <trkpt lat="54.786878700" lon="-2.344367600">
-  <speed>0.063043</speed>
+  <speed>0.000000</speed>
   <name>WP0034</name>
 </trkpt>
 <trkpt lat="54.786876400" lon="-2.344365300">
-  <speed>0.057025</speed>
+  <speed>0.000000</speed>
   <name>WP0035</name>
 </trkpt>
 <trkpt lat="54.786877400" lon="-2.344361000">
-  <speed>0.057025</speed>
+  <speed>0.000000</speed>
   <name>WP0036</name>
 </trkpt>
 <trkpt lat="54.786939600" lon="-2.344332500">
-  <speed>1.432199</speed>
+  <speed>1.275627</speed>
   <name>WP0037</name>
 </trkpt>
 <trkpt lat="54.787010100" lon="-2.344387100">
   <course>24.064192</course>
-  <speed>1.432560</speed>
+  <speed>1.063023</speed>
   <name>WP0038</name>
 </trkpt>
 <trkpt lat="54.787079800" lon="-2.344423000">
   <course>16.541142</course>
-  <speed>1.618836</speed>
+  <speed>1.275627</speed>
   <name>WP0039</name>
 </trkpt>
 <trkpt lat="54.787159200" lon="-2.344461600">
   <course>15.659211</course>
-  <speed>1.835854</speed>
+  <speed>1.275627</speed>
   <name>WP0040</name>
 </trkpt>
 <trkpt lat="54.787268800" lon="-2.344447800">
-  <speed>2.446469</speed>
+  <speed>2.551255</speed>
   <name>WP0041</name>
 </trkpt>
 <trkpt lat="54.787316800" lon="-2.344428600">
-  <speed>1.096733</speed>
+  <speed>1.275627</speed>
   <name>WP0042</name>
 </trkpt>
 <trkpt lat="54.787358600" lon="-2.344494600">
   <course>42.315998</course>
-  <speed>1.258575</speed>
+  <speed>1.275627</speed>
   <name>WP0043</name>
 </trkpt>
 <trkpt lat="54.787398000" lon="-2.344587300">
   <course>53.605648</course>
-  <speed>1.478501</speed>
+  <speed>1.275627</speed>
   <name>WP0044</name>
 </trkpt>
 <trkpt lat="54.787446000" lon="-2.344635900">
   <course>30.277189</course>
-  <speed>1.237587</speed>
+  <speed>1.275627</speed>
   <name>WP0045</name>
 </trkpt>
 <trkpt lat="54.787489200" lon="-2.344701500">
   <course>41.205185</course>
-  <speed>1.278231</speed>
+  <speed>1.275627</speed>
   <name>WP0046</name>
 </trkpt>
 <trkpt lat="54.787536100" lon="-2.344777300">
   <course>42.981739</course>
-  <speed>1.427271</speed>
+  <speed>1.275627</speed>
   <name>WP0047</name>
 </trkpt>
 <trkpt lat="54.787576800" lon="-2.344848600">
   <course>45.288700</course>
-  <speed>1.287806</speed>
+  <speed>1.275627</speed>
   <name>WP0048</name>
 </trkpt>
 <trkpt lat="54.787619000" lon="-2.344905600">
   <course>37.912586</course>
-  <speed>1.190717</speed>
+  <speed>1.275627</speed>
   <name>WP0049</name>
 </trkpt>
 <trkpt lat="54.787654600" lon="-2.344976100">
   <course>48.789742</course>
-  <speed>1.202943</speed>
+  <speed>1.275627</speed>
   <name>WP0050</name>
 </trkpt>
 <trkpt lat="54.787706000" lon="-2.345057400">
   <course>42.365654</course>
-  <speed>1.548800</speed>
+  <speed>1.275627</speed>
   <name>WP0051</name>
 </trkpt>
 <trkpt lat="54.787704600" lon="-2.345093500">
   <course>93.847755</course>
-  <speed>0.464052</speed>
+  <speed>0.000000</speed>
   <name>WP0052</name>
 </trkpt>
 <trkpt lat="54.787650000" lon="-2.345038300">
-  <speed>1.407002</speed>
+  <speed>1.275627</speed>
   <name>WP0053</name>
 </trkpt>
 <trkpt lat="54.787599300" lon="-2.344979500">
-  <speed>1.357865</speed>
+  <speed>1.275627</speed>
   <name>WP0054</name>
 </trkpt>
 <trkpt lat="54.787556600" lon="-2.344911400">
-  <speed>1.291588</speed>
+  <speed>1.275627</speed>
   <name>WP0055</name>
 </trkpt>
 <trkpt lat="54.787516700" lon="-2.344837400">
-  <speed>1.300648</speed>
+  <speed>1.275627</speed>
   <name>WP0056</name>
 </trkpt>
 <trkpt lat="54.787474300" lon="-2.344746700">
-  <speed>1.499009</speed>
+  <speed>1.275627</speed>
   <name>WP0057</name>
 </trkpt>
 <trkpt lat="54.787424700" lon="-2.344667700">
-  <speed>1.499370</speed>
+  <speed>1.275627</speed>
   <name>WP0058</name>
 </trkpt>
 <trkpt lat="54.787376900" lon="-2.344594500">
-  <speed>1.419783</speed>
+  <speed>1.275627</speed>
   <name>WP0059</name>
 </trkpt>
 <trkpt lat="54.787337800" lon="-2.344539200">
-  <speed>1.123262</speed>
+  <speed>1.275627</speed>
   <name>WP0060</name>
 </trkpt>
 <trkpt lat="54.787292000" lon="-2.344480900">
-  <speed>1.264875</speed>
+  <speed>1.275627</speed>
   <name>WP0061</name>
 </trkpt>
 <trkpt lat="54.787233600" lon="-2.344424200">
-  <speed>1.489943</speed>
+  <speed>1.275627</speed>
   <name>WP0062</name>
 </trkpt>
 <trkpt lat="54.787188100" lon="-2.344418700">
-  <speed>1.015479</speed>
+  <speed>1.275627</speed>
   <name>WP0063</name>
 </trkpt>
 <trkpt lat="54.787137900" lon="-2.344400400">
-  <speed>1.142083</speed>
+  <speed>1.275627</speed>
   <name>WP0064</name>
 </trkpt>
 <trkpt lat="54.787093100" lon="-2.344371800">
-  <speed>1.062938</speed>
+  <speed>1.275627</speed>
   <name>WP0065</name>
 </trkpt>
 <trkpt lat="54.787020700" lon="-2.344353100">
-  <speed>1.629736</speed>
+  <speed>1.275627</speed>
   <name>WP0066</name>
 </trkpt>
 <trkpt lat="54.786968300" lon="-2.344298000">
-  <speed>1.364369</speed>
+  <speed>1.275627</speed>
   <name>WP0067</name>
 </trkpt>
 <trkpt lat="54.786953700" lon="-2.344270600">
-  <speed>0.478995</speed>
+  <speed>0.000000</speed>
   <name>WP0068</name>
 </trkpt>
 <trkpt lat="54.786928100" lon="-2.344276200">
   <course>172.810944</course>
-  <speed>0.574354</speed>
+  <speed>0.000000</speed>
   <name>WP0069</name>
 </trkpt>
 <trkpt lat="54.786947500" lon="-2.344239500">
-  <speed>0.638974</speed>
+  <speed>1.275627</speed>
   <name>WP0070</name>
 </trkpt>
 <trkpt lat="54.786874000" lon="-2.344211000">
-  <speed>1.676724</speed>
+  <speed>1.275627</speed>
   <name>WP0071</name>
 </trkpt>
 <trkpt lat="54.786889500" lon="-2.344175300">
-  <speed>0.573724</speed>
+  <speed>0.000000</speed>
   <name>WP0072</name>
 </trkpt>
 <trkpt lat="54.786905700" lon="-2.344154600">
-  <speed>0.448210</speed>
+  <speed>0.000000</speed>
   <name>WP0073</name>
 </trkpt>
 <trkpt lat="54.786887300" lon="-2.344152700">
-  <speed>0.410333</speed>
+  <speed>0.000000</speed>
   <name>WP0074</name>
 </trkpt>
 <trkpt lat="54.786967100" lon="-2.344200300">
   <course>18.980536</course>
-  <speed>1.878750</speed>
+  <speed>1.275627</speed>
   <name>WP0075</name>
 </trkpt>
 <trkpt lat="54.786950400" lon="-2.344192500">
-  <speed>0.384889</speed>
+  <speed>0.000000</speed>
   <name>WP0076</name>
 </trkpt>
 <trkpt lat="54.786550600" lon="-2.344644800">
   <course>146.881775</course>
-  <speed>10.627611</speed>
+  <speed>10.205019</speed>
   <name>WP0077</name>
 </trkpt>
 <trkpt lat="54.786423800" lon="-2.344905900">
   <course>130.104218</course>
-  <speed>4.382399</speed>
+  <speed>3.826882</speed>
   <name>WP0078</name>
 </trkpt>
 <trkpt lat="54.786339400" lon="-2.344960500">
   <course>159.542908</course>
-  <speed>2.005446</speed>
+  <speed>2.551255</speed>
   <name>WP0079</name>
 </trkpt>
 <trkpt lat="54.786129600" lon="-2.345095800">
   <course>159.601395</course>
-  <speed>4.983410</speed>
+  <speed>5.102509</speed>
   <name>WP0080</name>
 </trkpt>
 <trkpt lat="54.786113000" lon="-2.345044900">
-  <speed>0.750528</speed>
+  <speed>1.275627</speed>
   <name>WP0081</name>
 </trkpt>
 <trkpt lat="54.786210000" lon="-2.344944400">
-  <speed>2.515643</speed>
+  <speed>2.551255</speed>
   <name>WP0082</name>
 </trkpt>
 <trkpt lat="54.786279400" lon="-2.344882300">
-  <speed>1.738717</speed>
+  <speed>1.275627</speed>
   <name>WP0083</name>
 </trkpt>
 <trkpt lat="54.786328600" lon="-2.344835700">
-  <speed>1.248053</speed>
+  <speed>1.275627</speed>
   <name>WP0084</name>
 </trkpt>
 <trkpt lat="54.786377000" lon="-2.344791200">
-  <speed>1.219648</speed>
+  <speed>1.275627</speed>
   <name>WP0085</name>
 </trkpt>
 <trkpt lat="54.786418000" lon="-2.344751600">
-  <speed>1.044767</speed>
+  <speed>1.275627</speed>
   <name>WP0086</name>
 </trkpt>
 <trkpt lat="54.786450500" lon="-2.344721800">
-  <speed>0.818463</speed>
+  <speed>1.275627</speed>
   <name>WP0087</name>
 </trkpt>
 <trkpt lat="54.786480100" lon="-2.344698000">
-  <speed>0.726058</speed>
+  <speed>1.275627</speed>
   <name>WP0088</name>
 </trkpt>
 <trkpt lat="54.786506500" lon="-2.344674100">
-  <speed>0.552369</speed>
+  <speed>1.063023</speed>
   <name>WP0089</name>
 </trkpt>
 <trkpt lat="54.786529400" lon="-2.344655300">
-  <speed>0.563878</speed>
+  <speed>0.000000</speed>
   <name>WP0090</name>
 </trkpt>
 <trkpt lat="54.786550300" lon="-2.344636900">
-  <speed>0.521951</speed>
+  <speed>0.000000</speed>
   <name>WP0091</name>
 </trkpt>
 <trkpt lat="54.786568700" lon="-2.344621400">
-  <speed>0.455804</speed>
+  <speed>0.000000</speed>
   <name>WP0092</name>
 </trkpt>
 <trkpt lat="54.786586200" lon="-2.344606000">
-  <speed>0.436778</speed>
+  <speed>0.000000</speed>
   <name>WP0093</name>
 </trkpt>
 <trkpt lat="54.786601800" lon="-2.344590800">
-  <speed>0.398269</speed>
+  <speed>0.000000</speed>
   <name>WP0094</name>
 </trkpt>
 <trkpt lat="54.786616000" lon="-2.344576900">
-  <speed>0.363154</speed>
+  <speed>0.000000</speed>
   <name>WP0095</name>
 </trkpt>
 <trkpt lat="54.786630100" lon="-2.344563400">
-  <speed>0.358144</speed>
+  <speed>0.000000</speed>
   <name>WP0096</name>
 </trkpt>
 <trkpt lat="54.786643500" lon="-2.344550500">
-  <speed>0.341092</speed>
+  <speed>0.000000</speed>
   <name>WP0097</name>
 </trkpt>
 <trkpt lat="54.786656400" lon="-2.344538400">
-  <speed>0.326479</speed>
+  <speed>0.000000</speed>
   <name>WP0098</name>
 </trkpt>
 <trkpt lat="54.786712800" lon="-2.344309700">
-  <speed>3.193230</speed>
+  <speed>3.826882</speed>
   <name>WP0099</name>
 </trkpt>
 <trkpt lat="54.786421700" lon="-2.344238300">
-  <speed>6.545493</speed>
+  <speed>6.378137</speed>
   <name>WP0100</name>
 </trkpt>
 <trkpt lat="54.786106300" lon="-2.344361100">
   <course>167.346375</course>
-  <speed>7.196805</speed>
+  <speed>7.653764</speed>
   <name>WP0101</name>
 </trkpt>
 <trkpt lat="54.785876000" lon="-2.344429400">
   <course>170.295609</course>
-  <speed>5.201792</speed>
+  <speed>5.102509</speed>
   <name>WP0102</name>
 </trkpt>
 <trkpt lat="54.785637300" lon="-2.344343800">
-  <speed>5.426836</speed>
+  <speed>5.102509</speed>
   <name>WP0103</name>
 </trkpt>
 <trkpt lat="54.785565000" lon="-2.344340400">
-  <speed>1.610220</speed>
+  <speed>1.275627</speed>
   <name>WP0104</name>
 </trkpt>
 <trkpt lat="54.785501100" lon="-2.344222400">
-  <speed>2.078176</speed>
+  <speed>2.551255</speed>
   <name>WP0105</name>
 </trkpt>
 <trkpt lat="54.785521000" lon="-2.344218800">
-  <speed>0.445379</speed>
+  <speed>0.000000</speed>
   <name>WP0106</name>
 </trkpt>
 <trkpt lat="54.785462300" lon="-2.344312400">
   <course>137.402069</course>
-  <speed>1.775321</speed>
+  <speed>1.275627</speed>
   <name>WP0107</name>
 </trkpt>
 <trkpt lat="54.785276400" lon="-2.344252900">
-  <speed>4.208789</speed>
+  <speed>3.826882</speed>
   <name>WP0108</name>
 </trkpt>
 <trkpt lat="54.785179600" lon="-2.344116300">
-  <speed>2.778599</speed>
+  <speed>2.551255</speed>
   <name>WP0109</name>
 </trkpt>
 <trkpt lat="54.785117200" lon="-2.344006700">
-  <speed>1.977414</speed>
+  <speed>2.551255</speed>
   <name>WP0110</name>
 </trkpt>
 <trkpt lat="54.785218000" lon="-2.344177300">
   <course>44.302502</course>
-  <speed>2.613213</speed>
+  <speed>2.126046</speed>
   <name>WP0111</name>
 </trkpt>
 <trkpt lat="54.785293900" lon="-2.344022300">
-  <speed>2.175488</speed>
+  <speed>2.126046</speed>
   <name>WP0112</name>
 </trkpt>
 <trkpt lat="54.785521400" lon="-2.344255100">
   <course>30.543665</course>
-  <speed>5.881074</speed>
+  <speed>6.378137</speed>
   <name>WP0113</name>
 </trkpt>
 <trkpt lat="54.785671200" lon="-2.344188200">
-  <speed>3.443919</speed>
+  <speed>3.826882</speed>
   <name>WP0114</name>
 </trkpt>
 <trkpt lat="54.785927500" lon="-2.344016000">
-  <speed>6.119472</speed>
+  <speed>6.378137</speed>
   <name>WP0115</name>
 </trkpt>
 <trkpt lat="54.786170000" lon="-2.344095900">
   <course>10.757442</course>
-  <speed>5.495544</speed>
+  <speed>5.102509</speed>
   <name>WP0116</name>
 </trkpt>
 <trkpt lat="54.786300400" lon="-2.344209100">
   <course>26.591137</course>
-  <speed>3.246643</speed>
+  <speed>3.826882</speed>
   <name>WP0117</name>
 </trkpt>
 <trkpt lat="54.786436200" lon="-2.344380400">
   <course>36.030758</course>
-  <speed>3.738654</speed>
+  <speed>3.826882</speed>
   <name>WP0118</name>
 </trkpt>
 <trkpt lat="54.786480200" lon="-2.344508600">
   <course>59.238380</course>
-  <speed>1.915319</speed>
+  <speed>2.551255</speed>
   <name>WP0119</name>
 </trkpt>
 <trkpt lat="54.786509900" lon="-2.344486200">
-  <speed>0.720814</speed>
+  <speed>1.275627</speed>
   <name>WP0120</name>
 </trkpt>
 <trkpt lat="54.786535000" lon="-2.344489800">
   <course>4.727779</course>
-  <speed>0.560343</speed>
+  <speed>0.000000</speed>
   <name>WP0121</name>
 </trkpt>
 <trkpt lat="54.786657100" lon="-2.344486000">
-  <speed>2.718789</speed>
+  <speed>2.551255</speed>
   <name>WP0122</name>
 </trkpt>
 <trkpt lat="54.786667100" lon="-2.344606900">
   <course>81.836906</course>
-  <speed>1.306607</speed>
+  <speed>1.063023</speed>
   <name>WP0123</name>
 </trkpt>
 <trkpt lat="54.786687600" lon="-2.344578700">
-  <speed>0.582474</speed>
+  <speed>0.000000</speed>
   <name>WP0124</name>
 </trkpt>
 <trkpt lat="54.786707600" lon="-2.344565300">
-  <speed>0.477105</speed>
+  <speed>0.000000</speed>
   <name>WP0125</name>
 </trkpt>
 <trkpt lat="54.786715700" lon="-2.344577800">
   <course>41.664234</course>
-  <speed>0.241189</speed>
+  <speed>0.000000</speed>
   <name>WP0126</name>
 </trkpt>
 <trkpt lat="54.786721300" lon="-2.344563900">
-  <speed>0.217560</speed>
+  <speed>0.000000</speed>
   <name>WP0127</name>
 </trkpt>
 <trkpt lat="54.786725800" lon="-2.344570900">
   <course>41.891056</course>
-  <speed>0.133058</speed>
+  <speed>0.000000</speed>
   <name>WP0128</name>
 </trkpt>
 <trkpt lat="54.786755500" lon="-2.344623600">
   <course>45.655930</course>
-  <speed>0.945843</speed>
+  <speed>1.275627</speed>
   <name>WP0129</name>
 </trkpt>
 <trkpt lat="54.786780200" lon="-2.344553000">
-  <speed>1.060215</speed>
+  <speed>1.275627</speed>
   <name>WP0130</name>
 </trkpt>
 <trkpt lat="54.786783900" lon="-2.344515800">
-  <speed>0.484619</speed>
+  <speed>0.000000</speed>
   <name>WP0131</name>
 </trkpt>
 <trkpt lat="54.786801900" lon="-2.344472200">
-  <speed>0.688249</speed>
+  <speed>1.275627</speed>
   <name>WP0132</name>
 </trkpt>
 <trkpt lat="54.786801800" lon="-2.344466100">
-  <speed>0.076033</speed>
+  <speed>0.000000</speed>
   <name>WP0133</name>
 </trkpt>
 <trkpt lat="54.786801300" lon="-2.344469800">
   <course>103.189636</course>
-  <speed>0.046561</speed>
+  <speed>0.000000</speed>
   <name>WP0134</name>
 </trkpt>
 <trkpt lat="54.786803700" lon="-2.344463600">
-  <speed>0.096924</speed>
+  <speed>0.000000</speed>
   <name>WP0135</name>
 </trkpt>
 <trkpt lat="54.786806400" lon="-2.344457400">
-  <speed>0.098770</speed>
+  <speed>0.000000</speed>
   <name>WP0136</name>
 </trkpt>
 <trkpt lat="54.786808300" lon="-2.344454200">
-  <speed>0.057025</speed>
+  <speed>0.000000</speed>
   <name>WP0137</name>
 </trkpt>
 <trkpt lat="54.786809100" lon="-2.344457100">
   <course>64.432991</course>
-  <speed>0.032923</speed>
+  <speed>0.000000</speed>
   <name>WP0138</name>
 </trkpt>
 <trkpt lat="54.786811800" lon="-2.344452300">
-  <speed>0.085008</speed>
+  <speed>0.000000</speed>
   <name>WP0139</name>
 </trkpt>
 <trkpt lat="54.786815500" lon="-2.344450300">
-  <speed>0.087107</speed>
+  <speed>0.000000</speed>
   <name>WP0140</name>
 </trkpt>
 <trkpt lat="54.786818200" lon="-2.344449000">
-  <speed>0.063043</speed>
+  <speed>0.000000</speed>
   <name>WP0141</name>
 </trkpt>
 <trkpt lat="54.786820300" lon="-2.344445100">
-  <speed>0.065847</speed>
+  <speed>0.000000</speed>
   <name>WP0142</name>
 </trkpt>
 <trkpt lat="54.786850700" lon="-2.344378700">
-  <speed>1.088465</speed>
+  <speed>1.275627</speed>
   <name>WP0143</name>
 </trkpt>
 <trkpt lat="54.786851100" lon="-2.344379500">
@@ -647,61 +647,61 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>WP0144</name>
 </trkpt>
 <trkpt lat="54.786851700" lon="-2.344372600">
-  <speed>0.091161</speed>
+  <speed>0.000000</speed>
   <name>WP0145</name>
 </trkpt>
 <trkpt lat="54.786850500" lon="-2.344371500">
-  <speed>0.038017</speed>
+  <speed>0.000000</speed>
   <name>WP0146</name>
 </trkpt>
 <trkpt lat="54.786851700" lon="-2.344361900">
-  <speed>0.127512</speed>
+  <speed>0.000000</speed>
   <name>WP0147</name>
 </trkpt>
 <trkpt lat="54.786852200" lon="-2.344355400">
-  <speed>0.085008</speed>
+  <speed>0.000000</speed>
   <name>WP0148</name>
 </trkpt>
 <trkpt lat="54.786855700" lon="-2.344344300">
-  <speed>0.162407</speed>
+  <speed>0.000000</speed>
   <name>WP0149</name>
 </trkpt>
 <trkpt lat="54.786856800" lon="-2.344342000">
-  <speed>0.038017</speed>
+  <speed>0.000000</speed>
   <name>WP0150</name>
 </trkpt>
 <trkpt lat="54.786854800" lon="-2.344344100">
   <course>148.807159</course>
-  <speed>0.050291</speed>
+  <speed>0.000000</speed>
   <name>WP0151</name>
 </trkpt>
 <trkpt lat="54.786854300" lon="-2.344339000">
-  <speed>0.068536</speed>
+  <speed>0.000000</speed>
   <name>WP0152</name>
 </trkpt>
 <trkpt lat="54.786854300" lon="-2.344334100">
-  <speed>0.063043</speed>
+  <speed>0.000000</speed>
   <name>WP0153</name>
 </trkpt>
 <trkpt lat="54.786852500" lon="-2.344335600">
   <course>154.334946</course>
-  <speed>0.046561</speed>
+  <speed>0.000000</speed>
   <name>WP0154</name>
 </trkpt>
 <trkpt lat="54.786852100" lon="-2.344330900">
-  <speed>0.060110</speed>
+  <speed>0.000000</speed>
   <name>WP0155</name>
 </trkpt>
 <trkpt lat="54.786854400" lon="-2.344318100">
-  <speed>0.172128</speed>
+  <speed>0.000000</speed>
   <name>WP0156</name>
 </trkpt>
 <trkpt lat="54.786856800" lon="-2.344306700">
-  <speed>0.155590</speed>
+  <speed>0.000000</speed>
   <name>WP0157</name>
 </trkpt>
 <trkpt lat="54.786858400" lon="-2.344299800">
-  <speed>0.093121</speed>
+  <speed>0.000000</speed>
   <name>WP0158</name>
 </trkpt>
 <trkpt lat="54.786858200" lon="-2.344299800">
@@ -711,22 +711,22 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="54.786857500" lon="-2.344300600">
   <course>146.615356</course>
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0160</name>
 </trkpt>
 <trkpt lat="54.786856000" lon="-2.344304100">
   <course>126.621498</course>
-  <speed>0.060110</speed>
+  <speed>0.000000</speed>
   <name>WP0161</name>
 </trkpt>
 <trkpt lat="54.786854600" lon="-2.344307000">
   <course>129.936798</course>
-  <speed>0.046561</speed>
+  <speed>0.000000</speed>
   <name>WP0162</name>
 </trkpt>
 <trkpt lat="54.786853500" lon="-2.344309200">
   <course>130.929291</course>
-  <speed>0.032923</speed>
+  <speed>0.000000</speed>
   <name>WP0163</name>
 </trkpt>
 <trkpt lat="54.786852700" lon="-2.344310700">
@@ -736,82 +736,82 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="54.786851700" lon="-2.344313200">
   <course>124.748962</course>
-  <speed>0.038017</speed>
+  <speed>0.000000</speed>
   <name>WP0165</name>
 </trkpt>
 <trkpt lat="54.786851100" lon="-2.344314400">
   <course>130.929291</course>
-  <speed>0.026882</speed>
+  <speed>0.000000</speed>
   <name>WP0166</name>
 </trkpt>
 <trkpt lat="54.786850500" lon="-2.344316200">
   <course>120.031418</course>
-  <speed>0.026882</speed>
+  <speed>0.000000</speed>
   <name>WP0167</name>
 </trkpt>
 <trkpt lat="54.786848600" lon="-2.344321700">
   <course>120.925941</course>
-  <speed>0.082855</speed>
+  <speed>0.000000</speed>
   <name>WP0168</name>
 </trkpt>
 <trkpt lat="54.786846900" lon="-2.344326700">
   <course>120.525436</course>
-  <speed>0.073619</speed>
+  <speed>0.000000</speed>
   <name>WP0169</name>
 </trkpt>
 <trkpt lat="54.786845300" lon="-2.344330700">
   <course>124.748962</course>
-  <speed>0.063043</speed>
+  <speed>0.000000</speed>
   <name>WP0170</name>
 </trkpt>
 <trkpt lat="54.786843800" lon="-2.344334000">
   <course>128.248459</course>
-  <speed>0.053764</speed>
+  <speed>0.000000</speed>
   <name>WP0171</name>
 </trkpt>
 <trkpt lat="54.786842400" lon="-2.344336100">
   <course>139.142487</course>
-  <speed>0.038017</speed>
+  <speed>0.000000</speed>
   <name>WP0172</name>
 </trkpt>
 <trkpt lat="54.786841200" lon="-2.344337700">
   <course>142.445953</course>
-  <speed>0.032923</speed>
+  <speed>0.000000</speed>
   <name>WP0173</name>
 </trkpt>
 <trkpt lat="54.786840300" lon="-2.344339500">
   <course>130.929291</course>
-  <speed>0.026882</speed>
+  <speed>0.000000</speed>
   <name>WP0174</name>
 </trkpt>
 <trkpt lat="54.786840200" lon="-2.344340700">
   <course>98.223473</course>
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0175</name>
 </trkpt>
 <trkpt lat="54.786840400" lon="-2.344342600">
   <course>79.654457</course>
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0176</name>
 </trkpt>
 <trkpt lat="54.786840000" lon="-2.344345200">
   <course>104.938911</course>
-  <speed>0.026882</speed>
+  <speed>0.000000</speed>
   <name>WP0177</name>
 </trkpt>
 <trkpt lat="54.786839700" lon="-2.344347800">
   <course>101.315720</course>
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0178</name>
 </trkpt>
 <trkpt lat="54.786839900" lon="-2.344349600">
   <course>79.093140</course>
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0179</name>
 </trkpt>
 <trkpt lat="54.786839900" lon="-2.344350700">
   <course>90.000000</course>
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0180</name>
 </trkpt>
 <trkpt lat="54.786840200" lon="-2.344350700">
@@ -820,43 +820,43 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>WP0181</name>
 </trkpt>
 <trkpt lat="54.786840900" lon="-2.344350000">
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0182</name>
 </trkpt>
 <trkpt lat="54.786842300" lon="-2.344348300">
-  <speed>0.038017</speed>
+  <speed>0.000000</speed>
   <name>WP0183</name>
 </trkpt>
 <trkpt lat="54.786844000" lon="-2.344346000">
-  <speed>0.046561</speed>
+  <speed>0.000000</speed>
   <name>WP0184</name>
 </trkpt>
 <trkpt lat="54.786845900" lon="-2.344344300">
-  <speed>0.050291</speed>
+  <speed>0.000000</speed>
   <name>WP0185</name>
 </trkpt>
 <trkpt lat="54.786847900" lon="-2.344343000">
-  <speed>0.050291</speed>
+  <speed>0.000000</speed>
   <name>WP0186</name>
 </trkpt>
 <trkpt lat="54.786849500" lon="-2.344343100">
   <course>2.063974</course>
-  <speed>0.032923</speed>
+  <speed>0.000000</speed>
   <name>WP0187</name>
 </trkpt>
 <trkpt lat="54.786850000" lon="-2.344344700">
   <course>61.544453</course>
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0188</name>
 </trkpt>
 <trkpt lat="54.786850500" lon="-2.344345600">
   <course>46.065872</course>
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0189</name>
 </trkpt>
 <trkpt lat="54.786851100" lon="-2.344345900">
   <course>16.082796</course>
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0190</name>
 </trkpt>
 <trkpt lat="54.786851900" lon="-2.344345400">
@@ -872,297 +872,297 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>WP0193</name>
 </trkpt>
 <trkpt lat="54.786854300" lon="-2.344342300">
-  <speed>0.019008</speed>
+  <speed>0.000000</speed>
   <name>WP0194</name>
 </trkpt>
 <trkpt lat="54.786855100" lon="-2.344340600">
-  <speed>0.026882</speed>
+  <speed>0.000000</speed>
   <name>WP0195</name>
 </trkpt>
 <trkpt lat="54.786856200" lon="-2.344338400">
-  <speed>0.038017</speed>
+  <speed>0.000000</speed>
   <name>WP0196</name>
 </trkpt>
 <trkpt lat="54.786857000" lon="-2.344336600">
-  <speed>0.026882</speed>
+  <speed>0.000000</speed>
   <name>WP0197</name>
 </trkpt>
 <trkpt lat="54.786858200" lon="-2.344334500">
-  <speed>0.038017</speed>
+  <speed>0.000000</speed>
   <name>WP0198</name>
 </trkpt>
 <trkpt lat="54.786859900" lon="-2.344332700">
-  <speed>0.042504</speed>
+  <speed>0.000000</speed>
   <name>WP0199</name>
 </trkpt>
 <trkpt lat="54.786862100" lon="-2.344330500">
-  <speed>0.053764</speed>
+  <speed>0.000000</speed>
   <name>WP0200</name>
 </trkpt>
 <trkpt lat="54.786864100" lon="-2.344328100">
-  <speed>0.053764</speed>
+  <speed>0.000000</speed>
   <name>WP0201</name>
 </trkpt>
 <trkpt lat="54.787010400" lon="-2.344104300">
-  <speed>4.343226</speed>
+  <speed>3.826882</speed>
   <name>WP0202</name>
 </trkpt>
 <trkpt lat="54.787229300" lon="-2.343736200">
-  <speed>6.788423</speed>
+  <speed>6.378137</speed>
   <name>WP0203</name>
 </trkpt>
 <trkpt lat="54.787421800" lon="-2.343407600">
-  <speed>6.013606</speed>
+  <speed>6.378137</speed>
   <name>WP0204</name>
 </trkpt>
 <trkpt lat="54.787607100" lon="-2.343151200">
-  <speed>5.277713</speed>
+  <speed>5.102509</speed>
   <name>WP0205</name>
 </trkpt>
 <trkpt lat="54.787730000" lon="-2.342980300">
-  <speed>3.507230</speed>
+  <speed>3.826882</speed>
   <name>WP0206</name>
 </trkpt>
 <trkpt lat="54.787984800" lon="-2.342500800">
-  <speed>8.370941</speed>
+  <speed>8.929392</speed>
   <name>WP0207</name>
 </trkpt>
 <trkpt lat="54.787651300" lon="-2.342851000">
   <course>148.805801</course>
-  <speed>8.679982</speed>
+  <speed>8.929392</speed>
   <name>WP0208</name>
 </trkpt>
 <trkpt lat="54.787296200" lon="-2.343383500">
   <course>139.150696</course>
-  <speed>10.451539</speed>
+  <speed>10.205019</speed>
   <name>WP0209</name>
 </trkpt>
 <trkpt lat="54.787039700" lon="-2.343788000">
   <course>137.718918</course>
-  <speed>7.718669</speed>
+  <speed>7.653764</speed>
   <name>WP0210</name>
 </trkpt>
 <trkpt lat="54.786803800" lon="-2.344073800">
   <course>145.062073</course>
-  <speed>6.406710</speed>
+  <speed>6.378137</speed>
   <name>WP0211</name>
 </trkpt>
 <trkpt lat="54.786802300" lon="-2.344003800">
-  <speed>0.899237</speed>
+  <speed>1.275627</speed>
   <name>WP0212</name>
 </trkpt>
 <trkpt lat="54.786616200" lon="-2.344166600">
   <course>153.232285</course>
-  <speed>4.640603</speed>
+  <speed>5.102509</speed>
   <name>WP0213</name>
 </trkpt>
 <trkpt lat="54.786540500" lon="-2.344416600">
   <course>117.705025</course>
-  <speed>3.625063</speed>
+  <speed>3.826882</speed>
   <name>WP0214</name>
 </trkpt>
 <trkpt lat="54.786501700" lon="-2.344660800">
   <course>105.405190</course>
-  <speed>3.251814</speed>
+  <speed>3.826882</speed>
   <name>WP0215</name>
 </trkpt>
 <trkpt lat="54.786513700" lon="-2.344705000">
   <course>64.787437</course>
-  <speed>0.627275</speed>
+  <speed>0.000000</speed>
   <name>WP0216</name>
 </trkpt>
 <trkpt lat="54.786760100" lon="-2.344360500">
-  <speed>7.046580</speed>
+  <speed>7.653764</speed>
   <name>WP0217</name>
 </trkpt>
 <trkpt lat="54.787114900" lon="-2.343841500">
-  <speed>10.333961</speed>
+  <speed>10.205019</speed>
   <name>WP0218</name>
 </trkpt>
 <trkpt lat="54.786823000" lon="-2.344343500">
   <course>135.240036</course>
-  <speed>9.152427</speed>
+  <speed>8.929392</speed>
   <name>WP0219</name>
 </trkpt>
 <trkpt lat="54.786727900" lon="-2.344510000">
   <course>134.727890</course>
-  <speed>3.008605</speed>
+  <speed>2.551255</speed>
   <name>WP0220</name>
 </trkpt>
 <trkpt lat="54.786797300" lon="-2.344411700">
-  <speed>1.994969</speed>
+  <speed>2.551255</speed>
   <name>WP0221</name>
 </trkpt>
 <trkpt lat="54.786798000" lon="-2.344388300">
-  <speed>0.300548</speed>
+  <speed>0.000000</speed>
   <name>WP0222</name>
 </trkpt>
 <trkpt lat="54.787078000" lon="-2.343880200">
-  <speed>9.022692</speed>
+  <speed>8.929392</speed>
   <name>WP0223</name>
 </trkpt>
 <trkpt lat="54.787064400" lon="-2.343910000">
   <course>128.360611</course>
-  <speed>0.487963</speed>
+  <speed>0.000000</speed>
   <name>WP0224</name>
 </trkpt>
 <trkpt lat="54.787059700" lon="-2.343934800">
   <course>108.194084</course>
-  <speed>0.335216</speed>
+  <speed>0.000000</speed>
   <name>WP0225</name>
 </trkpt>
 <trkpt lat="54.787079300" lon="-2.343931200">
-  <speed>0.438841</speed>
+  <speed>0.000000</speed>
   <name>WP0226</name>
 </trkpt>
 <trkpt lat="54.787085100" lon="-2.343997400">
   <course>81.360321</course>
-  <speed>0.859589</speed>
+  <speed>1.275627</speed>
   <name>WP0227</name>
 </trkpt>
 <trkpt lat="54.787090000" lon="-2.343998400">
   <course>6.711519</course>
-  <speed>0.109195</speed>
+  <speed>0.000000</speed>
   <name>WP0228</name>
 </trkpt>
 <trkpt lat="54.787363500" lon="-2.343572600">
-  <speed>8.182794</speed>
+  <speed>7.653764</speed>
   <name>WP0229</name>
 </trkpt>
 <trkpt lat="54.787468300" lon="-2.343368600">
-  <speed>3.507539</speed>
+  <speed>3.826882</speed>
   <name>WP0230</name>
 </trkpt>
 <trkpt lat="54.787640700" lon="-2.343024900">
-  <speed>5.848113</speed>
+  <speed>6.378137</speed>
   <name>WP0231</name>
 </trkpt>
 <trkpt lat="54.787859200" lon="-2.342704200">
-  <speed>6.372952</speed>
+  <speed>6.378137</speed>
   <name>WP0232</name>
 </trkpt>
 <trkpt lat="54.787842200" lon="-2.342921800">
   <course>97.715996</course>
-  <speed>2.818878</speed>
+  <speed>2.551255</speed>
   <name>WP0233</name>
 </trkpt>
 <trkpt lat="54.787355300" lon="-2.343799700">
   <course>133.886002</course>
-  <speed>15.637352</speed>
+  <speed>15.307528</speed>
   <name>WP0234</name>
 </trkpt>
 <trkpt lat="54.787075000" lon="-2.344206800">
   <course>140.055038</course>
-  <speed>8.139894</speed>
+  <speed>7.653764</speed>
   <name>WP0235</name>
 </trkpt>
 <trkpt lat="54.787010700" lon="-2.344363000">
   <course>125.523293</course>
-  <speed>2.463761</speed>
+  <speed>2.551255</speed>
   <name>WP0236</name>
 </trkpt>
 <trkpt lat="54.786777100" lon="-2.344770400">
   <course>134.839066</course>
-  <speed>7.375820</speed>
+  <speed>7.653764</speed>
   <name>WP0237</name>
 </trkpt>
 <trkpt lat="54.786630800" lon="-2.344906200">
   <course>151.842575</course>
-  <speed>3.694468</speed>
+  <speed>3.826882</speed>
   <name>WP0238</name>
 </trkpt>
 <trkpt lat="54.786659200" lon="-2.344849700">
-  <speed>0.962317</speed>
+  <speed>1.275627</speed>
   <name>WP0239</name>
 </trkpt>
 <trkpt lat="54.786524100" lon="-2.345018400">
   <course>144.244812</course>
-  <speed>3.706478</speed>
+  <speed>3.826882</speed>
   <name>WP0240</name>
 </trkpt>
 <trkpt lat="54.786864600" lon="-2.344376200">
-  <speed>11.200036</speed>
+  <speed>11.480646</speed>
   <name>WP0241</name>
 </trkpt>
 <trkpt lat="54.787250300" lon="-2.343633900">
-  <speed>12.827707</speed>
+  <speed>12.756274</speed>
   <name>WP0242</name>
 </trkpt>
 <trkpt lat="54.787807600" lon="-2.342578800">
-  <speed>18.368883</speed>
+  <speed>17.858784</speed>
   <name>WP0243</name>
 </trkpt>
 <trkpt lat="54.787178600" lon="-2.344040000">
   <course>126.742546</course>
-  <speed>19.507580</speed>
+  <speed>19.134411</speed>
   <name>WP0244</name>
 </trkpt>
 <trkpt lat="54.786722100" lon="-2.344530500">
   <course>148.218903</course>
-  <speed>7.472546</speed>
+  <speed>7.175404</speed>
   <name>WP0245</name>
 </trkpt>
 <trkpt lat="54.786872300" lon="-2.344456200">
-  <speed>2.483881</speed>
+  <speed>2.733487</speed>
   <name>WP0246</name>
 </trkpt>
 <trkpt lat="54.786790900" lon="-2.344473100">
   <course>173.173264</course>
-  <speed>1.303782</speed>
+  <speed>0.911162</speed>
   <name>WP0247</name>
 </trkpt>
 <trkpt lat="54.786866200" lon="-2.344096600">
-  <speed>1.967664</speed>
+  <speed>1.962504</speed>
   <name>WP0248</name>
 </trkpt>
 <trkpt lat="54.786926000" lon="-2.344155900">
   <course>29.760809</course>
-  <speed>1.533561</speed>
+  <speed>1.275627</speed>
   <name>WP0249</name>
 </trkpt>
 <trkpt lat="54.787223500" lon="-2.343181500">
-  <speed>14.154443</speed>
+  <speed>14.031901</speed>
   <name>WP0250</name>
 </trkpt>
 <trkpt lat="54.787151700" lon="-2.343740700">
   <course>102.553291</course>
-  <speed>7.354651</speed>
+  <speed>7.653764</speed>
   <name>WP0251</name>
 </trkpt>
 <trkpt lat="54.787281000" lon="-2.343534000">
-  <speed>3.915116</speed>
+  <speed>3.826882</speed>
   <name>WP0252</name>
 </trkpt>
 <trkpt lat="54.787392100" lon="-2.343651100">
   <course>31.289225</course>
-  <speed>2.894576</speed>
+  <speed>2.551255</speed>
   <name>WP0253</name>
 </trkpt>
 <trkpt lat="54.787738600" lon="-2.342950500">
-  <speed>11.849266</speed>
+  <speed>11.480646</speed>
   <name>WP0254</name>
 </trkpt>
 <trkpt lat="54.787550500" lon="-2.343047500">
   <course>163.440262</course>
-  <speed>3.120760</speed>
+  <speed>2.733487</speed>
   <name>WP0255</name>
 </trkpt>
 <trkpt lat="54.786874100" lon="-2.344481700">
   <course>129.279663</course>
-  <speed>2.973259</speed>
+  <speed>3.029615</speed>
   <name>WP0256</name>
 </trkpt>
 <trkpt lat="54.787425000" lon="-2.342911400">
-  <speed>23.597078</speed>
+  <speed>22.961292</speed>
   <name>WP0257</name>
 </trkpt>
 <trkpt lat="54.787020700" lon="-2.344089400">
   <course>120.761200</course>
-  <speed>1.060176</speed>
+  <speed>1.075830</speed>
   <name>WP0258</name>
 </trkpt>
 <trkpt lat="54.787111400" lon="-2.344023100">
-  <speed>0.116564</speed>
+  <speed>0.135705</speed>
   <name>WP0259</name>
 </trkpt>
 </trkseg>

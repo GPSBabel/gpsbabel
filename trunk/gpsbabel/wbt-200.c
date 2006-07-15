@@ -193,10 +193,16 @@ static void data_chunk(struct read_state *st, const void *buf) {
     rtim = mkgmtime(&t);
 
     if (lat >= 100) {
-        /* Start new track */
+        /* Start new track in the northern hemisphere */
         lat -= 100;
         st->route_head = NULL;
+    } else if (lat <= -100) {
+        /* Start new track in the southern hemisphere */
+        /* This fix courtesy of Anton Frolich */
+        lat += 100;
+        st->route_head = NULL;
     } else {
+        double speed, gcd, dtim, rtm;
 		wpt = waypt_new();
 	
 		wpt->latitude	    = lat;;
@@ -204,14 +210,17 @@ static void data_chunk(struct read_state *st, const void *buf) {
 		wpt->creation_time  = rtim;
 		wpt->centiseconds   = 0;
 	
-		/* OK to reuse buffer now */
 		sprintf(wp_name, "WP%04d", ++st->wpn);
 		wpt->shortname      = xstrdup(wp_name);
 		
-		wpt->speed          = radtometers(
-	                            gcdist(RAD(st->plat), RAD(st->plon), 
-	                                   RAD(lat), RAD(lon))) /
-		                      (rtim - st->ptim);
+		/* Broken down to make it easier to find the source of rounding errors */
+        gcd                 = gcdist(RAD(st->plat), RAD(st->plon), RAD(lat), RAD(lon));
+        gcd                 = (double) ((long) (gcd * 1000000 + 0.5)) / 1000000;
+        dtim                = rtim - st->ptim;
+        rtm                 = radtometers(gcd);
+        speed               = rtm / dtim;
+        
+        wpt->speed          = speed;
 		wpt->course         = DEG(heading(RAD(st->plat), RAD(st->plon),
 	                                      RAD(lat), RAD(lon)));
 		wpt->pdop	        = 0;
