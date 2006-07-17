@@ -536,7 +536,8 @@ static int terminit(const char *portname, int create_ok) {
 	}
 }
 
-static char *termread(char *ibuf, int size) {
+static char *termread(char *ibuf, int size) 
+{
 	if (is_file) {
 		return fgets(ibuf, size, magfile_h);
 	} else {
@@ -545,6 +546,38 @@ static char *termread(char *ibuf, int size) {
 			fatal(MYNAME ": Read error\n");
 		}
 		return ibuf;
+	}
+}
+
+/* Though not documented in the protocol spec, if the unit itself
+ * wants to create a field containing a comma, it will encode it 
+ * as <escape>2C.  We extrapolate that any 2 digit hex encoding may
+ * be valid.  We don't do this in termread() since we need to do it 
+ * after the scanf.  This means we have to do it field-by-field
+ * basis.
+ *
+ * The buffer is modified in place and shortened by copying the remaining
+ * string including the terminator.
+ */
+static
+void
+mag_dequote(char *ibuf) 
+{
+	char *esc = NULL;
+
+	while ((esc = strchr (ibuf, 0x1b))) {
+		int nremains = strlen(esc);
+		if (nremains >= 3) {
+			static const char hex[16] = "0123456789ABCDEF";
+			char *c1 = strchr(hex, esc[1]);
+			char *c2 = strchr(hex, esc[2]);
+			if (c1 && c2) {
+				int escv = (c1 - hex) * 16 + (c2 - hex);
+				*esc++ = escv;
+				/* buffers overlap */
+				memmove(esc, esc+2, nremains - 2);
+			}
+		}
 	}
 }
 
@@ -1025,6 +1058,8 @@ mag_wptparse(char *trkmsg)
 		&alt,&altunits,shortname,descr);
 	icone = strrchr(trkmsg, '*');
 	icons = strrchr(trkmsg, ',')+1;
+
+	mag_dequote(descr);
 	
 	for (blah = icons ; blah < icone; blah++)
 		icon_token[i++] = *blah;
