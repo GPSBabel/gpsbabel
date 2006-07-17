@@ -104,7 +104,7 @@ data_read(void)
 			read_long( file_in );
 			read_long( file_in );
 		}
-		else if ( rectype == 2 ) {
+		else if ( rectype == 2 || rectype == 3 ) {
 			recsize = read_long( file_in );
 			x = read_long( file_in );
 			y = read_long( file_in );
