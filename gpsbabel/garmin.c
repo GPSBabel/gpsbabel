@@ -150,6 +150,7 @@ rw_init(const char *fname)
 					receiver_charset = CET_CHARSET_MS_ANSI;
 					break;
 				case 231: /* Quest */
+				case 463: /* Quest 2 */
 					receiver_must_upper = 0;
 					receiver_short_length = 30;
 					receiver_charset = CET_CHARSET_MS_ANSI;
