@@ -58,27 +58,38 @@ double radtometers( double rads ) {
     return ( rads * EARTH_RAD );
 }
 
-double gcdist( double lat1, double lon1, double lat2, double lon2 ) {
-  double res;
+double gcdist( double lat1, double lon1, double lat2, double lon2 ) 
+{
+	double res;
+	double sdlat, sdlon;
 
-  errno = 0;
+	errno = 0;
 
-  res = sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2);
-  if (res > 1.0) res = 1.0;
-  else if (res < -1.0) res = -1.0;
+	sdlat = sin((lat1 - lat2) / 2.0);
+	sdlon = sin((lon1 - lon2) / 2.0);
 
-  res = acos(res);
+	res = sqrt(sdlat * sdlat + cos(lat1) * cos(lat2) * sdlon * sdlon);
 
-  if (
+	if (res > 1.0) {
+		res = 1.0;
+	} else if (res < -1.0) {
+		res = -1.0;
+	}
+
+	res = asin(res);
+
+	if (
 #if defined isnan
-	  /* This is a C99-ism. */
-	  (isnan(res)) || 
-#endif 
-	  (errno == EDOM)) { /* this should never happen: */
-    errno = 0;                           /* Math argument out of domain of function, */
-    return 0;                            /* or value returned is not a number */
-  }
-  return res;
+		/* This is a C99-ism. */
+	    (isnan(res)) ||
+#endif
+	    (errno == EDOM)) { /* this should never happen: */
+		errno = 0;         /* Math argument out of domain of
+		function, */
+		return 0;          /* or value returned is not a number */
+	}
+
+	return 2.0 * res;
 }
 
 /* This value is the heading you'd leave point 1 at to arrive at point 2. */
