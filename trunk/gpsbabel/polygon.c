@@ -27,6 +27,72 @@
 static char *polyfileopt = NULL;
 static char *exclopt = NULL;
 
+/*
+ * This test for insideness is essentially an odd/even test.  The 
+ * traditional (simple) implementation of the odd/even test counts
+ * intersections along a test ray, and if it should happen to exactly hit 
+ * a vertex of the polygon, it throws away the result and fires a different 
+ * test ray.  Since we're potentially testing hundreds of test points against
+ * a polygon with hundreds of sides, this seemed both wasteful and difficult
+ * to coordinate, so instead I added extra state to try to figure out what we
+ * would have seen if we had just missed the vertex.  The result is the 
+ * hodgepodge of "limbo" states explained below.  On the credit side of the
+ * ledger, though, the tests for intersection are vastly simplified by always
+ * having a horizontal test ray.
+ * 
+ * The general structure of this filter is: we loop over the points in the 
+ * polygon.  For each point, we update the state of each of the waypoints in
+ * the test set.  Thus, the state of every waypoint is indeterminate until
+ * the end of the outer loop, at which point the state of every waypoint 
+ * should theoretically be completely determined.
+ * 
+ * The bits following this comment encode the current state of the test point 
+ * as we go around the polygon.  OUTSIDE clearly isn't a bit; it's just here 
+ * for completeness.  If it's not INSIDE, and it's not something else, it's 
+ * clearly OUTSIDE.
+ * 
+ * INSIDE is self-explanatory.  What it means is that the last time we were 
+ * certain of our state, we were inside of the polygon.  
+ * 
+ * LIMBO encodes a bit more state information, to handle the case where our 
+ * test ray (a horizontal line) has intersected one of the vertices of the
+ * polygon exactly.  If the two lines that meet at that vertex are on 
+ * opposite sides of the test ray, it was an intersection.  Otherwise, it just
+ * grazed a local minimum or maximum and so counted as either zero or two 
+ * intersections - not a change in state.  Horizontal lines encountered 
+ * while in limbo don't change the limbo state.  All other lines do.
+ * The rest of the bits talk about how we got into limbo, and thus what to do
+ * when we get out of limbo.
+ * 
+ * LIMBO_UP means that the last line segment we saw going into limbo was
+ * headed upward.  When we see another non-horizontal line segment, whether
+ * we flip the INSIDE bit or not depends on whether it also goes upward.  If
+ * it does, we flip the INSIDE bit.  Otherwise, we just clear our limbo state
+ * and go on as if nothing had happened.
+ * 
+ * LIMBO_BEGIN means that the very first vertex in the polygon put us into a 
+ * limbo state.  We won't be able to resolve that limbo state until we get to
+ * the end of the cycle, and it can actually coexist with another more local
+ * limbo state.  The next two bits talk about the beginning limbo state in 
+ * more detail.
+ * 
+ * BEGIN_UP means that the first non-horizontal line segment we encountered
+ * while in a LIMBO_BEGIN state went upward.  As with LIMBO_UP, this is used
+ * to determine the final disposition of the limbo state when we get back 
+ * around to the other end of the cycle.
+ * 
+ * BEGIN_HOR is fairly temporary.  It says that we've encountered one or more
+ * horizontal line segments at the beginning of the cycle, so we haven't yet
+ * been able to resolve the state of BEGIN_UP.  It's a way of propagating the
+ * "firstness" forward until we can make a decision, without propagating it
+ * for every test point.
+ * 
+ * UP is used to remember which way we were going in case we encounter a 
+ * limbo state. 
+ * 
+ *  --  RLP 
+ */  
+
 #define OUTSIDE     0
 #define INSIDE      1
 #define LIMBO       2
@@ -96,11 +162,8 @@ static void polytest ( double lat1, double lon1,
 		else {
 	            if ( lon1 <= wlon && lon2 > wlon ) {
 		        if ( *state & UP ) {
-		        /* TODO: I assume this intends to set LIMBO_UP and
-		         * clear UP - but & has higher precendence so it
-		         * actually leaves *state unaltered.
-		         */
-			    *state = *state | LIMBO_UP & ~UP;
+			    *state &= ~UP;
+			    *state |= LIMBO_UP;
 			}
 			*state = *state | LIMBO;
 	            }
@@ -112,15 +175,12 @@ static void polytest ( double lat1, double lon1,
 		    if ( !(*state & LIMBO_UP) ) {
 			*state = *state ^ INSIDE;
 		    }
-	        /* TODO: I assume this intends to set LIMBO_UP and
-	         * clear UP - but & has higher precendence so it
-	         * actually leaves *state unaltered.
-	         */
 		    *state = *state & ~LIMBO & ~LIMBO_UP;
 		}
 		else if (*state & LIMBO_BEGIN) {
 		    if ( *state & BEGIN_HOR ) {
-			*state = *state & ~BEGIN_HOR | BEGIN_UP;
+			*state &= ~BEGIN_HOR;
+			*state |= BEGIN_UP;
 		    }
 		    else if ( last ) {
 			if ( !(*state & BEGIN_UP) ) {
