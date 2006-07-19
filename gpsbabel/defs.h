@@ -74,7 +74,9 @@
 
 /* Turn off numeric conversion warning */
 #if __WIN32__
-#  pragma warning(disable:4244)
+#  if _MSC_VER
+#    pragma warning(disable:4244)
+#  endif
 #  define _CRT_SECURE_NO_DEPRECATE 1
 #endif
 
