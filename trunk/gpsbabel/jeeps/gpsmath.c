@@ -1802,9 +1802,14 @@ int32 GPS_Math_UTM_EN_To_WGS84(double *lat, double *lon, double E,
 int32 GPS_Lookup_Datum_Index(const char *n)
 {
 	GPS_PDatum dp;
+	const char *name;
+	
+	if (case_ignore_strcmp(n, "WGS84") == 0) name = "WGS 84";
+	else if (case_ignore_strcmp(n, "WGS72") == 0) name = "WGS 72";
+	else name = n;
 
 	for (dp = GPS_Datum; dp->name; dp++) {
-		if (0 == case_ignore_strcmp(dp->name, n)) {
+		if (0 == case_ignore_strcmp(dp->name, name)) {
 			return dp - GPS_Datum;
 		}
 	}
