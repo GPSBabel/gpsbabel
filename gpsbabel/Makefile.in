@@ -212,7 +212,7 @@ release-winbuild:
 	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
 	cp -a gpsbabel-$(VERSIOND) /tmp/gpsbabel-$(VERSIOND)-cross
 	cd /tmp/gpsbabel-$(VERSIOND)-cross ; \
-	  CC=i386-mingw32-gcc LDFLAGS="-s" ./configure --target=i386-pc-mingw32 --with-cet=all --with-expathdr=mingw/include --with-libexpat=mingw/lib && make && \
+	  CC=i386-mingw32-gcc LDFLAGS="-s" ./configure --host=i386-pc-mingw32 --with-cet=all --with-expathdr=mingw/include --with-libexpat=mingw/lib && make && \
 	  zip -j /tmp/gpsbabel-$(VERSIOND).zip $(WINFILES)
 	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
 
