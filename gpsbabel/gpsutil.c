@@ -75,12 +75,17 @@ data_read(void)
 	tin = textfile_init(file_in);
 
 	while ((ibuf = textfile_read(tin))) {
+		int n;
 	/*  A sharp in column zero or an blank line is a comment */
 		ibuf = lrtrim(ibuf);
 		if (ibuf[0] == '#' || ibuf[0] == '\n') continue;
-		sscanf(ibuf, "%s %le%c %le%c %ld%c %30[^,] %c",
+		n = sscanf(ibuf, "%s %le%c %le%c %ld%c %30[^,] %c",
 			name, &lat, &latdir, &lon, &londir,
 			&alt, &alttype, desc, icon);
+		/* Require at least first threee fields, otherwise ignore */
+		if (n < 3) { 
+			continue;
+		}
 		desc[0] = '\0';
 		icon[0] = '\0';
 		sscanf(&ibuf[39], "%30c", desc);
