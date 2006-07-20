@@ -263,9 +263,9 @@ int gbser__fill_buffer(void *handle, unsigned want, unsigned *ms) {
         h->inbuf_used += rc;
         /*printf("Got %d bytes\n", rc);*/
     } else {
+        double time_left = *ms;
         hp_time tv;
         get_time(&tv);
-        double time_left = *ms;
         
         for (;;) {
             fd_set rec;
