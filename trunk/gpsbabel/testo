@@ -1083,4 +1083,12 @@ ${PNAME} -i wbt-bin -f ${REFERENCE}/wbt-200.bin -o gpx -F ${TMPDIR}/wbt-200.gpx
 grep -v time <${TMPDIR}/wbt-200.gpx >${TMPDIR}/wbt-200.gpx2
 compare ${TMPDIR}/wbt-200.gpx2 ${REFERENCE}/wbt-200.gpx
 
+#
+# Sportsim style-sheet
+#
+rm -f ${TMPDIR}/sportsim*
+${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,routes -o sportsim -F ${TMPDIR}/sportsim.txt
+compare ${TMPDIR}/sportsim.txt ${REFERENCE}/track/sportsim-sample.txt
+
+
 exit 0
