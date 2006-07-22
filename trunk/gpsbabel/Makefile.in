@@ -70,11 +70,16 @@ COLDSYNC=coldsync/util.o coldsync/pdb.o
 
 SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
 
+ZLIB=zlib/adler32.o zlib/compress.o zlib/crc32.o zlib/deflate.o zlib/inffast.o \
+	zlib/inflate.o zlib/infback.o zlib/inftrees.o zlib/trees.o \
+	zlib/uncompr.o zlib/gzio.o zlib/zutil.o
+
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
           uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
 	  inifile.o garmin_fs.o gbsleep.o units.o textfile.o @GBSER@ gbser.o \
-	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(FMTS) $(FILTERS)
+	  gbfile.o \
+	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(ZLIB) $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS)
 
 .c.o:
@@ -320,6 +325,9 @@ garmin_txt.o: garmin_txt.c defs.h config.h queue.h gbtypes.h cet.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h garmin_tables.h \
   grtcirc.h jeeps/gpsmath.h strptime.h
+gbfile.o: gbfile.h gbfile.c config.h defs.h gbtypes.h \
+  zlib/crc32.h zlib/deflate.h zlib/inffast.h zlib/inffixed.h zlib/inflate.h \
+  zlib/inftrees.h zlib/trees.h zlib/zconf.h zlib/zlib.h zlib/zutil.h
 gbsleep.o: gbsleep.c config.h
 gcdb.o: gcdb.c defs.h config.h queue.h gbtypes.h cet.h cet_util.h \
   inifile.h coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
@@ -661,5 +669,21 @@ jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h jeeps/../defs.h \
   jeeps/gpsproj.h
 shapelib/dbfopen.o: shapelib/dbfopen.c shapelib/shapefil.h
 shapelib/shpopen.o: shapelib/shpopen.c shapelib/shapefil.h
+zlib/adler32.o: zlib/zlib.h zlib/zconf.h
+zlib/compress.o: zlib/zlib.h zlib/zconf.h
+zlib/crc32.o: zlib/crc32.h zlib/zlib.h zlib/zconf.h
+zlib/deflate.o: zlib/deflate.h zlib/zutil.h zlib/zlib.h zlib/zconf.h
+zlib/gzio.o: zlib/gzio.c zlib/zutil.h zlib/zlib.h zlib/zconf.h
+zlib/inffast.o: zlib/zutil.h zlib/zlib.h zlib/zconf.h zlib/inftrees.h \
+  zlib/inflate.h zlib/inffast.h
+zlib/inflate.o: zlib/zutil.h zlib/zlib.h zlib/zconf.h zlib/inftrees.h \
+  zlib/inflate.h zlib/inffast.h
+zlib/infback.o: zlib/zutil.h zlib/zlib.h zlib/zconf.h zlib/inftrees.h \
+  zlib/inflate.h zlib/inffast.h
+zlib/inftrees.o: zlib/zutil.h zlib/zlib.h zlib/zconf.h zlib/inftrees.h
+zlib/trees.o: zlib/deflate.h zlib/zutil.h zlib/zlib.h zlib/zconf.h \
+  zlib/trees.h
+zlib/uncompr.o: zlib/zlib.h zlib/zconf.h
+zlib/zutil.o: zlib/zutil.h zlib/zlib.h zlib/zconf.h
 internal_styles.c: mkstyle.sh style/arc.style style/cambridge.style style/csv.style style/cup.style style/custom.style style/dna.style style/fugawi.style style/garmin301.style style/garmin_poi.style style/geonet.style style/gpsdrive.style style/gpsdrivetrack.style style/gpsman.style style/ktf2.style style/kwf2.style style/mapconverter.style style/mxf.style style/nima.style style/openoffice.style  style/s_and_t.style style/saplus.style style/tabsep.style style/xmap2006.style style/xmap.style style/xmapwpt.style style/sportsim.style
 	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)

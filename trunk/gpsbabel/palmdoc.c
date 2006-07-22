@@ -143,7 +143,7 @@ static unsigned char * mem_find(unsigned char *t, int t_len, unsigned char *m, i
 }
 
 
-static void compress( struct buffer *b )
+static void pd_compress( struct buffer *b )
 {
 
 	unsigned i, j;
@@ -316,7 +316,7 @@ static void commit_buffer( void ) {
 	newrec->size = buf.len;
 	recordsize_tail = newrec;
 
-	compress( &buf );
+	pd_compress( &buf );
 	
         opdb_rec = new_Record (0, 0, ct++, (uword) buf.len, (const ubyte *)buf.data);
 
