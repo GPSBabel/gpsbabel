@@ -103,6 +103,9 @@ jeeps/gpslibusb.o:
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
 
+more-clean: clean
+	tools/mkmoreclean
+
 check:
 	./testo
 
