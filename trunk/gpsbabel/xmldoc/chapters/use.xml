@@ -160,8 +160,9 @@ merged data to multiple destinations.
       <member>baud=115200</member>
       <member>[tiger]</member>
       <member>[Garmin categories]</member>
-      <member>0=fixed waypoints</member>
-      <member>1=temporary waypoints</member>
+      <member>; any # from 1 to 16</member>
+      <member>1=fixed waypoints</member>
+      <member>2=temporary waypoints</member>
     </simplelist>
     <para>
       Each section of the file starts with a '[section]' header followed by any
@@ -214,6 +215,6 @@ merged data to multiple destinations.
       (i.e. wrapper applications using GPSBabel in the background). 
        The inifile mechanism can be disabled with an empty filename.
     </para>
-    <screen format="linespecific">gpsbabel -p "" -i gpx -f something.gpx -o tiger -O -</screen>
+    <screen format="linespecific">gpsbabel -p "" -i gpx -f something.gpx -o tiger -F -</screen>
 </sect1>
 </chapter>
