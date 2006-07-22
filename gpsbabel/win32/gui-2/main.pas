@@ -23,7 +23,7 @@ interface
 uses
   gnugettext, TypInfo, delphi, 
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, Buttons, ExtCtrls, 
+  StdCtrls, Buttons, ExtCtrls,
   common, utils, ImgList, ActnList, Menus, ComCtrls, ToolWin;
 
 type
@@ -174,6 +174,7 @@ type
     procedure HandleParams;
     procedure HistoryChanged(Box: TComboBox; Swap: Boolean = False);
     procedure InitCombo(Target: TComboBox; IsInput, ForDevice: Boolean);
+    procedure InitializeSerialPorts;
     procedure LoadLanguages;
     procedure LoadFileFormats;
     procedure LoadVersion;
@@ -374,6 +375,8 @@ begin
   // ? valid README form
   s := ExtractFilePath(ParamStr(0)) + 'gpsbabel.html';
   acHelpReadme.Enabled := FileExists(s) or (frmReadme.Memo.Lines.Count > 0);
+
+  InitializeSerialPorts;
 end;
 
 procedure TfrmMain.InitCombo(Target: TComboBox; IsInput, ForDevice: Boolean);
@@ -588,8 +591,13 @@ begin
     if mnuSynthesizeShortNames.Checked then cmdline := cmdline + ' -s';
 
     if chbInputDevice.Checked then
-      s := SysUtils.AnsiLowerCase(cbInputDevice.Text) + ':'
-    else begin
+    begin
+      s := SysUtils.AnsiLowerCase(cbInputDevice.Text) + ':';
+//    if (s = 'usb:') then
+//      s := s + '-1';
+    end
+      else
+    begin
       s := edInputFile.Text;
       if not(FileExists(s)) then
       raise eGPSBabelError.CreateFmt(_('File %s not found.'), [s]);
@@ -639,8 +647,11 @@ begin
     begin
       if (cbOutputDevice.Text = 'SCREEN') then
         s := '-'
-      else
-        s := cbOutputDevice.Text + ':'
+      else begin
+        s := AnsiLowerCase(cbOutputDevice.Text + ':');
+//      if (s = 'usb:') then
+//        s := s + '-1';
+      end;
     end
     else begin
       s := edOutputFile.Text;
@@ -771,7 +782,17 @@ begin
   
   l := TStringList.Create;
   try
-    if not gpsbabel('-p "" -V', l) then Exit;
+
+    try
+      if not gpsbabel('-p "" -V', l) then
+        PostMessage(Self.Handle, WM_QUIT, 0, 0);
+    except
+      on E: Exception do
+      begin
+        ShowException(E, nil);
+        PostMessage(Self.Handle, WM_QUIT, 0, 0);
+      end;
+    end;
 
     for i := 0 to l.Count - 1 do
     begin
@@ -1317,6 +1338,25 @@ end;
 procedure TfrmMain.cbInputDeviceChange(Sender: TObject);
 begin
   CheckInput;
+end;
+
+procedure TfrmMain.InitializeSerialPorts;
+var
+  port: string;
+  i: Integer;
+  config: TCommConfig;
+  cfsize: DWORD;
+begin
+  for i := 1 to MAX_NO_OF_SERIAL_PORTS do
+  begin
+    port := Format('COM%d', [i]);
+    cfsize := sizeof(config);
+    if GetDefaultCommConfig(PChar(port), config, cfsize) then
+    begin
+      cbInputDevice.Items.Add(Format('COM%d', [i]));
+      cbOutputDevice.Items.Add(Format('COM%d', [i]));
+    end;
+  end;
 end;
 
 end.

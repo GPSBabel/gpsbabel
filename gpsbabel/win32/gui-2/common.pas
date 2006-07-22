@@ -51,6 +51,9 @@ const
   WM_OPTIONS_CHANGED = WM_USER + 2;
 
 const
+  MAX_NO_OF_SERIAL_PORTS = 8;
+
+const
   SREG_TARGET_DIR = 'Target:Directory';
   SREG_SOURCE_DIR = 'Source:Directory';
 
