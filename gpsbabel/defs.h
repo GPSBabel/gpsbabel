@@ -28,6 +28,8 @@
 #include "config.h"
 #include "queue.h"
 #include "gbtypes.h"
+#include "zlib/zlib.h"
+#include "gbfile.h"
 #include "cet.h"
 #include "cet_util.h"
 #include "inifile.h"
