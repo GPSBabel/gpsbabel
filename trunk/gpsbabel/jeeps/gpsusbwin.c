@@ -72,7 +72,6 @@ gusb_win_get(garmin_usb_packet *ibuf, size_t sz)
 	DWORD rxed = GARMIN_USB_INTERRUPT_DATA_SIZE;
 	unsigned char *buf = (unsigned char *) &ibuf->dbuf;
 	int tsz=0;
-	unsigned char *obuf = buf;
 
 	while (sz) {
 		/* The driver wrongly (IMO) rejects reads smaller than 
@@ -118,13 +117,7 @@ gusb_win_send(const garmin_usb_packet *opkt, size_t sz)
 	WriteFile(usb_handle, obuf, sz, &rsz, NULL);
 
 	if (rsz != sz) {
-		fatal ("Error sending %d bytes.   Successfully sent %d\n", sz, rsz);
-	}
-
-	if (0 == sz % usb_tx_packet_size) {
-		DWORD sz2;
-		GPS_Diag("Writing padding buffer.\n");
-		WriteFile(usb_handle, 0, 0, &sz2, NULL);
+		fatal ("Error sending %d bytes.   Successfully sent %ld\n", sz, rsz);
 	}
 
 	return rsz;
@@ -177,6 +170,7 @@ HANDLE * garmin_usb_start(HDEVINFO* hdevinfo, SP_DEVICE_INTERFACE_DATA *infodata
 	    &size, NULL)) {
                 fatal("Couldn't get USB packet size.\n");
         }
+	win_llops.max_tx_size = usb_tx_packet_size;
 
 	gusb_syncup();
 

@@ -32,6 +32,7 @@ typedef struct gusb_llops {
 	gusb_llop_get  llop_get_bulk;
 	gusb_llop_send llop_send;
 	gusb_llop_close llop_close;
+	int max_tx_size;
 } gusb_llops_t;
 
 /* Provided by the common code. */

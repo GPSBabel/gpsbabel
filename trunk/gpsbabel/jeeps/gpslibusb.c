@@ -54,6 +54,7 @@ typedef struct {
 static int gusb_intr_in_ep;
 static int gusb_bulk_out_ep;
 static int gusb_bulk_in_ep;
+static gusb_llops_t libusb_llops;
 
 static usb_dev_handle *udev;
 static void garmin_usb_scan(libusb_unit_data *, int);
@@ -71,6 +72,7 @@ gusb_libusb_send(const garmin_usb_packet *opkt, size_t sz)
 				usb_strerror());
 		}
 	}
+
 	return r;
 }
 
@@ -214,10 +216,12 @@ garmin_usb_start(struct usb_device *dev)
 		fatal("Claim interfaced failed: %s\n", usb_strerror());
 	}
 
+	libusb_llops.max_tx_size = dev->descriptor.bMaxPacketSize0;
 
 	for (i = 0; i < dev->config->interface->altsetting->bNumEndpoints; i++) {
 		struct usb_endpoint_descriptor * ep;
 		ep = &dev->config->interface->altsetting->endpoint[i];
+
 		switch (ep->bmAttributes & USB_ENDPOINT_TYPE_MASK) {
 #define EA(x) x & USB_ENDPOINT_ADDRESS_MASK
 			case USB_ENDPOINT_TYPE_BULK:

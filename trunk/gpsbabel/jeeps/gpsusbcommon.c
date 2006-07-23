@@ -170,6 +170,18 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 
 		GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
         }
+	/*
+	 * Recursion, when used in a disciplined way, can be our friend.
+	 * 
+	 * The Garmin protocol requires that packets that are exactly
+	 * a multiple of the max tx size be followed by a zero length
+	 * packet.  Do that here so we can see it in debugging traces.
+	 */
+
+	if (sz && !(sz % gusb_llops->max_tx_size)) {
+		gusb_cmd_send(opkt, 0);
+	}
+
 	return (rv);
 }
 
