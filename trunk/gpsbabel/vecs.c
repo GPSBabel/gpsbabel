@@ -686,7 +686,7 @@ assign_option(const char *module, arglist_t *ap, const char *val)
 void
 disp_vec_options(const char *vecname, arglist_t *ap)
 {
-	for (ap = ap; ap->argstring; ap++) {
+	for (ap = ap; ap && ap->argstring; ap++) {
 		if (*ap->argval && ap->argval) {
 			printf("options: module/option=value: %s/%s=\"%s\"", 
 				vecname, ap->argstring, *ap->argval);
