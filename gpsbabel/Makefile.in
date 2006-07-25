@@ -25,8 +25,8 @@ OUTPUT_SWITCH=-o #
 #
 # Enable either or both of these as you wish.
 #
-OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
-DEBUGGING=-g $(EXTRA_DEBUGGING)
+#OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
+#DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
 GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I. -I@srcdir@/coldsync \
 	$(OPTIMIZATION) @CFLAGS@
@@ -107,6 +107,9 @@ jeeps/gpslibusb.o:
 
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
+
+configure: configure.in
+	autoconf
 
 more-clean: clean
 	tools/mkmoreclean

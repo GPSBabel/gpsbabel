@@ -1388,8 +1388,6 @@ test -n "$target_alias" &&
     NONENONEs,x,x, &&
   program_prefix=${target_alias}-
 
-
-
 # Checks for programs.
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -2321,22 +2319,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-echo "$as_me:$LINENO: checking whether ${CC-cc} accepts -Wall" >&5
-echo $ECHO_N "checking whether ${CC-cc} accepts -Wall... $ECHO_C" >&6
-if test "${ac_cv_prog_cc_wall+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  echo 'void f(){}' > conftest.c
-if test -z "`${CC-cc} -Wall -c conftest.c 2>&1`"; then
-  ac_cv_prog_cc_wall=yes
-else
-  ac_cv_prog_cc_wall=no
-fi
-rm -f conftest*
-
-fi
-echo "$as_me:$LINENO: result: $ac_cv_prog_cc_wall" >&5
-echo "${ECHO_T}$ac_cv_prog_cc_wall" >&6
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
 # incompatible versions:
@@ -2534,6 +2516,10 @@ else
   cet="default"
 fi;
 
+if test $GCC = yes; then
+ CFLAGS="$CFLAGS -Wall"
+fi
+
 if test "$cet" = "all"; then
 
 cat >>confdefs.h <<\_ACEOF
@@ -2615,8 +2601,8 @@ echo "${ECHO_T}yes" >&6
 echo "${ECHO_T}no" >&6
     fi
 
-echo "$as_me:$LINENO: checking whether to support csv formats" >&5
-echo $ECHO_N "checking whether to support csv formats... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether to support filters" >&5
+echo $ECHO_N "checking whether to support filters... $ECHO_C" >&6
 # Check whether --enable-filters or --disable-filters was given.
 if test "${enable_filters+set}" = set; then
   enableval="$enable_filters"
@@ -2825,10 +2811,6 @@ else
 
 
 fi;
-
-if test $ac_cv_prog_cc_wall = yes; then
-    CFLAGS="$CFLAGS -Wall"
-fi
 
 if test "x-$xpathdr" != "x-" ; then
 	CFLAGS="$CFLAGS -I$xpathdr"
