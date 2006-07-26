@@ -1,17 +1,22 @@
 VPATH = @srcdir@
 
-VERSU=1_3_0
-VERSD=1.3.0
-# YYYYMMDD, please, if beta.
-# RELEASE=-beta20060701a
-VERSIONU=$(VERSU)$(RELEASE)
+# version and release are defined in the head of configure.in 
+# don't forget 'autoconf' if you change them 
+VERSD=@GBMAJOR@.@GBMINOR@.@GBMICRO@
+VERSU=@GBMAJOR@_@GBMINOR@_@GBMICRO@
+RELEASE=@PACKAGE_RELEASE@
+
 VERSIOND=$(VERSD)$(RELEASE)
+VERSIONU=$(VERSU)$(RELEASE)
 
 DOCVERSION=development
-DOCVERSION=1.3.0
+DOCVERSION=@PACKAGE_VERSION@
 
 CC=@CC@
 EXEEXT=@EXEEXT@
+
+# Resource compiler, currently used under MinGW
+RC=@RC@
 
 #EXTRA_LIBS -lefence
 
@@ -80,7 +85,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
 	  inifile.o garmin_fs.o gbsleep.o units.o textfile.o @GBSER@ gbser.o \
 	  gbfile.o \
 	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) $(ZLIB) $(FMTS) $(FILTERS)
-OBJS = main.o globals.o $(LIBOBJS)
+OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
 .c.o:
 	$(CC)  @CPPFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
@@ -104,6 +109,9 @@ globals.o:
 
 jeeps/gpslibusb.o: 
 	$(CC)  @CPPFLAGS@ -c $(GBCFLAGS) @USB_CFLAGS@ @srcdir@/jeeps/gpslibusb.c $(OUTPUT_SWITCH)$@
+
+fileinfo.o: win32/gpsbabel.rc
+	$(RC) -o fileinfo.o win32/gpsbabel.rc
 
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
