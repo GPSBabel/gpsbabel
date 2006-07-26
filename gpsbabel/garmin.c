@@ -528,15 +528,19 @@ waypoint_write(void)
 		}
 		way[i]->ident[sizeof(way[i]->ident)-1] = 0;
 
+#define CL(b) strlen(b) > sizeof(way[i]->cmnt) ? \
+	sizeof(way[i]->cmnt) : \
+	strlen(b)
+
 		if (!global_opts.no_smart_icons && 
 		     wpt->gc_data.diff && wpt->gc_data.terr) {
 	                snprintf(obuf, sizeof(obuf), "%s%d/%d %s", 
 					get_gc_info(wpt),
 					wpt->gc_data.diff, wpt->gc_data.terr, 
 					src);
-			memcpy(way[i]->cmnt, obuf, strlen(obuf));
+			memcpy(way[i]->cmnt, obuf, CL(obuf));
 		} else  {
-			memcpy(way[i]->cmnt, src, strlen(src));
+			memcpy(way[i]->cmnt, src, CL(src));
 		}
 		way[i]->lon = wpt->longitude;
 		way[i]->lat = wpt->latitude;

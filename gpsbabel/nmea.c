@@ -733,7 +733,7 @@ nmea_read(void)
 
 	while (fgets(ibuf, sizeof(ibuf), file_in)) {
 		nmea_parse_one_line(ibuf);
-		if (lt < last_read_time && curr_waypt && trk_head) {
+		if (lt != last_read_time && curr_waypt && trk_head) {
 			if (curr_waypt != last_waypt) {
 				track_add_wpt(trk_head, curr_waypt);
 				last_waypt = curr_waypt;

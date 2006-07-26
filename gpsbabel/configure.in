@@ -96,9 +96,7 @@ case "$target" in
 		OSJEEPS=jeeps/gpsusbstub.o
 	else
 		AC_CHECK_PROG(LIBUSBCONFIG, libusb-config, true, false)
-		if test "$LIBUSBCONFIG" = false; then
-			AC_MSG_ERROR([libusb-config not found in $PATH])
-		fi;
+	    if test "$LIBUSBCONFIG" = true; then
 		OLDFLAGS=$LDFLAGS
 		OCFLAGS=$CFLAGS
 		LDFLAGS="$LDFLAGS `libusb-config --libs`"
@@ -107,8 +105,8 @@ case "$target" in
 		AC_CHECK_LIB([usb], [usb_interrupt_read],
 			AC_DEFINE(HAVE_LIBUSB, 1, [Defined if you have libusb])
 			[USB_CFLAGS="`libusb-config --cflags`"]
-			[USB_LIBS="`libusb-config --libs`"],
-			[AC_MSG_ERROR([libusb >= 0.1.8 is needed])]
+			[USB_LIBS="`libusb-config --libs`"]
+#			,[AC_MSG_ERROR([libusb >= 0.1.8 is needed])]
 			)
 		# Override libusb for Darwin to reduce external 
 		# runtime requirement.
@@ -123,6 +121,7 @@ case "$target" in
 		OSJEEPS=jeeps/gpslibusb.o
 		CFLAGS="$OCFLAGS"
 	#	LIBS="$LIBS `libusb-config --libs`"
+	    fi
 	fi
 	;;
 esac
