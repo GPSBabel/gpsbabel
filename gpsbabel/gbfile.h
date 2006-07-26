@@ -28,16 +28,20 @@
 #include "zlib/zlib.h"
 #include <stdarg.h>
 
-
 typedef struct gbfile_s {
 #ifdef DEBUG_MEM
 	void   *dummy;	/* ZERO pointer for stdio oop's */
 #endif
-	void   *f;
+	union {
+	  FILE *std;
+	  gzFile *gz;
+	} handle;
 	char   *name;
 	char   *module;
 	char   *line;
-	int    lsize;
+	int    linesz;
+	char   *buff;	/* static growing buffer, primary used by gbprintf */
+	int    buffsz;
 	char   mode;
 	unsigned char big_endian:1;
 	unsigned char binary:1;
@@ -52,7 +56,7 @@ void gbfclose(gbfile *file);
 
 gbsize_t gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file);
 int gbfgetc(gbfile *file);
-char *gbfgets(gbfile *file, char *buf, int len);
+char *gbfgets(char *buf, int len, gbfile *file);
 
 int gbfprintf(gbfile *file, const char *format, ...);
 int gbfputc(int c, gbfile *file);
@@ -63,24 +67,27 @@ int gbfflush(gbfile *file);
 void gbfclearerr(gbfile *file);
 int gbferror(gbfile *file);
 void gbfrewind(gbfile *file);
-int gbfseek(gbfile *file, gbsize_t offset, int whence);
+int gbfseek(gbfile *file, gbint32 offset, int whence);
 gbsize_t gbftell(gbfile *file);
 int gbfeof(gbfile *file);
 int gbfungetc(const int c, gbfile *file);
 
 gbint32 gbfgetint32(gbfile *file);
-#define gbfgetuint32(a) (gbuint32)gbfgetint32((a))
+#define gbfgetuint32 (gbuint32)gbfgetint32
 gbint16 gbfgetint16(gbfile *file);
-#define gbfgetuint16(a) (gbuint16)gbfgetint16((a))
-double gbfgetdbl(gbfile *file);			// read double value
-char *gbfgetstr(gbfile *file);			// read until any type of line-breaks of EOF
+#define gbfgetuint16 (gbuint16)gbfgetint16
+double gbfgetdbl(gbfile *file);			// read a double value
+float gbfgetflt(gbfile *file);			// read a float value
+char *gbfgetstr(gbfile *file);			// read until any type of line-breaks or EOF
 char *gbfgetpstr(gbfile *file);			// read a pascal string
 
 int gbfputint16(const gbint16 i, gbfile *file);
-#define gbfputuint16 gbfputint16((gbuint16)(a),(b))
+#define gbfputuint16(a,b) gbfputint16((gbuint16)(a),(b))
 int gbfputint32(const gbint32 i, gbfile *file);
 #define gbfputuint32(a,b) gbfputint16((gbuint32)(a),(b))
-int gbfputdbl(const double d, gbfile *file);	// write double value
+int gbfputdbl(const double d, gbfile *file);	// write a double value
+int gbfputflt(const float f, gbfile *file);	// write a float value
+int gbfputcstr(const char *s, gbfile *file);	// write string including '\0'
 int gbfputpstr(const char *s, gbfile *file);	// write as pascal string
 
 #endif
