@@ -329,9 +329,9 @@ google_read(void)
 		  }
 	          if ( panel ) {
 		    panel += 8;
-		    end = strstr( panel, ">'," );
+		    end = strstr( panel, "/table><div class=\\\"legal" );
 		    if ( end ) {
-	              *(end+1) = '\0';
+	              strcpy(end,"/table></div>");
 		      end = panel;
 		      while ( (end = strstr( end, "\\\"" ))) {
 		        memmove( end, end+1, strlen(end)+1 );
@@ -347,6 +347,7 @@ google_read(void)
 		  }
 		}
 		xfree( script );
+		script = NULL;
 	}
 }
 #endif
@@ -356,6 +357,8 @@ google_rd_deinit(void)
 {
 	xml_deinit();
 	mkshort_del_handle(&desc_handle);
+	encoded_points = NULL;
+	encoded_levels = NULL;
 }
 
 ff_vecs_t google_vecs = {

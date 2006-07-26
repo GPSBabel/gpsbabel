@@ -1,7 +1,8 @@
 <para>
 This format is a very flexible module that can be used to read or write 
 nearly any plain-text record-based waypoint file.  This flexibility is 
-achieved with "style" files that describe the format of the waypoint files.
+achieved by combining this format with "style" files that describe the 
+format of the waypoint files.
 </para>
 <para>
 There are several formats built in to GPSBabel that use the underlying xcsv 

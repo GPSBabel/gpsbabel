@@ -364,6 +364,9 @@ main(int argc, char *argv[])
 					global_opts.inifile = inifile_init(optarg, MYNAME);
 				break;
 
+			default:
+				fatal("Unknown option '%s'.\n", argv[argn]);
+				break;
 		}
 	}
 
