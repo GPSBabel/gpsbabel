@@ -29,7 +29,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MYNAME "gdbfile"
+#define MYNAME "gbfile"
+
+
+/* GPSBabel 'file' standard calls */
 
 gbfile *
 gbfopen(const char *filename, const char *mode, const char *module)
@@ -66,8 +69,8 @@ gbfopen(const char *filename, const char *mode, const char *module)
 	}
 	
 	if (file->gzapi) {
-		file->f = gzopen(filename, mode);
-		if (file->f == NULL) {
+		file->handle.gz = gzopen(filename, mode);
+		if (file->handle.gz == NULL) {
 			fatal("%s: Cannot %s file '%s'!\n", 
 				module, 
 				(file->mode == 'r') ? "open" : "create",
@@ -76,8 +79,14 @@ gbfopen(const char *filename, const char *mode, const char *module)
 		file->gzapi = 1;
 	}
 	else {
-		file->f = xfopen(filename, mode, module);
+		file->handle.std = xfopen(filename, mode, module);
 	}
+#ifdef DEBUG_MEM
+	file->buffsz = 1;
+#else
+	file->buffsz = 256;
+#endif
+	file->buff = xmalloc(file->buffsz);
 
 	return file;
 }
@@ -103,14 +112,15 @@ gbfclose(gbfile *file)
 	if (!file) return;
 
 	if (file->gzapi) {
-		gzclose( (gzFile *) file->f);
+		gzclose(file->handle.gz);
 	}
 	else {
-		fclose( (FILE *) file->f);
+		fclose(file->handle.std);
 	}
 	xfree(file->name);
 	xfree(file->module);
 	xfree(file->line);
+	xfree(file->buff);
 	xfree(file);
 }
 
@@ -119,7 +129,7 @@ gbfgetc(gbfile *file)
 {
 	unsigned char c;
 
-	/* errors are catched in gbfread */
+	/* errors are caught in gbfread */
 	if (gbfread(&c, 1, 1, file) == 0) {
 		return EOF;
 	}
@@ -129,14 +139,28 @@ gbfgetc(gbfile *file)
 }
 
 char * 
-gbfgets(gbfile *file, char *buf, int len)
+gbfgets(char *buf, int len, gbfile *file)
 {
-	if (file->gzapi) {
-		return gzgets( (gzFile *) file->f, buf, len);
+	char *result = buf;
+	
+	while (--len > 0) {
+		int c = gbfgetc(file);
+
+		if (c == EOF) break;
+		
+		*(unsigned char *)buf = (unsigned char)c;
+		buf++;
+		
+		if (c == '\r') {
+			c = gbfgetc(file);
+			if ((c != '\n') && (c != EOF)) gbfungetc(c, file);
+			break;
+		}
+		else if (c == '\n')
+			break;
 	}
-	else {
-		return fgets(buf, len, (FILE *) file->f);
-	}
+	*buf = '\0';
+	return (*result != '\0') ? result : NULL;
 }
 
 
@@ -146,12 +170,12 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 	if ((size == 0) || (members == 0)) return 0;
 	
 	if (file->gzapi) {
-		int result = gzread( (gzFile *) file->f, buf, size * members) / size;
+		int result = gzread(file->handle.gz, buf, size * members) / size;
 		if ((result < 0) || ((gbsize_t)result < members)) {
 			int errnum;
 			const char *errtxt;
 			
-			errtxt = gzerror( (gzFile *) file->f, &errnum);
+			errtxt = gzerror(file->handle.gz, &errnum);
 			if ((errnum != Z_STREAM_END) && (errnum != 0))
 				fatal("%s: zlib returned error %d ('%s')!\n",
 					file->module, errnum, errtxt);
@@ -160,9 +184,9 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 	}
 	else {
 		int errno;
-		gbsize_t result = fread(buf, size, members, (FILE *) file->f);
+		gbsize_t result = fread(buf, size, members, file->handle.std);
 		
-		if ((result < members) && (errno = ferror( (FILE *) file->f))) {
+		if ((result < members) && (errno = ferror(file->handle.std))) {
 			fatal("%s: Error %d occured during read of file '%s'!\n",
 				file->module, errno, file->name);
 		}
@@ -173,27 +197,29 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 int 
 gbfprintf(gbfile *file, const char *format, ...)
 {
-	int len, result;
-	char *buf;
-	va_list args;
-	char tmp[256];	/* probably enough for 99.9 percent of our code */
+	int len;
 	
-	va_start(args, format);
-	len = vsnprintf(tmp, sizeof(tmp), format, args);
-	va_end(args);
-
-	if (len < sizeof(tmp)) buf = tmp;
-	else {
-		buf = xmalloc(len + 1);
+	for (;;) {
+		va_list args;
 		
 		va_start(args, format);
-		vsnprintf(buf, len + 1, format, args);
+		len = vsnprintf(file->buff, file->buffsz, format, args);
 		va_end(args);
+
+		if (len < 0)
+			fatal(MYNAME ": Unexpected vsnprintf error %d (%s/%s)!\n", 
+				len, file->module, file->name);
+		else if (len == 0)
+			return 0;
+		else if (len < file->buffsz) 
+			break;
+
+		while (file->buffsz <= len) 
+			file->buffsz *= 2;
+			
+		file->buff = xrealloc(file->buff, file->buffsz);
 	}
-	result = gbfwrite(buf, 1, len, file);
-	if (buf != tmp) xfree(buf);
-	
-	return result;
+	return gbfwrite(file->buff, 1, len, file);
 }
 
 int 
@@ -220,10 +246,10 @@ gbfwrite(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *f
 	if ((size == 0) || (members == 0)) return 0;
 
 	if (file->gzapi) {
-		result = gzwrite( (gzFile *) file->f, buf, size * members) / size;
+		result = gzwrite(file->handle.gz, buf, size * members) / size;
 	}
 	else {
-		result = fwrite(buf, size, members, (FILE *) file->f);
+		result = fwrite(buf, size, members, file->handle.std);
 	}
 
 	if (result != members) {
@@ -240,10 +266,10 @@ int
 gbfflush(gbfile *file)
 {
 	if (file->gzapi) {
-		return gzflush( (gzFile *) file->f, Z_SYNC_FLUSH);
+		return gzflush(file->handle.gz, Z_SYNC_FLUSH);
 	}
 	else {
-		return fflush( (FILE *) file->f);
+		return fflush(file->handle.std);
 	}
 }
 
@@ -251,10 +277,10 @@ void
 gbfclearerr(gbfile *file)
 {
 	if (file->gzapi) {
-		gzclearerr( (gzFile *) file->f);
+		gzclearerr(file->handle.gz);
 	}
 	else {
-		clearerr( (FILE *) file->f);
+		clearerr(file->handle.std);
 	}
 }
 
@@ -264,10 +290,10 @@ gbferror(gbfile *file)
 	int errnum;
 	
 	if (file->gzapi) {
-		(void)gzerror( (gzFile *) file->f, &errnum);
+		(void)gzerror(file->handle.gz, &errnum);
 	}
 	else {
-		errnum = ferror( (FILE *) file->f);
+		errnum = ferror(file->handle.std);
 	}
 	return errnum;
 }
@@ -275,29 +301,26 @@ gbferror(gbfile *file)
 void
 gbfrewind(gbfile *file)
 {
-	if (file->gzapi) {
-		gzrewind( (gzFile *) file->f);
-	}
-	else {
-		rewind( (FILE *) file->f);
-	}
+	(void)gbfseek(file, 0, SEEK_SET);
+	gbfclearerr(file);
 }
 
 int
-gbfseek(gbfile *file, gbsize_t offset, int whence)
+gbfseek(gbfile *file, gbint32 offset, int whence)
 {
-	int result;
-	
+
 	if (file->gzapi) {
+		int result;
+		
 		assert(whence != SEEK_END);
-		result = gzseek( (gzFile *) file->f, offset, whence);
+		result = gzseek(file->handle.gz, offset, whence);
 		is_fatal(result < 0,
 			"%s: online compression not yet supported for this format!", file->module);
 		return 0;
 		
 	}
 	else {
-		return fseek( (FILE *) file->f, offset, whence);
+		return fseek(file->handle.std, offset, whence);
 	}
 }
 
@@ -305,10 +328,10 @@ gbsize_t
 gbftell(gbfile *file)
 {
 	if (file->gzapi) {
-		return gztell( (gzFile *) file->f);
+		return gztell(file->handle.gz);
 	}
 	else {
-		return ftell( (FILE *) file->f);
+		return ftell(file->handle.std);
 	}
 }
 
@@ -316,10 +339,10 @@ int
 gbfeof(gbfile *file)
 {
 	if (file->gzapi) {
-		return gzeof( (gzFile *) file->f);
+		return gzeof(file->handle.gz);
 	}
 	else {
-		return feof( (FILE *) file->f);
+		return feof(file->handle.std);
 	}
 }
 
@@ -327,14 +350,14 @@ int
 gbfungetc(const int c, gbfile *file)
 {
 	if (file->gzapi) {
-		return gzungetc(c, (gzFile *) file->f);
+		return gzungetc(c, file->handle.gz);
 	}
 	else {
-		return ungetc(c, (FILE *) file->f);
+		return ungetc(c, file->handle.std);
 	}
 }
 
-/* ----------------------------------------------------------- */
+/* GPSBabel 'file' enhancements */
 
 gbint32
 gbfgetint32(gbfile *file)
@@ -374,6 +397,18 @@ gbfgetdbl(gbfile *file)
 	return result;
 }
 
+float
+gbfgetflt(gbfile *file)
+{
+	union {
+		float f;
+		gbint32 i;
+	} x;
+	
+	x.i = gbfgetint32(file);
+	return x.f;
+}
+
 /*
  * gbfgetcstr: Reads a string from file until either a '\0' or eof.
  *             The result is a temporary allocated entity: use it or free it!
@@ -407,7 +442,7 @@ gbfgetcstr(gbfile *file)
 }
 
 /*
- * gbfgetstr: Reads a pascal string (first byte is length) from file.
+ * gbfgetpstr: Reads a pascal string (first byte is length) from file.
  *             The result is a temporary allocated entity: use it or free it!
  */
 char *
@@ -427,8 +462,8 @@ gbfgetpstr(gbfile *file)
 }
 
 /*
- * gbfgetstr: read a string from file (util any type of line-breaks or eof or error)
- *            except free you can do all possible things with the result
+ * gbfgetstr: Reads a string from file (util any type of line-breaks or eof or error)
+ *            except xfree and free you can do all possible things with the result
  */
 char *
 gbfgetstr(gbfile *file)
@@ -436,7 +471,7 @@ gbfgetstr(gbfile *file)
 	int len;
 	char *result = file->line;
 	
-	len = file->lsize = 0;
+	len = file->linesz = 0;
 	
 	while (1) {
 		char c = gbfgetc(file);
@@ -455,8 +490,8 @@ gbfgetstr(gbfile *file)
 		else if (c == '\n') {
 			break;
 		}
-		if (len == file->lsize) {
-			file->lsize = len + 128;
+		if (len == file->linesz) {
+			file->linesz = len + 128;
 			result = file->line = xrealloc(file->line, len + 128 + 1);
 		}
 		result[len] = c;
@@ -500,15 +535,35 @@ gbfputdbl(const double d, gbfile *file)
 	return gbfwrite(buf, 1, sizeof(buf), file);
 }
 
+int 
+gbfputflt(const float f, gbfile *file)
+{
+	union {
+		float f;
+		gbint32 i; } x;
+		
+	x.f = f;
+	return gbfputint32(x.i, file);
+}
+
+int 
+gbfputcstr(const char *s, gbfile *file)
+{
+	return gbfwrite(s, 1, strlen(s) + 1, file)
+}
+
 int
 gbfputpstr(const char *s, gbfile *file)
 {
 	int len;
 	
 	len = strlen(s);
-	if (len > 255) len = 255;
+	if (len > 255)
+		len = 255;
 	gbfputc(len, file);
 	gbfwrite(s, 1, len, file);
 	
 	return len + 1;
 }
+
+/* Thats all, sorry */
