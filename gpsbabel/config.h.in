@@ -30,6 +30,9 @@
 /* Define to the full name of this package. */
 #undef PACKAGE_NAME
 
+/* Define to the release of this package. */
+#undef PACKAGE_RELEASE
+
 /* Define to the full name and version of this package. */
 #undef PACKAGE_STRING
 
