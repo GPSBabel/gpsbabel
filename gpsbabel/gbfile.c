@@ -549,7 +549,7 @@ gbfputflt(const float f, gbfile *file)
 int 
 gbfputcstr(const char *s, gbfile *file)
 {
-	return gbfwrite(s, 1, strlen(s) + 1, file)
+	return gbfwrite(s, 1, strlen(s) + 1, file);
 }
 
 int
