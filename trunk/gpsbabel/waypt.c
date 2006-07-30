@@ -135,8 +135,8 @@ waypt_new(void)
 
 	wpt = (waypoint *) xcalloc(sizeof (*wpt), 1);
 	wpt->altitude = unknown_alt;
-	wpt->course = -999.0;
-	wpt->speed = -999.0;
+	wpt->course = unknown_course;
+	wpt->speed = unknown_speed;
 	wpt->fix = fix_unknown;
 	wpt->sat = -1;
 
