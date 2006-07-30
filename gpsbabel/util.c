@@ -25,6 +25,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <stdarg.h>
+#include <time.h>
 
 static int i_am_little_endian = -1;
 static int doswap(void);
@@ -702,6 +703,26 @@ mkgmtime(struct tm *t)
 	return(result);
 }
 
+/*
+ * mklocaltime: same as mktime, but try to recover the "Summer time flag",
+ *              which is evaluated by mktime
+ */
+time_t
+mklocaltime(struct tm *t)
+{
+	time_t result;
+	struct tm check = *t;
+	
+	check.tm_isdst = 0;
+	result = mktime(&check);
+	check = *localtime(&result);
+	if (check.tm_isdst == 1) {	/* DST is in effect */
+		check = *t;
+		check.tm_isdst = 1;
+		result = mktime(&check);
+	}
+	return result;
+}
 
 /*
  * A wrapper for time(2) that allows us to "freeze" time for testing.

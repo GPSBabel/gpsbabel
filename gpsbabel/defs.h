@@ -677,6 +677,7 @@ int xasprintf(char **strp, const char *fmt, ...);
 char *strupper(char *src);
 char *strlower(char *src);
 signed int get_tz_offset(void);
+time_t mklocaltime(struct tm *t);
 time_t mkgmtime(struct tm *t);
 time_t current_time(void);
 signed int month_lookup(const char *m);
@@ -798,8 +799,9 @@ int color_to_bbggrr(char *cname);
  * A constant for unknown altitude.   It's tempting to just use zero
  * but that's not very nice for the folks near sea level.
  */
-#define unknown_alt -99999999.0
-
+#define unknown_alt 	-99999999.0
+#define unknown_course 	     -999.0
+#define unknown_speed	     -999.0
 /*
  * textfile: buffered OS independent (CRLF,NL,CR) text reader
  */
