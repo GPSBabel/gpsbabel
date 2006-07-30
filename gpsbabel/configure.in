@@ -241,5 +241,5 @@ echo $EXPAT_LIB
 # AC_CHECK_FUNCS([atexit floor localtime_r memmove memset pow select sqrt strchr strcspn strdup strerror strncasecmp strrchr strspn strstr strtol strtoul])
 AC_CHECK_FUNCS([nanosleep sleep])
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile win32/gpsbabel.rc])
 AC_OUTPUT
