@@ -888,7 +888,7 @@ parse_date_and_time(char *str, time_t *value)
 //	printf(MYNAME "_parse_date_and_time: %02d.%02d.%04d, %02d:%02d:%02d\n",
 //		tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-	*value = mktime(&tm);
+	*value = mklocaltime(&tm);
 	return 1;
 }
 
