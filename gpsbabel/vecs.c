@@ -91,6 +91,7 @@ extern ff_vecs_t psp_vecs;
 extern ff_vecs_t quovadis_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t shape_vecs;
+extern ff_vecs_t stmsdf_vecs;
 extern ff_vecs_t stmwpp_vecs;
 extern ff_vecs_t tef_xml_vecs;
 extern ff_vecs_t text_vecs;
@@ -501,6 +502,12 @@ vecs_t vec_list[] = {
 		"ignrando",
 		"IGN Rando track files",
 		"rdn"
+	},
+	{
+		&stmsdf_vecs,
+		"stmsdf",
+		"Suunto Trek Manager (STM) .sdf files",
+		"sdf"
 	},
 	{
 		&stmwpp_vecs,
