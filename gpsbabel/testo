@@ -1094,11 +1094,11 @@ compare ${TMPDIR}/sportsim.txt ${REFERENCE}/track/sportsim-sample.txt
 # Suunto SDF
 #
 rm -f ${TMPDIR}/stmsdf*
-${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -r -o stmsdf -F ${TMPDIR}/stmsdf-route.sdf -t -o stmsdf -F ${TMPDIR}/stmsdf-track.sdf
-compare ${TMPDIR}/stmsdf-route.sdf ${REFERENCE}/route/stmsdf-route.sdf
+${PNAME} -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -t -o stmsdf -F ${TMPDIR}/stmsdf-track.sdf -r -o stmsdf,index=2 -F ${TMPDIR}/stmsdf-route.sdf
 compare ${TMPDIR}/stmsdf-track.sdf ${REFERENCE}/track/stmsdf-track.sdf
-${PNAME} -i stmsdf -f ${TMPDIR}/stmsdf-route.sdf -f ${TMPDIR}/stmsdf-track.sdf -o gpx -F ${TMPDIR}/stmsdf-example.gpx
-compare ${TMPDIR}/stmsdf-example.gpx ${REFERENCE}/stmsdf-example.gpx
+compare ${TMPDIR}/stmsdf-route.sdf ${REFERENCE}/route/stmsdf-route.sdf
+${PNAME} -i stmsdf -f ${TMPDIR}/stmsdf-track.sdf -f ${TMPDIR}/stmsdf-route.sdf -o garmin_txt,prec=2 -F ${TMPDIR}/stmsdf.txt
+compare ${TMPDIR}/stmsdf.txt ${REFERENCE}/stmsdf.txt
 
 
 exit 0
