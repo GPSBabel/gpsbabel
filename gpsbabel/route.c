@@ -517,8 +517,8 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 		tlon = RAD(this->longitude);
 		plat = RAD(prev->latitude);
 		plon = RAD(prev->longitude);
-		this->course = DEG(heading(plat, plon,
-			tlat, tlon));
+		this->course = heading_true_degrees(plat, plon,
+			tlat, tlon);
 		dist = radtometers(gcdist(plat, plon, tlat, tlon));
 
 		/* 

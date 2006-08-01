@@ -221,8 +221,8 @@ static void data_chunk(struct read_state *st, const void *buf) {
         speed               = rtm / dtim;
         
         wpt->speed          = speed;
-		wpt->course         = DEG(heading(RAD(st->plat), RAD(st->plon),
-	                                      RAD(lat), RAD(lon)));
+		wpt->course         = heading_true_degrees(RAD(st->plat), RAD(st->plon),
+	                                      RAD(lat), RAD(lon));
 		wpt->pdop	        = 0;
 		wpt->fix 		    = fix_unknown;
 

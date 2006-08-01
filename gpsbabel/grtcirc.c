@@ -92,7 +92,9 @@ double gcdist( double lat1, double lon1, double lat2, double lon2 )
 	return 2.0 * res;
 }
 
-/* This value is the heading you'd leave point 1 at to arrive at point 2. */
+/* This value is the heading you'd leave point 1 at to arrive at point 2. 
+ * Inputs and outputs are in radians.
+ */
 double heading( double lat1, double lon1, double lat2, double lon2 ) {
   double v1, v2;
   v1 = sin(lon1 - lon2) * cos(lat2);
@@ -103,7 +105,15 @@ double heading( double lat1, double lon1, double lat2, double lon2 ) {
   return atan2(v1, v2);
 }
 
-	
+/* As above, but outputs is in degrees from 0 - 359.  Inputs are still radians. */
+double heading_true_degrees( double lat1, double lon1, double lat2, double lon2 ) 
+{
+  double h = 360.0 - DEG(heading(lat1, lon1, lat2, lon2));
+  if (h > 360) h -= 360;
+
+  return h;
+}
+
  
 double linedist(double lat1, double lon1,
 		double lat2, double lon2,
