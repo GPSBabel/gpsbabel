@@ -95,8 +95,8 @@ static int opt_route_index_value;
 
 static
 arglist_t stmsdf_args[] = {
-	{"index", &opt_route_index, "Index of route (if more the one in source)", 
-		"1", ARGTYPE_INT, "1", NULL },
+	{ "index", &opt_route_index,
+		"Index of route (if more the one in source)", "1", ARGTYPE_INT, "1", NULL },
 	ARG_TERMINATOR
 };
 
@@ -410,10 +410,9 @@ calculate(const waypoint *wpt, double *dist, double *speed, double *course,
 		
 		time_t time;
 		
-		*course = 360 - DEG(heading(
+		*course = heading_true_degrees(
 			RAD(trkpt_out->latitude), RAD(trkpt_out->longitude),
-			RAD(wpt->latitude), RAD(wpt->longitude)));
-		if (*course >= 360) *course -= 360;
+			RAD(wpt->latitude), RAD(wpt->longitude));
 
 		*dist = radtometers(gcdist(
 			RAD(trkpt_out->latitude), RAD(trkpt_out->longitude), 
