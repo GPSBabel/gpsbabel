@@ -796,6 +796,40 @@ static char saplus[] =
 "IFIELD  IGNORE, \"\", \"\"                  # Holder for Geocache Type\n"
 
 ;
+static char sportsim[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: Sportsim track files\n"
+"# Author: Olaf Klein\n"
+"#   Date: 07/05/2006\n"
+"#\n"
+"DESCRIPTION	Sportsim track files (part of zipped .ssz files) \n"
+"EXTENSION	txt\n"
+
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		SEMICOLON\n"
+"RECORD_DELIMITER	CRNEWLINE\n"
+"BADCHARS		TAB\n"
+
+"#\n"
+"# FILE HEADER\n"
+"#\n"
+"PROLOGUE	﻿SportsimVersion:01\n"
+"PROLOGUE	\\#Sportsim TrackFile\n"
+
+"#\n"
+"# INDIVIDUAL DATA FIELDS:\n"
+"#\n"
+"IFIELD	INDEX, \"\", \"%05d\"\n"
+"IFIELD	CONSTANT, \"0\", \"%s\"\n"
+"IFIELD	LAT_DECIMAL, \"\", \"%f\"\n"
+"IFIELD	LON_DECIMAL, \"\", \"%f\"\n"
+"IFIELD	ALT_FEET, \"\", \"%.f\"\n"
+"IFIELD	TIMET_TIME, \"\", \"%ld\"\n"
+"IFIELD	CONSTANT, \";\", \"%s\"\n"
+;
 static char tabsep[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -958,8 +992,8 @@ static char xmapwpt[] =
 "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "xmap2006", xmap2006 } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 25;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "xmap2006", xmap2006 } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 26;
 #else /* CSVFMTS_ENABLED */
 style_vecs_t style_list[] = {{0,0}};
 size_t nstyles = 0;

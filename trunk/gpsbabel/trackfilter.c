@@ -654,9 +654,9 @@ trackfilter_synth(void)
 		}
 		else {
 			if ( opt_course ) {
-				wpt->course = DEG(heading( RAD(oldlat), 
+				wpt->course = heading_true_degrees( RAD(oldlat), 
 					RAD(oldlon),RAD(wpt->latitude), 
-					RAD(wpt->longitude) ));
+					RAD(wpt->longitude) );
 			}
 			if ( opt_speed ) {
 				if ( oldtime != wpt->creation_time ) {
