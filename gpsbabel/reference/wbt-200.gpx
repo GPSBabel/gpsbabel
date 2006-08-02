@@ -164,7 +164,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>WP0031</name>
 </trkpt>
 <trkpt lat="54.786883500" lon="-2.344370000">
-  <course>360.000000</course>
+  <course>0.000000</course>
   <speed>0.000000</speed>
   <name>WP0032</name>
 </trkpt>
@@ -909,7 +909,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>WP0180</name>
 </trkpt>
 <trkpt lat="54.786840200" lon="-2.344350700">
-  <course>360.000000</course>
+  <course>0.000000</course>
   <speed>0.000000</speed>
   <name>WP0181</name>
 </trkpt>
