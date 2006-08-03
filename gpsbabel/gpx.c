@@ -735,6 +735,8 @@ xml_parse_time( const char *cdatastr )
 	struct tm tm;
 	time_t rv = 0;
 	char *timestr = xstrdup( cdatastr );
+
+	memset(&tm, 0, sizeof(tm));
 	
 	offsetstr = strchr( timestr, 'Z' );
 	if ( offsetstr ) {
