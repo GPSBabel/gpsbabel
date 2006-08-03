@@ -25,7 +25,9 @@
 <member>Forerunner 305</member>  
 <member>Foretrex 201</member>
 <member>Foretrex 301</member> 
+<member>GPSMAP 195</member> 
 <member>GPSMAP 276C</member> 
+<member>GPSMAP 295</member> 
 <member>GPSMAP 296C</member> 
 <member>GPSMAP 378</member> 
 <member>GPSMAP 396</member> 
@@ -39,6 +41,7 @@
 <member>GPSMAP 76CS</member> 
 <member>GPSMAP 76CSX</member> 
 <member>GPSMAP 76CX</member> 
+<member>GPSMAP 96</member> 
 <member>GPSMAP 96C</member> 
 <member>Nuvi 300<footnote id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.</para></footnote></member>
 <member>Nuvi 310<footnoteref linkend="gpx"/></member>
