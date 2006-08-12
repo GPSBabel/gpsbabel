@@ -18,6 +18,9 @@
 /* Defined if you have libusb */
 #undef HAVE_LIBUSB
 
+/* Define to 1 if you have the `z' library (-lz). */
+#undef HAVE_LIBZ
+
 /* Define to 1 if you have the `nanosleep' function. */
 #undef HAVE_NANOSLEEP
 
@@ -30,7 +33,7 @@
 /* Define to the full name of this package. */
 #undef PACKAGE_NAME
 
-/* Define to the release of this package. */
+/* Define to the release name of this package. */
 #undef PACKAGE_RELEASE
 
 /* Define to the full name and version of this package. */
@@ -47,3 +50,6 @@
 
 /* 1 to enable shapefile support */
 #undef SHAPELIB_ENABLED
+
+/* 1 to inhibit our use of zlib. */
+#undef ZLIB_INHIBITED
