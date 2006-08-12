@@ -31,6 +31,14 @@
 
 #define MYNAME "gbfile"
 
+/* About the ZLIB_INHIBITED stuff:
+ * 
+ * If a user goes out of his way to build with ZLIB_INHIBITED set,
+ * we jettison our use of zlib entirely within this file, replacing
+ * all calls out to zlib with calls to abort() as that's an internal
+ * consistency error.
+ *
+ */
 
 /* GPSBabel 'file' standard calls */
 
@@ -69,6 +77,7 @@ gbfopen(const char *filename, const char *mode, const char *module)
 	}
 	
 	if (file->gzapi) {
+#if !ZLIB_INHIBITED
 		file->handle.gz = gzopen(filename, mode);
 		if (file->handle.gz == NULL) {
 			fatal("%s: Cannot %s file '%s'!\n", 
@@ -77,6 +86,10 @@ gbfopen(const char *filename, const char *mode, const char *module)
 				filename);
 		}
 		file->gzapi = 1;
+#else
+		/* This is the only runtime test we make */
+		fatal("Zlib was not included in this build.");
+#endif
 	}
 	else {
 		file->handle.std = xfopen(filename, mode, module);
@@ -112,7 +125,11 @@ gbfclose(gbfile *file)
 	if (!file) return;
 
 	if (file->gzapi) {
+#if !ZLIB_INHIBITED
 		gzclose(file->handle.gz);
+#else
+		abort();
+#endif
 	}
 	else {
 		fclose(file->handle.std);
@@ -170,7 +187,12 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 	if ((size == 0) || (members == 0)) return 0;
 	
 	if (file->gzapi) {
-		int result = gzread(file->handle.gz, buf, size * members) / size;
+		int result;
+#if !ZLIB_INHIBITED
+		result = gzread(file->handle.gz, buf, size * members) / size;
+#else
+		abort();
+#endif
 		if ((result < 0) || ((gbsize_t)result < members)) {
 			int errnum;
 			const char *errtxt;
@@ -246,7 +268,11 @@ gbfwrite(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *f
 	if ((size == 0) || (members == 0)) return 0;
 
 	if (file->gzapi) {
+#if !ZLIB_INHIBITED
 		result = gzwrite(file->handle.gz, buf, size * members) / size;
+#else
+		abort();
+#endif
 	}
 	else {
 		result = fwrite(buf, size, members, file->handle.std);
@@ -266,7 +292,11 @@ int
 gbfflush(gbfile *file)
 {
 	if (file->gzapi) {
+#if !ZLIB_INHIBITED
 		return gzflush(file->handle.gz, Z_SYNC_FLUSH);
+#else
+		abort();
+#endif
 	}
 	else {
 		return fflush(file->handle.std);
@@ -277,7 +307,9 @@ void
 gbfclearerr(gbfile *file)
 {
 	if (file->gzapi) {
+#if !ZLIB_INHIBITED
 		gzclearerr(file->handle.gz);
+#endif
 	}
 	else {
 		clearerr(file->handle.std);
@@ -290,7 +322,11 @@ gbferror(gbfile *file)
 	int errnum;
 	
 	if (file->gzapi) {
+#if !ZLIB_INHIBITED
 		(void)gzerror(file->handle.gz, &errnum);
+#else
+		abort();
+#endif
 	}
 	else {
 		errnum = ferror(file->handle.std);
@@ -313,7 +349,12 @@ gbfseek(gbfile *file, gbint32 offset, int whence)
 		int result;
 		
 		assert(whence != SEEK_END);
+
+#if !ZLIB_INHIBITED
 		result = gzseek(file->handle.gz, offset, whence);
+#else
+		result = 1;
+#endif
 		is_fatal(result < 0,
 			"%s: online compression not yet supported for this format!", file->module);
 		return 0;
@@ -328,7 +369,11 @@ gbsize_t
 gbftell(gbfile *file)
 {
 	if (file->gzapi) {
+#if !ZLIB_INHIBITED
 		return gztell(file->handle.gz);
+#else
+		abort();
+#endif
 	}
 	else {
 		return ftell(file->handle.std);
@@ -339,7 +384,11 @@ int
 gbfeof(gbfile *file)
 {
 	if (file->gzapi) {
+#if !ZLIB_INHIBITED
 		return gzeof(file->handle.gz);
+#else
+		abort();
+#endif
 	}
 	else {
 		return feof(file->handle.std);
@@ -350,7 +399,11 @@ int
 gbfungetc(const int c, gbfile *file)
 {
 	if (file->gzapi) {
+#if !ZLIB_INHIBITED
 		return gzungetc(c, file->handle.gz);
+#else
+		abort();
+#endif
 	}
 	else {
 		return ungetc(c, file->handle.std);

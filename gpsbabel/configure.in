@@ -92,6 +92,19 @@ AC_ARG_ENABLE(filters,
 	AC_MSG_RESULT(no)
     fi
 
+AC_MSG_CHECKING(whether to support zlib)
+AC_ARG_WITH(zlib, [  --with-zlib=[(included)|system|no]])
+  case $with_zlib in 
+    "system") 
+	AC_CHECK_LIB([z], [gzopen])
+	;;
+    "no") 
+        AC_DEFINE(ZLIB_INHIBITED, 1, [1 to inhibit our use of zlib.])
+	AC_MSG_RESULT(no) 
+	;;
+    *) 	ZLIB="\$(ZLIB)" 
+	AC_MSG_RESULT(using included version);;
+  esac
 
 case "$target" in
     *-*-mingw32*)
@@ -164,6 +177,7 @@ AC_SUBST(USB_LIBS)
 AC_SUBST(USB_CFLAGS)
 AC_SUBST(OSJEEPS)
 AC_SUBST(GBSER)
+AC_SUBST(ZLIB)
 
 AC_MSG_CHECKING(for random stuff to make you feel better)
 AC_MSG_RESULT(failed)
@@ -213,7 +227,6 @@ AC_CHECK_LIB([expat], [XML_ParserCreate],
   AC_SUBST(EXPAT_LIB)
 #  [EXPAT_LIB="$LDFLAGS -lexpat"]
 )
-echo $EXPAT_LIB
 
 # Checks for header files.
 # AC_HEADER_STDC
