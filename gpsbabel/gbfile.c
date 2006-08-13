@@ -29,6 +29,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+#if __WIN32__
+/* taken from minigzip.c (part of the zlib project) */
+#  include <fcntl.h>
+#  include <io.h>
+#  define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)
+#else
+#  define SET_BINARY_MODE(file)
+#endif
+
 #define MYNAME "gbfile"
 
 /* About the ZLIB_INHIBITED stuff:
@@ -94,6 +104,7 @@ gbfopen(const char *filename, const char *mode, const char *module)
 				fd = stdin;
 			else
 				fd = stdout;
+			SET_BINARY_MODE(fd);
 			file->handle.gz = gzdopen(fileno(fd), openmode);
 		}
 		else
