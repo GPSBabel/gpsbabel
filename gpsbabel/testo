@@ -1100,5 +1100,12 @@ compare ${TMPDIR}/stmsdf-route.sdf ${REFERENCE}/route/stmsdf-route.sdf
 ${PNAME} -i stmsdf -f ${TMPDIR}/stmsdf-track.sdf -f ${TMPDIR}/stmsdf-route.sdf -o garmin_txt,prec=2 -F ${TMPDIR}/stmsdf.txt
 compare ${TMPDIR}/stmsdf.txt ${REFERENCE}/stmsdf.txt
 
+#
+# gzipped file i/o
+#
+${PNAME} -i compegps -f ${REFERENCE}/compegps.wpt.gz -o gpx -F ${TMPDIR}/compegps-wpt.gpx
+compare ${REFERENCE}/compegps-wpt.gpx ${TMPDIR}/compegps-wpt.gpx
+${PNAME} -i cst -f ${REFERENCE}/route/cst-sample.cst.gz -o gpx -F ${TMPDIR}/cst-sample.gpx
+compare ${TMPDIR}/cst-sample.gpx ${REFERENCE}/route/cst-sample.gpx
 
 exit 0
