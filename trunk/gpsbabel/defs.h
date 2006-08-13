@@ -28,7 +28,11 @@
 #include "config.h"
 #include "queue.h"
 #include "gbtypes.h"
+#if HAVE_LIBZ
+#include <zlib.h>
+#elif !ZLIB_INHIBITED
 #include "zlib/zlib.h"
+#endif
 #include "gbfile.h"
 #include "cet.h"
 #include "cet_util.h"
