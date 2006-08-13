@@ -1102,51 +1102,40 @@ cet_disp_character_set_names(FILE *fout)
  *
  * - print any special hard-coded characters from inside a module - */
 
-int cet_vfprintf(FILE *stream, const cet_cs_vec_t *src_vec, const char *fmt, va_list args)
+int cet_gbfprintf(gbfile *stream, const cet_cs_vec_t *src_vec, const char *fmt, ...)
 {
 	char buff[128];
-	char *cout = buff;
 	int res, ct;
-	va_list args2;		/* vsnprintf makes args unusable for a second try */
-	
-	__va_copy(args2, args);
+	va_list args;
+	char *cout = buff;
+
+	va_start(args, fmt);
 	ct = vsnprintf(buff, sizeof(buff), fmt, args);
+	va_end(args);
+
 	if (ct >= (int)sizeof(buff)) {
-	    cout = xmalloc(ct + 1);
-	    vsnprintf(cout, ct + 1, fmt, args2);
+		cout = xmalloc(ct + 1);
+		va_start(args, fmt);
+		vsnprintf(cout, ct + 1, fmt, args);
+		va_end(args);
 	}
-	va_end(args2);
-	
+
 	if (global_opts.charset != src_vec)
 	{
-	    if (src_vec != &cet_cs_vec_utf8)
-	    {
-		char *ctemp = cet_str_any_to_utf8(cout, src_vec);
-		if (cout != buff) xfree(cout);
-		cout = ctemp;
-	    }
-	    if (global_opts.charset != &cet_cs_vec_utf8)
-	    {
-		char *ctemp = cet_str_utf8_to_any(cout, global_opts.charset);
-		if (cout != buff) xfree(cout);
-		cout = ctemp;
-	    }
+		if (src_vec != &cet_cs_vec_utf8) {
+			char *ctemp = cet_str_any_to_utf8(cout, src_vec);
+			if (cout != buff) xfree(cout);
+			cout = ctemp;
+		}
+		if (global_opts.charset != &cet_cs_vec_utf8) {
+			char *ctemp = cet_str_utf8_to_any(cout, global_opts.charset);
+			if (cout != buff) xfree(cout);
+			cout = ctemp;
+		}
 	}
 
-	res = fprintf(stream, "%s", cout);
+	res = gbfprintf(stream, "%s", cout);
 	if (cout != buff) xfree(cout);
-	
-	return res;
-}
-
-int cet_fprintf(FILE *stream, const cet_cs_vec_t *src_vec, const char *fmt, ...)
-{
-	int res;
-	va_list args;
-	
-	va_start(args, fmt);
-	res = cet_vfprintf(stream, src_vec, fmt, args);
-	va_end(args);
 	
 	return res;
 }

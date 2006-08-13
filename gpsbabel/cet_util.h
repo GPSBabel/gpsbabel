@@ -99,8 +99,7 @@ char *cet_str_uni_to_any(const short *src, int length, const cet_cs_vec_t *dest_
 char *cet_str_any_to_any(const char *src, const cet_cs_vec_t *src_vec, const cet_cs_vec_t *dest_vec);
 int cet_valid_char(const char *src, const cet_cs_vec_t *vec);
 
-int cet_vfprintf(FILE *stream, const cet_cs_vec_t *src_vec, const char *fmt, va_list args);
-int cet_fprintf(FILE *stream, const cet_cs_vec_t *src_vec, const char *fmt, ...);
+int cet_gbfprintf(gbfile *stream, const cet_cs_vec_t *src_vec, const char *fmt, ...);
 
 /* cet_convert_string: !!! ONLY VALID WITHIN 'cet_convert_strings' process !!! */
 char *cet_convert_string(char *str);
