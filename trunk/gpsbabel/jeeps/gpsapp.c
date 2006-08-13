@@ -2063,7 +2063,11 @@ static void GPS_D108_Send(UC *data, GPS_PWay way, int32 *len)
     GPS_Util_Put_Int(p,(int32)GPS_Math_Deg_To_Semi(way->lon));
     p+=sizeof(int32);
 
-    GPS_Util_Put_Float(p,way->alt);
+    if (way->alt_is_unknown) {
+	GPS_Util_Put_Float(p,(const float) 1.0e25);
+    } else {
+	GPS_Util_Put_Float(p,way->alt);
+    }
     p+=sizeof(float);
     GPS_Util_Put_Float(p,way->dpth);
     p+=sizeof(float);
