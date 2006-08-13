@@ -526,6 +526,9 @@ static void ppdb_read(void)
 	    case wptdata:
 		ppdb_read_wpt(pdb_in, pdb_rec, NULL, 0);
 		break;
+	    case posndata:
+		fatal(MYNAME ": Realtime positioning not supported.\n");
+		break;
 	}
 	
 	free_pdb(pdb_in);
@@ -715,6 +718,9 @@ static void ppdb_write(void)
 		pdb_out->type = PPDB_MAGIC_TRK;
 		appinfo->dataBaseSubType = 1;
 		route_disp_all(ppdb_track_header, ppdb_track_trailer, ppdb_write_wpt);
+		break;
+	    case posndata:
+		fatal(MYNAME ": Realtime positioning not supported.\n");
 		break;
 	}
 

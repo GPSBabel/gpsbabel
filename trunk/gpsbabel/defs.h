@@ -124,19 +124,22 @@ typedef enum {
 typedef enum {
 	trkdata = 1 ,
 	wptdata,
-	rtedata
+	rtedata,
+	posndata
 } gpsdata_type;
 
 #define NOTHINGMASK		0
 #define WPTDATAMASK		1
 #define TRKDATAMASK		2
 #define	RTEDATAMASK		4
+#define	POSNDATAMASK		8
 
 /* mask objective testing */
 #define	doing_nothing (global_opts.masked_objective == NOTHINGMASK)
 #define	doing_wpts ((global_opts.masked_objective & WPTDATAMASK) == WPTDATAMASK)
 #define	doing_trks ((global_opts.masked_objective & TRKDATAMASK) == TRKDATAMASK)
 #define	doing_rtes ((global_opts.masked_objective & RTEDATAMASK) == RTEDATAMASK)
+#define	doing_posn ((global_opts.masked_objective & POSNDATAMASK) == POSNDATAMASK)
 
 typedef struct {
 	int synthesize_shortnames;
@@ -390,6 +393,8 @@ typedef void (*ff_deinit) (void);
 typedef void (*ff_read) (void);
 typedef void (*ff_write) (void);
 typedef void (*ff_exit) (void);
+typedef void (*ff_writeposn) (waypoint *);
+typedef waypoint * (*ff_readposn) (void);
 
 #ifndef DEBUG_MEM
 char * get_option(const char *iarglist, const char *argname);
@@ -573,6 +578,19 @@ typedef enum {
 	{ ff_cap_read | ff_cap_write, ff_cap_none, ff_cap_none}
 
 /*
+ * Format capabilities for realtime positioning.
+ */
+typedef struct position_ops {
+	ff_init rd_init;
+	ff_readposn rd_position;
+	ff_deinit rd_deinit;
+
+	ff_init wr_init;
+	ff_writeposn wr_position;
+	ff_deinit wr_deinit;
+} position_ops_t;
+
+/*
  *  Describe the file format to the caller.
  */
 typedef struct ff_vecs {
@@ -588,6 +606,7 @@ typedef struct ff_vecs {
 	arglist_t *args;
 	char *encode;
 	int fixed_encode;
+	position_ops_t position_ops;
 } ff_vecs_t;
 
 typedef struct style_vecs {
@@ -772,7 +791,7 @@ unsigned long get_crc32_s(const void * data);
  */
 typedef enum {
 	units_unknown = 0,
-	units_statue = 1,
+	units_statute = 1,
 	units_metric =2
 } fmt_units;
 

@@ -295,7 +295,10 @@ my_write(void)
 			route_disp_all(poly_init, poly_deinit, poly_point);
 			break;
 		case rtedata:
-			fatal(MYNAME ":Routes are not supported\n");
+			fatal(MYNAME ": Routes are not supported\n");
+			break;
+		case posndata:
+			fatal(MYNAME ": Realtime positioning not supported\n");
 			break;
 	}
 }

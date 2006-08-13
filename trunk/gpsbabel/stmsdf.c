@@ -692,6 +692,9 @@ data_write(void)
 				}
 			}
 			break;
+		case posndata:
+			fatal(MYNAME ": Realtime positioning not supported.\n");
+			break;
 	}
 }
 

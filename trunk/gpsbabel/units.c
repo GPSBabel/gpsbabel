@@ -21,13 +21,13 @@
 
 #include "defs.h"
 
-static int units = units_statue;
+static int units = units_statute;
 
 int 
 fmt_setunits(fmt_units u)
 {
 	switch (u) {
-	case units_statue:
+	case units_statute:
 	case units_metric:
 		units = u;
 		return 0;
@@ -42,7 +42,7 @@ fmt_distance(const double distance_meters, char **tag)
 	double d;
 
 	switch (units) {
-	case units_statue: 
+	case units_statute: 
 		d = METERS_TO_FEET(distance_meters);
 		if (d < 5280) {
 			*tag = "ft";
@@ -75,7 +75,7 @@ fmt_speed(const double distance_meters_sec, char **tag)
 	double d;
 
 	switch (units) {
-	case units_statue:
+	case units_statute:
 		d = METERS_TO_MILES(distance_meters_sec) * SECONDS_PER_HOUR ;
 		*tag = "mph";
 		break;

@@ -618,6 +618,9 @@ compegps_data_write(void)
 		case rtedata:
 			write_route();
 			break;
+		case posndata:
+			fatal(MYNAME ": Realtime positioning not supported.\n");
+			break;
 	}
 }
 
