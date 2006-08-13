@@ -287,6 +287,9 @@ stmwpp_data_write(void)
 			what = STM_TRKPT;
 			track_disp_all(stmwpp_track_hdr, stmwpp_track_tlr, stmwpp_waypt_cb);
 			break;
+	    	case posndata:
+			fatal(MYNAME ": Realtime positioning not supported.\n");
+			break;
 	}
 }
 

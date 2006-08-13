@@ -203,6 +203,10 @@ main(int argc, char *argv[])
 				if (ivecs->rd_init == NULL) {
 					fatal ("Format does not support reading.\n");
 				}
+				if (global_opts.masked_objective & POSNDATAMASK) {
+					did_something = 1;
+					break;
+				}
 				/* simulates the default behaviour of waypoints */
 				if (doing_nothing) global_opts.masked_objective |= WPTDATAMASK;
 			
@@ -221,7 +225,7 @@ main(int argc, char *argv[])
 				optarg = argv[argn][2]
 					? argv[argn]+2 : argv[++argn];
 				ofname = optarg;
-				if (ovecs) {
+				if (ovecs && (!(global_opts.masked_objective & POSNDATAMASK))) {
 					/* simulates the default behaviour of waypoints */
 					if (doing_nothing) 
 						global_opts.masked_objective |= WPTDATAMASK;
@@ -286,6 +290,10 @@ main(int argc, char *argv[])
 			case 'r':
 				global_opts.objective = rtedata;
 				global_opts.masked_objective |= RTEDATAMASK;
+				break;
+			case 'T':
+				global_opts.objective = posndata;
+				global_opts.masked_objective |= POSNDATAMASK;
 				break;
 			case 'N':
 				switch(argv[argn][2]) {
@@ -422,6 +430,38 @@ main(int argc, char *argv[])
 		waypt_disp_all(waypt_disp);
 		global_opts.verbose_status = saved_status;
 	}
+
+	/*
+	 * This is very unlike the rest of our command sequence.
+	 * If we're doing realtime position tracking, we enforce that
+	 * we're not doing anything else and we just bounce between
+	 * the special "read position" and "write position" vectors 
+	 * in our most recent vecs.
+	 */
+	if (global_opts.masked_objective & POSNDATAMASK) {
+		waypoint *wpt = waypt_new();
+		ivecs->position_ops.rd_init(fname);
+
+		if (global_opts.masked_objective & ~POSNDATAMASK) {
+			fatal("Realtime tracking (-T) is exclusive of other modes.\n");
+		}
+
+		while (1) {
+			wpt = ivecs->position_ops.rd_position();
+			if (wpt) {
+				if (ovecs) {
+					ovecs->position_ops.wr_init(ofname);
+					ovecs->position_ops.wr_position(wpt);
+					ovecs->position_ops.wr_deinit();
+				} else {
+					/* Just print to screen */
+					waypt_disp(wpt);
+				}
+			}
+		}
+//		waypt_del(wpt);
+	}
+	
 
 	if (!did_something)
 		fatal ("Nothing to do!  Use '%s -h' for command-line options.\n", prog_name);

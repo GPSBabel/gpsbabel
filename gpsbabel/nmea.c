@@ -24,6 +24,7 @@
 #include <time.h>
 
 #include "defs.h"
+#include "gbser.h"
 #include "strptime.h"
 
 /**********************************************************
@@ -139,6 +140,12 @@ typedef enum {
 	gprmc
 } preferred_posn_type;
 
+enum {
+	rm_unknown = 0,
+	rm_serial,
+	rm_file
+} read_mode;
+
 static FILE *file_in;
 static FILE *file_out;
 static route_head *trk_head;
@@ -147,6 +154,7 @@ static preferred_posn_type posn_type;
 static struct tm tm;
 static waypoint * curr_waypt = NULL;
 static waypoint * last_waypt = NULL;
+static void * gbser_handle;
 
 static int without_date;	/* number of created trackpoints without a valid date */
 static struct tm opt_tm;	/* converted "date" parameter */
@@ -162,11 +170,17 @@ static char *dogpvtg = NULL;
 static char *dogpgsa = NULL;
 static char *snlenopt = NULL;
 static char *optdate = NULL;
+static char *getposnarg = NULL;
 static char *opt_sleep = NULL;
+static char *opt_baud = NULL;
 static long sleepus = 0;
+static int getposn;
 
 static time_t last_time = -1;
 static double last_read_time;   /* Last timestamp of GGA or PRMC */
+
+static waypoint * nmea_rd_posn(void);
+static void nmea_rd_posn_init(const char *fname);
 
 arglist_t nmea_args[] = {
 	{"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64" },
@@ -175,8 +189,10 @@ arglist_t nmea_args[] = {
 	{"gpvtg", &dogpvtg, "Read/write GPVTG sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"gpgsa", &dogpgsa, "Read/write GPGSA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX },
-	{"pause", &opt_sleep, "Decimal seconds to pause between groups of strings", NULL, 
-			ARGTYPE_STRING, ARG_NOMINMAX },
+	{ "get_posn", &getposnarg, "Return current position as a waypoint", 
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	{"pause", &opt_sleep, "Decimal seconds to pause between groups of strings", NULL, ARGTYPE_INT, ARG_NOMINMAX },
+	{"baud", &opt_baud, "Bits per speed of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -200,13 +216,48 @@ nmea_rd_init(const char *fname)
 {
 	curr_waypt = NULL;
 	last_waypt = NULL;
+
+ 	if (getposnarg) {
+ 		getposn = 1;
+ 	}
+ 
+ 	/* A special case hack that gets our current position and returns
+ 	 * it as one waypoint.
+ 	 */
+ 	if (getposn) {
+ 		waypoint *wpt;
+ 		nmea_rd_posn_init(fname);
+ 		wpt = nmea_rd_posn();
+ 		if (!wpt) {
+ 			return;
+ 		}
+ 		if (wpt->shortname) {
+ 			xfree(wpt->shortname);
+ 		}
+ 		wpt->shortname = xstrdup("Position");
+ 		waypt_add(wpt);
+ 		return;
+ 	}
+
+ 	read_mode = rm_file;
 	file_in = xfopen(fname, "rb", MYNAME);
 }
 
 static  void
 nmea_rd_deinit(void)
 {
-	fclose(file_in);
+	switch(read_mode) {
+	case rm_serial:
+		gbser_deinit(gbser_handle);
+		break;
+	case rm_file:
+		fclose(file_in);
+		file_in = NULL;
+		break;
+	default:
+		fatal("nmea_rd_deinit: illegal read_mode.\n");
+		break;
+	}
 }
 
 static void
@@ -718,6 +769,11 @@ nmea_read(void)
 	without_date = 0;
 	memset(&tm, 0, sizeof(tm));
 	opt_tm = tm;
+
+	/* This was done in rd_init() */
+	if (getposn) {
+		return;
+	}
 	
 	if (optdate)
 	{
@@ -750,6 +806,56 @@ nmea_read(void)
 	textfile_done(tin);
 }
 
+void
+nmea_rd_posn_init(const char *fname)
+{
+	if ((gbser_handle = gbser_init(fname)) != NULL) {
+		read_mode = rm_serial;
+		gbser_set_speed(gbser_handle, 4800);
+	} else {
+		fatal("Could not open %s\n", fname);
+	}
+
+	if (opt_baud) {
+		if (!gbser_set_speed(gbser_handle, atoi(opt_baud))) {
+			fatal("Unable to set baud rate %s\n", opt_baud);
+		}
+	}
+}
+
+static waypoint *
+nmea_rd_posn(void)
+{
+	char ibuf[1024];
+	static double lt = -1;
+	int i;
+
+	/*
+	 * Read a handful of sentences, collecting the best info we
+	 * can.  If the timestamp changes (indicating the sequence is
+	 * about to restart and thus the one we're collecting isn't going
+	 * to get any better than we now have) hand that back to the caller.
+	 */
+	for (i = 0; i < 10; i++) {
+		int rv;
+		ibuf[0] = 0;
+		rv = gbser_read_line(gbser_handle, ibuf, sizeof(ibuf), 2000, '\x0a', '\x0d');
+		if (global_opts.debug_level > 1) {
+			warning( "READ: %s\n", ibuf);
+		}
+		if (rv < 0) {
+			fatal("No data received.\n");
+		}
+		nmea_parse_one_line(ibuf);
+		if (lt != last_read_time) {
+			if (last_read_time) {
+				lt = last_read_time;
+				return waypt_dupe(curr_waypt);
+			}
+		}
+	}
+	return NULL;
+}
 
 static void
 nmea_wayptpr(const waypoint *wpt)
@@ -921,5 +1027,6 @@ ff_vecs_t nmea_vecs = {
 	nmea_write,
 	NULL,
 	nmea_args,
-	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+	CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
+	{ nmea_rd_posn_init, nmea_rd_posn, nmea_rd_deinit, NULL, NULL, NULL }
 };

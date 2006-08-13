@@ -637,6 +637,9 @@ data_read(void)
                 case wptdata:
                     ozi_parse_waypt(i, s, wpt_tmp, fsdata);
                     break;
+		case posndata:
+		    fatal(MYNAME ": realtime positioning not supported.\n");
+		    break;
                 }
                 i++;
                 s = csv_lineparse(NULL, ",", "", linecount);
@@ -664,6 +667,9 @@ data_read(void)
                     waypt_free(wpt_tmp);
 		}
                 break;
+	     case posndata:
+		 fatal(MYNAME ": realtime positioning not supported.\n");
+	  	 break;
             }
 
         } else {

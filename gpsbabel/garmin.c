@@ -409,6 +409,81 @@ route_read(void)
 
 }
 
+/*
+ * Rather than propogate Garmin-specific data types outside of the Garmin
+ * code, we convert the PVT (position/velocity/time) data from the receiver
+ * to the data type we use throughout.   Yes, we do lose some data that way.
+ */
+static void
+pvt2wpt(GPS_PPvt_Data pvt, waypoint *wpt)
+{
+	double wptime, wptimes;
+
+	wpt->altitude = pvt->alt;
+	wpt->latitude = pvt->lat;
+	wpt->longitude = pvt->lon;
+
+	/*
+	 * The unit reports time in three fields:
+	 * 1) The # of days to most recent Sun. since  1989-12-31 midnight UTC.
+	 * 2) The number of seconds (fractions allowed) since that Sunday.
+	 * 3) The number of leap seconds that offset the current UTC and GPS
+	 *    reference clocks.
+	 */
+	wptime = 631065600.0 + pvt->wn_days * 86400.0  + 
+		pvt->tow 
+		- pvt->leap_scnds;
+	wptimes = floor(wptime);
+	wpt->creation_time = wptimes;
+	wpt->centiseconds = 100.0 * (wptime - wptimes);
+	
+	/*
+	 * The Garmin spec fifteen different models that use a different 
+	 * table for 'fix' without a really good way to tell if the model 
+	 * we're talking to happens to be one of those...By inspection,
+	 * it looks like even though the models (Summit, Legend, etc.) may
+	 * be popular, it's older (2001 and earlier or so) versions that
+	 * are affected and I think there are relatively few readers of
+	 * the fix field anyway.   Time will tell if this is a good plan.
+	 */
+	switch (pvt->fix) {
+		case 0: wpt->fix = fix_unknown;break;
+		case 1: wpt->fix = fix_none;break;
+		case 2: wpt->fix = fix_2d;break;
+		case 3: wpt->fix = fix_3d;break;
+		case 4: wpt->fix = fix_dgps;break; /* 2D_diff */
+		case 5: wpt->fix = fix_dgps;break; /* 3D_diff */
+		default:
+			/* undocumented type. */
+			break;
+	}
+}
+
+static gpsdevh *pvt_fd;
+
+static void
+pvt_init(const char *fname)
+{
+	rw_init(fname);
+	GPS_Command_Pvt_On(fname, &pvt_fd);
+}
+
+static waypoint *
+pvt_read(void)
+{
+	waypoint *wpt = waypt_new();
+	GPS_PPvt_Data pvt = GPS_Pvt_New();
+
+	if (GPS_Command_Pvt_Get(&pvt_fd, &pvt)) {
+		pvt2wpt(pvt, wpt);
+		wpt->shortname = xstrdup("Position");
+	
+		return wpt;
+	} 
+
+	return NULL;
+}
+
 static void
 data_read(void)
 {
@@ -423,7 +498,7 @@ data_read(void)
 	if (global_opts.masked_objective & RTEDATAMASK)
 	  route_read();
 	if (!(global_opts.masked_objective & 
-	      (WPTDATAMASK | TRKDATAMASK | RTEDATAMASK)))
+	      (WPTDATAMASK | TRKDATAMASK | RTEDATAMASK | POSNDATAMASK)))
 	  fatal(MYNAME ": Nothing to do.\n");
 }
 
@@ -739,7 +814,8 @@ ff_vecs_t garmin_vecs = {
 	data_write,
 	NULL,
 	garmin_args,
-	CET_CHARSET_ASCII, 0
+	CET_CHARSET_ASCII, 0,
+	{ pvt_init, pvt_read, NULL, NULL, NULL, NULL }
 };
 
 static const char *d103_icons[16] = {
