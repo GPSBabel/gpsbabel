@@ -26,8 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static FILE *fin;
-static FILE *fout;
+static gbfile *fin, *fout;
 static route_head *track, *route;
 static waypoint *wpt;
 
@@ -56,7 +55,7 @@ arglist_t stmwpp_args[] =
 static void
 stmwpp_rd_init(const char *fname)
 {
-	fin = xfopen(fname, "rb", MYNAME);
+	fin = gbfopen(fname, "rb", MYNAME);
 	track = NULL;
 	route = NULL;
 	wpt = NULL;
@@ -65,25 +64,22 @@ stmwpp_rd_init(const char *fname)
 static void
 stmwpp_rd_deinit(void)
 {
-	fclose(fin);
+	gbfclose(fin);
 }
 
 static void
 stmwpp_data_read(void)
 {
 	char *buff;
-	textfile_t *tin;
-	
-	tin = textfile_init(fin);
 	
 	what = STM_NOTHING;
-	buff = textfile_read(tin);
+	buff = gbfgetstr(fin);
 	buff = (buff == NULL) ? "" : buff;
 	
 	if (strncmp(buff, "Datum,WGS 84,WGS 84,", 20) != 0)
 		fatal(MYNAME ": Invalid GPS datum or not \"WaypointPlus\"\" file!\n");
 	
-	while ((buff = textfile_read(tin)))
+	while ((buff = gbfgetstr(fin)))
 	{
 		char *c;
 		int column = -1;
@@ -181,19 +177,18 @@ stmwpp_data_read(void)
 			wpt = NULL;
 		}
 	}
-	textfile_done(tin);
 }
 
 static void
 stmwpp_rw_init(const char *fname)
 {
-	fout = xfopen(fname, "wb", MYNAME);
+	fout = gbfopen(fname, "wb", MYNAME);
 }
 
 static void
 stmwpp_rw_deinit(void)
 {
-	fclose(fout);
+	gbfclose(fout);
 }
 
 static void
@@ -216,7 +211,7 @@ stmwpp_write_double(const double val)
 	c = buff + snprintf(buff, sizeof(buff), "%3.7f", val);
 	while (*--c == '0') *c = '\0';
 	if (*c == '.') *c = '0';
-	fprintf(fout, "%s,", buff);
+	gbfprintf(fout, "%s,", buff);
 }
 
 static void
@@ -238,27 +233,27 @@ stmwpp_waypt_cb(const waypoint *wpt)
 	{
 		case STM_WAYPT:
 		case STM_RTEPT:
-			fprintf(fout, "WP,D,%s,", wpt->shortname);
+			gbfprintf(fout, "WP,D,%s,", wpt->shortname);
 			break;
 			
 		case STM_TRKPT:
-			fprintf(fout, "TP,D,");
+			gbfprintf(fout, "TP,D,");
 			break;
 	}
 	stmwpp_write_double(wpt->latitude);
 	stmwpp_write_double(wpt->longitude);
-	fprintf(fout, "%s,%s", cdate, ctime);
+	gbfprintf(fout, "%s,%s", cdate, ctime);
 	switch(what)
 	{
 		case STM_WAYPT:
 		case STM_RTEPT:
-			fprintf(fout, ".%02d", wpt->centiseconds);
+			gbfprintf(fout, ".%02d", wpt->centiseconds);
 			break;
 		case STM_TRKPT:
-			fprintf(fout, ".%03d", wpt->centiseconds * 10);
+			gbfprintf(fout, ".%03d", wpt->centiseconds * 10);
 			break;
 	}
-	fprintf(fout, ",\r\n");
+	gbfprintf(fout, ",\r\n");
 }
 
 static void
@@ -270,7 +265,7 @@ stmwpp_data_write(void)
 	else
 		track_index = 1;
 		
-	fprintf(fout, "Datum,WGS 84,WGS 84,0,0,0,0,0\r\n");
+	gbfprintf(fout, "Datum,WGS 84,WGS 84,0,0,0,0,0\r\n");
 	
 	switch(global_opts.objective)
 	{

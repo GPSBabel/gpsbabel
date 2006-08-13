@@ -25,6 +25,7 @@
     		10/25/2005: becomes a writer too
 		10/26/2005: received documention from CompeGPS team
 		            added fatals for "G" and "U" if not WGS84 and lat/lon
+		08/13/2006: switch to gbfile api
 */
 
 /*  
@@ -69,8 +70,7 @@
 
 #define SHORT_NAME_LENGTH 16
 
-static FILE *fin, *fout;
-static char *fin_name, *fout_name;
+static gbfile *fin, *fout;
 static int target_index, curr_index;
 static int track_info_flag;
 static short_handle sh;
@@ -317,28 +317,25 @@ parse_rte_info(const char *buff, route_head *route)	/* "R" */
 static void
 compegps_rd_init(const char *fname)
 {
-	fin_name = (char *)fname;
-	fin = xfopen(fname, "rb", MYNAME);
+	fin = gbfopen(fname, "rb", MYNAME);
 }
 
 static void
 compegps_rd_deinit(void)
 {
-	fclose(fin);
+	gbfclose(fin);
 }
 
 static void
 compegps_data_read(void)
 {
-	textfile_t *tin;
 	char *buff;
 	int line = 0;
 	waypoint *wpt = NULL;
 	route_head *route = NULL;
 	route_head *track = NULL;
 	
-	tin = textfile_init(fin);
-	while ((buff = textfile_read(tin)))
+	while ((buff = gbfgetstr(fin)))
 	{
 		char *cin = buff;
 		char *ctail, *cx;
@@ -408,7 +405,6 @@ compegps_data_read(void)
 				break;
 		}
 	}
-	textfile_done(tin);
 }
 
 /* ----------------------------------------------------------- */
@@ -422,16 +418,16 @@ write_waypt_cb(const waypoint *wpt)
 	
 	name = (snlen > 0) ? mkshort_from_wpt(sh, wpt) : csv_stringclean(wpt->shortname, " ");
 	
-	fprintf(fout, "W  %s A ", name);
-	fprintf(fout, "%.10f%c%c ",
+	gbfprintf(fout, "W  %s A ", name);
+	gbfprintf(fout, "%.10f%c%c ",
 		fabs(wpt->latitude), 0xBA, (wpt->latitude >= 0) ? 'N' : 'S');
-	fprintf(fout, "%.10f%c%c ",
+	gbfprintf(fout, "%.10f%c%c ",
 		fabs(wpt->longitude), 0xBA, (wpt->longitude >= 0) ? 'E' : 'W');
-	fprintf(fout, "27-MAR-62 00:00:00 %.6f", 
+	gbfprintf(fout, "27-MAR-62 00:00:00 %.6f", 
 		(wpt->altitude != unknown_alt) ? wpt->altitude : 0.0);
 	if (wpt->description != NULL)
-		fprintf(fout, " %s", wpt->description);
-	fprintf(fout, "\n");
+		gbfprintf(fout, " %s", wpt->description);
+	gbfprintf(fout, "\n");
 	
 	if ((wpt->icon_descr != NULL) || (wpt->proximity > 0.0) || \
 	    (option_icon != NULL))
@@ -440,7 +436,7 @@ write_waypt_cb(const waypoint *wpt)
 		
 		if (wpt->icon_descr != NULL) icon = (char *) wpt->icon_descr;
 			
-		fprintf(fout, "w  %s,0,0.0,16777215,255,1,7,,%.1f\n",
+		gbfprintf(fout, "w  %s,0,0.0,16777215,255,1,7,,%.1f\n",
 			(icon != NULL) ? icon : "Waypoint",
 			(wpt->proximity > 0.0f) ? wpt->proximity : 0.0);
 	}
@@ -460,7 +456,7 @@ write_route_hdr_cb(const route_head *rte)
 		name = csv_stringclean(name, ",");
 	else
 		name = xstrdup(" ");
-	fprintf(fout, "R  16711680,%s,1,-1\n", name);
+	gbfprintf(fout, "R  16711680,%s,1,-1\n", name);
 	xfree(name);
 }
 
@@ -500,17 +496,17 @@ write_trkpt_cb(const waypoint *wpt)
 		strupper(buff);
 	}
 	
-	fprintf(fout, "T  A %.10f%c%c %.10f%c%c ",
+	gbfprintf(fout, "T  A %.10f%c%c %.10f%c%c ",
 		fabs(wpt->latitude), 0xBA, (wpt->latitude >= 0) ? 'N' : 'S',
 		fabs(wpt->longitude), 0xBA, (wpt->longitude >= 0) ? 'E' : 'W');
-	fprintf(fout, "%s s %.1f %.1f %.1f %.1f %d ",
+	gbfprintf(fout, "%s s %.1f %.1f %.1f %.1f %d ",
 		buff,
 		wpt->altitude,
 		0.0,
 		0.0,
 		0.0,
 		0);
-	fprintf(fout, "%.1f %.1f %.1f %.1f %.1f\n",
+	gbfprintf(fout, "%.1f %.1f %.1f %.1f %.1f\n",
 		-1000.0,
 		-1.0,
 		-1.0,
@@ -524,7 +520,7 @@ write_trkpt_cb(const waypoint *wpt)
 			char *name;
 			
 			name = csv_stringclean(curr_track->rte_name, "|");
-			fprintf(fout, "t 4294967295|%s|-1|-1\n", name);
+			gbfprintf(fout, "t 4294967295|%s|-1|-1\n", name);
 			xfree(name);
 		}
 	}
@@ -535,9 +531,9 @@ write_track(void)
 {
 	curr_index = 0;
 	
-//	fprintf(fout, "L  +02:00:00\n");
+//	gbfprintf(fout, "L  +02:00:00\n");
 	track_disp_all(write_track_hdr_cb, NULL, write_trkpt_cb);
-	fprintf(fout, "F  1234\n");
+	gbfprintf(fout, "F  1234\n");
 }
 
 static void
@@ -551,8 +547,7 @@ write_waypoints(void)
 static void
 compegps_wr_init(const char *fname)
 {
-	fout_name = (char *)fname;
-	fout = xfopen(fname, "w", MYNAME);
+	fout = gbfopen(fname, "w", MYNAME);
 	sh = mkshort_new_handle();
 }
 
@@ -560,7 +555,7 @@ static void
 compegps_wr_deinit(void)
 {
 	mkshort_del_handle(&sh);
-	fclose(fout);
+	gbfclose(fout);
 }
 
 static void
@@ -568,8 +563,8 @@ compegps_data_write(void)
 {
 	/* because of different file extensions we can only write one GPS data type at time */
 	
-	fprintf(fout, "G  WGS 84\n");
-	fprintf(fout, "U  1\n");
+	gbfprintf(fout, "G  WGS 84\n");
+	gbfprintf(fout, "U  1\n");
 	
 	/* process options */
 	
