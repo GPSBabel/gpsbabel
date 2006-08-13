@@ -61,7 +61,9 @@ gbfopen(const char *filename, const char *mode, const char *module)
 		switch(tolower(*m)) {
 			case 'r':
 				file->mode = 'r';
-				file->gzapi = 1;
+#if !ZLIB_INHIBITED
+				file->gzapi = 1;	/* native or transparent */
+#endif
 				break;
 			case 'w':
 				file->mode = 'w';
@@ -78,7 +80,25 @@ gbfopen(const char *filename, const char *mode, const char *module)
 	
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		file->handle.gz = gzopen(filename, mode);
+		char openmode[32];
+
+		/* under non-posix systems files MUST be opened in binary mode */
+		
+		strcpy(openmode, mode);
+		if (strchr(mode, 'b') == NULL)
+			strncat(openmode, "b", sizeof(openmode));
+		
+		if (strcmp(filename, "-") == 0) {
+			FILE *fd;
+			if (file->mode == 'r')
+				fd = stdin;
+			else
+				fd = stdout;
+			file->handle.gz = gzdopen(fileno(fd), openmode);
+		}
+		else
+			file->handle.gz = gzopen(filename, openmode);
+			
 		if (file->handle.gz == NULL) {
 			fatal("%s: Cannot %s file '%s'!\n", 
 				module, 
@@ -88,7 +108,7 @@ gbfopen(const char *filename, const char *mode, const char *module)
 		file->gzapi = 1;
 #else
 		/* This is the only runtime test we make */
-		fatal("Zlib was not included in this build.");
+		fatal("%s: Zlib was not included in this build.\n", file->module);
 #endif
 	}
 	else {
