@@ -50,6 +50,15 @@ static int route_out_count;
 static int waypoint_read_count;
 static int wpt_len = 8;
 static const char *curfname;
+/*
+ * Magellan's firmware is *horribly* slow to send the next packet after
+ * we turn around an ack while we are reading from the device.  It's
+ * quite spiffy when we're writing to the device.   Since we're *way*
+ * less likely to lose data while reading from it than it is to lose data
+ * when we write to it, we turn off the acks when we are predominatly
+ *  reading.
+ */
+static int suppress_ack;
 
 typedef enum {
 	mrs_handoff = 0,
@@ -471,8 +480,8 @@ retry:
 			 */
 			const char *s = strrchr(curfname, GB_PATHSEP);
 			char *e;
-
 			trk_head = route_head_alloc();
+
 			if (s) {
 				s++; /* Skip path delim */
 			}  else {
@@ -509,8 +518,10 @@ retry:
 		found_done = 1;
 		return;
 	} 
-	if (magrxstate != mrs_handoff)
+
+	if (magrxstate != mrs_handoff) {
 		mag_writeack(isum);
+	}
 }
 
 static void *serial_handle = NULL;
@@ -637,7 +648,7 @@ mag_rd_init_common(const char *portname)
 {
 	time_t now, later;
 	waypoint_read_count = 0;
-	
+
 	if (bs) {
 		bitrate=atoi(bs);
 	}
@@ -646,8 +657,9 @@ mag_rd_init_common(const char *portname)
 	if (!mkshort_handle) {
 		mkshort_handle = mkshort_new_handle();
 	}
-
-	if (!noack)
+	
+	mag_handoff();
+	if (!noack && !suppress_ack) 
 		mag_handon();
 
 	now = current_time();
@@ -708,6 +720,7 @@ static void
 mag_rd_init(const char *portname)
 {
 	explorist = 0;
+	suppress_ack = 1;
 	mag_rd_init_common(portname);
 }
 
@@ -721,6 +734,7 @@ magX_rd_init(const char *portname)
 static void
 mag_wr_init_common(const char *portname)
 {
+	suppress_ack = 0;
 	if (bs) {
 		bitrate=atoi(bs);
 	}
@@ -1093,6 +1107,7 @@ mag_read(void)
           }
         }
 
+	found_done = 0;
         if (global_opts.masked_objective & WPTDATAMASK) {
 		  magrxstate = mrs_handoff;
           if (!is_file) 
@@ -1103,6 +1118,7 @@ mag_read(void)
           }
         }
 
+	found_done = 0;
         if (global_opts.masked_objective & RTEDATAMASK) {
 		  magrxstate = mrs_handoff;
           if (!is_file) {
