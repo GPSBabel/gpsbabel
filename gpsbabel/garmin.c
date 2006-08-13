@@ -705,6 +705,12 @@ route_waypt_pr(const waypoint *wpt)
 	if (wpt->altitude != unknown_alt) {
 		rte->alt = wpt->altitude;
 	}
+	if (wpt->altitude != unknown_alt) {
+		rte->alt = wpt->altitude;
+	} else {
+		rte->alt_is_unknown = 1;
+		rte->alt = 0;
+	}
 	strncpy(rte->ident, wpt->shortname, sizeof(rte->ident));
 	rte->ident[sizeof(rte->ident)-1] = 0;
 
