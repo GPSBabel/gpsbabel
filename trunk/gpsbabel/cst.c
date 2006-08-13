@@ -38,8 +38,7 @@
 #define CST_REFERENCE	4
 #define CST_VERSION	5
 
-static FILE *fin;
-static char *fin_name;
+static gbfile *fin;
 
 static route_head *temp_route;
 
@@ -139,17 +138,14 @@ cst_make_url(char *str)
 static void
 cst_rd_init(const char *fname)
 {
-	fin_name = xstrdup(fname);
-	fin = xfopen(fname, "rb", MYNAME);
-	
+	fin = gbfopen(fname, "rb", MYNAME);
 	temp_route = NULL;
 }
 
 static void
 cst_rd_deinit(void)
 {
-	fclose(fin);
-	xfree(fin_name);
+	gbfclose(fin);
 }
 
 /* --------------------------------------------------------------------------- */
@@ -167,11 +163,8 @@ cst_data_read(void)
 	int cst_points = -1;
 	route_head *track = NULL;
 	waypoint *wpt = NULL;
-	textfile_t *tin;
 	
-	tin = textfile_init(fin);
-	
-	while ((buff = textfile_read(tin)))
+	while ((buff = gbfgetstr(fin)))
 	{
 		char *cin = buff;
 		
@@ -216,14 +209,14 @@ cst_data_read(void)
 							wpt->url = cst_make_url(cin);
 					}
 					
-					while ((buff = textfile_read(tin)))
+					while ((buff = gbfgetstr(fin)))
 					{
 						line++;
 						cin = lrtrim(buff);
 						
 						if (strcmp(cin + 2, "note") == 0)
 						{
-							buff = textfile_read(tin);
+							buff = gbfgetstr(fin);
 							if (buff == NULL) buff = "";
 							line++;
 							cin = lrtrim(buff);
@@ -318,23 +311,19 @@ cst_data_read(void)
 	
 	if ((cst_points >= 0) && (data_lines != cst_points))
 		warning(MYNAME ": Loaded %d point(s), but line %d says %d!\n", data_lines, line_of_count, cst_points);
-	
-	textfile_done(tin);
 }
 
 #if 0
 static void
 cst_wr_init(const char *fname)
 {
-	fout_name = xstrdup(fname);
-	fout = xfopen(fname, "w", MYNAME);
+	fout = gbfopen(fname, "w", MYNAME);
 }
 
 static void
 cst_wr_deinit(void)
 {
-	fclose(fout);
-	xfree(fout_name);
+	gbfclose(fout);
 }
 
 static void 
