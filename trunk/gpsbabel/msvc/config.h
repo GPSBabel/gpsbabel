@@ -20,3 +20,9 @@
 /* 1 to enable shapefile support */
 #undef SHAPELIB_ENABLED
 
+#define ZLIB_INHIBITED 1
+
+/* We really should figure out some way to get this from autoconf into
+ * a file so that the MSVC build can pick it up
+ */
+#define VERSION "1.3.0-development"
