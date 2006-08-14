@@ -32,6 +32,7 @@ static char *opt_floating = NULL;
 static char *opt_extrude = NULL;
 static char *opt_trackdata = NULL;
 static char *opt_units = NULL;
+static char *opt_labels = NULL;
 
 static int export_lines;
 static int export_points;
@@ -89,6 +90,9 @@ arglist_t kml_args[] = {
 	{"units", &opt_units, 
 	 "Units used when writing comments ('s'tatute or 'm'etric)", 
 	 "s", ARGTYPE_STRING, ARG_NOMINMAX },
+	{"labels", &opt_labels,
+	 "Display labels on track and routepoints  (default = 1)",
+	 "1", ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -516,7 +520,9 @@ static void kml_output_point(const waypoint *waypointp, const char *style)
 
   if (export_points) {
 	kml_write_xml(1, "<Placemark>\n");
-	kml_write_xmle("name", waypointp->shortname);
+	if (atoi(opt_labels)) {
+		kml_write_xmle("name", waypointp->shortname);
+	}
 	kml_write_xml(0, "<Snippet/>\n");
 	kml_write_xml(0, "<styleUrl>%s</styleUrl>\n", style);
 	kml_output_description(waypointp);
