@@ -52,8 +52,9 @@ typedef enum {
 
 static gbfile *fin, *fout;
 
-typedef struct stmsdf_s {
-} stmsdf_t;
+// Empty structs aren't C89.  But this wasn't being used anyway.
+//typedef struct stmsdf_s {
+//} stmsdf_t;
 
 static int lineno;
 static int datum;

@@ -34,12 +34,13 @@
 /* taken from minigzip.c (part of the zlib project) */
 #  include <fcntl.h>
 #  include <io.h>
-#  define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)
+#  define SET_BINARY_MODE(file) _setmode(fileno(file), O_BINARY)
 #else
 #  define SET_BINARY_MODE(file)
 #endif
 
 #define MYNAME "gbfile"
+#define NO_ZLIB "No zlib support"
 
 /* About the ZLIB_INHIBITED stuff:
  * 
@@ -159,7 +160,7 @@ gbfclose(gbfile *file)
 #if !ZLIB_INHIBITED
 		gzclose(file->handle.gz);
 #else
-		abort();
+		fatal(NO_ZLIB);
 #endif
 	}
 	else {
@@ -218,12 +219,10 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 	if ((size == 0) || (members == 0)) return 0;
 	
 	if (file->gzapi) {
-		int result;
 #if !ZLIB_INHIBITED
+		int result;
 		result = gzread(file->handle.gz, buf, size * members) / size;
-#else
-		abort();
-#endif
+
 		if ((result < 0) || ((gbsize_t)result < members)) {
 			int errnum;
 			const char *errtxt;
@@ -234,6 +233,9 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 					file->module, errnum, errtxt);
 		}
 		return (gbsize_t) result;
+#else
+		fatal(NO_ZLIB);
+#endif
 	}
 	else {
 		int errno;
@@ -302,7 +304,7 @@ gbfwrite(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *f
 #if !ZLIB_INHIBITED
 		result = gzwrite(file->handle.gz, buf, size * members) / size;
 #else
-		abort();
+		fatal(NO_ZLIB);
 #endif
 	}
 	else {
@@ -326,7 +328,7 @@ gbfflush(gbfile *file)
 #if !ZLIB_INHIBITED
 		return gzflush(file->handle.gz, Z_SYNC_FLUSH);
 #else
-		abort();
+		fatal(NO_ZLIB);
 #endif
 	}
 	else {
@@ -356,7 +358,7 @@ gbferror(gbfile *file)
 #if !ZLIB_INHIBITED
 		(void)gzerror(file->handle.gz, &errnum);
 #else
-		abort();
+		fatal(NO_ZLIB);
 #endif
 	}
 	else {
@@ -403,7 +405,7 @@ gbftell(gbfile *file)
 #if !ZLIB_INHIBITED
 		return gztell(file->handle.gz);
 #else
-		abort();
+		fatal(NO_ZLIB);
 #endif
 	}
 	else {
@@ -418,7 +420,7 @@ gbfeof(gbfile *file)
 #if !ZLIB_INHIBITED
 		return gzeof(file->handle.gz);
 #else
-		abort();
+		fatal(NO_ZLIB);
 #endif
 	}
 	else {
@@ -429,16 +431,18 @@ gbfeof(gbfile *file)
 int
 gbfungetc(const int c, gbfile *file)
 {
+	int r = -1;
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		return gzungetc(c, file->handle.gz);
+		r = gzungetc(c, file->handle.gz);
 #else
-		abort();
+		fatal(NO_ZLIB);
 #endif
 	}
 	else {
-		return ungetc(c, file->handle.std);
+		r = ungetc(c, file->handle.std);
 	}
+	return r;
 }
 
 /* GPSBabel 'file' enhancements */
