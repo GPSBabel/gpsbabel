@@ -33,9 +33,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-static FILE *fin;
-static FILE *fout;
-static char *fin_name, *fout_name;
+static gbfile *fin, *fout;
 static int curr_rte_num, target_rte_num;
 
 #define MYNAME "navigon"
@@ -50,20 +48,6 @@ arglist_t nmn4_args[] = {
 
 
 /* helpers */
-
-void
-nmn4_fwrite(FILE *fout, const char *fmt, ...)
-{
-
-	va_list args;
-	int res;
-	
-	va_start(args, fmt);
-	res = vfprintf(fout, fmt, args);
-	is_fatal((res < 0),
-		MYNAME ": error (%d) while writing to \"%s\"!\n", 0-res, fout_name);
-	va_end(args);
-}
 
 static char *
 nmn4_concat(char *arg0, ...)
@@ -121,13 +105,11 @@ nmn4_read_data(void)
 	char *zip1, *zip2, *city, *street, *number;	
 	route_head *route;
 	waypoint *wpt;
-	textfile_t *tin;
 	
 	route = route_head_alloc();
 	route_add_head(route);
 	
-	tin = textfile_init(fin);
-	while ((buff = textfile_read(tin)))
+	while ((buff = gbfgetstr(fin)))
 	{
 		str = buff = lrtrim(buff);
 		if (*buff == '\0') continue;
@@ -226,7 +208,6 @@ nmn4_read_data(void)
 		}
 		route_add_wpt(route, wpt);
 	}
-	textfile_done(tin);
 }
 
 static void 
@@ -263,7 +244,7 @@ nmn4_write_waypt(const waypoint *wpt)
 	   implementing a simple data exchange.
 	 */
 
-	fprintf(fout, "-|-|-|-|%s|%s|%s|%s|%s|-|-|%.5f|%.5f|-|-|\r\n",
+	gbfprintf(fout, "-|-|-|-|%s|%s|%s|%s|%s|-|-|%.5f|%.5f|-|-|\r\n",
 		zipc, city, zipc, street, number,
 		wpt->longitude, wpt->latitude);
 }
@@ -291,15 +272,13 @@ nmn4_write_data(void)
 static void
 nmn4_rd_init(const char *fname)
 {
-	fin = xfopen(fname, "rb", MYNAME);
-	fin_name = xstrdup(fname);
+	fin = gbfopen(fname, "rb", MYNAME);
 }
 
 static void
 nmn4_rd_deinit(void)
 {
-	xfree(fin_name);
-	fclose(fin);
+	gbfclose(fin);
 }
 
 static void
@@ -311,15 +290,13 @@ nmn4_read(void)
 static void
 nmn4_wr_init(const char *fname)
 {
-	fout = xfopen(fname, "wb", MYNAME);
-	fout_name = xstrdup(fname);
+	fout = gbfopen(fname, "wb", MYNAME);
 }
 
 static void
 nmn4_wr_deinit(void)
 {
-	xfree(fout_name);
-	fclose(fout);
+	gbfclose(fout);
 }
 
 static void
