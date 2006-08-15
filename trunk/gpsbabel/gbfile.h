@@ -84,7 +84,8 @@ char *gbfgetpstr(gbfile *file);			// read a pascal string
 int gbfputint16(const gbint16 i, gbfile *file);
 #define gbfputuint16(a,b) gbfputint16((gbuint16)(a),(b))
 int gbfputint32(const gbint32 i, gbfile *file);
-#define gbfputuint32(a,b) gbfputint16((gbuint32)(a),(b))
+#define gbfputuint32(a,b) gbfputint32((gbuint32)(a),(b))
+
 int gbfputdbl(const double d, gbfile *file);	// write a double value
 int gbfputflt(const float f, gbfile *file);	// write a float value
 int gbfputcstr(const char *s, gbfile *file);	// write string including '\0'
