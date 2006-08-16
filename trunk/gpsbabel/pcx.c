@@ -24,8 +24,7 @@
 #include "garmin_tables.h"
 #include <ctype.h>
 
-static FILE *file_in;
-static FILE *file_out;
+static gbfile *file_in, *file_out;
 static short_handle mkshort_handle;
 static short_handle mkshort_handle2;	/* for track and route names */
 static char *deficon = NULL;
@@ -48,19 +47,19 @@ arglist_t pcx_args[] = {
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = gbfopen(fname, "rb", MYNAME);
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(file_in);
+	gbfclose(file_in);
 }
 
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "w", MYNAME);
+	file_out = gbfopen(fname, "w", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 	mkshort_handle2 = mkshort_new_handle();
 }
@@ -68,7 +67,7 @@ wr_init(const char *fname)
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	gbfclose(file_out);
 	mkshort_del_handle(&mkshort_handle);
 	mkshort_del_handle(&mkshort_handle2);
 }
@@ -91,12 +90,10 @@ data_read(void)
 	route_head *route = NULL;
 	int n; 
 	char lathemi, lonhemi;
-	textfile_t *tin;
 
 	read_as_degrees  = 0;
-	tin = textfile_init(file_in);
 
-	while ((buff = textfile_read(tin)))
+	while ((buff = gbfgetstr(file_in)))
 	{
 		char *ibuf = lrtrim(buff);
 		char *cp;
@@ -217,7 +214,6 @@ data_read(void)
 			;
 		}
 	}
-	textfile_done(tin);
 }
 
 static void
@@ -246,7 +242,7 @@ gpsutil_disp(const waypoint *wpt)
 	}
 
 
-	fprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5d %-40.40s %5e  %d\n",
+	gbfprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5d %-40.40s %5e  %d\n",
                 global_opts.synthesize_shortnames ?
                         mkshort_from_wpt(mkshort_handle, wpt) : 
 			wpt->shortname,
@@ -275,10 +271,10 @@ pcx_track_hdr(const route_head *trk)
 	 * so provide option to supppress these.
 	 */
 	if (!cartoexploreur) {
-		fprintf(file_out, "\n\nH  TN %s\n", name);
+		gbfprintf(file_out, "\n\nH  TN %s\n", name);
 	}
 	xfree(name);
-	fprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT  ;track\n");
+	gbfprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT  ;track\n");
 }
 
 static void
@@ -294,9 +290,9 @@ pcx_route_hdr(const route_head *rte)
 	
 	/* see pcx_track_hdr */
 	if (!cartoexploreur) {
-		fprintf(file_out, "\n\nR  %s\n", name);
+		gbfprintf(file_out, "\n\nR  %s\n", name);
 	}
-	fprintf(file_out, "\n"
+	gbfprintf(file_out, "\n"
 "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
 }
 
@@ -317,7 +313,7 @@ pcx_track_disp(const waypoint *wpt)
 	for (tp = tbuf; *tp; tp++) {
 		*tp = toupper(*tp);
 	}
-	fprintf(file_out, "T  %c%08.5f %c%011.5f %s %.f\n",
+	gbfprintf(file_out, "T  %c%08.5f %c%011.5f %s %.f\n",
 			lat < 0.0 ? 'S' : 'N',
 			fabs(lat),
 			lon < 0.0 ? 'W' : 'E',
@@ -329,7 +325,7 @@ pcx_track_disp(const waypoint *wpt)
 static void
 data_write(void)
 {
-fprintf(file_out,
+gbfprintf(file_out,
 "H  SOFTWARE NAME & VERSION\n"
 "I  PCX5 2.09\n"
 "\n"
@@ -347,7 +343,7 @@ fprintf(file_out,
 
 	if (global_opts.objective == wptdata)
 	{
-		fprintf(file_out,
+		gbfprintf(file_out,
 "\n"
 "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
 
