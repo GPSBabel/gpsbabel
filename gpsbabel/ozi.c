@@ -37,8 +37,7 @@ typedef struct {
 } ozi_fsdata;
 
 
-static FILE *file_in;
-static FILE *file_out;
+static gbfile *file_in, *file_out;
 static short_handle mkshort_handle;
 static route_head *trk_head;
 static route_head *rte_head;
@@ -120,7 +119,7 @@ ozi_openfile(char *fname) {
      */
 
     if (0 == strcmp(fname, "-")) {
-	file_out = xfopen(fname, "wb", MYNAME);
+	file_out = gbfopen(fname, "wb", MYNAME);
 	return;
     }
 
@@ -154,11 +153,11 @@ ozi_openfile(char *fname) {
 
     /* re-open file_out with the new filename */
     if (file_out) {
-        fclose(file_out);
+        gbfclose(file_out);
         file_out = NULL;
     }
 
-    file_out = xfopen(tmpname, "wb", MYNAME);
+    file_out = gbfopen(tmpname, "wb", MYNAME);
 
     xfree(tmpname);
 
@@ -177,7 +176,7 @@ ozi_track_hdr(const route_head * rte)
         "0\r\n";
 
     ozi_openfile(ozi_ofname);
-    fprintf(file_out, ozi_trk_header, 
+    gbfprintf(file_out, ozi_trk_header, 
 	rte->rte_name ? rte->rte_name : "ComplimentsOfGPSBabel");
 
     track_out_count++;
@@ -197,7 +196,7 @@ ozi_track_disp(const waypoint * waypointp)
         alt_feet = METERS_TO_FEET(waypointp->altitude);
     }
 
-    fprintf(file_out, "%.6f,%.6f,0,%.0f,%.5f,,\r\n",
+    gbfprintf(file_out, "%.6f,%.6f,0,%.0f,%.5f,,\r\n",
             waypointp->latitude, waypointp->longitude, alt_feet, ozi_time);
 }
 
@@ -223,7 +222,7 @@ ozi_route_hdr(const route_head * rte)
 
     /* prologue on 1st pass only */
     if (route_out_count == 0) {
-        fprintf(file_out, ozi_route_header);
+        gbfprintf(file_out, ozi_route_header);
     }
 
     route_out_count++;
@@ -241,7 +240,7 @@ ozi_route_hdr(const route_head * rte)
      * R, 1, ICP GALHETA,, 16711680 
      */
      
-     fprintf(file_out, "R,%d,%s,%s,\r\n", 
+     gbfprintf(file_out, "R,%d,%s,%s,\r\n", 
          route_out_count, 
          rte->rte_name ? rte->rte_name : "", 
          rte->rte_desc ? rte->rte_desc : "");
@@ -285,7 +284,7 @@ ozi_route_disp(const waypoint * waypointp)
  * W,1,7,7,007,-25.581670,-48.316660,36564.54196,10,1,4,0,65535,TR ILHA GALHETA,0,0 
  */
 
-    fprintf(file_out, "W,%d,%d,,%s,%.6f,%.6f,%.5f,0,1,3,0,65535,%s,0,0\r\n", 
+    gbfprintf(file_out, "W,%d,%d,,%s,%.6f,%.6f,%.5f,0,1,3,0,65535,%s,0,0\r\n", 
             route_out_count,
             route_wpt_count,
             waypointp->shortname ? waypointp->shortname : "",
@@ -310,7 +309,7 @@ ozi_route_pr()
 static void
 rd_init(const char *fname)
 {
-    file_in = xfopen(fname, "rb", MYNAME);
+    file_in = gbfopen(fname, "rb", MYNAME);
 
     mkshort_handle = mkshort_new_handle();
 }
@@ -318,7 +317,7 @@ rd_init(const char *fname)
 static void
 rd_deinit(void)
 {
-    fclose(file_in);
+    gbfclose(file_in);
     file_in = NULL;
     mkshort_del_handle(&mkshort_handle);
 }
@@ -360,7 +359,7 @@ wr_deinit(void)
 {
     if (file_out != NULL) {
     
-	fclose(file_out);
+	gbfclose(file_out);
 	file_out = NULL;
     }
     ozi_ofname = NULL;
@@ -582,11 +581,8 @@ data_read(void)
     waypoint *wpt_tmp;
     int i;
     int linecount = 0;
-    textfile_t *tin;
     
-    tin = textfile_init(file_in);
-
-    while ((buff = textfile_read(tin))) {
+    while ((buff = gbfgetstr(file_in))) {
         linecount++;
 
         /* 
@@ -677,7 +673,6 @@ data_read(void)
         }
 
     }
-    textfile_done(tin);
 }
 
 static void
@@ -732,15 +727,15 @@ ozi_waypt_pr(const waypoint * wpt)
 
     index++;
 
-    fprintf(file_out,
+    gbfprintf(file_out,
             "%d,%s,%.6f,%.6f,%.5f,%d,%d,%d,%d,%d,%s,%d,%d,",
             index, shortname, wpt->latitude, wpt->longitude, ozi_time, 0,
             1, 3, fs->fgcolor, fs->bgcolor, description, 0, 0);
     if (wpt->proximity > 0)
-	fprintf(file_out, "%.1f,", wpt->proximity);
+	gbfprintf(file_out, "%.1f,", wpt->proximity);
     else
-	fprintf(file_out,"0,");
-    fprintf(file_out, "%.0f,%d,%d,%d\r\n", alt_feet, 6, 0, 17);
+	gbfprintf(file_out,"0,");
+    gbfprintf(file_out, "%.0f,%d,%d,%d\r\n", alt_feet, 6, 0, 17);
 
     xfree(description);
     xfree(shortname);
@@ -764,7 +759,7 @@ data_write(void)
     if (waypt_count()) {
         ozi_objective = wptdata;
         ozi_openfile(ozi_ofname);
-        fprintf(file_out, ozi_wpt_header);
+        gbfprintf(file_out, ozi_wpt_header);
         waypt_disp_all(ozi_waypt_pr);
     }
 
