@@ -22,8 +22,7 @@
 #include "defs.h"
 #include "csv_util.h"
 
-static FILE *file_in;
-static FILE *file_out;
+static gbfile *file_in, *file_out;
 static short_handle mkshort_handle;
 static short_handle mkshort_whandle;
 
@@ -99,28 +98,28 @@ arglist_t tiger_args[] = {
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = gbfopen(fname, "rb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(file_in);
+	gbfclose(file_in);
 	mkshort_del_handle(&mkshort_handle);
 }
 
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "w", MYNAME);
+	file_out = gbfopen(fname, "w", MYNAME);
 	thresh_days = strtod(oldthresh, NULL);
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	gbfclose(file_out);
 }
 
 static void
@@ -131,11 +130,8 @@ data_read(void)
 	char icon[100];
 	char *ibuf;
 	waypoint *wpt_tmp;
-	textfile_t *tin;
-
-	tin = textfile_init(file_in);
 	
-	while ((ibuf = textfile_read(tin))) {
+	while ((ibuf = gbfgetstr(file_in))) {
 		if( sscanf(ibuf, "%lf,%lf:%100[^:]:%100[^\n]", 
 				&lon, &lat, icon, desc)) {
 			wpt_tmp = waypt_new();
@@ -148,7 +144,6 @@ data_read(void)
 			waypt_add(wpt_tmp);
 		}
 	}
-	textfile_done(tin);
 }
 
 static void
@@ -174,7 +169,7 @@ tiger_disp(const waypoint *wpt)
 		if (lon < minlon) minlon = lon;
 	}
 
-	fprintf(file_out, "%f,%f:%s", lon, lat, pin);
+	gbfprintf(file_out, "%f,%f:%s", lon, lat, pin);
 	if (!nolabels) {
 		char *temp = NULL;
 		char *desc = csv_stringclean(wpt->description, ":");
@@ -183,11 +178,11 @@ tiger_disp(const waypoint *wpt)
 			temp = desc;
 			desc = mkshort(mkshort_whandle, desc);
 		}
-		fprintf(file_out, ":%s", desc);
+		gbfprintf(file_out, ":%s", desc);
 		if (temp != NULL) desc = temp;
 		xfree(desc);
 	}
-	fprintf(file_out, "\n");
+	gbfprintf(file_out, "\n");
 }
 
 #if CLICKMAP
@@ -200,7 +195,7 @@ map_plot(const waypoint *wpt)
 	x+=10;
 	y+=10;
 
-	fprintf(linkf, "<area shape=\"circle\" coords=\"%d,%d,7\" href=\"%s\" alt=\"%s\"\n", x, y, wpt->url, wpt->description);
+	gbfprintf(linkf, "<area shape=\"circle\" coords=\"%d,%d,7\" href=\"%s\" alt=\"%s\"\n", x, y, wpt->url, wpt->description);
 }
 #endif /* CLICKMAP */
 
@@ -240,13 +235,13 @@ data_write(void)
 
 	setshort_length(mkshort_whandle, short_length);
 
-	fprintf(file_out, "#tms-marker\n");
+	gbfprintf(file_out, "#tms-marker\n");
 	waypt_disp_all(tiger_disp);
 
 	if (genurl) {
-		FILE *urlf;
+		gbfile *urlf;
 
-		urlf = xfopen(genurl, "w", MYNAME);
+		urlf = gbfopen(genurl, "w", MYNAME);
 		latsz = fabs(maxlat - minlat); 
 		lonsz = fabs(maxlon - minlon); 
 
@@ -254,21 +249,21 @@ data_write(void)
 		 * Center the map along X and Y axis the midpoint of
 		 * our min and max coords each way.   
 		 */
-		fprintf(urlf, "lat=%f&lon=%f&ht=%f&wid=%f",
+		gbfprintf(urlf, "lat=%f&lon=%f&ht=%f&wid=%f",
 				minlat + (latsz/2.0),
 				minlon + (lonsz/2.0),
 				dscale(latsz),
 				dscale(lonsz));
 
-		fprintf(urlf, "&iwd=%s&iht=%s", xpixels, ypixels);
-		fclose(urlf);
+		gbfprintf(urlf, "&iwd=%s&iht=%s", xpixels, ypixels);
+		gbfclose(urlf);
 #if CLICKMAP
 		if (clickmap) {
-			linkf = xfopen(clickmap, "w", MY NAME);
-			fprintf(linkf, "<map name=\"map\">\n");
+			linkf = gbfopen(clickmap, "w", MY NAME);
+			gbfprintf(linkf, "<map name=\"map\">\n");
 			waypt_disp_all(map_plot);
-			fprintf(linkf, "</map>\n");
-			fclose(linkf);
+			gbfprintf(linkf, "</map>\n");
+			gbfclose(linkf);
 			linkf = NULL;
 		}
 #endif

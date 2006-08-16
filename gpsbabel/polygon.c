@@ -256,12 +256,12 @@ polygon_process(void)
 	int first = 1;
 	int last = 0;
 	char *line;
-	textfile_t *tin;
+	gbfile *file_in;
 
-	tin = textfile_open_read(polyfileopt, MYNAME );
+	file_in = gbfopen(polyfileopt, "r", MYNAME);
 	
         olat = olon = lat1 = lon1 = lat2 = lon2 = BADVAL;
-	while ((line = textfile_read(tin))) {
+	while ((line = gbfgetstr(file_in))) {
 	    char *pound = NULL;
 	    int argsfound = 0;
 	    
@@ -327,7 +327,7 @@ polygon_process(void)
 	        lon1 = lon2;
 	    }
 	}
-	textfile_done(tin);
+	gbfclose(file_in);
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypoint *wp = (waypoint *) elem;

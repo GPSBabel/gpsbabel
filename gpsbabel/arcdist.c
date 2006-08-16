@@ -60,12 +60,12 @@ arcdist_process(void)
         double lat1, lon1, lat2, lon2;
 	int fileline = 0;
 	char *line;
-	textfile_t *tin;
+	gbfile *file_in;
 
-	tin = textfile_open_read(arcfileopt, MYNAME );
+	file_in = gbfopen(arcfileopt, "r", MYNAME);
 	
         lat1 = lon1 = lat2 = lon2 = BADVAL;
-	while ((line = textfile_read(tin))) {
+	while ((line = gbfgetstr(file_in))) {
 	    char *pound = NULL;
 	    int argsfound = 0;
 	    
@@ -123,7 +123,7 @@ arcdist_process(void)
 	    lon1 = lon2;
 	}
 	    
-	textfile_done(tin);
+	gbfclose(file_in);
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypoint *wp = (waypoint *) elem;
