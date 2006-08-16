@@ -24,8 +24,7 @@
 
 #define MYNAME "unicsv"
 
-static FILE *fin;
-static textfile_t *tin;
+static gbfile *file_in;
 
 /* This structure must contain only ints.  Firstval must be first.
  * This is block initialized.
@@ -129,10 +128,9 @@ unicsv_rd_init(const char *fname)
 	char *c;
 	unicsv_altscale = 1.0;
 
-	fin = xfopen(fname, "rb", MYNAME);
-	tin = textfile_init(fin);
+	file_in = gbfopen(fname, "rb", MYNAME);
 
-	if ((c = textfile_read(tin)))
+	if ((c = gbfgetstr(file_in)))
 		unicsv_fondle_header(c);
 	else
 		unicsv_fieldsep = NULL;
@@ -141,8 +139,7 @@ unicsv_rd_init(const char *fname)
 static void
 unicsv_rd_deinit(void)
 {
-	textfile_done(tin);
-	fclose(fin);
+	gbfclose(file_in);
 }
 
 static void
@@ -206,7 +203,7 @@ unicsv_rd(void)
 
 	if (unicsv_fieldsep == NULL) return;
 	
-	while ((buff = textfile_read(tin))) {
+	while ((buff = gbfgetstr(file_in))) {
 	    	buff = lrtrim(buff);
 		if (*buff)
 			unicsv_parse_one_line(buff);
