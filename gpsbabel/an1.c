@@ -415,11 +415,16 @@ static void Read_AN1_Waypoint( FILE *f, an1_waypoint_record *wpt ) {
 		ofs += 2;
 
 		if ( len ) {
+			char *oldurlstr;
 			/*
 			 * Trust URL encoded in new format over one in
-			 * old format.  Whack the name starting at '{URL='.
+			 * old format if both are present.  Whack the 
+			 * name starting at '{URL='.
 			 */
-			wpt->name[strlen(wpt->name) - len - 6] = 0;
+			oldurlstr = strstr(wpt->name, "{URL=");
+			if (oldurlstr) {
+				*oldurlstr = 0;
+			}
 
 			wpt->url = xcalloc( len+1, 1 );
 			memcpy( wpt->url, ofs, len );
