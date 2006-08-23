@@ -702,9 +702,7 @@ route_waypt_pr(const waypoint *wpt)
 	rte->lon = wpt->longitude;
 	rte->lat = wpt->latitude;
 	rte->smbl = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
-	if (wpt->altitude != unknown_alt) {
-		rte->alt = wpt->altitude;
-	}
+
 	if (wpt->altitude != unknown_alt) {
 		rte->alt = wpt->altitude;
 	} else {
