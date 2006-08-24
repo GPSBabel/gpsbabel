@@ -366,14 +366,11 @@ static void kml_output_timestamp(const waypoint *waypointp)
 {
 	char time_string[64];
 	if (waypointp->creation_time) {
-	kml_write_xml(1, "<TimeInstant>\n");
-	xml_fill_in_time(time_string, waypointp->creation_time, XML_LONG_TIME);
-	if (time_string[0]) {
-		kml_write_xml(0, "<timePosition>%s</timePosition>\n", 
-			time_string);
-	}
-
-	kml_write_xml(-1,"</TimeInstant>\n");
+		xml_fill_in_time(time_string, waypointp->creation_time, XML_LONG_TIME);
+		if (time_string[0]) {
+			kml_write_xml(0, "<TimeStamp>%s</TimeStamp>\n", 
+				time_string);
+		}
 	}
 }
 
@@ -383,8 +380,6 @@ static void kml_output_timestamp(const waypoint *waypointp)
 static 
 void kml_output_trkdescription(computed_trkdata *td)
 {
-	char stbuf[100];
-	char endbuf[100];
 	char *max_alt_units;
 	double max_alt;
 	char *min_alt_units;
@@ -400,24 +395,22 @@ void kml_output_trkdescription(computed_trkdata *td)
 	min_alt = fmt_distance(td->min_alt, &min_alt_units);
 	distance = fmt_distance(td->distance_meters, &distance_units);
 
-	strftime(stbuf, sizeof(stbuf), "%c", localtime(&td->start));
-	strftime(endbuf, sizeof(endbuf), "%c", localtime(&td->end));
-
 	/* We won't always have times. Garmin saved tracks, for example... */
-	if (td->start) {
-		kml_write_xml(0, "<Snippet>From %s</Snippet>\n", stbuf);
+	if (td->start && td->end) {
+		char time_string[64];
+		kml_write_xml(1, "<TimeRange>\n");
+		xml_fill_in_time(time_string, td->start, XML_LONG_TIME);
+		kml_write_xml(0, "<begin>%s</begin>\n", time_string);
+		xml_fill_in_time(time_string, td->end, XML_LONG_TIME);
+		kml_write_xml(0, "<end>%s</end>\n", time_string);
+		kml_write_xml(-1, "</TimeRange>\n");
 	} else {
-		kml_write_xml(0, "<Snippet/>\n", stbuf);
+		kml_write_xml(0, "<Snippet/>\n");
 	}
 
 	kml_write_xml(1, "<description>\n");
 	kml_write_xml(1, "<table>\n");
-	if (td->start) {
-		TD("<b>Start</b> %s", stbuf);
-	}
-	if (td->end) {
-		TD("<b>End</b> %s", endbuf);
-	}
+
 	TD2("<b>Distance</b> %.1f %s", distance, distance_units);
 	if (min_alt != unknown_alt) {
 		TD2("<b>Min Alt</b> %.1f %s", min_alt, min_alt_units);
@@ -486,12 +479,7 @@ static void kml_output_description(const waypoint *pt)
 
 	kml_write_xml(1,"<description><![CDATA[\n");
 	kml_write_xml(1,"<table>\n");
-	if (pt->creation_time) {
-		char stbuf[100];
-		strftime(stbuf, sizeof(stbuf), "%c", 
-			localtime(&pt->creation_time));
-		TD("Time: %s", stbuf);
-	}
+
 	TD("Longitude: %f", pt->longitude);
 	TD("Latitude: %f", pt->latitude);
 	if (pt->altitude != unknown_alt) TD2("Altitude: %.1f %s", alt, alt_units);

@@ -410,7 +410,7 @@ vecs_t vec_list[] = {
         {
                 &kml_vecs,
                 "kml",
-                "Keyhole Markup Language",
+                "Google Earth (Keyhole) Markup Language",
                 "kml"
 	},
 	{
