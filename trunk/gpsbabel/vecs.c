@@ -109,6 +109,7 @@ extern ff_vecs_t xcsv_vecs;
 extern ff_vecs_t yahoo_vecs;
 extern ff_vecs_t wbt_svecs;
 extern ff_vecs_t wbt_fvecs;
+extern ff_vecs_t gtc_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -592,6 +593,12 @@ vecs_t vec_list[] = {
 		"axim_gpb",
 		"Dell Axim Navigation System (.gpb) file format",
 		"gpb"
+	},
+	{
+		&gtc_vecs,
+		"gtrnctr",
+		"Garmin Training Center"
+		"xml"
 	},
 	{
 		NULL,
