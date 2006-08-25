@@ -280,7 +280,7 @@ int gbser__fill_buffer(void *handle, unsigned want, unsigned *ms) {
             FD_SET(h->fd, &rec);
 
             t.tv_sec  = (time_t) time_left / 1000;
-            t.tv_usec = (suseconds_t) ((unsigned) time_left % 1000) * 1000;
+            t.tv_usec = ((unsigned) time_left % 1000) * 1000;
 
             if (select(h->fd + 1, &rec, NULL, NULL, &t) < 0) {
                 return gbser_ERROR;
