@@ -23,8 +23,11 @@ static char arc[] =
 "#\n"
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
 "#\n"
-"IFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
-"IFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
+"IFIELD	LAT_HUMAN_READABLE, \"\", \"%08.5f\"\n"
+"IFIELD	LON_HUMAN_READABLE, \"\", \"%08.5f\"\n"
+
+"OFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
 ;
 static char cambridge[] = 
 "DESCRIPTION     Cambridge/Winpilot glider software\n"
