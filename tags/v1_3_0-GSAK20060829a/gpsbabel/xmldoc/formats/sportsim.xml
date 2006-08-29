@@ -1,0 +1,14 @@
+<para>
+	With this format we support Sportsim trackfiles located in zipped .ssz archives. 
+</para>
+<para>
+	Currently we cannot read zipped files directly with GPSBabel. So you have 
+	to extract the archive before you can use any file. The trackfiles have .txt extensions.
+</para>
+<para>
+<ulink url="http://www.sportsim.com/web/index.php?url=about">From the Sportsim homepage:</ulink>
+</para>
+<para>
+	Sportsim provide software applications and web-based graphically 
+	simulated performance information and image solutions to outdoor active people.
+</para>

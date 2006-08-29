@@ -1,0 +1,8 @@
+
+      
+      
+      <para>Input support for the GEOnet Names Server (GNS) country
+file structure.  Export to this format is not possible, as this format
+has too many fields that we never get populated by any other
+format.</para>
+    
