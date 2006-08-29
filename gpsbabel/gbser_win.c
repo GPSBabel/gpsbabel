@@ -112,6 +112,9 @@ static int set_rx_timeout(gbser_handle *h, DWORD timeout) {
  * COM ports 1 - 9 are "COM1:" through "COM9:"
  * The one after that is \\.\\com10 - this function tries to plaster over
  * that.
+ * 
+ * Worse still, Win98 and ME fail the open if you rename com1 to be \\.\\com1:
+ *
  * It returns a pointer to a staticly allocated buffer and is therefore not
  * thread safe.   The buffer pointed to remains valid only until the next
  * call to this function.
@@ -119,7 +122,9 @@ static int set_rx_timeout(gbser_handle *h, DWORD timeout) {
 
 const char *fix_win_serial_name_r(const char *comname, char *obuf, size_t len) {
 	if (!gbser_is_serial(comname) ||
-		((strlen(comname) == 5) && (comname[4] == ':'))) {
+		((strlen(comname) == 5) && (comname[4] == ':')) || 
+		((strlen(comname) == 4) && (case_ignore_strncmp(comname, "com", 3) == 0))
+		) {
 		strncpy(obuf, comname, len);
 	} else {
 	    size_t l;
@@ -181,7 +186,7 @@ failed:
 void gbser_deinit(void *handle) {
 	gbser_handle *h = gbser__get_handle(handle);
 
-    CloseHandle(h->comport);
+	CloseHandle(h->comport);
 
 	xfree(h);
 }
@@ -352,6 +357,10 @@ int gbser_is_serial(const char *port_name) {
 	const char *com = "COM";
 	size_t com_l = strlen(com);
 	unsigned digits;
+
+	if (NULL == port_name) {
+		return 0;
+	}
 
 	/* Skip any prefix */
 	if (memcmp(port_name, pfx, pfx_l) == 0) {
