@@ -406,7 +406,7 @@ int gbser_read_line(void *handle, void *buf,
     get_time(&tv);
     bp[pos] = '\0';
     for (;;) {
-        unsigned time_left = ms - elapsed(&tv);
+        signed time_left = ms - elapsed(&tv);
         int c;
         if (time_left <= 0) {
             return gbser_TIMEOUT;
