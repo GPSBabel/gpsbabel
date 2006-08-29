@@ -24,7 +24,7 @@
 #include "jeeps/gpsmath.h"
 #include <ctype.h>
 
-static FILE *file_out;
+static gbfile *file_out;
 static short_handle mkshort_handle;
 
 static char *suppresssep = NULL;
@@ -50,14 +50,14 @@ arglist_t text_args[] = {
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "w", MYNAME);
+	file_out = gbfopen(fname, "w", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	gbfclose(file_out);
 	mkshort_del_handle(&mkshort_handle);
 }
 
@@ -82,28 +82,28 @@ text_disp(const waypoint *wpt)
 		tm = time(NULL);
 	strftime(tbuf, sizeof(tbuf), "%d-%b-%Y", localtime(&tm));
 
-	fprintf(file_out, "%-16s  %c%d %06.3f  %c%d %06.3f  (%d%c %6.0f %7.0f)",
+	gbfprintf(file_out, "%-16s  %c%d %06.3f  %c%d %06.3f  (%d%c %6.0f %7.0f)",
 		(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname,
 		wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), 
 		wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint),
 		utmz, utmzc, utme, utmn);
 	if (wpt->altitude != unknown_alt) 
-		fprintf (file_out, "  alt: %1.1f", wpt->altitude);
-	fprintf (file_out, "\n");
+		gbfprintf (file_out, "  alt: %1.1f", wpt->altitude);
+	gbfprintf (file_out, "\n");
 	if (strcmp(wpt->description, wpt->shortname)) {
-		fprintf(file_out, "%s\n", wpt->description);
+		gbfprintf(file_out, "%s\n", wpt->description);
 	}
 	if (wpt->gc_data.terr) {
-		fprintf(file_out, "%s/%s\n", 
+		gbfprintf(file_out, "%s/%s\n", 
 			gs_get_cachetype(wpt->gc_data.type), gs_get_container(wpt->gc_data.container));
 	        if (wpt->gc_data.desc_short.utfstring) {
 	                char *stripped_html = strip_html(&wpt->gc_data.desc_short);
-			fprintf (file_out, "\n%s\n", stripped_html);
+			gbfprintf (file_out, "\n%s\n", stripped_html);
                 	xfree(stripped_html);
        		}
 	        if (wpt->gc_data.desc_long.utfstring) {
 	                char *stripped_html = strip_html(&wpt->gc_data.desc_long);
-			fprintf (file_out, "\n%s\n", stripped_html);
+			gbfprintf (file_out, "\n%s\n", stripped_html);
                 	xfree(stripped_html);
        		}
 		if (wpt->gc_data.hint) {
@@ -112,12 +112,12 @@ text_disp(const waypoint *wpt)
 				hint = rot13( wpt->gc_data.hint );
 			else
 				hint = xstrdup( wpt->gc_data.hint );
-			fprintf (file_out, "\nHint: %s\n", hint);
+			gbfprintf (file_out, "\nHint: %s\n", hint);
 			xfree( hint );
 		}
 	}
 	else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
-		fprintf (file_out, "%s\n", wpt->notes);
+		gbfprintf (file_out, "%s\n", wpt->notes);
 	}
 
 	fs_gpx = NULL;
@@ -133,16 +133,16 @@ text_disp(const waypoint *wpt)
 		while ( curlog ) {
 			time_t logtime = 0;
 			struct tm *logtm = NULL;
-			fprintf( file_out, "\n" );
+			gbfprintf( file_out, "\n" );
 			
 			logpart = xml_findfirst( curlog, "groundspeak:type" );
 			if ( logpart ) {
-				fprintf( file_out, "%s by ", logpart->cdata );
+				gbfprintf( file_out, "%s by ", logpart->cdata );
 			}
 			
 			logpart = xml_findfirst( curlog, "groundspeak:finder" );
 			if ( logpart ) {
-				fprintf( file_out, "%s on ", logpart->cdata );
+				gbfprintf( file_out, "%s on ", logpart->cdata );
 			}
 			
 			logpart = xml_findfirst( curlog, "groundspeak:date" );
@@ -150,7 +150,7 @@ text_disp(const waypoint *wpt)
 				logtime = xml_parse_time( logpart->cdata );
 				logtm = localtime( &logtime );
 				if ( logtm ) {
-					fprintf( file_out, 
+					gbfprintf( file_out, 
 						"%2.2d/%2.2d/%4.4d\n",
 						logtm->tm_mon+1,
 						logtm->tm_mday,
@@ -177,7 +177,7 @@ text_disp(const waypoint *wpt)
 				latdeg = abs(lat);
 				londeg = abs(lon);
 				
-				fprintf( file_out,
+				gbfprintf( file_out,
 					"%c %d %.3f' %c %d %.3f'\n",
 				
 					lat < 0 ? 'S' : 'N', latdeg, 60.0 * (fabs(lat) - latdeg), 
@@ -200,18 +200,18 @@ text_disp(const waypoint *wpt)
 					s = xstrdup( logpart->cdata );
 				}
 					
-				fprintf( file_out, "%s", s ); 
+				gbfprintf( file_out, "%s", s ); 
 				xfree( s );
 			}
 
-			fprintf( file_out, "\n" );
+			gbfprintf( file_out, "\n" );
 			curlog = xml_findnext( root, curlog, "groundspeak:log" );
 		}
 	}
 	if (! suppresssep) 
-		fprintf(file_out, "-----------------------------------------------------------------------------\n");
+		gbfprintf(file_out, "-----------------------------------------------------------------------------\n");
 	else
-		fprintf(file_out, "\n");
+		gbfprintf(file_out, "\n");
 		
 	
 }
@@ -220,7 +220,7 @@ static void
 data_write(void)
 {
 	if (! suppresssep) 
-		fprintf(file_out, "-----------------------------------------------------------------------------\n");
+		gbfprintf(file_out, "-----------------------------------------------------------------------------\n");
 	setshort_length(mkshort_handle, 6);
 	waypt_disp_all(text_disp);
 }
