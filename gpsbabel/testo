@@ -1101,6 +1101,14 @@ ${PNAME} -i stmsdf -f ${TMPDIR}/stmsdf-track.sdf -f ${TMPDIR}/stmsdf-route.sdf -
 compare ${TMPDIR}/stmsdf.txt ${REFERENCE}/stmsdf.txt
 
 #
+# Digital Mapping Tracklogs
+#
+rm -f ${TMPDIR}/dmtlog*
+${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -o dmtlog -F ${TMPDIR}/dmtlog-sample.trl
+${PNAME} -i dmtlog -f ${TMPDIR}/dmtlog-sample.trl -o gpx -F ${TMPDIR}/dmtlog-sample.gpx
+compare ${TMPDIR}/dmtlog-sample.gpx ${REFERENCE}/track/dmtlog-sample.gpx
+
+#
 # gzipped file i/o
 #
 ${PNAME} -i compegps -f ${REFERENCE}/compegps.wpt.gz -o gpx -F ${TMPDIR}/compegps-wpt.gpx
