@@ -368,7 +368,7 @@ static void kml_output_timestamp(const waypoint *waypointp)
 	if (waypointp->creation_time) {
 		xml_fill_in_time(time_string, waypointp->creation_time, XML_LONG_TIME);
 		if (time_string[0]) {
-			kml_write_xml(0, "<TimeStamp>%s</TimeStamp>\n", 
+			kml_write_xml(0, "<TimeStamp><when>%s</when></TimeStamp>\n", 
 				time_string);
 		}
 	}
@@ -398,12 +398,12 @@ void kml_output_trkdescription(computed_trkdata *td)
 	/* We won't always have times. Garmin saved tracks, for example... */
 	if (td->start && td->end) {
 		char time_string[64];
-		kml_write_xml(1, "<TimeRange>\n");
+		kml_write_xml(1, "<TimeSpan>\n");
 		xml_fill_in_time(time_string, td->start, XML_LONG_TIME);
 		kml_write_xml(0, "<begin>%s</begin>\n", time_string);
 		xml_fill_in_time(time_string, td->end, XML_LONG_TIME);
 		kml_write_xml(0, "<end>%s</end>\n", time_string);
-		kml_write_xml(-1, "</TimeRange>\n");
+		kml_write_xml(-1, "</TimeSpan>\n");
 	} else {
 		kml_write_xml(0, "<Snippet/>\n");
 	}
