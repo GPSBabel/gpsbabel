@@ -839,7 +839,7 @@ nmea_rd_posn(void)
 	for (i = 0; i < 10; i++) {
 		int rv;
 		ibuf[0] = 0;
-		rv = gbser_read_line(gbser_handle, ibuf, sizeof(ibuf), 2000, '\x0a', '\x0d');
+		rv = gbser_read_line(gbser_handle, ibuf, sizeof(ibuf), 2000, 0x0a, 0x0d);
 		if (global_opts.debug_level > 1) {
 			warning( "READ: %s\n", ibuf);
 		}
