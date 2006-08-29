@@ -110,8 +110,8 @@ globals.o:
 jeeps/gpslibusb.o: 
 	$(CC)  @CPPFLAGS@ -c $(GBCFLAGS) @USB_CFLAGS@ @srcdir@/jeeps/gpslibusb.c $(OUTPUT_SWITCH)$@
 
-fileinfo.o: win32/gpsbabel.rc
-	$(RC) -o fileinfo.o win32/gpsbabel.rc
+fileinfo.o: @srcdir@/win32/gpsbabel.rc
+	$(RC) -o fileinfo.o @srcdir@/win32/gpsbabel.rc
 
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
