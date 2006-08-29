@@ -535,6 +535,9 @@ static int terminit(const char *portname, int create_ok) {
 			}
 		}
 		is_file = 0;
+		if (serial_handle == NULL) {
+			fatal(MYNAME ": Could not open serial port %s\n", portname);
+		}
 		return 1;
 	} else {
 		/* Does this check for an error? */
@@ -552,7 +555,8 @@ static char *termread(char *ibuf, int size)
 	if (is_file) {
 		return fgets(ibuf, size, magfile_h);
 	} else {
-		int rc = gbser_read_line(serial_handle, ibuf, size, 2000, '\x0a', '\x0d');
+		int rc;
+		rc = gbser_read_line(serial_handle, ibuf, size, 2000, 0x0a, 0x0d);
 		if (rc != gbser_OK) {
 			fatal(MYNAME ": Read error\n");
 		}
