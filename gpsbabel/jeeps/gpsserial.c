@@ -92,7 +92,7 @@ int32 GPS_Serial_On(const char *port, gpsdevh **dh)
 	const char *xname = fix_win_serial_name(port);
 	win_serial_data *wsd = xcalloc(sizeof (win_serial_data), 1);
 	*dh = (gpsdevh*) wsd;
-
+	GPS_Diag("Opening %s\n", xname);
 	comport = CreateFile(xname, GENERIC_READ|GENERIC_WRITE, 0, NULL,
 					  OPEN_EXISTING, 0, NULL);
 
