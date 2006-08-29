@@ -24,7 +24,7 @@
 #include "csv_util.h"
 #include <ctype.h>
 
-static FILE *file_in;
+static gbfile *file_in;
 static char *nseicon = NULL;
 static char *nsneicon = NULL;
 static char *seicon = NULL;
@@ -54,14 +54,14 @@ arglist_t netstumbler_args[] = {
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = gbfopen(fname, "rb", MYNAME);
 	macstumbler = 0;
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(file_in);
+	gbfclose(file_in);
 }
 
 static void
@@ -78,12 +78,10 @@ data_read(void)
 	long flags = 0;
 	int speed = 0, channel = 0;
 	struct tm tm;
-	textfile_t *tin;
 	
-	tin = textfile_init(file_in);
 	memset(&tm, 0, sizeof(tm));
 
-	while ((ibuf = textfile_read(tin))) {
+	while ((ibuf = gbfgetstr(file_in))) {
 		char *field;
 		int field_num, len, i, stealth = 0;
 		
@@ -224,7 +222,6 @@ data_read(void)
 
 		waypt_add(wpt_tmp);
 	}
-	textfile_done(tin);
 	fix_netstumbler_dupes();
 }
 
