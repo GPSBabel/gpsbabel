@@ -1,0 +1,8 @@
+
+      
+      
+      <para>National Geographic Topo! Waypoint and Route Format.  This module
+reads and writes .TPG files created by various editions of NG Topo!
+Reading/writing of route data is not supported yet.</para>
+<para>Contributed by Alex Mottram.</para>
+    

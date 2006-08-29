@@ -1,0 +1,28 @@
+<chapter id="Getting_and_Building">
+  <title>Getting it and Building it</title>
+  <para> 
+GPSBabel is distributed "ready to run" on most common 
+operating systems via the 
+<ulink url="http://www.gpsbabel.org/download.html">download page</ulink>.
+</para>
+  <para> As GPSBabel runs on a wide variety of operating systems,
+be sure to visit the 
+<ulink url="http://www.gpsbabel.org/osnotes.html">OS-Specific notes</ulink> for
+additional information.
+</para>
+  <para> 
+ For operating systems where no binary is provided or if 
+you want the latest development version, you will have to build it from
+source.  The code should be compilable on any system with
+ISO C89 compilers.  It's been tested on UnixWare, OpenServer, OS/X,
+Linux, Solaris, and a variety of processors and compilers.
+</para>
+  <para>
+  In most cases, the code is as simple to build as running:
+ <screen format="linespecific">./configure &amp;&amp; make</screen>
+</para>
+  <para><ulink url="http://expat.sourceforge.net">Expat</ulink> 
+is strongly recommended for source builds as it is
+required for reading all the XML formats such as GPX.
+</para>
+</chapter>

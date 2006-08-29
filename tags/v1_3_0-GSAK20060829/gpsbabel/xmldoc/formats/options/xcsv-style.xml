@@ -1,0 +1,10 @@
+<para>
+This option specifies the style file that defines the records to be read on
+input or written on output.  This is not a valid option for the various
+built-in xcsv-based styles; they have prebuilt style definitions.
+</para>
+<para>
+For information on the format of xcsv style files, see 
+<xref linkend="Styles" />.
+</para>
+

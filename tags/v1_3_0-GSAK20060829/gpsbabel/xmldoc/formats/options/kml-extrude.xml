@@ -1,0 +1,7 @@
+<para>
+This option is a boolean flag to specicy whether Google Earth should
+draw lines from trackpoints to the ground.   It defaults to '0', which
+means no extrusion lines are drawn.   The option of '1' is, of course,
+most useful for points that aren't actually on the ground such as those
+be captured from planes.
+</para>
