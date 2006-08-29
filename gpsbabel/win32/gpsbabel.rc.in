@@ -1,4 +1,4 @@
-MAINICON ICON "win32/gpsbabel.ico"
+MAINICON ICON "@srcdir@/gpsbabel.ico"
 
 1 VERSIONINFO
 FILEVERSION @GBMAJOR@,@GBMINOR@,@GBMICRO@,0
