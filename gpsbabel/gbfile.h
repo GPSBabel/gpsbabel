@@ -25,7 +25,6 @@
 
 #include "config.h"
 #include "defs.h"
-#include "zlib/zlib.h"
 #include <stdarg.h>
 
 typedef struct gbfile_s {
@@ -34,7 +33,9 @@ typedef struct gbfile_s {
 #endif
 	union {
 	  FILE *std;
+#if !ZLIB_INHIBITED
 	  gzFile *gz;
+#endif
 	} handle;
 	char   *name;
 	char   *module;
