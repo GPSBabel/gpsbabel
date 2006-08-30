@@ -146,8 +146,7 @@ enum {
 	rm_file
 } read_mode;
 
-static FILE *file_in;
-static FILE *file_out;
+static gbfile *file_in, *file_out;
 static route_head *trk_head;
 static short_handle mkshort_handle;
 static preferred_posn_type posn_type;
@@ -240,7 +239,7 @@ nmea_rd_init(const char *fname)
  	}
 
  	read_mode = rm_file;
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = gbfopen(fname, "rb", MYNAME);
 }
 
 static  void
@@ -251,7 +250,7 @@ nmea_rd_deinit(void)
 		gbser_deinit(gbser_handle);
 		break;
 	case rm_file:
-		fclose(file_in);
+		gbfclose(file_in);
 		file_in = NULL;
 		break;
 	default:
@@ -263,7 +262,7 @@ nmea_rd_deinit(void)
 static void
 nmea_wr_init(const char *portname)
 {
-	file_out = xfopen(portname, "w+", MYNAME);
+	file_out = gbfopen(portname, "w+", MYNAME);
 
 	if ( opt_sleep ) {
 		if ( *opt_sleep ) {
@@ -281,7 +280,7 @@ nmea_wr_init(const char *portname)
 static  void
 nmea_wr_deinit(void)
 {
-	fclose(file_out);
+	gbfclose(file_out);
 	mkshort_del_handle(&mkshort_handle);
 }
 
@@ -762,7 +761,6 @@ nmea_read(void)
 	char *ibuf;
 	char *ck;
 	double lt = -1;
-	textfile_t *tin;
 
 	posn_type = gp_unknown;
 	trk_head = NULL;
@@ -787,9 +785,8 @@ nmea_read(void)
 	}
 
 	curr_waypt = NULL; 
-	tin = textfile_init(file_in);
 
-	while ((ibuf = textfile_read(tin))) {
+	while ((ibuf = gbfgetstr(file_in))) {
 		nmea_parse_one_line(ibuf);
 		if (lt != last_read_time && curr_waypt && trk_head) {
 			if (curr_waypt != last_waypt) {
@@ -802,8 +799,6 @@ nmea_read(void)
 
 	/* try to complete date-less trackpoints */
 	nmea_fix_timestamps(trk_head);
-	
-	textfile_done(tin);
 }
 
 void
@@ -879,9 +874,9 @@ nmea_wayptpr(const waypoint *wpt)
 
 	);
 	cksum = nmea_cksum(obuf);
-	fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+	gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	if (sleepus >= 0) {
-		fflush(file_out);
+		gbfflush(file_out);
 		gb_sleep(sleepus);
 	}
 	
@@ -907,7 +902,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 	time_t ymd;
 
 	if ( opt_sleep ) {
-	    fflush( file_out );
+	    gbfflush( file_out );
 	    if ( last_time > 0 ) {
 		if ( sleepus >= 0 ) {
 		    gb_sleep( sleepus );
@@ -960,7 +955,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 				(wpt->course>=0)?(wpt->course):(0),
 				(int) ymd);
 		cksum = nmea_cksum(obuf);
-		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
 	if (dogpgga) {
 		snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,0.0,M,,",
@@ -972,7 +967,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 				(wpt->hdop>0)?(wpt->hdop):(0.0),
 				wpt->altitude == unknown_alt ? 0 : wpt->altitude);
 		cksum = nmea_cksum(obuf);
-		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
 	if ((dogpvtg) && ((wpt->course>=0) || (wpt->speed>0))) {
 		snprintf(obuf,sizeof(obuf),"GPVTG,%.3f,T,0,M,%.3f,N,%.3f,K",
@@ -981,7 +976,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 			(wpt->speed>0)?(wpt->speed / kmh2mps):(0) );
 
 		cksum = nmea_cksum(obuf);
-		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
 			
 	if ((dogpgsa) && (wpt->fix!=fix_unknown)) {
@@ -1005,7 +1000,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 			(wpt->hdop>0)?(wpt->hdop):(0),
 			(wpt->vdop>0)?(wpt->vdop):(0) );
 		cksum = nmea_cksum(obuf);
-		fprintf(file_out, "$%s*%02X\n", obuf, cksum);
+		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
 }
 
