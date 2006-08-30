@@ -667,7 +667,7 @@ trackfilter_synth(void)
 					    labs(wpt->creation_time-oldtime);
 				}	
 				else {
-					wpt->speed = -999.0;
+					wpt->speed = unknown_speed;
 				}
 			}
 		}
