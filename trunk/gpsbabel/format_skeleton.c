@@ -35,7 +35,7 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
- 
+
 #include "defs.h"
 #include <ctype.h>
 
@@ -60,20 +60,28 @@ arglist_t format_skeleton_args[] = {
 static void
 format_skeleton_rd_init(const char *fname)
 {
-//	fin = xfopen(fname, "r", MYNAME);
+//	fin = gbfopen(fname, "r", MYNAME);
 }
 
 static void 
 format_skeleton_rd_deinit(void)
 {
-//	fclose(fin);
+//	gbfclose(fin);
 }
 
 static void
 format_skeleton_read(void)
 {
 //	your special code to extract waypoint, route and track
-//	information from file "fin"
+//	information from gbfile "fin"
+//
+// Sample text-file read code:
+//	char *s;
+//	while ((s = gbfgetstr(fin))) {
+//		do_anything(s);
+//	}
+//
+//
 // For waypoints:
 //         while (have waypoints) {
 //                 waypoint = waypt_new()
@@ -99,13 +107,13 @@ format_skeleton_read(void)
 static void
 format_skeleton_wr_init(const char *fname)
 {
-//	fout = xfopen(fname, "w", MYNAME);
+//	fout = gbfopen(fname, "w", MYNAME);
 }
 
 static void
 format_skeleton_wr_deinit(void)
 {
-//	fclose(fout);
+//	gbfclose(fout);
 }
 
 static void
