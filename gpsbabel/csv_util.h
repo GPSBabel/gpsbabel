@@ -123,7 +123,7 @@ typedef struct {
     int ifield_ct;		/* actual # of ifields */
     int ofield_ct;		/* actual # of ofields */
     
-    FILE * xcsvfp;		/* ptr to current *open* data file */
+    gbfile * xcsvfp;		/* ptr to current *open* data file */
     char * fname;                /* ptr to filename of above. */
 
     char * description;		/* Description for help text */

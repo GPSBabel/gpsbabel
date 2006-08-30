@@ -1001,11 +1001,8 @@ xcsv_data_read(void)
     queue *elem, *tmp;
     field_map_t *fmp;
     ogue_t *ogp;
-    textfile_t *tin;
     
-    tin = textfile_init(xcsv_file.xcsvfp);
-
-    while ((buff = textfile_read(tin))) {
+    while ((buff = gbfgetstr(xcsv_file.xcsvfp))) {
         linecount++;
         buff = lrtrim(buff);
 
@@ -1061,7 +1058,6 @@ xcsv_data_read(void)
         }
 
     }
-    textfile_done(tin);
 }
 
 static void
@@ -1150,7 +1146,7 @@ xcsv_waypt_pr(const waypoint *wpt)
         fmp = (field_map_t *) elem;
 
         if ((i != 0) && !(fmp->options & OPTIONS_NODELIM))  
-            fprintf (xcsv_file.xcsvfp, write_delimiter);
+            gbfprintf (xcsv_file.xcsvfp, write_delimiter);
 
 	if (fmp->options & OPTIONS_ABSOLUTE) {
 		lat = fabs(lat);
@@ -1454,16 +1450,16 @@ xcsv_waypt_pr(const waypoint *wpt)
  	 * ""%s"" to smuggle bad characters through.
 	 */
 	if (0 == strcmp(fmp->printfc, "\"%s\"")) {
-		fprintf (xcsv_file.xcsvfp, "\"%s\"", obuff);
+		gbfprintf (xcsv_file.xcsvfp, "\"%s\"", obuff);
 	} else {
-		fprintf (xcsv_file.xcsvfp, "%s", obuff);
+		gbfprintf (xcsv_file.xcsvfp, "%s", obuff);
 	}
 
 next:
 	xfree(obuff);
     }
 
-    fprintf (xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
+    gbfprintf (xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
 
     if (description && description != shortname)
         xfree(description);
@@ -1502,12 +1498,12 @@ xcsv_data_write(void)
        ol = strsub(ogp->val, "__FILE__", xcsv_file.fname);
 
        if (ol) {
-               fprintf(xcsv_file.xcsvfp, "%s", ol);
+               gbfprintf(xcsv_file.xcsvfp, "%s", ol);
                xfree(ol);
        } else {
-               fprintf(xcsv_file.xcsvfp, "%s", ogp->val);
+               gbfprintf(xcsv_file.xcsvfp, "%s", ogp->val);
        }
-       fprintf(xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
+       gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
     }
 
     waypt_disp_all(xcsv_waypt_pr);
@@ -1517,7 +1513,7 @@ xcsv_data_write(void)
     /* output epilogue lines, if any. */
     QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {
         ogp = (ogue_t *) elem;
-        fprintf (xcsv_file.xcsvfp, "%s%s", ogp->val, xcsv_file.record_delimiter);
+        gbfprintf (xcsv_file.xcsvfp, "%s%s", ogp->val, xcsv_file.record_delimiter);
     }
 }
 #endif

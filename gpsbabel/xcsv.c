@@ -441,18 +441,16 @@ static void
 xcsv_read_style(const char *fname)
 {
     char *sbuff;
-    FILE *fp;
-    textfile_t *tin;
+    gbfile *fp;
 
     xcsv_file_init();
 
-    fp = xfopen(fname, "rb", MYNAME);
-    tin = textfile_init(fp);
+    fp = gbfopen(fname, "rb", MYNAME);
 
-    while ((sbuff = textfile_read(tin))) {
+    while ((sbuff = gbfgetstr(fp))) {
         sbuff = lrtrim(sbuff);
 	xcsv_parse_style_line(sbuff);
-    } while (!feof(fp));
+    } while (!gbfeof(fp));
 
     /* if we have no output fields, use input fields as output fields */
     if (xcsv_file.ofield_ct == 0) {
@@ -461,8 +459,7 @@ xcsv_read_style(const char *fname)
         xcsv_file.ofield = &xcsv_file.ifield;
         xcsv_file.ofield_ct = xcsv_file.ifield_ct;
     }
-    textfile_done(tin);
-    fclose(fp);
+    gbfclose(fp);
 }
 
 /*
@@ -519,14 +516,14 @@ xcsv_rd_init(const char *fname)
 	warning(MYNAME " attempt to read %s as a track or route, but this module only supports waypoints on read.  Reading as waypoints instead.\n", fname);
     }
 
-    xcsv_file.xcsvfp = xfopen(fname, "r", MYNAME);
+    xcsv_file.xcsvfp = gbfopen(fname, "r", MYNAME);
 
 }
 
 static void
 xcsv_rd_deinit(void)
 {
-    fclose(xcsv_file.xcsvfp);
+    gbfclose(xcsv_file.xcsvfp);
 
     xcsv_destroy_style();
 }
@@ -548,7 +545,7 @@ xcsv_wr_init(const char *fname)
         xcsv_read_style(styleopt);
     }
 
-    xcsv_file.xcsvfp = xfopen(fname, "w", MYNAME);
+    xcsv_file.xcsvfp = gbfopen(fname, "w", MYNAME);
     xcsv_file.fname = (char *)fname;
 
     /* set mkshort options from the command line */
@@ -575,7 +572,7 @@ xcsv_wr_init(const char *fname)
 static void
 xcsv_wr_deinit(void)
 {
-    fclose(xcsv_file.xcsvfp);
+    gbfclose(xcsv_file.xcsvfp);
 
     xcsv_destroy_style();
 }
