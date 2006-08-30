@@ -192,7 +192,7 @@ arglist_t nmea_args[] = {
 	{ "get_posn", &getposnarg, "Return current position as a waypoint", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"pause", &opt_sleep, "Decimal seconds to pause between groups of strings", NULL, ARGTYPE_INT, ARG_NOMINMAX },
-	{"baud", &opt_baud, "Bits per speed of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX },
+	{"baud", &opt_baud, "Speed in bits per second of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
