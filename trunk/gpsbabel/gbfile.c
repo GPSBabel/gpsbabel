@@ -40,7 +40,7 @@
 #endif
 
 #define MYNAME "gbfile"
-#define NO_ZLIB "No zlib support"
+#define NO_ZLIB MYNAME ": No zlib support\n."
 
 /* About the ZLIB_INHIBITED stuff:
  * 
