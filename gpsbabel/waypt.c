@@ -87,6 +87,11 @@ waypt_add(waypoint *wpt)
 	ENQUEUE_TAIL(&waypt_head, &wpt->Q);
 	waypt_ct++;
 
+	if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
+		fatal ("Invalid latitude %f in waypoint.\n", wpt->latitude);
+	if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
+		fatal ("Invalid longitude %f in waypoint.\n", wpt->latitude);
+
 	/*
 	 * Some input may not have one or more of these types so we
 	 * try to be sure that we have these fields even if just by
