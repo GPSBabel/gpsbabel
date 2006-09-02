@@ -27,7 +27,7 @@
 #define NL          "\x0D\x0A"
 
 #define BAUD        9600
-#define TIMEOUT     1500
+#define TIMEOUT     5000
 
 #define RECLEN_V1   12
 #define RECLEN_V2   16
