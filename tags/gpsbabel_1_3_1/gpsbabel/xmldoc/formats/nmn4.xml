@@ -1,0 +1,10 @@
+
+      
+      
+      <para>Support for Navigon Mobile Navigator route (.rte) files.
+This is a very simple text format that only requires coordinates, but
+has fields for many other things.  We only write coordinates as fields
+like 'city' and 'street' cannot typically be populated from other
+formats. <ulink url="http://www.navigon.com">www.navigon.com</ulink>
+         </para>
+    

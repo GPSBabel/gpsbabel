@@ -1,0 +1,8 @@
+
+      
+       <para>This is a very simple format that
+is most useful for exporting data from a Garmin301 to other programs
+for analysis.   It's a simple comma delimited format that includes the
+timestamp, 3D position information and heart rate so you can pull it
+into a spreadsheet or graphing program. </para>
+    

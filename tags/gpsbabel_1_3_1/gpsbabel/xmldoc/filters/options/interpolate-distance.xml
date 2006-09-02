@@ -1,0 +1,13 @@
+<para>
+This option specifies the maximum allowable distance between points in the
+track.  If two points in the track are further apart than this value, new
+points will be inserted between them.
+</para>
+<para>
+This value may be specified in units of miles (3M) or kilometers (5K).  If
+no units are specified, the units are assumed to be miles.
+</para>
+<para>
+Either this option or the <option>time</option> must be specified.
+</para>
+

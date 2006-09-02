@@ -1,0 +1,9 @@
+<para> 
+The Lowrance iFinder GPS series has the unique capability
+to output its data to an MMC card.  The data is saved to the card as a
+.USR file and can be read by your computer using a card reader.
+Waypoints, routes, tracks are supported.  By default, Event marker
+icons are converted to waypoints.  Symbols tend to get lost in the
+translation.
+</para>
+    

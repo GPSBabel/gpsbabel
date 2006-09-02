@@ -1,0 +1,16 @@
+Grid	Lat/Lon hddd°mm.mmm'
+Datum	WGS 84
+
+Header	Name	Description	Type	Position	Altitude	Depth	Proximity	Temperature	Display Mode	Color	Symbol	Facility	City	State	Country	Date Modified	Link	Categories
+
+Waypoint	GC1B51		User Waypoint	N56 04.717 E13 07.465	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	GC1DE6		User Waypoint	N56 23.471 E12 53.771	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	GC1E56		User Waypoint	N57 28.592 E12 10.402	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	GC2182		User Waypoint	N56 13.627 E14 21.366	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	GC23F6		User Waypoint	N57 21.837 E12 50.586	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	GC28B4		User Waypoint	N56 19.809 E14 22.637	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	GC2A45		User Waypoint	N56 42.798 E13 01.599	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	GC2AFD		User Waypoint	N56 11.461 E14 16.266	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	GC2BC9		User Waypoint	N56 08.548 E14 33.886	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	GC2BCA		User Waypoint	N56 18.119 E13 03.645	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	GC2D31		User Waypoint	N57 22.484 E12 54.991	0 m				Symbol & Name	Unknown	Waypoint							

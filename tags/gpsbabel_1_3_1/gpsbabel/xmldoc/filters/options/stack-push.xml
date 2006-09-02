@@ -1,0 +1,8 @@
+<para>
+This is one of three "primary" options to the stack filter.
+</para>
+<para>
+When this option is specified, the current state is pushed onto the top of
+the stack.  By default, the current state is then cleared, but the 
+<option>copy</option> option can be used to cause it to be saved.
+</para>

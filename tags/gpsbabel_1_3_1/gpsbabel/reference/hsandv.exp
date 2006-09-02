@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<Export>
+	<Route>
+		<Version>1.0000000</Version>
+		<Name>ROUTENAME</Name>
+		<LastModified>0</LastModified>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGCEBBlegnum0usrmrkMountain Bike Heaven by susy1313select2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>35.972033</Latitude>
+			<Longitude>-87.134700</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGC1A37legnum1usrmrkThe Troll by a182pilot & Familyselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>36.090683</Latitude>
+			<Longitude>-86.679550</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGC1C2Blegnum2usrmrkDive Bomber by JoGPS & familyselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>35.996267</Latitude>
+			<Longitude>-86.620117</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGC25A9legnum3usrmrkFOSTER by JoGPS & Familyselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>36.038483</Latitude>
+			<Longitude>-86.648617</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGC2723legnum4usrmrkLogan Lighthouse by JoGps & Familyselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>36.112183</Latitude>
+			<Longitude>-86.741767</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGC2B71legnum5usrmrkGanier Cache by Susy1313select2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>36.064083</Latitude>
+			<Longitude>-86.790517</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGC309Flegnum6usrmrkShy's Hill by FireFighterEng33select2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>36.087767</Latitude>
+			<Longitude>-86.809733</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGC317Alegnum7usrmrkGittyUp by JoGPS / Warner Parksselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>36.057500</Latitude>
+			<Longitude>-86.892000</Longitude>
+		</Object>
+		<Object>
+			<ClassName>waypnt</ClassName>
+			<Attr><![CDATA[attr=grpnamROUTENAMEtrnrad50OBJNAMGC317Dlegnum8usrmrkInlighting by JoGPS / Warner Parksselect2]]></Attr>
+			<LegAttr><![CDATA[attr=grpnamROUTENAME]]></LegAttr>
+			<NumberOfVertexs>1</NumberOfVertexs>
+			<Latitude>36.082800</Latitude>
+			<Longitude>-86.867283</Longitude>
+		</Object>
+	</Route>
+</Export>
