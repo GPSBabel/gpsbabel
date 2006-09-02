@@ -526,8 +526,11 @@ retry:
 
 static void *serial_handle = NULL;
 
-static int terminit(const char *portname, int create_ok) {
+static int 
+terminit(const char *portname, int create_ok) 
+{
 	if (gbser_is_serial(portname)) {
+fprintf(stderr, "ser is Is serial\n");
 		if (serial_handle = gbser_init(portname), NULL != serial_handle) {
 			int rc;
 			if (rc = gbser_set_port(serial_handle, bitrate, 8, 0, 1), gbser_OK != rc) {
@@ -596,7 +599,9 @@ mag_dequote(char *ibuf)
 	}
 }
 
-static void termwrite(char *obuf, int size) {
+static void 
+termwrite(char *obuf, int size) 
+{
 	if (is_file) {
 		size_t nw;
 		if (nw = fwrite(obuf, 1, size, magfile_h), nw < (size_t) size) {
@@ -610,7 +615,8 @@ static void termwrite(char *obuf, int size) {
 	}
 }
 
-static void termdeinit() {
+static void termdeinit() 
+{
 	if (is_file) {
 		fclose(magfile_h);
 		magfile_h = NULL;
@@ -647,21 +653,18 @@ arglist_t mag_fargs[] = {
 	ARG_TERMINATOR
 };
 
+/* 
+ * The part of the serial init that's common to read and write.
+ */
 static void
-mag_rd_init_common(const char *portname)
+mag_serial_init_common(const char *portname)
 {
 	time_t now, later;
-	waypoint_read_count = 0;
 
-	if (bs) {
-		bitrate=atoi(bs);
+	if (is_file) {
+		return;
 	}
 
-	terminit(portname, 0);
-	if (!mkshort_handle) {
-		mkshort_handle = mkshort_new_handle();
-	}
-	
 	mag_handoff();
 	if (!noack && !suppress_ack) 
 		mag_handon();
@@ -672,10 +675,8 @@ mag_rd_init_common(const char *portname)
 	 * commands.   Time out on the side of caution.
 	 */
 	later = now + 6;
-	if (!is_file) {
-		got_version = 0;
-		mag_writemsg("PMGNCMD,VERSION");
-	}
+	got_version = 0;
+	mag_writemsg("PMGNCMD,VERSION");
 
 	while (!got_version) {
 		mag_readmsg(trkdata);
@@ -685,7 +686,7 @@ mag_rd_init_common(const char *portname)
 		}
 	}
 
-	if (!is_file && (icon_mapping != gps315_icon_table)) {
+	if ((icon_mapping != gps315_icon_table)) {
 		/*
 		 * The 315 can't handle this command, so we set a global
 		 * to ignore the NAK on it.
@@ -694,6 +695,7 @@ mag_rd_init_common(const char *portname)
 		mag_writemsg("PMGNCMD,NMEAOFF");
 		ignore_unable = 0;
 	}
+
 	if (nukewpt) {
 		/* The unit will send us an "end" message upon completion */
 		mag_writemsg("PMGNCMD,DELETE,WAYPOINT");
@@ -703,6 +705,23 @@ mag_rd_init_common(const char *portname)
 		}
 		found_done = 0;
 	}
+
+}
+static void
+mag_rd_init_common(const char *portname)
+{
+	waypoint_read_count = 0;
+
+	if (bs) {
+		bitrate=atoi(bs);
+	}
+
+	if (!mkshort_handle) {
+		mkshort_handle = mkshort_new_handle();
+	}
+
+	terminit(portname, 0);
+	mag_serial_init_common(portname);
 
 	QUEUE_INIT(&rte_wpt_tmp);
 
@@ -749,11 +768,12 @@ mag_wr_init_common(const char *portname)
 		wptcmtcnt_max = MAXCMTCT ;
 	}
 
-	terminit(portname, 1);
-
 	if (!mkshort_handle) {
 		mkshort_handle = mkshort_new_handle();
 	}
+
+	terminit(portname, 1);
+	mag_serial_init_common(portname);
 
 	QUEUE_INIT(&rte_wpt_tmp);
 }
