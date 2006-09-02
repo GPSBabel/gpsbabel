@@ -70,7 +70,7 @@ typedef struct msroute_head_s
 
 #define BLOCKS(a, b) (((a) + (b) - 1) / (b))
 
-static const char ole_magic[8] =
+static const unsigned char ole_magic[8] =
 {
 	0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1
 };
@@ -375,7 +375,7 @@ ole_init(void)
 	memset(&head, 0, sizeof(head));
 	fread(&head, sizeof(head), 1, fin);
 	
-	is_fatal((strncmp(head.magic, ole_magic, sizeof(ole_magic)) != 0), MYNAME ": No MS document.");
+	is_fatal((strncmp(head.magic, (char *) ole_magic, sizeof(ole_magic)) != 0), MYNAME ": No MS document.");
 
 	head.rev = le_read16(&head.rev);
 	head.ver = le_read16(&head.ver);

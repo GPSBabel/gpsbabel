@@ -446,6 +446,14 @@ main(int argc, char *argv[])
 			fatal("Realtime tracking (-T) is exclusive of other modes.\n");
 		}
 
+		if (ovecs) {
+			if (!ovecs->position_ops.wr_init || 
+			    !ovecs->position_ops.wr_position ||
+			    !ovecs->position_ops.wr_deinit) {
+				fatal ("This output format does not support realtime positioning.\n");
+			}
+		}
+
 		while (1) {
 			wpt = ivecs->position_ops.rd_position();
 			if (wpt) {
