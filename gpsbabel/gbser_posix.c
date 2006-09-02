@@ -183,7 +183,13 @@ int gbser_set_port(void *handle, unsigned speed, unsigned bits, unsigned parity,
 	h->new_tio = h->old_tio;
 
 	/* clear bits */
-	cfmakeraw(&h->new_tio);
+//	cfmakeraw(&h->new_tio);
+	h->new_tio.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP
+                                   |INLCR|IGNCR|ICRNL|IXON);
+	h->new_tio.c_oflag &= ~OPOST;
+	h->new_tio.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
+	h->new_tio.c_cflag &= ~(CSIZE|PARENB);
+	h->new_tio.c_cflag |= CS8;
 
 	h->new_tio.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP |
                 			INLCR  | IGNCR  | IXON);
