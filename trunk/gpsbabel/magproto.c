@@ -1041,6 +1041,7 @@ mag_find_descr_from_token(const char *token)
 	}
 
 	for (i = icon_mapping; i->token; i++) {
+		if (token[0] == 0) break;
 		if (case_ignore_strcmp(token, i->token) == 0)
 			return i->icon;
 	}
