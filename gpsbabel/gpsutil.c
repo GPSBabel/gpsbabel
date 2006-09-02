@@ -64,6 +64,7 @@ data_read(void)
 	char alttype;
 	char icon[3];
 	waypoint *wpt_tmp;
+	icon[0] = 0;
 
 	/*
 	 * Make sure that all waypoints in single read have same 
