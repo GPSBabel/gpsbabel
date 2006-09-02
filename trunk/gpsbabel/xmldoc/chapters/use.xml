@@ -217,4 +217,22 @@ merged data to multiple destinations.
     </para>
     <screen format="linespecific">gpsbabel -p "" -i gpx -f something.gpx -o tiger -F -</screen>
 </sect1>
+<sect1 id="tracking">
+  <title>Realtime tracking</title>
+    <para>
+      Introduced in GPSBabel 1.3.1, we now have an <emphasis>experimental</emphasis>  feature for realtime tracking via the new '-T' option.  This reads position reports from selected formats and writes an output file when a position report is received. 
+    </para>
+    <para>
+	  As of this writing, Garmin's PVT protocol and NMEA are supported 
+	  inputs and KML is supported on output.   Additional formats 
+   	  may be added by interested parties later.
+    </para>
+    <para>
+    <screen format="linespecific">gpsbabel -T -i garmin -f usb: -o kml -F xxx.kml</screen>
+   	  Will read the USB-connected Garmin and rewrite 'xxx.kml' atomically,
+	  suitable for a self-refreshing network link in Google Earth.
+    </para>
+   
+  
+</sect1>
 </chapter>
