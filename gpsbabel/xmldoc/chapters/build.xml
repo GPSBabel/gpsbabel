@@ -25,4 +25,28 @@ Linux, Solaris, and a variety of processors and compilers.
 is strongly recommended for source builds as it is
 required for reading all the XML formats such as GPX.
 </para>
+  <para><ulink url="http://libusb.sourceforge.net">libusb</ulink> 
+is recommended for OS/X and Linux if you want to use a USB Garmin.
+</para>
+<para>There are additional flags that can be passed to configure to
+ customize your build of GPSBabel.   <screen format="linespecific"> ./configure --help</screen> lists all the supported options, but additionally we have:
+</para>
+<para>
+ <option>--disable-shapefile</option> Excludes the shapefile support.
+</para>
+<para>
+ <option>--disable-pdb</option> Excludes the Palm database support and all formats that rely on it.
+</para>
+<para>
+  <option>--disable-csv</option> Excludes all support for our something-separated formats.
+</para>
+<para>
+  <option>--disable-filters</option> Excludes all filter support.
+</para>
+<para>
+  <option>--without-libusb</option> Disables use of libusb, even it's it's available.
+</para>
+<para>
+ <option>--with-zlib=(included)|system|no</option> By default, we use our own version of zlib.  Ify ou specify <option>system</option> the system zlib is used.  A value of <option>no</option> (or --without-zlib) disables zlib.
+</para>
 </chapter>
