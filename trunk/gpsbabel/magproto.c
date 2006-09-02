@@ -530,7 +530,6 @@ static int
 terminit(const char *portname, int create_ok) 
 {
 	if (gbser_is_serial(portname)) {
-fprintf(stderr, "ser is Is serial\n");
 		if (serial_handle = gbser_init(portname), NULL != serial_handle) {
 			int rc;
 			if (rc = gbser_set_port(serial_handle, bitrate, 8, 0, 1), gbser_OK != rc) {
