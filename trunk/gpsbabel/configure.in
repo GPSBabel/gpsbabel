@@ -168,6 +168,8 @@ case "$target" in
 		OSJEEPS=jeeps/gpslibusb.o
 		CFLAGS="$OCFLAGS"
 	#	LIBS="$LIBS `libusb-config --libs`"
+	    else
+		OSJEEPS=jeeps/gpsusbstub.o
 	    fi
 	fi
 	;;

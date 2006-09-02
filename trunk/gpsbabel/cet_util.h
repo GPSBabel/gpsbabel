@@ -25,11 +25,14 @@
 #include <ctype.h>
 #include <stdio.h>
 #include "config.h"
-#include "cet.h"
 
 #if HAVE_LIBEXPAT
 # include <expat.h>
+#else
+typedef char XML_Char;
 #endif
+
+#include "cet.h"
 
 cet_cs_vec_t *cet_find_cs_by_name(const char *name);
 void cet_register(void);
