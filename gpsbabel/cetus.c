@@ -249,7 +249,7 @@ read_tracks(const struct pdb *pdb)
 			tm.tm_mday = head->day;
 			tm.tm_mon = head->month - 1;
 			tm.tm_year = head->year + 100;
-			basetime = mktime(&tm);
+			basetime = mkgmtime(&tm);
 			break;
 			
 		    case 1: 	/* first part of description */
@@ -345,7 +345,7 @@ read_waypts(const struct pdb *pdb)
 			tm.tm_mon = rec->mon - 1;
 			tm.tm_year = be_read16(&rec->year) - 1900;
 
-			wpt_tmp->creation_time = mktime(&tm); 
+			wpt_tmp->creation_time = mkgmtime(&tm); 
 			
 		}
 
