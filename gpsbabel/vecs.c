@@ -604,7 +604,7 @@ vecs_t vec_list[] = {
 	{
 		&dmtlog_vecs,
 		"dmtlog",
-		"Digital Mapping TrackLogs (.trl)",
+		"TrackLogs digital mapping (.trl)",
 		"trl"
 	},
 	{
