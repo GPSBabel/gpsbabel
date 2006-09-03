@@ -120,7 +120,9 @@ static int set_rx_timeout(gbser_handle *h, DWORD timeout) {
  * call to this function.
  */
 
-const char *fix_win_serial_name_r(const char *comname, char *obuf, size_t len) {
+const char *
+fix_win_serial_name_r(const char *comname, char *obuf, size_t len) 
+{
 	if (!gbser_is_serial(comname) ||
 		((strlen(comname) == 5) && (comname[4] == ':')) || 
 		((strlen(comname) == 4) && (case_ignore_strncmp(comname, "com", 3) == 0))
@@ -140,7 +142,8 @@ const char *fix_win_serial_name_r(const char *comname, char *obuf, size_t len) {
 
 static char gb_com_buffer[100];
 
-const char *fix_win_serial_name(const char *comname) {
+const char *fix_win_serial_name(const char *comname) 
+{
 	return fix_win_serial_name_r(comname, gb_com_buffer, sizeof(gb_com_buffer));
 }
 
@@ -149,10 +152,11 @@ const char *fix_win_serial_name(const char *comname) {
  * ('com1:') are translated into the equivalent name required by
  * WIN32
  */
-void *gbser_init(const char *port_name) {
+void *gbser_init(const char *port_name) 
+{
 	HANDLE comport;
 	gbser_handle* h = xcalloc(1, sizeof(*h));
-    const char *xname = fix_win_serial_name(port_name);
+	const char *xname = fix_win_serial_name(port_name);
 
 	gbser__db(2, "Translated port name: \"%s\"\n", xname);
 
@@ -167,7 +171,6 @@ void *gbser_init(const char *port_name) {
 	
 	h->comport = comport;
 	h->timeout = 1;
-
 	if (gbser_set_port(h, 4800, 8, 0, 1) || set_rx_timeout(h, 0)) {
 	    goto failed;
 	}
@@ -175,10 +178,12 @@ void *gbser_init(const char *port_name) {
 	return h;
 	
 failed:
-	if (comport) { CloseHandle(h->comport); }
-    xfree(h);
+	if (comport) { 
+		CloseHandle(h->comport); 
+	}
+	xfree(h);
     
-    return NULL;
+	return NULL;
 }
 
 /* Close a serial port
