@@ -1,6 +1,6 @@
 /*
 
-    Support for Digital Mapping TrackLogs (.trl) files,
+    Support for TrackLogs digital mapping (.trl) files,
 
     Copyright (C) 2006 Olaf Klein, o.b.klein@t-online.de
 
