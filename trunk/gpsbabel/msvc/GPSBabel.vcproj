@@ -239,7 +239,7 @@
 				EnableIntrinsicFunctions="false"
 				FavorSizeOrSpeed="2"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="expatw,..\coldsync,."
+				AdditionalIncludeDirectories="expatw;..\coldsync;."
 				PreprocessorDefinitions="XML_UNICODE=1;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;__WIN32__;"
 				StringPooling="true"
 				ExceptionHandling="0"
@@ -533,6 +533,10 @@
 			</File>
 			<File
 				RelativePath="..\discard.c"
+				>
+			</File>
+			<File
+				RelativePath="..\dmtlog.c"
 				>
 			</File>
 			<File
@@ -1041,6 +1045,10 @@
 			</File>
 			<File
 				RelativePath="..\gtm.c"
+				>
+			</File>
+			<File
+				RelativePath="..\gtrnctr.c"
 				>
 			</File>
 			<File
@@ -2142,10 +2150,6 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\textfile.c"
-				>
 			</File>
 			<File
 				RelativePath="..\tiger.c"
