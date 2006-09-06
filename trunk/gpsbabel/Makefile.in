@@ -55,7 +55,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
 	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o
 
-FILTERS=position.o duplicate.o arcdist.o polygon.o smplrout.o \
+FILTERS=position.o radius.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
 	nukedata.o interpolate.o
 
@@ -506,6 +506,8 @@ queue.o: queue.c queue.h
 quovadis.o: quovadis.c quovadis.h defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
   coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
+radius.o: radius.c defs.h config.h queue.h gbtypes.h cet.h cet_util.h \
+  inifile.h filterdefs.h grtcirc.h
 reverse_route.o: reverse_route.c defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
   filterdefs.h
