@@ -33,7 +33,7 @@ char *turns_important = NULL;
 char *turns_only = NULL;
 char *controls = NULL;
 char *split = NULL;
-char *times = NULL;
+char *timesynth = NULL;
 
 int control = 0;
 
@@ -48,7 +48,7 @@ arglist_t saroute_args[] = {
        		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"controls", &controls, "Read control points as waypoint/route/none",
 		"none", ARGTYPE_STRING, ARG_NOMINMAX },
-	{"times", &times, "Synthesize track times",
+	{"times", &timesynth, "Synthesize track times",
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
@@ -286,7 +286,7 @@ my_read(void)
 		count = ReadLong(infile);
 		if ( count ) {
 			track_head = route_head_alloc();
-			if ( times ) {
+			if ( timesynth ) {
 				track_add_head(track_head);
 			}
 			else {
@@ -306,7 +306,7 @@ my_read(void)
 			    if ( track_head->rte_waypt_ct ) {
 				old_track_head = track_head;
 				track_head = route_head_alloc();
-				if ( times ) {
+				if ( timesynth ) {
 					track_add_head( track_head );
 				}
 				else {
@@ -322,7 +322,7 @@ my_read(void)
 			    } 
 			}
 			
-			if ( times ) {
+			if ( timesynth ) {
 	                        le_read64( &seglen, 
 					   record + 2 + stringlen + 0x08 );
 				starttime = le_read32((unsigned long *)
@@ -369,7 +369,7 @@ my_read(void)
 				    sprintf( wpt_tmp->shortname, "\\%5.5x", 
 						serial++ );
 				}
-				if ( times ) {
+				if ( timesynth ) {
 					if ( !first ) {
 					   double dist = radtomiles(gcdist( 
 						RAD(lat), RAD(-lon), 
@@ -394,14 +394,14 @@ my_read(void)
 				if ( turns_important && stringlen ) 
 					wpt_tmp->route_priority=1;
 				if ( !turns_only || stringlen ) {
-					if ( times ) {
+					if ( timesynth ) {
 					    track_add_wpt(track_head,wpt_tmp);
 					}
 					else {
 					    route_add_wpt(track_head, wpt_tmp);
 					}
 					if ( old_track_head ) {
-						if ( times ) {
+						if ( timesynth ) {
 						  track_add_wpt(old_track_head,
 						   waypt_dupe(wpt_tmp));
 						}
