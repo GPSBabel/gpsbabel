@@ -864,6 +864,7 @@ void tpo_process_waypoints(void)
 //UNKNOWN DATA LENGTH
         // Fetch name length
         name_length = tpo_read_int();
+//printf("\nName Length: %d\n", name_length);
         if (name_length) {
             waypoint_name = xmalloc(name_length+1);
             waypoint_name[0] = '\0';
@@ -874,7 +875,7 @@ void tpo_process_waypoints(void)
             waypoint_name = xmalloc(15);
             sprintf(waypoint_name, "WPT %d", ii+1);
         }
-//printf("Waypoint Name: %s\n", waypoint_name);
+//printf("\tWaypoint Name: %s\n", waypoint_name);
 
 //UNKNOWN DATA LENGTH
         (void)tpo_read_int();
@@ -893,11 +894,12 @@ void tpo_process_waypoints(void)
         if (altitude == 0xfffd000c) // Unknown altitude
             altitude = 0;
         waypoint_temp->altitude = altitude / 100;   // Meters
-//printf("Altitude: %d\n", waypoint_temp->altitude);
+//printf("\tAltitude: %1.0f meters\n", waypoint_temp->altitude);
 
 //UNKNOWN DATA LENGTH
         // Fetch comment length
         name_length = tpo_read_int();
+//printf("\tComment length: %d\n", name_length); 
         if (name_length) {
             char *comment;
  
@@ -906,7 +908,7 @@ void tpo_process_waypoints(void)
             tpo_fread(comment, 1, name_length, tpo_file_in);
             comment[name_length] = '\0';  // Terminator
             waypoint_temp->description = comment;
-//printf("Comment: %s\n", waypoint_name);
+//printf("\tComment: %s\n", waypoint_name);
         }
         else {
 //            waypoint_temp->description = NULL;
@@ -927,16 +929,20 @@ void tpo_process_waypoints(void)
         waypt_add(waypoint_temp);
 
 //UNKNOWN DATA LENGTH
-        (void)tpo_read_int();
+//        (void)tpo_read_int();
+	(void)tpo_read_8();
 
 //UNKNOWN DATA LENGTH
-        (void)tpo_read_int();
+//        (void)tpo_read_int();
+	(void)tpo_read_8();
 
 //UNKNOWN DATA LENGTH
-        (void)tpo_read_int();
+//        (void)tpo_read_int();
+	(void)tpo_read_8();
 
 //UNKNOWN DATA LENGTH
-        (void)tpo_read_int();
+//        (void)tpo_read_int();
+	(void)tpo_read_8();
     }
 }
 
