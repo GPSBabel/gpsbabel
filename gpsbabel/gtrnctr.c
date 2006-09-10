@@ -136,7 +136,7 @@ gtc_waypt_pr(const waypoint *wpt)
 	}
 	gtc_write_xml(1, "<Position>\n");
 	gtc_write_xml(0, "<LatitudeDegrees>%f</LatitudeDegrees>\n", wpt->latitude);
-	gtc_write_xml(0, "<LongitudeDegrees>%f</LongitudeDegrees>\n", wpt->latitude);
+	gtc_write_xml(0, "<LongitudeDegrees>%f</LongitudeDegrees>\n", wpt->longitude);
 	gtc_write_xml(-1, "</Position>\n");
 	if (wpt->altitude != unknown_alt) {
 		gtc_write_xml(0, "<AltitudeMeters>%f</AltitudeMeters>\n", wpt->altitude);
