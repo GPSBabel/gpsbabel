@@ -439,7 +439,6 @@ tag_gs_cache(const char **attrv)
 {
 	const char **avp;
 
-	cache_descr_is_html = 0;
 	for (avp = &attrv[0]; *avp; avp+=2) {
 		if (strcmp(avp[0], "id") == 0) {
 				wpt_tmp->gc_data.id = atoi(avp[1]);
