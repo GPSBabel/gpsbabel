@@ -323,7 +323,7 @@ my_read(void)
 			}
 			
 			if ( timesynth ) {
-	                        le_read64( &seglen, 
+	                        seglen = le_read_double(
 					   record + 2 + stringlen + 0x08 );
 				starttime = le_read32((unsigned long *)
 					(record + 2 + stringlen + 0x30 ));

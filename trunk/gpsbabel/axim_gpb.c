@@ -67,9 +67,8 @@ decode_buff(const char *buff, route_head *track)
 	tm.tm_hour = le_read16((void *) (buff + 24));
 	tm.tm_min = le_read16((void *)  (buff + 26));
 	tm.tm_sec = le_read16((void *)  (buff + 28));
-	
-	le_read64(&lat, (void *)        (buff + 32));
-	le_read64(&lon, (void *)        (buff + 40));
+	lat = le_read_double( (void *)  (buff + 32));
+	lon = le_read_double( (void *)  (buff + 40));	
 	spd = le_read32_float((void *)  (buff + 48));
 	dir = le_read32_float((void *)  (buff + 52));
 

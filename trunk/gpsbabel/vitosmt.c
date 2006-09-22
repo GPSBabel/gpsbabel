@@ -53,11 +53,8 @@ static double
 ReadDouble(FILE * f)
 {
 	unsigned char buffer[8] = "\0\0\0\0\0\0\0\0";
-	double result=0;
-
 	fread(buffer, sizeof (buffer), 1, f);
-	le_read64(&result,buffer);
-	return result;
+	return le_read_double(buffer );
 }
 
 
@@ -75,11 +72,8 @@ static void
 WriteDouble(void* ptr, double d)
 {
   unsigned char result[8]="\0\0\0\0\0\0\0\0";
-
-  le_read64(result, &d);
+  le_write_double(result,d);
   memcpy(ptr, result, 8);
-
-  return;
 }
 
 

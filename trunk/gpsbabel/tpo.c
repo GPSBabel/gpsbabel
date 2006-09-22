@@ -145,20 +145,15 @@ static double
 tpo_fread_double(FILE *fp)
 {
 	unsigned char buf[8];
-	unsigned char sbuf[8];
-
 	tpo_fread(buf, 1, 8, fp);
-	le_read64(sbuf, buf);
-	return *(double *)sbuf;
+	return le_read_double(buf);
 }
 
 static void
 tpo_fwrite_double(double x, FILE *fp)
 {
-	unsigned char *cptr = (unsigned char *)&x;
 	unsigned char cbuf[8];
-
-	le_read64(cbuf, cptr);
+	le_write_double(cbuf,x);
 	fwrite(cbuf, 8, 1, fp);
 }
 

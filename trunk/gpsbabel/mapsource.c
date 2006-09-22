@@ -97,26 +97,20 @@ arglist_t mps_args[] = {
  * A wrapper to ensure the doubles we fwrite are in correct endianness.
  */
 
-void
-le_fwrite64(void *ptr, int sz, int ct, FILE *stream)
+static void
+le_fwrite_double(double d, FILE *stream)
 {
 	unsigned char cbuf[8];
-
-	if ((sz != 8) || (ct != 1)) {
-		fatal(MYNAME ": Bad internal arguments to le_fwrite64.\n");
-	}
-
-	le_read64(cbuf, ptr);
+	le_write_double(cbuf,d);
 	fwrite(cbuf, 8, 1, stream);
 }
 
-void
-le_fread64(void *ptr, int sz, int ct, FILE *stream)
+static double
+le_fread_double( FILE *stream)
 {
 	unsigned char cbuf[8];
-
 	fread(cbuf, 8, 1, stream);
-	le_read64(ptr, cbuf);
+	return le_read_double(cbuf);
 }
 
 static void 
@@ -536,22 +530,22 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 	
 	fread(tbuf, 1, 1, mps_file);				/* altitude validity */
 	if (tbuf[0] == 1) {
-		le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);
+		mps_altitude = le_fread_double(mps_file);
 	}
 	else {
 		mps_altitude = unknown_alt;
-		le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
+		fseek( mps_file, 8, SEEK_CUR );
 	}
 
 	mps_readstr(mps_file, wptdesc, sizeof(wptdesc));
 
 	fread(tbuf, 1, 1, mps_file);				/* proximity validity */
 	if (tbuf[0] == 1) {
-		le_fread64(&mps_proximity,sizeof(mps_proximity),1,mps_file);
+		mps_proximity = le_fread_double(mps_file);
 	}
 	else {
 		mps_proximity = unknown_alt;
-		le_fread64(tbuf,sizeof(mps_proximity),1, mps_file);
+		fseek( mps_file, 8, SEEK_CUR );
 	}
 
 	fread(tbuf, 4, 1, mps_file);					/* display flag */
@@ -567,11 +561,11 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 
 	fread(tbuf, 1, 1, mps_file);					/* depth validity */
 	if (tbuf[0] == 1) {
-		le_fread64(&mps_depth,sizeof(mps_depth),1,mps_file);
+		mps_depth = le_fread_double( mps_file );
 	}
 	else {
 		mps_depth = unknown_alt;
-		le_fread64(tbuf,sizeof(mps_depth),1, mps_file);
+		fseek( mps_file, 8, SEEK_CUR );
 	}
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
@@ -704,7 +698,7 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	else {
 		hdr[0] = 1;
 		fwrite(hdr, 1 , 1, mps_file);
-		le_fwrite64(&mps_altitude, 8 , 1, mps_file);
+		le_fwrite_double( mps_altitude, mps_file );
 	}
 	if (wpt->description) fputs(ascii_description, mps_file);
 	fwrite(zbuf, 1, 1, mps_file);	/* NULL termination */
@@ -717,7 +711,7 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	else {
 		hdr[0] = 1;
 		fwrite(hdr, 1 , 1, mps_file);
-		le_fwrite64(&mps_proximity, 8 , 1, mps_file);
+		le_fwrite_double( mps_proximity, mps_file );
 	}
 
 	le_write32(&display, display);
@@ -739,7 +733,7 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	else {
 		hdr[0] = 1;
 		fwrite(hdr, 1 , 1, mps_file);
-		le_fwrite64(&mps_depth, 8 , 1, mps_file);
+		le_fwrite_double(mps_depth, mps_file);
 	}
 
 	fwrite(zbuf, 2, 1, mps_file);		/* unknown */
@@ -904,11 +898,11 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 
 		fread(tbuf, 1, 1, mps_file);			/* altitude validity */
 		if (tbuf[0] == 1) {
-			le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);	/* max alt of the whole route */
+			mps_altitude = le_fread_double(mps_file);
 		}
 		else {
 			mps_altitude = unknown_alt;
-			le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
+			fseek( mps_file, 8, SEEK_CUR );
 		}
 
 		fread(&lat, 4, 1, mps_file); 
@@ -918,11 +912,11 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 
 		fread(tbuf, 1, 1, mps_file);			/* altitude validity */
 		if (tbuf[0] == 1) {
-			le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);	/* min alt of the whole route */
+			mps_altitude = le_fread_double(mps_file);
 		}
 		else {
 			mps_altitude = unknown_alt;
-			le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
+			fseek( mps_file, 8, SEEK_CUR );
 		}
 	}
 
@@ -1000,11 +994,11 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 	
 		fread(tbuf, 1, 1, mps_file);			/* altitude validity */
 		if (tbuf[0] == 1) {
-			le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);
+			mps_altitude = le_fread_double(mps_file);
 		}
 		else {
 			mps_altitude = unknown_alt;
-			le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
+			fseek( mps_file, 8, SEEK_CUR );
 		}
 
 		/* with MapSource routes, the real waypoint details are held as a separate waypoint, so copy from there
@@ -1048,11 +1042,11 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 		
 			fread(tbuf, 1, 1, mps_file);			/* altitude validity */
 			if (tbuf[0] == 1) {
-				le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);
+				mps_altitude = le_fread_double( mps_file );
 			}
 			else {
 				mps_altitude = unknown_alt;
-				le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
+				fseek( mps_file, 8, SEEK_CUR );
 			}
 		}
 
@@ -1260,7 +1254,7 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 		else {
 			hdr[0] = 1;
 			fwrite(hdr, 1 , 1, mps_file);
-			le_fwrite64(&maxalt, 8 , 1, mps_file);
+			le_fwrite_double(maxalt, mps_file);
 		}
 
 		lat = GPS_Math_Deg_To_Semi(minlat);
@@ -1279,7 +1273,7 @@ mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 			hdr[0] = 1;
 
 			fwrite(hdr, 1 , 1, mps_file);
-			le_fwrite64(&minalt, 8 , 1, mps_file);
+			le_fwrite_double(minalt, mps_file);
 		}
 
 		le_write32(&rte_datapoints, rte_datapoints);
@@ -1345,7 +1339,7 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 		else {
 			hdr[0] = 1;
 			fwrite(hdr, 1 , 1, mps_file);
-			le_fwrite64(&mps_altitude, 8 , 1, mps_file);
+			le_fwrite_double(mps_altitude, mps_file );
 		}
 
 		/* output end point 2 */
@@ -1364,7 +1358,7 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 		else {
 			hdr[0] = 1;
 			fwrite(hdr, 1 , 1, mps_file);
-			le_fwrite64(&mps_altitude, 8 , 1, mps_file);
+			le_fwrite_double(mps_altitude, mps_file);
 		}
 
 		if (rtewpt->latitude > prevRouteWpt->latitude) {
@@ -1409,7 +1403,7 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 		else {
 			hdr[0] = 1;
 			fwrite(hdr, 1 , 1, mps_file);
-			le_fwrite64(&maxalt, 8 , 1, mps_file);
+			le_fwrite_double(maxalt, mps_file);
 		}
 
 		/* output min coords of the link */
@@ -1425,7 +1419,7 @@ mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 		else {
 			hdr[0] = 1;
 			fwrite(hdr, 1 , 1, mps_file);
-			le_fwrite64(&minalt, 8 , 1, mps_file);
+			le_fwrite_double(minalt, mps_file );
 		}
 
 	}
@@ -1560,11 +1554,11 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 	
 		fread(tbuf, 1, 1, mps_file);			/* altitude validity */
 		if (tbuf[0] == 1) {
-			le_fread64(&mps_altitude,sizeof(mps_altitude),1,mps_file);
+			mps_altitude = le_fread_double( mps_file );
 		}
 		else {
 			mps_altitude = unknown_alt;
-			le_fread64(tbuf,sizeof(mps_altitude),1, mps_file);
+			fseek( mps_file, 8, SEEK_CUR );
 		}
 
 		fread(tbuf, 1, 1, mps_file);			/* date/time validity */
@@ -1577,11 +1571,11 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 
 		fread(tbuf, 1, 1, mps_file);			/* depth validity */
 		if (tbuf[0] == 1) {
-			le_fread64(&mps_depth,sizeof(mps_depth),1,mps_file);
+			mps_depth = le_fread_double(mps_file );
 		}
 		else {
 			mps_depth = unknown_alt;
-			le_fread64(tbuf,sizeof(mps_depth),1, mps_file);
+			fseek( mps_file, 8, SEEK_CUR );
 		}
 
 		thisWaypoint = waypt_new();
@@ -1706,7 +1700,7 @@ mps_trackdatapoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 	else {
 		hdr[0] = 1;
 		fwrite(hdr, 1 , 1, mps_file);
-		le_fwrite64(&mps_altitude, 8 , 1, mps_file);
+		le_fwrite_double(mps_altitude, mps_file);
 	}
 
 	if (t > 0) {					/* a valid time is assumed to > 0 */
@@ -1725,7 +1719,7 @@ mps_trackdatapoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 	else {
 		hdr[0] = 1;
 		fwrite(hdr, 1 , 1, mps_file);
-		le_fwrite64(&mps_depth, 8 , 1, mps_file);
+		le_fwrite_double(mps_depth, mps_file );
 	}
 }
 

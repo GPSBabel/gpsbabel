@@ -64,11 +64,15 @@ gpl_read(void)
 
 	while (fread(&gp, sizeof(gp), 1, gplfile_in) > 0) {
 		wpt_tmp = waypt_new();
-		le_read64(&wpt_tmp->latitude, &gp.lat);
-		le_read64(&wpt_tmp->longitude, &gp.lon);
-		le_read64(&alt_feet, &gp.alt);
+		wpt_tmp->latitude = le_read_double(&gp.lat);
+		wpt_tmp->longitude = le_read_double(&gp.lon);
+		alt_feet = le_read_double(&gp.alt);
 		wpt_tmp->altitude = FEET_TO_METERS(alt_feet);
 		wpt_tmp->creation_time = le_read32(&gp.tm);
+		
+	        wpt_tmp->course = le_read_double(&gp.heading);
+		wpt_tmp->speed = le_read_double(&gp.speed);		
+		
 		track_add_wpt(track_head, wpt_tmp);
 	}
 }
@@ -98,12 +102,16 @@ gpl_trackpt(const waypoint *wpt)
 	double alt_feet = METERS_TO_FEET(wpt->altitude);
 	int status = 3;
 	gpl_point_t gp;
+	double speed = wpt->speed;
+	double heading = wpt->course;
 	
 	memset(&gp, 0, sizeof(gp));
 	le_write32(&gp.status, status);
-	le_read64(&gp.lat, &wpt->latitude);
-	le_read64(&gp.lon, &wpt->longitude);
-	le_read64(&gp.alt, &alt_feet);
+	le_write_double(&gp.lat, wpt->latitude);
+	le_write_double(&gp.lon, wpt->longitude);
+	le_write_double(&gp.alt, alt_feet );
+	le_write_double(&gp.speed, speed );
+	le_write_double(&gp.heading, heading );
 	le_write32(&gp.tm, wpt->creation_time);
 
 	fwrite(&gp, sizeof(gp), 1, gplfile_out);

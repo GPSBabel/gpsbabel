@@ -777,6 +777,11 @@ void le_write32(void *pp, const unsigned i);
 double pdb_read_double(void *p);
 void pdb_write_double(void *pp, double d);
 
+double le_read_double(void *p);
+double be_read_double(void *p);
+void le_write_double(void *p, double d);
+void be_write_double(void *p, double d);
+
 /*
  * Prototypes for generic conversion routines (util.c).
  */
