@@ -127,7 +127,7 @@ ReadDouble( FILE * f )
 	double tmp = 0;
 	double result = 0;
 	fread(&tmp, sizeof(tmp),1,f);
-	le_read64(&result, &tmp );
+	result = le_read_double( &tmp );
 	return result;
 }
 
@@ -135,7 +135,7 @@ static void
 WriteDouble(FILE * f, double d)
 {
 	double tmp = 0;
-        le_read64( &tmp, (void *)&d );
+        le_write_double( &tmp, d );
 	fwrite( &tmp, sizeof(tmp), 1, f );
 }
 

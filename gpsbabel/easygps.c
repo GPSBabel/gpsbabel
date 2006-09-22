@@ -96,7 +96,6 @@ data_read(void)
 	char ibuf[10];
 	char bbuf[4096];
 	char *bbufp;
-	double d;
 	do {
 		unsigned char tag;
 		waypoint *wpt_tmp;
@@ -157,13 +156,11 @@ data_read(void)
 				break;
 			case 0x63:
 				fread(ibuf, 8, 1, file_in);
-				le_read64(&d, ibuf);
-				wpt_tmp->latitude = d;
+				wpt_tmp->latitude = le_read_double(ibuf);
 				break;
 			case 0x64:
 				fread(ibuf, 8, 1, file_in);
-				le_read64(&d, ibuf);
-				wpt_tmp->longitude = d;
+				wpt_tmp->longitude = le_read_double(ibuf);
 				break;
 			case 0x65:
 			case 0x66:
@@ -220,10 +217,10 @@ ez_disp(const waypoint *wpt)
 		write_pstring(wpt->icon_descr);
 	}
 	fputc(0x63, file_out);
-	le_read64(tbuf, &wpt->latitude);
+	le_write_double(tbuf, wpt->latitude);
 	fwrite(tbuf, 8, 1, file_out);
 	fputc(0x64, file_out);
-	le_read64(tbuf, &wpt->longitude);
+	le_write_double(tbuf, wpt->longitude);
 	fwrite(tbuf, 8, 1, file_out);
 	if (wpt->notes) {
 		fputc(5, file_out);

@@ -477,12 +477,8 @@ double
 gbfgetdbl(gbfile *file)
 {
 	char buf[8];
-	double result;
-	
 	gbfread(buf, 1, sizeof(buf), file);
-	le_read64(&result, buf);
-
-	return result;
+	return le_read_double(buf);
 }
 
 float
@@ -618,8 +614,7 @@ int
 gbfputdbl(const double d, gbfile *file)
 {
 	char buf[8];
-	
-	le_read64(buf, (char *)&d);
+	le_write_double(buf, d );
 	return gbfwrite(buf, 1, sizeof(buf), file);
 }
 

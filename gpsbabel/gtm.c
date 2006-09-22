@@ -107,10 +107,8 @@ static double
 fread_double(FILE *fd)
 {
 	char buf[8];
-	double d;
 	fread(buf, 8, 1, fd);
-	le_read64(&d, buf);
-	return d;
+	return le_read_double(buf);
 }
 
 static char *
@@ -203,7 +201,7 @@ static void
 fwrite_double(FILE *fd, double val)
 {
 	char buf[8];
-	le_read64(buf, &val);
+	le_write_double(buf,val);
 	fwrite(buf, 8, 1, fd);
 }
 

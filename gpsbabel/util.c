@@ -813,37 +813,64 @@ static int doswap()
 }
 
 double
-pdb_read_double(void* ptr)
+endian_read_double(void* ptr, int read_le)
 {
   double ret;
   char r[8];
+  void *p;
   int i;
   doswap(); /* make sure i_am_little_endian is initialized */
-  for (i = 0; i < 8; i++)
-  {
-	int j = (i_am_little_endian)?(7-i):i;
-	r[i] = ((char*)ptr)[j];
+  if ( i_am_little_endian == read_le ) {
+	  p = ptr;
   }
-  memcpy(&ret, r, 8);
+  else {
+	  for (i = 0; i < 8; i++)
+	  {
+		r[i] = ((char*)ptr)[7-i];
+	  }
+	  p = r;
+  }
+  
+  memcpy(&ret, p, 8);
   return ret;
 }
 
 void
-pdb_write_double(void* ptr, double d)
+endian_write_double(void* ptr, double d, int write_le)
 {
-  char r[8];
+  char *r = (char *)(void *)&d;
   int i;
   char *optr = ptr;
 
-  memcpy(r, &d, 8);
   doswap(); /* make sure i_am_little_endian is initialized */
-  for (i = 0; i < 8; i++)
-  {
-	int j = (i_am_little_endian)?(7-i):i;
-	*optr++ = r[j];
+  if ( i_am_little_endian == write_le ) {
+	  memcpy( ptr, &d, 8);
   }
-  return;
+  else {
+	  for (i = 0; i < 8; i++)
+	  {
+		*optr++ = r[7-i];
+	  }
+  }
 }
+
+double
+pdb_read_double( void *ptr ) {return endian_read_double(ptr, 0);}
+
+double 
+le_read_double( void *ptr ) {return endian_read_double(ptr,1);}
+
+double 
+be_read_double( void *ptr ) {return endian_read_double(ptr,0);}
+
+void
+pdb_write_double( void *ptr, double d ) {endian_write_double(ptr,d,0);}
+
+void
+le_write_double( void *ptr, double d ) {endian_write_double(ptr,d,1);}
+
+void 
+be_write_double( void *ptr, double d ) {endian_write_double(ptr,d,0);}
 
 /* Magellan and PCX formats use this DDMM.mm format */
 double ddmm2degrees(double pcx_val) {
