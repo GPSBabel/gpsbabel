@@ -27,8 +27,11 @@
 #include <stdarg.h>
 #include <time.h>
 
-static int i_am_little_endian = -1;
-static int doswap(void);
+#if defined WORDS_BIGENDIAN
+# define i_am_little_endian 0
+#else
+# define i_am_little_endian 1
+#endif
 
 #ifdef DEBUG_MEM
 #define DEBUG_FILENAME "/tmp/gpsbabel.debug"
@@ -596,8 +599,6 @@ le_read64(void *dest, const void *src)
 	char *cdest = dest;
 	const char *csrc = src;
 
-	doswap(); /* make sure i_am_little_endian is initialized */
-
 	if (i_am_little_endian) {
 		memcpy(dest, src, 8);
 	} else {
@@ -795,23 +796,6 @@ get_cache_icon(const waypoint *waypointp)
 	return NULL;
 }
 
-static int doswap()
-{
-  if (i_am_little_endian < 0)
-  {
-	/*	On Intel, Vax and MIPs little endian, -1.0 maps to the bytes
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f and on Motorola,
-		SPARC, ARM, and PowerPC, it maps to
-		0x3f, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00.
-	*/
-	double d = 1.0;
-	char c[8];
-	memcpy(c, &d, 8);
-	i_am_little_endian = (c[0] == 0);
-  }
-  return i_am_little_endian;
-}
-
 double
 endian_read_double(void* ptr, int read_le)
 {
@@ -819,7 +803,7 @@ endian_read_double(void* ptr, int read_le)
   char r[8];
   void *p;
   int i;
-  doswap(); /* make sure i_am_little_endian is initialized */
+  
   if ( i_am_little_endian == read_le ) {
 	  p = ptr;
   }
@@ -842,7 +826,6 @@ endian_write_double(void* ptr, double d, int write_le)
   int i;
   char *optr = ptr;
 
-  doswap(); /* make sure i_am_little_endian is initialized */
   if ( i_am_little_endian == write_le ) {
 	  memcpy( ptr, &d, 8);
   }
