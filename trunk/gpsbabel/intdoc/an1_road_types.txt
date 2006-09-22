@@ -1,0 +1,52 @@
+
+04xx Limited Access
+08xx Primary
+0Cxx Secondary
+10xx Local Road
+
+Axes:
+  Toll/Limited/Primary/Secondary/Connecting/Local/-
+  Interstate/US/State/County/Farm/Indian/Urban/Forest/Ranch/Ferry/Exit/Minor/-
+  Unimproved/Under Construction/Approximation/-
+
+1107 ....  
+
+0410 Primary Limited Access                    Limited - -
+0420 Primary Limited Access Toll               Toll - - 
+0430 Interstate                                Limited Interstate -
+0440 Interstate Toll                           Toll Interstate -
+0450 Interstate Under Construction             Limited Interstate Const
+0460 State Route Primary Limited Access        Limited State - 
+0470 State Route Toll                          Toll State -
+0480 US Route Primary Limited Access           Limited US - 
+0490 US Route Toll                             Toll US -
+
+0810 Primary Non Limited Access                Primary - -
+0820 Interstate Business Route                 Primary Interstate -
+0830 Primary Under Construction                Primary - Const
+0840 State Route                               - State -
+0850 State Route Under Construction            - State Const
+0860 State Route Primary                       Primary State -
+0870 US Route                                  Primary US -
+0880 US Route Under Construction               Primary US Const
+
+0C10 Secondary State                           Secondary State - 
+0C20 Secondary                                 Secondary - - 
+0C30 Connecting Road                           Connecting - -
+0C40 County Route Connecting Road              Connecting County -
+0C50 Farm Route Connecting Road                Connecting Farm - 
+0C60 Indian Route Connecting Road              Connecting Indian - 
+0C70 Urban Connecting Road                     Connecting Urban - 
+0C80 Forest Connecting Road                    Connecting Forest - 
+0C90 Ranch Route Connecting Road               Connecting Ranch - 
+0CA0 Ferry Crossing Connecting Road            Connecting Ferry - 
+0CB0 Exit COnnecting Road                      Connecting Exit - 
+0CC0 Minor Connecting Road                     Connecting Minor - 
+0CD0 Unimproved Connecting Road                Connecting - Unimproved
+0CE0 Forest Secondary Road                     Secondary Forest - 
+
+1010 Local or Rural Road                       Local - - 
+1020 Local Road Approximation                  Local - Approx 
+1030 Ferry Crossing Local Road                 Local Ferry - 
+1040 Unimproved Local Road                     Local - Unimproved
+
