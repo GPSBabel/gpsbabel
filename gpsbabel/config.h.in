@@ -51,5 +51,9 @@
 /* 1 to enable shapefile support */
 #undef SHAPELIB_ENABLED
 
+/* Define to 1 if your processor stores words with the most significant byte
+   first (like Motorola and SPARC, unlike Intel and VAX). */
+#undef WORDS_BIGENDIAN
+
 /* 1 to inhibit our use of zlib. */
 #undef ZLIB_INHIBITED
