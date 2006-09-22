@@ -33,7 +33,7 @@ typedef struct gpl_point {
 	double lon;
 	double alt; /* in feet */
 	double heading;
-	double speed; /* mps */
+	double speed; /* mph */
 	unsigned int tm;
 	unsigned int dummy3;
 } gpl_point_t;
@@ -71,7 +71,8 @@ gpl_read(void)
 		wpt_tmp->creation_time = le_read32(&gp.tm);
 		
 	        wpt_tmp->course = le_read_double(&gp.heading);
-		wpt_tmp->speed = le_read_double(&gp.speed);		
+		wpt_tmp->speed = le_read_double(&gp.speed);	
+	        wpt_tmp->speed = MILES_TO_METERS(wpt_tmp->speed)/3600;	
 		
 		track_add_wpt(track_head, wpt_tmp);
 	}
@@ -102,7 +103,7 @@ gpl_trackpt(const waypoint *wpt)
 	double alt_feet = METERS_TO_FEET(wpt->altitude);
 	int status = 3;
 	gpl_point_t gp;
-	double speed = wpt->speed;
+	double speed = 3600*METERS_TO_MILES(wpt->speed);
 	double heading = wpt->course;
 	
 	memset(&gp, 0, sizeof(gp));
