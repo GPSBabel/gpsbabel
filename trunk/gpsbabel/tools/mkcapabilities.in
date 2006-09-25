@@ -28,4 +28,4 @@ function getcap(type, cap, sname, lname) {
 }
 
 getcap($1, $2, $3, $5)
-' > ../babelweb/capabilities.inc > ../babelweb/capabilities.inc
+' > @DOCDIR@capabilities.inc > @DOCDIR@capabilities.inc
