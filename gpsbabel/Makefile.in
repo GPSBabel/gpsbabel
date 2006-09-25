@@ -36,7 +36,7 @@ OUTPUT_SWITCH=-o #
 GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I. -I@srcdir@/coldsync \
 	$(OPTIMIZATION) @CFLAGS@
 LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
-INSTALL_TARGETDIR=/usr/local/
+DESTDIR=/usr/local/
 
 # OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
 # OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
@@ -93,13 +93,16 @@ OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
 
 # Directory of local web doc.  Traditionally a sibling to the GPSBabel tree.
-WEB=../babelweb/
+WEB=@DOCDIR@
 
 
 all: gpsbabel$(EXEEXT)
 
-gpsbabel$(EXEEXT): $(OBJS)
+gpsbabel$(EXEEXT): $(OBJS) @GPSBABEL_DEBUG@
 	$(CC)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
+
+gpsbabel-debug: $(OBJS)
+	$(CC)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 Makefile: Makefile.in config.status
 	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
@@ -132,8 +135,11 @@ torture:
 #
 # This will only work on UNIX-like substances.
 #
-install:
-	install gpsbabel  $(INSTALL_TARGETDIR)/bin
+install: @INSTALL_DEBUG@
+	install gpsbabel  $(DESTDIR)/bin
+
+install-debug:
+	install gpsbabel-debug  $(DESTDIR)/bin
 
 # Nerdy release stuff that needs to work only on Linux.
 
@@ -157,6 +163,7 @@ $(WEB)/htmldoc-$(DOCVERSION)/readme.html: FORCE
 	 --stringparam root.filename "readme" \
 	 xmldoc/babelmain.xsl \
 	 xmldoc/readme.xml
+	chmod 755 tools/mkcapabilities
 	tools/mkcapabilities
 
 gpsbabel.html: FORCE

@@ -64,6 +64,7 @@ sub includef {
 
 
 
+@dir=`mkdir -p @DOCDIR@`;
 $dir = $0;
 $dir =~ s:/.*$::;
 

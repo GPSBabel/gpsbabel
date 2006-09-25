@@ -228,8 +228,25 @@ AC_MSG_RESULT($EXPAT_LIB)
 AC_CHECK_LIB([expat], [XML_ParserCreate], 
   AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
   AC_SUBST(EXPAT_LIB)
-#  [EXPAT_LIB="$LDFLAGS -lexpat"]
 )
+
+AC_MSG_CHECKING(for efence)
+AC_ARG_ENABLE(efence,
+  [  --enable-efence=[yes|(no)]],
+  [ if test "$enable_efence" != "no" ; then
+  	EFENCE_LIB=-lefence
+	GPSBABEL_DEBUG=gpsbabel-debug
+	INSTALL_DEBUG=install-debug
+    fi])
+AC_SUBST(EFENCE_LIB)
+AC_SUBST(GPSBABEL_DEBUG)
+AC_SUBST(INSTALL_DEBUG)
+AC_MSG_RESULT($EFENCE_LIB)
+
+AC_MSG_CHECKING(for docdir)
+AC_ARG_WITH(doc,[  --with-doc=DIR        Path where the documentation will be stored.],
+             DOCDIR="$withval", DOCDIR="../babelweb/")
+AC_SUBST(DOCDIR)
 
 # Checks for header files.
 # AC_HEADER_STDC
@@ -257,5 +274,5 @@ AC_CHECK_LIB([expat], [XML_ParserCreate],
 # AC_CHECK_FUNCS([atexit floor localtime_r memmove memset pow select sqrt strchr strcspn strdup strerror strncasecmp strrchr strspn strstr strtol strtoul])
 AC_CHECK_FUNCS([nanosleep sleep])
 
-AC_CONFIG_FILES([Makefile win32/gpsbabel.rc coldsync/Makefile jeeps/Makefile shapelib/Makefile zlib/empty])
+AC_CONFIG_FILES([Makefile xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc coldsync/Makefile jeeps/Makefile shapelib/Makefile zlib/empty])
 AC_OUTPUT
