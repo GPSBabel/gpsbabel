@@ -558,7 +558,7 @@ int tpo_find_block(unsigned int block_desired)
 	
         // Read record type
         block_type = tpo_read_32();
-//printf("Block: %x\n", block_type);
+//printf("Block: %08x\tat offset: %08x\n", block_type, block_offset);
 
         // Read offset to next record
         block_offset = tpo_read_32();
@@ -691,7 +691,7 @@ void tpo_process_tracks(void)
             sprintf(track_name, "TRK %d", ii+1);
         }
 		track_temp->rte_name = track_name;
-//printf("Track Name: %s\n", track_name);
+//printf("\nTrack Name: %s  ", track_name);
 
         // Route description
 //        track_temp->rte_desc = NULL;
@@ -730,37 +730,52 @@ void tpo_process_tracks(void)
                 lat = le_read32(buf+jj);
                 jj+=4;
 
-                // Peek to see if next is a lonscale
-                if(jj+3<track_byte_count && !buf[jj+3] && buf[jj] !=
-                        0x88 && buf[jj+1] != 0x88 && buf[jj+2] != 0x88) {
+//printf("L");
+
+                // Peek to see if next is a lonscale.  Note that it
+                // can begin with 0x88, which is confusing.  Here we
+                // allow up to 16-bits of offset, so two of the
+                // bytes must be 0x00 for us to recognize it.
+                if(jj+3<track_byte_count
+                        && !buf[jj+3]
+                        && !buf[jj+2]) {
 
                     lonscale = le_read32(buf+jj);
+//printf(" LONSCALE:");
+//printf("%02x%02x%02x%02x", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3]);
                     jj+=4;
                 }
-                // Peek to see if next is a latscale
-                if(jj+3<track_byte_count && !buf[jj+3] && buf[jj] !=
-                        0x88 && buf[jj+1] != 0x88 && buf[jj+2] != 0x88) {
+                // Peek to see if next is a latscale.  Note that it
+                // can begin with 0x88, which is confusing.  Here we
+                // allow up to 16-bits of offset, so two of the
+                // bytes must be 0x00 for us to recognize it.
+                if(jj+3<track_byte_count
+                        && !buf[jj+3]
+                        && !buf[jj+2]) {
 
                     latscale = le_read32(buf+jj);
+//printf(" LATSCALE:");
+//printf("%02x%02x%02x%02x ", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3]);
                     jj+=4;
                 }
                 llvalid = 1;
-
-//printf("LL");
 
                 waypoint_temp = tpo_convert_ll(lat, lon);
                 route_add_wpt(track_temp, waypoint_temp);
                 waypoint_count++;
             }
 
-            // We have a lonlat, let's see if it's time to get a new
-            // one
+            // Check whether there's a lonlat coming up instead of
+            // offsets.
             else if (buf[jj] == 0x88) {
                 jj++;
                 llvalid = 0;
             }
 
+            // Check whether there's a lonlat + lonscale/latscale
+            // combo embedded in this track next.
             else if (buf[jj] == 0x00) {
+//printf(" ZERO ");
                 jj++;
                 llvalid = 0;
             }
