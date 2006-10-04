@@ -43,8 +43,8 @@ msgstr "www.gpsbabel.org"
 
 #. frmAbout..pnClient..pnCenter..lbCopyRight..Caption
 #: about.dfm:114
-msgid "Copyright (C) 2005 Olaf Klein (O.B.Klein@T-Online.de)"
-msgstr "Copyright (C) 2005 Olaf Klein (O.B.Klein@T-Online.de)"
+msgid "Copyright (C) 2005 Olaf Klein (o.b.klein@gpsbabel.org)"
+msgstr "Copyright (C) 2005 Olaf Klein (o.b.klein@gpsbabel.org)"
 
 #. frmAbout..pnClient..pnCenter..lbMoreInfo..Caption
 #: about.dfm:121
