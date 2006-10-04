@@ -144,6 +144,10 @@ gtc_waypt_pr(const waypoint *wpt)
 	if (wpt->heartrate) {
 		gtc_write_xml(0, "<HeartRateBpm>%d</HeartRateBpm>\n", wpt->heartrate);
 	}
+	if (wpt->cadence) {
+		gtc_write_xml(0, "<Cadence>%d</Cadence>\n", wpt->cadence);
+	}
+
 
 	gtc_write_xml(-1, "</Trackpoint>\n");
 #endif
