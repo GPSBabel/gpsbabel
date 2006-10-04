@@ -1,7 +1,7 @@
 unit filter;
 
 {
-    Copyright (C) 2005 Olaf Klein, o.b.klein@t-online.de
+    Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
