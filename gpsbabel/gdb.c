@@ -1,7 +1,7 @@
 /* 
 	Garmin GPS Database Reader/Writer
 	
-	Copyright (C) 2005 Olaf Klein, o.b.klein@t-online.de
+	Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
 	Mainly based on mapsource.c,
 	Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
 	
