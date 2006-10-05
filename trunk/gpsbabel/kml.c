@@ -313,7 +313,7 @@ kml_write_xmle(const char *tag, const char *v)
 		for (i = 0; i < indent_level; i++) {
 			fputs("  ", ofd);
 		}
-		fprintf(ofd, "<%s>%s</%s>\n",tag, v, tag);
+		fprintf(ofd, "<%s>%s</%s>\n",tag, tmp_ent, tag);
 		xfree(tmp_ent);
 	}
 }
