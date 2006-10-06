@@ -291,16 +291,15 @@ xfputs(const char *errtxt, const char *s, FILE *stream)
  */
 
 int
-xasprintf(char **strp, const char *fmt, ...)
+xvasprintf(char **strp, const char *fmt, va_list args)
 {
 	/* From http://perfec.to/vsnprintf/pasprintf.c */
 /* size of first buffer malloc; start small to exercise grow routines */
 #define	FIRSTSIZE	64
-	va_list args;
-	char *buf;
+	char *buf = NULL;
 	size_t bufsize;
 	char *newbuf;
-	size_t nextsize;
+	size_t nextsize = 0;
 	int outsize;
 
 	bufsize = 0;
@@ -320,9 +319,7 @@ xasprintf(char **strp, const char *fmt, ...)
 			return -1;
 		}
 
-		va_start(args, fmt);
 		outsize = vsnprintf(buf, bufsize, fmt, args);
-		va_end(args);
 
 		if (outsize == -1) {
 			/* Clear indication that output was truncated, but no
@@ -362,6 +359,20 @@ xasprintf(char **strp, const char *fmt, ...)
 	}
 	*strp = buf;
 	return 0;
+}
+
+int
+xasprintf(char **strp, const char *fmt, ...)
+{
+	va_list args;
+	int rval;
+
+	va_start(args, fmt);
+	rval = xvasprintf(strp, fmt, args);
+	va_end(args);
+
+	return rval;
+	
 }
 
 /* 
