@@ -218,15 +218,11 @@ xcsv_parse_style_line(const char *sbuff)
 		p = csv_stringtrim(xcsv_file.field_delimiter, " ", 0);
 
 		/* field delimiters are always bad characters */
-		if (xcsv_file.badchars) {
-			xcsv_file.badchars = (char *) xrealloc(xcsv_file.badchars,
-				strlen(xcsv_file.badchars) +
-				strlen(p) + 1);
+		if (0 == strcmp(p, "\\w")) {
+			xstrappend(xcsv_file.badchars, " \n\r");
 		} else {
-			xcsv_file.badchars = (char *) xcalloc(strlen(p) + 1, 1);
+			xcsv_file.badchars = xstrappend(xcsv_file.badchars, p);
 		}
-
-		strcat(xcsv_file.badchars, p);
 		
 		xfree(p);
 
