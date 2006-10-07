@@ -49,10 +49,10 @@ arglist_t sort_args[] = {
 };
 
 static int
-sort_comp(const void * a, const void * b)
+sort_comp(const queue * a, const queue * b)
 {
-	const waypoint *x1 = *(waypoint **)a;
-	const waypoint *x2 = *(waypoint **)b;
+	const waypoint *x1 = (waypoint *)a;
+	const waypoint *x2 = (waypoint *)b;
 
 	switch (sort_mode)  {
 	   case sm_gcid: return x1->gc_data.id - x2->gc_data.id;
@@ -66,31 +66,7 @@ sort_comp(const void * a, const void * b)
 void 
 sort_process(void)
 {
-	queue * elem, * tmp;
-	waypoint ** comp;
-	int i = 0, wc;
-
-	wc = waypt_count();
-
-	comp = (waypoint **) xcalloc(wc, sizeof(*comp));
-
-	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-		comp[i] = (waypoint *)elem;
-		waypt_del(comp[i]); /* Pop this waypoint off the master Q */
-		i++;
-	}
-
-	qsort(comp, wc, sizeof(waypoint *), sort_comp);
-
-	/*
-	 * Now re-add the list back.
-	 */
-	for (i = 0; i < wc ; i++) {
-		waypt_add(comp[i]);
-	}
-
-	if (comp)
-		xfree(comp);
+	sortqueue(&waypt_head, sort_comp);
 }
 
 void
