@@ -980,6 +980,9 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     if ( strcmp( fmp->key, "HEART_RATE") == 0) {
       wpt->heartrate = atoi(s); 
     } else
+    if ( strcmp( fmp->key, "CADENCE") == 0) {
+      wpt->cadence = atoi(s); 
+    } else
     if ( strcmp( fmp->key, "PATH_DISTANCE_KM") == 0 ) {
        /* Ignored on input */
     } else {
@@ -1329,6 +1332,10 @@ xcsv_waypt_pr(const waypoint *wpt)
         /* HEART RATE CONVERSION***********************************************/
         if (strcmp(fmp->key, "HEART_RATE") == 0) {
             writebuff(buff, fmp->printfc, wpt->heartrate);
+        } else
+        /* CADENCE CONVERSION***********************************************/
+        if (strcmp(fmp->key, "CADENCE") == 0) {
+            writebuff(buff, fmp->printfc, wpt->cadence);
         } else
         /* TIME CONVERSIONS**************************************************/
         if (strcmp(fmp->key, "EXCEL_TIME") == 0) {
