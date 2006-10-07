@@ -184,7 +184,9 @@ typedef enum {
 	gt_earth,
 	gt_locationless,
 	gt_benchmark, /* Extension to Groundspeak for GSAK */
-	gt_cito
+	gt_cito,
+	gt_ape,
+	gt_mega
 } geocache_type;
 
 typedef enum {
