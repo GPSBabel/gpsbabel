@@ -261,17 +261,26 @@ gbfprintf(gbfile *file, const char *format, ...)
 		len = vsnprintf(file->buff, file->buffsz, format, args);
 		va_end(args);
 
-		if (len < 0)
-			fatal(MYNAME ": Unexpected vsnprintf error %d (%s/%s)!\n", 
-				len, file->module, file->name);
-		else if (len == 0)
-			return 0;
-		else if (len < file->buffsz) 
+		/* Unambiguous Success */
+		if ((len > -1) && (len < file->buffsz))
 			break;
 
-		while (file->buffsz <= len) 
+		/* First case: C99 behaviour.  Len is correctly sized.
+	 	 * add space for null terminator.  Next time through the
+		 * loop we're guaranteed success.
+		 * 
+		 * Second case: SUS (and Windows) behaviour.  We know it
+		 * doesn't fit, but we don't know how big it has to be.
+`		 * double it and try again.  We'll loop until we succeed.
+		 *
+		 * Since we keep the I/O buffer in the file handle, we
+		 * quickly reach a steady state on the size of these buffers.
+		 */
+		if (len > -1) 
+			file->buffsz = len + 1;
+		else 
 			file->buffsz *= 2;
-			
+
 		file->buff = xrealloc(file->buff, file->buffsz);
 	}
 	return gbfwrite(file->buff, 1, len, file);
