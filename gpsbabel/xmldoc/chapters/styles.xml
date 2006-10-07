@@ -704,6 +704,19 @@ example:
 </screen>
 </section>
 
+<section id="style_def_cadence">
+<title>CADENCE</title>
+<para>
+   Cadence in revolutions per minute.  Only valid for units with 
+   heart rate monitor features (i.e. Garmin Edge 305).
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   IFIELD CADENCE,"","%d"
+</screen>
+</section>
+
 <section id="style_def_exceltime">
 <title>EXCEL_TIME</title>
 <para>
