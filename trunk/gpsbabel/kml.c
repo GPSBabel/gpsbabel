@@ -575,6 +575,36 @@ static void kml_output_tailer(const route_head *header)
   kml_write_xml(-1, "</Folder>\n");
 }
 
+static 
+char *
+kml_lookup_gc_icon(const waypoint *waypointp)
+{
+	const char *icon;
+	char *rb;
+
+	/* This could be done so much better in C99 with designated
+	 * initializers...
+	 */
+	switch (waypointp->gc_data.type) {
+		case gt_traditional: icon = "2.png"; break;
+		case gt_multi: icon = "3.png"; break;
+		case gt_virtual: icon = "4.png"; break;
+		case gt_letterbox: icon = "5.png"; break;
+		case gt_event: icon = "6.png"; break;
+		case gt_ape: icon = "7.png"; break;
+		case gt_locationless: icon = "8.png"; break; // No unique icon.
+		case gt_suprise: icon = "8.png"; break;
+		case gt_webcam: icon = "11.png"; break;
+		case gt_cito: icon = "13.png"; break;
+		case gt_earth:  icon = "earthcache.png"; break;
+		case gt_mega: icon = "6.png"; break; // No unique icon yet.
+		default: icon = "8.png"; break;
+	}
+
+	xasprintf(&rb, "http://www.geocaching.com/images/kml/%s", icon);
+	return rb;
+}
+
 /*
  * WAYPOINTS
  */
@@ -600,6 +630,16 @@ static void kml_waypt_pr(const waypoint *waypointp)
 		}
 		else
 			fputs(odesc, ofd);
+
+		if (!global_opts.no_smart_icons && 
+		     waypointp->gc_data.diff && waypointp->gc_data.terr) {
+			fprintf(ofd, " %3.1f/%3.1f", waypointp->gc_data.diff / 10.0,  waypointp->gc_data.terr / 10.0);
+			if (waypointp->gc_data.desc_short.utfstring) {
+				char *ob = html_entitize(waypointp->gc_data.desc_short.utfstring);
+				fprintf(ofd, "<p>%s</p>\n", ob);
+				xfree(ob);
+			}
+		}
 		kml_write_xml(0, "</description>\n");
 		xfree(odesc);
 	}
@@ -626,6 +666,12 @@ static void kml_waypt_pr(const waypoint *waypointp)
 		fprintf(ofd, "\t  <Style>\n");
 		fprintf(ofd, "\t\t<icon>%s</icon>\n", icon);
 		fprintf(ofd, "\t  </Style>\n");
+	} else if (!global_opts.no_smart_icons && waypointp->gc_data.diff && waypointp->gc_data.terr) {
+		char *is = kml_lookup_gc_icon(waypointp);
+		fprintf(ofd, "\t  <Style>\n");
+		fprintf(ofd, "\t\t<icon>%s</icon>\n", is);
+		fprintf(ofd, "\t  </Style>\n");
+		xfree(is);
 	}
 
 	// Timestamp
