@@ -161,7 +161,7 @@ HANDLE * garmin_usb_start(HDEVINFO* hdevinfo, SP_DEVICE_INTERFACE_DATA *infodata
 	usb_handle = CreateFile(pdd->DevicePath, GENERIC_READ|GENERIC_WRITE, 
 			0, NULL, OPEN_EXISTING, 0, NULL );
 	if (usb_handle == INVALID_HANDLE_VALUE) {
-		GPS_Serial_Error("CreateFile on '%' failed", pdd->DevicePath);
+		GPS_Serial_Error("(usb) CreateFile on '%s' failed", pdd->DevicePath);
 		return NULL;
 	}
 
