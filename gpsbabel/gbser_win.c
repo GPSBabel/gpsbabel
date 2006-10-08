@@ -1,4 +1,3 @@
-#define ERROR_TIMEOUT 0x4321
 /*
     Serial interface - Windows layer.
     
