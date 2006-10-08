@@ -44,7 +44,7 @@ static char cambridge[] =
 "IFIELD INDEX,\"1\",\"%d\"\n"
 "IFIELD LAT_HUMAN_READABLE,\"\",\"%d:%06.3f%c\"\n"
 "IFIELD LON_HUMAN_READABLE,\"\",\"%03d:%06.3f%c\"\n"
-"IFIELD ALT_METERS,\"\",\"%dM\"\n"
+"IFIELD ALT_METERS,\"\",\"%3.0fM\"\n"
 "IFIELD CONSTANT,\"\",\"T\"\n"
 "IFIELD SHORTNAME,\"\",\"%s\"\n"
 "IFIELD DESCRIPTION,\"\",\"%s\"\n"
