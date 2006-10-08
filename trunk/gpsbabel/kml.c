@@ -33,12 +33,15 @@ static char *opt_extrude = NULL;
 static char *opt_trackdata = NULL;
 static char *opt_units = NULL;
 static char *opt_labels = NULL;
+static char *opt_max_position_points = NULL;
 
 static int export_lines;
 static int export_points;
 static int floating;
 static int extrude;
 static int trackdata;
+static int posn_track_points;
+static int max_position_points;
 
 static int indent_level;
 
@@ -93,6 +96,9 @@ arglist_t kml_args[] = {
 	{"labels", &opt_labels,
 	 "Display labels on track and routepoints  (default = 1)",
 	 "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"max_position_points", &opt_max_position_points,
+	 "Retain at most this number of position points  (0 = unlimited)",
+	 "0", ARGTYPE_INT, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -255,12 +261,15 @@ kml_wr_position_init(const char *fname)
 	posnfilename = fname;;
 	posnfilenametmp = xstrappend(xstrdup(fname), "-");
 	realtime_positioning = 1;
+
 	/*
 	 * 30% of our output file is whitespace.  Since parse time
 	 * matters in this mode, turn the pretty formatting off.
 	 */
 	do_indentation = 0;
-	kml_wr_init(fname);
+	kml_wr_init(posnfilenametmp);
+
+	max_position_points = atoi(opt_max_position_points);
 }
 
 static void
@@ -794,7 +803,14 @@ kml_wr_position(waypoint *wpt)
 		track_add_head(trk_head);
 	}
 
+	if (max_position_points && (posn_track_points >= max_position_points)) {
+		waypoint *tonuke = QUEUE_FIRST(&trk_head->waypoint_list);
+		dequeue(&tonuke->Q);
+		waypt_free(tonuke);
+	}
+
 	track_add_wpt(trk_head, t);
+	posn_track_points++;
 
 	waypt_add(wpt);
 	kml_write();
