@@ -235,6 +235,7 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 		return (gbsize_t) result;
 #else
 		fatal(NO_ZLIB);
+		return -1;
 #endif
 	}
 	else {
@@ -314,6 +315,7 @@ gbfwrite(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *f
 		result = gzwrite(file->handle.gz, buf, size * members) / size;
 #else
 		fatal(NO_ZLIB);
+		return -1;
 #endif
 	}
 	else {
@@ -338,6 +340,7 @@ gbfflush(gbfile *file)
 		return gzflush(file->handle.gz, Z_SYNC_FLUSH);
 #else
 		fatal(NO_ZLIB);
+		return -1;
 #endif
 	}
 	else {
@@ -368,6 +371,7 @@ gbferror(gbfile *file)
 		(void)gzerror(file->handle.gz, &errnum);
 #else
 		fatal(NO_ZLIB);
+		return -1;
 #endif
 	}
 	else {
@@ -415,6 +419,7 @@ gbftell(gbfile *file)
 		return gztell(file->handle.gz);
 #else
 		fatal(NO_ZLIB);
+		return -1;
 #endif
 	}
 	else {
@@ -430,6 +435,7 @@ gbfeof(gbfile *file)
 		return gzeof(file->handle.gz);
 #else
 		fatal(NO_ZLIB);
+		return 0;
 #endif
 	}
 	else {
