@@ -1,0 +1,9 @@
+<para>
+This option specifies the string GPSBabel should use to separate the parts
+of the street address.  Since most other formats supported by GPSBabel do 
+not support street addresses, the street address fields from the Yahoo file
+are concatenated into the waypoint "notes" field.
+</para>
+<para>
+The default value for this option is a comma followed by a space (", ").
+</para>

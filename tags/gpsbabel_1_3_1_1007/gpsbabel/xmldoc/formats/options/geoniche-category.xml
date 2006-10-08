@@ -1,0 +1,6 @@
+<para>
+This option specifies the name of the category in which to place the
+waypoints.  If this option is not specified, the default category is
+"Cache".
+</para>
+

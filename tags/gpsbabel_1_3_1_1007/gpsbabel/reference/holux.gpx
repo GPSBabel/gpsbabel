@@ -1,0 +1,46 @@
+<?xml version="1.0" standalone="yes"?>
+<gpx version="1.0" creator="GPS Utility 4.10 - http:/www.gpsu.co.uk"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+
+<wpt lat="50.937595" lon="6.883321"><name>ACHNR1</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.937510" lon="6.885123"><name>ACHNR2</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.937595" lon="6.882591"><name>ACHNRS</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.920901" lon="6.933060"><name>HWYB26</name><cmt>HWY B265 (NE)</cmt><desc>HWY B265 (NE)</desc><sym>Waypoint</sym></wpt>
+<wpt lat="50.968881" lon="6.869330"><name>HWYB59</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.936308" lon="6.924562"><name>L100</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.920901" lon="6.932673"><name>L1001</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.920901" lon="6.933060"><name>LXMBR1</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.920901" lon="6.933060"><name>LXMBR2</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.920773" lon="6.932931"><name>LXMBRG</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.937381" lon="6.882334"><name>MLTR10</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.968881" lon="6.869330"><name>MLTRN1</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.968752" lon="6.869287"><name>MLTRN2</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.947680" lon="6.874523"><name>MLTRN3</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.938110" lon="6.883321"><name>MLTRN4</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.937767" lon="6.883321"><name>MLTRN5</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.937595" lon="6.883321"><name>MLTRN6</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.937123" lon="6.883407"><name>MLTRN7</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.936866" lon="6.883149"><name>MLTRN8</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.936823" lon="6.882849"><name>MLTRN9</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.968881" lon="6.869330"><name>MLTRNG</name><cmt>MILITARRINGSTRASSE</cmt><desc>MILITARRINGSTRASSE</desc><sym>Waypoint</sym></wpt>
+<wpt lat="50.936565" lon="6.924133"><name>ROAD</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.930943" lon="6.926408"><name>UNVRS1</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.929999" lon="6.926966"><name>UNVRS2</name><sym>Waypoint</sym></wpt>
+<wpt lat="50.933862" lon="6.924648"><name>UNVRST</name><sym>Waypoint</sym></wpt>
+
+<rte><name>MLTRNG to HWYB26</name>
+<rtept lat="50.968881" lon="6.869330"><name>MLTRNG</name><cmt>MILITARRINGSTRASSE</cmt><desc>MILITARRINGSTRASSE</desc><sym>Waypoint</sym></rtept>
+<rtept lat="50.968881" lon="6.869330"><name>HWYB59</name><sym>Waypoint</sym></rtept>
+<rtept lat="50.968881" lon="6.869330"><name>MLTRN1</name><sym>Waypoint</sym></rtept>
+<rtept lat="50.968752" lon="6.869287"><name>MLTRN2</name><sym>Waypoint</sym></rtept>
+<rtept lat="50.947680" lon="6.874523"><name>MLTRN3</name><sym>Waypoint</sym></rtept>
+<rtept lat="50.938110" lon="6.883321"><name>MLTRN4</name><sym>Waypoint</sym></rtept>
+<rtept lat="50.937767" lon="6.883321"><name>MLTRN5</name><sym>Waypoint</sym></rtept>
+<rtept lat="50.937595" lon="6.883321"><name>MLTRN6</name><sym>Waypoint</sym></rtept>
+<rtept lat="50.937123" lon="6.883407"><name>MLTRN7</name><sym>Waypoint</sym></rtept>
+<rtept lat="50.936866" lon="6.883149"><name>MLTRN8</name><sym>Waypoint</sym></rtept>
+</rte>
+
+</gpx>

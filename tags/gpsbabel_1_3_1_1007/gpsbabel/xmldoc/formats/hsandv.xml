@@ -1,0 +1,8 @@
+
+      
+      
+      <para>HSA Systems Endeavour Navigator format - will import both
+the old version 4.x binary files, and the newer XML based ones.  Only
+writes the new XML (5.0 and above) format. (use the .exp
+extension)</para>
+    

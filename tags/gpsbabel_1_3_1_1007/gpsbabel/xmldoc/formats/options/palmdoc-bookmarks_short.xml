@@ -1,0 +1,9 @@
+<para>
+If you would like the generated bookmarks to start with
+the short name for the waypoint, specify this option.
+</para>
+<para>
+This is particularly useful when used in combination with the 'sort'
+filter.
+</para>
+    
