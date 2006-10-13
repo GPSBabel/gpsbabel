@@ -297,7 +297,7 @@ xvasprintf(char **strp, const char *fmt, va_list args)
 /* size of first buffer malloc; start small to exercise grow routines */
 #define	FIRSTSIZE	64
 	char *buf = NULL;
-	size_t bufsize;
+	int bufsize;
 	char *newbuf;
 	size_t nextsize = 0;
 	int outsize;
