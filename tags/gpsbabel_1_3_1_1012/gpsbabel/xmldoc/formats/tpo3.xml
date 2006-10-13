@@ -1,0 +1,6 @@
+<para>This module reads .TPO files created by National Geographic Topo! version
+3.x and 4.x.  It will read tracks, routes, waypoints, map notes, symbols, and
+text notes.  The latter three are converted to waypoints.</para>
+
+<para>Contributed by Curt Mills.</para>
+

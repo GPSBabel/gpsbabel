@@ -1,0 +1,6 @@
+<para>
+When this option is specified, the usual sense of the polygon filter is 
+reversed.   That is, points that are inside the polygon are discarded
+while points that are further away are kept.
+</para>
+

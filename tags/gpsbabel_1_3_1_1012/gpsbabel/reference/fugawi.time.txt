@@ -1,0 +1,16 @@
+# Latitude, Longitude and UTM coordinates are in WGS84 datum
+#
+# Every set of data contains the following:
+#
+# Waypoint name
+# Waypoint comment
+# Waypoint description
+# Latitude in Degree and decimals (soutern hemisphere has neg. degrees)
+# Longitude in degree and decimals (neg. numbers: west of Greenwich)
+# Height in meters [optional when importing, always present when exporting: Date (GMT) as ISO YYYYMMDD, Time of the day relative to the date as HHMMSS
+GCEBB,Mountain Bike Heaven by susy1313,,35.9720333,-87.1347000,0.0
+GC1A37,The Troll by a182pilot & Family,,36.0906833,-86.6795500,0.0    ,19700101
+GC1C2B,Dive Bomber by JoGPS & family,,35.9962667,-86.6201167,0.0    ,,110304
+GC25A9,FOSTER by JoGPS & Family,,36.0384833,-86.6486167,0.0    ,19700101,130405
+GC2723,Logan Lighthouse by JoGps & Family,,36.1121833,-86.7417667,0.0    ,20050102,000000
+GC2B71,Ganier Cache by Susy1313,,36.0640833,-86.7905167,0.0    ,20050102,000001

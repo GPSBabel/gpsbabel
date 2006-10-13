@@ -1,0 +1,56 @@
+#!/bin/sh
+#
+
+WEB=$1
+VERSION=$2
+RELEASE=$3	# may be empty
+
+REL=`echo $RELEASE | sed 's/^-//'`
+test "$REL" == "" && REL=0
+
+cat << EOF
+Summary:   GPSBabel
+Name:      gpsbabel
+Version:   $VERSION
+Release:   $REL
+License:   GPL
+Group:     File tools
+Source:    %{name}-%{version}.tgz
+BuildRoot: %{_tmppath}/%{name}-%{version}-build
+URL:       http://www.gpsbabel.org
+
+%description
+Converts GPS waypoint, route and track data from one format type to another.
+
+
+Authors:
+--------
+EOF
+
+cat AUTHORS
+
+cat << EOF
+
+%prep
+%setup -q
+
+
+%build
+LDFLAGS="-s" ./configure
+make
+
+%install
+rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/bin
+install -m 555 gpsbabel %{buildroot}/usr/bin/gpsbabel
+
+%files
+%defattr(-,root,root)
+/usr/bin/gpsbabel
+%doc README* COPYING CHANGELOG AUTHORS gpsbabel.html
+
+%changelog
+EOF
+
+cat $WEB/changes.html | tools/mkchangelog > CHANGELOG
+cat CHANGELOG

@@ -1,0 +1,34 @@
+# gpsbabel XCSV style file
+#
+# Format: Garmin POI
+# Author: Robert Lipe
+# Date: 10/07/2005
+# Reference: http://forums.groundspeak.com/GC/index.php?showtopic=110641&st=0&#entry1752204
+#
+DESCRIPTION Garmin POI database
+#
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER COMMA
+RECORD_DELIMITER NEWLINE
+BADCHARS COMMA
+SHORTLEN 24
+# PROLOGUE Longitude,Latitude,Name, comment
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD LON_HUMAN_READABLE, "", "%08.5f"
+IFIELD LAT_HUMAN_READABLE, "", "%08.5f"
+IFIELD SHORTNAME, "", "%s"
+IFIELD DESCRIPTION, "", "%s"
+
+OFIELD LON_DECIMAL, "", "%08.5f"
+OFIELD LAT_DECIMAL, "", "%08.5f"
+OFIELD SHORTNAME, "", "%-.24s"
+OFIELD GEOCACHE_TYPE, "", " %-.4s", "no_delim_before,optional"
+OFIELD GEOCACHE_CONTAINER, "", "/%-.4s ", "no_delim_before,optional"
+OFIELD GEOCACHE_DIFF, "", "(%3.1f", "no_delim_before,optional"
+OFIELD GEOCACHE_TERR, "", "/%3.1f)", "no_delim_before,optional"
+OFIELD DESCRIPTION, "", "%-.50s"

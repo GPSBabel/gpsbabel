@@ -1,0 +1,6 @@
+<para>
+This format is used by GPSBabel itself as the input to the 
+<link linkend="filter_arc">arc</link> and 
+<link linkend="filter_polygon">polygon</link> filters.  See those filters
+for more information.
+</para>
