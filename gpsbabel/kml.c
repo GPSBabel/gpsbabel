@@ -804,7 +804,7 @@ kml_wr_position(waypoint *wpt)
 	}
 
 	if (max_position_points && (posn_track_points >= max_position_points)) {
-		waypoint *tonuke = QUEUE_FIRST(&trk_head->waypoint_list);
+		waypoint *tonuke = (waypoint *) QUEUE_FIRST(&trk_head->waypoint_list);
 		dequeue(&tonuke->Q);
 		waypt_free(tonuke);
 	}
