@@ -481,6 +481,12 @@ pvt_read(void)
 		return wpt;
 	} 
 
+	if (gps_errno) {
+		fatal(MYNAME ": Fatal error reading position.\n");
+	}
+
+	GPS_Pvt_Del(&pvt);
+
 	return NULL;
 }
 
