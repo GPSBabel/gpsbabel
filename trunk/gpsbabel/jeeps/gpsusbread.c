@@ -40,7 +40,12 @@ do_over:
 	n = gusb_cmd_get(&pkt, sizeof(pkt));
 
 	if ( n < 0 ) {
-fprintf(stderr, "Eeek %d\n", n);
+		/*
+		 * We (probably) used to have a GPS and it went away 
+	 	 * while we were speaking with it.  Perhaps batteries 
+		 * died or it was unplugged or something.
+		 */
+		gps_errno = PROTOCOL_ERROR;
 		return n;
 	}
 
