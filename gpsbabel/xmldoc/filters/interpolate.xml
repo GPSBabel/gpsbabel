@@ -12,19 +12,19 @@ must specify either the
 This command line reads track.gpx and inserts points wherever two adjacent
 trackpoints are more than 10 seconds apart:
 </para>
-<screen format="linespecific">gpsbabel -i gpx -f track.gpx -x interpolate,time=10 -o gpx -f newtrack.gpx</screen>
+<screen format="linespecific">gpsbabel -i gpx -f track.gpx -x interpolate,time=10 -o gpx -F newtrack.gpx</screen>
 
 <para>
 This command reads track.gpx and inserts points wherever two adjacent
 trackpoints are more than 15 kilometers apart:
 </para>
 
-<screen format="linespecific">gpsbabel -i gpx -f track.gpx -x interpolate,distance=15k -o gpx -f newtrack.gpx</screen>
+<screen format="linespecific">gpsbabel -i gpx -f track.gpx -x interpolate,distance=15k -o gpx -F newtrack.gpx</screen>
 
 <para>
 This command reads track.gpx and inserts points wherever two adjacent
 trackpoints are more than 2 miles apart:
 </para>
 
-<screen format="linespecific">gpsbabel -i gpx -f track.gpx -x interpolate,distance=2m -o gpx -f newtrack.gpx</screen>
+<screen format="linespecific">gpsbabel -i gpx -f track.gpx -x interpolate,distance=2m -o gpx -F newtrack.gpx</screen>
 </example>      
