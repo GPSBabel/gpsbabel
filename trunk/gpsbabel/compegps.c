@@ -65,6 +65,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "jeeps/gpsmath.h"
 
 #define MYNAME "CompeGPS"
 
@@ -76,6 +77,7 @@ static int track_info_flag;
 static short_handle sh;
 static int snlen;
 static int radius;
+static int input_datum;
 
 static route_head *curr_track;
 static route_head *curr_route;
@@ -99,6 +101,25 @@ arglist_t compegps_args[] = {
 		"16", ARGTYPE_INT, "1", NULL},
 	ARG_TERMINATOR
 };
+
+static
+void fix_datum(double *lat, double *lon)
+{
+	double amt;
+	static int wgs84;
+
+	if (wgs84 == 0) {
+		wgs84 = GPS_Lookup_Datum_Index("WGS 84");
+	}
+
+	/*
+	 * Avoid FP jitter in the common case.
+ 	 */
+	if (input_datum != wgs84) {
+		GPS_Math_Known_Datum_To_WGS84_M(*lat, *lon, 0.0, lat, lon, 
+			&amt, input_datum);
+	}
+}
 
 /* specialized readers */
 
@@ -154,6 +175,7 @@ parse_wpt(char *buff)
 		}
 		c = csv_lineparse(NULL, " ", "", col++);
 	}
+	fix_datum(&wpt->latitude, &wpt->longitude);
 	return wpt;
 }
 
@@ -248,6 +270,7 @@ parse_trkpt(char *buff)
 		}
 		c = csv_lineparse(NULL, " ", "", col++);
 	}
+	fix_datum(&wpt->latitude, &wpt->longitude);
 	return wpt;
 }
 
@@ -318,6 +341,7 @@ static void
 compegps_rd_init(const char *fname)
 {
 	fin = gbfopen(fname, "rb", MYNAME);
+	input_datum = GPS_Lookup_Datum_Index("WGS 84");
 }
 
 static void
@@ -331,6 +355,7 @@ compegps_data_read(void)
 {
 	char *buff;
 	int line = 0;
+	int input_datum;
 	waypoint *wpt = NULL;
 	route_head *route = NULL;
 	route_head *track = NULL;
@@ -338,7 +363,7 @@ compegps_data_read(void)
 	while ((buff = gbfgetstr(fin)))
 	{
 		char *cin = buff;
-		char *ctail, *cx;
+		char *ctail;
 		
 		line++;
 		cin = lrtrim(buff);
@@ -351,9 +376,10 @@ compegps_data_read(void)
 		switch(*cin)
 		{
 			case 'G':
-				cx = csv_stringclean(ctail, " ");
-				is_fatal((strcmp(cx, "WGS84") != 0), MYNAME ": Unsupported datum \"%s\"!", ctail);
-				xfree(cx);
+				input_datum = GPS_Lookup_Datum_Index(ctail);
+				if (input_datum < 0) {
+					fatal( MYNAME ": Unsupported datum \"%s\"!", ctail);
+				}
 				break;
 			case 'U':
 				switch(*ctail)
