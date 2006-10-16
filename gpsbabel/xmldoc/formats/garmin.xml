@@ -150,4 +150,18 @@ first slot is a happy face, they only know they're in the lowest
 numbered slot.  GPSBabel names the them consistently with Mapsource,
 so they are named 'Custom 0' through 'Custom 511'.
 </para>
+	For models where the connection on the GPS is a serial interface, 
+	be sure the GPS is set for "Garmin
+	mode" in setup and that nothing else (PDA hotsync programs, gpsd,
+	getty, pppd, etc.) is using the serial port.  
+</para>
+<para>
+	For models connected via USB, we recommend use of the 'usb:' 
+	filename.   For this to work on Windows, you must install
+	the Garmin driver.  For Linux, this will fail if have the garmin_gps
+	kernel module loaded.  
+	See the <a href="/osnotes.html">Operating System Notes</a> for details.
+<para>
+
+</para>
 
