@@ -440,7 +440,15 @@ main(int argc, char *argv[])
 	 */
 	if (global_opts.masked_objective & POSNDATAMASK) {
 		waypoint *wpt = waypt_new();
-		ivecs->position_ops.rd_init(fname);
+
+		if (!ivecs->position_ops.rd_position) {
+			fatal("Realtime tracking (-T) is not suppored by this input type.\n");
+		}
+
+
+		if (ivecs->position_ops.rd_init) {
+			ivecs->position_ops.rd_init(fname);
+		}
 
 		if (global_opts.masked_objective & ~POSNDATAMASK) {
 			fatal("Realtime tracking (-T) is exclusive of other modes.\n");
