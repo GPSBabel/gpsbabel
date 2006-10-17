@@ -748,7 +748,11 @@ void kml_write(void)
 
 	now = current_time();
 	strftime(import_time, sizeof(import_time), "%c", localtime(&now));
-	kml_write_xml(0, "<name>GPS device</name>\n");
+	if (realtime_positioning) 
+		kml_write_xml(0, "<name>GPS position</name>\n");
+	else
+		kml_write_xml(0, "<name>GPS device</name>\n");
+	
 	kml_write_xml(0, "<Snippet>Created %s</Snippet>\n", import_time);
 
 	// Style settings for bitmaps
@@ -764,24 +768,34 @@ void kml_write(void)
         kml_write_xml(-1, "</LineStyle>\n");
         kml_write_xml(-1, "</Style>\n");
 
-	kml_write_xml(1, "<Folder>\n");
-	kml_write_xml(0, "<name>Waypoints</name>\n");
+	if (!realtime_positioning) {
+		kml_write_xml(1, "<Folder>\n");
+		kml_write_xml(0, "<name>Waypoints</name>\n");
+	}
 
 	waypt_disp_all(kml_waypt_pr);
 
-	kml_write_xml(-1, "</Folder>\n");
+	if (!realtime_positioning) {
+		kml_write_xml(-1, "</Folder>\n");
+	}
 
 	// Output trackpoints
-	kml_write_xml(1,  "<Folder>\n");
-	kml_write_xml(0,  "<name>Tracks</name>\n");
+	if (!realtime_positioning) {
+		kml_write_xml(1,  "<Folder>\n");
+		kml_write_xml(0,  "<name>Tracks</name>\n");
+	}
 	track_disp_all(kml_track_hdr, kml_track_tlr, kml_track_disp);
-	kml_write_xml(-1,  "</Folder>\n");
+	if (!realtime_positioning) {
+		kml_write_xml(-1,  "</Folder>\n");
+	}
   
 	// Output routes
-	kml_write_xml(1,  "<Folder>\n");
-	kml_write_xml(0,  "<name>Routes</name>\n");
-	route_disp_all(kml_route_hdr, kml_route_tlr, kml_route_disp);
-	kml_write_xml(-1,  "</Folder>\n");
+	if (!realtime_positioning) {
+		kml_write_xml(1,  "<Folder>\n");
+		kml_write_xml(0,  "<name>Routes</name>\n");
+		route_disp_all(kml_route_hdr, kml_route_tlr, kml_route_disp);
+		kml_write_xml(-1,  "</Folder>\n");
+	}
 
 	kml_write_xml(-1, "</Document>\n");
 	kml_write_xml(-1, "</kml>\n");
