@@ -138,39 +138,40 @@ position_runqueue(queue *q, int nelems, int qtype)
 					break;
 			}
 		}
-		else if (del ) {
-			switch (qtype) {
+		else {
+			if (del ) {
+			    switch (qtype) {
 				case wptdata:
-					waypt_del(comp[i]);
-					waypt_free(comp[i]);
+					waypt_del(comp[j]);
+					waypt_free(comp[j]);
 					del = 0;
 					break;
 				case trkdata:
-					track_del_wpt(cur_rte, comp[i]);
-					del = !!purge_duplicates;
+					track_del_wpt(cur_rte, comp[j]);
+					del = 0;
 					break;
 				case rtedata:
-					route_del_wpt(cur_rte, comp[i]);
+					route_del_wpt(cur_rte, comp[j]);
 					del = 0;
 					break;
 				default:
 					break;
+			    }
 			}
-		} else {
-			j = i; /* advance last use point */
+			j = i;
 		}
 	}
 	if ( del ) {
 		switch (qtype) {
 			case wptdata:
-				waypt_del(comp[nelems-1]);
-				waypt_free(comp[nelems-1]);
+				waypt_del(comp[j]);
+				waypt_free(comp[j]);
 				break;
 			case trkdata:
-				track_del_wpt(cur_rte, comp[i]);
+				track_del_wpt(cur_rte, comp[j]);
 				break;
 			case rtedata:
-				route_del_wpt(cur_rte, comp[i]);
+				route_del_wpt(cur_rte, comp[j]);
 				break;
 			default:
 				break;
