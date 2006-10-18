@@ -404,21 +404,10 @@ void kml_output_trkdescription(computed_trkdata *td)
 	min_alt = fmt_distance(td->min_alt, &min_alt_units);
 	distance = fmt_distance(td->distance_meters, &distance_units);
 
-	/* We won't always have times. Garmin saved tracks, for example... */
-	if (td->start && td->end) {
-		char time_string[64];
-		kml_write_xml(1, "<TimeSpan>\n");
-		xml_fill_in_time(time_string, td->start, XML_LONG_TIME);
-		kml_write_xml(0, "<begin>%s</begin>\n", time_string);
-		xml_fill_in_time(time_string, td->end, XML_LONG_TIME);
-		kml_write_xml(0, "<end>%s</end>\n", time_string);
-		kml_write_xml(-1, "</TimeSpan>\n");
-	} else {
-		kml_write_xml(0, "<Snippet/>\n");
-	}
+	kml_write_xml(0, "<Snippet/>\n");
 
 	kml_write_xml(1, "<description>\n");
-	kml_write_xml(1, "<table>\n");
+	kml_write_xml(1, "<![CDATA[<table>\n");
 
 	TD2("<b>Distance</b> %.1f %s", distance, distance_units);
 	if (min_alt != unknown_alt) {
@@ -437,8 +426,19 @@ void kml_output_trkdescription(computed_trkdata *td)
 		double spd = fmt_speed(td->max_spd, &spd_units);
 		TD2("<b>Max Speed</b> %.1f %s", spd, spd_units);
 	}
-	kml_write_xml(-1, "</table>\n");
+	kml_write_xml(-1, "</table>]]>\n");
 	kml_write_xml(-1, "</description>\n");
+
+	/* We won't always have times. Garmin saved tracks, for example... */
+	if (td->start && td->end) {
+		char time_string[64];
+		kml_write_xml(1, "<TimeSpan>\n");
+		xml_fill_in_time(time_string, td->start, XML_LONG_TIME);
+		kml_write_xml(0, "<begin>%s</begin>\n", time_string);
+		xml_fill_in_time(time_string, td->end, XML_LONG_TIME);
+		kml_write_xml(0, "<end>%s</end>\n", time_string);
+		kml_write_xml(-1, "</TimeSpan>\n");
+	}
 }
 
 
@@ -447,13 +447,13 @@ void kml_output_header(const route_head *header, computed_trkdata*td)
 {
         kml_write_xml(1,  "<Folder>\n");
 	kml_write_xmle("name", header->rte_name);
-	kml_write_xmle("desc", header->rte_desc);
+	kml_write_xmle("description", header->rte_desc);
 
         if (export_points && header->rte_waypt_ct > 0) {
-	  kml_output_trkdescription(td);
           // Put the points in a subfolder
           kml_write_xml(1,  "<Folder>\n");
           kml_write_xml(0,  "<name>Points</name>\n");
+	  kml_output_trkdescription(td);
         }
 
         // Create an array for holding waypoint coordinates so that we
@@ -521,9 +521,10 @@ static void kml_output_point(const waypoint *waypointp, const char *style)
 		kml_write_xmle("name", waypointp->shortname);
 	}
 	kml_write_xml(0, "<Snippet/>\n");
-	kml_write_xml(0, "<styleUrl>%s</styleUrl>\n", style);
 	kml_output_description(waypointp);
 	kml_output_lookat(waypointp);
+	kml_output_timestamp(waypointp);
+	kml_write_xml(0, "<styleUrl>%s</styleUrl>\n", style);
 	kml_write_xml(1, "<Point>\n");
         if (floating) {
           kml_write_xml(0, "<altitudeMode>absolute</altitudeMode>\n");
@@ -535,8 +536,6 @@ static void kml_output_point(const waypoint *waypointp, const char *style)
 		pt->longitude, pt->latitude, pt->altitude);
 	kml_write_xml(-1, "</Point>\n");
 
-	// Timestamp
-	kml_output_timestamp(waypointp);
 
 	kml_write_xml(-1, "</Placemark>\n");
   }
@@ -554,9 +553,9 @@ static void kml_output_tailer(const route_head *header)
   // Add a linestring for this track?
   if (export_lines && point3d_list_len > 0) {
     kml_write_xml(1, "<Placemark>\n");
-    kml_write_xml(0, "<styleUrl>#lineStyle</styleUrl>\n");
     kml_write_xml(0, "<name>Path</name>\n");
 //    fprintf(ofd, "\t  <MultiGeometry>\n");
+    kml_write_xml(0, "<styleUrl>#lineStyle</styleUrl>\n");
     kml_write_xml(1, "<LineString>\n");
     if (floating) {
       kml_write_xml(0, "<altitudeMode>absolute</altitudeMode>\n");
@@ -625,7 +624,6 @@ static void kml_waypt_pr(const waypoint *waypointp)
 	kml_write_xml(1, "<Placemark>\n");
 
 	kml_write_xmle("name", waypointp->shortname);
-	kml_write_xml(0, "<styleUrl>#waypoint</styleUrl>\n");
 
 	// Description
 	if (waypointp->url && waypointp->url[0]) {
@@ -655,6 +653,34 @@ static void kml_waypt_pr(const waypoint *waypointp)
 		xfree(odesc);
 	}
 
+	// Timestamp
+	kml_output_timestamp(waypointp);
+
+	// Icon - but only if it looks like a URL.
+	icon = opt_deficon ? opt_deficon : waypointp->icon_descr;
+	if (icon && strstr(icon, "://")) {
+		kml_write_xml(1, "<Style>\n");
+		kml_write_xml(1, "<IconStyle>\n");
+		kml_write_xml(1, "<Icon>\n");
+		kml_write_xml(0, "<href>%s</href>\n", icon);
+		kml_write_xml(-1, "</Icon>\n");
+		kml_write_xml(-1, "</IconStyle>\n");
+		kml_write_xml(-1, "</Style>\n");
+
+	} else if (!global_opts.no_smart_icons && waypointp->gc_data.diff && waypointp->gc_data.terr) {
+		char *is = kml_lookup_gc_icon(waypointp);
+		kml_write_xml(1, "<Style>\n");
+		kml_write_xml(1, "<IconStyle>\n");
+		kml_write_xml(1, "<Icon>\n");
+		kml_write_xml(0, "<href>%s</href>\n", is);
+		kml_write_xml(-1, "</Icon>\n");
+		kml_write_xml(-1, "</IconStyle>\n");
+		kml_write_xml(-1, "</Style>\n");
+		xfree(is);
+	} else {
+		kml_write_xml(0, "<styleUrl>#waypoint</styleUrl>\n");
+	}
+
 	// Location
 	kml_write_xml(1, "<Point>\n");
 
@@ -671,22 +697,7 @@ static void kml_waypt_pr(const waypoint *waypointp)
 		waypointp->altitude == unknown_alt ? 0.0 : waypointp->altitude);
 	kml_write_xml(-1, "</Point>\n");
 
-	// Icon - but only if it looks like a URL.
-	icon = opt_deficon ? opt_deficon : waypointp->icon_descr;
-	if (icon && strstr(icon, "://")) {
-		fprintf(ofd, "\t  <Style>\n");
-		fprintf(ofd, "\t\t<icon>%s</icon>\n", icon);
-		fprintf(ofd, "\t  </Style>\n");
-	} else if (!global_opts.no_smart_icons && waypointp->gc_data.diff && waypointp->gc_data.terr) {
-		char *is = kml_lookup_gc_icon(waypointp);
-		fprintf(ofd, "\t  <Style>\n");
-		fprintf(ofd, "\t\t<icon>%s</icon>\n", is);
-		fprintf(ofd, "\t  </Style>\n");
-		xfree(is);
-	}
 
-	// Timestamp
-	kml_output_timestamp(waypointp);
 
 	kml_write_xml(-1, "</Placemark>\n");
 }
