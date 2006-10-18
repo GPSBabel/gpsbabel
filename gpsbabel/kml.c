@@ -634,7 +634,7 @@ static void kml_waypt_pr(const waypoint *waypointp)
 		kml_write_xml(0,"<description>\n");
 		if (waypointp->url_link_text && waypointp->url_link_text[0])  {
 			char *olink = xml_entitize(waypointp->url_link_text);
-			kml_write_xml(0,"<a href=\"%s\">%s</a>", odesc, olink);
+			kml_write_xml(0,"<![CDATA[<a href=\"%s\">%s</a>]]>", odesc, olink);
 			xfree(olink);
 		}
 		else
@@ -644,8 +644,11 @@ static void kml_waypt_pr(const waypoint *waypointp)
 		     waypointp->gc_data.diff && waypointp->gc_data.terr) {
 			fprintf(ofd, " %3.1f/%3.1f", waypointp->gc_data.diff / 10.0,  waypointp->gc_data.terr / 10.0);
 			if (waypointp->gc_data.desc_short.utfstring) {
-				char *ob = html_entitize(waypointp->gc_data.desc_short.utfstring);
-				fprintf(ofd, "<p>%s</p>\n", ob);
+				// Dont entitize it - either XML or HTML.
+				// Wrap it in a cdata and let Earth work it out.
+
+				fprintf(ofd, "<![CDATA[<p>%s</p>]]>\n", waypointp->gc_data.desc_short.utfstring);
+
 				xfree(ob);
 			}
 		}
