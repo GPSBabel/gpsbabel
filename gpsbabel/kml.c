@@ -811,7 +811,12 @@ kml_wr_position(waypoint *wpt)
 
 	/* We want our waypoint to have a name, but not our trackpoint */	
 	if (!wpt->shortname) {
-		wpt->shortname = xstrdup("Position");
+		if (wpt->fix == fix_none) {
+			wpt->shortname = xstrdup("ESTIMATED Position");
+			wpt->icon_descr = "http://maps.google.com/mapfiles/kml/pal3/icon59.png";
+		} else {
+			wpt->shortname = xstrdup("Position");
+		}
 	}
 
 	if (!trk_head) {
