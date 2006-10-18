@@ -373,7 +373,12 @@ gpgga_parse(char *ibuf)
 		&lngdeg,&lngdir,
 		&fix,&nsats,&hdop,&alt,&altunits);
 
-	if (fix == 0) {
+	/*
+	 * In serial mode, allow the fix with an invalid position through
+	 * as serial units will often spit a remembered position up and
+	 * that is more comfortable than nothing at all...
+	 */
+	if ((fix == 0) && (read_mode != rm_serial)) {
 		return;
 	}
 
@@ -402,6 +407,9 @@ gpgga_parse(char *ibuf)
 	waypt->hdop 	= hdop;
 
 	switch (fix) {
+		case 0:
+			waypt->fix = fix_none;
+			break;
 		case 1:
 			waypt->fix  = (nsats>3)?(fix_3d):(fix_2d);
 			break;
