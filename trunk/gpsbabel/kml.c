@@ -649,7 +649,6 @@ static void kml_waypt_pr(const waypoint *waypointp)
 
 				fprintf(ofd, "<![CDATA[<p>%s</p>]]>\n", waypointp->gc_data.desc_short.utfstring);
 
-				xfree(ob);
 			}
 		}
 		kml_write_xml(0, "</description>\n");
