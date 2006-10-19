@@ -387,7 +387,7 @@ static void kml_output_timestamp(const waypoint *waypointp)
  * Output the track summary.
  */
 static 
-void kml_output_trkdescription(computed_trkdata *td)
+void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 {
 	char *max_alt_units;
 	double max_alt;
@@ -409,6 +409,9 @@ void kml_output_trkdescription(computed_trkdata *td)
 	kml_write_xml(1, "<description>\n");
 	kml_write_xml(1, "<![CDATA[<table>\n");
 
+	if (header->rte_desc) {
+		TD("<b>Description</b> %s", header->rte_desc);
+	}
 	TD2("<b>Distance</b> %.1f %s", distance, distance_units);
 	if (min_alt != unknown_alt) {
 		TD2("<b>Min Alt</b> %.1f %s", min_alt, min_alt_units);
@@ -447,13 +450,12 @@ void kml_output_header(const route_head *header, computed_trkdata*td)
 {
         kml_write_xml(1,  "<Folder>\n");
 	kml_write_xmle("name", header->rte_name);
-	kml_write_xmle("description", header->rte_desc);
+	kml_output_trkdescription(header, td);
 
         if (export_points && header->rte_waypt_ct > 0) {
           // Put the points in a subfolder
           kml_write_xml(1,  "<Folder>\n");
           kml_write_xml(0,  "<name>Points</name>\n");
-	  kml_output_trkdescription(td);
         }
 
         // Create an array for holding waypoint coordinates so that we
