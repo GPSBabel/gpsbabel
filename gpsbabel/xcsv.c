@@ -219,7 +219,9 @@ xcsv_parse_style_line(const char *sbuff)
 
 		/* field delimiters are always bad characters */
 		if (0 == strcmp(p, "\\w")) {
-			xstrappend(xcsv_file.badchars, " \n\r");
+			char *s = xstrappend(xcsv_file.badchars, " \n\r");
+			if (xcsv_file.badchars) xfree(xcsv_file.badchars);
+			xcsv_file.badchars = s;
 		} else {
 			xcsv_file.badchars = xstrappend(xcsv_file.badchars, p);
 		}
