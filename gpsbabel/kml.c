@@ -276,8 +276,12 @@ static void
 kml_wr_deinit(void)
 {
 	fclose(ofd);
-	rename(posnfilenametmp, posnfilename);
-	xfree(posnfilenametmp);
+
+	if (posnfilenametmp) {
+		rename(posnfilenametmp, posnfilename);
+		xfree(posnfilenametmp);
+		posnfilenametmp = NULL;
+	}
 	ofd = NULL;
 }
 
