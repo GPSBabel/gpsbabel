@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+  <Document xmlns:xlink="http://www.w3/org/1999/xlink">
+    <name>GPS device</name>
+    <Snippet>Created Wed Dec 31 18:00:00 1969</Snippet>
+<!-- Normal route style -->
+    <Style id="route_n">
+      <IconStyle>
+        <Icon>
+          <href>root://icons/bitmap-4.png</href>
+          <x>160</x>
+          <w>32</w>
+          <h>32</h>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted route style -->
+    <Style id="route_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>root://icons/bitmap-4.png</href>
+          <x>160</x>
+          <w>32</w>
+          <h>32</h>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="route">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#route_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#route_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track style -->
+    <Style id="track_n">
+      <IconStyle>
+        <Icon>
+          <href>root://icons/bitmap-4.png</href>
+          <x>128</x>
+          <w>32</w>
+          <h>32</h>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track style -->
+    <Style id="track_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>root://icons/bitmap-4.png</href>
+          <x>128</x>
+          <w>32</w>
+          <h>32</h>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal waypoint style -->
+    <Style id="waypoint_n">
+      <IconStyle>
+        <Icon>
+          <href>root://icons/bitmap-4.png</href>
+          <x>160</x>
+          <w>32</w>
+          <h>32</h>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted waypoint style -->
+    <Style id="waypoint_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>root://icons/bitmap-4.png</href>
+          <x>160</x>
+          <w>32</w>
+          <h>32</h>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="waypoint">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#waypoint_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#waypoint_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="lineStyle">
+      <LineStyle>
+        <color>64eeee17</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <Folder>
+      <name>Waypoints</name>
+      <Placemark>
+        <name>GC7FA4</name>
+        <Snippet/>
+        <description>
+<![CDATA[<a href="http://www.geocaching.com/seek/cache_details.aspx?guid=727f9d2c-f080-41f1-a2c9-a326ead462ed">Points géodésiques du Québec</a>]]> 1.0/1.0<![CDATA[<p>LES COORDONÉES PUBLIÉES NE REPRÉSENTENT PAS LA LOCALISATION D'UNE CACHE
+PUBLISHED COORDINATES DO NOT REPRESENT THE LOCALIZATION OF A CACHE</p>]]>
+        </description>
+        <TimeStamp><when>2002-08-15T07:00:00Z</when></TimeStamp>
+        <Style>
+          <IconStyle>
+            <Icon>
+              <href>http://www.geocaching.com/images/kml/8.png</href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <Point>
+          <coordinates>-73.000000,46.133333,0.000000</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>GCGCA8</name>
+        <Snippet/>
+        <description>
+<![CDATA[<a href="http://www.geocaching.com/seek/cache_details.aspx?guid=cda94cd6-d657-49bd-8e7e-0031ef1b2613">Oozy rat in a sanitary zoo</a>]]> 3.0/2.0<![CDATA[<p>The cache is not at the coordinates above.   These coords will get you to the correct park and within 1/2 mile of the cache.  The cache is within 35 feet of the trail.   It is not handicapped accessible.   It is a nice walk in the woods that is practical for all ages.  There is no space in the container for trading items.   You should bring a writing stick and bug spray is recommended.</p>]]>
+        </description>
+        <TimeStamp><when>2003-06-29T07:00:00Z</when></TimeStamp>
+        <Style>
+          <IconStyle>
+            <Icon>
+              <href>http://www.geocaching.com/images/kml/8.png</href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <Point>
+          <coordinates>-86.861667,35.921667,0.000000</coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Tracks</name>
+    </Folder>
+    <Folder>
+      <name>Routes</name>
+    </Folder>
+  </Document>
+</kml>
