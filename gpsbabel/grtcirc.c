@@ -286,6 +286,10 @@ void linepart(double lat1, double lon1,
   double phi = 0;
   double cosphi = 0;
   double sinphi = 0;
+
+  /* result must be in degrees */
+  *reslat = lat1;
+  *reslon = lon1;
   
   /* degrees to radians */
   lat1 = RAD(lat1);  lon1 = RAD(lon1);
@@ -306,8 +310,6 @@ void linepart(double lat1, double lon1,
     ya /= la;
     za /= la;
   }
-  *reslat = lat1;
-  *reslon = lon1;
   /* if la is zero, the points are either equal or directly opposite 
    * each other.  Either way, there's no single geodesic, so we punt. */
   if ( la ) {
