@@ -2,15 +2,11 @@
 <kml xmlns="http://earth.google.com/kml/2.1">
   <Document xmlns:xlink="http://www.w3/org/1999/xlink">
     <name>GPS device</name>
-    <Snippet>Created Wed Dec 31 18:00:00 1969</Snippet>
 <!-- Normal route style -->
     <Style id="route_n">
       <IconStyle>
         <Icon>
-          <href>root://icons/bitmap-4.png</href>
-          <x>160</x>
-          <w>32</w>
-          <h>32</h>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -19,10 +15,7 @@
       <IconStyle>
         <scale>1.2</scale>
         <Icon>
-          <href>root://icons/bitmap-4.png</href>
-          <x>160</x>
-          <w>32</w>
-          <h>32</h>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -40,10 +33,7 @@
     <Style id="track_n">
       <IconStyle>
         <Icon>
-          <href>root://icons/bitmap-4.png</href>
-          <x>128</x>
-          <w>32</w>
-          <h>32</h>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon60.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -52,10 +42,7 @@
       <IconStyle>
         <scale>1.2</scale>
         <Icon>
-          <href>root://icons/bitmap-4.png</href>
-          <x>128</x>
-          <w>32</w>
-          <h>32</h>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon60.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -73,10 +60,7 @@
     <Style id="waypoint_n">
       <IconStyle>
         <Icon>
-          <href>root://icons/bitmap-4.png</href>
-          <x>160</x>
-          <w>32</w>
-          <h>32</h>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -85,10 +69,7 @@
       <IconStyle>
         <scale>1.2</scale>
         <Icon>
-          <href>root://icons/bitmap-4.png</href>
-          <x>160</x>
-          <w>32</w>
-          <h>32</h>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
         </Icon>
       </IconStyle>
     </Style>
