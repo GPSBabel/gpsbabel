@@ -278,6 +278,17 @@ kml_wr_deinit(void)
 	fclose(ofd);
 
 	if (posnfilenametmp) {
+#if __WIN32__
+		/*
+		 * This is gross.
+		 * Windows does not offer an atomic rename; we must
+		 * explictly remove the destination here which exposes
+		 * a window where a polled reader of this file could find
+		 * the file to be missing.  Windows readers will simply
+		 * have to retry on this case.
+		 */
+		unlink(posnfilename);
+#endif
 		rename(posnfilenametmp, posnfilename);
 		xfree(posnfilenametmp);
 		posnfilenametmp = NULL;
