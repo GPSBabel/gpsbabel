@@ -102,6 +102,16 @@ arglist_t kml_args[] = {
 	ARG_TERMINATOR
 };
 
+static 
+struct {
+	int freshness;
+	char *icon;
+} kml_tracking_icons[] = {
+ { 60, "http://maps.google.com/mapfiles/kml/pal4/icon15.png" }, // Red
+ { 30, "http://maps.google.com/mapfiles/kml/pal4/icon31.png" }, // Yellow
+ { 0, "http://maps.google.com/mapfiles/kml/pal4/icon62.png" }, // Green
+};
+
 #define MYNAME "kml"
 
 #if ! HAVE_LIBEXPAT
@@ -343,8 +353,7 @@ kml_write_xmle(const char *tag, const char *v)
 }
 
 #define hovertag(h) h ? 'h' : 'n'
-static void kml_write_bitmap_style_(const char *style, int bitmap, 
-	                               int x, int y, int width, int height, 
+static void kml_write_bitmap_style_(const char *style, const char * bitmap, 
 				       int highlighted)
 {
 	kml_write_xml(0,"<!-- %s %s style -->\n", 
@@ -355,10 +364,7 @@ static void kml_write_bitmap_style_(const char *style, int bitmap,
 		kml_write_xml(0, "<scale>1.2</scale>\n");
 	}
 	kml_write_xml(1, "<Icon>\n");
-	kml_write_xml(0, "<href>root://icons/bitmap-%d.png</href>\n", bitmap);
-	kml_write_xml(0, "<x>%d</x>\n", x);
-	kml_write_xml(0, "<w>%d</w>\n", width);
-	kml_write_xml(0, "<h>%d</h>\n", height);
+	kml_write_xml(0, "<href>%s</href>\n", bitmap);
 	kml_write_xml(-1, "</Icon>\n");
 	kml_write_xml(-1, "</IconStyle>\n");
 	kml_write_xml(-1, "</Style>\n");
@@ -368,11 +374,10 @@ static void kml_write_bitmap_style_(const char *style, int bitmap,
  * and non-highlighted version of the style to allow the icons
  * to magnify slightly on a rollover.
  */
-static void kml_write_bitmap_style(const char *style, int bitmap, 
-	                               int x, int y, int width, int height)
+static void kml_write_bitmap_style(const char *style, const char *bitmap)
 {
-	kml_write_bitmap_style_(style, bitmap, x, y, width, height, 0);
-	kml_write_bitmap_style_(style, bitmap, x, y, width, height, 1);
+	kml_write_bitmap_style_(style, bitmap, 0);
+	kml_write_bitmap_style_(style, bitmap, 1);
 
 	kml_write_xml(1, "<StyleMap id=\"%s\">\n", style);
 	kml_write_xml(1, "<Pair>\n");
@@ -782,13 +787,15 @@ void kml_write(void)
 		kml_write_xml(0, "<name>GPS position</name>\n");
 	else
 		kml_write_xml(0, "<name>GPS device</name>\n");
-	
-	kml_write_xml(0, "<Snippet>Created %s</Snippet>\n", import_time);
+
+	if (now) {
+		kml_write_xml(0, "<Snippet>Created %s</Snippet>\n", import_time);
+	}
 
 	// Style settings for bitmaps
-	kml_write_bitmap_style("route", 4, 160, 0, 32, 32);
-	kml_write_bitmap_style("track", 4, 128, 0, 32, 32);
-	kml_write_bitmap_style("waypoint", 4, 160, 0, 32, 32);
+	kml_write_bitmap_style("route", "http://maps.google.com/mapfiles/kml/pal4/icon61.png");
+	kml_write_bitmap_style("track", "http://maps.google.com/mapfiles/kml/pal4/icon60.png");
+	kml_write_bitmap_style("waypoint", "http://maps.google.com/mapfiles/kml/pal4/icon61.png");
         
         // Style settings for line strings
         kml_write_xml(1, "<Style id=\"lineStyle\">\n");
@@ -831,22 +838,55 @@ void kml_write(void)
 	kml_write_xml(-1, "</kml>\n");
 }
 
+/*
+ * This depends on the table being sorted correctly.
+ */
+static 
+char *
+kml_get_posn_icon(int freshness)
+{
+	int i;
+	for (i = 0; i < sizeof(kml_tracking_icons) / sizeof(kml_tracking_icons[0]); i++) {
+		if (freshness >= kml_tracking_icons[i].freshness)
+			return kml_tracking_icons[i].icon;
+	}
+	return "http://maps.google.com/mapfiles/kml/pal3/icon59.png";
+}
+
+
 static void
 kml_wr_position(waypoint *wpt)
 {
 	static route_head *trk_head = NULL;
+	static time_t last_valid_fix;
 	waypoint *t = waypt_dupe(wpt);
+
+	if (last_valid_fix == 0) last_valid_fix = current_time();
 
 	/* We want our waypoint to have a name, but not our trackpoint */	
 	if (!wpt->shortname) {
 		if (wpt->fix == fix_none) {
 			wpt->shortname = xstrdup("ESTIMATED Position");
-			wpt->icon_descr = "http://maps.google.com/mapfiles/kml/pal3/icon59.png";
 		} else {
 			wpt->shortname = xstrdup("Position");
 		}
 	}
 
+	switch (wpt->fix) {
+		case fix_none:
+			if (wpt->shortname) {
+				xfree (wpt->shortname);
+			}
+			wpt->shortname = xstrdup("ESTIMATED Position");
+			break;
+		case fix_unknown:
+			break;
+		default:
+			last_valid_fix = wpt->creation_time;
+	}
+
+
+	wpt->icon_descr = kml_get_posn_icon(wpt->creation_time - last_valid_fix);
 	if (!trk_head) {
 		trk_head = route_head_alloc();
 		track_add_head(trk_head);
