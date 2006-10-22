@@ -50,6 +50,8 @@ static int route_out_count;
 static int waypoint_read_count;
 static int wpt_len = 8;
 static const char *curfname;
+static int extension_hint;
+
 /*
  * Magellan's firmware is *horribly* slow to send the next packet after
  * we turn around an ack while we are reading from the device.  It's
@@ -458,16 +460,24 @@ retry:
 			waypt_status_disp(waypoint_read_count, 
 					waypoint_read_count);
 		}
-		switch (objective)
-		{
-			case wptdata:
+
+		if (extension_hint) {
+			if (extension_hint == WPTDATAMASK) {
 				waypt_add(wpt);
-				break;
-			case rtedata:
-				ENQUEUE_TAIL(&rte_wpt_tmp, &wpt->Q);
-				break;
-			default:
-				break;
+			} else if (extension_hint == RTEDATAMASK) {
+					ENQUEUE_TAIL(&rte_wpt_tmp, &wpt->Q);
+			}
+		} else {
+			switch (objective) {
+				case wptdata:
+					waypt_add(wpt);
+					break;
+				case rtedata:
+					ENQUEUE_TAIL(&rte_wpt_tmp, &wpt->Q);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 	if (strncmp(ibuf, "$PMGNTRK,", 7) == 0) {
@@ -711,6 +721,7 @@ static void
 mag_rd_init_common(const char *portname)
 {
 	waypoint_read_count = 0;
+	char *ext;
 
 	if (bs) {
 		bitrate=atoi(bs);
@@ -734,6 +745,24 @@ mag_rd_init_common(const char *portname)
 		curfname++;  /* skip over path delimiter */
 	} else {
 		curfname = portname;
+	}
+
+	/*
+	 * I'd rather not derive behaviour from filenames but since
+	 * we can't otherwise tell if we should put a WPT on the route
+	 * queue or the WPT queue in the presence of (-w -r -t) we 
+	 * divine a hint from the filename extension when we can.
+	 */
+	ext = strrchr(curfname, '.');
+	if (ext) {
+		ext++;
+		if (0 == case_ignore_strcmp(ext, "upt")) {
+			extension_hint = WPTDATAMASK;
+		} else if (0 == case_ignore_strcmp(ext, "log")) {
+			extension_hint = TRKDATAMASK;
+		} else if (0 == case_ignore_strcmp(ext, "rte")) {
+			extension_hint = RTEDATAMASK;
+		} 
 	}
 
 	return;
