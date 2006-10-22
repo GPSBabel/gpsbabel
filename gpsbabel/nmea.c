@@ -154,6 +154,7 @@ static struct tm tm;
 static waypoint * curr_waypt = NULL;
 static waypoint * last_waypt = NULL;
 static void * gbser_handle;
+static const char *posn_fname;
 
 static int without_date;	/* number of created trackpoints without a valid date */
 static struct tm opt_tm;	/* converted "date" parameter */
@@ -816,14 +817,15 @@ nmea_rd_posn_init(const char *fname)
 		read_mode = rm_serial;
 		gbser_set_speed(gbser_handle, 4800);
 	} else {
-		fatal("Could not open %s\n", fname);
+		fatal(MYNAME ": Could not open %s.\n", fname);
 	}
 
 	if (opt_baud) {
 		if (!gbser_set_speed(gbser_handle, atoi(opt_baud))) {
-			fatal("Unable to set baud rate %s\n", opt_baud);
+			fatal(MYNAME ": Unable to set baud rate %s\n", opt_baud);
 		}
 	}
+	posn_fname = fname;
 }
 
 static waypoint *
@@ -847,7 +849,7 @@ nmea_rd_posn(void)
 			warning( "READ: %s\n", ibuf);
 		}
 		if (rv < 0) {
-			fatal("No data received.\n");
+			fatal(MYNAME ": No data received on %s.\n", posn_fname);
 		}
 		nmea_parse_one_line(ibuf);
 		if (lt != last_read_time) {
