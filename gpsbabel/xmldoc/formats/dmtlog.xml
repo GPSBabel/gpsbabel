@@ -4,6 +4,7 @@
 	have extension .trl and can contain waypoints and tracks.
 </para>
 <para>
-	We have seen three different types of this format. Two binary and one XML based format.
-	All these types are supported by our reader.
+	We have seen three different types of this format. Two are binary 
+	and one is an XML based format.  All three types are supported 
+	by our reader.
 </para>
