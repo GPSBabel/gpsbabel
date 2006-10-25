@@ -43,6 +43,7 @@
 
 #define TRACKFILTER_PACK_OPTION		"pack"
 #define TRACKFILTER_SPLIT_OPTION	"split"
+#define TRACKFILTER_SDIST_OPTION	"sdistance"
 #define TRACKFILTER_TITLE_OPTION	"title"
 #define TRACKFILTER_MERGE_OPTION	"merge"
 #define TRACKFILTER_NAME_OPTION		"name"
@@ -58,6 +59,7 @@
 static char *opt_merge = NULL;
 static char *opt_pack = NULL;
 static char *opt_split = NULL;
+static char *opt_sdistance = NULL;
 static char *opt_move = NULL;
 static char *opt_title = NULL;
 static char *opt_start = NULL;
@@ -76,6 +78,9 @@ arglist_t trackfilter_args[] = {
 	    "Pack all tracks into one", NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{TRACKFILTER_SPLIT_OPTION, &opt_split, 
 	    "Split by date or time interval (see README)", NULL, 
+	    ARGTYPE_STRING, ARG_NOMINMAX},
+	{TRACKFILTER_SDIST_OPTION, &opt_sdistance, 
+	    "Split by distance", NULL, 
 	    ARGTYPE_STRING, ARG_NOMINMAX},
 	{TRACKFILTER_MERGE_OPTION, &opt_merge, 
 	    "Merge multiple tracks for the same way", NULL, ARGTYPE_STRING, 
@@ -113,6 +118,7 @@ static trkflt_t *track_list = NULL;
 static int track_ct = 0;
 static int track_pts = 0;
 static int opt_interval = 0;
+static int opt_distance = 0;
 
 /*******************************************************************************
 * helpers
@@ -466,17 +472,19 @@ trackfilter_split(void)
 	queue *elem, *tmp;
 	int i, j;
 	float interval = -1;
+	float distance = -1; 
 
 	if (count <= 1) return;
 
 	/* check additional options */
 	
-	opt_interval = ((strlen(opt_split) > 0) && (0 != strcmp(opt_split, TRACKFILTER_SPLIT_OPTION)));
+	opt_interval = (opt_split && (strlen(opt_split) > 0) && (0 != strcmp(opt_split, TRACKFILTER_SPLIT_OPTION)));
+	opt_distance = (opt_sdistance && (strlen(opt_sdistance) > 0) && (0 != strcmp(opt_sdistance, TRACKFILTER_SDIST_OPTION)));
 
 	if (opt_interval != 0)
 	{
 	    float  base;
-	    char   dhms;
+	    char   unit;
 	    
 	    switch(strlen(opt_split))
 	    {
@@ -485,16 +493,16 @@ trackfilter_split(void)
 		    break; /* ? */
 		    
 		case 1:
-		    dhms = *opt_split;
+		    unit = *opt_split;
 		    interval = 1;
 		    break;
 		    
 		default:
-		    i = sscanf(opt_split,"%f%c", &interval, &dhms);
+		    i = sscanf(opt_split,"%f%c", &interval, &unit);
 		    if (i == 0) 
 		    {
 			/* test reverse order */
-			i = sscanf(opt_split,"%c%f", &dhms, &interval);
+			i = sscanf(opt_split,"%c%f", &unit, &interval);
 		    }
 		    if ((i != 2) || (interval <= 0))
 		    {
@@ -503,7 +511,7 @@ trackfilter_split(void)
 		    break;
 	    }
 
-	    switch(tolower(dhms))
+	    switch(tolower(unit))
 	    {
 		case 's':
 		    base = 1;
@@ -522,9 +530,57 @@ trackfilter_split(void)
 		    break;
 	    }
 #ifdef TRACKF_DBG
-	    printf(MYNAME ": dhms \"%c\", interval %g -> %g\n", dhms, interval, base * interval);
+	    printf(MYNAME ": unit \"%c\", interval %g -> %g\n", unit, interval, base * interval);
 #endif
 	    interval *= base;
+	}
+
+	if (opt_distance != 0)
+	{
+	    float  base;
+	    char   unit;
+	    
+	    switch(strlen(opt_sdistance))
+	    {
+		case 0:
+		    fatal(MYNAME ": No distance specified.\n");
+		    break; /* ? */
+		    
+		case 1:
+		    unit = *opt_sdistance;
+		    distance = 1;
+		    break;
+		    
+		default:
+		    i = sscanf(opt_sdistance,"%f%c", &distance, &unit);
+		    if (i == 0) 
+		    {
+			/* test reverse order */
+			i = sscanf(opt_sdistance,"%c%f", &unit, &distance);
+		    }
+		    if ((i != 2) || (distance <= 0))
+		    {
+			fatal(MYNAME ": invalid distance specified, must be one a positive number.\n");
+		    }
+		    break;
+	    }
+
+	    switch(tolower(unit))
+	    {
+		case 'k': /* kilometers */
+		    base = 0.6214;
+		    break;
+		case 'm': /* miles */
+		    base = 1;
+		    break;
+		default:
+		    fatal(MYNAME ": invalid distance specified, must be one of [km].\n");
+		    break;
+	    }
+#ifdef TRACKF_DBG
+	    printf(MYNAME ": unit \"%c\", distance %g -> %g\n", unit, distance, base * distance);
+#endif
+	    distance *= base;
 	}
 
 	trackfilter_split_init_rte_name(master, track_list[0].first_time);
@@ -544,7 +600,7 @@ trackfilter_split(void)
 	{
 	    int new_track_flag;
 	    
-	    if (opt_interval == 0)
+	    if ((opt_interval == 0) && (opt_distance == 0))
 	    {
 		struct tm t1, t2;
 		
@@ -560,17 +616,41 @@ trackfilter_split(void)
 	    }
 	    else
 	    {
-		float tr_interval;
+		new_track_flag = 1;
 		
-		tr_interval = difftime(buff[j]->creation_time,buff[i]->creation_time);
-		new_track_flag = ( tr_interval > interval );
+		if (distance > 0) 
+		{
+		    double rt1 = RAD(buff[i]->latitude);
+		    double rn1 = RAD(buff[i]->longitude);
+		    double rt2 = RAD(buff[j]->latitude);
+		    double rn2 = RAD(buff[j]->longitude);
+		    double curdist = gcdist( rt1, rn1, rt2, rn2 );
+		    curdist = radtomiles(curdist);
+		    if ( curdist <= distance ) 
+			new_track_flag = 0;
 #ifdef TRACKF_DBG
-		if (new_track_flag != 0)
-		    printf(MYNAME ": split, %g > %g\n", tr_interval, interval );
+		    else
+			printf(MYNAME ": sdistance, %g > %g\n", curdist, distance );
 #endif
+		}
+		
+		if (interval > 0)
+		{
+		    float tr_interval = difftime(buff[j]->creation_time,buff[i]->creation_time);
+		    if ( tr_interval <= interval ) 
+			new_track_flag = 0;
+#ifdef TRACKF_DBG
+		    else
+			printf(MYNAME ": split, %g > %g\n", tr_interval, interval );
+#endif
+		}
+
 	    }
 	    if (new_track_flag != 0)
 	    {
+#ifdef TRACKF_DBG
+		printf(MYNAME ": splitting new track\n" );
+#endif
 		curr = (route_head *) route_head_alloc();
 		trackfilter_split_init_rte_name(curr, buff[j]->creation_time);
 		track_add_head(curr);
@@ -871,7 +951,7 @@ trackfilter_process(void)
 	    return;
 	}
 	
-	if (opt_split != NULL)
+	if ((opt_split != NULL) || (opt_sdistance != NULL))
 	{
 	    if (track_ct > 1) 
 		fatal(MYNAME "-split: Cannot split more than one track, please pack (or merge) before!\n");
