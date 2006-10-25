@@ -4,7 +4,7 @@ by Wintec's Windows application.</para>
 <para>
 <ulink url="http://www.semsons.com/wi3mugpsrebt.html">Wintec WBT-200 </ulink>
 </para>
-<example id="wbt-on-macos">
+<example id="wbt-bin-on-macos">
   <title>Command showing conversion of a Wintec binary file to GPX</title>
   <screen format="linespecific">gpsbabel -i wbt-bin -f tracks.bin -o
 gpx -F out.gpx</screen>
