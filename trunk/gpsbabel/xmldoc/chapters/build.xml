@@ -53,6 +53,6 @@ is recommended for OS/X and Linux if you want to use a USB Garmin.
   <option>--without-libusb</option> Disables use of libusb, even it's it's available.
 </para>
 <para>
- <option>--with-zlib=(included)|system|no</option> By default, we use our own version of zlib.  Ify ou specify <option>system</option> the system zlib is used.  A value of <option>no</option> (or --without-zlib) disables zlib.
+ <option>--with-zlib=(included)|system|no</option> By default, we use our own version of zlib. If you specify <option>system</option> the system zlib is used.  A value of <option>no</option> (or --without-zlib) disables zlib.
 </para>
 </chapter>
