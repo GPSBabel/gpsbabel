@@ -720,8 +720,8 @@ mag_serial_init_common(const char *portname)
 static void
 mag_rd_init_common(const char *portname)
 {
-	waypoint_read_count = 0;
 	char *ext;
+	waypoint_read_count = 0;
 
 	if (bs) {
 		bitrate=atoi(bs);
