@@ -1,0 +1,16 @@
+<para>
+   Convert track number 'index' from source into dmtlog format.
+</para>
+<para>
+   The known variants of Tracklog 'digital mapping' files supports only
+   one track per file. If you have more than one track in source 
+   (f.e MapSource and many others can do such heavy things), you 
+   can specify which track should by used for the conversion. 
+</para>
+<para>
+   The default index is 1 (the first track of a possible list of tracks).
+</para>
+<para>
+   An example usage you can find at the <link linkend="fmt_ignrando">ignrando</link> format,
+   which uses option <link linkend="fmt_ignrando_o_index">index</link> in same manner.
+</para>
