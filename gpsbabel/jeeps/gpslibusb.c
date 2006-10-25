@@ -209,7 +209,20 @@ garmin_usb_start(struct usb_device *dev)
 	 * Hrmph.  No iManufacturer or iProduct headers....
 	 */
 	if (usb_set_configuration(udev, 1) < 0) {
+#if __linux__
+		char drvnm[128];
+		drvnm[0] = 0;
+		/*
+		 * Most Linux distributions ship a slightly broken
+		 * kernel driver that bonds with the hardware.  
+		 */
+		usb_get_driver_np(udev, 0, drvnm, sizeof(drvnm)-1);
+		fatal("usb_set_configuration failed, probably because kernel driver '%s'\n is blocking our access to the USB device.\n"	
+		"For more information see http://www.gpsbabel.org/os/Linux_Hotplug.html\n", drvnm);
+#else
+
 		fatal("usb_set_configuration failed: %s\n", usb_strerror());
+#endif
 	}
 
 	if (usb_claim_interface(udev, 0) < 0) {
