@@ -1266,7 +1266,7 @@ mag_waypt_pr(const waypoint *waypointp)
 	if (odesc && /* !is_file && */ (wptcmtcnt++ >= wptcmtcnt_max))
 		odesc[0] = 0;
 
-	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.lf,M,%-.*s,%-.46s,%s",
+	sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.0f,M,%-.*s,%-.46s,%s",
 		lat, ilat < 0 ? 'S' : 'N',
 		lon, ilon < 0 ? 'W' : 'E',
 		waypointp->altitude == unknown_alt ?
