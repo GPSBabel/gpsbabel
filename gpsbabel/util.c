@@ -1210,10 +1210,52 @@ convert_human_time_format(const char *human_timef)
 	return result;
 }
 
+
+/* 
+ * Return a decimal degree pair as
+ * DD.DDDDD  DD MM.MMM or DD MM SS.S
+ * fmt = ['d', 'm', 's']
+ * html = 1 for html output otherwise text
+ */
+char *
+pretty_deg_format(double lat, double lon, char fmt, int html) 
+{
+	double  latmin, lonmin, latsec, lonsec;
+	int     latint, lonint;
+	char	latsig, lonsig;
+	char	*result;
+	latsig = lat < 0 ? 'S':'N';
+	lonsig = lon < 0 ? 'W':'E';
+	latint = abs((int) lat);
+  	lonint = abs((int) lon);
+	latmin = 60.0 * (fabs(lat) - latint);
+	lonmin = 60.0 * (fabs(lon) - lonint);
+	latsec = 60.0 * (latmin - floor(latmin));
+	lonsec = 60.0 * (lonmin - floor(lonmin));
+	if (fmt == 'd') { /* ddd */
+		xasprintf ( &result, "%c%6.5f%s %c%6.5f%s",
+			latsig, fabs(lat), html?"&deg;":"", 
+			lonsig, fabs(lon), html?"&deg;":"" );
+	}
+	else if (fmt == 's') { /* dms */
+		xasprintf ( &result, "%c%d%s%02d'%04.1f\" %c%d%s%02d'%04.1f\"",
+                        latsig, latint, html?"&deg;":" ", (int)latmin, latsec,
+			lonsig, lonint, html?"&deg;":" ", (int)lonmin, lonsec);
+	}
+	else { /* default dmm */
+		xasprintf ( &result,  "%c%d%s%06.3f %c%d%s%06.3f",
+			latsig, latint, html?"&deg;":" ", latmin, 
+			lonsig, lonint, html?"&deg;":" ", lonmin);
+	} 
+	return result;
+}
+
+
+
 /* 
  * Get rid of potentially nasty HTML that would influence another record
  * that includes;
- * <body> - to stop backgrounds from being loaded
+ * <body> - to stop backgrounds/background colours from being loaded
  * </body> and </html>- stop processing altogether
  * <style> </style> - stop overriding styles for everything
  */
@@ -1226,19 +1268,28 @@ strip_nastyhtml(const char * in)
 	sp = returnstr = xstrdup(in);
 	lcp = lcstr = strlower(xstrdup(in));
 	
-	while (lcp = strstr(lcstr, "<body"), NULL != lcp) {   /* becomes <---- */
+	while (lcp = strstr(lcstr, "<body>"), NULL != lcp) {
+		sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
+		sp++; *sp++ = '!'; *sp++ = ' '; *sp++ = ' '; *sp++ = ' ';
+		*lcp = '*';         /* so we wont find it again */
+	}
+	while (lcp = strstr(lcstr, "<body"), lcp != NULL) {   /* becomes <!--        --> */
 		sp = returnstr + (lcp - lcstr) ;
-		sp++; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
+		sp++; *sp++ = '!'; *sp++ = '-';  *sp++ = '-';  
+		while ( (*sp) && (*sp != '>') ) {
+		  sp++;
+		}
+		*--sp = '-'; *--sp = '-'; 
 		*lcp = '*';         /* so we wont find it again */
 	}
-	while (lcp = strstr(lcstr, "</body"), NULL != lcp) {
-		sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
-		sp++; sp++; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
+	while (lcp = strstr(lcstr, "</body>"), NULL != lcp) {
+		sp = returnstr + (lcp - lcstr) ; /* becomes <!---- */
+		sp++; *sp++ = '!'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
 		*lcp = '*';         /* so we wont find it again */
 	}
-	while (lcp = strstr(lcstr, "</html"), NULL != lcp) {
+	while (lcp = strstr(lcstr, "</html>"), NULL != lcp) {
 		sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
-		sp++; sp++; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
+		sp++; *sp++ = '!'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; *sp++ = '-'; 
 		*lcp = '*';         /* so we wont find it again */
 	}
 	while (lcp = strstr(lcstr, "<style"), NULL != lcp) {
