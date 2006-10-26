@@ -715,6 +715,7 @@ char * strip_html(const utf_string*);
 char * strip_nastyhtml(const char * in);
 char * convert_human_date_format(const char *human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
 char * convert_human_time_format(const char *human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
+char * pretty_deg_format(double lat, double lon, char fmt, int html);   /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
 /* 
  * Character encoding transformations.

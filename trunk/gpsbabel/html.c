@@ -30,6 +30,8 @@ static short_handle mkshort_handle;
 static char *stylesheet = NULL;
 static char *encrypt = NULL;
 static char *includelogs = NULL;
+static char *degformat = NULL;
+static char *altunits = NULL;
 
 #define MYNAME "HTML"
 
@@ -41,6 +43,10 @@ arglist_t html_args[] = {
 		"Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "logs", &includelogs, 
 		"Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+        { "degformat", &degformat, 
+        	"Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX },
+	{ "altunits", &altunits,
+		"Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -63,16 +69,15 @@ wr_deinit(void)
 static void
 html_disp(const waypoint *wpt)
 {
-	int latint, lonint;
 	char tbuf[1024];
+	char *cout;
 	time_t tm = wpt->creation_time;
 	gbint32 utmz;
 	double utme, utmn;
 	char utmzc;
 	fs_xml *fs_gpx = NULL;
 	
-	lonint = abs((int) wpt->longitude);
-	latint = abs((int) wpt->latitude);
+
 	GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude, 
 		&utme, &utmn, &utmz, &utmzc);
 
@@ -81,17 +86,15 @@ html_disp(const waypoint *wpt)
 	strftime(tbuf, sizeof(tbuf), "%d-%b-%Y", localtime(&tm));
 
 
-	fprintf(file_out, "<hr>\n");
-	fprintf(file_out, "<a name=\"%s\"></a><table width=\"100%%\"><tr><td>\n", wpt->shortname);
-	fprintf(file_out, "<h3 class=\"waypoint\">%s - %c%d&deg;%06.3f %c%d&deg;%06.3f (%d%c %6.0f %7.0f)",
-		(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname,
-		wpt->latitude < 0 ? 'S' : 'N',  latint, 60.0 * (fabs(wpt->latitude) - latint), 
-		wpt->longitude < 0 ? 'W' : 'E', lonint, 60.0 * (fabs(wpt->longitude) - lonint),
-		utmz, utmzc, utme, utmn);
-	if (wpt->altitude != unknown_alt) 
-		fprintf (file_out, " alt: %1.1f", wpt->altitude);
+	fprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", wpt->shortname);
+	fprintf(file_out, "<table width=\"100%%\">\n");
+	fprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname);
+	cout = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], 1);
+	fprintf(file_out, "%s (%d%c %6.0f %7.0f)", cout, utmz, utmzc, utme, utmn);
+	xfree (cout);
+	if (wpt->altitude != unknown_alt)
+		fprintf (file_out, " alt:%d", (int) ( (altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude) );
 	fprintf (file_out, "<br>\n");
-
 	if (strcmp(wpt->description, wpt->shortname)) {
 		if (wpt->url) {
 			char *d = html_entitize(wpt->description);
@@ -100,36 +103,47 @@ html_disp(const waypoint *wpt)
 		}
 		else {
 			fprintf(file_out, "%s", wpt->description);
+		}
+		if (wpt->gc_data.placer) { 
+			fprintf(file_out, " by %s", wpt->gc_data.placer);
 		}		
 	}
-	fprintf(file_out, "</h3>\n");
+	fprintf(file_out, "</p></td>\n");
+
+	fprintf (file_out, "<td align=\"right\">");
 	if (wpt->gc_data.terr) {
-		fprintf(file_out, "<p class=\"cachetype\">%s</p>\n", 
-			gs_get_cachetype(wpt->gc_data.type));
-		fprintf(file_out, "<p class=\"cachecontainer\">%s</>\n", 
+		fprintf (file_out, "<p class=\"gpsbabelcacheinfo\">%d%s / %d%s<br>\n", 
+			(int)(wpt->gc_data.diff / 10), (wpt->gc_data.diff%10)?"&frac12;":"", 
+			(int)(wpt->gc_data.terr / 10), (wpt->gc_data.terr%10)?"&frac12;":""  ); 
+		fprintf(file_out, "%s / %s</p>", 
+			gs_get_cachetype(wpt->gc_data.type),
 			gs_get_container(wpt->gc_data.container));
-	        if (wpt->gc_data.desc_short.utfstring) {
-			char *tmpstr = strip_nastyhtml(wpt->gc_data.desc_short.utfstring);
-			fprintf (file_out, "<p class=\"descshort\">%s</p>\n", tmpstr );
-			xfree( tmpstr );
-       		}
-	        if (wpt->gc_data.desc_long.utfstring) {
-			char *tmpstr = strip_nastyhtml(wpt->gc_data.desc_long.utfstring);
-			fprintf (file_out, "<p class=\"desclong\">%s</p>\n", tmpstr );
-			xfree( tmpstr );
-       		}
-		if (wpt->gc_data.hint) {
-			char *hint = NULL;
-			if ( encrypt )
-				hint = rot13( wpt->gc_data.hint );
-			else 
-				hint = xstrdup( wpt->gc_data.hint );
-			fprintf (file_out, "<p class=\"hint\"><strong>Hint:</strong> %s</p>\n", hint);
-			xfree( hint );
-		}
+	}
+	fprintf(file_out, "</td></tr>\n");
+	
+
+	fprintf(file_out, "<tr><td colspan=\"2\">");
+	if (wpt->gc_data.desc_short.utfstring) {
+		char *tmpstr = strip_nastyhtml(wpt->gc_data.desc_short.utfstring);
+		fprintf (file_out, "<p class=\"gpsbabeldescshort\">%s</p>\n", tmpstr );
+		xfree( tmpstr );
+       	}
+	if (wpt->gc_data.desc_long.utfstring) {
+		char *tmpstr = strip_nastyhtml(wpt->gc_data.desc_long.utfstring);
+		fprintf (file_out, "<p class=\"gpsbabeldesclong\">%s</p>\n", tmpstr );
+		xfree( tmpstr );
+       	}
+	if (wpt->gc_data.hint) {
+		char *hint = NULL;
+		if ( encrypt )
+			hint = rot13( wpt->gc_data.hint );
+		else 
+			hint = xstrdup( wpt->gc_data.hint );
+		fprintf (file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", hint);
+		xfree( hint );
 	}
 	else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
-		fprintf (file_out, "<p class=\"notes\">%s</p>\n", wpt->notes);
+		fprintf (file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", wpt->notes);
 	}
 	
         fs_gpx = NULL;
@@ -145,17 +159,17 @@ html_disp(const waypoint *wpt)
 		while ( curlog ) {
 			time_t logtime = 0;
 			struct tm *logtm = NULL;
-			fprintf( file_out, "<p class=\"log\">\n" );
+			fprintf( file_out, "<p class=\"gpsbabellog\">\n" );
 			
 			logpart = xml_findfirst( curlog, "groundspeak:type" );
 			if ( logpart ) {
-				fprintf( file_out, "<span class=\"logtype\">%s</span> by ", logpart->cdata );
+				fprintf( file_out, "<span class=\"gpsbabellogtype\">%s</span> by ", logpart->cdata );
 			}
 			
 			logpart = xml_findfirst( curlog, "groundspeak:finder" );
 			if ( logpart ) {
 				char *f = html_entitize( logpart->cdata );
-				fprintf( file_out, "<span class=\"logfinder\">%s</span> on ", f );
+				fprintf( file_out, "<span class=\"gpsbabellogfinder\">%s</span> on ", f );
 				xfree( f );
 			}
 			
@@ -165,11 +179,10 @@ html_disp(const waypoint *wpt)
 				logtm = localtime( &logtime );
 				if ( logtm ) {
 					fprintf( file_out, 
-						"<span class=\"logdate\">%2.2d/%2.2d/%4.4d</span><br>\n",
+						"<span class=\"gpsbabellogdate\">%04d-%02d-%02d</span><br>\n",
+						logtm->tm_year+1900,
 						logtm->tm_mon+1,
-						logtm->tm_mday,
-						logtm->tm_year+1900
-						);
+						logtm->tm_mday );
 				}
 			}
 			
@@ -177,9 +190,7 @@ html_disp(const waypoint *wpt)
 			if ( logpart ) {
 				char *coordstr = NULL;
 				float lat = 0;
-				int latdeg = 0;
 				float lon = 0;
-				int londeg = 0;
 				coordstr = xml_attribute( logpart, "lat" );
 				if ( coordstr ) {
 					lat = atof( coordstr );
@@ -188,15 +199,11 @@ html_disp(const waypoint *wpt)
 				if ( coordstr ) {
 					lon = atof( coordstr );
 				}
-				latdeg = abs(lat);
-				londeg = abs(lon);
-				
+				coordstr = pretty_deg_format(lat, lon, degformat[2], 1);
 				fprintf( file_out,
-					"<span class=\"logcoords\">%c %d&deg; %.3f' %c %d&deg; %.3f'</span><br>\n",
-				
-					lat < 0 ? 'S' : 'N', latdeg, 60.0 * (fabs(lat) - latdeg), 
-					lon < 0 ? 'W' : 'E', londeg, 60.0 * (fabs(lon) - londeg)
-				);
+					"<span class=\"gpsbabellogcoords\">%s</span><br>\n",
+					coordstr );
+				xfree(coordstr);
 			}
 			
 			logpart = xml_findfirst( curlog, "groundspeak:text" );
@@ -249,10 +256,15 @@ data_write(void)
 	fprintf(file_out, "<html>\n");
 	fprintf(file_out, "<head>\n");
 	fprintf(file_out, " <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n");
+	fprintf(file_out, " <meta name=\"Generator\" content=\"GPSBabel %s\">\n", gpsbabel_version);
 	fprintf(file_out, " <title>GPSBabel HTML Output</title>\n");
-	fprintf(file_out, " <meta name=\"Generator\" content=\"GPSBabel\">\n");
 	if (stylesheet) 
 		fprintf(file_out, " <link rel=\"stylesheet\" type=\"text/css\" href=\"%s\">\n", stylesheet);
+	else {
+		fprintf(file_out, " <style>\n");
+		fprintf(file_out, "  p.gpsbabelwaypoint { font-size: 120%%; font-weight: bold }\n");
+		fprintf(file_out, " </style>\n");
+	}	
 	fprintf(file_out, "</head>\n");
 	fprintf(file_out, "<body>\n");
 

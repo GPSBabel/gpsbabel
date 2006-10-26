@@ -30,6 +30,8 @@ static short_handle mkshort_handle;
 static char *suppresssep = NULL;
 static char *encrypt = NULL;
 static char *includelogs = NULL;
+static char *degformat = NULL;
+static char *altunits = NULL;
 
 #define MYNAME "TEXT"
 
@@ -41,7 +43,12 @@ arglist_t text_args[] = {
 	{ "encrypt", &encrypt,
 		"Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "logs", &includelogs,
-		 "Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+		"Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+        { "degformat", &degformat, 
+        	"Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX },
+	{ "altunits", &altunits,
+		"Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX },
+
 	ARG_TERMINATOR
 };
 
@@ -70,6 +77,8 @@ text_disp(const waypoint *wpt)
 	gbint32 utmz;
 	double utme, utmn;
 	char utmzc;
+	char *tmpout1, *tmpout2;
+	char *altout;
 	fs_xml *fs_gpx;
 	
 	lonint = abs((int) wpt->longitude);
@@ -82,20 +91,33 @@ text_disp(const waypoint *wpt)
 		tm = time(NULL);
 	strftime(tbuf, sizeof(tbuf), "%d-%b-%Y", localtime(&tm));
 
-	gbfprintf(file_out, "%-16s  %c%d %06.3f  %c%d %06.3f  (%d%c %6.0f %7.0f)",
-		(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname,
-		wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), 
-		wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint),
-		utmz, utmzc, utme, utmn);
-	if (wpt->altitude != unknown_alt) 
-		gbfprintf (file_out, "  alt: %1.1f", wpt->altitude);
-	gbfprintf (file_out, "\n");
-	if (strcmp(wpt->description, wpt->shortname)) {
-		gbfprintf(file_out, "%s\n", wpt->description);
+	tmpout1 = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], 0);
+	if (wpt->altitude != unknown_alt) {
+		xasprintf(&altout, " alt:%d", (int) ( (altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude) );
 	}
-	if (wpt->gc_data.terr) {
-		gbfprintf(file_out, "%s/%s\n", 
-			gs_get_cachetype(wpt->gc_data.type), gs_get_container(wpt->gc_data.container));
+	else {
+		altout = "";
+	}
+	xasprintf (&tmpout2, "%s (%d%c %6.0f %7.0f)%s", tmpout1, utmz, utmzc, utme, utmn, altout );
+	gbfprintf(file_out, "%-16s  %59s\n",
+		(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname,
+		tmpout2);
+	xfree(tmpout2);
+	xfree(tmpout1);	
+	if (altout[0]) 
+		xfree(altout);
+	
+
+	if (strcmp(wpt->description, wpt->shortname)) {
+		gbfprintf(file_out, "%s", wpt->description);
+		if (wpt->gc_data.placer) 
+			gbfprintf(file_out, " by %s", wpt->gc_data.placer);
+		}
+		if (wpt->gc_data.terr) {
+			gbfprintf(file_out, " - %s / %s - (%d%s / %d%s)\n", 
+				gs_get_cachetype(wpt->gc_data.type), gs_get_container(wpt->gc_data.container), 
+				(int)(wpt->gc_data.diff / 10), (wpt->gc_data.diff%10)?".5":"", 
+				(int)(wpt->gc_data.terr / 10), (wpt->gc_data.terr%10)?".5":""  ); 
 	        if (wpt->gc_data.desc_short.utfstring) {
 	                char *stripped_html = strip_html(&wpt->gc_data.desc_short);
 			gbfprintf (file_out, "\n%s\n", stripped_html);
@@ -117,7 +139,7 @@ text_disp(const waypoint *wpt)
 		}
 	}
 	else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
-		gbfprintf (file_out, "%s\n", wpt->notes);
+		gbfprintf (file_out, "\n%s\n", wpt->notes);
 	}
 
 	fs_gpx = NULL;
@@ -151,11 +173,10 @@ text_disp(const waypoint *wpt)
 				logtm = localtime( &logtime );
 				if ( logtm ) {
 					gbfprintf( file_out, 
-						"%2.2d/%2.2d/%4.4d\n",
+						"%4.4d-%2.2d-%2.2d\n",
+						logtm->tm_year+1900,
 						logtm->tm_mon+1,
-						logtm->tm_mday,
-						logtm->tm_year+1900
-						);
+						logtm->tm_mday );
 				}
 			}
 			
@@ -163,9 +184,7 @@ text_disp(const waypoint *wpt)
 			if ( logpart ) {
 				char *coordstr = NULL;
 				float lat = 0;
-				int latdeg = 0;
 				float lon = 0;
-				int londeg = 0;
 				coordstr = xml_attribute( logpart, "lat" );
 				if ( coordstr ) {
 					lat = atof( coordstr );
@@ -174,15 +193,9 @@ text_disp(const waypoint *wpt)
 				if ( coordstr ) {
 					lon = atof( coordstr );
 				}
-				latdeg = abs(lat);
-				londeg = abs(lon);
-				
-				gbfprintf( file_out,
-					"%c %d %.3f' %c %d %.3f'\n",
-				
-					lat < 0 ? 'S' : 'N', latdeg, 60.0 * (fabs(lat) - latdeg), 
-					lon < 0 ? 'W' : 'E', londeg, 60.0 * (fabs(lon) - londeg)
-				);
+				coordstr = pretty_deg_format(lat, lon, degformat[2], 0);
+				gbfprintf( file_out, "%s\n", coordstr);
+				xfree(coordstr);
 			}
 			
 			logpart = xml_findfirst( curlog, "groundspeak:text" );
@@ -209,7 +222,7 @@ text_disp(const waypoint *wpt)
 		}
 	}
 	if (! suppresssep) 
-		gbfprintf(file_out, "-----------------------------------------------------------------------------\n");
+		gbfprintf(file_out, "\n-----------------------------------------------------------------------------\n");
 	else
 		gbfprintf(file_out, "\n");
 		
