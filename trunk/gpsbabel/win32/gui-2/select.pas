@@ -79,6 +79,7 @@ begin
       if (s = '') then Continue;
 
       if (CompareText(s, 'de') = 0) then sx := 'German' else
+      if (CompareText(s, 'es') = 0) then sx := 'Spanish' else
       if (CompareText(s, 'fr') = 0) then sx := 'French' else
       if (CompareText(s, 'en') = 0) then sx := 'English' else
         sx := '???';
