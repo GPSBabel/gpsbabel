@@ -73,13 +73,22 @@ msgstr ""
 msgid "Default speed for waypoints (knots/hr)"
 msgstr ""
 
+msgid "Degrees output as 'ddd', 'dmm'(default) or 'dms'"
+msgstr ""
+
 msgid "Delete all waypoints"
+msgstr ""
+
+msgid "Display labels on track and routepoints  (default = 1)"
 msgstr ""
 
 msgid "Distance unit [m=metric, s=statute]"
 msgstr ""
 
 msgid "Do not add geocache data to description"
+msgstr ""
+
+msgid "Draw extrusion line from trackpoint to ground"
 msgstr ""
 
 msgid "Drop route points that do not have an equivalent waypoint (hidden points)"
@@ -118,6 +127,9 @@ msgstr ""
 msgid "Ignore event marker icons"
 msgstr ""
 
+msgid "Include extended data for trackpoints (default = 1)"
+msgstr ""
+
 msgid "Include groundspeak logs if present"
 msgstr ""
 
@@ -130,10 +142,16 @@ msgstr ""
 msgid "Index of name field in .dbf"
 msgstr ""
 
+msgid "Index of route (if more the one in source)"
+msgstr ""
+
 msgid "Index of route to write (if more the one in source)"
 msgstr ""
 
 msgid "Index of route/track to write (if more the one in source)"
+msgstr ""
+
+msgid "Index of track (if more the one in source)"
 msgstr ""
 
 msgid "Index of track to write (if more the one in source)"
@@ -256,6 +274,9 @@ msgstr ""
 msgid "Read/Write time format (i.e. HH:mm:ss xx)"
 msgstr ""
 
+msgid "Retain at most this number of position points  (0 = unlimited)"
+msgstr ""
+
 msgid "Return current position as a waypoint"
 msgstr ""
 
@@ -263,6 +284,9 @@ msgid "Road type changes"
 msgstr ""
 
 msgid "Shortname is MAC address"
+msgstr ""
+
+msgid "Speed in bits per second of serial port (baud=4800)"
 msgstr ""
 
 msgid "Split input into separate files"
@@ -311,6 +335,12 @@ msgid "The icon description is already the marker"
 msgstr ""
 
 msgid "Type of .an1 file"
+msgstr ""
+
+msgid "Units for altitude (f)eet or (m)etres"
+msgstr ""
+
+msgid "Units used when writing comments ('s'tatute or 'm'etric)"
 msgstr ""
 
 msgid "UPPERCASE synth. shortnames"

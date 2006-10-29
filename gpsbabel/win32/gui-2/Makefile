@@ -16,6 +16,9 @@ LANG = \
   locale\de\LC_MESSAGES\delphi.mo \
   locale\de\LC_MESSAGES\default.mo \
   locale\de\LC_MESSAGES\gpsbabel.mo \
+  locale\es\LC_MESSAGES\delphi.mo \
+  locale\es\LC_MESSAGES\default.mo \
+  locale\es\LC_MESSAGES\gpsbabel.mo \
   locale\fr\LC_MESSAGES\delphi.mo \
   locale\fr\LC_MESSAGES\default.mo \
   locale\fr\LC_MESSAGES\gpsbabel.mo
@@ -52,5 +55,6 @@ clean:
 	rm -f *.~* *.??~ 
 	rm -f readme.html README readme.xml
 	rm -f locale\de\LC_MESSAGES\*.mo
+	rm -f locale\es\LC_MESSAGES\*.mo
 	rm -f locale\fr\LC_MESSAGES\*.mo
 

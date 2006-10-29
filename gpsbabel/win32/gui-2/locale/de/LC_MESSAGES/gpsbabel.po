@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPSBabel 1.2.7\n"
 "POT-Creation-Date: 2005-11-19 01:14\n"
-"PO-Revision-Date: 2006-06-27 23:37+0100\n"
-"Last-Translator: Olaf Klein <o.b.klein@gpsbabel.org>\n"
+"PO-Revision-Date: 2006-10-29 19:19+0100\n"
+"Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -84,14 +84,23 @@ msgstr "Standard Symbol"
 msgid "Default speed for waypoints (knots/hr)"
 msgstr "Vorgabegeschwindigkeit (Knoten/h)"
 
+msgid "Degrees output as 'ddd', 'dmm'(default) or 'dms'"
+msgstr ""
+
 msgid "Delete all waypoints"
 msgstr "Lösche alle Wegpunkte"
+
+msgid "Display labels on track and routepoints  (default = 1)"
+msgstr ""
 
 msgid "Distance unit [m=metric, s=statute]"
 msgstr "Entfernungsangaben [m=Metrisch, s=Statute]"
 
 msgid "Do not add geocache data to description"
 msgstr "Keine Geocache-Daten zur Beschreibung hinzufügen"
+
+msgid "Draw extrusion line from trackpoint to ground"
+msgstr ""
 
 msgid "Drop route points that do not have an equivalent waypoint (hidden points)"
 msgstr "Lösche versteckte Wegpunkte (automatisch berechnete Routenpunkte)"
@@ -129,6 +138,9 @@ msgstr "Kartenhöhe in Pixel"
 msgid "Ignore event marker icons"
 msgstr "Ignoriere Symbole vor Ereignismarkierungen"
 
+msgid "Include extended data for trackpoints (default = 1)"
+msgstr ""
+
 msgid "Include groundspeak logs if present"
 msgstr "Groundspeak Log's beifügen (wenn vorhandan)"
 
@@ -141,11 +153,17 @@ msgstr "Übernehme Kurznamen in Lesezeichen"
 msgid "Index of name field in .dbf"
 msgstr "Index des Namensfeldes innerhalb der .dbf"
 
+msgid "Index of route (if more the one in source)"
+msgstr ""
+
 msgid "Index of route to write (if more the one in source)"
 msgstr "Routen-Index (wenn mehrere vorhanden)"
 
 msgid "Index of route/track to write (if more the one in source)"
 msgstr "Route oder Track-Index (wenn mehrere vorhanden)"
+
+msgid "Index of track (if more the one in source)"
+msgstr ""
 
 msgid "Index of track to write (if more the one in source)"
 msgstr "Track-Index (wenn mehrere vorhanden)"
@@ -267,6 +285,9 @@ msgstr "Schreibe/Lese GPVTG Sequenzen"
 msgid "Read/Write time format (i.e. HH:mm:ss xx)"
 msgstr "Zeitformat (z.B. HH:mm:ss xx)"
 
+msgid "Retain at most this number of position points  (0 = unlimited)"
+msgstr ""
+
 msgid "Return current position as a waypoint"
 msgstr "Übertrage aktuelle Position als Wegpunkt"
 
@@ -275,6 +296,9 @@ msgstr ""
 
 msgid "Shortname is MAC address"
 msgstr "Kurzname ergibt sich aus MAC-Adresse"
+
+msgid "Speed in bits per second of serial port (baud=4800)"
+msgstr ""
 
 msgid "Split input into separate files"
 msgstr "Teile gelesene Daten in seperate Dateien"
@@ -323,6 +347,12 @@ msgstr "Die Symbolbeschreibung ist bereits die Markierung"
 
 msgid "Type of .an1 file"
 msgstr ".an1 Dateityp"
+
+msgid "Units for altitude (f)eet or (m)etres"
+msgstr ""
+
+msgid "Units used when writing comments ('s'tatute or 'm'etric)"
+msgstr ""
 
 msgid "UPPERCASE synth. shortnames"
 msgstr "Erzeuge Kurznamen in Großbuchstaben"
