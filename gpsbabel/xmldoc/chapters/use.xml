@@ -247,7 +247,7 @@ merged data to multiple destinations.
   </para>
   <para>
   Here is an example demonstrating segmenting a large command line
-  by placing the input and filtering directives in a file called 'all_my_files'.  </para>
+  by placing the input and filtering directives in a file called 'all_my_files'.
   <screen format="linespecific">gpsbabel -b all_my_files -o gdb -F all_my_tracks.gdb</screen>
   </para>
   <para>
