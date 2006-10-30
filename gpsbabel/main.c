@@ -22,10 +22,96 @@
 #include "filterdefs.h"
 #include "cet.h"
 #include "cet_util.h"
+#include "csv_util.h"
 #include "inifile.h"
 #include <ctype.h>
 
 #define MYNAME "main"
+
+typedef struct arg_stack_s {
+	int argn;
+	int argc;
+	char **argv;
+	struct arg_stack_s *prev;
+} arg_stack_t;
+
+static arg_stack_t
+*push_args(arg_stack_t *stack, const int argn, const int argc, char *argv[])
+{
+	arg_stack_t *res = xmalloc(sizeof(*res));
+	
+	res->prev = stack;
+	res->argn = argn;
+	res->argc = argc;
+	res->argv = (char **)argv;
+
+	return res;
+}
+
+static arg_stack_t
+*pop_args(arg_stack_t *stack, int *argn, int *argc, char **argv[])
+{
+	arg_stack_t *res;
+	char **argv2 = *argv;
+	int i;
+	
+	if (stack == NULL) fatal("main: Invalid point in time to call 'pop_args'\n");
+	
+	for (i = 0; i < *argc; i++)
+		xfree(argv2[i]);
+	xfree(*argv);
+
+	*argn = stack->argn;
+	*argc = stack->argc;
+	*argv = stack->argv;
+	
+	res = stack->prev;
+	xfree(stack);
+	
+	return res;
+}
+
+static void
+load_args(const char *filename, int *argc, char **argv[])
+{
+	gbfile *fin;
+	char *str, *line = NULL;
+	int argc2;
+	char **argv2;
+	
+	fin = gbfopen(filename, "r", "main");
+	while ((str = gbfgetstr(fin))) {
+		str = lrtrim(str);
+		if ((*str == '\0') || (*str == '#')) continue;
+		
+		if (line == NULL) line = xstrdup(str);
+		else {
+			char *tmp;
+			xasprintf(&tmp, "%s %s", line, str);
+			xfree(line);
+			line = tmp;
+		}
+	}
+	gbfclose(fin);
+	
+	argv2 = xmalloc(2 * sizeof(*argv2));
+	argv2[0] = xstrdup(*argv[0]);
+	argc2 = 1;
+	
+	str = csv_lineparse(line, " ", "\"", 0);
+	while (str != NULL) {
+		argv2 = xrealloc(argv2, (argc2 + 2) * sizeof(*argv2));
+		argv2[argc2] = xstrdup(str);
+		argc2++;
+		str = csv_lineparse(NULL, " ", "\"", 0);
+	}
+	xfree(line);
+
+	argv2[argc2] = NULL;
+	
+	*argc = argc2;
+	*argv = argv2;
+}
 
 static void
 usage(const char *pname, int shorter )
@@ -57,6 +143,7 @@ usage(const char *pname, int shorter )
 "    -r               Process route information\n"
 "    -t               Process track information\n"
 "    -w               Process waypoint information [default]\n"
+"    -b               Process command file (batch mode)\n"
 "    -c               Character set for next operation\n"
 "    -N               No smart icons on output\n"
 "    -x filtername    Invoke filter (place between inputs and output) \n"
@@ -107,6 +194,7 @@ main(int argc, char *argv[])
 	const char *prog_name = argv[0]; /* argv is modified during processing */
 	queue *wpt_head_bak, *rte_head_bak, *trk_head_bak;	/* #ifdef UTF8_SUPPORT */
 	signed int wpt_ct_bak, rte_ct_bak, trk_ct_bak;	/* #ifdef UTF8_SUPPORT */
+	arg_stack_t *arg_stack = NULL;
 
 	global_opts.objective = wptdata;
 	global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
@@ -141,7 +229,8 @@ main(int argc, char *argv[])
 	/*
 	 * Open-code getopts since POSIX-impaired OSes don't have one.
 	 */
-	for (argn = 1; argn < argc; argn++) {
+	argn = 1;
+	while (argn < argc) {
 		char *optarg;
 
 		if (argv[argn][0] != '-') {
@@ -371,11 +460,24 @@ main(int argc, char *argv[])
 				else
 					global_opts.inifile = inifile_init(optarg, MYNAME);
 				break;
+			case 'b':
+				optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
+				arg_stack = push_args(arg_stack, argn, argc, argv);
+				load_args(optarg, &argc, &argv);
+				if (argc == 0)
+					arg_stack = pop_args(arg_stack, &argn, &argc, &argv);
+				else
+					argn = 0;
+				break;
 
 			default:
 				fatal("Unknown option '%s'.\n", argv[argn]);
 				break;
 		}
+		
+		if ((argn+1 >= argc) && (arg_stack != NULL))
+			arg_stack = pop_args(arg_stack, &argn, &argc, &argv);
+		argn++;
 	}
 
 	/*

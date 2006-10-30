@@ -232,7 +232,29 @@ merged data to multiple destinations.
    	  Will read the USB-connected Garmin and rewrite 'xxx.kml' atomically,
 	  suitable for a self-refreshing network link in Google Earth.
     </para>
-   
-  
+</sect1>
+
+<sect1 id="batchfile">
+  <title>Batch mode (command files)</title>
+  <para>
+    GPSBabel supports working with batch- (command-) files (option -b). 
+  </para>
+  <para>
+    These files are ideal for holding long command lines, long file lists, complex filters 
+    and so on. You can use all GPSBabel known options and combinations when writing
+    such files. Nested batch files (the '-b' option within a batch file) is supported too.
+  </para>
+  <screen format="linespecific">gpsbabel -b all_my_files -o gdb -F all_my_tracks.gdb</screen>
+  <para>
+    'all_my_files' could look like this:
+  </para>
+  <simplelist columns="1">
+    <member>-i gpx</member>
+    <member>-f saxony_in_summer_2004.gpx -f austria_2005.gpx</member>
+    <member>-i gdb</member>
+    <member>-f croatia_2006.gdb</member>
+    <member>-x nukedata,waypoints,routes</member>
+    <member>-x track,pack,split,title="LOG # %Y%m%d"</member>
+  </simplelist>
 </sect1>
 </chapter>
