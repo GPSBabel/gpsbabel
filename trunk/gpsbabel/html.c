@@ -28,7 +28,7 @@ static FILE *file_out;
 static short_handle mkshort_handle;
 
 static char *stylesheet = NULL;
-static char *encrypt = NULL;
+static char *html_encrypt = NULL;
 static char *includelogs = NULL;
 static char *degformat = NULL;
 static char *altunits = NULL;
@@ -39,7 +39,7 @@ static
 arglist_t html_args[] = {
 	{ "stylesheet", &stylesheet, 
 		"Path to HTML style sheet", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-	{ "encrypt", &encrypt,
+	{ "encrypt", &html_encrypt,
 		"Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "logs", &includelogs, 
 		"Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
@@ -135,7 +135,7 @@ html_disp(const waypoint *wpt)
        	}
 	if (wpt->gc_data.hint) {
 		char *hint = NULL;
-		if ( encrypt )
+		if ( html_encrypt )
 			hint = rot13( wpt->gc_data.hint );
 		else 
 			hint = xstrdup( wpt->gc_data.hint );
@@ -215,7 +215,7 @@ html_disp(const waypoint *wpt)
 				encstr = xml_attribute( logpart, "encoded" );
 				encoded = (encstr[0] != 'F');
 				
-				if ( encrypt && encoded ) {
+				if ( html_encrypt && encoded ) {
 					s = rot13( logpart->cdata );
 				}
 				else {
