@@ -42,6 +42,7 @@ extern filter_vecs_t trackfilter_vecs;
 extern filter_vecs_t discard_vecs;
 extern filter_vecs_t nuke_vecs;
 extern filter_vecs_t interpolatefilt_vecs;
+extern filter_vecs_t transform_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -110,6 +111,11 @@ fl_vecs_t filter_vec_list[] = {
 		&trackfilter_vecs,
 		"track",
 		"Manipulate track lists"
+	},
+	{
+		&transform_vecs,
+		"transform",
+		"Transformate waypoints into a route, tracks into routes, ..."
 	},
 #endif
         {
