@@ -258,7 +258,7 @@ merged data to multiple destinations.
     <member>-f saxony_in_summer_2004.gpx -f austria_2005.gpx</member>
     <member>-i gdb</member>
     <member>-f croatia_2006.gdb</member>
-    <member>-x nukedata,waypoints,routes</member>
+    <member>-x nuketypes,waypoints,routes</member>
     <member>-x track,pack,split,title="LOG # %Y%m%d"</member>
   </simplelist>
 </sect1>
