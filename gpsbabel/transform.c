@@ -37,13 +37,13 @@ static char *opt_routes, *opt_tracks, *opt_waypts, *opt_delete;
 
 static
 arglist_t transform_args[] = {
-	{"wpt", &opt_waypts, "Transformate track(s) or route(s) into waypoint(s) [R/T].", NULL, 
+	{"wpt", &opt_waypts, "Transformate track(s) or route(s) into waypoint(s) [R/T]", NULL, 
 		ARGTYPE_STRING, ARG_NOMINMAX},
-	{"rte", &opt_routes, "Transformate waypoint(s) or track(s) into route(s) [W/T].", NULL, 
+	{"rte", &opt_routes, "Transformate waypoint(s) or track(s) into route(s) [W/T]", NULL, 
 		ARGTYPE_STRING, ARG_NOMINMAX},
-	{"trk", &opt_tracks, "Transformate waypoint(s) or route(s) into tracks(s) [W/R].", NULL, 
+	{"trk", &opt_tracks, "Transformate waypoint(s) or route(s) into tracks(s) [W/R]", NULL, 
 		ARGTYPE_STRING, ARG_NOMINMAX},
-	{"del", &opt_delete, "Delete source data after transformation.", "N", 
+	{"del", &opt_delete, "Delete source data after transformation", "N", 
 		ARGTYPE_BOOL, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
