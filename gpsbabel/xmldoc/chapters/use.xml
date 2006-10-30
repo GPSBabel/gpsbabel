@@ -237,14 +237,19 @@ merged data to multiple destinations.
 <sect1 id="batchfile">
   <title>Batch mode (command files)</title>
   <para>
-    GPSBabel supports working with batch- (command-) files (option -b). 
+	In addition to reading arguments from the command line, GPSBabel can
+	read directions from batch (or command) files via the '-b' option.
   </para>
   <para>
     These files are ideal for holding long command lines, long file lists, complex filters 
-    and so on. You can use all GPSBabel known options and combinations when writing
-    such files. Nested batch files (the '-b' option within a batch file) is supported too.
+    and so on. You can use all GPSBabel options and combinations when writing
+    such files. Nesting batch files by using the '-b' option within a batch file is supported.
   </para>
+  <para>
+  Here is an example demonstrating segmenting a large command line
+  by placing the input and filtering directives in a file called 'all_my_files'.  </para>
   <screen format="linespecific">gpsbabel -b all_my_files -o gdb -F all_my_tracks.gdb</screen>
+  </para>
   <para>
     'all_my_files' could look like this:
   </para>
