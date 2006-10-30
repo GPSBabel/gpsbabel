@@ -1133,4 +1133,14 @@ compare ${TMPDIR}/ge-gc.kml ${REFERENCE}/earth-gc.kml
 ${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -o kml -F ${TMPDIR}/ge-eg.kml
 compare ${TMPDIR}/ge-eg.kml ${REFERENCE}/earth-expertgps.kml
 
+#
+# Transformation filter (transform) tests
+#
+rm -f ${TMPDIR}/transform*
+${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x transform,rte=wpt,del=y -o gpx -F ${TMPDIR}/transform-rte.gpx
+compare ${TMPDIR}/transform-rte.gpx ${REFERENCE}/transform-rte.gpx
+${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,tracks -x transform,wpt=rte,del=y -o gpx -F ${TMPDIR}/transform-wpt.gpx
+compare ${TMPDIR}/transform-wpt.gpx ${REFERENCE}/transform-wpt.gpx
+
+
 exit 0
