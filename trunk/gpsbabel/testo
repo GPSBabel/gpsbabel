@@ -10,7 +10,12 @@ export MALLOC_CHECK_
 PNAME=${PNAME:-./gpsbabel}
 DIFF=${DIFF:-diff}
 REFERENCE=reference
-OD=${OD:-od -Ax -txC -v}
+# OD=${OD:-od -Ax -txC -v}
+if [ -x /usr/bin/hexdump ] ; then
+	OD=${OD:-hexdump -v -C}
+else
+	OD=${OD:-od -Ax -txC -v}
+fi
 
 TMPDIR=/tmp/gpsbabel.$$
 mkdir -p $TMPDIR
@@ -88,7 +93,7 @@ ${PNAME} -i gtm -f ${REFERENCE}/sample.gtm -o gpx -F ${TMPDIR}/gtm1.gpx
 ${PNAME} -i gpx -f ${TMPDIR}/gtm1.gpx -o gtm -F ${TMPDIR}/gtm.gtm
 ${PNAME} -i gtm -f ${TMPDIR}/gtm.gtm -o gpx -F ${TMPDIR}/gtm2.gpx
 compare ${TMPDIR}/gtm1.gpx ${TMPDIR}/gtm2.gpx
-compare ${TMPDIR}/gtm.gtm ${REFERENCE}/sample.gtm
+bincompare ${TMPDIR}/gtm.gtm ${REFERENCE}/sample.gtm
 
 # Magellan Mapsend
 rm -f ${TMPDIR}/mm.mapsend ${TMPDIR}/mm.gps
