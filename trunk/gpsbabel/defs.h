@@ -380,8 +380,13 @@ typedef struct {
 	double	min_alt;
 	double	max_spd;	/* Meters/sec */
 	double	min_spd;	/* Meters/sec */
+	double	avg_hrt;	/* Avg Heartrate */
+	double	avg_cad;	/* Avg Cadence */
 	time_t	start;		/* Min time */
 	time_t	end;		/* Max time */
+	int	min_hrt;        /* Min Heartrate */
+	int	max_hrt;        /* Max Heartrate */
+	int	max_cad;        /* Max Cadence */
 } computed_trkdata;
 
 /*
