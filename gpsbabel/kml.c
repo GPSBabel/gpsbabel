@@ -449,6 +449,22 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 		double spd = fmt_speed(td->max_spd, &spd_units);
 		TD2("<b>Max Speed</b> %.1f %s", spd, spd_units);
 	}
+	if (td->avg_hrt) {
+		TD("<b>Avg Heart Rate</b> %.1f bpm", td->avg_hrt);
+	}
+	if (td->min_hrt < td->max_hrt) {
+		TD("<b>Min Heart Rate</b> %d bpm", td->min_hrt);
+	}
+	if (td->max_hrt) {
+		TD("<b>Max Heart Rate</b> %d bpm", td->max_hrt);
+	}
+	if (td->avg_cad) {
+		TD("<b>Avg Cadence</b> %.1f rpm", td->avg_cad);
+	}
+	if (td->max_cad) {
+		TD("<b>Max Cadence</b> %d rpm", td->max_cad);
+	}
+
 	kml_write_xml(-1, "</table>]]>\n");
 	kml_write_xml(-1, "</description>\n");
 
@@ -468,15 +484,15 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 static 
 void kml_output_header(const route_head *header, computed_trkdata*td)
 {
-        kml_write_xml(1,  "<Folder>\n");
+	kml_write_xml(1,  "<Folder>\n");
 	kml_write_xmle("name", header->rte_name);
 	kml_output_trkdescription(header, td);
 
-        if (export_points && header->rte_waypt_ct > 0) {
-          // Put the points in a subfolder
-          kml_write_xml(1,  "<Folder>\n");
-          kml_write_xml(0,  "<name>Points</name>\n");
-        }
+	if (export_points && header->rte_waypt_ct > 0) {
+	       // Put the points in a subfolder
+	       kml_write_xml(1,  "<Folder>\n");
+	       kml_write_xml(0,  "<name>Points</name>\n");
+	}
 
         // Create an array for holding waypoint coordinates so that we
         // can produce a LineString at the end.
@@ -801,7 +817,7 @@ void kml_write(void)
         kml_write_xml(1, "<Style id=\"lineStyle\">\n");
         kml_write_xml(1, "<LineStyle>\n");
         kml_write_xml(0, "<color>%s</color>\n", opt_line_color);
-	kml_write_xml(0, "<width>%s</width>\n", opt_line_width);
+        kml_write_xml(0, "<width>%s</width>\n", opt_line_width);
         kml_write_xml(-1, "</LineStyle>\n");
         kml_write_xml(-1, "</Style>\n");
 
@@ -825,7 +841,7 @@ void kml_write(void)
 	if (!realtime_positioning) {
 		kml_write_xml(-1,  "</Folder>\n");
 	}
-  
+
 	// Output routes
 	if (!realtime_positioning) {
 		kml_write_xml(1,  "<Folder>\n");

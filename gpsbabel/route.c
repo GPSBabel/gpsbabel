@@ -67,7 +67,7 @@ route_head_alloc(void)
 	route_head *rte_head;
 	rte_head = (route_head *) xcalloc(sizeof (*rte_head), 1);
 	QUEUE_INIT(&rte_head->Q);
-        QUEUE_INIT(&rte_head->waypoint_list);
+	QUEUE_INIT(&rte_head->waypoint_list);
 	return rte_head;
 }
 
@@ -93,7 +93,7 @@ any_route_free(route_head *rte)
 
 static void
 any_route_add_head( route_head *rte, queue *head ) {
-        ENQUEUE_TAIL( head, &rte->Q );
+	ENQUEUE_TAIL( head, &rte->Q );
 }
 
 static void
@@ -313,7 +313,7 @@ route_flush( queue *head )
 {
 	queue *elem, *tmp;
 	queue *q;
-        QUEUE_FOR_EACH(head, elem, tmp ) {
+	QUEUE_FOR_EACH(head, elem, tmp ) {
 		q = dequeue(elem);
 		any_route_free((route_head *)q);
 	}
@@ -328,7 +328,7 @@ route_copy( int *dst_count, int *dst_wpt_count, queue **dst, queue *src ) {
 		dst_wpt_count = &junk;
 	}
 	
-        if ( !*dst ) {
+	if ( !*dst ) {
 		*dst = xcalloc( 1, sizeof( queue ));
 		QUEUE_INIT( *dst );
 		*dst_count = 0;
@@ -490,6 +490,10 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 	waypoint *prev = &first;
 	queue *elem, *tmp;
 	int tkpt = 0;
+	int pts_hrt = 0;
+	double tot_hrt = 0.0;
+	int pts_cad = 0;
+	double tot_cad = 0.0;
 	char tkptname[100];
 	computed_trkdata *tdata = xcalloc(1, sizeof (computed_trkdata));
 
@@ -500,6 +504,7 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 	first.latitude = 0;
 	first.longitude = 0;
 	first.creation_time = 0;
+	tdata->min_hrt =  9999;
 	tdata->min_alt =  999999999;
 	tdata->max_alt = -999999999;
 
@@ -548,6 +553,28 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 			tdata->max_alt = this->altitude;
 		}
 
+		if (this->heartrate > 0) {
+			pts_hrt++;
+			tot_hrt += (float) this->heartrate;
+		}
+
+		if ((this->heartrate > 0) && (this->heartrate < tdata->min_hrt)) {
+			tdata->min_hrt = (int) this->heartrate;
+		}
+
+		if ((this->heartrate > 0) && (this->heartrate > tdata->max_hrt)) {
+			tdata->max_hrt = (int) this->heartrate;
+		}
+
+		if (this->cadence > 0) {
+			pts_cad++;
+			tot_cad += (float) this->cadence;
+		}
+
+		if ((this->cadence > 0) && (this->cadence > tdata->max_cad)) {
+			tdata->max_cad = (int) this->cadence;
+		}
+
 		if (this->creation_time && (this->creation_time < tdata->start)) {
 			tdata->start = this->creation_time;
 		}
@@ -566,6 +593,15 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 		}
 		tkpt++;
 	}
+
+	if (pts_hrt > 0) {
+		tdata->avg_hrt = tot_hrt / (float) pts_hrt;
+	}
+
+	if (pts_cad > 0) {
+		tdata->avg_cad = tot_cad / (float) pts_cad;
+	}
+
 	if (!trkdatap) {
 		xfree(tdata);
 	}
