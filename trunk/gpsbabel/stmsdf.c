@@ -1,7 +1,8 @@
 /*
 
-    Support for Suunto Trackmanager SDF format,
-    Copyright (C) 2005-2006 Olaf Klein, o.b.klein@gpsbabel.org
+    Support for Suunto Trackmanager SDF format.
+
+    Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,6 +22,7 @@
 /*
     2006/04/05: initial release (not published in GPSBbabel)
     2006/07/19: finished reader and writer for type 4,5,28 of ver. 1
+    2006/10/31: remove wptdata from case statement (data_write)
     
     ToDo: Ascending/Descending
 */
@@ -654,7 +656,6 @@ data_write(void)
 			}
 			break;
 
-		case wptdata:
 		case trkdata:
 			gbfprintf(fout, "TYPE=28\n");
 			
