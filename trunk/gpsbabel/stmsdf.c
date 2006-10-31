@@ -642,6 +642,9 @@ data_write(void)
 	
 	switch(global_opts.objective)
 	{
+		case wptdata: 
+			break;
+
 		case rtedata:
 			gbfprintf(fout, "TYPE=5\n");
 
