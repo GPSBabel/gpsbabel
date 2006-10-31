@@ -2,13 +2,10 @@
   This filter can be used to convert GPS data between different data types.
 </para>
 <para>
-  Not all known and unknown GPS data formats has beed designed on
-  one common idea. So we have waypoint-only, route-only, track-only
-  and formats containing more than one of them.
-</para>
-<para>
-  To bring such different formats together we've implemented the transform 
-  filter. 
+  Some GPS data formats support only some subset of waypoints, tracks,
+  and routes.  The transform filter allows you to convert between these
+  types.  For example, it can be used to convert a pile of waypoints (such
+  as those from a CSV file) into a track or vice versa.
 </para>
 <para>
   The following example show you how to create a route from a waypoint table.
