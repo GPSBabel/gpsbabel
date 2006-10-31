@@ -484,7 +484,9 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 static 
 void kml_output_header(const route_head *header, computed_trkdata*td)
 {
-	kml_write_xml(1,  "<Folder>\n");
+	if (!realtime_positioning)  {
+		kml_write_xml(1,  "<Folder>\n");
+	}
 	kml_write_xmle("name", header->rte_name);
 	kml_output_trkdescription(header, td);
 
@@ -618,7 +620,9 @@ static void kml_output_tailer(const route_head *header)
   xfree(point3d_list);
   point3d_list = NULL;
   
-  kml_write_xml(-1, "</Folder>\n");
+  if (!realtime_positioning)  {
+    kml_write_xml(-1, "</Folder>\n");
+  }
 }
 
 static 
