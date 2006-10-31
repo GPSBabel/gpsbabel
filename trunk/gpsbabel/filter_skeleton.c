@@ -32,6 +32,7 @@
 
 #define MYNAME "filter_skeleton"
 
+#if FILTERS_ENABLED
 
 // Any arg in this list will appear in command line help and will be 
 // populated for you.
@@ -103,3 +104,4 @@ filter_vecs_t filter_skeleton_vecs = {
 };
 
 /*******************************************************************************/
+#endif // FILTERS_ENABLED
