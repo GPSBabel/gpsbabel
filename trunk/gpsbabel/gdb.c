@@ -1,7 +1,7 @@
 /* 
 	Garmin GPS Database Reader/Writer
 	
-	Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
+	Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
 	Mainly based on mapsource.c,
 	Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
 	
@@ -50,11 +50,13 @@
 	    2006/04/04: Use track_add_wpt for all tracks
 	    2006/04/19: add url i/o to tracks and routes
 	    2006/04/19: check for empty waypoint shortnames (paranioa)
+	    2006/11/01: Use version of GPSBabel and date/time of gdb.c (managed by CVS) for watermark
 */
 
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 #include "defs.h"
 #include "garmin_tables.h"
@@ -85,8 +87,8 @@
 
 /* %%% local vars %%% */
 
-static char gdb_release[] = "$Revision: 1.42 $";
-static char gdb_release_date[] = "$Date: 2006-11-01 21:32:01 $";
+/* static char gdb_release[] = "$Revision: 1.43 $"; */
+static char gdb_release_date[] = "$Date: 2006-11-01 22:23:39 $";
 
 static FILE *fin, *fout;
 static char *fin_name, *fout_name;
@@ -1095,11 +1097,12 @@ gdb_fwrite_icon(const waypoint *wpt)	/* partly taken from mapsource.c */
 /*-----------------------------------------------------------------------------*/
 
 static void
-gdb_write_file_header(const struct tm *tm)
+gdb_write_file_header(void)
 {
-	char buff[128];
+	char buff[128], tbuff[32];
 	char *c;
 	int len;
+	struct tm tm;
 	
 	gdb_fwrite_str("MsRcf", -1);
 	gdb_fwrite_int(2);
@@ -1109,18 +1112,30 @@ gdb_write_file_header(const struct tm *tm)
 	gdb_fwrite_str(buff, -1);
 	
 #if 0
+	/* Take this if anything is wrong with our self generated watermark */
 	strncpy(buff, "A].SQA*Dec 27 2004*17:40:51", sizeof(buff));		/* MapSource V6.5 */
 #else
 	/* This is our "Watermark" to show this file was created by GPSbabel */
-	/* !!! We should define the date use through Makefile !!! */
 	
 	/* history:
 	strncpy(buff, "A].GPSBabel_1.2.7-beta*Sep 13 2005*20:10:00", sizeof(buff));  // gpsbabel V1.2.7 BETA 
 	strncpy(buff, "A].GPSBabel_1.2.8-beta*Jan 18 2006*20:11:00", sizeof(buff));  // gpsbabel 1.2.8-beta01182006_clyde
 	strncpy(buff, "A].GPSBabel_1.2.8-beta*Apr 18 2006*20:12:00", sizeof(buff));  // gpsbabel 1.2.8-beta20060405
 	strncpy(buff, "A].GPSBabel-1.3*Jul 02 2006*20:13:00", sizeof(buff));  // gpsbabel 1.3.0
-	 */
 	strncpy(buff, "A].GPSBabel-1.3.1*Sep 03 2006*20:14:00", sizeof(buff));  // gpsbabel 1.3.1
+	 */
+
+	/* 
+	  New since 11/01/2006:
+	  version:   version and release of gpsbabel (defined in configure.in)
+	  timestamp: date and time of gdb.c (handled by CVS)
+	*/
+	memset(&tm, 0, sizeof(tm));
+	sscanf(gdb_release_date+7, "%d/%d/%d %d:%d:%d", &tm.tm_year, &tm.tm_mon, &tm.tm_mday, &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
+	tm.tm_year -= 1900;
+	tm.tm_mon -= 1;
+	strftime(tbuff, sizeof(tbuff), "%b %d %Y*%H:%M:%S", &tm);
+	snprintf(buff, sizeof(buff), "A].GPSBabel-%s*%s", gpsbabel_version, tbuff);
 #endif
 	len = strlen(buff);
 	buff[2] = 2;
@@ -1696,7 +1711,7 @@ gdb_read(void)
 static void
 gdb_write(void)
 {
-	gdb_write_file_header(NULL);
+	gdb_write_file_header();
 	gdb_write_data();
 }
 
