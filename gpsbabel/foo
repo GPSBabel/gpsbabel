@@ -1,1 +1,2 @@
-static char blah[] = "$Date: 2006-10-31 23:47:59 $";
+static char blah[] = "$Date: 2006-11-01 04:37:16 $";
+static char revision[] = "$Revision: 1.2 $";
