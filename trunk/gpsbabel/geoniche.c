@@ -611,6 +611,8 @@ wpt2icon(const waypoint *wpt)
 	case gt_webcam: return 49;
 	case gt_unknown: return 0;
 	case gt_benchmark: return 0;
+	case gt_ape: return 0;
+	case gt_mega: return 0;
     }
 
     return 0;
