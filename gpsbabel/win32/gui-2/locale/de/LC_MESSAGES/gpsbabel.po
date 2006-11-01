@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GPSBabel 1.2.7\n"
+"Project-Id-Version: GPSBabel command line program\n"
 "POT-Creation-Date: 2005-11-19 01:14\n"
 "PO-Revision-Date: 2006-10-30 18:29+0100\n"
 "Last-Translator: Olaf Klein <o.b.klein@gpsbabel.org>\n"
