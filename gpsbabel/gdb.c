@@ -85,6 +85,9 @@
 
 /* %%% local vars %%% */
 
+static char gdb_release[] = "$Release$";
+static char gdb_release_date[] = "$Date: 2006-11-01 21:26:17 $";
+
 static FILE *fin, *fout;
 static char *fin_name, *fout_name;
 
