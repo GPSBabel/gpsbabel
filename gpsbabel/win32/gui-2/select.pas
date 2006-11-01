@@ -78,10 +78,10 @@ begin
       s := Builtin.Strings[i];
       if (s = '') then Continue;
 
-      if (CompareText(s, 'de') = 0) then sx := 'German' else
-      if (CompareText(s, 'es') = 0) then sx := 'Spanish' else
-      if (CompareText(s, 'fr') = 0) then sx := 'French' else
-      if (CompareText(s, 'en') = 0) then sx := 'English' else
+      if (CompareText(s, 'de') = 0) then sx := _('German') else
+      if (CompareText(s, 'es') = 0) then sx := _('Spanish') else
+      if (CompareText(s, 'fr') = 0) then sx := _('French') else
+      if (CompareText(s, 'en') = 0) then sx := _('English') else
         sx := '???';
 
       sx := Format('%s - %s', [s, sx]);

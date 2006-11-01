@@ -1,7 +1,7 @@
 unit about;
 
 {
-    Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -84,9 +84,9 @@ begin
   lbSFURL.Left := lbHint1.Left + lbHint1.Width + 4;
   lbTranslators.Caption := lbTranslators.Caption + ':';
 
-  lbxTranslators.Items.Add(_('German by Olaf Klein'));
-  lbxTranslators.Items.Add(_('French by Lilian Morinon'));
-
+  lbxTranslators.Items.Add(_('German') + ' ' +  _('by') + ' Olaf Klein');
+  lbxTranslators.Items.Add(_('French') + ' ' +  _('by') + ' Lilian Morinon');
+  lbxTranslators.Items.Add(_('Spanish') + ' ' + _('by') + ' Daniel Diaz');
 end;
 
 procedure TfrmAbout.lbURLMouseMove(Sender: TObject; Shift: TShiftState; X,
