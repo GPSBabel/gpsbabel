@@ -1,7 +1,7 @@
 unit filter;
 
 {
-    Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -81,10 +81,14 @@ type
     edWayptRadiusLat: TEdit;
     edWayptRadiusLon: TEdit;
     cbTrackRangeTimeZone: TCheckBox;
-    BitBtn2: TBitBtn;
+    btnHelp: TBitBtn;
     cbTrackFixes: TCheckBox;
     cbTrackCourse: TCheckBox;
     cbTrackSpeed: TCheckBox;
+    gbTransform: TGroupBox;
+    cobTransform: TComboBox;
+    cbTransform: TCheckBox;
+    cbTransformDelete: TCheckBox;
     procedure cbTrackTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure cbTrackTitleClick(Sender: TObject);
@@ -101,7 +105,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure BitBtn2Click(Sender: TObject);
+    procedure btnHelpClick(Sender: TObject);
+    procedure cbTransformClick(Sender: TObject);
   private
     { Private-Deklarationen }
     lTrackTimeList: TList;
@@ -169,12 +174,21 @@ var
 begin
   TranslateComponent(SELF);
 
+  cobTransform.Items.Clear;
+  cobTransform.Items.Add(_('Waypoints') + ' -> ' + _('Routes'));
+  cobTransform.Items.Add(_('Routes') + ' -> ' + _('Waypoints'));
+  cobTransform.Items.Add(_('Routes') + ' -> ' + _('Tracks'));
+  cobTransform.Items.Add(_('Tracks') + ' -> ' + _('Routes'));
+  cobTransform.Items.Add(_('Waypoints') + ' -> ' + _('Tracks'));
+  cobTransform.Items.Add(_('Tracks') + ' -> ' + _('Waypoints'));
+  cobTransform.ItemIndex := 0;
+
   CurrentTime := SysUtils.Now;
   dtpTrackStartDate.DateTime := Int(CurrentTime);
   dtpTrackStopDate.DateTime := Int(CurrentTime);
 
   lTrackTimeList := TList.Create;
-  
+
   lTrackTimeList.Add(edTrackTimeDays);
   lTrackTimeList.Add(edTrackTimeHours);
   lTrackTimeList.Add(edTrackTimeMinutes);
@@ -231,8 +245,11 @@ begin
     cbTrackCourse.Enabled := False;
     cbTrackSpeed.Enabled := False;
   end;
-//LoadSettingsFromInifile();
+
   LoadSettingsFromRegistry();
+
+  gbTransform.Enabled := (common.gpsbabel_vfmt >= '001.003.002');
+  EnableAll(gbTransform, gbTransform.Enabled);
 end;
 
 function TfrmFilter.ValidateNumerical(AEdit: TCustomEdit; AMin, AMax: Extended): Boolean;
@@ -314,6 +331,21 @@ begin
 
   Result := '';
 
+  if gbTransform.Enabled and cbTransform.Checked then
+  begin
+    Result := Format('%s -x %s', [Result, 'transform,']);
+    case cobTransform.ItemIndex of
+      0: Result := Result + 'rte=wpt';
+      1: Result := Result + 'wpt=rte';
+      2: Result := Result + 'trk=rte';
+      3: Result := Result + 'rte=trk';
+      4: Result := Result + 'trk=wpt';
+      5: Result := Result + 'wpt=trk';
+    end;
+    if cbTransformDelete.Checked then
+      Result := Result + ',del=y' else
+      Result := Result + ',del=n';
+  end;
   if AnyChecked(gbWaypoints) then
   begin
     if cbWayptMergeDups.Checked and
@@ -561,9 +593,9 @@ begin
   ModalResult := mrCancel;
 end;
 
-procedure TfrmFilter.BitBtn2Click(Sender: TObject);
+procedure TfrmFilter.btnHelpClick(Sender: TObject);
 begin
-  WinOpenURL(readme_html_path + '#filters');
+  WinOpenURL(readme_html_path + '#Data_Filters');
 end;
 
 procedure TfrmFilter.LoadSettingsFromInifile();
@@ -691,6 +723,11 @@ begin
   finally
     r.Free;
   end;
+end;
+
+procedure TfrmFilter.cbTransformClick(Sender: TObject);
+begin
+  cobTransform.Enabled := cbTransform.Checked;
 end;
 
 end.
