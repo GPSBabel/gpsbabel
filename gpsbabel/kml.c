@@ -682,7 +682,12 @@ static void kml_waypt_pr(const waypoint *waypointp)
 
 		if (!global_opts.no_smart_icons && 
 		     waypointp->gc_data.diff && waypointp->gc_data.terr) {
-			fprintf(ofd, " %3.1f/%3.1f", waypointp->gc_data.diff / 10.0,  waypointp->gc_data.terr / 10.0);
+			if (waypointp->gc_data.placer) {
+				char *p = xml_entitize(waypointp->gc_data.placer);
+				fprintf(ofd, "<![CDATA[<i> by %s</i>]]>", p);
+				xfree(p);
+			}
+			fprintf(ofd, " (%3.1f/%3.1f)", waypointp->gc_data.diff / 10.0,  waypointp->gc_data.terr / 10.0);
 			if (waypointp->gc_data.desc_short.utfstring) {
 				// Dont entitize it - either XML or HTML.
 				// Wrap it in a cdata and let Earth work it out.
