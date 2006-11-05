@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.1">
-  <Document xmlns:xlink="http://www.w3/org/1999/xlink">
+  <Document xmlns:xlink="http://www.w3.org/1999/xlink">
     <name>GPS device</name>
 <!-- Normal route style -->
     <Style id="route_n">
