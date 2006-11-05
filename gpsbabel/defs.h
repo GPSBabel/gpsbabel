@@ -399,13 +399,17 @@ typedef struct {
 	double min_lon;
 } bounds;
 
+typedef struct {
+	int request_terminate;
+} posn_status;
+
 typedef void (*ff_init) (char const *);
 typedef void (*ff_deinit) (void);
 typedef void (*ff_read) (void);
 typedef void (*ff_write) (void);
 typedef void (*ff_exit) (void);
 typedef void (*ff_writeposn) (waypoint *);
-typedef waypoint * (*ff_readposn) (void);
+typedef waypoint * (*ff_readposn) (posn_status *);
 
 #ifndef DEBUG_MEM
 char * get_option(const char *iarglist, const char *argname);

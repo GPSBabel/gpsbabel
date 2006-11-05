@@ -541,7 +541,6 @@ main(int argc, char *argv[])
 	 * in our most recent vecs.
 	 */
 	if (global_opts.masked_objective & POSNDATAMASK) {
-		waypoint *wpt = waypt_new();
 
 		if (!ivecs->position_ops.rd_position) {
 			fatal("Realtime tracking (-T) is not suppored by this input type.\n");
@@ -565,7 +564,15 @@ main(int argc, char *argv[])
 		}
 
 		while (1) {
-			wpt = ivecs->position_ops.rd_position();
+			posn_status status;
+			status.request_terminate = 0;
+			waypoint *wpt = ivecs->position_ops.rd_position(&status);
+			if (status.request_terminate) {
+				if (wpt) {
+					waypt_free(wpt);
+				}
+				break;
+			}
 			if (wpt) {
 				if (ovecs) {
 					ovecs->position_ops.wr_init(ofname);
@@ -575,11 +582,17 @@ main(int argc, char *argv[])
 					/* Just print to screen */
 					waypt_disp(wpt);
 				}
+				waypt_free(wpt);
 			}
 		}
-//		waypt_del(wpt);
+		if (ivecs->position_ops.rd_deinit) {
+			ivecs->position_ops.rd_deinit();
+		}
+		if (ivecs->position_ops.wr_deinit) {
+			ivecs->position_ops.wr_deinit();
+		}
 	}
-	
+
 
 	if (!did_something)
 		fatal ("Nothing to do!  Use '%s -h' for command-line options.\n", prog_name);

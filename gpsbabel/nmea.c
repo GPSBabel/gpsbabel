@@ -179,7 +179,7 @@ static int getposn;
 static time_t last_time = -1;
 static double last_read_time;   /* Last timestamp of GGA or PRMC */
 
-static waypoint * nmea_rd_posn(void);
+static waypoint * nmea_rd_posn(posn_status *);
 static void nmea_rd_posn_init(const char *fname);
 
 arglist_t nmea_args[] = {
@@ -226,8 +226,9 @@ nmea_rd_init(const char *fname)
  	 */
  	if (getposn) {
  		waypoint *wpt;
+		posn_status st;
  		nmea_rd_posn_init(fname);
- 		wpt = nmea_rd_posn();
+ 		wpt = nmea_rd_posn(&st);
  		if (!wpt) {
  			return;
  		}
@@ -817,7 +818,7 @@ nmea_rd_posn_init(const char *fname)
 		read_mode = rm_serial;
 		gbser_set_speed(gbser_handle, 4800);
 	} else {
-		fatal(MYNAME ": Could not open %s.\n", fname);
+		fatal(MYNAME ": Could not open '%s' for position tracking.\n", fname);
 	}
 
 	if (opt_baud) {
@@ -829,7 +830,7 @@ nmea_rd_posn_init(const char *fname)
 }
 
 static waypoint *
-nmea_rd_posn(void)
+nmea_rd_posn(posn_status *posn_status)
 {
 	char ibuf[1024];
 	static double lt = -1;

@@ -40,7 +40,6 @@ static int export_points;
 static int floating;
 static int extrude;
 static int trackdata;
-static int posn_track_points;
 static int max_position_points;
 
 static int indent_level;
@@ -807,7 +806,7 @@ void kml_write(void)
 
 	kml_write_xml(0,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 	kml_write_xml(1,"<kml xmlns=\"http://earth.google.com/kml/2.1\">\n");
-	kml_write_xml(1,"<Document xmlns:xlink=\"http://www.w3/org/1999/xlink\">\n");
+	kml_write_xml(1,"<Document xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
 
 	now = current_time();
 	strftime(import_time, sizeof(import_time), "%c", localtime(&now));
@@ -882,12 +881,17 @@ kml_get_posn_icon(int freshness)
 }
 
 
+static route_head *posn_trk_head = NULL;
+
 static void
 kml_wr_position(waypoint *wpt)
 {
-	static route_head *trk_head = NULL;
 	static time_t last_valid_fix;
-	waypoint *t = waypt_dupe(wpt);
+
+	if (!posn_trk_head) {
+		posn_trk_head = route_head_alloc();
+		track_add_head(posn_trk_head);
+	}
 
 	if (last_valid_fix == 0) last_valid_fix = current_time();
 
@@ -913,25 +917,23 @@ kml_wr_position(waypoint *wpt)
 			last_valid_fix = wpt->creation_time;
 	}
 
-
 	wpt->icon_descr = kml_get_posn_icon(wpt->creation_time - last_valid_fix);
-	if (!trk_head) {
-		trk_head = route_head_alloc();
-		track_add_head(trk_head);
-	}
 
-	if (max_position_points && (posn_track_points >= max_position_points)) {
-		waypoint *tonuke = (waypoint *) QUEUE_FIRST(&trk_head->waypoint_list);
-		dequeue(&tonuke->Q);
-		waypt_free(tonuke);
-	}
-
-	track_add_wpt(trk_head, t);
-	posn_track_points++;
+	track_add_wpt(posn_trk_head, waypt_dupe(wpt));
 
 	waypt_add(wpt);
 	kml_write();
 	waypt_del(wpt);
+
+	/*
+	 * If we are keeping only a recent subset of the trail, trim the
+	 * head here.
+ 	 */
+	while (max_position_points && 
+	       (posn_trk_head->rte_waypt_ct >= max_position_points)) {
+		waypoint *tonuke = (waypoint *) QUEUE_FIRST(&posn_trk_head->waypoint_list);
+		track_del_wpt(posn_trk_head, tonuke);
+	}
 }
 
 ff_vecs_t kml_vecs = {

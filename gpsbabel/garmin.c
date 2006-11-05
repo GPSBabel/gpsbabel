@@ -469,7 +469,7 @@ pvt_init(const char *fname)
 }
 
 static waypoint *
-pvt_read(void)
+pvt_read(posn_status *posn_status)
 {
 	waypoint *wpt = waypt_new();
 	GPS_PPvt_Data pvt = GPS_Pvt_New();
@@ -477,10 +477,18 @@ pvt_read(void)
 	if (GPS_Command_Pvt_Get(&pvt_fd, &pvt)) {
 		pvt2wpt(pvt, wpt);
 		wpt->shortname = xstrdup("Position");
+
+		if (gps_errno && posn_status) {
+			posn_status->request_terminate = 1;
+		}
 	
 		return wpt;
 	} 
 
+	/*
+	 * If the caller has not given us a better way to return the
+	 * error, do it now. 
+	 */
 	if (gps_errno) {
 		fatal(MYNAME ": Fatal error reading position.\n");
 	}
@@ -825,7 +833,7 @@ ff_vecs_t garmin_vecs = {
 	NULL,
 	garmin_args,
 	CET_CHARSET_ASCII, 0,
-	{ pvt_init, pvt_read, NULL, NULL, NULL, NULL }
+	{ pvt_init, pvt_read, rw_deinit, NULL, NULL, NULL }
 };
 
 static const char *d103_icons[16] = {
