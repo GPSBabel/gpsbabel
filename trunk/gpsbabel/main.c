@@ -565,8 +565,9 @@ main(int argc, char *argv[])
 
 		while (1) {
 			posn_status status;
-			status.request_terminate = 0;
 			waypoint *wpt = ivecs->position_ops.rd_position(&status);
+			status.request_terminate = 0;
+
 			if (status.request_terminate) {
 				if (wpt) {
 					waypt_free(wpt);
