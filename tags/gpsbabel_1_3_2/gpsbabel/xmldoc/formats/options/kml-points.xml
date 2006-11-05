@@ -1,0 +1,6 @@
+<para>
+When this option is nonzero, GPSBabel draws placemarks for tracks and routes.
+The default value for this option is 1, which causes placemarks to be drawn.
+To disable drawing of placemarks, specify <option>points=0</option>.
+</para>
+

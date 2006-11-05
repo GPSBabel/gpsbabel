@@ -1,0 +1,11 @@
+<para>
+When this option is specified, only points that are within the specified 
+distance of one of the vertices of the arc are kept.  This differs from the
+normal mode of operation in that in the normal mode, points that are close to
+the lines between points are also kept.
+</para>
+<para>
+This option makes the arc filter act like a multi-point version of the
+<link linkend="filter_radius">radius</link> filter.
+</para>
+

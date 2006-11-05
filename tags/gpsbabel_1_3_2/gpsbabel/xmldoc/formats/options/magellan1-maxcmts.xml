@@ -1,0 +1,13 @@
+<para>
+The maxcmts option allows you to specify the number comments that will
+be sent to the unit.
+</para>
+<para>
+Magellan receivers allow a maximum of 200 waypoint comments.  Unfortunately,
+DirectRoute uses waypoint comments to provide next turn directions for
+navigation pop-ups and that comes from that pool of 200 comments.  It
+is therefore sometimes convenient to limit the number of waypoint 
+comments written to the receiver.   For example, a geocacher might want
+to upload 400 waypoints, but only 190 with comments so that DirectRoute
+could provide driving directions for the next ten turns.
+</para>

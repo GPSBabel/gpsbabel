@@ -1,0 +1,4 @@
+<para>
+This option specifies the unit to be used when writing temperature values.
+Valid values are C for Celsius or F for Fahrenheit.
+</para>

@@ -1,0 +1,8 @@
+<para>
+This is a boolean flag that controls
+whether GPSBabel writes extensive data for each trackpoint generated.
+By default computed speed, timestamps, and so on are written with the default
+of '1' for this option.   If you are writing large tracks and do not value
+this information, you can reduce the size of the generated file substantially
+by turning this flag off by setting it to '0'.
+</para>

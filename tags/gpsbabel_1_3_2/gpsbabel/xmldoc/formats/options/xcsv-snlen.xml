@@ -1,0 +1,8 @@
+<para>
+This option specifies the maximum allowable length for a short name on
+output.  This option overrides the style file.
+</para>
+<para>
+Valid values for this option are 0 (off) and 1 (on).
+</para>
+

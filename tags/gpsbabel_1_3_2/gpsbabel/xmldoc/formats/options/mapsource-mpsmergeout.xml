@@ -1,0 +1,5 @@
+<para>
+This option causes the output to be merged with a pre-existing output file.
+This allows MapSource sections that aren't handled by GPSBabel (e.g. map sets)
+to be preserved.
+</para>
