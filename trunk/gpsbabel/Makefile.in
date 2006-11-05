@@ -98,7 +98,7 @@ WEB=@DOCDIR@
 
 all: gpsbabel$(EXEEXT)
 
-gpsbabel$(EXEEXT): $(OBJS) @GPSBABEL_DEBUG@
+gpsbabel$(EXEEXT): $(OBJS) @GPSBABEL_DEBUG@ Makefile configure
 	$(CC)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 gpsbabel-debug: $(OBJS)
@@ -190,7 +190,7 @@ WINFILES = gpsbabel.exe mingw/libexpat.dll win32/GPSBabelGUI.exe win32/gui-2/REA
 # in and tagged.
 #
 release-sourcecheck:
-#rjl	cvs commit
+	cvs commit
 	./chkdoc
 	make clean
 	rm -fr gpsbabel-$(VERSIOND)
@@ -296,7 +296,12 @@ cet_util.o: cet_util.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
 coastexp.o: coastexp.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h uuid.h
 compegps.o: compegps.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h \
+  jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
+  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h
 copilot.o: copilot.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h coldsync/palm.h \
   coldsync/../gbtypes.h coldsync/pdb.h grtcirc.h
@@ -457,7 +462,7 @@ mag_pdb.o: mag_pdb.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
 magproto.o: magproto.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h magellan.h gbser.h
 main.o: main.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
-  gbfile.h cet.h cet_util.h inifile.h filterdefs.h
+  gbfile.h cet.h cet_util.h inifile.h filterdefs.h csv_util.h
 mapsend.o: mapsend.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h mapsend.h magellan.h
 mapsource.o: mapsource.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
@@ -513,8 +518,8 @@ queue.o: queue.c queue.h
 quovadis.o: quovadis.c quovadis.h defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
   coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
-radius.o: radius.c defs.h config.h queue.h gbtypes.h cet.h cet_util.h \
-  inifile.h filterdefs.h grtcirc.h
+radius.o: radius.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h grtcirc.h
 reverse_route.o: reverse_route.c defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
   filterdefs.h
@@ -572,7 +577,8 @@ tpo.o: tpo.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
 trackfilter.o: trackfilter.c defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
   filterdefs.h strptime.h grtcirc.h
-transform.o: transform.c defs.h filterdefs.h
+transform.o: transform.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h
 unicsv.o: unicsv.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h \
   jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
