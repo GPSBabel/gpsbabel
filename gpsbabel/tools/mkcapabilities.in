@@ -1,3 +1,6 @@
+#
+# mkcapabilities.in is used to create mkcapabilities.  
+#
 ./gpsbabel -^2 | sed 's/\&/\&amp;/' | awk  -F'\t' '
 function getcap(type, cap, sname, lname) {
 	if (type == "internal") return

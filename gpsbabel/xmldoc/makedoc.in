@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+#
+# makedoc.in is used to generate makedoc.  
+#
+
 sub expandrw {
    my $read = shift;
    my $write = shift;
