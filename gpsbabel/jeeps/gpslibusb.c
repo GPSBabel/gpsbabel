@@ -104,6 +104,7 @@ gusb_teardown(gpsdevh *dh)
 	if (udev) {
 		usb_release_interface(udev, 0);
 		usb_close(udev);
+		xfree(dh);
 		udev = NULL;
 	}
 	return 0; 
