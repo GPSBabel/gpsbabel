@@ -296,7 +296,7 @@ kml_wr_deinit(void)
 		 * the file to be missing.  Windows readers will simply
 		 * have to retry on this case.
 		 */
-		unlink(posnfilename);
+		_unlink(posnfilename);
 #endif
 		rename(posnfilenametmp, posnfilename);
 		xfree(posnfilenametmp);
