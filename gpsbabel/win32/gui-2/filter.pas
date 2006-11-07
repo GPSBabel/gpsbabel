@@ -543,8 +543,8 @@ begin
   end;
   CanClose :=
     ValidateNumerical(edWayptRadius, 0, 99999) and
-    ValidateNumerical(edWayptRadiusLat, -180, 180) and
-    ValidateNumerical(edWayptRadiusLon, -90, 90) and
+    ValidateNumerical(edWayptRadiusLat, -90, 90) and
+    ValidateNumerical(edWayptRadiusLon, -180, 180) and
     ValidateNumerical(edWayptMergeDist, 0, 99999999) and
     ValidateNumerical(edRoutesSimplifyMaxPoints, 1, 9999);
   ChangeCheckBoxesChecked(Self, False);
