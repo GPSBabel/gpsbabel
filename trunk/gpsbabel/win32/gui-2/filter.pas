@@ -65,7 +65,7 @@ type
     cbReverse: TCheckBox;
     cbWayptMergeDupNames: TCheckBox;
     cbWayptMergeDistance: TCheckBox;
-    cobWayptMergeDist: TComboBox;
+    cobWayptMergeDistUnit: TComboBox;
     edWayptMergeDist: TEdit;
     cbWayptSort: TCheckBox;
     cbWayptMergeDups: TCheckBox;
@@ -75,7 +75,7 @@ type
     BitBtn1: TBitBtn;
     cbWayptRadius: TCheckBox;
     edWayptRadius: TEdit;
-    cobWayptRadius: TComboBox;
+    cobWayptRadiusUnit: TComboBox;
     lbWayptRadiusLat: TLabel;
     lbWayptRadiusLon: TLabel;
     edWayptRadiusLat: TEdit;
@@ -86,7 +86,7 @@ type
     cbTrackCourse: TCheckBox;
     cbTrackSpeed: TCheckBox;
     gbTransform: TGroupBox;
-    cobTransform: TComboBox;
+    cobTransformType: TComboBox;
     cbTransform: TCheckBox;
     cbTransformDelete: TCheckBox;
     procedure cbTrackTimeClick(Sender: TObject);
@@ -174,14 +174,14 @@ var
 begin
   TranslateComponent(SELF);
 
-  cobTransform.Items.Clear;
-  cobTransform.Items.Add(_('Waypoints') + ' -> ' + _('Routes'));
-  cobTransform.Items.Add(_('Routes') + ' -> ' + _('Waypoints'));
-  cobTransform.Items.Add(_('Routes') + ' -> ' + _('Tracks'));
-  cobTransform.Items.Add(_('Tracks') + ' -> ' + _('Routes'));
-  cobTransform.Items.Add(_('Waypoints') + ' -> ' + _('Tracks'));
-  cobTransform.Items.Add(_('Tracks') + ' -> ' + _('Waypoints'));
-  cobTransform.ItemIndex := 0;
+  cobTransformType.Items.Clear;
+  cobTransformType.Items.Add(_('Waypoints') + ' -> ' + _('Routes'));
+  cobTransformType.Items.Add(_('Routes') + ' -> ' + _('Waypoints'));
+  cobTransformType.Items.Add(_('Routes') + ' -> ' + _('Tracks'));
+  cobTransformType.Items.Add(_('Tracks') + ' -> ' + _('Routes'));
+  cobTransformType.Items.Add(_('Waypoints') + ' -> ' + _('Tracks'));
+  cobTransformType.Items.Add(_('Tracks') + ' -> ' + _('Waypoints'));
+  cobTransformType.ItemIndex := 0;
 
   CurrentTime := SysUtils.Now;
   dtpTrackStartDate.DateTime := Int(CurrentTime);
@@ -212,20 +212,20 @@ begin
   FixPosition(udTimeSeconds, edTrackTimeSeconds, False);
   FixPosition(lbTimeSeconds, udTimeSeconds, True);
 
-  FixPosition(lbWayptRadiusLat, cobWayptRadius, True);
+  FixPosition(lbWayptRadiusLat, cobWayptRadiusUnit, True);
   FixPosition(edWayptRadiusLat, lbWayptRadiusLat, True);
   FixPosition(lbWayptRadiusLon, edWayptRadiusLat, True);
   FixPosition(edWayptRadiusLon, lbWayptRadiusLon, True);
 
   // will not be translated, fill by hand
 
-  cobWayptMergeDist.Items.Add(_('Feet'));
-  cobWayptMergeDist.Items.Add(_('Meter'));
-  cobWayptMergeDist.ItemIndex := 0;
+  cobWayptMergeDistUnit.Items.Add(_('Feet'));
+  cobWayptMergeDistUnit.Items.Add(_('Meter'));
+  cobWayptMergeDistUnit.ItemIndex := 0;
 
-  cobWayptRadius.Items.Add(_('Miles'));
-  cobWayptRadius.Items.Add(_('Kilometer'));
-  cobWayptRadius.ItemIndex := 0;
+  cobWayptRadiusUnit.Items.Add(_('Miles'));
+  cobWayptRadiusUnit.Items.Add(_('Kilometer'));
+  cobWayptRadiusUnit.ItemIndex := 0;
 
   dtpTrackStopTime.Time := 1 - (1.0 / (24*60*60));
 
@@ -334,7 +334,7 @@ begin
   if gbTransform.Enabled and cbTransform.Checked then
   begin
     Result := Format('%s -x %s', [Result, 'transform,']);
-    case cobTransform.ItemIndex of
+    case cobTransformType.ItemIndex of
       0: Result := Result + 'rte=wpt';
       1: Result := Result + 'wpt=rte';
       2: Result := Result + 'trk=rte';
@@ -360,14 +360,14 @@ begin
     if cbWayptMergeDistance.Checked then
     begin
       Result := Format('%s -x position,distance=%s', [Result, edWayptMergeDist.Text]);
-      if (cobWayptMergeDist.ItemIndex = 0) then
+      if (cobWayptMergeDistUnit.ItemIndex = 0) then
         Result := Result + 'f' else
         Result := Result + 'm';
     end;
     if cbWayptRadius.Checked then
     begin
       Result := Format('%s -x radius,distance=%s', [Result, edWayptRadius.Text]);
-      if (cobWayptRadius.ItemIndex = 0) then
+      if (cobWayptRadiusUnit.ItemIndex = 0) then
         Result := Result + 'M' else
         Result := Result + 'K';
       Result := Format('%s,lat=%s,lon=%s', [Result, edWayptRadiusLat.Text, edWayptRadiusLon.Text]);
@@ -515,7 +515,7 @@ end;
 procedure TfrmFilter.cbWayptMergeDistanceClick(Sender: TObject);
 begin
   edWayptMergeDist.Enabled := cbWayptMergeDistance.Checked;
-  cobWayptMergeDist.Enabled := cbWayptMergeDistance.Checked;
+  cobWayptMergeDistUnit.Enabled := cbWayptMergeDistance.Checked;
 end;
 
 procedure TfrmFilter.cbWayptMergeDupsClick(Sender: TObject);
@@ -527,7 +527,7 @@ end;
 procedure TfrmFilter.cbWayptRadiusClick(Sender: TObject);
 begin
   edWayptRadius.Enabled := cbWayptRadius.Checked;
-  cobWayptRadius.Enabled := cbWayptRadius.Checked;
+  cobWayptRadiusUnit.Enabled := cbWayptRadius.Checked;
   edWayptRadiusLat.Enabled := cbWayptRadius.Checked;
   edWayptRadiusLon.Enabled := cbWayptRadius.Checked;
 end;
@@ -673,7 +673,9 @@ begin
       if (c is TCheckbox) then
         r.WriteBool('filter:' + Copy(c.Name, 3, 256), TCheckBox(c).Checked)
       else if (c is TEdit) then
-        r.WriteString('filter:' + Copy(c.Name, 3, 256), TEdit(c).Text);
+        r.WriteString('filter:' + Copy(c.Name, 3, 256), TEdit(c).Text)
+      else if (c is TCombobox) then
+        r.WriteString('filter:' + Copy(c.Name, 4, 256), IntToStr(TCombobox(c).ItemIndex));
     end;
   finally
     r.Free;
@@ -687,7 +689,7 @@ var
   r: TRegistry;
   s: string;
   u: TUpDown;
-  
+
   function ReadString(R: TRegistry; const Key, Def: string): string;
   begin
     if R.ValueExists(Key) then
@@ -715,6 +717,11 @@ begin
             u.Position := StrToInt(s)
           else
             TEdit(c).Text := s;
+        end
+        else if (c is TCombobox) then
+        begin
+          s := ReadString(r, 'filter:' + Copy(c.Name, 4, 256), '0');
+          TCombobox(c).ItemIndex := StrToIntDef(s, 0);
         end;
       except
         on E: Exception do ;
@@ -727,7 +734,7 @@ end;
 
 procedure TfrmFilter.cbTransformClick(Sender: TObject);
 begin
-  cobTransform.Enabled := cbTransform.Checked;
+  cobTransformType.Enabled := cbTransform.Checked;
 end;
 
 end.
