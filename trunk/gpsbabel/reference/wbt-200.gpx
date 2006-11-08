@@ -5,7 +5,7 @@ creator="GPSBabel - http://www.gpsbabel.org"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<bounds minlat="54.785117200" minlon ="-2.345095800" maxlat="54.787984800" maxlon="-2.342500800" />
+<bounds minlat="54.785117200" minlon="-2.345095800" maxlat="54.787984800" maxlon="-2.342500800"/>
 <trk>
 <trkseg>
 <trkpt lat="54.786918600" lon="-2.344296200">

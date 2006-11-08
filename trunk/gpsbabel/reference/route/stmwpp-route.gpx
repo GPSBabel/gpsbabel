@@ -6,7 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
-<bounds minlat="50.492618900" minlon ="12.105448700" maxlat="51.314520700" maxlon="12.435919300" />
+<bounds minlat="50.492618900" minlon="12.105448700" maxlat="51.314520700" maxlon="12.435919300"/>
 <wpt lat="50.492618900" lon="12.105448700">
 <time>2005-09-03T00:00:00Z</time>
   <name>NARVA</name>
