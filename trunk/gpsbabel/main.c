@@ -565,9 +565,10 @@ main(int argc, char *argv[])
 
 		while (1) {
 			posn_status status;
+			waypoint *wpt;
 
 			status.request_terminate = 0;
-			waypoint *wpt = ivecs->position_ops.rd_position(&status);
+			wpt = ivecs->position_ops.rd_position(&status);
 
 			if (status.request_terminate) {
 				if (wpt) {
