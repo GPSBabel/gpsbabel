@@ -315,7 +315,7 @@ gpgll_parse(char *ibuf)
 	double latdeg, lngdeg;
 	char lngdir, latdir;
 	int hms;
-	char valid;
+	char valid = 0;
 	waypoint *waypt;
 
 	if (trk_head == NULL) {
@@ -349,6 +349,9 @@ gpgll_parse(char *ibuf)
 	if (lngdir == 'W') lngdeg = -lngdeg;
 	waypt->longitude = ddmm2degrees(lngdeg);
 
+	if (curr_waypt && (read_mode == rm_serial)) {
+		waypt_free(curr_waypt);
+	}
 	curr_waypt = waypt;
 }
 
@@ -359,8 +362,8 @@ gpgga_parse(char *ibuf)
 	char lngdir, latdir;
 	double hms;
 	double alt;
-	int fix;
-	int nsats;
+	int fix = fix_unknown;
+	int nsats = 0;
 	double hdop;
 	char altunits;
 	waypoint *waypt;
@@ -423,6 +426,9 @@ gpgga_parse(char *ibuf)
 			break;
 	}
 
+	if (curr_waypt && (read_mode == rm_serial)) {
+		waypt_free(curr_waypt);
+	}
 	curr_waypt = waypt;
 }
 
@@ -494,6 +500,9 @@ gprmc_parse(char *ibuf)
 	if (lngdir == 'W') lngdeg = -lngdeg;
 	waypt->longitude = ddmm2degrees(lngdeg);
 
+	if (curr_waypt && (read_mode == rm_serial)) {
+		waypt_free(curr_waypt);
+	}
 	curr_waypt = waypt;
 }
 
@@ -855,8 +864,12 @@ nmea_rd_posn(posn_status *posn_status)
 		nmea_parse_one_line(ibuf);
 		if (lt != last_read_time) {
 			if (last_read_time) {
+				waypoint *w = curr_waypt;
+
 				lt = last_read_time;
-				return waypt_dupe(curr_waypt);
+				curr_waypt = NULL;
+
+				return w;
 			}
 		}
 	}
