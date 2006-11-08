@@ -6,7 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>2005-01-18T18:58:35Z</time>
-<bounds minlat="-30.342870000" minlon ="149.746093000" maxlat="-27.755478000" maxlon="150.477059000" />
+<bounds minlat="-30.342870000" minlon="149.746093000" maxlat="-27.755478000" maxlon="150.477059000"/>
 <wpt lat="-29.480116000" lon="150.133619000">
   <name>PALLMG</name>
   <cmt>PALLMG</cmt>

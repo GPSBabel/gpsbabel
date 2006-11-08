@@ -6,7 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
-<bounds minlat="30.045517000" minlon ="-91.610567000" maxlat="30.062783000" maxlon="-91.589750000" />
+<bounds minlat="30.045517000" minlon="-91.610567000" maxlat="30.062783000" maxlon="-91.589750000"/>
 <trk>
   <name>LOG-20020525-20020525</name>
 <trkseg>

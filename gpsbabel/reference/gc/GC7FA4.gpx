@@ -8,7 +8,7 @@
   <urlname>Geocaching - High Tech Treasure Hunting</urlname>
   <time>2005-07-16T18:15:40.7599561-07:00</time>
   <keywords>cache, geocache</keywords>
-  <bounds minlat="46.1333333333333" minlon="-73" maxlat="46.1333333333333" maxlon="-73" />
+  <bounds minlat="46.1333333333333" minlon="-73" maxlat="46.1333333333333" maxlon="-73"/>
   <wpt lat="46.1333333333333" lon="-73">
     <time>2002-08-15T00:00:00.0000000-07:00</time>
     <name>GC7FA4</name>

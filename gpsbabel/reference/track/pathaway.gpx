@@ -6,7 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
-<bounds minlat="50.319399833" minlon ="11.700503833" maxlat="50.496254000" maxlon="12.138562167" />
+<bounds minlat="50.319399833" minlon="11.700503833" maxlat="50.496254000" maxlon="12.138562167"/>
 <trk>
   <name>20050116_Fahrradtour Gerd</name>
 <trkseg>

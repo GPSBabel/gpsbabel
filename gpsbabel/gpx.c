@@ -1651,8 +1651,8 @@ gpx_write_bounds(void)
 	track_disp_all(NULL, NULL, gpx_waypt_bound_calc);
 
 	if (waypt_bounds_valid(&all_bounds)) {
-		fprintf(ofd, "<bounds minlat=\"%0.9f\" minlon =\"%0.9f\" "
-			       "maxlat=\"%0.9f\" maxlon=\"%0.9f\" />\n",
+		fprintf(ofd, "<bounds minlat=\"%0.9f\" minlon=\"%0.9f\" "
+			       "maxlat=\"%0.9f\" maxlon=\"%0.9f\"/>\n",
 			       all_bounds.min_lat, all_bounds.min_lon, 
 			       all_bounds.max_lat, all_bounds.max_lon);
 	}

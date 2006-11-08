@@ -6,7 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
-<bounds minlat="45.458204984" minlon ="-75.770526640" maxlat="45.497519984" maxlon="-75.684934974" />
+<bounds minlat="45.458204984" minlon="-75.770526640" maxlat="45.497519984" maxlon="-75.684934974"/>
 <wpt lat="45.460366651" lon="-75.767939974">
   <ele>33.700000</ele>
 <time>2005-05-09T19:02:01Z</time>

@@ -6,7 +6,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
-<bounds minlat="-30.765600000" minlon ="150.602533333" maxlat="-30.675433333" maxlon="150.725983333" />
+<bounds minlat="-30.765600000" minlon="150.602533333" maxlat="-30.675433333" maxlon="150.725983333"/>
 <rte>
   <name>0001</name>
   <desc>IGCDATE000000: </desc>
