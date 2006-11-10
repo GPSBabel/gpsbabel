@@ -1,0 +1,10 @@
+<para>
+On input, track points with times but no dates will have this date applied.  
+</para>
+<para>
+This is necessary because some NMEA sentences contain times but no dates.  If
+this option is not specified and the date cannot be determined from one or 
+more of the available NMEA sentences, the tracks will be discarded.
+</para>
+
+

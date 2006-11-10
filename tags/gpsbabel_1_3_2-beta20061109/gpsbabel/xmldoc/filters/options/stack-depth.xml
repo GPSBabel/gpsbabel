@@ -1,0 +1,6 @@
+<para>
+This option is only valid when used along with the <option>swap</option>
+option.  If specified, it indicates which item on the stack should be
+swapped with the current state.  The default value is 1, which corresponds
+to the top of the stack.
+</para>

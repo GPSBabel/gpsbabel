@@ -1,0 +1,734 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="30.045517000" minlon="-91.610567000" maxlat="42.468655000" maxlon="-71.102973000"/>
+<wpt lat="42.438878000" lon="-71.119277000">
+  <name>5066</name>
+  <cmt>5066</cmt>
+  <desc>5066</desc>
+  <sym>Crossing</sym>
+</wpt>
+<wpt lat="42.439227000" lon="-71.119689000">
+  <name>5067</name>
+  <cmt>5067</cmt>
+  <desc>5067</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.438917000" lon="-71.116146000">
+  <name>5096</name>
+  <cmt>5096</cmt>
+  <desc>5096</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.443904000" lon="-71.122044000">
+  <name>5142</name>
+  <cmt>5142</cmt>
+  <desc>5142</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.447298000" lon="-71.121447000">
+  <name>5156</name>
+  <cmt>5156</cmt>
+  <desc>5156</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.454873000" lon="-71.125094000">
+  <name>5224</name>
+  <cmt>5224</cmt>
+  <desc>5224</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.459079000" lon="-71.124988000">
+  <name>5229</name>
+  <cmt>5229</cmt>
+  <desc>5229</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.456979000" lon="-71.124474000">
+  <name>5237</name>
+  <cmt>5237</cmt>
+  <desc>5237</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.454401000" lon="-71.120990000">
+  <name>5254</name>
+  <cmt>5254</cmt>
+  <desc>5254</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.451442000" lon="-71.121746000">
+  <name>5258</name>
+  <cmt>5258</cmt>
+  <desc>5258</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.454404000" lon="-71.120660000">
+  <name>5264</name>
+  <cmt>5264</cmt>
+  <desc>5264</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.457761000" lon="-71.121045000">
+  <name>526708</name>
+  <cmt>526708</cmt>
+  <desc>526708</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.457089000" lon="-71.120313000">
+  <name>526750</name>
+  <cmt>526750</cmt>
+  <desc>526750</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.456592000" lon="-71.119676000">
+  <name>527614</name>
+  <cmt>527614</cmt>
+  <desc>527614</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.456252000" lon="-71.119356000">
+  <name>527631</name>
+  <cmt>527631</cmt>
+  <desc>527631</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.458148000" lon="-71.119135000">
+  <name>5278</name>
+  <cmt>5278</cmt>
+  <desc>5278</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.459377000" lon="-71.117693000">
+  <name>5289</name>
+  <cmt>5289</cmt>
+  <desc>5289</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.464183000" lon="-71.119828000">
+  <name>5374FIRE</name>
+  <cmt>5374FIRE</cmt>
+  <desc>5374FIRE</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.465650000" lon="-71.119399000">
+  <name>5376</name>
+  <cmt>5376</cmt>
+  <desc>5376</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.439018000" lon="-71.114456000">
+  <name>6006</name>
+  <cmt>6006</cmt>
+  <desc>6006</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.438594000" lon="-71.114803000">
+  <name>6006BLUE</name>
+  <cmt>6006BLUE</cmt>
+  <desc>6006BLUE</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.436757000" lon="-71.113223000">
+  <name>6014MEADOW</name>
+  <cmt>6014MEADOW</cmt>
+  <desc>6014MEADOW</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.441754000" lon="-71.113220000">
+  <name>6029</name>
+  <cmt>6029</cmt>
+  <desc>6029</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.436243000" lon="-71.109075000">
+  <name>6053</name>
+  <cmt>6053</cmt>
+  <desc>6053</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.439250000" lon="-71.107500000">
+  <name>6066</name>
+  <cmt>6066</cmt>
+  <desc>6066</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.439764000" lon="-71.107582000">
+  <name>6067</name>
+  <cmt>6067</cmt>
+  <desc>6067</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.434766000" lon="-71.105874000">
+  <name>6071</name>
+  <cmt>6071</cmt>
+  <desc>6071</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.433304000" lon="-71.106599000">
+  <name>6073</name>
+  <cmt>6073</cmt>
+  <desc>6073</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.437338000" lon="-71.104772000">
+  <name>6084</name>
+  <cmt>6084</cmt>
+  <desc>6084</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.442196000" lon="-71.110975000">
+  <name>6130</name>
+  <cmt>6130</cmt>
+  <desc>6130</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.442981000" lon="-71.111441000">
+  <name>6131</name>
+  <cmt>6131</cmt>
+  <desc>6131</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.444773000" lon="-71.108882000">
+  <name>6153</name>
+  <cmt>6153</cmt>
+  <desc>6153</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.443592000" lon="-71.106301000">
+  <name>6171</name>
+  <cmt>6171</cmt>
+  <desc>6171</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.447804000" lon="-71.106624000">
+  <name>6176</name>
+  <cmt>6176</cmt>
+  <desc>6176</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.448448000" lon="-71.106158000">
+  <name>6177</name>
+  <cmt>6177</cmt>
+  <desc>6177</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.453415000" lon="-71.106783000">
+  <name>6272</name>
+  <cmt>6272</cmt>
+  <desc>6272</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.453434000" lon="-71.107253000">
+  <name>6272</name>
+  <cmt>6272</cmt>
+  <desc>6272</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.458298000" lon="-71.106771000">
+  <name>6278</name>
+  <cmt>6278</cmt>
+  <desc>6278</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.451430000" lon="-71.105413000">
+  <name>6280</name>
+  <cmt>6280</cmt>
+  <desc>6280</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.453845000" lon="-71.105206000">
+  <name>6283</name>
+  <cmt>6283</cmt>
+  <desc>6283</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.459986000" lon="-71.106170000">
+  <name>6289</name>
+  <cmt>6289</cmt>
+  <desc>6289</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.457616000" lon="-71.105116000">
+  <name>6297</name>
+  <cmt>6297</cmt>
+  <desc>6297</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.467110000" lon="-71.113574000">
+  <name>6328</name>
+  <cmt>6328</cmt>
+  <desc>6328</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.464202000" lon="-71.109863000">
+  <name>6354</name>
+  <cmt>6354</cmt>
+  <desc>6354</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.466459000" lon="-71.110067000">
+  <name>635722</name>
+  <cmt>635722</cmt>
+  <desc>635722</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.466557000" lon="-71.109410000">
+  <name>635783</name>
+  <cmt>635783</cmt>
+  <desc>635783</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.463495000" lon="-71.107117000">
+  <name>6373</name>
+  <cmt>6373</cmt>
+  <desc>6373</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.401051000" lon="-71.110241000">
+  <name>6634</name>
+  <cmt>6634</cmt>
+  <desc>6634</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.432621000" lon="-71.106532000">
+  <name>6979</name>
+  <cmt>6979</cmt>
+  <desc>6979</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.431033000" lon="-71.107883000">
+  <name>6997</name>
+  <cmt>6997</cmt>
+  <desc>6997</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.465687000" lon="-71.107360000">
+  <name>BEAR HILL</name>
+  <cmt>BEAR HILL</cmt>
+  <desc>BEAR HILL</desc>
+  <sym>Tall Tower</sym>
+</wpt>
+<wpt lat="42.430950000" lon="-71.107628000">
+  <name>BELLEVUE</name>
+  <cmt>BELLEVUE</cmt>
+  <desc>BELLEVUE</desc>
+  <sym>Parking Area</sym>
+</wpt>
+<wpt lat="42.438666000" lon="-71.114079000">
+  <name>6016</name>
+  <cmt>6016</cmt>
+  <desc>6016</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="42.456469000" lon="-71.124651000">
+  <name>5236BRIDGE</name>
+  <cmt>5236BRIDGE</cmt>
+  <desc>5236BRIDGE</desc>
+  <sym>Bridge</sym>
+</wpt>
+<wpt lat="42.465759000" lon="-71.119815000">
+  <name>5376BRIDGE</name>
+  <cmt>5376BRIDGE</cmt>
+  <desc>5376BRIDGE</desc>
+  <sym>Bridge</sym>
+</wpt>
+<wpt lat="42.442993000" lon="-71.105878000">
+  <name>6181CROSS</name>
+  <cmt>6181CROSS</cmt>
+  <desc>6181CROSS</desc>
+  <sym>Crossing</sym>
+</wpt>
+<wpt lat="42.435472000" lon="-71.109664000">
+  <name>6042CROSS</name>
+  <cmt>6042CROSS</cmt>
+  <desc>6042CROSS</desc>
+  <sym>Crossing</sym>
+</wpt>
+<wpt lat="42.458516000" lon="-71.103646000">
+  <name>DARKHOLLPO</name>
+  <cmt>DARKHOLLPO</cmt>
+  <desc>DARKHOLLPO</desc>
+  <sym>Fishing Area</sym>
+</wpt>
+<wpt lat="42.443109000" lon="-71.112675000">
+  <name>6121DEAD</name>
+  <cmt>6121DEAD</cmt>
+  <desc>6121DEAD</desc>
+  <sym>Danger Area</sym>
+</wpt>
+<wpt lat="42.449866000" lon="-71.119298000">
+  <name>5179DEAD</name>
+  <cmt>5179DEAD</cmt>
+  <desc>5179DEAD</desc>
+  <sym>Danger Area</sym>
+</wpt>
+<wpt lat="42.459629000" lon="-71.116524000">
+  <name>5299DEAD</name>
+  <cmt>5299DEAD</cmt>
+  <desc>5299DEAD</desc>
+  <sym>Danger Area</sym>
+</wpt>
+<wpt lat="42.465485000" lon="-71.119148000">
+  <name>5376DEAD</name>
+  <cmt>5376DEAD</cmt>
+  <desc>5376DEAD</desc>
+  <sym>Danger Area</sym>
+</wpt>
+<wpt lat="42.462776000" lon="-71.109986000">
+  <name>6353DEAD</name>
+  <cmt>6353DEAD</cmt>
+  <desc>6353DEAD</desc>
+  <sym>Danger Area</sym>
+</wpt>
+<wpt lat="42.446793000" lon="-71.108784000">
+  <name>6155DEAD</name>
+  <cmt>6155DEAD</cmt>
+  <desc>6155DEAD</desc>
+  <sym>Danger Area</sym>
+</wpt>
+<wpt lat="42.451204000" lon="-71.126602000">
+  <name>GATE14</name>
+  <cmt>GATE14</cmt>
+  <desc>GATE14</desc>
+  <sym>Truck Stop</sym>
+</wpt>
+<wpt lat="42.458499000" lon="-71.122078000">
+  <name>GATE16</name>
+  <cmt>GATE16</cmt>
+  <desc>GATE16</desc>
+  <sym>Truck Stop</sym>
+</wpt>
+<wpt lat="42.459376000" lon="-71.119238000">
+  <name>GATE17</name>
+  <cmt>GATE17</cmt>
+  <desc>GATE17</desc>
+  <sym>Truck Stop</sym>
+</wpt>
+<wpt lat="42.466353000" lon="-71.119240000">
+  <name>GATE19</name>
+  <cmt>GATE19</cmt>
+  <desc>GATE19</desc>
+  <sym>Truck Stop</sym>
+</wpt>
+<wpt lat="42.468655000" lon="-71.107697000">
+  <name>GATE21</name>
+  <cmt>GATE21</cmt>
+  <desc>GATE21</desc>
+  <sym>Truck Stop</sym>
+</wpt>
+<wpt lat="42.456718000" lon="-71.102973000">
+  <name>GATE24</name>
+  <cmt>GATE24</cmt>
+  <desc>GATE24</desc>
+  <sym>Truck Stop</sym>
+</wpt>
+<wpt lat="42.430847000" lon="-71.107690000">
+  <name>GATE5</name>
+  <cmt>GATE5</cmt>
+  <desc>GATE5</desc>
+  <sym>Truck Stop</sym>
+</wpt>
+<wpt lat="42.431240000" lon="-71.109236000">
+  <name>GATE6</name>
+  <cmt>GATE6</cmt>
+  <desc>GATE6</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="42.439502000" lon="-71.106556000">
+  <name>6077LOGS</name>
+  <cmt>6077LOGS</cmt>
+  <desc>6077LOGS</desc>
+  <sym>Amusement Park</sym>
+</wpt>
+<wpt lat="42.449765000" lon="-71.122320000">
+  <name>5148NANEPA</name>
+  <cmt>5148NANEPA</cmt>
+  <desc>5148NANEPA</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="42.457388000" lon="-71.119845000">
+  <name>5267OBSTAC</name>
+  <cmt>5267OBSTAC</cmt>
+  <desc>5267OBSTAC</desc>
+  <sym>Amusement Park</sym>
+</wpt>
+<wpt lat="42.434980000" lon="-71.109942000">
+  <name>PANTHRCAVE</name>
+  <cmt>PANTHRCAVE</cmt>
+  <desc>PANTHRCAVE</desc>
+  <sym>Tunnel</sym>
+</wpt>
+<wpt lat="42.453256000" lon="-71.121211000">
+  <name>5252PURPLE</name>
+  <cmt>5252PURPLE</cmt>
+  <desc>5252PURPLE</desc>
+  <sym>Summit</sym>
+</wpt>
+<wpt lat="42.457734000" lon="-71.117481000">
+  <name>5287WATER</name>
+  <cmt>5287WATER</cmt>
+  <desc>5287WATER</desc>
+  <sym>Swimming Area</sym>
+</wpt>
+<wpt lat="42.459278000" lon="-71.124574000">
+  <name>5239ROAD</name>
+  <cmt>5239ROAD</cmt>
+  <desc>5239ROAD</desc>
+  <sym>Truck Stop</sym>
+</wpt>
+<wpt lat="42.458782000" lon="-71.118991000">
+  <name>5278ROAD</name>
+  <cmt>5278ROAD</cmt>
+  <desc>5278ROAD</desc>
+  <sym>Truck Stop</sym>
+</wpt>
+<wpt lat="42.439993000" lon="-71.120925000">
+  <name>5058ROAD</name>
+  <cmt>5058ROAD</cmt>
+  <desc>5058ROAD</desc>
+  <sym>Dot</sym>
+</wpt>
+<wpt lat="42.453415000" lon="-71.106782000">
+  <name>SHEEPFOLD</name>
+  <cmt>SHEEPFOLD</cmt>
+  <desc>SHEEPFOLD</desc>
+  <sym>Parking Area</sym>
+</wpt>
+<wpt lat="42.455956000" lon="-71.107483000">
+  <name>SOAPBOX</name>
+  <cmt>SOAPBOX</cmt>
+  <desc>SOAPBOX</desc>
+  <sym>Cemetery</sym>
+</wpt>
+<wpt lat="42.465913000" lon="-71.119328000">
+  <name>5376STREAM</name>
+  <cmt>5376STREAM</cmt>
+  <desc>5376STREAM</desc>
+  <sym>Bridge</sym>
+</wpt>
+<wpt lat="42.445359000" lon="-71.122845000">
+  <name>5144SUMMIT</name>
+  <cmt>5144SUMMIT</cmt>
+  <desc>5144SUMMIT</desc>
+  <sym>Summit</sym>
+</wpt>
+<wpt lat="42.441727000" lon="-71.121676000">
+  <name>5150TANK</name>
+  <cmt>5150TANK</cmt>
+  <desc>5150TANK</desc>
+  <sym>Museum</sym>
+</wpt>
+<trk>
+<trkseg>
+<trkpt lat="30.062183000" lon="-91.610350000">
+  <ele>1.000000</ele>
+<time>2002-05-25T05:06:21Z</time>
+</trkpt>
+<trkpt lat="30.062783000" lon="-91.610567000">
+<time>2002-05-25T05:09:55Z</time>
+</trkpt>
+<trkpt lat="30.062700000" lon="-91.608267000">
+<time>2002-05-25T05:12:00Z</time>
+</trkpt>
+<trkpt lat="30.062333000" lon="-91.607383000">
+<time>2002-05-25T05:12:48Z</time>
+</trkpt>
+<trkpt lat="30.061533000" lon="-91.605283000">
+<time>2002-05-25T05:14:41Z</time>
+</trkpt>
+<trkpt lat="30.059783000" lon="-91.599400000">
+<time>2002-05-25T05:17:16Z</time>
+</trkpt>
+<trkpt lat="30.057800000" lon="-91.596683000">
+<time>2002-05-25T05:17:46Z</time>
+</trkpt>
+<trkpt lat="30.055383000" lon="-91.594900000">
+<time>2002-05-25T05:18:20Z</time>
+</trkpt>
+<trkpt lat="30.053883000" lon="-91.592617000">
+<time>2002-05-25T05:19:01Z</time>
+</trkpt>
+<trkpt lat="30.049733000" lon="-91.589750000">
+<time>2002-05-25T05:20:46Z</time>
+</trkpt>
+<trkpt lat="30.049017000" lon="-91.589883000">
+<time>2002-05-25T05:21:10Z</time>
+</trkpt>
+<trkpt lat="30.048800000" lon="-91.592933000">
+<time>2002-05-25T05:21:51Z</time>
+</trkpt>
+<trkpt lat="30.046233000" lon="-91.596450000">
+<time>2002-05-25T05:22:35Z</time>
+</trkpt>
+<trkpt lat="30.045517000" lon="-91.598717000">
+<time>2002-05-25T05:23:08Z</time>
+</trkpt>
+<trkpt lat="30.047300000" lon="-91.600267000">
+<time>2002-05-25T06:04:23Z</time>
+</trkpt>
+<trkpt lat="30.047000000" lon="-91.599633000">
+  <ele>2.000000</ele>
+<time>2002-05-25T06:06:04Z</time>
+</trkpt>
+<trkpt lat="30.046433000" lon="-91.599467000">
+<time>2002-05-25T06:07:06Z</time>
+</trkpt>
+<trkpt lat="30.046200000" lon="-91.598950000">
+  <ele>1.000000</ele>
+<time>2002-05-25T06:08:18Z</time>
+</trkpt>
+<trkpt lat="30.046367000" lon="-91.597733000">
+<time>2002-05-25T06:10:20Z</time>
+</trkpt>
+<trkpt lat="30.046350000" lon="-91.597167000">
+<time>2002-05-25T06:11:09Z</time>
+</trkpt>
+<trkpt lat="30.046783000" lon="-91.596333000">
+<time>2002-05-25T06:12:18Z</time>
+</trkpt>
+<trkpt lat="30.047450000" lon="-91.595200000">
+<time>2002-05-25T06:14:22Z</time>
+</trkpt>
+<trkpt lat="30.047800000" lon="-91.594767000">
+  <ele>2.000000</ele>
+<time>2002-05-25T06:15:04Z</time>
+</trkpt>
+<trkpt lat="30.048250000" lon="-91.594083000">
+  <ele>1.000000</ele>
+<time>2002-05-25T06:16:14Z</time>
+</trkpt>
+<trkpt lat="30.048683000" lon="-91.593800000">
+  <ele>1.000000</ele>
+<time>2002-05-25T06:17:01Z</time>
+</trkpt>
+<trkpt lat="30.049350000" lon="-91.593850000">
+<time>2002-05-25T06:18:07Z</time>
+</trkpt>
+<trkpt lat="30.050317000" lon="-91.593983000">
+  <ele>2.000000</ele>
+<time>2002-05-25T06:19:51Z</time>
+</trkpt>
+<trkpt lat="30.050783000" lon="-91.594117000">
+<time>2002-05-25T06:20:39Z</time>
+</trkpt>
+<trkpt lat="30.051233000" lon="-91.594367000">
+<time>2002-05-25T06:21:24Z</time>
+</trkpt>
+<trkpt lat="30.051800000" lon="-91.594367000">
+<time>2002-05-25T06:22:17Z</time>
+</trkpt>
+<trkpt lat="30.052217000" lon="-91.594667000">
+<time>2002-05-25T06:23:18Z</time>
+</trkpt>
+<trkpt lat="30.053017000" lon="-91.594683000">
+<time>2002-05-25T06:24:37Z</time>
+</trkpt>
+<trkpt lat="30.054867000" lon="-91.595200000">
+  <ele>6.000000</ele>
+<time>2002-05-25T06:28:13Z</time>
+</trkpt>
+<trkpt lat="30.053733000" lon="-91.594933000">
+  <ele>2.000000</ele>
+<time>2002-05-25T06:31:36Z</time>
+</trkpt>
+<trkpt lat="30.053183000" lon="-91.594783000">
+<time>2002-05-25T06:32:56Z</time>
+</trkpt>
+<trkpt lat="30.052633000" lon="-91.594833000">
+<time>2002-05-25T06:34:02Z</time>
+</trkpt>
+<trkpt lat="30.052450000" lon="-91.595433000">
+<time>2002-05-25T06:36:03Z</time>
+</trkpt>
+<trkpt lat="30.052483000" lon="-91.595967000">
+<time>2002-05-25T06:36:48Z</time>
+</trkpt>
+<trkpt lat="30.052650000" lon="-91.596783000">
+  <ele>1.000000</ele>
+<time>2002-05-25T06:37:52Z</time>
+</trkpt>
+<trkpt lat="30.053133000" lon="-91.597850000">
+<time>2002-05-25T06:39:18Z</time>
+</trkpt>
+<trkpt lat="30.053617000" lon="-91.597967000">
+<time>2002-05-25T06:40:15Z</time>
+</trkpt>
+<trkpt lat="30.053967000" lon="-91.597767000">
+  <ele>6.000000</ele>
+<time>2002-05-25T06:41:25Z</time>
+</trkpt>
+<trkpt lat="30.053617000" lon="-91.598083000">
+<time>2002-05-25T06:42:37Z</time>
+</trkpt>
+<trkpt lat="30.053200000" lon="-91.597917000">
+<time>2002-05-25T06:44:01Z</time>
+</trkpt>
+<trkpt lat="30.052817000" lon="-91.597517000">
+<time>2002-05-25T06:45:53Z</time>
+</trkpt>
+<trkpt lat="30.052567000" lon="-91.596933000">
+<time>2002-05-25T06:46:54Z</time>
+</trkpt>
+<trkpt lat="30.052333000" lon="-91.596433000">
+<time>2002-05-25T06:47:42Z</time>
+</trkpt>
+<trkpt lat="30.052250000" lon="-91.595683000">
+<time>2002-05-25T06:48:41Z</time>
+</trkpt>
+<trkpt lat="30.052217000" lon="-91.595017000">
+<time>2002-05-25T06:49:52Z</time>
+</trkpt>
+<trkpt lat="30.051883000" lon="-91.594700000">
+<time>2002-05-25T06:50:49Z</time>
+</trkpt>
+<trkpt lat="30.051050000" lon="-91.594400000">
+<time>2002-05-25T06:52:14Z</time>
+</trkpt>
+<trkpt lat="30.050567000" lon="-91.594233000">
+<time>2002-05-25T06:52:56Z</time>
+</trkpt>
+<trkpt lat="30.050183000" lon="-91.594100000">
+<time>2002-05-25T06:53:38Z</time>
+</trkpt>
+<trkpt lat="30.049100000" lon="-91.593717000">
+<time>2002-05-25T06:55:11Z</time>
+</trkpt>
+<trkpt lat="30.048450000" lon="-91.594250000">
+<time>2002-05-25T06:56:32Z</time>
+</trkpt>
+<trkpt lat="30.048083000" lon="-91.594750000">
+<time>2002-05-25T06:57:24Z</time>
+</trkpt>
+<trkpt lat="30.047500000" lon="-91.595450000">
+  <ele>7.000000</ele>
+<time>2002-05-25T06:58:40Z</time>
+</trkpt>
+<trkpt lat="30.047067000" lon="-91.596000000">
+<time>2002-05-25T06:59:28Z</time>
+</trkpt>
+<trkpt lat="30.046633000" lon="-91.596600000">
+<time>2002-05-25T07:00:22Z</time>
+</trkpt>
+<trkpt lat="30.046400000" lon="-91.597650000">
+<time>2002-05-25T07:01:41Z</time>
+</trkpt>
+<trkpt lat="30.046233000" lon="-91.598467000">
+<time>2002-05-25T07:02:48Z</time>
+</trkpt>
+<trkpt lat="30.046317000" lon="-91.598967000">
+<time>2002-05-25T07:03:43Z</time>
+</trkpt>
+<trkpt lat="30.046783000" lon="-91.599283000">
+<time>2002-05-25T07:04:49Z</time>
+</trkpt>
+<trkpt lat="30.047133000" lon="-91.599667000">
+<time>2002-05-25T07:05:57Z</time>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>2005-08-30T20:58:28Z</time>
+<bounds minlat="50.500000000" minlon="12.133333300" maxlat="51.133333300" maxlon="13.716666700"/>
+<wpt lat="51.016666700" lon="13.716666700">
+  <name>PLAUEN</name>
+  <cmt>Plauen</cmt>
+  <desc>Plauen</desc>
+</wpt>
+<wpt lat="50.500000000" lon="12.133333300">
+  <name>PLAUEN</name>
+  <cmt>Plauen</cmt>
+  <desc>Plauen</desc>
+</wpt>
+<wpt lat="50.500000000" lon="12.133333300">
+  <name>PLAUEN STADTKREIS</name>
+  <cmt>Stadtkreis Plauen</cmt>
+  <desc>Stadtkreis Plauen</desc>
+</wpt>
+<wpt lat="50.533333300" lon="12.133333300">
+  <name>PLAUENERSTADTWALD</name>
+  <cmt>Plauener Stadtwald</cmt>
+  <desc>Plauener Stadtwald</desc>
+</wpt>
+<wpt lat="51.133333300" lon="13.050000000">
+  <name>ZSCHOPAU</name>
+  <cmt>Zschopau</cmt>
+  <desc>Zschopau</desc>
+</wpt>
+<wpt lat="50.750000000" lon="13.066666700">
+  <name>ZSCHOPAU</name>
+  <cmt>Zschopau</cmt>
+  <desc>Zschopau</desc>
+</wpt>
+<wpt lat="50.866666700" lon="12.416666700">
+  <name>ZSCHOPEL</name>
+  <cmt>Zschöpel</cmt>
+  <desc>Zschöpel</desc>
+</wpt>
+<wpt lat="50.733333300" lon="13.066666700">
+  <name>ZSCHOPENBERG</name>
+  <cmt>Zschopen-Berg</cmt>
+  <desc>Zschopen-Berg</desc>
+</wpt>
+<wpt lat="50.766666700" lon="13.100000000">
+  <name>ZSCHOPENTHAL</name>
+  <cmt>Zschopenthal</cmt>
+  <desc>Zschopenthal</desc>
+</wpt>
+</gpx>

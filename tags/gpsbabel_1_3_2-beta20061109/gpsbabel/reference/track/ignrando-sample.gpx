@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="45.660805000" minlon="6.365717000" maxlat="45.667271000" maxlon="6.372394000"/>
+<trk>
+  <desc>20050719 Mar Tamié ind 2 VTT Sem Europ</desc>
+<trkseg>
+<trkpt lat="45.664261000" lon="6.372394000">
+  <ele>331.000000</ele>
+</trkpt>
+<trkpt lat="45.664452000" lon="6.372383000">
+  <ele>331.000000</ele>
+</trkpt>
+<trkpt lat="45.666973000" lon="6.371411000">
+  <ele>333.000000</ele>
+</trkpt>
+<trkpt lat="45.667198000" lon="6.371414000">
+  <ele>333.000000</ele>
+</trkpt>
+<trkpt lat="45.667271000" lon="6.371150000">
+  <ele>333.000000</ele>
+</trkpt>
+<trkpt lat="45.667030000" lon="6.371043000">
+  <ele>333.000000</ele>
+</trkpt>
+<trkpt lat="45.666859000" lon="6.370786000">
+  <ele>333.000000</ele>
+</trkpt>
+<trkpt lat="45.660805000" lon="6.367349000">
+  <ele>333.351990</ele>
+</trkpt>
+<trkpt lat="45.661282000" lon="6.366768000">
+  <ele>334.760010</ele>
+</trkpt>
+<trkpt lat="45.662376000" lon="6.365717000">
+  <ele>338.000000</ele>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>

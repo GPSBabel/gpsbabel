@@ -1,0 +1,1034 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="49.445861111" minlon="11.044861111" maxlat="49.935944444" maxlon="11.481583333"/>
+<wpt lat="49.718250000" lon="11.066416667">
+  <name>Jägersburg in Forchheim geradeaus weiter auf Eisenbahnstrasse</name>
+  <cmt>Jägersburg in Forchheim geradeaus weiter auf Eisenbahnstrasse</cmt>
+  <desc>Eisenbahnstrasse</desc>
+</wpt>
+<wpt lat="49.746361111" lon="11.088888889">
+  <name>Rettern in Jägersburg halb rechts halten auf Fürstenweg (FO17)</name>
+  <cmt>Rettern in Jägersburg halb rechts halten auf Fürstenweg (FO17)</cmt>
+  <desc>Fürstenweg (FO17)</desc>
+</wpt>
+<wpt lat="49.754694444" lon="11.099722222">
+  <name>Kauernhofen bei D 91330 Eggolsheim/Rettern</name>
+  <cmt>Kauernhofen bei D 91330 Eggolsheim/Rettern</cmt>
+  <desc>FO11\Kanzelstrasse</desc>
+</wpt>
+<wpt lat="49.766722222" lon="11.081916667">
+  <name>Eggolsheim bei D 91330 Eggolsheim/Kauernhofen</name>
+  <cmt>Eggolsheim bei D 91330 Eggolsheim/Kauernhofen</cmt>
+  <desc>FO11\Andreas-Knauer-Strasse</desc>
+</wpt>
+<wpt lat="49.769777778" lon="11.063861111">
+  <name>Weigelshofen in Eggolsheim rechts abbiegen auf FO5</name>
+  <cmt>Weigelshofen in Eggolsheim rechts abbiegen auf FO5</cmt>
+  <desc>FO5</desc>
+</wpt>
+<wpt lat="49.789000000" lon="11.096277778">
+  <name>Drosendorf a. Eggerbach rechts abbiegen auf Bachgasse</name>
+  <cmt>Drosendorf a. Eggerbach rechts abbiegen auf Bachgasse</cmt>
+  <desc>Bachgasse</desc>
+</wpt>
+<wpt lat="49.788416667" lon="11.157166667">
+  <name>Ebermannstadt bei D 91320 Ebermannstadt/Feuerstein</name>
+  <cmt>Ebermannstadt bei D 91320 Ebermannstadt/Feuerstein</cmt>
+  <desc>FO41</desc>
+</wpt>
+<wpt lat="49.783000000" lon="11.184083333">
+  <name>Gasseldorf bei D91320 Ebermannstadt</name>
+  <cmt>Gasseldorf bei D91320 Ebermannstadt</cmt>
+  <desc>ST2260\Breitenbacher Strasse</desc>
+</wpt>
+<wpt lat="49.797500000" lon="11.202472222">
+  <name>Streitberg bei D91320 Ebermannstadt/Gasseldorf</name>
+  <cmt>Streitberg bei D91320 Ebermannstadt/Gasseldorf</cmt>
+  <desc>B470</desc>
+</wpt>
+<wpt lat="49.827611111" lon="11.205444444">
+  <name>Unterleinleiter bei D 91346 Wiesenttal/Störnhof</name>
+  <cmt>Unterleinleiter bei D 91346 Wiesenttal/Störnhof</cmt>
+  <desc>Unterleinleiter bei D 91346 Wiesenttal/Störnhof</desc>
+</wpt>
+<wpt lat="49.824083333" lon="11.190138889">
+  <name>Traindorf bei D 91364 Unterleinleiter</name>
+  <cmt>Traindorf bei D 91364 Unterleinleiter</cmt>
+  <desc>ST2187</desc>
+</wpt>
+<wpt lat="49.864444444" lon="11.170888889">
+  <name>Neumühle bei D 91332 Heiligenstadt</name>
+  <cmt>Neumühle bei D 91332 Heiligenstadt</cmt>
+  <desc>ST2187\Hauptstrasse</desc>
+</wpt>
+<wpt lat="49.871416667" lon="11.167138889">
+  <name>Hohenpölz in Neumühle links abbiegen auf Neumühle</name>
+  <cmt>Hohenpölz in Neumühle links abbiegen auf Neumühle</cmt>
+  <desc>Neumühle</desc>
+</wpt>
+<wpt lat="49.907888889" lon="11.144722222">
+  <name>Voitmannsdorf bei D 91332 Heiligenstadt/Hohenpölz</name>
+  <cmt>Voitmannsdorf bei D 91332 Heiligenstadt/Hohenpölz</cmt>
+  <desc>BA11\Hohenpölz</desc>
+</wpt>
+<wpt lat="49.927416667" lon="11.217555556">
+  <name>Hollfeld bei D 96142 Hollfeld/Drosendorf a d Aufseß</name>
+  <cmt>Hollfeld bei D 96142 Hollfeld/Drosendorf a d Aufseß</cmt>
+  <desc>ST2281\Drosendorf an der Aufsess</desc>
+</wpt>
+<wpt lat="49.935527778" lon="11.292777778">
+  <name>Stechendorf bei D96142 Hollfeld</name>
+  <cmt>Stechendorf bei D96142 Hollfeld</cmt>
+  <desc>ST2191\Bahnhofstrasse</desc>
+</wpt>
+<wpt lat="49.884444444" lon="11.333972222">
+  <name>Nankendorf D 95515 Plankenfels</name>
+  <cmt>Nankendorf D 95515 Plankenfels</cmt>
+  <desc>ST2191\Hauptstrasse</desc>
+</wpt>
+<wpt lat="49.851250000" lon="11.334222222">
+  <name>Waischenfeld halb links halten auf Gutenbiegen (ST2191)</name>
+  <cmt>Waischenfeld halb links halten auf Gutenbiegen (ST2191)</cmt>
+  <desc>Gutenbiegen (ST2191)</desc>
+</wpt>
+<wpt lat="49.782388889" lon="11.323527778">
+  <name>Behringersmühle bei D 91327 Gößweinstein/Schweigelberg</name>
+  <cmt>Behringersmühle bei D 91327 Gößweinstein/Schweigelberg</cmt>
+  <desc>ST2191</desc>
+</wpt>
+<wpt lat="49.777444444" lon="11.335222222">
+  <name>Tüchersfeld links abbiegen auf B470</name>
+  <cmt>Tüchersfeld links abbiegen auf B470</cmt>
+  <desc>B470</desc>
+</wpt>
+<wpt lat="49.784583333" lon="11.362166667">
+  <name>Pottenstein bei D 91278 Pottenstein/Tüchersfeld</name>
+  <cmt>Pottenstein bei D 91278 Pottenstein/Tüchersfeld</cmt>
+  <desc>B470</desc>
+</wpt>
+<wpt lat="49.768750000" lon="11.409166667">
+  <name>Wannberg bei D 91278 Pottenstein</name>
+  <cmt>Wannberg bei D 91278 Pottenstein</cmt>
+  <desc>B470\Pegnitzer Strasse</desc>
+</wpt>
+<wpt lat="49.733444444" lon="11.476083333">
+  <name>Bronn bei D91257 Pegnitz/Lüglas</name>
+  <cmt>Bronn bei D91257 Pegnitz/Lüglas</cmt>
+  <desc>B470</desc>
+</wpt>
+<wpt lat="49.728305556" lon="11.461555556">
+  <name>Kühlenfels in Bronn rechts abbiegen auf BT33 Kühlenfelser Strasse</name>
+  <cmt>Kühlenfels in Bronn rechts abbiegen auf BT33 Kühlenfelser Strasse</cmt>
+  <desc>BT33 Kühlenfelser Strasse</desc>
+</wpt>
+<wpt lat="49.737222222" lon="11.414861111">
+  <name>Kirchenbirkig bei D 91278 Pottenstein/Kleinkirchenbirkig</name>
+  <cmt>Kirchenbirkig bei D 91278 Pottenstein/Kleinkirchenbirkig</cmt>
+  <desc>BT33\Langhausenweg</desc>
+</wpt>
+<wpt lat="49.741194444" lon="11.401527778">
+  <name>Siegmannsbrunn in Kirchenbirkig rechts abbiegen auf Sankt-Johannes-Strasse (ST2163)</name>
+  <cmt>Siegmannsbrunn in Kirchenbirkig rechts abbiegen auf Sankt-Johannes-Strasse (ST2163)</cmt>
+  <desc>Sankt-Johannes-Strasse (ST2163)</desc>
+</wpt>
+<wpt lat="49.768250000" lon="11.369777778">
+  <name>Gössweinstein bei D 91327 Gößweinstein/Hühnerloh</name>
+  <cmt>Gössweinstein bei D 91327 Gößweinstein/Hühnerloh</cmt>
+  <desc>ST2685</desc>
+</wpt>
+<wpt lat="49.748694444" lon="11.345250000">
+  <name>Kleingesee halb rechts halten auf ST2191</name>
+  <cmt>Kleingesee halb rechts halten auf ST2191</cmt>
+  <desc>ST2191</desc>
+</wpt>
+<wpt lat="49.727444444" lon="11.336472222">
+  <name>Bieberbach D 91327 Gößweinstein/Kleingesee</name>
+  <cmt>Bieberbach D 91327 Gößweinstein/Kleingesee</cmt>
+  <desc>ST2191\Kleingesee</desc>
+</wpt>
+<wpt lat="49.735833333" lon="11.271305556">
+  <name>Wichsenstein bei D 91327 Gößweinstein/Wichsenstein</name>
+  <cmt>Wichsenstein bei D 91327 Gößweinstein/Wichsenstein</cmt>
+  <desc>FO21</desc>
+</wpt>
+<wpt lat="49.737555556" lon="11.267888889">
+  <name>Hardt in Wichsenstein links abbiegen auf Wichsenstein (FO37)</name>
+  <cmt>Hardt in Wichsenstein links abbiegen auf Wichsenstein (FO37)</cmt>
+  <desc>Wichsenstein (FO37)</desc>
+</wpt>
+<wpt lat="49.738666667" lon="11.239861111">
+  <name>Wannbach in Sattelmannsburg halb links halten auf Sattelmannsburg (FO37)</name>
+  <cmt>Wannbach in Sattelmannsburg halb links halten auf Sattelmannsburg (FO37)</cmt>
+  <desc>Sattelmannsburg (FO37)</desc>
+</wpt>
+<wpt lat="49.744861111" lon="11.215138889">
+  <name>Unterzaunsbach in Wannbach links abbiegen auf Wannbach (ST2260)</name>
+  <cmt>Unterzaunsbach in Wannbach links abbiegen auf Wannbach (ST2260)</cmt>
+  <desc>Wannbach (ST2260)</desc>
+</wpt>
+<wpt lat="49.740666667" lon="11.220777778">
+  <name>Schweinthal bei D 91362 Pretzfeld/Unterzaunsbach</name>
+  <cmt>Schweinthal bei D 91362 Pretzfeld/Unterzaunsbach</cmt>
+  <desc>ST2260\Unterzaunsbach</desc>
+</wpt>
+<wpt lat="49.706361111" lon="11.257138889">
+  <name>Egloffstein bei D 91349 Egloffstein</name>
+  <cmt>Egloffstein bei D 91349 Egloffstein</cmt>
+  <desc>ST2260</desc>
+</wpt>
+<wpt lat="49.703500000" lon="11.259000000">
+  <name>Thuisbrunn in Egloffstein rechts abbiegen auf Felsenkellerstrasse (ST2242)</name>
+  <cmt>Thuisbrunn in Egloffstein rechts abbiegen auf Felsenkellerstrasse (ST2242)</cmt>
+  <desc>Felsenkellerstrasse (ST2242)</desc>
+</wpt>
+<wpt lat="49.685750000" lon="11.253000000">
+  <name>Hohenschwärz bei D 91322 Gräfenberg/Thuisbrunn</name>
+  <cmt>Hohenschwärz bei D 91322 Gräfenberg/Thuisbrunn</cmt>
+  <desc>FO32</desc>
+</wpt>
+<wpt lat="49.676694444" lon="11.253944444">
+  <name>Gräfenberg in Hohenschwärz halb links halten auf Hohenschwärz (FO32)</name>
+  <cmt>Gräfenberg in Hohenschwärz halb links halten auf Hohenschwärz (FO32)</cmt>
+  <desc>Hohenschwärz (FO32)</desc>
+</wpt>
+<wpt lat="49.643138889" lon="11.239138889">
+  <name>Guttenberg bei D 91322 Gräfenberg/Guttenburg</name>
+  <cmt>Guttenberg bei D 91322 Gräfenberg/Guttenburg</cmt>
+  <desc>FO28\Guttenburger Strasse</desc>
+</wpt>
+<wpt lat="49.644000000" lon="11.231388889">
+  <name>Walkersbrunn in Guttenberg rechts abbiegen auf Guttenberg (FO28)</name>
+  <cmt>Walkersbrunn in Guttenberg rechts abbiegen auf Guttenberg (FO28)</cmt>
+  <desc>Guttenberg (FO28)</desc>
+</wpt>
+<wpt lat="49.659694444" lon="11.185861111">
+  <name>Weingarts bei D 91322 Gräfenberg/Schlichenreuth</name>
+  <cmt>Weingarts bei D 91322 Gräfenberg/Schlichenreuth</cmt>
+  <desc>ST2236</desc>
+</wpt>
+<wpt lat="49.672888889" lon="11.170666667">
+  <name>Kunreuth in Weingarts rechts abbiegen auf Weingarts (ST2236)</name>
+  <cmt>Kunreuth in Weingarts rechts abbiegen auf Weingarts (ST2236)</cmt>
+  <desc>Weingarts (ST2236)</desc>
+</wpt>
+<wpt lat="49.682138889" lon="11.143361111">
+  <name>Gaiganz in Kunreuth links abbiegen auf Schlossstrasse (ST2242)</name>
+  <cmt>Gaiganz in Kunreuth links abbiegen auf Schlossstrasse (ST2242)</cmt>
+  <desc>Schlossstrasse (ST2242)</desc>
+</wpt>
+<wpt lat="49.671277778" lon="11.128194444">
+  <name>Effeltrich bei D 91090 Effeltrich/Gaiganz</name>
+  <cmt>Effeltrich bei D 91090 Effeltrich/Gaiganz</cmt>
+  <desc>ST2242\Gaiganzer Hauptstrasse</desc>
+</wpt>
+<wpt lat="49.659861111" lon="11.094722222">
+  <name>Honings bei D 91090 Effeltrich</name>
+  <cmt>Honings bei D 91090 Effeltrich</cmt>
+  <desc>ST2242\Hauptstrasse</desc>
+</wpt>
+<wpt lat="49.614777778" lon="11.127388889">
+  <name>Dormitz bei D 91077 Neunkirchen</name>
+  <cmt>Dormitz bei D 91077 Neunkirchen</cmt>
+  <desc>Friedhofstrasse</desc>
+</wpt>
+<wpt lat="49.557722222" lon="11.126055556">
+  <name>Neunhof bei D 90562 Kalchreuth</name>
+  <cmt>Neunhof bei D 90562 Kalchreuth</cmt>
+  <desc>ST2243</desc>
+</wpt>
+<wpt lat="49.518194444" lon="11.049138889">
+  <name>Kraftshof bei D 90427 Nürnberg/Neunhof</name>
+  <cmt>Kraftshof bei D 90427 Nürnberg/Neunhof</cmt>
+  <desc>Obere Dorfstrasse</desc>
+</wpt>
+<wpt lat="49.513916667" lon="11.046166667">
+  <name>Buch in Kraftshof links abbiegen auf Kraftshofer Hauptstrasse</name>
+  <cmt>Buch in Kraftshof links abbiegen auf Kraftshofer Hauptstrasse</cmt>
+  <desc>Kraftshofer Hauptstrasse</desc>
+</wpt>
+<wpt lat="49.469250000" lon="11.067916667">
+  <name>D 90403 Nürnberg/Sebald  in Nürnberg links abbiegen auf B4R</name>
+  <cmt>D 90403 Nürnberg/Sebald  in Nürnberg links abbiegen auf B4R</cmt>
+  <desc>B4R</desc>
+</wpt>
+<rte>
+</rte>
+<rte>
+  <rtept lat="49.718333333" lon="11.061388889">
+    <name>RPT001</name>
+    <cmt>bei D91301 Forchheim   Jägersburg</cmt>
+    <desc>Klosterstrasse</desc>
+  </rtept>
+  <rtept lat="49.718250000" lon="11.066416667">
+    <name>RPT002</name>
+    <cmt>Jägersburg in Forchheim geradeaus weiter auf Eisenbahnstrasse</cmt>
+    <desc>Eisenbahnstrasse</desc>
+  </rtept>
+  <rtept lat="49.717944444" lon="11.068166667">
+    <name>RPT003</name>
+    <cmt>- links abbiegen auf B470 Theodor-Heuss-Allee</cmt>
+    <desc>B470 Theodor-Heuss-Allee</desc>
+  </rtept>
+  <rtept lat="49.725166667" lon="11.061750000">
+    <name>RPT004</name>
+    <cmt>- rechts abbiegen auf Untere Kellerstrasse (FO17)</cmt>
+    <desc>Untere Kellerstrasse (FO17)</desc>
+  </rtept>
+  <rtept lat="49.737916667" lon="11.079805556">
+    <name>RPT005</name>
+    <cmt>- halb links halten auf FO17</cmt>
+    <desc>FO17</desc>
+  </rtept>
+  <rtept lat="49.746361111" lon="11.088888889">
+    <name>RPT006</name>
+    <cmt>Rettern in Jägersburg halb rechts halten auf Fürstenweg (FO17)</cmt>
+    <desc>Fürstenweg (FO17)</desc>
+  </rtept>
+  <rtept lat="49.750166667" lon="11.103166667">
+    <name>RPT007</name>
+    <cmt>- halb links halten auf FO11</cmt>
+    <desc>FO11</desc>
+  </rtept>
+  <rtept lat="49.754694444" lon="11.099722222">
+    <name>RPT008</name>
+    <cmt>Kauernhofen bei D 91330 Eggolsheim/Rettern</cmt>
+    <desc>FO11\Kanzelstrasse</desc>
+  </rtept>
+  <rtept lat="49.766611111" lon="11.082638889">
+    <name>RPT009</name>
+    <cmt>bei D 91330 Eggolsheim/Kauernhofen  in Kauernhofen links abbiegen auf Andreas-Knauer-Strasse (FO11)</cmt>
+    <desc>Andreas-Knauer-Strasse (FO11)</desc>
+  </rtept>
+  <rtept lat="49.766722222" lon="11.081916667">
+    <name>RPT010</name>
+    <cmt>Eggolsheim bei D 91330 Eggolsheim/Kauernhofen</cmt>
+    <desc>FO11\Andreas-Knauer-Strasse</desc>
+  </rtept>
+  <rtept lat="49.767361111" lon="11.074777778">
+    <name>RPT011</name>
+    <cmt>- halb rechts halten auf FO11</cmt>
+    <desc>FO11</desc>
+  </rtept>
+  <rtept lat="49.769777778" lon="11.063861111">
+    <name>RPT012</name>
+    <cmt>Weigelshofen in Eggolsheim rechts abbiegen auf FO5</cmt>
+    <desc>FO5</desc>
+  </rtept>
+  <rtept lat="49.789000000" lon="11.096277778">
+    <name>RPT013</name>
+    <cmt>Drosendorf a. Eggerbach rechts abbiegen auf Bachgasse</cmt>
+    <desc>Bachgasse</desc>
+  </rtept>
+  <rtept lat="49.793833333" lon="11.107916667">
+    <name>RPT014</name>
+    <cmt>bei D91330 Eggolsheim/Drosendorf  in Drosendorf a. Eggerbach rechts abbiegen auf Feuersteinstrasse (FO41)</cmt>
+    <desc>Feuersteinstrasse (FO41)</desc>
+  </rtept>
+  <rtept lat="49.794166667" lon="11.109444444">
+    <name>RPT015</name>
+    <cmt>bei D 91320 Ebermannstadt/Feuerstein  bei D91330 Eggolsheim/Drosendorf</cmt>
+    <desc>FO41\Feuersteinstrasse</desc>
+  </rtept>
+  <rtept lat="49.788416667" lon="11.157166667">
+    <name>RPT016</name>
+    <cmt>Ebermannstadt bei D 91320 Ebermannstadt/Feuerstein</cmt>
+    <desc>FO41</desc>
+  </rtept>
+  <rtept lat="49.784805556" lon="11.174000000">
+    <name>RPT017</name>
+    <cmt>bei D91320 Ebermannstadt  in Ebermannstadt links abbiegen auf Altweiherstrasse</cmt>
+    <desc>Altweiherstrasse</desc>
+  </rtept>
+  <rtept lat="49.784333333" lon="11.175222222">
+    <name>RPT018</name>
+    <cmt>- links abbiegen auf Altweiherstrasse</cmt>
+    <desc>Altweiherstrasse</desc>
+  </rtept>
+  <rtept lat="49.785416667" lon="11.181277778">
+    <name>RPT019</name>
+    <cmt>- rechts abbiegen auf Eschlipper Talstrasse (ST2260)</cmt>
+    <desc>Eschlipper Talstrasse (ST2260)</desc>
+  </rtept>
+  <rtept lat="49.783000000" lon="11.184083333">
+    <name>RPT020</name>
+    <cmt>Gasseldorf bei D91320 Ebermannstadt</cmt>
+    <desc>ST2260\Breitenbacher Strasse</desc>
+  </rtept>
+  <rtept lat="49.781694444" lon="11.185444444">
+    <name>RPT021</name>
+    <cmt>- links abbiegen auf B470 Breitenbacher Strasse</cmt>
+    <desc>B470 Breitenbacher Strasse</desc>
+  </rtept>
+  <rtept lat="49.797500000" lon="11.202472222">
+    <name>RPT022</name>
+    <cmt>Streitberg bei D91320 Ebermannstadt/Gasseldorf</cmt>
+    <desc>B470</desc>
+  </rtept>
+  <rtept lat="49.808527778" lon="11.217638889">
+    <name>RPT023</name>
+    <cmt>bei D 91346 Wiesenttal/Streitberg  in Streitberg links abbiegen auf Bahnhofstrasse (ST2186)</cmt>
+    <desc>Bahnhofstrasse (ST2186)</desc>
+  </rtept>
+  <rtept lat="49.810750000" lon="11.219583333">
+    <name>RPT024</name>
+    <cmt>bei D 91346 Wiesenttal/Störnhof  bei D 91346 Wiesenttal/Streitberg</cmt>
+    <desc>ST2186\Dorfplatz</desc>
+  </rtept>
+  <rtept lat="49.811111111" lon="11.220333333">
+    <name>RPT025</name>
+    <cmt>- links abbiegen auf Hadergasse</cmt>
+    <desc>Hadergasse</desc>
+  </rtept>
+  <rtept lat="49.812388889" lon="11.218916667">
+    <name>RPT026</name>
+    <cmt>- geradeaus weiter auf Schauertal</cmt>
+    <desc>Schauertal</desc>
+  </rtept>
+  <rtept lat="49.814694444" lon="11.218166667">
+    <name>RPT027</name>
+    <cmt>- geradeaus auffahren</cmt>
+    <desc>- geradeaus auffahren</desc>
+  </rtept>
+  <rtept lat="49.826750000" lon="11.211833333">
+    <name>RPT028</name>
+    <cmt>- links abbiegen</cmt>
+    <desc>- links abbiegen</desc>
+  </rtept>
+  <rtept lat="49.827611111" lon="11.205444444">
+    <name>RPT029</name>
+    <cmt>Unterleinleiter bei D 91346 Wiesenttal/Störnhof</cmt>
+    <desc>Unterleinleiter bei D 91346 Wiesenttal/Störnhof</desc>
+  </rtept>
+  <rtept lat="49.825416667" lon="11.193527778">
+    <name>RPT030</name>
+    <cmt>bei D 91364 Unterleinleiter  in Unterleinleiter rechts abbiegen auf Störnhofer Weg</cmt>
+    <desc>Störnhofer Weg</desc>
+  </rtept>
+  <rtept lat="49.825250000" lon="11.192416667">
+    <name>RPT031</name>
+    <cmt>- halb rechts halten auf Bahnhofstrasse</cmt>
+    <desc>Bahnhofstrasse</desc>
+  </rtept>
+  <rtept lat="49.824500000" lon="11.191583333">
+    <name>RPT032</name>
+    <cmt>- geradeaus weiter auf An der Leinleiter</cmt>
+    <desc>An der Leinleiter</desc>
+  </rtept>
+  <rtept lat="49.824000000" lon="11.190166667">
+    <name>RPT033</name>
+    <cmt>- rechts abbiegen auf ST2187</cmt>
+    <desc>ST2187</desc>
+  </rtept>
+  <rtept lat="49.824083333" lon="11.190138889">
+    <name>RPT034</name>
+    <cmt>Traindorf bei D 91364 Unterleinleiter</cmt>
+    <desc>ST2187</desc>
+  </rtept>
+  <rtept lat="49.864444444" lon="11.170888889">
+    <name>RPT035</name>
+    <cmt>Neumühle bei D 91332 Heiligenstadt</cmt>
+    <desc>ST2187\Hauptstrasse</desc>
+  </rtept>
+  <rtept lat="49.866416667" lon="11.170194444">
+    <name>RPT036</name>
+    <cmt>- in Heiligenstadt in Oberfranken links abbiegen auf Hauptstrasse (ST2187)</cmt>
+    <desc>Hauptstrasse (ST2187)</desc>
+  </rtept>
+  <rtept lat="49.867416667" lon="11.165722222">
+    <name>RPT037</name>
+    <cmt>- rechts abbiegen auf ST2188</cmt>
+    <desc>ST2188</desc>
+  </rtept>
+  <rtept lat="49.871416667" lon="11.167138889">
+    <name>RPT038</name>
+    <cmt>Hohenpölz in Neumühle links abbiegen auf Neumühle</cmt>
+    <desc>Neumühle</desc>
+  </rtept>
+  <rtept lat="49.871638889" lon="11.166250000">
+    <name>RPT039</name>
+    <cmt>- geradeaus weiter auf BA11</cmt>
+    <desc>BA11</desc>
+  </rtept>
+  <rtept lat="49.872500000" lon="11.158361111">
+    <name>RPT040</name>
+    <cmt>- rechts abbiegen auf BA11</cmt>
+    <desc>BA11</desc>
+  </rtept>
+  <rtept lat="49.889916667" lon="11.149916667">
+    <name>RPT041</name>
+    <cmt>- rechts abbiegen auf BA11</cmt>
+    <desc>BA11</desc>
+  </rtept>
+  <rtept lat="49.892027778" lon="11.158916667">
+    <name>RPT042</name>
+    <cmt>- links abbiegen auf BA11</cmt>
+    <desc>BA11</desc>
+  </rtept>
+  <rtept lat="49.907888889" lon="11.144722222">
+    <name>RPT043</name>
+    <cmt>Voitmannsdorf bei D 91332 Heiligenstadt/Hohenpölz</cmt>
+    <desc>BA11\Hohenpölz</desc>
+  </rtept>
+  <rtept lat="49.925444444" lon="11.151277778">
+    <name>RPT044</name>
+    <cmt>- rechts abbiegen auf ST2281</cmt>
+    <desc>ST2281</desc>
+  </rtept>
+  <rtept lat="49.928111111" lon="11.214166667">
+    <name>RPT045</name>
+    <cmt>bei D 96142 Hollfeld/Drosendorf a d Aufseß  in Drosendorf an der Aufsess halb links halten auf Drosendorf an der Aufsess (ST2281)</cmt>
+    <desc>Drosendorf an der Aufsess (ST2281)</desc>
+  </rtept>
+  <rtept lat="49.927416667" lon="11.217555556">
+    <name>RPT046</name>
+    <cmt>Hollfeld bei D 96142 Hollfeld/Drosendorf a d Aufseß</cmt>
+    <desc>ST2281\Drosendorf an der Aufsess</desc>
+  </rtept>
+  <rtept lat="49.927083333" lon="11.218805556">
+    <name>RPT047</name>
+    <cmt>- links halten auf Drosendorf an der Aufsess</cmt>
+    <desc>Drosendorf an der Aufsess</desc>
+  </rtept>
+  <rtept lat="49.927250000" lon="11.221750000">
+    <name>RPT048</name>
+    <cmt>- geradeaus weiter auf ST2281</cmt>
+    <desc>ST2281</desc>
+  </rtept>
+  <rtept lat="49.928388889" lon="11.229027778">
+    <name>RPT049</name>
+    <cmt>- links abbiegen auf ST2281</cmt>
+    <desc>ST2281</desc>
+  </rtept>
+  <rtept lat="49.934888889" lon="11.286722222">
+    <name>RPT050</name>
+    <cmt>bei D96142 Hollfeld  in Hollfeld links abbiegen auf Forchheimer Strasse (ST2189)</cmt>
+    <desc>Forchheimer Strasse (ST2189)</desc>
+  </rtept>
+  <rtept lat="49.935944444" lon="11.291555556">
+    <name>RPT051</name>
+    <cmt>- rechts abbiegen auf Bahnhofstrasse (ST2191)</cmt>
+    <desc>Bahnhofstrasse (ST2191)</desc>
+  </rtept>
+  <rtept lat="49.935527778" lon="11.292777778">
+    <name>RPT052</name>
+    <cmt>Stechendorf bei D96142 Hollfeld</cmt>
+    <desc>ST2191\Bahnhofstrasse</desc>
+  </rtept>
+  <rtept lat="49.884444444" lon="11.333972222">
+    <name>RPT053</name>
+    <cmt>Nankendorf D 95515 Plankenfels</cmt>
+    <desc>ST2191\Hauptstrasse</desc>
+  </rtept>
+  <rtept lat="49.881750000" lon="11.338333333">
+    <name>RPT054</name>
+    <cmt>- rechts abbiegen auf Eichenmühle (ST2186/ST2191)</cmt>
+    <desc>Eichenmühle (ST2186/ST2191)</desc>
+  </rtept>
+  <rtept lat="49.879388889" lon="11.334833333">
+    <name>RPT055</name>
+    <cmt>- links abbiegen auf ST2191</cmt>
+    <desc>ST2191</desc>
+  </rtept>
+  <rtept lat="49.851250000" lon="11.334222222">
+    <name>RPT056</name>
+    <cmt>Waischenfeld halb links halten auf Gutenbiegen (ST2191)</cmt>
+    <desc>Gutenbiegen (ST2191)</desc>
+  </rtept>
+  <rtept lat="49.851166667" lon="11.336055556">
+    <name>RPT057</name>
+    <cmt>- links halten auf Gutenbiegen</cmt>
+    <desc>Gutenbiegen</desc>
+  </rtept>
+  <rtept lat="49.851388889" lon="11.337194444">
+    <name>RPT058</name>
+    <cmt>- halb rechts halten auf ST2191</cmt>
+    <desc>ST2191</desc>
+  </rtept>
+  <rtept lat="49.843166667" lon="11.346694444">
+    <name>RPT059</name>
+    <cmt>bei D 91327 Gößweinstein/Schweigelberg  bei D 91344 Waischenfeld/Hammermühle</cmt>
+    <desc>ST2191</desc>
+  </rtept>
+  <rtept lat="49.782388889" lon="11.323527778">
+    <name>RPT060</name>
+    <cmt>Behringersmühle bei D 91327 Gößweinstein/Schweigelberg</cmt>
+    <desc>ST2191</desc>
+  </rtept>
+  <rtept lat="49.777444444" lon="11.335222222">
+    <name>RPT061</name>
+    <cmt>Tüchersfeld links abbiegen auf B470</cmt>
+    <desc>B470</desc>
+  </rtept>
+  <rtept lat="49.784583333" lon="11.362166667">
+    <name>RPT062</name>
+    <cmt>Pottenstein bei D 91278 Pottenstein/Tüchersfeld</cmt>
+    <desc>B470</desc>
+  </rtept>
+  <rtept lat="49.778111111" lon="11.377888889">
+    <name>RPT063</name>
+    <cmt>- links abbiegen auf B470</cmt>
+    <desc>B470</desc>
+  </rtept>
+  <rtept lat="49.778638889" lon="11.379361111">
+    <name>RPT064</name>
+    <cmt>- halb links halten auf B470</cmt>
+    <desc>B470</desc>
+  </rtept>
+  <rtept lat="49.768750000" lon="11.409166667">
+    <name>RPT065</name>
+    <cmt>Wannberg bei D 91278 Pottenstein</cmt>
+    <desc>B470\Pegnitzer Strasse</desc>
+  </rtept>
+  <rtept lat="49.733444444" lon="11.476083333">
+    <name>RPT066</name>
+    <cmt>Bronn bei D91257 Pegnitz/Lüglas</cmt>
+    <desc>B470</desc>
+  </rtept>
+  <rtept lat="49.729944444" lon="11.481583333">
+    <name>RPT067</name>
+    <cmt>- rechts abbiegen auf B2</cmt>
+    <desc>B2</desc>
+  </rtept>
+  <rtept lat="49.728305556" lon="11.461555556">
+    <name>RPT068</name>
+    <cmt>Kühlenfels in Bronn rechts abbiegen auf BT33 Kühlenfelser Strasse</cmt>
+    <desc>BT33 Kühlenfelser Strasse</desc>
+  </rtept>
+  <rtept lat="49.728472222" lon="11.461388889">
+    <name>RPT069</name>
+    <cmt>- halb links halten auf BT33 Kühlenfelser Strasse</cmt>
+    <desc>BT33 Kühlenfelser Strasse</desc>
+  </rtept>
+  <rtept lat="49.736611111" lon="11.420722222">
+    <name>RPT070</name>
+    <cmt>bei D 91278 Pottenstein/Kleinkirchenbirkig  in Kühlenfels links abbiegen auf BT33 Kühlenfels</cmt>
+    <desc>BT33 Kühlenfels</desc>
+  </rtept>
+  <rtept lat="49.736527778" lon="11.419444444">
+    <name>RPT071</name>
+    <cmt>- halb links halten auf BT33 Langhausenweg</cmt>
+    <desc>BT33 Langhausenweg</desc>
+  </rtept>
+  <rtept lat="49.737222222" lon="11.415083333">
+    <name>RPT072</name>
+    <cmt>- halb rechts halten auf BT33 Langhausenweg</cmt>
+    <desc>BT33 Langhausenweg</desc>
+  </rtept>
+  <rtept lat="49.737222222" lon="11.414861111">
+    <name>RPT073</name>
+    <cmt>Kirchenbirkig bei D 91278 Pottenstein/Kleinkirchenbirkig</cmt>
+    <desc>BT33\Langhausenweg</desc>
+  </rtept>
+  <rtept lat="49.741194444" lon="11.401527778">
+    <name>RPT074</name>
+    <cmt>Siegmannsbrunn in Kirchenbirkig rechts abbiegen auf Sankt-Johannes-Strasse (ST2163)</cmt>
+    <desc>Sankt-Johannes-Strasse (ST2163)</desc>
+  </rtept>
+  <rtept lat="49.745277778" lon="11.403416667">
+    <name>RPT075</name>
+    <cmt>- halb links halten auf Sankt-Johannes-Strasse (ST2163)</cmt>
+    <desc>Sankt-Johannes-Strasse (ST2163)</desc>
+  </rtept>
+  <rtept lat="49.762194444" lon="11.403444444">
+    <name>RPT076</name>
+    <cmt>- links abbiegen auf ST2685</cmt>
+    <desc>ST2685</desc>
+  </rtept>
+  <rtept lat="49.765888889" lon="11.384111111">
+    <name>RPT077</name>
+    <cmt>bei D 91327 Gößweinstein/Hühnerloh  halb links halten auf ST2685</cmt>
+    <desc>ST2685</desc>
+  </rtept>
+  <rtept lat="49.768250000" lon="11.369777778">
+    <name>RPT078</name>
+    <cmt>Gössweinstein bei D 91327 Gößweinstein/Hühnerloh</cmt>
+    <desc>ST2685</desc>
+  </rtept>
+  <rtept lat="49.770388889" lon="11.346833333">
+    <name>RPT079</name>
+    <cmt>- links abbiegen auf ST2191</cmt>
+    <desc>ST2191</desc>
+  </rtept>
+  <rtept lat="49.748694444" lon="11.345250000">
+    <name>RPT080</name>
+    <cmt>Kleingesee halb rechts halten auf ST2191</cmt>
+    <desc>ST2191</desc>
+  </rtept>
+  <rtept lat="49.727444444" lon="11.336472222">
+    <name>RPT081</name>
+    <cmt>Bieberbach D 91327 Gößweinstein/Kleingesee</cmt>
+    <desc>ST2191\Kleingesee</desc>
+  </rtept>
+  <rtept lat="49.727138889" lon="11.336444444">
+    <name>RPT082</name>
+    <cmt>- in Kleingesee rechts abbiegen auf Kleingesee (ST2191)</cmt>
+    <desc>Kleingesee (ST2191)</desc>
+  </rtept>
+  <rtept lat="49.726138889" lon="11.328388889">
+    <name>RPT083</name>
+    <cmt>- halb rechts halten auf Kleingesee (FO43)</cmt>
+    <desc>Kleingesee (FO43)</desc>
+  </rtept>
+  <rtept lat="49.729805556" lon="11.290416667">
+    <name>RPT084</name>
+    <cmt>bei D 91327 Gößweinstein/Wichsenstein  in Bieberbach rechts abbiegen auf Bieberbach (FO21)</cmt>
+    <desc>Bieberbach (FO21)</desc>
+  </rtept>
+  <rtept lat="49.735833333" lon="11.271305556">
+    <name>RPT085</name>
+    <cmt>Wichsenstein bei D 91327 Gößweinstein/Wichsenstein</cmt>
+    <desc>FO21</desc>
+  </rtept>
+  <rtept lat="49.737555556" lon="11.267888889">
+    <name>RPT086</name>
+    <cmt>Hardt in Wichsenstein links abbiegen auf Wichsenstein (FO37)</cmt>
+    <desc>Wichsenstein (FO37)</desc>
+  </rtept>
+  <rtept lat="49.736500000" lon="11.260916667">
+    <name>RPT087</name>
+    <cmt>- rechts abbiegen auf FO37</cmt>
+    <desc>FO37</desc>
+  </rtept>
+  <rtept lat="49.738666667" lon="11.239861111">
+    <name>RPT088</name>
+    <cmt>Wannbach in Sattelmannsburg halb links halten auf Sattelmannsburg (FO37)</cmt>
+    <desc>Sattelmannsburg (FO37)</desc>
+  </rtept>
+  <rtept lat="49.745222222" lon="11.216083333">
+    <name>RPT089</name>
+    <cmt>- links abbiegen auf FO37</cmt>
+    <desc>FO37</desc>
+  </rtept>
+  <rtept lat="49.744861111" lon="11.215138889">
+    <name>RPT090</name>
+    <cmt>Unterzaunsbach in Wannbach links abbiegen auf Wannbach (ST2260)</cmt>
+    <desc>Wannbach (ST2260)</desc>
+  </rtept>
+  <rtept lat="49.740666667" lon="11.220777778">
+    <name>RPT091</name>
+    <cmt>Schweinthal bei D 91362 Pretzfeld/Unterzaunsbach</cmt>
+    <desc>ST2260\Unterzaunsbach</desc>
+  </rtept>
+  <rtept lat="49.706361111" lon="11.257138889">
+    <name>RPT092</name>
+    <cmt>Egloffstein bei D 91349 Egloffstein</cmt>
+    <desc>ST2260</desc>
+  </rtept>
+  <rtept lat="49.703500000" lon="11.259000000">
+    <name>RPT093</name>
+    <cmt>Thuisbrunn in Egloffstein rechts abbiegen auf Felsenkellerstrasse (ST2242)</cmt>
+    <desc>Felsenkellerstrasse (ST2242)</desc>
+  </rtept>
+  <rtept lat="49.700527778" lon="11.248444444">
+    <name>RPT094</name>
+    <cmt>- geradeaus weiter auf FO32</cmt>
+    <desc>FO32</desc>
+  </rtept>
+  <rtept lat="49.688694444" lon="11.244666667">
+    <name>RPT095</name>
+    <cmt>bei D 91322 Gräfenberg/Thuisbrunn  in Thuisbrunn links abbiegen auf Thuisbrunn (FO32)</cmt>
+    <desc>Thuisbrunn (FO32)</desc>
+  </rtept>
+  <rtept lat="49.685750000" lon="11.253000000">
+    <name>RPT096</name>
+    <cmt>Hohenschwärz bei D 91322 Gräfenberg/Thuisbrunn</cmt>
+    <desc>FO32</desc>
+  </rtept>
+  <rtept lat="49.676694444" lon="11.253944444">
+    <name>RPT097</name>
+    <cmt>Gräfenberg in Hohenschwärz halb links halten auf Hohenschwärz (FO32)</cmt>
+    <desc>Hohenschwärz (FO32)</desc>
+  </rtept>
+  <rtept lat="49.671166667" lon="11.259638889">
+    <name>RPT098</name>
+    <cmt>- rechts abbiegen auf ST2191</cmt>
+    <desc>ST2191</desc>
+  </rtept>
+  <rtept lat="49.656138889" lon="11.252888889">
+    <name>RPT099</name>
+    <cmt>- rechts abbiegen auf FO14</cmt>
+    <desc>FO14</desc>
+  </rtept>
+  <rtept lat="49.651194444" lon="11.249333333">
+    <name>RPT100</name>
+    <cmt>bei D 91322 Gräfenberg/Guttenburg  in Gräfenberg halb links halten auf Egloffsteiner Strasse (FO14)</cmt>
+    <desc>Egloffsteiner Strasse (FO14)</desc>
+  </rtept>
+  <rtept lat="49.647027778" lon="11.249611111">
+    <name>RPT101</name>
+    <cmt>- halb rechts halten auf Egloffsteiner Strasse (FO14)</cmt>
+    <desc>Egloffsteiner Strasse (FO14)</desc>
+  </rtept>
+  <rtept lat="49.645972222" lon="11.249500000">
+    <name>RPT102</name>
+    <cmt>- rechts abbiegen auf Kasberger Strasse (FO14)</cmt>
+    <desc>Kasberger Strasse (FO14)</desc>
+  </rtept>
+  <rtept lat="49.646111111" lon="11.248944444">
+    <name>RPT103</name>
+    <cmt>- links abbiegen auf Am Bach (FO28)</cmt>
+    <desc>Am Bach (FO28)</desc>
+  </rtept>
+  <rtept lat="49.643305556" lon="11.246500000">
+    <name>RPT104</name>
+    <cmt>- halb rechts halten auf Guttenburger Strasse (FO28)</cmt>
+    <desc>Guttenburger Strasse (FO28)</desc>
+  </rtept>
+  <rtept lat="49.643138889" lon="11.239138889">
+    <name>RPT105</name>
+    <cmt>Guttenberg bei D 91322 Gräfenberg/Guttenburg</cmt>
+    <desc>FO28\Guttenburger Strasse</desc>
+  </rtept>
+  <rtept lat="49.644000000" lon="11.231388889">
+    <name>RPT106</name>
+    <cmt>Walkersbrunn in Guttenberg rechts abbiegen auf Guttenberg (FO28)</cmt>
+    <desc>Guttenberg (FO28)</desc>
+  </rtept>
+  <rtept lat="49.644416667" lon="11.231361111">
+    <name>RPT107</name>
+    <cmt>- halb links halten auf Guttenberg (FO28)</cmt>
+    <desc>Guttenberg (FO28)</desc>
+  </rtept>
+  <rtept lat="49.644805556" lon="11.230888889">
+    <name>RPT108</name>
+    <cmt>- halb links halten auf Guttenberg (FO28)</cmt>
+    <desc>Guttenberg (FO28)</desc>
+  </rtept>
+  <rtept lat="49.650000000" lon="11.209000000">
+    <name>RPT109</name>
+    <cmt>bei D 91322 Gräfenberg/Walkersbrunn  in Walkersbrunn rechts abbiegen auf Walkersbrunn (ST2236)</cmt>
+    <desc>Walkersbrunn (ST2236)</desc>
+  </rtept>
+  <rtept lat="49.652194444" lon="11.207777778">
+    <name>RPT110</name>
+    <cmt>bei D 91322 Gräfenberg/Schlichenreuth  bei D 91322 Gräfenberg/Walkersbrunn</cmt>
+    <desc>ST2236\Walkersbrunn</desc>
+  </rtept>
+  <rtept lat="49.653944444" lon="11.208638889">
+    <name>RPT111</name>
+    <cmt>- links abbiegen auf Walkersbrunn (ST2236)</cmt>
+    <desc>Walkersbrunn (ST2236)</desc>
+  </rtept>
+  <rtept lat="49.655166667" lon="11.209194444">
+    <name>RPT112</name>
+    <cmt>- links abbiegen auf Walkersbrunn (ST2236)</cmt>
+    <desc>Walkersbrunn (ST2236)</desc>
+  </rtept>
+  <rtept lat="49.659694444" lon="11.185861111">
+    <name>RPT113</name>
+    <cmt>Weingarts bei D 91322 Gräfenberg/Schlichenreuth</cmt>
+    <desc>ST2236</desc>
+  </rtept>
+  <rtept lat="49.672888889" lon="11.170666667">
+    <name>RPT114</name>
+    <cmt>Kunreuth in Weingarts rechts abbiegen auf Weingarts (ST2236)</cmt>
+    <desc>Weingarts (ST2236)</desc>
+  </rtept>
+  <rtept lat="49.682138889" lon="11.143361111">
+    <name>RPT115</name>
+    <cmt>Gaiganz in Kunreuth links abbiegen auf Schlossstrasse (ST2242)</cmt>
+    <desc>Schlossstrasse (ST2242)</desc>
+  </rtept>
+  <rtept lat="49.681916667" lon="11.141750000">
+    <name>RPT116</name>
+    <cmt>- geradeaus weiter auf Badanger</cmt>
+    <desc>Badanger</desc>
+  </rtept>
+  <rtept lat="49.680583333" lon="11.137972222">
+    <name>RPT117</name>
+    <cmt>- geradeaus weiter auf ST2242</cmt>
+    <desc>ST2242</desc>
+  </rtept>
+  <rtept lat="49.679416667" lon="11.135944444">
+    <name>RPT118</name>
+    <cmt>- links abbiegen auf ST2242</cmt>
+    <desc>ST2242</desc>
+  </rtept>
+  <rtept lat="49.672944444" lon="11.130500000">
+    <name>RPT119</name>
+    <cmt>bei D 91090 Effeltrich/Gaiganz  in Gaiganz halb rechts halten auf Gaiganzer Hauptstrasse (ST2242)</cmt>
+    <desc>Gaiganzer Hauptstrasse (ST2242)</desc>
+  </rtept>
+  <rtept lat="49.671277778" lon="11.128194444">
+    <name>RPT120</name>
+    <cmt>Effeltrich bei D 91090 Effeltrich/Gaiganz</cmt>
+    <desc>ST2242\Gaiganzer Hauptstrasse</desc>
+  </rtept>
+  <rtept lat="49.669055556" lon="11.122361111">
+    <name>RPT121</name>
+    <cmt>- halb links halten auf ST2242</cmt>
+    <desc>ST2242</desc>
+  </rtept>
+  <rtept lat="49.659555556" lon="11.098777778">
+    <name>RPT122</name>
+    <cmt>bei D 91090 Effeltrich  in Effeltrich rechts abbiegen auf Gaiganzer Strasse (ST2242)</cmt>
+    <desc>Gaiganzer Strasse (ST2242)</desc>
+  </rtept>
+  <rtept lat="49.659861111" lon="11.094722222">
+    <name>RPT123</name>
+    <cmt>Honings bei D 91090 Effeltrich</cmt>
+    <desc>ST2242\Hauptstrasse</desc>
+  </rtept>
+  <rtept lat="49.659694444" lon="11.092416667">
+    <name>RPT124</name>
+    <cmt>- links abbiegen auf Neunkirchener Strasse (ST2242/ST2243)</cmt>
+    <desc>Neunkirchener Strasse (ST2242/ST2243)</desc>
+  </rtept>
+  <rtept lat="49.658555556" lon="11.092472222">
+    <name>RPT125</name>
+    <cmt>- links abbiegen auf Neunkirchener Strasse (ST2243)</cmt>
+    <desc>Neunkirchener Strasse (ST2243)</desc>
+  </rtept>
+  <rtept lat="49.615000000" lon="11.127638889">
+    <name>RPT126</name>
+    <cmt>bei D 91077 Neunkirchen  in Neunkirchen am Brand rechts abbiegen auf Friedhofstrasse</cmt>
+    <desc>Friedhofstrasse</desc>
+  </rtept>
+  <rtept lat="49.614777778" lon="11.127388889">
+    <name>RPT127</name>
+    <cmt>Dormitz bei D 91077 Neunkirchen</cmt>
+    <desc>Friedhofstrasse</desc>
+  </rtept>
+  <rtept lat="49.612750000" lon="11.126305556">
+    <name>RPT128</name>
+    <cmt>- geradeaus weiter auf Erleinhofer Strasse</cmt>
+    <desc>Erleinhofer Strasse</desc>
+  </rtept>
+  <rtept lat="49.611861111" lon="11.122194444">
+    <name>RPT129</name>
+    <cmt>- links abbiegen auf Henkerstegstrasse</cmt>
+    <desc>Henkerstegstrasse</desc>
+  </rtept>
+  <rtept lat="49.609361111" lon="11.123805556">
+    <name>RPT130</name>
+    <cmt>- geradeaus weiter auf Erlanger Strasse (ST2243)</cmt>
+    <desc>Erlanger Strasse (ST2243)</desc>
+  </rtept>
+  <rtept lat="49.608583333" lon="11.124166667">
+    <name>RPT131</name>
+    <cmt>- halb rechts halten auf Erlanger Strasse (ST2243)</cmt>
+    <desc>Erlanger Strasse (ST2243)</desc>
+  </rtept>
+  <rtept lat="49.603527778" lon="11.119944444">
+    <name>RPT132</name>
+    <cmt>- geradeaus weiter auf ST2240</cmt>
+    <desc>ST2240</desc>
+  </rtept>
+  <rtept lat="49.593722222" lon="11.106750000">
+    <name>RPT133</name>
+    <cmt>bei D 91080 Uttenreuth/Habernhofermühle  links abbiegen auf ST2243</cmt>
+    <desc>ST2243</desc>
+  </rtept>
+  <rtept lat="49.586250000" lon="11.109027778">
+    <name>RPT134</name>
+    <cmt>bei D 90562 Kalchreuth  bei D 91080 Uttenreuth/Habernhofermühle</cmt>
+    <desc>ST2243</desc>
+  </rtept>
+  <rtept lat="49.557722222" lon="11.126055556">
+    <name>RPT135</name>
+    <cmt>Neunhof bei D 90562 Kalchreuth</cmt>
+    <desc>ST2243</desc>
+  </rtept>
+  <rtept lat="49.556472222" lon="11.127472222">
+    <name>RPT136</name>
+    <cmt>- in Kalchreuth einfahren in Kreisverkehr</cmt>
+    <desc>- in Kalchreuth einfahren in Kreisverkehr</desc>
+  </rtept>
+  <rtept lat="49.556305556" lon="11.127361111">
+    <name>RPT137</name>
+    <cmt>- 1. Möglichkeit aus Kreisverkehr ausfahren auf Fürther Strasse (ERH6)</cmt>
+    <desc>Fürther Strasse (ERH6)</desc>
+  </rtept>
+  <rtept lat="49.528416667" lon="11.063111111">
+    <name>RPT138</name>
+    <cmt>- geradeaus weiter auf N3 Obere Dorfstrasse</cmt>
+    <desc>N3 Obere Dorfstrasse</desc>
+  </rtept>
+  <rtept lat="49.518194444" lon="11.049138889">
+    <name>RPT139</name>
+    <cmt>Kraftshof bei D 90427 Nürnberg/Neunhof</cmt>
+    <desc>Obere Dorfstrasse</desc>
+  </rtept>
+  <rtept lat="49.516194444" lon="11.048305556">
+    <name>RPT140</name>
+    <cmt>- geradeaus weiter auf Kraftshofer Hauptstrasse</cmt>
+    <desc>Kraftshofer Hauptstrasse</desc>
+  </rtept>
+  <rtept lat="49.513916667" lon="11.046166667">
+    <name>RPT141</name>
+    <cmt>Buch in Kraftshof links abbiegen auf Kraftshofer Hauptstrasse</cmt>
+    <desc>Kraftshofer Hauptstrasse</desc>
+  </rtept>
+  <rtept lat="49.512472222" lon="11.046666667">
+    <name>RPT142</name>
+    <cmt>- halb rechts halten auf Am Kressenstein</cmt>
+    <desc>Am Kressenstein</desc>
+  </rtept>
+  <rtept lat="49.506916667" lon="11.047083333">
+    <name>RPT143</name>
+    <cmt>- geradeaus weiter auf Kraftshofer Hauptstrasse</cmt>
+    <desc>Kraftshofer Hauptstrasse</desc>
+  </rtept>
+  <rtept lat="49.502833333" lon="11.044861111">
+    <name>RPT144</name>
+    <cmt>- links abbiegen auf B4 Erlanger Strasse</cmt>
+    <desc>B4 Erlanger Strasse</desc>
+  </rtept>
+  <rtept lat="49.469250000" lon="11.067916667">
+    <name>RPT145</name>
+    <cmt>D 90403 Nürnberg/Sebald  in Nürnberg links abbiegen auf B4R</cmt>
+    <desc>B4R</desc>
+  </rtept>
+  <rtept lat="49.470250000" lon="11.094472222">
+    <name>RPT146</name>
+    <cmt>- halb rechts halten auf B4R Hintermayrstrasse</cmt>
+    <desc>B4R Hintermayrstrasse</desc>
+  </rtept>
+  <rtept lat="49.460611111" lon="11.105750000">
+    <name>RPT147</name>
+    <cmt>- rechts abbiegen auf Äussere Sulzbacher Strasse</cmt>
+    <desc>Äussere Sulzbacher Strasse</desc>
+  </rtept>
+  <rtept lat="49.459750000" lon="11.102805556">
+    <name>RPT148</name>
+    <cmt>- rechts halten auf Sulzbacher Strasse</cmt>
+    <desc>Sulzbacher Strasse</desc>
+  </rtept>
+  <rtept lat="49.459083333" lon="11.097611111">
+    <name>RPT149</name>
+    <cmt>- links abbiegen auf Bauvereinstrasse</cmt>
+    <desc>Bauvereinstrasse</desc>
+  </rtept>
+  <rtept lat="49.454666667" lon="11.098416667">
+    <name>RPT150</name>
+    <cmt>- geradeaus weiter auf Wöhrder Talübergang</cmt>
+    <desc>Wöhrder Talübergang</desc>
+  </rtept>
+  <rtept lat="49.449944444" lon="11.097166667">
+    <name>RPT151</name>
+    <cmt>- geradeaus weiter auf Dürrenhofstrasse</cmt>
+    <desc>Dürrenhofstrasse</desc>
+  </rtept>
+  <rtept lat="49.445861111" lon="11.097555556">
+    <name>RPT152</name>
+    <cmt>- links abbiegen auf Stephanstrasse</cmt>
+    <desc>Stephanstrasse</desc>
+  </rtept>
+  <rtept lat="49.446055556" lon="11.100944444">
+    <name>RPT153</name>
+    <cmt>- links abbiegen auf Hintere Cramergasse</cmt>
+    <desc>Hintere Cramergasse</desc>
+  </rtept>
+  <rtept lat="49.447694444" lon="11.100611111">
+    <name>RPT154</name>
+    <cmt>- rechts abbiegen auf Burgerstrasse</cmt>
+    <desc>Burgerstrasse</desc>
+  </rtept>
+</rte>
+</gpx>

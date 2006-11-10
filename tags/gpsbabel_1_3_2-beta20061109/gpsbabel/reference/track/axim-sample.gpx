@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="50.877340632" minlon="12.433738670" maxlat="50.877348965" maxlon="12.433888670"/>
+<trk>
+<trkseg>
+<trkpt lat="50.877340632" lon="12.433888670">
+  <ele>320.000000</ele>
+<time>2006-04-24T09:46:20Z</time>
+</trkpt>
+<trkpt lat="50.877340632" lon="12.433880337">
+  <ele>320.000000</ele>
+<time>2006-04-24T09:46:21Z</time>
+</trkpt>
+<trkpt lat="50.877340632" lon="12.433872003">
+  <ele>320.100006</ele>
+<time>2006-04-24T09:46:22Z</time>
+</trkpt>
+<trkpt lat="50.877342299" lon="12.433860337">
+  <ele>320.100006</ele>
+<time>2006-04-24T09:46:23Z</time>
+</trkpt>
+<trkpt lat="50.877343965" lon="12.433847003">
+  <ele>320.100006</ele>
+<time>2006-04-24T09:46:24Z</time>
+</trkpt>
+<trkpt lat="50.877343965" lon="12.433832003">
+  <ele>320.100006</ele>
+<time>2006-04-24T09:46:25Z</time>
+</trkpt>
+<trkpt lat="50.877343965" lon="12.433815337">
+  <ele>320.100006</ele>
+<time>2006-04-24T09:46:26Z</time>
+</trkpt>
+<trkpt lat="50.877345632" lon="12.433798670">
+  <ele>320.200012</ele>
+<time>2006-04-24T09:46:27Z</time>
+</trkpt>
+<trkpt lat="50.877345632" lon="12.433782003">
+  <ele>320.200012</ele>
+<time>2006-04-24T09:46:28Z</time>
+</trkpt>
+<trkpt lat="50.877347299" lon="12.433767003">
+  <ele>320.299988</ele>
+<time>2006-04-24T09:46:29Z</time>
+</trkpt>
+<trkpt lat="50.877347299" lon="12.433752003">
+  <ele>320.600006</ele>
+<time>2006-04-24T09:46:30Z</time>
+</trkpt>
+<trkpt lat="50.877348965" lon="12.433738670">
+  <ele>321.000000</ele>
+<time>2006-04-24T09:46:31Z</time>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>

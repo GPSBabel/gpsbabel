@@ -1,0 +1,10 @@
+<para>
+	This format can be used to convert files from
+	<ulink url="http://www.tracklogs.co.uk">TrackLogs Digital Mapping</ulink>. The files 
+	have extension .trl and can contain waypoints and tracks.
+</para>
+<para>
+	We have seen three different types of this format. Two are binary 
+	and one is an XML based format.  All three types are supported 
+	by our reader.
+</para>

@@ -1,0 +1,9 @@
+<para>Serial download protocol for the <productname>Wintec WBT-200</productname> GPS data logger. Although untested it is expected that this will also support the WBT-100.</para>
+<para>
+<ulink url="http://www.semsons.com/wi3mugpsrebt.html">Wintec WBT-200</ulink>
+</para>
+<example id="wbt-on-macos">
+  <title>Command showing WBT-200 download and erase over Bluetooth on Mac OS X</title>
+  <screen format="linespecific">gpsbabel -i wbt,erase -f /dev/cu.WBT200-SPPslave-1 -o gpx -F out.gpx</screen>
+</example>
+    
