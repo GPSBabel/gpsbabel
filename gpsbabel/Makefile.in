@@ -167,6 +167,16 @@ $(WEB)/htmldoc-$(DOCVERSION)/readme.html: FORCE
 	chmod 755 tools/mkcapabilities
 	tools/mkcapabilities
 
+gpsbabel.fo: 
+	perl xmldoc/makedoc
+	xmlwf xmldoc/readme.xml		#check for well-formedness
+	xmllint --noout --valid xmldoc/readme.xml    	#validate
+	xsltproc -o $@ xmldoc/babelpdf.xsl xmldoc/readme.xml
+
+gpsbabel.pdf: gpsbabel.fo
+	fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
+
+
 gpsbabel.html: FORCE
 	xsltproc \
 	  --stringparam toc.section.depth "1" \
@@ -178,7 +188,7 @@ gpsbabel.html: FORCE
 readme.txt: gpsbabel.html
 	lynx -nolist -dump gpsbabel.html  > $@
 
-doc: gpsbabel $(WEB)/htmldoc-$(DOCVERSION)/readme.html # readme.txt
+doc: gpsbabel $(WEB)/htmldoc-$(DOCVERSION)/readme.html gpsbabel.pdf # readme.txt
 
 FORCE:
 
