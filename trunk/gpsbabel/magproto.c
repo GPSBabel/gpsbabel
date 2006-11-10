@@ -721,7 +721,7 @@ static void
 mag_rd_init_common(const char *portname)
 {
 	char *ext;
-	waypoint_read_count = 0;
+	int waypoint_read_count = 0;
 
 	if (bs) {
 		bitrate=atoi(bs);
