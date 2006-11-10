@@ -649,7 +649,7 @@ track_wpt_cb(const waypoint *wpt)
 	
 	gbfputdbl(wpt->latitude, fout);
 	gbfputdbl(wpt->longitude, fout);
-	gbfputdbl(wpt->altitude, fout);
+	gbfputdbl(wpt->altitude != unknown_alt ? wpt->altitude : 0, fout);
 }
 
 static void
@@ -659,7 +659,7 @@ wpt_cb(const waypoint *wpt)
 	
 	gbfputdbl(wpt->latitude, fout);
 	gbfputdbl(wpt->longitude, fout);
-	gbfputdbl(wpt->altitude, fout);
+	gbfputdbl(wpt->altitude != unknown_alt ? wpt->altitude : 0, fout);
 	
 	names = 1;
 	if (wpt->description && *wpt->description) names = 2;
