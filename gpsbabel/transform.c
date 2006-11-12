@@ -98,7 +98,12 @@ static void
 transform_any_disp_wpt_cb(const waypoint *wpt)
 {
 	waypoint *temp = waypt_dupe(wpt);
-	waypt_add(temp);
+	if (current_target == 'R')
+		route_add_wpt(current_rte, temp);
+	else if (current_target == 'T')
+		track_add_wpt(current_trk, temp);
+	else
+		waypt_add(temp);
 }
 
 static void
