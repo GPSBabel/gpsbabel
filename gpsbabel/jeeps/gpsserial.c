@@ -305,6 +305,7 @@ void GPS_Serial_Error(const char *mb, ...)
 	s = msg + b;
 	*s++ = ':';
 	*s++ = ' ';
+	*s++ = '\0';
 
 //	FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM, 0, 
 //			GetLastError(), 0, s, sizeof(msg) - b - 2, 0 );
