@@ -22,7 +22,3 @@
 
 #define ZLIB_INHIBITED 1
 
-/* We really should figure out some way to get this from autoconf into
- * a file so that the MSVC build can pick it up
- */
-#define VERSION "1.3.2-1109"

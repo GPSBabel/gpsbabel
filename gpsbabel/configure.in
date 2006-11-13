@@ -3,10 +3,10 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT(GPSBabel, 1.3.2-1109, BUG-REPORT-ADDRESS)
+AC_INIT(GPSBabel, 1.3.2, BUG-REPORT-ADDRESS)
 
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-PACKAGE_RELEASE=""
+PACKAGE_RELEASE="-beta20061113"
 AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$PACKAGE_RELEASE", [Define to the release name of this package.])
 AC_SUBST(PACKAGE_RELEASE)
 
@@ -274,5 +274,5 @@ AC_SUBST(DOCDIR)
 # AC_CHECK_FUNCS([atexit floor localtime_r memmove memset pow select sqrt strchr strcspn strdup strerror strncasecmp strrchr strspn strstr strtol strtoul])
 AC_CHECK_FUNCS([nanosleep sleep])
 
-AC_CONFIG_FILES([Makefile xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc coldsync/Makefile jeeps/Makefile shapelib/Makefile zlib/empty])
+AC_CONFIG_FILES([Makefile gbversion.h xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc coldsync/Makefile jeeps/Makefile shapelib/Makefile zlib/empty])
 AC_OUTPUT

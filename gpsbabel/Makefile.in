@@ -10,7 +10,7 @@ VERSIOND=$(VERSD)$(RELEASE)
 VERSIONU=$(VERSU)$(RELEASE)
 
 DOCVERSION=development
-DOCVERSION=@PACKAGE_VERSION@
+# DOCVERSION=@PACKAGE_VERSION@
 
 CC=@CC@
 EXEEXT=@EXEEXT@
@@ -106,9 +106,6 @@ gpsbabel-debug: $(OBJS)
 
 Makefile: Makefile.in config.status
 	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
-
-globals.o:
-	$(CC)  @CPPFLAGS@ -c $(GBCFLAGS) -DVERSION=\"$(VERSIOND)\" $< $(OUTPUT_SWITCH)$@
 
 jeeps/gpslibusb.o: 
 	$(CC)  @CPPFLAGS@ -c $(GBCFLAGS) @USB_CFLAGS@ @srcdir@/jeeps/gpslibusb.c $(OUTPUT_SWITCH)$@
@@ -397,7 +394,7 @@ geoniche.o: geoniche.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h garmin_tables.h
-globals.o: globals.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+globals.o: globals.c defs.h gbversion.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 glogbook.o: glogbook.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
