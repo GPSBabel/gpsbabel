@@ -1281,7 +1281,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-PACKAGE_RELEASE=""
+PACKAGE_RELEASE="-beta20061113"
 
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE_RELEASE "$PACKAGE_RELEASE"
@@ -3448,7 +3448,7 @@ fi
 done
 
 
-                                                                                ac_config_files="$ac_config_files Makefile xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc coldsync/Makefile jeeps/Makefile shapelib/Makefile zlib/empty"
+                                                                                          ac_config_files="$ac_config_files Makefile gbversion.h xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc coldsync/Makefile jeeps/Makefile shapelib/Makefile zlib/empty"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3976,6 +3976,7 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+  "gbversion.h" ) CONFIG_FILES="$CONFIG_FILES gbversion.h" ;;
   "xmldoc/makedoc" ) CONFIG_FILES="$CONFIG_FILES xmldoc/makedoc" ;;
   "tools/mkcapabilities" ) CONFIG_FILES="$CONFIG_FILES tools/mkcapabilities" ;;
   "win32/gpsbabel.rc" ) CONFIG_FILES="$CONFIG_FILES win32/gpsbabel.rc" ;;

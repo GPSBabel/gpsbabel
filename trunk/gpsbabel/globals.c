@@ -21,6 +21,7 @@
 
 
 #include "defs.h"
+#include "gbversion.h"
 
 global_options global_opts;
 const char gpsbabel_version[] = VERSION;
