@@ -2,7 +2,7 @@
       
       
       <para> This was a requested CSV format, *not* the proprietary
-binary format used by Fugawi. Like any other CSV format, GPSBabel
+binary format used by <ulink url="http://www.fugawi.com">Fugawi</ulink>. Like any other CSV format, GPSBabel
 cannot read tracks in this format, but converting a track into it and
 then importing as track in Fugawi works.</para>
       <para> It is known to work with Fugawi V3.1.4.635. When

@@ -1,5 +1,5 @@
 <para> 
-This format supports <productname>cotoGPS</productname>, a Palm GPS program. 
+This format supports <productname>cotoGPS</productname>, a <productname>Palm</productname> GPS program. 
 It can read both track and marker (waypoint) files. It is currently unable 
 to write track files, so only marker files can be written. The marker
 categories are written to and read from the icon description. The 'Not

@@ -1,8 +1,8 @@
 
       
       
-      <para> This code is mostly intended to convert CoPilot Flight
-Planner for Palmd/OS atabases into other formats.  You probably should
+      <para> This code is mostly intended to convert  <ulink url="http://xcski.com/~ptomblin/CoPilot/">CoPilot Flight
+Planner for Palm/OS"</ulink> databases into other formats.  You probably should
 not use this to write CoPilot databases, although the code is there,
 because GPSBabel doesn't convert magnetic declination values.</para>
       <para> Questions, bug reports, etc, to ptomblin at
