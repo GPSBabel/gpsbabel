@@ -128,6 +128,15 @@ finalize_pt(waypoint *wpt)
 		wpt->latitude = xmlLatitude;
 		wpt->longitude = xmlLongitude;
 	}
+	/* NOTE:
+	 * Alan White reports this program actually subtracts a number
+	 * of meters ranging between 46 and 50 meters.  It appears to be
+	 * constant for each location, but different without an obvious
+	 * correlation to ground altitude.  We considered offsetting this
+	 * in GPSBabel, but concluded it wasn't worth the bother. 
+	 * If we get complaints, probably all of our alt reading and writing
+	 * should offset an average of 46m or so.
+	 */
 	wpt->altitude = xmlAltitude;
 	convert_datum(wpt, xmldatum);
 }
