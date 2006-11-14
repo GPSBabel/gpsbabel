@@ -176,6 +176,43 @@ spec_usage( const char *vec ) {
 	printf( "\n" );
 }
 
+static void
+print_extended_info(void)
+{
+	printf(
+
+#if !ZLIB_INHIBITED	/* Note polarity inverted here */
+	"ZLIB_ENABLED "
+#endif
+
+#if FILTERS_ENABLED
+	"FILTERS_ENABLED "
+#endif
+
+#if CSVFMTS_ENABLED
+	"CSVFMTS_ENABLED "
+#endif
+
+#if PDBFMTS_ENABLED 
+	"PDBFMTS_ENABLED "
+#endif
+
+#if SHAPELIB_ENABLED 
+	"SHAPELIB_ENABLED "
+#endif
+#if HAVE_LIBEXPAT
+	"HAVE_LIBEXPAT "
+#if XML_UNICODE
+	"XML_UNICODE "
+#endif
+#endif
+
+#if defined CET_WANTED 	
+	"CET_ENABLED "
+#endif
+	"\n");
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -213,6 +250,7 @@ main(int argc, char *argv[])
 	}
 	debug_mem_output( "\n" );
 #endif
+
 	if (gpsbabel_time != 0) {	/* within testo ? */
 		global_opts.inifile = inifile_init(NULL, MYNAME);
 	}
@@ -241,8 +279,11 @@ main(int argc, char *argv[])
 		}
 		
 		if (argv[argn][1] == 'V' ) {
-			 printf("\nGPSBabel Version %s\n\n", gpsbabel_version );
-			 exit(0);
+			printf("\nGPSBabel Version %s\n\n", gpsbabel_version );
+			if (argv[argn][2] == 'V') {
+				print_extended_info();
+			}
+			exit(0);
 		}
 
 		if (argv[argn][1] == '?' || argv[argn][1] == 'h') {
