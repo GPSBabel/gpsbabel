@@ -164,6 +164,15 @@ $(WEB)/htmldoc-$(DOCVERSION)/readme.html: FORCE
 	chmod 755 tools/mkcapabilities
 	tools/mkcapabilities
 
+#
+# The .fo and PDF versions depend on additional tools.
+# 'fop' must be obtained from http://xmlgraphics.apache.org/fop/
+#   0.92beta seems to work OK, BUT.
+#   * If you have a package called 'docbook-xml-website' it's reported
+#     to prevent the build from working.   Remove it. (Suse)
+#   * Sun Java seems to be required.   GCJ 1.4.2 doesn't work.   You can
+#     force Sun Java to be used by creating ~/.foprc with 'rpm_mode=' (Fedora)
+#
 gpsbabel.fo: 
 	perl xmldoc/makedoc
 	xmlwf xmldoc/readme.xml		#check for well-formedness
@@ -242,6 +251,11 @@ release-rpm:
 # Do this build in a temporary tree that was a copy of the tagged one
 # to avoid scribbling in the "real" one.
 #
+# The cross builds are built with mingw.   http://mirzam.it.vu.nl/mingw
+# and http://mingw.sourceforge.net are convenient sources for that.
+# binutils, runtime, w32api, and gcc-core seem to be required.
+#
+
 release-winbuild:
 	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
 	cp -a gpsbabel-$(VERSIOND) /tmp/gpsbabel-$(VERSIOND)-cross
