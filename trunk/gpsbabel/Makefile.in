@@ -172,6 +172,7 @@ $(WEB)/htmldoc-$(DOCVERSION)/readme.html: FORCE
 #     to prevent the build from working.   Remove it. (Suse)
 #   * Sun Java seems to be required.   GCJ 1.4.2 doesn't work.   You can
 #     force Sun Java to be used by creating ~/.foprc with 'rpm_mode=' (Fedora)
+#     Get it from http://www.java.com
 #
 gpsbabel.fo: 
 	perl xmldoc/makedoc

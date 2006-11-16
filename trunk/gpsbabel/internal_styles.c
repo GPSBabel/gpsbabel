@@ -889,6 +889,8 @@ static char tabsep[] =
 "IFIELD  PATH_DISTANCE_KM, \"\", \"%f\"\n"
 "IFIELD  GEOCACHE_PLACER,\"\",\"%s\"\n"
 "IFIELD  YYYYMMDD_TIME,\"\",\"%ld\"\n"
+"IFIELD	GEOCACHE_HINT, \"\", \"%s\"\n"
+"IFIELD	GEOCACHE_LAST_FOUND, \"\", \"%d\"\n"
 ;
 static char xmap2006[] = 
 "# gpsbabel XCSV style file\n"
