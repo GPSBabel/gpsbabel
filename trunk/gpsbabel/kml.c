@@ -22,6 +22,10 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
+#ifdef __WIN32__
+# include <windows.h>
+#endif
+
 // options
 static char *opt_deficon = NULL;
 static char *opt_export_lines = NULL;
