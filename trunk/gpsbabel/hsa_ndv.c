@@ -226,14 +226,13 @@ static void
 hsa_ndv_read(void)
 {
 	int len;
-	char buf[MY_CBUF];
-	memset(buf, 0, MY_CBUF);
+	char buf[MY_CBUF + 1];
 	
-	while ((len = fread(buf, 1, sizeof(buf), fd))) 
+	while ((len = fread(buf, 1, sizeof(buf) - 1, fd))) 
 	{
 		char *bad;
 
-		buf[len-1] = 0;
+		buf[len] = '\0';
 		if (NULL != strstr(buf, "nver=1"))
 		{//its the older format, not xml
 			fseek(fd, 0, SEEK_SET);
@@ -241,7 +240,8 @@ hsa_ndv_read(void)
 			break;
 		}
 		//grumble - have to remove \x1f's from sirius attributes
-		while (NULL != (bad = strchr(buf, '\x1f')))
+		bad = buf;
+		while (NULL != (bad = strchr(bad, '\x1f')))
 		{
 			*bad = REPLACEMENT_SIRIUS_ATTR_SEPARATOR;
 		}
