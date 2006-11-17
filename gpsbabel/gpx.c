@@ -45,8 +45,8 @@ static vmem_t current_tag;
 
 static waypoint *wpt_tmp;
 static int cache_descr_is_html;
-static FILE *fd;
-static FILE *ofd;
+static gbfile *fd;
+static gbfile *ofd;
 static short_handle mkshort_handle;
 
 static const char *input_string = NULL;
@@ -227,18 +227,18 @@ gpx_write_gdata(gpx_global_entry *ge, char *tag)
 		return;
 	}
 
-	fprintf(ofd, "<%s>", tag);
+	gbfprintf(ofd, "<%s>", tag);
 	QUEUE_FOR_EACH(&ge->queue, elem, tmp) {
 		gep = BASE_STRUCT(elem, gpx_global_entry, queue);
-		fprintf(ofd, "%s", gep->tagdata);
+		gbfprintf(ofd, "%s", gep->tagdata);
 		/* Some tags we just output once. */
 		if ((0 == strcmp(tag, "url")) ||
 			(0 == strcmp(tag, "email"))) {
 			break;
 		}
-		fprintf(ofd, " ");
+		gbfprintf(ofd, " ");
 	}
-	fprintf(ofd, "</%s>\n", tag);
+	gbfprintf(ofd, "</%s>\n", tag);
 }
 
 
@@ -1097,7 +1097,7 @@ static void
 gpx_rd_init(const char *fname)
 {
 	if ( fname[0] ) {
-		fd = xfopen(fname, "r", MYNAME);
+		fd = gbfopen(fname, "r", MYNAME);
 	}
 	else {
 		fd = NULL;
@@ -1173,7 +1173,7 @@ gpx_rd_deinit(void)
 		gpx_author = NULL;
 	}
 	if (fd) {
-	        fclose(fd);
+	        gbfclose(fd);
 	}
 	XML_ParserFree(psr);
 	psr = NULL;
@@ -1187,13 +1187,13 @@ gpx_wr_init(const char *fname)
 {
 	mkshort_handle = mkshort_new_handle();
 
-	ofd = xfopen(fname, "w", MYNAME);
+	ofd = gbfopen(fname, "w", MYNAME);
 }
 
 static void
 gpx_wr_deinit(void)
 {
-	fclose(ofd);
+	gbfclose(ofd);
 	mkshort_del_handle(&mkshort_handle);
 }
 
@@ -1225,8 +1225,8 @@ gpx_read(void)
 			char *badchar;
 			char *semi;
 			int maxentlength = 8;
-			len = fread(buf, 1, MY_CBUF_SZ - maxentlength, fd);
-			done = feof(fd) || !len;
+			len = gbfread(buf, 1, MY_CBUF_SZ - maxentlength, fd);
+			done = gbfeof(fd) || !len;
 			buf[len] = '\0';
 			badchar = buf+len-maxentlength;
 			badchar = strchr( badchar, '&' );
@@ -1234,7 +1234,7 @@ gpx_read(void)
 			while ( badchar && len < MY_CBUF_SZ-1) {
 				semi = strchr( badchar, ';');
 				while ( extra && !semi ) {
-					len += fread( buf+len, 1, 1, fd);
+					len += gbfread( buf+len, 1, 1, fd);
 					buf[len]='\0';
 					extra--;
 					if ( buf[len-1] == ';') 
@@ -1292,15 +1292,15 @@ static void
 fprint_tag_and_attrs( char *prefix, char *suffix, xml_tag *tag )
 {
 	char **pa;
-	fprintf( ofd, "%s%s", prefix, tag->tagname );
+	gbfprintf( ofd, "%s%s", prefix, tag->tagname );
 	pa = tag->attributes;
 	if ( pa ) {
 		while ( *pa ) {
-			fprintf( ofd, " %s=\"%s\"", pa[0], pa[1] );
+			gbfprintf( ofd, " %s=\"%s\"", pa[0], pa[1] );
 			pa += 2;
 		}
 	}
-	fprintf( ofd, "%s", suffix );
+	gbfprintf( ofd, "%s", suffix );
 }
 
 static void
@@ -1316,7 +1316,7 @@ fprint_xml_chain( xml_tag *tag, const waypoint *wpt )
 		
 			if ( tag->cdata ) {
 				tmp_ent = xml_entitize( tag->cdata );
-				fprintf( ofd, "%s", tmp_ent );
+				gbfprintf( ofd, "%s", tmp_ent );
 				xfree(tmp_ent);
 			}
 			if ( tag->child ) {
@@ -1327,11 +1327,11 @@ fprint_xml_chain( xml_tag *tag, const waypoint *wpt )
 				xml_write_time( ofd, wpt->gc_data.exported, 
 						"groundspeak:exported" );
 			}
-			fprintf( ofd, "</%s>\n", tag->tagname);
+			gbfprintf( ofd, "</%s>\n", tag->tagname);
 		}
 		if ( tag->parentcdata ) {
 			tmp_ent = xml_entitize(tag->parentcdata);
-			fprintf(ofd, "%s", tmp_ent );
+			gbfprintf(ofd, "%s", tmp_ent );
 			xfree(tmp_ent);
 		}
 		tag = tag->sibling;	
@@ -1383,13 +1383,13 @@ write_gpx_url(const waypoint *waypointp)
 		tmp_ent = xml_entitize(waypointp->url);
 		if (gpx_wversion_num > 10) {
 			
-			fprintf(ofd, "  <link href=\"%s%s\">\n", 
+			gbfprintf(ofd, "  <link href=\"%s%s\">\n", 
 				urlbase ? urlbase : "", tmp_ent);
 			write_optional_xml_entity(ofd, "  ", "text", 
 				waypointp->url_link_text);
-			fprintf(ofd, "  </link>\n");
+			gbfprintf(ofd, "  </link>\n");
 		} else {
-			fprintf(ofd, "  <url>%s%s</url>\n", 
+			gbfprintf(ofd, "  <url>%s%s</url>\n", 
 				urlbase ? urlbase : "", tmp_ent);
 			write_optional_xml_entity(ofd, "  ", "urlname", 
 				waypointp->url_link_text);
@@ -1430,19 +1430,19 @@ gpx_write_common_acc(const waypoint *waypointp, const char *indent)
 			break;
 	}
 	if (fix) {
-		fprintf(ofd, "%s<fix>%s</fix>\n", indent, fix);
+		gbfprintf(ofd, "%s<fix>%s</fix>\n", indent, fix);
 	}
 	if (waypointp->sat > 0) {
-		fprintf(ofd, "%s<sat>%d</sat>\n", indent, waypointp->sat);
+		gbfprintf(ofd, "%s<sat>%d</sat>\n", indent, waypointp->sat);
 	}
 	if (waypointp->hdop) {
-		fprintf(ofd, "%s<hdop>%f</hdop>\n", indent, waypointp->hdop);
+		gbfprintf(ofd, "%s<hdop>%f</hdop>\n", indent, waypointp->hdop);
 	}
 	if (waypointp->vdop) {
-		fprintf(ofd, "%s<vdop>%f</vdop>\n", indent, waypointp->vdop);
+		gbfprintf(ofd, "%s<vdop>%f</vdop>\n", indent, waypointp->vdop);
 	}
 	if (waypointp->pdop) {
-		fprintf(ofd, "%s<pdop>%f</pdop>\n", indent, waypointp->pdop);
+		gbfprintf(ofd, "%s<pdop>%f</pdop>\n", indent, waypointp->pdop);
 	}
 }
 
@@ -1450,7 +1450,7 @@ static void
 gpx_write_common_position(const waypoint *waypointp, const char *indent)
 {
 	if (waypointp->altitude != unknown_alt) {
-		fprintf(ofd, "%s<ele>%f</ele>\n",
+		gbfprintf(ofd, "%s<ele>%f</ele>\n",
 			 indent, waypointp->altitude);
 	}
 	if (waypointp->creation_time) {
@@ -1494,7 +1494,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 				  mkshort(mkshort_handle, odesc) : 
 				  waypointp->shortname;
 
-	fprintf(ofd, "<wpt lat=\"" FLT_FMT "\" lon=\"" FLT_FMT "\">\n",
+	gbfprintf(ofd, "<wpt lat=\"" FLT_FMT "\" lon=\"" FLT_FMT "\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
 
@@ -1509,7 +1509,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 	if (gpx_wversion_num > 10) {
 		garmin_fs_xml_fprint(ofd, waypointp);
 	}
-	fprintf(ofd, "</wpt>\n");
+	gbfprintf(ofd, "</wpt>\n");
 }
 
 static void
@@ -1517,13 +1517,13 @@ gpx_track_hdr(const route_head *rte)
 {
 	fs_xml *fs_gpx;
 
-	fprintf(ofd, "<trk>\n");
+	gbfprintf(ofd, "<trk>\n");
 	write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
 	write_optional_xml_entity(ofd, "  ", "desc", rte->rte_desc);
 	if (rte->rte_num) {
-		fprintf(ofd, "<number>%d</number>\n", rte->rte_num);
+		gbfprintf(ofd, "<number>%d</number>\n", rte->rte_num);
 	}
-	fprintf(ofd, "<trkseg>\n");
+	gbfprintf(ofd, "<trkseg>\n");
 
 	fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
 	if ( fs_gpx ) {
@@ -1536,7 +1536,7 @@ gpx_track_disp(const waypoint *waypointp)
 {
 	fs_xml *fs_gpx;
 
-	fprintf(ofd, "<trkpt lat=\"" FLT_FMT_T "\" lon=\"" FLT_FMT_T "\">\n",
+	gbfprintf(ofd, "<trkpt lat=\"" FLT_FMT_T "\" lon=\"" FLT_FMT_T "\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
 
@@ -1545,11 +1545,11 @@ gpx_track_disp(const waypoint *waypointp)
 	/* These were accidentally removed from 1.1 */
 	if (gpx_wversion_num == 10) {
 		if (waypointp->course >= 0) {
-			fprintf(ofd, "  <course>%f</course>\n", 
+			gbfprintf(ofd, "  <course>%f</course>\n", 
 				waypointp->course);
 		}
 		if (waypointp->speed >= 0) {
-			fprintf(ofd, "  <speed>%f</speed>\n", 
+			gbfprintf(ofd, "  <speed>%f</speed>\n", 
 				waypointp->speed);
 		}
 	}
@@ -1567,14 +1567,14 @@ gpx_track_disp(const waypoint *waypointp)
 		fprint_xml_chain( fs_gpx->tag, waypointp );
 	}
 
-	fprintf(ofd, "</trkpt>\n");
+	gbfprintf(ofd, "</trkpt>\n");
 }
 
 static void
 gpx_track_tlr(const route_head *rte)
 {
-	fprintf(ofd, "</trkseg>\n");
-	fprintf(ofd, "</trk>\n");
+	gbfprintf(ofd, "</trkseg>\n");
+	gbfprintf(ofd, "</trk>\n");
 }
 
 static
@@ -1588,11 +1588,11 @@ gpx_route_hdr(const route_head *rte)
 {
 	fs_xml *fs_gpx;
 
-	fprintf(ofd, "<rte>\n");
+	gbfprintf(ofd, "<rte>\n");
 	write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
 	write_optional_xml_entity(ofd, "  ", "desc", rte->rte_desc);
 	if (rte->rte_num) {
-		fprintf(ofd, "  <number>%d</number>\n", rte->rte_num);
+		gbfprintf(ofd, "  <number>%d</number>\n", rte->rte_num);
 	}
 
 	fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
@@ -1606,7 +1606,7 @@ gpx_route_disp(const waypoint *waypointp)
 {
 	fs_xml *fs_gpx;
 
-	fprintf(ofd, "  <rtept lat=\"" FLT_FMT_R "\" lon=\"" FLT_FMT_R "\">\n",
+	gbfprintf(ofd, "  <rtept lat=\"" FLT_FMT_R "\" lon=\"" FLT_FMT_R "\">\n",
 		waypointp->latitude,
 		waypointp->longitude);
 
@@ -1619,13 +1619,13 @@ gpx_route_disp(const waypoint *waypointp)
 		fprint_xml_chain( fs_gpx->tag, waypointp );
 	}
 
-	fprintf(ofd, "  </rtept>\n");
+	gbfprintf(ofd, "  </rtept>\n");
 }
 
 static void
 gpx_route_tlr(const route_head *rte)
 {
-	fprintf(ofd, "</rte>\n");
+	gbfprintf(ofd, "</rte>\n");
 }
 
 static
@@ -1651,7 +1651,7 @@ gpx_write_bounds(void)
 	track_disp_all(NULL, NULL, gpx_waypt_bound_calc);
 
 	if (waypt_bounds_valid(&all_bounds)) {
-		fprintf(ofd, "<bounds minlat=\"%0.9f\" minlon=\"%0.9f\" "
+		gbfprintf(ofd, "<bounds minlat=\"%0.9f\" minlon=\"%0.9f\" "
 			       "maxlat=\"%0.9f\" maxlon=\"%0.9f\"/>\n",
 			       all_bounds.min_lat, all_bounds.min_lon, 
 			       all_bounds.max_lat, all_bounds.max_lon);
@@ -1680,22 +1680,22 @@ gpx_write(void)
 
 	setshort_length(mkshort_handle, short_length);
 
-	fprintf(ofd, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", global_opts.charset_name);
-	fprintf(ofd, "<gpx\n version=\"%s\"\n", gpx_wversion);
-	fprintf(ofd, "creator=\"" CREATOR_NAME_URL "\"\n");
-	fprintf(ofd, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-	fprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
+	gbfprintf(ofd, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", global_opts.charset_name);
+	gbfprintf(ofd, "<gpx\n version=\"%s\"\n", gpx_wversion);
+	gbfprintf(ofd, "creator=\"" CREATOR_NAME_URL "\"\n");
+	gbfprintf(ofd, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+	gbfprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
 	if (xsi_schema_loc) {
-		fprintf(ofd, "xsi:schemaLocation=\"%s\">\n", xsi_schema_loc);
+		gbfprintf(ofd, "xsi:schemaLocation=\"%s\">\n", xsi_schema_loc);
 	} else {
-		fprintf(ofd,
+		gbfprintf(ofd,
 			"xsi:schemaLocation=" DEFAULT_XSI_SCHEMA_LOC_FMT">\n",
 			gpx_wversion[0], gpx_wversion[2],
 			gpx_wversion[0], gpx_wversion[2]);
 	}
 
 	if (gpx_wversion_num > 10) {	
-		fprintf(ofd, "<metadata>\n");
+		gbfprintf(ofd, "<metadata>\n");
 	}
 	gpx_write_gdata(&gpx_global->name, "name");
 	gpx_write_gdata(&gpx_global->desc, "desc");
@@ -1714,14 +1714,14 @@ gpx_write(void)
 	gpx_write_bounds();
 
 	if (gpx_wversion_num > 10) {	
-		fprintf(ofd, "</metadata>\n");
+		gbfprintf(ofd, "</metadata>\n");
 	}
 
 	waypt_disp_all(gpx_waypt_pr);
 	gpx_route_pr();
 	gpx_track_pr();
 
-	fprintf(ofd, "</gpx>\n");
+	gbfprintf(ofd, "</gpx>\n");
 }
 
 
