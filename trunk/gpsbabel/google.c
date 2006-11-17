@@ -345,6 +345,20 @@ google_read(void)
 		  }
 		}
 		xfree( script );
+		script = NULL;
+	}
+
+	/*
+	 * 'Tis better to leak than crash when we are merging and 
+	 * don't see an 'end' in the first file.  This feels a bit
+	 * like plastering over a deeper problem...
+	 *
+	 */
+	if ( encoded_points ) {
+		encoded_points = NULL;
+	}
+	if ( encoded_levels ) {
+		encoded_levels = NULL;
 	}
 }
 #endif
