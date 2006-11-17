@@ -1,8 +1,8 @@
 /* 
 
-	Support for IGN Rando track files, 
+	Support for IGN Rando track files.
 	
-	Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
+	Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 
 #define MYNAME "IGNRando"
 
-static FILE *fout;
+static gbfile *fout;
 
 static route_head *track;
 static waypoint *wpt;
@@ -189,50 +189,18 @@ ignr_read(void)
 
 /* write support */
 
-static void
-ignr_fprintf(FILE *f, const char *fmt, ...)
-{
-	char buff[256];
-	char *temp = buff;
-	va_list args;
-	int i;
-	
-	va_start(args, fmt);
-	
-	i = vsnprintf(buff, sizeof(buff), fmt, args);
-	if (i >= (int) sizeof(buff))
-	{
-		temp = xmalloc(i + 1);
-		i = vsnprintf(temp, i + 1, fmt, args);
-	}
-	if (i < 0)
-	{
-		fatal(MYNAME ": error in vsnprintf.\n");	
-	}
-	else if (i > 0)
-	{
-		char eol = temp[i - 1];
-		if (eol == '\n') i--;
-		fwrite(temp, 1, i, f);
-		if (eol == '\n') fprintf(f, "\r\n");
-	}
-	
-	if (temp != buff) xfree(temp);
-	va_end(args);
-}
-
 /* callbacks registered in ignr_vecs */
 
 static void 
 ignr_rw_init(const char *fname)
 {
-	fout = xfopen(fname, "wb", MYNAME);
+	fout = gbfopen(fname, "w", MYNAME);
 }
 
 static void 
 ignr_rw_deinit(void)
 {
-	fclose(fout);
+	gbfclose(fout);
 }
 
 static void
@@ -242,11 +210,11 @@ ignr_write_track_hdr(const route_head *track)
 
 	if (track_num != track_index) return;
 	
-	ignr_fprintf(fout, "\t<INFORMATIONS>\n");
-	ignr_fprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track->rte_waypt_ct);
+	gbfprintf(fout, "\t<INFORMATIONS>\n");
+	gbfprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track->rte_waypt_ct);
 	if (track->rte_desc != NULL)
-		ignr_fprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", track->rte_desc);
-	ignr_fprintf(fout, "\t</INFORMATIONS>\n");
+		gbfprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", track->rte_desc);
+	gbfprintf(fout, "\t</INFORMATIONS>\n");
 }
 
 static void
@@ -259,11 +227,11 @@ ignr_write_waypt(const waypoint *wpt)
 {
 	if (track_num != track_index) return;
 
-	ignr_fprintf(fout, "\t<ETAPE>\n");
-	ignr_fprintf(fout, "\t\t<POSITION>%3.6f,%3.6f</POSITION>\n", wpt->latitude, wpt->longitude);
+	gbfprintf(fout, "\t<ETAPE>\n");
+	gbfprintf(fout, "\t\t<POSITION>%3.6f,%3.6f</POSITION>\n", wpt->latitude, wpt->longitude);
 	if (wpt->altitude != unknown_alt)
-		ignr_fprintf(fout, "\t\t<ALTITUDE>%3.6f</ALTITUDE>\n", wpt->altitude);
-	ignr_fprintf(fout, "\t</ETAPE>\n");
+		gbfprintf(fout, "\t\t<ALTITUDE>%3.6f</ALTITUDE>\n", wpt->altitude);
+	gbfprintf(fout, "\t</ETAPE>\n");
 }
 
 static void 
@@ -287,20 +255,20 @@ ignr_write(void)
         now = current_time();
 	tm = *localtime(&now);
 	
-	ignr_fprintf(fout, "<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n");
-	ignr_fprintf(fout, "<RANDONNEE>\n");
-	ignr_fprintf(fout, "\t<ENTETE>\n");
-	ignr_fprintf(fout, "\t\t<VERSION_XML>1.1</VERSION_XML>\n");
-	ignr_fprintf(fout, "\t\t<VERSION_BASE>IHA03AA</VERSION_BASE>\n");
+	gbfprintf(fout, "<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n");
+	gbfprintf(fout, "<RANDONNEE>\n");
+	gbfprintf(fout, "\t<ENTETE>\n");
+	gbfprintf(fout, "\t\t<VERSION_XML>1.1</VERSION_XML>\n");
+	gbfprintf(fout, "\t\t<VERSION_BASE>IHA03AA</VERSION_BASE>\n");
 	
 	strftime(buff, sizeof(buff), "%d/%m/%Y", &tm);
-	ignr_fprintf(fout, "\t\t<DATE>%s</DATE>\n", buff);
+	gbfprintf(fout, "\t\t<DATE>%s</DATE>\n", buff);
 	strftime(buff, sizeof(buff), "%H:%M:%S", &tm);
-	ignr_fprintf(fout, "\t\t<HEURE>%s</HEURE>\n", buff);
+	gbfprintf(fout, "\t\t<HEURE>%s</HEURE>\n", buff);
 	
-	ignr_fprintf(fout, "\t</ENTETE>\n");
+	gbfprintf(fout, "\t</ENTETE>\n");
 	track_disp_all(ignr_write_track_hdr, ignr_write_track_trl, ignr_write_waypt);
-	ignr_fprintf(fout, "</RANDONNEE>\n");
+	gbfprintf(fout, "</RANDONNEE>\n");
 }
 
 ff_vecs_t ignr_vecs = {

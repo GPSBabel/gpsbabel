@@ -29,8 +29,7 @@
 
 #include "uuid.h"
 
-static FILE *fd;
-static FILE *ofd;
+static gbfile *fd, *ofd;
 
 #define MYNAME "coastexp"
 #define MY_CBUF 4096
@@ -312,7 +311,7 @@ ce_cdata(void *dta, const XML_Char *xml_s, int len)
 void
 ce_rd_init(const char *fname)
 {
-	fd = xfopen(fname, "r", MYNAME);
+	fd = gbfopen(fname, "r", MYNAME);
 	QUEUE_INIT(&ce_route_head);
 	QUEUE_INIT(&ce_mark_head);
 
@@ -335,8 +334,8 @@ ce_read(void)
 	int len;
 	char buf[MY_CBUF];
 
-	while ((len = fread(buf, 1, sizeof(buf), fd))) {
-		if (!XML_Parse(psr, buf, len, feof(fd))) {
+	while ((len = gbfread(buf, 1, sizeof(buf), fd))) {
+		if (!XML_Parse(psr, buf, len, gbfeof(fd))) {
 			fatal(MYNAME ":Parse error at %d: %s\n",
 				(int) XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
@@ -478,7 +477,7 @@ ce_rd_deinit(void)
 		ce_free_mark(mark);
 	}
 
-	fclose(fd);
+	gbfclose(fd);
 	xfree(element);
 	xfree(cdatastr);
 }
@@ -494,13 +493,13 @@ ce_wr_init(const char *fname)
 	uuid_buffer = xcalloc(MY_UBUF,1);
 	xml_buffer = xcalloc(MY_XBUF, 1);
 
-	ofd = xfopen(fname, "w", MYNAME);
+	ofd = gbfopen(fname, "w", MYNAME);
 }
 
 void
 ce_wr_deinit(void)
 {
-	fclose(ofd);
+	gbfclose(ofd);
 
 	// Free the buffers used for writing
 	xfree(time_buffer);
@@ -559,7 +558,7 @@ ce_route_disp(const waypoint *waypointp)
 	currentMark->id = id;
 	currentMark->wp = (waypoint *) waypointp;
 	ENQUEUE_TAIL(&ce_mark_head, &currentMark->Q);
-	fprintf(ofd, "\t\t\t%s\n", id); // CE's departure from XML standard!
+	gbfprintf(ofd, "\t\t\t%s\n", id); // CE's departure from XML standard!
 }
 
 /* Generate route trailer XML */

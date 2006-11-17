@@ -36,23 +36,23 @@ typedef struct xg_tag_mapping {
 } xg_tag_mapping;
 
 
-void write_xml_entity(FILE *ofd, const char *indent,
+void write_xml_entity(gbfile *ofd, const char *indent,
 		const char *tag, const char *value);
-void write_xml_entity_begin0(FILE *ofd, const char *indent,
+void write_xml_entity_begin0(gbfile *ofd, const char *indent,
 		const char *tag);
-void write_xml_entity_begin1(FILE *ofd, const char *indent, const char *tag, 
+void write_xml_entity_begin1(gbfile *ofd, const char *indent, const char *tag, 
 		const char *attr1, const char *attrval1);
-void write_xml_entity_begin2(FILE *ofd, const char *indent, const char *tag, 
+void write_xml_entity_begin2(gbfile *ofd, const char *indent, const char *tag, 
 		const char *attr1, const char *attrval1, 
 		const char *attr2, const char *attrval2);
-void write_xml_entity_end(FILE *ofd, const char *indent, const char *tag);
+void write_xml_entity_end(gbfile *ofd, const char *indent, const char *tag);
 
-void write_optional_xml_entity(FILE *ofd, const char *indent,
+void write_optional_xml_entity(gbfile *ofd, const char *indent,
 		const char *tag, const char *value);
-void xml_write_time(FILE *ofd, const time_t timep, char *elname);
+void xml_write_time(gbfile *ofd, const time_t timep, char *elname);
 void xml_fill_in_time(char *time_string, const time_t timep, 
 		int long_or_short);
-void write_xml_header(FILE *ofd);
+void write_xml_header(gbfile *ofd);
 void xml_ignore_tags(const char **taglist);
 
 void xml_init(const char *fname, xg_tag_mapping *tbl,const char *encoding);

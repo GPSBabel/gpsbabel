@@ -40,7 +40,7 @@ static void readVersion4( FILE* pFile);
 static void getAttr(const char *data, const char *attr, char **val, char seperator);
 
 static FILE *fd;
-static FILE *ofd;
+static gbfile *ofd;
 
 static
 arglist_t hsa_ndv_args[] = {
@@ -295,13 +295,13 @@ hsa_ndv_rd_deinit(void)
 static void
 hsa_ndv_wr_init(const char *fname)
 {
-	ofd = xfopen(fname, "w", MYNAME);
+	ofd = gbfopen(fname, "w", MYNAME);
 }
 
 static void
 hsa_ndv_wr_deinit(void)
 {
-	fclose(ofd);
+	gbfclose(ofd);
 }
 
 static int legNum = 0;
@@ -310,20 +310,20 @@ static void
 hsa_ndv_waypt_pr(const waypoint *waypointp)
 {
 
-	fprintf(ofd, "\t\t<Object>\n");
+	gbfprintf(ofd, "\t\t<Object>\n");
 
-	fprintf(ofd, "\t\t\t<ClassName>waypnt</ClassName>\n");
+	gbfprintf(ofd, "\t\t\t<ClassName>waypnt</ClassName>\n");
 //ignore these for now, they are s57 specific
 //	fprintf(ofd, "\t\t\t<FeatureNameAgency>0</FeatureNameAgency>\n");
 //	fprintf(ofd, "\t\t\t<FeatureNameSubDiv>1</FeatureNameSubDiv>\n");
 //	fprintf(ofd, "\t\t\t<FeatureNameNumber>1089009023</FeatureNameNumber>\n");
-	fprintf(ofd, "\t\t\t<Attr><![CDATA[attr=grpnam%s\x1ftrnrad50\x1fOBJNAM%s\x1flegnum%i\x1fusrmrk%s\x1fselect2]]></Attr>\n", routeName, waypointp->shortname, legNum, waypointp->description);
-	fprintf(ofd, "\t\t\t<LegAttr><![CDATA[attr=grpnam%s\x1f]]></LegAttr>\n", routeName);
-	fprintf(ofd, "\t\t\t<NumberOfVertexs>1</NumberOfVertexs>\n");
-	fprintf(ofd, "\t\t\t<Latitude>%lf</Latitude>\n", waypointp->latitude);
-	fprintf(ofd, "\t\t\t<Longitude>%lf</Longitude>\n", waypointp->longitude);
+	gbfprintf(ofd, "\t\t\t<Attr><![CDATA[attr=grpnam%s\x1ftrnrad50\x1fOBJNAM%s\x1flegnum%i\x1fusrmrk%s\x1fselect2]]></Attr>\n", routeName, waypointp->shortname, legNum, waypointp->description);
+	gbfprintf(ofd, "\t\t\t<LegAttr><![CDATA[attr=grpnam%s\x1f]]></LegAttr>\n", routeName);
+	gbfprintf(ofd, "\t\t\t<NumberOfVertexs>1</NumberOfVertexs>\n");
+	gbfprintf(ofd, "\t\t\t<Latitude>%lf</Latitude>\n", waypointp->latitude);
+	gbfprintf(ofd, "\t\t\t<Longitude>%lf</Longitude>\n", waypointp->longitude);
 
-	fprintf(ofd, "\t\t</Object>\n");
+	gbfprintf(ofd, "\t\t</Object>\n");
 
 	legNum++;
 }
@@ -331,14 +331,14 @@ hsa_ndv_waypt_pr(const waypoint *waypointp)
 static void
 hsa_ndv_write(void)
 {
-	fprintf(ofd, "<?xml version=\"1.0\"?>\n");
-	fprintf(ofd, "<Export>\n");
-	fprintf(ofd, "\t<Route>\n");
-	fprintf(ofd, "\t\t<Version>1.0000000</Version>\n");
-	fprintf(ofd, "\t\t<Name>ROUTENAME</Name>\n");			/*TODO: used filename? */
-	fprintf(ofd, "\t\t<LastModified>0</LastModified>\n");
+	gbfprintf(ofd, "<?xml version=\"1.0\"?>\n");
+	gbfprintf(ofd, "<Export>\n");
+	gbfprintf(ofd, "\t<Route>\n");
+	gbfprintf(ofd, "\t\t<Version>1.0000000</Version>\n");
+	gbfprintf(ofd, "\t\t<Name>ROUTENAME</Name>\n");			/*TODO: used filename? */
+	gbfprintf(ofd, "\t\t<LastModified>0</LastModified>\n");
 	waypt_disp_all(hsa_ndv_waypt_pr);
-	fprintf(ofd, "\t</Route>\n");
+	gbfprintf(ofd, "\t</Route>\n");
 
 //later we'll import past tracks and chart objects?
 //	fprintf(ofd, "\t<Chartwork>\n");
@@ -347,7 +347,7 @@ hsa_ndv_write(void)
 //	fprintf(ofd, "\t</Chartwork>\n");
 
 
-	fprintf(ofd, "</Export>\n");
+	gbfprintf(ofd, "</Export>\n");
 }
 
 ff_vecs_t HsaEndeavourNavigator_vecs = {

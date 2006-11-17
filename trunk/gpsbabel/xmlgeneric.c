@@ -39,7 +39,7 @@ static const char **xg_ignore_taglist;
 #define MYNAME "XML Reader"
 
 void
-write_xml_header(FILE *ofd)
+write_xml_header(gbfile *ofd)
 {
 	char buff[128];
 	cet_cs_vec_t *cs = cet_find_cs_by_name(CET_CHARSET_ASCII);
@@ -48,20 +48,20 @@ write_xml_header(FILE *ofd)
 	    snprintf(buff, sizeof(buff), " encoding=\"%s\"", global_opts.charset_name);
 	else
 	    buff[0] = 0;
-	fprintf(ofd, "<?xml version=\"1.0\"%s?>\n", buff);
+	gbfprintf(ofd, "<?xml version=\"1.0\"%s?>\n", buff);
 }
 
 void
-write_xml_entity(FILE *ofd, const char *indent,
+write_xml_entity(gbfile *ofd, const char *indent,
                  const char *tag, const char *value)
 {
         char *tmp_ent = xml_entitize(value);
-        fprintf(ofd, "%s<%s>%s</%s>\n", indent, tag, tmp_ent, tag);
+        gbfprintf(ofd, "%s<%s>%s</%s>\n", indent, tag, tmp_ent, tag);
         xfree(tmp_ent);
 }
 
 void
-write_optional_xml_entity(FILE *ofd, const char *indent,
+write_optional_xml_entity(gbfile *ofd, const char *indent,
                           const char *tag, const char *value)
 {
         if (value && *value)
@@ -69,34 +69,34 @@ write_optional_xml_entity(FILE *ofd, const char *indent,
 }
 
 void
-write_xml_entity_begin0(FILE *ofd, const char *indent,
+write_xml_entity_begin0(gbfile *ofd, const char *indent,
 							  const char *tag)
 {
-    fprintf(ofd, "%s<%s>\n", indent, tag);
+    gbfprintf(ofd, "%s<%s>\n", indent, tag);
 }
 
 void
-write_xml_entity_begin1(FILE *ofd, const char *indent,
+write_xml_entity_begin1(gbfile *ofd, const char *indent,
 							  const char *tag, const char *attr,
 							  const char *attrval)
 {
-    fprintf(ofd, "%s<%s %s=\"%s\">\n", indent, tag, attr, attrval);
+    gbfprintf(ofd, "%s<%s %s=\"%s\">\n", indent, tag, attr, attrval);
 }
 
 void
-write_xml_entity_begin2(FILE *ofd, const char *indent,
+write_xml_entity_begin2(gbfile *ofd, const char *indent,
 							  const char *tag, const char *attr1,
 							  const char *attrval1, const char *attr2,
 							  const char *attrval2)
 {
-    fprintf(ofd, "%s<%s %s=\"%s\" %s=\"%s\">\n", indent, tag, attr1, attrval1, attr2, attrval2);
+    gbfprintf(ofd, "%s<%s %s=\"%s\" %s=\"%s\">\n", indent, tag, attr1, attrval1, attr2, attrval2);
 }
 
 void
-write_xml_entity_end(FILE *ofd, const char *indent,
+write_xml_entity_end(gbfile *ofd, const char *indent,
 					 const char *tag)
 {
-    fprintf(ofd, "%s</%s>\n", indent, tag);
+    gbfprintf(ofd, "%s</%s>\n", indent, tag);
 }
 
 void
@@ -124,12 +124,12 @@ xml_fill_in_time(char *time_string, const time_t timep, int long_or_short)
 }
 
 void
-xml_write_time(FILE *ofd, const time_t timep, char *elname)
+xml_write_time(gbfile *ofd, const time_t timep, char *elname)
 {
 	char time_string[64];
 	xml_fill_in_time(time_string, timep, XML_LONG_TIME);
 	if (time_string[0]) {
-		fprintf(ofd, "<%s>%s</%s>\n",
+		gbfprintf(ofd, "<%s>%s</%s>\n",
 			elname,
 			time_string,
 			elname

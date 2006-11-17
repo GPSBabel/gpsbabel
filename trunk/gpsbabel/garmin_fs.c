@@ -96,7 +96,7 @@ void garmin_fs_copy(garmin_fs_t **dest, garmin_fs_t *src)
 /* GPX - out */
 
 void 
-garmin_fs_xml_fprint(FILE *ofd, const waypoint *waypt)
+garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
 {
 	garmin_fs_t *gmsd = GMSD_FIND(waypt);
 	if (gmsd == NULL) return;
@@ -109,18 +109,18 @@ garmin_fs_xml_fprint(FILE *ofd, const waypoint *waypt)
 	{
 		int space = 1;
 		
-		fprintf(ofd, "%*s<extensions>\n", space++ * 2, "");
-		fprintf(ofd, "%*s<gpxx:WaypointExtension xmlns:gpxx=\"" \
+		gbfprintf(ofd, "%*s<extensions>\n", space++ * 2, "");
+		gbfprintf(ofd, "%*s<gpxx:WaypointExtension xmlns:gpxx=\"" \
 			"http://www.garmin.com/xmlschemas/GpxExtensions/v2\" " \
 			"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " \
 			"xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/GpxExtensions/v2 " \
 			"http://www.garmin.com/xmlschemas/GpxExtensions/v2/GpxExtensionsv2.xsd\">\n", space++ * 2, "");
 		if (gmsd->flags.proximity)
-			fprintf(ofd, "%*s<gpxx:Proximity>%.6f</gpxx:Proximity>\n", space * 2, "", gmsd->proximity);
+			gbfprintf(ofd, "%*s<gpxx:Proximity>%.6f</gpxx:Proximity>\n", space * 2, "", gmsd->proximity);
 		if (gmsd->flags.temperature)
-			fprintf(ofd, "%*s<gpxx:Temperature>%.6f</gpxx:Temperature>\n", space * 2, "", gmsd->temperature);
+			gbfprintf(ofd, "%*s<gpxx:Temperature>%.6f</gpxx:Temperature>\n", space * 2, "", gmsd->temperature);
 		if (gmsd->flags.depth)
-			fprintf(ofd, "%*s<gpxx:Depth>%.6f</gpxx:Depth>\n", space * 2, "", gmsd->depth);
+			gbfprintf(ofd, "%*s<gpxx:Depth>%.6f</gpxx:Depth>\n", space * 2, "", gmsd->depth);
 		if (gmsd->flags.display)
 		{
 			char *cx;
@@ -136,23 +136,23 @@ garmin_fs_xml_fprint(FILE *ofd, const waypoint *waypt)
 					cx = "SymbolAndName"; 
 					break;
 			}
-			fprintf(ofd, "%*s<gpxx:DisplayMode>%s</gpxx:DisplayMode>\n", space * 2, "", cx);
+			gbfprintf(ofd, "%*s<gpxx:DisplayMode>%s</gpxx:DisplayMode>\n", space * 2, "", cx);
 		}
 		if (gmsd->flags.category && gmsd->category)
 		{
 			int i;
 			gbuint16 cx = gmsd->category;
-			fprintf(ofd, "%*s<gpxx:Categories>\n", space++ * 2, "");
+			gbfprintf(ofd, "%*s<gpxx:Categories>\n", space++ * 2, "");
 			for (i = 0; i < 16; i++) 
 			{
 				if (cx & 1)
-					fprintf(ofd, "%*s<gpxx:Category>Category %d</gpxx:Category>\n", space*2, "", i+1);
+					gbfprintf(ofd, "%*s<gpxx:Category>Category %d</gpxx:Category>\n", space*2, "", i+1);
 				cx = cx >> 1;
 			}
-			fprintf(ofd, "%*s</gpxx:Categories>\n", --space * 2, "");
+			gbfprintf(ofd, "%*s</gpxx:Categories>\n", --space * 2, "");
 		}
-		fprintf(ofd, "%*s</gpxx:WaypointExtension>\n", --space * 2, "");
-		fprintf(ofd, "%*s</extensions>\n", --space * 2, "");
+		gbfprintf(ofd, "%*s</gpxx:WaypointExtension>\n", --space * 2, "");
+		gbfprintf(ofd, "%*s</extensions>\n", --space * 2, "");
 	}
 	
 }
