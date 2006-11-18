@@ -1,7 +1,7 @@
 
       
       
-      <para> This format can read and write TomTom .ov2 (POI) files,
+      <para> This format can read and write <ulink url="http://www.tomtom.com">TomTom</ulink> .ov2 (POI) files,
 as used by the TomTom GO and TomTom Navigator.  It has been tested
 with an original TomTom GO running version 5.00 of the TomTom
 software.  There may be some records that confuse the input module -

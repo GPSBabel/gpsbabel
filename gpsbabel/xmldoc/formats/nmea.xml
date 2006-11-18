@@ -34,3 +34,9 @@ that work with NMEA-0183 formatted data include:
   <ulink url="http://www.sparkfun.com/commerce/product_info.php?products_id=671">SparkFun GPS Datalogger</ulink>
 </member>
 </simplelist>  
+<para>
+This module also supports <link linkend="tracking">realtime tracking</link> 
+which allows realtime position reports from a GPS, such as one connected 
+serially, over Bluetooth, or a USB module emulating a serial port, to be used
+with selected output formats.
+</para>

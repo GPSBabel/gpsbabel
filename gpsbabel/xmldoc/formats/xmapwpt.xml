@@ -1,7 +1,7 @@
 <para>
 Delorme XMapHandHeld Street Atlas USA is another of the
-billion CSV variants.  This is the format used by XmapHH SA USA on (at
-least) PocketPC O/S. 
+billion <link linkend="fmt_csv"> CSV variants</link>.  
+This is the format used by XmapHH SA USA on (at least) PocketPC O/S. 
 </para>
 <para> 
 This XMap is not the same as the simpler 

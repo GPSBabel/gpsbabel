@@ -1,4 +1,4 @@
-<para>GPSBabel supports the following Magellan receivers:
+<para>GPSBabel supports the following <ulink url="http://www.magellangps.com">Magellan</ulink> receivers:
 <simplelist columns="2">
 	<member>310</member>
 	<member>315</member>
