@@ -1,0 +1,382 @@
+// An EBNF+ format.
+
+// This is a comment
+// "xxx" is the literal three characters x, x and x
+// 0xA8 means a byte of hexadecimal value A8
+// <NULL> ::= 0x00
+// FunctionName(<entity>) means the result of FunctionName when executed on parameter <entity>
+// FunctionName ::= defines the result format in a text description
+// [<entity>] means <entity> is optional
+// <entity 1> | <entity 2> means either <entity 1> or <entity 2>
+// {<entity> <another entity>} is grouping of two or more entities together; mainly for use with the | or operator
+// Entity names might be long winded but are intended to convey some meaning without explicit/additional comments
+
+// Version history
+// V2.5 - 2004/01/12 20:49 GMT mrcb.mps.fmt@osps.net
+//        Updates to record signatures for MapSource V5.3 & 5.4
+//        Update to incorporate the sketchiest of subclass details
+// V2.4 - 2003/10/18 18:42 BST (GMT+1) mrcb.mps.fmt@osps.net
+//        Updates to route formats to include interlink steps (my name for them)
+// V2.3 - 2003/10/03 17:49 BST (GMT+1) mrcb.mps.fmt@osps.net
+//        I must type really badly as there were more typoes to sort out.
+// V2.2 - 2003/09/27 23:33 BST (GMT+1) mrcb.mps.fmt@osps.net
+//        Corrected typoes
+//        Corrected NULL terminated string length counts for records with strings
+// V2.1 - 2003/09/12 18:23 BST (GMT+1) mrcb.mps.fmt@osps.net
+//        Changed some of the expressions covering the sections so that the LengthOf(x) was a less ambiguous x
+//        Corrected some typoes
+//        Added definitions of MapSource V5.0 (this creates data files of format 1.05, apparently)
+//
+// V2.0 - 2003/07/15 21:34 BST (GMT+1) mrcb.mps.fmt@osps.net
+//        Complete definitions as far as possible (in my ability, anyway) for V3.02 formats.
+//        Some typoes cleaned up.
+//        Replaced "unknown" by "UNKNOWN" in entity names where the meaning is not known to this author
+//        (as opposed to, for example, where the meaning is known but the value happens to be "unknown", 
+//        as in the colour unknown).
+//        Added definitions for V5.03beta of MapSource - no seeming significant changes from v4 - woopee.
+//
+// V1.0 - 2003/06/30 21:00 BST mrcb.mps.fmt@osps.net
+//        First "release". Coverage for version 4.xx (to 4.13) is good although some unknowns still
+//        Coverage for V3.x is less good since it seems a little needless to document a format no longer
+//        in use, so why start to? Good question. Perhaps I'll finish it off when my MapSource 3 machine
+//        is fixed.
+
+
+// Start of MapSource definition ==================================================
+<MPS file> ::= <Header> [<Waypoint section>] [<Route section>] [<Tracklog section>] [<Map section>] <Map Set Name>
+
+<Header> ::= <File Signature> <Format signature> <Program signature>
+
+<File Signature> ::= "MsRc" <First version related char> <NULL>
+
+<First version related char> ::= <MapSource from V3.02, V4.13, V5.03beta, V5.0 char, V5.3 char, V5.4 char>
+
+<MapSource from V3.02, V4.13, v5.03beta, V5.0 char, V5.3 char, V5.4 char> ::= "d"
+
+<Format signature> ::= LengthOf(<Format details>) <Format details>
+
+<Format details> ::= "D" <Second version related char> <NULL>
+
+<Second version related char> ::= <MapSource V3.02 format byte> | 
+					<MapSource V4.06 format byte> | 
+					<MapSource V4.13 format byte> |
+					<MapSource V5.03beta format byte> | 
+					<MapSource V5.0 format byte> | 
+					<MapSource V5.3 format byte> | 
+					<MapSource V5.4 format byte>
+
+<MapSource V3.02 format byte> ::= "d"
+<MapSource V4.06 format byte> ::= "g"
+<MapSource V4.13 format byte> ::= "h"
+<MapSource V5.03beta format byte> ::= "i"
+<MapSource V5.0 format byte> ::= "i"
+<MapSource V5.3 format byte> ::= "i"
+<MapSource V5.4 format byte> ::= "i"
+
+<Program signature> ::= LengthOf(<Program signature details>) <Program signature details>
+
+<Program signature details> ::= "A" <UNKNOWN two bytes> <QA string> <NULL> <Program date time> <NULL>
+
+<UNKNOWN two bytes> ::= <MapSource V3.02 two bytes> | 
+			<MapSource V4.06 two bytes> | 
+			<MapSource V4.13 two bytes> |
+			<MapSource V5.03beta two bytes> | 
+			<MapSource V5.0 two bytes> | 
+			<MapSource V5.3 two bytes> | 
+			<MapSource V5.4 two bytes>
+
+// Perhaps this is software build number
+<MapSource V3.02 two bytes> ::= 0x2E 0x01
+<MapSource V4.06 two bytes> ::= 0x96 0x01
+<MapSource V4.13 two bytes> ::= 0x9D 0x01
+<MapSource V5.03beta two bytes> ::= 0xF4 0x01
+<MapSource V5.0 two bytes> ::= 0xF4 0x01
+<MapSource V5.3 two bytes> ::= 0xF7 0x01
+<MapSource V5.4 two bytes> ::= 0xF8 0x01
+
+// SQA might be Software Quality Assurance;  buell appears in the beta, so is presumably the programmer's id
+<QA String> ::= "SQA" | "buell"
+
+<Program date time> ::= <MapSource V3.02 date time> | 
+			<MapSource V4.06 date time> | 
+			<MapSource V4.13 date time> |
+			<MapSource V5.03beta date time> | 
+			<MapSource V5.0 date time> | 
+			<MapSource V5.3 date time> | 
+			<MapSource V5.4 date time>
+
+<MapSource V3.02 date time> ::= "Oct 20 1999" <NULL> "12:50:03"
+<MapSource V4.06 date time> ::= "Oct 22 2001" <NULL> "15:45:05"
+<MapSource V4.13 date time> ::= "Mar  7 2003" <NULL> "15:12:28"
+<MapSource V5.03beta date time> ::= "Jun 27 2003" <NULL> "10:12:10"
+<MapSource V5.0 date time> ::= "Jul  3 2003" <NULL> "08:35:39"
+<MapSource V5.3 date time> ::= "Sep 24 2003" <NULL> "11:44:25"
+<MapSource V5.4 date time> ::= "Nov  6 2003" <NULL> "16:01:32"
+
+<Map Set Name> ::= LengthOf(<Map set details>) <Map set details>
+
+<Map set details> ::= "V" ASCII-Map-Set-Name-can-be-blank <NULL> <Map set auto name flag>
+
+<Map set auto name flag> ::= <Map set don't auto name> | <Map set do auto name>
+<Map set don't auto name> ::= 0x00
+<Map set do auto name> ::= 0x01
+
+// ............................
+<Waypoint section> ::= <Waypoint list>
+
+<Waypoint list> ::= LengthOf(<Waypoint record>) <Waypoint record> [<waypoint list>]
+
+<Waypoint record> ::=  <Waypoint V3 record> | <Waypoint V4 record> | <Waypoint V5 record>
+
+<Waypoint V3 record> ::= "W" <Waypoint name> <Waypoint UNKNOWN 1 V3> <Lat semicircle> 
+				<Lon semicircle> <Altitude field> <Waypoint description> <Proximity field> <Waypoint attributes V3> 
+				<Waypoint city> <Waypoint state> <Waypoint facility> <Waypoint UNKNOWN 2 V3> <Depth field> 
+				<Waypoint UNKNOWN 3 V3>
+
+<Waypoint name> ::= x-character-short-name <NULL>
+
+<Waypoint class> ::= Long(class)
+// Class classification - cf D154_Wpt_Type
+// 0 = user waypoint, editable
+// 1 = Airport, not user editable
+// 2 = Aviation Intersection, not user editable
+// 3 = NDB (whatever that is), not user editable
+// 4 = VOR, not user editable
+// 5 = Runway Threshold, not user editable
+// 6 = Airport Intersection, not user editable
+// 7 = Airport NDM, not user editable
+// 8 = Map Point, not user editable
+// 9 = Map Area, not user editable
+// A = Map Intersection, not user editable
+// B = Map Address, not user editable
+// C = Map Line, not user editable
+
+// Valid for waypoint class types 1 to 8
+<Waypoint country> ::= country-string <NULL>
+
+// Perhaps some waypoint subclass definition?
+// The following almost certainly contains <Waypoint class> <Waypoint country> - this is the case for the V4 formatted file
+// Vwip - added 0x00 at the end of this
+<Waypoint UNKNOWN 1 V3> ::= 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0x00
+
+<Waypoint description> ::= ASCII-Character-string <NULL>
+
+<Waypoint attributes V3> ::= <Waypoint display flag> <Waypoint colour field> <Waypoint symbol field>
+
+<Waypoint display flag> ::= <Waypoint display symbol only> | <Waypoint display symbol and name only> | <Waypoint display symbol and description>
+
+<Waypoint display symbol only> ::= Long(0x00)
+<Waypoint display symbol and name only> ::= Long(0x01)
+<Waypoint display symbol and description> ::= Long(0x02)
+
+<Waypoint colour field> ::= <Colour field>
+
+<Waypoint symbol field> ::= Long(<Icon value>)
+
+// Next three only valid for waypoint classes 1 to 8
+<Waypoint city> ::= city-string <NULL>
+<Waypoint state> ::= USA-state-for-waypoint-city-string <NULL>
+<Waypoint facility> ::= facility-string <NULL>
+
+<Waypoint UNKNOWN 2 V3> ::= <UNKNOWN byte>
+
+<Waypoint UNKNOWN 3 V3> ::= 2-bytes-unknown
+
+<Waypoint V4 record> ::= "W" <Waypoint name> <Waypoint class> <Waypoint country> <Waypoint subclass data V4> 
+				<Waypoint UNKNOWN 1 V4> <Lat semicircle> <Lon semicircle> <Altitude field>  
+				<Waypoint description> <Proximity field> <Waypoint attributes V3> <Waypoint city> 
+				<Waypoint state> <Waypoint facility> <Waypoint UNKNOWN 2 V3> <Depth field> 
+                                <Waypoint UNKNOWN 3 V4>
+
+// Values depend on <Waypoint class>. If class is zero, then
+// subclass = 0x00 0x00 0x00 0x00 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF
+//            (last two octects may be zero depending on whether the waypoint was originally created
+//             in MapSource V3)
+// If class is non-zero, then values are unknown
+<Waypoint subclass data V4> ::= 18-bytes-unknown
+
+<Waypoint UNKNOWN 1 V4> ::= 0xFF 0xFF 0xFF 0xFF
+
+// Perhaps the 2 bytes of <Waypoint UNKNOWN 3 V3> plus Field-defined-flag plus a Long value
+<Waypoint UNKNOWN 3 V4> ::= 7-bytes-unknown
+
+<Waypoint V5 record> ::= <Waypoint V4 record>
+
+// ............................
+<Route section> ::= <Route list>
+
+<Route list> ::= LengthOf(<Route record>) <Route record> [<Route list>]
+
+<Route record> ::=  <Route V3 record> | <Route V4 record> | <Route V5 record>
+
+// Note: for each waypoint that appears in a route, there must also be a "normal" waypoint defined
+<Route V3 record> ::= "R" ASCII-Route-Name-string <NULL> <Route autoname flag> <Route lat lon max> <Route max altitude>
+				<Route lat lon min> <Route min altitude> Long(Number-of-Waypoints-in-Route) <Route waypoint list V3>
+
+// Note: for each waypoint that appears in a route, there must also be a "normal" waypoint defined
+<Route V4 record> ::= "R" ASCII-Route-Name-string <NULL> <Route autoname flag> <Route lat lon max> <Route max altitude>
+				<Route lat lon min> <Route min altitude> Long(Number-of-Waypoints-in-Route) <Route waypoint list v4>
+
+<Route V5 record> ::= <Route V4 record>
+
+<Route autoname flag> ::= <Route not autoname> | <Route do autoname>
+<Route not autoname> ::= Word(0x00)
+<Route do autoname> ::= Word(0x01)
+
+// Max values taken from all waypoints in the route to form a virtual "upper right" point
+<Route lat lon max> ::= <Lat semicircle> <Lon semicircle>
+
+// Part of the route bounding a 3D co-ordinate
+<Route max altitude> ::= <Altitude field>
+
+// Min values taken from all waypoints in the route to form a virtual "lower left" point
+<Route lat lon min> ::= <Lat semicircle> <Lon semicircle>
+
+// Part of the route bounding a 3D co-ordinate
+<Route min altitude> ::= <Altitude field>
+
+<Route waypoint list v3> ::= <Route waypoint v3> <Route link list v3> Long(0x00) 0x01
+
+<Route link list v3> ::= <Route link details> <Route waypoint v3> [<Route link list v3>]
+
+<Route waypoint v3> ::= <Route waypoint name> <Waypoint UNKNOWN 1 V3> <Route waypoint UNKNOWN 1 V3>
+
+<Route waypoint name> ::= ASCII-name <NULL>
+
+// The first zero seems to be a string <NULL> terminator
+<Route waypoint UNKNOWN 1 V3> ::= 0x00 0x03 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+                                  0x00 0x00
+
+<Route waypoint list v4> ::= <Route waypoint v4> <Route link list v4> Long(0x00) 0x01
+
+<Route link list v4> ::= <Route link details> <Route waypoint v4> [<Route link list v4>]
+
+<Route waypoint v4> ::= <Route waypoint name> <Waypoint class> <Waypoint country> <Waypoint subclass data V4> 
+                        <Route subclass data V4> <Waypoint UNKNOWN 1 V4> <Route waypoint UNKNOWN 1 V4>
+
+<Route subclass data V4> ::= empty-if-class-is-zero | 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF
+
+// The first zero seems to be a string <NULL> terminator
+<Route waypoint UNKNOWN 1 V4> ::= 0x00 0x03 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+                                  0x00 0x00 0x00  
+
+<Route link details> ::= Long(0x02 + Num-of-Interlink-steps) <Route link end 1 co-ord> [<Interlink steps>] <Route link end 2 co-ord> <NULL> 
+					<Route link max co-ord> <Route link min co-ord>
+
+// These are optional additional steps between the two ends of the link
+// Why MapSource creates these is unknown
+<Interlink steps> ::= <co-ord> <Interlink steps>
+
+<Route link end 1 co-ord> ::= <co-ord>
+
+<Route link end 2 co-ord> ::= <co-ord>
+
+// Virtual "Upper right top" co-ordinate
+<Route link max 1 co-ord> ::= <co-ord>
+
+// Virtual "lower left bottom" co-ordinate
+<Route link min 1 co-ord> ::= <co-ord>
+
+<co-ord> ::= <Lat semicircle> <Lon semicircle> <Altitude field> 
+
+// ............................
+<Tracklog section> ::= <Tracklog list>
+
+<Tracklog list> ::= LengthOf(<Tracklog record>) <Tracklog record> [<Tracklog list>]
+
+<Tracklog record> ::=  <Tracklog V3 record> | <Tracklog V4 record> | <Tracklog V5 record>
+
+<Tracklog V3 record> ::= "T" ASCII-Tracklog-Name-string <NULL> <Tracklog display flag> <Tracklog colour field> 
+				Long(Number-of-datapoints-in-tracklog) <Tracklog datapoint list>
+
+<Tracklog V4 record> ::= <Tracklog V3 record>
+
+<Tracklog V5 record> ::= <Tracklog V3 record>
+
+<Tracklog display flag> ::= <Tracklog do display on GPS> | <Tracklog don't display on GPS>
+<Tracklog do display on GPS> ::= 0x01
+<Tracklog don't display on GPS> ::= 0x00
+
+<Tracklog colour field> ::= <Colour field>
+
+<Tracklog datapoint list> ::= [<Tracklog datapoint>] [<Tracklog datapoint list>]
+
+<Tracklog datapoint> ::== <Lat semicircle> <Lon semicircle> <Altitude field> <Date Time field> <Depth field>
+
+// ............................
+<Map section> ::= <Map segment list>
+
+<Map segment list> ::= LengthOf(<Map segment>) <Map segment> [<Map segment list>]
+
+<Map segment> ::=  <Map V3 segment> | <Map V4 segment> | <Map V5 segment>
+
+// Map segments are portions of the overall map
+// What is stored in the MPS file is not the map detail but references to the detail
+// Area name refers to an area larger than the segment, perhaps by way of locating the segment within the World
+<Map V3 segment> ::= "L" Long(Map-CD-ID) Long(Segment-ID) ASCII-CD-Name <NULL> ASCII-Segment-Name <NULL> ASCII-Area-Name <NULL> Long(0x00)
+
+<Map V4 segment> ::= <Map V3 segment>
+
+<Map V5 segment> ::= <Map V3 segment>
+
+// Common definitions --------------------------------------------------------------
+
+<Colour field> ::= <colour unknown> | <colour black> | <colour dark red> | colour dark green> | <colour dark yellow> | <colour dark blue> |
+			<colour dark magenta> | <colour dark cyan> | <colour light grey> | <colour dark grey> | <colour red> | 
+			<colour green> | <colour blue> | <colour magenta> | <colour cyan> | <colour white>
+<colour unknown> ::= Long(0x00)
+<colour black> ::= Long(0x01)
+<colour dark red> ::= Long(0x02)
+<colour dark green> ::= Long(0x03)
+<colour dark yellow> ::= Long(0x04)
+<colour dark blue> ::= Long(0x05)
+<colour dark magenta> ::= Long(0x06)
+<colour dark cyan> ::= Long(0x07)
+<colour light grey> ::= Long(0x08)
+<colour dark grey> ::= Long(0x09)
+<colour red> ::= Long(0x0A)
+<colour green> ::= Long(0x0B)
+<colour yellow> ::= Long(0x0C)
+<colour blue> ::= Long(0x0D)
+<colour magenta> ::= Long(0x0E)
+<colour cyan> ::= Long(0x0F)
+<colour white> ::= Long(0x10)
+
+<Altitude field> ::= <Field contains a defined value flag> <Altitude value>
+
+<Altitude value> ::= Double(Value in metres)
+
+<Date Time field> ::= <Field contains a defined value flag> <Date time value>
+
+<Date time value> ::= Long(date-time-seconds-since-00:00:00-01/01/1970)
+
+<Depth field> ::= <Field contains a defined value flag> <Depth value>
+
+// Depth is not negative altitude - GPS not being overly useful on a submarine - but the "thickness" of a GPS point (e.g. airspace)
+// Assumed to be calculated below the GPS datapoint height. If so, then the object being referenced extends from 
+// 	(Altitude - depth) to (Altitude) upwards
+<Depth value> ::= Double(value in metres)
+
+<Proximity field> ::= <Field contains a defined value flag> <Proximity value>
+
+<Proximity value> ::= Double(Value in metres)
+
+<Field contains a defined value flag> ::= <Field defined flag - yes> | <Field defined flag - no>
+<Field defined flag - yes> ::= 0x01
+<Field defined flag - no> ::= 0x00
+
+// Check out the values in the Garmin Protocol description document and elsewhere on the web
+<Icon value> ::= Too-many-to-list-here-!
+
+<Lat semicircle> ::= Long(latitude * 2^31 / 180) 
+<Lon semicircle> ::= Long(longitude * 2^31 / 180) 
+
+// Start of function definitions ---------------------------------------------------
+Word ::= 2 bytes, little endian
+Long ::= 4 bytes, little endian
+Double ::= 8 byte, little endian, IEEE format
+LengthOf ::= 4 bytes, little endian - zero value means "1 element long"
+// End of function definitions
+
+// End of MapSource defintion
+

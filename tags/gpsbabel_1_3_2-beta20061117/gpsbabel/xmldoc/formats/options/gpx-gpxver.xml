@@ -1,0 +1,11 @@
+<para>
+This option specifies the version of the GPX specification to use for 
+output.  The default version is 1.0.  The only other valid value for this
+option is 1.1.
+</para>
+<para>
+Notice that this is not a full scale XML schema conversion.  In particular,
+if you have a GPX 1.0 file that has extended namespaces in it (such as a 
+pocket query from Geocaching.com) just writing it with this option will
+result in a horribly mangled GPX file as we can't convert the schema data.
+</para>

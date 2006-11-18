@@ -1,0 +1,12 @@
+
+      
+      
+      <para> This is a Palm/OS file format for GPilotS.  It was tested
+against version 6.2.
+</para>
+      <para>
+            <ulink url="http://www.cru.fr/perso/cc/GPilotS/">http://www.cru.fr/perso/cc/GPilotS/</ulink>
+         </para>
+      <para> Neither tracks nor routes are supported at this
+time.</para>
+    

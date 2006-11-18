@@ -1,0 +1,28 @@
+<para> 
+This format supports the Garmin <productname>Mapsource</productname>
+product family.
+</para>
+<para>
+This format is based on significant reverse-engineering and guesswork.
+GPSBabel's output appears to be compatible with the various versions of 
+MapSource.  Icon mapping is attempted between different MapSource versions.  
+Altitude is supported, but proximity and depth are not.  
+</para>
+<para>
+Naming files *.mps will allow file-&gt;open in Mapsource to find the files 
+more easily.  
+</para>
+<para>
+Versions 3, 4, and 5 of the Mapsource data format are handled automatically 
+on input.  By default the output is version 5.  (Until 3/2004, it was
+version 3, but since Mapsource updates are free, the convenience of
+having modern icon sets outweighs the backward compatibility concern.
+Users of other versions can either upgrade or specify the switches to
+get output in a compatible format.)  Waypoints, routes, and tracklogs are 
+all handled, but map sets are ignored.
+</para>
+<para> 
+Information on the Garmin Mapsource format was provided by Ian Cowley and 
+Mark Bradley.  The code was implemented by Robert Lipe and Mark Bradley.
+</para>
+    

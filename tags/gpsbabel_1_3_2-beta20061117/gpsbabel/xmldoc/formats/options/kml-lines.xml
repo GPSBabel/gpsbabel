@@ -1,0 +1,6 @@
+<para>
+When this option is nonzero, GPSBabel draws lines between points in
+tracks and routes.  The default value for this option is 1, which causes
+lines to be drawn by default.  To disable line-drawing, specify 
+<option>lines=0</option>.
+</para>
