@@ -1,8 +1,8 @@
 
       
       
-      <para> The SD card format used by the Magellan Explorist 400,
-500, and 600 to describe geocaches.  Notice what while the format can
+      <para> The SD card format used by the <ulink url="http://www.magellangps.com">Magellan</ulink> > 400,
+500, 600, 210, and XL to describe geocaches.  Notice what while the format can
 hold an infinite number of geocaches, the unit will read and silently
 discard all but 200 geocache POIs at a time.</para>
       <para> You should name any file created with this format with a

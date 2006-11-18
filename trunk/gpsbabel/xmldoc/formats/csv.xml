@@ -2,7 +2,7 @@
       
       
       <para> There are a billion variants of Comma Separated Value
-data.  This is the one that makes <ulink url="http://www.delorme.com">Delorme"</ulink> <productname>S&amp;A Deluxe 9</productname> happy. It's
+data.  This is the one that makes <ulink url="http://www.delorme.com">Delorme</ulink> <productname>S&amp;A Deluxe 9</productname> happy. It's
 also a very simple program and useful for many other programs like
 spreadsheets.</para>
       <para> CSV is also the correct format for 
@@ -10,4 +10,11 @@ spreadsheets.</para>
 their commercial mapping program, or GDM6 (their free waypoint
 manager) for iFinder which is available at <ulink url="http://www.lowrance.com/Software/GDM6/Default.asp">lowrance.com</ulink>
          </para>
-    
+    <para>
+	On write, this format writes simple "latitude, longitude" pairs, but 
+on read it  will read anything supported by our <link linkend="style_def_lathuman">human readable</link> definition.
+    </para>
+    <para>
+       For something-separated data that has headers identifying the various
+	fields, see our <link linkend="fmt_unicsv">universal csv</link> format.
+    </para>

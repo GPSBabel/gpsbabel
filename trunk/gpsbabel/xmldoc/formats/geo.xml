@@ -1,5 +1,5 @@
 <para>
-This format supports the Geocaching.com/EasyGPS ".loc" format.  This format
+This format supports the <ulink  url="http://www.geocaching.com">Geocaching.com</ulink>/<ulink url="http://www.easygps.com">EasyGPS</ulink> ".loc" format.  This format
 was created specifically for Geocaching.com and is not the same as the 
 standard EasyGPS .loc format.  See the <link linkend="fmt_easygps">EasyGPS</link> 
 or <link linkend="fmt_gpx">GPX</link> formats for more general EasyGPS support.

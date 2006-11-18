@@ -1,6 +1,6 @@
 <para> 
 KML, the Keyhole Markup Language, is used by Keyhole and
-Google Earth.  There are features in this file format that GPSBabel
+<ulink url="http://earth.google.com">Google Earth</ulink>.  There are features in this file format that GPSBabel
 doesn't support - such as camera views - but waypoints, tracks, and routes 
 work well.
 </para>
