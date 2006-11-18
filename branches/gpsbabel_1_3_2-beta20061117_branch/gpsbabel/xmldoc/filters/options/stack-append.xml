@@ -1,0 +1,5 @@
+<para>
+This option is only valid in conjunction with the <option>pop</option>.  
+When it is specified, the topmost collection of data from the stack is
+appended to the current collection of data.
+</para>

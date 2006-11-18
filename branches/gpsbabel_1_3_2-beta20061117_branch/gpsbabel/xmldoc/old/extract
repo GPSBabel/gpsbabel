@@ -1,0 +1,4 @@
+#!/bin/sh
+
+xsltproc --stringparam id $1 extract.xsl ../readme.xml
+

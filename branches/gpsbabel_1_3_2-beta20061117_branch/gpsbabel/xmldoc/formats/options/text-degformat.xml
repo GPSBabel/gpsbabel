@@ -1,0 +1,5 @@
+<para>
+When GPSBabel writes coordinates, this option is consulted to see if it
+should write decimal degrees ('ddd') decimal minutes ('dmm') or degrees,
+minutes, seconds ('dms').  The default is 'dmm'.
+</para>

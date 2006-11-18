@@ -1,0 +1,12 @@
+<para>
+This option specifies the maximum allowable time interval between points in the
+track.  If two points in the track are further apart than this value, new
+points will be inserted between them.
+</para>
+<para>
+This value is always specified in units of seconds.
+</para>
+<para>
+Either this option or the <option>distance</option> must be specified.
+</para>
+
