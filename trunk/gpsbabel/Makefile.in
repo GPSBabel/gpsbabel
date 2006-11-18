@@ -123,7 +123,7 @@ configure: configure.in
 
 tag:
 	cvs commit
-	cvs tag @GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@
+	cvs tag gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@
 
 more-clean: clean
 	tools/mkmoreclean
