@@ -98,7 +98,7 @@ WEB=@DOCDIR@
 
 all: gpsbabel$(EXEEXT)
 
-gpsbabel$(EXEEXT): $(OBJS) @GPSBABEL_DEBUG@ Makefile configure
+gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@ 
 	$(CC)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 gpsbabel-debug: $(OBJS)
@@ -106,6 +106,8 @@ gpsbabel-debug: $(OBJS)
 
 Makefile: Makefile.in config.status
 	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
+
+gbversion.h: configure config.status
 
 jeeps/gpslibusb.o: 
 	$(CC)  @CPPFLAGS@ -c $(GBCFLAGS) @USB_CFLAGS@ @srcdir@/jeeps/gpslibusb.c $(OUTPUT_SWITCH)$@
@@ -118,6 +120,10 @@ clean:
 
 configure: configure.in
 	autoconf
+
+tag:
+	cvs commit
+	cvs tag @GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@
 
 more-clean: clean
 	tools/mkmoreclean
