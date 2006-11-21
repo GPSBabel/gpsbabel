@@ -280,8 +280,8 @@ release-upload:  /tmp/gpsbabel-$(VERSIOND).tar.gz  /tmp/gpsbabel-$(VERSIOND).zip
 
 release: release-sourcecheck  release-tarball release-winbuild release-rpm release-upload
 
-rpm: clean
-	tools/mkrpm $(VERSD) $(RELEASE)
+rpm:
+	tools/mkrpm $(VERSD) $(RELEASE) $(WEB)
 
 mac-release:
 	mkdir -p usr/bin usr/share/gpsbabel/doc
