@@ -228,6 +228,11 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 			const char *errtxt;
 			
 			errtxt = gzerror(file->handle.gz, &errnum);
+			
+			/* Workaround for zlib bug: buffer error on empty files */
+			if ((errnum == Z_BUF_ERROR) && (gztell(file->handle.gz) == 0)) {
+				return (gbsize_t) 0;
+			}
 			if ((errnum != Z_STREAM_END) && (errnum != 0))
 				fatal("%s: zlib returned error %d ('%s')!\n",
 					file->module, errnum, errtxt);
