@@ -19,7 +19,7 @@ Unfortunately, you need one .PSP file for every .MPS file.
 <section id="fmt_psp_faq">
 <title>Frequently Asked Questions</title>
 <qandaset>
-<qandaentry>
+<qandaentry id="why">
 <question>
 <para>
 Why should I use GPSBabel/psp to make pushpins when Streets &amp; Trips (S&amp;T)
@@ -42,7 +42,7 @@ GPSBabel/psp has the advantage of being able to create pushpins
 </para>
 </answer>
 </qandaentry>
-<qandaentry>
+<qandaentry id="blank">
 <question>
 <para>
 I keep getting a blank (32 byte) PSP file.
@@ -61,7 +61,7 @@ There are either no points to write, or you have botched the command
 </para>
 </answer>    
 </qandaentry>
-<qandaentry>
+<qandaentry id="now_what">
 <question>
 <para>
 I've created a PSP file, now what do I do with it?
@@ -76,7 +76,7 @@ To use pushpins in Pocketstreets, you need to have both a map and a
 </para>
 </answer>
 </qandaentry>
-<qandaentry>
+<qandaentry id="no_map">
 <question>
 <para>
 I don't have a map.  What do I do now?
@@ -90,7 +90,7 @@ Create one using the "Export map to Pocketstreets" option in S&amp;T.  You
 </para>
 </answer>
 </qandaentry>
-<qandaentry>
+<qandaentry id="have_est">
 <question>
 <para>
 I have .EST files, not .PSP files.  What's up with that?
@@ -104,7 +104,7 @@ In order to make PSP files, you need to use the "Export map to
 </para>
 </answer>
 </qandaentry>
-<qandaentry>
+<qandaentry id="coord_jitter">
 <question>
 <para>
  The .PSP files differ when I use GPSBabel/psp versus Pocketstreets to 
@@ -119,7 +119,7 @@ Pocketstreets makes corrections to the S&amp;T waypoint data upon initial
 </para>
 </answer>
 </qandaentry>
-<qandaentry>
+<qandaentry id="mappoint">
 <question>
 <para>
 Does GPSBabel/psp work with (Autoroute, Mappoint, etc..) .PSP files?
@@ -132,7 +132,7 @@ As of this writing, I haven't seen any so I can't be sure.  If they
 </para>
 </answer>
 </qandaentry>
-<qandaentry>
+<qandaentry id="after2001">
 <question>
 <para>
  Does GPSBabel/psp work with (S&amp;T 2001, S&amp;T 2002, etc...) files?
@@ -145,7 +145,7 @@ MS changed the file layout between S&amp;T 2001 and S&amp;T 2002.  The GPSBabel 
 </para>
 </answer>
 </qandaentry>
-<qandaentry>
+<qandaentry id="non_us">
 <question>
 <para>
 Does GPSBabel/psp work with (insert your country/location here) maps?
@@ -159,7 +159,7 @@ mailing list.
 </para>
 </answer>
 </qandaentry>
-<qandaentry>
+<qandaentry id="wrong_coords">
 <question>
 <para>
 What do you mean S&amp;T writes points with the wrong coordinates?
@@ -175,7 +175,7 @@ At some point in the "Export map to Pocketstreets" function in S&amp;T,
 </para>
 </answer>
 </qandaentry>
-<qandaentry>
+<qandaentry id="splitting">
 <question>
 <para>
 I have 800 waypoints that cover a dozen or so Pocketstreets maps.  
@@ -192,7 +192,7 @@ I have 800 waypoints that cover a dozen or so Pocketstreets maps.
 </para>
 </answer>
 </qandaentry>
-<qandaentry>
+<qandaentry id="doc_for_layout">
 <question>
 <para>
 Where can I find documentation for the layout of PSP files?
@@ -206,7 +206,7 @@ Just about everything I know about the PSP file format is documented
 </para>
 </answer>
 </qandaentry>
-<qandaentry>
+<qandaentry id="morehelp">
 <question>
 <para>
 I have some other problem, what do I do?
