@@ -24,4 +24,7 @@ SHORTWHITE              0
 IFIELD	LAT_DECIMAL, "", "%10.6f"
 IFIELD	LON_DECIMAL, "", "%10.6f"
 IFIELD	ALT_METERS, "", "%10.0f"
-IFIELD	GMT_TIME, "", "%a %b %d %T %Y"
+# Reports are that this format stores in local time, not GMT as 
+# originally thought.
+# IFIELD	GMT_TIME, "", "%a %b %d %T %Y"
+IFIELD	LOCAL_TIME, "", "%a %b %d %T %Y"

@@ -437,7 +437,10 @@ static char gpsdrivetrack[] =
 "IFIELD	LAT_DECIMAL, \"\", \"%10.6f\"\n"
 "IFIELD	LON_DECIMAL, \"\", \"%10.6f\"\n"
 "IFIELD	ALT_METERS, \"\", \"%10.0f\"\n"
-"IFIELD	GMT_TIME, \"\", \"%a %b %d %T %Y\"\n"
+"# Reports are that this format stores in local time, not GMT as \n"
+"# originally thought.\n"
+"# IFIELD	GMT_TIME, \"\", \"%a %b %d %T %Y\"\n"
+"IFIELD	LOCAL_TIME, \"\", \"%a %b %d %T %Y\"\n"
 ;
 static char gpsman[] = 
 "# gpsbabel XCSV style file\n"
