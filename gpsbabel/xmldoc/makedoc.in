@@ -11,7 +11,7 @@ sub expandrw {
 
    my $res = "";
    if ( ($read eq 'r') || ($write eq 'w')) {
-     $res .= "      <listitem>\n        <para>\n          ";
+     $res .= "      <listitem>\n        <para role=\"fmtcapsitem\">\n          ";
      if ( ($read eq 'r') && ($write eq 'w')) {
        $res .= "read and write $type";
      }
@@ -28,13 +28,13 @@ sub expandrw {
 
 sub expandoptions {
    my $opts = shift;
-   my $res = "  <para>\n    This format can...\n    <itemizedlist>\n";
+   my $res = "  <para role=\"fmtcapshdr\">\n    This format can...\n    <itemizedlist>\n";
    
    $res .= expandrw( substr($opts,0,1), substr($opts,1,1), 'waypoints' );
    $res .= expandrw( substr($opts,2,1), substr($opts,3,1), 'tracks' );
    $res .= expandrw( substr($opts,4,1), substr($opts,5,1), 'routes' );
  
-   $res .= "    </itemizedlist>\n  </para>\n";
+   $res .= "    </itemizedlist></para>\n";
 
    $res;  
 }
