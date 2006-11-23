@@ -421,6 +421,9 @@ lrtrim(char *buff)
 {
 	char *c;
 
+	if (buff[0] == '\0')
+		return buff;
+
 	c = buff + strlen(buff);
 	while ((c >= buff) && ((unsigned char)*c <= ' ')) *c-- = '\0';
 
