@@ -104,7 +104,7 @@ gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@
 gpsbabel-debug: $(OBJS)
 	$(CC)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
-Makefile: Makefile.in config.status
+Makefile: Makefile.in config.status xmldoc/makedoc.in
 	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
 
 gbversion.h: configure config.status
