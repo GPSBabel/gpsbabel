@@ -159,6 +159,9 @@ compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 ${PNAME} -t -i gpx -f ${REFERENCE}/track/tracks.gpx -o pcx -F ${TMPDIR}/pcx.trk
 ${PNAME} -t -i pcx -f ${REFERENCE}/track/pcx.trk -o pcx -F ${TMPDIR}/pcx2.trk
 compare ${TMPDIR}/pcx.trk ${TMPDIR}/pcx2.trk 
+# GPSUtil strain - hand crafted, but based on problem report.
+${PNAME} -i pcx -f reference/gpsutil-1.pcx -o pcx -F ${TMPDIR}/mm-2.pcx
+compare ${TMPDIR}/mm-2.pcx ${TMPDIR}/mm.pcx
 
 #
 # Magellan file format
