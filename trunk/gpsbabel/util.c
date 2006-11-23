@@ -301,6 +301,7 @@ xvasprintf(char **strp, const char *fmt, va_list args)
 	char *newbuf;
 	size_t nextsize = 0;
 	int outsize;
+	va_list tmp;
 
 	bufsize = 0;
 	for (;;) {
@@ -309,7 +310,7 @@ xvasprintf(char **strp, const char *fmt, va_list args)
 				*strp = NULL;
 				return -1;
 			}
-			bufsize = 1;
+			bufsize = FIRSTSIZE;
 		} else if ((newbuf = xrealloc(buf, nextsize)) != NULL) {
 			buf = newbuf;
 			bufsize = nextsize;
@@ -319,8 +320,10 @@ xvasprintf(char **strp, const char *fmt, va_list args)
 			return -1;
 		}
 
-		outsize = vsnprintf(buf, bufsize, fmt, args);
-
+		va_copy(tmp, args);
+		outsize = vsnprintf(buf, bufsize, fmt, tmp);
+		va_end(tmp);
+		
 		if (outsize == -1) {
 			/* Clear indication that output was truncated, but no
 			 * clear indication of how big buffer needs to be, so
