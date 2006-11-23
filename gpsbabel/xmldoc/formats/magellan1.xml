@@ -36,5 +36,5 @@ The RoadMate family of products is not supported.
 	If you specify a serial port for the file (.e.g. "COM1", "/dev/ttyS0")
 	to be read or written, GPSBabel will use serial protocol.   Specifying
 	a file, either on local filesystem or on a mounted flash card reader,
-	will results in the file-based format being used.
+	will result in the file-based format being used.
 </para>

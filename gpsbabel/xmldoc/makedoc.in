@@ -144,7 +144,7 @@ END
      $nid = 'fmt_'.$id.'_o_'.$line[2];
      print FILE <<END;
   <section id="$nid">
-    <title>$line[2] option</title>
+    <title><option>$line[2]</option> option</title>
     <para>
       $line[3].
     </para>
