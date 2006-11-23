@@ -27,7 +27,8 @@
 	This format is used for both the serial protocol used on the
 	devices with serial ports such as Map330 and Meridian and for
 	the files stored either in either the unit's internal memory 
-	(Explorist 210, 400, 500, 600, XL) or on removable memory.
+	(Explorist 210, Explorist 400, Explorist 500, Explorist 600, 
+	Explorist XL) or on removable memory.
 </para> 
 <para>
 	If you specify a serial port for the file (.e.g. "COM1", "/dev/ttyS0")
