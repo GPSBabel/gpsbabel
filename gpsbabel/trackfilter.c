@@ -471,8 +471,8 @@ trackfilter_split(void)
 	waypoint *wpt;
 	queue *elem, *tmp;
 	int i, j;
-	float interval = -1;
-	float distance = -1; 
+	double interval = -1;
+	double distance = -1; 
 
 	if (count <= 1) return;
 
@@ -483,7 +483,7 @@ trackfilter_split(void)
 
 	if (opt_interval != 0)
 	{
-	    float  base;
+	    double base;
 	    char   unit;
 	    
 	    switch(strlen(opt_split))
@@ -498,11 +498,11 @@ trackfilter_split(void)
 		    break;
 		    
 		default:
-		    i = sscanf(opt_split,"%f%c", &interval, &unit);
+		    i = sscanf(opt_split,"%lf%c", &interval, &unit);
 		    if (i == 0) 
 		    {
 			/* test reverse order */
-			i = sscanf(opt_split,"%c%f", &unit, &interval);
+			i = sscanf(opt_split,"%c%lf", &unit, &interval);
 		    }
 		    if ((i != 2) || (interval <= 0))
 		    {
@@ -537,7 +537,7 @@ trackfilter_split(void)
 
 	if (opt_distance != 0)
 	{
-	    float  base;
+	    double base;
 	    char   unit;
 	    
 	    switch(strlen(opt_sdistance))
@@ -552,11 +552,11 @@ trackfilter_split(void)
 		    break;
 		    
 		default:
-		    i = sscanf(opt_sdistance,"%f%c", &distance, &unit);
+		    i = sscanf(opt_sdistance,"%lf%c", &distance, &unit);
 		    if (i == 0) 
 		    {
 			/* test reverse order */
-			i = sscanf(opt_sdistance,"%c%f", &unit, &distance);
+			i = sscanf(opt_sdistance,"%c%lf", &unit, &distance);
 		    }
 		    if ((i != 2) || (distance <= 0))
 		    {
@@ -636,7 +636,7 @@ trackfilter_split(void)
 		
 		if (interval > 0)
 		{
-		    float tr_interval = difftime(buff[j]->creation_time,buff[i]->creation_time);
+		    double tr_interval = difftime(buff[j]->creation_time,buff[i]->creation_time);
 		    if ( tr_interval <= interval ) 
 			new_track_flag = 0;
 #ifdef TRACKF_DBG
