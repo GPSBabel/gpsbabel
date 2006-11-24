@@ -305,7 +305,7 @@ static void data_read(void)
 	case rec_fix:
 	    // Date must appear in file before the first fix record
 	    if (date < 1000000L) {
-		fatal(MYNAME ": bad date %ld\n", date);
+		fatal(MYNAME ": bad date %d\n", (int)date);
 	    }
 	    // Create a track for pressure altitude waypoints
 	    if (!pres_head) {
