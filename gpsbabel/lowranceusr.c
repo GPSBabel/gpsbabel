@@ -363,10 +363,10 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 
     if (global_opts.debug_level >= 2)
 	{
-		printf("LOWRANCE parse_waypt: creation time %ld\n", 
-			wpt_tmp->creation_time);
-		printf("LOWRANCE parse_waypt: base_time %ld\n", base_time_secs);
-		printf("LOWRANCE parse_waypt: waypt time %ld\n", waypt_time);
+		printf("LOWRANCE parse_waypt: creation time %d\n", 
+			(int)wpt_tmp->creation_time);
+		printf("LOWRANCE parse_waypt: base_time %d\n", (int)base_time_secs);
+		printf("LOWRANCE parse_waypt: waypt time %d\n", (int)waypt_time);
 	}
 
 	/* Symbol ID */
@@ -699,10 +699,10 @@ lowranceusr_waypt_disp(const waypoint *wpt)
     if (global_opts.debug_level >= 2)
 	{
 		time_t wpt_time = Time;
-		printf("LOWRANCE waypt_disp: base_time : %ld\n",base_time_secs);
-		printf("LOWRANCE waypt_disp: creation time : %ld\n",wpt->creation_time);
-		printf("LOWRANCE waypt_disp: waypt time : %ld\n",wpt_time);
-		printf("LOWRANCE waypt_disp: waypt time (local): %s\n",ctime(&wpt_time));
+		printf("LOWRANCE waypt_disp: base_time : %d\n", (int)base_time_secs);
+		printf("LOWRANCE waypt_disp: creation time : %d\n", (int)wpt->creation_time);
+		printf("LOWRANCE waypt_disp: waypt time : %d\n", (int)wpt_time);
+		printf("LOWRANCE waypt_disp: waypt time (local): %s\n", ctime(&wpt_time));
 	}
 
 	my_fwrite4(&Time, file_out);
