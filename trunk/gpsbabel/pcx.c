@@ -256,8 +256,9 @@ data_read(void)
 		// where our other columns start.
 		case 'F': {
 			int col;
-			sym_col = 0;
 			char *i = ibuf;
+			sym_col = 0;
+
 			for (col = 0, i = ibuf; *i; col++, i++) {
 				if (0 == case_ignore_strncmp(i, "comment", 7)) {
 					comment_col = col;
