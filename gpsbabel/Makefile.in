@@ -36,7 +36,8 @@ OUTPUT_SWITCH=-o #
 GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I. -I@srcdir@/coldsync \
 	$(OPTIMIZATION) @CFLAGS@
 LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
-DESTDIR=/usr/local/
+PREFIX=@prefix@
+INSTALL_DIR=$(DESTDIR)/$(PREFIX)
 
 # OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
 # OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
@@ -139,10 +140,12 @@ torture:
 # This will only work on UNIX-like substances.
 #
 install: @INSTALL_DEBUG@
-	install gpsbabel  $(DESTDIR)/bin
+	@mkdir -p $(INSTALL_DIR)/bin
+	install gpsbabel  $(INSTALL_DIR)/bin/
 
 install-debug:
-	install gpsbabel-debug  $(DESTDIR)/bin
+	@mkdir -p $(INSTALL_DIR)/bin
+	install gpsbabel-debug  $(INSTALL_DIR)/bin/
 
 # Nerdy release stuff that needs to work only on Linux.
 
