@@ -38,3 +38,9 @@ The RoadMate family of products is not supported.
 	a file, either on local filesystem or on a mounted flash card reader,
 	will result in the file-based format being used.
 </para>
+<para>
+	Users of the Explorist generation of receivers should probably
+	prefer to use the <link linkend="fmt_magellan">magellanx</link>
+	format over this one.
+
+</para>

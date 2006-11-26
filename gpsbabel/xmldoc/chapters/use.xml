@@ -2,13 +2,10 @@
       <title>Usage</title>
       <sect1 id="Invocation">
          <title>Invocation</title>
-         <para>Invocation was meant to be flexible.  Unfortunately,
-         that can sometimes lead to unwieldy command lines.</para>
-
 <para>
 If you're using GPSBabel, you will need to know how to do at least two things:
 read data from a file, and write it to another file.  There are four basic
-commands you need to know to do those things:
+options you need to know to do those things:
 </para>
 <segmentedlist>
 <?dbhtml list-presentation="table"?>
@@ -43,6 +40,11 @@ name that you would use on the command line follows the format name in
 parentheses.
 </para>
 <para>
+Options are <emphasis>always</emphasis> processed in order from left to right.
+In practical terms, this means that things you want to read should appear
+in the command before things you want to write.
+</para>
+<para>
 The <parameter class="command">filename</parameter> parameters specify the 
 name of a file to be read or written.
 </para>
@@ -73,6 +75,35 @@ name of a file to be read or written.
          like this useful.</para>
          <screen format="linespecific"> gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0  </screen>
 	<screen format="linespecific"> gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1</screen>
+      </sect1>
+      <sect1 id="Suboptions">
+	<title>Suboptions</title>
+	<para>
+	  Many of the available format options in GPSBabel can themselves
+	  take options.   While we try to make all the formats do the most
+	  sensible thing possible without any extra options, this allows
+	  great power and flexibility in the operation of the program.
+	</para>
+	<para>
+	  Suboptions are comma separated and immediately follow the option
+	  itself. The available suboptions are listed on the individual 
+	  format pages.  We'll make an example from <xref linkend="fmt_kml" />:
+	</para>
+         <screen format="linespecific">gpsbabel -i gpx -f file.gpx -o kml,deficon="file://myicon.png",lines=0 -F one.kml -o kml -F two.kml</screen>
+	<para>
+	This command will read the GPX file <filename>file.gpx</filename>
+	and create two KML files.    <filename>one.kml</filename> will
+	have the given icon and no lines between track and routepoints.
+	<filename>two.kml</filename> will be created with the defaults used
+	in the KML writer.
+	</para>
+	<para>
+	Suboptions for the various formats allow you to change serial speeds,
+	pass arguments to filters, change the type of file written, override
+	icon defaults, and lots of other things.   The suboptions for each
+	filetype are documented on the page in this document that describes
+	the option itself.
+	</para>
       </sect1>
       <sect1 id="Advanced_Usage">
          <title>Advanced Usage</title>
@@ -110,7 +141,7 @@ merged data to multiple destinations.
       </sect1>
       <sect1 id="Route_And_Track_Modes">
          <title>Route and Track Modes</title>
-         <para> Most formats will make reasonable attempt to work
+         <para> Most formats will make a reasonable attempt to work
          transparently with waypoints, tracks, and routes.  Some
          formats, like 'garmin' and 'magellan' require the <parameter moreinfo="none">-t</parameter> flag to work with tracks and
          <parameter moreinfo="none">-r</parameter> to work with
@@ -123,6 +154,14 @@ merged data to multiple destinations.
          to handle every possible hazard that can be encountered
          during a conversion.  If you're merging or converting files
          of similar limitations, things work very well.</para>
+	 <para> Many of those hazards can be overcome with our filters
+	 but there are often compromises to be made.  For example, if you
+	 have a GPX route that contains  150 turn points but you're sending
+	 the route to a GPX that supports only 30 turnpoints, something has
+	 to go.   One might use our 'simplify' filter to produce a route that
+ 	 retained the 30 most mathematically significant turnpoints but that
+	 may not really be the route you had in mind.
+	 </para>
          <para> Tracks and routes will sometimes be converted to a
          list of waypoints when necessary, f.i. when writing into one
          of the CSV formats. The inverse operation is not supported

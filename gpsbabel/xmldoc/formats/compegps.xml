@@ -1,5 +1,5 @@
 <para>
-These data files are "character" separated text files like
+<productname>CompeGPS</productname> data files are "character" separated text files like
 the pcx format. "Character" means special data lines can have their
 own separator.
 </para>

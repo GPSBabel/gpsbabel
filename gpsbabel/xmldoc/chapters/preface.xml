@@ -13,13 +13,14 @@ alternate formats.
       </section>
       <section id="The_Solution">
          <title>The Solution</title>
-         <para> I needed to convert waypoints between a couple of formats, so I
+         <para> The original author of GPSBabel, <ulink url="/people/robertlipe.html">Robert Lipe</ulink>, needed to convert waypoints between a couple of formats, so he
 whipped up a converter and based it on an extensible foundation so
-that it was easy to add new formats.  Most file formats added so far
-have taken under 200 lines of reasonable ISO C so they can be stamped
-out pretty trivially.  Formats that are ASCII text delimited in some
-fixed way can be added with no programming at all via our 'style'
-mechanism.
-</para>
+that it was easy to add new formats and made the program freely available. <ulink url="/people/index.html">Many others</ulink> have contributed to the program since then.</para>
+	<para>  Most file formats added so far have taken under 200 
+	lines of reasonable ISO C so they can be stamped
+	out pretty trivially.  Formats that are ASCII text delimited in some
+	fixed way can be added with no programming at all via our 
+	<link linkend ="Styles">style</link> mechanism.
+	</para>
       </section>
    </preface>
