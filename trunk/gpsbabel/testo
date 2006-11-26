@@ -1150,5 +1150,11 @@ compare ${TMPDIR}/transform-rte.gpx ${REFERENCE}/transform-rte.gpx
 ${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,tracks -x transform,wpt=rte,del=y -o gpx -F ${TMPDIR}/transform-wpt.gpx
 compare ${TMPDIR}/transform-wpt.gpx ${REFERENCE}/transform-wpt.gpx
 
+#
+# "Raymarine Waypoint File" tests
+#
+${PNAME} -i raymarine -f ${REFERENCE}/raymarine-sample.rwf -o gpx -F ${TMPDIR}/raymarine-sample.gpx
+compare ${TMPDIR}/raymarine-sample.gpx ${REFERENCE}/raymarine-sample.gpx
+
 
 exit 0

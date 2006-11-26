@@ -54,7 +54,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
 	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
-	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o
+	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o
 
 FILTERS=position.o radius.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
@@ -553,6 +553,8 @@ quovadis.o: quovadis.c quovadis.h defs.h config.h queue.h gbtypes.h \
   coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
 radius.o: radius.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h grtcirc.h
+raymarine.o: raymarine.c defs.h config.h queue.h gbtypes.h cet.h cet_util.h \
+  inifile.h filterdefs.h grtcirc.h gbfile.h csv_util.h
 reverse_route.o: reverse_route.c defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
   filterdefs.h

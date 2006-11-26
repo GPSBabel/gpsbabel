@@ -111,6 +111,7 @@ extern ff_vecs_t wbt_svecs;
 extern ff_vecs_t wbt_fvecs;
 extern ff_vecs_t gtc_vecs;
 extern ff_vecs_t dmtlog_vecs;
+extern ff_vecs_t raymarine_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -606,6 +607,12 @@ vecs_t vec_list[] = {
 		"dmtlog",
 		"TrackLogs digital mapping (.trl)",
 		"trl"
+	},
+	{
+		&raymarine_vecs,
+		"raymarine",
+		"Raymarine Waypoint File (.rwf)",
+		"rwf"
 	},
 	{
 		NULL,
