@@ -437,7 +437,25 @@ gbfeof(gbfile *file)
 {
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		return gzeof(file->handle.gz);
+		int res = gzeof(file->handle.gz);
+		
+		if (!res) {
+			signed char test;
+			int len = gzread(file->handle.gz, &test, 1);
+			if (len == 1) {
+				/* No EOF, put the single byte back into stream */
+				gzungetc(test, file->handle.gz);
+			}
+			else {
+				/* we are at the end of the file */
+				if (global_opts.debug_level > 0) {
+					/* now gzeof() should return 1 */
+					is_fatal(!gzeof(file->handle.gz), "zlib gzeof error!\n");
+				}
+				res = 1;
+			}
+		}
+		return res;
 #else
 		fatal(NO_ZLIB);
 		return 0;
