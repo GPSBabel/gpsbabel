@@ -86,18 +86,6 @@
 #  define _CRT_SECURE_NO_DEPRECATE 1
 #endif
 
-/* va_copy workaround */
-
-#ifndef va_copy
-#  ifdef __va_copy
-#    define va_copy __va_copy
-#  else
-#    error Function 'va_copy' or '__va_copy' is not defined in your environment!
-#    error Please mail some information about your system 
-#    error (platform,compiler,...) to gpsbabel-code@lists.sourceforge.net
-#  endif
-#endif
-
 /* Pathname separator character */
 #if __WIN32__
 #  define GB_PATHSEP '\\'
