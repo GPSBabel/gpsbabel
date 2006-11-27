@@ -1227,7 +1227,11 @@ gpx_read(void)
 			int maxentlength = 8;
 			len = gbfread(buf, 1, MY_CBUF_SZ - maxentlength, fd);
 			done = gbfeof(fd) || !len;
+// fprintf(stderr, "%d/%d\n", len, done);
 			buf[len] = '\0';
+			if (len < maxentlength) {
+				maxentlength = len;
+			}
 			badchar = buf+len-maxentlength;
 			badchar = strchr( badchar, '&' );
 			extra = maxentlength - 1; /* for terminator */
