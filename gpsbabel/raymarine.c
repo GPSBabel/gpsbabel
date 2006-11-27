@@ -138,7 +138,6 @@ find_symbol_num(const char *descr)
 		a = &raymarine_symbols[0];
 		
 		for (i = 0; i < RAYMARINE_SYMBOL_CT; i++, a++) {
-			printf(MYNAME ": %s - %s\n", descr, a->name);
 			if (case_ignore_strcmp(descr, a->name) == 0) return i;
 		}
 	}
