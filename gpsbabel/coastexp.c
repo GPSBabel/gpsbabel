@@ -332,9 +332,10 @@ void
 ce_read(void)
 {
 	int len;
-	char buf[MY_CBUF];
+	char buf[MY_CBUF + 1];
 
-	while ((len = gbfread(buf, 1, sizeof(buf), fd))) {
+	while ((len = gbfread(buf, 1, sizeof(buf) - 1, fd))) {
+		buf[len] = '\0';
 		if (!XML_Parse(psr, buf, len, gbfeof(fd))) {
 			fatal(MYNAME ":Parse error at %d: %s\n",
 				(int) XML_GetCurrentLineNumber(psr),
