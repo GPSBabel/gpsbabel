@@ -785,6 +785,10 @@ typedef struct {
 	unsigned char data[8];
 } pdb_double;
 
+typedef struct {
+	unsigned char data[4];
+} pdb_float;
+
 /*
  * Protypes for Endianness helpers.
  */
@@ -798,8 +802,10 @@ void be_write16(void *pp, const unsigned i);
 void be_write32(void *pp, const unsigned i);
 void le_write16(void *pp, const unsigned i);
 void le_write32(void *pp, const unsigned i);
+float pdb_read_float(void *p);
 double pdb_read_double(void *p);
 void pdb_write_double(void *pp, double d);
+void pdb_write_float(void *pp, float d);
 
 double le_read_double(void *p);
 double be_read_double(void *p);
