@@ -890,6 +890,29 @@ endian_read_double(void* ptr, int read_le)
   return ret;
 }
 
+float
+endian_read_float(void* ptr, int read_le)
+{
+  float ret;
+  char r[4];
+  void *p;
+  int i;
+  
+  if ( i_am_little_endian == read_le ) {
+	  p = ptr;
+  }
+  else {
+	  for (i = 0; i < 4; i++)
+	  {
+		r[i] = ((char*)ptr)[3-i];
+	  }
+	  p = r;
+  }
+  
+  memcpy(&ret, p, 4);
+  return ret;
+}
+
 void
 endian_write_double(void* ptr, double d, int write_le)
 {
@@ -908,8 +931,29 @@ endian_write_double(void* ptr, double d, int write_le)
   }
 }
 
+void
+endian_write_float(void* ptr, float f, int write_le)
+{
+  char *r = (char *)(void *)&f;
+  int i;
+  char *optr = ptr;
+
+  if ( i_am_little_endian == write_le ) {
+	  memcpy( ptr, &f, 4);
+  }
+  else {
+	  for (i = 0; i < 4; i++)
+	  {
+		*optr++ = r[3-i];
+	  }
+  }
+}
+
 double
 pdb_read_double( void *ptr ) {return endian_read_double(ptr, 0);}
+
+float
+pdb_read_float( void *ptr ) {return endian_read_float(ptr, 0);}
 
 double 
 le_read_double( void *ptr ) {return endian_read_double(ptr,1);}
@@ -919,6 +963,9 @@ be_read_double( void *ptr ) {return endian_read_double(ptr,0);}
 
 void
 pdb_write_double( void *ptr, double d ) {endian_write_double(ptr,d,0);}
+
+void
+pdb_write_float( void *ptr, float f ) {endian_write_float(ptr,f,0);}
 
 void
 le_write_double( void *ptr, double d ) {endian_write_double(ptr,d,1);}

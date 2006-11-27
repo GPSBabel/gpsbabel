@@ -5,6 +5,9 @@
 Planner for Palm/OS"</ulink> databases into other formats.  You probably should
 not use this to write CoPilot databases, although the code is there,
 because GPSBabel doesn't convert magnetic declination values.</para>
+<para>This version now reads all CoPilot file versions up to 4, but only
+writes version 4 files.  If you have a need for a version flag, please let
+me know.</para>  
       <para> Questions, bug reports, etc, to ptomblin at
 xcski.com</para>
       <para>

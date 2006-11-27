@@ -25,17 +25,40 @@
 #include "coldsync/pdb.h"
 #include "grtcirc.h"
 
-#define MYNAME		"CoPilot Waypoint"
-#define MYTYPE 		0x77617970  	/* wayp */
-#define MYCREATOR	0x47584255 		/* GXBU */
+#define MYNAME			"CoPilot Waypoint"
+#define wayp_TYPE 		0x77617970  	/* wayp */
+#define swpu_TYPE 		0x73777075  	/* swpu */
+#define GXPU_CREATOR	0x47584255 		/* GXBU */
+#define AP_P_CREATOR	0x41502d50 		/* AP-P */
 
 
-struct record {
+struct record0 {
+	pdb_double	latitude; 	/* PDB double format, */
+	pdb_double	longitude; 	/* similarly, neg = east */
+	pdb_double	magvar; 	/* magnetic variation in degrees, neg = east */
+	udword		elevation; 	/* feet */
+};
+
+struct record1 {
 	pdb_double	latitude; 	/* PDB double format, */
 	pdb_double	longitude; 	/* similarly, neg = east */
 	pdb_double	magvar; 	/* magnetic variation in degrees, neg = east */
 	pdb_double	elevation; 	/* feet */
-	char		flags;
+};
+
+struct record3 {
+	pdb_double	latitude; 	/* PDB double format, */
+	pdb_double	longitude; 	/* similarly, neg = east */
+	pdb_double	magvar; 	/* magnetic variation in degrees, neg = east */
+	pdb_double	elevation; 	/* feet */
+	char		flags;		/* flags */
+};
+
+struct record4 {
+	pdb_double	latitude; 	/* PDB double format, */
+	pdb_double	longitude; 	/* similarly, neg = east */
+	pdb_float	magvar; 	/* magnetic variation in degrees, neg = east */
+	pdb_float	elevation; 	/* feet */
 };
 
 static FILE *file_in;
@@ -69,10 +92,124 @@ wr_deinit(void)
 	fclose(file_out);
 }
 
+static waypoint*
+read_version0(ubyte* data)
+{
+  char *vdata;
+  waypoint *wpt_tmp;
+  struct record0* rec = (struct record0*)data;
+
+  wpt_tmp = waypt_new();
+
+  wpt_tmp->longitude =
+	DEG(-pdb_read_double(&rec->longitude));
+  wpt_tmp->latitude =
+	DEG(pdb_read_double(&rec->latitude));
+  wpt_tmp->altitude = FEET_TO_METERS(be_read32(&rec->elevation));
+
+  vdata = (char *) data + sizeof(*rec);
+
+  wpt_tmp->shortname = xstrdup(vdata);
+  vdata = vdata + strlen(vdata) + 1;
+
+  wpt_tmp->description = xstrdup(vdata);
+  vdata = vdata + strlen(vdata) + 1;
+
+  wpt_tmp->notes = NULL;
+
+  return wpt_tmp;
+}
+
+static waypoint*
+read_version1(ubyte* data)
+{
+  char *vdata;
+  waypoint *wpt_tmp;
+  struct record1* rec = (struct record1*)data;
+
+  wpt_tmp = waypt_new();
+
+  wpt_tmp->longitude =
+	DEG(-pdb_read_double(&rec->longitude));
+  wpt_tmp->latitude =
+	DEG(pdb_read_double(&rec->latitude));
+  wpt_tmp->altitude =
+	FEET_TO_METERS(pdb_read_double(&rec->elevation));
+
+  vdata = (char *) data + sizeof(*rec);
+
+  wpt_tmp->shortname = xstrdup(vdata);
+  vdata = vdata + strlen(vdata) + 1;
+
+  wpt_tmp->description = xstrdup(vdata);
+  vdata = vdata + strlen(vdata) + 1;
+
+  wpt_tmp->notes = xstrdup(vdata);
+
+  return wpt_tmp;
+}
+
+static waypoint*
+read_version3(ubyte* data)
+{
+  char *vdata;
+  waypoint *wpt_tmp;
+  struct record3* rec = (struct record3*)data;
+
+  wpt_tmp = waypt_new();
+
+  wpt_tmp->longitude =
+	DEG(-pdb_read_double(&rec->longitude));
+  wpt_tmp->latitude =
+	DEG(pdb_read_double(&rec->latitude));
+  wpt_tmp->altitude =
+	FEET_TO_METERS(pdb_read_double(&rec->elevation));
+
+  vdata = (char *) data + sizeof(*rec);
+
+  wpt_tmp->shortname = xstrdup(vdata);
+  vdata = vdata + strlen(vdata) + 1;
+
+  wpt_tmp->description = xstrdup(vdata);
+  vdata = vdata + strlen(vdata) + 1;
+
+  wpt_tmp->notes = xstrdup(vdata);
+
+  return wpt_tmp;
+}
+
+static waypoint*
+read_version4(ubyte* data)
+{
+  char *vdata;
+  waypoint *wpt_tmp;
+  struct record4* rec = (struct record4*)data;
+
+  wpt_tmp = waypt_new();
+
+  wpt_tmp->longitude =
+	DEG(-pdb_read_double(&rec->longitude));
+  wpt_tmp->latitude =
+	DEG(pdb_read_double(&rec->latitude));
+  wpt_tmp->altitude =
+	FEET_TO_METERS(pdb_read_float(&rec->elevation));
+
+  vdata = (char *) data + sizeof(*rec);
+
+  wpt_tmp->shortname = xstrdup(vdata);
+  vdata = vdata + strlen(vdata) + 1;
+
+  wpt_tmp->description = xstrdup(vdata);
+  vdata = vdata + strlen(vdata) + 1;
+
+  wpt_tmp->notes = xstrdup(vdata);
+
+  return wpt_tmp;
+}
+
 static void
 data_read(void)
 {
-	struct record *rec;
 	struct pdb *pdb;
 	struct pdb_record *pdb_rec;
 
@@ -80,45 +217,46 @@ data_read(void)
 		fatal(MYNAME ": pdb_Read failed\n");
 	}
 
-	if ((pdb->creator != MYCREATOR) || (pdb->type != MYTYPE)) {
+	if ((pdb->creator != GXPU_CREATOR && pdb->creator != AP_P_CREATOR) ||
+		(pdb->type != wayp_TYPE && pdb->type != swpu_TYPE)) {
 		fatal(MYNAME ": Not a CoPilot file.\n");
 	}
+	if (pdb->version > 4) {
+	  fatal(MYNAME ": %d is not a known version.\n", pdb->version);
+	}
+
 
 	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
 		waypoint *wpt_tmp;
-		char *vdata;
 
-		wpt_tmp = waypt_new();
-
-		rec = (struct record *) pdb_rec->data;
-		wpt_tmp->longitude =
-		  DEG(-pdb_read_double(&rec->longitude));
-		wpt_tmp->latitude =
-		  DEG(pdb_read_double(&rec->latitude));
-		wpt_tmp->altitude =
-		  pdb_read_double(&rec->elevation) * .3048;
-
-		vdata = (char *) pdb_rec->data + sizeof(*rec);
-
-		wpt_tmp->shortname = xstrdup(vdata);
-		vdata = vdata + strlen(vdata) + 1;
-
-		wpt_tmp->description = xstrdup(vdata);
-		vdata = vdata + strlen(vdata) + 1;
-		
-		wpt_tmp->notes = xstrdup(vdata);
-
+		switch (pdb->version)
+		{
+		case 0:
+		  wpt_tmp = read_version0(pdb_rec->data);
+		  break;
+		case 1:
+		case 2:
+		  wpt_tmp = read_version1(pdb_rec->data);
+		  break;
+		case 3:
+		  wpt_tmp = read_version3(pdb_rec->data);
+		  break;
+		case 4:
+		  wpt_tmp = read_version4(pdb_rec->data);
+		  break;
+		default:
+		  fatal(MYNAME ": Unknown version %d.\n", pdb->version);
+		}
 		waypt_add(wpt_tmp);
 
 	} 
 	free_pdb(pdb);
 }
 
-
 static void
 copilot_writewpt(const waypoint *wpt)
 {
-	struct record *rec;
+	struct record4 *rec;
 	static int ct = 0;
 	char *vdata;
 
@@ -126,9 +264,9 @@ copilot_writewpt(const waypoint *wpt)
 
 	pdb_write_double(&rec->latitude, RAD(wpt->latitude));
 	pdb_write_double(&rec->longitude, RAD(-wpt->longitude));
-	pdb_write_double(&rec->elevation,
-		wpt->altitude / .3048);
-	pdb_write_double(&rec->magvar, 0);
+	pdb_write_float(&rec->magvar, 0);
+	pdb_write_float(&rec->elevation,
+		METERS_TO_FEET(wpt->altitude));
 
 	vdata = (char *)rec + sizeof(*rec);
 	if ( wpt->shortname ) {
@@ -180,9 +318,9 @@ data_write(void)
 	opdb->name[PDB_DBNAMELEN-1] = 0;
 	opdb->attributes = PDB_ATTR_BACKUP;
 	opdb->ctime = opdb->mtime = current_time() + 2082844800U;
-	opdb->type = MYTYPE;
-	opdb->creator = MYCREATOR; 
-	opdb->version = 0;
+	opdb->type = wayp_TYPE;
+	opdb->creator = GXPU_CREATOR; 
+	opdb->version = 4;
 
 	waypt_disp_all(copilot_writewpt);
 	
