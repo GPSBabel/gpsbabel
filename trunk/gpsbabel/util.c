@@ -288,6 +288,11 @@ xfputs(const char *errtxt, const char *s, FILE *stream)
 
 /*
  * Allocate a string using a format list with optional arguments
+ * Returns -1 on error.
+ * If return value is anything else, *strp will be populated with an
+ * allocated string containging the formatted buffer.
+ * 
+ * Freeing that is the responsbility of the caller.
  */
 
 int
@@ -361,7 +366,7 @@ xasprintf(char **strp, const char *fmt, ...)
 		}
 	}
 	*strp = buf;
-	return 0;
+	return outsize;
 }
 
 /* 
