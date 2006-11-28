@@ -297,7 +297,7 @@ static void
 write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char *location, const char *GUID)
 {
 	char *notes;
-	char *temp;
+	char *name;
 	double time;
 		
 	/* ToDo: remove possible line-breaks from notes */
@@ -305,15 +305,15 @@ write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char
 	notes = (wpt->notes != NULL) ? wpt->notes : "";
 	time = (wpt->creation_time != 0) ? TIMET_TO_EXCEL(wpt->creation_time) : TIMET_TO_EXCEL(gpsbabel_time);
 	
-	temp = mkshort(hshort, wpt->shortname);
+	name = mkshort(hshort, wpt->shortname);
 	gbfprintf(fout, "[Wp%d]\n"
 			"Loc=%s\n"
 			"Name=%s\n"
 			"Lat=%.15f\n"
 			"Long=%.15f\n",
-		waypt_no, location, temp, wpt->latitude, wpt->longitude
+		waypt_no, location, name, wpt->latitude, wpt->longitude
 	);
-	xfree(temp);
+	xfree(name);
 	gbfprintf(fout, "Rng=%.15f\n"
 			"Bear=%.15f\n"
 			"Bmp=%d\n"
@@ -357,7 +357,7 @@ static void
 write_route_wpt_cb(const waypoint *wpt)
 {
 	int i;
-	char *s;
+	char *name;
 	static char *items[] = {
 		"Cog",
 		"Eta",
@@ -370,9 +370,9 @@ write_route_wpt_cb(const waypoint *wpt)
 		"PredictedTwd",
 		"PredictedTws" };
 		
-	s = mkshort(hshort, wpt->shortname);
-	gbfprintf(fout, "Mk%d=%s\n", rte_wpt_index, wpt->shortname);
-	xfree(s);
+	name = mkshort(hshort, wpt->shortname);
+	gbfprintf(fout, "Mk%d=%s\n", rte_wpt_index, name);
+	xfree(name);
 
 	for (i = 0; i < sizeof(items) / sizeof(char *); i++) {
 		gbfprintf(fout, "%s%d=%.15f\n", items[i], rte_wpt_index, 0.0);
@@ -403,7 +403,7 @@ raymarine_wr_init(const char *fname)
 
 	setshort_badchars(hshort, ",");
 	setshort_mustupper(hshort, 0);
-	setshort_mustuniq(hshort, 1);
+	setshort_mustuniq(hshort, 0);
 	setshort_whitespace_ok(hshort, 1);
 	setshort_repeating_whitespace_ok(hshort, 1);
 }
