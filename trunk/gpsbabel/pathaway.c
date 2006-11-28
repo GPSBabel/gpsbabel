@@ -271,7 +271,7 @@ double ppdb_decode_coord(const char *str)
 	    if (*str == 'O') german_release = 1;
 	    
 	    tmp = strchr(str, ' ');
-	    if ((tmp) && (tmp - str < 4))
+	    if ((tmp) && (tmp - str < 5))
 	    {
 		CHECK_INP(3, sscanf(str,"%c%d %lf", &dir, &deg, &val), "decode_coord(2)");
 		val = deg + (val / 60.0);
