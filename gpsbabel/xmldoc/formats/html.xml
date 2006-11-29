@@ -12,5 +12,5 @@ for Geocachers with pocket queries.
 Groundspeak extensions and writes an HTML file with encrypted hints
 that is rendered using a custom stylesheet:
 </para>
-<screen format="linespecific">gpsbabel -i gpx -f 12345.gpx -o html,stylesheet=green.css,encrypt -F 12345.html</screen>
+<para><command>gpsbabel -i gpx -f 12345.gpx -o html,stylesheet=green.css,encrypt -F 12345.html</command></para>
     

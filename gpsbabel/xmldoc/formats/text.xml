@@ -4,5 +4,5 @@ handy for listings of any type of waypoint files.
       <para> The following command line reads a GPX file with
 Groundspeak extensions and writes a text file with encrypted hints:
 </para>
-<screen format="linespecific">gpsbabel -i gpx -f 12345.gpx -o text,encrypt -F 12345.txt</screen>
+<para><command>gpsbabel -i gpx -f 12345.gpx -o text,encrypt -F 12345.txt</command></para>
     

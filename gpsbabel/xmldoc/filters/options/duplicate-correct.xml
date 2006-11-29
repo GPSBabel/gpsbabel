@@ -11,7 +11,7 @@ geocaches in a Groundspeak pocket query:
 <example id="Correcting_Cache_Locations">
 <title>Using the duplicate filter to correct the locations of "puzzle"
 geocaches</title>
-<screen format="linespecific">gpsbabel -i gpx -f 43622.gpx -i csv -f corrections.csv -x duplicate,shortname,correct -o gpx -F 43622-corrected.gpx</screen>
+<para><command>gpsbabel -i gpx -f 43622.gpx -i csv -f corrections.csv -x duplicate,shortname,correct -o gpx -F 43622-corrected.gpx</command></para>
 <para>
 After this command is run, the waypoints in the output file will have all 
 of the descriptive information from <filename>43622.gpx</filename>, but 

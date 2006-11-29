@@ -48,7 +48,7 @@ Suppose you have a polygon file that defines the border of your county,
 called mycounty.txt.  This command line will give you only the points 
 in your county:
 </para>
-<screen format="linespecific">gpsbabel -i geo -f 1.loc -x polygon,file=mycounty.txt -o mapsend -F 2.wpt</screen>
+<para><command>gpsbabel -i geo -f 1.loc -x polygon,file=mycounty.txt -o mapsend -F 2.wpt</command></para>
 </example>
 <example id="example_in_or_close_to">
 <title>Using the polygon and arc filters to find points in or nearly in a 
@@ -61,11 +61,11 @@ boundaries of your polygon are not quite perfect, so you want to provide a
 buffer zone around it in case there are points nearby that should be in the 
 polygon but aren't quite.
 </para>
-<screen>
+<para><command>
 gpsbabel -i gpx -f points.gpx -x stack,push -x polygon,file=mycounty.txt 
 -x stack,swap -x arc,file=mycounty.txt,distance=1k -x stack,pop,append 
 -x duplicate,shortname -o gpx -F nearmycounty.gpx
-</screen>
+</command></para>
 <para>
 This command makes a copy of the points, finds the ones that are in your
 your county, swaps that result with the copy of the original set of points,

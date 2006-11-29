@@ -4,5 +4,5 @@ Obviously, further processing once you have sent a "power off" command to
 a unit that supports it is rather futile, so place this option carefully
 in your command.
 
-<screen format="linespecific">gpsbabel -o garmin,power_off -F /dev/ttyS0</screen>
 </para>
+<para><command>gpsbabel -o garmin,power_off -F /dev/ttyS0</command></para>

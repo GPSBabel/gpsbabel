@@ -4,16 +4,12 @@
          split a single tracks into separate tracks for each day and
          name them, use this:
       </para>
-         <screen format="linespecific">
-gpsbabel -t -i gpx -f in.gpx -x \
-   track,split,title="ACTIVE LOG \
-    # %Y%m%d" -o gpx -F out.gpx</screen>
+         <para><command> gpsbabel -t -i gpx -f in.gpx -x track,split,title="ACTIVE LOG # %Y%m%d" -o gpx -F out.gpx</command></para>
          <para> If the input has multiple tracks, pack them together before
 splitting them back apart per day thusly: </para>
-         <screen format="linespecific">     	    
-gpsbabel -t   -i gpx -f in.gpx  \
-     -x track,pack,split,title="ACTIVE LOG # %D"  	\
-     -o gpx -F out.gpx</screen>
+         <para><command>     	    gpsbabel -t   -i gpx -f in.gpx  
+     -x track,pack,split,title="ACTIVE LOG # %D"  	
+     -o gpx -F out.gpx</command></para>
          <para> Additionally you can add an interval to the split
          option.  With this the track will be split if the time
          between two points is greater than this parameter. The
@@ -24,9 +20,9 @@ gpsbabel -t   -i gpx -f in.gpx  \
 </para>
          <para> For example, to split a track based on an four hour
          interval, use this:</para>
-         <screen format="linespecific">            
-gpsbabel -t \ 
-     -i gpx -f in.gpx \ 
-     -x track,pack,split=4h,title="LOG # %c" \ 
+         <para><command>            
+gpsbabel -t 
+     -i gpx -f in.gpx 
+     -x track,pack,split=4h,title="LOG # %c" 
      -o gpx -F out.gpx
-</screen>
+</command></para>

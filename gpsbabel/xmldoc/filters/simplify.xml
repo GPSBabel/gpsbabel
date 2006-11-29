@@ -17,5 +17,5 @@ For example, suppose you have a route from Street Atlas 2003 that you
 wish to use with a Magellan GPS receiver that only supports up to 50 points 
 in a route:
 </para>
-<screen format="linespecific">gpsbabel -r -i saroute -f RoadTrip.anr -x simplify,count=50 -o magellan  -F grocery.rte</screen>
+<para><command>gpsbabel -r -i saroute -f RoadTrip.anr -x simplify,count=50 -o magellan  -F grocery.rte</command></para>
       

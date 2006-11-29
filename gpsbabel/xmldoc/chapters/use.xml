@@ -33,7 +33,7 @@ options you need to know to do those things:
 The <parameter class="command">format</parameter> parameters in the above list
 refer to the names of formats or file types supported by GPSBabel. 
 </para>
-<screen format="linespecific">gpsbabel -? </screen>
+<para><command>gpsbabel -? </command></para>
 <para>will always show you the supported file types.  In this document, the
 various supported formats are listed in <xref linkend="The_Formats" />.  The 
 name that you would use on the command line follows the format name in 
@@ -53,15 +53,15 @@ name of a file to be read or written.
          this program, just tell it what you're reading, where to read
          it from, what you're writing, and what to write it to.  For
          example:</para>
-         <screen format="linespecific">gpsbabel -i geo -f /tmp/geocaching.loc -o gpx -F /tmp/geocaching.gpx</screen>
+         <para><command>gpsbabel -i geo -f /tmp/geocaching.loc -o gpx -F /tmp/geocaching.gpx</command></para>
          <para>tells it to read the file "/tmp/geocaching.loc" in geocaching.com
          format and create a new file in GPX format.</para>
          <para> This command will read from a Magellan unit attached
          to the first serial port on a Linux system (device names will
          vary on other OSes) and write them as a geocaching loc file.
          The second command does the same on Microsoft Windows.</para>
-         <screen format="linespecific">gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</screen>
-         <screen format="linespecific">gpsbabel -i magellan -f com1 -o geo -F mag.loc</screen>
+         <para><command>gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</command></para>
+         <para><command>gpsbabel -i magellan -f com1 -o geo -F mag.loc</command></para>
          <para>Optionally, you may specify <parameter moreinfo="none">"-s"</parameter> in any command line.  This
          causes the program to ignore any "short" names that may be
          present in the source data format and synthesize one from the
@@ -73,8 +73,8 @@ name of a file to be read or written.
          the 'GC1234' ones that are optimized for NMEA-only receivers.
          A geocacher with a Magellan receiver may thus find commands
          like this useful.</para>
-         <screen format="linespecific"> gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0  </screen>
-	<screen format="linespecific"> gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1</screen>
+         <para><command>gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0  </command></para>
+	<para><command>gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1</command></para>
       </sect1>
       <sect1 id="Suboptions">
 	<title>Suboptions</title>
@@ -89,7 +89,7 @@ name of a file to be read or written.
 	  itself. The available suboptions are listed on the individual 
 	  format pages.  We'll make an example from <xref linkend="fmt_kml" />:
 	</para>
-         <screen format="linespecific">gpsbabel -i gpx -f file.gpx -o kml,deficon="file://myicon.png",lines=0 -F one.kml -o kml -F two.kml</screen>
+         <para><command>gpsbabel -i gpx -f file.gpx -o kml,deficon="file://myicon.png",lines=0 -F one.kml -o kml -F two.kml</command></para>
 	<para>
 	This command will read the GPX file <filename>file.gpx</filename>
 	and create two KML files.    <filename>one.kml</filename> will
@@ -124,19 +124,18 @@ merged data to multiple destinations.
          <parameter moreinfo="none">-i</parameter> argument is seen.
          Files are read in the order they appear. So you could merge
          three input files into one output file with: </para>
-         <screen format="linespecific">gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc</screen>
+         <para><command>gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc</command></para>
          <para>You can merge files of different types:</para>
-         <screen format="linespecific">gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx \ 
--o gpsutil -F big.gps</screen>
+         <para><command>gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx  
+-o gpsutil -F big.gps</command></para>
          <para> You can write the same data in different output formats:</para>
-         <screen format="linespecific">gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx 1.wpt</screen>
+         <para><command>gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx 1.wpt</command></para>
          <para>If you want to change the character set of input or/and
          output side you can do this with the option <option>-c
          &lt;character set&gt;</option>. You can get a complete list
          of supported character sets with "gpsbabel -l".  To change
          the character set on both sides you should do this:</para>
-         <screen format="linespecific">gpsbabel -i xcsv,style=foo.style -c latin1 -f foo  \
-	         -o xcsv,style=bar.style -c ms-ansi -F bar</screen>
+         <para><command>gpsbabel -i xcsv,style=foo.style -c latin1 -f foo -o xcsv,style=bar.style -c ms-ansi -F bar</command></para>
          <para>Note, that some formats has a fixed character set and ignore this option.</para>
       </sect1>
       <sect1 id="Route_And_Track_Modes">
@@ -149,7 +148,7 @@ merged data to multiple destinations.
          waypoints, and is the default. So if you wanted to read all
          data from your unit into a gpx file, you might use a command
          like:</para>
-         <screen format="linespecific"> gpsbabel -t -r -w -i magellan -f com1:  -o gpx -F backup.gpx</screen>
+         <para><command> gpsbabel -t -r -w -i magellan -f com1:  -o gpx -F backup.gpx</command></para>
          <para> Tracks and routes are advanced features and don't try
          to handle every possible hazard that can be encountered
          during a conversion.  If you're merging or converting files
@@ -254,7 +253,7 @@ merged data to multiple destinations.
       (i.e. wrapper applications using GPSBabel in the background). 
        The inifile mechanism can be disabled with an empty filename.
     </para>
-    <screen format="linespecific">gpsbabel -p "" -i gpx -f something.gpx -o tiger -F -</screen>
+    <para><command>gpsbabel -p "" -i gpx -f something.gpx -o tiger -F -</command></para>
 </sect1>
 <sect1 id="tracking">
   <title>Realtime tracking</title>
@@ -266,8 +265,8 @@ merged data to multiple destinations.
 	  inputs and KML is supported on output.   Additional formats 
    	  may be added by interested parties later.
     </para>
+    <para><command>gpsbabel -T -i garmin -f usb: -o kml -F xxx.kml</command></para>
     <para>
-    <screen format="linespecific">gpsbabel -T -i garmin -f usb: -o kml -F xxx.kml</screen>
    	  Will read the USB-connected Garmin and rewrite 'xxx.kml' atomically,
 	  suitable for a self-refreshing network link in Google Earth.
     </para>
@@ -287,8 +286,8 @@ merged data to multiple destinations.
   <para>
   Here is an example demonstrating segmenting a large command line
   by placing the input and filtering directives in a file called 'all_my_files'.
-  <screen format="linespecific">gpsbabel -b all_my_files -o gdb -F all_my_tracks.gdb</screen>
   </para>
+  <para><command>gpsbabel -b all_my_files -o gdb -F all_my_tracks.gdb</command></para>
   <para>
     'all_my_files' could look like this:
   </para>

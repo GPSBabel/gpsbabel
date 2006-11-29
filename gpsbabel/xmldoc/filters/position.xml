@@ -10,6 +10,6 @@ has come before.
 The following command removes multiple points that are within 
 one foot of each other, leaving just one.
 </para>
-<screen format="linespecific">gpsbabel -i geo -f 1.loc -f 2.loc -x position,distance=1f -o mapsend -F 3.wpt</screen>
+<para><command>gpsbabel -i geo -f 1.loc -f 2.loc -x position,distance=1f -o mapsend -F 3.wpt</command></para>
 </example>
       

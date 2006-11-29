@@ -6,7 +6,7 @@ for a given configuration of GPS satellites.
 </para>
 <example id="example_discard_filter">
 <title>Using the discard filter</title>
-<screen format="linespecific"> gpsbabel -i gpx -f in.gpx -x discard,hdop=10,vdop=20,hdopandvdop -o gpx -F out.gpx</screen>
+<para><command> gpsbabel -i gpx -f in.gpx -x discard,hdop=10,vdop=20,hdopandvdop -o gpx -F out.gpx</command></para>
 </example>
 <para> Contributed by Tobias Minich.</para>
       

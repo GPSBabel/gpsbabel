@@ -12,6 +12,6 @@ This option may be used to implement an "ignore list."  In the following
 example, the duplicate filter is used to remove a list of waypoints to be
 ignored from a larger collection of waypoints:
 </para>
-<screen format="linespecific">gpsbabel -i gpx -f waypoints.gpx -i csv -f to_ignore.csv -x duplicate,shortname,all -o gpx -F filtered.gpx</screen>
+<para><command>gpsbabel -i gpx -f waypoints.gpx -i csv -f to_ignore.csv -x duplicate,shortname,all -o gpx -F filtered.gpx</command></para>
 </example>
 
