@@ -12,6 +12,6 @@ center appear earlier in the output file.
  <para>This example command line would include only points within 1 1/2 miles
        of N30.000 W 90.000</para>
 
-<screen format="linespecific">gpsbabel -i geo -f 1.loc -x radius,distance=1.5M,lat=30.0,lon=-90.0 -o mapsend -F 2.wpt</screen>
+<para><command>gpsbabel -i geo -f 1.loc -x radius,distance=1.5M,lat=30.0,lon=-90.0 -o mapsend -F 2.wpt</command></para>
 </example>
       

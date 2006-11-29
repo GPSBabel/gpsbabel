@@ -8,7 +8,6 @@ A single track will be created in the sequence they appear in the input.
 <para>
 Say you you have a data file that came from CSV file that you want to convert  
 to a GPX track that can be loaded into Mapsource.  Use the following command:
-<screen format="linespecific">gpsbabel -i csv -f blah.txt -x transform,trk=wpt \
--o gdb -F blah.gdb</screen>
 </para>
+<para><command>gpsbabel -i csv -f blah.txt -x transform,trk=wpt -o gdb -F blah.gdb</command></para>
 </example>

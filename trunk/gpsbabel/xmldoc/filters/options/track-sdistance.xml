@@ -10,12 +10,12 @@
 
          <para> For example, to split the track if the distance between
          points is greater than 100 meters, use this:</para>
-         <screen format="linespecific">
-gpsbabel -t \
-     -i gpx -f in.gpx \
-     -x track,pack,sdistance=0.1k" \
+         <para><command>
+gpsbabel -t 
+     -i gpx -f in.gpx 
+     -x track,pack,sdistance=0.1k" 
      -o gpx -F out.gpx
-</screen>
+</command></para>
         <para> The sdistance option can be combined with the split option.
         The track then will be split only if both time and distance
         interval exceeds the supplied values. This technique can be used to 
@@ -26,11 +26,11 @@ gpsbabel -t \
         This example splits the track
         if the device is without signal for at least 5 minutes
         and during this time moves more than 300 meters:</para>
-        <screen format="linespecific">
+        <para><command>
 gpsbabel -t \
      -i gpx -f in.gpx \
      -x track,pack,sdistance=0.3k,split=5m \
      -o gpx -F out.gpx
-</screen>
+</command></para>
 
 

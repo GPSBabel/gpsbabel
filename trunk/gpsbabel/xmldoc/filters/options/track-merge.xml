@@ -9,6 +9,6 @@ dropped.
 Suppose you want to merge tracks recorded with two different GPS devices 
 at the same time.  To do that, use this command line:
 </para>
-<screen format="linespecific">gpsbabel -t -i gpx -f john.gpx -i gpx -f doe.gpx -x track,merge,title="COMBINED LOG" -o gpx -F john_doe.gpx</screen>
+<para><command>gpsbabel -t -i gpx -f john.gpx -i gpx -f doe.gpx -x track,merge,title="COMBINED LOG" -o gpx -F john_doe.gpx</command></para>
 </example>
 

@@ -27,7 +27,7 @@ PalmOS, not of NAV Companion.)
 <para>
 To merge the databases, use a command line like the following:
 </para>
-<screen format="linespecific">gpsbabel -i magnav -f Companion_Waypoints.PDB -i geo -f geocaching.loc -o magnav -F merged.pdb</screen>
+<para><command>gpsbabel -i magnav -f Companion_Waypoints.PDB -i geo -f geocaching.loc -o magnav -F merged.pdb</command></para>
 <para>
 Second, you must use the installer to install your new PDB file.  Don't
 make the mistake of copying it over the existing Companion_Waypoints.PDB

@@ -19,8 +19,8 @@ Linux, Solaris, and a variety of processors and compilers.
 </para>
   <para>
   In most cases, the code is as simple to build as running:
- <screen format="linespecific">./configure &amp;&amp; make</screen>
 </para>
+<para><command> ./configure &amp;&amp; make</command></para>
   <para><ulink url="http://expat.sourceforge.net">Expat</ulink> 
 is strongly recommended for source builds as it is
 required for reading all the XML formats such as GPX.
@@ -29,9 +29,11 @@ required for reading all the XML formats such as GPX.
 is recommended for OS/X and Linux if you want to use a USB Garmin.
 </para>
 <para>There are additional flags that can be passed to configure to
- customize your build of GPSBabel.   <screen format="linespecific"> ./configure --help</screen> lists all the supported options, but additionally we have:
+ customize your build of GPSBabel.   
 </para>
+<para><command>./configure --help</command></para> 
 <para>
+lists all the supported options, but additionally we have:
  <option>--disable-shapefile</option> Excludes the shapefile support.
 </para>
 <para>

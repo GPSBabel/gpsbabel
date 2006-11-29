@@ -5,8 +5,5 @@ you are trying to avoid duplicated data in the output.
 </para>
 <example id="transform_del">
 <title>Convert a GPX track to GPX waypoints, tossing the original track</title>
-<para>
-<screen format="linespecific">gpsbabel -i gpx -f blah.gpx -x transform,wpt=trk,del \
--o gpx -F converted.gpx</screen>
-</para>
+<para><command>gpsbabel -i gpx -f blah.gpx -x transform,wpt=trk,del -o gpx -F converted.gpx</command></para>
 </example>

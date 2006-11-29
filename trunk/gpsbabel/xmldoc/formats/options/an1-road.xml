@@ -59,7 +59,7 @@ local roads, but may be edited with the drawing tools in Street Atlas.
 This option has a special format that is best demonstrated by example:
 </para>
 
-<screen format="linespecific">"road=I-599!limited!Beecher St.!major" </screen>
+<screen format="linespecific"> "road=I-599!limited!Beecher St.!major" </screen>
 
 <para>
 This option will cause any road named "I-599" to become a limited-access 

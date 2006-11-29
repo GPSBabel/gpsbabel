@@ -121,10 +121,10 @@
 	To communicate via USB use "usb:" as the filename on all OSes.   
 	Thus, to read the waypoints from a Garmin USB unit and write 
 	them to a GPX file:
-
-      <screen format="linespecific">gpsbabel -i garmin -f usb: -o gpx -F blah.gpx</screen>
-
 </para>
+
+      <para><command>gpsbabel -i garmin -f usb: -o gpx -F blah.gpx</command></para>
+
 <para>
 	If you have multiple units attached via USB, you may provide 
 	a unit number, with zero being the implied default.  So if you 
@@ -132,7 +132,7 @@
 	"usb:0", "usb:1", and "usb:2".  To get a list of recognized devices,
 	specifiy a negative number such as:
 </para>
-	<screen format="linespecific">gpsbabel -i garmin -f usb:-1</screen>
+	<para><command>gpsbabel -i garmin -f usb:-1</command></para>
  
 <para> 
 When reporting problems with the Garmin format, be sure to include
@@ -140,7 +140,7 @@ the full unit model, firmware version, and be prepared to offer
 debugging dumps by adding "-D9" to the command line, like:
 </para>
 
-      <screen format="linespecific"> gpsbabel -D9 -i garmin -f usb: -o gpx -F blah.gpx</screen>
+      <para><command> gpsbabel -D9 -i garmin -f usb: -o gpx -F blah.gpx</command></para>
 
 <para> 
 Custom icons are supported on units that support that.
