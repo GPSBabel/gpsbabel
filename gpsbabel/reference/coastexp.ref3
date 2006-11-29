@@ -7,60 +7,6 @@ xmlns="http://www.topografix.com/GPX/1/0"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
 <bounds minlat="34.019184000" minlon="-122.605838000" maxlat="37.819339000" maxlon="-120.438209000"/>
-<wpt lat="37.763290000" lon="-122.282580000">
-<time>2004-11-05T17:09:09Z</time>
-  <name>SFBALBAY</name>
-  <cmt>SFBALBAY</cmt>
-  <desc>SFBALBAY</desc>
-</wpt>
-<wpt lat="37.751613000" lon="-122.339028000">
-<time>2004-11-05T17:09:10Z</time>
-  <name>SFBAY001</name>
-  <cmt>SFBAY001</cmt>
-  <desc>SFBAY001</desc>
-</wpt>
-<wpt lat="37.817420000" lon="-122.394305000">
-<time>2004-11-05T17:09:13Z</time>
-  <name>SFBAY002</name>
-  <cmt>SFBAY002</cmt>
-  <desc>SFBAY002</desc>
-</wpt>
-<wpt lat="37.819339000" lon="-122.478302000">
-<time>2004-11-05T17:09:16Z</time>
-  <name>SFGGBRDG</name>
-  <cmt>SFGGBRDG</cmt>
-  <desc>SFGGBRDG</desc>
-</wpt>
-<wpt lat="37.773033000" lon="-122.605838000">
-<time>2004-11-05T17:09:20Z</time>
-  <name>SFCHNL01</name>
-  <cmt>SFCHNL01</cmt>
-  <desc>SFCHNL01</desc>
-</wpt>
-<wpt lat="37.518860000" lon="-122.529914000">
-<time>2004-11-05T17:09:26Z</time>
-  <name>HMCOLREF</name>
-  <cmt>HMCOLREF</cmt>
-  <desc>HMCOLREF</desc>
-</wpt>
-<wpt lat="37.482348000" lon="-122.507704000">
-<time>2004-11-05T17:09:27Z</time>
-  <name>HMPILL01</name>
-  <cmt>HMPILL01</cmt>
-  <desc>HMPILL01</desc>
-</wpt>
-<wpt lat="37.476448000" lon="-122.475800000">
-<time>2004-11-05T17:09:29Z</time>
-  <name>HMPILL02</name>
-  <cmt>HMPILL02</cmt>
-  <desc>HMPILL02</desc>
-</wpt>
-<wpt lat="37.495102000" lon="-122.483927000">
-<time>2004-11-05T17:09:30Z</time>
-  <name>HMPILL03</name>
-  <cmt>HMPILL03</cmt>
-  <desc>HMPILL03</desc>
-</wpt>
 <wpt lat="37.229349000" lon="-122.441589000">
 <time>2004-11-05T21:13:00Z</time>
   <name>PESCDR01</name>
@@ -96,12 +42,6 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>SCRUZENT</name>
   <cmt>SCRUZENT</cmt>
   <desc>SCRUZENT</desc>
-</wpt>
-<wpt lat="37.475062000" lon="-122.488531000">
-<time>2004-11-05T21:16:24Z</time>
-  <name>HMPILLPT</name>
-  <cmt>HMPILLPT</cmt>
-  <desc>HMPILLPT</desc>
 </wpt>
 <wpt lat="36.581344000" lon="-121.995411000">
 <time>2004-11-05T21:24:22Z</time>
@@ -235,4 +175,47 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <cmt>ADCOVANC</cmt>
   <desc>ADCOVANC</desc>
 </wpt>
+<rte>
+  <name>Into The Bay</name>
+  <rtept lat="37.763290000" lon="-122.282580000">
+<time>2004-11-05T17:09:09Z</time>
+    <name>SFBALBAY</name>
+  </rtept>
+  <rtept lat="37.751613000" lon="-122.339028000">
+<time>2004-11-05T17:09:10Z</time>
+    <name>SFBAY001</name>
+  </rtept>
+  <rtept lat="37.817420000" lon="-122.394305000">
+<time>2004-11-05T17:09:13Z</time>
+    <name>SFBAY002</name>
+  </rtept>
+  <rtept lat="37.819339000" lon="-122.478302000">
+<time>2004-11-05T17:09:16Z</time>
+    <name>SFGGBRDG</name>
+  </rtept>
+  <rtept lat="37.773033000" lon="-122.605838000">
+<time>2004-11-05T17:09:20Z</time>
+    <name>SFCHNL01</name>
+  </rtept>
+  <rtept lat="37.518860000" lon="-122.529914000">
+<time>2004-11-05T17:09:26Z</time>
+    <name>HMCOLREF</name>
+  </rtept>
+  <rtept lat="37.482348000" lon="-122.507704000">
+<time>2004-11-05T17:09:27Z</time>
+    <name>HMPILL01</name>
+  </rtept>
+  <rtept lat="37.475062000" lon="-122.488531000">
+<time>2004-11-05T21:16:24Z</time>
+    <name>HMPILLPT</name>
+  </rtept>
+  <rtept lat="37.476448000" lon="-122.475800000">
+<time>2004-11-05T17:09:29Z</time>
+    <name>HMPILL02</name>
+  </rtept>
+  <rtept lat="37.495102000" lon="-122.483927000">
+<time>2004-11-05T17:09:30Z</time>
+    <name>HMPILL03</name>
+  </rtept>
+</rte>
 </gpx>

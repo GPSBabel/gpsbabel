@@ -95,7 +95,9 @@ ce_add_mark_to_route(ce_route *route, ce_mark *mark)
 static void
 ce_free_mark(ce_mark *mark)
 {
-	xfree(mark->id);
+	dequeue(&mark->Q);
+	if (mark->id)
+		xfree(mark->id);
 	if (mark->created)
 		xfree(mark->created);
 	xfree(mark);
@@ -113,6 +115,16 @@ ce_free_route(ce_route *route)
 	xfree(route->id);
 	xfree(route);
 	// Don't free the waypoint since this is done elsewhere
+}
+
+/* Allocate a mark */
+static ce_mark *
+ce_alloc_mark(const waypoint *wpt, const char *id)
+{
+	ce_mark *res = xcalloc(sizeof(ce_mark), 1);
+	res->id = (char *) id;
+	res->wp = (waypoint *) wpt;
+	return res;
 }
 
 #if !HAVE_LIBEXPAT
@@ -145,18 +157,14 @@ ce_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 				// Create a CE route object and add it to the list of routes
 				currentRoute = (ce_route *) xcalloc(sizeof (ce_route), 1);
 				currentRoute->id=xstrdup(ap[1]);
-				if (doing_rtes) 
-					currentRoute->r = route_head_alloc();
+				currentRoute->r = route_head_alloc();
 				QUEUE_INIT(&currentRoute->ce_mark_head);
-				if (doing_rtes) 
-					ce_add_route(currentRoute);
+				ce_add_route(currentRoute);
 			}
 		}
 	} else if (0 == strcmp(el, "Mark")) {
 		inMark = 1;
-		currentMark = (ce_mark *) xcalloc(sizeof (ce_mark), 1);
-		currentMark->wp = NULL;
-		currentMark->used = 0;
+		currentMark = ce_alloc_mark(NULL, NULL);
 		ce_add_mark(currentMark);
 		for (ap = attr; *ap; ap+=2) {
 			if (0 == strcmp(ap[0], "id")) {
@@ -178,9 +186,7 @@ ce_end(void *data, const XML_Char *xml_el)
 {
 	const char *el = xml_convert_to_char_string(xml_el);
 	if (0 == strcmp(el, "Route")) {
-		if (!doing_rtes)
-			ce_free_route(currentRoute);
-		inRoute = 0;
+		inRoute = 0; /* ??? */
 	}
 	else if (0 == strcmp(el, "Mark"))
 		inMark = 0;
@@ -214,10 +220,7 @@ ce_cdata(void *dta, const XML_Char *xml_s, int len)
 			if (inRoute) {
 				// We are processing the marks in a route so create a CE mark object
 				// and add it to the current route
-				ce_mark *mark = (ce_mark *) xcalloc(sizeof (ce_mark), 1);
-				mark->id = xstrdup(s);
-				mark->created = NULL;
-				mark->wp = NULL;
+				ce_mark *mark = (ce_mark *) ce_alloc_mark(NULL, xstrdup(s));
 				ce_add_mark_to_route(currentRoute, mark);
 			}
 		} else if (0 == strcmp(element, "Position")) {
@@ -284,7 +287,6 @@ ce_cdata(void *dta, const XML_Char *xml_s, int len)
 				}
 			}
 			else if (inRoute) {
-				if (doing_rtes)
 				currentRoute->r->rte_name = xstrdup(s);
 			}
 		} else if (0 == strcmp(element, "Description")) {
@@ -397,7 +399,6 @@ ce_remove_used_marks(void)
 		ce_mark *mark = (ce_mark *) elem;
 		if (mark->used)
 		{
-			dequeue(elem);
 			if (mark->wp)
 				waypt_free(mark->wp);
 			ce_free_mark(mark);
@@ -444,11 +445,9 @@ ce_rd_deinit(void)
 	*/
 	queue *elem, *tmp;
 
-	if (doing_rtes) {
-		ce_fix_route_mark_waypoints();
+	ce_fix_route_mark_waypoints();
 	ce_check_route_names();
-		ce_remove_used_marks();
-	}
+	ce_remove_used_marks();
 
 	// Log results
 	if (global_opts.debug_level > 1)
@@ -457,7 +456,6 @@ ce_rd_deinit(void)
 	// Add routes to GPSBabel
 	QUEUE_FOR_EACH(&ce_route_head, elem, tmp) {
 		ce_route *route = (ce_route *) elem;
-		if (doing_rtes) {
 		queue *elem2, *tmp2;
 		route_add_head(route->r);
 		QUEUE_FOR_EACH(&route->ce_mark_head, elem2, tmp2) {
@@ -466,7 +464,6 @@ ce_rd_deinit(void)
 				route_add_wpt(route->r, mark->wp);
 			else
 				printf("Undefined mark: %s\n", mark->id);
-		}
 		}
 		ce_free_route(route);
 	}
@@ -495,6 +492,7 @@ ce_wr_init(const char *fname)
 	xml_buffer = xcalloc(MY_XBUF, 1);
 
 	ofd = gbfopen(fname, "w", MYNAME);
+	srand(gpsbabel_now);
 }
 
 void
@@ -541,11 +539,9 @@ ce_gen_uuid(void)
 static void
 ce_route_hdr(const route_head *rte)
 {
-	if (doing_rtes) {
-		sprintf(xml_buffer, "{%s}", ce_gen_uuid());
-		write_xml_entity_begin2(ofd, "\t", "Route", "created", ce_gen_current_time(), "id", xml_buffer);
-		write_xml_entity_begin0(ofd, "\t\t", "Marks");
-	}
+	sprintf(xml_buffer, "{%s}", ce_gen_uuid());
+	write_xml_entity_begin2(ofd, "\t", "Route", "created", ce_gen_current_time(), "id", xml_buffer);
+	write_xml_entity_begin0(ofd, "\t\t", "Marks");
 }
 
 /* Generate route body XML */
@@ -554,11 +550,11 @@ ce_route_disp(const waypoint *waypointp)
 {
 	char *uuid = ce_gen_uuid();
 	char *id = xcalloc(strlen(uuid)+3, 1);
+		
 	sprintf(id, "{%s}", uuid);
-	currentMark = (ce_mark *) xcalloc(sizeof (ce_mark), 1);
-	currentMark->id = id;
-	currentMark->wp = (waypoint *) waypointp;
+	currentMark = ce_alloc_mark(waypointp, id);
 	ENQUEUE_TAIL(&ce_mark_head, &currentMark->Q);
+
 	gbfprintf(ofd, "\t\t\t%s\n", id); // CE's departure from XML standard!
 }
 
@@ -566,11 +562,9 @@ ce_route_disp(const waypoint *waypointp)
 static void
 ce_route_tlr(const route_head *rte)
 {
-	if (doing_rtes) {
-		write_xml_entity_end(ofd, "\t\t", "Marks");
-		write_optional_xml_entity(ofd, "\t\t", "Name", rte->rte_name);
-		write_xml_entity_end(ofd, "\t", "Route");
-	}
+	write_xml_entity_end(ofd, "\t\t", "Marks");
+	write_optional_xml_entity(ofd, "\t\t", "Name", rte->rte_name);
+	write_xml_entity_end(ofd, "\t", "Route");
 }
 
 /* Generate waypoint body XML */
@@ -595,13 +589,59 @@ ce_waypt_pr(const waypoint *wp)
 	write_optional_xml_entity(ofd, "\t\t", "Name", wp->shortname);
 }
 
-/* Generate a standalone mark XML */
+static char *
+ce_find_uuid(const waypoint *wpt)
+{
+	queue *elem, *tmp;
+
+	QUEUE_FOR_EACH(&ce_mark_head, elem, tmp) {
+		ce_mark *mark = (ce_mark *) elem;
+		if (mark->wp == wpt) {
+			return mark->id;
+		}
+	}
+	return NULL;
+}
+
+static waypoint *
+ce_find_wpt(const waypoint *wpt)
+{
+	queue *elem, *tmp;
+
+	QUEUE_FOR_EACH(&ce_mark_head, elem, tmp) {
+		ce_mark *mark = (ce_mark *) elem;
+		if ((mark->wp->shortname == wpt->shortname) &&
+		    (mark->wp->latitude == wpt->latitude) &&
+		    (mark->wp->longitude == wpt->longitude))
+			return mark->wp;
+	}
+	return NULL;
+}
+
+/* Generate a mark XML; look for created id's */
 static void
 ce_mark_pr(const waypoint *wp)
 {
+	char *id;
+	
+	if (inRoute) {
+		id = ce_find_uuid(wp);
+		if (id == NULL) {
+			sprintf(xml_buffer, "{%s}", ce_gen_uuid());
+			id = xml_buffer;
+		}
+	}
+	/* Have we seen and written the (nearly) same waypoint ? */
+	else if (ce_find_wpt(wp) != NULL) return;
+	else {
+		ce_mark *mark = ce_alloc_mark(wp, NULL);
+		ENQUEUE_TAIL(&ce_mark_head, &mark->Q);
+		sprintf(xml_buffer, "{%s}", ce_gen_uuid());
+		id = xml_buffer;
+	}
 	write_xml_entity_begin2(ofd, "\t", "Mark",
-							"created", ce_gen_creation_time(wp->creation_time),
-							"id", ce_gen_uuid());
+		"created", ce_gen_creation_time(wp->creation_time),
+		"id", id);
 	ce_waypt_pr(wp);
 	write_xml_entity_end(ofd, "\t", "Mark");
 }
@@ -611,9 +651,21 @@ static void
 ce_marks_pr(void)
 {
 	queue *elem, *tmp;
+
 	QUEUE_FOR_EACH(&ce_mark_head, elem, tmp) {
 		ce_mark *mark = (ce_mark *) elem;
 		ce_mark_pr(mark->wp);
+	}
+}
+
+/* Release all generated marks */
+static void
+ce_marks_flush_all(void)
+{
+	queue *elem, *tmp;
+
+	QUEUE_FOR_EACH(&ce_mark_head, elem, tmp) {
+		ce_mark *mark = (ce_mark *) elem;
 		ce_free_mark(mark);
 	}
 }
@@ -634,10 +686,14 @@ ce_write(void)
 						   ce_gen_current_time());
 	write_xml_entity(ofd, "\t", "Name", "Navigation Objects");
 
+	inRoute = 1;
 	route_disp_all(ce_route_hdr, ce_route_tlr, ce_route_disp);
 	ce_marks_pr();
+	inRoute = 0;
+	
 	waypt_disp_all(ce_mark_pr);
-
+	ce_marks_flush_all();
+	
 	write_xml_entity_end(ofd, "", "NavObjectCollection");
 }
 
