@@ -181,7 +181,7 @@ void wpt_desc(const char *args, const char **unused)
 		tmp = xstrdup((char *)args);
 		c = lrtrim(tmp);
 		if (*c) {
-			wpt_tmp->description = xstrappend(wpt_tmp->description, c);
+//			wpt_tmp->description = xstrappend(wpt_tmp->description, c);
 		}
 		xfree(tmp);
 	}
