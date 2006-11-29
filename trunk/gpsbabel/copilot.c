@@ -27,6 +27,7 @@
 
 #define MYNAME			"CoPilot Waypoint"
 #define wayp_TYPE 		0x77617970  	/* wayp */
+#define wayu_TYPE		0x77617975	/* wayu */
 #define swpu_TYPE 		0x73777075  	/* swpu */
 #define GXPU_CREATOR	0x47584255 		/* GXBU */
 #define AP_P_CREATOR	0x41502d50 		/* AP-P */
@@ -218,7 +219,8 @@ data_read(void)
 	}
 
 	if ((pdb->creator != GXPU_CREATOR && pdb->creator != AP_P_CREATOR) ||
-		(pdb->type != wayp_TYPE && pdb->type != swpu_TYPE)) {
+		(pdb->type != wayp_TYPE && pdb->type != swpu_TYPE &&
+		pdb->type != wayu_TYPE)) {
 		fatal(MYNAME ": Not a CoPilot file.\n");
 	}
 	if (pdb->version > 4) {
