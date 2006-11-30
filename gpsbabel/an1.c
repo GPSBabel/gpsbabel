@@ -1266,7 +1266,11 @@ my_write( void )
 
 ff_vecs_t an1_vecs = {
 	ff_type_file,
-	FF_CAP_RW_ALL,
+	{ 
+		ff_cap_read | ff_cap_write	/* waypoints */, 
+		ff_cap_write 			/* tracks */, 
+	  	ff_cap_read | ff_cap_write 	/* routes */, 
+	},
 	rd_init,
 	wr_init,
 	rd_deinit,
