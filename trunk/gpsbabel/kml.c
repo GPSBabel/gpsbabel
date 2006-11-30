@@ -803,7 +803,7 @@ void kml_write(void)
 
 	kml_write_xml(0,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 	kml_write_xml(1,"<kml xmlns=\"http://earth.google.com/kml/2.1\">\n");
-	kml_write_xml(1,"<Document xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
+	kml_write_xml(1,"<Document>\n");
 
 	now = current_time();
 	strftime(import_time, sizeof(import_time), "%c", localtime(&now));
