@@ -183,8 +183,13 @@ $(WEB)/htmldoc-$(DOCVERSION)/readme.html: FORCE
 #   * Sun Java seems to be required.   GCJ 1.4.2 doesn't work.   You can
 #     force Sun Java to be used by creating ~/.foprc with 'rpm_mode=' (Fedora)
 #     Get it from http://www.java.com
+# The Hypnenation package must be installed from 
+#   http://offo.sourceforge.net/hyphenation/index.html - be sure to get the
+#   version that corresponds to the version of FOP that you used above.
+# The docbook XSL must be 1.71.1 or higher.  
+#   * Remember to update /etc/xml/catalogs if you manually update this.
 #
-gpsbabel.fo: 
+gpsbabel.fo:  FORCE
 	perl xmldoc/makedoc
 	xmlwf xmldoc/readme.xml		#check for well-formedness
 	xmllint --noout --valid xmldoc/readme.xml    	#validate
