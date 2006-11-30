@@ -972,10 +972,10 @@ mag_rteparse(char *rtemsg)
 		char *ca, *ce;
 		
 		ca = rtemsg + n;
-		is_fatal(*ca++ != ',', MYNAME ": Wrong formated line!");
+		is_fatal(*ca++ != ',', MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
 
 		ce = strchr(ca, ',');
-		is_fatal(ce == NULL, MYNAME ": Wrong formated line!");
+		is_fatal(ce == NULL, MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
 
 		if (ca == ce)
 			xasprintf(&rte_name, "Route%d", rtenum);
