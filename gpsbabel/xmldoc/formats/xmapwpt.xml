@@ -43,16 +43,18 @@ folks, something as simple as:
 <para>
 will do the trick just fine.  
 </para>
-<programlisting format="linespecific">
+<programlisting>
 #!/full/path/to/perl
 $INPUTFILE = @ARGV[0];
 $TARGETDIR = @ARGV[1];
 $FILENAME  = @ARGV[2];
 
 if (! $FILENAME) {
-    print "Usage: xmap_split.pl INPUT_FILE OUTPUT_DIRECTORY FILENAME_BASE\n";
+    print "Usage: xmap_split.pl " . 
+	"INPUT_FILE OUTPUT_DIRECTORY FILENAME_BASE\n";
     print " (i.e. xmapl_split.pl points.wpt /tmp/points GPSB)\n";
-    print " (created GPSB0001-GPSBXXXX in /tmp/points/ from points.wpt)\n";
+    print " (created GPSB0001-GPSBXXXX " .
+	" in /tmp/points/ from points.wpt)\n";
     exit;
 }
 
@@ -62,7 +64,8 @@ while (&lt;INFILE&gt;) {
     $lc++;
     $filename = sprintf("%s/Gpsb%04d.wpt", $TARGETDIR, $lc);
 
-    open (OUTFILE, "&gt;$filename") || die "Cannot open $filename for write!\n";
+    open (OUTFILE, "&gt;$filename") || 
+	die "Cannot open $filename for write!\n";
 
     print OUTFILE $_;
 
