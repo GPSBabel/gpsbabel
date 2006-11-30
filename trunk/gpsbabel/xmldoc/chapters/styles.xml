@@ -28,7 +28,9 @@ or want, you must tell GPSBabel to use the xcsv format and have the xcsv
 format use that file.  If you created a new style file called 
 "mystyle.style" and you want to write the  waypoints from
 a GPX file named "mine.gpx" to it, you would issue a command like:
-<screen format="linespecific">gpsbabel -i gpx -f mine.gpx -o xcsv,style=mystyle.style -f mine.new</screen>
+</para>
+<para><command>gpsbabel -i gpx -f mine.gpx -o xcsv,style=mystyle.style -f mine.new</command></para>
+<para>
 You might then examine <filename>mine.new</filename> to see if it met
 your expectations.  If not, you could continue to tweak 
 <filename>mystyle.style</filename> until it did, rerunning the above
@@ -74,8 +76,9 @@ PROLOGUE	Name	Latitude	Longitude	Description	URL	Type	Container	Diff	Terr
 
 #
 # INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
-# NOTE: MS S&amp;T ONLY IMPORTS DATA, IT DOESN'T EXPORT THIS ANYWHERE SO WE CAN
-#       HAVE OUR WAY WITH THE FORMATTING. 
+# NOTE: MS S&amp;T ONLY IMPORTS DATA, IT DOESN'T 
+#       EXPORT THIS ANYWHERE SO WE CAN HAVE OUR 
+#       WAY WITH THE FORMATTING. 
 #
 IFIELD	SHORTNAME, "", "%s"		# Name
 IFIELD	LAT_DECIMAL, "", "%f"		# Latitude
@@ -451,7 +454,7 @@ examples:
 <para>
 example:
 </para>
-<screen format="linespecific">   IFIELD SHORTNAME,"","%s"   # (write shortname in the output file)
+<screen format="linespecific">   IFIELD SHORTNAME,"","%s"
 </screen>
 </section>
 
@@ -465,7 +468,7 @@ example:
 <para>
 examples:
 </para>
-<screen format="linespecific">   IFIELD DESCRIPTION,"","%s" # (write description in the output file)
+<screen format="linespecific">   IFIELD DESCRIPTION,"","%s" 
 </screen>
 </section>
 
@@ -487,7 +490,7 @@ examples:
 <para>
 example:
 </para>
-<screen format="linespecific">   IFIELD URL,"","%s" #	(writes the URL in the output file)
+<screen format="linespecific">   IFIELD URL,"","%s"
 </screen>
 </section>
 
@@ -501,7 +504,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">   IFIELD URL_LINK_TEXT,"","%s" # (writes link text in the output file)
+<screen format="linespecific">   IFIELD URL_LINK_TEXT,"","%s" 
 </screen>
 </section>
 
@@ -515,7 +518,7 @@ example:
 <para>
 example:
 </para>
-<screen format="linespecific">   IFIELD ICON_DESCR,"","%s" # (writes link text in the output file)
+<screen format="linespecific">   IFIELD ICON_DESCR,"","%s" 
 </screen>
 </section>
 
@@ -610,12 +613,15 @@ examples:
 <para>
 examples:
 </para>
-<screen format="linespecific">   IFIELD LAT_HUMAN_READABLE,"","%c %d %f"   # (writes N 31 40.000)
+<screen format="linespecific">
+   #  (writes N 31 40.000)
+   IFIELD LAT_HUMAN_READABLE,"","%c %d %f"   
+   #  (writes "31 deg 40.000 min N")
    IFIELD LAT_HUMAN_READABLE,"","%d deg %f min %c"
-                              #  (writes "31 deg 40.000 min N")
-          #  Note that this string will confuse the reading routine due 
-          #  to the letter "n" in "min" and the letter "e" in "deg."
-   IFIELD LAT_HUMAN_READABLE,"","%d %d %f%c" # (writes 31 40 00.000N)
+   #  Note that this string will confuse the reading routine due 
+   #  to the letter "n" in "min" and the letter "e" in "deg."
+   # (writes 31 40 00.000N)
+   IFIELD LAT_HUMAN_READABLE,"","%d %d %f%c" 
 </screen>
 </section>
 

@@ -10,7 +10,7 @@ a datum for the output file.
 The following is a list of the datums supported by GPSBabel.
 </para>
 
-<simplelist columns="5">
+<simplelist columns="4">
 <member>Adindan</member>
 <member>AFG</member>
 <member>Ain-El-Abd</member>
