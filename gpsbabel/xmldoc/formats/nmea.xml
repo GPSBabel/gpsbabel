@@ -31,12 +31,6 @@ that work with NMEA-0183 formatted data include:
   <ulink url="http://www.commlinx.com.au/GPS_recorder.htm">CommLinx GPS recorder</ulink>
 </member>
 <member>
-  <ulink url="http://www.sparkfun.com/">SparkFun GPS Datalogger</ulink>
+  <ulink url="http://www.sparkfun.com/commerce/product_info.php?products_id=671">SparkFun GPS Datalogger</ulink>
 </member>
 </simplelist>  
-<para>
-This module also supports <link linkend="tracking">realtime tracking</link> 
-which allows realtime position reports from a GPS, such as one connected 
-serially, over Bluetooth, or a USB module emulating a serial port, to be used
-with selected output formats.
-</para>

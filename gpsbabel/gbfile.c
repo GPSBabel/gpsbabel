@@ -228,11 +228,6 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 			const char *errtxt;
 			
 			errtxt = gzerror(file->handle.gz, &errnum);
-			
-			/* Workaround for zlib bug: buffer error on empty files */
-			if ((errnum == Z_BUF_ERROR) && (gztell(file->handle.gz) == 0)) {
-				return (gbsize_t) 0;
-			}
 			if ((errnum != Z_STREAM_END) && (errnum != 0))
 				fatal("%s: zlib returned error %d ('%s')!\n",
 					file->module, errnum, errtxt);
@@ -437,25 +432,7 @@ gbfeof(gbfile *file)
 {
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		int res = gzeof(file->handle.gz);
-		
-		if (!res) {
-			signed char test;
-			int len = gzread(file->handle.gz, &test, 1);
-			if (len == 1) {
-				/* No EOF, put the single byte back into stream */
-				gzungetc(test, file->handle.gz);
-			}
-			else {
-				/* we are at the end of the file */
-				if (global_opts.debug_level > 0) {
-					/* now gzeof() should return 1 */
-					is_fatal(!gzeof(file->handle.gz), "zlib gzeof error!\n");
-				}
-				res = 1;
-			}
-		}
-		return res;
+		return gzeof(file->handle.gz);
 #else
 		fatal(NO_ZLIB);
 		return 0;

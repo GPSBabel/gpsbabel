@@ -283,14 +283,15 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
 #if CSVFMTS_ENABLED
 /*****************************************************************************/
 /* dec_to_intdeg() - convert decimal degrees to integer degreees             */
-/*    usage: i = dec_to_intdeg(31.1234);                                     */
+/*    usage: i = dec_to_intdeg(31.1234, 1);                                  */
+/*           i = dec_to_intdeg(91.1234, 0);                                  */
 /*****************************************************************************/
 static int
-dec_to_intdeg(const double d) 
+dec_to_intdeg(const double d, const int islat) 
 {
     int ideg = 0;
     
-    if (d >= 0) {
+    if (islat) {
         ideg = (2147483647) - (d * 8388608);
     } else {
         ideg = (2147483647) - (fabs(d) * 8388608) + 1; 
@@ -301,14 +302,15 @@ dec_to_intdeg(const double d)
 
 /*****************************************************************************/
 /* intdeg_to_dec() - convert integer degrees to decimal degreees             */
-/*    usage: lat = dec_to_intdeg(ilat);                                      */
+/*    usage: lat = dec_to_intdeg(ilat, 1);                                   */
+/*           lon = dec_to_intdeg(ilon, 0);                                   */
 /*****************************************************************************/
 static double
-intdeg_to_dec(const int ideg) 
+intdeg_to_dec(const int ideg, const int islat) 
 {
     double d;
     
-    if (ideg >= 0) {
+    if (islat) {
         d = ((2147483647) - ideg) / (double)8388608;
     } else {
         d = ((-2147483647-1) + ideg) / (double)8388608;
@@ -832,7 +834,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     } else
     if (strcmp(fmp->key, "LAT_INT32DEG") == 0) {
        /* latitude as a 32 bit integer offset */
-       wpt->latitude = intdeg_to_dec((int) atof(s));
+       wpt->latitude = intdeg_to_dec((int) atof(s), 1);
     } else
     if ( strcmp(fmp->key, "LAT_HUMAN_READABLE") == 0) {
        human_to_dec( s, &wpt->latitude, &wpt->longitude, 1 );
@@ -852,7 +854,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     } else
     if (strcmp(fmp->key, "LON_INT32DEG") == 0) {
        /* longitude as a 32 bit integer offset  */
-       wpt->longitude = intdeg_to_dec((int) atof(s));
+       wpt->longitude = intdeg_to_dec((int) atof(s), 0);
     } else
     if ( strcmp(fmp->key, "LON_HUMAN_READABLE") == 0) {
        human_to_dec( s, &wpt->latitude, &wpt->longitude, 2 );
@@ -1243,7 +1245,7 @@ xcsv_waypt_pr(const waypoint *wpt)
         if (strcmp(fmp->key, "LAT_INT32DEG") == 0) {
             /* latitude as an integer offset from 0 degrees */
             writebuff(buff, fmp->printfc,
-              dec_to_intdeg(lat));
+              dec_to_intdeg(lat, 1));
         } else
 	if (strcmp(fmp->key, "LAT_HUMAN_READABLE") == 0) {
 	    dec_to_human( buff, fmp->printfc, "SN", lat );
@@ -1272,7 +1274,7 @@ xcsv_waypt_pr(const waypoint *wpt)
         if (strcmp(fmp->key, "LON_INT32DEG") == 0) {
             /* longitudee as an integer offset from 0 degrees */
             writebuff(buff, fmp->printfc,
-              dec_to_intdeg(lon));
+              dec_to_intdeg(lon, 0));
         } else
 	if (strcmp(fmp->key, "LON_HUMAN_READABLE") == 0) {
 	    dec_to_human( buff, fmp->printfc, "WE", lon );

@@ -1,5 +1,5 @@
 <para>
-<ulink url="http://www.magellangs.com">Magellan</ulink> NAV Companion for Palm/OS is not really designed
+Magellan NAV Companion for Palm/OS is not really designed
 for this sort of use, but its file format is supported and with a
 little bit of patience you can both read and write NAV Companion
 waypoints.  This conversion is based on
@@ -27,7 +27,7 @@ PalmOS, not of NAV Companion.)
 <para>
 To merge the databases, use a command line like the following:
 </para>
-<para><command>gpsbabel -i magnav -f Companion_Waypoints.PDB -i geo -f geocaching.loc -o magnav -F merged.pdb</command></para>
+<screen format="linespecific">gpsbabel -i magnav -f Companion_Waypoints.PDB -i geo -f geocaching.loc -o magnav -F merged.pdb</screen>
 <para>
 Second, you must use the installer to install your new PDB file.  Don't
 make the mistake of copying it over the existing Companion_Waypoints.PDB

@@ -1,4 +1,4 @@
-<para>GPSBabel supports the following <ulink url="http://www.magellangps.com">Magellan</ulink> receivers:
+<para>GPSBabel supports the following Magellan receivers:
 <simplelist columns="2">
 	<member>310</member>
 	<member>315</member>
@@ -36,11 +36,5 @@ The RoadMate family of products is not supported.
 	If you specify a serial port for the file (.e.g. "COM1", "/dev/ttyS0")
 	to be read or written, GPSBabel will use serial protocol.   Specifying
 	a file, either on local filesystem or on a mounted flash card reader,
-	will result in the file-based format being used.
-</para>
-<para>
-	Users of the Explorist generation of receivers should probably
-	prefer to use the <link linkend="fmt_magellan">magellanx</link>
-	format over this one.
-
+	will results in the file-based format being used.
 </para>

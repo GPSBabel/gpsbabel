@@ -969,20 +969,11 @@ mag_rteparse(char *rtemsg)
 
 	/* Explorist has a route name here */
 	if (explorist) {
-		char *ca, *ce;
-		
-		ca = rtemsg + n;
-		is_fatal(*ca++ != ',', MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
-
-		ce = strchr(ca, ',');
-		is_fatal(ce == NULL, MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
-
-		if (ca == ce)
-			xasprintf(&rte_name, "Route%d", rtenum);
-		else
-			rte_name = xstrndup(ca, ce - ca);
-		
-		n += ((ce - ca) + 1);
+		char rten[1024];
+		int n2;
+		sscanf(rtemsg + n, ",%[^,]%n", rten, &n2);
+		n += n2;
+		rte_name = xstrdup(rten);
 	}
 
 #endif

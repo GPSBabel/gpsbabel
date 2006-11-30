@@ -115,7 +115,7 @@ fl_vecs_t filter_vec_list[] = {
 	{
 		&transform_vecs,
 		"transform",
-		"Transform waypoints into a route, tracks into routes, ..."
+		"Transformate waypoints into a route, tracks into routes, ..."
 	},
 #endif
         {

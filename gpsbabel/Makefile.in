@@ -36,8 +36,7 @@ OUTPUT_SWITCH=-o #
 GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I. -I@srcdir@/coldsync \
 	$(OPTIMIZATION) @CFLAGS@
 LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
-PREFIX=@prefix@
-INSTALL_DIR=$(DESTDIR)/$(PREFIX)
+DESTDIR=/usr/local/
 
 # OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
 # OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
@@ -54,7 +53,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
 	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
-	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o
+	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o
 
 FILTERS=position.o radius.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
@@ -105,11 +104,10 @@ gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@
 gpsbabel-debug: $(OBJS)
 	$(CC)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
-Makefile gbversion.h: Makefile.in config.status xmldoc/makedoc.in
+Makefile: Makefile.in config.status
 	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
 
-config.status: configure 
-	$(SHELL) config.status --recheck
+gbversion.h: configure config.status
 
 jeeps/gpslibusb.o: 
 	$(CC)  @CPPFLAGS@ -c $(GBCFLAGS) @USB_CFLAGS@ @srcdir@/jeeps/gpslibusb.c $(OUTPUT_SWITCH)$@
@@ -141,12 +139,10 @@ torture:
 # This will only work on UNIX-like substances.
 #
 install: @INSTALL_DEBUG@
-	@mkdir -p $(INSTALL_DIR)/bin
-	install gpsbabel  $(INSTALL_DIR)/bin/
+	install gpsbabel  $(DESTDIR)/bin
 
 install-debug:
-	@mkdir -p $(INSTALL_DIR)/bin
-	install gpsbabel-debug  $(INSTALL_DIR)/bin/
+	install gpsbabel-debug  $(DESTDIR)/bin
 
 # Nerdy release stuff that needs to work only on Linux.
 
@@ -284,8 +280,8 @@ release-upload:  /tmp/gpsbabel-$(VERSIOND).tar.gz  /tmp/gpsbabel-$(VERSIOND).zip
 
 release: release-sourcecheck  release-tarball release-winbuild release-rpm release-upload
 
-rpm:
-	tools/mkrpm $(VERSD) $(RELEASE) $(WEB)
+rpm: clean
+	tools/mkrpm $(VERSD) $(RELEASE)
 
 mac-release:
 	mkdir -p usr/bin usr/share/gpsbabel/doc
@@ -419,8 +415,8 @@ geoniche.o: geoniche.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h garmin_tables.h
-globals.o: globals.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h gbversion.h
+globals.o: globals.c defs.h gbversion.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 glogbook.o: glogbook.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
 google.o: google.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
@@ -538,7 +534,7 @@ pathaway.o: pathaway.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h coldsync/palm.h \
   coldsync/../gbtypes.h coldsync/pdb.h csv_util.h strptime.h
 pcx.o: pcx.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
-  gbfile.h cet.h cet_util.h inifile.h garmin_tables.h csv_util.h
+  gbfile.h cet.h cet_util.h inifile.h garmin_tables.h
 polygon.o: polygon.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h
 position.o: position.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
@@ -553,8 +549,6 @@ quovadis.o: quovadis.c quovadis.h defs.h config.h queue.h gbtypes.h \
   coldsync/palm.h coldsync/../gbtypes.h coldsync/pdb.h
 radius.o: radius.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h grtcirc.h
-raymarine.o: raymarine.c defs.h config.h queue.h gbtypes.h cet.h cet_util.h \
-  inifile.h filterdefs.h grtcirc.h gbfile.h csv_util.h
 reverse_route.o: reverse_route.c defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
   filterdefs.h

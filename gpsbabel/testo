@@ -159,9 +159,6 @@ compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 ${PNAME} -t -i gpx -f ${REFERENCE}/track/tracks.gpx -o pcx -F ${TMPDIR}/pcx.trk
 ${PNAME} -t -i pcx -f ${REFERENCE}/track/pcx.trk -o pcx -F ${TMPDIR}/pcx2.trk
 compare ${TMPDIR}/pcx.trk ${TMPDIR}/pcx2.trk 
-# GPSUtil strain - hand crafted, but based on problem report.
-${PNAME} -i pcx -f reference/gpsutil-1.pcx -o pcx -F ${TMPDIR}/mm-2.pcx
-compare ${TMPDIR}/mm-2.pcx ${TMPDIR}/mm.pcx
 
 #
 # Magellan file format
@@ -1149,12 +1146,6 @@ ${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x tran
 compare ${TMPDIR}/transform-rte.gpx ${REFERENCE}/transform-rte.gpx
 ${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,tracks -x transform,wpt=rte,del=y -o gpx -F ${TMPDIR}/transform-wpt.gpx
 compare ${TMPDIR}/transform-wpt.gpx ${REFERENCE}/transform-wpt.gpx
-
-#
-# "Raymarine Waypoint File" tests
-#
-${PNAME} -i raymarine -f ${REFERENCE}/raymarine-sample.rwf -o gpx -F ${TMPDIR}/raymarine-sample.gpx
-compare ${TMPDIR}/raymarine-sample.gpx ${REFERENCE}/raymarine-sample.gpx
 
 
 exit 0

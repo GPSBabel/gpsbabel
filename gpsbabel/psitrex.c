@@ -468,8 +468,6 @@ psit_routehdr_w(FILE *psit_file, const route_head *rte)
 	allWptNameLengths = 0;
 
 	if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
-		char *c;
-		
 		QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
 			testwpt = (waypoint *)elem;
 			if (rte_datapoints == 0) {
@@ -490,10 +488,8 @@ psit_routehdr_w(FILE *psit_file, const route_head *rte)
 		else
 			rname = xstrdup(rte->rte_name);
 
-		/* check for psitrex comment sign; replace with '$' */
-		while ((c = strchr(rname, '#'))) *c = '$';
-
-		fprintf(psit_file, "Route:  %s\n", rname);
+		fprintf(psit_file, "Route:  %s\n",
+							rname);
 		xfree(rname);
 	}
 }
@@ -536,8 +532,6 @@ psit_track_r(FILE *psit_file, route_head **trk)
 	trk_num = 0;
 
 	trk_count = 0;
-	
-	track_head = NULL;
 
 	psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);
 
@@ -581,7 +575,7 @@ psit_track_r(FILE *psit_file, route_head **trk)
 
 			psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), whitespace);
 
-			if ((strcmp(psit_current_token, "1") == 0) || (track_head == NULL)) {
+			if (strcmp(psit_current_token, "1") == 0) {
 				track_head = route_head_alloc();
 				/* Add a number to the track name.  With Garmins, the "first" tracklog is usually ACTIVE LOG
 				   the second is ACTIVE LOG001 and so on */
@@ -627,8 +621,6 @@ psit_trackhdr_w(FILE *psit_file, const route_head *trk)
 		/* total nodes (waypoints) this track */
 		trk_datapoints = 0;
 		if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
-			char *c;
-			
 			QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
 				if (trk_datapoints == 0) {
 					testwpt = (waypoint *)elem;
@@ -649,10 +641,8 @@ psit_trackhdr_w(FILE *psit_file, const route_head *trk)
 			else
 				tname = xstrdup(trk->rte_name);
 
-			/* check for psitrex comment sign; replace with '$' */
-			while ((c = strchr(tname, '#'))) *c = '$';
-			
-			fprintf (psit_file, "Track:  %s\n", tname);
+			fprintf (psit_file, "Track:  %s\n",
+								tname);
 
 			xfree(tname);
 		}
