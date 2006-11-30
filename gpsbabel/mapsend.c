@@ -313,7 +313,7 @@ static void
 mapsend_read(void)
 {
 	mapsend_hdr hdr;
-	int type;
+	int type, len;
 	char buf[3];
 
 	/*
@@ -321,7 +321,9 @@ mapsend_read(void)
 	 * strings, each member has to be read in one at a time.  Grrr.
 	 */
 
-	fread(&hdr, sizeof(hdr), 1, mapsend_file_in);
+	len = fread(&hdr, 1, sizeof(hdr), mapsend_file_in);
+	is_fatal(len < sizeof(hdr), MYNAME ": No mapsend or empty file!");
+	
 	type = le_read16(&hdr.ms_type);
 	strncpy(buf, hdr.ms_version, 2);
 	buf[2] = '\0';
