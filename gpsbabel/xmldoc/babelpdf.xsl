@@ -8,6 +8,7 @@
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
 
 <!-- <xsl:param name="fop.extensions">1</xsl:param> -->
+<xsl:param name="fop1.extensions" select="1" />
 
 <xsl:template match="simplelist">
   <!-- with no type specified, the default is 'vert' -->
