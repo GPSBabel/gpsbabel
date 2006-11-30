@@ -1,0 +1,17 @@
+<para>
+This option specifies the icon or waypoint type to write for each waypoint on 
+output.
+</para>
+<para>
+If this option is specified, its value will be used for all waypoints, not 
+just those that do not already have descriptions.  That is, this option 
+overrides any icon description that might be in the input file.
+</para>
+<para>
+There is no list of valid values for this option.
+</para>
+<para>
+This option has no effect on input.
+</para>
+
+

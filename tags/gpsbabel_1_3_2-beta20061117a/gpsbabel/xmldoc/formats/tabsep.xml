@@ -1,0 +1,12 @@
+<para>
+This format, like the <link linkend="fmt_custom">custom</link> format, is
+mainly used for the purpose of testing GPSBabel.  It is supposed to contain
+one field for each piece of information supported by the 
+<link linkend="fmt_xcsv">xcsv</link> format writer, but it may not be entirely
+in sync with the documentation at <xref linkend="Styles" />.
+</para>
+<para>
+For a list of fields, see the style/tabsep.style file in the GPSBabel source
+distribution.
+</para>
+
