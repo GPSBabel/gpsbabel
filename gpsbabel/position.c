@@ -59,127 +59,84 @@ gc_distance(double lat1, double lon1, double lat2, double lon2)
 	    );
 }
 
-static int
-position_comp(const void * a, const void * b)
-{
-	const waypoint *x1 = *(waypoint **)a;
-	const waypoint *x2 = *(waypoint **)b;
-	double latdiff, londiff, max;
-
-	/*
-	 * this compare makes the assumption that things will fall into
-	 * order by declaring their biggest single axial difference.
-	 * It is much less math than distance and bearing from some random
-	 * point.
-	 */
-
-	londiff = (x1->longitude -
-		   x2->longitude) * 1000000.0;
-	latdiff = (x1->latitude -
-		   x2->latitude) * 1000000.0;
-
-	max = fabs(londiff) >= fabs(latdiff) ? floor(londiff) : floor(latdiff);
-
-	if (max < 0)
-		return (-1);
-	else if (max > 0)
-		return (1);
-
-	return(0);
-}
-
 /* tear through a waypoint queue, processing points by distance */
 static void 
 position_runqueue(queue *q, int nelems, int qtype)
 {
 	queue * elem, * tmp;
 	waypoint ** comp;
+	int * qlist;
 	double dist;
-	int i, j;
-	int del = 0;
+	int i = 0, j, anyitem;
 
 	comp = (waypoint **) xcalloc(nelems, sizeof(*comp));
-
-	i = 0;
+	qlist = (int *) xcalloc(nelems, sizeof(*qlist));
 
 	QUEUE_FOR_EACH(q, elem, tmp) {
 		comp[i] = (waypoint *)elem;
+		qlist[i] = 0;
 		i++;
 	}
+	
+	for (i = 0 ; i < nelems ; i++) {
+		anyitem = 0;
 
-	if (qtype == wptdata)
-		qsort(comp, nelems, sizeof(waypoint *), position_comp);
-
-	for (i = 1, j = 0 ; i < nelems ; i++) {
-		dist = gc_distance(comp[j]->latitude,
-				   comp[j]->longitude,
-				   comp[i]->latitude,
-				   comp[i]->longitude);
-
-		/* convert radians to integer feet */
-		dist = (int)(5280*radtomiles(dist));
+		if (!qlist[i]) {
+			for (j = i + 1 ; j < nelems ; j++) {
+				if (!qlist[j]) {
+					dist = gc_distance(comp[j]->latitude, 
+						comp[j]->longitude, 
+						comp[i]->latitude, 
+						comp[i]->longitude);
 		
-		if (dist <= pos_dist) {
-			switch (qtype) {
-				case wptdata:
-					waypt_del(comp[i]);
-					waypt_free(comp[i]);
-					del = !!purge_duplicates;
-					break;
-				case trkdata:
-					track_del_wpt(cur_rte, comp[i]);
-					del = !!purge_duplicates;
-					break;
-				case rtedata:
-					route_del_wpt(cur_rte, comp[i]);
-					del = !!purge_duplicates;
-					break;
-				default:
-					break;
+						/* convert radians to integer feet */
+					dist = (int)(5280*radtomiles(dist));
+						
+					if (dist <= pos_dist) {
+						qlist[j] = 1;
+						switch (qtype) {
+							case wptdata:
+								waypt_del(comp[j]);
+								waypt_free(comp[j]);
+								break;
+							case trkdata:
+								track_del_wpt(cur_rte, comp[j]);
+								break;
+							case rtedata:
+								route_del_wpt(cur_rte, comp[j]);
+								break;
+							default:
+								break;
+						}
+						anyitem = 1;
+					}
+				}
+			}
+				
+			if (anyitem && !!purge_duplicates) {
+				switch (qtype) {
+					case wptdata:
+						waypt_del(comp[i]);
+						waypt_free(comp[i]);
+						break;
+					case trkdata:
+						track_del_wpt(cur_rte, comp[i]);
+						break;
+					case rtedata:
+						route_del_wpt(cur_rte, comp[i]);
+						break;
+					default:
+						break;
+				}
 			}
 		}
-		else {
-			if (del ) {
-			    switch (qtype) {
-				case wptdata:
-					waypt_del(comp[j]);
-					waypt_free(comp[j]);
-					del = 0;
-					break;
-				case trkdata:
-					track_del_wpt(cur_rte, comp[j]);
-					del = 0;
-					break;
-				case rtedata:
-					route_del_wpt(cur_rte, comp[j]);
-					del = 0;
-					break;
-				default:
-					break;
-			    }
-			}
-			j = i;
-		}
 	}
-	if ( del ) {
-		switch (qtype) {
-			case wptdata:
-				waypt_del(comp[j]);
-				waypt_free(comp[j]);
-				break;
-			case trkdata:
-				track_del_wpt(cur_rte, comp[j]);
-				break;
-			case rtedata:
-				route_del_wpt(cur_rte, comp[j]);
-				break;
-			default:
-				break;
-		}
-	}
-
+						
 	if (comp)
 		xfree(comp);
+  
+	if (qlist)
+		xfree(qlist);
 }
 
 static void
