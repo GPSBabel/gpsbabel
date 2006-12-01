@@ -20,5 +20,5 @@ given date, you need not specify the minutes or seconds.
 To get only the parts of a track that were mapped on 20 July 2005
 between 10 AM and 6 PM, use this command line:
 </para> 
-<para><command>gpsbabel -t -i gpx -f in.gpx -x track,start=2005072010,stop=2005072018 -o gpx -F out.gpx </command></para>
+<para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,start=2005072010,stop=2005072018 -o gpx -F out.gpx </userinput></para>
 </example>

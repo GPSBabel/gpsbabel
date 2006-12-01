@@ -21,7 +21,7 @@ can fit in your computer's memory.
  duplicates can be removed with the DUPLICATE filter; see
  above.)
 </para>
-         <para><command>           
+         <para><userinput>           
 gpsbabel -i gpx -f in.gpx 
          -x stack,push,copy 
          -x polygon,file=county_a.txt 
@@ -29,13 +29,13 @@ gpsbabel -i gpx -f in.gpx
          -x polygon,file=county_b.txt 
          -x stack,pop,append 
          -o gpx -F out.gpx
-</command></para>
+</userinput></para>
          <para> This example reads a large list of waypoints and
          extracts the points within 20 miles of each of two cities,
          writing the waypoint descriptions into two different PalmDoc
          files and exporting all of the points to the GPS receiver:
 </para>
-         <para><command>           
+         <para><userinput>           
 gpsbabel -i gpx -f indiana.gpx 
          -x stack,push,copy 
          -x radius,lat=41.0765,lon=-85.1365,distance=20m 
@@ -45,5 +45,5 @@ gpsbabel -i gpx -f indiana.gpx
          -o palmdoc,dbname=Indianapolis -F indianapolis.pdb 
          -x stack,pop,append 
          -o magellan -F fwaind.wpt
-</command></para>
+</userinput></para>
       

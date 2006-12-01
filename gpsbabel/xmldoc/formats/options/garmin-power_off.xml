@@ -5,4 +5,4 @@ a unit that supports it is rather futile, so place this option carefully
 in your command.
 
 </para>
-<para><command>gpsbabel -o garmin,power_off -F /dev/ttyS0</command></para>
+<para><userinput>gpsbabel -o garmin,power_off -F /dev/ttyS0</userinput></para>

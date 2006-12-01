@@ -11,6 +11,6 @@ waypoints and you want a GPX file that contains only tracks,
 you may use this filter to remove the waypoints and the routes 
 with this command:
 </para>
-<para><command>gpsbabel -i gpx -f bigfile.gpx -x nuketypes,waypoints,routes -o gpx -F tracksonly.gpx</command></para>
+<para><userinput>gpsbabel -i gpx -f bigfile.gpx -x nuketypes,waypoints,routes -o gpx -F tracksonly.gpx</userinput></para>
 </example>
    

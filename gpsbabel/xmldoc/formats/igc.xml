@@ -42,7 +42,7 @@ will not be accepted as proof of a flight.
 A track stored in another format (GPX for example) representing a recorded
 flight can be converted into an IGC file:
 </para>
-<para><command>gpsbabel -i gpx -f mytrk.gpx -o igc -F myflight.igc</command></para>
+<para><userinput>gpsbabel -i gpx -f mytrk.gpx -o igc -F myflight.igc</userinput></para>
 <para>
 If multiple track segments are provided in the input file, the one with the
 most points will be used.
@@ -51,34 +51,34 @@ most points will be used.
 A route stored in another format representing a task declaration can be
 converted into an IGC file:
 </para>
-<para><command>gpsbabel -i gpx -f myrte.gpx -o igc -F mytask.igc</command></para>
+<para><userinput>gpsbabel -i gpx -f myrte.gpx -o igc -F mytask.igc</userinput></para>
 <para>
 A route and a track in other formats can be included into a single IGC file:
 </para>
-<para><command>gpsbabel -i gpx -f mytrk.gpx -f myrte.gpx -o igc -F myflight.igc</command></para>
+<para><userinput>gpsbabel -i gpx -f mytrk.gpx -f myrte.gpx -o igc -F myflight.igc</userinput></para>
 <para>
 A similar result can be obtained by downloading the track log and routes
 directly from a GPS device connected to a PC.  For example to create an IGC
 file from data recorded in a Garmin GPS connected to the first serial port of
 a PC running Linux:
 </para>
-<para><command>gpsbabel -t -r -i garmin -f /dev/ttyS0 -o igc -F myflight.igc</command></para>
+<para><userinput>gpsbabel -t -r -i garmin -f /dev/ttyS0 -o igc -F myflight.igc</userinput></para>
 <para>
 For Windows operating systems:
 </para>
-<para><command>gpsbabel -t -r -i garmin -f com1 -o igc -F myflight.igc</command></para>
+<para><userinput>gpsbabel -t -r -i garmin -f com1 -o igc -F myflight.igc</userinput></para>
 <para>
 A waypoint file in another format containing a waypoint whose short name is
 "PILOT" can be merged into an IGC file.  The description field of the waypoint
 will be used for the pilot name in the IGC file header:
 </para>
-<para><command>gpsbabel -i gpx -f mytrk.gpx -f myrte.gpx -f mywpt.gpx -o igc -F myflight.igc
-gpsbabel -w -t -r -i garmin -f /dev/ttyS0 -o igc -F myflight.igc</command></para>
+<para><userinput>gpsbabel -i gpx -f mytrk.gpx -f myrte.gpx -f mywpt.gpx -o igc -F myflight.igc
+gpsbabel -w -t -r -i garmin -f /dev/ttyS0 -o igc -F myflight.igc</userinput></para>
 <para>
 Some formats such as GPX allow routes, tracks and waypoints to exist in the
 same file and can be used to fully populate an IGC file:
 </para>
-<para><command>gpsbabel -i gpx -f myall.gpx -o igc -F myflight.igc</command></para>
+<para><userinput>gpsbabel -i gpx -f myall.gpx -o igc -F myflight.igc</userinput></para>
 </section>
 
 <section id="fmt_igc_convfrom">
@@ -88,11 +88,11 @@ Data in an IGC file can be converted into other formats.  For example to
 generate OziExplorer files containing tracks representing the recorded
 flight (myozi.plt) and routes representing declared tasks (myozi.rte):
 </para>
-<para><command>gpsbabel -i igc -f myflight.igc -o ozi -F myozi</command></para>
+<para><userinput>gpsbabel -i igc -f myflight.igc -o ozi -F myozi</userinput></para>
 <para>
 Or to GPX format:
 </para>
-<para><command>gpsbabel -i igc -f myflight.igc -o gpx -F myflight.gpx</command></para>
+<para><userinput>gpsbabel -i igc -f myflight.igc -o gpx -F myflight.gpx</userinput></para>
 <para>
 Header information from the IGC file will be written to the description field
 of the track(s).
@@ -110,23 +110,23 @@ tracks.  The latitude, longitude and timestamps in the tracks will be identical.
 A route stored in another format can be merged with an existing IGC file that
 has no task declaration, to generate a new IGC file with a task declaration:
 </para>
-<para><command>gpsbabel -i igc -f myflight.igc -i gpx -f myrte.gpx -o igc -F mynew.igc</command></para>
+<para><userinput>gpsbabel -i igc -f myflight.igc -i gpx -f myrte.gpx -o igc -F mynew.igc</userinput></para>
 <para>
 A two dimensional (lat/lon) track recorded during a flight by a GPS receiver
 can be merged with a one dimensional (altitude) track recorded during the same
 flight by a barograph instrument.  The result is a three dimensional IGC file
 representing the flight:
 </para>
-<para><command>gpsbabel -i gpx -f baro.gpx -i igc -f my2D.igc -o igc -F my3D.igc</command></para>
+<para><userinput>gpsbabel -i gpx -f baro.gpx -i igc -f my2D.igc -o igc -F my3D.igc</userinput></para>
 <para>
 The same can be acheived by downloading directly from a barograph instrument
 supported by GPSBabel.  For example with a Brauniger IQ Comp GPS variometer:
 </para>
-<para><command>gpsbabel -i baroiq -f /dev/ttyS0 -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc</command></para>
+<para><userinput>gpsbabel -i baroiq -f /dev/ttyS0 -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc</userinput></para>
 <para>
 or:
 </para>
-<para><command>gpsbabel -i baroiq -f com1 -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc</command></para>
+<para><userinput>gpsbabel -i baroiq -f com1 -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc</userinput></para>
 <para>
 (Documentation contributed by Chris Jones, Aug 2004)
 </para>

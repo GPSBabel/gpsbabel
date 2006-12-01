@@ -20,7 +20,7 @@ Linux, Solaris, and a variety of processors and compilers.
   <para>
   In most cases, the code is as simple to build as running:
 </para>
-<para><command> ./configure &amp;&amp; make</command></para>
+<para><userinput> ./configure &amp;&amp; make</userinput></para>
   <para><ulink url="http://expat.sourceforge.net">Expat</ulink> 
 is strongly recommended for source builds as it is
 required for reading all the XML formats such as GPX.
@@ -31,7 +31,7 @@ is recommended for OS/X and Linux if you want to use a USB Garmin.
 <para>There are additional flags that can be passed to configure to
  customize your build of GPSBabel.   
 </para>
-<para><command>./configure --help</command></para> 
+<para><userinput>./configure --help</userinput></para> 
 <para>
 lists all the supported options, but additionally we have:
  <option>--disable-shapefile</option> Excludes the shapefile support.

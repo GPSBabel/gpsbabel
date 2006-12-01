@@ -9,5 +9,5 @@ to a particular waypoint.
 The following command line reads a GPX file with Groundspeak extensions 
 and writes a Palm document with encrypted hints and logs:
 </para>
-<para><command>gpsbabel -i gpx -f 12345.gpx -o "palmdoc,dbname=Unfound Geocaches,encrypt,logs" -F 12345.pdb</command></para>
+<para><userinput>gpsbabel -i gpx -f 12345.gpx -o "palmdoc,dbname=Unfound Geocaches,encrypt,logs" -F 12345.pdb</userinput></para>
     

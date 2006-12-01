@@ -324,7 +324,7 @@ create a three dimensional IGC file. </para>
 Routenplaner 2002-..." by Map&amp;Guide. It is a route-onle
 format. If you own a newer release (2005...) you can also use the XML
 export and convert via <command moreinfo="none">gpsbabel ... -i tef
-...</command> to your preferred format.  May be there are other
+...</userinput> to your preferred format.  May be there are other
 products from Map&amp;Guide using the format.
 </para>
       <para> Coordinates are stored in Mercator format. The
@@ -1301,7 +1301,7 @@ format.  Intended to serve as source for number-processing
 applications like OpenOffice, Ploticus and others. Tab was chosen as
 delimiter because it is a) supported by both OpenOffice and Ploticus
 and b) is not ',', so you can use <command moreinfo="none">sed -i
-"s/./,/g" &lt;x&gt;.csv'</command> to adapt it to locales where ',' is
+"s/./,/g" &lt;x&gt;.csv'</userinput> to adapt it to locales where ',' is
 used as decimal seperator.  Contributed by Tobias Minich.</para>
     </section>
     <section id="ozi">
@@ -1709,7 +1709,7 @@ handle at least a few thousand of the billion CSV variants available.
 By itself, it doesn't comply to any format, however *most* CSV
 variants can be described as a "style" and fine-tuned by the end user.
 For more information on it's use, please see README.style in the
-style/ sub-directory of <command moreinfo="none">GPSBabel</command>.
+style/ sub-directory of <command moreinfo="none">GPSBabel</userinput>.
 For an example of using the XCSV module within your C program, look at
 the <filename moreinfo="none">ozi.c</filename>, <filename
 moreinfo="none">mxf.c</filename>, and <filename

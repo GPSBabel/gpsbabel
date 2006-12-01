@@ -37,6 +37,6 @@ Assuming the arc above is in a file called
 would include only points within one mile of the section of Lima Road 
 covered by the arc.
 </para>
-<para><command>gpsbabel -i geo -f 1.loc -x arc,file=lima_rd.txt,distance=1 -o mapsend -F 2.wpt</command></para>
+<para><userinput>gpsbabel -i geo -f 1.loc -x arc,file=lima_rd.txt,distance=1 -o mapsend -F 2.wpt</userinput></para>
 </example>
       

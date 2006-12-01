@@ -15,7 +15,7 @@
 		<member>28 = X9 TrackLog</member>
 	</simplelist>
 </para>
-	<para><command>gpsbabel -i gpx -f some-routes.gpx -r -o stmsdf,index=3 -F single-route.sdf</command></para>
+	<para><userinput>gpsbabel -i gpx -f some-routes.gpx -r -o stmsdf,index=3 -F single-route.sdf</userinput></para>
 <para>
 	<ulink url="http://www.suunto.fi">Suunto Website</ulink>
 </para>

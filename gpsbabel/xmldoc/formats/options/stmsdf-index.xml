@@ -12,4 +12,4 @@
 <para>
 	This example will convert route number two and three into separate sdf files:
 </para>
-	<para><command> gpsbabel -i gdb -f routes.gdb -r -o stmsdf,index=2 -F route-one.sdf -r -o stmsdf,index=3 -F route-three.sdf </command></para>
+	<para><userinput> gpsbabel -i gdb -f routes.gdb -r -o stmsdf,index=2 -F route-one.sdf -r -o stmsdf,index=3 -F route-three.sdf </userinput></para>
