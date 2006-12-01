@@ -7,5 +7,5 @@ This option selects the destination type of this filter to be routes.  Choose th
 Say you you have a data file that came from CSV file that you want to convert  
 to a GPX route that can be loaded into Mapsource.  Use the following command:
 </para>
-<para><command>gpsbabel -i csv -f blah.txt -x transform,rte=wpt -o gdb -F blah.gdb</command></para>
+<para><userinput>gpsbabel -i csv -f blah.txt -x transform,rte=wpt -o gdb -F blah.gdb</userinput></para>
 </example>

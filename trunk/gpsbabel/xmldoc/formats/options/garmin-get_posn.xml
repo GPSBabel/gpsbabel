@@ -2,4 +2,4 @@
 and returns it as a single waypoint for further processing.  For example,
 to return the current position from a USB Garmin to a KML file:
 </para>
-<para><command>gpsbabel -i garmin,get_posn -f usb: -o kml -F myposition.kml</command></para>
+<para><userinput>gpsbabel -i garmin,get_posn -f usb: -o kml -F myposition.kml</userinput></para>

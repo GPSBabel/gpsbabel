@@ -15,6 +15,6 @@ Generally, at least one of these options is required.
   <link linkend="fmt_gpx">gpx</link> file that more than likely 
   contains only unique points and point data.
   </para>
-  <para><command> gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname -o gpx -F merged_with_no_dupes.gpx</command></para>
+  <para><userinput> gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname -o gpx -F merged_with_no_dupes.gpx</userinput></para>
 </example>
       

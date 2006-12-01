@@ -6,7 +6,7 @@ a map that will hold all the points to be displayed  and is suitably scaled
 and centered.   
 </para>
 <para>For example:</para>
-<para><command>gpsbabel -i geo -f geocaching.loc -o tiger,genurl=tiger.ctr -F tiger.dat</command></para>
+<para><userinput>gpsbabel -i geo -f geocaching.loc -o tiger,genurl=tiger.ctr -F tiger.dat</userinput></para>
 <para>
 may create tiger.ctr with
 <screen format="linespecific">

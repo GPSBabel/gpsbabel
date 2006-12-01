@@ -31,15 +31,15 @@ It should also be noted that <emphasis>reading</emphasis> multiple files
 is indeed possible, but if you have more than a few points, it can be a task. 
 For example:
 </para>
-<para><command>gpsbabel -i xmapwpt -f Xmap1.wpt -f Xmap2.wpt -o mapsend -F mapsend.wpt</command></para>
+<para><userinput>gpsbabel -i xmapwpt -f Xmap1.wpt -f Xmap2.wpt -o mapsend -F mapsend.wpt</userinput></para>
 <para>
 will read the two Xmap .wpt files and write one mapsend file.  This
 is fine for a small handful of points, but could be quite cumbersome
 for folks like me who have 100+ waypoints loaded into XMap.  For *nix
 folks, something as simple as:
 </para>
-<para><command>cat *.wpt > /tmp/foo.wpt</command>
-<command>gpsbabel -i xmapwpt -f foo.wpt -o mapsend -F mapsend.wpt </command></para>
+<para><userinput>cat *.wpt > /tmp/foo.wpt</userinput>
+<userinput>gpsbabel -i xmapwpt -f foo.wpt -o mapsend -F mapsend.wpt </userinput></para>
 <para>
 will do the trick just fine.  
 </para>

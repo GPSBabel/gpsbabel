@@ -16,7 +16,7 @@
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gpsbabel</command>
+<userinput>gpsbabel</userinput>
 <arg choice="opt">
   <option>iofFxsh</option>
 </arg>

@@ -5,5 +5,5 @@ tracks read from a more expressive format.  If you have, say, a
 <link linkend="fmt_gpx">gpx</link> file that contains two tracks, you may
 use this option to write them one at a time to individual files.
 </para>
-<para><command>gpsbabel -i gpx -f tracks.gpx -o ignrando,index=1 -F track1.txt -o ignrando,index=2 -F track2.txt</command></para>
+<para><userinput>gpsbabel -i gpx -f tracks.gpx -o ignrando,index=1 -F track1.txt -o ignrando,index=2 -F track2.txt</userinput></para>
 

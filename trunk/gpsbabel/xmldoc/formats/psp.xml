@@ -55,7 +55,7 @@ There are either no points to write, or you have botched the command
    on the command line.  A simple command line to create PSP files
    looks like this:
 </para>
-<para><command>gpsbabel -i geo -f geocaching.loc -o psp -F NewOrleans.psp</command></para>
+<para><userinput>gpsbabel -i geo -f geocaching.loc -o psp -F NewOrleans.psp</userinput></para>
 <para>
    Note the use of "-f" for INPUT files and "-F" for OUTPUT files.
 </para>

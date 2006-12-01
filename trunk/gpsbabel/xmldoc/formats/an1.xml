@@ -7,7 +7,7 @@ thick red lines for routes or tracks.  It is possible to merge two drawing
 layers by doing something like this:
 </para>
 
-<para><command>gpsbabel -i an1 -f one.an1 -f two.an1 -o an1 -F merged.an1</command></para>
+<para><userinput>gpsbabel -i an1 -f one.an1 -f two.an1 -o an1 -F merged.an1</userinput></para>
 
 <para> 
 In this case, the merged data will contain all of the

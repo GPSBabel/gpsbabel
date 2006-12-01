@@ -8,6 +8,6 @@ time zone.
 <para>
 The following command line will shift all tracks to be one hour later.
 </para>
-<para><command>gpsbabel -t -i gpx -f in.gpx -x track,move=+1h -o gpx -F out.gpx</command></para>
+<para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,move=+1h -o gpx -F out.gpx</userinput></para>
 </example>
 

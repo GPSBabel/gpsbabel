@@ -16,6 +16,6 @@ reports are welcome.
 </para>
 <example id="sample_bcr_command">
   <title>Sample BCR command with all options</title>
-  <para><command>gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr</command></para>
+  <para><userinput>gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr</userinput></para>
 </example>
     

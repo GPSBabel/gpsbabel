@@ -4,6 +4,6 @@
 </para>
 <example id="wbt-on-macos">
   <title>Command showing WBT-200 download and erase over Bluetooth on Mac OS X</title>
-  <para><command>gpsbabel -i wbt,erase -f /dev/cu.WBT200-SPPslave-1 -o gpx -F out.gpx</command></para>
+  <para><userinput>gpsbabel -i wbt,erase -f /dev/cu.WBT200-SPPslave-1 -o gpx -F out.gpx</userinput></para>
 </example>
     
