@@ -27,9 +27,9 @@ gpsbabel -t
         if the device is without signal for at least 5 minutes
         and during this time moves more than 300 meters:</para>
         <para><userinput>
-gpsbabel -t \
-     -i gpx -f in.gpx \
-     -x track,pack,sdistance=0.3k,split=5m \
+gpsbabel -t 
+     -i gpx -f in.gpx 
+     -x track,pack,sdistance=0.3k,split=5m 
      -o gpx -F out.gpx
 </userinput></para>
 
