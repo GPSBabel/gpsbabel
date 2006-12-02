@@ -25,6 +25,7 @@
 #include "csv_util.h"
 #include "grtcirc.h"
 #include "strptime.h"
+#include "jeeps/gpsmath.h"
 
 #define MYNAME "CSV_UTIL"
 
@@ -38,6 +39,7 @@
 #define EXCEL_TO_TIMET(a) ((a - 25569.0) * 86400.0)
 #define TIMET_TO_EXCEL(a) ((a / 86400.0) + 25569.0)
 
+#define GPS_DATUM_WGS84		118
 
 /****************************************************************************/
 /* obligatory global struct                                                 */
@@ -583,6 +585,7 @@ xcsv_file_init(void)
     xcsv_file.type = ff_type_file;
 
     xcsv_file.mkshort_handle = mkshort_new_handle();
+    xcsv_file.gps_datum = GPS_DATUM_WGS84;
 }
 
 /*****************************************************************************/
@@ -1055,6 +1058,11 @@ xcsv_data_read(void)
                 s = csv_lineparse(NULL, xcsv_file.field_delimiter, "",
                   linecount);
             }
+            if ((xcsv_file.gps_datum > -1) && (xcsv_file.gps_datum != GPS_DATUM_WGS84)) {
+        	double alt;
+		GPS_Math_Known_Datum_To_WGS84_M(wpt_tmp->latitude, wpt_tmp->longitude, 0.0,
+		    &wpt_tmp->latitude, &wpt_tmp->longitude, &alt, xcsv_file.gps_datum);
+	    }
             waypt_add(wpt_tmp);
         }
 
@@ -1084,13 +1092,14 @@ xcsv_waypt_pr(const waypoint *wpt)
     int i;
     field_map_t *fmp;
     queue *elem, *tmp;
+    double latitude, longitude;
     
     if ( oldlon < 900 ) {
 	pathdist += radtomiles(gcdist(RAD(oldlat),RAD(oldlon),
 			RAD(wpt->latitude),RAD(wpt->longitude)));
     }
-    oldlon = wpt->longitude;
-    oldlat = wpt->latitude;
+    longitude = oldlon = wpt->longitude;
+    latitude = oldlat = wpt->latitude;
 
     if (xcsv_file.field_delimiter && strcmp(xcsv_file.field_delimiter, "\\w") == 0)
         write_delimiter = " ";
@@ -1130,12 +1139,17 @@ xcsv_waypt_pr(const waypoint *wpt)
 	    description = xstrdup(odesc);
 	    xfree(odesc);
     }
+    if ((xcsv_file.gps_datum > -1) && (xcsv_file.gps_datum != GPS_DATUM_WGS84)) {
+	double alt;
+	GPS_Math_WGS84_To_Known_Datum_M(latitude, longitude, 0.0,
+	    &latitude, &longitude, &alt, xcsv_file.gps_datum);
+    }
 
     i = 0;
     QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
 	char *obuff;
-	double lat = wpt->latitude;
-	double lon = wpt->longitude;
+	double lat = latitude;
+	double lon = longitude;
 	/*
 	 * A klunky concept.   This should evaluate to true for any
 	 * field if we think we don't have realistic value for it.
