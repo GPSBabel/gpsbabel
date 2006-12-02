@@ -26,6 +26,7 @@
 #include <ctype.h>
 #include "defs.h"
 #include "csv_util.h"
+#include "jeeps/gpsmath.h"
 
 #if CSVFMTS_ENABLED
 #define MYNAME	"XCSV"
@@ -38,6 +39,7 @@ static char *snupperopt = NULL;
 static char *snuniqueopt = NULL;
 char *prefer_shortnames = NULL;
 char *xcsv_urlbase = NULL;
+static char *opt_datum;
 
 static const char *intstylebuf = NULL;
 
@@ -58,6 +60,8 @@ arglist_t xcsv_args[] = {
 	{"prefer_shortnames", &prefer_shortnames, 
 		"Use shortname instead of description", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"datum", &opt_datum, "GPS datum (def. WGS 84)", 
+		NULL, ARGTYPE_STRING, ARG_NOMINMAX}, 
 	ARG_TERMINATOR
 };
 
@@ -327,6 +331,13 @@ xcsv_parse_style_line(const char *sbuff)
 	    cet_convert_init(p, 1);
 	    xfree(p);
 	} else
+
+	if (ISSTOKEN(sbuff, "DATUM")) {
+	    p = csv_stringtrim(&sbuff[8], "\"", 1);
+	    xcsv_file.gps_datum = GPS_Lookup_Datum_Index(p);
+	    is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", p);
+	    xfree(p);
+	} else
 	
 	if (ISSTOKEN(sbuff, "IFIELD")) {
 	    key = val = pfc = NULL;
@@ -515,6 +526,10 @@ xcsv_rd_init(const char *fname)
     }
 
     xcsv_file.xcsvfp = gbfopen(fname, "r", MYNAME);
+    if (opt_datum) {
+	xcsv_file.gps_datum = GPS_Lookup_Datum_Index(opt_datum);
+	is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", opt_datum);
+    }
 
 }
 
@@ -564,7 +579,10 @@ xcsv_wr_init(const char *fname)
         setshort_badchars(xcsv_file.mkshort_handle, xcsv_file.badchars);
 
     }
-
+    if (opt_datum) {
+	xcsv_file.gps_datum = GPS_Lookup_Datum_Index(opt_datum);
+	is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", opt_datum);
+    }
 }
 
 static void
