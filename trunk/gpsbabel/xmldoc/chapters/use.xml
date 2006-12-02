@@ -140,13 +140,13 @@ merged data to multiple destinations.
       </sect1>
       <sect1 id="Route_And_Track_Modes">
          <title>Route and Track Modes</title>
-         <para> Most formats will make a reasonable attempt to work
+         <para> Most formats supported by GPSBabel will make a reasonable attempt to work
          transparently with waypoints, tracks, and routes.  Some
-         formats, like 'garmin' and 'magellan' require the <parameter moreinfo="none">-t</parameter> flag to work with tracks and
+         formats, like <link linkend="fmt_garmin">garmin</link> and <link linkend="fmt_magellan">magellan</link> require the <parameter moreinfo="none">-t</parameter> flag to work with tracks and
          <parameter moreinfo="none">-r</parameter> to work with
          routes. <parameter moreinfo="none">-w</parameter> is for
          waypoints, and is the default. So if you wanted to read all
-         data from your unit into a gpx file, you might use a command
+         data from a Magellan Meridian GPS receiver into a gpx file, you might use a command
          like:</para>
          <para><userinput> gpsbabel -t -r -w -i magellan -f com1:  -o gpx -F backup.gpx</userinput></para>
          <para> Tracks and routes are advanced features and don't try
@@ -156,7 +156,7 @@ merged data to multiple destinations.
 	 <para> Many of those hazards can be overcome with our filters
 	 but there are often compromises to be made.  For example, if you
 	 have a GPX route that contains  150 turn points but you're sending
-	 the route to a GPX that supports only 30 turnpoints, something has
+	 the route to a GPS receiver that supports only 30 turnpoints, something has
 	 to go.   One might use our 'simplify' filter to produce a route that
  	 retained the 30 most mathematically significant turnpoints but that
 	 may not really be the route you had in mind.
@@ -258,7 +258,7 @@ merged data to multiple destinations.
 <sect1 id="tracking">
   <title>Realtime tracking</title>
     <para>
-      Introduced in GPSBabel 1.3.1, we now have an <emphasis>experimental</emphasis>  feature for realtime tracking via the new '-T' option.  This reads position reports from selected formats and writes an output file when a position report is received. 
+      Introduced in GPSBabel 1.3.1, we now have an <emphasis>experimental</emphasis>  feature for realtime tracking via the new <option>-T</option> option.  This reads position reports from selected formats and writes an output file when a position report is received. 
     </para>
     <para>
 	  As of this writing, Garmin's PVT protocol and NMEA are supported 
@@ -276,12 +276,12 @@ merged data to multiple destinations.
   <title>Batch mode (command files)</title>
   <para>
 	In addition to reading arguments from the command line, GPSBabel can
-	read directions from batch (or command) files via the '-b' option.
+	read directions from batch (or command) files via the <option>-b</option> option.
   </para>
   <para>
     These files are ideal for holding long command lines, long file lists, complex filters 
     and so on. You can use all GPSBabel options and combinations when writing
-    such files. Nesting batch files by using the '-b' option within a batch file is supported.
+    such files. Nesting batch files by using the <option>-b</option> option within a batch file is supported.
   </para>
   <para>
   Here is an example demonstrating segmenting a large command line
