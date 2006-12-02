@@ -23,7 +23,7 @@
 #include "jeeps/gpsmath.h"
 #include <ctype.h>
 
-static FILE *file_out;
+static gbfile *file_out;
 static short_handle mkshort_handle;
 
 static char *vcf_encrypt = NULL;
@@ -40,14 +40,14 @@ arglist_t vcf_args[] = {
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "w", MYNAME);
+	file_out = gbfopen(fname, "w", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	gbfclose(file_out);
 	mkshort_del_handle(&mkshort_handle);
 }
 
@@ -67,7 +67,7 @@ vcf_print_utf(const utf_string *s)
 	stripped_html = strip_html(s);
  	p = gstrsub(stripped_html, "\n", "\\n");
  	p2 = gstrsub(p, "<p>", "\\n");
-	fputs(p2, file_out);
+	gbfputs(p2, file_out);
 	xfree(p);
 	xfree(p2);
 	xfree(stripped_html);
@@ -82,7 +82,7 @@ vcf_print(const char *s)
 		return;
 
  	p = gstrsub(s, "\n", "\\n");
-	fputs(p, file_out);
+	gbfputs(p, file_out);
 	xfree(p);
 }
 
@@ -94,19 +94,19 @@ vcf_disp(const waypoint *wpt)
 	lonint = abs((int) wpt->longitude);
 	latint = abs((int) wpt->latitude);
 
-	fprintf(file_out, "BEGIN:VCARD\nVERSION:3.0\n");
-	fprintf(file_out, "N:%s;%s;;;\n", wpt->description,wpt->shortname);
-	fprintf(file_out, "ORG:%c%d %06.3f %c%d %06.3f\n", wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint));
+	gbfprintf(file_out, "BEGIN:VCARD\nVERSION:3.0\n");
+	gbfprintf(file_out, "N:%s;%s;;;\n", wpt->description,wpt->shortname);
+	gbfprintf(file_out, "ORG:%c%d %06.3f %c%d %06.3f\n", wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint));
 
 	if (wpt->url) {
-		fprintf(file_out, "URL:%s\n", wpt->url);
+		gbfprintf(file_out, "URL:%s\n", wpt->url);
 	}
 
-	fprintf(file_out, "NOTE:");
+	gbfprintf(file_out, "NOTE:");
 	vcf_print_utf(&wpt->gc_data.desc_short);
-	fprintf(file_out, "\\n");
+	gbfprintf(file_out, "\\n");
 	vcf_print_utf(&wpt->gc_data.desc_long);
-	fprintf(file_out, "\\n\\nHINT:\\n");
+	gbfprintf(file_out, "\\n\\nHINT:\\n");
 	if (vcf_encrypt) {
 		char *s = rot13(wpt->gc_data.hint);
 		vcf_print(s);
@@ -115,7 +115,7 @@ vcf_disp(const waypoint *wpt)
 		vcf_print(wpt->gc_data.hint);
 	}
 
-	fprintf(file_out, "\nEND:VCARD\n");
+	gbfprintf(file_out, "\nEND:VCARD\n");
 }
 
 static void

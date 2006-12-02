@@ -29,7 +29,7 @@
 
 #define RECORD_LEN	344
 
-static FILE *fin;
+static gbfile *fin;
 
 static
 arglist_t axim_gpb_args[] = {
@@ -124,13 +124,13 @@ decode_buff(const char *buff, route_head *track)
 static void
 axim_gpb_rd_init(const char *fname)
 {
-	fin = xfopen(fname, "rb", MYNAME);
+	fin = gbfopen(fname, "rb", MYNAME);
 }
 
 static void 
 axim_gpb_rd_deinit(void)
 {
-	fclose(fin);
+	gbfclose(fin);
 }
 
 static void
@@ -139,18 +139,10 @@ axim_gpb_read(void)
 	char buff[RECORD_LEN];
 	route_head *track = NULL;
 	size_t bytes;
-	long filesize, left;
 
-	fseek(fin, 0, SEEK_END);
-	filesize = ftell(fin);
-
-	left = filesize - ((filesize / RECORD_LEN) * RECORD_LEN);
-	is_fatal((left != 0), MYNAME ": Invalid or unsupported file (filesize).");
-	
-	fseek(fin, 0, SEEK_SET);	/* seek file to start */
-	
-	while ((bytes = fread(buff, 1, RECORD_LEN, fin)))
+	while ((bytes = gbfread(buff, 1, RECORD_LEN, fin)))
 	{
+		is_fatal((bytes != RECORD_LEN), MYNAME ": Invalid or unsupported file (filesize).");
 		if (track == NULL)
 		{
 			track = route_head_alloc();

@@ -24,7 +24,7 @@ static char *nuke_placer;
 
 static waypoint *wpt_tmp;
 
-static FILE *ofd;
+static gbfile *ofd;
 
 static
 arglist_t geo_args[] = {
@@ -164,13 +164,13 @@ geo_rd_deinit(void)
 static void
 geo_wr_init(const char *fname)
 {
-	ofd = xfopen(fname, "w", MYNAME);
+	ofd = gbfopen(fname, "w", MYNAME);
 }
 
 static void
 geo_wr_deinit(void)
 {
-	fclose(ofd);
+	gbfclose(ofd);
 }
 
 static void
@@ -178,34 +178,34 @@ geo_waypt_pr(const waypoint *waypointp)
 {
 	char *tmp;
 
-	fprintf(ofd, "<waypoint>\n");
-	fprintf(ofd, "<name id=\"%s\">", waypointp->shortname);
-	fprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
-	fprintf(ofd, "</name>\n");
+	gbfprintf(ofd, "<waypoint>\n");
+	gbfprintf(ofd, "<name id=\"%s\">", waypointp->shortname);
+	gbfprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
+	gbfprintf(ofd, "</name>\n");
 
-	fprintf(ofd, "<coord lat=\"%lf\" lon=\"%lf\"/>",
+	gbfprintf(ofd, "<coord lat=\"%lf\" lon=\"%lf\"/>",
 		waypointp->latitude,
 		waypointp->longitude);
-	fprintf(ofd, "\n");
+	gbfprintf(ofd, "\n");
 
 	if (waypointp->icon_descr) {
-		fprintf(ofd, "<type>%s</type>\n", deficon ? deficon : waypointp->icon_descr);
+		gbfprintf(ofd, "<type>%s</type>\n", deficon ? deficon : waypointp->icon_descr);
 	}
 	if (waypointp->url) {
 		tmp = xml_entitize(waypointp->url);
-		fprintf(ofd, "<link text =\"Cache Details\">%s</link>\n", 
+		gbfprintf(ofd, "<link text =\"Cache Details\">%s</link>\n", 
 			tmp);
 		xfree(tmp);
 	}
-	fprintf(ofd, "</waypoint>\n");
+	gbfprintf(ofd, "</waypoint>\n");
 }
 
 static void
 geo_write(void)
 {
-	fprintf(ofd, "<?xml version=\"1.0\"?><loc version=\"1.0\" src=\"EasyGPS\">\n");
+	gbfprintf(ofd, "<?xml version=\"1.0\"?><loc version=\"1.0\" src=\"EasyGPS\">\n");
 	waypt_disp_all(geo_waypt_pr);
-	fprintf(ofd, "</loc>\n");
+	gbfprintf(ofd, "</loc>\n");
 }
 
 ff_vecs_t geo_vecs = {

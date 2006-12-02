@@ -41,8 +41,8 @@ typedef struct psit_icon_mapping {
 	const char	*icon;
 } psit_icon_mapping_t;
 
-static FILE *psit_file_in;
-static FILE *psit_file_out;
+static gbfile *psit_file_in;
+static gbfile *psit_file_out;
 static short_handle mkshort_handle;
 
 /* 2 = not written any tracks out
@@ -180,25 +180,25 @@ psit_find_icon_number_from_desc(const char *desc)
 static void
 psit_rd_init(const char *fname)
 {
-	psit_file_in = xfopen(fname, "r", MYNAME);
+	psit_file_in = gbfopen(fname, "r", MYNAME);
 }
 
 static void
 psit_rd_deinit(void)
 {
-	fclose(psit_file_in);
+	gbfclose(psit_file_in);
 }
 
 static void
 psit_wr_init(const char *fname)
 {
-	psit_file_out = xfopen(fname, "w", MYNAME);
+	psit_file_out = gbfopen(fname, "w", MYNAME);
 }
 
 static void
 psit_wr_deinit(void)
 {
-	fclose(psit_file_out);
+	gbfclose(psit_file_out);
 }
 
 /*
@@ -206,26 +206,26 @@ psit_wr_deinit(void)
  * and write into buf.
  */
 static void
-psit_getToken(FILE *psit_file, char *buf, size_t sz, psit_tokenSep_type delimType)
+psit_getToken(gbfile *psit_file, char *buf, size_t sz, psit_tokenSep_type delimType)
 {
 	int c = -1;
 
 	*buf = 0;
 
 	if (delimType != EOL) {
-		while ((c = fgetc (psit_file)) != EOF) {
+		while ((c = gbfgetc(psit_file)) != EOF) {
 			if (!isspace(c)) break;
 		}
 	}
 
-	if (feof(psit_file)) return;
+	if (gbfeof(psit_file)) return;
 
 	if (delimType == EOL) {
-		c = fgetc (psit_file);
+		c = gbfgetc(psit_file);
 	}
 
 	if (c == '#') {
-		if (fgets(buf, sz, psit_file) == NULL) {
+		if (gbfgets(buf, sz, psit_file) == NULL) {
 			*buf = 0;
 			return;
 		}
@@ -237,13 +237,13 @@ psit_getToken(FILE *psit_file, char *buf, size_t sz, psit_tokenSep_type delimTyp
 	if ((delimType == EOL) || (delimType == ltrimEOL)) {
 		*buf = c;
 		buf++;
-		fgets(buf, sz-1, psit_file);
+		gbfgets(buf, sz-1, psit_file);
 		return;
 	}
 
 	while (sz--) {
 		*buf++ = c;
-		if ((c = fgetc (psit_file)) == EOF) {
+		if ((c = gbfgetc (psit_file)) == EOF) {
 			*buf = 0;
 			return;
 		}
@@ -280,7 +280,7 @@ psit_isKnownToken(char *buf)
  * MRCB
  */
 static void
-psit_waypoint_r(FILE *psit_file, waypoint **wpt)
+psit_waypoint_r(gbfile *psit_file, waypoint **wpt)
 {
 	int		garmin_icon_num;
 
@@ -326,27 +326,27 @@ psit_waypoint_r(FILE *psit_file, waypoint **wpt)
  * MRCB
  */
 static void
-psit_waypoint_w(FILE *psit_file, const waypoint *wpt)
+psit_waypoint_w(gbfile *psit_file, const waypoint *wpt)
 {
 	int	icon;
     const char *ident;
 	char *src = 0;  /* BUGBUG Passed to mkshort */
 
-	fprintf(psit_file, "%11.6f,%11.6f,", 
+	gbfprintf(psit_file, "%11.6f,%11.6f,", 
 						wpt->latitude,
 						wpt->longitude);
 
 	if (wpt->altitude == unknown_alt) 
-		fprintf(psit_file, "********,");
+		gbfprintf(psit_file, "********,");
 	else
-		fprintf(psit_file, "%8.2f,",
+		gbfprintf(psit_file, "%8.2f,",
 						wpt->altitude);
 
 	ident = global_opts.synthesize_shortnames ?
 				mkshort(mkshort_handle, src) :
 				wpt->shortname;
 
-	fprintf(psit_file, " %-6s, ", ident);
+	gbfprintf(psit_file, " %-6s, ", ident);
 	icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
 
 	if (get_cache_icon(wpt) && wpt->icon_descr && (strcmp(wpt->icon_descr, "Geocache Found") != 0)) {
@@ -355,9 +355,9 @@ psit_waypoint_w(FILE *psit_file, const waypoint *wpt)
 
 	ident = psit_find_desc_from_icon_number(icon);
 	if (strlen(ident) == 0)
-		fprintf(psit_file, "%1d\n", icon);
+		gbfprintf(psit_file, "%1d\n", icon);
 	else
-		fprintf(psit_file, "%s\n", ident);
+		gbfprintf(psit_file, "%s\n", ident);
 
 }
 
@@ -372,7 +372,7 @@ psit_waypoint_w_wrapper(const waypoint *wpt)
  * MRCB
  */
 static void
-psit_route_r(FILE *psit_file, route_head **rte)
+psit_route_r(gbfile *psit_file, route_head **rte)
 {
 	char rtename[256];
 	unsigned int rte_num;
@@ -438,7 +438,7 @@ psit_route_r(FILE *psit_file, route_head **rte)
 
 			route_add_wpt(rte_head, thisWaypoint);
 
-			if (feof(psit_file)) break;
+			if (gbfeof(psit_file)) break;
 
 			psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);
 		}
@@ -451,7 +451,7 @@ psit_route_r(FILE *psit_file, route_head **rte)
  * MRCB
  */
 static void
-psit_routehdr_w(FILE *psit_file, const route_head *rte)
+psit_routehdr_w(gbfile *psit_file, const route_head *rte)
 {
 	char		hdr[20];
 	unsigned int rte_datapoints;
@@ -493,7 +493,7 @@ psit_routehdr_w(FILE *psit_file, const route_head *rte)
 		/* check for psitrex comment sign; replace with '$' */
 		while ((c = strchr(rname, '#'))) *c = '$';
 
-		fprintf(psit_file, "Route:  %s\n", rname);
+		gbfprintf(psit_file, "Route:  %s\n", rname);
 		xfree(rname);
 	}
 }
@@ -510,7 +510,7 @@ psit_routehdr_w_wrapper(const route_head *rte)
  * MRCB
  */
 static void
-psit_track_r(FILE *psit_file, route_head **trk)
+psit_track_r(gbfile *psit_file, route_head **trk)
 {
 	char tbuf[100];
 	char trkname[256];
@@ -600,7 +600,7 @@ psit_track_r(FILE *psit_file, route_head **trk)
 			thisWaypoint->centiseconds = 0;
 			track_add_wpt(track_head, thisWaypoint);
 
-			if (feof(psit_file)) break;
+			if (gbfeof(psit_file)) break;
 
 			psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);
 		}
@@ -613,7 +613,7 @@ psit_track_r(FILE *psit_file, route_head **trk)
  * MRCB
  */
 static void
-psit_trackhdr_w(FILE *psit_file, const route_head *trk)
+psit_trackhdr_w(gbfile *psit_file, const route_head *trk)
 {
 	char		hdr[30];
 	unsigned int trk_datapoints;
@@ -652,7 +652,7 @@ psit_trackhdr_w(FILE *psit_file, const route_head *trk)
 			/* check for psitrex comment sign; replace with '$' */
 			while ((c = strchr(tname, '#'))) *c = '$';
 			
-			fprintf (psit_file, "Track:  %s\n", tname);
+			gbfprintf (psit_file, "Track:  %s\n", tname);
 
 			xfree(tname);
 		}
@@ -672,23 +672,23 @@ psit_trackhdr_w_wrapper(const route_head *trk)
  * MRCB
  */
 static void
-psit_trackdatapoint_w(FILE *psit_file, const waypoint *wpt)
+psit_trackdatapoint_w(gbfile *psit_file, const waypoint *wpt)
 {
 	time_t	t = wpt->creation_time;
 	struct tm *tmTime = gmtime(&t);
 
-	fprintf(psit_file, "%11.6f,%11.6f,", 
+	gbfprintf(psit_file, "%11.6f,%11.6f,", 
 						wpt->latitude,
 						wpt->longitude);
 
 	if (wpt->altitude == unknown_alt) 
-		fprintf(psit_file, "********, ");
+		gbfprintf(psit_file, "********, ");
 	else
-		fprintf(psit_file, "%8.2f, ",
+		gbfprintf(psit_file, "%8.2f, ",
 						wpt->altitude);
 
 	/* Following date time format is fixed and reveals the origin of PsiTrex (i.e. the UK) */
-	fprintf(psit_file, "%02d/%02d/%02d %02d:%02d:%02d,",
+	gbfprintf(psit_file, "%02d/%02d/%02d %02d:%02d:%02d,",
 						tmTime->tm_mday,
 						tmTime->tm_mon+1,
 						tmTime->tm_year % 100,
@@ -696,7 +696,7 @@ psit_trackdatapoint_w(FILE *psit_file, const waypoint *wpt)
 						tmTime->tm_min,
 						tmTime->tm_sec);
 
-	fprintf(psit_file," %d\n", psit_track_state);
+	gbfprintf(psit_file," %d\n", psit_track_state);
 	psit_track_state = 0;
 }
 
@@ -747,7 +747,7 @@ psit_read(void)
 			}
 			else break;
 		}
-	} while (!feof(psit_file_in));
+	} while (!gbfeof(psit_file_in));
 
 	return;
 
