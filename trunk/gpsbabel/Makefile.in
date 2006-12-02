@@ -134,8 +134,20 @@ check:
 	./testo
 
 torture:
-	./testo
-	./torture_test
+	@echo "testo in progress... (basic data integrity test)"
+	@./testo
+	@echo "vtesto in progress... (valgrind is watching testo)"
+	@./vtesto
+	@echo "torture_test in progress... (shortname reduction)"
+	@./torture_test
+#
+# 	Because there are some "non-real" errors like "IGC: bad date" 
+# 	test-all does not stop on errors.
+# 	Please inspect the log file (/tmp/gb-test-all.log) for segmentation
+# 	faults, math overflows and other hard errors
+#
+	@echo "test-all in progress... (read/write test between all possible formats)"
+	@./test-all -s -r reference/expertgps.gpx
 
 #
 # This will only work on UNIX-like substances.

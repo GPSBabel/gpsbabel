@@ -197,6 +197,8 @@ if test ! -s $REFGPX; then
     exit 1
 fi
 
+test -s $LOGFILE && rm -f $LOGFILE.bak > /dev/null
+touch $LOGFILE
 touch $CATALOG
 
 log_entry "test-all started."
