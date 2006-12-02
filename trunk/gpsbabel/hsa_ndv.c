@@ -36,10 +36,10 @@ static char *routeName = "ROUTENAME";
 #define ATTR_OBJECTNAME						"OBJNAM"
 #define ATTR_SHIPNAME						"shpnam"
 
-static void readVersion4( FILE* pFile);
+static void readVersion4(gbfile* pFile);
 static void getAttr(const char *data, const char *attr, char **val, char seperator);
 
-static FILE *fd;
+static gbfile *fd;
 static gbfile *ofd;
 
 static
@@ -209,7 +209,7 @@ hsa_ndv_cdata(void *dta, const XML_Char *s, int len)
 static void
 hsa_ndv_rd_init(const char *fname)
 {
-	fd = xfopen(fname, "r", MYNAME);
+	fd = gbfopen(fname, "r", MYNAME);
 
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {
@@ -228,14 +228,14 @@ hsa_ndv_read(void)
 	int len;
 	char buf[MY_CBUF + 1];
 	
-	while ((len = fread(buf, 1, sizeof(buf) - 1, fd))) 
+	while ((len = gbfread(buf, 1, sizeof(buf) - 1, fd))) 
 	{
 		char *bad;
 
 		buf[len] = '\0';
 		if (NULL != strstr(buf, "nver=1"))
 		{//its the older format, not xml
-			fseek(fd, 0, SEEK_SET);
+			gbfseek(fd, 0, SEEK_SET);
 			readVersion4(fd);
 			break;
 		}
@@ -245,7 +245,7 @@ hsa_ndv_read(void)
 		{
 			*bad = REPLACEMENT_SIRIUS_ATTR_SEPARATOR;
 		}
-		if (!XML_Parse(psr, buf, len, feof(fd))) {
+		if (!XML_Parse(psr, buf, len, gbfeof(fd))) {
 			fatal(MYNAME ":Parse error at %d: %s\n", 
 				(int) XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
@@ -289,7 +289,7 @@ hsa_ndv_rd_deinit(void)
 	if ( cdatastr ) {
 		xfree(cdatastr);
 	}
-	fclose(fd);
+	gbfclose(fd);
 }
 
 static void
@@ -379,10 +379,10 @@ ff_vecs_t HsaEndeavourNavigator_vecs = {
 #define INVALID_TIME -1L
 #define SOUNDARRAY_CHAR 'S'
 
-static int readRecord( FILE* pFile, const char* pRecName, char *recData);
-static int readPositionRecord( FILE* pFile, double* lat, double* lng, long* timeStamp);
+static int readRecord(gbfile* pFile, const char* pRecName, char *recData);
+static int readPositionRecord(gbfile* pFile, double* lat, double* lng, long* timeStamp);
 
-static void readVersion4( FILE* pFile)
+static void readVersion4(gbfile* pFile)
 {
 	while( TRUE )
 	{
@@ -476,12 +476,12 @@ static void readVersion4( FILE* pFile)
 		waypt_add(wpt_tmp);
 	}
 
-	fclose(pFile);
+	gbfclose(pFile);
 	return;
 }
 
 // read a record to a file
-static int readRecord( FILE* pFile, const char* pRecName, char *recData)
+static int readRecord(gbfile* pFile, const char* pRecName, char *recData)
 {
 	// get the rec name
 	int len;
@@ -490,7 +490,7 @@ static int readRecord( FILE* pFile, const char* pRecName, char *recData)
 
 	for( len = 0; len < ED_REC_NAME_SIZE; len++)
 	{
-		int c = fgetc( pFile);
+		int c = gbfgetc(pFile);
 
 		// if we hit EOF failed
 		if( c == EOF )
@@ -506,7 +506,7 @@ static int readRecord( FILE* pFile, const char* pRecName, char *recData)
 	// get the rec data
 	for( len = 0; TRUE; len++)
 	{
-		int c = fgetc( pFile);
+		int c = gbfgetc( pFile);
 
 		// if we hit EOF failed
 		if( c == EOF )
@@ -526,7 +526,7 @@ static int readRecord( FILE* pFile, const char* pRecName, char *recData)
 }
 
 // read position
-static int readPositionRecord( FILE* pFile, double* lat, double* lng, 
+static int readPositionRecord(gbfile* pFile, double* lat, double* lng, 
 						long* timeStamp)
 {
 	// read the lat record

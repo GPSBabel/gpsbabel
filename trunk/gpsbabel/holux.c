@@ -32,7 +32,7 @@ History:
 #include "holux.h"
 
 
-static  FILE *file_in;
+static  gbfile *file_in;
 static 	unsigned char *HxWFile;
 static  short_handle mkshort_handle;
 static  char fOutname[256];
@@ -41,13 +41,13 @@ static  char fOutname[256];
 
 static void rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = gbfopen_le(fname, "rb", MYNAME);
 }
 
 
 static void rd_deinit(void)
 {
-	fclose(file_in);
+	gbfclose(file_in);
 }
 
 
@@ -95,7 +95,7 @@ static void data_read(void)
     HxWpt = xcalloc(GM100_WPO_FILE_SIZE, 1);
 
     /* read the wpo file to the data-array */
-    iDataRead = fread( HxWpt, 1, GM100_WPO_FILE_SIZE, file_in );
+    iDataRead = gbfread( HxWpt, 1, GM100_WPO_FILE_SIZE, file_in );
 
     if (iDataRead == 0)
     {
