@@ -1,7 +1,7 @@
    <preface id="Introduction">
       <title>Introduction</title>
       <section id="The_Problem">
-         <title>The Problem</title>
+         <title>The Problem: Too many incompatible formats</title>
          <para> There are simply too many gratuitously different file formats
 to hold waypoint, track, and route information in various programs
 used by computers and GPS receivers.  
@@ -9,6 +9,16 @@ used by computers and GPS receivers.
 standard in XML to contain all the data, but there are too many
 programs that don't understand it yet and too much data that are in an
 alternate formats.
+</para>
+<para>
+Perhaps you have an Explorist 600 and your friend has a StreetPilot 2720.
+You've collected a a list of your favorite locations as waypoints and you'd
+like to be able to share them.  Unfortunately, his copy of Garmin Mapsource
+won't read data created by your copy of Magellan Directroute.  What you need
+is a program that converts data bewteen the two programs.
+</para>
+<para>
+But GPSBabel actually does much more...
 </para>
       </section>
       <section id="The_Solution">
