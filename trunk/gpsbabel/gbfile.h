@@ -81,6 +81,7 @@ double gbfgetdbl(gbfile *file);			// read a double value
 float gbfgetflt(gbfile *file);			// read a float value
 char *gbfgetstr(gbfile *file);			// read until any type of line-breaks or EOF
 char *gbfgetpstr(gbfile *file);			// read a pascal string
+char *gbfgetcstr(gbfile *file);			// read a null terminated string
 
 int gbfputint16(const gbint16 i, gbfile *file);
 #define gbfputuint16(a,b) gbfputint16((gbuint16)(a),(b))
