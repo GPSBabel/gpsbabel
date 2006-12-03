@@ -22,8 +22,8 @@
 #include "defs.h"
 #include <ctype.h>
 
-static FILE *file_in;
-static FILE *file_out;
+static gbfile *file_in;
+static gbfile *file_out;
 static short_handle mkshort_handle;
 /* static char *deficon = NULL; */
 
@@ -39,54 +39,39 @@ arglist_t easygps_args[] = {
 static void
 rd_init(const char *fname)
 {
+	int sz;
 	char ibuf[100] = {'0'} ;
 	const char *ezsig = "TerraByte Location File";
 
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = gbfopen_le(fname, "rb", MYNAME);
 
-	fread(ibuf, 52, 1, file_in);
+	sz = gbfread(ibuf, 1, 52, file_in);
 	
-	if (strncmp(ibuf, ezsig, sizeof(ezsig)-1) ||
-				ibuf[51] != 'W') {
-		fatal(MYNAME ": %s is not an EasyGPS file\n", fname);
+	if ((sz < 52) || 
+	    strncmp(ibuf, ezsig, sizeof(ezsig)-1) ||
+	    (ibuf[51] != 'W')) {
+		fatal(MYNAME ": %s is not an EasyGPS file.\n", fname);
 	}
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(file_in);
+	gbfclose(file_in);
 }
 
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "wb", MYNAME);
+	file_out = gbfopen_le(fname, "wb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	gbfclose(file_out);
 	mkshort_del_handle(&mkshort_handle);
-}
-
-/*
- *  Read a pascal string from file_in and return a copy in allocated
- *  storage.
- */
-static void *
-pas_read(void)
-{
-	char *d;
-	int ilen;
-
-	ilen = fgetc(file_in);
-	d = (char *) xmalloc(ilen + 1);
-	fread(d, ilen, 1, file_in);
-	d[ilen] = 0;
-	return d;
 }
 
 static void
@@ -94,84 +79,56 @@ data_read(void)
 {
 	char p;
 	char ibuf[10];
-	char bbuf[4096];
-	char *bbufp;
 	do {
 		unsigned char tag;
 		waypoint *wpt_tmp;
 
 		wpt_tmp = waypt_new();
 			
-		for (tag = fgetc(file_in); tag != 0xff; tag = fgetc(file_in)) {
+		for (tag = gbfgetc(file_in); tag != 0xff; tag = gbfgetc(file_in)) {
 		switch (tag) {
 			case 1:
-				wpt_tmp->shortname = (char *) pas_read();
+				wpt_tmp->shortname = gbfgetpstr(file_in);
 				break;
 			case 2:
 			case 3:
-				wpt_tmp->description = (char *) pas_read();
+				wpt_tmp->description = gbfgetpstr(file_in);;
 				break;
 			case 5:
-				wpt_tmp->notes = (char *) pas_read();
+				wpt_tmp->notes = gbfgetpstr(file_in);;
 				break;
 			case 6:
-				wpt_tmp->url_link_text = (char *) pas_read();
+				wpt_tmp->url_link_text = gbfgetpstr(file_in);;
 				break;
 			case 7:
-				wpt_tmp->icon_descr = (char *) pas_read();
+				wpt_tmp->icon_descr = gbfgetpstr(file_in);;
 				wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
 				break;
 			case 8:  /* NULL Terminated (vs. pascal) descr */
-				bbufp = bbuf;
-				for(;;) {
-					p = fgetc(file_in);
-					*bbufp++ = p;
-					if ( 0 == p ) {
-						break;
-					}
-				}
-				wpt_tmp->notes = xstrdup(bbuf);
+				wpt_tmp->notes = gbfgetcstr(file_in);
 				break;
 			case 9: /* NULL Terminated (vs. pascal) link */
-				bbufp = bbuf;
-				for(;;) {
-					p = fgetc(file_in);
-					*bbufp++ = p;
-					if ( 0 == p ) {
-						break;
-					}
-				}
-				wpt_tmp->url = xstrdup(bbuf);
+				wpt_tmp->url = gbfgetcstr(file_in);
 				break;
 			case 0x10:
-				bbufp = bbuf;
-				for(;;) {
-					p = fgetc(file_in);
-					*bbufp++ = p;
-					if ( 0 == p ) {
-						break;
-					}
-				}
-				wpt_tmp->url_link_text = xstrdup(bbuf);
+				wpt_tmp->url_link_text = gbfgetcstr(file_in);
 				break;
 			case 0x63:
-				fread(ibuf, 8, 1, file_in);
-				wpt_tmp->latitude = le_read_double(ibuf);
+				wpt_tmp->latitude = gbfgetdbl(file_in);
 				break;
 			case 0x64:
-				fread(ibuf, 8, 1, file_in);
-				wpt_tmp->longitude = le_read_double(ibuf);
+				wpt_tmp->longitude = gbfgetdbl(file_in);
 				break;
 			case 0x65:
 			case 0x66:
-				fread(ibuf, 8, 1, file_in);
+				gbfread(ibuf, 8, 1, file_in);
 				break;
 			case 0x84:
 			case 0x85:
-				fread(ibuf, 4, 1, file_in);
+				gbfread(ibuf, 4, 1, file_in);
 				break;
 			case 0x86: /* May be proximity.  I think it's time. */
-				fread(ibuf, 4, 1, file_in);
+				gbfread(ibuf, 4, 1, file_in);
 				break;
 			default:
 				printf("Unknown tag %x\n", tag);
@@ -179,63 +136,47 @@ data_read(void)
 		}
 		}
 		waypt_add(wpt_tmp);
-		p = fgetc(file_in);
-	} while (!feof(file_in) && (p == 'W'));
+		p = gbfgetc(file_in);
+	} while (!gbfeof(file_in) && (p == 'W'));
 }
 
-
-
-	/*
-	 * Write a Pascal string to the output stream.
-	 */
-static void
-write_pstring(const char *p)
-{
-	int len = strlen(p);
-	if (len > 255) {
-			fatal(MYNAME ": String too long at %d bytes\n", len);
-	}
-	fputc(len, file_out);
-	fwrite(p, len, 1, file_out);
-}
 
 static void
 ez_disp(const waypoint *wpt)
 {
-	char tbuf[8];
-	fprintf(file_out, "W");
+	gbfputc('W', file_out);
+
 	if (wpt->shortname) {
-		fputc(1, file_out);
-		write_pstring(wpt->shortname);
+		gbfputc(1, file_out);
+		gbfputpstr(wpt->shortname, file_out);
 	} 
 	if (wpt->description) {
-		fputc(3, file_out);
-		write_pstring(wpt->description);
+		gbfputc(3, file_out);
+		gbfputpstr(wpt->description, file_out);
 	}
 	if (wpt->icon_descr) {
-		fputc(7, file_out);
-		write_pstring(wpt->icon_descr);
+		gbfputc(7, file_out);
+		gbfputpstr(wpt->icon_descr, file_out);
 	}
-	fputc(0x63, file_out);
-	le_write_double(tbuf, wpt->latitude);
-	fwrite(tbuf, 8, 1, file_out);
-	fputc(0x64, file_out);
-	le_write_double(tbuf, wpt->longitude);
-	fwrite(tbuf, 8, 1, file_out);
+	gbfputc(0x63, file_out);
+	gbfputdbl(wpt->latitude, file_out);
+
+	gbfputc(0x64, file_out);
+	gbfputdbl(wpt->longitude, file_out);
+
 	if (wpt->notes) {
-		fputc(5, file_out);
-		write_pstring(wpt->notes);
+		gbfputc(5, file_out);
+		gbfputpstr(wpt->notes, file_out);
 	}
 	if (wpt->url_link_text) {
-		fputc(6, file_out);
-		write_pstring(wpt->url_link_text);
+		gbfputc(6, file_out);
+		gbfputpstr(wpt->url_link_text, file_out);
 	}
 	if (1 && wpt->url) {
-		fputc(9, file_out);
-		fputs(wpt->url, file_out);
-		fputc(0, file_out);
+		gbfputc(9, file_out);
+		gbfputcstr(wpt->url, file_out);
 	}
-	fputc(0xff, file_out);
+	gbfputc(0xff, file_out);
 }
 
 static void
@@ -243,19 +184,19 @@ data_write(void)
 {
 	setshort_length(mkshort_handle, 6);
 
-	fprintf(file_out, 
+	gbfprintf(file_out, 
 		"TerraByte Location File Copyright 2001 TopoGrafix\n");
 	/*
 	 * I don't know what this is.
 	 */
-	fprintf(file_out, "%c", 0xb);
+	gbfprintf(file_out, "%c", 0xb);
 
 	waypt_disp_all(ez_disp);
 
 	/*
 	 * Files seem to always end in a zero.
 	 */
-	fputc(0x00, file_out);
+	gbfputc(0x00, file_out);
 }
 
 
