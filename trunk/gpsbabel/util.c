@@ -298,9 +298,13 @@ xfputs(const char *errtxt, const char *s, FILE *stream)
 int
 xasprintf(char **strp, const char *fmt, ...)
 {
-	/* From http://perfec.to/vsnprintf/pasprintf.c */
+/* From http://perfec.to/vsnprintf/pasprintf.c */
 /* size of first buffer malloc; start small to exercise grow routines */
-#define	FIRSTSIZE	64
+#ifdef DEBUG_MEM
+# define	FIRSTSIZE	64
+#else
+# define	FIRSTSIZE	1
+#endif
 	char *buf = NULL;
 	int bufsize;
 	char *newbuf;
@@ -364,6 +368,14 @@ xasprintf(char **strp, const char *fmt, ...)
 			/* Output was not truncated */
 			break;
 		}
+	}
+	/* Prevent us from allocating millions of unused bytes. */
+	/* O.K.: I think this is not the final solution. */
+	if (bufsize > outsize + 1) {
+		const unsigned ptrsz = sizeof(buf);
+		if (((bufsize + ptrsz + 1) / ptrsz) > ((outsize + ptrsz + 1) / ptrsz))
+			buf = xrealloc(buf, outsize + 1);	
+
 	}
 	*strp = buf;
 	return outsize;
@@ -940,29 +952,30 @@ endian_write_float(void* ptr, float f, int write_le)
   }
 }
 
-double
-pdb_read_double( void *ptr ) {return endian_read_double(ptr, 0);}
+float
+le_read_float( void *ptr ) {return endian_read_float(ptr, 1);}
+
+void
+le_write_float( void *ptr, float f ) {endian_write_float(ptr,f,1);}
 
 float
-pdb_read_float( void *ptr ) {return endian_read_float(ptr, 0);}
+be_read_float( void *ptr ) {return endian_read_float(ptr, 0);}
+
+void
+be_write_float( void *ptr, float f ) {endian_write_float(ptr,f,0);}
 
 double 
 le_read_double( void *ptr ) {return endian_read_double(ptr,1);}
+
+void
+le_write_double( void *ptr, double d ) {endian_write_double(ptr,d,1);}
 
 double 
 be_read_double( void *ptr ) {return endian_read_double(ptr,0);}
 
 void
-pdb_write_double( void *ptr, double d ) {endian_write_double(ptr,d,0);}
-
-void
-pdb_write_float( void *ptr, float f ) {endian_write_float(ptr,f,0);}
-
-void
-le_write_double( void *ptr, double d ) {endian_write_double(ptr,d,1);}
-
-void 
 be_write_double( void *ptr, double d ) {endian_write_double(ptr,d,0);}
+
 
 /* Magellan and PCX formats use this DDMM.mm format */
 double ddmm2degrees(double pcx_val) {
