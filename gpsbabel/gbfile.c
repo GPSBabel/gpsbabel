@@ -1,8 +1,7 @@
 /*
 
     Common GPSBabel file I/O API
-
-    Copyright (C) 2006 Olaf Klein 
+    Copyright (C) 2006 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,7 +39,7 @@
 #endif
 
 #define MYNAME "gbfile"
-#define NO_ZLIB MYNAME ": No zlib support\n."
+#define NO_ZLIB MYNAME ": No zlib support.\n"
 
 /* About the ZLIB_INHIBITED stuff:
  * 
@@ -52,6 +51,10 @@
  */
 
 /* GPSBabel 'file' standard calls */
+
+/*
+ * gbfopen: (as xfopen) plus the name of the calling GPSBabel module (MYNAME)
+ */
 
 gbfile *
 gbfopen(const char *filename, const char *mode, const char *module)
@@ -85,8 +88,12 @@ gbfopen(const char *filename, const char *mode, const char *module)
 	/* Do we have a '.gz' extension in the filename ? */
 	len = strlen(file->name);
 	if ((len > 3) && (case_ignore_strcmp(&file->name[len-3], ".gz") == 0)) {
+#if !ZLIB_INHIBITED
 		/* force gzipped files on output */
 		file->gzapi = 1;
+#else
+		fatal(NO_ZLIB);
+#endif
 	}
 	
 	if (file->gzapi) {
@@ -151,6 +158,10 @@ gbfopen_be(const char *filename, const char *mode, const char *module)
 	return result;
 }
 
+/*
+ * gbfclose: (as fclose)
+ */
+ 
 void
 gbfclose(gbfile *file)
 {
@@ -173,6 +184,10 @@ gbfclose(gbfile *file)
 	xfree(file);
 }
 
+/*
+ * gbfgetc: (as fgetc)
+ */
+ 
 int 
 gbfgetc(gbfile *file)
 {
@@ -187,6 +202,10 @@ gbfgetc(gbfile *file)
 	}
 }
 
+/*
+ * gbfgets: (as fgets)
+ */
+ 
 char * 
 gbfgets(char *buf, int len, gbfile *file)
 {
@@ -212,7 +231,10 @@ gbfgets(char *buf, int len, gbfile *file)
 	return (*result != '\0') ? result : NULL;
 }
 
-
+/*
+ * gbfread: (as fread)
+ */
+ 
 gbsize_t
 gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 {
@@ -255,6 +277,10 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 	}
 }
 
+/*
+ * gbfprintf: (as fprintf)
+ */
+ 
 int 
 gbfprintf(gbfile *file, const char *format, ...)
 {
@@ -292,6 +318,10 @@ gbfprintf(gbfile *file, const char *format, ...)
 	return gbfwrite(file->buff, 1, len, file);
 }
 
+/*
+ * gbfputc: (as fputc)
+ */
+ 
 int 
 gbfputc(int c, gbfile *file)
 {
@@ -302,11 +332,19 @@ gbfputc(int c, gbfile *file)
 	return c;
 }
 
+/*
+ * gbfputs: (as fputs)
+ */
+
 int 
 gbfputs(const char *s, gbfile *file)
 {
 	return gbfwrite(s, 1, strlen(s), file);
 }
+
+/*
+ * gbfwrite: (as fwrite)
+ */
 
 int 
 gbfwrite(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
@@ -337,6 +375,10 @@ gbfwrite(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *f
 	return result;
 }
 
+/*
+ * gbfflush: (as fflush)
+ */
+ 
 int
 gbfflush(gbfile *file)
 {
@@ -353,12 +395,18 @@ gbfflush(gbfile *file)
 	}
 }
 
+/*
+ * gbfclearerr: (as clearerr)
+ */
+
 void
 gbfclearerr(gbfile *file)
 {
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
 		gzclearerr(file->handle.gz);
+#else
+		fatal(NO_ZLIB);
 #endif
 	}
 	else {
@@ -366,6 +414,10 @@ gbfclearerr(gbfile *file)
 	}
 }
 
+/*
+ * gbferror: (as ferror)
+ */
+ 
 int
 gbferror(gbfile *file)
 {
@@ -385,6 +437,10 @@ gbferror(gbfile *file)
 	return errnum;
 }
 
+/*
+ * gbfrewind: (as frewind)
+ */
+ 
 void
 gbfrewind(gbfile *file)
 {
@@ -392,6 +448,10 @@ gbfrewind(gbfile *file)
 	gbfclearerr(file);
 }
 
+/*
+ * gbfseek: (as fseek)
+ */
+ 
 int
 gbfseek(gbfile *file, gbint32 offset, int whence)
 {
@@ -416,6 +476,10 @@ gbfseek(gbfile *file, gbint32 offset, int whence)
 	}
 }
 
+/*
+ * gbftell: (as ftell)
+ */
+
 gbsize_t 
 gbftell(gbfile *file)
 {
@@ -431,6 +495,10 @@ gbftell(gbfile *file)
 		return ftell(file->handle.std);
 	}
 }
+
+/*
+ * gbfeof: (as feof)
+ */
 
 int 
 gbfeof(gbfile *file)
@@ -466,6 +534,10 @@ gbfeof(gbfile *file)
 	}
 }
 
+/*
+ * gbfungetc: (as fungetc)
+ */
+
 int
 gbfungetc(const int c, gbfile *file)
 {
@@ -485,25 +557,33 @@ gbfungetc(const int c, gbfile *file)
 
 /* GPSBabel 'file' enhancements */
 
+/*
+ * gbfgetint32: read a signed 32-bit integer from input stream
+ */
+
 gbint32
 gbfgetint32(gbfile *file)
 {
 	char buf[4];
 	
-	gbfread(buf, 1, sizeof(buf), file);
-	
+	gbfread(&buf, 1, sizeof(buf), file);
+
 	if (file->big_endian)
 		return be_read32(buf);
 	else
 		return le_read32(buf);
 }
 
+/*
+ * gbfgetint16: read a signed 16-bit integer from input stream
+ */
+
 gbint16
 gbfgetint16(gbfile *file)
 {
 	char buf[2];
 	
-	gbfread(buf, 1, sizeof(buf), file);
+	gbfread(&buf, 1, sizeof(buf), file);
 	
 	if (file->big_endian)
 		return be_read16(buf);
@@ -511,54 +591,63 @@ gbfgetint16(gbfile *file)
 		return le_read16(buf);
 }
 
+/*
+ * gbfgetdbl: read a double value (8 byte, double precision) from input stream
+ */
+
 double 
 gbfgetdbl(gbfile *file)
 {
 	char buf[8];
-	gbfread(buf, 1, sizeof(buf), file);
-	return le_read_double(buf);
+
+	gbfread(&buf, 1, sizeof(buf), file);
+
+	return endian_read_double(buf, ! file->big_endian);
 }
+
+/*
+ * gbfgetflt: read a float value (4 byte, single precision) from input stream
+ */
 
 float
 gbfgetflt(gbfile *file)
 {
-	union {
-		float f;
-		gbint32 i;
-	} x;
+	char buf[4];
 	
-	x.i = gbfgetint32(file);
-	return x.f;
+	gbfread(&buf, 1, sizeof(buf), file);
+
+	return endian_read_float(buf, ! file->big_endian);
 }
 
 /*
  * gbfgetcstr: Reads a string from file until either a '\0' or eof.
  *             The result is a temporary allocated entity: use it or free it!
  */
+ 
 char *
 gbfgetcstr(gbfile *file)
 {
-	int len, size;
 	char *result;
+	int len = 0;
+	char *str = file->buff;
 	
-	len = size = 0;
-	result = xstrdup("");
-	
-	while (1) {
+	for (;;) {
 		char c = gbfgetc(file);
 		
 		if ((c == 0) || (c == EOF)) break;
 		
-		if (len == size) {
-			size += 32;
-			result = xrealloc(result, size + 1);
+		if (len == file->buffsz) {
+			file->buffsz += 64;
+			str = file->buff = xrealloc(file->buff, file->buffsz + 1);
 		}
-		result[len] = c;
+		str[len] = c;
 		len++;
 	}
 	
-	if ((len + 1) != size)
-		result = xrealloc(result, len + 1);
+	result = (char *) xmalloc(len + 1);
+	if (len > 0)
+		memcpy(result, str, len);
+	result[len] = '\0';
 	
 	return result;
 }
@@ -567,6 +656,7 @@ gbfgetcstr(gbfile *file)
  * gbfgetpstr: Reads a pascal string (first byte is length) from file.
  *             The result is a temporary allocated entity: use it or free it!
  */
+
 char *
 gbfgetpstr(gbfile *file)
 {
@@ -575,9 +665,9 @@ gbfgetpstr(gbfile *file)
 	
 	len = gbfgetc(file);
 	result = xmalloc(len + 1);
-	
-	if (len > 0)
+	if (len > 0) {
 		gbfread(result, 1, len, file);
+	}
 	result[len] = '\0';
 	
 	return result;
@@ -587,15 +677,14 @@ gbfgetpstr(gbfile *file)
  * gbfgetstr: Reads a string from file (util any type of line-breaks or eof or error)
  *            except xfree and free you can do all possible things with the result
  */
+
 char *
 gbfgetstr(gbfile *file)
 {
-	int len;
+	int len = 0;
 	char *result = file->line;
 	
-	len = file->linesz = 0;
-	
-	while (1) {
+	for (;;) {
 		char c = gbfgetc(file);
 		
 		if ((c == EOF) || (c == 0x1A)) {
@@ -606,24 +695,29 @@ gbfgetstr(gbfile *file)
 		}
 		else if (c == '\r') {
 			c = gbfgetc(file);
-			if ((c != '\n') && (c != EOF)) gbfungetc(c, file);
+			if ((c != '\n') && (c != EOF))
+				gbfungetc(c, file);
 			break;
 		}
 		else if (c == '\n') {
 			break;
 		}
 		if (len == file->linesz) {
-			file->linesz = len + 128;
-			result = file->line = xrealloc(file->line, len + 128 + 1);
+			file->linesz += 64;
+			result = file->line = xrealloc(file->line, file->linesz + 1);
 		}
 		result[len] = c;
 		len++;
 	}
-	result[len] = '\0'; // terminate resulting string
+	result[len] = '\0';	// terminate resulting string
 	
 	return result;
 }
 
+/*
+ * gbfputint16: write a signed 16-bit integer value into output stream
+ */
+ 
 int
 gbfputint16(const gbint16 i, gbfile *file)
 {
@@ -635,6 +729,10 @@ gbfputint16(const gbint16 i, gbfile *file)
 		le_write16(buf, i);
 	return gbfwrite(buf, 1, sizeof(buf), file);
 }
+
+/*
+ * gbfputint32: write a signed 32-bit integer value into output stream
+ */
 
 int
 gbfputint32(const gbint32 i, gbfile *file)
@@ -648,43 +746,68 @@ gbfputint32(const gbint32 i, gbfile *file)
 	return gbfwrite(buf, 1, sizeof(buf), file);
 }
 
+/*
+ * gbfputdbl: write a double value (8 byte, double precision) into output stream
+ */
+
 int
 gbfputdbl(const double d, gbfile *file)
 {
 	char buf[8];
-	le_write_double(buf, d );
+	
+	endian_write_double(buf, d, ! file->big_endian);
 	return gbfwrite(buf, 1, sizeof(buf), file);
 }
+
+/*
+ * gbfputflt: write a float value (4 byte, single precision) into output stream
+ */
 
 int 
 gbfputflt(const float f, gbfile *file)
 {
-	union {
-		float f;
-		gbint32 i; } x;
-		
-	x.f = f;
-	return gbfputint32(x.i, file);
+	char buf[4];
+	
+	endian_write_float(buf, f, ! file->big_endian);
+	return gbfwrite(buf, 1, sizeof(buf), file);
 }
+
+/*
+ * gbfputcstr: write a NULL terminated string into a stream (!) including NULL
+ *             return the number of written characters
+ */
 
 int 
 gbfputcstr(const char *s, gbfile *file)
 {
-	return gbfwrite(s, 1, strlen(s) + 1, file);
+	int len;
+	
+	len = (s == NULL) ? 0 : strlen(s);
+	if (len > 0) {
+		return gbfwrite(s, 1, len + 1, file);
+	} else {
+		gbfputc(0, file);
+		return 1;
+	}
 }
+
+/*
+ * gbfputcstr: write a pascal string into a stream
+ *             return the number of written characters
+ */
 
 int
 gbfputpstr(const char *s, gbfile *file)
 {
 	int len;
 	
-	len = strlen(s);
-	if (len > 255)
-		len = 255;
+	len = (s == NULL) ? 0 : strlen(s);
+	if (len > 255) len = 255;	/* the maximum size of a standard pascal string */
 	gbfputc(len, file);
-	gbfwrite(s, 1, len, file);
-	
-	return len + 1;
+	if (len > 0) {
+		gbfwrite(s, 1, len, file);
+	}
+	return (len + 1);
 }
 
-/* Thats all, sorry */
+/* Thats all, sorry. */
