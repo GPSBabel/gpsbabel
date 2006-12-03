@@ -790,15 +790,26 @@ void be_write16(void *pp, const unsigned i);
 void be_write32(void *pp, const unsigned i);
 void le_write16(void *pp, const unsigned i);
 void le_write32(void *pp, const unsigned i);
-float pdb_read_float(void *p);
-double pdb_read_double(void *p);
-void pdb_write_double(void *pp, double d);
-void pdb_write_float(void *pp, float d);
 
-double le_read_double(void *p);
+double endian_read_double(void* ptr, int read_le);
+float  endian_read_float(void* ptr, int read_le);
+void   endian_write_double(void* ptr, double d, int write_le);
+void   endian_write_float(void* ptr, float f, int write_le);
+
+float  be_read_float(void *p);
 double be_read_double(void *p);
-void le_write_double(void *p, double d);
-void be_write_double(void *p, double d);
+void   be_write_float(void *pp, float d);
+void   be_write_double(void *pp, double d);
+
+float  le_read_float(void *p);
+double le_read_double(void *p);
+void   le_write_float(void *ptr, float f);
+void   le_write_double(void *p, double d);
+
+#define pdb_write_float be_write_float
+#define pdb_read_float be_read_float
+#define pdb_write_double be_write_double
+#define pdb_read_double be_read_double
 
 /*
  * Prototypes for generic conversion routines (util.c).
