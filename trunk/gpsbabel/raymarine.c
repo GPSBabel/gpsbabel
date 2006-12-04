@@ -243,9 +243,9 @@ mkGUID(void)
 {
 	guid_t res;
 	
-	if (gpsbabel_now != 0) {
-		srand(gpsbabel_now + rand());
-		res = ((guid_t) (gpsbabel_now) << 48) | 
+	if (gpsbabel_time != 0) {
+		srand(gpsbabel_time + rand());
+		res = ((guid_t) (gpsbabel_time) << 48) | 
 			((guid_t)(rand() & 0xFFFF) << 32) | 
 			((guid_t)(rand() & 0xFFFF) << 16) | 
 			(rand() & 0xFFFF);
@@ -286,7 +286,10 @@ register_waypoint(const waypoint *wpt)
 	
 	if (items_in_depot >= size_of_depot) {
 		size_of_depot+=16;
-		depot = (void *) xrealloc(depot, size_of_depot * sizeof(wpt));
+		if (depot)
+			depot = (void *) xrealloc(depot, size_of_depot * sizeof(wpt));
+		else
+			depot = (void *) xmalloc(size_of_depot * sizeof(wpt));
 	}
 	
 	depot[items_in_depot] = (waypoint *)wpt;
