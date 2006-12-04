@@ -1155,6 +1155,9 @@ compare ${TMPDIR}/transform-wpt.gpx ${REFERENCE}/transform-wpt.gpx
 #
 ${PNAME} -i raymarine -f ${REFERENCE}/raymarine-sample.rwf -o gpx -F ${TMPDIR}/raymarine-sample.gpx
 compare ${TMPDIR}/raymarine-sample.gpx ${REFERENCE}/raymarine-sample.gpx
+${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -o raymarine -F ${TMPDIR}/expertgps.rwf
+compare ${TMPDIR}/expertgps.rwf ${REFERENCE}/expertgps.rwf
+
 
 
 exit 0
