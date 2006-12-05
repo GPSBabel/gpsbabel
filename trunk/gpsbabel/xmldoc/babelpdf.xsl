@@ -10,6 +10,15 @@
 <!-- <xsl:param name="fop.extensions">1</xsl:param> -->
 <xsl:param name="fop1.extensions" select="1" />
 
+
+<xsl:template match="userinput">
+  <fo:block background-color="#E5E9EB" padding="6pt" 
+		border="1pt dashed #000000">
+    <xsl:call-template name="inline.boldmonoseq"/>
+  </fo:block>
+</xsl:template>
+
+
 <xsl:template match="simplelist">
   <!-- with no type specified, the default is 'vert' -->
   <xsl:variable name="explicit.table.width">
