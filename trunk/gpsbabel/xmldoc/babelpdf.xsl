@@ -7,10 +7,13 @@
 
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
 
-<!-- <xsl:param name="fop.extensions">1</xsl:param> -->
+<!-- turn on extensions for newer versions of fop.  In particular, this makes
+     the XSL generate an fo bookmark-tree, which fop translates into bookmarks
+     in the PDF.   RLP -->
 <xsl:param name="fop1.extensions" select="1" />
 
-
+<!-- This template formats userinput as a block-level element and adds the
+     background and border we use in the HTML doc, for consistency.  RLP -->
 <xsl:template match="userinput">
   <fo:block background-color="#E5E9EB" padding="6pt" 
 		border="1pt dashed #000000">
@@ -18,7 +21,9 @@
   </fo:block>
 </xsl:template>
 
-
+<!-- This template is used to get rid of a lot of warnings we were getting
+     from fop due to the fact that it doesn't support table-layout="auto".
+     Auto is apparently the default if no table layout is specified. RLP -->
 <xsl:template match="simplelist">
   <!-- with no type specified, the default is 'vert' -->
   <xsl:variable name="explicit.table.width">
