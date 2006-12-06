@@ -165,7 +165,7 @@ my_writewpt(const waypoint *wpt)
 	be_write16( &rec->crt_hour, tm->tm_hour );
 	be_write16( &rec->crt_mday, tm->tm_mday );
 	be_write16( &rec->crt_mon, tm->tm_mon + 1 );
-	be_write16( &rec->crt_year, tm->tm_mon + 1900 );
+	be_write16( &rec->crt_year, tm->tm_year + 1900 );
 	
         be_write16( &rec->unknown, 0);
 	
@@ -174,7 +174,7 @@ my_writewpt(const waypoint *wpt)
 	be_write16( &rec->xx_hour, tm->tm_hour );
 	be_write16( &rec->xx_mday, tm->tm_mday );
 	be_write16( &rec->xx_mon, tm->tm_mon + 1 );
-	be_write16( &rec->xx_year, tm->tm_mon + 1900 );
+	be_write16( &rec->xx_year, tm->tm_year + 1900 );
 	
         be_write16( &rec->unknown2, 0);
 	
