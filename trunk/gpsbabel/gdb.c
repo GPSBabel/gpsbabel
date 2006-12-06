@@ -87,8 +87,8 @@
 
 /* %%% local vars %%% */
 
-/* static char gdb_release[] = "$Revision: 1.43 $"; */
-static char gdb_release_date[] = "$Date: 2006-11-01 22:23:39 $";
+/* static char gdb_release[] = "$Revision: 1.44 $"; */
+static char gdb_release_date[] = "$Date: 2006-12-06 21:55:59 $";
 
 static FILE *fin, *fout;
 static char *fin_name, *fout_name;
@@ -1244,7 +1244,7 @@ gdb_write_waypt(const waypoint *wpt, const int hidden)
 
 	gdb_fwrite_alt(GMSD_GET(temperature, 0), 0);	/* temperature */
 	
-	if (wpt->creation_time != 0)			/* creation time */
+	if (wpt->creation_time > 0)			/* creation time */
 	{
 	    gdb_fwrite(&c1, 1);
 	    gdb_fwrite_int(wpt->creation_time);
@@ -1548,7 +1548,7 @@ gdb_write_track(const route_head *track)
 	    gdb_fwrite_alt(wpt->altitude, unknown_alt);	/* altitude */
 	    
 
-	    if (wpt->creation_time != 0)			/* creation time */
+	    if (wpt->creation_time > 0)			/* creation time */
 	    {
 		gdb_fwrite(&c1, 1);
 		gdb_fwrite_int(wpt->creation_time);
