@@ -26,5 +26,5 @@ IFIELD	LON_DECIMAL, "", "%10.6f"
 IFIELD	ALT_METERS, "", "%10.0f"
 # Reports are that this format stores in local time, not GMT as 
 # originally thought.
-# IFIELD	GMT_TIME, "", "%a %b %d %T %Y"
-IFIELD	LOCAL_TIME, "", "%a %b %d %T %Y"
+# IFIELD	GMT_TIME, "", "%a %b %d %H:%M:%S %Y"
+IFIELD	LOCAL_TIME, "", "%a %b %d %H:%M:%S %Y"
