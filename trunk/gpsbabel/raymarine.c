@@ -306,7 +306,7 @@ write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char
 	/* ToDo: remove possible line-breaks from notes */
 	
 	notes = (wpt->notes != NULL) ? wpt->notes : "";
-	time = (wpt->creation_time != 0) ? TIMET_TO_EXCEL(wpt->creation_time) : TIMET_TO_EXCEL(gpsbabel_time);
+	time = (wpt->creation_time > 0) ? TIMET_TO_EXCEL(wpt->creation_time) : TIMET_TO_EXCEL(gpsbabel_time);
 	
 	name = mkshort(hshort, wpt->shortname);
 	gbfprintf(fout, "[Wp%d]\n"
@@ -335,7 +335,7 @@ write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char
 			"RcShow=0\n"
 			"SeaTemp=%.15f\n"
 			"Depth=%.15f\n"
-			"Time=%.15f\n"
+			"Time=%.10f00000\n"
 			"GUID=%s\n",
 		0.0, -32678.0, 65535.0, time, GUID
 	);
