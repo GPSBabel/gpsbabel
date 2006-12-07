@@ -94,6 +94,16 @@ ${PNAME} -i gpx -f ${TMPDIR}/gtm1.gpx -o gtm -F ${TMPDIR}/gtm.gtm
 ${PNAME} -i gtm -f ${TMPDIR}/gtm.gtm -o gpx -F ${TMPDIR}/gtm2.gpx
 compare ${TMPDIR}/gtm1.gpx ${TMPDIR}/gtm2.gpx
 bincompare ${TMPDIR}/gtm.gtm ${REFERENCE}/sample.gtm
+#
+# GTM compressed files
+# ... do the same as above but with gzipped gtm files
+#
+rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
+${PNAME} -i gtm -f ${REFERENCE}/sample.gtm.gz -o gpx -F ${TMPDIR}/gtm1.gpx
+${PNAME} -i gpx -f ${TMPDIR}/gtm1.gpx -o gtm -F ${TMPDIR}/gtm.gtm.gz
+${PNAME} -i gtm -f ${TMPDIR}/gtm.gtm.gz -o gpx -F ${TMPDIR}/gtm2.gpx
+compare ${TMPDIR}/gtm1.gpx ${TMPDIR}/gtm2.gpx
+bincompare ${TMPDIR}/gtm.gtm.gz ${REFERENCE}/sample.gtm.gz
 
 # Magellan Mapsend
 rm -f ${TMPDIR}/mm.mapsend ${TMPDIR}/mm.gps

@@ -21,7 +21,7 @@
 #include "defs.h"
 #include "jeeps/gpsmath.h"
 
-static FILE *fd, *ofd;
+static gbfile *file_in, *file_out;
 static int indatum;
 static int wp_count;
 static int ws_count;
@@ -49,78 +49,35 @@ static int start_new;
 
 /* Read functions, according to specification. */
 
-static void
-fread_discard(FILE *fd, int len)
-{
-	char buf[1024];
-	fread(buf, 1, len, fd);
-}
-
-static unsigned char
-fread_byte(FILE *fd)
-{
-	unsigned char buf[1];
-	fread(buf, 1, 1, fd);
-	return buf[0];
-}
+#define fread_discard(a,b) gbfseek(a, (b), SEEK_CUR)
+#define fread_byte(a) (unsigned char) gbfgetc(a)
 
 #if 0
 /* not used */
 static short int
-fread_bool(FILE *fd)
+fread_bool(gbfile *fd)
 {
 	char buf[2];
-	fread(buf, 2, 1, fd);
+	gbfread(buf, 2, 1, fd);
 	return le_read16(buf) ? 1 : 0;
 }
 #endif
 
-static short int
-fread_integer(FILE *fd)
-{
-	char buf[2];
-	fread(buf, 2, 1, fd);
-	return le_read16(buf);
-}
-
-static int
-fread_long(FILE *fd)
-{
-	char buf[4];
-	fread(buf, 4, 1, fd);
-	return le_read32(buf);
-}
-
-static float
-fread_single(FILE *fd)
-{
-	unsigned char buf[4];
-	float f;
-	int i;
-	fread(buf, 4, 1, fd);
-	i = le_read32(buf);
-	memcpy(&f, &i, 4);
-	return f;
-}
-
-static double
-fread_double(FILE *fd)
-{
-	char buf[8];
-	fread(buf, 8, 1, fd);
-	return le_read_double(buf);
-}
+#define fread_integer(a) gbfgetint16(a)
+#define fread_long(a) gbfgetint32(a)
+#define fread_single(a) gbfgetflt(a)
+#define fread_double(a) gbfgetdbl(a)
 
 static char *
-fread_string(FILE *fd)
+fread_string(gbfile *fd)
 {
-	int len = fread_integer(fd);
 	char *val;
+	int len = fread_integer(fd);
 	
 	if (len == 0) return NULL;
 	
 	val = xmalloc(len+1);
-	fread(val, 1, len, fd);
+	gbfread(val, 1, len, fd);
 	while (len != 0 && val[len-1] == ' ')
 		len--;
 	val[len] = 0;
@@ -128,19 +85,21 @@ fread_string(FILE *fd)
 }
 
 static void
-fread_string_discard(FILE *fd)
+fread_string_discard(gbfile *fd)
 {
 	char *temp = fread_string(fd);
+
 	if (temp != NULL) {
 		xfree(temp);
 	}
 }
 
 static char *
-fread_fixedstring(FILE *fd, int len)
+fread_fixedstring(gbfile *fd, int len)
 {
 	char *val = xmalloc(len+1);
-	fread(val, 1, len, fd);
+
+	gbfread(val, 1, len, fd);
 	while (len != 0 && val[len-1] == ' ')
 		len--;
 	val[len] = 0;
@@ -150,68 +109,28 @@ fread_fixedstring(FILE *fd, int len)
 /* Write functions, according to specification. */
 
 static void
-fwrite_null(FILE *fd, int len)
+fwrite_null(gbfile *fd, int len)
 {
 	char buf[1024];
+
 	memset(buf, 0, len);
-	fwrite(buf, 1, len, fd);
+	gbfwrite(buf, 1, len, fd);
 }
 
-static void
-fwrite_byte(FILE *fd, unsigned char val)
-{
-	fwrite(&val, 1, 1, fd);
-}
+#define fwrite_byte(a,b) gbfputc((signed char)(b), a)
+#define fwrite_bool(a,b) gbfputuint16((b) ? 0xffff : 0, a)
+#define fwrite_integer(a,b) gbfputint16((b), a)
+#define fwrite_long(a,b) gbfputint32((b), a)
+#define fwrite_single(a,b) gbfputflt((b), a)
+#define fwrite_double(a,b) gbfputdbl((b), a)
 
 static void
-fwrite_bool(FILE *fd, short int val)
-{
-	char buf[2];
-	buf[0] = buf[1] = val ? 0xff : 0x00;
-	fwrite(buf, 2, 1, fd);
-}
-
-static void
-fwrite_integer(FILE *fd, short int val)
-{
-	char buf[2];
-	le_write16(buf, val);
-	fwrite(buf, 2, 1, fd);
-}
-
-static void
-fwrite_long(FILE *fd, int val)
-{
-	char buf[4];
-	le_write32(buf, val);
-	fwrite(buf, 4, 1, fd);
-}
-
-static void
-fwrite_single(FILE *fd, float val)
-{
-	char buf[4];
-	int i;
-	memcpy(&i, &val, 4);
-	le_write32(buf, i);
-	fwrite(buf, 4, 1, fd);
-}
-
-static void
-fwrite_double(FILE *fd, double val)
-{
-	char buf[8];
-	le_write_double(buf,val);
-	fwrite(buf, 8, 1, fd);
-}
-
-static void
-fwrite_string(FILE *fd, const char *str)
+fwrite_string(gbfile *fd, const char *str)
 {
 	if (str && str[0]) {
 		int len = strlen(str);
 		fwrite_integer(fd, len);
-		fwrite(str, 1, len, fd);
+		gbfwrite(str, 1, len, fd);
 	}
 	else {
 		fwrite_integer(fd, 0);
@@ -219,15 +138,16 @@ fwrite_string(FILE *fd, const char *str)
 }
 
 void
-fwrite_fixedstring(FILE *fd, const char *str, int fieldlen)
+fwrite_fixedstring(gbfile *fd, const char *str, int fieldlen)
 {
 	int len = str ? strlen(str) : 0;
+
 	if (len > fieldlen)
 		len = fieldlen;
 	if (str)
-		fwrite(str, 1, len, fd);
+		gbfwrite(str, 1, len, fd);
 	for (; len != fieldlen; len++)
-		fputc(' ', fd);
+		gbfputc(' ', fd);
 }
 
 /* Auxiliar functions */
@@ -442,9 +362,9 @@ gtm_rd_init(const char *fname)
 {
 	int version;
 	char *name;
-	fd = xfopen(fname, "rb", MYNAME);
-	version = fread_integer(fd);
-	name = fread_fixedstring(fd, 10);
+	file_in = gbfopen_le(fname, "rb", MYNAME);
+	version = fread_integer(file_in);
+	name = fread_fixedstring(file_in, 10);
 	if (version == -29921)
 		fatal(MYNAME ": Uncompress the file first\n");
 	if (strcmp(name, "TrackMaker") != 0)
@@ -454,31 +374,31 @@ gtm_rd_init(const char *fname)
 	xfree(name);
 
 	/* Header */
-	fread_discard(fd, 15);
-	ws_count = fread_long(fd);
-	fread_discard(fd, 4);
-	wp_count = fread_long(fd);
-	tr_count = fread_long(fd);
-	rt_count = fread_long(fd);
-	fread_discard(fd, 16);
-	im_count = fread_long(fd);
-	ts_count = fread_long(fd);
-	fread_discard(fd, 28);
-	fread_string_discard(fd);
-	fread_string_discard(fd);
-	fread_string_discard(fd);
-	fread_string_discard(fd);
+	fread_discard(file_in, 15);
+	ws_count = fread_long(file_in);
+	fread_discard(file_in, 4);
+	wp_count = fread_long(file_in);
+	tr_count = fread_long(file_in);
+	rt_count = fread_long(file_in);
+	fread_discard(file_in, 16);
+	im_count = fread_long(file_in);
+	ts_count = fread_long(file_in);
+	fread_discard(file_in, 28);
+	fread_string_discard(file_in);
+	fread_string_discard(file_in);
+	fread_string_discard(file_in);
+	fread_string_discard(file_in);
 
 	/* User Grid and Datum */
-	fread_discard(fd, 34);
-	set_datum(fread_integer(fd));
-	fread_discard(fd, 22);
+	fread_discard(file_in, 34);
+	set_datum(fread_integer(file_in));
+	fread_discard(file_in, 22);
 }
 
 static void 
 gtm_rd_deinit(void) 
 {
-	fclose(fd);
+	gbfclose(file_in);
 }
 
 static void count_route_waypts(const waypoint *wpt) { rt_count++; }
@@ -491,58 +411,58 @@ gtm_wr_init(const char *fname)
 	track_disp_all(NULL, NULL, count_track_waypts);
 	route_disp_all(NULL, NULL, count_route_waypts);
 
-	ofd = xfopen(fname, "wb", MYNAME);
+	file_out = gbfopen_le(fname, "wb", MYNAME);	/* little endian */
 
 	/* Header */
-	fwrite_integer(ofd, 211);
-	fwrite_fixedstring(ofd, "TrackMaker", 10);
-	fwrite_byte(ofd, 0);
-	fwrite_byte(ofd, 0);
-	fwrite_byte(ofd, 8);
-	fwrite_byte(ofd, 0);
-	fwrite_byte(ofd, 0);
-	fwrite_byte(ofd, 0);
-	fwrite_byte(ofd, 0);
-	fwrite_long(ofd, 0);
-	fwrite_long(ofd, 16777215);
-	fwrite_long(ofd, waypt_count() ? 4 : 0); /* num waypoint styles */
-	fwrite_long(ofd, 0);
-	fwrite_long(ofd, waypt_count()); /* num waypoints */
-	fwrite_long(ofd, tr_count);
-	fwrite_long(ofd, rt_count);
-	fwrite_single(ofd, 0); /* maxlon */
-	fwrite_single(ofd, 0); /* minlon */
-	fwrite_single(ofd, 0); /* maxlat */
-	fwrite_single(ofd, 0); /* minlat */
-	fwrite_long(ofd, 0);
-	fwrite_long(ofd, track_count()); /* num tracklog styles */
-	fwrite_single(ofd, 0);
-	fwrite_single(ofd, 0);
-	fwrite_bool(ofd, 0);
-	fwrite_bool(ofd, 0);
-	fwrite_bool(ofd, 0);
-	fwrite_bool(ofd, 0);
-	fwrite_bool(ofd, 0);
-	fwrite_bool(ofd, 0);
-	fwrite_bool(ofd, 0);
-	fwrite_bool(ofd, 0);
-	fwrite_bool(ofd, 0);
-	fwrite_bool(ofd, 0);
-	fwrite_string(ofd, "Times New Roman");
-	fwrite_string(ofd, "");
-	fwrite_string(ofd, "");
-	fwrite_string(ofd, "");
+	fwrite_integer(file_out, 211);
+	fwrite_fixedstring(file_out, "TrackMaker", 10);
+	fwrite_byte(file_out, 0);
+	fwrite_byte(file_out, 0);
+	fwrite_byte(file_out, 8);
+	fwrite_byte(file_out, 0);
+	fwrite_byte(file_out, 0);
+	fwrite_byte(file_out, 0);
+	fwrite_byte(file_out, 0);
+	fwrite_long(file_out, 0);
+	fwrite_long(file_out, 16777215);
+	fwrite_long(file_out, waypt_count() ? 4 : 0); /* num waypoint styles */
+	fwrite_long(file_out, 0);
+	fwrite_long(file_out, waypt_count()); /* num waypoints */
+	fwrite_long(file_out, tr_count);
+	fwrite_long(file_out, rt_count);
+	fwrite_single(file_out, 0); /* maxlon */
+	fwrite_single(file_out, 0); /* minlon */
+	fwrite_single(file_out, 0); /* maxlat */
+	fwrite_single(file_out, 0); /* minlat */
+	fwrite_long(file_out, 0);
+	fwrite_long(file_out, track_count()); /* num tracklog styles */
+	fwrite_single(file_out, 0);
+	fwrite_single(file_out, 0);
+	fwrite_bool(file_out, 0);
+	fwrite_bool(file_out, 0);
+	fwrite_bool(file_out, 0);
+	fwrite_bool(file_out, 0);
+	fwrite_bool(file_out, 0);
+	fwrite_bool(file_out, 0);
+	fwrite_bool(file_out, 0);
+	fwrite_bool(file_out, 0);
+	fwrite_bool(file_out, 0);
+	fwrite_bool(file_out, 0);
+	fwrite_string(file_out, "Times New Roman");
+	fwrite_string(file_out, "");
+	fwrite_string(file_out, "");
+	fwrite_string(file_out, "");
 
 	/* User Grid and Datum */
-	fwrite_null(ofd, 34);
-	fwrite_integer(ofd, 217); /* WGS84 */
-	fwrite_null(ofd, 22);
+	fwrite_null(file_out, 34);
+	fwrite_integer(file_out, 217); /* WGS84 */
+	fwrite_null(file_out, 22);
 }
 
 static void
 gtm_wr_deinit(void)
 {
-	fclose(ofd);
+	gbfclose(file_out);
 }
 
 static void
@@ -559,54 +479,54 @@ gtm_read(void)
 
 	/* Image information */
 	for (i = 0; i != im_count; i++) {
-		fread_string_discard(fd);
-		fread_string_discard(fd);
-		fread_discard(fd, 30);
+		fread_string_discard(file_in);
+		fread_string_discard(file_in);
+		fread_discard(file_in, 30);
 	}
 
 	/* Waypoints */
 	for (i = 0; i != wp_count; i++) {
 		wpt = waypt_new();
-		wpt->latitude = fread_double(fd);
-		wpt->longitude = fread_double(fd);
+		wpt->latitude = fread_double(file_in);
+		wpt->longitude = fread_double(file_in);
 		convert_datum(&wpt->latitude, &wpt->longitude);
-		wpt->shortname = fread_fixedstring(fd, 10);
-		wpt->description = fread_string(fd);
-		icon = fread_integer(fd);
+		wpt->shortname = fread_fixedstring(file_in, 10);
+		wpt->description = fread_string(file_in);
+		icon = fread_integer(file_in);
 		if (icon < sizeof(icon_descr)/sizeof(char*))
 			wpt->icon_descr = icon_descr[icon];
-		fread_discard(fd, 1);
-		wpt->creation_time = fread_long(fd);
+		fread_discard(file_in, 1);
+		wpt->creation_time = fread_long(file_in);
 		if (wpt->creation_time)
 			wpt->creation_time += EPOCH89DIFF;
-		fread_discard(fd, 2);
-		wpt->altitude = fread_single(fd);
+		fread_discard(file_in, 2);
+		wpt->altitude = fread_single(file_in);
 		if (wpt->altitude == unknown_alt_gtm)
 			wpt->altitude = unknown_alt;
-		fread_discard(fd, 2);
+		fread_discard(file_in, 2);
 		waypt_add(wpt);
 	}
 
 	/* Waypoint Styles */
 	if (wp_count) {
 		for (i = 0; i != ws_count; i++) {
-			fread_discard(fd, 4);
-			fread_string_discard(fd);
-			fread_discard(fd, 24);
+			fread_discard(file_in, 4);
+			fread_string_discard(file_in);
+			fread_discard(file_in, 24);
 		}
 	}
 
 	/* Tracklogs */
 	for (i = 0; i != tr_count; i++) {
 		wpt = waypt_new();
-		wpt->latitude = fread_double(fd);
-		wpt->longitude = fread_double(fd);
+		wpt->latitude = fread_double(file_in);
+		wpt->longitude = fread_double(file_in);
 		convert_datum(&wpt->latitude, &wpt->longitude);
-		wpt->creation_time = fread_long(fd);
+		wpt->creation_time = fread_long(file_in);
 		if (wpt->creation_time)
 			wpt->creation_time += EPOCH89DIFF;
-		start_new = fread_byte(fd);
-		wpt->altitude = fread_single(fd);
+		start_new = fread_byte(file_in);
+		wpt->altitude = fread_single(file_in);
 		if (wpt->altitude == unknown_alt_gtm)
 			wpt->altitude = unknown_alt;
 		if (start_new || !trk_head) {
@@ -622,30 +542,30 @@ gtm_read(void)
 	/* Tracklog styles */
 	trk_head = first_trk_head;
 	for (i = 0; i != ts_count && i != real_tr_count; i++) {
-		trk_head->rte_name = fread_string(fd);
-		fread_discard(fd, 12);
+		trk_head->rte_name = fread_string(file_in);
+		fread_discard(file_in, 12);
 		trk_head = (route_head *)QUEUE_NEXT(&trk_head->Q);
 	}
 
 	/* Routes */
 	for (i = 0; i != rt_count; i++) {
 		wpt = waypt_new();
-		wpt->latitude = fread_double(fd);
-		wpt->longitude = fread_double(fd);
+		wpt->latitude = fread_double(file_in);
+		wpt->longitude = fread_double(file_in);
 		convert_datum(&wpt->latitude, &wpt->longitude);
-		wpt->shortname = fread_fixedstring(fd, 10);
-		wpt->description = fread_string(fd);
-		route_name = fread_string(fd);
-		icon = fread_integer(fd);
+		wpt->shortname = fread_fixedstring(file_in, 10);
+		wpt->description = fread_string(file_in);
+		route_name = fread_string(file_in);
+		icon = fread_integer(file_in);
 		if (icon < sizeof(icon_descr)/sizeof(char*))
 			wpt->icon_descr = icon_descr[icon];
-		fread_discard(fd, 1);
-		start_new = fread_byte(fd);
-		fread_discard(fd, 6);
-		wpt->altitude = fread_single(fd);
+		fread_discard(file_in, 1);
+		start_new = fread_byte(file_in);
+		fread_discard(file_in, 6);
+		wpt->altitude = fread_single(file_in);
 		if (wpt->altitude == unknown_alt_gtm)
 			wpt->altitude = unknown_alt;
-		fread_discard(fd, 2);
+		fread_discard(file_in, 2);
 
 		if (start_new || !rte_head) {
 			rte_head = route_head_alloc();
@@ -672,22 +592,22 @@ int icon_from_descr(const char *descr)
 
 static void write_waypt(const waypoint *wpt)
 {
-	fwrite_double(ofd, wpt->latitude);
-	fwrite_double(ofd, wpt->longitude);
-	fwrite_fixedstring(ofd, wpt->shortname, 10);
-	fwrite_string(ofd, wpt->description);
-	fwrite_integer(ofd, icon_from_descr(wpt->icon_descr));
-	fwrite_byte(ofd, 3);
+	fwrite_double(file_out, wpt->latitude);
+	fwrite_double(file_out, wpt->longitude);
+	fwrite_fixedstring(file_out, wpt->shortname, 10);
+	fwrite_string(file_out, wpt->description);
+	fwrite_integer(file_out, icon_from_descr(wpt->icon_descr));
+	fwrite_byte(file_out, 3);
 	if (wpt->creation_time)
-		fwrite_long(ofd, wpt->creation_time-EPOCH89DIFF);
+		fwrite_long(file_out, wpt->creation_time-EPOCH89DIFF);
 	else
-		fwrite_long(ofd, 0);
-	fwrite_integer(ofd, 0);
+		fwrite_long(file_out, 0);
+	fwrite_integer(file_out, 0);
 	if (wpt->altitude == unknown_alt)
-		fwrite_single(ofd, unknown_alt_gtm);
+		fwrite_single(file_out, unknown_alt_gtm);
 	else
-		fwrite_single(ofd, wpt->altitude);
-	fwrite_integer(ofd, 0);
+		fwrite_single(file_out, wpt->altitude);
+	fwrite_integer(file_out, 0);
 }
 
 static void start_rte(const route_head *rte)
@@ -698,44 +618,44 @@ static void start_rte(const route_head *rte)
 
 static void write_trk_waypt(const waypoint *wpt)
 {
-	fwrite_double(ofd, wpt->latitude);
-	fwrite_double(ofd, wpt->longitude);
-	fwrite_long(ofd, wpt->creation_time-EPOCH89DIFF);
-	fwrite_byte(ofd, start_new);
+	fwrite_double(file_out, wpt->latitude);
+	fwrite_double(file_out, wpt->longitude);
+	fwrite_long(file_out, wpt->creation_time-EPOCH89DIFF);
+	fwrite_byte(file_out, start_new);
 	if (wpt->altitude == unknown_alt)
-		fwrite_single(ofd, unknown_alt_gtm);
+		fwrite_single(file_out, unknown_alt_gtm);
 	else
-		fwrite_single(ofd, wpt->altitude);
+		fwrite_single(file_out, wpt->altitude);
 	start_new = 0;
 }
 
 static void write_trk_style(const route_head *trk)
 {
-	fwrite_string(ofd, trk->rte_name);
-	fwrite_byte(ofd, 1);
-	fwrite_long(ofd, 0);
-	fwrite_single(ofd, 0);
-	fwrite_byte(ofd, 0);
-	fwrite_integer(ofd, 0);
+	fwrite_string(file_out, trk->rte_name);
+	fwrite_byte(file_out, 1);
+	fwrite_long(file_out, 0);
+	fwrite_single(file_out, 0);
+	fwrite_byte(file_out, 0);
+	fwrite_integer(file_out, 0);
 }
 
 static void write_rte_waypt(const waypoint *wpt)
 {
-	fwrite_double(ofd, wpt->latitude);
-	fwrite_double(ofd, wpt->longitude);
-	fwrite_fixedstring(ofd, wpt->shortname, 10);
-	fwrite_string(ofd, wpt->description);
-	fwrite_string(ofd, rte_active->rte_name);
-	fwrite_integer(ofd, icon_from_descr(wpt->icon_descr));
-	fwrite_byte(ofd, 3);
-	fwrite_byte(ofd, start_new);
-	fwrite_long(ofd, 0);
-	fwrite_integer(ofd, 0);
+	fwrite_double(file_out, wpt->latitude);
+	fwrite_double(file_out, wpt->longitude);
+	fwrite_fixedstring(file_out, wpt->shortname, 10);
+	fwrite_string(file_out, wpt->description);
+	fwrite_string(file_out, rte_active->rte_name);
+	fwrite_integer(file_out, icon_from_descr(wpt->icon_descr));
+	fwrite_byte(file_out, 3);
+	fwrite_byte(file_out, start_new);
+	fwrite_long(file_out, 0);
+	fwrite_integer(file_out, 0);
 	if (wpt->altitude == unknown_alt)
-		fwrite_single(ofd, unknown_alt_gtm);
+		fwrite_single(file_out, unknown_alt_gtm);
 	else
-		fwrite_single(ofd, wpt->altitude);
-	fwrite_integer(ofd, 0);
+		fwrite_single(file_out, wpt->altitude);
+	fwrite_integer(file_out, 0);
 	start_new = 0;
 }
 
@@ -744,7 +664,7 @@ gtm_write(void)
 {
 	waypt_disp_all(write_waypt);
 	if (waypt_count())
-		fwrite(WAYPOINTSTYLES, 1, sizeof(WAYPOINTSTYLES)-1, ofd);
+		gbfwrite(WAYPOINTSTYLES, 1, sizeof(WAYPOINTSTYLES)-1, file_out);
 	track_disp_all(start_rte, NULL, write_trk_waypt);
 	track_disp_all(write_trk_style, NULL, NULL);
 	route_disp_all(start_rte, NULL, write_rte_waypt);
