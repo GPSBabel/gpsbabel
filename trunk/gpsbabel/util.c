@@ -1627,3 +1627,17 @@ char *xml_attribute( xml_tag *tag, char *attrname )
 	}
 	return result;
 }
+
+char *get_filename(const char *fname)
+{
+	char *res, *cb, *cs;
+	
+	cb = strrchr(fname, '\\');
+	cs = strrchr(fname, '/');
+	
+	if (cb == NULL) res = cs;
+	else if (cs == NULL) res = cb;
+	else res = (cs > cb) ? cs : cb;
+	
+	return (res == NULL) ? (char *) fname : ++res;
+}

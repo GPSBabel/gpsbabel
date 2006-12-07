@@ -726,6 +726,8 @@ char * convert_human_date_format(const char *human_datef);	/* "MM,YYYY,DD" -> "%
 char * convert_human_time_format(const char *human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
 char * pretty_deg_format(double lat, double lon, char fmt, int html);   /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
+char * get_filename(const char *fname);				/* extract the filename portion */
+
 /* 
  * Character encoding transformations.
  */
