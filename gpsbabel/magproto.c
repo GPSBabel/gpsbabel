@@ -489,15 +489,10 @@ retry:
 			/* These tracks don't have names, so derive one
 			 * from input filename.
 			 */
-			const char *s = strrchr(curfname, GB_PATHSEP);
 			char *e;
-			trk_head = route_head_alloc();
+			const char *s = get_filename(curfname);
 
-			if (s) {
-				s++; /* Skip path delim */
-			}  else {
-				s = curfname;/* use name intact */
-			}
+			trk_head = route_head_alloc();
 
 			/* Whack trailing extension if present. */
 			trk_head->rte_name = xstrdup(s);
@@ -740,12 +735,7 @@ mag_rd_init_common(const char *portname)
 	 * make a copy of it, then lop off the file extension
 	 */
 
-	curfname = strrchr(portname, GB_PATHSEP);
-	if (curfname) {
-		curfname++;  /* skip over path delimiter */
-	} else {
-		curfname = portname;
-	}
+	curfname = get_filename(portname);
 
 	/*
 	 * I'd rather not derive behaviour from filenames but since
