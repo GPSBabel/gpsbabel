@@ -10,8 +10,8 @@
 </para>
 
 <para> 
-	Supported models on USB include 
-	<simplelist columns="5">
+	Supported Garmin GPS receivers with USB include 
+	<simplelist columns="4">
 <member>Edge 205</member> 
 <member>Edge 305</member> 
 <member>eTrex Legend C</member> 
@@ -67,11 +67,12 @@
 <member>StreetPilot i2</member>
 <member>StreetPilot i3</member>
 <member>StreetPilot i5</member>
+<member>Zumo<footnoteref linkend="gpx"/></member>
 </simplelist>
 </para>
 
-<para>and most serial units including:
-<simplelist columns="5">
+<para>and most serial Garmin GPS receivers including:
+<simplelist columns="4">
 <member>eMap</member>
 <member>eTrex Camo</member>
 <member>eTrex Legend</member>
@@ -114,12 +115,12 @@
 </para>
 
 <para> 
-	To communicate with a unit serially, use the name of that
-	serial port such as "COM1" or  "/dev/cu.serial".  
+	To communicate with a Garmin GPS serially, use the name of that
+	serial port such as <filename>COM1</filename> or  <filename>/dev/cu.serial</filename>.  
 </para>
 <para>
-	To communicate via USB use "usb:" as the filename on all OSes.   
-	Thus, to read the waypoints from a Garmin USB unit and write 
+	To communicate via USB use <filename>usb:</filename> as the filename on all OSes.   
+	Thus, to read the waypoints from a Garmin USB receiver and write 
 	them to a GPX file:
 </para>
 
@@ -129,7 +130,7 @@
 	If you have multiple units attached via USB, you may provide 
 	a unit number, with zero being the implied default.  So if you 
 	have three USB models on your system, they can be addressed as 
-	"usb:0", "usb:1", and "usb:2".  To get a list of recognized devices,
+	<filename>usb:0</filename>, <filename>usb:1</filename>, and <filename>usb:2</filename>.  To get a list of recognized devices,
 	specifiy a negative number such as:
 </para>
 	<para><userinput>gpsbabel -i garmin -f usb:-1</userinput></para>
@@ -137,7 +138,7 @@
 <para> 
 When reporting problems with the Garmin format, be sure to include
 the full unit model, firmware version, and be prepared to offer
-debugging dumps by adding "-D9" to the command line, like:
+debugging dumps by adding <option>-D9</option> to the command line, like:
 </para>
 
       <para><userinput> gpsbabel -D9 -i garmin -f usb: -o gpx -F blah.gpx</userinput></para>
@@ -157,7 +158,7 @@ so they are named 'Custom 0' through 'Custom 511'.
 	getty, pppd, etc.) is using the serial port.  
 </para>
 <para>
-	For models connected via USB, we recommend use of the 'usb:' 
+	For models connected via USB, we recommend use of the <filename>usb:</filename>
 	filename.   For this to work on Windows, you must install
 	the Garmin driver.  For Linux, this will fail if have the garmin_gps
 	kernel module loaded.  
