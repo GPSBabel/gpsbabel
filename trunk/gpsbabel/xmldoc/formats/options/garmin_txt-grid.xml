@@ -1,0 +1,15 @@
+<para>
+  This value specifies the grid to be used on write.
+</para>
+<screen format="linespecific">
+# idx  short   file-header             sample
+   0   ddd     Lat/Lon hddd.ddddd      S26.25333 E27.92333
+   1   dmm     Lat/Lon hddd°mm.mmm     N33 56.539 W118 24.471
+   2   dms     Lat/Lon hddd°mm'ss.s"   S25 25 26.8 E28 06 07.3
+   3   bng     British National Grid   TQ 18919 69392
+</screen>
+<para>
+  Idx or short are valid params for this option.
+</para>
+
+
