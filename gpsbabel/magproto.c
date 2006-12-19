@@ -425,6 +425,12 @@ retry:
 		}
 	}
 
+	/* If column zero isn't a dollar sign, it's not for us */
+	if (ibuf[0] != '$') {
+		fatal(MYNAME ": line doesn't start with '$'.\n");
+	}
+
+
 	isz = strlen(ibuf);
 
 	if (isz < 5) {
