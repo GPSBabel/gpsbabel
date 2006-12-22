@@ -54,6 +54,7 @@ static DWORD mkspeed(unsigned br) {
 	case   4800: return CBR_4800;
 	case   9600: return CBR_9600;
 	case  19200: return CBR_19200;
+	case  38400: return CBR_38400;
 	case  57600: return CBR_57600;
 	case 115200: return CBR_115200;
     default:
