@@ -830,12 +830,65 @@ nmea_rd_posn_init(const char *fname)
 		fatal(MYNAME ": Could not open '%s' for position tracking.\n", fname);
 	}
 
+	gbser_flush(gbser_handle);
+
 	if (opt_baud) {
 		if (!gbser_set_speed(gbser_handle, atoi(opt_baud))) {
 			fatal(MYNAME ": Unable to set baud rate %s\n", opt_baud);
 		}
 	}
 	posn_fname = fname;
+}
+static 
+safe_print(int cnt, const char *b)  
+{
+	int i;
+	for (i = 0; i < cnt; i++) {
+		char c = isprint(b[i]) ? b[i] : '.';
+		fputc(c, stderr);
+	}
+}
+
+static 
+int hunt_sirf(void)
+{
+	/* Try to place the common BR's first to speed searching */
+	static int br[] = {38400, 9600, 57600, 115200, 19200, 4800, -1};
+	static int *brp = &br[0];
+	char ibuf[1024];
+
+	for (brp = br; *brp > 0; brp++) {
+		int rv;
+		if (global_opts.debug_level > 1) {
+			fprintf(stderr, "Trying %d\n", *brp);
+		}
+
+		/* 
+		 * Cycle our port's data speed and spray the "change to NMEA
+		 * mode to the device.
+		 */
+		gbser_set_speed(gbser_handle, *brp);
+		reset_sirf_to_nmea(*brp);
+
+		rv = gbser_read_line(gbser_handle, ibuf, sizeof(ibuf), 
+			1000, 0x0a, 0x0d);
+		/* 
+		 * If we didn't get a read error but did get a string that
+	 	 * started with a dollar sign, we're probably in NMEA mode 
+		 * now.
+		 */
+		if ((rv > -1) && (strlen(ibuf) > 0) && ibuf[0] == '$') {
+			return 1;
+		}
+
+		/*
+		 * If nothing was received, it's not a sirf part.  Fast exit.
+		 */
+		if (rv < 0) {
+			return 0;
+		}
+	}
+	return 0;
 }
 
 static waypoint *
@@ -844,6 +897,7 @@ nmea_rd_posn(posn_status *posn_status)
 	char ibuf[1024];
 	static double lt = -1;
 	int i;
+	int am_sirf = 0;
 
 	/*
 	 * Read a handful of sentences, collecting the best info we
@@ -851,14 +905,29 @@ nmea_rd_posn(posn_status *posn_status)
 	 * about to restart and thus the one we're collecting isn't going
 	 * to get any better than we now have) hand that back to the caller.
 	 */
+	
 	for (i = 0; i < 10; i++) {
 		int rv;
 		ibuf[0] = 0;
 		rv = gbser_read_line(gbser_handle, ibuf, sizeof(ibuf), 2000, 0x0a, 0x0d);
 		if (global_opts.debug_level > 1) {
-			warning( "READ: %s\n", ibuf);
+			safe_print(strlen(ibuf), ibuf);
 		}
 		if (rv < 0) {
+			if (am_sirf == 0) {
+				if (global_opts.debug_level > 1) {
+					warning(MYNAME ": Attempting sirf mode.\n");
+				}
+				/* This is tacky, we have to change speed
+				 * to 9600bps to tell it to speak NMEA at
+				 * 4800.
+				 */
+				am_sirf = hunt_sirf();
+				if (am_sirf) {
+					i = 0;
+					continue;
+				}
+			}
 			fatal(MYNAME ": No data received on %s.\n", posn_fname);
 		}
 		nmea_parse_one_line(ibuf);
@@ -1049,3 +1118,54 @@ ff_vecs_t nmea_vecs = {
 	CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
 	{ nmea_rd_posn_init, nmea_rd_posn, nmea_rd_deinit, NULL, NULL, NULL }
 };
+
+/*
+ * If we later decide to implement a "real" Sirf module, this code should
+ * go there.  For now, we try a kind of heavy handed thing - if we don't
+ * see NMEA-isms from the device, we'll go on the premise that it MAY be
+ * a SiRF Star device and send it the "speak NMEA, please" command.
+ */
+
+static void
+sirf_write(unsigned char *buf)
+{
+	int i, chksum = 0;
+	int len = buf[2] << 8 | buf[3];
+
+	for (i = 0; i < len; i++) {
+		chksum += buf[4 + i];
+	}
+	chksum &= 0x7fff;
+
+	buf[len + 4] = chksum  >> 8;
+	buf[len + 5] = chksum  & 0xff;
+
+	gbser_write(gbser_handle, buf, len + 8);  /* 4 at front, 4 at back */
+}
+
+static
+void reset_sirf_to_nmea(int br)
+{
+	static unsigned char pkt[] = {0xa0, 0xa2, 0x00, 0x18,
+		0x81, 0x02,
+		0x01, 0x01, /* GGA */
+		0x00, 0x00, /* suppress GLL */
+		0x01, 0x00, /* suppress GSA */
+		0x05, 0x00, /* suppress GSV */
+		0x01, 0x01, /* use RMC for date*/
+		0x00, 0x00, /* suppress VTG */
+		0x00, 0x01, /* output rate */
+		0x00, 0x01, /* unused recommended values */
+		0x00, 0x01, 
+		0x00, 0x01, /* ZDA */
+		0x12, 0xc0, /* 4800 bps */
+		0x00, 0x00,  /* checksum */
+		0xb0, 0xb3}; /* packet end */
+	/* repopulate bit rate */
+	pkt[26] = br >> 8;
+	pkt[27] = br & 0xff;
+
+	sirf_write(pkt);
+	gb_sleep(250 * 1000);
+	gbser_flush(gbser_handle);
+}

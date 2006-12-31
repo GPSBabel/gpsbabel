@@ -40,3 +40,11 @@ which allows realtime position reports from a GPS, such as one connected
 serially, over Bluetooth, or a USB module emulating a serial port, to be used
 with selected output formats.
 </para>
+<para>
+When used in <link linkend="tracking">realtime tracking</link> mode, if
+GPSBabel does not sense incoming NMEA sentences arriving from the port, it
+will send Sirf "reset to NMEA" commands to the port at a variety of speeds
+in an attempt to communicate with an attached GPS.   This lets devices
+like the Microsoft GPS or Pharos GPS that are Sirf chips with an integrated
+USB/Serial adapter work with this input format.
+</para>
