@@ -1137,9 +1137,9 @@ bind_fields(const header_type ht)
 static void
 parse_grid(void)
 {
+	char *str = csv_lineparse(NULL, "\t", "", 1);
 	grid_index = -1;
 	
-	char *str = csv_lineparse(NULL, "\t", "", 1);
 	if (str != NULL) {
 		if (strstr(str, "dd.ddddd") != 0) grid_index = GRID_IDX_LAT_LON_DDD;
 		else if (strstr(str, "mm.mmm") != 0) grid_index = GRID_IDX_LAT_LON_DMM;
