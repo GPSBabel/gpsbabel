@@ -839,7 +839,8 @@ nmea_rd_posn_init(const char *fname)
 	}
 	posn_fname = fname;
 }
-static 
+
+static void
 safe_print(int cnt, const char *b)  
 {
 	int i;
@@ -848,6 +849,8 @@ safe_print(int cnt, const char *b)
 		fputc(c, stderr);
 	}
 }
+
+static void reset_sirf_to_nmea(int br);
 
 static 
 int hunt_sirf(void)
