@@ -43,7 +43,7 @@
     but this seems to be used by Map&Guide when exporting to XML. 
 */
 
-static FILE *fout;
+static gbfile *fout;
 static char *filename;
 static int curr_rte_num, target_rte_num;
 static double radius;
@@ -104,8 +104,8 @@ bcr_create_waypts_from_route(route_head *route)
 	
 	QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) 
 	{
-	    wpt = waypt_dupe((waypoint *) elem);
-	    waypt_add(wpt);
+		wpt = waypt_dupe((waypoint *) elem);
+		waypt_add(wpt);
 	}
 }
 
@@ -204,14 +204,14 @@ static void
 bcr_wr_init(const char *fname)
 {
 	filename = xstrdup(fname);
-	fout = xfopen(fname, "wb", MYNAME);
+	fout = gbfopen(fname, "wb", MYNAME);
 	bcr_init_radius();
 }
 
 static void
 bcr_wr_deinit(void)
 {
-	fclose(fout);
+	gbfclose(fout);
 	xfree(filename);
 }
 
@@ -225,21 +225,21 @@ bcr_write_wpt(const waypoint *wpt)
 {
 }
 
-void bcr_write_line(FILE *fout, const char *key, int *index, const char *value)
+void bcr_write_line(gbfile *fout, const char *key, int *index, const char *value)
 {
 	if (value == NULL)				/* this is mostly used in the world of windows */
 	{						/* so we respectfully add a CR/LF on each line */
-	    fprintf(fout, "%s\r\n", key);
+		gbfprintf(fout, "%s\r\n", key);
 	}
 	else
 	{
-	    char *tmp;
-	    
-	    tmp = (value != NULL) ? xstrdup(value) : xstrdup("");
-	    if (index != NULL)
-		fprintf(fout, "%s%d=%s\r\n", key, *index, tmp);
-	    else
-		fprintf(fout, "%s=%s\r\n", key, tmp);
+		char *tmp;
+		
+		tmp = (value != NULL) ? xstrdup(value) : xstrdup("");
+		if (index != NULL)
+			gbfprintf(fout, "%s%d=%s\r\n", key, *index, tmp);
+		else
+			gbfprintf(fout, "%s=%s\r\n", key, tmp);
 	    xfree(tmp);
 	}
 }
@@ -257,34 +257,33 @@ bcr_route_header(const route_head *route)
 	if (curr_rte_num != target_rte_num) return;	
 	
 	bcr_write_line(fout, "[CLIENT]", NULL, NULL);			/* client section */
-
 	bcr_write_line(fout, "REQUEST", NULL, "TRUE");
 	
 	c = route->rte_name;
 	if (rtename_opt != 0) c = rtename_opt;
 	if (c != NULL)
-	    bcr_write_line(fout, "ROUTENAME", NULL, c);
+		bcr_write_line(fout, "ROUTENAME", NULL, c);
 	else
-	    bcr_write_line(fout, "ROUTENAME", NULL, "Route");
+		bcr_write_line(fout, "ROUTENAME", NULL, "Route");
 
 	bcr_write_line(fout, "DESCRIPTIONLINES", NULL, "1");
 	bcr_write_line(fout, "DESCRIPTION1", NULL, "");
 	
 	i = 0;
+
 	QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) 
 	{
-	    i++;
-	    wpt = (waypoint *) elem;
-	    
-	    strncpy(symbol, "Standort", sizeof(symbol));
-	    if (wpt->icon_descr != 0)
-	    {
-		icon = gt_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
-		if ((icon >= 69) && (icon <= 72))
-		    strncpy(symbol, "Town", sizeof(symbol));
-	    }
-	    snprintf(buff, sizeof(buff), "%s,%s", symbol, "999999999");
-	    bcr_write_line(fout, "STATION", &i, buff);
+		i++;
+		wpt = (waypoint *) elem;
+		
+		strncpy(symbol, "Standort", sizeof(symbol));
+		if (wpt->icon_descr != 0) {
+			icon = gt_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
+			if ((icon >= 69) && (icon <= 72))
+				strncpy(symbol, "Town", sizeof(symbol));
+		}
+		snprintf(buff, sizeof(buff), "%s,%s", symbol, "999999999");
+		bcr_write_line(fout, "STATION", &i, buff);
 	}
 	    
 	bcr_write_line(fout, "[COORDINATES]", NULL, NULL);		/* coords section */
@@ -295,18 +294,18 @@ bcr_route_header(const route_head *route)
 	i = 0;
 	QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) 
 	{
-	    i++;
-	    wpt = (waypoint *) elem;
-	    
-	    bcr_wgs84_to_mercator(wpt->latitude, wpt->longitude, &north, &east);
-	    
-	    if (north > nmax) nmax = north;
-	    if (east > emax) emax = east;
-	    if (north < nmin) nmin = north;
-	    if (east < emin) emin = east;
-	    
-	    snprintf(buff, sizeof(buff), "%d,%d", east, north);
-	    bcr_write_line(fout, "STATION", &i, buff);
+		i++;
+		wpt = (waypoint *) elem;
+		
+		bcr_wgs84_to_mercator(wpt->latitude, wpt->longitude, &north, &east);
+		
+		if (north > nmax) nmax = north;
+		if (east > emax) emax = east;
+		if (north < nmin) nmin = north;
+		if (east < emin) emin = east;
+		
+		snprintf(buff, sizeof(buff), "%d,%d", east, north);
+		bcr_write_line(fout, "STATION", &i, buff);
 	}
 	
 	bcr_write_line(fout, "[DESCRIPTION]", NULL, NULL);		/* descr. section */
@@ -314,11 +313,11 @@ bcr_route_header(const route_head *route)
 	i = 0;
 	QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) 
 	{
-	    i++;
-	    wpt = (waypoint *) elem;
-	    c = wpt->description;
-	    if (c == NULL) c = wpt->shortname;
-	    bcr_write_line(fout, "STATION", &i, c);
+		i++;
+		wpt = (waypoint *) elem;
+		c = wpt->description;
+		if (c == NULL) c = wpt->shortname;
+		bcr_write_line(fout, "STATION", &i, c);
 	}
 	
 	bcr_write_line(fout, "[ROUTE]", NULL, NULL);			/* route section */
@@ -334,17 +333,16 @@ bcr_data_write(void)
 	
 	if (global_opts.objective == rtedata)
 	{
-	    target_rte_num = 1;
-	    
-	    if (rtenum_opt != NULL)
-	    {
-		target_rte_num = atoi(rtenum_opt);
-		if (((unsigned)target_rte_num > route_count()) || (target_rte_num < 1))
-		    fatal(MYNAME ": invalid route number %d (1..%d))!\n", 
-			target_rte_num, route_count());
-	    }
-	    curr_rte_num = 0;
-	    route_disp_all(bcr_route_header, bcr_route_trailer, bcr_write_wpt);
+		target_rte_num = 1;
+		
+		if (rtenum_opt != NULL) {
+			target_rte_num = atoi(rtenum_opt);
+			if (((unsigned)target_rte_num > route_count()) || (target_rte_num < 1))
+				fatal(MYNAME ": invalid route number %d (1..%d))!\n", 
+					target_rte_num, route_count());
+			}
+		curr_rte_num = 0;
+		route_disp_all(bcr_route_header, bcr_route_trailer, bcr_write_wpt);
 	}
 }
 
