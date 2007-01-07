@@ -317,6 +317,8 @@ vecs_t vec_list[] = {
 		"ESRI shapefile",
 		"shp"
 	},
+#endif
+#if PDBFMTS_ENABLED
 	{
 		&geoniche_vecs,
 		"geoniche",
