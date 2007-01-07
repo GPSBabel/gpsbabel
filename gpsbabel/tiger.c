@@ -53,7 +53,7 @@ static double thresh_days;
  *   the projection transformations.   Some trig geek can finish that.
  */
 #if CLICKMAP
-static FILE *linkf;
+static gbfile *linkf;
 static char *clickmap = NULL;
 #endif
 
@@ -259,7 +259,7 @@ data_write(void)
 		gbfclose(urlf);
 #if CLICKMAP
 		if (clickmap) {
-			linkf = gbfopen(clickmap, "w", MY NAME);
+			linkf = gbfopen(clickmap, "w", MYNAME);
 			gbfprintf(linkf, "<map name=\"map\">\n");
 			waypt_disp_all(map_plot);
 			gbfprintf(linkf, "</map>\n");
