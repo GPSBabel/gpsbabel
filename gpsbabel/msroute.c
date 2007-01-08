@@ -578,9 +578,13 @@ msroute_read_journey(void)
 		int count = 0;
 		route_head *route;
 		waypoint *wpt;
+		char version;
 			
 		is_fatal((strncmp(head->masm, "MASM", 4) != 0), MYNAME ": Invalid or unknown data!");
-				
+			
+		version = buff[0x14];
+		is_fatal((version < 1) || (version > 7), MYNAME ": Unsupported version %d!", version);
+
 		cin = buff + 71; // sizeof(msroute_head_t);
 			
 		route = route_head_alloc();
@@ -594,6 +598,7 @@ msroute_read_journey(void)
 			short test;
 				
 			cin++;
+			if (version == 7) cin+=8;
 			
 			len = *cin++;
 			strncpy(text, cin, len);
