@@ -12,6 +12,7 @@
 <para> 
 	Supported Garmin GPS receivers with USB include 
 	<simplelist columns="4">
+<member>Astro</member> 
 <member>Edge 205</member> 
 <member>Edge 305</member> 
 <member>eTrex Legend C</member> 
@@ -25,6 +26,7 @@
 <member>Forerunner 305</member>  
 <member>Foretrex 201</member>
 <member>Foretrex 301</member> 
+<member>GPS 18<footnote id="posnonly"><para>This model does not support transfer of waypoints, tracks, or routes, but may be used with the <link linkend="tracking">realtime tracking</link> feature.</para></footnote></member>
 <member>GPSMAP 195</member> 
 <member>GPSMAP 276C</member> 
 <member>GPSMAP 295</member> 
@@ -46,7 +48,10 @@
 <member>Nuvi 300<footnote id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.</para></footnote></member>
 <member>Nuvi 310<footnoteref linkend="gpx"/></member>
 <member>Nuvi 350<footnoteref linkend="gpx"/></member>
-<member>Nuvi 360<footnoteref linkend="gpx"/></member>
+<member>Nuvi 370<footnoteref linkend="gpx"/></member>
+<member>Nuvi 660<footnoteref linkend="gpx"/></member>
+<member>Nuvi 670<footnoteref linkend="gpx"/></member>
+<member>Nuvi 680<footnoteref linkend="gpx"/></member>
 <member>Quest</member>
 <member>Quest II</member>
 <member>StreetPilot 2610</member> 
@@ -64,10 +69,17 @@
 <member>StreetPilot c510<footnoteref linkend="gpx"/></member>
 <member>StreetPilot c530<footnoteref linkend="gpx"/></member>
 <member>StreetPilot c550<footnoteref linkend="gpx"/></member>
+<member>StreetPilot c580<footnoteref linkend="gpx"/></member>
 <member>StreetPilot i2</member>
 <member>StreetPilot i3</member>
 <member>StreetPilot i5</member>
-<member>Zumo<footnoteref linkend="gpx"/></member>
+<member>Zumo 450<footnoteref linkend="gpx"/></member>
+<member>Zumo 550<footnoteref linkend="gpx"/></member>
+</simplelist>
+</para>
+<para>the following Bluetooth Garmin products:
+<simplelist columns="4">
+<member>GPS 10<footnoteref linkend="posnonly"/></member>
 </simplelist>
 </para>
 
@@ -165,3 +177,8 @@ so they are named 'Custom 0' through 'Custom 511'.
 	See the <ulink url="/osnotes.html">Operating System Notes</ulink> for details.
 </para>
 
+<para>
+This module also supports <link linkend="tracking">realtime tracking</link> 
+which allows realtime position reports from a Garmin GPS receiver over USB
+or serial.
+</para>
