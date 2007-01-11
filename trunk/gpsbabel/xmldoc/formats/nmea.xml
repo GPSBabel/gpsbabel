@@ -33,6 +33,9 @@ that work with NMEA-0183 formatted data include:
 <member>
   <ulink url="http://www.sparkfun.com/">SparkFun GPS Datalogger</ulink>
 </member>
+<member>
+  <ulink url="http://www.sonystyle.com/is-bin/INTERSHOP.enfinity/eCS/Store/en/-/USD/SY_DisplayProductInformation-Start?ProductSKU=GPSCS1">Sony GPS-CS1</ulink>
+</member>
 </simplelist>  
 <para>
 This module also supports <link linkend="tracking">realtime tracking</link> 
