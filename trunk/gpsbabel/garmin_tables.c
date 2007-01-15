@@ -3,7 +3,7 @@
     Based on information provided by Ian Cowley, Sigurd Humerfelt,
 	and Garmin MapSource
 
-    Copyright (C) 2003 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2003-2007 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -221,26 +221,26 @@ icon_mapping_t garmin_icon_table[] = {
 	 * spec and fed through some horrible awk to add ones we didn't 
 	 * have before but normalized for consistency. */
 	{ -1,  8359, "Asian Food" },
-	{ -1,  8296, "Blue Circle" },
-	{ -1,  8299, "Blue Diamond" },
-	{ -1,  8317, "Blue Letter A" },
-	{ -1,  8318, "Blue Letter B" },
-	{ -1,  8319, "Blue Letter C" },
-	{ -1,  8320, "Blue Letter D" },
-	{ -1,  8341, "Blue Number 0" },
-	{ -1,  8342, "Blue Number 1" },
-	{ -1,  8343, "Blue Number 2" },
-	{ -1,  8344, "Blue Number 3" },
-	{ -1,  8345, "Blue Number 4" },
-	{ -1,  8346, "Blue Number 5" },
-	{ -1,  8347, "Blue Number 6" },
-	{ -1,  8348, "Blue Number 7" },
-	{ -1,  8349, "Blue Number 8" },
-	{ -1,  8350, "Blue Number 9" },
-	{ -1,  8302, "Blue Oval" },
-	{ -1,  8305, "Blue Rectangle" },
-	{ -1,  8308, "Blue Square" },
-	{ -1,  8351, "Blue Triangle" },
+	{ 167,  8296, "Blue Circle" },
+	{ 168,  8299, "Blue Diamond" },
+	{ 178,  8317, "Blue Letter A" },
+	{ 181,  8318, "Blue Letter B" },
+	{ 184,  8319, "Blue Letter C" },
+	{ 187,  8320, "Blue Letter D" },
+	{ 190,  8341, "Blue Number 0" },
+	{ 193,  8342, "Blue Number 1" },
+	{ 196,  8343, "Blue Number 2" },
+	{ 199,  8344, "Blue Number 3" },
+	{ 202,  8345, "Blue Number 4" },
+	{ 205,  8346, "Blue Number 5" },
+	{ 208,  8347, "Blue Number 6" },
+	{ 211,  8348, "Blue Number 7" },
+	{ 214,  8349, "Blue Number 8" },
+	{ 217,  8350, "Blue Number 9" },
+	{ 171,  8302, "Blue Oval" },
+	{ 174,  8305, "Blue Rectangle" },
+	{ 175,  8308, "Blue Square" },
+	{ 218,  8351, "Blue Triangle" },
 	{ -1,  8254, "Border Crossing (Port Of Entry)" },
 	{ -1,   182, "Bottom Conditions" },
 	{ -1,  8360, "Deli" },
@@ -251,24 +251,24 @@ icon_mapping_t garmin_icon_table[] = {
 	{ -1,  8232, "Geographic place name, land" },
 	{ -1,  8230, "Geographic place name, Man-made" },
 	{ -1,  8231, "Geographic place name, water" },
-	{ -1,  8295, "Green circle" },
-	{ -1,  8313, "Green Letter A" },
-	{ -1,  8315, "Green Letter B" },
-	{ -1,  8314, "Green Letter C" },
-	{ -1,  8316, "Green Letter D" },
-	{ -1,  8331, "Green Number 0" },
-	{ -1,  8332, "Green Number 1" },
-	{ -1,  8333, "Green Number 2" },
-	{ -1,  8334, "Green Number 3" },
-	{ -1,  8335, "Green Number 4" },
-	{ -1,  8336, "Green Number 5" },
-	{ -1,  8337, "Green Number 6" },
-	{ -1,  8338, "Green Number 7" },
-	{ -1,  8339, "Green Number 8" },
-	{ -1,  8340, "Green Number 9" },
-	{ -1,  8301, "Green Oval" },
-	{ -1,  8304, "Green Rectangle" },
-	{ -1,  8352, "Green Triangle" },
+	{ 166,  8295, "Green circle" },
+	{ 177,  8313, "Green Letter A" },
+	{ 180,  8315, "Green Letter B" },
+	{ 183,  8314, "Green Letter C" },
+	{ 186,  8316, "Green Letter D" },
+	{ 189,  8331, "Green Number 0" },
+	{ 192,  8332, "Green Number 1" },
+	{ 195,  8333, "Green Number 2" },
+	{ 198,  8334, "Green Number 3" },
+	{ 201,  8335, "Green Number 4" },
+	{ 204,  8336, "Green Number 5" },
+	{ 207,  8337, "Green Number 6" },
+	{ 210,  8338, "Green Number 7" },
+	{ 213,  8339, "Green Number 8" },
+	{ 216,  8340, "Green Number 9" },
+	{ 170,  8301, "Green Oval" },
+	{ 173,  8304, "Green Rectangle" },
+	{ 219,  8352, "Green Triangle" },
 	{ -1, 16385, "Intersection" },
 	{ -1,  8201, "Intl freeway hwy" },
 	{ -1,  8202, "Intl national hwy" },
@@ -281,24 +281,24 @@ icon_mapping_t garmin_icon_table[] = {
 	{ -1,   168, "Null" },
 	{ -1,   180, "Open 24 Hours" },
 	{ -1,  8222, "Ramp intersection" },
-	{ -1,  8294, "Red circle" },
-	{ -1,  8309, "Red Letter A" },
-	{ -1,  8310, "Red Letter B" },
-	{ -1,  8311, "Red Letter C" },
-	{ -1,  8312, "Red Letter D" },
-	{ -1,  8321, "Red Number 0" },
-	{ -1,  8322, "Red Number 1" },
-	{ -1,  8323, "Red Number 2" },
-	{ -1,  8324, "Red Number 3" },
-	{ -1,  8325, "Red Number 4" },
-	{ -1,  8326, "Red Number 5" },
-	{ -1,  8327, "Red Number 6" },
-	{ -1,  8328, "Red Number 7" },
-	{ -1,  8329, "Red Number 8" },
-	{ -1,  8330, "Red Number 9" },
-	{ -1,  8300, "Red Oval" },
-	{ -1,  8303, "Red Rectangle" },
-	{ -1,  8353, "Red Triangle" },
+	{ 165,  8294, "Red circle" },
+	{ 176,  8309, "Red Letter A" },
+	{ 179,  8310, "Red Letter B" },
+	{ 182,  8311, "Red Letter C" },
+	{ 185,  8312, "Red Letter D" },
+	{ 188,  8321, "Red Number 0" },
+	{ 191,  8322, "Red Number 1" },
+	{ 194,  8323, "Red Number 2" },
+	{ 197,  8324, "Red Number 3" },
+	{ 200,  8325, "Red Number 4" },
+	{ 203,  8326, "Red Number 5" },
+	{ 206,  8327, "Red Number 6" },
+	{ 209,  8328, "Red Number 7" },
+	{ 212,  8329, "Red Number 8" },
+	{ 215,  8330, "Red Number 9" },
+	{ 169,  8300, "Red Oval" },
+	{ 172,  8303, "Red Rectangle" },
+	{ 220,  8353, "Red Triangle" },
 	{ -1,  8362, "Seafood" },
 	{ -1,  8194, "State Hwy" },
 	{ -1,  8363, "Steak" },
@@ -311,6 +311,37 @@ icon_mapping_t garmin_icon_table[] = {
 	{ -1, 16387, "VHF Omni-range" },
 	{ -1, 16397, "VOR-DME" },
 	{ -1, 16396, "VOR/TACAN" },
+
+	/* This block new on 1/15 from the Mapsource 6.12 beta */
+	{ 221, -1, "Contact, Blonde" },
+	{ 222, -1, "Contact, Clown" },
+	{ 223, -1, "Contact, Glasses" },
+	{ 224, -1, "Contact, Panda" },
+	{ 225, -1, "Multi-Cache" },
+	{ 226, -1, "Letterbox Cache" },
+	{ 227, -1, "Puzzle Cache" },
+	{ 228, -1, "Library" },
+	{ 229, -1, "Ground Transportation" },
+	{ 230, -1, "City Hall" },
+	{ 231, -1, "Winery" },
+	{ 232, -1, "ATV" },
+	{ 233, -1, "Big Game" },
+	{ 234, -1, "Blind" },
+	{ 235, -1, "Blood Trail" },
+	{ 236, -1, "Cover" },
+	{ 237, -1, "Covey" },
+	{ 238, -1, "Food Source" },
+	{ 239, -1, "Furbearer" },
+	{ 240, -1, "Lodge" },
+	{ 241, -1, "Small Game" },
+	{ 242, -1, "Animal Tracks" },
+	{ 243, -1, "Treed Quarry" },
+	{ 244, -1, "Tree Stand" },
+	{ 245, -1, "Truck" },
+	{ 246, -1, "Upland Game" },
+	{ 247, -1, "Waterfowl" },
+	{ 248, -1, "Water Source" },
+
 	
 	{    -1,    -1, NULL },
 };
@@ -767,3 +798,27 @@ gt_get_icao_cc(const char *country, const char *shortname)
 	} while (x->country != NULL);
 	return NULL;
 }
+
+#if 0
+
+int
+sortem(const void *a, const void *b)
+{
+	const icon_mapping_t *aa = a;
+	const icon_mapping_t *bb = b;
+
+//	return aa->mpssymnum - bb->mpssymnum;
+	return strcmp(aa->icon, bb->icon);
+
+}
+
+main()
+{
+	icon_mapping_t *i;
+	qsort(garmin_icon_table, sizeof(garmin_icon_table) / sizeof(garmin_icon_table[0]) - 1,  sizeof(garmin_icon_table[0]), sortem);
+	for (i = garmin_icon_table; i->icon; i++) {
+//		printf("%03d\t%s\n", i->mpssymnum, i->icon);
+		printf("<member>%s</member>\n", i->icon);
+	}
+}
+#endif
