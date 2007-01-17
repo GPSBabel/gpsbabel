@@ -53,7 +53,7 @@ arglist_t unicsv_args[] = {
 
 /* helpers */
 
-#define UNICSV_IS(f) (0 == strcmp(s, f))
+// #define UNICSV_IS(f) (0 == strcmp(s, f))
 #define UNICSV_CONTAINS(f) (0 != strstr(s, f))
 
 static void
@@ -94,7 +94,7 @@ unicsv_fondle_header(char *ibuf)
 		else if (UNICSV_CONTAINS("desc")) {
 			unicsv_fieldpos.desccol = i;
 		}
-		else if (UNICSV_IS("name")) {
+		else if (UNICSV_CONTAINS("name")) {
 			unicsv_fieldpos.namecol = i;
 		}
 		else if (UNICSV_CONTAINS("notes")) {
@@ -158,6 +158,7 @@ unicsv_parse_one_line(char *ibuf)
 	wpt = waypt_new();
 
 	for (i=0; s; i++, s = csv_lineparse(NULL, unicsv_fieldsep, "\"", 0)) {
+		s = lrtrim(s);
 		if (i == unicsv_fieldpos.latcol) {
 			human_to_dec( s, &wpt->latitude, &wpt->longitude, 1 );
 		}
