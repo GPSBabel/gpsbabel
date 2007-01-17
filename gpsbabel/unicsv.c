@@ -88,7 +88,7 @@ unicsv_fondle_header(char *ibuf)
 		if (UNICSV_CONTAINS("lat")) {
 			unicsv_fieldpos.latcol = i;
 		}
-		else if (UNICSV_IS("lon") || UNICSV_CONTAINS("long")) {
+		else if (UNICSV_CONTAINS("lon")) {
 			unicsv_fieldpos.loncol = i;
 		}
 		else if (UNICSV_CONTAINS("desc")) {
