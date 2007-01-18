@@ -1175,8 +1175,7 @@ compare ${TMPDIR}/expertgps.rwf ${REFERENCE}/expertgps.rwf
 rm -f ${TMPDIR}/alanwpr*
 ${PNAME} -i alanwpr -f ${REFERENCE}/alanwpr.wpr -o alanwpr -F ${TMPDIR}/alanwpr-new.wpr
 ${PNAME} -i alanwpr -f ${TMPDIR}/alanwpr-new.wpr -o gpx -F ${TMPDIR}/alanwpr-new.gpx
-grep -v '<time>.*<\/time>' ${TMPDIR}/alanwpr-new.gpx > ${TMPDIR}/alanwpr-sed.gpx
-compare ${TMPDIR}/alanwpr-sed.gpx ${REFERENCE}/alanwpr.gpx
+compare ${TMPDIR}/alanwpr-new.gpx ${REFERENCE}/alanwpr.gpx
 
 #
 # Alan Map500 tracklogs< test
@@ -1184,8 +1183,7 @@ compare ${TMPDIR}/alanwpr-sed.gpx ${REFERENCE}/alanwpr.gpx
 rm -f ${TMPDIR}/alantrl*
 ${PNAME} -i alantrl -f ${REFERENCE}/alantrl.trl -o alantrl -F ${TMPDIR}/alantrl-new.trl
 ${PNAME} -i alantrl -f ${TMPDIR}/alantrl-new.trl -o gpx -F ${TMPDIR}/alantrl-new.gpx
-grep -v '<time>.*<\/time>' ${TMPDIR}/alantrl-new.gpx > ${TMPDIR}/alantrl-sed.gpx
-compare ${TMPDIR}/alantrl-sed.gpx ${REFERENCE}/alantrl.gpx
+compare ${TMPDIR}/alantrl-new.gpx ${REFERENCE}/alantrl.gpx
 
 
 exit 0
