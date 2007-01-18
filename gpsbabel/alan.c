@@ -214,7 +214,7 @@ static void sw_bytes(void *word) {
   uint8_t *p = word;
   uint16_t *r = word;
 
-  *r = (uint16_t)(p[0] << 8 | p[1]);
+  *r = (uint16_t)(p[1] << 8 | p[0]);
 }
 static void sw_words(void *dword) {
   uint16_t *p = dword;
@@ -226,7 +226,7 @@ static void rev_bytes(void *dword) {
   uint8_t *p = dword;
   uint32_t *r = dword;
 
-  *r = (uint32_t)(p[0] << 24 | p[1] << 16 | p[2] << 8 | p[0]);
+  *r = (uint32_t)(p[3] << 24 | p[2] << 16 | p[1] << 8 | p[0]);
 }
 
 static void swap_wpthdr(struct wpthdr *wpthdr,
