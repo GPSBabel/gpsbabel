@@ -530,7 +530,7 @@ static void wpr_read(void) {
       RT->rte_desc = xstrndup(rte->comment,j+1);
     else
       RT->rte_desc = xstrdup("");
-    RT->rte_waypt_ct = rte->wptnum;
+
     route_add_head(RT);          
 
     /* route points */
@@ -577,7 +577,7 @@ static void trl_read(void) {
 	j--) {};
     TL->rte_desc = xstrndup(trkhdr->comment,j+1);
     TL->rte_num = i;
-    TL->rte_waypt_ct = trkhdr->totalpt;
+
     track_add_head(TL);          
 
     /* track points */
