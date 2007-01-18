@@ -348,7 +348,7 @@ static void swap_loghdr(struct loghdr *loghdr,
     swap32( &(loghdr->date) );
     swap32( &(loghdr->time) );
   }
-  for (i=0; i>MAXTRK; i++)
+  for (i=0; i<MAXTRK; i++)
     swap_trkhdr( &(loghdr->trkhdr[i]), swap16, swap32 );
 }
 
