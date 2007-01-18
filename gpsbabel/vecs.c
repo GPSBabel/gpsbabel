@@ -112,6 +112,8 @@ extern ff_vecs_t wbt_fvecs;
 extern ff_vecs_t gtc_vecs;
 extern ff_vecs_t dmtlog_vecs;
 extern ff_vecs_t raymarine_vecs;
+extern ff_vecs_t alanwpr_vecs;
+extern ff_vecs_t alantrl_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -616,6 +618,18 @@ vecs_t vec_list[] = {
 		"Raymarine Waypoint File (.rwf)",
 		"rwf"
 	},
+        {
+                &alanwpr_vecs,
+                "alanwpr",
+                "Alan Map500 waypoints and routes (.wpr)",
+                "wpr"
+        },
+        {
+                &alantrl_vecs,
+                "alantrl",
+                "Alan Map500 tracklogs (.trl)",
+                "trl"
+        },
 	{
 		NULL,
 		NULL,
