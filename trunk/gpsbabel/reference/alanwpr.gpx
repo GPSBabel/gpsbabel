@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<bounds minlat="28.455250000" minlon="-17.980111111" maxlat="47.650694444" maxlon="9.483111111"/>
+<wpt lat="47.650694444" lon="9.483111111">
+  <name>Home</name>
+  <cmt>Sweet_Home</cmt>
+  <desc>Sweet_Home</desc>
+</wpt>
+<wpt lat="28.620472222" lon="-17.752805556">
+  <name>Airport</name>
+  <cmt>Santa_Cruz</cmt>
+  <desc>Santa_Cruz</desc>
+</wpt>
+<wpt lat="28.830361111" lon="-17.803222222">
+  <name>GAS001</name>
+  <cmt>Barlovento</cmt>
+  <desc>Barlovento</desc>
+</wpt>
+<wpt lat="28.763444444" lon="-17.977722222">
+  <name>GAS002</name>
+  <cmt>Puntagorda</cmt>
+  <desc>Puntagorda</desc>
+</wpt>
+<wpt lat="28.766000000" lon="-17.980111111">
+  <name>Police</name>
+  <cmt>Puntagorda</cmt>
+  <desc>Puntagorda</desc>
+</wpt>
+<wpt lat="28.689583333" lon="-17.767472222">
+  <name>SMrkt01</name>
+  <cmt>Santa_Cruz</cmt>
+  <desc>Santa_Cruz</desc>
+</wpt>
+<wpt lat="28.651083333" lon="-17.881027778">
+  <name>SMrkt02</name>
+  <cmt>El_Paso</cmt>
+  <desc>El_Paso</desc>
+</wpt>
+<wpt lat="28.778305556" lon="-17.906250000">
+  <name>PARK01</name>
+  <cmt>SmallParking</cmt>
+  <desc>SmallParking</desc>
+</wpt>
+<wpt lat="28.791527778" lon="-17.799361111">
+  <name>PARK02</name>
+  <cmt>Tilos_Trail</cmt>
+  <desc>Tilos_Trail</desc>
+</wpt>
+<wpt lat="28.780388889" lon="-17.962944444">
+  <name>PARK03</name>
+  <cmt>Las_Tricia</cmt>
+  <desc>Las_Tricia</desc>
+</wpt>
+<wpt lat="28.811111111" lon="-17.805222222">
+  <name>Barloven</name>
+  <cmt>Barlovento</cmt>
+  <desc>Barlovento</desc>
+</wpt>
+<wpt lat="28.692500000" lon="-17.876888889">
+  <name>Bejenado</name>
+  <cmt>Bejenado</cmt>
+  <desc>Bejenado</desc>
+</wpt>
+<wpt lat="28.697916667" lon="-17.856750000">
+  <name>Cumbreci</name>
+  <cmt>Cumbrecita</cmt>
+  <desc>Cumbrecita</desc>
+</wpt>
+<wpt lat="28.578805556" lon="-17.838083333">
+  <name>Durazner</name>
+  <cmt>Duraznero</cmt>
+  <desc>Duraznero</desc>
+</wpt>
+<wpt lat="28.614916667" lon="-17.836777778">
+  <name>El_Pilar</name>
+  <cmt>El_Pilar</cmt>
+  <desc>El_Pilar</desc>
+</wpt>
+<wpt lat="28.689138889" lon="-17.870083333">
+  <name>El_Rodeo</name>
+  <cmt>El_Rodeo</cmt>
+  <desc>El_Rodeo</desc>
+</wpt>
+<wpt lat="28.455361111" lon="-17.843166667">
+  <name>FaroFuen</name>
+  <cmt>Fuencaliente</cmt>
+  <desc>Fuencaliente</desc>
+</wpt>
+<wpt lat="28.730166667" lon="-17.813666667">
+  <name>F.Olen</name>
+  <cmt>Fuente_Olen</cmt>
+  <desc>Fuente_Olen</desc>
+</wpt>
+<wpt lat="28.583250000" lon="-17.837527778">
+  <name>HoyoNegr</name>
+  <cmt>Hoyo_Negro</cmt>
+  <desc>Hoyo_Negro</desc>
+</wpt>
+<wpt lat="28.754305556" lon="-17.884805556">
+  <name>Muchacho</name>
+  <cmt>Rq.Muchachos</cmt>
+  <desc>Rq.Muchachos</desc>
+</wpt>
+<wpt lat="28.609750000" lon="-17.839944444">
+  <name>M.Birigo</name>
+  <cmt>M_Birigoyo</cmt>
+  <desc>M_Birigoyo</desc>
+</wpt>
+<wpt lat="28.629027778" lon="-17.802027778">
+  <name>S.Isidro</name>
+  <cmt>San_Isidro</cmt>
+  <desc>San_Isidro</desc>
+</wpt>
+<wpt lat="28.688250000" lon="-17.761611111">
+  <name>S.Maria</name>
+  <cmt>Santa_Maria</cmt>
+  <desc>Santa_Maria</desc>
+</wpt>
+<wpt lat="28.647277778" lon="-17.944055556">
+  <name>Tazacort</name>
+  <cmt>Tazacorte</cmt>
+  <desc>Tazacorte</desc>
+</wpt>
+<wpt lat="28.692805556" lon="-17.924444444">
+  <name>T.d.Time</name>
+  <cmt>Tor_del_Time</cmt>
+  <desc>Tor_del_Time</desc>
+</wpt>
+<wpt lat="28.802388889" lon="-17.906944444">
+  <name>Zarza</name>
+  <cmt>La_Zarza</cmt>
+  <desc>La_Zarza</desc>
+</wpt>
+<wpt lat="28.801638889" lon="-17.908722222">
+  <name>Zarzita</name>
+  <cmt>La_Zarzita</cmt>
+  <desc>La_Zarzita</desc>
+</wpt>
+<wpt lat="28.723027778" lon="-17.875583333">
+  <name>SRVCENTR</name>
+  <cmt>Servicecentr</cmt>
+  <desc>Servicecentr</desc>
+</wpt>
+<wpt lat="28.501916667" lon="-17.843888889">
+  <name>TGR130</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.688777778" lon="-17.927250000">
+  <name>TGR131</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.622972222" lon="-17.844805556">
+  <name>TPRLP14</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.562611111" lon="-17.836833333">
+  <name>TPRLP15</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.587416667" lon="-17.837694444">
+  <name>TPRLP16</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.619361111" lon="-17.858638889">
+  <name>TSLEP103</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.603194444" lon="-17.846388889">
+  <name>TSLEP107</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.601944444" lon="-17.880944444">
+  <name>TSLEP107</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.525138889" lon="-17.837555556">
+  <name>TSLFU110</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.536055556" lon="-17.842666667">
+  <name>TSLFU111</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.767166667" lon="-17.832916667">
+  <name>TSLSAS30</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.703972222" lon="-17.925750000">
+  <name>TSLTJ71</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.702138889" lon="-17.951472222">
+  <name>TSLTJ71a</name>
+  <cmt>Trailhead</cmt>
+  <desc>Trailhead</desc>
+</wpt>
+<wpt lat="28.561555556" lon="-17.836500000">
+  <name>GC7CF</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.518166667" lon="-17.834250000">
+  <name>GCN1TQ</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.603000000" lon="-17.877250000">
+  <name>GCNXY8</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.622666667" lon="-17.848777778">
+  <name>GCHT8C</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.480750000" lon="-17.856500000">
+  <name>GCNQXK</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.653916667" lon="-17.852722222">
+  <name>GCD098</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.455250000" lon="-17.843555556">
+  <name>GCM6N0</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.668027778" lon="-17.831361111">
+  <name>GC405B</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.651138889" lon="-17.946194444">
+  <name>GCD096</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.692055556" lon="-17.875194444">
+  <name>GCNXKV</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.703805556" lon="-17.845555556">
+  <name>GCNXMD</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.710027778" lon="-17.954611111">
+  <name>GCHND9</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.766861111" lon="-17.833194444">
+  <name>GC405C</name>
+  <cmt>Geocache</cmt>
+  <desc>Geocache</desc>
+</wpt>
+<wpt lat="28.698000000" lon="-17.949055556">
+  <name>FH-HAUS</name>
+</wpt>
+<wpt lat="28.696750000" lon="-17.950194444">
+  <name>FH-DRIVE</name>
+</wpt>
+<wpt lat="28.710055556" lon="-17.954638889">
+  <name>GCHND9-1</name>
+</wpt>
+<wpt lat="28.710944444" lon="-17.955277778">
+  <name>GCHND9-2</name>
+</wpt>
+<wpt lat="28.707222222" lon="-17.950888889">
+  <name>GCHND9-3</name>
+</wpt>
+<wpt lat="28.722111111" lon="-17.979694444">
+  <name>PL VETA</name>
+  <cmt>PLAYA VETA</cmt>
+  <desc>PLAYA VETA</desc>
+</wpt>
+<rte>
+  <name>GCHND9</name>
+  <rtept lat="28.710027778" lon="-17.954611111">
+    <name>GCHND9</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </rtept>
+  <rtept lat="28.710055556" lon="-17.954638889">
+    <name>GCHND9-1</name>
+  </rtept>
+  <rtept lat="28.710944444" lon="-17.955277778">
+    <name>GCHND9-2</name>
+  </rtept>
+  <rtept lat="28.707222222" lon="-17.950888889">
+    <name>GCHND9-3</name>
+  </rtept>
+</rte>
+</gpx>

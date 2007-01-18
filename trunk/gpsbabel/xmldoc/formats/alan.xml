@@ -1,0 +1,5 @@
+<para>
+This format supports .wpr (waypoints and routes) and .trl (tracklogs) files of
+the Alan Map 500 device.
+Support is currently limited to Alan'S Map 500 operating systems 2.x 
+</para>

@@ -45,7 +45,7 @@
 <member>GPSMAP 76CX</member> 
 <member>GPSMAP 96</member> 
 <member>GPSMAP 96C</member> 
-<member>Nuvi 300<footnote id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.</para></footnote></member>
+<member>Nuvi 300<footnote id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.  Members of this class of products do not support realtime positioning protocol.</para></footnote></member>
 <member>Nuvi 310<footnoteref linkend="gpx"/></member>
 <member>Nuvi 350<footnoteref linkend="gpx"/></member>
 <member>Nuvi 370<footnoteref linkend="gpx"/></member>
@@ -180,5 +180,5 @@ so they are named 'Custom 0' through 'Custom 511'.
 <para>
 This module also supports <link linkend="tracking">realtime tracking</link> 
 which allows realtime position reports from a Garmin GPS receiver over USB
-or serial.
+or serial.  
 </para>
