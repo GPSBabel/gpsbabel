@@ -1011,7 +1011,7 @@ xcsv_data_read(void)
 	/* Whack trailing space; leading space may matter if our field sep
 	 * is whitespace and we have leading whitespace. 
 	 */
-        buff = rtrim(buff);
+        rtrim(buff);
 
         /* skip over x many lines on the top for the prologue... */
         if ((xcsv_file.prologue_lines) && ((linecount - 1) <
