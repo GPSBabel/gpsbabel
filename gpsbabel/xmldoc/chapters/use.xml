@@ -129,7 +129,7 @@ merged data to multiple destinations.
          <para><userinput>gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx  
 -o gpsutil -F big.gps</userinput></para>
          <para> You can write the same data in different output formats:</para>
-         <para><userinput>gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx 1.wpt</userinput></para>
+         <para><userinput>gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx -F 1.wpt</userinput></para>
          <para>If you want to change the character set of input or/and
          output side you can do this with the option <option>-c
          &lt;character set&gt;</option>. You can get a complete list
