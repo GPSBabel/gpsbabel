@@ -52,5 +52,7 @@ typedef  int16_t	 gbint16;
 #endif /* defined(_MSC_VER) */
 
 typedef gbuint32	gbsize_t;
+typedef unsigned char	gbuint8;
+typedef signed char	gbint8;
 
 #endif /* gb_types_h_included */
