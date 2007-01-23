@@ -818,6 +818,8 @@ ${PNAME} -i gdb,via -f ${REFERENCE}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sampl
 compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
 ${PNAME} -i gpx -f ${REFERENCE}/gdb-sample.gpx -o gdb,ver=1 -F ${TMPDIR}/gdb-sample.gdb
 ${PNAME} -i gdb -f ${TMPDIR}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
+${PNAME} -i gdb,via -f ${REFERENCE}/gdb-sample-v3.gdb -o gpx -F ${TMPDIR}/gdb-sample_v3.gpx
+compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample_v3.gpx
 #
 # Because of Garmin coordinates storage gpx is not good for this test
 # compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
@@ -1184,6 +1186,15 @@ rm -f ${TMPDIR}/alantrl*
 ${PNAME} -i alantrl -f ${REFERENCE}/alantrl.trl -o alantrl -F ${TMPDIR}/alantrl-new.trl
 ${PNAME} -i alantrl -f ${TMPDIR}/alantrl-new.trl -o gpx -F ${TMPDIR}/alantrl-new.gpx
 compare ${TMPDIR}/alantrl-new.gpx ${REFERENCE}/alantrl.gpx
+
+#
+# Kompass / "Deutscher Alpenverein" (DAV) track format
+#
+rm -f ${TMPDIR}/kompass*
+${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -o kompass_tk -F ${TMPDIR}/kompass.tk
+compare ${TMPDIR}/kompass.tk ${REFERENCE}/track/kompass.tk
+${PNAME} -i kompass_tk -f ${REFERENCE}/track/kompass.tk -o kompass_tk -F ${TMPDIR}/kompass-2.tk
+compare ${TMPDIR}/kompass-2.tk ${REFERENCE}/track/kompass.tk
 
 
 exit 0
