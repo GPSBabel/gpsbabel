@@ -25,8 +25,6 @@
  */
 
 #include <stdio.h>
-#include <stdint.h>
-#include <sys/types.h>
 #include <time.h>
 #include "defs.h"
 
@@ -51,44 +49,44 @@
 #define TRK_COMMENT_LEN 13
 
 struct wpthdr {
-  uint32_t id;
-  int16_t num;
-  int16_t next;
-  int16_t idx[MAXWPT];
-  uint8_t used[MAXWPT];
+  gbuint32 id;
+  gbint16 num;
+  gbint16 next;
+  gbint16 idx[MAXWPT];
+  gbuint8 used[MAXWPT];
 };
 
 struct wpt {
   char name[WPT_NAME_LEN];
   char comment[WPT_COMMENT_LEN];
   struct {
-    int32_t x;				/* degree * 36000 */
-    int32_t y;				/* degree * 36000  */
+    gbint32 x;				/* degree * 36000 */
+    gbint32 y;				/* degree * 36000  */
   } pt;
-  int32_t date;
-  int32_t time;
-  int16_t usecount;
-  int8_t checked;
-  int8_t reserved;
+  gbint32 date;
+  gbint32 time;
+  gbint16 usecount;
+  gbint8 checked;
+  gbint8 reserved;
 };
 
 struct rtehdr {
-  uint32_t id;
-  int16_t num;
-  int16_t next;
-  int16_t idx[MAXRTE];
-  uint8_t used[MAXRTE];
-  int16_t rteno;
+  gbuint32 id;
+  gbint16 num;
+  gbint16 next;
+  gbint16 idx[MAXRTE];
+  gbuint8 used[MAXRTE];
+  gbint16 rteno;
 };
 
 struct rte {
   char name[RTE_NAME_LEN];
   char comment[RTE_COMMENT_LEN];
-  int16_t wptnum;
-  int16_t wptidx[MAXWPTINRTE];
-  int16_t reserved;
-  int32_t date;
-  int32_t time;
+  gbint16 wptnum;
+  gbint16 wptidx[MAXWPTINRTE];
+  gbint16 reserved;
+  gbint32 date;
+  gbint32 time;
 };
 
 struct wprdata {
@@ -99,33 +97,33 @@ struct wprdata {
 };
 
 struct trkhdr {
-  int16_t totalpt;
-  int16_t next;
+  gbint16 totalpt;
+  gbint16 next;
   char name[TRK_NAME_LEN];		/* 10, null terminated */
   char comment[TRK_COMMENT_LEN];	/* 12, null terminated */
-  uint8_t reserved[3];
-  uint32_t occupied;
-  uint32_t show;
-  uint32_t fill;
+  gbuint8 reserved[3];
+  gbuint32 occupied;
+  gbuint32 show;
+  gbuint32 fill;
 };
 
 struct loghdr {
-  uint32_t id;
-  int16_t num;
-  int16_t next;
-  int32_t date;
-  int32_t time;
+  gbuint32 id;
+  gbint16 num;
+  gbint16 next;
+  gbint32 date;
+  gbint32 time;
   struct trkhdr trkhdr[MAXTRK];
 };
 
 struct trklog {
   struct {
-    int32_t x;				/* degree * 36000 */
-    int32_t y;				/* degree * 36000  */
+    gbint32 x;				/* degree * 36000 */
+    gbint32 y;				/* degree * 36000  */
   } pt[MAXPTINTRK];
   struct {
-    int16_t speed;			/* km/h * 200 */
-    int16_t height;			/* m * 5 */
+    gbint16 speed;			/* km/h * 200 */
+    gbint16 height;			/* m * 5 */
   } sh[MAXPTINTRK];
 };
 
@@ -158,15 +156,15 @@ struct trldata {
 
 #define MAP500_PT_SCALE 36000.0
 #define pt2deg(P) ((double)(P) / MAP500_PT_SCALE)
-#define deg2pt(D) (int32_t)si_round((double)(D) * MAP500_PT_SCALE)
+#define deg2pt(D) (gbint32)si_round((double)(D) * MAP500_PT_SCALE)
 
 #define MAP500_ALTITUDE_SCALE   5.0
 #define hgt2m(A) ((double)(A) / MAP500_ALTITUDE_SCALE)
-#define m2hgt(A) (int16_t)si_round((double)(A) * MAP500_ALTITUDE_SCALE)
+#define m2hgt(A) (gbint16)si_round((double)(A) * MAP500_ALTITUDE_SCALE)
 
 #define MAP500_SPEED_SCALE    720.0
 #define sp2mps(S) ((double)(S) / MAP500_SPEED_SCALE)
-#define mps2sp(S) (int16_t)si_round((double)(S) * MAP500_SPEED_SCALE)
+#define mps2sp(S) (gbint16)si_round((double)(S) * MAP500_SPEED_SCALE)
 
 #define  BYTEORDER_TEST  0x04030201	/* 32bit reference value */
 enum {
@@ -211,22 +209,22 @@ static unsigned int byte_order(void) {
 }
 
 static void sw_bytes(void *word) {
-  uint8_t *p = word;
-  uint16_t *r = word;
+  gbuint8 *p = word;
+  gbuint16 *r = word;
 
-  *r = (uint16_t)(p[1] << 8 | p[0]);
+  *r = (gbuint16)(p[1] << 8 | p[0]);
 }
 static void sw_words(void *dword) {
-  uint16_t *p = dword;
-  uint32_t *r = dword;
+  gbuint16 *p = dword;
+  gbuint32 *r = dword;
 
-  *r = (uint32_t)(p[0] << 16 | p[1]);
+  *r = (gbuint32)(p[0] << 16 | p[1]);
 }
 static void rev_bytes(void *dword) {
-  uint8_t *p = dword;
-  uint32_t *r = dword;
+  gbuint8 *p = dword;
+  gbuint32 *r = dword;
 
-  *r = (uint32_t)(p[3] << 24 | p[2] << 16 | p[1] << 8 | p[0]);
+  *r = (gbuint32)(p[3] << 24 | p[2] << 16 | p[1] << 8 | p[0]);
 }
 
 static void swap_wpthdr(struct wpthdr *wpthdr,
@@ -403,7 +401,7 @@ static void trl_swap(struct trldata *trldata) {
 
 /**************************************************************************/
 
-static void str2lab(char *dest, char *src, size_t len, char *fmt, int n) {
+static void str2lab(char *dest, char *src, int len, char *fmt, int n) {
   int i,j;
 
   j = 0;
@@ -421,7 +419,7 @@ static void str2lab(char *dest, char *src, size_t len, char *fmt, int n) {
     memset(dest+j, ' ', len-j);
 }
 
-static void pack_time(time_t t, int32_t *date, int32_t *time) {
+static void pack_time(time_t t, gbint32 *date, gbint32 *time) {
   struct tm *tm;
 
   tm = gmtime(&t);
@@ -429,7 +427,7 @@ static void pack_time(time_t t, int32_t *date, int32_t *time) {
   *time = t % 86400;
 }
 
-static time_t unpack_time(int32_t date, int32_t time) {
+static time_t unpack_time(gbint32 date, gbint32 time) {
   time_t result;
   short year, month, day;
   static int m_to_d[12] =
