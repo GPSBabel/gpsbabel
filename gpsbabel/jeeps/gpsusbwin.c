@@ -161,7 +161,7 @@ HANDLE * garmin_usb_start(HDEVINFO* hdevinfo, SP_DEVICE_INTERFACE_DATA *infodata
 	usb_handle = CreateFile(pdd->DevicePath, GENERIC_READ|GENERIC_WRITE, 
 			0, NULL, OPEN_EXISTING, 0, NULL );
 	if (usb_handle == INVALID_HANDLE_VALUE) {
-		if (GetLastError() == ACCESS_DENIED) {
+		if (GetLastError() == ERROR_ACCESS_DENIED) {
 			warning(
 "Exclusive access is denied.  It's likely that something else such as\n"
 "Nroute, Spanner, Google Earth, or GPSGate already has control of the device\n");
