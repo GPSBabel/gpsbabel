@@ -1187,14 +1187,4 @@ ${PNAME} -i alantrl -f ${REFERENCE}/alantrl.trl -o alantrl -F ${TMPDIR}/alantrl-
 ${PNAME} -i alantrl -f ${TMPDIR}/alantrl-new.trl -o gpx -F ${TMPDIR}/alantrl-new.gpx
 compare ${TMPDIR}/alantrl-new.gpx ${REFERENCE}/alantrl.gpx
 
-#
-# Kompass / "Deutscher Alpenverein" (DAV) track format
-#
-rm -f ${TMPDIR}/kompass*
-${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -o kompass_tk -F ${TMPDIR}/kompass.tk
-compare ${TMPDIR}/kompass.tk ${REFERENCE}/track/kompass.tk
-${PNAME} -i kompass_tk -f ${REFERENCE}/track/kompass.tk -o kompass_tk -F ${TMPDIR}/kompass-2.tk
-compare ${TMPDIR}/kompass-2.tk ${REFERENCE}/track/kompass.tk
-
-
 exit 0
