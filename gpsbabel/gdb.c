@@ -51,6 +51,7 @@
 	    2006/04/19: add url i/o to tracks and routes
 	    2006/04/19: check for empty waypoint shortnames (paranioa)
 	    2006/11/01: Use version of GPSBabel and date/time of gdb.c (managed by CVS) for watermark
+	    2007/01/23: add support for GDB version 3
 */
 
 #include <stdio.h>
@@ -62,6 +63,7 @@
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
 #include "garmin_fs.h"
+#include "cet_util.h"
 
 #define MYNAME "gdb"
 
@@ -87,8 +89,8 @@
 
 /* %%% local vars %%% */
 
-/* static char gdb_release[] = "$Revision: 1.44 $"; */
-static char gdb_release_date[] = "$Date: 2006-12-06 21:55:59 $";
+/* static char gdb_release[] = "$Revision: 1.45 $"; */
+static char gdb_release_date[] = "$Date: 2007-01-25 09:27:58 $";
 
 static FILE *fin, *fout;
 static char *fin_name, *fout_name;
@@ -359,6 +361,9 @@ gdb_read_file_header(void)
 	    case 'l':
 		gdb_ver = 2;
 		break;
+	    case 'm':
+		gdb_ver = 3;
+		break;
 	    default:
 		fatal(MYNAME ": Non supported GDB version!\n");
 	}
@@ -495,21 +500,45 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	    GMSD_SET(depth, xdepth);
 	}
 	
-	gdb_fread(buff, 1);
-	gdb_fread(buff, 1);
-
-	if (gdb_fread_flag(0))
-	    gdb_fread(buff, 3);
-	else
+	if (gdb_ver >= 3) {
+	    int url_ct, unkn;
+	    char *url = NULL;
+	    
+	    unkn = gdb_fread_le(&unkn, sizeof(unkn), 32, prefix, "unknown dword(x) since v3");
 	    gdb_fread(buff, 2);
-	
-	do								/* undocumented & unused string */
-	{
-	    gdb_fread(buff, 1);
+	    
+	    gdb_fread_str(xurl, sizeof(xurl));				/* what dagmar will say */
+	    
+	    url_ct = gdb_fread_le(&url_ct, sizeof(url_ct), 32, prefix, "number of urls (since v3)");
+	    gdb_is_valid((url_ct >= 0), prefix, "Number of urls (since v3)");
+	    
+	    while (url_ct > 0) {
+		url_ct--;
+		gdb_fread_str(xurl, sizeof(xurl));			/* URL list */
+		if ((url == NULL) && (xurl[0] != '\0'))
+		    url = xstrdup(xurl);				/* keep only the first valid entry */
+	    }
+	    if (url != NULL) {
+		strncpy(xurl, url, sizeof(xurl));
+		xfree(url);
+	    }
 	}
-	while (buff[0] != 0);
+	else {	/* gdb_ver <= 2 */
+	    gdb_fread(buff, 2);
 
-	gdb_fread_str(xurl, sizeof(xurl));				/* URL */
+	    if (gdb_fread_flag(0))
+		gdb_fread(buff, 3);
+	    else
+		gdb_fread(buff, 2);
+	
+	    do								/* undocumented & unused string */
+	    {
+		gdb_fread(buff, 1);
+	    }
+	    while (buff[0] != 0);
+
+	    gdb_fread_str(xurl, sizeof(xurl));				/* URL */
+	}
 	
 	xcat = gdb_fread_le(&xcat, sizeof(xcat), 16, prefix, "category");
 	if (xcat != 0) GMSD_SET(category, xcat);
@@ -519,28 +548,42 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	    GMSD_SET(temperature, xtemp);
 	}
 
-	/* Here comes 1 .. 6 unknown bytes
-	   !!! 6 only if class > 0 !!!
-	   the field seems to be a time stamp */
-	
 	pos = ftell(fin);
 	delta = fileofs - pos;
 	gdb_is_valid(delta > 0, prefix, "waypoint final");
-	
-	if ((delta & 1) == 0)
-	{
-	    gdb_fread(buff, 1);
+
+	if (gdb_ver >= 3) {
 	    delta--;
+	    if (gdb_fread_flag(1)) {
+		gdb_is_valid((delta >= 4), prefix, "No waypoint time (v3++)");
+		gdb_fread_le(&xtime, sizeof(xtime), 32, prefix, "time");
+		gdb_is_valid((xtime > 0), prefix, "Invalid time (v3++)");
+		delta-=sizeof(xtime);
+	    }
+	    else
+		xtime = 0;
+	    if (delta > 0)	/* skip over trailing unknown bytes */
+		gdb_fread(buff, delta);
 	}
+	else { /* gdb_ver <= 2 */
 	
-	xtime = 0;
-	if (gdb_fread_flag(1))
-	{
-	    gdb_is_valid((delta == 5), prefix, "Waypoint time");
-	    gdb_fread_le(&xtime, sizeof(xtime), 32, prefix, "time");
-	}
+	    /* Here comes 1 .. 6 unknown bytes
+	       !!! 6 only if class > 0 !!!
+	       the field seems to be a time stamp */
+	       
+	    if ((delta & 1) == 0) {
+		gdb_fread(buff, 1);
+		delta--;
+	    }
+	    
+	    xtime = 0;
+	    if (gdb_fread_flag(1)) {
+		gdb_is_valid((delta == 5), prefix, "Waypoint time");
+		gdb_fread_le(&xtime, sizeof(xtime), 32, prefix, "time");
+	    }
 	    else
 		gdb_is_valid(delta==1, prefix, "No waypoint time");
+	}
 	
 	*wptclass = xclass;
 	
@@ -658,13 +701,31 @@ gdb_read_route(void)
 		gdb_fread(buff, 1);
 		gdb_is_valid((buff[0] == 1), prefix3, "last seq.(1)");
 		
-		if (gdb_ver > 1)
+		if (gdb_ver >= 2)
 		    gdb_fread(buff, 8);					/* Unknown 8 bytes since gdb v2 */
 
 		gdb_fread_str(xname, sizeof(xname));
-		if (buff[0] != 0)
+		if (xname[0] != 0)
 			route->rte_url = xstrdup(xname);
 		
+		if (gdb_ver >= 3) {
+
+		    int url_ct, unkn;
+		    
+		    gdb_fread(buff, 1);					/* Unknown byte since gdb v3 */
+		    gdb_fread_le(&url_ct, sizeof(url_ct), 32, prefix3, "number of urls (since v3)");
+		    while (url_ct > 0) {
+			url_ct--;
+			gdb_fread_str(xname, sizeof(xname));
+			if (route->rte_url == NULL)
+			    route->rte_url = xstrdup(xname);
+		    }
+		    gdb_fread_le(&unkn, sizeof(unkn), 32, prefix3, "unknown dword (since v3)");
+		    gdb_fread(buff, 1);					/* Unknown byte since gdb v3 */
+		    gdb_fread_str(xname, sizeof(xname));		/* multi-line notes */
+		    if (xname[0] != '\0')
+			route->rte_desc = xstrdup(xname);
+		}
 		wpt = gdb_create_rte_wpt(xwptname, xlat, xlon, xalt);
 		if (wpt != NULL)
 		    route_add_wpt(route, wpt);
@@ -744,8 +805,10 @@ gdb_read_route(void)
 	    if (gdb_fread_flag(1))				/* link min alt validity + alt */
 		gdb_fread(buff, 2 * sizeof(int));				
 		
-	    if (gdb_ver > 1)
+	    if (gdb_ver >= 2)
 		gdb_fread(buff, 8);				/* unknown 8 bytes since gdb v2 */
+		if (gdb_ver >= 3)
+		    gdb_fread(buff, 2);				/* unknown 8 bytes since gdb v3 */
 	}
 	
 	/* This should normally never happen; end of route is handled in main loop before this */
@@ -822,9 +885,21 @@ gdb_read_track(const size_t max_file_pos)
 	    track_add_wpt(track, wpt);
 	}
 	
-	gdb_fread_str(xname, sizeof(xname));
-	if (xname[0] != '\0')
+	if (gdb_ver >= 3) {
+	    int url_ct;
+	    
+	    gdb_fread_le(&url_ct, sizeof(url_ct), 32, prefix, "number of urls (since v3)");
+	    while (url_ct > 0) {
+		url_ct--;
+		gdb_fread_str(xname, sizeof(xname));
+		if ((track->rte_url == NULL) && (xname[0] != '\0'))
+		    track->rte_url = xstrdup(xname);
+	    }
+	} else {
+	    gdb_fread_str(xname, sizeof(xname));
+	    if (xname[0] != '\0')
 		track->rte_url = xstrdup(xname);
+	}
 	
 	return track;
 }
@@ -882,7 +957,7 @@ gdb_read_data(void)
 		    if ((warnings & 1) == 0)
 		    {
 			warnings |= 1;
-			warning(MYNAME "-%s: At least one incomplete waypoint read (%d byte(s) left).\n", prefix, delta);
+			warning(MYNAME "-%s: At least one incomplete waypoint (gdb v%d, %d byte(s) left).\n", prefix, gdb_ver, delta);
 		    }
 		    fseek(fin, curpos + reclen, SEEK_SET);
 		}
@@ -926,7 +1001,7 @@ gdb_read_data(void)
 		    if ((delta != reclen) && ((warnings & flag) == 0))
 		    {
 			warnings |= flag;
-			warning(MYNAME "-%s: At least one incomplete %s (gdb v%d.0, %d byte(s) left).\n", 
+			warning(MYNAME "-%s: At least one incomplete %s (gdb v%d, %d byte(s) left).\n", 
 			    prefix, (typ == 'R') ? "route" : "track", gdb_ver, delta);
 		    }
     		    fseek(fin, curpos + reclen, SEEK_SET);
@@ -941,7 +1016,7 @@ gdb_read_data(void)
 		    case 'D': break;
 		    case 'L': break;
 		    case 'W': break;
-		    default: warning(MYNAME "-%s: Found unknown record type \"%c\"!\n", prefix, typ);
+		    default: warning(MYNAME "-%s: Found unknown record type \"%c\" (gdb v%d)!\n", prefix, typ, gdb_ver);
 		}
     		fseek(fin, curpos + reclen, SEEK_SET);
 	    }
@@ -1449,7 +1524,7 @@ gdb_write_route(const route_head *route, const waypoint **list, const int count)
 		gdb_fwrite_int(GPS_Math_Deg_To_Semi(minlon));
 		gdb_fwrite_alt(minalt, -unknown_alt);
 
-		if (gdb_ver > 1)
+		if (gdb_ver >= 2)
 		    gdb_fwrite(ffbuff, 8);
 	    }
 	    
@@ -1475,7 +1550,7 @@ gdb_write_route(const route_head *route, const waypoint **list, const int count)
 	gdb_fwrite_int(0);		/* Zero interlink steps */
 	gdb_fwrite(&c1, 1);
 
-	if (gdb_ver > 1)
+	if (gdb_ver >= 2)
 	    gdb_fwrite(ffbuff, 8);
 	    
 	gdb_fwrite_str(route->rte_url, -1);
@@ -1671,6 +1746,9 @@ gdb_rd_init(const char *fname)
 	
 	fin_name = xstrdup(fname);
 	fin = xfopen(fname, "rb", MYNAME);
+	gdb_read_file_header();
+	
+	if (gdb_ver >= 3) cet_convert_init(CET_CHARSET_UTF8, 1);
 }
 
 static void
@@ -1704,7 +1782,6 @@ gdb_wr_deinit(void)
 static void 
 gdb_read(void)
 {
-	gdb_read_file_header();
 	gdb_read_data();
 }
 
@@ -1728,7 +1805,8 @@ ff_vecs_t gdb_vecs = {
 	gdb_write,
 	NULL, 
 	gdb_args,
-	CET_CHARSET_MS_ANSI, 1				/* CET-REVIEW */
+	CET_CHARSET_MS_ANSI, 0	/* O.K.: changed to NON-FIXED */
+				/* because of utf8 strings since GDB V3 */
 };
 
 /*******************************************************************************/
