@@ -68,8 +68,14 @@ xg_tag_mapping loc_map[] = {
 
 void wpt_s(const char *args, const char **unused) 
 { 
-//	wpt_tmp = waypt_new();
-	wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+	wpt_tmp = waypt_new();
+	/*
+ 	 * 'geo' doesn't really have an 'unknown' and doesn't have any
+	 * concept of alt.  Unfortunately, we have many reference files
+	 * that have leaked the 'unknown_alt' value into them, so we paper
+	 * over that here.
+	 */
+	wpt_tmp->altitude = 0;
 }
 
 void wpt_e(const char *args, const char **unused)
