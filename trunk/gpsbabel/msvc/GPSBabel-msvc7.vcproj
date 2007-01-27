@@ -141,6 +141,9 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
+				RelativePath="..\alan.c">
+			</File>
+			<File
 				RelativePath="..\an1.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1353,6 +1356,9 @@
 				RelativePath="..\radius.c">
 			</File>
 			<File
+				RelativePath="..\raymarine.c">
+			</File>
+			<File
 				RelativePath="..\reverse_route.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1642,6 +1648,9 @@
 			</File>
 			<File
 				RelativePath="..\trackfilter.c">
+			</File>
+			<File
+				RelativePath="..\transform.c">
 			</File>
 			<File
 				RelativePath="..\unicsv.c">
@@ -2320,6 +2329,9 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
+				RelativePath=".\config.h">
+			</File>
+			<File
 				RelativePath="..\csv_util.h">
 			</File>
 			<File
@@ -2434,6 +2446,40 @@
 				Filter="">
 				<File
 					RelativePath="..\shapelib\shapefil.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="Zlib-Headers"
+				Filter="">
+				<File
+					RelativePath="..\zlib\crc32.h">
+				</File>
+				<File
+					RelativePath="..\zlib\deflate.h">
+				</File>
+				<File
+					RelativePath="..\zlib\inffast.h">
+				</File>
+				<File
+					RelativePath="..\zlib\inffixed.h">
+				</File>
+				<File
+					RelativePath="..\zlib\inflate.h">
+				</File>
+				<File
+					RelativePath="..\zlib\inftrees.h">
+				</File>
+				<File
+					RelativePath="..\zlib\trees.h">
+				</File>
+				<File
+					RelativePath="..\zlib\zconf.h">
+				</File>
+				<File
+					RelativePath="..\zlib\zlib.h">
+				</File>
+				<File
+					RelativePath="..\zlib\zutil.h">
 				</File>
 			</Filter>
 		</Filter>

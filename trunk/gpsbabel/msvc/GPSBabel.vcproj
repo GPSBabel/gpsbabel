@@ -312,6 +312,10 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath="..\alan.c"
+				>
+			</File>
+			<File
 				RelativePath="..\an1.c"
 				>
 			</File>
@@ -1908,6 +1912,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\radius.c"
+				>
+			</File>
+			<File
+				RelativePath="..\raymarine.c"
+				>
+			</File>
+			<File
 				RelativePath="..\reverse_route.c"
 				>
 				<FileConfiguration
@@ -2269,6 +2281,10 @@
 			</File>
 			<File
 				RelativePath="..\trackfilter.c"
+				>
+			</File>
+			<File
+				RelativePath="..\transform.c"
 				>
 			</File>
 			<File
@@ -3067,11 +3083,67 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Zlib"
+				>
+				<File
+					RelativePath="..\zlib\adler32.c"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\compress.c"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\crc32.c"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\deflate.c"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\gzio.c"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\infback.c"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\inffast.c"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\inflate.c"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\inftrees.c"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\trees.c"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\uncompr.c"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\zutil.c"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
+			<File
+				RelativePath=".\config.h"
+				>
+			</File>
 			<File
 				RelativePath="..\csv_util.h"
 				>
@@ -3220,14 +3292,54 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Zlib-Headers"
+				>
+				<File
+					RelativePath="..\zlib\crc32.h"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\deflate.h"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\inffast.h"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\inffixed.h"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\inflate.h"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\inftrees.h"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\trees.h"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\zconf.h"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\zlib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\zutil.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-			>
-		</Filter>
-		<Filter
-			Name="NewFilter1"
 			>
 		</Filter>
 	</Files>
