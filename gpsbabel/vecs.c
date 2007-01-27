@@ -976,7 +976,17 @@ sort_and_unify_vecs(int *ctp)
 			 */
 			svp[i]->vec->args++;
 		}
-		
+		memset(&svp[i]->vec->cap, 0, sizeof(svp[i]->vec->cap));
+		switch(xcsv_file.datatype) {
+			case 0:
+			case wptdata:
+				svp[i]->vec->cap[ff_cap_rw_wpt] = ff_cap_read | ff_cap_write; break;
+			case trkdata:
+				svp[i]->vec->cap[ff_cap_rw_trk] = ff_cap_read | ff_cap_write; break;
+			case rtedata:
+				svp[i]->vec->cap[ff_cap_rw_rte] = ff_cap_read | ff_cap_write; break;
+			default: ;
+		}
 		svp[i]->desc = xcsv_file.description;
 		svp[i]->parent = "xcsv";
 	}

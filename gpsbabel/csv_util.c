@@ -1005,7 +1005,18 @@ xcsv_data_read(void)
     queue *elem, *tmp;
     field_map_t *fmp;
     ogue_t *ogp;
+    route_head *rte = NULL;
+    route_head *trk = NULL;
     
+    if (xcsv_file.datatype == trkdata) {
+	trk = route_head_alloc();
+	track_add_head(trk);
+    } else
+    if (xcsv_file.datatype == rtedata) {
+	rte = route_head_alloc();
+	route_add_head(rte);
+    }
+
     while ((buff = gbfgetstr(xcsv_file.xcsvfp))) {
         linecount++;
 	/* Whack trailing space; leading space may matter if our field sep
@@ -1066,7 +1077,16 @@ xcsv_data_read(void)
 		GPS_Math_Known_Datum_To_WGS84_M(wpt_tmp->latitude, wpt_tmp->longitude, 0.0,
 		    &wpt_tmp->latitude, &wpt_tmp->longitude, &alt, xcsv_file.gps_datum);
 	    }
-            waypt_add(wpt_tmp);
+	    switch(xcsv_file.datatype) {
+		case 0:
+		case wptdata:
+		    waypt_add(wpt_tmp); break;
+		case trkdata:
+		    track_add_wpt(trk, wpt_tmp); break;
+		case rtedata: 
+		    route_add_wpt(rte, wpt_tmp); break;
+		default: ;
+	    }
         }
 
     }
@@ -1528,9 +1548,12 @@ xcsv_data_write(void)
        gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
     }
 
-    waypt_disp_all(xcsv_waypt_pr);
-    route_disp_all(xcsv_resetpathlen,xcsv_noop,xcsv_waypt_pr);
-    track_disp_all(xcsv_resetpathlen,xcsv_noop,xcsv_waypt_pr);
+    if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == wptdata))
+	waypt_disp_all(xcsv_waypt_pr);
+    if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == rtedata))
+	route_disp_all(xcsv_resetpathlen,xcsv_noop,xcsv_waypt_pr);
+    if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == trkdata))
+	track_disp_all(xcsv_resetpathlen,xcsv_noop,xcsv_waypt_pr);
 
     /* output epilogue lines, if any. */
     QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {

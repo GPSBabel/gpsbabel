@@ -338,6 +338,24 @@ xcsv_parse_style_line(const char *sbuff)
 	    is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", p);
 	    xfree(p);
 	} else
+
+	if (ISSTOKEN(sbuff, "DATATYPE")) {
+	    p = csv_stringtrim(&sbuff[8], "\"", 1);
+	    if (case_ignore_strcmp(p, "TRACK") == 0) {
+		xcsv_file.datatype = trkdata;
+	    }
+	    else if (case_ignore_strcmp(p, "ROUTE") == 0) {
+		xcsv_file.datatype = rtedata;
+	    }
+	    else if (case_ignore_strcmp(p, "WAYPOINT") == 0) {
+		xcsv_file.datatype = wptdata;
+	    }
+	    else {
+		fatal(MYNAME ": Unknown data type \"%s\"!\n", p);
+	    }
+	    xfree(p);
+	
+	} else
 	
 	if (ISSTOKEN(sbuff, "IFIELD")) {
 	    key = val = pfc = NULL;
@@ -521,8 +539,10 @@ xcsv_rd_init(const char *fname)
         xcsv_read_style(styleopt);
     }
 
-    if (global_opts.masked_objective & (TRKDATAMASK|RTEDATAMASK)) {
-	warning(MYNAME " attempt to read %s as a track or route, but this module only supports waypoints on read.  Reading as waypoints instead.\n", fname);
+    if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == wptdata)) {
+	if (global_opts.masked_objective & (TRKDATAMASK|RTEDATAMASK)) {
+	    warning(MYNAME " attempt to read %s as a track or route, but this format only supports waypoints on read.  Reading as waypoints instead.\n", fname);
+	}
     }
 
     xcsv_file.xcsvfp = gbfopen(fname, "r", MYNAME);
