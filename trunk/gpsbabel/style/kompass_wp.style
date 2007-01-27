@@ -1,0 +1,26 @@
+# gpsbabel XCSV style file
+#
+# Format: Kompass / Deutscher Alpenverein (DAV) Waypoints
+# Author: Olaf Klein
+#   Date: 01/10/2007
+#
+# 
+DESCRIPTION		Kompass (DAV) Waypoints (.wp)
+DATATYPE		WAYPOINT
+EXTENSION		wp
+ENCODING		UTF-8
+FIELD_DELIMITER		SEMICOLON
+RECORD_DELIMITER	CRNEWLINE
+BADCHARS		,"
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	SHORTNAME, "", "%s"
+IFIELD	LON_DECIMAL, "", "%.7f"
+IFIELD	LAT_DECIMAL, "", "%.7f"
+IFIELD	ALT_METERS, "", "%.0f"
+IFIELD	LOCAL_TIME,"","%d.%m.%Y %H:%M:%S"
+IFIELD	CONSTANT, "Icons\Wegpunkt grün.bmp", "%s"
+IFIELD	IGNORE, "", "%s"
+IFIELD  CONSTANT, "1", "%s"			# unknown
+IFIELD	DESCRIPTION, "", "%s"
