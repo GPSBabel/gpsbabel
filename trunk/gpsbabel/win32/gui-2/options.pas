@@ -767,6 +767,7 @@ var
   s, key, value: string;
   r: TRegistry;
   u: TUpDown;
+  v: Integer;
 begin
   r := TRegistry.Create;
   try
@@ -799,7 +800,12 @@ begin
         if (value <> '(default)') then
         begin
           if HasUpDown(TEdit(o.edit), u) then
-            u.Position := StrToInt(value)
+          begin
+            if (o.def <> nil) then
+              v := StrToIntDef(o.def, 0) else
+              v := 0;
+            u.Position := StrToIntDef(value, v);
+          end
           else
             SetStrProp(o.edit, 'Text', value);
         end;
