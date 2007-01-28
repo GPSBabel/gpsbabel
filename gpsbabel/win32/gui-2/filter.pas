@@ -82,13 +82,14 @@ type
     edWayptRadiusLon: TEdit;
     cbTrackRangeTimeZone: TCheckBox;
     btnHelp: TBitBtn;
-    cbTrackFixes: TCheckBox;
+    cbGPSfix: TCheckBox;
     cbTrackCourse: TCheckBox;
     cbTrackSpeed: TCheckBox;
     gbTransform: TGroupBox;
     cobTransformType: TComboBox;
     cbTransform: TCheckBox;
     cbTransformDelete: TCheckBox;
+    cobGPSfixes: TComboBox;
     procedure cbTrackTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure cbTrackTitleClick(Sender: TObject);
@@ -107,6 +108,7 @@ type
       Shift: TShiftState);
     procedure btnHelpClick(Sender: TObject);
     procedure cbTransformClick(Sender: TObject);
+    procedure cbGPSfixClick(Sender: TObject);
   private
     { Private-Deklarationen }
     lTrackTimeList: TList;
@@ -241,9 +243,10 @@ begin
 
   if not(gpsbabel_knows_inifile) then
   begin
-    cbTrackFixes.Enabled := False;
+    cbGPSfix.Enabled := False;
     cbTrackCourse.Enabled := False;
     cbTrackSpeed.Enabled := False;
+    cobGPSfixes.Enabled := False;
   end;
 
   LoadSettingsFromRegistry();
@@ -421,8 +424,8 @@ begin
         Result,
         FormatDateTime('yyyymmddhhnnss', dt)]);
     end;
-    if cbTrackFixes.Checked then
-      Result := Format('%s,fix', [Result]);
+    if cbGPSfix.Checked then
+      Result := Format('%s,fix=%s', [Result, cobGPSfixes.Text]);
     if cbTrackCourse.Checked then
       Result := Format('%s,course', [Result]);
     if cbTrackSpeed.Checked then
@@ -735,6 +738,11 @@ end;
 procedure TfrmFilter.cbTransformClick(Sender: TObject);
 begin
   cobTransformType.Enabled := cbTransform.Checked;
+end;
+
+procedure TfrmFilter.cbGPSfixClick(Sender: TObject);
+begin
+  cobGPSfixes.Enabled := cbGPSfix.Checked;
 end;
 
 end.
