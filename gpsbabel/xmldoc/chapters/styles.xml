@@ -207,7 +207,7 @@ this file.
 Describes the character set used by this format.  The value given
 must be one listed by 'gpsbabel -l'.    example:
 </para>
-<screen format="linespecific">   ENCODING             UTF-8	# Use UTF-8 for input and output.
+<screen format="linespecific">   ENCODING          UTF-8	# Use UTF-8 for input and output.
 </screen>
 </section>
 <section id="style_global_datum">
@@ -217,6 +217,18 @@ This value specifies the GPS datum to be used on read or write. Valid values for
 option are listed in <xref linkend="Datums" />.
 </para>
 <screen format="linespecific">   DATUM             European 1950
+</screen>
+</section>
+<section id="style_global_datatype">
+<title>DATATYPE</title>
+<para>
+Specifies the kind of data we have to read or write.
+</para>
+<para>
+By default all data are seen as waypoint data. With DATATYPE you are now able to bind
+a specific type to this format. Possible values are WAYPOINT, ROUTE or TRACK.
+</para>
+<screen format="linespecific">   DATATYPE          ROUTE # route-only format
 </screen>
 </section>
 </section> <!-- global -->
