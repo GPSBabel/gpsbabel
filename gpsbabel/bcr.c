@@ -2,7 +2,7 @@
 
     Support for Motorrad Routenplaner (Map&Guide) .bcr files.
 
-    Copyright (C) 2005-2006 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 
 /*
     2006/01/22: reader simplified with inifile library
+    2007/01/30: new option prefer_shortnames
+    		don't check global_opts.objective
 */
 
 #include "defs.h"
@@ -54,12 +56,18 @@ static inifile_t *ini;
 static char *rtenum_opt;
 static char *rtename_opt;
 static char *radius_opt;
+static char *prefer_shortnames_opt;
 
 static
 arglist_t bcr_args[] = {
-	{"index", &rtenum_opt, "Index of route to write (if more the one in source)", NULL, ARGTYPE_INT, "1", NULL },
-	{"name", &rtename_opt, "New name for the route", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-	{"radius", &radius_opt, "Radius of our big earth (default 6371000 meters)", "6371000", ARGTYPE_FLOAT, ARG_NOMINMAX },
+	{"index", &rtenum_opt, "Index of route to write (if more the one in source)", 
+		NULL, ARGTYPE_INT, "1", NULL },
+	{"name", &rtename_opt, "New name for the route", 
+		NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+	{"radius", &radius_opt, "Radius of our big earth (default 6371000 meters)", "6371000",
+		ARGTYPE_FLOAT, ARG_NOMINMAX },
+	{"prefer_shortnames", &prefer_shortnames_opt, "Use shortname instead of description",
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -240,7 +248,7 @@ void bcr_write_line(gbfile *fout, const char *key, int *index, const char *value
 			gbfprintf(fout, "%s%d=%s\r\n", key, *index, tmp);
 		else
 			gbfprintf(fout, "%s=%s\r\n", key, tmp);
-	    xfree(tmp);
+		xfree(tmp);
 	}
 }
 
@@ -316,7 +324,8 @@ bcr_route_header(const route_head *route)
 		i++;
 		wpt = (waypoint *) elem;
 		c = wpt->description;
-		if (c == NULL) c = wpt->shortname;
+		if (prefer_shortnames_opt || (c == NULL) || (*c == '\0'))
+			c = wpt->shortname;
 		bcr_write_line(fout, "STATION", &i, c);
 	}
 	
@@ -330,20 +339,16 @@ bcr_route_header(const route_head *route)
 static void
 bcr_data_write(void)
 {
-	
-	if (global_opts.objective == rtedata)
-	{
-		target_rte_num = 1;
+	target_rte_num = 1;
 		
-		if (rtenum_opt != NULL) {
-			target_rte_num = atoi(rtenum_opt);
-			if (((unsigned)target_rte_num > route_count()) || (target_rte_num < 1))
-				fatal(MYNAME ": invalid route number %d (1..%d))!\n", 
-					target_rte_num, route_count());
-			}
-		curr_rte_num = 0;
-		route_disp_all(bcr_route_header, bcr_route_trailer, bcr_write_wpt);
+	if (rtenum_opt != NULL) {
+		target_rte_num = atoi(rtenum_opt);
+		if (((unsigned)target_rte_num > route_count()) || (target_rte_num < 1))
+			fatal(MYNAME ": invalid route number %d (1..%d))!\n", 
+				target_rte_num, route_count());
 	}
+	curr_rte_num = 0;
+	route_disp_all(bcr_route_header, bcr_route_trailer, bcr_write_wpt);
 }
 
 ff_vecs_t bcr_vecs = {
