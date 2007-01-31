@@ -3173,6 +3173,11 @@ else
 			xpathdr=/sw/include/
 		fi
 		;;
+	*-*-freebsd*)
+ 		if test -f /usr/local/include/expat.h ; then
+			xpathdr=/usr/local/include
+		fi
+		;;
 	*) 	;;
 	esac
 
@@ -3198,6 +3203,17 @@ else
 	*-*-darwin*)
 		if test -f /sw/lib/libexpat.a ; then
 			EXPAT_LIB=/sw/lib/libexpat.a
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_LIBEXPAT 1
+_ACEOF
+
+
+		fi
+		;;
+	*-*-freebsd*)
+		if test -f /usr/local/lib/libexpat.a ; then
+			EXPAT_LIB=/usr/local/lib/libexpat.a
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBEXPAT 1

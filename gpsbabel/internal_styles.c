@@ -439,8 +439,8 @@ static char gpsdrivetrack[] =
 "IFIELD	ALT_METERS, \"\", \"%10.0f\"\n"
 "# Reports are that this format stores in local time, not GMT as \n"
 "# originally thought.\n"
-"# IFIELD	GMT_TIME, \"\", \"%a %b %d %T %Y\"\n"
-"IFIELD	LOCAL_TIME, \"\", \"%a %b %d %T %Y\"\n"
+"# IFIELD	GMT_TIME, \"\", \"%a %b %d %H:%M:%S %Y\"\n"
+"IFIELD	LOCAL_TIME, \"\", \"%a %b %d %H:%M:%S %Y\"\n"
 ;
 static char gpsman[] = 
 "# gpsbabel XCSV style file\n"
@@ -477,6 +477,54 @@ static char gpsman[] =
 "IFIELD	IGNORE, \"\", \"%s\"\n"
 
 "# gpsman.c likes mkshort len = 8, whitespace = 0.\n"
+;
+static char kompass_tk[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: Kompass / Deutscher Alpenverein (DAV) Waypoints\n"
+"# Author: Olaf Klein\n"
+"#   Date: 01/10/2007\n"
+"#\n"
+"# \n"
+"DESCRIPTION		Kompass (DAV) Track (.tk)\n"
+"DATATYPE		TRACK\n"
+"EXTENSION		wp\n"
+"FIELD_DELIMITER		COMMA\n"
+"RECORD_DELIMITER	NEWLINE\n"
+"BADCHARS		,\"\n"
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	LAT_DECIMAL, \"\", \"%.7f\"\n"
+"IFIELD	LON_DECIMAL, \"\", \"%.7f\"\n"
+;
+static char kompass_wp[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: Kompass / Deutscher Alpenverein (DAV) Waypoints\n"
+"# Author: Olaf Klein\n"
+"#   Date: 01/10/2007\n"
+"#\n"
+"# \n"
+"DESCRIPTION		Kompass (DAV) Waypoints (.wp)\n"
+"DATATYPE		WAYPOINT\n"
+"EXTENSION		wp\n"
+"ENCODING		UTF-8\n"
+"FIELD_DELIMITER		SEMICOLON\n"
+"RECORD_DELIMITER	CRNEWLINE\n"
+"BADCHARS		,\"\n"
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	SHORTNAME, \"\", \"%s\"\n"
+"IFIELD	LON_DECIMAL, \"\", \"%.7f\"\n"
+"IFIELD	LAT_DECIMAL, \"\", \"%.7f\"\n"
+"IFIELD	ALT_METERS, \"\", \"%.0f\"\n"
+"IFIELD	LOCAL_TIME,\"\",\"%d.%m.%Y %H:%M:%S\"\n"
+"IFIELD	CONSTANT, \"Icons\\Wegpunkt grün.bmp\", \"%s\"\n"
+"IFIELD	IGNORE, \"\", \"%s\"\n"
+"IFIELD  CONSTANT, \"1\", \"%s\"			# unknown\n"
+"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
 ;
 static char ktf2[] = 
 "# gpsbabel XCSV style file\n"
@@ -1000,8 +1048,8 @@ static char xmapwpt[] =
 "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "xmap2006", xmap2006 } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 26;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "xmap2006", xmap2006 } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 28;
 #else /* CSVFMTS_ENABLED */
 style_vecs_t style_list[] = {{0,0}};
 size_t nstyles = 0;
