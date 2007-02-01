@@ -181,7 +181,7 @@ void wpt_desc(const char *args, const char **unused)
 		tmp = xstrdup((char *)args);
 		c = lrtrim(tmp);
 		if (*c) {
-//			wpt_tmp->description = xstrappend(wpt_tmp->description, c);
+			wpt_tmp->description = xstrappend(wpt_tmp->description, c);
 		}
 		xfree(tmp);
 	}
@@ -802,7 +802,11 @@ void kml_write(void)
 	trackdata = (!! strcmp("0", opt_trackdata));
 
 	kml_write_xml(0,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-	kml_write_xml(1,"<kml xmlns=\"http://earth.google.com/kml/2.1\">\n");
+	kml_write_xml(1,"<kml xmlns=\"http://earth.google.com/kml/2.1\"\n"
+		"\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+		"\txsi:schemaLocation=\"http://earth.google.com/kml/2.1 \n"
+		"\thttp://code.google.com/apis/kml/schema/kml21.xsd\">\n"
+	);
 	kml_write_xml(1,"<Document>\n");
 
 	now = current_time();
