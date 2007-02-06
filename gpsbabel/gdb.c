@@ -1,7 +1,7 @@
 /* 
 	Garmin GPS Database Reader/Writer
 	
-	Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
+	Copyright (C) 2005-2007 Olaf Klein, o.b.klein@gpsbabel.org
 	Mainly based on mapsource.c,
 	Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
 	
@@ -52,6 +52,7 @@
 	    2006/04/19: check for empty waypoint shortnames (paranioa)
 	    2006/11/01: Use version of GPSBabel and date/time of gdb.c (managed by CVS) for watermark
 	    2007/01/23: add support for GDB version 3
+	    2007/02/07: Add special code for unknown bytes in waypoints with class GE 8 (calculated points)
 */
 
 #include <stdio.h>
@@ -89,8 +90,8 @@
 
 /* %%% local vars %%% */
 
-/* static char gdb_release[] = "$Revision: 1.45 $"; */
-static char gdb_release_date[] = "$Date: 2007-01-25 09:27:58 $";
+/* static char gdb_release[] = "$Revision: 1.46 $"; */
+static char gdb_release_date[] = "$Date: 2007-02-06 23:24:14 $";
 
 static FILE *fin, *fout;
 static char *fin_name, *fout_name;
@@ -550,7 +551,7 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 
 	pos = ftell(fin);
 	delta = fileofs - pos;
-	gdb_is_valid(delta > 0, prefix, "waypoint final");
+	gdb_is_valid((delta > 0), prefix, "waypoint final");
 
 	if (gdb_ver >= 3) {
 	    delta--;
@@ -562,8 +563,10 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	    }
 	    else
 		xtime = 0;
-	    if (delta > 0)	/* skip over trailing unknown bytes */
+	    if (delta > 0) {	/* skip over trailing unknown bytes */
+		gdb_is_valid((delta <= sizeof(buff)), prefix, "Waypoint structure V3");
 		gdb_fread(buff, delta);
+	    }
 	}
 	else { /* gdb_ver <= 2 */
 	
@@ -572,17 +575,28 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	       the field seems to be a time stamp */
 	       
 	    if ((delta & 1) == 0) {
-		gdb_fread(buff, 1);
 		delta--;
+		gdb_fread(buff, 1);
+		if (buff[0] != '\0')
+		    warning(MYNAME ": Invalid byte (0x%02x) at EOW'.\n", (unsigned char)buff[0]);
 	    }
 	    
 	    xtime = 0;
+
+	    delta--;
 	    if (gdb_fread_flag(1)) {
-		gdb_is_valid((delta == 5), prefix, "Waypoint time");
+		gdb_is_valid((delta == 4), prefix, "Waypoint time");
 		gdb_fread_le(&xtime, sizeof(xtime), 32, prefix, "time");
 	    }
-	    else
-		gdb_is_valid(delta==1, prefix, "No waypoint time");
+	    else if (delta > 0) {
+		gdb_is_valid((delta <= sizeof(buff)), prefix, "Waypoint structure");
+		gdb_fread(buff, delta);
+		if (xclass < gt_waypt_class_map_point) {
+		    warning(MYNAME ": Unhandled EOW. Please report!\n");
+		    fatal(MYNAME ": [class is 0x%02xh, %d bytes left, gdb version %d]\n",
+			xclass, (int)delta, gdb_ver);
+		}
+	    }
 	}
 	
 	*wptclass = xclass;
