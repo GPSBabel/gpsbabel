@@ -42,8 +42,10 @@ static char *snwhiteopt = NULL;
 static char *deficon = NULL;
 static char *category = NULL;
 
+#define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
 /* Technically, even this is a little loose as spaces arent allowed */
-static char valid_waypt_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789";
+static const char *valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
 
 static
 arglist_t garmin_args[] = {
@@ -133,6 +135,14 @@ rw_init(const char *fname)
 				case 130:	/* Garmin Etrex (yellow) */
 					receiver_short_length = 6;
 					break;
+				case 295:
+					/* eTrex (yellow, firmware v. 3.30) */
+					receiver_short_length = 6;
+					valid_waypt_chars =
+					  MILITANT_VALID_WAYPT_CHARS " +-";
+					setshort_badchars(mkshort_handle, "\"$.,'!");
+					break;
+
 				case 155:	/* Garmin V */
 				case 404:	/* SP2720 */
 					receiver_short_length = 20;
