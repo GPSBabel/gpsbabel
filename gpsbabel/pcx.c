@@ -178,11 +178,11 @@ data_read(void)
   			everything else is 
 			  H(2 chars)TN(tracknane\0)
   			*/
-			if (ibuf[3] == 'L' && ibuf[4] == 'A') {
+			if (ibuf[3] == 'L' && ibuf[4] == 'A' && !track) {
 				track = route_head_alloc();
 				track->rte_name = xstrdup("track");
 				track_add_head(track);
-			} else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
+			} else if (ibuf[3] == 'T' && ibuf[4] == 'N' && !track) {
 				track = route_head_alloc();
 				track->rte_name = xstrdup(&ibuf[6]);
 				track_add_head(track);
