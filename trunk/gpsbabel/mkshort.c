@@ -515,6 +515,7 @@ mkshort(short_handle h, const char *istring)
 		if (dp < ostring) dp = ostring;
 		memmove(dp, np, strlen(np));
 		dp[strlen(np)] = 0;
+		rtrim(ostring);
 	}
 
 	/* 
