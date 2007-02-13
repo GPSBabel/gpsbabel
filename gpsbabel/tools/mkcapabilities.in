@@ -32,3 +32,10 @@ function getcap(type, cap, sname, lname) {
 
 getcap($1, $2, $3, $5)
 ' > @DOCDIR@capabilities.inc > @DOCDIR@capabilities.inc
+
+FMTS=`./gpsbabel -^2 | sed 's/\&/\&amp;/' | awk  -F'\t' '{print $3}'`
+for f in $FMTS
+do
+	[ ! -f @DOCDIR@/htmldoc-development/fmt_${f}.html ] && echo Missing doc for $f
+done
+
