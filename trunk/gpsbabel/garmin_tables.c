@@ -834,7 +834,18 @@ gt_get_icao_cc(const char *country, const char *shortname)
 	return NULL;
 }
 
-#if 0
+#if MAKE_TABLE
+
+/*
+ * Used to generate icon tables in appendix. 
+ * cc -DMAKE_TABLE garmin_tables.c fatal.o util.o globals.o  -lm
+ */
+
+int cet_utf8_to_ucs4(const char *str, int *bytes, int *value)
+{
+	fatal("Should not be here.");
+}
+
 
 int
 sortem(const void *a, const void *b)
