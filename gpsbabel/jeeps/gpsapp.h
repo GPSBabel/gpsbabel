@@ -34,6 +34,7 @@ void   GPS_D310_Get(GPS_PTrack *trk, UC *s);
 void   GPS_D311_Get(GPS_PTrack *trk, UC *s);
 void   GPS_D300_Send(UC *data, GPS_PTrack trk);
 void   GPS_D301_Send(UC *data, GPS_PTrack trk);
+void   GPS_D304_Send(UC *data, GPS_PTrack trk);
 void   GPS_D310_Send(UC *data, GPS_PTrack trk, int32 *len);
 
 int32  GPS_A400_Get(const char *port, GPS_PWay **way);
