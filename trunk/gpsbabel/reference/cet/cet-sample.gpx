@@ -110,13 +110,13 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>X1</name>
   <cmt>žðÉéÀàÈèÙùÂâÊêÎîÄäËëÖöÜüÆæÅåØøÇçÑñ²³½É×</cmt>
   <desc>žðÉéÀàÈèÙùÂâÊêÎîÄäËëÖöÜüÆæÅåØøÇçÑñ²³½É×</desc>
-  <sym>Diamond, Blue</sym>
+  <sym>Block, Blue</sym>
 </wpt>
 <wpt lat="50.497970581" lon="13.027725220">
 <time>2005-07-14T11:18:06Z</time>
   <name>X2</name>
   <cmt>žðÉéÀàÈèÙùÂâÊêÎîÄäËëÖöÜüÆæÅåØøÇçÑñ²³½É×</cmt>
   <desc>žðÉéÀàÈèÙùÂâÊêÎîÄäËëÖöÜüÆæÅåØøÇçÑñ²³½É×</desc>
-  <sym>Diamond, Blue</sym>
+  <sym>Block, Blue</sym>
 </wpt>
 </gpx>
