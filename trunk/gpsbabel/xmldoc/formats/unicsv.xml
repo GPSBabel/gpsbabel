@@ -12,7 +12,7 @@
 	</para>
 	<para>
 	The list of keywords include "lat", "lon", "desc", "name", 
-	"notes", "alt", "utm z", "utm n", "utm e", and "url".   
+	"notes", "alt", "utm z", "utm n", "utm e", "utm c" and "url".   
 	Fuller spellings (i.e. "longitude") may be used.
 	</para>
 	<para>

@@ -41,6 +41,7 @@ struct {
 	int utmzcol; /* Zone */
 	int utmncol; /* Northing */
 	int utmecol; /* Easting */
+	int utmccol; /* Zone character */
 } unicsv_fieldpos;
 
 static double unicsv_altscale;
@@ -118,6 +119,9 @@ unicsv_fondle_header(char *ibuf)
 		else if (UNICSV_CONTAINS("utm e")) {
 			unicsv_fieldpos.utmecol = i;
 		}
+		else if (UNICSV_CONTAINS("utm c")) {
+			unicsv_fieldpos.utmccol = i;
+		}
 /* todo: speed, course, hdop, sat, date, time, maybe a few others */
 	}
 }
@@ -151,6 +155,7 @@ unicsv_parse_one_line(char *ibuf)
 	int  utmz = -9999;
 	double utme = 0;
 	double utmn = 0;
+	char utmc = 'N';
 
 	s = csv_lineparse(ibuf, unicsv_fieldsep, "\"", 0);
 	if (s == NULL) return;
@@ -189,10 +194,13 @@ unicsv_parse_one_line(char *ibuf)
 		else if (i == unicsv_fieldpos.utmncol) {
 			utmn = atof(s);
 		}
+		else if (i == unicsv_fieldpos.utmccol) {
+			utmc = toupper(s[0]);
+		}
 	}
 	if (utmz  != -9999) {
 		GPS_Math_UTM_EN_To_WGS84(&wpt->latitude, &wpt->longitude,
-			utme, utmn, utmz, 'N');
+			utme, utmn, utmz, utmc);
 	}
 	waypt_add(wpt);
 }
