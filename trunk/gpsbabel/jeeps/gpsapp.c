@@ -3796,6 +3796,10 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 		GPS_D301_Send(data,trk[i]);
 		len = 21;
 		break;
+	    case pD304:
+		GPS_D304_Send(data,trk[i]);
+		len = 26;
+		break;
 	    default:
 		GPS_Error("A301_Send: Unknown track protocol");
 		return PROTOCOL_ERROR;
@@ -4192,6 +4196,36 @@ void GPS_D301_Send(UC *data, GPS_PTrack trk)
 
     *p = trk->tnew;
     
+    return;
+}
+
+void GPS_D304_Send(UC *data, GPS_PTrack trk)
+{
+    UC *p;
+
+    p = data;
+    GPS_A300_Encode(p,trk);
+    p = data+12;
+    
+    GPS_Util_Put_Float(p,trk->alt);
+    p+=sizeof(float);
+ 
+    GPS_Util_Put_Float(p,1.0e25);
+    p+=sizeof(float);
+
+    /* Not really clear if the members below makes sense to write or not */
+
+    *p = trk->heartrate;
+    p+=sizeof(char);
+
+    *p = trk->cadence;
+    p+=sizeof(char);
+
+    *p = trk->cadence > 0 ? trk->cadence : 0xff;
+    p+=sizeof(char);
+
+    *p = trk->tnew;
+
     return;
 }
 
