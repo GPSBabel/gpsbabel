@@ -94,8 +94,8 @@ icon_mapping_t garmin_icon_table[] = {
 	{    99,  8239, "Ghost Town" },
 	{   113, 16393, "Glider Area" },
 	{    68,  8197, "Golf Course" },
-	{     2,     2, "Green Diamond" },
-	{    15,    15, "Green Square" },
+	{     2,     2, "Diamond, Green" },
+	{    15,    15, "Square, Green" },
 	{   108, 16388, "Heliport" },
 	{     9,     9, "Horn" },
 	{    57,   171, "Hunting Area" },
@@ -106,7 +106,7 @@ icon_mapping_t garmin_icon_table[] = {
 	{    59,   173, "Lodging" },
 	{    59,   173, "Hotel" },
 	{    20,    21, "Man Overboard" },
-	{     0,     0, "Marina" },
+	{     0,     0, "Anchor" },
 	{    43,   156, "Medical Facility" },
 	{    66,  8195, "Mile Marker" },
 	{   101,  8241, "Military" },
@@ -137,8 +137,8 @@ icon_mapping_t garmin_icon_table[] = {
 	{    83,  8214, "Post Office" },
 	{   109, 16389, "Private Field" },
 	{    36,    37, "Radio Beacon" },
-	{     3,     3, "Red Diamond" },
-	{    16,    16, "Red Square" },
+	{     3,     3, "Diamond, Red" },
+	{    16,    16, "Square, Red" },
 	{    10,    10, "Residence" },
 	{    10,    10, "House" },
 	{    11,    11, "Restaurant" },
@@ -169,8 +169,8 @@ icon_mapping_t garmin_icon_table[] = {
 	{   114, 16394, "Ultralight Area" },
 	{   139,  8282, "Water Hydrant" },	/* new in MapSource V5 */
 	{    18,    18, "Waypoint" },
-	{    17,    17, "White Buoy" },
-	{    35,    36, "White Dot" },
+	{    17,    17, "Buoy, White" },
+	{    35,    36, "Dot, White" },
 	{    88,  8219, "Zoo" },
 
 	/* Custom icons.   The spec reserves 7680-8191 for the custom
@@ -200,9 +200,9 @@ icon_mapping_t garmin_icon_table[] = {
 	{   143,  8289, "Pin, Red" },
 	{   144,  8287, "Pin, Blue" },
 	{   145,  8288, "Pin, Green" },
-	{   146,  8292, "Diamond, Red" },
-	{   147,  8290, "Diamond, Blue" },
-	{   148,  8291, "Diamond, Green" },
+	{   146,  8292, "Block, Red" },
+	{   147,  8290, "Block, Blue" },
+	{   148,  8291, "Block, Green" },
 	{   149,  8293, "Bike Trail" },
 	{   150,   181, "Fishing Hot Spot Facility" }, 
 	{   151,  8249, "Police Station"}, 
@@ -216,31 +216,34 @@ icon_mapping_t garmin_icon_table[] = {
 	{   159,   188, "Weed Bed" }, 
 	{   160,   189, "Dropoff" }, 
 	{   161,   190, "Dock" }, 
+	{   162,   191, "Marina" },
+	{   163,   192, "Bait and Tackle" },
+	{   164,   193, "Stump" },
 
 	/* New in Garmin protocol spec from June 2006.  Extracted from
 	 * spec and fed through some horrible awk to add ones we didn't 
 	 * have before but normalized for consistency. */
 	{ -1,  8359, "Asian Food" },
-	{ 167,  8296, "Blue Circle" },
-	{ 168,  8299, "Blue Diamond" },
-	{ 178,  8317, "Blue Letter A" },
-	{ 181,  8318, "Blue Letter B" },
-	{ 184,  8319, "Blue Letter C" },
-	{ 187,  8320, "Blue Letter D" },
-	{ 190,  8341, "Blue Number 0" },
-	{ 193,  8342, "Blue Number 1" },
-	{ 196,  8343, "Blue Number 2" },
-	{ 199,  8344, "Blue Number 3" },
-	{ 202,  8345, "Blue Number 4" },
-	{ 205,  8346, "Blue Number 5" },
-	{ 208,  8347, "Blue Number 6" },
-	{ 211,  8348, "Blue Number 7" },
-	{ 214,  8349, "Blue Number 8" },
-	{ 217,  8350, "Blue Number 9" },
-	{ 171,  8302, "Blue Oval" },
-	{ 174,  8305, "Blue Rectangle" },
-	{ 175,  8308, "Blue Square" },
-	{ 218,  8351, "Blue Triangle" },
+	{ 167,  8296, "Circle, Blue" },
+	{ 168,  8299, "Diamond, Blue" },
+	{ 178,  8317, "Letter A, Blue" },
+	{ 181,  8318, "Letter B, Blue" },
+	{ 184,  8319, "Letter C, Blue" },
+	{ 187,  8320, "Letter D, Blue" },
+	{ 190,  8341, "Number 0, Blue" },
+	{ 193,  8342, "Number 1, Blue" },
+	{ 196,  8343, "Number 2, Blue" },
+	{ 199,  8344, "Number 3, Blue" },
+	{ 202,  8345, "Number 4, Blue" },
+	{ 205,  8346, "Number 5, Blue" },
+	{ 208,  8347, "Number 6, Blue" },
+	{ 211,  8348, "Number 7, Blue" },
+	{ 214,  8349, "Number 8, Blue" },
+	{ 217,  8350, "Number 9, Blue" },
+	{ 171,  8302, "Oval, Blue" },
+	{ 174,  8305, "Rectangle, Blue" },
+	{ 175,  8308, "Square, Blue" },
+	{ 218,  8351, "Triangle, Blue" },
 	{ -1,  8254, "Border Crossing (Port Of Entry)" },
 	{ -1,   182, "Bottom Conditions" },
 	{ -1,  8360, "Deli" },
@@ -251,24 +254,24 @@ icon_mapping_t garmin_icon_table[] = {
 	{ -1,  8232, "Geographic place name, land" },
 	{ -1,  8230, "Geographic place name, Man-made" },
 	{ -1,  8231, "Geographic place name, water" },
-	{ 166,  8295, "Green circle" },
-	{ 177,  8313, "Green Letter A" },
-	{ 180,  8315, "Green Letter B" },
-	{ 183,  8314, "Green Letter C" },
-	{ 186,  8316, "Green Letter D" },
-	{ 189,  8331, "Green Number 0" },
-	{ 192,  8332, "Green Number 1" },
-	{ 195,  8333, "Green Number 2" },
-	{ 198,  8334, "Green Number 3" },
-	{ 201,  8335, "Green Number 4" },
-	{ 204,  8336, "Green Number 5" },
-	{ 207,  8337, "Green Number 6" },
-	{ 210,  8338, "Green Number 7" },
-	{ 213,  8339, "Green Number 8" },
-	{ 216,  8340, "Green Number 9" },
-	{ 170,  8301, "Green Oval" },
-	{ 173,  8304, "Green Rectangle" },
-	{ 219,  8352, "Green Triangle" },
+	{ 166,  8295, "Circle, Green" },
+	{ 177,  8313, "Letter A, Green" },
+	{ 180,  8315, "Letter B, Green" },
+	{ 183,  8314, "Letter C, Green" },
+	{ 186,  8316, "Letter D, Green" },
+	{ 189,  8331, "Number 0, Green" },
+	{ 192,  8332, "Number 1, Green" },
+	{ 195,  8333, "Number 2, Green" },
+	{ 198,  8334, "Number 3, Green" },
+	{ 201,  8335, "Number 4, Green" },
+	{ 204,  8336, "Number 5, Green" },
+	{ 207,  8337, "Number 6, Green" },
+	{ 210,  8338, "Number 7, Green" },
+	{ 213,  8339, "Number 8, Green" },
+	{ 216,  8340, "Number 9, Green" },
+	{ 170,  8301, "Oval, Green" },
+	{ 173,  8304, "Rectangle, Green" },
+	{ 219,  8352, "Triangle, Green" },
 	{ -1, 16385, "Intersection" },
 	{ -1,  8201, "Intl freeway hwy" },
 	{ -1,  8202, "Intl national hwy" },
@@ -281,24 +284,24 @@ icon_mapping_t garmin_icon_table[] = {
 	{ -1,   168, "Null" },
 	{ -1,   180, "Open 24 Hours" },
 	{ -1,  8222, "Ramp intersection" },
-	{ 165,  8294, "Red circle" },
-	{ 176,  8309, "Red Letter A" },
-	{ 179,  8310, "Red Letter B" },
-	{ 182,  8311, "Red Letter C" },
-	{ 185,  8312, "Red Letter D" },
-	{ 188,  8321, "Red Number 0" },
-	{ 191,  8322, "Red Number 1" },
-	{ 194,  8323, "Red Number 2" },
-	{ 197,  8324, "Red Number 3" },
-	{ 200,  8325, "Red Number 4" },
-	{ 203,  8326, "Red Number 5" },
-	{ 206,  8327, "Red Number 6" },
-	{ 209,  8328, "Red Number 7" },
-	{ 212,  8329, "Red Number 8" },
-	{ 215,  8330, "Red Number 9" },
-	{ 169,  8300, "Red Oval" },
-	{ 172,  8303, "Red Rectangle" },
-	{ 220,  8353, "Red Triangle" },
+	{ 165,  8294, "Circle, Red" },
+	{ 176,  8309, "Letter A, Red" },
+	{ 179,  8310, "Letter B, Red" },
+	{ 182,  8311, "Letter C, Red" },
+	{ 185,  8312, "Letter D, Red" },
+	{ 188,  8321, "Number 0, Red" },
+	{ 191,  8322, "Number 1, Red" },
+	{ 194,  8323, "Number 2, Red" },
+	{ 197,  8324, "Number 3, Red" },
+	{ 200,  8325, "Number 4, Red" },
+	{ 203,  8326, "Number 5, Red" },
+	{ 206,  8327, "Number 6, Red" },
+	{ 209,  8328, "Number 7, Red" },
+	{ 212,  8329, "Number 8, Red" },
+	{ 215,  8330, "Number 9, Red" },
+	{ 169,  8300, "Oval, Red" },
+	{ 172,  8303, "Rectangle, Red" },
+	{ 220,  8353, "Triangle, Red" },
 	{ -1,  8362, "Seafood" },
 	{ -1,  8194, "State Hwy" },
 	{ -1,  8363, "Steak" },
@@ -682,6 +685,7 @@ gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, in
 
 int gt_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
 {
+	static int find_flag = 0;
 	icon_mapping_t *i;
 	int def_icon = DEFAULT_ICON_VALUE;
 	int n;
@@ -719,6 +723,37 @@ int gt_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_form
 				return i->pcxsymnum;
 			default:
 				fatal(MYNAME ": unknown garmin format.\n");
+			}
+		}
+	}
+	
+	/* 
+	 *  try to handle some complex icon names: i.e. "Blue Diamond" and "Diamond, Blue"
+	 *  "find_flag" prevents us from a possible endless loop
+	 */
+	
+	if (find_flag == 0)
+	{
+		char **prefix;
+		char *prefixes[] = {"White ", "Red ", "Green ", "Blue ", "Black ", NULL};
+
+		for (prefix = prefixes; *prefix != NULL; prefix++)
+		{
+			int len = strlen(*prefix);
+			
+			if (case_ignore_strncmp(desc, *prefix, len) == 0)
+			{
+				char buff[64];
+				int result;
+				
+				snprintf(buff, sizeof(buff), "%s, %s", &desc[len], *prefix);
+				rtrim(buff);
+				
+				find_flag = 1;
+				result = gt_find_icon_number_from_desc(buff, garmin_format);
+				find_flag = 0;
+				
+				return result;
 			}
 		}
 	}
