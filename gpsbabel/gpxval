@@ -1,15 +1,20 @@
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/robertl/xerces-c1_7_0-linux7.2/lib
 export PATH=$PATH:/home/robertl/xerces-c1_7_0-linux7.2/bin
 
+validate()
+{
+	SAX2Count -p -f -v=always $*
+}
+
 gpxval()
 {
 	echo "Validating $*"
 	./gpsbabel $* -o gpx -F /tmp/$$.gpx
-	SAX2Count /tmp/$$.gpx
+	validate /tmp/$$.gpx
 	./gpsbabel $* -o gpx,gpxver=1.0 -F /tmp/$$.gpx
-	SAX2Count /tmp/$$.gpx
+	validate /tmp/$$.gpx
 	./gpsbabel $* -o gpx,gpxver=1.1 -F /tmp/$$.gpx
-	SAX2Count /tmp/$$.gpx
+	validate /tmp/$$.gpx
 }
 
 
