@@ -748,7 +748,7 @@ char * get_filename(const char *fname);				/* extract the filename portion */
 #define str_iso8859_1_to_utf8(str) cet_str_iso8859_1_to_utf8((str))
 
 /* this lives in gpx.c */
-time_t xml_parse_time( const char *cdatastr );
+time_t xml_parse_time( const char *cdatastr, int * microsecs );
 	
 xml_tag *xml_findfirst( xml_tag *root, char *tagname );
 xml_tag *xml_findnext( xml_tag *root, xml_tag *cur, char *tagname );

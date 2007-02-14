@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2004 Justin Broughton, justinbr@earthlink.net
+    Copyright (C) 2007 Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -510,7 +511,7 @@ ce_wr_deinit(void)
 static char *
 ce_gen_creation_time(time_t tm)
 {
-	xml_fill_in_time(time_buffer, tm, XML_SHORT_TIME);
+	xml_fill_in_time(time_buffer, tm, 0, XML_SHORT_TIME);
 	return time_buffer;
 }
 

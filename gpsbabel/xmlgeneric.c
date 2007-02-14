@@ -1,7 +1,7 @@
 /*
     Common utilities for XML-based formats.
 
-    Copyright (C) 2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004, 2005, 2006, 2007 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -100,10 +100,11 @@ write_xml_entity_end(gbfile *ofd, const char *indent,
 }
 
 void
-xml_fill_in_time(char *time_string, const time_t timep, int long_or_short)
+xml_fill_in_time(char *time_string, const time_t timep, int microseconds, int long_or_short)
 {
 	struct tm *tm = gmtime(&timep);
 	char *format;
+	int n;
 	
 	if (!tm) {
 		*time_string = 0;
@@ -111,23 +112,29 @@ xml_fill_in_time(char *time_string, const time_t timep, int long_or_short)
 	}
 	
 	if (long_or_short == XML_LONG_TIME)
-		format = "%02d-%02d-%02dT%02d:%02d:%02dZ";
+		format = "%02d-%02d-%02dT%02d:%02d:%02d";
 	else
-		format = "%02d%02d%02dT%02d%02d%02dZ";
-	sprintf(time_string, format,
+		format = "%02d%02d%02dT%02d%02d%02d";
+	n = sprintf(time_string, format,
 		tm->tm_year+1900, 
 		tm->tm_mon+1, 
 		tm->tm_mday, 
 		tm->tm_hour, 
 		tm->tm_min, 
 		tm->tm_sec);
+	if (microseconds) {
+		n += sprintf(time_string + n, ".%03d", microseconds / 1000);
+	}
+	time_string[n++] = 'Z';
+	time_string[n++] = '\0';
+	
 }
 
 void
-xml_write_time(gbfile *ofd, const time_t timep, char *elname)
+xml_write_time(gbfile *ofd, const time_t timep, int microseconds, char *elname)
 {
 	char time_string[64];
-	xml_fill_in_time(time_string, timep, XML_LONG_TIME);
+	xml_fill_in_time(time_string, timep, microseconds, XML_LONG_TIME);
 	if (time_string[0]) {
 		gbfprintf(ofd, "<%s>%s</%s>\n",
 			elname,

@@ -1,7 +1,7 @@
 /*
     Access GPX data files.
 
-    Copyright (C) 2002, 2003, 2004, 2005 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -726,7 +726,7 @@ gs_get_container(geocache_container t)
 }
 
 time_t 
-xml_parse_time( const char *cdatastr ) 
+xml_parse_time( const char *cdatastr, int *microsecs ) 
 {
 	int off_hr = 0;
 	int off_min = 0;
@@ -766,6 +766,12 @@ xml_parse_time( const char *cdatastr )
 	
 	pointstr = strchr( timestr, '.' );
 	if ( pointstr ) {
+		if (microsecs) {
+			double fsec;
+			sscanf(pointstr, "%le", &fsec);
+			/* Round to avoid FP jitter */
+			*microsecs = .5 + (fsec * 1000000.0) ;
+		}
 		*pointstr = '\0';
 	}
 	
@@ -890,7 +896,7 @@ gpx_end(void *data, const XML_Char *xml_el)
 		wpt_tmp->gc_data.placer = xstrdup(cdatastrp);
 		break;
 	case tt_cache_log_date:
-		gc_log_date = xml_parse_time( cdatastrp );
+		gc_log_date = xml_parse_time( cdatastrp, NULL );
 		break;
 	/*
 	 * "Found it" logs follow the date according to the schema,
@@ -981,7 +987,7 @@ gpx_end(void *data, const XML_Char *xml_el)
 	case tt_wpt_time:
 	case tt_trk_trkseg_trkpt_time:
 	case tt_rte_rtept_time:
-		wpt_tmp->creation_time = xml_parse_time( cdatastrp );
+		wpt_tmp->creation_time = xml_parse_time( cdatastrp, &wpt_tmp->microseconds );
 		break;
 	case tt_wpt_cmt:
 	case tt_rte_rtept_cmt:
@@ -1327,7 +1333,7 @@ fprint_xml_chain( xml_tag *tag, const waypoint *wpt )
 			}
 			if ( wpt && wpt->gc_data.exported &&
 			    strcmp(tag->tagname, "groundspeak:cache" ) == 0 ) {
-				xml_write_time( ofd, wpt->gc_data.exported, 
+				xml_write_time( ofd, wpt->gc_data.exported, 0,
 						"groundspeak:exported" );
 			}
 			gbfprintf( ofd, "</%s>\n", tag->tagname);
@@ -1457,7 +1463,7 @@ gpx_write_common_position(const waypoint *waypointp, const char *indent)
 			 indent, waypointp->altitude);
 	}
 	if (waypointp->creation_time) {
-		xml_write_time(ofd, waypointp->creation_time, "time");
+		xml_write_time(ofd, waypointp->creation_time, waypointp->microseconds, "time");
 	}
 }
 
@@ -1711,7 +1717,7 @@ gpx_write(void)
 	gpx_write_gdata(&gpx_global->email, "email");
 	gpx_write_gdata(&gpx_global->url, "url");
 	gpx_write_gdata(&gpx_global->urlname, "urlname");
-	xml_write_time( ofd, now, "time" );
+	xml_write_time( ofd, now, 0, "time" );
 	gpx_write_gdata(&gpx_global->keywords, "keywords");
 
 	gpx_write_bounds();

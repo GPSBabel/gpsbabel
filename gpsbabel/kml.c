@@ -1,7 +1,7 @@
 /* 
 	Support for Google Earth & Keyhole "kml" format.
 
-	Copyright (C) 2005, 2006 Robert Lipe, robertlipe@usa.net
+	Copyright (C) 2005, 2006, 2007 Robert Lipe, robertlipe@usa.net
 	Updates by Andrew Kirmse, akirmse at google.com
 
 	This program is free software; you can redistribute it and/or modify
@@ -391,7 +391,7 @@ static void kml_output_timestamp(const waypoint *waypointp)
 {
 	char time_string[64];
 	if (waypointp->creation_time) {
-		xml_fill_in_time(time_string, waypointp->creation_time, XML_LONG_TIME);
+		xml_fill_in_time(time_string, waypointp->creation_time, waypointp->microseconds, XML_LONG_TIME);
 		if (time_string[0]) {
 			kml_write_xml(0, "<TimeStamp><when>%s</when></TimeStamp>\n", 
 				time_string);
@@ -468,9 +468,9 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 	if (td->start && td->end) {
 		char time_string[64];
 		kml_write_xml(1, "<TimeSpan>\n");
-		xml_fill_in_time(time_string, td->start, XML_LONG_TIME);
+		xml_fill_in_time(time_string, td->start, 0, XML_LONG_TIME);
 		kml_write_xml(0, "<begin>%s</begin>\n", time_string);
-		xml_fill_in_time(time_string, td->end, XML_LONG_TIME);
+		xml_fill_in_time(time_string, td->end, 0, XML_LONG_TIME);
 		kml_write_xml(0, "<end>%s</end>\n", time_string);
 		kml_write_xml(-1, "</TimeSpan>\n");
 	}

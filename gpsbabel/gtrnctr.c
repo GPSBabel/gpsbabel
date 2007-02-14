@@ -1,7 +1,7 @@
 /*
     Access Garmin Training Center (Forerunner/Foretracker/Edge) data files.
 
-    Copyright (C) 2006 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2006, 2007 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -127,7 +127,7 @@ gtc_waypt_pr(const waypoint *wpt)
 	gtc_write_xml(1, "<Trackpoint>\n");
 	if (wpt->creation_time) {
 		char time_string[100];
-		xml_fill_in_time(time_string, wpt->creation_time, 
+		xml_fill_in_time(time_string, wpt->creation_time, wpt->microseconds,
 			XML_LONG_TIME);
 		if (time_string[0]) {
 			gtc_write_xml(0, "<Time>%s</Time>\n", 
@@ -227,7 +227,7 @@ gtc_write(void)
 
 	if (gtc_least_time) {
 		char time_string[100];
-		xml_fill_in_time(time_string, gtc_least_time, XML_LONG_TIME);
+		xml_fill_in_time(time_string, gtc_least_time, 0, XML_LONG_TIME);
 		gtc_write_xml(1, "<Lap StartTime=\"%s\">\n", time_string);
 	} else {
 		gtc_write_xml(1, "<Lap>\n");
@@ -271,7 +271,7 @@ void	gl_trk_pnt_e(const char *args, const char **unused)
 
 void	gl_trk_utc(const char *args, const char **unused)
 {
-	wpt_tmp->creation_time = xml_parse_time(args);
+	wpt_tmp->creation_time = xml_parse_time(args, NULL);
 }
 
 void	gl_trk_lat(const char *args, const char **unused)
