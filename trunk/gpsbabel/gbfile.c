@@ -70,6 +70,7 @@ gbfopen(const char *filename, const char *mode, const char *module)
 	file->line = xstrdup("");
 	file->mode = 'r'; // default
 	file->binary = (strchr(mode, 'b') != NULL);
+	file->back = -1;
 	
 	for (m = mode; *m; m++) {
 		switch(tolower(*m)) {
@@ -242,8 +243,18 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 	
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		int result;
-		result = gzread(file->handle.gz, buf, size * members) / size;
+		int result = 0;
+		char *target = buf;
+		int count = size * members;
+		
+		if (file->back != -1) {
+			*target++ = file->back;
+			count--;
+			result++;
+			file->back = -1;
+		}
+		result += gzread(file->handle.gz, target, count);
+		result /= size;
 
 		if ((result < 0) || ((gbsize_t)result < members)) {
 			int errnum;
@@ -462,12 +473,17 @@ gbfseek(gbfile *file, gbint32 offset, int whence)
 		assert(whence != SEEK_END);
 
 #if !ZLIB_INHIBITED
+		if ((whence == SEEK_CUR) && (file->back != -1)) offset--;
 		result = gzseek(file->handle.gz, offset, whence);
+		file->back = -1;
 #else
 		result = 1;
 #endif
-		is_fatal(result < 0,
-			"%s: online compression not yet supported for this format!", file->module);
+		if (result < 0) {
+			if (strcmp(file->name, "-") == 0)
+				fatal("%s: This format cannot be used in piped commands!\n", file->module);
+			fatal("%s: online compression not yet supported for this format!", file->module);
+		}
 		return 0;
 		
 	}
@@ -485,7 +501,12 @@ gbftell(gbfile *file)
 {
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		return gztell(file->handle.gz);
+		gbsize_t result = gztell(file->handle.gz);
+		if (file->back != -1) {
+			file->back = -1;
+			result--;
+		}
+		return result;
 #else
 		fatal(NO_ZLIB);
 		return -1;
@@ -505,14 +526,17 @@ gbfeof(gbfile *file)
 {
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		int res = gzeof(file->handle.gz);
+		int res;
 		
+		if (file->back != -1) return 0;
+
+		res  = gzeof(file->handle.gz);
 		if (!res) {
 			signed char test;
 			int len = gzread(file->handle.gz, &test, 1);
 			if (len == 1) {
 				/* No EOF, put the single byte back into stream */
-				gzungetc(test, file->handle.gz);
+				file->back = test;
 			}
 			else {
 				/* we are at the end of the file */
@@ -544,7 +568,7 @@ gbfungetc(const int c, gbfile *file)
 	int r = -1;
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		r = gzungetc(c, file->handle.gz);
+		file->back = -1;
 #else
 		fatal(NO_ZLIB);
 #endif
