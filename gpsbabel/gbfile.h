@@ -44,6 +44,7 @@ typedef struct gbfile_s {
 	char   *buff;	/* static growing buffer, primary used by gbprintf */
 	int    buffsz;
 	char   mode;
+	int    back;
 	unsigned char big_endian:1;
 	unsigned char binary:1;
 	unsigned char gzapi:1;
