@@ -1,7 +1,7 @@
 /*
     Header for our common utilities for XML-based formats.
 
-    Copyright (C) 2004, 2005 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004, 2005, 2006, 2007 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,8 +49,8 @@ void write_xml_entity_end(gbfile *ofd, const char *indent, const char *tag);
 
 void write_optional_xml_entity(gbfile *ofd, const char *indent,
 		const char *tag, const char *value);
-void xml_write_time(gbfile *ofd, const time_t timep, char *elname);
-void xml_fill_in_time(char *time_string, const time_t timep, 
+void xml_write_time(gbfile *ofd, const time_t timep, int microseconds, char *elname);
+void xml_fill_in_time(char *time_string, const time_t timep, int microseconds,
 		int long_or_short);
 void write_xml_header(gbfile *ofd);
 void xml_ignore_tags(const char **taglist);

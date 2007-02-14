@@ -1,7 +1,7 @@
 /*
     Access Garmin Logbook (Forerunner/Foretracker) data files.
 
-    Copyright (C) 2004 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004, 2005, 2006, 2007  Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@ glogbook_waypt_pr(const waypoint *wpt)
 	}
 	gbfprintf(ofd, "                </Position>\n");
 	gbfprintf(ofd, "                ");
-	xml_write_time(ofd, wpt->creation_time, "Time");
+	xml_write_time(ofd, wpt->creation_time, wpt->microseconds, "Time");
 	gbfprintf(ofd, "            </Trackpoint>\n");
 }
 
@@ -147,7 +147,7 @@ void	gl_trk_pnt_e(const char *args, const char **unused)
 
 void	gl_trk_utc(const char *args, const char **unused)
 {
-	wpt_tmp->creation_time = xml_parse_time(args);
+	wpt_tmp->creation_time = xml_parse_time(args, &wpt_tmp->microseconds);
 }
 
 void	gl_trk_lat(const char *args, const char **unused)

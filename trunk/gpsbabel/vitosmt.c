@@ -184,7 +184,6 @@ vitosmt_read(void)
 
 		wpt_tmp->creation_time = mkgmtime(&tmStruct);
 		wpt_tmp->microseconds = fmod(1000000*seconds+0.5,1000000);
-	
 		wpt_tmp->shortname	=xcalloc(16,1);
 		snprintf(wpt_tmp->shortname, 15 , "WP%04d", ++serial);
 

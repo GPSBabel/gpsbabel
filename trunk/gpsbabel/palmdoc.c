@@ -516,7 +516,7 @@ palmdoc_disp(const waypoint *wpt)
 			
 			logpart = xml_findfirst( curlog, "groundspeak:date" );
 			if ( logpart ) {
-				logtime = xml_parse_time( logpart->cdata );
+				logtime = xml_parse_time( logpart->cdata, NULL);
 				logtm = localtime( &logtime );
 				if ( logtm ) {
 					docprintf( 15, 
