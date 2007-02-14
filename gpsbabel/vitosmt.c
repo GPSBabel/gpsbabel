@@ -183,7 +183,7 @@ vitosmt_read(void)
 		tmStruct.tm_isdst	=-1;
 
 		wpt_tmp->creation_time = mkgmtime(&tmStruct);
-		wpt_tmp->centiseconds = fmod(100*seconds+0.5,100);
+		wpt_tmp->microseconds = fmod(1000000*seconds+0.5,1000000);
 	
 		wpt_tmp->shortname	=xcalloc(16,1);
 		snprintf(wpt_tmp->shortname, 15 , "WP%04d", ++serial);
@@ -274,7 +274,7 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 	position += sizeof(double);
 
 	tmstructp =  gmtime(&waypointp->creation_time);
-	seconds = (double) tmstructp->tm_sec + 0.01*waypointp->centiseconds;
+	seconds = (double) tmstructp->tm_sec + 0.0000001*waypointp->microseconds;
 
 	workbuffer[position++]	=tmstructp->tm_year-100;
 	workbuffer[position++]	=tmstructp->tm_mon+1;

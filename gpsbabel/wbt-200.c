@@ -392,7 +392,6 @@ static int data_chunk(struct read_state *st, const void *buf, int fmt) {
 		wpt->longitude	    = lon;
 		wpt->altitude       = alt;
 		wpt->creation_time  = rtim;
-		wpt->centiseconds   = 0;
 
 		sprintf(wp_name, "WP%04d", ++st->wpn);
 		wpt->shortname      = xstrdup(wp_name);

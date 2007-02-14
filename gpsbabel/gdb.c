@@ -90,8 +90,8 @@
 
 /* %%% local vars %%% */
 
-/* static char gdb_release[] = "$Revision: 1.46 $"; */
-static char gdb_release_date[] = "$Date: 2007-02-06 23:24:14 $";
+/* static char gdb_release[] = "$Revision: 1.47 $"; */
+static char gdb_release_date[] = "$Date: 2007-02-14 14:25:36 $";
 
 static FILE *fin, *fout;
 static char *fin_name, *fout_name;
@@ -890,7 +890,7 @@ gdb_read_track(const size_t max_file_pos)
 	    wpt->latitude = GPS_Math_Semi_To_Deg(xlat);
 	    wpt->longitude = GPS_Math_Semi_To_Deg(xlon);
 	    wpt->creation_time = xtime;
-	    wpt->centiseconds = 0;
+	    wpt->microseconds = 0;
 	    wpt->altitude = xalt;
 	    wpt->depth = xdepth;
 	    

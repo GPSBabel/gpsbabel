@@ -292,18 +292,18 @@ nmea_set_waypoint_time(waypoint *wpt, struct tm *time)
 	if (time->tm_year == 0)
 	{
 		wpt->creation_time = ((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec;
-		if (wpt->centiseconds == 0)
+		if (wpt->microseconds == 0)
 		{
-			 wpt->centiseconds++;
+			 wpt->microseconds++;
 			 without_date++;
 		}
 	}
 	else
 	{
 		wpt->creation_time = mkgmtime(time);
-		if (wpt->centiseconds != 0)
+		if (wpt->microseconds != 0)
 		{
-			wpt->centiseconds = 0;
+			wpt->microseconds = 0;
 			without_date--;
 		}
 	}
@@ -676,11 +676,11 @@ nmea_fix_timestamps(route_head *track)
 		{
 			waypoint *wpt = (waypoint *)elem;
 			
-			if (wpt->centiseconds != 0)
+			if (wpt->microseconds != 0)
 			{
 				time_t dt;
 				
-				wpt->centiseconds = 0;		/* reset flag */
+				wpt->microseconds = 0;		/* reset flag */
 
 				dt = (prev / SECONDS_PER_DAY) * SECONDS_PER_DAY;
 				wpt->creation_time += dt;

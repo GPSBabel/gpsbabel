@@ -923,7 +923,7 @@ mag_trkparse(char *trkmsg)
 	tm.tm_mday = dmy % 100; 
 
 	waypt->creation_time = mkgmtime(&tm);
-	waypt->centiseconds = fracsecs;
+	waypt->microseconds = CENTI_TO_MICRO(fracsecs);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -1319,7 +1319,7 @@ void mag_track_disp(const waypoint *waypointp)
 				   tm->tm_sec;
 			date = tm->tm_mday * 10000 + tm->tm_mon * 100 + 
 				   tm->tm_year;
-			fracsec = waypointp->centiseconds;
+			fracsec = MICRO_TO_CENTI(waypointp->microseconds);
 		}
 	}
         if (!tm) {
