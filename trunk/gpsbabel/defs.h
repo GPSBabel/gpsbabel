@@ -163,6 +163,9 @@ extern const char gpsbabel_version[];
 extern time_t gpsbabel_now;	/* gpsbabel startup-time; initialized in main.c with time() */
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
 
+#define CENTI_TO_MICRO(t) (t * 10000) /* Centiseconds to Microseconds */
+#define MICRO_TO_CENTI(t) (t / 10000) /* Centiseconds to Microseconds */
+
 /* Short or Long XML Times */
 #define XML_SHORT_TIME 1
 #define XML_LONG_TIME 2
@@ -326,7 +329,7 @@ typedef struct {
 	wp_flags wpt_flags;
 	const char *icon_descr;
 	time_t creation_time;	/* standardized in UTC/GMT */
-	int centiseconds;	/* Optional hundredths of a second. */
+	int microseconds;	/* Optional millionths of a second. */
 	
 	/*
 	 * route priority is for use by the simplify filter.  If we have

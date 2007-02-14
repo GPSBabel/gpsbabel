@@ -214,7 +214,7 @@ mapsend_track_read(void)
 		} else {
 			centisecs = 0;
 		}
-		wpt_tmp->centiseconds = centisecs;
+		wpt_tmp->microseconds = CENTI_TO_MICRO(centisecs);
 		
 		track_add_wpt(track_head, wpt_tmp);
 	}
@@ -488,7 +488,7 @@ void mapsend_track_disp(const waypoint * wpt)
 
 	/* 0 centiseconds */
 	if (trk_version >= 30) {
-		c = wpt->centiseconds;
+		c = MICRO_TO_CENTI(wpt->microseconds);
 		gbfwrite(&c, 1, 1, mapsend_file_out);
 	}
 }

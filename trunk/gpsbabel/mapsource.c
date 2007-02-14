@@ -1582,7 +1582,7 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 		thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
 		thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
 		thisWaypoint->creation_time = le_read32(&dateTime);
-		thisWaypoint->centiseconds = 0;
+		thisWaypoint->microseconds = 0;
 		thisWaypoint->altitude = mps_altitude;
 		thisWaypoint->depth = mps_depth;
 		track_add_wpt(track_head, thisWaypoint);

@@ -597,7 +597,6 @@ psit_track_r(gbfile *psit_file, route_head **trk)
 			}
 
 			thisWaypoint->creation_time = dateTime;
-			thisWaypoint->centiseconds = 0;
 			track_add_wpt(track_head, thisWaypoint);
 
 			if (gbfeof(psit_file)) break;
