@@ -426,6 +426,12 @@ main(int argc, char *argv[])
 				global_opts.masked_objective |= POSNDATAMASK;
 				break;
 			case 'N':
+#if 0
+/* This option is silently eaten for compatibilty.  -N is now the
+ * default.  If you want the old behaviour, -S allows you to individually
+ * turn them on.  The -N option will be removed in 2008.
+ */ 
+
 				switch(argv[argn][2]) {
 					case 'i':
 						global_opts.no_smart_icons = 1;
@@ -438,7 +444,22 @@ main(int argc, char *argv[])
 						global_opts.no_smart_icons = 1;
 						break;
 				}
+#endif
 				
+				break;
+			case 'S':
+				switch(argv[argn][2]) {
+					case 'i':
+						global_opts.smart_icons = 1;
+						break;	
+					case 'n': 
+						global_opts.smart_names = 1;
+						break;
+					default:
+						global_opts.smart_icons = 1;
+						global_opts.smart_names = 1;
+						break;
+				}
 				break;
  			case 'x':
 				optarg = argv[argn][2]
