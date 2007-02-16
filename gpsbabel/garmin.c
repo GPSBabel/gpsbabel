@@ -572,13 +572,13 @@ waypt_write_cb(GPS_PWay *way)
 }
 
 /* 
- * If we're not using smart icons, try to put the cache info in the
+ * If we're using smart names, try to put the cache info in the
  * description.
  */
 const char *
 get_gc_info(waypoint *wpt)
 {
-	if (global_opts.no_smart_icons) {
+	if (global_opts.smart_names) {
 		if (wpt->gc_data.type == gt_virtual) return  "V ";
 		if (wpt->gc_data.type == gt_unknown) return  "? ";
 		if (wpt->gc_data.type == gt_multi) return  "Mlt ";
@@ -636,7 +636,7 @@ waypoint_write(void)
 		}
 		way[i]->ident[sizeof(way[i]->ident)-1] = 0;
 
-		if (!global_opts.no_smart_icons && 
+		if (global_opts.smart_names && 
 		     wpt->gc_data.diff && wpt->gc_data.terr) {
 	                snprintf(obuf, sizeof(obuf), "%s%d/%d %s", 
 					get_gc_info(wpt),

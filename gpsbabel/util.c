@@ -839,7 +839,7 @@ month_lookup(const char *m)
 const char *
 get_cache_icon(const waypoint *waypointp)
 {
-	if (global_opts.no_smart_icons)
+	if (!global_opts.smart_icons)
 		return NULL;
 
 	/*

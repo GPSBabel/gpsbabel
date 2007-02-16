@@ -676,8 +676,13 @@ static void kml_waypt_pr(const waypoint *waypointp)
 		else
 			fputs(odesc, ofd);
 
-		if (!global_opts.no_smart_icons && 
-		     waypointp->gc_data.diff && waypointp->gc_data.terr) {
+		/* It's tempting to conditionalize this on smart_names, but
+		 * KML is so robust that it makes sense to just always do
+		 * this for geocaches.  (Plus the convenience of being able
+		 * to do a drag-n-drop into Earth without extra option is a 
+		 * win.)
+		 */
+		if (waypointp->gc_data.diff && waypointp->gc_data.terr) {
 			if (waypointp->gc_data.placer) {
 				char *p = xml_entitize(waypointp->gc_data.placer);
 				fprintf(ofd, "<![CDATA[<i> by %s</i>]]>", p);
@@ -713,7 +718,7 @@ static void kml_waypt_pr(const waypoint *waypointp)
 		kml_write_xml(-1, "</IconStyle>\n");
 		kml_write_xml(-1, "</Style>\n");
 
-	} else if (!global_opts.no_smart_icons && waypointp->gc_data.diff && waypointp->gc_data.terr) {
+	} else if (waypointp->gc_data.diff && waypointp->gc_data.terr) {
 		char *is = kml_lookup_gc_icon(waypointp);
 		kml_write_xml(1, "<Style>\n");
 		kml_write_xml(1, "<IconStyle>\n");

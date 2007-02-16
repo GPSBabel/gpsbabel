@@ -151,8 +151,8 @@ typedef struct {
 	gpsdata_type objective;
 	unsigned int	masked_objective;
 	int verbose_status;	/* set by GUI wrappers for status */
-	int no_smart_icons;	
-	int no_smart_names;
+	int smart_icons;	
+	int smart_names;
 	cet_cs_vec_t *charset;
 	char *charset_name;
 	inifile_t *inifile;
