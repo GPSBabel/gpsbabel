@@ -90,8 +90,8 @@
 
 /* %%% local vars %%% */
 
-/* static char gdb_release[] = "$Revision: 1.47 $"; */
-static char gdb_release_date[] = "$Date: 2007-02-14 14:25:36 $";
+/* static char gdb_release[] = "$Revision: 1.48 $"; */
+static char gdb_release_date[] = "$Date: 2007-02-20 20:51:15 $";
 
 static FILE *fin, *fout;
 static char *fin_name, *fout_name;
@@ -700,6 +700,8 @@ gdb_read_route(void)
 #ifdef GDB_DEBUG
 		gdb_print_buff(buff, 8, "Unknown bytes within rte_reed_loop");
 #endif
+		if (gdb_ver >= 3)
+		    gdb_fread(buff, 8);						/* a second block of unknown bytes */
 	    }
 
 	    /* The next thing is the unknown 0x03 0x00 .. 0x00 (18 bytes) */
