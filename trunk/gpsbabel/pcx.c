@@ -97,8 +97,10 @@ data_read(void)
 	char lathemi, lonhemi;
 	char tbuf[20];
 	char nbuf[20];
+	int points;
 
 	read_as_degrees  = 0;
+	points = 0;
 
 	while ((buff = gbfgetstr(file_in)))
 	{
@@ -171,6 +173,7 @@ data_read(void)
 			if (route != NULL)
 				route_add_wpt(route, waypt_dupe(wpt_tmp));
 			waypt_add(wpt_tmp);
+			points++;
 			break;
 		case 'H':
 			/* Garmap2 has headers 
@@ -178,14 +181,20 @@ data_read(void)
   			everything else is 
 			  H(2 chars)TN(tracknane\0)
   			*/
-			if (ibuf[3] == 'L' && ibuf[4] == 'A') {
-				track = route_head_alloc();
-				track->rte_name = xstrdup("track");
-				track_add_head(track);
-			} else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
-				track = route_head_alloc();
-				track->rte_name = xstrdup(&ibuf[6]);
-				track_add_head(track);
+			if (points > 0) {
+				track = NULL;
+				points = 0;
+			}
+			if (track == NULL) {
+				if (ibuf[3] == 'L' && ibuf[4] == 'A') {
+					track = route_head_alloc();
+					track->rte_name = xstrdup("track");
+					track_add_head(track);
+				} else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
+					track = route_head_alloc();
+					track->rte_name = xstrdup(&ibuf[6]);
+					track_add_head(track);
+				}
 			}
 			break;
 		case 'R':
@@ -239,6 +248,7 @@ data_read(void)
 				track_add_head(track);
 			}
 			track_add_wpt(track, wpt_tmp);
+			points++;
 			break;
 		case 'U': 
  			read_as_degrees = ! strncmp("LAT LON DEG", ibuf + 3, 11);
