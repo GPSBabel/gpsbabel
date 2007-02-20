@@ -39,6 +39,8 @@ dequeue(queue *element)
 
 	next->prev = prev;
 	prev->next = next;
+	
+	QUEUE_INIT(element);
 	return element;
 }
 
