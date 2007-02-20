@@ -104,23 +104,20 @@ tef_header(const char *args, const char **attrv)
 {
 	const char **avp = &attrv[0];
 
-	if (global_opts.objective == rtedata)
+	route = route_head_alloc();
+	while (*avp) 
 	{
-	    route = route_head_alloc();
-	    while (*avp) 
+	    if (strcmp(avp[0], "Name") == 0) 
 	    {
-		if (strcmp(avp[0], "Name") == 0) 
-		{
-		    route->rte_name = xstrdup(avp[1]);
-		}
-		else if (strcmp(avp[0], "Software") == 0) 
-		{
-		    route->rte_desc = xstrdup(avp[1]);
-		}
-        	avp+=2;
+		route->rte_name = xstrdup(avp[1]);
 	    }
-	    route_add_head(route);
+	    else if (strcmp(avp[0], "Software") == 0) 
+	    {
+		route->rte_desc = xstrdup(avp[1]);
+	    }
+	    avp+=2;
 	}
+	route_add_head(route);
 }
 
 /*
