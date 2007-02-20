@@ -28,6 +28,8 @@ static char *vdopopt = NULL;
 static char *andopt = NULL;
 static double hdopf;
 static double vdopf;
+static gpsdata_type what;
+static route_head *head;
 
 static
 arglist_t fix_args[] = {
@@ -62,35 +64,43 @@ fix_process_wpt(const waypoint *wpt)
 		del = delh || delv;
 
 	if (del) {
-		waypt_del(waypointp);
+		switch(what) {
+			case wptdata:
+				waypt_del(waypointp);
+				break;
+			case trkdata:
+				track_del_wpt(head, waypointp);
+				break;
+			case rtedata:
+				route_del_wpt(head, waypointp);
+				break;
+			default:
+				return;
+		}
 		waypt_free(waypointp);
 	}
 }
 
 static void
-fix_process_track(const route_head *trk)
+fix_process_head(const route_head *trk)
 {
-	waypoint * waypointp;
-	queue *elem, *tmp;
-	
-	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
-		waypointp = (waypoint *)elem;
-
-		fix_process_wpt(waypointp);
-	}
+	head = (route_head *)trk;
 }
 
 static void
 fix_process(void)
 {
 	// Filter waypoints.
+	what = wptdata;
 	waypt_disp_all(fix_process_wpt);
 
 	// Filter tracks
-	track_disp_all(fix_process_track, NULL, NULL);
+	what = trkdata;
+	track_disp_all(fix_process_head, NULL, fix_process_wpt);
 	
 	// And routes
-	route_disp_all(fix_process_track, NULL, NULL);
+	what = rtedata;
+	route_disp_all(fix_process_head, NULL, fix_process_wpt);
 	
 }
 

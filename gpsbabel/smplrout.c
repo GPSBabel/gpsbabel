@@ -271,6 +271,7 @@ routesimple_tail( const route_head *rte )
 		}
 		route_del_wpt( (route_head *)(void *)rte,
 				(waypoint *)(void *)(xte_recs[i].intermed->wpt));
+		waypt_free((waypoint *)(void *)(xte_recs[i].intermed->wpt));
               	
 		if ( xte_recs[i].intermed->prev ) {
 			xte_recs[i].intermed->prev->next = xte_recs[i].intermed->next;

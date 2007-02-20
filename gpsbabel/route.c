@@ -205,7 +205,6 @@ static void
 any_route_del_wpt( route_head *rte, waypoint *wpt, int *ct)
 {
 	dequeue( &wpt->Q );
-	waypt_free( wpt );
 	rte->rte_waypt_ct--;
 	if ( ct ) (*ct)--;
 }
