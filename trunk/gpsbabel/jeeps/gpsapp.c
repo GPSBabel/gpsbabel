@@ -4210,7 +4210,7 @@ void GPS_D304_Send(UC *data, GPS_PTrack trk)
     GPS_Util_Put_Float(p,trk->alt);
     p+=sizeof(float);
  
-    GPS_Util_Put_Float(p,1.0e25);
+    GPS_Util_Put_Float(p, (const float) 1.0e25);
     p+=sizeof(float);
 
     /* Not really clear if the members below makes sense to write or not */
