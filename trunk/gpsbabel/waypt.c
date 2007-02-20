@@ -75,7 +75,7 @@ waypt_dupe(const waypoint *wpt)
 	 * It's important that this duplicated waypoint not appear
 	 * on the master Q.
 	 */
-	tmp->Q.next = tmp->Q.prev = NULL;
+	QUEUE_INIT(&tmp->Q);
 	tmp->fs = fs_chain_copy( wpt->fs );
 
 	return tmp;
@@ -145,6 +145,7 @@ waypt_new(void)
 	wpt->fix = fix_unknown;
 	wpt->sat = -1;
 
+	QUEUE_INIT(&wpt->Q);
 	return wpt;
 }
 
