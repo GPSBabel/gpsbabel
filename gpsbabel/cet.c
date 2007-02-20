@@ -305,6 +305,7 @@ cet_str_any_to_utf8(const char *src, const cet_cs_vec_t *vec)
 
 	cin = (char *)src;
 	if (cin == NULL) return NULL;
+	if (vec->ucs4_count == 0) return xstrdup(src); /* UTF-8 -> UTF-8 */
 
 	len = 0;
 	while (*cin != '\0')		/* determine length of resulting UTF-8 string */
