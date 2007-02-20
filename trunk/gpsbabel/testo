@@ -796,7 +796,7 @@ ${PNAME} -i geo -f ${REFERENCE}/../geocaching.loc -o text -F ${TMPDIR}/text.out 
 # tef "TourExchangeFormat" read test
 #
 rm -f ${TMPDIR}/tef_xml*
-${PNAME} -r -i tef -f ${REFERENCE}/route/tef_xml.sample.xml -o gpx -F ${TMPDIR}/tef_xml.sample.gpx
+${PNAME} -i tef -f ${REFERENCE}/route/tef_xml.sample.xml -o gpx -F ${TMPDIR}/tef_xml.sample.gpx
 compare ${TMPDIR}/tef_xml.sample.gpx ${REFERENCE}/route/tef_xml.sample.gpx 
 
 #
