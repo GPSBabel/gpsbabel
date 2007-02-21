@@ -155,6 +155,7 @@ static waypoint * curr_waypt = NULL;
 static waypoint * last_waypt = NULL;
 static void * gbser_handle;
 static const char *posn_fname;
+static queue pcmpt_head;
 
 static int without_date;	/* number of created trackpoints without a valid date */
 static struct tm opt_tm;	/* converted "date" parameter */
@@ -216,6 +217,7 @@ nmea_rd_init(const char *fname)
 {
 	curr_waypt = NULL;
 	last_waypt = NULL;
+	QUEUE_INIT(&pcmpt_head);
 
  	if (getposnarg) {
  		getposn = 1;
@@ -626,6 +628,95 @@ gpvtg_parse(char *ibuf)
 	
 }
 
+/*
+ *  AVMAP EKP-IV Tracks - a proprietary (and very weird) extended NMEA.
+ * https://sourceforge.net/tracker/?func=detail&atid=489478&aid=1640814&group_id=58972 
+ */
+static 
+double pcmpt_deg(int d)
+{
+	int deg;
+	double minutes; 
+
+	deg = d  / 100000;
+	minutes = (((d / 100000.0) - deg) * 100) / 60.0;
+	return (double) deg + minutes;
+}
+
+void
+pcmpt_parse(char *ibuf)
+{
+	int i, j1, j2, j3, j4, j5, j6;
+	int lat, lon;
+	char altflag, u1, u2;
+	float alt, f1, f2;
+	char coords[20] = {0};
+	int dmy, hms;
+
+	dmy = hms = 0;
+
+	sscanf(ibuf,"$PCMPT,%d,%d,%d,%c,%f,%d,%[^,],%d,%f,%d,%f,%c,%d,%c,%d",
+		&j1, &j2, &j3, &altflag, &alt, &j4, (char *) &coords, 
+			&j5, &f1, &j6, &f2, &u1, &dmy, &u2, &hms);
+
+	if (altflag == 'D' && curr_waypt && alt > 0) {
+		curr_waypt->altitude =  alt /*+ 500*/;
+		return;
+	}
+
+	/* 
+	 * There are a couple of different second line records, but we
+	 * don't care about them.
+	 */
+	if (j2 != 1) {
+		return;
+	}
+
+	sscanf(coords, "%d%n", &lat, &i);
+	if (coords[i] == 'S') lat = -lat;
+	sscanf(coords + i + 1, "%d%n", &lon, &i);
+	if (coords[i] == 'W') lon= -lon;
+
+	if (lat || lon) {
+		curr_waypt = waypt_new();
+		curr_waypt->longitude = pcmpt_deg(lon);
+		curr_waypt->latitude = pcmpt_deg(lat);
+
+		tm.tm_sec = (long) hms % 100;
+		hms = hms / 100;
+		tm.tm_min = (long) hms % 100;
+		hms = hms / 100;
+		tm.tm_hour = (long) hms % 100;
+
+		tm.tm_year = dmy % 10000 - 1900;
+		dmy = dmy / 10000;
+		tm.tm_mon  = dmy % 100 - 1;
+		dmy = dmy / 100;
+		tm.tm_mday = dmy;
+		nmea_set_waypoint_time(curr_waypt, &tm);
+		ENQUEUE_HEAD(&pcmpt_head, &curr_waypt->Q);
+	} else {
+		queue *elem, *tmp;
+		route_head *trk_head;
+
+		if (QUEUE_EMPTY(&pcmpt_head)) {
+			return;
+		}
+		
+		/* 
+		 * Since we oh-so-cleverly inserted points at the head,
+		 * we can rip through the queue forward now to get our
+`		 * handy-dandy reversing effect.
+		 */
+		trk_head = route_head_alloc();
+		track_add_head(trk_head);
+		QUEUE_FOR_EACH(&pcmpt_head, elem, tmp) {
+			waypoint *wpt = (waypoint *) dequeue(elem);
+			track_add_wpt(trk_head, wpt);
+		}
+	}
+}
+
 static void
 nmea_fix_timestamps(route_head *track)
 {
@@ -760,6 +851,9 @@ nmea_parse_one_line(char *ibuf)
 	} else
 	if (0 == strncmp(tbuf, "$GPZDA,",7)) {
 		gpzda_parse(tbuf);
+	} else
+	if (0 == strncmp(tbuf, "$PCMPT,", 7)) {
+		pcmpt_parse(tbuf);
 	} else
 	if (dogpvtg && (0 == strncmp(tbuf, "$GPVTG,",7))) {
 		gpvtg_parse(tbuf); /* speed and course */
