@@ -382,6 +382,19 @@ mkshort(short_handle h, const char *istring)
 	int i, l, nlen, replaced;
 	mkshort_handle *hdl = (mkshort_handle *) h;
 
+
+	/*
+	 * A rather horrible special case hack.
+	 * If the target length is "6" and the source length is "7" and
+	 * the first two characters are "GC", we'll assume it's one of the
+	 * the new seven digit geocache numbers and special case whacking
+	 * the 'G' off the front.
+	 */
+	if ((hdl->target_len == 6) && (strlen(ostring) == 7) && 
+	    (ostring[0] == 'G') && (ostring[1] == 'C')) {
+		memmove(&ostring[0], &ostring[1], strlen(ostring));
+	}
+
 	/* 
 	 * Whack leading "[Tt]he",
  	 */
