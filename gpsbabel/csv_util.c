@@ -689,7 +689,7 @@ sscanftime( const char *s, const char *format, const int gmt )
 			return mktime(&stm);		
 	}
 	
-	return -1;
+	return 0;
 }
 static
 time_t
