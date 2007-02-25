@@ -277,20 +277,28 @@ tag_mapping tag_path_map[] = {
 	{ tt_wpt_link_text, 0, "/gpx/wpt/link/text", 0UL },		/* GPX 1.1 */
 	{ tt_wpt_sym, 0, "/gpx/wpt/sym", 0UL },
 	{ tt_wpt_type, 1, "/gpx/wpt/type", 0UL },
-	
-	{ tt_cache, 1, "/gpx/wpt/groundspeak:cache", 0UL },
-	{ tt_cache_name, 1, "/gpx/wpt/groundspeak:cache/groundspeak:name", 0UL },
-	{ tt_cache_container, 1, "/gpx/wpt/groundspeak:cache/groundspeak:container", 0UL },
-	{ tt_cache_type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:type", 0UL },
-	{ tt_cache_difficulty, 1, "/gpx/wpt/groundspeak:cache/groundspeak:difficulty", 0UL },
-	{ tt_cache_terrain, 1, "/gpx/wpt/groundspeak:cache/groundspeak:terrain", 0UL },
-	{ tt_cache_hint, 1, "/gpx/wpt/groundspeak:cache/groundspeak:encoded_hints", 0UL },
-	{ tt_cache_desc_short, 1, "/gpx/wpt/groundspeak:cache/groundspeak:short_description", 0UL },
-	{ tt_cache_desc_long, 1, "/gpx/wpt/groundspeak:cache/groundspeak:long_description", 0UL },
-	{ tt_cache_log_wpt, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:log_wpt", 0UL },
-	{ tt_cache_log_type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type", 0UL },
-	{ tt_cache_log_date, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date", 0UL },
-	{ tt_cache_placer, 1, "/gpx/wpt/groundspeak:cache/groundspeak:owner", 0UL },
+
+	/* Double up the GPX 1.0 and GPX 1.1 styles */
+#define GEOTAG(type,name) \
+  {type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:" name, 0UL }, \
+  {type, 1, "/gpx/wpt/extensions/cache/" name, 0UL }
+
+	GEOTAG( tt_cache, 		"cache"),
+	GEOTAG( tt_cache_name, 		"name"),
+	GEOTAG( tt_cache_container, 	"container"),
+	GEOTAG( tt_cache_type, 		"type"),
+	GEOTAG( tt_cache_difficulty, 	"difficulty"),
+	GEOTAG( tt_cache_terrain, 	"terrain"),
+	GEOTAG( tt_cache_hint, 		"encoded_hints"),
+	GEOTAG( tt_cache_desc_short, 	"short_description"),
+	GEOTAG( tt_cache_desc_long, 	"long_description"),
+	GEOTAG( tt_cache_placer, 	"owner"),
+	{ tt_cache_log_wpt, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:log_wpt"},
+	{ tt_cache_log_wpt, 1, "/gpx/wpt/extensions/cache/logs/log/log_wpt"},
+	{ tt_cache_log_type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type"},
+	{ tt_cache_log_type, 1, "/gpx/wpt/extensions/cache/logs/log/type"},
+	{ tt_cache_log_date, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date"},
+	{ tt_cache_log_date, 1, "/gpx/wpt/extensions/cache/logs/log/date"},
 	
 	{ tt_garmin_extension, 0, "/gpx/wpt/extensions", 0UL },
 	{ tt_garmin_waypt_extension, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension", 0UL },
