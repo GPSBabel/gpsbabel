@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# creates a RPM compatible ChangeLog file from babelweb/changes.html 
+# (published at http://www.gpsbabel.org)
+#
+# !!! input from stdin and output to stdout !!!
+#
+
+LANG='POSIX'; export LANG > /dev/null
+
+sed -e :a -e 's/<[^<]*>/ /g;/</{N;s/\n/ /;ba;}' | # remove most html tags
+sed -e 's/&nbsp;/ /g' -e 's/&amp;/\&/g' -e 's/&gt;/\>/g' -e 's/&lt;/\</g'| # replace HTML special chars
+sed -e 's/^[ \t]*//;s/[ \t]*$//' | # trim leading and trailing spaces
+sed -e 's/  / /g' | # remove double (or more) spaces
+awk ' # create list with line format YYYY-MM-DD <comment>
+BEGIN { line=0; item=0; OUTP="" }
+/^20[0-9][0-9]-[0-9][0-9]-/ { # this will be work until 2099
+  line++
+  item=0
+  if (length(OUTP) > 0)
+  {
+    printf("%s\n", OUTP)
+    OUTP=""
+  }
+  printf("%s", substr($0, 1, 10))
+  next
+}
+{ if (line==0) next } # skip header stuff
+{
+  item++;
+  if (item==1)
+  {
+    if (length($0) > 0) OUTP=sprintf(" %s:", $0)
+    next
+  }
+  else if (length($0) > 0)
+  {
+    OUTP=sprintf("%s %s", OUTP, $0)
+    next
+  }
+}
+END { if (length(OUTP) > 0) printf("%s\n", OUTP) }
+' | 
+sort -r | # keep sure, lines "YYYY-MM-DD ....." are sorted in descending order
+uniq | # and remove duplicates
+awk '
+BEGIN { TMx=0 }
+{
+  DT=sprintf("%s %s %s 00 00 00", substr($0, 1, 4), substr($0, 6, 2), substr($0, 9, 2))
+  TM=mktime(DT)
+  if (TM != TMx) 
+  {
+    TX=strftime("%a %b %d %Y", TM)
+    printf("* %s http://www.gpsbabel.org\n", TX)
+    TMx = TM
+  }
+  OUTP=substr($0, 11)
+  while (substr(OUTP, 1, 1) <= " " ) { OUTP=substr(OUTP, 2) }
+  printf("- %s \n", OUTP)
+  next
+}
+'

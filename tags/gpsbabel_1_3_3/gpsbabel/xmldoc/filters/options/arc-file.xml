@@ -1,0 +1,13 @@
+<para>
+This option is required.
+</para>
+<para>
+This option specifies the name of the file containing the arc to use for
+filtering.  The format of the file is as described above.
+</para>
+<para>
+GPSBabel supports converting any route or track to a file usable by this
+filter; simply read it in the normal way and write it using the 
+<link linkend="fmt_arc">arc</link> file format.
+</para>
+

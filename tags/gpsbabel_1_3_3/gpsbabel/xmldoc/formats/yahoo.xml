@@ -1,0 +1,7 @@
+<para>
+This format reads output from the 
+<ulink url="http://developer.yahoo.com/maps/rest/V1/geocode.html">Yahoo geocoding API</ulink>.  
+This feature of GPSBabel makes it easy to get geocoded results from 
+Yahoo into your favorite mapping program, GPS receiver, or other format.
+</para>
+

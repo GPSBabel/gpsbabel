@@ -1,0 +1,9 @@
+
+      
+      
+      <para>This is the XML format that's used by Navicache.com for
+their geocaching data.  There are a number of fields in it that are
+marked "required" but are Navicache-specific, so GPSBabel can not
+write these files, but we can still read them. <ulink url="http://www.navicache.com/cgi-bin/ib312a/ikonboard.cgi?act=ST;f=23;t=334">navicache.com</ulink>
+         </para>
+    
