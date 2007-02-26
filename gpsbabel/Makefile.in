@@ -208,7 +208,8 @@ gpsbabel.fo:  FORCE
 	xsltproc -o $@ xmldoc/babelpdf.xsl xmldoc/readme.xml
 
 gpsbabel.pdf: gpsbabel.fo
-	fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
+	fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf 
+	cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
 
 
 gpsbabel.html: FORCE
