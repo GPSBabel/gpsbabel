@@ -90,8 +90,8 @@
 
 /* %%% local vars %%% */
 
-/* static char gdb_release[] = "$Revision: 1.48 $"; */
-static char gdb_release_date[] = "$Date: 2007-02-20 20:51:15 $";
+/* static char gdb_release[] = "$Revision: 1.49 $"; */
+static char gdb_release_date[] = "$Date: 2007-03-10 23:36:14 $";
 
 static FILE *fin, *fout;
 static char *fin_name, *fout_name;
@@ -514,10 +514,14 @@ gdb_read_wpt(const size_t fileofs, int *wptclass)
 	    gdb_is_valid((url_ct >= 0), prefix, "Number of urls (since v3)");
 	    
 	    while (url_ct > 0) {
+		char v3xurl[GDB_URL_BUFFERLEN];
 		url_ct--;
-		gdb_fread_str(xurl, sizeof(xurl));			/* URL list */
+		gdb_fread_str(v3xurl, sizeof(v3xurl));			/* URL list */
+		add_url(res, xstrdup(v3xurl), NULL);
+#if 0
 		if ((url == NULL) && (xurl[0] != '\0'))
 		    url = xstrdup(xurl);				/* keep only the first valid entry */
+#endif
 	    }
 	    if (url != NULL) {
 		strncpy(xurl, url, sizeof(xurl));

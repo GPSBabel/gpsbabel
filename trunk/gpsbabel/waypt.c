@@ -1,7 +1,7 @@
 /*
     Perform various operations on waypoints.
 
-    Copyright (C) 2002-2005 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2007 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -303,6 +303,22 @@ waypt_free( waypoint *wpt )
 	}
 	if (wpt->url_link_text) {
 		xfree(wpt->url_link_text);
+	}
+	if (wpt->url_next) {
+		url_link *url_next;
+		
+		for (url_next = wpt->url_next; url_next; ) {
+	
+			url_link *tonuke = url_next;
+			if (tonuke->url) {
+				xfree(tonuke->url);
+			}
+			if (tonuke->url_link_text) {
+				xfree(tonuke->url_link_text);
+			}
+			url_next = tonuke->url_next;
+			xfree(tonuke);
+		}
 	}
 	if (wpt->icon_descr && wpt->wpt_flags.icon_descr_is_dynamic) {
 		xfree((char *)(void *)wpt->icon_descr);
