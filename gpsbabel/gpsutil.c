@@ -90,7 +90,7 @@ data_read(void)
 			ibuf += 9;
 		}
 		
-		n = sscanf(ibuf, "%lf%c %lf%c %ld%c %30[^,]s %2s",
+		n = sscanf(ibuf, "%lf%c %lf%c %ld%c %30[^,] %2s",
 			&lat, &latdir, &lon, &londir,
 			&alt, &alttype, desc, icon);
 		/* Require at least first threee fields, otherwise ignore */
