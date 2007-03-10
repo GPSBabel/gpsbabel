@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2002, 2003, 2004, 2005  Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007  Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -276,6 +276,12 @@ typedef struct {
 	unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
 } wp_flags;
 
+typedef struct url_link {
+	struct url_link *url_next;
+	char *url;
+	char *url_link_text;
+} url_link;
+
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not 
  * cater to any specific model or protocol.  Anything that needs to
@@ -325,6 +331,13 @@ typedef struct {
 	 * Few formats support this.
 	 */
 	char *notes;
+
+	/* This is a bit icky.   Multiple waypoint support is an
+	 * afterthought and I don't want to change our data structures.
+	 * So we have the first in the waypoint itself and subsequent
+	 * ones in a linked list.
+	 */
+	struct url_link *url_next;
 	char *url;
 	char *url_link_text;
 
