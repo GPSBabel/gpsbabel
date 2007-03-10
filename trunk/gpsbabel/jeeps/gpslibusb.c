@@ -185,9 +185,6 @@ gusb_reset_toggles(void)
 
 		gusb_cmd_get(&iresp, sizeof(iresp));
 
-		if ((le_read16(iresp.gusb_pkt.pkt_id) == GUSB_SESSION_ACK) &&
-                        (le_read32(iresp.gusb_pkt.datasz) == 4)) {
-		}
 		if (le_read16(iresp.gusb_pkt.pkt_id) == 0xfd) return;
 		if (t-- <= 0) {
 			fatal("Could not start session in a reasonable number of tries.\n");
