@@ -276,12 +276,6 @@ typedef struct {
 	unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
 } wp_flags;
 
-typedef struct url_link {
-	struct url_link *url_next;
-	char *url;
-	char *url_link_text;
-} url_link;
-
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not 
  * cater to any specific model or protocol.  Anything that needs to
@@ -336,6 +330,8 @@ typedef struct {
 	 * afterthought and I don't want to change our data structures.
 	 * So we have the first in the waypoint itself and subsequent
 	 * ones in a linked list.
+	 * We also use an implicit anonymous union here, so these three
+	 * members must match struct url_link...
 	 */
 	struct url_link *url_next;
 	char *url;
@@ -420,6 +416,19 @@ typedef struct {
 typedef struct {
 	int request_terminate;
 } posn_status;
+
+/*
+ * Structures and functions for multiple URLs per waypoint.
+ */
+typedef struct url_link {
+	struct url_link *url_next;
+	char *url;
+	char *url_link_text;
+} url_link;
+
+void add_url(waypoint *wpt, char *link, char *url_link_text);
+
+
 
 typedef void (*ff_init) (char const *);
 typedef void (*ff_deinit) (void);

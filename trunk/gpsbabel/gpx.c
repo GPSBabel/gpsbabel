@@ -48,6 +48,8 @@ static int cache_descr_is_html;
 static gbfile *fd;
 static gbfile *ofd;
 static short_handle mkshort_handle;
+static const char *link_url;
+static char *link_text;
 
 static const char *input_string = NULL;
 static int input_string_len = 0;
@@ -599,8 +601,11 @@ gpx_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 		break;
 	case tt_wpt_link:
 		if (0 == strcmp(attr[0], "href")) {
-			wpt_tmp->url = xstrdup(attr[1]);
+			link_url = attr[1];
 		}
+		break;
+	case tt_wpt_link_text:
+		link_text = cdatastr.mem;
 		break;
 	case tt_rte:
 		rte_head = route_head_alloc();
@@ -853,8 +858,18 @@ gpx_end(void *data, const XML_Char *xml_el)
 		wpt_tmp->url = xstrdup(cdatastrp);
 		break;
 	case tt_wpt_urlname:
-	case tt_wpt_link_text:
 		wpt_tmp->url_link_text = xstrdup(cdatastrp);
+		break;
+	case tt_wpt_link: {
+		char *lt = link_text;
+		if (lt) {
+			lt = xstrdup(lrtrim(link_text));
+		}
+		
+		fprintf(stderr, "Here %s/%s\n", link_url, lt);
+		add_url(wpt_tmp, xstrdup(link_url), lt);
+		link_text = NULL;
+		}
 		break;
 	case tt_wpt:
 		waypt_add(wpt_tmp);
@@ -1396,21 +1411,27 @@ write_gpx_url(const waypoint *waypointp)
 {
 	char *tmp_ent;
 
-	if (waypointp->url) {
-		tmp_ent = xml_entitize(waypointp->url);
-		if (gpx_wversion_num > 10) {
-			
+	if (waypointp->url == NULL) {
+		return;
+	}
+
+	if (gpx_wversion_num > 10) {
+		url_link *tail;
+		for (tail = (url_link *)&waypointp->url_next; tail; tail = tail->url_next) {
+			tmp_ent = xml_entitize(tail->url);
 			gbfprintf(ofd, "  <link href=\"%s%s\">\n", 
 				urlbase ? urlbase : "", tmp_ent);
 			write_optional_xml_entity(ofd, "  ", "text", 
-				waypointp->url_link_text);
+				tail->url_link_text);
 			gbfprintf(ofd, "  </link>\n");
-		} else {
-			gbfprintf(ofd, "  <url>%s%s</url>\n", 
-				urlbase ? urlbase : "", tmp_ent);
-			write_optional_xml_entity(ofd, "  ", "urlname", 
-				waypointp->url_link_text);
+			xfree(tmp_ent);
 		}
+	} else {
+		tmp_ent = xml_entitize(waypointp->url);
+		gbfprintf(ofd, "  <url>%s%s</url>\n", 
+			urlbase ? urlbase : "", tmp_ent);
+		write_optional_xml_entity(ofd, "  ", "urlname", 
+			waypointp->url_link_text);
 		xfree(tmp_ent);
 	}
 }
