@@ -1655,7 +1655,7 @@ add_url(waypoint *wpt, char *link, char *url_link_text)
 		new_link->url = link;
 		new_link->url_link_text = url_link_text;
 
-		/* Find current end of chain. */
+		/* Find current end of chain and tack this onto the end.. */
 		for (tail = wpt->url_next;;tail = tail->url_next) {
 			if (tail == NULL) {
 				wpt->url_next = new_link;
