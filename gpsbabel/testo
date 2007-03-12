@@ -1157,9 +1157,9 @@ compare ${TMPDIR}/ge-eg.kml ${REFERENCE}/earth-expertgps.kml
 # Transformation filter (transform) tests
 #
 rm -f ${TMPDIR}/transform*
-${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x transform,rte=wpt,del=y -o gpx -F ${TMPDIR}/transform-rte.gpx
+${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x transform,rte=wpt,del=y -o gpx,gpxver=1.1 -F ${TMPDIR}/transform-rte.gpx
 compare ${TMPDIR}/transform-rte.gpx ${REFERENCE}/transform-rte.gpx
-${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,tracks -x transform,wpt=rte,del=y -o gpx -F ${TMPDIR}/transform-wpt.gpx
+${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,tracks -x transform,wpt=rte,del=y -o gpx,gpxver=1.1 -F ${TMPDIR}/transform-wpt.gpx
 compare ${TMPDIR}/transform-wpt.gpx ${REFERENCE}/transform-wpt.gpx
 
 #
@@ -1186,5 +1186,12 @@ rm -f ${TMPDIR}/alantrl*
 ${PNAME} -i alantrl -f ${REFERENCE}/alantrl.trl -o alantrl -F ${TMPDIR}/alantrl-new.trl
 ${PNAME} -i alantrl -f ${TMPDIR}/alantrl-new.trl -o gpx -F ${TMPDIR}/alantrl-new.gpx
 compare ${TMPDIR}/alantrl-new.gpx ${REFERENCE}/alantrl.gpx
+
+#
+# Test > 1 URL in selected files.
+#
+rm -f ${TMPDIR}/mlink*
+${PNAME} -i gpx -f reference/multiple-links.gpx -o gpx,gpxver=1.1 -F ${TMPDIR}/mlink-1.gpx
+compare ${TMPDIR}/mlink-1.gpx reference/multiple-links.gpx
 
 exit 0

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx
- version="1.0"
+ version="1.1"
 creator="GPSBabel - http://www.gpsbabel.org"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://www.topografix.com/GPX/1/0"
-xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+xmlns="http://www.topografix.com/GPX/1/1"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata>
 <time>1970-01-01T00:00:00Z</time>
 <bounds minlat="42.401051000" minlon="-71.126602000" maxlat="42.468655000" maxlon="-71.102973000"/>
+</metadata>
 <rte>
   <rtept lat="42.438878000" lon="-71.119277000">
     <ele>44.586548</ele>

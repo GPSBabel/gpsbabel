@@ -69,6 +69,7 @@ static format_specific_data **fs_ptr;
 #define MYNAME "GPX"
 #define MY_CBUF_SZ 4096
 #define DEFAULT_XSI_SCHEMA_LOC "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
+#define DEFAULT_XSI_SCHEMA_LOC_11 "http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
 #define DEFAULT_XSI_SCHEMA_LOC_FMT "\"http://www.topografix.com/GPX/%c/%c http://www.topografix.com/GPX/%c/%c/gpx.xsd\""
 #ifndef CREATOR_NAME_URL
 #  define CREATOR_NAME_URL "GPSBabel - http://www.gpsbabel.org"
@@ -389,21 +390,32 @@ prescan_tags(void)
 static void
 tag_gpx(const char **attrv)
 {
-	const char **avp = &attrv[0];
-	while (*avp) {
+	const char **avp;
+	for (avp = &attrv[0]; *avp; avp += 2) {
 		if (strcmp(avp[0], "version") == 0) {
 			gpx_version = avp[1];
 		}
 		else if (strcmp(avp[0], "src") == 0) {
 			gpx_creator = avp[1];
 		}
+		/*
+		 * Our handling of schemaLocation really is weird.
+		 * If we see we have a "normal" GPX 1.1 header, on read,
+		 * flip our default on write to use that and don't append
+		 * it to the rest...
+		 */
 		else if (strcmp(avp[0], "xsi:schemaLocation") == 0) {
+			if (0 == strcmp(avp[1], DEFAULT_XSI_SCHEMA_LOC_11)) {
+				if (0 == strcmp(xsi_schema_loc, DEFAULT_XSI_SCHEMA_LOC))
+					xfree(xsi_schema_loc);
+					xsi_schema_loc = xstrdup(DEFAULT_XSI_SCHEMA_LOC_11);
+				continue;
+			}
 			if (0 == strstr(xsi_schema_loc, avp[1])) {
 			    xsi_schema_loc = xstrappend(xsi_schema_loc, " ");
 			    xsi_schema_loc = xstrappend(xsi_schema_loc, avp[1]);
 			}
 		}
-		avp+=2;
 	}
 }
 
@@ -866,7 +878,6 @@ gpx_end(void *data, const XML_Char *xml_el)
 			lt = xstrdup(lrtrim(link_text));
 		}
 		
-		fprintf(stderr, "Here %s/%s\n", link_url, lt);
 		add_url(wpt_tmp, xstrdup(link_url), lt);
 		link_text = NULL;
 		}
