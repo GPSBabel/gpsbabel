@@ -41,6 +41,8 @@ waypt_dupe(const waypoint *wpt)
 	 * This and waypt_free should be closely synced.
 	 */
 	waypoint * tmp;
+	url_link *url_next;
+
 	tmp = waypt_new();
 	memcpy(tmp, wpt, sizeof(waypoint));
 
@@ -54,6 +56,11 @@ waypt_dupe(const waypoint *wpt)
 		tmp->url = xstrdup(wpt->url);
 	if (wpt->url_link_text)
 		tmp->url_link_text = xstrdup(wpt->url_link_text);
+	for (url_next = wpt->url_next; url_next; url_next = url_next->url_next) {
+		waypt_add_url(tmp,
+			(url_next->url) ? xstrdup(url_next->url) : NULL,
+			(url_next->url_link_text) ? xstrdup(url_next->url_link_text) : NULL);
+	}
 	if (wpt->icon_descr && wpt->wpt_flags.icon_descr_is_dynamic)
 		tmp->icon_descr = xstrdup(wpt->icon_descr);
 	if (wpt->gc_data.desc_short.utfstring) {
@@ -222,6 +229,8 @@ waypt_init_bounds(bounds *bounds)
 	bounds->max_lon = -9999;
 	bounds->min_lat = 9999;
 	bounds->min_lon = 9999;
+	bounds->max_alt = -unknown_alt;
+	bounds->min_alt = unknown_alt;
 }
 
 int
@@ -245,6 +254,12 @@ waypt_add_to_bounds(bounds *bounds, const waypoint *waypointp)
 		bounds->min_lat = waypointp->latitude;
 	if (waypointp->longitude < bounds->min_lon)
 		bounds->min_lon = waypointp->longitude;
+	if (waypointp->altitude != unknown_alt) {
+		if (waypointp->altitude < bounds->min_alt)
+			bounds->min_alt = waypointp->altitude;
+		if (waypointp->altitude > bounds->max_alt)
+			bounds->max_alt = waypointp->altitude;
+	}
 }
 
 
@@ -398,4 +413,33 @@ waypt_restore(signed int count, queue *head_bak)
 	QUEUE_MOVE(&waypt_head, head_bak);
 	waypt_ct = count;
 	xfree(head_bak);
+}
+
+void
+waypt_add_url(waypoint *wpt, char *link, char *url_link_text)
+{
+	if ((link == NULL) && (url_link_text == NULL)) return;
+	
+	/* Special case first one; it goes right into the waypoint. */
+	if ((wpt->url == NULL)  && (wpt->url_link_text == NULL)) {
+		wpt->url = link;
+		wpt->url_link_text = url_link_text;
+	} else {
+		url_link *tail;
+		url_link *new_link = xcalloc(sizeof(url_link), 1);
+		new_link->url = link;
+		new_link->url_link_text = url_link_text;
+
+		/* Find current end of chain and tack this onto the end.. */
+		for (tail = wpt->url_next;;tail = tail->url_next) {
+			if (tail == NULL) {
+				wpt->url_next = new_link;
+				break;
+			}
+			if (tail->url_next == NULL) {
+				tail->url_next = new_link;
+				break;
+			}
+		}
+	}
 }

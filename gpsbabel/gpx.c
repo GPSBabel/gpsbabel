@@ -878,7 +878,7 @@ gpx_end(void *data, const XML_Char *xml_el)
 			lt = xstrdup(lrtrim(link_text));
 		}
 		
-		add_url(wpt_tmp, xstrdup(link_url), lt);
+		waypt_add_url(wpt_tmp, xstrdup(link_url), lt);
 		link_text = NULL;
 		}
 		break;
