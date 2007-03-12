@@ -268,6 +268,15 @@ fs_xml *fs_xml_alloc( long type );
 #define FS_GMSD 0x474d5344L	/* GMSD = Garmin specific data */
 
 /*
+ * Structures and functions for multiple URLs per waypoint.
+ */
+typedef struct url_link {
+	struct url_link *url_next;
+	char *url;
+	char *url_link_text;
+} url_link;
+
+/*
  * Misc bitfields inside struct waypoint;
  */
 typedef struct {
@@ -409,24 +418,15 @@ typedef struct {
 typedef struct {
 	double max_lat;
 	double max_lon;
+	double max_alt;
 	double min_lat;
 	double min_lon;
+	double min_alt;
 } bounds;
 
 typedef struct {
 	int request_terminate;
 } posn_status;
-
-/*
- * Structures and functions for multiple URLs per waypoint.
- */
-typedef struct url_link {
-	struct url_link *url_next;
-	char *url;
-	char *url_link_text;
-} url_link;
-
-void add_url(waypoint *wpt, char *link, char *url_link_text);
 
 
 
@@ -468,6 +468,7 @@ void waypt_flush(queue *);
 void waypt_flush_all(void);
 unsigned int waypt_count(void);
 void set_waypt_count(unsigned int nc);
+void waypt_add_url(waypoint *wpt, char *link, char *url_link_text);
 void free_gpx_extras (xml_tag * tag);
 void xcsv_setup_internal_style(const char *style_buf);
 void xcsv_read_internal_style(const char *style_buf);

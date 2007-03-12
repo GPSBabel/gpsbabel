@@ -2,7 +2,7 @@
 
     Character encoding transformation - utilities
 
-    Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005,2006,2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -950,6 +950,7 @@ cet_convert_waypt(const waypoint *wpt)
 {
 	waypoint *w = (waypoint *)wpt;
 	format_specific_data *fs;
+	url_link *url_next;
 	
 	if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) return;
 	
@@ -960,6 +961,10 @@ cet_convert_waypt(const waypoint *wpt)
 	w->notes = cet_convert_string(wpt->notes);
 	w->url = cet_convert_string(wpt->url);
 	w->url_link_text = cet_convert_string(wpt->url_link_text);
+	for (url_next = w->url_next; url_next; url_next = url_next->url_next) {
+		url_next->url = cet_convert_string(url_next->url);
+		url_next->url_link_text = cet_convert_string(url_next->url_link_text);
+	}
 	
 	fs = wpt->fs;
 	while (fs != NULL)
