@@ -45,6 +45,9 @@
 /* GMSD_SET(a,b): a = numeric gmsd field, b = numeric source */
 #define GMSD_SET(a,b) if (gmsd) {gmsd->a = (b); gmsd->flags.a = 1; }
 
+/* GMSD_UNSET(a): a = gmsd field */
+#define GMSD_UNSET(a) if (gmsd) { gmsd->flags.a = 0; }
+
 /* GMSD_SETSTR(a,b): a = gmsd field, b = null terminated source */
 #define GMSD_SETSTR(a,b) if (gmsd && (b) && (b)[0]) { gmsd->a = xstrdup((b)); gmsd->flags.a = 1; }
 
@@ -56,7 +59,7 @@
 
 typedef struct garmin_ilink_s {
 	int ref_count;
-	double lat, lon;
+	double lat, lon, alt;
 	struct garmin_ilink_s *next;
 } garmin_ilink_t;
 
@@ -74,6 +77,9 @@ typedef struct {
 	unsigned int cc:1;
 	unsigned int cross_road:1;
 	unsigned int addr:1;		
+#ifdef GMSD_EXPERIMENTAL
+	unsigned int subclass:1;
+#endif
 } garmin_fs_flags_t;
 
 typedef struct garmin_fs_s
@@ -97,6 +103,9 @@ typedef struct garmin_fs_s
 	char *cross_road;		/* Intersection road label */
 	char *addr;			/* address + number */
 	garmin_ilink_t *ilinks;
+#ifdef GMSD_EXPERIMENTAL
+	char subclass[22];
+#endif
 } garmin_fs_t, *garmin_fs_p;
 
 garmin_fs_t *garmin_fs_alloc(const int protocol);
