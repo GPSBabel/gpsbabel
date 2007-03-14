@@ -909,6 +909,28 @@ cet_convert_init(const char *cs_name, const int force)
 }
 
 /* -------------------------------------------------------------------- */
+
+static void
+cet_flag_waypt(const waypoint *wpt)
+{
+	((waypoint *)(wpt))->wpt_flags.cet_converted = 1;
+}
+
+static void
+cet_flag_route(const route_head *rte)
+{
+	((route_head *)(rte))->cet_converted = 1;
+}
+
+static void
+cet_flag_all(void)
+{
+	waypt_disp_all(cet_flag_waypt);
+	route_disp_all(cet_flag_route, NULL, cet_flag_waypt);
+	track_disp_all(cet_flag_route, NULL, cet_flag_waypt);
+}
+
+/* -------------------------------------------------------------------- */
 /* %%%         complete data strings transformation                 %%% */
 /* -------------------------------------------------------------------- */
 
@@ -1013,25 +1035,30 @@ cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, cons
 	
 	if ((source == NULL) || (source == &cet_cs_vec_utf8))
 	{
-	    if ((target == NULL) || (target == &cet_cs_vec_utf8)) return;	/* Nothing to do */
-	    
-	    cet_output = 1;
+		if ((target == NULL) || (target == &cet_cs_vec_utf8)) {
+			cet_flag_all();
+			return;
+		}
 
-	    converter = cet_convert_from_utf8;
-	    cs_name_from = (char *)cet_cs_vec_utf8.name;
-	    cs_name_to = (char *)target->name;
+		cet_output = 1;
+		
+		converter = cet_convert_from_utf8;
+		cs_name_from = (char *)cet_cs_vec_utf8.name;
+		cs_name_to = (char *)target->name;
 	}
-	else
-	{
-	    if ((target != NULL) && (target != &cet_cs_vec_utf8))
-		fatal(MYNAME ": Internal error!\n");
-	    converter = cet_convert_to_utf8;
-	    cs_name_to = (char *)cet_cs_vec_utf8.name;
-	    cs_name_from = (char *)source->name;
+	else {
+		if ((target != NULL) && (target != &cet_cs_vec_utf8))
+			fatal(MYNAME ": Internal error!\n");
+
+		cet_output = 0;
+		
+		converter = cet_convert_to_utf8;
+		cs_name_to = (char *)cet_cs_vec_utf8.name;
+		cs_name_from = (char *)source->name;
 	}
 	
 	if (global_opts.debug_level > 0)
-	    printf(MYNAME ": Converting from \"%s\" to \"%s\"", cs_name_from, cs_name_to);
+		printf(MYNAME ": Converting from \"%s\" to \"%s\"", cs_name_from, cs_name_to);
 
 	waypt_disp_all(cet_convert_waypt);
 	route_disp_all(cet_convert_route_hdr, cet_convert_route_tlr, cet_convert_waypt);
@@ -1040,7 +1067,7 @@ cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, cons
 	cet_output = 0;
 	
 	if (global_opts.debug_level > 0)
-	    printf(", done.\n");
+		printf(", done.\n");
 }
 
 /* %%% cet_disp_character_set_names %%%
