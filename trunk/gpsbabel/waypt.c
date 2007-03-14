@@ -45,6 +45,7 @@ waypt_dupe(const waypoint *wpt)
 
 	tmp = waypt_new();
 	memcpy(tmp, wpt, sizeof(waypoint));
+	tmp->url_next = NULL;
 
 	if (wpt->shortname)
 		tmp->shortname = xstrdup(wpt->shortname);
