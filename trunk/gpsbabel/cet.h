@@ -26,7 +26,7 @@
 #include <stdio.h>
 
 #define CET_ERROR	1
-#define CET_SUCESS	0
+#define CET_SUCCESS	0
 
 typedef struct cet_ucs4_link_s
 {
