@@ -104,11 +104,24 @@ gusb_teardown(gpsdevh *dh)
 	if (udev) {
 		usb_release_interface(udev, 0);
 		usb_close(udev);
-		xfree(dh);
+		/* In the worst case, we leak a little bit of memory
+		 * when called via the atexit handler.  That's not too 
+		 * terrible.
+		 */
+		if (NULL != dh) {
+			xfree(dh);
+		}
 		udev = NULL;
 	}
 	return 0; 
 }
+
+static void
+gusb_atexit_teardown(void)
+{
+	gusb_teardown(NULL);
+}
+
 
 /*
  * This is a function of great joy to discover.
@@ -200,7 +213,7 @@ garmin_usb_start(struct usb_device *dev)
 	if (udev) return;
 
 	udev = usb_open(dev);
-	atexit((void(*)())gusb_teardown);
+	atexit(gusb_atexit_teardown);
 
 	if (!udev) { fatal("usb_open failed: %s\n", usb_strerror()); }
 	/*
