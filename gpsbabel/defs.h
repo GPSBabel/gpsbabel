@@ -425,10 +425,10 @@ typedef struct {
 } bounds;
 
 typedef struct {
-	int request_terminate;
+	volatile int request_terminate;
 } posn_status;
 
-
+extern posn_status tracking_status;
 
 typedef void (*ff_init) (char const *);
 typedef void (*ff_deinit) (void);

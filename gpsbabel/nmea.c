@@ -174,8 +174,10 @@ static char *optdate = NULL;
 static char *getposnarg = NULL;
 static char *opt_sleep = NULL;
 static char *opt_baud = NULL;
+static char *opt_append = NULL;
 static long sleepus = 0;
 static int getposn;
+static int append_output;
 
 static time_t last_time = -1;
 static double last_read_time;   /* Last timestamp of GGA or PRMC */
@@ -193,6 +195,7 @@ arglist_t nmea_args[] = {
 	{ "get_posn", &getposnarg, "Return current position as a waypoint", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"pause", &opt_sleep, "Decimal seconds to pause between groups of strings", NULL, ARGTYPE_INT, ARG_NOMINMAX },
+	{"append_positioning", &opt_append, "Append realtime positioning data to the output file instead of truncating", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"baud", &opt_baud, "Speed in bits per second of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
@@ -266,7 +269,9 @@ nmea_rd_deinit(void)
 static void
 nmea_wr_init(const char *portname)
 {
-	file_out = gbfopen(portname, "w+", MYNAME);
+	append_output = atoi(opt_append);
+
+	file_out = gbfopen(portname, append_output ? "a+" : "w+", MYNAME);
 
 	if ( opt_sleep ) {
 		if ( *opt_sleep ) {
@@ -276,7 +281,7 @@ nmea_wr_init(const char *portname)
 			sleepus = -1;
 		}
 	}
-	
+
 	mkshort_handle = mkshort_new_handle();
 	setshort_length(mkshort_handle, atoi(snlenopt));
 }
@@ -1201,6 +1206,25 @@ nmea_write(void)
 	track_disp_all(nmea_track_init, NULL, nmea_trackpt_pr);
 }
 
+static void
+nmea_wr_posn_init(const char *fname)
+{
+	nmea_wr_init(fname);
+}
+
+static void
+nmea_wr_posn(waypoint *wpt)
+{
+	nmea_trackpt_pr(wpt);
+}
+
+static void
+nmea_wr_posn_deinit(void)
+{
+//	nmea_wr_deinit();
+}
+
+
 ff_vecs_t nmea_vecs = {
 	ff_type_file,
 	{ ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write, ff_cap_none},
@@ -1213,7 +1237,8 @@ ff_vecs_t nmea_vecs = {
 	NULL,
 	nmea_args,
 	CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-	{ nmea_rd_posn_init, nmea_rd_posn, nmea_rd_deinit, NULL, NULL, NULL }
+	{ nmea_rd_posn_init, nmea_rd_posn, nmea_rd_deinit, 
+	  nmea_wr_posn_init, nmea_wr_posn, nmea_wr_posn_deinit }
 };
 
 /*

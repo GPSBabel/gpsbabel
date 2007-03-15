@@ -280,7 +280,6 @@ kml_wr_position_init(const char *fname)
 	 * matters in this mode, turn the pretty formatting off.
 	 */
 	do_indentation = 0;
-	kml_wr_init(posnfilenametmp);
 
 	max_position_points = atoi(opt_max_position_points);
 }
@@ -296,10 +295,18 @@ kml_wr_deinit(void)
 		MOVEFILE_REPLACE_EXISTING);
 #endif
 		rename(posnfilenametmp, posnfilename);
+	}
+	ofd = NULL;
+}
+
+static void
+kml_wr_position_deinit(void)
+{
+	kml_wr_deinit();
+	if (posnfilenametmp) {
 		xfree(posnfilenametmp);
 		posnfilenametmp = NULL;
 	}
-	ofd = NULL;
 }
 
 /*
@@ -894,6 +901,8 @@ kml_wr_position(waypoint *wpt)
 {
 	static time_t last_valid_fix;
 
+	kml_wr_init(posnfilenametmp);
+
 	if (!posn_trk_head) {
 		posn_trk_head = route_head_alloc();
 		track_add_head(posn_trk_head);
@@ -940,6 +949,8 @@ kml_wr_position(waypoint *wpt)
 		waypoint *tonuke = (waypoint *) QUEUE_FIRST(&posn_trk_head->waypoint_list);
 		track_del_wpt(posn_trk_head, tonuke);
 	}
+
+//	kml_wr_deinit();
 }
 
 ff_vecs_t kml_vecs = {
@@ -954,5 +965,5 @@ ff_vecs_t kml_vecs = {
 	NULL, 
 	kml_args,
 	CET_CHARSET_UTF8, 1,	/* CET-REVIEW */
-	{ NULL, NULL, NULL, kml_wr_position_init, kml_wr_position, kml_wr_deinit }
+	{ NULL, NULL, NULL, kml_wr_position_init, kml_wr_position, kml_wr_position_deinit }
 };
