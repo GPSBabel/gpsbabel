@@ -639,7 +639,6 @@ main(int argc, char *argv[])
 		while (!tracking_status.request_terminate) {
 			waypoint *wpt;
 
-			tracking_status.request_terminate = 0;
 			wpt = ivecs->position_ops.rd_position(&tracking_status);
 
 			if (tracking_status.request_terminate) {
@@ -663,8 +662,8 @@ main(int argc, char *argv[])
 		if (ivecs->position_ops.rd_deinit) {
 			ivecs->position_ops.rd_deinit();
 		}
-		if (ivecs->position_ops.wr_deinit) {
-			ivecs->position_ops.wr_deinit();
+		if (ovecs->position_ops.wr_deinit) {
+			ovecs->position_ops.wr_deinit();
 		}
 	}
 
