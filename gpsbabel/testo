@@ -1188,6 +1188,13 @@ ${PNAME} -i alantrl -f ${TMPDIR}/alantrl-new.trl -o gpx -F ${TMPDIR}/alantrl-new
 compare ${TMPDIR}/alantrl-new.gpx ${REFERENCE}/alantrl.gpx
 
 #
+# VITO SmartMap .vtt track file 'vitovtt' test
+#
+rm -f ${TMPDIR}/vitovtt-*
+${PNAME} -i vitovtt -f ${REFERENCE}/track/vitovtt-sample.vtt -o gpx -F ${TMPDIR}/vitovtt-sample.gpx
+compare ${REFERENCE}/track/vitovtt-sample.gpx ${TMPDIR}/vitovtt-sample.gpx
+
+#
 # Test > 1 URL in selected files.
 #
 rm -f ${TMPDIR}/mlink*
