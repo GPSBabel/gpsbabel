@@ -114,6 +114,7 @@ extern ff_vecs_t dmtlog_vecs;
 extern ff_vecs_t raymarine_vecs;
 extern ff_vecs_t alanwpr_vecs;
 extern ff_vecs_t alantrl_vecs;
+extern ff_vecs_t vitovtt_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -629,6 +630,12 @@ vecs_t vec_list[] = {
                 "alantrl",
                 "Alan Map500 tracklogs (.trl)",
                 "trl"
+        },
+        {
+                &vitovtt_vecs,
+                "vitovtt",
+		"Vito SmartMap tracks (.vtt)",
+		"vtt"
         },
 	{
 		NULL,
