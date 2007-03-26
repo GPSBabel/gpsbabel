@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include "defs.h"
 #include "cet_util.h"
+#include "grtcirc.h"
 
 queue waypt_head;
 static unsigned int waypt_ct;
@@ -443,4 +444,40 @@ waypt_add_url(waypoint *wpt, char *link, char *url_link_text)
 			}
 		}
 	}
+}
+
+/*
+ * returns full creation_time with parts of seconds in fractional portion
+ */
+ 
+double
+waypt_time(const waypoint *wpt)
+{
+	if (wpt->creation_time <= 0)
+		return (double) 0;
+	else
+		return ((double)wpt->creation_time + ((double)wpt->microseconds / 1000000));
+}
+
+/*
+ * calculates the speed between points "A" and "B"
+ * the result comes in meters per second and is always positive
+ */ 
+
+double
+waypt_speed(const waypoint *A, const waypoint *B)
+{
+	double dist, time;
+	
+	dist = radtometers(gcdist(
+		RAD(A->latitude), RAD(A->longitude),
+		RAD(B->latitude), RAD(B->longitude)));
+	if (dist < 0.1) dist = 0;	/* calc. diffs on 32- and 64-bit hosts */
+	if (dist == 0) return 0;
+	
+	time = fabs(waypt_time(A) - waypt_time(B));
+	if (time > 0)
+		return (dist / time);
+	else
+		return 0;
 }

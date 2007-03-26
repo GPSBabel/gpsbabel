@@ -662,6 +662,8 @@ void waypt_init(void);
 void route_init(void);
 void waypt_disp(const waypoint *);
 void waypt_status_disp(int total_ct, int myct);
+double waypt_time(const waypoint *wpt);
+double waypt_speed(const waypoint *A, const waypoint *B);
 
 NORETURN fatal(const char *, ...) PRINTFLIKE(1, 2);
 void is_fatal(const int condition, const char *, ...) PRINTFLIKE(2, 3);
