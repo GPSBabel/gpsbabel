@@ -54,7 +54,8 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
 	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
-	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o
+	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o \
+	ggv_log.o
 
 FILTERS=position.o radius.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
@@ -443,6 +444,8 @@ geoniche.o: geoniche.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h garmin_tables.h
+ggv_log.o: ggv_log.c defs.h config.h queue.h gbtypes.h gbfile.h \
+  jeeps/gpsmath.h
 globals.o: globals.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h gbversion.h
 glogbook.o: glogbook.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
@@ -664,7 +667,7 @@ vitosmt.o: vitosmt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
 vmem.o: vmem.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h
 waypt.o: waypt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
 wbt-200.o: wbt-200.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h gbser.h grtcirc.h
 wfff_xml.o: wfff_xml.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
