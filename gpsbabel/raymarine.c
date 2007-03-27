@@ -2,7 +2,7 @@
 
     Support for Raymarine Waypoint File (.rwf).
 
-    Copyright (C) 2006 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2006,2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,6 +29,11 @@
     	
     	2006/10/30: Initial release (not yet in GPSBabel source tree)
     	2006/11/08: 
+	2007/03/17: Remove GUIDs from writer (not really valid)
+	            Fix "PredictedTwa" output
+		    Initialize location with "My Waypoints"
+		    Change default value for RcCount and RelSet (now 0)
+
 */
 
 #include "defs.h"
@@ -47,7 +52,6 @@ static waypoint **depot;
 static short_handle hshort;
 static int size_of_depot, items_in_depot;
 static int rte_index, rte_wpt_index;
-static char *sguid;
 static char *opt_location;
 
 #define MYNAME "raymarine"
@@ -55,7 +59,7 @@ static char *opt_location;
 static
 arglist_t raymarine_args[] = 
 {
-	{ "location", &opt_location, "Default location", "New location", ARGTYPE_STRING, ARG_NOMINMAX },
+	{ "location", &opt_location, "Default location", "My Waypoints", ARGTYPE_STRING, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -237,40 +241,6 @@ raymarine_read(void)
 /* %%%    R A Y M A R I N E   W R I T E R    %%% */
 /* ============================================= */
 
-
-static guid_t
-mkGUID(void)
-{
-	guid_t res;
-	
-	if (gpsbabel_time != 0) {
-		srand(gpsbabel_time + rand());
-		res = ((guid_t) (gpsbabel_time) << 48) | 
-			((guid_t)(rand() & 0xFFFF) << 32) | 
-			((guid_t)(rand() & 0xFFFF) << 16) | 
-			(rand() & 0xFFFF);
-	}
-	else res = 0;
-	
-	return res;
-}
-
-static char *
-GUID2str(guid_t GUID)
-{
-	gbuint16 w0, w1, w2, w3;
-	char *res;
-	
-	w0 = GUID & 0xFFFF; GUID = GUID >> 16;
-	w1 = GUID & 0xFFFF; GUID = GUID >> 16;
-	w2 = GUID & 0xFFFF; GUID = GUID >> 16;
-	w3 = GUID & 0xFFFF;
-	
-	xasprintf(&res, "%d-%d-%d-%d", w0, w1, w2, w3);
-	return res;
-}
-
-
 static void
 register_waypoint(const waypoint *wpt)
 {
@@ -297,7 +267,7 @@ register_waypoint(const waypoint *wpt)
 }
 
 static void
-write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char *location, const char *GUID)
+write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char *location)
 {
 	char *notes;
 	char *name;
@@ -328,16 +298,15 @@ write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char
 		notes
 	);
 	gbfprintf(fout, "Rel=\n"
-			"RelSet=1\n"
-			"RcCount=1\n"
+			"RelSet=0\n"
+			"RcCount=0\n"
 			"RcRadius=%.15f\n"
 			"Show=1\n"
 			"RcShow=0\n"
 			"SeaTemp=%.15f\n"
 			"Depth=%.15f\n"
-			"Time=%.10f00000\n"
-			"GUID=%s\n",
-		0.0, -32678.0, 65535.0, time, GUID
+			"Time=%.10f00000\n",
+		0.0, -32678.0, 65535.0, time
 	);
 }
 
@@ -346,11 +315,9 @@ write_route_head_cb(const route_head *rte)
 {
 	gbfprintf(fout, "[Rt%d]\n"
 			"Name=%s\n"
-			"Visible=1\n"
-			"Guid=%s\n",
+			"Visible=1\n",
 		rte_index,
-		rte->rte_name,
-		sguid
+		rte->rte_name
 	);
 	rte_index++;
 	rte_wpt_index = 0;
@@ -369,7 +336,7 @@ write_route_wpt_cb(const waypoint *wpt)
 		"PredictedSet",
 		"PredictedSog",
 		"PredictedTime",
-		"PredictedTwa2",
+		"PredictedTwa",
 		"PredictedTwd",
 		"PredictedTws" };
 		
@@ -424,13 +391,10 @@ raymarine_write(void)
 	int i;
 	queue *elem, *tmp;
 	extern queue waypt_head;
-	guid_t guid;
 	
 	size_of_depot = 0;
 	items_in_depot = 0;
 	depot = NULL;
-	guid = mkGUID();
-	sguid = GUID2str(guid);
 
 	/* enumerate all possible waypoints */
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
@@ -442,7 +406,7 @@ raymarine_write(void)
 	/* write out waypoint summary */
 	for (i = 0; i < items_in_depot; i++) {
 		waypoint *wpt = depot[i];
-		write_waypoint(fout, wpt, i, opt_location, sguid);
+		write_waypoint(fout, wpt, i, opt_location);
 	}
 	
 	/* write out all routes with their waypoints */
@@ -450,7 +414,6 @@ raymarine_write(void)
 	route_disp_all(write_route_head_cb, NULL, write_route_wpt_cb);
 	
 	if (depot != NULL) xfree(depot);
-	xfree(sguid);
 }
 
 /* ================================================== */
