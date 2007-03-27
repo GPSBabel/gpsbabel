@@ -99,7 +99,7 @@ waypt_add(waypoint *wpt)
 	if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
 		fatal ("Invalid latitude %f in waypoint.\n", wpt->latitude);
 	if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-		fatal ("Invalid longitude %f in waypoint.\n", wpt->latitude);
+		fatal ("Invalid longitude %f in waypoint.\n", wpt->longitude);
 
 	/*
 	 * Some input may not have one or more of these types so we
