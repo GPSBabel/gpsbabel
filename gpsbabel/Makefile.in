@@ -286,6 +286,9 @@ release-rpm:
 # binutils, runtime, w32api, and gcc-core seem to be required.
 #
 
+cross-configure:
+	  CC=i386-mingw32-gcc LDFLAGS="-s" @srcdir@/configure --host=i386-pc-mingw32 --with-cet=all --with-expathdr=@srcdir@/mingw/include --with-libexpat=@srcdir@/mingw/lib 
+
 release-winbuild:
 	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
 	cp -a gpsbabel-$(VERSIOND) /tmp/gpsbabel-$(VERSIOND)-cross
