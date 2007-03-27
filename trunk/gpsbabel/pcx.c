@@ -45,7 +45,7 @@ arglist_t pcx_args[] = {
 	{"deficon", &deficon, "Default icon name", "Waypoint", 
 		ARGTYPE_STRING, ARG_NOMINMAX },
 	{"cartoexploreur", &cartoexploreur,
-		"Write tracks compatible with Carto Exploreur", "",
+		"Write tracks compatible with Carto Exploreur", NULL,
 		ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
