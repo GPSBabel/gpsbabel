@@ -28,8 +28,7 @@
 
 #undef OLE_DEBUG
 
-static FILE *fin;
-static char *fin_name;
+static gbfile *fin;
 
 static arglist_t msroute_args[] = 
 {
@@ -82,7 +81,7 @@ static const unsigned char ole_magic[8] =
 	
 	Remarks:
 
-	* in the moment ole_size1 and sector_size represents the same value
+	* in the moment ole_size1 and sector_sz represents the same value
 	* in OLE_DEBUG mode: successfully tested with 64MB++ standard MS doc's (PowerPoint, Word)
 */
 
@@ -112,7 +111,7 @@ typedef struct ole_head_s
 typedef struct ole_prop_s
 {
 	gbuint16 name[32];
-	gbuint16 name_size;		/* offset 0x40 */
+	gbuint16 name_sz;		/* offset 0x40 */
 	char ole_typ;			/* offset 0x42 */
 	char U1;			/* offset 0x43 */
 	gbuint32 previous;		/* offset 0x44 */
@@ -128,13 +127,13 @@ typedef struct ole_prop_s
 	gbuint32 U12;			/* offset 0x6c */
 	gbuint32 U13;			/* offset 0x70 */
 	gbint32 first_sector;		/* offset 0x74 */
-	gbint32 length;			/* offset 0x78 */
+	gbint32 data_sz;		/* offset 0x78 */
 	gbuint32 U16;			/* offset 0x7c */
 } ole_prop_t;
 
 #define DIR_ITEM_SIZE sizeof(ole_prop_t)
 
-static int sector_size = 512;
+static int sector_sz = 512;
 
 #ifndef min
 #define min(a,b) ((a) < (b)) ? (a) : (b)
@@ -169,14 +168,16 @@ le_read32_buff(int *buff, const int count)
 /* simple OLE file reader */
 
 static void
-ole_read_sector(const int sector, void *target)
+ole_read_sector(const int sector, void *target, const char full)
 {
 	int res;
 	
-	res = fseek(fin, (sector + 1) * sector_size, SEEK_SET);
+	res = gbfseek(fin, (sector + 1) * sector_sz, SEEK_SET);
 	is_fatal((res != 0), MYNAME ": Could not seek file to sector %d!", sector + 1);
-	res = fread(target, 1, sector_size, fin);
-	is_fatal((res < sector_size), MYNAME ": Read error (%d, sector %d) on file \"%s\"!", res, sector, fin_name);
+	res = gbfread(target, 1, sector_sz, fin);
+	is_fatal(
+		((res < 0) || (full && (res < sector_sz))),
+		MYNAME ": Read error (%d, sector %d) on file \"%s\"!", res, sector, fin->name);
 }
 
 static ole_prop_t *
@@ -186,19 +187,20 @@ ole_find_property(const char *property)
 	
 	for (i = 0; i < ole_dir_ct; i++)
 	{
-		int j, len;
-		char buff[OLE_MAX_NAME_LENGTH + 1];
+		int len, test;
+		char *str;
 		ole_prop_t *item;
 		
 		item = &ole_dir[i];
-		len = min(OLE_MAX_NAME_LENGTH, item->name_size / 2);
+		if ((item->ole_typ != 1) && (item->ole_typ != 2) && (item->ole_typ != 5)) continue;
+		if ((item->data_sz <= 0) || (item->name_sz <= 0)) continue;
 		
-		for (j = 0; j < len; j++)
-			buff[j] = le_read16(&item->name[j]);
-		buff[j] = '\0';
-		
-		if (case_ignore_strcmp(buff, property) == 0)
-			return item;
+		len = min(OLE_MAX_NAME_LENGTH, item->name_sz / 2);
+		str = cet_str_uni_to_utf8((short *)&item->name, len);
+		test = case_ignore_strcmp(str, property);
+		xfree(str);
+
+		if (test == 0) return item;
 	}
 	is_fatal((1), MYNAME ": \"%s\" not in property catalog!", property);
 	return 0;
@@ -213,7 +215,7 @@ ole_read_stream(const ole_prop_t *property)
 	int *fat;
 	char *buff;
 	
-	len = property->length;
+	len = property->data_sz;
 	
 	if (len >= ole_size1_min)
 	{
@@ -240,7 +242,7 @@ ole_read_stream(const ole_prop_t *property)
 		while (left > 0)
 		{
 			int bytes = (left <= blocksize) ? left : blocksize;
-			ole_read_sector(sector, buff + offs);
+			ole_read_sector(sector, buff + offs, (bytes >= sector_sz));
 			left -= bytes;
 			offs += bytes;
 			if (left > 0)
@@ -254,7 +256,7 @@ ole_read_stream(const ole_prop_t *property)
 	{
 		int chain = sector;
 		int blocks = (len + blocksize - 1) / blocksize;
-		int blocks_per_sector = sector_size / blocksize;
+		int blocks_per_sector = sector_sz / blocksize;
 		
 		offs = 0;
 
@@ -284,7 +286,7 @@ ole_read_stream(const ole_prop_t *property)
 
 
 static char *
-ole_read_property_stream(const char *property_name, int *length)
+ole_read_property_stream(const char *property_name, int *data_sz)
 {
 	ole_prop_t *property;
 	char *result;
@@ -292,8 +294,8 @@ ole_read_property_stream(const char *property_name, int *length)
 	if ((property = ole_find_property(property_name)) == NULL) return NULL;
 	
 	result = ole_read_stream(property);
-	if ((result != NULL) && (length != NULL))
-		*length = property->length;
+	if ((result != NULL) && (data_sz != NULL))
+		*data_sz = property->data_sz;
 
 	return result;
 }
@@ -312,16 +314,16 @@ ole_test_properties()
 		ole_prop_t *p = &ole_dir[i];
 		
 		if ((p->ole_typ != 1) && (p->ole_typ != 2) && (p->ole_typ != 5)) continue;
-		if ((p->length <= 0) || (p->name_size <= 0)) continue;
+		if ((p->data_sz <= 0) || (p->name_sz <= 0)) continue;
 		
-		temp = cet_str_uni_to_utf8(&p->name, min(p->name_size / 2, OLE_MAX_NAME_LENGTH));
+		temp = cet_str_uni_to_utf8(&p->name, min(p->name_sz / 2, OLE_MAX_NAME_LENGTH));
 		strncpy(name, temp, sizeof(name));
 		xfree(temp);
 		
-		printf(MYNAME ": ole_test_properties for \"%s\" (%d bytes):", name, p->length);
+		printf(MYNAME ": ole_test_properties for \"%s\" (%d bytes):", name, p->data_sz);
 		
 		if ((case_ignore_strcmp(name, "Root Entry") == 0) ||
-		    (p->length < ole_size1_min))
+		    (p->data_sz < ole_size1_min))
 		{
 			printf(" skipped...\n");
 			continue;
@@ -329,17 +331,17 @@ ole_test_properties()
 		else
 		{
 			int sector = p->first_sector;
-			int length = p->length;
-			int block_size = ole_size1; 	/* sector_size */
+			int data_sz = p->data_sz;
+			int block_size = ole_size1; 	/* sector_sz */
 
 			printf("\n");
 			
-			while ((length > 0) && (sector >= 0))
+			while ((data_sz > 0) && (sector >= 0))
 			{
-				int bytes = (length > block_size) ? block_size : length;
+				int bytes = (data_sz > block_size) ? block_size : data_sz;
 				int prev = sector;
 				
-				length -= bytes;
+				data_sz -= bytes;
 				sector = ole_fat1[sector];
 				if (sector == -3)
 				{
@@ -349,8 +351,8 @@ ole_test_properties()
 						printf(MYNAME "-new sector: %d\n", sector);
 				}
 			}
-			is_fatal((length != 0), MYNAME ": Error in fat1 chain, sector = %d, %d bytes (=%d blocks) left!", 
-				sector, length, BLOCKS(length, block_size));
+			is_fatal((data_sz != 0), MYNAME ": Error in fat1 chain, sector = %d, %d bytes (=%d blocks) left!", 
+				sector, data_sz, BLOCKS(data_sz, block_size));
 		}
 	}
 }
@@ -366,14 +368,14 @@ ole_init(void)
 	ole_fat1 = NULL;
 	ole_fat2 = NULL;
 	
-	sector_size = 512;	/* fixed for the moment */
+	sector_sz = 512;	/* fixed for the moment */
 	
-	is_fatal((sizeof(head) != sector_size), 
+	is_fatal((sizeof(head) != sector_sz), 
 	    MYNAME ": (!) internal error - invalid header size (%lu)!", 
 	                    (unsigned long) sizeof(head));
 	
 	memset(&head, 0, sizeof(head));
-	fread(&head, sizeof(head), 1, fin);
+	gbfread(&head, sizeof(head), 1, fin);
 	
 	is_fatal((strncmp(head.magic, (char *) ole_magic, sizeof(ole_magic)) != 0), MYNAME ": No MS document.");
 
@@ -412,17 +414,17 @@ ole_init(void)
 
 	is_fatal((head.byte_order != -2), MYNAME ": Unsupported byte-order %d", head.byte_order);
 #if 0
-	sector_size = ole_size1;	/* i'll implement this, if i get an MS-doc (ole) 	*/
-					/* with "sector_size" other than 512			*/
+	sector_sz = ole_size1;	/* i'll implement this, if i get an MS-doc (ole) 	*/
+					/* with "sector_sz" other than 512			*/
 #else
 	is_fatal((ole_size1 != 512), MYNAME ": Unsupported sector size %d", ole_size1);
 #endif
-	ole_fat1 = xmalloc(head.fat1_blocks * sector_size);
-	ole_fat1_ct = (head.fat1_blocks * sector_size) / sizeof(gbint32);
+	ole_fat1 = xmalloc(head.fat1_blocks * sector_sz);
+	ole_fat1_ct = (head.fat1_blocks * sector_sz) / sizeof(gbint32);
 	
 #ifdef OLE_DEBUG
 	printf(MYNAME "-big fat: %d maximum sectors, size in memory %d, max. datasize %d bytes\n", 
-		ole_fat1_ct, head.fat1_blocks * sector_size, head.fat1_blocks * sector_size * sector_size / sizeof(gbint32));
+		ole_fat1_ct, head.fat1_blocks * sector_sz, head.fat1_blocks * sector_sz * sector_sz / sizeof(gbint32));
 #endif
 
 	i_offs = 0;				/* load "big fat" into memory */
@@ -432,7 +434,7 @@ ole_init(void)
 	for (i = 0; i < count; i++)
 	{
 		sector = head.fat1[i];
-		ole_read_sector(sector, &ole_fat1[i_offs]);
+		ole_read_sector(sector, &ole_fat1[i_offs], 1);
 		i_offs += ole_size1 / 4;
 	}
 	
@@ -444,13 +446,13 @@ ole_init(void)
 
 		while ((left > 0) && (sector >= 0))
 		{
-			ole_read_sector(sector, &fat1_extra);
+			ole_read_sector(sector, &fat1_extra, 1);
 			le_read32_buff(&fat1_extra[0], 128);
 			
 			count = (left < 127) ? left : 127;
 			for (i = 0; i < count; i++)
 			{
-				ole_read_sector(fat1_extra[i], &ole_fat1[i_offs]);
+				ole_read_sector(fat1_extra[i], &ole_fat1[i_offs], 1);
 				i_offs += ole_size1 / 4;
 			}
 			left -= count;
@@ -472,18 +474,18 @@ ole_init(void)
 	    	do
 	    	{
 			if (ole_fat2 == NULL)
-		    		ole_fat2 = (int *)xmalloc((count + 1) * sector_size);
+		    		ole_fat2 = (int *)xmalloc((count + 1) * sector_sz);
 			else
-		    		ole_fat2 = (int *)xrealloc(ole_fat2, (count + 1) * sector_size);
+		    		ole_fat2 = (int *)xrealloc(ole_fat2, (count + 1) * sector_sz);
 		
-			ole_read_sector(sector, (char *)ole_fat2 + (count * sector_size));
+			ole_read_sector(sector, (char *)ole_fat2 + (count * sector_sz), 1);
 			sector = ole_fat1[sector];
 			
 			count++;
 	    	}
 		while (sector >= 0);
 		
-		ole_fat2_ct = (count * sector_size) / sizeof(gbint32);
+		ole_fat2_ct = (count * sector_sz) / sizeof(gbint32);
 		if (ole_fat2_ct > 0)
 			le_read32_buff(&ole_fat2[0], ole_fat2_ct);
 	}
@@ -497,16 +499,16 @@ ole_init(void)
 	while (sector >= 0)
 	{
 		if (ole_dir == NULL)
-			ole_dir = (void *)xmalloc((count + 1) * sector_size);
+			ole_dir = (void *)xmalloc((count + 1) * sector_sz);
 		else
-			ole_dir = (void *)xrealloc(ole_dir, (count + 1) * sector_size);
+			ole_dir = (void *)xrealloc(ole_dir, (count + 1) * sector_sz);
 				
-		ole_read_sector(sector, (char *)ole_dir + (count * sector_size));
+		ole_read_sector(sector, (char *)ole_dir + (count * sector_sz), 1);
 		sector = ole_fat1[sector];
 			
 		count++;
 	}
-	ole_dir_ct = (count * sector_size) / sizeof(ole_prop_t);
+	ole_dir_ct = (count * sector_sz) / sizeof(ole_prop_t);
 		
 	/* fix endianess of property catalog */
 	
@@ -515,14 +517,14 @@ ole_init(void)
 		ole_prop_t *item = &ole_dir[i];
 		
 		item->first_sector = le_read32(&item->first_sector);
-		item->length = le_read32(&item->length);
+		item->data_sz = le_read32(&item->data_sz);
 	}
 	
 	ole_root = ole_find_property("Root Entry");
 	
 	/* read fat2 data sectors given by "Root Entry" */
 	
-	ole_root_sec_ct = (ole_root->length + (sector_size - 1)) / sector_size;
+	ole_root_sec_ct = (ole_root->data_sz + (sector_sz - 1)) / sector_sz;
 	ole_root_sec = xcalloc(ole_root_sec_ct + 1, sizeof(char *));
 	
 	i = 0;
@@ -531,9 +533,9 @@ ole_init(void)
 	{
 		char *temp;
 		
-		temp = ole_root_sec[i++] = xmalloc(sector_size);
+		temp = ole_root_sec[i++] = xmalloc(sector_sz);
 
-		ole_read_sector(sector, temp);
+		ole_read_sector(sector, temp, 1);
 		sector = ole_fat1[sector];
 	}
 #ifdef OLE_DEBUG
@@ -646,8 +648,7 @@ msroute_read_journey(void)
 
 static void msroute_rd_init(const char *fname)
 {
-	fin_name = xstrdup(fname);
-	fin = xfopen(fname, "rb", MYNAME);
+	fin = gbfopen(fname, "rb", MYNAME);
 	
 	ole_init();	
 }
@@ -656,8 +657,7 @@ static void msroute_rd_deinit(void)
 {
 	ole_deinit();
 
-	xfree(fin_name);
-	fclose(fin);
+	gbfclose(fin);
 }
 
 static void msroute_read(void)
