@@ -3,7 +3,7 @@
     Support for "Suunto Trek Manager" (STM) WaypointPlus files,
     see homepage "http://www.suunto.fi" for more details,
 
-    Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005,2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -155,16 +155,15 @@ stmwpp_data_read(void)
 
 			switch(what)
 			{
-				case STM_RTEPT:
-					if (route == NULL) {
-					    route = route_head_alloc();
-					    route_add_head(route);
-					}
-					route_add_wpt(route, wpt);
-					break;
-					
 				case STM_WAYPT:
 					waypt_add(wpt);
+					if (global_opts.objective == rtedata) {
+						if (route == NULL) {
+							route = route_head_alloc();
+							route_add_head(route);
+						}
+						route_add_wpt(route, waypt_dupe(wpt));
+					}
 					break;
 					
 				case STM_TRKPT:
