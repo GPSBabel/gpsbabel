@@ -29,7 +29,7 @@ format use that file.  If you created a new style file called
 "mystyle.style" and you want to write the  waypoints from
 a GPX file named "mine.gpx" to it, you would issue a command like:
 </para>
-<para><userinput>gpsbabel -i gpx -f mine.gpx -o xcsv,style=mystyle.style -f mine.new</userinput></para>
+<para><userinput>gpsbabel -i gpx -f mine.gpx -o xcsv,style=mystyle.style -F mine.new</userinput></para>
 <para>
 You might then examine <filename>mine.new</filename> to see if it met
 your expectations.  If not, you could continue to tweak 
