@@ -1,4 +1,4 @@
 <para>
-This option breaks track segments into separate tracks when reading a .USR
+(USR input) Break track segments into separate tracks.
 file.
 </para>
