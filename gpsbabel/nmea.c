@@ -151,8 +151,8 @@ static route_head *trk_head;
 static short_handle mkshort_handle;
 static preferred_posn_type posn_type;
 static struct tm tm;
-static waypoint * curr_waypt = NULL;
-static waypoint * last_waypt = NULL;
+static waypoint *curr_waypt;
+static waypoint *last_waypt;
 static void * gbser_handle;
 static const char *posn_fname;
 static queue pcmpt_head;
@@ -165,21 +165,22 @@ static struct tm opt_tm;	/* converted "date" parameter */
 static const double kts2mps =0.51444444444444444; /* knots to m/s */
 static const double kmh2mps =0.27777777777777778; /* km/h to m/s  */ 
 
-static char *dogprmc = NULL;
-static char *dogpgga = NULL;
-static char *dogpvtg = NULL;
-static char *dogpgsa = NULL;
-static char *snlenopt = NULL;
-static char *optdate = NULL;
-static char *getposnarg = NULL;
-static char *opt_sleep = NULL;
-static char *opt_baud = NULL;
-static char *opt_append = NULL;
-static long sleepus = 0;
+static char *opt_gprmc;
+static char *opt_gpgga;
+static char *opt_gpvtg;
+static char *opt_gpgsa;
+static char *snlenopt;
+static char *optdate;
+static char *getposnarg;
+static char *opt_sleep;
+static char *opt_baud;
+static char *opt_append;
+
+static long sleepus;
 static int getposn;
 static int append_output;
 
-static time_t last_time = -1;
+static time_t last_time;
 static double last_read_time;   /* Last timestamp of GGA or PRMC */
 
 static waypoint * nmea_rd_posn(posn_status *);
@@ -187,10 +188,10 @@ static void nmea_rd_posn_init(const char *fname);
 
 arglist_t nmea_args[] = {
 	{"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64" },
-	{"gprmc", &dogprmc, "Read/write GPRMC sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
-	{"gpgga", &dogpgga, "Read/write GPGGA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
-	{"gpvtg", &dogpvtg, "Read/write GPVTG sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
-	{"gpgsa", &dogpgsa, "Read/write GPGSA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"gprmc", &opt_gprmc, "Read/write GPRMC sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"gpgga", &opt_gpgga, "Read/write GPGGA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"gpvtg", &opt_gpvtg, "Read/write GPVTG sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"gpgsa", &opt_gpgsa, "Read/write GPGSA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX },
 	{ "get_posn", &getposnarg, "Return current position as a waypoint", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
@@ -199,6 +200,8 @@ arglist_t nmea_args[] = {
 	{"baud", &opt_baud, "Speed in bits per second of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
+
+#define CHECK_BOOL(a) if (a && (*a == '0')) a = NULL
 
 /*
  * Slightly different than the Magellan checksum fn.
@@ -220,6 +223,13 @@ nmea_rd_init(const char *fname)
 {
 	curr_waypt = NULL;
 	last_waypt = NULL;
+	last_time = -1;
+
+	CHECK_BOOL(opt_gprmc);
+	CHECK_BOOL(opt_gpgga);
+	CHECK_BOOL(opt_gpvtg);
+	CHECK_BOOL(opt_gpgsa);
+
 	QUEUE_INIT(&pcmpt_head);
 
  	if (getposnarg) {
@@ -269,10 +279,16 @@ nmea_rd_deinit(void)
 static void
 nmea_wr_init(const char *portname)
 {
+	CHECK_BOOL(opt_gprmc);
+	CHECK_BOOL(opt_gpgga);
+	CHECK_BOOL(opt_gpvtg);
+	CHECK_BOOL(opt_gpgsa);
+
 	append_output = atoi(opt_append);
 
 	file_out = gbfopen(portname, append_output ? "a+" : "w+", MYNAME);
 
+	sleepus = -1;
 	if ( opt_sleep ) {
 		if ( *opt_sleep ) {
 			sleepus = 1e6 * atof(opt_sleep);
@@ -835,11 +851,11 @@ nmea_parse_one_line(char *ibuf)
 	if (0 == strncmp(tbuf, "$GPWPL,", 7)) {
 		gpwpl_parse(tbuf);
 	} else
-	if (dogpgga && (0 == strncmp(tbuf, "$GPGGA,", 7))) {
+	if (opt_gpgga && (0 == strncmp(tbuf, "$GPGGA,", 7))) {
 		posn_type = gpgga;
 		gpgga_parse(tbuf);
 	} else
-	if (dogprmc && (0 == strncmp(tbuf, "$GPRMC,", 7))) {
+	if (opt_gprmc && (0 == strncmp(tbuf, "$GPRMC,", 7))) {
 		if (posn_type != gpgga) {
 			posn_type = gprmc;
 		}			
@@ -860,10 +876,10 @@ nmea_parse_one_line(char *ibuf)
 	if (0 == strncmp(tbuf, "$PCMPT,", 7)) {
 		pcmpt_parse(tbuf);
 	} else
-	if (dogpvtg && (0 == strncmp(tbuf, "$GPVTG,",7))) {
+	if (opt_gpvtg && (0 == strncmp(tbuf, "$GPVTG,",7))) {
 		gpvtg_parse(tbuf); /* speed and course */
 	} else
-	if (dogpgsa && (0 == strncmp(tbuf, "$GPGSA,",7))) {
+	if (opt_gpgsa && (0 == strncmp(tbuf, "$GPGSA,",7))) {
 		gpgsa_parse(tbuf); /* GPS fix */
 	}
 
@@ -1140,7 +1156,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 		fix='0';
 	}
 
-	if (dogprmc) {
+	if (opt_gprmc) {
 		snprintf(obuf, sizeof(obuf), "GPRMC,%06d,%c,%08.3f,%c,%09.3f,%c,%.2f,%.2f,%06d,,",
 				(int) hms,
 				fix=='0' ? 'V' : 'A',
@@ -1152,7 +1168,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 		cksum = nmea_cksum(obuf);
 		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
-	if (dogpgga) {
+	if (opt_gpgga) {
 		snprintf(obuf, sizeof(obuf), "GPGGA,%06d,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,0.0,M,,",
 				(int) hms,
 				fabs(lat), lat < 0 ? 'S' : 'N',
@@ -1164,7 +1180,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 		cksum = nmea_cksum(obuf);
 		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
-	if ((dogpvtg) && ((wpt->course>=0) || (wpt->speed>0))) {
+	if ((opt_gpvtg) && ((wpt->course>=0) || (wpt->speed>0))) {
 		snprintf(obuf,sizeof(obuf),"GPVTG,%.3f,T,0,M,%.3f,N,%.3f,K",
 			(wpt->course>=0)?(wpt->course):(0),	
 			(wpt->speed>0)?(wpt->speed / kts2mps):(0),
@@ -1174,7 +1190,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
 			
-	if ((dogpgsa) && (wpt->fix!=fix_unknown)) {
+	if ((opt_gpgsa) && (wpt->fix!=fix_unknown)) {
 
 		switch (wpt->fix) 
 		{
