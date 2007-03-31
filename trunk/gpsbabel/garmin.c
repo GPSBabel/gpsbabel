@@ -145,6 +145,7 @@ rw_init(const char *fname)
 
 				case 155:	/* Garmin V */
 				case 404:	/* SP2720 */
+				case 520:	/* SP2820 */
 					receiver_short_length = 20;
 					break;
 				case 382: 	/* C320 */
