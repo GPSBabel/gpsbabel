@@ -1805,7 +1805,9 @@ int32 GPS_Lookup_Datum_Index(const char *n)
 	const char *name;
 	
 	if (case_ignore_strcmp(n, "WGS84") == 0) name = "WGS 84";
+	else if (case_ignore_strcmp(n, "WGS-84") == 0) name = "WGS 84";
 	else if (case_ignore_strcmp(n, "WGS72") == 0) name = "WGS 72";
+	else if (case_ignore_strcmp(n, "WGS-72") == 0) name = "WGS 72";
 	else name = n;
 
 	for (dp = GPS_Datum; dp->name; dp++) {
