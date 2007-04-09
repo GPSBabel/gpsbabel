@@ -155,15 +155,19 @@ vitosmt_read(void)
 				MYNAME, __LINE__, strerror(errno) );
 			break;
 		}
-fprintf(stderr, "Looptop %d\n", ftell(infile));
-
+#if 0
+		fprintf(stderr, "Looptop %d\n", ftell(infile));
+#endif
 		latrad		=ReadDouble(infile);	/* WGS84 latitude in radians */
 		lonrad		=ReadDouble(infile);	/* WGS84 longitude in radians */
 		elev		=ReadDouble(infile);	/* elevation in meters */
-fprintf(stderr, "before %d\n", ftell(infile));
+#if 0
+		fprintf(stderr, "before %d\n", ftell(infile));
+#endif
 		timestamp	=ReadRecord(infile,5);	/* UTC time yr/mo/dy/hr/mi */
-fprintf(stderr, "%d latrad %f/%f ele %f\n", ftell(infile),latrad, DEG(latrad), elev);
-
+#if 0
+		fprintf(stderr, "%d latrad %f/%f ele %f\n", ftell(infile),latrad, DEG(latrad), elev);
+#endif
 		seconds		=ReadDouble(infile);	/* seconds */
 		speed		=ReadDouble(infile);    /* speed in knots */
 		course		=ReadDouble(infile);	/* course in degrees */
