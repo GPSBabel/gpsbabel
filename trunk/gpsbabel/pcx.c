@@ -217,7 +217,7 @@ data_read(void)
 				if (lathemi == 'S') lat = -lat;
 				if (lonhemi == 'W') lon = -lon;
 			} else if (n == 0) {
-				fatal(MYNAME ":Unrecognized track line '%s'", 
+				fatal(MYNAME ":Unrecognized track line '%s'\n", 
 						ibuf);
 			}
 

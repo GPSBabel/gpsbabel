@@ -1026,7 +1026,7 @@ parse_categories(const char *str)
 		cin = lrtrim(cin);
 		if (*cin != '\0') {
 			if (!garmin_fs_convert_category(cin, &val)) 
-				warning(MYNAME ": Unable to convert category \"%s\" at line %d!", cin, current_line);
+				warning(MYNAME ": Unable to convert category \"%s\" at line %d!\n", cin, current_line);
 			else
 				res = res | val;
 		}
