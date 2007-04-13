@@ -21,13 +21,13 @@
 </row>
 <row>
   <entry>1</entry>
-  <entry>dm</entry>
+  <entry>dmm</entry>
   <entry>Lat/Lon hddd°mm.mm</entry>
   <entry>N33 56.539 W118 24.471</entry>
 </row>
 <row>
   <entry>2</entry>
-  <entry>dm</entry>
+  <entry>dms</entry>
   <entry>Lat/Lon hddd°mm'ss.s</entry>
   <entry>S25 25 26.8 E28 06 07.3</entry>
 </row>
@@ -36,6 +36,12 @@
   <entry>bng</entry>
   <entry>British National Grid</entry>
   <entry>TQ 18919 69392</entry>
+</row>
+<row>
+  <entry>4</entry>
+  <entry>utm</entry>
+  <entry>Universal Transverse Mercator</entry>
+  <entry>33 U 318293 5637154</entry>
 </row>
 </tbody>
 </tgroup>

@@ -54,7 +54,7 @@ static int waypoints;
 static int routepoints;
 static waypoint **wpt_a;
 static int wpt_a_ct;
-static int grid_index;
+static grid_type grid_index;
 static int datum_index;
 static char *datum_str;
 static int current_line;
@@ -139,26 +139,6 @@ static char *headers[] = {
 	NULL
 };
 
-static char *grid_short_names[] = {
-	"ddd",
-	"dmm",
-	"dms",
-	"bng",
-	NULL
-};
-
-static char *grid_long_names[] = {	/* starting at index !!! 3 !!! after inbuild lat/lon ... grids */
-	"British National Grid",
-	NULL
-};
-
-#define GRID_IDX_LAT_LON_DDD	0
-#define GRID_IDX_LAT_LON_DMM	1
-#define GRID_IDX_LAT_LON_DMS	2
-#define GRID_IDX_BNG 		3
-
-#define GRID_IDX_MAX		GRID_IDX_BNG
-
 /* helpers */
 
 static char *
@@ -231,7 +211,7 @@ convert_datum(waypoint *wpt, const int to_internal_wgs84, double *dest_lat, doub
 {
 	double alt;
 
-	if (datum_index == 118 /* WGS 84 */) {
+	if (datum_index == DATUM_WGS84 ) {
 		if (to_internal_wgs84 == 0) {
 			*dest_lat = wpt->latitude;
 			*dest_lon = wpt->longitude;
@@ -337,10 +317,10 @@ print_position(const waypoint *wpt)
 {
 	int valid;
 	double lat, lon, north, east;
-	char map[3];
 	char latsig, lonsig;
 	double  latmin, lonmin, latsec, lonsec;
-	int     latint, lonint;
+	int     latint, lonint, zone;
+	char map[3], zonec;
 	
 	convert_datum((waypoint *)wpt, 0, &lat, &lon);
 
@@ -361,32 +341,43 @@ print_position(const waypoint *wpt)
 
 	switch(grid_index) {
 
-	case GRID_IDX_LAT_LON_DDD:
+	case grid_lat_lon_ddd:
 	
 		gbfprintf(fout, "%c%0.*f %c%0.*f\t", 
 			latsig, precision, fabs(lat), 
 			lonsig, precision, fabs(lon));
 		break;
 
-	case GRID_IDX_LAT_LON_DMM:
+	case grid_lat_lon_dmm:
 	
 		gbfprintf(fout, "%c%d %0*.*f %c%d %0*.*f\t",
 			latsig, latint, precision + 3, precision, latmin,
 			lonsig, lonint, precision + 3, precision, lonmin);
 		break;
 		
-	case GRID_IDX_LAT_LON_DMS:
+	case grid_lat_lon_dms:
 	
 		gbfprintf(fout, "%c%d %d %.*f %c%d %d %.*f\t", 
 			latsig, latint, (int)latmin, precision, latsec,
 			lonsig, lonint, (int)lonmin, precision, lonsec);
 		break;
 
-	case GRID_IDX_BNG:
+	case grid_bng:
+
 		valid = GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map);
 		is_fatal(! valid, MYNAME ": Some (or all?) of the coordinates cannot be displayed using \"BNG\".");
-		gbfprintf(fout, "%s %5.0f %5.0f", map, east, north);
+		gbfprintf(fout, "%s %5.0f %5.0f\t", map, east, north);
 		break;
+
+	case grid_utm:
+
+		valid = GPS_Math_Known_Datum_To_UTM_EN(lat, lon,
+			&east, &north, &zone, &zonec, datum_index);
+		gbfprintf(fout, "%02d %c %.0f %.0f\t", zone, zonec, east, north);
+		break;
+
+	default:
+		fatal("ToDo\n");
 	}
 }
 
@@ -759,42 +750,25 @@ garmin_txt_wr_init(const char *fname)
 	datum_str = get_option_val(opt_datum, NULL);
 	grid_str = get_option_val(opt_grid, NULL);
 
-	grid_index = -1;
-	if (grid_str == NULL) {
-		grid_index = 1; /* default: dmm */
-	}
-	else if (! sscanf(grid_str, "%d", &grid_index)) {
-		char *name;
-		int index;
+	grid_index = grid_lat_lon_dmm;
+	if (grid_str != NULL) {
+		int i;
 		
-		index = 0;
-		while ((name = grid_short_names[index])) {
-			if (case_ignore_strcmp(name, grid_str) == 0) {
-				grid_index = index;
-				break;
-			}
-			index++;
+		if (sscanf(grid_str, "%d", &i)) {
+			grid_index = (grid_type) i;
+			if ((grid_index < GRID_INDEX_MIN) || (grid_index > GRID_INDEX_MAX))
+				fatal(MYNAME ": Grid index out of range (%d..%d)!",
+					(int)GRID_INDEX_MIN, (int)GRID_INDEX_MAX);
 		}
-		if (name == NULL) {	/* look in "long names" */
-			index = 0;
-			while ((name = grid_long_names[index])) {
-				if (case_ignore_strcmp(name, grid_str) == 0) break;
-				else index++;
-			}
-			is_fatal(name == NULL,
-				MYNAME ": Unsupported grid (%s). See GPSBabel help for supported grids.", grid_str);
-			grid_index = 3 + index;
-		}
+		else grid_index = gt_lookup_grid_type(grid_str, MYNAME);
 	}
-	else is_fatal(grid_index > GRID_IDX_MAX, MYNAME ": Grid index out of range (0..%d)!", GRID_IDX_MAX);
 	
 	switch(grid_index) {
-	case GRID_IDX_BNG: /* force datum to "Ord Srvy Grt Britn" */
-		datum_index = GPS_Lookup_Datum_Index("OSGB36");
+	case grid_bng: /* force datum to "Ord Srvy Grt Britn" */
+		datum_index = gt_lookup_datum_index("OSGB36", MYNAME);
 		break;
 	default:
-		datum_index = GPS_Lookup_Datum_Index(datum_str);
-		is_fatal(datum_index < 0, MYNAME ": Invalid or unknown gps datum (%s)!", datum_str);
+		datum_index = gt_lookup_datum_index(datum_str, MYNAME);
 	}
 	
 	if (opt_utc != NULL) {
@@ -817,22 +791,14 @@ garmin_txt_wr_deinit(void)
 static void
 garmin_txt_write(void)
 {
-	switch(grid_index) {
-	case 0:
-		cet_gbfprintf(fout, &cet_cs_vec_cp1252, "Grid\tLat/Lon hddd.ddddd%c\r\n", 0xB0);
-		break;
-	case 1:
-		cet_gbfprintf(fout, &cet_cs_vec_cp1252, "Grid\tLat/Lon hddd%cmm.mmm'\r\n", 0xB0);
-		break;
-	case 2:
-		cet_gbfprintf(fout, &cet_cs_vec_cp1252, "Grid\tLat/Lon hddd%cmm'ss.s\"\r\n", 0xB0);
-		break;
-	case GRID_IDX_BNG:
-		cet_gbfprintf(fout, &cet_cs_vec_cp1252, "Grid\t%s\r\n", grid_long_names[0]);
-		datum_str = "Ord Srvy Grt Britn";
-		break;
-	}
+	char *grid_str, *c;
 	
+	grid_str = xstrdup(gt_get_mps_grid_longname(grid_index, MYNAME));
+	while ((c = strchr(grid_str, '*'))) *c = 0xB0;	/* degree sign */
+	cet_gbfprintf(fout, &cet_cs_vec_cp1252, "Grid\t%s\r\n", grid_str);
+	xfree(grid_str);
+
+	datum_str = gt_get_mps_datum_name(datum_index);
 	gbfprintf(fout, "Datum\t%s\r\n\r\n", datum_str);
 
 	waypoints = 0;
@@ -904,47 +870,14 @@ free_header(const header_type ht)
 
 /* data parsers */
 
+#if 0
+/* moved to util.c */
 static void
 parse_position(const char *str, waypoint *wpt)
 {
-	double lat, lon;
-	unsigned char lathemi, lonhemi;
-	int deg_lat, deg_lon, min_lat, min_lon;
-	char map[3];
-	
-	switch(grid_index) {
-	
-	case GRID_IDX_LAT_LON_DDD:
-		sscanf(str, "%c%lf %c%lf", &lathemi, &lat, &lonhemi, &lon);
-		break;
-		
-	case GRID_IDX_LAT_LON_DMM:
-		sscanf(str, "%c%d %lf %c%d %lf", &lathemi, &deg_lat, &lat, &lonhemi, &deg_lon, &lon);
-		lat = (double)deg_lat + (lat / (double)60);
-		lon = (double)deg_lon + (lon / (double)60);
-		break;
-	case GRID_IDX_LAT_LON_DMS:
-		sscanf(str, "%c%d %d %lf %c%d %d %lf", &lathemi, &deg_lat, &min_lat, &lat, &lonhemi, &deg_lon, &min_lon, &lon);
-		lat = (double)deg_lat + ((double)min_lat / (double)60) + (lat / (double)3600.0);
-		lon = (double)deg_lon + ((double)min_lon / (double)60) + (lon / (double)3600.0);
-		break;
-		
-	case GRID_IDX_BNG:
-		sscanf(str, "%2s %lf %lf", map, &lat, &lon);
-		lathemi = lonhemi = '\0';
-		break;
-	}
-	
-	if (lathemi == 'S') 
-		wpt->latitude = -lat;
-	else
-		wpt->latitude = lat;
-
-	if (lonhemi == 'W')
-		wpt->longitude = -lon;
-	else
-		wpt->longitude = lon;
+......
 }
+#endif
 
 static int
 parse_distance(const char *str, double *value)
@@ -1138,25 +1071,12 @@ static void
 parse_grid(void)
 {
 	char *str = csv_lineparse(NULL, "\t", "", 1);
-	grid_index = -1;
 	
 	if (str != NULL) {
-		if (strstr(str, "dd.ddddd") != 0) grid_index = GRID_IDX_LAT_LON_DDD;
-		else if (strstr(str, "mm.mmm") != 0) grid_index = GRID_IDX_LAT_LON_DMM;
-		else if (strstr(str, "mm'ss.s") != 0) grid_index = GRID_IDX_LAT_LON_DMS;
-		else {
-			char *name;
-			int index = 0;
-
-			while ((name = grid_long_names[index])) {
-				if (case_ignore_strcmp(name, str) == 0) {
-					grid_index = GRID_IDX_BNG + index;
-					break;
-				}
-				index++;
-			}
-		}
-		is_fatal(grid_index < 0, MYNAME ": Unsupported grid (%s)!", str);
+		if (strstr(str, "dd.ddddd") != 0) grid_index = grid_lat_lon_ddd;
+		else if (strstr(str, "mm.mmm") != 0) grid_index = grid_lat_lon_dmm;
+		else if (strstr(str, "mm'ss.s") != 0) grid_index = grid_lat_lon_dms;
+		else grid_index = gt_lookup_grid_type(str, MYNAME);
 	}
 	else
 		fatal(MYNAME ": Missing grid headline!\n");
@@ -1167,10 +1087,8 @@ parse_datum(void)
 {
 	char *str = csv_lineparse(NULL, "\t", "", 1);
 	
-	if (str != NULL) {
-		datum_index = GPS_Lookup_Datum_Index(str);
-	 	is_fatal(datum_index < 0, MYNAME ": Unsupported GPS datum \"%s\"!", str);
-	}
+	if (str != NULL)
+		datum_index = gt_lookup_datum_index(str, MYNAME);
 	else
 		fatal(MYNAME ": Missing GPS datum headline!\n");
 }
@@ -1206,7 +1124,10 @@ parse_waypoint(void)
 					}
 				}
 				break;
-			case  4: parse_position(str, wpt); break;
+			case  4:
+				parse_coordinates(str, datum_index, grid_index,
+					&wpt->latitude, &wpt->longitude, MYNAME);
+				break;
 			case  5: if (parse_distance(str, &d)) wpt->altitude = d; break;
 			case  6: if (parse_distance(str, &d)) GMSD_SET(depth, d); break;
 			case  7: if (parse_distance(str, &d)) GMSD_SET(proximity, d); break;
@@ -1229,7 +1150,6 @@ parse_waypoint(void)
 			default: break;
 		}
 	}
-	convert_datum(wpt, 1, NULL, NULL);
 	waypt_add(wpt);
 }
 
@@ -1311,12 +1231,13 @@ parse_track_waypoint(void)
 	while ((str = csv_lineparse(NULL, "\t", "", column++))) {
 		int field_no = header_fields[trkpt_header][column];
 		switch(field_no) {
-			case 1: parse_position(str, wpt); break;
+			case 1: parse_coordinates(str, datum_index, grid_index,
+					&wpt->latitude, &wpt->longitude, MYNAME);
+				break;
 			case 2: parse_date_and_time(str, &wpt->creation_time); break;
 			case 3: parse_distance(str, &wpt->altitude); break;
 		}
 	}
-	convert_datum(wpt, 1, NULL, NULL);
 	route_add_wpt(current_trk, wpt);
 }
 
