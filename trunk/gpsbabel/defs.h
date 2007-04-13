@@ -850,6 +850,22 @@ void   le_write_double(void *p, double d);
 double ddmm2degrees(double ddmm_val);
 double degrees2ddmm(double deg_val);
 
+typedef enum {
+	grid_unknown = -1,
+	grid_lat_lon_ddd = 0,
+	grid_lat_lon_dmm = 1,
+	grid_lat_lon_dms = 2,
+	grid_bng = 3,
+	grid_utm = 4
+} grid_type;
+
+#define GRID_INDEX_MIN	grid_lat_lon_ddd
+#define GRID_INDEX_MAX	grid_utm
+#define DATUM_WGS84	118
+
+int parse_coordinates(const char *str, int datum, const grid_type grid,
+	double *latitude, double *longitude, const char *module);
+
 /*
  *  From util_crc.c
  */

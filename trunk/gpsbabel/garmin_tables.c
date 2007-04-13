@@ -21,6 +21,8 @@
  */
 
 #include "garmin_tables.h"
+#include "jeeps/gpsmath.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -597,6 +599,49 @@ char *gt_display_mode_names[] = {
 	"Symbol & Description"
 };
 
+typedef struct {
+	char *shortname;
+	char *longname;
+	grid_type grid;
+} grid_mapping_t;
+
+/* gt_mps_grid_names: !!! degree sign substituted with '*' !!! */
+
+grid_mapping_t gt_mps_grid_names[] =
+{
+	{ "ddd",	"Lat/Lon hddd.ddddd*",		grid_lat_lon_ddd },
+	{ "dmm",	"Lat/Lon hddd*mm.mmm'",		grid_lat_lon_dmm },
+	{ "dms",	"Lat/Lon hddd*mm'ss.s\"",	grid_lat_lon_dms },
+	{ "bng",	"British National Grid",	grid_bng },
+	{ "utm",	"UTM",				grid_utm },
+	{ NULL,	NULL,	0 }
+};
+
+/* gt_mps_datum_names: */
+
+typedef struct {
+	char *jeeps_name;
+	char *mps_name;
+} datum_mapping_t;
+
+/* will be continued (when requested) */	
+datum_mapping_t gt_mps_datum_names[] = 
+{
+	{ "Alaska-NAD27",	"NAD27 Alaska" },
+	{ "Bahamas NAD27",	"NAD27 Bahamas" },
+	{ "Canada_Mean(NAD27)",	"NAD27 Canada" },
+	{ "Canal_Zone_(NAD27)",	"NAD27 Canal Zone" },
+	{ "Carribean NAD27",	"NAD27 Caribbean" },
+	{ "Cent America NAD27",	"NAD27 Central" },
+	{ "Cuba NAD27",		"NAD27 Cuba" },
+	{ "Geodetic Datum 49",	"Geodetic Datum '49" },
+	{ "Greenland NAD27",	"NAD27 Greenland" },
+	{ "Mexico NAD27",	"NAD27 Mexico" },
+	{ "North America 83",	"NAD83" },
+	{ "OSGB36",		"Ord Srvy Grt Britn" },
+	{ NULL,	NULL }
+};
+
 unsigned char
 gt_switch_display_mode_value(const unsigned char display_mode, const int protoid, const char device)
 {
@@ -832,6 +877,77 @@ gt_get_icao_cc(const char *country, const char *shortname)
 		return NULL;
 	} while (x->country != NULL);
 	return NULL;
+}
+
+grid_type
+gt_lookup_grid_type(const char *grid_name, const char *module)
+{
+	grid_mapping_t *g;
+	
+	for (g = gt_mps_grid_names; (g->shortname); g++) {
+		if ((case_ignore_strcmp(grid_name, g->shortname) == 0) ||
+		    (case_ignore_strcmp(grid_name, g->longname) == 0))
+		    	return g->grid;
+	}
+	
+	fatal("%s: Unsupported grid (%s)! See GPSBabel help for supported grids.\n",
+		module, grid_name);
+
+	return grid_unknown;	/* (warnings) */
+}
+
+char *
+gt_get_mps_grid_longname(const grid_type grid, const char *module)
+{
+	if ((grid < GRID_INDEX_MIN) || (grid > GRID_INDEX_MAX))
+		fatal("%s: Grid index out of range %d (%d..%d)!",
+			module, (int) grid,
+			(int)GRID_INDEX_MIN, (int)GRID_INDEX_MAX);
+	return gt_mps_grid_names[grid].longname;
+}
+
+char *
+gt_get_mps_datum_name(const int datum_index)
+{
+	char *result;
+	datum_mapping_t *d;
+	
+	result = GPS_Math_Get_Datum_Name(datum_index);
+
+	for (d = gt_mps_datum_names; (d->jeeps_name); d++)
+		if (case_ignore_strcmp(result, d->jeeps_name) == 0) return d->mps_name;
+
+	return result;
+}
+
+int
+gt_lookup_datum_index(const char *datum_str, const char *module)
+{
+	datum_mapping_t *d;
+	int result;
+	const char *name = datum_str;
+	
+	for (d = gt_mps_datum_names; (d->jeeps_name); d++) {
+		if (case_ignore_strcmp(name, d->mps_name) == 0) {
+			name = d->jeeps_name;
+			break;
+		}
+	}
+	
+	result = GPS_Lookup_Datum_Index(name);
+	
+	if (result < 0) {
+		char *tmp;
+		xasprintf(&tmp, "%s mean", datum_str);
+		result = GPS_Lookup_Datum_Index(tmp);
+		xfree(tmp);
+	}
+
+	is_fatal(result < 0,
+		"%s: Unsupported datum (%s)! See GPSBabel help for supported datums.",
+			module, datum_str);
+
+	return result;
 }
 
 #if MAKE_TABLE
