@@ -116,7 +116,13 @@ int32 GPS_Math_UTM_EN_To_WGS84(double *lat, double *lon, double E,
 int32 GPS_Math_UTM_EN_To_NAD83(double *lat, double *lon, double E,
 			       double N, int32 zone, char zc);
 
+int32 GPS_Math_Known_Datum_To_UTM_EN(double lat, double lon, double *E,
+			       double *N, int32 *zone, char *zc, const int n);
+int32 GPS_Math_UTM_EN_To_Known_Datum(double *lat, double *lon, double E,
+			       double N, int32 zone, char zc, const int n);
+
 int32 GPS_Lookup_Datum_Index(const char *n);
+char *GPS_Math_Get_Datum_Name(const int datum_index);
 
 #endif
 

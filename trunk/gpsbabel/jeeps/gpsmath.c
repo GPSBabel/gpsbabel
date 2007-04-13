@@ -1432,7 +1432,7 @@ int32 GPS_Math_UKOSMap_To_WGS84_M(char *map, double mE, double mN,
 
     GPS_Math_NGENToAiry1830LatLon(E,N,&alat,&alon);
 
-    GPS_Math_Known_Datum_To_WGS84_M(alat,alon,0,lat,lon,&ht,78);
+    GPS_Math_Known_Datum_To_WGS84_M(alat,alon,0,lat,lon,&ht,86);
 
     return 1;
 }
@@ -1501,7 +1501,7 @@ int32 GPS_Math_UKOSMap_To_WGS84_C(char *map, double mE, double mN,
 
     GPS_Math_NGENToAiry1830LatLon(E,N,&alat,&alon);
 
-    GPS_Math_Known_Datum_To_WGS84_C(alat,alon,0,lat,lon,&ht,78);
+    GPS_Math_Known_Datum_To_WGS84_C(alat,alon,0,lat,lon,&ht,86);
 
     return 1;
 }
@@ -1799,6 +1799,88 @@ int32 GPS_Math_UTM_EN_To_WGS84(double *lat, double *lon, double E,
     return 1;
 }
 
+/* @func GPS_Math_Known_Datum_To_UTM_EN *********************************
+**
+** Transform known datum lat/lon to UTM zone, easting and northing
+**
+** @param [r] lat  [double] WGS84 latitude (deg)
+** @param [r] lon  [double] WGS84 longitude (deg)
+** @param [w] E    [double *] easting (metres)
+** @param [w] N    [double *] northing (metres)
+** @param [w] zone [int32 *]  zone number
+** @param [w] zc   [char *] zone character
+** @param [r] n    [int32] datum number from GPS_Datum structure
+**
+** @return [int32] success
+************************************************************************/
+int32 GPS_Math_Known_Datum_To_UTM_EN(double lat, double lon, double *E,
+			       double *N, int32 *zone, char *zc, const int n)
+{
+    double phi0;
+    double lambda0;
+    double N0;
+    double E0;
+    double F0;
+    double a;
+    double b;
+    int32  idx;
+
+    if(!GPS_Math_LatLon_To_UTM_Param(lat,lon,zone,zc,&lambda0,&E0,
+				     &N0,&F0))
+	return 0;
+
+    phi0 = (double)0.0;
+    
+    idx  = GPS_Datum[n].ellipse;
+    a = (double) GPS_Ellipse[idx].a;
+    b = a - (a/GPS_Ellipse[idx].invf);
+
+    GPS_Math_LatLon_To_EN(E,N,lat,lon,N0,E0,phi0,lambda0,F0,a,b);
+
+    return 1;
+}
+
+/* @func GPS_Math_UTM_EN_To_Known_Datum *********************************
+**
+** Transform UTM zone, easting and northing to known datum lat/lon
+**
+** @param [w] lat  [double *] WGS84 latitude (deg)
+** @param [r] lon  [double *] WGS84 longitude (deg)
+** @param [w] E    [double]   easting (metres)
+** @param [w] N    [double]   northing (metres)
+** @param [w] zone [int32]      zone number
+** @param [w] zc   [char]     zone character
+** @param [r] n    [int32] datum number from GPS_Datum structure
+**
+** @return [int32] success
+************************************************************************/
+int32 GPS_Math_UTM_EN_To_Known_Datum(double *lat, double *lon, double E,
+			       double N, int32 zone, char zc, const int n)
+{
+    double phi0;
+    double lambda0;
+    double N0;
+    double E0;
+    double F0;
+    double a;
+    double b;
+    int32  idx;
+
+    if(!GPS_Math_UTM_Param_To_Mc(zone,zc,&lambda0,&E0,&N0,&F0))
+	return 0;
+
+    phi0 = (double)0.0;
+
+    idx  = GPS_Datum[n].ellipse;
+    a = (double) GPS_Ellipse[idx].a;
+    b = a - (a/GPS_Ellipse[idx].invf);
+
+    GPS_Math_EN_To_LatLon(E,N,lat,lon,N0,E0,phi0,lambda0,F0,a,b);
+
+    return 1;
+}
+
+
 int32 GPS_Lookup_Datum_Index(const char *n)
 {
 	GPS_PDatum dp;
@@ -1817,4 +1899,10 @@ int32 GPS_Lookup_Datum_Index(const char *n)
 	}
 
 	return -1;
+}
+
+char *
+GPS_Math_Get_Datum_Name(const int datum_index)
+{
+	return GPS_Datum[datum_index].name;
 }
