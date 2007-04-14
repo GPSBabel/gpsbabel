@@ -54,13 +54,8 @@ typedef enum {
 
 static gbfile *fin, *fout;
 
-// Empty structs aren't C89.  But this wasn't being used anyway.
-//typedef struct stmsdf_s {
-//} stmsdf_t;
-
 static int lineno;
 static int datum;
-static int datum86;
 static int filetype;
 static route_head *route;
 static queue trackpts;
@@ -310,7 +305,7 @@ parse_point(char *line)
 		wpt->creation_time = mklocaltime(&tm);
 	}
 			
-	if (datum != datum86) {
+	if (datum != DATUM_WGS84) {
 		double ht;
 		GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0,
 			&wpt->latitude, &wpt->longitude, &ht, datum);
@@ -341,7 +336,7 @@ rd_init(const char *fname)
 	
 	lineno = 0;
 	route = NULL;
-	datum = datum86 = GPS_Lookup_Datum_Index("WGS84");
+	datum = DATUM_WGS84;
 	filetype = 28;
 	rte_name = rte_desc = NULL;
 
