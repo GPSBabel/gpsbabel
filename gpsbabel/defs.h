@@ -907,26 +907,5 @@ int color_to_bbggrr(char *cname);
 #define unknown_alt 	-99999999.0
 #define unknown_course 	     -999.0
 #define unknown_speed	     -999.0
-/*
- * textfile: buffered OS independent (CRLF,NL,CR) text reader
- */
- 
-typedef struct
-{
-	FILE *file_in;
-	char buf[1024];
-	char *buf_pos;
-	char *buf_end;
-	char *line;
-	int line_size;
-	int line_no;
-	unsigned char tfclose:1;
-} textfile_t;
-
-textfile_t *textfile_init(const FILE *file_in);
-textfile_t *textfile_open_read(const char *filename, const char *module);
-void textfile_done(textfile_t *tf);
-char *textfile_read(textfile_t *tf);
-int textfile_getc(textfile_t *tf);
 
 #endif /* gpsbabel_defs_h_included */
