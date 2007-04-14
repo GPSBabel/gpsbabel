@@ -38,7 +38,7 @@ static char *xmlbin;
 static waypoint *xmlwpt;
 static route_head *xmltrk;
 static char *xmlgrid;
-static int xmldatum, datum_WGS84, datum_OSGB36;
+static int xmldatum;
 static double xmlEasting, xmlNorthing;
 static double xmlLatitude, xmlLongitude;
 static double xmlAltitude;
@@ -105,7 +105,7 @@ static xg_tag_mapping tlog3b_xgcb_map[] = {
 static void
 convert_datum(waypoint *wpt, int datum)
 {
-	if (datum != datum_WGS84) {
+	if (datum != DATUM_WGS84) {
 		double lat = wpt->latitude;
 		double lon = wpt->longitude;
 		double alt = wpt->altitude;
@@ -122,7 +122,7 @@ finalize_pt(waypoint *wpt)
 	if (strcmp(xmlgrid, "BNG") == 0) {
 		GPS_Math_NGENToAiry1830LatLon(xmlEasting, xmlNorthing, 
 		&wpt->latitude, &wpt->longitude);
-		xmldatum = datum_OSGB36;
+		xmldatum = DATUM_OSGB36;
 	}
 	else {
 		wpt->latitude = xmlLatitude;
@@ -219,7 +219,7 @@ static void
 tlog3b_xgcb_wptst(const char *args, const char **unused)
 {
 	xmlwpt = waypt_new();
-	xmldatum = datum_WGS84;
+	xmldatum = DATUM_WGS84;
 }
 
 
@@ -227,7 +227,7 @@ static void
 tlog3b_xgcb_tptst(const char *args, const char **unused)
 {
 	xmlwpt = waypt_new();
-	xmldatum = datum_WGS84;
+	xmldatum = DATUM_WGS84;
 }
 
 
@@ -550,9 +550,6 @@ static void
 dmtlog_rd_init(const char *fname)
 {
 	fin = gbfopen_le(fname, "rb", MYNAME);
-	
-	datum_OSGB36 = GPS_Lookup_Datum_Index("OSGB36");
-	datum_WGS84 = GPS_Lookup_Datum_Index("WGS84");
 	
 	xmlbin = NULL;
 	xmltrk = NULL;

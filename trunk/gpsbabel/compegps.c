@@ -106,16 +106,11 @@ static
 void fix_datum(double *lat, double *lon)
 {
 	double amt;
-	static int wgs84;
-
-	if (wgs84 == 0) {
-		wgs84 = GPS_Lookup_Datum_Index("WGS 84");
-	}
 
 	/*
 	 * Avoid FP jitter in the common case.
  	 */
-	if (input_datum != wgs84) {
+	if (input_datum != DATUM_WGS84) {
 		GPS_Math_Known_Datum_To_WGS84_M(*lat, *lon, 0.0, lat, lon, 
 			&amt, input_datum);
 	}
@@ -341,7 +336,7 @@ static void
 compegps_rd_init(const char *fname)
 {
 	fin = gbfopen(fname, "rb", MYNAME);
-	input_datum = GPS_Lookup_Datum_Index("WGS 84");
+	input_datum = DATUM_WGS84;
 }
 
 static void
