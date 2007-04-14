@@ -503,7 +503,7 @@ gbftell(gbfile *file)
 #if !ZLIB_INHIBITED
 		gbsize_t result = gztell(file->handle.gz);
 		if (file->back != -1) {
-			file->back = -1;
+//			file->back = -1;
 			result--;
 		}
 		return result;
