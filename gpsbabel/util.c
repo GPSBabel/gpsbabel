@@ -434,8 +434,16 @@ lrtrim(char *buff)
 
 	c = buff;
 	while ((*c != '\0') && ((unsigned char)*c <= ' ')) c++;
+	
+	if (c != buff) {
+		char *src = c;
+		char *dst = buff;
+		
+		while (*src) *dst++ = *src++;
+		*dst = '\0';
+	}
 
-	return c;
+	return buff;
 }
 
 /*
@@ -1009,7 +1017,8 @@ parse_coordinates(const char *str, int datum, const grid_type grid,
 	unsigned char lathemi, lonhemi;
 	int deg_lat, deg_lon, min_lat, min_lon;
 	char map[3];
-	int utmz, utme, utmn;
+	int utmz;
+	double utme, utmn;
 	char utmc;
 	int valid, result, ct;
 	double lx, ly;
@@ -1065,14 +1074,13 @@ parse_coordinates(const char *str, int datum, const grid_type grid,
 			break;
 			
 		case grid_utm:
-			format = "%d %c %d %d%n";
+			format = "%d %c %lf %lf%n";
 			ct = sscanf(str, format,
 				&utmz, &utmc, &utme, &utmn,
 				&result);
 			valid = (ct == 4);
 			if (valid) {
-				valid = GPS_Math_UTM_EN_To_Known_Datum(&lat, &lon, utme, utmn, utmz, utmc, datum);
-				if (! valid)
+				if (! GPS_Math_UTM_EN_To_Known_Datum(&lat, &lon, utme, utmn, utmz, utmc, datum))
 					fatal("%s: Unable to convert UTM coordinates (%s)!\n",
 						module, str);
 			}
@@ -1085,9 +1093,10 @@ parse_coordinates(const char *str, int datum, const grid_type grid,
 				module, (int)grid);
 	}
 	
-	if (!valid) {
-		warning("%s: sscanf error using format \"%s\"\n", module, format);
-		fatal(  "%s: could not convert data \"%s\"!\n", module, str);
+	if (! valid) {
+		warning("%s: sscanf error using format \"%s\"!\n", module, format);
+		warning("%s: parsing has stopped at parameter number %d.\n", module, ct);
+		fatal("%s: could not convert coordinates \"%s\"!\n", module, str);
 	}
 	
 	if (lathemi == 'S') lat = -lat;
