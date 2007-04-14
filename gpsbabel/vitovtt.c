@@ -72,7 +72,6 @@ vitovtt_read(void)
 	double			speed			= 0;
 	int				course			= 0;
 	int				status			= 0;
-	int				serial			= 0;
 	
 	memset(&tmStruct, 0, sizeof(tmStruct));
 	
