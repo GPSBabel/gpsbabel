@@ -861,6 +861,8 @@ typedef enum {
 
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_utm
+
+#define DATUM_OSGB36	86
 #define DATUM_WGS84	118
 
 int parse_coordinates(const char *str, int datum, const grid_type grid,

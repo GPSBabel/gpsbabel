@@ -765,7 +765,7 @@ garmin_txt_wr_init(const char *fname)
 	
 	switch(grid_index) {
 	case grid_bng: /* force datum to "Ord Srvy Grt Britn" */
-		datum_index = gt_lookup_datum_index("OSGB36", MYNAME);
+		datum_index = DATUM_OSGB36;
 		break;
 	default:
 		datum_index = gt_lookup_datum_index(datum_str, MYNAME);
