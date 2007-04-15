@@ -116,6 +116,7 @@ extern ff_vecs_t alanwpr_vecs;
 extern ff_vecs_t alantrl_vecs;
 extern ff_vecs_t vitovtt_vecs;
 extern ff_vecs_t ggv_log_vecs;
+extern ff_vecs_t g7towin_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -644,6 +645,14 @@ vecs_t vec_list[] = {
                 "Geogrid Viewer tracklogs (.log)",
                 "log"
         },
+#if CSVFMTS_ENABLED
+        {
+		&g7towin_vecs,
+		"g7towin",
+		"G7ToWin data files (.g7t)",
+		"g7t"
+	},
+#endif
 	{
 		NULL,
 		NULL,
