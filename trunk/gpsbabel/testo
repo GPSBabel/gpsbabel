@@ -1210,4 +1210,11 @@ bincompare ${REFERENCE}/track/ggv_log-sample.log ${TMPDIR}/ggv_log-sample.log
 ${PNAME} -i ggv_log -f ${REFERENCE}/track/ggv_log-sample.log -o ggv_log -F ${TMPDIR}/ggv_log-sample2.log
 bincompare ${REFERENCE}/track/ggv_log-sample.log ${TMPDIR}/ggv_log-sample2.log
 
+#
+# G7ToWin (read only) test
+#
+${PNAME} -i g7towin -f ${REFERENCE}/expertgps.g7t -o garmin_txt,utc=0 -F ${TMPDIR}/expertgps-g7t.txt
+compare ${REFERENCE}/expertgps-g7t.txt ${TMPDIR}/expertgps-g7t.txt
+
+
 exit 0

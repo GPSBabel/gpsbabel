@@ -21,6 +21,7 @@
 /*
     History:
     		04/07/2007: start programming
+    		04/15/2007: added to gpsbabel
 */
 
 #include "defs.h"
