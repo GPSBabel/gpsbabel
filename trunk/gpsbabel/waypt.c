@@ -97,9 +97,11 @@ waypt_add(waypoint *wpt)
 	waypt_ct++;
 
 	if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-		fatal ("Invalid latitude %f in waypoint.\n", wpt->latitude);
+		fatal ("Invalid latitude %f in waypoint %s.\n",
+			wpt->latitude, wpt->shortname ? wpt->shortname : "");
 	if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-		fatal ("Invalid longitude %f in waypoint.\n", wpt->longitude);
+		fatal ("Invalid longitude %f in waypoint %s.\n",
+			wpt->longitude, wpt->shortname ? wpt->shortname : "");
 
 	/*
 	 * Some input may not have one or more of these types so we
