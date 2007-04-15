@@ -23,9 +23,11 @@
     2006/01/22: reader simplified with inifile library
     2007/01/30: new option prefer_shortnames
     		don't check global_opts.objective
+    2007/04&14: new handling of DESCRIPTION lines
 */
 
 #include "defs.h"
+#include "csv_util.h"
 #include "garmin_tables.h"
 #include <ctype.h>
 #include <stdio.h>
@@ -39,6 +41,9 @@
 #undef BCR_DEBUG
     
 #define R_EARTH		6371000		/* radius of our big blue ball */
+#define BCR_DEF_ICON		"Standort"
+#define BCR_DEF_MPS_ICON	"Waypoint"
+#define BCR_UNKNOWN		(double) 999999999
 
 /*  
     6371014 would be a better value when converting to f.e. to mapsoure,
@@ -71,13 +76,101 @@ arglist_t bcr_args[] = {
 	ARG_TERMINATOR
 };
 
+typedef struct {
+	char *bcr_name;
+	char *mps_name;
+	char *symbol_DE;
+	int  warned;
+} bcr_icon_mapping_t;
+
+static
+bcr_icon_mapping_t bcr_icon_mapping[] = {
+	{ BCR_DEF_ICON,		BCR_DEF_MPS_ICON, 	BCR_DEF_ICON },
+	{ "",			BCR_DEF_MPS_ICON, 	"Eigene Adressen" },
+	{ "AdrMon alpen",	"Summit",		"Pass-Strassen" },
+	{ "AdrMon bauern",	NULL,			"Bauern- und Biohoefe" },
+	{ "AdrMon cmpngs",	"Campground",		"Campingplaetzte" },
+	{ "AdrMon p_aeu",	"Scenic Area",		"Sehenswertes" },
+	{ "AdrMon p_beu",	"Gas Station",		"Tanken" },
+	{ "AdrMon p_deu",	"Parking Area",		"Parken" },
+	{ "AdrMon p_feu",	"Restaurant",		"Gastro" },
+	{ "AdrMon p_geu",	"Museum",		"Freizeit" },
+	{ "AdrMon p_heu",	"Gas Station",		"Tankstellen" },
+	{ "AdrMon p_keu",	NULL,			"Faehrverbindungen" },
+	{ "AdrMon p_leu",	NULL,			"Grenzuebergaenge" },
+	{ "AdrMon p_teu",	NULL,			"Wein- und Sektgueter" },
+	{ "AdrMon RUINEN",	"Ghost Town",		"Burgen und Schloesser" },
+	{ "AdrMon NFHAUS",	"Residence",		"Naturfreundehaeuser" },
+	{ "AdrMon racing",	"Bike Trail",		"Rennstrecken" },
+	{ "AdrMon TNKRST",	"Bar",			"Tankraststaetten" },
+	{ "AdrMon tpclub",	"Contact, Biker",	"Motorrad-Clubs" },
+	{ "AdrMon tpequ",	NULL,			"Motorrad-Equipment" },
+	{ "AdrMon tphot",	"Hotel",		"Motorrad-Hotels" },
+	{ "AdrMon tpmh",	NULL,			"Motorradhaendler" },
+	{ "AdrMon tpss",	"Restricted Area",	"Sperrungen" },
+	{ "AdrMon tpsw",	"Scenic Area",		"Sehenswertes" },
+	{ "AdrMon tptref",	NULL,			"Treffpunkte" },
+	{ "AdrMon VORTE",	"Information",		"Ortsinformationen" },
+	{ "AdrMon WEBCAM",	NULL,			"WebCam-Standorte" },
+	{ "AdrMon youthh",	NULL,			"Jugendherbergen" },
+	{ "Town",		"City (Small)",		"Orte" },
+	{ NULL,			NULL,			NULL, 0 }
+};
+
+static void
+bcr_handle_icon_str(const char *str, waypoint *wpt)
+{
+	bcr_icon_mapping_t *m;
+	
+	wpt->icon_descr = BCR_DEF_MPS_ICON;
+	
+	for (m = bcr_icon_mapping; (m->bcr_name); m++) {
+		if (case_ignore_strcmp(str, m->bcr_name) == 0) {
+			int nr;
+			
+			if (m->symbol_DE == NULL) {
+				if (! m->warned) {
+					m->warned = 1;
+					warning(MYNAME ": Unknown icon \"%s\" found. Please report.\n", str);
+				}
+				return;
+			}
+			wpt->description = xstrdup(m->symbol_DE);
+			if (m->mps_name != NULL) {
+				nr = gt_find_icon_number_from_desc(m->mps_name, MAPSOURCE);
+				wpt->icon_descr = gt_find_desc_from_icon_number(nr, MAPSOURCE, NULL);
+			}
+			return;
+		}
+	}
+}
+
+static char *
+get_bcr_icon_from_icon_descr(const char *icon_descr)
+{
+	char *result = BCR_DEF_ICON;
+	
+	if (icon_descr) {
+		bcr_icon_mapping_t *m;
+		
+		for (m = bcr_icon_mapping; (m->bcr_name); m++) {
+			if (! m->mps_name) continue;
+			if (case_ignore_strcmp(icon_descr, m->mps_name) == 0) {
+				result = m->bcr_name;
+				break;
+			}
+		}
+	}
+	return result;
+}
+
 static void
 bcr_init_radius(void)
 {
 	if (radius_opt != NULL)				/* preinitialize the earth radius */
 	{
 		radius = atof(radius_opt);
-		if (radius < 0)
+		if (radius <= 0)
 			fatal(MYNAME ": Sorry, the radius should be greater than zero!\n");
 	}
 	else
@@ -162,7 +255,6 @@ bcr_data_read(void)
 		char station[32];
 		char *str;
 		int mlat, mlon;		/* mercator data */
-		double xalt;
 		waypoint *wpt;
 		
 		snprintf(station, sizeof(station), "STATION%d", index);
@@ -184,22 +276,25 @@ bcr_data_read(void)
 			if (cx == NULL)
 				fatal(MYNAME ": structure error at %s (Client)!\n", station);
 			*cx++ = '\0';
-			
-			xalt = atof(cx);
-			if (xalt != 999999999) {
-				wpt->altitude = FEET_TO_METERS(xalt);
-			}
-			
-			if (case_ignore_strcmp(str, "Standort") == 0)
-			    wpt->icon_descr = gt_find_desc_from_icon_number(18, MAPSOURCE, NULL);
-			else if (case_ignore_strcmp(str, "Town") == 0)
-			    wpt->icon_descr = gt_find_desc_from_icon_number(69, MAPSOURCE, NULL);
-			else
-			    warning(MYNAME ": Unknown icon \"%s\" found. Please report.\n", str);
+			bcr_handle_icon_str(str, wpt);
 		}
 		
-		if (NULL != (str = inifile_readstr(ini, "description", station)))
-			wpt->description = xstrdup(str);
+		if (NULL != (str = inifile_readstr(ini, "description", station))) {
+			char *c;
+			
+			c = strchr(str, ',');
+			if (c != NULL) *c = '\0';
+			if (*str) wpt->notes = xstrdup(str);
+			if ((str = c)) {
+				str++;
+				c = strchr(str, ',');
+				if (c != NULL) *c = '\0';
+				if (*str) {
+					xfree(wpt->shortname);
+					wpt->shortname = xstrdup(str);
+				}
+			}
+		}
 		
 		route_add_wpt(route, wpt);
 	}
@@ -257,9 +352,8 @@ bcr_route_header(const route_head *route)
 {
 	queue *elem, *tmp;
 	waypoint *wpt;
-	char *c;
-	int i, icon, north, east, nmin, nmax, emin, emax;
-	char buff[128], symbol[32];
+	char *sout;
+	int i, north, east, nmin, nmax, emin, emax;
 	
 	curr_rte_num++;
 	if (curr_rte_num != target_rte_num) return;	
@@ -267,31 +361,28 @@ bcr_route_header(const route_head *route)
 	bcr_write_line(fout, "[CLIENT]", NULL, NULL);			/* client section */
 	bcr_write_line(fout, "REQUEST", NULL, "TRUE");
 	
-	c = route->rte_name;
-	if (rtename_opt != 0) c = rtename_opt;
-	if (c != NULL)
-		bcr_write_line(fout, "ROUTENAME", NULL, c);
+	sout = route->rte_name;
+	if (rtename_opt != 0) sout = rtename_opt;
+	if (sout != NULL)
+		bcr_write_line(fout, "ROUTENAME", NULL, sout);
 	else
 		bcr_write_line(fout, "ROUTENAME", NULL, "Route");
 
-	bcr_write_line(fout, "DESCRIPTIONLINES", NULL, "1");
-	bcr_write_line(fout, "DESCRIPTION1", NULL, "");
+	bcr_write_line(fout, "DESCRIPTIONLINES", NULL, "0");
 	
 	i = 0;
-
 	QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) 
 	{
+		char *icon;
+		waypoint *wpt = (waypoint *) elem;
+
 		i++;
-		wpt = (waypoint *) elem;
 		
-		strncpy(symbol, "Standort", sizeof(symbol));
-		if (wpt->icon_descr != 0) {
-			icon = gt_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
-			if ((icon >= 69) && (icon <= 72))
-				strncpy(symbol, "Town", sizeof(symbol));
-		}
-		snprintf(buff, sizeof(buff), "%s,%s", symbol, "999999999");
-		bcr_write_line(fout, "STATION", &i, buff);
+		icon = get_bcr_icon_from_icon_descr(wpt->icon_descr);
+
+		xasprintf(&sout, "%s,%.f", icon, BCR_UNKNOWN);
+		bcr_write_line(fout, "STATION", &i, sout);
+		xfree(sout);
 	}
 	    
 	bcr_write_line(fout, "[COORDINATES]", NULL, NULL);		/* coords section */
@@ -312,8 +403,9 @@ bcr_route_header(const route_head *route)
 		if (north < nmin) nmin = north;
 		if (east < emin) emin = east;
 		
-		snprintf(buff, sizeof(buff), "%d,%d", east, north);
-		bcr_write_line(fout, "STATION", &i, buff);
+		xasprintf(&sout, "%d,%d", east, north);
+		bcr_write_line(fout, "STATION", &i, sout);
+		xfree(sout);
 	}
 	
 	bcr_write_line(fout, "[DESCRIPTION]", NULL, NULL);		/* descr. section */
@@ -321,18 +413,37 @@ bcr_route_header(const route_head *route)
 	i = 0;
 	QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) 
 	{
+		char *s1, *s2, *sout;
+		
 		i++;
 		wpt = (waypoint *) elem;
-		c = wpt->description;
-		if (prefer_shortnames_opt || (c == NULL) || (*c == '\0'))
-			c = wpt->shortname;
-		bcr_write_line(fout, "STATION", &i, c);
+		s1 = wpt->notes;
+		if (s1 == NULL) s1 = wpt->description;
+		
+		if (prefer_shortnames_opt || (s1 == NULL) || (*s1 == '\0')) {
+			s2 = s1;
+			s1 = wpt->shortname;
+		}
+		else s2 = wpt->shortname;
+		
+		if (s1 == NULL) s1 = xstrdup("");
+		else s1 = csv_stringclean(s1, ",\t\r\n");
+		if (s2 == NULL) s2 = xstrdup("");
+		else s2 = csv_stringclean(s2, ",\t\r\n");
+		
+		xasprintf(&sout, "%s,%s,,0", s1, s2);
+		bcr_write_line(fout, "STATION", &i, sout);
+		
+		xfree(s1);
+		xfree(s2);
+		xfree(sout);
 	}
 	
 	bcr_write_line(fout, "[ROUTE]", NULL, NULL);			/* route section */
 
-	snprintf(buff, sizeof(buff), "%d,%d,%d,%d", emin, nmax, emax, nmin);
-	bcr_write_line(fout, "ROUTERECT", NULL, buff);
+	xasprintf(&sout, "%d,%d,%d,%d", emin, nmax, emax, nmin);
+	bcr_write_line(fout, "ROUTERECT", NULL, sout);
+	xfree(sout);
 	
 }
 
