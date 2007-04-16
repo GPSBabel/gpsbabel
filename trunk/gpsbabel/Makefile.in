@@ -153,7 +153,7 @@ torture:
 #
 # This will only work on UNIX-like substances.
 #
-install: @INSTALL_DEBUG@
+install: @INSTALL_DEBUG@ gpsbabel$(EXEEXT)
 	@mkdir -p $(INSTALL_DIR)/bin
 	install gpsbabel  $(INSTALL_DIR)/bin/
 
