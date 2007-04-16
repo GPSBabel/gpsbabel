@@ -544,6 +544,19 @@ static void kml_output_description(const waypoint *pt)
 		TD2("Speed: %.1f %s", spd, spd_units);
 	}
 	TD("Heading: %.1f", pt->course);
+	/* This really shouldn't be here, but as of this writing, 
+	 * Earth can't edit/display the TimeStamp.  
+	 */
+	if (pt->creation_time) {
+		char time_string[64];
+
+		xml_fill_in_time(time_string, pt->creation_time, 
+					pt->microseconds, XML_LONG_TIME);
+		 if (time_string[0]) {
+			 TD("Time: %s", time_string);
+		 }
+	}
+
 	kml_write_xml(-1, "</table>\n");
 	kml_write_xml(-1, "]]></description>\n");
 }

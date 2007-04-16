@@ -810,6 +810,7 @@
                 <tr><td>Altitude: 3.3 ft </td></tr>
                 <tr><td>Speed: 0.0 mph </td></tr>
                 <tr><td>Heading: 300.1 </td></tr>
+                <tr><td>Time: 2002-05-25T17:06:21Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -832,6 +833,7 @@
                 <tr><td>Latitude: 30.062783 </td></tr>
                 <tr><td>Speed: 0.7 mph </td></tr>
                 <tr><td>Heading: 342.6 </td></tr>
+                <tr><td>Time: 2002-05-25T17:09:55Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -854,6 +856,7 @@
                 <tr><td>Latitude: 30.062700 </td></tr>
                 <tr><td>Speed: 4.0 mph </td></tr>
                 <tr><td>Heading: 92.4 </td></tr>
+                <tr><td>Time: 2002-05-25T17:12:00Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -876,6 +879,7 @@
                 <tr><td>Latitude: 30.062333 </td></tr>
                 <tr><td>Speed: 4.4 mph </td></tr>
                 <tr><td>Heading: 115.6 </td></tr>
+                <tr><td>Time: 2002-05-25T17:12:48Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -898,6 +902,7 @@
                 <tr><td>Latitude: 30.061533 </td></tr>
                 <tr><td>Speed: 4.4 mph </td></tr>
                 <tr><td>Heading: 113.8 </td></tr>
+                <tr><td>Time: 2002-05-25T17:14:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -920,6 +925,7 @@
                 <tr><td>Latitude: 30.059783 </td></tr>
                 <tr><td>Speed: 8.6 mph </td></tr>
                 <tr><td>Heading: 109.0 </td></tr>
+                <tr><td>Time: 2002-05-25T17:17:16Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -942,6 +948,7 @@
                 <tr><td>Latitude: 30.057800 </td></tr>
                 <tr><td>Speed: 25.5 mph </td></tr>
                 <tr><td>Heading: 130.1 </td></tr>
+                <tr><td>Time: 2002-05-25T17:17:46Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -964,6 +971,7 @@
                 <tr><td>Latitude: 30.055383 </td></tr>
                 <tr><td>Speed: 21.0 mph </td></tr>
                 <tr><td>Heading: 147.4 </td></tr>
+                <tr><td>Time: 2002-05-25T17:18:20Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -986,6 +994,7 @@
                 <tr><td>Latitude: 30.053883 </td></tr>
                 <tr><td>Speed: 15.1 mph </td></tr>
                 <tr><td>Heading: 127.2 </td></tr>
+                <tr><td>Time: 2002-05-25T17:19:01Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1008,6 +1017,7 @@
                 <tr><td>Latitude: 30.049733 </td></tr>
                 <tr><td>Speed: 11.5 mph </td></tr>
                 <tr><td>Heading: 149.1 </td></tr>
+                <tr><td>Time: 2002-05-25T17:20:46Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1030,6 +1040,7 @@
                 <tr><td>Latitude: 30.049017 </td></tr>
                 <tr><td>Speed: 7.5 mph </td></tr>
                 <tr><td>Heading: 189.1 </td></tr>
+                <tr><td>Time: 2002-05-25T17:21:10Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1052,6 +1063,7 @@
                 <tr><td>Latitude: 30.048800 </td></tr>
                 <tr><td>Speed: 16.1 mph </td></tr>
                 <tr><td>Heading: 265.3 </td></tr>
+                <tr><td>Time: 2002-05-25T17:21:51Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1074,6 +1086,7 @@
                 <tr><td>Latitude: 30.046233 </td></tr>
                 <tr><td>Speed: 22.5 mph </td></tr>
                 <tr><td>Heading: 229.9 </td></tr>
+                <tr><td>Time: 2002-05-25T17:22:35Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1096,6 +1109,7 @@
                 <tr><td>Latitude: 30.045517 </td></tr>
                 <tr><td>Speed: 15.8 mph </td></tr>
                 <tr><td>Heading: 250.0 </td></tr>
+                <tr><td>Time: 2002-05-25T17:23:08Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1118,6 +1132,7 @@
                 <tr><td>Latitude: 30.047300 </td></tr>
                 <tr><td>Speed: 0.2 mph </td></tr>
                 <tr><td>Heading: 323.0 </td></tr>
+                <tr><td>Time: 2002-05-25T18:04:23Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1141,6 +1156,7 @@
                 <tr><td>Altitude: 6.6 ft </td></tr>
                 <tr><td>Speed: 1.5 mph </td></tr>
                 <tr><td>Heading: 118.7 </td></tr>
+                <tr><td>Time: 2002-05-25T18:06:04Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1163,6 +1179,7 @@
                 <tr><td>Latitude: 30.046433 </td></tr>
                 <tr><td>Speed: 2.3 mph </td></tr>
                 <tr><td>Heading: 165.8 </td></tr>
+                <tr><td>Time: 2002-05-25T18:07:06Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1186,6 +1203,7 @@
                 <tr><td>Altitude: 3.3 ft </td></tr>
                 <tr><td>Speed: 1.7 mph </td></tr>
                 <tr><td>Heading: 117.5 </td></tr>
+                <tr><td>Time: 2002-05-25T18:08:18Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1208,6 +1226,7 @@
                 <tr><td>Latitude: 30.046367 </td></tr>
                 <tr><td>Speed: 2.2 mph </td></tr>
                 <tr><td>Heading: 81.0 </td></tr>
+                <tr><td>Time: 2002-05-25T18:10:20Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1230,6 +1249,7 @@
                 <tr><td>Latitude: 30.046350 </td></tr>
                 <tr><td>Speed: 2.5 mph </td></tr>
                 <tr><td>Heading: 92.0 </td></tr>
+                <tr><td>Time: 2002-05-25T18:11:09Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1252,6 +1272,7 @@
                 <tr><td>Latitude: 30.046783 </td></tr>
                 <tr><td>Speed: 3.0 mph </td></tr>
                 <tr><td>Heading: 59.0 </td></tr>
+                <tr><td>Time: 2002-05-25T18:12:18Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1274,6 +1295,7 @@
                 <tr><td>Latitude: 30.047450 </td></tr>
                 <tr><td>Speed: 2.4 mph </td></tr>
                 <tr><td>Heading: 55.8 </td></tr>
+                <tr><td>Time: 2002-05-25T18:14:22Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1297,6 +1319,7 @@
                 <tr><td>Altitude: 6.6 ft </td></tr>
                 <tr><td>Speed: 3.0 mph </td></tr>
                 <tr><td>Heading: 47.0 </td></tr>
+                <tr><td>Time: 2002-05-25T18:15:04Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1320,6 +1343,7 @@
                 <tr><td>Altitude: 3.3 ft </td></tr>
                 <tr><td>Speed: 2.6 mph </td></tr>
                 <tr><td>Heading: 52.8 </td></tr>
+                <tr><td>Time: 2002-05-25T18:16:14Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1343,6 +1367,7 @@
                 <tr><td>Altitude: 3.3 ft </td></tr>
                 <tr><td>Speed: 2.6 mph </td></tr>
                 <tr><td>Heading: 29.5 </td></tr>
+                <tr><td>Time: 2002-05-25T18:17:01Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1365,6 +1390,7 @@
                 <tr><td>Latitude: 30.049350 </td></tr>
                 <tr><td>Speed: 2.5 mph </td></tr>
                 <tr><td>Heading: 356.3 </td></tr>
+                <tr><td>Time: 2002-05-25T18:18:07Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1388,6 +1414,7 @@
                 <tr><td>Altitude: 6.6 ft </td></tr>
                 <tr><td>Speed: 2.3 mph </td></tr>
                 <tr><td>Heading: 353.2 </td></tr>
+                <tr><td>Time: 2002-05-25T18:19:51Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1410,6 +1437,7 @@
                 <tr><td>Latitude: 30.050783 </td></tr>
                 <tr><td>Speed: 2.5 mph </td></tr>
                 <tr><td>Heading: 346.0 </td></tr>
+                <tr><td>Time: 2002-05-25T18:20:39Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1432,6 +1460,7 @@
                 <tr><td>Latitude: 30.051233 </td></tr>
                 <tr><td>Speed: 2.8 mph </td></tr>
                 <tr><td>Heading: 334.3 </td></tr>
+                <tr><td>Time: 2002-05-25T18:21:24Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1454,6 +1483,7 @@
                 <tr><td>Latitude: 30.051800 </td></tr>
                 <tr><td>Speed: 2.7 mph </td></tr>
                 <tr><td>Heading: 0.0 </td></tr>
+                <tr><td>Time: 2002-05-25T18:22:17Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1476,6 +1506,7 @@
                 <tr><td>Latitude: 30.052217 </td></tr>
                 <tr><td>Speed: 2.0 mph </td></tr>
                 <tr><td>Heading: 328.1 </td></tr>
+                <tr><td>Time: 2002-05-25T18:23:18Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1498,6 +1529,7 @@
                 <tr><td>Latitude: 30.053017 </td></tr>
                 <tr><td>Speed: 2.5 mph </td></tr>
                 <tr><td>Heading: 359.0 </td></tr>
+                <tr><td>Time: 2002-05-25T18:24:37Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1521,6 +1553,7 @@
                 <tr><td>Altitude: 19.7 ft </td></tr>
                 <tr><td>Speed: 2.2 mph </td></tr>
                 <tr><td>Heading: 346.4 </td></tr>
+                <tr><td>Time: 2002-05-25T18:28:13Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1544,6 +1577,7 @@
                 <tr><td>Altitude: 6.6 ft </td></tr>
                 <tr><td>Speed: 1.4 mph </td></tr>
                 <tr><td>Heading: 168.5 </td></tr>
+                <tr><td>Time: 2002-05-25T18:31:36Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1566,6 +1600,7 @@
                 <tr><td>Latitude: 30.053183 </td></tr>
                 <tr><td>Speed: 1.8 mph </td></tr>
                 <tr><td>Heading: 166.7 </td></tr>
+                <tr><td>Time: 2002-05-25T18:32:56Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1588,6 +1623,7 @@
                 <tr><td>Latitude: 30.052633 </td></tr>
                 <tr><td>Speed: 2.1 mph </td></tr>
                 <tr><td>Heading: 184.5 </td></tr>
+                <tr><td>Time: 2002-05-25T18:34:02Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1610,6 +1646,7 @@
                 <tr><td>Latitude: 30.052450 </td></tr>
                 <tr><td>Speed: 1.1 mph </td></tr>
                 <tr><td>Heading: 250.6 </td></tr>
+                <tr><td>Time: 2002-05-25T18:36:03Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1632,6 +1669,7 @@
                 <tr><td>Latitude: 30.052483 </td></tr>
                 <tr><td>Speed: 2.6 mph </td></tr>
                 <tr><td>Heading: 274.1 </td></tr>
+                <tr><td>Time: 2002-05-25T18:36:48Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1655,6 +1693,7 @@
                 <tr><td>Altitude: 3.3 ft </td></tr>
                 <tr><td>Speed: 2.8 mph </td></tr>
                 <tr><td>Heading: 283.3 </td></tr>
+                <tr><td>Time: 2002-05-25T18:37:52Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1677,6 +1716,7 @@
                 <tr><td>Latitude: 30.053133 </td></tr>
                 <tr><td>Speed: 3.0 mph </td></tr>
                 <tr><td>Heading: 297.6 </td></tr>
+                <tr><td>Time: 2002-05-25T18:39:18Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1699,6 +1739,7 @@
                 <tr><td>Latitude: 30.053617 </td></tr>
                 <tr><td>Speed: 2.2 mph </td></tr>
                 <tr><td>Heading: 348.2 </td></tr>
+                <tr><td>Time: 2002-05-25T18:40:15Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1722,6 +1763,7 @@
                 <tr><td>Altitude: 19.7 ft </td></tr>
                 <tr><td>Speed: 1.4 mph </td></tr>
                 <tr><td>Heading: 26.3 </td></tr>
+                <tr><td>Time: 2002-05-25T18:41:25Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1744,6 +1786,7 @@
                 <tr><td>Latitude: 30.053617 </td></tr>
                 <tr><td>Speed: 1.5 mph </td></tr>
                 <tr><td>Heading: 218.0 </td></tr>
+                <tr><td>Time: 2002-05-25T18:42:37Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1766,6 +1809,7 @@
                 <tr><td>Latitude: 30.053200 </td></tr>
                 <tr><td>Speed: 1.3 mph </td></tr>
                 <tr><td>Heading: 161.0 </td></tr>
+                <tr><td>Time: 2002-05-25T18:44:01Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1788,6 +1832,7 @@
                 <tr><td>Latitude: 30.052817 </td></tr>
                 <tr><td>Speed: 1.1 mph </td></tr>
                 <tr><td>Heading: 137.9 </td></tr>
+                <tr><td>Time: 2002-05-25T18:45:53Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1810,6 +1855,7 @@
                 <tr><td>Latitude: 30.052567 </td></tr>
                 <tr><td>Speed: 2.3 mph </td></tr>
                 <tr><td>Heading: 116.3 </td></tr>
+                <tr><td>Time: 2002-05-25T18:46:54Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1832,6 +1878,7 @@
                 <tr><td>Latitude: 30.052333 </td></tr>
                 <tr><td>Speed: 2.6 mph </td></tr>
                 <tr><td>Heading: 118.4 </td></tr>
+                <tr><td>Time: 2002-05-25T18:47:42Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1854,6 +1901,7 @@
                 <tr><td>Latitude: 30.052250 </td></tr>
                 <tr><td>Speed: 2.8 mph </td></tr>
                 <tr><td>Heading: 97.3 </td></tr>
+                <tr><td>Time: 2002-05-25T18:48:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1876,6 +1924,7 @@
                 <tr><td>Latitude: 30.052217 </td></tr>
                 <tr><td>Speed: 2.0 mph </td></tr>
                 <tr><td>Heading: 93.3 </td></tr>
+                <tr><td>Time: 2002-05-25T18:49:52Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1898,6 +1947,7 @@
                 <tr><td>Latitude: 30.051883 </td></tr>
                 <tr><td>Speed: 1.9 mph </td></tr>
                 <tr><td>Heading: 140.6 </td></tr>
+                <tr><td>Time: 2002-05-25T18:50:49Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1920,6 +1970,7 @@
                 <tr><td>Latitude: 30.051050 </td></tr>
                 <tr><td>Speed: 2.6 mph </td></tr>
                 <tr><td>Heading: 162.7 </td></tr>
+                <tr><td>Time: 2002-05-25T18:52:14Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1942,6 +1993,7 @@
                 <tr><td>Latitude: 30.050567 </td></tr>
                 <tr><td>Speed: 3.0 mph </td></tr>
                 <tr><td>Heading: 163.3 </td></tr>
+                <tr><td>Time: 2002-05-25T18:52:56Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1964,6 +2016,7 @@
                 <tr><td>Latitude: 30.050183 </td></tr>
                 <tr><td>Speed: 2.4 mph </td></tr>
                 <tr><td>Heading: 163.3 </td></tr>
+                <tr><td>Time: 2002-05-25T18:53:38Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -1986,6 +2039,7 @@
                 <tr><td>Latitude: 30.049100 </td></tr>
                 <tr><td>Speed: 3.0 mph </td></tr>
                 <tr><td>Heading: 163.0 </td></tr>
+                <tr><td>Time: 2002-05-25T18:55:11Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2008,6 +2062,7 @@
                 <tr><td>Latitude: 30.048450 </td></tr>
                 <tr><td>Speed: 2.5 mph </td></tr>
                 <tr><td>Heading: 215.4 </td></tr>
+                <tr><td>Time: 2002-05-25T18:56:32Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2030,6 +2085,7 @@
                 <tr><td>Latitude: 30.048083 </td></tr>
                 <tr><td>Speed: 2.7 mph </td></tr>
                 <tr><td>Heading: 229.7 </td></tr>
+                <tr><td>Time: 2002-05-25T18:57:24Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2053,6 +2109,7 @@
                 <tr><td>Altitude: 23.0 ft </td></tr>
                 <tr><td>Speed: 2.8 mph </td></tr>
                 <tr><td>Heading: 226.1 </td></tr>
+                <tr><td>Time: 2002-05-25T18:58:40Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2075,6 +2132,7 @@
                 <tr><td>Latitude: 30.047067 </td></tr>
                 <tr><td>Speed: 3.3 mph </td></tr>
                 <tr><td>Heading: 227.7 </td></tr>
+                <tr><td>Time: 2002-05-25T18:59:28Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2097,6 +2155,7 @@
                 <tr><td>Latitude: 30.046633 </td></tr>
                 <tr><td>Speed: 3.1 mph </td></tr>
                 <tr><td>Heading: 230.1 </td></tr>
+                <tr><td>Time: 2002-05-25T19:00:22Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2119,6 +2178,7 @@
                 <tr><td>Latitude: 30.046400 </td></tr>
                 <tr><td>Speed: 3.0 mph </td></tr>
                 <tr><td>Heading: 255.6 </td></tr>
+                <tr><td>Time: 2002-05-25T19:01:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2141,6 +2201,7 @@
                 <tr><td>Latitude: 30.046233 </td></tr>
                 <tr><td>Speed: 2.7 mph </td></tr>
                 <tr><td>Heading: 256.7 </td></tr>
+                <tr><td>Time: 2002-05-25T19:02:48Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2163,6 +2224,7 @@
                 <tr><td>Latitude: 30.046317 </td></tr>
                 <tr><td>Speed: 2.0 mph </td></tr>
                 <tr><td>Heading: 281.0 </td></tr>
+                <tr><td>Time: 2002-05-25T19:03:43Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2185,6 +2247,7 @@
                 <tr><td>Latitude: 30.046783 </td></tr>
                 <tr><td>Speed: 2.0 mph </td></tr>
                 <tr><td>Heading: 329.6 </td></tr>
+                <tr><td>Time: 2002-05-25T19:04:49Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2207,6 +2270,7 @@
                 <tr><td>Latitude: 30.047133 </td></tr>
                 <tr><td>Speed: 1.8 mph </td></tr>
                 <tr><td>Heading: 316.5 </td></tr>
+                <tr><td>Time: 2002-05-25T19:05:57Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2311,6 +2375,7 @@
                 <tr><td>Latitude: 42.430950 </td></tr>
                 <tr><td>Altitude: 77.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T00:18:15Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2333,6 +2398,7 @@
                 <tr><td>Latitude: 42.431240 </td></tr>
                 <tr><td>Altitude: 87.1 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2355,6 +2421,7 @@
                 <tr><td>Latitude: 42.434980 </td></tr>
                 <tr><td>Altitude: 148.6 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2377,6 +2444,7 @@
                 <tr><td>Latitude: 42.436757 </td></tr>
                 <tr><td>Altitude: 123.4 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2399,6 +2467,7 @@
                 <tr><td>Latitude: 42.439018 </td></tr>
                 <tr><td>Altitude: 185.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:26:55Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2421,6 +2490,7 @@
                 <tr><td>Latitude: 42.438594 </td></tr>
                 <tr><td>Altitude: 151.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2443,6 +2513,7 @@
                 <tr><td>Latitude: 42.438917 </td></tr>
                 <tr><td>Altitude: 147.1 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-16T23:03:38Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2465,6 +2536,7 @@
                 <tr><td>Latitude: 42.438878 </td></tr>
                 <tr><td>Altitude: 146.3 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2487,6 +2559,7 @@
                 <tr><td>Latitude: 42.439227 </td></tr>
                 <tr><td>Altitude: 189.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:26:55Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2509,6 +2582,7 @@
                 <tr><td>Latitude: 42.439993 </td></tr>
                 <tr><td>Altitude: 177.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T00:18:14Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2531,6 +2605,7 @@
                 <tr><td>Latitude: 42.441727 </td></tr>
                 <tr><td>Altitude: 221.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T00:18:16Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2553,6 +2628,7 @@
                 <tr><td>Latitude: 42.443904 </td></tr>
                 <tr><td>Altitude: 166.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2575,6 +2651,7 @@
                 <tr><td>Latitude: 42.445359 </td></tr>
                 <tr><td>Altitude: 202.3 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2597,6 +2674,7 @@
                 <tr><td>Latitude: 42.447298 </td></tr>
                 <tr><td>Altitude: 419.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:26:58Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2619,6 +2697,7 @@
                 <tr><td>Latitude: 42.449765 </td></tr>
                 <tr><td>Altitude: 393.1 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2641,6 +2720,7 @@
                 <tr><td>Latitude: 42.451442 </td></tr>
                 <tr><td>Altitude: 244.8 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2663,6 +2743,7 @@
                 <tr><td>Latitude: 42.453256 </td></tr>
                 <tr><td>Altitude: 255.9 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2685,6 +2766,7 @@
                 <tr><td>Latitude: 42.456252 </td></tr>
                 <tr><td>Altitude: 258.2 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2707,6 +2789,7 @@
                 <tr><td>Latitude: 42.456592 </td></tr>
                 <tr><td>Altitude: 258.2 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2729,6 +2812,7 @@
                 <tr><td>Latitude: 42.457388 </td></tr>
                 <tr><td>Altitude: 242.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:00Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2751,6 +2835,7 @@
                 <tr><td>Latitude: 42.458148 </td></tr>
                 <tr><td>Altitude: 224.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:00Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2773,6 +2858,7 @@
                 <tr><td>Latitude: 42.459377 </td></tr>
                 <tr><td>Altitude: 210.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:01Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2795,6 +2881,7 @@
                 <tr><td>Latitude: 42.464183 </td></tr>
                 <tr><td>Altitude: 173.9 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2817,6 +2904,7 @@
                 <tr><td>Latitude: 42.465650 </td></tr>
                 <tr><td>Altitude: 185.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:02Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2839,6 +2927,7 @@
                 <tr><td>Latitude: 42.465913 </td></tr>
                 <tr><td>Altitude: 211.7 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2861,6 +2950,7 @@
                 <tr><td>Latitude: 42.467110 </td></tr>
                 <tr><td>Altitude: 176.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:02Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2883,6 +2973,7 @@
                 <tr><td>Latitude: 42.466459 </td></tr>
                 <tr><td>Altitude: 160.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:02Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2905,6 +2996,7 @@
                 <tr><td>Latitude: 42.466557 </td></tr>
                 <tr><td>Altitude: 161.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:02Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2927,6 +3019,7 @@
                 <tr><td>Latitude: 42.463495 </td></tr>
                 <tr><td>Altitude: 205.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:03Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2949,6 +3042,7 @@
                 <tr><td>Latitude: 42.465687 </td></tr>
                 <tr><td>Altitude: 288.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:03Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2971,6 +3065,7 @@
                 <tr><td>Latitude: 42.459986 </td></tr>
                 <tr><td>Altitude: 239.3 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-16T23:03:38Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -2993,6 +3088,7 @@
                 <tr><td>Latitude: 42.457616 </td></tr>
                 <tr><td>Altitude: 239.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:04Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3015,6 +3111,7 @@
                 <tr><td>Latitude: 42.453845 </td></tr>
                 <tr><td>Altitude: 218.8 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-16T23:03:38Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3037,6 +3134,7 @@
                 <tr><td>Latitude: 42.451430 </td></tr>
                 <tr><td>Altitude: 188.9 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-16T23:03:38Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3059,6 +3157,7 @@
                 <tr><td>Latitude: 42.448448 </td></tr>
                 <tr><td>Altitude: 204.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:04Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3081,6 +3180,7 @@
                 <tr><td>Latitude: 42.447804 </td></tr>
                 <tr><td>Altitude: 205.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:04Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3103,6 +3203,7 @@
                 <tr><td>Latitude: 42.444773 </td></tr>
                 <tr><td>Altitude: 206.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:05Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3125,6 +3226,7 @@
                 <tr><td>Latitude: 42.443592 </td></tr>
                 <tr><td>Altitude: 182.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:27:05Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3147,6 +3249,7 @@
                 <tr><td>Latitude: 42.442981 </td></tr>
                 <tr><td>Altitude: 210.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:26:58Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3169,6 +3272,7 @@
                 <tr><td>Latitude: 42.442196 </td></tr>
                 <tr><td>Altitude: 210.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:26:55Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3191,6 +3295,7 @@
                 <tr><td>Latitude: 42.441754 </td></tr>
                 <tr><td>Altitude: 185.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:26:55Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3213,6 +3318,7 @@
                 <tr><td>Latitude: 42.439018 </td></tr>
                 <tr><td>Altitude: 185.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T03:26:55Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3235,6 +3341,7 @@
                 <tr><td>Latitude: 42.436757 </td></tr>
                 <tr><td>Altitude: 123.4 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3257,6 +3364,7 @@
                 <tr><td>Latitude: 42.434980 </td></tr>
                 <tr><td>Altitude: 148.6 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3279,6 +3387,7 @@
                 <tr><td>Latitude: 42.431240 </td></tr>
                 <tr><td>Altitude: 87.1 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
@@ -3301,6 +3410,7 @@
                 <tr><td>Latitude: 42.430950 </td></tr>
                 <tr><td>Altitude: 77.0 ft </td></tr>
                 <tr><td>Heading: -999.0 </td></tr>
+                <tr><td>Time: 2001-06-02T00:18:15Z </td></tr>
               </table>
             ]]></description>
             <LookAt>
