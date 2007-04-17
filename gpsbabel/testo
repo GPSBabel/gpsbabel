@@ -1222,5 +1222,11 @@ compare ${REFERENCE}/expertgps-g7t.txt ${TMPDIR}/expertgps-g7t.txt
 ${PNAME} -i tomtom_asc -f ${REFERENCE}/tomtom_poi.asc -o tomtom_asc -F ${TMPDIR}/tomtom_poi.asc
 compare ${REFERENCE}/tomtom_poi.asc ${TMPDIR}/tomtom_poi.asc
 
+#
+# TomTom Navigator Itinerary files (.asc)
+#
+${PNAME} -i tomtom_itn -f ${REFERENCE}/route/tomtom_itn.itn -o tomtom_itn -F ${TMPDIR}/tomtom_itn.itn
+compare ${REFERENCE}/route/tomtom_itn.itn ${TMPDIR}/tomtom_itn.itn
+
 
 exit 0
