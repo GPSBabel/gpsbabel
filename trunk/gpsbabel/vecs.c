@@ -458,7 +458,7 @@ vecs_t vec_list[] = {
 	{
 		&tomtom_vecs,
 		"tomtom",
-		"TomTom POI file",
+		"TomTom POI file (.ov2)",
 		"ov2"
 	},
 	{
