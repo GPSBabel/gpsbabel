@@ -1216,5 +1216,11 @@ bincompare ${REFERENCE}/track/ggv_log-sample.log ${TMPDIR}/ggv_log-sample2.log
 ${PNAME} -i g7towin -f ${REFERENCE}/expertgps.g7t -o garmin_txt,utc=0 -F ${TMPDIR}/expertgps-g7t.txt
 compare ${REFERENCE}/expertgps-g7t.txt ${TMPDIR}/expertgps-g7t.txt
 
+#
+# TomTom Navigator Places of Interest (.asc)
+#
+${PNAME} -i tomtom_asc -f ${REFERENCE}/tomtom_poi.asc -o tomtom_asc -F ${TMPDIR}/tomtom_poi.asc
+compare ${REFERENCE}/tomtom_poi.asc ${TMPDIR}/tomtom_poi.asc
+
 
 exit 0
