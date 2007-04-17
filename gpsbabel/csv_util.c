@@ -1563,7 +1563,7 @@ xcsv_data_write(void)
 	   cout = ctmp;
        }
 
-       while ((ctmp = strsub(cout, "__VERSION__", gpsbabel_version))) {
+       while ((ctmp = strsub(cout, "__VERSION__", (time == 0) ? "" : gpsbabel_version))) {
 	   xfree(cout);
 	   cout = ctmp;
        }
