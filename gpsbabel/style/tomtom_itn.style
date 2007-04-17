@@ -1,10 +1,10 @@
 # gpsbabel XCSV style file
 #
-# Format: TomTom Navigator Itenaries (Routes)
+# Format: TomTom Navigator Itineraries (Routes)
 # Author: Olaf Klein
 #   Date: 04/17/2007
 #
-DESCRIPTION		TomTom Itenaries (.itn)
+DESCRIPTION		TomTom Itineraries (.itn)
 EXTENSION		itn
 DATATYPE		ROUTE
 #
