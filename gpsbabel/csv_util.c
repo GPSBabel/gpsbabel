@@ -21,6 +21,7 @@
  */
 
 #include <ctype.h>
+#include <math.h>
 #include "defs.h"
 #include "csv_util.h"
 #include "grtcirc.h"
@@ -843,6 +844,9 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     if ( strcmp(fmp->key, "LAT_NMEA") == 0) {
 	wpt->latitude = ddmm2degrees(atof(s));
     } else
+    if ( strncmp(fmp->key, "LAT_10E", 7) == 0) {
+	wpt->latitude = atof(s) / pow((double)10, atof(fmp->key+7));
+    } else
     /* LONGITUDE CONVERSIONS ***********************************************/
     if (strcmp(fmp->key, "LON_DECIMAL") == 0) {
        /* longitude as a pure decimal value */
@@ -862,6 +866,9 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     } else
     if ( strcmp(fmp->key, "LON_NMEA") == 0) {
 	wpt->longitude = ddmm2degrees(atof(s));
+    } else
+    if ( strncmp(fmp->key, "LON_10E", 7) == 0) {
+	wpt->longitude = atof(s) / pow((double)10, atof(fmp->key+7));
     } else
     /* LAT AND LON CONVERSIONS ********************************************/
     if ( strcmp(fmp->key, "LATLON_HUMAN_READABLE") == 0) {
@@ -1288,6 +1295,9 @@ xcsv_waypt_pr(const waypoint *wpt)
 	if (strcmp(fmp->key, "LAT_NMEA") == 0) {
 	    writebuff(buff, fmp->printfc, degrees2ddmm(lat));
 	} else
+	if (strncmp(fmp->key, "LAT_10E", 7) == 0) {
+	    writebuff(buff, fmp->printfc, lat * pow((double)10, atof(fmp->key+7)));
+	} else
 
         /* LONGITUDE CONVERSIONS*********************************************/
         if (strcmp(fmp->key, "LON_DECIMAL") == 0) {
@@ -1322,6 +1332,9 @@ xcsv_waypt_pr(const waypoint *wpt)
 	} else
 	if (strcmp(fmp->key, "LON_NMEA") == 0) {
 		writebuff(buff, fmp->printfc, degrees2ddmm(lon));
+	} else
+	if (strncmp(fmp->key, "LON_10E", 7) == 0) {
+	    writebuff(buff, fmp->printfc, lon * pow((double)10, atof(fmp->key+7)));
 	} else
 
         /* DIRECTIONS *******************************************************/
@@ -1528,23 +1541,56 @@ xcsv_data_write(void)
 {
     queue *elem, *tmp;
     ogue_t *ogp;
+    time_t time;
+    struct tm tm;
+    char tbuf[32];
 
     /* reset the index counter */
     waypt_out_count = 0;
+
+    time = gpsbabel_time;
+    tm = *localtime(&time);
     
     /* output prologue lines, if any. */
     QUEUE_FOR_EACH(&xcsv_file.prologue, elem, tmp) {
-       char *ol;
+       char *cout, *ctmp;
        ogp = (ogue_t *) elem;
 
-       ol = strsub(ogp->val, "__FILE__", xcsv_file.fname);
-
-       if (ol) {
-               gbfprintf(xcsv_file.xcsvfp, "%s", ol);
-               xfree(ol);
-       } else {
-               gbfprintf(xcsv_file.xcsvfp, "%s", ogp->val);
+       cout = xstrdup((ogp->val) ? ogp->val : "");
+       
+       while ((ctmp = strsub(cout, "__FILE__", xcsv_file.fname))) {
+	   xfree(cout);
+	   cout = ctmp;
        }
+
+       while ((ctmp = strsub(cout, "__VERSION__", gpsbabel_version))) {
+	   xfree(cout);
+	   cout = ctmp;
+       }
+       
+       while (strstr(cout, "__DATE__")) {
+		strftime(tbuf, sizeof(tbuf), "%m/%d/%Y", &tm);
+		ctmp = strsub(cout, "__DATE__", tbuf);
+		xfree(cout);
+		cout = ctmp;
+       }
+
+       while (strstr(cout, "__TIME__")) {
+		strftime(tbuf, sizeof(tbuf), "%H:%S:%M", &tm);
+		ctmp = strsub(cout, "__TIME__", tbuf);
+		xfree(cout);
+		cout = ctmp;
+       }
+
+       while (strstr(cout, "__DATE_AND_TIME__")) {
+		strftime(tbuf, sizeof(tbuf), "%a %b %d %H:%M:%S %Y", &tm);
+		ctmp = strsub(cout, "__DATE_AND_TIME__", tbuf);
+		xfree(cout);
+		cout = ctmp;
+       }
+
+       gbfprintf(xcsv_file.xcsvfp, "%s", cout);
+       xfree(cout);
        gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
     }
 
