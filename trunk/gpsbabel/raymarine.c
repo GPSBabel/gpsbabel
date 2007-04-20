@@ -23,7 +23,9 @@
     Known format limits:
 
     	Waypoint name: max. 16 characters
+    	Route name:    max. 16 characters
 	Routes:        max. 50 waypoints per route
+	???:           the character set may be only a subset of std. ASCII
 
     History:
     	
@@ -33,7 +35,12 @@
 	            Fix "PredictedTwa" output
 		    Initialize location with "My Waypoints"
 		    Change default value for RcCount and RelSet (now 0)
-
+	2007/04/18: Limit route names also to 16 characters
+		    Bug-fix - add missing comma (write_route_wpt_cb/items)
+		    Change line feeds to fixed CRLF
+		    Sort waypoints by name (not really needed, but nice)
+		    Add some MapSource icon names to icon mappings
+		    Remove unused id from icon table
 */
 
 #include "defs.h"
@@ -48,9 +55,9 @@ typedef unsigned long long guid_t;
 
 static inifile_t *fin;
 static gbfile *fout;
-static waypoint **depot;
-static short_handle hshort;
-static int size_of_depot, items_in_depot;
+static waypoint **waypt_table;
+static short_handle hshort_wpt, hshort_rte;
+static int waypt_table_sz, waypt_table_ct;
 static int rte_index, rte_wpt_index;
 static char *opt_location;
 
@@ -68,64 +75,66 @@ arglist_t raymarine_args[] =
 #define EXCEL_TO_TIMET(a) ((a - 25569.0) * 86400.0)
 #define TIMET_TO_EXCEL(a) ((a / 86400.0) + 25569.0)
 
+#define LINE_FEED "\r\n"
+
 /* Bitmaps */
 
 typedef struct {
-	int id;
 	char *name;
+	char *mps_name;
 } raymarine_symbol_mapping_t;
 
 static raymarine_symbol_mapping_t raymarine_symbols[] = {
-	{ 0, "Unknown Symbol 0" },
-	{ 1, "Unknown Symbol 1" },
-	{ 2, "Unknown Symbol 2" },
-	{ 3, "Red Square" },
-	{ 4, "Big Fish" },
-	{ 5, "Anchor" },
-	{ 6, "Smiley" },
-	{ 7, "Sad" },
-	{ 8, "Red Button" },
-	{ 9, "Sailfish" },
-	{ 10, "Danger" },
-	{ 11, "Attention" },
-	{ 12, "Black Square" },
-	{ 13, "Intl. Dive Flag" },
-	{ 14, "Vessel" },
-	{ 15, "Lobster" },
-	{ 16, "Buoy" },
-	{ 17, "Exclamation" },
-	{ 18, "Red X" },
-	{ 19, "Check Mark" },
-	{ 20, "Black Plus" },
-	{ 21, "Black Cross" },
-	{ 22, "MOB" },
-	{ 23, "Billfish" },
-	{ 24, "Bottom Mark" },
-	{ 25, "Circle" },
-	{ 26, "Diamond" },
-	{ 27, "Diamond Quarters" },
-	{ 28, "U.S.Dive Flag" },
-	{ 29, "Dolphin" },
-	{ 30, "Few Fish" },
-	{ 31, "Multiple Fish" },
-	{ 32, "Many Fish" },
-	{ 33, "Single Fish" },
-	{ 34, "Small Fish" },
-	{ 35, "Marker" },
-	{ 36, "Cocktails" },
-	{ 37, "Red Box Marker" },
-	{ 38, "Reef" },
-	{ 39, "Rocks" },
-	{ 40, "FishSchool" },
-	{ 41, "Seaweed" },
-	{ 42, "Shark" },
-	{ 43, "Sportfisher" },
-	{ 44, "Swimmer" },
-	{ 45, "Top Mark" },
-	{ 46, "Trawler" },
-	{ 47, "Tree" },
-	{ 48, "Triangle" },
-	{ 49, "Wreck" }
+	{ /* 0 */  "Unknown Symbol 0" },
+	{ /* 1 */  "Unknown Symbol 1" },
+	{ /* 2 */  "Unknown Symbol 2" },
+	{ /* 3 */  "Red Square" },
+	{ /* 4 */  "Big Fish" },
+	{ /* 5 */  "Anchor" },
+	{ /* 6 */  "Smiley", "Contact, Smiley" },
+	{ /* 7 */  "Sad" },
+	{ /* 8 */  "Red Button", "Navaid, Red" },
+	{ /* 9 */  "Sailfish" },
+	{ /* 10 */ "Danger", "Skull and Crossbones" },
+	{ /* 11 */ "Attention" },
+	{ /* 12 */ "Black Square" },
+	{ /* 13 */ "Intl. Dive Flag", "Diver Down Flag 2" },
+	{ /* 14 */ "Vessel", "Marina" },
+	{ /* 15 */ "Lobster" },
+	{ /* 16 */ "Buoy", "Buoy, White" },
+	{ /* 17 */ "Exclamation" },
+	{ /* 18 */ "Red X" },
+	{ /* 19 */ "Check Mark" },
+	{ /* 20 */ "Black Plus" },
+	{ /* 21 */ "Black Cross" },
+	{ /* 22 */ "MOB" },
+	{ /* 23 */ "Billfish" },
+	{ /* 24 */ "Bottom Mark" },
+	{ /* 25 */ "Circle", "Circle, Red" },
+	{ /* 26 */ "Diamond", "Block, Red" },
+	{ /* 27 */ "Diamond Quarters", "Diamond, Red" },
+	{ /* 28 */ "U.S. Dive Flag", "Diver Down Flag 1" },
+	{ /* 29 */ "Dolphin" },
+	{ /* 30 */ "Few Fish" },
+	{ /* 31 */ "Multiple Fish" },
+	{ /* 32 */ "Many Fish" },
+	{ /* 33 */ "Single Fish" },
+	{ /* 34 */ "Small Fish" },
+	{ /* 35 */ "Marker" },
+	{ /* 36 */ "Cocktails", "Bar" },
+	{ /* 37 */ "Red Box Marker" },
+	{ /* 38 */ "Reef" },
+	{ /* 39 */ "Rocks" },
+	{ /* 40 */ "Fish School" },
+	{ /* 41 */ "Seaweed", "Weed Bed" },
+	{ /* 42 */ "Shark" },
+	{ /* 43 */ "Sportfisher" },
+	{ /* 44 */ "Swimmer", "Swimming Area" },
+	{ /* 45 */ "Top Mark" },
+	{ /* 46 */ "Trawler" },
+	{ /* 47 */ "Tree" },
+	{ /* 48 */ "Triangle", "Triangle, Red" },
+	{ /* 49 */ "Wreck", "Shipwreck" }
 };
 
 #define RAYMARINE_SYMBOL_CT  sizeof(raymarine_symbols) / sizeof(raymarine_symbol_mapping_t)
@@ -143,6 +152,7 @@ find_symbol_num(const char *descr)
 		
 		for (i = 0; i < RAYMARINE_SYMBOL_CT; i++, a++) {
 			if (case_ignore_strcmp(descr, a->name) == 0) return i;
+			if (a->mps_name && (case_ignore_strcmp(descr, a->mps_name) == 0)) return i;
 		}
 	}
 	
@@ -241,29 +251,65 @@ raymarine_read(void)
 /* %%%    R A Y M A R I N E   W R I T E R    %%% */
 /* ============================================= */
 
+/* make waypoint shortnames unique */
+
+static char
+same_points(const waypoint *A, const waypoint *B)
+{
+	return (	/* !!! We are case-sensitive !!! */
+		(strcmp(A->shortname, B->shortname) == 0) &&
+		(A->latitude == B->latitude) &&
+		(A->longitude == B->longitude));
+}
+
 static void
-register_waypoint(const waypoint *wpt)
+register_waypt(const waypoint *ref, const char is_rtept)
 {
 	int i;
+	waypoint *wpt = (waypoint *) ref;
 	
-	for (i = 0; i < items_in_depot; i++) {
-		waypoint *cmp = depot[i];
-		if ((strcmp(wpt->shortname, cmp->shortname) == 0) &&
-		    (wpt->latitude == cmp->latitude) &&
-		    (wpt->longitude == cmp->longitude))
+	for (i = 0; i < waypt_table_ct; i++) {
+		waypoint *cmp = waypt_table[i];
+		
+		if (same_points(wpt, cmp)) {
+			wpt->extra_data = cmp->extra_data;
 			return;
+		}
 	}
 	
-	if (items_in_depot >= size_of_depot) {
-		size_of_depot+=16;
-		if (depot)
-			depot = (void *) xrealloc(depot, size_of_depot * sizeof(wpt));
+	if (waypt_table_ct >= waypt_table_sz) {
+		waypt_table_sz += 32;
+		if (waypt_table)
+			waypt_table = (void *) xrealloc(waypt_table, waypt_table_sz * sizeof(wpt));
 		else
-			depot = (void *) xmalloc(size_of_depot * sizeof(wpt));
+			waypt_table = (void *) xmalloc(waypt_table_sz * sizeof(wpt));
 	}
 	
-	depot[items_in_depot] = (waypoint *)wpt;
-	items_in_depot++;
+	wpt->extra_data = (void *)mkshort(hshort_wpt, wpt->shortname);
+
+	waypt_table[waypt_table_ct] = (waypoint *)wpt;
+	waypt_table_ct++;
+}
+
+static void
+enum_waypt_cb(const waypoint *wpt)
+{
+	register_waypt((waypoint *) wpt, 0);
+}
+
+static void
+enum_rtept_cb(const waypoint *wpt)
+{
+	register_waypt((waypoint *) wpt, 1);
+}
+
+static int 
+qsort_cb(const void *a, const void *b)
+{
+	const waypoint *wa = *(waypoint **)a;
+	const waypoint *wb = *(waypoint **)b;
+	
+	return strcmp(wa->shortname, wb->shortname);
 }
 
 static void
@@ -273,52 +319,66 @@ write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char
 	char *name;
 	double time;
 		
-	/* ToDo: remove possible line-breaks from notes */
-	
-	notes = (wpt->notes != NULL) ? wpt->notes : "";
+	notes = wpt->notes;
+	if (notes == NULL) {
+		notes = wpt->description;
+		if (notes == NULL) notes = "";
+	}
+	notes = csv_stringclean(notes, LINE_FEED);
 	time = (wpt->creation_time > 0) ? TIMET_TO_EXCEL(wpt->creation_time) : TIMET_TO_EXCEL(gpsbabel_time);
-	
-	name = mkshort(hshort, wpt->shortname);
-	gbfprintf(fout, "[Wp%d]\n"
-			"Loc=%s\n"
-			"Name=%s\n"
-			"Lat=%.15f\n"
-			"Long=%.15f\n",
+	name = (char *)wpt->extra_data;
+
+	gbfprintf(fout, "[Wp%d]" LINE_FEED
+			"Loc=%s" LINE_FEED
+			"Name=%s" LINE_FEED
+			"Lat=%.15f" LINE_FEED
+			"Long=%.15f" LINE_FEED,
 		waypt_no, location, name, wpt->latitude, wpt->longitude
 	);
-	xfree(name);
-	gbfprintf(fout, "Rng=%.15f\n"
-			"Bear=%.15f\n"
-			"Bmp=%d\n"
-			"Fixed=1\n"
-			"Locked=0\n"
-			"Notes=%s\n",
+	gbfprintf(fout, "Rng=%.15f" LINE_FEED
+			"Bear=%.15f" LINE_FEED
+			"Bmp=%d" LINE_FEED
+			"Fixed=1" LINE_FEED
+			"Locked=0" LINE_FEED
+			"Notes=%s" LINE_FEED,
 		0.0, 0.0, 
 		find_symbol_num(wpt->icon_descr), 
 		notes
 	);
-	gbfprintf(fout, "Rel=\n"
-			"RelSet=0\n"
-			"RcCount=0\n"
-			"RcRadius=%.15f\n"
-			"Show=1\n"
-			"RcShow=0\n"
-			"SeaTemp=%.15f\n"
-			"Depth=%.15f\n"
-			"Time=%.10f00000\n",
+	gbfprintf(fout, "Rel=" LINE_FEED
+			"RelSet=0" LINE_FEED
+			"RcCount=0" LINE_FEED
+			"RcRadius=%.15f" LINE_FEED
+			"Show=1" LINE_FEED
+			"RcShow=0" LINE_FEED
+			"SeaTemp=%.15f" LINE_FEED
+			"Depth=%.15f" LINE_FEED
+			"Time=%.10f00000" LINE_FEED,
 		0.0, -32678.0, 65535.0, time
 	);
+	xfree(notes);
 }
 
 static void
 write_route_head_cb(const route_head *rte)
 {
-	gbfprintf(fout, "[Rt%d]\n"
-			"Name=%s\n"
-			"Visible=1\n",
+	char buff[32];
+	char *name;
+	
+	name = rte->rte_name;
+	if ((name == NULL) || (*name == '\0')) {
+		snprintf(buff, sizeof(buff), "Route%d", rte_index);
+		name = buff;
+	}
+	name = mkshort(hshort_rte, name);
+	gbfprintf(fout, "[Rt%d]" LINE_FEED
+			"Name=%s" LINE_FEED
+			"Visible=1" LINE_FEED,
 		rte_index,
-		rte->rte_name
+		name
 	);
+	xfree(name);
+
 	rte_index++;
 	rte_wpt_index = 0;
 }
@@ -327,11 +387,10 @@ static void
 write_route_wpt_cb(const waypoint *wpt)
 {
 	int i;
-	char *name;
 	static char *items[] = {
 		"Cog",
 		"Eta",
-		"Length"
+		"Length",
 		"PredictedDrift",
 		"PredictedSet",
 		"PredictedSog",
@@ -340,14 +399,12 @@ write_route_wpt_cb(const waypoint *wpt)
 		"PredictedTwd",
 		"PredictedTws" };
 		
-	name = mkshort(hshort, wpt->shortname);
-	gbfprintf(fout, "Mk%d=%s\n", rte_wpt_index, name);
-	xfree(name);
-
-	for (i = 0; i < sizeof(items) / sizeof(char *); i++) {
-		gbfprintf(fout, "%s%d=%.15f\n", items[i], rte_wpt_index, 0.0);
-	}
+	gbfprintf(fout, "Mk%d=%s" LINE_FEED, rte_wpt_index, (char *)wpt->extra_data);
+	for (i = 0; i < sizeof(items) / sizeof(char *); i++)
+		gbfprintf(fout, "%s%d=%.15f" LINE_FEED, items[i], rte_wpt_index, 0.0);
+	
 	rte_wpt_index++;
+	return;
 }
 
 static void
@@ -357,31 +414,38 @@ enum_route_hdr_cb(const route_head *rte)
 		MYNAME ": Routes with more than 50 points are not supported by Waymarine!");
 }
 
-static void
-enum_route_wpt_cb(const waypoint *wpt)
+static short_handle
+raymarine_new_short_handle(void)
 {
-	register_waypoint(wpt);
+	short_handle res;
+	
+	res = mkshort_new_handle();
+
+	setshort_length(res, 16);
+	setshort_badchars(res, ",");
+	setshort_mustupper(res, 0);
+	setshort_mustuniq(res, 1);
+	setshort_whitespace_ok(res, 1);
+	setshort_repeating_whitespace_ok(res, 1);
+	
+	return res;
 }
 
 static void
 raymarine_wr_init(const char *fname)
 {
-	fout = gbfopen(fname, "w", MYNAME);
+	fout = gbfopen(fname, "wb", MYNAME);
 
-	hshort = mkshort_new_handle();
-	setshort_length(hshort, 16);
-
-	setshort_badchars(hshort, ",");
-	setshort_mustupper(hshort, 0);
-	setshort_mustuniq(hshort, 0);
-	setshort_whitespace_ok(hshort, 1);
-	setshort_repeating_whitespace_ok(hshort, 1);
+	hshort_wpt = raymarine_new_short_handle();
+	hshort_rte = raymarine_new_short_handle();
 }
 
 static void
 raymarine_wr_done(void)
 {
-	mkshort_del_handle(&hshort);
+	mkshort_del_handle(&hshort_wpt);
+	mkshort_del_handle(&hshort_rte);
+
 	gbfclose(fout);
 }
 
@@ -389,23 +453,23 @@ static void
 raymarine_write(void)
 {
 	int i;
-	queue *elem, *tmp;
-	extern queue waypt_head;
+	waypoint *wpt;
 	
-	size_of_depot = 0;
-	items_in_depot = 0;
-	depot = NULL;
+	waypt_table_sz = 0;
+	waypt_table_ct = 0;
+	waypt_table = NULL;
 
 	/* enumerate all possible waypoints */
-	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-		waypoint *wpt = (waypoint *) elem;
-		register_waypoint(wpt);
-	}
-	route_disp_all(enum_route_hdr_cb, NULL, enum_route_wpt_cb);
+	waypt_disp_all(enum_waypt_cb);
+	route_disp_all(enum_route_hdr_cb, NULL, enum_rtept_cb);
 	
+	if (waypt_table_ct == 0) return;
+	
+	qsort(waypt_table, waypt_table_ct, sizeof(*waypt_table), qsort_cb);
+
 	/* write out waypoint summary */
-	for (i = 0; i < items_in_depot; i++) {
-		waypoint *wpt = depot[i];
+	for (i = 0; i < waypt_table_ct; i++) {
+		waypoint *wpt = waypt_table[i];
 		write_waypoint(fout, wpt, i, opt_location);
 	}
 	
@@ -413,7 +477,13 @@ raymarine_write(void)
 	rte_index = 0;
 	route_disp_all(write_route_head_cb, NULL, write_route_wpt_cb);
 	
-	if (depot != NULL) xfree(depot);
+	/* release local used data */	
+	for (i = 0; i < waypt_table_ct; i++) {
+		wpt = waypt_table[i];
+		xfree(wpt->extra_data);
+		wpt->extra_data = NULL;
+	}
+	xfree(waypt_table);
 }
 
 /* ================================================== */
@@ -435,5 +505,5 @@ ff_vecs_t raymarine_vecs = {
 	raymarine_write,
 	NULL,
 	raymarine_args,
-	CET_CHARSET_ASCII, 0
+	CET_CHARSET_ASCII, 0	/* should we force this to 1 ? */
 };
