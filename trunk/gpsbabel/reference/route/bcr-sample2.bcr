@@ -22,14 +22,14 @@ STATION7=1389101,6644184
 STATION8=1377578,6656081
 STATION9=1379831,6669676
 [DESCRIPTION]
-STATION1=bei D 08527,Neundorf,,0
-STATION2=bei D 08523,Plauen/Possig,,0
-STATION3=bei D 08523,Plauen/Westend,,0
-STATION4=bei D 08427,Fraureuth/Beiersdorf,,0
-STATION5=bei D 04639,Ponitz/Merlach,,0
-STATION6=bei D 04600,Altenburg/Paditz,,0
-STATION7=bei D 04552,Borna/Gestewitz,,0
-STATION8=bei D 04564,Boehlen/Grossdeuben,,0
-STATION9=bei D 04317,Leipzig/Thonberg,,0
+STATION1=bei D 08527,Neundorf,@,0
+STATION2=bei D 08523,Plauen/Possig,@,0
+STATION3=bei D 08523,Plauen/Westend,@,0
+STATION4=bei D 08427,Fraureuth/Beiersdorf,@,0
+STATION5=bei D 04639,Ponitz/Merlach,@,0
+STATION6=bei D 04600,Altenburg/Paditz,@,0
+STATION7=bei D 04552,Borna/Gestewitz,@,0
+STATION8=bei D 04564,Boehlen/Grossdeuben,@,0
+STATION9=bei D 04317,Leipzig/Thonberg,@,0
 [ROUTE]
 ROUTERECT=1346067,6669676,1389101,6524736
