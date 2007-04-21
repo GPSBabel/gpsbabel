@@ -431,7 +431,10 @@ bcr_route_header(const route_head *route)
 		if (s2 == NULL) s2 = xstrdup("");
 		else s2 = csv_stringclean(s2, ",\t\r\n");
 		
-		xasprintf(&sout, "%s,%s,,0", s1, s2);
+		if (*s2)
+			xasprintf(&sout, "%s,%s,@,0", s1, s2);
+		else
+			xasprintf(&sout, "%s,%s,@,0", s1, s1);
 		bcr_write_line(fout, "STATION", &i, sout);
 		
 		xfree(s1);
