@@ -1,9 +1,0 @@
-#!/bin/sh
-
-#
-# Run our testsuite under valgrind.  Mostly it complains about core GNU libc
-# functions, but it does actually help find interesting stuff in our own code
-# from time to time.
-#
-
-PNAME="valgrind -q ./gpsbabel" ./testo

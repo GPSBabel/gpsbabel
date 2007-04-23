@@ -1,4 +1,0 @@
-<para>
-When this option is zero, no labels are added for track and route points.
-This option defaults to one, so labels are added by default.
-</para>
