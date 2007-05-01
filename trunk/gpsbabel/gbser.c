@@ -137,7 +137,7 @@ int gbser_read_wait(void *handle, void *buf, unsigned len, unsigned ms) {
  * none are available.
  */
 int gbser_readc(void *handle) {
-    char buf;
+    unsigned char buf;
     int rc;
     
     rc = gbser_read(handle, &buf, 1);
@@ -154,7 +154,7 @@ int gbser_readc(void *handle) {
  * milliseconds for a character to be available.
  */
 int gbser_readc_wait(void *handle, unsigned ms) {
-    char buf;
+    unsigned char buf;
     int rc;
     
     rc = gbser_read_wait(handle, &buf, 1, ms);
