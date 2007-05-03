@@ -22,7 +22,8 @@
 static char *encoded_points = NULL;
 static char *encoded_levels = NULL;
 static char *script = NULL;
-static route_head *routehead;
+static route_head **routehead;
+static int *routecount;
 static short_handle desc_handle;
 
 static int serial = 0;
@@ -111,6 +112,7 @@ void goog_levels( const char *args, const char **unused )
 
 static char goog_segname[7];
 static char *goog_realname = NULL;
+static int goog_segroute = 0;
 
 /*
  * The segments contain an index into the points array.  We use that
@@ -132,7 +134,7 @@ void goog_segment( const char *args, const char **unused )
 {
 	waypoint *wpt_tmp;
 
-	wpt_tmp = route_find_waypt_by_name( routehead, goog_segname);
+	wpt_tmp = route_find_waypt_by_name( routehead[goog_segroute], goog_segname);
 	if (wpt_tmp) {
 		xfree(wpt_tmp->shortname);
 		wpt_tmp->shortname = mkshort(desc_handle,args);
@@ -151,14 +153,21 @@ void goog_td_s( const char *args, const char **attrv )
 			isseg = !strcmp(avp[1], "dirsegtext" );
 		}
 		else if ( isdesc && (0 == strcmp( avp[0], "id" ))) {
+			goog_segroute = 0;
 			snprintf( goog_segname, sizeof(goog_segname),
 				"\\%5.5x",
 				atoi(avp[1] + 6 ));
 		}
 		else if ( isseg && (0 == strcmp( avp[0], "id" ))) {
+			if ( strchr(strchr(avp[1],'_')+1,'_')) {
+  			  goog_segroute = atoi(strchr(avp[1],'_')+1);
+			}
+			else {
+			  goog_segroute = 0;
+			}
 			snprintf( goog_segname, sizeof(goog_segname),
 				"\\%5.5x",
-				atoi(strrchr( avp[1],'_') + 1 ));
+				atoi(strrchr( avp[1],'_') + 1 )+routecount[goog_segroute]);
 		}
 		avp += 2;
 	}
@@ -219,9 +228,10 @@ void goog_poly_e( const char *args, const char **unused )
 	long level2 = -9999;
         char *str = encoded_points;
 	char *lstr = encoded_levels;
-
-	routehead = route_head_alloc();
-	route_add_head(routehead);
+	
+	routehead[goog_segroute] = route_head_alloc();
+	route_add_head(routehead[goog_segroute]);
+	routecount[goog_segroute] = serial;
 
 	while ( str && *str ) 
 	{
@@ -251,7 +261,7 @@ void goog_poly_e( const char *args, const char **unused )
 			wpt_tmp->route_priority=level;
 			wpt_tmp->shortname = (char *) xmalloc(7);
 			sprintf( wpt_tmp->shortname, "\\%5.5x", serial++ );
-			route_add_wpt(routehead, wpt_tmp);
+			route_add_wpt(routehead[goog_segroute], wpt_tmp);
 		}
 	}
 	
@@ -269,7 +279,13 @@ google_rd_init(const char *fname)
 static void
 google_read(void)
 {
+	routehead = (route_head **)xmalloc(sizeof(route_head *));
+	routecount = (int *)xmalloc(sizeof(int));
+	goog_segroute = 0;
 	xml_read();
+	xfree( routehead );
+	xfree( routecount );
+
 	if ( encoded_points ) 
 	{
 		xfree( encoded_points );
@@ -288,6 +304,9 @@ google_read(void)
 		char *end = NULL;
 		
 		if ( xml && (!dict || (xml < dict ))) {
+			routehead = (route_head **)xmalloc(sizeof(route_head *));
+			routecount = (int *)xmalloc(sizeof(int));
+			goog_segroute = 0;
 			xml++;
 			end = strchr( xml+1, '\'' );
 			if ( end ) {
@@ -310,6 +329,10 @@ google_read(void)
 		else if ( dict ) {
 		  char qc = '\'';
 		  int ofs = 9;
+		  int count = 0;
+		  char *tmp = NULL;
+		  char *start = NULL;
+		  
 		  char *panel = strstr( dict, "panel: '" );
 		  encoded_points = strstr( dict, "points: '" );
 		  encoded_levels = strstr( dict, "levels: '" );
@@ -320,29 +343,61 @@ google_read(void)
 		    ofs = 10;
 		  }
 		  
-		  if ( encoded_points && encoded_levels ) {
-	            encoded_points += ofs;
-		    encoded_levels += ofs;
-		    end = strchr( encoded_points, qc );
-		    if ( end ) {
-	              *end = '\0';
-		      end = encoded_points;
-		      while ( (end = strstr(end, "\\\\" ))) {
-			memmove( end, end+1, strlen(end)+1 );
-			end++;
-		      }
-		      end = strchr( encoded_levels, qc );
+		  tmp = panel;
+		  while ( tmp ) {
+	            if ( qc == '"' ) {
+		      tmp = strstr( tmp, "\"points\":\"" );
+		    }
+		    else {
+		      tmp = strstr( tmp, "points: '" );
+		    }
+		    count++;
+		    if ( tmp ) {
+		      tmp++;
+		    }			  
+		  } 
+		  routehead = (route_head **)xmalloc(sizeof(route_head *)*count);
+		  routecount = (int *)xmalloc(sizeof(int)*count);
+		  goog_segroute = 0;
+		  
+		  do {
+		  
+		    if ( encoded_points && encoded_levels ) {
+	              encoded_points += ofs;
+		      encoded_levels += ofs;
+		      end = strchr( encoded_points, qc );		 
 		      if ( end ) {
-			*end = '\0';
-		        end = encoded_levels;
-  		        while ( (end = strstr(end, "\\\\" ))) {
-			  memmove( end, end+1, strlen(end)+1 );
+	                *end = '\0';
+		        end = encoded_points;
+		        while ( (end = strstr(end, "\\\\" ))) {
+		  	  memmove( end, end+1, strlen(end)+1 );
 			  end++;
 		        }
-			goog_poly_e( NULL, NULL );
-		      }
-		    }		      
-		  }
+		        end = strchr( encoded_levels, qc );
+		        if ( end ) {
+			  start = end;
+	 		  *end = '\0';
+		          end = encoded_levels;			  
+  		          while ( (end = strstr(end, "\\\\" ))) {
+			    memmove( end, end+1, strlen(end)+1 );
+			    end++;
+		          }
+			  goog_poly_e( NULL, NULL );
+			  
+		          goog_segroute++;
+			  start++;
+                          if ( qc == '"' ) {
+	                    encoded_points = strstr( start, "\"points\":\"" );
+	                    encoded_levels = strstr( start, "\"levels\":\"" );
+			  }
+			  else {
+		            encoded_points = strstr( start, "points: '" );
+		            encoded_levels = strstr( start, "levels: '" );
+			  }
+		        }
+		      }		      
+		    }
+		  } while ( start && encoded_points && encoded_levels );
 	          if ( panel ) {
 		    panel += 8;
 		    end = strstr( panel, "/table><div class=\\\"legal" );
@@ -376,6 +431,8 @@ google_read(void)
 		  }
 		}
 		xfree( script );
+		xfree( routehead );
+		xfree( routecount );
 		script = NULL;
 	}
 
