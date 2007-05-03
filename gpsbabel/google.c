@@ -56,8 +56,11 @@ xg_tag_mapping google_map[] = {
 	{ goog_segment_s, cb_start,      "/page/directions/segments/segment" },
 	{ goog_segment, cb_cdata,      "/page/directions/segments/segment" },
 	{ goog_td_s,    cb_start,      "/div/table/tr/td" },
+	{ goog_td_s,    cb_start,      "/div/div/table/tr/td" },
 	{ goog_td_b,      cb_cdata,      "/div/table/tr/td/b" },
+	{ goog_td_b,      cb_cdata,      "/div/div/table/tr/td/b" },
 	{ goog_td_e,    cb_end,        "/div/table/tr/td" },
+	{ goog_td_e,    cb_end,        "/div/div/table/tr/td" },
 	{ NULL,         0,              NULL }
 };
 
@@ -141,14 +144,21 @@ void goog_td_s( const char *args, const char **attrv )
 {
 	const char **avp = &attrv[0];
 	int isdesc = 0;
+	int isseg = 0;
 	while (*avp) {
 		if ( 0 == strcmp(avp[0], "class" )) {
 			isdesc = !strcmp(avp[1], "desc" );
+			isseg = !strcmp(avp[1], "dirsegtext" );
 		}
 		else if ( isdesc && (0 == strcmp( avp[0], "id" ))) {
 			snprintf( goog_segname, sizeof(goog_segname),
 				"\\%5.5x",
 				atoi(avp[1] + 6 ));
+		}
+		else if ( isseg && (0 == strcmp( avp[0], "id" ))) {
+			snprintf( goog_segname, sizeof(goog_segname),
+				"\\%5.5x",
+				atoi(strrchr( avp[1],'_') + 1 ));
 		}
 		avp += 2;
 	}
@@ -298,14 +308,22 @@ google_read(void)
 			}
 		}
 		else if ( dict ) {
+		  char qc = '\'';
+		  int ofs = 9;
 		  char *panel = strstr( dict, "panel: '" );
 		  encoded_points = strstr( dict, "points: '" );
 		  encoded_levels = strstr( dict, "levels: '" );
+		  if ( !encoded_points ) {
+	            encoded_points = strstr( dict, "\"points\":\"" );
+	            encoded_levels = strstr( dict, "\"levels\":\"" );
+		    qc = '"';
+		    ofs = 10;
+		  }
 		  
 		  if ( encoded_points && encoded_levels ) {
-	            encoded_points += 9;
-		    encoded_levels += 9;
-		    end = strchr( encoded_points, '\'' );
+	            encoded_points += ofs;
+		    encoded_levels += ofs;
+		    end = strchr( encoded_points, qc );
 		    if ( end ) {
 	              *end = '\0';
 		      end = encoded_points;
@@ -313,7 +331,7 @@ google_read(void)
 			memmove( end, end+1, strlen(end)+1 );
 			end++;
 		      }
-		      end = strchr( encoded_levels, '\'' );
+		      end = strchr( encoded_levels, qc );
 		      if ( end ) {
 			*end = '\0';
 		        end = encoded_levels;
@@ -328,6 +346,9 @@ google_read(void)
 	          if ( panel ) {
 		    panel += 8;
 		    end = strstr( panel, "/table><div class=\\\"legal" );
+		    if ( !end ) {
+	              end = strstr( panel, "/table><div class=\\042legal" );
+		    }
 		    if ( end ) {
 	              strcpy(end,"/table></div>");
 		      end = panel;
@@ -335,9 +356,19 @@ google_read(void)
 		        memmove( end, end+1, strlen(end)+1 );
 		      }
 		      end = panel;
+		      while ( (end = strstr( end, "\\042"))) {
+			memmove( end, end+3, strlen(end+3)+1 );
+			*end = '\"';
+		      }
+		      end = panel;
 		      while ( (end = strstr( end, "\\'" ))) {
 			memmove( end, end+1, strlen(end)+1 );
 		      }
+		      end = panel;
+		      while ( (end = strstr( end, " nowrap "))) {
+			memcpy( end+1, "      ", 6 );
+		      }
+		      
 		      xml_deinit();
 		      xml_init( NULL, google_map, NULL );
 		      xml_readstring( panel );
