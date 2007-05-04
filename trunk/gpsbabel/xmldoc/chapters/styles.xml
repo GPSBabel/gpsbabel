@@ -646,6 +646,24 @@ examples:
 </screen>
 </section>
 
+<section id="style_def_map_en_bng">
+<title>MAP_EN_BNG</title>
+<para>
+   MAP_EN_BNG converts coordinates from/to British National Grid (BNG).
+</para>
+<para>
+   The only supported order of the items is: Map,Easting,Northing.
+   During output all coordinates have to be located within this limited area.
+</para>
+<para>
+examples:
+</para>
+<screen format="linespecific">
+   IFIELD MAP_EN_BNG,"","%s%5d %5d"   #  (writes i.e. "SJ00001 00001")
+   IFIELD MAP_EN_BNG,"","%s %d %d"    #  (writes i.e. "TQ 888 999")
+</screen>
+</section>
+
 <section id="style_def_lonhuman">
 <title>LON_HUMAN_READABLE</title>
 <para>

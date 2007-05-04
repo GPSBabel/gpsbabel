@@ -881,7 +881,11 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     if (strcmp(fmp->key, "LON_DIR") == 0) {
        /* longitude E/W. Ingore on input for now */
     } else
-
+    /* SPECIAL COORDINATES/GRID */
+    if (strcmp(fmp->key, "MAP_EN_BNG") == 0) {
+       parse_coordinates(s, DATUM_OSGB36, grid_bng,
+          &wpt->latitude, &wpt->longitude, MYNAME);
+    } else
     /* ALTITUDE CONVERSIONS ************************************************/
     if (strcmp(fmp->key, "ALT_FEET") == 0) {
        /* altitude in feet as a decimal value */
@@ -1348,6 +1352,16 @@ xcsv_waypt_pr(const waypoint *wpt)
             writebuff(buff, fmp->printfc,
               LON_DIR(lon));
         } else
+	
+	/* SPECIAL COORDINATES */
+        if (strcmp(fmp->key, "MAP_EN_BNG") == 0) {
+		char map[3];
+		double north, east;
+		if (! GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map))
+			fatal(MYNAME ": Position (%.5f/%.5f) outside of BNG.\n",
+				wpt->latitude, wpt->longitude);
+		snprintf(buff, sizeof(buff), fmp->printfc, map, (int)(east + 0.5), (int)(north + 0.5));
+	} else
 
         /* ALTITUDE CONVERSIONS**********************************************/
         if (strcmp(fmp->key, "ALT_FEET") == 0) {
