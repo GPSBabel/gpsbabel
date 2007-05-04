@@ -54,6 +54,7 @@
 	    2007/01/23: add support for GDB version 3
 	    2007/02/07: Add special code for unknown bytes in waypoints with class GE 8 (calculated points)
 	    2007/02/15: Nearly full rewrite. Full support for GDB V3. New option roadbook.
+	    2007/05/03: Add code for tricky V3 descriptions
 */
 
 #include <stdio.h>
@@ -65,6 +66,7 @@
 
 #include "cet.h"
 #include "cet_util.h"
+#include "csv_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
 #include "grtcirc.h"
@@ -94,15 +96,15 @@
 #define GDB_DBG_RTEe		16
 #define GDB_DBG_TRKe		32
 
-#define GDB_DEBUG		(GDB_DBG_WPT | GDB_DBG_RTE)
+#define GDB_DEBUG		(GDB_DBG_WPTe) /* | GDB_DBG_RTE) */
 #undef GDB_DEBUG
 
 #define DBG(a,b)		if ((GDB_DEBUG & (a)) && (b))
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.50 $"; */
-static char gdb_release_date[] = "$Date: 2007-03-12 22:29:12 $";
+/* static char gdb_release[] = "$Revision: 1.51 $"; */
+static char gdb_release_date[] = "$Date: 2007-05-04 08:41:41 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -470,7 +472,14 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 
 	if (FREAD_C == 1) {
 		double alt = gbfgetdbl(fin);
-		if (alt < 1.0e24) res->altitude = alt;
+		if (alt < 1.0e24) {
+			res->altitude = alt;
+#if GDB_DEBUG
+			DBG(GDB_DBG_WPTe, 1)
+			printf(MYNAME "-wpt \"%s\" (%d): Altitude = %.1f\n",
+				sn, wpt_class, alt);
+#endif		
+		}
 	}
 #if GDB_DEBUG
 	DBG(GDB_DBG_WPT, 1)
@@ -481,17 +490,25 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 #endif		
 	res->notes = FREAD_CSTR;
 #if GDB_DEBUG
-	DBG(GDB_DBG_WPTe, res->notes)
+	DBG(GDB_DBG_WPTe, res->notes) {
+		char *str = gstrsub(res->notes, "\r\n", ", ");
 		printf(MYNAME "-wpt \"%s\" (%d): notes = %s\n",
-			sn, wpt_class, nice(res->notes));
+			sn, wpt_class, nice(str));
+		xfree(str);
+	}
 #endif
 	if (FREAD_C == 1) {
 		double proximity = gbfgetdbl(fin);
 		GMSD_SET(proximity, proximity);
+#if GDB_DEBUG
+		DBG(GDB_DBG_WPTe, 1)
+			printf(MYNAME "-wpt \"%s\" (%d): Proximity = %.1f\n",
+				sn, wpt_class, proximity / 1000);
+#endif		
 	}
 	i = FREAD_i32;
 #if GDB_DEBUG
-	DBG(GDB_DBG_WPTe, 1)
+	DBG(GDB_DBG_WPTe, i)
 		printf(MYNAME "-wpt \"%s\" (%d): display = %d\n",
 			sn, wpt_class, i);
 #endif
@@ -520,14 +537,19 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	if (FREAD_C == 1) {
 		double depth = gbfgetdbl(fin);
 		GMSD_SET(depth, depth);
+#if GDB_DEBUG
+		DBG(GDB_DBG_WPTe, 1)
+			printf(MYNAME "-wpt \"%s\" (%d): Depth = %.1f\n",
+				sn, wpt_class, depth);
+#endif		
 	}
-	
-	FREAD(buf, 2);				/* ?????????????????????????????????? */
 
 	/* VERSION DEPENDENT CODE */
+
 	if (gdb_ver <= GDB_VER_2) {
 		char *temp;
 		
+		FREAD(buf, 2);				/* ?????????????????????????????????? */
 		waypt_flag = FREAD_C;
 		if (waypt_flag == 0)
 			FREAD(buf, 3);
@@ -549,15 +571,31 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 		}
 	}
 	else { // if (gdb_ver >= GDB_VER_3)
-		int cnt;
+		int i, url_ct;
+		char *str;
 		
-		FREAD(buf, 4);					/* ???? */
 		waypt_flag = 0;
-		res->description = FREAD_CSTR;
 
-		for (cnt = FREAD_i32; cnt; cnt--) {
+		str = FREAD_CSTR;
+		if (str)
+			FREAD(buf, 6);					/* ???? */
+		else {
+			FREAD(buf, 5);					/* ???? */
+			str = FREAD_CSTR;
+		}
+		res->description = str;
+
+		url_ct = FREAD_i32;
+		for (i = url_ct; (i); i--) {
 			char *str = FREAD_CSTR;
-			if (str && *str) waypt_add_url(res, str, NULL);
+			if (str && *str) {
+				waypt_add_url(res, str, NULL);
+#if GDB_DEBUG
+				DBG(GDB_DBG_WPTe, 1)
+					printf(MYNAME "-wpt \"%s\" (%d): url(%d) = %s\n",
+					sn, wpt_class, url_ct - i, str);
+#endif
+			}
 		}
 	}
 
@@ -571,12 +609,17 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 #endif
 	i = FREAD_i16;
 	if (i != 0) GMSD_SET(category, i);
+#if GDB_DEBUG
+	DBG(GDB_DBG_WPTe, i)
+		printf(MYNAME "-wpt \"%s\" (%d): category = %d\n",
+			sn, wpt_class, i);
+#endif
 	
 	if (FREAD_C == 1) {
 		res->temperature = FREAD_DBL;
 #if GDB_DEBUG
 		DBG(GDB_DBG_WPTe, 1)
-			printf(MYNAME "-wpt \"%s\" (%d): temperature = %f\n",
+			printf(MYNAME "-wpt \"%s\" (%d): temperature = %.1f\n",
 				sn, wpt_class, res->temperature);
 #endif
 	}
@@ -599,7 +642,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 
 #if GDB_DEBUG
 	DBG(GDB_DBG_WPTe, icon != GDB_DEF_ICON)
-		printf(MYNAME "-wpt \"%s\" (%d): icon = \"%s\" (MapSoure %d)\n", 
+		printf(MYNAME "-wpt \"%s\" (%d): icon = \"%s\" (MapSource symbol %d)\n", 
 			sn, wpt_class, nice(res->icon_descr), icon);
 #endif
 	if (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && res->description) {
@@ -635,11 +678,11 @@ read_route(void)
 	FREAD(buf, 1);			/* display/autoname - 1 byte */
 	
 	if (FREAD_C == 0) {		/* max. data flag */
-		/* maxlat = */ FREAD_i32;
-		/* maxlon = */ FREAD_i32;
+		/* maxlat = */ (void) FREAD_i32;
+		/* maxlon = */ (void) FREAD_i32;
 		if (FREAD_C == 1) /* maxalt = */ gbfgetdbl(fin);
-		/* minlat = */ FREAD_i32;
-		/* minlon = */ FREAD_i32;
+		/* minlat = */ (void) FREAD_i32;
+		/* minlon = */ (void) FREAD_i32;
 		if (FREAD_C == 1) /* minalt = */ gbfgetdbl(fin);
 	}
 	
@@ -693,7 +736,7 @@ read_route(void)
 		il_anchor = NULL;
 		il_root = NULL;
 #if GDB_DEBUG
-		DBG(GDB_DBG_RTE, 1)
+		DBG(GDB_DBG_RTE, links)
 			printf(MYNAME "-rte_pt \"%s\" (%d): %d interlink step(s)\n", 
 				nice(wpt->shortname), wpt_class, links);
 #endif		
