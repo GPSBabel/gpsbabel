@@ -272,17 +272,21 @@ parse_waypt(char *buff)
 	
 	if (gardown)
 		cin = buff + 6;
-	else
+	else {
+		/* We've seen waypoints with length of 14 and 15 !!! */
 		cin = buff + 15;
+		while ((cin > buff) && (! isspace(*cin))) cin--;
+	}
 
 	while (isspace(*cin)) cin--;
 	if (cin >= buff)
 		wpt->shortname = xstrndup(buff, cin - buff + 1);
 
 	if (gardown)
-		buff += 7;
+		buff += 6;
 	else
-		buff += 16;
+		buff += 15;
+	while (isspace(*buff)) buff++;
 
 	buff += parse_coordinates(buff, datum, grid,
 		&wpt->latitude, &wpt->longitude, MYNAME);
@@ -438,7 +442,7 @@ data_read(void)
 
 		case 'P': /* proximity waypoint */
 		case 'W': /* normal waypoint */
-			wpt = parse_waypt(cdata);
+			wpt = parse_waypt(cin + 3);
 			prev = wpt;
 			if (wpt) {
 				if (mode == rtedata)
