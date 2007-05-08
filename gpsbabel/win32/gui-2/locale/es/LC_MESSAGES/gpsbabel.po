@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPSBabel command line program\n"
 "POT-Creation-Date: 2006-10-29 16:00\n"
-"PO-Revision-Date: 2006-10-31 14:53+0100\n"
-"Last-Translator: Daniel Díaz <Daniel.Diaz.Quintero@gmail.com>\n"
+"PO-Revision-Date: 2007-05-01 20:23+0100\n"
+"Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
 "Language-Team: Daniel Díaz <Daniel.Diaz.Quintero@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,6 +33,9 @@ msgstr "Altitudes absolutas, no relativas al suelo"
 
 msgid "Append icon_descr to description"
 msgstr "Añadir descripción de icono a la descripción"
+
+msgid "Append realtime positioning data to the output file instead of truncating"
+msgstr ""
 
 msgid "Base URL for link tag in output"
 msgstr "URL base para marca de enlace en salida"
@@ -78,6 +81,9 @@ msgstr "Categoría por defecto del resultado (1..16)"
 
 msgid "Default icon name"
 msgstr "Nombre del icono por defecto"
+
+msgid "Default location"
+msgstr ""
 
 msgid "Default speed for waypoints (knots/hr)"
 msgstr "Velocidad por defecto para los puntos de trazado (nudos/hora)"
@@ -141,6 +147,9 @@ msgstr "Incluir datos extendidos para los puntos de ruta."
 
 msgid "Include groundspeak logs if present"
 msgstr "Incluir registros de groundspeak, si existen"
+
+msgid "Include major turn points (with description) from calculated route"
+msgstr ""
 
 msgid "Include only via stations in route"
 msgstr "Suprimir puntos de ruta calculados"
@@ -364,8 +373,8 @@ msgstr "Usar valores de proximidad en resultado (por defecto: ignorar)"
 msgid "Use shortname instead of description"
 msgstr "Usar el nombre corto en lugar de la descripción"
 
-msgid "Version of gdb file to generate (1,2)"
-msgstr "Versión de fichero gdb a generar (1,2)"
+msgid "Version of gdb file to generate (1..3)"
+msgstr ""
 
 msgid "Version of mapsource file to generate (3,4,5)"
 msgstr "Versión de fichero mapsource a generar (3,4,5)"
@@ -384,6 +393,9 @@ msgstr "Ancho del mapa, en pixels"
 
 msgid "Width of lines, in pixels"
 msgstr "Ancho de líneas, en pixels"
+
+msgid "Write position using this grid."
+msgstr ""
 
 msgid "Write timestamps with offset x to UTC time"
 msgstr "Escribir marcas de tiempo con un desplazamiento de 'x' sobre la hora UTC"
