@@ -87,6 +87,7 @@ begin
   lbxTranslators.Items.Add(_('German') + ' ' +  _('by') + ' Olaf Klein');
   lbxTranslators.Items.Add(_('French') + ' ' +  _('by') + ' Lilian Morinon');
   lbxTranslators.Items.Add(_('Spanish') + ' ' + _('by') + ' Daniel Diaz');
+  lbxTranslators.Items.Add(_('Hungarian') + ' ' + _('by') + ' Sprok Bence');
 end;
 
 procedure TfrmAbout.lbURLMouseMove(Sender: TObject; Shift: TShiftState; X,

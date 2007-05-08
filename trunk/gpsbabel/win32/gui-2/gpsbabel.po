@@ -25,6 +25,9 @@ msgstr ""
 msgid "Append icon_descr to description"
 msgstr ""
 
+msgid "Append realtime positioning data to the output file instead of truncating"
+msgstr ""
+
 msgid "Base URL for link tag in output"
 msgstr ""
 
@@ -68,6 +71,9 @@ msgid "Default category on output (1..16)"
 msgstr ""
 
 msgid "Default icon name"
+msgstr ""
+
+msgid "Default location"
 msgstr ""
 
 msgid "Default speed for waypoints (knots/hr)"
@@ -131,6 +137,9 @@ msgid "Include extended data for trackpoints (default = 1)"
 msgstr ""
 
 msgid "Include groundspeak logs if present"
+msgstr ""
+
+msgid "Include major turn points (with description) from calculated route"
 msgstr ""
 
 msgid "Include only via stations in route"
@@ -355,7 +364,7 @@ msgstr ""
 msgid "Use shortname instead of description"
 msgstr ""
 
-msgid "Version of gdb file to generate (1,2)"
+msgid "Version of gdb file to generate (1..3)"
 msgstr ""
 
 msgid "Version of mapsource file to generate (3,4,5)"
@@ -374,6 +383,9 @@ msgid "Width in pixels of map"
 msgstr ""
 
 msgid "Width of lines, in pixels"
+msgstr ""
+
+msgid "Write position using this grid."
 msgstr ""
 
 msgid "Write timestamps with offset x to UTC time"
