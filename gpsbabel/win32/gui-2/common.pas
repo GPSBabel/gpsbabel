@@ -103,6 +103,7 @@ type
     format: string;
     name:   string;
     hint:   string;
+    defname: string;
     otype:  Byte;
     def:    PChar;       // default value from gpsbabel or ini-file
     gbdef:  PChar;       // default value from gpsbabel       
@@ -110,6 +111,7 @@ type
     max:    PChar;
     chb:    TCheckBox;
     edit:   TControl;
+    dir:    Byte;        // 1 = only in; 2 = only out
   end;
   POption = ^TOption;
 
@@ -227,7 +229,7 @@ var
   buff: array[0..1023] of Char;
   cin, cend: PChar;
   index: Integer;
-  opt: POption;
+  opt, opt2: POption;
   list: TStringList;
   i: Integer;
   s: string;
@@ -289,6 +291,9 @@ begin
     opt.def := opt.gbdef;
   end;
 
+  opt.dir := 3;  // in and out
+  opt.defname := opt.name;
+
   index := Self.IndexOf(opt.format);
   if (index >= 0) then
     list := TStringList(Self.Objects[index])
@@ -298,6 +303,18 @@ begin
     Self.AddObject(opt.format, list);
   end;
   list.AddObject(opt.name, Pointer(opt));
+  if (opt.format = 'xcsv') then
+  begin
+    if (opt.name = 'style') then
+    begin
+      opt.dir := 1;
+      New(opt2);
+      opt2^ := opt^;
+      opt2.name := 'style_out';
+      opt2.dir := 2;
+      list.AddObject(opt2.name, Pointer(opt2));
+    end;
+  end;
 end;
 
 procedure TOptions.DebugGetHints(List: TStringList);
@@ -410,7 +427,7 @@ begin
          info.Ext := ext;
          info.internal := internal;
          info.Capas := caps;
-         
+
          i := SELF.Add(name);
          SELF.PutObject(i, Pointer(info));
 
@@ -418,7 +435,9 @@ begin
          begin
            gpsbabel_knows_inifile := True;
            // add -p "" to command-line
-         end;
+         end
+         else if (name = 'xcsv') then
+           info.internal := 'file';
          break;
        end;
     end;

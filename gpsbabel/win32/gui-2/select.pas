@@ -62,7 +62,7 @@ function SelectLanguage(const Title: string; const Builtin: TStrings; var Lang: 
 var
   i: Integer;
   s, sx, sy: string;
-  l: TStrings;
+  l: TStringList;
 
 begin
   Result := False;
@@ -72,6 +72,8 @@ begin
 
   l := TStringList.Create;
   try
+    l.Sorted := True;
+    
     sy := '';
     for i := 0 to Builtin.Count - 1 do
     begin
@@ -82,6 +84,7 @@ begin
       if (CompareText(s, 'es') = 0) then sx := _('Spanish') else
       if (CompareText(s, 'fr') = 0) then sx := _('French') else
       if (CompareText(s, 'en') = 0) then sx := _('English') else
+      if (CompareText(s, 'hu') = 0) then sx := _('Hungarian') else
         sx := '???';
 
       sx := Format('%s - %s', [s, sx]);

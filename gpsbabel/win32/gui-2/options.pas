@@ -170,8 +170,15 @@ begin
   for i := 0 to FOpts.Count - 1 do
   begin
     o := Pointer(FOpts.Objects[i]);
+
     o.chb := nil;
     o.edit := nil;
+
+    if (o.dir <> 3) then
+    begin
+      if (FIsInput and (o.dir and 1 = 0)) then Continue
+      else if (not(FIsInput) and (o.dir and 2 = 0)) then Continue;
+    end;
 
     if (FFormat = '') then
     begin
@@ -205,8 +212,13 @@ begin
 //  chb.Checked := (gpsbabel_ini.ReadString(o.format, o.name, #1) <> #1);
     chb.Parent := pnOptions;
 
-    chb.Hint := SysUtils.Format(_('Short "%s"'), [o.name]);
+    chb.Hint := SysUtils.Format(_('Short "%s"'), [o.defname]);
     chb.ShowHint := True;
+
+    if (o.format = 'xcsv') and (o.defname = 'style') then
+    begin
+      chb.Checked := True;
+    end;
 
     xy.y := xy.y + chb.Height + 8;
     if (o.otype <> 4) then
@@ -237,8 +249,7 @@ begin
       1: CreateIntegerOption(xy.X, xy.Y - 2, i + 1, o, xmax);
       2, 3: CreateStringOption(xy.X, xy.Y - 2, i + 1, o, xmax);
       4: ;
-      5: // ??? if FIsInput then
-        CreateFileOption(xy.X, xy.Y - 2, i + 1, o, True, xmax);
+      5: CreateFileOption(xy.X, xy.Y - 2, i + 1, o, True, xmax);
       6: if not FIsInput then CreateFileOption(xy.X, xy.Y - 2, i + 1, o, False, xmax);
     end;
     if (o.edit <> nil) then
@@ -294,10 +305,10 @@ begin
       if (o.chb.State = cbGrayed) then Continue
     end
     else if not(o.chb.Checked) then Continue;
-    
+
     if (Result <> '') then
       Result := Result + ',';
-    Result := Result + o.name;
+    Result := Result + o.defname;
 
     if (o.edit = nil) then
     begin
@@ -317,8 +328,8 @@ end;
 procedure TfrmOptions.SetOptsStr(const AValue: string);
 var
   l: TStrings;
-  i, j: Integer;
-  s, name, value: string;
+  i, j, k: Integer;
+  s, name, value, name_out: string;
   o: POption;
   ud: TUpDown;
 begin
@@ -350,7 +361,17 @@ begin
 
       j := FOpts.IndexOf(name);
       if (j < 0) then
-        raise eUnknownOption.CreateFmt(_('Unknown option "%s"!'), [name]);
+        raise eUnknownOption.CreateFmt(_('Unknown option "%s"!'), [name])
+      else if not(FIsInput) then
+      begin
+        name_out := name + '_out';
+        k := FOpts.IndexOf(name);
+        if (k >= 0) then
+        begin
+          name := name_out;
+          j := k;
+        end;
+      end;
 
       o := Pointer(FOpts.Objects[j]);
       if (o.edit <> nil) then
@@ -472,7 +493,8 @@ begin
   WinOpenURL(readme_html_path + '#fmt_' + FFormat);
 end;
 
-procedure TfrmOptions.CreateFileOption(const x, y, tag: Integer; o: POption; IsInput: Boolean; xmax: Integer = -1);
+procedure TfrmOptions.CreateFileOption(const x, y, tag: Integer;
+  o: POption; IsInput: Boolean; xmax: Integer = -1);
 var
   ed: TEdit;
   btn: TSpeedButton;
@@ -566,7 +588,9 @@ var
   ins: Boolean;
 begin
   List.Clear;
-  s := Trim(line) + ',';
+  s := Trim(line);
+  while ((s <> '') and (s[Length(s)] = ',')) do SetLength(s, Length(s) - 1);
+  s := s + ',';
 
   cin := PChar(s);
   cend := cin + StrLen(cin);

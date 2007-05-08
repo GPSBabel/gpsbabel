@@ -1,14 +1,14 @@
 #  Doesn't have any letters
 #. frmMain..MainMenu1..mnuFile..N5..Caption
-#: main.dfm:1495
+#: main.dfm:1485
 #. frmMain..MainMenu1..mnuFile..N3..Caption
-#: main.dfm:1501
+#: main.dfm:1491
 #. frmMain..MainMenu1..mnuOptions..N2..Caption
-#: main.dfm:1525
+#: main.dfm:1515
 #. frmMain..MainMenu1..mnuOptions..N4..Caption
-#: main.dfm:1537
+#: main.dfm:1527
 #. frmMain..MainMenu1..mnuHelp..N1..Caption
-#: main.dfm:1566
+#: main.dfm:1556
 msgid "-"
 msgstr ""
 
@@ -18,13 +18,25 @@ msgstr ""
 msgid "+/-"
 msgstr ""
 
+#  Doesn't look like text
+#. frmFilter..gbTracks..cobGPSfixes....Items.Strings
+#: filter.dfm:342
+msgid "2d"
+msgstr ""
+
+#  Doesn't look like text
+#. frmFilter..gbTracks..cobGPSfixes....Items.Strings
+#: filter.dfm:341
+msgid "3d"
+msgstr ""
+
 #  Doesn't have any letters
 #. frmFilter..gbRoutes..edRoutesSimplifyMaxPoints..Text
 #: filter.dfm:344
 msgid "50 "
 msgstr ""
 
-#. frmFilter..gbTracks..edTrackTitle..Text
+#. frmFilter..gbTracks..edTrackTitleValue..Text
 #: filter.dfm:88
 msgid "ACTIVE LOG # %Y%m%d"
 msgstr ""
@@ -32,7 +44,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:153
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:368
+#: main.dfm:364
 msgid "ASCII"
 msgstr ""
 
@@ -69,20 +81,20 @@ msgid "COM4"
 msgstr ""
 
 #. frmMain..ActionList1..acDebugCreatePo..Caption
-#: main.dfm:1459
+#: main.dfm:1449
 msgid "Create options.po"
 msgstr ""
 
 #. frmMain..ActionList1..acDebugCreatePo..Category
-#: main.dfm:1458
+#: main.dfm:1448
 #. frmMain..MainMenu1..mnuDebug..Caption
-#: main.dfm:1546
+#: main.dfm:1536
 msgid "Debug"
 msgstr ""
 
 #  Seems like a Font.Name extract
 #. frmMain..memoOutput..Font.Name
-#: main.dfm:678
+#: main.dfm:670
 msgid "Fixedsys"
 msgstr ""
 
@@ -90,7 +102,7 @@ msgstr ""
 #. frmMain..Caption
 #: main.dfm:6
 #. Programmer's name for it: SGPSBabelTitle
-#: common.pas:32
+#: common.pas:35
 msgid "GPSBabelGUI-2"
 msgstr ""
 
@@ -100,8 +112,10 @@ msgstr ""
 msgid "GPSBabelGUI-2:"
 msgstr ""
 
+#. frmMain..stbMain......Text
+#: main.dfm:693
 #. Programmer's name for it: SGPSBabelURL
-#: common.pas:31
+#: common.pas:34
 msgid "http://www.gpsbabel.org"
 msgstr ""
 
@@ -114,7 +128,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:156
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:371
+#: main.dfm:367
 msgid "ISO-8859-1"
 msgstr ""
 
@@ -122,7 +136,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:165
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:380
+#: main.dfm:376
 msgid "ISO-8859-10"
 msgstr ""
 
@@ -130,7 +144,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:166
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:381
+#: main.dfm:377
 msgid "ISO-8859-13"
 msgstr ""
 
@@ -138,7 +152,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:167
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:382
+#: main.dfm:378
 msgid "ISO-8859-14"
 msgstr ""
 
@@ -146,7 +160,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:168
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:383
+#: main.dfm:379
 msgid "ISO-8859-15"
 msgstr ""
 
@@ -154,7 +168,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:157
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:372
+#: main.dfm:368
 msgid "ISO-8859-2"
 msgstr ""
 
@@ -162,7 +176,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:158
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:373
+#: main.dfm:369
 msgid "ISO-8859-3"
 msgstr ""
 
@@ -170,7 +184,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:159
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:374
+#: main.dfm:370
 msgid "ISO-8859-4"
 msgstr ""
 
@@ -178,7 +192,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:160
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:375
+#: main.dfm:371
 msgid "ISO-8859-5"
 msgstr ""
 
@@ -186,7 +200,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:161
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:376
+#: main.dfm:372
 msgid "ISO-8859-6"
 msgstr ""
 
@@ -194,7 +208,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:162
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:377
+#: main.dfm:373
 msgid "ISO-8859-7"
 msgstr ""
 
@@ -202,7 +216,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:163
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:378
+#: main.dfm:374
 msgid "ISO-8859-8"
 msgstr ""
 
@@ -210,7 +224,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:164
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:379
+#: main.dfm:375
 msgid "ISO-8859-9"
 msgstr ""
 
@@ -218,14 +232,14 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:169
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:384
+#: main.dfm:380
 msgid "KOI-8"
 msgstr ""
 
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:170
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:385
+#: main.dfm:381
 msgid "MACROMAN"
 msgstr ""
 
@@ -246,15 +260,15 @@ msgstr ""
 #. frmMain..Font.Name
 #: main.dfm:13
 #. frmMain..pnBottom..lbWhat..Font.Name
-#: main.dfm:427
+#: main.dfm:419
 #. frmMain..stbMain..Font.Name
-#: main.dfm:693
+#: main.dfm:685
 #. frmOptions..Font.Name
 #: options.dfm:14
 #. frmOptions..pnOptions..Font.Name
-#: options.dfm:68
+#: options.dfm:69
 #. frmOptions..pnOptions..mmWarning..Font.Name
-#: options.dfm:85
+#: options.dfm:86
 #. frmReadme..Font.Name
 #: readme.dfm:11
 #. frmSelect..Font.Name
@@ -267,7 +281,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:154
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:369
+#: main.dfm:365
 msgid "MS-ANSI"
 msgstr ""
 
@@ -283,7 +297,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputDevice....Items.Strings
 #: main.dfm:183
 #. frmMain..pnTop..gbOutput..cbOutputDevice....Items.Strings
-#: main.dfm:398
+#: main.dfm:394
 msgid "USB"
 msgstr ""
 
@@ -291,7 +305,7 @@ msgstr ""
 #. frmMain..pnTop..gbInput..cbInputLang....Items.Strings
 #: main.dfm:155
 #. frmMain..pnTop..gbOutput..cbOutputLang....Items.Strings
-#: main.dfm:370
+#: main.dfm:366
 msgid "UTF-8"
 msgstr ""
 

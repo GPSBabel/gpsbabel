@@ -21,7 +21,10 @@ LANG = \
   locale\es\LC_MESSAGES\gpsbabel.mo \
   locale\fr\LC_MESSAGES\delphi.mo \
   locale\fr\LC_MESSAGES\default.mo \
-  locale\fr\LC_MESSAGES\gpsbabel.mo
+  locale\fr\LC_MESSAGES\gpsbabel.mo \
+  locale\hu\LC_MESSAGES\delphi.mo \
+  locale\hu\LC_MESSAGES\default.mo \
+  locale\hu\LC_MESSAGES\gpsbabel.mo
 
 .suffixes: .po
 
@@ -57,4 +60,5 @@ clean:
 	rm -f locale\de\LC_MESSAGES\*.mo
 	rm -f locale\es\LC_MESSAGES\*.mo
 	rm -f locale\fr\LC_MESSAGES\*.mo
+	rm -f locale\hu\LC_MESSAGES\*.mo
 
