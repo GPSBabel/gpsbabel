@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPSBabelGUI-2\n"
 "POT-Creation-Date: 2005-08-12 14:50\n"
-"PO-Revision-Date: 2006-11-01 20:12+0100\n"
-"Last-Translator: Olaf Klein <o.b.klein@gpsbabel.org>\n"
+"PO-Revision-Date: 2007-05-01 19:38+0100\n"
+"Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
 "Language-Team:  <o.b.klein@gpsbabel.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,7 +41,7 @@ msgstr "www.gpsbabel.org"
 #. frmAbout..pnClient..pnCenter..lbCopyRight..Caption
 #: about.dfm:114
 msgid "Copyright (C) 2005,2006 Olaf Klein (o.b.klein@gpsbabel.org)"
-msgstr ""
+msgstr "Copyright (C) 2005,2006 Olaf Klein (o.b.klein@gpsbabel.org)"
 
 #. frmAbout..pnClient..pnCenter..lbMoreInfo..Caption
 #: about.dfm:121
@@ -80,6 +80,7 @@ msgstr "&Tracks"
 #: about.pas:87
 #: about.pas:88
 #: about.pas:89
+#: about.pas:90
 msgid "by"
 msgstr "von"
 
@@ -178,190 +179,205 @@ msgstr "Verschiebe Beginn/Ende um Differenz zur lokalen Zeitzone"
 msgid "TZ"
 msgstr "\"TZ\""
 
-#. frmFilter..gbTracks..cbTrackFixes..Hint
+#. frmFilter..gbTracks..cbGPSfix..Hint
 #: filter.dfm:306
 msgid "Synthesize GPS fixes (PPS, DGPS, 3D, 2D)"
 msgstr ""
 
-#. frmFilter..gbTracks..cbTrackFixes..Caption
+#. frmFilter..gbTracks..cbGPSfix..Caption
 #: filter.dfm:307
 msgid "GPS fixes"
 msgstr ""
 
 #. frmFilter..gbTracks..cbTrackCourse..Hint
-#: filter.dfm:315
+#: filter.dfm:316
 msgid "Synthesize course values"
 msgstr "Generiere Kurs-Werte"
 
 #. frmFilter..gbTracks..cbTrackCourse..Caption
-#: filter.dfm:316
+#: filter.dfm:317
 msgid "Course"
 msgstr "Kurs"
 
 #. frmFilter..gbTracks..cbTrackSpeed..Hint
-#: filter.dfm:324
+#: filter.dfm:325
 msgid "Synthesize speed values"
 msgstr "Generiere Geschwindigkeitswerte"
 
 #. frmFilter..gbTracks..cbTrackSpeed..Caption
-#: filter.dfm:325
+#: filter.dfm:326
 msgid "Speed"
 msgstr "Geschwindigkeit"
 
+#. frmFilter..gbTracks..cobGPSfixes....Items.Strings
+#: filter.dfm:338
+msgid "none"
+msgstr ""
+
+#. frmFilter..gbTracks..cobGPSfixes....Items.Strings
+#: filter.dfm:339
+msgid "pps"
+msgstr ""
+
+#. frmFilter..gbTracks..cobGPSfixes....Items.Strings
+#: filter.dfm:340
+msgid "dgps"
+msgstr ""
+
 #. frmFilter..gbRoutes..Caption
-#: filter.dfm:335
+#: filter.dfm:352
 msgid "&Routes && Tracks"
 msgstr "&Routen && Tracks"
 
 #. frmFilter..gbRoutes..lbRouteSimplifyCount..Caption
-#: filter.dfm:343
+#: filter.dfm:360
 msgid "limit to"
 msgstr "auf maximal"
 
 #. frmFilter..gbRoutes..lbRouteSimplifyText..Caption
-#: filter.dfm:351
+#: filter.dfm:368
 msgid "Points"
 msgstr "Punkte"
 
 #. frmFilter..gbRoutes..cbRouteSimplify..Hint
-#: filter.dfm:358
+#: filter.dfm:375
 msgid "Simplify routes and tracks by limited number of points"
 msgstr "Limitiert die Anzahl von Wegpunkten in Routen und Tracks"
 
 #. frmFilter..gbRoutes..cbRouteSimplify..Caption
-#: filter.dfm:359
+#: filter.dfm:376
 msgid "Simplify"
 msgstr "Vereinfachen"
 
 #. frmFilter..gbRoutes..edRoutesSimplifyMaxPoints..Hint
-#: filter.dfm:368
+#: filter.dfm:385
 msgid "Upper limit of points for routes and tracks"
 msgstr "Maximale Anzahl an Punkten innerhalb von Routen und Tracks"
 
 #. frmFilter..gbRoutes..cbReverse..Hint
-#: filter.dfm:390
+#: filter.dfm:407
 msgid "Reverse routes and tracks"
 msgstr "Reihenfolge von Wegpunkten in Routen und Tracks umdrehen"
 
 #. frmFilter..gbRoutes..cbReverse..Caption
-#: filter.dfm:391
+#: filter.dfm:408
 msgid "Reverse"
 msgstr "Umdrehen"
 
 #. frmFilter..pnBottom..btnOK..Caption
-#: filter.dfm:408
+#: filter.dfm:425
 msgid "OK"
 msgstr "OK"
 
 #. frmFilter..pnBottom..BitBtn1..Caption
-#: filter.dfm:444
+#: filter.dfm:461
 msgid "File based filters"
 msgstr "Datei basierende Filter"
 
 #. frmFilter..gbWaypoints..Caption
 #. frmMain..pnBottom..cbWaypoints..Caption
-#: filter.dfm:473
+#: filter.dfm:490
 #: main.dfm:555
 msgid "&Waypoints"
 msgstr "&Wegpunkte"
 
 #. frmFilter..gbWaypoints..lbWayptRadiusLat..Caption
-#: filter.dfm:482
+#: filter.dfm:499
 msgid "Latitude"
 msgstr "Breitengrad"
 
 #. frmFilter..gbWaypoints..lbWayptRadiusLon..Caption
-#: filter.dfm:490
+#: filter.dfm:507
 msgid "Longitude"
 msgstr "Längengrad"
 
 #. frmFilter..gbWaypoints..cbWayptMergeDupLoc..Hint
-#: filter.dfm:498
+#: filter.dfm:515
 msgid "Merge waypoints with duplicate locations"
 msgstr "Fasse Wegpunkte mit gleichen Koordinaten zusammen"
 
 #. frmFilter..gbWaypoints..cbWayptMergeDupLoc..Caption
-#: filter.dfm:499
+#: filter.dfm:516
 msgid "locations"
 msgstr "Koordinaten"
 
 #. frmFilter..gbWaypoints..cbWayptMergeDupNames..Hint
-#: filter.dfm:508
+#: filter.dfm:525
 msgid "Merge waypoints with duplicate \"short name\""
 msgstr "Fasse Wegpunkte mit gleichem Namen zusammen"
 
 #. frmFilter..gbWaypoints..cbWayptMergeDupNames..Caption
-#: filter.dfm:509
+#: filter.dfm:526
 msgid "\"short names\""
 msgstr "\"Kurznamen\""
 
 #. frmFilter..gbWaypoints..cbWayptMergeDistance..Hint
-#: filter.dfm:518
+#: filter.dfm:535
 msgid "Merge waypoints separated by less then"
 msgstr "Fasse alle Wegpunkte zusammen, die weniger als ... auseinander liegen"
 
 #. frmFilter..gbWaypoints..cbWayptMergeDistance..Caption
-#: filter.dfm:519
+#: filter.dfm:536
 msgid "Position"
 msgstr "Position"
 
 #. frmFilter..gbWaypoints..cbWayptSort..Hint
-#: filter.dfm:547
+#: filter.dfm:564
 msgid "Sort waypoints by \"short name\" or by description"
 msgstr "Sortiere Wegpunkte nach Name oder Beschreibung"
 
 #. frmFilter..gbWaypoints..cbWayptSort..Caption
-#: filter.dfm:548
+#: filter.dfm:565
 msgid "Sort"
 msgstr "Sortieren"
 
 #. frmFilter..gbWaypoints..cbWayptMergeDups..Hint
-#: filter.dfm:556
+#: filter.dfm:573
 msgid "Merge duplicate waypoints"
 msgstr "Entferne doppelte Wegpunkte"
 
 #. frmFilter..gbWaypoints..cbWayptMergeDups..Caption
-#: filter.dfm:557
+#: filter.dfm:574
 msgid "Duplicates"
 msgstr "Duplikate"
 
 #. frmFilter..gbWaypoints..cbWayptRadius..Hint
-#: filter.dfm:566
+#: filter.dfm:583
 msgid "Include points based on their proximity to central point"
 msgstr "Übernehme nur Punkte mit Entfernung von maximal ... um Mittelpunkt ..."
 
 #. frmFilter..gbWaypoints..cbWayptRadius..Caption
-#: filter.dfm:567
+#: filter.dfm:584
 msgid "Radius"
 msgstr "Radius"
 
 #. frmFilter..gbWaypoints..edWayptRadiusLat..Hint
-#: filter.dfm:595
+#: filter.dfm:612
 msgid "Latitude of central point"
 msgstr "Breitengrad (Latitude) des Mittelpunktes"
 
 #. frmFilter..gbWaypoints..edWayptRadiusLon..Hint
-#: filter.dfm:605
+#: filter.dfm:622
 msgid "Longitude of central point"
 msgstr "Längengrad (Longitude) des Mittelpunktes"
 
 #. frmFilter..gbTransform..Caption
-#: filter.dfm:617
+#: filter.dfm:634
 msgid "Transformation"
 msgstr "Transformation"
 
 #. frmFilter..gbTransform..cbTransform..Caption
-#: filter.dfm:634
+#: filter.dfm:651
 msgid "Transform"
 msgstr "Transformiere"
 
 #. frmFilter..gbTransform..cbTransformDelete..Hint
-#: filter.dfm:643
+#: filter.dfm:660
 msgid "Delete source data after transformation"
 msgstr "Lösche anschließend die internen Quelldaten"
 
 #. frmFilter..gbTransform..cbTransformDelete..Caption
-#: filter.dfm:644
+#: filter.dfm:661
 msgid "Delete"
 msgstr "Lösche"
 
@@ -369,8 +385,8 @@ msgstr "Lösche"
 #: main.dfm:38
 #: main.pas:270
 #: main.pas:275
-#: main.pas:471
-#: main.pas:872
+#: main.pas:467
+#: main.pas:868
 msgid "Input"
 msgstr "Eingabe"
 
@@ -413,8 +429,8 @@ msgstr "Format"
 #: main.dfm:1443
 #: main.dfm:1455
 #: main.dfm:1460
-#: main.pas:869
-#: main.pas:923
+#: main.pas:865
+#: main.pas:919
 msgid "File"
 msgstr "Datei"
 
@@ -471,8 +487,8 @@ msgstr "zu benutzendes Eingabeformat"
 #: main.dfm:222
 #: main.pas:271
 #: main.pas:276
-#: main.pas:480
-#: main.pas:926
+#: main.pas:476
+#: main.pas:922
 msgid "Output"
 msgstr "Ausgabe"
 
@@ -713,7 +729,12 @@ msgstr "Französisch"
 msgid "Spanish"
 msgstr "Spanisch"
 
-#: about.pas:131
+#: about.pas:90
+#: select.pas:85
+msgid "Hungarian"
+msgstr "Ungarisch"
+
+#: about.pas:132
 msgid ""
 "Please have a look at the file README.GUI.\n"
 "\n"
@@ -725,52 +746,52 @@ msgstr ""
 "Dort finden Sie alle nötigen Informationen, um\n"
 "GPSBabelGUI eine neue Sprache beizubringen."
 
-#: filter.pas:178
-#: filter.pas:179
-#: filter.pas:182
-#: filter.pas:183
+#: filter.pas:180
+#: filter.pas:181
+#: filter.pas:184
+#: filter.pas:185
 msgid "Waypoints"
 msgstr "Wegpunkte"
 
-#: filter.pas:178
-#: filter.pas:179
-#: filter.pas:180
-#: filter.pas:181
-msgid "Routes"
-msgstr "Routen"
-
 #: filter.pas:180
 #: filter.pas:181
 #: filter.pas:182
 #: filter.pas:183
+msgid "Routes"
+msgstr "Routen"
+
+#: filter.pas:182
+#: filter.pas:183
+#: filter.pas:184
+#: filter.pas:185
 msgid "Tracks"
 msgstr "Tracks"
 
-#: filter.pas:222
+#: filter.pas:224
 msgid "Feet"
 msgstr "\"Feet\" (engl.)"
 
-#: filter.pas:223
+#: filter.pas:225
 msgid "Meter"
 msgstr "Meter"
 
-#: filter.pas:226
+#: filter.pas:228
 msgid "Miles"
 msgstr "Meilen"
 
-#: filter.pas:227
+#: filter.pas:229
 msgid "Kilometer"
 msgstr "Kilometer"
 
-#: filter.pas:237
+#: filter.pas:239
 msgid "Not supported by gpsbabel.exe, release %s!"
 msgstr "Wird von gpsbabel.exe, Version %s, nicht unterstützt!"
 
-#: filter.pas:285
+#: filter.pas:288
 msgid "Value (%s) out of range (%g to %g)!"
 msgstr "Wert (%s) liegt außerhalb des zulässigen Bereiches  (%g to %g)!"
 
-#: filter.pas:590
+#: filter.pas:593
 #: options.pas:661
 msgid "Discard changes?"
 msgstr "Änderungen verwerfen?"
@@ -791,71 +812,71 @@ msgstr "Private Version"
 msgid "Special release"
 msgstr "Spezial-Version"
 
-#: main.pas:346
+#: main.pas:342
 msgid "The file \"gpsbabel.exe\" found in current directory is too old!"
 msgstr "Die Datei \"gpsbabel.exe\" ist zu alt für diese GUI!"
 
-#: main.pas:420
-#: main.pas:554
+#: main.pas:416
+#: main.pas:550
 msgid "All files|*.*"
 msgstr "Alle Dateien|*.*"
 
-#: main.pas:488
+#: main.pas:484
 msgid "Select and edit options for \"%s\""
 msgstr "Optionen von \"%s\" bearbeiten"
 
-#: main.pas:492
+#: main.pas:488
 msgid "No options available for \"%s\""
 msgstr " \"%s\" hat keine Optionen!"
 
 #. s := s + '-1';
-#: main.pas:607
+#: main.pas:603
 msgid "File %s not found."
 msgstr "Datei \"%s\" nicht gefunden."
 
-#: main.pas:668
+#: main.pas:664
 msgid "File \"%s\" exists ! Overwrite ?"
 msgstr "Datei \"%s\" existiert bereits! Überschreiben?"
 
-#: main.pas:669
+#: main.pas:665
 msgid "Warning"
 msgstr "Warnung"
 
-#: main.pas:702
+#: main.pas:698
 msgid "Could not run \"gpsbabel.exe\"!"
 msgstr "Konnte \"gpsbabel.exe\" nicht ausführen!"
 
-#: main.pas:711
+#: main.pas:707
 msgid "Sorry, gpsbabel.exe reported problems!"
 msgstr "Uhps, da ging etwas schief!"
 
-#: main.pas:713
+#: main.pas:709
 msgid "Converted successfully from \"%s\" to \"%s\"."
 msgstr "Erfolgreich konvertiert von \"%s\" zu \"%s\"."
 
-#: main.pas:824
+#: main.pas:820
 msgid "GPSBabel, version %s"
 msgstr "GPSBabel, Version %s"
 
-#: main.pas:858
-#: main.pas:913
+#: main.pas:854
+#: main.pas:909
 msgid "Port"
 msgstr "Schnittstelle"
 
-#: main.pas:1017
+#: main.pas:1013
 msgid "Options for \"%s\""
 msgstr "Optionen für \"%s\""
 
-#: main.pas:1207
-#: main.pas:1277
+#: main.pas:1203
+#: main.pas:1273
 msgid "Choose language"
 msgstr "Wähle Sprache"
 
-#: main.pas:1207
+#: main.pas:1203
 msgid "for GUIBabelGUI"
 msgstr "für GPSBabelGUI"
 
-#: main.pas:1277
+#: main.pas:1273
 msgid "for export"
 msgstr "für Export"
 

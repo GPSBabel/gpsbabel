@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GPSBabel command line program\n"
 "POT-Creation-Date: 2005-11-19 01:14\n"
-"PO-Revision-Date: 2006-10-30 18:29+0100\n"
-"Last-Translator: Olaf Klein <o.b.klein@gpsbabel.org>\n"
+"PO-Revision-Date: 2007-05-01 20:18+0100\n"
+"Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -35,6 +35,9 @@ msgstr "Absolute Höhenangaben (nicht bodenverbunden)"
 
 msgid "Append icon_descr to description"
 msgstr "Erweitere Beschreibung um Symbolbeschreibung"
+
+msgid "Append realtime positioning data to the output file instead of truncating"
+msgstr ""
 
 msgid "Base URL for link tag in output"
 msgstr "Basis-URL für Verknüpfungseintrag "
@@ -80,6 +83,9 @@ msgstr "Standard Kategorie (1..16)"
 
 msgid "Default icon name"
 msgstr "Standard Symbol"
+
+msgid "Default location"
+msgstr ""
 
 msgid "Default speed for waypoints (knots/hr)"
 msgstr "Vorgabegeschwindigkeit (Knoten/h)"
@@ -143,6 +149,9 @@ msgstr "Erweiterte Daten in Trackpoints mit einbeziehen (Vorgabe = 1)"
 
 msgid "Include groundspeak logs if present"
 msgstr "Groundspeak Log's beifügen (wenn vorhandan)"
+
+msgid "Include major turn points (with description) from calculated route"
+msgstr ""
 
 msgid "Include only via stations in route"
 msgstr "Übernehme nur Stationspunkte ('viastations') der Route"
@@ -366,8 +375,8 @@ msgstr "Benutze Proximity-Werte bei der Ausgabe (Vorgabe: NEIN)"
 msgid "Use shortname instead of description"
 msgstr "Benutze den Kurznamen anstelle der Beschreibung"
 
-msgid "Version of gdb file to generate (1,2)"
-msgstr "GDB-Version (1 oder 2)"
+msgid "Version of gdb file to generate (1..3)"
+msgstr "Schreibe GDB-Version 1, 2 oder 3"
 
 msgid "Version of mapsource file to generate (3,4,5)"
 msgstr "Schreibe MapSource Datei in Version ... (3,4 oder 5)"
@@ -386,6 +395,9 @@ msgstr "Kartenbreite in Pixel"
 
 msgid "Width of lines, in pixels"
 msgstr "Linienhöhe in Pixel"
+
+msgid "Write position using this grid."
+msgstr ""
 
 msgid "Write timestamps with offset x to UTC time"
 msgstr "Schreibe Zeitstempel relativ zur UTC + x"
