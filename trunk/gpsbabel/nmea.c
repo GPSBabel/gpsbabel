@@ -26,6 +26,7 @@
 #include "defs.h"
 #include "gbser.h"
 #include "strptime.h"
+#include "jeeps/gpsmath.h"
 
 /**********************************************************
 
@@ -182,6 +183,7 @@ static int append_output;
 
 static time_t last_time;
 static double last_read_time;   /* Last timestamp of GGA or PRMC */
+static int datum;
 
 static waypoint * nmea_rd_posn(posn_status *);
 static void nmea_rd_posn_init(const char *fname);
@@ -219,11 +221,27 @@ nmea_cksum(const char *const buf)
 }
 
 static void
+nmea_add_wpt(waypoint *wpt, route_head *trk)
+{
+	if (datum != DATUM_WGS84) {
+		double lat, lon, alt;
+		GPS_Math_Known_Datum_To_WGS84_M(
+			wpt->latitude, wpt->longitude, 0,
+			&lat, &lon, &alt, datum);
+		wpt->latitude = lat;
+		wpt->longitude = lon;
+	}
+	if (trk != NULL) track_add_wpt(trk, wpt);
+	else waypt_add(wpt);
+}
+
+static void
 nmea_rd_init(const char *fname)
 {
 	curr_waypt = NULL;
 	last_waypt = NULL;
 	last_time = -1;
+	datum = DATUM_WGS84;
 
 	CHECK_BOOL(opt_gprmc);
 	CHECK_BOOL(opt_gpgga);
@@ -251,7 +269,7 @@ nmea_rd_init(const char *fname)
  			xfree(wpt->shortname);
  		}
  		wpt->shortname = xstrdup("Position");
- 		waypt_add(wpt);
+ 		nmea_add_wpt(wpt, NULL);
  		return;
  	}
 
@@ -552,8 +570,7 @@ gpwpl_parse(char *ibuf)
 	waypt->shortname = xstrdup(sname);
 
 	curr_waypt = NULL; /* waypoints won't be updated with GPS fixes */
-	waypt_add(waypt);
-
+	nmea_add_wpt(waypt, NULL);
 }
 
 static void
@@ -733,7 +750,7 @@ pcmpt_parse(char *ibuf)
 		track_add_head(trk_head);
 		QUEUE_FOR_EACH(&pcmpt_head, elem, tmp) {
 			waypoint *wpt = (waypoint *) dequeue(elem);
-			track_add_wpt(trk_head, wpt);
+			nmea_add_wpt(wpt, trk_head);
 		}
 	}
 }
@@ -895,6 +912,7 @@ nmea_read(void)
 	char *ibuf;
 	char *ck;
 	double lt = -1;
+	int line = -1;
 
 	posn_type = gp_unknown;
 	trk_head = NULL;
@@ -921,10 +939,30 @@ nmea_read(void)
 	curr_waypt = NULL; 
 
 	while ((ibuf = gbfgetstr(file_in))) {
+		char *sdatum, *cx;
+		
+		line++;
+		
+		if ((line == 0) && (case_ignore_strncmp(ibuf, "@SonyGPS/ver", 12) == 0)) {
+			/* special hack for Sony GPS-CS1 files:
+			   they are fully (?) nmea compatible, but come with a header line like
+			   "@Sonygps/ver1.0/wgs-84". */
+			   
+			/* Check the GPS datum */
+			cx = strchr(&ibuf[12], '/');
+			if (cx != NULL) {
+				sdatum = cx + 1;
+				datum = GPS_Lookup_Datum_Index(sdatum);
+				if (datum < 0)
+					fatal(MYNAME "/SonyGPS: Unsupported datum \"%s\" in source data!\n", sdatum);
+			}
+			continue;
+		}
+
 		nmea_parse_one_line(ibuf);
 		if (lt != last_read_time && curr_waypt && trk_head) {
 			if (curr_waypt != last_waypt) {
-				track_add_wpt(trk_head, curr_waypt);
+				nmea_add_wpt(curr_waypt, trk_head);
 				last_waypt = curr_waypt;
 			}
 			lt = last_read_time;	
