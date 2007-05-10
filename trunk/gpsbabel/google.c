@@ -423,6 +423,11 @@ google_read(void)
 		      while ( (end = strstr( end, " nowrap "))) {
 			memcpy( end+1, "      ", 6 );
 		      }
+		     
+		      end = panel;
+		      while ( (end = strstr( end, "&nbsp;"))) {
+			memcpy( end, "&#160;", 6);
+		      }
 		      
 		      xml_deinit();
 		      xml_init( NULL, google_map, NULL );
