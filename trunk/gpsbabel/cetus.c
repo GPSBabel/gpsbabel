@@ -452,8 +452,7 @@ cetus_writewpt(const waypoint *wpt)
 		rec->mon = 0xff;
 		be_write16(&rec->year, 0xff);
 	}
-
-	be_write32(&rec->longitude, (unsigned int) (wpt->longitude * 10000000.0));
+	be_write32(&rec->longitude, (unsigned int) (int) (wpt->longitude * 10000000.0));
 	be_write32(&rec->latitude, (unsigned int) (wpt->latitude * 10000000.0));
 	if ( wpt->altitude == unknown_alt ) {
 		be_write32(&rec->elevation, -100000000);
