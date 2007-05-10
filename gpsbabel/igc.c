@@ -91,11 +91,15 @@ static igc_rec_type_t get_record(char **rec)
 {
     size_t len;
     char *c;
-
+retry:
     *rec = c = gbfgetstr(file_in);
     if (c == NULL) return rec_none;
 
     len = strlen(c);
+
+    /* Trackwiev writes (bogus) blank links between each record */
+    if (len == 0) goto retry;
+
     if (len < 3 || c[0] < 'A' || c[0] > 'Z') {
 	warning(MYNAME " bad input record: '%s'\n", c);
 	return rec_bad;
