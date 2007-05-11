@@ -406,31 +406,37 @@ google_read(void)
 		    }
 		    if ( end ) {
 	              strcpy(end,"/table></div>");
-		      end = panel;
-		      while ( (end = strstr( end, "\\\"" ))) {
-		        memmove( end, end+1, strlen(end)+1 );
-		      }
-		      end = panel;
-		      while ( (end = strstr( end, "\\042"))) {
-			memmove( end, end+3, strlen(end+3)+1 );
-			*end = '\"';
-		      }
-		      end = panel;
-		      while ( (end = strstr( end, "\\'" ))) {
-			memmove( end, end+1, strlen(end)+1 );
-		      }
-		      end = panel;
-		      while ( (end = strstr( end, " nowrap "))) {
-			memcpy( end+1, "      ", 6 );
-		      }
-		     
-		      end = panel;
-		      while ( (end = strstr( end, "&nbsp;"))) {
-			memcpy( end, "&#160;", 6);
-		      }
 		      
+		      char *to = panel;
+		      char *from = panel;
+		      while ( *from ) {
+			if ( !strncmp( from, "\\\"", 2 )) {
+			  *to++ = '"';
+			  from += 2;
+			}
+			else if ( !strncmp( from, "\\042", 4)) {
+			  *to++ = '"';
+			  from += 4;
+			}
+			else if ( !strncmp( from, "\\'", 2)) {
+			  *to++ = '\'';
+			  from += 2;
+			}
+			else if ( !strncmp( from, " nowrap ", 8)) {
+			  *to++ = ' ';
+			  from += 8;
+			}
+			else {
+			  *to++ = *from++;
+			}			  
+		      }
+		      *to = '\0';
+
 		      xml_deinit();
 		      xml_init( NULL, google_map, NULL );
+		      xml_readprefixstring( "<!DOCTYPE foo [" );
+		      xml_readprefixstring( xhtml_entities ); 
+		      xml_readprefixstring( "]>" );
 		      xml_readstring( panel );
 		    }
 		  }
