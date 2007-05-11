@@ -288,6 +288,16 @@ void xml_readstring( char *str )
 	XML_ParserFree(psr);
 }
 
+void xml_readprefixstring( char *str ) 
+{
+	int len = strlen(str);
+	if (!XML_Parse(psr, str, len, 0)) {
+		fatal( MYNAME ":Parse error at %d: %s\n",
+				(int) XML_GetCurrentLineNumber(psr),
+				XML_ErrorString(XML_GetErrorCode(psr)));
+	}
+}
+
 void xml_ignore_tags(const char **taglist)
 {
 	xg_ignore_taglist = taglist;

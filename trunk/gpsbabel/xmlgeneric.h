@@ -35,6 +35,7 @@ typedef struct xg_tag_mapping {
 	const char *tag_name;
 } xg_tag_mapping;
 
+extern char *xhtml_entities;
 
 void write_xml_entity(gbfile *ofd, const char *indent,
 		const char *tag, const char *value);
@@ -58,4 +59,5 @@ void xml_ignore_tags(const char **taglist);
 void xml_init(const char *fname, xg_tag_mapping *tbl,const char *encoding);
 void xml_read(void);
 void xml_readstring(char *str);
+void xml_readprefixstring(char *str);
 void xml_deinit(void);
