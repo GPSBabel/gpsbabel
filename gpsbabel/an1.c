@@ -33,6 +33,7 @@ static FILE *outfile;
 static char *output_type = NULL;
 static char *road_changes = NULL;
 static char *nogc = NULL;
+static char *nourl = NULL;
 static char *opt_symbol = NULL;
 static char *opt_color = NULL;
 static char *opt_zoom  = NULL;
@@ -63,6 +64,8 @@ arglist_t an1_args[] = {
 	{"road", &road_changes, "Road type changes",
 		"", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"nogc", &nogc, "Do not add geocache data to description",
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"nourl", &nourl, "Do not add URLs to description",
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"deficon", &opt_symbol, "Symbol to use for point data",
 		"Red Flag", ARGTYPE_STRING, ARG_NOMINMAX },
@@ -797,7 +800,7 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 		xfree( extra );
 	}
 	
-	if ( wpt->url ) {
+	if ( !nourl && wpt->url ) {
 		int len = 7+strlen(wpt->url);
 		char *extra = (char *)xmalloc( len );
 		sprintf( extra, "{URL=%s}", wpt->url );
