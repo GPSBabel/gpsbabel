@@ -639,7 +639,7 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 	char *comment;
 	int alt = METERS_TO_FEET(wpt->altitude);
 
-	if (alt == unknown_alt) {
+	if (wpt->altitude == unknown_alt) {
 		alt = UNKNOWN_USR_ALTITUDE;
 	}
 
