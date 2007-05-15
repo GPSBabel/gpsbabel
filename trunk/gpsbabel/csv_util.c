@@ -1563,7 +1563,10 @@ xcsv_data_write(void)
     waypt_out_count = 0;
 
     time = gpsbabel_time;
-    tm = *localtime(&time);
+    if (time == 0)		/* testo script ? */
+    	tm = *gmtime(&time);
+    else
+    	tm = *localtime(&time);
     
     /* output prologue lines, if any. */
     QUEUE_FOR_EACH(&xcsv_file.prologue, elem, tmp) {
