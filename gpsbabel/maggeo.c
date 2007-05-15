@@ -174,7 +174,7 @@ maggeo_waypt_pr(const waypoint *waypointp)
 	}
 	placeddate = maggeo_fmtdate(waypointp->creation_time);
 	lfounddate = maggeo_fmtdate(waypointp->gc_data.last_found);
-	cname = mkshort(desc_handle, waypointp->notes ? waypointp->notes : waypointp->shortname);
+	cname = mkshort(desc_handle, waypointp->notes ? waypointp->notes : waypointp->description);
 	placer = waypointp->gc_data.placer;
 
 	/*
