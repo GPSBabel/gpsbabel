@@ -117,6 +117,7 @@ extern ff_vecs_t alantrl_vecs;
 extern ff_vecs_t vitovtt_vecs;
 extern ff_vecs_t ggv_log_vecs;
 extern ff_vecs_t g7towin_vecs;
+extern ff_vecs_t garmin_poi_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -653,6 +654,12 @@ vecs_t vec_list[] = {
 		"g7t"
 	},
 #endif
+        {
+                &garmin_poi_vecs,
+                "garmin_poi",
+                "Garmin Points of Interest (.gpi)",
+                "gpi"
+        },
 	{
 		NULL,
 		NULL,
