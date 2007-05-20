@@ -36,13 +36,13 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "jeeps/gpsmath.h"
-#include "garmin_poi.h"
+#include "garmin_gpi.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 
-#define MYNAME "garmin_poi"
+#define MYNAME "garmin_gpi"
 
 #define GPI_DBG 1
 #undef GPI_DBG
@@ -51,7 +51,7 @@
 
 static char *opt_cat, *opt_pos, *opt_notes, *opt_hide, *opt_descr;
 
-static arglist_t garmin_poi_args[] = {
+static arglist_t garmin_gpi_args[] = {
 	{"category", &opt_cat, "Default category on output", 
 		"My points", ARGTYPE_STRING, ARG_NOMINMAX},
 	{"hide", &opt_hide, "Don't show gpi bitmap on device", 
@@ -679,7 +679,7 @@ write_data(const char *group)
 *******************************************************************************/
 
 static void
-garmin_poi_rd_init(const char *fname)
+garmin_gpi_rd_init(const char *fname)
 {
 	char cp[8];
 	
@@ -697,7 +697,7 @@ garmin_poi_rd_init(const char *fname)
 
 
 static void
-garmin_poi_wr_init(const char *fname)
+garmin_gpi_wr_init(const char *fname)
 {
 	char cp[8];
 	cet_cs_vec_t *vec;
@@ -738,7 +738,7 @@ garmin_poi_wr_init(const char *fname)
 
 
 static void 
-garmin_poi_rd_deinit(void)
+garmin_gpi_rd_deinit(void)
 {
 	if (dt->category) xfree(dt->category);
 	if (dt->group) xfree(dt->group);
@@ -748,7 +748,7 @@ garmin_poi_rd_deinit(void)
 
 
 static void 
-garmin_poi_wr_deinit(void)
+garmin_gpi_wr_deinit(void)
 {
 	queue *elem, *tmp;
 	
@@ -762,20 +762,20 @@ garmin_poi_wr_deinit(void)
 
 
 static void
-garmin_poi_read(void)
+garmin_gpi_read(void)
 {
 	while (! gbfeof(fin)) {	/* main loop */
 		int tag;
 		
 		tag = gbfgetint32(fin);
 		if ((tag == 0xffff) || (tag == 0xff)) return;
-		if (! read_tag("garmin_poi_read", tag, NULL)) return;
+		if (! read_tag("garmin_gpi_read", tag, NULL)) return;
 	};
 }
 
 
 static void
-garmin_poi_write(void)
+garmin_gpi_write(void)
 {
 	if (strlen(opt_cat) == 0) fatal(MYNAME ": Can't write empty category!\n");
 	
@@ -788,21 +788,21 @@ garmin_poi_write(void)
 
 /**************************************************************************/
 
-ff_vecs_t garmin_poi_vecs = {
+ff_vecs_t garmin_gpi_vecs = {
 	ff_type_file,
 	{ 
 		ff_cap_read | ff_cap_write 	/* waypoints */, 
 	  	ff_cap_none 			/* tracks */, 
 	  	ff_cap_none 			/* routes */
 	},
-	garmin_poi_rd_init,	
-	garmin_poi_wr_init,
-	garmin_poi_rd_deinit,	
-	garmin_poi_wr_deinit,
-	garmin_poi_read,
-	garmin_poi_write,
+	garmin_gpi_rd_init,	
+	garmin_gpi_wr_init,
+	garmin_gpi_rd_deinit,	
+	garmin_gpi_wr_deinit,
+	garmin_gpi_read,
+	garmin_gpi_write,
 	NULL,
-	garmin_poi_args,
+	garmin_gpi_args,
 	CET_CHARSET_MS_ANSI, 0		/* WIN-CP1252 */
 };
 
