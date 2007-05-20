@@ -1234,8 +1234,8 @@ compare ${REFERENCE}/route/tomtom_itn.itn ${TMPDIR}/tomtom_itn.itn
 ${PNAME} -i garmin_gpi -f ${REFERENCE}/garmin_gpi.gpi -o gpx -F ${TMPDIR}/garmin_gpi.gpx
 compare ${REFERENCE}/garmin_gpi.gpx ${TMPDIR}/garmin_gpi.gpx
 ${PNAME} -i gpx -f ${REFERENCE}/garmin_gpi.gpx -o garmin_gpi -F ${TMPDIR}/garmin_gpi.gpi
-${PNAME} -i garmin_gpi -f ${TMPDIR}/garmin_gpi.gpi -o gpx -F ${TMPDIR}/garmin_poi2.gpx
-compare ${REFERENCE}/garmin_poi2.gpx ${TMPDIR}/garmin_poi2.gpx
+${PNAME} -i garmin_gpi -f ${TMPDIR}/garmin_gpi.gpi -o gpx -F ${TMPDIR}/garmin_gpi2.gpx
+compare ${REFERENCE}/garmin_gpi2.gpx ${TMPDIR}/garmin_gpi2.gpx
 
 
 exit 0
