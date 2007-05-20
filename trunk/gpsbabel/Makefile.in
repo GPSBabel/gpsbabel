@@ -413,7 +413,8 @@ garmin_fs.o: garmin_fs.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
   jeeps/gpsproj.h garmin_tables.h
-garmin_poi.o: garmin_poi.c defs.h config.h queue.h gbtypes.h jeeps/gpsmath.h
+garmin_poi.o: garmin_poi.c garmin_poi.h defs.h config.h queue.h gbtypes.h \
+  cet_util.h jeeps/gpsmath.h
 garmin_tables.o: garmin_tables.c garmin_tables.h defs.h config.h queue.h \
   gbtypes.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
   jeeps/gpsmath.h
