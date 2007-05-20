@@ -1228,5 +1228,14 @@ compare ${REFERENCE}/tomtom_poi.asc ${TMPDIR}/tomtom_poi.asc
 ${PNAME} -i tomtom_itn -f ${REFERENCE}/route/tomtom_itn.itn -o tomtom_itn -F ${TMPDIR}/tomtom_itn.itn
 compare ${REFERENCE}/route/tomtom_itn.itn ${TMPDIR}/tomtom_itn.itn
 
+#
+# Garmin Points of Interest "garmin_poi" (.gpi)
+#
+${PNAME} -i garmin_poi -f ${REFERENCE}/garmin_poi.gpi -o gpx -F ${TMPDIR}/garmin_poi.gpx
+compare ${REFERENCE}/garmin_poi.gpx ${TMPDIR}/garmin_poi.gpx
+${PNAME} -i gpx -f ${REFERENCE}/garmin_poi.gpx -o garmin_poi -F ${TMPDIR}/garmin_poi.gpi
+${PNAME} -i garmin_poi -f ${TMPDIR}/garmin_poi.gpi -o gpx -F ${TMPDIR}/garmin_poi2.gpx
+compare ${REFERENCE}/garmin_poi2.gpx ${TMPDIR}/garmin_poi2.gpx
+
 
 exit 0
