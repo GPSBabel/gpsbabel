@@ -25,7 +25,8 @@
 
 	* 2007/05/18: initial release (only a reader)
 	* 2007/05/20: added writer code with embedded bitmap
-
+	* 2007/05/22: add support for multiple bounding boxes
+	              (useful / required!) for large waypoints lists
 	ToDo:
 	
 	* Display mode ("Symbol & Name")
@@ -48,6 +49,7 @@
 #undef GPI_DBG
 
 #define DEFAULT_ICON	"Waypoint"
+#define WAYPOINTS_PER_BLOCK	128
 
 static char *opt_cat, *opt_pos, *opt_notes, *opt_hide, *opt_descr;
 
@@ -73,43 +75,30 @@ typedef struct {
 	char S8[3];
 	char *group;
 	char *category;
-} gpi_data_t;
+} reader_data_t;
+
+typedef struct writer_data_s {
+	queue Q;
+	int ct;
+	int sz;
+	bounds bds;
+	struct writer_data_s *top_left;
+	struct writer_data_s *top_right;
+	struct writer_data_s *buttom_left;
+	struct writer_data_s *buttom_right;
+} writer_data_t;
+	
 
 static gbfile *fin, *fout;
 static gbint32 codepage;	/* code-page, i.e. 1252 */
-static gpi_data_t *dt;
-static queue wptq;
-static int all_points_sz;
-static bounds bds;
+static reader_data_t *rdata;
+static writer_data_t *wdata;
 static short_handle short_h;
 
 #ifdef GPI_DBG
 # define PP printf("@%1$6x (%1$8d): ", gbftell(fin))
 #else
 # define PP
-#endif
-
-#ifdef GPI_DBG
-static void
-store_bitmap(const char *filename, int sz)
-{
-	gbfile *fout;
-	
-	fout = gbfopen_le(filename, "wb", MYNAME);
-	
-	while (! gbfeof(fin)) {
-		char buff[256];
-		int len;
-		
-		len = sizeof(buff);
-		if (len > sz) len = sz;
-		sz -= len;
-		len = gbfread(buff, 1, len, fin);
-		gbfwrite(buff, 1, len, fout);
-		if (sz <= 0) break;
-	}
-	gbfclose(fout);
-}
 #endif
 
 /*******************************************************************************
@@ -158,20 +147,20 @@ read_header(void)
 
 	i = gbfgetint32(fin);
 	if (i != 0) i = gbfgetint32(fin);
-	dt->D2 = gbfgetint32(fin);
+	rdata->D2 = gbfgetint32(fin);
 
-	gbfread(&dt->S3, 1, sizeof(dt->S3) - 1, fin);	/* GRMRECnn */
-	if (strncmp(dt->S3, "GRMREC", 6) != 0)
+	gbfread(&rdata->S3, 1, sizeof(rdata->S3) - 1, fin);	/* GRMRECnn */
+	if (strncmp(rdata->S3, "GRMREC", 6) != 0)
 		fatal(MYNAME ": No GPI file!\n");
 
 	PP;
-	dt->crdate = gbfgetint32(fin);
+	rdata->crdate = gbfgetint32(fin);
 #ifdef GPI_DBG
-	tm = *localtime(&dt->crdate);
+	tm = *localtime(&rdata->crdate);
 	tm.tm_year += 20;	/* !!! */
 	tm.tm_mday -= 1;	/* !!! */
 	strftime(stime, sizeof(stime), "%Y/%m/%d %H:%M:%S", &tm);
-	printf("crdate = %lu (%s)\n", dt->crdate, stime);
+	printf("crdate = %lu (%s)\n", rdata->crdate, stime);
 #endif	
 	
 	(void) gbfgetint16(fin);	/* 0 */
@@ -182,12 +171,12 @@ read_header(void)
 	(void) gbfgetint32(fin);	/* 1 */
 	(void) gbfgetint32(fin);	/* 12 */
 
-	gbfread(&dt->POI, 1, sizeof(dt->POI) - 1, fin);
-	if (strcmp(dt->POI, "POI") != 0)
+	gbfread(&rdata->POI, 1, sizeof(rdata->POI) - 1, fin);
+	if (strcmp(rdata->POI, "POI") != 0)
 		fatal(MYNAME ": Wrong or unsupported GPI file!\n");
 
 	for (i = 0; i < 3; i++) (void)gbfgetc(fin);
-	gbfread(&dt->S8, 1, sizeof(dt->S8) - 1, fin);
+	gbfread(&rdata->S8, 1, sizeof(rdata->S8) - 1, fin);
 
 	codepage = gbfgetint32(fin);
 
@@ -312,10 +301,10 @@ read_poi_group(const int sz, const int tag)
 
 	len = gbfgetint32(fin);	/* size of group string */
 	PP;
-	if (dt->group) xfree(dt->group);
-	dt->group = read_string(&len);
+	if (rdata->group) xfree(rdata->group);
+	rdata->group = read_string(&len);
 #ifdef GPI_DBG
-	printf("Group \"%s\"\n", dt->group);
+	printf("Group \"%s\"\n", rdata->group);
 #endif
 	while (gbftell(fin) < (pos + sz)) {
 		int subtag = gbfgetint32(fin);
@@ -333,7 +322,7 @@ read_poi_group(const int sz, const int tag)
 static int
 read_tag(const char *caller, const int tag, waypoint *wpt)
 {
-	int pos, sz, len;
+	int pos, sz, len, flag;
 	char *str;
 #ifdef GPI_DBG
 	int subtag;
@@ -355,19 +344,16 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 			break;
 			
 		case 0x5:	/* group bitmap (BMP: <= 24x24) */
-#ifdef GPI_DBG
-			// store_bitmap("gpi_bitmap", sz);
-#endif
 			break;
 
 		case 0x7:	/* category */
 			(void) gbfgetint32(fin);
 			(void) gbfgetint16(fin);
-			if (dt->category) xfree(dt->category);
+			if (rdata->category) xfree(rdata->category);
 			PP;
-			dt->category = read_string(NULL);
+			rdata->category = read_string(NULL);
 #ifdef GPI_DBG
-			printf("Category: \"%s\"\n", dt->category);
+			printf("Category: \"%s\"\n", rdata->category);
 #endif
 			break;
 			
@@ -381,19 +367,20 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 			break;
 			
 		case 0xe:	/* ? notes ? */
-			(void) gbfgetc(fin);
-			if (dt->D2 == 0x1D) {
+			flag = gbfgetc(fin);
+			if (flag == 0x01) {
 				len = gbfgetint32(fin);
 				PP;
 				str = read_string(NULL);
 			}
-			else {
+			else if (flag == 0x32) {
 				len = gbfgetint16(fin);
 				str = xmalloc(len + 1);
 				str[len] = '\0';
 				PP;
 				gbfread(str, 1, len, fin);
 			}
+			else break;
 #ifdef GPI_DBG
 			printf("Notes: \"%s\"\n", str);
 #endif
@@ -415,7 +402,6 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 			break;
 			
 		case 0x8000b:	/* address (street/city...) */
-			gbfseek(fin, sz, SEEK_CUR);
 			/* ToDo */
 			break;
 
@@ -455,11 +441,24 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 static void
 write_string(const char *str)
 {
-	int len = strlen(str);
+	int len;
 	
+	len = strlen(str);
+
+	gbfputint32(len + 4, fout);
 	gbfwrite("EN", 1, 2, fout);
 	gbfputint16(len, fout);
 	gbfwrite(str, 1, len, fout);
+}
+
+
+static int
+compare_wpt_cb(const queue *a, const queue *b)
+{
+	const waypoint *wa = (waypoint *) a;
+	const waypoint *wb = (waypoint *) b;
+	
+	return strcmp(wa->shortname, wb->shortname);
 }
 
 
@@ -472,6 +471,251 @@ compare_strings(const char *s1, const char *s2)
 		else return 1;
 	}
 	else return 1;
+}
+
+
+static writer_data_t *
+wdata_alloc()
+{
+	writer_data_t *res;
+
+	res = xcalloc(1, sizeof(*res));
+	QUEUE_INIT(&res->Q);
+	waypt_init_bounds(&res->bds);
+
+	return res;
+}
+
+
+static void
+wdata_free(writer_data_t *data)
+{
+	queue *elem, *tmp;
+	
+	QUEUE_FOR_EACH(&data->Q, elem, tmp) {
+		waypoint *wpt = (waypoint *)elem;
+		
+		if (wpt->extra_data) xfree(wpt->extra_data);
+		waypt_free(wpt);
+	}
+
+	if (data->top_left) wdata_free(data->top_left);
+	if (data->top_right) wdata_free(data->top_right);
+	if (data->buttom_left) wdata_free(data->buttom_left);
+	if (data->buttom_right) wdata_free(data->buttom_right);
+	
+	xfree(data);
+}
+
+
+static void
+wdata_add_wpt(writer_data_t *data, waypoint *wpt)
+{
+	data->ct++;
+	ENQUEUE_TAIL(&data->Q, &wpt->Q);
+	waypt_add_to_bounds(&data->bds, wpt);
+}
+
+
+static void
+wdata_check(writer_data_t *data)
+{
+	queue *elem, *tmp;
+	double center_lat, center_lon;
+
+	if (data->ct <= WAYPOINTS_PER_BLOCK) {
+		if (data->ct) sortqueue(&data->Q, compare_wpt_cb);
+		return;
+	}
+
+	/* compute the center of current bounds */
+	if (data->bds.max_lat == data->bds.min_lat) center_lat = data->bds.max_lat;
+	else center_lat = (data->bds.max_lat + data->bds.min_lat) / 2;
+
+	if (data->bds.max_lon == data->bds.min_lon) center_lon = data->bds.max_lon;
+	else center_lon = (data->bds.max_lon + data->bds.min_lon) / 2;
+	
+	QUEUE_FOR_EACH(&data->Q, elem, tmp) {
+		waypoint *wpt = (waypoint *) elem;
+		writer_data_t **ref;
+
+		if (wpt->latitude < center_lat) {
+			if (wpt->longitude < center_lon)
+				ref = &data->buttom_left;
+			else
+				ref = &data->buttom_right;
+		} else {
+			if (wpt->longitude < center_lon)
+				ref = &data->top_left;
+			else
+				ref = &data->top_right;
+		}
+
+		if (*ref == NULL) *ref = wdata_alloc();
+
+		data->ct--;
+		dequeue(&wpt->Q);
+		
+		wdata_add_wpt(*ref, wpt);
+	}
+	
+	if (data->top_left) wdata_check(data->top_left);
+	if (data->top_right) wdata_check(data->top_right);
+	if (data->buttom_left) wdata_check(data->buttom_left);
+	if (data->buttom_right) wdata_check(data->buttom_right);
+}
+
+
+static int
+wdata_compute_size(writer_data_t *data)
+{
+	queue *elem, *tmp;
+	int res;
+	
+	res = 23;	/* bounds, ... of tag 0x80008 */
+		
+	QUEUE_FOR_EACH(&data->Q, elem, tmp) {
+		waypoint *wpt = (waypoint *) elem;
+		char *str;
+		
+		res += 12;		/* tag/sz/sub-sz */
+		res += 19;		/* poi fixed size */
+		res += strlen(wpt->shortname);
+		res += 10;		/* tag(4) */
+		
+		str = NULL;
+		if (opt_descr) {
+			if (wpt->description && *wpt->description)
+				str = xstrdup(wpt->description);
+		}
+		else if (opt_notes) {
+			if (wpt->notes && *wpt->notes)
+				str = xstrdup(wpt->notes);
+		}
+		else if (opt_pos)
+			str = pretty_deg_format(wpt->latitude, wpt->longitude, 's', 0);
+			
+		if (str) {	/* this will be stored into street-address field */
+			res += 22 + strlen(str);
+			wpt->extra_data = str;
+		}
+		
+		str = wpt->description;
+		if (! str) str = wpt->notes;
+		if (str) res += (16 + strlen(str));
+	}
+
+	if (data->top_left) res += wdata_compute_size(data->top_left);
+	if (data->top_right) res += wdata_compute_size(data->top_right);
+	if (data->buttom_left) res += wdata_compute_size(data->buttom_left);
+	if (data->buttom_right) res += wdata_compute_size(data->buttom_right);
+
+	data->sz = res;
+
+	return res + 12;	/* 12 = caller needs info about tag header size */
+}
+
+
+static void
+wdata_write(const writer_data_t *data)
+{
+	queue *elem, *tmp;
+	
+	gbfputint32(0x80008, fout);
+	gbfputint32(data->sz, fout);
+	gbfputint32(23, fout);	/* bounds + three bytes */
+
+	gbfputint32(GPS_Math_Deg_To_Semi(data->bds.max_lat), fout);
+	gbfputint32(GPS_Math_Deg_To_Semi(data->bds.max_lon), fout);
+	gbfputint32(GPS_Math_Deg_To_Semi(data->bds.min_lat), fout);
+	gbfputint32(GPS_Math_Deg_To_Semi(data->bds.min_lon), fout);
+	
+	gbfputc(0, fout);		/* three unknown bytes */
+	gbfputc(0, fout);		/* ? should be zero ? */
+	gbfputc(0, fout);
+	
+	gbfputint32(0x1000100, fout);	/* ? const 0x1000100 ? */
+	
+	QUEUE_FOR_EACH(&data->Q, elem, tmp) {
+		char *str;
+		int s0, s1;
+		waypoint *wpt = (waypoint *)elem;
+		
+		str = wpt->description;
+		if (! str) str = wpt->notes;
+
+		gbfputint32(0x80002, fout);		
+		
+		s0 = s1 = 19 + strlen(wpt->shortname);
+		s0 += 10;				/* tag(4) */
+		if (str) s0 += (16 + strlen(str));	/* descr */
+
+		if (wpt->extra_data)
+			s0 += 22 + strlen((char *)wpt->extra_data);
+
+		gbfputint32(s0, fout);	/* size of following data (tag) */
+		gbfputint32(s1, fout);	/* basic size (without options) */
+		
+		gbfputint32(GPS_Math_Deg_To_Semi(wpt->latitude), fout);
+		gbfputint32(GPS_Math_Deg_To_Semi(wpt->longitude), fout);
+	
+		gbfputint16(1, fout);	/* ? always 1 ? */
+		gbfputc(0, fout);	/* seems to be 1 when extra options present */
+		
+		write_string(wpt->shortname);
+		
+		gbfputint32(4, fout);	/* tag(4) */
+		gbfputint32(2, fout);
+		if (opt_hide) gbfputint16(0x3ff, fout);	/* values != 0 hides the bitmap */
+		else gbfputint16(0, fout);
+		
+		if (str) {
+			gbfputint32(0xa, fout);
+			gbfputint32(strlen(str) + 8, fout);	/* string + string header */
+			write_string(str);
+		}
+		
+		str = (char *)wpt->extra_data;
+		if (str) {
+			gbfputint32(0x8000b, fout);
+			gbfputint32(strlen(str) + 10, fout);
+			gbfputint32(0x2, fout);		/* ? always 2 ? */
+			gbfputint16(0x10, fout);	/* 0x10 = StreetAddress */
+			write_string(str);
+		}
+	}
+	
+	if (data->top_left) wdata_write(data->top_left);
+	if (data->top_right) wdata_write(data->top_right);
+	if (data->buttom_left) wdata_write(data->buttom_left);
+	if (data->buttom_right) wdata_write(data->buttom_right);
+}
+
+
+static void
+write_category(const char *category)
+{
+	int sz;
+	
+	sz = wdata_compute_size(wdata);
+	sz += 8;	/* string header */
+	sz += strlen(opt_cat);
+	
+	gbfputint32(0x80009, fout);
+	if ((! opt_hide) && BMP_SIZE)
+		gbfputint32(sz + BMP_SIZE + 8, fout);
+	else
+		gbfputint32(sz, fout);
+	gbfputint32(sz, fout);
+	
+	write_string(opt_cat);
+	
+	wdata_write(wdata);
+	if ((! opt_hide) && BMP_SIZE) {
+		gbfputint32(5, fout);	/* simple bitmap / GPSBabel logo */
+		gbfputint32(BMP_SIZE, fout);
+		gbfwrite(gpi_bitmap, 1, BMP_SIZE, fout);
+	}
 }
 
 
@@ -503,6 +747,7 @@ write_header(void)
 	gbfputint32(codepage, fout);
 }
 
+
 static void
 enum_waypt_cb(const waypoint *ref)
 {
@@ -510,167 +755,24 @@ enum_waypt_cb(const waypoint *ref)
 	char *str;
 	queue *elem, *tmp;
 
-	QUEUE_FOR_EACH(&wptq, elem, tmp) {
+	QUEUE_FOR_EACH(&wdata->Q, elem, tmp) {
 		waypoint *cmp = (waypoint *) elem;
 		
+		/* sort out nearly equal waypoints */
 		if ((compare_strings(cmp->shortname, ref->shortname) == 0) &&
 		    (cmp->latitude == ref->latitude) &&
 		    (cmp->longitude == ref->longitude) &&
-		    (compare_strings(cmp->description, ref->description) == 0)) return;
+		    (compare_strings(cmp->description, ref->description) == 0) &&
+		    (compare_strings(cmp->notes, ref->notes) == 0)) return;
 	}
 	
 	wpt = waypt_dupe(ref);
 
-	ENQUEUE_TAIL(&wptq, &wpt->Q);
-
 	str = mkshort(short_h, wpt->shortname);
 	xfree(wpt->shortname);
 	wpt->shortname = str;
-	
-	all_points_sz += 12;		/* tag/sz/sub-sz */
-	all_points_sz += 19;		/* poi fixed size */
-	all_points_sz += strlen(wpt->shortname);
-	all_points_sz += 10;		/* tag(4) */
 
-	str = NULL;
-	if (opt_descr) {
-		if (wpt->description && *wpt->description)
-			str = xstrdup(wpt->description);
-	}
-	else if (opt_notes) {
-		if (wpt->notes && *wpt->notes)
-			str = xstrdup(wpt->notes);
-	}
-	else if (opt_pos)
-		str = pretty_deg_format(wpt->latitude, wpt->longitude, 's', 0);
-
-	if (str) {	/* this will be stored into street-address field */
-		all_points_sz += 22 + strlen(str);
-		wpt->extra_data = str;
-	}
-	
-	str = wpt->description;
-	if (! str) str = wpt->notes;
-	if (str) all_points_sz += (16 + strlen(str));
-		
-	waypt_add_to_bounds(&bds, wpt);
-}
-
-
-static int
-compare_wpt_cb(const queue *a, const queue *b)
-{
-	const waypoint *wa = (waypoint *) a;
-	const waypoint *wb = (waypoint *) b;
-	
-	return strcmp(wa->shortname, wb->shortname);
-}
-
-
-static void
-write_data(const char *group)
-{
-	queue *elem, *tmp;
-	int size;
-	
-	size = all_points_sz;
-	size += 8;
-	size += strlen(group);
-	
-	size += 12 + 23;
-	
-	/* --- group header --- */
-	
-	gbfputint32(0x80009, fout);
-	gbfputint32(size + BMP_SIZE + 8, fout);
-	gbfputint32(size, fout);
-	
-	gbfputint32(strlen(group) + 4, fout);
-	write_string(group);
-	
-	/* --- list header --- */
-	
-	gbfputint32(0x80008, fout);
-	gbfputint32(all_points_sz + 23, fout);
-	gbfputint32(23, fout);
-
-	gbfputint32(GPS_Math_Deg_To_Semi(bds.max_lat), fout);
-	gbfputint32(GPS_Math_Deg_To_Semi(bds.max_lon), fout);
-	gbfputint32(GPS_Math_Deg_To_Semi(bds.min_lat), fout);
-	gbfputint32(GPS_Math_Deg_To_Semi(bds.min_lon), fout);
-	
-	gbfputc(0, fout);		/* three unknown bytes */
-	gbfputc(0, fout);		/* ? should be zero ? */
-	gbfputc(0, fout);
-	
-	gbfputint32(0x1000100, fout);	/* ? const 0x1000100 ? */
-	
-	QUEUE_FOR_EACH(&wptq, elem, tmp) {
-		char *str;
-		int s0, s1;
-		waypoint *wpt = (waypoint *)elem;
-		
-		str = wpt->description;
-		if (! str) str = wpt->notes;
-
-		/* --- poi header --- */
-		gbfputint32(0x80002, fout);		
-		
-		s0 = s1 = 19 + strlen(wpt->shortname);
-		s0 += 10;				/* tag(4) */
-		if (str) s0 += (16 + strlen(str));	/* descr */
-
-		if (wpt->extra_data)
-			s0 += 22 + strlen((char *)wpt->extra_data);
-
-		gbfputint32(s0, fout);	/* size of following data (tag) */
-		gbfputint32(s1, fout);	/* basic size (without options) */
-		
-		gbfputint32(GPS_Math_Deg_To_Semi(wpt->latitude), fout);
-		gbfputint32(GPS_Math_Deg_To_Semi(wpt->longitude), fout);
-	
-		gbfputint16(1, fout);	/* ? always 1 ? */
-		gbfputc(1, fout);	/* seems to be 1 when extra options present */
-					/* because we always write tag(4) this should be okay */
-		
-		gbfputint32(strlen(wpt->shortname) + 4, fout);
-		write_string(wpt->shortname);
-		
-		gbfputint32(4, fout);	/* tag(4) */
-		gbfputint32(2, fout);
-		if (opt_hide) gbfputint16(1, fout);	/* values != 0 hides the bitmap */
-		else gbfputint16(0, fout);
-		
-		if (str) {
-			gbfputint32(0xa, fout);
-			gbfputint32(strlen(str) + 8, fout);
-			gbfputint32(strlen(str) + 4, fout);
-			write_string(str);
-		}
-		
-		str = (char *)wpt->extra_data;
-		if (str) {
-			gbfputint32(0x8000b, fout);
-			gbfputint32(strlen(str) + 10, fout);
-			gbfputint32(0x2, fout);
-			gbfputint16(0x10, fout);	/* 0x10 = StreetAddress */
-			gbfputint32(strlen(str) + 4, fout);
-			write_string(str);
-			xfree(str);
-		}
-	}
-	
-	if (BMP_SIZE) {
-		gbfputint32(5, fout);	/* simple bitmap / GPSBabel logo */
-		gbfputint32(BMP_SIZE, fout);
-		gbfwrite(gpi_bitmap, 1, BMP_SIZE, fout);
-	}
-
-	gbfputc(-1, fout);		/* end of group */
-	gbfputint32(0xff, fout);	/* final tag */
-
-	gbfputint16(0, fout);
-	gbfputc(0, fout);
+	wdata_add_wpt(wdata, wpt);
 }
 
 
@@ -684,7 +786,7 @@ garmin_gpi_rd_init(const char *fname)
 	char cp[8];
 	
 	fin = gbfopen_le(fname, "rb", MYNAME);
-	dt = xcalloc(1, sizeof(*dt));
+	rdata = xcalloc(1, sizeof(*rdata));
 
 	read_header();
 	
@@ -705,10 +807,6 @@ garmin_gpi_wr_init(const char *fname)
 	
 	fout = gbfopen_le(fname, "wb", MYNAME);
 	
-	QUEUE_INIT(&wptq);
-	all_points_sz = 0;
-	waypt_init_bounds(&bds);
-
 	short_h = mkshort_new_handle();
 	
 	setshort_length(short_h, 1024);
@@ -729,20 +827,22 @@ garmin_gpi_wr_init(const char *fname)
 			break;
 		}
 	}
-	
+
 	if (! codepage) {
 		warning(MYNAME ": Unsupported character set (%s)!\n", global_opts.charset_name);
 		fatal(MYNAME ": Valid values are CP1250 to CP1257.\n");
 	}
+
+	wdata = wdata_alloc();
 }
 
 
 static void 
 garmin_gpi_rd_deinit(void)
 {
-	if (dt->category) xfree(dt->category);
-	if (dt->group) xfree(dt->group);
-	xfree(dt);
+	if (rdata->category) xfree(rdata->category);
+	if (rdata->group) xfree(rdata->group);
+	xfree(rdata);
 	gbfclose(fin);
 }
 
@@ -750,13 +850,8 @@ garmin_gpi_rd_deinit(void)
 static void 
 garmin_gpi_wr_deinit(void)
 {
-	queue *elem, *tmp;
-	
+	wdata_free(wdata);
 	mkshort_del_handle(&short_h);
-	QUEUE_FOR_EACH(&wptq, elem, tmp) {
-		dequeue(elem);
-		waypt_free((waypoint *) elem);
-	}
 	gbfclose(fout);
 }
 
@@ -764,11 +859,9 @@ garmin_gpi_wr_deinit(void)
 static void
 garmin_gpi_read(void)
 {
-	while (! gbfeof(fin)) {	/* main loop */
-		int tag;
-		
-		tag = gbfgetint32(fin);
-		if ((tag == 0xffff) || (tag == 0xff)) return;
+	while (1) {
+		int tag = gbfgetint32(fin);
+		if (tag == 0xffff) return;
 		if (! read_tag("garmin_gpi_read", tag, NULL)) return;
 	};
 }
@@ -779,11 +872,12 @@ garmin_gpi_write(void)
 {
 	if (strlen(opt_cat) == 0) fatal(MYNAME ": Can't write empty category!\n");
 	
-	write_header();
 	waypt_disp_all(enum_waypt_cb);
-	sortqueue(&wptq, compare_wpt_cb);
-
-	write_data(opt_cat);
+	wdata_check(wdata);
+	write_header();
+	write_category(opt_cat);
+	gbfputint32(0xffff, fout);	/* final tag */
+	gbfputint32(0, fout);
 }
 
 /**************************************************************************/
