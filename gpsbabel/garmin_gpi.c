@@ -27,9 +27,11 @@
 	* 2007/05/20: added writer code with embedded bitmap
 	* 2007/05/22: add support for multiple bounding boxes
 	              (useful / required!) for large waypoints lists
+	* 2007/05/23: add optional user bitmap
+
 	ToDo:
 	
-	* Display mode ("Symbol & Name")
+	* Display mode ("Symbol & Name") ??? not in gpi ???
 	* decode speed/proximity
 	* support category from GMSD "Garmin Special Data"
 */
@@ -51,12 +53,14 @@
 #define DEFAULT_ICON	"Waypoint"
 #define WAYPOINTS_PER_BLOCK	128
 
-static char *opt_cat, *opt_pos, *opt_notes, *opt_hide, *opt_descr;
+static char *opt_cat, *opt_pos, *opt_notes, *opt_hide_bitmap, *opt_descr, *opt_bitmap;
 
 static arglist_t garmin_gpi_args[] = {
+	{"bitmap", &opt_bitmap, "Use specified bitmap on output", 
+		NULL, ARGTYPE_FILE, ARG_NOMINMAX},
 	{"category", &opt_cat, "Default category on output", 
 		"My points", ARGTYPE_STRING, ARG_NOMINMAX},
-	{"hide", &opt_hide, "Don't show gpi bitmap on device", 
+	{"hide", &opt_hide_bitmap, "Don't show gpi bitmap on device", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"descr", &opt_descr, "Write description to address field", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
@@ -88,6 +92,39 @@ typedef struct writer_data_s {
 	struct writer_data_s *buttom_right;
 } writer_data_t;
 	
+typedef struct {
+	gbint32 size;
+	gbint16 res1;
+	gbint16 res2;
+	gbint32 image_offset;
+	gbint32 header_size;
+	gbint32 width;
+	gbint32 height;
+	gbint16 planes;
+	gbint16 bpp;
+	gbint32 compression_type;
+	gbint32 image_data_size;
+	gbint32 resolution_h;
+	gbint32 resolution_v;
+	gbint32 used_colors;
+	gbint32 important_colors;
+} bmp_header_t;
+
+typedef struct {
+	gbint16 index;
+	gbint16 height;
+	gbint16 width;
+	gbint16 line_sz;
+	gbint16 bpp;
+	gbint16 fixed_0;
+	gbint32 image_size;
+	gbint32 fixed_2c;
+	gbint32 flag1;
+	gbint32 tr_color;
+	gbint32 flag2;
+	gbint32 size_2c;
+} gpi_bitmap_header_t;
+
 
 static gbfile *fin, *fout;
 static gbint32 codepage;	/* code-page, i.e. 1252 */
@@ -343,7 +380,7 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 		case 0x6:	/* size = 2  ? */
 			break;
 			
-		case 0x5:	/* group bitmap (BMP: <= 24x24) */
+		case 0x5:	/* group bitmap */
 			break;
 
 		case 0x7:	/* category */
@@ -366,7 +403,7 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 #endif
 			break;
 			
-		case 0xe:	/* ? notes ? */
+		case 0xe:	/* ? notes or description / or both ? */
 			flag = gbfgetc(fin);
 			if (flag == 0x01) {
 				len = gbfgetint32(fin);
@@ -666,7 +703,7 @@ wdata_write(const writer_data_t *data)
 		
 		gbfputint32(4, fout);	/* tag(4) */
 		gbfputint32(2, fout);
-		if (opt_hide) gbfputint16(0x3ff, fout);	/* values != 0 hides the bitmap */
+		if (opt_hide_bitmap) gbfputint16(0x3ff, fout);	/* values != 0 hides the bitmap */
 		else gbfputint16(0, fout);
 		
 		if (str) {
@@ -693,7 +730,7 @@ wdata_write(const writer_data_t *data)
 
 
 static void
-write_category(const char *category)
+write_category(const char *category, const char *image, const int image_sz)
 {
 	int sz;
 	
@@ -702,19 +739,19 @@ write_category(const char *category)
 	sz += strlen(opt_cat);
 	
 	gbfputint32(0x80009, fout);
-	if ((! opt_hide) && BMP_SIZE)
-		gbfputint32(sz + BMP_SIZE + 8, fout);
+	if ((! opt_hide_bitmap) && image_sz)
+		gbfputint32(sz + image_sz + 8, fout);
 	else
 		gbfputint32(sz, fout);
 	gbfputint32(sz, fout);
-	
 	write_string(opt_cat);
-	
+
 	wdata_write(wdata);
-	if ((! opt_hide) && BMP_SIZE) {
-		gbfputint32(5, fout);	/* simple bitmap / GPSBabel logo */
-		gbfputint32(BMP_SIZE, fout);
-		gbfwrite(gpi_bitmap, 1, BMP_SIZE, fout);
+
+	if ((! opt_hide_bitmap) && image_sz) {
+		gbfputint32(5, fout);
+		gbfputint32(image_sz, fout);
+		gbfwrite(image, 1, image_sz, fout);
 	}
 }
 
@@ -775,6 +812,133 @@ enum_waypt_cb(const waypoint *ref)
 	wdata_add_wpt(wdata, wpt);
 }
 
+
+static void
+load_bitmap_from_file(const char *fname, char **data, int *data_sz)
+{
+	gbfile *f;
+	int i, sz;
+	int dest_bpp;
+	int src_line_sz, dest_line_sz;
+	bmp_header_t src_h;
+	void *color_table = NULL;
+	gpi_bitmap_header_t *dest_h;
+	void *ptr;
+	
+	f = gbfopen_le(fname, "rb", MYNAME);
+	is_fatal(gbfgetint16(f) != 0x4d42, MYNAME ": No BMP image.");
+
+	/* read a standard bmp file header */
+	src_h.size = gbfgetint32(f);
+	src_h.res1 = gbfgetint16(f);
+	src_h.res2 = gbfgetint16(f);
+	src_h.image_offset = gbfgetint32(f);
+	src_h.header_size = gbfgetint32(f);
+	src_h.width = gbfgetint32(f);
+	src_h.height = gbfgetint32(f);
+	src_h.planes = gbfgetint16(f);
+	src_h.bpp = gbfgetint16(f);
+	src_h.compression_type = gbfgetint32(f);
+	src_h.image_data_size = gbfgetint32(f);
+	src_h.resolution_h = gbfgetint32(f);
+	src_h.resolution_v = gbfgetint32(f);
+	src_h.used_colors = gbfgetint32(f);
+	src_h.important_colors = gbfgetint32(f);
+
+#ifdef GPI_DBG
+	printf("data size:             0x%1$x (%1$d)\n", src_h.size);
+	printf("image data offset:     0x%1$x (%1$d)\n", src_h.image_offset);
+	printf("header size:           0x%1$x (%1$d)\n", src_h.header_size);
+	printf("image width:           0x%1$x (%1$d)\n", src_h.width);
+	printf("image height:          0x%1$x (%1$d)\n", src_h.height);
+	printf("number of planes:      0x%1$x (%1$d)\n", src_h.planes);
+	printf("bits per pixel:        0x%1$x (%1$d)\n", src_h.bpp);
+	printf("compression type:      0x%1$x (%1$d)\n", src_h.compression_type);
+	printf("image size:            0x%1$x (%1$d)\n", src_h.image_data_size);
+	printf("horizontal resolution: 0x%1$x (%1$d)\n", src_h.resolution_h);
+	printf("vertical resolution:   0x%1$x (%1$d)\n", src_h.resolution_v);
+	printf("number of colors:      0x%1$x (%1$d)\n", src_h.used_colors);
+	printf("important colors:      0x%1$x (%1$d)\n", src_h.important_colors);
+#endif
+	/* sort out unsupported files */
+	if (! ((src_h.width <= 24) && (src_h.height <= 24) &&
+	       (src_h.width > 0) && (src_h.height > 0)))
+		fatal(MYNAME ": Unsupported format (%dx%d)!\n", src_h.width, src_h.height);
+	if (! ((src_h.bpp == 8) || (src_h.bpp == 24) || (src_h.bpp == 32)))
+		fatal(MYNAME ": Unsupported color depth (%d)!\n", src_h.bpp);
+	if (! (src_h.compression_type == 0))
+		fatal(MYNAME ": Sorry, we don't support compressed bitmaps.\n");
+
+	if (src_h.used_colors > 0) {
+		color_table = xmalloc(4 * src_h.used_colors);
+		gbfread(color_table, 1, 4 * src_h.used_colors, f);
+	}
+	
+	/* calculate line-size for source and destination */
+	src_line_sz = (src_h.width * src_h.bpp) / 8;
+	src_line_sz = ((int)((src_line_sz + 3) / 4)) * 4;
+	
+	if (src_h.bpp == 24) dest_bpp = 32;
+	else dest_bpp = src_h.bpp;
+	
+	dest_line_sz = (src_h.width * dest_bpp) / 8;
+	dest_line_sz = ((int)((dest_line_sz + 3) / 4)) * 4;
+	
+	sz = sizeof(*dest_h) + (src_h.height * dest_line_sz);
+	if (src_h.used_colors) sz += src_h.used_colors * 4;
+
+	dest_h = ptr = xmalloc(sz);
+	*data = ptr;
+	*data_sz = sz;
+	
+	le_write16(&dest_h->index, 0);
+	le_write16(&dest_h->height, src_h.height);
+	le_write16(&dest_h->width, src_h.width);
+	le_write16(&dest_h->line_sz, dest_line_sz);
+	le_write16(&dest_h->bpp, dest_bpp);
+	le_write16(&dest_h->fixed_0, 0);		/* seems to be fixed */
+	le_write32(&dest_h->image_size, dest_line_sz * src_h.height);
+	le_write32(&dest_h->fixed_2c, 0x2c);		/* seems to be fixed */
+	le_write32(&dest_h->flag1, (dest_bpp == 8) ? 0x100 : 0);
+	le_write32(&dest_h->tr_color, 0xff00ff);	/* magenta = transparent color */
+	le_write32(&dest_h->flag2, 0x1);		/* ? enable transparent mode ? */
+	le_write32(&dest_h->size_2c, (dest_line_sz * src_h.height) + 0x2c);
+
+	/* copy and revert order of BMP lines */
+	ptr = dest_h;
+	ptr += sizeof(*dest_h) + (dest_line_sz * (src_h.height - 1));
+
+	if (src_h.bpp == 24) {
+		/* 24 bpp seems to be not supported, convert to 32 bpp */
+		for (i = 0; i < src_h.height; i++) {
+			int j;
+			void *p = ptr;
+			
+			for (j = 0; j < src_h.width; j++) {
+				int color;
+				color = (gbint32)gbfgetint16(f) | (gbfgetc(f) << 16);
+				le_write32(p, color);
+				p += 4;
+			}
+			ptr -= dest_line_sz;
+		}
+	}
+	else for (i = 0; i < src_h.height; i++) {
+		/* source and target are "litle" */
+		gbfread(ptr, 1, src_line_sz, f);
+		ptr -= dest_line_sz;
+	}
+
+	if (src_h.used_colors > 0) {
+		ptr = dest_h;
+		ptr += sizeof(*dest_h) + (src_h.height * src_line_sz);
+		/* source and target are "litle" */
+		memcpy(ptr, color_table, 4 * src_h.used_colors);
+	}
+
+	if (color_table) xfree(color_table);
+	gbfclose(f);
+}
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
@@ -870,14 +1034,31 @@ garmin_gpi_read(void)
 static void
 garmin_gpi_write(void)
 {
+	char *image;
+	int image_sz;
+	
 	if (strlen(opt_cat) == 0) fatal(MYNAME ": Can't write empty category!\n");
 	
+	if (opt_hide_bitmap) {
+		image = NULL;
+		image_sz = 0;
+	}
+	else if (opt_bitmap && *opt_bitmap)
+		load_bitmap_from_file(opt_bitmap, &image, &image_sz);
+	else {
+		image = gpi_bitmap;	/* embedded image in gpi format */
+		image_sz = GPI_BITMAP_SIZE;
+	}
 	waypt_disp_all(enum_waypt_cb);
+
 	wdata_check(wdata);
 	write_header();
-	write_category(opt_cat);
+	write_category(opt_cat, image, image_sz);
+
 	gbfputint32(0xffff, fout);	/* final tag */
-	gbfputint32(0, fout);
+	gbfputint32(0, fout);		/* ? dummy size ? */
+	
+	if (image != gpi_bitmap) xfree(image);
 }
 
 /**************************************************************************/

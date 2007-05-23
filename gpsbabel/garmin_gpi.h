@@ -107,6 +107,6 @@ static char gpi_bitmap[] = {
 	0x00,0x00,0x00,0x00
 };
 
-#define BMP_SIZE sizeof(gpi_bitmap)
+#define GPI_BITMAP_SIZE sizeof(gpi_bitmap)
 
 #endif
