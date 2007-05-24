@@ -821,7 +821,7 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
 	int dest_bpp;
 	int src_line_sz, dest_line_sz;
 	bmp_header_t src_h;
-	void *color_table = NULL;
+	int *color_table = NULL;
 	gpi_bitmap_header_t *dest_h;
 	void *ptr;
 	
@@ -872,6 +872,12 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
 	if (src_h.used_colors > 0) {
 		color_table = xmalloc(4 * src_h.used_colors);
 		gbfread(color_table, 1, 4 * src_h.used_colors, f);
+		for (i = 0; i < src_h.used_colors; i++) {
+			int color = color_table[i];
+			/* swap blue and red value */
+			color = (color >> 16) | (color << 16) | (color & 0x00ff00);
+			color_table[i] = color & 0xffffff;
+		}
 	}
 	
 	/* calculate line-size for source and destination */
@@ -924,7 +930,6 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
 		}
 	}
 	else for (i = 0; i < src_h.height; i++) {
-		/* source and target are "litle" */
 		gbfread(ptr, 1, src_line_sz, f);
 		ptr -= dest_line_sz;
 	}
@@ -932,8 +937,11 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
 	if (src_h.used_colors > 0) {
 		ptr = dest_h;
 		ptr += sizeof(*dest_h) + (src_h.height * src_line_sz);
-		/* source and target are "litle" */
-		memcpy(ptr, color_table, 4 * src_h.used_colors);
+
+		for (i = 0; i < src_h.used_colors; i++) {
+			le_write32(ptr, color_table[i]);
+			ptr += 4;
+		}
 	}
 
 	if (color_table) xfree(color_table);
