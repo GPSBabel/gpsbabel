@@ -406,7 +406,15 @@ google_read(void)
 		    }
 		    if ( end ) {
 	              strcpy(end,"/table></div>");
-		      
+		    }
+		    if ( !end ) {
+		      end = strstr( panel, "/div><div class=\\042legal");
+		      if ( end ) {
+			strcpy( end, "/div></div>");
+		      }
+		    }
+		    
+		    if ( end ) {		    		      
 		      char *to = panel;
 		      char *from = panel;
 		      while ( *from ) {
