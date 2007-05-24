@@ -1747,25 +1747,7 @@ static int32 GPS_Math_UTM_Param_To_Mc(int32 zone, char zc, double *Mc,
 int32 GPS_Math_UTM_EN_To_NAD83(double *lat, double *lon, double E,
 			       double N, int32 zone, char zc)
 {
-    double phi0;
-    double lambda0;
-    double N0;
-    double E0;
-    double F0;
-    double a;
-    double b;
-
-    if(!GPS_Math_UTM_Param_To_Mc(zone,zc,&lambda0,&E0,&N0,&F0))
-	return 0;
-
-    phi0 = (double)0.0;
-
-    a = (double) GPS_Ellipse[21].a;
-    b = a - (a/GPS_Ellipse[21].invf);
-
-    GPS_Math_EN_To_LatLon(E,N,lat,lon,N0,E0,phi0,lambda0,F0,a,b);
-
-    return 1;
+    return GPS_Math_UTM_EN_To_Known_Datum(lat, lon, E, N, zone, zc, 77);
 }
 
 
@@ -1786,18 +1768,9 @@ int32 GPS_Math_UTM_EN_To_NAD83(double *lat, double *lon, double E,
 int32 GPS_Math_UTM_EN_To_WGS84(double *lat, double *lon, double E,
 			       double N, int32 zone, char zc)
 {
-    double phi;
-    double lambda;
-    double H;
-
-    if(!GPS_Math_UTM_EN_To_NAD83(&phi,&lambda,E,N,zone,zc))
-	return 0;
-
-    
-    GPS_Math_Known_Datum_To_WGS84_M(phi,lambda,0,lat,lon,&H,77);
-
-    return 1;
+    return GPS_Math_UTM_EN_To_Known_Datum(lat, lon, E, N, zone, zc, 118);
 }
+
 
 /* @func GPS_Math_Known_Datum_To_UTM_EN *********************************
 **
@@ -1865,9 +1838,17 @@ int32 GPS_Math_UTM_EN_To_Known_Datum(double *lat, double *lon, double E,
     double a;
     double b;
     int32  idx;
+    char southern;
 
     if(!GPS_Math_UTM_Param_To_Mc(zone,zc,&lambda0,&E0,&N0,&F0))
 	return 0;
+
+    if (N0 > N) {
+        southern = 1;
+	N = N0 - N;
+	N0 = 0;
+    }
+    else southern = 0;
 
     phi0 = (double)0.0;
 
@@ -1876,6 +1857,8 @@ int32 GPS_Math_UTM_EN_To_Known_Datum(double *lat, double *lon, double E,
     b = a - (a/GPS_Ellipse[idx].invf);
 
     GPS_Math_EN_To_LatLon(E,N,lat,lon,N0,E0,phi0,lambda0,F0,a,b);
+
+    if (southern) *lat = -(*lat);
 
     return 1;
 }
