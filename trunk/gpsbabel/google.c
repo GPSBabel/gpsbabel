@@ -417,6 +417,10 @@ google_read(void)
 			else if ( !strncmp( from, "\\042", 4)) {
 			  *to++ = '"';
 			  from += 4;
+			  
+			  if ( *(to-2) != '=' ) { 
+  			    *to++ = ' ';				  
+			  }
 			}
 			else if ( !strncmp( from, "\\'", 2)) {
 			  *to++ = '\'';
