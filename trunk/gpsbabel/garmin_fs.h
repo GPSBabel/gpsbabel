@@ -69,8 +69,6 @@ typedef struct {
 	unsigned int display:1; 
 	unsigned int category:1; 
 	unsigned int depth:1; 
-	unsigned int proximity:1; 
-	unsigned int temperature:1; 
 	unsigned int city:1;
 	unsigned int state:1;
 	unsigned int facility:1;
@@ -94,8 +92,6 @@ typedef struct garmin_fs_s
 	gbint32 display;
 	gbint16 category;
 	double depth;			/* depth in meters */
-	double proximity;		/* proximity distance in meters */
-	double temperature;
 	char *city;			/* city name */
 	char *facility;			/* facility name */
 	char *state;			/* state */

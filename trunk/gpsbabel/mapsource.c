@@ -582,7 +582,7 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 	thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
 	thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
 	thisWaypoint->altitude = mps_altitude;
-	thisWaypoint->proximity = mps_proximity;
+	if (mps_proximity != unknown_alt) WAYPT_SET(thisWaypoint, proximity, mps_proximity);
 	thisWaypoint->depth = mps_depth;
 
 	/* might need to change this to handle version dependent icon handling */
@@ -616,7 +616,7 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 	int colour = 0;			/*  (unknown colour) black is 1, white is 16 */
 
 	double	mps_altitude = wpt->altitude;
-	double	mps_proximity = (mpsuseprox ? wpt->proximity : unknown_alt);
+	double	mps_proximity = (mpsuseprox ? WAYPT_GET(wpt, proximity, unknown_alt) : unknown_alt);
 	double	mps_depth = (mpsusedepth ? wpt->depth : unknown_alt);
 	
 	lat = GPS_Math_Deg_To_Semi(wpt->latitude);

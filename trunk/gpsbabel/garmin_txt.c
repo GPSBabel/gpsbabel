@@ -581,12 +581,12 @@ write_waypt(const waypoint *wpt)
 		print_distance(x, 1, 0);
 	gbfprintf(fout, "\t");
 
-	x = GMSD_GET(proximity, unknown_alt);
+	x = WAYPT_GET(wpt, proximity, unknown_alt);
 	if (x != unknown_alt)
 		print_distance(x, 0, 0);
 	gbfprintf(fout, "\t");
 	
-	x = GMSD_GET(temperature, unknown_alt);
+	x = WAYPT_GET(wpt, temperature, unknown_alt);
 	if (x != unknown_alt) {
 		if (gtxt_flags.celsius)
 			gbfprintf(fout, "%.f C", x);
@@ -1130,8 +1130,8 @@ parse_waypoint(void)
 				break;
 			case  5: if (parse_distance(str, &d)) wpt->altitude = d; break;
 			case  6: if (parse_distance(str, &d)) GMSD_SET(depth, d); break;
-			case  7: if (parse_distance(str, &d)) GMSD_SET(proximity, d); break;
-			case  8: if (parse_temperature(str, &d)) GMSD_SET(temperature, d); break;
+			case  7: if (parse_distance(str, &d)) WAYPT_SET(wpt, proximity, d); break;
+			case  8: if (parse_temperature(str, &d)) WAYPT_SET(wpt, temperature, d); break;
 			case  9: if (parse_display(str, &i)) GMSD_SET(display, i); break;
 			case 10: break;	/* skip color */
 			case 11: 
