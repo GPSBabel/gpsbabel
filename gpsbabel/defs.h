@@ -283,7 +283,12 @@ typedef struct {
 	unsigned int icon_descr_is_dynamic:1; 
 	unsigned int shortname_is_synthetic:1;
 	unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
+	unsigned int temperature:1;		/* temperature field set */
+	unsigned int proximity:1;		/* proximity field set */
 } wp_flags;
+
+#define WAYPT_SET(wpt,member,val) { wpt->member = (val); wpt->wpt_flags.member = 1; }
+#define WAYPT_GET(wpt,member,def) (wpt->wpt_flags.member) ? (wpt->member) : (def)
 
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not 

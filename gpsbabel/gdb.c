@@ -103,8 +103,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.51 $"; */
-static char gdb_release_date[] = "$Date: 2007-05-04 08:41:41 $";
+/* static char gdb_release[] = "$Revision: 1.52 $"; */
+static char gdb_release_date[] = "$Date: 2007-05-25 10:13:21 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -499,7 +499,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 #endif
 	if (FREAD_C == 1) {
 		double proximity = gbfgetdbl(fin);
-		GMSD_SET(proximity, proximity);
+		WAYPT_SET(res, proximity, proximity);
 #if GDB_DEBUG
 		DBG(GDB_DBG_WPTe, 1)
 			printf(MYNAME "-wpt \"%s\" (%d): Proximity = %.1f\n",
@@ -1154,7 +1154,7 @@ write_waypoint(
 	FWRITE_LATLON(wpt->longitude);		/* longitude */
 	FWRITE_DBL(wpt->altitude, unknown_alt);	/* altitude */
 	FWRITE_CSTR(wpt->notes);
-	FWRITE_DBL(GMSD_GET(proximity, 0), 0);	/* proximity */
+	FWRITE_DBL(WAYPT_GET(wpt, proximity, 0), 0);	/* proximity */
 	FWRITE_i32(display);			/* display */
 	FWRITE_i32(0);				/* color (colour) */
 	FWRITE_i32(icon);			/* icon */
@@ -1195,7 +1195,7 @@ write_waypoint(
 	}
 		
 	FWRITE_i16(GMSD_GET(category, gdb_category));
-	FWRITE_DBL(GMSD_GET(temperature, 0), 0);
+	FWRITE_DBL(WAYPT_GET(wpt, temperature, 0), 0);
 	FWRITE_TIME(wpt->creation_time);
 
 	/* VERSION DEPENDENT CODE */

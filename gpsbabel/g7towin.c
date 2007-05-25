@@ -183,12 +183,12 @@ parse_line(char *buff, int index, const char *delimiter, waypoint *wpt)
 				/* !!! NO BREAK !!! */
 			case WPT_cD_OFS + 1:
 			case WPT_cB_OFS + 6:
-				GMSD_SET(temperature, atof(cin));
+				WAYPT_SET(wpt, temperature, atof(cin));
 				break;
 
 			case WAYPT__OFS + 6: /* proximity */
 			case WPT_cD_OFS + 2:
-				GMSD_SET(proximity, atof(cin));
+				WAYPT_SET(wpt, proximity, atof(cin));
 				break;
 
 			case WPT_cB_OFS + 5: 

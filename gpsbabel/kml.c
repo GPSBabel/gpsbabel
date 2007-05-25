@@ -537,7 +537,7 @@ static void kml_output_description(const waypoint *pt)
 	if (pt->altitude != unknown_alt) TD2("Altitude: %.1f %s", alt, alt_units);
 	if (pt->heartrate) TD("Heart rate: %d", pt->heartrate);
 	if (pt->cadence) TD("Cadence: %d", pt->cadence);
-	if (pt->temperature) TD("Temperature: %.1f", pt->temperature);
+	if (pt->wpt_flags.temperature) TD("Temperature: %.1f", pt->temperature);
 	if (pt->speed > 0) {
 		char *spd_units;
 		double spd = fmt_speed(pt->speed, &spd_units);

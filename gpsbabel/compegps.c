@@ -205,8 +205,7 @@ parse_wpt_info(const char *buff, waypoint *wpt)		/* "w" */
 				case 7:	break;			/* ??? */
 				case 8: 			/* radius */
 					fx = atof(c);
-					if (fx > 0)
-						wpt->proximity = fx;
+					if (fx > 0) WAYPT_SET(wpt, proximity, fx);
 					break;
 			}
 		}
@@ -450,7 +449,7 @@ write_waypt_cb(const waypoint *wpt)
 		gbfprintf(fout, " %s", wpt->description);
 	gbfprintf(fout, "\n");
 	
-	if ((wpt->icon_descr != NULL) || (wpt->proximity > 0.0) || \
+	if ((wpt->icon_descr != NULL) || (wpt->wpt_flags.proximity) || \
 	    (option_icon != NULL))
 	{
 		char *icon = option_icon;
@@ -459,7 +458,7 @@ write_waypt_cb(const waypoint *wpt)
 			
 		gbfprintf(fout, "w  %s,0,0.0,16777215,255,1,7,,%.1f\n",
 			(icon != NULL) ? icon : "Waypoint",
-			(wpt->proximity > 0.0f) ? wpt->proximity : 0.0);
+			WAYPT_GET(wpt, proximity, 0));
 	}
 	xfree(name);
 }

@@ -273,7 +273,7 @@ parse_point(char *line)
 					case 0: 
 						wpt->speed = atof(str) * 3.6; break;
 					case 3: 
-						wpt->proximity = atof(str); 
+						WAYPT_SET(wpt, proximity, atof(str));
 						xasprintf(&wpt->notes, "Alarm point: radius=%s", str);
 						break;
 				}
