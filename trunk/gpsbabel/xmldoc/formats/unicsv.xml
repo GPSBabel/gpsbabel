@@ -1,26 +1,58 @@
-
-	
-        
-	<para>
-	Unicsv examines the first line of a file to determine the field
-	order and field separator in that file.   It is thus read-only format.
-	</para>
-	<para>
-	If the first line contains any tabs, the data lines are assumed 
-	to be tab separated.   Otherwise the fields are assumed to be 
-	separated by commas.
-	</para>
-	<para>
-	The list of keywords include "lat", "lon", "desc", "name", 
-	"notes", "alt", "utm z", "utm n", "utm e", "utm c" and "url".   
-	Fuller spellings (i.e. "longitude") may be used.
-	</para>
-	<para>
-	A typical file may be:
-	<screen format="linespecific">
-	Name, Latitude, Longitude, Description 
-	GCEBB,35.972033,-87.134700,Mountain Bike Heaven by susy1313
- 	GC1A37,36.090683,-86.679550,The Troll by a182pilot &amp; Family
-	</screen>
-	</para>
+<para>
+   Unicsv examines the first line of a file to determine the field
+   order and field separator in that file.   It is thus read-only format.
+</para>
+<para>
+   If the first line contains any tabs, the data lines are assumed
+   to be tab separated.   Otherwise the fields are assumed to be
+   separated by commas.
+</para>
+<para>
+   The list of keywords include:
+   <screen format="linespecific">
+      alt =      Altitude
+      bng_e =    British National Grid's easting
+      bng =      full coordinate in BNG format (zone easting northing)
+      bng_n =    British National Grid's northing
+      bng_z =    British National Grid's zone
+      cadence =  Cadence
+      course =   Heading
+      depth =    Depth
+      desc =     Description
+      ele =      Altitude (elevation)
+      fix =      3d, 2d, etc.
+      hdop =     Horizontal precision
+      head =     Heading
+      heart =    Heartrate
+      lat =      Latitude
+      lon =      Longitude
+      name =     Waypoint name ("Shortname")
+      notes =    Notes
+      pdop =     Precision summary (horizontal &amp; vertical)
+      prox =     Proximity
+      sat =      Number of sats used for fix
+      speed =    Speed
+      tempf =    Temperature (degrees Fahrenheit)
+      temp =     Temperature (degrees Celsius)
+      url =      URL
+      utc_d =    UTC date
+      utc_t =    UTC time
+      utm_c =    UTM zone character
+      utm_e =    UTM easting
+      utm =      full coordinate in UTM format (zone zone-ch easting northing)
+      utm_n =    UTM northing
+      utm_z =    UTM zone
+      vdop =     Vertical precision
+   </screen>
+   Fuller spellings (i.e. "longitude") may be used. You can also
+   use keywords with a whitespace instead of an underscore.
+</para>
+<para>
+   A typical file may be:
+   <screen format="linespecific">
+     Name, Latitude, Longitude, Description 
+     GCEBB,35.972033,-87.134700,Mountain Bike Heaven by susy1313
+     GC1A37,36.090683,-86.679550,The Troll by a182pilot &amp; Family
+   </screen>
+</para>
 	
