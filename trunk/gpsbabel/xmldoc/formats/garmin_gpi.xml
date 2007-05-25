@@ -1,0 +1,23 @@
+<para>
+   The format garmin_gpi supports binary POI (.gpi) files useable
+   on newer Garmin GPS receivers (see also <link linkend="fmt_garmin_poi">garmin_poi</link> for some hints).
+   <ulink url="http://www.garmin.com/support/agree.jsp?id=927">Garmin POI-Loader</ulink> is the standard application that creates GPI's
+   with all possible features.
+</para>
+<para>
+   The layout of GPI files isn't documented and our module was created
+   via reverse engeneering. If you get a problem on reading or writing 
+   a GPI file, please provide that file (mailto:gpsbabel-misc@lists.sourceforge.net).
+</para>
+<para>
+   At this time we don't support special features as "Tour-Guide", alerts or links
+   to sounds and pictures.
+</para>
+<example id="all_garmin_gpi_options">
+  <title>Command showing garmin_gpi output example</title>
+  <para>
+    <userinput>
+      gpsbabel -i gpx -f "My Points.gpx" -o garmin_gpi,category="Nice Restaurants",bitmap=restaurant.bmp,notes -F "My Points.gpi"
+    </userinput>
+  </para>
+</example>
