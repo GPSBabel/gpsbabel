@@ -218,6 +218,7 @@ typedef struct {
 	time_t exported;
 	time_t last_found;
 	char *placer; /* Placer name */
+	int placer_id; /* Placer id */
 	char *hint; /* all these UTF8, XML entities removed, May be not HTML. */
 	utf_string desc_short;
 	utf_string desc_long; 

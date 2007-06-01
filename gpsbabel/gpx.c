@@ -649,6 +649,10 @@ gpx_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 	case tt_cache_desc_short:
 		tag_cache_desc(attr);
 		break;
+	case tt_cache_placer:
+		if (0 == strcmp(attr[0], "id")) {
+			wpt_tmp->gc_data.placer_id = atoi(attr[1]);
+		}
 	default:
 		break;
 	}
