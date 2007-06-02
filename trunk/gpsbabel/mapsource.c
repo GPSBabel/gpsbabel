@@ -583,7 +583,7 @@ mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpscla
 	thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
 	thisWaypoint->altitude = mps_altitude;
 	if (mps_proximity != unknown_alt) WAYPT_SET(thisWaypoint, proximity, mps_proximity);
-	thisWaypoint->depth = mps_depth;
+	if (mps_depth != unknown_alt) WAYPT_SET(thisWaypoint, depth, mps_depth);
 
 	/* might need to change this to handle version dependent icon handling */
 	thisWaypoint->icon_descr = gt_find_desc_from_icon_number(icon, MAPSOURCE, &dynamic);
@@ -617,10 +617,11 @@ mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRou
 
 	double	mps_altitude = wpt->altitude;
 	double	mps_proximity = (mpsuseprox ? WAYPT_GET(wpt, proximity, unknown_alt) : unknown_alt);
-	double	mps_depth = (mpsusedepth ? wpt->depth : unknown_alt);
+	double	mps_depth = unknown_alt;
 	
 	lat = GPS_Math_Deg_To_Semi(wpt->latitude);
 	lon = GPS_Math_Deg_To_Semi(wpt->longitude);
+	if (WAYPT_HAS(wpt, depth) && mpsusedepth) mps_depth = wpt->depth;
 
 	if(wpt->description) src = wpt->description;
 	if(wpt->notes) src = wpt->notes;
@@ -1024,7 +1025,7 @@ mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 				thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
 				thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
 				thisWaypoint->altitude = mps_altitude;
-				thisWaypoint->depth = mps_depth;
+				if (mps_depth != unknown_alt) WAYPT_SET(thisWaypoint, depth, mps_depth);
 			}
 		}
 
@@ -1584,7 +1585,7 @@ mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 		thisWaypoint->creation_time = le_read32(&dateTime);
 		thisWaypoint->microseconds = 0;
 		thisWaypoint->altitude = mps_altitude;
-		thisWaypoint->depth = mps_depth;
+		if (mps_depth != unknown_alt) WAYPT_SET(thisWaypoint, depth, mps_depth);
 		track_add_wpt(track_head, thisWaypoint);
 
 	}		/* while (trk_count--) */
@@ -1682,10 +1683,11 @@ mps_trackdatapoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 	char zbuf[10];
 
 	double	mps_altitude = wpt->altitude;
-	double	mps_depth = (mpsusedepth ? wpt->depth : unknown_alt);
+	double	mps_depth = unknown_alt;
 
 	lat = GPS_Math_Deg_To_Semi(wpt->latitude);
 	lon = GPS_Math_Deg_To_Semi(wpt->longitude);
+	if (WAYPT_HAS(wpt, depth) && mpsusedepth) mps_depth = wpt->depth;
 
 	memset(zbuf, 0, sizeof(zbuf));
 

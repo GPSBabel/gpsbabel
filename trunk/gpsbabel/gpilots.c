@@ -275,7 +275,7 @@ data_read(void)
 			  fi.i = le_read32(&rec->wpt.d108.alt);
 			  wpt_tmp->altitude = fi.f;
 			  fi.i = le_read32(&rec->wpt.d108.dpth);
-			  wpt_tmp->depth = fi.f;
+			  WAYPT_SET(wpt_tmp, depth, fi.f);
 			  fi.i = le_read32(&rec->wpt.d108.dist);
 			  WAYPT_SET(wpt_tmp, proximity, fi.f);
 			  wpt_tmp->wpt_flags.icon_descr_is_dynamic = 0;

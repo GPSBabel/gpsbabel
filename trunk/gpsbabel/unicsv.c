@@ -456,7 +456,7 @@ unicsv_parse_one_line(char *ibuf)
 			break;
 
 		case fld_depth:
-			wpt->depth = atof(s);
+			WAYPT_SET(wpt, depth, atof(s));
 			break;
 			
 		case fld_terminator: /* dummy */

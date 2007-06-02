@@ -289,6 +289,7 @@ typedef struct {
 	unsigned int proximity:1;		/* proximity field is set */
 	unsigned int course:1;			/* course field is set */
 	unsigned int speed:1;			/* speed field is set */
+	unsigned int depth:1;			/* depth field is set */
 	/* !ToDo!
 	unsigned int altitude:1;		/+ altitude field is set +/
 	... and others
