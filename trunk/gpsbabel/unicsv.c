@@ -87,6 +87,8 @@ static field_t fields_def[] = {
 	{ "url",	fld_url, STR_ANY },
 	{ "lat",	fld_latitude, STR_ANY },
 	{ "lon",	fld_longitude, STR_ANY },
+	{ "x",		fld_longitude, STR_EQUAL },
+	{ "y",		fld_latitude, STR_EQUAL },
 	{ "alt",	fld_altitude, STR_ANY },
 	{ "ele",	fld_altitude, STR_ANY },
 	{ "utm_z",	fld_utm_zone, STR_ANY },
