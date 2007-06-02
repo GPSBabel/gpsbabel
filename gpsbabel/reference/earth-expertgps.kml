@@ -2374,7 +2374,6 @@
                 <tr><td>Longitude: -71.107628 </td></tr>
                 <tr><td>Latitude: 42.430950 </td></tr>
                 <tr><td>Altitude: 77.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T00:18:15Z </td></tr>
               </table>
             ]]></description>
@@ -2397,7 +2396,6 @@
                 <tr><td>Longitude: -71.109236 </td></tr>
                 <tr><td>Latitude: 42.431240 </td></tr>
                 <tr><td>Altitude: 87.1 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
@@ -2420,7 +2418,6 @@
                 <tr><td>Longitude: -71.109942 </td></tr>
                 <tr><td>Latitude: 42.434980 </td></tr>
                 <tr><td>Altitude: 148.6 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
@@ -2443,7 +2440,6 @@
                 <tr><td>Longitude: -71.113223 </td></tr>
                 <tr><td>Latitude: 42.436757 </td></tr>
                 <tr><td>Altitude: 123.4 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
@@ -2466,7 +2462,6 @@
                 <tr><td>Longitude: -71.114456 </td></tr>
                 <tr><td>Latitude: 42.439018 </td></tr>
                 <tr><td>Altitude: 185.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:26:55Z </td></tr>
               </table>
             ]]></description>
@@ -2489,7 +2484,6 @@
                 <tr><td>Longitude: -71.114803 </td></tr>
                 <tr><td>Latitude: 42.438594 </td></tr>
                 <tr><td>Altitude: 151.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
@@ -2512,7 +2506,6 @@
                 <tr><td>Longitude: -71.116146 </td></tr>
                 <tr><td>Latitude: 42.438917 </td></tr>
                 <tr><td>Altitude: 147.1 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-16T23:03:38Z </td></tr>
               </table>
             ]]></description>
@@ -2535,7 +2528,6 @@
                 <tr><td>Longitude: -71.119277 </td></tr>
                 <tr><td>Latitude: 42.438878 </td></tr>
                 <tr><td>Altitude: 146.3 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
@@ -2558,7 +2550,6 @@
                 <tr><td>Longitude: -71.119689 </td></tr>
                 <tr><td>Latitude: 42.439227 </td></tr>
                 <tr><td>Altitude: 189.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:26:55Z </td></tr>
               </table>
             ]]></description>
@@ -2581,7 +2572,6 @@
                 <tr><td>Longitude: -71.120925 </td></tr>
                 <tr><td>Latitude: 42.439993 </td></tr>
                 <tr><td>Altitude: 177.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T00:18:14Z </td></tr>
               </table>
             ]]></description>
@@ -2604,7 +2594,6 @@
                 <tr><td>Longitude: -71.121676 </td></tr>
                 <tr><td>Latitude: 42.441727 </td></tr>
                 <tr><td>Altitude: 221.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T00:18:16Z </td></tr>
               </table>
             ]]></description>
@@ -2627,7 +2616,6 @@
                 <tr><td>Longitude: -71.122044 </td></tr>
                 <tr><td>Latitude: 42.443904 </td></tr>
                 <tr><td>Altitude: 166.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
@@ -2650,7 +2638,6 @@
                 <tr><td>Longitude: -71.122845 </td></tr>
                 <tr><td>Latitude: 42.445359 </td></tr>
                 <tr><td>Altitude: 202.3 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
@@ -2673,7 +2660,6 @@
                 <tr><td>Longitude: -71.121447 </td></tr>
                 <tr><td>Latitude: 42.447298 </td></tr>
                 <tr><td>Altitude: 419.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:26:58Z </td></tr>
               </table>
             ]]></description>
@@ -2696,7 +2682,6 @@
                 <tr><td>Longitude: -71.122320 </td></tr>
                 <tr><td>Latitude: 42.449765 </td></tr>
                 <tr><td>Altitude: 393.1 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
@@ -2719,7 +2704,6 @@
                 <tr><td>Longitude: -71.121746 </td></tr>
                 <tr><td>Latitude: 42.451442 </td></tr>
                 <tr><td>Altitude: 244.8 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
@@ -2742,7 +2726,6 @@
                 <tr><td>Longitude: -71.121211 </td></tr>
                 <tr><td>Latitude: 42.453256 </td></tr>
                 <tr><td>Altitude: 255.9 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
@@ -2765,7 +2748,6 @@
                 <tr><td>Longitude: -71.119356 </td></tr>
                 <tr><td>Latitude: 42.456252 </td></tr>
                 <tr><td>Altitude: 258.2 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
@@ -2788,7 +2770,6 @@
                 <tr><td>Longitude: -71.119676 </td></tr>
                 <tr><td>Latitude: 42.456592 </td></tr>
                 <tr><td>Altitude: 258.2 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
@@ -2811,7 +2792,6 @@
                 <tr><td>Longitude: -71.119845 </td></tr>
                 <tr><td>Latitude: 42.457388 </td></tr>
                 <tr><td>Altitude: 242.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:00Z </td></tr>
               </table>
             ]]></description>
@@ -2834,7 +2814,6 @@
                 <tr><td>Longitude: -71.119135 </td></tr>
                 <tr><td>Latitude: 42.458148 </td></tr>
                 <tr><td>Altitude: 224.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:00Z </td></tr>
               </table>
             ]]></description>
@@ -2857,7 +2836,6 @@
                 <tr><td>Longitude: -71.117693 </td></tr>
                 <tr><td>Latitude: 42.459377 </td></tr>
                 <tr><td>Altitude: 210.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:01Z </td></tr>
               </table>
             ]]></description>
@@ -2880,7 +2858,6 @@
                 <tr><td>Longitude: -71.119828 </td></tr>
                 <tr><td>Latitude: 42.464183 </td></tr>
                 <tr><td>Altitude: 173.9 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
@@ -2903,7 +2880,6 @@
                 <tr><td>Longitude: -71.119399 </td></tr>
                 <tr><td>Latitude: 42.465650 </td></tr>
                 <tr><td>Altitude: 185.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:02Z </td></tr>
               </table>
             ]]></description>
@@ -2926,7 +2902,6 @@
                 <tr><td>Longitude: -71.119328 </td></tr>
                 <tr><td>Latitude: 42.465913 </td></tr>
                 <tr><td>Altitude: 211.7 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
@@ -2949,7 +2924,6 @@
                 <tr><td>Longitude: -71.113574 </td></tr>
                 <tr><td>Latitude: 42.467110 </td></tr>
                 <tr><td>Altitude: 176.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:02Z </td></tr>
               </table>
             ]]></description>
@@ -2972,7 +2946,6 @@
                 <tr><td>Longitude: -71.110067 </td></tr>
                 <tr><td>Latitude: 42.466459 </td></tr>
                 <tr><td>Altitude: 160.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:02Z </td></tr>
               </table>
             ]]></description>
@@ -2995,7 +2968,6 @@
                 <tr><td>Longitude: -71.109410 </td></tr>
                 <tr><td>Latitude: 42.466557 </td></tr>
                 <tr><td>Altitude: 161.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:02Z </td></tr>
               </table>
             ]]></description>
@@ -3018,7 +2990,6 @@
                 <tr><td>Longitude: -71.107117 </td></tr>
                 <tr><td>Latitude: 42.463495 </td></tr>
                 <tr><td>Altitude: 205.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:03Z </td></tr>
               </table>
             ]]></description>
@@ -3041,7 +3012,6 @@
                 <tr><td>Longitude: -71.107360 </td></tr>
                 <tr><td>Latitude: 42.465687 </td></tr>
                 <tr><td>Altitude: 288.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:03Z </td></tr>
               </table>
             ]]></description>
@@ -3064,7 +3034,6 @@
                 <tr><td>Longitude: -71.106170 </td></tr>
                 <tr><td>Latitude: 42.459986 </td></tr>
                 <tr><td>Altitude: 239.3 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-16T23:03:38Z </td></tr>
               </table>
             ]]></description>
@@ -3087,7 +3056,6 @@
                 <tr><td>Longitude: -71.105116 </td></tr>
                 <tr><td>Latitude: 42.457616 </td></tr>
                 <tr><td>Altitude: 239.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:04Z </td></tr>
               </table>
             ]]></description>
@@ -3110,7 +3078,6 @@
                 <tr><td>Longitude: -71.105206 </td></tr>
                 <tr><td>Latitude: 42.453845 </td></tr>
                 <tr><td>Altitude: 218.8 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-16T23:03:38Z </td></tr>
               </table>
             ]]></description>
@@ -3133,7 +3100,6 @@
                 <tr><td>Longitude: -71.105413 </td></tr>
                 <tr><td>Latitude: 42.451430 </td></tr>
                 <tr><td>Altitude: 188.9 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-16T23:03:38Z </td></tr>
               </table>
             ]]></description>
@@ -3156,7 +3122,6 @@
                 <tr><td>Longitude: -71.106158 </td></tr>
                 <tr><td>Latitude: 42.448448 </td></tr>
                 <tr><td>Altitude: 204.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:04Z </td></tr>
               </table>
             ]]></description>
@@ -3179,7 +3144,6 @@
                 <tr><td>Longitude: -71.106624 </td></tr>
                 <tr><td>Latitude: 42.447804 </td></tr>
                 <tr><td>Altitude: 205.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:04Z </td></tr>
               </table>
             ]]></description>
@@ -3202,7 +3166,6 @@
                 <tr><td>Longitude: -71.108882 </td></tr>
                 <tr><td>Latitude: 42.444773 </td></tr>
                 <tr><td>Altitude: 206.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:05Z </td></tr>
               </table>
             ]]></description>
@@ -3225,7 +3188,6 @@
                 <tr><td>Longitude: -71.106301 </td></tr>
                 <tr><td>Latitude: 42.443592 </td></tr>
                 <tr><td>Altitude: 182.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:27:05Z </td></tr>
               </table>
             ]]></description>
@@ -3248,7 +3210,6 @@
                 <tr><td>Longitude: -71.111441 </td></tr>
                 <tr><td>Latitude: 42.442981 </td></tr>
                 <tr><td>Altitude: 210.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:26:58Z </td></tr>
               </table>
             ]]></description>
@@ -3271,7 +3232,6 @@
                 <tr><td>Longitude: -71.110975 </td></tr>
                 <tr><td>Latitude: 42.442196 </td></tr>
                 <tr><td>Altitude: 210.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:26:55Z </td></tr>
               </table>
             ]]></description>
@@ -3294,7 +3254,6 @@
                 <tr><td>Longitude: -71.113220 </td></tr>
                 <tr><td>Latitude: 42.441754 </td></tr>
                 <tr><td>Altitude: 185.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:26:55Z </td></tr>
               </table>
             ]]></description>
@@ -3317,7 +3276,6 @@
                 <tr><td>Longitude: -71.114456 </td></tr>
                 <tr><td>Latitude: 42.439018 </td></tr>
                 <tr><td>Altitude: 185.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T03:26:55Z </td></tr>
               </table>
             ]]></description>
@@ -3340,7 +3298,6 @@
                 <tr><td>Longitude: -71.113223 </td></tr>
                 <tr><td>Latitude: 42.436757 </td></tr>
                 <tr><td>Altitude: 123.4 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-28T21:05:28Z </td></tr>
               </table>
             ]]></description>
@@ -3363,7 +3320,6 @@
                 <tr><td>Longitude: -71.109942 </td></tr>
                 <tr><td>Latitude: 42.434980 </td></tr>
                 <tr><td>Altitude: 148.6 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
@@ -3386,7 +3342,6 @@
                 <tr><td>Longitude: -71.109236 </td></tr>
                 <tr><td>Latitude: 42.431240 </td></tr>
                 <tr><td>Altitude: 87.1 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-11-07T23:53:41Z </td></tr>
               </table>
             ]]></description>
@@ -3409,7 +3364,6 @@
                 <tr><td>Longitude: -71.107628 </td></tr>
                 <tr><td>Latitude: 42.430950 </td></tr>
                 <tr><td>Altitude: 77.0 ft </td></tr>
-                <tr><td>Heading: -999.0 </td></tr>
                 <tr><td>Time: 2001-06-02T00:18:15Z </td></tr>
               </table>
             ]]></description>

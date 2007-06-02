@@ -70,9 +70,9 @@ gpl_read(void)
 		wpt_tmp->altitude = FEET_TO_METERS(alt_feet);
 		wpt_tmp->creation_time = le_read32(&gp.tm);
 		
-	        wpt_tmp->course = le_read_double(&gp.heading);
-		wpt_tmp->speed = le_read_double(&gp.speed);	
-	        wpt_tmp->speed = MILES_TO_METERS(wpt_tmp->speed)/3600;	
+	        WAYPT_SET(wpt_tmp, course, le_read_double(&gp.heading));
+		WAYPT_SET(wpt_tmp, speed, le_read_double(&gp.speed));
+	        WAYPT_SET(wpt_tmp, speed, MILES_TO_METERS(wpt_tmp->speed)/3600);	
 		
 		track_add_wpt(track_head, wpt_tmp);
 	}

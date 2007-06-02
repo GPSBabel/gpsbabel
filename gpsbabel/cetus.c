@@ -180,9 +180,9 @@ read_track_point(cetus_track_point_t *data, const time_t basetime)
 	if (data->hdop != -1) wpt->hdop = (float) data->hdop / 10;
 	
 	i = be_read16(&data->speed);
-	if (i != 10000) wpt->speed = ((float) i / 10) * 0.514444;	/* meters/second */
+	if (i != 10000) WAYPT_SET(wpt, speed, ((float) i / 10) * 0.514444);	/* meters/second */
 	i = be_read16(&data->course);
-	if (i != 4000) wpt->course = (float) i / 10;
+	if (i != 4000) WAYPT_SET(wpt, course, (float) i / 10);
 	
 	switch(data->hour / 32)	/* extract fix */
 	{

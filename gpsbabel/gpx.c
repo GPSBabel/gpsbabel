@@ -997,10 +997,10 @@ gpx_end(void *data, const XML_Char *xml_el)
 		trk_head->rte_num = atoi(cdatastrp);
 		break;
 	case tt_trk_trkseg_trkpt_course:
-		wpt_tmp->course = atof(cdatastrp);
+		WAYPT_SET(wpt_tmp, course, atof(cdatastrp));
 		break;
 	case tt_trk_trkseg_trkpt_speed:
-		wpt_tmp->speed = atof(cdatastrp);
+		WAYPT_SET(wpt_tmp, speed, atof(cdatastrp));
 		break;
 
 	/*
@@ -1597,11 +1597,11 @@ gpx_track_disp(const waypoint *waypointp)
 
 	/* These were accidentally removed from 1.1 */
 	if (gpx_wversion_num == 10) {
-		if (waypointp->course >= 0) {
+		if WAYPT_HAS(waypointp, course) {
 			gbfprintf(ofd, "  <course>%f</course>\n", 
 				waypointp->course);
 		}
-		if (waypointp->speed >= 0) {
+		if WAYPT_HAS(waypointp, speed) {
 			gbfprintf(ofd, "  <speed>%f</speed>\n", 
 				waypointp->speed);
 		}

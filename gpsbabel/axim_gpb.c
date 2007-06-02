@@ -87,12 +87,12 @@ decode_buff(const char *buff, route_head *track)
 	/* These values can be, but must not be right. */
 	/* Further checks are needed to verify that. */
 	/*         (!!! reference data !!!)          */
-	wpt->course = dir;
+	WAYPT_SET(wpt, course, dir);
 	wpt->hdop = hdop;
 	wpt->vdop = vdop;
 	wpt->pdop = pdop;
 	wpt->sat = sats;
-	wpt->speed = spd * 10;
+	WAYPT_SET(wpt, speed, spd * 10);
 #endif
 	/* We don't have a header with some magic fixed numbers or strings. */
 	/* So let us check the range for some basic values */

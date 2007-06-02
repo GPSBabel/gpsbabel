@@ -729,29 +729,29 @@ trackfilter_synth(void)
 		}
 		if ( first ) {
 			if ( opt_course ) {
-				wpt->course = 0;
+				WAYPT_SET(wpt, course, 0);
 			}
 			if ( opt_speed ) {
-				wpt->speed = 0;
+				WAYPT_SET(wpt, speed, 0);
 			}
 			first = 0;
 		}
 		else {
 			if ( opt_course ) {
-				wpt->course = heading_true_degrees( RAD(oldlat), 
+				WAYPT_SET(wpt, course, heading_true_degrees( RAD(oldlat), 
 					RAD(oldlon),RAD(wpt->latitude), 
-					RAD(wpt->longitude) );
+					RAD(wpt->longitude)) );
 			}
 			if ( opt_speed ) {
 				if ( oldtime != wpt->creation_time ) {
-					wpt->speed = radtometers(gcdist( 
+					WAYPT_SET(wpt, speed, radtometers(gcdist( 
 					    RAD(oldlat), RAD(oldlon), 
 					    RAD(wpt->latitude), 
 					    RAD(wpt->longitude))) /
-					    labs(wpt->creation_time-oldtime);
+					    labs(wpt->creation_time-oldtime));
 				}	
 				else {
-					wpt->speed = unknown_speed;
+					WAYPT_UNSET(wpt, speed);
 				}
 			}
 		}

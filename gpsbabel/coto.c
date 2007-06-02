@@ -199,7 +199,7 @@ coto_track_read(struct pdb *pdb)
 		wpt_tmp->latitude = DEG(pdb_read_double(&rec->latitude));
 
 		// It's not the course, so leave it out for now
-		// wpt_tmp->course = pdb_read_double(&rec->arc);
+		// WAYPT_SET(wpt_tmp, course, pdb_read_double(&rec->arc));
 		wpt_tmp->altitude = be_read16(&rec->alt);
 		
 		if (internals)
@@ -234,7 +234,7 @@ coto_track_read(struct pdb *pdb)
 				wpt_tmp->fix = fix_dgps; 
 				break;
 		}
-		wpt_tmp->speed = be_read16(&rec->speed)/10.0;
+		WAYPT_SET(wpt_tmp, speed, be_read16(&rec->speed)/10.0);
 		rec->time = be_read32(&rec->time);
 		if (rec->time != 0)
 		{

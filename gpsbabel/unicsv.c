@@ -424,12 +424,12 @@ unicsv_parse_one_line(char *ibuf)
 			break;
 
 		case fld_speed:
-			wpt->speed = atof(s);
+			WAYPT_SET(wpt, speed, atof(s));
 			unicsv_data_type = trkdata;
 			break;
 
 		case fld_course:
-			wpt->course = atof(s);
+			WAYPT_SET(wpt, course, atof(s));
 			unicsv_data_type = trkdata;
 			break;
 			

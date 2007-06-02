@@ -104,7 +104,7 @@ gpssim_write_pt(const waypoint *wpt)
 	char obuf[1024];
 	double lat, lon;
 
-	if (wpt->speed > 0) {
+	if WAYPT_HAS(wpt, speed) {
 		gpssim_write_spd(mpsec2knots(wpt->speed));
 	}
 

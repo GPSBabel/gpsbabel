@@ -898,10 +898,10 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     
     /* PATH CONVERSIONS ************************************************/
     if (strcmp(fmp->key, "PATH_SPEED") == 0) {
-	wpt->speed = atof(s);
+	WAYPT_SET(wpt, speed, atof(s));
     } else
     if (strcmp(fmp->key, "PATH_COURSE") == 0) {
-	wpt->course = atof(s);
+	WAYPT_SET(wpt, course, atof(s));
     } else
 
     /* TIME CONVERSIONS ***************************************************/

@@ -195,8 +195,8 @@ vitosmt_read(void)
 		wpt_tmp->shortname	=xcalloc(16,1);
 		snprintf(wpt_tmp->shortname, 15 , "WP%04d", ++serial);
 
-		wpt_tmp->speed	= speed*kts2mps; /* meters per second */
-		wpt_tmp->course = course;
+		WAYPT_SET(wpt_tmp, speed, speed*kts2mps); /* meters per second */
+		WAYPT_SET(wpt_tmp, course, course);
 		wpt_tmp->pdop	= pdop;
 
 		/* 

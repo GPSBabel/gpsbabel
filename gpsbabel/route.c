@@ -521,8 +521,8 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 		tlon = RAD(this->longitude);
 		plat = RAD(prev->latitude);
 		plon = RAD(prev->longitude);
-		this->course = heading_true_degrees(plat, plon,
-			tlat, tlon);
+		WAYPT_SET(this, course, heading_true_degrees(plat, plon,
+			tlat, tlon));
 		dist = radtometers(gcdist(plat, plon, tlat, tlon));
 
 		/* 
@@ -536,7 +536,7 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 		 * If we've moved as much as a meter, recompute speed.
 		 */
 		if (timed && (dist > 1)) {
-			this->speed = dist / labs(timed);
+			WAYPT_SET(this, speed, dist / labs(timed));
 			if (this->speed > tdata->max_spd) {
 				tdata->max_spd = this->speed;
 			}
