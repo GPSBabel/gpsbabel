@@ -102,7 +102,7 @@ garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
 	if (gmsd == NULL) return;
 	
 	if ((gmsd->flags.category && gmsd->category) || 
-	     gmsd->flags.depth || 
+	     waypt->wpt_flags.depth || 
 	     waypt->wpt_flags.proximity || 
 	     waypt->wpt_flags.temperature || 
 	     gmsd->flags.display)
@@ -115,12 +115,12 @@ garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
 			"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " \
 			"xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/GpxExtensions/v2 " \
 			"http://www.garmin.com/xmlschemas/GpxExtensions/v2/GpxExtensionsv2.xsd\">\n", space++ * 2, "");
-		if (waypt->wpt_flags.proximity)
+		if WAYPT_HAS(waypt, proximity)
 			gbfprintf(ofd, "%*s<gpxx:Proximity>%.6f</gpxx:Proximity>\n", space * 2, "", waypt->proximity);
-		if (waypt->wpt_flags.temperature)
+		if WAYPT_HAS(waypt, temperature)
 			gbfprintf(ofd, "%*s<gpxx:Temperature>%.6f</gpxx:Temperature>\n", space * 2, "", waypt->temperature);
-		if (gmsd->flags.depth)
-			gbfprintf(ofd, "%*s<gpxx:Depth>%.6f</gpxx:Depth>\n", space * 2, "", gmsd->depth);
+		if WAYPT_HAS(waypt, depth)
+			gbfprintf(ofd, "%*s<gpxx:Depth>%.6f</gpxx:Depth>\n", space * 2, "", waypt->depth);
 		if (gmsd->flags.display)
 		{
 			char *cx;
@@ -181,15 +181,13 @@ garmin_fs_xml_convert(const int base_tag, int tag, const char *cdatastr, waypoin
 */
 	switch(tag) {
 	case 2:
-		waypt->proximity = atof(cdatastr); 
-		waypt->wpt_flags.proximity = (*cdatastr); 
+		if (*cdatastr) 	WAYPT_SET(waypt, proximity, atof(cdatastr));
 		break;
 	case 3:
-		waypt->temperature = atof(cdatastr);
-		waypt->wpt_flags.temperature = (*cdatastr);
+		if (*cdatastr) WAYPT_SET(waypt, temperature, atof(cdatastr));
 		break;
 	case 4:
-		GMSD_SET(depth, atof(cdatastr)); 
+		if (*cdatastr) WAYPT_SET(waypt, depth, atof(cdatastr)); 
 		break;
 	case 5:
 		if (case_ignore_strcmp(cdatastr, "SymbolOnly") == 0) {
@@ -281,7 +279,7 @@ garmin_fs_garmin_after_read(const GPS_PWay way, waypoint *wpt, const int protoid
 	if (way->category != 0) GMSD_SET(category, way->category);
 	if (way->dst < 1.0e25f) WAYPT_SET(wpt, proximity, way->dst);
 	if (way->temperature_populated) WAYPT_SET(wpt, temperature, way->temperature);
-	if (way->dpth < 1.0e25f) GMSD_SET(depth, way->dpth);
+	if (way->dpth < 1.0e25f) WAYPT_SET(wpt, depth, way->dpth);
 	GMSD_SETNSTR(cc, way->cc, sizeof(way->cc));
 	GMSD_SETNSTR(state, way->state, sizeof(way->state));
 	GMSD_SETSTR(city, way->city);
@@ -303,7 +301,7 @@ garmin_fs_garmin_before_write(const waypoint *wpt, GPS_PWay way, const int proto
 	way->dspl = gt_switch_display_mode_value(
 		GMSD_GET(display, way->dspl), gps_waypt_type, 0);
 	way->category = GMSD_GET(category, way->category);
-	way->dpth = GMSD_GET(depth, way->dpth);
+	way->dpth = WAYPT_GET(wpt, depth, way->dpth);
  	way->dst = WAYPT_GET(wpt, proximity, way->dpth);
  	way->temperature = WAYPT_GET(wpt, temperature, way->temperature);
 	

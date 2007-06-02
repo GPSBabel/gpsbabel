@@ -173,7 +173,7 @@ parse_line(char *buff, int index, const char *delimiter, waypoint *wpt)
 			case WPT_cC_OFS + 2:
 			case WPT_c5_OFS + 2:
 			case WPT_c8_OFS + 2:
-				GMSD_SET(depth, altf * atof(cin));
+				WAYPT_SET(wpt, depth, altf * atof(cin));
 				break;
 				
 			case TRKPT__OFS + 10: /* temperature */

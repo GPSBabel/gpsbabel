@@ -103,8 +103,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.52 $"; */
-static char gdb_release_date[] = "$Date: 2007-05-25 10:13:21 $";
+/* static char gdb_release[] = "$Revision: 1.53 $"; */
+static char gdb_release_date[] = "$Date: 2007-06-02 21:00:37 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -536,7 +536,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 
 	if (FREAD_C == 1) {
 		double depth = gbfgetdbl(fin);
-		GMSD_SET(depth, depth);
+		WAYPT_SET(res, depth, depth);
 #if GDB_DEBUG
 		DBG(GDB_DBG_WPTe, 1)
 			printf(MYNAME "-wpt \"%s\" (%d): Depth = %.1f\n",
@@ -896,10 +896,10 @@ read_track(void)
 			wpt->creation_time = FREAD_i32;
 		}
 		if (FREAD_C == 1) {
-			wpt->depth = gbfgetdbl(fin);
+			WAYPT_SET(wpt, depth, gbfgetdbl(fin));
 		}
 		if (FREAD_C == 1) {
-			wpt->temperature = gbfgetdbl(fin);
+			WAYPT_SET(wpt, temperature, gbfgetdbl(fin));
 		}
 		
 		track_add_wpt(res, wpt);
@@ -1154,7 +1154,7 @@ write_waypoint(
 	FWRITE_LATLON(wpt->longitude);		/* longitude */
 	FWRITE_DBL(wpt->altitude, unknown_alt);	/* altitude */
 	FWRITE_CSTR(wpt->notes);
-	FWRITE_DBL(WAYPT_GET(wpt, proximity, 0), 0);	/* proximity */
+	FWRITE_DBL(WAYPT_GET(wpt, proximity, unknown_alt), unknown_alt);	/* proximity */
 	FWRITE_i32(display);			/* display */
 	FWRITE_i32(0);				/* color (colour) */
 	FWRITE_i32(icon);			/* icon */
@@ -1162,7 +1162,7 @@ write_waypoint(
 	FWRITE_CSTR(GMSD_GET(state, ""));	/* state */
 	FWRITE_CSTR(GMSD_GET(facility, ""));	/* facility */
 	FWRITE_C(0);				/* unknown */
-	FWRITE_DBL(GMSD_GET(depth, 0), 0);	/* depth */
+	FWRITE_DBL(WAYPT_GET(wpt, depth, unknown_alt), unknown_alt);	/* depth */
 	
 	/* VERSION DEPENDENT CODE */
 	if (gdb_ver <= GDB_VER_2) {
@@ -1352,6 +1352,7 @@ write_track(const route_head *trk, const char *trk_name)
 	
 	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp)
 	{
+		double d;
 		waypoint *wpt = (waypoint *)elem;
 		
 		trkpt_ct++;	/* increase informational number of written route points */
@@ -1360,8 +1361,10 @@ write_track(const route_head *trk, const char *trk_name)
 		FWRITE_LATLON(wpt->longitude);
 		FWRITE_DBL(wpt->altitude, unknown_alt);
 		FWRITE_TIME(wpt->creation_time);
-		FWRITE_DBL(wpt->depth, unknown_alt);
-		FWRITE_DBL(wpt->temperature, 0);
+		d = WAYPT_GET(wpt, depth, unknown_alt);
+		FWRITE_DBL(d, unknown_alt);
+		d = WAYPT_GET(wpt, temperature, -99999);
+		FWRITE_DBL(d, -99999);
 	}
 
 	/* finalize track */

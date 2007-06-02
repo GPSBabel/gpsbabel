@@ -68,7 +68,6 @@ typedef struct {
 	unsigned int wpt_class:1;
 	unsigned int display:1; 
 	unsigned int category:1; 
-	unsigned int depth:1; 
 	unsigned int city:1;
 	unsigned int state:1;
 	unsigned int facility:1;
@@ -91,7 +90,6 @@ typedef struct garmin_fs_s
 	int wpt_class;
 	gbint32 display;
 	gbint16 category;
-	double depth;			/* depth in meters */
 	char *city;			/* city name */
 	char *facility;			/* facility name */
 	char *state;			/* state */
