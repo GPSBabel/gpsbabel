@@ -284,13 +284,22 @@ typedef struct {
 	unsigned int icon_descr_is_dynamic:1; 
 	unsigned int shortname_is_synthetic:1;
 	unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
-	unsigned int temperature:1;		/* temperature field set */
-	unsigned int proximity:1;		/* proximity field set */
+	/* "flagged fields" */
+	unsigned int temperature:1;		/* temperature field is set */
+	unsigned int proximity:1;		/* proximity field is set */
+	unsigned int course:1;			/* course field is set */
+	unsigned int speed:1;			/* speed field is set */
+	/* !ToDo!
+	unsigned int altitude:1;		/+ altitude field is set +/
+	... and others
+	*/
+	
 } wp_flags;
 
 #define WAYPT_SET(wpt,member,val) { wpt->member = (val); wpt->wpt_flags.member = 1; }
 #define WAYPT_GET(wpt,member,def) (wpt->wpt_flags.member) ? (wpt->member) : (def)
-
+#define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
+#define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not 
  * cater to any specific model or protocol.  Anything that needs to
@@ -913,7 +922,5 @@ int color_to_bbggrr(char *cname);
  * but that's not very nice for the folks near sea level.
  */
 #define unknown_alt 	-99999999.0
-#define unknown_course 	     -999.0
-#define unknown_speed	     -999.0
 
 #endif /* gpsbabel_defs_h_included */

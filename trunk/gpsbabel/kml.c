@@ -537,13 +537,13 @@ static void kml_output_description(const waypoint *pt)
 	if (pt->altitude != unknown_alt) TD2("Altitude: %.1f %s", alt, alt_units);
 	if (pt->heartrate) TD("Heart rate: %d", pt->heartrate);
 	if (pt->cadence) TD("Cadence: %d", pt->cadence);
-	if (pt->wpt_flags.temperature) TD("Temperature: %.1f", pt->temperature);
-	if (pt->speed > 0) {
+	if WAYPT_HAS(pt, temperature) TD("Temperature: %.1f", pt->temperature);
+	if WAYPT_HAS(pt, speed) {
 		char *spd_units;
 		double spd = fmt_speed(pt->speed, &spd_units);
 		TD2("Speed: %.1f %s", spd, spd_units);
 	}
-	TD("Heading: %.1f", pt->course);
+	if WAYPT_HAS(pt, course) TD("Heading: %.1f", pt->course);
 	/* This really shouldn't be here, but as of this writing, 
 	 * Earth can't edit/display the TimeStamp.  
 	 */

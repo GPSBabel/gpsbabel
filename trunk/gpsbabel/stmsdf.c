@@ -271,7 +271,7 @@ parse_point(char *line)
 			case 7:
 				switch(what) {
 					case 0: 
-						wpt->speed = atof(str) * 3.6; break;
+						WAYPT_SET(wpt, speed, atof(str) * 3.6); break;
 					case 3: 
 						WAYPT_SET(wpt, proximity, atof(str));
 						xasprintf(&wpt->notes, "Alarm point: radius=%s", str);
@@ -279,7 +279,7 @@ parse_point(char *line)
 				}
 				break;
 			case 8:
-				if (what == 0) wpt->course = atof(str);
+				if (what == 0) WAYPT_SET(wpt, course, atof(str));
 				break;
 			case 9:
 			case 10:
@@ -439,8 +439,8 @@ calculate(const waypoint *wpt, double *dist, double *speed, double *course,
 		if (asc) *asc = 0;
 		if (desc) *desc = 0;
 	}
-	if (wpt->speed != unknown_speed) *speed = wpt->speed / 3.6;	/* -> meters per second */
-	if (wpt->course != unknown_course) *course = wpt->course;
+	if WAYPT_HAS(wpt, speed) *speed = wpt->speed / 3.6;	/* -> meters per second */
+	if WAYPT_HAS(wpt, course) *course = wpt->course;
 }
 
 /* pre-calculation callbacks */

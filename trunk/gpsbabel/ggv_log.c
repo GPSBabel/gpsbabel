@@ -125,13 +125,13 @@ ggv_log_read(void)
 		xlon = (double)deg + ((double)min / (double)60) + (sec / (double)3600.0);
 		wpt->longitude = xlon;
 		
-		wpt->course = le_read16(&buf[16 + 0]);
+		WAYPT_SET(wpt, course, le_read16(&buf[16 + 0]));
 		
 		if (ggv_log_ver == 10) {
 			double secs;
 			
 			wpt->altitude = le_read16(&buf[16 +  2]);
-			wpt->speed =    le_read16(&buf[16 +  4]);
+			WAYPT_SET(wpt, speed, le_read16(&buf[16 +  4]));
 			tm.tm_year =    le_read16(&buf[16 +  8]);
 			tm.tm_mon =     le_read16(&buf[16 + 10]);
 			tm.tm_mday =    le_read16(&buf[16 + 12]);

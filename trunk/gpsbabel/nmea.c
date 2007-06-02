@@ -655,12 +655,12 @@ gpvtg_parse(char *ibuf)
 		&course,&ct,&magcourse,&cm,&speed_n,&cn,&speed_k,&ck);
 		
 	if (curr_waypt) {
-		curr_waypt->course = course;		
+		WAYPT_SET(curr_waypt, course, course);
 		
 		if (speed_k>0)
-			curr_waypt->speed = speed_k*kmh2mps;
+			WAYPT_SET(curr_waypt, speed, speed_k*kmh2mps)
 		else
-			curr_waypt->speed = speed_n*kts2mps;
+			WAYPT_SET(curr_waypt, speed, speed_n*kts2mps);
 
 	}	
 	
