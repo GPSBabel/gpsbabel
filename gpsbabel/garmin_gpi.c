@@ -769,13 +769,14 @@ write_category(const char *category, const char *image, const int image_sz)
 static void
 write_header(void)
 {
-	struct tm tm;
-	time_t time;
-	
-	tm = *gmtime(&gpsbabel_now);
-	tm.tm_year -= 20;
-	time = mkgmtime(&tm);
-	time += SECONDS_PER_DAY;
+	time_t time = gpsbabel_time;	/* !!! ZERO during leaktest !!! */
+
+	if (time != 0) {
+		struct tm tm = *gmtime(&time);
+		tm.tm_year -= 20;
+		time = mkgmtime(&tm);
+		time += SECONDS_PER_DAY;
+	}
 	
 	gbfputint32(0, fout);
 	gbfputint32(0x16, fout);
