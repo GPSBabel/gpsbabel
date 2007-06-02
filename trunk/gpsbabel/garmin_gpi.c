@@ -28,6 +28,8 @@
 	* 2007/05/22: add support for multiple bounding boxes
 	              (useful / required!) for large waypoints lists
 	* 2007/05/23: add optional user bitmap
+	* 2007/06/02: new method to compute center (mean) of bounds
+	              avoid endless loop in group splitting
 
 	ToDo:
 	
@@ -560,17 +562,25 @@ wdata_check(writer_data_t *data)
 	queue *elem, *tmp;
 	double center_lat, center_lon;
 
-	if (data->ct <= WAYPOINTS_PER_BLOCK) {
-		if (data->ct) sortqueue(&data->Q, compare_wpt_cb);
+	if ((data->ct <= WAYPOINTS_PER_BLOCK) ||
+	   /* avoid endless loop for points (more than WAYPOINTS_PER_BLOCK) 
+	      at same coordinates */
+	   ((data->bds.min_lat >= data->bds.max_lat) && (data->bds.min_lon >= data->bds.max_lon))) {
+	   	if (data->ct > 1)
+			sortqueue(&data->Q, compare_wpt_cb);
 		return;
 	}
 
-	/* compute the center of current bounds */
-	if (data->bds.max_lat == data->bds.min_lat) center_lat = data->bds.max_lat;
-	else center_lat = (data->bds.max_lat + data->bds.min_lat) / 2;
+	/* compute the (mean) center of current bounds */
 
-	if (data->bds.max_lon == data->bds.min_lon) center_lon = data->bds.max_lon;
-	else center_lon = (data->bds.max_lon + data->bds.min_lon) / 2;
+	center_lat = center_lon = 0;
+	QUEUE_FOR_EACH(&data->Q, elem, tmp) {
+		waypoint *wpt = (waypoint *) elem;
+		center_lat += wpt->latitude;
+		center_lon += wpt->longitude;
+	}
+	center_lat /= data->ct;
+	center_lon /= data->ct;
 	
 	QUEUE_FOR_EACH(&data->Q, elem, tmp) {
 		waypoint *wpt = (waypoint *) elem;
