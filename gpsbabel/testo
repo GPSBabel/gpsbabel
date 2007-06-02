@@ -1236,6 +1236,9 @@ compare ${REFERENCE}/garmin_gpi.gpx ${TMPDIR}/garmin_gpi.gpx
 ${PNAME} -i gpx -f ${REFERENCE}/garmin_gpi.gpx -o garmin_gpi -F ${TMPDIR}/garmin_gpi.gpi
 ${PNAME} -i garmin_gpi -f ${TMPDIR}/garmin_gpi.gpi -o gpx -F ${TMPDIR}/garmin_gpi2.gpx
 compare ${REFERENCE}/garmin_gpi2.gpx ${TMPDIR}/garmin_gpi2.gpx
+${PNAME} -i gpx -f ${REFERENCE}/track/vitovtt-sample.gpx -x transform,wpt=trk -o garmin_gpi -F ${TMPDIR}/garmin_gpi3a.gpi
+${PNAME} -i garmin_gpi -f ${TMPDIR}/garmin_gpi3a.gpi -o garmin_gpi -F ${TMPDIR}/garmin_gpi3b.gpi
+bincompare ${TMPDIR}/garmin_gpi3a.gpi ${TMPDIR}/garmin_gpi3b.gpi
 
 
 exit 0
