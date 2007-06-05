@@ -683,6 +683,11 @@ sscanftime( const char *s, const char *format, const int gmt )
 
 	if ( strptime( s, format, &stm ) )
 	{
+		if ((stm.tm_mday == 0) && (stm.tm_mon == 0) && (stm.tm_year == 0)) {
+			stm.tm_mday = 1;
+			stm.tm_mon = 0;
+			stm.tm_year = 70;
+		}
 		stm.tm_isdst = -1;
 		if (gmt)
 			return mkgmtime(&stm);
