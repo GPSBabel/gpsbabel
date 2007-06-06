@@ -24,7 +24,7 @@
 #include "jeeps/gpsmath.h"
 #include <ctype.h>
 
-static FILE *file_out;
+static gbfile *file_out;
 static short_handle mkshort_handle;
 
 static char *stylesheet = NULL;
@@ -55,14 +55,14 @@ arglist_t html_args[] = {
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "w", MYNAME);
+	file_out = gbfopen(fname, "w", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	gbfclose(file_out);
 	mkshort_del_handle(&mkshort_handle);
 }
 
@@ -86,51 +86,51 @@ html_disp(const waypoint *wpt)
 	strftime(tbuf, sizeof(tbuf), "%d-%b-%Y", localtime(&tm));
 
 
-	fprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", wpt->shortname);
-	fprintf(file_out, "<table width=\"100%%\">\n");
-	fprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname);
+	gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", wpt->shortname);
+	gbfprintf(file_out, "<table width=\"100%%\">\n");
+	gbfprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname);
 	cout = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], 1);
-	fprintf(file_out, "%s (%d%c %6.0f %7.0f)", cout, utmz, utmzc, utme, utmn);
+	gbfprintf(file_out, "%s (%d%c %6.0f %7.0f)", cout, utmz, utmzc, utme, utmn);
 	xfree (cout);
 	if (wpt->altitude != unknown_alt)
-		fprintf (file_out, " alt:%d", (int) ( (altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude) );
-	fprintf (file_out, "<br>\n");
+		gbfprintf (file_out, " alt:%d", (int) ( (altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude) );
+	gbfprintf (file_out, "<br>\n");
 	if (strcmp(wpt->description, wpt->shortname)) {
 		if (wpt->url) {
 			char *d = html_entitize(wpt->description);
-			fprintf(file_out, "<a href=\"%s\">%s</a>", wpt->url, d);
+			gbfprintf(file_out, "<a href=\"%s\">%s</a>", wpt->url, d);
 			xfree(d);
 		}
 		else {
-			fprintf(file_out, "%s", wpt->description);
+			gbfprintf(file_out, "%s", wpt->description);
 		}
 		if (wpt->gc_data.placer) { 
-			fprintf(file_out, " by %s", wpt->gc_data.placer);
+			gbfprintf(file_out, " by %s", wpt->gc_data.placer);
 		}		
 	}
-	fprintf(file_out, "</p></td>\n");
+	gbfprintf(file_out, "</p></td>\n");
 
-	fprintf (file_out, "<td align=\"right\">");
+	gbfprintf (file_out, "<td align=\"right\">");
 	if (wpt->gc_data.terr) {
-		fprintf (file_out, "<p class=\"gpsbabelcacheinfo\">%d%s / %d%s<br>\n", 
+		gbfprintf (file_out, "<p class=\"gpsbabelcacheinfo\">%d%s / %d%s<br>\n", 
 			(int)(wpt->gc_data.diff / 10), (wpt->gc_data.diff%10)?"&frac12;":"", 
 			(int)(wpt->gc_data.terr / 10), (wpt->gc_data.terr%10)?"&frac12;":""  ); 
-		fprintf(file_out, "%s / %s</p>", 
+		gbfprintf(file_out, "%s / %s</p>", 
 			gs_get_cachetype(wpt->gc_data.type),
 			gs_get_container(wpt->gc_data.container));
 	}
-	fprintf(file_out, "</td></tr>\n");
+	gbfprintf(file_out, "</td></tr>\n");
 	
 
-	fprintf(file_out, "<tr><td colspan=\"2\">");
+	gbfprintf(file_out, "<tr><td colspan=\"2\">");
 	if (wpt->gc_data.desc_short.utfstring) {
 		char *tmpstr = strip_nastyhtml(wpt->gc_data.desc_short.utfstring);
-		fprintf (file_out, "<p class=\"gpsbabeldescshort\">%s</p>\n", tmpstr );
+		gbfprintf (file_out, "<p class=\"gpsbabeldescshort\">%s</p>\n", tmpstr );
 		xfree( tmpstr );
        	}
 	if (wpt->gc_data.desc_long.utfstring) {
 		char *tmpstr = strip_nastyhtml(wpt->gc_data.desc_long.utfstring);
-		fprintf (file_out, "<p class=\"gpsbabeldesclong\">%s</p>\n", tmpstr );
+		gbfprintf (file_out, "<p class=\"gpsbabeldesclong\">%s</p>\n", tmpstr );
 		xfree( tmpstr );
        	}
 	if (wpt->gc_data.hint) {
@@ -139,11 +139,11 @@ html_disp(const waypoint *wpt)
 			hint = rot13( wpt->gc_data.hint );
 		else 
 			hint = xstrdup( wpt->gc_data.hint );
-		fprintf (file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", hint);
+		gbfprintf (file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", hint);
 		xfree( hint );
 	}
 	else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
-		fprintf (file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", wpt->notes);
+		gbfprintf (file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", wpt->notes);
 	}
 	
         fs_gpx = NULL;
@@ -159,17 +159,17 @@ html_disp(const waypoint *wpt)
 		while ( curlog ) {
 			time_t logtime = 0;
 			struct tm *logtm = NULL;
-			fprintf( file_out, "<p class=\"gpsbabellog\">\n" );
+			gbfprintf( file_out, "<p class=\"gpsbabellog\">\n" );
 			
 			logpart = xml_findfirst( curlog, "groundspeak:type" );
 			if ( logpart ) {
-				fprintf( file_out, "<span class=\"gpsbabellogtype\">%s</span> by ", logpart->cdata );
+				gbfprintf( file_out, "<span class=\"gpsbabellogtype\">%s</span> by ", logpart->cdata );
 			}
 			
 			logpart = xml_findfirst( curlog, "groundspeak:finder" );
 			if ( logpart ) {
 				char *f = html_entitize( logpart->cdata );
-				fprintf( file_out, "<span class=\"gpsbabellogfinder\">%s</span> on ", f );
+				gbfprintf( file_out, "<span class=\"gpsbabellogfinder\">%s</span> on ", f );
 				xfree( f );
 			}
 			
@@ -178,7 +178,7 @@ html_disp(const waypoint *wpt)
 				logtime = xml_parse_time( logpart->cdata, NULL);
 				logtm = localtime( &logtime );
 				if ( logtm ) {
-					fprintf( file_out, 
+					gbfprintf( file_out, 
 						"<span class=\"gpsbabellogdate\">%04d-%02d-%02d</span><br>\n",
 						logtm->tm_year+1900,
 						logtm->tm_mon+1,
@@ -200,7 +200,7 @@ html_disp(const waypoint *wpt)
 					lon = atof( coordstr );
 				}
 				coordstr = pretty_deg_format(lat, lon, degformat[2], 1);
-				fprintf( file_out,
+				gbfprintf( file_out,
 					"<span class=\"gpsbabellogcoords\">%s</span><br>\n",
 					coordstr );
 				xfree(coordstr);
@@ -223,16 +223,16 @@ html_disp(const waypoint *wpt)
 				}
 					
 				t = html_entitize( s );
-				fprintf( file_out, "%s", t ); 
+				gbfprintf( file_out, "%s", t ); 
 				xfree( t );
 				xfree( s );
 			}
 
-			fprintf( file_out, "</p>\n" );
+			gbfprintf( file_out, "</p>\n" );
 			curlog = xml_findnext( root, curlog, "groundspeak:log" );
 		}
 	}
-	fprintf(file_out, "</td></tr></table>\n");
+	gbfprintf(file_out, "</td></tr></table>\n");
 }
 
 static void
@@ -241,7 +241,7 @@ html_index(const waypoint *wpt)
 	char *sn = html_entitize(wpt->shortname);
 	char *d = html_entitize(wpt->description);
 
-	fprintf(file_out, "<a href=\"#%s\">%s - %s</a><br>\n", sn, sn, d);
+	gbfprintf(file_out, "<a href=\"#%s\">%s - %s</a><br>\n", sn, sn, d);
 
 	xfree(sn);
 	xfree(d);
@@ -252,30 +252,30 @@ data_write(void)
 {
 	setshort_length(mkshort_handle, 6);
 
-	fprintf(file_out, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
-	fprintf(file_out, "<html>\n");
-	fprintf(file_out, "<head>\n");
-	fprintf(file_out, " <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n");
-	fprintf(file_out, " <meta name=\"Generator\" content=\"GPSBabel %s\">\n", gpsbabel_version);
-	fprintf(file_out, " <title>GPSBabel HTML Output</title>\n");
+	gbfprintf(file_out, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
+	gbfprintf(file_out, "<html>\n");
+	gbfprintf(file_out, "<head>\n");
+	gbfprintf(file_out, " <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n");
+	gbfprintf(file_out, " <meta name=\"Generator\" content=\"GPSBabel %s\">\n", gpsbabel_version);
+	gbfprintf(file_out, " <title>GPSBabel HTML Output</title>\n");
 	if (stylesheet) 
-		fprintf(file_out, " <link rel=\"stylesheet\" type=\"text/css\" href=\"%s\">\n", stylesheet);
+		gbfprintf(file_out, " <link rel=\"stylesheet\" type=\"text/css\" href=\"%s\">\n", stylesheet);
 	else {
-		fprintf(file_out, " <style>\n");
-		fprintf(file_out, "  p.gpsbabelwaypoint { font-size: 120%%; font-weight: bold }\n");
-		fprintf(file_out, " </style>\n");
+		gbfprintf(file_out, " <style>\n");
+		gbfprintf(file_out, "  p.gpsbabelwaypoint { font-size: 120%%; font-weight: bold }\n");
+		gbfprintf(file_out, " </style>\n");
 	}	
-	fprintf(file_out, "</head>\n");
-	fprintf(file_out, "<body>\n");
+	gbfprintf(file_out, "</head>\n");
+	gbfprintf(file_out, "<body>\n");
 
-	fprintf(file_out, "<p class=\"index\">\n");
+	gbfprintf(file_out, "<p class=\"index\">\n");
 	waypt_disp_all(html_index);
-	fprintf(file_out, "</p>\n");
+	gbfprintf(file_out, "</p>\n");
 	
 	waypt_disp_all(html_disp);
 
-	fprintf(file_out, "</body>");
-	fprintf(file_out, "</html>");
+	gbfprintf(file_out, "</body>");
+	gbfprintf(file_out, "</html>");
 
 }
 
