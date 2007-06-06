@@ -25,8 +25,7 @@ static XML_Parser psr;
 
 static waypoint *wpt_tmp;
 
-static FILE *fd;
-static FILE *ofd;
+static gbfile *fin, *fout;
 
 static char *noretired = NULL;
 
@@ -210,7 +209,7 @@ nav_end(void *data, const XML_Char *el)
 static void
 nav_rd_init(const char *fname)
 {
-	fd = xfopen(fname, "r", MYNAME);
+	fin = gbfopen(fname, "r", MYNAME);
 
 	psr = XML_ParserCreate(NULL);
 	if (!psr) {
@@ -227,8 +226,8 @@ nav_read(void)
 	int len;
 	char buf[MY_CBUF];
 	
-	while ((len = fread(buf, 1, sizeof(buf), fd))) {
-		if (!XML_Parse(psr, buf, len, feof(fd))) {
+	while ((len = gbfread(buf, 1, sizeof(buf), fin))) {
+		if (!XML_Parse(psr, buf, len, gbfeof(fin))) {
 			fatal(MYNAME ":Parse error at %d: %s\n", 
 				(int) XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
@@ -243,20 +242,20 @@ nav_read(void)
 static void
 nav_rd_deinit(void)
 {
-	fclose(fd);
+	gbfclose(fin);
 }
 
 static void
 nav_wr_init(const char *fname)
 {
 	fatal(MYNAME ": Does not support writing Navicache files.\n");
-	ofd = xfopen(fname, "w", MYNAME);
+	fout = gbfopen(fname, "w", MYNAME);
 }
 
 static void
 nav_wr_deinit(void)
 {
-	fclose(ofd);
+	gbfclose(fout);
 }
 
 static void
