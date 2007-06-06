@@ -829,6 +829,12 @@ nmea_parse_one_line(char *ibuf)
 	int ckval, ckcmp;
 	char *tbuf = lrtrim(ibuf);
 
+	/*
+	 * GISTEQ PhotoTracker (stupidly) puts a bogus field in front
+	 * of the line.  Look for it and toss it.
+ 	 */
+	if (0 == strncmp(tbuf, "---,", 4)) tbuf += 4;
+
 	if (*tbuf != '$') return;
 	
 	ck = strrchr(tbuf, '*');
