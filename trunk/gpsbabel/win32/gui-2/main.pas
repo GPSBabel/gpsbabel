@@ -562,7 +562,7 @@ var
   list: TStrings;
   CSave: TCursor;
   str: TStream;
-  s: string;
+  s, tmp: string;
   i: Integer;
   IFormat, OFormat: string;
   Fatal: Boolean;
@@ -660,9 +660,10 @@ begin
       begin
         if FileExists(s) then
         begin
+          tmp := _('Warning');
           if (Windows.MessageBox(SELF.Handle,
             PChar(Format(_('File "%s" exists ! Overwrite ?'), [s])),
-            PChar(_('Warning')), MB_YESNO) <> IDYES) then Exit;
+            PChar(tmp), MB_YESNO) <> IDYES) then Exit;
         end
           else
         begin
