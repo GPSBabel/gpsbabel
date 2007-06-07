@@ -264,7 +264,7 @@ read_poi(const int sz)
 	printf("shortname = %s\n", wpt->shortname);
 #endif	
 	
-	while (gbftell(fin) < (pos + sz - 4)) {
+	while (gbftell(fin) < (gbsize_t)(pos + sz - 4)) {
 		int tag = gbfgetint32(fin);
 		if (! read_tag("read_poi", tag, wpt)) break;
 	}
@@ -307,7 +307,7 @@ read_poi_list(const int sz)
 	
 	(void) gbfgetint32(fin);	/* ? const 0x1000100 ? */
 	
-	while (gbftell(fin) < (pos + sz - 4)) {
+	while (gbftell(fin) < (gbsize_t)(pos + sz - 4)) {
 		int tag = gbfgetint32(fin);
 		if (! read_tag("read_poi_list", tag, NULL)) return;
 	}
@@ -345,7 +345,7 @@ read_poi_group(const int sz, const int tag)
 #ifdef GPI_DBG
 	printf("Group \"%s\"\n", rdata->group);
 #endif
-	while (gbftell(fin) < (pos + sz)) {
+	while (gbftell(fin) < (gbsize_t)(pos + sz)) {
 		int subtag = gbfgetint32(fin);
 		if (! read_tag("read_poi_group", subtag, NULL)) break;
 	}
@@ -834,7 +834,7 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
 	bmp_header_t src_h;
 	int *color_table = NULL;
 	gpi_bitmap_header_t *dest_h;
-	void *ptr;
+	char *ptr;
 	
 	f = gbfopen_le(fname, "rb", MYNAME);
 	is_fatal(gbfgetint16(f) != 0x4d42, MYNAME ": No BMP image.");
@@ -904,7 +904,8 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
 	sz = sizeof(*dest_h) + (src_h.height * dest_line_sz);
 	if (src_h.used_colors) sz += src_h.used_colors * 4;
 
-	dest_h = ptr = xmalloc(sz);
+	ptr = xmalloc(sz);
+	dest_h = (void *)ptr;
 	*data = ptr;
 	*data_sz = sz;
 	
@@ -922,14 +923,14 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
 	le_write32(&dest_h->size_2c, (dest_line_sz * src_h.height) + 0x2c);
 
 	/* copy and revert order of BMP lines */
-	ptr = dest_h;
+	ptr = (void *)dest_h;
 	ptr += sizeof(*dest_h) + (dest_line_sz * (src_h.height - 1));
 
 	if (src_h.bpp == 24) {
 		/* 24 bpp seems to be not supported, convert to 32 bpp */
 		for (i = 0; i < src_h.height; i++) {
 			int j;
-			void *p = ptr;
+			char *p = ptr;
 			
 			for (j = 0; j < src_h.width; j++) {
 				int color;
@@ -946,7 +947,7 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
 	}
 
 	if (src_h.used_colors > 0) {
-		ptr = dest_h;
+		ptr = (void *)dest_h;
 		ptr += sizeof(*dest_h) + (src_h.height * src_line_sz);
 
 		for (i = 0; i < src_h.used_colors; i++) {
