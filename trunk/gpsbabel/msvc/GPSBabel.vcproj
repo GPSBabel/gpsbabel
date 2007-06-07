@@ -664,6 +664,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\g7towin.c"
+				>
+			</File>
+			<File
 				RelativePath="..\garmin.c"
 				>
 				<FileConfiguration
@@ -701,6 +705,10 @@
 			</File>
 			<File
 				RelativePath="..\garmin_fs.c"
+				>
+			</File>
+			<File
+				RelativePath="..\garmin_gpi.c"
 				>
 			</File>
 			<File
@@ -838,6 +846,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\ggv_log.c"
+				>
 			</File>
 			<File
 				RelativePath="..\globals.c"
@@ -2416,6 +2428,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\vitovtt.c"
+				>
+			</File>
+			<File
 				RelativePath="..\vmem.c"
 				>
 				<FileConfiguration
@@ -2530,6 +2546,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\xhtmlent.c"
+				>
 			</File>
 			<File
 				RelativePath="..\xmlgeneric.c"
@@ -3150,6 +3170,10 @@
 			</File>
 			<File
 				RelativePath="..\defs.h"
+				>
+			</File>
+			<File
+				RelativePath="..\garmin_gpi.h"
 				>
 			</File>
 			<File
