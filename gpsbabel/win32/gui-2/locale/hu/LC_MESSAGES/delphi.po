@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Borland Delphi Hungarian translation 0.1\n"
 "POT-Creation-Date: 2007-05-01 20:52\n"
-"PO-Revision-Date: 2007-05-08 22:21+0100\n"
-"Last-Translator: Olaf Klein <o.b.klein@t-online.de>\n"
+"PO-Revision-Date: 2007-06-07 02:36+0100\n"
+"Last-Translator: Sprok Bence <sprok.bence@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,14 +20,14 @@ msgstr ""
 #. Programmer's name for it: SCreateRegKeyError
 #: Rtl/Sys/comconst.pas:15
 msgid "Error creating system registry entry"
-msgstr ""
+msgstr "Hiba a regisztrációs bejegyzés készítésekor"
 
 #. Programmer's name for it: SOleError
 #. Programmer's name for it: SOleError
 #: Rtl/Sys/comconst.pas:16
 #: Vcl/oleconst.pas:18
 msgid "OLE error %.8x"
-msgstr ""
+msgstr "OLE hiba %.8x"
 
 #. Programmer's name for it: SObjectFactoryMissing
 #: Rtl/Sys/comconst.pas:17
@@ -64,22 +64,22 @@ msgstr ""
 #. Programmer's name for it: SDCOMNotInstalled
 #: Rtl/Sys/comconst.pas:23
 msgid "DCOM not installed"
-msgstr ""
+msgstr "DCOM nincs installálva"
 
 #. Programmer's name for it: SDAXError
 #: Rtl/Sys/comconst.pas:24
 msgid "DAX Error"
-msgstr ""
+msgstr "DAX Hiba"
 
 #. Programmer's name for it: SAutomationWarning
 #: Rtl/Sys/comconst.pas:26
 msgid "COM Server Warning"
-msgstr ""
+msgstr "COM Server figyelmeztetés"
 
 #. Programmer's name for it: SNoCloseActiveServer1
 #: Rtl/Sys/comconst.pas:29
 msgid "There are still active COM objects in this application.  One or more clients may have references to these objects, so manually closing "
-msgstr ""
+msgstr "Még jelenleg is futnak COM parancsok. Egy vagy több kliens még lehet, hogy hivatkozik ezekre. Kézi leállítás szükséges."
 
 #. Programmer's name for it: SNoCloseActiveServer2
 #: Rtl/Sys/comconst.pas:32
@@ -88,6 +88,9 @@ msgid ""
 "\n"
 "Are you sure you want to close this application?"
 msgstr ""
+"ez az alkalmazás befagyaszthatja mások munkáját.\n"
+"\n"
+"Biztos, hogy be akarja zárni az alkalmazást?"
 
 #. Programmer's name for it: SAutoSessionExclusive
 #: Vcl/bdeconst.pas:15
@@ -107,47 +110,47 @@ msgstr ""
 #. Programmer's name for it: SDuplicateDatabaseName
 #: Vcl/bdeconst.pas:18
 msgid "Duplicate database name '%s'"
-msgstr ""
+msgstr "Duplikált adatbázis-név '%s'"
 
 #. Programmer's name for it: SDuplicateSessionName
 #: Vcl/bdeconst.pas:19
 msgid "Duplicate session name '%s'"
-msgstr ""
+msgstr "Duplikált munkafázis név '%s'"
 
 #. Programmer's name for it: SInvalidSessionName
 #: Vcl/bdeconst.pas:20
 msgid "Invalid session name %s"
-msgstr ""
+msgstr "Érvénytelen munkafázis-név %s"
 
 #. Programmer's name for it: SDatabaseNameMissing
 #: Vcl/bdeconst.pas:21
 msgid "Database name missing"
-msgstr ""
+msgstr "Hiányzó adatbázis-név"
 
 #. Programmer's name for it: SSessionNameMissing
 #: Vcl/bdeconst.pas:22
 msgid "Session name missing"
-msgstr ""
+msgstr "Hiányzó munkafázis-név"
 
 #. Programmer's name for it: SDatabaseOpen
 #: Vcl/bdeconst.pas:23
 msgid "Cannot perform this operation on an open database"
-msgstr ""
+msgstr "A művelet nem hajtható végre nyitott adatbázison"
 
 #. Programmer's name for it: SDatabaseClosed
 #: Vcl/bdeconst.pas:24
 msgid "Cannot perform this operation on a closed database"
-msgstr ""
+msgstr "A művelet nem hajtható végre zárt adatbázison"
 
 #. Programmer's name for it: SDatabaseHandleSet
 #: Vcl/bdeconst.pas:25
 msgid "Database handle owned by a different session"
-msgstr ""
+msgstr "Az adatbázis-kezelés jogosultsága egy másik munkafolyamathoz tartozik"
 
 #. Programmer's name for it: SSessionActive
 #: Vcl/bdeconst.pas:26
 msgid "Cannot perform this operation on an active session"
-msgstr ""
+msgstr "A műveletet nem lehet végrehajtani az aktív munkafolyamaton"
 
 #. Programmer's name for it: SHandleError
 #: Vcl/bdeconst.pas:27
@@ -157,7 +160,7 @@ msgstr ""
 #. Programmer's name for it: SInvalidFloatField
 #: Vcl/bdeconst.pas:28
 msgid "Cannot convert field '%s' to a floating point value"
-msgstr ""
+msgstr "Az értéket '%s' nem lehet lebegőpontos értékké alakítani"
 
 #. Programmer's name for it: SInvalidIntegerField
 #: Vcl/bdeconst.pas:29
@@ -1341,112 +1344,112 @@ msgstr ""
 #. Programmer's name for it: SDirNameCap
 #: Vcl/consts.pas:207
 msgid "Directory &Name:"
-msgstr ""
+msgstr "Könyvtár Név:"
 
 #. Programmer's name for it: SDrivesCap
 #: Vcl/consts.pas:208
 msgid "D&rives:"
-msgstr ""
+msgstr "Meghajtók:"
 
 #. Programmer's name for it: SDirsCap
 #: Vcl/consts.pas:209
 msgid "&Directories:"
-msgstr ""
+msgstr "Könyvtárak:"
 
 #. Programmer's name for it: SFilesCap
 #: Vcl/consts.pas:210
 msgid "&Files: (*.*)"
-msgstr ""
+msgstr "Minden fájl (*.*)"
 
 #. Programmer's name for it: SNetworkCap
 #: Vcl/consts.pas:211
 msgid "Ne&twork..."
-msgstr ""
+msgstr "Hálózat..."
 
 #. Programmer's name for it: SColorPrefix
 #: Vcl/consts.pas:213
 msgid "Color"
-msgstr ""
+msgstr "Szín"
 
 #. Programmer's name for it: SColorTags
 #: Vcl/consts.pas:214
 msgid "ABCDEFGHIJKLMNOP"
-msgstr ""
+msgstr "ABCDEFGHIJKLMNOP"
 
 #. Programmer's name for it: SInvalidClipFmt
 #: Vcl/consts.pas:216
 msgid "Invalid clipboard format"
-msgstr ""
+msgstr "Nem megfelelő vágólap formátum"
 
 #. Programmer's name for it: SIconToClipboard
 #: Vcl/consts.pas:217
 msgid "Clipboard does not support Icons"
-msgstr ""
+msgstr "A vágólap nem támogat ikonokat"
 
 #. Programmer's name for it: SCannotOpenClipboard
 #: Vcl/consts.pas:218
 msgid "Cannot open clipboard"
-msgstr ""
+msgstr "Nem lehet megnyitni a vágólapot"
 
 #. Programmer's name for it: SDefault
 #: Vcl/consts.pas:220
 msgid "Default"
-msgstr ""
+msgstr "Alapértelmezett"
 
 #. Programmer's name for it: SInvalidMemoSize
 #: Vcl/consts.pas:222
 msgid "Text exceeds memo capacity"
-msgstr ""
+msgstr "A szöveg túllép a kapacitáson"
 
 #. Programmer's name for it: SCustomColors
 #: Vcl/consts.pas:223
 msgid "Custom Colors"
-msgstr ""
+msgstr "Egyedi színek"
 
 #. Programmer's name for it: SInvalidPrinterOp
 #: Vcl/consts.pas:224
 msgid "Operation not supported on selected printer"
-msgstr ""
+msgstr "A parancs nem támgatott ezen a nyomtatón"
 
 #. Programmer's name for it: SNoDefaultPrinter
 #: Vcl/consts.pas:225
 msgid "There is no default printer currently selected"
-msgstr ""
+msgstr "Nincs kiválasztva alapértelmezett nyomtató"
 
 #. Programmer's name for it: SIniFileWriteError
 #: Vcl/consts.pas:227
 msgid "Unable to write to %s"
-msgstr ""
+msgstr "Hiba az íráskor %s"
 
 #. Programmer's name for it: SBitsIndexError
 #: Vcl/consts.pas:229
 msgid "Bits index out of range"
-msgstr ""
+msgstr "Bit index hatókörön kívülre esik"
 
 #. Programmer's name for it: SUntitled
 #: Vcl/consts.pas:231
 msgid "(Untitled)"
-msgstr ""
+msgstr "(Névtelen)"
 
 #. Programmer's name for it: SInvalidRegType
 #: Vcl/consts.pas:233
 msgid "Invalid data type for '%s'"
-msgstr ""
+msgstr "Érvénytelen adattípus '%s'"
 
 #. Programmer's name for it: SRegCreateFailed
 #: Vcl/consts.pas:234
 msgid "Failed to create key %s"
-msgstr ""
+msgstr "Hiba a kulcs előállításakor %s"
 
 #. Programmer's name for it: SRegSetDataFailed
 #: Vcl/consts.pas:235
 msgid "Failed to set data for '%s'"
-msgstr ""
+msgstr "Hiba az adat beállításakor '%s'"
 
 #. Programmer's name for it: SRegGetDataFailed
 #: Vcl/consts.pas:236
 msgid "Failed to get data for '%s'"
-msgstr ""
+msgstr "Hiba az adat behívásakor '%s'"
 
 #. Programmer's name for it: SUnknownConversion
 #: Vcl/consts.pas:238
@@ -1456,77 +1459,77 @@ msgstr ""
 #. Programmer's name for it: SDuplicateMenus
 #: Vcl/consts.pas:239
 msgid "Menu '%s' is already being used by another form"
-msgstr ""
+msgstr "Menü '%s' már használatban van"
 
 #. Programmer's name for it: SPictureLabel
 #: Vcl/consts.pas:241
 msgid "Picture:"
-msgstr ""
+msgstr "Kép:"
 
 #. Programmer's name for it: SPictureDesc
 #: Vcl/consts.pas:242
 msgid " (%dx%d)"
-msgstr ""
+msgstr " (%dx%d)"
 
 #. Programmer's name for it: SPreviewLabel
 #: Vcl/consts.pas:243
 msgid "Preview"
-msgstr ""
+msgstr "Előnézet"
 
 #. Programmer's name for it: SCannotOpenAVI
 #: Vcl/consts.pas:245
 msgid "Cannot open AVI"
-msgstr ""
+msgstr "Nem lehet megnyitni az AVI-t"
 
 #. Programmer's name for it: SNotOpenErr
 #: Vcl/consts.pas:247
 msgid "No MCI device open"
-msgstr ""
+msgstr "Nincs megnyitva MCI eszköz"
 
 #. Programmer's name for it: SMPOpenFilter
 #: Vcl/consts.pas:248
 msgid "All files (*.*)|*.*|Wave files (*.wav)|*.wav|Midi files (*.mid)|*.mid|Video for Windows (*.avi)|*.avi"
-msgstr ""
+msgstr "Minden fájl (*.*)|*.*|Hangfájl (*.wav)|*.wav|Midi fájl (*.mid)|*.mid|Windows Video (*.avi)|*.avi"
 
 #. Programmer's name for it: SMCIAVIVideo
 #: Vcl/consts.pas:250
 msgid "AVIVideo"
-msgstr ""
+msgstr "AVIVideo"
 
 #. Programmer's name for it: SMCICDAudio
 #: Vcl/consts.pas:251
 msgid "CDAudio"
-msgstr ""
+msgstr "CDAudio"
 
 #. Programmer's name for it: SMCIDAT
 #: Vcl/consts.pas:252
 msgid "DAT"
-msgstr ""
+msgstr "DAT"
 
 #. Programmer's name for it: SMCIDigitalVideo
 #: Vcl/consts.pas:253
 msgid "DigitalVideo"
-msgstr ""
+msgstr "DigitalVideo"
 
 #. Programmer's name for it: SMCIMMMovie
 #: Vcl/consts.pas:254
 msgid "MMMovie"
-msgstr ""
+msgstr "MMMovie"
 
 #. Programmer's name for it: SMCIOther
 #: Vcl/consts.pas:255
 msgid "Other"
-msgstr ""
+msgstr "Egyéb"
 
 #. Programmer's name for it: SMCIOverlay
 #: Vcl/consts.pas:256
 msgid "Overlay"
-msgstr ""
+msgstr "Borítás"
 
 #. Programmer's name for it: SMCIScanner
 #: Vcl/consts.pas:257
 msgid "Scanner"
-msgstr ""
+msgstr "Képolvasó"
 
 #. Programmer's name for it: SMCISequencer
 #: Vcl/consts.pas:258
@@ -1536,12 +1539,12 @@ msgstr ""
 #. Programmer's name for it: SMCIVCR
 #: Vcl/consts.pas:259
 msgid "VCR"
-msgstr ""
+msgstr "VCR"
 
 #. Programmer's name for it: SMCIVideodisc
 #: Vcl/consts.pas:260
 msgid "Videodisc"
-msgstr ""
+msgstr "Videolemez"
 
 #. Programmer's name for it: SMCIWaveAudio
 #: Vcl/consts.pas:261
@@ -1551,37 +1554,37 @@ msgstr ""
 #. Programmer's name for it: SMCIUnknownError
 #: Vcl/consts.pas:262
 msgid "Unknown error code"
-msgstr ""
+msgstr "Ismeretlen hibakód"
 
 #. Programmer's name for it: SBoldItalicFont
 #: Vcl/consts.pas:264
 msgid "Bold Italic"
-msgstr ""
+msgstr "Felkövér dőlt"
 
 #. Programmer's name for it: SBoldFont
 #: Vcl/consts.pas:265
 msgid "Bold"
-msgstr ""
+msgstr "Félkövér"
 
 #. Programmer's name for it: SItalicFont
 #: Vcl/consts.pas:266
 msgid "Italic"
-msgstr ""
+msgstr "Dőlt"
 
 #. Programmer's name for it: SRegularFont
 #: Vcl/consts.pas:267
 msgid "Regular"
-msgstr ""
+msgstr "Normál"
 
 #. Programmer's name for it: SPropertiesVerb
 #: Vcl/consts.pas:269
 msgid "Properties"
-msgstr ""
+msgstr "Tulajdonságok"
 
 #. Programmer's name for it: sWindowsSocketError
 #: Vcl/consts.pas:271
 msgid "Windows socket error: %s (%d), on API '%s'"
-msgstr ""
+msgstr "Windows foglalat hiba: %s (%d), on API '%s'"
 
 #. Programmer's name for it: sAsyncSocketError
 #: Vcl/consts.pas:272
@@ -1961,62 +1964,62 @@ msgstr ""
 #. Programmer's name for it: SExprInvalidChar
 #: Vcl/dbconsts.pas:58
 msgid "Invalid filter expression character: '%s'"
-msgstr ""
+msgstr "Hibás karakter a szűrő kifejezésben: '%s'"
 
 #. Programmer's name for it: SExprNoLParen
 #: Vcl/dbconsts.pas:59
 msgid "'(' expected but %s found"
-msgstr ""
+msgstr "%s találat, de hiányzó '('"
 
 #. Programmer's name for it: SExprNoRParen
 #: Vcl/dbconsts.pas:60
 msgid "')' expected but %s found"
-msgstr ""
+msgstr "%s találat, de hiányzó ')'"
 
 #. Programmer's name for it: SExprNoRParenOrComma
 #: Vcl/dbconsts.pas:61
 msgid "')' or ',' expected but %s found"
-msgstr ""
+msgstr "%s találat, de hiányzó ')' vagy ','"
 
 #. Programmer's name for it: SExprExpected
 #: Vcl/dbconsts.pas:62
 msgid "Expression expected but %s found"
-msgstr ""
+msgstr "%s találat, de hiányzó kifejezés"
 
 #. Programmer's name for it: SExprBadField
 #: Vcl/dbconsts.pas:63
 msgid "Field '%s' cannot be used in a filter expression"
-msgstr ""
+msgstr "'%s' mezőt nem lehet alkalmazni a szűrő kifejezésben"
 
 #. Programmer's name for it: SExprBadNullTest
 #: Vcl/dbconsts.pas:64
 msgid "NULL only allowed with '=' and '<>'"
-msgstr ""
+msgstr "Csak NULL engedélyezett  '=' és/vagy '<>' -el"
 
 #. Programmer's name for it: SExprRangeError
 #: Vcl/dbconsts.pas:65
 msgid "Constant out of range"
-msgstr ""
+msgstr "Túlcsordulás"
 
 #. Programmer's name for it: SExprNotBoolean
 #: Vcl/dbconsts.pas:66
 msgid "Field '%s' is not of type Boolean"
-msgstr ""
+msgstr "'%s' mező nem Boolean típusú változó"
 
 #. Programmer's name for it: SExprIncorrect
 #: Vcl/dbconsts.pas:67
 msgid "Incorrectly formed filter expression"
-msgstr ""
+msgstr "Hibásan fogalmazott szűrő meghatározás"
 
 #. Programmer's name for it: SExprNothing
 #: Vcl/dbconsts.pas:68
 msgid "nothing"
-msgstr ""
+msgstr "semmi"
 
 #. Programmer's name for it: SExprTypeMis
 #: Vcl/dbconsts.pas:69
 msgid "Type mismatch in expression"
-msgstr ""
+msgstr "Gépelési hiba a kifejezésben"
 
 #. Programmer's name for it: SExprBadScope
 #: Vcl/dbconsts.pas:70
@@ -2051,17 +2054,17 @@ msgstr ""
 #. Programmer's name for it: SInvalidKeywordUse
 #: Vcl/dbconsts.pas:76
 msgid "Invalid use of keyword"
-msgstr ""
+msgstr "Nem megengedett kulcsszó használata"
 
 #. Programmer's name for it: STextFalse
 #: Vcl/dbconsts.pas:77
 msgid "False"
-msgstr ""
+msgstr "Hamis"
 
 #. Programmer's name for it: STextTrue
 #: Vcl/dbconsts.pas:78
 msgid "True"
-msgstr ""
+msgstr "Igaz"
 
 #. Programmer's name for it: SParameterNotFound
 #: Vcl/dbconsts.pas:79
@@ -2176,7 +2179,7 @@ msgstr ""
 #. Programmer's name for it: SRemoteLogin
 #: Vcl/dbconsts.pas:105
 msgid "Remote Login"
-msgstr ""
+msgstr "Távoli bejelentkezés"
 
 #. Programmer's name for it: SDataBindings
 #: Vcl/dbconsts.pas:108
@@ -2191,7 +2194,7 @@ msgstr ""
 #. Programmer's name for it: SCannotActivate
 #: Vcl/oleconst.pas:16
 msgid "OLE control activation failed"
-msgstr ""
+msgstr "Hibás OLE aktviációs parancs"
 
 #. Programmer's name for it: SNoWindowHandle
 #: Vcl/oleconst.pas:17
@@ -2211,12 +2214,12 @@ msgstr ""
 #. Programmer's name for it: SLinkProperties
 #: Vcl/oleconst.pas:22
 msgid "Link Properties"
-msgstr ""
+msgstr "Link tulajdonságok"
 
 #. Programmer's name for it: SInvalidLinkSource
 #: Vcl/oleconst.pas:23
 msgid "Cannot link to an invalid source."
-msgstr ""
+msgstr "Nem lehet hozzácsatolni érvénytelen forráshoz"
 
 #. Programmer's name for it: SCannotBreakLink
 #: Vcl/oleconst.pas:24
@@ -2226,12 +2229,12 @@ msgstr ""
 #. Programmer's name for it: SLinkedObject
 #: Vcl/oleconst.pas:25
 msgid "Linked %s"
-msgstr ""
+msgstr "Linkelve %s"
 
 #. Programmer's name for it: SEmptyContainer
 #: Vcl/oleconst.pas:26
 msgid "Operation not allowed on an empty OLE container"
-msgstr ""
+msgstr "A művelet nem engedélyezett üres OLE tárolón"
 
 #. Programmer's name for it: SInvalidVerb
 #: Vcl/oleconst.pas:27
@@ -2241,12 +2244,12 @@ msgstr ""
 #. Programmer's name for it: SPropDlgCaption
 #: Vcl/oleconst.pas:28
 msgid "%s Properties"
-msgstr ""
+msgstr "%s Tulajdonságok"
 
 #. Programmer's name for it: SInvalidLicense
 #: Vcl/oleconst.pas:30
 msgid "License information for %s is invalid"
-msgstr ""
+msgstr "Licensz információ nem megfelelő %s -hoz"
 
 #. Programmer's name for it: SNotLicensed
 #: Vcl/oleconst.pas:31
