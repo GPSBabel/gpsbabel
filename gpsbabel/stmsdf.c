@@ -2,7 +2,7 @@
 
     Support for Suunto Trackmanager SDF format.
 
-    Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005,2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,13 +27,15 @@
     ToDo: Ascending/Descending
 */
 
+#include "defs.h"
+
+#if CSVFMTS_ENABLED
 
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "defs.h"
 #include "csv_util.h"
 #include "strptime.h"
 #include "jeeps/gpsmath.h"
@@ -76,6 +78,7 @@ static int this_points;
 static int saved_points;
 static time_t start_time;
 static unsigned char this_valid;
+static short_handle short_h;
 
 #define route_index this_index
 #define track_index this_index
@@ -430,7 +433,6 @@ calculate(const waypoint *wpt, double *dist, double *speed, double *course,
 			else
 				*desc -= dh;
 		}
-		
 	}
 	else {
 		*speed = 0;
@@ -441,6 +443,7 @@ calculate(const waypoint *wpt, double *dist, double *speed, double *course,
 	}
 	if WAYPT_HAS(wpt, speed) *speed = wpt->speed / 3.6;	/* -> meters per second */
 	if WAYPT_HAS(wpt, course) *course = wpt->course;
+	
 }
 
 /* pre-calculation callbacks */
@@ -586,8 +589,15 @@ static void
 route_disp_wpt_cb(const waypoint *wpt)
 {
 	if (this_route_valid) {
+		char *sn;
+		
+		if (global_opts.synthesize_shortnames)
+			sn = mkshort_from_wpt(short_h, wpt);
+		else
+			sn = mkshort(short_h, wpt->shortname);
 		gbfprintf(fout, "\"WP\",\"%s\",%.8lf,%.8lf,%.f\n",
-			wpt->shortname, wpt->latitude, wpt->longitude, ALT(wpt));
+			sn, wpt->latitude, wpt->longitude, ALT(wpt));
+		xfree(sn);
 	}
 }
 
@@ -603,11 +613,13 @@ static void
 wr_init(const char *fname)
 {
 	fout = gbfopen(fname, "w", MYNAME);
+	short_h = mkshort_new_handle();
 }
 
 static void
 wr_deinit(void)
 {
+	mkshort_del_handle(&short_h);
 	gbfclose(fout);
 }
 
@@ -634,6 +646,12 @@ data_write(void)
 	all_points = 0;
 	start_time = 0;
 	
+	setshort_length(short_h, 100);
+	setshort_badchars(short_h, "\r\n");
+	setshort_mustupper(short_h, 0);
+	setshort_mustuniq(short_h, 0);
+	setshort_whitespace_ok(short_h, 1);
+	setshort_repeating_whitespace_ok(short_h, 1);
 	
 	switch(global_opts.objective)
 	{
@@ -717,3 +735,6 @@ ff_vecs_t stmsdf_vecs = {
 };
 
 /* ================================================================== */
+
+#endif /* CSVFMTS_ENABLED */
+
