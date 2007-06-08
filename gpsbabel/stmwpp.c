@@ -20,7 +20,11 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 */
 
+
 #include "defs.h"
+
+#if CSVFMTS_ENABLED
+
 #include "csv_util.h"
 #include <ctype.h>
 #include <stdio.h>
@@ -29,6 +33,7 @@
 static gbfile *fin, *fout;
 static route_head *track, *route;
 static waypoint *wpt;
+static short_handle short_h;
 
 #define MYNAME "STMwpp"
 
@@ -76,7 +81,7 @@ stmwpp_data_read(void)
 	buff = gbfgetstr(fin);
 	buff = (buff == NULL) ? "" : buff;
 	
-	if (strncmp(buff, "Datum,WGS 84,WGS 84,", 20) != 0)
+	if (case_ignore_strncmp(buff, "Datum,WGS 84,WGS 84,", 20) != 0)
 		fatal(MYNAME ": Invalid GPS datum or not \"WaypointPlus\"\" file!\n");
 	
 	while ((buff = gbfgetstr(fin)))
@@ -85,15 +90,19 @@ stmwpp_data_read(void)
 		int column = -1;
 		struct tm time;
 		
+		buff = lrtrim(buff);
+		if (*buff == '\0') continue;
+		
 		wpt = NULL;
 		memset(&time, 0, sizeof(time));
 		
-		c = csv_lineparse(buff, ",", "", column++);
-		while (c != NULL)
+		while ((c = csv_lineparse(buff, ",", "", column++)))
 		{
 			int new_what;
 			int fracsec;
 			
+			buff = NULL;
+
 			switch(column)
 			{
 				case 0:
@@ -145,7 +154,6 @@ stmwpp_data_read(void)
 				default:
 					break;
 			}
-			c = csv_lineparse(NULL, ",", "", column++);
 		}
 		if (wpt != NULL)
 		{
@@ -184,11 +192,13 @@ static void
 stmwpp_rw_init(const char *fname)
 {
 	fout = gbfopen(fname, "wb", MYNAME);
+	short_h = mkshort_new_handle();
 }
 
 static void
 stmwpp_rw_deinit(void)
 {
+	mkshort_del_handle(&short_h);
 	gbfclose(fout);
 }
 
@@ -196,11 +206,6 @@ static void
 stmwpp_track_hdr(const route_head *track)
 {
 	track_num++;
-}
-
-static void
-stmwpp_track_tlr(const route_head *track)
-{
 }
 
 static void
@@ -232,9 +237,16 @@ stmwpp_waypt_cb(const waypoint *wpt)
 	
 	switch(what)
 	{
+		char *sn;
+
 		case STM_WAYPT:
 		case STM_RTEPT:
-			gbfprintf(fout, "WP,D,%s,", wpt->shortname);
+			if (global_opts.synthesize_shortnames)
+				sn = mkshort_from_wpt(short_h, wpt);
+			else
+				sn = mkshort(short_h, wpt->shortname);
+			gbfprintf(fout, "WP,D,%s,", sn);
+			xfree(sn);
 			break;
 			
 		case STM_TRKPT:
@@ -260,6 +272,13 @@ stmwpp_waypt_cb(const waypoint *wpt)
 static void
 stmwpp_data_write(void)
 {
+	setshort_length(short_h, 100);
+	setshort_badchars(short_h, ",\r\n");
+	setshort_mustupper(short_h, 0);
+	setshort_mustuniq(short_h, 0);
+	setshort_whitespace_ok(short_h, 1);
+	setshort_repeating_whitespace_ok(short_h, 1);
+
 	track_num = 0;
 	if (index_opt != NULL)
 		track_index = atoi(index_opt);
@@ -273,15 +292,17 @@ stmwpp_data_write(void)
 		case wptdata:
 			what = STM_WAYPT;
 			track_index = track_num;	/* disable filter */
+			setshort_defname(short_h, "WPT");
 			waypt_disp_all(stmwpp_waypt_cb);
 			break;
 		case rtedata:
 			what = STM_RTEPT;
-			route_disp_all(stmwpp_track_hdr, stmwpp_track_tlr, stmwpp_waypt_cb);
+			setshort_defname(short_h, "RPT");
+			route_disp_all(stmwpp_track_hdr, NULL, stmwpp_waypt_cb);
 			break;
 		case trkdata:
 			what = STM_TRKPT;
-			track_disp_all(stmwpp_track_hdr, stmwpp_track_tlr, stmwpp_waypt_cb);
+			track_disp_all(stmwpp_track_hdr, NULL, stmwpp_waypt_cb);
 			break;
 	    	case posndata:
 			fatal(MYNAME ": Realtime positioning not supported.\n");
@@ -302,3 +323,6 @@ ff_vecs_t stmwpp_vecs = {
 	stmwpp_args,
 	CET_CHARSET_MS_ANSI, 0
 };
+
+#endif /* CSVFMTS_ENABLED */
+
