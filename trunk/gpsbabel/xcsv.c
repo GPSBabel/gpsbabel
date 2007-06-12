@@ -61,7 +61,7 @@ arglist_t xcsv_args[] = {
 		"Use shortname instead of description", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"datum", &opt_datum, "GPS datum (def. WGS 84)", 
-		NULL, ARGTYPE_STRING, ARG_NOMINMAX}, 
+		"WGS 84", ARGTYPE_STRING, ARG_NOMINMAX}, 
 	ARG_TERMINATOR
 };
 
@@ -546,11 +546,8 @@ xcsv_rd_init(const char *fname)
     }
 
     xcsv_file.xcsvfp = gbfopen(fname, "r", MYNAME);
-    if (opt_datum) {
-	xcsv_file.gps_datum = GPS_Lookup_Datum_Index(opt_datum);
-	is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", opt_datum);
-    }
-
+    xcsv_file.gps_datum = GPS_Lookup_Datum_Index(opt_datum);
+    is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", opt_datum);
 }
 
 static void
@@ -599,10 +596,8 @@ xcsv_wr_init(const char *fname)
         setshort_badchars(xcsv_file.mkshort_handle, xcsv_file.badchars);
 
     }
-    if (opt_datum) {
-	xcsv_file.gps_datum = GPS_Lookup_Datum_Index(opt_datum);
-	is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", opt_datum);
-    }
+    xcsv_file.gps_datum = GPS_Lookup_Datum_Index(opt_datum);
+    is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", opt_datum);
 }
 
 static void
