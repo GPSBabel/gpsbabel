@@ -30,7 +30,7 @@
 
 static vmem_t current_tag;
 static vmem_t cdatastr;
-static FILE *ifd;
+static gbfile *ifd;
 static xg_tag_mapping *xg_tag_tbl;
 static const char **xg_ignore_taglist;
 
@@ -266,8 +266,8 @@ void xml_read(void)
 	int len;
 	char buf[MY_CBUF];
 	
-	while ((len = fread(buf, 1, sizeof(buf), ifd))) {
-		if (!XML_Parse(psr, buf, len, feof(ifd))) {
+	while ((len = gbfread(buf, 1, sizeof(buf), ifd))) {
+		if (!XML_Parse(psr, buf, len, gbfeof(ifd))) {
 			fatal(MYNAME ":Parse error at %d: %s\n",
 				(int) XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
@@ -307,7 +307,9 @@ void
 xml_init(const char *fname, xg_tag_mapping *tbl, const char *encoding)
 {
 	if (fname) {
-		ifd = xfopen(fname, "r", MYNAME);
+		ifd = gbfopen(fname, "r", MYNAME);
+	} else {
+		ifd = NULL;
 	}
 
 	current_tag = vmem_alloc(1,0);
@@ -334,7 +336,7 @@ xml_deinit(void)
 	vmem_free(&current_tag);
 	vmem_free(&cdatastr);
 	if (ifd) {
-		fclose(ifd);
+		gbfclose(ifd);
 		ifd = NULL;
 	}
 	xg_ignore_taglist = NULL;
