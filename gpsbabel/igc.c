@@ -628,6 +628,9 @@ static void wr_task_hdr(const route_head * rte)
     if (num_tps < 0) {
 	fatal(MYNAME ": Too few waypoints in task route\n");
     }
+    else if (num_tps > 99) {
+	fatal(MYNAME ": Too much waypoints (more than 99) in task route.\n");
+    }
     // Gather data to write to the task identification (first) record
     rte_time = wpt->creation_time ? wpt->creation_time : current_time();
     if (NULL == (tm = gmtime(&rte_time))) {
