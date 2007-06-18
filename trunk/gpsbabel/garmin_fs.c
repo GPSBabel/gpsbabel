@@ -102,9 +102,9 @@ garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
 	if (gmsd == NULL) return;
 	
 	if ((gmsd->flags.category && gmsd->category) || 
-	     waypt->wpt_flags.depth || 
-	     waypt->wpt_flags.proximity || 
-	     waypt->wpt_flags.temperature || 
+	     WAYPT_HAS(waypt, depth) || 
+	     WAYPT_HAS(waypt, proximity) || 
+	     WAYPT_HAS(waypt, temperature) || 
 	     gmsd->flags.display)
 	{
 		int space = 1;
