@@ -516,10 +516,10 @@ gprmc_parse(char *ibuf)
 	if (posn_type == gpgga) {
 		/* capture useful data update and exit */
 		if (curr_waypt) {
-			if (curr_waypt->speed<=0) 
-				curr_waypt->speed 	= speed*kts2mps;
-			if (curr_waypt->course<=0)
-				curr_waypt->course 	= course;
+			if (! WAYPT_HAS(curr_waypt, speed))
+				WAYPT_SET(curr_waypt, speed, speed*kts2mps);
+			if (! WAYPT_HAS(curr_waypt, course))
+				WAYPT_SET(curr_waypt, course, course);
 			/* The change of date wasn't recorded when 
 			 * going from 235959 to 000000. */
 			 nmea_set_waypoint_time(curr_waypt, &tm);
@@ -529,9 +529,9 @@ gprmc_parse(char *ibuf)
 		
 	waypt  = waypt_new();
 
-	waypt->speed 	= speed*kts2mps;
+	WAYPT_SET(waypt, speed, speed*kts2mps);
 
-	waypt->course 	= course;
+	WAYPT_SET(waypt, course, course);
 	
 	nmea_set_waypoint_time(waypt, &tm);
 
@@ -1206,8 +1206,8 @@ nmea_trackpt_pr(const waypoint *wpt)
 				fix=='0' ? 'V' : 'A',
 				fabs(lat), lat < 0 ? 'S' : 'N',
 				fabs(lon), lon < 0 ? 'W' : 'E',
-				(wpt->speed>0)?(wpt->speed / kts2mps):(0),
-				(wpt->course>=0)?(wpt->course):(0),
+				WAYPT_HAS(wpt, speed) ? (wpt->speed / kts2mps):(0),
+				WAYPT_HAS(wpt, course) ? (wpt->course):(0),
 				(int) ymd);
 		cksum = nmea_cksum(obuf);
 		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
@@ -1224,11 +1224,11 @@ nmea_trackpt_pr(const waypoint *wpt)
 		cksum = nmea_cksum(obuf);
 		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
-	if ((opt_gpvtg) && ((wpt->course>=0) || (wpt->speed>0))) {
+	if ((opt_gpvtg) && (WAYPT_HAS(wpt, course) || WAYPT_HAS(wpt, speed))) {
 		snprintf(obuf,sizeof(obuf),"GPVTG,%.3f,T,0,M,%.3f,N,%.3f,K",
-			(wpt->course>=0)?(wpt->course):(0),	
-			(wpt->speed>0)?(wpt->speed / kts2mps):(0),
-			(wpt->speed>0)?(wpt->speed / kmh2mps):(0) );
+			WAYPT_HAS(wpt, course) ? (wpt->course):(0),	
+			WAYPT_HAS(wpt, speed) ? (wpt->speed / kts2mps):(0),
+			WAYPT_HAS(wpt, speed) ? (wpt->speed / kmh2mps):(0) );
 
 		cksum = nmea_cksum(obuf);
 		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
