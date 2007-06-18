@@ -103,8 +103,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.53 $"; */
-static char gdb_release_date[] = "$Date: 2007-06-02 21:00:37 $";
+/* static char gdb_release[] = "$Revision: 1.54 $"; */
+static char gdb_release_date[] = "$Date: 2007-06-18 18:08:52 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -471,7 +471,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	res->longitude = FREAD_LATLON;
 
 	if (FREAD_C == 1) {
-		double alt = gbfgetdbl(fin);
+		double alt = FREAD_DBL;
 		if (alt < 1.0e24) {
 			res->altitude = alt;
 #if GDB_DEBUG
@@ -498,12 +498,11 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	}
 #endif
 	if (FREAD_C == 1) {
-		double proximity = gbfgetdbl(fin);
-		WAYPT_SET(res, proximity, proximity);
+		WAYPT_SET(res, proximity, FREAD_DBL);
 #if GDB_DEBUG
 		DBG(GDB_DBG_WPTe, 1)
 			printf(MYNAME "-wpt \"%s\" (%d): Proximity = %.1f\n",
-				sn, wpt_class, proximity / 1000);
+				sn, wpt_class, res->proximity / 1000);
 #endif		
 	}
 	i = FREAD_i32;
@@ -535,12 +534,11 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	FREAD(buf, 1);
 
 	if (FREAD_C == 1) {
-		double depth = gbfgetdbl(fin);
-		WAYPT_SET(res, depth, depth);
+		WAYPT_SET(res, depth, FREAD_DBL);
 #if GDB_DEBUG
 		DBG(GDB_DBG_WPTe, 1)
 			printf(MYNAME "-wpt \"%s\" (%d): Depth = %.1f\n",
-				sn, wpt_class, depth);
+				sn, wpt_class, res->depth);
 #endif		
 	}
 
@@ -616,7 +614,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 #endif
 	
 	if (FREAD_C == 1) {
-		res->temperature = FREAD_DBL;
+		WAYPT_SET(res, temperature, FREAD_DBL);
 #if GDB_DEBUG
 		DBG(GDB_DBG_WPTe, 1)
 			printf(MYNAME "-wpt \"%s\" (%d): temperature = %.1f\n",
@@ -680,10 +678,10 @@ read_route(void)
 	if (FREAD_C == 0) {		/* max. data flag */
 		/* maxlat = */ (void) FREAD_i32;
 		/* maxlon = */ (void) FREAD_i32;
-		if (FREAD_C == 1) /* maxalt = */ gbfgetdbl(fin);
+		if (FREAD_C == 1) /* maxalt = */ FREAD_DBL;
 		/* minlat = */ (void) FREAD_i32;
 		/* minlon = */ (void) FREAD_i32;
-		if (FREAD_C == 1) /* minalt = */ gbfgetdbl(fin);
+		if (FREAD_C == 1) /* minalt = */ FREAD_DBL;
 	}
 	
 	links = 0;
@@ -889,17 +887,17 @@ read_track(void)
 		wpt->latitude = FREAD_LATLON;
 		wpt->longitude = FREAD_LATLON;
 		if (FREAD_C == 1) {
-			double alt = gbfgetdbl(fin);
+			double alt = FREAD_DBL;
 			if (alt < 1.0e24) wpt->altitude = alt;
 		}
 		if (FREAD_C == 1) {
 			wpt->creation_time = FREAD_i32;
 		}
 		if (FREAD_C == 1) {
-			WAYPT_SET(wpt, depth, gbfgetdbl(fin));
+			WAYPT_SET(wpt, depth, FREAD_DBL);
 		}
 		if (FREAD_C == 1) {
-			WAYPT_SET(wpt, temperature, gbfgetdbl(fin));
+			WAYPT_SET(wpt, temperature, FREAD_DBL);
 		}
 		
 		track_add_wpt(res, wpt);
