@@ -55,6 +55,7 @@
 	    2007/02/07: Add special code for unknown bytes in waypoints with class GE 8 (calculated points)
 	    2007/02/15: Nearly full rewrite. Full support for GDB V3. New option roadbook.
 	    2007/05/03: Add code for tricky V3 descriptions
+	    2007/06/18: Tweak some forgotten "flagged" fields
 */
 
 #include <stdio.h>
@@ -103,8 +104,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.54 $"; */
-static char gdb_release_date[] = "$Date: 2007-06-18 18:08:52 $";
+/* static char gdb_release[] = "$Revision: 1.55 $"; */
+static char gdb_release_date[] = "$Date: 2007-06-18 18:10:13 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
