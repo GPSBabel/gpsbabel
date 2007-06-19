@@ -329,6 +329,7 @@ google_read(void)
 		else if ( dict ) {
 		  char qc = '\'';
 		  int ofs = 9;
+		  int panelofs = 8;
 		  int count = 0;
 		  char *tmp = NULL;
 		  char *start = NULL;
@@ -337,16 +338,30 @@ google_read(void)
 		  encoded_points = strstr( dict, "points: '" );
 		  encoded_levels = strstr( dict, "levels: '" );
 		  if ( !encoded_points ) {
+		    ofs = 10;
+		    qc = '"';
 	            encoded_points = strstr( dict, "\"points\":\"" );
 	            encoded_levels = strstr( dict, "\"levels\":\"" );
-		    qc = '"';
-		    ofs = 10;
+		    if ( !encoded_points ) { 
+		      encoded_points = strstr(dict, "points:\"" );
+		      encoded_levels = strstr(dict, "levels:\"" );
+		      ofs = 8;
+		    }
+		  }
+		  
+		  if ( !panel ) {
+		    panel = strstr( dict, "panel:\"");
+		    panelofs = 7;
 		  }
 		  
 		  tmp = panel;
 		  while ( tmp ) {
 	            if ( qc == '"' ) {
-		      tmp = strstr( tmp, "\"points\":\"" );
+		      char *tmp1 = strstr( tmp, "\"points\":\"" );
+		      if ( !tmp1 ) {
+		        tmp1 = strstr( tmp, "points:\"" );
+		      }
+		      tmp = tmp1;
 		    }
 		    else {
 		      tmp = strstr( tmp, "points: '" );
@@ -386,24 +401,31 @@ google_read(void)
 			  
 		          goog_segroute++;
 			  start++;
-                          if ( qc == '"' ) {
+			  {
+		            encoded_points = strstr( start, "points: '" );
+		            encoded_levels = strstr( start, "levels: '" );
+			  }
+                          if ( !encoded_points ) {
 	                    encoded_points = strstr( start, "\"points\":\"" );
 	                    encoded_levels = strstr( start, "\"levels\":\"" );
 			  }
-			  else {
-		            encoded_points = strstr( start, "points: '" );
-		            encoded_levels = strstr( start, "levels: '" );
+			  if ( !encoded_points ) {
+		            encoded_points = strstr( start, "points:\"" );
+			    encoded_levels = strstr( start, "levels:\"" );
 			  }
 		        }
 		      }		      
 		    }
 		  } while ( start && encoded_points && encoded_levels );
 	          if ( panel ) {
-		    panel += 8;
+		    panel += panelofs;
 		    end = strstr( panel, "/table><div class=\\\"legal" );
 		    if ( !end ) {
 	              end = strstr( panel, "/table><div class=\\042legal" );
 		    }
+		    if ( !end ) {
+		      end = strstr( panel, "/table\\u003e\\u003cdiv id=\\\"mrDragRouteTip\\\"" );
+		    }		    
 		    if ( end ) {
 	              strcpy(end,"/table></div>");
 		    }
@@ -421,6 +443,9 @@ google_read(void)
 			if ( !strncmp( from, "\\\"", 2 )) {
 			  *to++ = '"';
 			  from += 2;
+			  if ( *(to-2) != '=' ) { 
+  			    *to++ = ' ';				  
+			  }
 			}
 			else if ( !strncmp( from, "\\042", 4)) {
 			  *to++ = '"';
@@ -429,6 +454,18 @@ google_read(void)
 			  if ( *(to-2) != '=' ) { 
   			    *to++ = ' ';				  
 			  }
+			}
+			else if ( !strncmp( from, "\\u0026", 6 )) {
+			  *to++='&';
+			  from += 6;
+			}
+			else if ( !strncmp( from, "\\u003c", 6 )) {
+			  *to++='<';
+			  from += 6;
+			}
+			else if ( !strncmp( from, "\\u003e", 6 )) {
+			  *to++='>';
+			  from += 6;
 			}
 			else if ( !strncmp( from, "\\'", 2)) {
 			  *to++ = '\'';
@@ -443,6 +480,14 @@ google_read(void)
 			}			  
 		      }
 		      *to = '\0';
+		      
+#if 0 
+		      {
+			FILE *foo = fopen( "foo.xml", "w" );
+			fwrite( panel, sizeof(char), strlen(panel), foo );
+			fclose( foo );
+		      }
+#endif
 
 		      xml_deinit();
 		      xml_init( NULL, google_map, NULL );
