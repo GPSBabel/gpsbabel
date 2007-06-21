@@ -16,11 +16,16 @@
 <member>Edge 205</member> 
 <member>Edge 305</member> 
 <member>eTrex Legend C</member> 
-<member>eTrex LegendCX</member>  
+<member>eTrex Legend Cx</member>  
+<member>eTrex Legend HCx</member>  
+<member>eTrex Summit Cx</member> 
+<member>eTrex Summit HC</member>  
 <member>eTrex Venture C</member> 
-<member>eTrex Venture CX</member> 
-<member>eTrex VistaC</member> 
-<member>eTrex Vista CX</member> 
+<member>eTrex Venture Cx</member> 
+<member>eTrex Venture HC</member> 
+<member>eTrex Vista C</member> 
+<member>eTrex Vista Cx</member> 
+<member>eTrex Vista HCx</member> 
 <member>Forerunner 205</member> 
 <member>Forerunner 301</member> 
 <member>Forerunner 305</member>  
@@ -37,23 +42,35 @@
 <member>GPSMAP 496</member>
 <member>GPSMAP 60C</member> 
 <member>GPSMAP 60CS</member> 
-<member>GPSMAP 60CSX</member> 
-<member>GPSMAP 60CX</member> 
+<member>GPSMAP 60CSx</member> 
+<member>GPSMAP 60Cx</member> 
 <member>GPSMAP 76C</member> 
 <member>GPSMAP 76CS</member> 
 <member>GPSMAP 76CSX</member> 
-<member>GPSMAP 76CX</member> 
+<member>GPSMAP 76Cx</member> 
 <member>GPSMAP 96</member> 
 <member>GPSMAP 96C</member> 
 <member>Nuvi 300<footnote id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.  Members of this class of products do not support realtime positioning protocol.</para></footnote></member>
+<member>Nuvi 200<footnoteref linkend="gpx"/></member>
+<member>Nuvi 200W<footnoteref linkend="gpx"/></member>
+<member>Nuvi 250<footnoteref linkend="gpx"/></member>
+<member>Nuvi 250W<footnoteref linkend="gpx"/></member>
+<member>Nuvi 270<footnoteref linkend="gpx"/></member>
 <member>Nuvi 310<footnoteref linkend="gpx"/></member>
 <member>Nuvi 350<footnoteref linkend="gpx"/></member>
 <member>Nuvi 370<footnoteref linkend="gpx"/></member>
+<member>Nuvi 600<footnoteref linkend="gpx"/></member>
+<member>Nuvi 650<footnoteref linkend="gpx"/></member>
+<member>Nuvi 650FM<footnoteref linkend="gpx"/></member>
 <member>Nuvi 660<footnoteref linkend="gpx"/></member>
 <member>Nuvi 670<footnoteref linkend="gpx"/></member>
 <member>Nuvi 680<footnoteref linkend="gpx"/></member>
 <member>Quest</member>
 <member>Quest II</member>
+<member>Rhino 520</member>
+<member>Rhino 530</member>
+<member>Rhino 520 HCx</member>
+<member>Rhino 530 HCx</member>
 <member>StreetPilot 2610</member> 
 <member>StreetPilot 2620</member> 
 <member>StreetPilot 2650</member> 
@@ -91,7 +108,8 @@
 <member>eTrex Summit</member>
 <member>eTrex Venture</member>
 <member>eTrex Vista</member>
-<member>eTrex Yellow</member>
+<member>eTrex (Basic Yellow)</member>
+<member>eTrex H</member>
 <member>Forerunner 201</member> 
 <member>Foretrex 201</member> 
 <member>Geko 201</member> 
@@ -105,6 +123,9 @@
 <member>GPS II </member> 
 <member>GPS II+ </member> 
 <member>GPS V</member> 
+<member>Rhino 110</member> 
+<member>Rhino 120</member> 
+<member>Rhino 130</member> 
 <member>StreetPilot III</member> 
 <member>StreetPilot III+</member> 
 </simplelist>
