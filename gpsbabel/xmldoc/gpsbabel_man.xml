@@ -26,11 +26,22 @@
 
 <refsect1><title>Description</title>
 <para>
-GPSBabel converts waypoints, tracks, and routes from one format to another, whether that format is a common mapping format like Delorme, Streets and Trips, or even a serial upload or download to a GPS unit such as those from Garmin and Magellan. By flattening the Tower of Babel that the authors of various programs for manipulating GPS data have imposed upon us, it returns to us the ability to freely move our own waypoint data between the programs and hardware we choose to use.
-</para><para>
-It contains extensive data manipulation abilities making it a convenient for server-side processing or as the backend for other tools.
+	GPSBabel converts waypoints, tracks, and routes from one format to
+	another.  GPSBabel also downloads and uploads waypoints, tracks,
+	and routes to and from a GPS receiver (such as those by Garmin and
+	Magellan) connected by a serial or USB port.
 </para>
-</refsect1>
+
+</para>
+	By flattening the Tower of Babel that the authors of various programs
+	for manipulating GPS data have imposed upon us, it returns to us the
+	ability to freely move our own waypoint data between the programs and
+	hardware we choose to use. 
+</para>
+
+<para> It contains extensive data
+manipulation abilities making it a convenient for server-side processing
+or as the backend for other tools. </para> </refsect1>
 
 <refsect1><title>Options</title>
 <para>
