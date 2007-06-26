@@ -422,13 +422,13 @@ google_read(void)
 		    end = strstr( panel, "/table><div class=\\\"legal" );
 		    if ( !end ) {
 	              end = strstr( panel, "/table><div class=\\042legal" );
-		    }
+		    }		    
 		    if ( !end ) {
 		      end = strstr( panel, "/table\\u003e\\u003cdiv id=\\\"mrDragRouteTip\\\"" );
-		    }		    
-		    if ( end ) {
-	              strcpy(end,"/table></div>");
-		    }
+		    }		   
+                    if ( end ) {
+                      strcpy(end,"/table></div>");
+                    }
 		    if ( !end ) {
 		      end = strstr( panel, "/div><div class=\\042legal");
 		      if ( end ) {
@@ -474,6 +474,14 @@ google_read(void)
 			else if ( !strncmp( from, " nowrap ", 8)) {
 			  *to++ = ' ';
 			  from += 8;
+			}
+			else if ( !strncmp( from, "tr style=\\\"display:none", 23 )) {
+			  if ( strcmp( to-5, "/tr><" )) {
+			    /* broken 6-26-07 missing </tr> that apparently doesn't bother browsers */
+		            strcpy(to, "/tr><" );
+			    to += 5;
+		          }
+			  *to++ = *from++;
 			}
 			else {
 			  *to++ = *from++;
