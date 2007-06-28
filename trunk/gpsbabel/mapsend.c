@@ -205,6 +205,8 @@ mapsend_track_read(void)
 		} else {
 			wpt_tmp->altitude = gbfgetflt(mapsend_file_in);
 		}
+		if (wpt_tmp->altitude < unknown_alt + 1)
+			wpt_tmp->altitude = unknown_alt;
 		wpt_tmp->creation_time = gbfgetint32(mapsend_file_in);
 		valid = gbfgetint32(mapsend_file_in);
 
