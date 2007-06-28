@@ -93,15 +93,23 @@ waypt_dupe(const waypoint *wpt)
 void
 waypt_add(waypoint *wpt)
 {
+	double lat_orig = wpt->latitude;
+	double lon_orig = wpt->longitude;
+	
 	ENQUEUE_TAIL(&waypt_head, &wpt->Q);
 	waypt_ct++;
 
+	if (wpt->latitude < -90) wpt->latitude += 180;
+	else if (wpt->latitude > +90) wpt->latitude -= 180;
+	if (wpt->longitude < -180) wpt->longitude += 360;
+	else if (wpt->longitude > +180) wpt->longitude -= 360;
+	
 	if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
 		fatal ("Invalid latitude %f in waypoint %s.\n",
-			wpt->latitude, wpt->shortname ? wpt->shortname : "");
+			lat_orig, wpt->shortname ? wpt->shortname : "");
 	if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
 		fatal ("Invalid longitude %f in waypoint %s.\n",
-			wpt->longitude, wpt->shortname ? wpt->shortname : "");
+			lon_orig, wpt->shortname ? wpt->shortname : "");
 
 	/*
 	 * Some input may not have one or more of these types so we
