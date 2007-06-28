@@ -640,7 +640,7 @@ wdata_compute_size(writer_data_t *data)
 				str = xstrdup(wpt->notes);
 		}
 		else if (opt_pos)
-			str = pretty_deg_format(wpt->latitude, wpt->longitude, 's', 0);
+			str = pretty_deg_format(wpt->latitude, wpt->longitude, 's', " ", 0);
 			
 		if (str) {	/* this will be stored into street-address field */
 			res += 22 + strlen(str);

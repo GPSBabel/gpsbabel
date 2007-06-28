@@ -91,7 +91,7 @@ text_disp(const waypoint *wpt)
 		tm = time(NULL);
 	strftime(tbuf, sizeof(tbuf), "%d-%b-%Y", localtime(&tm));
 
-	tmpout1 = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], 0);
+	tmpout1 = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 0);
 	if (wpt->altitude != unknown_alt) {
 		xasprintf(&altout, " alt:%d", (int) ( (altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude) );
 	}
@@ -193,7 +193,7 @@ text_disp(const waypoint *wpt)
 				if ( coordstr ) {
 					lon = atof( coordstr );
 				}
-				coordstr = pretty_deg_format(lat, lon, degformat[2], 0);
+				coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 0);
 				gbfprintf( file_out, "%s\n", coordstr);
 				xfree(coordstr);
 			}

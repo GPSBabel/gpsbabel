@@ -1394,10 +1394,11 @@ convert_human_time_format(const char *human_timef)
  * Return a decimal degree pair as
  * DD.DDDDD  DD MM.MMM or DD MM SS.S
  * fmt = ['d', 'm', 's']
+ * sep = string between lat and lon (separator)
  * html = 1 for html output otherwise text
  */
 char *
-pretty_deg_format(double lat, double lon, char fmt, int html) 
+pretty_deg_format(double lat, double lon, char fmt, char *sep, int html) 
 {
 	double  latmin, lonmin, latsec, lonsec;
 	int     latint, lonint;
@@ -1411,19 +1412,20 @@ pretty_deg_format(double lat, double lon, char fmt, int html)
 	lonmin = 60.0 * (fabs(lon) - lonint);
 	latsec = 60.0 * (latmin - floor(latmin));
 	lonsec = 60.0 * (lonmin - floor(lonmin));
+	if (sep == NULL) sep = " ";	/* default " " */
 	if (fmt == 'd') { /* ddd */
-		xasprintf ( &result, "%c%6.5f%s %c%6.5f%s",
-			latsig, fabs(lat), html?"&deg;":"", 
+		xasprintf ( &result, "%c%6.5f%s%s%c%6.5f%s",
+			latsig, fabs(lat), html?"&deg;":"", sep,
 			lonsig, fabs(lon), html?"&deg;":"" );
 	}
 	else if (fmt == 's') { /* dms */
-		xasprintf ( &result, "%c%d%s%02d'%04.1f\" %c%d%s%02d'%04.1f\"",
-                        latsig, latint, html?"&deg;":" ", (int)latmin, latsec,
+		xasprintf ( &result, "%c%d%s%02d'%04.1f\"%s%c%d%s%02d'%04.1f\"",
+                        latsig, latint, html?"&deg;":" ", (int)latmin, latsec, sep,
 			lonsig, lonint, html?"&deg;":" ", (int)lonmin, lonsec);
 	}
 	else { /* default dmm */
-		xasprintf ( &result,  "%c%d%s%06.3f %c%d%s%06.3f",
-			latsig, latint, html?"&deg;":" ", latmin, 
+		xasprintf ( &result,  "%c%d%s%06.3f%s%c%d%s%06.3f",
+			latsig, latint, html?"&deg;":" ", latmin, sep,
 			lonsig, lonint, html?"&deg;":" ", lonmin);
 	} 
 	return result;
