@@ -1033,6 +1033,8 @@ echo "lat,lon,descr,name,notes,unk,unk" > ${TMPDIR}/unicsv.txt
 cat ${REFERENCE}/mxf.mxf >> ${TMPDIR}/unicsv.txt
 ${PNAME} -i unicsv -f ${TMPDIR}/unicsv.txt -o gpx -F ${TMPDIR}/unicsv.gpx
 compare ${TMPDIR}/unicsv.gpx ${REFERENCE}/unicsv.gpx
+${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -o unicsv -F ${TMPDIR}/expert-uni.txt
+compare ${TMPDIR}/expert-uni.txt ${REFERENCE}/expert-uni.txt
 
 #
 # Basic NMEA tests
