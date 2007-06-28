@@ -68,6 +68,8 @@ gpl_read(void)
 		wpt_tmp->longitude = le_read_double(&gp.lon);
 		alt_feet = le_read_double(&gp.alt);
 		wpt_tmp->altitude = FEET_TO_METERS(alt_feet);
+		if (wpt_tmp->altitude <= unknown_alt + 1)
+			wpt_tmp->altitude = unknown_alt;
 		wpt_tmp->creation_time = le_read32(&gp.tm);
 		
 	        WAYPT_SET(wpt_tmp, course, le_read_double(&gp.heading));

@@ -895,10 +895,14 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     if (strcmp(fmp->key, "ALT_FEET") == 0) {
        /* altitude in feet as a decimal value */
        wpt->altitude = FEET_TO_METERS(atof(s));
+       if (wpt->altitude < unknown_alt + 1)
+          wpt->altitude = unknown_alt;
     } else
     if (strcmp(fmp->key, "ALT_METERS") == 0) {
        /* altitude in meters as a decimal value */
        wpt->altitude = atof(s);
+       if (wpt->altitude < unknown_alt + 1)
+          wpt->altitude = unknown_alt;
     } else
     
     /* PATH CONVERSIONS ************************************************/
