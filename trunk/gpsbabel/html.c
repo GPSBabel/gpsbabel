@@ -89,7 +89,7 @@ html_disp(const waypoint *wpt)
 	gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", wpt->shortname);
 	gbfprintf(file_out, "<table width=\"100%%\">\n");
 	gbfprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname);
-	cout = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], 1);
+	cout = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 1);
 	gbfprintf(file_out, "%s (%d%c %6.0f %7.0f)", cout, utmz, utmzc, utme, utmn);
 	xfree (cout);
 	if (wpt->altitude != unknown_alt)
@@ -199,7 +199,7 @@ html_disp(const waypoint *wpt)
 				if ( coordstr ) {
 					lon = atof( coordstr );
 				}
-				coordstr = pretty_deg_format(lat, lon, degformat[2], 1);
+				coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 1);
 				gbfprintf( file_out,
 					"<span class=\"gpsbabellogcoords\">%s</span><br>\n",
 					coordstr );
