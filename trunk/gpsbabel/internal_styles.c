@@ -943,6 +943,60 @@ static char tabsep[] =
 "IFIELD	GEOCACHE_HINT, \"\", \"%s\"\n"
 "IFIELD	GEOCACHE_LAST_FOUND, \"\", \"%d\"\n"
 ;
+static char tomtom_asc[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: TomTom Navigator Places of Interest\n"
+"# Author: Olaf Klein\n"
+"#   Date: 04/17/2007\n"
+"#\n"
+"DESCRIPTION		TomTom POI file (.asc)\n"
+"EXTENSION		asc\n"
+"DATATYPE		WAYPOINT\n"
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		COMMA\n"
+"RECORD_DELIMITER	CRNEWLINE\n"
+"BADCHARS		,\"\n"
+"ENCODING		MS-ANSI\n"
+"#\n"
+"PROLOGUE	 TomTom Navigator Places of Interest\n"
+"PROLOGUE	 GPSBabel-__VERSION__ ASCII Export\n"
+"PROLOGUE	  Points\n"
+"PROLOGUE	 Created at: __DATE_AND_TIME__\n"
+"# #\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	LON_DECIMAL, \"\", \"%.6f\"\n"
+"IFIELD	LAT_DECIMAL, \"\", \"%.6f\"\n"
+"IFIELD	SHORTNAME, \"\", \"\"%s\"\"\n"
+;
+static char tomtom_itn[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: TomTom Navigator Itineraries (Routes)\n"
+"# Author: Olaf Klein\n"
+"#   Date: 04/17/2007\n"
+"#\n"
+"DESCRIPTION		TomTom Itineraries (.itn)\n"
+"EXTENSION		itn\n"
+"DATATYPE		ROUTE\n"
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		PIPE\n"
+"RECORD_DELIMITER	CRNEWLINE\n"
+"BADCHARS		,|\n"
+"ENCODING		MS-ANSI\n"
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	LAT_10E5, \"\", \"%.f\"\n"
+"IFIELD	LON_10E5, \"\", \"%.f\"\n"
+"IFIELD	SHORTNAME, \"\", \"%s\"\n"
+"IFIELD	CONSTANT, \"0\", \"%s\"\n"
+;
 static char xmap2006[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -1048,8 +1102,8 @@ static char xmapwpt[] =
 "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "xmap2006", xmap2006 } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 28;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "xmap2006", xmap2006 } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 30;
 #else /* CSVFMTS_ENABLED */
 style_vecs_t style_list[] = {{0,0}};
 size_t nstyles = 0;
