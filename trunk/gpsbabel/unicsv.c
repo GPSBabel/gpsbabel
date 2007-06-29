@@ -713,33 +713,6 @@ unicsv_rd(void)
 
 /* =========================================================================== */
 
-static char *
-strenquote(const char *str, const char quot_char)
-{
-	int len;
-	char *cin, *cout;
-	char *tmp;
-
-	if (str == NULL) cin = "";
-	else cin = (char *)str;
-	
-	len = strlen(cin);
-	cout = tmp = xmalloc((len * 2) + 3);
-	
-	*cout++ = quot_char;
-	while (*cin) {
-		*cout++	= *cin;
-		if (*cin++ == quot_char)
-			*cout++	= quot_char;
-	}
-	*cout++ = quot_char;
-	*cout = '\0';
-	
-	cout = xstrdup(tmp);
-	xfree(tmp);
-	return cout;
-}
-
 static void
 unicsv_print_str(const char *str)
 {
@@ -829,7 +802,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 		
 	case grid_lat_lon_dms:
 		cout = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, 0);
-		gbfputs(cout, fout);
+		gbfprintf(fout, "%c%s%c", UNICSV_QUOT_CHAR, cout, UNICSV_QUOT_CHAR);
 		xfree(cout);
 		break;
 
