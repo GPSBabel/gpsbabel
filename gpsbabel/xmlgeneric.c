@@ -160,7 +160,7 @@ xml_tbl_lookup(const char *tag, xg_cb_type cb_type)
 {
 	xg_tag_mapping *tm;
         for (tm = xg_tag_tbl; tm->tag_cb != NULL; tm++) {
-		if (str_match(tm->tag_name, tag) && (cb_type == tm->cb_type)) {
+		if (str_match(tag, tm->tag_name) && (cb_type == tm->cb_type)) {
 			return tm->tag_cb;
 		}
 	}
