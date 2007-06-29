@@ -595,6 +595,33 @@ case_ignore_str_match(const char *str, const char *match)
 	return res;
 }
 
+char *
+strenquote(const char *str, const char quot_char)
+{
+	int len;
+	char *cin, *cout;
+	char *tmp;
+
+	if (str == NULL) cin = "";
+	else cin = (char *)str;
+	
+	len = strlen(cin);
+	cout = tmp = xmalloc((len * 2) + 3);
+	
+	*cout++ = quot_char;
+	while (*cin) {
+		*cout++	= *cin;
+		if (*cin++ == quot_char)
+			*cout++	= quot_char;
+	}
+	*cout++ = quot_char;
+	*cout = '\0';
+	
+	cout = xstrdup(tmp);
+	xfree(tmp);
+	return cout;
+}
+
 void
 printposn(const double c, int is_lat)
 {
