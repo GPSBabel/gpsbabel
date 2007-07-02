@@ -77,7 +77,7 @@
    With at least ONE valid timestamp in data a unicsv output may look like that:
    <screen format="linespecific">
      No,Name,Latitude,Longitude,Description,Date,Time
-     1,GCEBB,35.972033,-87.134700,Mountain Bike Heaven by susy1313,2003/06/29,09:00:00
-     2,GC1A37,36.090683,-86.679550,The Troll by a182pilot &amp; Family,,,
+     1,"GCEBB",35.972033,-87.134700,"Mountain Bike Heaven by susy1313",2003/06/29,09:00:00
+     2,"GC1A37",36.090683,-86.679550,"The Troll by a182pilot &amp; Family",,,
    </screen>
 </para>
