@@ -13,17 +13,22 @@
       alt =      Altitude
       bng_e =    British National Grid's easting
       bng =      full coordinate in BNG format (zone easting northing)
+      bng_pos =  full coordinate in BNG format (zone easting northing)
       bng_n =    British National Grid's northing
       bng_z =    British National Grid's zone
-      cadence =  Cadence
-      course =   Heading
+      caden =    Cadence
+      comment =  Notes
+      cour =     Heading / Course true
+      date =     Date (yyyy/mm/dd)
       depth =    Depth
       desc =     Description
       ele =      Altitude (elevation)
       fix =      3d, 2d, etc.
+      geschw =   Geschwindigkeit (speed)
       hdop =     Horizontal precision
-      head =     Heading
+      head =     Heading / Course true
       heart =    Heartrate
+      icon =     Symbol (icon) name
       lat =      Latitude
       lon =      Longitude
       name =     Waypoint name ("Shortname")
@@ -32,17 +37,25 @@
       prox =     Proximity
       sat =      Number of sats used for fix
       speed =    Speed
+      symb =     Symbol (icon) name
       tempf =    Temperature (degrees Fahrenheit)
       temp =     Temperature (degrees Celsius)
+      time =     Time (hh:mm:ss[.msec])
       url =      URL
       utc_d =    UTC date
       utc_t =    UTC time
       utm_c =    UTM zone character
       utm_e =    UTM easting
       utm =      full coordinate in UTM format (zone zone-ch easting northing)
+      utm_pos =  full coordinate in UTM format (zone zone-ch easting northing)
       utm_n =    UTM northing
       utm_z =    UTM zone
       vdop =     Vertical precision
+      x =        Longitude
+      x_pos =    Longitude
+      y =        Latitude
+      y_pos =    Latitude
+      z =        Altitude (elevation)
    </screen>
    Fuller spellings (i.e. "longitude") may be used. You can also
    use keywords with a whitespace instead of an underscore.
@@ -56,3 +69,15 @@
    </screen>
 </para>
 	
+<para>
+   On the output side unicsv writes fixed number of columns (waypoint index, latitude, longitude and shortname) followed by a variable
+   column list depending on internal data.
+</para>
+<para>
+   With at least ONE valid timestamp in data a unicsv output may look like that:
+   <screen format="linespecific">
+     No,Name,Latitude,Longitude,Description,Date,Time
+     1,GCEBB,35.972033,-87.134700,Mountain Bike Heaven by susy1313,2003/06/29,09:00:00
+     2,GC1A37,36.090683,-86.679550,The Troll by a182pilot &amp; Family,,,
+   </screen>
+</para>
