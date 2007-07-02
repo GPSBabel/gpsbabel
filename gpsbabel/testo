@@ -17,7 +17,7 @@ else
 	OD=${OD:-od -Ax -txC -v}
 fi
 
-TMPDIR=/tmp/gpsbabel.$$
+TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
 mkdir -p $TMPDIR
 trap "rm -fr $TMPDIR" 0 1 2 3 15
 
@@ -1033,8 +1033,8 @@ echo "lat,lon,descr,name,notes,unk,unk" > ${TMPDIR}/unicsv.txt
 cat ${REFERENCE}/mxf.mxf >> ${TMPDIR}/unicsv.txt
 ${PNAME} -i unicsv -f ${TMPDIR}/unicsv.txt -o gpx -F ${TMPDIR}/unicsv.gpx
 compare ${TMPDIR}/unicsv.gpx ${REFERENCE}/unicsv.gpx
-${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -o unicsv -F ${TMPDIR}/expert-uni.txt
-compare ${TMPDIR}/expert-uni.txt ${REFERENCE}/expert-uni.txt
+${PNAME} -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -x transform,wpt=trk -o unicsv -F ${TMPDIR}/garmin_txt-uni.csv
+compare ${TMPDIR}/garmin_txt-uni.csv ${REFERENCE}/garmin_txt-uni.csv
 
 #
 # Basic NMEA tests
