@@ -467,6 +467,14 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 	if (td->max_cad) {
 		TD("<b>Max Cadence</b> %d rpm", td->max_cad);
 	}
+	if (td->start && td->end) {
+		char time_string[64];
+
+		xml_fill_in_time(time_string, td->start, 0, XML_LONG_TIME);
+		TD("<b>Start Time:</b> %s ", time_string);
+		xml_fill_in_time(time_string, td->end, 0, XML_LONG_TIME);
+		TD("<b>End Time:</b> %s ", time_string);
+	}
 
 	kml_write_xml(-1, "</table>]]>\n");
 	kml_write_xml(-1, "</description>\n");
