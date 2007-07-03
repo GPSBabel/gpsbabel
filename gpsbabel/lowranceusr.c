@@ -956,19 +956,17 @@ data_write(void)
     if (global_opts.debug_level >= 1)
 	printf("LOWRANCE data_write: Num waypoints = %d\n", NumWaypoints);
 
-	if (NumWaypoints) {
-		if  (writeasicons) {
-			short zero = 0;
-			my_fwrite2(&zero, file_out);
-		} else {
-			my_fwrite2(&NumWaypoints, file_out);
-			waypt_disp_all(lowranceusr_waypt_pr);
-		}
-	}
+    if (writeasicons) {
+	    short zero = 0;
+	    my_fwrite2(&zero, file_out);
+    } else {
+	    my_fwrite2(&NumWaypoints, file_out);
+	    waypt_disp_all(lowranceusr_waypt_pr);
+    }
 
-	/* Route support added 6/21/05 */
-	NumRoutes = route_count();
-	my_fwrite2(&NumRoutes, file_out);
+    /* Route support added 6/21/05 */
+    NumRoutes = route_count();
+    my_fwrite2(&NumRoutes, file_out);
 
     if (global_opts.debug_level >= 1)
 	printf("LOWRANCE data_write: Num routes = %d\n", NumRoutes);
