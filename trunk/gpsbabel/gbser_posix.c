@@ -117,10 +117,14 @@ void *gbser_init(const char *port_name) {
 	h->magic = MYMAGIC;
 	h->vmin = h->vtime = 0;
 
-    if (h->fd = open(port_name, O_RDWR | O_NOCTTY), h->fd == -1) {
+	if (0 == strcmp(port_name, "-") {
+		h->fd = 0;
+		return h;
+	}
+        else if (h->fd = open(port_name, O_RDWR | O_NOCTTY), h->fd == -1) {
 		gbser__db(1, "Failed to open port (%s)\n", strerror(errno));	
-        goto failed;
-    }
+	        goto failed;
+	}
 
 	if (!isatty(h->fd)) { 
 		gbser__db(1, "%s is not a TTY\n");
