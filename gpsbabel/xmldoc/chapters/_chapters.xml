@@ -7,4 +7,5 @@
 <!ENTITY app_datums  SYSTEM "datums.xml">
 <!ENTITY app_garmin_icons  SYSTEM "garmin_icons.xml">
 <!ENTITY app_styles  SYSTEM "styles.xml">
+<!ENTITY app_glossary  SYSTEM "glossary.xml">
 
