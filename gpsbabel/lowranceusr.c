@@ -170,6 +170,7 @@ static short num_section_points;
 static route_head *trk_head;
 static route_head *rte_head;
 static char *ignoreicons;
+static char *writeasicons;
 static char *merge;
 static char *seg_break;
 
@@ -260,7 +261,9 @@ lowranceusr_fread(void *buff, size_t size, size_t members, FILE * fp)
 
 static
 arglist_t lowranceusr_args[] = {
-	{"ignoreicons", &ignoreicons, "Ignore event marker icons",
+	{"ignoreicons", &ignoreicons, "Ignore event marker icons on read",
+	 NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"writeasicons", &writeasicons, "Treat waypoints as icons on write",
 	 NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"merge", &merge, "(USR output) Merge into one segmented track",
 	NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
@@ -736,6 +739,28 @@ lowranceusr_waypt_pr(const waypoint *wpt)
 }
 
 /*
+ * In Lowrance parlance, an "Icon" is a waypoint but without any 
+ * kind of a name.  The header count of icons has already been written
+ * before we get here, so it's just a matter of spitting out 
+ * 4 bytes lat
+ * 4 bytes long
+ * 4 bytes symbol
+ */
+static void
+lowranceusr_write_icon(const waypoint *wpt)
+{
+	int latmm = lat_deg_to_mm(wpt->latitude);
+	int lonmm = lon_deg_to_mm(wpt->longitude);
+	int icon = wpt->icon_descr ? 
+		lowranceusr_find_icon_number_from_desc(wpt->icon_descr) :
+		10003;
+
+	my_fwrite4(&latmm, file_out);
+	my_fwrite4(&lonmm, file_out);
+	my_fwrite4(&icon, file_out);
+}
+
+/*
  * Header format:
  *	short num_trails,
  *  int trail_name text length,
@@ -927,13 +952,19 @@ data_write(void)
 
 	my_fwrite2(&MajorVersion, file_out);
 	my_fwrite2(&MinorVersion, file_out);
-	my_fwrite2(&NumWaypoints, file_out);
 
     if (global_opts.debug_level >= 1)
 	printf("LOWRANCE data_write: Num waypoints = %d\n", NumWaypoints);
 
-	if (NumWaypoints)
-		waypt_disp_all(lowranceusr_waypt_pr);
+	if (NumWaypoints) {
+		if  (writeasicons) {
+			short zero = 0;
+			my_fwrite2(&zero, file_out);
+		} else {
+			my_fwrite2(&NumWaypoints, file_out);
+			waypt_disp_all(lowranceusr_waypt_pr);
+		}
+	}
 
 	/* Route support added 6/21/05 */
 	NumRoutes = route_count();
@@ -948,9 +979,13 @@ data_write(void)
 		route_disp_all(lowranceusr_route_hdr, NULL, lowranceusr_waypt_disp);
 	}
 
-	/* no support for Icons */
-	NumIcons = 0;
-	my_fwrite2(&NumIcons, file_out);
+	if (NumWaypoints && writeasicons) {
+		my_fwrite2(&NumWaypoints, file_out);
+		waypt_disp_all(lowranceusr_write_icon);
+	} else {
+		NumIcons = 0;
+		my_fwrite2(&NumIcons, file_out);
+	}
 	
 	/* Track support added 6/21/05 */
 	NumTrails = track_count();
