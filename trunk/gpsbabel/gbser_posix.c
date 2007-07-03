@@ -117,7 +117,7 @@ void *gbser_init(const char *port_name) {
 	h->magic = MYMAGIC;
 	h->vmin = h->vtime = 0;
 
-	if (0 == strcmp(port_name, "-") {
+	if (0 == strcmp(port_name, "-")) {
 		h->fd = 0;
 		return h;
 	}
