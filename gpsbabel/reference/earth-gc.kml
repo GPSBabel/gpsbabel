@@ -132,11 +132,5 @@ PUBLISHED COORDINATES DO NOT REPRESENT THE LOCALIZATION OF A CACHE</p>]]>
         </Point>
       </Placemark>
     </Folder>
-    <Folder>
-      <name>Tracks</name>
-    </Folder>
-    <Folder>
-      <name>Routes</name>
-    </Folder>
   </Document>
 </kml>
