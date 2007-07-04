@@ -230,7 +230,7 @@ FORCE:
 
 # file list for windows package
 WINFILES = gpsbabel.exe mingw/libexpat.dll win32/GPSBabelGUI.exe win32/gui-2/README.gui \
-           README* AUTHORS COPYING gpsbabel.html
+           README.contrib AUTHORS COPYING gpsbabel.html
 
 #
 # Do administrative-y things to the tree.  Verify that everything is checked
