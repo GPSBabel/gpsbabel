@@ -88,10 +88,64 @@ const cet_ucs4_link_t cet_ucs4_to_cp1252_links[cet_ucs4_to_cp1252_ct] =
 	 {0x2122, 0x99} /* mark sign */
 };
 
-/*
-#define cet_ucs4_to_cp1252_extra_ct 0
-const cet_ucs4_link_t cet_ucs4_to_cp1252_extra[cet_ucs4_to_cp1252_extra_ct] = {};
-*/
+/* Extra table was generated from bestfit1252.txt located at
+   ftp.unicode.org:/Public/MAPPINGS/VENDORS/MICSFT/WindowsBestFit/ */
+  
+const cet_ucs4_link_t cet_ucs4_to_cp1252_extra[] = 
+{
+	{0x0110, 0xd0} /* latin capital letter d with stroke */,
+	{0x0189, 0xd0} /* latin capital letter african d */,
+	{0x0191, 0x83} /* latin capital letter f with hook */,
+	{0x02c9, 0xaf} /* modifier letter macron */,
+	{0x02ca, 0xb4} /* modifier letter acute accent */,
+	{0x02da, 0xb0} /* ring above */,
+	{0x0301, 0xb4} /* combining acute accent */,
+	{0x0304, 0xaf} /* combining macron */,
+	{0x0305, 0xaf} /* combining overline */,
+	{0x0308, 0xa8} /* combining diaeresis */,
+	{0x030a, 0xb0} /* combining ring above */,
+	{0x0327, 0xb8} /* combining cedilla */,
+	{0x03b2, 0xdf} /* greek small letter beta */,
+	{0x03bc, 0xb5} /* greek small letter mu */,
+	{0x2024, 0xb7} /* one dot leader */,
+	{0x2070, 0xb0} /* superscript zero */,
+	{0x20a1, 0xa2} /* colon sign */,
+	{0x20a4, 0xa3} /* lira sign */,
+	{0x212b, 0xc5} /* angstrom sign */,
+	{0x2205, 0xd8} /* empty set */,
+	{0x2213, 0xb1} /* minus-or-plus sign */,
+	{0x2218, 0xb0} /* ring operator */,
+	{0x2219, 0xb7} /* bullet operator */,
+	{0x2248, 0x98} /* almost equal to */,
+	{0x226a, 0xab} /* much less-than */,
+	{0x226b, 0xbb} /* much greater-than */,
+	{0x22c5, 0xb7} /* dot operator */,
+	{0x2302, 0xa6} /* house */,
+	{0x2310, 0xac} /* reversed not sign */,
+	{0x2502, 0xa6} /* box drawings light vertical */,
+	{0x2524, 0xa6} /* box drawings light vertical and left */,
+	{0x2551, 0xa6} /* box drawings double vertical */,
+	{0x255e, 0xa6} /* box drawings vertical single and right double */,
+	{0x255f, 0xa6} /* box drawings vertical double and right single */,
+	{0x2560, 0xa6} /* box drawings double vertical and right */,
+	{0x2561, 0xa6} /* box drawings vertical single and left double */,
+	{0x2562, 0xa6} /* box drawings vertical double and left single */,
+	{0x2563, 0xa6} /* box drawings double vertical and left */,
+	{0x2580, 0xaf} /* upper half block */,
+	{0x2588, 0xa6} /* full block */,
+	{0x258c, 0xa6} /* left half block */,
+	{0x2590, 0xa6} /* right half block */,
+	{0x2591, 0xa6} /* light shade */,
+	{0x2592, 0xa6} /* medium shade */,
+	{0x2593, 0xa6} /* dark shade */,
+	{0x25a0, 0xa6} /* black square */,
+	{0x263c, 0xa4} /* white sun with rays */,
+	{0x300a, 0xab} /* left double angle bracket */,
+	{0x300b, 0xbb} /* right double angle bracket */,
+	{0x30fb, 0xb7} /* katakana middle dot */
+};
+
+#define cet_ucs4_to_cp1252_extra_ct sizeof(cet_ucs4_to_cp1252_extra) / sizeof(cet_ucs4_to_cp1252_extra[0])
 
 cet_cs_vec_t cet_cs_vec_cp1252 =	/* defined in cet.h */
 {	
@@ -108,8 +162,8 @@ cet_cs_vec_t cet_cs_vec_cp1252 =	/* defined in cet.h */
 	cet_ucs4_to_cp1252_links,	/* UCS-4 to char links		*/
 	cet_ucs4_to_cp1252_ct,		/* number of links		*/
 
-	NULL,				/* hand made UCS-4 links	*/
-	0,				/* number of extra links	*/
+	cet_ucs4_to_cp1252_extra,	/* hand made UCS-4 links	*/
+	cet_ucs4_to_cp1252_extra_ct,	/* number of extra links	*/
 
 	NULL	/* for internal use */
 };
