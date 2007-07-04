@@ -58,6 +58,7 @@ static double oldlon = 999;
 static double oldlat = 999;
     
 static int waypt_out_count;
+static route_head *csv_track, *csv_route;
 
 /*********************************************************************/
 /* csv_stringclean() - remove any unwanted characters from string.   */
@@ -993,6 +994,13 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
 		wpt->fix = fix_unknown;
 	}
     } else
+    /* Tracks and routes *********************************************/
+    if ( strcmp ( fmp->key, "ROUTE_NAME") == 0) {
+	if (csv_route) csv_route->rte_name = csv_stringtrim(s, enclosure, 0);
+    } else
+    if ( strcmp ( fmp->key, "TRACK_NAME") == 0) {
+	if (csv_track) csv_track->rte_name = csv_stringtrim(s, enclosure, 0);
+    } else
 	
     /* OTHER STUFF ***************************************************/
     if ( strcmp( fmp->key, "PATH_DISTANCE_MILES") == 0) {
@@ -1028,13 +1036,16 @@ xcsv_data_read(void)
     route_head *rte = NULL;
     route_head *trk = NULL;
     
+    csv_route = csv_track = NULL;
     if (xcsv_file.datatype == trkdata) {
 	trk = route_head_alloc();
 	track_add_head(trk);
+	csv_track = trk;
     } else
     if (xcsv_file.datatype == rtedata) {
 	rte = route_head_alloc();
 	route_add_head(rte);
+	csv_route = rte;
     }
 
     while ((buff = gbfgetstr(xcsv_file.xcsvfp))) {
@@ -1118,6 +1129,17 @@ xcsv_resetpathlen(const route_head *head)
     pathdist = 0;
     oldlat = 999;
     oldlon = 999;
+    csv_route = csv_track = NULL;
+    switch (xcsv_file.datatype) {
+	case trkdata:
+		csv_track = (route_head *) head;
+		break;
+	case rtedata:
+		csv_route = (route_head *) head;
+		break;
+	default:
+		break;
+    }
 }
 
 /*****************************************************************************/
@@ -1468,6 +1490,13 @@ xcsv_waypt_pr(const waypoint *wpt)
 	    writebuff(buff, fmp->printfc, NONULL(wpt->gc_data.placer));
 	    field_is_unknown = !wpt->gc_data.placer;
         } else
+	/* Tracks and Routes ***********************************************/
+	if (strcmp(fmp->key, "TRACK_NAME") == 0) {
+	    if (csv_track) writebuff(buff, fmp->printfc, NONULL(csv_track->rte_name));
+        } else
+	if (strcmp(fmp->key, "ROUTE_NAME") == 0) {
+	    if (csv_route) writebuff(buff, fmp->printfc, NONULL(csv_route->rte_name));
+        } else
 	
 	/* GPS STUFF *******************************************************/
 	if (strcmp(fmp->key, "GPS_HDOP") == 0) {
@@ -1510,10 +1539,8 @@ xcsv_waypt_pr(const waypoint *wpt)
 				break;
 		}
 		writebuff(buff, fmp->printfc, fix);
-        } else
-
-	{
-		/* this should probably never happen */
+        } else {
+       		warning( MYNAME ": Unknown style directive: %s\n", fmp->key);
         }
 	
 
@@ -1622,7 +1649,7 @@ xcsv_data_write(void)
 
     if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == wptdata))
 	waypt_disp_all(xcsv_waypt_pr);
-    if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == rtedata))
+    if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == rtedata)) 
 	route_disp_all(xcsv_resetpathlen,xcsv_noop,xcsv_waypt_pr);
     if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == trkdata))
 	track_disp_all(xcsv_resetpathlen,xcsv_noop,xcsv_waypt_pr);
