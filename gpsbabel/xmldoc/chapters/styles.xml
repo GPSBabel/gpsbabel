@@ -1092,6 +1092,15 @@ example:
 <screen format="linespecific">   GPS_FIX,"","%s"
 </screen>
 </section>
+
+<section id="style_track_name">
+<title>TRACK_NAME</title>
+<para>The name of the track currently being operated on.  Needs string conversion.</para><para>example:<screen format="linespecific">TRACK_NAME, "", "%s"</screen></section>
+
+<section id="style_route_name">
+<title>ROUTE_NAME</title>
+<para>The name of the route currently being operated on.  Needs string conversion.</para><para>example:<screen format="linespecific">ROUTE_NAME, "", "%s"</screen></section>
+
 </section> <!-- definitions -->
 
 <section id="style_examples">
