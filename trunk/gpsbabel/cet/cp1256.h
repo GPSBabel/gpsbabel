@@ -142,10 +142,32 @@ const cet_ucs4_link_t cet_ucs4_to_cp1256_links[cet_ucs4_to_cp1256_ct] =
 	 {0x3113, 0xd0} /* letter zh */
 };
 
-/*
-#define cet_ucs4_to_cp1256_extra_ct 0
-const cet_ucs4_link_t cet_ucs4_to_cp1256_extra[cet_ucs4_to_cp1256_extra_ct] = {};
-*/
+/* Extra table was generated from bestfit1256.txt located at
+   ftp.unicode.org:/Public/MAPPINGS/VENDORS/MICSFT/WindowsBestFit/ */
+  
+const cet_ucs4_link_t cet_ucs4_to_cp1256_extra[] = 
+{
+	{0x0152, 0x8c} /* latin capital letter o e */,
+	{0x0153, 0x9c} /* latin small letter o e */,
+	{0x0192, 0x83} /* latin small letter script f */,
+	{0x02c6, 0x88} /* modifier letter circumflex */,
+	{0x060c, 0xa1} /* arabic comma */,
+	{0x0638, 0xd9} /* arabic letter dhah */,
+	{0x0679, 0x8a} /* arabic letter tteh */,
+	{0x0688, 0x8f} /* arabic letter ddal */,
+	{0x0691, 0x9a} /* arabic letter rreh */,
+	{0x06a9, 0x98} /* arabic letter keheh */,
+	{0x06ba, 0x9f} /* arabic letter noon ghunna */,
+	{0x06be, 0xaa} /* arabic letter heh doachashmee */,
+	{0x06c1, 0xc0} /* arabic letter heh goal */,
+	{0x06cc, 0xed} /* best-fit : farsi yeh -> arabic yeh (u+064a) */,
+	{0x06d2, 0xff} /* arabic letter yeh barree */,
+	{0x200c, 0x9d} /* zero width non-joiner */,
+	{0x200d, 0x9e} /* zero width joiner */,
+	{0x2030, 0x89} /* per mille sign */
+};
+
+#define cet_ucs4_to_cp1256_extra_ct sizeof(cet_ucs4_to_cp1256_extra) / sizeof(cet_ucs4_to_cp1256_extra[0])
 
 cet_cs_vec_t cet_cs_vec_cp1256 =	/* defined in cet.h */
 {	
@@ -162,8 +184,8 @@ cet_cs_vec_t cet_cs_vec_cp1256 =	/* defined in cet.h */
 	cet_ucs4_to_cp1256_links,	/* UCS-4 to char links		*/
 	cet_ucs4_to_cp1256_ct,		/* number of links		*/
 
-	NULL,				/* hand made UCS-4 links	*/
-	0,				/* number of extra links	*/
+	cet_ucs4_to_cp1256_extra,	/* hand made UCS-4 links	*/
+	cet_ucs4_to_cp1256_extra_ct,	/* number of extra links	*/
 
 	NULL	/* for internal use */
 };

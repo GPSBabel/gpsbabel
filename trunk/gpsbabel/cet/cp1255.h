@@ -112,10 +112,42 @@ const cet_ucs4_link_t cet_ucs4_to_cp1255_links[cet_ucs4_to_cp1255_ct] =
 	 {0x2122, 0x99} /* mark sign */
 };
 
-/*
-#define cet_ucs4_to_cp1255_extra_ct 0
-const cet_ucs4_link_t cet_ucs4_to_cp1255_extra[cet_ucs4_to_cp1255_extra_ct] = {};
-*/
+/* Extra table was generated from bestfit1255.txt located at
+   ftp.unicode.org:/Public/MAPPINGS/VENDORS/MICSFT/WindowsBestFit/ */
+  
+const cet_ucs4_link_t cet_ucs4_to_cp1255_extra[] = 
+{
+	{0x02c6, 0x88} /* modifier letter circumflex */,
+	{0x02dc, 0x98} /* spacing tilde */,
+	{0x05b0, 0xc0} /* hebrew point sheva */,
+	{0x05b1, 0xc1} /* hebrew point hataf segol */,
+	{0x05b2, 0xc2} /* hebrew point hataf patah */,
+	{0x05b3, 0xc3} /* hebrew point hataf qamats */,
+	{0x05b4, 0xc4} /* hebrew point hiriq */,
+	{0x05b5, 0xc5} /* hebrew point tsere */,
+	{0x05b6, 0xc6} /* hebrew point segol */,
+	{0x05b7, 0xc7} /* hebrew point patah */,
+	{0x05b8, 0xc8} /* hebrew point qamats */,
+	{0x05b9, 0xc9} /* hebrew point holam */,
+	{0x05ba, 0xca} /* hebrew point ???? */,
+	{0x05bb, 0xcb} /* hebrew point qubuts */,
+	{0x05bc, 0xcc} /* hebrew point dagesh */,
+	{0x05bd, 0xcd} /* hebrew point meteg */,
+	{0x05be, 0xce} /* hebrew punctuation maqaf */,
+	{0x05bf, 0xcf} /* hebrew point rafe */,
+	{0x05c0, 0xd0} /* hebrew point paseq */,
+	{0x05c1, 0xd1} /* hebrew point shin dot */,
+	{0x05c2, 0xd2} /* hebrew point sin dot */,
+	{0x05c3, 0xd3} /* hebrew punctuation sof pasuq */,
+	{0x05f0, 0xd4} /* hebrew ligature yiddish double vav */,
+	{0x05f1, 0xd5} /* hebrew ligature yiddish vav yod */,
+	{0x05f2, 0xd6} /* hebrew ligature yiddish double yod */,
+	{0x05f3, 0xd7} /* hebrew punctuation geresh */,
+	{0x05f4, 0xd8} /* hebrew punctuation gershayim */,
+	{0x20aa, 0xa4} /* new sheqel sign */
+};
+
+#define cet_ucs4_to_cp1255_extra_ct sizeof(cet_ucs4_to_cp1255_extra) / sizeof(cet_ucs4_to_cp1255_extra[0])
 
 cet_cs_vec_t cet_cs_vec_cp1255 =	/* defined in cet.h */
 {	
@@ -132,8 +164,8 @@ cet_cs_vec_t cet_cs_vec_cp1255 =	/* defined in cet.h */
 	cet_ucs4_to_cp1255_links,	/* UCS-4 to char links		*/
 	cet_ucs4_to_cp1255_ct,		/* number of links		*/
 
-	NULL,				/* hand made UCS-4 links	*/
-	0,				/* number of extra links	*/
+	cet_ucs4_to_cp1255_extra,	/* hand made UCS-4 links	*/
+	cet_ucs4_to_cp1255_extra_ct,	/* number of extra links	*/
 
 	NULL	/* for internal use */
 };

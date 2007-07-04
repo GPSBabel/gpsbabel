@@ -130,10 +130,17 @@ const cet_ucs4_link_t cet_ucs4_to_cp1257_links[cet_ucs4_to_cp1257_ct] =
 	 {0x2122, 0x99} /* mark sign */
 };
 
-/*
-#define cet_ucs4_to_cp1257_extra_ct 0
-const cet_ucs4_link_t cet_ucs4_to_cp1257_extra[cet_ucs4_to_cp1257_extra_ct] = {};
-*/
+/* Extra table was generated from bestfit1257.txt located at
+   ftp.unicode.org:/Public/MAPPINGS/VENDORS/MICSFT/WindowsBestFit/ */
+  
+const cet_ucs4_link_t cet_ucs4_to_cp1257_extra[] = 
+{
+	{0x02c7, 0x8e} /* hacek */,
+	{0x02d9, 0xff} /* dot above */,
+	{0x02db, 0x9e} /* ogonek */,
+};
+
+#define cet_ucs4_to_cp1257_extra_ct sizeof(cet_ucs4_to_cp1257_extra) / sizeof(cet_ucs4_to_cp1257_extra[0])
 
 cet_cs_vec_t cet_cs_vec_cp1257 =	/* defined in cet.h */
 {	
@@ -150,8 +157,8 @@ cet_cs_vec_t cet_cs_vec_cp1257 =	/* defined in cet.h */
 	cet_ucs4_to_cp1257_links,	/* UCS-4 to char links		*/
 	cet_ucs4_to_cp1257_ct,		/* number of links		*/
 
-	NULL,				/* hand made UCS-4 links	*/
-	0,				/* number of extra links	*/
+	cet_ucs4_to_cp1257_extra,	/* hand made UCS-4 links	*/
+	cet_ucs4_to_cp1257_extra_ct,	/* number of extra links	*/
 
 	NULL	/* for internal use */
 };

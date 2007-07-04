@@ -151,10 +151,33 @@ const cet_ucs4_link_t cet_ucs4_to_cp1253_links[cet_ucs4_to_cp1253_ct] =
 	 {0x2122, 0x99} /* mark sign */
 };
 
-/*
-#define cet_ucs4_to_cp1253_extra_ct 0
-const cet_ucs4_link_t cet_ucs4_to_cp1253_extra[cet_ucs4_to_cp1253_extra_ct] = {};
-*/
+/* Extra table was generated from bestfit1253.txt located at
+   ftp.unicode.org:/Public/MAPPINGS/VENDORS/MICSFT/WindowsBestFit/ */
+  
+const cet_ucs4_link_t cet_ucs4_to_cp1253_extra[] = 
+{
+	{0x0191, 0x83} /* latin capital letter f with hook */,
+	{0x030d, 0xb4} /* combining vertical line above */,
+	{0x2195, 0xa6} /* up down arrow */,
+	{0x21a8, 0xa6} /* up down arrow with base */,
+	{0x2302, 0xa6} /* house */,
+	{0x2502, 0xa6} /* box drawings light vertical */,
+	{0x2510, 0xac} /* box drawings light down and left */,
+	{0x2551, 0xa6} /* box drawings double vertical */,
+	{0x2557, 0xac} /* box drawings double down and left */,
+	{0x2560, 0xa6} /* box drawings double vertical and right */,
+	{0x2563, 0xa6} /* box drawings double vertical and left */,
+	{0x2569, 0xa6} /* box drawings double up and horizontal */,
+	{0x25a0, 0xa6} /* black square */,
+	{0x25bc, 0xa1} /* black down-pointing triangle */,
+	{0x25d8, 0x95} /* inverse bullet */,
+	{0x2660, 0xa6} /* black spade suit */,
+	{0x2663, 0xa6} /* black club suit */,
+	{0x2665, 0xa6} /* black heart suit */,
+	{0x2666, 0xa6} /* black diamond suit */
+};
+
+#define cet_ucs4_to_cp1253_extra_ct sizeof(cet_ucs4_to_cp1253_extra) / sizeof(cet_ucs4_to_cp1253_extra[0])
 
 cet_cs_vec_t cet_cs_vec_cp1253 =	/* defined in cet.h */
 {	
@@ -171,8 +194,8 @@ cet_cs_vec_t cet_cs_vec_cp1253 =	/* defined in cet.h */
 	cet_ucs4_to_cp1253_links,	/* UCS-4 to char links		*/
 	cet_ucs4_to_cp1253_ct,		/* number of links		*/
 
-	NULL,				/* hand made UCS-4 links	*/
-	0,				/* number of extra links	*/
+	cet_ucs4_to_cp1253_extra,	/* hand made UCS-4 links	*/
+	cet_ucs4_to_cp1253_extra_ct,	/* number of extra links	*/
 
 	NULL	/* for internal use */
 };
