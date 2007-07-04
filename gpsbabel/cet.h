@@ -38,8 +38,8 @@ typedef struct cet_cs_vec_s
 {
 	const char *name;			/* name of character set 	*/
 	const char **alias;			/* alias table  		*/
-	int (*decode)(const char *, int *);	/* ... to UCS-4 decoder 	!FUTURE! */
-	short (*encode)(const int);		/* UCS-4 to ... encoder		!FUTURE! */
+	struct cet_cs_vec_s *fallback;		/* fallback character set       */
+	void *unused;
 	const int *ucs4_map;			/* char to UCS-4 value table 	*/
 	const int ucs4_offset;			/* first non standard character */
 	const int ucs4_count;			/* values in table 		*/
