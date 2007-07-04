@@ -49,9 +49,15 @@ static int cet_cs_alias_ct = 0;
 static int cet_cs_vec_ct = 0;
 static int cet_output = 0;
 
+/* %%% fixed inbuild character sets %%% */
+
+#include "cet/ansi_x3_4_1968.h"
+#include "cet/iso_8859_1.h"
+#include "cet/iso_8859_15.h"
+#include "cet/cp1252.h"
+
 /* %%% short hand strings transmission for main character sets %%% */
 
-#include "cet/iso_8859_1.h"
 char *
 cet_str_utf8_to_iso8859_1(const char *src)
 {
@@ -63,8 +69,6 @@ cet_str_iso8859_1_to_utf8(const char *src)
 {
 	return cet_str_any_to_utf8(src, &cet_cs_vec_iso_8859_1);
 }
-
-#include "cet/iso_8859_15.h"
 
 char *
 cet_str_utf8_to_iso8859_15(const char *src)
@@ -78,8 +82,6 @@ cet_str_iso8859_15_to_utf8(const char *src)
 	return cet_str_any_to_utf8(src, &cet_cs_vec_iso_8859_15);
 }
 
-#include "cet/ansi_x3_4_1968.h"
-
 char *
 cet_str_utf8_to_us_ascii(const char *src)
 {
@@ -91,8 +93,6 @@ cet_str_us_ascii_to_utf8(const char *src)
 {
 	return cet_str_any_to_utf8(src, &cet_cs_vec_ansi_x3_4_1968);
 }
-
-#include "cet/cp1252.h"
 
 char *
 cet_str_utf8_to_cp1252(const char *src)
@@ -333,7 +333,7 @@ void
 cet_check_cs(cet_cs_vec_t *vec)	/* test well sorted link & extra tables */
 {
 	cet_ucs4_link_t *link;
-	
+
 	if ((link = (cet_ucs4_link_t *)vec->ucs4_link))
 	{
 	    int i, j;
@@ -810,10 +810,28 @@ cet_register_cs(&cet_cs_vec_vps);
 	    qsort(list, c, sizeof(*list), cet_cs_alias_qsort_cb);
 	    cet_cs_alias = list;
 	    cet_cs_alias_ct = c;
+
+	    /* install fallback for ascii-like (first 128 ch.) character sets */
+	    for (i = 1250; i <= 1258; i++) {
+		char name[16];
+		cet_cs_vec_t *vec;
+		
+		snprintf(name, sizeof(name), "WIN-CP%d", i);
+		if ((vec = cet_find_cs_by_name(name)))
+		    vec->fallback = &cet_cs_vec_ansi_x3_4_1968;
+	    }
+	    for (i = 1; i <= 15; i++) {
+		char name[16];
+		cet_cs_vec_t *vec;
+		
+		snprintf(name, sizeof(name), "ISO-8859-%d", i);
+		if ((vec = cet_find_cs_by_name(name)))
+		    vec->fallback = &cet_cs_vec_ansi_x3_4_1968;
+	    }
+	}
 #ifdef CET_DEBUG	    
 	    printf("We have registered %d character sets with %d aliases\n", cet_cs_vec_ct, cet_cs_alias_ct);
 #endif
-	}
 }
 
 cet_cs_vec_t *
