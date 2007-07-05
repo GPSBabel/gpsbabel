@@ -900,6 +900,23 @@ example:
 </screen>
 </section>
  
+<section id="style_def_isotimems">
+<title>ISO_TIME_MS</title>
+<para>
+   ISO_TIME_MS is much like ISO_TIME, but expresses milliseconds at the
+   end of the timestamp.
+   It is thus in the format yyyy-mm-ddThh:mm:ss.SSSzzzzz
+   where 'SSS' is milliseconds and zzzzzz is the local time offset 
+   or the character Z for UTC time.
+   On output, UTC 'Z' time zone will always be used.
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   IFIELD ISO_TIME_MS,"","%s"
+</screen>
+</section>
+
 <section id="style_def_geodiff">
 <title>GEOCACHE_DIFF</title>
 <para>
