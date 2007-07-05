@@ -27,6 +27,7 @@
 #include "grtcirc.h"
 #include "strptime.h"
 #include "jeeps/gpsmath.h"
+#include "xmlgeneric.h"  // for xml_fill_in_time.
 
 #define MYNAME "CSV_UTIL"
 
@@ -938,8 +939,9 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     	(strcmp(fmp->key, "HMSL_TIME") == 0) ) {
 	wpt->creation_time += addhms(s, fmp->printfc);
     } else
-    if (strcmp(fmp->key, "ISO_TIME") == 0) {
-	wpt->creation_time = xml_parse_time(s, NULL);
+    if ((strcmp(fmp->key, "ISO_TIME") == 0) || 
+        (strcmp(fmp->key, "ISO_TIME_MS") == 0)) {
+	wpt->creation_time = xml_parse_time(s, &wpt->microseconds);
     } else
 	if (strcmp(fmp->key, "GEOCACHE_LAST_FOUND") == 0) {
 	wpt->gc_data.last_found = yyyymmdd_to_time(s);
@@ -1456,6 +1458,10 @@ xcsv_waypt_pr(const waypoint *wpt)
 	} else
 	if (strcmp(fmp->key, "ISO_TIME") == 0) {
             writetime(buff, sizeof buff, "%Y-%m-%dT%H:%M:%SZ", wpt->creation_time, 1 );
+	} else
+	if (strcmp(fmp->key, "ISO_TIME_MS") == 0) {
+            xml_fill_in_time(buff, wpt->creation_time, 
+		MICRO_TO_MILLI(wpt->microseconds), XML_LONG_TIME);
 	} else
         if (strcmp(fmp->key, "GEOCACHE_LAST_FOUND") == 0) {
 	    writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->gc_data.last_found));
