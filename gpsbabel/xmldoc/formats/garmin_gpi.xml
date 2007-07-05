@@ -13,6 +13,15 @@
    At this time we don't support special features as "Tour-Guide", alerts or links
    to sounds and pictures.
 </para>
+<para>
+	This module does not support direct transfer of .GPI files to
+	receivers in Garmin protocol mode.  For units like Nuvi, Zumo, or 
+	Streetpilot, just choose a file that's on the drive where your
+	GPS is mounted.   For units like the X series (GPSMap60, etc.) 
+	you must explictly put the unit in mass storage mode or mount
+	the memory chip in an external reader and transfer the file 
+	directly.
+</para>
 <example id="all_garmin_gpi_options">
   <title>Command showing garmin_gpi output example</title>
   <para>
