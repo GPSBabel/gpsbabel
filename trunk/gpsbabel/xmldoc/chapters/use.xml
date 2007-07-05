@@ -54,15 +54,15 @@ name of a file to be read or written.
          it from, what you're writing, and what to write it to.  For
          example:</para>
          <para><userinput>gpsbabel -i geo -f /tmp/geocaching.loc -o gpx -F /tmp/geocaching.gpx</userinput></para>
-         <para>tells it to read the file "/tmp/geocaching.loc" in geocaching.com
-         format and create a new file in GPX format.</para>
+         <para>tells it to read the file <filename>/tmp/geocaching.loc</filename> in geocaching.com
+         format and create a new file <filename>/tmp/geocaching.gpx</filename> in GPX format.   It's important to note that the names have nothign to do with the formats actually used.</para>
          <para> This command will read from a Magellan unit attached
          to the first serial port on a Linux system (device names will
-         vary on other OSes) and write them as a geocaching loc file.
-         The second command does the same on Microsoft Windows.</para>
+         vary on other OSes) and write them as a geocaching loc file.</para>
          <para><userinput>gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</userinput></para>
+         <para>This second command does the same on Microsoft Windows.</para>
          <para><userinput>gpsbabel -i magellan -f com1 -o geo -F mag.loc</userinput></para>
-         <para>Optionally, you may specify <parameter moreinfo="none">"-s"</parameter> in any command line.  This
+         <para>Optionally, you may specify <parameter moreinfo="none">-s</parameter> in any command line.  This
          causes the program to ignore any "short" names that may be
          present in the source data format and synthesize one from the
          long name.  This is particularly useful if you're writing to
@@ -81,7 +81,7 @@ name of a file to be read or written.
 	<para>
 	  Many of the available format options in GPSBabel can themselves
 	  take options.   While we try to make all the formats do the most
-	  sensible thing possible without any extra options, this allows
+	  sensible thing possible without any extra options; this allows
 	  great power and flexibility in the operation of the program.
 	</para>
 	<para>
@@ -136,7 +136,7 @@ merged data to multiple destinations.
          of supported character sets with "gpsbabel -l".  To change
          the character set on both sides you should do this:</para>
          <para><userinput>gpsbabel -i xcsv,style=foo.style -c latin1 -f foo -o xcsv,style=bar.style -c ms-ansi -F bar</userinput></para>
-         <para>Note, that some formats has a fixed character set and ignore this option.</para>
+         <para>Note, that some formats have a fixed character set and ignore this option.</para>
       </sect1>
       <sect1 id="Route_And_Track_Modes">
          <title>Route and Track Modes</title>
@@ -162,7 +162,7 @@ merged data to multiple destinations.
 	 may not really be the route you had in mind.
 	 </para>
          <para> Tracks and routes will sometimes be converted to a
-         list of waypoints when necessary, f.i. when writing into one
+         list of waypoints when necessary, One example is when writing into one
          of the CSV formats. The inverse operation is not supported
          right now, so reading the converted track back from CSV will
          always result in a list of waypoints, not the original track.

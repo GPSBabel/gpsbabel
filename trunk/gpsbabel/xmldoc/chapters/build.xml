@@ -37,7 +37,7 @@ need to 'apt-get install libusb-dev'.
 </para>
 <para><userinput>./configure --help</userinput></para> 
 <para>
-lists all the supported options, but additionally we have:
+lists all the supported options, but additionally we have:</para><para>
  <option>--disable-shapefile</option> Excludes the shapefile support.
 </para>
 <para>
