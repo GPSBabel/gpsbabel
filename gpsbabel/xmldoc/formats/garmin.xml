@@ -50,21 +50,6 @@
 <member>GPSMAP 76Cx</member> 
 <member>GPSMAP 96</member> 
 <member>GPSMAP 96C</member> 
-<member>Nuvi 300<footnote id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.  Members of this class of products do not support realtime positioning protocol.</para></footnote></member>
-<member>Nuvi 200<footnoteref linkend="gpx"/></member>
-<member>Nuvi 200W<footnoteref linkend="gpx"/></member>
-<member>Nuvi 250<footnoteref linkend="gpx"/></member>
-<member>Nuvi 250W<footnoteref linkend="gpx"/></member>
-<member>Nuvi 270<footnoteref linkend="gpx"/></member>
-<member>Nuvi 310<footnoteref linkend="gpx"/></member>
-<member>Nuvi 350<footnoteref linkend="gpx"/></member>
-<member>Nuvi 370<footnoteref linkend="gpx"/></member>
-<member>Nuvi 600<footnoteref linkend="gpx"/></member>
-<member>Nuvi 650<footnoteref linkend="gpx"/></member>
-<member>Nuvi 650FM<footnoteref linkend="gpx"/></member>
-<member>Nuvi 660<footnoteref linkend="gpx"/></member>
-<member>Nuvi 670<footnoteref linkend="gpx"/></member>
-<member>Nuvi 680<footnoteref linkend="gpx"/></member>
 <member>Quest</member>
 <member>Quest II</member>
 <member>Rhino 520</member>
@@ -83,15 +68,9 @@
 <member>StreetPilot c320</member>
 <member>StreetPilot c330</member>
 <member>StreetPilot c340</member>
-<member>StreetPilot c510<footnoteref linkend="gpx"/></member>
-<member>StreetPilot c530<footnoteref linkend="gpx"/></member>
-<member>StreetPilot c550<footnoteref linkend="gpx"/></member>
-<member>StreetPilot c580<footnoteref linkend="gpx"/></member>
 <member>StreetPilot i2</member>
 <member>StreetPilot i3</member>
 <member>StreetPilot i5</member>
-<member>Zumo 450<footnoteref linkend="gpx"/></member>
-<member>Zumo 550<footnoteref linkend="gpx"/></member>
 </simplelist>
 </para>
 <para>the following Bluetooth Garmin products:
@@ -99,6 +78,7 @@
 <member>GPS 10<footnoteref linkend="posnonly"/></member>
 </simplelist>
 </para>
+
 
 <para>and most serial Garmin GPS receivers including:
 <simplelist columns="4">
@@ -128,6 +108,36 @@
 <member>Rhino 130</member> 
 <member>StreetPilot III</member> 
 <member>StreetPilot III+</member> 
+</simplelist>
+</para>
+
+<para>
+The following Garmin GPS receivers are supported, but they do not
+support Garmin communication protocol and don't work with the 
+<option>garmin</option> option.  To use these receivers, read or write
+GPX files from the mass storage device as mounted on your computer.
+<simplelist columns="4">
+<member>Nuvi 200<footnoteref linkend="gpx"/></member>
+<member>Nuvi 200W<footnoteref linkend="gpx"/></member>
+<member>Nuvi 250<footnoteref linkend="gpx"/></member>
+<member>Nuvi 250W<footnoteref linkend="gpx"/></member>
+<member>Nuvi 270<footnoteref linkend="gpx"/></member>
+<member>Nuvi 300<footnote id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.  Members of this class of products do not support realtime positioning protocol.</para></footnote></member>
+<member>Nuvi 310<footnoteref linkend="gpx"/></member>
+<member>Nuvi 350<footnoteref linkend="gpx"/></member>
+<member>Nuvi 370<footnoteref linkend="gpx"/></member>
+<member>Nuvi 600<footnoteref linkend="gpx"/></member>
+<member>Nuvi 650<footnoteref linkend="gpx"/></member>
+<member>Nuvi 650FM<footnoteref linkend="gpx"/></member>
+<member>Nuvi 660<footnoteref linkend="gpx"/></member>
+<member>Nuvi 670<footnoteref linkend="gpx"/></member>
+<member>Nuvi 680<footnoteref linkend="gpx"/></member>
+<member>StreetPilot c510<footnoteref linkend="gpx"/></member>
+<member>StreetPilot c530<footnoteref linkend="gpx"/></member>
+<member>StreetPilot c550<footnoteref linkend="gpx"/></member>
+<member>StreetPilot c580<footnoteref linkend="gpx"/></member>
+<member>Zumo 450<footnoteref linkend="gpx"/></member>
+<member>Zumo 550<footnoteref linkend="gpx"/></member>
 </simplelist>
 </para>
 
