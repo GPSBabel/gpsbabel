@@ -14,28 +14,44 @@ extern "C"
 
 struct LINKDATA
 {
-    UC Pid_Ack_Byte;
-    UC Pid_Command_Data;
-    UC Pid_Xfer_Cmplt;
-    UC Pid_Date_Time_Data;
-    UC Pid_Position_Data;
-    UC Pid_Prx_Wpt_Data;
-    UC Pid_Nak_Byte;
-    UC Pid_Records;
-    UC Pid_Rte_Hdr;
-    UC Pid_Rte_Wpt_Data;
-    UC Pid_Almanac_Data;
-    UC Pid_Trk_Data;
-    UC Pid_Wpt_Data;
-    UC Pid_Pvt_Data;
-    UC Pid_Rte_Link_Data;
-    UC Pid_Trk_Hdr;
-    UC Pid_Protocol_Array;
-    UC Pid_Product_Rqst;
-    UC Pid_Product_Data;
-    UC Pid_Wpt_Cat_Data;
-}
-;
+    US Pid_Protocol_Array;
+    US Pid_Product_Rqst;
+    US Pid_Product_Data;
+    US Pid_Ext_Product_Data;
+
+    US Pid_Ack_Byte;
+    US Pid_Command_Data;
+    US Pid_Xfer_Cmplt;
+    US Pid_Date_Time_Data;
+    US Pid_Position_Data;
+    US Pid_Prx_Wpt_Data;
+    US Pid_Nak_Byte;
+    US Pid_Records;
+    US Pid_Rte_Hdr;
+    US Pid_Rte_Wpt_Data;
+    US Pid_Almanac_Data;
+    US Pid_Trk_Data;
+    US Pid_Wpt_Data;
+    US Pid_Pvt_Data;
+    US Pid_Rte_Link_Data;
+    US Pid_Trk_Hdr;
+	
+    US Pid_FlightBook_Record;
+    US Pid_Lap;
+    US Pid_Wpt_Cat_Data;
+    US Pid_Run;
+    US Pid_Workout;
+    US Pid_Workout_Occurrence;
+    US Pid_Fitness_User_Profile;
+    US Pid_Workout_Limits;
+    US Pid_Course;
+    US Pid_Course_Lap;
+    US Pid_Course_Point;
+    US Pid_Course_Trk_Hdr;
+    US Pid_Course_Trk_Data;
+    US Pid_Course_Limits;
+    US Pid_Trk2_Hdr; /*Undocumented*/
+};
 
 
 
@@ -68,6 +84,15 @@ struct COMMANDDATA
     US Cmnd_Transfer_Lap;
     US Cmnd_Transfer_Wpt_Cats;
     US Cmnd_Transfer_Runs;
+    US Cmnd_Transfer_Workouts;
+    US Cmnd_Transfer_Workout_Occurrences;
+    US Cmnd_Transfer_Fitness_User_Profile;
+    US Cmnd_Transfer_Workout_Limits;
+    US Cmnd_Transfer_Courses;
+    US Cmnd_Transfer_Course_Laps;
+    US Cmnd_Transfer_Course_Points;
+    US Cmnd_Transfer_Course_Tracks;
+    US Cmnd_Transfer_Course_Limits;
 }
 ;
 
@@ -121,6 +146,11 @@ int32 gps_almanac_transfer;
 #define pA600 600
 int32 gps_date_time_transfer;
 
+/*
+ *  FlightBook Transfer Protocol
+ */
+#define pA650 650
+/*Not implemented */
 
 /*
  *  Position
@@ -141,10 +171,21 @@ int32 gps_pvt_transfer;
 #define pA906 906
 int32 gps_lap_transfer;
 
+/*
+ * Various fitness related
+ */
 #define pA1000 1000
 int32 gps_run_transfer;
-
-
+#define pA1002 1002
+int32 gps_workout_transfer;
+#define pA1004 1004
+int32 gps_user_profile_transfer;
+#define pA1005 1005
+int32 gps_workout_limits_transfer;
+#define pA1006 1006
+int32 gps_course_transfer;
+#define pA1009 1009
+int32 gps_course_limits_transfer;
 
 /*
  * Waypoint D Type
@@ -262,8 +303,36 @@ int32 gps_pvt_type;
  * Lap Data Type
  */
 #define pD906 906
+#define pD1001 1001
+#define pD1011 1011
+#define pD1015 1015
 
 int32 gps_lap_type;
+
+/*
+ * Various fitness related
+ */
+#define pD1000 1000
+#define pD1009 1009
+#define pD1010 1010
+int32 gps_run_type;
+#define pD1002 1002
+#define pD1008 1008
+int32 gps_workout_type;
+#define pD1003 1003
+int32 gps_workout_occurrence_type;
+#define pD1004 1004
+int32 gps_user_profile_type;
+#define pD1005 1005
+int32 gps_workout_limits_type;
+#define pD1006 1006
+int32 gps_course_type;
+#define pD1007 1007
+int32 gps_course_lap_type;
+#define pD1012 1012
+int32 gps_course_point_type;
+#define pD1013 1013
+int32 gps_course_limits_type;
 
 /*
  * Link protocol type

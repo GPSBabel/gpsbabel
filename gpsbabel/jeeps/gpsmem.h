@@ -19,6 +19,8 @@ GPS_PTrack    GPS_Track_New(void);
 void          GPS_Track_Del(GPS_PTrack *thys);
 GPS_PWay      GPS_Way_New(void);
 void          GPS_Way_Del(GPS_PWay *thys);
+GPS_PLap	  GPS_Lap_New(void);
+void          GPS_Lap_Del(GPS_PLap *thys);
 
 #endif
 

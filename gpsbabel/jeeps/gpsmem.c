@@ -300,3 +300,42 @@ void GPS_Way_Del(GPS_PWay *thys)
     return;
 }
 
+/* @func GPS_Lap_New ***********************************************
+**
+** Lap constructor
+**
+** @return [GPS_PLap] virgin track
+**********************************************************************/
+
+GPS_PLap GPS_Lap_New(void)
+{
+    GPS_PLap ret;
+    
+    if(!(ret=(GPS_PLap)calloc(1,sizeof(GPS_OLap))))
+    {
+	perror("malloc");
+	fprintf(stderr,"GPS_Lap_New: Insufficient memory");
+	fflush(stderr);
+	return NULL;
+    }
+
+    return ret;
+}
+
+
+
+/* @func GPS_Lap_Del ***********************************************
+**
+** Lap destructor
+**
+** @param [w] thys [GPS_PLap *] track to delete
+**
+** @return [void]
+**********************************************************************/
+
+void GPS_Lap_Del(GPS_PLap *thys)
+{
+    free((void *)*thys);
+
+    return;
+}
