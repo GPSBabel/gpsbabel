@@ -421,6 +421,94 @@ route_read(void)
 
 }
 
+static
+void
+lap_read_as_track(void)
+{
+	int32 ntracks;
+	GPS_PLap *array;
+	route_head *trk_head = NULL;
+	int trk_num = 0;
+	int index;
+	int i;
+
+	ntracks = GPS_Command_Get_Lap(portname, &array, waypt_read_cb);
+	if ( ntracks <= 0 )
+		return;
+	for (i = 0; i < ntracks; i++) {
+		waypoint *wpt;
+		if (array[i]->index == -1){
+			index=i;
+		} else {
+			index=array[i]->index;
+			index=i;
+		}
+		
+		if ((trk_head == NULL) || (i == 0) ||
+			/* D906 - last track:index is the track index */
+			(array[i]->index == -1 && array[i]->track_index != 255) ||
+			/* D10xx - no real separator, use begin/end time to guess */
+			(abs(array[i-1]->start_time + array[i]->total_time/100-array[i]->start_time) > 2)
+			) {
+			static struct tm * stmp;
+			stmp = gmtime(&array[i]->start_time);
+			trk_head = route_head_alloc();
+			/*For D906, we would like to use the track_index in the last packet instead...*/
+			trk_head->rte_num = ++trk_num;
+			trk_head->rte_name = xmalloc(32);
+			strftime(trk_head->rte_name, 32, "%Y-%m-%dT%H:%M:%SZ", stmp);
+			track_add_head(trk_head);
+
+			wpt = waypt_new();
+
+			wpt->longitude = array[i]->begin_lon;
+			wpt->latitude = array[i]->begin_lat;
+			wpt->heartrate = array[i]->avg_heart_rate;
+			wpt->cadence = array[i]->avg_cadence;
+			wpt->speed = array[i]->max_speed;
+			wpt->creation_time = array[i]->start_time;
+			wpt->microseconds = 0;
+
+			wpt->shortname = xmalloc(8);
+			sprintf(wpt->shortname, "#%d-0", index);
+			wpt->description = xmalloc(128);
+			sprintf(wpt->description, "D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d",
+			  array[i]->total_distance, array[i]->calories, array[i]->max_speed, array[i]->avg_heart_rate,
+			  array[i]->max_heart_rate, array[i]->avg_cadence, array[i]->intensity, array[i]->trigger_method);
+
+			track_add_wpt(trk_head, wpt);
+		}
+/*Allow even if no correct location, no skip if invalid */
+/*		if (array[i]->no_latlon) {
+*			continue;
+*		}
+*/
+		wpt = waypt_new();
+
+		wpt->longitude = array[i]->end_lon;
+		wpt->latitude = array[i]->end_lat;
+		wpt->heartrate = array[i]->avg_heart_rate;
+		wpt->cadence = array[i]->avg_cadence;
+		wpt->speed = array[i]->max_speed;
+		wpt->creation_time = array[i]->start_time + array[i]->total_time/100;
+		wpt->microseconds = 10000*(array[i]->total_time % 100);
+		/*Add fields with no mapping in the description */
+		wpt->shortname = xmalloc(8);
+		sprintf(wpt->shortname, "#%d", index);
+		wpt->description = xmalloc(128);
+		sprintf(wpt->description, "D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d (%f,%f)",
+		  array[i]->total_distance, array[i]->calories, array[i]->max_speed, array[i]->avg_heart_rate,
+		  array[i]->max_heart_rate, array[i]->avg_cadence, array[i]->intensity, array[i]->trigger_method, 
+		  array[i]->begin_lon, array[i]->begin_lat);
+
+	  track_add_wpt(trk_head, wpt);
+	}
+	while(ntracks) {
+		GPS_Lap_Del(&array[--ntracks]);
+	}
+	xfree(array);
+}
+
 /*
  * Rather than propogate Garmin-specific data types outside of the Garmin
  * code, we convert the PVT (position/velocity/time) data from the receiver

@@ -361,6 +361,9 @@ int32 GPS_Command_Get_Almanac(const char *port, GPS_PAlmanac **alm)
 {
     int32 ret=0;
 
+    if(gps_almanac_transfer == -1)
+	return GPS_UNSUPPORTED;
+
     switch(gps_almanac_transfer)
     {
     case pA500:
@@ -390,6 +393,9 @@ int32 GPS_Command_Get_Almanac(const char *port, GPS_PAlmanac **alm)
 int32 GPS_Command_Send_Almanac(const char *port, GPS_PAlmanac *alm, int32 n)
 {
     int32 ret=0;
+
+	if(gps_almanac_transfer == -1)
+		return GPS_UNSUPPORTED;
 
     switch(gps_almanac_transfer)
     {
@@ -635,3 +641,50 @@ int32 GPS_Command_Pvt_Get(gpsdevh **fd, GPS_PPvt_Data *pvt)
 
     return ret;
 }    
+
+/* @func GPS_Command_Get_Lap ***************************************
+**
+** Get lap from GPS
+**
+** @param [r] port [const char *] serial port
+** @param [w] way [GPS_PLap **] pointer to lap array
+**
+** @return [int32] number of lap entries
+************************************************************************/
+
+int32 GPS_Command_Get_Lap(const char *port, GPS_PLap **lap, pcb_fn cb)
+{
+    int32 ret=0;
+
+    if(gps_lap_transfer == -1)
+	return GPS_UNSUPPORTED;
+
+    switch(gps_lap_transfer)
+    {
+	case pA906:
+	    ret = GPS_A906_Get(port,lap, cb);
+	    break;
+	default:
+	    GPS_Error("Get_Lap: Unknown lap protocol");
+	    return PROTOCOL_ERROR;
+    }
+
+    return ret;
+}    
+ /*Stubs for unimplemented stuff*/
+int32  GPS_Command_Get_Workout(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **)){
+  return 0;
+}  
+int32  GPS_Command_Get_Fitness_User_Profile(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **)){
+  return 0;
+}  
+int32  GPS_Command_Get_Workout_Limits(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **)){
+  return 0;
+}  
+int32  GPS_Command_Get_Course(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **)){
+  return 0;
+}  
+int32  GPS_Command_Get_Course_Limits(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **)){
+  return 0;
+}  
+

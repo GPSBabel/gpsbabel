@@ -98,10 +98,6 @@ static void   GPS_D400_Send(UC *data, GPS_PWay way, int32 *len);
 static void   GPS_D403_Send(UC *data, GPS_PWay way, int32 *len);
 static void   GPS_D450_Send(UC *data, GPS_PWay way, int32 *len);
 
-static int32    GPS_D500_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd);
-static int32    GPS_D501_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd);
-static int32    GPS_D550_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd);
-static int32    GPS_D551_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd);
 static void   GPS_D500_Send(UC *data, GPS_PAlmanac alm);
 static void   GPS_D501_Send(UC *data, GPS_PAlmanac alm);
 static void   GPS_D550_Send(UC *data, GPS_PAlmanac alm);
@@ -235,13 +231,18 @@ static int32 GPS_A000(const char *port)
 #endif
     gps_pvt_transfer       = -1;
     gps_pvt_type           = -1;
-    gps_prx_waypt_transfer = -1;
-    gps_prx_waypt_type     = -1;
     gps_trk_transfer       = -1;
     gps_trk_type           = -1;
     gps_trk_hdr_type       = -1;
     gps_rte_link_type      = -1;
     
+    gps_prx_waypt_transfer = -1;
+    gps_prx_waypt_type     = -1;
+    gps_almanac_transfer   = -1;
+    gps_almanac_type       = -1;
+    gps_lap_transfer       = -1;
+    gps_lap_type           = -1;
+   
     if(!GPS_Device_Wait(fd))
     {
 	GPS_Warning("A001 protocol not supported");
@@ -353,6 +354,8 @@ static void GPS_A001(GPS_PPacket packet)
     gps_prx_waypt_type     = -1;
     gps_almanac_transfer   = -1;
     gps_almanac_type       = -1;
+    gps_lap_transfer       = -1;
+    gps_lap_type           = -1;
     
     entries = packet->n / 3;
     p = packet->data;
@@ -411,14 +414,35 @@ static void GPS_A001(GPS_PPacket packet)
 		case 600:
 		    gps_date_time_transfer = pA600;
 		    break;
+		case 650:
+		    /*  FlightBook Transfer Protocol */
+		    break;
 		case 700:
 		    gps_position_transfer = pA700;
 		    break;
 		case 800:
 		    gps_pvt_transfer = pA800;
 		    break;
+		case 906:
+		    gps_lap_transfer = pA906;
+		    break;
 		case 1000:
 		    gps_run_transfer = pA1000;
+		    break;
+		case 1002:
+		    gps_workout_transfer = pA1002;
+		    break;
+		case 1004:
+		    gps_user_profile_transfer = pA1004;
+		    break;
+		case 1005:
+		    gps_workout_limits_transfer = pA1005;
+		    break;
+		case 1006:
+		    gps_course_transfer = pA1006;
+		    break;
+		case 1009:
+		    gps_course_limits_transfer = pA1009;
 		    break;
 	    }
 	    break;
@@ -532,27 +556,14 @@ static void GPS_A001(GPS_PPacket packet)
 		    continue;
 	    }
 
-
 	    else if(lasta<500)
 	    {
-		if(data<=110 && data>=100)
-		{
-		    gps_prx_waypt_type = data;
-		    continue;
-		}
-		if(data<153 && data>=150)
-		{
-		    gps_prx_waypt_type = data;
-		    continue;
-		}
-		if(data<156 && data>=154)
-		{
-		    gps_prx_waypt_type = data;
-		    continue;
-		}
-		if(data<451)
-		{
-		    if(data==400)
+		    if((data<=110 && data>=100) ||
+				(data<153 && data>=150) ||
+				(data<156 && data>=154)) {
+		    	gps_prx_waypt_type = data;
+		    }
+			else if(data==400)
 			gps_prx_waypt_type = pD400;
 		    else if(data==403)
 			gps_prx_waypt_type = pD403;
@@ -562,7 +573,6 @@ static void GPS_A001(GPS_PPacket packet)
 			GPS_Protocol_Error(tag,data);
 		    continue;
 		}
-	    }
 
 	    else if(lasta<600)
 	    {
@@ -579,7 +589,7 @@ static void GPS_A001(GPS_PPacket packet)
 		continue;
 	    }
 
-	    else if(lasta<700)
+	    else if(lasta<650)
 	    {
 		if (data == 600) {
 		    gps_date_time_type = pD600;
@@ -590,6 +600,13 @@ static void GPS_A001(GPS_PPacket packet)
 		}
 		continue;
 	    }
+		
+	    else if(lasta<651)
+	    {
+			/*  FlightBook Transfer Protocol, not handled */
+			continue;
+	    }
+		
 	    else if(lasta<800)
 	    {
 		if(data!=700)
@@ -598,6 +615,7 @@ static void GPS_A001(GPS_PPacket packet)
 		    gps_position_type = pD700;
 		continue;
 	    }
+		
 	    else if(lasta<900)
 	    {
 		if (data == 800)
@@ -609,10 +627,87 @@ static void GPS_A001(GPS_PPacket packet)
 	         */
 		continue;
 	    }
+		
 	    else if (lasta < 1000)
 	    {
 		if (data == 906)
 		    gps_lap_type = pD906;
+			else if (data == 1001)
+				gps_lap_type = pD1001;
+			else if (data == 1011)
+				gps_lap_type = pD1011;
+			else if (data == 1015)
+				gps_lap_type = pD1015;
+			continue;
+	    }
+		
+	    else if (lasta < 1002)
+	    {
+		if (data == 1000)
+			gps_run_type = pD1000;
+		else if (data == 1009)
+			gps_run_type = pD1009;
+		else if (data == 1010)
+			gps_run_type = pD1010;
+		continue;
+	    }
+		
+	    else if (lasta < 1003)
+	    {
+		if (data == 1002)
+			gps_workout_type = pD1002;
+		else if (data == 1008)
+			gps_workout_type = pD1008;
+		continue;
+	    }
+		
+	    else if (lasta < 1004)
+	    {
+		if (data == 1003)
+		    gps_workout_occurrence_type = pD1003;
+		continue;
+	    }
+		
+	    else if (lasta < 1005)
+	    {
+		if (data == 1004)
+		    gps_user_profile_type = pD1004;
+		continue;
+	    }
+		
+	    else if (lasta < 1006)
+	    {
+		if (data == 1005)
+		    gps_workout_limits_type = pD1005;
+		continue;
+	    }
+		
+	    else if (lasta < 1007)
+	    {
+		if (data == 1006)
+		    gps_course_type = pD1006;
+		continue;
+	    }
+		
+	    else if (lasta < 1008)
+	    {
+		if (data == 1007)
+		    gps_course_lap_type = pD1007;
+		continue;
+	    }
+		
+	    else if (lasta < 1009)
+	    {
+		if (data == 1012)
+		    gps_course_point_type = pD1012;
+		continue;
+	    }
+		
+	    else if (lasta < 1010)
+	    {
+		if (data == 1013)
+		    gps_course_limits_type = pD1013;
+		continue;
 	    }
 	}
     }
@@ -4006,7 +4101,7 @@ void GPS_D302b_Get(GPS_PTrack *trk, UC *data)
 
 /* @func GPS_D303b_Get ******************************************************
 **
-** Get track data (A302 protocol) -- XXX used in Forerunner 301
+** Get track data (A302 protocol) -- used in Forerunner 301
 **
 ** @param [w] trk [GPS_PTrack *] track
 ** @param [r] data [UC *] packet data
@@ -4073,7 +4168,8 @@ void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
      */
     switch (gps_trk_type) {
     case pD304:
-	p+=4; /* A float indicating number of meters travelled. */
+	(*trk)->distance = GPS_Util_Get_Float(p);
+	p+=sizeof(float); /* A float indicating number of meters travelled. */
 	
 	(*trk)->heartrate = (*p++);
 	/* crank cadence, RPM, 0xff if invalid.  */
@@ -4866,34 +4962,33 @@ int32 GPS_A500_Get(const char *port, GPS_PAlmanac **alm)
 {
     static UC data[2];
     gpsdevh *fd;
-    GPS_PPacket tra;
-    GPS_PPacket rec;
-    int32 n;
-    int32 i;
-    int32 ret;
+    GPS_PPacket trapkt;
+    GPS_PPacket recpkt;
+    int32 i, n;
+
+    if (gps_almanac_transfer == -1)
+	return GPS_UNSUPPORTED;
     
     if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
-    if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
+    if (!(trapkt = GPS_Packet_New() ) || !(recpkt = GPS_Packet_New()))
 	return MEMORY_ERROR;
-
 
     GPS_Util_Put_Short(data,
 		       COMMAND_ID[gps_device_command].Cmnd_Transfer_Alm);
-    GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
+    GPS_Make_Packet(&trapkt, LINK_ID[gps_link_type].Pid_Command_Data,
 		    data,2);
-    if(!GPS_Write_Packet(fd,tra))
+    if(!GPS_Write_Packet(fd,trapkt))
 	return gps_errno;
-    if(!GPS_Get_Ack(fd, &tra, &rec))
+    if(!GPS_Get_Ack(fd, &trapkt, &recpkt))
+	return gps_errno;
+    if(!GPS_Packet_Read(fd, &recpkt))
+	return gps_errno;
+    if(!GPS_Send_Ack(fd, &trapkt, &recpkt))
 	return gps_errno;
 
-    if(!GPS_Packet_Read(fd, &rec))
-	return gps_errno;
-    if(!GPS_Send_Ack(fd, &tra, &rec))
-	return gps_errno;
-
-    n = GPS_Util_Get_Short(rec->data);
+    n = GPS_Util_Get_Short(recpkt->data);
 
     if(n)
 	if(!((*alm)=(GPS_PAlmanac *)malloc(n*sizeof(GPS_PAlmanac))))
@@ -4901,49 +4996,65 @@ int32 GPS_A500_Get(const char *port, GPS_PAlmanac **alm)
 	    GPS_Error("A500_Get: Insufficient memory");
 	    return MEMORY_ERROR;
 	}
-    for(i=0;i<n;++i)
+
+    for(i=0;i<n;++i) {
 	if(!((*alm)[i]=GPS_Almanac_New()))
 	    return MEMORY_ERROR;
+		if(!GPS_Packet_Read(fd, &recpkt)) {
+			return gps_errno;
+		}
     
+		if(!GPS_Send_Ack(fd, &trapkt, &recpkt)) {
+			return gps_errno;
+		}
 
-    switch(gps_almanac_type)
-    {
+		switch(gps_almanac_type) {
     case pD500:
-	ret = GPS_D500_Get(*alm,n,fd);
+	GPS_A500_Translate(recpkt->data, &((*alm)[i]));
 	break;
     case pD501:
-	ret = GPS_D501_Get(*alm,n,fd);
+	GPS_A500_Translate(recpkt->data, &((*alm)[i]));
+	(*alm)[i]->hlth=recpkt->data[42];
 	break;
     case pD550:
-	ret = GPS_D550_Get(*alm,n,fd);
+	(*alm)[i]->svid = recpkt->data[0];
+	GPS_A500_Translate(recpkt->data+1, &((*alm)[i]));
 	break;
     case pD551:
-	ret = GPS_D551_Get(*alm,n,fd);
+	(*alm)[i]->svid = recpkt->data[0];
+	GPS_A500_Translate(recpkt->data+1, &((*alm)[i]));
+	(*alm)[i]->hlth = recpkt->data[43];
 	break;
     default:
 	GPS_Error("A500_GET: Unknown almanac protocol");
 	return PROTOCOL_ERROR;
     }
+		/* Cheat and don't _really_ pass the trkpt back */
+/*		cb(n, NULL);*/
+	}
 
-    if(ret < 0) return ret;
-    if(ret != n)
-    {
+    if(!GPS_Packet_Read(fd, &recpkt))
+	return gps_errno;
+    if(!GPS_Send_Ack(fd, &trapkt, &recpkt))
+	return gps_errno;
+    if(recpkt->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+	GPS_Error("A500_Get: Error transferring almanac");
+	return FRAMING_ERROR;
+    }
+    
+    if(i != n) {
 	GPS_Error("A500_GET: Almanac entry number mismatch");
 	return FRAMING_ERROR;
     }
     
-    
-    GPS_Packet_Del(&tra);
-    GPS_Packet_Del(&rec);
+    GPS_Packet_Del(&trapkt);
+    GPS_Packet_Del(&recpkt);
 
     if(!GPS_Device_Off(fd))
 	return gps_errno;
 
-    return ret;
+    return n;
 }
-
-
-
 
 
 /* @func GPS_A500_Send **************************************************
@@ -5124,216 +5235,6 @@ int32 GPS_A500_Send(const char *port, GPS_PAlmanac *alm, int32 n)
 
     return 1;
 }
-
-
-
-/* @funcstatic GPS_D500_Get ********************************************
-**
-** Get almanac data
-**
-** @param [w] alm [GPS_PAlmanac *] almanac array
-** @param [r] entries [int32] number of packets to receive
-** @param [r] fd [int32] file descriptor
-**
-** @return [int32] number of entries read
-************************************************************************/
-static int32 GPS_D500_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd)
-{
-    GPS_PPacket tra;
-    GPS_PPacket rec;
-    int32 i;
-    
-    if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
-	return MEMORY_ERROR;
-
-
-    for(i=0;i<entries;++i)
-    {
-	if(!GPS_Packet_Read(fd, &rec))
-	    return gps_errno;
-	
-	if(!GPS_Send_Ack(fd, &tra, &rec))
-	    return gps_errno;
-
-	GPS_A500_Translate(rec->data, &alm[i]);
-    }
-    
-
-    if(!GPS_Packet_Read(fd, &rec))
-	return gps_errno;
-    
-    if(!GPS_Send_Ack(fd, &tra, &rec))
-	return gps_errno;
-    
-
-    if(rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt)
-    {
-	GPS_Error("D500_GET: Error transferring almanac");
-	return FRAMING_ERROR;
-    }
-
-    GPS_Packet_Del(&tra);
-    GPS_Packet_Del(&rec);
-	
-    return i;
-}
-
-
-/* @funcstatic  GPS_D501_Get ********************************************
-**
-** Get almanac data
-**
-** @param [w] alm [GPS_PAlmanac *] almanac array
-** @param [r] entries [int32] number of packets to receive
-** @param [r] fd [int32] file descriptor
-**
-** @return [int32] number of entries read
-************************************************************************/
-static int32 GPS_D501_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd)
-{
-    GPS_PPacket tra;
-    GPS_PPacket rec;
-    int32 i;
-
-    if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
-	return MEMORY_ERROR;
-
-
-    for(i=0;i<entries;++i)
-    {
-	if(!GPS_Packet_Read(fd, &rec))
-	    return gps_errno;
-	if(!GPS_Send_Ack(fd, &tra, &rec))
-	    return gps_errno;
-
-	GPS_A500_Translate(rec->data, &alm[i]);
-	alm[i]->hlth=rec->data[42];
-    }
-    
-
-    if(!GPS_Packet_Read(fd, &rec))
-	return gps_errno;
-    if(!GPS_Send_Ack(fd, &tra, &rec))
-	return gps_errno;
-    
-
-    if(rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt)
-    {
-	GPS_Error("D501_GET: Error transferring almanac");
-	return FRAMING_ERROR;
-    }
-    
-    GPS_Packet_Del(&tra);
-    GPS_Packet_Del(&rec);
-	
-    return i;
-}
-
-
-
-/* @funcstatic GPS_D550_Get *********************************************
-**
-** Get almanac data
-**
-** @param [w] alm [GPS_PAlmanac *] almanac array
-** @param [r] entries [int32] number of packets to receive
-** @param [r] fd [int32] file descriptor
-**
-** @return [int32] number of entries read
-************************************************************************/
-static int32 GPS_D550_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd)
-{
-    GPS_PPacket tra;
-    GPS_PPacket rec;
-    int32 i;
-    
-    if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
-	return MEMORY_ERROR;
-
-
-    for(i=0;i<entries;++i)
-    {
-	if(!GPS_Packet_Read(fd, &rec))
-	    return gps_errno;
-	if(!GPS_Send_Ack(fd, &tra, &rec))
-	    return gps_errno;
-
-	alm[i]->svid = rec->data[0];
-	GPS_A500_Translate(rec->data+1, &alm[i]);
-    }
-    
-
-    if(!GPS_Packet_Read(fd, &rec))
-	return gps_errno;
-    if(!GPS_Send_Ack(fd, &tra, &rec))
-	return gps_errno;
-    
-    if(rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt)
-    {
-	GPS_Error("D550_GET: Error transferring almanac");
-	return FRAMING_ERROR;
-    }
-
-    GPS_Packet_Del(&tra);
-    GPS_Packet_Del(&rec);
-	
-    return i;
-}
-
-
-
-/* @funcstatic GPS_D551_Get *********************************************
-**
-** Get almanac data
-**
-** @param [w] alm [GPS_PAlmanac *] almanac array
-** @param [r] entries [int32] number of packets to receive
-** @param [r] fd [int32] file descriptor
-**
-** @return [int32] number of entries read
-************************************************************************/
-static int32 GPS_D551_Get(GPS_PAlmanac *alm, int32 entries, gpsdevh *fd)
-{
-    GPS_PPacket tra;
-    GPS_PPacket rec;
-    int32 i;
-    
-    if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
-	return MEMORY_ERROR;
-
-
-    for(i=0;i<entries;++i)
-    {
-	if(!GPS_Packet_Read(fd, &rec))
-	    return gps_errno;
-	if(!GPS_Send_Ack(fd, &tra, &rec))
-	    return gps_errno;
-
-	alm[i]->svid = rec->data[0];
-	GPS_A500_Translate(rec->data+1, &alm[i]);
-	alm[i]->hlth = rec->data[43];
-    }
-    
-
-    if(!GPS_Packet_Read(fd, &rec))
-	return gps_errno;
-    if(!GPS_Send_Ack(fd, &tra, &rec))
-	return gps_errno;
-    
-
-    if(rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt)
-    {
-	GPS_Error("D551_GET: Error transferring almanac\n");
-	return FRAMING_ERROR;
-    }
-
-    GPS_Packet_Del(&tra);
-    GPS_Packet_Del(&rec);
-	
-    return i;
-}
-
-
 
 /* @funcstatic  GPS_A500_Translate ***************************************
 **
@@ -6104,23 +6005,22 @@ void GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data *pvt)
     
     return;
 }
-#if XXX /*   FIXME/PLACEHOLDER */
 
 /* @func GPS_A906_Get ******************************************************
 **
 ** Get lap data from GPS
 **
 ** @param [r] port [const char *] serial port
-** @param [w] trk [GPS_PLap_Data **] lap array
+** @param [w] trk [GPS_PLap **] lap array
 **
 ** @return [int32] number of lap entries
 ************************************************************************/
 
-int32 GPS_A906_Get(const char *port, GPS_OLap_Data **lap)
+int32 GPS_A906_Get(const char *port, GPS_PLap **lap, pcb_fn cb)
 {
     static UC data[2];
     gpsdevh *fd;
-    GPS_PPacket lappkt;
+    GPS_PPacket trapkt;
     GPS_PPacket recpkt;
     int32 i, n;
 
@@ -6130,20 +6030,20 @@ int32 GPS_A906_Get(const char *port, GPS_OLap_Data **lap)
     if (!GPS_Device_On(port, &fd))
 	return gps_errno;
 
-    if (!(lappkt = GPS_Packet_New() ) || !(recpkt = GPS_Packet_New()))
+    if (!(trapkt = GPS_Packet_New() ) || !(recpkt = GPS_Packet_New()))
        return MEMORY_ERROR;
 
     GPS_Util_Put_Short(data,
                        COMMAND_ID[gps_device_command].Cmnd_Transfer_Lap);
-    GPS_Make_Packet(&lappkt, LINK_ID[gps_link_type].Pid_Command_Data,
+    GPS_Make_Packet(&trapkt, LINK_ID[gps_link_type].Pid_Command_Data,
                     data,2);
-    if(!GPS_Write_Packet(fd,lappkt))
+    if(!GPS_Write_Packet(fd,trapkt))
         return gps_errno;
-    if(!GPS_Get_Ack(fd, &lappkt, &recpkt))
+    if(!GPS_Get_Ack(fd, &trapkt, &recpkt))
         return gps_errno;
     if(!GPS_Packet_Read(fd, &recpkt))
         return gps_errno;
-    if(!GPS_Send_Ack(fd, &lappkt, &recpkt))
+    if(!GPS_Send_Ack(fd, &trapkt, &recpkt))
         return gps_errno;
 
     n = GPS_Util_Get_Short(recpkt->data);
@@ -6155,48 +6055,86 @@ int32 GPS_A906_Get(const char *port, GPS_OLap_Data **lap)
             return MEMORY_ERROR;
         }
 
-    for(i=0;i<n;++i)
-        if(!((*trk)[i]=GPS_Track_New()))
+    for(i=0;i<n;++i) {
+        if(!((*lap)[i]=GPS_Lap_New()))
             return MEMORY_ERROR;
+	if(!GPS_Packet_Read(fd, &recpkt)) {
+		return gps_errno;
+	}
 
-    switch(gps_lap_type) {
-	case pD906:
-	    ret = GPS_D906_Get(*lap, n, fd);
-	    if (ret < 0) return ret;
-	    break;
-	default:
-	    GPS_Error("A906_Get: Unknown Lap protocol %d\n", gps_lap_type);
-	    return PROTOCOL_ERROR;
+	if(!GPS_Send_Ack(fd, &trapkt, &recpkt)) {
+		return gps_errno;
+	}
+
+	switch(gps_lap_type) {
+	    case pD906:
+		    case pD1001:
+		    case pD1011:
+		    case pD1015:
+			    GPS_D1011b_Get(&((*lap)[i]),recpkt->data);
+		break;
+	    default:
+		GPS_Error("A906_Get: Unknown Lap protocol %d\n", gps_lap_type);
+		return PROTOCOL_ERROR;
+	}
+
+	/* Cheat and don't _really_ pass the trkpt back */
+	cb(n, NULL);
     }
-    if (ret != n) {
-	GPS_Error("A906_Get: got %d lap entries.  Expected %d\n", ret, n);
+
+    if(!GPS_Packet_Read(fd, &recpkt))
+	return gps_errno;
+    if(!GPS_Send_Ack(fd, &trapkt, &recpkt))
+	return gps_errno;
+    if(recpkt->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+	GPS_Error("A906_Get: Error transferring laps");
 	return FRAMING_ERROR;
     }
-    GPS_Packet_Del(&lap);
-    GPS_Packet_Del(&rec);
+
+    if(i != n) {
+	GPS_Error("A906_GET: Lap entry number mismatch");
+	return FRAMING_ERROR;
+    }
+    
+    GPS_Packet_Del(&trapkt);
+    GPS_Packet_Del(&recpkt);
 
     if (!GPS_Device_Off(fd))
 	return gps_errno;
-
-    return ret;
+    return n;
 }
-#endif /* FIXME */
 
-/* @func GPS_D906_Get ******************************************************
+/* @func GPS_D1011b_Get ******************************************************
 **
-** Convert packet to lap structure
+** Convert packet D906, D1001, D1011, D1015 to lap structure
 **
 ** @param [r] packet [GPS_PPacket] packet
-** @param [w] pvt [GPS_PLap_Data *] lap structure
+** @param [w] pvt [GPS_PLap *] lap structure
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D906_Get(GPS_PPacket packet, GPS_PLap_Data *Lap)
+void GPS_D1011b_Get(GPS_PLap *Lap, UC *p)
 {
-    UC *p;
     uint32 t;
     
-    p = packet->data;
+	/* Lap index (not in D906) */
+	switch(gps_lap_type) {
+		case pD906:
+			(*Lap)->index = -1;
+			break;
+		case pD1001:
+			(*Lap)->index = GPS_Util_Get_Uint(p);
+			p+=sizeof(uint32);
+			break;
+		case pD1011:
+		case pD1015:
+			(*Lap)->index = GPS_Util_Get_Short(p);
+			p+=sizeof(uint16);
+			p+=sizeof(uint16); /*unused*/
+			break;
+		default:
+			break;
+	}
 
     t = GPS_Util_Get_Uint(p);
     (*Lap)->start_time = GPS_Math_Gtime_To_Utime((time_t)t);
@@ -6207,7 +6145,10 @@ void GPS_D906_Get(GPS_PPacket packet, GPS_PLap_Data *Lap)
 
     (*Lap)->total_distance = GPS_Util_Get_Float(p);
     p+=sizeof(float);
-
+	if(gps_lap_type != pD906){
+		(*Lap)->max_speed = GPS_Util_Get_Float(p);
+		p+=sizeof(float);
+	}
 
     (*Lap)->begin_lat = GPS_Math_Semi_To_Deg(GPS_Util_Get_Int(p));
     p+=sizeof(int32);
@@ -6221,16 +6162,53 @@ void GPS_D906_Get(GPS_PPacket packet, GPS_PLap_Data *Lap)
     (*Lap)->calories = GPS_Util_Get_Short(p);
     p+=sizeof(int16);
 
-    (*Lap)->track_index = *p++;
+	/* Track index, only in D906*/
+    if(gps_lap_type == pD906){
+	(*Lap)->track_index = *p++;
+	p++; /*Unused*/
+		
+	/*Last field, no more to do */
+	return;
+    } else {
+	(*Lap)->track_index = -1;
+    }
+
+    (*Lap)->avg_heart_rate = *p++;
+    (*Lap)->max_heart_rate = *p++;
+    (*Lap)->intensity = *p++;
+
+    switch(gps_lap_type) {
+	case pD1001:
+			/*No more fields */
+	    return;
+	case pD1011:
+	case pD1015:
+	    (*Lap)->avg_cadence = *p++;
+	    (*Lap)->trigger_method = *p++;
+	    break;
+	default:
+	    /*pD906 already returned*/
+	    break;
+    }
+
+    if (gps_lap_type==pD1015) {
+	/*some unknown fields like 04 dc 44 ff ff */
+	/*		(*Lap)->unk1015_1 = *p++; normally 4?
+	(*Lap)->unk1015_2 = GPS_Util_Get_Short(p);wkt related , ffff otherwise
+	p+=sizeof(int16);
+	(*Lap)->unk1015_3 = GPS_Util_Get_Short(p);ffff ?
+	p+=sizeof(int16);
+	*/
+    }
 
     return;
 }
+
 
 /* 
  *  It's unfortunate that these aren't constant and therefore switchable,
  *  but they really are runtime variable.  Sigh.
  */
-
 const char *
 Get_Pkt_Type(unsigned char p, unsigned short d0, const char **xinfo)
 {
@@ -6259,10 +6237,25 @@ Get_Pkt_Type(unsigned char p, unsigned short d0, const char **xinfo)
 			case 452: *xinfo = "Xfer Wkt Occurrences"; break;
 			case 453: *xinfo = "Xfer User Profile "; break;
 			case 454: *xinfo = "Xfer Wkt Limits"; break;
+			case 561: *xinfo = "Xfer Courses"; break;
+			case 562: *xinfo = "Xfer Course Laps"; break;
+			case 563: *xinfo = "Xfer Course Point"; break;
+			case 564: *xinfo = "Xfer Course Tracks"; break;
+			case 565: *xinfo = "Xfer Course Limits"; break;
+
 			default: *xinfo = "Unknown";
 		}
 		return "CMDDAT";
 	}
+	if (p == LT.Pid_Protocol_Array)
+		return "PRTARR";
+	if (p == LT.Pid_Product_Rqst)
+		return "PRDREQ";
+	if (p == LT.Pid_Product_Data)
+		return "PRDDAT";
+	if (p == LT.Pid_Ext_Product_Data)
+		return "PRDEDA";
+
 	if (p == LT.Pid_Xfer_Cmplt)
 		return "XFRCMP";
 	if (p == LT.Pid_Date_Time_Data)
@@ -6291,19 +6284,44 @@ Get_Pkt_Type(unsigned char p, unsigned short d0, const char **xinfo)
 		return "LNKDAT";
 	if (p == LT.Pid_Trk_Hdr)
 		return "TRKHDR";
-	if (p == LT.Pid_Protocol_Array)
-		return "PRTARR";
-	if (p == LT.Pid_Product_Rqst)
-		return "PRDREQ";
-	if (p == LT.Pid_Product_Data)
-		return "PRDDAT";
+
+	if (p == LT.Pid_FlightBook_Record)
+		return "FLIBOO";
+	if (p == LT.Pid_Lap)
+		return "LAPDAT";
+	if (p == LT.Pid_Wpt_Cat_Data)
+		return "WPTCAT";
+	if (p == LT.Pid_Run)
+		return "RUNDAT";
+	if (p == LT.Pid_Workout)
+		return "WKTDAT";
+	if (p == LT.Pid_Workout_Occurrence)
+		return "WKTOCC";
+	if (p == LT.Pid_Fitness_User_Profile)
+		return "UPROFI";
+	if (p == LT.Pid_Workout_Limits)
+		return "WKTLIM";
+	if (p == LT.Pid_Course)
+		return "CRSDAT";
+	if (p == LT.Pid_Course_Lap)
+		return "CRSLAP";
+	if (p == LT.Pid_Course_Point)
+		return "CRSPOI";
+	if (p == LT.Pid_Course_Trk_Hdr)
+		return "CRSTHD";
+	if (p == LT.Pid_Course_Trk_Data)
+		return "CRSTDA";
+	if (p == LT.Pid_Course_Limits)
+		return "CRSLIM";
+	if (p == LT.Pid_Trk2_Hdr)
+		return "TRKHD2";
+		
 	if (p == GUSB_REQUEST_BULK) 
 		return "REQBLK";
 	if (p == GUSB_SESSION_START)
 		return "SESREQ";
 	if (p == GUSB_SESSION_ACK)
 		return "SESACK";
-	if (p == 152)
-		return "WPTCAT";
+		
 	return "UNKNOWN";
 }

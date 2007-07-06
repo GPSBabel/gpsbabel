@@ -96,6 +96,7 @@ typedef struct GPS_STrack
     unsigned int   no_latlon:1;	/* True if no valid lat/lon found. */
     int32    dspl;		/* Display on map? */
     int32    colour;		/* Colour */
+    float    distance; /* distance traveled in meters.*/
     char     trk_ident[256];	/* Track identifier */
 }
 GPS_OTrack, *GPS_PTrack;
@@ -166,9 +167,10 @@ typedef struct GPS_SWay
 } GPS_OWay, *GPS_PWay;
 
 /*
- * Forerunner Lap data.
+ * Forerunner/Edge Lap data.
  */
-typedef struct GPS_SLap_Data {
+typedef struct GPS_SLap {
+	uint32 index; /* unique index in device or -1 */
 	time_t	start_time;
 	uint32	total_time;	/* Hundredths of a second */
 	float	total_distance;	/* In meters */
@@ -177,8 +179,19 @@ typedef struct GPS_SLap_Data {
 	double	end_lat;
 	double	end_lon;
 	int16	calories;
-	UC	track_index;
-} GPS_OLap_Data, *GPS_PLap_Data;
+	uint32 track_index; /* ref to track or -1 */
+	float max_speed; /* In meters per second */
+	unsigned char avg_heart_rate; /* In beats-per-minute, 0 if invalid */
+	unsigned char max_heart_rate; /* In beats-per-minute, 0 if invalid */
+	unsigned char intensity; /* Same as D1001 */
+	unsigned char avg_cadence; /* In revolutions-per-minute, 0xFF if invalid */
+	unsigned char trigger_method; 
+	/*Some D1015 unknown */
+	/*    unsigned char unk1015_1;
+	int16 unk1015_2;
+	int16 unk1015_3;
+	*/
+} GPS_OLap, *GPS_PLap;
 
 typedef int (*pcb_fn) (int, struct GPS_SWay **);
 
