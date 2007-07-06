@@ -32,11 +32,13 @@
 #define MYNAME "unicsv"
 
 /* "UNICSV_FIELD_SEP" and "UNICSV_LINE_SEP" are only used by the writer */
+
 #define UNICSV_FIELD_SEP	","
 #define UNICSV_LINE_SEP		"\r\n"
 #define UNICSV_QUOT_CHAR	'"'
 
 /* GPSBabel internal and calculated fields */
+
 typedef enum {
 	fld_shortname = 0,
 	fld_latitude,
@@ -713,6 +715,14 @@ unicsv_rd(void)
 
 /* =========================================================================== */
 
+static char *
+strassign(char **old, char *new)
+{
+	if (*old) xfree(*old);
+	*old = new;
+	return new;
+}
+
 static void
 unicsv_print_str(const char *str)
 {
@@ -750,6 +760,7 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
 			unicsv_outp_flags |= BIT_OF(fld_date);
 	}
 
+	if (wpt->fix != fix_unknown) unicsv_outp_flags |= BIT_OF(fld_fix);
 	if (wpt->vdop > 0) unicsv_outp_flags |= BIT_OF(fld_vdop);
 	if (wpt->hdop > 0) unicsv_outp_flags |= BIT_OF(fld_hdop);
 	if (wpt->pdop > 0) unicsv_outp_flags |= BIT_OF(fld_pdop);
@@ -769,7 +780,7 @@ static void
 unicsv_waypt_disp_cb(const waypoint *wpt)
 {
 	double lat, lon, alt;
-	char *cout;
+	char *cout = NULL;
 	char *shortname = (wpt->shortname) ? wpt->shortname : "";
 	
 	unicsv_waypt_ct++;
@@ -791,19 +802,16 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	case grid_lat_lon_ddd:
 		cout = pretty_deg_format(lat, lon, 'd', unicsv_fieldsep, 0);
 		gbfputs(cout, fout);
-		xfree(cout);
 		break;
 
 	case grid_lat_lon_dmm:
 		cout = pretty_deg_format(lat, lon, 'm', unicsv_fieldsep, 0);
 		gbfputs(cout, fout);
-		xfree(cout);
 		break;
 		
 	case grid_lat_lon_dms:
 		cout = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, 0);
-		gbfprintf(fout, "%c%s%c", UNICSV_QUOT_CHAR, cout, UNICSV_QUOT_CHAR);
-		xfree(cout);
+		gbfputs(strassign(&cout, strenquote(cout, UNICSV_QUOT_CHAR)), fout);
 		break;
 
 	case grid_bng: {
@@ -837,6 +845,8 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 		gbfprintf(fout, "%.6f%s%.6f", lat, unicsv_fieldsep, lon);
 		break;
 	}
+	
+	if (cout) xfree(cout);
 
 	if FIELD_USED(fld_shortname) unicsv_print_str(shortname);
 	if FIELD_USED(fld_altitude) {
@@ -878,6 +888,21 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 			gbfprintf(fout, "%s%.1f", unicsv_fieldsep, wpt->course);
 		else
 			gbfputs(unicsv_fieldsep, fout);
+	}
+	if FIELD_USED(fld_fix) {
+		char *fix;
+		switch(wpt->fix) {
+			case fix_none: fix = "none";
+			case fix_2d: fix = "2d";
+			case fix_3d: fix = "3d";
+			case fix_dgps: fix = "dgps";
+			case fix_pps: fix = "pps";
+				unicsv_print_str(fix);
+				break;
+			default:
+				gbfputs(unicsv_fieldsep, fout);
+				break;
+		}
 	}
 	if FIELD_USED(fld_hdop) {
 		if (wpt->hdop > 0)
@@ -1009,10 +1034,18 @@ unicsv_wr(void)
 
 	switch(unicsv_grid_idx) {
 	case grid_bng: 
-		gbfprintf(fout, "BNG-Zone%1$sBNG-East%1$sBNG-North", unicsv_fieldsep); 
+/*		indexed parameters doesn't work under __win32__ (mingw)
+		gbfprintf(fout, "BNG-Zone%1$sBNG-East%1$sBNG-North", unicsv_fieldsep);
+*/
+		gbfprintf(fout, "BNG-Zone%sBNG-East%sBNG-North",
+			unicsv_fieldsep, unicsv_fieldsep);
 		break;
 	case grid_utm: 
-		gbfprintf(fout, "UTM-Zone%1$sUTM-Ch%1$sUTM-East%1$sUTM-North", unicsv_fieldsep);
+/*		indexed parameters doesn't work under __win32__ (mingw)
+		gbfprintf(fout, "BNG-Zone%1$sBNG-East%1$sBNG-North", unicsv_fieldsep);
+*/
+		gbfprintf(fout, "UTM-Zone%sUTM-Ch%sUTM-East%sUTM-North",
+			unicsv_fieldsep, unicsv_fieldsep, unicsv_fieldsep);
 		break;
 	default: 
 		gbfprintf(fout, "Latitude%sLongitude", unicsv_fieldsep);
@@ -1028,6 +1061,7 @@ unicsv_wr(void)
 	if FIELD_USED(fld_temperature) gbfprintf(fout, "%sTemperature", unicsv_fieldsep);
 	if FIELD_USED(fld_speed) gbfprintf(fout, "%sSpeed", unicsv_fieldsep);
 	if FIELD_USED(fld_course) gbfprintf(fout, "%sCourse", unicsv_fieldsep);
+	if FIELD_USED(fld_fix) gbfprintf(fout, "%sFIX", unicsv_fieldsep);
 	if FIELD_USED(fld_hdop) gbfprintf(fout, "%sHDOP", unicsv_fieldsep);
 	if FIELD_USED(fld_vdop) gbfprintf(fout, "%sVDOP", unicsv_fieldsep);
 	if FIELD_USED(fld_pdop) gbfprintf(fout, "%sPDOP", unicsv_fieldsep);
