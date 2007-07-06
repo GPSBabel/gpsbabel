@@ -262,8 +262,9 @@ merged data to multiple destinations.
     </para>
     <para>
 	  As of this writing, Garmin's PVT protocol and NMEA are supported 
-	  inputs and KML is supported on output.   Additional formats 
-   	  may be added by interested parties later.
+	  inputs. KML, NMEA, and the variou XCSV formats are supported on 
+	  output.   Additional formats may be added by interested parties 
+	  later.
     </para>
     <para><userinput>gpsbabel -T -i garmin -f usb: -o kml -F xxx.kml</userinput></para>
     <para>

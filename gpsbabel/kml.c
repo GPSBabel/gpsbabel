@@ -302,7 +302,7 @@ kml_wr_deinit(void)
 static void
 kml_wr_position_deinit(void)
 {
-	kml_wr_deinit();
+//	kml_wr_deinit();
 	if (posnfilenametmp) {
 		xfree(posnfilenametmp);
 		posnfilenametmp = NULL;
@@ -971,7 +971,7 @@ kml_wr_position(waypoint *wpt)
 		track_del_wpt(posn_trk_head, tonuke);
 	}
 
-//	kml_wr_deinit();
+	kml_wr_deinit();
 }
 
 ff_vecs_t kml_vecs = {

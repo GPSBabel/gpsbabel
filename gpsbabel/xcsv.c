@@ -601,11 +601,46 @@ xcsv_wr_init(const char *fname)
 }
 
 static void
+xcsv_wr_position_init(const char *fname)
+{
+	xcsv_wr_init(fname);
+}
+
+static void
 xcsv_wr_deinit(void)
 {
-    gbfclose(xcsv_file.xcsvfp);
+	gbfclose(xcsv_file.xcsvfp);
 
-    xcsv_destroy_style();
+	xcsv_destroy_style();
+}
+
+static void
+xcsv_wr_position_deinit(void)
+{
+	xcsv_wr_deinit();
+}
+
+
+static void
+xcsv_wr_position(waypoint *wpt)
+{
+	/* Tweak incoming name if we don't have a fix */
+	switch(wpt->fix) {
+		case fix_none: 
+			if (wpt->shortname) {
+				xfree(wpt->shortname);
+			}
+			wpt->shortname = xstrdup("ESTIMATED Position");
+			break;
+		default: 
+			break;
+	}
+
+	waypt_add(wpt);
+	xcsv_data_write();
+	waypt_del(wpt);
+
+	gbfflush(xcsv_file.xcsvfp);
 }
 
 ff_vecs_t xcsv_vecs = {
@@ -619,7 +654,9 @@ ff_vecs_t xcsv_vecs = {
     xcsv_data_write,
     NULL, 
     xcsv_args,
-    CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+    CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
+    { NULL, NULL, NULL, xcsv_wr_position_init, xcsv_wr_position, xcsv_wr_position_deinit }
+
 };
 #else
 void xcsv_read_internal_style(const char *style_buf) {}
