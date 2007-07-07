@@ -395,7 +395,8 @@ mag_verparse(char *ibuf)
 static void
 mag_readmsg(gpsdata_type objective)
 {
-	char ibuf[200];
+	char ibuf[512];	/* oliskoli: corrupted data (I've seen descr with a lot
+				     of escaped FFFFFFFF) may need more size  */
 	int isz;
 	unsigned int isum;
 	char *isump;
@@ -459,7 +460,7 @@ retry:
 		magrxstate = mrs_handon;
 		return;
 	} 
-	if (strncmp(ibuf, "$PMGNWPT,", 7) == 0) {
+	if (strncmp(ibuf, "$PMGNWPL,", 7) == 0) {
 		waypoint *wpt = mag_wptparse(ibuf);
 		waypoint_read_count++;
 		if (global_opts.verbose_status) {
@@ -602,10 +603,21 @@ mag_dequote(char *ibuf)
 			char *c2 = strchr(hex, esc[2]);
 			if (c1 && c2) {
 				int escv = (c1 - hex) * 16 + (c2 - hex);
-				*esc++ = escv;
-				/* buffers overlap */
-				memmove(esc, esc+2, nremains - 2);
+				if (escv == 255) {	/* corrupted data */
+					char *tmp = esc + 1;
+					while (*tmp == 'F') tmp++;
+					memmove(esc, tmp, strlen(tmp) + 1);
+				}
+				else {
+					*esc++ = (isprint(escv)) ? escv : '$';
+					/* buffers overlap */
+					memmove(esc, esc+2, nremains - 2);
+				}
 			}
+		}
+		else {
+			*esc = '\0';	/* trim corrupted data, 
+					   otherwise we get an endless loop */
 		}
 	}
 }
@@ -1112,7 +1124,7 @@ mag_wptparse(char *trkmsg)
 	int alt;
 	char altunits;
 	char shortname[100];
-	char descr[100];
+	char descr[256];
 	char icon_token[100];
 	waypoint *waypt;
 	char *icons;
