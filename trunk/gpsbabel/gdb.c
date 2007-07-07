@@ -56,6 +56,7 @@
 	    2007/02/15: Nearly full rewrite. Full support for GDB V3. New option roadbook.
 	    2007/05/03: Add code for tricky V3 descriptions
 	    2007/06/18: Tweak some forgotten "flagged" fields
+	    2007/07/07: Better support for new fields since V3 (postal code/street address/instruction)
 */
 
 #include <stdio.h>
@@ -104,8 +105,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.55 $"; */
-static char gdb_release_date[] = "$Date: 2007-06-18 18:10:13 $";
+/* static char gdb_release[] = "$Revision: 1.56 $"; */
+static char gdb_release_date[] = "$Date: 2007-07-07 21:30:21 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -571,18 +572,14 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	}
 	else { // if (gdb_ver >= GDB_VER_3)
 		int i, url_ct;
-		char *str;
 		
 		waypt_flag = 0;
 
-		str = FREAD_CSTR;
-		if (str)
-			FREAD(buf, 6);					/* ???? */
-		else {
-			FREAD(buf, 5);					/* ???? */
-			str = FREAD_CSTR;
-		}
-		res->description = str;
+		FREAD_STR(buf);				/* street address */
+		GMSD_SETSTR(addr, buf);
+
+		FREAD(buf, 5);				/* ???? */
+		res->description = FREAD_CSTR;		/* instruction */
 
 		url_ct = FREAD_i32;
 		for (i = url_ct; (i); i--) {
@@ -633,7 +630,12 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 
 	/* VERSION DEPENDENT CODE */
 	if (gdb_ver >= GDB_VER_3) {
-		FREAD(buf, 6); 						/* ???? */
+		if (FREAD_i32 == 1) {
+			FREAD_STR(buf);		/* phone number */
+			FREAD_STR(buf);		/* ???? */
+		}
+		FREAD_STR(buf);			/* ???? */
+		FREAD_STR(buf);			/* postal code */
 	}
 	
 	res->icon_descr = gt_find_desc_from_icon_number(icon, GDB, &dynamic);
@@ -1029,6 +1031,8 @@ read_data(void)
 	
 	if (incomplete) {
 		warning(MYNAME ":------------------------------------------\n");
+		warning(MYNAME ": \"%s\"\n", fin->name);
+		warning(MYNAME ":------------------------------------------\n");
 		warning(MYNAME ":       Please mail this information\n");
 		warning(MYNAME "     and, if you can, the used GDB file\n");
 		warning(MYNAME ":  to gpsbabel-misc@lists.sourceforge.net\n");
@@ -1179,9 +1183,19 @@ write_waypoint(
 	else /* if (gdb_ver > GDB_VER_3) */ {
 		int cnt;
 		url_link *url_next;
+		char *str;
 
-		FWRITE(zbuf, 6);
-		FWRITE_CSTR(wpt->description);
+		if (wpt_class < gt_waypt_class_map_point)	/* street address */
+			str  = GMSD_GET(addr, "");
+		else
+			str = "";
+		FWRITE_CSTR(str);
+		FWRITE(zbuf, 5);				/* ???, instruction dependend */
+		if (wpt_class >= gt_waypt_class_map_point)	/* instruction */
+			str = wpt->description;
+		else
+			str = "";
+		FWRITE_CSTR(str);
 		
 		cnt = 0;
 		if (wpt->url) cnt++;
