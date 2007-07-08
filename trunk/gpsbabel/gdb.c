@@ -105,8 +105,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.56 $"; */
-static char gdb_release_date[] = "$Date: 2007-07-07 21:30:21 $";
+/* static char gdb_release[] = "$Revision: 1.57 $"; */
+static char gdb_release_date[] = "$Date: 2007-07-08 12:35:15 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -416,11 +416,11 @@ read_file_header(void)
 	
 	reclen = FREAD_i32;
 	i = FREAD(buf, reclen + 1);
-	if (global_opts.verbose_status >= 0) {
+	if (global_opts.verbose_status > 0) {
 		char *name = buf+2;
 		if (strstr(name, "SQA") == 0) name = "MapSource";
 		else if (strstr(name, "neaderhi") == 0) name = "MapSource BETA";
-		else warning(MYNAME ": Created with \"%s\"\n", name);
+		warning(MYNAME ": File created with \"%s\"\n", name);
 	}
 
 	i = FREAD_STR(buf);
@@ -634,7 +634,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 			FREAD_STR(buf);		/* phone number */
 			FREAD_STR(buf);		/* ???? */
 		}
-		FREAD_STR(buf);			/* ???? */
+		FREAD_STR(buf);			/* country */
 		FREAD_STR(buf);			/* postal code */
 	}
 	
@@ -1213,7 +1213,19 @@ write_waypoint(
 
 	/* VERSION DEPENDENT CODE */
 	if (gdb_ver >= GDB_VER_3) {
+#if 1
 		FWRITE(zbuf, 6);
+#else
+		/* phone, country and zipcode not yet part of GMSD
+		char *str = GMSD_GET(phone, "");
+		if (str && *str) {
+			FWRITE_CSTR(str);
+			FWRITE_CSTR("");
+		}
+		FWRITE_CSTR(GMSD_GET(country, ""));
+		FWRITE_CSTR(GMSD_GET(zipcode, ""));
+		*/
+#endif
 	}
 }
 
