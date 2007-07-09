@@ -21,6 +21,28 @@ The entire world doesn't run <your OS here>.  I've tested this code on
 at least five different OSes.  If you find yourself wanting to insert
 compiler or OS specific magic, please resist.
 
+Coding consistency is encouraged. The reality is we have a lot of code
+that was written by different authors. Some code from other projects is
+included. We don't have immutable rules about code style (indention,
+curly location, whitespace rules, etc.) but we do ask that you try to
+match what is around any code you modify.  "When in Rome..."  
+
+If writing new code, we'd prefer a style like:
+
+	int
+	mumble(int whatever)
+	{
+	<tab>if (whatevever) {
+	<tab><tab>return blah;
+	<tab>}
+	}
+
+...but if you're submitting a new source file that you intend to
+maintain and are convinced that two space indents will make the world a
+better place, knock yourself out.  But if you need to add a line of code
+to the above before "return blah" and do it with spaces instead of hard
+tabs, that would be bad.
+
 Submitting Patches
 ------------------
 
