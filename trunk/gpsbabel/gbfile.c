@@ -565,18 +565,25 @@ gbfeof(gbfile *file)
 int
 gbfungetc(const int c, gbfile *file)
 {
-	int r = -1;
+	int res;
+
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		file->back = -1;
+		if (file->back == -1) {
+			file->back = c;
+			res = c;
+		}
+		else {
+			fatal(MYNAME ": Cannot store more than one byte back!\n");
+		}
 #else
 		fatal(NO_ZLIB);
 #endif
 	}
 	else {
-		r = ungetc(c, file->handle.std);
+		res = ungetc(c, file->handle.std);
 	}
-	return r;
+	return res;
 }
 
 /* GPSBabel 'file' enhancements */
