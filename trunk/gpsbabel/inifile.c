@@ -50,6 +50,9 @@ typedef struct inifile_section_s
 
 #define GPSBABEL_INIFILE "gpsbabel.ini"
 
+/* Remember the filename we used so we can include it in errors. */
+char *gbinipathname;
+
 static char *
 find_gpsbabel_inifile(const char *path)		/* can be empty or NULL */
 {
@@ -123,7 +126,10 @@ open_gpsbabel_inifile(void)
 	}
 	if (name != NULL) {
 		res = gbfopen(name, "r", "GPSBabel");
-		xfree(name);
+		if (gbinipathname) {
+			xfree(gbinipathname);
+		}
+		gbinipathname = name;
 	}
 	return res;
 }
@@ -152,7 +158,7 @@ inifile_load_file(gbfile *fin, inifile_t *inifile, const char *myname)
 				cin = lrtrim(cin);
 			}
 			if ((*cin == '\0') || (cend == NULL))
-				fatal("%s: invalid section header!\n", myname);
+				fatal("%s: invalid section header '%s' in '%s'.\n", myname, cin, gbinipathname);
 				
 			sec = xcalloc(1, sizeof(*sec));
 			
@@ -167,7 +173,7 @@ inifile_load_file(gbfile *fin, inifile_t *inifile, const char *myname)
 			inifile_entry_t *entry;
 			
 			if (sec == NULL)
-				fatal("%s: missing section header!\n", myname);
+				fatal("%s: missing section header in '%s'.\n", myname,gbinipathname);
 			
 			entry = xcalloc(1, sizeof(*entry));
 			ENQUEUE_TAIL(&sec->entries, &entry->Q);
@@ -280,6 +286,10 @@ inifile_done(inifile_t *inifile)
 			xfree(sec);
 		}
 		xfree(inifile);
+	}
+	if (gbinipathname) {
+		xfree(gbinipathname);
+		gbinipathname = NULL;
 	}
 }
 
