@@ -872,7 +872,7 @@ static void trl_write(void) {
 /**************************************************************************/
 
 static void alan_rd_init(const char *fname) {
-  fin = gbfopen(fname, "r", MYNAME);
+  fin = gbfopen(fname, "rb", MYNAME);
 }
 
 static void alan_rd_deinit(void) {
@@ -882,7 +882,7 @@ static void alan_rd_deinit(void) {
 
 
 static void alan_wr_init(const char *fname) {
-  fout = gbfopen(fname, "w", MYNAME);
+  fout = gbfopen(fname, "wb", MYNAME);
 }
 
 static void alan_wr_deinit(void) {
