@@ -1,0 +1,21 @@
+<para>
+This option is used to change the locations of waypoints without losing any 
+of the other associated information.  When this option is specified, the 
+latitude and longitude from later duplicates will replace the latitude and
+longitude in the original waypoint.
+</para>
+<para>
+As an example, this option may be used to adjust the locations of "puzzle" 
+geocaches in a Groundspeak pocket query:
+</para>
+<example id="Correcting_Cache_Locations">
+<title>Using the duplicate filter to correct the locations of "puzzle"
+geocaches</title>
+<para><userinput>gpsbabel -i gpx -f 43622.gpx -i csv -f corrections.csv -x duplicate,shortname,correct -o gpx -F 43622-corrected.gpx</userinput></para>
+<para>
+After this command is run, the waypoints in the output file will have all 
+of the descriptive information from <filename>43622.gpx</filename>, but 
+waypoints that were also found in <filename>corrections.csv</filename> 
+will have their coordinates replaced with the coordinates from that file.
+</para>
+</example>

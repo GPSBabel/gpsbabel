@@ -1,0 +1,12 @@
+<para> 
+Support for the "Garmin GPS Database" format used by
+default in <productname>MapSource</productname> versions since release 6.0 of 
+that product. By default GPSBabel creates
+gdb files of version 2.  Version 2 is used in Mapsource 6.3 and 6.5.
+</para>
+<para> 
+Garmin GPS database is an undocumented file format. The
+basic info for this module came from the existing MapSource
+conversion code.
+</para>
+    

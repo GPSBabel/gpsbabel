@@ -1,0 +1,5 @@
+<para>This options allows you to control the threshold in days between
+whether a pin is considered "new" (and thus potentially governed by the
+'newmarker' option) or "old" (and thus potentially governed by the 
+'oldmarker' option).
+</para>
