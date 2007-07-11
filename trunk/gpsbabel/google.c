@@ -455,6 +455,11 @@ google_read(void)
   			    *to++ = ' ';				  
 			  }
 			}
+			else if ( !strncmp( from, "\\u0026utm", 9)) {
+			  strcpy( to, "&amp;utm" );
+			  to += 8;
+			  from += 9;
+			} 
 			else if ( !strncmp( from, "\\u0026", 6 )) {
 			  *to++='&';
 			  from += 6;
