@@ -331,6 +331,9 @@ main(int argc, char *argv[])
 				optarg = argv[argn][2]
 					? argv[argn]+2 : argv[++argn];
 				fname = optarg;
+				if (fname == NULL) {
+					fatal ("No file or device name specified.\n");
+				}
 				if (ivecs == NULL) {
 					fatal ("No valid input type specified\n");
 				}
@@ -359,6 +362,9 @@ main(int argc, char *argv[])
 				optarg = argv[argn][2]
 					? argv[argn]+2 : argv[++argn];
 				ofname = optarg;
+				if (ofname == NULL) {
+					fatal ("No output file or device name specified.\n");
+				}
 				if (ovecs && (!(global_opts.masked_objective & POSNDATAMASK))) {
 					/* simulates the default behaviour of waypoints */
 					if (doing_nothing) 
