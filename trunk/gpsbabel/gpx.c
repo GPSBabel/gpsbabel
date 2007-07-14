@@ -129,14 +129,21 @@ typedef enum {
 	tt_cache_log_date,
 	tt_cache_placer,
 	
-	tt_garmin_extension,		/* don't change this order */
-	tt_garmin_waypt_extension,
-	tt_garmin_proximity,
-	tt_garmin_temperature,
-	tt_garmin_depth,
-	tt_garmin_display_mode,
-	tt_garmin_categories,
-	tt_garmin_category,		/* don't change this order */
+	tt_wpt_extensions,		
+
+	tt_garmin_wpt_extensions,	/* don't change this order */
+	tt_garmin_wpt_proximity,
+	tt_garmin_wpt_temperature,
+	tt_garmin_wpt_depth,
+	tt_garmin_wpt_display_mode,
+	tt_garmin_wpt_categories,
+	tt_garmin_wpt_category,
+	tt_garmin_wpt_addr,
+	tt_garmin_wpt_city,
+	tt_garmin_wpt_state,
+	tt_garmin_wpt_country,
+	tt_garmin_wpt_postal_code,
+	tt_garmin_wpt_phone_nr,		/* don't change this order */
 
 	tt_rte,
 	tt_rte_name,
@@ -286,6 +293,8 @@ tag_mapping tag_path_map[] = {
   {type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:" name, 0UL }, \
   {type, 1, "/gpx/wpt/extensions/cache/" name, 0UL }
 
+#define GARMIN_WPT_EXT "/gpx/wpt/extensions/gpxx:WaypointExtension"
+
 	GEOTAG( tt_cache, 		"cache"),
 	GEOTAG( tt_cache_name, 		"name"),
 	GEOTAG( tt_cache_container, 	"container"),
@@ -303,14 +312,21 @@ tag_mapping tag_path_map[] = {
 	{ tt_cache_log_date, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date"},
 	{ tt_cache_log_date, 1, "/gpx/wpt/extensions/cache/logs/log/date"},
 	
-	{ tt_garmin_extension, 0, "/gpx/wpt/extensions", 0UL },
-	{ tt_garmin_waypt_extension, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension", 0UL },
-	{ tt_garmin_proximity, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:Proximity", 0UL },
-	{ tt_garmin_temperature, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:Temperature", 0UL },
-	{ tt_garmin_depth, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:Depth", 0UL },
-	{ tt_garmin_display_mode, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:DisplayMode", 0UL },
-	{ tt_garmin_categories, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:Categories", 0UL },
-	{ tt_garmin_category, 0, "/gpx/wpt/extensions/gpxx:WaypointExtension/gpxx:Categories/gpxx:Category", 0UL },
+	{ tt_wpt_extensions, 0, "/gpx/wpt/extensions", 0UL },
+
+	{ tt_garmin_wpt_extensions, 0, GARMIN_WPT_EXT, 0UL },
+	{ tt_garmin_wpt_proximity, 0, GARMIN_WPT_EXT "/gpxx:Proximity", 0UL },
+	{ tt_garmin_wpt_temperature, 0, GARMIN_WPT_EXT "/gpxx:Temperature", 0UL },
+	{ tt_garmin_wpt_depth, 0, GARMIN_WPT_EXT "/gpxx:Depth", 0UL },
+	{ tt_garmin_wpt_display_mode, 0, GARMIN_WPT_EXT "/gpxx:DisplayMode", 0UL },
+	{ tt_garmin_wpt_categories, 0, GARMIN_WPT_EXT "/gpxx:Categories", 0UL },
+	{ tt_garmin_wpt_category, 0, GARMIN_WPT_EXT "/gpxx:Categories/gpxx:Category", 0UL },
+	{ tt_garmin_wpt_addr, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:StreetAddress", 0UL },
+	{ tt_garmin_wpt_city, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:City", 0UL },
+	{ tt_garmin_wpt_state, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:State", 0UL },
+	{ tt_garmin_wpt_country, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:Country", 0UL },
+	{ tt_garmin_wpt_postal_code, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:PostalCode", 0UL },
+	{ tt_garmin_wpt_phone_nr, 0, GARMIN_WPT_EXT "/gpxx:PhoneNumber", 0UL },
 
 	{ tt_rte, 0, "/gpx/rte", 0UL },
 	{ tt_rte_name, 0, "/gpx/rte/name", 0UL },
@@ -952,12 +968,18 @@ gpx_end(void *data, const XML_Char *xml_el)
 	/*
 	 * Garmin-waypoint-specific tags.
  	 */
-	case tt_garmin_proximity:
-	case tt_garmin_temperature:
-	case tt_garmin_depth:
-	case tt_garmin_display_mode:
-	case tt_garmin_category: 
-		garmin_fs_xml_convert(tt_garmin_extension, tag, cdatastrp, wpt_tmp);
+	case tt_garmin_wpt_proximity:
+	case tt_garmin_wpt_temperature:
+	case tt_garmin_wpt_depth:
+	case tt_garmin_wpt_display_mode:
+	case tt_garmin_wpt_category: 
+	case tt_garmin_wpt_addr: 
+	case tt_garmin_wpt_city:
+	case tt_garmin_wpt_state:
+	case tt_garmin_wpt_country:
+	case tt_garmin_wpt_postal_code:
+	case tt_garmin_wpt_phone_nr:
+		garmin_fs_xml_convert(tt_garmin_wpt_extensions, tag, cdatastrp, wpt_tmp);
 		break;
 
 	/*
@@ -1531,6 +1553,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 	const char *oname;
 	char *odesc;
 	fs_xml *fs_gpx;
+	garmin_fs_t *gmsd;	/* gARmIN sPECIAL dATA */
 
 	/*
 	 * Desparation time, try very hard to get a good shortname
@@ -1556,10 +1579,12 @@ gpx_waypt_pr(const waypoint *waypointp)
 	gpx_write_common_acc(waypointp, "  ");
 
 	fs_gpx = (fs_xml *)fs_chain_find( waypointp->fs, FS_GPX );
+	gmsd = GMSD_FIND(waypointp);
 	if ( fs_gpx ) {
-		fprint_xml_chain( fs_gpx->tag, waypointp );
+		if (! gmsd) fprint_xml_chain( fs_gpx->tag, waypointp );
 	}
-	if (gpx_wversion_num > 10) {
+	if (gmsd && (gpx_wversion_num > 10)) {
+		/* MapSource doesn't accepts extensions from 1.0 */
 		garmin_fs_xml_fprint(ofd, waypointp);
 	}
 	gbfprintf(ofd, "</wpt>\n");
