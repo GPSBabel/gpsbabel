@@ -100,13 +100,14 @@
 
 #define GDB_DEBUG		(GDB_DBG_WPTe) /* | GDB_DBG_RTE) */
 #undef GDB_DEBUG
+// #define GDB_DEBUG 0xff
 
 #define DBG(a,b)		if ((GDB_DEBUG & (a)) && (b))
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.57 $"; */
-static char gdb_release_date[] = "$Date: 2007-07-08 12:35:15 $";
+/* static char gdb_release[] = "$Revision: 1.58 $"; */
+static char gdb_release_date[] = "$Date: 2007-07-14 21:06:14 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -274,7 +275,9 @@ gdb_find_wayptq(const queue *Q, const waypoint *wpt, const char exact)
 	QUEUE_FOR_EACH(Q, elem, tmp) {
 		waypoint *tmp = (waypoint *)elem;
 		if (case_ignore_strcmp(name, tmp->shortname) == 0) {
+
 			if (! exact) return tmp;
+
 			if ((tmp->latitude == wpt->latitude) &&
 			    (tmp->longitude == wpt->longitude))
 				return tmp;
@@ -327,7 +330,7 @@ gdb_add_route_waypt(route_head *rte, waypoint *ref, const int wpt_class)
 	}
 	res = NULL;
 	turn_point = (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && tmp->description);
-	if (turn_point || (gdb_via == 0) || (wpt_class == 0)) {
+	if (turn_point || (gdb_via == 0) || (wpt_class < gt_waypt_class_map_point)) {
 		res = waypt_dupe(tmp);
 		route_add_wpt(rte, res);
 	}
@@ -437,6 +440,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	int i;
 	waypoint *res;
 	garmin_fs_t *gmsd;
+	char *str;
 #ifdef GMSD_EXPERIMENTAL
 	char subclass[22];
 #endif
@@ -578,7 +582,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 		FREAD_STR(buf);				/* street address */
 		GMSD_SETSTR(addr, buf);
 
-		FREAD(buf, 5);				/* ???? */
+		FREAD(buf, 5);				/* instruction depended */
 		res->description = FREAD_CSTR;		/* instruction */
 
 		url_ct = FREAD_i32;
@@ -632,10 +636,13 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	if (gdb_ver >= GDB_VER_3) {
 		if (FREAD_i32 == 1) {
 			FREAD_STR(buf);		/* phone number */
-			FREAD_STR(buf);		/* ???? */
+			GMSD_SETSTR(phone_nr, buf);
+			FREAD_STR(buf);		/* ?? fax / mobile ?? */
 		}
 		FREAD_STR(buf);			/* country */
+		GMSD_SETSTR(country, buf);
 		FREAD_STR(buf);			/* postal code */
+		GMSD_SETSTR(postal_code, buf);
 	}
 	
 	res->icon_descr = gt_find_desc_from_icon_number(icon, GDB, &dynamic);
@@ -646,6 +653,11 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 		printf(MYNAME "-wpt \"%s\" (%d): icon = \"%s\" (MapSource symbol %d)\n", 
 			sn, wpt_class, nice(res->icon_descr), icon);
 #endif
+	if ((str = GMSD_GET(cc, NULL))) {
+		if (! GMSD_HAS(country))
+			GMSD_SETSTR(country, gt_get_icao_country(str));
+	}
+
 	if (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && res->description) {
 		wpt_class = gt_waypt_class_user_waypoint;
 		GMSD_SET(wpt_class, wpt_class);
@@ -674,7 +686,6 @@ read_route(void)
 	warnings = 0;
 
 	rte = route_head_alloc();
-//	rte->rte_num = rte_ct;
 	rte->rte_name = FREAD_CSTR;
 	FREAD(buf, 1);			/* display/autoname - 1 byte */
 	
@@ -1042,6 +1053,9 @@ read_data(void)
 
 /*******************************************************************************/
 
+/*
+ * reset_short_handle: used for waypoint, route and track names
+ */
 static void
 reset_short_handle(const char *defname)
 {
@@ -1051,15 +1065,16 @@ reset_short_handle(const char *defname)
 	short_h = mkshort_new_handle();
 	
 	setshort_length(short_h, GDB_NAME_BUFFERLEN);
-	setshort_badchars(short_h, "");
+	setshort_badchars(short_h, "\r\n\t");
 	setshort_mustupper(short_h, 0);
 	setshort_mustuniq(short_h, 1);
 	setshort_whitespace_ok(short_h, 1);
-	setshort_repeating_whitespace_ok(short_h, 0);
+	setshort_repeating_whitespace_ok(short_h, 1);
 	setshort_defname(short_h, defname);
 }
 
 /* ----------------------------------------------------------------------------*/
+
 static void
 write_header(void)
 {
@@ -1083,19 +1098,20 @@ write_header(void)
 	
 	/* history:
 	
-	"A].GPSBabel_1.2.7-beta*Sep 13 2005*20:10:00" -   gpsbabel V1.2.7 BETA
-	"A].GPSBabel_1.2.8-beta*Jan 18 2006*20:11:00" -   gpsbabel 1.2.8-beta01182006_clyde
-	"A].GPSBabel_1.2.8-beta*Apr 18 2006*20:12:00" -   gpsbabel 1.2.8-beta20060405
-	"A].GPSBabel-1.3*Jul 02 2006*20:13:00" -          gpsbabel 1.3.0
-	"A].GPSBabel-1.3.1*Sep 03 2006*20:14:00" -        gpsbabel 1.3.1
-	
+	"A].GPSBabel_1.2.7-beta*Sep 13 2005*20:10:00" - gpsbabel V1.2.7 BETA
+	"A].GPSBabel_1.2.8-beta*Jan 18 2006*20:11:00" - gpsbabel 1.2.8-beta01182006_clyde
+	"A].GPSBabel_1.2.8-beta*Apr 18 2006*20:12:00" - gpsbabel 1.2.8-beta20060405
+	"A].GPSBabel-1.3*Jul 02 2006*20:13:00" -        gpsbabel 1.3.0
+	"A].GPSBabel-1.3.1*Sep 03 2006*20:14:00" -      gpsbabel 1.3.1
+	"A].GPSBabel-1.3.2*Nov 01 2006*22:23:39" -      gpsbabel 1.3.2
+
 	New since 11/01/2006:
-	
 	version:   version and release of gpsbabel (defined in configure.in)
 	timestamp: date and time of gdb.c (handled by CVS)
 
-	"A].GPSBabel-1.3.2*Nov 01 2006*22:23:39" -	  gpsbabel 1.3.2
-	"A].GPSBabel-beta20061125*Feb 06 2007*23:24:14" - gpsbabel beta20061125
+	"A].GPSBabel-1.3.2*Nov 01 2006*22:23:39" -      gpsbabel 1.3.2
+	"A].GPSBabel-beta20061125*Feb 06 2007*23:24:14" gpsbabel beta20061125
+	"A].GPSBabel-1.3.3*Feb 20 2007*20:51:15" -      gpsbabel 1.3.3
 
 	*/
 
@@ -1115,6 +1131,33 @@ write_header(void)
 	FWRITE_i32(len);
 	FWRITE(buff, len + 1);
 	FWRITE_CSTR("MapSource");		/* MapSource magic */
+}
+
+/*-----------------------------------------------------------------------------*/
+
+/*
+ * gdb_check_waypt: As implemented in waypt_add, but we have some leaks where 
+ *                  waypoints are modified after waypt_add. Maybe we need a data check
+ *                  after each input module.
+ */
+ 
+static void
+gdb_check_waypt(waypoint *wpt)
+{
+	double lat_orig = wpt->latitude;
+	double lon_orig = wpt->longitude;
+
+	if (wpt->latitude < -90) wpt->latitude += 180;
+	else if (wpt->latitude > +90) wpt->latitude -= 180;
+	if (wpt->longitude < -180) wpt->longitude += 360;
+	else if (wpt->longitude > +180) wpt->longitude -= 360;
+	
+	if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
+		fatal ("Invalid latitude %f in waypoint %s.\n",
+			lat_orig, wpt->shortname ? wpt->shortname : "<no name>");
+	if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
+		fatal ("Invalid longitude %f in waypoint %s.\n",
+			lon_orig, wpt->shortname ? wpt->shortname : "<no name>");
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -1190,12 +1233,15 @@ write_waypoint(
 		else
 			str = "";
 		FWRITE_CSTR(str);
-		FWRITE(zbuf, 5);				/* ???, instruction dependend */
-		if (wpt_class >= gt_waypt_class_map_point)	/* instruction */
-			str = wpt->description;
-		else
-			str = "";
-		FWRITE_CSTR(str);
+		FWRITE(zbuf, 5);				/* instruction dependend */
+		
+		/* GBD doesn't have a native description field */
+		/* here we misuse the instruction field */
+
+		str = wpt->description;
+		if (str && (strcmp(str, wpt->shortname) == 0)) str = NULL;
+		if (str && wpt->notes && (strcmp(str, wpt->notes) == 0)) str = NULL;
+		FWRITE_CSTR(str);				/* instruction */
 		
 		cnt = 0;
 		if (wpt->url) cnt++;
@@ -1213,19 +1259,17 @@ write_waypoint(
 
 	/* VERSION DEPENDENT CODE */
 	if (gdb_ver >= GDB_VER_3) {
-#if 1
-		FWRITE(zbuf, 6);
-#else
-		/* phone, country and zipcode not yet part of GMSD
-		char *str = GMSD_GET(phone, "");
-		if (str && *str) {
+		char *str = GMSD_GET(phone_nr, "");
+		if (*str) {
+			FWRITE_i32(1);
 			FWRITE_CSTR(str);
 			FWRITE_CSTR("");
 		}
+		else {
+			FWRITE_i32(0);
+		}
 		FWRITE_CSTR(GMSD_GET(country, ""));
-		FWRITE_CSTR(GMSD_GET(zipcode, ""));
-		*/
-#endif
+		FWRITE_CSTR(GMSD_GET(postal_code, ""));
 	}
 }
 
@@ -1236,6 +1280,7 @@ route_compute_bounds(const route_head *rte, bounds *bounds)
 	waypt_init_bounds(bounds);
 	QUEUE_FOR_EACH((queue *)&rte->waypoint_list, elem, tmp) {
 		waypoint *wpt = (waypoint *)elem;
+		gdb_check_waypt(wpt);
 		waypt_add_to_bounds(bounds, wpt);
 	}
 }
@@ -1280,12 +1325,16 @@ write_route(const route_head *rte, const char *rte_name)
 	QUEUE_FOR_EACH((queue *)&rte->waypoint_list, elem, tmp) {
 	
 		waypoint *wpt = (waypoint *)elem;
+		waypoint *next = (waypoint *)tmp;
 		waypoint *test;
 		garmin_fs_t *gmsd = NULL;
 		int wpt_class;
 		
 		index++;
 		rtept_ct++;	/* increase informational number of written route points */
+
+		if (index == 1) gdb_check_waypt(wpt);
+		if (index < points) gdb_check_waypt(next);
 
 		test = gdb_find_wayptq(&wayptq_out, wpt, 1);
 		if (test != NULL) wpt = test;
@@ -1325,8 +1374,6 @@ write_route(const route_head *rte, const char *rte_name)
 			FWRITE_C(1);		/* skip bounds */
 		}
 		else /* if (index < points) */ {
-			waypoint *next = (waypoint *)tmp;
-			
 			FWRITE_i32(2);		/* two interstep links */
 			
 			FWRITE_LATLON(wpt->latitude);
@@ -1445,8 +1492,7 @@ write_waypoint_cb(const waypoint *refpt)
 	test = gdb_find_wayptq(&wayptq_out, refpt, 1);
 
 	if ((test != NULL) && (route_flag == 0)) {
-		if ((str_not_equal(test->description, refpt->description)) ||
-		    (str_not_equal(test->notes, refpt->notes)) ||
+		if ((str_not_equal(test->notes, refpt->notes)) ||
 		    (str_not_equal(test->url, refpt->url)))
 			test = NULL;
 	}
@@ -1456,6 +1502,7 @@ write_waypoint_cb(const waypoint *refpt)
 		char *name;
 		waypoint *wpt = waypt_dupe(refpt);
 		
+		gdb_check_waypt(wpt);
 		ENQUEUE_TAIL(&wayptq_out, &wpt->Q);
 		
 		FWRITE_i32(-1);
