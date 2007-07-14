@@ -23,6 +23,7 @@
 #include "cet.h"
 #include "cet_util.h"
 #include "csv_util.h"
+#include "garmin_fs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
 #include "strptime.h"
@@ -76,6 +77,13 @@ typedef enum {
 	fld_time,
 	fld_datetime,
 	fld_iso_time,
+	fld_garmin_city,
+	fld_garmin_postal_code,
+	fld_garmin_state,
+	fld_garmin_country,
+	fld_garmin_addr,
+	fld_garmin_phone_nr,
+	fld_garmin_facility,
 	fld_terminator
 } field_e;
 
@@ -146,6 +154,16 @@ static field_t fields_def[] = {
 	{ "depth",	fld_depth, STR_ANY },
 	{ "date",	fld_date, STR_ANY },
 	{ "time",	fld_time, STR_ANY },
+	/* garmin specials */
+	{ "addr",	fld_garmin_addr, STR_ANY },
+	{ "street",	fld_garmin_addr, STR_ANY },
+	{ "city",	fld_garmin_city, STR_ANY },
+	{ "country",	fld_garmin_country, STR_ANY },
+	{ "post",	fld_garmin_postal_code, STR_ANY },
+	{ "zip",	fld_garmin_postal_code, STR_ANY },
+	{ "phone",	fld_garmin_phone_nr, STR_ANY },
+	{ "state",	fld_garmin_state, STR_ANY },
+	{ "faci",	fld_garmin_facility, STR_ANY },
 	/* unhandled columns */
 	{ "index",	fld_terminator, STR_ANY },
 	{ "no",		fld_terminator, STR_EQUAL },
@@ -421,6 +439,7 @@ unicsv_parse_one_line(char *ibuf)
 	int checked = 0;
 	int date = -1, time = -1, msec = -1;
 	char is_localtime = 0;
+	garmin_fs_t *gmsd;
 
 	wpt = waypt_new();
 	wpt->latitude = -9999;
@@ -633,6 +652,30 @@ unicsv_parse_one_line(char *ibuf)
 			/* not implemented */
 			break;
 
+		case fld_garmin_city:
+		case fld_garmin_postal_code:
+		case fld_garmin_state:
+		case fld_garmin_country:
+		case fld_garmin_addr:
+		case fld_garmin_phone_nr:
+		case fld_garmin_facility:
+			gmsd = GMSD_FIND(wpt);
+			if (! gmsd) {
+				gmsd = garmin_fs_alloc(-1);
+				fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+			}
+			switch(unicsv_fields_tab[column]) {
+			case fld_garmin_city: GMSD_SETSTR(city, s); break;
+			case fld_garmin_postal_code: GMSD_SETSTR(postal_code, s); break;
+			case fld_garmin_state: GMSD_SETSTR(state, s); break;
+			case fld_garmin_country: GMSD_SETSTR(country, s); break;
+			case fld_garmin_addr: GMSD_SETSTR(addr, s); break;
+			case fld_garmin_phone_nr: GMSD_SETSTR(phone_nr, s); break;
+			case fld_garmin_facility: GMSD_SETSTR(facility, s); break;
+			default: break;
+			}
+			break;
+
 		case fld_terminator: /* dummy */
 			checked--;
 			break;
@@ -727,9 +770,24 @@ static void
 unicsv_print_str(const char *str)
 {
 	if (str && *str) {
-		char *cout;
+		char *cout, *cx;
 		
 		cout = strenquote(str, UNICSV_QUOT_CHAR);
+
+		while ((cx = strstr(cout, "\r\n"))) {
+			memmove(cx, cx + 1, strlen(cx));
+			*cx++ = ',';
+			lrtrim(cx);
+		}
+		while ((cx = strchr(cout, '\r'))) {
+			*cx++ = ',';
+			lrtrim(cx);
+		}
+		while ((cx = strchr(cout, '\n'))) {
+			*cx++ = ',';
+			lrtrim(cx);
+		}
+		
 		gbfprintf(fout, "%s%s", unicsv_fieldsep, cout);
 		xfree(cout);
 	}
@@ -742,7 +800,11 @@ unicsv_print_str(const char *str)
 static void 
 unicsv_waypt_enum_cb(const waypoint *wpt)
 {
-	char *shortname = (wpt->shortname) ? wpt->shortname : "";
+	char *shortname;
+	garmin_fs_t *gmsd;
+
+	shortname = (wpt->shortname) ? wpt->shortname : "";
+	gmsd = GMSD_FIND(wpt);
 	
 	if (*shortname) unicsv_outp_flags |= BIT_OF(fld_shortname);
 	if (wpt->altitude != unknown_alt) unicsv_outp_flags |= BIT_OF(fld_altitude);
@@ -774,6 +836,16 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
 	if WAYPT_HAS(wpt, speed) unicsv_outp_flags |= BIT_OF(fld_speed);
 	if WAYPT_HAS(wpt, proximity) unicsv_outp_flags |= BIT_OF(fld_proximity);
 	if WAYPT_HAS(wpt, temperature) unicsv_outp_flags |= BIT_OF(fld_temperature);
+	
+	if (gmsd) {
+		if GMSD_HAS(addr) unicsv_outp_flags |= BIT_OF(fld_garmin_addr);
+		if GMSD_HAS(city) unicsv_outp_flags |= BIT_OF(fld_garmin_city);
+		if GMSD_HAS(country) unicsv_outp_flags |= BIT_OF(fld_garmin_country);
+		if GMSD_HAS(phone_nr) unicsv_outp_flags |= BIT_OF(fld_garmin_phone_nr);
+		if GMSD_HAS(postal_code) unicsv_outp_flags |= BIT_OF(fld_garmin_postal_code);
+		if GMSD_HAS(state) unicsv_outp_flags |= BIT_OF(fld_garmin_state);
+		if GMSD_HAS(facility) unicsv_outp_flags |= BIT_OF(fld_garmin_facility);
+	}
 }
 
 static void 
@@ -781,9 +853,13 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 {
 	double lat, lon, alt;
 	char *cout = NULL;
-	char *shortname = (wpt->shortname) ? wpt->shortname : "";
-	
+	char *shortname;
+	garmin_fs_t *gmsd;
+
 	unicsv_waypt_ct++;
+
+	shortname = (wpt->shortname) ? wpt->shortname : "";
+	gmsd = GMSD_FIND(wpt);
 	
 	if (unicsv_datum_idx == DATUM_WGS84) {
 		lat = wpt->latitude;
@@ -970,6 +1046,14 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	}
 	if FIELD_USED(fld_url) unicsv_print_str(wpt->url);
 
+	if FIELD_USED(fld_garmin_facility) unicsv_print_str(GMSD_GET(facility, NULL));
+	if FIELD_USED(fld_garmin_addr) unicsv_print_str(GMSD_GET(addr, NULL));
+	if FIELD_USED(fld_garmin_city) unicsv_print_str(GMSD_GET(city, NULL));
+	if FIELD_USED(fld_garmin_postal_code) unicsv_print_str(GMSD_GET(postal_code, NULL));
+	if FIELD_USED(fld_garmin_state) unicsv_print_str(GMSD_GET(state, NULL));
+	if FIELD_USED(fld_garmin_country) unicsv_print_str(GMSD_GET(country, NULL));
+	if FIELD_USED(fld_garmin_phone_nr) unicsv_print_str(GMSD_GET(phone_nr, NULL));
+
 	gbfputs(UNICSV_LINE_SEP, fout);
 }
 
@@ -1071,6 +1155,13 @@ unicsv_wr(void)
 	if FIELD_USED(fld_date) gbfprintf(fout, "%sDate", unicsv_fieldsep);
 	if FIELD_USED(fld_time) gbfprintf(fout, "%sTime", unicsv_fieldsep);
 	if FIELD_USED(fld_url) gbfprintf(fout, "%sURL", unicsv_fieldsep);
+	if FIELD_USED(fld_garmin_facility) gbfprintf(fout, "%sFacility", unicsv_fieldsep);
+	if FIELD_USED(fld_garmin_addr) gbfprintf(fout, "%sAddress", unicsv_fieldsep);
+	if FIELD_USED(fld_garmin_city) gbfprintf(fout, "%sCity", unicsv_fieldsep);
+	if FIELD_USED(fld_garmin_postal_code) gbfprintf(fout, "%sPostalCode", unicsv_fieldsep);
+	if FIELD_USED(fld_garmin_state) gbfprintf(fout, "%sState", unicsv_fieldsep);
+	if FIELD_USED(fld_garmin_country) gbfprintf(fout, "%sCountry", unicsv_fieldsep);
+	if FIELD_USED(fld_garmin_phone_nr) gbfprintf(fout, "%sPhone", unicsv_fieldsep);
 	
 	gbfputs(UNICSV_LINE_SEP, fout);
 
