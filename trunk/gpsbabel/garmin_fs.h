@@ -38,6 +38,7 @@
 /* macros */
 
 #define GMSD_FIND(a) (garmin_fs_t *) fs_chain_find((a)->fs, FS_GMSD)
+#define GMSD_HAS(a) (gmsd && gmsd->flags.a)
 
 /* GMSD_GET(a,b): a = any gmsd field, b = default value */
 #define GMSD_GET(a,b) ((gmsd) && (gmsd->flags.a)) ? (gmsd->a) : (b)
@@ -73,7 +74,10 @@ typedef struct {
 	unsigned int facility:1;
 	unsigned int cc:1;
 	unsigned int cross_road:1;
-	unsigned int addr:1;		
+	unsigned int addr:1;
+	unsigned int country:1;
+	unsigned int phone_nr:1;
+	unsigned int postal_code:1;
 #ifdef GMSD_EXPERIMENTAL
 	unsigned int subclass:1;
 #endif
@@ -96,6 +100,9 @@ typedef struct garmin_fs_s
 	char *cc;			/* country code */
 	char *cross_road;		/* Intersection road label */
 	char *addr;			/* address + number */
+	char *country;			/* country */
+	char *phone_nr;			/* phone number */
+	char *postal_code;		/* postal code */
 	garmin_ilink_t *ilinks;
 #ifdef GMSD_EXPERIMENTAL
 	char subclass[22];
@@ -105,6 +112,7 @@ typedef struct garmin_fs_s
 garmin_fs_t *garmin_fs_alloc(const int protocol);
 void garmin_fs_destroy(void *fs);
 void garmin_fs_copy(garmin_fs_t **dest, garmin_fs_t *src);
+void garmin_fs_convert(void *fs);
 char *garmin_fs_xstrdup(const char *src, size_t size);
 
 /* for GPX */
