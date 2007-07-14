@@ -111,7 +111,7 @@ mkshort_new_handle()
 }
 
 static 
-int
+uniq_shortname *
 is_unique(mkshort_handle *h, char *name)
 {
 	queue *e, *t;
@@ -121,10 +121,10 @@ is_unique(mkshort_handle *h, char *name)
 	QUEUE_FOR_EACH(&h->namelist[hash], e, t) {
 		uniq_shortname *z = (uniq_shortname *) e;
 		if (0 == case_ignore_strcmp(z->orig_shortname, name)) {
-			return 0;
+			return z;
 		}
 	}
-	return 1;
+	return (uniq_shortname *) NULL;
 }
 
 static
@@ -141,12 +141,12 @@ add_to_hashlist(mkshort_handle *h, char *name)
 char *
 mkshort_add_to_list(mkshort_handle *h, char *name)
 {
-	while (!is_unique(h, name)) {
+	uniq_shortname *s;
+
+	while ((s = is_unique(h, name))) {
 		int dl;
 		char tbuf[10];
 		size_t l = strlen(name);
-		int hash = hash_string(name);
-		uniq_shortname *s = (uniq_shortname *) h->namelist[hash].next;
 
 		s->conflictctr++;
 
