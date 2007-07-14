@@ -1143,7 +1143,10 @@ parse_waypoint(void)
 			case 12: GMSD_SETSTR(facility, str); break;
 			case 13: GMSD_SETSTR(city, str); break;
 			case 14: GMSD_SETSTR(state, str); break;
-			case 15: GMSD_SETSTR(cc, gt_get_icao_cc(str, wpt->shortname)); break;
+			case 15: 
+				GMSD_SETSTR(country, str);
+				GMSD_SETSTR(cc, gt_get_icao_cc(str, wpt->shortname)); 
+				break;
 			case 16: parse_date_and_time(str, &wpt->creation_time); break;
 			case 17: wpt->url = DUPSTR(str); break;
 			case 18: GMSD_SET(category, parse_categories(str)); break;
