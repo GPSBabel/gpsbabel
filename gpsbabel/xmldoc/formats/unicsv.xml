@@ -57,14 +57,15 @@
       y_pos =    Latitude
       z =        Altitude (elevation)
    </screen>
-   We are also support some enhanced Garmin attributes. They are also available in 
+   We support some enhanced Garmin attributes. They are also available in 
    <link linkend="fmt_gpx">gpx</link>, <link linkend="fmt_gdb">gdb</link>, 
    <link linkend="fmt_garmin_gpi">garmin_gpi</link> and partly 
-   <link linkend="fmt_garmin_txt">garmin_txt</link>. All this entities are currently 
+   <link linkend="fmt_garmin_txt">garmin_txt</link>. These entities are currently 
    not visible in <productname>MapSource</productname> (6.12.4), but are NOT dropped  
    when working with GDB (version 3) or GPX files.
    <screen></screen>
-   Please note, that all of them are NOT really a part of geocoding services.
+   Please note, that these do NOT provide a geocoding service; don't expect
+	to "convert" a street address to a latitude and longitude.
    <screen>
       addr =     Street address
       city =     City
