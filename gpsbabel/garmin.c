@@ -421,6 +421,7 @@ route_read(void)
 
 }
 
+#if 0
 static
 void
 lap_read_as_track(void)
@@ -508,6 +509,7 @@ lap_read_as_track(void)
 	}
 	xfree(array);
 }
+#endif
 
 /*
  * Rather than propogate Garmin-specific data types outside of the Garmin
