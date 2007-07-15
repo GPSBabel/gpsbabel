@@ -911,6 +911,12 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     if (strcmp(fmp->key, "PATH_SPEED") == 0) {
 	WAYPT_SET(wpt, speed, atof(s));
     } else
+    if (strcmp(fmp->key, "PATH_SPEED_KPH") == 0) {
+	WAYPT_SET(wpt, speed, KPH_TO_MPS(atof(s)));
+    } else
+    if (strcmp(fmp->key, "PATH_SPEED_MPH") == 0) {
+	WAYPT_SET(wpt, speed, MPH_TO_MPS(atof(s)));
+    } else
     if (strcmp(fmp->key, "PATH_COURSE") == 0) {
 	WAYPT_SET(wpt, course, atof(s));
     } else
@@ -1419,6 +1425,12 @@ xcsv_waypt_pr(const waypoint *wpt)
 	} else
 	if (strcmp(fmp->key, "PATH_SPEED") == 0) {
             writebuff( buff, fmp->printfc, wpt->speed );
+	} else
+	if (strcmp(fmp->key, "PATH_SPEED_KPH") == 0) {
+            writebuff( buff, fmp->printfc, MPS_TO_KPH(wpt->speed));
+	} else
+	if (strcmp(fmp->key, "PATH_SPEED_MPH") == 0) {
+            writebuff( buff, fmp->printfc, MPS_TO_MPH(wpt->speed));
 	} else
 	if (strcmp(fmp->key, "PATH_COURSE") == 0) {
             writebuff( buff, fmp->printfc, wpt->course );

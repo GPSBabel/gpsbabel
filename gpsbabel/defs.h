@@ -64,6 +64,15 @@
 #define SECONDS_PER_HOUR (60L*60)
 #define SECONDS_PER_DAY (24L*60*60)
 
+/* meters/second to kilometers/hour */
+#define MPS_TO_KPH(a) ((double)(a)*SECONDS_PER_HOUR/1000)
+/* meters/second to miles/hour */
+#define MPS_TO_MPH(a) (METERS_TO_MILES(a) * SECONDS_PER_HOUR)
+/* kilometers/hour to meters/second */
+#define KPH_TO_MPS(a) ((double)(a)*1000/SECONDS_PER_HOUR)
+/* miles/hour to meters/second */
+#define MPH_TO_MPS(a) (MILES_TO_METERS(a) / SECONDS_PER_HOUR)
+
 /*
  * Snprintf is in SUS (so it's in most UNIX-like substance) and it's in 
  * C99 (albeit with slightly different semantics) but it isn't in C89.   

@@ -1057,6 +1057,30 @@ example:
 </screen>
 </section>
 
+<section id="style_def_pathspeed_kph">
+<title>PATH_SPEED_KPH</title>
+<para>
+   Like PATH_SPEED but means kilometers per hour.
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   PATH_SPEED_KPH,"","%.1f"
+</screen>
+</section>
+
+<section id="style_def_pathspeed_mph">
+<title>PATH_SPEED_MPH</title>
+<para>
+   Like PATH_SPEED but means miles per hour.
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   PATH_SPEED_MPH,"","%.1f"
+</screen>
+</section>
+
 <section id="style_def_pathcourse">
 <title>PATH_COURSE</title>
 <para>
