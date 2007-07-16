@@ -66,12 +66,21 @@
 
 /* meters/second to kilometers/hour */
 #define MPS_TO_KPH(a) ((double)(a)*SECONDS_PER_HOUR/1000)
+
 /* meters/second to miles/hour */
 #define MPS_TO_MPH(a) (METERS_TO_MILES(a) * SECONDS_PER_HOUR)
+
+/* meters/second to knots */
+#define MPS_TO_KNOTS(a) (MPS_TO_KPH((a)/1.852))
+
 /* kilometers/hour to meters/second */
 #define KPH_TO_MPS(a) ((double)(a)*1000/SECONDS_PER_HOUR)
+
 /* miles/hour to meters/second */
 #define MPH_TO_MPS(a) (MILES_TO_METERS(a) / SECONDS_PER_HOUR)
+
+/* knots to meters/second */
+#define KNOTS_TO_MPS(a) (KPH_TO_MPS((a)*1.852))
 
 /*
  * Snprintf is in SUS (so it's in most UNIX-like substance) and it's in 

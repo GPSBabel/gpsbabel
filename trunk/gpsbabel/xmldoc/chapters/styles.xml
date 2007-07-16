@@ -1081,6 +1081,18 @@ example:
 </screen>
 </section>
 
+<section id="style_def_pathspeed_knots">
+<title>PATH_SPEED_KNOTS</title>
+<para>
+   Like PATH_SPEED but means knots (nautical).
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   PATH_SPEED_KNOTS,"","%.1f"
+</screen>
+</section>
+
 <section id="style_def_pathcourse">
 <title>PATH_COURSE</title>
 <para>
