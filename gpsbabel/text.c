@@ -32,6 +32,9 @@ static char *txt_encrypt = NULL;
 static char *includelogs = NULL;
 static char *degformat = NULL;
 static char *altunits = NULL;
+static char *split_output = NULL;
+static int waypoint_count;
+static char *output_name;
 
 #define MYNAME "TEXT"
 
@@ -48,6 +51,8 @@ arglist_t text_args[] = {
         	"Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX },
 	{ "altunits", &altunits,
 		"Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX },
+	{ "splitoutput", &split_output,
+		"Write each waypoint in a separate file", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 
 	ARG_TERMINATOR
 };
@@ -57,15 +62,22 @@ arglist_t text_args[] = {
 static void
 wr_init(const char *fname)
 {
-	file_out = gbfopen(fname, "w", MYNAME);
+	waypoint_count = 0;
+	output_name = xstrdup(fname);
+	if (!split_output) {
+		file_out = gbfopen(fname, "w", MYNAME);
+	} 
 	mkshort_handle = mkshort_new_handle();
 }
 
 static void
 wr_deinit(void)
 {
-	gbfclose(file_out);
+	if (!split_output) {
+		gbfclose(file_out);
+	}
 	mkshort_del_handle(&mkshort_handle);
+	xfree(output_name);
 }
 
 static void
@@ -80,6 +92,14 @@ text_disp(const waypoint *wpt)
 	char *tmpout1, *tmpout2;
 	char *altout;
 	fs_xml *fs_gpx;
+
+	waypoint_count++;
+	
+	if (split_output) {
+		char *thisfname;
+		xasprintf(&thisfname, "%s%d", output_name, waypoint_count);
+		file_out = gbfopen(thisfname, "w", MYNAME);
+	}
 	
 	lonint = abs((int) wpt->longitude);
 	latint = abs((int) wpt->latitude);
@@ -225,14 +245,17 @@ text_disp(const waypoint *wpt)
 		gbfprintf(file_out, "\n-----------------------------------------------------------------------------\n");
 	else
 		gbfprintf(file_out, "\n");
-		
-	
+
+	if (split_output) {
+		gbfclose(file_out);
+		file_out = NULL;
+	}
 }
 
 static void
 data_write(void)
 {
-	if (! suppresssep) 
+	if (! suppresssep && !split_output) 
 		gbfprintf(file_out, "-----------------------------------------------------------------------------\n");
 	setshort_length(mkshort_handle, 6);
 	waypt_disp_all(text_disp);
