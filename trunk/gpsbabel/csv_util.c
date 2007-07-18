@@ -1169,6 +1169,8 @@ xcsv_waypt_pr(const waypoint *wpt)
     field_map_t *fmp;
     queue *elem, *tmp;
     double latitude, longitude;
+
+    buff[0] = '\0';
     
     if ( oldlon < 900 ) {
 	pathdist += radtomiles(gcdist(RAD(oldlat),RAD(oldlon),
