@@ -496,7 +496,7 @@ print_speed(double *distance, time_t *time)
 	idist = si_round(dist);
 	
 	if ((*time != 0) && (idist > 0)) {
-		double speed = dist / (double)*time * SECONDS_PER_HOUR / 1000;
+		double speed = MPS_TO_KPH(dist / (double)*time);
 		int ispeed = si_round(speed);
 		
 		if (speed < (double)0.01)

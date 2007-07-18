@@ -96,8 +96,6 @@ gpssim_write_spd(double knotsperhour)
 	gpssim_write_sentence(obuf);
 }
 
-#define mpsec2knots(n) ((n) * 1.9438445 / 0.51444444)
-
 static void
 gpssim_write_pt(const waypoint *wpt)
 {
@@ -105,7 +103,7 @@ gpssim_write_pt(const waypoint *wpt)
 	double lat, lon;
 
 	if WAYPT_HAS(wpt, speed) {
-		gpssim_write_spd(mpsec2knots(wpt->speed));
+		gpssim_write_spd(MPS_TO_KNOTS(wpt->speed));
 	}
 
 	lat = degrees2ddmm(wpt->latitude);
