@@ -1481,7 +1481,7 @@ xcsv_waypt_pr(const waypoint *wpt)
 	} else
 	if (strcmp(fmp->key, "ISO_TIME_MS") == 0) {
             xml_fill_in_time(buff, wpt->creation_time, 
-		MICRO_TO_MILLI(wpt->microseconds), XML_LONG_TIME);
+		wpt->microseconds, XML_LONG_TIME);
 	} else
         if (strcmp(fmp->key, "GEOCACHE_LAST_FOUND") == 0) {
 	    writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->gc_data.last_found));
