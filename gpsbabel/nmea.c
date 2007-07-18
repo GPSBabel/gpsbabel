@@ -163,9 +163,6 @@ static struct tm opt_tm;	/* converted "date" parameter */
 
 #define MYNAME "nmea"
 
-static const double kts2mps =0.51444444444444444; /* knots to m/s */
-static const double kmh2mps =0.27777777777777778; /* km/h to m/s  */ 
-
 static char *opt_gprmc;
 static char *opt_gpgga;
 static char *opt_gpvtg;
@@ -517,7 +514,7 @@ gprmc_parse(char *ibuf)
 		/* capture useful data update and exit */
 		if (curr_waypt) {
 			if (! WAYPT_HAS(curr_waypt, speed))
-				WAYPT_SET(curr_waypt, speed, speed*kts2mps);
+				WAYPT_SET(curr_waypt, speed, KNOTS_TO_MPS(speed));
 			if (! WAYPT_HAS(curr_waypt, course))
 				WAYPT_SET(curr_waypt, course, course);
 			/* The change of date wasn't recorded when 
@@ -529,7 +526,7 @@ gprmc_parse(char *ibuf)
 		
 	waypt  = waypt_new();
 
-	WAYPT_SET(waypt, speed, speed*kts2mps);
+	WAYPT_SET(waypt, speed, KNOTS_TO_MPS(speed));
 
 	WAYPT_SET(waypt, course, course);
 	
@@ -658,9 +655,9 @@ gpvtg_parse(char *ibuf)
 		WAYPT_SET(curr_waypt, course, course);
 		
 		if (speed_k>0)
-			WAYPT_SET(curr_waypt, speed, speed_k*kmh2mps)
+			WAYPT_SET(curr_waypt, speed, KPH_TO_MPS(speed_k))
 		else
-			WAYPT_SET(curr_waypt, speed, speed_n*kts2mps);
+			WAYPT_SET(curr_waypt, speed, KNOTS_TO_MPS(speed_n));
 
 	}	
 	
@@ -1206,7 +1203,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 				fix=='0' ? 'V' : 'A',
 				fabs(lat), lat < 0 ? 'S' : 'N',
 				fabs(lon), lon < 0 ? 'W' : 'E',
-				WAYPT_HAS(wpt, speed) ? (wpt->speed / kts2mps):(0),
+				WAYPT_HAS(wpt, speed) ? MPS_TO_KNOTS(wpt->speed):(0),
 				WAYPT_HAS(wpt, course) ? (wpt->course):(0),
 				(int) ymd);
 		cksum = nmea_cksum(obuf);
@@ -1227,8 +1224,8 @@ nmea_trackpt_pr(const waypoint *wpt)
 	if ((opt_gpvtg) && (WAYPT_HAS(wpt, course) || WAYPT_HAS(wpt, speed))) {
 		snprintf(obuf,sizeof(obuf),"GPVTG,%.3f,T,0,M,%.3f,N,%.3f,K",
 			WAYPT_HAS(wpt, course) ? (wpt->course):(0),	
-			WAYPT_HAS(wpt, speed) ? (wpt->speed / kts2mps):(0),
-			WAYPT_HAS(wpt, speed) ? (wpt->speed / kmh2mps):(0) );
+			WAYPT_HAS(wpt, speed) ? MPS_TO_KNOTS(wpt->speed):(0),
+			WAYPT_HAS(wpt, speed) ? MPS_TO_KPH(wpt->speed):(0) );
 
 		cksum = nmea_cksum(obuf);
 		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);

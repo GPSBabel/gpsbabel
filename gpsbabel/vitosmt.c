@@ -36,9 +36,6 @@ const long				vitosmt_version			=2;
 const long				vitosmt_subversion		=1000;
 const size_t			vitosmt_headersize		=24;
 const size_t			vitosmt_datasize		=64;
-const double mile2km	=1.609344;				/* mile/h to kilometer/h */
-const double kts2mps	=0.5144444444444444444;	/* knots to m/s */
-const double mph2mps 	=0.447039259;			/* mile/h to m/s     */
 
 static unsigned long
 ReadLong(FILE * f)
@@ -195,7 +192,7 @@ vitosmt_read(void)
 		wpt_tmp->shortname	=xcalloc(16,1);
 		snprintf(wpt_tmp->shortname, 15 , "WP%04d", ++serial);
 
-		WAYPT_SET(wpt_tmp, speed, speed*kts2mps); /* meters per second */
+		WAYPT_SET(wpt_tmp, speed, KNOTS_TO_MPS(speed)); /* meters per second */
 		WAYPT_SET(wpt_tmp, course, course);
 		wpt_tmp->pdop	= pdop;
 
@@ -294,7 +291,7 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 
 	/* speed */
 	if (waypointp->speed>0) 
-		WriteDouble(&workbuffer[position], waypointp->speed / mph2mps );
+		WriteDouble(&workbuffer[position], MPS_TO_MPH(waypointp->speed));
 	position += sizeof(double);
 	
 	/* course */
