@@ -1091,6 +1091,10 @@ xcsv_data_read(void)
             s = buff;
             s = csv_lineparse(s, xcsv_file.field_delimiter, "", linecount);
 
+	    if (QUEUE_EMPTY(&xcsv_file.ifield)) {
+		fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", xcsv_file.description? xcsv_file.description : "unknown");
+	    }
+
             /* reset the ifield queue */
             elem = QUEUE_FIRST(&xcsv_file.ifield);
 
