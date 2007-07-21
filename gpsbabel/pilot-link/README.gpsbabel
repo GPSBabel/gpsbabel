@@ -1,0 +1,6 @@
+This directory is a tiny subset of the pilot-link 0.12.2 code from
+http://www.pilot-link.org. It is licensed under the GPL.
+
+We considered conditionalizing away some of the code we didn't use, but
+once we realized the compiled object size was already smaller than the
+coldsync code it replaces, that didn't make sense.

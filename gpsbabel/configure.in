@@ -68,8 +68,10 @@ AC_ARG_ENABLE(pdb,
         AC_DEFINE(PDBFMTS_ENABLED, 1, [1 to enable Palm PDB support])
 	AC_MSG_RESULT(yes)
     else
+	PALM_DB_CMT=#
 	AC_MSG_RESULT(no)
     fi
+AC_SUBST(PALM_DB_CMT)
 
 AC_MSG_CHECKING(whether to support csv formats)
 AC_ARG_ENABLE(csv,

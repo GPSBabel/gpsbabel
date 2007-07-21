@@ -73,7 +73,7 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 # 	jeeps/gpsfmt.o jeeps/gpsinput.o jeeps/gpsproj.o
 
 
-COLDSYNC=coldsync/util.o coldsync/pdb.o
+@PALM_DB_CMT@PALM_DB=coldsync/util.o coldsync/pdb.o # pilot-link/pi-file.o  pilot-link/pi-buffer.o 
 
 SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
 
@@ -86,7 +86,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
 	  xhtmlent.o inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
 	  gbfile.o \
-	$(COLDSYNC) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
+	$(PALM_DB) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
 .c.o:
