@@ -38,6 +38,12 @@
 
 #define RECLEN_WBT201  16
 
+/* tk1 file format stuff */
+
+#define TK1_MAGIC       "WintecLogFormat"
+#define TK1_DATA_OFFSET 0x0400
+#define TK1_END_FLAG    0x04000000ul
+
 /* Used to sanity check data - from
  *   http://hypertextbook.com/facts/2001/DanaWollman.shtml
  * The MAXALT check doesn't need to be enabled unless there's
@@ -152,6 +158,7 @@ static void buf_init(struct buf_head *h, size_t alloc) {
     h->alloc    = alloc;
     h->used     = 0;
     h->checksum = 0;
+    h->offset   = 0;
 }
 
 static void buf_empty(struct buf_head *h) {
@@ -172,16 +179,22 @@ static void buf_rewind(struct buf_head *h) {
 }
 
 static size_t buf_read(struct buf_head *h, void *data, size_t len) {
-    char *bp = data;
+    char    *bp = data;
+    size_t  got = 0;
 
     while (len != 0 && h->current != NULL) {
         size_t avail = h->current->used - h->offset;
         if (avail > len) { avail = len; }
 
-        memcpy(bp, buf_CHUNK_PTR(h->current, h->offset), avail);
+        /* Allow NULL buffer pointer to skip bytes */
+        if (NULL != bp) {
+            memcpy(bp, buf_CHUNK_PTR(h->current, h->offset), avail);
+            bp          += avail;
+        }
+
         h->offset   += avail;
-        bp          += avail;
         len         -= avail;
+        got         += avail;
 
         if (h->offset == h->current->used) {
             h->current  = h->current->next;
@@ -189,7 +202,7 @@ static size_t buf_read(struct buf_head *h, void *data, size_t len) {
         }
     }
 
-    return bp - (char *) data;
+    return got;
 }
 
 static void buf_extend(struct buf_head *h, size_t amt) {
@@ -617,42 +630,6 @@ static void state_empty(struct read_state *pst) {
     state_init(pst);
 }
 
-static void file_read(void) {
-    char                buf[512];
-    size_t              rc;
-    struct read_state   st;
-    int                 fmt;
-
-    state_init(&st);
-
-    /* Read the whole file into the buffer */
-    rc = fread(buf, 1, sizeof(buf), fl);
-    while (rc != 0) {
-        buf_write(&st.data, buf, rc);
-        rc = fread(buf, 1, sizeof(buf), fl);
-    }
-
-    if (!feof(fl)) {
-        fatal(MYNAME ": Read error\n");
-    }
-
-    /* Try to guess the data format */
-    for (fmt = 0; fmt_version[fmt].reclen != 0; fmt++) {
-        size_t reclen = fmt_version[fmt].reclen;
-        if ((st.data.used % reclen) == 0 && is_valid(&st.data, fmt)) {
-            break;
-        }
-    }
-
-    if (fmt_version[fmt].reclen == 0) {
-        fatal(MYNAME ": Can't autodetect data format\n");
-    }
-
-    wbt200_process_data(&st, fmt);
-
-    state_empty(&st);
-}
-
 static void want_bytes(struct buf_head *h, size_t len) {
     char buf[512];
 
@@ -750,6 +727,19 @@ static void wbt200_data_read(void) {
     state_empty(&st);
 }
 
+static int all_null(const void *buf, size_t len) {
+    const char *bp = buf;
+    int i;
+
+    for (i = 0; i < len; i++) {
+        if (bp[i]) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
 static int wbt201_data_chunk(struct read_state *st, const void *buf) {
     gbuint32    tim;
     gbuint16    flags;
@@ -758,8 +748,19 @@ static int wbt201_data_chunk(struct read_state *st, const void *buf) {
     waypoint    *tpt     = NULL;
 	const char  *bp      = buf;
 
+    /* Zero records are skipped */
+    if (all_null(buf, RECLEN_WBT201)) {
+        return 1;
+    }
+
     flags = le_read16(bp + 0);
     tim   = le_read32(bp + 2);
+
+    if (TK1_END_FLAG == tim) {
+        /* EOF? (TK1 files only as far as I know) */
+        return 0;
+    }
+
     lat   = (double) ((gbint32) le_read32(bp +  6)) / 10000000;
     lon   = (double) ((gbint32) le_read32(bp + 10)) / 10000000;
     alt   = (double) ((gbint16) le_read16(bp + 14));
@@ -792,17 +793,15 @@ static int wbt201_data_chunk(struct read_state *st, const void *buf) {
 
 static void wbt201_process_chunk(struct read_state *st) {
     char buf[RECLEN_WBT201];
-    buf_rewind(&st->data);
 
     db(2, "Processing %lu bytes of data\n", st->data.used);
 
-    for (;;) {
+    do {
         size_t got = buf_read(&st->data, buf, sizeof(buf));
         if (got != sizeof(buf)) {
             break;
         }
-        wbt201_data_chunk(st, buf);
-    }
+    } while (wbt201_data_chunk(st, buf));
 }
 
 static int wbt201_read_chunk(struct read_state *st, unsigned pos, unsigned limit) {
@@ -897,6 +896,7 @@ static void wbt201_data_read(void) {
     tries = 10;
     while (log_addr_start < log_addr_end) {
         if (wbt201_read_chunk(&st, log_addr_start, log_addr_end)) {
+            buf_rewind(&st.data);
             wbt201_process_chunk(&st);
             log_addr_start += st.data.used;
         } else {
@@ -913,6 +913,60 @@ static void wbt201_data_read(void) {
 
     state_empty(&st);
     do_simple("@AL,2,1", BUFSPEC(line_buf));
+}
+
+static void file_read(void) {
+    char                buf[512];
+    size_t              rc;
+    struct read_state   st;
+    int                 fmt;
+
+    const char *        tk1_magic     = TK1_MAGIC;
+    size_t              tk1_magic_len = strlen(tk1_magic) + 1;
+
+    state_init(&st);
+
+    /* Read the whole file into the buffer */
+    rc = fread(buf, 1, sizeof(buf), fl);
+    while (rc != 0) {
+        buf_write(&st.data, buf, rc);
+        rc = fread(buf, 1, sizeof(buf), fl);
+    }
+
+    if (!feof(fl)) {
+        fatal(MYNAME ": Read error\n");
+    }
+
+    /* WBT201 TK1 format? */
+
+    buf_rewind(&st.data);
+    buf_read(&st.data, buf, tk1_magic_len);
+    if (memcmp(buf, tk1_magic, tk1_magic_len) == 0) {
+        db(1, "Got TK1 file\n");
+        buf_rewind(&st.data);
+        /* Seek */
+        buf_read(&st.data, NULL, TK1_DATA_OFFSET);
+        wbt201_process_chunk(&st);
+    }
+    else {
+        db(1, "Got bin file\n");
+
+        /* Try to guess the data format */
+        for (fmt = 0; fmt_version[fmt].reclen != 0; fmt++) {
+            size_t reclen = fmt_version[fmt].reclen;
+            if ((st.data.used % reclen) == 0 && is_valid(&st.data, fmt)) {
+                break;
+            }
+        }
+
+        if (fmt_version[fmt].reclen == 0) {
+            fatal(MYNAME ": Can't autodetect data format\n");
+        }
+
+        wbt200_process_data(&st, fmt);
+    }
+
+    state_empty(&st);
 }
 
 static void data_read(void) {
