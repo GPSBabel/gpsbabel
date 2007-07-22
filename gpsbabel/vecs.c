@@ -398,13 +398,19 @@ vecs_t vec_list[] = {
                 &wbt_svecs,
                 "wbt",
                 "Wintec WBT-100/200 GPS Download",
-                "bin"
+                NULL
         },
         {
                 &wbt_fvecs,
                 "wbt-bin",
-                "Wintec WBT-100/200 Binary file format",
-                NULL
+                "Wintec WBT-100/200 Binary File Format",
+                "bin"
+        },
+        {
+                &wbt_fvecs,
+                "wbt-tk1",
+                "Wintec WBT-201/G-Rays 2 Binary File Format",
+                "tk1"
         },
         {
                 &hiketech_vecs,
