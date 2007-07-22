@@ -83,20 +83,9 @@ static struct {
 #define RETRIES     60
 
 /*
-    A conversation looks like this
-
-    >> $PFST,FIRMWAREVERSION
-    << $PFST,FIRMWAREVERSION,WBT200,3,31,6090,R2*77
-    >> $PFST,NORMAL
-    << $PFST,NORMAL,*02
-    >> $PFST,READLOGGER
-    << $PFST,READLOGGER,*17
-    << 0xFFFF, <length>, 0xFFFF
-    << (length + 1) * 12 or 16 bytes of data
-    << ====
-    >> $PFST,NORMAL
-    << $PFST,NORMAL,*02
-*/
+ * For WBT-200 protocol documentation see:
+ *   http://hexten.net/wiki/index.php/WBT-200_Comms_Protocol
+ */
 
 static void *fd;
 static FILE *fl;
@@ -133,7 +122,7 @@ struct buf_head {
 };
 
 struct read_state {
-	route_head	        *route_head;
+    route_head          *route_head;
     unsigned            wpn, tpn;
 
     struct buf_head     data;
@@ -406,7 +395,10 @@ static void file_deinit(void) {
 }
 
 static int starts_with(const char *buf, const char *pat) {
-    return memcmp(buf, pat, strlen(pat)) == 0;
+    size_t pat_len = strlen(pat);
+    return (pat_len <= strlen(buf))
+                ? (memcmp(buf, pat, pat_len) == 0) 
+                : 0;
 }
 
 /* Send a command then wait for a line starting with the command string
@@ -496,16 +488,16 @@ static int check_date(gbuint32 tim) {
 
 static waypoint *make_point(double lat, double lon, double alt, time_t tim, const char *fmt, int index) {
     char     wp_name[20];
-	waypoint *wpt = waypt_new();
+    waypoint *wpt = waypt_new();
 
-	sprintf(wp_name, fmt, index);
+    sprintf(wp_name, fmt, index);
 
-	wpt->latitude	    = lat;;
-	wpt->longitude	    = lon;
-	wpt->altitude       = alt;
-	wpt->creation_time  = tim;
-	wpt->shortname      = xstrdup(wp_name);
-	
+    wpt->latitude       = lat;;
+    wpt->longitude      = lon;
+    wpt->altitude       = alt;
+    wpt->creation_time  = tim;
+    wpt->shortname      = xstrdup(wp_name);
+    
     return wpt;
 }
 
@@ -521,8 +513,8 @@ static int wbt200_data_chunk(struct read_state *st, const void *buf, int fmt) {
     gbuint32   tim;
     double     lat, lon, alt;
     time_t     rtim;
-	waypoint   *tpt     = NULL;
-	const char *bp      = buf;
+    waypoint   *tpt     = NULL;
+    const char *bp      = buf;
     size_t     buf_used = fmt_version[fmt].reclen;
 
     tim = le_read32(bp + 0);
@@ -552,13 +544,13 @@ static int wbt200_data_chunk(struct read_state *st, const void *buf, int fmt) {
 
     tpt = make_trackpoint(st, lat, lon, alt, rtim);
 
-	if (NULL == st->route_head)	{
-	    db(1, "New Track\n");
-		st->route_head = route_head_alloc();
-		track_add_head(st->route_head);
-	}
+    if (NULL == st->route_head) {
+        db(1, "New Track\n");
+        st->route_head = route_head_alloc();
+        track_add_head(st->route_head);
+    }
 
-	track_add_wpt(st->route_head, tpt);
+    track_add_wpt(st->route_head, tpt);
 
     return 1;
 }
@@ -746,7 +738,7 @@ static int wbt201_data_chunk(struct read_state *st, const void *buf) {
     double      lat, lon, alt;
     time_t      rtim;
     waypoint    *tpt     = NULL;
-	const char  *bp      = buf;
+    const char  *bp      = buf;
 
     /* Zero records are skipped */
     if (all_null(buf, RECLEN_WBT201)) {
@@ -779,13 +771,13 @@ static int wbt201_data_chunk(struct read_state *st, const void *buf) {
 
         tpt = make_trackpoint(st, lat, lon, alt, rtim);
 
-    	if (NULL == st->route_head)	{
-    	    db(1, "New Track\n");
-    		st->route_head = route_head_alloc();
-    		track_add_head(st->route_head);
-    	}
+        if (NULL == st->route_head) {
+            db(1, "New Track\n");
+            st->route_head = route_head_alloc();
+            track_add_head(st->route_head);
+        }
 
-    	track_add_wpt(st->route_head, tpt);
+        track_add_wpt(st->route_head, tpt);
     }
 
     return 1;
@@ -796,12 +788,10 @@ static void wbt201_process_chunk(struct read_state *st) {
 
     db(2, "Processing %lu bytes of data\n", st->data.used);
 
-    do {
-        size_t got = buf_read(&st->data, buf, sizeof(buf));
-        if (got != sizeof(buf)) {
-            break;
-        }
-    } while (wbt201_data_chunk(st, buf));
+    while (buf_read(&st->data, buf, sizeof(buf)) == sizeof(buf) 
+               && wbt201_data_chunk(st, buf)) {
+        /* do nothing */
+    }
 }
 
 static int wbt201_read_chunk(struct read_state *st, unsigned pos, unsigned limit) {
@@ -937,6 +927,10 @@ static void file_read(void) {
         fatal(MYNAME ": Read error\n");
     }
 
+    /* Although wbt-tk1 and wbt-bin are enumerated as distinct formats
+     * we handle them both here and autodetect which type we have. 
+     */
+
     /* WBT201 TK1 format? */
 
     buf_rewind(&st.data);
@@ -985,6 +979,8 @@ static void data_read(void) {
     }
 }
 
+/* wbt */
+
 static arglist_t wbt_sargs[] = {
     { "erase", &erase, "Erase device data after download",
         "0", ARGTYPE_BOOL, ARG_NOMINMAX },
@@ -1004,6 +1000,8 @@ ff_vecs_t wbt_svecs = {
     wbt_sargs,
     CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
 };
+
+/* used for wbt-bin /and/ wbt-tk1 */
 
 static arglist_t wbt_fargs[] = {
     ARG_TERMINATOR
