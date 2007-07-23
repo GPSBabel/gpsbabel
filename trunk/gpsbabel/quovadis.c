@@ -22,16 +22,12 @@
 #include "quovadis.h"
 
 #if PDBFMTS_ENABLED
-static FILE *file_in;
-static FILE *file_out;
-static const char *out_fname;
-static struct pdb *opdb;
+static pdbfile *file_in, *file_out;
 
-static int ct;
-static ubyte* rec_ptr = NULL;
-static ubyte* current_rec = NULL;
+static gbuint8* rec_ptr = NULL;
+static gbuint8* current_rec = NULL;
 static int rec_index = 0;
-
+static int ct;
 static char *dbname = NULL;
 
 static
@@ -77,13 +73,13 @@ static int wpt_to_icon(geocache_type	type) {
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = pdb_open(fname, MYNAME);
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(file_in);
+	pdb_close(file_in);
 	if ( dbname ) {
 	    xfree(dbname);
 	    dbname = NULL;
@@ -93,14 +89,14 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "wb", MYNAME);
-	out_fname = fname;
+	file_out = pdb_create(fname, MYNAME);
+	ct = 0;
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	pdb_close(file_out);
 	if ( dbname ) {
 	    xfree(dbname);
 	    dbname = NULL;
@@ -111,21 +107,16 @@ static void
 data_read(void)
 {
     struct record *rec;
-    struct pdb *pdb;
-    struct pdb_record *pdb_rec;
+    pdbrec_t *pdb_rec;
     int	i;
 
-    if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
-	fatal(MYNAME ": pdb_Read failed\n");
-    }
-
-    if ((pdb->creator != MYCREATOR) || (pdb->type != MYTYPE)) {
+    if ((file_in->creator != MYCREATOR) || (file_in->type != MYTYPE)) {
 	fatal(MYNAME ": Not a QuoVadis file.\n");
     }
 	
     /* Ignore the first record, it contains one zero byte */
-    for(pdb_rec = pdb->rec_index.rec->next; pdb_rec; pdb_rec=pdb_rec->next) {
-	int num_recs = pdb_rec->data_len / sizeof(struct record);
+    for(pdb_rec = file_in->rec_list->next; pdb_rec; pdb_rec = pdb_rec->next) {
+	int num_recs = pdb_rec->size / sizeof(struct record);
 	for (i = 0; i < num_recs; i++) {
 	    waypoint *wpt_tmp;
 
@@ -146,7 +137,6 @@ data_read(void)
 	    waypt_add(wpt_tmp);
 	}
     } 
-    free_pdb(pdb);
 }
 
 
@@ -157,17 +147,11 @@ quovadis_writewpt(waypoint *wpt)
     int	i;
 
     if (current_rec == NULL) {
-	ubyte dummy = 0;
-	struct pdb_record *pdb_rec;
-	pdb_rec = new_Record(0, 0, ct++, 1, &dummy);
-	if (pdb_rec == NULL) {
-	    fatal(MYNAME ": libpdb couldn't create record\n");
-	}
-	if (pdb_AppendRecord(opdb, pdb_rec)) {
-	    fatal(MYNAME ": libpdb couldn't append record\n");
-	}
+	gbuint8 dummy = 0;
+	
+	pdb_write_rec(file_out, 0, 0, ct++, &dummy, 1);
 
-	current_rec = (ubyte *) xcalloc(MAXCHUNKSIZE, 1);
+	current_rec = (gbuint8 *) xcalloc(MAXCHUNKSIZE, 1);
 	rec_index = 0;
 	rec_ptr = current_rec;
     }
@@ -227,22 +211,18 @@ data_write(void)
 	extern queue waypt_head;
         waypoint *waypointp;
 
-	if (NULL == (opdb = new_pdb())) { 
-		fatal (MYNAME ": new_pdb failed\n");
-	}
-
 	if ( dbname ) {
-	    strncpy( opdb->name, dbname, PDB_DBNAMELEN );
+	    strncpy( file_out->name, dbname, PDB_DBNAMELEN );
 	}
 	else {
-	    strncpy(opdb->name, "QuoVadisMarkerDB", PDB_DBNAMELEN);
+	    strncpy(file_out->name, "QuoVadisMarkerDB", PDB_DBNAMELEN);
 	}
-	opdb->name[PDB_DBNAMELEN-1] = 0;
-	opdb->attributes = PDB_ATTR_BACKUP;
-	opdb->ctime = opdb->mtime = current_time() + 2082844800U;
-	opdb->type = MYTYPE;  /* CWpt */
-	opdb->creator = MYCREATOR; /* cGPS */
-	opdb->version = 1;
+	file_out->name[PDB_DBNAMELEN-1] = 0;
+	file_out->attr = PDB_FLAG_BACKUP;
+	file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+	file_out->type = MYTYPE;  /* CWpt */
+	file_out->creator = MYCREATOR; /* cGPS */
+	file_out->version = 1;
 
 	/*
 	 * All this is to sort by waypoint names before going to QuoVadis.
@@ -265,21 +245,10 @@ data_write(void)
 	}
 
 	if (rec_index != 0) {
-	    struct pdb_record* pdb_rec;
-	    pdb_rec = new_Record(0, 0, ct++, (uword) (rec_index *
-				 sizeof(struct record)), current_rec);
-	
-	    if (pdb_rec == NULL) {
-		fatal(MYNAME ": libpdb couldn't create record\n");
-	    }
-
-	    if (pdb_AppendRecord(opdb, pdb_rec)) {
-		fatal(MYNAME ": libpdb couldn't append record\n");
-	    }
+	    pdb_write_rec(file_out, 0, 0, ct++, current_rec, rec_index * sizeof(struct record));
 	}
 	xfree(current_rec);
 
-	pdb_Write(opdb, fileno(file_out));
 	xfree(htable);
 }
 

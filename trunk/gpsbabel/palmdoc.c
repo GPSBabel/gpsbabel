@@ -26,23 +26,20 @@
 #if PDBFMTS_ENABLED
 #include "jeeps/gpsmath.h"
 #include <ctype.h>
-#include "coldsync/palm.h"
-#include "coldsync/pdb.h"
+#include "pdbfile.h"
 
-static FILE *file_out;
+static pdbfile *file_out;
 static short_handle mkshort_handle;
 static short_handle mkshort_bookmark_handle;
 static const char *out_fname;
-static struct pdb *opdb;
-static struct pdb_record *opdb_rec;
 
 static char *suppresssep = NULL;
 static char *dbname = NULL;
 static char *bmid = NULL;
 static char *includelogs = NULL;
 
-static int ct = 1;
-static int offset = 0;
+static int ct;
+static int offset;
 
 static char *palm_encrypt;
 
@@ -257,16 +254,8 @@ static void write_header( void ) {
 		--recs;
 	}
 	
-	opdb_rec = new_Record (0, 0, 0, 
-		(uword) (sizeof(struct doc_record0)+sizeof(short)*(ct-1)), (const ubyte *)rec0);
+	pdb_write_rec(file_out, 0, 0, 0, (void *)rec0, sizeof(struct doc_record0) + sizeof(short)*(ct-1));
 
-	if (opdb_rec == NULL) {
-		fatal(MYNAME ": libpdb couldn't create summary record\n");
-	}
-
-	if (pdb_InsertRecord(opdb, NULL, opdb_rec)) {
-		fatal(MYNAME ": libpdb couldn't insert summary record\n");
-	}
 	xfree(rec0);
 }
 
@@ -294,16 +283,7 @@ static void write_bookmarks( void ) {
 		memset( rec.text, 0, 16 );
 		strncpy( rec.text, oldmark->text, 16 );
 		
-		opdb_rec = new_Record( 0, 0, ct++, 
-				sizeof(struct bookmark_record),
-					(const ubyte *)&rec );
-		if (opdb_rec == NULL) {
-			fatal(MYNAME ": libpdb couldn't create bookmark record\n");
-		}
-
-		if (pdb_AppendRecord(opdb, opdb_rec)) {
-			fatal(MYNAME ": libpdb couldn't append bookmark record\n");
-		}
+		pdb_write_rec(file_out, 0, 0, ct++, (void *)&rec, sizeof(struct bookmark_record));
 
 		xfree( oldmark );
 	} 
@@ -318,16 +298,7 @@ static void commit_buffer( void ) {
 
 	pd_compress( &buf );
 	
-        opdb_rec = new_Record (0, 0, ct++, (uword) buf.len, (const ubyte *)buf.data);
-
-        if (opdb_rec == NULL) {
-                fatal(MYNAME ": libpdb couldn't create record\n");
-        }
-
-        if (pdb_AppendRecord(opdb, opdb_rec)) {
-                fatal(MYNAME ": libpdb couldn't append record\n");
-        }
-
+	pdb_write_rec(file_out, 0, 0, ct++, (void *)buf.data, buf.len);
 }
 
 static void create_bookmark( char *bmtext ) {
@@ -385,7 +356,7 @@ static void docfinish() {
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "wb", MYNAME);
+	file_out = pdb_create(fname, MYNAME);
         out_fname = fname;
 		
 	mkshort_handle = mkshort_new_handle();
@@ -400,7 +371,7 @@ wr_init(const char *fname)
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	pdb_close(file_out);
 	mkshort_del_handle(&mkshort_handle);
 	mkshort_del_handle(&mkshort_bookmark_handle);
 	
@@ -581,30 +552,23 @@ palmdoc_disp(const waypoint *wpt)
 		docprintf(50, "---------------------------\n");
 	else
 		docprintf(10, "\n");
-		
-	
 }
 
 static void
 data_write(void)
 {
-	
-        if (NULL == (opdb = new_pdb())) {
-                fatal (MYNAME ": new_pdb failed\n");
-        }
-
         if ( dbname ) {
-            strncpy( opdb->name, dbname, PDB_DBNAMELEN );
+            strncpy( file_out->name, dbname, PDB_DBNAMELEN );
         }
         else {
-            strncpy(opdb->name, out_fname, PDB_DBNAMELEN);
+            strncpy(file_out->name, out_fname, PDB_DBNAMELEN);
         }
-        opdb->name[PDB_DBNAMELEN-1] = 0;
-        opdb->attributes = PDB_ATTR_BACKUP;
-        opdb->ctime = opdb->mtime = current_time() + 2082844800U;
-        opdb->type = DOC_TYPE; 
-        opdb->creator = DOC_CREATOR;
-        opdb->version = 1;
+        file_out->name[PDB_DBNAMELEN-1] = 0;
+        file_out->attr = PDB_FLAG_BACKUP;
+        file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+        file_out->type = DOC_TYPE; 
+        file_out->creator = DOC_CREATOR;
+        file_out->version = 1;
 	
 	if (! suppresssep) 
 		docprintf(50, "---------------------------\n");
@@ -614,7 +578,6 @@ data_write(void)
 	waypt_disp_all(palmdoc_disp);
 
         docfinish();	
-	pdb_Write(opdb, fileno(file_out));
 }
 
 

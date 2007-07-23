@@ -31,9 +31,8 @@
 #include <ctype.h>
 #include "defs.h"
 #if PDBFMTS_ENABLED
-#include "coldsync/palm.h"
-#include "coldsync/pdb.h"
 #include "csv_util.h"
+#include "pdbfile.h"
 #include "strptime.h"
 
 #define MYNAME "pathaway"
@@ -42,13 +41,13 @@
 #define PPDB_MAGIC_WPT  0x506f4c69		/* PoLi */
 #define PPDB_MAGIC	0x4b6e5772 		/* KwNr */
 
-static FILE *fd_in, *fd_out;
-static struct pdb *pdb_in, *pdb_out;
-static char *fname_in, *fname_out;
+static pdbfile *file_in, *file_out;
+static char *fname_out;
 static short_handle mkshort_handle;
 static gpsdata_type ppdb_type;
 static unsigned char german_release = 0;
 static char *datefmt;
+static int ct;
 
 typedef struct ppdb_appdata
 {
@@ -369,22 +368,19 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 }
 
 static 
-int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_rec, route_head *head, int isRoute)
+int ppdb_read_wpt(route_head *head, int isRoute)
 {
 	char *data, *str;
 	double altfeet;
 	struct tm tm;
 	
-	for (pdb_rec = pdb_in->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) 
-	{
+	while (pdb_read_rec(file_in, NULL, NULL, NULL, (void *)&data) >= 0) {
 		waypoint *wpt_tmp = waypt_new();
 		int line = 0;
+		char *tmp = data;
 
-		data = (char *) pdb_rec->data;
-		str = csv_lineparse(data, ",", """", line++);
-
-		while (str != NULL)
-		{
+		while ((str = csv_lineparse(tmp, ",", """", line++))) {
+		    tmp = NULL;
 		    switch(line)
 		    {
 			case 1:
@@ -422,7 +418,6 @@ int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_rec, ro
 			    break;
 			    
 		    }
-		    str = csv_lineparse(NULL, ",", """", line++);
 		}
 		
 		if (head && isRoute )
@@ -442,9 +437,9 @@ int ppdb_read_wpt(const struct pdb *pdb_in, const struct pdb_record *pdb_rec, ro
 
 static void ppdb_rd_init(const char *fname)
 {
-	fname_in = xstrdup(fname);
 	str_pool_init();
-	fd_in = xfopen(fname, "rb", MYNAME);
+	file_in = pdb_open(fname, MYNAME);
+	ct = 0;
 	
 	if (opt_date)
 		datefmt = convert_human_date_format(opt_date);
@@ -454,34 +449,29 @@ static void ppdb_rd_init(const char *fname)
 
 static void ppdb_rd_deinit(void)
 {
-	fclose(fd_in);
+	pdb_close(file_in);
 	str_pool_deinit();
-	xfree(fname_in);
 	if (datefmt) xfree(datefmt);
 }
 
 static void ppdb_read(void)
 {
-	struct pdb_record *pdb_rec = NULL;
 	ppdb_appdata_t *info = NULL;
 	route_head *track_head, *route_head;
 	const char *descr = NULL;
 
-	if (NULL == (pdb_in = pdb_Read(fileno(fd_in))))
-	    fatal(MYNAME ": pdb_Read failed.\n");
-	    
-	if (pdb_in->creator != PPDB_MAGIC)	/* identify the database */
+	if (file_in->creator != PPDB_MAGIC)	/* identify the database */
 	    fatal(MYNAME ": Not a PathAway pdb file.\n");
 
-	if (pdb_in->version != 3)	/* Currently we support only version 3 */
-	    fatal(MYNAME ": This file is from an untested version (%d) of PathAway and is unsupported.\n", pdb_in->version);
+	if (file_in->version != 3)	/* Currently we support only version 3 */
+	    fatal(MYNAME ": This file is from an untested version (%d) of PathAway and is unsupported.\n", file_in->version);
 
-	if ((pdb_in->appinfo_len > 0) && (pdb_in->appinfo != NULL))
+	if ((file_in->appinfo_len > 0) && (file_in->appinfo != NULL))
 	{
-	    info = (ppdb_appdata_t *) pdb_in->appinfo;
+	    info = (ppdb_appdata_t *) file_in->appinfo;
 	    descr = info->vehicleStr;
 	}
-	switch(pdb_in->type)
+	switch(file_in->type)
 	{
 	    case PPDB_MAGIC_TRK:
 		ppdb_type = trkdata; /* as default */
@@ -514,24 +504,22 @@ static void ppdb_read(void)
 	    case trkdata:
 		track_head = route_head_alloc();
 		track_add_head(track_head);
-		track_head->rte_name = xstrdup(pdb_in->name);
-		ppdb_read_wpt(pdb_in, pdb_rec, track_head, 0);
+		track_head->rte_name = xstrdup(file_in->name);
+		ppdb_read_wpt(track_head, 0);
 		break;
 	    case rtedata:
 		route_head = route_head_alloc();
 		route_add_head(route_head);
-		route_head->rte_name = xstrdup(pdb_in->name);
-		ppdb_read_wpt(pdb_in, pdb_rec, route_head, 1);
+		route_head->rte_name = xstrdup(file_in->name);
+		ppdb_read_wpt(route_head, 1);
 		break;
 	    case wptdata:
-		ppdb_read_wpt(pdb_in, pdb_rec, NULL, 0);
+		ppdb_read_wpt(NULL, 0);
 		break;
 	    case posndata:
 		fatal(MYNAME ": Realtime positioning not supported.\n");
 		break;
 	}
-	
-	free_pdb(pdb_in);
 }
 
 /* ============================================================================================
@@ -544,8 +532,9 @@ static void ppdb_wr_init(const char *fname)
 
 	fname_out = xstrdup(fname);
 	str_pool_init();
-	fd_out = xfopen(fname, "wb", MYNAME);
+	file_out = pdb_create(fname, MYNAME);
 	mkshort_handle = mkshort_new_handle();
+	ct = 0;
 	
 	if (global_opts.synthesize_shortnames != 0)
 	{
@@ -568,7 +557,7 @@ static void ppdb_wr_init(const char *fname)
 static void ppdb_wr_deinit(void)
 {
 	mkshort_del_handle(&mkshort_handle);
-	fclose(fd_out);
+	pdb_close(file_out);
 	str_pool_deinit();
 	xfree(fname_out);
 	if (datefmt) xfree(datefmt);
@@ -585,8 +574,6 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	char *buff, *tmp;
 	char latdir, longdir;
 	int len;
-	struct pdb_record *rec;
-	static int ct;
 	struct tm tm;
 	
 	buff = xcalloc(REC_SIZE, 1);
@@ -653,13 +640,7 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	    buff = ppdb_strcat(buff, tmp, "", &len);
 
 	len = strlen(buff) + 1;
-	rec = new_Record(0, 0, (udword)ct++, (uword)len, (const ubyte *) buff);
-
-	if (rec == NULL) 
-	    fatal(MYNAME ": libpdb couldn't create record\n");
-
-	if (pdb_AppendRecord(pdb_out, rec)) 
-	    fatal(MYNAME ": libpdb couldn't append record\n");
+	pdb_write_rec(file_out, 0, 0, ct++, buff, len);
 	    
 	xfree(buff);
 }
@@ -668,64 +649,51 @@ static void ppdb_write_wpt(const waypoint *wpt)
  * track and route write callbacks
  */
  
-static void ppdb_track_header(const route_head *rte)
-{
-}
-
-static void ppdb_track_trailer(const route_head *rte)
-{
-}
-
-
 static void ppdb_write(void)
 {
 	ppdb_appdata_t *appinfo = NULL;
 	
-	if (NULL == (pdb_out = new_pdb()))
-	    fatal(MYNAME ": new_pdb failed\n");
 	if (opt_dbname)
-	    strncpy(pdb_out->name, opt_dbname, PDB_DBNAMELEN);
+	    strncpy(file_out->name, opt_dbname, PDB_DBNAMELEN);
 	    
-	pdb_out->name[PDB_DBNAMELEN-1] = 0;
-	pdb_out->attributes = PDB_ATTR_BACKUP;
-	pdb_out->ctime = pdb_out->mtime = current_time() + 2082844800U;
-	pdb_out->creator = PPDB_MAGIC;
-	pdb_out->version = 3;
+	file_out->name[PDB_DBNAMELEN-1] = 0;
+	file_out->attr = PDB_FLAG_BACKUP;
+	file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+	file_out->creator = PPDB_MAGIC;
+	file_out->version = 3;
 	
 	if (global_opts.objective != wptdata)	/* Waypoint target do not need appinfo block */
 	{
 	    appinfo = xcalloc(PPDB_APPINFO_SIZE, 1);
 	    
-	    pdb_out->appinfo = (void *)appinfo;
-	    pdb_out->appinfo_len = PPDB_APPINFO_SIZE;
+	    file_out->appinfo = (void *)appinfo;
+	    file_out->appinfo_len = PPDB_APPINFO_SIZE;
 	}
 	
 	switch(global_opts.objective)		/* Only one target is possible */
 	{
 	    case wptdata:
-		if (opt_dbname == NULL) strncpy(pdb_out->name, "PathAway Waypoints", PDB_DBNAMELEN);
-		pdb_out->type = PPDB_MAGIC_WPT;
+		if (opt_dbname == NULL) strncpy(file_out->name, "PathAway Waypoints", PDB_DBNAMELEN);
+		file_out->type = PPDB_MAGIC_WPT;
 		waypt_disp_all(ppdb_write_wpt);
 		break;
 	    case trkdata:
-		if (opt_dbname == NULL) strncpy(pdb_out->name, "PathAway Track", PDB_DBNAMELEN);
-		pdb_out->type = PPDB_MAGIC_TRK;
+		if (opt_dbname == NULL) strncpy(file_out->name, "PathAway Track", PDB_DBNAMELEN);
+		file_out->type = PPDB_MAGIC_TRK;
 		appinfo->dataBaseSubType = 0;
-		track_disp_all(ppdb_track_header, ppdb_track_trailer, ppdb_write_wpt);
+		track_disp_all(NULL, NULL, ppdb_write_wpt);
 		break;
 	    case rtedata:
-		if (opt_dbname == NULL) strncpy(pdb_out->name, "PathAway Route", PDB_DBNAMELEN);
-		pdb_out->type = PPDB_MAGIC_TRK;
+		if (opt_dbname == NULL) strncpy(file_out->name, "PathAway Route", PDB_DBNAMELEN);
+		file_out->type = PPDB_MAGIC_TRK;
 		appinfo->dataBaseSubType = 1;
-		route_disp_all(ppdb_track_header, ppdb_track_trailer, ppdb_write_wpt);
+		route_disp_all(NULL, NULL, ppdb_write_wpt);
 		break;
 	    case posndata:
 		fatal(MYNAME ": Realtime positioning not supported.\n");
 		break;
 	}
 
-	pdb_Write(pdb_out, fileno(fd_out));
-	
 	if (appinfo != NULL) xfree(appinfo);
 }
 

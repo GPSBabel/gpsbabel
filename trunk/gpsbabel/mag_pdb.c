@@ -26,8 +26,7 @@
 
 #include "defs.h"
 #if PDBFMTS_ENABLED
-#include "coldsync/palm.h"
-#include "coldsync/pdb.h"
+#include "pdbfile.h"
 #include "jeeps/gpsmath.h"
 
 #define MYNAME "mag_pdb"
@@ -35,9 +34,7 @@
 #define PROUTE_MAGIC	0x766d6170 		/* vmap */
 #define PROUTE_ROUTE	0x49444154		/* IDAT */
 
-static FILE *fd_in;
-static struct pdb *pdb_in;
-static char *fname_in;
+static pdbfile *file_in;
 
 static arglist_t magpdb_args[] = 
 {
@@ -185,34 +182,28 @@ magpdb_read_data(const char *data, const size_t data_len)
 
 static void magpdb_rd_init(const char *fname)
 {
-	fname_in = xstrdup(fname);
-	fd_in = xfopen(fname, "rb", MYNAME);
+	file_in = pdb_open(fname, MYNAME);
 }
 
 static void magpdb_rd_deinit(void)
 {
-	fclose(fd_in);
-	xfree(fname_in);
+	pdb_close(file_in);
 }
 
 static void magpdb_read(void)
 {
-	struct pdb_record *pdb_rec = NULL;
-
+	pdbrec_t *pdb_rec;
 	
-	pdb_in = pdb_Read(fileno(fd_in));
-	is_fatal((pdb_in == NULL), MYNAME ": read failed.");
-	    
-	is_fatal((pdb_in->creator != PROUTE_MAGIC),	/* identify the database */
-		MYNAME ": Not a Map&Guide pdb file (0x%08x).", pdb_in->creator);
+	is_fatal((file_in->creator != PROUTE_MAGIC),	/* identify the database */
+		MYNAME ": Not a Map&Guide pdb file (0x%08x).", file_in->creator);
 
-	is_fatal((pdb_in->version != 0), 		/* only version "0" currently seen and tested */
-		MYNAME ": This file is from an unsupported version (%d) of Map&Guide and is unsupported.", pdb_in->version + 5);
+	is_fatal((file_in->version != 0), 		/* only version "0" currently seen and tested */
+		MYNAME ": This file is from an unsupported version (%d) of Map&Guide and is unsupported.", file_in->version + 5);
 
-	is_fatal((pdb_in->type != PROUTE_ROUTE),
-		MYNAME ": Unknown pdb data type (0x%08x).", pdb_in->type);
+	is_fatal((file_in->type != PROUTE_ROUTE),
+		MYNAME ": Unknown pdb data type (0x%08x).", file_in->type);
 
-	for (pdb_rec = pdb_in->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) 
+	for (pdb_rec = file_in->rec_list; pdb_rec; pdb_rec = pdb_rec->next) 
 	{
 		char *data = (char *)pdb_rec->data;
 
@@ -222,7 +213,6 @@ static void magpdb_read(void)
 			magpdb_read_data(data + 4, len);
 		}
 	}
-	free_pdb(pdb_in);
 }
 
 /* ======================================================================================= */

@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /WX /GX /O2 /I "expat" /I "..\coldsync" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "__WIN32__" /D VERSION=\"1.2.6_beta06232005_msvc\" /YX /FD /c
+# ADD CPP /nologo /W3 /WX /GX /O2 /I "expat" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "__WIN32__" /D VERSION=\"1.2.6_beta06232005_msvc\" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -66,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /WX /Gm /GX /ZI /Od /I "expat" /I "..\coldsync" /D "WIN32" /D "__WIN32__" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D VERSION=\"1.2.6_beta06232005_msvc\" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /WX /Gm /GX /ZI /Od /I "expat" /D "WIN32" /D "__WIN32__" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D VERSION=\"1.2.6_beta06232005_msvc\" /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -250,40 +250,6 @@ SOURCE=..\jeeps\gpsutil.c
 !ELSEIF  "$(CFG)" == "GPSBabel - Win32 Debug"
 
 # PROP Intermediate_Dir "Debug\Jeeps"
-
-!ENDIF 
-
-# End Source File
-# End Group
-# Begin Group "Coldsync"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\coldsync\pdb.c
-
-!IF  "$(CFG)" == "GPSBabel - Win32 Release"
-
-# PROP Intermediate_Dir "Release\Coldsync"
-
-!ELSEIF  "$(CFG)" == "GPSBabel - Win32 Debug"
-
-# PROP Intermediate_Dir "Debug\Coldsync"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\coldsync\util.c
-
-!IF  "$(CFG)" == "GPSBabel - Win32 Release"
-
-# PROP Intermediate_Dir "Release\Coldsync"
-
-!ELSEIF  "$(CFG)" == "GPSBabel - Win32 Debug"
-
-# PROP Intermediate_Dir "Debug\Coldsync"
 
 !ENDIF 
 
@@ -617,26 +583,6 @@ SOURCE=.\Expat\libexpat.lib
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Group "Coldsync-Headers"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\coldsync\config.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\coldsync\palm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\coldsync\pdb.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\coldsync\pconn\util.h
-# End Source File
-# End Group
 # Begin Group "Jeeps-Headers"
 
 # PROP Default_Filter ""

@@ -21,8 +21,7 @@
 
 #include "defs.h"
 #if PDBFMTS_ENABLED
-#include "coldsync/palm.h"
-#include "coldsync/pdb.h"
+#include "pdbfile.h"
 
 #define MYNAME "Companion Waypoints"
 #define MYTYPE  0x64617461  	/* Platdata */
@@ -65,31 +64,25 @@ struct record {
 	pdb_16 lat2d;
 };
 
-static FILE *file_in;
-static FILE *file_out;
-static const char *out_fname;
+static pdbfile *file_in, *file_out;
 static short_handle mkshort_handle;
-
-struct pdb *opdb;
-struct pdb_record *opdb_rec;
 
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = pdb_open(fname, "rb", MYNAME);
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(file_in);
+	pdb_close(file_in);
 }
 
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "wb", MYNAME);
-	out_fname = fname;
+	file_out = pdb_create(fname, MYNAME);
 	mkshort_handle = mkshort_new_handle();
 	setshort_length(mkshort_handle, 20);
 }
@@ -97,7 +90,7 @@ wr_init(const char *fname)
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	pdb_close(file_out);
 	mkshort_del_handle(&mkshort_handle);
 }
 
@@ -129,18 +122,13 @@ decode(char *buf)
 	}
 }
 
-	static void
-	data_read(void)
+static void
+data_read(void)
 {
 	struct record *rec;
-	struct pdb *pdb;
-	struct pdb_record *pdb_rec;
+	pdbrec_t *pdb_rec;
 
-	if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
-		fatal(MYNAME ": pdb_Read failed\n");
-	}
-
-	if ((pdb->creator != MYCREATOR) || (pdb->type != MYTYPE)) {
+	if ((file_in->creator != MYCREATOR) || (file_in->type != MYTYPE)) {
 		fatal(MYNAME ": Not a Magellan Navigator file.\n");
 	}
 
@@ -148,14 +136,14 @@ decode(char *buf)
 	convert_rec0((struct record0*) pdb_rec->data);
 
 //	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
-	for(pdb_rec=pdb_rec->next; pdb_rec; pdb_rec=pdb_rec->next) {
+	for(pdb_rec = pdb_rec->next; pdb_rec; pdb_rec=pdb_rec->next) {
 		waypoint *wpt_tmp;
 		char *vdata = 0;
 		char *edata;
 		struct tm tm = {0};
 
 		rec = (struct record *) pdb_rec->data;
-		edata = (char *) rec + pdb_rec->data_len;
+		edata = (char *) rec + pdb_rec->sz;
 
 		for (; vdata < edata; rec = (struct record *) vdata) {
 			wpt_tmp = waypt_new();
@@ -251,15 +239,8 @@ my_writewpt(const waypoint *wpt)
 	vdata[1] = '\0';
 	vdata += 2;
 	
-	opdb_rec = new_Record (0, 0, ct++, vdata-(char *)rec, (const ubyte *)rec);
+	pdb_write(file_out, 0, rec, (char *)vdata - (char *)rec);
 
-	if (opdb_rec == NULL) {
-		fatal(MYNAME ": libpdb couldn't create record\n");
-	}
-
-	if (pdb_AppendRecord(opdb, opdb_rec)) {
-		fatal(MYNAME ": libpdb couldn't append record\n");
-	}
 	xfree(rec);
 #endif
 }
@@ -288,23 +269,17 @@ data_write(void)
 		"\0\x01\x02\x03\x04\x05\x06\x07\x08"
 		"\x09\x0a\x0b\x0c\x0d\x0e\x0f\0\0";
 	
-	if (NULL == (opdb = new_pdb())) { 
-		fatal (MYNAME ": new_pdb failed\n");
-	}
-
-	strncpy(opdb->name, "Companion Waypoints", PDB_DBNAMELEN);
-	opdb->name[PDB_DBNAMELEN-1] = 0;
-	opdb->attributes = PDB_ATTR_BACKUP;
-	opdb->ctime = opdb->mtime = current_time() + 2082844800U;
-	opdb->type = MYTYPE;  /* CWpt */
-	opdb->creator = MYCREATOR; /* cGPS */
-	opdb->version = 1;
-	opdb->appinfo = (void *)appinfo;
-	opdb->appinfo_len = 276;
+	strncpy(file_out->name, "Companion Waypoints", PDB_DBNAMELEN);
+	file_out->name[PDB_DBNAMELEN-1] = 0;
+	file_out->attr = PDB_FLAG_BACKUP;
+	file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+	file_out->type = MYTYPE;  /* CWpt */
+	file_out->creator = MYCREATOR; /* cGPS */
+	file_out->version = 1;
+	file_out->appinfo = (void *)appinfo;
+	file_out->appinfo_len = 276;
 
 	waypt_disp_all(my_writewpt);
-	
-	pdb_Write(opdb, fileno(file_out));
 }
 
 

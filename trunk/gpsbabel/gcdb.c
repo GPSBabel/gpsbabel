@@ -21,8 +21,7 @@
 
 #include "defs.h"
 #if PDBFMTS_ENABLED
-#include "coldsync/palm.h"
-#include "coldsync/pdb.h"
+#include "pdbfile.h"
 
 #define MYNAME "GeocachingDB"
 #define MYTYPE  0x44415441  	/* DATA */
@@ -48,11 +47,9 @@ struct dbrec {
 	struct dbfld dbfld[1];
 };
 
-static FILE *file_in;
-static FILE *file_out;
+static pdbfile *file_in, *file_out;
 static const char *out_fname;
-static struct pdb *opdb;
-static struct pdb_record *opdb_rec;
+static int ct;
 
 static char *tbuf = NULL;
 static char *tbufp = NULL;
@@ -60,26 +57,27 @@ static char *tbufp = NULL;
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = pdb_open(fname, MYNAME);
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(file_in);
+	pdb_close(file_in);
 }
 
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "wb", MYNAME);
+	file_out = pdb_create(fname, MYNAME);
 	out_fname = fname;
+	ct = 0;
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	pdb_close(file_out);
 	if ( tbuf ) 
 		xfree(tbuf);
 }
@@ -87,18 +85,13 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-	struct pdb *pdb;
-	struct pdb_record *pdb_rec;
+	pdbrec_t *pdb_rec;
 
-	if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
-		fatal(MYNAME ": pdb_Read failed\n");
-	}
-
-	if ((pdb->creator != MYCREATOR) || (pdb->type != MYTYPE)) {
+	if ((file_in->creator != MYCREATOR) || (file_in->type != MYTYPE)) {
 		fatal(MYNAME ": Not a GeocachingDB file.\n");
 	}
 
-	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
+	for(pdb_rec = file_in->rec_list; pdb_rec; pdb_rec=pdb_rec->next) {
 		waypoint *wpt = waypt_new();
 		struct dbrec *rec = (struct dbrec *) pdb_rec->data;
 		int nflds;
@@ -182,8 +175,6 @@ data_read(void)
 		wpt->longitude = lon_dir * (lon_deg + lon_min/60);
 		waypt_add(wpt);
 	}
-
-	free_pdb(pdb);
 }
 
 
@@ -236,7 +227,6 @@ static void
 gcdb_write_wpt(const waypoint *wpt)
 {
 	struct dbrec *rec;
-	static int ct;
 	int reclen;
 	char tbuf[100];
 
@@ -294,39 +284,23 @@ gcdb_write_wpt(const waypoint *wpt)
 	 */
 	reclen = gcdb_add_to_rec(rec, NULL, 0, NULL);
 
-	opdb_rec = new_Record(0, 2, ct++, (uword) reclen, (const ubyte *)rec);
-
-	if (opdb_rec == NULL) {
-		fatal(MYNAME ": libpdb couldn't create record\n");
-	}
-
-	if (pdb_AppendRecord(opdb, opdb_rec)) {
-		fatal(MYNAME ": libpdb couldn't append record\n");
-	}
-
+	pdb_write_rec(file_out, 0, 2, ct++, rec, reclen);
 	xfree(rec);
 }
 
 static void
 data_write(void)
 {
-	
-	if (NULL == (opdb = new_pdb())) { 
-		fatal (MYNAME ": new_pdb failed\n");
-	}
-
-	strncpy(opdb->name, out_fname, PDB_DBNAMELEN);
-	strncpy(opdb->name, "GeocachingDB", PDB_DBNAMELEN);
-	opdb->name[PDB_DBNAMELEN-1] = 0;
-	opdb->attributes = PDB_ATTR_BACKUP;
-	opdb->ctime = opdb->mtime = current_time() + 2082844800U;
-	opdb->type = MYTYPE;  /* CWpt */
-	opdb->creator = MYCREATOR; /* cGPS */
-	opdb->version = 1;
+	strncpy(file_out->name, out_fname, PDB_DBNAMELEN);
+	strncpy(file_out->name, "GeocachingDB", PDB_DBNAMELEN);
+	file_out->name[PDB_DBNAMELEN-1] = 0;
+	file_out->attr = PDB_FLAG_BACKUP;
+	file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+	file_out->type = MYTYPE;  /* CWpt */
+	file_out->creator = MYCREATOR; /* cGPS */
+	file_out->version = 1;
 
 	waypt_disp_all(gcdb_write_wpt);
-
-	pdb_Write(opdb, fileno(file_out));
 }
 
 
