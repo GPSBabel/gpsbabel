@@ -45,6 +45,7 @@ static route_head *rte_head;
 static int track_out_count;
 static int route_out_count;
 static int route_wpt_count;
+static int new_track;
 
 static char *snlenopt = NULL;
 static char *snwhiteopt = NULL;
@@ -180,6 +181,7 @@ ozi_track_hdr(const route_head * rte)
 	rte->rte_name ? rte->rte_name : "ComplimentsOfGPSBabel");
 
     track_out_count++;
+    new_track = 1;
 }
 
 static void 
@@ -196,8 +198,11 @@ ozi_track_disp(const waypoint * waypointp)
         alt_feet = METERS_TO_FEET(waypointp->altitude);
     }
 
-    gbfprintf(file_out, "%.6f,%.6f,0,%.0f,%.5f,,\r\n",
-            waypointp->latitude, waypointp->longitude, alt_feet, ozi_time);
+    gbfprintf(file_out, "%.6f,%.6f,%d,%.0f,%.5f,,\r\n",
+       	waypointp->latitude, waypointp->longitude, new_track, 
+	alt_feet, ozi_time);
+
+    new_track = 0;
 }
 
 static void
