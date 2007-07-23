@@ -26,8 +26,7 @@
 #include "defs.h"
 #if PDBFMTS_ENABLED
 #include "csv_util.h"
-#include "coldsync/palm.h"
-#include "coldsync/pdb.h"
+#include "pdbfile.h"
 #include "grtcirc.h"
 
 #define MYNAME "cotoGPS"
@@ -58,14 +57,14 @@ struct record_track {
 	pdb_double arc;		/* Course, unknown dimension */
 	pdb_double x,y;		/* Internal virtual coordinates used for drawing the track on the Palm */
 
-	word alt;		/* Altitude */
+	gbuint16 alt;		/* Altitude */
 
 	/* accuracy and precision information for use where applicable */
 	gbuint16 hdop; /* _dop * 10 */
 	gbuint16 vdop;
 	gbuint16 pdop;
-	ubyte sat_tracked;
-	ubyte fix_quality;
+	gbuint8 sat_tracked;
+	gbuint8 fix_quality;
 
 	gbuint16 speed; /* *10 */
 	gbuint32 time; /* Palm Time */
@@ -84,21 +83,20 @@ struct record_wpt {
 typedef char appinfo_category[16];
 
 typedef struct appinfo {
-	ubyte U0;
-	ubyte renamedCategories;
+	gbuint8 U0;
+	gbuint8 renamedCategories;
 	appinfo_category categories[CATEGORY_NAME_LENGTH];
-	ubyte ids[16];
-	ubyte maxid;
+	gbuint8 ids[16];
+	gbuint8 maxid;
 } appinfo_t;
 
 #define APPINFO_SIZE sizeof(appinfo_t)
 
-static FILE *file_in;
-static FILE *file_out;
+static pdbfile *file_in, *file_out;
 static const char *out_fname;
 static const char *in_fname; /* We might need that for naming tracks */
-static struct pdb *opdb;
 static short_handle  mkshort_wr_handle;
+static int ct;
 
 static char *zerocat = NULL;
 static char *internals = NULL;
@@ -115,27 +113,28 @@ arglist_t coto_args[] = {
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = pdb_open(fname, MYNAME);
 	in_fname = fname;
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(file_in);
+	pdb_close(file_in);
 }
 
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "wb", MYNAME);
+	file_out = pdb_create(fname, MYNAME);
 	out_fname = fname;
+	ct = 0;
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	pdb_close(file_out);
 }
 
 /* helpers */
@@ -157,16 +156,16 @@ coto_get_icon_descr(int category, const appinfo_t *app)
 }
 
 static void
-coto_track_read(struct pdb *pdb)
+coto_track_read(void)
 {
 	struct record_track *rec;
-	struct pdb_record *pdb_rec;
+	pdbrec_t *pdb_rec;
 	route_head *trk_head;
 	char *track_name;
 	
-	if (strncmp(pdb->name, "cotoGPS TrackDB", PDB_DBNAMELEN) != 0)
+	if (strncmp(file_in->name, "cotoGPS TrackDB", PDB_DBNAMELEN) != 0)
 		// Use database name if not default
-		track_name = xstrndup(pdb->name, PDB_DBNAMELEN);
+		track_name = xstrndup(file_in->name, PDB_DBNAMELEN);
 	else {
 		// Use filename for new track title
 		const char *fnametmp = strrchr(in_fname, '/');
@@ -187,7 +186,7 @@ coto_track_read(struct pdb *pdb)
 		
 	trk_head->rte_name = track_name;
 	
-	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next)
+	for (pdb_rec = file_in->rec_list; pdb_rec; pdb_rec = pdb_rec->next)
 	{
 		waypoint *wpt_tmp;
 
@@ -246,14 +245,14 @@ coto_track_read(struct pdb *pdb)
 }
 
 static void
-coto_wpt_read(struct pdb *pdb)
+coto_wpt_read(void)
 {
 	struct record_wpt *rec;
-	struct pdb_record *pdb_rec;
+	pdbrec_t *pdb_rec;
 	appinfo_t *app;
-	app = (struct appinfo *) pdb->appinfo;
+	app = (struct appinfo *) file_in->appinfo;
 	
-	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next)
+	for(pdb_rec = file_in->rec_list; pdb_rec; pdb_rec = pdb_rec->next)
 	{
 		waypoint *wpt_tmp;
 		char *c;
@@ -287,49 +286,42 @@ coto_wpt_read(struct pdb *pdb)
 static void
 data_read(void)
 {
-	struct pdb *pdb;
-
-	if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
-		fatal(MYNAME ": pdb_Read failed\n");
-	}
-
-	if ((pdb->creator != MYCREATOR) || ((pdb->type != MYTYPETRACK) && (pdb->type != MYTYPEWPT))) {
-		warning("Creator %x Type %x Version %d\n", (int) pdb->creator, (int) pdb->type, (int) pdb->version);
+	if ((file_in->creator != MYCREATOR) || ((file_in->type != MYTYPETRACK) && (file_in->type != MYTYPEWPT))) {
+		warning("Creator %x Type %x Version %d\n", (int) file_in->creator, (int) file_in->type, (int) file_in->version);
 		fatal(MYNAME ": Not a cotoGPS file.\n");
 	}
 	
-        is_fatal((pdb->version > 0), 
+        is_fatal((file_in->version > 0), 
 		MYNAME ": This file is from an unsupported newer version of cotoGPS.  It may be supported in a newer version of GPSBabel.\n");
 	
-	switch(pdb->type)
+	switch(file_in->type)
 	{
 		case MYTYPETRACK:
-			coto_track_read(pdb);
+			coto_track_read();
 			break;
 		case MYTYPEWPT:
-			coto_wpt_read(pdb);
+			coto_wpt_read();
 			break;
 	}
-
-	free_pdb(pdb);
 }
 
 static void
-coto_prepare_wpt_write(struct pdb *opdb)
+coto_prepare_wpt_write(void)
 {
 	struct appinfo *ai;
-	opdb->name[PDB_DBNAMELEN-1] = 0;
-	opdb->attributes = PDB_ATTR_BACKUP;
-	opdb->type = MYTYPEWPT;  
-	opdb->creator = MYCREATOR; 
-	opdb->version = 0;
+
+	file_out->name[PDB_DBNAMELEN-1] = 0;
+	file_out->attr = PDB_FLAG_BACKUP;
+	file_out->type = MYTYPEWPT;  
+	file_out->creator = MYCREATOR; 
+	file_out->version = 0;
 	
-	strncpy(opdb->name, "cotoGPS MarkerDB", PDB_DBNAMELEN);
+	strncpy(file_out->name, "cotoGPS MarkerDB", PDB_DBNAMELEN);
 	
-	opdb->appinfo_len = APPINFO_SIZE;
-	opdb->appinfo = calloc(APPINFO_SIZE,1);
+	file_out->appinfo_len = APPINFO_SIZE;
+	file_out->appinfo = calloc(APPINFO_SIZE,1);
 	
-	ai = (struct appinfo *) opdb->appinfo;
+	ai = (struct appinfo *) file_out->appinfo;
 	be_write16(&ai->renamedCategories, 31); // Don't ask me why...
 	if (zerocat)
 		strncpy(ai->categories[0], zerocat, 16);
@@ -342,13 +334,11 @@ static void
 coto_wpt_write(const waypoint *wpt)
 {
 	struct record_wpt *rec;
-	struct appinfo *ai = (struct appinfo *) opdb->appinfo;
-	static int ct;
-	struct pdb_record *opdb_rec;
+	struct appinfo *ai = (struct appinfo *) file_out->appinfo;
 	char *notes = NULL;
 	char *shortname = NULL;
 	int size;
-	ubyte cat = 0;
+	gbuint8 cat = 0;
 	int i;
 	
 	mkshort_wr_handle = mkshort_new_handle();
@@ -407,14 +397,8 @@ coto_wpt_write(const waypoint *wpt)
 		}
 	}
 	
-	opdb_rec = new_Record (0, cat, ct++, size, (const ubyte *)rec);
+	pdb_write_rec(file_out, 0, cat, ct++, (const gbuint8 *)rec, size);
 	
-	if (opdb_rec == NULL)
-		fatal(MYNAME ": libpdb couldn't create record\n");
-
-	if (pdb_AppendRecord(opdb, opdb_rec))
-		fatal(MYNAME ": libpdb couldn't append record\n");
-
 	xfree(shortname);
 	xfree(rec);
 	
@@ -424,22 +408,8 @@ coto_wpt_write(const waypoint *wpt)
 static void
 data_write(void)
 {
-	if (NULL == (opdb = new_pdb())) { 
-		fatal (MYNAME ": new_pdb failed\n");
-	}
-	
-	coto_prepare_wpt_write(opdb);
-	
+	coto_prepare_wpt_write();
 	waypt_disp_all(coto_wpt_write);
-	/* 
-	if we want waypoints from all data, we should create a new filter for that
-	
-	track_disp_all(NULL, NULL, coto_wpt_write);
-	route_disp_all(NULL, NULL, coto_wpt_write);
-	*/
-	
-	pdb_Write(opdb, fileno(file_out));
-	
 }
 
 

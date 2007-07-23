@@ -21,8 +21,7 @@
 
 #include "defs.h"
 #if PDBFMTS_ENABLED
-#include "coldsync/palm.h"
-#include "coldsync/pdb.h"
+#include "pdbfile.h"
 #include "grtcirc.h"
 
 #define MYNAME			"CoPilot Waypoint"
@@ -37,7 +36,7 @@ struct record0 {
 	pdb_double	latitude; 	/* PDB double format, */
 	pdb_double	longitude; 	/* similarly, neg = east */
 	pdb_double	magvar; 	/* magnetic variation in degrees, neg = east */
-	udword		elevation; 	/* feet */
+	gbuint32	elevation; 	/* feet */
 };
 
 struct record1 {
@@ -62,39 +61,38 @@ struct record4 {
 	pdb_float	elevation; 	/* feet */
 };
 
-static FILE *file_in;
-static FILE *file_out;
+static pdbfile *file_in, *file_out;
 static const char *out_fname;
-static struct pdb *opdb;
-static struct pdb_record *opdb_rec;
+static int ct;
 
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = pdb_open(fname, MYNAME);
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(file_in);
+	pdb_close(file_in);
 }
 
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "wb", MYNAME);
+	file_out = pdb_create(fname, MYNAME);
 	out_fname = fname;
+	ct = 0;
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	pdb_close(file_out);
 }
 
 static waypoint*
-read_version0(ubyte* data)
+read_version0(void *data)
 {
   char *vdata;
   waypoint *wpt_tmp;
@@ -122,7 +120,7 @@ read_version0(ubyte* data)
 }
 
 static waypoint*
-read_version1(ubyte* data)
+read_version1(void *data)
 {
   char *vdata;
   waypoint *wpt_tmp;
@@ -151,7 +149,7 @@ read_version1(ubyte* data)
 }
 
 static waypoint*
-read_version3(ubyte* data)
+read_version3(void *data)
 {
   char *vdata;
   waypoint *wpt_tmp;
@@ -180,7 +178,7 @@ read_version3(ubyte* data)
 }
 
 static waypoint*
-read_version4(ubyte* data)
+read_version4(void *data)
 {
   char *vdata;
   waypoint *wpt_tmp;
@@ -211,27 +209,22 @@ read_version4(ubyte* data)
 static void
 data_read(void)
 {
-	struct pdb *pdb;
-	struct pdb_record *pdb_rec;
+	pdbrec_t *pdb_rec;
 
-	if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
-		fatal(MYNAME ": pdb_Read failed\n");
-	}
-
-	if ((pdb->creator != GXPU_CREATOR && pdb->creator != AP_P_CREATOR) ||
-		(pdb->type != wayp_TYPE && pdb->type != swpu_TYPE &&
-		pdb->type != wayu_TYPE)) {
+	if ((file_in->creator != GXPU_CREATOR && file_in->creator != AP_P_CREATOR) ||
+		(file_in->type != wayp_TYPE && file_in->type != swpu_TYPE &&
+		file_in->type != wayu_TYPE)) {
 		fatal(MYNAME ": Not a CoPilot file.\n");
 	}
-	if (pdb->version > 4) {
-	  fatal(MYNAME ": %d is not a known version.\n", pdb->version);
+	if (file_in->version > 4) {
+	  fatal(MYNAME ": %d is not a known version.\n", file_in->version);
 	}
 
 
-	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
+	for(pdb_rec = file_in->rec_list; pdb_rec; pdb_rec = pdb_rec->next) {
 		waypoint *wpt_tmp;
 
-		switch (pdb->version)
+		switch (file_in->version)
 		{
 		case 0:
 		  wpt_tmp = read_version0(pdb_rec->data);
@@ -247,19 +240,16 @@ data_read(void)
 		  wpt_tmp = read_version4(pdb_rec->data);
 		  break;
 		default:
-		  fatal(MYNAME ": Unknown version %d.\n", pdb->version);
+		  fatal(MYNAME ": Unknown version %d.\n", file_in->version);
 		}
 		waypt_add(wpt_tmp);
-
 	} 
-	free_pdb(pdb);
 }
 
 static void
 copilot_writewpt(const waypoint *wpt)
 {
 	struct record4 *rec;
-	static int ct = 0;
 	char *vdata;
 
 	rec = xcalloc(sizeof(*rec)+1141,1);
@@ -297,36 +287,23 @@ copilot_writewpt(const waypoint *wpt)
 	}
 	vdata += strlen( vdata ) + 1;
 
-	opdb_rec = new_Record (0, 2, ct++, (uword) (vdata-(char *)rec), (const ubyte *)rec);	       
+	pdb_write_rec(file_out, 0, 2, ct++, rec, (char *)vdata - (char *)rec);	       
 
-	if (opdb_rec == NULL) {
-		fatal(MYNAME ": libpdb couldn't create record\n");
-	}
-
-	if (pdb_AppendRecord(opdb, opdb_rec)) {
-		fatal(MYNAME ": libpdb couldn't append record\n");
-	}
 	xfree(rec);
 }
 
 static void
 data_write(void)
 {
-	if (NULL == (opdb = new_pdb())) { 
-		fatal (MYNAME ": new_pdb failed\n");
-	}
-
-	strncpy(opdb->name, out_fname, PDB_DBNAMELEN);
-	opdb->name[PDB_DBNAMELEN-1] = 0;
-	opdb->attributes = PDB_ATTR_BACKUP;
-	opdb->ctime = opdb->mtime = current_time() + 2082844800U;
-	opdb->type = wayp_TYPE;
-	opdb->creator = GXPU_CREATOR; 
-	opdb->version = 4;
+	strncpy(file_out->name, out_fname, PDB_DBNAMELEN);
+	file_out->name[PDB_DBNAMELEN-1] = 0;
+	file_out->attr = PDB_FLAG_BACKUP;
+	file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+	file_out->type = wayp_TYPE;
+	file_out->creator = GXPU_CREATOR; 
+	file_out->version = 4;
 
 	waypt_disp_all(copilot_writewpt);
-	
-	pdb_Write(opdb, fileno(file_out));
 }
 
 

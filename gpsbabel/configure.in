@@ -288,5 +288,5 @@ AC_SUBST(DOCDIR)
 # AC_CHECK_FUNCS([atexit floor localtime_r memmove memset pow select sqrt strchr strcspn strdup strerror strncasecmp strrchr strspn strstr strtol strtoul])
 AC_CHECK_FUNCS([nanosleep sleep])
 
-AC_CONFIG_FILES([Makefile gbversion.h xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc coldsync/Makefile jeeps/Makefile shapelib/Makefile zlib/empty])
+AC_CONFIG_FILES([Makefile gbversion.h xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc jeeps/Makefile shapelib/Makefile zlib/empty])
 AC_OUTPUT

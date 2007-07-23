@@ -22,8 +22,7 @@
 
 #include "defs.h"
 #if PDBFMTS_ENABLED
-#include "coldsync/palm.h"
-#include "coldsync/pdb.h"
+#include "pdbfile.h"
 #include "jeeps/gpsmath.h"
 #include "garmin_tables.h"
 
@@ -37,11 +36,10 @@
 
 #undef GEONICHE_DBG
 
-static FILE		*FileIn;
-static FILE		*FileOut;
+static pdbfile	*file_in, *file_out;
 static const char	*FilenameOut;
-static struct pdb	*PdbOut;
-
+static int		rec_ct;
+static int		ct;
 static char		Rec0Magic[] = "68000NV4Q2";
 
 static char *Arg_dbname = NULL;
@@ -118,13 +116,13 @@ id2gid(char gid[6+1], int id)
 static void
 rd_init(const char *fname)
 {
-    FileIn = xfopen(fname, "rb", MYNAME);
+    file_in = pdb_open(fname, MYNAME);
 }
 
 static void
 rd_deinit(void)
 {
-    fclose(FileIn);
+    pdb_close(file_in);
     ARG_FREE(Arg_dbname);
     ARG_FREE(Arg_category);
 }
@@ -132,14 +130,14 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-    FileOut = xfopen(fname, "wb", MYNAME);
+    file_out = pdb_create(fname, MYNAME);
     FilenameOut = fname;
 }
 
 static void
 wr_deinit(void)
 {
-    fclose(FileOut);
+    pdb_close(file_out);
     ARG_FREE(Arg_dbname);
     ARG_FREE(Arg_category);
 }
@@ -190,12 +188,12 @@ eof:
 }
 
 static void
-geoniche_read_asc(const struct pdb *pdb)
+geoniche_read_asc(void)
 {
-    struct pdb_record *pdb_rec;
+    pdbrec_t *pdb_rec;
 
     /* Process record 0 */
-    pdb_rec = pdb->rec_index.rec;
+    pdb_rec = file_in->rec_list;
     if (strcmp((char *) pdb_rec->data, Rec0Magic))
 	fatal(MYNAME ": Bad record 0, not a GeoNiche file.\n");
     pdb_rec = pdb_rec->next;
@@ -225,7 +223,7 @@ geoniche_read_asc(const struct pdb *pdb)
 	if (!wpt)
 	    fatal(MYNAME ": Couldn't allocate waypoint.\n");
 	vdata = (char *) pdb_rec->data;
-	vlen = pdb_rec->data_len;
+	vlen = pdb_rec->size;
 
 	/* Field 1: Target */
 	p = field(&vdata, &vlen);
@@ -436,13 +434,13 @@ geoniche_icon_to_descr(const int no)
 }
 
 static void
-geoniche_read_bin(const struct pdb *pdb)
+geoniche_read_bin(void)
 {
-    struct pdb_record *pdb_rec;
+    pdbrec_t *pdb_rec;
 
     /* Process records */
     
-    for (pdb_rec = pdb->rec_index.rec; pdb_rec != NULL; pdb_rec = pdb_rec->next)
+    for (pdb_rec = file_in->rec_list; pdb_rec != NULL; pdb_rec = pdb_rec->next)
     {
 	char *vdata = (char *) pdb_rec->data;
 	struct tm created, visited;
@@ -516,27 +514,20 @@ geoniche_read_bin(const struct pdb *pdb)
 static void
 data_read(void)
 {
-    struct pdb *pdb;
-
-    if (NULL == (pdb = pdb_Read(fileno(FileIn))))
-	fatal(MYNAME ": pdb_Read failed\n");
-
-    if (pdb->creator != MYCREATOR)
+    if (file_in->creator != MYCREATOR)
 	fatal(MYNAME ": Not a GeoNiche file.\n");
 	
-    switch(pdb->type)
+    switch(file_in->type)
     {
 	case MYTYPE_ASC:
-	    geoniche_read_asc(pdb);
+	    geoniche_read_asc();
 	    break;
 	case MYTYPE_BIN:
-	    geoniche_read_bin(pdb);
+	    geoniche_read_bin();
 	    break;
 	default:
 	    fatal(MYNAME ": Unsupported GeoNiche file.\n");
     }
-
-    free_pdb(pdb);
 }
 
 static char *
@@ -666,11 +657,8 @@ geoniche_geostuff(const waypoint *wpt)
 static void
 geoniche_writewpt(const waypoint *wpt)
 {
-    static int		ct = 0;
-    struct pdb_record	*opdb_rec;
     int			vlen;
-    static int		vsize = 4096;
-    ubyte		*vdata;
+    char		*vdata;
     char		*title;
     struct tm		tm;
     char		datestr[10+1];
@@ -680,13 +668,8 @@ geoniche_writewpt(const waypoint *wpt)
     time_t		tx;
     char 		*gs;
 
-    if (ct == 0)
-    {
-	opdb_rec = new_Record (0, 0, ct++, sizeof(Rec0Magic), (ubyte *) Rec0Magic);	       
-	if (opdb_rec == NULL)
-	    fatal(MYNAME ": libpdb couldn't create record\n");
-	if (pdb_AppendRecord(PdbOut, opdb_rec))
-	    fatal(MYNAME ": libpdb couldn't append record\n");
+    if (rec_ct == 0) {
+	pdb_write_rec(file_out, 0, 0, ct++, Rec0Magic, sizeof(Rec0Magic));
     }
 
     if ( wpt->description && wpt->description[0] )
@@ -696,7 +679,7 @@ geoniche_writewpt(const waypoint *wpt)
 
     id = gid2id(wpt->shortname);
     if (id < 0)
-	id = ct;
+	id = rec_ct;
 	
     tx = (wpt->creation_time != 0) ? wpt->creation_time : gpsbabel_time;
     if (tx == 0) {	/* maybe zero during testo (freezed time) */
@@ -723,13 +706,7 @@ geoniche_writewpt(const waypoint *wpt)
     /* last chance to fill notes with something */
     if (*notes == '\0') notes = xstrappend(notes, "(notes)");
 
-    vdata = (ubyte *) xmalloc(vsize);
-    if (vdata == NULL)
-	fatal(MYNAME ": libpdb couldn't get record memory\n");
-
-    for (;;)
-    {
-	vlen = snprintf((char *) vdata, vsize,
+    vlen = xasprintf(&vdata,
 	    "Target,%d,%s,,%s,%f,%f,%f,%s,%s,,,,%d,,,,%s"
 	    , id
 	    , title
@@ -750,58 +727,37 @@ geoniche_writewpt(const waypoint *wpt)
 	    , notes
 	    );
 
-	if (vlen > -1 && vlen < vsize)
-	    break;
-
-	/* try again with more space. */
-	if (vlen > -1)
-	    vsize = vlen + 1;
-	else
-	    vsize *= 2;
-	vdata = (ubyte *) xrealloc(vdata, vsize);
-	if (vdata == NULL)
-	    fatal(MYNAME ": libpdb couldn't get record memory\n");
-    }
-
-    opdb_rec = new_Record (0, 0, ct++, (uword) (vlen+1), vdata);	       
-
-    if (opdb_rec == NULL)
-	fatal(MYNAME ": libpdb couldn't create record\n");
-    if (pdb_AppendRecord(PdbOut, opdb_rec))
-	fatal(MYNAME ": libpdb couldn't append record\n");
+    pdb_write_rec(file_out, 0, 0, ct++, vdata, vlen + 1);
 
     xfree(notes);
     xfree(title);
     xfree(vdata);
+
+    rec_ct++;
 }
 
 static void
 data_write(void)
 {
-    if (NULL == (PdbOut = new_pdb()))
-	fatal (MYNAME ": new_pdb failed\n");
-
     if (Arg_dbname) {
 	if (case_ignore_strcmp(Arg_dbname, "GeoNiche Targets") == 0)
 	    fatal(MYNAME ": Reserved database name!\n");
-	strncpy(PdbOut->name, Arg_dbname, PDB_DBNAMELEN);
+	strncpy(file_out->name, Arg_dbname, PDB_DBNAMELEN);
     }
     else
-	strncpy(PdbOut->name, FilenameOut, PDB_DBNAMELEN);
-    PdbOut->name[PDB_DBNAMELEN-1] = 0;
+	strncpy(file_out->name, FilenameOut, PDB_DBNAMELEN);
+    file_out->name[PDB_DBNAMELEN-1] = 0;
 
-    PdbOut->attributes = PDB_ATTR_BACKUP;
-    PdbOut->ctime = PdbOut->mtime = current_time() + (49*365 + 17*366) * (60*60*24);
-    PdbOut->type = MYTYPE_ASC;
-    PdbOut->creator = MYCREATOR; 
-    PdbOut->version = 0;
-    PdbOut->modnum = 1;
+    file_out->attr = PDB_FLAG_BACKUP;
+    file_out->ctime = file_out->mtime = current_time() + (49*365 + 17*366) * (60*60*24);
+    file_out->type = MYTYPE_ASC;
+    file_out->creator = MYCREATOR; 
+    file_out->version = 0;
+    file_out->revision = 1;
 
+    rec_ct = 0;
+    ct = 0;
     waypt_disp_all(geoniche_writewpt);
-    
-    pdb_Write(PdbOut, fileno(FileOut));
-
-    free_pdb(PdbOut);
 }
 
 

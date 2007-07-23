@@ -22,8 +22,7 @@
 #define __quovadis_h__
 
 #include "defs.h"
-#include "coldsync/palm.h"
-#include "coldsync/pdb.h"
+#include "pdbfile.h"
 
 #define MYNAME "QuoVadis"
 #define MYTYPE  0x51564D52	/* QVMR */

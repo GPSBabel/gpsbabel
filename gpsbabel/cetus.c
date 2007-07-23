@@ -30,9 +30,8 @@
     
 #include "defs.h"
 #if PDBFMTS_ENABLED
-#include "coldsync/palm.h"
-#include "coldsync/pdb.h"
-#
+#include "pdbfile.h"
+
 #define MYNAME "Cetus"
 #define MYTYPE_WPT  	0x43577074  	/* CWpt */
 #define MYTYPE_TRK 	0x7374726d	/* strm */
@@ -137,12 +136,10 @@ typedef struct cetus_track_point_s
 
 #define TRACK_POINT_SIZE sizeof(struct cetus_track_point_s)
 
-static FILE *file_in;
-static FILE *file_out;
+static pdbfile *file_in, *file_out;
 static const char *out_fname;
-static struct pdb *opdb;
-static struct pdb_record *opdb_rec;
 static short_handle mkshort_wr_handle;
+static int ct;
 
 static char *dbname = NULL;
 static char *appendicon = NULL;
@@ -180,7 +177,7 @@ read_track_point(cetus_track_point_t *data, const time_t basetime)
 	if (data->hdop != -1) wpt->hdop = (float) data->hdop / 10;
 	
 	i = be_read16(&data->speed);
-	if (i != 10000) WAYPT_SET(wpt, speed, ((float) i / 10) * 0.514444);	/* meters/second */
+	if (i != 10000) WAYPT_SET(wpt, speed, KNOTS_TO_MPS((float) i / 10));	/* meters/second */
 	i = be_read16(&data->course);
 	if (i != 4000) WAYPT_SET(wpt, course, (float) i / 10);
 	
@@ -201,9 +198,9 @@ read_track_point(cetus_track_point_t *data, const time_t basetime)
 
 	
 static void
-read_tracks(const struct pdb *pdb)
+read_tracks(const pdbfile *pdb)
 {
-	struct pdb_record *pdb_rec;
+	pdbrec_t *pdb_rec;
 	int reclen, records, total, points, dropped;
 	char descr[(2 * TRACK_POINT_SIZE) + 1];
 	char temp_descr[TRACK_POINT_SIZE + 1];
@@ -220,7 +217,7 @@ read_tracks(const struct pdb *pdb)
 	dropped = 0;
 	basetime = 0;
 	
-	for (pdb_rec = pdb->rec_index.rec; pdb_rec != NULL; pdb_rec = pdb_rec->next) 
+	for (pdb_rec = pdb->rec_list; pdb_rec; pdb_rec = pdb_rec->next) 
 	{
 	    int i, magic;
 	    char *c = (char *)pdb_rec->data;
@@ -294,13 +291,13 @@ read_tracks(const struct pdb *pdb)
 }
 
 static void
-read_waypts(const struct pdb *pdb)
+read_waypts(const pdbfile *pdb)
 {
 	struct cetus_wpt_s *rec;
-	struct pdb_record *pdb_rec;
+	pdbrec_t *pdb_rec;
 	char *vdata;
 
-	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) 
+	for(pdb_rec = pdb->rec_list; pdb_rec; pdb_rec = pdb_rec->next) 
 	{
 		waypoint *wpt_tmp;
 		int i;
@@ -369,13 +366,13 @@ read_waypts(const struct pdb *pdb)
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = pdb_open(fname, MYNAME);
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(file_in);
+	pdb_close(file_in);
 	if ( dbname ) {
 	    xfree(dbname);
 	    dbname = NULL;
@@ -385,14 +382,15 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "wb", MYNAME);
+	file_out = pdb_create(fname, MYNAME);
 	out_fname = fname;
+	ct = 0;
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	pdb_close(file_out);
 	if ( dbname ) {
 	    xfree(dbname);
 	    dbname = NULL;
@@ -402,11 +400,7 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-	struct pdb *pdb;
-
-	if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
-		fatal(MYNAME ": pdb_Read failed\n");
-	}
+	pdbfile *pdb = file_in;
 
 	if (pdb->creator != MYCREATOR) fatal(MYNAME ": Not a Cetus file.\n");
 
@@ -420,7 +414,6 @@ data_read(void)
 		read_waypts(pdb);
 		break;
 	}
-	free_pdb(pdb);
 }
 
 
@@ -428,7 +421,6 @@ static void
 cetus_writewpt(const waypoint *wpt)
 {
 	struct cetus_wpt_s *rec;
-	static int ct;
 	struct tm *tm;
 	char *vdata;
 	char *desc_long;
@@ -541,15 +533,8 @@ cetus_writewpt(const waypoint *wpt)
 	}
 	vdata += strlen( vdata ) + 1;
 	
-	opdb_rec = new_Record (0, 2, ct++, (uword) (vdata-(char *)rec), (const ubyte *)rec);
+	pdb_write_rec(file_out, 0, 2, ct++, rec, (char *)vdata - (char *)rec);
 	
-	if (opdb_rec == NULL) {
-		fatal(MYNAME ": libpdb couldn't create record\n");
-	}
-
-	if (pdb_AppendRecord(opdb, opdb_rec)) {
-		fatal(MYNAME ": libpdb couldn't append record\n");
-	}
 	xfree(rec);
 }
 
@@ -580,22 +565,18 @@ data_write(void)
 	setshort_length(mkshort_wr_handle, 15);
 	setshort_whitespace_ok(mkshort_wr_handle, 0);
 
-	if (NULL == (opdb = new_pdb())) { 
-		fatal (MYNAME ": new_pdb failed\n");
-	}
-
 	if ( dbname ) {
-	    strncpy( opdb->name, dbname, PDB_DBNAMELEN );
+	    strncpy( file_out->name, dbname, PDB_DBNAMELEN );
 	}
 	else {
-	    strncpy(opdb->name, out_fname, PDB_DBNAMELEN);
+	    strncpy(file_out->name, out_fname, PDB_DBNAMELEN);
 	}
-	opdb->name[PDB_DBNAMELEN-1] = 0;
-	opdb->attributes = PDB_ATTR_BACKUP;
-	opdb->ctime = opdb->mtime = current_time() + 2082844800U;
-	opdb->type = MYTYPE_WPT;  /* CWpt */
-	opdb->creator = MYCREATOR; /* cGPS */
-	opdb->version = 1;
+	file_out->name[PDB_DBNAMELEN-1] = 0;
+	file_out->attr = PDB_FLAG_BACKUP;
+	file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+	file_out->type = MYTYPE_WPT;  /* CWpt */
+	file_out->creator = MYCREATOR; /* cGPS */
+	file_out->version = 1;
 
 	/*
 	 * All this is to sort by waypoint names before going to Cetus.
@@ -622,7 +603,6 @@ data_write(void)
 		cetus_writewpt(htable[i].wpt);
 	}
 
-	pdb_Write(opdb, fileno(file_out));
 	xfree(htable);
 	mkshort_del_handle(&mkshort_wr_handle);
 }

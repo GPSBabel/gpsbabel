@@ -47,7 +47,7 @@
 				EnableIntrinsicFunctions="false"
 				FavorSizeOrSpeed="2"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="expat,..\coldsync,."
+				AdditionalIncludeDirectories="expat,."
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;__WIN32__;"
 				StringPooling="true"
 				ExceptionHandling="0"
@@ -142,7 +142,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="expat;..\coldsync;."
+				AdditionalIncludeDirectories="expat;."
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;__WIN32__;_DEBUG;_CONSOLE;"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -239,7 +239,7 @@
 				EnableIntrinsicFunctions="false"
 				FavorSizeOrSpeed="2"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="expatw;..\coldsync;."
+				AdditionalIncludeDirectories="expatw;."
 				PreprocessorDefinitions="XML_UNICODE=1;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;__WIN32__;"
 				StringPooling="true"
 				ExceptionHandling="0"
@@ -1708,6 +1708,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\pdbfile.c"
+				>
+			</File>
+			<File
 				RelativePath="..\polygon.c"
 				>
 				<FileConfiguration
@@ -3004,94 +3008,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Coldsync"
-				>
-				<File
-					RelativePath="..\coldsync\pdb.c"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							Optimization="2"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-							ObjectFile=".\Release\Coldsync/"
-							ProgramDataBaseFileName="Release\Coldsync/"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							Optimization="0"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-							BasicRuntimeChecks="3"
-							ObjectFile=".\Debug\Coldsync/"
-							ProgramDataBaseFileName="Debug\Coldsync/"
-							BrowseInformation="1"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Unicode|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							Optimization="2"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-							ObjectFile=".\Release\Coldsync/"
-							ProgramDataBaseFileName="Release\Coldsync/"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\coldsync\util.c"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							Optimization="2"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-							ObjectFile=".\Release\Coldsync/"
-							ProgramDataBaseFileName="Release\Coldsync/"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							Optimization="0"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-							BasicRuntimeChecks="3"
-							ObjectFile=".\Debug\Coldsync/"
-							ProgramDataBaseFileName="Debug\Coldsync/"
-							BrowseInformation="1"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Unicode|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							Optimization="2"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-							ObjectFile=".\Release\Coldsync/"
-							ProgramDataBaseFileName="Release\Coldsync/"
-						/>
-					</FileConfiguration>
-				</File>
-			</Filter>
-			<Filter
 				Name="shapelib"
 				>
 				<File
@@ -3201,6 +3117,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\pdbfile.h"
+				>
+			</File>
+			<File
 				RelativePath="..\queue.h"
 				>
 			</File>
@@ -3208,26 +3128,6 @@
 				RelativePath="..\quovadis.h"
 				>
 			</File>
-			<Filter
-				Name="Coldsync-Headers"
-				>
-				<File
-					RelativePath="..\coldsync\config.h"
-					>
-				</File>
-				<File
-					RelativePath="..\coldsync\palm.h"
-					>
-				</File>
-				<File
-					RelativePath="..\coldsync\pdb.h"
-					>
-				</File>
-				<File
-					RelativePath="..\coldsync\pconn\util.h"
-					>
-				</File>
-			</Filter>
 			<Filter
 				Name="Jeeps-Headers"
 				>

@@ -21,8 +21,7 @@
 
 #include "defs.h"
 #if PDBFMTS_ENABLED
-#include "coldsync/palm.h"
-#include "coldsync/pdb.h"
+#include "pdbfile.h"
 
 #define MYNAME "GPSPilot"
 #define MYTYPE_POINTS 0x706f696e  	/* poin */
@@ -46,12 +45,10 @@ struct runways {
 	pdb_32 en_latitude; 	/* similarly */
 };
 
-static FILE *file_in;
-static FILE *file_out;
+static pdbfile *file_in, *file_out;
 static const char *out_fname;
-static struct pdb *opdb;
-static struct pdb_record *opdb_rec;
 static char *dbname = NULL;
+static int ct;
 
 static
 arglist_t gpspilot_args[] = {
@@ -62,13 +59,13 @@ arglist_t gpspilot_args[] = {
 static void
 rd_init(const char *fname)
 {
-	file_in = xfopen(fname, "rb", MYNAME);
+	file_in = pdb_open(fname, MYNAME);
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(file_in);
+	pdb_close(file_in);
 	if ( dbname ) {
 	    xfree(dbname);
 	    dbname = NULL;
@@ -78,14 +75,15 @@ rd_deinit(void)
 static void
 wr_init(const char *fname)
 {
-	file_out = xfopen(fname, "wb", MYNAME);
+	file_out = pdb_create(fname, MYNAME);
 	out_fname = fname;
+	ct = 0;
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(file_out);
+	pdb_close(file_out);
 	if ( dbname ) {
 	    xfree(dbname);
 	    dbname = NULL;
@@ -96,18 +94,13 @@ static void
 data_read(void)
 {
 	struct record *rec;
-	struct pdb *pdb;
-	struct pdb_record *pdb_rec;
+	pdbrec_t *pdb_rec;
 
-	if (NULL == (pdb = pdb_Read(fileno(file_in)))) {
-		fatal(MYNAME ": pdb_Read failed\n");
-	}
-
-	if ((pdb->creator != MYCREATOR)) {
+	if ((file_in->creator != MYCREATOR)) {
 		fatal(MYNAME ": Not a gpspilot file.\n");
 	}
 
-	switch (pdb->type)
+	switch (file_in->type)
 	{
 	case MYTYPE_AIRPORT:
 	case MYTYPE_POINTS:
@@ -119,7 +112,7 @@ data_read(void)
 		fatal(MYNAME ": Not a gpspilot file.\n");
 	}
 
-	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
+	for(pdb_rec = file_in->rec_list; pdb_rec; pdb_rec = pdb_rec->next) {
 		waypoint *wpt_tmp;
 		char *vdata;
 
@@ -163,7 +156,6 @@ data_read(void)
 		waypt_add(wpt_tmp);
 
 	} 
-	free_pdb(pdb);
 }
 
 
@@ -171,7 +163,6 @@ static void
 gpspilot_writewpt(const waypoint *wpt)
 {
 	struct record *rec;
-	static int ct = 0;
 	char *vdata;
 
 	rec = xcalloc(sizeof(*rec)+206,1);
@@ -208,41 +199,28 @@ gpspilot_writewpt(const waypoint *wpt)
         }
         vdata += strlen( vdata ) + 1;
 
-        opdb_rec = new_Record (0, 2, ct++, (uword) (vdata-(char *)rec), (const ubyte *)rec);	       
+        pdb_write_rec(file_out, 0, 2, ct++, (void *)rec, (char *)vdata - (char *)rec);	       
 
-	if (opdb_rec == NULL) {
-		fatal(MYNAME ": libpdb couldn't create record\n");
-	}
-
-	if (pdb_AppendRecord(opdb, opdb_rec)) {
-		fatal(MYNAME ": libpdb couldn't append record\n");
-	}
 	xfree(rec);
 }
 
 static void
 data_write(void)
 {
-	if (NULL == (opdb = new_pdb())) { 
-		fatal (MYNAME ": new_pdb failed\n");
-	}
-
 	if ( dbname ) {
-	    strncpy(opdb->name, dbname, PDB_DBNAMELEN);
+	    strncpy(file_out->name, dbname, PDB_DBNAMELEN);
 	}
 	else {
-	    strncpy(opdb->name, out_fname, PDB_DBNAMELEN);
+	    strncpy(file_out->name, out_fname, PDB_DBNAMELEN);
 	}
-	opdb->name[PDB_DBNAMELEN-1] = 0;
-	opdb->attributes = PDB_ATTR_BACKUP;
-	opdb->ctime = opdb->mtime = current_time() + 2082844800U;
-	opdb->type = MYTYPE_POINTS;
-	opdb->creator = MYCREATOR; 
-	opdb->version = 0;
+	file_out->name[PDB_DBNAMELEN-1] = 0;
+	file_out->attr = PDB_FLAG_BACKUP;
+	file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+	file_out->type = MYTYPE_POINTS;
+	file_out->creator = MYCREATOR; 
+	file_out->version = 0;
 
 	waypt_disp_all(gpspilot_writewpt);
-	
-	pdb_Write(opdb, fileno(file_out));
 }
 
 
