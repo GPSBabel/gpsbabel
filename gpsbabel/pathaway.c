@@ -60,6 +60,7 @@ typedef struct ppdb_appdata
 } ppdb_appdata_t;
 
 #define PPDB_APPINFO_SIZE sizeof(struct ppdb_appdata)
+static ppdb_appdata_t *appinfo;
 
 static char *opt_dbname = NULL;
 static char *opt_deficon = NULL;
@@ -535,6 +536,7 @@ static void ppdb_wr_init(const char *fname)
 	file_out = pdb_create(fname, MYNAME);
 	mkshort_handle = mkshort_new_handle();
 	ct = 0;
+	appinfo = NULL;
 	
 	if (global_opts.synthesize_shortnames != 0)
 	{
@@ -561,6 +563,7 @@ static void ppdb_wr_deinit(void)
 	str_pool_deinit();
 	xfree(fname_out);
 	if (datefmt) xfree(datefmt);
+	if (appinfo) xfree(appinfo);
 }
 
 /*
@@ -651,12 +654,10 @@ static void ppdb_write_wpt(const waypoint *wpt)
  
 static void ppdb_write(void)
 {
-	ppdb_appdata_t *appinfo = NULL;
 	
 	if (opt_dbname)
 	    strncpy(file_out->name, opt_dbname, PDB_DBNAMELEN);
 	    
-	file_out->name[PDB_DBNAMELEN-1] = 0;
 	file_out->attr = PDB_FLAG_BACKUP;
 	file_out->ctime = file_out->mtime = current_time() + 2082844800U;
 	file_out->creator = PPDB_MAGIC;
@@ -664,8 +665,7 @@ static void ppdb_write(void)
 	
 	if (global_opts.objective != wptdata)	/* Waypoint target do not need appinfo block */
 	{
-	    appinfo = xcalloc(PPDB_APPINFO_SIZE, 1);
-	    
+	    appinfo = xcalloc(1, sizeof(*appinfo));
 	    file_out->appinfo = (void *)appinfo;
 	    file_out->appinfo_len = PPDB_APPINFO_SIZE;
 	}
@@ -693,8 +693,6 @@ static void ppdb_write(void)
 		fatal(MYNAME ": Realtime positioning not supported.\n");
 		break;
 	}
-
-	if (appinfo != NULL) xfree(appinfo);
 }
 
 

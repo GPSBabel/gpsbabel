@@ -515,6 +515,7 @@ write_trkpt_cb(const waypoint *wpt)
 		strftime(buff, sizeof(buff), "%d-%b-%y %H:%M:%S", &tm);
 		strupper(buff);
 	}
+	else strncpy(buff, "01-JAN-70 00:00:00", sizeof(buff));
 	
 	gbfprintf(fout, "T  A %.10f%c%c %.10f%c%c ",
 		fabs(wpt->latitude), 0xBA, (wpt->latitude >= 0) ? 'N' : 'S',

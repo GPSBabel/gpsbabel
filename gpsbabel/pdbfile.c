@@ -72,9 +72,9 @@ pdb_load_data(pdbfile *fin)
 	pdbrec_t *rec;
 	
 	/* load the header */
-	fin->name = xcalloc(1, 32 + 1);
-	gbfread(fin->name, 1, 32, fin->file);
-	
+	gbfread(fin->name, 1, PDB_DBNAMELEN, fin->file);
+	fin->name[PDB_DBNAMELEN] = '\0';
+
 	fin->attr = gbfgetuint16(fin->file);
 	fin->version = gbfgetuint16(fin->file);
 	fin->ctime = gbfgetuint32(fin->file);
@@ -219,7 +219,6 @@ pdb_create(const char *filename, const char *module)
 	pdbfile *res;
 
 	res = xcalloc(1, sizeof(*res));
-	res->name = xmalloc(PDB_DBNAMELEN + 1);
 	strncpy(res->name, "Palm/OS Database", PDB_DBNAMELEN);
 	res->file = gbfopen_be(filename, "wb", module);;
 	res->mode = 2;
@@ -305,9 +304,8 @@ pdb_flush(pdbfile *file)
 	}
 
 	len = strlen(file->name);
-	if (len > 32) len = 32;
 	gbfwrite(file->name, 1, len, fout);
-	while (len++ < 32) gbfputc(0, fout);
+	while (len++ < PDB_DBNAMELEN) gbfputc(0, fout);
 
 	gbfputuint16(file->attr, fout);
 	gbfputuint16(file->version, fout);
@@ -337,10 +335,9 @@ pdb_flush(pdbfile *file)
 		gbfwrite(file->appinfo, 1, file->appinfo_len, fout);
 	}
 
-	rec = file->rec_list;
-	while (rec) {
-		gbfwrite(rec->data, 1, rec->size, fout);
-		rec = rec->next;
+	for (rec = file->rec_list; rec; rec = rec->next) {
+		if (rec->size > 0)
+			gbfwrite(rec->data, 1, rec->size, fout);
 	}
 }
 
@@ -366,7 +363,6 @@ pdb_close(pdbfile *file)
 	gbfclose(file->file);
 
 	if ((file->mode & 1) && file->appinfo) xfree(file->appinfo);
-	xfree(file->name);
 	
 	rec = file->rec_list;
 	while (rec) {
