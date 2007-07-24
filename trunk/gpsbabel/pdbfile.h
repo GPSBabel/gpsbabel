@@ -51,7 +51,7 @@ typedef struct pdbrec_s {
 typedef struct {
 	gbfile *file;
 	char mode;		/* file-mode: 1 = read / 2 = write */
-	char *name;		/* database name */
+	char name[PDB_DBNAMELEN + 1];	/* database name */
 	gbuint16 attr;		/* attributes */
 	gbuint16 version;	/* version */
 	time_t ctime;		/* creation time */
