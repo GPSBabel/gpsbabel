@@ -9,7 +9,7 @@ while read dirname; do
 	test -s "$dirname/.cvsignore" || continue
 	while read filemask; do
 		test -z "$filemask" && continue
-		cmd="rm -fv $dirname/$filemask"
+		cmd="rm -Rfv $dirname/$filemask"
 		${cmd}
 	done < "$dirname/.cvsignore"
 done
