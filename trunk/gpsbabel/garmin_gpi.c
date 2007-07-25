@@ -176,10 +176,10 @@ static short_handle short_h;
 static garmin_fs_t *
 gpi_gmsd_init(waypoint *wpt)
 {
+	garmin_fs_t *gmsd = GMSD_FIND(wpt);
 	if (wpt == NULL) {
 		fatal(MYNAME ": Error in file structure.\n");
 	}
-	garmin_fs_t *gmsd = GMSD_FIND(wpt);
 	if (gmsd == NULL) {
 		gmsd = garmin_fs_alloc(-1);
 		fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
