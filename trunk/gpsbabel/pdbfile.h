@@ -39,8 +39,8 @@
 #define EPOCH_1904		2082844800L
 
 typedef struct pdbrec_s {
-	int      offs;
-	int      size;
+	gbint32  offs;
+	gbint32  size;
 	gbuint32 id;
 	gbuint8  category;
 	gbuint8  flags;
@@ -58,12 +58,12 @@ typedef struct {
 	time_t mtime;		/* modification time */
 	time_t btime;		/* backup time */
 	gbuint32 revision;
-	gbuint32 appinfo_offs;	/* offset to application info */
-	gbuint32 index_offs;	/* offset to sort-index info */
+	gbint32 appinfo_offs;	/* offset to application info */
+	gbint32 index_offs;	/* offset to sort-index info */
 	gbuint32 creator;
 	gbuint32 type;
 	gbuint32 uid;
-	gbuint32 rec_ct;
+	gbuint16 rec_ct;
 	struct pdbrec_s *rec_list;
 	struct pdbrec_s *rec_curr;
 	void *appinfo;

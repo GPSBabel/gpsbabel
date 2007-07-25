@@ -33,6 +33,20 @@
 
 #define MYNAME "pdbfile"
 
+static void
+pdb_invalid_file(const pdbfile *pdb_in, const char *fmt, ...)
+{
+	char buff[128];
+	va_list args;
+
+	va_start(args, fmt);
+	vsnprintf(buff, sizeof(buff), fmt, args);
+	buff[sizeof(buff)-1] = '0';
+	
+	warning(MYNAME ": %s\n", buff);
+	fatal(MYNAME ": Invalid or unsupported file (%s).\n", pdb_in->file->name);
+}
+
 /* try to read to EOF (avoid determining file-size) */
 
 static void *
@@ -81,11 +95,16 @@ pdb_load_data(pdbfile *fin)
 	fin->mtime = gbfgetuint32(fin->file);
 	fin->btime = gbfgetuint32(fin->file);
 	fin->revision = gbfgetuint32(fin->file);
-	fin->appinfo_offs = gbfgetuint32(fin->file);
+	fin->appinfo_offs = gbfgetint32(fin->file);
 	fin->index_offs = gbfgetuint32(fin->file);
 	fin->type = gbfgetuint32(fin->file);
 	fin->creator = gbfgetuint32(fin->file);
 	fin->uid = gbfgetuint32(fin->file);
+
+	if (fin->appinfo_offs < 0) 
+		pdb_invalid_file(fin, "Invalid application data offset (%0xh)", fin->appinfo_offs);
+	if (fin->index_offs < 0)
+		pdb_invalid_file(fin, "Invalid index offset (%0xh)", fin->index_offs);
 	
 #if 0
 	fprintf(stderr, "%s: dbname   \"%s\"\n", MYNAME, fin->name);
@@ -97,7 +116,9 @@ pdb_load_data(pdbfile *fin)
 	fprintf(stderr, "%s: index-ofs %-8u\n", MYNAME, fin->index_offs);
 #endif	
 	/* ID = */ (void) gbfgetuint32(fin->file);
-	ct = fin->rec_ct = gbfgetuint16(fin->file);
+	ct = fin->rec_ct = gbfgetint16(fin->file);
+	if (ct >= 0x7FFF)
+		warning(MYNAME ": Probably invalid number of records (%0d)\n", fin->rec_ct);
 
 	offs = 78;
 	
@@ -110,6 +131,8 @@ pdb_load_data(pdbfile *fin)
 			(void) gbfgetuint32(fin->file);	/* type */
 			rec->id = gbfgetint16(fin->file);
 			rec->offs = gbfgetuint32(fin->file);
+			if ((gbint32)rec->offs < 0) 
+				pdb_invalid_file(fin, "Invalid offset to record (%0d, id = %d)", rec->offs, rec->id);
 		}
 		else {
 			gbuint32 x;
@@ -119,6 +142,8 @@ pdb_load_data(pdbfile *fin)
 			rec->id = x & 0x0ffff;
 			rec->category = (x >> 24) & 0x0f;
 			rec->flags = (x >> 24) & 0xf0;
+			if ((gbint32)rec->offs < 0) 
+				pdb_invalid_file(fin, "Invalid offset to resource record (%0d, id = %d)", rec->offs, rec->id);
 		}
 
 		if (last_rec == NULL)
@@ -171,9 +196,8 @@ pdb_load_data(pdbfile *fin)
 				rec->size = gbfread(rec->data, 1, rec->size, fin->file);
 				offs += rec->size;
 			}
-			else if (rec->size < 0) {
-				fatal(MYNAME ": Wrong data size in record with id %d.\n", rec->id);
-			}
+			else if (rec->size < 0)
+				pdb_invalid_file(fin, "Wrong data size in record with id %d.\n", rec->id);
 		}
 		else {
 			rec->data = pdb_read_tail(fin->file, &rec->size);
