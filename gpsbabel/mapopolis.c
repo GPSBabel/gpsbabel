@@ -70,7 +70,7 @@ static short_handle mkshort_handle;
 static void
 rd_init(const char *fname)
 {
-	file_in = pdb_open(fname, "rb", MYNAME);
+	file_in = pdb_open(fname, MYNAME);
 }
 
 static void
@@ -132,7 +132,7 @@ data_read(void)
 		fatal(MYNAME ": Not a Magellan Navigator file.\n");
 	}
 
-	pdb_rec = pdb->rec_index.rec;
+	pdb_rec = file_in->rec_list;
 	convert_rec0((struct record0*) pdb_rec->data);
 
 //	for(pdb_rec = pdb->rec_index.rec; pdb_rec; pdb_rec=pdb_rec->next) {
@@ -143,7 +143,7 @@ data_read(void)
 		struct tm tm = {0};
 
 		rec = (struct record *) pdb_rec->data;
-		edata = (char *) rec + pdb_rec->sz;
+		edata = (char *) rec + pdb_rec->size;
 
 		for (; vdata < edata; rec = (struct record *) vdata) {
 			wpt_tmp = waypt_new();
@@ -165,7 +165,6 @@ data_read(void)
 			waypt_add(wpt_tmp);
 		}
 	}
-	free_pdb(pdb);
 }
 
 
