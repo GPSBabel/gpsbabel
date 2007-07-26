@@ -195,6 +195,9 @@ routesimple_head( const route_head *rte )
 	/* short-circuit if we already have fewer than the max points */
 	if ( countopt && count >= rte->rte_waypt_ct) return;
 	
+	/* short-circuit if the route is impossible to simplify, too. */
+	if ( 2 >= rte->rte_waypt_ct ) return;
+	
 	xte_recs = (struct xte *) xcalloc(  rte->rte_waypt_ct, sizeof (struct xte));
 	cur_rte = rte;
 	
