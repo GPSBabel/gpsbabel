@@ -32,6 +32,7 @@
     2006-06-01: Add name option
     2007-01-08: if not really needed disable check for valid timestamps
 		(based on patch from Vladimir Kondratiev)
+    2007-07-26: Allow 'range' together with trackpoints without timestamp
  */
  
 #include <ctype.h>
@@ -799,7 +800,7 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
 {
 	time_t start, stop;
 	queue *elem, *tmp;
-	int i, dropped;
+	int i, dropped, inside = 0;
 	
 	if (opt_start != 0)
 	    start = trackfilter_range_check(opt_start);
@@ -811,7 +812,7 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
 	else
 	    stop = 0x7FFFFFFF;
 
-	dropped = 0;
+	dropped = inside = 0;
 	
 	for (i = 0; i < track_ct; i++)
 	{
@@ -821,8 +822,11 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
 	    {
 		waypoint *wpt = (waypoint *)elem;
 
-		if ((wpt->creation_time < start) || (wpt->creation_time > stop))
-		{
+		if (wpt->creation_time > 0) {
+		    inside = ((wpt->creation_time >= start) && (wpt->creation_time <= stop));
+		}
+		
+		if (! inside) {
 		    track_del_wpt(track, wpt);
 		    waypt_free(wpt);
 		    dropped++;
@@ -861,7 +865,7 @@ trackfilter_init(const char *args)
  */
 	need_time = ( 
 	    opt_merge || opt_pack || opt_split || opt_sdistance ||
-	    opt_move || opt_start || opt_stop || opt_fix || opt_speed ||
+	    opt_move || opt_fix || opt_speed ||
 	    (trackfilter_opt_count() == 0)	/* do pack by default */
 	);
 	/* in case of a formated title we also need valid timestamps */
