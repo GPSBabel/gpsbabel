@@ -53,11 +53,14 @@ static char *snupperopt = NULL;
 static char *snuniqueopt = NULL;
 static char *wptfgcolor = NULL;
 static char *wptbgcolor = NULL;
+static char *pack_opt = NULL;
 
 
 
 static
 arglist_t ozi_args[] = {
+	{"pack", &pack_opt, "Write all tracks into one file",
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"snlen", &snlenopt, "Max synthesized shortname length",
 		"32", ARGTYPE_INT, "1", NULL},
 	{"snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
@@ -120,7 +123,9 @@ ozi_openfile(char *fname) {
      */
 
     if (0 == strcmp(fname, "-")) {
-	file_out = gbfopen(fname, "wb", MYNAME);
+	if (! file_out) {
+	    file_out = gbfopen(fname, "wb", MYNAME);
+	}
 	return;
     }
 
@@ -130,27 +135,10 @@ ozi_openfile(char *fname) {
         buff[0] = '\0';
     }
 
-    /* allocate more than enough room for new filename */
-    tmpname = (char *) xcalloc(1, strlen(fname) +
-                         strlen(buff) +
-                         strlen(ozi_extensions[ozi_objective]) +
-                         2); /* . (dot) plus null term */
-
-    strcpy(tmpname, fname);
-
-    /* locate and remove file extension */
-    c = strrchr(tmpname, '.');
-
-    if (c)
-        *c = '\0';
-
-    /* append the -xx sequence number for tracks if needed */
-    strcat(tmpname + strlen(tmpname), buff);
-
-    strcat(tmpname, ".");
-
-    /* append the extension after the "." */
-    strcat(tmpname, ozi_extensions[ozi_objective]);
+    /* remove extension and add buff + ozi's extension */
+    c = strrchr(fname, '.');
+    if (c == NULL) c = fname + strlen(fname);
+    xasprintf(&tmpname, "%*.*s%s.%s", c - fname, c - fname, fname, buff, ozi_extensions[ozi_objective]);
 
     /* re-open file_out with the new filename */
     if (file_out) {
@@ -176,9 +164,11 @@ ozi_track_hdr(const route_head * rte)
         "0,2,255,%s,0,0,2,8421376\r\n"
         "0\r\n";
 
-    ozi_openfile(ozi_ofname);
-    gbfprintf(file_out, ozi_trk_header, 
-	rte->rte_name ? rte->rte_name : "ComplimentsOfGPSBabel");
+    if ((! pack_opt) || (track_out_count == 0)) {
+	ozi_openfile(ozi_ofname);
+	gbfprintf(file_out, ozi_trk_header, 
+	    rte->rte_name ? rte->rte_name : "ComplimentsOfGPSBabel");
+    }
 
     track_out_count++;
     new_track = 1;
@@ -356,7 +346,7 @@ wr_init(const char *fname)
 
         setshort_badchars(mkshort_handle, "\",");
     }
-
+    file_out = NULL;
 }
 
 static void
