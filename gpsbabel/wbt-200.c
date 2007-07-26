@@ -719,7 +719,7 @@ static void wbt200_data_read(void) {
     state_empty(&st);
 }
 
-static int all_null(const void *buf, size_t len) {
+static int all_null(const void *buf, const int len) {
     const char *bp = buf;
     int i;
 
