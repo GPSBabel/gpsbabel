@@ -82,7 +82,7 @@ pdb_load_data(pdbfile *fin)
 {
 	gbuint16 i, ct;
 	pdbrec_t *last_rec;
-	gbuint32 offs;
+	gbint32 offs;
 	pdbrec_t *rec;
 	
 	/* load the header */
@@ -157,7 +157,7 @@ pdb_load_data(pdbfile *fin)
 	last_rec = fin->rec_list;
 
 	if (fin->appinfo_offs != 0) {
-		gbuint32 top;
+		gbint32 top;
 
 		/* seek to application info offset */
 		while (offs < fin->appinfo_offs) {
@@ -222,7 +222,7 @@ pdb_open(const char *filename, const char *module)
 }
 
 int
-pdb_read_rec_by_id(pdbfile *fin, const int rec_id, gbuint8 *flags, gbuint8 *category, void **data)
+pdb_read_rec_by_id(pdbfile *fin, const gbuint32 rec_id, gbuint8 *flags, gbuint8 *category, void **data)
 {
 	pdbrec_t *rec;
 
@@ -251,7 +251,7 @@ pdb_create(const char *filename, const char *module)
 }
 
 void 
-pdb_write_rec(pdbfile *fout, const gbuint8 flags, const gbuint8 category, const int rec_id, const void *data, const gbuint32 size)
+pdb_write_rec(pdbfile *fout, const gbuint8 flags, const gbuint8 category, const gbuint32 rec_id, const void *data, const gbuint32 size)
 {
 	pdbrec_t *rec, *cur;
 	
