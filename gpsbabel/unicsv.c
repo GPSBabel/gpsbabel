@@ -1033,10 +1033,19 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 		if (wpt->creation_time != 0) {
 			struct tm tm;
 			char buf[32], msec[12];
+
 			tm = *localtime(&wpt->creation_time);
 			snprintf(buf, sizeof(buf), "%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
+
 			if (wpt->microseconds > 0) {
-				snprintf(msec, sizeof(msec), ".%d", wpt->microseconds / 1000);
+				int len = 6;
+				int ms = wpt->microseconds;
+				
+				while (len && (ms == (int)((double)ms / 10) * 10)) {
+					ms /= 10;
+					len--;
+				}
+				snprintf(msec, sizeof(msec), ".%0*d", len, ms);
 				strcat(buf, msec);
 			}
 			gbfprintf(fout, "%s%s", unicsv_fieldsep, buf);
