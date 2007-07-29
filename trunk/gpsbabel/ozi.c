@@ -114,7 +114,7 @@ ozi_alloc_fsdata(void)
 
 static void
 ozi_openfile(char *fname) {
-    char *c, *tmpname;
+    char *c, *cx, *tmpname;
     char *ozi_extensions[] = {0, "plt", "wpt", "rte"};
     char buff[32];
     
@@ -137,6 +137,8 @@ ozi_openfile(char *fname) {
 
     /* remove extension and add buff + ozi's extension */
     c = strrchr(fname, '.');
+    if (c && (cx = strrchr(fname, '/')) && (cx > c)) c = NULL; 
+    if (c && (cx = strrchr(fname, '\\')) && (cx > c)) c = NULL; 
     if (c == NULL) c = fname + strlen(fname);
     xasprintf(&tmpname, "%*.*s%s.%s", c - fname, c - fname, fname, buff, ozi_extensions[ozi_objective]);
 
