@@ -254,13 +254,21 @@ unicsv_parse_date(const char *str)
 static int
 unicsv_parse_time(const char *str, int *msec)
 {
-	int hour, min, ct;
-	double sec;
+	int hour, min, ct, sec;
 	char sep[2];
+	char *dot;
 	
-	ct = sscanf(str, "%d%1[.://]%d%1[.://]%lf", &hour, sep, &min, sep, &sec);
+	ct = sscanf(str, "%d%1[.://]%d%1[.://]%d", &hour, sep, &min, sep, &sec);
 	is_fatal(ct != 5, MYNAME ": Could not parse time string (%s).\n", str);
-	*msec = (sec - (int)sec) * 1000000;
+	if ((dot = strchr(str, '.'))) {
+		*msec = (atof(dot) + 0.0000005) * 1000000;
+		if (*msec >= 1000000) {
+			*msec = 0;
+			sec++;
+		}
+	}
+	else *msec = 0;
+
 	return ((hour * SECONDS_PER_HOUR) + (min * 60) + (int)sec);
 }
 
@@ -1041,7 +1049,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 				int len = 6;
 				int ms = wpt->microseconds;
 				
-				while (len && (ms == (int)((double)ms / 10) * 10)) {
+				while (len && (ms % 10 == 0)) {
 					ms /= 10;
 					len--;
 				}
