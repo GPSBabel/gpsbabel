@@ -637,7 +637,7 @@ main(int argc, char *argv[])
 			fatal ("Couldn't install the exit signal handler.\n");
 		}
 
-		if (ovecs->position_ops.wr_init) {
+		if (ovecs && ovecs->position_ops.wr_init) {
 			ovecs->position_ops.wr_init(ofname);
 		}
 
