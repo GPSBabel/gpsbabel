@@ -1,0 +1,13 @@
+
+      
+      
+      <para>The vCard output is intended to be in a format that
+enables waypoints to be viewed with an Apple iPod. This is achieved by
+mapping waypoint fields into vCard fields that can be displayed as
+'Contacts' on the iPod. With the iPod mounted as a hard disk (see your
+iPod manual for instructions), the resulting VCF file should be moved
+into the iPod 'Contacts' folder. As an alternative, Mac OS X users may
+prefer to drag the VCF file into their address book and synchronize
+with the iPod using iSync. 
+</para>
+    

@@ -1,0 +1,17 @@
+<DocumentElement>
+  <AP>
+    <WEP>On</WEP>
+    <MAC>001217AD3124</MAC>
+    <SSID>WitoldM</SSID>
+    <Type>AP</Type>
+    <RSSI>0</RSSI>
+    <MaxRSSI>-77</MaxRSSI>
+    <MinRSSI>-85</MinRSSI>
+    <Channel>11</Channel>
+    <FirstSeen>2006-03-11T09:07:46-05:00</FirstSeen>
+    <LastSeen>2006-03-11T09:07:52-05:00</LastSeen>
+    <HDOP>14.2</HDOP>
+    <Lat>45.489801666666672</Lat>
+    <Lon>-75.686505</Lon>
+  </AP>
+</DocumentElement>

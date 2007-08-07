@@ -1,0 +1,51 @@
+#!/bin/sh
+
+# create filelist using CVS Entries files
+# 
+# Parameter 1: base directory where we're looking for the first CVS directory
+# Parameter 2: insert directory name "$2" at the beginning of 
+#              resulting filenames
+#
+# foo> ./tools/mkfilelist . gpsbabel-1.2.8/
+# 
+# creates a output like the this:
+#
+# ...
+# gpsbabel-1.2.8/win32/gui-2/options.pas
+# gpsbabel-1.2.8/win32/gui-2/utils.pas
+# gpsbabel-1.2.8/win32/gui-2/GPSBabelGUI.res
+# gpsbabel-1.2.8/win32/GPSBabelGUI.exe
+# gpsbabel-1.2.8/copilot.c
+# gpsbabel-1.2.8/gcdb.c
+# gpsbabel-1.2.8/fatal.c
+# ...
+
+function loop()
+{
+	test -f "$1/CVS/Entries" || return 0
+
+	case $1 in
+	/) return 0;;
+	esac
+	
+	IFS="/"
+	cat "$1/CVS/Entries" |
+	while read LINE; do
+		echo "$LINE" |
+		(
+			read LEAD NAME READ
+			test "x$NAME" == "x" && continue
+			case $LEAD in
+			D)	
+				loop "$1/$NAME/" "$2"
+				;;
+			*)
+				echo "$2$1/$NAME"
+				;;
+			esac
+		)
+	done
+	IFS=" "
+}
+
+loop "$1" "$2" | sed -e 's|\/\/|\/|g' -e 's|\.\.|\.|g' -e 's|\.\/||g'

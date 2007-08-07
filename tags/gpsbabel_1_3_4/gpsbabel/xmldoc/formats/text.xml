@@ -1,0 +1,8 @@
+      <para> This is a simple human readable version of the data file,
+handy for listings of any type of waypoint files.
+</para>
+      <para> The following command line reads a GPX file with
+Groundspeak extensions and writes a text file with encrypted hints:
+</para>
+<para><userinput>gpsbabel -i gpx -f 12345.gpx -o text,encrypt -F 12345.txt</userinput></para>
+    

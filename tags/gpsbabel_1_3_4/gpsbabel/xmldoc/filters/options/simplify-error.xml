@@ -1,0 +1,13 @@
+<para>
+This option specifies the maximum allowable error that may be introduced
+by removing a single point.  The value of this option is a distance, 
+specified in miles by default.  You may also specify the distance in 
+kilometers by adding a 'k' to the end of the number.
+</para>
+<para> 
+How the error is determined depends on whether the <option>length</option>
+or <option>crosstrack</option> method is used.  If you are using the length
+method, the error is the change in the length of the route introduced by 
+removing a point.  If you are using the crosstrack method, the error is the
+distance from the point to the line that results if that point is removed.
+</para>
