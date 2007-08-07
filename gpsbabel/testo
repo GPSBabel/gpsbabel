@@ -1253,5 +1253,11 @@ bincompare ${TMPDIR}/garmin_gpi3a.gpi ${TMPDIR}/garmin_gpi3b.gpi
 ${PNAME} -i garmin_gpi -f ${REFERENCE}/gpi_ext-sample.gpi -o unicsv -F ${TMPDIR}/gpi_ext-sample.csv
 compare ${REFERENCE}/gpi_ext-sample.csv ${TMPDIR}/gpi_ext-sample.csv
 
+#
+# Nokia  LMX
+#
+${PNAME} -i lmx -f ${REFERENCE}/nokia.lmx -o lmx -F ${TMPDIR}/nokia.lmx
+compare ${REFERENCE}/nokia.lmx ${TMPDIR}/nokia.lmx
+
 
 exit 0
