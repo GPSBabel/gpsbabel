@@ -10,7 +10,7 @@ VERSIOND=$(VERSD)$(RELEASE)
 VERSIONU=$(VERSU)$(RELEASE)
 
 DOCVERSION=@PACKAGE_VERSION@
-# DOCVERSION=development
+DOCVERSION=development
 
 CC=@CC@
 EXEEXT=@EXEEXT@
@@ -55,7 +55,7 @@ FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
 	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
 	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o \
-	ggv_log.o g7towin.o garmin_gpi.o
+	ggv_log.o g7towin.o garmin_gpi.o lmx.o
 
 FILTERS=position.o radius.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
