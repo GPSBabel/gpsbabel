@@ -4339,7 +4339,28 @@ else
 	case "$target" in
 	*-*-darwin*)
 		if test -f /sw/lib/libexpat.a ; then
+			# libexpat installed via fink
 			EXPAT_LIB=/sw/lib/libexpat.a
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_LIBEXPAT 1
+_ACEOF
+
+
+		fi
+		if test -f /opt/local/lib/libexpat.a ; then
+			# libexpat installed via macports
+			EXPAT_LIB=/opt/local/lib/libexpat.a
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_LIBEXPAT 1
+_ACEOF
+
+
+		fi
+		if test -f /usr/local/lib/libexpat.a ; then
+			# libexpat installed from source
+			EXPAT_LIB=/usr/local/lib/libexpat.a
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBEXPAT 1
