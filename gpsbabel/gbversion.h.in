@@ -5,4 +5,4 @@
  * Isn't simplification via automation grand?
  */
 #define VERSION "@GBMAJOR@.@GBMINOR@.@GBMICRO@@PACKAGE_RELEASE@"
-
+#define WEB_DOC_DIR "http://www.gpsbabel.org/htmldoc-@DOCVERSION@"
