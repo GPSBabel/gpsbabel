@@ -10,6 +10,10 @@ PACKAGE_RELEASE="-beta20070807"
 AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$PACKAGE_RELEASE", [Define to the release name of this package.])
 AC_SUBST(PACKAGE_RELEASE)
 
+DOCVERSION=`echo $PACKAGE_VERSION`
+DOCVERSION=development
+AC_SUBST(DOCVERSION)
+
 GBMAJOR=`echo $PACKAGE_VERSION | (IFS="."; read major minor micro; echo $major)`
 GBMINOR=`echo $PACKAGE_VERSION | (IFS="."; read major minor micro; echo $minor)`
 GBMICRO=`echo $PACKAGE_VERSION | (IFS="."; read major minor micro; echo $micro)`

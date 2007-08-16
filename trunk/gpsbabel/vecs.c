@@ -1,7 +1,7 @@
 /*
     Describe vectors containing file operations.
  
-    Copyright (C) 2002, 2004, 2005, 2006  Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2004, 2005, 2006, 2007 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include "defs.h"
 #include "csv_util.h"
 #include "inifile.h"
+#include "gbversion.h"
 
 #define MYNAME "vecs.c"
 
@@ -1146,14 +1147,26 @@ name_option(long type)
 	return at[0];
 }
 
+static 
+void disp_help_url(const vecs_t *vec, arglist_t *arg)
+{
+	printf("\t" WEB_DOC_DIR "/fmt_%s.html", vec->name);
+	if (arg) {
+		printf("#fmt_%s_o_%s",vec->name, arg->argstring);
+	}
+	printf("\n");
+}
+
+
 static void 
-disp_v3(vecs_t *vec)
+disp_v3(const vecs_t *vec)
 {
 	arglist_t *ap;
 
+	disp_help_url(vec, NULL);
 	for (ap = vec->vec->args; ap && ap->argstring; ap++) {
-		if ( !(ap->argtype & ARGTYPE_HIDDEN))
-			printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+		if ( !(ap->argtype & ARGTYPE_HIDDEN)) {
+			printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
 			vec->name, 
 			ap->argstring, 
 			ap->helpstring, 
@@ -1161,6 +1174,9 @@ disp_v3(vecs_t *vec)
 			ap->defaultvalue? ap->defaultvalue : "",
 			ap->minvalue? ap->minvalue : "",
 			ap->maxvalue? ap->maxvalue : "");
+		}
+		disp_help_url(vec, ap);
+		printf("\n");
 	}
 }
 
