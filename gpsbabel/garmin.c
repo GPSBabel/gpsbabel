@@ -152,8 +152,9 @@ rw_init(const char *fname)
 					receiver_short_length = 30;
 					receiver_must_upper = 0;
 					break;
-				case 292: /* (60|76)C[s]X series */
-				case 421: /* Vista|Legend CX */
+				case 292: /* (60|76)C[S]x series */
+				case 421: /* Vista|Legend Cx */
+				case 694: /* Legend HCx */
 					receiver_short_length = 14;
 					snwhiteopt = xstrdup("1");
 					receiver_must_upper = 0;
@@ -731,9 +732,10 @@ waypoint_write(void)
 
 		if (global_opts.smart_names && 
 		     wpt->gc_data.diff && wpt->gc_data.terr) {
-	                snprintf(obuf, sizeof(obuf), "%s%d/%d %s", 
+	                snprintf(obuf, sizeof(obuf), "%s%d/%d %s %s", 
 					get_gc_info(wpt),
 					wpt->gc_data.diff, wpt->gc_data.terr, 
+&wpt->shortname[2],
 					src);
 			memcpy(way[i]->cmnt, obuf, strlen(obuf));
 		} else  {
