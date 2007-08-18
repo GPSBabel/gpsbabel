@@ -325,23 +325,25 @@ nmea_wr_deinit(void)
 }
 
 static void
-nmea_set_waypoint_time(waypoint *wpt, struct tm *time)
+nmea_set_waypoint_time(waypoint *wpt, struct tm *time, int microseconds)
 {
 	if (time->tm_year == 0)
 	{
 		wpt->creation_time = ((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec;
-		if (wpt->microseconds == 0)
+		wpt->microseconds = microseconds;
+		if (wpt->wpt_flags.fmt_use == 0)
 		{
-			 wpt->microseconds++;
+			 wpt->wpt_flags.fmt_use = 1;
 			 without_date++;
 		}
 	}
 	else
 	{
 		wpt->creation_time = mkgmtime(time);
-		if (wpt->microseconds != 0)
+		wpt->microseconds = microseconds;
+		if (wpt->wpt_flags.fmt_use != 0)
 		{
-			wpt->microseconds = 0;
+			wpt->wpt_flags.fmt_use = 0;
 			without_date--;
 		}
 	}
@@ -379,7 +381,7 @@ gpgll_parse(char *ibuf)
 
 	waypt = waypt_new();
 
-	nmea_set_waypoint_time(waypt, &tm);
+	nmea_set_waypoint_time(waypt, &tm, 0);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -405,6 +407,7 @@ gpgga_parse(char *ibuf)
 	double hdop;
 	char altunits;
 	waypoint *waypt;
+	double microseconds;
 
 	if (trk_head == NULL) {
 		trk_head = route_head_alloc();
@@ -426,6 +429,7 @@ gpgga_parse(char *ibuf)
 	}
 
 	last_read_time = hms;
+	microseconds = MILLI_TO_MICRO(1000 * (hms - (int)hms));
 
 	tm.tm_sec = (long) hms % 100;
 	hms = hms / 100;
@@ -435,7 +439,7 @@ gpgga_parse(char *ibuf)
 
 	waypt  = waypt_new();
 
-	nmea_set_waypoint_time(waypt, &tm);
+	nmea_set_waypoint_time(waypt, &tm, microseconds);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -480,6 +484,7 @@ gprmc_parse(char *ibuf)
 	unsigned int dmy;
 	double speed,course;
 	waypoint *waypt;
+	double microseconds;
 
 	if (trk_head == NULL) {
 		trk_head = route_head_alloc();
@@ -497,6 +502,7 @@ gprmc_parse(char *ibuf)
 	}
 
 	last_read_time = hms;
+	microseconds = MILLI_TO_MICRO(1000 * (hms - (int)hms));
 	
 	tm.tm_sec = (long) hms % 100;
 	hms = hms / 100;
@@ -519,7 +525,7 @@ gprmc_parse(char *ibuf)
 				WAYPT_SET(curr_waypt, course, course);
 			/* The change of date wasn't recorded when 
 			 * going from 235959 to 000000. */
-			 nmea_set_waypoint_time(curr_waypt, &tm);
+			 nmea_set_waypoint_time(curr_waypt, &tm, microseconds);
 		}
 		return;
 	}
@@ -530,7 +536,7 @@ gprmc_parse(char *ibuf)
 
 	WAYPT_SET(waypt, course, course);
 	
-	nmea_set_waypoint_time(waypt, &tm);
+	nmea_set_waypoint_time(waypt, &tm, microseconds);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
@@ -728,7 +734,7 @@ pcmpt_parse(char *ibuf)
 		tm.tm_mon  = dmy % 100 - 1;
 		dmy = dmy / 100;
 		tm.tm_mday = dmy;
-		nmea_set_waypoint_time(curr_waypt, &tm);
+		nmea_set_waypoint_time(curr_waypt, &tm, 0);
 		ENQUEUE_HEAD(&pcmpt_head, &curr_waypt->Q);
 	} else {
 		queue *elem, *tmp;
@@ -802,11 +808,11 @@ nmea_fix_timestamps(route_head *track)
 		{
 			waypoint *wpt = (waypoint *)elem;
 			
-			if (wpt->microseconds != 0)
+			if (wpt->wpt_flags.fmt_use != 0)
 			{
 				time_t dt;
 				
-				wpt->microseconds = 0;		/* reset flag */
+				wpt->wpt_flags.fmt_use = 0;	/* reset flag */
 
 				dt = (prev / SECONDS_PER_DAY) * SECONDS_PER_DAY;
 				wpt->creation_time += dt;

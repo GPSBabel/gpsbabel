@@ -302,6 +302,7 @@ typedef struct {
 	unsigned int icon_descr_is_dynamic:1; 
 	unsigned int shortname_is_synthetic:1;
 	unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
+	unsigned int fmt_use:1;			/* lightweight "extra data" */
 	/* "flagged fields" */
 	unsigned int temperature:1;		/* temperature field is set */
 	unsigned int proximity:1;		/* proximity field is set */
