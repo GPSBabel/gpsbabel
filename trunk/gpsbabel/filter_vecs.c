@@ -275,7 +275,6 @@ void disp_help_url(const fl_vecs_t *vec, arglist_t *arg)
 	if (arg) {
 		printf("#fmt_%s_o_%s",vec->name, arg->argstring);
 	}
-	printf("\n");
 }
 
 static void
@@ -284,6 +283,7 @@ disp_v1(const fl_vecs_t *vec)
 	arglist_t *ap;
 	
 	disp_help_url(vec, NULL);
+	printf("\n");
 	for (ap = vec->vec->args; ap && ap->argstring; ap++) {
 		if ( !(ap->argtype & ARGTYPE_HIDDEN)) {
 			printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
@@ -294,9 +294,9 @@ disp_v1(const fl_vecs_t *vec)
 				ap->defaultvalue? ap->defaultvalue : "",
 				ap->minvalue? ap->minvalue : "",
 				ap->maxvalue? ap->maxvalue : "");
+			disp_help_url(vec, ap);
+			printf("\n");
 		}
-		disp_help_url(vec, ap);
-		printf("\n");
 	}
 }
 
@@ -320,9 +320,12 @@ disp_filters(int version)
 	case 0:
 	case 1:
 		for (vec = filter_vec_list; vec->vec; vec++) {
-			printf("%s\t%s\n", vec->name, vec->desc);
-			if (version > 0)
+			if (version == 0) {
+				printf("%s\t%s\n", vec->name, vec->desc);
+			} else {
+				printf("%s\t%s", vec->name, vec->desc);
 				disp_v1(vec);
+			}
 		}
 		break;
 	default:
