@@ -732,10 +732,9 @@ waypoint_write(void)
 
 		if (global_opts.smart_names && 
 		     wpt->gc_data.diff && wpt->gc_data.terr) {
-	                snprintf(obuf, sizeof(obuf), "%s%d/%d %s %s", 
+	                snprintf(obuf, sizeof(obuf), "%s%d/%d %s", 
 					get_gc_info(wpt),
 					wpt->gc_data.diff, wpt->gc_data.terr, 
-&wpt->shortname[2],
 					src);
 			memcpy(way[i]->cmnt, obuf, strlen(obuf));
 		} else  {
