@@ -1051,7 +1051,7 @@ bind_fields(const header_type ht)
 		
 		c = fields;
 		field_no = 1;
-		while (c != NULL) {
+		while (*c) {
 			if (strcmp(c, name) == 0) {
 				header_fields[ht][i] = field_no;
 #if 0
