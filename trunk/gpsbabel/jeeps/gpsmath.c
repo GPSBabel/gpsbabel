@@ -28,7 +28,6 @@
 #include "gpsdatum.h"
 
 
-
 static int32 GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32 *zone,
 					  char *zc, double *Mc, double *E0,
 					  double *N0, double *F0);
@@ -505,11 +504,6 @@ void GPS_Math_XYZ_To_WGS84LatLonH(double *phi, double *lambda, double *H,
 }
 
 
-
-
-
-
-    
 /* @func  GPS_Math_LatLon_To_EN **********************************
 **
 ** Convert latitude and longitude to eastings and northings
@@ -675,7 +669,373 @@ void GPS_Math_Airy1830LatLonToNGEN(double phi, double lambda, double *E,
 }
 
 
+/* @func GPS_Math_WGS84_To_CH1903_NGEN *********************************
+**
+** Convert WGS84 latitude and longitude to 
+** Swiss CH-1903 National Grid Eastings and Northings
+** ( Oblique Mercator Projection )
+**
+** @param [r] phi [double] WGS84 latitude     (deg)
+** @param [r] lambda [double] WGS84 longitude (deg)
+** @param [w] E [double *] Swiss-NG easting (metres)
+** @param [w] N [double *] Swiss-NG northing (metres)
+**
+** @return [void]
+************************************************************************/
 
+int32 GPS_Math_WGS84_To_CH1903_NGEN(double lat, double lon, double *E,
+				   double *N)
+{
+#if 1
+	double alat, alon, aht;
+	
+	GPS_Math_WGS84_To_Known_Datum_M(lat, lon, 0, &alat, &alon, &aht, 123);
+	return GPS_Math_LatLon_To_OM_EN(alat, alon, E, N,
+		46.95240555555556,	/* phiC, center of projection */
+		7.439583333333333,	/* lambdaC, center of projection */
+		90,			/* azimuth true (initial line) */
+		90,			/* Angle from Rectified to Skew Grid */
+		1,			/* const double kC,	*/
+		600000,			/* false easting */
+		200000,			/* false northing */
+		GPS_Ellipse[4].a,
+		GPS_Ellipse[4].invf,
+		0,			/* const char hotine, */
+		1			/* const char degrees */ );
+#else
+
+	/* short-hand method, only good for swiss area */
+	/* reference: http://www.swisstopo.ch/pub/down/basics/geo/system/ch1903_wgs84_en.pdf */
+	/* reference: <http://www.remotesensing.org/geotiff/proj_list/epsg_om.html> */
+	
+	double phi = ((lat * 3600) - 169028.66) / 10000;
+	double lambda = ((lon * 3600) - 26782.5) / 10000;
+	
+	if ((lat < 0) || (lon < 0)) return 0;
+	
+	*E =  (double)600072.37 +
+	     ((double)211455.93 * lambda) -
+	     ((double)10938.51 * lambda * phi) -
+	     ((double)0.36 * lambda * (phi * phi)) -
+	     ((double)44.54 * (lambda * lambda * lambda));
+	     
+	*N = (double)200147.07 +
+	    ((double)308807.95 * phi) +
+	    ((double)3745.25 * (lambda * lambda)) +
+	    ((double)76.63 * (phi * phi)) -
+	    ((double)194.56 * (lambda * lambda * phi)) +
+	    ((double)119.79 * (phi * phi * phi));
+
+	return ((*E >= 0) && (*N >=0)) ? 1 : 0;
+#endif
+}
+
+
+/* @func GPS_Math_CH1903_NGEN_To_WGS84 *********************************
+**
+** Convert WGS84 latitude and longitude to 
+** Swiss CH-1903 National Grid Eastings and Northings
+**
+** @param [r] E [double] Swiss-NG easting (metres)
+** @param [r] N [double] Swiss-NG northing (metres)
+** @param [w] lat [double *] WGS84 latitude     (deg)
+** @param [w] lon [double *] WGS84 longitude (deg)
+**
+** @return [void]
+************************************************************************/
+
+void GPS_Math_CH1903_NGEN_To_WGS84(double E, double N, double *lat, double *lon)
+{
+#if 0
+	double alat, alon, aht;
+	GPS_Math_OM_EN_To_LatLon(E, N, &alat, &alon,
+		46.95240555555556,	/* phiC, center of projection */
+		7.439583333333333,	/* lambdaC, center of projection */
+		90,			/* azimuth true (initial line) */
+		90,			/* ??? Angle from Rectified to Skew Grid */
+		1,			/* const double kC,	*/
+		600000,			/* false easting */
+		200000,			/* false northing */
+		GPS_Ellipse[4].a,
+		GPS_Ellipse[4].invf,
+		0,			/* const char hotine, */
+		1			/* const char degrees */ );
+	GPS_Math_Known_Datum_To_WGS84_M(alat, alon, 0, lat, lon, &aht, 123);
+#else
+	/* short-hand method 1 (only good for swiss area) */
+	
+	double y = (E - 600000) / 1000000;
+	double x = (N - 200000) / 1000000;
+	
+	*lon = (double)2.6779094 +
+		((double)4.728982 * y) +
+		((double)0.791484 * y * x) +
+		((double)0.1306 * y * x * x) -
+		((double)0.0436 * y * y * y);
+	     
+	*lat = (double)16.9023892 +
+		((double)3.238272 * x) -
+		((double)0.270978 * y * y) -
+		((double)0.002528 * x * x) -
+		((double)0.0447 * y * y * x) -
+		((double)0.0140 * x * x * x);
+		
+	*lat *= ((double)100 / 36);
+	*lon *= ((double)100 / 36);
+#endif
+}
+
+#define SIGN(a) (((a) < 0) ? -1 : (((a) > 0) ? +1 : 0))
+
+/* @func GPS_Math_LatLon_To_OM_EN *********************************
+**
+** Convert latitude and longitude to Oblique Mercator or Hotine Oblique 
+** Mercator projection easting and northing
+**
+** status: OKAY
+** reference: <http://www.remotesensing.org/geotiff/proj_list/epsg_om.html>
+**
+** @param [r] phi [double] latitude
+** @param [r] lambda [double] latitude
+** @param [w] E [double *] easting
+** @param [w] N [double *] northing
+** @param [r] phiC [double] center of projection
+** @param [r] lamdaC [double] center of projection
+** @param [r] azmC [double] azimuth true (initial line)
+** @param [r] gammaC [double] angle from Rectified to Skew Grid
+** @param [r] kC [double] skaling factor
+** @param [r] FE [double] false easting / E0 for Hotine OM
+** @param [r] FN [double] false northing / N0 for Hotine OM
+** @param [r] a [double] semi-major axis (meter)
+** @param [r] invf [double] flattening (inv.)
+** @param [r] hotine [int] use Hotine Hotine Oblique Mercator projection
+** @param [r] degrees [int] 1 = parameters in degrees, otherwise radians
+**
+** @return [int32] result 1 = success
+************************************************************************/
+
+int32 GPS_Math_LatLon_To_OM_EN(
+	double phi, double lambda, double *E, double *N,
+	double phiC, double lambdaC, double azmC, double gammaC, const double kC,
+	const double FE, const double FN, const double a, const double invf,
+	const char hotine, const char degrees)
+{
+	double e, e2, f;
+	double A, B, t0, D, F, G, H, t, Q, S, T, V, U, v, u;
+	double lambda0, gamma0, uC;
+	double cos4, D2;
+	
+	/* prepare parameter */
+	
+	if (degrees) {
+		phi = phi * M_PI / 180.0;
+		lambda = lambda * M_PI / 180.0;
+		phiC = phiC * M_PI / 180.0;
+		lambdaC = lambdaC * M_PI / 180.0;
+		azmC = azmC * M_PI / 180.0;
+		gammaC = gammaC * M_PI / 180.0;
+	}
+	f = 1 / invf;
+	e2 = 2 * f - f * f;
+	e = sqrt(e2);
+	
+	cos4 = cos(phiC);
+	cos4 *= cos4;
+	cos4 *= cos4;
+	
+	B = sqrt(1 + (e2 * cos4) / (1 - e2));
+	A = a * B * kC * sqrt(1 - e2) / (1 - e2 * sin(phiC) * sin(phiC));
+	t0 = tan((M_PI/4) - (phiC/2)) / pow((1 - e * sin(phiC)) / (1 + e * sin(phiC)), e/2);
+	D = B * sqrt(1 - e2) / (cos(phiC) * sqrt(1 - e2 * sin(phiC) * sin(phiC)));
+	D2 = (D < 1) ? 1 : (D * D);
+	F = D + sqrt(D2 - 1) * SIGN(phiC);
+
+	H = F * pow(t0, B);
+	G = (F - (1 / F)) / 2;
+	gamma0 = asin(sin(azmC) / D);
+	lambda0 = lambdaC - asin(G * tan(gamma0)) / B;
+
+	if (azmC == (M_PI / 2)) {
+		uC = A * (lambdaC - lambda0);
+	}
+	else {
+		uC = (A / B) * atan(sqrt(D2 - 1) / cos(azmC)) * SIGN(phiC);
+	}
+	
+	/* now calculate from LatLon to EN */
+	
+	t = tan(M_PI/4 - phi/2) / pow((1 - e * sin(phi)) / (1 + e * sin(phi)), e/2);
+	
+	Q = H / pow(t, B);
+	S = (Q - 1.0 / Q) / 2;
+	T = (Q + 1.0 / Q) / 2;
+	V = sin(B * (lambda - lambda0));
+	U = ((-1.0 * V * cos(gamma0)) + (S * sin(gamma0))) / T;
+	v = A * log((1.0 - U) / (1.0 + U)) / (2.0 * B);
+	if (hotine) {
+		u = A * atan((S * cos(gamma0) + V * sin(gamma0)) / cos(B * (lambda - lambda0))) / B;
+	}
+	else {
+		double tmp = fabs(uC) * SIGN(phiC);
+		u = (A * atan((S * cos(gamma0) + V * sin(gamma0)) / cos(B * (lambda - lambda0))) / B);
+		if (u < 0) u = u + tmp;
+		else u = u - tmp;
+	}
+
+	*E = (v * cos(gammaC)) + (u * sin(gammaC)) + FE;
+	*N = (u * cos(gammaC)) - (v * sin(gammaC)) + FN;
+#if 0
+	printf("B   = %.9f\t\tF   = %.9f\n", B, F);
+	printf("A   = %.3f\t\tH   = %.9f\n", A, H);
+	printf("t0  = %.9f\t\tgam0= %.9f\n", t0, gamma0);
+	printf("D   = %.9f\t\tlam0= %.9f\n", D, lambda0);
+	printf("D2  = %.9f\n", D2);
+	printf("uC  = %.2f\t\t\tvC  = %.2f\n", uC, (double)0);
+	printf("\nt   = %.9f\t\tQ   = %.9f\n", t, Q);
+	printf("S   = %.9f\t\tT   = %.9f\n", S, T);
+	printf("V   = %.9f\t\tU   = %.9f\n", V, U);
+	printf("v   = %.3f\t\tu   = %.3f\n", v, u);
+#endif
+	if ((*E >= 0) && (&N >= 0)) return 1;
+	else return 0;
+}
+
+
+/* @func GPS_Math_OM_EN_To_LatLon *********************************
+**
+** Convert Oblique Mercator or Hotine Oblique Mercator projection
+** easting and northing to latitude and longitude
+**
+** status: not really tested, BUT unusable for 'Swiss Grid'
+** reference: <http://www.remotesensing.org/geotiff/proj_list/epsg_om.html>
+**
+** @param [r] E [double] easting
+** @param [r] N [double] northing
+** @param [w] phi [double *] latitude
+** @param [w] lambda [double *] latitude
+** @param [r] phiC [double] center of projection
+** @param [r] lamdaC [double] center of projection
+** @param [r] azmC [double] azimuth true (initial line)
+** @param [r] gammaC [double] angle from Rectified to Skew Grid
+** @param [r] kC [double] skaling factor
+** @param [r] FE [double] false easting / E0 for Hotine OM
+** @param [r] FN [double] false northing / N0 for Hotine OM
+** @param [r] a [double] semi-major axis (meter)
+** @param [r] invf [double] flattening (inv.)
+** @param [r] hotine [int] use Hotine Hotine Oblique Mercator projection
+** @param [r] degrees [int] 1 = parameters in degrees, otherwise radians
+**
+** @return [void]
+************************************************************************/
+
+void GPS_Math_OM_EN_To_LatLon(
+	const double E, const double N, double *phi, double *lambda,
+	double phiC, double lambdaC, double azmC, double gammaC, const double kC,
+	const double FE, const double FN, const double a, const double invf,
+	const char hotine, const char degrees)
+{
+	double e, e2, e4, e6, e8, f;
+	double A, B, t0, D, F, G, H;
+	double v, u, Q, S, T, V, U, t, chi;
+	double lambda0, gamma0, uC;
+	double cos4, D2;
+	
+	/* prepare parameter */
+	
+	f = 1 / invf;
+	e2 = 2 * f - f * f;
+	e4 = e2 * e2;
+	e6 = e4 * e2;
+	e8 = e4 * e4;
+	e = sqrt(e2);
+	
+	if (degrees) {
+		phiC = phiC * M_PI / 180.0;
+		lambdaC = lambdaC * M_PI / 180.0;
+		azmC = azmC * M_PI / 180.0;
+		gammaC = gammaC * M_PI / 180.0;
+	}
+	
+	cos4 = cos(phiC);
+	cos4 *= cos4;
+	cos4 *= cos4;
+	
+	B = sqrt((double)1 + (e2 * cos4) / (1 - e2));
+	A = a * B * kC * sqrt((double)1 - e2) / (1 - e2 * sin(phiC) * sin(phiC));
+	t0 = tan((M_PI/4) - (phiC/2)) / pow((1 - e * sin(phiC)) / ((double)1 + e * sin(phiC)), e/2);
+	D = B * sqrt(1 - e2) / (cos(phiC) * sqrt((double)1 - e2 * sin(phiC) * sin(phiC)));
+	D2 = (D < 1) ? 1 : (D * D);
+	F = D + sqrt(D2 - 1) * SIGN(phiC);
+
+	H = F * pow(t0, B);
+	G = (F - ((double)1 / F)) / 2;
+	gamma0 = asin(sin(azmC) / D);
+	lambda0 = lambdaC - asin(G * tan(gamma0)) / B;
+
+	if (azmC == (M_PI / 2)) {
+		uC = A * (lambdaC - lambda0);
+	}
+	else {
+		uC = (A / B) * atan(sqrt(D2 - 1) / cos(azmC)) * SIGN(phiC);
+	}
+
+	/* now calculate from LatLon to EN */
+	
+	if (hotine) {
+		v = (E - FE) * cos(gammaC) - (N - FN) * sin(gammaC);
+		u = (N - FN) * cos(gammaC) + (E - FE) * sin(gammaC);
+	}
+	else {
+		v = (E - FE) * cos(gammaC) - (N - FN) * sin(gammaC);
+		u = (N - FN) * cos(gammaC) + (E - FE) * sin(gammaC) + uC;
+	}
+
+	Q = exp(-1.0 * (B * v / A));
+	S = (Q - 1/Q) / 2;
+	T = (Q + 1/Q) / 2;
+	V = sin(B * u / A);
+	U = (V * cos(gamma0) + S * sin(gamma0)) / T;
+	t = pow(H / sqrt((1.0 + U) / (1.0 - U)), 1.0 / B);
+	chi = (M_PI / 2) - (atan(t) * 2);
+
+	*phi = chi + sin(chi*2) * (e2 / 2 + 5*e4 / 24 + e6 / 12 + e8 / 360) +
+	       sin(chi*4) * (7 * e4 / 48 + 29 * e6 / 240 + 811*e8 / 11520) + 
+	       sin(chi*6) * (7 * e6 /120 + 81 * e8 / 1120) +
+	       sin(chi*8) * (4279 * e8 / 161280);
+	       
+//	*lambda = lambda0 - atan2((S * cos(gammaC) - V * sin(gammaC)), cos(B * u / A)) / B;
+	*lambda = lambda0 - atan((S * cos(gammaC) - V * sin(gammaC)) / cos(B * u / A)) / B;
+	
+	/* finalize results */
+	if (degrees) {
+		*phi = *phi * 180.0 / M_PI;
+		*lambda = *lambda * 180.0 / M_PI;
+	}
+
+#if 0
+	printf("\nE   = %11.3f\t\tN   = %11.3f\n", E, N);
+	printf("\nB   = %.9f\t\tF   = %.9f\n", B, F);
+	printf("A   = %.3f\t\tH   = %.9f\n", A, H);
+	printf("t0  = %.9f\t\tgam0= %.9f\n", t0, gamma0);
+	printf("D   = %.9f\t\tlam0= %.9f\n", D, lambda0);
+	printf("D2  = %.9f\n", D2);
+	printf("uC  = %.2f\n", uC);
+	printf("cosG= %11.9f\t\tsinG = %11.9f\n", cos(gammaC), sin(gammaC));
+	printf("BuA = %11.9f\t\tcosBuA=%9.9f\n", B * u / A, cos(B * u / A));
+	printf("S * cos(gammaC) = %11.9f\n", S * cos(gammaC));
+	printf("V * sin(gammaC) = %11.9f\n", V * sin(gammaC));
+	printf("base= %11.9f\t\tatan = %11.9f\n", 
+		(S * cos(gammaC) - V * sin(gammaC)) / cos(B * u / A),
+		atan((S * cos(gammaC) - V * sin(gammaC)) / cos(B * u / A))
+	);
+
+	printf("v'  = %11.3f\t\tu'  = %.3f\n", v, u);
+	printf("Q'  = %.9f\n", Q);
+	printf("S'  = %11.9f\t\tT'  = %.9f\n", S, T);
+	printf("V'  = %11.9f\t\tU'  = %.9f\n", V, U);
+	printf("t'  = %11.9f\t\tchi'= %0.9f\n", t, chi);
+#endif
+}
 
 /* @func  GPS_Math_EN_To_LatLon **************************************
 **
@@ -1867,16 +2227,16 @@ int32 GPS_Math_UTM_EN_To_Known_Datum(double *lat, double *lon, double E,
 int32 GPS_Lookup_Datum_Index(const char *n)
 {
 	GPS_PDatum dp;
-	const char *name;
-	
-	if (case_ignore_strcmp(n, "WGS84") == 0) name = "WGS 84";
-	else if (case_ignore_strcmp(n, "WGS-84") == 0) name = "WGS 84";
-	else if (case_ignore_strcmp(n, "WGS72") == 0) name = "WGS 72";
-	else if (case_ignore_strcmp(n, "WGS-72") == 0) name = "WGS 72";
-	else name = n;
+	GPS_PDatum_Alias al;
+
+	for (al = GPS_DatumAlias; al->alias; al++) {
+		if (case_ignore_strcmp(al->alias, n) == 0) {
+			return al->datum;
+		}
+	}
 
 	for (dp = GPS_Datum; dp->name; dp++) {
-		if (0 == case_ignore_strcmp(dp->name, name)) {
+		if (0 == case_ignore_strcmp(dp->name, n)) {
 			return dp - GPS_Datum;
 		}
 	}
