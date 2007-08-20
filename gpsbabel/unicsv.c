@@ -57,6 +57,9 @@ typedef enum {
 	fld_bng_zone,
 	fld_bng_northing,
 	fld_bng_easting,
+	fld_swiss,
+	fld_swiss_northing,
+	fld_swiss_easting,
 	fld_hdop,
 	fld_pdop,
 	fld_vdop,
@@ -77,6 +80,12 @@ typedef enum {
 	fld_time,
 	fld_datetime,
 	fld_iso_time,
+	fld_year,
+	fld_month,
+	fld_day,
+	fld_hour,
+	fld_min,
+	fld_sec,
 	fld_garmin_city,
 	fld_garmin_postal_code,
 	fld_garmin_state,
@@ -93,6 +102,8 @@ typedef enum {
 #define STR_EQUAL	8
 #define STR_CASE	16
 
+#define unicsv_unknown	1e25
+
 typedef struct {
 	char *name;
 	field_e type;
@@ -104,10 +115,17 @@ typedef struct {
  * we check a second time after replacing underscores with spaces
  */
 static field_t fields_def[] = {
+	/* unhandled columns */
+	{ "index",	fld_terminator, STR_ANY },
+	{ "no",		fld_terminator, STR_EQUAL },
+	{ "mini",	fld_terminator, STR_ANY },	/* maybe minimum anything, so
+							   avoid detection as 'min' for minute */
+	/* handled columns */
 	{ "name",	fld_shortname, STR_ANY },
+	{ "title",	fld_shortname, STR_ANY },
 	{ "desc",	fld_description, STR_ANY },
 	{ "notes",	fld_notes, STR_ANY },
-	{ "omment",	fld_notes, STR_ANY },
+	{ "omment",	fld_notes, STR_ANY },		/* works also for German "Kommentar" */
 	{ "text",	fld_notes, STR_ANY },
 	{ "url",	fld_url, STR_ANY },
 	{ "icon",	fld_symbol, STR_ANY },
@@ -135,6 +153,11 @@ static field_t fields_def[] = {
 	{ "bng",	fld_bng, STR_EQUAL },
 	{ "bng_coo",	fld_bng, STR_ANY },
 	{ "bng_pos",	fld_bng, STR_ANY },
+	{ "swiss_e",	fld_swiss_easting, STR_ANY },
+	{ "swiss_n",	fld_swiss_northing, STR_ANY },
+	{ "swiss",	fld_swiss, STR_EQUAL },
+	{ "swiss_coo",	fld_swiss, STR_ANY },
+	{ "swiss_pos",	fld_swiss, STR_ANY },
 	{ "hdop",	fld_hdop, STR_ANY },
 	{ "pdop",	fld_pdop, STR_ANY },
 	{ "vdop",	fld_vdop, STR_ANY },
@@ -145,6 +168,7 @@ static field_t fields_def[] = {
 	{ "head",	fld_course, STR_ANY },
 	{ "cour",	fld_course, STR_ANY },
 	{ "speed",	fld_speed, STR_ANY },
+	{ "velo",	fld_speed, STR_ANY },
 	{ "geschw",	fld_speed, STR_ANY },		/* speed in german */
 	{ "tempf",	fld_temperature_f, STR_EQUAL },	/* degrees fahrenheit */
 	{ "temp",	fld_temperature, STR_ANY },	/* degrees celsius by default */
@@ -153,7 +177,16 @@ static field_t fields_def[] = {
 	{ "prox",	fld_proximity, STR_ANY },
 	{ "depth",	fld_depth, STR_ANY },
 	{ "date",	fld_date, STR_ANY },
+	{ "datum",	fld_date, STR_ANY },
 	{ "time",	fld_time, STR_ANY },
+	{ "zeit",	fld_time, STR_ANY },
+	{ "hour",	fld_hour, STR_LEFT },
+	{ "min",	fld_min, STR_LEFT },
+	{ "sec",	fld_sec, STR_LEFT },
+	{ "year",	fld_year, STR_LEFT },
+	{ "month",	fld_month, STR_LEFT },
+	{ "day",	fld_day, STR_LEFT },
+
 	/* garmin specials */
 	{ "addr",	fld_garmin_addr, STR_ANY },
 	{ "street",	fld_garmin_addr, STR_ANY },
@@ -164,15 +197,13 @@ static field_t fields_def[] = {
 	{ "phone",	fld_garmin_phone_nr, STR_ANY },
 	{ "state",	fld_garmin_state, STR_ANY },
 	{ "faci",	fld_garmin_facility, STR_ANY },
-	/* unhandled columns */
-	{ "index",	fld_terminator, STR_ANY },
-	{ "no",		fld_terminator, STR_EQUAL },
 	{ NULL,		fld_terminator, 0 }
 };
 
 static field_e *unicsv_fields_tab;
 static int unicsv_fields_tab_ct;
-static double unicsv_altscale;
+static double unicsv_altscale, unicsv_depthscale, unicsv_proximityscale
+;
 static char *unicsv_fieldsep;
 static gbfile *fin, *fout;
 static gpsdata_type unicsv_data_type;
@@ -180,7 +211,7 @@ static route_head *unicsv_track, *unicsv_route;
 static unsigned long long unicsv_outp_flags;
 static grid_type unicsv_grid_idx;
 static int unicsv_datum_idx;
-static char *opt_datum, *opt_grid;
+static char *opt_datum, *opt_grid, *opt_utc;
 static int unicsv_waypt_ct;
 static char unicsv_detect;
 
@@ -189,6 +220,8 @@ static arglist_t unicsv_args[] = {
 		"WGS 84", ARGTYPE_STRING, ARG_NOMINMAX}, 
 	{"grid",  &opt_grid,  "Write position using this grid.",
 		NULL, ARGTYPE_STRING, ARG_NOMINMAX},
+	{"utc",   &opt_utc,   "Write timestamps with offset x to UTC time", 
+		NULL, ARGTYPE_INT, "-23", "+23"},
 	ARG_TERMINATOR };
 
 
@@ -255,14 +288,14 @@ static int
 unicsv_parse_time(const char *str, int *msec)
 {
 	int hour, min, ct, sec;
-	char sep[2];
-	char *dot;
+	double ms;
+	char sep[1];
 	
-	ct = sscanf(str, "%d%1[.://]%d%1[.://]%d", &hour, sep, &min, sep, &sec);
-	is_fatal(ct != 5, MYNAME ": Could not parse time string (%s).\n", str);
-	if ((dot = strchr(str, '.'))) {
-		*msec = (atof(dot) + 0.0000005) * 1000000;
-		if (*msec >= 1000000) {
+	ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &ms);
+	is_fatal(ct < 5, MYNAME ": Could not parse time string (%s).\n", str);
+	if (ct == 6) {
+		*msec = (ms * 1000000) + 0.5;
+		if (*msec > 999999) {
 			*msec = 0;
 			sec++;
 		}
@@ -394,6 +427,16 @@ unicsv_fondle_header(char *ibuf)
 				unicsv_altscale = FEET_TO_METERS(1);
 			}
 		}
+		if (f->type == fld_depth) {
+			if (UNICSV_CONTAINS("ft") || UNICSV_CONTAINS("feet")) {
+				unicsv_depthscale = FEET_TO_METERS(1);
+			}
+		}
+		if (f->type == fld_proximity) {
+			if (UNICSV_CONTAINS("ft") || UNICSV_CONTAINS("feet")) {
+				unicsv_proximityscale = FEET_TO_METERS(1);
+			}
+		}
 		if ((f->type == fld_time) || (f->type == fld_date)) {
 			if (UNICSV_CONTAINS("iso"))
 				f->type = fld_iso_time;
@@ -407,6 +450,8 @@ unicsv_rd_init(const char *fname)
 {
 	char *c;
 	unicsv_altscale = 1.0;
+	unicsv_depthscale = 1.0;
+	unicsv_proximityscale = 1.0;
 	
 	unicsv_fields_tab = NULL;
 	unicsv_fields_tab_ct = 0;
@@ -444,14 +489,19 @@ unicsv_parse_one_line(char *ibuf)
 	char bng_zone[3] = "";
 	double bng_easting = 0;
 	double bng_northing = 0;
+	double swiss_easting = unicsv_unknown;
+	double swiss_northing = unicsv_unknown;
 	int checked = 0;
 	int date = -1, time = -1, msec = -1;
 	char is_localtime = 0;
 	garmin_fs_t *gmsd;
+	double d;
+	struct tm ymd;
 
 	wpt = waypt_new();
-	wpt->latitude = -9999;
-	wpt->longitude = -9999;
+	wpt->latitude = unicsv_unknown;
+	wpt->longitude = unicsv_unknown;
+	memset(&ymd, 0, sizeof(ymd));
 
 	column = -1;
 	while ((s = csv_lineparse(ibuf, unicsv_fieldsep, "\"", 0))) {
@@ -505,7 +555,10 @@ unicsv_parse_one_line(char *ibuf)
 			break;
 
 		case fld_altitude:
-			wpt->altitude = atof(s) * unicsv_altscale;
+			if (parse_distance(s, &d, unicsv_altscale, MYNAME)) {
+				if (fabs(d) < fabs(unknown_alt))
+					wpt->altitude = d;
+			}
 			break;
 
 		case fld_utm_zone:
@@ -547,6 +600,19 @@ unicsv_parse_one_line(char *ibuf)
 			bng_easting = atof(s);
 			break;
 			
+		case fld_swiss:
+			parse_coordinates(s, DATUM_WGS84, grid_swiss,
+				&wpt->latitude, &wpt->longitude, MYNAME);
+			break;
+
+		case fld_swiss_easting:
+			swiss_easting = atof(s);
+			break;
+
+		case fld_swiss_northing:
+			swiss_northing = atof(s);
+			break;
+
 		case fld_hdop:
 			wpt->hdop = atof(s);
 			if (unicsv_detect) unicsv_data_type = trkdata;
@@ -597,8 +663,11 @@ unicsv_parse_one_line(char *ibuf)
 			break;
 
 		case fld_speed:
-			WAYPT_SET(wpt, speed, atof(s));
-			if (unicsv_detect) unicsv_data_type = trkdata;
+			if (parse_speed(s, &d, 1.0, MYNAME)) {
+				WAYPT_SET(wpt, speed, d);
+				if (unicsv_detect)
+					unicsv_data_type = trkdata;
+			}
 			break;
 
 		case fld_course:
@@ -607,11 +676,13 @@ unicsv_parse_one_line(char *ibuf)
 			break;
 			
 		case fld_temperature:
-			WAYPT_SET(wpt, temperature, atof(s));
+			d = atof(s);
+			if (fabs(d) < 999999) WAYPT_SET(wpt, temperature, d);
 			break;
 
 		case fld_temperature_f:
-			WAYPT_SET(wpt, temperature, FAHRENHEIT_TO_CELSIUS(atof(s)));
+			d = atof(s);
+			if (fabs(d) < 999999) WAYPT_SET(wpt, temperature, FAHRENHEIT_TO_CELSIUS(d));
 			break;
 
 		case fld_heartrate:
@@ -625,11 +696,13 @@ unicsv_parse_one_line(char *ibuf)
 			break;
 
 		case fld_proximity:
-			WAYPT_SET(wpt, proximity, atof(s));
+			if (parse_distance(s, &d, unicsv_proximityscale, MYNAME))
+				WAYPT_SET(wpt, proximity, d);
 			break;
 
 		case fld_depth:
-			WAYPT_SET(wpt, depth, atof(s));
+			if (parse_distance(s, &d, unicsv_depthscale, MYNAME))
+				WAYPT_SET(wpt, depth, d);
 			break;
 			
 		case fld_symbol:
@@ -654,6 +727,30 @@ unicsv_parse_one_line(char *ibuf)
 				date = unicsv_parse_date(s);
 				is_localtime = 1;
 			}
+			break;
+			
+		case fld_year:
+			ymd.tm_year = atoi(s);
+			break;
+
+		case fld_month:
+			ymd.tm_mon = atoi(s);
+			break;
+
+		case fld_day:
+			ymd.tm_mday = atoi(s);
+			break;
+
+		case fld_hour:
+			ymd.tm_hour = atoi(s);
+			break;
+
+		case fld_min:
+			ymd.tm_min = atoi(s);
+			break;
+
+		case fld_sec:
+			ymd.tm_sec = atoi(s);
 			break;
 
 		case fld_datetime:
@@ -702,7 +799,10 @@ unicsv_parse_one_line(char *ibuf)
 			if (is_localtime) {
 				struct tm tm;
 				tm = *gmtime(&t);
-				wpt->creation_time = mklocaltime(&tm);
+				if (opt_utc)
+					wpt->creation_time = mkgmtime(&tm);
+				else
+					wpt->creation_time = mklocaltime(&tm);
 			}
 			else
 				wpt->creation_time = t;
@@ -711,12 +811,39 @@ unicsv_parse_one_line(char *ibuf)
 			wpt->creation_time = time;
 		else if (date >= 0)
 			wpt->creation_time = date;
+		else if (ymd.tm_year || ymd.tm_mon || ymd.tm_mday) {
+			if (ymd.tm_year < 100) {
+				if (ymd.tm_year <= 70) ymd.tm_year += 2000;
+				else ymd.tm_year += 1900;
+			}
+			ymd.tm_year -= 1900;
+			
+			if (ymd.tm_mon == 0) ymd.tm_mon = 1;
+			if (ymd.tm_mday == 0) ymd.tm_mday = 1;
+			
+			ymd.tm_mon--;
+			if (opt_utc)
+				wpt->creation_time = mkgmtime(&ymd);
+			else
+				wpt->creation_time = mklocaltime(&ymd);
+		}
+		else if (ymd.tm_hour || ymd.tm_min || ymd.tm_sec) {
+			if (opt_utc)
+				wpt->creation_time = mkgmtime(&ymd);
+			else
+				wpt->creation_time = mklocaltime(&ymd);
+		}
+
 		if (msec >= 0)
 			wpt->microseconds = msec;
+		
+		if (opt_utc)
+			wpt->creation_time += atoi(opt_utc) * SECONDS_PER_HOUR;
 	}
 	
-	/* utm/bng can be optional */
-	if ((wpt->latitude == -9999) && (wpt->longitude == -9999)) {
+	/* utm/bng/swiss can be optional */
+
+	if ((wpt->latitude == unicsv_unknown) && (wpt->longitude == unicsv_unknown)) {
 		if (utm_zone != -9999) {
 			GPS_Math_UTM_EN_To_Known_Datum(&wpt->latitude, &wpt->longitude,
 				utm_easting, utm_northing, utm_zone, utm_zc, DATUM_WGS84);
@@ -727,6 +854,11 @@ unicsv_parse_one_line(char *ibuf)
 				&wpt->latitude, &wpt->longitude))
 			fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
 				bng_zone, bng_easting, bng_northing);
+		}
+		else if ((swiss_easting != unicsv_unknown) && (swiss_northing != unicsv_unknown)) {
+			GPS_Math_CH1903_NGEN_To_WGS84(swiss_easting, swiss_northing,
+				&wpt->latitude, &wpt->longitude);
+
 		}
 	}
 
@@ -772,6 +904,16 @@ strassign(char **old, char *new)
 	if (*old) xfree(*old);
 	*old = new;
 	return new;
+}
+
+static void
+unicsv_fatal_outside(const waypoint *wpt)
+{
+	gbfprintf(fout, "#####\n");
+	fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
+		wpt->shortname ? wpt->shortname : "Waypoint",
+		pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
+		gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));
 }
 
 static void
@@ -903,7 +1045,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 		double north, east;
 
 		if (! GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map))
-			fatal(MYNAME ": Some (or all?) of the coordinates cannot be displayed using \"BNG\".\n");
+			unicsv_fatal_outside(wpt);
 		gbfprintf(fout, "%s%s%5.0f%s%5.0f",
 			map, unicsv_fieldsep, 
 			east, unicsv_fieldsep, 
@@ -917,13 +1059,22 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 
 		if (! GPS_Math_Known_Datum_To_UTM_EN(lat, lon,
 			&east, &north, &zone, &zonec, unicsv_datum_idx))
-			fatal(MYNAME ": Some (or all?) of the coordinates cannot be displayed using \"UTM\".\n");
+			unicsv_fatal_outside(wpt);
 		gbfprintf(fout, "%02d%s%c%s%.0f%s%.0f",
 			zone, unicsv_fieldsep, 
 			zonec, unicsv_fieldsep,
 			east, unicsv_fieldsep, 
 			north);
 		break;
+	}
+	case grid_swiss: {
+		double north, east;
+		
+		if (! GPS_Math_WGS84_To_CH1903_NGEN(wpt->latitude, wpt->longitude, &east, &north))
+			unicsv_fatal_outside(wpt);
+		gbfprintf(fout, "%.f%s%.f%s",
+			east, unicsv_fieldsep, north, unicsv_fieldsep);
+
 	}
 	default:
 		gbfprintf(fout, "%.6f%s%.6f", lat, unicsv_fieldsep, lon);
@@ -1028,7 +1179,13 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 		if (wpt->creation_time >= SECONDS_PER_DAY) {
 			struct tm tm;
 			char buf[32];
-			tm = *localtime(&wpt->creation_time);
+			time_t time = wpt->creation_time;
+			
+			if (opt_utc) {
+				time += atoi(opt_utc) * SECONDS_PER_HOUR;
+				tm = *gmtime(&time);
+			}
+			else tm = *localtime(&wpt->creation_time);
 			tm.tm_year += 1900;
 			tm.tm_mon += 1;
 			snprintf(buf, sizeof(buf), "%04d/%02d/%02d", tm.tm_year, tm.tm_mon, tm.tm_mday);
@@ -1041,8 +1198,13 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 		if (wpt->creation_time != 0) {
 			struct tm tm;
 			char buf[32], msec[12];
-
-			tm = *localtime(&wpt->creation_time);
+			time_t time = wpt->creation_time;
+			
+			if (opt_utc) {
+				time += atoi(opt_utc) * SECONDS_PER_HOUR;
+				tm = *gmtime(&time);
+			}
+			else tm = *localtime(&wpt->creation_time);
 			snprintf(buf, sizeof(buf), "%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
 
 			if (wpt->microseconds > 0) {
@@ -1147,6 +1309,10 @@ unicsv_wr(void)
 */
 		gbfprintf(fout, "UTM-Zone%sUTM-Ch%sUTM-East%sUTM-North",
 			unicsv_fieldsep, unicsv_fieldsep, unicsv_fieldsep);
+		break;
+	case grid_swiss: 
+		gbfprintf(fout, "Swiss-East%sSwiss-North",
+			unicsv_fieldsep);
 		break;
 	default: 
 		gbfprintf(fout, "Latitude%sLongitude", unicsv_fieldsep);
