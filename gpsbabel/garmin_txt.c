@@ -73,7 +73,7 @@ typedef enum {
 	unknown_header
 } header_type;
 
-#define MAX_HEADER_FIELDS 24
+#define MAX_HEADER_FIELDS 36
 
 static char *header_lines[unknown_header + 1][MAX_HEADER_FIELDS];
 static int header_fields[unknown_header + 1][MAX_HEADER_FIELDS];
@@ -133,7 +133,7 @@ static char *headers[] = {
 		"Display Mode\tColor\tSymbol\tFacility\tCity\tState\tCountry\t"
 		"Date Modified\tLink\tCategories",
 	"Waypoint Name\tDistance\tLeg Length\tCourse",
-	"Position\tTime\tAltitude\tDepth\tLeg Length\tLeg Time\tLeg Speed\tLeg Course",
+	"Position\tTime\tAltitude\tDepth\tTemperature\tLeg Length\tLeg Time\tLeg Speed\tLeg Course",
 	"Name\tLength\tCourse\tWaypoints\tLink",
 	"Name\tStart Time\tElapsed Time\tLength\tAverage Speed\tLink",
 	NULL
@@ -162,48 +162,6 @@ init_date_and_time_format(void)
 	c = convert_human_time_format(f);
 	date_time_format = xstrappend(date_time_format, c);
 	xfree(c);
-}
-
-static double
-distance(double lat1, double lon1, double lat2, double lon2)
-{
-	double res = radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
-	if (res < 0.1) res = 0;	/* calc. diffs on 32- and 64-bit hosts */
-	return res;
-}
-
-static double
-course_deg(double lat1, double lon1, double lat2, double lon2)
-{
-	return DEG(heading(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
-}
-
-static double
-waypt_distance(const waypoint *A, const waypoint *B)		/* !!! from A to B !!! */
-{
-	double dist = 0;
-	garmin_fs_p gmsd;
-	
-	if ((A == NULL) || (B == NULL)) return 0;
-	
-	gmsd = GMSD_FIND(A);
-	if ((gmsd != NULL) && (gmsd->ilinks != NULL))
-	{
-		garmin_ilink_t *link = gmsd->ilinks;
-		
-		dist = distance(A->latitude, A->longitude, link->lat, link->lon);
-		while (link->next != NULL)
-		{
-			garmin_ilink_t *prev = link;
-			link = link->next;
-			dist += distance(prev->lat, prev->lon, link->lat, link->lon);
-		}
-		dist += distance(link->lat, link->lon, B->latitude, B->longitude);
-	} else 
-	{
-		dist = distance(A->latitude, A->longitude, B->latitude, B->longitude);
-	}
-	return dist;
 }
 
 static void
@@ -298,7 +256,7 @@ prework_wpt_cb(const waypoint *wpt)
 
 	if (prev != NULL) {
 		cur_info->time += (wpt->creation_time - prev->creation_time);
-		cur_info->length += waypt_distance(prev, wpt);
+		cur_info->length += waypt_distance_ex(prev, wpt);
 	}
 	else {
 		cur_info->first_wpt = (waypoint *)wpt;
@@ -315,7 +273,7 @@ prework_wpt_cb(const waypoint *wpt)
 static void
 print_position(const waypoint *wpt)
 {
-	int valid;
+	int valid = 1;
 	double lat, lon, north, east;
 	char latsig, lonsig;
 	double  latmin, lonmin, latsec, lonsec;
@@ -365,19 +323,32 @@ print_position(const waypoint *wpt)
 	case grid_bng:
 
 		valid = GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map);
-		is_fatal(! valid, MYNAME ": Some (or all?) of the coordinates cannot be displayed using \"BNG\".");
-		gbfprintf(fout, "%s %5.0f %5.0f\t", map, east, north);
+		if (valid) gbfprintf(fout, "%s %5.0f %5.0f\t", map, east, north);
 		break;
 
 	case grid_utm:
 
 		valid = GPS_Math_Known_Datum_To_UTM_EN(lat, lon,
 			&east, &north, &zone, &zonec, datum_index);
-		gbfprintf(fout, "%02d %c %.0f %.0f\t", zone, zonec, east, north);
+		if (valid) gbfprintf(fout, "%02d %c %.0f %.0f\t", zone, zonec, east, north);
+		break;
+
+	case grid_swiss:
+
+		valid = GPS_Math_WGS84_To_CH1903_NGEN(wpt->latitude, wpt->longitude, &east, &north);
+		if (valid) gbfprintf(fout, "%.f %.f\t", east, north);
 		break;
 
 	default:
 		fatal("ToDo\n");
+	}
+	
+	if (! valid) {
+		gbfprintf(fout, "#####\n");
+		fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
+			wpt->shortname ? wpt->shortname : "Waypoint",
+			pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
+			gt_get_mps_grid_longname(grid_index, MYNAME));
 	}
 }
 
@@ -440,16 +411,13 @@ print_course(const waypoint *A, const waypoint *B)		/* seems to be okay */
 {
 	if ((A != NULL) && (B != NULL) && (A != B)) {
 		int course;
-		course = si_round((double)360 - course_deg(A->latitude, A->longitude, B->latitude, B->longitude));
-		if (course >= 360) {
-			course -= 360;
-		}
+		course = si_round(waypt_course(A, B));
 		cet_gbfprintf(fout, &cet_cs_vec_cp1252, "%d%c true", course, 0xB0);
 	}
 }
 
 static void
-print_distance(const double distance, const int no_scale, const int with_tab)
+print_distance(const double distance, const int no_scale, const int with_tab, const int decis)
 {
 	double dist = distance;
 	
@@ -457,7 +425,7 @@ print_distance(const double distance, const int no_scale, const int with_tab)
 		dist = METERS_TO_FEET(dist);
 	
 		if ((dist < 5280) || no_scale)
-			gbfprintf(fout, "%.f ft", dist);
+			gbfprintf(fout, "%.*f ft", decis, dist);
 		else {
 			dist = METERS_TO_MILES(distance);
 			if (dist < (double)100)
@@ -469,7 +437,7 @@ print_distance(const double distance, const int no_scale, const int with_tab)
 	else
 	{
 		if ((dist < 1000) || no_scale)
-			gbfprintf(fout, "%.f m", dist);
+			gbfprintf(fout, "%.*f m", decis, dist);
 		else {
 			dist = dist / (double)1000.0;
 			if (dist < (double)100)
@@ -508,6 +476,16 @@ print_speed(double *distance, time_t *time)
 	}
 	else
 		gbfprintf(fout, "0 %s", unit);
+	gbfprintf(fout, "\t");
+}
+
+static void
+print_temperature(const float temperature)
+{
+	if (gtxt_flags.celsius)
+		gbfprintf(fout, "%.f C", temperature);
+	else
+		gbfprintf(fout, "%.f F", (temperature * 1.8) + 32);
 	gbfprintf(fout, "\t");
 }
 
@@ -573,26 +551,22 @@ write_waypt(const waypoint *wpt)
 	print_position(wpt);
 	
 	if IS_VALID_ALT(wpt->altitude)
-		print_distance(wpt->altitude, 1, 0);
+		print_distance(wpt->altitude, 1, 0, 0);
 	gbfprintf(fout, "\t");
 	
 	x = WAYPT_GET(wpt, depth, unknown_alt);
 	if (x != unknown_alt)
-		print_distance(x, 1, 0);
+		print_distance(x, 1, 0, 1);
 	gbfprintf(fout, "\t");
 
 	x = WAYPT_GET(wpt, proximity, unknown_alt);
 	if (x != unknown_alt)
-		print_distance(x, 0, 0);
+		print_distance(x, 0, 0, 0);
 	gbfprintf(fout, "\t");
 	
-	x = WAYPT_GET(wpt, temperature, unknown_alt);
-	if (x != unknown_alt) {
-		if (gtxt_flags.celsius)
-			gbfprintf(fout, "%.f C", x);
-		else
-			gbfprintf(fout, "%.f F", (x * 1.8) + 32);
-	}
+	x = WAYPT_GET(wpt, temperature, -999);
+	if (x != -999)
+		print_temperature(x);
 	gbfprintf(fout, "\t%s\t", dspl_mode);
 	
 	gbfprintf(fout, "Unknown\t"); 				/* Color is fixed: Unknown */
@@ -632,7 +606,7 @@ route_disp_hdr_cb(const route_head *rte)
 	}
 
 	print_string("\r\nRoute\t%s\t", current_trk->rte_name ? current_trk->rte_name : "");
-	print_distance(cur_info->length, 0, 1);
+	print_distance(cur_info->length, 0, 1, 0);
 	print_course(cur_info->first_wpt, cur_info->last_wpt);
 	gbfprintf(fout, "\t%d waypoints\t", cur_info->count);
 	print_string("%s\r\n", rte->rte_url ? rte->rte_url : "");
@@ -655,14 +629,14 @@ route_disp_wpt_cb(const waypoint *wpt)
 
 	if (prev != NULL)
 	{
-		double dist = waypt_distance(prev, wpt);
+		double dist = waypt_distance_ex(prev, wpt);
 		cur_info->total += dist;
-		print_distance(cur_info->total, 0, 1);
-		print_distance(dist, 0, 1);
+		print_distance(cur_info->total, 0, 1, 0);
+		print_distance(dist, 0, 1, 0);
 		print_course(prev, wpt);
 	}
 	else 
-		print_distance(0, 1, 0);	
+		print_distance(0, 1, 0, 0);
 
 	gbfprintf(fout, "\r\n");
 	
@@ -686,7 +660,7 @@ track_disp_hdr_cb(const route_head *track)
 	print_string("\r\nTrack\t%s\t", current_trk->rte_name ? current_trk->rte_name : "");
 	print_date_and_time(cur_info->start, 0);
 	print_date_and_time(cur_info->time, 1);
-	print_distance(cur_info->length, 0, 1);
+	print_distance(cur_info->length, 0, 1, 0);
 	print_speed(&cur_info->length, &cur_info->time);
 	print_string("%s", (track->rte_url != NULL) ? track->rte_url : "");
 	gbfprintf(fout, "\r\n\r\nHeader\t%s\r\n\r\n", headers[trkpt_header]);
@@ -703,20 +677,30 @@ track_disp_wpt_cb(const waypoint *wpt)
 {
 	waypoint *prev = cur_info->prev_wpt;
 	time_t delta;
-	double dist;
+	double dist, depth;
 	
 	gbfprintf(fout, "Trackpoint\t");
 
 	print_position(wpt);
 	print_date_and_time(wpt->creation_time, 0);
 	if IS_VALID_ALT(wpt->altitude)
-		print_distance(wpt->altitude, 1, 0);
-	gbfprintf(fout, "\t0.0 %s", (gtxt_flags.metric) ? "m" : "ft");
+		print_distance(wpt->altitude, 1, 0, 0);
+
+	gbfprintf(fout, "\t");
+	depth = WAYPT_GET(wpt, depth, unknown_alt);
+	if (depth != unknown_alt)
+		print_distance(depth, 1, 0, 1);
+
 	if (prev != NULL) {
+		float temp;
 		gbfprintf(fout, "\t");
 		delta = wpt->creation_time - prev->creation_time;
-		dist = distance(prev->latitude, prev->longitude, wpt->latitude, wpt->longitude);
-		print_distance(dist, 0, 1);
+		temp = WAYPT_GET(wpt, temperature, -999);
+		if (temp != -999)
+			print_temperature(temp);
+		gbfprintf(fout, "\t");
+		dist = waypt_distance_ex(prev, wpt);
+		print_distance(dist, 0, 1, 0);
 		print_date_and_time(delta, 1);
 		print_speed(&dist, &delta);
 		print_course(prev, wpt);
@@ -766,6 +750,9 @@ garmin_txt_wr_init(const char *fname)
 	switch(grid_index) {
 	case grid_bng: /* force datum to "Ord Srvy Grt Britn" */
 		datum_index = DATUM_OSGB36;
+		break;
+	case grid_swiss: /* force datum to "Ord Srvy Grt Britn" */
+		datum_index = DATUM_WGS84;
 		break;
 	default:
 		datum_index = gt_lookup_datum_index(datum_str, MYNAME);
@@ -869,51 +856,6 @@ free_header(const header_type ht)
 }
 
 /* data parsers */
-
-#if 0
-/* moved to util.c */
-static void
-parse_position(const char *str, waypoint *wpt)
-{
-......
-}
-#endif
-
-static int
-parse_distance(const char *str, double *value)
-{
-	double x;
-	char *buff;
-	
-	if ((str == NULL) || (*str == '\0')) return 0;
-	
-	buff = xmalloc(strlen(str) + 1);
-	sscanf(str, "%lf %s", &x, buff);
-	
-	if (case_ignore_strcmp(buff, "km") == 0) {
-		*value = x * (double)1000;
-	}
-	else if (case_ignore_strcmp(buff, "m") == 0) {		/* meters */
-		*value = x;
-	} 
-	else if (case_ignore_strcmp(buff, "ft") == 0) {		/* feet */
-		*value = FEET_TO_METERS(x);
-	}
-	else if (case_ignore_strcmp(buff, "nm") == 0) {		/* mile (nautical / geographical) */
-		*value = NMILES_TO_METERS(x);
-	}
-	else if (case_ignore_strcmp(buff, "mi") == 0) {		/* mile (statute) */
-		*value = MILES_TO_METERS(x);
-	}
-	else if (case_ignore_strcmp(buff, "fa") == 0) {		/* fathom */
-		*value = FATHOMS_TO_METERS(x);
-	}
-	else
-		fatal(MYNAME ": Unknown distance unit \"%s\" at line %d!\n", str, current_line);
-		
-	xfree(buff);
-	return 1;
-}
 
 static int
 parse_date_and_time(char *str, time_t *value)
@@ -1128,9 +1070,9 @@ parse_waypoint(void)
 				parse_coordinates(str, datum_index, grid_index,
 					&wpt->latitude, &wpt->longitude, MYNAME);
 				break;
-			case  5: if (parse_distance(str, &d)) wpt->altitude = d; break;
-			case  6: if (parse_distance(str, &d)) WAYPT_SET(wpt, depth, d); break;
-			case  7: if (parse_distance(str, &d)) WAYPT_SET(wpt, proximity, d); break;
+			case  5: if (parse_distance(str, &d, 1, MYNAME)) wpt->altitude = d; break;
+			case  6: if (parse_distance(str, &d, 1, MYNAME)) WAYPT_SET(wpt, depth, d); break;
+			case  7: if (parse_distance(str, &d, 1, MYNAME)) WAYPT_SET(wpt, proximity, d); break;
 			case  8: if (parse_temperature(str, &d)) WAYPT_SET(wpt, temperature, d); break;
 			case  9: if (parse_display(str, &i)) GMSD_SET(display, i); break;
 			case 10: break;	/* skip color */
@@ -1232,16 +1174,39 @@ parse_track_waypoint(void)
 	wpt = waypt_new();
 	
 	while ((str = csv_lineparse(NULL, "\t", "", column++))) {
-		int field_no = header_fields[trkpt_header][column];
+		int field_no;
+		double x;
+		
+		if (! *str) continue;
+
+		field_no = header_fields[trkpt_header][column];
 		switch(field_no) {
-			case 1: parse_coordinates(str, datum_index, grid_index,
+			case 1: 
+				parse_coordinates(str, datum_index, grid_index,
 					&wpt->latitude, &wpt->longitude, MYNAME);
 				break;
-			case 2: parse_date_and_time(str, &wpt->creation_time); break;
-			case 3: parse_distance(str, &wpt->altitude); break;
+			case 2: 
+				parse_date_and_time(str, &wpt->creation_time);
+				break;
+			case 3:
+				if (parse_distance(str, &x, 1, MYNAME))
+					wpt->altitude = x;
+				break;
+			case 4:
+				if (parse_distance(str, &x, 1, MYNAME)) WAYPT_SET(wpt, depth, x); 
+				break;
+			case 5:
+				if (parse_temperature(str, &x)) WAYPT_SET(wpt, temperature, x); 
+				break;
+			case 8:
+				if (parse_speed(str, &x, 1, MYNAME)) WAYPT_SET(wpt, speed, x);
+				break;
+			case 9:
+				WAYPT_SET(wpt, course, atoi(str));
+				break;
 		}
 	}
-	route_add_wpt(current_trk, wpt);
+	track_add_wpt(current_trk, wpt);
 }
 
 /***************************************************************/
@@ -1285,11 +1250,12 @@ garmin_txt_read(void)
 		current_line++;
 		cin = lrtrim(buff);
 		if (*cin == '\0') continue;
-		
+
 		cin = csv_lineparse(cin, "\t", "", 0);
 		
 		if (cin == NULL) continue;
-		else if (case_ignore_strcmp(cin, "Header") == 0) parse_header();
+		
+		if (case_ignore_strcmp(cin, "Header") == 0) parse_header();
 		else if (case_ignore_strcmp(cin, "Grid") == 0) parse_grid();
 		else if (case_ignore_strcmp(cin, "Datum") == 0) parse_datum();
 		else if (case_ignore_strcmp(cin, "Waypoint") == 0) parse_waypoint();
