@@ -121,6 +121,20 @@ int32 GPS_Math_Known_Datum_To_UTM_EN(double lat, double lon, double *E,
 int32 GPS_Math_UTM_EN_To_Known_Datum(double *lat, double *lon, double E,
 			       double N, int32 zone, char zc, const int n);
 
+int32 GPS_Math_WGS84_To_CH1903_NGEN(double phi, double lambda, double *E, double *N);
+void GPS_Math_CH1903_NGEN_To_WGS84(double E, double N, double *lat, double *lon);
+
+int32 GPS_Math_LatLon_To_OM_EN(double phi, double lambda, double *E, double *N,
+			       double phiC, double lambdaC, double azmC, double gammaC,
+			       const double kC, const double FE, const double FN,
+			       const double a, const double invf,
+			       const char hotine, const char degrees);
+void GPS_Math_OM_EN_To_LatLon(const double E, const double N, double *phi, double *lambda,
+			      double phiC, double lambdaC, double azmC, double gammaC,
+			      const double kC, const double FE,	const double FN,
+			      const double a, const double invf,
+			      const char hotine, const char degrees);
+
 int32 GPS_Lookup_Datum_Index(const char *n);
 char *GPS_Math_Get_Datum_Name(const int datum_index);
 

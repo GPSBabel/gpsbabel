@@ -43,7 +43,7 @@ GPS_OEllipse GPS_Ellipse[]=
     { "WGS60",                   6378165.000, 298.3 },
     { "WGS66",                   6378145.000, 298.25 },
     { "WGS72",                   6378135.000, 298.26 },
-    { "WGS84",                   6378137.000, 298.257223563 }
+    { "WGS84",                   6378137.000, 298.257223563 },
 };
 
 
@@ -181,7 +181,46 @@ GPS_ODatum GPS_Datum[]=
 /* 119 */    { "Yacare",            	17,  	-155,  	171,    37 	},
 /* 120 */    { "Zanderij",          	17,  	-265,  	120,  	-358 	},
 /* 121 */    { "Sweden",          	4,  	424.3, 	-80.5, 	613.1 	},
+/* 122 */    { "GDA 94",		21,  	0, 	0, 	0 	},
+/* 123 */    { "CH-1903",		4,  	674, 	15, 	405 	},
 	     { NULL,                 	0,  	0,    	0,     	0 	}
+};
+
+
+typedef struct GPS_SDatum_Alias
+{
+    char *alias;
+    const int datum;
+} GPS_ODatum_Alias, *GPS_PDatum_Alias;
+
+GPS_ODatum_Alias GPS_DatumAlias[] =
+{
+    { "Australian GDA94", 122 },
+    { "GDA94", 122 },
+    { "GDA-94", 122 },
+    { "CH1903", 123 },
+    { "CH 1903", 123 },
+    { "Geodetic Datum 1949", 42 },
+    { "NAD27 Alaska", 3 },
+    { "NAD27 Bahamas", 14 },
+    { "NAD27 Canada", 4 },
+    { "NAD27 Canal Zone", 21 },
+    { "NAD27 Caribbean", 25 },
+    { "NAD27 Central", 27 },
+    { "NAD27 Cuba", 31 },
+    { "NAD27 Greenland", 44 },
+    { "NAD27 Mexico", 70 },
+    { "NAD83", 77 },
+    { "NAD 83", 77 },
+    { "NAD-83", 77 },
+    { "OSGB 36", 86 },
+    { "OSGB-36", 86 },
+    { "Wake-Eniwetok 1960", 116 },
+    { "WGS72", 117 },
+    { "WGS-72", 117 },
+    { "WGS84", 118 },
+    { "WGS-84", 118 },
+    { NULL, -1 }
 };
 
 
