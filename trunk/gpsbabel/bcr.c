@@ -298,7 +298,12 @@ bcr_data_read(void)
 		
 		route_add_wpt(route, wpt);
 	}
-	bcr_create_waypts_from_route(route);
+	
+	/* remove empty route */
+	if (route->rte_waypt_ct == 0)
+		route_del_head(route);
+	else
+		bcr_create_waypts_from_route(route);
 }
 
 /* %%% bcr write support %%% ----------------------------------- */
