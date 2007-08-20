@@ -23,6 +23,7 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "grtcirc.h"
+#include "garmin_fs.h"
 
 queue waypt_head;
 static unsigned int waypt_ct;
@@ -454,6 +455,18 @@ waypt_add_url(waypoint *wpt, char *link, char *url_link_text)
 	}
 }
 
+static double
+gcgeodist(const double lat1, const double lon1,
+	     const double lat2, const double lon2)
+{
+	double res;
+
+	res = radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
+	if (res < 0.1) res = 0;	/* calc. diffs on 32- and 64-bit hosts */
+	
+	return res;
+}
+
 /*
  * returns full creation_time with parts of seconds in fractional portion
  */
@@ -468,7 +481,68 @@ waypt_time(const waypoint *wpt)
 }
 
 /*
- * calculates the speed between points "A" and "B"
+ * Calculates the distance between points "A" and "B" including
+ * special data (Garmin interstep links)
+ * The result comes in meters.
+ */ 
+
+double
+waypt_distance_ex(const waypoint *A, const waypoint *B)
+{
+	double res = 0;
+	garmin_fs_p gmsd;
+	
+	if ((A == NULL) || (B == NULL)) return 0;
+	
+	if ((gmsd = GMSD_FIND(A)) && (gmsd->ilinks != NULL))
+	{
+		garmin_ilink_t *link = gmsd->ilinks;
+		
+		res = gcgeodist(A->latitude, A->longitude, link->lat, link->lon);
+		while (link->next != NULL)
+		{
+			garmin_ilink_t *prev = link;
+			link = link->next;
+			res += gcgeodist(prev->lat, prev->lon, link->lat, link->lon);
+		}
+		res += gcgeodist(link->lat, link->lon, B->latitude, B->longitude);
+	}
+	else
+		res = gcgeodist(A->latitude, A->longitude, B->latitude, B->longitude);
+
+	return res;
+}
+
+double
+waypt_distance(const waypoint *A, const waypoint *B)
+{
+	if ((A == NULL) || (B == NULL)) return 0;
+	else return gcgeodist(A->latitude, A->longitude, B->latitude, B->longitude);
+}
+
+/*
+ * Calculates the speed between points "A" and "B" including
+ * special data (Garmin interstep links)
+ * The result comes in meters per second and is always positive.
+ */ 
+
+double
+waypt_speed_ex(const waypoint *A, const waypoint *B)
+{
+	double dist, time;
+	
+	dist = waypt_distance_ex(A, B);
+	if (dist == 0) return 0;
+	
+	time = fabs(waypt_time(A) - waypt_time(B));
+	if (time > 0)
+		return (dist / time);
+	else
+		return 0;
+}
+
+/*
+ * Calculates the speed between points "A" and "B"
  * the result comes in meters per second and is always positive
  */ 
 
@@ -477,15 +551,24 @@ waypt_speed(const waypoint *A, const waypoint *B)
 {
 	double dist, time;
 	
-	dist = radtometers(gcdist(
-		RAD(A->latitude), RAD(A->longitude),
-		RAD(B->latitude), RAD(B->longitude)));
-	if (dist < 0.1) dist = 0;	/* calc. diffs on 32- and 64-bit hosts */
+	dist = waypt_distance(A, B);
 	if (dist == 0) return 0;
 	
 	time = fabs(waypt_time(A) - waypt_time(B));
 	if (time > 0)
 		return (dist / time);
+	else
+		return 0;
+}
+
+/*
+ * Calculates "Course True" from A to B
+ */
+double
+waypt_course(const waypoint *A, const waypoint *B)
+{
+	if (A && B)
+		return heading_true_degrees(RAD(A->latitude), RAD(A->longitude), RAD(B->latitude), RAD(B->longitude));
 	else
 		return 0;
 }
