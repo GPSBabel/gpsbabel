@@ -85,7 +85,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
           uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
 	  xhtmlent.o inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
-	  gbfile.o \
+	  gbfile.o parse.o \
 	$(PALM_DB) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
@@ -586,6 +586,7 @@ palmdoc.o: palmdoc.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
   pdbfile.h
+parse.o: parse.c defs.h config.h queue.h gbtypes.h jeeps/gpsmath.h
 pathaway.o: pathaway.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h strptime.h \
   pdbfile.h

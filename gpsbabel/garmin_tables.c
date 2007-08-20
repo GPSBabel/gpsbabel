@@ -617,6 +617,7 @@ grid_mapping_t gt_mps_grid_names[] =
 	{ "dms",	"Lat/Lon hddd*mm'ss.s\"",	grid_lat_lon_dms },
 	{ "bng",	"British National Grid",	grid_bng },
 	{ "utm",	"UTM",				grid_utm },
+	{ "swiss",	"Swiss grid",			grid_swiss },
 	{ NULL,	NULL,	0 }
 };
 
