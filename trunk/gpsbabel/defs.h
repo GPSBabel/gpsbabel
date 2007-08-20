@@ -699,6 +699,10 @@ void waypt_disp(const waypoint *);
 void waypt_status_disp(int total_ct, int myct);
 double waypt_time(const waypoint *wpt);
 double waypt_speed(const waypoint *A, const waypoint *B);
+double waypt_speed_ex(const waypoint *A, const waypoint *B);
+double waypt_course(const waypoint *A, const waypoint *B);
+double waypt_distance(const waypoint *A, const waypoint *B);
+double waypt_distance_ex(const waypoint *A, const waypoint *B);
 
 NORETURN fatal(const char *, ...) PRINTFLIKE(1, 2);
 void is_fatal(const int condition, const char *, ...) PRINTFLIKE(2, 3);
@@ -892,17 +896,23 @@ typedef enum {
 	grid_lat_lon_dmm = 1,
 	grid_lat_lon_dms = 2,
 	grid_bng = 3,
-	grid_utm = 4
+	grid_utm = 4,
+	grid_swiss = 5
 } grid_type;
 
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
-#define GRID_INDEX_MAX	grid_utm
+#define GRID_INDEX_MAX	grid_swiss
 
 #define DATUM_OSGB36	86
 #define DATUM_WGS84	118
 
+/*
+ *  From parse.c
+ */
 int parse_coordinates(const char *str, int datum, const grid_type grid,
 	double *latitude, double *longitude, const char *module);
+int parse_distance(const char *str, double *val, double scale, const char *module);
+int parse_speed(const char *str, double *val, const double scale, const char *module);
 
 /*
  *  From util_crc.c
