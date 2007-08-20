@@ -119,7 +119,9 @@ extern ff_vecs_t vitovtt_vecs;
 extern ff_vecs_t ggv_log_vecs;
 extern ff_vecs_t g7towin_vecs;
 extern ff_vecs_t garmin_gpi_vecs;
-extern ff_vecs_t lmx_vecs;;
+extern ff_vecs_t lmx_vecs;
+extern ff_vecs_t random_vecs;
+extern ff_vecs_t xol_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -673,6 +675,18 @@ vecs_t vec_list[] = {
                 "lmx",
                 "Nokia Landmark Exchange",
                 NULL
+        },
+        {
+                &random_vecs,
+                "random",
+                "Internal GPS data generator",
+                NULL
+        },
+        {
+                &xol_vecs,
+                "xol",
+                "Swiss Map 50 (.xol)",
+                "xol"
         },
 	{
 		NULL,
