@@ -148,69 +148,69 @@ Header	Name	Start Time	Elapsed Time	Length	Average Speed	Link
 
 Track	- Trk from .gpx file	25/05/2002 17:06:21 	1:59:36	7.7 km	4 kph	
 
-Header	Position	Time	Altitude	Depth	Leg Length	Leg Time	Leg Speed	Leg Course
+Header	Position	Time	Altitude	Depth	Temperature	Leg Length	Leg Time	Leg Speed	Leg Course
 
-Trackpoint	N30 03.731 W91 36.620	25/05/2002 17:06:21 	1 m	0.0 m
-Trackpoint	N30 03.767 W91 36.633	25/05/2002 17:09:55 		0.0 m	70 m	0:03:34	1.2 kph	343° true
-Trackpoint	N30 03.762 W91 36.495	25/05/2002 17:12:00 		0.0 m	222 m	0:02:05	6 kph	92° true
-Trackpoint	N30 03.740 W91 36.442	25/05/2002 17:12:48 		0.0 m	94 m	0:00:48	7 kph	116° true
-Trackpoint	N30 03.692 W91 36.316	25/05/2002 17:14:41 		0.0 m	221 m	0:01:53	7 kph	114° true
-Trackpoint	N30 03.587 W91 35.963	25/05/2002 17:17:16 		0.0 m	599 m	0:02:35	14 kph	109° true
-Trackpoint	N30 03.468 W91 35.800	25/05/2002 17:17:46 		0.0 m	342 m	0:00:30	41 kph	130° true
-Trackpoint	N30 03.323 W91 35.693	25/05/2002 17:18:20 		0.0 m	319 m	0:00:34	34 kph	147° true
-Trackpoint	N30 03.233 W91 35.556	25/05/2002 17:19:01 		0.0 m	276 m	0:00:41	24 kph	127° true
-Trackpoint	N30 02.984 W91 35.384	25/05/2002 17:20:46 		0.0 m	538 m	0:01:45	18 kph	149° true
-Trackpoint	N30 02.941 W91 35.392	25/05/2002 17:21:10 		0.0 m	81 m	0:00:24	12 kph	189° true
-Trackpoint	N30 02.928 W91 35.575	25/05/2002 17:21:51 		0.0 m	295 m	0:00:41	26 kph	265° true
-Trackpoint	N30 02.774 W91 35.786	25/05/2002 17:22:35 		0.0 m	443 m	0:00:44	36 kph	230° true
-Trackpoint	N30 02.731 W91 35.922	25/05/2002 17:23:08 		0.0 m	233 m	0:00:33	25 kph	250° true
-Trackpoint	N30 02.838 W91 36.015	25/05/2002 18:04:23 		0.0 m	248 m	0:41:15	0.4 kph	323° true
-Trackpoint	N30 02.820 W91 35.977	25/05/2002 18:06:04 	2 m	0.0 m	70 m	0:01:41	2 kph	119° true
-Trackpoint	N30 02.786 W91 35.967	25/05/2002 18:07:06 		0.0 m	65 m	0:01:02	4 kph	166° true
-Trackpoint	N30 02.772 W91 35.936	25/05/2002 18:08:18 	1 m	0.0 m	56 m	0:01:12	3 kph	117° true
-Trackpoint	N30 02.782 W91 35.863	25/05/2002 18:10:20 		0.0 m	119 m	0:02:02	4 kph	81° true
-Trackpoint	N30 02.781 W91 35.829	25/05/2002 18:11:09 		0.0 m	55 m	0:00:49	4 kph	92° true
-Trackpoint	N30 02.807 W91 35.779	25/05/2002 18:12:18 		0.0 m	94 m	0:01:09	5 kph	59° true
-Trackpoint	N30 02.847 W91 35.711	25/05/2002 18:14:22 		0.0 m	132 m	0:02:04	4 kph	56° true
-Trackpoint	N30 02.868 W91 35.685	25/05/2002 18:15:04 	2 m	0.0 m	57 m	0:00:42	5 kph	47° true
-Trackpoint	N30 02.895 W91 35.644	25/05/2002 18:16:14 	1 m	0.0 m	83 m	0:01:10	4 kph	53° true
-Trackpoint	N30 02.921 W91 35.627	25/05/2002 18:17:01 	1 m	0.0 m	55 m	0:00:47	4 kph	30° true
-Trackpoint	N30 02.961 W91 35.630	25/05/2002 18:18:07 		0.0 m	74 m	0:01:06	4 kph	356° true
-Trackpoint	N30 03.019 W91 35.638	25/05/2002 18:19:51 	2 m	0.0 m	108 m	0:01:44	4 kph	353° true
-Trackpoint	N30 03.047 W91 35.646	25/05/2002 18:20:39 		0.0 m	53 m	0:00:48	4 kph	346° true
-Trackpoint	N30 03.074 W91 35.661	25/05/2002 18:21:24 		0.0 m	56 m	0:00:45	4 kph	334° true
-Trackpoint	N30 03.108 W91 35.661	25/05/2002 18:22:17 		0.0 m	63 m	0:00:53	4 kph	0° true
-Trackpoint	N30 03.133 W91 35.679	25/05/2002 18:23:18 		0.0 m	55 m	0:01:01	3 kph	328° true
-Trackpoint	N30 03.181 W91 35.680	25/05/2002 18:24:37 		0.0 m	89 m	0:01:19	4 kph	359° true
-Trackpoint	N30 03.292 W91 35.711	25/05/2002 18:28:13 	6 m	0.0 m	212 m	0:03:36	4 kph	346° true
-Trackpoint	N30 03.224 W91 35.695	25/05/2002 18:31:36 	2 m	0.0 m	129 m	0:03:23	2 kph	168° true
-Trackpoint	N30 03.191 W91 35.686	25/05/2002 18:32:56 		0.0 m	63 m	0:01:20	3 kph	167° true
-Trackpoint	N30 03.158 W91 35.689	25/05/2002 18:34:02 		0.0 m	61 m	0:01:06	3 kph	184° true
-Trackpoint	N30 03.147 W91 35.725	25/05/2002 18:36:03 		0.0 m	61 m	0:02:01	2 kph	251° true
-Trackpoint	N30 03.149 W91 35.757	25/05/2002 18:36:48 		0.0 m	52 m	0:00:45	4 kph	274° true
-Trackpoint	N30 03.159 W91 35.806	25/05/2002 18:37:52 	1 m	0.0 m	81 m	0:01:04	5 kph	283° true
-Trackpoint	N30 03.188 W91 35.870	25/05/2002 18:39:18 		0.0 m	116 m	0:01:26	5 kph	298° true
-Trackpoint	N30 03.217 W91 35.877	25/05/2002 18:40:15 		0.0 m	55 m	0:00:57	3 kph	348° true
-Trackpoint	N30 03.238 W91 35.865	25/05/2002 18:41:25 	6 m	0.0 m	43 m	0:01:10	2 kph	26° true
-Trackpoint	N30 03.217 W91 35.884	25/05/2002 18:42:37 		0.0 m	49 m	0:01:12	2 kph	218° true
-Trackpoint	N30 03.192 W91 35.874	25/05/2002 18:44:01 		0.0 m	49 m	0:01:24	2 kph	161° true
-Trackpoint	N30 03.169 W91 35.850	25/05/2002 18:45:53 		0.0 m	57 m	0:01:52	2 kph	138° true
-Trackpoint	N30 03.154 W91 35.815	25/05/2002 18:46:54 		0.0 m	63 m	0:01:01	4 kph	116° true
-Trackpoint	N30 03.140 W91 35.785	25/05/2002 18:47:42 		0.0 m	55 m	0:00:48	4 kph	118° true
-Trackpoint	N30 03.135 W91 35.740	25/05/2002 18:48:41 		0.0 m	73 m	0:00:59	4 kph	97° true
-Trackpoint	N30 03.133 W91 35.700	25/05/2002 18:49:52 		0.0 m	64 m	0:01:11	3 kph	93° true
-Trackpoint	N30 03.113 W91 35.681	25/05/2002 18:50:49 		0.0 m	48 m	0:00:57	3 kph	141° true
-Trackpoint	N30 03.063 W91 35.663	25/05/2002 18:52:14 		0.0 m	97 m	0:01:25	4 kph	163° true
-Trackpoint	N30 03.034 W91 35.653	25/05/2002 18:52:56 		0.0 m	56 m	0:00:42	5 kph	163° true
-Trackpoint	N30 03.011 W91 35.645	25/05/2002 18:53:38 		0.0 m	45 m	0:00:42	4 kph	163° true
-Trackpoint	N30 02.946 W91 35.622	25/05/2002 18:55:11 		0.0 m	126 m	0:01:33	5 kph	163° true
-Trackpoint	N30 02.907 W91 35.654	25/05/2002 18:56:32 		0.0 m	89 m	0:01:21	4 kph	215° true
-Trackpoint	N30 02.885 W91 35.684	25/05/2002 18:57:24 		0.0 m	63 m	0:00:52	4 kph	230° true
-Trackpoint	N30 02.850 W91 35.726	25/05/2002 18:58:40 	7 m	0.0 m	94 m	0:01:16	4 kph	226° true
-Trackpoint	N30 02.824 W91 35.759	25/05/2002 18:59:28 		0.0 m	72 m	0:00:48	5 kph	228° true
-Trackpoint	N30 02.798 W91 35.795	25/05/2002 19:00:22 		0.0 m	75 m	0:00:54	5 kph	230° true
-Trackpoint	N30 02.784 W91 35.858	25/05/2002 19:01:41 		0.0 m	105 m	0:01:19	5 kph	256° true
-Trackpoint	N30 02.774 W91 35.907	25/05/2002 19:02:48 		0.0 m	81 m	0:01:07	4 kph	257° true
-Trackpoint	N30 02.779 W91 35.937	25/05/2002 19:03:43 		0.0 m	49 m	0:00:55	3 kph	281° true
-Trackpoint	N30 02.807 W91 35.956	25/05/2002 19:04:49 		0.0 m	60 m	0:01:06	3 kph	330° true
-Trackpoint	N30 02.828 W91 35.979	25/05/2002 19:05:57 		0.0 m	54 m	0:01:08	3 kph	317° true
+Trackpoint	N30 03.731 W91 36.620	25/05/2002 17:06:21 	1 m	
+Trackpoint	N30 03.767 W91 36.633	25/05/2002 17:09:55 				70 m	0:03:34	1.2 kph	343° true
+Trackpoint	N30 03.762 W91 36.495	25/05/2002 17:12:00 				222 m	0:02:05	6 kph	92° true
+Trackpoint	N30 03.740 W91 36.442	25/05/2002 17:12:48 				94 m	0:00:48	7 kph	116° true
+Trackpoint	N30 03.692 W91 36.316	25/05/2002 17:14:41 				221 m	0:01:53	7 kph	114° true
+Trackpoint	N30 03.587 W91 35.963	25/05/2002 17:17:16 				599 m	0:02:35	14 kph	109° true
+Trackpoint	N30 03.468 W91 35.800	25/05/2002 17:17:46 				342 m	0:00:30	41 kph	130° true
+Trackpoint	N30 03.323 W91 35.693	25/05/2002 17:18:20 				319 m	0:00:34	34 kph	147° true
+Trackpoint	N30 03.233 W91 35.556	25/05/2002 17:19:01 				276 m	0:00:41	24 kph	127° true
+Trackpoint	N30 02.984 W91 35.384	25/05/2002 17:20:46 				538 m	0:01:45	18 kph	149° true
+Trackpoint	N30 02.941 W91 35.392	25/05/2002 17:21:10 				81 m	0:00:24	12 kph	189° true
+Trackpoint	N30 02.928 W91 35.575	25/05/2002 17:21:51 				295 m	0:00:41	26 kph	265° true
+Trackpoint	N30 02.774 W91 35.786	25/05/2002 17:22:35 				443 m	0:00:44	36 kph	230° true
+Trackpoint	N30 02.731 W91 35.922	25/05/2002 17:23:08 				233 m	0:00:33	25 kph	250° true
+Trackpoint	N30 02.838 W91 36.015	25/05/2002 18:04:23 				248 m	0:41:15	0.4 kph	323° true
+Trackpoint	N30 02.820 W91 35.977	25/05/2002 18:06:04 	2 m			70 m	0:01:41	2 kph	119° true
+Trackpoint	N30 02.786 W91 35.967	25/05/2002 18:07:06 				65 m	0:01:02	4 kph	166° true
+Trackpoint	N30 02.772 W91 35.936	25/05/2002 18:08:18 	1 m			56 m	0:01:12	3 kph	117° true
+Trackpoint	N30 02.782 W91 35.863	25/05/2002 18:10:20 				119 m	0:02:02	4 kph	81° true
+Trackpoint	N30 02.781 W91 35.829	25/05/2002 18:11:09 				55 m	0:00:49	4 kph	92° true
+Trackpoint	N30 02.807 W91 35.779	25/05/2002 18:12:18 				94 m	0:01:09	5 kph	59° true
+Trackpoint	N30 02.847 W91 35.711	25/05/2002 18:14:22 				132 m	0:02:04	4 kph	56° true
+Trackpoint	N30 02.868 W91 35.685	25/05/2002 18:15:04 	2 m			57 m	0:00:42	5 kph	47° true
+Trackpoint	N30 02.895 W91 35.644	25/05/2002 18:16:14 	1 m			83 m	0:01:10	4 kph	53° true
+Trackpoint	N30 02.921 W91 35.627	25/05/2002 18:17:01 	1 m			55 m	0:00:47	4 kph	30° true
+Trackpoint	N30 02.961 W91 35.630	25/05/2002 18:18:07 				74 m	0:01:06	4 kph	356° true
+Trackpoint	N30 03.019 W91 35.638	25/05/2002 18:19:51 	2 m			108 m	0:01:44	4 kph	353° true
+Trackpoint	N30 03.047 W91 35.646	25/05/2002 18:20:39 				53 m	0:00:48	4 kph	346° true
+Trackpoint	N30 03.074 W91 35.661	25/05/2002 18:21:24 				56 m	0:00:45	4 kph	334° true
+Trackpoint	N30 03.108 W91 35.661	25/05/2002 18:22:17 				63 m	0:00:53	4 kph	360° true
+Trackpoint	N30 03.133 W91 35.679	25/05/2002 18:23:18 				55 m	0:01:01	3 kph	328° true
+Trackpoint	N30 03.181 W91 35.680	25/05/2002 18:24:37 				89 m	0:01:19	4 kph	359° true
+Trackpoint	N30 03.292 W91 35.711	25/05/2002 18:28:13 	6 m			212 m	0:03:36	4 kph	346° true
+Trackpoint	N30 03.224 W91 35.695	25/05/2002 18:31:36 	2 m			129 m	0:03:23	2 kph	168° true
+Trackpoint	N30 03.191 W91 35.686	25/05/2002 18:32:56 				63 m	0:01:20	3 kph	167° true
+Trackpoint	N30 03.158 W91 35.689	25/05/2002 18:34:02 				61 m	0:01:06	3 kph	184° true
+Trackpoint	N30 03.147 W91 35.725	25/05/2002 18:36:03 				61 m	0:02:01	2 kph	251° true
+Trackpoint	N30 03.149 W91 35.757	25/05/2002 18:36:48 				52 m	0:00:45	4 kph	274° true
+Trackpoint	N30 03.159 W91 35.806	25/05/2002 18:37:52 	1 m			81 m	0:01:04	5 kph	283° true
+Trackpoint	N30 03.188 W91 35.870	25/05/2002 18:39:18 				116 m	0:01:26	5 kph	298° true
+Trackpoint	N30 03.217 W91 35.877	25/05/2002 18:40:15 				55 m	0:00:57	3 kph	348° true
+Trackpoint	N30 03.238 W91 35.865	25/05/2002 18:41:25 	6 m			43 m	0:01:10	2 kph	26° true
+Trackpoint	N30 03.217 W91 35.884	25/05/2002 18:42:37 				49 m	0:01:12	2 kph	218° true
+Trackpoint	N30 03.192 W91 35.874	25/05/2002 18:44:01 				49 m	0:01:24	2 kph	161° true
+Trackpoint	N30 03.169 W91 35.850	25/05/2002 18:45:53 				57 m	0:01:52	2 kph	138° true
+Trackpoint	N30 03.154 W91 35.815	25/05/2002 18:46:54 				63 m	0:01:01	4 kph	116° true
+Trackpoint	N30 03.140 W91 35.785	25/05/2002 18:47:42 				55 m	0:00:48	4 kph	118° true
+Trackpoint	N30 03.135 W91 35.740	25/05/2002 18:48:41 				73 m	0:00:59	4 kph	97° true
+Trackpoint	N30 03.133 W91 35.700	25/05/2002 18:49:52 				64 m	0:01:11	3 kph	93° true
+Trackpoint	N30 03.113 W91 35.681	25/05/2002 18:50:49 				48 m	0:00:57	3 kph	141° true
+Trackpoint	N30 03.063 W91 35.663	25/05/2002 18:52:14 				97 m	0:01:25	4 kph	163° true
+Trackpoint	N30 03.034 W91 35.653	25/05/2002 18:52:56 				56 m	0:00:42	5 kph	163° true
+Trackpoint	N30 03.011 W91 35.645	25/05/2002 18:53:38 				45 m	0:00:42	4 kph	163° true
+Trackpoint	N30 02.946 W91 35.622	25/05/2002 18:55:11 				126 m	0:01:33	5 kph	163° true
+Trackpoint	N30 02.907 W91 35.654	25/05/2002 18:56:32 				89 m	0:01:21	4 kph	215° true
+Trackpoint	N30 02.885 W91 35.684	25/05/2002 18:57:24 				63 m	0:00:52	4 kph	230° true
+Trackpoint	N30 02.850 W91 35.726	25/05/2002 18:58:40 	7 m			94 m	0:01:16	4 kph	226° true
+Trackpoint	N30 02.824 W91 35.759	25/05/2002 18:59:28 				72 m	0:00:48	5 kph	228° true
+Trackpoint	N30 02.798 W91 35.795	25/05/2002 19:00:22 				75 m	0:00:54	5 kph	230° true
+Trackpoint	N30 02.784 W91 35.858	25/05/2002 19:01:41 				105 m	0:01:19	5 kph	256° true
+Trackpoint	N30 02.774 W91 35.907	25/05/2002 19:02:48 				81 m	0:01:07	4 kph	257° true
+Trackpoint	N30 02.779 W91 35.937	25/05/2002 19:03:43 				49 m	0:00:55	3 kph	281° true
+Trackpoint	N30 02.807 W91 35.956	25/05/2002 19:04:49 				60 m	0:01:06	3 kph	330° true
+Trackpoint	N30 02.828 W91 35.979	25/05/2002 19:05:57 				54 m	0:01:08	3 kph	317° true
