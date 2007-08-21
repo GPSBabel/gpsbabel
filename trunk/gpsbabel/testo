@@ -1041,6 +1041,8 @@ compare ${TMPDIR}/garmin_txt-uni.csv ${REFERENCE}/garmin_txt-uni.csv
 #
 ${PNAME} -i nmea -f ${REFERENCE}/track/nmea -o gpx -F ${TMPDIR}/nmea.gpx
 compare ${TMPDIR}/nmea.gpx ${REFERENCE}/track/nmea.gpx
+${PNAME} -i nmea -f ${REFERENCE}/track/nmea+ms.txt -o gpx -F ${TMPDIR}/nmea+ms.gpx
+compare ${TMPDIR}/nmea+ms.gpx ${REFERENCE}/track/nmea+ms.gpx
 
 #
 # Wfff.
@@ -1258,6 +1260,14 @@ compare ${REFERENCE}/gpi_ext-sample.csv ${TMPDIR}/gpi_ext-sample.csv
 #
 ${PNAME} -i lmx -f ${REFERENCE}/nokia.lmx -o lmx -F ${TMPDIR}/nokia.lmx
 compare ${REFERENCE}/nokia.lmx ${TMPDIR}/nokia.lmx
+
+#
+# Swiss Map (.xol) tests
+#
+${PNAME} -i xol -f ${REFERENCE}/xol-sample.xol -o gpx -F ${TMPDIR}/xol-sample.gpx
+compare ${TMPDIR}/xol-sample.gpx -f ${REFERENCE}/xol-sample.gpx
+${PNAME} -i gpx -f ${REFERENCE}/xol-sample.gpx -o xol -F ${TMPDIR}/xol-sample-gpx.xol
+compare ${TMPDIR}/xol-sample-gpx.xol ${REFERENCE}/xol-sample-gpx.xol
 
 
 exit 0
