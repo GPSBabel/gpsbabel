@@ -1265,7 +1265,7 @@ compare ${REFERENCE}/nokia.lmx ${TMPDIR}/nokia.lmx
 # Swiss Map (.xol) tests
 #
 ${PNAME} -i xol -f ${REFERENCE}/xol-sample.xol -o gpx -F ${TMPDIR}/xol-sample.gpx
-compare ${TMPDIR}/xol-sample.gpx -f ${REFERENCE}/xol-sample.gpx
+compare ${TMPDIR}/xol-sample.gpx ${REFERENCE}/xol-sample.gpx
 ${PNAME} -i gpx -f ${REFERENCE}/xol-sample.gpx -o xol -F ${TMPDIR}/xol-sample-gpx.xol
 compare ${TMPDIR}/xol-sample-gpx.xol ${REFERENCE}/xol-sample-gpx.xol
 
