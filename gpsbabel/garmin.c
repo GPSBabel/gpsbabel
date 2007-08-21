@@ -135,8 +135,8 @@ rw_init(const char *fname)
 				case 130:	/* Garmin Etrex (yellow) */
 					receiver_short_length = 6;
 					break;
-				case 295:
-					/* eTrex (yellow, firmware v. 3.30) */
+				case 295: 	/* eTrex (yellow, fw v. 3.30) */
+				case 696: 	/* eTrex HC */
 					receiver_short_length = 6;
 					valid_waypt_chars =
 					  MILITANT_VALID_WAYPT_CHARS " +-";
@@ -155,6 +155,8 @@ rw_init(const char *fname)
 				case 292: /* (60|76)C[S]x series */
 				case 421: /* Vista|Legend Cx */
 				case 694: /* Legend HCx */
+				case 695: /* Vista HCx */
+				case 786: /* HC model */
 					receiver_short_length = 14;
 					snwhiteopt = xstrdup("1");
 					receiver_must_upper = 0;
