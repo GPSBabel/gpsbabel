@@ -358,6 +358,10 @@ print_date_and_time(const time_t time, const int time_only)
 	struct tm tm;
 	char tbuf[32];
 	
+	if (time < 0) {
+		gbfprintf(fout, "\t");
+		return;
+	}
 	if (time_only) {
 		tm = *gmtime(&time);
 		snprintf(tbuf, sizeof(tbuf), "%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
