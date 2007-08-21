@@ -473,12 +473,14 @@ human_to_dec( const char *instr, double *outlat, double *outlon, int which )
 	if ( lat[0] != 999 ) *outlat = lat[0];
 	if ( lat[1] != 999 ) *outlat += lat[1]/60.0;
 	if ( lat[2] != 999 ) *outlat += lat[2]/3600.0;
+	if ( *outlat > 360) *outlat = ddmm2degrees(*outlat);	/* NMEA style */
 	if ( latsign ) *outlat *= latsign;
     }
     if ( outlon ) {
 	if ( lon[0] != 999 ) *outlon = lon[0];
 	if ( lon[1] != 999 ) *outlon += lon[1]/60.0;
 	if ( lon[2] != 999 ) *outlon += lon[2]/3600.0;
+	if ( *outlon > 360) *outlon = ddmm2degrees(*outlon);	/* NMEA style */
 	if ( lonsign ) *outlon *= lonsign;
     }
     if (buff != instr) {
@@ -1049,13 +1051,9 @@ xcsv_data_read(void)
     
     csv_route = csv_track = NULL;
     if (xcsv_file.datatype == trkdata) {
-	trk = route_head_alloc();
-	track_add_head(trk);
 	csv_track = trk;
     } else
     if (xcsv_file.datatype == rtedata) {
-	rte = route_head_alloc();
-	route_add_head(rte);
 	csv_route = rte;
     }
 
@@ -1126,11 +1124,22 @@ xcsv_data_read(void)
 	    switch(xcsv_file.datatype) {
 		case 0:
 		case wptdata:
-		    waypt_add(wpt_tmp); break;
+		    waypt_add(wpt_tmp);
+		    break;
 		case trkdata:
-		    track_add_wpt(trk, wpt_tmp); break;
-		case rtedata: 
-		    route_add_wpt(rte, wpt_tmp); break;
+		    if (trk == NULL) {
+			trk = route_head_alloc();
+			track_add_head(trk);
+		    }
+		    track_add_wpt(trk, wpt_tmp);
+		    break;
+		case rtedata:
+		    if (rte == NULL) {
+			rte = route_head_alloc();
+			route_add_head(rte);
+		    }
+		    route_add_wpt(rte, wpt_tmp);
+		    break;
 		default: ;
 	    }
         }
