@@ -1,6 +1,6 @@
 /* 
 
-	Support for Swiss Map 50 (.xol) format
+	Support for Swiss Map # (.xol) format
 
 	Copyright (C) 2007 Olaf Klein, o.b.klein@gpsbabel.org
 
@@ -313,6 +313,10 @@ xol_write(void)
 	waypt_disp_all(xol_waypt_bound_calc);
 	track_disp_all(NULL, NULL, xol_waypt_bound_calc);
 	
+	if (! waypt_bounds_valid(&all_bounds)) {
+		fatal(MYNAME ": No data available!\n");
+	}
+
 	if (! GPS_Math_WGS84_To_CH1903_NGEN(
 		(all_bounds.min_lat + all_bounds.max_lat) / 2,
 		(all_bounds.min_lon + all_bounds.max_lon) / 2, &x, &y)) {
