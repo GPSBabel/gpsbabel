@@ -597,7 +597,8 @@ gbfgetint32(gbfile *file)
 {
 	char buf[4];
 	
-	gbfread(&buf, 1, sizeof(buf), file);
+	is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)),
+		"%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
 	if (file->big_endian)
 		return be_read32(buf);
@@ -614,7 +615,8 @@ gbfgetint16(gbfile *file)
 {
 	char buf[2];
 	
-	gbfread(&buf, 1, sizeof(buf), file);
+	is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)),
+		"%s: Unexpected end of file (%s)!\n", file->module, file->name);
 	
 	if (file->big_endian)
 		return be_read16(buf);
@@ -631,7 +633,8 @@ gbfgetdbl(gbfile *file)
 {
 	char buf[8];
 
-	gbfread(&buf, 1, sizeof(buf), file);
+	is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)),
+		"%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
 	return endian_read_double(buf, ! file->big_endian);
 }
@@ -645,7 +648,8 @@ gbfgetflt(gbfile *file)
 {
 	char buf[4];
 	
-	gbfread(&buf, 1, sizeof(buf), file);
+	is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)),
+		"%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
 	return endian_read_float(buf, ! file->big_endian);
 }
