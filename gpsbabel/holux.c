@@ -32,10 +32,10 @@ History:
 #include "holux.h"
 
 
-static  gbfile *file_in;
+static  gbfile *file_in, *file_out;
 static 	unsigned char *HxWFile;
 static  short_handle mkshort_handle;
-static  char fOutname[256];
+
 #define MYNAME "Holux"
 
 
@@ -61,7 +61,7 @@ wr_init(const char *fname)
 
 	HxWFile = xcalloc(GM100_WPO_FILE_SIZE, 1);
 
-	strcpy (fOutname,fname);
+	file_out = gbfopen_le(fname, "wb", MYNAME);
 }
 
 
@@ -71,7 +71,7 @@ wr_init(const char *fname)
 static void wr_deinit(void)
 {   
         mkshort_del_handle(&mkshort_handle);
-
+	gbfclose(file_out);
 }
 
 
@@ -99,7 +99,7 @@ static void data_read(void)
 
     if (iDataRead == 0)
     {
-		fatal("GPSBABEL: Error reading data from .wpo file\n");
+		fatal(MYNAME ": Error reading data from %s.\n", file_in->name);
     }
 
     iWptNum = le_read16(&((WPTHDR *)HxWpt)->num);
@@ -255,7 +255,6 @@ static void holux_disp(const waypoint *wpt)
 static void data_write(void)
 {
     int iWritten;
-    FILE *file_out;
     short sCount;
 
     /* init the waypoint area*/
@@ -283,16 +282,11 @@ static void data_write(void)
 
     waypt_disp_all(holux_disp);
    
-
-    file_out = xfopen(fOutname, "wb", MYNAME);
-  
-    iWritten = fwrite (HxWFile, 1, GM100_WPO_FILE_SIZE,file_out);  
+    iWritten = gbfwrite (HxWFile, 1, GM100_WPO_FILE_SIZE,file_out);  
     if (iWritten == 0)
     {
-		fatal("GPSBABEL: Error writing .%s\n", fOutname);
+		fatal(MYNAME ": Error writing data to %s.\n", file_out->name);
     }
-
-	fclose(file_out);
     xfree(HxWFile);
 }
 
