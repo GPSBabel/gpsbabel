@@ -321,6 +321,12 @@ msvc-build:
 	echo $(OBJS) > objs.lst
 	LINK.EXE /NOLOGO @objs.lst ./msvc/expat/libexpat.lib /out:gpsbabel.exe 
 
+# release check using CVS tree
+test-release: doc gpsbabel.html
+	cvs export -r HEAD -d gpsbabel-$(VERSIOND) gpsbabel
+	rm -f gpsbabel-$(VERSIOND)/internal_styles.c
+	make release-tarball release-winbuild release-rpm
+
 # Machine generated from here down. 
 alan.o: alan.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h
