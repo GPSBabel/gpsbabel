@@ -505,8 +505,8 @@ static void
 mapsend_wpt_write(void)
 {
 	mapsend_hdr hdr = {13, {"4D533330 MS"}, {"30"}, ms_type_wpt, {0, 0, 0}};
-	int wpt_count = waypt_count();
 	int n = 0;
+	int wpt_count = waypt_count();
 	
 	if (global_opts.objective == trkdata) {
 		mapsend_track_write();
