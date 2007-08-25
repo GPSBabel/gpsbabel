@@ -233,6 +233,17 @@ nmea_add_wpt(waypoint *wpt, route_head *trk)
 }
 
 static void
+nmea_release_wpt(waypoint *wpt)
+{
+	if (wpt && ((wpt->Q.next == NULL) || (wpt->Q.next == &wpt->Q))) {
+		/* This waypoint isn't queued.
+		   Release it, because we don't have any reference to this
+		   waypoint (! memory leak !) */
+		waypt_free(wpt);
+	}
+}
+
+static void
 nmea_rd_init(const char *fname)
 {
 	curr_waypt = NULL;
@@ -389,9 +400,7 @@ gpgll_parse(char *ibuf)
 	if (lngdir == 'W') lngdeg = -lngdeg;
 	waypt->longitude = ddmm2degrees(lngdeg);
 
-	if (curr_waypt && (read_mode == rm_serial)) {
-		waypt_free(curr_waypt);
-	}
+	nmea_release_wpt(curr_waypt);
 	curr_waypt = waypt;
 }
 
@@ -468,9 +477,7 @@ gpgga_parse(char *ibuf)
 			break;
 	}
 
-	if (curr_waypt && (read_mode == rm_serial)) {
-		waypt_free(curr_waypt);
-	}
+	nmea_release_wpt(curr_waypt);
 	curr_waypt = waypt;
 }
 
@@ -544,9 +551,7 @@ gprmc_parse(char *ibuf)
 	if (lngdir == 'W') lngdeg = -lngdeg;
 	waypt->longitude = ddmm2degrees(lngdeg);
 
-	if (curr_waypt && (read_mode == rm_serial)) {
-		waypt_free(curr_waypt);
-	}
+	nmea_release_wpt(curr_waypt);
 	curr_waypt = waypt;
 }
 
