@@ -106,8 +106,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.58 $"; */
-static char gdb_release_date[] = "$Date: 2007-07-14 21:06:14 $";
+/* static char gdb_release[] = "$Revision: 1.59 $"; */
+static char gdb_release_date[] = "$Date: 2007-08-25 19:35:25 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -441,6 +441,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	waypoint *res;
 	garmin_fs_t *gmsd;
 	char *str;
+	char *bufp = buf;
 #ifdef GMSD_EXPERIMENTAL
 	char subclass[22];
 #endif
@@ -462,7 +463,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	if (wpt_class != 0) waypth_ct++;
 	
 	FREAD_STR(buf);					/* Country code */
-	GMSD_SETSTR(cc, buf);
+	GMSD_SETSTR(cc, bufp);
 	
 #ifdef GMSD_EXPERIMENTAL
 	FREAD(subclass, sizeof(subclass));
@@ -531,11 +532,11 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	icon = FREAD_i32;
 	GMSD_SET(icon, icon);			/* icon */
 	FREAD_STR(buf);				/* city */
-	GMSD_SETSTR(city, buf);
+	GMSD_SETSTR(city, bufp);
 	FREAD_STR(buf);				/* state */
-	GMSD_SETSTR(state, buf);
+	GMSD_SETSTR(state, bufp);
 	FREAD_STR(buf);				/* facility */
-	GMSD_SETSTR(facility, buf);
+	GMSD_SETSTR(facility, bufp);
 
 	FREAD(buf, 1);
 
@@ -580,7 +581,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 		waypt_flag = 0;
 
 		FREAD_STR(buf);				/* street address */
-		GMSD_SETSTR(addr, buf);
+		GMSD_SETSTR(addr, bufp);
 
 		FREAD(buf, 5);				/* instruction depended */
 		res->description = FREAD_CSTR;		/* instruction */
@@ -636,13 +637,13 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	if (gdb_ver >= GDB_VER_3) {
 		if (FREAD_i32 == 1) {
 			FREAD_STR(buf);		/* phone number */
-			GMSD_SETSTR(phone_nr, buf);
+			GMSD_SETSTR(phone_nr, bufp);
 			FREAD_STR(buf);		/* ?? fax / mobile ?? */
 		}
 		FREAD_STR(buf);			/* country */
-		GMSD_SETSTR(country, buf);
+		GMSD_SETSTR(country, bufp);
 		FREAD_STR(buf);			/* postal code */
-		GMSD_SETSTR(postal_code, buf);
+		GMSD_SETSTR(postal_code, bufp);
 	}
 	
 	res->icon_descr = gt_find_desc_from_icon_number(icon, GDB, &dynamic);
