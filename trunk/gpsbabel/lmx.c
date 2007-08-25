@@ -94,7 +94,7 @@ lmx_print(const waypoint *wpt)
 		gbfprintf(ofd, "        <lm:mediaLink>\n");
 		if (wpt->url_link_text)
 			lmx_write_xml(5,"lm:name", wpt->url_link_text);
-		gbfprintf(ofd, "          <lm:url>\%s</lm:url>\n", wpt->url);
+		gbfprintf(ofd, "          <lm:url>%s</lm:url>\n", wpt->url);
 		gbfprintf(ofd, "        </lm:mediaLink>\n");
 	}
 
@@ -229,7 +229,11 @@ lmx_lm_mlink_e(const char *args, const char **unused)
 
 ff_vecs_t lmx_vecs = {
         ff_type_file,
-	{ ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none},
+	{ 
+	  ff_cap_read | ff_cap_write,	/* waypoints */
+	  ff_cap_none,			/* tracks */
+	  ff_cap_none			/* routes */
+	},
         lmx_rd_init,
         lmx_wr_init,
         lmx_rd_deinit,
