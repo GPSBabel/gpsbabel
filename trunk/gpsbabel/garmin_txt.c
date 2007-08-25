@@ -165,24 +165,16 @@ init_date_and_time_format(void)
 }
 
 static void
-convert_datum(waypoint *wpt, const int to_internal_wgs84, double *dest_lat, double *dest_lon)
+convert_datum(const waypoint *wpt, double *dest_lat, double *dest_lon)
 {
 	double alt;
 
 	if (datum_index == DATUM_WGS84 ) {
-		if (to_internal_wgs84 == 0) {
-			*dest_lat = wpt->latitude;
-			*dest_lon = wpt->longitude;
-		}
-		return;
+		*dest_lat = wpt->latitude;
+		*dest_lon = wpt->longitude;
 	}
-		
-	if (to_internal_wgs84) { /* convert the waypoint himself */
-		GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
-			&wpt->latitude, &wpt->longitude, &alt, datum_index);
-	} else
-		GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0.0,
-			dest_lat, dest_lon, &alt, datum_index);
+	else GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0.0,
+		dest_lat, dest_lon, &alt, datum_index);
 }
 
 /* WRITER *****************************************************************/
@@ -280,7 +272,7 @@ print_position(const waypoint *wpt)
 	int     latint, lonint, zone;
 	char map[3], zonec;
 	
-	convert_datum((waypoint *)wpt, 0, &lat, &lon);
+	convert_datum(wpt, &lat, &lon);
 
 	/* ----------------------------------------------------------------------------*/
 	/*            the following code is from pretty_deg_format (util.c)            */
