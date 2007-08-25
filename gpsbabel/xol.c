@@ -139,7 +139,7 @@ xol_shape_end(const char *args, const char **unused)
 static void 
 xol_waypt(const char *args, const char **attrv) {
 	const char **avp = &attrv[0];
-	int x, y;
+	int x=0, y=y;
 
 	while (*avp) {
 		if (strcmp(avp[0], "y") == 0)
