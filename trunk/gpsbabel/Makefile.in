@@ -109,6 +109,9 @@ gpsbabel-debug: $(OBJS)
 Makefile gbversion.h: Makefile.in config.status xmldoc/makedoc.in gbversion.h.in
 	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
 
+xcsv_tokens.gperf: xcsv_tokens.in
+	gperf -t --output-file=$@ $?
+
 config.status: configure 
 	$(SHELL) config.status --recheck
 
@@ -376,7 +379,7 @@ csv_util.o: csv_util.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
-  jeeps/gpsproj.h xmlgeneric.h
+  jeeps/gpsproj.h xmlgeneric.h xcsv_tokens.gperf
 delgpl.o: delgpl.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 discard.o: discard.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
