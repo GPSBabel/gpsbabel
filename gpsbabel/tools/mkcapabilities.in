@@ -36,7 +36,7 @@ getcap($1, $2, $3, $5)
 FMTS=`./gpsbabel -^2 | grep -v '^internal' | sed 's/\&/\&amp;/' | awk  -F'\t' '{print $3}'`
 for f in $FMTS
 do
-	[ ! -f @DOCDIR@/htmldoc-development/fmt_${f}.html ] && echo Missing doc for $f
+	[ ! -f @DOCDIR@/htmldoc-@DOCVERSION@/fmt_${f}.html ] && echo Missing doc for $f
 done
 
 exit 0
