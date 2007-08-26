@@ -81,6 +81,7 @@ typedef struct field_map {
 	char * key;
 	char * val;
 	char * printfc;
+	int hashed_key;
 	int options;
 } field_map_t;
 
