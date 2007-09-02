@@ -148,7 +148,7 @@ bintime2utc(int date, int time)
 }
 
 static void 
-dg100_debug(const char *hdr, size_t sz, unsigned char *buf)
+dg100_debug(const char *hdr, int include_nl, size_t sz, unsigned char *buf)
 {
    int i;
 
@@ -160,7 +160,9 @@ dg100_debug(const char *hdr, size_t sz, unsigned char *buf)
        fprintf(stderr, "%02x ", buf[i]);
    }
 
-   fprintf(stderr, "\n");
+   if (include_nl) {
+       fprintf(stderr, "\n");
+   }
 }
 
 
@@ -285,7 +287,7 @@ dg100_send(gbuint8 cmd, const void *payload, size_t count)
 	be_write16(frame + framelen - 2, 0xB0B3);
 
 	n = gbser_write(serial_handle, frame, framelen);
-        dg100_debug(n == 0 ? "Sent: " : "Error Sending:", framelen, frame);
+        dg100_debug(n == 0 ? "Sent: " : "Error Sending:", 1, framelen, frame);
 	if (n == gbser_ERROR) {
 	    	fatal("dg_100_send: write failed\n");
 	}
@@ -324,10 +326,10 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 
 	/* consume input until frame head sequence 0xA0A2 was received */
 	frame_head = 0;
-        dg100_debug("Receiving ", 0, NULL);
+        dg100_debug("Receiving ", 0, 0, NULL);
 	do {
 		c = dg100_recv_byte();
-        	dg100_debug("", 1, &c);
+        	dg100_debug("", 0, 1, &c);
 		frame_head <<= 8;
 		frame_head |= c;
 
@@ -356,7 +358,7 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 	/* read Payload Length, Command ID, and two further bytes */
 	for (i = 2; i < 7; i++) {
 		buf[i] = dg100_recv_byte();
-        	dg100_debug("", 1, &buf[i]);
+        	dg100_debug("", 0, 1, &buf[i]);
 	}
 
 	payload_len_field = be_read16(buf + 2);
@@ -405,7 +407,7 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 	 * read the rest of the frame at once using gbser_read_wait(). */
 	for (i = 7; i < frame_len; i++) {
 		buf[i] = dg100_recv_byte();
-        	dg100_debug("", 1, &buf[i]);
+        	dg100_debug("", 0, 1, &buf[i]);
 	}
 
 	frame_start_seq   = be_read16(buf + 0);
@@ -428,6 +430,7 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 
 	*cmdinfo_result = cmdinfo;
 	*payload = buf + 5;
+	dg100_debug("\n", 0, 0, &buf[i]);
 	return(param_len);
 }
 
