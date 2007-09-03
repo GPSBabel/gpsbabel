@@ -295,7 +295,9 @@ tag_mapping tag_path_map[] = {
 
 #define GARMIN_WPT_EXT "/gpx/wpt/extensions/gpxx:WaypointExtension"
 
-	GEOTAG( tt_cache, 		"cache"),
+//	GEOTAG( tt_cache, 		"cache"),
+	{ tt_cache, 1, "/gpx/wpt/groundspeak:cache" },
+
 	GEOTAG( tt_cache_name, 		"name"),
 	GEOTAG( tt_cache_container, 	"container"),
 	GEOTAG( tt_cache_type, 		"type"),
