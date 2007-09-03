@@ -208,6 +208,9 @@ void trk_coord(const char *args, const char **attrv)
 	waypoint *trkpt;
 
 	route_head *trk_head = route_head_alloc();
+	if (wpt_tmp->shortname) {
+		trk_head->rte_name  = xstrdup(wpt_tmp->shortname);
+	}
 	track_add_head(trk_head);
 	
 	while (3 == sscanf(args,"%lf,%lf,%lf %n", &lon, &lat, &alt, &consumed)){
