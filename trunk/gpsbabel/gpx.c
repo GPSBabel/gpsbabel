@@ -480,6 +480,14 @@ tag_gs_cache(const char **attrv)
 	for (avp = &attrv[0]; *avp; avp+=2) {
 		if (strcmp(avp[0], "id") == 0) {
 				wpt_tmp->gc_data.id = atoi(avp[1]);
+		} else if (strcmp(avp[0], "available") == 0) {
+			if (strcmp(avp[1], "True") == 0) {
+				wpt_tmp->gc_data.is_available = 1;
+			}
+		} else if (strcmp(avp[0], "archived") == 0) {
+			if (strcmp(avp[1], "True") == 0) {
+				wpt_tmp->gc_data.is_archived = 1;
+			}
 		}
 	}
 }

@@ -233,6 +233,8 @@ typedef struct {
 	geocache_container container:4;
 	unsigned int diff:6; /* (multiplied by ten internally) */
 	unsigned int terr:6; /* (likewise) */
+	unsigned int is_archived:1;
+	unsigned int is_available:1;
 	time_t exported;
 	time_t last_found;
 	char *placer; /* Placer name */
