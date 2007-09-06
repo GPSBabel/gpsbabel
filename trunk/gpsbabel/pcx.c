@@ -82,7 +82,7 @@ static void
 data_read(void)
 {
 	char name[7], desc[41];
-	double lat = 0, lon = 0;:
+	double lat = 0, lon = 0;
 	long alt; 
 	int symnum;
 	char date[10];
