@@ -1127,17 +1127,15 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	if FIELD_USED(fld_fix) {
 		char *fix;
 		switch(wpt->fix) {
-			case fix_none: fix = "none";
-			case fix_2d: fix = "2d";
-			case fix_3d: fix = "3d";
-			case fix_dgps: fix = "dgps";
-			case fix_pps: fix = "pps";
-				unicsv_print_str(fix);
-				break;
-			default:
-				gbfputs(unicsv_fieldsep, fout);
-				break;
+			case fix_none: fix = "none"; break;
+			case fix_2d: fix = "2d"; break;
+			case fix_3d: fix = "3d"; break;
+			case fix_dgps: fix = "dgps"; break;
+			case fix_pps: fix = "pps"; break;
+			default: fix = NULL;
 		}
+		if (fix) unicsv_print_str(fix);
+		else gbfputs(unicsv_fieldsep, fout);
 	}
 	if FIELD_USED(fld_hdop) {
 		if (wpt->hdop > 0)
