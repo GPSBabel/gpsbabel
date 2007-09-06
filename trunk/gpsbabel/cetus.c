@@ -124,7 +124,7 @@ typedef struct cetus_track_point_s
 	char hour;
 	char min;
 	char sec;
-	char msec;
+	char dsec;
 	char sat;
 	char hdop;
 	pdb_32 latitude;
@@ -181,17 +181,19 @@ read_track_point(cetus_track_point_t *data, const time_t basetime)
 	i = be_read16(&data->course);
 	if (i != 4000) WAYPT_SET(wpt, course, (float) i / 10);
 	
-	switch(data->hour / 32)	/* extract fix */
+	switch(data->hour >> 5)	/* extract fix */
 	{
-	    case 0: break;			/* no GPS */
 	    case 1: wpt->fix = fix_none; break;
 	    case 2: wpt->fix = fix_2d; break;
 	    case 3: wpt->fix = fix_3d; break;
 	    case 4: wpt->fix = fix_dgps; break;
+	    default: break;			/* no GPS */
 	}
 	
 	wpt->creation_time = basetime +
-	    ((data->hour % 32) * 3600) + (data->min * 60) + data->sec;
+	    ((data->hour & 0x1F) * 3600) + (data->min * 60) + data->sec;
+	if (data->dsec)
+	    wpt->microseconds = (int)data->dsec * 10000;
 
 	return wpt;
 }
@@ -205,7 +207,7 @@ read_tracks(const pdbfile *pdb)
 	char descr[(2 * TRACK_POINT_SIZE) + 1];
 	char temp_descr[TRACK_POINT_SIZE + 1];
 	cetus_track_head_t *head;
-	waypoint *wpt, *prev;
+	waypoint *wpt;
 	route_head *track;
 	time_t basetime;
 	
@@ -230,7 +232,6 @@ read_tracks(const pdbfile *pdb)
 	    records = reclen / TRACK_POINT_SIZE;
 
 	    c += 8;
-	    prev = NULL;
 	    
 	    for (i = 0; i < records; i++, c += TRACK_POINT_SIZE)
 	    {
@@ -240,7 +241,8 @@ read_tracks(const pdbfile *pdb)
 		    
 		    case 0: 	/* track header */
 			head = (cetus_track_head_t *)c; 
-			if (head->id[0] != 'C' || head->id[1] != 'G') fatal(MYNAME ": Invalid track header!\n");
+			if (head->id[0] != 'C' || head->id[1] != 'G')
+			    fatal(MYNAME ": Invalid track header!\n");
 			
 			memset(&tm, 0, sizeof(tm));
 			tm.tm_mday = head->day;
@@ -266,14 +268,6 @@ read_tracks(const pdbfile *pdb)
 			{
 			    track_add_wpt(track, wpt);
 			    points++;
-			    
-			    /* Did we run over midnight ? */
-			    if ((prev != NULL) && (prev->creation_time > wpt->creation_time))
-			    {
-				basetime += (24 * 3600);
-				wpt->creation_time += (24 * 3600);
-			    }
-			    prev = wpt;
 			}
 			else
 			    dropped++;
@@ -400,18 +394,16 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-	pdbfile *pdb = file_in;
+	if (file_in->creator != MYCREATOR) fatal(MYNAME ": Not a Cetus file.\n");
 
-	if (pdb->creator != MYCREATOR) fatal(MYNAME ": Not a Cetus file.\n");
-
-	switch(pdb->type)
+	switch(file_in->type)
 	{
 	    case MYTYPE_TRK:
-		read_tracks(pdb);
+		read_tracks(file_in);
 		break;
 		
 	    case MYTYPE_WPT:
-		read_waypts(pdb);
+		read_waypts(file_in);
 		break;
 	}
 }
