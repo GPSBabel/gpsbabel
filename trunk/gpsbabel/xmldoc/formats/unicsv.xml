@@ -10,7 +10,7 @@
 <para>
    The list of keywords include:
    <screen format="linespecific">
-      alt =      Altitude
+      alt =      Elevation (in meters) of the point
       bng_e =    British National Grid's easting
       bng =      full coordinate in BNG format (zone easting northing)
       bng_pos =  full coordinate in BNG format (zone easting northing)
@@ -22,10 +22,10 @@
       date =     Date (yyyy/mm/dd)
       depth =    Depth
       desc =     Description
-      ele =      Altitude (elevation)
+      ele =      Elevation (in meters) of the point
       fix =      3d, 2d, etc.
       geschw =   Geschwindigkeit (speed)
-      hdop =     Horizontal precision
+      hdop =     Horizontal dilution of precision
       head =     Heading / Course true
       heart =    Heartrate
       icon =     Symbol (icon) name
@@ -33,7 +33,7 @@
       lon =      Longitude
       name =     Waypoint name ("Shortname")
       notes =    Notes
-      pdop =     Precision summary (horizontal &amp; vertical)
+      pdop =     Position dilution of precision
       prox =     Proximity
       sat =      Number of sats used for fix
       speed =    Speed
@@ -50,7 +50,7 @@
       utm_pos =  full coordinate in UTM format (zone zone-ch easting northing)
       utm_n =    UTM northing
       utm_z =    UTM zone
-      vdop =     Vertical precision
+      vdop =     Vertical dilution of precision
       x =        Longitude
       x_pos =    Longitude
       y =        Latitude
