@@ -339,7 +339,7 @@ dg100_recv_byte()
 /* payload returns a pointer into a static buffer (which also contains the
  * framing around the data), so the caller must copy the data before calling
  * this function again */
-static ssize_t
+static int
 dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 {
 	static gbuint8 buf[FRAME_MAXLEN];
@@ -464,7 +464,7 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 }
 
 /* return value: number of bytes copied into buf, -1 on error */
-static ssize_t
+static int
 dg100_recv(gbuint8 expected_id, void *buf, unsigned len)
 {
 	int n;
@@ -495,7 +495,7 @@ dg100_recv(gbuint8 expected_id, void *buf, unsigned len)
 
 /* the number of bytes to be sent is determined by cmd,
  * count is the size of recvbuf */
-static ssize_t
+static int
 dg100_request(gbuint8 cmd, const void *sendbuf, void *recvbuf, size_t count)
 {
 	struct dg100_command *cmdinfo;
