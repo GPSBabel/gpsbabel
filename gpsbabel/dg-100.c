@@ -325,8 +325,9 @@ dg100_recv_byte()
 {
 	int result;
 
-	/* allow for a delay of 20s; especially erase can take a long time */
-	result = gbser_readc_wait(serial_handle, 20000);
+	/* allow for a delay of 40s; 
+	 *  eraseing the whole DG-100 memory takes about 21s */
+	result = gbser_readc_wait(serial_handle, 40000);
 	switch(result){
 		case gbser_ERROR:
 			fatal("dg100_recv_byte(): error reading one byte\n");
@@ -529,8 +530,6 @@ dg100_getfileheaders(struct dynarray16 *headers)
 	int seqnum;
 	gbint16 numheaders, nextheader, *h;
 	int i, offset;
-	//time_t ti;
-	//int time, date;
 
 	nextheader = 0;
 	do {
@@ -541,6 +540,8 @@ dg100_getfileheaders(struct dynarray16 *headers)
 		/* process the answer */
 		numheaders = be_read16(answer);
 		nextheader = be_read16(answer + 2);
+		dg100_log("found %d headers, nextheader=%d\n",
+			numheaders, nextheader);
 
 		h = dynarray16_alloc(headers, numheaders);
 		for (i = 0; i < numheaders; i++) {
@@ -555,7 +556,7 @@ dg100_getfileheaders(struct dynarray16 *headers)
 					i, seqnum, ctime(&ti));
 			}
 		}
-	} while (numheaders != 0);
+	} while (nextheader != 0);
 }
 
 static void
