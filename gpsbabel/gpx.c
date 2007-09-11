@@ -896,22 +896,6 @@ gpx_end(void *data, const XML_Char *xml_el)
 	/*
 	 * Waypoint-specific tags.
 	 */
-	case tt_wpt_url:
-		wpt_tmp->url = xstrdup(cdatastrp);
-		break;
-	case tt_wpt_urlname:
-		wpt_tmp->url_link_text = xstrdup(cdatastrp);
-		break;
-	case tt_wpt_link: {
-		char *lt = link_text;
-		if (lt) {
-			lt = xstrdup(lrtrim(link_text));
-		}
-		
-		waypt_add_url(wpt_tmp, xstrdup(link_url), lt);
-		link_text = NULL;
-		}
-		break;
 	case tt_wpt:
 		waypt_add(wpt_tmp);
 		logpoint_ct = 0;
@@ -1093,6 +1077,29 @@ gpx_end(void *data, const XML_Char *xml_el)
 				wpt_tmp->fix = fix_pps;
 			else
 				wpt_tmp->fix = fix_unknown;
+		}
+		break;
+	case tt_wpt_url:
+	case tt_trk_trkseg_trkpt_url:
+	case tt_rte_rtept_url:
+		wpt_tmp->url = xstrdup(cdatastrp);
+		break;
+	case tt_wpt_urlname:
+	case tt_trk_trkseg_trkpt_urlname:
+	case tt_rte_rtept_urlname:
+		wpt_tmp->url_link_text = xstrdup(cdatastrp);
+		break;
+	case tt_wpt_link: 
+//TODO: implement GPX 1.1 	case tt_trk_trkseg_trkpt_link: 
+//TODO: implement GPX 1.1 	case tt_rte_rtept_link: 
+		{
+		char *lt = link_text;
+		if (lt) {
+			lt = xstrdup(lrtrim(link_text));
+		}
+		
+		waypt_add_url(wpt_tmp, xstrdup(link_url), lt);
+		link_text = NULL;
 		}
 		break;
 	case tt_unknown:
