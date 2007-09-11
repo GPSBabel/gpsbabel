@@ -1,6 +1,6 @@
 program GPSBabelGUI;
 {
-    Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ begin
 {$IFOPT D+}
 //  UseLanguage('fr');                 // for testing
 {$ENDIF}
+
   Application.Initialize;
   Application.CreateForm(TfrmMain, frmMain);
   Application.CreateForm(TfrmReadme, frmReadme);

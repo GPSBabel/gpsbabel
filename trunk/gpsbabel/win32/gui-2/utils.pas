@@ -1,7 +1,7 @@
 unit utils;
 
 {
-    Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ interface
 uses
   gnugettext,
   Windows, SysUtils, Classes, StdCtrls, ComCtrls,
-  Registry, ShellAPI;
+  Registry, ShellAPI, Forms;
 
 type
   PBoolean = ^Boolean;
@@ -36,7 +36,10 @@ function gpsbabel(const CommandLine: string; Output: TStrings;
   Fatal: PBoolean = nil; OEMStrings: Boolean = True): Boolean;
 
 function GetShortName(const PathName: string): string;
-procedure StoreProfile(const Tag: Integer; const Value: string);
+
+procedure StoreProfile(const Tag: Integer; const Value: string); overload;
+procedure StoreProfile(const Tag, Value: string); overload;
+
 function ReadProfile(const Tag: Integer; const Default: string = ''): string; overload;
 function ReadProfile(const Name: string; const Default: string = ''): string; overload;
 
@@ -57,10 +60,14 @@ function readme_html_path: string;
 
 function HasUpDown(E: TEdit; var UpDown: TUpdown): Boolean;
 
+procedure StoreBounds(const Name: string; AForm: TForm);
+procedure RestoreBounds(const Name: string; AForm: TForm);
+
+function CharCount(const Str: string; const Ch: Char): Integer;
+
 implementation
 
 uses
-  Forms,
   common;
 
 function GetShortName(const PathName: string): string;
@@ -208,6 +215,22 @@ begin
     if reg.OpenKey('\SOFTWARE\GPSBabel', True) then
     begin
       reg.WriteString(str, Value);
+    end;
+  finally
+    reg.Free;
+  end;
+end;
+
+procedure StoreProfile(const Tag, Value: string);
+var
+  reg: TRegistry;
+begin
+  reg := TRegistry.Create;
+  try
+    reg.RootKey := HKEY_CURRENT_USER;
+    if reg.OpenKey('\SOFTWARE\GPSBabel', True) then
+    begin
+      reg.WriteString(Tag, Value);
     end;
   finally
     reg.Free;
@@ -425,10 +448,70 @@ begin
   end;
 end;
 
+procedure StoreBounds(const Name: string; AForm: TForm);
+var
+  str: string;
+begin
+  if (AForm = nil) then Exit;
+
+  if (AForm.WindowState = wsMaximized) then str := 'Y' else str := 'N';
+  str := Format('%s,%d,%d,%d,%d', [str,
+    AForm.Left, AForm.Top, AForm.Width, AForm.Height]);
+  StoreProfile(Name, str);
+end;
+
+procedure RestoreBounds(const Name: string; AForm: TForm);
+var
+  str: string;
+  idx: Integer;
+  lst: TStringList;
+  bds: TRect;
+begin
+  if (AForm = nil) then Exit;
+
+  str := ReadProfile(Name);
+  if (str = '') then Exit;
+
+  lst := TStringList.Create;
+  try
+    lst.Sorted := False;
+    lst.Duplicates := dupAccept;
+    lst.CommaText := str;
+    try
+      AForm.Position := poDesigned;
+
+      if (StrUpper(PChar(lst[0])) = 'Y') then AForm.WindowState := wsMaximized
+      else AForm.WindowState := wsNormal;
+
+      bds.Left := StrToInt(lst[1]);
+      bds.Top := StrToInt(lst[2]);
+      bds.Right := bds.Left + StrToInt(lst[3]);
+      bds.Bottom := bds.Top + StrToInt(lst[4]);
+
+      AForm.BoundsRect := bds;
+      
+    except
+      on E: Exception do;
+    end;
+  finally
+    lst.Free;
+  end;
+end;
+
+function CharCount(const Str: string; const Ch: Char): Integer;
+var
+  i, len: Integer;
+begin
+  Result := 0;
+  len := Length(Str);
+  for i := 1 to len do
+    if (Str[i] = Ch) then
+      Inc(Result);
+end;
 
 var
   hMutex: THandle;
-  
+
 initialization
 
   // Flag for InnoSetup

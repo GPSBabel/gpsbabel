@@ -1,7 +1,7 @@
 unit common;
 
 {
-    Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ const
   SREG_GLOBAL_LANG = 'Global:Language';
   
 const
-  Profile: array[0..11] of string =
+  Profile: array[0..12] of string =
   ('?',
    SREG_SOURCE_DIR,
    SREG_SOURCE_FMT,
@@ -84,7 +84,8 @@ const
    SREG_TARGET_SER,
    SREG_TARGET_FILE,
    SREG_SOURCE_FILE,
-   SREG_GLOBAL_LANG);
+   SREG_GLOBAL_LANG,
+   'Main:Layout');
 
 const
   GPSBabel_Domain = 'gpsbabel';
@@ -96,6 +97,7 @@ type
     Ext:   string;
     internal: string;
     Capas: Integer;
+    url: PChar;
   end;
 
 type

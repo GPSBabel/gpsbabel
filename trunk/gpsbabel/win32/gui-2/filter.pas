@@ -1,7 +1,7 @@
 unit filter;
 
 {
-    Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -108,6 +108,7 @@ type
       Shift: TShiftState);
     procedure btnHelpClick(Sender: TObject);
     procedure cbTransformClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure cbGPSfixClick(Sender: TObject);
   private
     { Private-Deklarationen }
@@ -175,6 +176,7 @@ var
 
 begin
   TranslateComponent(SELF);
+  RestoreBounds('filter_form', Self);
 
   cobTransformType.Items.Clear;
   cobTransformType.Items.Add(_('Waypoints') + ' -> ' + _('Routes'));
@@ -253,6 +255,9 @@ begin
 
   gbTransform.Enabled := (common.gpsbabel_vfmt >= '001.003.002');
   EnableAll(gbTransform, gbTransform.Enabled);
+
+  cobTransformType.Enabled := cbTransform.Checked;
+  cbTransformDelete.Enabled := cbTransform.Checked;
 end;
 
 function TfrmFilter.ValidateNumerical(AEdit: TCustomEdit; AMin, AMax: Extended): Boolean;
@@ -512,7 +517,8 @@ end;
 
 procedure TfrmFilter.cbTrackMergeClick(Sender: TObject);
 begin
-  if cbTrackMerge.Checked then cbTrackPack.Checked := False;
+  if cbTrackMerge.Checked then
+    cbTrackPack.Checked := False;
 end;
 
 procedure TfrmFilter.cbWayptMergeDistanceClick(Sender: TObject);
@@ -738,11 +744,17 @@ end;
 procedure TfrmFilter.cbTransformClick(Sender: TObject);
 begin
   cobTransformType.Enabled := cbTransform.Checked;
+  cbTransformDelete.Enabled := cbTransform.Checked;
+end;
+
+procedure TfrmFilter.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  StoreBounds('filter_form', Self);
 end;
 
 procedure TfrmFilter.cbGPSfixClick(Sender: TObject);
 begin
-  cobGPSfixes.Enabled := cbGPSfix.Checked;
+  cobGPSfixes.Enabled := TCheckBox(Sender).Checked;
 end;
 
 end.
