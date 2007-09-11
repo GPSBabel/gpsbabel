@@ -881,22 +881,30 @@ void kml_write(void)
 	}
 
 	// Output trackpoints
-	if (!realtime_positioning && track_waypt_count()) {
-		kml_write_xml(1,  "<Folder>\n");
-		kml_write_xml(0,  "<name>Tracks</name>\n");
-	}
-	track_disp_all(kml_track_hdr, kml_track_tlr, kml_track_disp);
-	if (!realtime_positioning && track_waypt_count()) {
-		kml_write_xml(-1,  "</Folder>\n");
+	if (track_waypt_count()) {
+		if (!realtime_positioning) {
+			kml_write_xml(1,  "<Folder>\n");
+			kml_write_xml(0,  "<name>Tracks</name>\n");
+		}
+
+		track_disp_all(kml_track_hdr, kml_track_tlr, kml_track_disp);
+
+		if (!realtime_positioning) {
+			kml_write_xml(-1,  "</Folder>\n");
+		}
 	}
 
 	// Output routes
-	if (!realtime_positioning && route_waypt_count()) {
-		kml_write_xml(1,  "<Folder>\n");
-		kml_write_xml(0,  "<name>Routes</name>\n");
-		route_disp_all(kml_route_hdr, kml_route_tlr, kml_route_disp);
-		kml_write_xml(-1,  "</Folder>\n");
-	}
+	if (route_waypt_count()) {
+		if (!realtime_positioning) {
+			kml_write_xml(1,  "<Folder>\n");
+			kml_write_xml(0,  "<name>Routes</name>\n");
+
+			route_disp_all(kml_route_hdr, 
+				kml_route_tlr, kml_route_disp);
+			kml_write_xml(-1,  "</Folder>\n");
+		}
+        }
 
 	kml_write_xml(-1, "</Document>\n");
 	kml_write_xml(-1, "</kml>\n");
