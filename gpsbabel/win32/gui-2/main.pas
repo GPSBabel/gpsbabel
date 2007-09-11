@@ -1,7 +1,9 @@
 unit main;
 
 {
-    Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
+    GPSBabelGUI main unit/formular
+
+    Copyright (C) 2005-2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,8 +36,8 @@ type
     cbRoutes: TCheckBox;
     cbTracks: TCheckBox;
     lbWhat: TLabel;
-    OpenDialog: TOpenDialog;
-    SaveDialog: TSaveDialog;
+    dlgFileOpen: TOpenDialog;
+    dlgFileSave: TSaveDialog;
     wptInputOK: TSpeedButton;
     ImageList1: TImageList;
     wptOutputOK: TSpeedButton;
@@ -44,13 +46,12 @@ type
     trkInputOK: TSpeedButton;
     trkOutputOK: TSpeedButton;
     ActionList1: TActionList;
-    acConvert: TAction;
+    acLetsGo: TAction;
     btnFilter: TBitBtn;
     acFilterSelect: TAction;
     btnProcess: TBitBtn;
-    memoOutput: TMemo;
     stbMain: TStatusBar;
-    MainMenu1: TMainMenu;
+    mnuMain: TMainMenu;
     mnuFile: TMenuItem;
     mnuExit: TMenuItem;
     acFileExit: TAction;
@@ -110,13 +111,34 @@ type
     mnuDebug: TMenuItem;
     Createoptionspo1: TMenuItem;
     acFileChangeLanguage: TAction;
-    Changelanguage1: TMenuItem;
+    mnuChangeLanguage: TMenuItem;
     N5: TMenuItem;
     acFileExportCSV: TAction;
     Createoptionscsv1: TMenuItem;
     File1: TMenuItem;
     Createoptionscsv2: TMenuItem;
     sdOptional: TSaveDialog;
+    PopupMenu: TPopupMenu;
+    acSelectAll: TAction;
+    pmnuSelectAll: TMenuItem;
+    acCopySelected: TAction;
+    pmnuCopySelected: TMenuItem;
+    pmnuClearOutput: TMenuItem;
+    pmnuOutputtoscreen: TMenuItem;
+    acOptionsSynthesizeShortNames: TAction;
+    pmnuSynthesizeshortnames: TMenuItem;
+    pmnu6: TMenuItem;
+    pmnu7: TMenuItem;
+    pmnuForsourceformat: TMenuItem;
+    pmuFortargetformat: TMenuItem;
+    pmnu8: TMenuItem;
+    pmnuLetsgo: TMenuItem;
+    memoOutput: TMemo;
+    pmnuEnablecharactersettransformation: TMenuItem;
+    acOptionsNukeTypes: TAction;
+    pmnuForceselectedGPSdatatypesnuketypesfilter: TMenuItem;
+    pmnu9: TMenuItem;
+    pmnuFilter: TMenuItem;
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure OpenButtonClick(Sender: TObject);
@@ -127,7 +149,7 @@ type
     procedure cbRoutesClick(Sender: TObject);
     procedure cbTracksClick(Sender: TObject);
     procedure sbSaveFileClick(Sender: TObject);
-    procedure acConvertExecute(Sender: TObject);
+    procedure acLetsGoExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure acFilterSelectExecute(Sender: TObject);
     procedure acFileExitExecute(Sender: TObject);
@@ -136,7 +158,6 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure chbOutputDeviceClick(Sender: TObject);
     procedure acHelpReadmeExecute(Sender: TObject);
-    procedure mnuSynthesizeShortNamesClick(Sender: TObject);
     procedure edOutputFileKeyPress(Sender: TObject; var Key: Char);
     procedure cbInputFormatDeviceChange(Sender: TObject);
     procedure cbOutputFormatDeviceChange(Sender: TObject);
@@ -147,7 +168,6 @@ type
     procedure btnInputOptsClick(Sender: TObject);
     procedure acFileClearMemoExecute(Sender: TObject);
     procedure acFinalizeDropDownsExecute(Sender: TObject);
-    procedure mnuOptionsForceDataTypeClick(Sender: TObject);
     procedure acOptionsEnableCharactersetTransformationExecute(
       Sender: TObject);
     procedure acFileOutputToScreenExecute(Sender: TObject);
@@ -156,6 +176,11 @@ type
     procedure acFileExportCSVExecute(Sender: TObject);
     procedure cbOutputDeviceChange(Sender: TObject);
     procedure cbInputDeviceChange(Sender: TObject);
+    procedure acSelectAllExecute(Sender: TObject);
+    procedure acCopySelectedExecute(Sender: TObject);
+    procedure PopupMenuPopup(Sender: TObject);
+    procedure acOptionsSynthesizeShortNamesExecute(Sender: TObject);
+    procedure acOptionsNukeTypesExecute(Sender: TObject);
   private
     { Private-Deklarationen }
     FCaps: TCapabilities;
@@ -282,8 +307,9 @@ end;
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   MakeFirstTranslation(Self);
-
   FFirstShow := True;
+
+  RestoreBounds('main_form', Self);
 
   TP_Ignore(mnuDebug, 'mnuDebug');
 {$IFOPT D-}
@@ -296,8 +322,8 @@ begin
   FCaps := TCapabilities.Create;
   FOpts := TOptions.Create(FCaps);
 
-  OpenDialog.InitialDir := ReadProfile(OpenDialog.Tag);
-  SaveDialog.InitialDir := ReadProfile(SaveDialog.Tag);
+  dlgFileOpen.InitialDir := ReadProfile(dlgFileOpen.Tag);
+  dlgFileSave.InitialDir := ReadProfile(dlgFileSave.Tag);
 
   if not ComboBoxSelect(cbInputDevice, ReadProfile(cbInputDevice.Tag)) then
     cbInputDevice.ItemIndex := 0;
@@ -346,8 +372,8 @@ begin
 
     FCaps.List := l;
     FOpts.List := l;
-    InitCombo(cbInputFormatDevice, False, True);
-    InitCombo(cbOutputFormatDevice, True, True);
+    InitCombo(cbInputFormatDevice, True, True);
+    InitCombo(cbOutputFormatDevice, False, True);
     InitCombo(cbInputFormat, True, False);
     InitCombo(cbOutputFormat, False, False);
   finally
@@ -407,18 +433,28 @@ end;
 procedure TfrmMain.OpenButtonClick(Sender: TObject);
 var
   s: string;
+  i: Integer;
 begin
-  OpenDialog.Filter := '';
-  OpenDialog.DefaultExt := '*.*';
+  dlgFileOpen.Filter := '';
+  dlgFileOpen.DefaultExt := '*.*';
 
   if (cbInputFormat.Text <> '') then
     s := cbInputFormat.Text + '|*.' + FCaps.GetExt(cbInputFormat.Text) + '|';
   s := s + _('All files|*.*');
 
-  OpenDialog.Filter := s;
-  if not SELF.OpenDialog.Execute then Exit;
+  dlgFileOpen.Filter := s;
+  if not SELF.dlgFileOpen.Execute then Exit;
 
-  edInputFile.Text := OpenDialog.FileName;
+  edInputFile.Text := '';
+  for i := 0 to dlgFileOpen.Files.Count - 1 do
+  begin
+    s := dlgFileOpen.Files[i];
+    if (Pos('"', s) <> 0) or (Pos(' ', s) <> 0) or (Pos(',', s) <> 0) then
+      s := AnsiQuotedStr(s, '"');
+    if (edInputFile.Text <> '') then edInputFile.Text := edInputFile.Text + ', ';
+    edInputFile.Text := edInputFile.Text + s;
+  end;
+
   CheckInput;
 end;
 
@@ -466,7 +502,6 @@ begin
     ac := acOptionsSourceFormat;
     acOptionsSourceFormat.Caption := _('Input') + ': ' + Format;
     btnInputOpts.Caption := '';
-//  ImageList1.GetBitmap(11, btnInputOpts.Glyph);
   end
   else begin
     edOutputOpts.Text := '';
@@ -475,7 +510,6 @@ begin
     ac := acOptionsTargetFormat;
     acOptionsTargetFormat.Caption := _('Output') + ': ' + Format;
     btnOutputOpts.Caption := '';
-//  ImageList1.GetBitmap(11, btnOutputOpts.Glyph);
   end;
 
   ac.Enabled := FOpts.HasFormatOpts(Format);
@@ -496,7 +530,7 @@ end;
 
 procedure TfrmMain.CheckInput;
 begin
-  acConvert.Enabled :=
+  acLetsGo.Enabled :=
   (cbWaypoints.Checked or cbRoutes.Checked or cbTracks.Checked)
   and
    (
@@ -542,33 +576,34 @@ procedure TfrmMain.sbSaveFileClick(Sender: TObject);
 var
   s: string;
 begin
-  SaveDialog.Filter := '';
-  SaveDialog.DefaultExt := '*.*';
+  dlgFileSave.Filter := '';
+  dlgFileSave.DefaultExt := '*.*';
 
   if (cbOutputFormat.Text <> '') then
     s := cbOutputFormat.Text + '|*.' + FCaps.GetExt(cbOutputFormat.Text) + '|';
   s := s + _('All files|*.*');
 
-  SaveDialog.Filter := s;
-  if not SELF.SaveDialog.Execute then Exit;
+  dlgFileSave.Filter := s;
+  if not SELF.dlgFileSave.Execute then Exit;
 
-  edOutputFile.Text := SaveDialog.FileName;
+  edOutputFile.Text := dlgFileSave.FileName;
   CheckInput;
 end;
 
-procedure TfrmMain.acConvertExecute(Sender: TObject);
+procedure TfrmMain.acLetsGoExecute(Sender: TObject);
 var
   cmdline: string;
-  list: TStrings;
+  list, files: TStrings;
   CSave: TCursor;
   str: TStream;
   s, tmp: string;
   i: Integer;
-  IFormat, OFormat: string;
+  IFormat, OFormat, IFiles: string;
   Fatal: Boolean;
+  sp: PChar;
 
 begin
-  btnProcess.Enabled := False;
+  acLetsGo.Enabled := False;
   try
     acFinalizeDropDownsExecute(nil);
 
@@ -588,20 +623,34 @@ begin
     if cbRoutes.Checked then cmdline := cmdline + ' -r';
     if cbTracks.Checked then cmdline := cmdline + ' -t';
 
-    if mnuSynthesizeShortNames.Checked then cmdline := cmdline + ' -s';
+    if acOptionsSynthesizeShortNames.Checked then cmdline := cmdline + ' -s';
 
     if chbInputDevice.Checked then
     begin
-      s := SysUtils.AnsiLowerCase(cbInputDevice.Text) + ':';
+      IFiles := '-f ' + SysUtils.AnsiLowerCase(cbInputDevice.Text) + ':';
 //    if (s = 'usb:') then
 //      s := s + '-1';
     end
       else
     begin
-      s := edInputFile.Text;
-      if not(FileExists(s)) then
-      raise eGPSBabelError.CreateFmt(_('File %s not found.'), [s]);
-      s := '"' + s + '"';
+     IFiles := '';
+     files := TStringList.Create;
+      try
+        if (edInputFile.Text[1] <> '"') then
+          files.CommaText := AnsiQuotedStr(edInputFile.Text, '"')
+        else
+          files.CommaText := edInputFile.Text;
+        for i := 0 to files.Count - 1 do
+        begin
+          s := files.Strings[i];
+          if not(FileExists(s)) then
+            raise eGPSBabelError.CreateFmt(_('File %s not found.'), [s]);
+          if (IFiles <> '') then IFiles := IFiles + ' ';
+          IFiles := IFiles + '-f ' + AnsiQuotedStr(s, '"');
+        end;
+      finally
+        files.Free;
+      end;
     end;
 
     // Input character set
@@ -612,17 +661,17 @@ begin
         [cmdline, cbInputLang.Text]);
 
     if (Trim(edInputOpts.Text) <> '') then
-      cmdline := Format('%s -i %s,%s -f %s',
-        [cmdline, IFormat, Trim(edInputOpts.Text), s])
+      cmdline := Format('%s -i %s,%s %s',
+        [cmdline, IFormat, Trim(edInputOpts.Text), IFiles])
     else
-      cmdline := Format('%s -i %s -f %s',
-        [cmdline, IFormat, s]);
+      cmdline := Format('%s -i %s %s',
+        [cmdline, IFormat, IFiles]);
 
     if mnuOptionsForceDataType.Checked then
     begin
       s := '';
       if not(cbWaypoints.Checked) then
-        s := s + ',waypoints'; 
+        s := s + ',waypoints';
       if not(cbRoutes.Checked) then
         s := s + ',routes';
       if not(cbTracks.Checked) then
@@ -654,23 +703,30 @@ begin
       end;
     end
     else begin
-      s := edOutputFile.Text;
+      s := Trim(edOutputFile.Text);
+      if (s <> '') and (s[1] <> '"') then s := AnsiQuotedStr(s, '"');
+      if (CharCount(s, '"') mod 2 <> 0) then
+      begin
+        MessageDlg(_('Invalid usage of character ''"''!'), mtError, [mbOK], 0);
+        Exit;
+      end;
+      sp := PChar(s);
+      tmp := AnsiExtractQuotedStr(sp, '"');
+      if (tmp <> '') then s := tmp;
 
       if (s <> '-') then
       begin
         if FileExists(s) then
         begin
-          tmp := _('Warning');
-          if (Windows.MessageBox(SELF.Handle,
-            PChar(Format(_('File "%s" exists ! Overwrite ?'), [s])),
-            PChar(tmp), MB_YESNO) <> IDYES) then Exit;
+          if (MessageDlg(Format(_('File "%s" exists ! Overwrite ?'), [s]),
+            mtWarning, [mbYes, mbNO], 0) <> mrYes) then Exit;
         end
           else
         begin
           str := TFileStream.Create(s, fmCreate);
           str.Free;
         end;
-        s := '"' + s + '"';
+        s := AnsiQuotedStr(s, '"');
       end
       else
         s := '-';
@@ -691,8 +747,8 @@ begin
     CSave := Cursor;
     list := TStringList.Create;
     try
-      Cursor := crHourGlass;
-      Application.ProcessMessages;
+      Cursor := crHourGlass;       // doesn't work ???
+      Application.ProcessMessages; // doesn't work ???
       Sleep(50);
 
       if not gpsbabel(cmdline, list, @Fatal, False) then
@@ -718,7 +774,7 @@ begin
     end;
 
   finally
-    btnProcess.Enabled := True;
+    acLetsGo.Enabled := True;
   end;
 end;
 
@@ -875,16 +931,22 @@ procedure TfrmMain.StoreProfiles;
 var
   s: string;
 begin
-  s := SysUtils.ExtractFilePath(edInputFile.Text);
+  if (dlgFileOpen.Files.Count > 0) then
+    s := SysUtils.ExtractFilePath(dlgFileOpen.Files[0])
+  else
+    s := SysUtils.ExtractFilePath(dlgFileOpen.FileName);
   if (s <> '') then
-    StoreProfile(OpenDialog.Tag, s);
-  s := SysUtils.ExtractFilePath(edOutputFile.Text);
+    StoreProfile(dlgFileOpen.Tag, s);
+  if (edOutputFile.Text = '-') then
+    s := dlgFileSave.InitialDir
+  else
+    s := SysUtils.ExtractFilePath(edOutputFile.Text);
   if (s <> '') then
-    StoreProfile(SaveDialog.Tag, s);
+    StoreProfile(dlgFileSave.Tag, s);
   StoreProfile(cbInputFormat.Tag, cbInputFormat.Text);
   StoreProfile(cbOutputFormat.Tag, cbOutputFormat.Text);
   StoreProfile(cbInputDevice.Tag, cbInputDevice.Text);
-  StoreProfile(cbInputFormatDevice.Tag, cbInputFormatDevice.Text); 
+  StoreProfile(cbInputFormatDevice.Tag, cbInputFormatDevice.Text);
   StoreProfile(cbOutputDevice.Tag, cbOutputDevice.Text);
   StoreProfile(cbOutputFormatDevice.Tag, cbOutputFormatDevice.Text);
   StoreProfile(edInputFile.Tag, edInputFile.Text);
@@ -894,6 +956,7 @@ end;
 procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   StoreProfiles;
+  StoreBounds('main_form', Self);
 end;
 
 procedure TfrmMain.chbOutputDeviceClick(Sender: TObject);
@@ -937,11 +1000,6 @@ begin
       Application.CreateForm(TfrmReadme, frmReadme);
     frmReadme.ShowModal;
   end;
-end;
-
-procedure TfrmMain.mnuSynthesizeShortNamesClick(Sender: TObject);
-begin
-  mnuSynthesizeShortNames.Checked := not(mnuSynthesizeShortNames.Checked);
 end;
 
 procedure TfrmMain.edOutputFileKeyPress(Sender: TObject; var Key: Char);
@@ -1067,11 +1125,6 @@ begin
   acFinalizeDropDowns.Execute;
 end;
 
-procedure TfrmMain.mnuOptionsForceDataTypeClick(Sender: TObject);
-begin
-  mnuOptionsForceDataType.Checked := not(mnuOptionsForceDataType.Checked);
-end;
-
 procedure TfrmMain.acOptionsEnableCharactersetTransformationExecute(
   Sender: TObject);
 begin
@@ -1106,6 +1159,7 @@ begin
     edOutputFile.Color := edInputFile.Color;
     chbOutputDevice.Enabled := True;
     edOutputFile.Enabled := True;
+    edOutputFile.Text := '';
     HistoryChanged(edOutputFile, True);
     sbSaveFile.Enabled := True;
   end;
@@ -1358,6 +1412,39 @@ begin
       cbOutputDevice.Items.Add(Format('COM%d', [i]));
     end;
   end;
+end;
+
+procedure TfrmMain.acSelectAllExecute(Sender: TObject);
+begin
+  memoOutput.SetFocus;
+  memoOutput.SelectAll;
+end;
+
+procedure TfrmMain.acCopySelectedExecute(Sender: TObject);
+begin
+  memoOutput.SetFocus;
+  memoOutput.CopyToClipboard;
+end;
+
+procedure TfrmMain.PopupMenuPopup(Sender: TObject);
+begin
+  pmnuSelectAll.Caption := dgettext('delphi', pmnuSelectAll.Caption);
+  pmnuCopySelected.Caption := dgettext('delphi', pmnuCopySelected.Caption);
+  pmnuClearOutput.Caption := dgettext('delphi', pmnuClearOutput.Caption);
+  
+  pmnuSelectAll.Enabled := (memoOutput.Lines.Count > 0);
+  pmnuCopySelected.Enabled := (memoOutput.Lines.Count > 0);
+  pmnuClearOutput.Enabled := (memoOutput.Lines.Count > 0);
+end;
+
+procedure TfrmMain.acOptionsSynthesizeShortNamesExecute(Sender: TObject);
+begin
+  acOptionsSynthesizeShortNames.Checked := not(acOptionsSynthesizeShortNames.Checked);
+end;
+
+procedure TfrmMain.acOptionsNukeTypesExecute(Sender: TObject);
+begin
+  acOptionsNukeTypes.Checked := not(acOptionsNukeTypes.Checked);
 end;
 
 end.
