@@ -326,7 +326,7 @@ dg100_recv_byte()
 	int result;
 
 	/* allow for a delay of 40s; 
-	 *  eraseing the whole DG-100 memory takes about 21s */
+	 *  erasing the whole DG-100 memory takes about 21s */
 	result = gbser_readc_wait(serial_handle, 40000);
 	switch(result){
 		case gbser_ERROR:
