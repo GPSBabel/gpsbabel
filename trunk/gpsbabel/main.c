@@ -123,8 +123,8 @@ usage(const char *pname, int shorter )
 			gpsbabel_version );
 	printf(
 "Usage:\n"
-"    %s [options] -i INTYPE -f INFILE -o OUTTYPE -F OUTFILE\n"
-"    %s [options] -i INTYPE -o OUTTYPE INFILE [OUTFILE]\n"
+"    %s [options] -i INTYPE -f INFILE [filter] -o OUTTYPE -F OUTFILE\n"
+"    %s [options] -i INTYPE -o OUTTYPE INFILE [filter] [OUTFILE]\n"
 "\n"
 "    Converts GPS route and waypoint data from one format type to another.\n"
 "    The input type and filename are specified with the -i INTYPE\n"
@@ -150,7 +150,7 @@ usage(const char *pname, int shorter )
 "    -b               Process command file (batch mode)\n"
 "    -c               Character set for next operation\n"
 "    -N               No smart icons on output\n"
-"    -x filtername    Invoke filter (place between inputs and output) \n"
+"    -x filtername    Invoke filter (placed between inputs and output) \n"
 "    -D level         Set debug level [%d]\n"
 "    -l               Print GPSBabel builtin character sets and exit\n"
 "    -h, -?           Print detailed help and exit\n"
@@ -671,6 +671,7 @@ main(int argc, char *argv[])
 		if (ovecs->position_ops.wr_deinit) {
 			ovecs->position_ops.wr_deinit();
 		}
+		exit(0);
 	}
 
 
