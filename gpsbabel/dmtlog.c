@@ -2,7 +2,7 @@
 
     Support for TrackLogs digital mapping (.trl) files,
 
-    Copyright (C) 2006 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2006,2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -308,14 +308,31 @@ tlog3b_xgcb_wpten(const char *args, const char **unused)
 }
 
 
+static char *
+read_str(gbfile *f)
+{
+	int i;
+	char *res;
+
+	i = gbfgetc(f);
+	if (i == 0xff) i = gbfgetint16(f);
+	
+	res = xmalloc(i + 1);
+	res[i] = '\0';
+	if (i) gbfread(res, 1, i, f);
+	
+	return res;
+}
+
+
 static int
 read_datum(gbfile *f)
 {
 	int res;
 	char *d, *g;
 	
-	d = gbfgetpstr(f);
-	g = gbfgetpstr(f);
+	d = read_str(f);
+	g = read_str(f);
 	
 	res = GPS_Lookup_Datum_Index(d);
 	
@@ -348,10 +365,9 @@ read_CTrackFile(const int version)
 	if ((u1 != 0x0a) || (strncmp("CTrackFile", buf, 10) != 0))
 		fatal(MYNAME ": Unknown or invalid track file.\n");
 
-	if (version == 8) {
-		for (i = 1; i <= 9; i++)
-			gbfread(buf, 1, 4, fin);
-	}
+	if (version == 8)
+		gbfseek(fin, 36, SEEK_CUR);	/* skip unknown 36 bytes */
+
 	ver = gbfgetint32(fin);
 	if (ver != version)
 		fatal(MYNAME ": Unknown or invalid track file (%d).\n", ver);
@@ -365,8 +381,8 @@ read_CTrackFile(const int version)
 	
 	/* S1 .. S9: comments, hints, jokes, aso */
 	for (i = 0; i < 9; i++) {
-		int c = gbfgetc(fin);
-		gbfseek(fin, c, SEEK_CUR);
+		char *s = read_str(fin);
+		xfree(s);
 	}
 	
 	tcount = gbfgetint32(fin);
@@ -401,17 +417,55 @@ read_CTrackFile(const int version)
 		track_add_wpt(track, wpt);
 		
 		if (version == 8)
-			gbfseek(fin, 34, SEEK_CUR);
+			gbfseek(fin, 34, SEEK_CUR);	/* skip unknown 34 bytes */
+	}
+
+	if (version == 8) {
+
+		i = gbfgetint16(fin);
+		i = gbfgetc(fin);
+		if (i == 0) return;
+		
+		gbfungetc(i, fin);
+		datum = read_datum(fin);
+
+		(void) gbfgetint16(fin);
+		(void) gbfgetint32(fin);
+		
+		gbfread(buf, 1, 9, fin);
+		if (strncmp(buf, "CWayPoint", 9) != 0) {
+			warning(MYNAME ": Unsupported waypoint structure!\n");
+			return;
+		}
+		
+		while (! gbfeof(fin)) {
+			waypoint *wpt;
+
+			i = gbfgetc(fin);
+			if (i == 0) break;
+			
+			gbfungetc(i, fin);
+			datum = read_datum(fin);
+
+			wpt = waypt_new();
+		
+			wpt->latitude = gbfgetdbl(fin);
+			wpt->longitude = gbfgetdbl(fin);
+			wpt->altitude = gbfgetdbl(fin);
+			
+			gbfseek(fin, 36, SEEK_CUR);	/* skip unknown 36 bytes */
+			
+			wpt->notes = read_str(fin);
+			wpt->description = read_str(fin);
+			(void) gbfgetint16(fin);
+			
+			waypt_add(wpt);
+		}
+		return;
 	}
 
 	wcount = gbfgetint32(fin);
-	
 	if (wcount == 0) return;
-
-	if (version == 8) {
-		warning(MYNAME ": We don't yet support waypoints for this file version!\n");
-		return;
-	}
 		
 	datum = read_datum(fin);
 
@@ -421,9 +475,6 @@ read_CTrackFile(const int version)
 		
 		wcount--;
 
-		if (version == 8)
-			datum = read_datum(fin);
-		
 		wpt = waypt_new();
 		
 		wpt->latitude = gbfgetdbl(fin);
@@ -437,7 +488,9 @@ read_CTrackFile(const int version)
 		// variants of shortname
 		
 		for (i = 0; i < namect; i++) {
-			char *name = gbfgetpstr(fin);
+			char *name;
+			
+			name = read_str(fin);
 			if (name && *name) {
 				switch(i) {
 					case 0: wpt->description = xstrdup(name); break;
@@ -446,9 +499,7 @@ read_CTrackFile(const int version)
 			}
 			xfree(name);
 		}
-		if (version == 8)
-			gbfseek(fin, 34, SEEK_CUR);
-		
+
 		waypt_add(wpt);
 	}
 }
