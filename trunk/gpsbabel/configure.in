@@ -195,7 +195,9 @@ AC_ARG_WITH(expathdr,
   [  --with-expathdr[=DIR]   Use this to specify the location of expat.h],
   [ xpathdr="$withval" ], [
 	case "$target" in
-	*-*-darwin*)
+	*-*-darwin6*|*-*-darwin7|*-*-darwin8)
+		# Restrict test to OS/X 10.4 and earlier.  Leopard (10.5) 
+		# provides expat and in a sensible location.
 		if test -f /sw/include/expat.h ; then
 			xpathdr=/sw/include/
 		fi
@@ -221,7 +223,9 @@ AC_ARG_WITH(libexpat,
     EXPAT_LIB="-L$withval -lexpat"
   ], [
 	case "$target" in
-	*-*-darwin*)
+	*-*-darwin6*|*-*-darwin7|*-*-darwin8)
+		# Restrict test to OS/X 10.4 and earlier.  Leopard (10.5) 
+		# provides expat and in a sensible location.
 		if test -f /sw/lib/libexpat.a ; then
 			# libexpat installed via fink
 			EXPAT_LIB=/sw/lib/libexpat.a
