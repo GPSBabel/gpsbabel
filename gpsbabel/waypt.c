@@ -28,6 +28,7 @@
 queue waypt_head;
 static unsigned int waypt_ct;
 static short_handle mkshort_handle;
+int geocaches_present;
 
 void
 waypt_init(void)
@@ -140,6 +141,16 @@ waypt_add(waypoint *wpt)
 				wpt->description = xstrdup(wpt->shortname);
 			}
 		}
+	}
+
+	/* This is a bit tacky, but it allows a hint whether we've seen
+	 * geocaches or not in the life cycle of this run.   Of course,
+	 * the caches could have been filtered out of existance and not
+	 * all waypoints may have this and a few other pitfalls, but it's
+	 * an easy and fast test here.
+	 */
+	if (wpt->gc_data.diff && wpt->gc_data.terr) {
+		geocaches_present = 1;
 	}
 }
 

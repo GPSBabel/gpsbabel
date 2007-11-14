@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.1"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://earth.google.com/kml/2.1 
-	http://code.google.com/apis/kml/schema/kml21.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Document>
     <name>GPS device</name>
 <!-- Normal route style -->
