@@ -142,6 +142,7 @@ xg_tag_mapping kml_map[] = {
 	{ wpt_coord, 	cb_cdata, 	"/Placemark/Point/coordinates" },
 	{ wpt_icon, 	cb_cdata, 	"/Placemark/Style/Icon/href" },
 	{ trk_coord, 	cb_cdata, 	"/Placemark/MultiGeometry/LineString/coordinates" },
+	{ trk_coord, 	cb_cdata,	"/Placemark/Polygon/outerBoundaryIs/LinearRing/coordinates" },
 	{ trk_coord, 	cb_cdata, 	"/Placemark/LineString/coordinates" },
 	{ NULL, 	0, 		NULL }
 };
@@ -592,6 +593,12 @@ static void kml_output_point(const waypoint *waypointp, const char *style)
 	kml_output_lookat(waypointp);
 	kml_output_timestamp(waypointp);
 	kml_write_xml(0, "<styleUrl>%s</styleUrl>\n", style);
+#if 0
+	// If we were to try to spin track icon to indication direction
+	// of motion, it might look something like this.  Unfortunately,
+	// doing that causes a huge performance problem in Google Earth.
+	kml_write_xml(0, "<Style><IconStyle><heading>%f</heading></IconStyle></Style>\n", 360 - waypointp->course);
+#endif
 	kml_write_xml(1, "<Point>\n");
         if (floating) {
           kml_write_xml(0, "<altitudeMode>absolute</altitudeMode>\n");
