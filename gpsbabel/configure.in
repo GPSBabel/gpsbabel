@@ -195,7 +195,7 @@ AC_ARG_WITH(expathdr,
   [  --with-expathdr[=DIR]   Use this to specify the location of expat.h],
   [ xpathdr="$withval" ], [
 	case "$target" in
-	*-*-darwin6*|*-*-darwin7|*-*-darwin8)
+	*-*-darwin6*|*-*-darwin7*|*-*-darwin8*)
 		# Restrict test to OS/X 10.4 and earlier.  Leopard (10.5) 
 		# provides expat and in a sensible location.
 		if test -f /sw/include/expat.h ; then
@@ -223,24 +223,27 @@ AC_ARG_WITH(libexpat,
     EXPAT_LIB="-L$withval -lexpat"
   ], [
 	case "$target" in
-	*-*-darwin6*|*-*-darwin7|*-*-darwin8)
+	*-*-darwin6*|*-*-darwin7*|*-*-darwin8*)
 		# Restrict test to OS/X 10.4 and earlier.  Leopard (10.5) 
 		# provides expat and in a sensible location.
 		if test -f /sw/lib/libexpat.a ; then
 			# libexpat installed via fink
 			EXPAT_LIB=/sw/lib/libexpat.a
+			LIBS="$LIBS -L/sw/lib"
 			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
 			  AC_SUBST(EXPAT_LIB)
 		fi
 		if test -f /opt/local/lib/libexpat.a ; then
 			# libexpat installed via macports
 			EXPAT_LIB=/opt/local/lib/libexpat.a
+			LIBS="$LIBS -L/opt/local/lib"
 			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
 			  AC_SUBST(EXPAT_LIB)
 		fi
 		if test -f /usr/local/lib/libexpat.a ; then
 			# libexpat installed from source
 			EXPAT_LIB=/usr/local/lib/libexpat.a
+			LIBS="$LIBS -L/usr/local/lib"
 			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
 			  AC_SUBST(EXPAT_LIB)
 		fi				
