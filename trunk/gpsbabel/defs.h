@@ -180,6 +180,7 @@ extern global_options global_opts;
 extern const char gpsbabel_version[];
 extern time_t gpsbabel_now;	/* gpsbabel startup-time; initialized in main.c with time() */
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
+extern int geocaches_present;
 
 #define MILLI_TO_MICRO(t) (t * 1000)  /* Milliseconds to Microseconds */
 #define MICRO_TO_MILLI(t) (t / 1000)  /* Microseconds to Milliseconds*/
