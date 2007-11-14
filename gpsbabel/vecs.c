@@ -166,22 +166,41 @@ vecs_t vec_list[] = {
 		"upt"
 	},
 	{
+		&garmin_vecs,
+		"garmin",
+		"Garmin serial/USB protocol", 
+		NULL
+	},
+	{
 		&mapsend_vecs,
 		"mapsend",
 		"Magellan Mapsend", 
 		NULL
 	},
 	{
-		&pcx_vecs,
-		"pcx",
-		"Garmin PCX5",
-		"pcx"
-	},
-	{
 		&mps_vecs,
 		"mapsource",
 		"Garmin MapSource - mps",
 		"mps"
+	},
+	{
+		&nmea_vecs,
+		"nmea",
+		"NMEA 0183 sentences",
+		NULL
+	},
+        {
+                &kml_vecs,
+                "kml",
+                "Google Earth (Keyhole) Markup Language",
+                "kml"
+	},
+#if MAXIMAL_ENABLED
+	{
+		&pcx_vecs,
+		"pcx",
+		"Garmin PCX5",
+		"pcx"
 	},
 	{
 		&gpsutil_vecs,
@@ -227,12 +246,6 @@ vecs_t vec_list[] = {
 		"pdb"
 	},
 #endif /* PDBFMTS_ENABLED */
-	{
-		&garmin_vecs,
-		"garmin",
-		"Garmin serial/USB protocol", 
-		NULL
-	},
 	{
 		&holux_vecs,
 		"holux",
@@ -350,12 +363,6 @@ vecs_t vec_list[] = {
 		NULL
 	},
 	{
-		&nmea_vecs,
-		"nmea",
-		"NMEA 0183 sentences",
-		NULL
-	},
-	{
 		&text_vecs,
 		"text",
 		"Textual Output",
@@ -429,12 +436,6 @@ vecs_t vec_list[] = {
                 "Garmin Logbook XML",
                 "xml"
         },
-        {
-                &kml_vecs,
-                "kml",
-                "Google Earth (Keyhole) Markup Language",
-                "kml"
-	},
 	{
                 &vcf_vecs,
                 "vcard",
@@ -525,6 +526,7 @@ vecs_t vec_list[] = {
 		"IGN Rando track files",
 		"rdn"
 	},
+#if CSVFMTS_ENABLED
 	{
 		&stmsdf_vecs,
 		"stmsdf",
@@ -537,6 +539,7 @@ vecs_t vec_list[] = {
 		"Suunto Trek Manager (STM) WaypointPlus files",
 		"txt"
 	},
+#endif //  CSVFMTS_ENABLED
 	{
 		&msroute_vecs,
 		"msroute",
@@ -695,6 +698,7 @@ vecs_t vec_list[] = {
                 "GlobalSat DG-100/BT-335 Download",
                 NULL
         },
+#endif // MAXIMAL_ENABLED
 	{
 		NULL,
 		NULL,
@@ -861,7 +865,9 @@ find_vec(char *const vecname, char **opts)
 		if (global_opts.debug_level >= 1)
 			disp_vec_options(vec->name, vec->vec->args);
 		
+#if CSVFMTS_ENABLED		
 		xcsv_setup_internal_style( NULL );
+#endif // CSVFMTS_ENABLED		
 		xfree(v);
 		return vec->vec;
 		
@@ -913,8 +919,9 @@ find_vec(char *const vecname, char **opts)
 
 		if (global_opts.debug_level >= 1)
 			disp_vec_options(svec->name, vec_list[0].vec->args);
-		
+#if CSVFMTS_ENABLED		
 		xcsv_setup_internal_style(svec->style_buf);
+#endif // CSVFMTS_ENABLED		
 
 		xfree(v);
 
@@ -1008,8 +1015,12 @@ sort_and_unify_vecs(int *ctp)
 
 	/* Get a count from both the vec (normal) and the svec (csv) lists */
 
+#if CSVFMTS_ENABLED
 	extern size_t nstyles;
-	vc = sizeof vec_list / sizeof vec_list[0] -1 + nstyles;
+	vc = sizeof vec_list / sizeof vec_list[0] - 1 + nstyles;
+#else
+	vc = sizeof vec_list / sizeof vec_list[0] - 1;
+#endif // CSVFMTS_ENABLED
 
 
 	svp = xcalloc(vc, sizeof(style_vecs_t *));
@@ -1021,6 +1032,7 @@ sort_and_unify_vecs(int *ctp)
 		}
 	}
 
+#if CSVFMTS_ENABLED
 	/* Walk the style list, parse the entries, dummy up a "normal" vec */
 	for (svec = style_list; svec->name; svec++, i++)  {
 		xcsv_read_internal_style(svec->style_buf);
@@ -1055,6 +1067,8 @@ sort_and_unify_vecs(int *ctp)
 		svp[i]->desc = xcsv_file.description;
 		svp[i]->parent = "xcsv";
 	}
+#endif // CSVFMTS_ENABLED
+
 	/* Now that we have everything in an array, alphabetize them */
 	qsort(svp, vc, sizeof(*svp), alpha);
 

@@ -42,20 +42,24 @@ INSTALL_DIR=$(DESTDIR)/$(PREFIX)
 # OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
 # OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
 
-FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin_tables.o \
-	gtm.o \
-	gpsutil.o pcx.o cetus.o copilot.o gpspilot.o magnav.o \
-	psp.o holux.o garmin.o tmpro.o tpg.o tpo.o \
-	xcsv.o gcdb.o tiger.o internal_styles.o easygps.o quovadis.o \
+MINIMAL_FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin.o \
+	garmin_tables.o internal_styles.o nmea.o kml.o
+
+ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
+	gpspilot.o magnav.o \
+	psp.o holux.o tmpro.o tpg.o tpo.o \
+	xcsv.o gcdb.o tiger.o easygps.o quovadis.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
-	ozi.o nmea.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
+	ozi.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
-	vcf.o overlay.o kml.o google.o lowranceusr.o an1.o tomtom.o \
+	vcf.o overlay.o google.o xhtmlent.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
 	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
 	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o
+
+FMTS=@FMTS@
 
 FILTERS=position.o radius.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
@@ -84,7 +88,7 @@ ZLIB=zlib/adler32.o zlib/compress.o zlib/crc32.o zlib/deflate.o zlib/inffast.o \
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
           uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
-	  xhtmlent.o inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
+	  inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
 	  gbfile.o parse.o \
 	$(PALM_DB) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
