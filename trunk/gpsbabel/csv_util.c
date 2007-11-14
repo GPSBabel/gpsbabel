@@ -775,9 +775,14 @@ sscanftime( const char *s, const char *format, const int gmt )
 		else
 			return mktime(&stm);		
 	}
-	
+	// Don't fuss for empty strings.
+	if (*s) {
+		warning("date parse of string '%s' with format '%s' failed.\n", 
+			 s, format);	
+	}
 	return 0;
 }
+
 static
 time_t
 addhms( const char *s, const char *format )
