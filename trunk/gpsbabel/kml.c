@@ -441,10 +441,10 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 	}
 	TD2("<b>Distance</b> %.1f %s", distance, distance_units);
 	if (min_alt != unknown_alt) {
-		TD2("<b>Min Alt</b> %.1f %s", min_alt, min_alt_units);
+		TD2("<b>Min Alt</b> %.3f %s", min_alt, min_alt_units);
 	}
 	if (max_alt != unknown_alt) {
-		TD2("<b>Max Alt</b> %.1f %s", max_alt, max_alt_units);
+		TD2("<b>Max Alt</b> %.3f %s", max_alt, max_alt_units);
 	}
 	if (td->min_spd) {
 		char *spd_units;
@@ -546,7 +546,7 @@ static void kml_output_description(const waypoint *pt)
 
 	TD("Longitude: %f", pt->longitude);
 	TD("Latitude: %f", pt->latitude);
-	if (pt->altitude != unknown_alt) TD2("Altitude: %.1f %s", alt, alt_units);
+	if (pt->altitude != unknown_alt) TD2("Altitude: %.3f %s", alt, alt_units);
 	if (pt->heartrate) TD("Heart rate: %d", pt->heartrate);
 	if (pt->cadence) TD("Cadence: %d", pt->cadence);
 	if WAYPT_HAS(pt, temperature) TD("Temperature: %.1f", pt->temperature);
