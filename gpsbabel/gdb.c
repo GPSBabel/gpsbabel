@@ -106,8 +106,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.59 $"; */
-static char gdb_release_date[] = "$Date: 2007-08-25 19:35:25 $";
+/* static char gdb_release[] = "$Revision: 1.60 $"; */
+static char gdb_release_date[] = "$Date: 2007-11-15 02:03:25 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -1200,7 +1200,10 @@ write_waypoint(
 	FWRITE_LATLON(wpt->latitude);		/* latitude */
 	FWRITE_LATLON(wpt->longitude);		/* longitude */
 	FWRITE_DBL(wpt->altitude, unknown_alt);	/* altitude */
-	FWRITE_CSTR(wpt->notes);
+	if (wpt->notes)
+		FWRITE_CSTR(wpt->notes);
+	else 
+		FWRITE_CSTR(wpt->description);
 	FWRITE_DBL(WAYPT_GET(wpt, proximity, unknown_alt), unknown_alt);	/* proximity */
 	FWRITE_i32(display);			/* display */
 	FWRITE_i32(0);				/* color (colour) */
