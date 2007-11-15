@@ -30,6 +30,7 @@ static int bitrate = 4800;
 static int wptcmtcnt;
 static int wptcmtcnt_max;
 static int explorist;
+static int broken_sportrak;
 #define MYNAME "MAGPROTO"
 #define MAXCMTCT 200
 
@@ -369,6 +370,11 @@ mag_verparse(char *ibuf)
 			break;
 		}
 	}
+
+	if (prodid == 37) {
+		broken_sportrak = 1;
+	}
+
 	switch (pp->model) {
 		case mm_gps315320:
 		case mm_map410:
@@ -1027,6 +1033,20 @@ mag_rteparse(char *rtemsg)
 		rte_elem->wpt_icon = xstrdup(abuf);
 
 		ENQUEUE_TAIL(&mag_rte_head->Q, &rte_elem->Q);
+
+		/* Sportrak (the non-mapping unit) creates malformed
+		 * RTE sentence with no icon info after the routepoint
+		 * name.  So if we saw an "icon" treat that as new 
+		 * routepoint.
+		 */
+		if (broken_sportrak && abuf[0]) {
+			rte_elem = xcalloc(sizeof (*rte_elem),1);
+			QUEUE_INIT(&rte_elem->Q);
+			rte_elem->wpt_name = xstrdup(abuf);
+
+			ENQUEUE_TAIL(&mag_rte_head->Q, &rte_elem->Q);
+		}
+
 		next_stop[0] = 0;
 		currtemsg += n;
 	}
