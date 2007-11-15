@@ -897,6 +897,7 @@ get_cache_icon(const waypoint *waypointp)
 		default:
 			break;
 	}
+
 	switch (waypointp->gc_data.container) {
 		case gc_micro: 
 			return "Micro-Cache";
@@ -904,6 +905,11 @@ get_cache_icon(const waypoint *waypointp)
 		default:
 			break;
 	}
+
+	if (waypointp->gc_data.diff > 1) {
+		return "Geocache";
+	}
+
 	return NULL;
 }
 

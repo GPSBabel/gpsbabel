@@ -734,6 +734,9 @@ waypoint_write(void)
 
 		if (global_opts.smart_names && 
 		     wpt->gc_data.diff && wpt->gc_data.terr) {
+#if 0
+xasprintf(&src, "%s %s", &wpt->shortname[2], src);
+#endif
 	                snprintf(obuf, sizeof(obuf), "%s%d/%d %s", 
 					get_gc_info(wpt),
 					wpt->gc_data.diff, wpt->gc_data.terr, 
