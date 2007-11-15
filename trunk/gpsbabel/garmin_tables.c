@@ -184,7 +184,7 @@ icon_mapping_t garmin_icon_table[] = {
 	 * ....
 	 * {    -2,  8192, "Custom 511" },
 	 */
-#if 0
+#if 1
 /* Since Garmin is busily adding icons to new units, we have to hide
  * these so we can pass them through to the new entries.  6/2/07 robertl
  */
