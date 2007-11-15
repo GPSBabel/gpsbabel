@@ -1240,7 +1240,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 static void
 unicsv_wr_init(const char *filename)
 {
-	fout = gbfopen(filename, "w", MYNAME);
+	fout = gbfopen(filename, "wb", MYNAME);
 
 	unicsv_outp_flags = 0;
 	unicsv_grid_idx = grid_unknown;
