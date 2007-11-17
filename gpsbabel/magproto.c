@@ -1435,6 +1435,9 @@ mag_route_trl(const route_head * rte)
 			pbuff = buff2;
 
 		owpt = waypointp->shortname;
+		if (strlen(owpt) > sizeof(buff1) - 3) {
+			owpt[sizeof(buff1) - 3] = 0;
+		}
 		owpt = mag_cleanse(owpt);
 
 		sprintf(pbuff, "%s,%s", owpt, icon_token);
