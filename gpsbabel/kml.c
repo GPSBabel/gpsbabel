@@ -470,6 +470,14 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 		double spd = fmt_speed(td->max_spd, &spd_units);
 		TD2("<b>Max Speed</b> %.1f %s", spd, spd_units);
 	}
+	if (td->max_spd && td->start && td->end) {
+		char *spd_units;
+		time_t elapsed = td->end - td->start;
+		double spd = fmt_speed(td->distance_meters / elapsed, &spd_units);
+		if (spd > 1.0)  {
+			TD2("<b>Avg Speed</b> %.1f %s", spd, spd_units);
+		}
+	}
 	if (td->avg_hrt) {
 		TD("<b>Avg Heart Rate</b> %.1f bpm", td->avg_hrt);
 	}
@@ -489,9 +497,9 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 		char time_string[64];
 
 		xml_fill_in_time(time_string, td->start, 0, XML_LONG_TIME);
-		TD("<b>Start Time:</b> %s ", time_string);
+		TD("<b>Start Time</b> %s ", time_string);
 		xml_fill_in_time(time_string, td->end, 0, XML_LONG_TIME);
-		TD("<b>End Time:</b> %s ", time_string);
+		TD("<b>End Time</b> %s ", time_string);
 	}
 
 	kml_write_xml(-1, "</table>]]>\n");
