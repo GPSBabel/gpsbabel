@@ -101,7 +101,7 @@ xcalloc(size_t nmemb, size_t size)
 #endif
 
 	if (!obj) {
-		fatal("gpsbabel: Unable to allocate %ld bytes of memory.\n", (unsigned long) size);
+		fatal("gpsbabel: Unable to allocate %ld units of %ld bytes of memory.\n", (unsigned long) nmemb, (unsigned long) size);
 	}
 
 	return obj;
