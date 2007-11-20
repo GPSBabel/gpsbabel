@@ -46,6 +46,7 @@ static vmem_t current_tag;
 static waypoint *wpt_tmp;
 static int cache_descr_is_html;
 static gbfile *fd;
+static const char *input_fname;
 static gbfile *ofd;
 static short_handle mkshort_handle;
 static const char *link_url;
@@ -1181,11 +1182,13 @@ gpx_rd_init(const char *fname)
 {
 	if ( fname[0] ) {
 		fd = gbfopen(fname, "r", MYNAME);
+		input_fname = fname;
 	}
 	else {
 		fd = NULL;
 		input_string = fname+1;
 		input_string_len = strlen(input_string);
+		input_fname = NULL;
 	}
 
 
@@ -1262,6 +1265,7 @@ gpx_rd_deinit(void)
 	psr = NULL;
 	wpt_tmp = NULL;
 	cur_tag = NULL;
+	input_fname = NULL;
 }
 #endif
 
@@ -1365,8 +1369,9 @@ gpx_read(void)
 			result = -1;
 		}
 		if (!result) {
-			fatal(MYNAME ": XML parse error at %d: %s\n", 
+			fatal(MYNAME ": XML parse error at line %d of '%s' : %s\n", 
 				(int) XML_GetCurrentLineNumber(psr),
+				input_fname ? input_fname : "unknown file",
 				XML_ErrorString(XML_GetErrorCode(psr)));
 		}
 	}
