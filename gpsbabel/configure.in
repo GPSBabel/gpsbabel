@@ -88,7 +88,7 @@ AC_ARG_ENABLE(csv,
 	AC_MSG_RESULT(no)
     fi
 
-AC_MSG_CHECKING(whether to support only minimal number of formats)
+AC_MSG_CHECKING(whether to support maximum number of formats)
 AC_ARG_ENABLE(most,
   [  --enable-most=[(yes)|no]],
   [ enable_most="$enableval"],[enable_most="yes"])
