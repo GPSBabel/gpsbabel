@@ -769,6 +769,9 @@ char * kml_gc_mkstar(int rating)
 static void kml_geocache_pr(const waypoint *waypointp)
 {
 	char *p, *is;
+	double lat = waypointp->latitude;;
+	double lng = waypointp->longitude;
+// optionally "fuzz" lat/lng here.
 
 	kml_write_xml(1, "<Placemark>\n");
 
@@ -824,9 +827,6 @@ static void kml_geocache_pr(const waypoint *waypointp)
 	kml_write_xml(-1, "</ExtendedData>\n");
 
 	// Location
-	double lat = waypointp->latitude;;
-	double lng = waypointp->longitude;
-// optionally "fuzz" lat/lng here.
 	kml_write_xml(1, "<Point>\n");
 	kml_write_xml(0, "<coordinates>%f,%f,%f</coordinates>\n",
 		lng, lat,
