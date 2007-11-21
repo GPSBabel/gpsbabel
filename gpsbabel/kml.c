@@ -769,7 +769,7 @@ char * kml_gc_mkstar(int rating)
 static void kml_geocache_pr(const waypoint *waypointp)
 {
 	char *p, *is;
-	double lat = waypointp->latitude;;
+	double lat = waypointp->latitude;
 	double lng = waypointp->longitude;
 // optionally "fuzz" lat/lng here.
 
