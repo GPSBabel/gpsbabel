@@ -44,3 +44,34 @@ The RoadMate family of products is not supported.
 	format over this one.
 
 </para>
+<important>
+<para>
+This module does not support the units that do not follow Magellan's
+documented communications protocols including:</para>
+<simplelist>
+<member>Maestro 3100</member>
+<member>Maestro 3140</member>
+<member>Maestro 3200</member>
+<member>Maestro 3210</member>
+<member>Maestro 3220</member>
+<member>Maestro 4000</member>
+<member>Maestro 4040</member>
+<member>Maestro 4050</member>
+<member>Maestro 4250</member>
+
+<member> RoadMate 2000 </member>
+<member> RoadMate 2200T</member>
+<member> RoadMate 300 </member>
+<member> RoadMate 3000T</member>
+<member> RoadMate 3050T</member>
+<member> RoadMate 360 </member>
+<member> RoadMate 500</member>
+<member> RoadMate 6000T</member>
+<member> RoadMate 700 </member>
+<member> RoadMate 760</member>
+<member> RoadMate 800</member>
+<member> RoadMate 860T</member>
+<member> RoadMate AAA </member>
+</simplelist>
+
+</important>

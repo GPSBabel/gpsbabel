@@ -121,6 +121,7 @@ GPX files from the mass storage device as mounted on your computer.
 <member>Nuvi 200W<footnoteref linkend="gpx"/></member>
 <member>Nuvi 250<footnoteref linkend="gpx"/></member>
 <member>Nuvi 250W<footnoteref linkend="gpx"/></member>
+<member>Nuvi 260<footnoteref linkend="gpx"/></member>
 <member>Nuvi 270<footnoteref linkend="gpx"/></member>
 <member>Nuvi 300<footnote id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.  Members of this class of products do not support realtime positioning protocol.</para></footnote></member>
 <member>Nuvi 310<footnoteref linkend="gpx"/></member>
@@ -132,6 +133,9 @@ GPX files from the mass storage device as mounted on your computer.
 <member>Nuvi 660<footnoteref linkend="gpx"/></member>
 <member>Nuvi 670<footnoteref linkend="gpx"/></member>
 <member>Nuvi 680<footnoteref linkend="gpx"/></member>
+<member>Nuvi 750<footnoteref linkend="gpx"/></member>
+<member>Nuvi 760<footnoteref linkend="gpx"/></member>
+<member>Nuvi 770<footnoteref linkend="gpx"/></member>
 <member>StreetPilot c510<footnoteref linkend="gpx"/></member>
 <member>StreetPilot c530<footnoteref linkend="gpx"/></member>
 <member>StreetPilot c550<footnoteref linkend="gpx"/></member>
@@ -214,3 +218,37 @@ This module also supports <link linkend="tracking">realtime tracking</link>
 which allows realtime position reports from a Garmin GPS receiver over USB
 or serial.  
 </para>
+
+<important>
+<para>The following Garmin units do not follow the standard Garmin 
+communications protocol and are <emphasis>not supported</emphasis> 
+by GPSBabel.</para>
+<para>
+Marine plotters:
+<simplelist columns="4">
+<member>GPSMap 420</member>
+<member>GPSMap 430</member>
+<member>GPSMap 440</member>
+<member>GPSMap 450</member>
+<member>GPSMap 520</member>
+<member>GPSMap 525</member>
+<member>GPSMap 530</member>
+<member>GPSMap 535</member>
+<member>GPSMap 540</member>
+<member>GPSMap 545</member>
+<member>GPSMap 550</member>
+<member>GPSMap 555</member>
+</simplelist>
+</para>
+
+<para>The PDA products
+<simplelist>
+<member>iQue 3000</member>
+<member>iQue 3200</member>
+<member>iQue 3600</member>
+<member>iQue M3</member>
+<member>iQue M4</member>
+<member>iQue M5</member>
+</simplelist>
+</para>
+</important>
