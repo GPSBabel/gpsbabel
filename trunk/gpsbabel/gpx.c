@@ -292,7 +292,8 @@ tag_mapping tag_path_map[] = {
 	/* Double up the GPX 1.0 and GPX 1.1 styles */
 #define GEOTAG(type,name) \
   {type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:" name, 0UL }, \
-  {type, 1, "/gpx/wpt/extensions/cache/" name, 0UL }
+  {type, 1, "/gpx/wpt/extensions/cache/" name, 0UL }, \
+  {type, 1, "/gpx/wpt/geocache/" name, 0UL }  /* opencaching.de */
 
 #define GARMIN_WPT_EXT "/gpx/wpt/extensions/gpxx:WaypointExtension"
 
@@ -305,6 +306,7 @@ tag_mapping tag_path_map[] = {
 	GEOTAG( tt_cache_difficulty, 	"difficulty"),
 	GEOTAG( tt_cache_terrain, 	"terrain"),
 	GEOTAG( tt_cache_hint, 		"encoded_hints"),
+	GEOTAG( tt_cache_hint, 		"hints"), /* opencaching.de */
 	GEOTAG( tt_cache_desc_short, 	"short_description"),
 	GEOTAG( tt_cache_desc_long, 	"long_description"),
 	GEOTAG( tt_cache_placer, 	"owner"),
@@ -696,12 +698,18 @@ gs_type_mapping{
 	const char *name;
 } gs_type_map[] = {
 	{ gt_traditional, "Traditional Cache" },
+	{ gt_traditional, "Traditional" }, /* opencaching.de */
 	{ gt_multi, "Multi-cache" },
+	{ gt_multi, "Multi" }, /* opencaching.de */
 	{ gt_virtual, "Virtual Cache" },
+	{ gt_virtual, "Virtual" }, /* opencaching.de */
 	{ gt_event, "Event Cache" },
+	{ gt_event, "Event" }, /* opencaching.de */
 	{ gt_webcam, "Webcam Cache" },
+	{ gt_webcam, "Webcam" }, /* opencaching.de */
 	{ gt_suprise, "Unknown Cache" },
 	{ gt_earth, "Earthcache" },
+	{ gt_earth, "Earth" }, /* opencaching.de */
 	{ gt_cito, "Cache In Trash Out Event" },
 	{ gt_letterbox, "Letterbox Hybrid" },
 	{ gt_locationless, "Locationless (Reverse) Cache" },
