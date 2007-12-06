@@ -93,8 +93,12 @@ extern ff_vecs_t psp_vecs;
 extern ff_vecs_t quovadis_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t shape_vecs;
+#if CSVFMTS_ENABLED
 extern ff_vecs_t stmsdf_vecs;
+#endif
+#if CSVFMTS_ENABLED
 extern ff_vecs_t stmwpp_vecs;
+#endif
 extern ff_vecs_t tef_xml_vecs;
 extern ff_vecs_t text_vecs;
 extern ff_vecs_t tiger_vecs;
@@ -533,6 +537,8 @@ vecs_t vec_list[] = {
 		"Suunto Trek Manager (STM) .sdf files",
 		"sdf"
 	},
+#endif
+#if CSVFMTS_ENABLED
 	{
 		&stmwpp_vecs,
 		"stmwpp",
@@ -1010,7 +1016,9 @@ sort_and_unify_vecs(int *ctp)
 	int vc;
 	vecs_t **svp;
 	vecs_t *vec;
+#if CSVFMTS_ENABLED
 	style_vecs_t *svec;
+#endif
 	int i = 0;
 
 	/* Get a count from both the vec (normal) and the svec (csv) lists */
