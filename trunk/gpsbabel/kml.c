@@ -144,8 +144,8 @@ kml_read(void)
 }
 #else
 
-static xg_callback	wpt_s, wpt_e;
-static xg_callback	wpt_name, wpt_desc, wpt_coord, wpt_icon, trk_coord;
+static xg_callback wpt_s, wpt_e;
+static xg_callback wpt_name, wpt_desc, wpt_coord, wpt_icon, trk_coord, wpt_time;
 
 static 
 xg_tag_mapping kml_map[] = {
@@ -153,6 +153,7 @@ xg_tag_mapping kml_map[] = {
 	{ wpt_e, 	cb_end, 	"/Placemark" },
 	{ wpt_name, 	cb_cdata, 	"/Placemark/name" },
 	{ wpt_desc, 	cb_cdata, 	"/Placemark/description" },
+	{ wpt_time, 	cb_cdata, 	"/Placemark/TimeStamp/when" },
 	{ wpt_coord, 	cb_cdata, 	"/Placemark/Point/coordinates" },
 	{ wpt_icon, 	cb_cdata, 	"/Placemark/Style/Icon/href" },
 	{ trk_coord, 	cb_cdata, 	"/Placemark/MultiGeometry/LineString/coordinates" },
@@ -200,6 +201,11 @@ void wpt_desc(const char *args, const char **unused)
 		}
 		xfree(tmp);
 	}
+}
+
+void wpt_time(const char *args, const char **unused)
+{
+	wpt_tmp->creation_time = xml_parse_time(args, &wpt_tmp->microseconds);
 }
 
 void wpt_coord(const char *args, const char **attrv)
