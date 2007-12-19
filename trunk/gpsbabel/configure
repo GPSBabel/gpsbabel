@@ -1744,7 +1744,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-PACKAGE_RELEASE="-beta20070807"
+PACKAGE_RELEASE="-beta20071219"
 
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE_RELEASE "$PACKAGE_RELEASE"
