@@ -4307,9 +4307,11 @@ fi
 			USB_LIBS="`libusb-config --prefix`/lib/libusb.a -framework  IOKit -framework CoreFoundation"
 			LDFLAGS=$OLDFLAGS
 			CDFLAGS=$OCDFLAGS
+			OSJEEPS=jeeps/gpslibusb.o
+		    else
+			OSJEEPS=jeeps/gpsusbstub.o
 		  fi
 		esac
-		OSJEEPS=jeeps/gpslibusb.o
 		CFLAGS="$OCFLAGS"
 	#	LIBS="$LIBS `libusb-config --libs`"
 	    else
