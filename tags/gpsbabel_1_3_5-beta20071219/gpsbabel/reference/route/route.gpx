@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://gpsbabel.sourceforge.net"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>2003-03-31T16:25:59Z</time>
+<rte>
+<name>LILI PATH</name>
+<desc>Hurricane LILI</desc>
+<rtept lat="30.700000" lon="-92.400000">
+<ele>0.000000</ele>
+<name><![CDATA[49B]]></name>
+<sym><![CDATA[crossed square]]></sym></rtept>
+<rtept lat="30.200000" lon="-92.300000">
+<ele>0.000000</ele>
+<name><![CDATA[49A]]></name>
+<sym><![CDATA[crossed square]]></sym></rtept>
+<rtept lat="29.400000" lon="-92.200000">
+<ele>0.000000</ele>
+<name><![CDATA[48B]]></name>
+<sym><![CDATA[crossed square]]></sym></rtept>
+<rtept lat="29.000000" lon="-91.900000">
+<ele>0.000000</ele>
+<name><![CDATA[48A]]></name>
+<sym><![CDATA[crossed square]]></sym></rtept>
+<rtept lat="28.400000" lon="-91.400000">
+<ele>0.000000</ele>
+<name><![CDATA[47B]]></name>
+<sym><![CDATA[crossed square]]></sym></rtept>
+<rtept lat="27.800000" lon="-91.100000">
+<ele>0.000000</ele>
+<name><![CDATA[47A]]></name>
+<sym><![CDATA[crossed square]]></sym></rtept>
+<rtept lat="26.600000" lon="-90.300000">
+<ele>0.000000</ele>
+<name><![CDATA[46A]]></name>
+<sym><![CDATA[crossed square]]></sym></rtept>
+<rtept lat="24.400000" lon="-88.400000">
+<ele>0.000000</ele>
+<name><![CDATA[43A]]></name>
+<sym><![CDATA[crossed square]]></sym></rtept>
+<rtept lat="23.600000" lon="-87.200000">
+<ele>0.000000</ele>
+<name><![CDATA[42A]]></name>
+<sym><![CDATA[crossed square]]></sym></rtept>
+<rtept lat="23.000000" lon="-85.600000">
+<ele>0.000000</ele>
+<name><![CDATA[41A]]></name>
+<sym><![CDATA[crossed square]]></sym></rtept>
+<rtept lat="22.300000" lon="-84.400000">
+<ele>0.000000</ele>
+<name><![CDATA[40A]]></name>
+<sym><![CDATA[crossed square]]></sym></rtept>
+</rte>
+<rte>
+<name>ATCHAFALAYA</name>
+<desc>ROUTE1</desc>
+<number>2</number>
+<rtept lat="30.280517" lon="-91.685883">
+<ele>0.000000</ele>
+<name><![CDATA[ATLAUN]]></name>
+<desc><![CDATA[Launch at Butte LaRose]]></desc>
+<sym><![CDATA[Boating]]></sym></rtept>
+<rtept lat="30.291050" lon="-91.627167">
+<ele>0.000000</ele>
+<name><![CDATA[ATWRNC]]></name>
+<desc><![CDATA[Canal to Warner Lake]]></desc>
+<sym><![CDATA[Exit Ramp]]></sym></rtept>
+<rtept lat="30.314717" lon="-91.646117">
+<ele>0.000000</ele>
+<name><![CDATA[ATWRNR]]></name>
+<desc><![CDATA[Warner Lake]]></desc>
+<sym><![CDATA[Hunt/Fish]]></sym></rtept>
+</rte>
+</gpx>

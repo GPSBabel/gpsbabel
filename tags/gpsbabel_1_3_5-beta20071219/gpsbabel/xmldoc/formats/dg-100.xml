@@ -1,0 +1,9 @@
+<para>Serial download protocol for the <productname>GlobalSat DG-100</productname> GPS data logger. Although untested it is expected that this will also support the BT-335.</para>
+<para>While the DG-100 has a button to record waypoints, they seem to be indistinguishable from trackpoints. Therefore, all points will be presented as trackpoints, disregarding whether they were recorded automatically or manually.</para>
+<para>
+<ulink url="http://www.globalsat.com.tw/eng/product_detail_00000090.htm">GlobalSat DG-100</ulink>
+</para>
+<example id="dg-100-on-linux">
+  <title>Command showing DG-100 download and erase on Linux</title>
+  <para><userinput>gpsbabel -t -i dg-100,erase -o gpx /dev/ttyUSB0 outputfile.gpx</userinput></para>
+</example>
