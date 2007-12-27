@@ -4311,6 +4311,10 @@ fi
 		    else
 			OSJEEPS=jeeps/gpsusbstub.o
 		  fi
+		  ;;
+		*)
+		  OSJEEPS=jeeps/gpslibusb.o
+		  ;;
 		esac
 		CFLAGS="$OCFLAGS"
 	#	LIBS="$LIBS `libusb-config --libs`"
