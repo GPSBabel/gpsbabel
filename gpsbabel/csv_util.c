@@ -1019,10 +1019,10 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
 	wpt->creation_time = yyyymmdd_to_time(s);
     	break;
     case XT_GMT_TIME:
-	wpt->creation_time = sscanftime(s, fmp->printfc, 1);
+	wpt->creation_time += sscanftime(s, fmp->printfc, 1);
     	break;
     case XT_LOCAL_TIME:
-	wpt->creation_time = sscanftime(s, fmp->printfc, 0);
+	wpt->creation_time += sscanftime(s, fmp->printfc, 0);
     	break;
     /* Useful when time and date are in separate fields 
     	GMT / Local offset is handled by the two cases above */
