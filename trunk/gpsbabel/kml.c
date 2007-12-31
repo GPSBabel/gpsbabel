@@ -21,6 +21,7 @@
  */
 #include "defs.h"
 #include "xmlgeneric.h"
+#include "grtcirc.h"
 
 #ifdef __WIN32__
 # include <windows.h>
@@ -852,6 +853,16 @@ static void kml_waypt_pr(const waypoint *waypointp)
 {
 	const char *icon;
 
+#if 0 // Experimental
+	if(realtime_positioning) {
+		kml_write_xml(1, "<LookAt>\n");
+		kml_write_xml(0, "<longitude>%f</longitude>\n", waypointp->longitude);
+		kml_write_xml(0, "<latitude>%f</latitude>\n", waypointp->latitude);
+		kml_write_xml(0, "<altitude>1000</altitude>\n");
+		kml_write_xml(-1, "</LookAt>\n");
+	}
+#endif
+
 	if (waypointp->gc_data.diff && waypointp->gc_data.terr) {
 		kml_geocache_pr(waypointp);
 		return;
@@ -1117,7 +1128,25 @@ kml_wr_position(waypoint *wpt)
 
 	wpt->icon_descr = kml_get_posn_icon(wpt->creation_time - last_valid_fix);
 
-	track_add_wpt(posn_trk_head, waypt_dupe(wpt));
+	
+	/* In order to avoid clutter while we're sitting still, don't add
+ 	   track points if we've not moved a minimum distance from the
+	   beginnning of our accumulated track. */
+	{
+  	waypoint *newest_posn= (waypoint *) QUEUE_LAST(&posn_trk_head->waypoint_list);
+	
+	if(radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude), 
+		RAD(newest_posn->latitude), RAD(newest_posn->longitude))) > 50) {
+		track_add_wpt(posn_trk_head, waypt_dupe(wpt));
+	} else {
+		/* If we haven't move more than our threshold, pretend 
+		 * we didn't move at  all to prevent Earth from jittering 
+		 * the zoom levels on us.
+		 */
+		wpt->latitude = newest_posn->latitude;
+		wpt->longitude = newest_posn->longitude;
+	}
+	}
 
 	waypt_add(wpt);
 	kml_write();
