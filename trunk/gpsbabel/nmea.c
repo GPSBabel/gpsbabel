@@ -173,6 +173,7 @@ static char *getposnarg;
 static char *opt_sleep;
 static char *opt_baud;
 static char *opt_append;
+static char *opt_gisteq;
 
 static long sleepus;
 static int getposn;
@@ -197,6 +198,7 @@ arglist_t nmea_args[] = {
 	{"pause", &opt_sleep, "Decimal seconds to pause between groups of strings", NULL, ARGTYPE_INT, ARG_NOMINMAX },
 	{"append_positioning", &opt_append, "Append realtime positioning data to the output file instead of truncating", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"baud", &opt_baud, "Speed in bits per second of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX },
+	{"gisteq", &opt_gisteq, "Write tracks for Gisteq Phototracker", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -326,6 +328,12 @@ nmea_wr_init(const char *portname)
 
 	mkshort_handle = mkshort_new_handle();
 	setshort_length(mkshort_handle, atoi(snlenopt));
+
+	if (opt_gisteq) {
+		opt_gpgga = NULL;
+		opt_gpvtg = NULL;
+		opt_gpgsa = NULL;
+	}
 }
 
 static  void
@@ -1218,6 +1226,10 @@ nmea_trackpt_pr(const waypoint *wpt)
 				WAYPT_HAS(wpt, course) ? (wpt->course):(0),
 				(int) ymd);
 		cksum = nmea_cksum(obuf);
+		/* GISTeq doesn't care about the checksum */
+		if (opt_gisteq) {
+			gbfprintf(file_out, "---,");
+		}
 		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
 	if (opt_gpgga) {
