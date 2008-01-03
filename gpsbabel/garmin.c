@@ -732,19 +732,27 @@ waypoint_write(void)
 		}
 		way[i]->ident[sizeof(way[i]->ident)-1] = 0;
 
-		if (global_opts.smart_names && 
-		     wpt->gc_data.diff && wpt->gc_data.terr) {
+		// If we were explictly given a comment from GPX, use that. 
+		if (wpt->description) {
+			memcpy(way[i]->cmnt, wpt->description, strlen(wpt->description));
+		} else {
+			if (global_opts.smart_names && 
+			     wpt->gc_data.diff && wpt->gc_data.terr) {
 #if 0
 xasprintf(&src, "%s %s", &wpt->shortname[2], src);
 #endif
-	                snprintf(obuf, sizeof(obuf), "%s%d/%d %s", 
-					get_gc_info(wpt),
-					wpt->gc_data.diff, wpt->gc_data.terr, 
-					src);
-			memcpy(way[i]->cmnt, obuf, strlen(obuf));
-		} else  {
-			memcpy(way[i]->cmnt, src, strlen(src));
+				snprintf(obuf, sizeof(obuf), "%s%d/%d %s", 
+						get_gc_info(wpt),
+						wpt->gc_data.diff, wpt->gc_data.terr, 
+						src);
+				memcpy(way[i]->cmnt, obuf, strlen(obuf));
+			} else  {
+				memcpy(way[i]->cmnt, src, strlen(src));
+			}
 		}
+
+		
+
 		way[i]->lon = wpt->longitude;
 		way[i]->lat = wpt->latitude;
 
