@@ -138,6 +138,12 @@ typedef enum {
 	fix_pps
 } fix_type;
 
+typedef enum {
+	status_unknown=0,
+	status_true,
+	status_false
+} status_type;
+        
 /*
  * Define globally on which kind of data gpsbabel is working.
  * Important for "file types" that are essentially a communication
@@ -234,15 +240,15 @@ typedef struct {
 	geocache_container container:4;
 	unsigned int diff:6; /* (multiplied by ten internally) */
 	unsigned int terr:6; /* (likewise) */
-	unsigned int is_archived:1;
-	unsigned int is_available:1;
+	status_type is_archived:2;
+	status_type is_available:2;
 	time_t exported;
 	time_t last_found;
 	char *placer; /* Placer name */
 	int placer_id; /* Placer id */
 	char *hint; /* all these UTF8, XML entities removed, May be not HTML. */
 	utf_string desc_short;
-	utf_string desc_long; 
+	utf_string desc_long;
 } geocache_data ;
 
 typedef struct xml_tag {

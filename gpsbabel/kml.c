@@ -820,9 +820,9 @@ static void kml_geocache_pr(const waypoint *waypointp)
  	 // Highlight any issues with the cache, such as temp unavail 
 	 // or archived.
 	kml_write_xml(0, "<Data name=\"gc_issues\"><value>");
-	if (waypointp->gc_data.is_archived == 1) {
+	if (waypointp->gc_data.is_archived == status_true) {
 		kml_write_xml(0, "&lt;font color=\"red\"&gt;This cache has been archived.&lt;/font&gt;<br/>\n");
-	} else if (waypointp->gc_data.is_available == 0) {
+	} else if (waypointp->gc_data.is_available == status_false) {
 		kml_write_xml(0, "&lt;font color=\"red\"&gt;This cache is temporarily unavailable.&lt;/font&gt;<br/>\n");
 	}
 	kml_write_xml(0, "</value></Data>\n");
