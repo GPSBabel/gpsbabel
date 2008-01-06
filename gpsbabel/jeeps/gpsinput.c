@@ -41,7 +41,7 @@ static int32 GPS_Input_Get_D105(GPS_PWay *way, FILE *inf);
 static int32 GPS_Input_Get_D106(GPS_PWay *way, FILE *inf);
 static int32 GPS_Input_Get_D107(GPS_PWay *way, FILE *inf);
 static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf);
+static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf, int protonum);
 static int32 GPS_Input_Get_D150(GPS_PWay *way, FILE *inf);
 static int32 GPS_Input_Get_D151(GPS_PWay *way, FILE *inf);
 static int32 GPS_Input_Get_D152(GPS_PWay *way, FILE *inf);
