@@ -66,6 +66,8 @@ typedef enum {
 	XT_GEOCACHE_PLACER,
 	XT_GEOCACHE_TERR,
 	XT_GEOCACHE_TYPE,
+	XT_GEOCACHE_ISAVAILABLE,
+	XT_GEOCACHE_ISARCHIVED,
 	XT_GMT_TIME,
 	XT_GPS_FIX,
 	XT_GPS_HDOP,
@@ -1060,7 +1062,23 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     case XT_GEOCACHE_PLACER:
 	wpt->gc_data.placer = csv_stringtrim(s, "", 0);
     	break;
-	
+    case XT_GEOCACHE_ISAVAILABLE:
+	if ( case_ignore_strcmp(csv_stringtrim(s, "", 0), "False") == 0 )
+        	wpt->gc_data.is_available = status_false;
+	else if ( case_ignore_strcmp(csv_stringtrim(s, "", 0), "True") == 0 )
+		wpt->gc_data.is_available = status_true;
+	else
+		wpt->gc_data.is_available = status_unknown;
+	break;
+    case XT_GEOCACHE_ISARCHIVED:
+	if ( case_ignore_strcmp(csv_stringtrim(s, "", 0), "False") == 0 )
+		wpt->gc_data.is_archived = status_false;
+	else if ( case_ignore_strcmp(csv_stringtrim(s, "", 0), "True") == 0 )
+		wpt->gc_data.is_archived = status_true;        
+	else
+	wpt->gc_data.is_archived = status_unknown;
+	break;
+		
     /* GPS STUFF *******************************************************/
     case XT_GPS_HDOP:
 	wpt->hdop = atof(s);
@@ -1619,6 +1637,22 @@ xcsv_waypt_pr(const waypoint *wpt)
 	case XT_GEOCACHE_PLACER:
 	    writebuff(buff, fmp->printfc, NONULL(wpt->gc_data.placer));
 	    field_is_unknown = !wpt->gc_data.placer;
+            break;
+	case XT_GEOCACHE_ISAVAILABLE:
+	    if ( wpt->gc_data.is_available == status_false )
+	      writebuff(buff, fmp->printfc, "False");
+	    else if ( wpt->gc_data.is_available == status_true )
+	      writebuff(buff, fmp->printfc, "True");
+			else
+				writebuff(buff, fmp->printfc, "Unknown");
+            break;
+	case XT_GEOCACHE_ISARCHIVED:
+	    if ( wpt->gc_data.is_archived == status_false )
+	      writebuff(buff, fmp->printfc, "False");
+	    else if ( wpt->gc_data.is_archived == status_true )
+	    	writebuff(buff, fmp->printfc, "True");
+	    else
+		writebuff(buff, fmp->printfc, "Unknown");
             break;
 	/* Tracks and Routes ***********************************************/
 	case XT_TRACK_NAME:

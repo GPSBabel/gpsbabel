@@ -986,6 +986,32 @@ example:
 </screen>
 </section>
 
+<section id="style_def_isavailable">
+<title>GEOCACHE_ISAVAILABLE</title>
+<para>
+   GEOCACHE_ISAVAILABLE is a string containing "True" or "False" 
+   indicating whether a geocache is currently available or not.  
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   GEOCACHE_ISAVAILABLE,"","%s"
+</screen>
+</section>
+
+<section id="style_def_isarchived">
+<title>GEOCACHE_ISARCHIVED</title>
+<para>
+   GEOCACHE_ISARCHIVED is a string containing "True" or "False" 
+   indicating whether a geocache has been archived.   
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   GEOCACHE_ISARCHIVED,"","%s"
+</screen>
+</section>
+
 <section id="style_def_geofound">
 <title>GEOCACHE_LAST_FOUND</title>
 <para>
