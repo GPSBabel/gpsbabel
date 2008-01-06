@@ -58,7 +58,7 @@ wr_deinit(void)
 static void
 vcf_print_utf(const utf_string *s)
 {
-	char *p, *p2;
+	char *p, *p2, *p3;
 	char *stripped_html;
 
 	if (!s)
@@ -67,9 +67,11 @@ vcf_print_utf(const utf_string *s)
 	stripped_html = strip_html(s);
  	p = gstrsub(stripped_html, "\n", "\\n");
  	p2 = gstrsub(p, "<p>", "\\n");
-	gbfputs(p2, file_out);
+ 	p3 = gstrsub(p2, ";", "\\;");
+	gbfputs(p3, file_out);
 	xfree(p);
 	xfree(p2);
+	xfree(p3);
 	xfree(stripped_html);
 }
 
@@ -96,7 +98,7 @@ vcf_disp(const waypoint *wpt)
 
 	gbfprintf(file_out, "BEGIN:VCARD\nVERSION:3.0\n");
 	gbfprintf(file_out, "N:%s;%s;;;\n", wpt->description,wpt->shortname);
-	gbfprintf(file_out, "ORG:%c%d %06.3f %c%d %06.3f\n", wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint));
+	gbfprintf(file_out, "ADR:%c%d %06.3f %c%d %06.3f\n", wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint));
 
 	if (wpt->url) {
 		gbfprintf(file_out, "URL:%s\n", wpt->url);
