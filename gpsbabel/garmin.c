@@ -821,6 +821,7 @@ static void
 route_waypt_pr(const waypoint *wpt)
 {
 	GPS_PWay rte = *cur_tx_routelist_entry;
+ 	char *s, *d;
 
 	/*
 	 * As stupid as this is, libjeeps seems to want an empty 
@@ -844,7 +845,20 @@ route_waypt_pr(const waypoint *wpt)
 		rte->alt_is_unknown = 1;
 		rte->alt = 0;
 	}
-	strncpy(rte->ident, wpt->shortname, sizeof(rte->ident));
+
+	// Garmin protocol spec says no spaces, no lowercase, etc. in a route.
+	// enforce that here, since jeeps doesn't.
+	// 
+	// This was strncpy(rte->ident, wpt->shortname, sizeof(rte->ident));
+	d = rte->ident;
+	for (s = wpt->shortname; *s; s++) {
+		int c = *s;
+		if (isalpha(c)) c = toupper(c);
+		if (strchr(MILITANT_VALID_WAYPT_CHARS, c)) {
+			*d++ = c;
+		}
+	}
+	
 	rte->ident[sizeof(rte->ident)-1] = 0;
 
 	if (wpt->description) {
