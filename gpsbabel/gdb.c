@@ -57,6 +57,7 @@
 	    2007/05/03: Add code for tricky V3 descriptions
 	    2007/06/18: Tweak some forgotten "flagged" fields
 	    2007/07/07: Better support for new fields since V3 (postal code/street address/instruction)
+	    2008/01/09: Fix handling of option category (cat)
 */
 
 #include <stdio.h>
@@ -106,8 +107,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.60 $"; */
-static char gdb_release_date[] = "$Date: 2007-11-15 02:03:25 $";
+/* static char gdb_release[] = "$Revision: 1.61 $"; */
+static char gdb_release_date[] = "$Date: 2008-01-09 23:06:04 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -1629,6 +1630,11 @@ init_writer(const char *fname)
 	gdb_category = (gdb_opt_category) ? atoi(gdb_opt_category) : 0;
 	gdb_ver = (gdb_opt_ver && *gdb_opt_ver) ? atoi(gdb_opt_ver) : 0;
 
+	if (gdb_category) {
+		is_fatal((gdb_category < 1) || (gdb_category > 16),
+			MYNAME ": cat must be between 1 and 16!");
+		gdb_category = 1 << (gdb_category - 1);
+	}
 	if (gdb_ver >= GDB_VER_UTF8)
 		cet_convert_init(CET_CHARSET_UTF8, 1);
 	
