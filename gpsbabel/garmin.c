@@ -239,7 +239,7 @@ static void
 waypt_read(void)
 {
 	int i,n;
-	GPS_PWay *way;
+	GPS_PWay *way = NULL;
 
 	if (getposn) {
 		waypoint *wpt = waypt_new();
