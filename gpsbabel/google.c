@@ -353,9 +353,8 @@ google_read(void)
 		    panel = strstr( dict, "panel:\"");
 		    panelofs = 7;
 		  }
-		  
 		  tmp = panel;
-		  while ( tmp ) {
+		  while ( tmp ) {			 
 	            if ( qc == '"' ) {
 		      char *tmp1 = strstr( tmp, "\"points\":\"" );
 		      if ( !tmp1 ) {
@@ -421,6 +420,9 @@ google_read(void)
 		    panel += panelofs;
 		    end = strstr( panel, "/table><div class=\\\"legal" );
 		    if ( !end ) {
+		      end = strstr( panel, "/table\\x3e\\x3cdiv class=\\\"legal" );
+		    } 
+		    if ( !end ) {
 	              end = strstr( panel, "/table><div class=\\042legal" );
 		    }		    
 		    if ( !end ) {
@@ -435,7 +437,6 @@ google_read(void)
 			strcpy( end, "/div></div>");
 		      }
 		    }
-		    
 		    if ( end ) {		    		      
 		      char *to = panel;
 		      char *from = panel;
@@ -472,6 +473,12 @@ google_read(void)
 			  *to++='>';
 			  from += 6;
 			}
+			else if ( !strncmp( from, "\\x", 2)) {
+			  unsigned int c;
+			  sscanf(from+2, "%2x", &c);
+			  *to++ = (char)c;
+			  from += 4;
+			}
 			else if ( !strncmp( from, "\\'", 2)) {
 			  *to++ = '\'';
 			  from += 2;
@@ -497,6 +504,7 @@ google_read(void)
 #if 0 
 		      {
 			FILE *foo = fopen( "foo.xml", "w" );
+			fprintf(foo, "<!DOCTYPE foo [%s]>\n", xhtml_entities );
 			fwrite( panel, sizeof(char), strlen(panel), foo );
 			fclose( foo );
 		      }
