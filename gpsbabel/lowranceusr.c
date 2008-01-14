@@ -682,7 +682,7 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 	/**
 	 * Comments aren't used by the iFinder yet so they just take up space...
 	 */
-	if (0 && wpt->description && strcmp(wpt->description, wpt->shortname) != 0) {
+	if (wpt->description && strcmp(wpt->description, wpt->shortname) != 0) {
 		comment = xstrdup(wpt->description);
 		TextLen = strlen(comment);
 		my_fwrite4(&TextLen, file_out);
