@@ -57,6 +57,8 @@ static char *wptfgcolor = NULL;
 static char *wptbgcolor = NULL;
 static char *pack_opt = NULL;
 static int datum;
+static char *proximityarg = NULL;
+static int proximity;
 
 static
 arglist_t ozi_args[] = {
@@ -74,6 +76,8 @@ arglist_t ozi_args[] = {
 		"black", ARGTYPE_STRING, ARG_NOMINMAX},
 	{"wptbgcolor", &wptbgcolor, "Waypoint background color",
 		"yellow", ARGTYPE_STRING, ARG_NOMINMAX},
+	{"proximity", &proximityarg, "Proximity distance",
+		"0", ARGTYPE_INT, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
 
@@ -397,6 +401,9 @@ wr_init(const char *fname)
 
         setshort_badchars(mkshort_handle, "\",");
     }
+
+    proximity = atoi(proximityarg);
+
     file_out = NULL;
 }
 
@@ -794,7 +801,7 @@ ozi_waypt_pr(const waypoint * wpt)
     if (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0))
 	gbfprintf(file_out, "%.1f,", wpt->proximity);
     else
-	gbfprintf(file_out,"0,");
+	gbfprintf(file_out,"%d,", proximity);
     gbfprintf(file_out, "%.0f,%d,%d,%d\r\n", alt_feet, 6, 0, 17);
 
     xfree(description);
