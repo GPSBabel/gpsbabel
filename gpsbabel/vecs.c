@@ -127,6 +127,7 @@ extern ff_vecs_t garmin_gpi_vecs;
 extern ff_vecs_t lmx_vecs;
 extern ff_vecs_t random_vecs;
 extern ff_vecs_t xol_vecs;
+extern ff_vecs_t navilink_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -702,6 +703,12 @@ vecs_t vec_list[] = {
                 &dg100_vecs,
                 "dg-100",
                 "GlobalSat DG-100/BT-335 Download",
+                NULL
+        },
+        {
+                &navilink_vecs,
+                "navilink",
+                "NaviGPS GT-11/BGT-11 Download",
                 NULL
         },
 #endif // MAXIMAL_ENABLED

@@ -326,7 +326,7 @@ typedef struct {
 } wp_flags;
 
 #define WAYPT_SET(wpt,member,val) { wpt->member = (val); wpt->wpt_flags.member = 1; }
-#define WAYPT_GET(wpt,member,def) (wpt->wpt_flags.member) ? (wpt->member) : (def)
+#define WAYPT_GET(wpt,member,def) ((wpt->wpt_flags.member) ? (wpt->member) : (def))
 #define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
 #define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)
 /*
@@ -865,7 +865,9 @@ typedef struct {
 signed int be_read16(const void *p);
 signed int be_read32(const void *p);
 signed int le_read16(const void *p);
+unsigned int le_readu16(const void *p);
 signed int le_read32(const void *p);
+unsigned int le_readu32(const void *p);
 void le_read64(void *dest, const void *src);
 void be_write16(void *pp, const unsigned i);
 void be_write32(void *pp, const unsigned i);

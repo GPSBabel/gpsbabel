@@ -693,8 +693,22 @@ le_read16(const void *addr)
 	return p[0] | (p[1] << 8);
 }
 
+unsigned int
+le_readu16(const void *addr)
+{
+	const unsigned char *p = addr;
+	return p[0] | (p[1] << 8);
+}
+
 signed int
 le_read32(const void *addr)
+{
+	const unsigned char *p = addr;
+	return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
+}
+
+unsigned int
+le_readu32(const void *addr)
 {
 	const unsigned char *p = addr;
 	return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);

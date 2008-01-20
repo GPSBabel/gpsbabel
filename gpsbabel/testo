@@ -1269,5 +1269,21 @@ compare ${TMPDIR}/xol-sample.gpx ${REFERENCE}/xol-sample.gpx
 ${PNAME} -i gpx -f ${REFERENCE}/xol-sample.gpx -o xol -F ${TMPDIR}/xol-sample-gpx.xol
 compare ${TMPDIR}/xol-sample-gpx.xol ${REFERENCE}/xol-sample-gpx.xol
 
+#
+# NaviLink waypoints
+#
+${PNAME} -i navilink -f ${REFERENCE}/navilink_waypoints.wpt -o gpx -F ${TMPDIR}/navilink_waypoints.gpx
+compare ${TMPDIR}/navilink_waypoints.gpx ${REFERENCE}/navilink_waypoints.gpx
+${PNAME} -i gpx -f ${TMPDIR}/navilink_waypoints.gpx -o navilink -F ${TMPDIR}/navilink_waypoints_gpx.wpt
+compare ${TMPDIR}/navilink_waypoints_gpx.wpt ${REFERENCE}/navilink_waypoints_gpx.wpt
+
+#
+# NaviLink tracks
+#
+${PNAME} -t -i navilink -f ${REFERENCE}/navilink_tracks.trk -o gpx -F ${TMPDIR}/navilink_tracks.gpx
+compare ${TMPDIR}/navilink_tracks.gpx ${REFERENCE}/navilink_tracks.gpx
+${PNAME} -t -i gpx -f ${TMPDIR}/navilink_tracks.gpx -o navilink -F ${TMPDIR}/navilink_tracks_gpx.trk
+compare ${TMPDIR}/navilink_tracks_gpx.trk ${REFERENCE}/navilink_tracks_gpx.trk
+
 
 exit 0
