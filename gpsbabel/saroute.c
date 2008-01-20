@@ -80,7 +80,7 @@ ReadRecord(FILE * f,
 {
 	unsigned char *result = (unsigned char *) xmalloc(size);
 
-	if (!fread(result, size, 1, f))
+	if (size && !fread(result, size, 1, f))
 		fatal(MYNAME ": Attempt to read past EOF");
 	return result;
 }
