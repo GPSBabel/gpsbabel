@@ -37,6 +37,7 @@ static GPS_PTrack *tx_tracklist;
 static GPS_PTrack *cur_tx_tracklist_entry;
 static char *getposn = NULL;
 static char *poweroff = NULL;
+static char *resettime = NULL;
 static char *snlen = NULL;
 static char *snwhiteopt = NULL;
 static char *deficon = NULL;
@@ -57,6 +58,8 @@ arglist_t garmin_args[] = {
 	{ "get_posn", &getposn, "Return current position as a waypoint", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{ "power_off", &poweroff, "Command unit to power itself down", 
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	{ "resettime", &resettime, "Sync GPS time to computer time", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{ "category", &category, "Category number to use for written waypoints", 
 		NULL, ARGTYPE_INT, "1", "16"},
@@ -87,6 +90,16 @@ rw_init(const char *fname)
 
 	if (poweroff) {
 		GPS_Command_Off(fname);
+		return;
+	}
+
+	/*
+ 	 * THis is Gross. The B&W Vista sometimes sets its time decades into
+	 * the future with no way to reset it.  This apparently can "cure"
+	 * an affected unit.
+	 */
+	if (resettime) {
+		GPS_Command_Send_Time(fname, current_time());
 		return;
 	}
 
