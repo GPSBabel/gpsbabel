@@ -1,10 +1,13 @@
 <para> 
 KML, the Keyhole Markup Language, is used by Keyhole and
-<ulink url="http://earth.google.com">Google Earth</ulink>.  There are features in this file format that GPSBabel
-doesn't support - such as camera views - but waypoints, tracks, and routes 
-work well.
+<ulink url="http://earth.google.com">Google Earth</ulink>.  There are numerous 
+features in this file format that GPSBabel
+doesn't support - such as camera views - but core spport waypoints, tracks, and routes work well.
 </para>
 <para>
 Google Earth also uses GPSBabel internally for receiver communications
 and several file format imports and exports.
+</para>
+<para>
+In general, GPSBabel's KML writer is relatively strong.  GPSBabel handles simple KML on read fairly well, but if you're dealing with handcrafted KML that uses extensive features that have no analog in other formats like nested folders, ringgeometry, camera angles, and such, don't expect GPSBabel to do well with them on read.
 </para>
