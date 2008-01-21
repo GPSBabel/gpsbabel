@@ -311,8 +311,8 @@ decode_position(const unsigned char *buffer, waypoint *waypt)
 static void
 encode_position(const waypoint *waypt, unsigned char *buffer)
 {
-	le_write32(buffer + 0, waypt->latitude * 10000000);
-	le_write32(buffer + 4, waypt->longitude * 10000000);
+	le_write32(buffer + 0, (int) (waypt->latitude * 10000000));
+	le_write32(buffer + 4, (int) (waypt->longitude * 10000000));
 	le_write16(buffer + 8, METERS_TO_FEET(waypt->altitude));
 }
 
