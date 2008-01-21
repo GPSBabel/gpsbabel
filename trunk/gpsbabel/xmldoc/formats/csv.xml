@@ -1,8 +1,7 @@
-
       
       
       <para> There are a billion variants of Comma Separated Value
-data.  This is the one that makes <ulink url="http://www.delorme.com">Delorme</ulink> <productname>S&amp;A Deluxe 9</productname> happy. It's
+data.  This is the one specifically that makes <ulink url="http://www.delorme.com">Delorme</ulink> <productname>S&amp;A Deluxe 9</productname> happy. It's
 also a very simple program and useful for many other programs like
 spreadsheets.</para>
       <para> CSV is also the correct format for 
@@ -18,3 +17,11 @@ on read it  will read anything supported by our <link linkend="style_def_lathuma
        For something-separated data that has headers identifying the various
 	fields, see our <link linkend="fmt_unicsv">universal csv</link> format.
     </para>
+<example><title>Example 'csv' file</title>
+<programlisting>
+35.97203, -87.13470, Mountain Bike Heaven by susy1313
+36.09068, -86.67955, The Troll by a182pilot &amp; Family
+35.99627, -86.62012, Dive Bomber by JoGPS &amp; family
+36.03848, -86.64862, FOSTER by JoGPS &amp; Family
+</programlisting>
+</example>

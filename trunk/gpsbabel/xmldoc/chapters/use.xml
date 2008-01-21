@@ -25,9 +25,14 @@ options you need to know to do those things:
 </seglistitem>
 <seglistitem>
   <seg><option>-F</option> <parameter class="command">filename</parameter></seg>
-  <seg>Write output File</seg>
+  <seg>Write output file</seg>
 </seglistitem>
 </segmentedlist>
+<important>
+<para>
+Case matters.  Notably <option>-f</option> (lowercase) sets the <emphasis>input</emphasis> file.  <option> -F</option> (uppercase) sets the <emphasis>output</emphasis> file. 
+</para>
+</important>
 
 <para>
 The <parameter class="command">format</parameter> parameters in the above list
@@ -42,7 +47,11 @@ parentheses.
 <para>
 Options are <emphasis>always</emphasis> processed in order from left to right.
 In practical terms, this means that things you want to read should appear
-in the command before things you want to write.
+in the command before things you want to write.   This sometimes surprises
+new users as adding options to turn on debugging at the end, for example, 
+doesn't work as the debugging is turned on after all the interesting work is
+done.   The reason for this strict ordering becomes more apparent once you
+learn about mixing formats and filters.
 </para>
 <para>
 The <parameter class="command">filename</parameter> parameters specify the 
@@ -50,15 +59,15 @@ name of a file to be read or written.
 </para>
 
 <para>To use
-         this program, just tell it what you're reading, where to read
+         GPSBabel in its simplest form, just tell it what you're reading, where to read
          it from, what you're writing, and what to write it to.  For
          example:</para>
          <para><userinput>gpsbabel -i geo -f /tmp/geocaching.loc -o gpx -F /tmp/geocaching.gpx</userinput></para>
          <para>tells it to read the file <filename>/tmp/geocaching.loc</filename> in geocaching.com
-         format and create a new file <filename>/tmp/geocaching.gpx</filename> in GPX format.   It's important to note that the names have nothign to do with the formats actually used.</para>
+         format and create a new file <filename>/tmp/geocaching.gpx</filename> in GPX format.   It's important to note that the names have nothing to do with the formats actually used.</para>
          <para> This command will read from a Magellan unit attached
          to the first serial port on a Linux system (device names will
-         vary on other OSes) and write them as a geocaching loc file.</para>
+         vary on other OSes; typically COMx: on WIndows) and write them as a geocaching loc file.</para>
          <para><userinput>gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</userinput></para>
          <para>This second command does the same on Microsoft Windows.</para>
          <para><userinput>gpsbabel -i magellan -f com1 -o geo -F mag.loc</userinput></para>
@@ -68,12 +77,14 @@ name of a file to be read or written.
          long name.  This is particularly useful if you're writing to
          a target format that isn't the lowest common denominator but
          the source data was written for the lowest common
-         denominator.  I use this for writing data from geocaching.com
-         to my Magellan so my waypoints have "real" names instead of
-         the 'GC1234' ones that are optimized for NMEA-only receivers.
-         A geocacher with a Magellan receiver may thus find commands
+         denominator.  This is useful for writing data from geocaching.com
+         to a GPS so my waypoints have "real" names instead of
+         the 'GC1234' ones that are optimized for receivers of the lowest 
+	common denominator.
+         A geocacher using Linux with a Magellan receiver may thus find commands
          like this useful.</para>
          <para><userinput>gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0  </userinput></para>
+	<para>His counterpart on Windows will find this equivalent</para>
 	<para><userinput>gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1</userinput></para>
       </sect1>
       <sect1 id="Suboptions">

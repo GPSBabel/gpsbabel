@@ -37,7 +37,7 @@ need to 'apt-get install libusb-dev'.
 </para>
 <para><userinput>./configure --help</userinput></para> 
 <para>
-lists all the supported options, but additionally we have:</para><para>
+lists all the supported options, but of interest we have:</para><para>
  <option>--disable-shapefile</option> Excludes the shapefile support.
 </para>
 <para>
@@ -53,7 +53,7 @@ lists all the supported options, but additionally we have:</para><para>
   <option>--enable-efence</option> Activate debugging mode for gpsbabel-debug.
 </para>
 <para>
-  <option>--with-doc=dir</option> Specify that the doc should be created and installed in <option>dir</option>.
+  <option>--with-doc=</option><filename class="directory">dir</filename> Specifies that the doc should be created and installed in <filename class="directory">dir</filename>.
 </para>
 <para>
   <option>--without-libusb</option> Disables use of libusb, even it's it's available.
