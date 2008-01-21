@@ -35,6 +35,7 @@ static GPS_PWay *tx_routelist;
 static GPS_PWay *cur_tx_routelist_entry;
 static GPS_PTrack *tx_tracklist;
 static GPS_PTrack *cur_tx_tracklist_entry;
+static int my_track_count = 0;
 static char *getposn = NULL;
 static char *poweroff = NULL;
 static char *resettime = NULL;
@@ -918,8 +919,11 @@ track_hdr_pr(const route_head *trk_head)
 	if ( trk_head->rte_name ) {
 		strncpy((*cur_tx_tracklist_entry)->trk_ident, trk_head->rte_name, sizeof((*cur_tx_tracklist_entry)->trk_ident));
 		(*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
-	}
+	} else {
+		sprintf((*cur_tx_tracklist_entry)->trk_ident, "TRACK%02d", my_track_count);
+        }
 	cur_tx_tracklist_entry++;
+	my_track_count++;
 }
 
 static void
@@ -947,7 +951,7 @@ track_write(void)
 	for (i = 0; i < n; i++) {
 		tx_tracklist[i] = GPS_Track_New();
 	}
-
+	my_track_count = 0;
 	track_disp_all(track_hdr_pr, route_noop, track_waypt_pr);
 
 	GPS_Command_Send_Track(portname, tx_tracklist, n);
