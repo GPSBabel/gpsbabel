@@ -230,8 +230,8 @@ write_blocks( FILE *f, struct blockheader *blocks ) {
 	}
 	if ( !blocks->ch1 && !blocks->ch2 ) {
 		for ( i = 0; i < blocks->count; i++ ) {
+            		char desc_field [256];
 			write_char( f, 2 );
-            char desc_field [256];
             if (global_opts.smart_names && 
 	      		blocks->start[i].wpt->gc_data.diff && 
 			blocks->start[i].wpt->gc_data.terr) {
