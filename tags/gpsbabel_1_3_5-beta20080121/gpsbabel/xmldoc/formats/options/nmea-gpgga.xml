@@ -1,0 +1,8 @@
+<para>
+This option tells GPSBabel whether to read (on input) or write (on output) 
+GPGGA sentences.  The default is to read or write GPGGA sentences.  To 
+disable GPGGA sentences, specify <option>gpgga=0</option>.
+</para>
+<para>
+GPGGA sentences contain the location and quality of the GPS position fix.
+</para>

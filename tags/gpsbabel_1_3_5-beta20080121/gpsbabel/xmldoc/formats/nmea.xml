@@ -1,0 +1,53 @@
+    
+      
+<para> This format is the file representation of the NMEA 
+(National Marine Electronics Association) 0183
+log and waypoint format for GPS devices.  Some hardware and software
+that work with NMEA-0183 formatted data include:
+</para>
+<simplelist columns="3">
+<member>
+  <ulink url="http://homepages.tig.com.au/~robk/datalogger.html">GPS Data Logger</ulink>
+</member>
+<member>
+  <ulink url="http://www.gpstm.com/eng/features_eng.htm ">GPS TrackMaker</ulink>
+</member>
+<member>
+  <ulink url="http://www.gpsmaster.nl/ ">GPSMaster</ulink>
+</member>
+<member>
+  <ulink url="http://www.silcom.com/~rwhately/index.html">NMEAlog</ulink>
+</member>
+<member>
+  <ulink url="http://www.visualgps.net/VisualGPSce/default.htm">VisualGPS</ulink>
+</member>
+<member>
+  <ulink url="http://www.gpsu.co.uk/">GPS Utility</ulink>
+</member>
+<member>
+  <ulink url="http://www.kolumbus.fi/eino.uikkanen/geoconvgb/index.htm">GeoConv</ulink>
+</member>
+<member>
+  <ulink url="http://www.commlinx.com.au/GPS_recorder.htm">CommLinx GPS recorder</ulink>
+</member>
+<member>
+  <ulink url="http://www.sparkfun.com/">SparkFun GPS Datalogger</ulink>
+</member>
+<member>
+  <ulink url="http://www.sonystyle.com/is-bin/INTERSHOP.enfinity/eCS/Store/en/-/USD/SY_DisplayProductInformation-Start?ProductSKU=GPSCS1">Sony GPS-CS1</ulink>
+</member>
+</simplelist>  
+<para>
+This module also supports <link linkend="tracking">realtime tracking</link> 
+which allows realtime position reports from a GPS, such as one connected 
+serially, over Bluetooth, or a USB module emulating a serial port, to be used
+with selected output formats.
+</para>
+<para>
+When used in <link linkend="tracking">realtime tracking</link> mode, if
+GPSBabel does not sense incoming NMEA sentences arriving from the port, it
+will send Sirf "reset to NMEA" commands to the port at a variety of speeds
+in an attempt to communicate with an attached GPS.   This lets devices
+like the Microsoft GPS or Pharos GPS that are Sirf chips with an integrated
+USB/Serial adapter work with this input format.
+</para>

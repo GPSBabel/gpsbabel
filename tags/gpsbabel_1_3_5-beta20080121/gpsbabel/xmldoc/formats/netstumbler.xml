@@ -1,0 +1,21 @@
+<para>
+This format reads summary files from <productname>NetStumbler</productname>
+<productnumber>0.4</productnumber> or <productname>MacStumbler</productname>.
+</para>
+<para> 
+The default behavior when creating waypoints is to use the SSID for
+the short name, and information about the access point for the
+description.  When the SSID is not unique, is not available, or
+consists of whitespace, a short name is synthesized. 
+</para>
+<para> 
+Different icons are assigned to encrypted,
+non-encrypted, stealth, and non-stealth access points; these may be
+changed with options. 
+</para>
+<para>
+<ulink url="http://www.netstumbler.com/">NetStumbler</ulink>
+</para>
+<para>
+<ulink url="http://www.macstumbler.com/">MacStumbler</ulink>   
+</para>

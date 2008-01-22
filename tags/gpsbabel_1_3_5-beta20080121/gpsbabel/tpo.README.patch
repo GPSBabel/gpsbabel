@@ -1,0 +1,51 @@
+Index: README
+===================================================================
+RCS file: /cvsroot/gpsbabel/gpsbabel/README,v
+retrieving revision 1.145
+diff -p -u -r1.145 README
+--- README	26 Oct 2005 23:54:45 -0000	1.145
++++ README	31 Oct 2005 22:21:04 -0000
+@@ -467,9 +467,10 @@ THE FORMATS
+ 
+     TPG
+ 
+-	National Geographic Topo! Waypoint Format.  This filter 
+-	reads and writes .TPG files created by various editions of NG Topo! 
+-	This filter will *not* work with the newer combined .TPO files.  
++        National Geographic Topo! Waypoint and Route Format.  This
++        format reads and writes .TPG files created by various editions
++        of NG Topo!  This filter will *not* work with the newer combined
++        .TPO files.  Reading/writing of route data is not supported yet.
+ 
+         The option 'datum="datum name"' can be used to override the
+         default of NAD27 ("N. America 1927 mean") which is correct
+@@ -478,6 +479,29 @@ THE FORMATS
+ 
+ 	Contributed by Alex Mottram.
+ 
++    TPO
++
++        National Geographic Topo! Track Format.  This format reads
++        and writes .TPO files created by various editions of NG Topo!
++        version 2.7.7 or earlier. This format will *not* work with the
++        newer .TPO files (version 3.0 and later) that have TPG data
++        combined into them.
++
++        When writing TPO files, note that every TOPO! state edition
++        employs a slightly different data format, so you will need to
++        specify which state edition to generate output for.  The current
++        supported states are CA, NY, NJ, MA, CT, RI, NH, VT, ME.  It's
++        fairly easy to add support for additional states. Instructions
++        are in the source code.
++
++	Additional options:
++	dumpheader    -    (0/1) Display the file header bytes (useful when
++				adding support for a new state)
++	state        -    State map format to write, default=CA
++	
++	Contributed by Steve Chamberlin.
++
++
+     HOLUX
+ 
+         The Holuxgm-100 (e-fox) gps receiver uses standard compact
