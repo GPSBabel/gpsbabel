@@ -68,7 +68,7 @@ static unsigned route_id_ptr;
 #define PID_ADD_A_ROUTE       0x3d
 #define PID_ERASE_TRACK       0x11
 #define PID_READ_TRACKPOINTS  0x14
-#define PID_WRITE_TRACKPOINTS 0x14
+#define PID_WRITE_TRACKPOINTS 0x16
 #define PID_CMD_OK            0xf3
 #define PID_CMD_FAIL          0xf4
 #define PID_QUIT              0xf2
@@ -191,6 +191,24 @@ checksum_packet(const unsigned char *packet, unsigned length)
 	return checksum & 0x7fff;
 }
 
+#ifdef NAVILINK_DEBUG
+
+static void
+dump_packet(char *prefix, unsigned char *packet, unsigned length)
+{
+	unsigned i;
+
+	for (i = 0; i < length; i++ ) {
+		if ((i % 16) == 0) fprintf(stderr, "%s %08x :", prefix, i);
+		fprintf(stderr, " %02x", packet[i]);
+		if ((i % 16) == 15 || i == length - 1) fprintf(stderr, "\n");
+	}
+
+	fprintf(stderr, "\n");
+}
+
+#endif
+
 static void
 write_packet(unsigned type, const void *payload, unsigned length)
 {
@@ -204,6 +222,10 @@ write_packet(unsigned type, const void *payload, unsigned length)
 	le_write16(packet + length + 5, checksum_packet(packet + 4, length + 1));
 	packet[length + 7] = 0xb0;
 	packet[length + 8] = 0xb3;
+
+#ifdef NAVILINK_DEBUG
+	dump_packet(">>>", packet + 4, length + 1);
+#endif
 
 	if (gbser_write(serial_handle, packet, length + 9) != gbser_OK) {
 		fatal(MYNAME ": Write error\n");
@@ -244,6 +266,10 @@ read_packet(unsigned type, void *payload, unsigned minlength, unsigned maxlength
 	if (gbser_read_wait(serial_handle, data, size, SERIAL_TIMEOUT) != size) {
 		fatal(MYNAME ": Read error reading %d byte payload\n", size);
 	}
+
+#ifdef NAVILINK_DEBUG
+	dump_packet("<<<", data, size);
+#endif
 
 	if (data[0] != type) {
 		fatal(MYNAME ": Protocol error: Bad packet type (expected 0x%02x but got 0x%02x)\n", type, data[0]);
@@ -519,9 +545,10 @@ serial_write_track(void)
 
 	le_write32(data + 0, address + total * 32);
 	le_write16(data + 4, track_data_ptr - track_data);
-	data[6] = 0x01;
+	data[6] = 0x00;
 
 	write_packet(PID_WRITE_TRACKPOINTS, data, sizeof(data));
+	gb_sleep(10000);
 	write_packet(PID_DATA, track_data, track_data_ptr - track_data);
 	read_packet(PID_CMD_OK, NULL, 0, 0);
 
@@ -531,8 +558,6 @@ serial_write_track(void)
 static void
 serial_write_track_start(const route_head *track)
 {
-	fatal(MYNAME ": Writing tracks to navilink devices is not supported\n");
-
 	track_data = xmalloc(MAX_WRITE_TRACKPOINTS * 32);
 	track_data_ptr = track_data;
 	track_data_end = track_data + MAX_WRITE_TRACKPOINTS * 32;
@@ -654,7 +679,7 @@ serial_write_route_end(const route_head *route)
 	unsigned char id[1];
 
 	if (route_id_ptr > MAX_ROUTE_LENGTH) {
-		fatal(MYNAME ": Route %s too int32_t\n", route->rte_name);
+		fatal(MYNAME ": Route %s too long\n", route->rte_name);
 	}
 
 	src = (route_id_ptr + MAX_SUBROUTE_LENGTH) / MAX_SUBROUTE_LENGTH;
@@ -793,14 +818,14 @@ navilink_common_init(const char *name, const char *mode)
 
 		if (nuketrk) {
 			unsigned char information[32];
-			unsigned char data[9];
+			unsigned char data[7];
 
 			write_packet(PID_QRY_INFORMATION, NULL, 0);
 			read_packet(PID_DATA, information, sizeof(information), sizeof(information));
 
 			le_write32(data + 0, le_read32(information + 4));
 			le_write16(data + 4, 0);
-			data[8] = 0;
+			data[6] = 0;
 
 			write_packet(PID_ERASE_TRACK, data, sizeof(data));
 			read_packet(PID_CMD_OK, NULL, 0, 0);
