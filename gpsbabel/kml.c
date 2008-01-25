@@ -62,6 +62,13 @@ typedef struct {
   double altitude;
 } point3d;
 
+typedef enum  {
+  kmlpt_unknown,
+  kmlpt_waypoint,
+  kmlpt_track,
+  kmlpt_route
+} kml_point_type;
+
 static int      point3d_list_len;
 static point3d *point3d_list;
 static int realtime_positioning;
@@ -129,6 +136,11 @@ struct {
  { 30, "http://maps.google.com/mapfiles/kml/pal4/icon31.png" }, // Yellow
  { 0, "http://maps.google.com/mapfiles/kml/pal4/icon62.png" }, // Green
 };
+#define ICON_NOSAT "http://maps.google.com/mapfiles/kml/pal3/icon59.png";
+
+#define ICON_WPT "http://maps.google.com/mapfiles/kml/pal4/icon61.png"
+#define ICON_TRK "http://maps.google.com/mapfiles/kml/pal4/icon60.png"
+#define ICON_RTE "http://maps.google.com/mapfiles/kml/pal4/icon61.png"
 
 #define MYNAME "kml"
 
@@ -383,7 +395,7 @@ kml_write_xmle(const char *tag, const char *v)
 
 #define hovertag(h) h ? 'h' : 'n'
 static void kml_write_bitmap_style_(const char *style, const char * bitmap, 
-				       int highlighted)
+				    int highlighted)
 {
 	kml_write_xml(0, "<!-- %s %s style -->\n", 
 		highlighted ? "Highlighted" : "Normal", style);
@@ -403,8 +415,16 @@ static void kml_write_bitmap_style_(const char *style, const char * bitmap,
  * and non-highlighted version of the style to allow the icons
  * to magnify slightly on a rollover.
  */
-static void kml_write_bitmap_style(const char *style, const char *bitmap)
+static void kml_write_bitmap_style(kml_point_type pt_type, const char *bitmap)
 {
+	char *style;
+	switch (pt_type) {
+		case kmlpt_track: style = "track"; break;
+		case kmlpt_route: style = "route"; break;
+		case kmlpt_waypoint: style = "waypoint"; break;
+		default: fatal("kml_output_point: unknown point type"); break;
+	}
+
 	kml_write_bitmap_style_(style, bitmap, 0);
 	kml_write_bitmap_style_(style, bitmap, 1);
 
@@ -603,11 +623,18 @@ static void kml_output_description(const waypoint *pt)
 	kml_write_xml(-1, "]]></description>\n");
 }
 
-static void kml_output_point(const waypoint *waypointp, const char *style)
+static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type)
 {
+  char *style;
   // Save off this point for later use
   point3d *pt = &point3d_list[point3d_list_len];
   point3d_list_len++;
+
+  switch (pt_type) {
+    case kmlpt_track: style = "#track"; break;
+    case kmlpt_route: style = "#route"; break;
+    default: fatal("kml_output_point: unknown point type"); break;
+  }
 
   pt->longitude = waypointp->longitude;
   pt->latitude = waypointp->latitude;
@@ -940,7 +967,7 @@ static void kml_track_hdr(const route_head *header)
 
 static void kml_track_disp(const waypoint *waypointp)
 {
-	kml_output_point(waypointp, "#track");
+	kml_output_point(waypointp, kmlpt_track);
 }
 
 static void kml_track_tlr(const route_head *header) 
@@ -959,7 +986,7 @@ static void kml_route_hdr(const route_head *header)
 
 static void kml_route_disp(const waypoint *waypointp)
 {
-        kml_output_point(waypointp, "#route");
+        kml_output_point(waypointp, kmlpt_route);
 }
 
 static void kml_route_tlr(const route_head *header) 
@@ -1009,14 +1036,14 @@ void kml_write(void)
 
 	// Style settings for bitmaps
 	if (route_waypt_count()) {
-		kml_write_bitmap_style("route", "http://maps.google.com/mapfiles/kml/pal4/icon61.png");
+		kml_write_bitmap_style(kmlpt_route, ICON_RTE);
 	}
 
 	if (track_waypt_count()) {
-		kml_write_bitmap_style("track", "http://maps.google.com/mapfiles/kml/pal4/icon60.png");
+		kml_write_bitmap_style(kmlpt_track, ICON_TRK);
 	}
 
-	kml_write_bitmap_style("waypoint", "http://maps.google.com/mapfiles/kml/pal4/icon61.png");
+	kml_write_bitmap_style(kmlpt_waypoint, ICON_WPT);
         
 	if (track_waypt_count() || route_waypt_count()) {
 		// Style settings for line strings
@@ -1085,7 +1112,7 @@ kml_get_posn_icon(int freshness)
 		if (freshness >= kml_tracking_icons[i].freshness)
 			return kml_tracking_icons[i].icon;
 	}
-	return "http://maps.google.com/mapfiles/kml/pal3/icon59.png";
+	return ICON_NOSAT;
 }
 
 
