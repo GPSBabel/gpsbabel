@@ -58,7 +58,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
 	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
-	navilink.o
+	navilink.o mtk_logger.o
 
 FMTS=@FMTS@
 
@@ -575,6 +575,8 @@ msroute.o: msroute.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
   jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+mtk_logger.o: mtk_logger.c defs.h config.h queue.h gbtypes.h \
+   gbfile.h cet.h cet_util.h inifile.h gbser.h
 navicache.o: navicache.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 netstumbler.o: netstumbler.c defs.h config.h queue.h gbtypes.h \

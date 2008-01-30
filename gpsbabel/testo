@@ -1285,5 +1285,13 @@ compare ${TMPDIR}/navilink_tracks.gpx ${REFERENCE}/navilink_tracks.gpx
 ${PNAME} -t -i gpx -f ${TMPDIR}/navilink_tracks.gpx -o navilink -F ${TMPDIR}/navilink_tracks_gpx.trk
 compare ${TMPDIR}/navilink_tracks_gpx.trk ${REFERENCE}/navilink_tracks_gpx.trk
 
+#
+# MTK logger tests
+#
+rm -f ${TMPDIR}/mtk_logger.*
+${PNAME} -t -i mtk-bin,csv=${TMPDIR}/mtk_logger.csv -f ${REFERENCE}/track/mtk_logger.bin -o gpx -F ${TMPDIR}/mtk_logger.gpx
+compare ${TMPDIR}/mtk_logger.gpx ${REFERENCE}/track/mtk_logger.gpx
+## CSV compare needs to be done with '-w' - ignore whitespace.
+compare ${TMPDIR}/mtk_logger.csv ${REFERENCE}/track/mtk_logger.csv
 
 exit 0
