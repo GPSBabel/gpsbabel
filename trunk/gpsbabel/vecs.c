@@ -79,6 +79,8 @@ extern ff_vecs_t magX_fvecs;
 extern ff_vecs_t mapsend_vecs;
 extern ff_vecs_t mps_vecs;
 extern ff_vecs_t msroute_vecs;
+extern ff_vecs_t mtk_vecs;
+extern ff_vecs_t mtk_fvecs;
 extern ff_vecs_t navicache_vecs;
 extern ff_vecs_t netstumbler_vecs;
 extern ff_vecs_t nmea_vecs;
@@ -410,6 +412,18 @@ vecs_t vec_list[] = {
                 "baroiq",
                 "Brauniger IQ Series Barograph Download",
                 NULL
+        },
+        {
+                &mtk_vecs,
+                "mtk",
+                "MTK Logger (iBlue 747,Qstarz BT-1000,...) download",
+                NULL
+        },
+        {
+                &mtk_fvecs,
+                "mtk-bin",
+                "MTK Logger (iBlue 747,...) Binary File Format",
+                "bin"
         },
         {
                 &wbt_svecs,
