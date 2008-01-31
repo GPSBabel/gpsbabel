@@ -36,6 +36,7 @@ static char *opt_line_color = NULL;
 static char *opt_floating = NULL;
 static char *opt_extrude = NULL;
 static char *opt_trackdata = NULL;
+static char *opt_trackdirection = NULL;
 static char *opt_units = NULL;
 static char *opt_labels = NULL;
 static char *opt_max_position_points = NULL;
@@ -45,6 +46,7 @@ static int export_points;
 static int floating;
 static int extrude;
 static int trackdata;
+static int trackdirection;
 static int max_position_points;
 
 static int indent_level;
@@ -66,7 +68,8 @@ typedef enum  {
   kmlpt_unknown,
   kmlpt_waypoint,
   kmlpt_track,
-  kmlpt_route
+  kmlpt_route,
+  kmlpt_other
 } kml_point_type;
 
 static int      point3d_list_len;
@@ -105,7 +108,7 @@ arglist_t kml_args[] = {
          "6", ARGTYPE_INT, ARG_NOMINMAX },
 	{"line_color", &opt_line_color, 
          "Line color, specified in hex AABBGGRR",
-         "64eeee17", ARGTYPE_STRING, ARG_NOMINMAX },
+         "99ffac59", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"floating", &opt_floating, 
 	 "Altitudes are absolute and not clamped to ground", 
 	 "0", ARGTYPE_BOOL, ARG_NOMINMAX },
@@ -115,6 +118,9 @@ arglist_t kml_args[] = {
 	{"trackdata", &opt_trackdata, 
 	 "Include extended data for trackpoints (default = 1)", 
 	 "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"trackdirection", &opt_trackdirection, 
+	 "Indicate direction of travel in track icons (default = 0)", 
+	 "0", ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"units", &opt_units, 
 	 "Units used when writing comments ('s'tatute or 'm'etric)", 
 	 "s", ARGTYPE_STRING, ARG_NOMINMAX },
@@ -132,15 +138,16 @@ struct {
 	int freshness;
 	char *icon;
 } kml_tracking_icons[] = {
- { 60, "http://maps.google.com/mapfiles/kml/pal4/icon15.png" }, // Red
- { 30, "http://maps.google.com/mapfiles/kml/pal4/icon31.png" }, // Yellow
- { 0, "http://maps.google.com/mapfiles/kml/pal4/icon62.png" }, // Green
+ { 60, "http://www.gpsbabel.org/apps/earth/youarehere-60.png" }, // Red
+ { 30, "http://www.gpsbabel.org/apps/earth/youarehere-30.png" }, // Yellow
+ { 0, "http://www.gpsbabel.org/apps/earth/youarehere-0.png" }, // Green
 };
-#define ICON_NOSAT "http://maps.google.com/mapfiles/kml/pal3/icon59.png";
 
+#define ICON_NOSAT "http://www.gpsbabel.org/apps/earth//youarehere-warning.png";    
 #define ICON_WPT "http://maps.google.com/mapfiles/kml/pal4/icon61.png"
-#define ICON_TRK "http://maps.google.com/mapfiles/kml/pal4/icon60.png"
-#define ICON_RTE "http://maps.google.com/mapfiles/kml/pal4/icon61.png"
+#define ICON_TRK "http://www.gpsbabel.org/apps/earth/track-directional/track-none.png"
+#define ICON_RTE "http://www.gpsbabel.org/apps/earth/track-directional/track-none.png"    
+#define ICON_DIR "http://www.gpsbabel.org/apps/earth/track-directional/track-%d.png" // format string where next arg is rotational degrees.
 
 #define MYNAME "kml"
 
@@ -415,13 +422,15 @@ static void kml_write_bitmap_style_(const char *style, const char * bitmap,
  * and non-highlighted version of the style to allow the icons
  * to magnify slightly on a rollover.
  */
-static void kml_write_bitmap_style(kml_point_type pt_type, const char *bitmap)
+static void kml_write_bitmap_style(kml_point_type pt_type, const char *bitmap,
+				  const char *customstyle)
 {
-	char *style;
+	const char *style;
 	switch (pt_type) {
 		case kmlpt_track: style = "track"; break;
 		case kmlpt_route: style = "route"; break;
 		case kmlpt_waypoint: style = "waypoint"; break;
+		case kmlpt_other: style = customstyle; break;
 		default: fatal("kml_output_point: unknown point type"); break;
 	}
 
@@ -636,6 +645,12 @@ static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type)
     default: fatal("kml_output_point: unknown point type"); break;
   }
 
+  switch (pt_type) {
+    case kmlpt_track: style = "#track"; break;
+    case kmlpt_route: style = "#route"; break;
+    default: fatal("kml_output_point: unknown point type"); break;
+  }
+
   pt->longitude = waypointp->longitude;
   pt->latitude = waypointp->latitude;
   pt->altitude = waypointp->altitude == unknown_alt ? 0.0 : waypointp->altitude;
@@ -649,13 +664,19 @@ static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type)
 	kml_output_description(waypointp);
 	kml_output_lookat(waypointp);
 	kml_output_timestamp(waypointp);
-	kml_write_xml(0, "<styleUrl>%s</styleUrl>\n", style);
-#if 0
-	// If we were to try to spin track icon to indication direction
-	// of motion, it might look something like this.  Unfortunately,
-	// doing that causes a huge performance problem in Google Earth.
-	kml_write_xml(0, "<Style><IconStyle><heading>%f</heading></IconStyle></Style>\n", 360 - waypointp->course);
-#endif
+
+	if (trackdirection && (pt_type == kmlpt_track)) {
+		char buf[100];
+		if (waypointp->speed < 1) 
+			snprintf(buf, sizeof(buf), "%s-none", style);
+		else
+			snprintf(buf, sizeof(buf), "%s-%d", style, 
+				(int) (waypointp->course / 22.5 + .5) % 16);
+		kml_write_xml(0, "<styleUrl>%s</styleUrl>\n", buf);
+	} else {
+		kml_write_xml(0, "<styleUrl>%s</styleUrl>\n", style);
+	}
+
 	kml_write_xml(1, "<Point>\n");
         if (floating) {
 		kml_write_xml(0, "<altitudeMode>absolute</altitudeMode>\n");
@@ -1005,6 +1026,7 @@ void kml_write(void)
 	floating = (!! strcmp("0", opt_floating));
 	extrude = (!! strcmp("0", opt_extrude));
 	trackdata = (!! strcmp("0", opt_trackdata));
+	trackdirection = (!! strcmp("0", opt_trackdirection));
 
 	kml_write_xml(0, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
@@ -1036,14 +1058,27 @@ void kml_write(void)
 
 	// Style settings for bitmaps
 	if (route_waypt_count()) {
-		kml_write_bitmap_style(kmlpt_route, ICON_RTE);
+		kml_write_bitmap_style(kmlpt_route, ICON_RTE, NULL);
 	}
 
 	if (track_waypt_count()) {
-		kml_write_bitmap_style(kmlpt_track, ICON_TRK);
+		if (trackdirection) {
+		  int i;
+	          kml_write_bitmap_style(kmlpt_other, ICON_TRK, "track-none");
+		  for (i = 0; i < 16; i++) {
+		    char buf1[100];
+		    char buf2[100];
+
+		    sprintf(buf1, "track-%d", i);
+		    sprintf(buf2, ICON_DIR, i);
+ 		    kml_write_bitmap_style(kmlpt_other, buf2, buf1);
+		  }
+		} else {
+		  kml_write_bitmap_style(kmlpt_track, ICON_TRK, NULL);
+	        }
 	}
 
-	kml_write_bitmap_style(kmlpt_waypoint, ICON_WPT);
+	kml_write_bitmap_style(kmlpt_waypoint, ICON_WPT, NULL);
         
 	if (track_waypt_count() || route_waypt_count()) {
 		// Style settings for line strings
