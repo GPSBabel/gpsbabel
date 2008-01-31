@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Document>
+    <name>GPS device</name>
+<!-- Normal waypoint style -->
+    <Style id="waypoint_n">
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted waypoint style -->
+    <Style id="waypoint_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="waypoint">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#waypoint_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#waypoint_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="geocache"><BalloonStyle><text><![CDATA[
+      <a href="http://www.geocaching.com"><img src="http://www.geocaching.com/images/nav/logo_sub.gif"> </a>
+      <p><a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+      a $[gc_type], by <b>$[gc_placer]</b> [<a href="http://www.geocaching.com/profile?id=$[gc_placer_id]">profile</a>]<br/>
+      (ratings out of 5 stars. 1 is easiest, 5 is hardest)<br/>
+      Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13">
+      &nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13"><br />
+      Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12">&nbsp;($[gc_cont_icon])<br />
+      $[gc_issues]
+      $[gc_short_desc]
+      $[gc_long_desc]
+    ]]></text></BalloonStyle></Style>
+    <Folder>
+      <name>Waypoints</name>
+      <Placemark>
+        <name>
+<![CDATA[Points géodésiques du Québec]]>
+        </name>
+        <TimeStamp><when>2002-08-15T07:00:00Z</when></TimeStamp>
+        <styleUrl>#geocache</styleUrl>
+        <Style>
+          <IconStyle>
+            <Icon>
+              <href>http://www.geocaching.com/images/kml/8.png</href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <ExtendedData>
+          <Data name="gc_num"><value>GC7FA4</value></Data>
+          <Data name="gc_name"><value>Points géodésiques du Québec</value></Data>
+          <Data name="gc_placer"><value>Sverdrup2</value></Data>
+          <Data name="gc_placer_id"><value>6293</value></Data>
+          <Data name="gc_diff_stars"><value>stars1</value></Data>
+          <Data name="gc_terr_stars"><value>stars1</value></Data>
+          <Data name="gc_cont_icon"><value>virtual</value></Data>
+          <Data name="gc_issues"><value>          </value></Data>
+          <Data name="gc_type"><value>Locationless (Reverse) Cache</value></Data>
+          <Data name="gc_short_desc"><value><![CDATA[LES COORDONÉES PUBLIÉES NE REPRÉSENTENT PAS LA LOCALISATION D'UNE CACHE
+PUBLISHED COORDINATES DO NOT REPRESENT THE LOCALIZATION OF A CACHE]]></value></Data>
+          <Data name="gc_long_desc"><value><![CDATA[Le but de cette cache virtuelle est de trouver les points géodésiques du territoire québécois. Les points géodésiques sont faciles à identifier (capuchons de laiton au niveau du sol). Généralement, il y a un panneau de couleur orange sur un poteau à proximité du point. Sur ce panneau, le numéro du point est identifié. Aussi, la distance relative du panneau au point est indiquée. 
+<P>
+Pour inscrire votre découverte, vous devez prendre en note le NUMÉRO DU POINT(inscrit sur le point même ou au centre du panneau)LA COORDONNÉE(en format HDDD MM.MM WGS84 datum ET UTM NAD83 indiquer la zone SVP)et L'ALTITUDE RELATIVE. Si le points n'est pas visible (il se peut qu'il soit sous quelques centimètres de terre) vous pouvez prendre la coordonnée à l'emplacement du panneau SI LA PRÉCISION DE VOTRE GPS EST SUPÉRIEUR À LA DISTANCE INSCRITE SUR LE PANNEAU (ex : Précison du GPS de 5m et distance au point inscrite sur le panneau de 3m).
+<P>
+Une photo du point ou du panneau et une description générale des lieux serait aussi des informations importantes.
+<P>
+Enfin, il faudrait aussi prendre en note l'organisme propriétaire du point géodésique. Au Québec il en existe plusieurs:
+<P>
+Le Service de la géodésie du Québec, Ministère des Ressources naturelles, Québec
+<P>
+La Division des levés géodésiques, Géomatique Canada, Secteur des sciences de la terre Ressources naturelles Canada 
+<P>
+Le Service hydrographique du Canada, Direction des sciences, Pêches et Océans Canada et la Garde côtière canadienne, Pêches et Océans Canada 
+<P>
+Et tout les anciens noms de ministères et/ou organisme
+<P>
+Des photos de points de même que des panneaux suivront bientôt.
+VOUS NE POUVEZ INSCRIRE QU'UN SEUL POINT GÉODÉSIQUE (UN POINT PAR GÉOCACHEUR)
+Bonne chance!
+
+<P>
+
+The goal of this virtual cache is to find the geodetic points of Québec’s territory. The geodetic points are easy to identify (Brass cap at ground level) Generally, there is an orange panel of on a post near the point. On this panel, the number of the point is identified. Also, the distance relating from the panel to the point is also indicated. In order to log your find, you must take in note THE NUMBER OF THE POINT(registered on the point or in the center of the panel) and THE COORDINATES(in format HDDD MM.MM WGS84 datum AND UTM NAD83 indicate the zone please)and THE ALTITUDE. If the point is not visible (it may be buried under few centimetres) you can take the coordinate at the panel IF THE ACCURACY OF YOUR GPS IS HIGHER Than the DISTANCE REGISTERED ON the PANEL. (Ex: accuracy of the GPS is 5m and the distance to the point registered on the panel is 3m). 
+ <P>
+A picture of the point or panel and a general description of the places would be also significant information. Finally, it would also be important to take in note the organization owner of the geodetic point. 
+In Quebec there are several: 
+<P>
+The "Service de la géodésie du Québec, Ministère des Ressources naturelles Québec"
+The Geodetic Survey Division, Geomatics Canada, Earth Sciences Sector, Natural Resources Canada 
+The Canadian Hydrographic Service, Sciences Directorate, Fisheries and Oceans Canada and the Canadian Coast Guard, Fisheries and Oceans Canada
+And all old names of ministries and/or organization
+<P>
+
+PICTURES of points and of the panels will follow soon. YOU CAN ONLY LOG ONE POINT (ONE POINT PER GEOCACHER)
+Good luck!]]></value></Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>-73.000000,46.133333,0.000000</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>
+<![CDATA[Oozy rat in a sanitary zoo]]>
+        </name>
+        <TimeStamp><when>2003-06-29T07:00:00Z</when></TimeStamp>
+        <styleUrl>#geocache</styleUrl>
+        <Style>
+          <IconStyle>
+            <Icon>
+              <href>http://www.geocaching.com/images/kml/8.png</href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <ExtendedData>
+          <Data name="gc_num"><value>GCGCA8</value></Data>
+          <Data name="gc_name"><value>Oozy rat in a sanitary zoo</value></Data>
+          <Data name="gc_placer"><value>robertlipe</value></Data>
+          <Data name="gc_placer_id"><value>32733</value></Data>
+          <Data name="gc_diff_stars"><value>stars3</value></Data>
+          <Data name="gc_terr_stars"><value>stars2</value></Data>
+          <Data name="gc_cont_icon"><value>not_chosen</value></Data>
+          <Data name="gc_issues"><value>          </value></Data>
+          <Data name="gc_type"><value>Unknown Cache</value></Data>
+          <Data name="gc_short_desc"><value><![CDATA[The cache is not at the coordinates above.   These coords will get you to the correct park and within 1/2 mile of the cache.  The cache is within 35 feet of the trail.   It is not handicapped accessible.   It is a nice walk in the woods that is practical for all ages.  There is no space in the container for trading items.   You should bring a writing stick and bug spray is recommended.]]></value></Data>
+          <Data name="gc_long_desc"><value><![CDATA[So if the cache isn't at the above coordinates, where is it?  
+
+<ul>
+
+<li>Too bad I hid a boot
+<li>Too hot to hoot
+<li>Never odd or even
+<li>Do geese see God?
+<li>"Do nine men interpret?" "Nine men," I nod
+<li>Rats live on no evil star
+<li>Go hang a salami, I'm a lasagna hog
+</ul>
+
+Now that it's intuitively obvious to even the most casual observer where the cache is, turn on your geo-mojo and go find it.
+<br>
+<img SRC="http://www.mtgc.org/mtgc_member-banner.gif" WIDTH="500" HEIGHT="40" ALT="Member of Middle Tennessee GeoCachers Club [www.mtgc.org]" BORDER="0"></a></p>]]></value></Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>-86.861667,35.921667,0.000000</coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

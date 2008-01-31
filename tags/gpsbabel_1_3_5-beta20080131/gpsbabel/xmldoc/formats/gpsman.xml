@@ -1,0 +1,13 @@
+
+      
+      
+	<para> <ulink url="http://www.ncc.up.pt/gpsman/">GPS Manager</ulink> 
+can read and write formats GPSBabel doesn't understand.  The format defaults
+(WGS84, DDD) work reliably.  Tracks, routes, and non-default format options
+are not supported.
+	</para>
+
+	<para>This format is documented at the GPS Manager 
+	<ulink url="http://www.ncc.up.pt/gpsman/gpsmanhtml/manual/html/GPSMandoc_30.html">doc site</ulink>.
+	</para>
+    

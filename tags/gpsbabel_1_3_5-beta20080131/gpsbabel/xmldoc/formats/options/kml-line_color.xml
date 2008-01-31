@@ -1,0 +1,5 @@
+<para>
+This option specifies the line color as a hexadecimal number in 
+AABBGGRR format, where A is alpha, B is blue, G is green, and R is red.
+</para>
+

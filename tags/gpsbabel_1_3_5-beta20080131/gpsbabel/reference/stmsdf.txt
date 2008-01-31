@@ -1,0 +1,83 @@
+Grid	Lat/Lon hddd°mm.mmm'
+Datum	WGS 84
+
+Header	Name	Description	Type	Position	Altitude	Depth	Proximity	Temperature	Display Mode	Color	Symbol	Facility	City	State	Country	Date Modified	Link	Categories
+
+Waypoint	001		User Waypoint	N50 29.56 E12 06.33	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	002		User Waypoint	N50 29.56 E12 06.33	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	003		User Waypoint	N50 29.66 E12 06.31	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	004		User Waypoint	N50 29.63 E12 06.37	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	005		User Waypoint	N50 29.63 E12 06.37	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	006		User Waypoint	N50 29.60 E12 06.43	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	007		User Waypoint	N50 29.62 E12 06.43	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	Jahnstrasse		User Waypoint	N50 29.62 E12 06.43	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	Liebknechtstrasse		User Waypoint	N50 29.63 E12 06.37	0 m				Symbol & Name	Unknown	Waypoint							
+Waypoint	NARVA		User Waypoint	N50 29.56 E12 06.33	391 m				Symbol & Name	Unknown	Waypoint							
+
+
+Header	Name	Length	Course	Waypoints	Link
+
+Route		394 m	46° true	10 waypoints	
+
+Header	Waypoint Name	Distance	Leg Length	Course
+
+Route Waypoint	NARVA	0 m
+Route Waypoint	001	2 m	2 m	221° true
+Route Waypoint	002	2 m	0 m	0° true
+Route Waypoint	003	189 m	188 m	353° true
+Route Waypoint	004	274 m	85 m	126° true
+Route Waypoint	Liebknechtstrasse	274 m	0 m	299° true
+Route Waypoint	005	274 m	0 m	119° true
+Route Waypoint	006	361 m	88 m	126° true
+Route Waypoint	007	393 m	32 m	6° true
+Route Waypoint	Jahnstrasse	394 m	1 m	351° true
+
+
+Header	Name	Start Time	Elapsed Time	Length	Average Speed	Link
+
+Track	ACTIVE LOG 006	01/05/2005 15:02:47 	0:33:09	653 m	1.2 kph	
+
+Header	Position	Time	Altitude	Depth	Temperature	Leg Length	Leg Time	Leg Speed	Leg Course
+
+Trackpoint	N51 18.78 E12 24.79	01/05/2005 15:02:47 	161 m	
+Trackpoint	N51 18.77 E12 24.79	01/05/2005 15:03:25 	154 m			8 m	0:00:38	0.8 kph	137° true
+Trackpoint	N51 18.77 E12 24.79	01/05/2005 15:03:39 	148 m			3 m	0:00:14	0.8 kph	180° true
+Trackpoint	N51 18.77 E12 24.80	01/05/2005 15:04:16 	139 m			5 m	0:00:37	0.5 kph	129° true
+Trackpoint	N51 18.77 E12 24.80	01/05/2005 15:05:02 	145 m			2 m	0:00:46	0.2 kph	270° true
+Trackpoint	N51 18.77 E12 24.80	01/05/2005 15:05:45 	134 m			2 m	0:00:43	0.2 kph	90° true
+Trackpoint	N51 18.77 E12 24.80	01/05/2005 15:06:44 	131 m			6 m	0:00:59	0.4 kph	162° true
+Trackpoint	N51 18.77 E12 24.80	01/05/2005 15:07:50 	130 m			0 m	0:01:06	0 kph	0° true
+Trackpoint	N51 18.76 E12 24.80	01/05/2005 15:08:19 	132 m			3 m	0:00:29	0.4 kph	180° true
+Trackpoint	N51 18.77 E12 24.80	01/05/2005 15:11:16 	144 m			6 m	0:02:57	0.1 kph	342° true
+Trackpoint	N51 18.77 E12 24.81	01/05/2005 15:12:34 	147 m			16 m	0:01:18	0.7 kph	38° true
+Trackpoint	N51 18.78 E12 24.83	01/05/2005 15:13:18 	145 m			27 m	0:00:44	2 kph	70° true
+Trackpoint	N51 18.78 E12 24.83	01/05/2005 15:13:27 	145 m			6 m	0:00:09	2 kph	0° true
+Trackpoint	N51 18.78 E12 24.83	01/05/2005 15:13:37 	135 m			2 m	0:00:10	0.7 kph	90° true
+Trackpoint	N51 18.79 E12 24.83	01/05/2005 15:13:46 	135 m			6 m	0:00:09	2 kph	0° true
+Trackpoint	N51 18.79 E12 24.83	01/05/2005 15:14:03 	136 m			13 m	0:00:17	3 kph	17° true
+Trackpoint	N51 18.80 E12 24.84	01/05/2005 15:14:16 	135 m			11 m	0:00:13	3 kph	32° true
+Trackpoint	N51 18.80 E12 24.84	01/05/2005 15:14:26 	139 m			7 m	0:00:10	2 kph	117° true
+Trackpoint	N51 18.80 E12 24.85	01/05/2005 15:14:30 	139 m			4 m	0:00:04	4 kph	90° true
+Trackpoint	N51 18.78 E12 24.88	01/05/2005 15:15:06 	141 m			43 m	0:00:36	4 kph	126° true
+Trackpoint	N51 18.78 E12 24.89	01/05/2005 15:15:27 	140 m			18 m	0:00:21	3 kph	121° true
+Trackpoint	N51 18.77 E12 24.90	01/05/2005 15:15:39 	140 m			10 m	0:00:12	3 kph	128° true
+Trackpoint	N51 18.78 E12 24.90	01/05/2005 15:25:31 	152 m			4 m	0:09:52	0.0 kph	33° true
+Trackpoint	N51 18.78 E12 24.90	01/05/2005 15:25:40 	152 m			0 m	0:00:09	0 kph	0° true
+Trackpoint	N51 18.78 E12 24.90	01/05/2005 15:29:18 	155 m			4 m	0:03:38	0.1 kph	328° true
+Trackpoint	N51 18.79 E12 24.87	01/05/2005 15:30:30 	149 m			33 m	0:01:12	2 kph	311° true
+Trackpoint	N51 18.79 E12 24.87	01/05/2005 15:30:37 	150 m			2 m	0:00:07	1.0 kph	270° true
+Trackpoint	N51 18.79 E12 24.87	01/05/2005 15:30:47 	151 m			8 m	0:00:10	3 kph	270° true
+Trackpoint	N51 18.79 E12 24.86	01/05/2005 15:30:48 	151 m			4 m	0:00:01	14 kph	270° true
+Trackpoint	N51 18.80 E12 24.83	01/05/2005 15:30:52 	150 m			38 m	0:00:04	34 kph	300° true
+Trackpoint	N51 18.82 E12 24.80	01/05/2005 15:30:57 	150 m			57 m	0:00:05	41 kph	315° true
+Trackpoint	N51 18.84 E12 24.77	01/05/2005 15:31:03 	150 m			47 m	0:00:06	28 kph	316° true
+Trackpoint	N51 18.85 E12 24.75	01/05/2005 15:31:10 	150 m			35 m	0:00:07	18 kph	314° true
+Trackpoint	N51 18.88 E12 24.57	01/05/2005 15:32:38 	143 m			210 m	0:01:28	9 kph	283° true
+Trackpoint	N51 18.88 E12 24.57	01/05/2005 15:32:45 	141 m			4 m	0:00:07	2 kph	270° true
+Trackpoint	N51 18.88 E12 24.57	01/05/2005 15:33:17 	143 m			0 m	0:00:32	0 kph	0° true
+Trackpoint	N51 18.88 E12 24.57	01/05/2005 15:33:42 	139 m			4 m	0:00:25	0.6 kph	270° true
+Trackpoint	N51 18.88 E12 24.56	01/05/2005 15:33:54 	139 m			6 m	0:00:12	2 kph	270° true
+Trackpoint	N51 18.88 E12 24.56	01/05/2005 15:34:04 	138 m			0 m	0:00:10	0 kph	0° true
+Trackpoint	N51 18.88 E12 24.56	01/05/2005 15:34:20 	139 m			0 m	0:00:16	0 kph	0° true
+Trackpoint	N51 18.88 E12 24.56	01/05/2005 15:35:45 	144 m			0 m	0:01:25	0 kph	0° true
+Trackpoint	N51 18.88 E12 24.56	01/05/2005 15:35:56 	145 m			0 m	0:00:11	0 kph	0° true
