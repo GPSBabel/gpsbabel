@@ -7,7 +7,7 @@
     <Style id="route_n">
       <IconStyle>
         <Icon>
-          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+          <href>http://www.gpsbabel.org/apps/earth/track-directional/track-none.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -16,7 +16,7 @@
       <IconStyle>
         <scale>1.2</scale>
         <Icon>
-          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+          <href>http://www.gpsbabel.org/apps/earth/track-directional/track-none.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -34,7 +34,7 @@
     <Style id="track_n">
       <IconStyle>
         <Icon>
-          <href>http://maps.google.com/mapfiles/kml/pal4/icon60.png</href>
+          <href>http://www.gpsbabel.org/apps/earth/track-directional/track-none.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -43,7 +43,7 @@
       <IconStyle>
         <scale>1.2</scale>
         <Icon>
-          <href>http://maps.google.com/mapfiles/kml/pal4/icon60.png</href>
+          <href>http://www.gpsbabel.org/apps/earth/track-directional/track-none.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -86,7 +86,7 @@
     </StyleMap>
     <Style id="lineStyle">
       <LineStyle>
-        <color>64eeee17</color>
+        <color>99ffac59</color>
         <width>6</width>
       </LineStyle>
     </Style>
