@@ -245,14 +245,18 @@ unicsv_strrcmp(const char *s1, const char *s2)
 }
 
 static int
-unicsv_parse_date(const char *str)
+unicsv_parse_date(const char *str, int *consumed)
 {
 	int p1, p2, p3, ct;
 	char sep[2];
 	struct tm tm;
+	int lconsumed = 0;
 	
 	memset(&tm, 0, sizeof(tm));
-	ct = sscanf(str, "%d%1[-.//]%d%1[-.//]%d", &p1, sep, &p2, sep, &p3);
+	ct = sscanf(str, "%d%1[-.//]%d%1[-.//]%d%n", &p1, sep, &p2, sep, &p3, &lconsumed);
+	if (consumed && lconsumed) {
+		*consumed = lconsumed;
+	}
 	is_fatal(ct != 5, MYNAME ": Could not parse date string (%s).", str);
 	
 	if ((p1 > 99) || (sep[0] == '-')) { /* Y-M-D (iso like) */
@@ -285,11 +289,24 @@ unicsv_parse_date(const char *str)
 }
 
 static int
-unicsv_parse_time(const char *str, int *msec)
+unicsv_parse_time(const char *str, int *msec, int *date)
 {
 	int hour, min, ct, sec;
+	int consumed = 0;
 	double ms;
 	char sep[1];
+	int ldate;
+
+	/* If we have somethine we're pretty sure is a date, parse that
+	 * first, skip over it, and pass that back to the caller)
+	 */
+	ldate = unicsv_parse_date(str, &consumed);
+	if (consumed && ldate) {
+		str += consumed;
+		if (date) {
+			*date = ldate;
+		}
+	}
 	
 	ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &ms);
 	is_fatal(ct < 5, MYNAME ": Could not parse time string (%s).\n", str);
@@ -650,14 +667,14 @@ unicsv_parse_one_line(char *ibuf)
 
 		case fld_utc_date:
 			if ((is_localtime < 2) && (date < 0)) {
-				date = unicsv_parse_date(s);
+				date = unicsv_parse_date(s, NULL);
 				is_localtime = 0;
 			}
 			break;
 
 		case fld_utc_time:
 			if ((is_localtime < 2) && (time < 0)) {
-				time = unicsv_parse_time(s, &msec);
+				time = unicsv_parse_time(s, &msec, &date);
 				is_localtime = 0;
 			}
 			break;
@@ -717,14 +734,14 @@ unicsv_parse_one_line(char *ibuf)
 
 		case fld_time:
 			if ((is_localtime < 2) && (time < 0)) {
-				time = unicsv_parse_time(s, &msec);
+				time = unicsv_parse_time(s, &msec, &date);
 				is_localtime = 1;
 			}
 			break;
 
 		case fld_date: 
 			if ((is_localtime < 2) && (date < 0)) {
-				date = unicsv_parse_date(s);
+				date = unicsv_parse_date(s, NULL);
 				is_localtime = 1;
 			}
 			break;
