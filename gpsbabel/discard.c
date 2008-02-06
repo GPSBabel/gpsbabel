@@ -26,8 +26,10 @@
 static char *hdopopt = NULL;
 static char *vdopopt = NULL;
 static char *andopt = NULL;
+static char *satopt = NULL;
 static double hdopf;
 static double vdopf;
+static int satpf;
 static gpsdata_type what;
 static route_head *head;
 
@@ -39,6 +41,8 @@ arglist_t fix_args[] = {
 		"-1.0", ARGTYPE_END_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX},
 	{"hdopandvdop", &andopt, "Link hdop and vdop supression with AND",
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	{"sat", &satopt, "Minimium sats to keep waypoints",
+		"-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
 
@@ -51,6 +55,7 @@ fix_process_wpt(const waypoint *wpt)
 	int del = 0;
 	int delh = 0;
 	int delv = 0;
+	
 	waypoint *waypointp = (waypoint *) wpt;
 
 	if ((hdopf >= 0.0) && (waypointp->hdop > hdopf))
@@ -62,6 +67,9 @@ fix_process_wpt(const waypoint *wpt)
 		del = delh && delv;
 	else
 		del = delh || delv;
+		
+        if ((satpf >= 0) && (waypointp->sat < satpf))
+		del = 1;
 
 	if (del) {
 		switch(what) {
@@ -116,6 +124,12 @@ fix_init(const char *args)
 		vdopf = atof(vdopopt);
 	else
 		vdopf = -1.0;
+	
+	if (satopt)
+		satpf = atoi(satopt);
+	else
+		satpf = -1;
+		
 }
 
 filter_vecs_t discard_vecs = {
