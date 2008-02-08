@@ -132,6 +132,7 @@ static field_t fields_def[] = {
 	{ "symb",	fld_symbol, STR_ANY },
 	{ "lat",	fld_latitude, STR_ANY },
 	{ "lon",	fld_longitude, STR_ANY },
+	{ "lng",	fld_longitude, STR_ANY },
 	{ "x",		fld_longitude, STR_EQUAL },
 	{ "y",		fld_latitude, STR_EQUAL },
 	{ "z",		fld_altitude, STR_EQUAL },
