@@ -258,15 +258,21 @@ unicsv_parse_date(const char *str, int *consumed)
 	if (consumed && lconsumed) {
 		*consumed = lconsumed;
 	}
-	is_fatal(ct != 5, MYNAME ": Could not parse date string (%s).", str);
+	if (ct != 5) {
+		if (consumed) {		/* don't stop here; it's only sniffing */
+			*consumed = 0;	/* for a possible date */
+			return 0;
+		}
+		fatal(MYNAME ": Could not parse date string (%s).\n", str);
+	}
 	
 	if ((p1 > 99) || (sep[0] == '-')) { /* Y-M-D (iso like) */
 		tm.tm_year = p1;
 		tm.tm_mon = p2;
 		tm.tm_mday = p3;
 	}
-	else if (sep[0] == '.') {	/* Germany any other countries */
-		tm.tm_mday = p1;	/* have fixed D.M.Y format */
+	else if (sep[0] == '.') {	/* Germany and any other countries */
+		tm.tm_mday = p1;	/* have a fixed D.M.Y format */
 		tm.tm_mon = p2;
 		tm.tm_year = p3;
 	}
@@ -280,8 +286,13 @@ unicsv_parse_date(const char *str, int *consumed)
 		else tm.tm_year += 1900;
 	}
 	/* some low-level checks */
-	if ((tm.tm_mon > 12) || (tm.tm_mon < 1) || (tm.tm_mday > 31) || (tm.tm_mday < 1))
+	if ((tm.tm_mon > 12) || (tm.tm_mon < 1) || (tm.tm_mday > 31) || (tm.tm_mday < 1)) {
+		if (consumed) {
+			*consumed = 0;
+			return 0;	/* don't stop here */
+		}
 		fatal(MYNAME ": Could not parse date string (%s).\n", str);
+	}
 	
 	tm.tm_year -= 1900;
 	tm.tm_mon -= 1;
