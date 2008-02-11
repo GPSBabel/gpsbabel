@@ -1065,7 +1065,7 @@ static void file_read(void) {
 // GPS logger will only handle tracks - neither waypoints or tracks...
 
 ff_vecs_t mtk_vecs = {
-	ff_type_file,
+	ff_type_serial,
 	{ 
 		ff_cap_none 	/* waypoints */, 
 	  	ff_cap_read 	/* tracks */, 
