@@ -2,7 +2,7 @@
 	Access to Lowrance USR files.
 	Contributed to gpsbabel by Jason Rust (jrust at rustyparts.com)
 
-	Copyright (C) 2005, 2006 Robert Lipe, robertlipe@usa.net
+	Copyright (C) 2005, 2006, 2007, 2008 Robert Lipe, robertlipe@usa.net
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -176,6 +176,7 @@ static char *ignoreicons;
 static char *writeasicons;
 static char *merge;
 static char *seg_break;
+static int reading_version;
 
 #define MYNAME "Lowrance USR"
 
@@ -368,6 +369,11 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	if (global_opts.debug_level >= 1)
 		printf(MYNAME " parse_waypt: waypt_type = %d\n",waypt_type);
 
+    // Version 3 has an extra word in here that we don't know about.
+    if (reading_version >= 3) {
+      int junkword = gbfgetint32(file_in);
+      (void)junkword;
+    }
 }
 
 
@@ -558,6 +564,7 @@ data_read(void)
 	int i;
 
 	MajorVersion = gbfgetint16(file_in);
+	reading_version = MajorVersion;
 	MinorVersion = gbfgetint16(file_in);
 	
 	if (global_opts.debug_level >= 1)
