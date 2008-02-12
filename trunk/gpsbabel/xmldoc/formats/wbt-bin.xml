@@ -1,8 +1,8 @@
 <para>File protocol for the <productname>Wintec WBT-200</productname>
-GPS data logger. This format reads the binary file format created
+and <productname>Wintec WBT-201</productname> (sometimes called the <productname> G-Rays 2</productname>)GPS data loggers. This format reads the binary file format created
 by Wintec's Windows application.</para>
 <para>
-<ulink url="http://www.semsons.com/wi3mugpsrebt.html">Wintec WBT-200 </ulink>
+<ulink url="http://www.semsons.com/wiwbmu3gpsre2.html">Wintec WBT-201 </ulink>
 </para>
 <example id="wbt-bin-on-macos">
   <title>Command showing conversion of a Wintec binary file to GPX</title>

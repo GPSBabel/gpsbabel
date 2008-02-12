@@ -305,7 +305,16 @@ int gbser__fill_buffer(void *handle, unsigned want, unsigned *ms) {
                     vmin  = want - h->inbuf_used;
                     vtime = (unsigned) time_left / 100;
                 }
-                if ((rc = set_rx_timeout(h, vmin, vtime), rc < 0) ||
+		// The commented out call to set_rx_timeout here is totally
+		// legal by POSIX standards but does result in a flurry of
+		// of tcsetattrs that slightly tweak VMIN/VTIME while there
+		// is incoming data.   This has been shown to trigger driver
+		// bugs in the Prolific drivers for Mac and in certain Linux
+		// kernels, thought the latter has since been fixed.  
+		// So althogh removing this means that the timeout behaviour
+		// is actually different on POSIX and WIN32, it triggers
+		// fewer buts this way.  2/12/2008 RJL
+                if (/* (rc = set_rx_timeout(h, vmin, vtime), rc < 0) || */
                     (rc = read(h->fd, h->inbuf + h->inbuf_used, 
                                       want - h->inbuf_used), rc < 0)) {
                     return gbser_ERROR;

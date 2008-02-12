@@ -3,7 +3,7 @@
     GlobalSat DG-100 GPS data logger download.
 
     Copyright (C) 2007  Mirko Parthey, mirko.parthey@informatik.tu-chemnitz.de
-    Copyright (C) 2005  Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2005-2008  Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -432,10 +432,19 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 
 	/* TODO: Since we know how long the frame should be, we could try to
 	 * read the rest of the frame at once using gbser_read_wait(). */
+#if 0
 	for (i = 7; i < frame_len; i++) {
 		buf[i] = dg100_recv_byte();
 		dg100_debug("", 0, 1, &buf[i]);
 	}
+#else
+	i = gbser_read_wait(serial_handle, &buf[7], frame_len - 7, 1000);
+	dg100_debug("", 0, frame_len - 7, &buf[7]);
+	if (i < frame_len - 7) {
+		fatal("Expected to read %d bytes, but got %d\n", 
+			frame_len - 7, i);
+	}
+#endif
 
 	frame_start_seq   = be_read16(buf + 0);
 	payload_len_field = be_read16(buf + 2);
