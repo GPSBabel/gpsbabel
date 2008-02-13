@@ -239,8 +239,16 @@ fi
 AC_MSG_CHECKING(for libexpat)
 AC_ARG_WITH(libexpat,
   [  --with-libexpat[=DIR]   Use this to specify expat library .],
-  [ CFLAGS="$CFLAGS -L$withval"
-    EXPAT_LIB="-L$withval -lexpat"
+  [ 
+    # If the developer specified a reference
+    # to a FILE and not a directory, assume they are a highly
+    # trained professional that has specified a .a to to be used.
+    if test -f $withval ; then
+      EXPAT_LIB=$withval
+    else
+      CFLAGS="$CFLAGS -L$withval"
+      EXPAT_LIB="-L$withval -lexpat"
+    fi
   ], [
 	case "$target" in
 	*-*-darwin6*|*-*-darwin7*|*-*-darwin8*)

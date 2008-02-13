@@ -1,0 +1,6 @@
+SRC=.
+CFLAGS="-O  -arch i386 -arch ppc" \
+  LDFLAGS="-arch i386 -arch ppc"   ${SRC}/configure \
+ --with-libexpat=${SRC}/mac/lib/libexpat.a \
+ --with-expathdr=${SRC}/mac/include
+

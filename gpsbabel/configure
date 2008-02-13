@@ -4371,8 +4371,16 @@ echo $ECHO_N "checking for libexpat... $ECHO_C" >&6; }
 
 # Check whether --with-libexpat was given.
 if test "${with_libexpat+set}" = set; then
-  withval=$with_libexpat;  CFLAGS="$CFLAGS -L$withval"
-    EXPAT_LIB="-L$withval -lexpat"
+  withval=$with_libexpat;
+    # If the developer specified a reference
+    # to a FILE and not a directory, assume they are a highly
+    # trained professional that has specified a .a to to be used.
+    if test -f $withval ; then
+      EXPAT_LIB=$withval
+    else
+      CFLAGS="$CFLAGS -L$withval"
+      EXPAT_LIB="-L$withval -lexpat"
+    fi
 
 else
 
