@@ -1,0 +1,11 @@
+<para>Serial download protocol for the <productname>i-Blue 747</productname> and other MTK based GPS data loggers. Observe that it is only possible to download data using USB cable, Bluetooth requires a hardware modification.</para>
+<para>
+<ulink url="http://www.transystem.com.tw/p-gps-iblue747.htm">Transystem i-Blue 747</ulink>
+Downloaded data will be storef in data.bin file in the current directory together with
+the choosen output format.
+</para>
+<example id="mtk-on-linux">
+  <title>Command showing MTK download and erase on Linux</title>
+  <para><userinput>gpsbabel -t -w -i mtk,erase -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput></para>
+</example>
+    

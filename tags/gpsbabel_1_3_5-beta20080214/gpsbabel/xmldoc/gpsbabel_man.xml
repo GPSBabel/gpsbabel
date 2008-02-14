@@ -1,0 +1,92 @@
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+          "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="ls">
+
+<refmeta>
+<refentrytitle>gpsbabel</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname>gpsbabel</refname>
+<refpurpose>
+  convert and manipulate waypoints, tracks, and routes between formats.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<userinput>gpsbabel</userinput>
+<arg choice="opt">
+  <option>iofFxsh</option>
+</arg>
+<arg choice="opt" rep="repeat">file</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+	GPSBabel converts waypoints, tracks, and routes from one format to
+	another.  GPSBabel also downloads and uploads waypoints, tracks,
+	and routes to and from a GPS receiver (such as those by Garmin and
+	Magellan) connected by a serial or USB port.
+</para>
+
+</para>
+	By flattening the Tower of Babel that the authors of various programs
+	for manipulating GPS data have imposed upon us, it returns to us the
+	ability to freely move our own waypoint data between the programs and
+	hardware we choose to use. 
+</para>
+
+<para> It contains extensive data
+manipulation abilities making it a convenient for server-side processing
+or as the backend for other tools. </para> </refsect1>
+
+<refsect1><title>Options</title>
+<para>
+	GPSBabel accepts the following options and processes them in order
+	from left to right..  Additional options are documented in the 
+	docbook help.
+</para>
+<variablelist>
+<varlistentry>
+      <term><option>-i</option> <replaceable>format</replaceable></term>
+      <listitem> <para>Use <replaceable>format</replaceable> as the type file to read.</para> </listitem>
+</varlistentry>
+<varlistentry>
+      <term><option>-f</option> <replaceable>name</replaceable></term>
+      <listitem> <para>Use <replaceable>name</replaceable> as the filename to read.</para> </listitem>
+</varlistentry>
+<varlistentry>
+      <term><option>-o</option> <replaceable>format</replaceable></term>
+      <listitem> <para>Use <replaceable>format</replaceable> as the type of file to read.</para> </listitem>
+</varlistentry>
+<varlistentry>
+      <term><option>-F</option> <replaceable>name</replaceable></term>
+      <listitem> <para>Use <replaceable>name</replaceable> as the filename to write.</para> </listitem>
+    </varlistentry>
+<varlistentry>
+      <term><option>-x</option> <replaceable>filter</replaceable></term>
+      <listitem> <para>Invoke an internal <replaceable>filter</replaceable> on the data.</para> </listitem>
+</varlistentry>
+<varlistentry>
+      <term><option>-s</option></term>
+      <listitem> <para>Generate smart names for waypoints on output.</para> </listitem>
+</varlistentry>
+<varlistentry>
+      <term><option>-h</option> <arg choice="opt">format</arg></term>
+      <listitem> <para>Display help that is more exhaustive than this page.  If <replaceable>format</replaceable> is given, provide help for only that format.</para> </listitem>
+</varlistentry>
+</variablelist>
+<para>Lists of filters and formats are given in the doc at http://www.gpsbabel.org. </para>
+</refsect1>
+
+<refsect1><title>See Also</title>
+<para>
+	http://www.gpsbabel.org
+</para>
+</refsect1>
+
+
+</refentry>

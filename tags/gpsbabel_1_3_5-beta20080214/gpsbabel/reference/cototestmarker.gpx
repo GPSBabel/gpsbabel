@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="29.958683333" minlon="-90.065533333" maxlat="48.570233333" maxlon="9.524850000"/>
+<wpt lat="29.958683333" lon="-90.065533333">
+  <name>GC2663</name>
+  <cmt>New Orleans Bon Chance (Good Luck) Cache-Cam by CrotalusRex and Mimichan</cmt>
+  <desc>New Orleans Bon Chance (Good Luck) Cache-Cam by CrotalusRex and Mimichan</desc>
+  <sym>Geocache</sym>
+</wpt>
+<wpt lat="48.570233333" lon="9.524850000">
+  <name>GCMK1V</name>
+  <cmt>Randeck Maar Earthcache by Border</cmt>
+  <desc>Randeck Maar Earthcache by Border</desc>
+  <sym>Earthcache</sym>
+</wpt>
+</gpx>

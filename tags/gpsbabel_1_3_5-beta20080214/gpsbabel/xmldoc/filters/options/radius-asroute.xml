@@ -1,0 +1,13 @@
+<para>
+This option specifies the name of a route.  If this option is specified, the
+radius filter puts all points that are kept into a route with the given name.
+The order of points in the route is by distance from the center (unless the
+<option>nosort</option> option is also specified.)
+</para>
+<para>
+Note that this route is not necessarily the most efficient route to visit 
+all of the points.  In fact, for some data sets, it might be the least 
+efficient route.
+</para>
+
+

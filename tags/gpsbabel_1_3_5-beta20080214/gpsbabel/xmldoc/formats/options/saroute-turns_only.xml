@@ -1,0 +1,4 @@
+      <para> This option causes GPSBabel to read only the
+waypoints associated with named turns.  This should create a list of
+waypoints that correspond to the itinerary from Street Atlas.</para>
+    

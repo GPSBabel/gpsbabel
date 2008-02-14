@@ -1,0 +1,6 @@
+<para>
+This option is only valid when used with the <option>push</option> option.
+When this option is specified, a copy of the current state is pushed onto 
+the stack but the current state is left unchanged.  Otherwise, the push 
+operation clears the current data collection.
+</para>

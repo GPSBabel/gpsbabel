@@ -1,0 +1,12 @@
+<para>File protocol for MTK based GPS loggers.
+This format reads the raw binary format created by the MTK Windows application
+and outputs to other gpsbabel suppoted formats. 
+When using the csv option a MTK application compatible output file will also be created.</para>
+<para>
+<ulink url="http://www.transystem.com.tw/p-gps-iblue747.htm">Transystem i-Blue 747</ulink>
+</para>
+<example id="mtk-bin-on-linux">
+  <title>Command showing conversion of a MTK binary file to GPX with an additional CSV output file.</title>
+  <para><userinput>gpsbabel -i mtk-bin,csv=extra.csv -f data.bin -o gpx -F out.gpx</userinput></para>
+</example>
+

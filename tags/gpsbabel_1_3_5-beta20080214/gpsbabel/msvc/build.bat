@@ -1,0 +1,8 @@
+setlocal
+set include=%include%;expat;c:\tools\c
+set SOURCEJEEPS=..\jeeps\gpsapp.c ..\jeeps\gpscom.c ..\jeeps\gpsmath.c ..\jeeps\gpsmem.c ..\jeeps\gpsprot.c ..\jeeps\gpsread.c ..\jeeps\gpsrqst.c ..\jeeps\gpssend.c ..\jeeps\gpsserial.c ..\jeeps\gpsusbread.c ..\jeeps\gpsusbsend.c ..\jeeps\gpsusbstub.c ..\jeeps\gpsusbwin.c ..\jeeps\gpsutil.c
+set SOURCEMAG=..\maggeo.c ..\magnav.c ..\magproto.c
+set SOURCE=..\xmltag.c ..\strptime.c ..\trackfilter.c ..\gdb.c ..\bcr.c ..\discard.c ..\formspec.c ..\an1.c ..\arcdist.c ..\brauniger_iq.c ..\wbt-200.c ..\cetus.c ..\coastexp.c ..\copilot.c ..\csv_util.c ..\delgpl.c ..\duplicate.c ..\easygps.c ..\filter_vecs.c ..\garmin.c ..\garmin_tables.c ..\gcdb.c ..\geo.c ..\geoniche.c ..\glogbook.c ..\google.c ..\gpilots.c ..\gpspilot.c ..\gpx.c ..\grtcirc.c ..\hiketech.c ..\holux.c ..\hsa_ndv.c ..\html.c ..\igc.c ..\internal_styles.c  ..\kml.c ..\lowranceusr.c ..\main.c ..\mapopolis.c ..\mapsend.c ..\mapsource.c ..\mkshort.c ..\navicache.c ..\netstumbler.c ..\nmea.c ..\overlay.c ..\ozi.c ..\palmdoc.c ..\pathaway.c ..\pcx.c ..\polygon.c ..\position.c ..\psitrex.c ..\psp.c ..\queue.c ..\quovadis.c ..\reverse_route.c ..\route.c ..\saroute.c ..\shape.c ..\shapelib\dbfopen.c ..\shapelib\shpopen.c ..\smplrout.c ..\sort.c ..\stackfilter.c ..\tef_xml.c ..\text.c ..\tiger.c ..\tmpro.c ..\tomtom.c ..\tpg.c ..\util.c ..\util_crc.c ..\uuid.c ..\vcf.c ..\vecs.c ..\vitosmt.c ..\vmem.c ..\waypt.c ..\xcsv.c ..\xmlgeneric.c ..\fatal.c ..\globals.c ..\cet_util.c ..\cet.c ..\nmn5.c ..\nmn4.c ..\cst.c ..\msroute.c ..\stmwpp.c ..\ignrando.c ..\tpo.c
+cl /c ..\gpsutil.c -Fogpsutil2.obj
+cl /Fegpsbabel.exe %source% %sourcejeeps% %sourcemag% gpsutil2.obj -DVERSION=\"1\" -D__WIN32__ -DWIN32_LEAN_AND_MEAN -DNO_USB Expat\libexpat.lib
+endlocal

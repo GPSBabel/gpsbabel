@@ -1,0 +1,117 @@
+<para>
+  This format reads the binary (.vtt) track logs recorded by
+  <ulink url="http://vitotechnology.com/en/products/smartmap_nokia_series60.html">
+  <application>VITO SmartMap for Nokia Series 60</application>
+  </ulink> 1.0, a GPS application for smartphones connected to
+  NMEA 0183-compatible Bluetooth GPS receivers. It may work
+  with .vtt files produced by versions of VITO SmartMap
+  for other platforms.
+</para>
+
+<para>
+  This format was reverse engineered from a .vtt file.
+  Currently, the coordinates, altitude, and time are
+  available for each point recorded in a track.
+  The course speed and heading fields have been identified,
+  but the units are not certain and so those fields are ignored.
+  The rest of the entry has not yet been decoded. The format
+  uses little-endian byte ordering. The application displays
+  metric units by default. Time is UTC.
+</para>
+
+<table>
+  <title>track file header (8 bytes)</title>
+  <tgroup cols="2">
+  <thead>
+    <row>
+      <entry>Position</entry>
+      <entry>Field info</entry>
+    </row>
+  </thead>
+  <tbody>
+    <row>
+      <entry>bytes 0-3</entry>
+      <entry>Probably a version field. Int value is 3 in sample file.</entry>
+    </row>
+    <row>
+      <entry>bytes 4-7</entry>
+      <entry>Number of points in file as int.</entry>
+    </row>
+  </tbody>
+  </tgroup>
+</table>
+
+<table>
+  <title>track point (32 bytes)</title>
+  <tgroup cols="2">
+  <thead>
+    <row>
+      <entry>Position</entry>
+      <entry>Field info</entry>
+    </row>
+  </thead>
+  <tbody>
+    <row>
+      <entry>bytes 0-3</entry>
+      <entry>Decimal latitude multiplied by 20000000 as int.</entry>
+    </row>
+    <row>
+      <entry>bytes 4-7</entry>
+      <entry>Decimal longitude multiplied by 10000000 as int.</entry>
+    </row>
+    <row>
+      <entry>bytes 8-11</entry>
+      <entry>Altitude in meters as float.</entry>
+    </row>
+    <row>
+      <entry>bytes 12-13</entry>
+      <entry>Year, with century, as int.</entry>
+    </row>
+    <row>
+      <entry>byte 14</entry>
+      <entry>Month, ranging 1-12.</entry>
+    </row>
+    <row>
+      <entry>byte 15</entry>
+      <entry>Day of month, ranging 1-31.</entry>
+    </row>
+    <row>
+      <entry>byte 16</entry>
+      <entry>Hour, ranging 0-23.</entry>
+    </row>
+    <row>
+      <entry>byte 17</entry>
+      <entry>Minute, ranging 0-59.</entry>
+    </row>
+    <row>
+      <entry>bytes 18-21</entry>
+      <entry>Decimal second multiplied by 30000000 as int.</entry>
+    </row>
+    <row>
+      <entry>bytes 22-25</entry>
+      <entry>
+        Probably speed in meters per second as float.
+        Ranges 0-~3 in file, seems reasonable since sample
+        file was acquired on foot.
+      </entry>
+    </row>
+    <row>
+      <entry>bytes 26-27</entry>
+      <entry>
+        Probably decimal heading multiplied by something.
+        Ranges between min and max values possible when
+        decoded as integer. Doesn't change when speed field is 0.
+        Doesn't change smoothly, jumps around a bit.
+      </entry>
+    </row>
+    <row>
+      <entry>bytes 28-31</entry>
+      <entry>
+        Status field of some kind. Changes only twice in file.
+        May contain satellite count or PDOP info, as both are
+        reported by the application's GUI.
+      </entry>
+    </row>
+  </tbody>
+  </tgroup>
+</table>

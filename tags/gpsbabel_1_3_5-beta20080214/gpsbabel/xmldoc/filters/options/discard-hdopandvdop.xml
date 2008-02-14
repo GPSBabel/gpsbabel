@@ -1,0 +1,6 @@
+<para>
+If this option is used, only points that exceed both the maximum 
+allowable HDOP and the maximum allowable VDOP will be discarded.  This
+option requires that both the <option>hdop</option> and 
+<option>vdop</option> options be specified.  
+</para>

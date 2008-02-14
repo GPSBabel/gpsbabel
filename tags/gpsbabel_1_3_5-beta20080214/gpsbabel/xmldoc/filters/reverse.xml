@@ -1,0 +1,19 @@
+
+         
+         <para> The reverse filter is used to reverse tracks and routes.
+	It's mostly useful for those few formats where track/route
+	sequence matters and there isn't a way to reverse them using
+	the program itself.</para>
+         <para> The reversal is performed in the laziest way possible.
+        Timestamps are kept with the original waypoints so the
+        resulting track or route will have the interesting
+        characteristic that time runs backwards.  This tends to make
+        Magellan Mapsend, in particular, do a wierd thing and place
+        each waypoint on a separate day.
+</para>
+         <para> Additionally, if you're using this to reverse a route
+         that navigates, say, an exit ramp or a one way street, you
+         will be in for unpleasant ride. application cares about
+         timestamps
+</para>
+      
