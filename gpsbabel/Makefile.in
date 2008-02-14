@@ -312,6 +312,9 @@ release-upload:  /tmp/gpsbabel-$(VERSIOND).tar.gz  /tmp/gpsbabel-$(VERSIOND).zip
 	curl -u anonymous:anonymous --upload-file /tmp/dist/SRPMS/gpsbabel-$(VERSIOND)-0.src.rpm  ftp://upload.sf.net/incoming/ 
 	curl -u anonymous:anonymous --upload-file /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND)-0.i386.rpm  ftp://upload.sf.net/incoming/ 
 
+mac-upload:
+	curl -u anonymous:anonymous --upload-file GPSBabel+-$(VERSIOND).dmg  ftp://upload.sf.net/incoming/
+
 release: release-sourcecheck  release-tarball release-winbuild release-rpm release-upload
 
 rpm:
