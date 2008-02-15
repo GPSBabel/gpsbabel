@@ -2495,7 +2495,6 @@ static void GPS_D154_Send(UC *data, GPS_PWay way, int32 *len)
 static void GPS_D155_Send(UC *data, GPS_PWay way, int32 *len)
 {
     UC *p;
-    int32 i;
     
     p = data;
 
@@ -2518,11 +2517,11 @@ static void GPS_D155_Send(UC *data, GPS_PWay way, int32 *len)
     GPS_Util_Put_Short(p,(US) way->alt);
     p+=sizeof(int16);
 
-    for(i=0;i<2;++i) *p++ = way->cc[i];
+    copy_char_array(&p, way->cc, 2, UpperYes);
     *p++ = 0;
 
-    if(way->wpt_class == 5) way->wpt_class = 0;
-    *p++   = way->wpt_class;
+    /* Ignore wpt_class; our D155 points are always user type which is "4". */
+    *p++ = 4;
 
     GPS_Util_Put_Short(p,(int16)way->smbl);
     p+=sizeof(int16);
