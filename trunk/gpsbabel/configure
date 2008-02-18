@@ -1754,6 +1754,7 @@ _ACEOF
 
 DOCVERSION=`echo $PACKAGE_VERSION`
 DOCVERSION=development
+DOCVERSION=1.3.5
 
 
 GBMAJOR=`echo $PACKAGE_VERSION | (IFS="."; read major minor micro; echo $major)`
