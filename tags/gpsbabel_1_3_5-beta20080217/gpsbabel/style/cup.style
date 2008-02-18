@@ -1,0 +1,46 @@
+#
+# (c) 2006, Robert Lipe, based on  sample files by Krzysztof Wojtas
+# Reference info: http://www.seeyou.ws/thankyou.php?fname=cup_format.pdf
+#
+
+DESCRIPTION      See You flight analysis data
+SHORTLEN  8
+EXTENSION cup
+#
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER         COMMA
+RECORD_DELIMITER        NEWLINE
+BADCHARS                ,"
+PROLOGUE name,code,country,lat,lon,elev,style,rwdir,rwlen,freq,desc
+EPILOGUE -----Related Tasks-----
+
+
+IFIELD SHORTNAME,"", ""%s""
+IFIELD SHORTNAME,"", "%s"
+IFIELD CONSTANT,"", ""
+IFIELD LAT_NMEA, "%f", "%08.3f", "absolute"
+IFIELD LON_NMEA, "%f", "%09.3f", "absolute"
+IFIELD ALT_METERS,"", "%dm"
+IFIELD CONSTANT,"", "1"
+IFIELD CONSTANT,"", ""
+IFIELD CONSTANT,"", ""
+IFIELD CONSTANT,"", ""
+IFIELD DESCRIPTION,"", ""%s""
+
+OFIELD SHORTNAME,"", ""%s""
+OFIELD SHORTNAME,"", "%s"
+OFIELD CONSTANT,"", ""
+OFIELD LAT_NMEA, "%f", "%08.3f", "absolute"
+OFIELD LAT_DIR, "", "%c", "no_delim_before"
+OFIELD LON_NMEA, "%f", "%09.3f", "absolute"
+OFIELD LON_DIR, "", "%c", "no_delim_before"
+OFIELD ALT_METERS,"", "%3.1fm"
+OFIELD CONSTANT,"", "1"
+OFIELD CONSTANT,"", ""
+OFIELD CONSTANT,"", ""
+OFIELD CONSTANT,"", ""
+OFIELD DESCRIPTION,"", ""%s""
+
+

@@ -1,0 +1,18 @@
+<para>
+  This filter can be used to convert GPS data between different data types.
+</para>
+<para>
+  Some GPS data formats support only some subset of waypoints, tracks,
+  and routes.  The transform filter allows you to convert between these
+  types.  For example, it can be used to convert a pile of waypoints (such
+  as those from a CSV file) into a track or vice versa.
+</para>
+<para>
+  The following example show you how to create a route from a waypoint table.
+</para>
+  <para><userinput>gpsbabel -i csv waypts.txt -x transform,rte=wpt -o gpx -F route.gpx</userinput></para>
+<para>
+  Only the first letter of option value decides which transformation will be done.
+  Depending on the used option it can be only 'W' for waypoints, 'R' for routes or
+  'T' for tracks.
+</para>

@@ -1,0 +1,5 @@
+      <para>This option causes GPSBabel to create separate
+routes for each street, creating a new route at each turn point.  For
+obvious reasons, 'split' cannot be used at the same time as the
+'turns_only' or 'turns_important' options.</para>
+    

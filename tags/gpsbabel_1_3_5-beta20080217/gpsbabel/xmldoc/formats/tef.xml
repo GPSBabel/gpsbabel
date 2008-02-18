@@ -1,0 +1,15 @@
+<para>
+TEF, internally called "TourExchangeFormat", is an XML based export format 
+used by Map&amp;Guide <productname>Motorrad-Routenplaner 2005/06</productname>.
+</para>
+<para>
+Because this is only an export format, GPSBabel does not support writing to
+this format.
+</para>
+<para>
+GPSBabel also supports the <link linkend="fmt_bcr">bcr</link> format, which 
+may also be used with this program and supports both reading and writing.
+</para>
+
+<para><userinput> gpsbabel -r -i tef,routevia -f in.xml -o gpx -F out.gpx</userinput></para>
+    
