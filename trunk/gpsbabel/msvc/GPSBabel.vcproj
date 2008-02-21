@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="GPSBabel"
 	ProjectGUID="{EB2609DB-5800-45B2-BCB2-06D72F389DCA}"
+	RootNamespace="GPSBabel"
 	>
 	<Platforms>
 		<Platform
@@ -1512,6 +1513,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\navilink.c"
+				>
+			</File>
+			<File
 				RelativePath="..\netstumbler.c"
 				>
 				<FileConfiguration
@@ -1666,6 +1671,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\parse.c"
+				>
 			</File>
 			<File
 				RelativePath="..\pathaway.c"
