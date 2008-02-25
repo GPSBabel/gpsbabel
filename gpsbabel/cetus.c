@@ -1,7 +1,7 @@
 /*
     Read and write Cetus files.
 
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2008 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -417,6 +417,7 @@ cetus_writewpt(const waypoint *wpt)
 	char *vdata;
 	char *desc_long;
 	char *desc_short;
+	char *desc_geo;
 	char *desc;
 
 	rec = xcalloc(sizeof(*rec)+18 + NOTESZ + DESCSZ,1);
@@ -472,9 +473,20 @@ cetus_writewpt(const waypoint *wpt)
 	}
 	vdata += strlen( vdata ) + 1;
 
+	if (wpt->gc_data.diff) {
+		xasprintf(&desc_geo, " by %s\n%.4s/%.4s %3.1f/%3.1f\n",
+			wpt->gc_data.placer,
+			gs_get_cachetype(wpt->gc_data.type),
+			gs_get_container(wpt->gc_data.container),
+			wpt->gc_data.diff/10.0,
+			wpt->gc_data.terr/10.0);
+	} else {
+		desc_geo = xstrdup("");
+	}
+
 	if (wpt->gc_data.desc_short.utfstring) {
 		char *stripped_html = strip_html(&wpt->gc_data.desc_short);
-		desc_short = xstrdup("\n\n");
+		desc_short = xstrdup(wpt-:>gc_data.diff == 0 ? "\n\n" : "");
 		desc_short = xstrappend(desc_short, xstrdup(stripped_html));
 		xfree(stripped_html);
 	} else {
@@ -493,12 +505,14 @@ cetus_writewpt(const waypoint *wpt)
 	desc = wpt->description ? xstrdup(wpt->description) : 
 		xstrdup("");
 
-	snprintf(vdata, DESCSZ, "%s%s%s", 
+	snprintf(vdata, DESCSZ, "%s%s%s%s", 
 		desc,
+		desc_geo,
 		desc_short,
 		desc_long);
 
 	xfree(desc);
+	xfree(desc_geo);
 	xfree(desc_short);
 	xfree(desc_long);
 
