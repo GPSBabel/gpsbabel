@@ -103,6 +103,9 @@ static const unsigned char LOG_RST[16] = {
     0x00, 0x00, 0x00, 0x00, 0x00,       /* data */
     0xbb, 0xbb, 0xbb, 0xbb };          /* end marker */
 
+static const char *MTK_ACK[] = { /* Flags returned from PMTK001 ack packet */
+  "Invalid packet", "Unsupported packet type", 
+  "Valid packet but action failed", "Valid packet, action success" };
 
 /* *************************************** */
 
@@ -277,7 +280,7 @@ static int do_cmd(const char *cmd, const char *expect, time_t timeout_sec) {
         if ( rc == gbser_TIMEOUT && time(NULL) > tout ){
            dbg(2, "NMEA command '%s' timeout !\n", cmd);
            return -1;
-           // fatal(MYNAME ":%s() Read error (%d)\n", __FUNCTION__, rc);
+           // fatal(MYNAME "do_cmd(): Read error (%d)\n", rc);
         }
         len = -1;
     } else {
@@ -294,10 +297,24 @@ static int do_cmd(const char *cmd, const char *expect, time_t timeout_sec) {
             if ( cmd_erase && global_opts.debug_level > 0 ) printf("\n");
             dbg(6, "NMEA command success !\n");
             done = 1;
+          } else if ( strncmp(line, "$PMTK", 5) == 0 ){
+             /* A quick parser for ACK packets */
+             if ( !cmd_erase && strncmp(line, "$PMTK001,", 9) == 0 && line[9] != '\0' ){ 
+                char *pType, *pRslt;
+                int pAck;
+                pType = &line[9];
+                pRslt = strchr(&line[9], ',') + 1;
+                if ( memcmp(&cmd[5], pType, 3) == 0 && pRslt != NULL && *pRslt != '\0' ){
+                   pAck = *pRslt - '0';
+                   if ( pAck != 3 && pAck >= 0 && pAck < 4 ){ // Erase will return '2'
+                      dbg(1, "NMEA command '%s' failed - %s\n", cmd, MTK_ACK[pAck]);
+                      return -1;
+                   }
+                }
+                   
+             } 
+             dbg(6, "RECV: '%s'\n", line);
           }
-           else if ( strncmp(line, "$PMTK", 5) == 0 ){
-               dbg(6, "RECV: '%s'\n", line);
-           }
           
       }
       if ( !done && time(NULL) > tout ){
@@ -305,7 +322,7 @@ static int do_cmd(const char *cmd, const char *expect, time_t timeout_sec) {
            return -1;
       }
    }  while ( len != 0 && loops > 0 && !done );
-   return 0;
+   return done?0:1;
 }
 
 /*******************************************************************************
@@ -329,7 +346,7 @@ static void mtk_rd_init(const char *fname){
         dbg(1, "Set baud rate to %d failed (%d)\n", MTK_BAUDRATE, rc);
         fatal(MYNAME ": Failed to set baudrate !\n");
     }
-    rc = do_cmd("$PMTK604*30\r\n", "PMTK704", 6);
+    rc = do_cmd("$PMTK605*31\r\n", "PMTK705", 10);
     if ( rc != 0 )
       fatal(MYNAME ": This is not a MTK based GPS ! (or is it turned off ?)\n");
 
@@ -409,7 +426,7 @@ static void mtk_read(void){
       do {
          rc = gbser_read_line(fd, line, line_size-1, TIMEOUT, 0x0A, 0x0D);
          if ( rc != gbser_OK) {
-             fatal(MYNAME ":%s() Read error (%d)\n", __FUNCTION__, rc);
+             fatal(MYNAME "mtk_read(): Read error (%d)\n", rc);
          }
          len = strlen(line);
          dbg(8, "Read %d bytes: '%s'\n", len, line);
