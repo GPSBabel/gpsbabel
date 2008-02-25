@@ -486,7 +486,7 @@ cetus_writewpt(const waypoint *wpt)
 
 	if (wpt->gc_data.desc_short.utfstring) {
 		char *stripped_html = strip_html(&wpt->gc_data.desc_short);
-		desc_short = xstrdup(wpt-:>gc_data.diff == 0 ? "\n\n" : "");
+		desc_short = xstrdup(wpt->gc_data.diff == 0 ? "\n\n" : "");
 		desc_short = xstrappend(desc_short, xstrdup(stripped_html));
 		xfree(stripped_html);
 	} else {
