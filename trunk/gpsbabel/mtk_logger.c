@@ -36,20 +36,16 @@
 
  Example usage::
    
-   # Read from USB port, output in GPX format   
+   # Read from USB port, output trackpoints & waypoints in GPX format   
   ./gpsbabel -D 2 -t -w -i mtk -f /dev/ttyUSB0 -o gpx -F out.gpx
   
-   # Parse an existing .bin file (data_2007_09_04.bin), output as 
+   # Parse an existing .bin file (data_2007_09_04.bin), output trackpoints as 
    #  both CSV file and GPX
-  ./gpsbabel -D 2 -t -w -i mtk-bin,csv=data__2007_09_04.csv -f data_2007_09_04.bin -o gpx -F out.gpx
+  ./gpsbabel -D 2 -t -i mtk-bin,csv=data__2007_09_04.csv -f data_2007_09_04.bin -o gpx -F out.gpx
 
   Todo:
-    o Create a testsuit of .bin to .gpx/csv files
-    o More documentation ? 
     o ....    
  
-    
-
  */
 
 #include "defs.h"
@@ -194,6 +190,7 @@ static char *port; /* serial port name */
 static char *erase;  /* erase ? command option */
 static char *csv_file; /* csv ? command option */
 static unsigned int bmask = 0x000e0e7f;
+static unsigned int mlog_period, mlog_distance, mlog_speed; /* in 10:ths of sec, m, km/h */
 
 
 const char LIVE_CHAR[4] = {'-', '\\','|','/'};
@@ -512,23 +509,24 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm){
     char     wp_name[20];
     waypoint *trk = waypt_new();
 
-    if ( trk_head == NULL ){
+    if ( global_opts.masked_objective & TRKDATAMASK && trk_head == NULL ){
         trk_head = route_head_alloc();
+        xasprintf(&trk_head->rte_desc, "Log every %.0f sec, %.0f m, %.0f km/h" 
+          , mlog_period/10., mlog_distance/10., mlog_speed/10.);
         track_add_head(trk_head);
     } 
-
-    sprintf(wp_name, "TP%04d", idx);
 
     if ( bmask & (1<<LATITUDE) && bmask & (1<<LONGITUDE) ){
        trk->latitude       = itm->lat;
        trk->longitude      = itm->lon;
     } else {
-      return -1; // GPX requires lat/lon...
+       return -1; // GPX requires lat/lon...
     }  
 
-    if ( bmask & (1<<HEIGHT) )
+    if ( bmask & (1<<HEIGHT) ){
        trk->altitude       = itm->height;
-    
+       // WAYPT_SET(trk, altitude, itm->height);
+    }
     trk->creation_time  = itm->timestamp; // in UTC..
     if ( bmask & (1<<MILLISECOND) ) 
        trk->microseconds  = MILLI_TO_MICRO(itm->timestamp_ms);
@@ -540,11 +538,12 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm){
     if ( bmask & (1<<VDOP) )
        trk->vdop = itm->vdop; 
 
-    if ( bmask & (1<<HEADING) )
-       trk->course = itm->heading; 
-    if ( bmask & (1<<SPEED) )
-       trk->speed = itm->speed; 
-
+    if ( bmask & (1<<HEADING) ){
+       WAYPT_SET(trk, course, itm->heading);
+    }
+    if ( bmask & (1<<SPEED) ){
+       WAYPT_SET(trk, speed, KPH_TO_MPS(itm->speed));
+    }
     if ( bmask & (1<<VALID) ){
        switch (itm->valid){
          case 0x0040: trk->fix = fix_unknown;break; /* Estimated mode */
@@ -565,10 +564,28 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm){
     if ( bmask & (1<<NSAT) )
        trk->sat = itm->sat_used;
        
-    trk->shortname      = xstrdup(wp_name);
-    
-    track_add_wpt(trk_head, trk);
-    
+    // RCR is a bitmask of possibly several log reasons..
+    if ( global_opts.masked_objective & WPTDATAMASK 
+       && bmask & (1<<RCR) && itm->rcr & 0x0008  )
+    {
+       /* Button press -- create waypoint, start count at 1 */
+       waypoint *w = waypt_dupe(trk);
+
+       sprintf(wp_name, "WP%04d", waypt_count()+1);
+       w->shortname      = xstrdup(wp_name);
+       waypt_add(w);
+    } 
+    // In theory we would not add the waypoint to the list of
+    // trackpoints. But as the MTK logger restart the 
+    // log session from the button press we would loose a 
+    // trackpoint unless we include/duplicate it.
+
+    if ( global_opts.masked_objective & TRKDATAMASK ){
+       sprintf(wp_name, "TP%04d", idx);
+       trk->shortname      = xstrdup(wp_name);
+
+       track_add_wpt(trk_head, trk);
+    }    
     return 0;
 }
 
@@ -907,12 +924,15 @@ static int mtk_parse_info(const unsigned char *data, int dataLen){
             break;
          case 0x03:
             dbg(1, "# Log period change %.0f sec\n", cmd/10.);
+            mlog_period = cmd;
             break;
          case 0x04:
             dbg(1, "# Log distance change %.1f m\n", cmd/10.);
+            mlog_distance = cmd;
             break;
          case 0x05:
             dbg(1, "# Log speed change %.1f km/h\n", cmd/10.);
+            mlog_speed  = cmd;
             break;
          case 0x06:
             dbg(1, "# Log policy change 0x%.4x\n", cmd);
@@ -923,9 +943,9 @@ static int mtk_parse_info(const unsigned char *data, int dataLen){
             break;
          case 0x07:
             if ( cmd == 0x0106 )
-              ; //  fprintf(stderr,"# GPS Logger# Turned On\n"); // Fixme - start new trk
+              dbg(5, "# GPS Logger# Turned On\n"); // Fixme - start new trk
             if ( cmd == 0x0104 )
-              ; //  fprintf(stderr,"# GPS Logger# Log disabled\n");
+              dbg(5, "# GPS Logger# Log disabled\n");
             break;
          default:
             dbg(1, "## Unknown INFO 0x%.2x\n", data[7]);
@@ -1002,6 +1022,10 @@ static void file_read(void) {
           mask, log_period/10., log_distance/10., log_speed/10.);
       bmask = mask;
       dbg(3, "Using initial bitmask %.8x for parsing the .bin file\n", bmask); 
+
+      mlog_period = log_period;
+      mlog_distance = log_distance;
+      mlog_speed  = log_speed;
    }
 
    pos = 0x200; // skip header...first data position 
