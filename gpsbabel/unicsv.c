@@ -2,7 +2,7 @@
     Universal CSV - support for csv files, divining field order from the header.
 
     Copyright (C) 2006 Robert Lipe, robertlipe@usa.net,
-    copyright (C) 2007 Olaf Klein, o.b.klein@gpsbabel.org
+    copyright (C) 2007,2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -526,6 +526,7 @@ unicsv_parse_one_line(char *ibuf)
 	garmin_fs_t *gmsd;
 	double d;
 	struct tm ymd;
+	int src_datum = unicsv_datum_idx;
 
 	wpt = waypt_new();
 	wpt->latitude = unicsv_unknown;
@@ -607,13 +608,19 @@ unicsv_parse_one_line(char *ibuf)
 			break;
 			
 		case fld_utm:
-			parse_coordinates(s, DATUM_WGS84, grid_utm,
+			parse_coordinates(s, unicsv_datum_idx, grid_utm,
 				&wpt->latitude, &wpt->longitude, MYNAME);
+			/* coordinates from parse_coordinates are in WGS84
+			   don't convert a second time */
+			src_datum = DATUM_WGS84;
 			break;
 
 		case fld_bng:
 			parse_coordinates(s, DATUM_OSGB36, grid_bng,
 				&wpt->latitude, &wpt->longitude, MYNAME);
+			/* coordinates from parse_coordinates are in WGS84
+			   don't convert a second time */
+			src_datum = DATUM_WGS84;
 			break;
 			
 		case fld_bng_zone:
@@ -632,6 +639,9 @@ unicsv_parse_one_line(char *ibuf)
 		case fld_swiss:
 			parse_coordinates(s, DATUM_WGS84, grid_swiss,
 				&wpt->latitude, &wpt->longitude, MYNAME);
+			/* coordinates from parse_coordinates are in WGS84
+			   don't convert a second time */
+			src_datum = DATUM_WGS84;
 			break;
 
 		case fld_swiss_easting:
@@ -875,7 +885,7 @@ unicsv_parse_one_line(char *ibuf)
 	if ((wpt->latitude == unicsv_unknown) && (wpt->longitude == unicsv_unknown)) {
 		if (utm_zone != -9999) {
 			GPS_Math_UTM_EN_To_Known_Datum(&wpt->latitude, &wpt->longitude,
-				utm_easting, utm_northing, utm_zone, utm_zc, DATUM_WGS84);
+				utm_easting, utm_northing, utm_zone, utm_zc, unicsv_datum_idx);
 		}
 		else if (bng_zone[0]) {
 			if (! GPS_Math_UKOSMap_To_WGS84_M(
@@ -883,12 +893,20 @@ unicsv_parse_one_line(char *ibuf)
 				&wpt->latitude, &wpt->longitude))
 			fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
 				bng_zone, bng_easting, bng_northing);
+			src_datum = DATUM_WGS84;	/* don't convert afterwards */
 		}
 		else if ((swiss_easting != unicsv_unknown) && (swiss_northing != unicsv_unknown)) {
 			GPS_Math_CH1903_NGEN_To_WGS84(swiss_easting, swiss_northing,
 				&wpt->latitude, &wpt->longitude);
-
+			src_datum = DATUM_WGS84;	/* don't convert afterwards */
 		}
+	}
+	
+	if ((src_datum != DATUM_WGS84) && 
+	    (wpt->latitude == unicsv_unknown) && (wpt->longitude == unicsv_unknown)) {
+		double alt;
+		GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, (double) 0.0, 
+			&wpt->latitude, &wpt->longitude, &alt, src_datum);
 	}
 
 	switch(unicsv_data_type) {
@@ -1293,6 +1311,9 @@ unicsv_wr_init(const char *filename)
 		/* force datum to "Ord Srvy Grt Britn" / OSGB36 */
 		/* ! ignore parameter "Datum" ! */
 		unicsv_datum_idx = DATUM_OSGB36;
+	else if (unicsv_grid_idx == grid_swiss)
+		/* ! ignore parameter "Datum" ! */
+		unicsv_datum_idx = DATUM_WGS84;	/* internal, becomes CH1903 */
 	else
 		unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
 }
