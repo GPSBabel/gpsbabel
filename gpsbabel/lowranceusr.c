@@ -26,6 +26,9 @@
 	02/09/08 - oliskoli
 	- gbfile API
 	- check for buffer overflows when reading names or comments
+	02/25/2008 - Alan Porter (alan@kr4jb.net)
+	- Added new icons for Lowrance iFinder Expedition C
+	- Categorized geocaching waypoints using different icons
 */
 
 
@@ -85,15 +88,6 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
 	{ 10040, "swimmer" },
 	{ 10041, "pier"},
 
-	{ 10038, "Micro-Cache" },   	/* icon for "flag buoy" */
-	{ 10030, "Virtual cache" }, 	/* icon for "skull and crossbones" */
-	{ 10032, "Multi-Cache" },   	/* icon for "two fish" */
-	{ 10003, "Unknown Cache" },   	/* icon for "x 1" */
-	{ 10018, "Locationless (Reverse) Cache" }, /* Icon for "american flag" */
-	{ 10007, "Post Office" },  	/* Icon for "house" */
-	{ 10019, "Event Cache" }, 	/* Icon for "person" */
-	{ 10020, "Webcam Cache" }, 	/* Icon for "restrooms" */
-
 /* The following list is from TopoFusion */
 
 	{ 10000, "Waypoint" },		/* diamond 1 */
@@ -105,8 +99,8 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
 	{ DEF_ICON, "Short Tower" },
 	{ 10021, "Forest" },		/* tree */
 	{ DEF_ICON, "Mine" },
-	{ 10038, "Geocache" },		/* flag buoy */
-	{ 10016, "Geocache Found" },	/* exclamation */
+//	{ 10038, "Geocache" },		/* flag buoy */
+//	{ 10016, "Geocache Found" },	/* exclamation */
 	{ DEF_ICON, "Skiing Area" },
 	{ 10029, "Crossing" },		/* bridge */
 	{ 10007, "House" },			/* house */
@@ -135,28 +129,65 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
 	{ DEF_ICON, "Tunnel" },
 
 	/* This list comes from 'wifinder' from ifinder H20 Color */
-	
-        { 10062, "Interesting Land Feature" },
-        { 10063, "Global Location" },
-        { 10064, "Note" },
-        { 10065, "Ghost" },
-        { 10066, "Letter" },
-        { 10067, "Multi-Treasure" },
-        { 10068, "Mystery Or Puzzle" },
-        { 10069, "Treasure" },
-        { 10070, "Webmail" },
-        { 10071, "Sun" },
-        { 10072, "Musical Note" },
-        { 10073, "Camera/Movie Theater" },
-        { 10074, "Star" },
-        { 10075, "Coffee Mug" },
-        { 10076, "Books" },
-        { 10077, "Historical Marker" },
-        { 10078, "Tools/Repair" },
-        { 10079, "Favorite" },
-        { 10080, "Arena" },
-        { 10081, "Golf Course" },
-        { 10082, "Money/Atm" },
+
+	{ 10062, "Interesting Land Feature" },
+	{ 10063, "Global Location" },
+	{ 10064, "Note" },
+	{ 10065, "Ghost" },
+	{ 10066, "Letter" },
+	{ 10067, "Multi-Treasure" },
+	{ 10068, "Mystery Or Puzzle" },
+	{ 10069, "Treasure" },
+	{ 10070, "Webmail" },
+	{ 10071, "Sun" },
+	{ 10072, "Musical Note" },
+	{ 10073, "Camera/Movie Theater" },
+	{ 10074, "Star" },
+	{ 10075, "Coffee Mug" },
+	{ 10076, "Books" },
+	{ 10077, "Historical Marker" },
+	{ 10078, "Tools/Repair" },
+	{ 10079, "Favorite" },
+	{ 10080, "Arena" },
+	{ 10081, "Golf Course" },
+	{ 10082, "Money/Atm" },
+
+	/* This list comes from Alan Porter <alan@kr4jb.net>, using an iFinder Expedition C */
+
+	{ 10042, "icon42" },  // black box with red X
+	{ 10043, "icon43" },  // small red dot
+	{ 10044, "icon44" },  // 4-wheeler
+	{ 10045, "icon45" },  // hiding hunter
+	{ 10046, "icon46" },  // tree (yellow base)
+	{ 10047, "icon47" },  // windmill
+	{ 10048, "icon48" },  // camera
+	{ 10049, "icon49" },  // tree (something in front of base)
+	{ 10050, "icon50" },  // tree (something hanging from left side)
+	{ 10051, "icon51" },  // 4 dots in rhombus shape
+	{ 10052, "icon52" },  // bare winter tree
+	{ 10053, "icon53" },  // hiding deer head peeking over bushes
+	{ 10054, "icon54" },  // piston? over a pile of salt?
+	{ 10055, "icon55" },  // corn
+	{ 10056, "icon56" },  // turkey
+	{ 10057, "icon57" },  // duck
+	{ 10058, "icon58" },  // hen
+	{ 10059, "icon59" },  // rabbit
+	{ 10060, "icon60" },  // paw print
+	{ 10061, "icon61" },  // 2 red flames?
+
+	/* These are the icons that gpsbabel will use */
+
+	{ 10038, "Geocache" },                      // flag buoy
+	{ 10016, "Geocache Found" },                // exclamation
+	{ 10043, "Micro-Cache" },                   // small red dot
+	{ 10065, "Virtual cache" },                 // ghost
+	{ 10051, "Multi-Cache" },                   // 4 dots in rhombus shape
+	{ 10068, "Unknown Cache" },                 // ? mark
+	{ 10045, "Locationless (Reverse) Cache" },  // hiding hunter
+	{ 10066, "Post Office" },                   // letter
+	{ 10019, "Event Cache" },                   // person
+	{ 10070, "Webcam Cache" },                  // webcam
+	{ 10042, "Disabled Cache" },                // black box with red X
 
 	{	 -1, NULL }
 };
@@ -619,8 +650,10 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 	gbfputint32(Lon, file_out);
 	gbfputint32(alt, file_out);
 
-	if (global_opts.debug_level >= 1)
-		printf(MYNAME " waypt_disp: Lat = %d\nLon = %d\nAlt = %d\n",Lat, Lon, alt);
+	if (global_opts.debug_level >= 1) {
+		/* print lat/lon/alt on one easily greppable line */
+		printf(MYNAME " waypt_disp: Lat = %d   Lon = %d   Alt = %d\n",Lat, Lon, alt);
+	}
 
 	/* Try and make sure we have a name */
 	if ((! wpt->shortname) || global_opts.synthesize_shortnames) {
@@ -648,7 +681,7 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 	xfree(name);
 
 	/**
-	 * Comments aren't used by the iFinder yet so they just take up space...
+	 * Comments are now used by the iFinder (Expedition C supports them)
 	 */
 	if (wpt->description && strcmp(wpt->description, wpt->shortname) != 0) {
 		comment = xstrdup(wpt->description);
@@ -683,6 +716,10 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 		SymbolId = lowranceusr_find_icon_number_from_desc(get_cache_icon(wpt));
 	} else {
 		SymbolId = lowranceusr_find_icon_number_from_desc(wpt->icon_descr);
+	}
+	/* If the waypoint is archived or disabled, use a "disabled" icon instead. */
+	if ( (wpt->gc_data.is_archived==status_true) || (wpt->gc_data.is_available==status_false) ) {
+		SymbolId = lowranceusr_find_icon_number_from_desc("Disabled Cache");
 	}
 
 	gbfputint32(SymbolId, file_out);
