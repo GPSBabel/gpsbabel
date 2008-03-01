@@ -903,7 +903,7 @@ unicsv_parse_one_line(char *ibuf)
 	}
 	
 	if ((src_datum != DATUM_WGS84) && 
-	    (wpt->latitude == unicsv_unknown) && (wpt->longitude == unicsv_unknown)) {
+	    (wpt->latitude != unicsv_unknown) && (wpt->longitude != unicsv_unknown)) {
 		double alt;
 		GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, (double) 0.0, 
 			&wpt->latitude, &wpt->longitude, &alt, src_datum);
