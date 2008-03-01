@@ -207,6 +207,7 @@ GPS_ODatum_Alias GPS_DatumAlias[] =
     { "NAD27 Canal Zone", 21 },
     { "NAD27 Caribbean", 25 },
     { "NAD27 Central", 27 },
+    { "NAD27 CONUS", 78 },
     { "NAD27 Cuba", 31 },
     { "NAD27 Greenland", 44 },
     { "NAD27 Mexico", 70 },
