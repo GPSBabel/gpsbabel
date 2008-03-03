@@ -124,6 +124,7 @@ void copy_char_array(UC **dst, char* src, int count, copycase mustupper)
 	int ocount =  count;
 	do {
 		UC sc = *src++;
+		if (!isalnum(sc)) continue;
 		if (sc == 0) {
 			while (count--) 
 				*d++ = ' ';
