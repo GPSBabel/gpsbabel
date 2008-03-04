@@ -21,6 +21,7 @@
  */
 
 #include "defs.h"
+#include "cet.h"
 #include "cet_util.h"
 #include <ctype.h>
 #include "grtcirc.h"
@@ -30,39 +31,65 @@
 #define MAXPSPSTRINGSIZE	256
 #define MAXPSPOUTPUTPINS	8192   /* Any more points than this is ludicrous */
 
-static FILE *psp_file_in;
-static FILE *psp_file_out;
+static gbfile *psp_file_in;
+static gbfile *psp_file_out;
 static short_handle mkshort_handle;
 
-static int
-psp_fread(void *buff, size_t size, size_t members, FILE * fp) 
-{
-    size_t br;
+#define psp_fread(b,s,m,f) gbfread((b),(s),(m),f)
+#define psp_fread_double(f) gbfgetdbl(f)
+#define psp_fwrite_double(v,f) gbfputdbl((v),f)
 
-    br = fread(buff, size, members, fp);
-
-    if (br != members) {
-        fatal(MYNAME ": requested to read %ld bytes, read %ld bytes.\n", 
-                            (unsigned long) members, (unsigned long) br);
-    }
-
-    return (br);
-}
-
-static double
-psp_fread_double(FILE *fp)
-{
-	unsigned char buf[8];
-	psp_fread(buf, 1, 8, fp);
-	return le_read_double(buf);
-}
-
+/* ToDo: move the code inside to CET library */
 static void
-psp_fwrite_double(double x, FILE *fp)
+psp_write_str(const char *str)
 {
-	unsigned char cbuf[8];
-	le_write_double(cbuf,x);
-	fwrite(cbuf, 8, 1, fp);
+	if (str && *str) {
+		const char *cin = str;
+		gbint16 *tmp, *res;
+		int len = 0;
+		
+		/* convert UTF-8 string into a unicode sequence */
+		/* not perfect, but enough for us */
+
+		res = tmp = xmalloc(strlen(str) << 1);
+		while (*cin) {
+			int bytes, value;
+
+			if (cet_utf8_to_ucs4(cin, &bytes, &value) != CET_SUCCESS)
+				value = CET_NOT_CONVERTABLE_DEFAULT;
+			*tmp++ = value;
+			cin += bytes;
+			len++;
+			if (len == (MAXPSPSTRINGSIZE >> 1)) break;
+		}
+		gbfputc(len, psp_file_out);
+		tmp = res;
+		while (len--)
+			/* ! we need LE values, don't use gbfwrite ! */
+			gbfputint16(*tmp++, psp_file_out);
+		xfree(res);
+	}
+	else
+		gbfputc(0, psp_file_out);
+}
+
+/* ToDo: move the code inside to CET library */
+static char *
+psp_read_str(gbfile *fin)
+{
+	int i, len;
+	gbint16 *buff;
+	char *res;
+	
+	len = (unsigned char)gbfgetc(fin);
+	if (len == 0) return NULL;
+	
+	buff = xmalloc(len * 2);
+	for (i = 0; i < len; i++)
+		buff[i] = gbfgetint16(fin);
+	res = cet_str_uni_to_utf8(buff, len);
+	xfree(buff);
+	return res;
 }
 
 /* Implement the grid in ascii art... This makes a bit of sense if you stand
@@ -149,44 +176,22 @@ valid_psp_header(char * header)
     
 }
 
-static char *
-buffer_washer(char * buff, int buffer_len)
-{
-/* original code
-    int i;
-
-    for (i = 0 ; i < buffer_len - 1; i++) {
-	if (buff[i] == '\0') {
-	    memmove(&buff[i], &buff[i+1], buffer_len - i);
-	    buffer_len--;
-	    buff[buffer_len] = '\0';
-	}
-    }
-
-    return (buff);
-*/
-    char *c = cet_str_uni_to_any((const short *)buff, buffer_len >> 1, global_opts.charset);
-    strncpy(buff, c, buffer_len);
-    xfree(c);
-    return (buff);
-}
-
 static void
 psp_rd_init(const char *fname)
 {
-	psp_file_in = xfopen(fname, "rb", MYNAME);
+	psp_file_in = gbfopen_le(fname, "rb", MYNAME);
 }
 
 static void
 psp_rd_deinit(void)
 {
-	fclose(psp_file_in);
+	gbfclose(psp_file_in);
 }
 
 static void
 psp_wr_init(const char *fname)
 {
-	psp_file_out = xfopen(fname, "wb", MYNAME);
+	psp_file_out = gbfopen_le(fname, "wb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 }
 
@@ -194,7 +199,7 @@ static void
 psp_wr_deinit(void)
 {
 	mkshort_del_handle(&mkshort_handle);
-	fclose(psp_file_out);
+	gbfclose(psp_file_out);
 }
 
 static void
@@ -204,10 +209,10 @@ psp_read(void)
 	double radians;
 	double lat, lon;
 	waypoint *wpt_tmp;
-	int stringsize;
 	short int pincount;
 	short int pindex;
         char gridbyte = 0x00;
+	char *tmp;
 
         /* 32 bytes - file header */
         psp_fread(&buff[0], 1, 32, psp_file_in);
@@ -264,54 +269,10 @@ psp_read(void)
 	    /* 3 bytes - unknown */
     	    psp_fread(&buff[0], 1, 3, psp_file_in);
 
-            /* 1 byte - string size */
-    	    psp_fread(&buff[0], 1, 1, psp_file_in);
-
-    	    stringsize = buff[0];
-    	    stringsize *= 2;
-
-    	    if (stringsize > MAXPSPSTRINGSIZE) {
-		fatal(MYNAME ": variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
-    	    }
-
-            /* stringsize bytes - string data */
-    	    psp_fread(&buff[0], 1, stringsize, psp_file_in);
-
-	    buffer_washer(buff, stringsize);
-
-	    wpt_tmp->shortname = xstrdup(buff);
-
-            /* 1 bytes string size */
-    	    psp_fread(&buff[0], 1, 1, psp_file_in);
-
-    	    stringsize = buff[0];
-    	    stringsize *= 2;
-
-    	    if (stringsize > MAXPSPSTRINGSIZE) {
-		fatal(MYNAME ": variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
-    	    }
-
-            /* stringsize bytes - string data */
-    	    psp_fread(&buff[0], 1, stringsize, psp_file_in);
-
-	    buffer_washer(buff, stringsize);
-
-	    wpt_tmp->description = xstrdup(buff);
-
-            /* 1 bytes - string size */
-    	    psp_fread(&buff[0], 1, 1, psp_file_in);
-
-    	    stringsize = buff[0];
-    	    stringsize *= 2;
-
-    	    if (stringsize > MAXPSPSTRINGSIZE) {
-		fatal(MYNAME ": variable string size (%d) in PSP file exceeds MAX (%d).\n", stringsize, MAXPSPSTRINGSIZE);
-    	    }
-
-            /* stringsize bytes - string data (address?) */
-    	    psp_fread(&buff[0], 1, stringsize, psp_file_in);
-
-	    buffer_washer(buff, stringsize);
+	    wpt_tmp->shortname = psp_read_str(psp_file_in);
+	    wpt_tmp->description = psp_read_str(psp_file_in);
+	    tmp = psp_read_str(psp_file_in); /* (address?) */
+	    if (tmp) xfree(tmp);
 
 	    waypt_add(wpt_tmp);
 	}
@@ -323,7 +284,6 @@ psp_waypt_pr(const waypoint *wpt)
 	double lon, lat;
 	char tbuf[64];
 	char c;
-	int i;
 	static short int pindex = 0;
 	char *shortname;
 	char *description;
@@ -357,13 +317,11 @@ psp_waypt_pr(const waypoint *wpt)
         lon = RAD(wpt->longitude);
         
 	pindex++;
-	le_write16(tbuf, pindex);
         /* 2 bytes - pin index */
-        fwrite(tbuf, 1, 2, psp_file_out);
+        gbfputint16(pindex, psp_file_out);
         
         /* 2 bytes - null bytes */
-        memset(tbuf, '\0', sizeof(tbuf));
-        fwrite(tbuf, 1, 2, psp_file_out);
+        gbfputint16(0, psp_file_out);
         
 
         /* set the grid byte */
@@ -377,7 +335,7 @@ psp_waypt_pr(const waypoint *wpt)
         /* comes straight from S&T.                                      */
 	
         /* the grid byte */
-        fwrite(&c, 1, 1, psp_file_out);
+        gbfwrite(&c, 1, 1, psp_file_out);
 
         /* 8 bytes - latitude/radians */
         psp_fwrite_double(lat, psp_file_out);
@@ -387,47 +345,25 @@ psp_waypt_pr(const waypoint *wpt)
 
         /* 1 byte - pin properties */
         c = 0x14; /* display pin name on, display notes on. 0x04 = no notes */
-        fwrite(&c, 1, 1, psp_file_out);
+        gbfwrite(&c, 1, 1, psp_file_out);
 
         memset(tbuf, '\0', sizeof(tbuf));
 
         /* 3 unknown bytes */
-        fwrite(tbuf, 1, 3, psp_file_out);
+        gbfwrite(tbuf, 1, 3, psp_file_out);
 
         /* 1 icon byte 0x00 = PIN */
-        fwrite(tbuf, 1, 1, psp_file_out);
+        gbfwrite(tbuf, 1, 1, psp_file_out);
 
         /* 3 unknown bytes */
-        fwrite(tbuf, 1, 3, psp_file_out); /* 3 junk */
+        gbfwrite(tbuf, 1, 3, psp_file_out); /* 3 junk */
 
-        c = strlen(shortname);
-        /* 1 string size */
-        fwrite(&c, 1, 1, psp_file_out);
-
-        for (i = 0 ; shortname[i] ; i++) {
-             fwrite(&shortname[i], 1, 1, psp_file_out);    /* char */
-             fwrite(&tbuf[0], 1, 1, psp_file_out);              /* null */
-        }
-
-        c = strlen(description);
-        /*  1 byte string size */
-        fwrite(&c, 1, 1, psp_file_out);
-
-        for (i = 0 ; description[i] ; i++) {
-             fwrite(&description[i], 1, 1, psp_file_out);  /* char */
-             fwrite(&tbuf[0], 1, 1, psp_file_out);              /* null */
-        }
+	psp_write_str(shortname);
+	psp_write_str(description);
 
         /* just for the hell of it, we'll scrap the third string. */
-        c = strlen(tbuf);
-        /* 1 byte string size */
-        fwrite(&c, 1, 1, psp_file_out);
+	psp_write_str("");
 
-        for (i = 0 ; tbuf[i] ; i++) {
-             fwrite(&tbuf[i], 1, 1, psp_file_out);              /* char */
-             fwrite(&tbuf[0], 1, 1, psp_file_out);              /* null */
-        }
-        
         xfree(shortname);
         xfree(description);
 }
@@ -456,7 +392,7 @@ psp_write(void)
         /* insert waypoint count into header */
 	le_write16(&header_bytes[12], s);
 
-        fwrite(header_bytes, 1,  32, psp_file_out);
+        gbfwrite(header_bytes, 1,  32, psp_file_out);
 
         waypt_disp_all(psp_waypt_pr);
 }
@@ -472,5 +408,5 @@ ff_vecs_t psp_vecs = {
 	psp_write,
 	NULL,
 	NULL,
-	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+	CET_CHARSET_UTF8, 1	/* Fixed because of unicode strings in psp files (see psp_read_str / psp_write_str) */
 };
