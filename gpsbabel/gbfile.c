@@ -532,7 +532,7 @@ gbfeof(gbfile *file)
 
 		res  = gzeof(file->handle.gz);
 		if (!res) {
-			signed char test;
+			unsigned char test;
 			int len = gzread(file->handle.gz, &test, 1);
 			if (len == 1) {
 				/* No EOF, put the single byte back into stream */
