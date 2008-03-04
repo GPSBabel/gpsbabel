@@ -28,8 +28,8 @@
 #include "defs.h"
 #include "grtcirc.h"
 
-static FILE				*infile	=0;
-static FILE				*ofs	=0;
+static gbfile				*infile	=NULL;
+static gbfile				*ofs	=NULL;
 static long				count	=0;
 
 const long				vitosmt_version			=2;
@@ -37,31 +37,12 @@ const long				vitosmt_subversion		=1000;
 const size_t			vitosmt_headersize		=24;
 const size_t			vitosmt_datasize		=64;
 
-static unsigned long
-ReadLong(FILE * f)
-{
-	gbuint32 result = 0;
-
-	fread(&result, sizeof (result), 1, f);
-	return le_read32(&result);
-}
-
-static double
-ReadDouble(FILE * f)
-{
-	unsigned char buffer[8] = "\0\0\0\0\0\0\0\0";
-	fread(buffer, sizeof (buffer), 1, f);
-	return le_read_double(buffer );
-}
-
-
 static unsigned char *
-ReadRecord(FILE * f,
-	   size_t size)
+ReadRecord(gbfile *f, gbsize_t size)
 {
 	unsigned char *result = (unsigned char *) xmalloc(size);
 
-	fread(result, size, 1, f);
+	gbfread(result, size, 1, f);
 	return result;
 }
 
@@ -77,13 +58,13 @@ WriteDouble(void* ptr, double d)
 static void
 rd_init(const char *fname)
 {
-	infile = xfopen(fname, "rb", MYNAME);
+	infile = gbfopen_le(fname, "rb", MYNAME);
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(infile);
+	gbfclose(infile);
 }
 
 static void
@@ -115,12 +96,12 @@ vitosmt_read(void)
 	/* 
 	 * 24 bytes header 
 	 */
-	version		= ReadLong(infile);	/* 2	*/
-	subversion	= ReadLong(infile);	/* 1000	*/
-	count		= ReadLong(infile);	/* n	*/
-	check1		= ReadLong(infile);	/* 0	*/
-	check2		= ReadLong(infile);	/* not sure */
-	check3		= ReadLong(infile);	/* n	*/
+	version		= gbfgetint32(infile);	/* 2	*/
+	subversion	= gbfgetint32(infile);	/* 1000	*/
+	count		= gbfgetint32(infile);	/* n	*/
+	check1		= gbfgetint32(infile);	/* 0	*/
+	check2		= gbfgetint32(infile);	/* not sure */
+	check3		= gbfgetint32(infile);	/* n	*/
 
 	if (version!=vitosmt_version) {
 	
@@ -146,32 +127,32 @@ vitosmt_read(void)
 		/*
 		 *	64 bytes of data	
 		 */
-		if (feof(infile)||ferror(infile)) 
+		if (gbfeof(infile)||gbferror(infile)) 
 		{
 			warning("%s (%d) reading file.  Unexpected end of file %s\n",
 				MYNAME, __LINE__, strerror(errno) );
 			break;
 		}
 #if 0
-		fprintf(stderr, "Looptop %d\n", ftell(infile));
+		fprintf(stderr, "Looptop %d\n", gbftell(infile));
 #endif
-		latrad		=ReadDouble(infile);	/* WGS84 latitude in radians */
-		lonrad		=ReadDouble(infile);	/* WGS84 longitude in radians */
-		elev		=ReadDouble(infile);	/* elevation in meters */
+		latrad		=gbfgetdbl(infile);	/* WGS84 latitude in radians */
+		lonrad		=gbfgetdbl(infile);	/* WGS84 longitude in radians */
+		elev		=gbfgetdbl(infile);	/* elevation in meters */
 #if 0
-		fprintf(stderr, "before %d\n", ftell(infile));
+		fprintf(stderr, "before %d\n", gbftell(infile));
 #endif
 		timestamp	=ReadRecord(infile,5);	/* UTC time yr/mo/dy/hr/mi */
 #if 0
-		fprintf(stderr, "%d latrad %f/%f ele %f\n", ftell(infile),latrad, DEG(latrad), elev);
+		fprintf(stderr, "%d latrad %f/%f ele %f\n", gbftell(infile),latrad, DEG(latrad), elev);
 #endif
-		seconds		=ReadDouble(infile);	/* seconds */
-		speed		=ReadDouble(infile);    /* speed in knots */
-		course		=ReadDouble(infile);	/* course in degrees */
-		pdop     	=ReadDouble(infile);	/* dilution of precision */
-		gpsfix		=fgetc(infile);			/* fix type x08,x10, x20  */	
-		gpsvalid	=fgetc(infile);			/* fix is valid */
-     	gpssats	=fgetc(infile);				/* number of sats */
+		seconds		=gbfgetdbl(infile);	/* seconds */
+		speed		=gbfgetdbl(infile);    /* speed in knots */
+		course		=gbfgetdbl(infile);	/* course in degrees */
+		pdop     	=gbfgetdbl(infile);	/* dilution of precision */
+		gpsfix		=gbfgetc(infile);	/* fix type x08,x10, x20  */	
+		gpsvalid	=gbfgetc(infile);	/* fix is valid */
+		gpssats		=gbfgetc(infile);	/* number of sats */
 
 		wpt_tmp = waypt_new();
 		
@@ -248,13 +229,13 @@ static void
 wr_init(const char *fname)
 {
 	warning(MYNAME " write: format is experimental and may crash Vito Navigator II.\n");
-	ofs = xfopen(fname, "wb", MYNAME);
+	ofs = gbfopen_le(fname, "wb", MYNAME);
 }
 
 static void
 wr_deinit(void)
 {
-	fclose(ofs);
+	gbfclose(ofs);
 
 }
 
@@ -330,11 +311,7 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 	else
 		workbuffer[position++] = 0;
 	
-	if (fwrite(workbuffer,vitosmt_datasize,1,ofs)!=1)
-	{
-		fatal("%s (%d) writing output file.  Error was '%s'.\n",
-			MYNAME, __LINE__, strerror(errno));
-	}
+	(void)gbfwrite(workbuffer,vitosmt_datasize,1,ofs);
 	
 	xfree(workbuffer);
 }
@@ -355,11 +332,7 @@ vitosmt_write(void)
 
 	/* leave a spacer for the header */
 	memset(workbuffer,0,vitosmt_headersize);
-	if (fwrite(workbuffer,vitosmt_headersize,1,ofs)!=1)
-	{
-		fatal("%s (%d) writing output file.  Error was '%s'.\n",
-			MYNAME, __LINE__, strerror(errno));
-	}
+	(void)gbfwrite(workbuffer,vitosmt_headersize,1,ofs);
 
 	if 	(doing_wpts)	/* process as waypoints */
 	{
@@ -389,12 +362,8 @@ vitosmt_write(void)
 	le_write32(&workbuffer[position],count);
 	position += sizeof(gbuint32);
 
-	rewind(ofs);
-	if (fwrite(workbuffer,vitosmt_headersize,1,ofs)!=1)
-	{
-		fatal("%s (%d) writing output file.  Error was '%s'.\n",
-			MYNAME, __LINE__, strerror(errno));
-	}
+	gbfrewind(ofs);
+	(void)gbfwrite(workbuffer,vitosmt_headersize,1,ofs);
 
 	xfree(workbuffer);
 }
