@@ -27,7 +27,7 @@
 #include "defs.h"
 #include "grtcirc.h"
 
-FILE *infile;
+gbfile *infile;
 
 char *turns_important = NULL;
 char *turns_only = NULL;
@@ -53,49 +53,28 @@ arglist_t saroute_args[] = {
 	ARG_TERMINATOR
 };
 
-unsigned short
-ReadShort(FILE * f)
-{
-	gbuint16 result = 0;
-
-	if (!fread(&result, sizeof (result), 1, f)) {
-		fatal(MYNAME ": Attempt to read past EOF");
-	}
-	return le_read16(&result);
-}
-
-unsigned long
-ReadLong(FILE * f)
-{
-	gbuint32 result = 0;
-
-	if (!fread(&result, sizeof (result), 1, f))
-		fatal(MYNAME ": Attempt to read past EOF");
-	return le_read32(&result);
-}
+#define ReadShort(f) gbfgetint16(f)
+#define ReadLong(f) gbfgetint32(f)
 
 unsigned char *
-ReadRecord(FILE * f,
-	   unsigned long size)
+ReadRecord(gbfile *f, gbsize_t size)
 {
 	unsigned char *result = (unsigned char *) xmalloc(size);
 
-	if (size && !fread(result, size, 1, f))
-		fatal(MYNAME ": Attempt to read past EOF");
+	(void)gbfread(result, size, 1, f);
 	return result;
 }
 
 void
-Skip(FILE * f,
-     unsigned long distance)
+Skip(gbfile * f, gbsize_t distance)
 {
-	fseek(f, distance, SEEK_CUR);
+	gbfseek(f, distance, SEEK_CUR);
 }
 
 static void
 rd_init(const char *fname)
 {
-	infile = xfopen(fname, "rb", MYNAME);
+	infile = gbfopen(fname, "rb", MYNAME);
 	if ( split && (turns_important || turns_only )) {
 		fatal( MYNAME 
 		      ": turns options are not compatible with split\n" );
@@ -116,32 +95,32 @@ rd_init(const char *fname)
 static void
 rd_deinit(void)
 {
-	fclose(infile);
+	gbfclose(infile);
 }
 
 static void
 my_read(void)
 {
 
-	unsigned short version;
-	unsigned long count;
-	unsigned long outercount;
-	unsigned long recsize;
-	unsigned short stringlen;
+	gbuint16 version;
+	gbuint32 count;
+	gbuint32 outercount;
+	gbuint32 recsize;
+	gbuint16 stringlen;
 	unsigned char *record;
 	static int serial = 0;
 	struct ll {
 		gbint32 lat;
 		gbint32 lon;
 	} *latlon;
-	unsigned short coordcount;
+	gbuint16 coordcount;
 	route_head *track_head = NULL;
 	route_head *old_track_head = NULL;
 	waypoint *wpt_tmp;
 	char *routename = NULL;
 	double seglen = 0.0;
-	long  starttime = 0;
-	long  transittime = 0;
+	gbint32  starttime = 0;
+	gbint32  transittime = 0;
 	double totaldist = 0.0;
 	double oldlat = 0;
 	double oldlon = 0;
@@ -168,7 +147,7 @@ my_read(void)
 	 */
 	record = ReadRecord(infile, recsize);
 
-	stringlen = le_read16((unsigned short *)(record + 0x1a));
+	stringlen = le_read16((gbuint16 *)(record + 0x1a));
 	if ( stringlen ) {
 		routename = (char *)xmalloc( stringlen + 1 );
 		routename[stringlen] = '\0';
@@ -314,7 +293,7 @@ my_read(void)
 			ReadShort(infile);
 			recsize = ReadLong(infile);
 			record = ReadRecord(infile, recsize);
-			stringlen = le_read16((unsigned short *)record);
+			stringlen = le_read16((gbuint16 *)record);
 			if ( split && stringlen ) {
 			    if ( track_head->rte_waypt_ct ) {
 				old_track_head = track_head;
@@ -338,14 +317,14 @@ my_read(void)
 			if ( timesynth ) {
 	                        seglen = le_read_double(
 					   record + 2 + stringlen + 0x08 );
-				starttime = le_read32((unsigned long *)
+				starttime = le_read32((gbuint32 *)
 					(record + 2 + stringlen + 0x30 ));
-				transittime = le_read32((unsigned long *)
+				transittime = le_read32((gbuint32 *)
 					(record + 2 + stringlen + 0x10 ));
 				seglen /= 5280*12*2.54/100000; /* to miles */
 			}
 				
-			coordcount = le_read16((unsigned short *)
+			coordcount = le_read16((gbuint16 *)
 					(record + 2 + stringlen + 0x3c));
 			latlon = (struct ll *)(record + 2 + stringlen + 0x3c + 2);
 			count--;
