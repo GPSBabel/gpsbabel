@@ -47,9 +47,7 @@ type
     trkOutputOK: TSpeedButton;
     ActionList1: TActionList;
     acLetsGo: TAction;
-    btnFilter: TBitBtn;
     acFilterSelect: TAction;
-    btnProcess: TBitBtn;
     stbMain: TStatusBar;
     mnuMain: TMainMenu;
     mnuFile: TMenuItem;
@@ -61,7 +59,7 @@ type
     Intro1: TMenuItem;
     About1: TMenuItem;
     mnuReadme: TMenuItem;
-    acHelpReadme: TAction;
+    acHelpDoc: TAction;
     N1: TMenuItem;
     mnuOptions: TMenuItem;
     mnuSynthesizeShortNames: TMenuItem;
@@ -139,6 +137,8 @@ type
     pmnuForceselectedGPSdatatypesnuketypesfilter: TMenuItem;
     pmnu9: TMenuItem;
     pmnuFilter: TMenuItem;
+    btnFilter: TBitBtn;
+    btnProcess: TBitBtn;
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure OpenButtonClick(Sender: TObject);
@@ -157,7 +157,7 @@ type
     procedure chbInputDeviceClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure chbOutputDeviceClick(Sender: TObject);
-    procedure acHelpReadmeExecute(Sender: TObject);
+    procedure acHelpDocExecute(Sender: TObject);
     procedure edOutputFileKeyPress(Sender: TObject; var Key: Char);
     procedure cbInputFormatDeviceChange(Sender: TObject);
     procedure cbOutputFormatDeviceChange(Sender: TObject);
@@ -217,7 +217,7 @@ var
 implementation
 
 uses
-  filter, about, readme, options, select;
+  filter, about, options, select;
 
 {$R *.DFM}
 
@@ -384,7 +384,15 @@ end;
 procedure TfrmMain.FormShow(Sender: TObject);
 begin
   if not(FFirstShow) then Exit;
-  
+
+{$IFDEF VER120}
+  // --------------------
+  // Bug (?) Delphi4-Std./Sp3
+  FixAlign(btnProcess, 8);
+  FixAlign(btnFilter, 16, btnProcess);
+  // --------------------
+{$ENDIF}
+
   FFirstShow := False;
   PostMessage(SELF.Handle, WM_STARTUP, 0, 0); // keep sure our window is visible
 end;
@@ -400,7 +408,7 @@ begin
 
   // ? valid README form
   s := ExtractFilePath(ParamStr(0)) + 'gpsbabel.html';
-  acHelpReadme.Enabled := FileExists(s) or (frmReadme.Memo.Lines.Count > 0);
+  acHelpDoc.Enabled := FileExists(s);
 
   InitializeSerialPorts;
 end;
@@ -449,7 +457,7 @@ begin
   for i := 0 to dlgFileOpen.Files.Count - 1 do
   begin
     s := dlgFileOpen.Files[i];
-    if (Pos('"', s) <> 0) or (Pos(' ', s) <> 0) or (Pos(',', s) <> 0) then
+    if (s[1] <> '"') or (s[Length(s)] <> '"') then
       s := AnsiQuotedStr(s, '"');
     if (edInputFile.Text <> '') then edInputFile.Text := edInputFile.Text + ', ';
     edInputFile.Text := edInputFile.Text + s;
@@ -988,18 +996,13 @@ begin
   CheckInput;
 end;
 
-procedure TfrmMain.acHelpReadmeExecute(Sender: TObject);
+procedure TfrmMain.acHelpDocExecute(Sender: TObject);
 var
   s: string;
 begin
   s := ExtractFilePath(ParamStr(0)) + 'gpsbabel.html';
   if FileExists(s) then
     WinOpenFile(s, '')   // new gpsbabel.html
-  else begin // show the old readme
-    if (frmReadme = nil) then
-      Application.CreateForm(TfrmReadme, frmReadme);
-    frmReadme.ShowModal;
-  end;
 end;
 
 procedure TfrmMain.edOutputFileKeyPress(Sender: TObject; var Key: Char);
@@ -1264,9 +1267,6 @@ begin
     RefreshDesign;
     form := frmFilter;
     frmFilter := nil;
-    if (Form <> nil) then Form.Release;
-    form := frmReadme;
-    frmReadme := nil;
     if (Form <> nil) then Form.Release;
     form := frmAbout;
     frmAbout := nil;

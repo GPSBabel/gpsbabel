@@ -30,7 +30,6 @@ uses
   common in 'common.pas',
   filter in 'filter.pas' {frmFilter},
   about in 'about.pas' {frmAbout},
-  readme in 'readme.pas' {frmReadme},
   options in 'options.pas' {frmOptions},
   select in 'select.pas' {frmSelect};
 
@@ -50,6 +49,5 @@ begin
 
   Application.Initialize;
   Application.CreateForm(TfrmMain, frmMain);
-  Application.CreateForm(TfrmReadme, frmReadme);
   Application.Run;
 end.
