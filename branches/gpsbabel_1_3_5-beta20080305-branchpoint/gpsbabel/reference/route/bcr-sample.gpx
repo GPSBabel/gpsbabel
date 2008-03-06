@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="50.492706401" minlon="12.105471361" maxlat="51.314684001" maxlon="12.492485421"/>
+<wpt lat="50.492706401" lon="12.105471361">
+  <name>Neundorf</name>
+  <cmt>Orte</cmt>
+  <desc>bei D 08527</desc>
+  <sym>City (Small)</sym>
+</wpt>
+<wpt lat="50.494102371" lon="12.107252018">
+  <name>Plauen/Possig</name>
+  <cmt>Ortsinformationen</cmt>
+  <desc>bei D 08523</desc>
+  <sym>Information</sym>
+</wpt>
+<wpt lat="50.497986840" lon="12.105885049">
+  <name>Plauen/Westend</name>
+  <cmt>Standort</cmt>
+  <desc>bei D 08523</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="50.688914683" lon="12.327792655">
+  <name>Fraureuth/Beiersdorf</name>
+  <cmt>Standort</cmt>
+  <desc>bei D 08427</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="50.864403822" lon="12.429074255">
+  <name>Ponitz/Merlach</name>
+  <cmt>Standort</cmt>
+  <desc>bei D 04639</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="50.971321599" lon="12.452645474">
+  <name>Altenburg/Paditz</name>
+  <cmt>Standort</cmt>
+  <desc>bei D 04600</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.171165953" lon="12.492485421">
+  <name>Borna/Gestewitz</name>
+  <cmt>Standort</cmt>
+  <desc>bei D 04552</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.238200898" lon="12.388856592">
+  <name>Boehlen/Grossdeuben</name>
+  <cmt>Standort</cmt>
+  <desc>bei D 04564</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.314684001" lon="12.409118308">
+  <name>Leipzig/Thonberg</name>
+  <cmt>Orte</cmt>
+  <desc>bei D 04317</desc>
+  <sym>City (Small)</sym>
+</wpt>
+<rte>
+  <name>DE_Plauen-Leipzig</name>
+  <rtept lat="50.492706401" lon="12.105471361">
+    <name>Neundorf</name>
+    <cmt>Orte</cmt>
+    <desc>bei D 08527</desc>
+    <sym>City (Small)</sym>
+  </rtept>
+  <rtept lat="50.494102371" lon="12.107252018">
+    <name>Plauen/Possig</name>
+    <cmt>Ortsinformationen</cmt>
+    <desc>bei D 08523</desc>
+    <sym>Information</sym>
+  </rtept>
+  <rtept lat="50.497986840" lon="12.105885049">
+    <name>Plauen/Westend</name>
+    <cmt>Standort</cmt>
+    <desc>bei D 08523</desc>
+    <sym>Waypoint</sym>
+  </rtept>
+  <rtept lat="50.688914683" lon="12.327792655">
+    <name>Fraureuth/Beiersdorf</name>
+    <cmt>Standort</cmt>
+    <desc>bei D 08427</desc>
+    <sym>Waypoint</sym>
+  </rtept>
+  <rtept lat="50.864403822" lon="12.429074255">
+    <name>Ponitz/Merlach</name>
+    <cmt>Standort</cmt>
+    <desc>bei D 04639</desc>
+    <sym>Waypoint</sym>
+  </rtept>
+  <rtept lat="50.971321599" lon="12.452645474">
+    <name>Altenburg/Paditz</name>
+    <cmt>Standort</cmt>
+    <desc>bei D 04600</desc>
+    <sym>Waypoint</sym>
+  </rtept>
+  <rtept lat="51.171165953" lon="12.492485421">
+    <name>Borna/Gestewitz</name>
+    <cmt>Standort</cmt>
+    <desc>bei D 04552</desc>
+    <sym>Waypoint</sym>
+  </rtept>
+  <rtept lat="51.238200898" lon="12.388856592">
+    <name>Boehlen/Grossdeuben</name>
+    <cmt>Standort</cmt>
+    <desc>bei D 04564</desc>
+    <sym>Waypoint</sym>
+  </rtept>
+  <rtept lat="51.314684001" lon="12.409118308">
+    <name>Leipzig/Thonberg</name>
+    <cmt>Orte</cmt>
+    <desc>bei D 04317</desc>
+    <sym>City (Small)</sym>
+  </rtept>
+</rte>
+</gpx>

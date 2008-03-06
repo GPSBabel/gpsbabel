@@ -1,0 +1,5 @@
+<para>
+	When writing NMEA realtime positioning data, append to the 
+	output file instead of truncating it on each successive position
+	fix.
+</para>

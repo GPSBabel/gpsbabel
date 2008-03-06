@@ -1,0 +1,4 @@
+<para>
+This option specifies whether to allow whitespace (space, tab, etc.) in 
+generated short names on output.  The default is to not allow whitespace.
+</para>

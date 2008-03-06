@@ -1,0 +1,2296 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+
+<book id="GPSBabel_Documentation_Book">
+   <bookinfo id="GPSBabel_Documentation">
+      <title>GPSBabel Documentation</title>
+<!--
+      <revhistory>
+         <revision>
+            <revnumber>1.0</revnumber>
+            <date>2005-10-26T10:33:03.0Z</date>
+            <authorinitials>Dave Pawson</authorinitials>
+            <revremark>Initial conversion from plain text file at <ulink url="http://www.gpsbabel.org/readme.html">gpsbabel.org/readme.html</ulink>
+            </revremark>
+         </revision>
+         <revision>
+            <revnumber>1.1</revnumber>
+            <date>2005-10-27T07:39:32.0Z</date>
+            <authorinitials>DaveP</authorinitials>
+            <revremark>Update to <ulink url=" http://cvs.sourceforge.net/viewcvs.py/gpsbabel/gpsbabel/README?rev=1.143&amp;view=download">cvs, rev 1.143</ulink>
+            </revremark>
+         </revision>
+         <revision>
+            <revnumber>1.2</revnumber>
+            <date>2005-10-27T15:25:55.0Z</date>
+            <authorinitials>DaveP</authorinitials>
+            <revremark>Update to Add toc for formats &amp; brief format description
+            </revremark>
+         </revision>
+         <revision>
+            <revnumber>1.3</revnumber>
+            <date>2005-10-28T15:19:02.0Z</date>
+            <authorinitials>DaveP</authorinitials>
+            <revremark>Amended structure.   </revremark>
+         </revision>
+      </revhistory>
+-->
+   </bookinfo><?formats?>
+   <preface>
+      <title>Introduction</title>
+      <section id="The_Problem">
+         <title>The Problem</title>
+         <para> There are simply too many gratuitously different file formats
+to hold waypoint, track, and route information in various programs
+used by computers.  GPX (http://www.topografix.com/gpx.asp) defines a
+standard in XML to contain all the data, but there are too many
+programs that don't understand it yet and too much data that are in an
+alternate formats.
+</para>
+      </section>
+      <section>
+         <title>THE SOLUTION</title>
+         <para> I needed to convert waypoints between a couple of formats, so I
+whipped up a converter and based it on an extensible foundation so
+that it was easy to add new formats.  Most file formats added so far
+have taken under 200 lines of reasonable ISO C so they can be stamped
+out pretty trivially.  Formats that are ASCII text delimited in some
+fixed way can be added with no programming at all via our 'style'
+mechanism.
+</para>
+      </section>
+   </preface>
+   <chapter id="Getting_and_Building">
+      <title>Getting it  and Building it</title>
+      <para> GPSBabel is distributed in source format that will work on
+about any operating system and as ready-to-run binaries for some
+operating systems, notably Windows.  See the "OS-Specific notes" at
+<ulink url="http://www.gpsbabel.org ">gpsbabel.org</ulink> for
+instructions on those binary kits.
+</para>
+      <para> For operating systems where no binary is provided, you will
+have to build it.  The code should be compilable on any system with
+ISO C89 compilers.  It's been tested on UnixWare, OpenServer, OS/X,
+Linux, Solaris, and a variety of processors and compilers.
+</para>
+      <para> Libexpat is required for source builds.  If you get errors
+about expat.h being missing, you must either edit the Makefile to tell
+the compiler where it is or install it in a sensible place.  Expat can
+be downloaded from <ulink url="http://expat.sourceforge.net">http://expat.sourceforge.net</ulink> and is part of Apache so it's very portable.
+</para>
+   </chapter>
+   <chapter id="Usage">
+      <title>Usage</title>
+      <sect1 id="Invocation">
+         <title>Invocation</title>
+         <para>Invocation was meant to be flexible.  Unfortunately,
+         that can sometimes lead to unwieldy command lines.</para>
+         <screen format="linespecific">gpsbabel -? </screen>
+         <para>will always show you the supported file types.  To use
+         this program, just tell it what you're reading, where to read
+         it from, what you're writing, and what to write it to.  For
+         example:</para>
+         <screen format="linespecific">gpsbabel -i geo -f /tmp/geocaching.loc -o gpx -F /tmp/geocaching.gpx</screen>
+         <para>tells it to read the first file in geocaching.com
+         format and create a new file in GPX format.</para>
+         <para> This command will read from a Magellan unit attached
+         to the first serial port on a Linux system (device names will
+         vary on other OSes) and write them as a geocaching loc file.
+         The second command does the same for windows.</para>
+         <screen format="linespecific">gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</screen>
+         <screen format="linespecific">gpsbabel -i magellan -f com1 -o geo -F mag.loc</screen>
+         <para>Optionally, you may specify <parameter moreinfo="none">"-s"</parameter> in any command line.  This
+         causes the program to ignore any "short" names that may be
+         present in the source data format and synthesize one from the
+         long name.  This is particularly useful if you're writing to
+         a target format that isn't the lowest common denominator but
+         the source data was written for the lowest common
+         denominator.  I use this for writing data from geocaching.com
+         to my Magellan so my waypoints have "real" names instead of
+         the 'GC1234' ones that are optimized for NMEA-only receivers.
+         A geocacher with a Magellan receiver may thus find commands
+         like this useful.</para>
+         <screen format="linespecific"> gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0  </screen>
+	<screen format="linespecific"> gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1</screen>
+      </sect1>
+      <sect1>
+         <title>ADVANCED USAGE</title>
+         <para>Argument are processed in the order they appear on the command
+line and are translated internally into a pipeline that data flows
+through when executed. Normally one would: </para>
+         <simplelist type="vert">
+            <member>read from one input</member>
+            <member>optionally apply filters </member>
+            <member>write into one output</member>
+         </simplelist>
+         <para> but GPSBabel is flexible enough to allow more complicated
+operations such as reading from several files (potentially of
+different types), applying a filter, reading more data, then write the
+merged data to multiple destinations.
+</para>
+         <para>The input file type remains unchanged until a new
+         <parameter moreinfo="none">-i</parameter> argument is seen.
+         Files are read in the order they appear. So you could merge
+         three input files into one output file with: </para>
+         <screen format="linespecific">gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc</screen>
+         <para>You can merge files of different types:</para>
+         <screen format="linespecific">gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx \ 
+-o gpsutil -F big.gps</screen>
+         <para> You can write the same data in different output formats:</para>
+         <screen format="linespecific">gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx 1.wpt</screen>
+         <para>If you want to change the character set of input or/and
+         output side you can do this with the option <option>-c
+         &lt;character set&gt;</option>. You can get a complete list
+         of supported character sets with "gpsbabel -l".  To change
+         the character set on both sides you should do this:</para>
+         <screen format="linespecific">gpsbabel -i xcsv,style=foo.style -c latin1 -f foo  \
+	         -o xcsv,style=bar.style -c ms-ansi -F bar</screen>
+         <para>Note, that some formats has a fixed character set and ignore this option.</para>
+      </sect1>
+      <sect1>
+         <title>ROUTE AND TRACK MODES</title>
+         <para> Most formats will make reasonable attempt to work
+         transparently with waypoints, tracks, and routes.  Some
+         formats, like 'garmin' and 'magellan' require the <parameter moreinfo="none">-t</parameter> flag to work with tracks and
+         <parameter moreinfo="none">-r</parameter> to work with
+         routes. <parameter moreinfo="none">-w</parameter> is for
+         waypoints, and is the default. So if you wanted to read all
+         data from your unit into a gpx file, you might use a command
+         like:</para>
+         <screen format="linespecific"> gpsbabel -t -r -w -i magellan -f com1:  -o gpx -F backup.gpx</screen>
+         <para> Tracks and routes are advanced features and don't try
+         to handle every possible hazard that can be encountered
+         during a conversion.  If you're merging or converting files
+         of similar limitations, things work very well.</para>
+         <para> Tracks and routes will sometimes be converted to a
+         list of waypoints when necessary, f.i. when writing into one
+         of the CSV formats. The inverse operation is not supported
+         right now, so reading the converted track back from CSV will
+         always result in a list of waypoints, not the original track.
+</para>
+         <para> The presence of <parameter moreinfo="none">-s</parameter> on the command line tends to
+         creats havoc on tracks and routes since many of these formats
+         rely on internal linkages between such points and renaming
+         them may break those linkages.  In general, don't use
+         <parameter moreinfo="none">-s</parameter> when tracks or
+         routes are present.
+</para>
+      </sect1>
+   </chapter>
+   <chapter id="formats">
+    <title>The Formats</title>
+    <section id="an1">
+      <sectioninfo>
+	<subtitle>DeLorme format</subtitle>
+      </sectioninfo>
+      <title>AN1</title>
+      <para> This format supports the DeLorme ".an1" drawing file
+format.  It can currently be used to either read or write drawing
+files.  If you use this format to create drawing files with routes or
+waypoints from another source, it will currently create "Red Flag"
+symbols for waypoints, and thick red lines for routes or tracks.  It
+is possible to merge two drawing layers by doing something like this:
+</para>
+      <screen format="linespecific">gpsbabel -i an1 -f one.an1 -f two.an1 -o an1 -F merged.an1 </screen>
+      <para> In this case, the merged data will contain all of the
+properties of the original data.
+</para>
+      <para>If your original data contains geocaching-specific
+information such as difficulty and terrain, GPSBabel will
+automatically include that information in the waypoint descriptions in
+the generated drawing file.  If you do not want that, specify the
+"nogc" option on the command line:</para>
+      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx -o an1,nogc -F 12345.an1</screen>
+      <para>The "deficon" option allows you to specify which symbol to
+use for points that don't have a symbol already.  It defaults to "Red
+Flag" but it accepts any symbol name you can put in a DeLorme export
+file.  To find the name of a specific symbol in Street Atlas, let the
+mouse pointer hover over it for a few seconds and the name will be
+displayed.</para>
+      <para>The "color" option allows you to specify the color for
+line or mapnote data.  It accepts color names of the form "#FF0000" (red) or any
+of the color names from the Cascading Style Sheets (CSS)
+specification.i</para>
+      <para>The "wpt_type" option specifies how to represent point data
+in the draw file.  Valid waypoint types are "marker", "text", "mapnote",
+and "circle".  The default is "marker". </para> 
+      <para>If the waypoint type is "circle", the "radius" option specifies
+the radius of the circles.  By default, this is in miles, but it may be 
+specified in kilometers by adding a 'k'.  The default radius is 1/10 mile.
+</para>
+      <para>The "zoom" option specifies at what zoom level Street
+Atlas will begin showing reduced versions of your symbols. The default
+is 10.  Setting zoom to 0 will disable this feature.  Setting it to
+anything but the default will override the zoom level specified on any
+waypoints that were read from an existing an1 file; this is by design.
+</para>
+      <para>GPSBabel has limited experimental support for other types
+of layers besides the default "drawing" layer with the use of two
+options:
+</para>
+      <para> The "type" option specifies the type of the drawing layer
+to be created.  The supported values are "drawing", "road", "trail",
+"waypoint", or "track".  If you do not specify a type, the default
+will be either the type of the previous an1 file or "drawing" if there
+is no previous file. This lets you merge, for example, two road layers
+without having to specify "type=road" for the output.  </para>
+      <para>If you are creating a road layer, you may also use the
+"road" option, which allows you to change the types of roads based on
+their names.  You can change multiple roads at the same time.
+Currently supported types are </para>
+      <simplelist type="vert">
+	<member>
+               <parameter moreinfo="none">limited</parameter>
+Limited-access freeways</member>
+	<member>
+               <parameter moreinfo="none">toll</parameter>
+Limited-access toll highways</member>
+	<member>
+               <parameter moreinfo="none">ramp</parameter>      Access
+ramps for limited-access highways</member>
+	<member>
+               <parameter moreinfo="none">us</parameter> National
+highways (e.g. US routes)</member>
+	<member>
+               <parameter moreinfo="none">primary</parameter> Primary
+State/Provincial routes</member>
+	<member>
+               <parameter moreinfo="none">state</parameter>
+State/Provincial routes</member>
+	<member>
+               <parameter moreinfo="none">major</parameter>     Major
+Connectors</member>
+	<member>
+               <parameter moreinfo="none">ferry</parameter>     Ferry
+Routes</member>
+	<member>
+               <parameter moreinfo="none">local</parameter>     Local
+Roads</member>
+	<member>
+               <parameter moreinfo="none">editable</parameter>
+User-drawn Roads
+</member>
+      </simplelist>
+      <para>GPSBabel defaults to creating editable roads.  These are
+routed just like local roads, but may be edited with the drawing tools
+in Street Atlas.</para>
+      <para> This option has a special format that is best
+demonstrated by example:</para>
+      <screen format="linespecific">"road=I-599!limited!Beecher St.!major" </screen>
+      <para>
+        This option will cause any road named "I-599" to become a
+limited- access highway and any road named "Beecher St." to become a
+major connector.  Note that roads that have had their types changed in
+this way are not editable in Street Atlas, so make sure they are where
+you want them before you change them, and make sure to keep a backup
+of your original road layer.  Note that the ! is a shell metacharacter
+in bash and possibly other shells, so you may have to use single
+quotes or some other escape mechanism.
+</para>
+	<para>There is a tutorial <ulink url="http://www.gpsbabel.org/formats/delorme-new-interstate/"> how to create an onramp for a limited access highway in Street Atlas USA using GPSBabel.</ulink>
+	</para>
+    </section>
+    <section id="axim_gdb">
+      <sectioninfo>
+	<subtitle>Dell Axim Navigation System tracklogs</subtitle>
+      </sectioninfo>
+      <title>axim_gdb</title>
+	<para> This reads the binary .gpb tracks recorded by Dell Axim.</para> 
+	<para> The structure has a fixed record length with 
+	  many unknown bytes, but we can extract the common gps data
+	  we need to create nice tracks in any format.   For this reason, 
+	  this track format is read-only.
+	</para>
+    </section>
+
+    <section id="baroiq">
+      <sectioninfo>
+	<subtitle>Brauniger IQ series</subtitle>
+      </sectioninfo>
+      <title>BAROIQ</title>
+      <para>Serial download protocol for the Brauniger IQ series of
+barograph recording flight instruments.  Creates a track of altitude
+vs time which can be merged with a GPS track of the same flight to
+create a three dimensional IGC file. </para>
+    </section>
+    <section id="bcr">
+      <sectioninfo>
+	<subtitle>Motorrad Routeplanner 2002 - </subtitle>
+      </sectioninfo>
+      <title>BCR</title>
+      <para> This file format (extension .bcr) is used in "Motorrad
+Routenplaner 2002-..." by Map&amp;Guide. It is a route-onle
+format. If you own a newer release (2005...) you can also use the XML
+export and convert via <command moreinfo="none">gpsbabel ... -i tef
+...</userinput> to your preferred format.  May be there are other
+products from Map&amp;Guide using the format.
+</para>
+      <para> Coordinates are stored in Mercator format. The
+calculation between this and our internal format can result in visible
+differences.  Experience reports are welcome.</para>
+      <para>	Options:</para>
+      <para>
+            <option>index</option> - If more then one route are
+present in source data, with this option you can determine, which of
+this should used for the output. The range is 1 to number routes in
+input.  If you don't use this, only the first route will be converted.
+</para>
+      <para>
+            <option>name</option> - Not every input format has a real
+name for routes in their data. So you can give the route a nice
+name.</para>
+      <para>
+            <option>radius</option> - Overwrites the default value of
+6371000.0 meters for the earth radius. My be this can help to reduce
+differences.</para>
+      <para/>
+      <example id="sample_bcr_command">
+	<title>Sample BCR command with all options</title>
+	<screen format="linespecific">gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr </screen>
+      </example>
+    </section>
+    <section id="cambridge">
+      <sectioninfo>
+	<subtitle>Cambridge/Winpilot flight analysis and planning software.</subtitle>
+      </sectioninfo>
+      <title>Cambridge</title>
+      <para>Support for Cambridge/Winpilot flight analysis and planning software for
+	glider pilots.  </para>
+    </section>
+    <section id="cetus">
+      <sectioninfo>
+	<subtitle>Cetus, for Palm OS</subtitle>
+      </sectioninfo>
+      <title>CETUS</title>
+      <para>Cetus GPS <ulink
+url="http://www.cetusgps.dk/">www.cetusgps.dk</ulink> is a program for
+Palm/OS.  Working with Ron Parker and Kjeld Jensen, we can now read
+and write files for that program.</para>
+    </section>
+    <section id="compegps">
+      <sectioninfo>
+	<subtitle>CompeGPS</subtitle>
+      </sectioninfo>
+      <title>compegps</title>
+      <para>Suppport for CompeGPS data files.</para>
+      <para>These data files are "character" separated text files like
+the pcx format. "Character" means special data lines can have their
+own separator.</para>
+      <para> Since release 6.1 GPX is also a supported import/export
+format for waypoints, routes and tracks.</para>
+      <para> For more information please have a look at <ulink
+url="http://www.compegps.com">http://www.compegps.com</ulink></para>
+      <para>
+         Options: </para>
+      <para><option>deficon</option> Default Icon name.</para>
+      <para><option>index</option> Use route/track number
+&lt;index&gt; from input data for output.</para>
+      <para><option>radius</option> Give points (waypoints/route
+points)  a default radius (proximity)</para>
+      <para><option>snlen</option> Length of generated short names
+(default 16).</para>
+    </section>
+    <section id="coastexp">
+      <sectioninfo>
+	<subtitle>CoastalExplorer (tm) </subtitle>
+      </sectioninfo>
+      <title>coastexp</title>
+      <para>This is the format used by CoastalExplorer (tm). The
+format is XML with items uniquely identified by Windows-style UUIDs.
+<ulink
+url="http://www.rosepointnav.com">http://www.rosepointnav.com</ulink>
+         </para>
+    </section>
+    <section id="copilot">
+      <sectioninfo>
+	<subtitle>CoPilot Flight Planner for Palm OS</subtitle>
+      </sectioninfo>
+      <title>CoPilot</title>
+      <para> This code is mostly intended to convert CoPilot Flight
+Planner for Palmd/OS atabases into other formats.  You probably should
+not use this to write CoPilot databases, although the code is there,
+because GPSBabel doesn't convert magnetic declination values.</para>
+      <para> Questions, bug reports, etc, to ptomblin at
+xcski.com</para>
+      <para>
+            <ulink
+url="http://xcski.com/~ptomblin/CoPilot/">http://xcski.com/~ptomblin/CoPilot/</ulink> 
+and <ulink
+url="http://navaid.com/CoPilot/">http://navaid.com/CoPilot</ulink>
+         </para>
+    </section>
+    <section id="coto">
+      <sectioninfo>
+	<subtitle>cotoGPS, a Palm GPS program</subtitle>
+      </sectioninfo>
+      <title>COTO</title>
+      <para> Format for cotoGPS, a Palm GPS program. It can read both
+track and marker (waypoint) files. It is currently unable to write
+track files, so only marker files can be written. The marker
+categories are written to and read from the icon description. The 'Not
+Assigned' category leaves the icon description empty on read.
+Currently geocache info is ignored.</para>
+      <para>
+         Options: </para>
+      <para>
+            <option>zerocat</option> (output) - Name for the Palm 'Not
+Assigned' category.  Defaults to 'Not Assigned'.
+  </para>
+      <para> There is also a debugging option called 'internals' which
+takes a XCSV delimiter value. It writes some internal values
+(distance, arc, x and y) of the cotoGPS track format to the notes
+field.  URL: <ulink
+url="http://core.de/~coto/projects/cotogps/">core.de/~coto</ulink>
+Contributed by Tobias Minich.
+	</para>
+    </section>
+    <section id="cst">
+      <sectioninfo>
+	<subtitle>CarteSurTable - French shareware</subtitle>
+      </sectioninfo>
+      <title>CST</title>
+      <para> With this format we can read CarteSurTable data files.
+CarteSurTable is a shareware program widely used in France. The data
+inside have to be seen as a mixture of a waypoints list, one route and
+several tracks.  <ulink
+url="http://phgiraud.free.fr/CarteSurTable/CarteSurTable.htm">phgiraud.free.fr</ulink>
+         </para>
+    </section>
+    <section id="csv">
+      <sectioninfo>
+	<subtitle>Comma Separated Variable, for Delorme S&amp;A
+Deluxe</subtitle>
+      </sectioninfo>
+      <title>CSV</title>
+      <para> There are a billion variants of Comma Separated Value
+data.  This is the one that makes Delorme S&amp;A Deluxe 9 happy. It's
+also a very simple program and useful for many other programs like
+spreadsheets.</para>
+      <para> CSV is also the correct format for Lowrance MapCreate,
+their commercial mapping program, or GDM6 (their free waypoint
+manager) for iFinder which is available at <ulink
+url="http://www.lowrance.com/Software/GDM6/Default.asp">lowrance.com</ulink>
+         </para>
+    </section>
+    <section id="custom">
+      <sectioninfo>
+	<subtitle>Plain CSV</subtitle>
+      </sectioninfo>
+      <title>custom</title>
+      <para> This is a "kitchen sink" CSV format.  No known program
+will read it, but it's handy for simply converting an arbitrary file
+to text so it can be pulled into a spreadsheet or manipulated with
+text processing tools.</para>
+    </section>
+    <section id="dna">
+      <sectioninfo>
+	<subtitle>Nivitrak DNA marker format</subtitle>
+      </sectioninfo>
+      <title>DNA</title>
+      <para>Navitrak DNA marker format - Another CSV format file. This
+is the format that is compatible with the DNA Desktop import/export
+command.  Reading the binary Markers.jwp format directly off the data
+card is not supported yet.  Contributed by Tim Zickus.</para>
+    </section>
+    <section id="easygps">
+      <sectioninfo>
+	<subtitle>EasyGPS binary format</subtitle>
+      </sectioninfo>
+      <title>EasyGPS</title>
+      <para> This is the binary file format used by EasyGPS.  This
+format is seemingly being phased out in favor of GPX in newer versions
+of EasyGPS, but this allows conversions to and from the old binary
+.loc format.
+</para>
+      <para>
+            <ulink
+url="http://www.easygps.com/">http://www.easygps.com/</ulink>
+         </para>
+      <para> Information about and sketchy code to implement this file
+format were provided by Eric Cloninger.
+</para>
+    </section>
+    <section id="fugawi">
+      <sectioninfo>
+	<subtitle>Fugawi CSV format</subtitle>
+      </sectioninfo>
+      <title>Fugawi</title>
+      <para> This was a requested CSV format, *not* the proprietary
+binary format used by Fugawi. Like any other CSV format, GPSBabel
+cannot read tracks in this format, but converting a track into it and
+then importing as track in Fugawi works.</para>
+      <para> It is known to work with Fugawi V3.1.4.635. When
+importing/exporting waypoints, one has to specify the order of fields
+as follows (names of fields may depend on the language used by
+Fugawi):</para>
+      <simplelist type="vert">
+	<member> - Name</member>
+	<member> - Comment</member>
+	<member> - Description</member>
+	<member> - Latidude</member>
+	<member> - Longitude</member>
+	<member> - Altitude (metres)</member>
+	<member> - Date (yyyymmdd/yymmdd)</member>
+	<member> - Time of day (hhmmss)</member>
+      </simplelist>
+      <para> When importing tracks, use "[ignore]" instead of "Name",
+"Comment" and "Description".</para>
+      <para>
+            <ulink
+url="http://www.fugawi.com/">http://www.fugawi.com/</ulink>
+         </para>
+    </section>
+    <section id="garmin">
+      <sectioninfo>
+	<subtitle>Garmin waypoint format</subtitle>
+      </sectioninfo>
+      <title>GARMIN</title>
+      <para> Waypoint serial upload and download works reliably under
+both POSIX and Windows.  I originally tested it with a Vista, a V, and
+a base eTrex, all graciously provided on loan by Joe Armstrong, but
+it's now regularly exercised on a 60CS (USB and serial) and many other
+models.  The communications library used, jeeps, claims to support
+most models of Garmin hardware.  Be sure the GPS is set for "Garmin
+mode" in setup and that nothing else (PDA hotsync programs, gpsd,
+getty, pppd, etc.) is using the serial port.
+</para>
+      <para> GPSBabel supports the USB Garmins under Windows and on
+Linux and OS/X via libusb.  It's reported successful with VistaC,
+SummitC, 60C, 60CS, 76C, 76CS, 96C, and Quest.  Some users report
+success with StreetPilot 2610 and some do not, but nobody's followed
+up with details on that.
+</para>
+      <para> Currently, only a single USB unit at a time can be
+supported.  The device name to use on the command line is "usb:" Thus,
+to read the waypoints from a Garmin USB unit and write them to a GPX
+file:
+</para>
+      <screen format="linespecific">gpsbabel -i garmin -f usb: -o gpx -F blah.gpx</screen>
+      <para> When reporting problems with Garmin, be sure to include
+the full unit model, firmware version, and be prepared to offer
+debugging dumps by adding "-D9" to the command line, like:
+</para>
+      <screen format="linespecific"> gpsbabel -D9 -i garmin -f usb: -o gpx -F blah.gpx</screen>
+      <para> Custom icons are supported on units that support that.
+Neither GPSBabel nor your firmware know what is associated with any
+given slot number.  They don't know that the picture you placed in the
+first slot is a happy face, they only know they're in the lowest
+numbered slot.  GPSBabel names the them consistently with Mapsource,
+so they are named 'Custom 0' through 'Custom 23'.
+</para>
+    </section>
+
+    <section id="garmin_poi">
+      <sectioninfo>
+        <subtitle>Garmin POI Database.</subtitle>
+      </sectioninfo>
+      <title>garmin_poi</title>
+      <para>The <ulink
+url="http://www.garmin.com/support/agree.jsp?id=927">Garmin POI loader</ulink> 
+loads custom points of interest into certain models of
+Garmin GPS receivers.  (As of this writing, only the models introduced
+in 2005 and later are supported.  See Garmin's site for more info.)
+This is the format readable that that program.</para>
+    </section>
+
+    <section id="garmin_txt">
+      <sectioninfo>
+        <subtitle>Garmin MapSource Text Export (tab delimited).</subtitle>
+      </sectioninfo>
+      <title>garmin_txt</title>
+      <para>
+  garmin_txt is a format that contains nearly all information as in the MapSource main format, GDB.
+garmin_txt has some computed values like distances between routepoints and trackpoints, speed, and course (heading) in addition to the standard data fields.
+      </para>
+      <para>
+The main goal of garmin_txt is to make aviation data more available. Because 
+MapSource supports only the export, GPSBabel gives you the possibility to 
+bring aviation data into MapSource.
+      </para>
+      <para>
+During the export with MapSource, some fields are written using local settings
+of MapSource and Windows. These include grid format, gps datum, distance and
+temperature units, and the representation of date and time fields. GPSBabel 
+tries to read all items automatically. Problems with date and time format can 
+be solved with the options 'date' and 'time'.
+      </para>
+      <para>Options:</para>
+      <para><option>date</option> -  input/output date format (Windows-like. For example  "YYYY/MM/DD")</para>
+      <para><option>datum</option> - write coodinates using this (GPSBabel known!) datum </para>
+      <para><option>dist</option> -  output unit for distance values, M (=metric, m/km/kph) or S (=statue, ft/mi/mph)</para>
+      <para><option>prec</option> -  write coordinates with precision # (# numbers behind dot)</para>
+      <para><option>temp</option> -  output unit for temperature values, C (=celsius) or F (=fahrenheit)</para>
+      <para><option>time</option> -  input/output time format (Windows-like For example, "hh:mm:ss xx")</para>
+      <para><option>utc</option> -   write timestamps x hours relative to UTC</para>
+      <example id="all_garmin_txt_options">
+        <title>Command showing garmin_txt output with all options</title>
+	<screen format="linespecific">gpsbabel -i garmin_txt,date="MM/DD/YYYY",time="hh:mm:ss xx" \
+   -f in.txt \
+   -o garmin_txt,date="DD.MM.YYYY",datum="WGS 72",dist=m,prec=6,temp=c,time="HH:mm:ss",utc=+2 \
+   -F out.txt
+        </screen>
+      </example>
+    </section>
+
+    <section id="garmin301">
+      <sectioninfo><subtitle>Garmin 301 data.</subtitle></sectioninfo>
+      <title>garmin301</title> <para>This is a very simple format that
+is most useful for exporting data from a Garmin301 to other programs
+for analysis.   It's a simple comma delimited format that includes the
+timestamp, 3D position information and heart rate so you can pull it
+into a spreadsheet or graphing program. </para>
+    </section>
+
+    <section id="gcdb">
+      <sectioninfo>
+	<subtitle>GeocachingDB format</subtitle>
+      </sectioninfo>
+      <title>Gcdb</title>
+      <para>This is the GeocachingDB by DougsBrat.  It works with v2
+and v3 of this program. See <ulink
+url="http://vip.hyperusa.com/~dougs/geocachingdb/geocachingdb.htm">vip.hyperusa.com</ulink>
+         </para>
+    </section>
+    <section id="gdb">
+      <sectioninfo>
+	<subtitle>Garmin GPS Database (as in MapSource)
+format</subtitle>
+      </sectioninfo>
+      <title>GDB</title>
+      <para> Support for the "Garmin GPS Database" format used by
+default in MapSource versions since release 6.0. By default we create
+gdb's of version 2.  Version 2 is used in Mapsource 6.3 and 6.5.
+</para>
+      <para> Garmin GPS database is an undocumented file format. The
+basic info for this module comes from the existing MapSource
+conversion code.
+</para>
+      <para> Additional options:</para>
+      <para>
+            <option>ver</option> - set the data format version of the
+output file (currently 1 or 2); 2 is our default.  </para>
+      <para>
+            <option>via</option> - Drop hidden route points (means
+calculated stuff)</para>
+      <para>
+            <option>cat</option> - default category on output
+(1..16)</para>
+    </section>
+    <section id="geo">
+      <sectioninfo>
+	<subtitle>geocaching.com .loc file format</subtitle>
+      </sectioninfo>
+      <title>GEO</title>
+      <para>geocaching.com spits up geocaching.loc files that are
+XML-ish but not quite GPX.  Becuase it's so close to GPX, this format
+is very well supported.</para>
+    </section>
+    <section id="geocaching-db">
+      <sectioninfo>
+	<subtitle>GeocachingDB PDA format</subtitle>
+      </sectioninfo>
+      <title>Geocaching DB</title>
+      <para> This is a PDA file format.  It was tested against version
+2 of GeocachingDB and a development snapshot of version 3. Information
+on the file format came from Dougs Brat and Ron Parker.  A
+particularly handy way to use GPSBabel on these files is to use
+GPSBabel to read a GPX file with Groundspeak (geocaching.com)
+extensions and let it write you a GeocachingDB file that contains the
+cache names, difficulty, terrain, and such.</para>
+      <para>
+            <ulink
+url="http://vip.hyperusa.com/~dougs/geocachingdb/geocachingdb.htm">vip.hyperusa.com</ulink>
+         </para>
+    </section>
+    <section id="geonet">
+      <sectioninfo>
+	<subtitle>GEOnet Names Server country file format
+(input)</subtitle>
+      </sectioninfo>
+      <title>GEOnet</title>
+      <para>Input support for the GEOnet Names Server (GNS) country
+file structure.  Export to this format is not possible, as this format
+has too many fields that we never get populated by any other
+format.</para>
+    </section>
+    <section id="geoniche">
+      <sectioninfo>
+	<subtitle>Geoniche - Palm format for off-road users</subtitle>
+      </sectioninfo>
+      <title>geoniche</title>
+      <para>Geoniche is a Palm/OS application oriented for the
+off-road user.  This module was contributed by Rick Richardson.  See
+<ulink
+url="http://www.nwlink.com/~raydar/GeoNiche/">nwlink.com</ulink>
+         </para>
+    </section>
+    <section id="glogbook">
+      <sectioninfo>
+	<subtitle>Garmin logbook format for Forerunner and
+ForeTrex</subtitle>
+      </sectioninfo>
+      <title>glogbook</title>
+      <para>This is the XML format used by the Garmin Logbook product
+that ships with Forerunner and Foretrex.  <ulink
+url="http://www.garmin.com">http://www.garmin.com</ulink>
+         </para>
+    </section>
+    <section id="google">
+      <sectioninfo>
+	<subtitle>Google maps routes</subtitle>
+      </sectioninfo>
+      <title>GOOGLE</title>
+      <para> This format is designed to read the XML emitted when you
+tack "&amp;output=js" onto the end of a Google Maps route URL (use
+the "link to this page" option to get a usable URL.)  This allows you
+to plan a route using Google Maps, then download it and use it in your
+own mapping program or GPS receiver.  If you use a Unix-compatible
+operating system, this shell script might be useful:
+</para>
+      <programlisting>
+#!/bin/sh 
+FROM="233 S. Upper Wacker Dr, Chicago, IL" 
+TO="1060 W. Addison St, Chicago, IL" 
+wget -O - "http://maps.google.com/maps?q=$FROM to $TO&amp;output=js" \
+2&amp;&gt;/dev/null &gt;google_map.js
+gpsbabel -i google -f google_map.js -o gpx -F google_map.gpx
+</programlisting>
+      <para> Note that Internet Explorer has been observed to damage
+the XHTML beyond recognition so use a better browser to save the pages
+such as Firefox or Mozilla.
+</para>
+    </section>
+    <section id="gpilots">
+      <sectioninfo>
+	<subtitle>Palm OS format for GPilots</subtitle>
+      </sectioninfo>
+      <title>GpilotS</title>
+      <para> This is a Palm/OS file format for GPilotS.  It was tested
+against version 6.2.
+</para>
+      <para>
+            <ulink
+url="http://www.cru.fr/perso/cc/GPilotS/">http://www.cru.fr/perso/cc/GPilotS/</ulink>
+         </para>
+      <para> Neither tracks nor routes are supported at this
+time.</para>
+    </section>
+    <section id="gpl">
+      <sectioninfo>
+	<subtitle>Delorme gpl format</subtitle>
+      </sectioninfo>
+      <title>gpl</title>
+      <para>This is the 'gpl' format as used in Delorme mapping
+products.  It is a track format and contains little more than the
+tracklog of a GPS that was attached while driving. <ulink
+url="http://www.frontiernet.net/~werner/gps/">frontiernet.net</ulink>
+         </para>
+    </section>
+    <section id="gpsdrive">
+      <sectioninfo>
+	<subtitle>GpsDrive way.txt file format.</subtitle>
+      </sectioninfo>
+      <title>GPSDRIVE</title>
+      <para>GpsDrive way.txt file format. A space seperated format
+file. Tested against GpsDrive v 1.30 found at <ulink
+url="http://www.kraftvoll.at/software">kraftvoll.at</ulink>.
+Contributed by Alan Curry.</para>
+    </section>
+    <section id="gpsdrivetrack">
+      <sectioninfo>
+	<subtitle>GpsDrive saved track format</subtitle>
+      </sectioninfo>
+      <title>GPSDRIVETRACK</title>
+      <para>Format used by GpsDrive to save tracks. Like GPSDRIVE a
+space seperated format file. See above for a link to GpsDrive.
+Contributed by Tobias Minich.</para>
+    </section>
+    <section id="gpsman">
+      <sectioninfo>
+	<subtitle>GPS Manager format (WGS84, DDD)</subtitle>
+      </sectioninfo>
+      <title>GPSMAN</title>
+      <para> GPS Manager can read and write formats that this
+converter doesn't understand.  The default formats (WGS84, DDD) work
+reliably.</para>
+    </section>
+    <section id="gpspilot">
+      <sectioninfo>
+	<subtitle>GPSPILOT file format</subtitle>
+      </sectioninfo>
+      <title>GPSPILOT</title>
+      <para>The file format for GPSPILOT <ulink
+url="http://www.gpspilot.com">gpspilot.com</ulink> was provided by Ron
+Parker.  The output from this module has been tested with GPSPilot
+Tracker v5.05sx, but it is based on reverse-engineering so it may not
+work with all versions of all GPSPilot products.  It had read-only
+support for Airport, Navaid, City and Landmark files but will read and
+write Point files.</para>
+    </section>
+    <section id="gpsutil">
+      <sectioninfo>
+	<subtitle>GPSUtil file format</subtitle>
+      </sectioninfo>
+      <title>GPSUTIL</title>
+      <para>GPSUtil has a simple file format of this program that runs
+on POSIX- compliant OSes like UNIX and Linux.  Reads and writes of
+this format are reliable.  (I've also contributed to this program.)
+It's available at <ulink
+url="http://www.cs.uakron.edu/~hennings/gpsutil">cs.uakron.edu</ulink>.</para>
+    </section>
+    <section id="gpx">
+      <sectioninfo>
+	<subtitle>EasyGPS, ExpertGPS etc format. </subtitle>
+      </sectioninfo>
+      <title>GPX</title>
+      <para>This is the most capable and expressive of all the file
+formats supplied.  It is described at <ulink
+url="http://www.topografix.com/gpx.asp">topografix.com</ulink> and is
+supported by EasyGPS, ExpertGPS, and many other programs described at
+<ulink
+url="http://www.topografix.com/gpx_resources.asp">topografix.com</ulink>
+         </para>
+    </section>
+    <section id="GTM">
+      <sectioninfo>
+	<subtitle>GPS TrackMaker format.</subtitle>
+      </sectioninfo>
+      <title>GTM</title>
+      <para>Input and output support for waypoints, tracks and routes in
+	     the <ulink url="http://www.gpstm.com">GPS TrackMaker </ulink>
+	      binary format.</para>
+      <para>Code implemented by Gustavo Niemeyer.</para>
+    </section>
+    <section id="hiketech">
+      <sectioninfo>
+	<subtitle>Mac OS HikeTech formats. TopoDraw, Link2GPS &amp;
+GPSWrite</subtitle>
+      </sectioninfo>
+      <title>Hiketech</title>
+      <para>This is the .gps format used by the Mac OS X applications
+written by HikeTech. These include TopoDraw, Link2GPS, and GPSWrite.
+More information about these products can be found at <ulink
+url="http://www.hiketech.com">hiketech.com</ulink>
+         </para>
+    </section>
+    <section id="holux">
+      <sectioninfo>
+	<subtitle>Holux format (Holuxgm-100)</subtitle>
+      </sectioninfo>
+      <title>HOLUX</title>
+      <para> The Holuxgm-100 (e-fox) gps receiver uses standard
+compact flash cards.  File formats were provided by Holux-Taiwan
+<ulink url="http://www.holux.com.tw">holux.com</ulink> to the author.
+The code was tested against version 2.27E1; other versions and
+receivers may work but have not been explictly tested.  Anyone with
+information on other Holux receivers is encouraged to contact
+jochen@bauerbahn.net.
+</para>
+      <para> When copying the .wpo file to a flash card, the file must
+be named <filename moreinfo="none">tempwprt.wpo</filename> as the
+receiver will ignore all other files.
+</para>
+      <para> Comparing the waypoints of a .wpo files against other
+formats like .gpx you may notice a small difference in the latitude
+and longitude values.  The reason is the low resolution of the
+coordinates in the wpo file format.  In a .wpo file the reolution is
+1/10"; in gpx for example it is 1/100".  A a practical matter, this
+loss is only about 1.7 meters (5 feet).
+</para>
+      <para> The generated waypoint failes can also be used by MapShow
+version 1.14.  This program is free of charge from the Holux web site.
+</para>
+      <para> This format was contributed by Jochen Becker.
+</para>
+    </section>
+    <section id="hsandv">
+      <sectioninfo>
+	<subtitle>HSA Systems Endeavour Navigator format</subtitle>
+      </sectioninfo>
+      <title>hsandv</title>
+      <para>HSA Systems Endeavour Navigator format - will import both
+the old version 4.x binary files, and the newer XML based ones.  Only
+writes the new XML (5.0 and above) format. (use the .exp
+extension)</para>
+    </section>
+    <section id="html">
+      <sectioninfo>
+	<subtitle>HTML format</subtitle>
+      </sectioninfo>
+      <title>HTML</title>
+      <para> HTML output generates a single HTML file of all of the
+waypoints in the input file.  It supports a number of Geocaching GPX
+extensions, as well as filters out potentially harmful HTML from the
+input file while maintaining almost all of the source HTML formatting.
+Use the 'stylesheet' option to specify a CSS stylesheet to be used
+with the resulting HTML file.  Use the 'encrypt' option to encrypt
+hints from Groundspeak GPX files.  Use the 'logs' option to include
+Groundspeak cache logs.
+</para>
+      <para> The following command line reads a GPX file with
+Groundspeak extensions and writes an HTML file with encrypted hints
+that is rendered using a custom stylesheet:
+</para>
+      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx \
+	 -o html,stylesheet=green.css,encrypt -F 12345.html
+</screen>
+    </section>
+    <section id="igc">
+      <sectioninfo>
+	<subtitle>FAI/IGC Data file format</subtitle>
+      </sectioninfo>
+      <title>IGC</title>
+      <para>FAI/IGC Data File -- Used by the international gliding
+community to record gliding flights.  IGC files can be converted to
+and from tracks representing recorded flights, and routes representing
+task declarations in other formats.</para>
+    </section>
+    <section id="ignrando">
+      <sectioninfo>
+	<subtitle>IGN Rando track file format</subtitle>
+      </sectioninfo>
+      <title>IGNRando</title>
+      <para>Input and output support for IGN Rando track files. IGN
+Rando is a program mainly used in France for Topo maps. The files are
+XML based and are "windows-1252" encoded. Trackpoints come without
+timestamp.</para>
+      <para>
+ Options:
+  </para>
+      <para>
+            <option>index</option> - Use track number &lt;index&gt;
+from input data for output.  The range is 1 to number of tracks in
+input.
+</para>
+    </section>
+    <section id="kml">
+      <sectioninfo>
+	<subtitle>Keyhole Markup Language format.</subtitle>
+      </sectioninfo>
+      <title>KML</title>
+      <para> KML, the Keyhole Markup Language, is used by Keyhole and
+Google Earth.  (Google Earth uses GPSBabel internally for receiver
+communications and several file format imports and exports. There are
+features in this file format that we don't support such as camera
+views, but waypoints, tracks, and routes work well.</para>
+      <para>Additional options:</para>
+      <para>
+            <option>lines=n</option> (default n=1) Draws lines between
+points in tracks and routes when n is non-zero.</para>
+      <para>
+            <option>points=n</option> (default n=1) Draws placemarks
+for tracks and routes when n is non-zero.</para>
+      <para>
+            <option>line_width=n</option> (default n=6) Width of drawn
+lines, in pixels.</para>
+      <para>
+            <option>line_color=n</option> (default=65eeee17) Line
+colour specified in hex AABBGGRR.</para>
+      <para>
+            <option>floating=n</option> (default n=0) Altitudes are
+not clamped to ground when n is non-zero.  This option is more useful
+to pilots than to hikers.</para>
+    </section>
+    <section id="kwf2">
+      <sectioninfo>
+	<subtitle>Kartex 5 waypoint</subtitle>
+      </sectioninfo>
+      <title>kwf2</title>
+      <para>Support for Kartex 5 waypoint files. Kartex is a Swedish 
+	map and GPS positioning system. GPSBabel can read and write 
+	files from Kartex 4 and 5 with WGS84 coordinates. UTM or 
+	Swedish grid are not supported.
+      </para>
+    </section>
+    <section id="ktf2">
+      <sectioninfo>
+	<subtitle>Kartex 5 trackfiles</subtitle>
+      </sectioninfo>
+      <title>ktf2</title>
+      <para>Support for Kartex 5 trackfiles. For more info see kwf2.</para>
+    </section>
+    <section id="lowranceusr">
+      <sectioninfo>
+	<subtitle>Lowrance iFinder .USR format</subtitle>
+      </sectioninfo>
+      <title>LowranceUSR</title>
+      <para> The Lowrance iFinder GPS series has the unique capability
+to output its data to an MMC card.  The data is saved to the card as a
+.USR file and can be read by your computer using a card reader.
+Waypoints, routes, tracks are supported.  By default, Event marker
+icons are converted to waypoints.  Symbols tend to get lost in the
+translation.</para>
+      <para> Additional options: ignoreicons - don't convert icons to
+waypoints merge - (USR output) merge all tracks into a single track
+with segments break - (USR input) break track segments into separate
+tracks</para>
+    </section>
+    <section id="mag_pdb">
+      <sectioninfo>
+	<subtitle>Palm OS for Map &amp; Guide format</subtitle>
+      </sectioninfo>
+      <title>mag_pdb</title>
+      <para> With this format we support the Palm/OS export for
+Map&amp;Guide based products like "PowerRoute",
+"Motorrad-Routenplaner" and (maybe) other software. The exported files
+can contain maps and/or route descriptions. The reader for this format
+has been tested with PowerRoute 5+6, Motorrad-Routenplaner
+2002(-2006).</para>
+    </section>
+    <section id="magellan">
+      <sectioninfo>
+	<subtitle>Magellan format</subtitle>
+      </sectioninfo>
+      <title>MAGELLAN</title>
+      <para>Waypoint serial upload and download works reliably to the
+315, 330, Meridian, and SportTrak family.  I expect it to work on any
+modern Magellan unit.</para>
+      <para> As of 08/30/02, GPSBabel can also read and write the
+files that can be stuck on the SD memory cards with the Meridian
+models.  Simply specify a file instead of a serial port.</para>
+      <para> Communication errors are handled robustly and
+verification of data is enabled.</para>
+      <para> Additional suboptions: <parameter
+moreinfo="none">baud:</parameter> may be 1200, 2400, 4800, 9600,
+19200, but must match receiver.</para>
+    </section>
+    <section id="magellanx">
+      <sectioninfo>
+	<subtitle>Magellan Explorist format</subtitle>
+      </sectioninfo>
+      <title>MAGELLANX</title>
+      <para>The SD card format used by the Magellan Explorist 400,
+500, and 600.  It's identical to the Magellan SD format used by
+Meridian, but allows longer waypoint names.</para>
+      <para> You should name any file created with this format with a
+".upt" extension so the firmware can read it.</para>
+    </section>
+    <section id="maggeo">
+      <sectioninfo>
+	<subtitle>Magellan SD card format</subtitle>
+      </sectioninfo>
+      <title>MAGGEO</title>
+      <para> The SD card format used by the Magellan Explorist 400,
+500, and 600 to describe geocaches.  Notice what while the format can
+hold an infinite number of geocaches, the unit will read and silently
+discard all but 200 geocache POIs at a time.</para>
+      <para> You should name any file created with this format with a
+".gs" extension so the firmware can read it.
+</para>
+    </section>
+    <section id="magnav">
+      <sectioninfo>
+	<subtitle>Magellan Nav Companion format</subtitle>
+      </sectioninfo>
+      <title>MAGNAV</title>
+      <para>Magellan NAV Companion for Palm/OS is not really designed
+for this sort of use, but its file format is supported and with a
+little bit of patience you can both read and write NAV Companion
+waypoints.  Please read README.magnav for further tips on getting
+waypoints in and out of NAV Companion.  This conversion is based on
+partially incomplete reverse-engineering of the record format, so it
+may not work with all versions of NAV Companion.  It has been tested
+with version 2.10 and 3.20.</para>
+    </section>
+    <section id="mapconverter">
+      <sectioninfo>
+	<subtitle>Mapconverter format from Mapopolis</subtitle>
+      </sectioninfo>
+      <title>mapconverter</title>
+      <para>Mapconverter is a format this is read by Mapopolis.com's
+mapconverter application.  Full details of it's usage are available in
+the file README.mapconverter.</para>
+    </section>
+    <section id="mapsend">
+      <sectioninfo>
+	<subtitle>Magellan Mapsend format</subtitle>
+      </sectioninfo>
+      <title>MAPSEND</title>
+      <para>Magellan was smart enough to document their file format to
+make creating software like this possible.</para>
+      <para>Additional options:</para>
+      <para>
+      	<option>trkver</option> - set the MapSend version to generate TRK files, 
+since new MapSend versions can't open V3 files. Options are 3 (MapSend v3.0) or
+4 (MapSend v4.0 and v4.1).
+      </para>
+    </section>
+    <section id="mapsource">
+      <sectioninfo>
+	<subtitle>Garmin Mapsource format</subtitle>
+      </sectioninfo>
+      <title>MAPSOURCE</title>
+      <para> Garmin Mapsource format appears compatible with the
+various members of that product family.  Icon mapping is attempted
+between different MapSource versions.  Altitude is supported, but
+proximity and depth are not.  Naming files *.mps will allow
+file-&gt;open in Mapsource to find the files more easily.  Versions 3,
+4 and 5 of the Mapsource data format are handled automatically on
+input and by default the output is version 5.  (Until 3/2004, it was
+version 3, but since Mapsource updates are free, the convenience of
+having modern icon sets outweighs the backward compatibility concern.
+Users of other versions can either upgrade or specify the switches to
+get get output in a compatible format.)  Waypoints, routes and
+tracklogs are all handled, but maps sets are ignored.
+</para>
+      <para> Information on the Garmin Mapsource format was provided
+by Ian Cowley and Mark Bradley.  The code was implemented by Robert
+Lipe and Mark Bradley.</para>
+      <para>Additional options:</para>
+      <para>
+            <option>snlen</option> - set the length of generated
+shortnames </para>
+      <para>
+            <option>mpsverout</option> - set the data format version
+of the output file (3,4 or 5) </para>
+      <para>
+            <option>mpsmergeout</option> - if the output file already
+exists, then the output is merged with it. This allows MapSource
+sections not being handled to remain intact (e.g. map sets)</para>
+    </section>
+    <section id="msroute">
+      <sectioninfo>
+	<subtitle>Microsoft Autoroute 2002-2006 reader</subtitle>
+	<subtitle>Microsoft Streets and Trips reader</subtitle>
+      </sectioninfo>
+      <title>MSroute</title>
+      <para> Input support for Microsoft AutoRoute 2002-2006 .axe files
+and Microsoft Streets and Trips .est files.
+These files contains only routes. We can extract the coordinates and
+the names of the points within route. An export to this format will
+not be supported.</para>
+      <para>Only the start, stops, and end points are stored in the 
+.est/.axe/.ptm files. Turn-by-turn route data is not stored in the 
+.est/.axe/.ptm files, and is recalculated by the Microsoft title each 
+time on opening the file. This means that the output of GPSBabel will 
+not contain turns needed for driving directions.</para>
+	<para>One possible approach to achieve similar results is to 
+use the Streets and Trips drawing tools to trace a line over the 
+interesting parts of the route to capture intersections or key turns.
+GPSBabel will capture stops in the route and insert those as turns, so 
+adding stops at intersections can also improve the results when converting.
+</para>
+    </section>
+    <section id="mxf">
+      <sectioninfo>
+	<subtitle>Maptech Exchange format.</subtitle>
+      </sectioninfo>
+      <title>MXF</title>
+      <para>Maptech Exchange Format - Another CSV format file.  This
+format complies with (at least) Maptech Terrain Navigator, Terrain
+Professional, Take a Hike, and ExpertGPS import/export MFX.
+Contributed by Alex Mottram.</para>
+    </section>
+    <section id="navicache">
+      <sectioninfo>
+	<subtitle>Nivicache.com's XML format</subtitle>
+      </sectioninfo>
+      <title>navicache</title>
+      <para>This is the XML format that's used by Navicache.com for
+their geocaching data.  There are a number of fields in it that are
+marked "required" but are Navicache-specific, so GPSBabel can not
+write these files, but we can still read them. <ulink
+url="http://www.navicache.com/cgi-bin/ib312a/ikonboard.cgi?act=ST;f=23;t=334">navicache.com</ulink>
+         </para>
+    </section>
+    <section id="netstumbler">
+      <sectioninfo>
+	<subtitle>NetStumbler CSV summary file format</subtitle>
+      </sectioninfo>
+      <title>Netstumbler</title>
+      <para> NetStumbler 0.4 Summary File -- Another CSV format file.
+The default behavior when creating waypoints is to use the SSID for
+the short name, and information about the access point for the
+description.  When the SSID is not unique, is not available, or
+consists of whitespace, a shortname is synthesized.  The snmac option
+uses the MAC address for the shortname, and includes the unmodified
+SSID in the description.  Different icons are assigned to encrypted,
+non-encrypted, stealth, and non-stealth access points; these may be
+changed with options. Import only.
+</para>
+<para>This format also works with MacStumbler.</para>
+      <para> Additional options:</para>
+      <para>
+            <option>nsneicon</option> - Name of icon used for
+non-stealth non-encrypted access points</para>
+      <para>
+            <option>seicon</option> - Name of icon used for stealth
+encrypted access points</para>
+      <para>
+            <option>sneicon</option> - Name of icon used for stealth
+non-encrypted access points</para>
+      <para>
+            <option>snmac</option> - Always use the MAC address as the
+shortname.</para>
+    </section>
+    <section id="nima">
+      <sectioninfo>
+	<subtitle>National Imagery and Mapping agency
+format</subtitle>
+      </sectioninfo>
+      <title>NIMA</title>
+      <para>This is a CSV format from the National Imagery and Mapping
+Agency.</para>
+    </section>
+    <section id="nmea">
+      <sectioninfo>
+	<subtitle>NMEA0183 log and waypoint format</subtitle>
+      </sectioninfo>
+      <title>nmea</title>
+      <para> This format is the file representation of the NMEA0183
+log and waypoint format.  Representative programs include:</para>
+      <para>
+            <ulink
+url="http://www.genimap.fi/kuluttajatuotteet/alue2.asp?folder=38&amp;subfolder=16662&amp;2057">genimap.fi</ulink>
+         </para>
+      <para>
+            <ulink
+url="http://homepages.tig.com.au/~robk/datalogger.html">homepages.tig.com.au</ulink>
+         </para>
+      <para>
+            <ulink url="http://www.gpstm.com/eng/features_eng.htm
+">gpstm.com</ulink>
+         </para>
+      <para>
+            <ulink url="http://www.gpsmaster.nl/
+">gpsmaster.nl</ulink>
+         </para>
+      <para>
+            <ulink
+url="http://www.silcom.com/~rwhately/index.html">silcom.com/~rwhately</ulink>
+         </para>
+      <para>
+            <ulink
+url="http://www.visualgps.net/VisualGPSce/default.htm">visualgps.net</ulink>
+         </para>
+      <para>
+            <ulink url="http://www.gpsu.co.uk/">gpsu.co.uk</ulink>
+         </para>
+      <para>
+            <ulink
+url="http://www.kolumbus.fi/eino.uikkanen/geoconvgb/index.htm">kolumbus.fi</ulink>
+         </para>
+      <para>
+            <ulink
+url="http://www.commlinx.com.au/GPS_recorder.htm">commlinkx.com</ulink>
+         </para>
+    </section>
+    <section id="nmn4">
+      <sectioninfo>
+	<subtitle>Navigon Mobile Navigator route (.rte)
+files.</subtitle>
+      </sectioninfo>
+      <title>nmn4</title>
+      <para>Support for Navigon Mobile Navigator route (.rte) files.
+This is a very simple text format that only requires coordinates, but
+has fields for many other things.  We only write coordinates as fields
+like 'city' and 'street' cannot typically be populated from other
+formats. <ulink url="http://www.navigon.com">www.navigon.com</ulink>
+         </para>
+    </section>
+    <section id="openoffice">
+      <sectioninfo>
+	<subtitle>Tab seperated file format - numerical
+processing</subtitle>
+      </sectioninfo>
+      <title>OPENOFFICE</title>
+      <para> Tab seperated export-all (except geocaching data) file
+format.  Intended to serve as source for number-processing
+applications like OpenOffice, Ploticus and others. Tab was chosen as
+delimiter because it is a) supported by both OpenOffice and Ploticus
+and b) is not ',', so you can use <command moreinfo="none">sed -i
+"s/./,/g" &lt;x&gt;.csv'</userinput> to adapt it to locales where ',' is
+used as decimal seperator.  Contributed by Tobias Minich.</para>
+    </section>
+    <section id="ozi">
+      <sectioninfo>
+	<subtitle>OziExplorer Waypoint Format</subtitle>
+      </sectioninfo>
+      <title>OZI</title>
+      <para>OziExplorer Waypoint Format - Another CSV format file.
+Tested against OziExplorer v 3.90.3a / Shareware. Contributed by Alex
+Mottram</para>
+    </section>
+    <section id="palmdoc">
+      <sectioninfo>
+	<subtitle>PalmDoc output format</subtitle>
+      </sectioninfo>
+      <title>PALMDOC</title>
+      <para> PalmDoc output is similar to Text output, except that it
+generates a Palm Database (PDB) file suitable for use with programs
+like CSpotRun, TealDoc, AportisDoc, Palm Reader, and others.  The
+resulting file also contains bookmarks to make it easy to jump to a
+particular waypoint.  To suppress the dashed lines between waypoints,
+use the 'nosep' option.  To specify a name for the document, use the
+'dbname' option. Use the 'encrypt' option to encrypt hints from
+Groundspeak GPX files.  Use the 'logs' option to include Groundspeak
+cache logs.  If you would like the generated bookmarks to start with
+the short name for the waypoint, specify the 'bookmarks_short' option.
+This is particularly useful when used in combination with the 'sort'
+filter.
+</para>
+      <para> The following command line reads a GPX file with
+Groundspeak extensions and writes a Palm document with encrypted hints
+and logs:
+</para>
+      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx \ -o
+	"palmdoc,dbname=Unfound Geocaches,encrypt,logs" \ 
+	-F 12345.pdb
+</screen>
+    </section>
+    <section id="pathaway">
+      <sectioninfo>
+	<subtitle>PathAway for Palm file format</subtitle>
+      </sectioninfo>
+      <title>PathAway</title>
+      <para> PathAway is a Palm software designed for handling "most"
+GPS devices (including BlueTooth). In this time (I mean 2005) a free
+tool to convert this database is located on the homepage of PathAway
+(www.pathaway.com). But I've read there ... for windows and the output
+formats are also very limited.
+</para>
+    </section>
+    <section id="pcx">
+      <sectioninfo>
+	<subtitle>Garmin PCX format</subtitle>
+      </sectioninfo>
+      <title>PCX</title>
+      <para> Garmin documents only PCX5, an older format limited to
+the lame NMEA six-character waypoint names that's treated as a
+second-class citizien in current versions of MapSource.  In Mapsource,
+use file-&gt;import to read these files.  If you name the files *.wpt,
+Mapsource will find them easier.
+</para>
+      <para> In general, you should prefer the "mapsource" file format
+to this one.
+</para>
+    </section>
+    <section id="psitrex">
+      <sectioninfo>
+	<subtitle>KuData's Psion PDA format</subtitle>
+      </sectioninfo>
+      <title>PsiTrex</title>
+      <para>This is a text format created by KuDaTa's PsiTrex program
+for the Psion PDAs. The format can't be readily handled by XCSV, so
+this format is handled explicitly. Waypoints, routes and tracks are
+all handled, with icon names used corresponding to verison 1.13 of
+PsiTrex. This module was contributed to GPSBabel by Mark
+Bradley.</para>
+    </section>
+    <section id="psp">
+      <sectioninfo>
+	<subtitle>Microsoft PocketStrees 2002 pushpin
+format</subtitle>
+      </sectioninfo>
+      <title>PSP</title>
+      <para> Microsoft's PocketStreets 2002 Pushpin (.PSP) format is
+not yet completely documented.  THE .PSP MODULE DOES NOT WORK WITH MS
+STREETS &amp; TRIPS 2002 .EST FILES.  To create .PSP files from
+Streets &amp; Trips 2002, you will need to have PocketStreets support
+installed.
+         </para>
+      <para>Please note that MS Streets &amp; Trips only *EXPORTS*
+.PSP files. It does not import them.  MS Streets &amp; Trips 2002 only
+imports CSV files.  To use .PSP files, simply copy them over to the
+same folder on the mobile device as the map (.MPS), and open
+PocketStreets.  It should also be noted that in the case a pushpin is
+outside of the exported map area, the pin will be "grayed-out" and
+unused in PocketStreets. This is a good thing as it allows us to
+create one big .PSP file that covers multiple .MPS files.
+Unfortunately, you need one .PSP file for every .MPS file. :(</para>
+    </section>
+    <section id="quovadis">
+      <sectioninfo>
+	<subtitle>QuoVadis for Palm OS format</subtitle>
+      </sectioninfo>
+      <title>QUOVADIS</title>
+      <para> QuoVadis for Palm OS <ulink
+url="http://www.marcosoft.com/">marcosoft.com</ulink> is a program for
+Palm/OS. Working with record definitions provided by MarcoSoft and
+further experimentation by Bruce Thompson and "Fuzzy" from the
+Geocaching Forums to nail down the format precisely.</para>
+      <para> Should work fine for import and export.</para>
+      <para> One thing of note, QuoVadis stores all waypoints in a
+single Palm Database without using categories. This means that it may
+be difficult to keep personal waypoints separate from generated
+waypoints. What Bruce recommends is taking the QuoVadisMarkerDB.PDB
+file synced down from your Palm Powered device and extract the
+waypoints you personally set to a GPX file. Then using GPSBabel's
+joining capabilities generate a new PDB file from the personal file
+and the other waypoint files of interest.</para>
+      <para> Currently the selection of icons to display and the scale
+at which to display them is hardcoded. Also there is no support for
+notes associated with waypoints. This will be addressed in a future
+revision.</para>
+    </section>
+    <section id="s_and_t">
+      <sectioninfo>
+	<subtitle>Microsoft Streets and Trips import format</subtitle>
+      </sectioninfo>
+      <title>s_and_t</title>
+      <para> This is a format for importing into Microsoft Streets and
+Trips.  It's been exercised on versions 2003, 2004, and 2005. Detailed
+instructions on how to use it, including preserving hyperlinks, are at
+<ulink
+url="http://www.gpsbabel.org/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html">gpsbabel.org</ulink>
+         </para>
+    </section>
+    <section id="saplus">
+      <sectioninfo>
+	<subtitle>Street Atlas USA 2004 Plus format</subtitle>
+      </sectioninfo>
+      <title>saplus</title>
+      <para> This format is for Street Atlas USA 2004 Plus.
+</para>
+      <para> For geocachers importing data from a tool like GSAK or
+Spinner, import the file twice in XData.  One will create a file with
+the Cache description as a hyperlink on the flag. This can clutter up
+the screen and when you try to zoom in, it causes problems.  So the
+second one will only have a flag. Thus you can turn off and on which
+one you want to view.  The first time you import the file, in the
+assign field types, check the circle above Full Name and then next.
+The second time you import the file do not check any circle and in the
+second to last column, change URL to none and then click next. Use the
+same name you used the first time but add -Flag to it.
+</para>
+    </section>
+    <section id="saroute">
+      <sectioninfo>
+	<subtitle>Delorme (anr, rte, rtd files)</subtitle>
+      </sectioninfo>
+      <title>saroute</title>
+      <para> This is a catch-all used by many Delorme mapping products
+and reads the anr, rte, and rtd formats as either tracks or
+routes.</para>
+      <para> The 'turns_only' option causes GPSBabel to read only the
+waypoints associated with named turns.  This should create a list of
+waypoints that correspond to the itinerary from Street Atlas.</para>
+      <para> The 'turns_important' option only makes sense in
+conjunction with the 'simplify' filter.  It ensures that the route
+simplification process will remove the points corresponding to turns
+only after it has removed all other route points.
+</para>
+      <para>The 'split' option causes GPSBabel to create separate
+routes for each street, creating a new route at each turn point.  For
+obvious reasons, 'split' cannot be used at the same time as the
+'turns_only' or 'turns_important' options.</para>
+      <para>The 'controls' option lets you read the control points
+(start, end, vias, and stops) for your route as well as the route
+itself.  The default for this option is 'none', which won't read the
+control points.  You may also specify 'waypoints', which reads the
+control points as waypoints, or 'route', which creates an extra route
+named 'control points' containing just the control points in order.
+Note that if your goal is to create an arc or other CSV file, you
+should use 'none' (or not use this option, which is the same
+thing.)</para>
+      <para>The 'times' option causes GPSBabel to read the route as if
+it were a track, synthesizing times starting from the current time, using
+the estimated travel times specified in your route file (you can change your
+travel speeds in the DeLorme product you used to create the route file.)</para>
+      <para> All options only apply to route files from newer (anr)
+versions of DeLorme software; older versions didn't store the turn
+information with the route.
+</para>
+    </section>
+    <section id="seeyou">
+      <sectioninfo>
+	<subtitle>SeeYou flight analysis and planning software.</subtitle>
+      </sectioninfo>
+      <title>SeeYou</title>
+      <para>Support for SeeYou flight analysis and planning software for
+	glider pilots.  Tasks, runway info, and most other data specific
+	for glider pilots is not preserved, but this is a convenient way
+	to get your flight data in other programs.  <ulink url="http://www.seeyou.ws/">www.seeyou.ws</ulink></para>
+    </section>
+    <section id="stmwpp">
+      <sectioninfo>
+	<subtitle>Suunto Trek Manager WaypointPlus format.</subtitle>
+      </sectioninfo>
+      <title>STMwpp</title>
+      <para>Support for Suunto Trek Manager (STM) WaypointPlus
+format..  Simple structure with coordinates and timestamp. Route
+points (waypoints) have additionaly shortname.  The files can only
+contain one route or one track.  <ulink
+url="http://www.suunto.fi">www.suunto.fi</ulink>
+         </para>
+      <para>
+ Options:
+  </para>
+      <para>
+            <option>index</option> - Use route/track number
+&lt;index&gt; from input data for output.
+</para>
+    </section>
+    <section id="tabsep">
+      <sectioninfo>
+	<subtitle>Unix tab seperated file format</subtitle>
+      </sectioninfo>
+      <title>tabsep</title>
+      <para>Dumps all fields in a traditional Unix tab separated
+style.</para>
+    </section>
+    <section id="tef">
+      <sectioninfo>
+	<subtitle>TourExchangeFormat. for Map&amp;Guide</subtitle>
+      </sectioninfo>
+      <title>TEF</title>
+      <para>TEF, internal called "TourExchangeFormat", is a XML based
+export format, used by Map&amp;Guide "Motorrad-Routenplaner 2005/06".
+Another posibility to exchange data with this are the .bcr files,
+which are supported by GPSbabel in both directions (see BCR).
+               </para>
+      <para>Via XML this software can only export routing data.  So we
+don't support writing.  With the option "routevia" you can eliminate
+calculated route points from tef source file.</para>
+      <screen format="linespecific"> gpsbabel -r -i tef,routevia -f in.xml -o gpx -F out.gpx</screen>
+    </section>
+    <section id="text">
+      <sectioninfo>
+	<subtitle>Plain text, for people</subtitle>
+      </sectioninfo>
+      <title>TEXT</title>
+      <para> This is a simple human readable version of the data file,
+handy for listings of any type of waypoint files.  Use the 'nosep'
+option to suppress the lines of dashes between entries.  Use the
+'encrypt' option to encrypt hints from Groundspeak GPX files.  Use the
+'logs' option to include Groundspeak cache logs.
+</para>
+      <para> The following command line reads a GPX file with
+Groundspeak extensions and writes a text file with encrypted hints:
+</para>
+      <screen format="linespecific">gpsbabel -i gpx -f 12345.gpx -o text,encrypt -F 12345.txt
+</screen>
+    </section>
+    <section id="tiger">
+      <sectioninfo>
+	<subtitle>US Census Bureau mapping format </subtitle>
+      </sectioninfo>
+      <title>TIGER</title>
+      <para>The U.S. Census Bureau provides online mapping facilities.
+This format is described at: <ulink
+url="http://tiger.census.gov/instruct.html">tiger.census.gov</ulink>.
+Do notice that this format is not the actual Tiger line mapping
+records, but rather the interface to their online mapping
+program.</para>
+    </section>
+    <section id="tmpro">
+      <sectioninfo>
+	<subtitle>TopoMapPro places file</subtitle>
+      </sectioninfo>
+      <title>TMPRO</title>
+      <para>TopoMapPro Places File.  Reads and writes places files for
+use in TopoMapPro <ulink
+url="http://www.topomappro.com">topomappro.com</ulink>).  As this file
+type can store links other than web links, anything that is not a http
+url will be discarded.  Note that this does not do datum conversions,
+so if your input file does not have WGS84/NZGD2000 data, your output
+file won't either. Colour of waypoint icons defaults to red.</para>
+    </section>
+    <section id="tomtom">
+      <sectioninfo>
+	<subtitle>TomTom .ov2 POI files</subtitle>
+      </sectioninfo>
+      <title>TomTom</title>
+      <para> This format can read and write TomTom .ov2 (POI) files,
+as used by the TomTom GO and TomTom Navigator.  It has been tested
+with an original TomTom GO running version 5.00 of the TomTom
+software.  There may be some records that confuse the input module -
+if you have an example of such a record "in the wild", and you aren't
+restricted from sharing it, we encourage you to post to the
+gpsbabel-misc mailing list to contact a developer.</para>
+      <para> Note that in addition to the .ov2 file, you will need a
+.bmp file for the icon.  It should be 22x22 and 16 colors, and have
+the same name (not including the extension) as the .ov2 file.
+</para>
+    </section>
+    <section id="tpg">
+      <sectioninfo>
+	<subtitle>National Geographic Topo Waypoint format.</subtitle>
+      </sectioninfo>
+      <title>TPG</title>
+      <para>National Geographic Topo! Waypoint and Route Format.  This module
+reads and writes .TPG files created by various editions of NG Topo!
+Reading/writing of route data is not supported yet.
+Contributed by Alex Mottram.</para>
+      <para>The option 'datum="datum name"' can be used to override
+the default of NAD27 ("N. America 1927 mean") which is correct for the
+continental U.S. Points in Hawaii should use "Old
+Hawaiian_mean"</para>
+      <para>Contributed by Alex Mottram.</para>
+    </section>
+   <section id="tpo">
+       <sectioninfo>
+	  <subtitle>National Geographic Topo! Track Format.</subtitle>
+	</sectioninfo>
+	<title>TPO</title>
+	<para>This module reads .TPO files created by various editions
+of NG Topo!.  For version 2.x files it will only read tracks.  For
+version 3.x files it will read Tracks/Routes/Waypoints/Map
+Notes/Symbols/Text Notes.  The latter three are converted to
+waypoints.</para>
+	<para>2.x support contributed by Steve Chamberlin.  3.x support
+contributed by Curt Mills.</para>
+
+   </section>
+	<section id="unicsv">
+	<sectioninfo>
+	  <subtitle>Universal csv with field structure in first line.</subtitle>
+	</sectioninfo>
+        <title>unicsv</title>
+	<para>
+	Unicsv examines the first line of a file to determine the field
+	order and field separator in that file.   It is thus read-only format.
+	</para>
+	<para>
+	If the first line contains any tabs, the data lines are assumed 
+	to be tab separated.   Otherwise the fields are assumed to be 
+	separated by commas.
+	</para>
+	<para>
+	The list of keywords include "lat", "lon", "desc", "name", 
+	"notes", "alt", "urm z", "utm n", "utm e", and "url".   
+	Fuller spellings (i.e. "longitude") may be used.
+	</para>
+	<para>
+	A typical file may be:
+	<screen format="linespecific">
+	Name, Latitude, Longitude, Description 
+	GCEBB,35.972033,-87.134700,Mountain Bike Heaven by susy1313
+ 	GC1A37,36.090683,-86.679550,The Troll by a182pilot &amp; Family
+	</screen>
+	</para>
+	</section>
+    <section id="vcard">
+      <sectioninfo>
+	<subtitle>vCard format for Apple iPod etc.</subtitle>
+      </sectioninfo>
+      <title>vCARD</title>
+      <para>The vCard output is intended to be in a format that
+enables waypoints to be viewed with an Apple iPod. This is achieved by
+mapping waypoint fields into vCard fields that can be displayed as
+'Contacts' on the iPod. With the iPod mounted as a hard disk (see your
+iPod manual for instructions), the resulting VCF file should be moved
+into the iPod 'Contacts' folder. As an alternative, Mac OS X users may
+prefer to drag the VCF file into their address book and synchronize
+with the iPod using iSync. By default hints are unencrypted; use the
+'encrypt' option to encrypt the hints.</para>
+    </section>
+    <section id="vitosmt">
+      <sectioninfo>
+	<subtitle>Vito Navigator II format</subtitle>
+      </sectioninfo>
+      <title>VitoSMT</title>
+      <para>Vito Navigator II is a Pocket PC GPS application.  This
+format reads a Vito Navigator II .SMT track file and can work in
+either waypoint or track mode.  The speed, heading and Dilution of
+Position data is written in the notes field.</para>
+      <para> Support for writing .SMT tracks is very experimental and
+may crash VitoNavigator II on the Pocket PC.</para>
+    </section>
+	<section id="wfff">
+	<sectioninfo>
+	   <subtitle> Aspecto Software's WiFiFoFum </subtitle>
+	</sectioninfo>
+        <title>wfff</title>
+	<para> WFFF is the export format for Aspecto Software's WiFiFoFum 2.0 for Windows Mobile PCs.</para>
+	<para>It is a simple XML format that is read-only to GPSBabel and stores information about a WiFi stumbling session.</para>
+	<para>All WiFi-specific elements are written in the description  field, similar to the netstumbler format.</para>
+	</section>
+    <section id="xcsv">
+      <sectioninfo>
+	<subtitle>For user supplied style files</subtitle>
+      </sectioninfo>
+      <title>XCSV</title>
+      <para> XCSV is an open-ended "Whatever Separated Values" parser
+/ writer designed to work with user-supplied "style" files.  It should
+handle at least a few thousand of the billion CSV variants available.
+By itself, it doesn't comply to any format, however *most* CSV
+variants can be described as a "style" and fine-tuned by the end user.
+For more information on it's use, please see README.style in the
+style/ sub-directory of <command moreinfo="none">GPSBabel</userinput>.
+For an example of using the XCSV module within your C program, look at
+the <filename moreinfo="none">ozi.c</filename>, <filename
+moreinfo="none">mxf.c</filename>, and <filename
+moreinfo="none">xmapwpt.c</filename> sources in the GPSBabel
+directory.  This module was contributed to GPSBabel by Alex
+Mottram.</para>
+      <para>	Additional Options: </para>
+      <para>
+            <option>style</option>	-	**REQUIRED** Path to
+XCSV style file.</para>
+      <para>
+            <option>snlen</option>	-	Maximum length of
+synthesized shortnames.  </para>
+      <para>
+            <option>snwhite</option>	-	Switch defining
+whether or not to allow whitespace in synthesized shortnames. (0 = NO
+WHITESPACE, 1 = WHITESPACE OK). </para>
+      <para>
+            <option>snupper</option>	-	Switch defining
+whether or not to force uppercase  in shortnames. (0 = LEAVE AS IS, 1
+= UPPERCASE ALL). NOTE: sn* options require use of the '-s' command
+line option.</para>
+      <example id="xcsv_command_options">
+	<title>xcsv Command options</title>
+	<screen format="linespecific"> gpsbabel -i xcsv,style=foo.style -f foo \
+ -o xcsv,style=bar.style \
+ -F bar
+</screen>
+	<screen format="linespecific"> gpsbabel -s -i gpx -f foo.gpx \
+-o xcsv,style=my.style,snlen=8 -F bar</screen>
+      </example>
+    </section>
+    <section id="xmap">
+      <sectioninfo>
+	<subtitle>Delorme TopoUSA/XMap Conduit format</subtitle>
+      </sectioninfo>
+      <title>XMap</title>
+      <para>Delorme TopoUSA/XMap Conduit is one of the billion CSV
+variants mentioned above.  It's just like S&amp;A with the addition of
+a completely pointless line at the beginning and end of the file. This
+is the format used to hot-sync to XMap from withing TopoUSA. Done with
+help of Dan Edwards.</para>
+    </section>
+    <section id="xmap2006">
+      <sectioninfo>
+	<subtitle>
+	  Delorme XMap/Street Atlas 2006 Handheld Conduit format
+	</subtitle>
+      </sectioninfo>
+      <title>XMap2006</title>
+      <para>Delorme XMap2006 Conduit is just like XMap, except there are 
+	no spaces between fields and the coordinate format is slightly 
+	different. The completely pointless header and footer lines 
+	are the same, at least. Use this to create the XMapHHWptsSend.txt 
+	file needed to sync to Street Atlas Handheld 2006.</para>
+	<para>Note that in order to keep from creating duplicates on your handheld, you must first remove the file "XMapWptsDB" from your handheld, restart SAHH2006 on the handheld to create an empty database, and THEN sync the new file. </para>
+    </section>
+    <section id="xmapwpt">
+      <sectioninfo>
+	<subtitle>Delorme XMapHandHeld street Atlas format.</subtitle>
+      </sectioninfo>
+      <title>XMapWpt</title>
+      <para>Delorme XMapHandHeld Street Atlas USA is another of the
+billion CSV variants.  This is the format used by XmapHH SA USA on (at
+least) PocketPC O/S.  Please see README.xmapwpt for more information
+on it's intricacies.  This XMap is not to be confused with the XMap
+mentioned above. Contributed to GPSBabel by Alex Mottram.</para>
+    </section>
+   </chapter>
+   <chapter id="filters">
+      <title>DATA FILTERS</title>
+      <para> GPSBabel supports data filtering.  Data filters are
+      invoked from the command line via the '-x' option.  It should be
+      noted that data filters are invoked in the internal pipeline at
+      the point that corresponds to their position on the
+      command. This implies that specifying a filter before reading
+      any data ('-x &lt;filter&gt; -f &lt;file&gt;'), despite being
+      legal, will not have any effect. The advantage is that filters
+      can be used intermittently between several variations of input
+      and output functions.  It should also be noted that filtering
+      data from different input types can sometimes produce
+      undesirable results due to differences in the native data
+      formats.
+</para>
+      <para> Beware that most filters only apply to a certain kind of
+      data. This is usually indicated below by referring to points,
+      tracks or routes in the first sentence which describes each
+      filter or in the table at <ulink url="http://www.gpsbabel.org/capabilities.html">gpsbabel.org</ulink>
+      .
+</para>
+      <section id="position">
+         <title>POSITION</title>
+         <para> The position filter is designed to remove points based
+         on their proximity to each other.  Distances can be passed on
+         the command line by passing the <parameter moreinfo="none">distance=XXX</parameter> option to the
+         filter.  Distance options may be expressed in feet
+         (<parameter moreinfo="none">distance=3f</parameter>) or
+         meters (<parameter moreinfo="none">distance=1m</parameter>).
+         The default is zero feet, essentially a duplicate position.
+         </para>
+         <example id="posn_to_suppress_close_points">
+            <title>Using position filter to suppress close points</title>
+            <screen format="linespecific">gpsbabel -i geo -f 1.loc -f 2.loc -x position,distance=1f  	\
+         -o mapsend -F 3.wpt</screen>
+         </example>
+         <para> would remove multiple points that are within 1 foot of
+         each other, leaving just one.</para>
+         <para> You can also specify the "all" option, which would
+         remove all of the points rather than leaving one.</para>
+      </section>
+      <section id="radius">
+         <title>RADIUS</title>
+         <para> The radius filter is designed to include points based
+         on their proximity to a central point.  Distances and the
+         central point are declared on the command line by passing the
+         <option>distance=X.XX</option>,
+         <option>lat=X.XX</option>, and
+         <option>lon=X.XX</option> options to
+         the filter.  Distance options may be expressed in miles
+         (<option>distance=3M</option>) or
+         kilometers (<option>distance=3K</option>).  The default is
+         zero miles.  Additionally, the exclude option may be
+         specified to reverse the effect of the filter, so that points
+         further from the center are kept and closer points are
+         discarded.</para>
+         <example id="radius_to_find_points_close">
+            <title>Using radius filter to identify points close to a given point </title>
+            <screen format="linespecific">gpsbabel -i geo -f 1.loc \
+   -x radius,distance=1.5M,lat=30.0,lon=-90.0   \	         
+   -o mapsend  \
+   -F 2.wpt</screen>
+         </example>
+         <para> would include only points within 1.5 miles of N30.000
+      W90.000
+</para>
+      </section>
+      <section id="duplicate">
+         <title>DUPLICATE</title>
+         <para> The duplicate filter is designed to remove duplicate
+         points based on their shortname (traditionally a waypoint's
+         name on the GPS receiver), and/or their location (to a
+         precision of 6 decimals).  This filter supports two options
+         that specify how duplicates will be recognized, "<parameter moreinfo="none">shortname</parameter>" and "<parameter moreinfo="none">location</parameter>".  Generally, at least
+         one of these options is REQUIRED.  </para>
+         <example id="duplicate_to_suppress_points">
+            <title>Using duplicate filter to suppress points with same name and locations</title>
+            <screen format="linespecific"> gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname  \
+	         -o gpx -F merged_with_no_dupes.gpx</screen>
+         </example>
+         <para> would remove points that have duplicate shortnames
+         *AND* duplicate locations.  The result would be a GPX file
+         that more than likely contains only unique points and point
+         data.</para>
+         <para> The duplicate filter can also take an "all" option.
+         If you specify that option, all instances of a duplicated
+         waypoint will be removed, not just the second and subsequent
+         instances.  If your input file contains waypoints A, B, B,
+         and C, the output file will contain waypoints A, B, and C
+         without the "all" option, or just A and C with the "all"
+         option.  This option can be useful as an "ignore list" in
+         some circumstances.
+</para>
+         <para> Finally, the duplicate filter takes a
+         "<option>correct</option>" option.  If you specify that
+         option, the latitude and longitude frmo later duplicates will
+         replace the latitude and longitude in earlier waypoints.  You
+         can use this to apply a list of "<emphasis role="bold">waypoint corrections</emphasis>" to a larger
+         file, while keeping all of the other details from the larger
+         file.</para>
+      </section>
+      <section id="arc">
+         <title>DISTANCE FROM A ROUTE (ARC) ARC</title>
+         <para> The arc filter is designed to include points based on
+         their proximity to an arc, which is a series of connected
+         line segments similar to a route or a track but without any
+         associated data other than the coordinates.
+</para>
+         <para> The arc is defined in a file whose name must be
+         provided with the <option>file=XXXX</option> option to the filter.
+         That file contains pairs of coordinates for the vertices of
+         the arc, one coordinate pair per line.  Comments may be
+         included by preceding them with a '#' character.  An arc file
+         looks something like this sample:
+</para>
+         <screen format="linespecific">	  
+# Lima Road/SR3 north of Fort Wayne, Indiana 	  
+41.150064468    -85.166207433 	  
+41.150064468    -85.165371895 	  
+41.149034500    -85.165157318 	  
+41.147832870    -85.164771080 	  
+41.146631241    -85.164384842 	  
+41.144270897    -85.163655281 	  
+41.141953468    -85.162882805</screen>
+         <para> An arc file may optionally contain gaps in the arc.  You can
+        specify such a gap by inserting a line containing "#break"
+        either on a line by itself or after the coordinates of the
+        starting point of the new arc segment.
+</para>
+         <para> In addition to the file containing the arc, you should
+         also specify the maximum distance from the arc that will be
+         accepted; that distance is declared on the command line with
+         the <option>distance=X.XX</option>
+         option to the filter.  Distance options may be expressed in
+         miles (<option>distance=3M</option>) or
+         kilometers (<option>distance=3K</option>).  The default is
+         zero miles.  You may also specify the exclude option, which
+         causes GPSBabel to only include points that are further than
+         the specified distance from the arc.
+</para>
+         <para>	For example, assuming the arc above is in a file called <filename moreinfo="none">lima_rd.txt</filename>:</para>
+         <screen format="linespecific">	gpsbabel -i geo -f 1.loc 
+   -x arc,file=lima_rd.txt,distance=1  	\
+   -o mapsend -F 2.wpt</screen>
+         <para> would include only points within one mile of the
+         section of Lima Road covered by the arc.</para>
+      </section>
+      <section id="polygon">
+         <title>POLYGON</title>
+         <para> The polygon filter includes points if they are inside
+         of a polygon.  A polygon file looks like an arc file, except
+         that the arc it describes must be a closed cycle.  That is,
+         for a simple polygon, the first and last points must be the
+         same.  Here's a square:
+</para>
+         <screen format="linespecific">
+          # A square (not really) polygon
+          41.0000       -85.0000
+          41.0000       -86.0000
+          42.0000       -86.0000
+          42.0000       -85.0000
+          41.0000       -85.0000
+</screen>
+         <para> Polygons may include islands and holes.  To specify an
+         island or a hole, just append it to the main polygon.
+</para>
+         <para> As with the arc filter, you specify a polygon by
+         specifying the name of the file that contains it, using
+         the file option.  You can also specify the exclude option,
+         which reverses the operation of the filter so that it only
+         includes points that are NOT in the polygon.
+</para>
+         <para> Note that this filter currently will not work properly
+         if your polygon contains one or both poles or if it spans the
+         line of 180 degrees east or west longitude.
+</para>
+         <para> For example, assume you have a polygon file that
+         defines the border of your county, called mycounty.txt.  This
+         command line will give you only the points in your county:
+</para>
+         <screen format="linespecific">	gpsbabel -i geo -f 1.loc -x polygon,file=mycounty.txt  	  	 \
+-o mapsend -F 2.wpt</screen>
+      </section>
+      <section id="simplify">
+         <title>SIMPLIFY</title>
+         <para> The Simplify filter is used to simplify routes and
+         tracks for use with formats that limit the number of points
+         they can contain or just to reduce the complexity of a route.</para>
+         <para>The Simplify filter attempts to remove points from each 
+         route until the number of points or the error is within the given 
+         bounds, while also attempting to preserve the shape of the original 
+         route as much as possible.  </para>
+         <para>You must specify either the "count" option or the "error" option.
+         The count option requires a number, which is the maximum number
+         of points that will appear in the simplified track.  The error 
+         option takes a distance, optionally followed by an 'm' for miles or
+         a 'k' for kilometers.  That distance specifies the maximum error;
+         how that error is determined depends on the simplification method,
+         described next.</para>
+         <para>You may also specify the method by which the filter chooses
+         which points to remove.  The options are "length", which tries to
+         remove points that have the smallest effect on the overall length
+         of the route, or "crosstrack", which tries to remove points that 
+         have the smallest overall effect on the shape of the route.  The
+         default, if you don't specify either option, is "crosstrack". </para>
+         <para> The quality of the results will vary depending on the
+         density of points in the original route and the length of the
+         original route.</para>
+         <para> For example, suppose you have a route from Street
+         Atlas 2003 that you wish to use with a Magellan GPS receiver
+         that only supports up to 50 points in a route:</para>
+         <screen format="linespecific">gpsbabel -r -i saroute -f RoadTrip.anr \
+   -x simplify,count=50 \
+   -o magellan  -F grocery.rte
+</screen>
+      </section>
+      <section id="reverse">
+         <title>REVERSE</title>
+         <para> The reverse filter is used to reverse tracks and routes.
+	It's mostly useful for those few formats where track/route
+	sequence matters and there isn't a way to reverse them using
+	the program itself.</para>
+         <para> The reversal is performed in the laziest way possible.
+        Timestamps are kept with the original waypoints so the
+        resulting track or route will have the interesting
+        characteristic that time runs backwards.  This tends to make
+        Magellan Mapsend, in particular, do a wierd thing and place
+        each waypoint on a separate day.
+</para>
+         <para> Additionally, if you're using this to reverse a route
+         that navigates, say, an exit ramp or a one way street, you
+         will be in for unpleasant ride. application cares about
+         timestamps
+</para>
+      </section>
+      <section id="sort">
+         <title>SORT</title>
+         <para> This simple filter allows you to alphabetize waypoints
+         by shortname or by description.  It has a special suboption
+         (gcid) to sort by geocaching.com waypoint ID's when the input
+         comes from a GPX file that has GC numbers in it.
+</para>
+      </section>
+      <section id="stack">
+         <title>STACK</title>
+         <para> This filter is designed to solve advanced problems
+         that involve shuffling multiple lists of waypoints.  It has
+         three distinct sets of suboptions:</para>
+         <para>PUSH</para>
+         <para>Pushes the current list of waypoints onto the stack.
+         If the 'copy' suboption is specified, a copy of the current
+         list is pushed onto the stack; otherwise, the current list is
+         cleared.</para>
+         <screen format="linespecific">
+-x stack,push
+-x stack,push,copy
+</screen>
+         <para>POP</para>
+         <para> 'Pops' the top list of waypoints off of the stack.
+         What is done with that list depends on the suboption
+         specified.  If the 'append' suboption is specified, the top
+         list of waypoints from the stack is added to the end of the
+         current list of waypoints.  If the 'discard' option is
+         specified, the top list of waypoints is removed from the
+         stack and discarded, leaving the current list of waypoints
+         unchanged.  If the 'replace' option is specified, or if no
+         option is specified, the top list of waypoints from the stack
+         replaces the current list of waypoints; the previous contents
+         of the current list are discarded.</para>
+         <screen format="linespecific">
+-x stack,pop 
+-x stack,pop,discard
+-x stack,pop,append
+</screen>
+         <para>SWAP</para>
+         <para> Swaps the current list of waypoints with a list from
+         the stack.  If no further options are specified, the current
+         list is swapped with the top list on the stack.  If the
+         'depth' option is specified, it indicates which item on the
+         stack should be swapped.  </para>
+         <screen format="linespecific">
+-x stack,swap        
+-x stack,swap,depth=2 
+</screen>
+         <para> The stack can be used in conjunction with other
+         filters to implement a "union" or "logical or" functionality.
+         The basic idea is to use the stack to store copies of the
+         original list of waypoints, then use the 'swap' function to
+         replace each copy with a filtered list.  Finally, append all
+         of the filtered lists to create one big list, which is then
+         output.  The following example finds a list of all points
+         that are either inside county A or inside county B.  Any
+         points that are inside both counties are duplicated (but the
+         duplicates can be removed with the DUPLICATE filter; see
+         above.)
+</para>
+         <screen format="linespecific">           
+gpsbabel -i gpx -f in.gpx \
+         -x stack,push,copy \
+         -x polygon,file=county_a.txt \    
+         -x stack,swap \
+         -x polygon,file=county_b.txt \
+         -x stack,pop,append \
+         -o gpx -F out.gpx
+</screen>
+         <para> This example reads a large list of waypoints and
+         extracts the points within 20 miles of each of two cities,
+         writing the waypoint descriptions into two different PalmDoc
+         files and exporting all of the points to the GPS receiver:
+</para>
+         <screen format="linespecific">           
+gpsbabel -i gpx -f indiana.gpx \
+         -x stack,push,copy \
+         -x radius,lat=41.0765,lon=-85.1365,distance=20m \
+         -o palmdoc,dbname=Fort\ Wayne -F fortwayne.pdb \
+         -x stack,swap \
+         -x radius,lat=39.7733,lon=-86.1433,distance=20m \
+         -o palmdoc,dbname=Indianapolis -F indianapolis.pdb \
+         -x stack,pop,append \
+         -o magellan -F fwaind.wpt
+ 
+</screen>
+      </section>
+      <section id="track">
+         <title>TRACK</title>
+         <para> ( !!! This filter always drops empty tracks !!! )
+         </para>
+         <para>The track filter is a tool for manipulating track lists.  The
+following options are available:</para>
+         <para> TITLE</para>
+         <para> Gives the new track(s) a basic title. Basic means if
+         more than one track is created by filter the title will be
+         expanded with the date the new track. Special formats (see
+         UNIX date or strftime for details) are possible.
+</para>
+         <screen format="linespecific">
+gpsbabel -t \
+ -i gpx -f in.gpx \ -x track,pack,split,title="ACTIVE LOG-%D" \ 
+-o gpx -F out.gpx PACK
+	</screen>
+         <para>MOVE</para>
+         <para>Change the time of all trackpoints. This is useful if
+         your track has moved by one or more hours through a time zone
+         problem.  The following example will shift your track to be
+         one hour later.</para>
+         <screen format="linespecific">	    
+gpsbabel -t  -i gpx -f in.gpx  \
+    -x track,move=+1h,pack,title="ACTIVE LOG"  \
+    -o gpx -F out.gpx 	</screen>
+         <para> START / STOP </para>
+         <para>Filter tracks against time borders. All points outside
+         this range will be dropped. The date-time paramters have to
+         be in form of YYYYMMDDHHMMSS; but you may specify only the
+         most significant portion represented in the the leftmost
+         fields.  See the example, where the time is specified only
+         through the hour.  If you only want to get a track mapped on
+         20 july 2005 from 10 am to 6pm, you should use this: </para>
+         <screen format="linespecific">
+gpsbabel -t -i gpx -f in.gpx -x \
+      track,start=2005072010,stop=2005072018 \
+      -o gpx -F out.gpx </screen>
+         <para>PACK</para>
+         <para> With this default option all tracks from input will be
+         packed into one track. If tracks overlaps in time, the filter
+         stops working.  To pack all the tracks together into one
+         track and give it a name, use this:</para>
+         <screen format="linespecific">	    
+gpsbabel -t  -i gpx -f in.gpx  	-x track,pack,title="ACTIVE LOG"  \
+		     -o gpx -F out.gpx 	</screen>
+         <para>SPLIT </para>
+         <para> The input track will be split into several tracks
+         depending on date of track points. If there is more than one
+         track, use the pack option before before using this.  To
+         split a single tracks into separate tracks for each day and
+         name them, use this:
+      </para>
+         <screen format="linespecific">
+gpsbabel -t -i gpx -f in.gpx -x \
+   track,split,title="ACTIVE LOG \
+    # %Y%m%d" -o gpx -F out.gpx</screen>
+         <para> If the input has multiple tracks, pack them together before
+splitting them back apart per day thusly: </para>
+         <screen format="linespecific">     	    
+gpsbabel -t   -i gpx -f in.gpx  \
+     -x track,pack,split,title="ACTIVE LOG # %D"  	\
+     -o gpx -F out.gpx</screen>
+         <para> Additionally you can add an interval to the split
+         option.  With this the track will be split if the time
+         between two points is greater than this parameter. The
+         interval must be numeric and can be int days, hours, minutes
+         or seconds, expressed as one of the character "d", "h", "m",
+         or "s".  If no trailing character is present, the units are
+         assumed to be in seconds.
+</para>
+         <para> For example, to split a track based on an four hour
+         interval, use this:</para>
+         <screen format="linespecific">            
+gpsbabel -t \ 
+     -i gpx -f in.gpx \ 
+     -x track,pack,split=4h,title="LOG # %c" \ 
+     -o gpx -F out.gpx
+</screen>
+         <para> MERGE</para>
+         <para> Merge puts all track points into one single track and
+         sort them by time. Points with identical time stamp will be
+         dropped !!!</para>
+         <para> If you want to merge tracks from different devices but
+         from same trip, use this:</para>
+         <screen format="linespecific">
+gpsbabel -t \
+     -i gpx -f john.gpx \
+     -i gpx -f doe.gpx \
+     -x track,merge,title="COMBINED LOG" \
+     -o gpx -F john_doe.gpx
+</screen>
+	<para>FIX</para>
+	<para>Fix forces the GPS fix status for all trackpoints to the 
+        specified value.  The value may be PPS, DGPS, 3D, 2D, or NONE.
+	</para>
+	<screen format="linespecific">
+	gpsbabel -i gpx -f trk.gpx -x track,fix=3D -o nmea -F -
+	</screen>
+
+	<para>COURSE</para>
+	<para>Course computes a value for the GPS heading at each trackpoint.
+	This is most useful with trackpoints from formats that don't support
+	heading information or for trackpoints synthesized by the interpolate
+	filter.  The heading at each trackpoint is simply the course from the
+	previous trackpoint in the track.  The first trackpoint in each track
+        is arbitrarily assigned a heading of 0 degrees.</para>
+	<screen format="linespecific">
+	gpsbabel -i gpx -f trk.gpx -x track,course,speed -o nmea -F -
+	</screen>
+
+	<para>SPEED</para>
+	<para>Course computes a value for the GPS speed at each trackpoint.
+	This is most useful with trackpoints from formats that don't support
+	speed information or for trackoints synthesized by the interpolate
+	filter.  The speed at each trackpoint is the average speed from the
+	previous trackpoint (distance/time).  The first trackpoint in each
+	track is assigned a speed of "unknown."</para>
+	<screen format="linespecific">
+	gpsbabel -i gpx -f trk.gpx -x track,course,speed -o nmea -F -
+	</screen>
+
+      </section>
+      <section id="discard">
+         <title>DISCARD</title>
+         <para> This filter 'fixes' gps data by discarding points with
+         a hdop and/or vdop over a set limit. If you give both the
+         hdop and a vdop options, by default points that exceed EITHER
+         are discarded (OR). This filter processes waypoints, tracks,
+         and routes.
+</para>
+         <para>HDOP (float)</para>
+         <para>Points with a hdop exceeding the given value are
+         discarded.
+</para>
+         <para>VDOP (float)</para>
+         <para>Points with a vdop exceeding the given value are
+         discarded.</para>
+         <para>HDOPANDVDOP</para>
+         <para>Only useful if both hdop and vdop are given. Now
+         logical AND is used, i.e. only points exceeding both given
+         values are discarded.
+</para>
+         <para>            Example: </para>
+         <screen format="linespecific"> gpsbabel \ 
+	-i gpx -f in.gpx \
+	-x discard,hdop=10,vdop=20,hdopandvdop \ 
+	-o gpx -F out.gpx
+</screen>
+         <para> Contributed by Tobias Minich.</para>
+      </section>
+      <section id="nuketypes">
+         <title>NUKETYPES</title>
+	<para>
+	There are three main types of data that GPSBabel deals with:
+	waypoints, tracks, and routes.   The nuketypes filter allows
+	removing all the data of any or all of those three types.
+	</para>
+	<para><option>waypoints</option> - Removes all waypoints.</para>
+	<para><option>tracks</option> - Removes all routes.</para>
+	<para><option>routes</option> - Removes all routes.</para>
+	<para>
+	For example, if you have a GPX file that contains routes, tracks, and
+	waypoints and you want a GPX file that contains only tracks,
+	you can use this filter to remove the waypoints with this command:
+	</para>
+        <screen format="linespecific">gpsbabel -i gpx -f bigfile.gpx -x nuketypes,waypoints,routes -o gpx -F tracksonly.gpx
+	</screen>
+      </section>
+      <section id="interpolate">
+          <title>INTERPOLATE</title>
+       <para>
+       This filter modifies any tracks so that either the distance or the time
+       between consecutive points is no less than the specified interval. Where
+       points are missing, the filter fills them in by following a straight 
+       line (actually a great circle) between the adjacent points.  You
+       must specify either the "distance" or the "time" option.
+       </para>
+       <screen format="linespecific">gpsbabel -i gpx -f track.gpx -x interpolate,time=10 -o gpx -f newtrack.gpx</screen>
+       <para>Reads track.gpx and inserts points wherever two adjacent
+       trackpoints are more than 10 seconds apart</para>
+       <screen format="linespecific">gpsbabel -i gpx -f track.gpx -x interpolate,distance=15k -o gpx -f newtrack.gpx</screen>
+       <para>Reads track.gpx and inserts points wherever two adjacent
+       trackpoints are more than 15 kilometers apart</para>
+       <screen format="linespecific">gpsbabel -i gpx -f track.gpx -x interpolate,distance=2m -o gpx -f newtrack.gpx</screen>
+       <para>Reads track.gpx and inserts points wherever two adjacent
+       trackpoints are more than 2 miles apart</para>
+      </section> 
+ 
+ 
+   </chapter>
+</book>

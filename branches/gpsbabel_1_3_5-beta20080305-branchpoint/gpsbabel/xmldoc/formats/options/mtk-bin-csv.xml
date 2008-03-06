@@ -1,0 +1,8 @@
+<para>
+  Specifies a filename into which  MTK-compatible CSV output will be written.
+</para>
+<para>
+  Note that this option is a bit of an oddity in the GPSBabel arsenal.  This
+  should probably be a "real" output type of its own instead of being bolted
+  onto an input type.
+</para>
