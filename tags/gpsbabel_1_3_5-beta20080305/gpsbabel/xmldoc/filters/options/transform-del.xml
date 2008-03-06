@@ -1,0 +1,9 @@
+<para>
+This option, when used in connction with the wpt, rte, or trk options, tells
+GPSBabel to delete the source data after conversion.  This is most useful if 
+you are trying to avoid duplicated data in the output.
+</para>
+<example id="transform_del">
+<title>Convert a GPX track to GPX waypoints, tossing the original track</title>
+<para><userinput>gpsbabel -i gpx -f blah.gpx -x transform,wpt=trk,del -o gpx -F converted.gpx</userinput></para>
+</example>

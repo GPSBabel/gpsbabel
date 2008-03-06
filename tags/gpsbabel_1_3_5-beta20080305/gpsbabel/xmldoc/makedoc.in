@@ -1,0 +1,217 @@
+#!/usr/bin/perl
+
+#
+# makedoc.in is used to generate makedoc.  
+#
+
+sub expandrw {
+   my $read = shift;
+   my $write = shift;
+   my $type = shift;
+
+   my $res = "";
+   if ( ($read eq 'r') || ($write eq 'w')) {
+     $res .= "      <listitem>\n        <para role=\"fmtcapsitem\">\n          ";
+     if ( ($read eq 'r') && ($write eq 'w')) {
+       $res .= "read and write $type";
+     }
+     elsif ( $read eq 'r' ) {
+       $res .= "read $type";
+     }
+     elsif ( $write eq 'w' ) {
+       $res .= "write $type";
+     }
+     $res .= "\n        </para>\n      </listitem>\n";
+   }
+   $res;
+}
+
+sub expandoptions {
+   my $opts = shift;
+   my $res = "  <para role=\"fmtcapshdr\">\n    This format can...\n    <itemizedlist>\n";
+   
+   $res .= expandrw( substr($opts,0,1), substr($opts,1,1), 'waypoints' );
+   $res .= expandrw( substr($opts,2,1), substr($opts,3,1), 'tracks' );
+   $res .= expandrw( substr($opts,4,1), substr($opts,5,1), 'routes' );
+ 
+   $res .= "    </itemizedlist></para>\n";
+
+   $res;  
+}
+
+sub include {
+   my $name=shift;
+   my $dir2=shift;
+
+   $name2 = $name;
+   $name2 =~ s/-/_/g;
+   $d2 = $dir2;
+   $d2 =~ s:/.*::;
+   $name2 = $d2.'_'.$name2;
+   print PARTS qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
+   print FILE "\&inc_$name2;\n";
+   if (! -e "$dir/$dir2/$name.xml") {
+     open TMP, ">$dir/$dir2/$name.xml";
+     print TMP "\n";
+     close TMP;
+   }
+}
+
+sub includef {
+   my $name=shift;
+
+   $name2 = $name;
+   $name2 =~ s/-/_/g;
+   print PARTS qq(<!ENTITY inc_$name2 SYSTEM "$name.xml">\n);
+   print FORMATS "\&inc_$name2;\n";
+}
+
+
+
+@dir=`mkdir -p @DOCDIR@`;
+$dir = $0;
+$dir =~ s:/.*$::;
+
+
+open PARTS, ">$dir/autogen/_parts.xml";
+print PARTS qq(<!-- This document is automatically generated. -->\n);
+print PARTS qq(<!ENTITY formats SYSTEM "_formats.xml">\n);
+print PARTS qq(<!ENTITY filters SYSTEM "_filters.xml">\n);
+
+open FORMATS, ">$dir/autogen/_formats.xml";
+print FORMATS qq(<!-- This document is automatically generated. -->\n);
+
+@formats = `./gpsbabel -^3`;
+
+$going = 0;
+$dooptions = 0;
+
+
+for (@formats) {
+   chomp;
+   s/\&/\&amp;/g;
+   s/</\&lt;/g;
+   s/>/\&gt;/g;
+   @line = split "\t";
+
+   if ( $line[0] eq 'internal') {
+     if ($going) {
+       print FILE "</section>\n";
+       close FILE;
+       $going = 0;
+     }
+     if ( $line[5] eq 'xcsv' ) {
+       $line[0] = 'file';
+     }
+   }
+
+   if (($line[0] eq 'file') || ($line[0] eq 'serial')) {
+     if ($going) {
+       print FILE "</section>\n";
+       close FILE;
+     }
+     $id = $line[2];
+     if ( $fmts{$id} ) {
+       $id .= $fmts{$id}++;
+     }
+     else {
+       $fmts{$id} = 1;
+     }
+     includef( 'fmt_'.$id );
+     open FILE, ">$dir/autogen/fmt_$id.xml";
+     print FILE <<END;
+<!-- This document is automatically generated. -->
+<section id="fmt_$id">
+  <title>$line[4] ($line[2])</title>
+END
+     print FILE expandoptions($line[1]);
+     $going = 1;
+     $dooptions = 1;
+     if ( defined($line[5]) && ($line[5] ne $line[2]) ) {
+       print FILE <<END;
+<para>
+This format is derived from the <link linkend="fmt_$line[5]">$line[5]</link>
+format, so it has all of the same options as that format.
+</para>
+END
+       if ($line[5] eq 'xcsv' ) {
+         $dooptions=0;
+       }
+     }
+     include($id,"formats");
+   }
+   elsif ($going && $dooptions && ($line[0] eq 'option')) {
+     $nid = 'fmt_'.$id.'_o_'.$line[2];
+     print FILE <<END;
+  <section id="$nid">
+    <title><option>$line[2]</option> option</title>
+    <para>
+      $line[3].
+    </para>
+END
+     include($id.'-'.$line[2],"formats/options");
+     print FILE <<END;
+  </section>
+END
+   }
+}
+
+if ($going) {
+  print FILE "</section>\n";
+  close FILE;
+  $going = 0;
+}
+
+
+open FORMATS, ">$dir/autogen/_filters.xml";
+print FORMATS qq(<!-- This document is automatically generated. -->\n);
+
+@filters = `./gpsbabel -%1`;
+
+$going = 0;
+
+for (@filters) {
+   chomp;
+   s/\&/\&amp;/g;
+   s/</\&lt;/g;
+   s/>/\&gt;/g;
+   @line = split "\t";
+
+   if ($going && ($line[0] eq 'option')) {
+     print FILE <<END;
+  <section id="fmt_$line[1]_o_$line[2]">
+    <title>$line[2] option</title>
+    <para>
+      $line[3].
+    </para>
+END
+     include($line[1].'-'.$line[2],"filters/options");
+     print FILE <<END;
+  </section>
+END
+   }
+   else {
+     if ($going) {
+       print FILE "</section>\n";
+       close FILE;
+     }
+     includef( 'filter_'.$line[0] );
+     open FILE, ">$dir/autogen/filter_$line[0].xml";
+     print FILE <<END;
+<!-- This document is automatically generated. -->
+<section id="filter_$line[0]">
+  <title>$line[1] ($line[0])</title>
+END
+     include($line[0],"filters");
+     $going = $line[0];
+   }
+}
+
+
+if ($going) {
+  print FILE "</section>\n";
+  close FILE;
+  $going = 0;
+}
+close FORMATS;
+close PARTS;

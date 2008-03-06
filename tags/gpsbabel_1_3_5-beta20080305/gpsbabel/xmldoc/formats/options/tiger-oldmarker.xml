@@ -1,0 +1,3 @@
+<para>This option specifies the pin to be used if a waypoint has a creation
+time newer than 'oldthresh' days.</para>
+<para>The default is "redpin".</para>

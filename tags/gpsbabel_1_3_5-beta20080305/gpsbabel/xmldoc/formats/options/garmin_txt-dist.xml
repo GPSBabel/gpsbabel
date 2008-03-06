@@ -1,0 +1,5 @@
+<para>
+This option specifies the unit to be used when outputting distance
+values.  Valid values are M for metric (m/km/kph) or S for statute
+(ft/mi/mph).
+</para>

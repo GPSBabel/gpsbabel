@@ -1,0 +1,20 @@
+# gpsbabel XCSV style file
+#
+# Format: Human readable read test style
+# Author: Ron Parker
+#   Date: 21 July 2004
+#
+
+DESCRIPTION		Human readable read test style
+EXTENSION		txt
+
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		TAB
+RECORD_DELIMITER	NEWLINE
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	LATLON_HUMAN_READABLE, "", ""

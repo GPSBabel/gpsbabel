@@ -1,0 +1,26 @@
+<para>Serial download protocol for the 
+<productname>Wintec WBT-200</productname>  and
+<productname>Wintec WBT-201</productname> 
+GPS data loggers. Although untested it is expected that this will also support the WBT-100.</para>
+<para>
+<ulink url="http://www.semsons.com/wiwbmu3gpsre2.html">Wintec WBT-201</ulink>
+</para>
+<example id="wbt-on-macos">
+  <title>Command showing WBT-200 download and erase over Bluetooth on Mac OS X</title>
+  <para><userinput>gpsbabel -t -w -i wbt,erase -f /dev/cu.WBT200-SPPslave-1 -o gpx -F out.gpx</userinput></para>
+</example>
+
+<para>
+Internally, this is actually a serial device that has a serial/USB adapter
+built into it.  It uses the CP210x chip by Silicon labs.   You will probably
+need a driver for this chip.  The product ships with one for Windows.  
+The Linux 210x driver seems to work fine.  Mac users will need to download 
+the <ulink url="http://www.silabs.com/tgwWebApp/public/web_content/products/Microcontrollers/USB/en/mcu_vcp.htm">Mac driver for CP210x</ulink>.
+</para>
+
+<para>
+GPSBabel does not try to offer an interface to configure these units. That
+is left to the Windows software that comes with it or tools like the 
+<ulink url="http://www.daria.co.uk/gps">WBT 201 Viewer</ulink> for Mac OS/X
+and Linux.
+</para>
