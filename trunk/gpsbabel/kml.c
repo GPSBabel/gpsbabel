@@ -402,7 +402,7 @@ kml_write_xmle(const char *tag, const char *v)
 
 #define hovertag(h) h ? 'h' : 'n'
 static void kml_write_bitmap_style_(const char *style, const char * bitmap, 
-				    int highlighted)
+				    int highlighted, int force_heading)
 {
 	kml_write_xml(0, "<!-- %s %s style -->\n", 
 		highlighted ? "Highlighted" : "Normal", style);
@@ -410,6 +410,10 @@ static void kml_write_bitmap_style_(const char *style, const char * bitmap,
 	kml_write_xml(1, "<IconStyle>\n");
 	if (highlighted) {
 		kml_write_xml(0, "<scale>1.2</scale>\n");
+	}
+	/* Our icons are pre-rotated, so nail them to the maps. */
+	if (force_heading) {
+		kml_write_xml(0, "<heading>0</heading>\n");
 	}
 	kml_write_xml(1, "<Icon>\n");
 	kml_write_xml(0, "<href>%s</href>\n", bitmap);
@@ -425,17 +429,18 @@ static void kml_write_bitmap_style_(const char *style, const char * bitmap,
 static void kml_write_bitmap_style(kml_point_type pt_type, const char *bitmap,
 				  const char *customstyle)
 {
+	int force_heading = 0;
 	const char *style;
 	switch (pt_type) {
 		case kmlpt_track: style = "track"; break;
 		case kmlpt_route: style = "route"; break;
 		case kmlpt_waypoint: style = "waypoint"; break;
-		case kmlpt_other: style = customstyle; break;
+		case kmlpt_other: style = customstyle; force_heading = 1; break;
 		default: fatal("kml_output_point: unknown point type"); break;
 	}
 
-	kml_write_bitmap_style_(style, bitmap, 0);
-	kml_write_bitmap_style_(style, bitmap, 1);
+	kml_write_bitmap_style_(style, bitmap, 0, force_heading);
+	kml_write_bitmap_style_(style, bitmap, 1, force_heading);
 
 	kml_write_xml(1, "<StyleMap id=\"%s\">\n", style);
 	kml_write_xml(1, "<Pair>\n");
@@ -851,13 +856,17 @@ static void kml_geocache_pr(const waypoint *waypointp)
 	kml_write_xml(1, "<ExtendedData>\n");
 	kml_write_xml(0, "<Data name=\"gc_num\"><value>%s</value></Data>\n", waypointp->shortname);
 
-	p = xml_entitize(waypointp->url_link_text);
-	kml_write_xml(0, "<Data name=\"gc_name\"><value>%s</value></Data>\n", p);
-	xfree(p);
+	if(waypointp->url_link_text) {
+		p = xml_entitize(waypointp->url_link_text);
+		kml_write_xml(0, "<Data name=\"gc_name\"><value>%s</value></Data>\n", p);
+		xfree(p);
+	}
 
-	p = xml_entitize(waypointp->gc_data.placer);
-	kml_write_xml(0, "<Data name=\"gc_placer\"><value>%s</value></Data>\n", p);
-	xfree(p);
+	if (waypointp->gc_data.placer) {
+		p = xml_entitize(waypointp->gc_data.placer);
+		kml_write_xml(0, "<Data name=\"gc_placer\"><value>%s</value></Data>\n", p);
+		xfree(p);
+	}
 
 	kml_write_xml(0, "<Data name=\"gc_placer_id\"><value>%d</value></Data>\n", waypointp->gc_data.placer_id);
 
