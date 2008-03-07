@@ -60,6 +60,7 @@ gbsize_t gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile 
 int gbfgetc(gbfile *file);
 char *gbfgets(char *buf, int len, gbfile *file);
 
+int gbvfprintf(gbfile *file, const char *format, va_list ap);
 int gbfprintf(gbfile *file, const char *format, ...);
 int gbfputc(int c, gbfile *file);
 int gbfputs(const char *s, gbfile *file);
