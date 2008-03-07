@@ -122,6 +122,18 @@
 #  define NORETURN void
 #endif
 
+#ifndef HAVE_VA_COPY
+#  ifdef __va_copy
+#    define va_copy(DEST,SRC) __va_copy((DEST),(SRC))
+#  else
+#    ifdef HAVE_VA_LIST_AS_ARRAY
+#      define va_copy(DEST,SRC) (*(DEST) = *(SRC))
+#    else
+#      define va_copy(DEST,SRC) ((DEST) = (SRC))
+#    endif
+#  endif
+#endif
+
 /*
  * Common definitions.   There should be no protocol or file-specific
  * data in this file.
@@ -787,6 +799,7 @@ char *xstrrstr(const char *s1, const char *s2);
 void rtrim(char *s);
 char * lrtrim(char *s);
 int xasprintf(char **strp, const char *fmt, ...);
+int xvasprintf(char **strp, const char *fmt, va_list ap);
 char *strupper(char *src);
 char *strlower(char *src);
 signed int get_tz_offset(void);

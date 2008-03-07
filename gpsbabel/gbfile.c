@@ -289,18 +289,17 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 }
 
 /*
- * gbfprintf: (as fprintf)
+ * gbvfprintf: (as vfprintf)
  */
  
-int 
-gbfprintf(gbfile *file, const char *format, ...)
+int gbvfprintf(gbfile *file, const char *format, va_list ap)
 {
 	int len;
 	
 	for (;;) {
 		va_list args;
 		
-		va_start(args, format);
+		va_copy(args, ap);
 		len = vsnprintf(file->buff, file->buffsz, format, args);
 		va_end(args);
 
@@ -327,6 +326,23 @@ gbfprintf(gbfile *file, const char *format, ...)
 		file->buff = xrealloc(file->buff, file->buffsz);
 	}
 	return gbfwrite(file->buff, 1, len, file);
+}
+
+/*
+ * gbfprintf: (as fprintf)
+ */
+ 
+int 
+gbfprintf(gbfile *file, const char *format, ...)
+{
+	va_list args;
+	int result;
+	
+	va_start(args, format);
+	result = gbvfprintf(file, format, args);
+	va_end(args);
+	
+	return result;
 }
 
 /*

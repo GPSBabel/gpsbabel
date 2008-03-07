@@ -1154,38 +1154,30 @@ cet_disp_character_set_names(FILE *fout)
 
 int cet_gbfprintf(gbfile *stream, const cet_cs_vec_t *src_vec, const char *fmt, ...)
 {
-	char buff[128];
-	int res, ct;
+	int res;
+	char *cout;
 	va_list args;
-	char *cout = buff;
 
 	va_start(args, fmt);
-	ct = vsnprintf(buff, sizeof(buff), fmt, args);
+	xvasprintf(&cout, fmt, args);
 	va_end(args);
-
-	if (ct >= (int)sizeof(buff)) {
-		cout = xmalloc(ct + 1);
-		va_start(args, fmt);
-		vsnprintf(cout, ct + 1, fmt, args);
-		va_end(args);
-	}
 
 	if (global_opts.charset != src_vec)
 	{
 		if (src_vec != &cet_cs_vec_utf8) {
 			char *ctemp = cet_str_any_to_utf8(cout, src_vec);
-			if (cout != buff) xfree(cout);
+			xfree(cout);
 			cout = ctemp;
 		}
 		if (global_opts.charset != &cet_cs_vec_utf8) {
 			char *ctemp = cet_str_utf8_to_any(cout, global_opts.charset);
-			if (cout != buff) xfree(cout);
+			xfree(cout);
 			cout = ctemp;
 		}
 	}
 
 	res = gbfprintf(stream, "%s", cout);
-	if (cout != buff) xfree(cout);
+	xfree(cout);
 	
 	return res;
 }

@@ -300,6 +300,19 @@ xfputs(const char *errtxt, const char *s, FILE *stream)
 int
 xasprintf(char **strp, const char *fmt, ...)
 {
+	va_list args;
+	int res;
+	
+	va_start(args, fmt);
+	res = xvasprintf(strp, fmt, args);
+	va_end(args);
+	
+	return res;
+}
+
+int
+xvasprintf(char **strp, const char *fmt, va_list ap)
+{
 /* From http://perfec.to/vsnprintf/pasprintf.c */
 /* size of first buffer malloc; start small to exercise grow routines */
 #ifdef DEBUG_MEM
@@ -331,7 +344,7 @@ xasprintf(char **strp, const char *fmt, ...)
 			return -1;
 		}
 
-		va_start(args, fmt);
+		va_copy(args, ap);
 		outsize = vsnprintf(buf, bufsize, fmt, args);
 		va_end(args);
 		
@@ -382,6 +395,7 @@ xasprintf(char **strp, const char *fmt, ...)
 	*strp = buf;
 	return outsize;
 }
+
 
 /* 
  * Duplicate a pascal string into a normal C string.
