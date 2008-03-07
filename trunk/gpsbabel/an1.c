@@ -27,8 +27,8 @@
 #define MYNAME "an1"
 #include "defs.h"
 
-static FILE *infile;
-static FILE *outfile;
+static gbfile *infile;
+static gbfile *outfile;
 
 static char *output_type = NULL;
 static char *road_changes = NULL;
@@ -89,94 +89,30 @@ typedef struct guid {
 
 #include "an1sym.h"
 
-static unsigned short
-ReadShort(FILE * f)
-{
-	gbuint16 result = 0;
-
-	fread(&result, sizeof (result), 1, f);
-	return le_read16(&result);
-}
-
-static void 
-WriteShort(FILE * f, unsigned short s)
-{
-	gbuint16 tmp = 0;
-        le_write16( &tmp, s );
-	fwrite( &tmp, sizeof(tmp), 1, f );
-}
-
-static unsigned long
-ReadLong(FILE * f)
-{
-	gbuint32 result = 0;
-
-	fread(&result, sizeof (result), 1, f);
-	return le_read32(&result);
-}
-
-static void 
-WriteLong(FILE * f, unsigned long l)
-{
-	gbuint32 tmp = 0;
-        le_write32( &tmp, l );
-	
-	fwrite( &tmp, sizeof(tmp), 1, f );
-}
-
-static double
-ReadDouble( FILE * f )
-{
-	double tmp = 0;
-	double result = 0;
-	fread(&tmp, sizeof(tmp),1,f);
-	result = le_read_double( &tmp );
-	return result;
-}
-
-static void 
-WriteDouble(FILE * f, double d)
-{
-	double tmp = 0;
-        le_write_double( &tmp, d );
-	fwrite( &tmp, sizeof(tmp), 1, f );
-}
+#define ReadShort(f) gbfgetint16(f)
+#define WriteShort(f,s) gbfputint16((s),f)
+#define ReadLong(f) gbfgetint32(f)
+#define WriteLong(f,l) gbfputint32((l),f)
+#define ReadDouble(f) gbfgetdbl(f)
+#define WriteDouble(f,d) gbfputdbl((d),f)
 
 static char *
-ReadString( FILE * f, short len ) 
+ReadString( gbfile * f, short len ) 
 {
 	char *result = NULL;
 	result = (char *)xcalloc( 1, len + 1 );
 	if ( len ) {
-		fread( result, 1, len, f );
+		gbfread( result, 1, len, f );
 	}
 	return result;
 }
 
-static unsigned char
-ReadChar( FILE *f )
-{
-	unsigned char result = 0;
-	if (fread( &result, 1, 1, f ) < 1) {
-		fatal( MYNAME ": error reading an1 file.  Perhaps this isn't really an an1 file.");
-	}
-	return result;
-}
-
-static void
-WriteChar( FILE *f, unsigned char c ) 
-{
-	fwrite( &c, 1, 1, f );
-}
-
-static void
-WriteString( FILE *f, char *s )
-{
-	fwrite( s, 1, strlen(s), f );
-}
+#define ReadChar(f) (unsigned char) gbfgetc(f)
+#define WriteChar(f,c) gbfputc((unsigned char)(c),f)
+#define WriteString(f,s) gbfputs((s),f)
 
 static void 
-ReadGuid( FILE *f, GUID *guid )
+ReadGuid( gbfile *f, GUID *guid )
 {
 	int i = 0;
 	guid->l = ReadLong( f );
@@ -189,7 +125,7 @@ ReadGuid( FILE *f, GUID *guid )
 }
 
 static void 
-WriteGuid( FILE *f, GUID *guid )
+WriteGuid( gbfile *f, GUID *guid )
 {
 	int i = 0;
 	WriteLong( f, guid->l );
@@ -202,10 +138,10 @@ WriteGuid( FILE *f, GUID *guid )
 }	
 
 static void
-Skip(FILE * f,
+Skip(gbfile * f,
      unsigned long distance)
 {
-	fseek(f, distance, SEEK_CUR);
+	gbfseek(f, distance, SEEK_CUR);
 }
 
 static double
@@ -386,7 +322,7 @@ static void Destroy_AN1_Symbol( an1_symbol_record *symbol ) {
 	xfree( symbol->name );
 }
 
-static void Read_AN1_Waypoint( FILE *f, an1_waypoint_record *wpt ) {
+static void Read_AN1_Waypoint( gbfile *f, an1_waypoint_record *wpt ) {
 	short len;
 	
 	wpt->magic = ReadShort( f );
@@ -476,7 +412,7 @@ static void Read_AN1_Waypoint( FILE *f, an1_waypoint_record *wpt ) {
 	wpt->fillflags = ReadLong( f );	
 }
 
-static void Write_AN1_Waypoint( FILE *f, an1_waypoint_record *wpt ) {
+static void Write_AN1_Waypoint( gbfile *f, an1_waypoint_record *wpt ) {
 	short len;
 	
 	WriteShort( f, wpt->magic );
@@ -564,7 +500,7 @@ static void Write_AN1_Waypoint( FILE *f, an1_waypoint_record *wpt ) {
 	WriteLong( f, wpt->fillflags );	
 }
 
-static void Read_AN1_Vertex( FILE *f, an1_vertex_record *vertex ) {
+static void Read_AN1_Vertex( gbfile *f, an1_vertex_record *vertex ) {
 	
 	vertex->magic = ReadShort( f );
 	vertex->unk0 = ReadLong( f );
@@ -573,7 +509,7 @@ static void Read_AN1_Vertex( FILE *f, an1_vertex_record *vertex ) {
 	vertex->unk1 = ReadShort( f );
 }
 
-static void Write_AN1_Vertex( FILE *f, an1_vertex_record *vertex ) {
+static void Write_AN1_Vertex( gbfile *f, an1_vertex_record *vertex ) {
 	WriteShort( f, vertex->magic );
 	WriteLong( f, vertex->unk0 );
 	WriteLong( f, vertex->lon );
@@ -581,7 +517,7 @@ static void Write_AN1_Vertex( FILE *f, an1_vertex_record *vertex ) {
 	WriteShort( f, vertex->unk1 );
 }
 
-static void Read_AN1_Line( FILE *f, an1_line_record *line ) {
+static void Read_AN1_Line( gbfile *f, an1_line_record *line ) {
 	
 	short len;
 	
@@ -604,7 +540,7 @@ static void Read_AN1_Line( FILE *f, an1_line_record *line ) {
 	line->pointcount = ReadLong( f );
 }
 
-static void Write_AN1_Line( FILE *f, an1_line_record *line ) {
+static void Write_AN1_Line( gbfile *f, an1_line_record *line ) {
 	short len;
 	
 	WriteLong( f, line->roadtype );
@@ -627,11 +563,11 @@ static void Write_AN1_Line( FILE *f, an1_line_record *line ) {
 	WriteLong( f, line->pointcount );
 } 
 
-static void Skip_AN1_IL( FILE *f ) {
+static void Skip_AN1_IL( gbfile *f ) {
 	Skip( f, 26 );
 }
 
-static void Skip_AN1_BM( FILE *f ) {
+static void Skip_AN1_BM( gbfile *f ) {
 	unsigned long bmsize;
 	unsigned long palettesize;
 	unsigned long bmisize;
@@ -649,7 +585,7 @@ static void Skip_AN1_BM( FILE *f ) {
 	Skip( f, bmsize + palettesize );
 }
 
-static void Read_AN1_Symbol( FILE *f, an1_symbol_record *symbol ) {
+static void Read_AN1_Symbol( gbfile *f, an1_symbol_record *symbol ) {
 	short len;
 
 	/* This is just the high word of a long; we ate the low 
@@ -662,7 +598,7 @@ static void Read_AN1_Symbol( FILE *f, an1_symbol_record *symbol ) {
 	symbol->name = ReadString( f, len );
 }
 
-static void Read_AN1_Header( FILE *f ) {
+static void Read_AN1_Header( gbfile *f ) {
 	unsigned short magic;
 	unsigned short type;
 	
@@ -672,12 +608,12 @@ static void Read_AN1_Header( FILE *f ) {
 	last_read_type = type;
 }
 
-static void Write_AN1_Header( FILE *f ) {
+static void Write_AN1_Header( gbfile *f ) {
 	WriteShort( f, 11557 );
 	WriteShort( f, output_type_num );
 }
 
-static void Read_AN1_Bitmaps( FILE *f ) {
+static void Read_AN1_Bitmaps( gbfile *f ) {
 	long count;
 	unsigned short magic;
 	an1_symbol_record symbol;
@@ -704,13 +640,13 @@ static void Read_AN1_Bitmaps( FILE *f ) {
 	/* Read the symbol table */
 }
 
-static void Write_AN1_Bitmaps( FILE *f ) {
+static void Write_AN1_Bitmaps( gbfile *f ) {
 	/* On write, we don't output any bitmaps, so writing them
 	 * is just a matter of writing a count of zero */
 	WriteLong( f, 0 );
 }
 
-static void Read_AN1_Waypoints( FILE *f ) {
+static void Read_AN1_Waypoints( gbfile *f ) {
 	unsigned long count = 0;
 	unsigned long i = 0;
 	an1_waypoint_record *rec = NULL;
@@ -839,13 +775,13 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 	}
 }
 
-static void Write_AN1_Waypoints( FILE *f ) {
+static void Write_AN1_Waypoints( gbfile *f ) {
 	WriteShort( f, 2 );
 	WriteLong( f, waypt_count() );
 	waypt_disp_all( Write_One_AN1_Waypoint );
 }
 
-static void Read_AN1_Lines( FILE *f ) {
+static void Read_AN1_Lines( gbfile *f ) {
 	unsigned long count = 0;
 	unsigned long i = 0;
 	unsigned long j = 0;
@@ -1026,7 +962,7 @@ Write_One_AN1_Vertex( const waypoint *wpt )
 	}
 }
 
-static void Write_AN1_Lines( FILE *f ) {
+static void Write_AN1_Lines( gbfile *f ) {
 	WriteShort( f, 2 );
 	WriteLong( f, route_count()+track_count() );
 	
@@ -1213,13 +1149,13 @@ Init_Road_Changes( void )
 static void
 rd_init(const char *fname)
 {
-	infile = xfopen(fname, "rb", MYNAME);
+	infile = gbfopen_le(fname, "rb", MYNAME);
 }
 
 static void
 rd_deinit(void)
 {
-	fclose(infile);
+	gbfclose(infile);
 }
 
 static void
@@ -1234,7 +1170,7 @@ my_read(void)
 static void
 wr_init(const char *fname)
 {
-	outfile = xfopen( fname, "wb", MYNAME );
+	outfile = gbfopen_le( fname, "wb", MYNAME );
 	Init_Output_Type();
 	Init_Road_Changes();
 	opt_color_num = color_to_bbggrr(opt_color);
@@ -1255,7 +1191,7 @@ static void
 wr_deinit( void ) 
 {
 	Free_Road_Changes();
-	fclose(outfile);
+	gbfclose(outfile);
 }
 
 static void
