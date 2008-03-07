@@ -56,7 +56,7 @@ static int wpt_tmp_queued;
 static const char *posnfilename;
 static char *posnfilenametmp;
 
-static FILE *ofd;
+static gbfile *ofd;
 
 typedef struct {
   double latitude;
@@ -306,7 +306,7 @@ kml_wr_init(const char *fname)
 	/*
 	 * Reduce race conditions with network read link.
 	 */	
-	ofd = xfopen(fname, "w", MYNAME);
+	ofd = gbfopen(fname, "w", MYNAME);
 }
 
 /* 
@@ -332,7 +332,7 @@ kml_wr_position_init(const char *fname)
 static void
 kml_wr_deinit(void)
 {
-	fclose(ofd);
+	gbfclose(ofd);
 
 	if (posnfilenametmp) {
 #if __WIN32__
@@ -371,11 +371,11 @@ kml_write_xml(int indent, const char *fmt, ...)
 
 	if (fmt[1] != '!' && do_indentation) {
 		for (i = 0; i < indent_level; i++) {
-			fputs("  ", ofd);
+			gbfputs("  ", ofd);
 		}
 	}
 
-	vfprintf(ofd, fmt, args);
+	gbvfprintf(ofd, fmt, args);
 
 	if (indent > 0) indent_level++;
 
@@ -393,9 +393,9 @@ kml_write_xmle(const char *tag, const char *v)
 	if (v && *v) {
 		char *tmp_ent = xml_entitize(v);
 		for (i = 0; i < indent_level; i++) {
-			fputs("  ", ofd);
+			gbfputs("  ", ofd);
 		}
-		fprintf(ofd, "<%s>%s</%s>\n",tag, tmp_ent, tag);
+		gbfprintf(ofd, "<%s>%s</%s>\n",tag, tmp_ent, tag);
 		xfree(tmp_ent);
 	}
 }
@@ -940,7 +940,7 @@ static void kml_waypt_pr(const waypoint *waypointp)
 			kml_write_xml(0, "<![CDATA[<a href=\"%s\">%s</a>]]>", odesc, olink);
 			xfree(olink);
 		} else {
-			fputs(odesc, ofd);
+			gbfputs(odesc, ofd);
 		}
 
 		kml_write_xml(0, "</description>\n");
