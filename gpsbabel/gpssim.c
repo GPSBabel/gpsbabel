@@ -23,7 +23,7 @@
 
 #define MYNAME "gpssim"
 
-static FILE *fout;
+static gbfile *fout;
 static char *wayptspd;
 static char *splitfiles_opt;
 static int splitfiles;
@@ -60,7 +60,7 @@ gpssim_wr_init(const char *fname)
 	}
 
 	if (!splitfiles) {
-		fout = xfopen(fname, "wb", MYNAME);
+		fout = gbfopen(fname, "wb", MYNAME);
 	}
 }
 
@@ -68,7 +68,7 @@ static void
 gpssim_wr_deinit(void)
 {
 	if (fout) {
-		fclose(fout);
+		gbfclose(fout);
 		fout = NULL;
 	}
 
@@ -84,7 +84,7 @@ gpssim_wr_deinit(void)
 static void 
 gpssim_write_sentence(const char *const s)
 {
-	fprintf(fout, "$%s*%02X\r\n", s, nmea_cksum(s));
+	gbfprintf(fout, "$%s*%02X\r\n", s, nmea_cksum(s));
 }
 
 static void
@@ -145,7 +145,7 @@ gpssim_trk_hdr(const route_head *rh)
 			doing_tracks ? "-track" : "-route",
 			trk_count++);
 		ofname = xstrappend(ofname, c);
-		fout = xfopen(ofname, "wb", MYNAME);
+		fout = gbfopen(ofname, "wb", MYNAME);
 		xfree(ofname);
 	}
 	track_recompute(rh, NULL);
@@ -155,7 +155,7 @@ static void
 gpssim_trk_ftr(const route_head *rh)
 {
 	if (splitfiles) {
-		fclose(fout);
+		gbfclose(fout);
 		fout = NULL;
 	}
 }
@@ -167,7 +167,7 @@ gpssim_write(void)
 		if (splitfiles) {
 			char *ofname = xstrdup(fnamestr);
 			ofname = xstrappend(ofname, "-waypoints.gpssim");
-			fout = xfopen(ofname, "wb", MYNAME);
+			fout = gbfopen(ofname, "wb", MYNAME);
 			xfree(ofname);
 		}
 		if (wayptspd && wayptspd[0]) {
@@ -175,7 +175,7 @@ gpssim_write(void)
 		}
 		waypt_disp_all(gpssim_write_pt);
 		if (splitfiles) {
-			fclose(fout);
+			gbfclose(fout);
 			fout = NULL;
 		}
 	}
