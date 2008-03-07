@@ -38,13 +38,13 @@ typedef struct gpl_point {
 	unsigned int dummy3;
 } gpl_point_t;
 
-static FILE *gplfile_in;
-static FILE *gplfile_out;
+static gbfile *gplfile_in;
+static gbfile *gplfile_out;
 
 static void
 gpl_rd_init(const char *fname)
 {
-	gplfile_in = xfopen(fname, "rb", MYNAME);
+	gplfile_in = gbfopen_le(fname, "rb", MYNAME);
 	if (sizeof(struct gpl_point) != 56) {
 		fatal(MYNAME ": gpl_point is %lu instead of 56.\n", 
 				(unsigned long) sizeof(struct gpl_point));
@@ -62,7 +62,7 @@ gpl_read(void)
 	track_head = route_head_alloc();
 	track_add_head(track_head);
 
-	while (fread(&gp, sizeof(gp), 1, gplfile_in) > 0) {
+	while (gbfread(&gp, sizeof(gp), 1, gplfile_in) > 0) {
 		wpt_tmp = waypt_new();
 		wpt_tmp->latitude = le_read_double(&gp.lat);
 		wpt_tmp->longitude = le_read_double(&gp.lon);
@@ -84,19 +84,19 @@ gpl_read(void)
 static void
 gpl_rd_deinit(void)
 {
-	fclose(gplfile_in);
+	gbfclose(gplfile_in);
 }
 
 static void
 gpl_wr_init(const char *fname)
 {
-	gplfile_out = xfopen(fname, "wb", MYNAME);
+	gplfile_out = gbfopen_le(fname, "wb", MYNAME);
 }
 
 static void
 gpl_wr_deinit(void)
 {
-	fclose(gplfile_out);
+	gbfclose(gplfile_out);
 }
 
 static void
@@ -117,7 +117,7 @@ gpl_trackpt(const waypoint *wpt)
 	le_write_double(&gp.heading, heading );
 	le_write32(&gp.tm, wpt->creation_time);
 
-	fwrite(&gp, sizeof(gp), 1, gplfile_out);
+	gbfwrite(&gp, sizeof(gp), 1, gplfile_out);
 }
 
 static void
