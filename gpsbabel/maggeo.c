@@ -29,27 +29,27 @@
 /* Turn this on (remove) after 5.2 becomes widespread. */
 #define FIRMWARE_DOES_88591 0		
 
-static FILE *maggeofile_in;
-static FILE *maggeofile_out;
+static gbfile *maggeofile_in;
+static gbfile *maggeofile_out;
 static short_handle desc_handle = NULL;
 
 static void
 maggeo_writemsg(const char * const buf)
 {
 	unsigned int osum = mag_checksum(buf);
-	fprintf(maggeofile_out, "$%s*%02X\r\n",buf, osum);
+	gbfprintf(maggeofile_out, "$%s*%02X\r\n",buf, osum);
 }
 
 static void
 maggeo_rd_init(const char *fname)
 {
-	maggeofile_in = xfopen(fname, "rb", MYNAME);
+	maggeofile_in = gbfopen(fname, "rb", MYNAME);
 }
 
 static void
 maggeo_rd_deinit(void)
 {
-        fclose(maggeofile_in);
+        gbfclose(maggeofile_in);
 }
 
 static void
@@ -58,7 +58,7 @@ maggeo_wr_init(const char *fname)
 	if (waypt_count() > 200) {
 		fatal(MYNAME ": eXplorist does not support more than 200 waypoints in one .gs file.\nDecrease the number of waypoints sent.\n");
 	}
-	maggeofile_out = xfopen(fname, "wb", MYNAME);
+	maggeofile_out = gbfopen(fname, "wb", MYNAME);
 	desc_handle = mkshort_new_handle();
 	setshort_length(desc_handle, 20);
 	setshort_badchars(desc_handle, "\"$,");
@@ -69,7 +69,7 @@ maggeo_wr_deinit(void)
 {
 	maggeo_writemsg("PMGNCMD,END");
 	mkshort_del_handle(&desc_handle);
-	fclose(maggeofile_out);
+	gbfclose(maggeofile_out);
 }
 
 static void
