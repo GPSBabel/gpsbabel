@@ -38,8 +38,8 @@ static short_handle mkshort_handle;
 #undef  MAPNAME
 #define MAPNAME "Top. Karte 1:50.000 Nieders."
 
-static FILE *fpout;
-static FILE *fpin;
+static gbfile *fpout;
+static gbfile *fpin;
 static int govl_cnt;
 static double govl_sum_e=0.0;
 static double govl_sum_n=0.0;
@@ -152,7 +152,7 @@ static int isKeyword(char *str,char **keys)
 static
 void ovl_rd_init(char const *fname)
 {
-  fpin = xfopen(fname, "rt", MYNAME);
+  fpin = gbfopen(fname, "r", MYNAME);
 }
 
 #define SECTION_NONE    0
@@ -214,7 +214,7 @@ static void route_add_name(const route_head *hd)
 
 static void ovl_read(void)
 {
-  char    line[MAXLINE];
+  char    *line;
   int     isSection;
   int     aktTyp,aktCol,aktSize,aktArt,aktGroup;
   int     aktArea,aktWidth,aktHeight,aktTrans,aktTransByte,aktDir;
@@ -237,8 +237,9 @@ static void ovl_read(void)
   aktPath = NULL;
   sym_cnt = 0;
   isSection = SECTION_NONE;
-  while (fgets(line,MAXLINE-1,fpin)!=NULL)
+  while ((line = gbfgetstr(fpin)))
   {
+    line = lrtrim(line);
     if( (pstr = strstr(line,"[Symbol "))!= NULL)
     {
       sym_cnt++;
@@ -394,27 +395,27 @@ static void ovl_read(void)
 
 static void ovl_rd_deinit(void)
 {
-  fclose(fpin);
+  gbfclose(fpin);
 }
 
 /*------------------------------------------*/
 void ovl_read_parameter(char *fname)
 {
-  FILE      *fpin;
+  gbfile    *fpin;
   arglist_t *p;
-  char       line[MAXLINE],str[MAXLINE];
+  char      *str;
   char      *pstr;
 
-  fpin = fopen(fname,"rt");
+  fpin = gbfopen(fname, "r", MYNAME);
   if (fpin!=NULL)
   {
-    while (fgets(line,MAXLINE-1,fpin)!=NULL)
+    while ((str = gbfgetstr(fpin)))
     {
-      sscanf(line,"%s",str); // trim
+      str = lrtrim(str); // trim
       if (str[0]!=';')
       {
         p = ovl_args;
-        pstr = strtok(line,"=");
+        pstr = strtok(str,"=");
         if (pstr!=NULL)
         {
           while(p->argstring!=NULL)
@@ -437,13 +438,13 @@ void ovl_read_parameter(char *fname)
         }
       }
     }
-    fclose(fpin);
+    gbfclose(fpin);
   }
 }
 
 static void ovl_wr_init(const char *fname)
 {
-  fpout = xfopen(fname, "wt", MYNAME);
+  fpout = gbfopen(fname, "w", MYNAME);
   govl_sum_n = 0.0;
   govl_sum_e = 0.0;
   govl_sumcnt = 0.0;
@@ -492,37 +493,37 @@ static void ovl_wr_init(const char *fname)
 
 static void ovl_wr_deinit(void)
 {
-  fprintf(fpout,"[Overlay]\n");
-  fprintf(fpout,"Symbols=%d\n",govl_symbol_cnt);
-  fprintf(fpout,"[MapLage]\n");
-  fprintf(fpout,"MapName=%s\n",govl_mapname);
-  fprintf(fpout,"DimmFc=%d\n",govl_dimmfc);
-  fprintf(fpout,"ZoomFc=%d\n",govl_zoomfc);
+  gbfprintf(fpout,"[Overlay]\n");
+  gbfprintf(fpout,"Symbols=%d\n",govl_symbol_cnt);
+  gbfprintf(fpout,"[MapLage]\n");
+  gbfprintf(fpout,"MapName=%s\n",govl_mapname);
+  gbfprintf(fpout,"DimmFc=%d\n",govl_dimmfc);
+  gbfprintf(fpout,"ZoomFc=%d\n",govl_zoomfc);
   if (govl_symbol_cnt)
   {
-    fprintf(fpout,"CenterLat=%.8lf\n",govl_sum_n/govl_sumcnt); // precision 8 = better than 1mm
-    fprintf(fpout,"CenterLong=%.8lf\n",govl_sum_e/govl_sumcnt);
+    gbfprintf(fpout,"CenterLat=%.8lf\n",govl_sum_n/govl_sumcnt); // precision 8 = better than 1mm
+    gbfprintf(fpout,"CenterLong=%.8lf\n",govl_sum_e/govl_sumcnt);
   }
   else
   {
-    fprintf(fpout,"CenterLong=10.52374295\n"); // Braunschweiger Löwe, Mittelpunkt der Welt :-)
-    fprintf(fpout,"CenterLat=52.26474445\n");
+    gbfprintf(fpout,"CenterLong=10.52374295\n"); // Braunschweiger Löwe, Mittelpunkt der Welt :-)
+    gbfprintf(fpout,"CenterLat=52.26474445\n");
   }
-  fprintf(fpout,"RefOn=0\n");
+  gbfprintf(fpout,"RefOn=0\n");
 
-  fclose(fpout);
+  gbfclose(fpout);
 }
 
 static void symbol_init(const route_head *hd)
 {
-  fprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
-  fprintf(fpout,"Typ=3\n");                            // Linie
-  fprintf(fpout,"Group=%d\n"   ,govl_group_cnt+1+1);   // group==1 : not a group
-  fprintf(fpout,"Col=%d\n"     ,govl_col);
-  fprintf(fpout,"Zoom=2\n");
-  fprintf(fpout,"Size=%d\n"    ,govl_size);
-  fprintf(fpout,"Art=1\n");
-  fprintf(fpout,"Punkte=%d\n"  ,hd->rte_waypt_ct);
+  gbfprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
+  gbfprintf(fpout,"Typ=3\n");                            // Linie
+  gbfprintf(fpout,"Group=%d\n"   ,govl_group_cnt+1+1);   // group==1 : not a group
+  gbfprintf(fpout,"Col=%d\n"     ,govl_col);
+  gbfprintf(fpout,"Zoom=2\n");
+  gbfprintf(fpout,"Size=%d\n"    ,govl_size);
+  gbfprintf(fpout,"Art=1\n");
+  gbfprintf(fpout,"Punkte=%d\n"  ,hd->rte_waypt_ct);
   govl_cnt = 0;
   govl_symbol_cnt++;
   govl_group_cnt++;
@@ -530,18 +531,18 @@ static void symbol_init(const route_head *hd)
 
 static void symbol_text(double east,double north,char *text,int group)
 {
-  fprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
-  fprintf(fpout,"Typ=2\n");                           // Text
-  fprintf(fpout,"Group=%d\n",group+1);  // group==1 : not a group
-  fprintf(fpout,"Col=%d\n",govl_txtcol);
-  fprintf(fpout,"Area=%d\n",govl_txttrans ? 1 : 2); // =2 opak =1 transparent
-  fprintf(fpout,"Zoom=%d\n",2);
-  fprintf(fpout,"Size=%d\n",govl_txtsize);
-  fprintf(fpout,"Font=%d\n",govl_font);
-  fprintf(fpout,"Dir=%d\n",100+((int) govl_dir));
-  fprintf(fpout,"XKoord=%.8lf\n",east);  // precision 8 = better than 1mm
-  fprintf(fpout,"YKoord=%.8lf\n",north);
-  fprintf(fpout,"Text=%s\n",text);
+  gbfprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
+  gbfprintf(fpout,"Typ=2\n");                           // Text
+  gbfprintf(fpout,"Group=%d\n",group+1);  // group==1 : not a group
+  gbfprintf(fpout,"Col=%d\n",govl_txtcol);
+  gbfprintf(fpout,"Area=%d\n",govl_txttrans ? 1 : 2); // =2 opak =1 transparent
+  gbfprintf(fpout,"Zoom=%d\n",2);
+  gbfprintf(fpout,"Size=%d\n",govl_txtsize);
+  gbfprintf(fpout,"Font=%d\n",govl_font);
+  gbfprintf(fpout,"Dir=%d\n",100+((int) govl_dir));
+  gbfprintf(fpout,"XKoord=%.8lf\n",east);  // precision 8 = better than 1mm
+  gbfprintf(fpout,"YKoord=%.8lf\n",north);
+  gbfprintf(fpout,"Text=%s\n",text);
   govl_symbol_cnt++;
 }
 
@@ -551,8 +552,8 @@ static void symbol_point(const waypoint *wpt)
 
   east  = wpt->longitude;
   north = wpt->latitude;
-  fprintf(fpout,"XKoord%d=%.8lf\n",govl_cnt,east);    // precision 8 = better than 1mm
-  fprintf(fpout,"YKoord%d=%.8lf\n",govl_cnt,north);
+  gbfprintf(fpout,"XKoord%d=%.8lf\n",govl_cnt,east);    // precision 8 = better than 1mm
+  gbfprintf(fpout,"YKoord%d=%.8lf\n",govl_cnt,north);
   govl_cnt++;
   govl_sum_e += east;
   govl_sum_n += north;
@@ -652,18 +653,18 @@ static void overlay_waypt_pr(const waypoint *waypointp)
               mkshort(mkshort_handle, odesc) :
               waypointp->shortname;
 
-  fprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
-  fprintf(fpout,"Typ=1\n");
-  fprintf(fpout,"Group=1\n");
-  fprintf(fpout,"Width=100\n");
-  fprintf(fpout,"Height=100\n");
-  fprintf(fpout,"Dir=%d\n",100+((int) govl_dir));
-  fprintf(fpout,"Zoom=2\n");
-  fprintf(fpout,"Trans=2\n");
-  fprintf(fpout,"TransByte=5\n");
-  fprintf(fpout,"Path=%s\n","waypoint.bmp");
-  fprintf(fpout,"XKoord=%.8lf\n",waypointp->longitude);
-  fprintf(fpout,"YKoord=%.8lf\n",waypointp->latitude);
+  gbfprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
+  gbfprintf(fpout,"Typ=1\n");
+  gbfprintf(fpout,"Group=1\n");
+  gbfprintf(fpout,"Width=100\n");
+  gbfprintf(fpout,"Height=100\n");
+  gbfprintf(fpout,"Dir=%d\n",100+((int) govl_dir));
+  gbfprintf(fpout,"Zoom=2\n");
+  gbfprintf(fpout,"Trans=2\n");
+  gbfprintf(fpout,"TransByte=5\n");
+  gbfprintf(fpout,"Path=%s\n","waypoint.bmp");
+  gbfprintf(fpout,"XKoord=%.8lf\n",waypointp->longitude);
+  gbfprintf(fpout,"YKoord=%.8lf\n",waypointp->latitude);
   govl_symbol_cnt++;
   govl_sum_e += waypointp->longitude;
   govl_sum_n += waypointp->latitude;
