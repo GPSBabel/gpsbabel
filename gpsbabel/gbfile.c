@@ -471,7 +471,7 @@ gbferror(gbfile *file)
 void
 gbfrewind(gbfile *file)
 {
-	(void)gbfseek(file, 0, SEEK_SET);
+	(void) gbfseek(file, 0, SEEK_SET);
 	gbfclearerr(file);
 }
 
@@ -482,9 +482,9 @@ gbfrewind(gbfile *file)
 int
 gbfseek(gbfile *file, gbint32 offset, int whence)
 {
+	int result;
 
 	if (file->gzapi) {
-		int result;
 		
 		assert(whence != SEEK_END);
 
@@ -501,10 +501,26 @@ gbfseek(gbfile *file, gbint32 offset, int whence)
 			fatal("%s: online compression not yet supported for this format!", file->module);
 		}
 		return 0;
-		
 	}
 	else {
-		return fseek(file->handle.std, offset, whence);
+		gbsize_t pos = 0;
+		
+		if (whence != SEEK_SET) pos = ftell(file->handle.std);
+
+		result = fseek(file->handle.std, offset, whence);
+		if (result != 0) {
+			switch (whence) {
+			case SEEK_CUR:
+			case SEEK_END: pos = pos + offset; break;
+			case SEEK_SET: pos = offset; break;
+			default:
+				fatal("%s: Unknown seek operation (%d) for file %s!\n",
+					file->module, whence, file->name);
+			}
+			fatal("%s: Unable to set file (%s) to position (%d)!\n",
+				file->module, file->name, pos);
+		}
+		return 0;
 	}
 }
 
@@ -515,22 +531,27 @@ gbfseek(gbfile *file, gbint32 offset, int whence)
 gbsize_t 
 gbftell(gbfile *file)
 {
+	gbsize_t result;
+	
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		gbsize_t result = gztell(file->handle.gz);
+		result = gztell(file->handle.gz);
 		if (file->back != -1) {
 //			file->back = -1;
 			result--;
 		}
-		return result;
 #else
 		fatal(NO_ZLIB);
-		return -1;
+		result = -1;
 #endif
 	}
 	else {
-		return ftell(file->handle.std);
+		result = ftell(file->handle.std);
 	}
+	if ((signed) result == -1)
+		fatal("%s: Could not determine position of file '%s'!\n",
+			file->module, file->name);
+	return result;
 }
 
 /*
