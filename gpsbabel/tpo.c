@@ -108,8 +108,8 @@ arglist_t tpo3_args[] = {
 };
 
 
-static FILE *tpo_file_in;
-static FILE *tpo_file_out;
+static gbfile *tpo_file_in;
+static gbfile *tpo_file_out;
 //static short_handle mkshort_handle;
 
 static double output_track_lon_scale;
@@ -127,36 +127,6 @@ static double last_waypoint_z;
 /*                                      READ                                   */
 /*******************************************************************************/
  
-static int
-tpo_fread(void *buff, size_t size, size_t members, FILE * fp) 
-{
-    size_t br;
-
-    br = fread(buff, size, members, fp);
-
-    if (br != members) {
-        fatal(MYNAME ": The input file does not look like a valid .TPO file.\n");
-    }
-
-    return (br);
-}
-
-static double
-tpo_fread_double(FILE *fp)
-{
-	unsigned char buf[8];
-	tpo_fread(buf, 1, 8, fp);
-	return le_read_double(buf);
-}
-
-static void
-tpo_fwrite_double(double x, FILE *fp)
-{
-	unsigned char cbuf[8];
-	le_write_double(cbuf,x);
-	fwrite(cbuf, 8, 1, fp);
-}
-
 /* Define a global here that we can query from multiple places */
 float tpo_version = 0.0;
 
@@ -171,9 +141,9 @@ tpo_check_version_string()
 	char* v3_id_string = "TOPO! Ver";
 
 	/* read the id string */
-	tpo_fread(&string_size, 1, 1, tpo_file_in);
+	gbfread(&string_size, 1, 1, tpo_file_in);
 	string_buffer = xmalloc(string_size+1);
-	tpo_fread(string_buffer, 1, string_size, tpo_file_in);
+	gbfread(string_buffer, 1, string_size, tpo_file_in);
 	
 	/* terminate the string */
 	string_buffer[string_size] = 0;
@@ -184,7 +154,7 @@ tpo_check_version_string()
 /*		fatal(MYNAME ": gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer); */
 //fprintf(stderr,"gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer);
 
-		fseek(tpo_file_in, -(string_size+1), SEEK_CUR);
+		gbfseek(tpo_file_in, -(string_size+1), SEEK_CUR);
         xfree(string_buffer);
         tpo_version = 3.0;  /* Really any 3.x version */
         return;
@@ -193,7 +163,7 @@ tpo_check_version_string()
 	else {
         /* We found a version 1.x or 2.x file */
 		/* seek back to the beginning of the file */
-		fseek(tpo_file_in, -(string_size+1), SEEK_CUR);
+		gbfseek(tpo_file_in, -(string_size+1), SEEK_CUR);
         xfree(string_buffer);
         tpo_version = 2.0;  /* Really any 1.x or 2.x version */
         return;
@@ -209,7 +179,7 @@ tpo_dump_header_bytes(int header_size)
 	int i;
 	unsigned char* buffer = (unsigned char*)xmalloc(header_size);
 
-	tpo_fread(buffer, 1, header_size, tpo_file_in);
+	gbfread(buffer, 1, header_size, tpo_file_in);
 
 	printf("unsigned char header_bytes[] = {\n");
 	
@@ -240,18 +210,18 @@ tpo_read_until_section(const char* section_name, int seek_bytes)
 	int header_size = 0;
 
 	while (1) {
-		tpo_fread(&byte, 1, 1, tpo_file_in);
+		gbfread(&byte, 1, 1, tpo_file_in);
 		header_size++;
 
 		if (byte == section_name[match_index]) {
 			match_index++;
 			if (match_index == strlen(section_name)) {
 /*fprintf(stderr,"Found %s\n", section_name);*/
-				fseek(tpo_file_in, seek_bytes, SEEK_CUR);
+				gbfseek(tpo_file_in, seek_bytes, SEEK_CUR);
 				header_size += seek_bytes;
 
 				if (dumpheader && dumpheader[0] == '1') {
-					fseek(tpo_file_in, -header_size, SEEK_CUR);
+					gbfseek(tpo_file_in, -header_size, SEEK_CUR);
 					tpo_dump_header_bytes(header_size);
 				}
 				return;
@@ -268,7 +238,7 @@ static void
 tpo_rd_init(const char *fname)
 {
 
-	tpo_file_in = xfopen(fname, "rb", MYNAME);
+	tpo_file_in = gbfopen_le(fname, "rb", MYNAME);
 	tpo_check_version_string();
 
     if (tpo_version == 2.0)
@@ -296,7 +266,7 @@ tpo_rd_init(const char *fname)
 static void
 tpo_rd_deinit(void)
 {
-	fclose(tpo_file_in);
+	gbfclose(tpo_file_in);
 }
 
 
@@ -325,16 +295,15 @@ void tpo_read_2_x(void)
 	waypoint* waypoint_temp;	
 
 	/* track count */
-	tpo_fread(&buff[0], 1, 2, tpo_file_in);
-	track_count = le_read16(&buff[0]);
+	track_count = gbfgetint16(tpo_file_in);
 	
 /*fprintf(stderr,"track_count:%d\n", track_count);*/
 	
 	/* 4 unknown bytes */
-	tpo_fread(&buff[0], 1, 4, tpo_file_in);
+	gbfread(&buff[0], 1, 4, tpo_file_in);
 
 	/* chunk name: "CTopoRoute" */
-	tpo_fread(&buff[0], 1, 12, tpo_file_in);
+	gbfread(&buff[0], 1, 12, tpo_file_in);
 
 	for (i=0; i<track_count; i++) {
 
@@ -346,33 +315,32 @@ void tpo_read_2_x(void)
 		track_temp->rte_name = xstrdup(buff);
 
 		/* zoom level 1-5 visibility flags */
-		tpo_fread(&buff[0], 1, 10, tpo_file_in);
+		gbfread(&buff[0], 1, 10, tpo_file_in);
 
 		/* 8 bytes of zeros, meaning unknown */
-		tpo_fread(&buff[0], 1, 8, tpo_file_in);
+		gbfread(&buff[0], 1, 8, tpo_file_in);
 
 		/* 4 more unknown bytes, possibly sign flags for the longitude and latitude? */
-		tpo_fread(&buff[0], 1, 4, tpo_file_in);
+		gbfread(&buff[0], 1, 4, tpo_file_in);
 
         /* read the position of the initial track point */
 		/* for some very odd reason, signs on longitude are swapped */
         /* coordinates are in NAD27/CONUS datum                     */
             
         /* 8 bytes - longitude, sign swapped  */
-	    first_lon = tpo_fread_double(tpo_file_in);
+	    first_lon = gbfgetdbl(tpo_file_in);
 
         /* 8 bytes - latitude */
-	    first_lat = tpo_fread_double(tpo_file_in);
+	    first_lat = gbfgetdbl(tpo_file_in);
 	    
         /* swap sign before we do datum conversions */
 	    first_lon *= -1.0;
 
 		/* 8 unknown bytes: seems to be some kind of bounding box info */
-		tpo_fread(&buff[0], 1, 8, tpo_file_in);
+		gbfread(&buff[0], 1, 8, tpo_file_in);
 
 		/* number of route points */
-		tpo_fread(&buff[0], 1, 2, tpo_file_in);
-		waypoint_count = le_read16(&buff[0]);
+		waypoint_count = gbfgetint16(tpo_file_in);
 
 		/* allocate temporary memory for the waypoint deltas */
 		lon_delta = (short*)xmalloc(waypoint_count * sizeof(short));
@@ -381,28 +349,26 @@ void tpo_read_2_x(void)
 		for (j=0; j<waypoint_count; j++) {
 			
 			/* get this point's longitude delta from the first waypoint */
-			tpo_fread(&buff[0], 1, 2, tpo_file_in);
-			lon_delta[j] = le_read16(&buff[0]);
+			lon_delta[j] = gbfgetint16(tpo_file_in);
 
 			/* get this point's latitude delta from the first waypoint */
-			tpo_fread(&buff[0], 1, 2, tpo_file_in);
-			lat_delta[j] = le_read16(&buff[0]);
+			lat_delta[j] = gbfgetint16(tpo_file_in);
 		}
 
 		/* 8 bytes - longitude delta to degrees scale  */
-	    lon_scale = tpo_fread_double(tpo_file_in);
+	    lon_scale = gbfgetdbl(tpo_file_in);
 
         /* 8 bytes - latitude delta to degrees scale */
-	    lat_scale = tpo_fread_double(tpo_file_in);
+	    lat_scale = gbfgetdbl(tpo_file_in);
 
 		/* 4 bytes: the total length of the route in feet*/
-		tpo_fread(&buff[0], 1, 4, tpo_file_in);
+		gbfread(&buff[0], 1, 4, tpo_file_in);
 
 		/* 2 unknown bytes */
-		tpo_fread(&buff[0], 1, 2, tpo_file_in);
+		gbfread(&buff[0], 1, 2, tpo_file_in);
 
 		/* 2 bytes: continuation marker */
-		tpo_fread(&buff[0], 1, 2, tpo_file_in);
+		gbfread(&buff[0], 1, 2, tpo_file_in);
 
 		/* multiply all the deltas by the scaling factors to determine the waypoint positions */
 		for (j=0; j<waypoint_count; j++) {
@@ -438,64 +404,6 @@ void tpo_read_2_x(void)
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
 
-
-
-
-
-// Read one 8-bit value from the input file.
-//
-// For version 3.x files.
-//
-int tpo_read_8()
-{
-    char val = 0;
-
-    tpo_fread(&val, 1, 1, tpo_file_in);
-    return(val);
-}
-
-
-
-
-
-// Read one 16-bit value in little-endian format from the input
-// file.  Takes care of processor endian-ness.
-//
-// For version 3.x files.
-//
-int tpo_read_16()
-{
-    unsigned char buf[2];
-    int val = 0;
-
-    tpo_fread(&buf[0], 1, 2, tpo_file_in);
-    val = le_read16(&buf[0]);
-    return(val);
-}
-
-
-
-
-
-// Read one 32-bit value in little-endian format from the input
-// file.  Takes care of processor endian-ness.
-//
-// For version 3.x files.
-//
-int tpo_read_32()
-{
-    unsigned char buf[4];
-    int val = 0;
-
-    tpo_fread(&buf[0], 1, 4, tpo_file_in);
-    val = le_read32(&buf[0]);
-    return(val);
-}
-
-
-
-
-
 // This will read 8/16/32 bits in little-endian format depending
 // upon the value of the first byte.
 //
@@ -505,19 +413,18 @@ int tpo_read_int()
 {
     unsigned char val;
 
-
-    val = tpo_read_8();
+    val = (unsigned char) gbfgetc(tpo_file_in);
 
     switch (val) {
 
         case 0xff:  // 32-bit value
 //printf("Found 32-bit value indicator: %x\n", val);
-            return( tpo_read_32() );
+            return( gbfgetint32(tpo_file_in) );
             break;
 
         case 0xfe:  // 16-bit value
 //printf("Found 16-bit value indicator: %x\n", val);
-            return( tpo_read_16() );
+            return( gbfgetint16(tpo_file_in) );
             break;
 
         default:    // 8-bit value
@@ -554,14 +461,14 @@ int tpo_find_block(unsigned int block_desired)
     do {
 
         // Seek to offset from start of file
-        fseek(tpo_file_in, block_offset, SEEK_SET);
+        gbfseek(tpo_file_in, block_offset, SEEK_SET);
 	
         // Read record type
-        block_type = tpo_read_32();
+        block_type = gbfgetint32(tpo_file_in);
 //printf("Block: %08x\tat offset: %08x\n", block_type, block_offset);
 
         // Read offset to next record
-        block_offset = tpo_read_32();
+        block_offset = gbfgetint32(tpo_file_in);
     }
     while (block_type != block_desired && block_offset != 0);
 
@@ -683,7 +590,7 @@ void tpo_process_tracks(void)
         if (name_length) {
             track_name = xmalloc(name_length+1);
             track_name[0] = '\0';
-            tpo_fread(track_name, 1, name_length, tpo_file_in);
+            gbfread(track_name, 1, name_length, tpo_file_in);
             track_name[name_length] = '\0';  // Terminator
         }
         else {  // Assign a generic track name
@@ -711,7 +618,7 @@ void tpo_process_tracks(void)
 
         // Read the track bytes into a buffer
         buf = xmalloc(track_byte_count);
-        tpo_fread(buf, 1, track_byte_count, tpo_file_in);
+        gbfread(buf, 1, track_byte_count, tpo_file_in);
 
         latscale=0;
         lonscale=0;
@@ -878,7 +785,7 @@ void tpo_process_waypoints(void)
         if (name_length) {
             waypoint_name = xmalloc(name_length+1);
             waypoint_name[0] = '\0';
-            tpo_fread(waypoint_name, 1, name_length, tpo_file_in);
+            gbfread(waypoint_name, 1, name_length, tpo_file_in);
             waypoint_name[name_length] = '\0';  // Terminator
         }
         else {  // Assign a generic waypoint name
@@ -890,8 +797,8 @@ void tpo_process_waypoints(void)
 //UNKNOWN DATA LENGTH
         (void)tpo_read_int();
 
-        lon = tpo_read_32();
-        lat = tpo_read_32();
+        lon = gbfgetint32(tpo_file_in);
+        lat = gbfgetint32(tpo_file_in);
 
         // Allocate space for waypoint and store lat/lon 
         waypoint_temp = tpo_convert_ll(lat, lon);
@@ -900,7 +807,7 @@ void tpo_process_waypoints(void)
 		waypoint_temp->shortname = waypoint_name;
 
         // Grab the altitude in meters 
-        altitude = tpo_read_32();
+        altitude = gbfgetint32(tpo_file_in);
         if (altitude == 0xfffd000c) // Unknown altitude
             altitude = 0;
         waypoint_temp->altitude = altitude / 100;   // Meters
@@ -915,7 +822,7 @@ void tpo_process_waypoints(void)
  
             comment = xmalloc(name_length+1);
             comment[0] = '\0';
-            tpo_fread(comment, 1, name_length, tpo_file_in);
+            gbfread(comment, 1, name_length, tpo_file_in);
             comment[name_length] = '\0';  // Terminator
             waypoint_temp->description = comment;
 //printf("\tComment: %s\n", waypoint_name);
@@ -940,19 +847,19 @@ void tpo_process_waypoints(void)
 
 //UNKNOWN DATA LENGTH
 //        (void)tpo_read_int();
-	(void)tpo_read_8();
+	(void) gbfgetc(tpo_file_in);
 
 //UNKNOWN DATA LENGTH
 //        (void)tpo_read_int();
-	(void)tpo_read_8();
+	(void) gbfgetc(tpo_file_in);
 
 //UNKNOWN DATA LENGTH
 //        (void)tpo_read_int();
-	(void)tpo_read_8();
+	(void) gbfgetc(tpo_file_in);
 
 //UNKNOWN DATA LENGTH
 //        (void)tpo_read_int();
-	(void)tpo_read_8();
+	(void) gbfgetc(tpo_file_in);
     }
 }
 
@@ -998,8 +905,8 @@ void tpo_process_map_notes(void)
 //UNKNOWN DATA LENGTH
         (void)tpo_read_int();
 
-        lon = tpo_read_32();
-        lat = tpo_read_32();
+        lon = gbfgetint32(tpo_file_in);
+        lat = gbfgetint32(tpo_file_in);
 
         // Allocate space for waypoint and store lat/lon 
         waypoint_temp = tpo_convert_ll(lat, lon);
@@ -1027,7 +934,7 @@ void tpo_process_map_notes(void)
  
             comment = xmalloc(name_length+1);
             comment[0] = '\0';
-            tpo_fread(comment, 1, name_length, tpo_file_in);
+            gbfread(comment, 1, name_length, tpo_file_in);
             comment[name_length] = '\0';  // Terminator
             waypoint_temp->description = comment;
 //printf("Comment: %s\n", comment);
@@ -1048,7 +955,7 @@ void tpo_process_map_notes(void)
  
             notes = xmalloc(name_length+1);
             notes[0] = '\0';
-            tpo_fread(notes, 1, name_length, tpo_file_in);
+            gbfread(notes, 1, name_length, tpo_file_in);
             notes[name_length] = '\0';  // Terminator
             waypoint_temp->url = notes;
 //printf("Notes: %s\n", notes);
@@ -1063,7 +970,7 @@ void tpo_process_map_notes(void)
  
             notes = xmalloc(name_length+1);
             notes[0] = '\0';
-            tpo_fread(notes, 1, name_length, tpo_file_in);
+            gbfread(notes, 1, name_length, tpo_file_in);
             notes[name_length] = '\0';  // Terminator
             waypoint_temp->url = notes;
 //printf("Notes: %s\n", notes);
@@ -1080,7 +987,7 @@ void tpo_process_map_notes(void)
         num_bytes = tpo_read_int();
 //printf("num_bytes: %x\n", num_bytes);
         for (jj = 0; jj < num_bytes; jj++) {
-            (void)tpo_read_8(); // Skip bytes
+            (void) gbfgetc(tpo_file_in); // Skip bytes
         }
 
         // Can be 8/16/32 bits
@@ -1135,8 +1042,8 @@ void tpo_process_symbols(void)
 //UNKNOWN DATA LENGTH
         (void)tpo_read_int();
 
-        lon = tpo_read_32();
-        lat = tpo_read_32();
+        lon = gbfgetint32(tpo_file_in);
+        lat = gbfgetint32(tpo_file_in);
 
         // Allocate space for waypoint and store lat/lon 
         waypoint_temp = tpo_convert_ll(lat, lon);
@@ -1200,8 +1107,8 @@ void tpo_process_text_labels(void)
 //UNKNOWN DATA LENGTH
         (void)tpo_read_int();
 
-        lon = tpo_read_32();
-        lat = tpo_read_32();
+        lon = gbfgetint32(tpo_file_in);
+        lat = gbfgetint32(tpo_file_in);
 
         // Allocate space for waypoint and store lat/lon 
         waypoint_temp = tpo_convert_ll(lat, lon);
@@ -1214,7 +1121,7 @@ void tpo_process_text_labels(void)
 
         for (jj = 0; jj < 16; jj++) {
 //UNKNOWN DATA LENGTH
-            (void)tpo_read_8();
+            (void) gbfgetc(tpo_file_in);
         }
 
         // Fetch comment length
@@ -1225,7 +1132,7 @@ void tpo_process_text_labels(void)
  
             comment = xmalloc(name_length+1);
             comment[0] = '\0';
-            tpo_fread(comment, 1, name_length, tpo_file_in);
+            gbfread(comment, 1, name_length, tpo_file_in);
             comment[name_length] = '\0';  // Terminator
             waypoint_temp->description = comment;
 //printf("Comment: %s\n", comment);
@@ -1299,7 +1206,7 @@ void tpo_process_routes(void)
         if (name_length) {
             route_name = xmalloc(name_length+1);
             route_name[0] = '\0';
-            tpo_fread(route_name, 1, name_length, tpo_file_in);
+            gbfread(route_name, 1, name_length, tpo_file_in);
             route_name[name_length] = '\0';  // Terminator
         }
         else {  // Assign a generic route name
@@ -1312,7 +1219,7 @@ void tpo_process_routes(void)
 //UNKNOWN DATA LENGTH 
         // Comment?
         (void)tpo_read_int();
-//        (void)tpo_read_8();
+//        gbfgetc(tpo_file_in);
 //        route_temp->rte_desc = NULL;
 
         route_temp->rte_num = ii+1;
@@ -1600,7 +1507,7 @@ tpo_write_file_header()
 			0x00, 0x01, 0x00, 0x28, 0x00 
 		};
 
-		fwrite(header_bytes, sizeof(header_bytes), 1, tpo_file_out);
+		gbfwrite(header_bytes, sizeof(header_bytes), 1, tpo_file_out);
 	}
 	else if (strncmp("CT", output_state, 2) == 0 ||
 			 strncmp("MA", output_state, 2) == 0 ||
@@ -1720,7 +1627,7 @@ tpo_write_file_header()
 			0x00, 0x01, 0x00, 0x28, 0x00
 		};
 
-		fwrite(header_bytes, sizeof(header_bytes), 1, tpo_file_out);
+		gbfwrite(header_bytes, sizeof(header_bytes), 1, tpo_file_out);
 	}
 
 	else {
@@ -1740,14 +1647,14 @@ tpo_track_hdr(const route_head *rte)
 	waypoint* first_track_waypoint = (waypoint*) QUEUE_FIRST(&rte->waypoint_list);
 
 	/* zoom level 1-5 visibility flags */
-	fwrite(visibility_flags, 1, sizeof(visibility_flags), tpo_file_out);
+	gbfwrite(visibility_flags, 1, sizeof(visibility_flags), tpo_file_out);
 
 	/* 8 bytes of zeros, meaning unknown */
 	memset(temp_buffer, 0, sizeof(temp_buffer));
-	fwrite(temp_buffer, 1, sizeof(temp_buffer), tpo_file_out);
+	gbfwrite(temp_buffer, 1, sizeof(temp_buffer), tpo_file_out);
 
 	/* 4 more unknown bytes, possibly sign flags for the longitude and latitude? */
-	fwrite(unknown1, 1, sizeof(unknown1), tpo_file_out);
+	gbfwrite(unknown1, 1, sizeof(unknown1), tpo_file_out);
 
 	/* the starting point of the route */
     /* convert lat/long to NAD27/CONUS datum */
@@ -1772,17 +1679,16 @@ tpo_track_hdr(const route_head *rte)
 	output_track_lon_scale = output_track_lat_scale / cos(GPS_Math_Deg_To_Rad(first_track_waypoint_lat));
 
 	/* 8 bytes - longitude */
-    tpo_fwrite_double(first_track_waypoint_lon, tpo_file_out);
+    gbfputdbl(first_track_waypoint_lon, tpo_file_out);
 
     /* 8 bytes - latitude */
-    tpo_fwrite_double(first_track_waypoint_lat, tpo_file_out);
+    gbfputdbl(first_track_waypoint_lat, tpo_file_out);
 
     /* 8 bytes: seems to be bounding box info */
-	fwrite(bounding_box, 1, sizeof(bounding_box), tpo_file_out);
+	gbfwrite(bounding_box, 1, sizeof(bounding_box), tpo_file_out);
 
 	/* number of route points */
-	le_write16(temp_buffer, rte->rte_waypt_ct);
-	fwrite(temp_buffer, 1, 2, tpo_file_out);
+	gbfputint16(rte->rte_waypt_ct, tpo_file_out);
 
 	/* initialize the track length computation */
 	track_length = 0;
@@ -1800,7 +1706,6 @@ tpo_track_disp(const waypoint *waypointp)
 {
 	double lat, lon, amt, x, y, z;
 	short lat_delta, lon_delta;
-    unsigned char temp_buffer[2];
 
 /* fprintf(stderr, "%f/%f\n", waypointp->latitude, waypointp->longitude); */
 
@@ -1837,47 +1742,42 @@ tpo_track_disp(const waypoint *waypointp)
 
 	/* longitude delta from first route point */
 	lon_delta = (short)((first_track_waypoint_lon - lon) / output_track_lon_scale);
-	le_write16(temp_buffer, lon_delta);
-	fwrite(temp_buffer, 1, 2, tpo_file_out);
+	gbfputint16(lon_delta, tpo_file_out);
 
 	/* latitude delta from first route point */
 	lat_delta = (short)((first_track_waypoint_lat - lat) / output_track_lat_scale);
-	le_write16(temp_buffer, lat_delta);
+	gbfputint16(lat_delta, tpo_file_out);
 
 /*
 fprintf(stderr, "%f %f: %x %x - %f %f %f / %f\n", lon, lat, lon_delta, lat_delta, first_track_waypoint_lat, lat, output_track_lat_scale, (first_track_waypoint_lat - lat) );
 */
 
-	fwrite(temp_buffer, 1, 2, tpo_file_out);
 }
 
 static void
 tpo_track_tlr(const route_head *rte)
 {
-	unsigned char temp_buffer[4];
-
 	unsigned char unknown1[] = { 0x06, 0x00 };
 
 	unsigned char continue_marker[] = { 0x01, 0x80 };
 	unsigned char end_marker[] = { 0x00, 0x00 };
 
 	/* pixel to degree scaling factors */
-	tpo_fwrite_double(output_track_lon_scale, tpo_file_out);
-	tpo_fwrite_double(output_track_lat_scale, tpo_file_out);
+	gbfputdbl(output_track_lon_scale, tpo_file_out);
+	gbfputdbl(output_track_lat_scale, tpo_file_out);
 
     /* 4 bytes: the total length of the route */
-	le_write32(temp_buffer, (unsigned int)track_length);
-    fwrite(temp_buffer, 1, 4, tpo_file_out);
+        gbfputint32(track_length, tpo_file_out);
 
 	/* 2 unknown bytes */
-	fwrite(unknown1, 1, sizeof(unknown1), tpo_file_out);
+	gbfwrite(unknown1, 1, sizeof(unknown1), tpo_file_out);
 
 	/* the last track ends with 0x0000 instead of 0x0180 */
 	track_out_count++;
 	if (track_out_count == track_count()) {		
-	    fwrite(end_marker, 1, sizeof(end_marker), tpo_file_out);
+	    gbfwrite(end_marker, 1, sizeof(end_marker), tpo_file_out);
 	} else {
-	    fwrite(continue_marker, 1, sizeof(continue_marker), tpo_file_out);
+	    gbfwrite(continue_marker, 1, sizeof(continue_marker), tpo_file_out);
 	}
 }
 
@@ -1889,7 +1789,7 @@ tpo_wr_init(const char *fname)
 		fatal(MYNAME ": this file format only supports tracks, not waypoints or routes.\n");
 	}
 
-	tpo_file_out = xfopen(fname, "wb", MYNAME);
+	tpo_file_out = gbfopen_le(fname, "wb", MYNAME);
 	tpo_write_file_header();
 }
 
@@ -1899,31 +1799,28 @@ tpo_wr_deinit(void)
 	/* the file footer is six bytes of zeroes */
 	unsigned char file_footer_bytes[6];
 	memset(file_footer_bytes, 0, sizeof(file_footer_bytes));
-	fwrite(file_footer_bytes, 1, sizeof(file_footer_bytes), tpo_file_out);
+	gbfwrite(file_footer_bytes, 1, sizeof(file_footer_bytes), tpo_file_out);
 
-	fclose(tpo_file_out);
+	gbfclose(tpo_file_out);
 }
 
 static void
 tpo_write(void)
 {
-	unsigned char buffer[8];	
 	unsigned char unknown1[] = { 0xFF, 0xFF, 0x01, 0x00 };
 
 	char* chunk_name = "CTopoRoute";
 	int chunk_name_length = strlen(chunk_name);
 
 	/* write the total number of tracks */
-    le_write16(buffer, track_count());
-	fwrite(buffer, 1, 2, tpo_file_out);
+        gbfputint16(track_count(), tpo_file_out);
 	
 	/* 4 unknown bytes */
-	fwrite(unknown1, 1, 4, tpo_file_out);
+	gbfwrite(unknown1, 1, 4, tpo_file_out);
 
 	/* chunk name: "CTopoRoute" */
-	le_write16(buffer, chunk_name_length);
-	fwrite(buffer, 1, 2, tpo_file_out);
-	fwrite(chunk_name, 1, chunk_name_length, tpo_file_out);
+	gbfputint16(chunk_name_length, tpo_file_out);
+	gbfwrite(chunk_name, 1, chunk_name_length, tpo_file_out);
 
 	track_out_count = 0;
 	track_disp_all(tpo_track_hdr, tpo_track_tlr, tpo_track_disp);
