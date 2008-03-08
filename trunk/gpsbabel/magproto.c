@@ -89,7 +89,7 @@ typedef struct mag_rte_head {
 
 static queue rte_wpt_tmp; /* temporary PGMNWPL msgs for routes */
 
-static FILE *magfile_h;
+static gbfile *magfile_h;
 static mag_rxstate magrxstate;
 static int mag_error;
 static unsigned int last_rx_csum;
@@ -533,7 +533,7 @@ retry:
 		ignore_unable = 0;
 		return;
 	}
-	if (IS_TKN("$PMGNCMD,END") || (is_file && (feof(magfile_h)))) {
+	if (IS_TKN("$PMGNCMD,END") || (is_file && (gbfeof(magfile_h)))) {
 		found_done = 1;
 		return;
 	} 
@@ -562,7 +562,7 @@ terminit(const char *portname, int create_ok)
 		return 1;
 	} else {
 		/* Does this check for an error? */
-		magfile_h = xfopen(portname, create_ok ? "w+b" : "rb", MYNAME);
+		magfile_h = gbfopen(portname, create_ok ? "w+b" : "rb", MYNAME);
 		is_file = 1;
 		icon_mapping = map330_icon_table;
 		mag_cleanse = m330_cleanse;
@@ -574,7 +574,7 @@ terminit(const char *portname, int create_ok)
 static char *termread(char *ibuf, int size) 
 {
 	if (is_file) {
-		return fgets(ibuf, size, magfile_h);
+		return gbfgets(ibuf, size, magfile_h);
 	} else {
 		int rc;
 		rc = gbser_read_line(serial_handle, ibuf, size, 2000, 0x0a, 0x0d);
@@ -633,7 +633,7 @@ termwrite(char *obuf, int size)
 {
 	if (is_file) {
 		size_t nw;
-		if (nw = fwrite(obuf, 1, size, magfile_h), nw < (size_t) size) {
+		if (nw = gbfwrite(obuf, 1, size, magfile_h), nw < (size_t) size) {
 			fatal(MYNAME ": Write error");
 		}
 	} else {
@@ -647,7 +647,7 @@ termwrite(char *obuf, int size)
 static void termdeinit() 
 {
 	if (is_file) {
-		fclose(magfile_h);
+		gbfclose(magfile_h);
 		magfile_h = NULL;
 	} else {
 		gbser_deinit(serial_handle);
