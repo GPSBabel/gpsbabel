@@ -882,7 +882,7 @@ mps_route_r(gbfile *mps_file, int mps_ver, route_head **rte)
 #endif
 
 	rte_head = route_head_alloc();
-	rte_head->rte_name = xstrdup(rtename);
+	rte_head->rte_name = rtename;
 	route_add_head(rte_head);
 	*rte = rte_head;
 
