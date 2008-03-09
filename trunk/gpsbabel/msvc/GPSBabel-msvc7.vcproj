@@ -387,9 +387,6 @@
 				RelativePath="..\fatal.c">
 			</File>
 			<File
-				RelativePath="..\filter_skeleton.c">
-			</File>
-			<File
 				RelativePath="..\filter_vecs.c">
 				<FileConfiguration
 					Name="Release|Win32">

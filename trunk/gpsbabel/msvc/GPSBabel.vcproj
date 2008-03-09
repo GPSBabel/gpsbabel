@@ -625,10 +625,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\filter_skeleton.c"
-				>
-			</File>
-			<File
 				RelativePath="..\filter_vecs.c"
 				>
 				<FileConfiguration
