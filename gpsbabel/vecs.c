@@ -130,6 +130,7 @@ extern ff_vecs_t lmx_vecs;
 extern ff_vecs_t random_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
+extern ff_vecs_t ik3d_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -724,6 +725,12 @@ vecs_t vec_list[] = {
                 "navilink",
                 "NaviGPS GT-11/BGT-11 Download",
                 NULL
+        },
+        {
+                &ik3d_vecs,
+                "ik3d",
+                "MagicMaps IK3D project file (.ikt)",
+                "ikt"
         },
 #endif // MAXIMAL_ENABLED
 	{
