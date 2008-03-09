@@ -319,7 +319,7 @@ gpsutil_disp(const waypoint *wpt)
 	}
 
 
-	gbfprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5d %-40.40s %5e  %d\n",
+	gbfprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5.f %-40.40s %5e  %d\n",
                 global_opts.synthesize_shortnames ?
                         mkshort_from_wpt(mkshort_handle, wpt) : 
 			wpt->shortname,
@@ -328,7 +328,7 @@ gpsutil_disp(const waypoint *wpt)
 		lon < 0.0 ? 'W' : 'E',
 		fabs(lon),
 		tbuf, 
-		-9999,
+		(wpt->altitude == unknown_alt) ? -9999 : wpt->altitude,
 		(wpt->description != NULL) ? wpt->description : "",
 		0.0,
 		icon_token);
