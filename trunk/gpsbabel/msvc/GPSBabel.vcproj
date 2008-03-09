@@ -501,6 +501,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\dg-100.c"
+				>
+			</File>
+			<File
 				RelativePath="..\delgpl.c"
 				>
 				<FileConfiguration
@@ -1209,6 +1213,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\lmx.c"
+				>
+			</File>
+			<File
 				RelativePath="..\lowranceusr.c"
 				>
 			</File>
@@ -1474,6 +1482,10 @@
 			</File>
 			<File
 				RelativePath="..\msroute.c"
+				>
+			</File>
+			<File
+				RelativePath="..\mtk_logger.c"
 				>
 			</File>
 			<File
@@ -1938,6 +1950,10 @@
 			</File>
 			<File
 				RelativePath="..\radius.c"
+				>
+			</File>
+			<File
+				RelativePath="..\random.c"
 				>
 			</File>
 			<File
@@ -2570,6 +2586,10 @@
 			</File>
 			<File
 				RelativePath="..\xmltag.c"
+				>
+			</File>
+			<File
+				RelativePath="..\xol.c"
 				>
 			</File>
 			<File
