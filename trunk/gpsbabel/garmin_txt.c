@@ -482,7 +482,6 @@ print_temperature(const float temperature)
 		gbfprintf(fout, "%.f C", temperature);
 	else
 		gbfprintf(fout, "%.f F", (temperature * 1.8) + 32);
-	gbfprintf(fout, "\t");
 }
 
 static void
