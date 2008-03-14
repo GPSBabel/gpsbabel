@@ -333,7 +333,7 @@ xcsv_parse_style_line(const char *sbuff)
 	} else
 
 	if (ISSTOKEN(sbuff, "DATUM")) {
-	    p = csv_stringtrim(&sbuff[8], "\"", 1);
+	    p = csv_stringtrim(&sbuff[5], "\"", 1);
 	    xcsv_file.gps_datum = GPS_Lookup_Datum_Index(p);
 	    is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", p);
 	    xfree(p);
