@@ -371,8 +371,9 @@ nmea_set_waypoint_time(waypoint *wpt, struct tm *time, int microseconds)
 static void
 gpgll_parse(char *ibuf)
 {
-	double latdeg, lngdeg;
+	double latdeg, lngdeg, microseconds;
 	char lngdir, latdir;
+	double hmsd;
 	int hms;
 	char valid = 0;
 	waypoint *waypt;
@@ -382,13 +383,16 @@ gpgll_parse(char *ibuf)
 		track_add_head(trk_head);
 	}
 
-	sscanf(ibuf,"$GPGLL,%lf,%c,%lf,%c,%d,%c,",
+	sscanf(ibuf,"$GPGLL,%lf,%c,%lf,%c,%lf,%c,",
 		&latdeg,&latdir,
 		&lngdeg,&lngdir,
-		&hms,&valid);
+		&hmsd,&valid);
 
 	if (valid != 'A')
 		return;
+
+	hms = (int) hmsd;
+	microseconds = MILLI_TO_MICRO(1000 * (hmsd - hms));
 
 	tm.tm_sec = hms % 100;
 	hms = hms / 100;
@@ -400,7 +404,7 @@ gpgll_parse(char *ibuf)
 
 	waypt = waypt_new();
 
-	nmea_set_waypoint_time(waypt, &tm, 0);
+	nmea_set_waypoint_time(waypt, &tm, microseconds);
 
 	if (latdir == 'S') latdeg = -latdeg;
 	waypt->latitude = ddmm2degrees(latdeg);
