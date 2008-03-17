@@ -317,7 +317,9 @@ waypt_read(void)
 		waypt_add(wpt_tmp);
 		GPS_Way_Del(&way[i]);
 	}
-	xfree(way);
+	if (way) {
+		xfree(way);
+	}
 }
 
 static
