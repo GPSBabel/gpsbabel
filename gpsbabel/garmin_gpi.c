@@ -35,6 +35,7 @@
 	* 2007/10/20: add option unique
 	* 2007/12/02: support speed and proximity distance (+ alerts)
 	* 2008/01/14: fix structure error after adding speed/proximity
+	* 2008/03/22: add options "speed" and "proximity" (default values) and "sleep"
 
 	ToDo:
 	
@@ -68,7 +69,9 @@
 #define GPI_ADDR_ADDR		16
 
 static char *opt_cat, *opt_pos, *opt_notes, *opt_hide_bitmap, *opt_descr, *opt_bitmap;
-static char *opt_unique, *opt_alerts, *opt_units;
+static char *opt_unique, *opt_alerts, *opt_units, *opt_speed, *opt_proximity, *opt_sleep;
+static double defspeed, defproximity;
+static int alerts;
 
 static arglist_t garmin_gpi_args[] = {
 	{"alerts", &opt_alerts, "Enable alerts on speed or proximity distance", 
@@ -85,6 +88,12 @@ static arglist_t garmin_gpi_args[] = {
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"position", &opt_pos, "Write position to address field", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	{"proximity", &opt_proximity, "Default proximity", 
+		NULL, ARGTYPE_FLOAT, ARG_NOMINMAX},
+	{"sleep", &opt_sleep, "After output job done sleep n second(s)", 
+		NULL, ARGTYPE_INT, "1", NULL},
+	{"speed", &opt_speed, "Default speed", 
+		NULL, ARGTYPE_FLOAT, ARG_NOMINMAX},
 	{"unique", &opt_unique, "Create unique waypoint names (default = yes)", 
 		"Y", ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"units", &opt_units, "Units used for names with @speed ('s'tatute or 'm'etric)", 
@@ -171,7 +180,8 @@ static gbint32 codepage;	/* code-page, i.e. 1252 */
 static reader_data_t *rdata;
 static writer_data_t *wdata;
 static short_handle short_h;
-char units;
+static char units;
+static time_t gpi_timestamp = 0;
 
 #ifdef GPI_DBG
 # define PP warning("@%1$6x (%1$8d): ", gbftell(fin))
@@ -727,19 +737,25 @@ wdata_compute_size(writer_data_t *data)
 		dt = xcalloc(1, sizeof(*dt));
 		wpt->extra_data = dt;
 		
-		if (opt_alerts) {
+		if (alerts) {
 			char *pos;
 			
 			if ((pos = strchr(wpt->shortname, '@'))) {
-				float f = atoi(pos + 1);
-				if (units == 's') f = MPH_TO_MPS(f);
-				else f = KPH_TO_MPS(f);
-				if (f > 0) WAYPT_SET(wpt, speed, f);
+				double speed, scale;
+				if (units == 's') scale = MPH_TO_MPS(1);
+				else scale = KPH_TO_MPS(1);
+				parse_speed(pos + 1, &speed, scale, MYNAME);
+				if (speed > 0) WAYPT_SET(wpt, speed, speed);
 #if 0				
 				if (pos > wpt->shortname) wpt->shortname[pos - wpt->shortname] = '\0';
 #endif
 			}
+			else if ((opt_speed) && (! WAYPT_HAS(wpt, speed)))
+				WAYPT_SET(wpt, speed, defspeed);
 			
+			if ((opt_proximity) && (! WAYPT_HAS(wpt, proximity)))
+				WAYPT_SET(wpt, proximity, defproximity);
+
 			if ((WAYPT_HAS(wpt, speed) && (wpt->speed > 0)) || 
 			    (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0))) {
 				data->alert = 1;
@@ -957,10 +973,11 @@ write_category(const char *category, const char *image, const int image_sz)
 static void
 write_header(void)
 {
-	time_t time = gpsbabel_time;	/* !!! ZERO during leaktest !!! */
+	time_t time = gpi_timestamp;
 
 	if (time != 0) {
-		struct tm tm = *gmtime(&time);
+		struct tm tm;
+		tm = *gmtime(&time);
 		tm.tm_year -= 20;
 		time = mkgmtime(&tm);
 		time += SECONDS_PER_DAY;
@@ -1188,6 +1205,16 @@ garmin_gpi_wr_init(const char *fname)
 	cet_cs_vec_t *vec;
 	int i;
 	
+	if (gpi_timestamp != 0) {			/* not the first gpi output session */ 
+		time_t t = time(NULL);
+		if (t <= gpi_timestamp)
+			gpi_timestamp++;		/* don't create files with same timestamp */
+		else
+			gpi_timestamp = t;
+	}
+	else
+		gpi_timestamp = gpsbabel_time;		/* always ZERO during 'testo' */
+	
 	fout = gbfopen_le(fname, "wb", MYNAME);
 	
 	short_h = mkshort_new_handle();
@@ -1220,6 +1247,23 @@ garmin_gpi_wr_init(const char *fname)
 	if ((units != 'm') && (units != 's'))
 		fatal(MYNAME ": Unknown units parameter (%c).\n", opt_units[0]);
 
+	alerts = (opt_alerts) ? 1 : 0;
+
+	if (opt_speed) {
+		double scale;
+		alerts = 1;					/* Force alerts to be enabled */
+		if (units == 's') scale = MPH_TO_MPS(1);	/* We need speed in meters per second */
+		else scale = KPH_TO_MPS(1);
+		parse_speed(opt_speed, &defspeed, scale, MYNAME);
+	}
+
+	if (opt_proximity) {
+		double scale;
+		alerts = 1; 					/* Force alerts to be enabled */
+		if (units == 's') scale = MILES_TO_METERS(1);	/* We need proximity in meters */
+		else scale = 1000.0;				/* one kilometer in meters */
+		parse_distance(opt_proximity, &defproximity, scale, MYNAME);
+	}
 	wdata = wdata_alloc();
 }
 
@@ -1240,6 +1284,15 @@ garmin_gpi_wr_deinit(void)
 	wdata_free(wdata);
 	mkshort_del_handle(&short_h);
 	gbfclose(fout);
+
+	if ((opt_sleep) && (gpi_timestamp != 0)) {	/* don't sleep during 'testo' */
+		int sleep = atoi(opt_sleep);
+		if (sleep < 1) sleep = 1;
+		gpi_timestamp += sleep;
+		while (gpi_timestamp > time(NULL)) {
+			gb_sleep(100);
+		}
+	}
 }
 
 
