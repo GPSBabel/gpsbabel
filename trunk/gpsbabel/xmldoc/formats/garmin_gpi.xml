@@ -10,8 +10,12 @@
    a GPI file, please provide that file (mailto:gpsbabel-misc@lists.sourceforge.net).
 </para>
 <para>
-   At this time we don't support special features as "Tour-Guide", alerts or links
+   At this time we don't support special features as "Tour-Guide" or links
    to sounds and pictures.
+</para>
+<important>
+<para>
+   Creation timestamp issue: See option <link linkend="fmt_garmin_gpi_o_sleep">sleep</link> !!!
 </para>
 <para>
 	This module does not support direct transfer of .GPI files to
@@ -22,6 +26,7 @@
 	the memory chip in an external reader and transfer the file 
 	directly.
 </para>
+</important>
 <example id="all_garmin_gpi_options">
   <title>Command showing garmin_gpi output example</title>
   <para>
