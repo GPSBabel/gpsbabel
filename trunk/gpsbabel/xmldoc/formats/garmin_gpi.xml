@@ -1,7 +1,7 @@
 <para>
-   The format garmin_gpi supports binary POI (.gpi) files useable
-   on newer Garmin GPS receivers (see also <link linkend="fmt_garmin_poi">garmin_poi</link> for some hints).
-   <ulink url="http://www.garmin.com/support/agree.jsp?id=927">Garmin POI-Loader</ulink> is the standard application that creates GPI's
+   The format garmin_gpi supports the binary POI (.gpi) files that are useable
+   on newer Garmin GPS receivers.  See <link linkend="fmt_garmin_poi">garmin_poi</link> for additional information about Garmin's own Poiloader program.
+   <ulink url="http://www.garmin.com/support/agree.jsp?id=927">Garmin POI-Loader</ulink> is the standard application that creates GPI files
    with all possible features.
 </para>
 <para>
@@ -21,7 +21,7 @@
 	This module does not support direct transfer of .GPI files to
 	receivers in Garmin protocol mode.  For units like Nuvi, Zumo, or 
 	Streetpilot, just choose a file that's on the drive where your
-	GPS is mounted.   For units like the X series (GPSMap60, etc.) 
+	GPS is mounted.   For units like the X series (GPSMap 60CSx, GPSMap 60Cx, Legend Hcx, etc.) 
 	you must explictly put the unit in mass storage mode or mount
 	the memory chip in an external reader and transfer the file 
 	directly.

@@ -1,5 +1,5 @@
 <para>
-  When no speed data is available GPSBabel uses this as default speed value.
+  When no speed data is available in the source input, GPSBabel uses this as the default speed value.
   The parameter has to be in kilometers per hour, or, when units=s specified,
   in miles per hour. <link linkend="fmt_garmin_gpi_o_alerts">alerts</link> are
   automatically enabled.

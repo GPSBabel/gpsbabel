@@ -1,13 +1,16 @@
 <para>
-  When no proximity data is available GPSBabel uses this as default proximity value.
+  When no proximity data is available in the source input, GPSBabel uses this as the default proximity value.
   The parameter has to be in meters, or, when units=s specified, in miles.
   <link linkend="fmt_garmin_gpi_o_alerts">alerts</link> are automatically enabled.
 </para>
+<example id="garmin_gpi_speedcams">
+<title>Read GPX file, create GPI to alert when you're 1/2 mile from a speed camera.</title>
 <para>
   <userinput>
     gpsbabel -i gpx -f "SpeedCameras.gpx" -o garmin_gpi,units=s,proximity=0.5 -F "SpeedCameras.gpi"
   </userinput>
 </para>
+</example>
 <para>
   Its also possible to append a specific distance unit to the parameter.
 </para>
