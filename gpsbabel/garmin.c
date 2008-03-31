@@ -265,6 +265,8 @@ waypt_read(void)
 		wpt->latitude = gps_save_lat;
 		wpt->longitude = gps_save_lon;
 		wpt->shortname = xstrdup("Position");
+		if (gps_save_time)
+			wpt->creation_time = gps_save_time;
 		waypt_add(wpt);
 		return;
 	}
