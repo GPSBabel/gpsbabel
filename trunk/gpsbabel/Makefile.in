@@ -90,7 +90,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
           uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
 	  inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
-	  gbfile.o parse.o \
+	  gbfile.o parse.o avltree.o \
 	$(PALM_DB) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
@@ -345,6 +345,7 @@ an1.o: an1.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h an1sym.h
 arcdist.o: arcdist.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h grtcirc.h
+avltree.o: avltree.h avltree.c defs.h gbtypes.h config.h
 axim_gpb.o: axim_gpb.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 bcr.o: bcr.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
