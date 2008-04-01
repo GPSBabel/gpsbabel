@@ -186,6 +186,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\avltree.c">
+			</File>
+			<File
 				RelativePath="..\axim_gpb.c">
 			</File>
 			<File
@@ -1138,6 +1141,9 @@
 			</File>
 			<File
 				RelativePath="..\nukedata.c">
+			</File>
+			<File
+				RelativePath="..\osm.c">
 			</File>
 			<File
 				RelativePath="..\overlay.c">
@@ -2381,6 +2387,9 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
+				RelativePath="..\avltree.h">
+			</File>
+			<File
 				RelativePath=".\config.h">
 			</File>
 			<File
@@ -2394,6 +2403,9 @@
 			</File>
 			<File
 				RelativePath="..\garmin_tables.h">
+			</File>
+			<File
+				RelativePath="..\gbfile.h">
 			</File>
 			<File
 				RelativePath="..\grtcirc.h">
