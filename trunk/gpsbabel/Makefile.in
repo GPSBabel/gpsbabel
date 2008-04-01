@@ -58,7 +58,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
 	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
-	navilink.o mtk_logger.o ik3d.o
+	navilink.o mtk_logger.o ik3d.o osm.o
 
 FMTS=@FMTS@
 
@@ -597,6 +597,9 @@ nmn4.o: nmn4.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h csv_util.h
 nukedata.o: nukedata.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h
+osm.o: osm.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h \
+  avltree.h
 overlay.o: overlay.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
 ozi.o: ozi.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \

@@ -131,6 +131,7 @@ extern ff_vecs_t random_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
 extern ff_vecs_t ik3d_vecs;
+extern ff_vecs_t osm_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -731,6 +732,12 @@ vecs_t vec_list[] = {
                 "ik3d",
                 "MagicMaps IK3D project file (.ikt)",
                 "ikt"
+        },
+        {
+                &osm_vecs,
+                "osm",
+                "OpenStreetMap data files",
+                "xml"
         },
 #endif // MAXIMAL_ENABLED
 	{
