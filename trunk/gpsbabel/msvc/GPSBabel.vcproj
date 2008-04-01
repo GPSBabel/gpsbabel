@@ -357,6 +357,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\avltree.c"
+				>
+			</File>
+			<File
 				RelativePath="..\axim_gpb.c"
 				>
 			</File>
@@ -1605,6 +1609,10 @@
 			</File>
 			<File
 				RelativePath="..\nukedata.c"
+				>
+			</File>
+			<File
+				RelativePath="..\osm.c"
 				>
 			</File>
 			<File
@@ -3105,6 +3113,10 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
+				RelativePath="..\avltree.h"
+				>
+			</File>
+			<File
 				RelativePath=".\config.h"
 				>
 			</File>
@@ -3126,6 +3138,10 @@
 			</File>
 			<File
 				RelativePath="..\jeeps\gpsdevice.h"
+				>
+			</File>
+			<File
+				RelativePath="..\gbfile.h"
 				>
 			</File>
 			<File
@@ -3155,6 +3171,9 @@
 			<File
 				RelativePath="..\quovadis.h"
 				>
+			</File>
+			<File
+				RelativePath="..\uuid.h">
 			</File>
 			<Filter
 				Name="Jeeps-Headers"
