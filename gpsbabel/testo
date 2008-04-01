@@ -1303,5 +1303,10 @@ compare ${TMPDIR}/mtk_logger.csv ${REFERENCE}/track/mtk_logger.csv
 ${PNAME} -i ik3d -f ${REFERENCE}/ik3d-sample.ikt -o gpx -F ${TMPDIR}/ik3d-sample.gpx
 compare ${TMPDIR}/ik3d-sample.gpx ${REFERENCE}/ik3d-sample.gpx
 
+# osm data files
+rm -f ${TMPDIR}/osm-*
+${PNAME} -i osm -f ${REFERENCE}/osm-data.xml -o gpx -F ${TMPDIR}/osm-data.gpx
+compare ${TMPDIR}/osm-data.gpx ${REFERENCE}/osm-data.gpx
+
 
 exit 0
