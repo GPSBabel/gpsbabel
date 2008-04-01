@@ -1103,18 +1103,30 @@ strsub(const char *s, const char *search, const char *replace)
 char *
 gstrsub(const char *s, const char *search, const char *replace)
 {
-	char *o = xstrdup(s);
-	char *tsearch = o;
-	// The tsearch silliness here is in case we decide to replace a string
-	// with a string that's a superset of that string.  Replacing ";" 
- 	// with "\\;" in the vcf writer is our problem child.
-	while ((tsearch = strstr(tsearch, search))) {
-		char *oo = o;
-		o = strsub(o, search, replace);
-		tsearch = tsearch + strlen(replace);
-		xfree(oo);
+	int ooffs = 0;
+	char *o, *c;
+	char *src = (char *)s;
+	int olen = strlen(src);
+	int slen = strlen(search);
+	int rlen = strlen(replace);
+
+	o = xmalloc(olen + 1);
+	
+	while ((c = strstr(src, search))) {
+		olen += (rlen - slen);
+		o = xrealloc(o, olen + 1);
+		memcpy(o + ooffs, src, c - src);
+		ooffs += (c - src);
+		src = c + slen;
+		if (rlen) {
+			memcpy(o + ooffs, replace, rlen);
+			ooffs += rlen;
+		}
 	}
 
+	if (ooffs < olen)
+		memcpy(o + ooffs, src, olen - ooffs);
+	o[olen] = '\0';
 	return o;
 }
 
