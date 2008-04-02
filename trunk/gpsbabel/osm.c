@@ -408,21 +408,29 @@ static osm_icon_mapping_t osm_icon_mappings[] = {
 static void
 osm_features_init(void)
 {
-	int i;
+	/* here we take a union because of warnings
+	   "cast to pointer from integer of different size" 
+	   on 64-bit systems */
+	union {
+		const void *p;
+		int i;
+	} x;
 
 	keys = avltree_init(0, MYNAME);
 	values = avltree_init(0, MYNAME);
 	
-	/* the first of osm_features is a place holder */
-	for (i = 1; osm_features[i]; i++)
-		avltree_insert(keys, osm_features[i], (void *)i);
+	x.p = NULL;
 	
-	for (i = 0; osm_icon_mappings[i].value; i++) {
+	/* the first of osm_features is a place holder */
+	for (x.i = 1; osm_features[x.i]; x.i++)
+		avltree_insert(keys, osm_features[x.i], x.p);
+	
+	for (x.i = 0; osm_icon_mappings[x.i].value; x.i++) {
 		char buff[128];
 
-		buff[0] = osm_icon_mappings[i].key;
-		strncpy(&buff[1], osm_icon_mappings[i].value, sizeof(buff) - 1);
-		avltree_insert(values, buff, (void *)&osm_icon_mappings[i]);
+		buff[0] = osm_icon_mappings[x.i].key;
+		strncpy(&buff[1], osm_icon_mappings[x.i].value, sizeof(buff) - 1);
+		avltree_insert(values, buff, (const void *)&osm_icon_mappings[x.i]);
 	}
 }
 
@@ -431,10 +439,13 @@ static char
 osm_feature_ikey(const char *key)
 {
 	int result;
-	const void *data;
+	union {
+		const void *p;
+		int i;
+	} x;
 	
-	if (avltree_find(keys, key, &data))
-		result = (int)data;
+	if (avltree_find(keys, key, &x.p))
+		result = x.i;
 	else
 		result = -1;
 
@@ -447,13 +458,13 @@ osm_feature_symbol(const char ikey, const char *value)
 {
 	char *result;
 	char buff[128];
-	const void *data;
+	osm_icon_mapping_t *data;
 
 	buff[0] = ikey;
 	strncpy(&buff[1], value, sizeof(buff) - 1);
 
-	if (avltree_find(values, buff, &data))
-		result = xstrdup(((osm_icon_mapping_t *)data)->icon);
+	if (avltree_find(values, buff, (void *)&data))
+		result = xstrdup(data->icon);
 	else
 		xasprintf(&result, "%s:%s", osm_features[(int)ikey], value);
 
