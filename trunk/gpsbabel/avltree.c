@@ -700,9 +700,9 @@ avltree_save_key(avltree_t *tree, const char *key)
 		if (key == NULL) {
 			if (tree->key_sz) {
 				xfree((char *)tree->key);
-				tree->key = NULL;
 				tree->key_sz = 0;
 			}
+			tree->key = NULL;
 		}
 		else {
 			int n, n8;
