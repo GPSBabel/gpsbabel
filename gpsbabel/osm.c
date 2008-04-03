@@ -1,6 +1,6 @@
 /* 
 
-	Reader for "OpenStreetMap" data files (.xml)
+	Support for "OpenStreetMap" data files (.xml)
 
 	Copyright (C) 2008 Olaf Klein, o.b.klein@gpsbabel.org
 
@@ -24,8 +24,12 @@
 #include "avltree.h"
 #include "xmlgeneric.h"
 
+static char *opt_tag, *opt_tagnd;
+
 static arglist_t osm_args[] = 
 {
+	{ "tag", &opt_tag, 	"Write additional way tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+	{ "tagnd", &opt_tagnd,	"Write additional node tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -705,14 +709,47 @@ osm_init_icons(void)
 }
 
 static void
+osm_write_tag(const char *key, const char *value)
+{
+	if (value && *value) {
+		char *str = xml_entitize(value);
+		gbfprintf(fout, "    <tag k='%s' v='%s'/>\n", key, str);
+		xfree(str);
+	}
+}
+
+static void
 osm_disp_feature(const waypoint *wpt)
 {
 	osm_icon_mapping_t *map;
 	
-	if (avltree_find(icons, wpt->icon_descr, (void *) &map)) {
-		gbfprintf(fout, "    <tag k='%s' v='%s'/>\n",
-			osm_features[map->key], map->value);
+	if (avltree_find(icons, wpt->icon_descr, (void *) &map))
+		osm_write_tag(osm_features[map->key], map->value);
+}
+
+static void
+osm_write_opt_tag(const char *atag)
+{
+	char *tag, *cin, *ce;
+	
+	if (!atag) return;
+	
+	tag = cin = xstrdup(atag);
+	ce = cin + strlen(cin);
+	
+	while (cin < ce) {
+		char *sc, *dp;
+		
+		if ((sc = strchr(cin, ';'))) *sc = '\0';
+		
+		if ((dp = strchr(cin, ':'))) {
+			*dp++ = '\0';
+			osm_write_tag(cin, dp);
+		}
+		cin += strlen(cin) + 1;
 	}
+
+	xfree(tag);
 }
 
 static void
@@ -747,14 +784,18 @@ osm_waypt_disp(const waypoint *wpt)
 			gbfprintf(fout, " timestamp='%s'", time_string);
 		}
 		gbfprintf(fout, ">\n");
-		
-		if (wpt->shortname) {
-			char *str = xml_entitize(wpt->shortname);
-			gbfprintf(fout, "    <tag k='name' v='%s'/>\n", str);
-			xfree(str);
-		}
+
+		gbfprintf(fout, "    <tag k='created_by' v='GPSBabel");
+		if (gpsbabel_time != 0)
+			gbfprintf(fout, "-%s", gpsbabel_version);
+		gbfprintf(fout, "'/>\n");
+
+		osm_write_tag("name", wpt->shortname);
+		osm_write_tag("note", (wpt->notes) ? wpt->notes : wpt->description);
 		if (wpt->icon_descr)
 			osm_disp_feature(wpt);
+
+		osm_write_opt_tag(opt_tagnd);
 
 		gbfprintf(fout, "  </node>\n");
 	}
@@ -796,11 +837,17 @@ osm_rte_disp_trail(const route_head *rte)
 {
 	if (skip_rte) return;
 
-	if (rte->rte_name) {
-		char *str = xml_entitize(rte->rte_name);
-		gbfprintf(fout, "    <tag k='name' v='%s'/>\n", str);
-		xfree(str);
-	}
+	gbfprintf(fout, "    <tag k='created_by' v='GPSBabel");
+	if (gpsbabel_time != 0)
+		gbfprintf(fout, "-%s", gpsbabel_version);
+	gbfprintf(fout, "'/>\n");
+
+	osm_write_tag("name", rte->rte_name);
+	osm_write_tag("note", rte->rte_desc);
+
+	if (opt_tag && (case_ignore_strncmp(opt_tag, "tagnd", 5) != 0))
+		osm_write_opt_tag(opt_tag);
+
 	gbfprintf(fout, "  </way>\n");
 }
 
