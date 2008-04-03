@@ -785,7 +785,7 @@ osm_waypt_disp(const waypoint *wpt)
 		}
 		gbfprintf(fout, ">\n");
 
-		gbfprintf(fout, "    <tag k='created_by' v='GPSBabel");
+		gbfprintf(fout, "<tag k='created_by' v='GPSBabel");
 		if (gpsbabel_time != 0)
 			gbfprintf(fout, "-%s", gpsbabel_version);
 		gbfprintf(fout, "'/>\n");
@@ -837,7 +837,7 @@ osm_rte_disp_trail(const route_head *rte)
 {
 	if (skip_rte) return;
 
-	gbfprintf(fout, "<tag k='created_by' v='GPSBabel");
+	gbfprintf(fout, "    <tag k='created_by' v='GPSBabel");
 	if (gpsbabel_time != 0)
 		gbfprintf(fout, "-%s", gpsbabel_version);
 	gbfprintf(fout, "'/>\n");
