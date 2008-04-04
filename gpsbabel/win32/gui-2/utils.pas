@@ -116,7 +116,7 @@ begin
   if (Copy(CommandLine, 1, 1) = '~') then
     sCmd := System.Copy(CommandLine, 2, Length(CommandLine) - 1)
   else
-    sCmd := SysUtils.Format('%s %s ', [gpsbabel_exe, CommandLine]);
+    sCmd := SysUtils.Format('"%s" %s ', [gpsbabel_exe, CommandLine]);
 
   SecurityAttr.nLength := sizeof(TSECURITYATTRIBUTES);
   SecurityAttr.bInheritHandle := true;
