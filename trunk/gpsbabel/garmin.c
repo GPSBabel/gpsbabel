@@ -43,6 +43,8 @@ static char *snlen = NULL;
 static char *snwhiteopt = NULL;
 static char *deficon = NULL;
 static char *category = NULL;
+static char *categorybitsopt = NULL;
+static int categorybits;
 
 #define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -64,6 +66,8 @@ arglist_t garmin_args[] = {
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{ "category", &category, "Category number to use for written waypoints", 
 		NULL, ARGTYPE_INT, "1", "16"},
+	{ "bitscategory", &categorybitsopt, "Bitmap of categories", 
+		NULL, ARGTYPE_INT, "1", "65535"},
 	ARG_TERMINATOR
 };
 
@@ -102,6 +106,10 @@ rw_init(const char *fname)
 	if (resettime) {
 		GPS_Command_Send_Time(fname, current_time());
 		return;
+	}
+
+	if (categorybitsopt) {
+		categorybits = strtol(categorybitsopt, NULL, 0);
 	}
 
         if (GPS_Init(fname) < 0) {
@@ -232,6 +240,8 @@ rw_init(const char *fname)
 
 	if (receiver_charset)
 		cet_convert_init(receiver_charset, 1);
+
+
 }
 
 static void
@@ -808,6 +818,9 @@ xasprintf(&src, "%s %s", &wpt->shortname[2], src);
 		}
 		if (category) {
 			way[i]->category = 1 << (atoi(category) - 1);
+		}
+		if (categorybits) {
+			way[i]->category = categorybits;
 		}
 #if SOON
 		garmin_fs_garmin_before_write(wpt, way[i], gps_waypt_type);

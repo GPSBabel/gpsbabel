@@ -107,8 +107,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.61 $"; */
-static char gdb_release_date[] = "$Date: 2008-01-09 23:06:04 $";
+/* static char gdb_release[] = "$Revision: 1.62 $"; */
+static char gdb_release_date[] = "$Date: 2008-04-06 03:41:10 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -120,6 +120,7 @@ static char *gdb_opt_category;
 static char *gdb_opt_ver;
 static char *gdb_opt_via;
 static char *gdb_opt_roadbook;
+static char *gdb_opt_bitcategory;
 
 static int waypt_flag;
 static int route_flag;
@@ -1635,6 +1636,11 @@ init_writer(const char *fname)
 			MYNAME ": cat must be between 1 and 16!");
 		gdb_category = 1 << (gdb_category - 1);
 	}
+
+	if (gdb_opt_bitcategory) {
+		gdb_category = strtol(gdb_opt_bitcategory, NULL, 0);
+	}
+
 	if (gdb_ver >= GDB_VER_UTF8)
 		cet_convert_init(CET_CHARSET_UTF8, 1);
 	
@@ -1686,12 +1692,15 @@ write_data(void)
 #define GDB_OPT_VER		"ver"
 #define GDB_OPT_VIA		"via"
 #define GDB_OPT_CATEGORY	"cat"
+#define GDB_OPT_BITCATEGORY	"bitcategory"
 #define GDB_OPT_ROADBOOK	"roadbook"
 
 static arglist_t gdb_args[] = {
 	{GDB_OPT_CATEGORY, &gdb_opt_category,
 		"Default category on output (1..16)", 
 		NULL, ARGTYPE_INT, "1", "16"},
+        {GDB_OPT_BITCATEGORY, &gdb_opt_bitcategory, "Bitmap of categories",
+                NULL, ARGTYPE_INT, "1", "65535"},
 	{GDB_OPT_VER, &gdb_opt_ver, 
 		"Version of gdb file to generate (1..3)",
 		"2", ARGTYPE_INT, "1", "3"},
@@ -1701,6 +1710,7 @@ static arglist_t gdb_args[] = {
 	{GDB_OPT_ROADBOOK, &gdb_opt_roadbook,
 		"Include major turn points (with description) from calculated route",
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+
 	ARG_TERMINATOR
 };
 
