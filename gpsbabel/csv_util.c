@@ -848,12 +848,15 @@ static
 int 
 writehms(char * buff, size_t bufsize, const char * format, time_t t, int gmt )
 {
-	static struct tm * stmp;
+	static struct tm no_time = {0};
+	static struct tm * stmp = &no_time;
 
 	if (gmt)
 		stmp = gmtime(&t);
 	else
 		stmp = localtime(&t);
+
+	if (stmp == NULL) stmp = &no_time;
 
 	return snprintf(buff, bufsize, format, 
 		stmp->tm_hour, stmp->tm_min, stmp->tm_sec, 
