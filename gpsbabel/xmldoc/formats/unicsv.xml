@@ -23,6 +23,7 @@
       depth =    Depth
       desc =     Description
       ele =      Elevation (in meters) of the point
+      e/w =      'e' for eastern hemisphere, 'w' for western
       fix =      3d, 2d, etc.
       geschw =   Geschwindigkeit (speed)
       hdop =     Horizontal dilution of precision
@@ -32,6 +33,7 @@
       lat =      Latitude
       lon =      Longitude
       name =     Waypoint name ("Shortname")
+      n/s =      'n' for northern hemisphere, 's' for southern
       notes =    Notes
       pdop =     Position dilution of precision
       prox =     Proximity
