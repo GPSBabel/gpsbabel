@@ -86,6 +86,8 @@ typedef enum {
 	fld_hour,
 	fld_min,
 	fld_sec,
+	fld_ns,
+	fld_ew,
 	fld_garmin_city,
 	fld_garmin_postal_code,
 	fld_garmin_state,
@@ -187,6 +189,8 @@ static field_t fields_def[] = {
 	{ "year",	fld_year, STR_LEFT },
 	{ "month",	fld_month, STR_LEFT },
 	{ "day",	fld_day, STR_LEFT },
+	{ "n/s",	fld_ns, STR_ANY },
+	{ "e/w",	fld_ew, STR_ANY },
 
 	/* garmin specials */
 	{ "addr",	fld_garmin_addr, STR_ANY },
@@ -527,6 +531,8 @@ unicsv_parse_one_line(char *ibuf)
 	double d;
 	struct tm ymd;
 	int src_datum = unicsv_datum_idx;
+	int ns = 1;
+	int ew = 1;
 
 	wpt = waypt_new();
 	wpt->latitude = unicsv_unknown;
@@ -545,7 +551,6 @@ unicsv_parse_one_line(char *ibuf)
 
 		s = lrtrim(s);
 		if (! *s) continue;	/* skip empty columns */
-		
 		switch(unicsv_fields_tab[column]) {
 
 		case fld_time:
@@ -562,10 +567,12 @@ unicsv_parse_one_line(char *ibuf)
 		
 		case fld_latitude:
 			human_to_dec( s, &wpt->latitude, &wpt->longitude, 1 );
+			wpt->latitude = wpt->latitude * ns;
 			break;
 			
 		case fld_longitude:
 			human_to_dec( s, &wpt->latitude, &wpt->longitude, 2 );
+			wpt->longitude = wpt->longitude * ew;
 			break;
 			
 		case fld_shortname:
@@ -795,7 +802,14 @@ unicsv_parse_one_line(char *ibuf)
 		case fld_datetime:
 			/* not implemented */
 			break;
-
+		case fld_ns:
+			ns = tolower(s[0]) == 'n' ? 1 : -1;
+			wpt->latitude *= ns;
+			break;
+		case fld_ew:
+			ew = tolower(s[0]) == 'e' ? 1 : -1;
+			wpt->longitude *= ew;
+			break;
 		case fld_garmin_city:
 		case fld_garmin_postal_code:
 		case fld_garmin_state:
