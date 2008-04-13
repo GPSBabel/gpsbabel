@@ -810,7 +810,7 @@ osm_rte_disp_head(const route_head *rte)
 	
 	if (skip_rte) return;
 
-	gbfprintf(fout, "  <way id='%d' action='modify' visible='true'>\n", --node_id);
+	gbfprintf(fout, "  <way id='%d' visible='true'>\n", --node_id);
 }
 
 static void
