@@ -50,7 +50,7 @@ pdb_invalid_file(const pdbfile *pdb_in, const char *fmt, ...)
 /* try to read to EOF (avoid determining file-size) */
 
 static void *
-pdb_read_tail(gbfile *fin, gbint32 *size)
+pdb_read_tail(gbfile *fin, gbuint32 *size)
 {
 	int count;
 	char buff[256];
@@ -176,7 +176,7 @@ pdb_load_data(pdbfile *fin)
 			offs += fin->appinfo_len;
 		}
 		else {
-			gbint32 size;
+			gbuint32 size;
 			fin->appinfo = pdb_read_tail(fin->file, &size);
 			fin->appinfo_len = size;
 			offs += size;
