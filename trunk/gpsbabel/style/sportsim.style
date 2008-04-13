@@ -6,6 +6,7 @@
 #
 DESCRIPTION	Sportsim track files (part of zipped .ssz files) 
 EXTENSION	txt
+DATATYPE	TRACK
 
 #
 # FILE LAYOUT DEFINITIIONS:
