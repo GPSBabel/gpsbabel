@@ -39,8 +39,8 @@
 #define EPOCH_1904		2082844800L
 
 typedef struct pdbrec_s {
-	gbint32  offs;
-	gbint32  size;
+	gbuint32  offs;
+	gbuint32  size;
 	gbuint32 id;
 	gbuint8  category;
 	gbuint8  flags;
