@@ -29,6 +29,7 @@
       hdop =     Horizontal dilution of precision
       head =     Heading / Course true
       heart =    Heartrate
+      height =   Elevation (in meters) of the point
       icon =     Symbol (icon) name
       lat =      Latitude
       lon =      Longitude

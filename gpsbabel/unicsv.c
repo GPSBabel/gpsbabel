@@ -142,6 +142,7 @@ static field_t fields_def[] = {
 	{ "y_pos",	fld_latitude, STR_ANY },
 	{ "alt",	fld_altitude, STR_ANY },
 	{ "ele",	fld_altitude, STR_ANY },
+	{ "height",	fld_altitude, STR_ANY },
 	{ "utm_z",	fld_utm_zone, STR_ANY },
 	{ "utm_c",	fld_utm_zone_char, STR_ANY },
 	{ "utm_zc",	fld_utm_zone_char, STR_ANY },
