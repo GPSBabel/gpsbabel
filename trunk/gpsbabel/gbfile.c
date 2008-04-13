@@ -393,9 +393,9 @@ gbfwrite(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *f
 	}
 
 	if (result != members) {
-		fatal("%s: Could not write %u bytes to %s!\n", 
+		fatal("%s: Could not write %lld bytes to %s!\n", 
 			file->module,
-			(members - result) * size,
+			(long long int) (members - result) * size,
 			file->name);
 	}
 		
@@ -517,8 +517,8 @@ gbfseek(gbfile *file, gbint32 offset, int whence)
 				fatal("%s: Unknown seek operation (%d) for file %s!\n",
 					file->module, whence, file->name);
 			}
-			fatal("%s: Unable to set file (%s) to position (%d)!\n",
-				file->module, file->name, pos);
+			fatal("%s: Unable to set file (%s) to position (%llu)!\n",
+				file->module, file->name, (long long unsigned) pos);
 		}
 		return 0;
 	}
