@@ -101,10 +101,12 @@ parse_speed(const char *str, double *val, const double scale, const char *module
 	else if (case_ignore_strcmp(unit, "mps") == 0) ;
 	else if (case_ignore_strcmp(unit, "kph") == 0) *val = KPH_TO_MPS(*val);
 	else if (case_ignore_strcmp(unit, "km/h") == 0) *val = KPH_TO_MPS(*val);
+	else if (case_ignore_strcmp(unit, "kmh") == 0) *val = KPH_TO_MPS(*val);
 	else if (case_ignore_strcmp(unit, "kt") == 0) *val = KNOTS_TO_MPS(*val);
 	else if (case_ignore_strcmp(unit, "knot") == 0) *val = KNOTS_TO_MPS(*val);
 	else if (case_ignore_strcmp(unit, "mph") == 0) *val = MPH_TO_MPS(*val);
 	else if (case_ignore_strcmp(unit, "mi/h") == 0) *val = MPH_TO_MPS(*val);
+	else if (case_ignore_strcmp(unit, "mih") == 0) *val = MPH_TO_MPS(*val);
 	else
 		fatal("%s: Unsupported speed unit '%s' in item '%s'!\n", module, unit, str);
 
