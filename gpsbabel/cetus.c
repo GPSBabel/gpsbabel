@@ -474,7 +474,11 @@ cetus_writewpt(const waypoint *wpt)
 	vdata += strlen( vdata ) + 1;
 
 	if (wpt->gc_data.diff) {
-		xasprintf(&desc_geo, " by %s\n%.4s/%.4s %3.1f/%3.1f\n",
+			xasprintf(&desc_geo, "%s%s by %s\n%.4s/%.4s %3.1f/%3.1f\n",
+			wpt->gc_data.is_available==status_true ? 
+				"" : " (Disabled)",
+			wpt->gc_data.is_archived==status_true ? 
+				" (Archived)" : "", 
 			wpt->gc_data.placer,
 			gs_get_cachetype(wpt->gc_data.type),
 			gs_get_container(wpt->gc_data.container),
