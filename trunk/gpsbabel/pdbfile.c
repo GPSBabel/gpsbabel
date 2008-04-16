@@ -82,7 +82,7 @@ pdb_load_data(pdbfile *fin)
 {
 	gbuint16 i, ct;
 	pdbrec_t *last_rec;
-	gbint32 offs;
+	gbuint32 offs;
 	pdbrec_t *rec;
 	
 	/* load the header */
@@ -157,7 +157,7 @@ pdb_load_data(pdbfile *fin)
 	last_rec = fin->rec_list;
 
 	if (fin->appinfo_offs != 0) {
-		gbint32 top;
+		gbuint32 top;
 
 		/* seek to application info offset */
 		while (offs < fin->appinfo_offs) {

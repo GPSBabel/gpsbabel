@@ -58,8 +58,8 @@ typedef struct {
 	time_t mtime;		/* modification time */
 	time_t btime;		/* backup time */
 	gbuint32 revision;
-	gbint32 appinfo_offs;	/* offset to application info */
-	gbint32 index_offs;	/* offset to sort-index info */
+	gbuint32 appinfo_offs;	/* offset to application info */
+	gbuint32 index_offs;	/* offset to sort-index info */
 	gbuint32 creator;
 	gbuint32 type;
 	gbuint32 uid;
