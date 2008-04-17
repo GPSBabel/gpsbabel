@@ -339,6 +339,9 @@
 				RelativePath="..\dg-100.c">
 			</File>
 			<File
+				RelativePath="..\destinator.c">
+			</File>
+			<File
 				RelativePath="..\discard.c">
 			</File>
 			<File
@@ -2406,6 +2409,9 @@
 			</File>
 			<File
 				RelativePath="..\gbfile.h">
+			</File>
+			<File
+				RelativePath="..\gbtypes.h">
 			</File>
 			<File
 				RelativePath="..\grtcirc.h">
