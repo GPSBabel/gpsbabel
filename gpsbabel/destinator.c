@@ -350,17 +350,17 @@ destinator_read(void)
 	
 	if ((i0 == 0x690043) && (i1 == 0x790074)) {
 		if (data_type != rtedata)
-			warning(MYNAME ": Using Desinator Itinerary Format!\n");
+			warning(MYNAME ": Using Destinator Itinerary Format!\n");
 		destinator_read_rte();
 	}
 	else if ((i0 == 0x790044) && (i1 == 0x61006e)) {
 		if (data_type != wptdata)
-			warning(MYNAME ": Using Desinator POI Format!\n");
+			warning(MYNAME ": Using Destinator POI Format!\n");
 		destinator_read_poi();
 	}
 	else {
 		if (data_type != trkdata)
-			warning(MYNAME ": Using Desinator Tracklog Format!\n");
+			warning(MYNAME ": Using Destinator Tracklog Format!\n");
 		
 		le_read64(&d0, &buff[0]);
 		le_read64(&d1, &buff[8]);
