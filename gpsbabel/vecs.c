@@ -132,6 +132,9 @@ extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
 extern ff_vecs_t ik3d_vecs;
 extern ff_vecs_t osm_vecs;
+extern ff_vecs_t destinator_poi_vecs;
+extern ff_vecs_t destinator_trk_vecs;
+extern ff_vecs_t destinator_rte_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -738,6 +741,24 @@ vecs_t vec_list[] = {
                 "osm",
                 "OpenStreetMap data files",
                 "xml"
+        },
+        {
+                &destinator_poi_vecs,
+                "destinator_poi",
+                "Destinator Points of Interest (.dat)",
+                "dat"
+        },
+        {
+                &destinator_rte_vecs,
+                "destinator_itn",
+                "Destinator Itineraries (.dat)",
+                "dat"
+        },
+        {
+                &destinator_trk_vecs,
+                "destinator_trk",
+                "Destinator TrackLogs (.dat)",
+                "dat"
         },
 #endif // MAXIMAL_ENABLED
 	{

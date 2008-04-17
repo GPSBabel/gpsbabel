@@ -1308,5 +1308,20 @@ rm -f ${TMPDIR}/osm-*
 ${PNAME} -i osm -f ${REFERENCE}/osm-data.xml -o gpx -F ${TMPDIR}/osm-data.gpx
 compare ${TMPDIR}/osm-data.gpx ${REFERENCE}/osm-data.gpx
 
+# Destinator POI
+${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -o destinator_poi -F ${TMPDIR}/destinator_poi.dat
+${PNAME} -i destinator_poi -f ${TMPDIR}/destinator_poi.dat -w -o unicsv,utc=0 -F ${TMPDIR}/destinator_poi.txt
+compare ${TMPDIR}/destinator_poi.txt ${REFERENCE}/destinator_poi.txt
+
+# Destinator Itinerary
+${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -o destinator_itn -F ${TMPDIR}/destinator_itn.dat
+${PNAME} -i destinator_itn -f ${TMPDIR}/destinator_itn.dat -r -o unicsv,utc=0 -F ${TMPDIR}/destinator_itn.txt
+compare ${TMPDIR}/destinator_itn.txt ${REFERENCE}/route/destinator_itn.txt
+
+# Destinator TrackLog
+${PNAME} -i nmea -f ${REFERENCE}/track/nmea+ms.txt -o destinator_trk -F ${TMPDIR}/destinator_trk.dat
+${PNAME} -i destinator_trk -f ${TMPDIR}/destinator_trk.dat -t -o unicsv,utc=0 -F ${TMPDIR}/destinator_trk.txt
+compare ${TMPDIR}/destinator_trk.txt ${REFERENCE}/track/destinator_trk.txt
+
 
 exit 0
