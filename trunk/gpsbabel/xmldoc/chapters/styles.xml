@@ -1180,6 +1180,42 @@ example:
 <title>ROUTE_NAME</title>
 <para>The name of the route currently being operated on.  Needs string conversion.</para><para>example:<screen format="linespecific">ROUTE_NAME, "", "%s"</screen></para></section>
 
+<section id="style_street_addr">
+<title>STREET_NAME</title>
+<para>Street address including house number.</para>
+<para>example:<screen format="linespecific">STREET_ADDR, "", "%s"</screen></para>
+</section>
+
+<section id="style_city">
+<title>CITY</title>
+<para>The name of a city. Sometimes part of "Points of Interest".</para>
+<para>example:<screen format="linespecific">CITY, "", "%s"</screen></para>
+</section>
+
+<section id="style_country">
+<title>COUNTRY</title>
+<para>.......</para>
+<para>example:<screen format="linespecific">COUNTRY, "", "%s"</screen></para>
+</section>
+
+<section id="style_facility">
+<title>FACILITY</title>
+<para>.......</para>
+<para>example:<screen format="linespecific">FACILITY, "", "%s"</screen></para>
+</section>
+
+<section id="style_phone_nr">
+<title>PHONE_NR</title>
+<para>.......</para>
+<para>example:<screen format="linespecific">PHONE_NR, "", "%s"</screen></para>
+</section>
+
+<section id="style_postal_code">
+<title>POSTAL_CODE</title>
+<para>.......</para>
+<para>example:<screen format="linespecific">POSTAL_CODE, "", "%s"</screen></para>
+</section>
+
 </section> <!-- definitions -->
 
 <section id="style_examples">
