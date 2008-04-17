@@ -9,6 +9,7 @@ CAPS=""
 TEMPDIR=${GBTEMP:-/tmp}/gb-test-all
 CATALOG=/tmp/gb-test-all.done
 LOGFILE=/tmp/gb-test-all.log
+RNDFILE=/tmp/gb-random.gpx
 
 # options
 vg=0
@@ -175,6 +176,10 @@ while [ $# -gt 0 ]; do
 	    ;;
 	-c|--clean)
 	    trap "rm -fr $TEMPDIR; exit 1" 0 1 2 3 15
+	    ;;
+	-n|--random)
+	    ${PNAME} -i random -w -f - -i random,points=48 -r -f - -i random,points=120 -t -f - -o gpx,gpxver=1.1 -F $RNDFILE
+	    REFGPX=/tmp/gb-random.gpx
 	    ;;
 	-r|--reference)
 	    shift
