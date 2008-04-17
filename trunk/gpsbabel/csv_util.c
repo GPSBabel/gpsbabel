@@ -28,6 +28,7 @@
 #include "strptime.h"
 #include "jeeps/gpsmath.h"
 #include "xmlgeneric.h"  // for xml_fill_in_time.
+#include "garmin_fs.h"
 
 #define MYNAME "CSV_UTIL"
 
@@ -56,9 +57,12 @@ typedef enum {
 	XT_ALT_METERS,
 	XT_ANYNAME,
 	XT_CADENCE,
+	XT_CITY,
 	XT_CONSTANT,
+	XT_COUNTRY,
 	XT_DESCRIPTION,
 	XT_EXCEL_TIME,
+	XT_FACILITY,
 	XT_GEOCACHE_CONTAINER,
 	XT_GEOCACHE_DIFF,
 	XT_GEOCACHE_HINT,
@@ -107,8 +111,12 @@ typedef enum {
 	XT_PATH_SPEED_KNOTS,
 	XT_PATH_SPEED_KPH,
 	XT_PATH_SPEED_MPH,
+	XT_PHONE_NR,
+	XT_POSTAL_CODE,
 	XT_ROUTE_NAME,
 	XT_SHORTNAME,
+	XT_STATE,
+	XT_STREET_ADDR,
 	XT_TIMET_TIME,
 	XT_TRACK_NAME,
 	XT_URL,
@@ -877,6 +885,17 @@ time_to_yyyymmdd(time_t t)
 	return b;
 }
 
+static garmin_fs_t *
+gmsd_init(waypoint *wpt)
+{
+	garmin_fs_t *gmsd = GMSD_FIND(wpt);
+	if (gmsd == NULL) {
+		gmsd = garmin_fs_alloc(-1);
+		fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+	}
+	return gmsd;
+}
+
 /*****************************************************************************/
 /* xcsv_parse_val() - parse incoming data into the waypt structure.          */
 /* usage: xcsv_parse_val("-123.34", *waypt, *field_map)                      */
@@ -1128,6 +1147,42 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     	break;
     case XT_PATH_DISTANCE_KM:
 	/* Ignored on input */
+	break;
+    /* GMSD ****************************************************************/
+    case XT_COUNTRY: {
+	garmin_fs_t *gmsd = gmsd_init(wpt);
+	GMSD_SET(country, csv_stringtrim(s, enclosure, 0));
+	}
+	break;
+    case XT_STATE: {
+	garmin_fs_t *gmsd = gmsd_init(wpt);
+	GMSD_SET(state, csv_stringtrim(s, enclosure, 0));
+	}
+	break;
+    case XT_CITY: {
+	garmin_fs_t *gmsd = gmsd_init(wpt);
+	GMSD_SET(city, csv_stringtrim(s, enclosure, 0));
+	}
+	break;
+    case XT_STREET_ADDR: {
+	garmin_fs_t *gmsd = gmsd_init(wpt);
+	GMSD_SET(addr, csv_stringtrim(s, enclosure, 0));
+	}
+	break;
+    case XT_POSTAL_CODE: {
+	garmin_fs_t *gmsd = gmsd_init(wpt);
+	GMSD_SET(postal_code, csv_stringtrim(s, enclosure, 0));
+	}
+	break;
+    case XT_PHONE_NR: {
+	garmin_fs_t *gmsd = gmsd_init(wpt);
+	GMSD_SET(phone_nr, csv_stringtrim(s, enclosure, 0));
+	}
+	break;
+    case XT_FACILITY: {
+	garmin_fs_t *gmsd = gmsd_init(wpt);
+	GMSD_SET(facility, csv_stringtrim(s, enclosure, 0));
+	}
 	break;
     case -1:
     	if (strncmp(fmp->key, "LON_10E", 7) == 0) {
@@ -1706,6 +1761,42 @@ xcsv_waypt_pr(const waypoint *wpt)
 				break;
 		}
 		writebuff(buff, fmp->printfc, fix);
+		}
+		break;
+	/* GMSD ************************************************************/
+	case XT_COUNTRY: {
+		garmin_fs_t *gmsd = GMSD_FIND(wpt);
+		writebuff(buff, fmp->printfc, GMSD_GET(country, ""));
+		}
+		break;
+	case XT_STATE: {
+		garmin_fs_t *gmsd = GMSD_FIND(wpt);
+		writebuff(buff, fmp->printfc, GMSD_GET(state, ""));
+		}
+		break;
+	case XT_CITY: {
+		garmin_fs_t *gmsd = GMSD_FIND(wpt);
+		writebuff(buff, fmp->printfc, GMSD_GET(city, ""));
+		}
+		break;
+	case XT_POSTAL_CODE: {
+		garmin_fs_t *gmsd = GMSD_FIND(wpt);
+		writebuff(buff, fmp->printfc, GMSD_GET(postal_code, ""));
+		}
+		break;
+	case XT_STREET_ADDR: {
+		garmin_fs_t *gmsd = GMSD_FIND(wpt);
+		writebuff(buff, fmp->printfc, GMSD_GET(addr, ""));
+		}
+		break;
+	case XT_PHONE_NR: {
+		garmin_fs_t *gmsd = GMSD_FIND(wpt);
+		writebuff(buff, fmp->printfc, GMSD_GET(phone_nr, ""));
+		}
+		break;
+	case XT_FACILITY: {
+		garmin_fs_t *gmsd = GMSD_FIND(wpt);
+		writebuff(buff, fmp->printfc, GMSD_GET(facility, ""));
 		}
 		break;
 	case -1:
