@@ -7,14 +7,14 @@ to hold waypoint, track, and route information in various programs
 used by computers and GPS receivers.  
 <ulink url="http://www.topografix.com/gpx.asp">GPX</ulink>  defines a
 standard in XML to contain all the data, but there are too many
-programs that don't understand it yet and too much data that are in an
+programs that don't understand it yet and too much data in 
 alternate formats.
 </para>
 <para>
-Perhaps you have an Explorist 600 and your friend has a StreetPilot 2720.
+Perhaps you have an <link linkend="fmt_magellanx">Explorist 600</link> and your friend has a <link linkend="fmt_garmin">StreetPilot 2720</link>.
 You've collected a a list of your favorite locations as waypoints and you'd
-like to be able to share them.  Unfortunately, his copy of Garmin Mapsource
-won't read data created by your copy of Magellan Directroute.  What you need
+like to be able to share them.  Unfortunately, his copy of <link linkend="fmt_gdb">Garmin Mapsource</link>
+won't read data created by your copy of <link linkend="fmt_mapsend">Magellan Mapsend DirectRoute</link>.  What you need
 is a program that converts data bewteen the two programs.
 </para>
 <para>

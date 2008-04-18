@@ -5,9 +5,9 @@
 <para>
   These data files are XML based. Every GPS element (way or node) described by the files has a unique
   number as identifier. When we write OSM data files and don't know something about the id's,
-  negative numbers will be used as identifier. This has beed tested with <ulink url="http://wiki.openstreetmap.org/index.php/JOSM">JOSM</ulink>.
+  negative numbers will be used as identifier. This has been tested with <ulink url="http://wiki.openstreetmap.org/index.php/JOSM">JOSM</ulink>.
 </para>
 <para>
-  Because the resulting timestamps of OSM ways aren't in the manner of real GPS track, 
+  Because the resulting timestamps of OSM ways differ from real GPS tracks, 
   we read OSM ways into routes. On the output side we write all available routes and tracks into the osm target file.
 </para>

@@ -12,8 +12,8 @@
     </userinput>
   </para>
   <para>
-    Because gdb creates internal a route AND a waypoint list, you have to drop all
-    waypoints and transform the route into waypoints. So you'll get a well ordered
-    html output. We sugess these steps for all waypoint-only formats as html. 
+    Because gdb internally creates a route AND a waypoint list, you have to drop all
+    waypoints and transform the route into waypoints in order to get a well ordered
+    html output. We suggest these steps for all waypoint-only formats as html. 
   </para>
 </example>
