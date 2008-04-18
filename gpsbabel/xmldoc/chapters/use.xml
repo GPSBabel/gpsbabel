@@ -68,9 +68,15 @@ name of a file to be read or written.
          <para> This command will read from a Magellan unit attached
          to the first serial port on a Linux system (device names will
          vary on other OSes; typically COMx: on WIndows) and write them as a geocaching loc file.</para>
+<example>
+  <title>Command showing Linux download from Magellan serial and writing to .loc file</title>
          <para><userinput>gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</userinput></para>
+</example>
          <para>This second command does the same on Microsoft Windows.</para>
+<example>
+  <title>Command showing Windows download from Magellan serial and writing to .loc file</title>
          <para><userinput>gpsbabel -i magellan -f com1 -o geo -F mag.loc</userinput></para>
+</example>
          <para>Optionally, you may specify <parameter moreinfo="none">-s</parameter> in any command line.  This
          causes the program to ignore any "short" names that may be
          present in the source data format and synthesize one from the
@@ -128,19 +134,28 @@ through when executed. Normally one would: </para>
          </simplelist>
          <para> but GPSBabel is flexible enough to allow more complicated
 operations such as reading from several files (potentially of
-different types), applying a filter, reading more data, then write the
+different types), applying a filter, reading more data, then writing the
 merged data to multiple destinations.
 </para>
          <para>The input file type remains unchanged until a new
          <parameter moreinfo="none">-i</parameter> argument is seen.
          Files are read in the order they appear. So you could merge
          three input files into one output file with: </para>
-         <para><userinput>gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc</userinput></para>
+	<example>
+	<title>Merging multiple files into one</title>
+           <para><userinput>gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc</userinput></para>
+	</example>
          <para>You can merge files of different types:</para>
-         <para><userinput>gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx  
--o gpsutil -F big.gps</userinput></para>
+	<example>
+	<title>Merging multiple files of differing types.</title>
+         <para><userinput>gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx  -o gpsutil -F big.gps</userinput></para>
+	</example>
+	<example>
+	 <title>Writing the same data in multiple output formats.</title>
          <para> You can write the same data in different output formats:</para>
+
          <para><userinput>gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx -F 1.wpt</userinput></para>
+	</example>
          <para>If you want to change the character set of input or/and
          output side you can do this with the option <option>-c
          &lt;character set&gt;</option>. You can get a complete list
@@ -227,13 +242,13 @@ merged data to multiple destinations.
 	There are three optional sections.
 	<itemizedlist>
 	<listitem>
-	<para>"Common format settings"</para>
+	<para>Common format settings.</para>
 	<para>  Any option from any of the formats listed here will be used by
 		GPSBabel unless explictly provided on the command line.
 	</para>
 	</listitem>
 	<listitem>
-	<para>"Common filter settings"</para>
+	<para>Common filter settings.</para>
 	<para>As above, but for filters.</para>
 	</listitem>
 	<listitem>
@@ -277,7 +292,10 @@ merged data to multiple destinations.
 	  output.   Additional formats may be added by interested parties 
 	  later.
     </para>
+<example>
+  <title>Read realtime positioning from Garmin USB, write to Keyhole Markup</title>
     <para><userinput>gpsbabel -T -i garmin -f usb: -o kml -F xxx.kml</userinput></para>
+</example>
     <para>
    	  Will read the USB-connected Garmin and rewrite 'xxx.kml' atomically,
 	  suitable for a self-refreshing network link in Google Earth.

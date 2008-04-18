@@ -1182,37 +1182,37 @@ example:
 
 <section id="style_street_addr">
 <title>STREET_NAME</title>
-<para>Street address including house number.</para>
+<para>Street address including house number.  Notice that this is not used for any geocoding, it's merely textual description associated with a position.</para>
 <para>example:<screen format="linespecific">STREET_ADDR, "", "%s"</screen></para>
 </section>
 
 <section id="style_city">
 <title>CITY</title>
-<para>The name of a city. Sometimes part of "Points of Interest".</para>
+<para>The name of a city. Sometimes part of "Points of Interest".   This is simple textual data associated with a position, no geocoding will be done..</para>
 <para>example:<screen format="linespecific">CITY, "", "%s"</screen></para>
 </section>
 
 <section id="style_country">
 <title>COUNTRY</title>
-<para>.......</para>
+<para>The name of a country associated with a position.</para>
 <para>example:<screen format="linespecific">COUNTRY, "", "%s"</screen></para>
 </section>
 
 <section id="style_facility">
 <title>FACILITY</title>
-<para>.......</para>
+<para>The name of a facility to associate with a position.</para>
 <para>example:<screen format="linespecific">FACILITY, "", "%s"</screen></para>
 </section>
 
 <section id="style_phone_nr">
 <title>PHONE_NR</title>
-<para>.......</para>
+<para>A phone number associated with a position.  This is just textual data attached for convenience.</para>
 <para>example:<screen format="linespecific">PHONE_NR, "", "%s"</screen></para>
 </section>
 
 <section id="style_postal_code">
 <title>POSTAL_CODE</title>
-<para>.......</para>
+<para>A postal code to associate with a position.  It is freeform text and is not used by GPSBabel for any geocoding or such.</para>
 <para>example:<screen format="linespecific">POSTAL_CODE, "", "%s"</screen></para>
 </section>
 

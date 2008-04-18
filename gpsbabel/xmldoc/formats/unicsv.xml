@@ -1,6 +1,7 @@
 <para>
    Unicsv examines the first line of a file to determine the field
-   order and field separator in that file.   It is thus read-only format.
+   order and field separator in that file.   On write, it tries to 
+   figure out what data it has and writes headers and all the data it can.
 </para>
 <para>
    If the first line contains any tabs, the data lines are assumed
