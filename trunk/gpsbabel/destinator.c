@@ -549,7 +549,7 @@ ff_vecs_t destinator_poi_vecs = {
 	CET_CHARSET_UTF8, 1			/* fixed */
 };
 
-ff_vecs_t destinator_rte_vecs = {
+ff_vecs_t destinator_itn_vecs = {
 	ff_type_file,
 	{ 
 	  	ff_cap_none 			/* waypoints */, 
@@ -567,7 +567,7 @@ ff_vecs_t destinator_rte_vecs = {
 	CET_CHARSET_UTF8, 1			/* fixed */
 };
 
-ff_vecs_t destinator_trk_vecs = {
+ff_vecs_t destinator_trl_vecs = {
 	ff_type_file,
 	{ 
 	  	ff_cap_none 			/* waypoints */, 
