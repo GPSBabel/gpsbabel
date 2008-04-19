@@ -13,6 +13,6 @@
 </para>
 <para>
   <userinput>
-    gpsbabel -i destinator_trk -f last_trip.dat -o gpx -F last_trip.gpx
+    gpsbabel -i destinator_trl -f last_trip.dat -o gpx -F last_trip.gpx
   </userinput>
 </para>
