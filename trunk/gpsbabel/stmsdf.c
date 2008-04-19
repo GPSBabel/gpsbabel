@@ -605,7 +605,7 @@ static void
 track_disp_custom_cb(const waypoint *wpt)
 {
 	if (wpt->creation_time && (wpt->altitude != unknown_alt)) {
-		gbfprintf(fout, "%lu,%.f\n", wpt->creation_time - start_time, wpt->altitude);
+		gbfprintf(fout, "%d,%.f\n", (int)(wpt->creation_time - start_time), wpt->altitude);
 	}
 }
 
