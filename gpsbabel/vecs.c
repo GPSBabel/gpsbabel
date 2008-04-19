@@ -133,8 +133,8 @@ extern ff_vecs_t navilink_vecs;
 extern ff_vecs_t ik3d_vecs;
 extern ff_vecs_t osm_vecs;
 extern ff_vecs_t destinator_poi_vecs;
-extern ff_vecs_t destinator_trk_vecs;
-extern ff_vecs_t destinator_rte_vecs;
+extern ff_vecs_t destinator_trl_vecs;
+extern ff_vecs_t destinator_itn_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -749,14 +749,14 @@ vecs_t vec_list[] = {
                 "dat"
         },
         {
-                &destinator_rte_vecs,
+                &destinator_itn_vecs,
                 "destinator_itn",
                 "Destinator Itineraries (.dat)",
                 "dat"
         },
         {
-                &destinator_trk_vecs,
-                "destinator_trk",
+                &destinator_trl_vecs,
+                "destinator_trl",
                 "Destinator TrackLogs (.dat)",
                 "dat"
         },

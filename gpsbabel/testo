@@ -1319,9 +1319,9 @@ ${PNAME} -i destinator_itn -f ${TMPDIR}/destinator_itn.dat -r -o unicsv,utc=0 -F
 compare ${TMPDIR}/destinator_itn.txt ${REFERENCE}/route/destinator_itn.txt
 
 # Destinator TrackLog
-${PNAME} -i nmea -f ${REFERENCE}/track/nmea+ms.txt -o destinator_trk -F ${TMPDIR}/destinator_trk.dat
-${PNAME} -i destinator_trk -f ${TMPDIR}/destinator_trk.dat -t -o unicsv,utc=0 -F ${TMPDIR}/destinator_trk.txt
-compare ${TMPDIR}/destinator_trk.txt ${REFERENCE}/track/destinator_trk.txt
+${PNAME} -i nmea -f ${REFERENCE}/track/nmea+ms.txt -o destinator_trl -F ${TMPDIR}/destinator_trl.dat
+${PNAME} -i destinator_trl -f ${TMPDIR}/destinator_trl.dat -t -o unicsv,utc=0 -F ${TMPDIR}/destinator_trl.txt
+compare ${TMPDIR}/destinator_trl.txt ${REFERENCE}/track/destinator_trl.txt
 
 
 exit 0
