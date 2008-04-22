@@ -69,6 +69,7 @@ exif_rd_deinit(void)
 	gbfclose(fin);
 }
 
+#if 0
 static int
 exif_tag_size(const exif_tag_t *tag)
 {
@@ -88,6 +89,7 @@ exif_tag_size(const exif_tag_t *tag)
 	}
 	return size * tag->count;
 }
+#endif
 
 static double
 exif_read_double(const gbsize_t offs)
@@ -196,7 +198,6 @@ exif_read_tags(const int ifd)
 
 		for (i = 0; i < entries; i++) {
 			exif_tag_t *tag = &tags[i];
-			int size = exif_tag_size(tag);
 			
 			switch(ifd) {
 				case 0:
@@ -295,6 +296,7 @@ exif_read_tags(const int ifd)
 		if ((wpt->latitude == unknown_alt) || (wpt->longitude == unknown_alt)) {
 			warning(MYNAME ": GPSLatitude and/or GPSLongitude not set!\n");
 			waypt_free(wpt);
+			wpt = NULL;
 			return 0;
 		}
 		
