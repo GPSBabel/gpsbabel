@@ -390,6 +390,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\exif.c">
+			</File>
+			<File
 				RelativePath="..\fatal.c">
 			</File>
 			<File
