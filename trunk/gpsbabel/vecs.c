@@ -135,6 +135,7 @@ extern ff_vecs_t osm_vecs;
 extern ff_vecs_t destinator_poi_vecs;
 extern ff_vecs_t destinator_trl_vecs;
 extern ff_vecs_t destinator_itn_vecs;
+extern ff_vecs_t exif_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -759,6 +760,12 @@ vecs_t vec_list[] = {
                 "destinator_trl",
                 "Destinator TrackLogs (.dat)",
                 "dat"
+        },
+        {
+                &exif_vecs,
+                "exif",
+                "Embedded Exif-GPS data (.jpg)",
+		"jpg"
         },
 #endif // MAXIMAL_ENABLED
 	{

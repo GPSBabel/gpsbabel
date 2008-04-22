@@ -1323,5 +1323,9 @@ ${PNAME} -i nmea -f ${REFERENCE}/track/nmea+ms.txt -o destinator_trl -F ${TMPDIR
 ${PNAME} -i destinator_trl -f ${TMPDIR}/destinator_trl.dat -t -o unicsv,utc=0 -F ${TMPDIR}/destinator_trl.txt
 compare ${TMPDIR}/destinator_trl.txt ${REFERENCE}/track/destinator_trl.txt
 
+# Exif format test (read only)
+${PNAME} -i exif -f ${REFERENCE}/IMG_2065.JPG -o unicsv,utc=0 -F ${TMPDIR}/exif-dat.csv
+compare ${TMPDIR}/exif-dat.csv ${REFERENCE}/exif-dat.csv
+
 
 exit 0
