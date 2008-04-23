@@ -319,7 +319,7 @@ exif_read_tags(const int ifd)
 		}
 		
 		if (lat_ref == 'S') wpt->latitude *= -1;
-		else 
+		else if (lat_ref != 'N') warning(MYNAME ": GPSLatitudeRef not set! Using N(orth).\n");
 		if (lon_ref == 'W') wpt->longitude *= -1;
 		else if (lon_ref != 'E') warning(MYNAME ": GPSLongitudeRef not set! Using E(east).\n");
 		
