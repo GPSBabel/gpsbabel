@@ -246,7 +246,11 @@ process_gpsfile(gbuint8 data[], route_head *track)
 			bintime = be_read32(data + i +  8);
 			bindate = be_read32(data + i + 12);
 			wpt->creation_time = bintime2utc(bindate, bintime);
-			wpt->speed = be_read32(data + i + 16) / 100.0;
+			/* The device presents the speed as a fixed-point number
+			 * with a scaling factor of 100, in km/h.
+			 * The waypoint struct wants the speed as a
+			 * floating-point number, in m/s. */
+			wpt->speed = KPH_TO_MPS(be_read32(data + i + 16) / 100.0);
 			wpt->wpt_flags.speed = 1;
 		}
 
