@@ -131,12 +131,11 @@ exif_read_string(const exif_tag_t *tag)
 		return gbfgetcstr(fin);
 	}
 	else {
-		char buff[4];
-#ifdef WORDS_BIGENDIAN
-		be_write32(buff, tag->offs);
-#else
-		le_write32(buff, tag->offs);
-#endif
+		char buff[5];
+		if (fin->big_endian) be_write32(buff, tag->offs);
+		else le_write32(buff, tag->offs);
+		if (tag->count < 5) buff[tag->count] = '\0';
+		else buff[4] = '\0';
 		return xstrdup(buff);
 	}
 }
@@ -228,15 +227,19 @@ exif_read_tags(const int ifd)
 					switch(tag->tag) {
 
 						case 0x0001: /* GPSLatitudeRef */
-							lat_ref = tag->offs & 127;
+							str = exif_read_string(tag);
+							lat_ref = *str & 127;
+							xfree(str);
 							break;
 
 						case 0x0002: /* GPSLatitude */ 
 							wpt->latitude = exif_read_coord(tag);
 							break;
 
-						case 0x0003: /* GPSLongitude */ 
-							lon_ref = tag->offs & 127;
+						case 0x0003: /* GPSLongitudeRef */
+							str = exif_read_string(tag);
+							lon_ref = *str & 127;
+							xfree(str);
 							break;
 
 						case 0x0004: /* GPSLongitude */ 
@@ -261,7 +264,9 @@ exif_read_tags(const int ifd)
 							break;
 							
 						case 0x000a: /* GPSMeasureMode */
-							mode = tag->offs & 127;
+							str = exif_read_string(tag);
+							mode = *str & 127;
+							xfree(str);
 							break;
 							
 						case 0x000b: /* GPSDOP */
@@ -269,7 +274,9 @@ exif_read_tags(const int ifd)
 							break;
 
 						case 0x000c: /* GPSSpeedRef */
-							speed_ref = tag->offs & 127;
+							str = exif_read_string(tag);
+							speed_ref = *str & 127;
+							xfree(str);
 							break;
 
 						case 0x000d: /* GPSSpeed */
@@ -406,7 +413,7 @@ exif_read(void)
 				wpt = NULL;
 			}
 			
-			if (! wpt) continue;
+			if (! wpt) return;
 			
 #if 0
 			if (timestamp != (SECONDS_PER_DAY * 99)) {
