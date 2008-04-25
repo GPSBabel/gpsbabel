@@ -29,6 +29,8 @@
 
 #define MYNAME "exif"
 
+#define UNKNOWN_TIMESTAMP 999999999
+
 typedef struct exif_tag_s {
 	gbuint16 tag;
 	gbuint16 type;
@@ -388,7 +390,7 @@ exif_read(void)
 			if (! next_ifd) continue;	/* No IFD0 ? */
 			
 			ifd = gps_ifd = exif_ifd = 0;
-			timestamp = (SECONDS_PER_DAY * 99);
+			timestamp = UNKNOWN_TIMESTAMP;
 
 			/* we need the wpt not only during GPS IFD */
 			wpt = waypt_new();
@@ -415,11 +417,15 @@ exif_read(void)
 			
 			if (! wpt) return;
 			
-#if 0
-			if (timestamp != (SECONDS_PER_DAY * 99)) {
-				// wpt->creation_time = timestamp;
+			if (wpt->creation_time && (timestamp != UNKNOWN_TIMESTAMP)) {
+				struct tm tm;
+				tm = *gmtime(&wpt->creation_time);
+				tm.tm_hour = 0;
+				tm.tm_min = 0;
+				tm.tm_sec = 0;
+				wpt->creation_time = mkgmtime(&tm) + timestamp;
 			}
-#endif
+
 			if (opt_filename) {
 				char *c, *cx;
 				char *str = xstrdup(fin->name);
@@ -435,6 +441,7 @@ exif_read(void)
 				xfree(str);
 			}
 			waypt_add(wpt);
+			
 			return;
 		}
 	}
@@ -479,4 +486,5 @@ ff_vecs_t exif_vecs = {
 	exif_args,
 	CET_CHARSET_ASCII, 0
 };
+
 /**************************************************************************/
