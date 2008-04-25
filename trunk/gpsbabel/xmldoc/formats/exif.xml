@@ -1,0 +1,9 @@
+<para>
+  With this format GPSBabel reads GPS information from embedded 
+  Exif (Exchangeable image file format) data. Exif is standardized and can
+  hold also GPS data. A good example for Exif information are camera information in JPEG pictures.
+</para>
+<para>
+  At this time this feature can be found in mobile phones with camera and GPS receiver, and other more
+  expansive digital cameras.
+</para>
