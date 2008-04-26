@@ -1,6 +1,6 @@
 /*
 
-    Support for "VidaOne Diet & Fittness" data files (.gpb)
+    Support for VidaOne GPS for Pocket PC (.gpb) files
 
     Copyright (C) 2008 Olaf Klein, o.b.klein@gpsbabel.org
 

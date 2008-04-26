@@ -771,7 +771,7 @@ vecs_t vec_list[] = {
         {
                 &vidaone_vecs,
                 "vidaone",
-                "VidaOne track logs (.gpb)",
+                "VidaOne GPS for Pocket PC (.gpb)",
 		"gpb"
         },
 #endif // MAXIMAL_ENABLED
