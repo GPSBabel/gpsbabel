@@ -136,6 +136,7 @@ extern ff_vecs_t destinator_poi_vecs;
 extern ff_vecs_t destinator_trl_vecs;
 extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t exif_vecs;
+extern ff_vecs_t vidaone_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -766,6 +767,12 @@ vecs_t vec_list[] = {
                 "exif",
                 "Embedded Exif-GPS data (.jpg)",
 		"jpg"
+        },
+        {
+                &vidaone_vecs,
+                "vidaone",
+                "VidaOne track logs (.gpb)",
+		"gpb"
         },
 #endif // MAXIMAL_ENABLED
 	{

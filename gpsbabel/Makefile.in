@@ -58,7 +58,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
 	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
-	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o
+	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o
 
 FMTS=@FMTS@
 
@@ -724,6 +724,8 @@ vcf.o: vcf.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
 vecs.o: vecs.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h csv_util.h
+vidaone.o: vidaone.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 vitosmt.o: vitosmt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
 vitovtt.o: vitovtt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \

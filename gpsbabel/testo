@@ -1327,5 +1327,9 @@ compare ${TMPDIR}/destinator_trl.txt ${REFERENCE}/track/destinator_trl.txt
 ${PNAME} -i exif -f ${REFERENCE}/IMG_2065.JPG -o unicsv,utc=0 -F ${TMPDIR}/exif-dat.csv
 compare ${TMPDIR}/exif-dat.csv ${REFERENCE}/exif-dat.csv
 
+# VidaOne track logs
+${PNAME} -i vidaone -f ${REFERENCE}/track/vidaone.gpb -t -o unicsv -F ${TMPDIR}/vidaone.csv
+compare ${TMPDIR}/vidaone.csv ${REFERENCE}/track/vidaone.csv
+
 
 exit 0
