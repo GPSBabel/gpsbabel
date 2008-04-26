@@ -1,7 +1,7 @@
 /*
 	Garmin GPS Database Reader/Writer
 	
-	Copyright (C) 2005,2006,2007 Olaf Klein, o.b.klein@gpsbabel.org
+	Copyright (C) 2005-2008 Olaf Klein, o.b.klein@gpsbabel.org
 	Mainly based on mapsource.c,
 	Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
 	
@@ -107,8 +107,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.62 $"; */
-static char gdb_release_date[] = "$Date: 2008-04-06 03:41:10 $";
+/* static char gdb_release[] = "$Revision: 1.63 $"; */
+static char gdb_release_date[] = "$Date: 2008-04-26 19:30:45 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
