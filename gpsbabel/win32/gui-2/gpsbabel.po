@@ -16,6 +16,9 @@ msgstr ""
 msgid "Ad-hoc open icon name"
 msgstr ""
 
+msgid "After output job done sleep n second(s)"
+msgstr ""
+
 msgid "Allow whitespace synth. shortnames"
 msgstr ""
 
@@ -34,6 +37,9 @@ msgstr ""
 msgid "Basename prepended to URL on output"
 msgstr ""
 
+msgid "Bitmap of categories"
+msgstr ""
+
 msgid "Category name (Cache)"
 msgstr ""
 
@@ -47,6 +53,9 @@ msgid "Command unit to power itself down"
 msgstr ""
 
 msgid "Complete date-free tracks with given date (YYYYMMDD)."
+msgstr ""
+
+msgid "Create unique waypoint names (default = yes)"
 msgstr ""
 
 msgid "Create waypoints from geocache log entries"
@@ -67,6 +76,9 @@ msgstr ""
 msgid "Decimal seconds to pause between groups of strings"
 msgstr ""
 
+msgid "Default category on output"
+msgstr ""
+
 msgid "Default category on output (1..16)"
 msgstr ""
 
@@ -76,10 +88,22 @@ msgstr ""
 msgid "Default location"
 msgstr ""
 
+msgid "Default proximity"
+msgstr ""
+
+msgid "Default speed"
+msgstr ""
+
 msgid "Default speed for waypoints (knots/hr)"
 msgstr ""
 
 msgid "Degrees output as 'ddd', 'dmm'(default) or 'dms'"
+msgstr ""
+
+msgid "Delete all routes"
+msgstr ""
+
+msgid "Delete all track points"
 msgstr ""
 
 msgid "Delete all waypoints"
@@ -94,10 +118,19 @@ msgstr ""
 msgid "Do not add geocache data to description"
 msgstr ""
 
+msgid "Do not add URLs to description"
+msgstr ""
+
+msgid "Don't show gpi bitmap on device"
+msgstr ""
+
 msgid "Draw extrusion line from trackpoint to ground"
 msgstr ""
 
 msgid "Drop route points that do not have an equivalent waypoint (hidden points)"
+msgstr ""
+
+msgid "Enable alerts on speed or proximity distance"
 msgstr ""
 
 msgid "Encrypt hints using ROT13"
@@ -118,6 +151,9 @@ msgstr ""
 msgid "Full path to XCSV style file"
 msgstr ""
 
+msgid "Generate # points"
+msgstr ""
+
 msgid "Generate file with lat/lon for centering map"
 msgstr ""
 
@@ -130,7 +166,7 @@ msgstr ""
 msgid "Height in pixels of map"
 msgstr ""
 
-msgid "Ignore event marker icons"
+msgid "Ignore event marker icons on read"
 msgstr ""
 
 msgid "Include extended data for trackpoints (default = 1)"
@@ -167,6 +203,9 @@ msgid "Index of track to write (if more the one in source)"
 msgstr ""
 
 msgid "Index of URL field in .dbf"
+msgstr ""
+
+msgid "Indicate direction of travel in track icons (default = 0)"
 msgstr ""
 
 msgid "Infrastructure closed icon name"
@@ -220,6 +259,9 @@ msgstr ""
 msgid "Merge output with existing file"
 msgstr ""
 
+msgid "MTK compatible CSV output file"
+msgstr ""
+
 msgid "Name of the 'unassigned' category"
 msgstr ""
 
@@ -251,6 +293,9 @@ msgid "Path to HTML style sheet"
 msgstr ""
 
 msgid "Precision of coordinates"
+msgstr ""
+
+msgid "Proximity distance"
 msgstr ""
 
 msgid "Radius for circles"
@@ -292,6 +337,9 @@ msgstr ""
 msgid "Road type changes"
 msgstr ""
 
+msgid "Set waypoint name to source filename."
+msgstr ""
+
 msgid "Shortname is MAC address"
 msgstr ""
 
@@ -302,6 +350,9 @@ msgid "Split input into separate files"
 msgstr ""
 
 msgid "Split into multiple routes at turns"
+msgstr ""
+
+msgid "Starting seed of the internal number generator"
 msgstr ""
 
 msgid "Stealth encrypted icon name"
@@ -331,6 +382,9 @@ msgstr ""
 msgid "Symbol to use for point data"
 msgstr ""
 
+msgid "Sync GPS time to computer time"
+msgstr ""
+
 msgid "Synthesize track times"
 msgstr ""
 
@@ -343,10 +397,16 @@ msgstr ""
 msgid "The icon description is already the marker"
 msgstr ""
 
+msgid "Treat waypoints as icons on write"
+msgstr ""
+
 msgid "Type of .an1 file"
 msgstr ""
 
 msgid "Units for altitude (f)eet or (m)etres"
+msgstr ""
+
+msgid "Units used for names with @speed ('s'tatute or 'm'etric)"
 msgstr ""
 
 msgid "Units used when writing comments ('s'tatute or 'm'etric)"
@@ -362,6 +422,9 @@ msgid "Use proximity values on output (default is ignore)"
 msgstr ""
 
 msgid "Use shortname instead of description"
+msgstr ""
+
+msgid "Use specified bitmap on output"
 msgstr ""
 
 msgid "Version of gdb file to generate (1..3)"
@@ -385,6 +448,27 @@ msgstr ""
 msgid "Width of lines, in pixels"
 msgstr ""
 
+msgid "Write additional node tag key/value pairs"
+msgstr ""
+
+msgid "Write additional way tag key/value pairs"
+msgstr ""
+
+msgid "Write all tracks into one file"
+msgstr ""
+
+msgid "Write description to address field"
+msgstr ""
+
+msgid "Write each waypoint in a separate file"
+msgstr ""
+
+msgid "Write notes to address field"
+msgstr ""
+
+msgid "Write position to address field"
+msgstr ""
+
 msgid "Write position using this grid."
 msgstr ""
 
@@ -392,6 +476,9 @@ msgid "Write timestamps with offset x to UTC time"
 msgstr ""
 
 msgid "Write tracks compatible with Carto Exploreur"
+msgstr ""
+
+msgid "Write tracks for Gisteq Phototracker"
 msgstr ""
 
 msgid "Zoom level to reduce points"
