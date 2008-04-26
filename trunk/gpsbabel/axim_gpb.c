@@ -104,8 +104,8 @@ decode_buff(const char *buff, route_head *track)
 		(tm.tm_hour > 23) || (tm.tm_min > 60) || (tm.tm_sec > 60),
 		MYNAME ": Invalid or unsupported file (invalid time-stamp).");
 	is_fatal(
-		(fabs(wpt->latitude) > 180) ||
-		(fabs(wpt->longitude) > 90),
+		(fabs(wpt->latitude) > 90) ||
+		(fabs(wpt->longitude) > 180),
 		MYNAME ": Invalid or unsupported file (lat or/and lon out of range).");
 
 	/* post work */
