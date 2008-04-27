@@ -960,19 +960,11 @@ unicsv_rd(void)
 
 /* =========================================================================== */
 
-static char *
-strassign(char **old, char *new)
-{
-	if (*old) xfree(*old);
-	*old = new;
-	return new;
-}
-
 static void
 unicsv_fatal_outside(const waypoint *wpt)
 {
 	gbfprintf(fout, "#####\n");
-	fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
+	fatal(MYNAME ": %s (%s) is outside of convertable area of grid \"%s\"!\n",
 		wpt->shortname ? wpt->shortname : "Waypoint",
 		pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
 		gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));
@@ -1097,9 +1089,18 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 		gbfputs(cout, fout);
 		break;
 		
-	case grid_lat_lon_dms:
+	case grid_lat_lon_dms: {
+		char *sep, *tmp;
 		cout = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, 0);
-		gbfputs(strassign(&cout, strenquote(cout, UNICSV_QUOT_CHAR)), fout);
+		sep = strchr(cout, ',');
+		*sep = '\0';
+		tmp = strenquote(cout, UNICSV_QUOT_CHAR);
+		gbfprintf(fout, "%s%s", tmp, unicsv_fieldsep);
+		xfree(tmp);
+		tmp = strenquote(sep+1, UNICSV_QUOT_CHAR);
+		gbfputs(tmp, fout);
+		xfree(tmp);
+		}
 		break;
 
 	case grid_bng: {
