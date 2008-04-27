@@ -1,13 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: GPSBabel command line program\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-06-07 02:09+0100\n"
+"PO-Revision-Date: 2008-04-27 10:58+0100\n"
 "Last-Translator: Sprok Bence <sprok.bence@gmail.com>\n"
-"Language-Team: \n"
+"Language-Team: Sprok Bence <sprok.bence@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Hungarian\n"
+"X-Poedit-Country: HUNGARY\n"
 
 msgid "(integer sec or 'auto') Barograph to GPS time diff"
 msgstr "Barométer adatok GPS pozícióba (másodperc vagy 'auto')"
@@ -23,6 +25,9 @@ msgstr "Ad-hoc zárt hálózat ikonnév"
 
 msgid "Ad-hoc open icon name"
 msgstr "Ad-hoc nyílt hálózat ikonnév"
+
+msgid "After output job done sleep n second(s)"
+msgstr "Feltöltés után x másodperccel kikapcsolás"
 
 msgid "Allow whitespace synth. shortnames"
 msgstr "Szóközök engedélyezése rövidnevek készítésekor"
@@ -42,6 +47,9 @@ msgstr "Alapért. URL a hivatkozásokban"
 msgid "Basename prepended to URL on output"
 msgstr "URL előtag eléfűzése a kimenetben"
 
+msgid "Bitmap of categories"
+msgstr "Raszter kategória"
+
 msgid "Category name (Cache)"
 msgstr "Kategória név (Cache)"
 
@@ -56,6 +64,9 @@ msgstr "Zárásként a készülék kikapcsolása"
 
 msgid "Complete date-free tracks with given date (YYYYMMDD)."
 msgstr "Dátum nélküli nyomvonalak új időpontja (ÉÉÉÉHHNN)"
+
+msgid "Create unique waypoint names (default = yes)"
+msgstr "Egyedi útpont nevek (alapért. = igen)"
 
 msgid "Create waypoints from geocache log entries"
 msgstr "Útpontok készítése a geocaching bejegyzésekből"
@@ -75,6 +86,9 @@ msgstr "Ennyi nap után a pontok elévültnek számítanak"
 msgid "Decimal seconds to pause between groups of strings"
 msgstr "Ennyi másodpercnyi szünet az adatfolyamban"
 
+msgid "Default category on output"
+msgstr "Alapért. kimeneti kategória"
+
 msgid "Default category on output (1..16)"
 msgstr "Alapértelmezett kimeneti kategória (1.. 16)"
 
@@ -84,11 +98,23 @@ msgstr "Alapértelmezett ikonnév"
 msgid "Default location"
 msgstr "Alapértelmezett pozíció"
 
+msgid "Default proximity"
+msgstr "Alapért. távolság"
+
+msgid "Default speed"
+msgstr "Alapért. sebesség"
+
 msgid "Default speed for waypoints (knots/hr)"
 msgstr "Alapértelmezett sebesség a pontokhoz (csomó/ó)"
 
 msgid "Degrees output as 'ddd', 'dmm'(default) or 'dms'"
 msgstr "Pozíció formátum 'fff', 'fpp'(alapért.) vagy 'fpm'"
+
+msgid "Delete all routes"
+msgstr "Minden útvonal törlése"
+
+msgid "Delete all track points"
+msgstr "Minden nyomvonalpont törlése"
 
 msgid "Delete all waypoints"
 msgstr "Minden útpont törlése"
@@ -102,11 +128,20 @@ msgstr "Távolság mértékegysége [m=metrikus, s=angolszász]"
 msgid "Do not add geocache data to description"
 msgstr "Geocaching információk kihagyása a megjegyzésből"
 
+msgid "Do not add URLs to description"
+msgstr "URL mező kihagyása a megjegyzésből"
+
+msgid "Don't show gpi bitmap on device"
+msgstr "gpi raszter rejtése a készüléken"
+
 msgid "Draw extrusion line from trackpoint to ground"
 msgstr "Meghosszabított vonal rajzolása útponttól felszínig"
 
 msgid "Drop route points that do not have an equivalent waypoint (hidden points)"
 msgstr "Útvonalpont elhagyása, aminek nincs megegyező útpontja (rejtett pontok)"
+
+msgid "Enable alerts on speed or proximity distance"
+msgstr "Figyelmeztetés engedélyezése sebességnél vagy közeledéskor"
 
 msgid "Encrypt hints using ROT13"
 msgstr "Megjegyzések kódolása ROT13 használatával"
@@ -126,6 +161,9 @@ msgstr "Hely-jelölések exportálása nyomvonalakba és útvonalakba"
 msgid "Full path to XCSV style file"
 msgstr "Teljes elérési út a XCSV fájlban"
 
+msgid "Generate # points"
+msgstr "# pontok készítése"
+
 msgid "Generate file with lat/lon for centering map"
 msgstr "Szélesség/hosszúság használata térképi kalibráláshoz"
 
@@ -138,8 +176,8 @@ msgstr "GPS dátum (alapért. WGS 84)"
 msgid "Height in pixels of map"
 msgstr "Magasság a térképen (pixel)"
 
-msgid "Ignore event marker icons"
-msgstr "Esemény jelző ikonok kihagyása"
+msgid "Ignore event marker icons on read"
+msgstr "Esemény pontok kihagyása"
 
 msgid "Include extended data for trackpoints (default = 1)"
 msgstr "Bővített információk használata a nyomvonalakban (alapért.=1)"
@@ -176,6 +214,9 @@ msgstr "Nyomvonalak indexelése íráshoz (ha több mint egy van a forrásban)"
 
 msgid "Index of URL field in .dbf"
 msgstr "URL mező hivatkozása a .dbf fájlban"
+
+msgid "Indicate direction of travel in track icons (default = 0)"
+msgstr "Irány mutatása a nyomvonal ikonjánál"
 
 msgid "Infrastructure closed icon name"
 msgstr "Zárt HotSpot ikonnév"
@@ -228,6 +269,9 @@ msgstr "Előállított rövidnevek max. hosszúsága"
 msgid "Merge output with existing file"
 msgstr "A jelenleg és a kész fájl összefűzése"
 
+msgid "MTK compatible CSV output file"
+msgstr "MTK kompatibilis CSV készítés"
+
 msgid "Name of the 'unassigned' category"
 msgstr "Az 'unassigned' kategória neve"
 
@@ -260,6 +304,9 @@ msgstr "Hivatkozás HTML style sheet-be"
 
 msgid "Precision of coordinates"
 msgstr "Koordináták pontossága"
+
+msgid "Proximity distance"
+msgstr "Közelesédi riasztás értéke"
 
 msgid "Radius for circles"
 msgstr "Kör sugara"
@@ -300,6 +347,9 @@ msgstr "Visszatérés a jelenlegi pozícióba, mint útpont"
 msgid "Road type changes"
 msgstr "Út típus változások"
 
+msgid "Set waypoint name to source filename."
+msgstr "Útpont név szinkronizálása a forrással"
+
 msgid "Shortname is MAC address"
 msgstr "A rövidnév, mint MAC cím"
 
@@ -311,6 +361,9 @@ msgstr "Beviteli adatok darabolása külön fájlokba"
 
 msgid "Split into multiple routes at turns"
 msgstr "Összetett útvonalakba és fordulópontokba darabolás"
+
+msgid "Starting seed of the internal number generator"
+msgstr "Kezdőérték a belső indexhez"
 
 msgid "Stealth encrypted icon name"
 msgstr "Titkosan kódolt ikonnevek"
@@ -339,6 +392,9 @@ msgstr "Szóközök elhagyása a készülő rövidnevekben"
 msgid "Symbol to use for point data"
 msgstr "Útpontok szimbóluma"
 
+msgid "Sync GPS time to computer time"
+msgstr "GPS idő szinkronizálása a számítógéppel"
+
 msgid "Synthesize track times"
 msgstr "Nyomvonal idejének előállítása"
 
@@ -351,11 +407,17 @@ msgstr "Hőmérséklet mértékegysége [c=Celsius, f=Fahrenheit]"
 msgid "The icon description is already the marker"
 msgstr "Az ikon meghatározás már a pontjelzőben"
 
+msgid "Treat waypoints as icons on write"
+msgstr "Útpontok ikonként való kezelése íráskor"
+
 msgid "Type of .an1 file"
 msgstr "A .an1 fájl típusa"
 
 msgid "Units for altitude (f)eet or (m)etres"
 msgstr "Magasság mértékegysége (méter vagy láb)"
+
+msgid "Units used for names with @speed ('s'tatute or 'm'etric)"
+msgstr "Sebesség mértékegysége a neveknél ('s' angolszász vagy 'm' metrikus)"
 
 msgid "Units used when writing comments ('s'tatute or 'm'etric)"
 msgstr "Mértékegység használata a megjegyzésben ('s' angolszász vagy 'm' metrikus)"
@@ -371,6 +433,9 @@ msgstr "Pontossági érték használata a kimenetben (alapért. nincs)"
 
 msgid "Use shortname instead of description"
 msgstr "Rövid név használata a megyjegyzés helyett"
+
+msgid "Use specified bitmap on output"
+msgstr "Meghatározott raszter használata a kimenetben"
 
 msgid "Version of gdb file to generate (1..3)"
 msgstr "A készülő gdb fájl típusa (1..3)"
@@ -393,6 +458,27 @@ msgstr "Térképi szélesség (pixel)"
 msgid "Width of lines, in pixels"
 msgstr "Vonalvastagság (pixel)"
 
+msgid "Write additional node tag key/value pairs"
+msgstr "További kulcs/érték címkepár írása (pont)"
+
+msgid "Write additional way tag key/value pairs"
+msgstr "További kulcs/érték címkepár írása (út)"
+
+msgid "Write all tracks into one file"
+msgstr "Az összes nyomvonal összefűzése egy fájlba"
+
+msgid "Write description to address field"
+msgstr "Megjegyzést a cím mezőbe"
+
+msgid "Write each waypoint in a separate file"
+msgstr "Minden útpont külön fájlba"
+
+msgid "Write notes to address field"
+msgstr "Megjegyzés írása a cím megjegyzésbe"
+
+msgid "Write position to address field"
+msgstr "Pozíció írása a cím megjegyzésbe"
+
 msgid "Write position using this grid."
 msgstr "Pozíció készítése ezzel a ráccsal"
 
@@ -401,6 +487,9 @@ msgstr "Időértékek eltolása x értékkel UTC-hez képest"
 
 msgid "Write tracks compatible with Carto Exploreur"
 msgstr "Carto Exploreur kompatibilis nyomvonal készítése"
+
+msgid "Write tracks for Gisteq Phototracker"
+msgstr "Gisteq Phototracker kompatibilis nyomvonal készítése"
 
 msgid "Zoom level to reduce points"
 msgstr "Zoom-szint a pontok szelektálásához"
