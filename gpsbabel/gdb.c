@@ -58,6 +58,7 @@
 	    2007/06/18: Tweak some forgotten "flagged" fields
 	    2007/07/07: Better support for new fields since V3 (postal code/street address/instruction)
 	    2008/01/09: Fix handling of option category (cat)
+	    2008/04/27: Add zero to checklist of "unknown bytes"
 */
 
 #include <stdio.h>
@@ -107,8 +108,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.63 $"; */
-static char gdb_release_date[] = "$Date: 2008-04-26 19:30:45 $";
+/* static char gdb_release[] = "$Revision: 1.64 $"; */
+static char gdb_release_date[] = "$Date: 2008-04-27 14:11:56 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -733,7 +734,8 @@ read_route(void)
 		}
 
 		FREAD(buf, 18);			/* unknown 18 bytes; but first should be 0x01 or 0x03 */
-		if ((buf[0] != 0x01) && (buf[0] != 0x03)) {
+						/* seen also 0 with VER3 */
+		if ((buf[0] != 0x00) && (buf[0] != 0x01) && (buf[0] != 0x03)) {
 			int i;
 			
 			warnings++;
