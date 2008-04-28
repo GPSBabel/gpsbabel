@@ -1,0 +1,5 @@
+<para>Serial download protocol for the <ulink url="http://www.brauniger.com">Brauniger</ulink> IQ series of
+barograph recording flight instruments.  This format creates a 
+track of altitude vs time which can be merged with a GPS track 
+of the same flight to create a three dimensional IGC file. </para>
+

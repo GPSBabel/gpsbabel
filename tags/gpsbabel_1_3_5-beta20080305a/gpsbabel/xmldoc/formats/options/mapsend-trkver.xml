@@ -1,0 +1,6 @@
+<para>
+This option sets the MapSend version to generate TRK files, 
+since new MapSend versions can't open version 3 files. 
+Valid values are 3 (MapSend v3.0) or 4 (MapSend v4.0 and v4.1).
+</para>
+    

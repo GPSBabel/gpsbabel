@@ -1,0 +1,4 @@
+<para>
+This option instructs GPSBabel to not convert icons to waypoints on input,
+but to instead disregard them altogether 
+</para>

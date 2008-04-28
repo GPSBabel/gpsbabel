@@ -1,0 +1,11 @@
+<para>
+This option tells GPSBabel whether to read (on input) or write (on output) 
+GPVTG sentences.  The default is to read or write GPVTG sentences.  To 
+disable GPVTG sentences, specify <option>gpvtg=0</option>.
+</para>
+<para>
+GPVTG sentences contain information about the heading and the speed at the
+time of the fix.  They do not contain any location information; for that 
+you will need either or both of GPGGA or GPRMC.
+</para>
+

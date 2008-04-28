@@ -1,0 +1,16 @@
+<para>
+GPSBabel has limited support for Garmin Training Center files.   That program is the successor to Garmin' Logbook program for their workout units.  It is a free upgrade.
+</para>
+<para>
+This format is somewhat underachieving in GPSBabel.  It is a write-only
+format; we never read it.  The bigger problem, however, is a fundamental
+impedance mismatch between this format and most of what we support.  GPSBabel
+fundamentally deals in waypoints, tracks, and routes.  While we do record
+things like heart rate and temperature when we know it, the fundamentals
+of Training Center are different - it deals in concepts like laps and calories
+which are rather alien to GPSBabel and most of the formats we support.  As 
+such, while we can describe the tracks pretty accurately, things like 
+calories and heart zone tracking are not supported.
+</para>
+
+

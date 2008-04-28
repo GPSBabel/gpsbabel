@@ -1,0 +1,166 @@
+#!/bin/sh
+
+### cross format waypoint check ###
+
+PNAME=${PNAME:-./gpsbabel}
+REFGPX="reference/expertgps.gpx"	# reference file for all tests
+EXCL="ozi vitosmt"			# exclude formats from test
+CAPS=""
+TEMPDIR=/tmp/gb-testw
+CATALOG=/tmp/gb-testw.done
+LOGFILE=/tmp/gb-testw.log
+
+# options
+vg=0
+prep=0
+
+function log_entry()
+{
+    touch $LOGFILE
+    echo "-----------------------------------------------------------------------" >> ${LOGFILE}
+    date >> ${LOGFILE}
+    echo "$*" >> ${LOGFILE}
+}
+
+function try_run() # command line
+{
+    local CMD="$*"
+    local RES=0
+    
+    [ $vg -ne 0 ] && CMD="valgrind -q $CMD"
+
+    ${CMD} > $TEMPDIR/.result 2>&1
+    RES=$?
+    if [ $RES -ne 0 -o -s $TEMPDIR/.result ]; then
+	if [ $RES -ne 0 ]; then
+	    echo " -- Uhps --"
+	    echo "-----------------------------------------------------------------------"
+	    test -s $TEMPDIR/.result && cat $TEMPDIR/.result
+	    echo "-----------------------------------------------------------------------"
+	else
+	    echo ""
+	fi
+	log_entry "cmd($RES): $CMD"
+	test -s $TEMPDIR/.result && cat $TEMPDIR/.result >> ${LOGFILE}
+	return 1
+    else
+	return 0
+    fi
+}
+
+function STAGE_1 () # format
+{
+    local FMT=$1
+    local CMD1 CMD2
+    
+    echo "$CAPS" |
+    
+    while read type caps format comment; do
+    
+	for i in $EXCL; do
+	    if [ "$format" == "$i" ]; then
+		caps="------"
+	    fi
+	done
+	
+	grep "$FMT & $format" ${CATALOG} > /dev/null && continue
+	
+	echo -n "testing \"$FMT\" with \"$format\" "
+	
+	case $caps in
+	
+	    -w*)
+		echo -n "*"
+		CMD1="${PNAME} -i $FMT -f $TEMPDIR/$FMT -o $format -F $TEMPDIR/$FMT.$format"
+		try_run "${CMD1}" || continue
+		;;
+		
+	    rw*)
+		echo -n "*"
+		CMD1="${PNAME} -i $FMT -f $TEMPDIR/$FMT -o $format -F $TEMPDIR/$FMT.$format"
+		try_run "${CMD1}" || continue
+		echo -n "*"
+		CMD2="${PNAME} -i $format -f $TEMPDIR/$FMT.$format -o $FMT -F $TEMPDIR/$FMT.$format.$FMT"
+		try_run "${CMD2}" || continue
+		;;
+	esac
+	echo "*"
+	echo "$FMT & $format" >> $CATALOG
+    done
+    return 0
+}
+
+function STAGE_0 ()
+{
+    echo "$CAPS" |
+    
+    while read type caps format comment; do
+    
+	for i in $EXCL; do
+		if [ "$format" == "$i" ]; then
+			caps="------"
+		fi
+	done
+	
+	case $caps in
+	    rw*)
+		CMD="${PNAME} -i gpx -f $REFGPX -x nuketypes,routes,tracks -o $format -F $TEMPDIR/$format"
+		try_run "${CMD}" || continue
+		STAGE_1 $format || exit 1
+		;;
+	esac
+	case $caps in
+	    -w*)
+		CMD="${PNAME} -i gpx -f $REFGPX -x nuketypes,routes,tracks -o $format -F $TEMPDIR/$format"
+		try_run "${CMD}" || continue
+		;;
+	esac
+    done
+    rm -f $TEMPDIR/.result
+}
+
+rm -rf $TEMPDIR > /dev/null
+mkdir -p $TEMPDIR > /dev/null
+
+while [ $# -gt 0 ]; do
+    case $1 in
+	-s|--start)	# remove catalog. run the full test.
+	    rm -f $CATALOG
+	    ;;
+	-v|--valgrind)
+	    vg=1
+	    ;;
+	-p|--prepare)	# prepare for valgrind check.
+	    prep=1
+	    ;;
+	-c|--clean)
+	    trap "rm -fr $TEMPDIR; exit 1" 0 1 2 3 15
+	    ;;
+	-r|--reference)
+	    shift
+	    REFGPX=$1
+	    ;;
+    esac
+    shift
+done
+
+if [ $prep -ne 0 ]; then
+    test -s Makefile && make clean
+    CFLAGS="-O0" ./configure || exit 1	#  -O0 is suggested by vg.
+    make || exit 1
+    echo "All fine. You can do now a 'testw -v'"
+    exit 0
+fi
+
+if test ! -s $REFGPX; then
+    echo "GPX reference \"$REFGPX\" doesn't exist!"
+    exit 1
+fi
+
+touch $CATALOG
+
+log_entry "testw started."
+echo "Catalog: $CATALOG" >> $LOGFILE
+
+CAPS=`${PNAME} -^2 | grep "^file"`
+STAGE_0

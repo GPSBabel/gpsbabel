@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>2005-07-25T01:10:30Z</time>
+<trk>
+  <name>Testcase</name>
+<trkseg>
+<trkpt lat="48.494133833" lon="9.209796667"><ele>374.000000</ele><time>2005-07-09T14:17:46Z</time><speed>0.000000</speed><fix>3d</fix><sat>8</sat><hdop>50.500000</hdop><vdop>6.800000</vdop><pdop>7.600000</pdop></trkpt>
+<trkpt lat="48.494150500" lon="9.209885333"><ele>374.000000</ele><time>2005-07-09T14:22:24Z</time><speed>1.100000</speed><fix>3d</fix><sat>8</sat><hdop>6.900000</hdop><vdop>50.500000</vdop><pdop>6.900000</pdop></trkpt>
+<trkpt lat="48.494220000" lon="9.210671667"><ele>374.000000</ele><time>2005-07-09T14:22:25Z</time><speed>1.100000</speed><fix>2d</fix><sat>8</sat><hdop>2.000000</hdop><vdop>2.000000</vdop><pdop>2.000000</pdop></trkpt>
+</trkseg>
+</trk>
+</gpx>

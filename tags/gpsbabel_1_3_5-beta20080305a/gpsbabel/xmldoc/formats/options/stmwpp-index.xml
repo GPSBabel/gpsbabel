@@ -1,0 +1,9 @@
+<para>
+Because the format supports only one route or track, this option may be used 
+on output to select a single route or track from a collection of routes and
+tracks read from a more expressive format.  If you have, say, a 
+<link linkend="fmt_gpx">gpx</link> file that contains three routes, you may
+use this option to write them one at a time to individual files.
+</para>
+<para><userinput>gpsbabel -i gpx -f routes.gpx -o stmwpp,index=1 -F route1.txt -o stmwpp,index=2 -F route2.txt -o stmwpp,index=3 -F route3.txt</userinput></para>
+
