@@ -86,7 +86,7 @@ struct dynarray16 {
 static struct dg100_command *
 dg100_findcmd(int id)
 {
-	unsigned int i;
+	int i;
 
 	/* linear search should be OK as long as dg100_numcommands is small */
 	for (i = 0; i < dg100_numcommands; i++) {
@@ -108,8 +108,8 @@ dynarray16_init(struct dynarray16 *a, unsigned limit)
 static gbint16 *
 dynarray16_alloc(struct dynarray16 *a, unsigned n)
 {
-	unsigned int i;
-	unsigned int need;
+	unsigned i;
+	int need;
 	const unsigned elements_per_chunk = 4096 / sizeof(a->data[0]);
 	
 	i = a->count;
@@ -151,7 +151,7 @@ bintime2utc(int date, int time)
 static void 
 dg100_debug(const char *hdr, int include_nl, size_t sz, unsigned char *buf)
 {
-	unsigned int i;
+	int i;
 
 	/* Only give byte dumps for higher debug levels */
 	if (global_opts.debug_level < 5) {
@@ -246,11 +246,7 @@ process_gpsfile(gbuint8 data[], route_head *track)
 			bintime = be_read32(data + i +  8);
 			bindate = be_read32(data + i + 12);
 			wpt->creation_time = bintime2utc(bindate, bintime);
-			/* The device presents the speed as a fixed-point number
-			 * with a scaling factor of 100, in km/h.
-			 * The waypoint struct wants the speed as a
-			 * floating-point number, in m/s. */
-			wpt->speed = KPH_TO_MPS(be_read32(data + i + 16) / 100.0);
+			wpt->speed = be_read32(data + i + 16) / 100.0;
 			wpt->wpt_flags.speed = 1;
 		}
 
@@ -479,12 +475,12 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 
 /* return value: number of bytes copied into buf, -1 on error */
 static int
-dg100_recv(gbuint8 expected_id, void *buf, unsigned int len)
+dg100_recv(gbuint8 expected_id, void *buf, unsigned len)
 {
 	int n;
 	struct dg100_command *cmdinfo;
 	gbuint8 *data;
-	unsigned int copysize, trailing_bytes;
+	int copysize, trailing_bytes;
 
 	n = dg100_recv_frame(&cmdinfo, &data);
 
@@ -586,8 +582,7 @@ dg100_getfile(gbint16 num, route_head *track)
 static void
 dg100_getfiles()
 {
-	unsigned int i;
-	int filenum;
+	int i, filenum;
 	struct dynarray16 headers;
 	route_head *track;
 

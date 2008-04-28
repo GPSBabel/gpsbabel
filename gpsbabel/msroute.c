@@ -2,7 +2,7 @@
 
 	Support for Microsoft AutoRoute 2002 ".axe" files,
 	
-	Copyright (C) 2005,2007,2008 Olaf Klein, o.b.klein@gpsbabel.org
+	Copyright (C) 2005,2007 Olaf Klein, o.b.klein@gpsbabel.org
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -566,15 +566,17 @@ ole_deinit(void)
 static void
 msroute_read_journey(void)
 {
-	int bufsz;
+	int len;
 	char *buff;
 	
-	buff = ole_read_property_stream(MSROUTE_OBJ_NAME, &bufsz);
+	buff = ole_read_property_stream(MSROUTE_OBJ_NAME, &len);
 			
-	if ((buff != NULL) && (bufsz > 0))
+	if ((buff != NULL) && (len > 0))
 	{
 		msroute_head_t *head = (msroute_head_t *)buff;
-		unsigned char *cin, *cend;
+		char *cin;
+		int len;
+		char text[256];
 		int count = 0;
 		route_head *route;
 		waypoint *wpt;
@@ -585,8 +587,7 @@ msroute_read_journey(void)
 		version = buff[0x14];
 		is_fatal((version < 1) || (version > 7), MYNAME ": Unsupported version %d!", version);
 
-		cin = (unsigned char *)buff + 71; // (at least?) sizeof(msroute_head_t);
-		cend = (unsigned char *)buff + bufsz;
+		cin = buff + 71; // sizeof(msroute_head_t);
 			
 		route = route_head_alloc();
 		route_add_head(route);
@@ -595,51 +596,47 @@ msroute_read_journey(void)
 		
 		while (count < head->waypts)
 		{
-			int len;
+			double lat, lon;
+			short test;
 				
-			/* after version 6 we've seen data with different header length */
-			/* now we try to find the next pair of names in buff */
-
-			while (1) {
-				len = *cin;
-				if ((cin + 120) > cend) {
-					cin = NULL;
-					break;
-				}
-				if ((cin + len < cend) && 	/* within buff ? */
-				    (cin[len + 3] == 0xff) &&	/* 0xff before next length byte ? */
-				    (cin[len + 4] == len) && 	/* wide string of same length ? */
-				    (le_read16(cin + len + 1) == 0xfeff)) {
-					break;
-				}
-				cin++;
-			}
-			if (cin == NULL) break;
-			
-			wpt = waypt_new();
-
-			len = *cin++;			/* length of shortname */
-			cin += len;
-			cin += 3;			/* 0xfffeff */
+			cin++;
+			if (version == 7) cin+=8;
 			
 			len = *cin++;
-			wpt->shortname = cet_str_uni_to_utf8((const short *)cin, len);
-			cin += (len * 2);		/* seek over wide string */
+			strncpy(text, cin, len);
+			text[len] = '\0';
+
+			cin += len + 1;
+			test = le_read16(cin);
+			is_fatal((test != -2), MYNAME ": Unsupported byte order within data (%d).", test);
+			
+			cin += 2;
+			
+			len = *cin;			/* skip wide-string 'name' */
+			cin += (len * 2) + 1;
+				
 			cin += (5 * sizeof(gbint32));	/* five unknown DWORDs */
 				
 			/* offs 12 !!!! Latitude int32 LE	*/
 			/* offs 16 !!!! Longitude int32 LE 	*/
-			wpt->latitude = GPS_Math_Semi_To_Deg(le_read32(cin+12));
-			wpt->longitude = GPS_Math_Semi_To_Deg(le_read32(cin+16));
+				
+			lat = GPS_Math_Semi_To_Deg(le_read32(cin+12));
+			lon = GPS_Math_Semi_To_Deg(le_read32(cin+16));
 
 			cin += (23 * sizeof(gbint32));
 			cin += 3;
-			
+
+			count++;
+				
+			wpt = waypt_new();
+				
+			wpt->latitude = lat;
+			wpt->longitude = lon;
+			wpt->shortname = xstrdup(text);
 #ifdef OLE_DEBUG
 			waypt_add(waypt_dupe(wpt));	/* put to wpt-list to see results if no output is specified */
 #endif				
 			route_add_wpt(route, wpt);
-			count++;
 		}
 	}
 	
@@ -679,5 +676,5 @@ ff_vecs_t msroute_vecs = {
 	NULL,
 	NULL, 
 	msroute_args,
-	CET_CHARSET_UTF8, 1		/* CET-REVIEW */
+	CET_CHARSET_MS_ANSI, 1		/* CET-REVIEW */
 };

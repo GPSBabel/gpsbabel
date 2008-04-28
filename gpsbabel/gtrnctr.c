@@ -22,7 +22,7 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static gbfile *ofd;
+static FILE *ofd;
 static waypoint *wpt_tmp;
 static route_head *trk_head;
 
@@ -77,13 +77,13 @@ gtc_rd_deinit(void)
 static void
 gtc_wr_init(const char *fname)
 {
-        ofd = gbfopen(fname, "w", MYNAME);
+        ofd = xfopen(fname, "w", MYNAME);
 }
 
 static void
 gtc_wr_deinit(void)
 {
-        gbfclose(ofd);
+        fclose(ofd);
 }
 
 static int gtc_indent_level;
@@ -91,34 +91,38 @@ static void
 gtc_write_xml(int indent, const char *fmt, ...)
 {
 	va_list args;
-
+	int i;
 	va_start(args, fmt);
 
 	if (indent < 0) gtc_indent_level--;
 
-	gbfprintf(ofd, "%*s", gtc_indent_level * 2, "");
-	gbvfprintf(ofd, fmt, args);
+	for (i = 0; i < gtc_indent_level; i++) {
+		fputs("  ", ofd);
+	}
+
+	vfprintf(ofd, fmt, args);
 
 	if (indent > 0) gtc_indent_level++;
 
 	va_end(args);
+
 }
 
 static void
 gtc_waypt_pr(const waypoint *wpt)
 {	
 #if 0
-	gbfprintf(ofd, "            <Trackpoint>\n");
-	gbfprintf(ofd, "                <Position>\n");
-	gbfprintf(ofd, "                    <Latitude>%.5f</Latitude>\n", wpt->latitude);
-	gbfprintf(ofd, "                    <Longitude>%.5f</Longitude>\n", wpt->longitude);
+	fprintf(ofd, "            <Trackpoint>\n");
+	fprintf(ofd, "                <Position>\n");
+	fprintf(ofd, "                    <Latitude>%.5f</Latitude>\n", wpt->latitude);
+	fprintf(ofd, "                    <Longitude>%.5f</Longitude>\n", wpt->longitude);
 	if (wpt->altitude != unknown_alt) {
-		gbfprintf(ofd, "                    <Altitude>%.3f</Altitude>\n", wpt->altitude);
+		fprintf(ofd, "                    <Altitude>%.3f</Altitude>\n", wpt->altitude);
 	}
-	gbfprintf(ofd, "                </Position>\n");
-	gbfprintf(ofd, "                ");
+	fprintf(ofd, "                </Position>\n");
+	fprintf(ofd, "                ");
 	xml_write_time(ofd, wpt->creation_time, "Time");
-	gbfprintf(ofd, "            </Trackpoint>\n");
+	fprintf(ofd, "            </Trackpoint>\n");
 #else
 	gtc_write_xml(1, "<Trackpoint>\n");
 	if (wpt->creation_time) {
@@ -204,12 +208,12 @@ void
 gtc_write(void)
 {
 #if 0
-	gbfprintf(ofd, "<?xml version=\"1.0\" ?>\n");
-	gbfprintf(ofd, "<History xmlns=\"http://www.garmin.com/xmlschemas/ForerunnerLogbook\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/ForerunnerLogbook http://www.garmin.com/xmlschemas/ForerunnerLogbookv1.xsd\" version=\"1\">\n");
-	gbfprintf(ofd, "    <Run>\n");
+	fprintf(ofd, "<?xml version=\"1.0\" ?>\n");
+	fprintf(ofd, "<History xmlns=\"http://www.garmin.com/xmlschemas/ForerunnerLogbook\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/ForerunnerLogbook http://www.garmin.com/xmlschemas/ForerunnerLogbookv1.xsd\" version=\"1\">\n");
+	fprintf(ofd, "    <Run>\n");
 	track_disp_all(gtc_hdr, gtc_ftr, gtc_waypt_pr);
-	gbfprintf(ofd, "    </Run>\n");
-	gbfprintf(ofd, "</History>\n");
+	fprintf(ofd, "    </Run>\n");
+	fprintf(ofd, "</History>\n");
 #else
 	gtc_write_xml(0, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n");
 	gtc_write_xml(1, "<TrainingCenterDatabase\nxmlns=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v1\"\nxmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\nxsi:schemaLocation=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v1\nhttp://www.garmin.com/xmlschemas/TrainingCenterDatabasev1.xsd\">\n");
@@ -230,7 +234,7 @@ gtc_write(void)
 	}
 	gtc_fake_hdr();
 	track_disp_all(gtc_hdr, gtc_ftr, gtc_waypt_pr);
-	gtc_write_xml(-1, "</Lap>\n");
+	gtc_write_xml(1, "</Lap>\n");
 	gtc_write_xml(-1, "</Run>\n");
 	gtc_write_xml(-1, "</Running>\n");
 	gtc_write_xml(0, "<Biking />\n");

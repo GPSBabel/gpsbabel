@@ -56,7 +56,7 @@ static int wpt_tmp_queued;
 static const char *posnfilename;
 static char *posnfilenametmp;
 
-static gbfile *ofd;
+static FILE *ofd;
 
 typedef struct {
   double latitude;
@@ -79,6 +79,9 @@ static int do_indentation = 1;
 
 #define TD(FMT,DATA) kml_write_xml(0, "<tr><td>" FMT " </td></tr>\n", DATA)
 #define TD2(FMT,DATA, DATA2) kml_write_xml(0, "<tr><td>" FMT " </td></tr>\n", DATA, DATA2)
+
+//  Icons provided and hosted by Google.  Used with permission.
+#define ICON_BASE "http://earth.google.com/images/kml-icons/"
 
 static const char kml22_hdr[] =  
 	"<kml xmlns=\"http://earth.google.com/kml/2.2\"\n"
@@ -138,16 +141,16 @@ struct {
 	int freshness;
 	char *icon;
 } kml_tracking_icons[] = {
- { 60, "http://www.gpsbabel.org/apps/earth/youarehere-60.png" }, // Red
- { 30, "http://www.gpsbabel.org/apps/earth/youarehere-30.png" }, // Yellow
- { 0, "http://www.gpsbabel.org/apps/earth/youarehere-0.png" }, // Green
+ { 60, ICON_BASE "youarehere-60.png" }, // Red
+ { 30, ICON_BASE "youarehere-30.png" }, // Yellow
+ { 0,  ICON_BASE "youarehere-0.png" }, // Green
 };
 
-#define ICON_NOSAT "http://www.gpsbabel.org/apps/earth//youarehere-warning.png";    
+#define ICON_NOSAT ICON_BASE "youarehere-warning.png";    
 #define ICON_WPT "http://maps.google.com/mapfiles/kml/pal4/icon61.png"
-#define ICON_TRK "http://www.gpsbabel.org/apps/earth/track-directional/track-none.png"
-#define ICON_RTE "http://www.gpsbabel.org/apps/earth/track-directional/track-none.png"    
-#define ICON_DIR "http://www.gpsbabel.org/apps/earth/track-directional/track-%d.png" // format string where next arg is rotational degrees.
+#define ICON_TRK ICON_BASE "track-directional/track-none.png"
+#define ICON_RTE ICON_BASE "track-directional/track-none.png"    
+#define ICON_DIR ICON_BASE "track-directional/track-%d.png" // format string where next arg is rotational degrees.
 
 #define MYNAME "kml"
 
@@ -306,7 +309,7 @@ kml_wr_init(const char *fname)
 	/*
 	 * Reduce race conditions with network read link.
 	 */	
-	ofd = gbfopen(fname, "w", MYNAME);
+	ofd = xfopen(fname, "w", MYNAME);
 }
 
 /* 
@@ -332,7 +335,7 @@ kml_wr_position_init(const char *fname)
 static void
 kml_wr_deinit(void)
 {
-	gbfclose(ofd);
+	fclose(ofd);
 
 	if (posnfilenametmp) {
 #if __WIN32__
@@ -371,11 +374,11 @@ kml_write_xml(int indent, const char *fmt, ...)
 
 	if (fmt[1] != '!' && do_indentation) {
 		for (i = 0; i < indent_level; i++) {
-			gbfputs("  ", ofd);
+			fputs("  ", ofd);
 		}
 	}
 
-	gbvfprintf(ofd, fmt, args);
+	vfprintf(ofd, fmt, args);
 
 	if (indent > 0) indent_level++;
 
@@ -393,9 +396,9 @@ kml_write_xmle(const char *tag, const char *v)
 	if (v && *v) {
 		char *tmp_ent = xml_entitize(v);
 		for (i = 0; i < indent_level; i++) {
-			gbfputs("  ", ofd);
+			fputs("  ", ofd);
 		}
-		gbfprintf(ofd, "<%s>%s</%s>\n",tag, tmp_ent, tag);
+		fprintf(ofd, "<%s>%s</%s>\n",tag, tmp_ent, tag);
 		xfree(tmp_ent);
 	}
 }
@@ -940,7 +943,7 @@ static void kml_waypt_pr(const waypoint *waypointp)
 			kml_write_xml(0, "<![CDATA[<a href=\"%s\">%s</a>]]>", odesc, olink);
 			xfree(olink);
 		} else {
-			gbfputs(odesc, ofd);
+			fputs(odesc, ofd);
 		}
 
 		kml_write_xml(0, "</description>\n");

@@ -29,9 +29,9 @@
 #include "jeeps/gpsmath.h"
 #include <ctype.h>
 
-static	gbfile	*mps_file_in;
-static	gbfile	*mps_file_out;
-static	gbfile	*mps_file_temp;
+static	FILE	*mps_file_in;
+static	FILE	*mps_file_out;
+static	FILE	*mps_file_temp;
 static	short_handle mkshort_handle;
 
 static	int		mps_ver_in = 0;
@@ -66,7 +66,6 @@ static short_handle read_route_wpt_mkshort_handle;
 #define MPSNOTESBUFFERLEN	4096
 #define MPSDESCBUFFERLEN	4096
 
-
 char *snlen = NULL;
 char *snwhiteopt = NULL;
 char *mpsverout = NULL;
@@ -93,6 +92,26 @@ arglist_t mps_args[] = {
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
+
+/*
+ * A wrapper to ensure the doubles we fwrite are in correct endianness.
+ */
+
+static void
+le_fwrite_double(double d, FILE *stream)
+{
+	unsigned char cbuf[8];
+	le_write_double(cbuf,d);
+	fwrite(cbuf, 8, 1, stream);
+}
+
+static double
+le_fread_double( FILE *stream)
+{
+	unsigned char cbuf[8];
+	fread(cbuf, 8, 1, stream);
+	return le_read_double(cbuf);
+}
 
 static void 
 mps_noop(const route_head *wp)
@@ -195,7 +214,7 @@ mps_converted_icon_number(const int icon_num, const int mpsver, garmin_formats_e
 static void
 mps_rd_init(const char *fname)
 {
-	mps_file_in = gbfopen_le(fname, "rb", MYNAME);
+	mps_file_in = xfopen(fname, "rb", MYNAME);
 
 	read_route_wpt_mkshort_handle = mkshort_new_handle();
 	/* initialise the "private" queue of waypoints read for routes */
@@ -205,7 +224,7 @@ mps_rd_init(const char *fname)
 static void
 mps_rd_deinit(void)
 {
-	gbfclose(mps_file_in);
+	fclose(mps_file_in);
 	if ( read_route_wpt_mkshort_handle ) {
 		mkshort_del_handle( &read_route_wpt_mkshort_handle );
 	}
@@ -222,12 +241,12 @@ mps_wr_init(const char *fname)
 	}
 
 	if (mpsmergeout) {
-		mps_file_out = gbfopen_le(fname, "rb", MYNAME);
+		mps_file_out = xfopen(fname, "rb", MYNAME);
 		if (mps_file_out == NULL) {
 			mpsmergeout = 0;
 		}
 		else {
-			gbfclose(mps_file_out);
+			fclose(mps_file_out);
 			srand((unsigned) current_time());
 
 			for (;;) {
@@ -235,16 +254,16 @@ mps_wr_init(const char *fname)
 				/* then test if it already exists, if so try again with another rand num */
 				/* yeah, yeah, so there's probably a library function for this           */
 				xasprintf(&tempname, "%s.%08x", fname, rand());
-				mps_file_temp = gbfopen_le(tempname, "rb", MYNAME);
+				mps_file_temp = fopen(tempname, "rb");
 				if (mps_file_temp == NULL) break;
-				gbfclose(mps_file_temp);
+				fclose(mps_file_temp);
 			}
 			rename(fname, tempname);
-			mps_file_temp = gbfopen_le(tempname, "rb", MYNAME);
+			mps_file_temp = xfopen(tempname, "rb", MYNAME);
 		}
 	}
 
-	mps_file_out = gbfopen_le(fname, "wb", MYNAME);
+	mps_file_out = xfopen(fname, "wb", MYNAME);
 
 	written_wpt_mkshort_handle = mkshort_new_handle();
 	/* initialise the "private" queue of waypoints written */
@@ -255,10 +274,10 @@ mps_wr_init(const char *fname)
 static void
 mps_wr_deinit(void)
 {
-	gbfclose(mps_file_out);
+	fclose(mps_file_out);
 
 	if (mpsmergeout) {
-		gbfclose(mps_file_temp);
+		fclose(mps_file_temp);
 		remove(tempname);
 		xfree(tempname);
 	}
@@ -277,10 +296,10 @@ mps_wr_deinit(void)
  * and write into buf.
  */
 static void
-mps_readstr(gbfile *mps_file, char *buf, size_t sz)
+mps_readstr(FILE *mps_file, char *buf, size_t sz)
 {
 	int c;
-	while (sz-- && (c = gbfgetc (mps_file)) != EOF) {
+	while (sz-- && (c = fgetc (mps_file)) != EOF) {
 		*buf++ = c;
 		if (c == 0)  {
 			return;
@@ -293,7 +312,7 @@ mps_readstr(gbfile *mps_file, char *buf, size_t sz)
  * MRCB
  */
 static void
-mps_fileHeader_r(gbfile *mps_file, int *mps_ver)
+mps_fileHeader_r(FILE *mps_file, int *mps_ver)
 {
 	char hdr[100];
 	int reclen;
@@ -303,9 +322,10 @@ mps_fileHeader_r(gbfile *mps_file, int *mps_ver)
 		fatal(MYNAME ": This doesn't look like a mapsource file.\n");
 	}
 	/* Read record length of "format details" section */
-	reclen = gbfgetint32(mps_file);
+	fread(&reclen, 4, 1, mps_file);
+	reclen = le_read32(&reclen);
 	/* Read the "format details" in plus the trailing null */
-	gbfread( hdr, 3, 1, mps_file);
+	fread( hdr, 3, 1, mps_file);
 	if (hdr[0] != 'D')  {
 		/* No flag for the "data" section */
 		fatal(MYNAME ": This doesn't look like a mapsource file.\n");
@@ -323,11 +343,12 @@ mps_fileHeader_r(gbfile *mps_file, int *mps_ver)
 		fatal(MYNAME ": Unsuppported version of mapsource file.\n");
 	}
 	/* Skip reliably over the "format details" section */
-	gbfseek( mps_file, reclen+1-3, SEEK_CUR); 
+	fseek( mps_file, reclen+1-3, SEEK_CUR); 
 	/* Read record length of "program signature" section */
-	reclen = gbfgetint32(mps_file);
+	fread(&reclen, 4, 1, mps_file);
+	reclen = le_read32(&reclen);
 	/* Skip reliably over the "program signature" section */
-	if (reclen >= 0) gbfseek(mps_file, reclen+1, SEEK_CUR); 
+	if (reclen >= 0) fseek(mps_file, reclen+1, SEEK_CUR); 
 }
 
 /*
@@ -335,17 +356,17 @@ mps_fileHeader_r(gbfile *mps_file, int *mps_ver)
  * MRCB
  */
 static void
-mps_fileHeader_w(gbfile *mps_file, int mps_ver)
+mps_fileHeader_w(FILE *mps_file, int mps_ver)
 {
 	char hdr[100];
 	int reclen;
 
 	strcpy (hdr, "MsRc");
-	gbfwrite(hdr, 4, 1, mps_file);
+	fwrite(hdr, 4, 1, mps_file);
 
 	/* Between versions 3 & 5 this value is 'd', but might change in the future */
 	strcpy(hdr, "d");
-	gbfwrite(hdr, 2, 1, mps_file);	/* include trailing NULL char */
+	fwrite(hdr, 2, 1, mps_file);	/* include trailing NULL char */
 
 	/* Start of a "Data" section */
 	hdr[0] = 'D';
@@ -356,8 +377,9 @@ mps_fileHeader_w(gbfile *mps_file, int mps_ver)
 	hdr[2] = 0;
 
 	reclen = 2;							/* this is 3 byte record */
-	gbfputint32(reclen, mps_file);
-	gbfwrite(hdr, 3, 1, mps_file);		/* reclen + 1 */
+	le_write32(&reclen, reclen);
+	fwrite(&reclen, 4, 1, mps_file);
+	fwrite(hdr, 3, 1, mps_file);		/* reclen + 1 */
 
 	hdr[0] = 'A';
 	/* if (mps_ver == 3) */
@@ -380,8 +402,9 @@ mps_fileHeader_w(gbfile *mps_file, int mps_ver)
 	}
 
 	reclen = 27;						/* pre measured! */
-	gbfputint32(reclen, mps_file);
-	gbfwrite(hdr, 28, 1, mps_file);		/* reclen + 1  - can't use this as reclen may be wrongendian now */
+	le_write32(&reclen, reclen);
+	fwrite(&reclen, 4, 1, mps_file);
+	fwrite(hdr, 28, 1, mps_file);		/* reclen + 1  - can't use this as reclen may be wrongendian now */
 }
 
 /*
@@ -389,29 +412,30 @@ mps_fileHeader_w(gbfile *mps_file, int mps_ver)
  * MRCB
  */
 static void
-mps_mapsegment_r(gbfile *mps_file, int mps_ver)
+mps_mapsegment_r(FILE *mps_file, int mps_ver)
 {
 	int reclen;
 
 #if 0
 	/* At the moment we're not doing anything with map segments, but here's the template code as if we were */
 	char hdr[100];
-	gbfread(&CDid, 4, 1, mps_file);
+	fread(&CDid, 4, 1, mps_file);
 	reclen = le_read32(&CDid);
 
-	gbfread(&CDSegmentid, 4, 1, mps_file);
+	fread(&CDSegmentid, 4, 1, mps_file);
 	reclen = le_read32(&CDSegmentid);
 
 	mps_readstr(mps_file, CDName, sizeof(CDName));
 	mps_readstr(mps_file, CDSegmentName, sizeof(CDSegmentName));
 	mps_readstr(mps_file, CDAreaName, sizeof(CDAreaName));
 
-	gbfread(hdr, 4, 1, mps_file); /* trailing long value */
+	fread(hdr, 4, 1, mps_file); /* trailing long value */
 #endif	
 	
-	gbfseek(mps_file, -5, SEEK_CUR);
-	reclen = gbfgetint32(mps_file);
-	if (reclen >= 0) gbfseek( mps_file, reclen+1, SEEK_CUR); 
+	fseek(mps_file, -5, SEEK_CUR);
+	fread(&reclen, 4, 1, mps_file);
+	reclen = le_read32(&reclen);
+	if (reclen >= 0) fseek( mps_file, reclen+1, SEEK_CUR); 
 	return;
 }
 
@@ -422,7 +446,7 @@ mps_mapsegment_r(gbfile *mps_file, int mps_ver)
  * MRCB
  */
 static void
-mps_mapsetname_r(gbfile *mps_file, int mps_ver)
+mps_mapsetname_r(FILE *mps_file, int mps_ver)
 {
 	int reclen;
 
@@ -432,11 +456,12 @@ mps_mapsetname_r(gbfile *mps_file, int mps_ver)
 	char mapsetnamename[very large number?];
 	strcpy(mapsetnamename,hdr);
 	char mapsetnameAutonameFlag;
-	gbfread(&mapsetnameAutonameFlag, 1, 1, mps_file); */
+	fread(&mapsetnameAutonameFlag, 1, 1, mps_file); */
 
-	gbfseek(mps_file, -5, SEEK_CUR);
-	reclen = gbfgetint32(mps_file);
-	gbfseek( mps_file, reclen+1, SEEK_CUR); 
+	fseek(mps_file, -5, SEEK_CUR);
+	fread(&reclen, 4, 1, mps_file);
+	reclen = le_read32(&reclen);
+	fseek( mps_file, reclen+1, SEEK_CUR); 
 	return;
 }
 
@@ -447,7 +472,7 @@ mps_mapsetname_r(gbfile *mps_file, int mps_ver)
  * MRCB
  */
 static void
-mps_mapsetname_w(gbfile *mps_file, int mps_ver)
+mps_mapsetname_w(FILE *mps_file, int mps_ver)
 {
 	char hdr[100];
 	int reclen;
@@ -456,8 +481,9 @@ mps_mapsetname_w(gbfile *mps_file, int mps_ver)
 	hdr[1] = 0;		/* zero length null terminated string			*/
 	hdr[2] = 1;		/* mapsetname autoname flag set to DO autoname	*/
 	reclen = 2;		/* three bytes of the V record					*/
-	gbfputint32(reclen, mps_file);
-	gbfwrite(hdr, 3, 1, mps_file);		/* reclen + 1 */
+	le_write32(&reclen, reclen);
+	fwrite(&reclen, 4, 1, mps_file);
+	fwrite(hdr, 3, 1, mps_file);		/* reclen + 1 */
 }
 
 
@@ -466,12 +492,12 @@ mps_mapsetname_w(gbfile *mps_file, int mps_ver)
  * MRCB
  */
 static void
-mps_waypoint_r(gbfile *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpsclass)
+mps_waypoint_r(FILE *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpsclass)
 {
 	char tbuf[100];
 	char wptname[MPSNAMEBUFFERLEN];
-	char *wptdesc = NULL;
-	char *wptnotes = NULL;
+	char wptdesc[MPSDESCBUFFERLEN];
+	char wptnotes[MPSNOTESBUFFERLEN];
 	int lat;
 	int lon;
 	int	icon;
@@ -487,65 +513,72 @@ mps_waypoint_r(gbfile *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpsc
 
 	mps_readstr(mps_file, wptname, sizeof(wptname));
 
-	(*mpsclass) = gbfgetint32(mps_file);			/* class */
+	fread(mpsclass, 4, 1, mps_file);			/* class */
+	(*mpsclass) = le_read32(mpsclass);
 	mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
 
-	gbfread(tbuf,17, 1, mps_file);				/* subclass data (17) */
+	fread(tbuf,17, 1, mps_file);				/* subclass data (17) */
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		gbfread(tbuf, 5, 1, mps_file);			/* additional subclass data (1) & terminator? (4) */
+		fread(tbuf, 5, 1, mps_file);			/* additional subclass data (1) & terminator? (4) */
 	}
 
-	lat = gbfgetint32(mps_file); 
-	lon = gbfgetint32(mps_file); 
+	fread(&lat, 4, 1, mps_file); 
+	fread(&lon, 4, 1, mps_file); 
+	lat = le_read32(&lat);
+	lon = le_read32(&lon);
 	
-	if (gbfgetc(mps_file) == 1) {				/* altitude validity */
-		mps_altitude = gbfgetdbl(mps_file);
+	fread(tbuf, 1, 1, mps_file);				/* altitude validity */
+	if (tbuf[0] == 1) {
+		mps_altitude = le_fread_double(mps_file);
 	}
 	else {
 		mps_altitude = unknown_alt;
-		gbfseek( mps_file, 8, SEEK_CUR );
+		fseek( mps_file, 8, SEEK_CUR );
 	}
 
-	wptdesc = gbfgetcstr(mps_file);
+	mps_readstr(mps_file, wptdesc, sizeof(wptdesc));
 
-	if (gbfgetc(mps_file) == 1) {				/* proximity validity */
-		mps_proximity = gbfgetdbl(mps_file);
+	fread(tbuf, 1, 1, mps_file);				/* proximity validity */
+	if (tbuf[0] == 1) {
+		mps_proximity = le_fread_double(mps_file);
 	}
 	else {
 		mps_proximity = unknown_alt;
-		gbfseek( mps_file, 8, SEEK_CUR );
+		fseek( mps_file, 8, SEEK_CUR );
 	}
 
-	(void) gbfgetint32(mps_file);					/* display flag */
-	(void) gbfgetint32(mps_file);					/* colour */
-	icon = gbfgetint32(mps_file);					/* display symbol */
+	fread(tbuf, 4, 1, mps_file);					/* display flag */
+	fread(tbuf, 4, 1, mps_file);					/* colour */
+	fread(&icon, 4, 1, mps_file);					/* display symbol */
+	icon = le_read32(&icon);
 
 	mps_readstr(mps_file, tbuf, sizeof(tbuf));		/* city */
 	mps_readstr(mps_file, tbuf, sizeof(tbuf));		/* state */
 	mps_readstr(mps_file, tbuf, sizeof(tbuf));		/*facility */
 
-	gbfread(tbuf, 1, 1, mps_file);					/* unknown */
+	fread(tbuf, 1, 1, mps_file);					/* unknown */
 
-	if (gbfgetc(mps_file) == 1) {					/* depth validity */
-		mps_depth = gbfgetdbl( mps_file );
+	fread(tbuf, 1, 1, mps_file);					/* depth validity */
+	if (tbuf[0] == 1) {
+		mps_depth = le_fread_double( mps_file );
 	}
 	else {
 		mps_depth = unknown_alt;
-		(void) gbfseek( mps_file, 8, SEEK_CUR );
+		fseek( mps_file, 8, SEEK_CUR );
 	}
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		gbfread(tbuf, 6, 1, mps_file);				/* unknown */
-		wptnotes = gbfgetcstr(mps_file);
+		fread(tbuf, 6, 1, mps_file);				/* unknown */
+		mps_readstr(mps_file, wptnotes, sizeof(wptnotes));
 	}
 	else {
-		gbfread(tbuf, 2, 1, mps_file);				/* unknown */
+		fread(tbuf, 2, 1, mps_file);				/* unknown */
 	}
 
 	thisWaypoint->shortname = xstrdup(wptname);
-	thisWaypoint->description = wptdesc;
-	thisWaypoint->notes = wptnotes;
+	thisWaypoint->description = xstrdup(wptdesc);
+	thisWaypoint->notes = xstrdup(wptnotes);
 	thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
 	thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
 	thisWaypoint->altitude = mps_altitude;
@@ -568,8 +601,9 @@ mps_waypoint_r(gbfile *mps_file, int mps_ver, waypoint **wpt, unsigned int *mpsc
  * MRCB
  */
 static void
-mps_waypoint_w(gbfile *mps_file, int mps_ver, const waypoint *wpt, const int isRouteWpt)
+mps_waypoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt, const int isRouteWpt)
 {
+	unsigned char hdr[100];
 	int reclen;
 	int lat, lon;
 	int icon;
@@ -629,74 +663,85 @@ mps_waypoint_w(gbfile *mps_file, int mps_ver, const waypoint *wpt, const int isR
 									/* -1 as reclen is interpreted from zero meaning a reclength of one */
 	}
 
-	gbfputint32(reclen, mps_file);
-	gbfwrite("W", 1, 1, mps_file);
-	gbfputs(ident, mps_file);
-	gbfwrite(zbuf, 1, 1, mps_file);		/* NULL termination to ident */
+	le_write32(&reclen, reclen);
+	fwrite(&reclen, 4, 1, mps_file);
+	fwrite("W", 1, 1, mps_file);
+	fputs(ident, mps_file);
+	fwrite(zbuf, 1, 1, mps_file);		/* NULL termination to ident */
 
 	if (isRouteWpt)	zbuf[0] = (char)MPSHIDDENROUTEWPTCLASS;
 	else			zbuf[0] = (char)MPSDEFAULTWPTCLASS;
-	gbfwrite(zbuf, 4, 1, mps_file);		/* class */
+	fwrite(zbuf, 4, 1, mps_file);		/* class */
 
 	zbuf[0]=0;
-	gbfwrite(zbuf, 1, 1, mps_file);		/* country empty string */
+	fwrite(zbuf, 1, 1, mps_file);		/* country empty string */
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		gbfwrite(zbuf, 4, 1, mps_file);	/* subclass part 1 */
-		gbfwrite(ffbuf, 12, 1, mps_file);	/* subclass part 2 */
-		gbfwrite(zbuf, 2, 1, mps_file);	/* subclass part 3 */
-		gbfwrite(ffbuf, 4, 1, mps_file);	/* unknown */
+		fwrite(zbuf, 4, 1, mps_file);	/* subclass part 1 */
+		fwrite(ffbuf, 12, 1, mps_file);	/* subclass part 2 */
+		fwrite(zbuf, 2, 1, mps_file);	/* subclass part 3 */
+		fwrite(ffbuf, 4, 1, mps_file);	/* unknown */
 	}
 	else {
-		gbfwrite(zbuf, 8, 1, mps_file);
-		gbfwrite(ffbuf, 8, 1, mps_file);
-		gbfwrite(zbuf, 1, 1, mps_file);
+		fwrite(zbuf, 8, 1, mps_file);
+		fwrite(ffbuf, 8, 1, mps_file);
+		fwrite(zbuf, 1, 1, mps_file);
 	}
 
-	gbfputint32(lat, mps_file);
-	gbfputint32(lon, mps_file);
+	le_write32(&lat, lat);
+	le_write32(&lon, lon);
+	fwrite(&lat, 4, 1, mps_file);
+	fwrite(&lon, 4, 1, mps_file);
 
 	if (mps_altitude == unknown_alt) {
-		gbfwrite(zbuf, 9, 1, mps_file);
+		fwrite(zbuf, 9, 1, mps_file);
 	}
 	else {
-		gbfputc(1, mps_file);
-		gbfputdbl(mps_altitude, mps_file);
+		hdr[0] = 1;
+		fwrite(hdr, 1 , 1, mps_file);
+		le_fwrite_double( mps_altitude, mps_file );
 	}
-	if (wpt->description) gbfputs(ascii_description, mps_file);
-	gbfwrite(zbuf, 1, 1, mps_file);	/* NULL termination */
+	if (wpt->description) fputs(ascii_description, mps_file);
+	fwrite(zbuf, 1, 1, mps_file);	/* NULL termination */
 	xfree(ascii_description);
 	ascii_description = NULL;
 
 	if (mps_proximity == unknown_alt) {
-		gbfwrite(zbuf, 9, 1, mps_file);
+		fwrite(zbuf, 9, 1, mps_file);
 	}
 	else {
-		gbfputc(1, mps_file);
-		gbfputdbl( mps_proximity, mps_file );
+		hdr[0] = 1;
+		fwrite(hdr, 1 , 1, mps_file);
+		le_fwrite_double( mps_proximity, mps_file );
 	}
 
-	gbfputint32(display, mps_file);	/* Show waypoint w/ name */
-	gbfputint32(colour, mps_file);
-	gbfputint32(icon, mps_file);
+	le_write32(&display, display);
+	fwrite(&display, 4, 1, mps_file);	/* Show waypoint w/ name */
 
-	gbfwrite(zbuf, 3, 1, mps_file);		/* city, state, facility */
+	le_write32(&colour, colour);
+	fwrite(&colour, 4, 1, mps_file);
 
-	gbfwrite(zbuf, 1, 1, mps_file);		/* unknown */
+	le_write32(&icon, icon);
+	fwrite(&icon, 4, 1, mps_file);
+
+	fwrite(zbuf, 3, 1, mps_file);		/* city, state, facility */
+
+	fwrite(zbuf, 1, 1, mps_file);		/* unknown */
 
 	if (mps_depth == unknown_alt) {
-		gbfwrite(zbuf, 9, 1, mps_file);
+		fwrite(zbuf, 9, 1, mps_file);
 	}
 	else {
-		gbfputc(1, mps_file);
-		gbfputdbl(mps_depth, mps_file);
+		hdr[0] = 1;
+		fwrite(hdr, 1 , 1, mps_file);
+		le_fwrite_double(mps_depth, mps_file);
 	}
 
-	gbfwrite(zbuf, 2, 1, mps_file);		/* unknown */
+	fwrite(zbuf, 2, 1, mps_file);		/* unknown */
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		gbfwrite(zbuf, 4, 1, mps_file);	/* unknown */
-		if (wpt->notes) gbfputs(wpt->notes, mps_file);
-		gbfwrite(zbuf, 1, 1, mps_file);	/* string termination */
+		fwrite(zbuf, 4, 1, mps_file);	/* unknown */
+		if (wpt->notes) fputs(wpt->notes, mps_file);
+		fwrite(zbuf, 1, 1, mps_file);	/* string termination */
 	}
 }
 
@@ -816,13 +861,13 @@ mps_waypoint_w_uniqloc_wrapper(waypoint *wpt)
  * MRCB
  */
 static void
-mps_route_r(gbfile *mps_file, int mps_ver, route_head **rte)
+mps_route_r(FILE *mps_file, int mps_ver, route_head **rte)
 {
 	char tbuf[100];
-	char *rtename;
+	char rtename[MPSNAMEBUFFERLEN];
 	char wptname[MPSNAMEBUFFERLEN];
-	int lat = 0;
-	int lon = 0;
+	int lat;
+	int lon;
 	char rte_autoname;
 	int	interlinkStepCount;
 	int	thisInterlinkStep;
@@ -837,40 +882,47 @@ mps_route_r(gbfile *mps_file, int mps_ver, route_head **rte)
 	double	mps_altitude = unknown_alt;
 	double	mps_depth = unknown_alt;
 
-	rtename = gbfgetcstr(mps_file);
+	mps_readstr(mps_file, rtename, sizeof(rtename));
 #ifdef	MPS_DEBUG
 	fprintf(stderr, "mps_route_r: reading route %s\n", rtename);
 #endif
 
-	gbfread(&rte_autoname, 1, 1, mps_file);	/* autoname flag */
+	fread(&rte_autoname, 1, 1, mps_file);	/* autoname flag */
 
-	gbfread(tbuf, 1, 1, mps_file);		/* skip min/max values */
+	fread(tbuf, 1, 1, mps_file);		/* skip min/max values */
 	if (tbuf[0] == 0) {
 
-		lat = gbfgetint32(mps_file);			/* max lat of whole route */
-		lon = gbfgetint32(mps_file);			/* max lon of whole route */
+		fread(&lat, 4, 1, mps_file); 
+		fread(&lon, 4, 1, mps_file); 
+		lat = le_read32(&lat);			/* max lat of whole route */
+		lon = le_read32(&lon);			/* max lon of whole route */
 
-		if (gbfgetc(mps_file) == 1) {			/* altitude validity */
-			mps_altitude = gbfgetdbl(mps_file);
+		fread(tbuf, 1, 1, mps_file);			/* altitude validity */
+		if (tbuf[0] == 1) {
+			mps_altitude = le_fread_double(mps_file);
 		}
 		else {
 			mps_altitude = unknown_alt;
-			gbfseek( mps_file, 8, SEEK_CUR );
+			fseek( mps_file, 8, SEEK_CUR );
 		}
 
-		lat = gbfgetint32(mps_file);			/* min lat of whole route */
-		lon = gbfgetint32(mps_file);			/* min lon of whole route */
+		fread(&lat, 4, 1, mps_file); 
+		fread(&lon, 4, 1, mps_file); 
+		lat = le_read32(&lat);			/* min lat of whole route */
+		lon = le_read32(&lon);			/* min lon of whole route */
 
-		if (gbfgetc(mps_file) == 1) {			/* altitude validity */
-			mps_altitude = gbfgetdbl(mps_file);
+		fread(tbuf, 1, 1, mps_file);			/* altitude validity */
+		if (tbuf[0] == 1) {
+			mps_altitude = le_fread_double(mps_file);
 		}
 		else {
 			mps_altitude = unknown_alt;
-			gbfseek( mps_file, 8, SEEK_CUR );
+			fseek( mps_file, 8, SEEK_CUR );
 		}
 	}
 
-	rte_count = gbfgetint32(mps_file);			/* number of waypoints in route */
+	fread(&rte_count, 4, 1, mps_file);			/* number of waypoints in route */
+	rte_count = le_read32(&rte_count);
 
 	/* This might be rather presumptuous, but is it valid in any format to have route with no points? */
 	/* Let's assume not, so if the route count is zero or less, let's get out of here and allow the   */
@@ -882,7 +934,7 @@ mps_route_r(gbfile *mps_file, int mps_ver, route_head **rte)
 #endif
 
 	rte_head = route_head_alloc();
-	rte_head->rte_name = rtename;
+	rte_head->rte_name = xstrdup(rtename);
 	route_add_head(rte_head);
 	*rte = rte_head;
 
@@ -895,28 +947,30 @@ mps_route_r(gbfile *mps_file, int mps_ver, route_head **rte)
 		fprintf(stderr, "mps_route_r: reading route waypoint %s\n", wptname);
 #endif
 
-		mpsclass = gbfgetint32(mps_file);			/* class */
+		fread(&mpsclass, 4, 1, mps_file);			/* class */
+		mpsclass = le_read32(&mpsclass);
 		mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
 
 		if ((mps_ver == 4) || (mps_ver == 5)) {
-			gbfread(tbuf, 22, 1, mps_file);				/* subclass data */
+			fread(tbuf, 22, 1, mps_file);				/* subclass data */
 
 			/* This is a bit unpleasant. Routes have a variable length of
 			   data (min 22 bytes) terminated by a zero */
 			do {
-				gbfread(tbuf, 1, 1, mps_file);
+				fread(tbuf, 1, 1, mps_file);
 			} while (tbuf[0]);
 
 			/* The next thing is the unknown 0x03 0x00 .. 0x00 (18 bytes) */
-			gbfread(tbuf, 18, 1, mps_file);
+			fread(tbuf, 18, 1, mps_file);
 		}
 		else {
-			gbfread(tbuf, 17, 1, mps_file);				/* subclass data */
-			gbfread(tbuf, 18, 1, mps_file);				/* unknown 0x00 0x03 0x00 .. 0x00 */
+			fread(tbuf, 17, 1, mps_file);				/* subclass data */
+			fread(tbuf, 18, 1, mps_file);				/* unknown 0x00 0x03 0x00 .. 0x00 */
 		}
 
 		/* link details */
-		interlinkStepCount = gbfgetint32(mps_file);					/* NOT always 2, but will assume > 0 */
+		fread(&interlinkStepCount, 4, 1, mps_file);					/* NOT always 2, but will assume > 0 */
+		interlinkStepCount = le_read32(&interlinkStepCount);
 
 #ifdef	MPS_DEBUG
 		fprintf(stderr, "mps_route_r: interlink steps are %d\n", interlinkStepCount);
@@ -934,15 +988,18 @@ mps_route_r(gbfile *mps_file, int mps_ver, route_head **rte)
 		}
 
 		/* first end of link */
-		lat = gbfgetint32(mps_file);
-		lon = gbfgetint32(mps_file);
+		fread(&lat, 4, 1, mps_file); 
+		fread(&lon, 4, 1, mps_file); 
+		lat = le_read32(&lat);
+		lon = le_read32(&lon);
 	
-		if (gbfgetc(mps_file) == 1) {			/* altitude validity */
-			mps_altitude = gbfgetdbl(mps_file);
+		fread(tbuf, 1, 1, mps_file);			/* altitude validity */
+		if (tbuf[0] == 1) {
+			mps_altitude = le_fread_double(mps_file);
 		}
 		else {
 			mps_altitude = unknown_alt;
-			gbfseek( mps_file, 8, SEEK_CUR );
+			fseek( mps_file, 8, SEEK_CUR );
 		}
 
 		/* with MapSource routes, the real waypoint details are held as a separate waypoint, so copy from there
@@ -979,27 +1036,30 @@ mps_route_r(gbfile *mps_file, int mps_ver, route_head **rte)
 		for (thisInterlinkStep = interlinkStepCount - 1; thisInterlinkStep > 0; thisInterlinkStep--) {
 			/* Could do this by doing a calculation on length of each co-ordinate and just doing one read
 			   but doing it this way makes it easier in the future to make use of this data */
-			lat = gbfgetint32(mps_file);
-			lon = gbfgetint32(mps_file);
+			fread(&lat, 4, 1, mps_file); 
+			fread(&lon, 4, 1, mps_file); 
+			lat = le_read32(&lat);
+			lon = le_read32(&lon);
 		
-			if (gbfgetc(mps_file) == 1) {			/* altitude validity */
-				mps_altitude = gbfgetdbl( mps_file );
+			fread(tbuf, 1, 1, mps_file);			/* altitude validity */
+			if (tbuf[0] == 1) {
+				mps_altitude = le_fread_double( mps_file );
 			}
 			else {
 				mps_altitude = unknown_alt;
-				gbfseek( mps_file, 8, SEEK_CUR );
+				fseek( mps_file, 8, SEEK_CUR );
 			}
 		}
 
-		gbfread(tbuf, 1, 1, mps_file);			/* NULL */
+		fread(tbuf, 1, 1, mps_file);			/* NULL */
 
-		gbfread(tbuf, 4, 1, mps_file);			/* link max lat */
-		gbfread(tbuf, 4, 1, mps_file);			/* link max lon */
-		gbfread(tbuf, 9, 1, mps_file);			/* link max alt validity + alt */
+		fread(tbuf, 4, 1, mps_file);			/* link max lat */
+		fread(tbuf, 4, 1, mps_file);			/* link max lon */
+		fread(tbuf, 9, 1, mps_file);			/* link max alt validity + alt */
 
-		gbfread(tbuf, 4, 1, mps_file);			/* link min lat */
-		gbfread(tbuf, 4, 1, mps_file);			/* link min lon */
-		gbfread(tbuf, 9, 1, mps_file);			/* link min alt validity + alt */
+		fread(tbuf, 4, 1, mps_file);			/* link min lat */
+		fread(tbuf, 4, 1, mps_file);			/* link min lon */
+		fread(tbuf, 9, 1, mps_file);			/* link min alt validity + alt */
 
 	}		/* while (trk_count--) */
 
@@ -1011,27 +1071,28 @@ mps_route_r(gbfile *mps_file, int mps_ver, route_head **rte)
 #endif
 
 
-	mpsclass = gbfgetint32(mps_file);			/* class */
+	fread(&mpsclass, 4, 1, mps_file);			/* class */
+	mpsclass = le_read32(&mpsclass);
 	mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		gbfread(tbuf, 22, 1, mps_file);				/* subclass data */
+		fread(tbuf, 22, 1, mps_file);				/* subclass data */
 
 		/* This is a bit unpleasant. Routes have a variable length of
 			data (min 22 bytes) terminated by a zero */
 		do {
-			gbfread(tbuf, 1, 1, mps_file);
+			fread(tbuf, 1, 1, mps_file);
 		} while (tbuf[0]);
 
 		/* The next thing is the unknown 0x03 0x00 .. 0x00 (18 bytes) */
-		gbfread(tbuf, 18, 1, mps_file);
+		fread(tbuf, 18, 1, mps_file);
 	}
 	else {
-		gbfread(tbuf, 17, 1, mps_file);				/* subclass data */
-		gbfread(tbuf, 18, 1, mps_file);				/* unknown 0x00 0x03 0x00 .. 0x00 */
+		fread(tbuf, 17, 1, mps_file);				/* subclass data */
+		fread(tbuf, 18, 1, mps_file);				/* unknown 0x00 0x03 0x00 .. 0x00 */
 	}
 
-	gbfread(tbuf, 5, 1, mps_file);					/* 5 byte trailer */
+	fread(tbuf, 5, 1, mps_file);					/* 5 byte trailer */
 	/* with MapSource routes, the real waypoint details are held as a separate waypoint, so copy from there
 		if found because there is more info held in a real waypoint than in its route counterpart,
 		e.g. the display symbol (aka icon)
@@ -1067,7 +1128,7 @@ mps_route_r(gbfile *mps_file, int mps_ver, route_head **rte)
  * MRCB
  */
 static void
-mps_routehdr_w(gbfile *mps_file, int mps_ver, const route_head *rte)
+mps_routehdr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 {
 	unsigned int reclen;
 	unsigned int rte_datapoints;
@@ -1165,46 +1226,59 @@ mps_routehdr_w(gbfile *mps_file, int mps_ver, const route_head *rte)
 					(rte_datapoints - 1) * 73 + 4;				/* link details plus overall trailing bytes */
 		}
 
-		gbfputint32(reclen, mps_file);
-		gbfputc('R', mps_file);
-		gbfwrite(rname, rname_len, 1, mps_file);
+		le_write32(&reclen, reclen);
+		fwrite(&reclen, 4, 1, mps_file);
 
+		hdr[0] = 'R';
+		fwrite(hdr, 1, 1, mps_file);
+
+		fwrite(rname, rname_len, 1, mps_file);
 		xfree(rname);
 
 		hdr[0] = 0;						/* NULL of string termination */
 		hdr[1] = 0;						/* don't autoname */
 		hdr[2] = 0;						/* MSB of don't autoname */
-		gbfwrite(hdr, 3, 1, mps_file);	/* NULL string terminator + route autoname flag */
+		fwrite(hdr, 3, 1, mps_file);	/* NULL string terminator + route autoname flag */
 
 		lat = GPS_Math_Deg_To_Semi(maxlat);
 		lon = GPS_Math_Deg_To_Semi(maxlon);
 
-		gbfputint32(lat, mps_file);
-		gbfputint32(lon, mps_file);
+		le_write32(&lat, lat);
+		le_write32(&lon, lon);
+
+		fwrite(&lat, 4, 1, mps_file);
+		fwrite(&lon, 4, 1, mps_file);
 
 		if (maxalt == unknown_alt) {
-			gbfwrite(zbuf, 9, 1, mps_file);
+			fwrite(zbuf, 9, 1, mps_file);
 		}
 		else {
-			gbfputc(1, mps_file);
-			gbfputdbl(maxalt, mps_file);
+			hdr[0] = 1;
+			fwrite(hdr, 1 , 1, mps_file);
+			le_fwrite_double(maxalt, mps_file);
 		}
 
 		lat = GPS_Math_Deg_To_Semi(minlat);
 		lon = GPS_Math_Deg_To_Semi(minlon);
 
-		gbfputint32(lat, mps_file);
-		gbfputint32(lon, mps_file);
+		le_write32(&lat, lat);
+		le_write32(&lon, lon);
+
+		fwrite(&lat, 4, 1, mps_file);
+		fwrite(&lon, 4, 1, mps_file);
 
 		if (minalt == unknown_alt) {
-			gbfwrite(zbuf, 9, 1, mps_file);
+			fwrite(zbuf, 9, 1, mps_file);
 		}
 		else {
-			gbfputc(1, mps_file);
-			gbfputdbl(minalt, mps_file);
+			hdr[0] = 1;
+
+			fwrite(hdr, 1 , 1, mps_file);
+			le_fwrite_double(minalt, mps_file);
 		}
 
-		gbfputint32(rte_datapoints, mps_file);
+		le_write32(&rte_datapoints, rte_datapoints);
+		fwrite(&rte_datapoints, 4, 1, mps_file);
 	}
 }
 
@@ -1220,8 +1294,9 @@ mps_routehdr_w_wrapper(const route_head *rte)
  * MRCB
  */
 static void
-mps_routedatapoint_w(gbfile *mps_file, int mps_ver, const waypoint *rtewpt)
+mps_routedatapoint_w(FILE *mps_file, int mps_ver, const waypoint *rtewpt)
 {
+	unsigned char hdr[10];
 	int			lat;
 	int			lon;
 	char		zbuf[20];
@@ -1246,38 +1321,45 @@ mps_routedatapoint_w(gbfile *mps_file, int mps_ver, const waypoint *rtewpt)
 	if (prevRouteWpt != NULL) {
 		/* output the route link details */
 		reclen = 2;
-		gbfputint32(reclen, mps_file);
+		le_write32(&reclen, reclen);
+		fwrite(&reclen, 4, 1, mps_file);
 
 		/* output end point 1 */
 		lat = GPS_Math_Deg_To_Semi(prevRouteWpt->latitude);
 		lon = GPS_Math_Deg_To_Semi(prevRouteWpt->longitude);
+		le_write32(&lat, lat);
+		le_write32(&lon, lon);
 
-		gbfputint32(lat, mps_file);
-		gbfputint32(lon, mps_file);
+		fwrite(&lat, 4, 1, mps_file);
+		fwrite(&lon, 4, 1, mps_file);
 
 		mps_altitude = prevRouteWpt->altitude;
 		if (mps_altitude == unknown_alt) {
-			gbfwrite(zbuf, 9, 1, mps_file);
+			fwrite(zbuf, 9, 1, mps_file);
 		}
 		else {
-			gbfputc(1, mps_file);
-			gbfputdbl(mps_altitude, mps_file );
+			hdr[0] = 1;
+			fwrite(hdr, 1 , 1, mps_file);
+			le_fwrite_double(mps_altitude, mps_file );
 		}
 
 		/* output end point 2 */
 		lat = GPS_Math_Deg_To_Semi(rtewpt->latitude);
 		lon = GPS_Math_Deg_To_Semi(rtewpt->longitude);
+		le_write32(&lat, lat);
+		le_write32(&lon, lon);
 
-		gbfputint32(lat, mps_file);
-		gbfputint32(lon, mps_file);
+		fwrite(&lat, 4, 1, mps_file);
+		fwrite(&lon, 4, 1, mps_file);
 
 		mps_altitude = rtewpt->altitude;
 		if (mps_altitude == unknown_alt) {
-			gbfwrite(zbuf, 9, 1, mps_file);
+			fwrite(zbuf, 9, 1, mps_file);
 		}
 		else {
-			gbfputc(1, mps_file);
-			gbfputdbl(mps_altitude, mps_file);
+			hdr[0] = 1;
+			fwrite(hdr, 1 , 1, mps_file);
+			le_fwrite_double(mps_altitude, mps_file);
 		}
 
 		if (rtewpt->latitude > prevRouteWpt->latitude) {
@@ -1307,30 +1389,38 @@ mps_routedatapoint_w(gbfile *mps_file, int mps_ver, const waypoint *rtewpt)
 				(minalt == unknown_alt)) minalt = prevRouteWpt->altitude;
 		}
 		
-		gbfwrite (zbuf, 1, 1, mps_file);
+		fwrite (zbuf, 1, 1, mps_file);
 
 		/* output max coords of the link */
-		gbfputint32(maxlat, mps_file);
-		gbfputint32(maxlon, mps_file);
+		le_write32(&maxlat, maxlat);
+		le_write32(&maxlon, maxlon);
+
+		fwrite(&maxlat, 4, 1, mps_file);
+		fwrite(&maxlon, 4, 1, mps_file);
 
 		if (maxalt == unknown_alt) {
-			gbfwrite(zbuf, 9, 1, mps_file);
+			fwrite(zbuf, 9, 1, mps_file);
 		}
 		else {
-			gbfputc(1, mps_file);
-			gbfputdbl(maxalt, mps_file);
+			hdr[0] = 1;
+			fwrite(hdr, 1 , 1, mps_file);
+			le_fwrite_double(maxalt, mps_file);
 		}
 
 		/* output min coords of the link */
-		gbfputint32(minlat, mps_file);
-		gbfputint32(minlon, mps_file);
+		le_write32(&minlat, minlat);
+		le_write32(&minlon, minlon);
+
+		fwrite(&minlat, 4, 1, mps_file);
+		fwrite(&minlon, 4, 1, mps_file);
 
 		if (minalt == unknown_alt) {
-			gbfwrite(zbuf, 9, 1, mps_file);
+			fwrite(zbuf, 9, 1, mps_file);
 		}
 		else {
-			gbfputc(1, mps_file);
-			gbfputdbl(minalt, mps_file );
+			hdr[0] = 1;
+			fwrite(hdr, 1 , 1, mps_file);
+			le_fwrite_double(minalt, mps_file );
 		}
 
 	}
@@ -1341,36 +1431,38 @@ mps_routedatapoint_w(gbfile *mps_file, int mps_ver, const waypoint *rtewpt)
 				mkshort(mkshort_handle, src) :
 				rtewpt->shortname;
 
-	gbfputs(ident, mps_file);
-	gbfwrite(zbuf, 1, 1, mps_file);	/* NULL termination to ident */
+	fputs(ident, mps_file);
+	fwrite(zbuf, 1, 1, mps_file);	/* NULL termination to ident */
 
 	wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, ident);
 	if (wptfound != NULL)	zbuf[0] = (char)MPSHIDDENROUTEWPTCLASS;
 	else					zbuf[0] = (char)MPSDEFAULTWPTCLASS;
-	gbfwrite(zbuf, 4, 1, mps_file);			/* class */
+	fwrite(zbuf, 4, 1, mps_file);			/* class */
 
 	zbuf[0]=0;
-	gbfwrite(zbuf, 1, 1, mps_file);			/* country - i.e. empty string */
+	fwrite(zbuf, 1, 1, mps_file);			/* country - i.e. empty string */
 
 	if ((mps_ver == 4) || (mps_ver == 5)) {
-		gbfwrite(zbuf, 4, 1, mps_file);		/* subclass part 1 */
-		gbfwrite(ffbuf, 12, 1, mps_file);		/* subclass part 2 */
-		gbfwrite(zbuf, 2, 1, mps_file);		/* subclass part 3 */
-		gbfwrite(ffbuf, 4, 1, mps_file);		/* unknown */
+		fwrite(zbuf, 4, 1, mps_file);		/* subclass part 1 */
+		fwrite(ffbuf, 12, 1, mps_file);		/* subclass part 2 */
+		fwrite(zbuf, 2, 1, mps_file);		/* subclass part 3 */
+		fwrite(ffbuf, 4, 1, mps_file);		/* unknown */
 
-		gbfwrite(zbuf, 1, 1, mps_file);
-		gbfputc(3, mps_file);
-		gbfwrite(zbuf, 17, 1, mps_file);
+		fwrite(zbuf, 1, 1, mps_file);
+		hdr[0] = 3;
+		fwrite(hdr, 1, 1, mps_file);
+		fwrite(zbuf, 17, 1, mps_file);
 	}
 	else {
-		gbfwrite(zbuf, 8, 1, mps_file);		/* subclass part 1 */
-		gbfwrite(ffbuf, 8, 1, mps_file);		/* subclass part 2 */
-		gbfwrite(zbuf, 1, 1, mps_file);		/* subclass part 3 */
+		fwrite(zbuf, 8, 1, mps_file);		/* subclass part 1 */
+		fwrite(ffbuf, 8, 1, mps_file);		/* subclass part 2 */
+		fwrite(zbuf, 1, 1, mps_file);		/* subclass part 3 */
 
 		/* unknown */
-		gbfwrite(zbuf, 1, 1, mps_file);
-		gbfputc(3, mps_file);
-		gbfwrite(zbuf, 16, 1, mps_file);
+		fwrite(zbuf, 1, 1, mps_file);
+		hdr[0] = 3;
+		fwrite(hdr, 1, 1, mps_file);
+		fwrite(zbuf, 16, 1, mps_file);
 	}
 
 	prevRouteWpt = rtewpt;
@@ -1388,7 +1480,7 @@ mps_routedatapoint_w_wrapper(const waypoint *rte)
  * MRCB
  */
 static void
-mps_routetrlr_w(gbfile *mps_file, int mps_ver, const route_head *rte)
+mps_routetrlr_w(FILE *mps_file, int mps_ver, const route_head *rte)
 {
 	char		hdr[2];
 	int			value = 0;
@@ -1396,8 +1488,8 @@ mps_routetrlr_w(gbfile *mps_file, int mps_ver, const route_head *rte)
 	hdr[0] = 1;
 
 	if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
-		gbfwrite(&value, 4, 1, mps_file);
-		gbfwrite(hdr, 1, 1, mps_file);
+		fwrite(&value, 4, 1, mps_file);
+		fwrite(hdr, 1, 1, mps_file);
 	}
 }
 	
@@ -1413,9 +1505,10 @@ mps_routetrlr_w_wrapper(const route_head *rte)
  * MRCB
  */
 static void
-mps_track_r(gbfile *mps_file, int mps_ver, route_head **trk)
+mps_track_r(FILE *mps_file, int mps_ver, route_head **trk)
 {
-	char *trkname;
+	char tbuf[100];
+	char trkname[MPSNAMEBUFFERLEN];
 	int lat;
 	int lon;
 
@@ -1427,15 +1520,17 @@ mps_track_r(gbfile *mps_file, int mps_ver, route_head **trk)
 	double	mps_altitude = unknown_alt;
 	double	mps_depth = unknown_alt;
 
-	trkname = gbfgetcstr(mps_file);
+	mps_readstr(mps_file, trkname, sizeof(trkname));
 #ifdef	MPS_DEBUG
 	fprintf(stderr, "mps_track_r: reading track %s\n", trkname);
 #endif
 
-	(void) gbfgetc(mps_file);				/* display flag */
-	(void) gbfgetint32(mps_file);				/* colour */
 
-	trk_count = gbfgetint32(mps_file);			/* number of datapoints in tracklog */
+	fread(tbuf, 1, 1, mps_file);				/* display flag */
+	fread(tbuf, 4, 1, mps_file);				/* colour */
+
+	fread(&trk_count, 4, 1, mps_file);			/* number of datapoints in tracklog */
+	trk_count = le_read32(&trk_count);
 
 	/* I don't know, but perhaps it's valid to have a track with no waypoints   */
 	/* Seems dumb, but truth is stranger than fiction. Of course, it could be   */
@@ -1447,42 +1542,47 @@ mps_track_r(gbfile *mps_file, int mps_ver, route_head **trk)
 #endif
 
 	track_head = route_head_alloc();
-	track_head->rte_name = trkname;
+	track_head->rte_name = xstrdup(trkname);
 	track_add_head(track_head);
 	*trk = track_head;
 
 	while (trk_count--) {
 
-		lat = gbfgetint32(mps_file);
-		lon = gbfgetint32(mps_file);
+		fread(&lat, 4, 1, mps_file); 
+		fread(&lon, 4, 1, mps_file); 
+		lat = le_read32(&lat);
+		lon = le_read32(&lon);
 	
-		if (gbfgetc(mps_file) == 1) {			/* altitude validity */
-			mps_altitude = gbfgetdbl( mps_file );
+		fread(tbuf, 1, 1, mps_file);			/* altitude validity */
+		if (tbuf[0] == 1) {
+			mps_altitude = le_fread_double( mps_file );
 		}
 		else {
 			mps_altitude = unknown_alt;
-			gbfseek( mps_file, 8, SEEK_CUR );
+			fseek( mps_file, 8, SEEK_CUR );
 		}
 
-		if (gbfgetc(mps_file) == 1) {			/* date/time validity */
-			dateTime = gbfgetint32(mps_file);
+		fread(tbuf, 1, 1, mps_file);			/* date/time validity */
+		if (tbuf[0] == 1) {
+			fread(&dateTime,sizeof(dateTime),1,mps_file);
 		}
 		else {
-			(void) gbfgetint32(mps_file);
+			fread(tbuf,sizeof(dateTime),1, mps_file);
 		}
 
-		if (gbfgetc(mps_file) == 1) {			/* depth validity */
-			mps_depth = gbfgetdbl(mps_file );
+		fread(tbuf, 1, 1, mps_file);			/* depth validity */
+		if (tbuf[0] == 1) {
+			mps_depth = le_fread_double(mps_file );
 		}
 		else {
 			mps_depth = unknown_alt;
-			gbfseek( mps_file, 8, SEEK_CUR );
+			fseek( mps_file, 8, SEEK_CUR );
 		}
 
 		thisWaypoint = waypt_new();
 		thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
 		thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
-		thisWaypoint->creation_time = dateTime;
+		thisWaypoint->creation_time = le_read32(&dateTime);
 		thisWaypoint->microseconds = 0;
 		thisWaypoint->altitude = mps_altitude;
 		if (mps_depth != unknown_alt) WAYPT_SET(thisWaypoint, depth, mps_depth);
@@ -1499,7 +1599,7 @@ mps_track_r(gbfile *mps_file, int mps_ver, route_head **trk)
  * MRCB
  */
 static void
-mps_trackhdr_w(gbfile *mps_file, int mps_ver, const route_head *trk)
+mps_trackhdr_w(FILE *mps_file, int mps_ver, const route_head *trk)
 {
 	unsigned int reclen;
 	unsigned int trk_datapoints;
@@ -1541,19 +1641,24 @@ mps_trackhdr_w(gbfile *mps_file, int mps_ver, const route_head *trk)
 		
 		reclen += (trk_datapoints * 31) - 1;	/* lat (4) + lon (4) + alt (9) + date (5) + depth (9) ;*/
 												/* -1 is because reclen starts from 0 which means a length of 1 */
-		gbfputint32(reclen, mps_file);
-		gbfputc('T', mps_file);
-		gbfwrite(tname, tname_len, 1, mps_file);
+		le_write32(&reclen, reclen);
+		fwrite(&reclen, 4, 1, mps_file);
 
+		hdr[0] = 'T';
+		fwrite(hdr, 1, 1, mps_file);
+
+		fwrite(tname, tname_len, 1, mps_file);
 		xfree(tname);
 
 		hdr[0] = 0;
 		hdr[1] = 1;
-		gbfwrite(hdr, 2, 1, mps_file);	/* NULL string terminator + display flag */
+		fwrite(hdr, 2, 1, mps_file);	/* NULL string terminator + display flag */
 
-		gbfputint32(colour, mps_file);
+		le_write32(&colour, colour);
+		fwrite(&colour, 4, 1, mps_file);
 
-		gbfputint32(trk_datapoints, mps_file);
+		le_write32(&trk_datapoints, trk_datapoints);
+		fwrite(&trk_datapoints, 4, 1, mps_file);
 	}
 
 }
@@ -1570,8 +1675,9 @@ mps_trackhdr_w_wrapper(const route_head *trk)
  * MRCB
  */
 static void
-mps_trackdatapoint_w(gbfile *mps_file, int mps_ver, const waypoint *wpt)
+mps_trackdatapoint_w(FILE *mps_file, int mps_ver, const waypoint *wpt)
 {
+	unsigned char hdr[10];
 	int lat, lon;
 	time_t	t = wpt->creation_time;
 	char zbuf[10];
@@ -1585,31 +1691,37 @@ mps_trackdatapoint_w(gbfile *mps_file, int mps_ver, const waypoint *wpt)
 
 	memset(zbuf, 0, sizeof(zbuf));
 
-	gbfputint32(lat, mps_file);
-	gbfputint32(lon, mps_file);
+	le_write32(&lat, lat);
+	le_write32(&lon, lon);
+	fwrite(&lat, 4, 1, mps_file);
+	fwrite(&lon, 4, 1, mps_file);
 
 	if (mps_altitude == unknown_alt) {
-		gbfwrite(zbuf, 9, 1, mps_file);
+		fwrite(zbuf, 9, 1, mps_file);
 	}
 	else {
-		gbfputc(1, mps_file);
-		gbfputdbl(mps_altitude, mps_file);
+		hdr[0] = 1;
+		fwrite(hdr, 1 , 1, mps_file);
+		le_fwrite_double(mps_altitude, mps_file);
 	}
 
 	if (t > 0) {					/* a valid time is assumed to > 0 */
-		gbfputc(1, mps_file);
-		gbfputint32(t, mps_file);
+		hdr[0] = 1;
+		fwrite(hdr, 1 , 1, mps_file);
+		le_write32(&t, t);
+		fwrite(&t, 4, 1, mps_file);
 	}
 	else {
-		gbfwrite(zbuf, 5, 1, mps_file);
+		fwrite(zbuf, 5, 1, mps_file);
 	}
 
 	if (mps_depth == unknown_alt) {
-		gbfwrite(zbuf, 9, 1, mps_file);
+		fwrite(zbuf, 9, 1, mps_file);
 	}
 	else {
-		gbfputc(1, mps_file);
-		gbfputdbl(mps_depth, mps_file );
+		hdr[0] = 1;
+		fwrite(hdr, 1 , 1, mps_file);
+		le_fwrite_double(mps_depth, mps_file );
 	}
 }
 
@@ -1642,16 +1754,17 @@ mps_read(void)
 #endif
 
 	morework = 1;
-	while (morework && !gbfeof(mps_file_in)) {
+	while (morework && !feof(mps_file_in)) {
 
 		/* Read record length of next section */
-		reclen = gbfgetint32(mps_file_in);
+		fread(&reclen, 4, 1, mps_file_in);
+		reclen = le_read32(&reclen);
 
 		if (reclen < 0) fatal (MYNAME ": a record length read from the input file is invalid. \nEither the file is corrupt or unsupported.\n");
 
-		/* Read the record type "flag" in - using gbfread in case in the future need more than one char */
-		gbfread(&recType, 1, 1, mps_file_in);
-		mpsFileInPos = gbftell(mps_file_in);
+		/* Read the record type "flag" in - using fread in case in the future need more than one char */
+		fread(&recType, 1, 1, mps_file_in);
+		mpsFileInPos = ftell(mps_file_in);
 		switch (recType) {
 		case 'W':
 			/* Waypoint record */
@@ -1662,13 +1775,13 @@ mps_read(void)
 			fprintf(stderr,"Read a waypoint - %s\n", wpt->shortname);
 #endif
 
-			if (gbftell(mps_file_in) != mpsFileInPos + reclen) {
+			if (ftell(mps_file_in) != mpsFileInPos + reclen) {
 				/* should junk this record and not save it since we're out of sync with the file */
 				/* Should and how do we warn the user?                                           */
 #ifdef	MPS_DEBUG
 				fprintf(stderr,"Lost sync with the file reading waypoint - %s\n", wpt->shortname);
 #endif
-				gbfseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
+				fseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
 				waypt_free( wpt );
 			}
 			else {
@@ -1687,36 +1800,36 @@ mps_read(void)
 		case 'R':
 			/* Route record */
 			mps_route_r(mps_file_in, mps_ver_in, &rte);
-			if (gbftell(mps_file_in) != mpsFileInPos + reclen) {
+			if (ftell(mps_file_in) != mpsFileInPos + reclen) {
 				/* should junk this record and not save it since we're out of sync with the file */
 				/* Should and how do we warn the user?                                           */
 #ifdef	MPS_DEBUG
 				fprintf(stderr,"Lost sync with the file reading route - %s\n", rte->rte_name);
 #endif
-				gbfseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
+				fseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
 			}
 			break;
 
 		case 'T':
 			/* Track record */
 			mps_track_r(mps_file_in, mps_ver_in, &trk);
-			if (gbftell(mps_file_in) != mpsFileInPos + reclen) {
+			if (ftell(mps_file_in) != mpsFileInPos + reclen) {
 				/* should junk this record and not save it since we're out of sync with the file */
 				/* Should and how do we warn the user?                                           */
 #ifdef	MPS_DEBUG
 				fprintf(stderr,"Lost sync with the file reading track - %s\n", trk->rte_name);
 #endif
-				gbfseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
+				fseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
 			}
 			break;
 
 		case 'L':
 			/* Map segment record */
 			mps_mapsegment_r(mps_file_in, mps_ver_in);
-			if (gbftell(mps_file_in) != mpsFileInPos + reclen) {
+			if (ftell(mps_file_in) != mpsFileInPos + reclen) {
 				/* should junk this record and not save it since we're out of sync with the file */
 				/* Should and how do we warn the user?                                           */
-				gbfseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
+				fseek (mps_file_in, mpsFileInPos + reclen, SEEK_SET);
 			}
 			break;
 
@@ -1728,10 +1841,10 @@ mps_read(void)
 			break;
 		default:
 			/* Unknown record type.  Skip over it. */
-			gbfseek(mps_file_in, reclen, SEEK_CUR); 
+			fseek(mps_file_in, reclen, SEEK_CUR); 
 		}
 
-	}	/* while (!gbfeof(mps_file_in)) */
+	}	/* while (!feof(mps_file_in)) */
 
 #ifdef DUMP_ICON_TABLE
 	printf("\t{ -1, NULL },\n");
@@ -1773,8 +1886,8 @@ mps_write(void)
 				/* Need to clean up after a junk version specified */
 				/* close the real output file + renamed original output file */
 				/* then delete the "real" file and rename the temporarily renamed file back */
-				gbfclose(mps_file_temp);
-				gbfclose(mps_file_out);
+				fclose(mps_file_temp);
+				fclose(mps_file_out);
 				remove(fin_name);
 				rename(tempname, fin_name);
 				fatal (MYNAME ": merge source version is %d, requested out version is %d\n", mps_ver_temp, atoi(mpsverout));
@@ -1808,35 +1921,36 @@ mps_write(void)
 	*/
 	/* if ((mpsmergeout) && (global_opts.objective != wptdata)) { */
 	if ((mpsmergeout) && (! doing_wpts)) {
-		while (!gbfeof(mps_file_temp)) {
+		while (!feof(mps_file_temp)) {
 
-			reclen2 = gbfgetint32(mps_file_temp);
+			fread(&reclen, 4, 1, mps_file_temp);
+			reclen2 = le_read32(&reclen);
 
-			/* Read the record type "flag" in - using gbfread in case in the future need more than one char */
-			gbfread(&recType, 1, 1, mps_file_temp);
+			/* Read the record type "flag" in - using fread in case in the future need more than one char */
+			fread(&recType, 1, 1, mps_file_temp);
 
 			if (recType == 'W')  {
-				gbfwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
-				gbfwrite(&recType, 1, 1, mps_file_out);
+				fwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
+				fwrite(&recType, 1, 1, mps_file_out);
 
-				tempFilePos = gbftell(mps_file_temp);
+				tempFilePos = ftell(mps_file_temp);
 				/* need to read in the waypoint info only because later we may need to check for uniqueness
 				   since we're here because the user didn't request waypoints, this should be acceptable */
 				mps_waypoint_r(mps_file_temp, mps_ver_temp, &wpt, &mpsWptClass);
 				mps_wpt_q_add(&written_wpt_head, wpt);
 				waypt_free( wpt );
 				/* now return to the start of the waypoint data to do a "clean" copy */
-				gbfseek(mps_file_temp, tempFilePos, SEEK_SET);
+				fseek(mps_file_temp, tempFilePos, SEEK_SET);
 
 				/* copy the data using a "reasonably" sized buffer */
 				for(tocopy = reclen2; tocopy > 0; tocopy -= block) {
 				  block = (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy);
-				  gbfread(copybuf, block, 1, mps_file_temp);
-				  gbfwrite(copybuf, block, 1, mps_file_out);
+				  fread(copybuf, block, 1, mps_file_temp);
+				  fwrite(copybuf, block, 1, mps_file_out);
 				}
 			}
 			else break;
-		}	/* while (!gbfeof(mps_file_temp)) */
+		}	/* while (!feof(mps_file_temp)) */
 	}	/* if (mpsmergeout) */
 
 	/* irrespective of merging, now write out any waypoints */
@@ -1846,12 +1960,13 @@ mps_write(void)
 		if (mpsmergeout) {
 			/* since we're processing waypoints, we should read in from whatever version and write out */
 			/* in the selected version */
-			while (!gbfeof(mps_file_temp)) {
+			while (!feof(mps_file_temp)) {
 
-				reclen2 = gbfgetint32(mps_file_temp);
+				fread(&reclen, 4, 1, mps_file_temp);
+				reclen2 = le_read32(&reclen);
 
-				/* Read the record type "flag" in - using gbfread in case in the future need more than one char */
-				gbfread(&recType, 1, 1, mps_file_temp);
+				/* Read the record type "flag" in - using fread in case in the future need more than one char */
+				fread(&recType, 1, 1, mps_file_temp);
 
 				if (recType == 'W')  {
 					/* need to be careful that we aren't duplicating a wpt defined from elsewhere */
@@ -1870,27 +1985,28 @@ mps_write(void)
 
 	/* if ((mpsmergeout) && (global_opts.objective != rtedata)) { */
 	if ((mpsmergeout) && (! doing_rtes)) {
-		while (!gbfeof(mps_file_temp)) {
+		while (!feof(mps_file_temp)) {
 
 			/* this might all fail if the relevant waypoints haven't been written */
 			if (recType == 'R')  {
-				gbfwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
-				gbfwrite(&recType, 1, 1, mps_file_out);
+				fwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
+				fwrite(&recType, 1, 1, mps_file_out);
 
 				/* copy the data using a "reasonably" sized buffer */
 				for(tocopy = reclen2; tocopy > 0; tocopy -= block) {
 				  block = (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy);
-				  gbfread(copybuf, block, 1, mps_file_temp);
-				  gbfwrite(copybuf, block, 1, mps_file_out);
+				  fread(copybuf, block, 1, mps_file_temp);
+				  fwrite(copybuf, block, 1, mps_file_out);
 				}
 			}
 			else break;
-			reclen2 = gbfgetint32(mps_file_temp);
+			fread(&reclen, 4, 1, mps_file_temp);
+			reclen2 = le_read32(&reclen);
 
-			/* Read the record type "flag" in - using gbfread in case in the future need more than one char */
-			gbfread(&recType, 1, 1, mps_file_temp);
+			/* Read the record type "flag" in - using fread in case in the future need more than one char */
+			fread(&recType, 1, 1, mps_file_temp);
 
-		}	/* while (!gbfeof(mps_file_temp)) */
+		}	/* while (!feof(mps_file_temp)) */
 	}	/* if (mpsmergeout) */
 
 	/* routes are next in the wpts, rtes, trks, mapset sequence */
@@ -1900,17 +2016,18 @@ mps_write(void)
 		if (mpsmergeout) {
 			/* since we're processing routes, we should read in from whatever version and write out */
 			/* in the selected version */
-			while (!gbfeof(mps_file_temp)) {
+			while (!feof(mps_file_temp)) {
 
 				if (recType == 'R')  {
 					mps_route_r(mps_file_temp, mps_ver_temp, &rte);
 				}
 				else break;
 
-				reclen2 = gbfgetint32(mps_file_temp);
+				fread(&reclen, 4, 1, mps_file_temp);
+				reclen2 = le_read32(&reclen);
 
-				/* Read the record type "flag" in - using gbfread in case in the future need more than one char */
-				gbfread(&recType, 1, 1, mps_file_temp);
+				/* Read the record type "flag" in - using fread in case in the future need more than one char */
+				fread(&recType, 1, 1, mps_file_temp);
 			}
 		}
 		/* need to make sure there is a "real" waypoint for each route waypoint
@@ -1931,26 +2048,27 @@ mps_write(void)
 	*/
 	/* if ((mpsmergeout) && (global_opts.objective != trkdata)) { */
 	if ((mpsmergeout) && (! doing_trks)) {
-		while (!gbfeof(mps_file_temp)) {
+		while (!feof(mps_file_temp)) {
 
 			if (recType == 'T')  {
-				gbfwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
-				gbfwrite(&recType, 1, 1, mps_file_out);
+				fwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
+				fwrite(&recType, 1, 1, mps_file_out);
 
 				/* copy the data using a "reasonably" sized buffer */
 				for(tocopy = reclen2; tocopy > 0; tocopy -= block) {
 				  block = (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy);
-				  gbfread(copybuf, block, 1, mps_file_temp);
-				  gbfwrite(copybuf, block, 1, mps_file_out);
+				  fread(copybuf, block, 1, mps_file_temp);
+				  fwrite(copybuf, block, 1, mps_file_out);
 				}
 			}
 			else break;
-			reclen2 = gbfgetint32(mps_file_temp);
+			fread(&reclen, 4, 1, mps_file_temp);
+			reclen2 = le_read32(&reclen);
 
-			/* Read the record type "flag" in - using gbfread in case in the future need more than one char */
-			gbfread(&recType, 1, 1, mps_file_temp);
+			/* Read the record type "flag" in - using fread in case in the future need more than one char */
+			fread(&recType, 1, 1, mps_file_temp);
 
-		}	/* while (!gbfeof(mps_file_temp)) */
+		}	/* while (!feof(mps_file_temp)) */
 	}	/* if (mpsmergeout) */
 
 	/* tracks are next in the wpts, rte, trks, mapset sequence in .mps files */
@@ -1959,17 +2077,18 @@ mps_write(void)
 		if (mpsmergeout) {
 			/* since we're processing tracks, we should read in from whatever version and write out
 			   in the selected version */
-			while (!gbfeof(mps_file_temp)) {
+			while (!feof(mps_file_temp)) {
 
 				if (recType == 'T')  {
 					mps_track_r(mps_file_temp, mps_ver_temp, &trk);
 				}
 				else break;
 
-				reclen2 = gbfgetint32(mps_file_temp);
+				fread(&reclen, 4, 1, mps_file_temp);
+				reclen2 = le_read32(&reclen);
 
-				/* Read the record type "flag" in - using gbfread in case in the future need more than one char */
-				gbfread(&recType, 1, 1, mps_file_temp);
+				/* Read the record type "flag" in - using fread in case in the future need more than one char */
+				fread(&recType, 1, 1, mps_file_temp);
 			}
 		}
 		track_disp_all(mps_trackhdr_w_wrapper, mps_noop, mps_trackdatapoint_w_wrapper);
@@ -1979,21 +2098,22 @@ mps_write(void)
 		/* should now be reading a either a map segment or a mapset - since we would write out an empty one,
 		   let's use the one from the merge file which may well have decent data in */
 		for (;;) {
-			gbfwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
-			gbfwrite(&recType, 1, 1, mps_file_out);
+			fwrite(&reclen, 4, 1, mps_file_out);	/* write out untouched */
+			fwrite(&recType, 1, 1, mps_file_out);
 
 			/* copy the data using a "reasonably" sized buffer */
 			for(tocopy = reclen2; tocopy > 0; tocopy -= block) {
 			  block = (tocopy > sizeof(copybuf) ? sizeof(copybuf) : tocopy);
-			  gbfread(copybuf, block, 1, mps_file_temp);
-			  gbfwrite(copybuf, block, 1, mps_file_out);
+			  fread(copybuf, block, 1, mps_file_temp);
+			  fwrite(copybuf, block, 1, mps_file_out);
 			}
 			
 			if (recType != 'V') {
-				reclen2 = gbfgetint32(mps_file_temp);
+				fread(&reclen, 4, 1, mps_file_temp);
+				reclen2 = le_read32(&reclen);
 
-				/* Read the record type "flag" in - using gbfread in case in the future need more than one char */
-				gbfread(&recType, 1, 1, mps_file_temp);
+				/* Read the record type "flag" in - using fread in case in the future need more than one char */
+				fread(&recType, 1, 1, mps_file_temp);
 			}
 			else break;
 		}

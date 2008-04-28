@@ -159,11 +159,9 @@ var
   xy, _xy: TPoint;
   xmax: Integer;
   lb: TLabel;
-  us: string;
-
 begin
   if (AList = nil) then Exit;
-
+  
   FOpts := AList;
 
   xy.x := 0;
@@ -190,16 +188,13 @@ begin
       btnHelp.ShowHint := True;
     end;
 
-    us := AnsiLowerCase(o.hint);
-    if FIsInput and (AnsiPos('read', us) = 0) and
-      (
-       (AnsiPos('generate ', us) <> 0) or
-       (AnsiPos(' generate', us) <> 0) or
-       (AnsiPos('output ', us) <> 0) or
-       (AnsiPos(' output', us) <> 0) or
-       (AnsiPos('write', us) <> 0) or
-       (AnsiPos(' write', us) <> 0)
-      ) then Continue;
+    if FIsInput and (
+       (AnsiPos('generate ', o.hint) <> 0) or
+       (AnsiPos(' generate', o.hint) <> 0) or
+       (AnsiPos('output ', o.hint) <> 0) or
+       (AnsiPos(' output', o.hint) <> 0) or
+       (AnsiPos('write', o.hint) <> 0) or
+       (AnsiPos(' write', o.hint) <> 0)) then Continue;
 
     chb := TCheckBox.Create(nil);
     o.chb := chb;

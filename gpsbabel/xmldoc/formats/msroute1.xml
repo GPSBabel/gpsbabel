@@ -2,9 +2,7 @@
       
       
       <para> Input support for Microsoft AutoRoute 2002-2006 .axe files
-and Microsoft Streets and Trips .est files.  This is for reading routes
-created this program and is different than the <link linkend="fmt_s_and_t">
-s_and_t</link> format used for writing pushpins.</para><para>
+and Microsoft Streets and Trips .est files.
 These files contains only routes. We can extract the coordinates and
 the names of the points within route. An export to this format will
 not be supported.</para>

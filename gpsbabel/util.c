@@ -300,19 +300,6 @@ xfputs(const char *errtxt, const char *s, FILE *stream)
 int
 xasprintf(char **strp, const char *fmt, ...)
 {
-	va_list args;
-	int res;
-	
-	va_start(args, fmt);
-	res = xvasprintf(strp, fmt, args);
-	va_end(args);
-	
-	return res;
-}
-
-int
-xvasprintf(char **strp, const char *fmt, va_list ap)
-{
 /* From http://perfec.to/vsnprintf/pasprintf.c */
 /* size of first buffer malloc; start small to exercise grow routines */
 #ifdef DEBUG_MEM
@@ -344,7 +331,7 @@ xvasprintf(char **strp, const char *fmt, va_list ap)
 			return -1;
 		}
 
-		va_copy(args, ap);
+		va_start(args, fmt);
 		outsize = vsnprintf(buf, bufsize, fmt, args);
 		va_end(args);
 		
@@ -395,7 +382,6 @@ xvasprintf(char **strp, const char *fmt, va_list ap)
 	*strp = buf;
 	return outsize;
 }
-
 
 /* 
  * Duplicate a pascal string into a normal C string.
@@ -1103,30 +1089,14 @@ strsub(const char *s, const char *search, const char *replace)
 char *
 gstrsub(const char *s, const char *search, const char *replace)
 {
-	int ooffs = 0;
-	char *o, *c;
-	char *src = (char *)s;
-	int olen = strlen(src);
-	int slen = strlen(search);
-	int rlen = strlen(replace);
+	char *o = xstrdup(s);
 
-	o = xmalloc(olen + 1);
-	
-	while ((c = strstr(src, search))) {
-		olen += (rlen - slen);
-		o = xrealloc(o, olen + 1);
-		memcpy(o + ooffs, src, c - src);
-		ooffs += (c - src);
-		src = c + slen;
-		if (rlen) {
-			memcpy(o + ooffs, replace, rlen);
-			ooffs += rlen;
-		}
+	while (strstr(o, search)) {
+		char *oo = o;
+		o = strsub(o, search, replace);
+		xfree(oo);
 	}
 
-	if (ooffs < olen)
-		memcpy(o + ooffs, src, olen - ooffs);
-	o[olen] = '\0';
 	return o;
 }
 

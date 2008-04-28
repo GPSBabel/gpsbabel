@@ -1,7 +1,6 @@
 <para>
    Unicsv examines the first line of a file to determine the field
-   order and field separator in that file.   On write, it tries to 
-   figure out what data it has and writes headers and all the data it can.
+   order and field separator in that file.   It is thus read-only format.
 </para>
 <para>
    If the first line contains any tabs, the data lines are assumed
@@ -24,18 +23,15 @@
       depth =    Depth
       desc =     Description
       ele =      Elevation (in meters) of the point
-      e/w =      'e' for eastern hemisphere, 'w' for western
       fix =      3d, 2d, etc.
       geschw =   Geschwindigkeit (speed)
       hdop =     Horizontal dilution of precision
       head =     Heading / Course true
       heart =    Heartrate
-      height =   Elevation (in meters) of the point
       icon =     Symbol (icon) name
       lat =      Latitude
       lon =      Longitude
       name =     Waypoint name ("Shortname")
-      n/s =      'n' for northern hemisphere, 's' for southern
       notes =    Notes
       pdop =     Position dilution of precision
       prox =     Proximity

@@ -186,9 +186,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\avltree.c">
-			</File>
-			<File
 				RelativePath="..\axim_gpb.c">
 			</File>
 			<File
@@ -336,12 +333,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\dg-100.c">
-			</File>
-			<File
-				RelativePath="..\destinator.c">
-			</File>
-			<File
 				RelativePath="..\discard.c">
 			</File>
 			<File
@@ -390,10 +381,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\exif.c">
+				RelativePath="..\fatal.c">
 			</File>
 			<File
-				RelativePath="..\fatal.c">
+				RelativePath="..\filter_skeleton.c">
 			</File>
 			<File
 				RelativePath="..\filter_vecs.c">
@@ -417,10 +408,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\formspec.c">
+				RelativePath="..\format_skeleton.c">
 			</File>
 			<File
-				RelativePath="..\g7towin.c">
+				RelativePath="..\formspec.c">
 			</File>
 			<File
 				RelativePath="..\garmin.c">
@@ -445,9 +436,6 @@
 			</File>
 			<File
 				RelativePath="..\garmin_fs.c">
-			</File>
-			<File
-				RelativePath="..\garmin_gpi.c">
 			</File>
 			<File
 				RelativePath="..\garmin_tables.c">
@@ -550,9 +538,6 @@
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\ggv_log.c">
 			</File>
 			<File
 				RelativePath="..\globals.c">
@@ -822,9 +807,6 @@
 				RelativePath="..\ignrando.c">
 			</File>
 			<File
-				RelativePath="..\ik3d.c">
-			</File>
-			<File
 				RelativePath="..\inifile.c">
 			</File>
 			<File
@@ -874,9 +856,6 @@
 			</File>
 			<File
 				RelativePath=".\Expatw\libexpatw.lib">
-			</File>
-			<File
-				RelativePath="..\lmx.c">
 			</File>
 			<File
 				RelativePath="..\lowranceusr.c">
@@ -1074,9 +1053,6 @@
 				RelativePath="..\msroute.c">
 			</File>
 			<File
-				RelativePath="..\mtk_logger.c">
-			</File>
-			<File
 				RelativePath="..\navicache.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1096,9 +1072,6 @@
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\navilink.c">
 			</File>
 			<File
 				RelativePath="..\netstumbler.c">
@@ -1147,9 +1120,6 @@
 			</File>
 			<File
 				RelativePath="..\nukedata.c">
-			</File>
-			<File
-				RelativePath="..\osm.c">
 			</File>
 			<File
 				RelativePath="..\overlay.c">
@@ -1213,9 +1183,6 @@
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\parse.c">
 			</File>
 			<File
 				RelativePath="..\pathaway.c">
@@ -1408,9 +1375,6 @@
 			</File>
 			<File
 				RelativePath="..\radius.c">
-			</File>
-			<File
-				RelativePath="..\random.c">
 			</File>
 			<File
 				RelativePath="..\raymarine.c">
@@ -1842,9 +1806,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\vitovtt.c">
-			</File>
-			<File
 				RelativePath="..\vmem.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1932,9 +1893,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\xhtmlent.c">
-			</File>
-			<File
 				RelativePath="..\xmlgeneric.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1960,9 +1918,6 @@
 			</File>
 			<File
 				RelativePath="..\yahoo.c">
-			</File>
-			<File
-				RelativePath="..\xol.c">
 			</File>
 			<Filter
 				Name="Jeeps"
@@ -2336,65 +2291,10 @@
 					</FileConfiguration>
 				</File>
 			</Filter>
-			<Filter
-				Name="Zlib"
-				>
-				<File
-					RelativePath="..\zlib\adler32.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\compress.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\crc32.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\deflate.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\gzio.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\infback.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\inffast.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\inflate.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\inftrees.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\trees.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\uncompr.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\zutil.c"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
-			<File
-				RelativePath="..\avltree.h">
-			</File>
 			<File
 				RelativePath=".\config.h">
 			</File>
@@ -2405,16 +2305,7 @@
 				RelativePath="..\defs.h">
 			</File>
 			<File
-				RelativePath="..\garmin_gpi.h">
-			</File>
-			<File
 				RelativePath="..\garmin_tables.h">
-			</File>
-			<File
-				RelativePath="..\gbfile.h">
-			</File>
-			<File
-				RelativePath="..\gbtypes.h">
 			</File>
 			<File
 				RelativePath="..\grtcirc.h">

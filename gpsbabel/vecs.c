@@ -130,13 +130,6 @@ extern ff_vecs_t lmx_vecs;
 extern ff_vecs_t random_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
-extern ff_vecs_t ik3d_vecs;
-extern ff_vecs_t osm_vecs;
-extern ff_vecs_t destinator_poi_vecs;
-extern ff_vecs_t destinator_trl_vecs;
-extern ff_vecs_t destinator_itn_vecs;
-extern ff_vecs_t exif_vecs;
-extern ff_vecs_t vidaone_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -731,48 +724,6 @@ vecs_t vec_list[] = {
                 "navilink",
                 "NaviGPS GT-11/BGT-11 Download",
                 NULL
-        },
-        {
-                &ik3d_vecs,
-                "ik3d",
-                "MagicMaps IK3D project file (.ikt)",
-                "ikt"
-        },
-        {
-                &osm_vecs,
-                "osm",
-                "OpenStreetMap data files",
-                "xml"
-        },
-        {
-                &destinator_poi_vecs,
-                "destinator_poi",
-                "Destinator Points of Interest (.dat)",
-                "dat"
-        },
-        {
-                &destinator_itn_vecs,
-                "destinator_itn",
-                "Destinator Itineraries (.dat)",
-                "dat"
-        },
-        {
-                &destinator_trl_vecs,
-                "destinator_trl",
-                "Destinator TrackLogs (.dat)",
-                "dat"
-        },
-        {
-                &exif_vecs,
-                "exif",
-                "Embedded Exif-GPS data (.jpg)",
-		"jpg"
-        },
-        {
-                &vidaone_vecs,
-                "vidaone",
-                "VidaOne GPS for Pocket PC (.gpb)",
-		"gpb"
         },
 #endif // MAXIMAL_ENABLED
 	{

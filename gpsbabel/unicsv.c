@@ -86,8 +86,6 @@ typedef enum {
 	fld_hour,
 	fld_min,
 	fld_sec,
-	fld_ns,
-	fld_ew,
 	fld_garmin_city,
 	fld_garmin_postal_code,
 	fld_garmin_state,
@@ -142,7 +140,6 @@ static field_t fields_def[] = {
 	{ "y_pos",	fld_latitude, STR_ANY },
 	{ "alt",	fld_altitude, STR_ANY },
 	{ "ele",	fld_altitude, STR_ANY },
-	{ "height",	fld_altitude, STR_ANY },
 	{ "utm_z",	fld_utm_zone, STR_ANY },
 	{ "utm_c",	fld_utm_zone_char, STR_ANY },
 	{ "utm_zc",	fld_utm_zone_char, STR_ANY },
@@ -190,8 +187,6 @@ static field_t fields_def[] = {
 	{ "year",	fld_year, STR_LEFT },
 	{ "month",	fld_month, STR_LEFT },
 	{ "day",	fld_day, STR_LEFT },
-	{ "n/s",	fld_ns, STR_ANY },
-	{ "e/w",	fld_ew, STR_ANY },
 
 	/* garmin specials */
 	{ "addr",	fld_garmin_addr, STR_ANY },
@@ -532,8 +527,6 @@ unicsv_parse_one_line(char *ibuf)
 	double d;
 	struct tm ymd;
 	int src_datum = unicsv_datum_idx;
-	int ns = 1;
-	int ew = 1;
 
 	wpt = waypt_new();
 	wpt->latitude = unicsv_unknown;
@@ -552,6 +545,7 @@ unicsv_parse_one_line(char *ibuf)
 
 		s = lrtrim(s);
 		if (! *s) continue;	/* skip empty columns */
+		
 		switch(unicsv_fields_tab[column]) {
 
 		case fld_time:
@@ -568,12 +562,10 @@ unicsv_parse_one_line(char *ibuf)
 		
 		case fld_latitude:
 			human_to_dec( s, &wpt->latitude, &wpt->longitude, 1 );
-			wpt->latitude = wpt->latitude * ns;
 			break;
 			
 		case fld_longitude:
 			human_to_dec( s, &wpt->latitude, &wpt->longitude, 2 );
-			wpt->longitude = wpt->longitude * ew;
 			break;
 			
 		case fld_shortname:
@@ -803,14 +795,7 @@ unicsv_parse_one_line(char *ibuf)
 		case fld_datetime:
 			/* not implemented */
 			break;
-		case fld_ns:
-			ns = tolower(s[0]) == 'n' ? 1 : -1;
-			wpt->latitude *= ns;
-			break;
-		case fld_ew:
-			ew = tolower(s[0]) == 'e' ? 1 : -1;
-			wpt->longitude *= ew;
-			break;
+
 		case fld_garmin_city:
 		case fld_garmin_postal_code:
 		case fld_garmin_state:
@@ -960,11 +945,19 @@ unicsv_rd(void)
 
 /* =========================================================================== */
 
+static char *
+strassign(char **old, char *new)
+{
+	if (*old) xfree(*old);
+	*old = new;
+	return new;
+}
+
 static void
 unicsv_fatal_outside(const waypoint *wpt)
 {
 	gbfprintf(fout, "#####\n");
-	fatal(MYNAME ": %s (%s) is outside of convertable area of grid \"%s\"!\n",
+	fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
 		wpt->shortname ? wpt->shortname : "Waypoint",
 		pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
 		gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));
@@ -1089,18 +1082,9 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 		gbfputs(cout, fout);
 		break;
 		
-	case grid_lat_lon_dms: {
-		char *sep, *tmp;
+	case grid_lat_lon_dms:
 		cout = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, 0);
-		sep = strchr(cout, ',');
-		*sep = '\0';
-		tmp = strenquote(cout, UNICSV_QUOT_CHAR);
-		gbfprintf(fout, "%s%s", tmp, unicsv_fieldsep);
-		xfree(tmp);
-		tmp = strenquote(sep+1, UNICSV_QUOT_CHAR);
-		gbfputs(tmp, fout);
-		xfree(tmp);
-		}
+		gbfputs(strassign(&cout, strenquote(cout, UNICSV_QUOT_CHAR)), fout);
 		break;
 
 	case grid_bng: {
