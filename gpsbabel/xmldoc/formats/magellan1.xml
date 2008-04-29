@@ -48,30 +48,49 @@ The RoadMate family of products is not supported.
 <para>
 This module does not support the units that do not follow Magellan's
 documented communications protocols including:</para>
-<simplelist>
+<simplelist columns="2">
 <member>Maestro 3100</member>
 <member>Maestro 3140</member>
 <member>Maestro 3200</member>
 <member>Maestro 3210</member>
 <member>Maestro 3220</member>
+<member>Maestro 3225</member>
+<member>Maestro 3250</member>
 <member>Maestro 4000</member>
 <member>Maestro 4040</member>
 <member>Maestro 4050</member>
+<member>Maestro 4200</member>
+<member>Maestro 4210</member>
+<member>Maestro 4220</member>
 <member>Maestro 4250</member>
+<member>Maestro 5310</member>
 
-<member> RoadMate 2000 </member>
-<member> RoadMate 2200T</member>
 <member> RoadMate 300 </member>
-<member> RoadMate 3000T</member>
-<member> RoadMate 3050T</member>
 <member> RoadMate 360 </member>
 <member> RoadMate 500</member>
-<member> RoadMate 6000T</member>
 <member> RoadMate 700 </member>
 <member> RoadMate 760</member>
 <member> RoadMate 800</member>
 <member> RoadMate 860T</member>
+<member> RoadMate 1200 </member>
+<member> RoadMate 1400 </member>
+<member> RoadMate 1412 </member>
+<member> RoadMate 1430 </member>
+<member> RoadMate 2000 </member>
+<member> RoadMate 2000 </member>
+<member> RoadMate 2200T</member>
+<member> RoadMate 3000T</member>
+<member> RoadMate 3050T</member>
+<member> RoadMate 6000T</member>
 <member> RoadMate AAA </member>
+
+<member> Triton 200 </member>
+<member> Triton 300 </member>
+<member> Triton 400 </member>
+<member> Triton 500 </member>
+<member> Triton 1500 </member>
+<member> Triton 2000 </member>
+
 </simplelist>
 
 </important>
