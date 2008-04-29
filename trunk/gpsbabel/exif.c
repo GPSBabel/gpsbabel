@@ -166,7 +166,7 @@ static gbsize_t
 exif_read_tags(const int ifd)
 {
 	int entries;
-	exif_tag_t *tags;
+	exif_tag_t *tags = NULL;
 	gbsize_t next_ifd = 0;
 	double gpsdop = unknown_alt;
 	char speed_ref = 'K';
