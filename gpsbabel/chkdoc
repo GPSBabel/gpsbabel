@@ -12,7 +12,7 @@ checkit() {
 		ECODE=1
 	fi
 	
-	if ! grep -qi $TYPE  ~/src/babelweb/changes.html
+	if ! grep -qi $TYPE  ~/src/babelweb/changes*.html
 	then
 		echo $STY $TYPE is not documented in changes.html.
 		ECODE=1
