@@ -1,0 +1,498 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: GPSBabel command line program\n"
+"POT-Creation-Date: 2005-11-19 01:14\n"
+"PO-Revision-Date: 2008-04-26 21:18+0100\n"
+"Last-Translator: oliskoli <o.b.klein@gpsbabel.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: dxgettext 1.2.1\n"
+"Language-Team:  <o.b.klein@gpsbabel.org>\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+
+msgid "(integer sec or 'auto') Barograph to GPS time diff"
+msgstr "Zeitdifferent zwischen Barograph und GPS (ganzz. Sekunden oder 'auto')"
+
+msgid "(USR input) Break segments into separate tracks"
+msgstr "USR Eingabe: Segmente in seperate Tracks aufteilen"
+
+msgid "(USR output) Merge into one segmented track"
+msgstr "USR-Ausgabe: zu einem segmentierten Track zusammenfassen"
+
+msgid "Ad-hoc closed icon name"
+msgstr "Icon allgemein für \"geschlossen\""
+
+msgid "Ad-hoc open icon name"
+msgstr "Icon allgemein für \"offen\""
+
+msgid "After output job done sleep n second(s)"
+msgstr "Pausiere im Anschluß n sekunde(n)"
+
+msgid "Allow whitespace synth. shortnames"
+msgstr "Erlaube Leerzeichen in Kurznamen"
+
+msgid "Altitudes are absolute and not clamped to ground"
+msgstr "Absolute Höhenangaben (nicht bodenverbunden)"
+
+msgid "Append icon_descr to description"
+msgstr "Erweitere Beschreibung um Symbolbeschreibung"
+
+msgid "Append realtime positioning data to the output file instead of truncating"
+msgstr ""
+
+msgid "Base URL for link tag in output"
+msgstr "Basis-URL für Verknüpfungseintrag "
+
+msgid "Basename prepended to URL on output"
+msgstr "Basis-Adresse für erzeugte URL's"
+
+msgid "Bitmap of categories"
+msgstr "Mehrfachkategorie, als Dezimal- oder Hexadezimalwert"
+
+msgid "Category name (Cache)"
+msgstr "Kategoriename (Cache)"
+
+msgid "Category number to use for written waypoints"
+msgstr "Benutze Kategorie # beim Schreiben von Wegpunkten  (1..16)"
+
+msgid "Color for lines or mapnotes"
+msgstr "Farbe für Linien oder Kartenangaben"
+
+msgid "Command unit to power itself down"
+msgstr "Gerät im Anschluß abschalten"
+
+msgid "Complete date-free tracks with given date (YYYYMMDD)."
+msgstr "Komplettiere Tracks ohne Datumsangaben mit Datum ... (YYYYMMDD)"
+
+msgid "Create unique waypoint names (default = yes)"
+msgstr "Erzeuge eindeutige Wegpunktnamen (Vorgabe: JA)"
+
+msgid "Create waypoints from geocache log entries"
+msgstr "Erzeuge Wegpunkte aus Geocache Log-Einträgen"
+
+msgid "Database name"
+msgstr "Interner Name für die Palm/OS Datenbank"
+
+msgid "Database name (filename)"
+msgstr "Datenbankname (Dateiname)"
+
+msgid "Datum (default=NAD27)"
+msgstr "GPS-Datum (Vorgabe: NAD27)"
+
+msgid "Days after which points are considered old"
+msgstr "Anzahl an Tagen, nach denen Punkte als alt betrachtet werden"
+
+msgid "Decimal seconds to pause between groups of strings"
+msgstr "Pause (in Sekunden) zwischen Zeilengruppen"
+
+msgid "Default category on output"
+msgstr "Standardkategorie beim Schreiben"
+
+msgid "Default category on output (1..16)"
+msgstr "Standard Kategorie (1..16)"
+
+msgid "Default icon name"
+msgstr "Standard Symbol"
+
+msgid "Default location"
+msgstr "Vorgabestandort"
+
+msgid "Default proximity"
+msgstr "Vorgabe-Annäherungsabstand"
+
+msgid "Default speed"
+msgstr "Standardgeschwindigkeit"
+
+msgid "Default speed for waypoints (knots/hr)"
+msgstr "Vorgabegeschwindigkeit (Knoten/h)"
+
+msgid "Degrees output as 'ddd', 'dmm'(default) or 'dms'"
+msgstr "Schreibe Gradangaben in 'ddd', 'dmm' (Vorgabe) oder 'dms' (Gitter)"
+
+msgid "Delete all routes"
+msgstr "Lösche alle Routen"
+
+msgid "Delete all track points"
+msgstr "Lösche alle Trackpunkte"
+
+msgid "Delete all waypoints"
+msgstr "Lösche alle Wegpunkte"
+
+msgid "Display labels on track and routepoints  (default = 1)"
+msgstr "Zeige Beschriftung bei Track- und Routenpunkten (Vorgabe: 1)"
+
+msgid "Distance unit [m=metric, s=statute]"
+msgstr "Entfernungsangaben [m=Metrisch, s=Statute]"
+
+msgid "Do not add geocache data to description"
+msgstr "Keine Geocache-Daten zur Beschreibung hinzufügen"
+
+msgid "Do not add URLs to description"
+msgstr "Hänge keine URL's an die Beschreibung an"
+
+msgid "Don't show gpi bitmap on device"
+msgstr "Zeige keine Bitmap (Icon) auf dem GPS"
+
+msgid "Draw extrusion line from trackpoint to ground"
+msgstr "Zeichne eine Verbindungslinie vom Trackpunkt zum Erdboden"
+
+msgid "Drop route points that do not have an equivalent waypoint (hidden points)"
+msgstr "Lösche versteckte Wegpunkte (automatisch berechnete Routenpunkte)"
+
+msgid "Enable alerts on speed or proximity distance"
+msgstr "Aktiviere Alarm für Annäherung and Geschwindigkeit"
+
+msgid "Encrypt hints using ROT13"
+msgstr "Verschlüsselung mit ROT13"
+
+msgid "Encrypt hints with ROT13"
+msgstr "Verschlüsselung mit ROT13"
+
+msgid "Erase device data after download"
+msgstr "Nach Download Daten auf dem Gerät löschen"
+
+msgid "Export linestrings for tracks and routes"
+msgstr "Exportiere Linendaten (linestrings) für Tracks und Routen (Vorgabe: JA)"
+
+msgid "Export placemarks for tracks and routes"
+msgstr "Exportiere Markierungen für Tracks und Routen"
+
+msgid "Full path to XCSV style file"
+msgstr "Pfad zur 'XCSV-Style'-Datei"
+
+msgid "Generate # points"
+msgstr "Erzeuge # Punkte"
+
+msgid "Generate file with lat/lon for centering map"
+msgstr "Erzeuge Datei mit Breiten- und Längengradwerten (für Kartenzentrierung)"
+
+msgid "Give points (waypoints/route points) a default radius (proximity)"
+msgstr "Gebe Wegpunkten/Routenpunkten diesen Radius "
+
+msgid "GPS datum (def. WGS 84)"
+msgstr "GPS-Datum (Vorgabe: WGS 84)"
+
+msgid "Height in pixels of map"
+msgstr "Kartenhöhe in Pixel"
+
+msgid "Ignore event marker icons on read"
+msgstr "Ignoriere Ereignis-Icons beim Lesen"
+
+msgid "Include extended data for trackpoints (default = 1)"
+msgstr "Erweiterte Daten in Trackpoints mit einbeziehen (Vorgabe = 1)"
+
+msgid "Include groundspeak logs if present"
+msgstr "Groundspeak Log's beifügen (wenn vorhandan)"
+
+msgid "Include major turn points (with description) from calculated route"
+msgstr "Beziehe Hauptrichtungsänderungen (Ansage vorhanden) mit ein"
+
+msgid "Include only via stations in route"
+msgstr "Übernehme nur Stationspunkte ('viastations') der Route"
+
+msgid "Include short name in bookmarks"
+msgstr "Übernehme Kurznamen in Lesezeichen"
+
+msgid "Index of name field in .dbf"
+msgstr "Index des Namensfeldes innerhalb der .dbf"
+
+msgid "Index of route (if more the one in source)"
+msgstr "Index des Route (falls mehrere im Eingabeformat)"
+
+msgid "Index of route to write (if more the one in source)"
+msgstr "Routen-Index (wenn mehrere vorhanden)"
+
+msgid "Index of route/track to write (if more the one in source)"
+msgstr "Route oder Track-Index (wenn mehrere vorhanden)"
+
+msgid "Index of track (if more the one in source)"
+msgstr "Index des Tracks (falls mehrere im Eingabeformat)"
+
+msgid "Index of track to write (if more the one in source)"
+msgstr "Track-Index (wenn mehrere vorhanden)"
+
+msgid "Index of URL field in .dbf"
+msgstr "Index der URL innerhalb der .dbf"
+
+msgid "Indicate direction of travel in track icons (default = 0)"
+msgstr "Erzeuge spezielle Icons (Richtungspfeile)"
+
+msgid "Infrastructure closed icon name"
+msgstr "Icon \"Komplex (Infrastruktur) geschlossen\""
+
+msgid "Infrastructure open icon name"
+msgstr "Icon \"Komplex (Infrastruktur) offen\""
+
+msgid "Keep turns if simplify filter is used"
+msgstr "Erhalte Abbiegungen bei Benutzung des Simplify-Filters (Vereinfachen)"
+
+msgid "Length of generated shortnames"
+msgstr "Maximale Länge der generierten Kurznamen"
+
+msgid "Length of generated shortnames (default 16)"
+msgstr "Maximale Länge der zu generierten Kurznamen"
+
+msgid "Line color, specified in hex AABBGGRR"
+msgstr "Linienfarbe (hex. Angabe in Form AABBGGRR)"
+
+msgid "Make synth. shortnames unique"
+msgstr "Eindeutige Kurznamen erzeugen"
+
+msgid "MapSend version TRK file to generate (3,4)"
+msgstr "Generiere TRK-Datei in MapSend-Version # (3,4)"
+
+msgid "Margin for map.  Degrees or percentage"
+msgstr "Begrenzung der Karte (in Grad oder Prozent)"
+
+msgid "Marker type for new points"
+msgstr "Markierungstyp für neue Punkte"
+
+msgid "Marker type for old points"
+msgstr "Markierungstyp für alte Punkte"
+
+msgid "Marker type for unfound points"
+msgstr "Markierungstyp für nicht gefundene Punkte"
+
+msgid "Max length of waypoint name to write"
+msgstr "Max. Länge der zu schreibenden Wegpunktnamen"
+
+msgid "Max number of comments to write (maxcmts=200)"
+msgstr "Maximale Anzahl an Kommentaren für die Ausgabe"
+
+msgid "Max shortname length when used with -s"
+msgstr "Maximale Länge der generierten Kurznamen"
+
+msgid "Max synthesized shortname length"
+msgstr "Maximale Länge der generierten Kurznamen"
+
+msgid "Merge output with existing file"
+msgstr "Ausgabe in existierende Datei einfügen"
+
+msgid "MTK compatible CSV output file"
+msgstr "Ausgabe-CSV-Datei kompatibel zum MTK-Datalogger"
+
+msgid "Name of the 'unassigned' category"
+msgstr "Name der 'unassigned'-Kategorie"
+
+msgid "New name for the route"
+msgstr "Name der neuen Route"
+
+msgid "No separator lines between waypoints"
+msgstr "keine Trennlinien zwischen den Wegpunkten"
+
+msgid "No whitespace in generated shortnames"
+msgstr "Leerzeichen in Kurznamen unterdrücken"
+
+msgid "Non-stealth encrypted icon name"
+msgstr "Sichtbar verschlüsselter Symbolname"
+
+msgid "Non-stealth non-encrypted icon name"
+msgstr "Sichtbar und unverschlüsselter Symbolname"
+
+msgid "Numeric value of bitrate (baud=4800)"
+msgstr "Baudrate (Vorgabe: 4800)"
+
+msgid "Omit Placer name"
+msgstr "Placername auslassen"
+
+msgid "Only read turns; skip all other points"
+msgstr "Lese nur Abbiegungen und ignoriere alle sonstigen Punkte"
+
+msgid "Path to HTML style sheet"
+msgstr "Pfad zum HTML-Style-Sheet"
+
+msgid "Precision of coordinates"
+msgstr "Präzision der Koordinaten (Anzahl Nachkommastellen)"
+
+msgid "Proximity distance"
+msgstr "Standardmäßiger Annäherungsabstand"
+
+msgid "Radius for circles"
+msgstr "Kreisradius"
+
+msgid "Radius of our big earth (default 6371000 meters)"
+msgstr "Erdradius in Meter (Vorgabe: 6371000 Meter)"
+
+msgid "Read control points as waypoint/route/none"
+msgstr "Lese Kontrollpunkte als Wegpunkt/Route/nichts"
+
+msgid "Read/Write date format (i.e. DDMMYYYY)"
+msgstr "Datumsformat für Ein-/Ausgabe (z.B. DDMMYYYY)"
+
+msgid "Read/Write date format (i.e. yyyy/mm/dd)"
+msgstr "Datumsformat (z.B. DD.MM.YYYY)"
+
+msgid "Read/write GPGGA sentences"
+msgstr "Schreibe/Lese GPGGA Sequenzen"
+
+msgid "Read/write GPGSA sentences"
+msgstr "Schreibe/Lese GPGSA Sequenzen"
+
+msgid "Read/write GPRMC sentences"
+msgstr "Schreibe/Lese GPRMC Sequenzen"
+
+msgid "Read/write GPVTG sentences"
+msgstr "Schreibe/Lese GPVTG Sequenzen"
+
+msgid "Read/Write time format (i.e. HH:mm:ss xx)"
+msgstr "Zeitformat (z.B. HH:mm:ss xx)"
+
+msgid "Retain at most this number of position points  (0 = unlimited)"
+msgstr "Behalte höchstens diese Anzahl an Positionspunkten (0 = kein Limit)"
+
+msgid "Return current position as a waypoint"
+msgstr "Übertrage aktuelle Position als Wegpunkt"
+
+msgid "Road type changes"
+msgstr "Straßentyp-Wechsel"
+
+msgid "Set waypoint name to source filename."
+msgstr "Erzeuge den Wegpunktnamen an Hand des Dateinames"
+
+msgid "Shortname is MAC address"
+msgstr "Kurzname ergibt sich aus MAC-Adresse"
+
+msgid "Speed in bits per second of serial port (baud=4800)"
+msgstr "Übertragungsrate des seriellen Ports in Bits/Sekunde (Vorgabe: baud=4800)"
+
+msgid "Split input into separate files"
+msgstr "Teile gelesene Daten in seperate Dateien"
+
+msgid "Split into multiple routes at turns"
+msgstr "Route an Abbiegungen teilen"
+
+msgid "Starting seed of the internal number generator"
+msgstr "Startwert für internen Zufallszahlengenerator"
+
+msgid "Stealth encrypted icon name"
+msgstr "Unsichtbar verschlüsselter Symbolname"
+
+msgid "Stealth non-encrypted icon name"
+msgstr "Unsichtbarer unverschlüsselter Symbolname"
+
+msgid "String to separate concatenated address fields (default=\", \")"
+msgstr "Trennzeichen für zusammengefügte Adressfelder (Vorgabe: \", \")"
+
+msgid "Suppress labels on generated pins"
+msgstr "Unterdücke Kennzeichnung für erzeugte Pins"
+
+msgid "Suppress retired geocaches"
+msgstr "Unterdrücke zurückgezogene (?) Geocaches"
+
+msgid "Suppress separator lines between waypoints"
+msgstr "Keine Trennlinien zwischen den Wegpunkten"
+
+msgid "Suppress use of handshaking in name of speed"
+msgstr "Kein 'Handshaking' (im Namen der Geschwindigkeit)"
+
+msgid "Suppress whitespace in generated shortnames"
+msgstr "Keine Leerzeichen in Kurznamen"
+
+msgid "Symbol to use for point data"
+msgstr "Symbol für Punkte"
+
+msgid "Sync GPS time to computer time"
+msgstr "Synchronisiere PC-Uhr mit dem GPS (PC -> GPS)"
+
+msgid "Synthesize track times"
+msgstr "Erzeuge Tracknamen"
+
+msgid "Target GPX version for output"
+msgstr "Schreibe in GPX-Version (1.0 oder 1.1)"
+
+msgid "Temperature unit [c=Celsius, f=Fahrenheit]"
+msgstr "Temperatureinheit [c=Celsius, F=Fahrenheit]"
+
+msgid "The icon description is already the marker"
+msgstr "Die Symbolbeschreibung ist bereits die Markierung"
+
+msgid "Treat waypoints as icons on write"
+msgstr "Behandle Wegpunkte als Icons beim Schreiben"
+
+msgid "Type of .an1 file"
+msgstr ".an1 Dateityp"
+
+msgid "Units for altitude (f)eet or (m)etres"
+msgstr "Höhenangaben in Fuß oder Meter ('f' oder 'm')"
+
+msgid "Units used for names with @speed ('s'tatute or 'm'etric)"
+msgstr "Einheit für Geschwindigkeit in Wegpunkten [...@30]  ( 's'tatute oder 'm'etrisch)"
+
+msgid "Units used when writing comments ('s'tatute or 'm'etric)"
+msgstr "Einheit innerhalb von Kommentaren ( 's'tatute oder 'm'etrisch)"
+
+msgid "UPPERCASE synth. shortnames"
+msgstr "Erzeuge Kurznamen in Großbuchstaben"
+
+msgid "Use depth values on output (default is ignore)"
+msgstr "Tiefenangaben mit ausgeben (normalerweise ausgeschaltet)"
+
+msgid "Use proximity values on output (default is ignore)"
+msgstr "Benutze Proximity-Werte bei der Ausgabe (Vorgabe: NEIN)"
+
+msgid "Use shortname instead of description"
+msgstr "Benutze den Kurznamen anstelle der Beschreibung"
+
+msgid "Use specified bitmap on output"
+msgstr "Benutze spezifische Bitmap (.BMP) für die Ausgabe"
+
+msgid "Version of gdb file to generate (1..3)"
+msgstr "Schreibe GDB-Version 1, 2 oder 3"
+
+msgid "Version of mapsource file to generate (3,4,5)"
+msgstr "Schreibe MapSource Datei in Version ... (3,4 oder 5)"
+
+msgid "Waypoint background color"
+msgstr "Wegpunkt Hintergrundfarbe"
+
+msgid "Waypoint foreground color"
+msgstr "Wegpunkt Vordergrundfarbe"
+
+msgid "Waypoint type"
+msgstr "Wegpunkt Typ"
+
+msgid "Width in pixels of map"
+msgstr "Kartenbreite in Pixel"
+
+msgid "Width of lines, in pixels"
+msgstr "Linienhöhe in Pixel"
+
+msgid "Write additional node tag key/value pairs"
+msgstr "Schreibe zusätzliche Wegpunkt (node) Informationspaare (tags)"
+
+msgid "Write additional way tag key/value pairs"
+msgstr "Schreibe zusätzliche Routen (way) Informationspaare (tags)"
+
+msgid "Write all tracks into one file"
+msgstr "Schreibe alle Tracks in eine Datei"
+
+msgid "Write description to address field"
+msgstr "Platziere die Beschreibung im Adressfeld"
+
+msgid "Write each waypoint in a separate file"
+msgstr "Schreibe jeden Wegpunkt in eine separate Datei"
+
+msgid "Write notes to address field"
+msgstr "Schreibe Kommentar (Notizen) in das Adressfeld"
+
+msgid "Write position to address field"
+msgstr "Platziere die Koordinaten im Adressfeld"
+
+msgid "Write position using this grid."
+msgstr "Erzeuge Koordinaten unter Benutzung dieses Gitters (Grids)."
+
+msgid "Write timestamps with offset x to UTC time"
+msgstr "Schreibe Zeitstempel relativ zur UTC + x"
+
+msgid "Write tracks compatible with Carto Exploreur"
+msgstr "Erzeuge Tracks ohne Titel (kompatibel zu \"Carto Exploreur\")"
+
+msgid "Write tracks for Gisteq Phototracker"
+msgstr "Schreibe Tracks für \"Gisteq Phototracker\""
+
+msgid "Zoom level to reduce points"
+msgstr "Vergrößerungsfakter um Punkte zu unterdrücken"
+

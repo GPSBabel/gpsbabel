@@ -1,0 +1,10 @@
+<para>
+  This option is experimental and was added to solve a very specific problem.
+  Certain Garmin units (the original black and white Vista is known to have 
+  this) will sometimes scramble their clock crazy far into the future (like
+  2066).  When this happens, the GPS itself may or may not work and 
+  later conversations with GPSBabel may fail as the time overflows the
+  documented range.  The use of <option>resettime</option> brings the GPS's internal clock
+  back close enough to reality that the GPS itself can then "fix" it when
+  it has next a lock.
+</para>

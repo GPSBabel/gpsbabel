@@ -1,0 +1,333 @@
+   <chapter id="Usage">
+      <title>Usage</title>
+      <sect1 id="Invocation">
+         <title>Invocation</title>
+<para>
+If you're using GPSBabel, you will need to know how to do at least two things:
+read data from a file, and write it to another file.  There are four basic
+options you need to know to do those things:
+</para>
+<segmentedlist>
+<?dbhtml list-presentation="table"?>
+<segtitle>Command</segtitle>
+<segtitle>Meaning</segtitle>
+<seglistitem>
+  <seg><option>-i</option> <parameter class="command">format</parameter></seg>
+  <seg>Set input format</seg>
+</seglistitem>
+<seglistitem>
+  <seg><option>-f</option> <parameter class="command">filename</parameter></seg>
+  <seg>Read file</seg>
+</seglistitem>
+<seglistitem>
+  <seg><option>-o</option> <parameter class="command">format</parameter></seg>
+  <seg>Set output format</seg>
+</seglistitem>
+<seglistitem>
+  <seg><option>-F</option> <parameter class="command">filename</parameter></seg>
+  <seg>Write output file</seg>
+</seglistitem>
+</segmentedlist>
+<important>
+<para>
+Case matters.  Notably <option>-f</option> (lowercase) sets the <emphasis>input</emphasis> file.  <option> -F</option> (uppercase) sets the <emphasis>output</emphasis> file. 
+</para>
+</important>
+
+<para>
+The <parameter class="command">format</parameter> parameters in the above list
+refer to the names of formats or file types supported by GPSBabel. 
+</para>
+<para><userinput>gpsbabel -? </userinput></para>
+<para>will always show you the supported file types.  In this document, the
+various supported formats are listed in <xref linkend="The_Formats" />.  The 
+name that you would use on the command line follows the format name in 
+parentheses.
+</para>
+<para>
+Options are <emphasis>always</emphasis> processed in order from left to right.
+In practical terms, this means that things you want to read should appear
+in the command before things you want to write.   This sometimes surprises
+new users as adding options to turn on debugging at the end, for example, 
+doesn't work as the debugging is turned on after all the interesting work is
+done.   The reason for this strict ordering becomes more apparent once you
+learn about mixing formats and filters.
+</para>
+<para>
+The <parameter class="command">filename</parameter> parameters specify the 
+name of a file to be read or written.
+</para>
+
+<para>To use
+         GPSBabel in its simplest form, just tell it what you're reading, where to read
+         it from, what you're writing, and what to write it to.  For
+         example:</para>
+         <para><userinput>gpsbabel -i geo -f /tmp/geocaching.loc -o gpx -F /tmp/geocaching.gpx</userinput></para>
+         <para>tells it to read the file <filename>/tmp/geocaching.loc</filename> in geocaching.com
+         format and create a new file <filename>/tmp/geocaching.gpx</filename> in GPX format.   It's important to note that the names have nothing to do with the formats actually used.</para>
+         <para> This command will read from a Magellan unit attached
+         to the first serial port on a Linux system (device names will
+         vary on other OSes; typically COMx: on WIndows) and write them as a geocaching loc file.</para>
+<example>
+  <title>Command showing Linux download from Magellan serial and writing to .loc file</title>
+         <para><userinput>gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</userinput></para>
+</example>
+         <para>This second command does the same on Microsoft Windows.</para>
+<example>
+  <title>Command showing Windows download from Magellan serial and writing to .loc file</title>
+         <para><userinput>gpsbabel -i magellan -f com1 -o geo -F mag.loc</userinput></para>
+</example>
+         <para>Optionally, you may specify <parameter moreinfo="none">-s</parameter> in any command line.  This
+         causes the program to ignore any "short" names that may be
+         present in the source data format and synthesize one from the
+         long name.  This is particularly useful if you're writing to
+         a target format that isn't the lowest common denominator but
+         the source data was written for the lowest common
+         denominator.  This is useful for writing data from geocaching.com
+         to a GPS so my waypoints have "real" names instead of
+         the 'GC1234' ones that are optimized for receivers of the lowest 
+	common denominator.
+         A geocacher using Linux with a Magellan receiver may thus find commands
+         like this useful.</para>
+         <para><userinput>gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0  </userinput></para>
+	<para>His counterpart on Windows will find this equivalent</para>
+	<para><userinput>gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1</userinput></para>
+      </sect1>
+      <sect1 id="Suboptions">
+	<title>Suboptions</title>
+	<para>
+	  Many of the available format options in GPSBabel can themselves
+	  take options.   While we try to make all the formats do the most
+	  sensible thing possible without any extra options; this allows
+	  great power and flexibility in the operation of the program.
+	</para>
+	<para>
+	  Suboptions are comma separated and immediately follow the option
+	  itself. The available suboptions are listed on the individual 
+	  format pages.  We'll make an example from <xref linkend="fmt_kml" />:
+	</para>
+         <para><userinput>gpsbabel -i gpx -f file.gpx -o kml,deficon="file://myicon.png",lines=0 -F one.kml -o kml -F two.kml</userinput></para>
+	<para>
+	This command will read the GPX file <filename>file.gpx</filename>
+	and create two KML files.    <filename>one.kml</filename> will
+	have the given icon and no lines between track and routepoints.
+	<filename>two.kml</filename> will be created with the defaults used
+	in the KML writer.
+	</para>
+	<para>
+	Suboptions for the various formats allow you to change serial speeds,
+	pass arguments to filters, change the type of file written, override
+	icon defaults, and lots of other things.   The suboptions for each
+	filetype are documented on the page in this document that describes
+	the option itself.
+	</para>
+      </sect1>
+      <sect1 id="Advanced_Usage">
+         <title>Advanced Usage</title>
+         <para>Argument are processed in the order they appear on the command
+line and are translated internally into a pipeline that data flows
+through when executed. Normally one would: </para>
+         <simplelist type="vert">
+            <member>read from one input</member>
+            <member>optionally apply filters </member>
+            <member>write into one output</member>
+         </simplelist>
+         <para> but GPSBabel is flexible enough to allow more complicated
+operations such as reading from several files (potentially of
+different types), applying a filter, reading more data, then writing the
+merged data to multiple destinations.
+</para>
+         <para>The input file type remains unchanged until a new
+         <parameter moreinfo="none">-i</parameter> argument is seen.
+         Files are read in the order they appear. So you could merge
+         three input files into one output file with: </para>
+	<example>
+	<title>Merging multiple files into one</title>
+           <para><userinput>gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc</userinput></para>
+	</example>
+         <para>You can merge files of different types:</para>
+	<example>
+	<title>Merging multiple files of differing types.</title>
+         <para><userinput>gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx  -o gpsutil -F big.gps</userinput></para>
+	</example>
+	<example>
+	 <title>Writing the same data in multiple output formats.</title>
+         <para> You can write the same data in different output formats:</para>
+
+         <para><userinput>gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx -F 1.wpt</userinput></para>
+	</example>
+         <para>If you want to change the character set of input or/and
+         output side you can do this with the option <option>-c
+         &lt;character set&gt;</option>. You can get a complete list
+         of supported character sets with "gpsbabel -l".  To change
+         the character set on both sides you should do this:</para>
+         <para><userinput>gpsbabel -i xcsv,style=foo.style -c latin1 -f foo -o xcsv,style=bar.style -c ms-ansi -F bar</userinput></para>
+         <para>Note, that some formats have a fixed character set and ignore this option.</para>
+      </sect1>
+      <sect1 id="Route_And_Track_Modes">
+         <title>Route and Track Modes</title>
+         <para> Most formats supported by GPSBabel will make a reasonable attempt to work
+         transparently with waypoints, tracks, and routes.  Some
+         formats, like <link linkend="fmt_garmin">garmin</link> and <link linkend="fmt_magellan">magellan</link> require the <parameter moreinfo="none">-t</parameter> flag to work with tracks and
+         <parameter moreinfo="none">-r</parameter> to work with
+         routes. <parameter moreinfo="none">-w</parameter> is for
+         waypoints, and is the default. So if you wanted to read all
+         data from a Magellan Meridian GPS receiver into a gpx file, you might use a command
+         like:</para>
+         <para><userinput> gpsbabel -t -r -w -i magellan -f com1:  -o gpx -F backup.gpx</userinput></para>
+         <para> Tracks and routes are advanced features and don't try
+         to handle every possible hazard that can be encountered
+         during a conversion.  If you're merging or converting files
+         of similar limitations, things work very well.</para>
+	 <para> Many of those hazards can be overcome with our filters
+	 but there are often compromises to be made.  For example, if you
+	 have a GPX route that contains  150 turn points but you're sending
+	 the route to a GPS receiver that supports only 30 turnpoints, something has
+	 to go.   One might use our 'simplify' filter to produce a route that
+ 	 retained the 30 most mathematically significant turnpoints but that
+	 may not really be the route you had in mind.
+	 </para>
+         <para> Tracks and routes will sometimes be converted to a
+         list of waypoints when necessary, One example is when writing into one
+         of the CSV formats. The inverse operation is not supported
+         right now, so reading the converted track back from CSV will
+         always result in a list of waypoints, not the original track.
+</para>
+         <para> The presence of <parameter moreinfo="none">-s</parameter> on the command line tends to
+         creats havoc on tracks and routes since many of these formats
+         rely on internal linkages between such points and renaming
+         them may break those linkages.  In general, don't use
+         <parameter moreinfo="none">-s</parameter> when tracks or
+         routes are present.
+</para>
+</sect1>
+<sect1 id="inifile">
+  <title>Working with predefined options</title>
+    <para>
+      GPSBabel can read a file on startup to set defaults for options. All
+      module and filter options may be set this way. 
+    </para>
+
+    <para>
+      The format of the file is identical to the inifile-format often seen 
+	on Windows.  Here is an example:
+    </para>
+<!--I don't know what the best "DOCbook-ese" is for this, but it's probably
+  not a simplelist... rjl -->
+    <simplelist columns="1">
+      <member>[Common format settings]</member>
+      <member>snupper=Y</member>
+      <member>snlen=10</member>
+      <member>[gpx]</member>
+      <member>gpxver=1.1</member>
+      <member>[magellan]</member>
+      <member>baud=115200</member>
+      <member>[tiger]</member>
+      <member>[Garmin categories]</member>
+      <member>; any # from 1 to 16</member>
+      <member>1=fixed waypoints</member>
+      <member>2=temporary waypoints</member>
+    </simplelist>
+    <para>
+      Each section of the file starts with a '[section]' header followed by any
+      number of lines formatted option=value. Leading and trailing whitespace
+	will be
+      automatically removed from header, option and value items. 
+<!--Are there any other lines? If not, why name them?  rjl -->
+      Lines starting 
+      with '#' or ';' will be treated as comments and ignored.
+    </para>
+
+    <para>
+	There are three optional sections.
+	<itemizedlist>
+	<listitem>
+	<para>Common format settings.</para>
+	<para>  Any option from any of the formats listed here will be used by
+		GPSBabel unless explictly provided on the command line.
+	</para>
+	</listitem>
+	<listitem>
+	<para>Common filter settings.</para>
+	<para>As above, but for filters.</para>
+	</listitem>
+	<listitem>
+	<para>Garmin categories</para>
+	<para>This allows you to give readable names to the numeric categories
+	used internally in some Garmin devices and the Mapsource formats
+	such as GDB and MPS.  This is information is also used by our GPX 
+	and garmin_txt formats as well.</para>
+	</listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      By default, GPSBabel tries at startup to load the file named 
+	<filename>gpsbabel.ini</filename> from the following locations:
+    </para>
+    <itemizedlist>
+      <listitem><para>current working directory</para></listitem>
+      <listitem><para>Windows: all paths "APPDATA", "WINDIR", "SYSTEMROOT" declared in environment.</para></listitem>
+      <listitem><para>Unix like OS'ses: <filename>${HOME}/.gpsbabel/</filename>, <filename>/usr/local/etc/</filename> and <filename>/etc/</filename></para></listitem>
+    </itemizedlist>
+	<para>
+      If the <option>-p</option> option is specified, the above locations are not searched.
+      Only the filename specified by that option will be used.
+	</para>
+    <para>
+      There may be situations where predefined values are not useable 
+      (i.e. wrapper applications using GPSBabel in the background). 
+       The inifile mechanism can be disabled with an empty filename.
+    </para>
+    <para><userinput>gpsbabel -p "" -i gpx -f something.gpx -o tiger -F -</userinput></para>
+</sect1>
+<sect1 id="tracking">
+  <title>Realtime tracking</title>
+    <para>
+      Introduced in GPSBabel 1.3.1, we now have an <emphasis>experimental</emphasis>  feature for realtime tracking via the new <option>-T</option> option.  This reads position reports from selected formats and writes an output file when a position report is received. 
+    </para>
+    <para>
+	  As of this writing, Garmin's PVT protocol and NMEA are supported 
+	  inputs. KML, NMEA, and the variou XCSV formats are supported on 
+	  output.   Additional formats may be added by interested parties 
+	  later.
+    </para>
+<example>
+  <title>Read realtime positioning from Garmin USB, write to Keyhole Markup</title>
+    <para><userinput>gpsbabel -T -i garmin -f usb: -o kml -F xxx.kml</userinput></para>
+</example>
+    <para>
+   	  Will read the USB-connected Garmin and rewrite 'xxx.kml' atomically,
+	  suitable for a self-refreshing network link in Google Earth.
+    </para>
+</sect1>
+
+<sect1 id="batchfile">
+  <title>Batch mode (command files)</title>
+  <para>
+	In addition to reading arguments from the command line, GPSBabel can
+	read directions from batch (or command) files via the <option>-b</option> option.
+  </para>
+  <para>
+    These files are ideal for holding long command lines, long file lists, complex filters 
+    and so on. You can use all GPSBabel options and combinations when writing
+    such files. Nesting batch files by using the <option>-b</option> option within a batch file is supported.
+  </para>
+  <para>
+  Here is an example demonstrating segmenting a large command line
+  by placing the input and filtering directives in a file called 'all_my_files'.
+  </para>
+  <para><userinput>gpsbabel -b all_my_files -o gdb -F all_my_tracks.gdb</userinput></para>
+  <para>
+    'all_my_files' could look like this:
+  </para>
+  <simplelist columns="1">
+    <member>-i gpx</member>
+    <member>-f saxony_in_summer_2004.gpx -f austria_2005.gpx</member>
+    <member>-i gdb</member>
+    <member>-f croatia_2006.gdb</member>
+    <member>-x nuketypes,waypoints,routes</member>
+    <member>-x track,pack,split,title="LOG # %Y%m%d"</member>
+  </simplelist>
+</sect1>
+</chapter>

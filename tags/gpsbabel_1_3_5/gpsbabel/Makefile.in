@@ -1,0 +1,916 @@
+VPATH = @srcdir@
+
+# version and release are defined in the head of configure.in 
+# don't forget 'autoconf' if you change them 
+VERSD=@GBMAJOR@.@GBMINOR@.@GBMICRO@
+VERSU=@GBMAJOR@_@GBMINOR@_@GBMICRO@
+RELEASE=@PACKAGE_RELEASE@
+
+VERSIOND=$(VERSD)$(RELEASE)
+VERSIONU=$(VERSU)$(RELEASE)
+
+DOCVERSION=@DOCVERSION@
+# DOCVERSION=development
+
+CC=@CC@
+EXEEXT=@EXEEXT@
+
+# Resource compiler, currently used under MinGW
+RC=@RC@
+
+#EXTRA_LIBS -lefence
+
+# Space is significant, because MSVC wants no space between switch and arg (-Fofoo.o)
+# but cc/gcc does:
+#  $(OUTPUT_SWITCH)main.o
+#  becomes -o main.o (gcc)
+#   or     -Fomain.o (cl.exe)
+OUTPUT_SWITCH=-o #
+
+#
+# Enable either or both of these as you wish.
+#
+#OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
+#DEBUGGING=-g $(EXTRA_DEBUGGING)
+# add -DDEBUG_MEM to turn on memory allocation logging
+GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I. \
+	$(OPTIMIZATION) @CFLAGS@
+LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
+PREFIX=@prefix@
+INSTALL_DIR=$(DESTDIR)/$(PREFIX)
+
+# OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
+# OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
+
+MINIMAL_FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin.o \
+	garmin_tables.o internal_styles.o nmea.o kml.o
+
+ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
+	gpspilot.o magnav.o \
+	psp.o holux.o tmpro.o tpg.o tpo.o \
+	xcsv.o gcdb.o tiger.o easygps.o quovadis.o \
+	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
+	ozi.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
+	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
+	vcf.o overlay.o google.o xhtmlent.o lowranceusr.o an1.o tomtom.o \
+	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
+	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o \
+	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
+	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o \
+	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
+	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o
+
+FMTS=@FMTS@
+
+FILTERS=position.o radius.o duplicate.o arcdist.o polygon.o smplrout.o \
+	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
+	nukedata.o interpolate.o transform.o
+
+JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
+	jeeps/gpsmath.o jeeps/gpsmem.o  \
+	jeeps/gpsprot.o jeeps/gpsread.o \
+	jeeps/gpsdevice.o jeeps/gpsdevice_ser.o jeeps/gpsdevice_usb.o \
+	jeeps/gpsrqst.o jeeps/gpssend.o jeeps/gpsserial.o jeeps/gpsutil.o \
+	jeeps/gpsusbread.o jeeps/gpsusbsend.o \
+	jeeps/gpsusbcommon.o @OSJEEPS@
+
+# Extra modules in Jeeps that we don't use
+# 	jeeps/gpsfmt.o jeeps/gpsinput.o jeeps/gpsproj.o
+
+
+@PALM_DB_CMT@PALM_DB=pdbfile.o
+
+SHAPE=shapelib/shpopen.o shapelib/dbfopen.o
+
+ZLIB=zlib/adler32.o zlib/compress.o zlib/crc32.o zlib/deflate.o zlib/inffast.o \
+	zlib/inflate.o zlib/infback.o zlib/inftrees.o zlib/trees.o \
+	zlib/uncompr.o zlib/gzio.o zlib/zutil.o
+
+LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
+          csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
+          uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
+	  inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
+	  gbfile.o parse.o avltree.o \
+	$(PALM_DB) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
+OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
+
+.c.o:
+	$(CC)  @CPPFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
+
+
+
+# Directory of local web doc.  Traditionally a sibling to the GPSBabel tree.
+WEB=@DOCDIR@
+
+
+all: gpsbabel$(EXEEXT)
+
+gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@ 
+	$(CC)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
+
+gpsbabel-debug: $(OBJS)
+	$(CC)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
+
+Makefile gbversion.h: Makefile.in config.status xmldoc/makedoc.in gbversion.h.in
+	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
+
+xcsv_tokens.gperf: xcsv_tokens.in
+	gperf -L ANSI-C -D -t $? > $@
+
+config.status: configure 
+	$(SHELL) config.status --recheck
+
+jeeps/gpslibusb.o: 
+	$(CC)  @CPPFLAGS@ -c $(GBCFLAGS) @USB_CFLAGS@ @srcdir@/jeeps/gpslibusb.c $(OUTPUT_SWITCH)$@
+
+fileinfo.o: win32/gpsbabel.rc
+	$(RC) -o fileinfo.o win32/gpsbabel.rc
+
+clean:
+	rm -f $(OBJS) gpsbabel gpsbabel.exe
+
+configure: configure.in
+	autoconf
+
+tag:
+	cvs commit
+	cvs tag gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@
+
+more-clean: clean
+	tools/mkmoreclean
+
+check:
+	./testo
+
+torture:
+	@echo "testo in progress... (basic data integrity test)"
+	@./testo
+	@echo "vtesto in progress... (valgrind is watching testo)"
+	@./vtesto
+	@echo "torture_test in progress... (shortname reduction)"
+	@./torture_test
+#
+# 	Because there are some "non-real" errors like "IGC: bad date" 
+# 	test-all does not stop on errors.
+# 	Please inspect the log file (/tmp/gb-test-all.log) for segmentation
+# 	faults, math overflows and other hard errors
+#
+	@echo "test-all in progress... (read/write test between all possible formats)"
+	@./test-all -s -r reference/expertgps.gpx
+
+#
+# This will only work on UNIX-like substances.
+#
+install: @INSTALL_DEBUG@ gpsbabel$(EXEEXT)
+	@mkdir -p $(INSTALL_DIR)/bin
+	install gpsbabel  $(INSTALL_DIR)/bin/
+
+install-debug:
+	@mkdir -p $(INSTALL_DIR)/bin
+	install gpsbabel-debug  $(INSTALL_DIR)/bin/
+
+# Nerdy release stuff that needs to work only on Linux.
+
+leaktest:
+	make EXTRA_CFLAGS=-DDEBUG_MEM
+	tools/cleardebug
+	./testo
+	tools/memdebug | grep -v '^command line:'
+
+dep:
+	make clean && make EXTRA_CFLAGS="-MMD"  && cat *.d */*.d > /tmp/dep && rm *.d */*.d
+	(echo -n "internal_styles.c: mkstyle.sh " ; echo style/*.style ; /bin/echo -e '\t./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
+	echo Edit Makefile.in and bring in /tmp/dep
+
+$(WEB)/htmldoc-$(DOCVERSION)/readme.html: FORCE
+	mkdir -p $(WEB)/htmldoc-$(DOCVERSION)
+	perl xmldoc/makedoc
+	xmlwf xmldoc/readme.xml		#check for well-formedness
+	xmllint --noout --valid xmldoc/readme.xml    	#validate
+	xsltproc \
+	 --stringparam base.dir "$(WEB)/htmldoc-$(DOCVERSION)/" \
+	 --stringparam root.filename "readme" \
+	 xmldoc/babelmain.xsl \
+	 xmldoc/readme.xml
+	chmod 755 tools/mkcapabilities
+	tools/mkcapabilities
+
+#
+# The .fo and PDF versions depend on additional tools.
+# 'fop' must be obtained from http://xmlgraphics.apache.org/fop/
+#   0.92beta seems to work OK, BUT.
+#   * If you have a package called 'docbook-xml-website' it's reported
+#     to prevent the build from working.   Remove it. (Suse)
+#   * Sun Java seems to be required.   GCJ 1.4.2 doesn't work.   You can
+#     force Sun Java to be used by creating ~/.foprc with 'rpm_mode=' (Fedora)
+#     Get it from http://www.java.com
+# The Hypnenation package must be installed from 
+#   http://offo.sourceforge.net/hyphenation/index.html - be sure to get the
+#   version that corresponds to the version of FOP that you used above.
+# The docbook XSL must be 1.71.1 or higher.  
+#   * Remember to update /etc/xml/catalogs if you manually update this.
+#
+gpsbabel.fo:  FORCE
+	perl xmldoc/makedoc
+	xmlwf xmldoc/readme.xml		#check for well-formedness
+	xmllint --noout --valid xmldoc/readme.xml    	#validate
+	xsltproc -o $@ xmldoc/babelpdf.xsl xmldoc/readme.xml
+
+gpsbabel.pdf: gpsbabel.fo
+	fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf 
+	cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
+
+
+gpsbabel.html: FORCE
+	xsltproc \
+	  --stringparam toc.section.depth "1" \
+	  --stringparam html.stylesheet \
+	  "http://www.gpsbabel.org/style3.css" \
+	  http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
+	xmldoc/readme.xml > $@ || rm $@
+
+readme.txt: gpsbabel.html
+	lynx -nolist -dump gpsbabel.html  > $@
+
+doc: gpsbabel $(WEB)/htmldoc-$(DOCVERSION)/readme.html gpsbabel.pdf # readme.txt
+
+FORCE:
+
+# file list for windows package
+WINFILES = gpsbabel.exe mingw/libexpat.dll win32/GPSBabelGUI.exe win32/gui-2/README.gui \
+           README.contrib AUTHORS COPYING gpsbabel.html
+
+#
+# Do administrative-y things to the tree.  Verify that everything is checked
+# in and tagged.
+#
+release-sourcecheck:
+	cvs commit
+	./chkdoc
+	make clean
+	rm -fr gpsbabel-$(VERSIOND)
+#rjl	make gpsbabel doc gpsbabel.html
+	@(. tools/functions && ask "Enter 'y' to tag the tree as gpsbabel_$(VERSIONU)." "y") && cvs tag -F gpsbabel_$(VERSIONU) ; exit 0
+	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
+	touch gpsbabel-$(VERSIOND)/internal_styles.c
+
+#
+# Build the release tarball from the exported CVS tree, tweaking 
+# timestamps and including generated filess as needed.
+#
+release-tarball: gpsbabel.html
+#	rm -fr gpsbabel-$(VERSIOND)
+	cp -ap gpsbabel.html gpsbabel-$(VERSIOND)/
+	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
+#	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
+
+release-rpm:
+	test -f gpsbabel.html
+	mkdir -p /tmp/dist/BUILD \
+	  /tmp/dist/RPMS /tmp/dist/SPECS \
+	  /tmp/dist/SOURCES /tmp/dist/SRPMS \
+	  /tmp/dist/TMP /tmp/dist/install 
+	tools/mkspec $(WEB) $(VERSD) $(RELEASE) > /tmp/dist/SPECS/gpsbabel.spec
+	cp -ap gpsbabel.html gpsbabel-$(VERSIOND)/
+	cp -ap CHANGELOG gpsbabel-$(VERSIOND)/
+	rm -rf /tmp/dist/TMP/gpsbabel-$(VERSD)
+	rm -rf /tmp/dist/SOURCES/gpsbabel-$(VERSD).tgz
+	cp -apr gpsbabel-$(VERSIOND) /tmp/dist/TMP/gpsbabel-$(VERSD)
+	cd /tmp/dist/TMP ; tar --owner=0 --group=0 -czf ../SOURCES/gpsbabel-$(VERSD).tgz gpsbabel-$(VERSD)
+	rpmbuild -ba \
+	  --define "_topdir /tmp/dist" \
+	  --define "buildroot /tmp/dist/install" \
+	  /tmp/dist/SPECS/gpsbabel.spec
+
+
+#
+# The Windows executables are cross compiled from the exported CVS image.
+# Do the build of that here  and make a zip file for distribution.
+# Do this build in a temporary tree that was a copy of the tagged one
+# to avoid scribbling in the "real" one.
+#
+# The cross builds are built with mingw.   http://mirzam.it.vu.nl/mingw
+# and http://mingw.sourceforge.net are convenient sources for that.
+# binutils, runtime, w32api, and gcc-core seem to be required.
+#
+
+cross-configure:
+	  CC=i386-mingw32-gcc LDFLAGS="-s" @srcdir@/configure --host=i386-pc-mingw32 --with-cet=all --with-expathdr=@srcdir@/mingw/include --with-libexpat=@srcdir@/mingw/lib 
+
+release-winbuild:
+	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
+	cp -a gpsbabel-$(VERSIOND) /tmp/gpsbabel-$(VERSIOND)-cross
+	cd /tmp/gpsbabel-$(VERSIOND)-cross ; \
+	  CC=i386-mingw32-gcc LDFLAGS="-s" ./configure --host=i386-pc-mingw32 --with-cet=all --with-expathdr=mingw/include --with-libexpat=mingw/lib && make && \
+	  zip -j /tmp/gpsbabel-$(VERSIOND).zip $(WINFILES)
+	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
+
+release-upload:  /tmp/gpsbabel-$(VERSIOND).tar.gz  /tmp/gpsbabel-$(VERSIOND).zip /tmp/dist/SRPMS/gpsbabel-$(VERSIOND)-0.src.rpm  /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND)-0.i386.rpm
+	@(. tools/functions && ask "Type 'yes' if you want to do the upload now" "yes" )
+	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).tar.gz ftp://upload.sf.net/incoming/
+	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).zip ftp://upload.sf.net/incoming/
+	curl -u anonymous:anonymous --upload-file /tmp/dist/SRPMS/gpsbabel-$(VERSIOND).src.rpm  ftp://upload.sf.net/incoming/ 
+	curl -u anonymous:anonymous --upload-file /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND).i386.rpm  ftp://upload.sf.net/incoming/ 
+
+mac-upload:
+	curl -u anonymous:anonymous --upload-file GPSBabel+-$(VERSIOND).dmg  ftp://upload.sf.net/incoming/
+
+release: release-sourcecheck  release-tarball release-winbuild release-rpm release-upload
+
+rpm:
+	tools/mkrpm $(WEB) $(VERSD) $(RELEASE)
+
+mac-release:
+	mkdir -p usr/bin usr/share/gpsbabel/doc
+	cp gpsbabel usr/bin/
+	cp README* COPYING usr/share/gpsbabel/doc
+	tar cvzf gpsbabel-osx.tgz usr/bin/gpsbabel
+	curl -u anonymous:anonymous --upload-file gpsbabel-osx.tgz ftp://upload.sf.net/incoming/
+
+msvc-build:
+	make CC=@CL.EXE DEBUGGING="" EXTRA_CFLAGS="-nologo -W3 -WL -D__WIN32__ -I msvc/expat " OUTPUT_SWITCH="-Fo" $(OBJS)
+	echo $(OBJS) > objs.lst
+	LINK.EXE /NOLOGO @objs.lst ./msvc/expat/libexpat.lib /out:gpsbabel.exe 
+
+# release check using CVS tree
+test-release: doc gpsbabel.html
+	cvs export -r HEAD -d gpsbabel-$(VERSIOND) gpsbabel
+	rm -f gpsbabel-$(VERSIOND)/internal_styles.c
+	make release-tarball release-winbuild release-rpm
+
+# Machine generated from here down. 
+alan.o: alan.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h
+an1.o: an1.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h an1sym.h
+arcdist.o: arcdist.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h grtcirc.h
+avltree.o: avltree.h avltree.c defs.h gbtypes.h config.h
+axim_gpb.o: axim_gpb.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+bcr.o: bcr.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h csv_util.h garmin_tables.h
+brauniger_iq.o: brauniger_iq.c defs.h config.h queue.h gbtypes.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h gbser.h
+cet.o: cet.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h
+cetus.o: cetus.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h pdbfile.h
+cet_util.o: cet_util.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h cet/ansi_x3_4_1968.h \
+  cet/iso_8859_1.h cet/iso_8859_15.h cet/cp1252.h cet/iso_8859_2.h \
+  cet/cp1250.h cet/latin_greek_1.h cet/macintosh.h cet/cp1251.h \
+  cet/cp1253.h cet/cp1254.h cet/cp1255.h cet/cp1256.h cet/cp1257.h \
+  cet/ibm437.h cet/ibm850.h cet/ibm851.h cet/ibm852.h cet/ibm855.h \
+  cet/ibm857.h cet/ibm860.h cet/ibm861.h cet/ibm862.h cet/ibm863.h \
+  cet/ibm864.h cet/ibm865.h cet/ibm868.h cet/ibm869.h cet/iso_8859_10.h \
+  cet/iso_8859_13.h cet/iso_8859_14.h cet/iso_8859_3.h cet/iso_8859_4.h \
+  cet/iso_8859_5.h cet/iso_8859_6.h cet/iso_8859_7.h cet/iso_8859_8.h \
+  cet/iso_8859_9.h cet/koi8_r.h cet/koi8_ru.h cet/koi_8.h
+coastexp.o: coastexp.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h uuid.h
+compegps.o: compegps.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h \
+  jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
+  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h
+copilot.o: copilot.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h pdbfile.h
+coto.o: coto.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h csv_util.h grtcirc.h pdbfile.h
+cst.o: cst.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h strptime.h
+csv_util.o: csv_util.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h grtcirc.h \
+  strptime.h jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
+  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h xmlgeneric.h xcsv_tokens.gperf garmin_fs.h
+delgpl.o: delgpl.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+discard.o: discard.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h
+dmtlog.o: dmtlog.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h jeeps/gpsmath.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  xmlgeneric.h
+duplicate.o: duplicate.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h
+easygps.o: easygps.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+exif.o: exif.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h garmin_tables.h \
+  strptime.h
+fatal.o: fatal.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+filter_vecs.o: filter_vecs.c defs.h config.h queue.h gbtypes.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
+  filterdefs.h
+formspec.o: formspec.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+g7towin.o: g7towin.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h garmin_fs.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gps.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h garmin_tables.h jeeps/gpsmath.h strptime.h
+garmin.o: garmin.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gps.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  garmin_tables.h garmin_fs.h
+garmin_fs.o: garmin_fs.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h garmin_fs.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gps.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h garmin_tables.h
+garmin_gpi.o: garmin_gpi.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h jeeps/gpsmath.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  garmin_fs.h jeeps/gps.h garmin_gpi.h
+garmin_tables.o: garmin_tables.c garmin_tables.h defs.h config.h queue.h \
+  gbtypes.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
+  jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
+  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h
+garmin_txt.o: garmin_txt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h garmin_fs.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gps.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h garmin_tables.h grtcirc.h jeeps/gpsmath.h strptime.h
+gbfile.o: gbfile.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+gbser.o: gbser.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h gbser.h \
+  gbser_private.h
+gbser_posix.o: gbser_posix.c defs.h config.h queue.h gbtypes.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h gbser.h \
+  gbser_private.h
+gbsleep.o: gbsleep.c config.h
+gcdb.o: gcdb.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h pdbfile.h
+gdb.o: gdb.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h csv_util.h garmin_fs.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gps.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  garmin_tables.h grtcirc.h jeeps/gpsmath.h
+geo.o: geo.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+geoniche.o: geoniche.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h pdbfile.h \
+  jeeps/gpsmath.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h garmin_tables.h
+ggv_log.o: ggv_log.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h \
+  jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
+  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h
+globals.o: globals.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h gbversion.h
+glogbook.o: glogbook.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+google.o: google.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+gpilots.o: gpilots.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h garmin_tables.h \
+  pdbfile.h
+gpspilot.o: gpspilot.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h pdbfile.h
+gpssim.o: gpssim.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+gpsutil.o: gpsutil.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h magellan.h
+gpx.o: gpx.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h garmin_fs.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gps.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h
+grtcirc.o: grtcirc.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
+gtm.o: gtm.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h jeeps/gpsmath.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+gtrnctr.o: gtrnctr.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+hiketech.o: hiketech.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+holux.o: holux.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h holux.h
+hsa_ndv.o: hsa_ndv.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+html.o: html.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h jeeps/gpsmath.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+igc.o: igc.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h
+ignrando.o: ignrando.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+ik3d.o: ik3d.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+inifile.o: inifile.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+internal_styles.o: internal_styles.c defs.h config.h queue.h gbtypes.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+interpolate.o: interpolate.c defs.h config.h queue.h gbtypes.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
+  filterdefs.h grtcirc.h
+kml.o: kml.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+lowranceusr.o: lowranceusr.c defs.h config.h queue.h gbtypes.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+maggeo.o: maggeo.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h \
+  magellan.h
+magnav.o: magnav.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h pdbfile.h
+mag_pdb.o: mag_pdb.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h pdbfile.h \
+  jeeps/gpsmath.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+magproto.o: magproto.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h magellan.h gbser.h
+main.o: main.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h filterdefs.h csv_util.h
+mapsend.o: mapsend.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h mapsend.h magellan.h
+mapsource.o: mapsource.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h garmin_tables.h \
+  jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
+  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h
+mkshort.o: mkshort.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+msroute.o: msroute.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h jeeps/gpsmath.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+mtk_logger.o: mtk_logger.c defs.h config.h queue.h gbtypes.h \
+   gbfile.h cet.h cet_util.h inifile.h gbser.h
+navicache.o: navicache.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+netstumbler.o: netstumbler.c defs.h config.h queue.h gbtypes.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h
+nmea.o: nmea.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h gbser.h strptime.h jeeps/gpsmath.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+nmn4.o: nmn4.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h csv_util.h
+nukedata.o: nukedata.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h
+osm.o: osm.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h \
+  avltree.h
+overlay.o: overlay.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
+ozi.o: ozi.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h csv_util.h
+palmdoc.o: palmdoc.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h jeeps/gpsmath.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  pdbfile.h
+parse.o: parse.c defs.h config.h queue.h gbtypes.h jeeps/gpsmath.h
+pathaway.o: pathaway.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h strptime.h \
+  pdbfile.h
+pcx.o: pcx.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h garmin_tables.h csv_util.h
+pdbfile.o: pdbfile.h pdbfile.c defs.h queue.h gbfile.h
+polygon.o: polygon.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h
+position.o: position.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h grtcirc.h
+psitrex.o: psitrex.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h garmin_tables.h
+psp.o: psp.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h grtcirc.h
+queue.o: queue.c queue.h
+quovadis.o: quovadis.c quovadis.h defs.h config.h queue.h gbtypes.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
+  pdbfile.h
+radius.o: radius.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h grtcirc.h
+random.o: random.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h grtcirc.h \
+  jeeps/gpsmath.h
+raymarine.o: raymarine.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h
+reverse_route.o: reverse_route.c defs.h config.h queue.h gbtypes.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
+  filterdefs.h
+rgbcolors.o: rgbcolors.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+route.o: route.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
+saroute.o: saroute.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
+shape.o: shape.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h shapelib/shapefil.h
+smplrout.o: smplrout.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h grtcirc.h
+sort.o: sort.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h filterdefs.h
+stackfilter.o: stackfilter.c defs.h config.h queue.h gbtypes.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
+  filterdefs.h
+stmsdf.o: stmsdf.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h strptime.h \
+  jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
+  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h grtcirc.h
+stmwpp.o: stmwpp.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h
+strptime.o: strptime.c strptime.h
+tef_xml.o: tef_xml.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+text.o: text.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h jeeps/gpsmath.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+tiger.o: tiger.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h
+tmpro.o: tmpro.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h
+tomtom.o: tomtom.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+tpg.o: tpg.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h jeeps/gpsmath.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+tpo.o: tpo.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h jeeps/gpsmath.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+trackfilter.o: trackfilter.c defs.h config.h queue.h gbtypes.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
+  filterdefs.h strptime.h grtcirc.h
+transform.o: transform.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h
+unicsv.o: unicsv.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h garmin_fs.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gps.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h garmin_tables.h jeeps/gpsmath.h strptime.h
+units.o: units.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+util_crc.o: util_crc.c
+util.o: util.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h jeeps/gpsmath.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+uuid.o: uuid.c uuid.h
+vcf.o: vcf.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h jeeps/gpsmath.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+vecs.o: vecs.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h csv_util.h
+vidaone.o: vidaone.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+vitosmt.o: vitosmt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
+vitovtt.o: vitovtt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+vmem.o: vmem.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h
+waypt.o: waypt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
+wbt-200.o: wbt-200.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h gbser.h grtcirc.h
+wfff_xml.o: wfff_xml.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+xcsv.o: xcsv.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h csv_util.h jeeps/gpsmath.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+xhtmlent.o: xhtmlent.c
+xmlgeneric.o: xmlgeneric.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+xmltag.o: xmltag.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+xol.o:xol.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h \
+  jeeps/gpsmath.h garmin_tables.h
+yahoo.o: yahoo.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+jeeps/gpsapp.o: jeeps/gpsapp.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbint.h
+jeeps/gpscom.o: jeeps/gpscom.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h
+jeeps/gpsdevice.o: jeeps/gpsdevice.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsserial.h
+jeeps/gpsdevice_ser.o: jeeps/gpsdevice_ser.c jeeps/gpsdevice.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/../config.h jeeps/../queue.h \
+  jeeps/../gbtypes.h jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h \
+  jeeps/../gbfile.h jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h \
+  jeeps/../inifile.h jeeps/gpsport.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsserial.h
+jeeps/gpsdevice_usb.o: jeeps/gpsdevice_usb.c jeeps/gpsdevice.h \
+  jeeps/gps.h jeeps/../defs.h jeeps/../config.h jeeps/../queue.h \
+  jeeps/../gbtypes.h jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h \
+  jeeps/../gbfile.h jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h \
+  jeeps/../inifile.h jeeps/gpsport.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbint.h \
+  jeeps/gpsusbcommon.h
+jeeps/gpslibusb.o: jeeps/gpslibusb.c config.h jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbcommon.h
+jeeps/gpsmath.o: jeeps/gpsmath.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsdatum.h
+jeeps/gpsmem.o: jeeps/gpsmem.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h
+jeeps/gpsprot.o: jeeps/gpsprot.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h
+jeeps/gpsread.o: jeeps/gpsread.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsserial.h
+jeeps/gpsrqst.o: jeeps/gpsrqst.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h
+jeeps/gpssend.o: jeeps/gpssend.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsserial.h
+jeeps/gpsserial.o: jeeps/gpsserial.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsserial.h jeeps/../gbser.h
+jeeps/gpsusbcommon.o: jeeps/gpsusbcommon.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbcommon.h
+jeeps/gpsusbread.o: jeeps/gpsusbread.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbint.h
+jeeps/gpsusbsend.o: jeeps/gpsusbsend.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbint.h
+jeeps/gpsutil.o: jeeps/gpsutil.c jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h
+shapelib/dbfopen.o: shapelib/dbfopen.c shapelib/shapefil.h config.h
+shapelib/shpopen.o: shapelib/shpopen.c shapelib/shapefil.h config.h
+zlib/adler32.o: zlib/adler32.c zlib/zlib.h zlib/zconf.h
+zlib/compress.o: zlib/compress.c zlib/zlib.h zlib/zconf.h
+zlib/crc32.o: zlib/crc32.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
+  zlib/crc32.h
+zlib/deflate.o: zlib/deflate.c zlib/deflate.h zlib/zutil.h zlib/zlib.h \
+  zlib/zconf.h
+zlib/gzio.o: zlib/gzio.c zlib/zutil.h zlib/zlib.h zlib/zconf.h
+zlib/infback.o: zlib/infback.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
+  zlib/inftrees.h zlib/inflate.h zlib/inffast.h zlib/inffixed.h
+zlib/inffast.o: zlib/inffast.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
+  zlib/inftrees.h zlib/inflate.h zlib/inffast.h
+zlib/inflate.o: zlib/inflate.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
+  zlib/inftrees.h zlib/inflate.h zlib/inffast.h zlib/inffixed.h
+zlib/inftrees.o: zlib/inftrees.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
+  zlib/inftrees.h
+zlib/trees.o: zlib/trees.c zlib/deflate.h zlib/zutil.h zlib/zlib.h \
+  zlib/zconf.h zlib/trees.h
+zlib/uncompr.o: zlib/uncompr.c zlib/zlib.h zlib/zconf.h
+zlib/zutil.o: zlib/zutil.c zlib/zutil.h zlib/zlib.h zlib/zconf.h
+internal_styles.c: mkstyle.sh style/arc.style style/cambridge.style style/csv.style style/cup.style style/custom.style style/dna.style style/fugawi.style style/garmin301.style style/garmin_poi.style style/geonet.style style/gpsdrive.style style/gpsdrivetrack.style style/gpsman.style style/kompass_tk.style style/kompass_wp.style style/ktf2.style style/kwf2.style style/mapconverter.style style/mxf.style style/nima.style style/openoffice.style style/s_and_t.style style/saplus.style style/sportsim.style style/tabsep.style style/tomtom_asc.style style/tomtom_itn.style style/xmap2006.style style/xmap.style style/xmapwpt.style
+	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)

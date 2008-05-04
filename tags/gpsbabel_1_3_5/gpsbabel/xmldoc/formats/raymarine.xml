@@ -1,0 +1,7 @@
+<para>
+  This format supports the "Raymarine Waypoint File" format (.rwf).
+  More information to Raymarine you'll find at their <ulink url="http://www.raymarine.com">homepage</ulink>.
+</para>
+<para>
+  Known limits: max. 16 characters for waypoint names and max. 50 waypoints per route.
+</para>

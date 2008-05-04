@@ -1,0 +1,62 @@
+<para>
+  This value specifies the grid to be used on write.
+</para>
+<table id="garmin_grid">
+<title>Grid values for garmin_txt</title>
+<tgroup cols="4">
+<thead>
+<row>
+ <entry># idx</entry> 
+ <entry>short</entry> 
+ <entry>file-header</entry> 
+ <entry>sample</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>0</entry>
+  <entry>ddd</entry>
+  <entry>Lat/Lon hddd.ddddd</entry>
+  <entry>    S26.25333 E27.92333</entry>
+</row>
+<row>
+  <entry>1</entry>
+  <entry>dmm</entry>
+  <entry>Lat/Lon hddd°mm.mm</entry>
+  <entry>N33 56.539 W118 24.471</entry>
+</row>
+<row>
+  <entry>2</entry>
+  <entry>dms</entry>
+  <entry>Lat/Lon hddd°mm'ss.s</entry>
+  <entry>S25 25 26.8 E28 06 07.3</entry>
+</row>
+<row>
+  <entry>3</entry>
+  <entry>bng</entry>
+  <entry>British National Grid</entry>
+  <entry>TQ 18919 69392</entry>
+</row>
+<row>
+  <entry>4</entry>
+  <entry>utm</entry>
+  <entry>Universal Transverse Mercator</entry>
+  <entry>33 U 318293 5637154</entry>
+</row>
+<row>
+  <entry>5</entry>
+  <entry>swiss</entry>
+  <entry>Swiss grid</entry>
+  <entry>776519 167359</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+
+
+<para>
+  Idx or short are valid params for this option.
+</para>
+
+

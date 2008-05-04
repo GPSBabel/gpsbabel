@@ -1,0 +1,105 @@
+<para>
+   Unicsv examines the first line of a file to determine the field
+   order and field separator in that file.   On write, it tries to 
+   figure out what data it has and writes headers and all the data it can.
+</para>
+<para>
+   If the first line contains any tabs, the data lines are assumed
+   to be tab separated.   Otherwise the fields are assumed to be
+   separated by commas.
+</para>
+<para>
+   The list of keywords include:
+   <screen format="linespecific">
+      alt =      Elevation (in meters) of the point
+      bng_e =    British National Grid's easting
+      bng =      full coordinate in BNG format (zone easting northing)
+      bng_pos =  full coordinate in BNG format (zone easting northing)
+      bng_n =    British National Grid's northing
+      bng_z =    British National Grid's zone
+      caden =    Cadence
+      comment =  Notes
+      cour =     Heading / Course true
+      date =     Date (yyyy/mm/dd)
+      depth =    Depth
+      desc =     Description
+      ele =      Elevation (in meters) of the point
+      e/w =      'e' for eastern hemisphere, 'w' for western
+      fix =      3d, 2d, etc.
+      geschw =   Geschwindigkeit (speed)
+      hdop =     Horizontal dilution of precision
+      head =     Heading / Course true
+      heart =    Heartrate
+      height =   Elevation (in meters) of the point
+      icon =     Symbol (icon) name
+      lat =      Latitude
+      lon =      Longitude
+      name =     Waypoint name ("Shortname")
+      n/s =      'n' for northern hemisphere, 's' for southern
+      notes =    Notes
+      pdop =     Position dilution of precision
+      prox =     Proximity
+      sat =      Number of sats used for fix
+      speed =    Speed
+      symb =     Symbol (icon) name
+      tempf =    Temperature (degrees Fahrenheit)
+      temp =     Temperature (degrees Celsius)
+      time =     Time (hh:mm:ss[.msec])
+      url =      URL
+      utc_d =    UTC date
+      utc_t =    UTC time
+      utm_c =    UTM zone character
+      utm_e =    UTM easting
+      utm =      full coordinate in UTM format (zone zone-ch easting northing)
+      utm_pos =  full coordinate in UTM format (zone zone-ch easting northing)
+      utm_n =    UTM northing
+      utm_z =    UTM zone
+      vdop =     Vertical dilution of precision
+      x =        Longitude
+      x_pos =    Longitude
+      y =        Latitude
+      y_pos =    Latitude
+      z =        Altitude (elevation)
+   </screen>
+   We support some enhanced Garmin attributes. They are also available in 
+   <link linkend="fmt_gpx">gpx</link>, <link linkend="fmt_gdb">gdb</link>, 
+   <link linkend="fmt_garmin_gpi">garmin_gpi</link> and partly 
+   <link linkend="fmt_garmin_txt">garmin_txt</link>. These entities are currently 
+   not visible in <productname>MapSource</productname> (6.12.4), but are NOT dropped  
+   when working with GDB (version 3) or GPX files.
+   <screen></screen>
+   Please note, that these do NOT provide a geocoding service; don't expect
+	to "convert" a street address to a latitude and longitude.
+   <screen>
+      addr =     Street address
+      city =     City
+      country =  Country
+      faci =     Facility (not available in GPX)
+      phone =    Phone number
+      post =     Postal code
+      state =    State
+   </screen>
+   Fuller spellings (i.e. "longitude") may be used. You can also
+   use keywords with a whitespace instead of an underscore.
+</para>
+<para>
+   A typical file may be:
+   <screen format="linespecific">
+     Name, Latitude, Longitude, Description 
+     GCEBB,35.972033,-87.134700,Mountain Bike Heaven by susy1313
+     GC1A37,36.090683,-86.679550,The Troll by a182pilot &amp; Family
+   </screen>
+</para>
+	
+<para>
+   On the output side unicsv writes fixed number of columns (waypoint index, latitude and longitude)
+   followed by a variable column list depending on internal data.
+</para>
+<para>
+   With at least ONE valid timestamp in data a unicsv output may look like that:
+   <screen format="linespecific">
+     No,Name,Latitude,Longitude,Description,Date,Time
+     1,"GCEBB",35.972033,-87.134700,"Mountain Bike Heaven by susy1313",2003/06/29,09:00:00
+     2,"GC1A37",36.090683,-86.679550,"The Troll by a182pilot &amp; Family",,
+   </screen>
+</para>

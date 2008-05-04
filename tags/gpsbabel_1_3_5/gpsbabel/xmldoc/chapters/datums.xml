@@ -1,0 +1,138 @@
+<appendix id="Datums">
+<title>Supported Datums</title>
+<para>
+Some formats in GPSBabel support multiple datums.  For example, the 
+<option>datum</option> option to the 
+<link linkend="fmt_garmin_txt">garmin_txt</link> format allows you to specify
+a datum for the output file.  
+</para>
+<para>
+The following is a list of the datums supported by GPSBabel.
+</para>
+
+<simplelist columns="4">
+<member>Adindan</member>
+<member>AFG</member>
+<member>Ain-El-Abd</member>
+<member>Alaska-NAD27</member>
+<member>Alaska-Canada</member>
+<member>Anna-1-Astro</member>
+<member>ARC 1950 Mean</member>
+<member>ARC 1960 Mean</member>
+<member>Asc Island 58</member>
+<member>Astro B4</member>
+<member>Astro Beacon E</member>
+<member>Astro pos 71/4</member>
+<member>Astro stn 52</member>
+<member>Australia Geo 1984</member>
+<member>Bahamas NAD27</member>
+<member>Bellevue IGN</member>
+<member>Bermuda 1957</member>
+<member>Bukit Rimpah</member>
+<member>Camp_Area_Astro</member>
+<member>Campo_Inchauspe</member>
+<member>Canada_Mean(NAD27)</member>
+<member>Canal_Zone_(NAD27)</member>
+<member>Canton_Island_1966</member>
+<member>Cape</member>
+<member>Cape_Canaveral_mean</member>
+<member>Carribean NAD27</member>
+<member>Carthage</member>
+<member>Cent America NAD27</member>
+<member>Chatham 1971</member>
+<member>Chua Astro</member>
+<member>Corrego Alegre</member>
+<member>Cuba NAD27</member>
+<member>Cyprus</member>
+<member>Djakarta(Batavia)</member>
+<member>DOS 1968</member>
+<member>Easter lsland 1967</member>
+<member>Egypt</member>
+<member>European 1950</member>
+<member>European 1950 mean</member>
+<member>European 1979 mean</member>
+<member>Finnish Nautical</member>
+<member>Gandajika Base</member>
+<member>Geodetic Datum 49</member>
+<member>Ghana</member>
+<member>Greenland NAD27</member>
+<member>Guam 1963</member>
+<member>Gunung Segara</member>
+<member>Gunung Serindung 1962</member>
+<member>GUX1 Astro</member>
+<member>Herat North</member>
+<member>Hjorsey 1955</member>
+<member>Hong Kong 1963</member>
+<member>Hu-Tzu-Shan</member>
+<member>Indian</member>
+<member>Iran</member>
+<member>Ireland 1965</member>
+<member>ISTS 073 Astro 69</member>
+<member>Johnston Island 61</member>
+<member>Kandawala</member>
+<member>Kerguelen Island</member>
+<member>Kertau 48</member>
+<member>L.C. 5 Astro</member>
+<member>La Reunion</member>
+<member>Liberia 1964</member>
+<member>Luzon</member>
+<member>Mahe 1971</member>
+<member>Marco Astro</member>
+<member>Masirah Is. Nahrwan</member>
+<member>Massawa</member>
+<member>Merchich</member>
+<member>Mexico NAD27</member>
+<member>Midway Astro 61</member>
+<member>Mindanao</member>
+<member>Minna</member>
+<member>Montjong Lowe</member>
+<member>Nahrwan</member>
+<member>Naparima BWI</member>
+<member>North America 83</member>
+<member>N. America 1927 mean</member>
+<member>Observatorio 1966</member>
+<member>Old Egyptian</member>
+<member>Old Hawaiian_mean</member>
+<member>Old Hawaiian Kauai</member>
+<member>Old Hawaiian Maui</member>
+<member>Old Hawaiian Oahu</member>
+<member>Oman</member>
+<member>OSGB36</member>
+<member>Pico De Las Nieves</member>
+<member>Pitcairn Astro 67</member>
+<member>S. Am. 1956 mean(P)</member>
+<member>S. Chilean 1963 (P)</member>
+<member>Puerto Rico</member>
+<member>Pulkovo 1942</member>
+<member>Qornoq</member>
+<member>Quatar National</member>
+<member>Rome 1940</member>
+<member>S-42(Pulkovo1942)</member>
+<member>S.E.Asia_(Indian)</member>
+<member>SAD-69/Brazil</member>
+<member>Santa Braz</member>
+<member>Santo (DOS)</member>
+<member>Sapper Hill 43</member>
+<member>Schwarzeck</member>
+<member>Sicily</member>
+<member>Sierra Leone 1960</member>
+<member>S. Am. 1969 mean</member>
+<member>South Asia</member>
+<member>Southeast Base</member>
+<member>Southwest Base</member>
+<member>Tananarive Obs 25</member>
+<member>Thai/Viet (Indian)</member>
+<member>Timbalai 1948</member>
+<member>Tokyo mean</member>
+<member>Tristan Astro 1968</member>
+<member>United Arab Emirates</member>
+<member>Viti Levu 1916</member>
+<member>Wake Eniwetok 60</member>
+<member>WGS 72</member>
+<member>WGS 84</member>
+<member>Yacare</member>
+<member>Zanderij</member>
+<member>Sweden</member>
+</simplelist>
+</appendix>
+

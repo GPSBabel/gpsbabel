@@ -1,0 +1,71 @@
+/* config.h.in.  Generated from configure.in by autoheader.  */
+
+/* 0 for most-used character sets */
+#undef CET_WANTED
+
+/* 1 to enable the CSV formats support */
+#undef CSVFMTS_ENABLED
+
+/* 1 to enable all the filters. */
+#undef FILTERS_ENABLED
+
+/* Defined if you have libexpat */
+#undef HAVE_LIBEXPAT
+
+/* Define to 1 if you have the `m' library (-lm). */
+#undef HAVE_LIBM
+
+/* Defined if you have libusb */
+#undef HAVE_LIBUSB
+
+/* Define to 1 if you have the `z' library (-lz). */
+#undef HAVE_LIBZ
+
+/* Define to 1 if you have the `nanosleep' function. */
+#undef HAVE_NANOSLEEP
+
+/* Define to 1 if you have the `sleep' function. */
+#undef HAVE_SLEEP
+
+/* Define if we have va_copy */
+#undef HAVE_VA_COPY
+
+/* Define if we have __va_copy */
+#undef HAVE___VA_COPY
+
+/* Define as 1 if your va_list type is an array */
+#undef HAVE_VA_LIST_AS_ARRAY
+
+/* 1 to enable as many formats as possible */
+#undef MAXIMAL_ENABLED
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the release name of this package. */
+#undef PACKAGE_RELEASE
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* 1 to enable Palm PDB support */
+#undef PDBFMTS_ENABLED
+
+/* 1 to enable shapefile support */
+#undef SHAPELIB_ENABLED
+
+/* Define to 1 if your processor stores words with the most significant byte
+   first (like Motorola and SPARC, unlike Intel and VAX). */
+#undef WORDS_BIGENDIAN
+
+/* 1 to inhibit our use of zlib. */
+#undef ZLIB_INHIBITED

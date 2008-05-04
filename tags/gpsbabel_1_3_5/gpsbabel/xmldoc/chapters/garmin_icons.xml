@@ -1,0 +1,314 @@
+<appendix id="GarminIcons">
+<title>Garmin Icons</title>
+<para>
+Following is a list of the valid values for the 
+<link linkend="fmt_garmin">garmin</link> <option>deficon</option> option.
+These values are also used internally by the 
+<link linkend="fmt_gdb">GDB</link>,
+<link linkend="fmt_bcr">BCR</link>,
+<link linkend="fmt_mapsource">Mapsource</link>,
+<link linkend="fmt_geoniche">Geoniche</link>,
+<link linkend="fmt_gpilots">GPilotS</link>,
+<link linkend="fmt_pcx">PCX</link>, and
+<link linkend="fmt_psitrex">PSITrex</link> 
+formats.
+</para>
+
+<simplelist columns="5">
+<member>ATV</member>
+<member>Airport</member>
+<member>Amusement Park</member>
+<member>Anchor</member>
+<member>Anchor Prohibited</member>
+<member>Animal Tracks</member>
+<member>Asian Food</member>
+<member>Bait and Tackle</member>
+<member>Ball Park</member>
+<member>Bank</member>
+<member>Bar</member>
+<member>Beach</member>
+<member>Beacon</member>
+<member>Bell</member>
+<member>Big Game</member>
+<member>Bike Trail</member>
+<member>Blind</member>
+<member>Block, Blue</member>
+<member>Block, Green</member>
+<member>Block, Red</member>
+<member>Blood Trail</member>
+<member>Boat Ramp</member>
+<member>Border Crossing (Port Of Entry)</member>
+<member>Bottom Conditions</member>
+<member>Bowling</member>
+<member>Bridge</member>
+<member>Building</member>
+<member>Buoy, White</member>
+<member>Campground</member>
+<member>Car</member>
+<member>Car Rental</member>
+<member>Car Repair</member>
+<member>Cemetery</member>
+<member>Church</member>
+<member>Circle with X</member>
+<member>Circle, Blue</member>
+<member>Circle, Green</member>
+<member>Circle, Red</member>
+<member>City (Capitol)</member>
+<member>City (Large)</member>
+<member>City (Medium)</member>
+<member>City (Small)</member>
+<member>City Hall</member>
+<member>Civil</member>
+<member>Coast Guard</member>
+<member>Contact, Afro</member>
+<member>Contact, Alien</member>
+<member>Contact, Ball Cap</member>
+<member>Contact, Big Ears</member>
+<member>Contact, Biker</member>
+<member>Contact, Blonde</member>
+<member>Contact, Bug</member>
+<member>Contact, Cat</member>
+<member>Contact, Clown</member>
+<member>Contact, Dog</member>
+<member>Contact, Dreadlocks</member>
+<member>Contact, Female1</member>
+<member>Contact, Female2</member>
+<member>Contact, Female3</member>
+<member>Contact, Glasses</member>
+<member>Contact, Goatee</member>
+<member>Contact, Kung-Fu</member>
+<member>Contact, Panda</member>
+<member>Contact, Pig</member>
+<member>Contact, Pirate</member>
+<member>Contact, Ranger</member>
+<member>Contact, Smiley</member>
+<member>Contact, Spike</member>
+<member>Contact, Sumo</member>
+<member>Controlled Area</member>
+<member>Convenience Store</member>
+<member>Cover</member>
+<member>Covey</member>
+<member>Crossing</member>
+<member>Dam</member>
+<member>Danger Area</member>
+<member>Deli</member>
+<member>Department Store</member>
+<member>Diamond, Blue</member>
+<member>Diamond, Green</member>
+<member>Diamond, Red</member>
+<member>Diver Down Flag 1</member>
+<member>Diver Down Flag 2</member>
+<member>Dock</member>
+<member>Dot, White</member>
+<member>Drinking Water</member>
+<member>Dropoff</member>
+<member>Elevation point</member>
+<member>Event Cache</member>
+<member>Exit</member>
+<member>Exit without services</member>
+<member>Fast Food</member>
+<member>First approach fix</member>
+<member>Fishing Area</member>
+<member>Fishing Hot Spot Facility</member>
+<member>Fitness Center</member>
+<member>Flag</member>
+<member>Flag, Blue</member>
+<member>Flag, Green</member>
+<member>Flag, Red</member>
+<member>Food Source</member>
+<member>Forest</member>
+<member>Furbearer</member>
+<member>Gambling/casino</member>
+<member>Gas Station</member>
+<member>Geocache</member>
+<member>Geocache Found</member>
+<member>Geographic place name, Man-made</member>
+<member>Geographic place name, land</member>
+<member>Geographic place name, water</member>
+<member>Ghost Town</member>
+<member>Glider Area</member>
+<member>Golf Course</member>
+<member>Ground Transportation</member>
+<member>Heliport</member>
+<member>Horn</member>
+<member>Hotel</member>
+<member>House</member>
+<member>Hunting Area</member>
+<member>Ice Skating</member>
+<member>Information</member>
+<member>Intersection</member>
+<member>Intl freeway hwy</member>
+<member>Intl national hwy</member>
+<member>Italian food</member>
+<member>Large Ramp intersection</member>
+<member>Large exit without services</member>
+<member>Letter A, Blue</member>
+<member>Letter A, Green</member>
+<member>Letter A, Red</member>
+<member>Letter B, Blue</member>
+<member>Letter B, Green</member>
+<member>Letter B, Red</member>
+<member>Letter C, Blue</member>
+<member>Letter C, Green</member>
+<member>Letter C, Red</member>
+<member>Letter D, Blue</member>
+<member>Letter D, Green</member>
+<member>Letter D, Red</member>
+<member>Letterbox Cache</member>
+<member>Levee</member>
+<member>Library</member>
+<member>Light</member>
+<member>Live Theater</member>
+<member>Localizer Outer Marker</member>
+<member>Locationless (Reverse) Cache</member>
+<member>Lodge</member>
+<member>Lodging</member>
+<member>Man Overboard</member>
+<member>Marina</member>
+<member>Medical Facility</member>
+<member>Micro-Cache</member>
+<member>Mile Marker</member>
+<member>Military</member>
+<member>Mine</member>
+<member>Missed approach point</member>
+<member>Movie Theater</member>
+<member>Multi-Cache</member>
+<member>Multi-Cache</member>
+<member>Museum</member>
+<member>Navaid, Amber</member>
+<member>Navaid, Black</member>
+<member>Navaid, Blue</member>
+<member>Navaid, Green</member>
+<member>Navaid, Green/Red</member>
+<member>Navaid, Green/White</member>
+<member>Navaid, Orange</member>
+<member>Navaid, Red</member>
+<member>Navaid, Red/Green</member>
+<member>Navaid, Red/White</member>
+<member>Navaid, Violet</member>
+<member>Navaid, White</member>
+<member>Navaid, White/Green</member>
+<member>Navaid, White/Red</member>
+<member>Non-directional beacon</member>
+<member>Null</member>
+<member>Number 0, Blue</member>
+<member>Number 0, Green</member>
+<member>Number 0, Red</member>
+<member>Number 1, Blue</member>
+<member>Number 1, Green</member>
+<member>Number 1, Red</member>
+<member>Number 2, Blue</member>
+<member>Number 2, Green</member>
+<member>Number 2, Red</member>
+<member>Number 3, Blue</member>
+<member>Number 3, Green</member>
+<member>Number 3, Red</member>
+<member>Number 4, Blue</member>
+<member>Number 4, Green</member>
+<member>Number 4, Red</member>
+<member>Number 5, Blue</member>
+<member>Number 5, Green</member>
+<member>Number 5, Red</member>
+<member>Number 6, Blue</member>
+<member>Number 6, Green</member>
+<member>Number 6, Red</member>
+<member>Number 7, Blue</member>
+<member>Number 7, Green</member>
+<member>Number 7, Red</member>
+<member>Number 8, Blue</member>
+<member>Number 8, Green</member>
+<member>Number 8, Red</member>
+<member>Number 9, Blue</member>
+<member>Number 9, Green</member>
+<member>Number 9, Red</member>
+<member>Oil Field</member>
+<member>Open 24 Hours</member>
+<member>Oval, Blue</member>
+<member>Oval, Green</member>
+<member>Oval, Red</member>
+<member>Parachute Area</member>
+<member>Park</member>
+<member>Parking Area</member>
+<member>Pharmacy</member>
+<member>Picnic Area</member>
+<member>Pin, Blue</member>
+<member>Pin, Green</member>
+<member>Pin, Red</member>
+<member>Pizza</member>
+<member>Police Station</member>
+<member>Post Office</member>
+<member>Post Office</member>
+<member>Private Field</member>
+<member>Puzzle Cache</member>
+<member>RV Park</member>
+<member>Radio Beacon</member>
+<member>Ramp intersection</member>
+<member>Rectangle, Blue</member>
+<member>Rectangle, Green</member>
+<member>Rectangle, Red</member>
+<member>Reef</member>
+<member>Residence</member>
+<member>Restaurant</member>
+<member>Restricted Area</member>
+<member>Restroom</member>
+<member>Scales</member>
+<member>Scenic Area</member>
+<member>School</member>
+<member>Seafood</member>
+<member>Seaplane Base</member>
+<member>Shipwreck</member>
+<member>Shopping Center</member>
+<member>Short Tower</member>
+<member>Shower</member>
+<member>Ski Resort</member>
+<member>Skiing Area</member>
+<member>Skull and Crossbones</member>
+<member>Small City</member>
+<member>Small Game</member>
+<member>Soft Field</member>
+<member>Square, Blue</member>
+<member>Square, Green</member>
+<member>Square, Red</member>
+<member>Stadium</member>
+<member>State Hwy</member>
+<member>Steak</member>
+<member>Street Intersection</member>
+<member>Stump</member>
+<member>Summit</member>
+<member>Swimming Area</member>
+<member>TACAN</member>
+<member>Tall Tower</member>
+<member>Telephone</member>
+<member>Tide/Current PRediction Station</member>
+<member>Toll Booth</member>
+<member>TracBack Point</member>
+<member>Trail Head</member>
+<member>Tree Stand</member>
+<member>Treed Quarry</member>
+<member>Triangle, Blue</member>
+<member>Triangle, Green</member>
+<member>Triangle, Red</member>
+<member>Truck</member>
+<member>Truck Stop</member>
+<member>Tunnel</member>
+<member>U Marina</member>
+<member>U stump</member>
+<member>US hwy</member>
+<member>Ultralight Area</member>
+<member>Unknown Cache</member>
+<member>Upland Game</member>
+<member>VHF Omni-range</member>
+<member>VOR-DME</member>
+<member>VOR/TACAN</member>
+<member>Virtual cache</member>
+<member>Water Hydrant</member>
+<member>Water Source</member>
+<member>Waterfowl</member>
+<member>Waypoint</member>
+<member>Webcam Cache</member>
+<member>Weed Bed</member>
+<member>Winery</member>
+<member>Wrecker</member>
+<member>Zoo</member>
+</simplelist>
+</appendix>

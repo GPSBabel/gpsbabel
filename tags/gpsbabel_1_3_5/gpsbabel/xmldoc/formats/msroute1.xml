@@ -1,0 +1,22 @@
+
+      
+      
+      <para> Input support for Microsoft AutoRoute 2002-2006 .axe files
+and Microsoft Streets and Trips .est files.  This is for reading routes
+created this program and is different than the <link linkend="fmt_s_and_t">
+s_and_t</link> format used for writing pushpins.</para><para>
+These files contains only routes. We can extract the coordinates and
+the names of the points within route. An export to this format will
+not be supported.</para>
+      <para>Only the start, stops, and end points are stored in the 
+.est/.axe/.ptm files. Turn-by-turn route data is not stored in the 
+.est/.axe/.ptm files, and is recalculated by the Microsoft title each 
+time on opening the file. This means that the output of GPSBabel will 
+not contain turns needed for driving directions.</para>
+	<para>One possible approach to achieve similar results is to 
+use the Streets and Trips drawing tools to trace a line over the 
+interesting parts of the route to capture intersections or key turns.
+GPSBabel will capture stops in the route and insert those as turns, so 
+adding stops at intersections can also improve the results when converting.
+</para>
+    

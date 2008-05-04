@@ -1,0 +1,10 @@
+<para>
+This option erases all waypoints in the receiver before doing a transfer.
+</para>
+<para>
+This is a convenient option to use in automated processes where you want
+to ensure the units starts with a clean state before sending waypoints to
+it.   Using this option on transmit is a better idea than doing it on 
+receive since the latter would erase all the waypoints before asking the
+unit to send all the waypoints.
+</para>
