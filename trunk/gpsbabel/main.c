@@ -124,7 +124,7 @@ usage(const char *pname, int shorter )
 	printf(
 "Usage:\n"
 "    %s [options] -i INTYPE -f INFILE [filter] -o OUTTYPE -F OUTFILE\n"
-"    %s [options] -i INTYPE -o OUTTYPE INFILE [filter] [OUTFILE]\n"
+"    %s [options] -i INTYPE -o OUTTYPE INFILE [filter] OUTFILE\n"
 "\n"
 "    Converts GPS route and waypoint data from one format type to another.\n"
 "    The input type and filename are specified with the -i INTYPE\n"
