@@ -108,8 +108,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.64 $"; */
-static char gdb_release_date[] = "$Date: 2008-04-27 14:11:56 $";
+/* static char gdb_release[] = "$Revision: 1.65 $"; */
+static char gdb_release_date[] = "$Date: 2008-05-04 23:09:08 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -1694,7 +1694,7 @@ write_data(void)
 #define GDB_OPT_VER		"ver"
 #define GDB_OPT_VIA		"via"
 #define GDB_OPT_CATEGORY	"cat"
-#define GDB_OPT_BITCATEGORY	"bitcategory"
+#define GDB_OPT_BITCATEGORY	"bitscategory"
 #define GDB_OPT_ROADBOOK	"roadbook"
 
 static arglist_t gdb_args[] = {
