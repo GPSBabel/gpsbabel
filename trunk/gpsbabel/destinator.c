@@ -60,17 +60,17 @@ gmsd_init(waypoint *wpt)
 static char *
 read_wcstr(const int discard)
 {
-	short *buff = NULL, c;
+	gbint16 *buff = NULL, c;
 	int size = 0, pos = 0;
 	
-	while ((c = gbfgetint16(fin))) {
+	while (gbfread(&c, sizeof(c), 1, fin) && (c != 0)) {
 		if (size == 0) {
 			size = 16;
-			buff = xmalloc(size * 2);
+			buff = xmalloc(size * sizeof(*buff));
 		}
 		else if (pos == size) {
 			size += 16;
-			buff = xrealloc(buff, size * 2);
+			buff = xrealloc(buff, size * sizeof(*buff));
 		}
 		buff[pos] = c;
 		pos += 1;
