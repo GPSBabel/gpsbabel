@@ -183,12 +183,16 @@ struct data_item {
 
 #define TIMEOUT        1000
 #define MTK_BAUDRATE 115200
+#define MTK_BAUDRATE_M241 38400
 
 static void *fd;  /* serial fd */
 static FILE *fl;  /* bin.file fd */
 static char *port; /* serial port name */
 static char *erase;  /* erase ? command option */
 static char *csv_file; /* csv ? command option */
+static char *m241;  /* m241 ? command option */
+#define IS_M241 (m241 && (*m241 != '0'))
+
 static unsigned int bmask = 0x000e0e7f;
 static unsigned int mlog_period, mlog_distance, mlog_speed; /* in 10:ths of sec, m, km/h */
 
@@ -216,6 +220,8 @@ static arglist_t mtk_sargs[] = {
         "0", ARGTYPE_BOOL, ARG_NOMINMAX },
     { "csv",   &csv_file, "MTK compatible CSV output file",
         NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+    { "m241",  &m241, "Special support for HOLUX M-241 Logger",
+        "0", ARGTYPE_BOOL, ARG_NOMINMAX },
     ARG_TERMINATOR
 };
 
@@ -339,10 +345,18 @@ static void mtk_rd_init(const char *fname){
     // verify that we have a MTK based logger...
     dbg(1, "Verifying MTK based device...\n");
 
-    if ((rc = gbser_set_port(fd, MTK_BAUDRATE, 8, 0, 1))) {
+    if ( IS_M241 ) {
+       log_type[LATITUDE].size = log_type[LONGITUDE].size = 4;
+       log_type[HEIGHT].size = 3;
+       rc = gbser_set_port(fd, MTK_BAUDRATE_M241, 8, 0, 1);
+    } else {
+       rc = gbser_set_port(fd, MTK_BAUDRATE, 8, 0, 1);
+    }
+    if (rc) {
         dbg(1, "Set baud rate to %d failed (%d)\n", MTK_BAUDRATE, rc);
         fatal(MYNAME ": Failed to set baudrate !\n");
     }
+
     rc = do_cmd("$PMTK605*31\r\n", "PMTK705", 10);
     if ( rc != 0 )
       fatal(MYNAME ": This is not a MTK based GPS ! (or is it turned off ?)\n");
@@ -763,13 +777,30 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
             itm.valid = le_read16(data + i);
             break;
          case 1<<LATITUDE: 
-            itm.lat = endian_read_double(data + i, 1 /* le */);
+            if ( log_type[LATITUDE].size == 4 ) {
+               itm.lat = endian_read_float(data + i, 1 /* le */); // M-241
+            } else {
+               itm.lat = endian_read_double(data + i, 1 /* le */);
+            }
             break;
         case 1<<LONGITUDE: 
-            itm.lon = endian_read_double(data + i, 1 /* le */);
+            if ( log_type[LONGITUDE].size == 4 ) {
+               itm.lon = endian_read_float(data + i, 1 /* le */); // M-241
+            } else {
+               itm.lon = endian_read_double(data + i, 1 /* le */);
+            }
             break;
-         case 1<<HEIGHT:
-            itm.height = endian_read_float(data + i, 1 /* le */);
+        case 1<<HEIGHT:
+            if ( IS_M241 ) {
+               unsigned char tmp[4];
+               tmp[0] = 0x0;
+               tmp[1] = *(data + i);
+               tmp[2] = *(data + i + 1);
+               tmp[3] = *(data + i + 2);
+               itm.height = endian_read_float(tmp, 1 /* le */);
+            } else {
+               itm.height = endian_read_float(data + i, 1 /* le */);          
+            }
             break;
          case 1<<SPEED: 
             itm.speed = endian_read_float(data + i, 1 /* le */);
@@ -870,8 +901,8 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
          i += log_type[k].size;
       }
    } /* for (bmap,...) */
-   
-   if ( data[i] != '*' ) {
+ 
+   if ( ! IS_M241 && ( data[i] != '*') ) {
       if ( global_opts.debug_level > 0 ) {
          int j;
          printf("Missing '*' !\n");
@@ -884,8 +915,8 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
          return 16;
       }
    }
+   if ( ! IS_M241 ) i++; // skip '*' separator
 
-   i++; // skip '*' separator
    if ( data[i] != crc ){
       printf("%2d: Bad CRC %.2x != %.2x\n", count, data[i], crc);
    }
@@ -918,6 +949,8 @@ static int mtk_parse_info(const unsigned char *data, int dataLen){
          case 0x02:
             bm = le_read32(data + 8);
             dbg(1, "# Log bitmask is: %.8x\n", bm);
+            if ( IS_M241 ) 
+               bm &= 0x7fffffffU;
             if ( bmask != bm )
                dbg(1," ########## Bitmask Change   %.8x -> %.8x ###########\n", bmask, bm);
             bmask = bm;
@@ -969,6 +1002,10 @@ static void file_init(const char *fname) {
     if (fl = fopen(fname, "rb"), NULL == fl) {
         fatal(MYNAME ": Can't open file '%s'\n", fname);
     }
+    if ( IS_M241 ) {
+       log_type[LATITUDE].size = log_type[LONGITUDE].size = 4;
+       log_type[HEIGHT].size = 3;
+    }
 }
 
 static void file_deinit(void) {
@@ -976,6 +1013,18 @@ static void file_deinit(void) {
     fclose(fl);
 }
 
+static int is_holux_string(const unsigned char *data, int dataLen) {
+   if ( IS_M241 &&
+        dataLen >= 5 &&
+        data[0] == (0xff & 'H') &&
+        data[1] == (0xff & 'O') &&
+        data[2] == (0xff & 'L') &&
+        data[3] == (0xff & 'U') &&
+        data[4] == (0xff & 'X') ) {
+      return 1;
+   }
+   return 0;
+}
 
 static void file_read(void) {
    long fsize, pos;
@@ -1013,6 +1062,11 @@ static void file_read(void) {
       unsigned int mask, log_period, log_distance, log_speed;
        
       mask = le_read32(buf + 2);
+      if ( IS_M241 ) {
+         // clear Holux-specific 'low precision' bit
+         mask &= 0x7fffffffU;
+      }
+
       // log_policy   = le_read16(buf + 6);
       log_period   = le_read32(buf + 8);
       log_distance = le_read32(buf + 12);
@@ -1038,7 +1092,9 @@ static void file_read(void) {
       if ( buf[0] == 0xaa ){ // pre-validate to avoid error...
         j = mtk_parse_info(buf, bLen);
         pos += j;
-      }   
+      } else if  ( is_holux_string(buf, bLen) ) {
+	pos += j;
+      }
    } while ( j == 16 );
    j = bLen;
    pos += j;
@@ -1066,6 +1122,8 @@ static void file_read(void) {
               && memcmp(&buf[i+12], &LOG_RST[12], 4) == 0 )
          {     
             mtk_parse_info(&buf[i], (bLen-i));
+            k = 16;
+         } else if  ( is_holux_string(&buf[i], (bLen - i)) ) {
             k = 16;
          } else if  ( buf[i] == 0xff && buf[i+1] == 0xff  && buf[i+2] == 0xff && buf[i+3] == 0xff
                /* && (pos + 2*logLen) & 0xffff) < logLen */)
@@ -1129,6 +1187,8 @@ ff_vecs_t mtk_vecs = {
 static arglist_t mtk_fargs[] = {
     { "csv",   &csv_file, "MTK compatible CSV output file",
         NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+    { "m241",  &m241, "Special support for HOLUX M-241 Logger",
+        "0", ARGTYPE_BOOL, ARG_NOMINMAX },
     ARG_TERMINATOR
 };
 
