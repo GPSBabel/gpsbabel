@@ -177,6 +177,8 @@ xg_tag_mapping kml_map[] = {
 	{ wpt_name, 	cb_cdata, 	"/Placemark/name" },
 	{ wpt_desc, 	cb_cdata, 	"/Placemark/description" },
 	{ wpt_time, 	cb_cdata, 	"/Placemark/TimeStamp/when" },
+	// Alias for above used in KML 2.0
+	{ wpt_time, 	cb_cdata, 	"/Placemark/TimeInstant/timePosition" },
 	{ wpt_coord, 	cb_cdata, 	"/Placemark/Point/coordinates" },
 	{ wpt_icon, 	cb_cdata, 	"/Placemark/Style/Icon/href" },
 	{ trk_coord, 	cb_cdata, 	"/Placemark/MultiGeometry/LineString/coordinates" },
