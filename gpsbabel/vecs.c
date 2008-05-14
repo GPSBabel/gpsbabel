@@ -81,6 +81,8 @@ extern ff_vecs_t mps_vecs;
 extern ff_vecs_t msroute_vecs;
 extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
+extern ff_vecs_t mtk_m241_vecs;
+extern ff_vecs_t mtk_m241_fvecs;
 extern ff_vecs_t navicache_vecs;
 extern ff_vecs_t netstumbler_vecs;
 extern ff_vecs_t nmea_vecs;
@@ -430,6 +432,18 @@ vecs_t vec_list[] = {
                 &mtk_fvecs,
                 "mtk-bin",
                 "MTK Logger (iBlue 747,...) Binary File Format",
+                "bin"
+        },
+        {
+                &mtk_m241_vecs,
+                "m241",
+                "Holux M-241 (MTK based) download",
+                NULL
+        },
+        {
+                &mtk_m241_fvecs,
+                "m241-bin",
+                "Holux M-241 (MTK based) Binary File Format",
                 "bin"
         },
         {

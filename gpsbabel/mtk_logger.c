@@ -190,8 +190,7 @@ static FILE *fl;  /* bin.file fd */
 static char *port; /* serial port name */
 static char *erase;  /* erase ? command option */
 static char *csv_file; /* csv ? command option */
-static char *m241;  /* m241 ? command option */
-#define IS_M241 (m241 && (*m241 != '0'))
+static int is_m241=0;
 
 static unsigned int bmask = 0x000e0e7f;
 static unsigned int mlog_period, mlog_distance, mlog_speed; /* in 10:ths of sec, m, km/h */
@@ -207,10 +206,10 @@ const char CMD_LOG_FORMAT[] = "$PMTK182,2,2*39\r\n";
 const char CMD_LOG_ERASE[]  = "$PMTK182,6,1*3E\r\n";
 
 
+static void mtk_rd_init(const char *fname);
 static void file_init(const char *fname);
 static void file_deinit(void) ;
 static void file_read(void);
-
 
 
 // Arguments for logg fetch 'mtk' command..
@@ -220,8 +219,6 @@ static arglist_t mtk_sargs[] = {
         "0", ARGTYPE_BOOL, ARG_NOMINMAX },
     { "csv",   &csv_file, "MTK compatible CSV output file",
         NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-    { "m241",  &m241, "Special support for HOLUX M-241 Logger",
-        "0", ARGTYPE_BOOL, ARG_NOMINMAX },
     ARG_TERMINATOR
 };
 
@@ -331,6 +328,10 @@ static int do_cmd(const char *cmd, const char *expect, time_t timeout_sec) {
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
+static void mtk_rd_init_m241 (const char *fname) {
+    is_m241 = 1;
+    mtk_rd_init(fname);
+}
 
 static void mtk_rd_init(const char *fname){
     int rc;
@@ -345,7 +346,7 @@ static void mtk_rd_init(const char *fname){
     // verify that we have a MTK based logger...
     dbg(1, "Verifying MTK based device...\n");
 
-    if ( IS_M241 ) {
+    if ( is_m241 ) {
        log_type[LATITUDE].size = log_type[LONGITUDE].size = 4;
        log_type[HEIGHT].size = 3;
        rc = gbser_set_port(fd, MTK_BAUDRATE_M241, 8, 0, 1);
@@ -791,7 +792,7 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
             }
             break;
         case 1<<HEIGHT:
-            if ( IS_M241 ) {
+            if ( is_m241 ) {
                unsigned char tmp[4];
                tmp[0] = 0x0;
                tmp[1] = *(data + i);
@@ -902,7 +903,7 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
       }
    } /* for (bmap,...) */
  
-   if ( ! IS_M241 && ( data[i] != '*') ) {
+   if ( ! is_m241 && ( data[i] != '*') ) {
       if ( global_opts.debug_level > 0 ) {
          int j;
          printf("Missing '*' !\n");
@@ -915,7 +916,7 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
          return 16;
       }
    }
-   if ( ! IS_M241 ) i++; // skip '*' separator
+   if ( ! is_m241 ) i++; // skip '*' separator
 
    if ( data[i] != crc ){
       printf("%2d: Bad CRC %.2x != %.2x\n", count, data[i], crc);
@@ -949,7 +950,7 @@ static int mtk_parse_info(const unsigned char *data, int dataLen){
          case 0x02:
             bm = le_read32(data + 8);
             dbg(1, "# Log bitmask is: %.8x\n", bm);
-            if ( IS_M241 ) 
+            if ( is_m241 ) 
                bm &= 0x7fffffffU;
             if ( bmask != bm )
                dbg(1," ########## Bitmask Change   %.8x -> %.8x ###########\n", bmask, bm);
@@ -997,12 +998,17 @@ static int mtk_parse_info(const unsigned char *data, int dataLen){
 
 /********************** File-in interface ********************************/
 
+static void file_init_m241(const char *fname) {
+    is_m241=1;
+    file_init(fname);
+}
+
 static void file_init(const char *fname) {
     dbg(4, "Opening file %s...\n", fname);
     if (fl = fopen(fname, "rb"), NULL == fl) {
         fatal(MYNAME ": Can't open file '%s'\n", fname);
     }
-    if ( IS_M241 ) {
+    if ( is_m241 ) {
        log_type[LATITUDE].size = log_type[LONGITUDE].size = 4;
        log_type[HEIGHT].size = 3;
     }
@@ -1014,7 +1020,7 @@ static void file_deinit(void) {
 }
 
 static int is_holux_string(const unsigned char *data, int dataLen) {
-   if ( IS_M241 &&
+   if ( is_m241 &&
         dataLen >= 5 &&
         data[0] == (0xff & 'H') &&
         data[1] == (0xff & 'O') &&
@@ -1062,7 +1068,7 @@ static void file_read(void) {
       unsigned int mask, log_period, log_distance, log_speed;
        
       mask = le_read32(buf + 2);
-      if ( IS_M241 ) {
+      if ( is_m241 ) {
          // clear Holux-specific 'low precision' bit
          mask &= 0x7fffffffU;
       }
@@ -1182,13 +1188,30 @@ ff_vecs_t mtk_vecs = {
 						/* not fixed, can be changed through command line parameter */
 };
 
+ff_vecs_t mtk_m241_vecs = {
+	ff_type_serial,
+	{ 
+		ff_cap_none 	/* waypoints */, 
+	  	ff_cap_read 	/* tracks */, 
+	  	ff_cap_none 	/* routes */
+	},
+	mtk_rd_init_m241,	
+	NULL,	
+	mtk_rd_deinit,	
+	NULL,	
+	mtk_read,
+	NULL,
+	NULL,
+	mtk_sargs,
+	CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
+						/* not fixed, can be changed through command line parameter */
+};
+
 /* used for mtk-bin */
 
 static arglist_t mtk_fargs[] = {
     { "csv",   &csv_file, "MTK compatible CSV output file",
         NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-    { "m241",  &m241, "Special support for HOLUX M-241 Logger",
-        "0", ARGTYPE_BOOL, ARG_NOMINMAX },
     ARG_TERMINATOR
 };
 
@@ -1196,6 +1219,20 @@ ff_vecs_t mtk_fvecs = {
     ff_type_file,
     { ff_cap_none, ff_cap_read, ff_cap_none },
     file_init,
+    NULL,
+    file_deinit,
+    NULL,
+    file_read,
+    NULL,
+    NULL, 
+    mtk_fargs,
+    CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
+};
+
+ff_vecs_t mtk_m241_fvecs = {
+    ff_type_file,
+    { ff_cap_none, ff_cap_read, ff_cap_none },
+    file_init_m241,
     NULL,
     file_deinit,
     NULL,
