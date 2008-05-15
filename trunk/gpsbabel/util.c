@@ -29,10 +29,16 @@
 #include <stdarg.h>
 #include <time.h>
 
+// First test Apple's clever macro that's really a runtime test so
+// that our universal binaries work right.
+#if defined __BIG_ENDIAN__
+#define i_am_little_endian !__BIG_ENDIAN__
+#else
 #if defined WORDS_BIGENDIAN
 # define i_am_little_endian 0
 #else
 # define i_am_little_endian 1
+#endif
 #endif
 
 #ifdef DEBUG_MEM
