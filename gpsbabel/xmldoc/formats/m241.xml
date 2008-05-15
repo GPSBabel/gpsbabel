@@ -5,7 +5,7 @@
 	 data; to configure extended logging you can use the BT747 open 
 	source software 
          <ulink url="http://bt747.wiki.sourceforge.net">bt747</ulink>
-	 Waypoint storage is possible only if RCR is enabled in the settings.
+	 Waypoint storage is possible only if "recording reason" (RCR) is enabled in the settings.
 </para>
 <para>
 	Use the m241 format to connect with the unit serially and m241-bin to read files saved by the device.
