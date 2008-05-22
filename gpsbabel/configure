@@ -4354,6 +4354,8 @@ else
 			xpathdr=/sw/include/
 		fi
 		;;
+	*-gentoo-freebsd*)
+		;;
 	*-*-freebsd*)
  		if test -f /usr/local/include/expat.h ; then
 			xpathdr=/usr/local/include
@@ -4425,6 +4427,9 @@ _ACEOF
 
 
 		fi
+		;;
+	*-gentoo-freebsd*)
+		EXPAT_LIB=-lexpa
 		;;
 	*-*-freebsd*)
 		if test -f /usr/local/lib/libexpat.a ; then
