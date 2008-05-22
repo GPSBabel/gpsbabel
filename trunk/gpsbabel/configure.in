@@ -225,6 +225,8 @@ AC_ARG_WITH(expathdr,
 			xpathdr=/sw/include/
 		fi
 		;;
+	*-gentoo-freebsd*)
+		;;
 	*-*-freebsd*)
  		if test -f /usr/local/include/expat.h ; then
 			xpathdr=/usr/local/include
@@ -278,6 +280,9 @@ AC_ARG_WITH(libexpat,
 			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
 			  AC_SUBST(EXPAT_LIB)
 		fi				
+		;;
+	*-gentoo-freebsd*)
+		EXPAT_LIB=-lexpa
 		;;
 	*-*-freebsd*)
 		if test -f /usr/local/lib/libexpat.a ; then
