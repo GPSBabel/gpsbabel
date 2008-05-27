@@ -159,6 +159,7 @@ rw_init(const char *fname)
 					break;
 				case 295: 	/* eTrex (yellow, fw v. 3.30) */
 				case 696: 	/* eTrex HC */
+				case 574: 	/* Geko 201 */
 					receiver_short_length = 6;
 					valid_waypt_chars =
 					  MILITANT_VALID_WAYPT_CHARS " +-";
