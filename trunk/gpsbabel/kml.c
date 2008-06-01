@@ -859,9 +859,14 @@ static void kml_geocache_pr(const waypoint *waypointp)
 	kml_write_xml(-1, "</Style>\n");
 
 	kml_write_xml(1, "<ExtendedData>\n");
-	kml_write_xml(0, "<Data name=\"gc_num\"><value>%s</value></Data>\n", waypointp->shortname);
 
-	if(waypointp->url_link_text) {
+	if (waypointp->shortname) {
+		p = xml_entitize(waypointp->shortname);
+		kml_write_xml(0, "<Data name=\"gc_num\"><value>%s</value></Data>\n", p);
+		xfree(p);
+	}
+
+	if (waypointp->url_link_text) {
 		p = xml_entitize(waypointp->url_link_text);
 		kml_write_xml(0, "<Data name=\"gc_name\"><value>%s</value></Data>\n", p);
 		xfree(p);
