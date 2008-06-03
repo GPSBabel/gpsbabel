@@ -579,7 +579,36 @@ osm_node_tag(const char *args, const char **attrv)
 		else
 			wpt->notes = xstrdup(str);
 	}
-	
+	else if (strcmp(key, "gps:hdop") == 0) {
+		wpt->hdop = atof(str);
+	}
+	else if (strcmp(key, "gps:vdop") == 0) {
+		wpt->vdop = atof(str);
+	}
+	else if (strcmp(key, "gps:pdop") == 0) {
+		wpt->pdop = atof(str);
+	}
+	else if (strcmp(key, "gps:sat") == 0) {
+		wpt->sat = atoi(str);
+	}
+	else if (strcmp(key, "gps:fix") == 0) {
+		if (strcmp(str, "2d") == 0) {
+			wpt->fix = fix_2d;
+		}
+		else if (strcmp(str, "3d") == 0) {
+			wpt->fix = fix_3d;
+		}
+		else if (strcmp(str, "dgps") == 0) {
+			wpt->fix = fix_dgps;
+		}
+		else if (strcmp(str, "pps") == 0) {
+			wpt->fix = fix_pps;
+		}
+		else if (strcmp(str, "none") == 0) {
+			wpt->fix = fix_none;
+		}
+	}
+
 	xfree(str);
 }
 
@@ -785,6 +814,40 @@ osm_waypt_disp(const waypoint *wpt)
 		}
 		gbfprintf(fout, ">\n");
 
+		if (wpt->hdop) {
+			gbfprintf(fout, "    <tag k='gps:hdop' v='%f' />\n", wpt->hdop);
+		}
+		if (wpt->vdop) {
+			gbfprintf(fout, "    <tag k='gps:vdop' v='%f' />\n", wpt->vdop);
+		}
+		if (wpt->pdop) {
+			gbfprintf(fout, "    <tag k='gps:pdop' v='%f' />\n", wpt->pdop);
+		}
+		if (wpt->sat > 0) {
+			gbfprintf(fout, "    <tag k='gps:sat' v='%d' />\n", wpt->sat);
+		}
+
+		switch (wpt->fix) {
+			case fix_2d:
+				gbfprintf(fout, "    <tag k='gps:fix' v='2d' />\n");
+				break;
+			case fix_3d:
+				gbfprintf(fout, "    <tag k='gps:fix' v='3d' />\n");
+				break;
+			case fix_dgps:
+				gbfprintf(fout, "    <tag k='gps:fix' v='dgps' />\n");
+				break;
+			case fix_pps:
+				gbfprintf(fout, "    <tag k='gps:fix' v='pps' />\n");
+				break;
+			case fix_none:
+				gbfprintf(fout, "    <tag k='gps:fix' v='none' />\n");
+				break;
+			case fix_unknown:
+			default:
+				break;
+		}
+		
 		gbfprintf(fout, "    <tag k='created_by' v='GPSBabel");
 		if (gpsbabel_time != 0)
 			gbfprintf(fout, "-%s", gpsbabel_version);
