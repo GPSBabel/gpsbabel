@@ -46,21 +46,6 @@ static int node_id;
 static route_head *rte;
 static int skip_rte;
 
-#if ! HAVE_LIBEXPAT
-
-void
-osm_rd_init(const char *fname)
-{
-	fatal(MYNAME ": This build excluded \" MYNAME \" support because expat was not installed.\n");
-}
-
-void
-osm_read(void)
-{
-}
-
-#else
-
 static waypoint *wpt;
 static int wpt_loaded, rte_loaded;
 
@@ -414,6 +399,22 @@ static osm_icon_mapping_t osm_icon_mappings[] = {
 
 	{ -1, NULL, NULL }
 };
+
+#if ! HAVE_LIBEXPAT
+
+void
+osm_rd_init(const char *fname)
+{
+	fatal(MYNAME ": This build excluded \" MYNAME \" support because expat was not installed.\n");
+}
+
+void
+osm_read(void)
+{
+}
+
+#else
+
 
 /*******************************************************************************/
 /*                                   READER                                    */
