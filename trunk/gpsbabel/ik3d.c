@@ -30,6 +30,8 @@ static arglist_t ikt_args[] =
 
 #define MYNAME "ikt"
 
+static char *name, *text;
+
 #if ! HAVE_LIBEXPAT
 void
 ikt_rd_init(const char *fname)
@@ -42,11 +44,15 @@ ikt_read(void)
 {
 }
 
+static void
+ikt_object_end(void)
+{
+}
+
 #else
 
 static route_head *track;
 static waypoint *waypt;
-static char *name, *text;
 
 static xg_callback	iktobj_waypt, iktobj_type, iktobj_name, iktobj_trkpt, iktobj_text;
 
