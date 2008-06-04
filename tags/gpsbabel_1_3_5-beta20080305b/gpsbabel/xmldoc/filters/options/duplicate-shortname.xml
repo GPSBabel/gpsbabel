@@ -1,0 +1,9 @@
+<para>
+This option is the one most often used with the duplicate filter.  This 
+option instructs the duplicate filter to remove any waypoints that share
+a short name with a waypoint that has come before.  This option might be
+used to remove duplicates if you are merging two datasets that were 
+each created in part from a common ancestor dataset.
+</para>
+
+

@@ -1,0 +1,216 @@
+Grid	Lat/Lon hddd°mm.mmm'
+Datum	WGS 84
+
+Header	Name	Description	Type	Position	Altitude	Depth	Proximity	Temperature	Display Mode	Color	Symbol	Facility	City	State	Country	Date Modified	Link	Categories
+
+Waypoint	5058ROAD	ROAD CROSSING	User Waypoint	N42 26.400 W71 07.257	54 m				Symbol & Name	Unknown	Waypoint					02/06/2001 00:18:14 		
+Waypoint	5066		User Waypoint	N42 26.333 W71 07.158	45 m				Symbol & Name	Unknown	Crossing					28/11/2001 21:05:28 		
+Waypoint	5067		User Waypoint	N42 26.354 W71 07.183	58 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:55 		
+Waypoint	5096		User Waypoint	N42 26.335 W71 06.970	45 m				Symbol & Name	Unknown	Waypoint					16/11/2001 23:03:38 		
+Waypoint	5142		User Waypoint	N42 26.634 W71 07.324	51 m				Symbol & Name	Unknown	Waypoint					28/11/2001 21:05:28 		
+Waypoint	5144SUMMIT		User Waypoint	N42 26.721 W71 07.372	62 m				Symbol & Name	Unknown	Summit					28/11/2001 21:05:28 		
+Waypoint	5148NANEPA		User Waypoint	N42 26.986 W71 07.341	120 m				Symbol & Name	Unknown	Waypoint					07/11/2001 23:53:41 		
+Waypoint	5150TANK	WATER TANK	User Waypoint	N42 26.504 W71 07.302	67 m				Symbol & Name	Unknown	Museum					02/06/2001 00:18:16 		
+Waypoint	5156		User Waypoint	N42 26.838 W71 07.288	128 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:58 		
+Waypoint	5179DEAD	Dead End	User Waypoint	N42 26.992 W71 07.159	117 m				Symbol & Name	Unknown	Danger Area					02/06/2001 03:26:59 		
+Waypoint	5224		User Waypoint	N42 27.292 W71 07.507	97 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:59 		
+Waypoint	5229		User Waypoint	N42 27.545 W71 07.501	83 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:59 		
+Waypoint	5236BRIDGE	Bridge	User Waypoint	N42 27.388 W71 07.481	90 m				Symbol & Name	Unknown	Bridge					02/06/2001 03:26:59 		
+Waypoint	5237		User Waypoint	N42 27.419 W71 07.470	83 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:59 		
+Waypoint	5239ROAD	Road	User Waypoint	N42 27.557 W71 07.476	81 m				Symbol & Name	Unknown	Truck Stop					02/06/2001 03:27:00 		
+Waypoint	5252PURPLE		User Waypoint	N42 27.195 W71 07.274	78 m				Symbol & Name	Unknown	Summit					07/11/2001 23:53:41 		
+Waypoint	5254		User Waypoint	N42 27.264 W71 07.261	67 m				Symbol & Name	Unknown	Waypoint					28/11/2001 21:05:28 		
+Waypoint	5258		User Waypoint	N42 27.086 W71 07.306	75 m				Symbol & Name	Unknown	Waypoint					07/11/2001 23:53:41 		
+Waypoint	5264		User Waypoint	N42 27.264 W71 07.241	65 m				Symbol & Name	Unknown	Waypoint					28/11/2001 21:05:28 		
+Waypoint	526708		User Waypoint	N42 27.466 W71 07.264	77 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:00 		
+Waypoint	526750		User Waypoint	N42 27.425 W71 07.220	75 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:00 		
+Waypoint	5267OBSTAC		User Waypoint	N42 27.443 W71 07.192	74 m				Symbol & Name	Unknown	Amusement Park					02/06/2001 03:27:00 		
+Waypoint	527614		User Waypoint	N42 27.395 W71 07.182	79 m				Symbol & Name	Unknown	Waypoint					07/11/2001 23:53:41 		
+Waypoint	527631		User Waypoint	N42 27.375 W71 07.163	79 m				Symbol & Name	Unknown	Waypoint					07/11/2001 23:53:41 		
+Waypoint	5278		User Waypoint	N42 27.489 W71 07.150	68 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:00 		
+Waypoint	5278ROAD	Road	User Waypoint	N42 27.527 W71 07.141	67 m				Symbol & Name	Unknown	Truck Stop					02/06/2001 03:27:01 		
+Waypoint	5287WATER	Reservoir	User Waypoint	N42 27.464 W71 07.050	68 m				Symbol & Name	Unknown	Swimming Area					02/06/2001 03:27:01 		
+Waypoint	5289		User Waypoint	N42 27.563 W71 07.063	64 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:01 		
+Waypoint	5299DEAD	Dead End	User Waypoint	N42 27.578 W71 06.993	69 m				Symbol & Name	Unknown	Danger Area					02/06/2001 03:27:01 		
+Waypoint	5374FIRE		User Waypoint	N42 27.851 W71 07.191	53 m				Symbol & Name	Unknown	Waypoint					28/11/2001 21:05:28 		
+Waypoint	5376		User Waypoint	N42 27.939 W71 07.166	56 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:02 		
+Waypoint	5376BRIDGE	Bridge	User Waypoint	N42 27.945 W71 07.190	55 m				Symbol & Name	Unknown	Bridge					02/06/2001 03:27:01 		
+Waypoint	5376DEAD	Dead End	User Waypoint	N42 27.929 W71 07.150	57 m				Symbol & Name	Unknown	Danger Area					02/06/2001 03:27:02 		
+Waypoint	5376STREAM		User Waypoint	N42 27.955 W71 07.161	65 m				Symbol & Name	Unknown	Bridge					07/11/2001 23:53:41 		
+Waypoint	6006		User Waypoint	N42 26.341 W71 06.869	56 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:55 		
+Waypoint	6006BLUE		User Waypoint	N42 26.316 W71 06.890	46 m				Symbol & Name	Unknown	Waypoint					28/11/2001 21:05:28 		
+Waypoint	6014MEADOW		User Waypoint	N42 26.205 W71 06.795	38 m				Symbol & Name	Unknown	Waypoint					28/11/2001 21:05:28 		
+Waypoint	6016	Bike Loop Connector	User Waypoint	N42 26.320 W71 06.846	43 m				Symbol & Name	Unknown	Waypoint					28/11/2001 21:05:28 		
+Waypoint	6029		User Waypoint	N42 26.505 W71 06.795	56 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:55 		
+Waypoint	6042CROSS	Crossing	User Waypoint	N42 26.128 W71 06.581	45 m				Symbol & Name	Unknown	Crossing					02/06/2001 03:27:05 		
+Waypoint	6053		User Waypoint	N42 26.175 W71 06.546	50 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:05 		
+Waypoint	6066		User Waypoint	N42 26.355 W71 06.452	26 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:57 		
+Waypoint	6067		User Waypoint	N42 26.386 W71 06.457	34 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:57 		
+Waypoint	6071		User Waypoint	N42 26.086 W71 06.354	30 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:57 		
+Waypoint	6073		User Waypoint	N42 25.998 W71 06.397	15 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:56 		
+Waypoint	6077LOGS	Log Crossing	User Waypoint	N42 26.370 W71 06.395	32 m				Symbol & Name	Unknown	Amusement Park					02/06/2001 00:18:16 		
+Waypoint	6084		User Waypoint	N42 26.240 W71 06.288	38 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:57 		
+Waypoint	6121DEAD	Dead End	User Waypoint	N42 26.586 W71 06.762	56 m				Symbol & Name	Unknown	Danger Area					02/06/2001 03:26:57 		
+Waypoint	6130		User Waypoint	N42 26.532 W71 06.660	64 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:55 		
+Waypoint	6131		User Waypoint	N42 26.579 W71 06.688	64 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:58 		
+Waypoint	6153		User Waypoint	N42 26.686 W71 06.535	63 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:05 		
+Waypoint	6155DEAD	Dead End	User Waypoint	N42 26.808 W71 06.529	61 m				Symbol & Name	Unknown	Danger Area					02/06/2001 03:27:04 		
+Waypoint	6171		User Waypoint	N42 26.615 W71 06.380	55 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:05 		
+Waypoint	6176		User Waypoint	N42 26.868 W71 06.399	62 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:04 		
+Waypoint	6177		User Waypoint	N42 26.907 W71 06.371	62 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:04 		
+Waypoint	6181CROSS	Crossing	User Waypoint	N42 26.580 W71 06.354	53 m				Symbol & Name	Unknown	Crossing					02/06/2001 03:27:05 		
+Waypoint	6272		User Waypoint	N42 27.205 W71 06.409	70 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:55 		
+Waypoint	6278		User Waypoint	N42 27.498 W71 06.408	70 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:04 		
+Waypoint	6280		User Waypoint	N42 27.086 W71 06.326	58 m				Symbol & Name	Unknown	Waypoint					16/11/2001 23:03:38 		
+Waypoint	6283		User Waypoint	N42 27.231 W71 06.314	67 m				Symbol & Name	Unknown	Waypoint					16/11/2001 23:03:38 		
+Waypoint	6289		User Waypoint	N42 27.599 W71 06.372	73 m				Symbol & Name	Unknown	Waypoint					16/11/2001 23:03:38 		
+Waypoint	6297		User Waypoint	N42 27.457 W71 06.309	73 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:04 		
+Waypoint	6328		User Waypoint	N42 28.027 W71 06.816	54 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:02 		
+Waypoint	6353DEAD	Dead End	User Waypoint	N42 27.766 W71 06.601	47 m				Symbol & Name	Unknown	Danger Area					02/06/2001 03:27:03 		
+Waypoint	6354		User Waypoint	N42 27.852 W71 06.593	44 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:03 		
+Waypoint	635722		User Waypoint	N42 27.988 W71 06.606	49 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:02 		
+Waypoint	635783		User Waypoint	N42 27.993 W71 06.566	49 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:02 		
+Waypoint	6373		User Waypoint	N42 27.810 W71 06.429	62 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:27:03 		
+Waypoint	6634		User Waypoint	N42 24.063 W71 06.616	4 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:56 		
+Waypoint	6979		User Waypoint	N42 25.957 W71 06.393	13 m				Symbol & Name	Unknown	Waypoint					02/06/2001 03:26:56 		
+Waypoint	6997		User Waypoint	N42 25.862 W71 06.475	34 m				Symbol & Name	Unknown	Waypoint					16/11/2001 23:03:38 		
+Waypoint	BEAR HILL	BEAR HILL TOWER	User Waypoint	N42 27.941 W71 06.443	88 m				Symbol & Name	Unknown	Tall Tower					02/06/2001 03:27:03 		
+Waypoint	BELLEVUE		User Waypoint	N42 25.857 W71 06.459	23 m				Symbol & Name	Unknown	Parking Area					02/06/2001 00:18:15 		
+Waypoint	DARKHOLLPO	Dark Hollow Pond	User Waypoint	N42 27.511 W71 06.220					Symbol & Name	Unknown	Fishing Area					16/07/2005 20:53:40 		
+Waypoint	GATE14	Gate 14	User Waypoint	N42 27.072 W71 07.598	111 m				Symbol & Name	Unknown	Truck Stop					02/06/2001 03:26:59 		
+Waypoint	GATE16	Gate 16	User Waypoint	N42 27.510 W71 07.326	78 m				Symbol & Name	Unknown	Truck Stop					02/06/2001 03:27:00 		
+Waypoint	GATE17	Gate 17	User Waypoint	N42 27.562 W71 07.156	66 m				Symbol & Name	Unknown	Truck Stop					02/06/2001 03:27:01 		
+Waypoint	GATE19	Gate 19	User Waypoint	N42 27.981 W71 07.156	57 m				Symbol & Name	Unknown	Truck Stop					02/06/2001 03:27:02 		
+Waypoint	GATE21	Gate 21	User Waypoint	N42 28.119 W71 06.463	49 m				Symbol & Name	Unknown	Truck Stop					02/06/2001 03:27:03 		
+Waypoint	GATE24	Gate 24	User Waypoint	N42 27.403 W71 06.180	81 m				Symbol & Name	Unknown	Truck Stop					02/06/2001 03:27:03 		
+Waypoint	GATE5	Gate 5	User Waypoint	N42 25.851 W71 06.463	22 m				Symbol & Name	Unknown	Truck Stop					28/11/2001 21:05:28 		
+Waypoint	GATE6		User Waypoint	N42 25.874 W71 06.556	27 m				Symbol & Name	Unknown	Waypoint					07/11/2001 23:53:41 		
+Waypoint	PANTHRCAVE		User Waypoint	N42 26.099 W71 06.598	45 m				Symbol & Name	Unknown	Tunnel					07/11/2001 23:53:41 		
+Waypoint	SHEEPFOLD	Sheepfold Parking Lot	User Waypoint	N42 27.205 W71 06.408	70 m				Symbol & Name	Unknown	Parking Area					02/06/2001 00:18:13 		
+Waypoint	SOAPBOX	Soap Box Derby Track	User Waypoint	N42 27.357 W71 06.451	64 m				Symbol & Name	Unknown	Cemetery					02/06/2001 03:27:04 		
+
+
+Header	Name	Length	Course	Waypoints	Link
+
+Route	BELLEVUE	11.2 km	0° true	46 waypoints	
+
+Header	Waypoint Name	Distance	Leg Length	Course
+
+Route Waypoint	BELLEVUE	0 m
+Route Waypoint	GATE6	136 m	136 m	284° true
+Route Waypoint	PANTHRCAVE	556 m	420 m	352° true
+Route Waypoint	6014MEADOW	891 m	334 m	306° true
+Route Waypoint	6006	1.2 km	271 m	338° true
+Route Waypoint	6006BLUE	1.2 km	55 m	211° true
+Route Waypoint	5096	1.3 km	116 m	288° true
+Route Waypoint	5066	1.6 km	257 m	269° true
+Route Waypoint	5067	1.6 km	52 m	319° true
+Route Waypoint	5058ROAD	1.8 km	133 m	310° true
+Route Waypoint	5150TANK	2.0 km	203 m	342° true
+Route Waypoint	5142	2.2 km	244 m	353° true
+Route Waypoint	5144SUMMIT	2.4 km	175 m	338° true
+Route Waypoint	5156	2.6 km	245 m	28° true
+Route Waypoint	5148NANEPA	2.9 km	284 m	345° true
+Route Waypoint	5258	3.1 km	193 m	14° true
+Route Waypoint	5252PURPLE	3.3 km	207 m	12° true
+Route Waypoint	527631	3.7 km	367 m	25° true
+Route Waypoint	527614	3.7 km	46 m	325° true
+Route Waypoint	5267OBSTAC	3.8 km	90 m	351° true
+Route Waypoint	5278	3.9 km	103 m	35° true
+Route Waypoint	5289	4.1 km	181 m	41° true
+Route Waypoint	5374FIRE	4.7 km	563 m	342° true
+Route Waypoint	5376	4.8 km	167 m	12° true
+Route Waypoint	5376STREAM	4.9 km	30 m	11° true
+Route Waypoint	6328	5.4 km	491 m	74° true
+Route Waypoint	635722	5.7 km	297 m	104° true
+Route Waypoint	635783	5.7 km	55 m	79° true
+Route Waypoint	6373	6.1 km	389 m	151° true
+Route Waypoint	BEAR HILL	6.3 km	245 m	355° true
+Route Waypoint	6289	7.0 km	642 m	171° true
+Route Waypoint	6297	7.3 km	278 m	162° true
+Route Waypoint	6283	7.7 km	420 m	181° true
+Route Waypoint	6280	8.0 km	269 m	184° true
+Route Waypoint	6177	8.3 km	338 m	190° true
+Route Waypoint	6176	8.4 km	81 m	208° true
+Route Waypoint	6153	8.8 km	385 m	209° true
+Route Waypoint	6171	9.0 km	249 m	122° true
+Route Waypoint	6131	9.4 km	428 m	261° true
+Route Waypoint	6130	9.5 km	95 m	156° true
+Route Waypoint	6029	9.7 km	191 m	255° true
+Route Waypoint	6006	10.0 km	321 m	198° true
+Route Waypoint	6014MEADOW	10.3 km	271 m	158° true
+Route Waypoint	PANTHRCAVE	10.7 km	334 m	126° true
+Route Waypoint	GATE6	11.1 km	420 m	172° true
+Route Waypoint	BELLEVUE	11.2 km	136 m	104° true
+
+
+Header	Name	Start Time	Elapsed Time	Length	Average Speed	Link
+
+Track	- Trk from .gpx file	25/05/2002 17:06:21 	1:59:36	7.7 km	4 kph	
+
+Header	Position	Time	Altitude	Depth	Temperature	Leg Length	Leg Time	Leg Speed	Leg Course
+
+Trackpoint	N30 03.731 W91 36.620	25/05/2002 17:06:21 	1 m	
+Trackpoint	N30 03.767 W91 36.633	25/05/2002 17:09:55 				70 m	0:03:34	1.2 kph	343° true
+Trackpoint	N30 03.762 W91 36.495	25/05/2002 17:12:00 				222 m	0:02:05	6 kph	92° true
+Trackpoint	N30 03.740 W91 36.442	25/05/2002 17:12:48 				94 m	0:00:48	7 kph	116° true
+Trackpoint	N30 03.692 W91 36.316	25/05/2002 17:14:41 				221 m	0:01:53	7 kph	114° true
+Trackpoint	N30 03.587 W91 35.963	25/05/2002 17:17:16 				599 m	0:02:35	14 kph	109° true
+Trackpoint	N30 03.468 W91 35.800	25/05/2002 17:17:46 				342 m	0:00:30	41 kph	130° true
+Trackpoint	N30 03.323 W91 35.693	25/05/2002 17:18:20 				319 m	0:00:34	34 kph	147° true
+Trackpoint	N30 03.233 W91 35.556	25/05/2002 17:19:01 				276 m	0:00:41	24 kph	127° true
+Trackpoint	N30 02.984 W91 35.384	25/05/2002 17:20:46 				538 m	0:01:45	18 kph	149° true
+Trackpoint	N30 02.941 W91 35.392	25/05/2002 17:21:10 				81 m	0:00:24	12 kph	189° true
+Trackpoint	N30 02.928 W91 35.575	25/05/2002 17:21:51 				295 m	0:00:41	26 kph	265° true
+Trackpoint	N30 02.774 W91 35.786	25/05/2002 17:22:35 				443 m	0:00:44	36 kph	230° true
+Trackpoint	N30 02.731 W91 35.922	25/05/2002 17:23:08 				233 m	0:00:33	25 kph	250° true
+Trackpoint	N30 02.838 W91 36.015	25/05/2002 18:04:23 				248 m	0:41:15	0.4 kph	323° true
+Trackpoint	N30 02.820 W91 35.977	25/05/2002 18:06:04 	2 m			70 m	0:01:41	2 kph	119° true
+Trackpoint	N30 02.786 W91 35.967	25/05/2002 18:07:06 				65 m	0:01:02	4 kph	166° true
+Trackpoint	N30 02.772 W91 35.936	25/05/2002 18:08:18 	1 m			56 m	0:01:12	3 kph	117° true
+Trackpoint	N30 02.782 W91 35.863	25/05/2002 18:10:20 				119 m	0:02:02	4 kph	81° true
+Trackpoint	N30 02.781 W91 35.829	25/05/2002 18:11:09 				55 m	0:00:49	4 kph	92° true
+Trackpoint	N30 02.807 W91 35.779	25/05/2002 18:12:18 				94 m	0:01:09	5 kph	59° true
+Trackpoint	N30 02.847 W91 35.711	25/05/2002 18:14:22 				132 m	0:02:04	4 kph	56° true
+Trackpoint	N30 02.868 W91 35.685	25/05/2002 18:15:04 	2 m			57 m	0:00:42	5 kph	47° true
+Trackpoint	N30 02.895 W91 35.644	25/05/2002 18:16:14 	1 m			83 m	0:01:10	4 kph	53° true
+Trackpoint	N30 02.921 W91 35.627	25/05/2002 18:17:01 	1 m			55 m	0:00:47	4 kph	30° true
+Trackpoint	N30 02.961 W91 35.630	25/05/2002 18:18:07 				74 m	0:01:06	4 kph	356° true
+Trackpoint	N30 03.019 W91 35.638	25/05/2002 18:19:51 	2 m			108 m	0:01:44	4 kph	353° true
+Trackpoint	N30 03.047 W91 35.646	25/05/2002 18:20:39 				53 m	0:00:48	4 kph	346° true
+Trackpoint	N30 03.074 W91 35.661	25/05/2002 18:21:24 				56 m	0:00:45	4 kph	334° true
+Trackpoint	N30 03.108 W91 35.661	25/05/2002 18:22:17 				63 m	0:00:53	4 kph	360° true
+Trackpoint	N30 03.133 W91 35.679	25/05/2002 18:23:18 				55 m	0:01:01	3 kph	328° true
+Trackpoint	N30 03.181 W91 35.680	25/05/2002 18:24:37 				89 m	0:01:19	4 kph	359° true
+Trackpoint	N30 03.292 W91 35.711	25/05/2002 18:28:13 	6 m			212 m	0:03:36	4 kph	346° true
+Trackpoint	N30 03.224 W91 35.695	25/05/2002 18:31:36 	2 m			129 m	0:03:23	2 kph	168° true
+Trackpoint	N30 03.191 W91 35.686	25/05/2002 18:32:56 				63 m	0:01:20	3 kph	167° true
+Trackpoint	N30 03.158 W91 35.689	25/05/2002 18:34:02 				61 m	0:01:06	3 kph	184° true
+Trackpoint	N30 03.147 W91 35.725	25/05/2002 18:36:03 				61 m	0:02:01	2 kph	251° true
+Trackpoint	N30 03.149 W91 35.757	25/05/2002 18:36:48 				52 m	0:00:45	4 kph	274° true
+Trackpoint	N30 03.159 W91 35.806	25/05/2002 18:37:52 	1 m			81 m	0:01:04	5 kph	283° true
+Trackpoint	N30 03.188 W91 35.870	25/05/2002 18:39:18 				116 m	0:01:26	5 kph	298° true
+Trackpoint	N30 03.217 W91 35.877	25/05/2002 18:40:15 				55 m	0:00:57	3 kph	348° true
+Trackpoint	N30 03.238 W91 35.865	25/05/2002 18:41:25 	6 m			43 m	0:01:10	2 kph	26° true
+Trackpoint	N30 03.217 W91 35.884	25/05/2002 18:42:37 				49 m	0:01:12	2 kph	218° true
+Trackpoint	N30 03.192 W91 35.874	25/05/2002 18:44:01 				49 m	0:01:24	2 kph	161° true
+Trackpoint	N30 03.169 W91 35.850	25/05/2002 18:45:53 				57 m	0:01:52	2 kph	138° true
+Trackpoint	N30 03.154 W91 35.815	25/05/2002 18:46:54 				63 m	0:01:01	4 kph	116° true
+Trackpoint	N30 03.140 W91 35.785	25/05/2002 18:47:42 				55 m	0:00:48	4 kph	118° true
+Trackpoint	N30 03.135 W91 35.740	25/05/2002 18:48:41 				73 m	0:00:59	4 kph	97° true
+Trackpoint	N30 03.133 W91 35.700	25/05/2002 18:49:52 				64 m	0:01:11	3 kph	93° true
+Trackpoint	N30 03.113 W91 35.681	25/05/2002 18:50:49 				48 m	0:00:57	3 kph	141° true
+Trackpoint	N30 03.063 W91 35.663	25/05/2002 18:52:14 				97 m	0:01:25	4 kph	163° true
+Trackpoint	N30 03.034 W91 35.653	25/05/2002 18:52:56 				56 m	0:00:42	5 kph	163° true
+Trackpoint	N30 03.011 W91 35.645	25/05/2002 18:53:38 				45 m	0:00:42	4 kph	163° true
+Trackpoint	N30 02.946 W91 35.622	25/05/2002 18:55:11 				126 m	0:01:33	5 kph	163° true
+Trackpoint	N30 02.907 W91 35.654	25/05/2002 18:56:32 				89 m	0:01:21	4 kph	215° true
+Trackpoint	N30 02.885 W91 35.684	25/05/2002 18:57:24 				63 m	0:00:52	4 kph	230° true
+Trackpoint	N30 02.850 W91 35.726	25/05/2002 18:58:40 	7 m			94 m	0:01:16	4 kph	226° true
+Trackpoint	N30 02.824 W91 35.759	25/05/2002 18:59:28 				72 m	0:00:48	5 kph	228° true
+Trackpoint	N30 02.798 W91 35.795	25/05/2002 19:00:22 				75 m	0:00:54	5 kph	230° true
+Trackpoint	N30 02.784 W91 35.858	25/05/2002 19:01:41 				105 m	0:01:19	5 kph	256° true
+Trackpoint	N30 02.774 W91 35.907	25/05/2002 19:02:48 				81 m	0:01:07	4 kph	257° true
+Trackpoint	N30 02.779 W91 35.937	25/05/2002 19:03:43 				49 m	0:00:55	3 kph	281° true
+Trackpoint	N30 02.807 W91 35.956	25/05/2002 19:04:49 				60 m	0:01:06	3 kph	330° true
+Trackpoint	N30 02.828 W91 35.979	25/05/2002 19:05:57 				54 m	0:01:08	3 kph	317° true

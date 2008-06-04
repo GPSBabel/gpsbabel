@@ -1,0 +1,12 @@
+
+      
+      
+      <para> This format support the on-card format used by the <ulink url="http://www.magellangps.com">Magellan</ulink> Explorist 400,
+Explorist 500, Explorist 600, Explorist 210, and Explorist XL 
+to describe geocaches.  Notice what while the format can
+hold an infinite number of geocaches, the unit will read and silently
+discard all but 200 geocache POIs at a time.</para>
+      <para> You should name any file created with this format with a
+".gs" extension so the firmware can read it.
+</para>
+    

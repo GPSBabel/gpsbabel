@@ -1,0 +1,10 @@
+<para>
+This format supports the Suunto Trek Manager (STM) WaypointPlus format.
+This is a simple format with coordinates and a time stamp.  Route points 
+also have a short name.  A single file may only contain one route or one
+track.
+</para>
+<para>
+<ulink url="http://www.suunto.fi">Suunto Website</ulink>
+</para>
+    

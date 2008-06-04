@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<NavObjectCollection created="19700101T000000Z">
+	<Name>Navigation Objects</Name>
+	<Route created="19700101T000000Z" id="{00010203-0405-0607-0809-0a0b0c0d0e0f}">
+		<Marks>
+			{10111213-1415-1617-1819-1a1b1c1d1e1f}
+			{20212223-2425-2627-2829-2a2b2c2d2e2f}
+			{30313233-3435-3637-3839-3a3b3c3d3e3f}
+			{40414243-4445-4647-4849-4a4b4c4d4e4f}
+			{50515253-5455-5657-5859-5a5b5c5d5e5f}
+			{60616263-6465-6667-6869-6a6b6c6d6e6f}
+			{70717273-7475-7677-7879-7a7b7c7d7e7f}
+			{80818283-8485-8687-8889-8a8b8c8d8e8f}
+			{90919293-9495-9697-9899-9a9b9c9d9e9f}
+			{a0a1a2a3-a4a5-a6a7-a8a9-aaabacadaeaf}
+		</Marks>
+		<Name>Into The Bay</Name>
+	</Route>
+	<Mark created="20041105T170909Z" id="{10111213-1415-1617-1819-1a1b1c1d1e1f}">
+		<Position>37.763290 N 122.282580 W</Position>
+		<Name>SFBALBAY</Name>
+	</Mark>
+	<Mark created="20041105T170910Z" id="{20212223-2425-2627-2829-2a2b2c2d2e2f}">
+		<Position>37.751613 N 122.339028 W</Position>
+		<Name>SFBAY001</Name>
+	</Mark>
+	<Mark created="20041105T170913Z" id="{30313233-3435-3637-3839-3a3b3c3d3e3f}">
+		<Position>37.817420 N 122.394305 W</Position>
+		<Name>SFBAY002</Name>
+	</Mark>
+	<Mark created="20041105T170916Z" id="{40414243-4445-4647-4849-4a4b4c4d4e4f}">
+		<Position>37.819339 N 122.478302 W</Position>
+		<Name>SFGGBRDG</Name>
+	</Mark>
+	<Mark created="20041105T170920Z" id="{50515253-5455-5657-5859-5a5b5c5d5e5f}">
+		<Position>37.773033 N 122.605838 W</Position>
+		<Name>SFCHNL01</Name>
+	</Mark>
+	<Mark created="20041105T170926Z" id="{60616263-6465-6667-6869-6a6b6c6d6e6f}">
+		<Position>37.518860 N 122.529914 W</Position>
+		<Name>HMCOLREF</Name>
+	</Mark>
+	<Mark created="20041105T170927Z" id="{70717273-7475-7677-7879-7a7b7c7d7e7f}">
+		<Position>37.482348 N 122.507704 W</Position>
+		<Name>HMPILL01</Name>
+	</Mark>
+	<Mark created="20041105T211624Z" id="{80818283-8485-8687-8889-8a8b8c8d8e8f}">
+		<Position>37.475062 N 122.488531 W</Position>
+		<Name>HMPILLPT</Name>
+	</Mark>
+	<Mark created="20041105T170929Z" id="{90919293-9495-9697-9899-9a9b9c9d9e9f}">
+		<Position>37.476448 N 122.475800 W</Position>
+		<Name>HMPILL02</Name>
+	</Mark>
+	<Mark created="20041105T170930Z" id="{a0a1a2a3-a4a5-a6a7-a8a9-aaabacadaeaf}">
+		<Position>37.495102 N 122.483927 W</Position>
+		<Name>HMPILL03</Name>
+	</Mark>
+	<Mark created="20041105T211300Z" id="{b0b1b2b3-b4b5-b6b7-b8b9-babbbcbdbebf}">
+		<Position>37.229349 N 122.441589 W</Position>
+		<Name>PESCDR01</Name>
+	</Mark>
+	<Mark created="20041105T211324Z" id="{c0c1c2c3-c4c5-c6c7-c8c9-cacbcccdcecf}">
+		<Position>37.183397 N 122.411904 W</Position>
+		<Name>PIGEON01</Name>
+	</Mark>
+	<Mark created="20041105T211341Z" id="{d0d1d2d3-d4d5-d6d7-d8d9-dadbdcdddedf}">
+		<Position>37.090736 N 122.348775 W</Position>
+		<Name>ANONUV01</Name>
+	</Mark>
+	<Mark created="20041105T211409Z" id="{e0e1e2e3-e4e5-e6e7-e8e9-eaebecedeeef}">
+		<Position>36.929502 N 122.113725 W</Position>
+		<Name>SCRUZ01</Name>
+	</Mark>
+	<Mark created="20041105T211416Z" id="{f0f1f2f3-f4f5-f6f7-f8f9-fafbfcfdfeff}">
+		<Position>36.934235 N 122.022130 W</Position>
+		<Name>SCRUZ02</Name>
+	</Mark>
+	<Mark created="20041105T211420Z" id="{00010203-0405-0607-0809-0a0b0c0d0e0f}">
+		<Position>36.960666 N 122.024734 W</Position>
+		<Name>SCRUZENT</Name>
+	</Mark>
+	<Mark created="20041105T212422Z" id="{10111213-1415-1617-1819-1a1b1c1d1e1f}">
+		<Position>36.581344 N 121.995411 W</Position>
+		<Name>CYPRSSPT</Name>
+	</Mark>
+	<Mark created="20041105T212438Z" id="{20212223-2425-2627-2829-2a2b2c2d2e2f}">
+		<Position>36.301110 N 121.919097 W</Position>
+		<Name>PTSUR</Name>
+	</Mark>
+	<Mark created="20041105T212515Z" id="{30313233-3435-3637-3839-3a3b3c3d3e3f}">
+		<Position>36.238177 N 121.855209 W</Position>
+		<Name>COOPERPT</Name>
+	</Mark>
+	<Mark created="20041105T212526Z" id="{40414243-4445-4647-4849-4a4b4c4d4e4f}">
+		<Position>36.225175 N 121.801314 W</Position>
+		<Name>PFEIFENT</Name>
+	</Mark>
+	<Mark created="20041105T212531Z" id="{50515253-5455-5657-5859-5a5b5c5d5e5f}">
+		<Position>36.230449 N 121.797444 W</Position>
+		<Name>PFEIFANC</Name>
+	</Mark>
+	<Mark created="20041105T212826Z" id="{60616263-6465-6667-6869-6a6b6c6d6e6f}">
+		<Position>35.879801 N 121.498947 W</Position>
+		<Name>SANMRT01</Name>
+	</Mark>
+	<Mark created="20041105T212833Z" id="{70717273-7475-7677-7879-7a7b7c7d7e7f}">
+		<Position>35.652801 N 121.308485 W</Position>
+		<Name>PDRSBLNC</Name>
+	</Mark>
+	<Mark created="20041105T212850Z" id="{80818283-8485-8687-8889-8a8b8c8d8e8f}">
+		<Position>35.623297 N 121.185920 W</Position>
+		<Name>SNSMNENT</Name>
+	</Mark>
+	<Mark created="20041105T212853Z" id="{90919293-9495-9697-9899-9a9b9c9d9e9f}">
+		<Position>35.640478 N 121.183772 W</Position>
+		<Name>SNSMNANC</Name>
+	</Mark>
+	<Mark created="20041105T213618Z" id="{a0a1a2a3-a4a5-a6a7-a8a9-aaabacadaeaf}">
+		<Position>35.572353 N 121.152797 W</Position>
+		<Name>CAMBRIA</Name>
+	</Mark>
+	<Mark created="20041105T213626Z" id="{b0b1b2b3-b4b5-b6b7-b8b9-babbbcbdbebf}">
+		<Position>35.449214 N 121.020825 W</Position>
+		<Name>PTESTERO</Name>
+	</Mark>
+	<Mark created="20041105T213635Z" id="{c0c1c2c3-c4c5-c6c7-c8c9-cacbcccdcecf}">
+		<Position>35.216602 N 120.928391 W</Position>
+		<Name>PTBUCHON</Name>
+	</Mark>
+	<Mark created="20041105T213642Z" id="{d0d1d2d3-d4d5-d6d7-d8d9-dadbdcdddedf}">
+		<Position>34.883361 N 120.684631 W</Position>
+		<Name>PTSAL01</Name>
+	</Mark>
+	<Mark created="20041105T213647Z" id="{e0e1e2e3-e4e5-e6e7-e8e9-eaebecedeeef}">
+		<Position>34.884641 N 120.652026 W</Position>
+		<Name>PTSALENT</Name>
+	</Mark>
+	<Mark created="20041105T213704Z" id="{f0f1f2f3-f4f5-f6f7-f8f9-fafbfcfdfeff}">
+		<Position>34.896555 N 120.649124 W</Position>
+		<Name>PTSALANC</Name>
+	</Mark>
+	<Mark created="20041105T213949Z" id="{00010203-0405-0607-0809-0a0b0c0d0e0f}">
+		<Position>34.758180 N 120.642516 W</Position>
+		<Name>PURSMAPT</Name>
+	</Mark>
+	<Mark created="20041105T213954Z" id="{10111213-1415-1617-1819-1a1b1c1d1e1f}">
+		<Position>34.572579 N 120.663636 W</Position>
+		<Name>PTARGLLO</Name>
+	</Mark>
+	<Mark created="20041105T214005Z" id="{20212223-2425-2627-2829-2a2b2c2d2e2f}">
+		<Position>34.113844 N 120.492630 W</Position>
+		<Name>SANMGL01</Name>
+	</Mark>
+	<Mark created="20041105T214044Z" id="{30313233-3435-3637-3839-3a3b3c3d3e3f}">
+		<Position>34.029483 N 120.471409 W</Position>
+		<Name>SANMGL02</Name>
+	</Mark>
+	<Mark created="20041105T214048Z" id="{40414243-4445-4647-4849-4a4b4c4d4e4f}">
+		<Position>34.019184 N 120.444197 W</Position>
+		<Name>SANMGL03</Name>
+	</Mark>
+	<Mark created="20041105T214057Z" id="{50515253-5455-5657-5859-5a5b5c5d5e5f}">
+		<Position>34.023478 N 120.438209 W</Position>
+		<Name>ADCOVENT</Name>
+	</Mark>
+	<Mark created="20041105T214059Z" id="{60616263-6465-6667-6869-6a6b6c6d6e6f}">
+		<Position>34.028615 N 120.439696 W</Position>
+		<Name>ADCOVANC</Name>
+	</Mark>
+</NavObjectCollection>

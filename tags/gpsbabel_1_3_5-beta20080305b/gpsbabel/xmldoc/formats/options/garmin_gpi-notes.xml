@@ -1,0 +1,11 @@
+<para>
+   The GPI address field is often visible in lists on the device. Use this
+   option if you want to see the waypoint notes (which can be an address too)
+   in this lists.
+</para>
+<para>
+  <userinput>
+    gpsbabel -i gpx -f "My Points.gpx" -o garmin_gpi,notes -F "My Points.gpi"
+  </userinput>
+</para>
+

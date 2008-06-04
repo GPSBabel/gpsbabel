@@ -1,0 +1,5 @@
+      <para>Input and output support for waypoints, tracks and routes in
+             the <ulink url="http://www.gpstm.com">GPS TrackMaker </ulink>
+              binary format.</para>
+      <para>Code implemented by Gustavo Niemeyer.</para>
+

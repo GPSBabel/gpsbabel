@@ -1,0 +1,16 @@
+
+      
+      
+      <para> Garmin documents only PCX5, an older format limited to
+the lame NMEA six-character waypoint names that's treated as a
+second-class citizien in current versions of MapSource.  In Mapsource,
+use file-&gt;import to read these files.  If you name the files *.wpt,
+Mapsource will find them more easily.
+</para>
+      <para> In general, you should prefer the "mapsource" file format
+to this one.
+</para>
+    <para>This format has been extended to handle many - but not all - 
+	files from <ulink url="http://www.gpsu.co.uk/index.html">GPS Utility</ulink>.  If you encounter something that GPSBabel does not handle well, use
+the free version of GPSUtil to read it and save as something more common.
+	</para>

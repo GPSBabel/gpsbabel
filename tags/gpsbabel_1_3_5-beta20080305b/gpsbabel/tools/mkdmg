@@ -1,0 +1,40 @@
+
+VERSION=$(./gpsbabel -V | awk '/\./ {print $3}')
+NAME=GPSBabel+-${VERSION}
+UDMG=${NAME}-uncompressed.dmg
+DMG=${NAME}.dmg
+WORKDIR=/tmp/${NAME}-$$
+QUIET=-quiet
+
+
+checkgpsbabel() {
+  file $1 | grep -q "2 architectures" || {
+    echo $1 is not a universal binary.  Aborting
+    exit 1
+  }
+  otool -L $1 | grep expat && {
+    echo $1 does not staticly link expat.  Use tools/mac-config
+    exit 1
+  }
+}
+
+
+makedmg() {
+  mkdir -p $WORKDIR
+  rm -f ${UDMG} ${DMG}
+
+  trap 'rm -fr $WORKDIR' 0 1 15
+
+  # Create the image uncompressed based on our preloaded copy.
+  hdiutil create ${QUIET} -srcfolder mac/dmg-contents -scrub -size 15m ${UDMG} -format UDRW -volname ${NAME}
+  hdiutil  attach ${QUIET} ${UDMG} -noautoopen -mountpoint ${WORKDIR}
+
+  # Copy in the new executable.
+  cp -p ./gpsbabel ${WORKDIR}
+  hdiutil detach ${QUIET} ${WORKDIR}
+
+  hdiutil convert ${QUIET} ${UDMG} -format UDZO -imagekey zlib-level=9 -o ${DMG}
+}
+
+checkgpsbabel ./gpsbabel
+makedmg

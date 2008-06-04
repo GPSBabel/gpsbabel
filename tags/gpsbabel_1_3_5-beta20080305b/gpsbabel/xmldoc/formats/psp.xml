@@ -1,0 +1,223 @@
+<para>
+Microsoft's PocketStreets 2002 Pushpin (.PSP) format is
+not yet completely documented.  <emphasis>The .PSP module does not work with 
+MS Streets &amp; Trips 2002 .EST files</emphasis>  To create .PSP files from
+Streets &amp; Trips 2002, you will need to have PocketStreets support
+installed.
+</para>
+<para>
+Please note that MS Streets &amp; Trips only <emphasis>exports</emphasis>
+.PSP files. It does not import them.  MS Streets &amp; Trips 2002 only
+imports CSV files.  To use .PSP files, simply copy them over to the
+same folder on the mobile device as the map (.MPS), and open
+PocketStreets.  It should also be noted that in the case a pushpin is
+outside of the exported map area, the pin will be "grayed-out" and
+unused in PocketStreets. This is a good thing as it allows us to
+create one big .PSP file that covers multiple .MPS files.
+Unfortunately, you need one .PSP file for every .MPS file. 
+</para>
+<section id="fmt_psp_faq">
+<title>Frequently Asked Questions</title>
+<qandaset>
+<qandaentry id="why">
+<question>
+<para>
+Why should I use GPSBabel/psp to make pushpins when Streets &amp; Trips (S&amp;T)
+   already does that for me?
+</para>
+</question>
+<answer>
+<para>
+GPSBabel/psp has the advantage of being able to create pushpins 
+<emphasis>without</emphasis>
+   creating the associated map file and the need to "import" the waypoint
+   data into S&amp;T.  Through a series of scripts, you can create a dozen
+   or so PSP files in a few seconds as opposed to a few weeks using the
+   S&amp;T interface.  The maps are not going to change between sessions, 
+   only the pins will.  Why waste all that time creating maps when all you
+   really want are updated pins? As an aside, GPSBabel/psp creates points 
+   <emphasis>with the proper coordinates</emphasis> 
+   where S&amp;T does not in some areas of the U.S. 
+   (Nashville, TN for instance).
+</para>
+</answer>
+</qandaentry>
+<qandaentry id="blank">
+<question>
+<para>
+I keep getting a blank (32 byte) PSP file.
+</para>
+</question>
+<answer>
+<para>
+There are either no points to write, or you have botched the command
+   line for GPSBabel.  GPSBabel is sensitive to UPPER and lower case 
+   on the command line.  A simple command line to create PSP files
+   looks like this:
+</para>
+<para><userinput>gpsbabel -i geo -f geocaching.loc -o psp -F NewOrleans.psp</userinput></para>
+<para>
+   Note the use of "-f" for INPUT files and "-F" for OUTPUT files.
+</para>
+</answer>    
+</qandaentry>
+<qandaentry id="now_what">
+<question>
+<para>
+I've created a PSP file, now what do I do with it?
+</para>
+</question>
+<answer>
+<para>
+To use pushpins in Pocketstreets, you need to have both a map and a
+   pushpin file.  These two files must exist in the same folder and have
+   exactly the same base name as the map.  For example, the pins that 
+   correspond to the map "NewOrleans.mps" should be named "NewOrleans.psp".  
+</para>
+</answer>
+</qandaentry>
+<qandaentry id="no_map">
+<question>
+<para>
+I don't have a map.  What do I do now?
+</para>
+</question>
+<answer>
+<para>
+Create one using the "Export map to Pocketstreets" option in S&amp;T.  You
+   can also pick up some major city maps on the web from the MS Pocketstreets
+   website if you are interested in seeing how it works.
+</para>
+</answer>
+</qandaentry>
+<qandaentry id="have_est">
+<question>
+<para>
+I have .EST files, not .PSP files.  What's up with that?
+</para>
+</question>
+<answer>
+<para>
+In order to make PSP files, you need to use the "Export map to 
+   Pocketstreets" function in S&amp;T.  .EST files are for use in S&amp;T, not 
+   Pocketstreets.
+</para>
+</answer>
+</qandaentry>
+<qandaentry id="coord_jitter">
+<question>
+<para>
+ The .PSP files differ when I use GPSBabel/psp versus Pocketstreets to 
+   create them.  What's up?
+</para>
+</question>
+<answer>
+<para>
+Pocketstreets makes corrections to the S&amp;T waypoint data upon initial 
+   loading. GPSBabel/psp writes PSP files with these corrections already made.
+   Ask MS.
+</para>
+</answer>
+</qandaentry>
+<qandaentry id="mappoint">
+<question>
+<para>
+Does GPSBabel/psp work with (Autoroute, Mappoint, etc..) .PSP files?
+</para>
+</question>
+<answer>
+<para>
+As of this writing, I haven't seen any so I can't be sure.  If they 
+   follow the same layout as S&amp;T 2002, I'd imagine so.
+</para>
+</answer>
+</qandaentry>
+<qandaentry id="after2001">
+<question>
+<para>
+ Does GPSBabel/psp work with (S&amp;T 2001, S&amp;T 2002, etc...) files?
+</para>
+</question>
+<answer>
+<para>
+MS changed the file layout between S&amp;T 2001 and S&amp;T 2002.  The GPSBabel psp
+   module is known to work fine with S&amp;T 2002 and 2003.
+</para>
+</answer>
+</qandaentry>
+<qandaentry id="non_us">
+<question>
+<para>
+Does GPSBabel/psp work with (insert your country/location here) maps?
+</para>
+</question>
+<answer>
+<para>
+If it doesn't, feel free to inquire on the 
+<ulink url="https://lists.sourceforge.net/lists/listinfo/gpsbabel-misc">GPSBabel-Misc</ulink>
+mailing list.
+</para>
+</answer>
+</qandaentry>
+<qandaentry id="wrong_coords">
+<question>
+<para>
+What do you mean S&amp;T writes points with the wrong coordinates?
+</para>
+</question>
+<answer>
+<para>
+At some point in the "Export map to Pocketstreets" function in S&amp;T,
+   it goofs the lat/long data.  Points in Nashville tended to shift
+   1.4 miles WEST of their original location.  I'm not a geometry buff,
+   but I'd imagine they have a reference point for generating coordinates
+   that's wrong in (at least) that area.
+</para>
+</answer>
+</qandaentry>
+<qandaentry id="splitting">
+<question>
+<para>
+I have 800 waypoints that cover a dozen or so Pocketstreets maps.  
+   Do I need to to split my points up into smaller chunks to match the 
+   area covered by the maps?
+</para>
+</question>
+<answer>
+<para>
+ No.  Pocketstreets will "ignore" points that are outside of the map
+   area.  Points that are not on the current map will be "grayed out"
+   in pushpin explorer in Pocketsreets.  This is the reason the PSP 
+   module was written for GPSBabel in the first place.
+</para>
+</answer>
+</qandaentry>
+<qandaentry id="doc_for_layout">
+<question>
+<para>
+Where can I find documentation for the layout of PSP files?
+</para>
+</question>
+<answer>
+<para>
+Just about everything I know about the PSP file format is documented 
+   in the source.  To the best of my knowledge, there is no documentation 
+   (and for good reason, I've come to discover). 
+</para>
+</answer>
+</qandaentry>
+<qandaentry id="morehelp">
+<question>
+<para>
+I have some other problem, what do I do?
+</para>
+</question>
+<answer>
+<para>
+Ask your question on the <ulink url="https://lists.sourceforge.net/lists/listinfo/gpsbabel-misc">GPSBabel-Misc</ulink> mailing list.
+</para>
+</answer>
+</qandaentry>
+</qandaset>
+</section>
+

@@ -1,0 +1,20 @@
+<para> 
+This format supports <productname>cotoGPS</productname>, a <productname>Palm</productname> GPS program. 
+It can read both track and marker (waypoint) files. It is currently unable 
+to write track files, so only marker files can be written. The marker
+categories are written to and read from the icon description. The 'Not
+Assigned' category leaves the icon description empty on read.
+Currently geocache info is ignored.
+</para>
+<para> In addition to the documented options, this format also has a 
+debugging option called <option>internals</option> which takes an XCSV 
+delimiter value. It writes some internal values (distance, arc, x and y) 
+of the cotoGPS track format to the notes field.  
+</para>
+<para>
+Contributed by Tobias Minich.
+</para>
+<para>
+<ulink url="http://core.de/~coto/projects/cotogps/">cotoGPS</ulink>
+</para>
+    

@@ -1,0 +1,33 @@
+# gpsbabel XCSV style file
+#
+# Format: Test-style for cotoGPS
+# Author: Tobias Minich
+#   Date: 08/01/2005
+#
+#
+
+DESCRIPTION		Test-style for cotoGPS
+
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		COMMA
+RECORD_DELIMITER	NEWLINE
+
+
+#
+# INDIVIDUAL DATA FIELDS:
+#
+IFIELD	LAT_DECIMAL, "", "%f"
+IFIELD	LON_DECIMAL, "", "%f"
+IFIELD	ICON_DESCR, "", "%s"
+IFIELD	SHORTNAME, "", "%s"
+IFIELD	DESCRIPTION, "", "%s"
+IFIELD	NOTES, "", "%s"
+IFIELD	ALT_METERS, "", "%.0f"
+IFIELD	PATH_SPEED, "", "%10.1f"
+IFIELD	TIMET_TIME, "", "%ld"
+IFIELD	GPS_HDOP, "", "%10.1f"
+IFIELD	GPS_VDOP, "", "%10.1f"
+IFIELD	GPS_PDOP, "", "%10.1f"
+IFIELD	GPS_SAT, "", "%d"
+IFIELD	GPS_FIX, "", "%s"

@@ -1,0 +1,28 @@
+
+      
+      
+      <para> The Holux gm-100 (e-fox) gps receiver uses standard
+compact flash cards.  File formats were provided by Holux-Taiwan
+<ulink url="http://www.holux.com.tw">holux.com</ulink> to the author.
+The code was tested against version 2.27E1; other versions and
+receivers may work but have not been explictly tested.  Anyone with
+information on other Holux receivers is encouraged to contact
+jochen@bauerbahn.net.
+</para>
+      <para> When copying the .wpo file to a flash card, the file must
+be named <filename moreinfo="none">tempwprt.wpo</filename> as the
+receiver will ignore all other files.
+</para>
+      <para> Comparing the waypoints of a .wpo files against other
+formats like .gpx you may notice a small difference in the latitude
+and longitude values.  The reason is the low resolution of the
+coordinates in the wpo file format.  In a .wpo file the reolution is
+1/10"; in gpx for example it is 1/100".  A a practical matter, this
+loss is only about 1.7 meters (5 feet).
+</para>
+      <para> The generated waypoint failes can also be used by MapShow
+version 1.14.  This program is free of charge from the Holux web site.
+</para>
+      <para> This format was contributed by Jochen Becker.
+</para>
+    

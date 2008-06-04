@@ -1,0 +1,75 @@
+  <glossary id="Glossary">
+    <title>Glossary</title>
+    <para>Terms that are used in conjunction with GPSBabel.</para>
+    <glossdiv id="G">
+      <title>G</title>
+      <glossentry id="gl_xml">
+        <glossterm>Geocaching</glossterm>
+        <glossdef>
+          <para>GPS based "paper chase", see 
+          <ulink url="http://en.wikipedia.org/wiki/Geocaching" /></para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv>
+      <title>I</title>
+      <glossentry id="gl_itinerary">
+        <glossterm>Itinerary</glossterm>
+        <glossdef>
+          <para>same as a Route (e.g. used by TomTom)</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv id="P">
+      <title>P</title>
+      <glossentry id="gl_poi">
+        <glossterm>Points of Interest (POI)</glossterm>
+        <glossdef>
+          <para>a collection of gas stations, post boxes, shops and
+          like.</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv id="R">
+      <title>R</title>
+      <glossentry id="gl_route">
+        <glossterm>Route</glossterm>
+        <glossdef>
+          <para>a list of geopoints (often with names) connected in
+          a specific order. Usually a collection of geopoints
+          defining the route you want to pass while traveling,
+          created by PC software, or generated inside a GPS device.
+          They can be composed of existing waypoints, or new
+          "routepoints" might be generated.</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv id="T">
+      <title>T</title>
+      <glossentry id="gl_track">
+        <glossterm>Track</glossterm>
+        <glossdef>
+          <para>a collection of geopoints recorded by your GPS
+          device while traveling -- "breadcrumb trails". The order
+          of trackpoints within the track is important. Usually a
+          trackpoint doesn't have a name or comment, but a
+          timestamp. This distinguishes a trackpoint from a
+          waypoint.</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv id="W">
+      <title>W</title>
+      <glossentry id="gl_waypoint">
+        <glossterm>Waypoints</glossterm>
+        <glossdef>
+          <para>are geopoints that are not necessarily connected to
+          other points, and their order is unimportant. They can be
+          entered before, while or after you actually visit the
+          place and might have tags like name, comment and the
+          like. Usually used to mark special locations as your
+          home, a hotel or a geocache.</para>
+        </glossdef>
+      </glossentry>
+    </glossdiv>
+  </glossary>
