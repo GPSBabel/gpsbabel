@@ -77,18 +77,18 @@ psp_write_str(const char *str)
 static char *
 psp_read_str(gbfile *fin)
 {
-	int len;
+	int i, len;
 	gbint16 *buff;
 	char *res;
 	
 	len = (unsigned char)gbfgetc(fin);
 	if (len == 0) return NULL;
 	
-	buff = xmalloc(len * sizeof(*buff));
-	gbfread(buff, sizeof(*buff), len, fin);
+	buff = xmalloc(len * 2);
+	for (i = 0; i < len; i++)
+		buff[i] = gbfgetint16(fin);
 	res = cet_str_uni_to_utf8(buff, len);
 	xfree(buff);
-
 	return res;
 }
 

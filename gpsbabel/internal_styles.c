@@ -536,7 +536,6 @@ static char ktf2[] =
 "# \n"
 "DESCRIPTION	Kartex 5 Track File\n"
 "EXTENSION	ktf\n"
-"DATATYPE	TRACK\n"
 "SHORTLEN	10\n"
 "SHORTWHITE	1\n"
 "#\n"
@@ -860,7 +859,6 @@ static char sportsim[] =
 "#\n"
 "DESCRIPTION	Sportsim track files (part of zipped .ssz files) \n"
 "EXTENSION	txt\n"
-"DATATYPE	TRACK\n"
 
 "#\n"
 "# FILE LAYOUT DEFINITIIONS:\n"

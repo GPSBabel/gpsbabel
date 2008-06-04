@@ -1,7 +1,7 @@
 /*
 	Garmin GPS Database Reader/Writer
 	
-	Copyright (C) 2005-2008 Olaf Klein, o.b.klein@gpsbabel.org
+	Copyright (C) 2005,2006,2007 Olaf Klein, o.b.klein@gpsbabel.org
 	Mainly based on mapsource.c,
 	Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
 	
@@ -58,7 +58,6 @@
 	    2007/06/18: Tweak some forgotten "flagged" fields
 	    2007/07/07: Better support for new fields since V3 (postal code/street address/instruction)
 	    2008/01/09: Fix handling of option category (cat)
-	    2008/04/27: Add zero to checklist of "unknown bytes"
 */
 
 #include <stdio.h>
@@ -108,8 +107,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.65 $"; */
-static char gdb_release_date[] = "$Date: 2008-05-04 23:09:08 $";
+/* static char gdb_release[] = "$Revision: 1.61 $"; */
+static char gdb_release_date[] = "$Date: 2008-01-09 23:06:04 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -121,7 +120,6 @@ static char *gdb_opt_category;
 static char *gdb_opt_ver;
 static char *gdb_opt_via;
 static char *gdb_opt_roadbook;
-static char *gdb_opt_bitcategory;
 
 static int waypt_flag;
 static int route_flag;
@@ -734,8 +732,7 @@ read_route(void)
 		}
 
 		FREAD(buf, 18);			/* unknown 18 bytes; but first should be 0x01 or 0x03 */
-						/* seen also 0 with VER3 */
-		if ((buf[0] != 0x00) && (buf[0] != 0x01) && (buf[0] != 0x03)) {
+		if ((buf[0] != 0x01) && (buf[0] != 0x03)) {
 			int i;
 			
 			warnings++;
@@ -1638,11 +1635,6 @@ init_writer(const char *fname)
 			MYNAME ": cat must be between 1 and 16!");
 		gdb_category = 1 << (gdb_category - 1);
 	}
-
-	if (gdb_opt_bitcategory) {
-		gdb_category = strtol(gdb_opt_bitcategory, NULL, 0);
-	}
-
 	if (gdb_ver >= GDB_VER_UTF8)
 		cet_convert_init(CET_CHARSET_UTF8, 1);
 	
@@ -1694,15 +1686,12 @@ write_data(void)
 #define GDB_OPT_VER		"ver"
 #define GDB_OPT_VIA		"via"
 #define GDB_OPT_CATEGORY	"cat"
-#define GDB_OPT_BITCATEGORY	"bitscategory"
 #define GDB_OPT_ROADBOOK	"roadbook"
 
 static arglist_t gdb_args[] = {
 	{GDB_OPT_CATEGORY, &gdb_opt_category,
 		"Default category on output (1..16)", 
 		NULL, ARGTYPE_INT, "1", "16"},
-        {GDB_OPT_BITCATEGORY, &gdb_opt_bitcategory, "Bitmap of categories",
-                NULL, ARGTYPE_INT, "1", "65535"},
 	{GDB_OPT_VER, &gdb_opt_ver, 
 		"Version of gdb file to generate (1..3)",
 		"2", ARGTYPE_INT, "1", "3"},
@@ -1712,7 +1701,6 @@ static arglist_t gdb_args[] = {
 	{GDB_OPT_ROADBOOK, &gdb_opt_roadbook,
 		"Include major turn points (with description) from calculated route",
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
-
 	ARG_TERMINATOR
 };
 

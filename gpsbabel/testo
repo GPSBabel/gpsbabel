@@ -104,9 +104,6 @@ ${PNAME} -i gpx -f ${TMPDIR}/gtm1.gpx -o gtm -F ${TMPDIR}/gtm.gtm.gz
 ${PNAME} -i gtm -f ${TMPDIR}/gtm.gtm.gz -o gpx -F ${TMPDIR}/gtm2.gpx
 compare ${TMPDIR}/gtm1.gpx ${TMPDIR}/gtm2.gpx
 bincompare ${TMPDIR}/gtm.gtm.gz ${REFERENCE}/sample.gtm.gz
-gunzip -c ${TMPDIR}/gtm.gtm.gz > ${TMPDIR}/gtm.gtm
-gunzip -c ${REFERENCE}/sample.gtm.gz > ${TMPDIR}/sample.gtm
-bincompare ${TMPDIR}/gtm.gtm ${REFERENCE}/sample.gtm
 
 # Magellan Mapsend
 rm -f ${TMPDIR}/mm.mapsend ${TMPDIR}/mm.gps
@@ -166,7 +163,7 @@ compare ${REFERENCE}/xmap ${TMPDIR}/xmap
 
 # PCX (Garmin mapsource import) file format
 rm -f ${TMPDIR}/mm.pcx ${TMPDIR}/pcx.gps
-${PNAME} -i gpx -f ${REFERENCE}/geocaching.gpx -o pcx -F ${TMPDIR}/mm.pcx
+${PNAME} -i geo -f ${REFERENCE}/../geocaching.loc -o pcx -F ${TMPDIR}/mm.pcx
 ${PNAME} -i pcx -f ${TMPDIR}/mm.pcx -o gpsutil -F ${TMPDIR}/pcx.gps
 compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 ${PNAME} -t -i gpx -f ${REFERENCE}/track/tracks.gpx -o pcx -F ${TMPDIR}/pcx.trk
@@ -368,7 +365,7 @@ compare ${TMPDIR}/ms1.gpx ${TMPDIR}/ms2.gpx
 rm -f ${TMPDIR}/mps-track.mps
 ${PNAME} -t -i mapsource -f ${REFERENCE}/track/mps-track.mps -o mapsource,mpsverout=3 \
          -F ${TMPDIR}/mps-track.mps
-compare ${TMPDIR}/mps-track.mps ${REFERENCE}/track
+compare ${TMPDIR}/mps-track.mps ${REFERENCE}/track/
 
 # Now do a test of reading waypoints from a track-only file - should have an empty result
 rm -f ${TMPDIR}/mps-track.mps
@@ -429,7 +426,7 @@ rm -f ${TMPDIR}/radius.csv
 ${PNAME} -i geo -f ${REFERENCE}/../geocaching.loc \
 		-x radius,lat=35.9720,lon=-87.1347,distance=14.7 \
 		-o csv -F ${TMPDIR}/radius.csv
-compare ${TMPDIR}/radius.csv ${REFERENCE}
+compare ${TMPDIR}/radius.csv ${REFERENCE}/
 
 #
 # magellan SD card waypoint / route format
@@ -1278,7 +1275,7 @@ compare ${TMPDIR}/xol-sample-gpx.xol ${REFERENCE}/xol-sample-gpx.xol
 ${PNAME} -i navilink -f ${REFERENCE}/navilink_waypoints.wpt -o gpx -F ${TMPDIR}/navilink_waypoints.gpx
 compare ${TMPDIR}/navilink_waypoints.gpx ${REFERENCE}/navilink_waypoints.gpx
 ${PNAME} -i gpx -f ${TMPDIR}/navilink_waypoints.gpx -o navilink -F ${TMPDIR}/navilink_waypoints_gpx.wpt
-#compare ${TMPDIR}/navilink_waypoints_gpx.wpt ${REFERENCE}/navilink_waypoints_gpx.wpt
+compare ${TMPDIR}/navilink_waypoints_gpx.wpt ${REFERENCE}/navilink_waypoints_gpx.wpt
 
 #
 # NaviLink tracks
@@ -1286,7 +1283,7 @@ ${PNAME} -i gpx -f ${TMPDIR}/navilink_waypoints.gpx -o navilink -F ${TMPDIR}/nav
 ${PNAME} -t -i navilink -f ${REFERENCE}/navilink_tracks.trk -o gpx -F ${TMPDIR}/navilink_tracks.gpx
 compare ${TMPDIR}/navilink_tracks.gpx ${REFERENCE}/navilink_tracks.gpx
 ${PNAME} -t -i gpx -f ${TMPDIR}/navilink_tracks.gpx -o navilink -F ${TMPDIR}/navilink_tracks_gpx.trk
-#compare ${TMPDIR}/navilink_tracks_gpx.trk ${REFERENCE}/navilink_tracks_gpx.trk
+compare ${TMPDIR}/navilink_tracks_gpx.trk ${REFERENCE}/navilink_tracks_gpx.trk
 
 #
 # MTK logger tests
@@ -1296,49 +1293,5 @@ ${PNAME} -t -w -i mtk-bin,csv=${TMPDIR}/mtk_logger.csv -f ${REFERENCE}/track/mtk
 compare ${TMPDIR}/mtk_logger.gpx ${REFERENCE}/track/mtk_logger.gpx
 ## CSV compare needs to be done with '-w' - ignore whitespace.
 compare ${TMPDIR}/mtk_logger.csv ${REFERENCE}/track/mtk_logger.csv
-
-#
-# MTK logger tests (Holux M-241)
-#
-rm -f ${TMPDIR}/mtk_logger_m241.*
-${PNAME} -t -w -i m241-bin,csv=${TMPDIR}/mtk_logger_m241.csv -f ${REFERENCE}/track/mtk_logger_m241.bin -o gpx -F ${TMPDIR}/mtk_logger_m241.gpx
-compare ${TMPDIR}/mtk_logger_m241.gpx ${REFERENCE}/track/mtk_logger_m241.gpx
-## CSV compare needs to be done with '-w' - ignore whitespace.
-compare ${TMPDIR}/mtk_logger_m241.csv ${REFERENCE}/track/mtk_logger_m241.csv
-
-#
-# MagicMaps IK3D Project File .ikt test
-#
-${PNAME} -i ik3d -f ${REFERENCE}/ik3d-sample.ikt -o gpx -F ${TMPDIR}/ik3d-sample.gpx
-compare ${TMPDIR}/ik3d-sample.gpx ${REFERENCE}/ik3d-sample.gpx
-
-# osm data files
-rm -f ${TMPDIR}/osm-*
-${PNAME} -i osm -f ${REFERENCE}/osm-data.xml -o gpx -F ${TMPDIR}/osm-data.gpx
-compare ${TMPDIR}/osm-data.gpx ${REFERENCE}/osm-data.gpx
-
-# Destinator POI
-${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -o destinator_poi -F ${TMPDIR}/destinator_poi.dat
-${PNAME} -i destinator_poi -f ${TMPDIR}/destinator_poi.dat -w -o unicsv,utc=0 -F ${TMPDIR}/destinator_poi.txt
-compare ${TMPDIR}/destinator_poi.txt ${REFERENCE}/destinator_poi.txt
-
-# Destinator Itinerary
-${PNAME} -i gpx -f ${REFERENCE}/expertgps.gpx -o destinator_itn -F ${TMPDIR}/destinator_itn.dat
-${PNAME} -i destinator_itn -f ${TMPDIR}/destinator_itn.dat -r -o unicsv,utc=0 -F ${TMPDIR}/destinator_itn.txt
-compare ${TMPDIR}/destinator_itn.txt ${REFERENCE}/route/destinator_itn.txt
-
-# Destinator TrackLog
-${PNAME} -i nmea -f ${REFERENCE}/track/nmea+ms.txt -o destinator_trl -F ${TMPDIR}/destinator_trl.dat
-${PNAME} -i destinator_trl -f ${TMPDIR}/destinator_trl.dat -t -o unicsv,utc=0 -F ${TMPDIR}/destinator_trl.txt
-compare ${TMPDIR}/destinator_trl.txt ${REFERENCE}/track/destinator_trl.txt
-
-# Exif format test (read only)
-${PNAME} -i exif -f ${REFERENCE}/IMG_2065.JPG -o unicsv,utc=0 -F ${TMPDIR}/exif-dat.csv
-compare ${TMPDIR}/exif-dat.csv ${REFERENCE}/exif-dat.csv
-
-# VidaOne track logs
-${PNAME} -i vidaone -f ${REFERENCE}/track/vidaone.gpb -t -o unicsv -F ${TMPDIR}/vidaone.csv
-compare ${TMPDIR}/vidaone.csv ${REFERENCE}/track/vidaone.csv
-
 
 exit 0

@@ -289,17 +289,18 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 }
 
 /*
- * gbvfprintf: (as vfprintf)
+ * gbfprintf: (as fprintf)
  */
  
-int gbvfprintf(gbfile *file, const char *format, va_list ap)
+int 
+gbfprintf(gbfile *file, const char *format, ...)
 {
 	int len;
 	
 	for (;;) {
 		va_list args;
 		
-		va_copy(args, ap);
+		va_start(args, format);
 		len = vsnprintf(file->buff, file->buffsz, format, args);
 		va_end(args);
 
@@ -326,23 +327,6 @@ int gbvfprintf(gbfile *file, const char *format, va_list ap)
 		file->buff = xrealloc(file->buff, file->buffsz);
 	}
 	return gbfwrite(file->buff, 1, len, file);
-}
-
-/*
- * gbfprintf: (as fprintf)
- */
- 
-int 
-gbfprintf(gbfile *file, const char *format, ...)
-{
-	va_list args;
-	int result;
-	
-	va_start(args, format);
-	result = gbvfprintf(file, format, args);
-	va_end(args);
-	
-	return result;
 }
 
 /*
@@ -393,9 +377,9 @@ gbfwrite(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *f
 	}
 
 	if (result != members) {
-		fatal("%s: Could not write %lld bytes to %s!\n", 
+		fatal("%s: Could not write %u bytes to %s!\n", 
 			file->module,
-			(long long int) (members - result) * size,
+			(members - result) * size,
 			file->name);
 	}
 		
@@ -471,7 +455,7 @@ gbferror(gbfile *file)
 void
 gbfrewind(gbfile *file)
 {
-	(void) gbfseek(file, 0, SEEK_SET);
+	(void)gbfseek(file, 0, SEEK_SET);
 	gbfclearerr(file);
 }
 
@@ -482,9 +466,9 @@ gbfrewind(gbfile *file)
 int
 gbfseek(gbfile *file, gbint32 offset, int whence)
 {
-	int result;
 
 	if (file->gzapi) {
+		int result;
 		
 		assert(whence != SEEK_END);
 
@@ -501,26 +485,10 @@ gbfseek(gbfile *file, gbint32 offset, int whence)
 			fatal("%s: online compression not yet supported for this format!", file->module);
 		}
 		return 0;
+		
 	}
 	else {
-		gbsize_t pos = 0;
-		
-		if (whence != SEEK_SET) pos = ftell(file->handle.std);
-
-		result = fseek(file->handle.std, offset, whence);
-		if (result != 0) {
-			switch (whence) {
-			case SEEK_CUR:
-			case SEEK_END: pos = pos + offset; break;
-			case SEEK_SET: pos = offset; break;
-			default:
-				fatal("%s: Unknown seek operation (%d) for file %s!\n",
-					file->module, whence, file->name);
-			}
-			fatal("%s: Unable to set file (%s) to position (%llu)!\n",
-				file->module, file->name, (long long unsigned) pos);
-		}
-		return 0;
+		return fseek(file->handle.std, offset, whence);
 	}
 }
 
@@ -531,27 +499,22 @@ gbfseek(gbfile *file, gbint32 offset, int whence)
 gbsize_t 
 gbftell(gbfile *file)
 {
-	gbsize_t result;
-	
 	if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		result = gztell(file->handle.gz);
+		gbsize_t result = gztell(file->handle.gz);
 		if (file->back != -1) {
 //			file->back = -1;
 			result--;
 		}
+		return result;
 #else
 		fatal(NO_ZLIB);
-		result = -1;
+		return -1;
 #endif
 	}
 	else {
-		result = ftell(file->handle.std);
+		return ftell(file->handle.std);
 	}
-	if ((signed) result == -1)
-		fatal("%s: Could not determine position of file '%s'!\n",
-			file->module, file->name);
-	return result;
 }
 
 /*

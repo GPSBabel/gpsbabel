@@ -56,7 +56,7 @@ static int wpt_tmp_queued;
 static const char *posnfilename;
 static char *posnfilenametmp;
 
-static gbfile *ofd;
+static FILE *ofd;
 
 typedef struct {
   double latitude;
@@ -177,8 +177,6 @@ xg_tag_mapping kml_map[] = {
 	{ wpt_name, 	cb_cdata, 	"/Placemark/name" },
 	{ wpt_desc, 	cb_cdata, 	"/Placemark/description" },
 	{ wpt_time, 	cb_cdata, 	"/Placemark/TimeStamp/when" },
-	// Alias for above used in KML 2.0
-	{ wpt_time, 	cb_cdata, 	"/Placemark/TimeInstant/timePosition" },
 	{ wpt_coord, 	cb_cdata, 	"/Placemark/Point/coordinates" },
 	{ wpt_icon, 	cb_cdata, 	"/Placemark/Style/Icon/href" },
 	{ trk_coord, 	cb_cdata, 	"/Placemark/MultiGeometry/LineString/coordinates" },
@@ -311,7 +309,7 @@ kml_wr_init(const char *fname)
 	/*
 	 * Reduce race conditions with network read link.
 	 */	
-	ofd = gbfopen(fname, "w", MYNAME);
+	ofd = xfopen(fname, "w", MYNAME);
 }
 
 /* 
@@ -337,7 +335,7 @@ kml_wr_position_init(const char *fname)
 static void
 kml_wr_deinit(void)
 {
-	gbfclose(ofd);
+	fclose(ofd);
 
 	if (posnfilenametmp) {
 #if __WIN32__
@@ -376,11 +374,11 @@ kml_write_xml(int indent, const char *fmt, ...)
 
 	if (fmt[1] != '!' && do_indentation) {
 		for (i = 0; i < indent_level; i++) {
-			gbfputs("  ", ofd);
+			fputs("  ", ofd);
 		}
 	}
 
-	gbvfprintf(ofd, fmt, args);
+	vfprintf(ofd, fmt, args);
 
 	if (indent > 0) indent_level++;
 
@@ -398,9 +396,9 @@ kml_write_xmle(const char *tag, const char *v)
 	if (v && *v) {
 		char *tmp_ent = xml_entitize(v);
 		for (i = 0; i < indent_level; i++) {
-			gbfputs("  ", ofd);
+			fputs("  ", ofd);
 		}
-		gbfprintf(ofd, "<%s>%s</%s>\n",tag, tmp_ent, tag);
+		fprintf(ofd, "<%s>%s</%s>\n",tag, tmp_ent, tag);
 		xfree(tmp_ent);
 	}
 }
@@ -866,7 +864,7 @@ static void kml_geocache_pr(const waypoint *waypointp)
 		xfree(p);
 	}
 
-	if (waypointp->url_link_text) {
+	if(waypointp->url_link_text) {
 		p = xml_entitize(waypointp->url_link_text);
 		kml_write_xml(0, "<Data name=\"gc_name\"><value>%s</value></Data>\n", p);
 		xfree(p);
@@ -950,7 +948,7 @@ static void kml_waypt_pr(const waypoint *waypointp)
 			kml_write_xml(0, "<![CDATA[<a href=\"%s\">%s</a>]]>", odesc, olink);
 			xfree(olink);
 		} else {
-			gbfputs(odesc, ofd);
+			fputs(odesc, ofd);
 		}
 
 		kml_write_xml(0, "</description>\n");

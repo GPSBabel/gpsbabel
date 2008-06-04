@@ -58,7 +58,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
 	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
-	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o
+	navilink.o mtk_logger.o
 
 FMTS=@FMTS@
 
@@ -90,7 +90,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
           uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
 	  inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
-	  gbfile.o parse.o avltree.o \
+	  gbfile.o parse.o \
 	$(PALM_DB) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
@@ -309,8 +309,8 @@ release-upload:  /tmp/gpsbabel-$(VERSIOND).tar.gz  /tmp/gpsbabel-$(VERSIOND).zip
 	@(. tools/functions && ask "Type 'yes' if you want to do the upload now" "yes" )
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).tar.gz ftp://upload.sf.net/incoming/
 	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).zip ftp://upload.sf.net/incoming/
-	curl -u anonymous:anonymous --upload-file /tmp/dist/SRPMS/gpsbabel-$(VERSIOND).src.rpm  ftp://upload.sf.net/incoming/ 
-	curl -u anonymous:anonymous --upload-file /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND).i386.rpm  ftp://upload.sf.net/incoming/ 
+	curl -u anonymous:anonymous --upload-file /tmp/dist/SRPMS/gpsbabel-$(VERSIOND)-0.src.rpm  ftp://upload.sf.net/incoming/ 
+	curl -u anonymous:anonymous --upload-file /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND)-0.i386.rpm  ftp://upload.sf.net/incoming/ 
 
 mac-upload:
 	curl -u anonymous:anonymous --upload-file GPSBabel+-$(VERSIOND).dmg  ftp://upload.sf.net/incoming/
@@ -345,7 +345,6 @@ an1.o: an1.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h an1sym.h
 arcdist.o: arcdist.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h grtcirc.h
-avltree.o: avltree.h avltree.c defs.h gbtypes.h config.h
 axim_gpb.o: axim_gpb.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 bcr.o: bcr.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
@@ -388,7 +387,7 @@ csv_util.o: csv_util.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
-  jeeps/gpsproj.h xmlgeneric.h xcsv_tokens.gperf garmin_fs.h
+  jeeps/gpsproj.h xmlgeneric.h xcsv_tokens.gperf
 delgpl.o: delgpl.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 discard.o: discard.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
@@ -404,9 +403,6 @@ duplicate.o: duplicate.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h
 easygps.o: easygps.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
-exif.o: exif.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h garmin_tables.h \
-  strptime.h
 fatal.o: fatal.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 filter_vecs.o: filter_vecs.c defs.h config.h queue.h gbtypes.h \
@@ -538,8 +534,6 @@ igc.o: igc.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h
 ignrando.o: ignrando.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
-ik3d.o: ik3d.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
 inifile.o: inifile.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 internal_styles.o: internal_styles.c defs.h config.h queue.h gbtypes.h \
@@ -600,9 +594,6 @@ nmn4.o: nmn4.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h csv_util.h
 nukedata.o: nukedata.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h filterdefs.h
-osm.o: osm.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h \
-  avltree.h
 overlay.o: overlay.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
 ozi.o: ozi.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
@@ -724,8 +715,6 @@ vcf.o: vcf.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
 vecs.o: vecs.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h csv_util.h
-vidaone.o: vidaone.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 vitosmt.o: vitosmt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
 vitovtt.o: vitovtt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
