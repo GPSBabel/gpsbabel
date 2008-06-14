@@ -1,7 +1,7 @@
 /*
     Access GPX data files.
 
-    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -634,10 +634,9 @@ gpx_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 
 	
 	/*
-	 * FIXME: Find out why a cdatastr[0] doesn't adequately reset the 	
-	 * cdata handler.
+	 * Reset end-of-string without actually emptying/reallocing cdatastr.
 	 */
-	memset(cdatastr.mem, 0, cdatastr.size);
+	*(char *) cdatastr.mem = 0;
 
 	switch (get_tag(current_tag.mem, &passthrough)) {
 	case tt_gpx:
@@ -1162,7 +1161,7 @@ gpx_cdata(void *dta, const XML_Char *xml_el, int len)
 	memcpy(estr, s, len);
 	estr[len]  = 0;
 
-	if (!cur_tag) 
+ 	if (!cur_tag)
 		return;
 
 		if ( cur_tag->child ) {
@@ -1178,11 +1177,7 @@ gpx_cdata(void *dta, const XML_Char *xml_el, int len)
 			cdatalen = &(cur_tag->cdatalen);
 		}
 		estr = *cdata;
-		*cdata = xcalloc( *cdatalen + len + 1, 1);
-		if ( estr ) {
-			memcpy( *cdata, estr, *cdatalen);
-			xfree( estr );
-		}
+		*cdata = xrealloc(*cdata, *cdatalen + len + 1);
 		estr = *cdata + *cdatalen;
 		memcpy( estr, s, len );
 		*(estr+len) = '\0';
