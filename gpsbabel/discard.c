@@ -27,6 +27,8 @@ static char *hdopopt = NULL;
 static char *vdopopt = NULL;
 static char *andopt = NULL;
 static char *satopt = NULL;
+static char *fixnoneopt = NULL;
+static char *fixunknownopt = NULL;
 static double hdopf;
 static double vdopf;
 static int satpf;
@@ -43,6 +45,10 @@ arglist_t fix_args[] = {
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"sat", &satopt, "Minimium sats to keep waypoints",
 		"-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX},
+	{"fixnone", &fixnoneopt, "Suppress waypoints without fix",
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	{"fixunknown", &fixunknownopt, "Suppress waypoints with unknown fix",
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
 
@@ -69,6 +75,12 @@ fix_process_wpt(const waypoint *wpt)
 		del = delh || delv;
 		
         if ((satpf >= 0) && (waypointp->sat < satpf))
+		del = 1;
+
+	if ((fixnoneopt) && (waypointp->fix == fix_none))
+		del = 1;
+
+	if ((fixunknownopt) && (waypointp->fix == fix_unknown))
 		del = 1;
 
 	if (del) {
