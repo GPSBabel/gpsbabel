@@ -704,7 +704,7 @@ gbfgetcstr(gbfile *file)
 	char *str = file->buff;
 	
 	for (;;) {
-		char c = gbfgetc(file);
+		int c = gbfgetc(file);
 		
 		if ((c == 0) || (c == EOF)) break;
 		
