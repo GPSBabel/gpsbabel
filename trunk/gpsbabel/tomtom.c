@@ -88,7 +88,18 @@ data_read(void)
 	waypoint *wpt_tmp;
 	while (!gbfeof( file_in ) ) {
 		rectype = read_char( file_in );
-		if ( rectype == 1 ) {
+		if (global_opts.debug_level >= 5)
+			printf("Reading record type %d\n", rectype );
+		if ( rectype == 0 || rectype == 100 ) {
+			if (global_opts.debug_level >= 5)
+				printf("Skipping deleted record\n" );
+			recsize = read_long( file_in ) - 5;
+			if (global_opts.debug_level >= 5)
+				printf("Skipping %li bytes\n", recsize );
+			while (recsize-- > 0)
+				read_char( file_in );
+		}
+		else if ( rectype == 1 ) {
 			/* a block header; ignored on read */
 			read_long( file_in );
 			read_long( file_in );
@@ -108,8 +119,17 @@ data_read(void)
 			wpt_tmp->longitude = x/100000.0;
 			wpt_tmp->latitude = y/100000.0;
 			wpt_tmp->description = desc;
+			// TODO:: description in rectype 3 contains two zero-terminated strings
+			// First is same as rectype 2, second apparently contains the unique ID of the waypoint
+			// See http://www.tomtom.com/lib/doc/PRO/TTN6_SDK_documentation.zip
+			if ( rectype == 3) {
+				warning("Unexpected waypoint record type %d encountered.\nThe unique ID of the POI may have been dropped.\n", rectype );
+			}
 
 			waypt_add(wpt_tmp);
+		}
+		else if (global_opts.debug_level >= 1) {
+			warning("Unexpected waypoint record type: %d \n", rectype );
 		}
 	}
 }
