@@ -22,6 +22,7 @@
 #include <ctype.h>
 #include <limits.h>
 #include "defs.h"
+#include "grtcirc.h"
 #include "jeeps/gps.h"
 #include "garmin_tables.h"
 #include "garmin_fs.h"
@@ -560,8 +561,19 @@ pvt2wpt(GPS_PPvt_Data pvt, waypoint *wpt)
 
 	wpt->altitude = pvt->alt;
 	wpt->latitude = pvt->lat;
-	wpt->longitude = pvt->lon;
-
+        wpt->longitude = pvt->lon;
+	WAYPT_SET(wpt,course,1);
+	WAYPT_SET(wpt,speed,1);
+	/* convert to true course in degrees */
+	if ( pvt->east >= 0.0 )
+		wpt->course = 90 - DEG(atan(pvt->north/pvt->east));
+	else
+		wpt->course = 270 - DEG(atan(pvt->north/pvt->east));
+#if 0
+	/* velocity in m/s */
+	wpt->speed = sqrt(pvt->north*pvt->north + pvt->east*pvt->east);
+	wpt->vs = pvt->up;
+#endif
 	/*
 	 * The unit reports time in three fields:
 	 * 1) The # of days to most recent Sun. since  1989-12-31 midnight UTC.
