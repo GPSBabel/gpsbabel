@@ -179,8 +179,8 @@ leaktest:
 	tools/memdebug | grep -v '^command line:'
 
 dep:
-	make clean && make EXTRA_CFLAGS="-MMD"  && cat *.d */*.d > /tmp/dep && rm *.d */*.d
-	echo "internal_styles.c: mkstyle.sh style/*.style ; ./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)' ) >> /tmp/dep
+	make clean && make EXTRA_CFLAGS="-isystem /sw/include -MMD"  && cat *.d */*.d > /tmp/dep && rm *.d */*.d
+	echo "internal_styles.c: mkstyle.sh style/*.style\n	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)"  >> /tmp/dep
 	echo Edit Makefile.in and bring in /tmp/dep
 
 $(WEB)/htmldoc-$(DOCVERSION)/readme.html: FORCE
@@ -437,7 +437,7 @@ g7towin.o: g7towin.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
   jeeps/gpsproj.h garmin_tables.h jeeps/gpsmath.h strptime.h
 garmin.o: garmin.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h jeeps/gps.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h jeeps/gps.h \
   jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gps.h \
   jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
   jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
@@ -514,6 +514,14 @@ google.o: google.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
 gpilots.o: gpilots.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h pdbfile.h \
   garmin_tables.h
+gpslibusb.o: jeeps/gpslibusb.c config.h jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbcommon.h
 gpspilot.o: gpspilot.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h pdbfile.h
 gpssim.o: gpssim.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
@@ -553,6 +561,8 @@ igc.o: igc.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h
 ignrando.o: ignrando.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
+igo8.o: igo8.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h
 ik3d.o: ik3d.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h xmlgeneric.h
 inifile.o: inifile.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
@@ -840,15 +850,14 @@ jeeps/gpsdevice_usb.o: jeeps/gpsdevice_usb.c jeeps/gpsdevice.h \
   jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
   jeeps/gpsinput.h jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbint.h \
   jeeps/gpsusbcommon.h
-jeeps/gpslibusb.o: jeeps/gpslibusb.c config.h /sw/include/usb.h \
-  jeeps/gps.h jeeps/../defs.h jeeps/../config.h jeeps/../queue.h \
-  jeeps/../gbtypes.h jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h \
-  jeeps/../gbfile.h jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h \
-  jeeps/../inifile.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
-  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
-  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
-  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h jeeps/garminusb.h \
-  jeeps/gpsusbcommon.h
+jeeps/gpslibusb.o: jeeps/gpslibusb.c config.h jeeps/gps.h jeeps/../defs.h \
+  jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
+  jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
+  jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbcommon.h
 jeeps/gpsmath.o: jeeps/gpsmath.c jeeps/gps.h jeeps/../defs.h \
   jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
   jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
@@ -958,5 +967,5 @@ zlib/trees.o: zlib/trees.c zlib/deflate.h zlib/zutil.h zlib/zlib.h \
   zlib/zconf.h zlib/trees.h
 zlib/uncompr.o: zlib/uncompr.c zlib/zlib.h zlib/zconf.h
 zlib/zutil.o: zlib/zutil.c zlib/zutil.h zlib/zlib.h zlib/zconf.h
-internal_styles.c: mkstyle.sh  style/arc.style style/cambridge.style style/csv.style style/cup.style style/custom.style style/dna.style style/fugawi.style style/garmin301.style style/garmin_poi.style style/geonet.style style/gpsdrive.style style/gpsdrivetrack.style style/gpsman.style style/iblue747.style style/kompass_tk.style style/kompass_wp.style style/ktf2.style style/kwf2.style style/mapconverter.style style/mxf.style style/nima.style style/openoffice.style style/s_and_t.style style/saplus.style style/sportsim.style style/tabsep.style style/tomtom_asc.style style/tomtom_itn.style style/xmap.style style/xmap2006.style style/xmapwpt.style 	
+internal_styles.c: mkstyle.sh style/*.style
 	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)
