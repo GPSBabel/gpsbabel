@@ -382,7 +382,6 @@ mkshort(short_handle h, const char *istring)
 	int i, l, nlen, replaced;
 	mkshort_handle *hdl = (mkshort_handle *) h;
 
-
 	/*
 	 * A rather horrible special case hack.
 	 * If the target length is "6" and the source length is "7" and
@@ -454,6 +453,8 @@ mkshort(short_handle h, const char *istring)
 			continue;
 		if (hdl->goodchars && (!strchr(hdl->goodchars, tstring[i])))
 			continue;
+		if (!isascii(tstring[i]))
+			continue
 		*cp++ = tstring[i];
 	}
 	*cp = 0;
