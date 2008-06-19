@@ -454,7 +454,7 @@ mkshort(short_handle h, const char *istring)
 		if (hdl->goodchars && (!strchr(hdl->goodchars, tstring[i])))
 			continue;
 		if (!isascii(tstring[i]))
-			continue
+			continue;
 		*cp++ = tstring[i];
 	}
 	*cp = 0;
