@@ -68,6 +68,7 @@ extern ff_vecs_t HsaEndeavourNavigator_vecs;
 extern ff_vecs_t html_vecs;
 extern ff_vecs_t igc_vecs;
 extern ff_vecs_t ignr_vecs;
+extern ff_vecs_t igo8_vecs;
 extern ff_vecs_t kml_vecs;
 extern ff_vecs_t lowranceusr_vecs;
 extern ff_vecs_t mag_fvecs;
@@ -205,11 +206,11 @@ vecs_t vec_list[] = {
 		"NMEA 0183 sentences",
 		NULL
 	},
-        {
-                &kml_vecs,
-                "kml",
-                "Google Earth (Keyhole) Markup Language",
-                "kml"
+	{
+		&kml_vecs,
+		"kml",
+		"Google Earth (Keyhole) Markup Language",
+		"kml"
 	},
 #if MAXIMAL_ENABLED
 	{
@@ -788,6 +789,12 @@ vecs_t vec_list[] = {
                 "VidaOne GPS for Pocket PC (.gpb)",
 		"gpb"
         },
+	{
+		&igo8_vecs,
+		"igo8",
+		"IGO8 .trk",
+		"trk"
+	},
 #endif // MAXIMAL_ENABLED
 	{
 		NULL,

@@ -1169,7 +1169,12 @@
 				>
 			</File>
 			<File
-				RelativePath="..\ik3d.c">
+				RelativePath="..\igo8.c"
+				>
+			</File>
+			<File
+				RelativePath="..\ik3d.c"
+				>
 			</File>
 			<File
 				RelativePath="..\inifile.c"
