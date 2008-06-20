@@ -705,7 +705,7 @@ example:
 <title>LAT_DDMMDIR</title>
 <para>
 Derived from the LAT_NMEA latitude format, with degrees * 100 plus decimal 
-minutes, but using a trailing 'N' or 'S' instead of a leading minus sign (or 
+minutes, but using an additional specifier to position the  'N' or 'S' instead of a leading minus sign (or 
 absence thereof) to give direction from zero.
 </para>
 <para>
@@ -733,9 +733,8 @@ Example:
 <section id="style_def_londdmmdir">
 <title>LON_DDMMDIR</title>
 <para>
-Derived from the LON_NMEA longitude format, with degrees * 100 plus decimal minutes, but using a
-trailing 'E' or 'W' instead of a leading minus sign (or absence thereof) to give direction from
-zero.
+Derived from the LON_NMEA longitude format, with degrees * 100 plus decimal minutes, but using an additional character format character to position the
+'E' or 'W' instead of a leading minus sign (or absence thereof) to give direction from zero.
 </para>
 <para>
 Example:
