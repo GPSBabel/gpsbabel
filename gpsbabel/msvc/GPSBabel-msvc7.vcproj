@@ -1800,6 +1800,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\vidaone.c">
+			</File>
+			<File
 				RelativePath="..\vecs.c">
 				<FileConfiguration
 					Name="Release|Win32">
