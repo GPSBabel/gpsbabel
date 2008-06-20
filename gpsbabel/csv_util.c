@@ -93,6 +93,7 @@ typedef enum {
 	XT_LAT_DIRDECIMAL,
 	XT_LAT_HUMAN_READABLE,
 	XT_LAT_INT32DEG,
+	XT_LAT_DDMMDIR,
 	XT_LAT_NMEA,
 	XT_LOCAL_TIME,
 	XT_LON_DECIMAL,
@@ -101,6 +102,7 @@ typedef enum {
 	XT_LON_DIRDECIMAL,
 	XT_LON_HUMAN_READABLE,
 	XT_LON_INT32DEG,
+	XT_LON_DDMMDIR,
 	XT_LON_NMEA,
 	XT_MAP_EN_BNG,
 	XT_NOTES,
@@ -140,7 +142,7 @@ extern geocache_container gs_mkcont(const char *t);
 static double pathdist = 0;
 static double oldlon = 999;
 static double oldlat = 999;
-    
+
 static int waypt_out_count;
 static route_head *csv_track, *csv_route;
 
@@ -437,6 +439,24 @@ decdir_to_dec(const char * decdir)
     }
     
     return(rval * sign);
+}
+
+/*****************************************************************************/
+/* ddmmdir_to_degrees() - convert ddmm/direction value into degrees          */
+/* usage: lat = ddmmdir_to_degrees("W90.1234");                              */
+/*        lat = ddmmdir_to_degrees("30.1234N");                              */
+/*****************************************************************************/
+static double
+ddmmdir_to_degrees(const char * ddmmdir)
+{
+      // if not N or E, prepend a '-' to ddmm2degrees input
+      // see XT_LAT_NMEA which handles ddmm directly
+      if (strchr(ddmmdir, 'W') || strchr(ddmmdir, 'S'))
+      {
+         return ddmm2degrees(- atof(ddmmdir));
+      }
+      return ddmm2degrees(atof(ddmmdir));
+
 }
 #endif
 
@@ -958,6 +978,9 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     case XT_LAT_HUMAN_READABLE:
 	human_to_dec( s, &wpt->latitude, &wpt->longitude, 1 );
 	break;
+    case XT_LAT_DDMMDIR:
+         wpt->latitude = ddmmdir_to_degrees(s);
+      break;
     case XT_LAT_NMEA:
 	wpt->latitude = ddmm2degrees(atof(s));
     	break;
@@ -979,6 +1002,9 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     case XT_LON_HUMAN_READABLE:
 	human_to_dec( s, &wpt->latitude, &wpt->longitude, 2 );
     	break;
+    case XT_LON_DDMMDIR:
+         wpt->longitude = ddmmdir_to_degrees(s);
+      break;
     case XT_LON_NMEA:
 	wpt->longitude = ddmm2degrees(atof(s));
     	break;
