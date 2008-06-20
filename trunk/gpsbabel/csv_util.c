@@ -1548,6 +1548,10 @@ xcsv_waypt_pr(const waypoint *wpt)
             writebuff(buff, fmp->printfc,
               dec_to_intdeg(lat));
             break;
+        case XT_LAT_DDMMDIR:
+            /*latitude as (degrees * 100) + decimal minutes, with N/S after it */
+            dec_to_human( buff, fmp->printfc, "SN", degrees2ddmm(lat) );
+            break;
 	case XT_LAT_HUMAN_READABLE:
 	    dec_to_human( buff, fmp->printfc, "SN", lat );
 	    break;
@@ -1576,6 +1580,10 @@ xcsv_waypt_pr(const waypoint *wpt)
             /* longitudee as an integer offset from 0 degrees */
             writebuff(buff, fmp->printfc,
               dec_to_intdeg(lon));
+            break;
+        case XT_LON_DDMMDIR:
+            /* longidute as (degrees * 100) + decimal minutes, with W/E after it*/
+            dec_to_human( buff, fmp->printfc, "WE", degrees2ddmm(lon) );
             break;
 	case XT_LON_HUMAN_READABLE:
 	    dec_to_human( buff, fmp->printfc, "WE", lon );
