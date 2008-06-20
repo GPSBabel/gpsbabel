@@ -97,7 +97,7 @@ data_read(void)
 			if (global_opts.debug_level >= 5)
 				printf("Skipping %li bytes\n", recsize );
 			while (recsize-- > 0)
-				read_char( file_in );
+				(void) read_char( file_in );
 		}
 		else if ( rectype == 1 ) {
 			/* a block header; ignored on read */
