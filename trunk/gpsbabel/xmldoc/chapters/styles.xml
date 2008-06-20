@@ -701,6 +701,22 @@ example:
 </screen>
 </section>
 
+<section id="style_def_latddmmdir">
+<title>LAT_DDMMDIR</title>
+<para>
+Derived from the LAT_NMEA latitude format, with degrees * 100 plus decimal 
+minutes, but using a trailing 'N' or 'S' instead of a leading minus sign (or 
+absence thereof) to give direction from zero.
+</para>
+<para>
+<screen format="linespecific"> IFIELD LAT_DDMMDIR, "%f", "%08.3f%c" # (writes "5334.192S" giving -53.56987 degrees latitude)
+</screen>
+</para>
+</section>
+
+
+
+
 <section id="style_def_lonnmea">
 <title>LON_NMEA</title>
 <para>
@@ -708,11 +724,27 @@ example:
    degrees multiplied by 100 plus decimal minutes.
 </para>
 <para>
-example:
+Example:
 </para>
 <screen format="linespecific">   IFIELD  LON_NMEA, "%f", "%010.3f"  # (writes -08708.082)
 </screen>
 </section>
+
+<section id="style_def_londdmmdir">
+<title>LON_DDMMDIR</title>
+<para>
+Derived from the LON_NMEA longitude format, with degrees * 100 plus decimal minutes, but using a
+trailing 'E' or 'W' instead of a leading minus sign (or absence thereof) to give direction from
+zero.
+</para>
+<para>
+Example:
+</para>
+<screen format="linespecific"> IFIELD LON_DDMMDIR, "%f", "%010.3f%c" # (writes "01232.745W" giving -12.54575 degrees
+longitude)
+</screen>
+</section>
+
 
 <section id="style_def_latlon_10ex">
 <title>LAT_10EX / LON_10EX</title>

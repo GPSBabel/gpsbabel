@@ -101,8 +101,8 @@ static char cup[] =
 "IFIELD SHORTNAME,\"\", \"\"%s\"\"\n"
 "IFIELD SHORTNAME,\"\", \"%s\"\n"
 "IFIELD CONSTANT,\"\", \"\"\n"
-"IFIELD LAT_NMEA, \"%f\", \"%08.3f\", \"absolute\"\n"
-"IFIELD LON_NMEA, \"%f\", \"%09.3f\", \"absolute\"\n"
+"IFIELD LAT_DDMMDIR, \"%f\", \"%08.3f\", \"absolute\"\n"
+"IFIELD LON_DDMMDIR, \"%f\", \"%09.3f\", \"absolute\"\n"
 "IFIELD ALT_METERS,\"\", \"%dm\"\n"
 "IFIELD CONSTANT,\"\", \"1\"\n"
 "IFIELD CONSTANT,\"\", \"\"\n"
@@ -477,6 +477,43 @@ static char gpsman[] =
 "IFIELD	IGNORE, \"\", \"%s\"\n"
 
 "# gpsman.c likes mkshort len = 8, whitespace = 0.\n"
+;
+static char iblue747[] = 
+"# GPSBabel XCSV Style File http://www.gpsbabel.org/htmldoc-1.3.2/Styles.html\n"
+"# Author: Christian Barmala http://www.barmala.de/\n"
+"# License GNU Public License http://opensource.org/licenses/gpl-license.php\n"
+
+"DESCRIPTION  Data Logger iBlue747 csv\n"
+"EXTENSION csv\n"
+
+
+"# FILE LAYOUT DEFINITIIONS:\n"
+
+"FIELD_DELIMITER COMMA\n"
+"RECORD_DELIMITER NEWLINE\n"
+"# BADCHARS COMMA\n"
+"# SHORTLEN 16\n"
+"# SHORTWHITE 0\n"
+"# ENCODING UTF-8\n"
+"DATATYPE TRACK\n"
+"PROLOGUE INDEX,RCR,DATE,TIME,VALID,LATITUDE,N/S,LONGITUDE,E/W,HEIGHT,SPEED,DISTANCE,\n"
+
+
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+
+"IFIELD INDEX,\"1\",\"%d\"           # INDEX\n"
+"IFIELD CONSTANT,\"T\",\"%s\"        # RCR\n"
+"IFIELD GMT_TIME,\"\",\"%Y/%m/%d\"   # DATE\n"
+"IFIELD HMSG_TIME,\"\",\"%H:%M:%S\"  # TIME\n"
+"IFIELD GPS_FIX,\"SPS\",\"%s\"       # VALID         #  No fix, SPS, DGPS, PPS\n"
+"IFIELD LAT_DECIMAL,\"\",\"%f\"      # LATITUDE\n"
+"IFIELD LAT_DIR,\"\",\"%s\"          # N/S\n"
+"IFIELD LON_DECIMAL,\"\",\"%f\"      # LONGITUDE\n"
+"IFIELD LON_DIR,\"\",\"%s\"          # E/W\n"
+"IFIELD ALT_METERS,\"\",\"%.0f\"     # HEIGHT\n"
+"PATH_SPEED_KPH,\"\",\"%.1f\"        # SPEED\n"
+"PATH_DISTANCE_KM,\"\",\"%f\"        # DISTANCE\n"
+
 ;
 static char kompass_tk[] = 
 "# gpsbabel XCSV style file\n"
@@ -1104,8 +1141,8 @@ static char xmapwpt[] =
 "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 30;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 31;
 #else /* CSVFMTS_ENABLED */
 style_vecs_t style_list[] = {{0,0}};
 size_t nstyles = 0;
