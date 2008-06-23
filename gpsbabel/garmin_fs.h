@@ -77,7 +77,10 @@ typedef struct {
 	unsigned int addr:1;
 	unsigned int country:1;
 	unsigned int phone_nr:1;
+	unsigned int phone_nr2:1;
+	unsigned int fax_nr:1;
 	unsigned int postal_code:1;
+	unsigned int email:1;
 #ifdef GMSD_EXPERIMENTAL
 	unsigned int subclass:1;
 #endif
@@ -102,7 +105,10 @@ typedef struct garmin_fs_s
 	char *addr;			/* address + number */
 	char *country;			/* country */
 	char *phone_nr;			/* phone number */
+	char *phone_nr2;		/* phone number (2) */
+	char *fax_nr;			/* fax number */
 	char *postal_code;		/* postal code */
+	char *email;			/* email address */
 	garmin_ilink_t *ilinks;
 #ifdef GMSD_EXPERIMENTAL
 	char subclass[22];
