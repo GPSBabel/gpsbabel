@@ -930,6 +930,11 @@ typedef enum {
 #define DATUM_OSGB36	86
 #define DATUM_WGS84	118
 
+/* bit manipulation functions (util.c) */
+
+char getbit(const void *buf, const gbuint32 nr);
+void setbit(void *buf, const gbuint32 nr);
+
 /*
  *  From parse.c
  */
