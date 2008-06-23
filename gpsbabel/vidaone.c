@@ -37,8 +37,16 @@
 
 #define MYNAME "vidaone"
 
+#define VIDAONE_VER	"ver"
+
+static char *vidaone_opt_ver;
+static int vidaone_ver;
+
 static
 arglist_t vidaone_args[] = {
+	{VIDAONE_VER, &vidaone_opt_ver, 
+		"Version of VidaOne file to read or write (1 or 2)",
+		"1", ARGTYPE_INT, "1", "2"},
 	ARG_TERMINATOR
 };
 
@@ -51,6 +59,7 @@ static gbfile *fin, *fout;
 static void
 vidaone_rd_init(const char *fname)
 {
+	vidaone_ver = atoi(vidaone_opt_ver);
 	fin = gbfopen(fname, "rb", MYNAME);
 }
 
@@ -70,6 +79,8 @@ vidaone_read(void)
 
 		wpt->latitude = gbfgetdbl(fin);
 		wpt->longitude = gbfgetdbl(fin);
+		if (vidaone_ver >= 2)
+			wpt->altitude = gbfgetflt(fin);
 		(void) gbfgetflt(fin);
 		
 		/* Only one basic check of data integrity */
@@ -88,6 +99,7 @@ vidaone_read(void)
 static void
 vidaone_wr_init(const char *fname)
 {
+	vidaone_ver = atoi(vidaone_opt_ver);
 	fout = gbfopen(fname, "wb", MYNAME);
 }
 
@@ -102,6 +114,8 @@ vidaone_trkpt(const waypoint *wpt)
 {
 	gbfputdbl(wpt->latitude, fout);
 	gbfputdbl(wpt->longitude, fout);
+	if (vidaone_ver >= 2)
+			gbfputflt(wpt->altitude, fout);
 	gbfputflt(0, fout);
 }
 
