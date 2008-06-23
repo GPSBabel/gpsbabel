@@ -26,7 +26,6 @@
 #include "garmin_fs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
-#include "strptime.h"
 #include <string.h>
 #include <time.h>
 
@@ -94,6 +93,9 @@ typedef enum {
 	fld_garmin_country,
 	fld_garmin_addr,
 	fld_garmin_phone_nr,
+	fld_garmin_phone_nr2,
+	fld_garmin_fax_nr,
+	fld_garmin_email,
 	fld_garmin_facility,
 	fld_terminator
 } field_e;
@@ -201,6 +203,9 @@ static field_t fields_def[] = {
 	{ "post",	fld_garmin_postal_code, STR_ANY },
 	{ "zip",	fld_garmin_postal_code, STR_ANY },
 	{ "phone",	fld_garmin_phone_nr, STR_ANY },
+	{ "phone2",	fld_garmin_phone_nr2, STR_ANY },
+	{ "fax",	fld_garmin_fax_nr, STR_ANY },
+	{ "email",	fld_garmin_email, STR_ANY },
 	{ "state",	fld_garmin_state, STR_ANY },
 	{ "faci",	fld_garmin_facility, STR_ANY },
 	{ NULL,		fld_terminator, 0 }
@@ -214,7 +219,7 @@ static char *unicsv_fieldsep;
 static gbfile *fin, *fout;
 static gpsdata_type unicsv_data_type;
 static route_head *unicsv_track, *unicsv_route;
-static unsigned long long unicsv_outp_flags;
+static char unicsv_outp_flags[(fld_terminator + 8) / 8];
 static grid_type unicsv_grid_idx;
 static int unicsv_datum_idx;
 static char *opt_datum, *opt_grid, *opt_utc;
@@ -817,6 +822,9 @@ unicsv_parse_one_line(char *ibuf)
 		case fld_garmin_country:
 		case fld_garmin_addr:
 		case fld_garmin_phone_nr:
+		case fld_garmin_phone_nr2:
+		case fld_garmin_fax_nr:
+		case fld_garmin_email:
 		case fld_garmin_facility:
 			gmsd = GMSD_FIND(wpt);
 			if (! gmsd) {
@@ -830,6 +838,9 @@ unicsv_parse_one_line(char *ibuf)
 			case fld_garmin_country: GMSD_SETSTR(country, s); break;
 			case fld_garmin_addr: GMSD_SETSTR(addr, s); break;
 			case fld_garmin_phone_nr: GMSD_SETSTR(phone_nr, s); break;
+			case fld_garmin_phone_nr2: GMSD_SETSTR(phone_nr2, s); break;
+			case fld_garmin_fax_nr: GMSD_SETSTR(fax_nr, s); break;
+			case fld_garmin_email: GMSD_SETSTR(email, s); break;
 			case fld_garmin_facility: GMSD_SETSTR(facility, s); break;
 			default: break;
 			}
@@ -998,8 +1009,7 @@ unicsv_print_str(const char *str)
 	else gbfputs(unicsv_fieldsep, fout);
 }
 
-#define BIT_OF(a) (1ULL << a)
-#define FIELD_USED(a) (unicsv_outp_flags & (1ULL << a))
+#define FIELD_USED(a) (getbit(&unicsv_outp_flags, a))
 
 static void 
 unicsv_waypt_enum_cb(const waypoint *wpt)
@@ -1010,45 +1020,48 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
 	shortname = (wpt->shortname) ? wpt->shortname : "";
 	gmsd = GMSD_FIND(wpt);
 	
-	if (*shortname) unicsv_outp_flags |= BIT_OF(fld_shortname);
-	if (wpt->altitude != unknown_alt) unicsv_outp_flags |= BIT_OF(fld_altitude);
-	if (wpt->icon_descr && *wpt->icon_descr) unicsv_outp_flags |= BIT_OF(fld_symbol);
+	if (*shortname) setbit(&unicsv_outp_flags, fld_shortname);
+	if (wpt->altitude != unknown_alt) setbit(&unicsv_outp_flags, fld_altitude);
+	if (wpt->icon_descr && *wpt->icon_descr) setbit(&unicsv_outp_flags, fld_symbol);
 	if (wpt->description && *wpt->description && (strcmp(shortname, wpt->description) != 0))
-		unicsv_outp_flags |= BIT_OF(fld_description);
+		setbit(&unicsv_outp_flags, fld_description);
 	if (wpt->notes && *wpt->notes && (strcmp(shortname, wpt->notes) != 0)) {
 		if ((! wpt->description) || (strcmp(wpt->description, wpt->notes) != 0))
-		    	unicsv_outp_flags |= BIT_OF(fld_notes);
+		    	setbit(&unicsv_outp_flags, fld_notes);
 	}
-	if (wpt->url && *wpt->url) unicsv_outp_flags |= BIT_OF(fld_url);
+	if (wpt->url && *wpt->url) setbit(&unicsv_outp_flags, fld_url);
 	if (wpt->creation_time != 0) {
-		unicsv_outp_flags |= BIT_OF(fld_time);
+		setbit(&unicsv_outp_flags, fld_time);
 		if (wpt->creation_time >= SECONDS_PER_DAY)
-			unicsv_outp_flags |= BIT_OF(fld_date);
+			setbit(&unicsv_outp_flags, fld_date);
 	}
 
-	if (wpt->fix != fix_unknown) unicsv_outp_flags |= BIT_OF(fld_fix);
-	if (wpt->vdop > 0) unicsv_outp_flags |= BIT_OF(fld_vdop);
-	if (wpt->hdop > 0) unicsv_outp_flags |= BIT_OF(fld_hdop);
-	if (wpt->pdop > 0) unicsv_outp_flags |= BIT_OF(fld_pdop);
-	if (wpt->sat > 0) unicsv_outp_flags |= BIT_OF(fld_sat);
-	if (wpt->heartrate != 0) unicsv_outp_flags |= BIT_OF(fld_heartrate);
-	if (wpt->cadence != 0) unicsv_outp_flags |= BIT_OF(fld_cadence);
+	if (wpt->fix != fix_unknown) setbit(&unicsv_outp_flags, fld_fix);
+	if (wpt->vdop > 0) setbit(&unicsv_outp_flags, fld_vdop);
+	if (wpt->hdop > 0) setbit(&unicsv_outp_flags, fld_hdop);
+	if (wpt->pdop > 0) setbit(&unicsv_outp_flags, fld_pdop);
+	if (wpt->sat > 0) setbit(&unicsv_outp_flags, fld_sat);
+	if (wpt->heartrate != 0) setbit(&unicsv_outp_flags, fld_heartrate);
+	if (wpt->cadence != 0) setbit(&unicsv_outp_flags, fld_cadence);
 
 	/* "flagged" waypoint members */
-	if WAYPT_HAS(wpt, course) unicsv_outp_flags |= BIT_OF(fld_course);
-	if WAYPT_HAS(wpt, depth) unicsv_outp_flags |= BIT_OF(fld_depth);
-	if WAYPT_HAS(wpt, speed) unicsv_outp_flags |= BIT_OF(fld_speed);
-	if WAYPT_HAS(wpt, proximity) unicsv_outp_flags |= BIT_OF(fld_proximity);
-	if WAYPT_HAS(wpt, temperature) unicsv_outp_flags |= BIT_OF(fld_temperature);
+	if WAYPT_HAS(wpt, course) setbit(&unicsv_outp_flags, fld_course);
+	if WAYPT_HAS(wpt, depth) setbit(&unicsv_outp_flags, fld_depth);
+	if WAYPT_HAS(wpt, speed) setbit(&unicsv_outp_flags, fld_speed);
+	if WAYPT_HAS(wpt, proximity) setbit(&unicsv_outp_flags, fld_proximity);
+	if WAYPT_HAS(wpt, temperature) setbit(&unicsv_outp_flags, fld_temperature);
 	
 	if (gmsd) {
-		if GMSD_HAS(addr) unicsv_outp_flags |= BIT_OF(fld_garmin_addr);
-		if GMSD_HAS(city) unicsv_outp_flags |= BIT_OF(fld_garmin_city);
-		if GMSD_HAS(country) unicsv_outp_flags |= BIT_OF(fld_garmin_country);
-		if GMSD_HAS(phone_nr) unicsv_outp_flags |= BIT_OF(fld_garmin_phone_nr);
-		if GMSD_HAS(postal_code) unicsv_outp_flags |= BIT_OF(fld_garmin_postal_code);
-		if GMSD_HAS(state) unicsv_outp_flags |= BIT_OF(fld_garmin_state);
-		if GMSD_HAS(facility) unicsv_outp_flags |= BIT_OF(fld_garmin_facility);
+		if GMSD_HAS(addr) setbit(&unicsv_outp_flags, fld_garmin_addr);
+		if GMSD_HAS(city) setbit(&unicsv_outp_flags, fld_garmin_city);
+		if GMSD_HAS(country) setbit(&unicsv_outp_flags, fld_garmin_country);
+		if GMSD_HAS(phone_nr) setbit(&unicsv_outp_flags, fld_garmin_phone_nr);
+		if GMSD_HAS(phone_nr2) setbit(&unicsv_outp_flags, fld_garmin_phone_nr2);
+		if GMSD_HAS(fax_nr) setbit(&unicsv_outp_flags, fld_garmin_fax_nr);
+		if GMSD_HAS(email) setbit(&unicsv_outp_flags, fld_garmin_email);
+		if GMSD_HAS(postal_code) setbit(&unicsv_outp_flags, fld_garmin_postal_code);
+		if GMSD_HAS(state) setbit(&unicsv_outp_flags, fld_garmin_state);
+		if GMSD_HAS(facility) setbit(&unicsv_outp_flags, fld_garmin_facility);
 	}
 }
 
@@ -1293,6 +1306,9 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	if FIELD_USED(fld_garmin_state) unicsv_print_str(GMSD_GET(state, NULL));
 	if FIELD_USED(fld_garmin_country) unicsv_print_str(GMSD_GET(country, NULL));
 	if FIELD_USED(fld_garmin_phone_nr) unicsv_print_str(GMSD_GET(phone_nr, NULL));
+	if FIELD_USED(fld_garmin_phone_nr2) unicsv_print_str(GMSD_GET(phone_nr2, NULL));
+	if FIELD_USED(fld_garmin_fax_nr) unicsv_print_str(GMSD_GET(fax_nr, NULL));
+	if FIELD_USED(fld_garmin_email) unicsv_print_str(GMSD_GET(email, NULL));
 
 	gbfputs(UNICSV_LINE_SEP, fout);
 }
@@ -1305,7 +1321,7 @@ unicsv_wr_init(const char *filename)
 {
 	fout = gbfopen(filename, "wb", MYNAME);
 
-	unicsv_outp_flags = 0;
+	memset(&unicsv_outp_flags, 0, sizeof(unicsv_outp_flags));
 	unicsv_grid_idx = grid_unknown;
 	unicsv_datum_idx = DATUM_WGS84;
 	unicsv_fieldsep = UNICSV_FIELD_SEP;
@@ -1409,6 +1425,9 @@ unicsv_wr(void)
 	if FIELD_USED(fld_garmin_state) gbfprintf(fout, "%sState", unicsv_fieldsep);
 	if FIELD_USED(fld_garmin_country) gbfprintf(fout, "%sCountry", unicsv_fieldsep);
 	if FIELD_USED(fld_garmin_phone_nr) gbfprintf(fout, "%sPhone", unicsv_fieldsep);
+	if FIELD_USED(fld_garmin_phone_nr2) gbfprintf(fout, "%sPhone2", unicsv_fieldsep);
+	if FIELD_USED(fld_garmin_fax_nr) gbfprintf(fout, "%sFax", unicsv_fieldsep);
+	if FIELD_USED(fld_garmin_email) gbfprintf(fout, "%sEmail", unicsv_fieldsep);
 	
 	gbfputs(UNICSV_LINE_SEP, fout);
 
