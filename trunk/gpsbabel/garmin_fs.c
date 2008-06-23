@@ -66,6 +66,9 @@ garmin_fs_destroy(void *fs)
 		if (data->cross_road != NULL) xfree(data->cross_road);
 		if (data->facility != NULL) xfree(data->facility);
 		if (data->phone_nr != NULL) xfree(data->phone_nr);
+		if (data->phone_nr2 != NULL) xfree(data->phone_nr2);
+		if (data->fax_nr != NULL) xfree(data->fax_nr);
+		if (data->email != NULL) xfree(data->email);
 		if (data->postal_code != NULL) xfree(data->postal_code);
 		if (data->state != NULL) xfree(data->state);
 
@@ -104,6 +107,9 @@ void garmin_fs_copy(garmin_fs_t **dest, garmin_fs_t *src)
 	(*dest)->cross_road = (src->cross_road != NULL) ? xstrdup(src->cross_road) : NULL;
 	(*dest)->facility = (src->facility != NULL) ? xstrdup(src->facility) : NULL;
 	(*dest)->phone_nr = (src->phone_nr != NULL) ? xstrdup(src->phone_nr) : NULL;
+	(*dest)->phone_nr2 = (src->phone_nr2 != NULL) ? xstrdup(src->phone_nr2) : NULL;
+	(*dest)->fax_nr = (src->fax_nr != NULL) ? xstrdup(src->fax_nr) : NULL;
+	(*dest)->email = (src->email != NULL) ? xstrdup(src->email) : NULL;
 	(*dest)->postal_code = (src->postal_code != NULL) ? xstrdup(src->postal_code) : NULL;
 	(*dest)->state = (src->state != NULL) ? xstrdup(src->state) : NULL;
 }
@@ -119,6 +125,9 @@ void garmin_fs_convert(void *fs)
 	if (gmsd->cross_road) gmsd->cross_road = cet_convert_string(gmsd->cross_road);
 	if (gmsd->facility) gmsd->facility = cet_convert_string(gmsd->facility);
 	if (gmsd->phone_nr) gmsd->phone_nr = cet_convert_string(gmsd->phone_nr);
+	if (gmsd->phone_nr2) gmsd->phone_nr2 = cet_convert_string(gmsd->phone_nr2);
+	if (gmsd->fax_nr) gmsd->fax_nr = cet_convert_string(gmsd->fax_nr);
+	if (gmsd->email) gmsd->email = cet_convert_string(gmsd->email);
 	if (gmsd->postal_code) gmsd->postal_code = cet_convert_string(gmsd->postal_code);
 	if (gmsd->state) gmsd->state = cet_convert_string(gmsd->state);
 }
