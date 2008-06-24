@@ -2,7 +2,7 @@
 
     Character encoding transformation - utilities
 
-    Copyright (C) 2005,2006,2007 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -106,6 +106,11 @@ cet_str_cp1252_to_utf8(const char *src)
 	return cet_str_any_to_utf8(src, &cet_cs_vec_cp1252);
 }
 
+short *
+cet_str_utf8_to_uni(const char *src, int *length)
+{
+	return cet_str_any_to_uni(src, &cet_cs_vec_utf8, length);
+}
 
 /* helpers */
 
@@ -1115,7 +1120,7 @@ cet_disp_character_set_names(FILE *fout)
 	
 	ac = 0;
 	
-	fprintf(fout, "GPSbabel builtin character sets: (-c option)\n");
+	fprintf(fout, "GPSBabel builtin character sets: (-c option)\n");
 	for (i = 0; i < c; i++)
 	{
 	    char **a;
