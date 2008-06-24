@@ -453,8 +453,9 @@ mkshort(short_handle h, const char *istring)
 			continue;
 		if (hdl->goodchars && (!strchr(hdl->goodchars, tstring[i])))
 			continue;
-		if (!isascii(tstring[i]))
-			continue;
+// FIXME(robertl): we need a way to not return partial UTF-8, but this isn't it.
+//		if (!isascii(tstring[i]))
+//			continue;
 		*cp++ = tstring[i];
 	}
 	*cp = 0;
