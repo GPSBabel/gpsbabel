@@ -62,6 +62,8 @@
 #include <ctype.h>
 #include <time.h>
 #include "defs.h"
+#include "cet.h"
+#include "cet_util.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -228,8 +230,26 @@ static void write_igo8_track_point(const waypoint *wpt)
 //
 // Please replace this with a much more filled out and correct version if you see 
 // fit.
-unsigned int ascii_to_unicode_2(char* dst, unsigned int dst_max_length, char* src)
+
+/* 2008/06/24, O.K.: Use CET library for ascii-> unicode 2 converter */
+
+unsigned int ascii_to_unicode_2(char *dst, const int dst_max_length, const char *src)
 {
+#if 1
+	short *unicode;
+	int len;
+
+	unicode = cet_str_any_to_uni(src, &cet_cs_vec_ansi_x3_4_1968, &len);
+
+	len += 1;	/* include terminating null */
+	len *= 2;	/* real size */
+	if (len > dst_max_length) len = dst_max_length;
+	memcpy(dst, unicode, len);
+	
+	xfree(unicode);
+	
+	return len;
+#else
 	unsigned int current_src_position = 0;
 	unsigned int current_dst_position = 0;
 	unsigned short current_unicode_char;
@@ -249,6 +269,7 @@ unsigned int ascii_to_unicode_2(char* dst, unsigned int dst_max_length, char* sr
 	}
 
 	return current_dst_position;
+#endif
 }
 
 void write_header()

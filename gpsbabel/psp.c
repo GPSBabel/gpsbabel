@@ -44,30 +44,17 @@ static void
 psp_write_str(const char *str)
 {
 	if (str && *str) {
-		const char *cin = str;
-		gbint16 *tmp, *res;
-		int len = 0;
+		short *unicode;
+		int len;
 		
 		/* convert UTF-8 string into a unicode sequence */
 		/* not perfect, but enough for us */
+		unicode = cet_str_any_to_uni(str, global_opts.charset, &len);
+		if (len > MAXPSPSTRINGSIZE) len = MAXPSPSTRINGSIZE;
+		gbfputc((unsigned char)len, psp_file_out);
+		if (len) gbfwrite(unicode, 2, len, psp_file_out);
 
-		res = tmp = xmalloc(strlen(str) << 1);
-		while (*cin) {
-			int bytes, value;
-
-			if (cet_utf8_to_ucs4(cin, &bytes, &value) != CET_SUCCESS)
-				value = CET_NOT_CONVERTABLE_DEFAULT;
-			*tmp++ = value;
-			cin += bytes;
-			len++;
-			if (len == (MAXPSPSTRINGSIZE >> 1)) break;
-		}
-		gbfputc(len, psp_file_out);
-		tmp = res;
-		while (len--)
-			/* ! we need LE values, don't use gbfwrite ! */
-			gbfputint16(*tmp++, psp_file_out);
-		xfree(res);
+		xfree(unicode);
 	}
 	else
 		gbfputc(0, psp_file_out);
