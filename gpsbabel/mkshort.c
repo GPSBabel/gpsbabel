@@ -24,6 +24,10 @@
 #include <stdlib.h>
 
 #include "defs.h"
+#include "cet.h"
+#include "cet_util.h"
+
+#define MYNAME	"mkshort"
 
 static const char vowels[] = "aeiouAEIOU";
 
@@ -50,6 +54,7 @@ typedef struct {
 	unsigned int whitespaceok:1;
 	unsigned int repeating_whitespaceok:1;
 	unsigned int must_uniq:1;
+	unsigned int is_utf8:1;
 } mkshort_handle;
 
 typedef struct {
@@ -106,6 +111,7 @@ mkshort_new_handle()
 	h->target_len = DEFAULT_TARGET_LEN;
 	h->must_uniq = 1;
 	h->defname = xstrdup("WPT");
+	h->is_utf8 = (global_opts.charset == &cet_cs_vec_utf8);
 
 	return h;
 }
@@ -367,6 +373,16 @@ setshort_mustuniq(short_handle h, int i)
 	hdl->must_uniq = i;
 }
 
+/* 
+ *  Declare that actually characters are (or are not) encoded in UTF-8.
+ */
+void
+setshort_is_utf8(short_handle h, const int is_utf8)
+{
+	mkshort_handle *hdl = (mkshort_handle *) h;
+	hdl->is_utf8 = is_utf8;
+}
+
 char *
 #ifdef DEBUG_MEM
 MKSHORT(short_handle h, const char *istring, DEBUG_PARAMS )
@@ -374,13 +390,16 @@ MKSHORT(short_handle h, const char *istring, DEBUG_PARAMS )
 mkshort(short_handle h, const char *istring)
 #endif
 {
-	char *ostring = xxstrdup(istring, file, line);
+	char *ostring;
 	char *nstring;
 	char *tstring;
 	char *cp;
 	char *np;
 	int i, l, nlen, replaced;
 	mkshort_handle *hdl = (mkshort_handle *) h;
+	
+	if (hdl->is_utf8) ostring = cet_utf8_strdup(istring); /* clean UTF-8 string */
+	else ostring = xxstrdup(istring, file, line);
 
 	/*
 	 * A rather horrible special case hack.
@@ -524,8 +543,16 @@ mkshort(short_handle h, const char *istring)
 	 * numeric data.
 	 * If the numeric component alone is longer than our target string
 	 * length, use only what'll fit.
- 	 */
-	if ((/*i = */strlen(ostring)) > hdl->target_len) {
+	 */
+	if (hdl->is_utf8) {
+		/* ToDo: Keep trailing numeric data as described above! */
+		if (cet_utf8_strlen(ostring) > hdl->target_len) {
+			char *tmp = cet_utf8_strndup(ostring, hdl->target_len);
+			xfree(ostring);
+			ostring = tmp;
+		}
+	}
+	else if ((/*i = */strlen(ostring)) > hdl->target_len) {
 		char *dp = &ostring[hdl->target_len] - strlen(np);
 		if (dp < ostring) dp = ostring;
 		memmove(dp, np, strlen(np));
