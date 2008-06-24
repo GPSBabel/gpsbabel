@@ -2,7 +2,7 @@
 
     Character encoding transformation - utilities header
 
-    Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -56,6 +56,7 @@ char *cet_str_utf8_to_us_ascii(const char *src);
 char *cet_str_us_ascii_to_utf8(const char *src);
 extern cet_cs_vec_t cet_cs_vec_ansi_x3_4_1968;
 
+short *cet_str_utf8_to_uni(const char *src, int *length);
 
 extern cet_cs_vec_t cet_cs_vec_utf8;
 

@@ -2,7 +2,7 @@
 
     Character encoding transformation - basics
 
-    Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -263,6 +263,81 @@ cet_utf8_to_char(const char *str, const cet_cs_vec_t *vec, /* out */ int *bytes,
 }
 
 /* =========================================================================== */
+/* %%%              UTF-8 string manipulation functions                    %%% */
+/* =========================================================================== */
+
+/* %%% cet_utf8_strlen %%%
+ *
+ * Returns the number of valid (visible) characters.
+ */
+int 
+cet_utf8_strlen(const char *str)
+{
+	if (str) {
+		const char *cin = str;
+		int len = 0;
+
+		while (*cin) {
+			int bytes, value;
+			if (CET_SUCCESS == cet_utf8_to_ucs4(cin, &bytes, &value)) len++;
+			cin += bytes;
+		}
+		return len;
+	}
+	else
+		return 0;
+}
+
+/* %%% cet_utf8_strdup %%%
+ *
+ * Checks and duplicates an UTF-8 string 
+ */
+char * 
+cet_utf8_strdup(const char *str)
+{
+	if (str)
+		return cet_utf8_strndup(str, strlen(str));
+	else
+		return NULL;
+}
+
+/* %%% cet_utf8_strndup %%%
+ *
+ * Checks and duplicates an UTF-8 string 
+ */
+char *
+cet_utf8_strndup(const char *str, const int maxlen)
+{
+	if (str) {
+		const char *cin = str;
+		char *res, *cout;
+		int len = 0;
+
+		res = cout = xstrdup(cin);
+
+		while (*cin && (len < maxlen)) {
+			int bytes, value;
+			if (CET_SUCCESS == cet_utf8_to_ucs4(cin, &bytes, &value)) {
+				cout += cet_ucs4_to_utf8(cout, 6, value);
+				len += 1;
+			}
+			cin += bytes;
+		}
+		*cout = '\0';
+		
+		if ((cin - str) != (cout - res)) {
+			cout = xstrdup(res);
+			xfree(res);
+			res = cout;
+		}
+
+		return res;
+	}
+	else
+		return NULL;
+}
+
+/* =========================================================================== */
 /* %%%                   full string transformation                        %%% */
 /* =========================================================================== */
 
@@ -361,6 +436,42 @@ cet_str_uni_to_utf8(const short *src, const int length)
 	    cout += cet_ucs4_to_utf8(cout, 6, le_read16(cin++));
 	    
 	*cout = '\0';
+
+	return res;
+}
+
+/* %%% cet_str_any_to_uni %%%
+ *
+ * Converts a string in given character set to a 'wide string' (unicode)
+ */
+short *
+cet_str_any_to_uni(const char *src, const cet_cs_vec_t *vec, int *length)
+{
+	char *utf8;
+	int len;
+	short *res, *sout;
+	
+	if (vec->ucs4_count == 0) utf8 = cet_utf8_strdup(src); /* UTF-8 -> clean UTF-8 */
+	else utf8 = cet_str_any_to_utf8(src, vec);
+
+	len = cet_utf8_strlen(utf8);
+	res = sout = xcalloc(2, len + 1);
+	
+	if (len) {
+		char *cin = utf8;
+		
+		while (*cin) {
+			int bytes, value;
+			if (CET_SUCCESS == cet_utf8_to_ucs4(cin, &bytes, &value)) {
+				le_write16(sout, value);
+				sout++;
+			}
+			cin += bytes;
+		}
+	}
+
+	*sout = 0;
+	if (length) *length = len;
 
 	return res;
 }
