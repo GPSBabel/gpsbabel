@@ -591,6 +591,7 @@ void setshort_mustuniq(short_handle,  int n);
 void setshort_whitespace_ok(short_handle,  int n);
 void setshort_repeating_whitespace_ok(short_handle,  int n);
 void setshort_defname(short_handle, const char *s);
+void setshort_is_utf8(short_handle h, const int is_utf8);
 
 /*
  *  Vmem flags values.
