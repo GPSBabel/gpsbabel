@@ -174,7 +174,7 @@ static void igo8_write_init(const char *fname)
 // Writer close callback
 static void igo8_write_deinit(void)
 {
-	unsigned long normalized_file_size;
+	gbuint32 normalized_file_size;
 
 	// Seek to the start of the third long in the Information Block, this is
 	// where we will write out the total size of the file.
