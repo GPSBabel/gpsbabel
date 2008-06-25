@@ -451,7 +451,8 @@ cet_str_any_to_uni(const char *src, const cet_cs_vec_t *vec, int *length)
 	int len;
 	short *res, *sout;
 	
-	if (vec->ucs4_count == 0) utf8 = cet_utf8_strdup(src); /* UTF-8 -> clean UTF-8 */
+	if (! src) utf8 = xstrdup("");
+	else if (vec->ucs4_count == 0) utf8 = cet_utf8_strdup(src); /* UTF-8 -> clean UTF-8 */
 	else utf8 = cet_str_any_to_utf8(src, vec);
 
 	len = cet_utf8_strlen(utf8);
@@ -472,6 +473,7 @@ cet_str_any_to_uni(const char *src, const cet_cs_vec_t *vec, int *length)
 
 	*sout = 0;
 	if (length) *length = len;
+	xfree(utf8);
 
 	return res;
 }
