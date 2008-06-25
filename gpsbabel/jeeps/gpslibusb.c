@@ -28,6 +28,7 @@
 #include "gps.h"
 #include "garminusb.h"
 #include "gpsusbcommon.h"
+#include "garmin_device_xml.h"
 
 #define GARMIN_VID 0x91e
 
@@ -57,7 +58,8 @@ static int gusb_bulk_in_ep;
 static gusb_llops_t libusb_llops;
 
 static usb_dev_handle *udev;
-static void garmin_usb_scan(libusb_unit_data *, int);
+static int garmin_usb_scan(libusb_unit_data *, int);
+static const gdx_info *gdx;
 
 static int
 gusb_libusb_send(const garmin_usb_packet *opkt, size_t sz)
@@ -277,7 +279,7 @@ garmin_usb_start(struct usb_device *dev)
 }
 
 static
-void garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
+int garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
 {
 	int found_devices = 0;
 	struct usb_bus *bus;
@@ -315,9 +317,21 @@ void garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
 		gusb_list_units();
 		exit (0);
 	}
+
 	if (0 == found_devices) {
+		/* It's time for Plan B.  The user told us to use 
+		 * Garmin Protocol in device "usb:" but it's possible
+		 * that they're talking to one of the dozens of models
+		 * that is wants to read and write GPX files on a 
+		 * mounted drive.  Try that now.
+		 */
+		gdx = gdx_find_file(".", NULL);
+		if (gdx) return 1;
+		/* Plan C. */
 		fatal("Found no Garmin USB devices.\n");
-	}
+	} else { 
+		return 1;
+        }
 }
 
 static gusb_llops_t libusb_llops = {
@@ -350,9 +364,7 @@ gusb_init(const char *portname, gpsdevh **dh)
 	usb_find_busses();
 	usb_find_devices();
 	lud->busses = usb_get_busses();
-	garmin_usb_scan(lud, req_unit_number);
-
-	return 1;
+	return garmin_usb_scan(lud, req_unit_number);
 }
 
 #endif /* HAVE_LIBUSB */
