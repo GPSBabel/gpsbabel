@@ -24,6 +24,7 @@
 
 #include "defs.h"
 #include "cet.h"
+#include "cet_util.h"
 #include "garmin_fs.h"
 #include "strptime.h"
 #include <ctype.h>
@@ -97,17 +98,12 @@ read_wcstr(const int discard)
 static void
 write_wcstr(const char *str)
 {
-	if (str && *str) {
-		int bytes, value;
-		char *cin = (char *)str;
-		char *ce = cin + strlen(cin);
-		while (cin < ce) {
-			cet_utf8_to_ucs4(cin, &bytes, &value);
-			cin += bytes;
-			gbfputint16(value, fout);
-		}
-	}
-	gbfputint16(0, fout);
+	int len;
+	short *unicode;
+	
+	unicode = cet_str_utf8_to_uni(str, &len);
+	gbfwrite((void *)unicode, 2, len + 1, fout);
+	xfree(unicode);
 }
 
 static int
