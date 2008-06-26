@@ -31,8 +31,11 @@
 static route_head *cur_rte = NULL;
 
 static double pos_dist;
+static double max_diff_time;
 static char *distopt = NULL;
+static char *timeopt = NULL;
 static char *purge_duplicates = NULL;
+static int check_time;
 
 typedef struct {
 	double distance;
@@ -45,6 +48,8 @@ arglist_t position_args[] = {
 	{"all", &purge_duplicates, 
 		"Suppress all points close to other points", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX }, 
+	{"time", &timeopt, "Maximum time in seconds beetween two points",
+		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -66,7 +71,7 @@ position_runqueue(queue *q, int nelems, int qtype)
 	queue * elem, * tmp;
 	waypoint ** comp;
 	int * qlist;
-	double dist;
+	double dist, diff_time;
 	int i = 0, j, anyitem;
 
 	comp = (waypoint **) xcalloc(nelems, sizeof(*comp));
@@ -91,8 +96,12 @@ position_runqueue(queue *q, int nelems, int qtype)
 		
 						/* convert radians to integer feet */
 					dist = (int)(5280*radtomiles(dist));
-						
+					diff_time = fabs( waypt_time(comp[i]) - waypt_time(comp[j]) );
+					
 					if (dist <= pos_dist) {
+						if(check_time && diff_time >= max_diff_time)
+							continue;
+						
 						qlist[j] = 1;
 						switch (qtype) {
 							case wptdata:
@@ -177,6 +186,8 @@ position_init(const char *args) {
 	char *fm;
 
 	pos_dist = 0;
+	max_diff_time = 0;
+	check_time = 0;
 
 	if (distopt) {
 		pos_dist = strtod(distopt, &fm);
@@ -185,6 +196,11 @@ position_init(const char *args) {
 			 /* distance is meters */
 			 pos_dist *= 3.2802;
 		}
+	}
+
+	if (timeopt) {
+		check_time = 1;
+		max_diff_time = strtod(timeopt, &fm);
 	}
 }
 
