@@ -24,10 +24,10 @@
  * Describes a file on the unit.
  */
 typedef struct {
-	const char *path;
-	const char *basename;
-	const char *extension;
-	const char *canon;	// full name, when applicable.
+	char *path;
+	char *basename;
+	char *extension;
+	char *canon;	// full name, when applicable.
 } gdx_file;
 
 /*

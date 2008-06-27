@@ -105,9 +105,15 @@ static xg_tag_mapping gdx_map[] = {
 
 const gdx_info *
 gdx_read(const char *fname) {
-  xml_init(fname, gdx_map, NULL);
-  xml_read();
-  xml_deinit();
+  // Test file open-able before gb_open gets a chance to fatal().
+  FILE *fin = fopen(fname, "r");
+
+  if (fin) {
+    fclose(fin);
+    xml_init(fname, gdx_map, NULL);
+    xml_read();
+    xml_deinit();
+  }
 
   return my_gdx_info;
 }
@@ -119,8 +125,8 @@ gdx_find_file(char **dirlist) {
   const gdx_info *gdx;
   while (*dirlist) {
     char *tbuf;
-    xasprintf(&tbuf, "%s/%s", dirlist, "GarminDevice.xml");
-    mountpoint = dirlist;
+    xasprintf(&tbuf, "%s/%s", *dirlist, "GarminDevice.xml");
+    mountpoint = *dirlist;
     gdx = gdx_read(tbuf);
     xfree(tbuf);
     if (gdx) {
