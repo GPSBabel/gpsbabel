@@ -325,7 +325,8 @@ int garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
 		 * that is wants to read and write GPX files on a 
 		 * mounted drive.  Try that now.
 		 */
-		gdx = gdx_find_file(".");
+char *dlist[] = { ".", NULL}; 
+		gdx = gdx_find_file(dlist);
 		if (gdx) return 1;
 		/* Plan C. */
 		fatal("Found no Garmin USB devices.\n");

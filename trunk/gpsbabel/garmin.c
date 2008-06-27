@@ -253,7 +253,7 @@ rd_init(const char *fname)
 {
 	if (setjmp(gdx_jmp_buf)) {
 		char *vec_opts = NULL;
-		gdx_info *gi = gdx_get_info();
+		const gdx_info *gi = gdx_get_info();
 		gpx_vec = find_vec("gpx", &vec_opts);
 		gpx_vec->rd_init(gi->from_device.canon);
 	} else {
