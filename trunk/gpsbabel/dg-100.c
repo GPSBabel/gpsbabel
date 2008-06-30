@@ -75,7 +75,6 @@ struct dg100_command dg100_commands[] = {
 };
 const unsigned dg100_numcommands = sizeof(dg100_commands) / sizeof(dg100_commands[0]);
 
-/* TODO: use obstacks or vmem_t instead? */
 struct dynarray16 {
 	unsigned count; /* number of elements used */
 	unsigned limit; /* number of elements allocated */
@@ -108,20 +107,19 @@ dynarray16_init(struct dynarray16 *a, unsigned limit)
 static gbint16 *
 dynarray16_alloc(struct dynarray16 *a, unsigned n)
 {
-	unsigned int i;
-	unsigned int need;
+	unsigned oldcount, need;
 	const unsigned elements_per_chunk = 4096 / sizeof(a->data[0]);
 	
-	i = a->count;
+	oldcount = a->count;
 	a->count += n;
 	
-	need = a->count - a->limit;
-	if (need > 0) {
+	if (a->count > a->limit) {
+		need = a->count - a->limit;
 		need = (need > elements_per_chunk) ? need : elements_per_chunk;
 		a->limit += need;
-		xrealloc(a->data, sizeof(a->data[0]) * a->limit);
+		a->data = xrealloc(a->data, sizeof(a->data[0]) * a->limit);
 	}
-	return(a->data + i);
+	return(a->data + oldcount);
 }
 
 static time_t
@@ -387,10 +385,11 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 	 */
 
 	/* read Payload Length, Command ID, and two further bytes */
-	for (i = 2; i < 7; i++) {
-		buf[i] = dg100_recv_byte();
-		dg100_debug("", 0, 1, &buf[i]);
+	i = gbser_read_wait(serial_handle, &buf[2], 5, 1000);
+	if (i < 5) {
+		fatal("Expected to read 5 bytes, but got %d\n", i);
 	}
+	dg100_debug("", 0, 5, &buf[2]);
 
 	payload_len_field = be_read16(buf + 2);
 	cmd = buf[4];
@@ -434,21 +433,12 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 				frame_len, FRAME_MAXLEN);
 	}
 
-	/* TODO: Since we know how long the frame should be, we could try to
-	 * read the rest of the frame at once using gbser_read_wait(). */
-#if 0
-	for (i = 7; i < frame_len; i++) {
-		buf[i] = dg100_recv_byte();
-		dg100_debug("", 0, 1, &buf[i]);
-	}
-#else
 	i = gbser_read_wait(serial_handle, &buf[7], frame_len - 7, 1000);
-	dg100_debug("", 0, frame_len - 7, &buf[7]);
 	if (i < frame_len - 7) {
 		fatal("Expected to read %d bytes, but got %d\n", 
 			frame_len - 7, i);
 	}
-#endif
+	dg100_debug("", 0, frame_len - 7, &buf[7]);
 
 	frame_start_seq   = be_read16(buf + 0);
 	payload_len_field = be_read16(buf + 2);
@@ -555,6 +545,10 @@ dg100_getfileheaders(struct dynarray16 *headers)
 		nextheader = be_read16(answer + 2);
 		dg100_log("found %d headers, nextheader=%d\n",
 			numheaders, nextheader);
+		if (numheaders <= 0) {
+			dg100_log("no further headers, aborting the loop\n");
+			break;
+		}
 
 		h = dynarray16_alloc(headers, numheaders);
 		for (i = 0; i < numheaders; i++) {
