@@ -232,7 +232,7 @@ static void dbg(int l, const char *msg, ...) {
     va_list ap;
     va_start(ap, msg);
     if (global_opts.debug_level >= l) {
-        vprintf(msg, ap);
+        vfprintf(stderr,msg, ap);
     }
     va_end(ap);
 }
@@ -297,11 +297,11 @@ static int do_cmd(const char *cmd, const char *expect, char **rslt, time_t timeo
     dbg(8, "Read %d bytes: '%s'\n", len, line);
     if ( cmd_erase && global_opts.debug_level > 0 && global_opts.debug_level <= 3 ){ 
        // erase cmd progress wheel -- only for debug level 1-3 
-       printf("\b%c", LIVE_CHAR[loops%4]); fflush(stdout);
+       fprintf(stderr,"\b%c", LIVE_CHAR[loops%4]); fflush(stderr);
     }
       if ( len > 5 && line[0] == '$' ){
          if ( expect_len > 0 && strncmp(&line[1], expect, expect_len) == 0 ){
-            if ( cmd_erase && global_opts.debug_level > 0 ) printf("\n");
+            if ( cmd_erase && global_opts.debug_level > 0 ) fprintf(stderr,"\n");
             dbg(6, "NMEA command success !\n");
             if ( (len - 4) > expect_len ){ // alloc and copy data segment...
                if ( line[len-3] == '*' ) 
@@ -659,7 +659,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm){
        /* Button press -- create waypoint, start count at 1 */
        waypoint *w = waypt_dupe(trk);
 
-       sprintf(wp_name, "WP%04d", waypt_count()+1);
+       sprintf(wp_name, "WP%06d", waypt_count()+1);
        w->shortname      = xstrdup(wp_name);
        waypt_add(w);
     } 
@@ -669,7 +669,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm){
     // trackpoint unless we include/duplicate it.
 
     if ( global_opts.masked_objective & TRKDATAMASK ){
-       sprintf(wp_name, "TP%04d", idx);
+       sprintf(wp_name, "TP%06d", idx);
        trk->shortname      = xstrdup(wp_name);
 
        track_add_wpt(trk_head, trk);
@@ -837,6 +837,16 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
    unsigned char crc;
    struct data_item itm;
 
+   dbg(5,"Entering mtk_parse, count = %i, dataLen = %i\n",
+									   count, dataLen);
+   if ( global_opts.debug_level > 5 ) {
+	   int j;
+	   fprintf(stderr,"# Data block:");
+	   for(j=0;j<dataLen;j++)
+		   fprintf(stderr,"%.2x ", data[j]);
+	   fprintf(stderr,"\n");
+   }
+
    memset(&itm, 0, sizeof(itm));    
    i = 0;
    crc = 0;
@@ -984,7 +994,7 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
    }    
 
    if ( data[i] != crc ){
-      printf("%2d: Bad CRC %.2x != %.2x\n", count, data[i], crc);
+      dbg(0,"%2d: Bad CRC %.2x != %.2x\n", count, data[i], crc);
    }
    i++; // crc         
    count++;
@@ -1053,9 +1063,9 @@ static int mtk_parse_info(const unsigned char *data, int dataLen){
       }
    } else {
       if ( global_opts.debug_level > 0 ){
-        printf("#!! Invalid INFO block !! %d bytes\n >> ", dataLen);
+        fprintf(stderr,"#!! Invalid INFO block !! %d bytes\n >> ", dataLen);
         for (bm=0;bm<16;bm++) printf("%.2x ", data[bm]);
-        printf("\n");
+        fprintf(stderr,"\n");
       }
       return 0;
    }
