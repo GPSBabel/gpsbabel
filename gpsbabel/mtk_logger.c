@@ -233,6 +233,7 @@ static void dbg(int l, const char *msg, ...) {
     va_start(ap, msg);
     if (global_opts.debug_level >= l) {
         vfprintf(stderr,msg, ap);
+        fflush(stderr);
     }
     va_end(ap);
 }
@@ -269,8 +270,7 @@ static int do_cmd(const char *cmd, const char *expect, char **rslt, time_t timeo
    if  ( strncmp(cmd, CMD_LOG_ERASE, 12) == 0 ){
       cmd_erase = 1;
       if (global_opts.debug_level > 0 ) {
-         dbg(1, "Erasing    "); 
-         fflush(stdout); 
+         dbg(1, "Erasing    ");
       }
    }
    // dbg(6, "## Send '%s' -- Expect '%s' in %d sec\n", cmd, expect, timeout_sec);
@@ -561,7 +561,7 @@ mtk_retry:
          perc = 100 - 100*(addr_max-addr)/addr_max;
          if ( addr >= addr_max ) 
            perc = 100;
-         dbg(2, "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bReading 0x%.6x %3d %%", addr, perc); fflush(stdout);
+         dbg(2, "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bReading 0x%.6x %3d %%", addr, perc);
       }
   }
   if ( dout != NULL )
@@ -845,6 +845,7 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
 	   for(j=0;j<dataLen;j++)
 		   fprintf(stderr,"%.2x ", data[j]);
 	   fprintf(stderr,"\n");
+	   fflush(stderr);
    }
 
    memset(&itm, 0, sizeof(itm));    
