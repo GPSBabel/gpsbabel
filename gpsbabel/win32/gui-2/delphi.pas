@@ -15,6 +15,9 @@ function GetStrProp(Instance: TObject; const Name: string): string; overload;
 function GetStrProp(Instance: TObject; Info: PPropInfo): string; overload;
 procedure SetStrProp(Instance: TObject; const Name, Value: string); overload;
 procedure SetStrProp(Instance: TObject; Info: PPropInfo; const Value: string); overload;
+
+function StrToBool(const str: string): Boolean;
+function BoolToStr(const b: Boolean; UseStrings: Boolean): string;
 {$ENDIF}
 
 implementation
@@ -88,6 +91,22 @@ begin
   TypInfo.SetStrProp(Instance, Info, Value);
 end;
 
+
+function StrToBool(const str: string): Boolean;
+begin
+  Result := (str = '1') or (LowerCase(str) = 'true') or (LowerCase(str) = 'ja')
+end;
+
+function BoolToStr(const b: Boolean; UseStrings: Boolean): string;
+const
+  Values: array[Boolean] of Char = ('0', '1');
+  SValues: array[Boolean] of string = ('false', 'true');
+begin
+  if UseStrings then
+    Result := SValues[b]
+  else
+    Result := Values[b];
+end;
 {$ENDIF}
 
 end.
