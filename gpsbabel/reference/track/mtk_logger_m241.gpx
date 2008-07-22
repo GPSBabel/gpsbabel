@@ -92,7 +92,8 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <pdop>4.480000</pdop>
 </wpt>
 <trk>
-  <desc>Log every 5 sec, 0 m, 6 km/h</desc>
+  <name>track-1</name>
+  <desc>Log every 5 sec, 0 m when moving above 6 km/h</desc>
 <trkseg>
 <trkpt lat="41.805591583" lon="12.679831505">
   <ele>374.812500</ele>

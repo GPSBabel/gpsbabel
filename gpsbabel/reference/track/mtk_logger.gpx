@@ -43,7 +43,8 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <sat>7</sat>
 </wpt>
 <trk>
-  <desc>Log every 5 sec, 100 m, 0 km/h</desc>
+  <name>track-1</name>
+  <desc>Log every 5 sec, 100 m</desc>
 <trkseg>
 <trkpt lat="57.719580948" lon="12.016372082">
   <ele>98.469612</ele>
@@ -61,6 +62,12 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>TP000002</name>
   <fix>none</fix>
 </trkpt>
+</trkseg>
+</trk>
+<trk>
+  <name>track-2</name>
+  <desc>Log every 5 sec, 100 m</desc>
+<trkseg>
 <trkpt lat="57.719580948" lon="12.016372082">
   <ele>98.469612</ele>
 <time>2008-01-27T14:13:51.012Z</time>
@@ -7370,6 +7377,12 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <fix>3d</fix>
   <sat>7</sat>
 </trkpt>
+</trkseg>
+</trk>
+<trk>
+  <name>track-3</name>
+  <desc>Log every 5 sec, 100 m</desc>
+<trkseg>
 <trkpt lat="57.707408790" lon="11.971353747">
   <ele>29.132912</ele>
 <time>2008-01-27T18:13:26.129Z</time>
