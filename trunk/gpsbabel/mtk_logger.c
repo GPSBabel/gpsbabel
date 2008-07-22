@@ -40,8 +40,8 @@
   ./gpsbabel -D 2 -t -w -i mtk -f /dev/ttyUSB0 -o gpx -F out.gpx
   
    # Parse an existing .bin file (data_2007_09_04.bin), output trackpoints as 
-   #  both CSV file and GPX
-  ./gpsbabel -D 2 -t -i mtk-bin,csv=data__2007_09_04.csv -f data_2007_09_04.bin -o gpx -F out.gpx
+   #  both CSV file and GPX, discard points without fix
+  ./gpsbabel -D 2 -t -i mtk-bin,csv=data__2007_09_04.csv -f data_2007_09_04.bin -x discard,fixnone -o gpx -F out.gpx
 
   Todo:
     o ....    
@@ -102,6 +102,12 @@ static const unsigned char LOG_RST[16] = {
 static const char *MTK_ACK[] = { /* Flags returned from PMTK001 ack packet */
   "Invalid packet", "Unsupported packet type", 
   "Valid packet but action failed", "Valid packet, action success" };
+
+#define MTK_EVT_BITMASK  (1<<0x02)
+#define MTK_EVT_PERIOD   (1<<0x03)
+#define MTK_EVT_DISTANCE (1<<0x04)
+#define MTK_EVT_SPEED    (1<<0x05)
+#define MTK_EVT_START    (1<<0x07)
 
 /* *************************************** */
 
@@ -183,6 +189,7 @@ struct mtk_loginfo {
    unsigned int bitmask;
    int logLen;
    int period, distance, speed; /* in 10:ths of sec, m, km/h */
+   int track_event;
 } mtk_loginfo;
 
 /* *************************************** */
@@ -597,10 +604,16 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm){
     char     wp_name[20];
     waypoint *trk = waypt_new();
 
-    if ( global_opts.masked_objective & TRKDATAMASK && trk_head == NULL ){
+    if ( global_opts.masked_objective & TRKDATAMASK && (trk_head == NULL || (mtk_info.track_event & MTK_EVT_START) ) ){
+        char spds[50];
         trk_head = route_head_alloc();
-        xasprintf(&trk_head->rte_desc, "Log every %.0f sec, %.0f m, %.0f km/h" 
-          , mtk_info.period/10., mtk_info.distance/10., mtk_info.speed/10.);
+        xasprintf(&trk_head->rte_name, "track-%d", 1+track_count() );
+
+        spds[0] = '\0';
+        if ( mtk_info.speed > 0 )
+           sprintf(spds, " when moving above %.0f km/h", mtk_info.speed/10.);
+        xasprintf(&trk_head->rte_desc, "Log every %.0f sec, %.0f m%s" 
+           , mtk_info.period/10., mtk_info.distance/10., spds);
         track_add_head(trk_head);
     } 
 
@@ -837,8 +850,7 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
    unsigned char crc;
    struct data_item itm;
 
-   dbg(5,"Entering mtk_parse, count = %i, dataLen = %i\n",
-									   count, dataLen);
+   dbg(5,"Entering mtk_parse, count = %i, dataLen = %i\n", count, dataLen);
    if ( global_opts.debug_level > 5 ) {
 	   int j;
 	   fprintf(stderr,"# Data block:");
@@ -1005,6 +1017,7 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
 
    add_trackpoint(count, bmask, &itm);
 
+   mtk_info.track_event = 0;
    return i;
 }
 
@@ -1028,33 +1041,40 @@ static int mtk_parse_info(const unsigned char *data, int dataLen){
             dbg(1, "# Log bitmask is: %.8x\n", bm);
             if ( is_m241 ) 
                bm &= 0x7fffffffU;
-            if ( mtk_info.bitmask != bm )
+            if ( mtk_info.bitmask != bm ){
                dbg(1," ########## Bitmask Change   %.8x -> %.8x ###########\n", mtk_info.bitmask, bm);
+               mtk_info.track_event |= MTK_EVT_BITMASK;
+            }
             mtk_info.bitmask = bm;
             mtk_info.logLen = mtk_log_len(mtk_info.bitmask);
             break;
          case 0x03:
             dbg(1, "# Log period change %.0f sec\n", cmd/10.);
+            mtk_info.track_event |= MTK_EVT_PERIOD;
             mtk_info.period = cmd;
             break;
          case 0x04:
             dbg(1, "# Log distance change %.1f m\n", cmd/10.);
+            mtk_info.track_event |= MTK_EVT_DISTANCE;
             mtk_info.distance = cmd;
             break;
          case 0x05:
             dbg(1, "# Log speed change %.1f km/h\n", cmd/10.);
+            mtk_info.track_event |= MTK_EVT_SPEED;
             mtk_info.speed  = cmd;
             break;
          case 0x06:
             dbg(1, "# Log policy change 0x%.4x\n", cmd);
-            if  ( cmd == 0x01 ) 
+            if  ( cmd == 0x01 )
                dbg(1, "# Log policy change to OVERWRITE\n");
             if  ( cmd == 0x02 ) 
                dbg(1, "# Log policy change to STOP\n");
             break;
          case 0x07:
-            if ( cmd == 0x0106 )
-              dbg(5, "# GPS Logger# Turned On\n"); // Fixme - start new trk
+            if ( cmd == 0x0106 ){
+               dbg(5, "# GPS Logger# Turned On\n"); // Fixme - start new trk
+               mtk_info.track_event |= MTK_EVT_START;
+            }
             if ( cmd == 0x0104 )
               dbg(5, "# GPS Logger# Log disabled\n");
             break;
@@ -1181,7 +1201,8 @@ static void file_read(void) {
       mtk_info.distance = log_distance;
       mtk_info.speed  = log_speed;
    }
-
+   mtk_info.track_event = 0;
+   
    pos = 0x200; // skip header...first data position 
    fseek(fl, pos, SEEK_SET);  
    

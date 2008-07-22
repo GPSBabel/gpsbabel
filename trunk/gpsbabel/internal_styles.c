@@ -717,6 +717,48 @@ static char mxf[] =
 "OFIELD	CONSTANT, \"ff0000\", \"%s\"	# COLOR\n"
 "OFIELD	CONSTANT, \"47\", \"%s\"		# ICON\n"
 ;
+static char navigonwpt[] = 
+"# gpsbabel XCSV style file\n"
+"# Author: Tom Glaab\n"
+"#\n"
+"DESCRIPTION     Navigon Waypoints\n"
+"SHORTLEN        8\n"
+"#\n"
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER         |\n"
+"RECORD_DELIMITER        NEWLINE\n"
+"BADCHARS                |\n"
+
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+
+"OFIELD  SHORTNAME, \"\",\"[%-.14s \"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"\",\"]\"\n"
+"OFIELD  CONSTANT, \"%s\",\"[0][17]\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  LON_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD  LAT_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"\"\n"
+"OFIELD  CONSTANT, \"%s\",\"49\"\n"
+;
 static char nima[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -1139,8 +1181,8 @@ static char xmapwpt[] =
 "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 31;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 32;
 #else /* CSVFMTS_ENABLED */
 style_vecs_t style_list[] = {{0,0}};
 size_t nstyles = 0;
