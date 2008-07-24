@@ -257,6 +257,7 @@ nmea_rd_init(const char *fname)
 	CHECK_BOOL(opt_gpgga);
 	CHECK_BOOL(opt_gpvtg);
 	CHECK_BOOL(opt_gpgsa);
+	CHECK_BOOL(opt_gisteq);
 
 	QUEUE_INIT(&pcmpt_head);
 
@@ -311,6 +312,7 @@ nmea_wr_init(const char *portname)
 	CHECK_BOOL(opt_gpgga);
 	CHECK_BOOL(opt_gpvtg);
 	CHECK_BOOL(opt_gpgsa);
+	CHECK_BOOL(opt_gisteq);
 
 	append_output = atoi(opt_append);
 
