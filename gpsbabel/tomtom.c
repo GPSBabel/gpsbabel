@@ -90,7 +90,9 @@ data_read(void)
 		rectype = read_char( file_in );
 		if (global_opts.debug_level >= 5)
 			printf("Reading record type %d\n", rectype );
-		if ( rectype == 0 || rectype == 100 ) {
+                switch (rectype) {
+                  case 0: 
+                  case 100:
 			if (global_opts.debug_level >= 5)
 				printf("Skipping deleted record\n" );
 			recsize = read_long( file_in ) - 5;
@@ -98,16 +100,17 @@ data_read(void)
 				printf("Skipping %li bytes\n", recsize );
 			while (recsize-- > 0)
 				(void) read_char( file_in );
-		}
-		else if ( rectype == 1 ) {
+                        break;
+		  case 1:
 			/* a block header; ignored on read */
 			read_long( file_in );
 			read_long( file_in );
 			read_long( file_in );
 			read_long( file_in );
 			read_long( file_in );
-		}
-		else if ( rectype == 2 || rectype == 3 ) {
+		        break;
+                  case 2:
+                  case 3:
 			recsize = read_long( file_in );
 			x = read_long( file_in );
 			y = read_long( file_in );
@@ -127,10 +130,22 @@ data_read(void)
 			}
 
 			waypt_add(wpt_tmp);
+		  break;
+              case 8:
+              case 9:
+                recsize = read_char( file_in ) + 6;
+                if (global_opts.debug_level >= 5)
+                  warning("Unknown record type 0x%x; skipping %d bytes.\n",
+                          rectype, recsize);
+                fprintf(stderr, "Skipping %d at 0x%x\n", recsize, gbftell(file_in));
+                while (recsize--)
+                  (void) read_char( file_in );
+                  break;
+          default:
+                if (global_opts.debug_level >= 1) {
+			warning("Unexpected waypoint record type: %d at offset 0x%x\n", rectype, gbftell(file_in) );
 		}
-		else if (global_opts.debug_level >= 1) {
-			warning("Unexpected waypoint record type: %d \n", rectype );
-		}
+                }
 	}
 }
 
