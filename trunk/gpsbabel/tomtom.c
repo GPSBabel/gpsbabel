@@ -135,12 +135,11 @@ data_read(void)
               case 9:
                 recsize = read_char( file_in ) + 6;
                 if (global_opts.debug_level >= 5)
-                  warning("Unknown record type 0x%x; skipping %d bytes.\n",
+                  warning("Unknown record type 0x%x; skipping %ld bytes.\n",
                           rectype, recsize);
-                fprintf(stderr, "Skipping %d at 0x%x\n", recsize, gbftell(file_in));
-                while (recsize--)
+                 while (recsize--)
                   (void) read_char( file_in );
-                  break;
+                 break;
           default:
                 if (global_opts.debug_level >= 1) {
 			warning("Unexpected waypoint record type: %d at offset 0x%x\n", rectype, gbftell(file_in) );
