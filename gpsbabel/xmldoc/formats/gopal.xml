@@ -1,0 +1,39 @@
+<para>The gopal format is a track format written by the
+ <ulink url="http://www.mediongopal.de/">
+   GoPal Navigation</ulink> program. </para>
+
+<para>
+  The format of the file itself is quite simple:</para>
+    <para>
+      <programlisting>
+        Fileformat GoPal
+        TICK;   TIME UTC; LONG;    LAT;       HEIGHT; SPEED km/h;  FIX; HDOP;     SAT
+        3801444, 080558, 2.944362, 43.262117, 295.28, 0.12964, 2, 2.900000, 3
+      </programlisting>
+
+Filenames are automatically created by the device as follows:
+      <programlisting>
+        trackYYYYMMDD_HHMMSS.trk  </programlisting>
+      and/or, depending on software version and settings:
+      <programlisting>
+		A_YYYYMMDD_HHMMSS.trk
+              </programlisting>
+	with HHMMSS local time (not UTC!)
+      </para> 
+      <para> 
+The file format lacks the correct date value for each trackpoint, so it has to be computed starting from the
+date given in the filename. To handle files without a parsable date in the
+name, the command line option 'date' is provided.
+</para>
+<para>
+Conversions from gopal into any other format are a bit lossy concerning the first field of each line wich looks like an useless time tick value
+and is simply discarded while reading. If written, there will be a time_t value from the current (computed) timestamp.
+</para>
+<para>
+
+Filtering out invalid data points is handled by the options 'clean', 'minspeed' and 'maxspeed'.
+For each datapoint the speed needed to come the from the last valid point is
+calculated and compared with the limits.
+Thus one cat easily discard unreliable points.
+
+         </para>
