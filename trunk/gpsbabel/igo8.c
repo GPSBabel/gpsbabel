@@ -17,6 +17,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
+	July 26, 2008 - Dustin: Added tracknum, title, and description options
+	July 26, 2008 - Dustin: Validated the new code for char to Unicode conversion
  */
 
 
@@ -94,10 +96,26 @@ typedef struct _igo8_point
 	gbuint32 lat;
 } igo8_point, *p_igo8_point;
 
+// Files
 static gbfile *igo8_file_in;
 static gbfile *igo8_file_out;
+
+// Options
+static char* igo8_option_tracknum = NULL;
+static char* igo8_option_title = NULL;
+static char* igo8_option_description = NULL;
+
+// Internal state
 gbuint32 invented_time;
 gbuint32 point_count;
+
+// Exported options list
+static arglist_t igo8_options[] = {
+	{ "tracknum", &igo8_option_tracknum, "Track identification number", NULL, ARGTYPE_INT, ARG_NOMINMAX },
+	{ "title", &igo8_option_title, "Track title", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+	{ "description", &igo8_option_description, "Track description", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+	ARG_TERMINATOR
+};
 
 // Sanity check
 static void igo8_check_type_sizes()
@@ -224,6 +242,40 @@ static void write_igo8_track_point(const waypoint *wpt)
 	point_count++;
 }
 
+// Write src unicode str to the dst cstring using unicode characters
+// All lengths are in bytes
+unsigned int print_unicode(char *dst, const unsigned int dst_max_length, short *src, unsigned int src_len)
+{
+	// Check to see what length we were passed, if the length doesn't include the null
+	// then we make it include the null
+	if (src[(src_len/2) - 1] != 0)
+	{
+		// If the last character isn't null check the next one
+		if (src[(src_len/2)] != 0)
+		{
+			// If the next character also inst' null, make it null
+			src[(src_len/2)] = 0;
+		}
+		else
+		{
+			// The next character is null, adjust the total length of the str to account for this
+			src_len += 2;
+		}
+	}
+
+	// Make sure we fit in our dst size
+	if (src_len > dst_max_length)
+	{
+		src_len = dst_max_length;
+		src[(src_len/2) - 1] = 0; // Make sure we keep that terminating null around
+	}
+
+	// Copy the str
+	memcpy(dst, src, src_len);
+
+	return src_len;
+}
+
 // This is a sort of hacked together ascii-> unicode 2 converter.  I have no idea
 // if iGo8 even supports real unicode 2, but is does look like it as every ascii
 // character is a short with the ascii character as the least significant 7 bits
@@ -232,44 +284,23 @@ static void write_igo8_track_point(const waypoint *wpt)
 // fit.
 
 /* 2008/06/24, O.K.: Use CET library for ascii-> unicode 2 converter */
+// 2008/07/25, Dustin: Slight fix to make sure that we always null terminate the
+//                     string, validate that the use of the CET library provides
+//                     conmforming output, remove my old junk converter code.
 
-unsigned int ascii_to_unicode_2(char *dst, const int dst_max_length, const char *src)
+unsigned int ascii_to_unicode_2(char *dst, const unsigned int dst_max_length, const char *src)
 {
-#if 1
 	short *unicode;
-	int len;
+	unsigned int len;
 
 	unicode = cet_str_any_to_uni(src, &cet_cs_vec_ansi_x3_4_1968, &len);
 
-	len += 1;	/* include terminating null */
-	len *= 2;	/* real size */
-	if (len > dst_max_length) len = dst_max_length;
-	memcpy(dst, unicode, len);
-	
+	len *= 2;	/* real size in bytes */
+	len = print_unicode(dst, dst_max_length, unicode, len);
+
 	xfree(unicode);
 	
 	return len;
-#else
-	unsigned int current_src_position = 0;
-	unsigned int current_dst_position = 0;
-	unsigned short current_unicode_char;
-
-	while (src[current_src_position] != '\0' && current_dst_position+4 <= dst_max_length)
-	{
-		le_write16(&current_unicode_char, src[current_src_position]);
-		*(gbuint16*)&dst[current_dst_position] = current_unicode_char;
-		current_src_position++;
-		current_dst_position += 2;
-	}
-
-	if (src[current_src_position] == '\0' && current_dst_position+2 <= dst_max_length)
-	{
-		*(gbuint16*)&dst[current_dst_position] = 0;
-		current_dst_position += 2;
-	}
-
-	return current_dst_position;
-#endif
 }
 
 void write_header()
@@ -278,7 +309,10 @@ void write_header()
 	igo8_id_block tmp_id_block;
 	p_igo8_id_block id_block = (p_igo8_id_block)header;
 	gbuint32 current_position = 0;
+	char* title = "Title";
+	char* description = "Description";
 
+	// These values seem to be constant for me, but I have no idea what they are.
 	tmp_id_block.unknown_1 = 0x0000029B;
 	tmp_id_block.unknown_2 = 0x000003E7;
 	tmp_id_block.unknown_3 = 0x00000003;
@@ -286,11 +320,17 @@ void write_header()
 	// This appears to be a unique number that IDs the track.
 	// It is mono-incrementing and offset by 2 above the track number.
 	// e.g. "Track 1" --> track_number = 3
-	// XXX - Dustin: This might need to be modified to print a number that is user-provided.
 	// XXX - Dustin: My guess is that this number is used as the key for the track color, if 
 	// XXX - Dustin: multiple tracks have the same color they will be colored the same, just
 	// XXX - Dustin: a guess though.
-	tmp_id_block.track_number = 0x00000010;
+	if (igo8_option_tracknum)
+	{
+		tmp_id_block.track_number = atoi(igo8_option_tracknum);
+	}
+	else
+	{
+		tmp_id_block.track_number = 0x00000010;
+	}
 	tmp_id_block.unknown_4 = 0x00000001;
 
 	// Byte swap out to the header buffer.
@@ -304,12 +344,20 @@ void write_header()
 	current_position += sizeof(*id_block);
 
 	// Set the title of the track
-	// XXX - Dustin: This needs to modified to print a title that the user provides.
-	current_position += ascii_to_unicode_2((char*)(header+current_position), IGO8_HEADER_SIZE - current_position, "Title");
+	// Note: we shorten the length of the potential title by 2 because we need to leave at
+	//       least enough room to have a null for the description string that follows it.
+	if (igo8_option_title)
+	{
+		title = igo8_option_title;
+	}
+	current_position += ascii_to_unicode_2((char*)(header+current_position), IGO8_HEADER_SIZE - current_position - 2, title);
 
 	// Set the description of the track
-	// XXX - Dustin: This needs to modified to print a description that the user provides.
-	current_position += ascii_to_unicode_2((char*)(header+current_position), IGO8_HEADER_SIZE - current_position, "Description");
+	if (igo8_option_description)
+	{
+		description = igo8_option_description;
+	}
+	current_position += ascii_to_unicode_2((char*)(header+current_position), IGO8_HEADER_SIZE - current_position, description);
 
 	gbfwrite(&header, IGO8_HEADER_SIZE, 1, igo8_file_out);
 }
@@ -332,7 +380,7 @@ ff_vecs_t igo8_vecs = {
 	igo8_read,
 	igo8_write,
 	NULL,
-	NULL,
+	igo8_options,
 	CET_CHARSET_UTF8, 
 	1
 };
