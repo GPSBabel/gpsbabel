@@ -178,6 +178,7 @@ static char *opt_gisteq;
 static long sleepus;
 static int getposn;
 static int append_output;
+static int amod_waypoint;
 
 static time_t last_time;
 static double last_read_time;   /* Last timestamp of GGA or PRMC */
@@ -548,7 +549,8 @@ gprmc_parse(char *ibuf)
 			 * going from 235959 to 000000. */
 			 nmea_set_waypoint_time(curr_waypt, &tm, microseconds);
 		}
-		return;
+                if (!amod_waypoint)
+			return;
 	}
 		
 	waypt  = waypt_new();
@@ -567,6 +569,11 @@ gprmc_parse(char *ibuf)
 
 	nmea_release_wpt(curr_waypt);
 	curr_waypt = waypt;
+
+	if (amod_waypoint) {
+		waypt_add(waypt_dupe(waypt));
+		amod_waypoint = 0;
+	}
 }
 
 static void
@@ -926,7 +933,10 @@ nmea_parse_one_line(char *ibuf)
 	} else
 	if (opt_gpgsa && (0 == strncmp(tbuf, "$GPGSA,",7))) {
 		gpgsa_parse(tbuf); /* GPS fix */
-	}
+	} else
+        if (0 == strncmp(tbuf, "$ADPMB,5,0", 10)) {
+          	amod_waypoint = 1;
+        }
 
 	if (tbuf != ibuf) {
 	  /* clear up the dynamic buffer we used because substition was required */
