@@ -140,6 +140,7 @@ extern ff_vecs_t destinator_trl_vecs;
 extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t exif_vecs;
 extern ff_vecs_t vidaone_vecs;
+extern ff_vecs_t gopal_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -795,6 +796,12 @@ vecs_t vec_list[] = {
 		"IGO8 .trk",
 		"trk"
 	},
+	{
+                &gopal_vecs,
+                "gopal",
+                "GoPal GPS track log (.trk)",
+		"trk"
+        },
 #endif // MAXIMAL_ENABLED
 	{
 		NULL,
