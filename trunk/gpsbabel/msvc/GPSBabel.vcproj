@@ -505,10 +505,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\dg-100.c"
-				>
-			</File>
-			<File
 				RelativePath="..\delgpl.c"
 				>
 				<FileConfiguration
@@ -546,6 +542,10 @@
 			</File>
 			<File
 				RelativePath="..\destinator.c"
+				>
+			</File>
+			<File
+				RelativePath="..\dg-100.c"
 				>
 			</File>
 			<File
@@ -717,6 +717,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\garmin_device_xml.c"
+				>
+			</File>
+			<File
 				RelativePath="..\garmin_fs.c"
 				>
 			</File>
@@ -874,6 +878,10 @@
 			</File>
 			<File
 				RelativePath="..\google.c"
+				>
+			</File>
+			<File
+				RelativePath="..\gopal.c"
 				>
 			</File>
 			<File
@@ -2437,10 +2445,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\vidaone.c"
-				>
-			</File>
-			<File
 				RelativePath="..\vecs.c"
 				>
 				<FileConfiguration
@@ -2475,6 +2479,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\vidaone.c"
+				>
 			</File>
 			<File
 				RelativePath="..\vitosmt.c"
@@ -3154,15 +3162,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\jeeps\gpsdevice.h"
-				>
-			</File>
-			<File
 				RelativePath="..\gbfile.h"
 				>
 			</File>
 			<File
 				RelativePath="..\gbtypes.h"
+				>
+			</File>
+			<File
+				RelativePath="..\jeeps\gpsdevice.h"
 				>
 			</File>
 			<File
@@ -3194,7 +3202,8 @@
 				>
 			</File>
 			<File
-				RelativePath="..\uuid.h">
+				RelativePath="..\uuid.h"
+				>
 			</File>
 			<Filter
 				Name="Jeeps-Headers"
