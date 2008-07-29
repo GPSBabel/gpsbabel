@@ -270,7 +270,7 @@ cet_utf8_to_char(const char *str, const cet_cs_vec_t *vec, /* out */ int *bytes,
  *
  * Returns the number of valid (visible) characters.
  */
-int 
+unsigned int 
 cet_utf8_strlen(const char *str)
 {
 	if (str) {

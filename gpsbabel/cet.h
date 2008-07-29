@@ -70,7 +70,7 @@ char *cet_str_uni_to_utf8(const short *src, const int length);
 
 /* UTF-8 string manipulation functions */
 
-int cet_utf8_strlen(const char *str);
+unsigned int cet_utf8_strlen(const char *str);
 char *cet_utf8_strdup(const char *str);
 char *cet_utf8_strndup(const char *str, const int maxlen);
 
