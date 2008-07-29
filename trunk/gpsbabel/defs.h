@@ -933,8 +933,8 @@ typedef enum {
 
 /* bit manipulation functions (util.c) */
 
-char getbit(const void *buf, const gbuint32 nr);
-void setbit(void *buf, const gbuint32 nr);
+char gb_getbit(const void *buf, const gbuint32 nr);
+void gb_setbit(void *buf, const gbuint32 nr);
 
 /*
  *  From parse.c

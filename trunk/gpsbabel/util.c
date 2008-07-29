@@ -1742,7 +1742,7 @@ char *get_filename(const char *fname)
 /*
  * setbit: Set bit number [nr] of buffer [buf]
  */
-void setbit(void *buf, const gbuint32 nr)
+void gb_setbit(void *buf, const gbuint32 nr)
 {
 	unsigned char *bytes = buf;
 	bytes[nr / 8] |= (1 << (nr % 8));
@@ -1751,10 +1751,9 @@ void setbit(void *buf, const gbuint32 nr)
 /*
  * setbit: Get state of bit number [nr] of buffer [buf]
  */
-char getbit(const void *buf, const gbuint32 nr)
+char gb_getbit(const void *buf, const gbuint32 nr)
 {
 	const unsigned char *bytes = buf;
 	return (bytes[nr / 8] & (1 << (nr % 8)));
 	
 }
-
