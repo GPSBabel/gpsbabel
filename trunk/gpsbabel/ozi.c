@@ -512,7 +512,7 @@ ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp, ozi_fsdata *fsdata)
         break;
     case 13:
         /* proximity distance - meters */
-	WAYPT_SET(wpt_tmp, proximity, atof(str));
+	WAYPT_SET(wpt_tmp, proximity, atof(str) * prox_scale);
         break;
     case 14:
         /* altitude */
