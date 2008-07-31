@@ -1482,6 +1482,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\session.c">
+			</File>
+			<File
 				RelativePath="..\shape.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -2439,6 +2442,9 @@
 			</File>
 			<File
 				RelativePath="..\quovadis.h">
+			</File>
+			<File
+				RelativePath="..\session.h">
 			</File>
 			<File
 				RelativePath="..\uuid.h">
