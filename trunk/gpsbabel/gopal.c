@@ -317,10 +317,12 @@ static void
 gopal_route_tlr(const route_head *rte)
 {
 }
+
 static void
 gopal_write_waypt(const waypoint *wpt)
 {
 	char tbuffer[64];
+	unsigned long long timestamp;
 	int fix=fix_unknown;
 	//TICK;    TIME;   LONG;     LAT;       HEIGHT; SPEED;  UN; HDOP;     SAT
 	//3801444, 080558, 2.944362, 43.262117, 295.28, 0.12964, 2, 2.900000, 3 
@@ -333,7 +335,9 @@ gopal_write_waypt(const waypoint *wpt)
 		default:		fix = 0; break;
 		}
 	}
-	gbfprintf(fout, "%lu, %s, %lf, %lf, %5.1lf, %8.5lf, %d, %lf, %d\n", (unsigned long) wpt->creation_time,tbuffer,  wpt->longitude, wpt->latitude,wpt->altitude,
+	//MSVC handles time_t as int64, gcc and mac only int32, so convert it: 
+	timestamp=(unsigned long long)wpt->creation_time;
+	gbfprintf(fout, "%llu, %s, %lf, %lf, %5.1lf, %8.5lf, %d, %lf, %d\n",timestamp,tbuffer,  wpt->longitude, wpt->latitude,wpt->altitude,
 	wpt->speed,fix,wpt->hdop,wpt->sat);
 }
 
@@ -353,16 +357,7 @@ gopal_wr_deinit(void)
 static void
 gopal_write(void)
 {
-	//route_disp_all(gopal_route_hdr, gopal_route_tlr, gopal_write_waypt);	
-	if (global_opts.objective == wptdata) 
-	{
-		waypt_disp_all(gopal_write_waypt);
-		
-	} else
-	//if (global_opts.objective == rtedata) 
-	{
-		route_disp_all(gopal_route_hdr, gopal_route_tlr, gopal_write_waypt);
-	}
+	route_disp_all(gopal_route_hdr, gopal_route_tlr, gopal_write_waypt);
 }
 
 static void
@@ -378,9 +373,9 @@ gopal_exit(void)		/* optional */
 ff_vecs_t gopal_vecs = {
 	ff_type_file,
 	{ 
-		ff_cap_read | ff_cap_write 	 	/* waypoints */, 
-		ff_cap_none	 					/* tracks */, 
-		ff_cap_read | ff_cap_write  	/* routes */
+		ff_cap_none 	 	/* waypoints */, 
+		ff_cap_read | ff_cap_write	/* tracks */, 
+		ff_cap_none  	/* routes */
 	},
 	gopal_rd_init,	
 	gopal_wr_init,	
