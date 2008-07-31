@@ -291,7 +291,7 @@ unsigned int print_unicode(char *dst, const unsigned int dst_max_length, short *
 unsigned int ascii_to_unicode_2(char *dst, const unsigned int dst_max_length, const char *src)
 {
 	short *unicode;
-	unsigned int len;
+	int len;
 
 	unicode = cet_str_any_to_uni(src, &cet_cs_vec_ansi_x3_4_1968, &len);
 
