@@ -37,6 +37,7 @@
 #include "cet.h"
 #include "cet_util.h"
 #include "inifile.h"
+#include "session.h"
 
 // Turn on Unicode in expat?
 #ifdef _UNICODE
@@ -435,6 +436,7 @@ typedef struct {
 	float temperature; /* Degrees celsius */
 	geocache_data gc_data;
 	format_specific_data *fs;
+	session_t *session;	/* pointer to a session struct */
 	void *extra_data;	/* Extra data added by, say, a filter. */
 } waypoint;
 
@@ -707,6 +709,7 @@ typedef struct ff_vecs {
 	char *encode;
 	int fixed_encode;
 	position_ops_t position_ops;
+	const char *name;		/* dyn. initialized by find_vec */
 } ff_vecs_t;
 
 typedef struct style_vecs {

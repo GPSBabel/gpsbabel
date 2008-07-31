@@ -973,6 +973,7 @@ find_vec(char *const vecname, char **opts)
 		xcsv_setup_internal_style( NULL );
 #endif // CSVFMTS_ENABLED		
 		xfree(v);
+		vec->vec->name = vec->name;	/* needed for session information */
 		return vec->vec;
 		
 	}
@@ -1028,7 +1029,7 @@ find_vec(char *const vecname, char **opts)
 #endif // CSVFMTS_ENABLED		
 
 		xfree(v);
-
+		vec_list[0].vec->name = svec->name;	/* needed for session information */
 		return vec_list[0].vec;
 	}
 	

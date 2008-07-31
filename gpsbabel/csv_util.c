@@ -63,6 +63,8 @@ typedef enum {
 	XT_DESCRIPTION,
 	XT_EXCEL_TIME,
 	XT_FACILITY,
+	XT_FILENAME,
+	XT_FORMAT,
 	XT_GEOCACHE_CONTAINER,
 	XT_GEOCACHE_DIFF,
 	XT_GEOCACHE_HINT,
@@ -1832,6 +1834,13 @@ xcsv_waypt_pr(const waypoint *wpt)
 		garmin_fs_t *gmsd = GMSD_FIND(wpt);
 		writebuff(buff, fmp->printfc, GMSD_GET(facility, ""));
 		}
+		break;
+	/* specials */
+	case XT_FILENAME:
+		writebuff(buff, fmp->printfc, wpt->session->filename);
+		break;
+	case XT_FORMAT:
+		writebuff(buff, fmp->printfc, wpt->session->name);
 		break;
 	case -1:
 		if (strncmp(fmp->key, "LON_10E", 7) == 0) {

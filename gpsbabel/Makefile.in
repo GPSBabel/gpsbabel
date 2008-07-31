@@ -91,7 +91,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
           uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
 	  inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
-	  gbfile.o parse.o avltree.o \
+	  gbfile.o parse.o avltree.o session.o \
 	$(PALM_DB) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
@@ -695,6 +695,7 @@ route.o: route.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
 saroute.o: saroute.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h
+session.o: session.h session.c defs.h gbtypes.h
 shape.o: shape.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h shapelib/shapefil.h
 smplrout.o: smplrout.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
@@ -778,7 +779,7 @@ vitovtt.o: vitovtt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
 vmem.o: vmem.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h
-waypt.o: waypt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+waypt.o: waypt.c defs.h config.h queue.h gbtypes.h zlib/zlib.h session.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h garmin_fs.h \
   jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
   jeeps/gps.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
