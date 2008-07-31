@@ -2101,6 +2101,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\session.c"
+				>
+			</File>
+			<File
 				RelativePath="..\shape.c"
 				>
 			</File>
@@ -3199,6 +3203,10 @@
 			</File>
 			<File
 				RelativePath="..\quovadis.h"
+				>
+			</File>
+			<File
+				RelativePath="..\session.h"
 				>
 			</File>
 			<File
