@@ -24,6 +24,7 @@
 #include "cet_util.h"
 #include "csv_util.h"
 #include "inifile.h"
+#include "session.h"
 #include <ctype.h>
 #include <signal.h>
 
@@ -260,6 +261,7 @@ main(int argc, char *argv[])
 	}
 	
 	cet_register();
+	session_init();
 	waypt_init();
 	route_init();
 
@@ -349,6 +351,7 @@ main(int argc, char *argv[])
 			
 				cet_convert_init(ivecs->encode, ivecs->fixed_encode);	/* init by module vec */
 
+				start_session(ivecs->name, fname);
 				ivecs->rd_init(fname);
 				ivecs->read();
 				ivecs->rd_deinit();
@@ -568,6 +571,7 @@ main(int argc, char *argv[])
 					
 		cet_convert_init(ivecs->encode, 1);
 
+		start_session(ivecs->name, argv[0]);
 		ivecs->rd_init(argv[0]);
 		ivecs->read();
 		ivecs->rd_deinit();
@@ -620,6 +624,7 @@ main(int argc, char *argv[])
 
 
 		if (ivecs->position_ops.rd_init) {
+			start_session(ivecs->name, fname);
 			ivecs->position_ops.rd_init(fname);
 		}
 
@@ -681,6 +686,7 @@ main(int argc, char *argv[])
 	cet_deregister();
 	waypt_flush_all();
 	route_flush_all();
+	session_exit();
 	exit_vecs();
 	exit_filter_vecs();
 	inifile_done(global_opts.inifile);

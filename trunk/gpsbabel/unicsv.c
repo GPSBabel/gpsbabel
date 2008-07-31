@@ -222,7 +222,7 @@ static route_head *unicsv_track, *unicsv_route;
 static char unicsv_outp_flags[(fld_terminator + 8) / 8];
 static grid_type unicsv_grid_idx;
 static int unicsv_datum_idx;
-static char *opt_datum, *opt_grid, *opt_utc;
+static char *opt_datum, *opt_grid, *opt_utc, *opt_filename, *opt_format;
 static int unicsv_waypt_ct;
 static char unicsv_detect;
 
@@ -233,6 +233,10 @@ static arglist_t unicsv_args[] = {
 		NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	{"utc",   &opt_utc,   "Write timestamps with offset x to UTC time", 
 		NULL, ARGTYPE_INT, "-23", "+23"},
+	{"format", &opt_format,   "Write name(s) of format(s) from input session(s)", 
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	{"filename", &opt_filename,   "Write filename(s) from input session(s)", 
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	ARG_TERMINATOR };
 
 
@@ -1310,6 +1314,9 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	if FIELD_USED(fld_garmin_fax_nr) unicsv_print_str(GMSD_GET(fax_nr, NULL));
 	if FIELD_USED(fld_garmin_email) unicsv_print_str(GMSD_GET(email, NULL));
 
+	if (opt_format) unicsv_print_str(wpt->session->name);
+	if (opt_filename) unicsv_print_str(wpt->session->filename);
+
 	gbfputs(UNICSV_LINE_SEP, fout);
 }
 
@@ -1428,6 +1435,9 @@ unicsv_wr(void)
 	if FIELD_USED(fld_garmin_phone_nr2) gbfprintf(fout, "%sPhone2", unicsv_fieldsep);
 	if FIELD_USED(fld_garmin_fax_nr) gbfprintf(fout, "%sFax", unicsv_fieldsep);
 	if FIELD_USED(fld_garmin_email) gbfprintf(fout, "%sEmail", unicsv_fieldsep);
+	
+	if (opt_format) gbfprintf(fout, "%sFormat", unicsv_fieldsep);
+	if (opt_filename) gbfprintf(fout, "%sFilename", unicsv_fieldsep);
 	
 	gbfputs(UNICSV_LINE_SEP, fout);
 

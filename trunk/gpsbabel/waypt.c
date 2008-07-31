@@ -24,6 +24,7 @@
 #include "cet_util.h"
 #include "grtcirc.h"
 #include "garmin_fs.h"
+#include "session.h"
 
 queue waypt_head;
 static unsigned int waypt_ct;
@@ -173,6 +174,7 @@ waypt_new(void)
 	wpt->altitude = unknown_alt;
 	wpt->fix = fix_unknown;
 	wpt->sat = -1;
+	wpt->session = curr_session();
 
 	QUEUE_INIT(&wpt->Q);
 	return wpt;
