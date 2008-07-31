@@ -56,6 +56,7 @@ start_session(const char *name, const char *filename)
 
 	s = xcalloc(1, sizeof(*s));
 	ENQUEUE_TAIL(&session_list, &s->Q);
+	QUEUE_INIT(&s->category_list);
 	s->nr = session_ct;
 	s->name = name;
 	s->filename = xstrdup(filename);
