@@ -120,7 +120,12 @@ gtc_waypt_pr(const waypoint *wpt)
 	xml_write_time(ofd, wpt->creation_time, "Time");
 	gbfprintf(ofd, "            </Trackpoint>\n");
 #else
-	gtc_write_xml(1, "<Trackpoint>\n");
+    if (wpt->wpt_flags.is_split != 0) {
+        gtc_write_xml(1, "<Trackpoint split=\"yes\">\n");
+    } else {
+        gtc_write_xml(1, "<Trackpoint>\n");
+    }
+
 	if (wpt->creation_time) {
 		char time_string[100];
 		xml_fill_in_time(time_string, wpt->creation_time, wpt->microseconds,

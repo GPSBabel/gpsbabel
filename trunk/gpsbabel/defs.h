@@ -335,6 +335,8 @@ typedef struct {
 	unsigned int altitude:1;		/+ altitude field is set +/
 	... and others
 	*/
+	unsigned int is_split:1;		/* the waypoint represents a split */
+
 	
 } wp_flags;
 

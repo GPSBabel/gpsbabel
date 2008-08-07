@@ -352,6 +352,40 @@ waypt_read(void)
 	}
 }
 
+static int lap_read_nop_cb(int n, struct GPS_SWay** dp)
+{
+	return 0;
+}
+
+// returns 1 if the waypoint's start_time can be found
+// in the laps array, 0 otherwise
+unsigned int checkWayPointIsAtSplit(waypoint *wpt, GPS_PLap *laps, int nlaps)
+{
+    int result = 0;
+
+    if ((laps != NULL) && (nlaps > 0)) {
+        int i;
+        for (i=(nlaps-1); i >= 0; i--) {
+            GPS_PLap lap = laps[i];
+            time_t delta = lap->start_time - wpt->creation_time;
+            if ((delta >= -1) && (delta <= 1)) {
+                result = 1;
+                break;
+
+            // as an optimization this will stop going through
+            // the lap array when the negative delta gets too
+            // big. It assumes that laps is sorted by time in
+            // ascending order (which appears to be the case for
+            // Forerunners. Don't know about other devices.
+            } else if (delta < -1) {
+                break;
+            }
+        }
+    }
+
+   return result;
+}
+
 static
 void
 track_read(void)
@@ -364,6 +398,13 @@ track_read(void)
 	int trk_seg_num = 1;
 	char trk_seg_num_buf[10];
 	char *trk_name = "";
+	GPS_PLap* laps = NULL;
+	int nlaps = 0;
+
+	if (gps_lap_type != -1) {
+		nlaps = GPS_Command_Get_Lap(portname, &laps, &lap_read_nop_cb);
+	}
+
 
 	ntracks = GPS_Command_Get_Track(portname, &array, waypt_read_cb);
 
@@ -414,6 +455,8 @@ track_read(void)
 		wpt->cadence = array[i]->cadence;
 		wpt->shortname = xstrdup(array[i]->trk_ident);
 		wpt->creation_time = array[i]->Time;
+                wpt->wpt_flags.is_split = checkWayPointIsAtSplit(wpt, laps,
+                                                                 nlaps);
 		
 		track_add_wpt(trk_head, wpt);
 	}
