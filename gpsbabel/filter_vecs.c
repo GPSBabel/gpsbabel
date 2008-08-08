@@ -44,6 +44,7 @@ extern filter_vecs_t discard_vecs;
 extern filter_vecs_t nuke_vecs;
 extern filter_vecs_t interpolatefilt_vecs;
 extern filter_vecs_t transform_vecs;
+extern filter_vecs_t height_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -118,6 +119,12 @@ fl_vecs_t filter_vec_list[] = {
 		"transform",
 		"Transform waypoints into a route, tracks into routes, ..."
 	},
+	{
+		&height_vecs,
+		"height",
+		"Manipulate altitudes"
+	},
+	
 #endif
         {
 		NULL,

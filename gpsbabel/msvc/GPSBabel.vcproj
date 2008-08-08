@@ -1089,6 +1089,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\height.c"
+				>
+			</File>
+			<File
 				RelativePath="..\hiketech.c"
 				>
 			</File>
