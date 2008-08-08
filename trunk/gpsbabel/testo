@@ -1380,4 +1380,13 @@ ${PNAME} -i gpx -f ${TMPDIR}/${GoPalName}.im2  -o gopal -F ${TMPDIR}/${GoPalName
 compare ${TMPDIR}/${GoPalName}.tst2 ${TMPDIR}/${GoPalName}.tst3
 
 
+#
+# Height filter
+#
+rm -f ${TMPDIR}/height_out.gpx
+${PNAME} -i gpx -f ${REFERENCE}/track/height.gpx \
+		-x height,wgs84tomsl,add=100m  \
+		-o gpx -F ${TMPDIR}/height_out.gpx
+compare ${TMPDIR}/height_out.gpx ${REFERENCE}/track/height_out.gpx
+
 exit 0
