@@ -1,0 +1,23 @@
+<para>
+  This format supports Humminbird waypoints (.hwr files).
+</para>
+<para>
+  If you do "save all nav data" on the device, you'll get a 
+  <filename>data.hwr</filename> file on the flash card (on a 797 in the <filename>matrix</filename> directory).
+</para>
+<para>
+  Supported models:
+  <simplelist>
+    <member>797c2i SI</member>
+  </simplelist>
+ (They should all work, but this is the only one tested so far.)
+ </para> 
+<para>
+  Known limits:
+  <simplelist>
+    <member>max 12 characters for waypoint names.</member>
+    <member>Only does waypoints. Tracks are in a different file 
+            (like <filename>000.ht</filename>).</member>
+  </simplelist>
+</para>
+
