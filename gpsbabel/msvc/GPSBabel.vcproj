@@ -1173,6 +1173,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\humminbird.c"
+				>
+			</File>
+			<File
 				RelativePath="..\igc.c"
 				>
 			</File>
