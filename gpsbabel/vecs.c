@@ -141,6 +141,7 @@ extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t exif_vecs;
 extern ff_vecs_t vidaone_vecs;
 extern ff_vecs_t gopal_vecs;
+extern ff_vecs_t humminbird_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -801,6 +802,12 @@ vecs_t vec_list[] = {
                 "gopal",
                 "GoPal GPS track log (.trk)",
 		"trk"
+        },
+	{
+		&humminbird_vecs,
+		"humminbird",
+		"Humminbird waypoints (.hwr)",
+		"hwr"
         },
 #endif // MAXIMAL_ENABLED
 	{
