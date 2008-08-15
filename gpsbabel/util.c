@@ -210,8 +210,10 @@ xrealloc(void *p, size_t s)
 {
 	char *o = (char *) realloc(p,s);
 #ifdef DEBUG_MEM
-	debug_mem_output( "realloc, %x, %x, %x, %s, %d\n", 
-			o, p, s, file, line );
+	if (p != NULL)
+		debug_mem_output( "realloc, %x, %x, %x, %s, %d\n", o, p, s, file, line );
+	else
+		debug_mem_output( "malloc, %x, %d, %s, %d\n", o, s, file, line );
 #endif
 
 	if (!o) {
