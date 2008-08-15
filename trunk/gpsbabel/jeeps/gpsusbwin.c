@@ -225,7 +225,7 @@ gusb_init(const char *pname, gpsdevh **dh)
 				(GUID *) &GARMIN_GUID, 
 				req_unit_number, &devinterface)) {
 			GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
-			warning("Is the Garmin USB unit number %d powered up and connected?\nIs it really a USB unit?  If it's serial, don't choose USB, choose serial.", un);
+			warning("Is the Garmin USB unit number %d powered up and connected?\nIs it really a USB unit?  If it's serial, don't choose USB, choose serial.\nAre the Garmin USB drivers installed and functioning with other programs?\nIs it a storage based device like Nuvi, CO, or OR?\n  If so, send GPX files to it, don't use this module.", un);
 			return 0;
 		}
 		/* We've matched.  Now start the specific unit. */
