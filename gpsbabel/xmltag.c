@@ -25,7 +25,8 @@
 
 #include "defs.h"
 
-void free_xml_tag( xml_tag *tag )
+static void
+free_xml_tag( xml_tag *tag )
 {
 	xml_tag *next = NULL;
 	char **ap;
@@ -58,7 +59,8 @@ void free_xml_tag( xml_tag *tag )
 	}
 }
 
-void copy_xml_tag( xml_tag **copy, xml_tag *src, xml_tag *parent ) {
+static void
+copy_xml_tag( xml_tag **copy, xml_tag *src, xml_tag *parent ) {
 	xml_tag *res = NULL;
 	char **ap = NULL;
 	char **ap2 = NULL;
@@ -117,7 +119,8 @@ convert_xml_tag( xml_tag *tag ) {
 
 fs_xml *fs_xml_alloc( long type );
 
-void fs_xml_destroy( void *fs ) {
+static void
+fs_xml_destroy( void *fs ) {
 	fs_xml *xml = (fs_xml *)fs;
 	if ( xml ) {
 		free_xml_tag( xml->tag );
@@ -125,7 +128,8 @@ void fs_xml_destroy( void *fs ) {
 	xfree( fs );
 }
 
-void fs_xml_copy( void **copy, void *source ) {
+static void
+fs_xml_copy( void **copy, void *source ) {
 	fs_xml *src = (fs_xml *)source;
 	if ( !source ) {
 		*copy = NULL;
@@ -136,7 +140,8 @@ void fs_xml_copy( void **copy, void *source ) {
 	copy_xml_tag( &(((fs_xml *)(*copy))->tag), src->tag, NULL );
 }
 
-void fs_xml_convert( void *fs ) {
+static void
+fs_xml_convert( void *fs ) {
 	fs_xml *xml = (fs_xml *)fs;
 	if ( xml ) {
 		convert_xml_tag( xml->tag );
