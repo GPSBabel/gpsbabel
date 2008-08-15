@@ -142,6 +142,7 @@ extern ff_vecs_t exif_vecs;
 extern ff_vecs_t vidaone_vecs;
 extern ff_vecs_t gopal_vecs;
 extern ff_vecs_t humminbird_vecs;
+extern ff_vecs_t tr7_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -809,6 +810,12 @@ vecs_t vec_list[] = {
 		"Humminbird waypoints (.hwr)",
 		"hwr"
         },
+	{
+		&tr7_vecs,
+		"tr7",
+		"MapAsia track file (.tr7)",
+		"tr7"
+	},
 #endif // MAXIMAL_ENABLED
 	{
 		NULL,
