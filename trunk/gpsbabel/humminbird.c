@@ -30,8 +30,8 @@
 
 static
 arglist_t humminbird_args[] = {
-// {"foo", &fooopt, "The text of the foo option in help", 
-//   "default", ARGYTPE_STRING, ARG_NOMINMAX} , 
+//	{"foo", &fooopt, "The text of the foo option in help",
+//	 "default", ARGYTPE_STRING, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
 
@@ -50,7 +50,6 @@ typedef struct humminbird_waypt_s {
         char     name[12];
 } humminbird_waypt_t;
 
-# if 0
 static const char* humminbird_icons[] = {
 	"Normal",       /*  0 */
 	"House",        /*  1 */
@@ -83,11 +82,11 @@ static const char* humminbird_icons[] = {
 	"Recording",    /* 28 */
 	"Snapshot"      /* 29 */
 };
-#endif
 
 static gbfile* fin;
+static gbfile* fout;
+static int waypoint_num = 0;
 
-# if 0
 /* Takes a latitude in degrees,
  * returns a latitude in degrees. */
 static double
@@ -99,13 +98,11 @@ geodetic_to_geocentric_hwr(const double gd_lat) {
 
         return atan(cos2_ae * tan(gdr)) * 180.0/M_PI;
 }
-#endif
 
 /* Takes a latitude in degrees,
  * returns a latitude in degrees. */
 static double
 geocentric_to_geodetic_hwr(const double gc_lat) {
-//        const double cos_ae = i1924_polar_axis/i1924_equ_axis;
 	const double cos_ae = 0.9966349016452;
 
 	const double cos2_ae = cos_ae * cos_ae;
@@ -123,7 +120,6 @@ gudermannian_i1924(const double x) {
         return atan(sinh(norm_x)) * 180.0/M_PI;
 }
 
-#if 0
 /* Takes latitude in degrees, returns projected "north" value. */
 static double
 inverse_gudermannian_i1924(const double x) {
@@ -132,7 +128,6 @@ inverse_gudermannian_i1924(const double x) {
 
         return guder * i1924_equ_axis;
 }
-#endif 
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
@@ -153,11 +148,10 @@ humminbird_rd_deinit(void)
 static void
 humminbird_read(void)
 {
-	
 	while(! gbfeof(fin)) {
 		humminbird_waypt_t w;
 		double guder;
-		int bytes;
+		int bytes, num_icons;
 		waypoint *wpt;
 
 		bytes = gbfread(&w, 1, sizeof(humminbird_waypt_t), fin);
@@ -165,7 +159,7 @@ humminbird_read(void)
 
 		is_fatal((bytes != sizeof(humminbird_waypt_t)),
 		         MYNAME ": Unexpected end of file (%d)!",
-		         (int)sizeof(humminbird_waypt_t) - bytes);
+		         (int) sizeof(humminbird_waypt_t) - bytes);
 
 		/* Fix endianness - these are now BE */
 		w.signature = be_read32(&w.signature);
@@ -195,49 +189,90 @@ humminbird_read(void)
 		if(w.depth != 0)
 			WAYPT_SET(wpt,depth,(double)w.depth / 100.0);
 
+		num_icons = sizeof(humminbird_icons) / sizeof(humminbird_icons[0]);
+		if(w.icon < num_icons)
+			wpt->icon_descr = humminbird_icons[w.icon];
+
 		waypt_add(wpt);
 	}
 }
 
-#if 0
 static void
 humminbird_wr_init(const char *fname)
 {
-//	fout = gbfopen(fname, "w", MYNAME);
+	fout = gbfopen(fname, "w", MYNAME);
 }
 
 static void
 humminbird_wr_deinit(void)
 {
-//	gbfclose(fout);
+	gbfclose(fout);
+}
+
+static void
+humminbird_write_waypoint(const waypoint *wpt) {
+	humminbird_waypt_t hum;
+	double lon, north, east;
+	int i;
+	int num_icons = sizeof(humminbird_icons) / sizeof(humminbird_icons[0]);
+
+	be_write32(&hum.signature, 0x02020024L);
+	be_write16(&hum.num, waypoint_num++);
+	hum.zero   = 0;
+	hum.status = 1;
+	hum.icon   = 0;
+	
+	// Icon....
+	if(wpt->icon_descr) {
+		for(i=0 ; i<num_icons ; i++) {
+			if(!strcmp(wpt->icon_descr, humminbird_icons[i])) {
+				hum.icon = i;
+				break;
+			}
+		}
+	}
+	hum.depth = round(WAYPT_GET(wpt, depth, 0)*100.0);
+	be_write16(&hum.depth,  hum.depth);
+	
+	be_write32(&hum.time, wpt->creation_time);
+	
+	east = wpt->longitude / 180.0 * EAST_SCALE;
+	be_write32(&hum.east, (gbint32)round((east)));
+
+	lon = geodetic_to_geocentric_hwr(wpt->latitude);
+	north = inverse_gudermannian_i1924(lon);
+	be_write32(&hum.north, (gbint32)round(north));
+
+	strncpy((char *)&hum.name, wpt->shortname, 12);
+	gbfwrite(&hum, sizeof(hum), 1, fout);
 }
 
 static void
 humminbird_write(void)
 {
+	waypoint_num = 0;
+	waypt_disp_all(humminbird_write_waypoint);
 }
-#endif
 
 /**************************************************************************/
-/*       capabilities below means: we can only read  waypoints            */
-/**************************************************************************/
 
+// capabilities below means: we can only read and write waypoints
 ff_vecs_t humminbird_vecs = {
 	ff_type_file,
 	{ 
-		ff_cap_read,	/* waypoints */
-	  	ff_cap_none,	/* tracks */
-	  	ff_cap_none 	/* routes */
+		ff_cap_read | ff_cap_write 	/* waypoints */, 
+	  	ff_cap_none 			/* tracks */, 
+	  	ff_cap_none 			/* routes */
 	},
 	humminbird_rd_init,	
-	NULL,	/* humminbird_wr_init, */
+	humminbird_wr_init,	
 	humminbird_rd_deinit,	
-	NULL,	/* humminbird_wr_deinit, */
+	humminbird_wr_deinit,	
 	humminbird_read,
-	NULL,	/* humminbird_write, */
-	NULL,	/* humminbird_exit, */
+	humminbird_write,
+	NULL, // humminbird_exit,
 	humminbird_args,
-	CET_CHARSET_ASCII, 0
+	CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
+						/* not fixed, can be changed through command line parameter */
 };
-
 /**************************************************************************/
