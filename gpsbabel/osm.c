@@ -24,12 +24,13 @@
 #include "avltree.h"
 #include "xmlgeneric.h"
 
-static char *opt_tag, *opt_tagnd;
+static char *opt_tag, *opt_tagnd, *created_by;
 
 static arglist_t osm_args[] = 
 {
 	{ "tag", &opt_tag, 	"Write additional way tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
 	{ "tagnd", &opt_tagnd,	"Write additional node tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+	{ "created_by", &created_by, "Use this value as custom created_by value","GPSBabel", ARGTYPE_STRING, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -849,11 +850,14 @@ osm_waypt_disp(const waypoint *wpt)
 				break;
 		}
 		
-		gbfprintf(fout, "    <tag k='created_by' v='GPSBabel");
-		if (gpsbabel_time != 0)
-			gbfprintf(fout, "-%s", gpsbabel_version);
-		gbfprintf(fout, "'/>\n");
-
+		if (strlen(created_by) !=0) {
+			gbfprintf(fout, "    <tag k='created_by' v='%s",created_by);
+			if (gpsbabel_time != 0)
+				if (strcmp("GPSBabel",created_by)==0)
+					gbfprintf(fout, "-%s", gpsbabel_version);
+			gbfprintf(fout, "'/>\n");
+		}
+		
 		osm_write_tag("name", wpt->shortname);
 		osm_write_tag("note", (wpt->notes) ? wpt->notes : wpt->description);
 		if (wpt->icon_descr)
@@ -901,10 +905,13 @@ osm_rte_disp_trail(const route_head *rte)
 {
 	if (skip_rte) return;
 
-	gbfprintf(fout, "    <tag k='created_by' v='GPSBabel");
-	if (gpsbabel_time != 0)
-		gbfprintf(fout, "-%s", gpsbabel_version);
-	gbfprintf(fout, "'/>\n");
+	if (strlen(created_by) !=0) {
+		gbfprintf(fout, "    <tag k='created_by' v='%s",created_by);
+		if (gpsbabel_time != 0)
+			if (strcmp("GPSBabel",created_by)==0)
+				gbfprintf(fout, "-%s", gpsbabel_version);
+		gbfprintf(fout, "'/>\n");
+	}
 
 	osm_write_tag("name", rte->rte_name);
 	osm_write_tag("note", rte->rte_desc);
