@@ -1249,13 +1249,13 @@ example:
 
 <section id="style_filename">
 <title>FILENAME</title>
-<para>The name of the file where the points were loaded from. Only useable on output!.</para>
+<para>The name of the input file from where the points were loaded. This field is available only on output.</para>
 <para>example:<screen format="linespecific">OFIELD FILENAME, "", "%s"</screen></para>
 </section>
 
 <section id="style_format">
 <title>FORMAT</title>
-<para>The name of the input file format the points came from. Only useable on output!.</para>
+<para>The name of the input format from where format the points came. This field is available only on output.</para>
 <para>example:<screen format="linespecific">OFIELD FORMAT, "", "%s"</screen></para>
 </section>
 

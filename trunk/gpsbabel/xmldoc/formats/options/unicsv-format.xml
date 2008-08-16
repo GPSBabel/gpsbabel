@@ -1,6 +1,6 @@
 <para>
   When this option is enabled, we generate an additional 'Format' column.
-  The values of this column are filled with names of previos input formats.
+  The values of this column are filled with names of previous input formats.
 </para>
 <example id="unicsv_format">
   <title>Example for unicsv format option to write names of input formats.</title>
