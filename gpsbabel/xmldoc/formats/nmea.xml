@@ -34,14 +34,20 @@ that work with NMEA-0183 formatted data include:
   <ulink url="http://www.sparkfun.com/">SparkFun GPS Datalogger</ulink>
 </member>
 <member>
-  <ulink url="http://www.sonystyle.com/is-bin/INTERSHOP.enfinity/eCS/Store/en/-/USD/SY_DisplayProductInformation-Start?ProductSKU=GPSCS1">Sony GPS-CS1</ulink>
+  AMOD 3080 GPS
+</member>
+<member>
+  Wintec WPL-1000 GPS
 </member>
 </simplelist>  
 <para>
 This module also supports <link linkend="tracking">realtime tracking</link> 
 which allows realtime position reports from a GPS, such as one connected 
 serially, over Bluetooth, or a USB module emulating a serial port, to be used
-with selected output formats.
+with selected output formats.  Just specify an input file that is the device
+name such as COM1: for Windows or a device-dependent name like
+/dev/cu.usbserial for Mac or /dev/ttyUSB0 for Linux.  (Note that serial 
+device names vary on Mac and Linux.)
 </para>
 <para>
 When used in <link linkend="tracking">realtime tracking</link> mode, if
