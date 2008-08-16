@@ -207,7 +207,9 @@ static char *ignoreicons;
 static char *writeasicons;
 static char *merge;
 static char *seg_break;
+static char *wversion_arg;
 static int reading_version;
+static int writing_version;
 
 #define MYNAME "Lowrance USR"
 
@@ -290,6 +292,8 @@ arglist_t lowranceusr_args[] = {
 	NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"break", &seg_break, "(USR input) Break segments into separate tracks",
 	NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"wversion", &wversion_arg, "(USR output) Write version",
+	"2", ARGTYPE_INT, "2", "3" },
 	ARG_TERMINATOR
 };
 
@@ -311,6 +315,7 @@ wr_init(const char *fname)
 	file_out = gbfopen_le(fname, "wb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 	waypt_out_count = 0;
+        writing_version = atoi(wversion_arg);
 }
 
 static void
@@ -336,12 +341,12 @@ lon_deg_to_mm(double x) {
 
 static double 
 lat_mm_to_deg(double x) {
-	return (2 * atan(exp(x / SEMIMINOR)) - M_PI / 2) / DEGREESTORADIANS;
+	return (2.0 * atan(exp(x / SEMIMINOR)) - M_PI / 2.0) / DEGREESTORADIANS;
 }
 
 static long
 lat_deg_to_mm(double x) {
-	return (long)(SEMIMINOR * log(tan((x * DEGREESTORADIANS + M_PI / 2) / 2)));
+	return (long)(SEMIMINOR * log(tan((x * DEGREESTORADIANS + M_PI / 2.0) / 2.0)));
 }
 
 static void
@@ -358,6 +363,7 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	if (wpt_tmp->altitude <= UNKNOWN_USR_ALTITUDE) {
 		wpt_tmp->altitude = unknown_alt;
 	}
+
 	text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
 	if (text_len) {
 		buff[text_len] = '\0';
@@ -400,11 +406,13 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	if (global_opts.debug_level >= 1)
 		printf(MYNAME " parse_waypt: waypt_type = %d\n",waypt_type);
 
-    // Version 3 has an extra word in here that we don't know about.
-    if (reading_version >= 3) {
-      int junkword = gbfgetint32(file_in);
-      (void)junkword;
-    }
+        // Version 3 has a depth field here.
+        if (reading_version >= 3) {
+          float depth_feet = gbfgetflt(file_in);
+          if (abs(depth_feet - 99999.0)  > .1)
+            WAYPT_SET(wpt_tmp, depth, FEET_TO_METERS(depth_feet));
+        }
+
 }
 
 
@@ -649,6 +657,12 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 	gbfputint32(Lat, file_out);
 	gbfputint32(Lon, file_out);
 	gbfputint32(alt, file_out);
+
+        if (writing_version >= 3) {
+          float depth = WAYPT_HAS(wpt, depth) ?
+              METERS_TO_FEET(wpt->depth) : -99999.0;
+          gbfputflt(depth, file_out);
+        }
 
 	if (global_opts.debug_level >= 1) {
 		/* print lat/lon/alt on one easily greppable line */
@@ -954,7 +968,7 @@ data_write(void)
 {
 	short int NumWaypoints, MajorVersion, MinorVersion, NumRoutes, NumTrails, NumIcons;
 	setshort_length(mkshort_handle, 15);
-	MajorVersion = 2;
+	MajorVersion = writing_version;
 	MinorVersion = 0;
 
 	NumWaypoints = waypt_count();
