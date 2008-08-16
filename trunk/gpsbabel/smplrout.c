@@ -61,10 +61,10 @@ static int count = 0;
 static double totalerror = 0;
 static double error = 0;
 
-static char *countopt = NULL;
-static char *erroropt = NULL;
-static char *xteopt = NULL;
-static char *lenopt = NULL;
+static char *countopt;
+static char *erroropt;
+static char *xteopt;
+static char *lenopt;
 void (*waypt_del_fnp) (route_head *rte, waypoint *wpt);
 
 static
@@ -322,7 +322,7 @@ routesimple_init(const char *args) {
 		fatal( MYNAME ": crosstrack and length may not be used together.\n");
 	}
 	if ( !xteopt && !lenopt ) {
-		xteopt = (char *)xmalloc( 1 );
+		xteopt = "";
 	}
 		
 	if (countopt) {

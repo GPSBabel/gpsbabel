@@ -42,5 +42,6 @@ void disp_filters(int version);
 void disp_filter( const char *vecname );
 void disp_filter_vec( const char *vecname );
 void disp_filter_vecs(void);
+void init_filter_vecs(void);
 void exit_filter_vecs(void);
 
