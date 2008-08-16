@@ -68,6 +68,9 @@ route_head_alloc(void)
 	rte_head = (route_head *) xcalloc(sizeof (*rte_head), 1);
 	QUEUE_INIT(&rte_head->Q);
 	QUEUE_INIT(&rte_head->waypoint_list);
+        rte_head->line_color.bbggrr = -1;
+        rte_head->line_color.opacity = 255;
+        rte_head->line_width = -1;
 	return rte_head;
 }
 
