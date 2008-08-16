@@ -226,7 +226,7 @@ so they are named 'Custom 0' through 'Custom 511'.
 <para>
 	For models connected via USB, we recommend use of the <filename>usb:</filename>
 	filename.   For this to work on Windows, you must install
-	the Garmin driver.  For Linux, this will fail if have the garmin_gps
+	the Garmin driver.  For Linux, this will fail if you have the garmin_gps
 	kernel module loaded.  
 	See the <ulink url="/osnotes.html">Operating System Notes</ulink> for details.
 </para>
