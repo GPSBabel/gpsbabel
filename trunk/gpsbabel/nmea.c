@@ -549,8 +549,12 @@ gprmc_parse(char *ibuf)
 			 * going from 235959 to 000000. */
 			 nmea_set_waypoint_time(curr_waypt, &tm, microseconds);
 		}
-                if (!amod_waypoint)
-			return;
+                /* This point is both a waypoint and a trackpoint. */
+                if (amod_waypoint) {
+			waypt_add(waypt_dupe(curr_waypt));
+			amod_waypoint = 0;
+                }
+		return;
 	}
 		
 	waypt  = waypt_new();
@@ -570,6 +574,7 @@ gprmc_parse(char *ibuf)
 	nmea_release_wpt(curr_waypt);
 	curr_waypt = waypt;
 
+	/* This point is both a waypoint and a trackpoint. */
 	if (amod_waypoint) {
 		waypt_add(waypt_dupe(waypt));
 		amod_waypoint = 0;
