@@ -197,19 +197,19 @@ msgstr "Rövidnevek használata a könyvjelzőben"
 msgid "Index of name field in .dbf"
 msgstr "Név mező hivatkozása a .dbf fájlban"
 
-msgid "Index of route (if more the one in source)"
+msgid "Index of route (if more than one in source)"
 msgstr "Útvonalak indexelése (ha több mint egy van a forrásban)"
 
-msgid "Index of route to write (if more the one in source)"
+msgid "Index of route to write (if more than one in source)"
 msgstr "Útvonalak indexelése íráshoz (ha több mint egy van a forrásban)"
 
-msgid "Index of route/track to write (if more the one in source)"
+msgid "Index of route/track to write (if more than one in source)"
 msgstr "Útvonalak/nyomvonalak indexelése íráshoz (ha több mint egy van a forrásban)"
 
-msgid "Index of track (if more the one in source)"
+msgid "Index of track (if more than one in source)"
 msgstr "Útvonalak/nyomvonalak indexelése (ha több mint egy van a forrásban)"
 
-msgid "Index of track to write (if more the one in source)"
+msgid "Index of track to write (if more than one in source)"
 msgstr "Nyomvonalak indexelése íráshoz (ha több mint egy van a forrásban)"
 
 msgid "Index of URL field in .dbf"

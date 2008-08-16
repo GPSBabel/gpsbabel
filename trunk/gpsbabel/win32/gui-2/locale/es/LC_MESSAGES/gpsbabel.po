@@ -196,19 +196,19 @@ msgstr "Incluir nombre corto en Favoritos"
 msgid "Index of name field in .dbf"
 msgstr "Índice del campo nombre en .dbf"
 
-msgid "Index of route (if more the one in source)"
+msgid "Index of route (if more than one in source)"
 msgstr "Índice de ruta (si hay más de una en el origen)"
 
-msgid "Index of route to write (if more the one in source)"
+msgid "Index of route to write (if more than one in source)"
 msgstr "Índice de la ruta a escribir (si existe más de una en origen)"
 
-msgid "Index of route/track to write (if more the one in source)"
+msgid "Index of route/track to write (if more than one in source)"
 msgstr "Índice de la ruta/traza a escribir (si existe más de una)"
 
-msgid "Index of track (if more the one in source)"
+msgid "Index of track (if more than one in source)"
 msgstr "Índice de traza (si hay más de una en el origen)"
 
-msgid "Index of track to write (if more the one in source)"
+msgid "Index of track to write (if more than one in source)"
 msgstr "Índice de la traza a grabar (si hay más de una en el origen)"
 
 msgid "Index of URL field in .dbf"

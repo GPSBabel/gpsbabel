@@ -54,7 +54,7 @@ static int track_index, this_index;
 static
 arglist_t dmtlog_args[] = {
 	{ "index", &opt_index,
-		"Index of track (if more the one in source)", "1", ARGTYPE_INT, "1", NULL },
+		"Index of track (if more than one in source)", "1", ARGTYPE_INT, "1", NULL },
 	ARG_TERMINATOR
 };
 
