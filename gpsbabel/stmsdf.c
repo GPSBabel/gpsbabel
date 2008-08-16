@@ -97,7 +97,7 @@ static int opt_route_index_value;
 static
 arglist_t stmsdf_args[] = {
 	{ "index", &opt_route_index,
-		"Index of route (if more the one in source)", "1", ARGTYPE_INT, "1", NULL },
+		"Index of route (if more than one in source)", "1", ARGTYPE_INT, "1", NULL },
 	ARG_TERMINATOR
 };
 

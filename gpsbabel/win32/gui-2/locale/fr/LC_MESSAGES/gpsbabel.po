@@ -198,19 +198,19 @@ msgstr "Inclure les noms courts dans les signets"
 msgid "Index of name field in .dbf"
 msgstr "Index du champ nom dans le .dbf"
 
-msgid "Index of route (if more the one in source)"
+msgid "Index of route (if more than one in source)"
 msgstr "Index des routes (si plus d'une dans la source)"
 
-msgid "Index of route to write (if more the one in source)"
+msgid "Index of route to write (if more than one in source)"
 msgstr "Index des routes à écrire (si plusieurs sources)"
 
-msgid "Index of route/track to write (if more the one in source)"
+msgid "Index of route/track to write (if more than one in source)"
 msgstr "Index des routes/traces à écrire (si plusieurs sources)"
 
-msgid "Index of track (if more the one in source)"
+msgid "Index of track (if more than one in source)"
 msgstr "Index des traces (si plus d'une dans la source)"
 
-msgid "Index of track to write (if more the one in source)"
+msgid "Index of track to write (if more than one in source)"
 msgstr "Index des traces à écrire (si plusieurs sources)"
 
 msgid "Index of URL field in .dbf"

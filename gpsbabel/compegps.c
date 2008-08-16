@@ -93,7 +93,7 @@ static
 arglist_t compegps_args[] = {
 	{"deficon", &option_icon, "Default icon name", 
 		NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-	{"index", &option_index, "Index of route/track to write (if more the one in source)", 
+	{"index", &option_index, "Index of route/track to write (if more than one in source)", 
 		NULL, ARGTYPE_INT, "1", NULL},
 	{"radius", &option_radius, "Give points (waypoints/route points) a default radius (proximity)", 
 		NULL, ARGTYPE_FLOAT, "0", NULL},

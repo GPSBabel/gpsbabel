@@ -65,7 +65,7 @@ static char *prefer_shortnames_opt;
 
 static
 arglist_t bcr_args[] = {
-	{"index", &rtenum_opt, "Index of route to write (if more the one in source)", 
+	{"index", &rtenum_opt, "Index of route to write (if more than one in source)", 
 		NULL, ARGTYPE_INT, "1", NULL },
 	{"name", &rtename_opt, "New name for the route", 
 		NULL, ARGTYPE_STRING, ARG_NOMINMAX },

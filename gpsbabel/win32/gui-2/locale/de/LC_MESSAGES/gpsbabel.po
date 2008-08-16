@@ -199,19 +199,19 @@ msgstr "Übernehme Kurznamen in Lesezeichen"
 msgid "Index of name field in .dbf"
 msgstr "Index des Namensfeldes innerhalb der .dbf"
 
-msgid "Index of route (if more the one in source)"
+msgid "Index of route (if more than one in source)"
 msgstr "Index des Route (falls mehrere im Eingabeformat)"
 
-msgid "Index of route to write (if more the one in source)"
+msgid "Index of route to write (if more than one in source)"
 msgstr "Routen-Index (wenn mehrere vorhanden)"
 
-msgid "Index of route/track to write (if more the one in source)"
+msgid "Index of route/track to write (if more than one in source)"
 msgstr "Route oder Track-Index (wenn mehrere vorhanden)"
 
-msgid "Index of track (if more the one in source)"
+msgid "Index of track (if more than one in source)"
 msgstr "Index des Tracks (falls mehrere im Eingabeformat)"
 
-msgid "Index of track to write (if more the one in source)"
+msgid "Index of track to write (if more than one in source)"
 msgstr "Track-Index (wenn mehrere vorhanden)"
 
 msgid "Index of URL field in .dbf"

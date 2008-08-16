@@ -47,7 +47,7 @@ static char *index_opt = NULL;
 
 static arglist_t ignr_args[] = 
 {
-	{"index", &index_opt, "Index of track to write (if more the one in source)", NULL, ARGTYPE_INT, "1", NULL },
+	{"index", &index_opt, "Index of track to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL },
 	ARG_TERMINATOR
 };
 
