@@ -1,6 +1,6 @@
 /*
     Read DeLorme drawing files (.an1)
- 
+
     Copyright (C) 2005 Ron Parker and Robert Lipe.
 
     This program is free software; you can redistribute it and/or modify
@@ -224,7 +224,7 @@ typedef struct {
 	long lineweight;
 	long linestyle;
 	long linecolor;
-	long unk5;
+	long opacity;
 	long polyfillcolor;
 	long unk6;
 	long unk7;
@@ -532,7 +532,7 @@ static void Read_AN1_Line( gbfile *f, an1_line_record *line ) {
 	line->lineweight = ReadShort( f );
 	line->linestyle = ReadLong( f );
 	line->linecolor = ReadLong( f );
-	line->unk5 = ReadLong( f );
+	line->opacity = ReadLong( f );
 	line->polyfillcolor = ReadLong( f );
 	line->unk6 = ReadLong( f );
 	line->unk7 = ReadLong( f );
@@ -555,7 +555,7 @@ static void Write_AN1_Line( gbfile *f, an1_line_record *line ) {
 	WriteShort( f, (short) line->lineweight );
 	WriteLong( f, line->linestyle );
 	WriteLong( f, line->linecolor );
-	WriteLong( f, line->unk5 );
+	WriteLong( f, line->opacity );
 	WriteLong( f, line->polyfillcolor );
 	WriteLong( f, line->unk6 );
 	WriteLong( f, line->unk7 );
@@ -797,6 +797,15 @@ static void Read_AN1_Lines( gbfile *f ) {
 		Read_AN1_Line( f, rec );
 		/* create route rec */
                 rte_head = route_head_alloc();
+                rte_head->line_color.bbggrr = rec->linecolor;
+                if (rec->opacity == 0x8200)
+                  rte_head->line_color.opacity = 128;
+                // lineweight isn't set for dashed/dotted lines
+                // Since we don't have a way to represent this internally yet,
+                // use leave line_width at the default.
+                if(rec->lineweight)
+                  rte_head->line_width = rec->lineweight;
+                rte_head->rte_name = xstrdup(rec->name);
 		fs_chain_add( &rte_head->fs, (format_specific_data *)rec );
                 route_add_head(rte_head);
 		for (j = 0; j < (unsigned) rec->pointcount; j++ ) {
@@ -847,7 +856,7 @@ Write_One_AN1_Line( const route_head *rte )
 	fs = fs_chain_find( rte->fs, FS_AN1L );
 	
 	if ( fs ) {
-		rec = (an1_line_record *)(void *)fs;	
+		rec = (an1_line_record *)(void *)fs;
 		local = 0;
 		switch (output_type_num) {
 			case 1:
@@ -918,7 +927,7 @@ Write_One_AN1_Line( const route_head *rte )
 				rec->unk4 = 2;
 				rec->lineweight = 6;
 				rec->linecolor = opt_color_num; /* red */
-				rec->unk5 = 3;
+				rec->opacity = 3;
 				rec->unk8 = 2;
 				break;
 		}

@@ -717,6 +717,17 @@ static void kml_output_tailer(const route_head *header)
     kml_write_xml(1, "<Placemark>\n");
     kml_write_xml(0, "<name>Path</name>\n");
     kml_write_xml(0, "<styleUrl>#lineStyle</styleUrl>\n");
+    if (header->line_color.bbggrr >= 0 || header->line_width >= 0) {
+      kml_write_xml(1, "<Style>\n");
+      kml_write_xml(1, "<LineStyle>\n");
+      if (header->line_color.bbggrr >= 0)
+        kml_write_xml(0, "<color>%02x%06x</color>\n",
+                      header->line_color.opacity, header->line_color.bbggrr);
+      if (header->line_width >= 0)
+        kml_write_xml(0, "<width>%d</width>\n",header->line_width);
+      kml_write_xml(-1, "</LineStyle>\n");
+      kml_write_xml(-1, "</Style>\n");
+    }
     kml_write_xml(1, "<LineString>\n");
     if (floating) {
       kml_write_xml(0, "<altitudeMode>absolute</altitudeMode>\n");

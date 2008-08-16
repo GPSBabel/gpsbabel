@@ -289,6 +289,12 @@ typedef struct format_specific_data {
 	fs_convert convert;
 } format_specific_data;
 
+typedef struct {
+  int bbggrr;   // 32 bit color: Blue/Green/Red.  < 0 == unknown.
+  unsigned char opacity;  // 0 == transparent.  255 == opaque.
+} gb_color;
+
+
 format_specific_data *fs_chain_copy( format_specific_data *source );
 void fs_chain_destroy( format_specific_data *chain );
 format_specific_data *fs_chain_find( format_specific_data *chain, long type );
@@ -452,6 +458,8 @@ typedef struct {
 	int rte_waypt_ct;		/* # waypoints in waypoint list */
 	format_specific_data *fs;
 	unsigned short cet_converted;	/* strings are converted to UTF8; interesting only for input */
+        gb_color line_color;         /* Optional line color for rendering */
+        int line_width;         /* in pixels (sigh).  < 0 is unknown. */
 } route_head;
 
 /*
