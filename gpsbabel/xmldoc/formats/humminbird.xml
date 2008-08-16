@@ -1,5 +1,5 @@
 <para>
-  This format supports Humminbird waypoints (.hwr files).
+  This format supports <ulink url="http://www.humminbird.com">Humminbird</ulink> waypoints (.hwr files).
 </para>
 <para>
   If you do "save all nav data" on the device, you'll get a 
