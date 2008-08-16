@@ -655,6 +655,7 @@ typedef struct arglist {
 	gbuint32 argtype;
 	char *minvalue;		/* minimum value for numeric options */
 	char *maxvalue;		/* maximum value for numeric options */
+	char *argvalptr;	/* !!! internal helper. Not used in definitions !!! */
 } arglist_t;
 
 typedef enum {
@@ -740,6 +741,7 @@ void assign_option(const char *vecname, arglist_t *ap, const char *val);
 void disp_vec_options(const char *vecname, arglist_t *ap);
 void disp_vecs(void);
 void disp_vec( const char *vecname );
+void init_vecs(void);
 void exit_vecs(void);
 void disp_formats(int version);
 const char * name_option(long type);

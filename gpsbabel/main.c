@@ -260,6 +260,8 @@ main(int argc, char *argv[])
 		global_opts.inifile = inifile_init(NULL, MYNAME);
 	}
 	
+	init_vecs();
+	init_filter_vecs();
 	cet_register();
 	session_init();
 	waypt_init();

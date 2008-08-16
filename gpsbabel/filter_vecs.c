@@ -202,11 +202,26 @@ free_filter_vec( filter_vecs_t *fvec )
 	
 	if ( fvec->args ) {
 		for ( ap = fvec->args; ap->argstring; ap++) {
-			if (ap->argval && *ap->argval) {
-				xfree(*ap->argval);
-				*ap->argval = NULL;
+			if (ap->argvalptr) {
+				xfree(ap->argvalptr);
+				ap->argvalptr = *ap->argval = NULL;
 			}
 		}
+	}
+}
+
+void 
+init_filter_vecs(void)
+{
+	fl_vecs_t *vec = filter_vec_list;
+	while ( vec->vec ) {
+		arglist_t *ap;
+		if ( vec->vec->args ) {
+			for ( ap = vec->vec->args; ap->argstring; ap++ ) {
+				ap->argvalptr = NULL;
+			}
+		}
+		vec++;
 	}
 }
 
@@ -221,7 +236,6 @@ exit_filter_vecs( void )
 		vec++;
 	}
 }
-		
 
 /*
  *  Display the available formats in a format that's easy for humans to

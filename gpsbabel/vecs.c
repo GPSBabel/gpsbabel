@@ -825,6 +825,22 @@ vecs_t vec_list[] = {
 	}
 };
 
+void
+init_vecs(void)
+{
+	vecs_t *vec = vec_list;
+	while ( vec->vec ) {
+		arglist_t *ap;
+		if ( vec->vec->args ) {
+			for ( ap = vec->vec->args; ap->argstring; ap++ ) {
+				ap->argvalptr = NULL;
+				if (ap->argval) *ap->argval = NULL;
+			}
+		}
+		vec++;
+	}
+}
+
 void 
 exit_vecs( void )
 {
@@ -841,9 +857,9 @@ exit_vecs( void )
 					! isdigit(ap->defaultvalue[0])) {
 					warning("%s: not an integer\n", ap->argstring);
 				}
-				if ( ap->argval && *ap->argval ) {
-					xfree(*ap->argval);
-					*ap->argval = NULL;
+				if ( ap->argvalptr ) {
+					xfree(ap->argvalptr);
+					*ap->argval = ap->argvalptr = NULL;
 				}
 			}
 		}
@@ -856,10 +872,15 @@ assign_option(const char *module, arglist_t *ap, const char *val)
 {
 	char *c;
 	
-	if (*ap->argval != NULL) {
-		xfree(*ap->argval);
-		*ap->argval = NULL;
+	if (ap->argval == NULL)
+		fatal("%s: No local variable defined for option \"%s\"!", module, ap->argstring);
+
+	if (ap->argvalptr != NULL) {
+		xfree(ap->argvalptr);
+		ap->argvalptr = NULL;
 	}
+	if (ap->argval) *ap->argval = NULL;
+
 	if (val == NULL) return;
 
 	if (case_ignore_strcmp(val, ap->argstring) == 0) c = "";
@@ -911,7 +932,7 @@ assign_option(const char *module, arglist_t *ap, const char *val)
 	    (*c == '0') && (ap->defaultvalue == NULL)) {
 		return;
 	}
-	*ap->argval = xstrdup(c);
+	*ap->argval = ap->argvalptr = xstrdup(c);
 }
 
 void
