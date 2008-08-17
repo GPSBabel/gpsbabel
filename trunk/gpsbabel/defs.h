@@ -958,6 +958,7 @@ int parse_coordinates(const char *str, int datum, const grid_type grid,
 	double *latitude, double *longitude, const char *module);
 int parse_distance(const char *str, double *val, double scale, const char *module);
 int parse_speed(const char *str, double *val, const double scale, const char *module);
+time_t parse_date(const char *str, const char *format, const char *module);
 
 /*
  *  From util_crc.c
