@@ -254,6 +254,11 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 			file->back = -1;
 		}
 		result += gzread(file->handle.gz, target, count);
+		
+		/* Check for an incomplete READ */
+		if ((members == 1) && (size > 1) && (result > 0) && (result < size))
+			fatal("%s: Unexpected end of files (EOF)!\n", file->module);
+
 		result /= size;
 
 		if ((result < 0) || ((gbsize_t)result < members)) {
