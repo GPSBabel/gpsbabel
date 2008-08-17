@@ -499,19 +499,18 @@ static char iblue747[] =
 
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
 
-"IFIELD INDEX,\"1\",\"%d\"           # INDEX\n"
-"IFIELD CONSTANT,\"T\",\"%s\"        # RCR\n"
-"IFIELD GMT_TIME,\"\",\"%Y/%m/%d\"   # DATE\n"
-"IFIELD HMSG_TIME,\"\",\"%H:%M:%S\"  # TIME\n"
-"IFIELD GPS_FIX,\"SPS\",\"%s\"       # VALID         #  No fix, SPS, DGPS, PPS\n"
-"IFIELD LAT_DECIMAL,\"\",\"%f\"      # LATITUDE\n"
-"IFIELD LAT_DIR,\"\",\"%s\"          # N/S\n"
-"IFIELD LON_DECIMAL,\"\",\"%f\"      # LONGITUDE\n"
-"IFIELD LON_DIR,\"\",\"%s\"          # E/W\n"
-"IFIELD ALT_METERS,\"\",\"%.0f\"     # HEIGHT\n"
-"PATH_SPEED_KPH,\"\",\"%.1f\"        # SPEED\n"
-"PATH_DISTANCE_KM,\"\",\"%f\"        # DISTANCE\n"
-
+"IFIELD INDEX,\"1\",\"%d\"			# INDEX\n"
+"IFIELD CONSTANT,\"T\",\"%s\"		# RCR\n"
+"IFIELD GMT_TIME,\"\",\"%Y/%m/%d\"		# DATE\n"
+"IFIELD HMSG_TIME,\"\",\"%02d:%02d:%02d\"	# TIME\n"
+"IFIELD GPS_FIX,\"SPS\",\"%s\"		# VALID #  No fix, SPS, DGPS, PPS\n"
+"IFIELD LAT_DECIMAL,\"\",\"%f\"		# LATITUDE\n"
+"IFIELD LAT_DIR,\"\",\"%c\"			# N/S\n"
+"IFIELD LON_DECIMAL,\"\",\"%f\"		# LONGITUDE\n"
+"IFIELD LON_DIR,\"\",\"%c\"			# E/W\n"
+"IFIELD ALT_METERS,\"\",\"%.0f\"		# HEIGHT\n"
+"IFIELD PATH_SPEED_KPH,\"\",\"%.1f\"		# SPEED\n"
+"IFIELD PATH_DISTANCE_KM,\"\",\"%f\"		# DISTANCE\n"
 ;
 static char kompass_tk[] = 
 "# gpsbabel XCSV style file\n"
@@ -1076,40 +1075,6 @@ static char tomtom_itn[] =
 "IFIELD	SHORTNAME, \"\", \"%s\"\n"
 "IFIELD	CONSTANT, \"0\", \"%s\"\n"
 ;
-static char xmap[] = 
-"# gpsbabel XCSV style file\n"
-"#\n"
-"# Format: DeLorme Xmap Conduit\n"
-"# Author: Alex Mottram\n"
-"#   Date: 12/09/2002\n"
-"#\n"
-"# \n"
-"# As defined in csv.c/xmap\n"
-"#\n"
-
-"DESCRIPTION		DeLorme XMap HH Native .WPT\n"
-"EXTENSION		wpt\n"
-
-"#\n"
-"# FILE LAYOUT DEFINITIIONS:\n"
-"#\n"
-"FIELD_DELIMITER		COMMASPACE\n"
-"RECORD_DELIMITER	NEWLINE\n"
-"BADCHARS		COMMA\n"
-
-"PROLOGUE	BEGIN SYMBOL\n"
-"EPILOGUE	END\n"
-"#\n"
-"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
-"#\n"
-"IFIELD	LAT_HUMAN_READABLE, \"\", \"%08.5f\"\n"
-"IFIELD	LON_HUMAN_READABLE, \"\", \"%08.5f\"\n"
-"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
-
-"OFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
-"OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
-"OFIELD	DESCRIPTION, \"\", \"%s\"\n"
-;
 static char xmap2006[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -1149,6 +1114,40 @@ static char xmap2006[] =
 
 
 ;
+static char xmap[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: DeLorme Xmap Conduit\n"
+"# Author: Alex Mottram\n"
+"#   Date: 12/09/2002\n"
+"#\n"
+"# \n"
+"# As defined in csv.c/xmap\n"
+"#\n"
+
+"DESCRIPTION		DeLorme XMap HH Native .WPT\n"
+"EXTENSION		wpt\n"
+
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		COMMASPACE\n"
+"RECORD_DELIMITER	NEWLINE\n"
+"BADCHARS		COMMA\n"
+
+"PROLOGUE	BEGIN SYMBOL\n"
+"EPILOGUE	END\n"
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	LAT_HUMAN_READABLE, \"\", \"%08.5f\"\n"
+"IFIELD	LON_HUMAN_READABLE, \"\", \"%08.5f\"\n"
+"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
+
+"OFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
+"OFIELD	DESCRIPTION, \"\", \"%s\"\n"
+;
 static char xmapwpt[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -1181,7 +1180,7 @@ static char xmapwpt[] =
 "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap", xmap } , { "xmap2006", xmap2006 } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
 size_t nstyles = 32;
 #else /* CSVFMTS_ENABLED */
 style_vecs_t style_list[] = {{0,0}};
