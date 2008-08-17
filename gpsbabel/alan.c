@@ -570,12 +570,12 @@ static void trl_read(void) {
 	j >= 0 && (trkhdr->name[j] == ' ' || trkhdr->name[j] == '\0');
 	j--) {};
     TL->rte_name = xstrndup(trkhdr->name,j+1);
-    TL->rte_name[TRK_NAME_LEN+1] = 0;
+/*  TL->rte_name[TRK_NAME_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
     for(j=TRK_COMMENT_LEN-1;
 	j >= 0 && (trkhdr->comment[j] == ' ' || trkhdr->comment[j] == '\0');
 	j--) {};
     TL->rte_desc = xstrndup(trkhdr->comment,j+1);
-    TL->rte_desc[TRK_COMMENT_LEN+1] = 0;
+/*  TL->rte_desc[TRK_COMMENT_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
     TL->rte_num = i;
 
     track_add_head(TL);          
