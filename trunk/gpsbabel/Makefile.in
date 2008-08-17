@@ -183,14 +183,14 @@ dep:
 	echo "internal_styles.c: mkstyle.sh style/*.style\n	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)"  >> /tmp/dep
 	echo Edit Makefile.in and bring in /tmp/dep
 
-$(WEB)/htmldoc-$(DOCVERSION)/readme.html: FORCE
+$(WEB)/htmldoc-$(DOCVERSION)/index.html: FORCE
 	mkdir -p $(WEB)/htmldoc-$(DOCVERSION)
 	perl xmldoc/makedoc
 	xmlwf xmldoc/readme.xml		#check for well-formedness
 	xmllint --noout --valid xmldoc/readme.xml    	#validate
 	xsltproc \
 	 --stringparam base.dir "$(WEB)/htmldoc-$(DOCVERSION)/" \
-	 --stringparam root.filename "readme" \
+	 --stringparam root.filename "index" \
 	 xmldoc/babelmain.xsl \
 	 xmldoc/readme.xml
 	chmod 755 tools/mkcapabilities
@@ -233,7 +233,7 @@ gpsbabel.html: FORCE
 readme.txt: gpsbabel.html
 	lynx -nolist -dump gpsbabel.html  > $@
 
-doc: gpsbabel $(WEB)/htmldoc-$(DOCVERSION)/readme.html gpsbabel.pdf # readme.txt
+doc: gpsbabel $(WEB)/htmldoc-$(DOCVERSION)/index.html gpsbabel.pdf # readme.txt
 
 FORCE:
 
