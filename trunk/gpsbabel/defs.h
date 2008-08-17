@@ -999,5 +999,6 @@ int color_to_bbggrr(char *cname);
  * but that's not very nice for the folks near sea level.
  */
 #define unknown_alt 	-99999999.0
+#define unknown_color	-1
 
 #endif /* gpsbabel_defs_h_included */
