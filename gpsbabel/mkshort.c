@@ -601,7 +601,10 @@ mkshort_from_wpt(short_handle h, const waypoint *wpt)
 	}
 
 	/* Should probably never actually happen... */
-	return NULL;
+	/* O.K.: But this can happen (waypoints transformed from trackpoints )! */
+	/*       Now we return every time a valid entity." */
+
+	return mkshort(h, wpt->shortname);
 }
 
 
