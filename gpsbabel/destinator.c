@@ -340,7 +340,9 @@ destinator_read(void)
 	double d0, d1;
 	char buff[16];
 	
-	gbfread(buff, sizeof(buff), 1, fin);
+	if (! gbfread(buff, 1, sizeof(buff), fin))
+		fatal(MYNAME ": Unexpected EOF (end of file)!\n");
+
 	i0 = le_read32(&buff[0]);
 	i1 = le_read32(&buff[4]);
 	
