@@ -735,7 +735,7 @@ vecs_t vec_list[] = {
         {
                 &xol_vecs,
                 "xol",
-                "Swiss Map # (.xol) format",
+                "Swiss Map",
                 "xol"
         },
         {
