@@ -29,5 +29,5 @@ In general, GPSBabel's KML writer is relatively strong.  GPSBabel handles simple
   you can widen the time slider to show the range of data of interest.
 </para>
 <para>
-  See <ulink url="http://earth.google.com/userguide/v4/ug_gps.com#timeline">Google Earth's documentation on timelines</ulink> for more info.
+  See <ulink url="http://earth.google.com/userguide/v4/ug_gps.html#timeline">Google Earth's documentation on timelines</ulink> for more info.
 </para>
