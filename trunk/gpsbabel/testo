@@ -1389,4 +1389,11 @@ ${PNAME} -i gpx -f ${REFERENCE}/track/height.gpx \
 		-o gpx -F ${TMPDIR}/height_out.gpx
 compare ${TMPDIR}/height_out.gpx ${REFERENCE}/track/height_out.gpx
 
+#
+# iBlue747 (style) track files
+#
+${PNAME} -i iblue747 -f ${REFERENCE}/track/iblue747.csv -o gpx -F ${TMPDIR}/iblue747~csv.gpx
+compare ${REFERENCE}/track/iblue747~csv.gpx ${TMPDIR}/iblue747~csv.gpx
+
+
 exit 0
