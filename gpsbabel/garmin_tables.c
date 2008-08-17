@@ -629,7 +629,7 @@ typedef struct {
 } datum_mapping_t;
 
 /* will be continued (when requested) */	
-datum_mapping_t gt_mps_datum_names[] = 
+static datum_mapping_t gt_mps_datum_names[] = 
 {
 	{ "Alaska-NAD27",	"NAD27 Alaska" },
 	{ "Bahamas NAD27",	"NAD27 Bahamas" },
@@ -645,6 +645,36 @@ datum_mapping_t gt_mps_datum_names[] =
 	{ "OSGB36",		"Ord Srvy Grt Britn" },
 	{ NULL,	NULL }
 };
+
+typedef struct garmin_color_s {
+	char *name;
+	gbint32 rgb;
+} garmin_color_t;
+
+static garmin_color_t gt_colors[] =
+{
+	{ "Unknown",		unknown_color },
+	{ "Black", 		0x000000 },
+	{ "DarkRed",		0x00008B },
+	{ "DarkGreen",		0x006400 },
+	{ "DarkYellow",		0x008B8B },
+	{ "DarkBlue",		0x8B0000 },
+	{ "DarkMagenta",	0x8B008B },
+	{ "DarkCyan",		0x8B8B00 },
+	{ "LightGray",		0xD3D3D3 },
+	{ "DarkGray",		0xA9A9A9 },
+	{ "Red",		0x0000FF },
+	{ "Green",		0x008000 },
+	{ "Yellow",		0x00FFFF },
+	{ "Blue",		0xFF0000 },
+	{ "Magenta",		0xFF00FF },
+	{ "Cyan",		0xFFFF00 },
+	{ "White",		0xFFFFFF },
+	{ "Transparent",	unknown_color }, /* Currently not handled */
+	{ NULL }
+};
+
+#define GT_COLORS_CT ((sizeof(gt_colors) / sizeof(gt_colors[0])) - 1)
 
 unsigned char
 gt_switch_display_mode_value(const unsigned char display_mode, const int protoid, const char device)
@@ -952,6 +982,58 @@ gt_lookup_datum_index(const char *datum_str, const char *module)
 			module, datum_str);
 
 	return result;
+}
+
+gbuint32
+gt_color_value(const int garmin_index)
+{
+	if ((garmin_index >= 0) && (garmin_index < GT_COLORS_CT))
+		return gt_colors[garmin_index].rgb;
+	else
+		return unknown_color;	/* -1 */
+}
+
+gbuint32
+gt_color_value_by_name(const char *name)
+{
+	int i;
+
+	for (i = 0; i < GT_COLORS_CT; i++)
+		if (case_ignore_strcmp(gt_colors[i].name, name) == 0)
+			return gt_colors[i].rgb;
+
+	return gt_colors[0].rgb;
+}
+
+int
+gt_color_index_by_name(const char *name)
+{
+	int i;
+
+	for (i = 0; i < GT_COLORS_CT; i++)
+		if (case_ignore_strcmp(name, gt_colors[i].name) == 0) return i;
+
+	return 0; /* unknown */
+}
+
+int
+gt_color_index_by_rgb(const int rgb)
+{
+	int i;
+
+	for (i = 0; i < GT_COLORS_CT; i++)
+		if (rgb == gt_colors[i].rgb) return i;
+
+	return 0; /* unknown */
+}
+
+const char *
+gt_color_name(const int garmin_index)
+{
+	if ((garmin_index >= 0) && (garmin_index < GT_COLORS_CT))
+		return gt_colors[garmin_index].name;
+	else
+		return gt_colors[0].name;
 }
 
 #if MAKE_TABLE

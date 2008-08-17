@@ -59,6 +59,7 @@
 	    2007/07/07: Better support for new fields since V3 (postal code/street address/instruction)
 	    2008/01/09: Fix handling of option category (cat)
 	    2008/04/27: Add zero to checklist of "unknown bytes"
+	    2008/08/17: Add concept of route/track line colors
 */
 
 #include <stdio.h>
@@ -108,8 +109,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.65 $"; */
-static char gdb_release_date[] = "$Date: 2008-05-04 23:09:08 $";
+/* static char gdb_release[] = "$Revision: 1.66 $"; */
+static char gdb_release_date[] = "$Date: 2008-08-17 21:07:43 $";
 
 static gbfile *fin, *fout;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -531,7 +532,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 	}
 	GMSD_SET(display, display);
 	
-	FREAD_i32;				/* color/colour !not implemented! */
+	FREAD_i32;				/* color !not implemented! */
 	icon = FREAD_i32;
 	GMSD_SET(icon, icon);			/* icon */
 	FREAD_STR(buf);				/* city */
@@ -685,7 +686,8 @@ read_route(void)
 	int points, warnings, links, i;
 	char buf[128];
 	bounds bounds;
-	
+	int color_idx;
+
 	rte_ct++;
 	warnings = 0;
 
@@ -859,7 +861,8 @@ read_route(void)
 	else {
 		rte->rte_url = gdb_fread_strlist();
 		
-		FREAD(buf, 4);			/* ?????????????????????????????????? */
+		color_idx = FREAD_i32;
+		rte->line_color.bbggrr = gt_color_value(color_idx);
 		FREAD(buf, 1);			/* ?????????????????????????????????? */
 
 		rte->rte_desc = FREAD_CSTR;
@@ -885,7 +888,8 @@ read_track(void)
 	route_head *res;
 	int points, index;
 	char dummy;
-	
+	int color_idx;
+
 	trk_ct++;
 
 	res = route_head_alloc();
@@ -893,8 +897,9 @@ read_track(void)
 //	res->rte_num = trk_ct;
 
 	FREAD(&dummy, 1);		/* display - 1 byte */
-	FREAD_i32;			/* color -   1 dword */
-	
+	color_idx = FREAD_i32;		/* color -  1 dword */
+	res->line_color.bbggrr = gt_color_value(color_idx);
+
 	points = FREAD_i32;
 	
 	for (index = 0; index < points; index++)
@@ -1210,7 +1215,7 @@ write_waypoint(
 		FWRITE_CSTR(wpt->description);
 	FWRITE_DBL(WAYPT_GET(wpt, proximity, unknown_alt), unknown_alt);	/* proximity */
 	FWRITE_i32(display);			/* display */
-	FWRITE_i32(0);				/* color (colour) */
+	FWRITE_i32(0);				/* color */
 	FWRITE_i32(icon);			/* icon */
 	FWRITE_CSTR(GMSD_GET(city, ""));	/* city */
 	FWRITE_CSTR(GMSD_GET(state, ""));	/* state */
@@ -1412,7 +1417,8 @@ write_route(const route_head *rte, const char *rte_name)
 	}
 	else /* if (gdb_ver >= GDB_VER_3) */ {
 		FWRITE_CSTR_LIST(rte->rte_url);
-		FWRITE_i32(0x0E);	/* color ??? */
+		/* "Magenta" (14) is MapSource default */
+		FWRITE_i32( (rte->line_color.bbggrr < 0) ? 14 : gt_color_index_by_rgb(rte->line_color.bbggrr) );
 		FWRITE_C(0);
 		FWRITE_CSTR(rte->rte_desc);
 	}
@@ -1426,7 +1432,8 @@ write_track(const route_head *trk, const char *trk_name)
 	
 	FWRITE_CSTR(trk_name);
 	FWRITE_C(0);
-	FWRITE_i32(0);
+	/* "Unknown" (0) is MapSource default */
+	FWRITE_i32(gt_color_index_by_rgb(trk->line_color.bbggrr));
 
 	FWRITE_i32(points);	/* total number of waypoints in waypoint list */
 	
