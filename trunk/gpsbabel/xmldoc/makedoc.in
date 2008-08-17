@@ -1,8 +1,10 @@
 #!/usr/bin/perl
 
 #
-# makedoc.in is used to generate makedoc.  
+# makedoc.in is used to generate makedoc.   Editing makedoc is a bad ide.
 #
+
+@options;
 
 sub expandrw {
    my $read = shift;
@@ -38,6 +40,25 @@ sub expandoptions {
 
    $res;  
 }
+
+sub expandsuboptions {
+  my $f = shift;
+  my $res;
+  $olist = $options{$f};
+
+  # If no options, don't clutter things.
+  if ($olist eq "") { return; }
+
+  # Comma separate the human-readable variation.
+  $olist =~ s/> </>, </g;
+ 
+  $res .= "<para>This format has the following options: ";
+  $res .= $olist;
+  $res .= ".</para>";
+ 
+  $res;
+}
+
 
 sub include {
    my $name=shift;
@@ -86,6 +107,33 @@ print FORMATS qq(<!-- This document is automatically generated. -->\n);
 $going = 0;
 $dooptions = 0;
 
+# Prescan the argument list for options.
+
+for (@formats) {
+   chomp;
+   s/\&/\&amp;/g;
+   s/</\&lt;/g;
+   s/>/\&gt;/g;
+   @line = split "\t";
+
+   if (($line[0] eq 'file') || ($line[0] eq 'serial')) {
+	$fmt = $line[2];
+	# Pennance for earlier sins.  Rename magellan -> magellan1 here.
+	if ($line[4] eq "Magellan serial protocol") {
+	 $fmt = "magellan1";
+	}
+	$skipping = 0;
+   }
+   if ( $line[0] eq 'internal' || $line[5] eq 'xcsv') {
+	$skipping = 1;
+   }
+   if ($line[0] eq 'option' && $skipping == 0) {
+     $optname = $line[2];
+
+     $options{$fmt} .= "<link linkend=\"fmt_${fmt}_o_${optname}\">$optname</link> ";
+   }
+}
+
 
 for (@formats) {
    chomp;
@@ -125,6 +173,7 @@ for (@formats) {
   <title>$line[4] ($line[2])</title>
 END
      print FILE expandoptions($line[1]);
+     print FILE expandsuboptions($id);
      $going = 1;
      $dooptions = 1;
      if ( defined($line[5]) && ($line[5] ne $line[2]) ) {
