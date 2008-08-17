@@ -31,8 +31,12 @@
 
 #define TR7_TRACK_MAGIC	0x223eadb
 
+static char *opt_date;
+
 static
 arglist_t tr7_args[] = {
+	{"date", &opt_date, "The date when the track was recorded (yyyy/mm/dd)",
+		NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
 
@@ -61,32 +65,39 @@ tr7_read(void)
 	waypoint *wpt;
 	route_head *trk = NULL;
 	unsigned int magic;
+	time_t delta_time = 0;
+	struct tm tm;
+
+	if (opt_date)
+		delta_time = parse_date(opt_date, NULL, MYNAME);
 	
 	magic = gbfgetint32(fin);
 	if (magic != TR7_TRACK_MAGIC) {
 		fatal(MYNAME ": Invalid magic number in header (%X, but %X expected)!\n", magic, TR7_TRACK_MAGIC);
 	}
 
+	memset(&tm, 0, sizeof(tm));
+	tm.tm_year = 70;
+	tm.tm_mday = 1;
+
 	while (! gbfeof(fin)) {
 		gbfread(buff, 1, sizeof(buff), fin);
 		if (buff[0] == 0xD8) {
-			struct tm tm;
 			double lat, lon;
 
 			lat = (double)le_read32(&buff[20]) / 1000000.0;
 			lon = (double)le_read32(&buff[16]) / 1000000.0;
 			if ((fabs(lat) > 90) || (fabs(lon) > 180)) continue;
 
-			memset(&tm, 0, sizeof(tm));
 			tm.tm_hour = buff[8];
 			tm.tm_min = buff[10];
 			tm.tm_sec = buff[12];
-
+			
 			wpt = waypt_new();
 
 			wpt->latitude = lat;
 			wpt->longitude = lon;
-			wpt->creation_time = mkgmtime(&tm);
+			wpt->creation_time = delta_time + mkgmtime(&tm);
 
 			if (! trk) {
 				trk = route_head_alloc();
@@ -114,7 +125,7 @@ ff_vecs_t tr7_vecs = {		/* currently we can only read tracks */
 	NULL,
 	NULL,
 	tr7_args,
-	CET_CHARSET_ASCII, 0
+	CET_CHARSET_ASCII, 1	/* FIXED - CET-REVIEW - */
 
 };
 
