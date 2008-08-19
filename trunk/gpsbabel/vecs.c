@@ -807,7 +807,7 @@ vecs_t vec_list[] = {
 	{
 		&humminbird_vecs,
 		"humminbird",
-		"Humminbird waypoints (.hwr)",
+		"Humminbird waypoints and routes (.hwr)",
 		"hwr"
         },
 	{
