@@ -77,6 +77,63 @@ wr_deinit(void)
 #define read_long(f) gbfgetint32((f))
 #define read_char(f) (unsigned char)gbfgetc((f))
 
+/*
+ *  Decode a type 8 compressed record
+ */
+char *
+decode_8(int sz, const unsigned char *inbuf)
+{
+  static const char encoding_8[32] = "X. SaerionstldchumgpbkfzvACBMPG-";
+  static const int encoding_8_high[8] = {0x2,0x3,0x4,0x5,0x6,0x7,0xe,0xf};
+
+  // Maximally sized for laziness.
+  char *rval = xmalloc(sz * 3 + 1);
+  char *out = rval;
+
+  int i;
+    for (i = 0; i < sz;) {
+     if (inbuf[0] & 0x80) {
+      int idx;
+      int res;
+      idx = (inbuf[0] & 0x70) >> 4;
+      res = inbuf[0] & 0x0f;
+      res |= encoding_8_high[idx] << 4;
+
+      *out++ = res;
+
+      inbuf++;
+      i++;
+     } else {
+      int c1 = (inbuf[0] & 0x7c) >> 2;
+      int c2 = ((inbuf[0] & 3) << 3) | (inbuf[1] & 0xe0) >> 5;
+      int c3 = inbuf[1] &  0x1f;
+      if ((c1 | c2 | c3) > 0x1f) fatal("bit unpacking error");
+      *out++ = encoding_8[c1];
+      *out++ = encoding_8[c2];
+      *out++ = encoding_8[c3];
+      inbuf+=2;
+      i+=2;
+    }
+  }
+  return rval;
+}
+
+void
+decode_latlon(double *lat, double *lon)
+{
+  unsigned char latbuf[3];
+  unsigned char lonbuf[3];
+  double rlat, rlon;
+
+  gbfread(&lonbuf, 3, 1, file_in );
+  gbfread(&latbuf, 3, 1, file_in );
+  rlat = ((latbuf[2] << 16) + (latbuf[1] << 8) + latbuf[0]) / 1000000.0;
+
+  *lat = 80 - rlat;
+  *lon = rlon = 123.456;
+
+}
+
 static void
 data_read(void)
 {
@@ -132,7 +189,21 @@ data_read(void)
 			waypt_add(wpt_tmp);
 		  break;
               case 8:
+              case 24:
+#if 0 // Fallthrough for now to silently ignore these until this is done.
+                recsize = read_char( file_in ) ;
+		wpt_tmp = waypt_new();
+                decode_latlon(&wpt_tmp->latitude, &wpt_tmp->longitude);
+                gbfread( tbuf, 3, 1, file_in );
+                gbfread( tbuf, 3, 1, file_in );
+                gbfread( tbuf, recsize, 1, file_in );
+                wpt_tmp->shortname = decode_8(recsize, tbuf);
+                waypt_add(wpt_tmp);
+                break;
+#else
+#endif
               case 9:
+              case 25:
                 recsize = read_char( file_in ) + 6;
                 if (global_opts.debug_level >= 5)
                   warning("Unknown record type 0x%x; skipping %ld bytes.\n",
