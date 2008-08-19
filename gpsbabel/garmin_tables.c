@@ -839,7 +839,7 @@ int gt_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_form
 	return def_icon;
 }
 
-char *
+const char *
 gt_get_icao_country(const char *cc)
 {
 	gt_country_code_t *x = &gt_country_codes[0];
@@ -847,7 +847,7 @@ gt_get_icao_country(const char *cc)
 	if ((cc == NULL) || (*cc == '\0')) return NULL;
 
 	do {
-		char *ccx = x->cc;
+		const char *ccx = x->cc;
 		while (ccx != NULL) {
 			if (strncmp(ccx, cc, 2) == 0) return x->country;
 			if ((ccx[0] == cc[0]) && (ccx[1] == '*'))  return x->country;
@@ -860,14 +860,14 @@ gt_get_icao_country(const char *cc)
 	return NULL;
 }
 
-char *
+const char *
 gt_get_icao_cc(const char *country, const char *shortname)
 {
 	static char res[3];
 	gt_country_code_t *x = &gt_country_codes[0];
 
 	if ((country == NULL) || (*country == '\0')) {
-		char *test;
+		const char *test;
 		if (shortname == NULL) return NULL;
 		switch(strlen(shortname)) {
 			case 3: strncpy(res, shortname, 1); break;
@@ -896,7 +896,7 @@ gt_get_icao_cc(const char *country, const char *shortname)
 			return res;
 		}
 		if (shortname && (strlen(shortname) == 4)) {
-			char *ccx = x->cc;
+			const char *ccx = x->cc;
 			
 			strncpy(res, shortname, 2);
 			res[2] = '\0';
@@ -930,7 +930,7 @@ gt_lookup_grid_type(const char *grid_name, const char *module)
 	return grid_unknown;	/* (warnings) */
 }
 
-char *
+const char *
 gt_get_mps_grid_longname(const grid_type grid, const char *module)
 {
 	if ((grid < GRID_INDEX_MIN) || (grid > GRID_INDEX_MAX))
@@ -940,7 +940,7 @@ gt_get_mps_grid_longname(const grid_type grid, const char *module)
 	return gt_mps_grid_names[grid].longname;
 }
 
-char *
+const char *
 gt_get_mps_datum_name(const int datum_index)
 {
 	char *result;

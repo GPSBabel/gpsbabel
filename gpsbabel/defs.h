@@ -659,11 +659,11 @@ typedef struct arglist {
 	const char *argstring;
 	char **argval;
 	const char *helpstring;
-	const char *defaultvalue;
+	char *defaultvalue;
 	const gbuint32 argtype;
 	const char *minvalue;		/* minimum value for numeric options */
 	const char *maxvalue;		/* maximum value for numeric options */
-	const char *argvalptr;	/* !!! internal helper. Not used in definitions !!! */
+	char *argvalptr;	/* !!! internal helper. Not used in definitions !!! */
 } arglist_t;
 
 typedef enum {

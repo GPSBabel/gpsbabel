@@ -626,7 +626,6 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm){
 
     if ( bmask & (1<<HEIGHT) ){
        trk->altitude       = itm->height;
-       // WAYPT_SET(trk, altitude, itm->height);
     }
     trk->creation_time  = itm->timestamp; // in UTC..
     if ( bmask & (1<<MILLISECOND) ) 

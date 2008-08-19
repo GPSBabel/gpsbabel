@@ -511,7 +511,7 @@ write_waypt(const waypoint *wpt)
 	garmin_fs_p gmsd;
 	char *wpt_type;
 	char *dspl_mode;
-	char *country;
+	const char *country;
 	double x;
 	int i, icon, dynamic;
 	char *icon_descr;
@@ -780,7 +780,7 @@ garmin_txt_write(void)
 	cet_gbfprintf(fout, &cet_cs_vec_cp1252, "Grid\t%s\r\n", grid_str);
 	xfree(grid_str);
 
-	datum_str = gt_get_mps_datum_name(datum_index);
+	const char *datum_str = gt_get_mps_datum_name(datum_index);
 	gbfprintf(fout, "Datum\t%s\r\n\r\n", datum_str);
 
 	waypoints = 0;

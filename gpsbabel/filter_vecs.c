@@ -153,7 +153,7 @@ find_filter_vec(char *const vecname, char **opts)
 		/* step 1: initialize by inifile or default values */
 		if (vec->vec->args) {
 			for (ap = vec->vec->args; ap->argstring; ap++) {
-				char *temp;
+				const char *temp;
 				
 				temp = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
 				if (temp == NULL) temp = inifile_readstr(global_opts.inifile, "Common filter settings", ap->argstring);

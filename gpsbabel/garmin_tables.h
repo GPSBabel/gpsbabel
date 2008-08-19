@@ -67,8 +67,8 @@ typedef struct gt_country_code_s
 
 extern gt_country_code_t gt_country_codes[];
 
-char *gt_get_icao_country(const char *cc);
-char *gt_get_icao_cc(const char *country, const char *shortname);
+const char *gt_get_icao_country(const char *cc);
+const char *gt_get_icao_cc(const char *country, const char *shortname);
 
 /* this order is used by most devices */
 typedef enum {
@@ -93,9 +93,9 @@ unsigned char gt_convert_category(const char *name, int *category);
 unsigned char gt_switch_display_mode_value(const unsigned char display_mode, const int protoid, const char device);
 
 grid_type gt_lookup_grid_type(const char *grid_name, const char *module);
-char *gt_get_mps_grid_longname(const grid_type grid, const char *module);
+const char *gt_get_mps_grid_longname(const grid_type grid, const char *module);
 int gt_lookup_datum_index(const char *datum_str, const char *module);
-char *gt_get_mps_datum_name(const int datum_index);
+const char *gt_get_mps_datum_name(const int datum_index);
 gbuint32 gt_color_value(const int garmin_index);
 gbuint32 gt_color_value_by_name(const char *name);
 int gt_color_index_by_name(const char *name);
