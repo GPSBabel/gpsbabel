@@ -621,7 +621,8 @@ char *
 strenquote(const char *str, const char quot_char)
 {
 	int len;
-	char *cin, *cout;
+	const char *cin;
+	char *cout;
 	char *tmp;
 
 	if (str == NULL) cin = "";
@@ -1371,7 +1372,7 @@ convert_human_time_format(const char *human_timef)
  * html = 1 for html output otherwise text
  */
 char *
-pretty_deg_format(double lat, double lon, char fmt, char *sep, int html) 
+pretty_deg_format(double lat, double lon, char fmt, const char *sep, int html) 
 {
 	double  latmin, lonmin, latsec, lonsec;
 	int     latint, lonint;
@@ -1695,7 +1696,7 @@ xml_tag *xml_next( xml_tag *root, xml_tag *cur )
 	return cur;
 }
 
-xml_tag *xml_findnext( xml_tag *root, xml_tag *cur, char *tagname ) 
+xml_tag *xml_findnext( xml_tag *root, xml_tag *cur, const char *tagname ) 
 {
 	xml_tag *result = cur;
 	do {
@@ -1704,12 +1705,12 @@ xml_tag *xml_findnext( xml_tag *root, xml_tag *cur, char *tagname )
 	return result;
 }
 
-xml_tag *xml_findfirst( xml_tag *root, char *tagname )
+xml_tag *xml_findfirst( xml_tag *root, const char *tagname )
 {
 	return xml_findnext( root, root, tagname );
 }
 
-char *xml_attribute( xml_tag *tag, char *attrname ) 
+char *xml_attribute( xml_tag *tag, const char *attrname ) 
 {
 	char *result = NULL;
 	if ( tag->attributes ) {

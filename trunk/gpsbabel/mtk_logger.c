@@ -754,7 +754,7 @@ static void mtk_csv_deinit(void){
 static int csv_line(gbfile *csvFile, int idx, unsigned long bmask, struct data_item *itm){
    struct tm *ts_tm;
    char ts_str[30];
-   char *fix_str = "";
+   const char *fix_str = "";
 
    ts_tm = gmtime(&(itm->timestamp));
    strftime(ts_str, sizeof(ts_str)-1, "%Y/%m/%d,%H:%M:%S", ts_tm);

@@ -179,7 +179,7 @@ data_read(void)
 
 
 static int 
-gcdb_add_to_rec(struct dbrec *rec, char *fldname, gcdb_rectype rectype, void *data)
+gcdb_add_to_rec(struct dbrec *rec, const char *fldname, gcdb_rectype rectype, void *data)
 {
 	int length;
 	static int rec_cnt;

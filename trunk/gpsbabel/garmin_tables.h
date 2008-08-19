@@ -61,8 +61,8 @@ extern char *gt_waypt_class_names[];
 
 typedef struct gt_country_code_s 
 { 
-	char *cc; 
-	char *country; 
+	const char *cc; 
+	const char *country; 
 } gt_country_code_t;
 
 extern gt_country_code_t gt_country_codes[];

@@ -77,9 +77,9 @@ arglist_t bcr_args[] = {
 };
 
 typedef struct {
-	char *bcr_name;
-	char *mps_name;
-	char *symbol_DE;
+	const char *bcr_name;
+	const char *mps_name;
+	const char *symbol_DE;
 	int  warned;
 } bcr_icon_mapping_t;
 
@@ -145,10 +145,10 @@ bcr_handle_icon_str(const char *str, waypoint *wpt)
 	}
 }
 
-static char *
+static const char *
 get_bcr_icon_from_icon_descr(const char *icon_descr)
 {
-	char *result = BCR_DEF_ICON;
+	const char *result = BCR_DEF_ICON;
 	
 	if (icon_descr) {
 		bcr_icon_mapping_t *m;
@@ -378,7 +378,7 @@ bcr_route_header(const route_head *route)
 	i = 0;
 	QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) 
 	{
-		char *icon;
+		const char *icon;
 		waypoint *wpt = (waypoint *) elem;
 
 		i++;

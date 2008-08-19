@@ -80,8 +80,8 @@ arglist_t raymarine_args[] =
 /* Bitmaps */
 
 typedef struct {
-	char *name;
-	char *mps_name;
+	const char *name;
+	const char *mps_name;
 } raymarine_symbol_mapping_t;
 
 static raymarine_symbol_mapping_t raymarine_symbols[] = {
@@ -387,7 +387,7 @@ static void
 write_route_wpt_cb(const waypoint *wpt)
 {
 	int i;
-	static char *items[] = {
+	static const char *items[] = {
 		"Cog",
 		"Eta",
 		"Length",
