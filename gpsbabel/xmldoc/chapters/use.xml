@@ -287,19 +287,44 @@ merged data to multiple destinations.
       Introduced in GPSBabel 1.3.1, we now have an <emphasis>experimental</emphasis>  feature for realtime tracking via the new <option>-T</option> option.  This reads position reports from selected formats and writes an output file when a position report is received. 
     </para>
     <para>
-	  As of this writing, Garmin's PVT protocol and NMEA are supported 
+      As of this writing, <link linkend="fmt_garmin">Garmin's PVT
+        protocol</link>  and 
+      <link linkend="fmt_nmea">NMEA</link>  are supported 
 	  inputs. KML, NMEA, and the variou XCSV formats are supported on 
 	  output.   Additional formats may be added by interested parties 
 	  later.
     </para>
 <example>
   <title>Read realtime positioning from Garmin USB, write to Keyhole Markup</title>
-    <para><userinput>gpsbabel -T -i garmin -f usb: -o kml -F xxx.kml</userinput></para>
-</example>
-    <para>
+  <para><userinput>gpsbabel -T -i garmin -f usb: -o kml -F xxx.kml</userinput></para>
+  <para>
    	  Will read the USB-connected Garmin and rewrite 'xxx.kml' atomically,
-	  suitable for a self-refreshing network link in Google Earth.
-    </para>
+          suitable for a self-refreshing network link in Google Earth.
+        </para>
+      </example>
+
+<example>
+  <title>Read realtime positioning from Wintec WBT-201 via Bluetooth on Mac, write to Keyhole Markup</title>
+  <para><userinput>gpsbabel -T -i nmea -f /dev/cu.G-Rays2-SPPslave-1 -o kml -F xxx.kml</userinput></para>
+  <para>
+    Will read the Wintec WBT-201 via Bluetooth, using the name that
+    the Mac assigned it, and rewrite 'xxx.kml' atomically,
+          suitable for a self-refreshing network link in Google Earth.
+        </para>
+</example>
+
+
+        <para>
+          Be sure to substitute an device name appropriate for your device
+          and OS, such as <filename>/dev/cu.usbserial</filename> or
+          <filename>/dev/cu.BT-GPS-37A695-BT-GPSCOM-1</filename>
+          for Mac, <filename>COM23:</filename> for Windows, or
+          <filename>usb:</filename> for
+          <link linkend="fmt_garmin">Garmin USB</link>.    These names
+            (except the "usb:" parlance for Garmin USB) are assigned by
+            your operating system.
+
+        </para>
 </sect1>
 
 <sect1 id="batchfile">

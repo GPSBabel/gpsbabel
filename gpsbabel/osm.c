@@ -65,7 +65,7 @@ xg_tag_mapping osm_map[] = {
 	{ NULL,		0,		NULL }
 };
 
-static char *osm_features[] = {
+static const char *osm_features[] = {
 	"- dummy -",	/*  0 */
 	"aeroway",	/*  1 */
 	"amenity",	/*  2 */

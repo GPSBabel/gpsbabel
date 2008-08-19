@@ -359,7 +359,7 @@ geoniche_read_asc(void)
     } 
 }
 
-static char *geoniche_icon_map[] = 			/* MPS */
+static const char *geoniche_icon_map[] = 			/* MPS */
 {
 	 /* 21 */ "Cross",
 	 /* 22 */ "Cross (light)",			

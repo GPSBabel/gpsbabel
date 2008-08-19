@@ -109,7 +109,7 @@ typedef enum {
 #define unicsv_unknown	1e25
 
 typedef struct {
-	char *name;
+	const char *name;
 	field_e type;
 	gbuint32 options;
 } field_t;
@@ -215,7 +215,7 @@ static field_e *unicsv_fields_tab;
 static int unicsv_fields_tab_ct;
 static double unicsv_altscale, unicsv_depthscale, unicsv_proximityscale
 ;
-static char *unicsv_fieldsep;
+static const char *unicsv_fieldsep;
 static gbfile *fin, *fout;
 static gpsdata_type unicsv_data_type;
 static route_head *unicsv_track, *unicsv_route;

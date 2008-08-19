@@ -656,14 +656,14 @@ void 	vmem_realloc(vmem_t*, size_t);
 #define ARG_TERMINATOR {0, 0, 0, 0, 0, ARG_NOMINMAX}
 
 typedef struct arglist {
-	char *argstring;
+	const char *argstring;
 	char **argval;
-	char *helpstring;
-	char *defaultvalue;
-	gbuint32 argtype;
-	char *minvalue;		/* minimum value for numeric options */
-	char *maxvalue;		/* maximum value for numeric options */
-	char *argvalptr;	/* !!! internal helper. Not used in definitions !!! */
+	const char *helpstring;
+	const char *defaultvalue;
+	const gbuint32 argtype;
+	const char *minvalue;		/* minimum value for numeric options */
+	const char *maxvalue;		/* maximum value for numeric options */
+	const char *argvalptr;	/* !!! internal helper. Not used in definitions !!! */
 } arglist_t;
 
 typedef enum {
@@ -717,7 +717,7 @@ typedef struct ff_vecs {
 	ff_write write;
 	ff_exit exit;
 	arglist_t *args;
-	char *encode;
+	const char *encode;
 	int fixed_encode;
 	position_ops_t position_ops;
 	const char *name;		/* dyn. initialized by find_vec */
@@ -832,7 +832,7 @@ char * strip_html(const utf_string*);
 char * strip_nastyhtml(const char * in);
 char * convert_human_date_format(const char *human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
 char * convert_human_time_format(const char *human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
-char * pretty_deg_format(double lat, double lon, char fmt, char *sep, int html);   /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
+char * pretty_deg_format(double lat, double lon, char fmt, const char *sep, int html);   /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
 char * get_filename(const char *fname);				/* extract the filename portion */
 
@@ -855,9 +855,9 @@ char * get_filename(const char *fname);				/* extract the filename portion */
 /* this lives in gpx.c */
 time_t xml_parse_time( const char *cdatastr, int * microsecs );
 	
-xml_tag *xml_findfirst( xml_tag *root, char *tagname );
-xml_tag *xml_findnext( xml_tag *root, xml_tag *cur, char *tagname );
-char *xml_attribute( xml_tag *tag, char *attrname );
+xml_tag *xml_findfirst( xml_tag *root, const char *tagname );
+xml_tag *xml_findnext( xml_tag *root, xml_tag *cur, const char *tagname );
+char *xml_attribute( xml_tag *tag, const char *attrname );
 
 char * rot13( const char *str );
 

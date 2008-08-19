@@ -603,8 +603,8 @@ char *gt_display_mode_names[] = {
 };
 
 typedef struct {
-	char *shortname;
-	char *longname;
+	const char *shortname;
+	const char *longname;
 	grid_type grid;
 } grid_mapping_t;
 
@@ -624,8 +624,8 @@ grid_mapping_t gt_mps_grid_names[] =
 /* gt_mps_datum_names: */
 
 typedef struct {
-	char *jeeps_name;
-	char *mps_name;
+	const char *jeeps_name;
+	const char *mps_name;
 } datum_mapping_t;
 
 /* will be continued (when requested) */	
@@ -647,7 +647,7 @@ static datum_mapping_t gt_mps_datum_names[] =
 };
 
 typedef struct garmin_color_s {
-	char *name;
+	const char *name;
 	gbint32 rgb;
 } garmin_color_t;
 

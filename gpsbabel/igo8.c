@@ -309,8 +309,8 @@ void write_header()
 	igo8_id_block tmp_id_block;
 	p_igo8_id_block id_block = (p_igo8_id_block)header;
 	gbuint32 current_position = 0;
-	char* title = "Title";
-	char* description = "Description";
+	const char* title = "Title";
+	const char* description = "Description";
 
 	// These values seem to be constant for me, but I have no idea what they are.
 	tmp_id_block.unknown_1 = 0x0000029B;
@@ -384,5 +384,3 @@ ff_vecs_t igo8_vecs = {
 	CET_CHARSET_UTF8, 
 	1
 };
-
- 	  	 

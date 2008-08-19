@@ -309,7 +309,7 @@ static void create_bookmark( char *bmtext ) {
 	bookmark_tail = newmark;
 }	
 
-static void docprintf( int maxlen, char *format, ... ) {
+static void docprintf( int maxlen, const char *format, ... ) {
 
     char *txt = NULL;
     char *txt2 = NULL;
