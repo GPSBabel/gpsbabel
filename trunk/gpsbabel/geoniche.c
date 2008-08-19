@@ -413,10 +413,10 @@ static const char *geoniche_icon_map[] = 			/* MPS */
 	 /* 52 */ "Mystery or puzzle Cache",
 };
 
-static char *
+static const char *
 geoniche_icon_to_descr(const int no)
 {
-    char *result = NULL;
+    const char *result = NULL;
 
     if (no >= 0x21) 
     {
