@@ -1395,5 +1395,15 @@ compare ${TMPDIR}/height_out.gpx ${REFERENCE}/track/height_out.gpx
 ${PNAME} -i iblue747 -f ${REFERENCE}/track/iblue747.csv -o gpx -F ${TMPDIR}/iblue747~csv.gpx
 compare ${REFERENCE}/track/iblue747~csv.gpx ${TMPDIR}/iblue747~csv.gpx
 
+#
+# Humminbird waypoints/routes
+#
+${PNAME} -i humminbird -f ${REFERENCE}/humminbird.hwr -o unicsv,utc=0 -F ${TMPDIR}/humminbird~hwr.csv
+compare ${REFERENCE}/humminbird~hwr.csv ${TMPDIR}/humminbird~hwr.csv
+${PNAME} -i humminbird -f ${REFERENCE}/humminbird.hwr -o humminbird -F ${TMPDIR}/humminbird.hwr
+bincompare ${REFERENCE}/humminbird.hwr ${TMPDIR}/humminbird.hwr
+${PNAME} -i humminbird -f ${REFERENCE}/route/humminbird.hwr -o gpx -F ${TMPDIR}/humminbird~hwr.gpx
+compare ${REFERENCE}/route/humminbird~hwr.gpx ${TMPDIR}/humminbird~hwr.gpx
+
 
 exit 0
