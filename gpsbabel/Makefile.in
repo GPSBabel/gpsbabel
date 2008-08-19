@@ -560,7 +560,7 @@ html.o: html.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
 humminbird.o: humminbird.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h avltree.h
 igc.o: igc.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h
 ignrando.o: ignrando.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
