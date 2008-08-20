@@ -22,4 +22,4 @@ on older Lowrance products, use this:
  gpsbabel ... -o lowranceusr,wversion=3 -F blah.usr
 </userinput>
 
-<para>
+</para>
