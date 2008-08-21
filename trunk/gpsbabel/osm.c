@@ -424,29 +424,21 @@ osm_read(void)
 static void
 osm_features_init(void)
 {
-	/* here we take a union because of warnings
-	   "cast to pointer from integer of different size" 
-	   on 64-bit systems */
-	union {
-		const void *p;
-		int i;
-	} x;
-
+	int i;
+	
 	keys = avltree_init(AVLTREE_STATIC_KEYS, MYNAME);
 	values = avltree_init(0, MYNAME);
 	
-	x.p = NULL;
-	
 	/* the first of osm_features is a place holder */
-	for (x.i = 1; osm_features[x.i]; x.i++)
-		avltree_insert(keys, osm_features[x.i], x.p);
+	for (i = 1; osm_features[i]; i++)
+		avltree_insert(keys, osm_features[i], gb_int2ptr(i));
 	
-	for (x.i = 0; osm_icon_mappings[x.i].value; x.i++) {
+	for (i = 0; osm_icon_mappings[i].value; i++) {
 		char buff[128];
 
-		buff[0] = osm_icon_mappings[x.i].key;
-		strncpy(&buff[1], osm_icon_mappings[x.i].value, sizeof(buff) - 1);
-		avltree_insert(values, buff, (const void *)&osm_icon_mappings[x.i]);
+		buff[0] = osm_icon_mappings[i].key;
+		strncpy(&buff[1], osm_icon_mappings[i].value, sizeof(buff) - 1);
+		avltree_insert(values, buff, (const void *)&osm_icon_mappings[i]);
 	}
 }
 
@@ -455,13 +447,10 @@ static char
 osm_feature_ikey(const char *key)
 {
 	int result;
-	union {
-		const void *p;
-		int i;
-	} x;
+	const void *p;
 	
-	if (avltree_find(keys, key, &x.p))
-		result = x.i;
+	if (avltree_find(keys, key, &p))
+		result = gb_ptr2int(p);
 	else
 		result = -1;
 
@@ -725,18 +714,14 @@ osm_rd_deinit(void)
 static void
 osm_init_icons(void)
 {
-	union {
-		const void *p;
-		int i;
-	} x;
+	int i;
 
 	if (icons) return;
 
 	icons = avltree_init(AVLTREE_STATIC_KEYS, MYNAME);
 
-	x.p = NULL;
-	for (x.i = 0; osm_icon_mappings[x.i].value; x.i++)
-		avltree_insert(icons, osm_icon_mappings[x.i].icon, (const void *)&osm_icon_mappings[x.i]);
+	for (i = 0; osm_icon_mappings[i].value; i++)
+		avltree_insert(icons, osm_icon_mappings[i].icon, (const void *)&osm_icon_mappings[i]);
 }
 
 static void
