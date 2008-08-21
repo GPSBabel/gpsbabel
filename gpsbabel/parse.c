@@ -64,6 +64,7 @@ parse_distance(const char *str, double *val, double scale, const char *module)
 	if (case_ignore_strcmp(unit, "m") == 0) /* do nothing, that's our standard */;
 	else if (case_ignore_strcmp(unit, "ft") == 0) *val = FEET_TO_METERS(*val);
 	else if (case_ignore_strcmp(unit, "feet") == 0) *val = FEET_TO_METERS(*val);
+	else if (case_ignore_strcmp(unit, "k") == 0) *val *= 1000.0;
 	else if (case_ignore_strcmp(unit, "km") == 0) *val *= 1000.0;
 	else if (case_ignore_strcmp(unit, "nm") == 0) *val = NMILES_TO_METERS(*val);
 	else if (case_ignore_strcmp(unit, "mi") == 0) *val = MILES_TO_METERS(*val);
