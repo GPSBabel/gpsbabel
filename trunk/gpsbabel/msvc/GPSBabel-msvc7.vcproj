@@ -579,6 +579,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\gnav_trl.c">
+			</File>
+			<File
 				RelativePath="..\google.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1708,6 +1711,9 @@
 			</File>
 			<File
 				RelativePath="..\tpo.c">
+			</File>
+			<File
+				RelativePath="..\tr7.c">
 			</File>
 			<File
 				RelativePath="..\trackfilter.c">
