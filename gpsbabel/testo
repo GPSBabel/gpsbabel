@@ -19,7 +19,7 @@ fi
 
 TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
 mkdir -p $TMPDIR
-trap "rm -fr $TMPDIR" 0 1 2 3 15
+# trap "rm -fr $TMPDIR" 0 1 2 3 15
 
 bincompare()
 {
@@ -1404,6 +1404,15 @@ ${PNAME} -i humminbird -f ${REFERENCE}/humminbird.hwr -o humminbird -F ${TMPDIR}
 bincompare ${REFERENCE}/humminbird.hwr ${TMPDIR}/humminbird.hwr
 ${PNAME} -i humminbird -f ${REFERENCE}/route/humminbird.hwr -o gpx -F ${TMPDIR}/humminbird~hwr.gpx
 compare ${REFERENCE}/route/humminbird~hwr.gpx ${TMPDIR}/humminbird~hwr.gpx
+
+#
+# Google Navigator tracklines
+#
+${PNAME} -i gnav_trl -f ${REFERENCE}/track/gnav_trl.trl -t -o unicsv,utc=0 -F ${TMPDIR}/gnav_trl~trl.csv
+compare ${REFERENCE}/track/gnav_trl~trl.csv ${TMPDIR}/gnav_trl~trl.csv
+${PNAME} -i gnav_trl -f ${REFERENCE}/track/gnav_trl.trl -o gnav_trl -F ${TMPDIR}/gnav_trl.trl
+${PNAME} -i gnav_trl -f ${TMPDIR}/gnav_trl.trl -t -o unicsv,utc=0 -F ${TMPDIR}/gnav_trl~trl2.csv
+compare ${REFERENCE}/track/gnav_trl~trl.csv ${TMPDIR}/gnav_trl~trl2.csv
 
 
 exit 0
