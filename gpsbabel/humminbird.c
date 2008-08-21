@@ -406,17 +406,14 @@ humminbird_rte_tail(const route_head *rte)
 static void
 humminbird_write_rtept(const waypoint *wpt)
 {
-	union {
-		void *p;
-		int i;
-	} x;
-	
+	int i;
+
 	if (humrte == NULL) return;
-	x.p = wpt->extra_data;
-	if (x.i <= 0) return;
+	i = gb_ptr2int(wpt->extra_data);
+	if (i <= 0) return;
 	
 	if (humrte->count < MAX_RTE_POINTS) {
-		humrte->points[humrte->count] = x.i - 1;
+		humrte->points[humrte->count] = i - 1;
 		humrte->count++;
 	}
 	else {
@@ -430,10 +427,6 @@ humminbird_write_waypoint_wrapper(const waypoint *wpt)
 {
 	char *key;
 	waypoint *tmpwpt;
-	union {			/* Pointers as extra_data are 64-bit in a 64-bit world. */
-		void *p;	/* What we do is to misuse a pointer as an integer, but 'int' is */
-		int i;		/* (mostly) a 32-bit entity. With this union the compiler keeps quiet! */
-	} x = { NULL };		/* Any ideas to a compiler friendly assign of a 32-bit integer to a 64-bit pointer ? */
 
 	xasprintf(&key, "%s\01%.9f\01\%.9f", wpt->shortname, wpt->latitude, wpt->longitude);
 
@@ -442,14 +435,13 @@ humminbird_write_waypoint_wrapper(const waypoint *wpt)
 
 		avltree_insert(waypoints, key, wpt);
 
-		x.i = waypoint_num + 1;		/* NOT NULL */
-		tmpwpt->extra_data = x.p;
+		tmpwpt->extra_data = gb_int2ptr(waypoint_num + 1);	/* NOT NULL */
 		humminbird_write_waypoint(wpt);
 	}
 	else {
-		x.p = tmpwpt->extra_data;
+		void *p = tmpwpt->extra_data;
 		tmpwpt = (waypoint *)wpt;
-		tmpwpt->extra_data = x.p;
+		tmpwpt->extra_data = p;
 	}
 
 	xfree(key);
