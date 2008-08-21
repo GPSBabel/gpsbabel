@@ -877,6 +877,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\gnav_trl.c"
+				>
+			</File>
+			<File
 				RelativePath="..\google.c"
 				>
 			</File>
@@ -2358,6 +2362,10 @@
 			</File>
 			<File
 				RelativePath="..\tpo.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tr7.c"
 				>
 			</File>
 			<File
