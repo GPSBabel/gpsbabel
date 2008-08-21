@@ -1760,3 +1760,30 @@ char gb_getbit(const void *buf, const gbuint32 nr)
 	return (bytes[nr / 8] & (1 << (nr % 8)));
 	
 }
+
+/*
+ * gb_int2ptr: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
+ */
+void *gb_int2ptr(const int i)
+{
+	union {
+		void *p;
+		int i;
+	} x = { NULL };
+
+	x.i = i;
+	return x.p;
+}
+
+/*
+ * gb_ptr2int: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
+ */
+int gb_ptr2int(const void *p)
+{
+	union {
+		const void *p;
+		int i;
+	} x = { p };
+
+	return x.i;
+}

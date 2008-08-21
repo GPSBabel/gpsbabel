@@ -951,6 +951,9 @@ typedef enum {
 char gb_getbit(const void *buf, const gbuint32 nr);
 void gb_setbit(void *buf, const gbuint32 nr);
 
+void *gb_int2ptr(const int i);
+int gb_ptr2int(const void *p);
+
 /*
  *  From parse.c
  */
