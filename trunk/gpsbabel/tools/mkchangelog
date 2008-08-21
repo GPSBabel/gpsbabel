@@ -8,6 +8,8 @@
 
 LANG='POSIX'; export LANG > /dev/null
 
+sed -e 's/^[ \t]*//;s/[ \t]*$//' | # trim leading and trailing spaces
+sed -e 's/ < / \&lt; /g' -e 's/ > /\&gt; /g' | # try replace some unhandled html operators
 sed -e :a -e 's/<[^<]*>/ /g;/</{N;s/\n/ /;ba;}' | # remove most html tags
 sed -e 's/&nbsp;/ /g' -e 's/&amp;/\&/g' -e 's/&gt;/\>/g' -e 's/&lt;/\</g'| # replace HTML special chars
 sed -e 's/^[ \t]*//;s/[ \t]*$//' | # trim leading and trailing spaces
