@@ -11,7 +11,7 @@
 <para>
    The list of keywords include:
    <screen format="linespecific">
-      alt =      Elevation (in meters) of the point
+     alt =      Elevation (in meters) of the point. Add "ft" or "feet" for feet.
       bng_e =    British National Grid's easting
       bng =      full coordinate in BNG format (zone easting northing)
       bng_pos =  full coordinate in BNG format (zone easting northing)
@@ -21,9 +21,9 @@
       comment =  Notes
       cour =     Heading / Course true
       date =     Date (yyyy/mm/dd)
-      depth =    Depth
+      depth =    Depth (in meters).  Add "ft" or "feet" for feet.
       desc =     Description
-      ele =      Elevation (in meters) of the point
+      ele =      Elevation (in meters) of the point. Add "ft" or "feet" for feet.
       e/w =      'e' for eastern hemisphere, 'w' for western
       fix =      3d, 2d, etc.
       geschw =   Geschwindigkeit (speed)
@@ -38,7 +38,7 @@
       n/s =      'n' for northern hemisphere, 's' for southern
       notes =    Notes
       pdop =     Position dilution of precision
-      prox =     Proximity
+      prox =     Proximity (in meters).  Add "ft" or "feet" for feet.
       sat =      Number of sats used for fix
       speed =    Speed
       symb =     Symbol (icon) name
@@ -59,7 +59,7 @@
       x_pos =    Longitude
       y =        Latitude
       y_pos =    Latitude
-      z =        Altitude (elevation)
+      z =        Altitude (elevation).  See "elevation".
    </screen>
    We support some enhanced Garmin attributes. They are also available in 
    <link linkend="fmt_gpx">gpx</link>, <link linkend="fmt_gdb">gdb</link>, 
