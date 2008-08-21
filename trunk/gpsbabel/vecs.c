@@ -143,6 +143,7 @@ extern ff_vecs_t vidaone_vecs;
 extern ff_vecs_t gopal_vecs;
 extern ff_vecs_t humminbird_vecs;
 extern ff_vecs_t tr7_vecs;
+extern ff_vecs_t gnav_trl_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -815,6 +816,12 @@ vecs_t vec_list[] = {
 		"tr7",
 		"MapAsia track file (.tr7)",
 		"tr7"
+	},
+	{
+		&gnav_trl_vecs,
+		"gnav_trl",
+		"Google Navigator Tracklines (.trl)",
+		NULL
 	},
 #endif // MAXIMAL_ENABLED
 	{
