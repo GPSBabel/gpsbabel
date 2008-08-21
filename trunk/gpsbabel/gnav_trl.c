@@ -71,7 +71,7 @@ static double
 read_altitude(const gbuint32 alt)
 {
 	const void *p = &alt;
-	unsigned char *i = p;
+	unsigned char *i = (unsigned char *) p;
 	gbuint32 res = (gbuint32)i[2] << 24 | (gbuint32)i[1] << 16  | (gbuint32)i[0] << 8 | (gbuint32)i[3];
 	return le_read_float(&res);
 }
@@ -81,7 +81,7 @@ write_altitude(const float alt)
 {
 	gbuint32 res;
 	const void *p = &res;
-	unsigned char *i = p;
+	unsigned char *i = (unsigned char *)p;
 	le_write_float(&res, alt);
 	res = (gbuint32)i[0] << 24 | (gbuint32)i[3] << 16  | (gbuint32)i[2] << 8 | (gbuint32)i[1];
 	return res;
@@ -137,7 +137,7 @@ gnav_trl_write(void)
 /**************************************************************************/
 
 ff_vecs_t gnav_trl_vecs = {
-	ff_type_internal,
+	ff_type_file,
 	{ 
 		ff_cap_none			/* waypoints */, 
 	  	ff_cap_read | ff_cap_write	/* tracks */, 
