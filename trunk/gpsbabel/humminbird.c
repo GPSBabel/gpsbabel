@@ -297,8 +297,8 @@ humminbird_read_track(gbfile* fin, const gbuint32 signature) {
 	int points_sz;
 	int i;
 	int max_points = 0;
-	int32_t accum_east;
-	int32_t accum_north;
+	gbint32 accum_east;
+	gbint32 accum_north;
 	double g_lat;
 
 
