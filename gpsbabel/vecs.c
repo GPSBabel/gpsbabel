@@ -315,7 +315,7 @@ vecs_t vec_list[] = {
 		&easygps_vecs,
 		"easygps",
 		"EasyGPS binary format",
-		".loc"
+		"loc"
 	},
 #if PDBFMTS_ENABLED
 	{
