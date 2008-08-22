@@ -19,7 +19,7 @@ fi
 
 TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
 mkdir -p $TMPDIR
-# trap "rm -fr $TMPDIR" 0 1 2 3 15
+trap "rm -fr $TMPDIR" 0 1 2 3 15
 
 bincompare()
 {
@@ -1413,6 +1413,12 @@ compare ${REFERENCE}/track/gnav_trl~trl.csv ${TMPDIR}/gnav_trl~trl.csv
 ${PNAME} -i gnav_trl -f ${REFERENCE}/track/gnav_trl.trl -o gnav_trl -F ${TMPDIR}/gnav_trl.trl
 ${PNAME} -i gnav_trl -f ${TMPDIR}/gnav_trl.trl -t -o unicsv,utc=0 -F ${TMPDIR}/gnav_trl~trl2.csv
 compare ${REFERENCE}/track/gnav_trl~trl.csv ${TMPDIR}/gnav_trl~trl2.csv
+
+#
+# simplify, option 'relative'
+#
+${PNAME} -i gpx -f ${REFERENCE}/track/simplify-relative.gpx -x simplify,relative,count=33 -o gpx -F ${TMPDIR}/simplify-relative2.gpx
+compare ${REFERENCE}/track/simplify-relative2.gpx ${TMPDIR}/simplify-relative2.gpx
 
 
 exit 0
