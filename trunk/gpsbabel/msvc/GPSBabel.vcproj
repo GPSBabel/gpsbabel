@@ -3162,6 +3162,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\cet.h"
+				>
+			</File>
+			<File
+				RelativePath="..\cet_util.h"
+				>
+			</File>
+			<File
 				RelativePath=".\config.h"
 				>
 			</File>
@@ -3171,6 +3179,18 @@
 			</File>
 			<File
 				RelativePath="..\defs.h"
+				>
+			</File>
+			<File
+				RelativePath="..\filterdefs.h"
+				>
+			</File>
+			<File
+				RelativePath="..\garmin_device_xml.h.h"
+				>
+			</File>
+			<File
+				RelativePath="..\garmin_fs.h"
 				>
 			</File>
 			<File
@@ -3186,11 +3206,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\gbtypes.h"
+				RelativePath="..\gbser.h"
 				>
 			</File>
 			<File
-				RelativePath="..\jeeps\gpsdevice.h"
+				RelativePath="..\gbser_private.h"
+				>
+			</File>
+			<File
+				RelativePath="..\gbtypes.h"
 				>
 			</File>
 			<File
@@ -3198,7 +3222,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\holux.h"
+				RelativePath="..\inifile.h"
+				>
+			</File>
+			<File
+				RelativePath="..\defs.h"
 				>
 			</File>
 			<File
@@ -3226,6 +3254,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\strptime.h"
+				>
+			</File>
+			<File
 				RelativePath="..\uuid.h"
 				>
 			</File>
@@ -3246,6 +3278,10 @@
 				</File>
 				<File
 					RelativePath="..\jeeps\gpsdatum.h"
+					>
+				</File>
+				<File
+					RelativePath="..\jeeps\gpsdevice.h"
 					>
 				</File>
 				<File
