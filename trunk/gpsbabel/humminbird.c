@@ -31,6 +31,8 @@
 #define RTE_NAME_LEN		20
 #define MAX_RTE_POINTS		50
 
+#define TRK_MAGIC		0x01030000L
+#define TRK_MAGIC2		0x01021F70L
 #define WPT_MAGIC		0x02020024L
 #define RTE_MAGIC		0x03030088L
 
@@ -47,7 +49,8 @@ typedef struct humminbird_waypt_s {
 	/* gbuint32 signature; */   /* Just for error checking(?) */
 	gbuint16 num;          /* Always ascending in the file. */
 	gbuint16 zero;         /* Always seems to be zero. */
-	gbuint8  status;       /* Always seems to be 1 */
+	gbuint8  status;       /* Always seems to be 1. Ends up as <h:status>
+	                          in gpx files exported by HumminbirdPC. */
 	gbuint8  icon;         /* See below */
 	gbuint16 depth;        /* Water depth. These are fishfinders. In centimeters */
 	gbuint32 time;         /* This is a time_t. In UTC */
@@ -69,6 +72,35 @@ typedef struct humminbird_rte_s {
 	char     name[RTE_NAME_LEN];
 	gbuint16 points[MAX_RTE_POINTS];
 } humminbird_rte_t;
+
+typedef struct humminbird_trk_header_s {      /* 64 bytes, incl signature */
+	/* gbuint32 signature; */
+	gbuint16 trk_num;
+	gbuint16 zero;
+	gbuint16 num_points;
+	gbuint16 unknown;
+	gbuint32 time;		/* a time_t, in UTC */
+
+	gbint32 start_east;	/* Start of track */
+	gbint32 start_north;
+	gbint32 end_east;	/* end of track */
+	gbint32 end_north;
+
+	gbint32 sw_east; 	/* Bounding box, enclosing the track */
+	gbint32 sw_north;	/* sw is the south-west one */
+	gbint32 ne_east;	/* ne is the north-east one */
+	gbint32 ne_north;
+
+	char     name[16];
+} humminbird_trk_header_t;
+
+
+typedef struct humminbird_trk_point_s {
+        gbint16  deltanorth;
+        gbuint16 depth;		/* in centimeters */
+        gbint16  deltaeast;
+} humminbird_trk_point_t;
+
 
 static const char* humminbird_icons[] = {
 	"Normal",       /*  0 */
@@ -174,93 +206,206 @@ humminbird_rd_deinit(void)
 }
 
 static void
+humminbird_read_wpt(gbfile* fin) {
+
+	humminbird_waypt_t w;
+	double guder;
+	int num_icons;
+	waypoint *wpt;
+	char buff[10];
+
+	if (! gbfread(&w, 1, sizeof(w), fin))
+		fatal(MYNAME ": Unexpected end of file!\n");
+
+	/* Fix endianness - these are now BE */
+	w.num = be_read16(&w.num);
+	w.zero = be_read16(&w.zero);
+	w.depth = be_read16(&w.depth);
+	w.time = be_read32(&w.time);
+	w.north = be_read32(&w.north);
+	w.east = be_read32(&w.east);
+
+	/* All right! Copy the data to the gpsbabel struct... */
+
+	wpt = waypt_new();
+
+	wpt->shortname = xstrndup(w.name, sizeof(w.name));
+	wpt->creation_time = w.time;
+
+	guder = gudermannian_i1924(w.north);
+	wpt->latitude = geocentric_to_geodetic_hwr(guder);
+	wpt->longitude = (double)w.east / EAST_SCALE * 180.0;
+
+	wpt->altitude  = 0.0; /* It's from a fishfinder... */
+
+	if (w.depth != 0)
+		WAYPT_SET(wpt,depth,(double)w.depth / 100.0);
+
+	num_icons = sizeof(humminbird_icons) / sizeof(humminbird_icons[0]);
+	if (w.icon < num_icons)
+		wpt->icon_descr = humminbird_icons[w.icon];
+
+	waypt_add(wpt);
+	
+	/* register the point over his internal Humminbird "Number" */
+	snprintf(buff, sizeof(buff), "%d", w.num);
+	avltree_insert(waypoints, buff, wpt);
+}
+
+static void
+humminbird_read_route(gbfile* fin) {
+
+	humminbird_rte_t hrte;
+
+	if (! gbfread(&hrte, 1, sizeof(hrte), fin))
+		fatal(MYNAME ": Unexpected end of file!\n");
+
+	hrte.time = be_read32(&hrte.time);
+	hrte.num = be_read16(&hrte.num);
+
+	if (hrte.count > 0) {
+		int i;
+		route_head *rte = NULL;
+
+		for (i = 0; i < hrte.count; i++) {
+			waypoint *wpt;
+			char buff[10];
+			hrte.points[i] = be_read16(&hrte.points[i]);
+			
+			/* locate the point over his internal Humminbird "Number" */
+			snprintf(buff, sizeof(buff), "%d", hrte.points[i]);
+			if (avltree_find(waypoints, buff, (void *) &wpt)) {
+				if (rte == NULL) {
+					rte = route_head_alloc();
+					route_add_head(rte);
+					rte->rte_name = xstrndup(hrte.name, sizeof(hrte.name));
+					/* rte->rte_num = hrte.num + 1; only internal number */
+				}
+				route_add_wpt(rte, waypt_dupe(wpt));
+			}
+		}
+	}
+}
+
+static void
+humminbird_read_track(gbfile* fin, const gbuint32 signature) {
+
+	humminbird_trk_header_t th;
+	humminbird_trk_point_t* points;
+	route_head* trk;
+	waypoint* first_wpt;
+	int points_sz;
+	int i;
+	int max_points = 0;
+	int32_t accum_east;
+	int32_t accum_north;
+	double g_lat;
+
+
+	if (! gbfread(&th, 1, sizeof(th), fin))
+		fatal(MYNAME ": Unexpected end of file reading header!\n");
+
+	th.trk_num     = be_read16(&th.trk_num);
+	th.num_points  = be_read16(&th.num_points);
+	th.time        = be_read32(&th.time);
+
+	th.start_east  = be_read32(&th.start_east);
+	th.start_north = be_read32(&th.start_north);
+	th.end_east    = be_read32(&th.end_east);
+	th.end_north   = be_read32(&th.end_north);
+
+	th.sw_east     = be_read32(&th.sw_east);
+	th.sw_north    = be_read32(&th.sw_north);
+	th.ne_east     = be_read32(&th.ne_east);
+	th.ne_north    = be_read32(&th.ne_north);
+
+	/* max_points: file length minus 64 bytes header */
+	switch(signature) {
+		case TRK_MAGIC:
+			max_points = (131080 - sizeof(th)) / 6;
+			break;
+		case TRK_MAGIC2:
+			max_points = (8048 - sizeof(th)) / 6;
+			break;
+	};
+
+	if (th.num_points > max_points)
+		fatal(MYNAME ": Too many track points! (%d)\n", th.num_points);
+
+	points_sz = sizeof(humminbird_trk_point_t) * th.num_points;
+	
+	points = xmalloc(points_sz);
+	if (! gbfread(points, 1, points_sz, fin))
+		fatal(MYNAME ": Unexpected end of file reading points!\n");
+	
+	accum_east  = th.start_east;
+	accum_north = th.start_north;
+
+	trk = route_head_alloc();
+	track_add_head(trk);
+
+	trk->rte_name     = xstrndup(th.name, sizeof(th.name));
+	trk->rte_num      = th.trk_num;
+
+	/* We create one wpt for the info in the header */
+
+	first_wpt = waypt_new();
+	g_lat = gudermannian_i1924(accum_north);
+	first_wpt->latitude  = geocentric_to_geodetic_hwr(g_lat);
+	first_wpt->longitude = accum_east/EAST_SCALE * 180.0;
+	first_wpt->altitude  = 0.0;
+	/* No depth info in the header. */
+	track_add_wpt(trk, first_wpt);
+
+	/* We actually end up with one more point in the track than
+ 	   exists in a humminbirdPC-created file. They drop the last
+	   one, prossibly because of a bug in their code. */
+	for(i=0 ; i<th.num_points ; i++) {
+		waypoint *wpt = waypt_new();
+		double guder;
+
+		points[i].depth      = be_read16(&points[i].depth);
+		points[i].deltaeast  = be_read16(&points[i].deltaeast);
+   		points[i].deltanorth = be_read16(&points[i].deltanorth);
+
+                accum_east  += points[i].deltaeast;
+                accum_north += points[i].deltanorth;
+
+		guder = gudermannian_i1924(accum_north);
+		wpt->latitude  = geocentric_to_geodetic_hwr(guder);
+		wpt->longitude = accum_east/EAST_SCALE * 180.0;
+		wpt->altitude  = 0.0;
+		
+		WAYPT_SET(wpt,depth,(double)points[i].depth / 100.0);
+
+		track_add_wpt(trk, wpt);
+	}
+	xfree(points);
+}
+
+
+static void
 humminbird_read(void)
 {
 	while(! gbfeof(fin)) {
 		gbuint32 signature;
 
 		signature = gbfgetuint32(fin);
-		
-		if (signature == WPT_MAGIC) { /* a waypoint */
-			humminbird_waypt_t w;
-			double guder;
-			int num_icons;
-			waypoint *wpt;
-			char buff[10];
 
-			if (! gbfread(&w, 1, sizeof(w), fin))
-				fatal(MYNAME ": Unexpected end of file!\n");
-
-			/* Fix endianness - these are now BE */
-			w.num = be_read16(&w.num);
-			w.zero = be_read16(&w.zero);
-			w.depth = be_read16(&w.depth);
-			w.time = be_read32(&w.time);
-			w.north = be_read32(&w.north);
-			w.east = be_read32(&w.east);
-
-			/* All right! Copy the data to the gpsbabel struct... */
-
-			wpt = waypt_new();
-
-			wpt->shortname = xstrndup(w.name, sizeof(w.name));
-			wpt->creation_time = w.time;
-
-			guder = gudermannian_i1924(w.north);
-			wpt->latitude = geocentric_to_geodetic_hwr(guder);
-			wpt->longitude = (double)w.east / EAST_SCALE * 180.0;
-
-			wpt->altitude  = 0.0; /* It's from a fishfinder... */
-		
-			if (w.depth != 0)
-				WAYPT_SET(wpt,depth,(double)w.depth / 100.0);
-
-			num_icons = sizeof(humminbird_icons) / sizeof(humminbird_icons[0]);
-			if (w.icon < num_icons)
-				wpt->icon_descr = humminbird_icons[w.icon];
-
-			waypt_add(wpt);
-			
-			/* register the point over his internal Humminbird "Number" */
-			snprintf(buff, sizeof(buff), "%d", w.num);
-			avltree_insert(waypoints, buff, wpt);
-
+		switch(signature) {
+			case WPT_MAGIC:
+				humminbird_read_wpt(fin);
+				break;
+			case RTE_MAGIC:
+				humminbird_read_route(fin);
+				break;
+			case TRK_MAGIC:
+			case TRK_MAGIC2:
+				humminbird_read_track(fin, signature);
+				return; /* Don't continue. The rest of the file is all zeores */
+			default:
+				fatal(MYNAME ": Invalid record header \"0x%08X\" (no or unknown humminbird file)!\n", signature);
 		}
-		else if (signature == RTE_MAGIC) { /* here comes a route */
-			humminbird_rte_t hrte;
-
-			if (! gbfread(&hrte, 1, sizeof(hrte), fin))
-				fatal(MYNAME ": Unexpected end of file!\n");
-
-			hrte.time = be_read32(&hrte.time);
-			hrte.num = be_read16(&hrte.num);
-
-			if (hrte.count > 0) {
-				int i;
-				route_head *rte = NULL;
-
-				for (i = 0; i < hrte.count; i++) {
-					waypoint *wpt;
-					char buff[10];
-					hrte.points[i] = be_read16(&hrte.points[i]);
-					
-					/* locate the point over his internal Humminbird "Number" */
-					snprintf(buff, sizeof(buff), "%d", hrte.points[i]);
-					if (avltree_find(waypoints, buff, (void *) &wpt)) {
-						if (rte == NULL) {
-							rte = route_head_alloc();
-							route_add_head(rte);
-							rte->rte_name = xstrndup(hrte.name, sizeof(hrte.name));
-							/* rte->rte_num = hrte.num + 1; only internal number */
-						}
-						route_add_wpt(rte, waypt_dupe(wpt));
-					}
-				}
-			}
-		}
-		else
-			fatal(MYNAME ": Invalid record header (no or unknown humminbird file)!\n");
-
 	}
 }
 
@@ -407,7 +552,7 @@ static void
 humminbird_write_rtept(const waypoint *wpt)
 {
 	int i;
-
+	
 	if (humrte == NULL) return;
 	i = gb_ptr2int(wpt->extra_data);
 	if (i <= 0) return;
@@ -457,13 +602,11 @@ humminbird_write(void)
 
 /**************************************************************************/
 
-// capabilities below means: we can only read and write waypoints
-
 ff_vecs_t humminbird_vecs = {
 	ff_type_file,
 	{ 
 		ff_cap_read | ff_cap_write 	/* waypoints */,
-		ff_cap_none 			/* tracks */,
+		ff_cap_read 			/* tracks */,
 		ff_cap_read | ff_cap_write	/* routes */
 	},
 	humminbird_rd_init,
