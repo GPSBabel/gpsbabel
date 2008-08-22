@@ -266,6 +266,7 @@ release-sourcecheck: changes.html
 release-tarball: gpsbabel.html
 #	rm -fr gpsbabel-$(VERSIOND)
 	cp -ap gpsbabel.html gpsbabel-$(VERSIOND)/
+	cp -ap internal_styles.c gpsbabel-$(VERSIOND)/
 	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
 #	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
 
