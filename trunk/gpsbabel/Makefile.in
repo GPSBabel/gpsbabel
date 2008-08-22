@@ -233,6 +233,10 @@ gpsbabel.html: FORCE
 readme.txt: gpsbabel.html
 	lynx -nolist -dump gpsbabel.html  > $@
 
+changes.html: FORCE
+	wget -O $(WEB)/changes.html http://www.gpsbabel.org/changes.html || exit 1
+	rm -f $(WEB)/changes.html.1 > /dev/null
+
 doc: gpsbabel $(WEB)/htmldoc-$(DOCVERSION)/index.html gpsbabel.pdf # readme.txt
 
 FORCE:
@@ -245,7 +249,7 @@ WINFILES = gpsbabel.exe mingw/libexpat.dll win32/GPSBabelGUI.exe win32/gui-2/REA
 # Do administrative-y things to the tree.  Verify that everything is checked
 # in and tagged.
 #
-release-sourcecheck:
+release-sourcecheck: changes.html
 	cvs commit
 	./chkdoc
 	make clean
@@ -318,7 +322,7 @@ mac-upload:
 
 release: release-sourcecheck  release-tarball release-winbuild release-rpm release-upload
 
-rpm:
+rpm: changes.html
 	tools/mkrpm $(WEB) $(VERSD) $(RELEASE)
 
 mac-release:
@@ -334,7 +338,7 @@ msvc-build:
 	LINK.EXE /NOLOGO @objs.lst ./msvc/expat/libexpat.lib /out:gpsbabel.exe 
 
 # release check using CVS tree
-test-release: doc gpsbabel.html
+test-release: doc gpsbabel.html changes.html
 	cvs export -r HEAD -d gpsbabel-$(VERSIOND) gpsbabel
 	rm -f gpsbabel-$(VERSIOND)/internal_styles.c
 	make release-tarball release-winbuild release-rpm
