@@ -2411,6 +2411,12 @@
 				RelativePath="..\avltree.h">
 			</File>
 			<File
+				RelativePath="..\cet.h">
+			</File>
+			<File
+				RelativePath="..\cet_util.h">
+			</File>
+			<File
 				RelativePath=".\config.h">
 			</File>
 			<File
@@ -2418,6 +2424,15 @@
 			</File>
 			<File
 				RelativePath="..\defs.h">
+			</File>
+			<File
+				RelativePath="..\filterdefs.h">
+			</File>
+			<File
+				RelativePath="..\garmin_device_xml.h">
+			</File>
+			<File
+				RelativePath="..\garmin_fs.h">
 			</File>
 			<File
 				RelativePath="..\garmin_gpi.h">
@@ -2429,6 +2444,12 @@
 				RelativePath="..\gbfile.h">
 			</File>
 			<File
+				RelativePath="..\gbser.h">
+			</File>
+			<File
+				RelativePath="..\gbser_private.h">
+			</File>
+			<File
 				RelativePath="..\gbtypes.h">
 			</File>
 			<File
@@ -2436,6 +2457,9 @@
 			</File>
 			<File
 				RelativePath="..\holux.h">
+			</File>
+			<File
+				RelativePath="..\inifile.h">
 			</File>
 			<File
 				RelativePath="..\magellan.h">
@@ -2456,6 +2480,9 @@
 				RelativePath="..\session.h">
 			</File>
 			<File
+				RelativePath="..\strptime.h">
+			</File>
+			<File
 				RelativePath="..\uuid.h">
 			</File>
 			<Filter
@@ -2472,6 +2499,9 @@
 				</File>
 				<File
 					RelativePath="..\jeeps\gpsdatum.h">
+				</File>
+				<File
+					RelativePath="..\jeeps\gpsdevice.h">
 				</File>
 				<File
 					RelativePath="..\jeeps\gpsfmt.h">
