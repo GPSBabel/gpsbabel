@@ -774,13 +774,14 @@ static void
 garmin_txt_write(void)
 {
 	char *grid_str, *c;
+	const char *datum_str;
 	
 	grid_str = xstrdup(gt_get_mps_grid_longname(grid_index, MYNAME));
 	while ((c = strchr(grid_str, '*'))) *c = 0xB0;	/* degree sign */
 	cet_gbfprintf(fout, &cet_cs_vec_cp1252, "Grid\t%s\r\n", grid_str);
 	xfree(grid_str);
 
-	const char *datum_str = gt_get_mps_datum_name(datum_index);
+	datum_str = gt_get_mps_datum_name(datum_index);
 	gbfprintf(fout, "Datum\t%s\r\n\r\n", datum_str);
 
 	waypoints = 0;
