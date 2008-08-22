@@ -176,6 +176,9 @@ typedef enum {
 	tt_trk_trkseg_trkpt_time,
 	tt_trk_trkseg_trkpt_course,	
 	tt_trk_trkseg_trkpt_speed,
+
+	tt_humminbird_wpt_depth,
+	tt_humminbird_wpt_status,
 } tag_type;
 
 typedef struct {
@@ -332,6 +335,9 @@ tag_mapping tag_path_map[] = {
 	{ tt_garmin_wpt_country, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:Country", 0UL },
 	{ tt_garmin_wpt_postal_code, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:PostalCode", 0UL },
 	{ tt_garmin_wpt_phone_nr, 0, GARMIN_WPT_EXT "/gpxx:PhoneNumber", 0UL },
+
+	{ tt_humminbird_wpt_depth, 0, "/gpx/wpt/extensions/h:depth", 0UL },  // in centimeters.
+	{ tt_humminbird_wpt_status, 0, "/gpx/wpt/extensions/h:status", 0UL },
 
 	{ tt_rte, 0, "/gpx/rte", 0UL },
 	{ tt_rte_name, 0, "/gpx/rte/name", 0UL },
@@ -990,6 +996,9 @@ gpx_end(void *data, const XML_Char *xml_el)
 		garmin_fs_xml_convert(tt_garmin_wpt_extensions, tag, cdatastrp, wpt_tmp);
 		break;
 
+	case tt_humminbird_wpt_depth:
+		WAYPT_SET(wpt_tmp, depth, atof(cdatastrp) / 100.0)
+		break;
 	/*
 	 * Route-specific tags.
  	 */
