@@ -305,7 +305,7 @@ void xml_ignore_tags(const char **taglist)
 
 void
 xml_init0(const char *fname, xg_tag_mapping *tbl, const char *encoding, 
-          off_t offset )
+          gbsize_t offset )
 {
 	if (fname) {
 		ifd = gbfopen(fname, "r", MYNAME);
@@ -342,8 +342,8 @@ xml_init(const char *fname, xg_tag_mapping *tbl, const char *encoding) {
 
 void
 xml_init_offset(const char *fname, xg_tag_mapping *tbl, const char *encoding,
-                off_t off) {
-  xml_init0(fname, tbl, encoding, off);
+                gbsize_t offset) {
+  xml_init0(fname, tbl, encoding, offset);
 }
 
 void
