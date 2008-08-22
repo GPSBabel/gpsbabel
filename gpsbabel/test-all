@@ -4,7 +4,7 @@
 
 PNAME=${PNAME:-./gpsbabel}
 REFGPX="reference/expertgps.gpx"	# reference file for all tests
-EXCL="exif ozi vitosmt xol"			# exclude formats from test
+EXCL="exif ozi vitosmt xol navigonwpt gopal"	# exclude formats from test
 CAPS=""
 TEMPDIR=${GBTEMP:-/tmp}/gb-test-all
 CATALOG=/tmp/gb-test-all.done
