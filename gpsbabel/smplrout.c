@@ -1,5 +1,5 @@
 /*
-   Route simplification filter 
+    Route / track simplification filter 
 
     Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
 
@@ -48,14 +48,21 @@
  * too, is only a heuristic, as it's possible that a different combination or
  * order of point removals could lead to a smaller number of points with less
  * reduction in path length.  In the case of pathlength, error is cumulative.
- */
+*/
 
+/*
+    History:
+
+	2008/08/20: added "relative" option, (Carsten Allefeld, carsten.allefeld@googlemail.com)
+*/
 
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
 
-#define MYNAME "Route simplification filter"
+#define MYNAME "simplify"
+
+#define sqr(a) ((a)*(a))
 
 static int count = 0;
 static double totalerror = 0;
@@ -65,6 +72,7 @@ static char *countopt;
 static char *erroropt;
 static char *xteopt;
 static char *lenopt;
+static char *relopt;
 void (*waypt_del_fnp) (route_head *rte, waypoint *wpt);
 
 static
@@ -76,6 +84,8 @@ arglist_t routesimple_args[] = {
 	{"crosstrack", &xteopt, "Use cross-track error (default)", NULL, 
 		ARGTYPE_BOOL | ARGTYPE_BEGIN_EXCL, ARG_NOMINMAX },
 	{"length", &lenopt, "Use arclength error", NULL, 
+		ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"relative", &relopt, "Use relative error", NULL, 
 		ARGTYPE_BOOL | ARGTYPE_END_EXCL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
@@ -130,6 +140,7 @@ compute_xte( struct xte *xte_rec ) {
 	const waypoint *wpt3 = xte_rec->intermed->wpt;
 	const waypoint *wpt1 = NULL;
 	const waypoint *wpt2 = NULL;
+	double frac, reslat, reslon;
 	/* if no previous, this is an endpoint and must be preserved. */
 	if ( !xte_rec->intermed->prev ) {
 		xte_rec->distance = HUGEVAL;
@@ -144,13 +155,13 @@ compute_xte( struct xte *xte_rec ) {
 	}
 	wpt2 = xte_rec->intermed->next->wpt;
 	
-	if ( xteopt || !lenopt ) {
+	if ( xteopt ) {
 		xte_rec->distance = radtomiles(linedist( 
 			wpt1->latitude, wpt1->longitude, 
 			wpt2->latitude, wpt2->longitude,
 			wpt3->latitude, wpt3->longitude ));
-	} 
-	else {
+	}
+	else if ( lenopt ) {
 		xte_rec->distance = radtomiles( 
 		       gcdist( wpt1->latitude, wpt1->longitude, 
 			       wpt3->latitude, wpt3->longitude ) +
@@ -158,6 +169,31 @@ compute_xte( struct xte *xte_rec ) {
 			       wpt2->latitude, wpt2->longitude ) -
 		       gcdist( wpt1->latitude, wpt1->longitude,
 			       wpt2->latitude, wpt2->longitude ));
+	}
+	else if ( relopt ) {
+		if ( wpt3->hdop == 0 ) {
+			fatal( MYNAME ": relative needs hdop information.\n");
+		}
+		// if timestamps exist, distance to interpolated point
+		if ( wpt1->creation_time != wpt2->creation_time ) {
+			frac = (double)(wpt3->creation_time - wpt1->creation_time) /
+				(wpt2->creation_time - wpt1->creation_time);
+			linepart( wpt1->latitude, wpt1->longitude,
+				  wpt2->latitude, wpt2->longitude,
+				  frac, &reslat, &reslon);
+			xte_rec->distance = radtometers(gcdist(
+				wpt3->latitude, wpt3->longitude,
+				reslat, reslon ));
+		} else { // else distance to connecting line
+			xte_rec->distance = radtometers(linedist(
+				wpt1->latitude, wpt1->longitude, 
+				wpt2->latitude, wpt2->longitude,
+				wpt3->latitude, wpt3->longitude ));
+		}
+		// error relative to horizontal precision
+		xte_rec->distance /= (6 * wpt3->hdop);
+		// (hdop->meters following to J. Person at <http://www.developerfusion.co.uk/show/4652/3/>)
+		
 	}
 }
 
@@ -257,11 +293,11 @@ routesimple_tail( const route_head *rte )
 		xte_recs[i].intermed->xte_rec = xte_recs+i;
 	}
 	/* while we still have too many records... */
-	while ( (countopt && count < xte_count) || (erroropt && totalerror < error) ) {
+	while ( (xte_count) && ((countopt && count < xte_count) || (erroropt && totalerror < error))) {
 		i = xte_count - 1;
 		/* remove the record with the lowest XTE */
 		if ( erroropt ) {
-			if ( xteopt ) {
+			if ( xteopt || relopt ) {
 				if ( i > 1 ) {
 					totalerror = xte_recs[i-1].distance;
 				}
@@ -312,16 +348,15 @@ routesimple_process( void )
 
 void
 routesimple_init(const char *args) {
-	char *fm = NULL;
 	count = 0;
 
 	if ( !!countopt == !!erroropt ) {
 		fatal( MYNAME ": You must specify either count or error, but not both.\n");
 	}
-	if ( xteopt && lenopt ) {
-		fatal( MYNAME ": crosstrack and length may not be used together.\n");
+	if ( (!!xteopt + !!lenopt + !!relopt) > 1 ) {
+		fatal( MYNAME ": You may specify only one of crosstrack, length, or relative.\n");
 	}
-	if ( !xteopt && !lenopt ) {
+	if ( !xteopt && !lenopt && !relopt) {
 		xteopt = "";
 	}
 		
@@ -329,12 +364,10 @@ routesimple_init(const char *args) {
 		count = atol(countopt);
 	}
 	if (erroropt) {
-               error = strtod(erroropt, &fm);
-
-               if ((*fm == 'k') || (*fm == 'K')) {
-	            /* distance is kilometers, convert to miles */
-	            error *= .6214;
-	       }
+		int res = parse_distance(erroropt, &error, 1.0, MYNAME);
+		if (res == 0) error = 0;
+		else if (res == 2) /* parameter with unit */
+			error = METERS_TO_MILES(error);
 	}
 }
 
