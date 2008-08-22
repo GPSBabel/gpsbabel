@@ -1,0 +1,64 @@
+<para>
+  When no proximity data is available in the source input, GPSBabel uses this as the default proximity value.
+  The parameter has to be in meters, or, when units=s specified, in miles.
+  <link linkend="fmt_garmin_gpi_o_alerts">alerts</link> are automatically enabled.
+</para>
+<example id="garmin_gpi_speedcams">
+<title>Read GPX file, create GPI to alert when you're 1/2 mile from a speed camera.</title>
+<para>
+  <userinput>
+    gpsbabel -i gpx -f "SpeedCameras.gpx" -o garmin_gpi,units=s,proximity=0.5 -F "SpeedCameras.gpi"
+  </userinput>
+</para>
+</example>
+<para>
+  Its also possible to append a specific distance unit to the parameter.
+</para>
+<para>
+  <userinput>
+    gpsbabel -i gpx -f "SpeedCameras.gpx" -o garmin_gpi,proximity=500m -F "SpeedCameras.gpi"
+  </userinput>
+</para>
+<para>
+  <table id="distance_units">
+  <title>Supported distance units</title>
+  <tgroup cols="2">
+  <thead>
+  <row>
+    <entry>Unit</entry> 
+    <entry>Description</entry> 
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry>fa</entry>
+    <entry>Fathoms</entry>
+  </row>
+  <row>
+    <entry>feet</entry>
+    <entry>Feet</entry>
+  </row>
+  <row>
+    <entry>ft</entry>
+    <entry>Feet</entry>
+  </row>
+  <row>
+    <entry>km</entry>
+    <entry>Kilometers</entry>
+  </row>
+  <row>
+    <entry>m</entry>
+    <entry>Meters</entry>
+  </row>
+  <row>
+    <entry>mi</entry>
+    <entry>Miles</entry>
+  </row>
+  <row>
+    <entry>nm</entry>
+    <entry>Nautical miles</entry>
+  </row>
+</tbody>
+</tgroup>
+</table>
+</para>

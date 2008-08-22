@@ -1,0 +1,27 @@
+# gpsbabel XCSV style file
+#
+# Format: TomTom Navigator Places of Interest
+# Author: Olaf Klein
+#   Date: 04/17/2007
+#
+DESCRIPTION		TomTom POI file (.asc)
+EXTENSION		asc
+DATATYPE		WAYPOINT
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		COMMA
+RECORD_DELIMITER	CRNEWLINE
+BADCHARS		,"
+ENCODING		MS-ANSI
+#
+PROLOGUE	 TomTom Navigator Places of Interest
+PROLOGUE	 GPSBabel-__VERSION__ ASCII Export
+PROLOGUE	  Points
+PROLOGUE	 Created at: __DATE_AND_TIME__
+# #
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	LON_DECIMAL, "", "%.6f"
+IFIELD	LAT_DECIMAL, "", "%.6f"
+IFIELD	SHORTNAME, "", ""%s""

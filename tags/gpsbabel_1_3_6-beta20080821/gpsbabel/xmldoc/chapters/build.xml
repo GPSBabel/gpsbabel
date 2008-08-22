@@ -1,0 +1,64 @@
+<chapter id="Getting_and_Building">
+  <title>Getting it and Building it</title>
+  <para> 
+GPSBabel is distributed "ready to run" on most common 
+operating systems via the 
+<ulink url="http://www.gpsbabel.org/download.html">download page</ulink>.
+</para>
+  <para> As GPSBabel runs on a wide variety of operating systems,
+be sure to visit the 
+<ulink url="http://www.gpsbabel.org/osnotes.html">OS-Specific notes</ulink> for
+additional information.
+</para>
+  <para> 
+ For operating systems where no binary is provided or if 
+you want the latest development version, you will have to build it from
+source.  The code should be compilable on any system with
+ISO C89 compilers.  It's been tested on UnixWare, OpenServer, OS/X,
+Linux, Solaris, and a variety of processors and compilers.
+</para>
+  <para>
+  In most cases, the code is as simple to build as running:
+</para>
+<para><userinput> ./configure &amp;&amp; make</userinput></para>
+  <para><ulink url="http://expat.sourceforge.net">Expat</ulink> 
+is strongly recommended for source builds as it is
+required for reading all the XML formats such as GPX.  Fedora users
+may need to 'yum install expat-devel'.  Ubuntu users may need to 
+'apt-get install expat libexpat-dev'.
+</para>
+  <para><ulink url="http://libusb.sourceforge.net">libusb</ulink> 
+is recommended for OS/X and Linux if you want to use a USB Garmin.
+Fedora users may need to 'yum install expat-devel'.  Ubuntu users may
+need to 'apt-get install libusb-dev'.
+</para>
+<para>There are additional flags that can be passed to configure to
+ customize your build of GPSBabel.   
+</para>
+<para><userinput>./configure --help</userinput></para> 
+<para>
+lists all the supported options, but of interest we have:</para><para>
+ <option>--disable-shapefile</option> Excludes the shapefile support.
+</para>
+<para>
+ <option>--disable-pdb</option> Excludes the Palm database support and all formats that rely on it.
+</para>
+<para>
+  <option>--disable-csv</option> Excludes all support for our something-separated formats.
+</para>
+<para>
+  <option>--disable-filters</option> Excludes all filter support.
+</para>
+<para>
+  <option>--enable-efence</option> Activate debugging mode for gpsbabel-debug.
+</para>
+<para>
+  <option>--with-doc=</option><filename class="directory">dir</filename> Specifies that the doc should be created and installed in <filename class="directory">dir</filename>.
+</para>
+<para>
+  <option>--without-libusb</option> Disables use of libusb, even it's it's available.
+</para>
+<para>
+ <option>--with-zlib=(included)|system|no</option> By default, we use our own version of zlib. If you specify <option>system</option> the system zlib is used.  A value of <option>no</option> (or --without-zlib) disables zlib.
+</para>
+</chapter>

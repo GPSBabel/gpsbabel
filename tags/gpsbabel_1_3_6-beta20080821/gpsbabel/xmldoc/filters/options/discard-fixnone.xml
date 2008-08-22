@@ -1,0 +1,5 @@
+<para>
+  This option is similar to the 'sat' option.   There are times when
+  some GPSes will know how many satellites are in view, but not yet computed
+  a valid fix.  This option allows you to discard those points.
+</para>

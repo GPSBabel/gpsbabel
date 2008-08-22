@@ -1,0 +1,32 @@
+<para>
+	GPSBabel supports the Navilink protocol used by the
+	<ulink url="http://www.locosystech.com/product.php?zln=en&amp;id=5">Locosys GT-11</ulink>
+	GPS receivers. These are sold under a variety of names including:
+<simplelist columns="3">
+	<member>NaviGPS</member>
+	<member>NaviGPS-BT</member>
+	<member>GT-11</member>
+	<member>BGT-11</member>
+	<member>Amaryllo</member>
+</simplelist>
+</para>
+<para>
+	This format is used for both the serial protocol used on
+	the USB link and for the files which can be copied from the
+	internal memory to the SD card using recent firmware versions.
+</para>
+<para>
+	If you specify a serial port for the file (.e.g. "COM1", "/dev/ttyUSB0")
+	to be read or written, GPSBabel will use the serial protocol. Specifying
+	a file, either on local filesystem or on a mounted flash card reader,
+	will results in the file-based format being used.
+</para>
+<para>
+	To access the device using the serial protocol over USB the
+	device needs to be in Navilink mode, which can be activated
+	from the main menu of the device.
+</para>
+<para>
+	Details of the Navilink serial protocol can be found
+	<ulink url="http://wiki.splitbrain.org/navilink">here</ulink>.
+</para>

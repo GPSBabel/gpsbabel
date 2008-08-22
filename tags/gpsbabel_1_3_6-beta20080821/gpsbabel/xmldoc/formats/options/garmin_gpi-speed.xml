@@ -1,0 +1,66 @@
+<para>
+  When no speed data is available in the source input, GPSBabel uses this as the default speed value.
+  The parameter has to be in kilometers per hour, or, when units=s specified,
+  in miles per hour. <link linkend="fmt_garmin_gpi_o_alerts">alerts</link> are
+  automatically enabled.
+</para>
+<para>
+  <userinput>
+    gpsbabel -i gpx -f "SpeedCameras.gpx" -o garmin_gpi,units=s,speed=30 -F "SpeedCameras.gpi"
+  </userinput>
+</para>
+<para>
+  Its also possible to append a specific speed unit to the parameter.
+</para>
+<para>
+  <userinput>
+    gpsbabel -i gpx -f "SpeedCameras.gpx" -o garmin_gpi,speed=30mph -F "SpeedCameras.gpi"
+  </userinput>
+</para>
+<para>
+  <table id="speed_units">
+  <title>Supported speed units</title>
+  <tgroup cols="2">
+  <thead>
+  <row>
+    <entry>Unit</entry> 
+    <entry>Description</entry> 
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry>km/h</entry>
+    <entry>Kilometers per hour</entry>
+  </row>
+  <row>
+    <entry>kmh</entry>
+    <entry>Kilometers per hour</entry>
+  </row>
+  <row>
+    <entry>kph</entry>
+    <entry>Kilometers per hour</entry>
+  </row>
+  <row>
+    <entry>kt</entry>
+    <entry>Knots</entry>
+  </row>
+  <row>
+    <entry>knot</entry>
+    <entry>Knots</entry>
+  </row>
+  <row>
+    <entry>m/s</entry>
+    <entry>Meters per second</entry>
+  </row>
+  <row>
+    <entry>mps</entry>
+    <entry>Meters per second</entry>
+  </row>
+  <row>
+    <entry>mi/h</entry>
+    <entry>Miles per hour</entry>
+  </row>
+</tbody>
+</tgroup>
+</table>
+</para>

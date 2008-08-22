@@ -1,0 +1,6 @@
+<para>
+This option specifies the maximum length to be used for waypoint names in 
+the GPWPL sentence.  Longer names will be shortened to no more than this 
+length, but all waypoint names will remain unique.
+</para>
+

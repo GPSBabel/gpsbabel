@@ -1,0 +1,9 @@
+<para>
+This is one of three "primary" options to the stack filter.
+</para>
+<para>
+This option "pops" the collection of data from the top of the stack.  
+By default, the saved state replaces the current state, but see the 
+<option>discard</option> and <option>append</option> options for 
+alternatives.
+</para>

@@ -1,0 +1,20 @@
+<para>
+genurl is a convenience option for generating the scaling paramaters
+when accessing the Tiger servers.  It will output the latitude, longitude,
+height, and width parameters in a form suitable for use in the URL to generate
+a map that will hold all the points to be displayed  and is suitably scaled
+and centered.   
+</para>
+<para>For example:</para>
+<para><userinput>gpsbabel -i geo -f geocaching.loc -o tiger,genurl=tiger.ctr -F tiger.dat</userinput></para>
+<para>
+may create tiger.ctr with
+<screen format="linespecific">
+lat=36.042108&amp;lon=-86.877408&amp;ht=0.161172&amp;wid=0.591771&amp;iwd=768&amp;iht=768</screen>
+
+After uploading tiger.dat to a public server, a request to 
+<screen format="linespecific"> http://tiger.census.gov/cgi-bin/mapgen?murl=$THATFILE$(cat tiger.ctr)</screen>
+will return a gif file from the tiger server that's suitably scaled.
+
+</para>
+

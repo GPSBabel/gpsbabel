@@ -1,0 +1,14 @@
+<para> 
+This option puts all track points from all tracks into a single track 
+and sorts them by time stamp.  Points with identical time stamps will be
+dropped.
+</para>
+<example id="ex_track_merge">
+<title>Merging tracks with the track filter</title>
+<para> 
+Suppose you want to merge tracks recorded with two different GPS devices 
+at the same time.  To do that, use this command line:
+</para>
+<para><userinput>gpsbabel -t -i gpx -f john.gpx -i gpx -f doe.gpx -x track,merge,title="COMBINED LOG" -o gpx -F john_doe.gpx</userinput></para>
+</example>
+

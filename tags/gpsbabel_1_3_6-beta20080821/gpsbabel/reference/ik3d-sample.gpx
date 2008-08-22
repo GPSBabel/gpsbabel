@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="50.492606163" minlon="12.105131149" maxlat="51.314635752" maxlon="12.414971469"/>
+<wpt lat="50.493662870" lon="12.107152529">
+  <name>Jahnstrasse</name>
+  <cmt>Jahnstrasse 11</cmt>
+  <desc>Jahnstrasse 11</desc>
+</wpt>
+<wpt lat="50.493837046" lon="12.106101019">
+  <name>Liebknechtstrasse</name>
+  <cmt>Liebknechtstrasse 90</cmt>
+  <desc>Liebknechtstrasse 90</desc>
+</wpt>
+<wpt lat="50.492618987" lon="12.105448823">
+  <name>NARVA</name>
+  <cmt>Start</cmt>
+  <desc>Start</desc>
+</wpt>
+<trk>
+  <name>NARVA to Jahnstrasse</name>
+<trkseg>
+<trkpt lat="50.492618987" lon="12.105448823">
+</trkpt>
+<trkpt lat="50.492606163" lon="12.105431557">
+</trkpt>
+<trkpt lat="50.492606163" lon="12.105431557">
+</trkpt>
+<trkpt lat="50.494279861" lon="12.105131149">
+</trkpt>
+<trkpt lat="50.493836962" lon="12.106101271">
+</trkpt>
+<trkpt lat="50.493837046" lon="12.106101019">
+</trkpt>
+<trkpt lat="50.493836962" lon="12.106101271">
+</trkpt>
+<trkpt lat="50.493378639" lon="12.107105255">
+</trkpt>
+<trkpt lat="50.493662786" lon="12.107152529">
+</trkpt>
+<trkpt lat="50.493662870" lon="12.107152529">
+</trkpt>
+</trkseg>
+</trk>
+<trk>
+  <name>ACTIVE LOG 006</name>
+<trkseg>
+<trkpt lat="51.312941350" lon="12.413165923">
+</trkpt>
+<trkpt lat="51.312885778" lon="12.413249239">
+</trkpt>
+<trkpt lat="51.312858034" lon="12.413249239">
+</trkpt>
+<trkpt lat="51.312830206" lon="12.413304811">
+</trkpt>
+<trkpt lat="51.312830206" lon="12.413276983">
+</trkpt>
+<trkpt lat="51.312830206" lon="12.413304811">
+</trkpt>
+<trkpt lat="51.312774718" lon="12.413332555">
+</trkpt>
+<trkpt lat="51.312774718" lon="12.413332555">
+</trkpt>
+<trkpt lat="51.312746890" lon="12.413332555">
+</trkpt>
+<trkpt lat="51.312802462" lon="12.413304811">
+</trkpt>
+<trkpt lat="51.312913606" lon="12.413443699">
+</trkpt>
+<trkpt lat="51.312996922" lon="12.413804792">
+</trkpt>
+<trkpt lat="51.313052494" lon="12.413804792">
+</trkpt>
+<trkpt lat="51.313052494" lon="12.413832536">
+</trkpt>
+<trkpt lat="51.313107982" lon="12.413832536">
+</trkpt>
+<trkpt lat="51.313219126" lon="12.413888108">
+</trkpt>
+<trkpt lat="51.313302442" lon="12.413971424">
+</trkpt>
+<trkpt lat="51.313274698" lon="12.414054740">
+</trkpt>
+<trkpt lat="51.313274698" lon="12.414110312">
+</trkpt>
+<trkpt lat="51.313052494" lon="12.414610293">
+</trkpt>
+<trkpt lat="51.312969094" lon="12.414832581">
+</trkpt>
+<trkpt lat="51.312913606" lon="12.414943641">
+</trkpt>
+<trkpt lat="51.312941350" lon="12.414971469">
+</trkpt>
+<trkpt lat="51.312941350" lon="12.414971469">
+</trkpt>
+<trkpt lat="51.312969094" lon="12.414943641">
+</trkpt>
+<trkpt lat="51.313163554" lon="12.414582549">
+</trkpt>
+<trkpt lat="51.313163554" lon="12.414554805">
+</trkpt>
+<trkpt lat="51.313163554" lon="12.414443661">
+</trkpt>
+<trkpt lat="51.313163554" lon="12.414388089">
+</trkpt>
+<trkpt lat="51.313330270" lon="12.413915852">
+</trkpt>
+<trkpt lat="51.313691363" lon="12.413332555">
+</trkpt>
+<trkpt lat="51.313996883" lon="12.412860319">
+</trkpt>
+<trkpt lat="51.314219087" lon="12.412499227">
+</trkpt>
+<trkpt lat="51.314635752" lon="12.409554748">
+</trkpt>
+<trkpt lat="51.314635752" lon="12.409499260">
+</trkpt>
+<trkpt lat="51.314635752" lon="12.409499260">
+</trkpt>
+<trkpt lat="51.314635752" lon="12.409443688">
+</trkpt>
+<trkpt lat="51.314635752" lon="12.409360288">
+</trkpt>
+<trkpt lat="51.314635752" lon="12.409360288">
+</trkpt>
+<trkpt lat="51.314635752" lon="12.409360288">
+</trkpt>
+<trkpt lat="51.314635752" lon="12.409360288">
+</trkpt>
+<trkpt lat="51.314635752" lon="12.409360288">
+</trkpt>
+</trkseg>
+</trk>
+</gpx>
