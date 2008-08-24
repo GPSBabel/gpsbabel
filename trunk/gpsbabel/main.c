@@ -620,12 +620,19 @@ main(int argc, char *argv[])
 	 */
 	if (global_opts.masked_objective & POSNDATAMASK) {
 
+                if (!ivecs) {
+                  fatal("Realtime tracking (-T) requires an input type (-t)i such as Garmin or NMEA.\n");
+                }
+
 		if (!ivecs->position_ops.rd_position) {
 			fatal("Realtime tracking (-T) is not suppored by this input type.\n");
 		}
 
 
 		if (ivecs->position_ops.rd_init) {
+			if (!fname) {
+			       fatal("An input file (-f) must be specified.\n");
+			}
 			start_session(ivecs->name, fname);
 			ivecs->position_ops.rd_init(fname);
 		}
@@ -703,4 +710,3 @@ void signal_handler(int sig)
 {
 	tracking_status.request_terminate = 1;
 }
-
