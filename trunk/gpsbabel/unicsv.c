@@ -222,9 +222,10 @@ static route_head *unicsv_track, *unicsv_route;
 static char unicsv_outp_flags[(fld_terminator + 8) / 8];
 static grid_type unicsv_grid_idx;
 static int unicsv_datum_idx;
-static char *opt_datum, *opt_grid, *opt_utc, *opt_filename, *opt_format;
+static char *opt_datum, *opt_grid, *opt_utc, *opt_filename, *opt_format, *opt_prec;
 static int unicsv_waypt_ct;
 static char unicsv_detect;
+int llprec;
 
 static arglist_t unicsv_args[] = { 
 	{"datum", &opt_datum, "GPS datum (def. WGS 84)",
@@ -237,6 +238,8 @@ static arglist_t unicsv_args[] = {
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"filename", &opt_filename,   "Write filename(s) from input session(s)", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	{"prec", &opt_prec,   "Precision of numerical coordinates (no grid set)", 
+		"6", ARGTYPE_INT | ARGTYPE_HIDDEN, "0", "15"},
 	ARG_TERMINATOR };
 
 
@@ -926,7 +929,7 @@ unicsv_parse_one_line(char *ibuf)
 			src_datum = DATUM_WGS84;	/* don't convert afterwards */
 		}
 		else if ((swiss_easting != unicsv_unknown) && (swiss_northing != unicsv_unknown)) {
-			GPS_Math_CH1903_NGEN_To_WGS84(swiss_easting, swiss_northing,
+			GPS_Math_Swiss_EN_To_WGS84(swiss_easting, swiss_northing,
 				&wpt->latitude, &wpt->longitude);
 			src_datum = DATUM_WGS84;	/* don't convert afterwards */
 		}
@@ -1150,14 +1153,15 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	case grid_swiss: {
 		double north, east;
 		
-		if (! GPS_Math_WGS84_To_CH1903_NGEN(wpt->latitude, wpt->longitude, &east, &north))
+		if (! GPS_Math_WGS84_To_Swiss_EN(wpt->latitude, wpt->longitude, &east, &north))
 			unicsv_fatal_outside(wpt);
-		gbfprintf(fout, "%.f%s%.f%s",
-			east, unicsv_fieldsep, north, unicsv_fieldsep);
+		gbfprintf(fout, "%.f%s%.f",
+			east, unicsv_fieldsep, north);
+		break;
 
 	}
 	default:
-		gbfprintf(fout, "%.6f%s%.6f", lat, unicsv_fieldsep, lon);
+		gbfprintf(fout, "%.*f%s%.*f", llprec, lat, unicsv_fieldsep, llprec, lon);
 		break;
 	}
 	
@@ -1355,6 +1359,8 @@ unicsv_wr_init(const char *filename)
 		unicsv_datum_idx = DATUM_WGS84;	/* internal, becomes CH1903 */
 	else
 		unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
+		
+	llprec = atoi(opt_prec);
 }
 
 static void
