@@ -149,7 +149,7 @@ xol_waypt(const char *args, const char **attrv) {
 		avp+=2;
 	}
 
-	GPS_Math_CH1903_NGEN_To_WGS84((double)x, (double)y, &wpt->latitude, &wpt->longitude);
+	GPS_Math_Swiss_EN_To_WGS84((double)x, (double)y, &wpt->latitude, &wpt->longitude);
 }
 
 static void 
@@ -252,7 +252,7 @@ xol_waypt_disp_cb(const waypoint *wpt)
 	else
 		name = mkshort(short_h, name);
 
-	if (! GPS_Math_WGS84_To_CH1903_NGEN(wpt->latitude, wpt->longitude, &x, &y))
+	if (! GPS_Math_WGS84_To_Swiss_EN(wpt->latitude, wpt->longitude, &x, &y))
 		xol_fatal_outside(wpt);
 
 	gbfprintf(fout, "%*s<shape type=\"waypoint\"", space++*2, "");
@@ -292,7 +292,7 @@ xol_trkpt_disp_cb(const waypoint *wpt)
 {
 	double x, y;
 
-	if (! GPS_Math_WGS84_To_CH1903_NGEN(wpt->latitude, wpt->longitude, &x, &y))
+	if (! GPS_Math_WGS84_To_Swiss_EN(wpt->latitude, wpt->longitude, &x, &y))
 		xol_fatal_outside(wpt);
 
 	gbfprintf(fout, "%*s<shape type=\"waypoint\"", space++*2, "");
@@ -317,7 +317,7 @@ xol_write(void)
 		fatal(MYNAME ": No data available!\n");
 	}
 
-	if (! GPS_Math_WGS84_To_CH1903_NGEN(
+	if (! GPS_Math_WGS84_To_Swiss_EN(
 		(all_bounds.min_lat + all_bounds.max_lat) / 2,
 		(all_bounds.min_lon + all_bounds.max_lon) / 2, &x, &y)) {
 		gbfprintf(fout, "#####\n");
