@@ -1420,5 +1420,23 @@ compare ${REFERENCE}/track/gnav_trl~trl.csv ${TMPDIR}/gnav_trl~trl2.csv
 ${PNAME} -i gpx -f ${REFERENCE}/track/simplify-relative.gpx -x simplify,relative,count=33 -o gpx -F ${TMPDIR}/simplify-relative2.gpx
 compare ${REFERENCE}/track/simplify-relative2.gpx ${TMPDIR}/simplify-relative2.gpx
 
+#
+# unicsv with various grids
+#
+${PNAME} -i unicsv,utc=0 -f ${REFERENCE}/grid-swiss.csv -o gpx -F ${TMPDIR}/grid-swiss~csv.gpx
+compare ${REFERENCE}/grid-swiss~csv.gpx ${TMPDIR}/grid-swiss~csv.gpx
+${PNAME} -i gpx -f ${REFERENCE}/grid-swiss~csv.gpx -o unicsv,utc=0,grid=swiss -F ${TMPDIR}/grid-swiss.csv
+compare ${REFERENCE}/grid-swiss.csv ${TMPDIR}/grid-swiss.csv
+
+${PNAME} -i unicsv,utc=0 -f ${REFERENCE}/grid-bng.csv -o gpx -F ${TMPDIR}/grid-bng~csv.gpx
+compare ${REFERENCE}/grid-bng~csv.gpx ${TMPDIR}/grid-bng~csv.gpx
+${PNAME} -i gpx -f ${REFERENCE}/grid-bng~csv.gpx -o unicsv,utc=0,grid=bng -F ${TMPDIR}/grid-bng.csv
+compare ${REFERENCE}/grid-bng.csv ${TMPDIR}/grid-bng.csv
+
+${PNAME} -i unicsv,utc=0 -f ${REFERENCE}/grid-utm.csv -o gpx -F ${TMPDIR}/grid-utm~csv.gpx
+compare ${REFERENCE}/grid-utm~csv.gpx ${TMPDIR}/grid-utm~csv.gpx
+${PNAME} -i gpx -f ${REFERENCE}/grid-utm~csv.gpx -o unicsv,utc=0,grid=utm -F ${TMPDIR}/grid-utm.csv
+compare ${REFERENCE}/grid-utm.csv ${TMPDIR}/grid-utm.csv
+
 
 exit 0
