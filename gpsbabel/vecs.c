@@ -737,7 +737,7 @@ vecs_t vec_list[] = {
         {
                 &xol_vecs,
                 "xol",
-                "Swiss Map",
+                "Swiss Map 25/50/100 (.xol)",
                 "xol"
         },
         {
@@ -828,7 +828,7 @@ vecs_t vec_list[] = {
 		&gnav_trl_vecs,
 		"gnav_trl",
 		"Google Navigator Tracklines (.trl)",
-		NULL
+		"trl"
 	},
 #endif // MAXIMAL_ENABLED
 	{
