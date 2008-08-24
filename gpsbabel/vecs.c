@@ -142,6 +142,7 @@ extern ff_vecs_t exif_vecs;
 extern ff_vecs_t vidaone_vecs;
 extern ff_vecs_t gopal_vecs;
 extern ff_vecs_t humminbird_vecs;
+extern ff_vecs_t humminbird_track_vecs;
 extern ff_vecs_t tr7_vecs;
 extern ff_vecs_t gnav_trl_vecs;
 
@@ -810,6 +811,12 @@ vecs_t vec_list[] = {
 		"humminbird",
 		"Humminbird waypoints and routes (.hwr)",
 		"hwr"
+        },
+	{
+		&humminbird_track_vecs,
+		"humminbird-track",
+		"Humminbird tracks (.ht)",
+		"ht"
         },
 	{
 		&tr7_vecs,

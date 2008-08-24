@@ -73,12 +73,12 @@ typedef struct humminbird_rte_s {
 	gbuint16 points[MAX_RTE_POINTS];
 } humminbird_rte_t;
 
-typedef struct humminbird_trk_header_s {      /* 64 bytes, incl signature */
+typedef struct humminbird_trk_header_s {      /* 68 bytes, incl signature */
 	/* gbuint32 signature; */
 	gbuint16 trk_num;
 	gbuint16 zero;
 	gbuint16 num_points;
-	gbuint16 unknown;
+	gbuint16 unknown;	/* Always zero so far. */
 	gbuint32 time;		/* a time_t, in UTC */
 
 	gbint32 start_east;	/* Start of track */
@@ -87,20 +87,39 @@ typedef struct humminbird_trk_header_s {      /* 64 bytes, incl signature */
 	gbint32 end_north;
 
 	gbint32 sw_east; 	/* Bounding box, enclosing the track */
-	gbint32 sw_north;	/* sw is the south-west one */
-	gbint32 ne_east;	/* ne is the north-east one */
+	gbint32 sw_north;	/* sw is the south-west point */
+	gbint32 ne_east;	/* ne is the north-east point */
 	gbint32 ne_north;
 
-	char     name[16];
+	char     name[20];
 } humminbird_trk_header_t;
 
 
 typedef struct humminbird_trk_point_s {
+        gbint16  deltaeast;
         gbint16  deltanorth;
         gbuint16 depth;		/* in centimeters */
-        gbint16  deltaeast;
 } humminbird_trk_point_t;
 
+typedef struct humminbird_trk_header_old_s {      /* 16 bytes, incl signature */
+	/* gbuint32 signature; */
+	gbuint16 trk_num;
+	gbuint16 zero;
+	gbuint16 num_points;
+	gbuint16 unknown;	/* Always zero so far. */
+	gbuint32 time;		/* a time_t, in UTC */
+
+	gbint32 start_east;	/* Start of track */
+	gbint32 start_north;
+	gbint32 end_east;	/* end of track */
+	gbint32 end_north;
+
+} humminbird_trk_header_old_t;
+
+typedef struct humminbird_trk_point_old_s {
+        gbint16  deltaeast;
+        gbint16  deltanorth;
+} humminbird_trk_point_old_t;
 
 static const char* humminbird_icons[] = {
 	"Normal",       /*  0 */
@@ -113,7 +132,7 @@ static const char* humminbird_icons[] = {
 	"Airport",      /*  7 */
 	"Camping",      /*  8 */
 	"Danger",       /*  9 */
-	"Petrol",       /* 10 */
+	"Fuel",         /* 10 */
 	"Rock",         /* 11 */
 	"Weed",         /* 12 */
 	"Wreck",        /* 13 */
@@ -288,13 +307,12 @@ humminbird_read_route(gbfile* fin) {
 }
 
 static void
-humminbird_read_track(gbfile* fin, const gbuint32 signature) {
+humminbird_read_track(gbfile* fin) {
 
 	humminbird_trk_header_t th;
 	humminbird_trk_point_t* points;
 	route_head* trk;
 	waypoint* first_wpt;
-	int points_sz;
 	int i;
 	int max_points = 0;
 	gbint32 accum_east;
@@ -319,23 +337,16 @@ humminbird_read_track(gbfile* fin, const gbuint32 signature) {
 	th.ne_east     = be_read32(&th.ne_east);
 	th.ne_north    = be_read32(&th.ne_north);
 
-	/* max_points: file length minus 64 bytes header */
-	switch(signature) {
-		case TRK_MAGIC:
-			max_points = (131080 - sizeof(th)) / 6;
-			break;
-		case TRK_MAGIC2:
-			max_points = (8048 - sizeof(th)) / 6;
-			break;
-	};
+	max_points = (131080 - sizeof(gbuint32) - sizeof(th)) / sizeof(humminbird_trk_point_t);
 
 	if (th.num_points > max_points)
 		fatal(MYNAME ": Too many track points! (%d)\n", th.num_points);
 
-	points_sz = sizeof(humminbird_trk_point_t) * th.num_points;
-	
-	points = xmalloc(points_sz);
-	if (! gbfread(points, 1, points_sz, fin))
+	/* num_points is actually one too big, because it includes the value in
+	   the header. But we want the extra point at the end because the
+	   freak-value filter below looks at points[i+1] */
+	points = xcalloc(th.num_points, sizeof(humminbird_trk_point_t));
+	if (! gbfread(points, sizeof(humminbird_trk_point_t), th.num_points-1, fin))
 		fatal(MYNAME ": Unexpected end of file reading points!\n");
 	
 	accum_east  = th.start_east;
@@ -344,8 +355,8 @@ humminbird_read_track(gbfile* fin, const gbuint32 signature) {
 	trk = route_head_alloc();
 	track_add_head(trk);
 
-	trk->rte_name     = xstrndup(th.name, sizeof(th.name));
-	trk->rte_num      = th.trk_num;
+	trk->rte_name = xstrndup(th.name, sizeof(th.name));
+	trk->rte_num  = th.trk_num;
 
 	/* We create one wpt for the info in the header */
 
@@ -357,16 +368,30 @@ humminbird_read_track(gbfile* fin, const gbuint32 signature) {
 	/* No depth info in the header. */
 	track_add_wpt(trk, first_wpt);
 
-	/* We actually end up with one more point in the track than
- 	   exists in a humminbirdPC-created file. They drop the last
-	   one, prossibly because of a bug in their code. */
-	for(i=0 ; i<th.num_points ; i++) {
+	for(i=0 ; i<th.num_points-1 ; i++) {
 		waypoint *wpt = waypt_new();
+		gbint16 next_deltaeast, next_deltanorth;
 		double guder;
 
 		points[i].depth      = be_read16(&points[i].depth);
 		points[i].deltaeast  = be_read16(&points[i].deltaeast);
    		points[i].deltanorth = be_read16(&points[i].deltanorth);
+
+		/* Every once in a while the delta values are 
+		   32767 followed by -32768. Filter that. */
+
+		next_deltaeast = be_read16(&points[i+1].deltaeast);
+		if (points[ i ].deltaeast ==  32767 &&
+		    next_deltaeast        == -32768) {
+			points[ i ].deltaeast = -1;
+			points[i+1].deltaeast =  0; /* BE 0 == LE 0 */
+		}
+		next_deltanorth = be_read16(&points[i+1].deltanorth);
+		if (points[ i ].deltanorth ==  32767 &&
+		    next_deltanorth        == -32768) {
+			points[ i ].deltanorth = -1;
+			points[i+1].deltanorth =  0;
+		}
 
                 accum_east  += points[i].deltaeast;
                 accum_north += points[i].deltanorth;
@@ -376,13 +401,120 @@ humminbird_read_track(gbfile* fin, const gbuint32 signature) {
 		wpt->longitude = accum_east/EAST_SCALE * 180.0;
 		wpt->altitude  = 0.0;
 		
-		WAYPT_SET(wpt,depth,(double)points[i].depth / 100.0);
+		if (points[i].depth != 0)
+			WAYPT_SET(wpt,depth,(double)points[i].depth / 100.0);
 
+		if (i == th.num_points-2 && th.time != 0) { 
+			/* Last point. Add the date from the header. */
+			/* Unless it's zero. Sometimes happens, possibly if
+			   the gps didn't have a lock when the track was
+			   saved. */
+			wpt->creation_time = th.time;
+		}
 		track_add_wpt(trk, wpt);
 	}
 	xfree(points);
 }
 
+static void
+humminbird_read_track_old(gbfile* fin) {
+
+	humminbird_trk_header_old_t th;
+	humminbird_trk_point_old_t* points;
+	route_head* trk;
+	waypoint* first_wpt;
+	int i;
+	int max_points = 0;
+	gbint32 accum_east;
+	gbint32 accum_north;
+	double g_lat;
+
+
+	if (! gbfread(&th, 1, sizeof(th), fin))
+		fatal(MYNAME ": Unexpected end of file reading header!\n");
+
+	th.trk_num     = be_read16(&th.trk_num);
+	th.num_points  = be_read16(&th.num_points);
+	th.time        = be_read32(&th.time);
+
+	th.start_east  = be_read32(&th.start_east);
+	th.start_north = be_read32(&th.start_north);
+	th.end_east    = be_read32(&th.end_east);
+	th.end_north   = be_read32(&th.end_north);
+
+	max_points = (8048 - sizeof(th)) / sizeof(humminbird_trk_point_old_t);
+
+	if (th.num_points > max_points)
+		fatal(MYNAME ": Too many track points! (%d)\n", th.num_points);
+
+	/* num_points is actually one too big, because it includes the value in
+	   the header. But we want the extra point at the end because the
+	   freak-value filter below looks at points[i+1] */
+	points = xcalloc(th.num_points, sizeof(humminbird_trk_point_old_t));
+	if (! gbfread(points, sizeof(humminbird_trk_point_old_t), th.num_points-1, fin))
+		fatal(MYNAME ": Unexpected end of file reading points!\n");
+	
+	accum_east  = th.start_east;
+	accum_north = th.start_north;
+
+	trk = route_head_alloc();
+	track_add_head(trk);
+
+//	trk->rte_name = xstrndup(th.name, sizeof(th.name));
+	trk->rte_num  = th.trk_num;
+
+	/* We create one wpt for the info in the header */
+
+	first_wpt = waypt_new();
+	g_lat = gudermannian_i1924(accum_north);
+	first_wpt->latitude  = geocentric_to_geodetic_hwr(g_lat);
+	first_wpt->longitude = accum_east/EAST_SCALE * 180.0;
+	first_wpt->altitude  = 0.0;
+	track_add_wpt(trk, first_wpt);
+
+	for(i=0 ; i<th.num_points-1 ; i++) {
+		waypoint *wpt = waypt_new();
+//		gbint16 next_deltaeast, next_deltanorth;
+		double guder;
+
+		points[i].deltaeast  = be_read16(&points[i].deltaeast);
+   		points[i].deltanorth = be_read16(&points[i].deltanorth);
+
+//		/* Every once in a while the delta values are 
+//		   32767 followed by -32768. Filter that. */
+//
+//		next_deltaeast = be_read16(&points[i+1].deltaeast);
+//		if (points[ i ].deltaeast ==  32767 &&
+//		    next_deltaeast        == -32768) {
+//			points[ i ].deltaeast = -1;
+//			points[i+1].deltaeast =  0; /* BE 0 == LE 0 */
+//		}
+//		next_deltanorth = be_read16(&points[i+1].deltanorth);
+//		if (points[ i ].deltanorth ==  32767 &&
+//		    next_deltanorth        == -32768) {
+//			points[ i ].deltanorth = -1;
+//			points[i+1].deltanorth =  0;
+//		}
+//
+                accum_east  += points[i].deltaeast;
+                accum_north += points[i].deltanorth;
+
+		guder = gudermannian_i1924(accum_north);
+		wpt->latitude  = geocentric_to_geodetic_hwr(guder);
+		wpt->longitude = accum_east/EAST_SCALE * 180.0;
+		wpt->altitude  = 0.0;
+		
+		if (i == th.num_points-2 && th.time != 0) { 
+			/* Last point. Add the date from the header. */
+			/* Unless it's zero. Sometimes happens, possibly if
+			   the gps didn't have a lock when the track was
+			   saved. */
+			wpt->creation_time = th.time;
+		}
+		track_add_wpt(trk, wpt);
+	}
+	xfree(points);
+}
 
 static void
 humminbird_read(void)
@@ -400,8 +532,10 @@ humminbird_read(void)
 				humminbird_read_route(fin);
 				break;
 			case TRK_MAGIC:
+				humminbird_read_track(fin);
+				return; /* Don't continue. The rest of the file is all zeores */
 			case TRK_MAGIC2:
-				humminbird_read_track(fin, signature);
+				humminbird_read_track_old(fin);
 				return; /* Don't continue. The rest of the file is all zeores */
 			default:
 				fatal(MYNAME ": Invalid record header \"0x%08X\" (no or unknown humminbird file)!\n", signature);
@@ -454,7 +588,7 @@ humminbird_wr_deinit(void)
 static void
 humminbird_write_waypoint(const waypoint *wpt) {
 	humminbird_waypt_t hum;
-	double lon, north, east;
+	double lat, north, east;
 	int i;
 	int num_icons = sizeof(humminbird_icons) / sizeof(humminbird_icons[0]);
 	char *name;
@@ -496,8 +630,8 @@ humminbird_write_waypoint(const waypoint *wpt) {
 	east = wpt->longitude / 180.0 * EAST_SCALE;
 	be_write32(&hum.east, si_round((east)));
 
-	lon = geodetic_to_geocentric_hwr(wpt->latitude);
-	north = inverse_gudermannian_i1924(lon);
+	lat = geodetic_to_geocentric_hwr(wpt->latitude);
+	north = inverse_gudermannian_i1924(lat);
 	be_write32(&hum.north, si_round(north));
 
 	name = (global_opts.synthesize_shortnames) 
@@ -509,6 +643,127 @@ humminbird_write_waypoint(const waypoint *wpt) {
 
 	gbfputuint32(WPT_MAGIC, fout);
 	gbfwrite(&hum, sizeof(hum), 1, fout);
+}
+
+static humminbird_trk_header_t* trk_head;
+static humminbird_trk_point_t* trk_points;
+static gbint32 last_east;
+static gbint32 last_north;
+static gbuint32 last_time;
+
+
+static void
+humminbird_track_head(const route_head *rte) {
+	int max_points = (131080 - sizeof(gbuint32)- sizeof(humminbird_trk_header_t)) / sizeof(humminbird_trk_point_t);
+
+	trk_head = NULL;
+	last_time = 0;
+	if (rte->rte_waypt_ct > 0) {
+		trk_head = xcalloc(1, sizeof(humminbird_trk_header_t));
+		trk_points = xcalloc (max_points, sizeof(humminbird_trk_point_t));
+
+		strncpy(trk_head->name, rte->rte_name, sizeof(trk_head->name));
+		be_write16(&trk_head->trk_num ,rte->rte_num);
+	}
+}
+
+static void
+humminbird_track_tail(const route_head *rte) {
+	int max_points = (131080 - sizeof(gbuint32)- sizeof(humminbird_trk_header_t)) / sizeof(humminbird_trk_point_t);
+
+	if (trk_head == NULL)
+		 return;
+
+	be_write32(&trk_head->end_east, last_east);
+	be_write32(&trk_head->end_north, last_north);
+	be_write32(&trk_head->time, last_time);
+
+	/* Fix some endianness */
+
+	be_write32(&trk_head->sw_east, trk_head->sw_east);
+	be_write32(&trk_head->ne_east, trk_head->ne_east);
+	be_write32(&trk_head->sw_north, trk_head->sw_north);
+	be_write32(&trk_head->ne_north, trk_head->ne_north);
+	
+	be_write16(&trk_head->num_points, trk_head->num_points);
+
+	/* Actually write it out */
+
+	
+	gbfputuint32(TRK_MAGIC, fout);
+	gbfwrite(trk_head, 1, sizeof(humminbird_trk_header_t), fout);
+	gbfwrite(trk_points, max_points, sizeof(humminbird_trk_point_t), fout);
+	gbfputuint16(0, fout); /* Odd but true. The format doesn't fit an int nr of entries. */
+
+	xfree(trk_head);
+	xfree(trk_points);
+
+	trk_head   = NULL;
+	trk_points = NULL;
+}
+
+static void
+humminbird_track_cb(const waypoint *wpt) {
+	gbint32 north, east;
+	double lat;
+	int i;
+
+	if (trk_head == NULL)
+                 return;
+
+	i = trk_head->num_points;
+
+	east  = si_round(wpt->longitude / 180.0 * EAST_SCALE);
+	lat = geodetic_to_geocentric_hwr(wpt->latitude);
+	north = si_round(inverse_gudermannian_i1924(lat));
+
+	if (wpt->creation_time != 0) 
+		last_time = wpt->creation_time;
+
+	if (i == 0) {
+		/* It's the first point. That info goes in the header. */
+		
+		be_write32(&trk_head->start_east, east);
+		be_write32(&trk_head->start_north, north);
+		
+		/* Bounding box. Easy for one point. */
+		/* These are not BE yet, fixed in the end. */
+		trk_head->sw_east = east;
+		trk_head->ne_east = east;
+		trk_head->sw_north = north;
+		trk_head->ne_north = north;
+
+		/* No depth info in the header. */
+	} else {
+		/* These points are 16-bit differential. */
+		int j = i-1;
+		trk_points[j].deltaeast = east - last_east;
+		trk_points[j].deltanorth = north - last_north;
+		trk_points[j].depth = si_round(WAYPT_GET(wpt, depth, 0)*100.0);
+
+		/* BE-ify */
+		be_write16(&trk_points[j].deltaeast, trk_points[j].deltaeast);
+		be_write16(&trk_points[j].deltanorth, trk_points[j].deltanorth);
+		be_write16(&trk_points[j].depth, trk_points[j].depth);
+
+		/* Update bounding box in header if neccessary */
+		if (east > trk_head->ne_east) trk_head->ne_east = east;
+		if (east < trk_head->sw_east) trk_head->sw_east = east;
+		if (north > trk_head->ne_north) trk_head->ne_north = north;
+		if (north < trk_head->sw_north) trk_head->sw_north = north;
+	}
+
+	last_east = east;
+	last_north = north;
+
+	trk_head->num_points++;
+}
+
+
+static void
+humminbird_track_write() {
+
+	track_disp_all(humminbird_track_head, humminbird_track_tail, humminbird_track_cb);
 }
 
 static void
@@ -615,6 +870,29 @@ ff_vecs_t humminbird_vecs = {
 	humminbird_wr_deinit,
 	humminbird_read,
 	humminbird_write,
+	NULL, // humminbird_exit,
+	humminbird_args,
+	CET_CHARSET_ASCII, 1			/* ascii is the expected character set */
+						/* currently fixed !!! */
+};
+
+/**************************************************************************/
+
+/**************************************************************************/
+
+ff_vecs_t humminbird_track_vecs = {
+	ff_type_file,
+	{ 
+		ff_cap_read		 	/* waypoints */,
+		ff_cap_read | ff_cap_write	/* tracks */,
+		ff_cap_read			/* routes */
+	},
+	humminbird_rd_init,
+	humminbird_wr_init,
+	humminbird_rd_deinit,
+	humminbird_wr_deinit,
+	humminbird_read,
+	humminbird_track_write,
 	NULL, // humminbird_exit,
 	humminbird_args,
 	CET_CHARSET_ASCII, 1			/* ascii is the expected character set */
