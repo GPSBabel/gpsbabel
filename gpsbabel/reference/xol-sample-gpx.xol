@@ -1,178 +1,178 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <overlays>
   <overlay version="1.0">
-    <center x="670866" y="212781"/>
+    <center x="670866" y="212782"/>
     <shapes>
       <shape type="waypoint" name="002" comment="002" icon="Waypoint">
         <points>
-          <point x="675012" y="211139"/>
+          <point x="675012" y="211140"/>
         </points>
       </shape>
       <shape type="waypoint" name="012" comment="012" icon="Waypoint">
         <points>
-          <point x="676012" y="214354"/>
+          <point x="676012" y="214355"/>
         </points>
       </shape>
       <shape type="waypoint" name="015" comment="015" icon="Waypoint">
         <points>
-          <point x="676153" y="214967"/>
+          <point x="676153" y="214968"/>
         </points>
       </shape>
       <shape type="waypoint" name="017" comment="017" icon="Waypoint">
         <points>
-          <point x="676130" y="214977"/>
+          <point x="676130" y="214978"/>
         </points>
       </shape>
       <shape type="waypoint" name="019" comment="019" icon="Waypoint">
         <points>
-          <point x="675700" y="215262"/>
+          <point x="675700" y="215263"/>
         </points>
       </shape>
       <shape type="waypoint" name="020" comment="020" icon="Waypoint">
         <points>
-          <point x="675681" y="215205"/>
+          <point x="675681" y="215206"/>
         </points>
       </shape>
       <shape type="waypoint" name="021" comment="021" icon="Waypoint">
         <points>
-          <point x="675635" y="215223"/>
+          <point x="675635" y="215224"/>
         </points>
       </shape>
       <shape type="waypoint" name="041" comment="041" icon="Waypoint">
         <points>
-          <point x="669202" y="210720"/>
+          <point x="669202" y="210721"/>
         </points>
       </shape>
       <shape type="waypoint" name="044" comment="044" icon="Waypoint">
         <points>
-          <point x="668394" y="211748"/>
+          <point x="668394" y="211749"/>
         </points>
       </shape>
       <shape type="waypoint" name="047" comment="047" icon="Waypoint">
         <points>
-          <point x="668377" y="211767"/>
+          <point x="668377" y="211768"/>
         </points>
       </shape>
       <shape type="waypoint" name="056" comment="056" icon="Waypoint">
         <points>
-          <point x="666154" y="211393"/>
+          <point x="666154" y="211394"/>
         </points>
       </shape>
       <shape type="waypoint" name="060" comment="060" icon="Waypoint">
         <points>
-          <point x="666130" y="210902"/>
+          <point x="666130" y="210903"/>
         </points>
       </shape>
       <shape type="waypoint" name="062" comment="062" icon="Waypoint">
         <points>
-          <point x="666150" y="210888"/>
+          <point x="666150" y="210889"/>
         </points>
       </shape>
       <shape type="waypoint" name="065" comment="065" icon="Waypoint">
         <points>
-          <point x="666150" y="210888"/>
+          <point x="666150" y="210889"/>
         </points>
       </shape>
       <shape type="waypoint" name="068" comment="068" icon="Waypoint">
         <points>
-          <point x="666121" y="210897"/>
+          <point x="666121" y="210898"/>
         </points>
       </shape>
       <shape type="waypoint" name="073" comment="073" icon="Waypoint">
         <points>
-          <point x="665720" y="210597"/>
+          <point x="665720" y="210598"/>
         </points>
       </shape>
       <shape type="waypoint" name="074" comment="074" icon="Waypoint">
         <points>
-          <point x="665579" y="210299"/>
+          <point x="665579" y="210300"/>
         </points>
       </shape>
       <shape type="polyline" lineSize="3" lineColor="#e60000" lineStyle="solid">
         <waypoints>
           <shape type="waypoint" timestamp="2007-08-21T18:37:58Z">
             <points>
-              <point x="675012" y="211139"/>
+              <point x="675012" y="211140"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:37:59Z">
             <points>
-              <point x="676012" y="214354"/>
+              <point x="676012" y="214355"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:00Z">
             <points>
-              <point x="676153" y="214967"/>
+              <point x="676153" y="214968"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:01Z">
             <points>
-              <point x="676130" y="214977"/>
+              <point x="676130" y="214978"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:02Z">
             <points>
-              <point x="675700" y="215262"/>
+              <point x="675700" y="215263"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:03Z">
             <points>
-              <point x="675681" y="215205"/>
+              <point x="675681" y="215206"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:04Z">
             <points>
-              <point x="675635" y="215223"/>
+              <point x="675635" y="215224"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:05Z">
             <points>
-              <point x="669202" y="210720"/>
+              <point x="669202" y="210721"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:06Z">
             <points>
-              <point x="668394" y="211748"/>
+              <point x="668394" y="211749"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:07Z">
             <points>
-              <point x="668377" y="211767"/>
+              <point x="668377" y="211768"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:08Z">
             <points>
-              <point x="666154" y="211393"/>
+              <point x="666154" y="211394"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:09Z">
             <points>
-              <point x="666130" y="210902"/>
+              <point x="666130" y="210903"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:10Z">
             <points>
-              <point x="666150" y="210888"/>
+              <point x="666150" y="210889"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:11Z">
             <points>
-              <point x="666150" y="210888"/>
+              <point x="666150" y="210889"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:12Z">
             <points>
-              <point x="666121" y="210897"/>
+              <point x="666121" y="210898"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:13Z">
             <points>
-              <point x="665720" y="210597"/>
+              <point x="665720" y="210598"/>
             </points>
           </shape>
           <shape type="waypoint" timestamp="2007-08-21T18:38:14Z">
             <points>
-              <point x="665579" y="210299"/>
+              <point x="665579" y="210300"/>
             </points>
           </shape>
         </waypoints>
