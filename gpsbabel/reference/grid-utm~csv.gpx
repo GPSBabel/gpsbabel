@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+ version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="-69.883348956" minlon="-172.920053269" maxlat="65.469335178" maxlon="158.537464649"/>
+<wpt lat="25.400181298" lon="80.144525617">
+<time>2008-08-23T18:14:04Z</time>
+  <name>Wpt_12E7vrv</name>
+  <cmt>Wpt_12E7vrv</cmt>
+  <desc>Wpt_12E7vrv</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="19.833722147" lon="-9.999591821">
+  <ele>57.000000</ele>
+<time>2008-08-23T18:13:50Z</time>
+  <name>Wpt_1NAeS</name>
+  <cmt>Wpt_1NAeS</cmt>
+  <desc>Wpt_1NAeS</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="-64.157551032" lon="-123.394005805">
+<time>2008-08-23T18:16:06Z</time>
+  <name>Wpt_2BYa1</name>
+  <cmt>Wpt_2BYa1</cmt>
+  <desc>Wpt_2BYa1</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="-50.326325852" lon="-53.445037114">
+  <ele>83.000000</ele>
+<time>2008-08-23T18:15:34Z</time>
+  <name>Wpt_32sd</name>
+  <cmt>Wpt_32sd</cmt>
+  <desc>Wpt_32sd</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="54.656949880" lon="26.271428796">
+  <ele>36.000000</ele>
+<time>2008-08-23T18:15:26Z</time>
+  <name>Wpt_39vH4Z</name>
+  <cmt>Wpt_39vH4Z</cmt>
+  <desc>Wpt_39vH4Z</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="1.214748037" lon="-77.640620374">
+<time>2008-08-23T18:15:50Z</time>
+  <name>Wpt_5tD1wEB</name>
+  <cmt>Wpt_5tD1wEB</cmt>
+  <desc>Wpt_5tD1wEB</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.513892606" lon="-41.033316096">
+<time>2008-08-23T18:16:11Z</time>
+  <name>Wpt_5Zhkd</name>
+  <cmt>Wpt_5Zhkd</cmt>
+  <desc>Wpt_5Zhkd</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="-1.061273741" lon="-1.600494198">
+  <ele>23.000000</ele>
+<time>2008-08-23T18:13:55Z</time>
+  <name>Wpt_6irYN</name>
+  <cmt>Wpt_6irYN</cmt>
+  <desc>Wpt_6irYN</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="27.333272563" lon="53.177856239">
+  <ele>83.000000</ele>
+<time>2008-08-23T18:14:53Z</time>
+  <name>Wpt_A1ss</name>
+  <cmt>Wpt_A1ss</cmt>
+  <desc>Wpt_A1ss</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="-7.474622110" lon="23.530583997">
+<time>2008-08-23T18:14:13Z</time>
+  <name>Wpt_APJU5</name>
+  <cmt>Wpt_APJU5</cmt>
+  <desc>Wpt_APJU5</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="9.693757157" lon="-68.238456918">
+<time>2008-08-23T18:14:45Z</time>
+  <name>Wpt_ASbe</name>
+  <cmt>Wpt_ASbe</cmt>
+  <desc>Wpt_ASbe</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="50.324712675" lon="45.985367566">
+  <ele>67.000000</ele>
+<time>2008-08-23T18:14:59Z</time>
+  <name>Wpt_eT3d</name>
+  <cmt>Wpt_eT3d</cmt>
+  <desc>Wpt_eT3d</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="54.977727916" lon="-168.238415725">
+  <ele>37.000000</ele>
+<time>2008-08-23T18:16:19Z</time>
+  <name>Wpt_HbL58</name>
+  <cmt>Wpt_HbL58</cmt>
+  <desc>Wpt_HbL58</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="14.924401003" lon="-89.101059642">
+  <ele>15.000000</ele>
+<time>2008-08-23T18:13:26Z</time>
+  <name>Wpt_Hupm</name>
+  <cmt>Wpt_Hupm</cmt>
+  <desc>Wpt_Hupm</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="-63.627623890" lon="-157.423027639">
+  <ele>55.000000</ele>
+<time>2008-08-23T18:14:27Z</time>
+  <name>Wpt_i61vHHf</name>
+  <cmt>Wpt_i61vHHf</cmt>
+  <desc>Wpt_i61vHHf</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="27.181559990" lon="-12.569988431">
+  <ele>42.000000</ele>
+<time>2008-08-23T18:13:46Z</time>
+  <name>Wpt_IKcJ</name>
+  <cmt>Wpt_IKcJ</cmt>
+  <desc>Wpt_IKcJ</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="65.469335178" lon="-67.062060936">
+  <ele>23.000000</ele>
+<time>2008-08-23T18:13:39Z</time>
+  <name>Wpt_j0344</name>
+  <cmt>Wpt_j0344</cmt>
+  <desc>Wpt_j0344</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="4.767008117" lon="-164.267265881">
+  <ele>92.000000</ele>
+<time>2008-08-23T18:13:30Z</time>
+  <name>Wpt_MedoTEJ</name>
+  <cmt>Wpt_MedoTEJ</cmt>
+  <desc>Wpt_MedoTEJ</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="-48.270035243" lon="-130.031050004">
+  <ele>47.000000</ele>
+<time>2008-08-23T18:16:05Z</time>
+  <name>Wpt_Q6qCFNf3</name>
+  <cmt>Wpt_Q6qCFNf3</cmt>
+  <desc>Wpt_Q6qCFNf3</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="-69.883348956" lon="-166.001379639">
+  <ele>2.000000</ele>
+<time>2008-08-23T18:14:38Z</time>
+  <name>Wpt_Qkfl</name>
+  <cmt>Wpt_Qkfl</cmt>
+  <desc>Wpt_Qkfl</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="-25.741283291" lon="-172.920053269">
+  <ele>6.000000</ele>
+<time>2008-08-23T18:15:58Z</time>
+  <name>Wpt_qzkKBpz</name>
+  <cmt>Wpt_qzkKBpz</cmt>
+  <desc>Wpt_qzkKBpz</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="-20.769476381" lon="10.476844951">
+  <ele>51.000000</ele>
+<time>2008-08-23T18:15:18Z</time>
+  <name>Wpt_r81J0Qr</name>
+  <cmt>Wpt_r81J0Qr</cmt>
+  <desc>Wpt_r81J0Qr</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="-21.500701082" lon="-11.232986608">
+  <ele>13.000000</ele>
+<time>2008-08-23T18:15:08Z</time>
+  <name>Wpt_tzplq3SA</name>
+  <cmt>Wpt_tzplq3SA</cmt>
+  <desc>Wpt_tzplq3SA</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="33.278612131" lon="158.537464649">
+  <ele>10.000000</ele>
+<time>2008-08-23T18:14:24Z</time>
+  <name>Wpt_vhagfqH</name>
+  <cmt>Wpt_vhagfqH</cmt>
+  <desc>Wpt_vhagfqH</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="57.043775060" lon="58.496628212">
+  <ele>51.000000</ele>
+<time>2008-08-23T18:15:42Z</time>
+  <name>Wpt_ZHNuvzhQ</name>
+  <cmt>Wpt_ZHNuvzhQ</cmt>
+  <desc>Wpt_ZHNuvzhQ</desc>
+  <sym>Waypoint</sym>
+</wpt>
+</gpx>
