@@ -209,7 +209,7 @@ parse_coordinates(const char *str, int datum, const grid_type grid,
 			ct = sscanf(str, format,
 				&east, &north, &result);
 			valid = (ct == 2);
-			GPS_Math_CH1903_NGEN_To_WGS84(east, north, &lat, &lon);
+			GPS_Math_Swiss_EN_To_WGS84(east, north, &lat, &lon);
 			break;
 		}
 		default:
