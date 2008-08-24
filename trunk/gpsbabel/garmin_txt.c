@@ -327,7 +327,7 @@ print_position(const waypoint *wpt)
 
 	case grid_swiss:
 
-		valid = GPS_Math_WGS84_To_CH1903_NGEN(wpt->latitude, wpt->longitude, &east, &north);
+		valid = GPS_Math_WGS84_To_Swiss_EN(wpt->latitude, wpt->longitude, &east, &north);
 		if (valid) gbfprintf(fout, "%.f %.f\t", east, north);
 		break;
 
