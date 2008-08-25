@@ -142,7 +142,7 @@ extern ff_vecs_t exif_vecs;
 extern ff_vecs_t vidaone_vecs;
 extern ff_vecs_t gopal_vecs;
 extern ff_vecs_t humminbird_vecs;
-extern ff_vecs_t humminbird_track_vecs;
+extern ff_vecs_t humminbird_ht_vecs;
 extern ff_vecs_t tr7_vecs;
 extern ff_vecs_t gnav_trl_vecs;
 
@@ -813,8 +813,8 @@ vecs_t vec_list[] = {
 		"hwr"
         },
 	{
-		&humminbird_track_vecs,
-		"humminbird-track",
+		&humminbird_ht_vecs,
+		"humminbird_ht",
 		"Humminbird tracks (.ht)",
 		"ht"
         },
