@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx
- version="1.0"
-creator="GPSBabel - http://www.gpsbabel.org"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://www.topografix.com/GPX/1/0"
-xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
 <bounds minlat="48.623286047" minlon="9.895914981" maxlat="51.593568734" maxlon="12.598730495"/>
 <wpt lat="51.593568734" lon="9.895914981">
-<time>2006-11-06T21:07:41Z</time>
+  <time>2006-11-06T21:07:41Z</time>
   <name>Qr1-one</name>
   <cmt>Qr1-one</cmt>
   <desc>notes-1</desc>
   <sym>Red Square</sym>
 </wpt>
 <wpt lat="50.833425048" lon="10.364770734">
-<time>2006-11-06T21:07:41Z</time>
+  <time>2006-11-06T21:07:41Z</time>
   <name>Qr,2</name>
   <cmt>Qr,2</cmt>
   <desc>notes-2</desc>
   <sym>Big Fish</sym>
 </wpt>
 <wpt lat="50.184475274" lon="10.557828985">
-<time>2006-11-06T21:07:41Z</time>
+  <time>2006-11-06T21:07:41Z</time>
   <name>Qr3</name>
   <cmt>Qr3</cmt>
   <desc>notes-3</desc>
   <sym>Anchor</sym>
 </wpt>
 <wpt lat="48.986577919" lon="12.047135492">
-<time>2006-11-06T21:07:41Z</time>
+  <time>2006-11-06T21:07:41Z</time>
   <name>Qr4-four</name>
   <cmt>Qr4-four</cmt>
   <desc>notes-4</desc>
   <sym>Smiley</sym>
 </wpt>
 <wpt lat="48.623286047" lon="12.598730495">
-<time>2006-11-06T21:07:43Z</time>
+  <time>2006-11-06T21:07:43Z</time>
   <name>Qr5</name>
   <cmt>Qr5</cmt>
   <desc>notes-5</desc>
@@ -45,35 +45,35 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 <rte>
   <name>Qr</name>
   <rtept lat="51.593568734" lon="9.895914981">
-<time>2006-11-06T21:07:41Z</time>
+    <time>2006-11-06T21:07:41Z</time>
     <name>Qr1-one</name>
     <cmt>Qr1-one</cmt>
     <desc>notes-1</desc>
     <sym>Red Square</sym>
   </rtept>
   <rtept lat="50.833425048" lon="10.364770734">
-<time>2006-11-06T21:07:41Z</time>
+    <time>2006-11-06T21:07:41Z</time>
     <name>Qr,2</name>
     <cmt>Qr,2</cmt>
     <desc>notes-2</desc>
     <sym>Big Fish</sym>
   </rtept>
   <rtept lat="50.184475274" lon="10.557828985">
-<time>2006-11-06T21:07:41Z</time>
+    <time>2006-11-06T21:07:41Z</time>
     <name>Qr3</name>
     <cmt>Qr3</cmt>
     <desc>notes-3</desc>
     <sym>Anchor</sym>
   </rtept>
   <rtept lat="48.986577919" lon="12.047135492">
-<time>2006-11-06T21:07:41Z</time>
+    <time>2006-11-06T21:07:41Z</time>
     <name>Qr4-four</name>
     <cmt>Qr4-four</cmt>
     <desc>notes-4</desc>
     <sym>Smiley</sym>
   </rtept>
   <rtept lat="48.623286047" lon="12.598730495">
-<time>2006-11-06T21:07:43Z</time>
+    <time>2006-11-06T21:07:43Z</time>
     <name>Qr5</name>
     <cmt>Qr5</cmt>
     <desc>notes-5</desc>

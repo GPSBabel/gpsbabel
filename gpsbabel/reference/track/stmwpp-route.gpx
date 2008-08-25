@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx
- version="1.0"
-creator="GPSBabel - http://www.gpsbabel.org"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://www.topografix.com/GPX/1/0"
-xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>2007-02-14T15:55:51Z</time>
 <bounds minlat="50.492618900" minlon="12.105448700" maxlat="51.314520700" maxlon="12.435919300"/>
 <wpt lat="50.492618900" lon="12.105448700">
-<time>2005-09-03T00:00:00.900Z</time>
+  <time>2005-09-03T00:00:00.900Z</time>
   <name>NARVA</name>
   <cmt>NARVA</cmt>
   <desc>NARVA</desc>
 </wpt>
 <wpt lat="50.493836900" lon="12.106101000">
-<time>2005-09-03T00:00:00.900Z</time>
+  <time>2005-09-03T00:00:00.900Z</time>
   <name>Liebknechtstras</name>
   <cmt>Liebknechtstras</cmt>
   <desc>Liebknechtstras</desc>
 </wpt>
 <wpt lat="50.493662800" lon="12.107152400">
-<time>2005-09-03T00:00:00.900Z</time>
+  <time>2005-09-03T00:00:00.900Z</time>
   <name>Jahnstrasse11</name>
   <cmt>Jahnstrasse11</cmt>
   <desc>Jahnstrasse11</desc>
 </wpt>
 <wpt lat="50.610795200" lon="12.173802200">
-<time>2005-09-03T00:00:00.900Z</time>
+  <time>2005-09-03T00:00:00.900Z</time>
   <name>Elsterberg</name>
   <cmt>Elsterberg</cmt>
   <desc>Elsterberg</desc>
 </wpt>
 <wpt lat="50.654763000" lon="12.204956700">
-<time>2005-09-03T00:00:00.900Z</time>
+  <time>2005-09-03T00:00:00.900Z</time>
   <name>Greiz</name>
   <cmt>Greiz</cmt>
   <desc>Greiz</desc>
 </wpt>
 <wpt lat="50.844125600" lon="12.408757200">
-<time>2005-09-03T00:00:00.900Z</time>
+  <time>2005-09-03T00:00:00.900Z</time>
   <name>Gosel</name>
   <cmt>Gosel</cmt>
   <desc>Gosel</desc>
 </wpt>
 <wpt lat="50.877340500" lon="12.433888700">
-<time>2005-09-03T00:00:00.900Z</time>
+  <time>2005-09-03T00:00:00.900Z</time>
   <name>3</name>
   <cmt>3</cmt>
   <desc>3</desc>
 </wpt>
 <wpt lat="50.964955100" lon="12.435919300">
-<time>2005-09-03T00:00:00.900Z</time>
+  <time>2005-09-03T00:00:00.900Z</time>
   <name>Altenburg-Umgehung</name>
   <cmt>Altenburg-Umgehung</cmt>
   <desc>Altenburg-Umgehung</desc>
 </wpt>
 <wpt lat="51.314520700" lon="12.409143300">
-<time>2005-09-03T00:00:00.900Z</time>
+  <time>2005-09-03T00:00:00.900Z</time>
   <name>Völkerschlachtdenkmal</name>
   <cmt>Völkerschlachtdenkmal</cmt>
   <desc>Völkerschlachtdenkmal</desc>
