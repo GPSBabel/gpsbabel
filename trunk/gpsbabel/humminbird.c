@@ -31,6 +31,19 @@
 #define RTE_NAME_LEN		20
 #define MAX_RTE_POINTS		50
 
+/*
+I suspect that these are actually
+struct signature {
+	gbuint8 format, // 1 = track, 2 = waypoint, 3 = route
+	gbuint8 version,
+	gpuint16 record_length
+}
+
+The v3 TRK_MAGIC doesn't have a length, probably because it wouldn't fit.
+(It would be 0x200008)
+
+Still, they're usful in the code as a plain signature.
+*/
 #define TRK_MAGIC		0x01030000L
 #define TRK_MAGIC2		0x01021F70L
 #define WPT_MAGIC		0x02020024L
@@ -442,6 +455,8 @@ humminbird_read_track_old(gbfile* fin) {
 	th.end_east    = be_read32(&th.end_east);
 	th.end_north   = be_read32(&th.end_north);
 
+	// These files are always 8048 bytes long. Note that that's the value
+	// of the second 16-bit word in the signature.
 	max_points = (8048 - sizeof(th)) / sizeof(humminbird_trk_point_old_t);
 
 	if (th.num_points > max_points)
@@ -479,6 +494,9 @@ humminbird_read_track_old(gbfile* fin) {
 
 		points[i].deltaeast  = be_read16(&points[i].deltaeast);
    		points[i].deltanorth = be_read16(&points[i].deltanorth);
+
+//		I've commented this out, don't know if it happens in this
+//		format. It happens in the newer version though.
 
 //		/* Every once in a while the delta values are 
 //		   32767 followed by -32768. Filter that. */
@@ -880,7 +898,7 @@ ff_vecs_t humminbird_vecs = {
 
 /**************************************************************************/
 
-ff_vecs_t humminbird_track_vecs = {
+ff_vecs_t humminbird_ht_vecs = {
 	ff_type_file,
 	{ 
 		ff_cap_read		 	/* waypoints */,
