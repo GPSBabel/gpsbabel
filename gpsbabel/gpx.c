@@ -1808,6 +1808,8 @@ gpx_write(void)
 	time_t now = 0;
 	int short_length;
 
+	if (opt_humminbirdext) gpx_wversion = "1.1";
+
 	gpx_wversion_num = strtod(gpx_wversion, NULL) * 10;
 
 	if (gpx_wversion_num <= 0) {
