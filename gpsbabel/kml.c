@@ -139,7 +139,7 @@ arglist_t kml_args[] = {
 static 
 struct {
 	int freshness;
-	char *icon;
+	const char *icon;
 } kml_tracking_icons[] = {
  { 60, ICON_BASE "youarehere-60.png" }, // Red
  { 30, ICON_BASE "youarehere-30.png" }, // Yellow
@@ -644,7 +644,7 @@ static void kml_output_description(const waypoint *pt)
 
 static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type)
 {
-  char *style;
+  const char *style;
   // Save off this point for later use
   point3d *pt = &point3d_list[point3d_list_len];
   point3d_list_len++;
@@ -809,11 +809,11 @@ kml_lookup_gc_icon(const waypoint *waypointp)
 	return rb;
 }
 
-static 
+static const
 char *
 kml_lookup_gc_container(const waypoint *waypointp)
 {
-	char *cont;
+	const char *cont;
 
 	switch (waypointp->gc_data.container) {
 		case gc_micro: cont="micro"; break;
@@ -1168,12 +1168,14 @@ void kml_write(void)
 /*
  * This depends on the table being sorted correctly.
  */
-static 
+static const
 char *
 kml_get_posn_icon(int freshness)
 {
 	int i;
-	for (i = 0; i < sizeof(kml_tracking_icons) / sizeof(kml_tracking_icons[0]); i++) {
+	int n_stations = sizeof(kml_tracking_icons) / sizeof(kml_tracking_icons[0]);
+
+	for (i = 0; i < n_stations ; i++) {
 		if (freshness >= kml_tracking_icons[i].freshness)
 			return kml_tracking_icons[i].icon;
 	}
