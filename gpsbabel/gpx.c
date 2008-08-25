@@ -31,6 +31,7 @@
 static xml_tag *cur_tag;
 static vmem_t cdatastr;
 static char *opt_logpoint = NULL;
+static char *opt_humminbirdext = NULL;
 static int logpoint_ct = 0;
 
 static const char *gpx_version;
@@ -179,6 +180,7 @@ typedef enum {
 
 	tt_humminbird_wpt_depth,
 	tt_humminbird_wpt_status,
+	tt_humminbird_trk_trkseg_trkpt_depth,
 } tag_type;
 
 typedef struct {
@@ -232,7 +234,7 @@ gpx_rm_from_global(gpx_global_entry *ge)
 }
 
 static void
-gpx_write_gdata(gpx_global_entry *ge, char *tag)
+gpx_write_gdata(gpx_global_entry *ge, const char *tag)
 {
 	queue *elem, *tmp;
 	gpx_global_entry * gep;
@@ -369,6 +371,8 @@ tag_mapping tag_path_map[] = {
 	{ tt_trk_trkseg_trkpt_sym, 0, "/gpx/trk/trkseg/trkpt/sym", 0UL },
 	{ tt_trk_trkseg_trkpt_course, 0, "/gpx/trk/trkseg/trkpt/course", 0UL },
 	{ tt_trk_trkseg_trkpt_speed, 0, "/gpx/trk/trkseg/trkpt/speed", 0UL },
+
+	{ tt_humminbird_trk_trkseg_trkpt_depth, 0, "/gpx/trk/trkseg/trkpt/extensions/h:depth", 0UL },  // in centimeters.
 
 	/* Common to tracks, routes, and waypts */
 	{ tt_fix,  0, "/gpx/wpt/fix", 0UL },
@@ -629,6 +633,7 @@ gpx_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 	char *e;
 	char *ep;
 	int passthrough;
+	int tag;
 	const char *el = xml_convert_to_char_string(xml_el);
 	const char **attr = xml_convert_attrs_to_char_string(xml_attr);
 
@@ -644,7 +649,8 @@ gpx_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 	 */
 	*(char *) cdatastr.mem = 0;
 
-	switch (get_tag(current_tag.mem, &passthrough)) {
+	tag = get_tag(current_tag.mem, &passthrough);
+	switch (tag) {
 	case tt_gpx:
 		tag_gpx(attr);
 		break;
@@ -996,7 +1002,11 @@ gpx_end(void *data, const XML_Char *xml_el)
 		garmin_fs_xml_convert(tt_garmin_wpt_extensions, tag, cdatastrp, wpt_tmp);
 		break;
 
+	/*
+	 * Humminbird-waypoint-specific tags.
+ 	 */
 	case tt_humminbird_wpt_depth:
+	case tt_humminbird_trk_trkseg_trkpt_depth:
 		WAYPT_SET(wpt_tmp, depth, atof(cdatastrp) / 100.0)
 		break;
 	/*
@@ -1351,7 +1361,7 @@ gpx_read(void)
 				badchar = strchr( badchar+1, '&' );
 			} 
 			{
-				char *hex="0123456789abcdef";
+				char hex[]="0123456789abcdef";
 				badchar = strstr( buf, "&#x" );
 				while ( badchar ) {
 					int val = 0;
@@ -1399,7 +1409,7 @@ gpx_read(void)
 }
 
 static void
-fprint_tag_and_attrs( char *prefix, char *suffix, xml_tag *tag )
+fprint_tag_and_attrs( const char *prefix, const char *suffix, xml_tag *tag )
 {
 	char **pa;
 	gbfprintf( ofd, "%s%s", prefix, tag->tagname );
@@ -1522,7 +1532,7 @@ write_gpx_url(const waypoint *waypointp)
 static void
 gpx_write_common_acc(const waypoint *waypointp, const char *indent)
 {
-	char *fix = NULL;
+	const char *fix = NULL;
 
 	switch (waypointp->fix) {
 		case fix_2d:
@@ -1569,7 +1579,22 @@ gpx_write_common_position(const waypoint *waypointp, const char *indent)
 		gbfprintf(ofd, "%s<ele>%f</ele>\n",
 			 indent, waypointp->altitude);
 	}
+	if (waypointp->depth != 0) {
+		if (opt_humminbirdext) {
+			gbfprintf(ofd, "%s<extensions>\n", indent);
+			gbfprintf(ofd, "%s  <h:depth>%f</h:depth>\n",
+			          indent, waypointp->depth*100.0);
+			gbfprintf(ofd, "%s</extensions>\n", indent);
+		}	
+/*
+		gbfprintf(ofd, "%s<extensions>\n", indent);
+		gbfprintf(ofd, "%s  <gpxx:Depth>%f</gpxx:Depth>\n",
+		          indent, waypointp->depth);
+		gbfprintf(ofd, "%s</extensions>\n", indent);
+*/
+	}
 	if (waypointp->creation_time) {
+		gbfprintf(ofd, indent);
 		xml_write_time(ofd, waypointp->creation_time, waypointp->microseconds, "time");
 	}
 }
@@ -1800,15 +1825,17 @@ gpx_write(void)
 	setshort_length(mkshort_handle, short_length);
 
 	gbfprintf(ofd, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", global_opts.charset_name);
-	gbfprintf(ofd, "<gpx\n version=\"%s\"\n", gpx_wversion);
-	gbfprintf(ofd, "creator=\"" CREATOR_NAME_URL "\"\n");
-	gbfprintf(ofd, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-	gbfprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
+	gbfprintf(ofd, "<gpx\n  version=\"%s\"\n", gpx_wversion);
+	gbfprintf(ofd, "  creator=\"" CREATOR_NAME_URL "\"\n");
+	gbfprintf(ofd, "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+	if (opt_humminbirdext)
+		gbfprintf(ofd, "  xmlns:h=\"http://humminbird.com\"\n");
+	gbfprintf(ofd, "  xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
 	if (xsi_schema_loc) {
-		gbfprintf(ofd, "xsi:schemaLocation=\"%s\">\n", xsi_schema_loc);
+		gbfprintf(ofd, "  xsi:schemaLocation=\"%s\">\n", xsi_schema_loc);
 	} else {
 		gbfprintf(ofd,
-			"xsi:schemaLocation=" DEFAULT_XSI_SCHEMA_LOC_FMT">\n",
+			"  xsi:schemaLocation=" DEFAULT_XSI_SCHEMA_LOC_FMT">\n",
 			gpx_wversion[0], gpx_wversion[2],
 			gpx_wversion[0], gpx_wversion[2]);
 	}
@@ -1885,6 +1912,9 @@ arglist_t gpx_args[] = {
 		NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	{ "gpxver", &gpx_wversion, "Target GPX version for output", 
 		"1.0", ARGTYPE_STRING, ARG_NOMINMAX},
+	{ "humminbirdextensions", &opt_humminbirdext,
+		"Add info (depth) as humminbird extension", 
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
 
