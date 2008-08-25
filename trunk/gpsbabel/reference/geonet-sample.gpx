@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx
- version="1.0"
-creator="GPSBabel - http://www.gpsbabel.org"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://www.topografix.com/GPX/1/0"
-xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>2005-08-30T20:58:28Z</time>
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  <time>2005-08-30T20:58:28Z</time>
 <bounds minlat="50.500000000" minlon="12.133333300" maxlat="51.133333300" maxlon="13.716666700"/>
 <wpt lat="51.016666700" lon="13.716666700">
   <name>PLAUEN</name>

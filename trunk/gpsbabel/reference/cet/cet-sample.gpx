@@ -1,119 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx
- version="1.0"
-creator="GPSBabel - http://www.gpsbabel.org"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://www.topografix.com/GPX/1/0"
-xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
 <bounds minlat="37.007446289" minlon="-13.823547363" maxlat="65.522460938" maxlon="18.424072266"/>
 <wpt lat="50.738296509" lon="12.683029175">
-<time>2005-07-14T10:12:49Z</time>
+  <time>2005-07-14T10:12:49Z</time>
   <name>01</name>
   <cmt>Hohndorf</cmt>
   <desc>Hohndorf</desc>
   <sym>City (Small)</sym>
 </wpt>
 <wpt lat="50.497970581" lon="13.027725220">
-<time>2005-07-14T14:04:15Z</time>
+  <time>2005-07-14T14:04:15Z</time>
   <name>0x9E</name>
   <cmt>ž - latin small letter z with caron</cmt>
   <desc>ž - latin small letter z with caron</desc>
   <sym>City (Small)</sym>
 </wpt>
 <wpt lat="50.497970581" lon="13.027725220">
-<time>2005-07-14T14:07:22Z</time>
+  <time>2005-07-14T14:07:22Z</time>
   <name>0xC9</name>
   <cmt>É - latin capital letter e with circumflex</cmt>
   <desc>É - latin capital letter e with circumflex</desc>
   <sym>City (Small)</sym>
 </wpt>
 <wpt lat="50.497970581" lon="13.027725220">
-<time>2005-07-14T14:06:05Z</time>
+  <time>2005-07-14T14:06:05Z</time>
   <name>0xF0</name>
   <cmt>ð - latin small letter eth (icelandic)</cmt>
   <desc>ð - latin small letter eth (icelandic)</desc>
   <sym>City (Small)</sym>
 </wpt>
 <wpt lat="50.514405901" lon="13.638633778">
-<time>2005-07-14T10:43:00Z</time>
+  <time>2005-07-14T10:43:00Z</time>
   <name>CS</name>
   <cmt>Ovládací, Prohlížení lokální síte</cmt>
   <desc>Ovládací, Prohlížení lokální síte</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="56.011734009" lon="9.847869873">
-<time>2005-07-14T09:48:47Z</time>
+  <time>2005-07-14T09:48:47Z</time>
   <name>DA</name>
   <cmt>Tåning, netværkssøgning, áâãäåæéë</cmt>
   <desc>Tåning, netværkssøgning, áâãäåæéë</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="50.625865096" lon="13.060610946">
-<time>2005-07-14T09:41:43Z</time>
+  <time>2005-07-14T09:41:43Z</time>
   <name>DE</name>
   <cmt>Himmelmühle, ä,ö,ü,Ä,Ö,Ü,ß</cmt>
   <desc>Himmelmühle, ä,ö,ü,Ä,Ö,Ü,ß</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="50.495280828" lon="13.027644670">
-<time>2005-07-14T13:20:14Z</time>
+  <time>2005-07-14T13:20:14Z</time>
   <name>EO</name>
   <cmt>Trasercado de la loka ret</cmt>
   <desc>Trasercado de la loka ret</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="37.007446289" lon="-6.558837891">
-<time>2005-07-14T09:39:12Z</time>
+  <time>2005-07-14T09:39:12Z</time>
   <name>ES</name>
   <cmt>Matalascañas, Navegación, Táliga</cmt>
   <desc>Matalascañas, Navegación, Táliga</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="48.679046631" lon="1.652069092">
-<time>2005-07-14T09:39:17Z</time>
+  <time>2005-07-14T09:39:17Z</time>
   <name>FR</name>
   <cmt>Boissière-École, Contrôle,  réseau, Mâle</cmt>
   <desc>Boissière-École, Contrôle,  réseau, Mâle</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="50.477937413" lon="12.510390887">
-<time>2005-07-14T09:28:22Z</time>
+  <time>2005-07-14T09:28:22Z</time>
   <name>HR</name>
   <cmt>Pregledavanje lokalne mreže</cmt>
   <desc>Pregledavanje lokalne mreže</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="46.491394043" lon="18.424072266">
-<time>2005-07-14T09:43:42Z</time>
+  <time>2005-07-14T09:43:42Z</time>
   <name>HU</name>
   <cmt>Hõgyész, Vezérlõközpont, Hálózat</cmt>
   <desc>Hõgyész, Vezérlõközpont, Hálózat</desc>
   <sym>City (Small)</sym>
 </wpt>
 <wpt lat="65.522460938" lon="-13.823547363">
-<time>2005-07-14T09:39:22Z</time>
+  <time>2005-07-14T09:39:22Z</time>
   <name>IS</name>
   <cmt>Borgarfjörður</cmt>
   <desc>Borgarfjörður</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="50.724214325" lon="13.524870649">
-<time>2005-07-14T09:34:53Z</time>
+  <time>2005-07-14T09:34:53Z</time>
   <name>SK</name>
   <cmt>Ovládacie centrum</cmt>
   <desc>Ovládacie centrum</desc>
   <sym>Waypoint</sym>
 </wpt>
 <wpt lat="50.497970581" lon="13.027725220">
-<time>2005-07-14T11:17:31Z</time>
+  <time>2005-07-14T11:17:31Z</time>
   <name>X1</name>
   <cmt>žðÉéÀàÈèÙùÂâÊêÎîÄäËëÖöÜüÆæÅåØøÇçÑñ²³½É×</cmt>
   <desc>žðÉéÀàÈèÙùÂâÊêÎîÄäËëÖöÜüÆæÅåØøÇçÑñ²³½É×</desc>
   <sym>Block, Blue</sym>
 </wpt>
 <wpt lat="50.497970581" lon="13.027725220">
-<time>2005-07-14T11:18:06Z</time>
+  <time>2005-07-14T11:18:06Z</time>
   <name>X2</name>
   <cmt>žðÉéÀàÈèÙùÂâÊêÎîÄäËëÖöÜüÆæÅåØøÇçÑñ²³½É×</cmt>
   <desc>žðÉéÀàÈèÙùÂâÊêÎîÄäËëÖöÜüÆæÅåØøÇçÑñ²³½É×</desc>

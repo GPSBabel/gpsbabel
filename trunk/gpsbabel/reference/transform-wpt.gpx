@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx
- version="1.1"
-creator="GPSBabel - http://www.gpsbabel.org"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://www.topografix.com/GPX/1/1"
-xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  version="1.1"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/1"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
 <metadata>
 <time>1970-01-01T00:00:00Z</time>
 <bounds minlat="42.430950000" minlon="-71.122845000" maxlat="42.467110000" maxlon="-71.105116000"/>
 </metadata>
 <wpt lat="42.430950000" lon="-71.107628000">
   <ele>23.469600</ele>
-<time>2001-06-02T00:18:15Z</time>
+  <time>2001-06-02T00:18:15Z</time>
   <name>BELLEVUE</name>
   <cmt>BELLEVUE</cmt>
   <desc>Bellevue Parking Lot</desc>
@@ -19,7 +19,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.431240000" lon="-71.109236000">
   <ele>26.561890</ele>
-<time>2001-11-07T23:53:41Z</time>
+  <time>2001-11-07T23:53:41Z</time>
   <name>GATE6</name>
   <cmt>Gate 6</cmt>
   <desc>Gate 6</desc>
@@ -27,7 +27,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.434980000" lon="-71.109942000">
   <ele>45.307495</ele>
-<time>2001-11-07T23:53:41Z</time>
+  <time>2001-11-07T23:53:41Z</time>
   <name>PANTHRCAVE</name>
   <cmt>Panther Cave</cmt>
   <desc>Panther Cave</desc>
@@ -35,7 +35,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.436757000" lon="-71.113223000">
   <ele>37.616943</ele>
-<time>2001-11-28T21:05:28Z</time>
+  <time>2001-11-28T21:05:28Z</time>
   <name>6014MEADOW</name>
   <cmt>6014MEADOW</cmt>
   <desc>6014MEADOW</desc>
@@ -43,7 +43,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.439018000" lon="-71.114456000">
   <ele>56.388000</ele>
-<time>2001-06-02T03:26:55Z</time>
+  <time>2001-06-02T03:26:55Z</time>
   <name>6006</name>
   <cmt>600698</cmt>
   <desc>600698</desc>
@@ -51,7 +51,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.438594000" lon="-71.114803000">
   <ele>46.028564</ele>
-<time>2001-11-28T21:05:28Z</time>
+  <time>2001-11-28T21:05:28Z</time>
   <name>6006BLUE</name>
   <cmt>6006BLUE</cmt>
   <desc>6006BLUE</desc>
@@ -59,7 +59,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.438917000" lon="-71.116146000">
   <ele>44.826904</ele>
-<time>2001-11-16T23:03:38Z</time>
+  <time>2001-11-16T23:03:38Z</time>
   <name>5096</name>
   <cmt>5096</cmt>
   <desc>5096</desc>
@@ -67,7 +67,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.438878000" lon="-71.119277000">
   <ele>44.586548</ele>
-<time>2001-11-28T21:05:28Z</time>
+  <time>2001-11-28T21:05:28Z</time>
   <name>5066</name>
   <cmt>5066</cmt>
   <desc>5066</desc>
@@ -75,7 +75,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.439227000" lon="-71.119689000">
   <ele>57.607200</ele>
-<time>2001-06-02T03:26:55Z</time>
+  <time>2001-06-02T03:26:55Z</time>
   <name>5067</name>
   <cmt>5067</cmt>
   <desc>5067</desc>
@@ -83,7 +83,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.439993000" lon="-71.120925000">
   <ele>53.949600</ele>
-<time>2001-06-02T00:18:14Z</time>
+  <time>2001-06-02T00:18:14Z</time>
   <name>5058ROAD</name>
   <cmt>ROAD CROSSING</cmt>
   <desc>Road Crossing</desc>
@@ -91,7 +91,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.441727000" lon="-71.121676000">
   <ele>67.360800</ele>
-<time>2001-06-02T00:18:16Z</time>
+  <time>2001-06-02T00:18:16Z</time>
   <name>5150TANK</name>
   <cmt>WATER TANK</cmt>
   <desc>Water Tank</desc>
@@ -99,7 +99,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.443904000" lon="-71.122044000">
   <ele>50.594727</ele>
-<time>2001-11-28T21:05:28Z</time>
+  <time>2001-11-28T21:05:28Z</time>
   <name>5142</name>
   <cmt>5142</cmt>
   <desc>5142</desc>
@@ -107,7 +107,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.445359000" lon="-71.122845000">
   <ele>61.649902</ele>
-<time>2001-11-28T21:05:28Z</time>
+  <time>2001-11-28T21:05:28Z</time>
   <name>5144SUMMIT</name>
   <cmt>Summit</cmt>
   <desc>Summit</desc>
@@ -115,7 +115,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.447298000" lon="-71.121447000">
   <ele>127.711200</ele>
-<time>2001-06-02T03:26:58Z</time>
+  <time>2001-06-02T03:26:58Z</time>
   <name>5156</name>
   <cmt>5156</cmt>
   <desc>5156</desc>
@@ -123,7 +123,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.449765000" lon="-71.122320000">
   <ele>119.809082</ele>
-<time>2001-11-07T23:53:41Z</time>
+  <time>2001-11-07T23:53:41Z</time>
   <name>5148NANEPA</name>
   <cmt>Nanepashemet Road Crossing</cmt>
   <desc>Nanepashemet Road Crossing</desc>
@@ -131,7 +131,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.451442000" lon="-71.121746000">
   <ele>74.627442</ele>
-<time>2001-11-07T23:53:41Z</time>
+  <time>2001-11-07T23:53:41Z</time>
   <name>5258</name>
   <cmt>5258</cmt>
   <desc>5258</desc>
@@ -139,7 +139,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.453256000" lon="-71.121211000">
   <ele>77.992066</ele>
-<time>2001-11-07T23:53:41Z</time>
+  <time>2001-11-07T23:53:41Z</time>
   <name>5252PURPLE</name>
   <cmt>Purple Rock Hill</cmt>
   <desc>Purple Rock Hill</desc>
@@ -147,7 +147,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.456252000" lon="-71.119356000">
   <ele>78.713135</ele>
-<time>2001-11-07T23:53:41Z</time>
+  <time>2001-11-07T23:53:41Z</time>
   <name>527631</name>
   <cmt>527631</cmt>
   <desc>527631</desc>
@@ -155,7 +155,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.456592000" lon="-71.119676000">
   <ele>78.713135</ele>
-<time>2001-11-07T23:53:41Z</time>
+  <time>2001-11-07T23:53:41Z</time>
   <name>527614</name>
   <cmt>527614</cmt>
   <desc>527614</desc>
@@ -163,7 +163,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.457388000" lon="-71.119845000">
   <ele>73.761600</ele>
-<time>2001-06-02T03:27:00Z</time>
+  <time>2001-06-02T03:27:00Z</time>
   <name>5267OBSTAC</name>
   <cmt>Obstacle</cmt>
   <desc>Obstacle</desc>
@@ -171,7 +171,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.458148000" lon="-71.119135000">
   <ele>68.275200</ele>
-<time>2001-06-02T03:27:00Z</time>
+  <time>2001-06-02T03:27:00Z</time>
   <name>5278</name>
   <cmt>5278</cmt>
   <desc>5278</desc>
@@ -179,7 +179,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.459377000" lon="-71.117693000">
   <ele>64.008000</ele>
-<time>2001-06-02T03:27:01Z</time>
+  <time>2001-06-02T03:27:01Z</time>
   <name>5289</name>
   <cmt>5289</cmt>
   <desc>5289</desc>
@@ -187,7 +187,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.464183000" lon="-71.119828000">
   <ele>52.997925</ele>
-<time>2001-11-28T21:05:28Z</time>
+  <time>2001-11-28T21:05:28Z</time>
   <name>5374FIRE</name>
   <cmt>5374FIRE</cmt>
   <desc>5374FIRE</desc>
@@ -195,7 +195,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.465650000" lon="-71.119399000">
   <ele>56.388000</ele>
-<time>2001-06-02T03:27:02Z</time>
+  <time>2001-06-02T03:27:02Z</time>
   <name>5376</name>
   <cmt>5376</cmt>
   <desc>5376</desc>
@@ -203,7 +203,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.465913000" lon="-71.119328000">
   <ele>64.533692</ele>
-<time>2001-11-07T23:53:41Z</time>
+  <time>2001-11-07T23:53:41Z</time>
   <name>5376STREAM</name>
   <cmt>Stream Crossing</cmt>
   <desc>Stream Crossing</desc>
@@ -211,7 +211,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.467110000" lon="-71.113574000">
   <ele>53.644800</ele>
-<time>2001-06-02T03:27:02Z</time>
+  <time>2001-06-02T03:27:02Z</time>
   <name>6328</name>
   <cmt>6328</cmt>
   <desc>6328</desc>
@@ -219,7 +219,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.466459000" lon="-71.110067000">
   <ele>48.768000</ele>
-<time>2001-06-02T03:27:02Z</time>
+  <time>2001-06-02T03:27:02Z</time>
   <name>635722</name>
   <cmt>635722</cmt>
   <desc>635722</desc>
@@ -227,7 +227,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.466557000" lon="-71.109410000">
   <ele>49.072800</ele>
-<time>2001-06-02T03:27:02Z</time>
+  <time>2001-06-02T03:27:02Z</time>
   <name>635783</name>
   <cmt>635783</cmt>
   <desc>635783</desc>
@@ -235,7 +235,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.463495000" lon="-71.107117000">
   <ele>62.484000</ele>
-<time>2001-06-02T03:27:03Z</time>
+  <time>2001-06-02T03:27:03Z</time>
   <name>6373</name>
   <cmt>6373</cmt>
   <desc>6373</desc>
@@ -243,7 +243,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.465687000" lon="-71.107360000">
   <ele>87.782400</ele>
-<time>2001-06-02T03:27:03Z</time>
+  <time>2001-06-02T03:27:03Z</time>
   <name>BEAR HILL</name>
   <cmt>BEAR HILL TOWER</cmt>
   <desc>Bear Hill Tower</desc>
@@ -251,7 +251,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.459986000" lon="-71.106170000">
   <ele>72.945191</ele>
-<time>2001-11-16T23:03:38Z</time>
+  <time>2001-11-16T23:03:38Z</time>
   <name>6289</name>
   <cmt>6289</cmt>
   <desc>6289</desc>
@@ -259,7 +259,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.457616000" lon="-71.105116000">
   <ele>72.847200</ele>
-<time>2001-06-02T03:27:04Z</time>
+  <time>2001-06-02T03:27:04Z</time>
   <name>6297</name>
   <cmt>6297</cmt>
   <desc>6297</desc>
@@ -267,7 +267,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.453845000" lon="-71.105206000">
   <ele>66.696655</ele>
-<time>2001-11-16T23:03:38Z</time>
+  <time>2001-11-16T23:03:38Z</time>
   <name>6283</name>
   <cmt>6283</cmt>
   <desc>6283</desc>
@@ -275,7 +275,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.451430000" lon="-71.105413000">
   <ele>57.564209</ele>
-<time>2001-11-16T23:03:38Z</time>
+  <time>2001-11-16T23:03:38Z</time>
   <name>6280</name>
   <cmt>6280</cmt>
   <desc>6280</desc>
@@ -283,7 +283,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.448448000" lon="-71.106158000">
   <ele>62.179200</ele>
-<time>2001-06-02T03:27:04Z</time>
+  <time>2001-06-02T03:27:04Z</time>
   <name>6177</name>
   <cmt>6177</cmt>
   <desc>6177</desc>
@@ -291,7 +291,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.447804000" lon="-71.106624000">
   <ele>62.484000</ele>
-<time>2001-06-02T03:27:04Z</time>
+  <time>2001-06-02T03:27:04Z</time>
   <name>6176</name>
   <cmt>6176</cmt>
   <desc>6176</desc>
@@ -299,7 +299,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.444773000" lon="-71.108882000">
   <ele>62.788800</ele>
-<time>2001-06-02T03:27:05Z</time>
+  <time>2001-06-02T03:27:05Z</time>
   <name>6153</name>
   <cmt>6153</cmt>
   <desc>6153</desc>
@@ -307,7 +307,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.443592000" lon="-71.106301000">
   <ele>55.473600</ele>
-<time>2001-06-02T03:27:05Z</time>
+  <time>2001-06-02T03:27:05Z</time>
   <name>6171</name>
   <cmt>6171</cmt>
   <desc>6171</desc>
@@ -315,7 +315,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.442981000" lon="-71.111441000">
   <ele>64.008000</ele>
-<time>2001-06-02T03:26:58Z</time>
+  <time>2001-06-02T03:26:58Z</time>
   <name>6131</name>
   <cmt>6131</cmt>
   <desc>6131</desc>
@@ -323,7 +323,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.442196000" lon="-71.110975000">
   <ele>64.008000</ele>
-<time>2001-06-02T03:26:55Z</time>
+  <time>2001-06-02T03:26:55Z</time>
   <name>6130</name>
   <cmt>6130</cmt>
   <desc>6130</desc>
@@ -331,7 +331,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.441754000" lon="-71.113220000">
   <ele>56.388000</ele>
-<time>2001-06-02T03:26:55Z</time>
+  <time>2001-06-02T03:26:55Z</time>
   <name>6029</name>
   <cmt>6029</cmt>
   <desc>6029</desc>
@@ -339,7 +339,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.439018000" lon="-71.114456000">
   <ele>56.388000</ele>
-<time>2001-06-02T03:26:55Z</time>
+  <time>2001-06-02T03:26:55Z</time>
   <name>6006</name>
   <cmt>600698</cmt>
   <desc>600698</desc>
@@ -347,7 +347,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.436757000" lon="-71.113223000">
   <ele>37.616943</ele>
-<time>2001-11-28T21:05:28Z</time>
+  <time>2001-11-28T21:05:28Z</time>
   <name>6014MEADOW</name>
   <cmt>6014MEADOW</cmt>
   <desc>6014MEADOW</desc>
@@ -355,7 +355,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.434980000" lon="-71.109942000">
   <ele>45.307495</ele>
-<time>2001-11-07T23:53:41Z</time>
+  <time>2001-11-07T23:53:41Z</time>
   <name>PANTHRCAVE</name>
   <cmt>Panther Cave</cmt>
   <desc>Panther Cave</desc>
@@ -363,7 +363,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.431240000" lon="-71.109236000">
   <ele>26.561890</ele>
-<time>2001-11-07T23:53:41Z</time>
+  <time>2001-11-07T23:53:41Z</time>
   <name>GATE6</name>
   <cmt>Gate 6</cmt>
   <desc>Gate 6</desc>
@@ -371,7 +371,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 </wpt>
 <wpt lat="42.430950000" lon="-71.107628000">
   <ele>23.469600</ele>
-<time>2001-06-02T00:18:15Z</time>
+  <time>2001-06-02T00:18:15Z</time>
   <name>BELLEVUE</name>
   <cmt>BELLEVUE</cmt>
   <desc>Bellevue Parking Lot</desc>

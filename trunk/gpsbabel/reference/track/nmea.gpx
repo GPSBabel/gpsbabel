@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx
- version="1.0"
-creator="GPSBabel - http://www.gpsbabel.org"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://www.topografix.com/GPX/1/0"
-xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
 <bounds minlat="42.530485000" minlon="-88.121766667" maxlat="42.530528333" maxlon="-88.121706667"/>
 <trk>
 <trkseg>
 <trkpt lat="42.530485000" lon="-88.121721667">
   <ele>209.800000</ele>
-<time>2004-08-07T03:29:08.379Z</time>
+  <time>2004-08-07T03:29:08.379Z</time>
   <course>138.919998</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -22,7 +22,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530485000" lon="-88.121723333">
   <ele>209.700000</ele>
-<time>2004-08-07T03:29:09.379Z</time>
+  <time>2004-08-07T03:29:09.379Z</time>
   <course>145.850006</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -33,7 +33,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530486667" lon="-88.121726667">
   <ele>209.700000</ele>
-<time>2004-08-07T03:29:10.379Z</time>
+  <time>2004-08-07T03:29:10.379Z</time>
   <course>143.250000</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -44,7 +44,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530486667" lon="-88.121726667">
   <ele>209.600000</ele>
-<time>2004-08-07T03:29:11.379Z</time>
+  <time>2004-08-07T03:29:11.379Z</time>
   <course>145.759995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -55,7 +55,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530486667" lon="-88.121728333">
   <ele>209.600000</ele>
-<time>2004-08-07T03:29:12.379Z</time>
+  <time>2004-08-07T03:29:12.379Z</time>
   <course>141.440002</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -66,7 +66,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530488333" lon="-88.121730000">
   <ele>209.600000</ele>
-<time>2004-08-07T03:29:13.379Z</time>
+  <time>2004-08-07T03:29:13.379Z</time>
   <course>140.399994</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -77,7 +77,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530488333" lon="-88.121730000">
   <ele>209.600000</ele>
-<time>2004-08-07T03:29:14.379Z</time>
+  <time>2004-08-07T03:29:14.379Z</time>
   <course>142.509995</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -88,7 +88,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530490000" lon="-88.121730000">
   <ele>209.400000</ele>
-<time>2004-08-07T03:29:15.379Z</time>
+  <time>2004-08-07T03:29:15.379Z</time>
   <course>144.059998</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -99,7 +99,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530490000" lon="-88.121728333">
   <ele>209.300000</ele>
-<time>2004-08-07T03:29:16.379Z</time>
+  <time>2004-08-07T03:29:16.379Z</time>
   <course>137.660004</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -110,7 +110,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530491667" lon="-88.121728333">
   <ele>209.100000</ele>
-<time>2004-08-07T03:29:17.379Z</time>
+  <time>2004-08-07T03:29:17.379Z</time>
   <course>144.229996</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -121,7 +121,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530493333" lon="-88.121726667">
   <ele>208.900000</ele>
-<time>2004-08-07T03:29:18.379Z</time>
+  <time>2004-08-07T03:29:18.379Z</time>
   <course>140.350006</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -132,7 +132,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530496667" lon="-88.121725000">
   <ele>208.800000</ele>
-<time>2004-08-07T03:29:19.379Z</time>
+  <time>2004-08-07T03:29:19.379Z</time>
   <course>143.059998</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -143,7 +143,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530498333" lon="-88.121723333">
   <ele>208.600000</ele>
-<time>2004-08-07T03:29:20.379Z</time>
+  <time>2004-08-07T03:29:20.379Z</time>
   <course>145.080002</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -154,7 +154,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530501667" lon="-88.121721667">
   <ele>208.500000</ele>
-<time>2004-08-07T03:29:21.379Z</time>
+  <time>2004-08-07T03:29:21.379Z</time>
   <course>141.559998</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -165,7 +165,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530505000" lon="-88.121721667">
   <ele>208.400000</ele>
-<time>2004-08-07T03:29:22.377Z</time>
+  <time>2004-08-07T03:29:22.377Z</time>
   <course>140.759995</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -176,7 +176,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530508333" lon="-88.121723333">
   <ele>208.400000</ele>
-<time>2004-08-07T03:29:23.377Z</time>
+  <time>2004-08-07T03:29:23.377Z</time>
   <course>143.919998</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -187,7 +187,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530511667" lon="-88.121725000">
   <ele>208.300000</ele>
-<time>2004-08-07T03:29:24.377Z</time>
+  <time>2004-08-07T03:29:24.377Z</time>
   <course>140.850006</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -198,7 +198,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121726667">
   <ele>208.200000</ele>
-<time>2004-08-07T03:29:25.377Z</time>
+  <time>2004-08-07T03:29:25.377Z</time>
   <course>145.270004</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -209,7 +209,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121730000">
   <ele>208.000000</ele>
-<time>2004-08-07T03:29:26.377Z</time>
+  <time>2004-08-07T03:29:26.377Z</time>
   <course>145.610001</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -220,7 +220,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530516667" lon="-88.121733333">
   <ele>207.900000</ele>
-<time>2004-08-07T03:29:27.377Z</time>
+  <time>2004-08-07T03:29:27.377Z</time>
   <course>145.139999</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -231,7 +231,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530518333" lon="-88.121736667">
   <ele>207.800000</ele>
-<time>2004-08-07T03:29:28.377Z</time>
+  <time>2004-08-07T03:29:28.377Z</time>
   <course>143.490005</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -242,7 +242,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530518333" lon="-88.121738333">
   <ele>207.700000</ele>
-<time>2004-08-07T03:29:29.377Z</time>
+  <time>2004-08-07T03:29:29.377Z</time>
   <course>145.089996</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -253,7 +253,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530518333" lon="-88.121740000">
   <ele>207.800000</ele>
-<time>2004-08-07T03:29:30.377Z</time>
+  <time>2004-08-07T03:29:30.377Z</time>
   <course>143.000000</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -264,7 +264,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530518333" lon="-88.121740000">
   <ele>207.900000</ele>
-<time>2004-08-07T03:29:31.377Z</time>
+  <time>2004-08-07T03:29:31.377Z</time>
   <course>144.100006</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -275,7 +275,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121740000">
   <ele>208.200000</ele>
-<time>2004-08-07T03:29:32.377Z</time>
+  <time>2004-08-07T03:29:32.377Z</time>
   <course>142.360001</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -286,7 +286,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530521667" lon="-88.121740000">
   <ele>208.600000</ele>
-<time>2004-08-07T03:29:33.377Z</time>
+  <time>2004-08-07T03:29:33.377Z</time>
   <course>139.899994</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -297,7 +297,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530521667" lon="-88.121738333">
   <ele>209.200000</ele>
-<time>2004-08-07T03:29:34.377Z</time>
+  <time>2004-08-07T03:29:34.377Z</time>
   <course>145.610001</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -308,7 +308,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530523333" lon="-88.121738333">
   <ele>209.800000</ele>
-<time>2004-08-07T03:29:35.377Z</time>
+  <time>2004-08-07T03:29:35.377Z</time>
   <course>143.770004</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -319,7 +319,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530523333" lon="-88.121738333">
   <ele>210.600000</ele>
-<time>2004-08-07T03:29:36.377Z</time>
+  <time>2004-08-07T03:29:36.377Z</time>
   <course>144.649994</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -330,7 +330,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530521667" lon="-88.121738333">
   <ele>211.400000</ele>
-<time>2004-08-07T03:29:37.377Z</time>
+  <time>2004-08-07T03:29:37.377Z</time>
   <course>144.570007</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -341,7 +341,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530521667" lon="-88.121738333">
   <ele>212.200000</ele>
-<time>2004-08-07T03:29:38.377Z</time>
+  <time>2004-08-07T03:29:38.377Z</time>
   <course>144.350006</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -352,7 +352,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121738333">
   <ele>212.900000</ele>
-<time>2004-08-07T03:29:39.377Z</time>
+  <time>2004-08-07T03:29:39.377Z</time>
   <course>141.220001</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -363,7 +363,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121736667">
   <ele>213.500000</ele>
-<time>2004-08-07T03:29:40.377Z</time>
+  <time>2004-08-07T03:29:40.377Z</time>
   <course>146.149994</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -374,7 +374,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121735000">
   <ele>213.900000</ele>
-<time>2004-08-07T03:29:41.377Z</time>
+  <time>2004-08-07T03:29:41.377Z</time>
   <course>142.419998</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -385,7 +385,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121733333">
   <ele>214.100000</ele>
-<time>2004-08-07T03:29:42.377Z</time>
+  <time>2004-08-07T03:29:42.377Z</time>
   <course>141.130005</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -396,7 +396,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121730000">
   <ele>214.100000</ele>
-<time>2004-08-07T03:29:43.377Z</time>
+  <time>2004-08-07T03:29:43.377Z</time>
   <course>144.000000</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -407,7 +407,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121728333">
   <ele>213.800000</ele>
-<time>2004-08-07T03:29:44.377Z</time>
+  <time>2004-08-07T03:29:44.377Z</time>
   <course>142.179993</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -418,7 +418,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121725000">
   <ele>213.400000</ele>
-<time>2004-08-07T03:29:45.377Z</time>
+  <time>2004-08-07T03:29:45.377Z</time>
   <course>145.289993</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -429,7 +429,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121723333">
   <ele>213.000000</ele>
-<time>2004-08-07T03:29:46.377Z</time>
+  <time>2004-08-07T03:29:46.377Z</time>
   <course>144.630005</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -440,7 +440,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121721667">
   <ele>212.600000</ele>
-<time>2004-08-07T03:29:47.377Z</time>
+  <time>2004-08-07T03:29:47.377Z</time>
   <course>143.470001</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -451,7 +451,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121720000">
   <ele>212.400000</ele>
-<time>2004-08-07T03:29:48.377Z</time>
+  <time>2004-08-07T03:29:48.377Z</time>
   <course>142.350006</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -462,7 +462,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121718333">
   <ele>212.200000</ele>
-<time>2004-08-07T03:29:49.377Z</time>
+  <time>2004-08-07T03:29:49.377Z</time>
   <course>143.190002</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -473,7 +473,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530518333" lon="-88.121718333">
   <ele>212.100000</ele>
-<time>2004-08-07T03:29:50.377Z</time>
+  <time>2004-08-07T03:29:50.377Z</time>
   <course>143.639999</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -484,7 +484,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530518333" lon="-88.121716667">
   <ele>212.100000</ele>
-<time>2004-08-07T03:29:51.377Z</time>
+  <time>2004-08-07T03:29:51.377Z</time>
   <course>140.800003</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -495,7 +495,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530516667" lon="-88.121715000">
   <ele>212.100000</ele>
-<time>2004-08-07T03:29:52.377Z</time>
+  <time>2004-08-07T03:29:52.377Z</time>
   <course>141.910004</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -506,7 +506,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121715000">
   <ele>212.200000</ele>
-<time>2004-08-07T03:29:53.377Z</time>
+  <time>2004-08-07T03:29:53.377Z</time>
   <course>142.309998</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -517,7 +517,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121716667">
   <ele>212.400000</ele>
-<time>2004-08-07T03:29:54.377Z</time>
+  <time>2004-08-07T03:29:54.377Z</time>
   <course>140.729996</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -528,7 +528,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121716667">
   <ele>212.600000</ele>
-<time>2004-08-07T03:29:55.375Z</time>
+  <time>2004-08-07T03:29:55.375Z</time>
   <course>141.190002</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -539,7 +539,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121718333">
   <ele>212.900000</ele>
-<time>2004-08-07T03:29:56.375Z</time>
+  <time>2004-08-07T03:29:56.375Z</time>
   <course>142.600006</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -550,7 +550,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121721667">
   <ele>213.400000</ele>
-<time>2004-08-07T03:29:57.375Z</time>
+  <time>2004-08-07T03:29:57.375Z</time>
   <course>142.809998</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -561,7 +561,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121725000">
   <ele>213.800000</ele>
-<time>2004-08-07T03:29:58.375Z</time>
+  <time>2004-08-07T03:29:58.375Z</time>
   <course>140.440002</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -572,7 +572,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121728333">
   <ele>214.200000</ele>
-<time>2004-08-07T03:29:59.375Z</time>
+  <time>2004-08-07T03:29:59.375Z</time>
   <course>142.369995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -583,7 +583,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121730000">
   <ele>214.700000</ele>
-<time>2004-08-07T03:30:00.375Z</time>
+  <time>2004-08-07T03:30:00.375Z</time>
   <course>139.389999</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -594,7 +594,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530516667" lon="-88.121733333">
   <ele>215.000000</ele>
-<time>2004-08-07T03:30:01.375Z</time>
+  <time>2004-08-07T03:30:01.375Z</time>
   <course>139.869995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -605,7 +605,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530516667" lon="-88.121733333">
   <ele>215.200000</ele>
-<time>2004-08-07T03:30:02.375Z</time>
+  <time>2004-08-07T03:30:02.375Z</time>
   <course>141.369995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -616,7 +616,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530516667" lon="-88.121733333">
   <ele>215.200000</ele>
-<time>2004-08-07T03:30:03.375Z</time>
+  <time>2004-08-07T03:30:03.375Z</time>
   <course>139.160004</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -627,7 +627,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530516667" lon="-88.121733333">
   <ele>215.200000</ele>
-<time>2004-08-07T03:30:04.375Z</time>
+  <time>2004-08-07T03:30:04.375Z</time>
   <course>142.389999</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -638,7 +638,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121730000">
   <ele>215.200000</ele>
-<time>2004-08-07T03:30:05.375Z</time>
+  <time>2004-08-07T03:30:05.375Z</time>
   <course>140.449997</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -649,7 +649,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121726667">
   <ele>215.100000</ele>
-<time>2004-08-07T03:30:06.375Z</time>
+  <time>2004-08-07T03:30:06.375Z</time>
   <course>141.089996</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -660,7 +660,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121723333">
   <ele>214.800000</ele>
-<time>2004-08-07T03:30:07.375Z</time>
+  <time>2004-08-07T03:30:07.375Z</time>
   <course>140.729996</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -671,7 +671,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121721667">
   <ele>214.600000</ele>
-<time>2004-08-07T03:30:08.375Z</time>
+  <time>2004-08-07T03:30:08.375Z</time>
   <course>137.970001</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -682,7 +682,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121718333">
   <ele>214.300000</ele>
-<time>2004-08-07T03:30:09.375Z</time>
+  <time>2004-08-07T03:30:09.375Z</time>
   <course>144.869995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -693,7 +693,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121716667">
   <ele>214.000000</ele>
-<time>2004-08-07T03:30:10.375Z</time>
+  <time>2004-08-07T03:30:10.375Z</time>
   <course>137.610001</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -704,7 +704,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121715000">
   <ele>213.700000</ele>
-<time>2004-08-07T03:30:11.375Z</time>
+  <time>2004-08-07T03:30:11.375Z</time>
   <course>145.339996</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -715,7 +715,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121713333">
   <ele>213.400000</ele>
-<time>2004-08-07T03:30:12.375Z</time>
+  <time>2004-08-07T03:30:12.375Z</time>
   <course>136.350006</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -726,7 +726,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530516667" lon="-88.121711667">
   <ele>213.200000</ele>
-<time>2004-08-07T03:30:13.375Z</time>
+  <time>2004-08-07T03:30:13.375Z</time>
   <course>138.580002</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -737,7 +737,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530518333" lon="-88.121708333">
   <ele>213.000000</ele>
-<time>2004-08-07T03:30:14.375Z</time>
+  <time>2004-08-07T03:30:14.375Z</time>
   <course>140.110001</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -748,7 +748,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121706667">
   <ele>212.900000</ele>
-<time>2004-08-07T03:30:15.375Z</time>
+  <time>2004-08-07T03:30:15.375Z</time>
   <course>140.309998</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -759,7 +759,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530523333" lon="-88.121706667">
   <ele>212.900000</ele>
-<time>2004-08-07T03:30:16.375Z</time>
+  <time>2004-08-07T03:30:16.375Z</time>
   <course>138.899994</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -770,7 +770,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530523333" lon="-88.121706667">
   <ele>213.000000</ele>
-<time>2004-08-07T03:30:17.375Z</time>
+  <time>2004-08-07T03:30:17.375Z</time>
   <course>142.899994</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -781,7 +781,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530525000" lon="-88.121708333">
   <ele>213.100000</ele>
-<time>2004-08-07T03:30:18.375Z</time>
+  <time>2004-08-07T03:30:18.375Z</time>
   <course>143.660004</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -792,7 +792,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530525000" lon="-88.121710000">
   <ele>213.300000</ele>
-<time>2004-08-07T03:30:19.375Z</time>
+  <time>2004-08-07T03:30:19.375Z</time>
   <course>140.869995</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -803,7 +803,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530523333" lon="-88.121711667">
   <ele>213.300000</ele>
-<time>2004-08-07T03:30:20.375Z</time>
+  <time>2004-08-07T03:30:20.375Z</time>
   <course>146.139999</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -814,7 +814,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530523333" lon="-88.121715000">
   <ele>213.300000</ele>
-<time>2004-08-07T03:30:21.375Z</time>
+  <time>2004-08-07T03:30:21.375Z</time>
   <course>141.570007</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -825,7 +825,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530521667" lon="-88.121716667">
   <ele>213.200000</ele>
-<time>2004-08-07T03:30:22.375Z</time>
+  <time>2004-08-07T03:30:22.375Z</time>
   <course>143.949997</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -836,7 +836,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530521667" lon="-88.121718333">
   <ele>213.200000</ele>
-<time>2004-08-07T03:30:23.375Z</time>
+  <time>2004-08-07T03:30:23.375Z</time>
   <course>141.809998</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -847,7 +847,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530521667" lon="-88.121720000">
   <ele>213.100000</ele>
-<time>2004-08-07T03:30:24.375Z</time>
+  <time>2004-08-07T03:30:24.375Z</time>
   <course>142.070007</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -858,7 +858,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530521667" lon="-88.121721667">
   <ele>213.000000</ele>
-<time>2004-08-07T03:30:25.375Z</time>
+  <time>2004-08-07T03:30:25.375Z</time>
   <course>140.210007</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -869,7 +869,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530523333" lon="-88.121723333">
   <ele>213.000000</ele>
-<time>2004-08-07T03:30:26.375Z</time>
+  <time>2004-08-07T03:30:26.375Z</time>
   <course>145.889999</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -880,7 +880,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530525000" lon="-88.121726667">
   <ele>213.000000</ele>
-<time>2004-08-07T03:30:27.375Z</time>
+  <time>2004-08-07T03:30:27.375Z</time>
   <course>139.509995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -891,7 +891,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530525000" lon="-88.121728333">
   <ele>213.200000</ele>
-<time>2004-08-07T03:30:28.374Z</time>
+  <time>2004-08-07T03:30:28.374Z</time>
   <course>144.059998</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -902,7 +902,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530526667" lon="-88.121730000">
   <ele>213.500000</ele>
-<time>2004-08-07T03:30:29.374Z</time>
+  <time>2004-08-07T03:30:29.374Z</time>
   <course>143.089996</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -913,7 +913,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530526667" lon="-88.121731667">
   <ele>213.900000</ele>
-<time>2004-08-07T03:30:30.374Z</time>
+  <time>2004-08-07T03:30:30.374Z</time>
   <course>141.050003</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -924,7 +924,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530528333" lon="-88.121733333">
   <ele>214.300000</ele>
-<time>2004-08-07T03:30:31.374Z</time>
+  <time>2004-08-07T03:30:31.374Z</time>
   <course>143.820007</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -935,7 +935,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530526667" lon="-88.121735000">
   <ele>214.800000</ele>
-<time>2004-08-07T03:30:32.374Z</time>
+  <time>2004-08-07T03:30:32.374Z</time>
   <course>143.529999</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -946,7 +946,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530526667" lon="-88.121738333">
   <ele>215.100000</ele>
-<time>2004-08-07T03:30:33.374Z</time>
+  <time>2004-08-07T03:30:33.374Z</time>
   <course>144.089996</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -957,7 +957,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530525000" lon="-88.121740000">
   <ele>215.600000</ele>
-<time>2004-08-07T03:30:34.374Z</time>
+  <time>2004-08-07T03:30:34.374Z</time>
   <course>142.949997</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -968,7 +968,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530521667" lon="-88.121741667">
   <ele>216.100000</ele>
-<time>2004-08-07T03:30:35.374Z</time>
+  <time>2004-08-07T03:30:35.374Z</time>
   <course>142.279999</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -979,7 +979,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530520000" lon="-88.121743333">
   <ele>216.700000</ele>
-<time>2004-08-07T03:30:36.374Z</time>
+  <time>2004-08-07T03:30:36.374Z</time>
   <course>141.429993</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -990,7 +990,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530516667" lon="-88.121745000">
   <ele>217.300000</ele>
-<time>2004-08-07T03:30:37.374Z</time>
+  <time>2004-08-07T03:30:37.374Z</time>
   <course>142.059998</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1001,7 +1001,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121745000">
   <ele>218.000000</ele>
-<time>2004-08-07T03:30:38.374Z</time>
+  <time>2004-08-07T03:30:38.374Z</time>
   <course>141.460007</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1012,7 +1012,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530511667" lon="-88.121745000">
   <ele>218.800000</ele>
-<time>2004-08-07T03:30:39.374Z</time>
+  <time>2004-08-07T03:30:39.374Z</time>
   <course>141.259995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1023,7 +1023,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530510000" lon="-88.121745000">
   <ele>219.700000</ele>
-<time>2004-08-07T03:30:40.374Z</time>
+  <time>2004-08-07T03:30:40.374Z</time>
   <course>145.539993</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1034,7 +1034,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530510000" lon="-88.121745000">
   <ele>220.600000</ele>
-<time>2004-08-07T03:30:41.374Z</time>
+  <time>2004-08-07T03:30:41.374Z</time>
   <course>134.630005</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -1045,7 +1045,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530510000" lon="-88.121746667">
   <ele>221.700000</ele>
-<time>2004-08-07T03:30:42.374Z</time>
+  <time>2004-08-07T03:30:42.374Z</time>
   <course>144.440002</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1056,7 +1056,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530510000" lon="-88.121746667">
   <ele>222.700000</ele>
-<time>2004-08-07T03:30:43.374Z</time>
+  <time>2004-08-07T03:30:43.374Z</time>
   <course>146.970001</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1067,7 +1067,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530510000" lon="-88.121748333">
   <ele>223.800000</ele>
-<time>2004-08-07T03:30:44.372Z</time>
+  <time>2004-08-07T03:30:44.372Z</time>
   <course>142.240005</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1078,7 +1078,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530511667" lon="-88.121750000">
   <ele>224.800000</ele>
-<time>2004-08-07T03:30:45.372Z</time>
+  <time>2004-08-07T03:30:45.372Z</time>
   <course>142.729996</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1089,7 +1089,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530511667" lon="-88.121751667">
   <ele>225.700000</ele>
-<time>2004-08-07T03:30:46.372Z</time>
+  <time>2004-08-07T03:30:46.372Z</time>
   <course>141.520004</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -1100,7 +1100,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530511667" lon="-88.121753333">
   <ele>226.400000</ele>
-<time>2004-08-07T03:30:47.372Z</time>
+  <time>2004-08-07T03:30:47.372Z</time>
   <course>141.429993</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1111,7 +1111,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530511667" lon="-88.121755000">
   <ele>227.000000</ele>
-<time>2004-08-07T03:30:48.372Z</time>
+  <time>2004-08-07T03:30:48.372Z</time>
   <course>137.690002</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1122,7 +1122,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530511667" lon="-88.121758333">
   <ele>227.500000</ele>
-<time>2004-08-07T03:30:49.372Z</time>
+  <time>2004-08-07T03:30:49.372Z</time>
   <course>144.580002</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -1133,7 +1133,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530511667" lon="-88.121760000">
   <ele>227.900000</ele>
-<time>2004-08-07T03:30:50.372Z</time>
+  <time>2004-08-07T03:30:50.372Z</time>
   <course>144.809998</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1144,7 +1144,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530510000" lon="-88.121761667">
   <ele>228.200000</ele>
-<time>2004-08-07T03:30:51.372Z</time>
+  <time>2004-08-07T03:30:51.372Z</time>
   <course>143.139999</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1155,7 +1155,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530510000" lon="-88.121763333">
   <ele>228.300000</ele>
-<time>2004-08-07T03:30:52.372Z</time>
+  <time>2004-08-07T03:30:52.372Z</time>
   <course>143.270004</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1166,7 +1166,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530508333" lon="-88.121765000">
   <ele>228.400000</ele>
-<time>2004-08-07T03:30:53.372Z</time>
+  <time>2004-08-07T03:30:53.372Z</time>
   <course>139.119995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1177,7 +1177,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530508333" lon="-88.121766667">
   <ele>228.300000</ele>
-<time>2004-08-07T03:30:54.372Z</time>
+  <time>2004-08-07T03:30:54.372Z</time>
   <course>140.070007</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1188,7 +1188,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530508333" lon="-88.121766667">
   <ele>228.100000</ele>
-<time>2004-08-07T03:30:55.372Z</time>
+  <time>2004-08-07T03:30:55.372Z</time>
   <course>144.720001</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1199,7 +1199,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530510000" lon="-88.121766667">
   <ele>227.800000</ele>
-<time>2004-08-07T03:30:56.372Z</time>
+  <time>2004-08-07T03:30:56.372Z</time>
   <course>140.800003</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1210,7 +1210,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530511667" lon="-88.121766667">
   <ele>227.500000</ele>
-<time>2004-08-07T03:30:57.372Z</time>
+  <time>2004-08-07T03:30:57.372Z</time>
   <course>143.259995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1221,7 +1221,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121765000">
   <ele>227.200000</ele>
-<time>2004-08-07T03:30:58.372Z</time>
+  <time>2004-08-07T03:30:58.372Z</time>
   <course>138.809998</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1232,7 +1232,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121763333">
   <ele>226.800000</ele>
-<time>2004-08-07T03:30:59.372Z</time>
+  <time>2004-08-07T03:30:59.372Z</time>
   <course>143.110001</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1243,7 +1243,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121761667">
   <ele>226.400000</ele>
-<time>2004-08-07T03:31:00.372Z</time>
+  <time>2004-08-07T03:31:00.372Z</time>
   <course>140.100006</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1254,7 +1254,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121760000">
   <ele>226.100000</ele>
-<time>2004-08-07T03:31:01.372Z</time>
+  <time>2004-08-07T03:31:01.372Z</time>
   <course>143.550003</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1265,7 +1265,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121758333">
   <ele>225.900000</ele>
-<time>2004-08-07T03:31:02.372Z</time>
+  <time>2004-08-07T03:31:02.372Z</time>
   <course>142.119995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1276,7 +1276,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121756667">
   <ele>225.700000</ele>
-<time>2004-08-07T03:31:03.372Z</time>
+  <time>2004-08-07T03:31:03.372Z</time>
   <course>141.639999</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1287,7 +1287,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121756667">
   <ele>225.600000</ele>
-<time>2004-08-07T03:31:04.372Z</time>
+  <time>2004-08-07T03:31:04.372Z</time>
   <course>143.270004</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1298,7 +1298,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530511667" lon="-88.121758333">
   <ele>225.600000</ele>
-<time>2004-08-07T03:31:05.372Z</time>
+  <time>2004-08-07T03:31:05.372Z</time>
   <course>143.910004</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1309,7 +1309,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530508333" lon="-88.121760000">
   <ele>225.500000</ele>
-<time>2004-08-07T03:31:06.372Z</time>
+  <time>2004-08-07T03:31:06.372Z</time>
   <course>145.970001</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1320,7 +1320,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530505000" lon="-88.121761667">
   <ele>225.400000</ele>
-<time>2004-08-07T03:31:07.372Z</time>
+  <time>2004-08-07T03:31:07.372Z</time>
   <course>144.000000</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -1331,7 +1331,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530501667" lon="-88.121761667">
   <ele>225.300000</ele>
-<time>2004-08-07T03:31:08.372Z</time>
+  <time>2004-08-07T03:31:08.372Z</time>
   <course>146.250000</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1342,7 +1342,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530500000" lon="-88.121763333">
   <ele>225.300000</ele>
-<time>2004-08-07T03:31:09.372Z</time>
+  <time>2004-08-07T03:31:09.372Z</time>
   <course>138.979996</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1353,7 +1353,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530498333" lon="-88.121763333">
   <ele>225.100000</ele>
-<time>2004-08-07T03:31:10.372Z</time>
+  <time>2004-08-07T03:31:10.372Z</time>
   <course>143.100006</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1364,7 +1364,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530496667" lon="-88.121763333">
   <ele>224.900000</ele>
-<time>2004-08-07T03:31:11.372Z</time>
+  <time>2004-08-07T03:31:11.372Z</time>
   <course>140.429993</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1375,7 +1375,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530495000" lon="-88.121763333">
   <ele>224.700000</ele>
-<time>2004-08-07T03:31:12.372Z</time>
+  <time>2004-08-07T03:31:12.372Z</time>
   <course>141.440002</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1386,7 +1386,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530493333" lon="-88.121763333">
   <ele>224.500000</ele>
-<time>2004-08-07T03:31:13.372Z</time>
+  <time>2004-08-07T03:31:13.372Z</time>
   <course>142.979996</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -1397,7 +1397,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530493333" lon="-88.121763333">
   <ele>224.300000</ele>
-<time>2004-08-07T03:31:14.372Z</time>
+  <time>2004-08-07T03:31:14.372Z</time>
   <course>145.029999</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1408,7 +1408,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530491667" lon="-88.121763333">
   <ele>224.300000</ele>
-<time>2004-08-07T03:31:15.372Z</time>
+  <time>2004-08-07T03:31:15.372Z</time>
   <course>143.059998</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1419,7 +1419,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530490000" lon="-88.121765000">
   <ele>224.300000</ele>
-<time>2004-08-07T03:31:16.372Z</time>
+  <time>2004-08-07T03:31:16.372Z</time>
   <course>145.490005</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1430,7 +1430,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530490000" lon="-88.121763333">
   <ele>224.500000</ele>
-<time>2004-08-07T03:31:17.370Z</time>
+  <time>2004-08-07T03:31:17.370Z</time>
   <course>141.300003</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1441,7 +1441,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530488333" lon="-88.121763333">
   <ele>224.700000</ele>
-<time>2004-08-07T03:31:18.370Z</time>
+  <time>2004-08-07T03:31:18.370Z</time>
   <course>141.190002</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1452,7 +1452,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530488333" lon="-88.121760000">
   <ele>225.000000</ele>
-<time>2004-08-07T03:31:19.370Z</time>
+  <time>2004-08-07T03:31:19.370Z</time>
   <course>143.009995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1463,7 +1463,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530488333" lon="-88.121758333">
   <ele>225.200000</ele>
-<time>2004-08-07T03:31:20.370Z</time>
+  <time>2004-08-07T03:31:20.370Z</time>
   <course>140.809998</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1474,7 +1474,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530490000" lon="-88.121755000">
   <ele>225.300000</ele>
-<time>2004-08-07T03:31:21.370Z</time>
+  <time>2004-08-07T03:31:21.370Z</time>
   <course>140.789993</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1485,7 +1485,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530490000" lon="-88.121751667">
   <ele>225.300000</ele>
-<time>2004-08-07T03:31:22.370Z</time>
+  <time>2004-08-07T03:31:22.370Z</time>
   <course>141.429993</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1496,7 +1496,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530491667" lon="-88.121750000">
   <ele>225.300000</ele>
-<time>2004-08-07T03:31:23.370Z</time>
+  <time>2004-08-07T03:31:23.370Z</time>
   <course>142.300003</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1507,7 +1507,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530493333" lon="-88.121748333">
   <ele>225.200000</ele>
-<time>2004-08-07T03:31:24.370Z</time>
+  <time>2004-08-07T03:31:24.370Z</time>
   <course>140.809998</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -1518,7 +1518,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530493333" lon="-88.121750000">
   <ele>225.200000</ele>
-<time>2004-08-07T03:31:25.370Z</time>
+  <time>2004-08-07T03:31:25.370Z</time>
   <course>142.399994</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1529,7 +1529,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530495000" lon="-88.121751667">
   <ele>225.200000</ele>
-<time>2004-08-07T03:31:26.370Z</time>
+  <time>2004-08-07T03:31:26.370Z</time>
   <course>140.330002</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -1540,7 +1540,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530496667" lon="-88.121753333">
   <ele>225.100000</ele>
-<time>2004-08-07T03:31:27.370Z</time>
+  <time>2004-08-07T03:31:27.370Z</time>
   <course>137.770004</course>
   <speed>0.083333</speed>
   <fix>3d</fix>
@@ -1551,7 +1551,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530496667" lon="-88.121755000">
   <ele>225.000000</ele>
-<time>2004-08-07T03:31:28.370Z</time>
+  <time>2004-08-07T03:31:28.370Z</time>
   <course>142.289993</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1562,7 +1562,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530498333" lon="-88.121756667">
   <ele>224.900000</ele>
-<time>2004-08-07T03:31:29.370Z</time>
+  <time>2004-08-07T03:31:29.370Z</time>
   <course>140.869995</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1573,7 +1573,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530500000" lon="-88.121758333">
   <ele>224.700000</ele>
-<time>2004-08-07T03:31:30.370Z</time>
+  <time>2004-08-07T03:31:30.370Z</time>
   <course>141.699997</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1584,7 +1584,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530500000" lon="-88.121758333">
   <ele>224.500000</ele>
-<time>2004-08-07T03:31:31.370Z</time>
+  <time>2004-08-07T03:31:31.370Z</time>
   <course>141.699997</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1595,7 +1595,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530501667" lon="-88.121760000">
   <ele>224.300000</ele>
-<time>2004-08-07T03:31:32.370Z</time>
+  <time>2004-08-07T03:31:32.370Z</time>
   <course>140.330002</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1606,7 +1606,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530501667" lon="-88.121761667">
   <ele>224.100000</ele>
-<time>2004-08-07T03:31:33.370Z</time>
+  <time>2004-08-07T03:31:33.370Z</time>
   <course>139.050003</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1617,7 +1617,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530503333" lon="-88.121761667">
   <ele>223.900000</ele>
-<time>2004-08-07T03:31:34.370Z</time>
+  <time>2004-08-07T03:31:34.370Z</time>
   <course>144.460007</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1628,7 +1628,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530505000" lon="-88.121763333">
   <ele>223.700000</ele>
-<time>2004-08-07T03:31:35.370Z</time>
+  <time>2004-08-07T03:31:35.370Z</time>
   <course>139.029999</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1639,7 +1639,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530506667" lon="-88.121763333">
   <ele>223.400000</ele>
-<time>2004-08-07T03:31:36.370Z</time>
+  <time>2004-08-07T03:31:36.370Z</time>
   <course>142.190002</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1650,7 +1650,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530508333" lon="-88.121763333">
   <ele>223.100000</ele>
-<time>2004-08-07T03:31:37.370Z</time>
+  <time>2004-08-07T03:31:37.370Z</time>
   <course>141.350006</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1661,7 +1661,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530510000" lon="-88.121763333">
   <ele>222.700000</ele>
-<time>2004-08-07T03:31:38.370Z</time>
+  <time>2004-08-07T03:31:38.370Z</time>
   <course>142.449997</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1672,7 +1672,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530513333" lon="-88.121761667">
   <ele>222.300000</ele>
-<time>2004-08-07T03:31:39.370Z</time>
+  <time>2004-08-07T03:31:39.370Z</time>
   <course>142.000000</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1683,7 +1683,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530515000" lon="-88.121760000">
   <ele>221.900000</ele>
-<time>2004-08-07T03:31:40.370Z</time>
+  <time>2004-08-07T03:31:40.370Z</time>
   <course>138.740005</course>
   <speed>0.111111</speed>
   <fix>3d</fix>
@@ -1694,7 +1694,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
 </trkpt>
 <trkpt lat="42.530516667" lon="-88.121758333">
   <ele>221.400000</ele>
-<time>2004-08-07T03:31:41.370Z</time>
+  <time>2004-08-07T03:31:41.370Z</time>
   <course>137.910004</course>
   <speed>0.111111</speed>
   <fix>3d</fix>

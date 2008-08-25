@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx
- version="1.0"
-creator="GPSBabel - http://www.gpsbabel.org"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://www.topografix.com/GPX/1/0"
-xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>2008-03-09T00:28:36Z</time>
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  <time>2008-03-09T00:28:36Z</time>
 <bounds minlat="35.972033333" minlon="-87.134700000" maxlat="36.112183333" maxlon="-86.620116667"/>
 <wpt lat="35.972033333" lon="-87.134700000">
   <name>GCEBB</name>

@@ -1,176 +1,176 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx
- version="1.0"
-creator="GPSBabel - http://www.gpsbabel.org"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://www.topografix.com/GPX/1/0"
-xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
 <bounds minlat="48.142198200" minlon="11.532774100" maxlat="48.146356200" maxlon="11.546733100"/>
 <wpt lat="48.142198200" lon="11.541224300">
-<time>2008-03-06T19:16:18Z</time>
+  <time>2008-03-06T19:16:18Z</time>
   <name>osm-id 250870628</name>
   <cmt>osm-id 250870628</cmt>
   <desc>osm-id 250870628</desc>
 </wpt>
 <wpt lat="48.144905900" lon="11.541171100">
-<time>2006-12-14T23:22:36Z</time>
+  <time>2006-12-14T23:22:36Z</time>
   <name>osm-id 21585826</name>
   <cmt>osm-id 21585826</cmt>
   <desc>osm-id 21585826</desc>
 </wpt>
 <wpt lat="48.144466600" lon="11.540724400">
-<time>2006-12-29T14:41:35Z</time>
+  <time>2006-12-29T14:41:35Z</time>
   <name>osm-id 21585827</name>
   <cmt>osm-id 21585827</cmt>
   <desc>osm-id 21585827</desc>
 </wpt>
 <wpt lat="48.144878800" lon="11.542666600">
-<time>2006-11-30T14:20:49Z</time>
+  <time>2006-11-30T14:20:49Z</time>
   <name>osm-id 21324374</name>
   <cmt>osm-id 21324374</cmt>
   <desc>osm-id 21324374</desc>
 </wpt>
 <wpt lat="48.146356200" lon="11.535740000">
-<time>2008-02-10T13:05:27Z</time>
+  <time>2008-02-10T13:05:27Z</time>
   <name>osm-id 245339</name>
   <cmt>osm-id 245339</cmt>
   <desc>osm-id 245339</desc>
 </wpt>
 <wpt lat="48.146296000" lon="11.536311800">
-<time>2008-02-10T13:05:27Z</time>
+  <time>2008-02-10T13:05:27Z</time>
   <name>osm-id 245353</name>
   <cmt>osm-id 245353</cmt>
   <desc>osm-id 245353</desc>
 </wpt>
 <wpt lat="48.145241000" lon="11.541552300">
-<time>2007-02-07T16:49:43Z</time>
+  <time>2007-02-07T16:49:43Z</time>
   <name>osm-id 398692</name>
   <cmt>osm-id 398692</cmt>
   <desc>osm-id 398692</desc>
 </wpt>
 <wpt lat="48.145220900" lon="11.540887000">
-<time>2006-12-18T10:06:05Z</time>
+  <time>2006-12-18T10:06:05Z</time>
   <name>osm-id 398694</name>
   <cmt>osm-id 398694</cmt>
   <desc>osm-id 398694</desc>
 </wpt>
 <wpt lat="48.145323400" lon="11.540503700">
-<time>2006-12-18T10:06:05Z</time>
+  <time>2006-12-18T10:06:05Z</time>
   <name>osm-id 398704</name>
   <cmt>osm-id 398704</cmt>
   <desc>osm-id 398704</desc>
 </wpt>
 <wpt lat="48.145746800" lon="11.538671100">
-<time>2006-12-18T10:07:09Z</time>
+  <time>2006-12-18T10:07:09Z</time>
   <name>osm-id 398705</name>
   <cmt>osm-id 398705</cmt>
   <desc>osm-id 398705</desc>
 </wpt>
 <wpt lat="48.146225900" lon="11.536977500">
-<time>2006-08-28T22:19:19Z</time>
+  <time>2006-08-28T22:19:19Z</time>
   <name>osm-id 398710</name>
   <cmt>osm-id 398710</cmt>
   <desc>osm-id 398710</desc>
 </wpt>
 <wpt lat="48.144241300" lon="11.545447000">
-<time>2006-10-24T12:41:23Z</time>
+  <time>2006-10-24T12:41:23Z</time>
   <name>osm-id 19404292</name>
   <cmt>osm-id 19404292</cmt>
   <desc>osm-id 19404292</desc>
 </wpt>
 <wpt lat="48.146104400" lon="11.536904100">
-<time>2006-11-17T12:37:19Z</time>
+  <time>2006-11-17T12:37:19Z</time>
   <name>osm-id 21040287</name>
   <cmt>osm-id 21040287</cmt>
   <desc>osm-id 21040287</desc>
 </wpt>
 <wpt lat="48.146221200" lon="11.535614400">
-<time>2008-02-10T13:05:37Z</time>
+  <time>2008-02-10T13:05:37Z</time>
   <name>osm-id 21040288</name>
   <cmt>osm-id 21040288</cmt>
   <desc>osm-id 21040288</desc>
 </wpt>
 <wpt lat="48.146179300" lon="11.536204200">
-<time>2008-02-10T13:05:36Z</time>
+  <time>2008-02-10T13:05:36Z</time>
   <name>osm-id 21040289</name>
   <cmt>osm-id 21040289</cmt>
   <desc>osm-id 21040289</desc>
 </wpt>
 <wpt lat="48.145943200" lon="11.537772800">
-<time>2006-12-18T10:06:05Z</time>
+  <time>2006-12-18T10:06:05Z</time>
   <name>osm-id 21040291</name>
   <cmt>osm-id 21040291</cmt>
   <desc>osm-id 21040291</desc>
 </wpt>
 <wpt lat="48.146265700" lon="11.536599800">
-<time>2008-02-10T13:05:26Z</time>
+  <time>2008-02-10T13:05:26Z</time>
   <name>osm-id 21040296</name>
   <cmt>osm-id 21040296</cmt>
   <desc>osm-id 21040296</desc>
 </wpt>
 <wpt lat="48.143935300" lon="11.546733100">
-<time>2006-11-30T14:20:49Z</time>
+  <time>2006-11-30T14:20:49Z</time>
   <name>osm-id 21324375</name>
   <cmt>osm-id 21324375</cmt>
   <desc>osm-id 21324375</desc>
 </wpt>
 <wpt lat="48.145147100" lon="11.541886000">
-<time>2006-12-18T10:06:06Z</time>
+  <time>2006-12-18T10:06:06Z</time>
   <name>osm-id 21324376</name>
   <cmt>osm-id 21324376</cmt>
   <desc>osm-id 21324376</desc>
 </wpt>
 <wpt lat="48.145350600" lon="11.540937600">
-<time>2006-12-18T10:06:04Z</time>
+  <time>2006-12-18T10:06:04Z</time>
   <name>osm-id 21324380</name>
   <cmt>osm-id 21324380</cmt>
   <desc>osm-id 21324380</desc>
 </wpt>
 <wpt lat="48.145450700" lon="11.540562900">
-<time>2006-12-18T10:06:07Z</time>
+  <time>2006-12-18T10:06:07Z</time>
   <name>osm-id 21324381</name>
   <cmt>osm-id 21324381</cmt>
   <desc>osm-id 21324381</desc>
 </wpt>
 <wpt lat="48.145913500" lon="11.538651000">
-<time>2006-12-18T10:06:04Z</time>
+  <time>2006-12-18T10:06:04Z</time>
   <name>osm-id 21324382</name>
   <cmt>osm-id 21324382</cmt>
   <desc>osm-id 21324382</desc>
 </wpt>
 <wpt lat="48.144707800" lon="11.538416800">
-<time>2007-06-27T18:34:56Z</time>
+  <time>2007-06-27T18:34:56Z</time>
   <name>osm-id 21585828</name>
   <cmt>osm-id 21585828</cmt>
   <desc>osm-id 21585828</desc>
 </wpt>
 <wpt lat="48.145120600" lon="11.541408700">
-<time>2006-12-18T10:06:01Z</time>
+  <time>2006-12-18T10:06:01Z</time>
   <name>osm-id 21632176</name>
   <cmt>osm-id 21632176</cmt>
   <desc>osm-id 21632176</desc>
 </wpt>
 <wpt lat="48.143974700" lon="11.545326200">
-<time>2007-06-27T18:34:56Z</time>
+  <time>2007-06-27T18:34:56Z</time>
   <name>osm-id 21632177</name>
   <cmt>osm-id 21632177</cmt>
   <desc>osm-id 21632177</desc>
 </wpt>
 <wpt lat="48.142325900" lon="11.532774100">
-<time>2008-03-06T19:16:17Z</time>
+  <time>2008-03-06T19:16:17Z</time>
   <name>osm-id 250870622</name>
   <cmt>osm-id 250870622</cmt>
   <desc>osm-id 250870622</desc>
 </wpt>
 <wpt lat="48.142383900" lon="11.535803100">
-<time>2008-03-06T19:16:17Z</time>
+  <time>2008-03-06T19:16:17Z</time>
   <name>osm-id 250870624</name>
   <cmt>osm-id 250870624</cmt>
   <desc>osm-id 250870624</desc>
 </wpt>
 <wpt lat="48.142360800" lon="11.538405500">
-<time>2008-03-06T19:16:17Z</time>
+  <time>2008-03-06T19:16:17Z</time>
   <name>osm-id 250870626</name>
   <cmt>osm-id 250870626</cmt>
   <desc>osm-id 250870626</desc>
@@ -179,61 +179,61 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>Arnulfstraße</name>
   <desc>osm-id 4020271</desc>
   <rtept lat="48.144878800" lon="11.542666600">
-<time>2006-11-30T14:20:49Z</time>
+    <time>2006-11-30T14:20:49Z</time>
     <name>osm-id 21324374</name>
     <cmt>osm-id 21324374</cmt>
     <desc>osm-id 21324374</desc>
   </rtept>
   <rtept lat="48.145147100" lon="11.541886000">
-<time>2006-12-18T10:06:06Z</time>
+    <time>2006-12-18T10:06:06Z</time>
     <name>osm-id 21324376</name>
     <cmt>osm-id 21324376</cmt>
     <desc>osm-id 21324376</desc>
   </rtept>
   <rtept lat="48.145241000" lon="11.541552300">
-<time>2007-02-07T16:49:43Z</time>
+    <time>2007-02-07T16:49:43Z</time>
     <name>osm-id 398692</name>
     <cmt>osm-id 398692</cmt>
     <desc>osm-id 398692</desc>
   </rtept>
   <rtept lat="48.145350600" lon="11.540937600">
-<time>2006-12-18T10:06:04Z</time>
+    <time>2006-12-18T10:06:04Z</time>
     <name>osm-id 21324380</name>
     <cmt>osm-id 21324380</cmt>
     <desc>osm-id 21324380</desc>
   </rtept>
   <rtept lat="48.145450700" lon="11.540562900">
-<time>2006-12-18T10:06:07Z</time>
+    <time>2006-12-18T10:06:07Z</time>
     <name>osm-id 21324381</name>
     <cmt>osm-id 21324381</cmt>
     <desc>osm-id 21324381</desc>
   </rtept>
   <rtept lat="48.145913500" lon="11.538651000">
-<time>2006-12-18T10:06:04Z</time>
+    <time>2006-12-18T10:06:04Z</time>
     <name>osm-id 21324382</name>
     <cmt>osm-id 21324382</cmt>
     <desc>osm-id 21324382</desc>
   </rtept>
   <rtept lat="48.146225900" lon="11.536977500">
-<time>2006-08-28T22:19:19Z</time>
+    <time>2006-08-28T22:19:19Z</time>
     <name>osm-id 398710</name>
     <cmt>osm-id 398710</cmt>
     <desc>osm-id 398710</desc>
   </rtept>
   <rtept lat="48.146265700" lon="11.536599800">
-<time>2008-02-10T13:05:26Z</time>
+    <time>2008-02-10T13:05:26Z</time>
     <name>osm-id 21040296</name>
     <cmt>osm-id 21040296</cmt>
     <desc>osm-id 21040296</desc>
   </rtept>
   <rtept lat="48.146296000" lon="11.536311800">
-<time>2008-02-10T13:05:27Z</time>
+    <time>2008-02-10T13:05:27Z</time>
     <name>osm-id 245353</name>
     <cmt>osm-id 245353</cmt>
     <desc>osm-id 245353</desc>
   </rtept>
   <rtept lat="48.146356200" lon="11.535740000">
-<time>2008-02-10T13:05:27Z</time>
+    <time>2008-02-10T13:05:27Z</time>
     <name>osm-id 245339</name>
     <cmt>osm-id 245339</cmt>
     <desc>osm-id 245339</desc>
@@ -243,19 +243,19 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>Arnulfstraße</name>
   <desc>osm-id 4020916</desc>
   <rtept lat="48.144878800" lon="11.542666600">
-<time>2006-11-30T14:20:49Z</time>
+    <time>2006-11-30T14:20:49Z</time>
     <name>osm-id 21324374</name>
     <cmt>osm-id 21324374</cmt>
     <desc>osm-id 21324374</desc>
   </rtept>
   <rtept lat="48.144241300" lon="11.545447000">
-<time>2006-10-24T12:41:23Z</time>
+    <time>2006-10-24T12:41:23Z</time>
     <name>osm-id 19404292</name>
     <cmt>osm-id 19404292</cmt>
     <desc>osm-id 19404292</desc>
   </rtept>
   <rtept lat="48.143935300" lon="11.546733100">
-<time>2006-11-30T14:20:49Z</time>
+    <time>2006-11-30T14:20:49Z</time>
     <name>osm-id 21324375</name>
     <cmt>osm-id 21324375</cmt>
     <desc>osm-id 21324375</desc>
@@ -265,25 +265,25 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>Helmholtzstraße</name>
   <desc>osm-id 4078867</desc>
   <rtept lat="48.145241000" lon="11.541552300">
-<time>2007-02-07T16:49:43Z</time>
+    <time>2007-02-07T16:49:43Z</time>
     <name>osm-id 398692</name>
     <cmt>osm-id 398692</cmt>
     <desc>osm-id 398692</desc>
   </rtept>
   <rtept lat="48.145120600" lon="11.541408700">
-<time>2006-12-18T10:06:01Z</time>
+    <time>2006-12-18T10:06:01Z</time>
     <name>osm-id 21632176</name>
     <cmt>osm-id 21632176</cmt>
     <desc>osm-id 21632176</desc>
   </rtept>
   <rtept lat="48.144905900" lon="11.541171100">
-<time>2006-12-14T23:22:36Z</time>
+    <time>2006-12-14T23:22:36Z</time>
     <name>osm-id 21585826</name>
     <cmt>osm-id 21585826</cmt>
     <desc>osm-id 21585826</desc>
   </rtept>
   <rtept lat="48.144466600" lon="11.540724400">
-<time>2006-12-29T14:41:35Z</time>
+    <time>2006-12-29T14:41:35Z</time>
     <name>osm-id 21585827</name>
     <cmt>osm-id 21585827</cmt>
     <desc>osm-id 21585827</desc>
@@ -293,19 +293,19 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>Marlene-Dietrich-Straße</name>
   <desc>osm-id 4078868</desc>
   <rtept lat="48.143974700" lon="11.545326200">
-<time>2007-06-27T18:34:56Z</time>
+    <time>2007-06-27T18:34:56Z</time>
     <name>osm-id 21632177</name>
     <cmt>osm-id 21632177</cmt>
     <desc>osm-id 21632177</desc>
   </rtept>
   <rtept lat="48.144466600" lon="11.540724400">
-<time>2006-12-29T14:41:35Z</time>
+    <time>2006-12-29T14:41:35Z</time>
     <name>osm-id 21585827</name>
     <cmt>osm-id 21585827</cmt>
     <desc>osm-id 21585827</desc>
   </rtept>
   <rtept lat="48.144707800" lon="11.538416800">
-<time>2007-06-27T18:34:56Z</time>
+    <time>2007-06-27T18:34:56Z</time>
     <name>osm-id 21585828</name>
     <cmt>osm-id 21585828</cmt>
     <desc>osm-id 21585828</desc>
@@ -315,55 +315,55 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>Arnulfstraße</name>
   <desc>osm-id 4513917</desc>
   <rtept lat="48.146221200" lon="11.535614400">
-<time>2008-02-10T13:05:37Z</time>
+    <time>2008-02-10T13:05:37Z</time>
     <name>osm-id 21040288</name>
     <cmt>osm-id 21040288</cmt>
     <desc>osm-id 21040288</desc>
   </rtept>
   <rtept lat="48.146179300" lon="11.536204200">
-<time>2008-02-10T13:05:36Z</time>
+    <time>2008-02-10T13:05:36Z</time>
     <name>osm-id 21040289</name>
     <cmt>osm-id 21040289</cmt>
     <desc>osm-id 21040289</desc>
   </rtept>
   <rtept lat="48.146104400" lon="11.536904100">
-<time>2006-11-17T12:37:19Z</time>
+    <time>2006-11-17T12:37:19Z</time>
     <name>osm-id 21040287</name>
     <cmt>osm-id 21040287</cmt>
     <desc>osm-id 21040287</desc>
   </rtept>
   <rtept lat="48.145943200" lon="11.537772800">
-<time>2006-12-18T10:06:05Z</time>
+    <time>2006-12-18T10:06:05Z</time>
     <name>osm-id 21040291</name>
     <cmt>osm-id 21040291</cmt>
     <desc>osm-id 21040291</desc>
   </rtept>
   <rtept lat="48.145746800" lon="11.538671100">
-<time>2006-12-18T10:07:09Z</time>
+    <time>2006-12-18T10:07:09Z</time>
     <name>osm-id 398705</name>
     <cmt>osm-id 398705</cmt>
     <desc>osm-id 398705</desc>
   </rtept>
   <rtept lat="48.145323400" lon="11.540503700">
-<time>2006-12-18T10:06:05Z</time>
+    <time>2006-12-18T10:06:05Z</time>
     <name>osm-id 398704</name>
     <cmt>osm-id 398704</cmt>
     <desc>osm-id 398704</desc>
   </rtept>
   <rtept lat="48.145220900" lon="11.540887000">
-<time>2006-12-18T10:06:05Z</time>
+    <time>2006-12-18T10:06:05Z</time>
     <name>osm-id 398694</name>
     <cmt>osm-id 398694</cmt>
     <desc>osm-id 398694</desc>
   </rtept>
   <rtept lat="48.145120600" lon="11.541408700">
-<time>2006-12-18T10:06:01Z</time>
+    <time>2006-12-18T10:06:01Z</time>
     <name>osm-id 21632176</name>
     <cmt>osm-id 21632176</cmt>
     <desc>osm-id 21632176</desc>
   </rtept>
   <rtept lat="48.144878800" lon="11.542666600">
-<time>2006-11-30T14:20:49Z</time>
+    <time>2006-11-30T14:20:49Z</time>
     <name>osm-id 21324374</name>
     <cmt>osm-id 21324374</cmt>
     <desc>osm-id 21324374</desc>
@@ -373,25 +373,25 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/
   <name>S7</name>
   <desc>osm-id 23197114</desc>
   <rtept lat="48.142325900" lon="11.532774100">
-<time>2008-03-06T19:16:17Z</time>
+    <time>2008-03-06T19:16:17Z</time>
     <name>osm-id 250870622</name>
     <cmt>osm-id 250870622</cmt>
     <desc>osm-id 250870622</desc>
   </rtept>
   <rtept lat="48.142383900" lon="11.535803100">
-<time>2008-03-06T19:16:17Z</time>
+    <time>2008-03-06T19:16:17Z</time>
     <name>osm-id 250870624</name>
     <cmt>osm-id 250870624</cmt>
     <desc>osm-id 250870624</desc>
   </rtept>
   <rtept lat="48.142360800" lon="11.538405500">
-<time>2008-03-06T19:16:17Z</time>
+    <time>2008-03-06T19:16:17Z</time>
     <name>osm-id 250870626</name>
     <cmt>osm-id 250870626</cmt>
     <desc>osm-id 250870626</desc>
   </rtept>
   <rtept lat="48.142198200" lon="11.541224300">
-<time>2008-03-06T19:16:18Z</time>
+    <time>2008-03-06T19:16:18Z</time>
     <name>osm-id 250870628</name>
     <cmt>osm-id 250870628</cmt>
     <desc>osm-id 250870628</desc>
