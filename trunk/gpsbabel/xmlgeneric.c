@@ -131,7 +131,7 @@ xml_fill_in_time(char *time_string, const time_t timep, int microseconds, int lo
 }
 
 void
-xml_write_time(gbfile *ofd, const time_t timep, int microseconds, char *elname)
+xml_write_time(gbfile *ofd, const time_t timep, int microseconds, const char *elname)
 {
 	char time_string[64];
 	xml_fill_in_time(time_string, timep, microseconds, XML_LONG_TIME);
