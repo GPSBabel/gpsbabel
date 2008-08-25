@@ -994,14 +994,14 @@ find_vec(char *const vecname, char **opts)
 		
 		if (vec->vec->args) {
 			for (ap = vec->vec->args; ap->argstring; ap++) {
-				char *opt;
+				const char *opt;
 				
 				if ( res ) {
 					opt = get_option(*opts, ap->argstring);
 					if ( opt ) {
 						found = 1;
 						assign_option(svecname, ap, opt);
-						xfree(opt);
+						xfree((char *)opt);
 						continue;
 					}
 				}
@@ -1049,14 +1049,14 @@ find_vec(char *const vecname, char **opts)
 		
 		if (vec_list[0].vec->args) {
 			for (ap = vec_list[0].vec->args; ap->argstring; ap++) {
-				char *opt;
+				const char *opt;
 				
 				if ( res ) {
 					opt = get_option(*opts, ap->argstring);
 					if ( opt ) {
 						found = 1;
 						assign_option(svecname, ap, opt);
-						xfree(opt);
+						xfree((char *)opt);
 						continue;
 					}
 				}
