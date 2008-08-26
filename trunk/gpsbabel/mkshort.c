@@ -587,7 +587,7 @@ mkshort_from_wpt(short_handle h, const waypoint *wpt)
 	 * which contains placer name, diff, terr, and generally way
 	 * more stuff than should be in any one field...
  	 */
-	if (wpt->gc_data.diff && wpt->gc_data.terr && 
+	if (wpt->gc_data->diff && wpt->gc_data->terr && 
 		wpt->notes && wpt->notes[0]) {
 		return mkshort(h, wpt->notes);
 	}

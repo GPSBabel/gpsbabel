@@ -789,7 +789,7 @@ kml_lookup_gc_icon(const waypoint *waypointp)
 	/* This could be done so much better in C99 with designated
 	 * initializers...
 	 */
-	switch (waypointp->gc_data.type) {
+	switch (waypointp->gc_data->type) {
 		case gt_traditional: icon = "2.png"; break;
 		case gt_multi: icon = "3.png"; break;
 		case gt_virtual: icon = "4.png"; break;
@@ -815,7 +815,7 @@ kml_lookup_gc_container(const waypoint *waypointp)
 {
 	const char *cont;
 
-	switch (waypointp->gc_data.container) {
+	switch (waypointp->gc_data->container) {
 		case gc_micro: cont="micro"; break;
 		case gc_regular: cont="regular"; break;
 		case gc_large: cont="large"; break;
@@ -883,32 +883,32 @@ static void kml_geocache_pr(const waypoint *waypointp)
 		xfree(p);
 	}
 
-	if (waypointp->gc_data.placer) {
-		p = xml_entitize(waypointp->gc_data.placer);
+	if (waypointp->gc_data->placer) {
+		p = xml_entitize(waypointp->gc_data->placer);
 		kml_write_xml(0, "<Data name=\"gc_placer\"><value>%s</value></Data>\n", p);
 		xfree(p);
 	}
 
-	kml_write_xml(0, "<Data name=\"gc_placer_id\"><value>%d</value></Data>\n", waypointp->gc_data.placer_id);
+	kml_write_xml(0, "<Data name=\"gc_placer_id\"><value>%d</value></Data>\n", waypointp->gc_data->placer_id);
 
-	kml_write_xml(0, "<Data name=\"gc_diff_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data.diff));
-	kml_write_xml(0, "<Data name=\"gc_terr_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data.terr));
+	kml_write_xml(0, "<Data name=\"gc_diff_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data->diff));
+	kml_write_xml(0, "<Data name=\"gc_terr_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data->terr));
 
 	kml_write_xml(0, "<Data name=\"gc_cont_icon\"><value>%s</value></Data>\n", kml_lookup_gc_container(waypointp));
 
  	 // Highlight any issues with the cache, such as temp unavail 
 	 // or archived.
 	kml_write_xml(0, "<Data name=\"gc_issues\"><value>");
-	if (waypointp->gc_data.is_archived == status_true) {
+	if (waypointp->gc_data->is_archived == status_true) {
 		kml_write_xml(0, "&lt;font color=\"red\"&gt;This cache has been archived.&lt;/font&gt;<br/>\n");
-	} else if (waypointp->gc_data.is_available == status_false) {
+	} else if (waypointp->gc_data->is_available == status_false) {
 		kml_write_xml(0, "&lt;font color=\"red\"&gt;This cache is temporarily unavailable.&lt;/font&gt;<br/>\n");
 	}
 	kml_write_xml(0, "</value></Data>\n");
 
-	kml_write_xml(0, "<Data name=\"gc_type\"><value>%s</value></Data>\n", gs_get_cachetype(waypointp->gc_data.type));
-	kml_write_xml(0, "<Data name=\"gc_short_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data.desc_short.utfstring ? waypointp->gc_data.desc_short.utfstring : "");
-	kml_write_xml(0, "<Data name=\"gc_long_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data.desc_long.utfstring ? waypointp->gc_data.desc_long.utfstring : "");
+	kml_write_xml(0, "<Data name=\"gc_type\"><value>%s</value></Data>\n", gs_get_cachetype(waypointp->gc_data->type));
+	kml_write_xml(0, "<Data name=\"gc_short_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data->desc_short.utfstring ? waypointp->gc_data->desc_short.utfstring : "");
+	kml_write_xml(0, "<Data name=\"gc_long_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data->desc_long.utfstring ? waypointp->gc_data->desc_long.utfstring : "");
 	
 	kml_write_xml(-1, "</ExtendedData>\n");
 
@@ -942,7 +942,7 @@ static void kml_waypt_pr(const waypoint *waypointp)
 	}
 #endif
 
-	if (waypointp->gc_data.diff && waypointp->gc_data.terr) {
+	if (waypointp->gc_data->diff && waypointp->gc_data->terr) {
 		kml_geocache_pr(waypointp);
 		return;
 	}

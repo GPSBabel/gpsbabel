@@ -431,27 +431,27 @@ palmdoc_disp(const waypoint *wpt)
 	if (strcmp(wpt->description, wpt->shortname)) {
 		docprintf(10+strlen(wpt->description), "%s\n", wpt->description);
 	}
-	if (wpt->gc_data.terr) {
+	if (wpt->gc_data->terr) {
 
-		docprintf (100, "%s/%s\n", gs_get_cachetype(wpt->gc_data.type), 
-			gs_get_container(wpt->gc_data.container));
+		docprintf (100, "%s/%s\n", gs_get_cachetype(wpt->gc_data->type), 
+			gs_get_container(wpt->gc_data->container));
 
-	        if (wpt->gc_data.desc_short.utfstring) {
-	                char *stripped_html = strip_html(&wpt->gc_data.desc_short);
+	        if (wpt->gc_data->desc_short.utfstring) {
+	                char *stripped_html = strip_html(&wpt->gc_data->desc_short);
 			docprintf (10+strlen(stripped_html), "\n%s\n", stripped_html);
                 	xfree(stripped_html);
        		}
-	        if (wpt->gc_data.desc_long.utfstring) {
-	                char *stripped_html = strip_html(&wpt->gc_data.desc_long);
+	        if (wpt->gc_data->desc_long.utfstring) {
+	                char *stripped_html = strip_html(&wpt->gc_data->desc_long);
 			docprintf (10+strlen(stripped_html), "\n%s\n", stripped_html);
                 	xfree(stripped_html);
        		}
-		if (wpt->gc_data.hint) {
+		if (wpt->gc_data->hint) {
 			char *hint = NULL;
 			if ( palm_encrypt )
-				hint = rot13( wpt->gc_data.hint );
+				hint = rot13( wpt->gc_data->hint );
 			else
-				hint = xstrdup( wpt->gc_data.hint );
+				hint = xstrdup( wpt->gc_data->hint );
 			docprintf (10+strlen(hint), "\nHint: %s\n", hint);
 			xfree( hint );
 		}

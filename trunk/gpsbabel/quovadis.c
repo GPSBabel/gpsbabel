@@ -131,7 +131,7 @@ data_read(void)
 		90.0 - (be_read32(&rec->latitude) / 1000000.0);
 	    wpt_tmp->shortname = xstrdup(rec->name);
 
-	    wpt_tmp->gc_data.type =
+	    waypt_alloc_gc_data(wpt_tmp)->type =
 		icon_to_wpt(be_read16(&rec->icon_bitmap));
 
 	    waypt_add(wpt_tmp);
@@ -168,7 +168,7 @@ quovadis_writewpt(waypoint *wpt)
     else {
 	rec->name[0] = '\0';
     }
-    be_write16(&rec->icon_bitmap, wpt_to_icon(wpt->gc_data.type));
+    be_write16(&rec->icon_bitmap, wpt_to_icon(wpt->gc_data->type));
     be_write32(&rec->note_id, 0);
     rec->name_scale = DEFAULT_NAME_SCALE;
     rec->icon_scale = DEFAULT_ICON_SCALE;

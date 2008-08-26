@@ -141,9 +141,9 @@ compare(const void *a, const void *b)
 	const wpt_ptr *wa = (wpt_ptr *)a;
 	const wpt_ptr *wb = (wpt_ptr *)b;
 
-	if ( wa->wpt->gc_data.exported < wb->wpt->gc_data.exported ) {
+	if ( wa->wpt->gc_data->exported < wb->wpt->gc_data->exported ) {
 		return 1;
-	} else if ( wa->wpt->gc_data.exported > wb->wpt->gc_data.exported ) {
+	} else if ( wa->wpt->gc_data->exported > wb->wpt->gc_data->exported ) {
 		return -1;
 	}
 

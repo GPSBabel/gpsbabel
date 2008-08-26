@@ -1291,9 +1291,9 @@ mag_waypt_pr(const waypoint *waypointp)
 	owpt = mag_cleanse(owpt);
 
 	if (global_opts.smart_icons &&
-	    waypointp->gc_data.diff && waypointp->gc_data.terr) {
-		sprintf(ofmtdesc, "%d/%d %s", waypointp->gc_data.diff, 
-			waypointp->gc_data.terr, odesc);
+	    waypointp->gc_data->diff && waypointp->gc_data->terr) {
+		sprintf(ofmtdesc, "%d/%d %s", waypointp->gc_data->diff, 
+			waypointp->gc_data->terr, odesc);
 		odesc = mag_cleanse(ofmtdesc);
 	} else {
 		odesc = mag_cleanse(odesc);

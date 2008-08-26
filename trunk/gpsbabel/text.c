@@ -130,30 +130,30 @@ text_disp(const waypoint *wpt)
 
 	if (strcmp(wpt->description, wpt->shortname)) {
 		gbfprintf(file_out, "%s", wpt->description);
-		if (wpt->gc_data.placer) 
-			gbfprintf(file_out, " by %s", wpt->gc_data.placer);
+		if (wpt->gc_data->placer) 
+			gbfprintf(file_out, " by %s", wpt->gc_data->placer);
 		}
-		if (wpt->gc_data.terr) {
+		if (wpt->gc_data->terr) {
 			gbfprintf(file_out, " - %s / %s - (%d%s / %d%s)\n", 
-				gs_get_cachetype(wpt->gc_data.type), gs_get_container(wpt->gc_data.container), 
-				(int)(wpt->gc_data.diff / 10), (wpt->gc_data.diff%10)?".5":"", 
-				(int)(wpt->gc_data.terr / 10), (wpt->gc_data.terr%10)?".5":""  ); 
-	        if (wpt->gc_data.desc_short.utfstring) {
-	                char *stripped_html = strip_html(&wpt->gc_data.desc_short);
+				gs_get_cachetype(wpt->gc_data->type), gs_get_container(wpt->gc_data->container), 
+				(int)(wpt->gc_data->diff / 10), (wpt->gc_data->diff%10)?".5":"", 
+				(int)(wpt->gc_data->terr / 10), (wpt->gc_data->terr%10)?".5":""  ); 
+	        if (wpt->gc_data->desc_short.utfstring) {
+	                char *stripped_html = strip_html(&wpt->gc_data->desc_short);
 			gbfprintf (file_out, "\n%s\n", stripped_html);
                 	xfree(stripped_html);
        		}
-	        if (wpt->gc_data.desc_long.utfstring) {
-	                char *stripped_html = strip_html(&wpt->gc_data.desc_long);
+	        if (wpt->gc_data->desc_long.utfstring) {
+	                char *stripped_html = strip_html(&wpt->gc_data->desc_long);
 			gbfprintf (file_out, "\n%s\n", stripped_html);
                 	xfree(stripped_html);
        		}
-		if (wpt->gc_data.hint) {
+		if (wpt->gc_data->hint) {
 			char *hint = NULL;
 			if ( txt_encrypt ) 
-				hint = rot13( wpt->gc_data.hint );
+				hint = rot13( wpt->gc_data->hint );
 			else
-				hint = xstrdup( wpt->gc_data.hint );
+				hint = xstrdup( wpt->gc_data->hint );
 			gbfprintf (file_out, "\nHint: %s\n", hint);
 			xfree( hint );
 		}

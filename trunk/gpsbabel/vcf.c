@@ -105,16 +105,16 @@ vcf_disp(const waypoint *wpt)
 	}
 
 	gbfprintf(file_out, "NOTE:");
-	vcf_print_utf(&wpt->gc_data.desc_short);
+	vcf_print_utf(&wpt->gc_data->desc_short);
 	gbfprintf(file_out, "\\n");
-	vcf_print_utf(&wpt->gc_data.desc_long);
+	vcf_print_utf(&wpt->gc_data->desc_long);
 	gbfprintf(file_out, "\\n\\nHINT:\\n");
 	if (vcf_encrypt) {
-		char *s = rot13(wpt->gc_data.hint);
+		char *s = rot13(wpt->gc_data->hint);
 		vcf_print(s);
 		xfree(s);
 	} else {
-		vcf_print(wpt->gc_data.hint);
+		vcf_print(wpt->gc_data->hint);
 	}
 
 	gbfprintf(file_out, "\nEND:VCARD\n");
