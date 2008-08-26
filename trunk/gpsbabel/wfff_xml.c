@@ -192,7 +192,7 @@ void wfff_e(const char *args, const char **unused)
 
 	if ((ap_hdop>=1)&&(ap_hdop<50)) // Discard invalid GPS fix
 	{
-		wpt_tmp = xcalloc(sizeof(*wpt_tmp), 1);
+		wpt_tmp = waypt_new();
 
 		if ( snmac ) {
 			wpt_tmp->shortname = xstrdup(ap_mac);
