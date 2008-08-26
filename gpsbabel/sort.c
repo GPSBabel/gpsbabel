@@ -55,7 +55,7 @@ sort_comp(const queue * a, const queue * b)
 	const waypoint *x2 = (waypoint *)b;
 
 	switch (sort_mode)  {
-	   case sm_gcid: return x1->gc_data.id - x2->gc_data.id;
+	   case sm_gcid: return x1->gc_data->id - x2->gc_data->id;
 	   case sm_shortname: return strcmp (x1->shortname, x2->shortname);
 	   case sm_description: return strcmp (x1->description, x2->description);
 	   case sm_time: return x1->creation_time - x2->creation_time;

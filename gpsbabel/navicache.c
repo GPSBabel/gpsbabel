@@ -116,7 +116,10 @@ nav_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 	attr = xml_convert_attrs_to_char_string(xml_attr);
 	if (0 == strcmp(el, "CacheDetails")) {
 		const char **ap;
+		geocache_data *gc_data;
 		wpt_tmp = waypt_new();
+		gc_data = waypt_alloc_gc_data(wpt_tmp);
+		
 		for (ap = attr; *ap; ap+=2) {
 			if (0 == strcmp(ap[0], "cache_id")) {
 				wpt_tmp->shortname = xstrdup(ap[1]);
@@ -139,17 +142,17 @@ nav_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 			if (0 == strcmp(ap[0], "difficulty")) {
 				float x;
 				sscanf(ap[1], "%f", &x);
-				wpt_tmp->gc_data.diff = x * 10;
+				gc_data->diff = x * 10;
 			} else
 			if (0 == strcmp(ap[0], "terrain")) {
 				float x;
 				sscanf(ap[1], "%f", &x);
-				wpt_tmp->gc_data.terr = x * 10;
+				gc_data->terr = x * 10;
 			} else
 			if (0 == strcmp(ap[0], "cache_type")) {
 				static char buf[512];
 
-	                        wpt_tmp->gc_data.type = nc_mktype(ap[1]);
+	                        gc_data->type = nc_mktype(ap[1]);
 				if (!strcmp(ap[1], "normal"))
 				    wpt_tmp->icon_descr = "Geocache-regular";
 				else if (!strcmp(ap[1], "multi-part"))
@@ -183,15 +186,15 @@ nav_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 				}
 			} else
 			if (0 == strcmp(ap[0], "cache_size")) {
-	                        wpt_tmp->gc_data.container = nc_mkcont(ap[1]);
+	                        gc_data->container = nc_mkcont(ap[1]);
 			}  else
 			if (0 == strcmp(ap[0], "description")) {
-				wpt_tmp->gc_data.desc_long.is_html = 1;
-				wpt_tmp->gc_data.desc_long.utfstring = xstrdup(ap[1]);
+				gc_data->desc_long.is_html = 1;
+				gc_data->desc_long.utfstring = xstrdup(ap[1]);
 			} else
 			if (0 == strcmp(ap[0], "comments")) {
-				wpt_tmp->gc_data.desc_short.is_html = 1;
-				wpt_tmp->gc_data.desc_short.utfstring = xstrdup(ap[1]);
+				gc_data->desc_short.is_html = 1;
+				gc_data->desc_short.utfstring = xstrdup(ap[1]);
 			}
 		}
 		waypt_add(wpt_tmp);

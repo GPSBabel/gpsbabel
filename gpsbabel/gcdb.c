@@ -148,10 +148,10 @@ data_read(void)
 					wpt->notes = xstrappend(wpt->notes,  recdata);
 				} else
 				if (!strncmp("diff", rec->dbfld[i].fldname,4)) {
-					wpt->gc_data.diff = 10 * atof(recdata);
+					waypt_alloc_gc_data(wpt)->diff = 10 * atof(recdata);
 				} else
 				if (!strncmp("terr", rec->dbfld[i].fldname,4)) {
-					wpt->gc_data.terr = 10 * atof(recdata);
+					waypt_alloc_gc_data(wpt)->terr = 10 * atof(recdata);
 				} 
 				break;
 #if 0
@@ -260,13 +260,13 @@ gcdb_write_wpt(const waypoint *wpt)
 				(int) wpt->longitude));
 	gcdb_add_to_rec(rec, "lon2", RECTYPE_TEXT, tbuf);
 
-	if (wpt->gc_data.diff) {
-		sprintf(tbuf, "%f", wpt->gc_data.diff / 10.0);
+	if (wpt->gc_data->diff) {
+		sprintf(tbuf, "%f", wpt->gc_data->diff / 10.0);
 		gcdb_add_to_rec(rec, "diff", RECTYPE_TEXT, tbuf);
 	}
 
-	if (wpt->gc_data.terr) {
-		sprintf(tbuf, "%f", wpt->gc_data.terr / 10.0);
+	if (wpt->gc_data->terr) {
+		sprintf(tbuf, "%f", wpt->gc_data->terr / 10.0);
 		gcdb_add_to_rec(rec, "terr", RECTYPE_TEXT, tbuf);
 	}
 

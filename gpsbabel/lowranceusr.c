@@ -732,7 +732,7 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 		SymbolId = lowranceusr_find_icon_number_from_desc(wpt->icon_descr);
 	}
 	/* If the waypoint is archived or disabled, use a "disabled" icon instead. */
-	if ( (wpt->gc_data.is_archived==status_true) || (wpt->gc_data.is_available==status_false) ) {
+	if ( (wpt->gc_data->is_archived==status_true) || (wpt->gc_data->is_available==status_false) ) {
 		SymbolId = lowranceusr_find_icon_number_from_desc("Disabled Cache");
 	}
 

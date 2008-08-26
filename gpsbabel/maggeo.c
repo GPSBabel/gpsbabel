@@ -167,15 +167,15 @@ maggeo_waypt_pr(const waypoint *waypointp)
 	 * For some reason, Magellan used exactly the GPX spellings of 
 	 * everything except this one...
 	 */
-	if (waypointp->gc_data.type == gt_suprise) {
+	if (waypointp->gc_data->type == gt_suprise) {
 		ctype = "Mystery Cache";
 	} else {
-		ctype = gs_get_cachetype(waypointp->gc_data.type);
+		ctype = gs_get_cachetype(waypointp->gc_data->type);
 	}
 	placeddate = maggeo_fmtdate(waypointp->creation_time);
-	lfounddate = maggeo_fmtdate(waypointp->gc_data.last_found);
+	lfounddate = maggeo_fmtdate(waypointp->gc_data->last_found);
 	cname = mkshort(desc_handle, waypointp->notes ? waypointp->notes : waypointp->description);
-	placer = waypointp->gc_data.placer;
+	placer = waypointp->gc_data->placer;
 
 	/*
 	 * As of this writing on 05/04, the firmware in the units will
@@ -198,20 +198,20 @@ maggeo_waypt_pr(const waypoint *waypointp)
 	append(obuf, shortname);
 	append(obuf, cname);
 	append(obuf, placer);
-	append(obuf, waypointp->gc_data.hint);
+	append(obuf, waypointp->gc_data->hint);
 	append(obuf, ctype);
 	append(obuf, placeddate);
 	append(obuf, lfounddate);
 
-	if (waypointp->gc_data.diff/10.0)
+	if (waypointp->gc_data->diff/10.0)
 		sprintf(obuf + strlen(obuf), ",%3.1f", 
-			waypointp->gc_data.diff/10.0);
+			waypointp->gc_data->diff/10.0);
 	else
 		strcat(obuf, ",");
 
-	if (waypointp->gc_data.terr/10.0)
+	if (waypointp->gc_data->terr/10.0)
 		sprintf(obuf + strlen(obuf), ",%3.1f", 
-			waypointp->gc_data.terr/10.0);
+			waypointp->gc_data->terr/10.0);
 	else
 		strcat(obuf, ",");
 

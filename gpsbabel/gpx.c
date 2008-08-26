@@ -491,23 +491,24 @@ static void
 tag_gs_cache(const char **attrv)
 {
 	const char **avp;
+	geocache_data *gc_data = waypt_alloc_gc_data(wpt_tmp);
 
 	for (avp = &attrv[0]; *avp; avp+=2) {
 		if (strcmp(avp[0], "id") == 0) {
-				wpt_tmp->gc_data.id = atoi(avp[1]);
+				gc_data->id = atoi(avp[1]);
 		} else if (strcmp(avp[0], "available") == 0) {
 			if (case_ignore_strcmp(avp[1], "True") == 0) {
-				wpt_tmp->gc_data.is_available = status_true;
+				gc_data->is_available = status_true;
 			}
 			else if (case_ignore_strcmp(avp[1], "False") == 0) {
-				wpt_tmp->gc_data.is_available = status_false;
+				gc_data->is_available = status_false;
 			}			
 		} else if (strcmp(avp[0], "archived") == 0) {
 			if (case_ignore_strcmp(avp[1], "True") == 0) {
-				wpt_tmp->gc_data.is_archived = status_true;
+				gc_data->is_archived = status_true;
 			}
 			else if (case_ignore_strcmp(avp[1], "False") == 0) {
-				wpt_tmp->gc_data.is_archived = status_false;
+				gc_data->is_archived = status_false;
 			}			
 		}
 	}
@@ -697,7 +698,7 @@ gpx_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 		break;
 	case tt_cache_placer:
 		if (*attr && (0 == strcmp(attr[0], "id"))) {
-			wpt_tmp->gc_data.placer_id = atoi(attr[1]);
+			waypt_alloc_gc_data(wpt_tmp)->placer_id = atoi(attr[1]);
 		}
 	default:
 		break;
@@ -933,41 +934,43 @@ gpx_end(void *data, const XML_Char *xml_el)
 		wpt_tmp->notes = xstrdup(cdatastrp);
 		break;
 	case tt_cache_container:
-		wpt_tmp->gc_data.container = gs_mkcont(cdatastrp);
+		waypt_alloc_gc_data(wpt_tmp)->container = gs_mkcont(cdatastrp);
 		break;
 	case tt_cache_type:
-		wpt_tmp->gc_data.type = gs_mktype(cdatastrp);
+		waypt_alloc_gc_data(wpt_tmp)->type = gs_mktype(cdatastrp);
 		break;
 	case tt_cache_difficulty:
 		sscanf(cdatastrp, "%f", &x);
-		wpt_tmp->gc_data.diff = x * 10;
+		waypt_alloc_gc_data(wpt_tmp)->diff = x * 10;
 		break;
 	case tt_cache_hint:
 		rtrim(cdatastrp);
 		if (cdatastrp[0]) {
-			wpt_tmp->gc_data.hint = xstrdup(cdatastrp);
+			waypt_alloc_gc_data(wpt_tmp)->hint = xstrdup(cdatastrp);
 		}
 		break;
 	case tt_cache_desc_long:
 		rtrim(cdatastrp);
 		if (cdatastrp[0]) {
-			wpt_tmp->gc_data.desc_long.is_html = cache_descr_is_html;
-			wpt_tmp->gc_data.desc_long.utfstring = xstrdup(cdatastrp);
+			geocache_data *gc_data = waypt_alloc_gc_data(wpt_tmp);
+			gc_data->desc_long.is_html = cache_descr_is_html;
+			gc_data->desc_long.utfstring = xstrdup(cdatastrp);
 		}
 		break;
 	case tt_cache_desc_short:
 		rtrim(cdatastrp);
 		if (cdatastrp[0]) {
-			wpt_tmp->gc_data.desc_short.is_html = cache_descr_is_html;
-			wpt_tmp->gc_data.desc_short.utfstring = xstrdup(cdatastrp);
+			geocache_data *gc_data = waypt_alloc_gc_data(wpt_tmp);
+			gc_data->desc_short.is_html = cache_descr_is_html;
+			gc_data->desc_short.utfstring = xstrdup(cdatastrp);
 		}
 		break;
 	case tt_cache_terrain:
 		sscanf(cdatastrp, "%f", &x);
-		wpt_tmp->gc_data.terr = x * 10;
+		waypt_alloc_gc_data(wpt_tmp)->terr = x * 10;
 		break;
 	case tt_cache_placer:
-		wpt_tmp->gc_data.placer = xstrdup(cdatastrp);
+		waypt_alloc_gc_data(wpt_tmp)->placer = xstrdup(cdatastrp);
 		break;
 	case tt_cache_log_date:
 		gc_log_date = xml_parse_time( cdatastrp, NULL );
@@ -979,8 +982,8 @@ gpx_end(void *data, const XML_Char *xml_el)
 	 */
 	case tt_cache_log_type:
 		if ((0 == strcmp(cdatastrp, "Found it")) && 
-		    (0 == wpt_tmp->gc_data.last_found)) {
-			wpt_tmp->gc_data.last_found  = gc_log_date;
+		    (0 == wpt_tmp->gc_data->last_found)) {
+			waypt_alloc_gc_data(wpt_tmp)->last_found  = gc_log_date;
 		}
 		gc_log_date = 0;
 		break;
@@ -1442,9 +1445,9 @@ fprint_xml_chain( xml_tag *tag, const waypoint *wpt )
 			if ( tag->child ) {
 				fprint_xml_chain(tag->child, wpt);
 			}
-			if ( wpt && wpt->gc_data.exported &&
+			if ( wpt && wpt->gc_data->exported &&
 			    strcmp(tag->tagname, "groundspeak:cache" ) == 0 ) {
-				xml_write_time( ofd, wpt->gc_data.exported, 0,
+				xml_write_time( ofd, wpt->gc_data->exported, 0,
 						"groundspeak:exported" );
 			}
 			gbfprintf( ofd, "</%s>\n", tag->tagname);

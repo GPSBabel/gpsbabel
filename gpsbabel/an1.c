@@ -726,12 +726,12 @@ Write_One_AN1_Waypoint( const waypoint *wpt )
 	}
 	rec->name = xstrdup( wpt->description );
 	
-	if ( !nogc && wpt->gc_data.id ) {
-		char *extra = xmalloc( 25 + strlen(wpt->gc_data.placer) + strlen( wpt->shortname ));
+	if ( !nogc && wpt->gc_data->id ) {
+		char *extra = xmalloc( 25 + strlen(wpt->gc_data->placer) + strlen( wpt->shortname ));
 		sprintf( extra, "\r\nBy %s\r\n%s (%1.1f/%1.1f)",
-			wpt->gc_data.placer, 
-			wpt->shortname, wpt->gc_data.diff/10.0, 
-			wpt->gc_data.terr/10.0);
+			wpt->gc_data->placer, 
+			wpt->shortname, wpt->gc_data->diff/10.0, 
+			wpt->gc_data->terr/10.0);
 		rec->name = xstrappend( rec->name, extra );
 		xfree( extra );
 	}

@@ -310,14 +310,14 @@ write_blocks( gbfile *f, struct blockheader *blocks ) {
             		char desc_field [256];
 			write_char( f, 2 );
             if (global_opts.smart_names && 
-	      		blocks->start[i].wpt->gc_data.diff && 
-			blocks->start[i].wpt->gc_data.terr) {
+	      		blocks->start[i].wpt->gc_data->diff && 
+			blocks->start[i].wpt->gc_data->terr) {
                 snprintf(desc_field,sizeof(desc_field),"%s(t%ud%u)%s(type%dcont%d)",blocks->start[i].wpt->description,
-                blocks->start[i].wpt->gc_data.terr/10,
-                blocks->start[i].wpt->gc_data.diff/10,
+                blocks->start[i].wpt->gc_data->terr/10,
+                blocks->start[i].wpt->gc_data->diff/10,
                 blocks->start[i].wpt->shortname,
-                (int) blocks->start[i].wpt->gc_data.type,
-                (int) blocks->start[i].wpt->gc_data.container);
+                (int) blocks->start[i].wpt->gc_data->type,
+                (int) blocks->start[i].wpt->gc_data->container);
                 //Unfortunately enums mean we get numbers for cache type and container.
             } else {
                 snprintf(desc_field, sizeof(desc_field), "%s",

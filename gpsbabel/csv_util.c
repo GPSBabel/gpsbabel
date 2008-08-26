@@ -926,6 +926,7 @@ static void
 xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
 {
     char *enclosure = "";
+    geocache_data *gc_data = NULL;
 
     if (0 == strcmp(fmp->printfc, "\"%s\"")) {
 	enclosure = "\"";
@@ -1086,47 +1087,49 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     case XT_ISO_TIME_MS: 
 	wpt->creation_time = xml_parse_time(s, &wpt->microseconds);
     	break;
-	case XT_GEOCACHE_LAST_FOUND:
-	wpt->gc_data.last_found = yyyymmdd_to_time(s);
+    case XT_GEOCACHE_LAST_FOUND:
+        waypt_alloc_gc_data(wpt)->last_found = yyyymmdd_to_time(s);
     	break;
 
     /* GEOCACHING STUFF ***************************************************/
     case XT_GEOCACHE_DIFF:
        /* Geocache Difficulty as an int */
-	wpt->gc_data.diff = atof(s) * 10; 
+        waypt_alloc_gc_data(wpt)->diff = atof(s) * 10; 
     	break;
     case XT_GEOCACHE_TERR:
        /* Geocache Terrain as an int */
-	wpt->gc_data.terr = atof(s) * 10;
+        waypt_alloc_gc_data(wpt)->terr = atof(s) * 10;
     	break;
     case XT_GEOCACHE_TYPE:
        /* Geocache Type */
-	wpt->gc_data.type = gs_mktype(s);
+        waypt_alloc_gc_data(wpt)->type = gs_mktype(s);
     	break;
     case XT_GEOCACHE_CONTAINER:
-	wpt->gc_data.container = gs_mkcont(s);
+        waypt_alloc_gc_data(wpt)->container = gs_mkcont(s);
     	break;
     case XT_GEOCACHE_HINT:
-	wpt->gc_data.hint = csv_stringtrim(s, "", 0);
+        waypt_alloc_gc_data(wpt)->hint = csv_stringtrim(s, "", 0);
     	break;
     case XT_GEOCACHE_PLACER:
-	wpt->gc_data.placer = csv_stringtrim(s, "", 0);
+        waypt_alloc_gc_data(wpt)->placer = csv_stringtrim(s, "", 0);
     	break;
     case XT_GEOCACHE_ISAVAILABLE:
+        gc_data = waypt_alloc_gc_data(wpt);
 	if ( case_ignore_strcmp(csv_stringtrim(s, "", 0), "False") == 0 )
-        	wpt->gc_data.is_available = status_false;
+        	gc_data->is_available = status_false;
 	else if ( case_ignore_strcmp(csv_stringtrim(s, "", 0), "True") == 0 )
-		wpt->gc_data.is_available = status_true;
+		gc_data->is_available = status_true;
 	else
-		wpt->gc_data.is_available = status_unknown;
+		gc_data->is_available = status_unknown;
 	break;
     case XT_GEOCACHE_ISARCHIVED:
+        gc_data = waypt_alloc_gc_data(wpt);
 	if ( case_ignore_strcmp(csv_stringtrim(s, "", 0), "False") == 0 )
-		wpt->gc_data.is_archived = status_false;
+		gc_data->is_archived = status_false;
 	else if ( case_ignore_strcmp(csv_stringtrim(s, "", 0), "True") == 0 )
-		wpt->gc_data.is_archived = status_true;        
+		gc_data->is_archived = status_true;        
 	else
-	wpt->gc_data.is_archived = status_unknown;
+	gc_data->is_archived = status_unknown;
 	break;
 		
     /* GPS STUFF *******************************************************/
@@ -1700,50 +1703,50 @@ xcsv_waypt_pr(const waypoint *wpt)
 		wpt->microseconds, XML_LONG_TIME);
 	    break;
         case XT_GEOCACHE_LAST_FOUND:
-	    writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->gc_data.last_found));
+	    writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->gc_data->last_found));
 	    break;
 
         /* GEOCACHE STUFF **************************************************/
         case XT_GEOCACHE_DIFF:
             /* Geocache Difficulty as a double */
-            writebuff(buff, fmp->printfc, wpt->gc_data.diff / 10.0);
-	    field_is_unknown = !wpt->gc_data.diff;
+            writebuff(buff, fmp->printfc, wpt->gc_data->diff / 10.0);
+	    field_is_unknown = !wpt->gc_data->diff;
             break;
         case XT_GEOCACHE_TERR:
             /* Geocache Terrain as a double */
-            writebuff(buff, fmp->printfc, wpt->gc_data.terr / 10.0);
-	    field_is_unknown = !wpt->gc_data.terr;
+            writebuff(buff, fmp->printfc, wpt->gc_data->terr / 10.0);
+	    field_is_unknown = !wpt->gc_data->terr;
             break;
         case XT_GEOCACHE_CONTAINER:
             /* Geocache Container */
-            writebuff(buff, fmp->printfc, gs_get_container(wpt->gc_data.container));
-	    field_is_unknown = wpt->gc_data.container == gc_unknown;
+            writebuff(buff, fmp->printfc, gs_get_container(wpt->gc_data->container));
+	    field_is_unknown = wpt->gc_data->container == gc_unknown;
 	    break;
 	case XT_GEOCACHE_TYPE:
             /* Geocache Type */
-            writebuff(buff, fmp->printfc, gs_get_cachetype(wpt->gc_data.type));
-	    field_is_unknown = wpt->gc_data.type == gt_unknown;
+            writebuff(buff, fmp->printfc, gs_get_cachetype(wpt->gc_data->type));
+	    field_is_unknown = wpt->gc_data->type == gt_unknown;
             break; 
 	case XT_GEOCACHE_HINT:
-	    writebuff(buff, fmp->printfc, NONULL(wpt->gc_data.hint));
-	    field_is_unknown = !wpt->gc_data.hint;
+	    writebuff(buff, fmp->printfc, NONULL(wpt->gc_data->hint));
+	    field_is_unknown = !wpt->gc_data->hint;
             break; 
 	case XT_GEOCACHE_PLACER:
-	    writebuff(buff, fmp->printfc, NONULL(wpt->gc_data.placer));
-	    field_is_unknown = !wpt->gc_data.placer;
+	    writebuff(buff, fmp->printfc, NONULL(wpt->gc_data->placer));
+	    field_is_unknown = !wpt->gc_data->placer;
             break;
 	case XT_GEOCACHE_ISAVAILABLE:
-	    if ( wpt->gc_data.is_available == status_false )
+	    if ( wpt->gc_data->is_available == status_false )
 	      writebuff(buff, fmp->printfc, "False");
-	    else if ( wpt->gc_data.is_available == status_true )
+	    else if ( wpt->gc_data->is_available == status_true )
 	      writebuff(buff, fmp->printfc, "True");
 			else
 				writebuff(buff, fmp->printfc, "Unknown");
             break;
 	case XT_GEOCACHE_ISARCHIVED:
-	    if ( wpt->gc_data.is_archived == status_false )
+	    if ( wpt->gc_data->is_archived == status_false )
 	      writebuff(buff, fmp->printfc, "False");
-	    else if ( wpt->gc_data.is_archived == status_true )
+	    else if ( wpt->gc_data->is_archived == status_true )
 	    	writebuff(buff, fmp->printfc, "True");
 	    else
 		writebuff(buff, fmp->printfc, "Unknown");

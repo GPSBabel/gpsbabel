@@ -442,7 +442,7 @@ typedef struct {
 	unsigned char heartrate; /* Beats/min. likely to get moved to fs. */
 	unsigned char cadence;	 /* revolutions per minute */
 	float temperature; /* Degrees celsius */
-	geocache_data gc_data;
+	const geocache_data *gc_data;
 	format_specific_data *fs;
 	session_t *session;	/* pointer to a session struct */
 	void *extra_data;	/* Extra data added by, say, a filter. */
@@ -543,6 +543,7 @@ void xcsv_read_internal_style(const char *style_buf);
 waypoint * find_waypt_by_name(const char *name);
 void waypt_backup(signed int *count, queue **head_bak);
 void waypt_restore(signed int count, queue *head_bak);
+geocache_data *waypt_alloc_gc_data(waypoint *wpt);
 
 route_head *route_head_alloc(void);
 void route_add (waypoint *);

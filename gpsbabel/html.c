@@ -104,41 +104,41 @@ html_disp(const waypoint *wpt)
 		else {
 			gbfprintf(file_out, "%s", wpt->description);
 		}
-		if (wpt->gc_data.placer) { 
-			gbfprintf(file_out, " by %s", wpt->gc_data.placer);
+		if (wpt->gc_data->placer) { 
+			gbfprintf(file_out, " by %s", wpt->gc_data->placer);
 		}		
 	}
 	gbfprintf(file_out, "</p></td>\n");
 
 	gbfprintf (file_out, "<td align=\"right\">");
-	if (wpt->gc_data.terr) {
+	if (wpt->gc_data->terr) {
 		gbfprintf (file_out, "<p class=\"gpsbabelcacheinfo\">%d%s / %d%s<br>\n", 
-			(int)(wpt->gc_data.diff / 10), (wpt->gc_data.diff%10)?"&frac12;":"", 
-			(int)(wpt->gc_data.terr / 10), (wpt->gc_data.terr%10)?"&frac12;":""  ); 
+			(int)(wpt->gc_data->diff / 10), (wpt->gc_data->diff%10)?"&frac12;":"", 
+			(int)(wpt->gc_data->terr / 10), (wpt->gc_data->terr%10)?"&frac12;":""  ); 
 		gbfprintf(file_out, "%s / %s</p>", 
-			gs_get_cachetype(wpt->gc_data.type),
-			gs_get_container(wpt->gc_data.container));
+			gs_get_cachetype(wpt->gc_data->type),
+			gs_get_container(wpt->gc_data->container));
 	}
 	gbfprintf(file_out, "</td></tr>\n");
 	
 
 	gbfprintf(file_out, "<tr><td colspan=\"2\">");
-	if (wpt->gc_data.desc_short.utfstring) {
-		char *tmpstr = strip_nastyhtml(wpt->gc_data.desc_short.utfstring);
+	if (wpt->gc_data->desc_short.utfstring) {
+		char *tmpstr = strip_nastyhtml(wpt->gc_data->desc_short.utfstring);
 		gbfprintf (file_out, "<p class=\"gpsbabeldescshort\">%s</p>\n", tmpstr );
 		xfree( tmpstr );
        	}
-	if (wpt->gc_data.desc_long.utfstring) {
-		char *tmpstr = strip_nastyhtml(wpt->gc_data.desc_long.utfstring);
+	if (wpt->gc_data->desc_long.utfstring) {
+		char *tmpstr = strip_nastyhtml(wpt->gc_data->desc_long.utfstring);
 		gbfprintf (file_out, "<p class=\"gpsbabeldesclong\">%s</p>\n", tmpstr );
 		xfree( tmpstr );
        	}
-	if (wpt->gc_data.hint) {
+	if (wpt->gc_data->hint) {
 		char *hint = NULL;
 		if ( html_encrypt )
-			hint = rot13( wpt->gc_data.hint );
+			hint = rot13( wpt->gc_data->hint );
 		else 
-			hint = xstrdup( wpt->gc_data.hint );
+			hint = xstrdup( wpt->gc_data->hint );
 		gbfprintf (file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", hint);
 		xfree( hint );
 	}

@@ -783,13 +783,13 @@ const char *
 get_gc_info(waypoint *wpt)
 {
 	if (global_opts.smart_names) {
-		if (wpt->gc_data.type == gt_virtual) return  "V ";
-		if (wpt->gc_data.type == gt_unknown) return  "? ";
-		if (wpt->gc_data.type == gt_multi) return  "Mlt ";
-		if (wpt->gc_data.type == gt_earth) return  "EC ";
-		if (wpt->gc_data.type == gt_event) return  "Ev ";
-		if (wpt->gc_data.container == gc_micro) return  "M ";
-		if (wpt->gc_data.container == gc_small) return  "S ";
+		if (wpt->gc_data->type == gt_virtual) return  "V ";
+		if (wpt->gc_data->type == gt_unknown) return  "? ";
+		if (wpt->gc_data->type == gt_multi) return  "Mlt ";
+		if (wpt->gc_data->type == gt_earth) return  "EC ";
+		if (wpt->gc_data->type == gt_event) return  "Ev ";
+		if (wpt->gc_data->container == gc_micro) return  "M ";
+		if (wpt->gc_data->container == gc_small) return  "S ";
 	}
 	return "";
 }
@@ -847,13 +847,13 @@ waypoint_write(void)
 			memcpy(way[i]->cmnt, wpt->description, strlen(wpt->description));
 		} else {
 			if (global_opts.smart_names && 
-			     wpt->gc_data.diff && wpt->gc_data.terr) {
+			     wpt->gc_data->diff && wpt->gc_data->terr) {
 #if 0
 xasprintf(&src, "%s %s", &wpt->shortname[2], src);
 #endif
 				snprintf(obuf, sizeof(obuf), "%s%d/%d %s", 
 						get_gc_info(wpt),
-						wpt->gc_data.diff, wpt->gc_data.terr, 
+						wpt->gc_data->diff, wpt->gc_data->terr, 
 						src);
 				memcpy(way[i]->cmnt, obuf, strlen(obuf));
 			} else  {

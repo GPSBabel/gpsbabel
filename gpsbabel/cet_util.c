@@ -996,6 +996,7 @@ cet_convert_waypt(const waypoint *wpt)
 	waypoint *w = (waypoint *)wpt;
 	format_specific_data *fs;
 	url_link *url_next;
+	geocache_data *gc_data = (geocache_data *)wpt->gc_data;
 	
 	if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) return;
 	
@@ -1010,6 +1011,8 @@ cet_convert_waypt(const waypoint *wpt)
 		url_next->url = cet_convert_string(url_next->url);
 		url_next->url_link_text = cet_convert_string(url_next->url_link_text);
 	}
+	gc_data->placer = cet_convert_string(gc_data->placer);
+	gc_data->hint = cet_convert_string(gc_data->hint);
 	
 	fs = wpt->fs;
 	while (fs != NULL)
