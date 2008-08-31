@@ -125,7 +125,7 @@ rw_init(const char *fname)
 	/*
 	 * Grope the unit we're talking to to set setshort_length to 
 	 * 	20 for  the V, 
-	 * 	10 for Street Pilot, Rhino, 76
+	 * 	10 for Street Pilot, (old) Rhino, 76
 	 * 	6 for the III, 12, emap, and etrex
 	 * Fortunately, getting this "wrong" only results in ugly names
 	 * when we're using the synthesize_shortname path.
@@ -202,6 +202,10 @@ rw_init(const char *fname)
 					receiver_short_length = 30;
 					receiver_charset = CET_CHARSET_MS_ANSI;
 					break;
+                                case 577: // Rino 530HCx Version 2.50
+                                        receiver_must_upper = 0;
+                                        receiver_short_length = 14;
+                                        break;
 				case 260: /* GPSMap 296 */
 				default:
 					break;
