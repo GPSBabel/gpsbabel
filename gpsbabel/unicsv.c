@@ -323,7 +323,7 @@ unicsv_parse_time(const char *str, int *msec, int *date)
 	int hour, min, ct, sec;
 	int consumed = 0;
 	double ms;
-	char sep[1];
+	char sep[2];
 	int ldate;
 
 	/* If we have somethine we're pretty sure is a date, parse that
