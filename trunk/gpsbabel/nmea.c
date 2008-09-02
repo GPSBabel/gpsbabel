@@ -448,7 +448,7 @@ gpgga_parse(char *ibuf)
 	 * as serial units will often spit a remembered position up and
 	 * that is more comfortable than nothing at all...
 	 */
-	if ((fix == 0) && (read_mode != rm_serial)) {
+	if ((fix <= 0) && (read_mode != rm_serial)) {
 		return;
 	}
 
