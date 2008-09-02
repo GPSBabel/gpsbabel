@@ -1,5 +1,5 @@
 <para>
 Units is a simple option.  Specify 's' for "statute" (miles, feet, and 
 other things that don't sensibly convert to each other, but are craved
-by Americans) or 'm' for "metric".
+by Americans) or 'm' for "metric". Default is 's'.
 </para>
