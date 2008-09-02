@@ -618,7 +618,13 @@ static void kml_output_description(const waypoint *pt)
 	if (pt->altitude != unknown_alt) TD2("Altitude: %.3f %s", alt, alt_units);
 	if (pt->heartrate) TD("Heart rate: %d", pt->heartrate);
 	if (pt->cadence) TD("Cadence: %d", pt->cadence);
+	/* Which unit is this temp in? C? F? K? */
 	if WAYPT_HAS(pt, temperature) TD("Temperature: %.1f", pt->temperature);
+	if WAYPT_HAS(pt, depth) {
+		char *depth_units;
+		double depth = fmt_distance(pt->depth, &depth_units);
+		TD2("Depth: %.1f %s", depth, depth_units);
+	}
 	if WAYPT_HAS(pt, speed) {
 		char *spd_units;
 		double spd = fmt_speed(pt->speed, &spd_units);
