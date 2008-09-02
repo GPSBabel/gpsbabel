@@ -332,7 +332,6 @@ humminbird_read_track(gbfile* fin) {
 	gbint32 accum_north;
 	double g_lat;
 
-
 	if (! gbfread(&th, 1, sizeof(th), fin))
 		fatal(MYNAME ": Unexpected end of file reading header!\n");
 
