@@ -32,6 +32,7 @@ static xml_tag *cur_tag;
 static vmem_t cdatastr;
 static char *opt_logpoint = NULL;
 static char *opt_humminbirdext = NULL;
+static char *opt_garminext = NULL;
 static int logpoint_ct = 0;
 
 static const char *gpx_version;
@@ -1575,6 +1576,7 @@ gpx_write_common_acc(const waypoint *waypointp, const char *indent)
 	}
 }
 
+
 static void
 gpx_write_common_position(const waypoint *waypointp, const char *indent)
 {
@@ -1582,23 +1584,26 @@ gpx_write_common_position(const waypoint *waypointp, const char *indent)
 		gbfprintf(ofd, "%s<ele>%f</ele>\n",
 			 indent, waypointp->altitude);
 	}
-	if (waypointp->depth != 0) {
-		if (opt_humminbirdext) {
-			gbfprintf(ofd, "%s<extensions>\n", indent);
-			gbfprintf(ofd, "%s  <h:depth>%f</h:depth>\n",
-			          indent, waypointp->depth*100.0);
-			gbfprintf(ofd, "%s</extensions>\n", indent);
-		}	
-/*
-		gbfprintf(ofd, "%s<extensions>\n", indent);
-		gbfprintf(ofd, "%s  <gpxx:Depth>%f</gpxx:Depth>\n",
-		          indent, waypointp->depth);
-		gbfprintf(ofd, "%s</extensions>\n", indent);
-*/
-	}
 	if (waypointp->creation_time) {
 		gbfprintf(ofd, indent);
 		xml_write_time(ofd, waypointp->creation_time, waypointp->microseconds, "time");
+	}
+}
+
+static void
+gpx_write_common_depth(const waypoint *waypointp, const char *indent)
+{
+	if (waypointp->depth != 0) {
+		if (opt_humminbirdext || opt_garminext) {
+			gbfprintf(ofd, "%s<extensions>\n", indent);
+			if (opt_humminbirdext)
+				gbfprintf(ofd, "%s  <h:depth>%f</h:depth>\n",
+				          indent, waypointp->depth*100.0);
+			if (opt_garminext)
+				gbfprintf(ofd, "%s  <gpxx:Depth>%f</gpxx:Depth>\n",
+				          indent, waypointp->depth);
+			gbfprintf(ofd, "%s</extensions>\n", indent);
+		}
 	}
 }
 
@@ -1656,6 +1661,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 		/* MapSource doesn't accepts extensions from 1.0 */
 		garmin_fs_xml_fprint(ofd, waypointp);
 	}
+	gpx_write_common_depth(waypointp, "  ");
 	gbfprintf(ofd, "</wpt>\n");
 }
 
@@ -1714,6 +1720,7 @@ gpx_track_disp(const waypoint *waypointp)
 		fprint_xml_chain( fs_gpx->tag, waypointp );
 	}
 
+	gpx_write_common_depth(waypointp, "  ");
 	gbfprintf(ofd, "</trkpt>\n");
 }
 
@@ -1766,6 +1773,7 @@ gpx_route_disp(const waypoint *waypointp)
 		fprint_xml_chain( fs_gpx->tag, waypointp );
 	}
 
+	gpx_write_common_depth(waypointp, "    ");
 	gbfprintf(ofd, "  </rtept>\n");
 }
 
@@ -1811,7 +1819,8 @@ gpx_write(void)
 	time_t now = 0;
 	int short_length;
 
-	if (opt_humminbirdext) gpx_wversion = "1.1";
+	if (opt_humminbirdext || opt_garminext)
+		gpx_wversion = (char *)"1.1";
 
 	gpx_wversion_num = strtod(gpx_wversion, NULL) * 10;
 
@@ -1833,8 +1842,12 @@ gpx_write(void)
 	gbfprintf(ofd, "<gpx\n  version=\"%s\"\n", gpx_wversion);
 	gbfprintf(ofd, "  creator=\"" CREATOR_NAME_URL "\"\n");
 	gbfprintf(ofd, "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+
 	if (opt_humminbirdext)
 		gbfprintf(ofd, "  xmlns:h=\"http://humminbird.com\"\n");
+	if (opt_garminext)
+		gbfprintf(ofd, "  xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\"");
+
 	gbfprintf(ofd, "  xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
 	if (xsi_schema_loc) {
 		gbfprintf(ofd, "  xsi:schemaLocation=\"%s\">\n", xsi_schema_loc);
@@ -1918,7 +1931,10 @@ arglist_t gpx_args[] = {
 	{ "gpxver", &gpx_wversion, "Target GPX version for output", 
 		"1.0", ARGTYPE_STRING, ARG_NOMINMAX},
 	{ "humminbirdextensions", &opt_humminbirdext,
-		"Add info (depth) as humminbird extension", 
+		"Add info (depth) as Humminbird extension", 
+		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+	{ "garminextensions", &opt_garminext,
+		"Add info (depth) as Garmin extension", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
