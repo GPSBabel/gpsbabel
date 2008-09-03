@@ -145,6 +145,7 @@ extern ff_vecs_t humminbird_vecs;
 extern ff_vecs_t humminbird_ht_vecs;
 extern ff_vecs_t tr7_vecs;
 extern ff_vecs_t gnav_trl_vecs;
+extern ff_vecs_t navitel_trk_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -830,6 +831,13 @@ vecs_t vec_list[] = {
 		"Google Navigator Tracklines (.trl)",
 		"trl"
 	},
+	{
+		&navitel_trk_vecs,
+		"navitel_trk",
+		"Navitel binary tracks (.bin)",
+		"bin"
+	},
+
 #endif // MAXIMAL_ENABLED
 	{
 		NULL,
