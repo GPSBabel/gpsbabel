@@ -980,7 +980,7 @@ route_waypt_pr(const waypoint *wpt)
 
 	if (wpt->description) {
 		strncpy(rte->cmnt, wpt->description, sizeof(rte->cmnt));
-		rte->cmnt[sizeof(rte->ident)-1] = 0;
+		rte->cmnt[sizeof(rte->cmnt)-1] = 0;
 	} else  {
 		rte->cmnt[0] = 0;
 	}
