@@ -317,19 +317,13 @@ destinator_read_trk(void)
 		wpt->creation_time = mkgmtime(&tm);
 		wpt->microseconds = ((int)time % 1000) * 1000;
 			
-		if ((wpt->sat > 0) && (wpt->fix > 0)) {
-			
-			wpt->fix++;
-			
-			if (! trk) {
-				trk = route_head_alloc();
-				track_add_head(trk);
-			}
-			
-			track_add_wpt(trk, wpt);
+		if (wpt->fix > 0) wpt->fix++;
+
+		if (! trk) {
+			trk = route_head_alloc();
+			track_add_head(trk);
 		}
-		else
-			waypt_free(wpt);
+		track_add_wpt(trk, wpt);
 	}
 }
 
