@@ -66,6 +66,9 @@ avltree_t *avltree_init(const int options, const char *module);
 /* Destroy an AVL Tree */
 void avltree_done(avltree_t *tree);
 
+/* Delete all items of tree [tree]; returns number of deleted items */
+int avltree_clear(avltree_t *tree);
+
 /* Get number of items in tree */
 int avltree_count(const avltree_t *tree);
 
