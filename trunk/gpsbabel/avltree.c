@@ -87,17 +87,32 @@ avltree_init(const int options, const char *module)
 	return tree;
 }
 
+/* Delete all items of tree [tree] */
+
+int
+avltree_clear(avltree_t *tree)
+{
+	int res;
+	
+	AVLTREE_CHECK_HANDLE(tree);
+
+	res = tree->count;
+	avltree_save_key(tree, NULL);
+	if (res) {
+		avltree_node_free(tree, tree->root);
+		/* avltree_node_free doesn't touch 'count' */
+		tree->count = 0;
+		tree->root = NULL;
+	}
+	return res;
+}
 
 /* Destroy an AVL Tree */
 
 void
 avltree_done(avltree_t *tree)
 {
-	AVLTREE_CHECK_HANDLE(tree);
-
-	avltree_save_key(tree, NULL);
-	if (tree->count)
-		avltree_node_free(tree, tree->root);
+	avltree_clear(tree);
 	xfree(tree);
 }
 
