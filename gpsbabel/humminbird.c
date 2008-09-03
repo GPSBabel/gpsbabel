@@ -170,7 +170,7 @@ static const char* humminbird_icons[] = {
 static gbfile* fin;
 static gbfile* fout;
 static int waypoint_num;
-static short_handle wptname_sh, rtename_sh;
+static short_handle wptname_sh, rtename_sh, trkname_sh;
 static avltree_t *waypoints;
 static humminbird_rte_t *humrte;
 static int rte_num;
@@ -596,6 +596,15 @@ humminbird_wr_init(const char *fname)
 	setshort_repeating_whitespace_ok(rtename_sh, 1);
 	setshort_defname(rtename_sh, "Route");
 
+	trkname_sh = mkshort_new_handle();
+	setshort_length(trkname_sh, RTE_NAME_LEN - 1);
+	setshort_badchars(trkname_sh, BAD_CHARS);
+	setshort_mustupper(trkname_sh, 0);
+	setshort_mustuniq(trkname_sh, 0);
+	setshort_whitespace_ok(trkname_sh, 1);
+	setshort_repeating_whitespace_ok(trkname_sh, 1);
+	setshort_defname(trkname_sh, "Track");
+
 	waypoints = avltree_init(0, MYNAME);
 
 	waypoint_num = 0;
@@ -608,6 +617,7 @@ humminbird_wr_deinit(void)
 	avltree_done(waypoints);
 	mkshort_del_handle(&wptname_sh);
 	mkshort_del_handle(&rtename_sh);
+	mkshort_del_handle(&trkname_sh);
 	gbfclose(fout);
 }
 
@@ -679,17 +689,20 @@ static gbuint32 last_time;
 
 
 static void
-humminbird_track_head(const route_head *rte) {
+humminbird_track_head(const route_head *trk) {
 	int max_points = (131080 - sizeof(gbuint32)- sizeof(humminbird_trk_header_t)) / sizeof(humminbird_trk_point_t);
 
 	trk_head = NULL;
 	last_time = 0;
-	if (rte->rte_waypt_ct > 0) {
+	if (trk->rte_waypt_ct > 0) {
+		char *name;
 		trk_head = xcalloc(1, sizeof(humminbird_trk_header_t));
 		trk_points = xcalloc (max_points, sizeof(humminbird_trk_point_t));
 
-		strncpy(trk_head->name, rte->rte_name, sizeof(trk_head->name));
-		be_write16(&trk_head->trk_num ,rte->rte_num);
+		name = mkshort(trkname_sh, trk->rte_name);
+		strncpy(trk_head->name, name, sizeof(trk_head->name));
+		xfree(name);
+		be_write16(&trk_head->trk_num, trk->rte_num);
 	}
 }
 
