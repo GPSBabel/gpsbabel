@@ -23,9 +23,12 @@
 #ifndef GBFILE_H
 #define GBFILE_H
 
+#include <ctype.h>
+#include <stdarg.h>
+#include <string.h>
 #include "config.h"
 #include "defs.h"
-#include <stdarg.h>
+#include "cet.h"
 
 typedef struct gbfile_s {
 #ifdef DEBUG_MEM
@@ -48,6 +51,8 @@ typedef struct gbfile_s {
 	unsigned char big_endian:1;
 	unsigned char binary:1;
 	unsigned char gzapi:1;
+	unsigned char unicode:1;
+	unsigned char unicode_checked:1;
 } gbfile;
 
 
@@ -95,4 +100,5 @@ int gbfputflt(const float f, gbfile *file);	// write a float value
 int gbfputcstr(const char *s, gbfile *file);	// write string including '\0'
 int gbfputpstr(const char *s, gbfile *file);	// write as pascal string
 
+int gbfunicode(gbfile *file);
 #endif
