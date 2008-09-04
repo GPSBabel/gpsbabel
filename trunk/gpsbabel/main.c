@@ -84,6 +84,7 @@ load_args(const char *filename, int *argc, char **argv[])
 	char **argv2;
 	
 	fin = gbfopen(filename, "r", "main");
+	(void) gbfunicode(fin);	/* check for unicode text file */
 	while ((str = gbfgetstr(fin))) {
 		str = lrtrim(str);
 		if ((*str == '\0') || (*str == '#')) continue;

@@ -287,6 +287,7 @@ nmea_rd_init(const char *fname)
 
  	read_mode = rm_file;
 	file_in = gbfopen(fname, "rb", MYNAME);
+	if (gbfunicode(file_in)) cet_convert_init(CET_CHARSET_UTF8, 1);
 }
 
 static  void

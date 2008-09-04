@@ -54,6 +54,7 @@ static void
 rd_init(const char *fname)
 {
 	file_in = gbfopen(fname, "rb", MYNAME);
+	if (gbfunicode(file_in)) cet_convert_init(CET_CHARSET_UTF8, 1);
 }
 
 static void

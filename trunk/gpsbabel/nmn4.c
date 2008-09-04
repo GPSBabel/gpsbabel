@@ -273,6 +273,7 @@ static void
 nmn4_rd_init(const char *fname)
 {
 	fin = gbfopen(fname, "rb", MYNAME);
+	if (gbfunicode(fin)) cet_convert_init(CET_CHARSET_UTF8, 1);
 }
 
 static void

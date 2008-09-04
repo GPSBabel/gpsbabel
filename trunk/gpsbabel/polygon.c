@@ -259,6 +259,7 @@ polygon_process(void)
 	gbfile *file_in;
 
 	file_in = gbfopen(polyfileopt, "r", MYNAME);
+	(void) gbfunicode(file_in);	/* check for unicode text file */
 	
         olat = olon = lat1 = lon1 = lat2 = lon2 = BADVAL;
 	while ((line = gbfgetstr(file_in))) {

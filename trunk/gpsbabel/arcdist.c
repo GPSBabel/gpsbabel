@@ -63,6 +63,7 @@ arcdist_process(void)
 	gbfile *file_in;
 
 	file_in = gbfopen(arcfileopt, "r", MYNAME);
+	(void) gbfunicode(file_in);	/* check for unicode text file */
 	
         lat1 = lon1 = lat2 = lon2 = BADVAL;
 	while ((line = gbfgetstr(file_in))) {
