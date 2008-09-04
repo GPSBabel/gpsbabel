@@ -112,6 +112,7 @@ static void rd_init(const char *fname)
     char *ibuf;
 
     file_in = gbfopen(fname, "r", MYNAME);
+    if (gbfunicode(file_in)) cet_convert_init(CET_CHARSET_UTF8, 1);
 
     // File must begin with a manufacturer/ID record
     if (get_record(&ibuf) != rec_manuf_id || sscanf(ibuf, "A%3[A-Z]", manufacturer) != 1) {

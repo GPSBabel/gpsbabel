@@ -153,6 +153,7 @@ static
 void ovl_rd_init(char const *fname)
 {
   fpin = gbfopen(fname, "r", MYNAME);
+	if (gbfunicode(fpin)) cet_convert_init(CET_CHARSET_UTF8, 1);
 }
 
 #define SECTION_NONE    0
