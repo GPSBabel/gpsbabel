@@ -1213,6 +1213,7 @@ garmin_txt_rd_init(const char *fname)
 	memset(&gtxt_flags, 0, sizeof(gtxt_flags));
 	
 	fin = gbfopen(fname, "rb", MYNAME);
+	if (gbfunicode(fin)) cet_convert_init(CET_CHARSET_UTF8, 1);
 	memset(&header_ct, 0, sizeof(header_ct));
 
 	datum_index = -1;
