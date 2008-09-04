@@ -87,6 +87,7 @@ typedef enum {
 	fld_sec,
 	fld_ns,
 	fld_ew,
+
 	fld_garmin_city,
 	fld_garmin_postal_code,
 	fld_garmin_state,
@@ -97,6 +98,20 @@ typedef enum {
 	fld_garmin_fax_nr,
 	fld_garmin_email,
 	fld_garmin_facility,
+#if UNICSV_GC_READY
+	fld_gc_id,
+	fld_gc_type,
+	fld_gc_container,
+	fld_gc_terr,
+	fld_gc_diff,
+	fld_gc_is_archived,
+	fld_gc_is_available,
+	fld_gc_exported,
+	fld_gc_last_found,
+	fld_gc_placer,
+	fld_gc_placer_id,
+	fld_gc_hint,
+#endif
 	fld_terminator
 } field_e;
 
@@ -208,6 +223,21 @@ static field_t fields_def[] = {
 	{ "email",	fld_garmin_email, STR_ANY },
 	{ "state",	fld_garmin_state, STR_ANY },
 	{ "faci",	fld_garmin_facility, STR_ANY },
+#if UNICSV_GC_READY
+	/* geocache details */
+	{ "gcid",	fld_gc_id, STR_ANY },
+	{ "type",	fld_gc_type, STR_ANY },
+	{ "cont",	fld_gc_container, STR_ANY },
+	{ "terr",	fld_gc_terr, STR_ANY },
+	{ "diff",	fld_gc_diff, STR_ANY },
+	{ "arch",	fld_gc_is_archived, STR_ANY },
+	{ "avail",	fld_gc_is_available, STR_ANY },
+	{ "exported",	fld_gc_exported, STR_ANY },
+	{ "found",	fld_gc_last_found, STR_ANY },
+	{ "placer",	fld_gc_placer, STR_ANY },
+	{ "placer_id",	fld_gc_placer_id, STR_ANY },
+	{ "hint",	fld_gc_hint, STR_ANY },
+#endif
 	{ NULL,		fld_terminator, 0 }
 };
 
@@ -243,6 +273,9 @@ static arglist_t unicsv_args[] = {
 	ARG_TERMINATOR };
 
 
+extern geocache_type gs_mktype(const char *t);
+extern geocache_container gs_mkcont(const char *t);
+
 /* helpers */
 
 // #define UNICSV_IS(f) (0 == strcmp(s, f))
@@ -262,7 +295,9 @@ unicsv_strrcmp(const char *s1, const char *s2)
 		return 1;	/* false */
 }
 
-static int
+// static int unicsv_parse_time(const char *str, int *msec, time_t *date);
+
+static time_t
 unicsv_parse_date(const char *str, int *consumed)
 {
 	int p1, p2, p3, ct;
@@ -317,14 +352,14 @@ unicsv_parse_date(const char *str, int *consumed)
 	return mkgmtime(&tm);
 }
 
-static int
-unicsv_parse_time(const char *str, int *msec, int *date)
+static time_t
+unicsv_parse_time(const char *str, int *msec, time_t *date)
 {
 	int hour, min, ct, sec;
 	int consumed = 0;
 	double ms;
 	char sep[2];
-	int ldate;
+	time_t ldate;
 
 	/* If we have somethine we're pretty sure is a date, parse that
 	 * first, skip over it, and pass that back to the caller)
@@ -350,6 +385,35 @@ unicsv_parse_time(const char *str, int *msec, int *date)
 
 	return ((hour * SECONDS_PER_HOUR) + (min * 60) + (int)sec);
 }
+
+#if UNICSV_GC_READY
+static status_type
+unicsv_parse_status(const char *str)
+{
+	if ((case_ignore_strcmp(str, "true") == 0) || 
+	    (case_ignore_strcmp(str, "yes") == 0) ||
+	    (*str == '1')) return status_true;
+	else if ((case_ignore_strcmp(str, "false") == 0) || 
+		 (case_ignore_strcmp(str, "no") == 0) || 
+		 (*str == '0')) return status_false;
+	else return status_unknown;
+}
+#endif
+
+#if UNICSV_GC_READY
+static time_t
+unicsv_adjust_time(const time_t time, time_t *date)
+{
+	time_t res = time;
+	if (date) res += *date;
+	if (opt_utc) res += atoi(opt_utc) * SECONDS_PER_HOUR;
+	else {
+		struct tm tm = *gmtime(&res);
+		res = mklocaltime(&tm);
+	}
+	return res;
+}
+#endif
 
 static char
 unicsv_compare_fields(char *s, const field_t *f)
@@ -508,6 +572,8 @@ unicsv_rd_init(const char *fname)
 	unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
 
 	fin = gbfopen(fname, "rb", MYNAME);
+	
+	if (gbfunicode(fin)) cet_convert_init(CET_CHARSET_UTF8, 1);
 
 	if ((c = gbfgetstr(fin)))
 		unicsv_fondle_header(c);
@@ -538,7 +604,8 @@ unicsv_parse_one_line(char *ibuf)
 	double swiss_easting = unicsv_unknown;
 	double swiss_northing = unicsv_unknown;
 	int checked = 0;
-	int date = -1, time = -1, msec = -1;
+	time_t date = -1, time = -1;
+	int msec = -1;
 	char is_localtime = 0;
 	garmin_fs_t *gmsd;
 	double d;
@@ -546,7 +613,9 @@ unicsv_parse_one_line(char *ibuf)
 	int src_datum = unicsv_datum_idx;
 	int ns = 1;
 	int ew = 1;
-
+#if UNICSV_GC_READY
+	geocache_data *gc_data = NULL;
+#endif
 	wpt = waypt_new();
 	wpt->latitude = unicsv_unknown;
 	wpt->longitude = unicsv_unknown;
@@ -568,6 +637,7 @@ unicsv_parse_one_line(char *ibuf)
 
 		case fld_time:
 		case fld_date:
+		case fld_datetime:
 			/* switch column type if it looks like an iso time string */
 			if (strchr(s, 'T'))
 				unicsv_fields_tab[column] = fld_iso_time;
@@ -813,16 +883,22 @@ unicsv_parse_one_line(char *ibuf)
 			break;
 
 		case fld_datetime:
-			/* not implemented */
+			if ((is_localtime < 2) && (date < 0) && (time < 0)) {
+				time = unicsv_parse_time(s, &msec, &date);
+				is_localtime = 1;
+			}
 			break;
+
 		case fld_ns:
 			ns = tolower(s[0]) == 'n' ? 1 : -1;
 			wpt->latitude *= ns;
 			break;
+
 		case fld_ew:
 			ew = tolower(s[0]) == 'e' ? 1 : -1;
 			wpt->longitude *= ew;
 			break;
+
 		case fld_garmin_city:
 		case fld_garmin_postal_code:
 		case fld_garmin_state:
@@ -852,7 +928,56 @@ unicsv_parse_one_line(char *ibuf)
 			default: break;
 			}
 			break;
+#if UNICSV_GC_READY
+		case fld_gc_id:
+		case fld_gc_type:
+		case fld_gc_container:
+		case fld_gc_terr:
+		case fld_gc_diff:
+		case fld_gc_is_archived:
+		case fld_gc_is_available:
+		case fld_gc_exported:
+		case fld_gc_last_found:
+		case fld_gc_placer:
+		case fld_gc_placer_id:
+		case fld_gc_hint:
 
+			gc_data = waypt_alloc_gc_data(wpt);
+
+			switch(unicsv_fields_tab[column]) {
+
+			case fld_gc_id: 
+				if ((s[0] == 'G') && (s[1] == 'C')) sscanf(s, "GC%x", &gc_data->id);
+				else gc_data->id = atoi(s);
+				break;
+			case fld_gc_type: gc_data->type = gs_mktype(s); break;
+			case fld_gc_container: gc_data->container = gs_mkcont(s); break;
+			case fld_gc_terr: gc_data->terr = atof(s) * 10; break;
+			case fld_gc_diff: gc_data->diff = atof(s) * 10; break;
+			case fld_gc_is_archived: gc_data->is_archived = unicsv_parse_status(s); break;
+			case fld_gc_is_available: gc_data->is_available = unicsv_parse_status(s); break;
+
+			case fld_gc_exported: {
+				time_t time, date; int msec;
+				time = unicsv_parse_time(s, &msec, &date);
+				if (date || time) gc_data->exported = unicsv_adjust_time(time, &date);
+				}
+				break;
+			case fld_gc_last_found: {
+				time_t time, date;
+				int msec;
+				time = unicsv_parse_time(s, &msec, &date);
+				if (date || time) gc_data->last_found = unicsv_adjust_time(time, &date);
+				}
+				break;
+			case fld_gc_placer: gc_data->placer = xstrdup(s); break;
+			case fld_gc_placer_id: gc_data->placer_id = atoi(s); break;
+			case fld_gc_hint: gc_data->hint = xstrdup(s); break;
+
+			default: break;
+			}
+			break;
+#endif
 		case fld_terminator: /* dummy */
 			checked--;
 			break;
@@ -1016,6 +1141,28 @@ unicsv_print_str(const char *str)
 	else gbfputs(unicsv_fieldsep, fout);
 }
 
+#if UNICSV_GC_READY
+static void
+unicsv_print_data_time(const time_t atime)
+{
+	struct tm tm;
+	time_t time = atime;
+	char buf[32] = "";
+	
+	if (time) {
+		if (opt_utc) {
+			time += atoi(opt_utc) * SECONDS_PER_HOUR;
+			tm = *gmtime(&time);
+		}
+		else tm = *localtime(&time);
+		snprintf(buf, sizeof(buf), "%04d/%02d/%02d %02d:%02d:%02d", 
+			tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
+			tm.tm_hour, tm.tm_min, tm.tm_sec);
+	}
+	unicsv_print_str(buf);
+}
+#endif
+
 #define FIELD_USED(a) (gb_getbit(&unicsv_outp_flags, a))
 
 static void 
@@ -1070,6 +1217,25 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
 		if GMSD_HAS(state) gb_setbit(&unicsv_outp_flags, fld_garmin_state);
 		if GMSD_HAS(facility) gb_setbit(&unicsv_outp_flags, fld_garmin_facility);
 	}
+	
+#if UNICSV_GC_READY
+	if (! waypt_empty_gc_data(wpt)) {
+		const geocache_data *gc_data = wpt->gc_data;
+		
+		if (gc_data->id) gb_setbit(&unicsv_outp_flags, fld_gc_id);
+		if (gc_data->type) gb_setbit(&unicsv_outp_flags, fld_gc_type);
+		if (gc_data->container) gb_setbit(&unicsv_outp_flags, fld_gc_container);
+		if (gc_data->terr) gb_setbit(&unicsv_outp_flags, fld_gc_terr);
+		if (gc_data->diff) gb_setbit(&unicsv_outp_flags, fld_gc_diff);
+		if (gc_data->is_archived) gb_setbit(&unicsv_outp_flags, fld_gc_is_archived);
+		if (gc_data->is_available) gb_setbit(&unicsv_outp_flags, fld_gc_is_available);
+		if (gc_data->exported) gb_setbit(&unicsv_outp_flags, fld_gc_exported);
+		if (gc_data->last_found) gb_setbit(&unicsv_outp_flags, fld_gc_last_found);
+		if (gc_data->placer && *gc_data->placer) gb_setbit(&unicsv_outp_flags, fld_gc_placer);
+		if (gc_data->placer_id) gb_setbit(&unicsv_outp_flags, fld_gc_placer_id);
+		if (gc_data->hint && *gc_data->hint) gb_setbit(&unicsv_outp_flags, fld_gc_hint);
+	}
+#endif
 }
 
 static void 
@@ -1079,7 +1245,9 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	char *cout = NULL;
 	char *shortname;
 	garmin_fs_t *gmsd;
-
+#if UNICSV_GC_READY
+	const geocache_data *gc_data = NULL;
+#endif
 	unicsv_waypt_ct++;
 
 	shortname = (wpt->shortname) ? wpt->shortname : "";
@@ -1318,6 +1486,59 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	if FIELD_USED(fld_garmin_fax_nr) unicsv_print_str(GMSD_GET(fax_nr, NULL));
 	if FIELD_USED(fld_garmin_email) unicsv_print_str(GMSD_GET(email, NULL));
 
+#if UNICSV_GC_READY
+	if (! waypt_empty_gc_data(wpt)) gc_data = wpt->gc_data;
+	else gc_data = NULL;
+	
+	if FIELD_USED(fld_gc_id) {
+		gbfputs(unicsv_fieldsep, fout);
+		if (gc_data && gc_data->id) gbfprintf(fout, "%d", gc_data->id);
+	}
+	if FIELD_USED(fld_gc_type) {
+		if (gc_data) unicsv_print_str(gs_get_cachetype(gc_data->type));
+		else gbfputs(unicsv_fieldsep, fout);
+	}
+	if FIELD_USED(fld_gc_container) {
+		if (gc_data) unicsv_print_str(gs_get_container(gc_data->container));
+		else gbfputs(unicsv_fieldsep, fout);
+	}
+	if FIELD_USED(fld_gc_terr) {
+		gbfputs(unicsv_fieldsep, fout);
+		if (gc_data && gc_data->terr) gbfprintf(fout, "%.1f", (double)gc_data->terr / 10);
+	}
+	if FIELD_USED(fld_gc_diff) {
+		gbfputs(unicsv_fieldsep, fout);
+		if (gc_data && gc_data->diff) gbfprintf(fout, "%.1f", (double)gc_data->diff / 10);
+	}
+	if FIELD_USED(fld_gc_is_archived) {
+		if (gc_data && gc_data->is_archived) unicsv_print_str((gc_data->is_archived == status_true) ? "True" : "False");
+		else gbfputs(unicsv_fieldsep, fout);
+	}
+	if FIELD_USED(fld_gc_is_available) {
+		if (gc_data && gc_data->is_available) unicsv_print_str((gc_data->is_available == status_true) ? "True" : "False");
+		else gbfputs(unicsv_fieldsep, fout);
+	}
+	if FIELD_USED(fld_gc_exported) {
+		if (gc_data) unicsv_print_data_time(gc_data->exported);
+		else gbfputs(unicsv_fieldsep, fout);
+	}
+	if FIELD_USED(fld_gc_last_found) {
+		if (gc_data) unicsv_print_data_time(gc_data->last_found);
+		else gbfputs(unicsv_fieldsep, fout);
+	}
+	if FIELD_USED(fld_gc_placer) {
+		if (gc_data) unicsv_print_str(gc_data->placer);
+		else gbfputs(unicsv_fieldsep, fout);
+	}
+	if FIELD_USED(fld_gc_placer_id) {
+		gbfputs(unicsv_fieldsep, fout);
+		if (gc_data && gc_data->placer_id) gbfprintf(fout, "%d", gc_data->placer_id);
+	}
+	if FIELD_USED(fld_gc_hint) {
+		if (gc_data) unicsv_print_str(gc_data->hint);
+		else gbfputs(unicsv_fieldsep, fout);
+	}
+#endif
 	if (opt_format) unicsv_print_str(wpt->session->name);
 	if (opt_filename) unicsv_print_str(wpt->session->filename);
 
@@ -1431,6 +1652,7 @@ unicsv_wr(void)
 	if FIELD_USED(fld_date) gbfprintf(fout, "%sDate", unicsv_fieldsep);
 	if FIELD_USED(fld_time) gbfprintf(fout, "%sTime", unicsv_fieldsep);
 	if FIELD_USED(fld_url) gbfprintf(fout, "%sURL", unicsv_fieldsep);
+
 	if FIELD_USED(fld_garmin_facility) gbfprintf(fout, "%sFacility", unicsv_fieldsep);
 	if FIELD_USED(fld_garmin_addr) gbfprintf(fout, "%sAddress", unicsv_fieldsep);
 	if FIELD_USED(fld_garmin_city) gbfprintf(fout, "%sCity", unicsv_fieldsep);
@@ -1441,7 +1663,21 @@ unicsv_wr(void)
 	if FIELD_USED(fld_garmin_phone_nr2) gbfprintf(fout, "%sPhone2", unicsv_fieldsep);
 	if FIELD_USED(fld_garmin_fax_nr) gbfprintf(fout, "%sFax", unicsv_fieldsep);
 	if FIELD_USED(fld_garmin_email) gbfprintf(fout, "%sEmail", unicsv_fieldsep);
-	
+
+#if UNICSV_GC_READY
+	if FIELD_USED(fld_gc_id) gbfprintf(fout, "%sGCID", unicsv_fieldsep);
+	if FIELD_USED(fld_gc_type) gbfprintf(fout, "%sType", unicsv_fieldsep);
+	if FIELD_USED(fld_gc_container) gbfprintf(fout, "%sContainer", unicsv_fieldsep);
+	if FIELD_USED(fld_gc_terr) gbfprintf(fout, "%sTerrain", unicsv_fieldsep);
+	if FIELD_USED(fld_gc_diff) gbfprintf(fout, "%sDifficulty", unicsv_fieldsep);
+	if FIELD_USED(fld_gc_is_archived) gbfprintf(fout, "%sArchived", unicsv_fieldsep);
+	if FIELD_USED(fld_gc_is_available) gbfprintf(fout, "%sAvailable", unicsv_fieldsep);
+	if FIELD_USED(fld_gc_exported) gbfprintf(fout, "%sExported", unicsv_fieldsep);
+	if FIELD_USED(fld_gc_last_found) gbfprintf(fout, "%sLast Found", unicsv_fieldsep);
+	if FIELD_USED(fld_gc_placer) gbfprintf(fout, "%sPlacer", unicsv_fieldsep);
+	if FIELD_USED(fld_gc_placer_id) gbfprintf(fout, "%sPlacer ID", unicsv_fieldsep);
+	if FIELD_USED(fld_gc_hint) gbfprintf(fout, "%sHint", unicsv_fieldsep);
+#endif	
 	if (opt_format) gbfprintf(fout, "%sFormat", unicsv_fieldsep);
 	if (opt_filename) gbfprintf(fout, "%sFilename", unicsv_fieldsep);
 	
