@@ -257,7 +257,7 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 		
 		/* Check for an incomplete READ */
 		if ((members == 1) && (size > 1) && (result > 0) && (result < (int)size))
-			fatal("%s: Unexpected end of files (EOF)!\n", file->module);
+			fatal("%s: Unexpected end of file (EOF)!\n", file->module);
 
 		result /= size;
 
@@ -750,6 +750,46 @@ gbfgetpstr(gbfile *file)
 	return result;
 }
 
+static char *
+gbfgetucs2str(gbfile *file)
+{
+	int len = 0;
+	char *result = file->line;
+	
+	for (;;) {
+		char buff[8];
+		int clen;
+		int c = gbfgetc(file);
+		
+		if ((c == EOF) && (len == 0)) return NULL;
+		
+		c = c | (gbfgetc(file) << 8);
+		if (file->big_endian) c = be_read16(&c);
+
+		if (c == '\r') {
+			c = gbfgetc(file) | (gbfgetc(file) << 8);
+			if (file->big_endian) c = be_read16(&c);
+			if (c != '\n')
+				fatal("%s: Invalid unicode (UCS-2/%s endian) line break!\n", 
+					file->module,
+					file->big_endian ? "Big" : "Little");
+			break;
+		}
+		
+		clen = cet_ucs4_to_utf8(buff, sizeof(buff), c);
+
+		if (len+clen >= file->linesz) {
+			file->linesz += 64;
+			result = file->line = xrealloc(file->line, file->linesz + 1);
+		}
+		memcpy(&result[len], buff, clen);
+		len += clen;
+	}
+	result[len] = '\0';	// terminate resulting string
+	
+	return result;
+}
+
 /*
  * gbfgetstr: Reads a string from file (util any type of line-breaks or eof or error)
  *            except xfree and free you can do all possible things with the result
@@ -760,6 +800,8 @@ gbfgetstr(gbfile *file)
 {
 	int len = 0;
 	char *result = file->line;
+	
+	if (file->unicode) return gbfgetucs2str(file);
 	
 	for (;;) {
 		char c = gbfgetc(file);
@@ -886,5 +928,31 @@ gbfputpstr(const char *s, gbfile *file)
 	}
 	return (len + 1);
 }
+
+int
+gbfunicode(gbfile *file)
+{
+	if (! file->unicode_checked) {
+		int c;
+		size_t pos;
+		
+		file->unicode_checked = 1;
+		
+		pos = gbftell(file);
+		gbfrewind(file);
+		c = gbfgetc(file) | (gbfgetc(file) << 8);
+		
+		if (c == 0xFEFF) file->big_endian = 0;
+		else if (c == 0xFFFE) file->big_endian = 1;
+		else {
+			gbfseek(file, pos, SEEK_SET);
+			return 0;
+		}
+		file->unicode = 1;
+		if (pos != 0) gbfseek(file, pos, SEEK_SET);
+	}
+	return file->unicode;
+}
+
 
 /* Thats all, sorry. */
