@@ -82,7 +82,7 @@ static void
 ggv_ovl_rd_init(const char *fname)
 {
 	inifile = inifile_init(fname, MYNAME);
-	if (ini->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
+	if (inifile->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 
 	route_ct = 0;
 	track_ct = 0;
