@@ -1448,5 +1448,19 @@ compare ${REFERENCE}/grid-utm~csv.gpx ${TMPDIR}/grid-utm~csv.gpx
 ${PNAME} -i gpx -f ${REFERENCE}/grid-utm~csv.gpx -o unicsv,utc=0,grid=utm -F ${TMPDIR}/grid-utm.csv
 compare ${REFERENCE}/grid-utm.csv ${TMPDIR}/grid-utm.csv
 
+#
+# ggv_ovl 'Geogrid Viewer ascii overlay files'
+#
+${PNAME} -i ggv_ovl -f ${REFERENCE}/ggv_ovl.ovl -o gpx -F ${TMPDIR}/ggv_ovl~ovl.gpx
+compare ${REFERENCE}/ggv_ovl~ovl.gpx ${TMPDIR}/ggv_ovl~ovl.gpx
+
+#
+# igo2008_poi
+#
+${PNAME} -i igo2008_poi -f ${REFERENCE}/igo2008_poi.upoi -o gpx -F ${TMPDIR}/igo2008_poi~upoi.gpx
+compare ${REFERENCE}/igo2008_poi~upoi.gpx ${TMPDIR}/igo2008_poi~upoi.gpx
+${PNAME} -i igo2008_poi -f ${REFERENCE}/igo2008_poi.upoi -o unicsv -F ${TMPDIR}/igo2008_poi~upoi.csv
+compare ${REFERENCE}/igo2008_poi~upoi.csv ${TMPDIR}/igo2008_poi~upoi.csv
+
 
 exit 0
