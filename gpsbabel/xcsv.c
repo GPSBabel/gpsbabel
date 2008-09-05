@@ -473,7 +473,7 @@ xcsv_read_style(const char *fname)
     xcsv_file_init();
 
     fp = gbfopen(fname, "rb", MYNAME);
-
+    (void) gbfunicode(fp);
     while ((sbuff = gbfgetstr(fp))) {
         sbuff = lrtrim(sbuff);
 	xcsv_parse_style_line(sbuff);
