@@ -27,6 +27,7 @@ typedef struct inifile_s
 {
 	int isecs;			/* number of sections */
 	queue secs;			/* sections */
+	gbuint8 unicode:1;
 } inifile_t;
 
 /*
