@@ -30,6 +30,7 @@ static gbfile *file_in, *file_out;
 static char manufacturer[4];
 static const route_head *head;
 static char *timeadj = NULL;
+static int lineno;
 
 #define MYNAME "IGC"
 #define MAXRECLEN 79		// Includes null terminator and CR/LF
@@ -93,6 +94,7 @@ static igc_rec_type_t get_record(char **rec)
     char *c;
 retry:
     *rec = c = gbfgetstr(file_in);
+    if ((lineno++ == 0) && file_in->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
     if (c == NULL) return rec_none;
 
     len = strlen(c);
@@ -112,8 +114,7 @@ static void rd_init(const char *fname)
     char *ibuf;
 
     file_in = gbfopen(fname, "r", MYNAME);
-    if (gbfunicode(file_in)) cet_convert_init(CET_CHARSET_UTF8, 1);
-
+    lineno = 0;
     // File must begin with a manufacturer/ID record
     if (get_record(&ibuf) != rec_manuf_id || sscanf(ibuf, "A%3[A-Z]", manufacturer) != 1) {
 	fatal(MYNAME ": %s is not an IGC file\n", fname);

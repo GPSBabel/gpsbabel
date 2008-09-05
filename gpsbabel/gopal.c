@@ -126,7 +126,6 @@ gopal_rd_init(const char *fname)
 	if (global_opts.debug_level > 1) fprintf(stderr,"setting minspeed to %5.1lf km/h and maxspeed to %5.1lf km/h\n",minspeed,maxspeed);
 
 	fin = gbfopen(fname, "r", MYNAME);
-	if (gbfunicode(fin)) cet_convert_init(CET_CHARSET_UTF8, 1);
 
 	memset(buff,0,sizeof(buff));
 	if (optdate)
@@ -195,6 +194,8 @@ gopal_read(void)
 	line=0;
 	while ((buff = gbfgetstr(fin)))
 	{
+		if ((line == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
+
 		str = buff = lrtrim(buff);
 		if (*buff == '\0') continue;	
 		if (gopal_check_line(buff)!=8)continue;

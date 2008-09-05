@@ -100,5 +100,4 @@ int gbfputflt(const float f, gbfile *file);	// write a float value
 int gbfputcstr(const char *s, gbfile *file);	// write string including '\0'
 int gbfputpstr(const char *s, gbfile *file);	// write as pascal string
 
-int gbfunicode(gbfile *file);
 #endif

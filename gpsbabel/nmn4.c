@@ -101,6 +101,7 @@ nmn4_read_data(void)
 	char *buff;
 	char *str, *c;
 	int column;
+	int line = 0;
 
 	char *zip1, *zip2, *city, *street, *number;	
 	route_head *route;
@@ -111,6 +112,7 @@ nmn4_read_data(void)
 	
 	while ((buff = gbfgetstr(fin)))
 	{
+		if ((line++ == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 		str = buff = lrtrim(buff);
 		if (*buff == '\0') continue;
 		
@@ -273,7 +275,6 @@ static void
 nmn4_rd_init(const char *fname)
 {
 	fin = gbfopen(fname, "rb", MYNAME);
-	if (gbfunicode(fin)) cet_convert_init(CET_CHARSET_UTF8, 1);
 }
 
 static void

@@ -139,7 +139,6 @@ static void
 cst_rd_init(const char *fname)
 {
 	fin = gbfopen(fname, "rb", MYNAME);
-	if (gbfunicode(fin)) cet_convert_init(CET_CHARSET_UTF8, 1);
 	temp_route = NULL;
 }
 
@@ -169,7 +168,7 @@ cst_data_read(void)
 	{
 		char *cin = buff;
 		
-		line++;
+		if ((line++ == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 		cin = lrtrim(buff);
 		if (strlen(cin) == 0) continue;
 		

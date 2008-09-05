@@ -1258,6 +1258,8 @@ xcsv_data_read(void)
     }
 
     while ((buff = gbfgetstr(xcsv_file.xcsvfp))) {
+	if ((linecount == 0) && xcsv_file.xcsvfp->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
+
         linecount++;
 	/* Whack trailing space; leading space may matter if our field sep
 	 * is whitespace and we have leading whitespace. 

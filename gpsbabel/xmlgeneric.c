@@ -315,7 +315,6 @@ xml_init0(const char *fname, xg_tag_mapping *tbl, const char *encoding,
 {
 	if (fname) {
 		ifd = gbfopen(fname, "r", MYNAME);
-		(void) gbfunicode(ifd);
 		if (offset) {
 			gbfseek(ifd, offset, SEEK_SET);
 		}

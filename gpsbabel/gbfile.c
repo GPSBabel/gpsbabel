@@ -804,7 +804,7 @@ gbfgetstr(gbfile *file)
 	if (file->unicode) return gbfgetucs2str(file);
 	
 	for (;;) {
-		char c = gbfgetc(file);
+		int c = gbfgetc(file);
 		
 		if ((c == EOF) || (c == 0x1A)) {
 			if (len == 0) {
@@ -821,11 +821,32 @@ gbfgetstr(gbfile *file)
 		else if (c == '\n') {
 			break;
 		}
+		else if (((c == 0xFE) || (c == 0xFF)) && (! file->unicode_checked)) {
+			int cx;
+			int c1 = gbfgetc(file);
+			if (c1 != EOF) {
+				cx = c | (c1 << 8);
+				if (cx == 0xFEFF) {
+					file->unicode = 1;
+					file->big_endian = 0;
+					return gbfgetucs2str(file);
+				}
+				else if (cx == 0xFFFE) {
+					file->unicode = 1;
+					file->big_endian = 1;
+					return gbfgetucs2str(file);
+				}
+				else gbfungetc(c1, file);
+			}
+		}
+		
+		file->unicode_checked = 1;
+		
 		if (len == file->linesz) {
 			file->linesz += 64;
 			result = file->line = xrealloc(file->line, file->linesz + 1);
 		}
-		result[len] = c;
+		result[len] = (char)c;
 		len++;
 	}
 	result[len] = '\0';	// terminate resulting string
@@ -927,39 +948,6 @@ gbfputpstr(const char *s, gbfile *file)
 		gbfwrite(s, 1, len, file);
 	}
 	return (len + 1);
-}
-
-int
-gbfunicode(gbfile *file)
-{
-	if (! file->unicode_checked) {
-		int c;
-		size_t pos;
-		
-		file->unicode_checked = 1;
-		
-		pos = gbftell(file);
-		gbfrewind(file);
-
-		c = gbfgetc(file);
-		if (c == EOF) return 0;
-		
-		if ((c != 0xFE) && (c != 0xFF)) {
-			if (pos) gbfseek(file, pos, SEEK_SET);
-			return 0;
-		}
-		c = c | (gbfgetc(file) << 8);
-		
-		if (c == 0xFEFF) file->big_endian = 0;
-		else if (c == 0xFFFE) file->big_endian = 1;
-		else {
-			if (pos) gbfseek(file, pos, SEEK_SET);
-			return 0;
-		}
-		file->unicode = 1;
-		if (pos != 0) gbfseek(file, pos, SEEK_SET);
-	}
-	return file->unicode;
 }
 
 

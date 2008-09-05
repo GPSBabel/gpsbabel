@@ -99,7 +99,6 @@ static void
 rd_init(const char *fname)
 {
 	file_in = gbfopen(fname, "rb", MYNAME);
-	if (gbfunicode(file_in)) cet_convert_init(CET_CHARSET_UTF8, 1);
 	mkshort_handle = mkshort_new_handle();
 }
 
@@ -131,8 +130,10 @@ data_read(void)
 	char icon[100];
 	char *ibuf;
 	waypoint *wpt_tmp;
+	int line = 0;
 	
 	while ((ibuf = gbfgetstr(file_in))) {
+		if ((line++ == 0) && file_in->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 		if( sscanf(ibuf, "%lf,%lf:%100[^:]:%100[^\n]", 
 				&lon, &lat, icon, desc)) {
 			wpt_tmp = waypt_new();

@@ -336,7 +336,6 @@ static void
 rd_init(const char *fname)
 {
 	fin = gbfopen(fname, "r", MYNAME);
-	if (gbfunicode(fin)) cet_convert_init(CET_CHARSET_UTF8, 1);
 	
 	lineno = 0;
 	route = NULL;
@@ -364,7 +363,7 @@ data_read(void)
 	while ((buf = gbfgetstr(fin)))
 	{
 		char *cin = lrtrim(buf);
-		lineno++;
+		if ((lineno++ == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 		
 		if (*cin == '\0') continue;
 		
