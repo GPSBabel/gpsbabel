@@ -167,6 +167,7 @@ static void
 raymarine_rd_init(const char *fname)
 {
 	fin = inifile_init(fname, MYNAME);
+	if (ini->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 }
 
 static void

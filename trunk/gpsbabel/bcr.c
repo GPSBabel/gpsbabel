@@ -185,6 +185,7 @@ bcr_rd_init(const char *fname)
 {
 	filename = xstrdup(fname);
 	ini = inifile_init(fname, MYNAME);
+	if (ini->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 	bcr_init_radius();
 }
 
