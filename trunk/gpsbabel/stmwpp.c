@@ -61,7 +61,6 @@ static void
 stmwpp_rd_init(const char *fname)
 {
 	fin = gbfopen(fname, "rb", MYNAME);
-	if (gbfunicode(fin)) cet_convert_init(CET_CHARSET_UTF8, 1);
 	track = NULL;
 	route = NULL;
 	wpt = NULL;
@@ -77,6 +76,7 @@ static void
 stmwpp_data_read(void)
 {
 	char *buff;
+	int line = 0;
 	
 	what = STM_NOTHING;
 	buff = gbfgetstr(fin);
@@ -91,6 +91,8 @@ stmwpp_data_read(void)
 		int column = -1;
 		struct tm time;
 		
+		if ((line++ == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
+
 		buff = lrtrim(buff);
 		if (*buff == '\0') continue;
 		

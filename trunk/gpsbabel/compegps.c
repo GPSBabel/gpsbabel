@@ -335,7 +335,6 @@ static void
 compegps_rd_init(const char *fname)
 {
 	fin = gbfopen(fname, "rb", MYNAME);
-	if (gbfunicode(fin)) cet_convert_init(CET_CHARSET_UTF8, 1);
 	input_datum = DATUM_WGS84;
 }
 
@@ -360,7 +359,7 @@ compegps_data_read(void)
 		char *cin = buff;
 		char *ctail;
 		
-		line++;
+		if ((line++ == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 		cin = lrtrim(buff);
 		if (strlen(cin) == 0) continue;
 		

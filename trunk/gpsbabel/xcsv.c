@@ -473,7 +473,6 @@ xcsv_read_style(const char *fname)
     xcsv_file_init();
 
     fp = gbfopen(fname, "rb", MYNAME);
-    (void) gbfunicode(fp);
     while ((sbuff = gbfgetstr(fp))) {
         sbuff = lrtrim(sbuff);
 	xcsv_parse_style_line(sbuff);
@@ -546,7 +545,6 @@ xcsv_rd_init(const char *fname)
     }
 
     xcsv_file.xcsvfp = gbfopen(fname, "r", MYNAME);
-    if (gbfunicode(xcsv_file.xcsvfp)) cet_convert_init(CET_CHARSET_UTF8, 1);
     xcsv_file.gps_datum = GPS_Lookup_Datum_Index(opt_datum);
     is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", opt_datum);
 }

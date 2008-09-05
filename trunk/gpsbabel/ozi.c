@@ -394,7 +394,6 @@ static void
 rd_init(const char *fname)
 {
     file_in = gbfopen(fname, "rb", MYNAME);
-    if (gbfunicode(file_in)) cet_convert_init(CET_CHARSET_UTF8, 1);
 
     mkshort_handle = mkshort_new_handle();
     ozi_init_units(0);
@@ -682,7 +681,8 @@ data_read(void)
     int linecount = 0;
     
     while ((buff = gbfgetstr(file_in))) {
-        linecount++;
+
+        if ((linecount++ == 0) && file_in->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 
         /* 
          * this is particularly nasty.  use the first line of the file
