@@ -494,7 +494,7 @@ vecs_t vec_list[] = {
 	{
 		&overlay_vecs,
 		"overlay",
-		"GeoGrid-Viewer",
+		"Geogrid-Viewer",
 		"ovl"
 	},
 #endif
@@ -707,7 +707,7 @@ vecs_t vec_list[] = {
         {
                 &ggv_log_vecs,
                 "ggv_log",
-                "Geogrid Viewer tracklogs (.log)",
+                "Geogrid-Viewer tracklogs (.log)",
                 "log"
         },
 #if CSVFMTS_ENABLED
@@ -841,7 +841,7 @@ vecs_t vec_list[] = {
         {
                 &ggv_ovl_vecs,
                 "ggv_ovl",
-                "GeoGrid Viewer ascii overlay files (.ovl)",
+                "Geogrid-Viewer ascii overlay files (.ovl)",
                 "ovl"
         },
 
