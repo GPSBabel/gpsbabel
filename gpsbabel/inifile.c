@@ -139,10 +139,13 @@ inifile_load_file(gbfile *fin, inifile_t *inifile, const char *myname)
 {
 	char *buf;
 	inifile_section_t *sec = NULL;
+	int line = 0;
 	
 	while ((buf = gbfgetstr(fin)))
 	{
 		char *cin = lrtrim(buf);
+
+		if ((line++ == 0) && fin->unicode) inifile->unicode = 1;
 		
 		if (*cin == '\0') continue;			/* skip empty lines */
 		if ((*cin == '#') || (*cin == ';')) continue;	/* skip comments */
