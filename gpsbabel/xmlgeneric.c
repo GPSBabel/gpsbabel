@@ -267,11 +267,17 @@ void xml_read(void)
 	char buf[MY_CBUF];
 	
 	while ((len = gbfread(buf, 1, sizeof(buf), ifd))) {
-		if (!XML_Parse(psr, buf, len, gbfeof(ifd))) {
+		char *str = buf;
+		if (ifd->unicode) {
+			str = cet_str_uni_to_utf8((short *)&buf, len >> 1);
+			len = strlen(str);
+		}
+		if (!XML_Parse(psr, str, len, gbfeof(ifd))) {
 			fatal(MYNAME ":Parse error at %d: %s\n",
 				(int) XML_GetCurrentLineNumber(psr),
 				XML_ErrorString(XML_GetErrorCode(psr)));
 		}
+		if (str != buf) xfree(str);
 	}
 	XML_ParserFree(psr);
 	
@@ -309,6 +315,7 @@ xml_init0(const char *fname, xg_tag_mapping *tbl, const char *encoding,
 {
 	if (fname) {
 		ifd = gbfopen(fname, "r", MYNAME);
+		(void) gbfunicode(ifd);
 		if (offset) {
 			gbfseek(ifd, offset, SEEK_SET);
 		}
