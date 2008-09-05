@@ -938,9 +938,17 @@ gbfunicode(gbfile *file)
 		
 		file->unicode_checked = 1;
 		
+		c = gbfgetc(file);
+		if (c == EOF) return 0;
+		
+		if ((c != 0xFE) && (c != 0xFF)) {
+			gbfungetc(c, file);
+			return 0;
+		}
+		
 		pos = gbftell(file);
 		gbfrewind(file);
-		c = gbfgetc(file) | (gbfgetc(file) << 8);
+		c = c | (gbfgetc(file) << 8);
 		
 		if (c == 0xFEFF) file->big_endian = 0;
 		else if (c == 0xFFFE) file->big_endian = 1;
@@ -948,6 +956,7 @@ gbfunicode(gbfile *file)
 			gbfseek(file, pos, SEEK_SET);
 			return 0;
 		}
+
 		file->unicode = 1;
 		if (pos != 0) gbfseek(file, pos, SEEK_SET);
 	}
