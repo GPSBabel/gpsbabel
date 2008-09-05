@@ -146,6 +146,7 @@ extern ff_vecs_t humminbird_ht_vecs;
 extern ff_vecs_t tr7_vecs;
 extern ff_vecs_t gnav_trl_vecs;
 extern ff_vecs_t navitel_trk_vecs;
+extern ff_vecs_t ggv_ovl_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -837,6 +838,12 @@ vecs_t vec_list[] = {
 		"Navitel binary tracks (.bin)",
 		"bin"
 	},
+        {
+                &ggv_ovl_vecs,
+                "ggv_ovl",
+                "GeoGrid Viewer ascii overlay files (.ovl)",
+                "ovl"
+        },
 
 #endif // MAXIMAL_ENABLED
 	{
