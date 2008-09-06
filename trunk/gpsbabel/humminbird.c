@@ -29,6 +29,7 @@
 
 #define WPT_NAME_LEN		12
 #define RTE_NAME_LEN		20
+#define TRK_NAME_LEN		20
 #define MAX_RTE_POINTS		50
 
 /*
@@ -441,8 +442,7 @@ humminbird_read_track_old(gbfile* fin) {
 	gbint32 accum_north;
 	double g_lat;
 	const int file_len = 8048;
-	const int name_len = 20;
-	char namebuf[name_len];
+	char namebuf[TRK_NAME_LEN];
 
 
 	if (! gbfread(&th, 1, sizeof(th), fin))
@@ -459,7 +459,7 @@ humminbird_read_track_old(gbfile* fin) {
 
 	// These files are always 8048 bytes long. Note that that's the value
 	// of the second 16-bit word in the signature.
-	max_points = (file_len - (sizeof(th) + sizeof (gbuint32) + name_len)) / sizeof(humminbird_trk_point_old_t);
+	max_points = (file_len - (sizeof(th) + sizeof (gbuint32) + TRK_NAME_LEN)) / sizeof(humminbird_trk_point_old_t);
 
 	if (th.num_points > max_points)
 		fatal(MYNAME ": Too many track points! (%d)\n", th.num_points);
@@ -480,8 +480,8 @@ humminbird_read_track_old(gbfile* fin) {
 	/* The name is not in the header, but at the end of the file.
 	   (The last 20 bytes.) */
 
-	gbfseek(fin, file_len-name_len, SEEK_SET);
-	gbfread(&namebuf, 1, name_len, fin);
+	gbfseek(fin, file_len-TRK_NAME_LEN, SEEK_SET);
+	gbfread(&namebuf, 1, TRK_NAME_LEN, fin);
 	trk->rte_name = xstrndup(namebuf, sizeof(namebuf));
 
 	trk->rte_num  = th.trk_num;
@@ -800,7 +800,7 @@ humminbird_track_cb(const waypoint *wpt) {
 
 
 static void
-humminbird_track_write() {
+humminbird_track_write(void) {
 
 	track_disp_all(humminbird_track_head, humminbird_track_tail, humminbird_track_cb);
 }
