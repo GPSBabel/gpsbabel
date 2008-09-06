@@ -460,6 +460,7 @@ typedef struct {
 	unsigned short cet_converted;	/* strings are converted to UTF8; interesting only for input */
         gb_color line_color;         /* Optional line color for rendering */
         int line_width;         /* in pixels (sigh).  < 0 is unknown. */
+	session_t *session;	/* pointer to a session struct */
 } route_head;
 
 /*
@@ -560,6 +561,8 @@ void track_del_head(route_head *rte);
 void route_disp(const route_head *rte, waypt_cb);
 void route_disp_all(route_hdr, route_trl, waypt_cb);
 void track_disp_all(route_hdr, route_trl, waypt_cb);
+void route_disp_session(const session_t *se, route_hdr rh, route_trl rt, waypt_cb wc);
+void track_disp_session(const session_t *se, route_hdr rh, route_trl rt, waypt_cb wc);
 void route_flush( queue *);
 void route_flush_all(void);
 void route_flush_all_routes(void);
