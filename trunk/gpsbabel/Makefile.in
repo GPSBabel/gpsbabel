@@ -757,7 +757,7 @@ tpo.o: tpo.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
 mapasia.o: mapasia.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h session.h
 trackfilter.o: trackfilter.c defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
   filterdefs.h strptime.h grtcirc.h
