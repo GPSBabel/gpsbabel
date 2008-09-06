@@ -30,7 +30,7 @@ queue waypt_head;
 static unsigned int waypt_ct;
 static short_handle mkshort_handle;
 int geocaches_present;
-static geocache_data empty_gc_data = {};
+static geocache_data empty_gc_data = { 0 };
 
 void
 waypt_init(void)
