@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include "defs.h"
 #include "grtcirc.h"
+#include "session.h"
 
 static queue my_route_head;
 static queue my_track_head;
@@ -71,6 +72,7 @@ route_head_alloc(void)
         rte_head->line_color.bbggrr = -1;
         rte_head->line_color.opacity = 255;
         rte_head->line_width = -1;
+	rte_head->session = curr_session();
 	return rte_head;
 }
 
@@ -263,6 +265,21 @@ common_disp_all(queue *qh, route_hdr rh, route_trl rt, waypt_cb wc)
 	}
 }
 
+static void
+common_disp_session(const session_t *se, queue *qh, route_hdr rh, route_trl rt, waypt_cb wc)
+{
+	queue *elem, *tmp;
+	QUEUE_FOR_EACH(qh, elem, tmp) {
+		const route_head *rhp;
+		rhp = (route_head *) elem;
+		if (rhp->session == se) {
+			if (rh) (*rh)(rhp);
+			route_disp(rhp, wc);
+			if (rt) (*rt)(rhp);
+		}
+	}
+}
+
 void 
 route_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
 {
@@ -270,9 +287,21 @@ route_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
 }
 
 void 
+route_disp_session(const session_t *se, route_hdr rh, route_trl rt, waypt_cb wc)
+{
+	common_disp_session(se, &my_route_head, rh, rt, wc);
+}
+
+void 
 track_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
 {
 	common_disp_all(&my_track_head, rh, rt, wc);
+}
+
+void 
+track_disp_session(const session_t *se, route_hdr rh, route_trl rt, waypt_cb wc)
+{
+	common_disp_session(se, &my_track_head, rh, rt, wc);
 }
 
 static void
