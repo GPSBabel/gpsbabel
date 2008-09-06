@@ -143,7 +143,7 @@ extern ff_vecs_t vidaone_vecs;
 extern ff_vecs_t gopal_vecs;
 extern ff_vecs_t humminbird_vecs;
 extern ff_vecs_t humminbird_ht_vecs;
-extern ff_vecs_t tr7_vecs;
+extern ff_vecs_t mapasia_tr7_vecs;
 extern ff_vecs_t gnav_trl_vecs;
 extern ff_vecs_t navitel_trk_vecs;
 extern ff_vecs_t ggv_ovl_vecs;
@@ -821,8 +821,8 @@ vecs_t vec_list[] = {
 		"ht"
         },
 	{
-		&tr7_vecs,
-		"tr7",
+		&mapasia_tr7_vecs,
+		"mapasia_tr7",
 		"MapAsia track file (.tr7)",
 		"tr7"
 	},
@@ -835,13 +835,13 @@ vecs_t vec_list[] = {
 	{
 		&navitel_trk_vecs,
 		"navitel_trk",
-		"Navitel binary tracks (.bin)",
+		"Navitel binary track (.bin)",
 		"bin"
 	},
         {
                 &ggv_ovl_vecs,
                 "ggv_ovl",
-                "Geogrid-Viewer ascii overlay files (.ovl)",
+                "Geogrid-Viewer ascii overlay file (.ovl)",
                 "ovl"
         },
 

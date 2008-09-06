@@ -59,7 +59,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
 	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o \
-	igo8.o gopal.o humminbird.o tr7.o gnav_trl.o navitel.o ggv_ovl.o
+	igo8.o gopal.o humminbird.o mapasia.o gnav_trl.o navitel.o ggv_ovl.o
 
 FMTS=@FMTS@
 
@@ -756,7 +756,7 @@ tpo.o: tpo.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
-tr7.o: tr7.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+mapasia.o: mapasia.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h csv_util.h
 trackfilter.o: trackfilter.c defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h \
