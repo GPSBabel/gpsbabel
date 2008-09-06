@@ -555,6 +555,9 @@
 				RelativePath="..\ggv_log.c">
 			</File>
 			<File
+				RelativePath="..\ggv_ovl.c">
+			</File>
+			<File
 				RelativePath="..\globals.c">
 			</File>
 			<File
@@ -993,6 +996,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\mapasia.c">
+			</File>
+			<File
 				RelativePath="..\mapopolis.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1105,6 +1111,9 @@
 			</File>
 			<File
 				RelativePath="..\navilink.c">
+			</File>
+			<File
+				RelativePath="..\navitel.c">
 			</File>
 			<File
 				RelativePath="..\netstumbler.c">
@@ -1711,9 +1720,6 @@
 			</File>
 			<File
 				RelativePath="..\tpo.c">
-			</File>
-			<File
-				RelativePath="..\tr7.c">
 			</File>
 			<File
 				RelativePath="..\trackfilter.c">
