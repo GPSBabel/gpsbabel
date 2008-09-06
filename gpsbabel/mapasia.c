@@ -37,6 +37,12 @@
 #define TR7_S_HOUR	8
 #define TR7_S_MIN	10
 #define TR7_S_SEC	12
+#define TR7_S_LON	16
+#define TR7_S_LAT	20
+#define TR7_S_SPEED	24
+#define TR7_S_COURSE	26
+#define TR7_S_VALID	28
+#define TR7_S_FIX	29
 
 static
 arglist_t tr7_args[] = {
@@ -83,8 +89,8 @@ tr7_read(void)
 
 			memset(&tm, 0, sizeof(tm));
 
-			lat = (double)le_read32(&buff[20]) / 1000000.0;
-			lon = (double)le_read32(&buff[16]) / 1000000.0;
+			lat = (double)le_read32(&buff[TR7_S_LAT]) / 1000000.0;
+			lon = (double)le_read32(&buff[TR7_S_LON]) / 1000000.0;
 			if ((fabs(lat) > 90) || (fabs(lon) > 180)) {
 				trk = NULL;	
 				continue;
@@ -103,24 +109,34 @@ tr7_read(void)
 			wpt->latitude = lat;
 			wpt->longitude = lon;
 			wpt->creation_time = mkgmtime(&tm);
-			
+			WAYPT_SET(wpt, course, 360 - le_read16(&buff[TR7_S_COURSE]));
+			WAYPT_SET(wpt, speed, (double)le_read16(&buff[TR7_S_SPEED]) / 3.6);
+#if 0
+			/* unsure items */
+			wpt->fix = buff[TR7_S_FIX];
+			if (buff[TR7_S_VALID] != 'A') {
+				waypt_free(wpt);
+				continue;
+			}
+#endif
 			if (waypt_speed(prev, wpt) > 9999.9) {
 				waypt_free(wpt);
-			} else {
-				if (! trk) {
-					trk = route_head_alloc();
-					track_add_head(trk);
-				}
-				track_add_wpt(trk, wpt);
-				prev = wpt;
+				continue;
 			}
+			
+			if (! trk) {
+				trk = route_head_alloc();
+				track_add_head(trk);
+			}
+			track_add_wpt(trk, wpt);
+			prev = wpt;
 		}
 	}
 }
 
 /**************************************************************************/
 
-ff_vecs_t tr7_vecs = {		/* currently we can only read tracks */
+ff_vecs_t mapasia_tr7_vecs = {		/* currently we can only read tracks */
 	ff_type_file,
 	{ 
 		ff_cap_none 	/* waypoints */, 
@@ -135,7 +151,7 @@ ff_vecs_t tr7_vecs = {		/* currently we can only read tracks */
 	NULL,
 	NULL,
 	tr7_args,
-	CET_CHARSET_ASCII, 1	/* FIXED - CET-REVIEW - */
+	CET_CHARSET_UTF8, 1	/* FIXED - CET-REVIEW - */
 
 };
 
