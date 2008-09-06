@@ -31,12 +31,15 @@
 
 #define TR7_TRACK_MAGIC	0x223eadb
 
-static char *opt_date;
+#define TR7_S_YEAR	0
+#define TR7_S_MONTH	2
+#define TR7_S_DAY	6
+#define TR7_S_HOUR	8
+#define TR7_S_MIN	10
+#define TR7_S_SEC	12
 
 static
 arglist_t tr7_args[] = {
-	{"date", &opt_date, "The date when the track was recorded (yyyy/mm/dd)",
-		NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
 
@@ -61,49 +64,56 @@ tr7_rd_deinit(void)
 static void
 tr7_read(void)
 {
-	unsigned char buff[32];
-	waypoint *wpt;
 	route_head *trk = NULL;
 	unsigned int magic;
-	time_t delta_time = 0;
-	struct tm tm;
-
-	if (opt_date)
-		delta_time = parse_date(opt_date, NULL, MYNAME);
+	waypoint *prev = NULL;
 	
 	magic = gbfgetint32(fin);
 	if (magic != TR7_TRACK_MAGIC) {
 		fatal(MYNAME ": Invalid magic number in header (%X, but %X expected)!\n", magic, TR7_TRACK_MAGIC);
 	}
 
-	memset(&tm, 0, sizeof(tm));
-	tm.tm_year = 70;
-	tm.tm_mday = 1;
-
 	while (! gbfeof(fin)) {
+		unsigned char buff[32];
 		gbfread(buff, 1, sizeof(buff), fin);
 		if (buff[0] == 0xD8) {
 			double lat, lon;
+			struct tm tm;
+			waypoint *wpt;
+
+			memset(&tm, 0, sizeof(tm));
 
 			lat = (double)le_read32(&buff[20]) / 1000000.0;
 			lon = (double)le_read32(&buff[16]) / 1000000.0;
-			if ((fabs(lat) > 90) || (fabs(lon) > 180)) continue;
+			if ((fabs(lat) > 90) || (fabs(lon) > 180)) {
+				trk = NULL;	
+				continue;
+			}
 
-			tm.tm_hour = buff[8];
-			tm.tm_min = buff[10];
-			tm.tm_sec = buff[12];
+			tm.tm_year = le_read16(&buff[TR7_S_YEAR]) - 1900;
+			tm.tm_mon = buff[TR7_S_MONTH] - 1;
+			tm.tm_mday = buff[TR7_S_DAY];
 			
+			tm.tm_hour = buff[TR7_S_HOUR];
+			tm.tm_min = buff[TR7_S_MIN];
+			tm.tm_sec = buff[TR7_S_SEC];
+
 			wpt = waypt_new();
 
 			wpt->latitude = lat;
 			wpt->longitude = lon;
-			wpt->creation_time = delta_time + mkgmtime(&tm);
-
-			if (! trk) {
-				trk = route_head_alloc();
-				track_add_head(trk);
+			wpt->creation_time = mkgmtime(&tm);
+			
+			if (waypt_speed(prev, wpt) > 9999.9) {
+				waypt_free(wpt);
+			} else {
+				if (! trk) {
+					trk = route_head_alloc();
+					track_add_head(trk);
+				}
+				track_add_wpt(trk, wpt);
+				prev = wpt;
 			}
-			track_add_wpt(trk, wpt);
 		}
 	}
 }
@@ -111,7 +121,7 @@ tr7_read(void)
 /**************************************************************************/
 
 ff_vecs_t tr7_vecs = {		/* currently we can only read tracks */
-	ff_type_internal,
+	ff_type_file,
 	{ 
 		ff_cap_none 	/* waypoints */, 
 	  	ff_cap_read	/* tracks */, 
