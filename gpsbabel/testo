@@ -1471,5 +1471,13 @@ compare ${REFERENCE}/igo2008_poi~upoi.gpx ${TMPDIR}/igo2008_poi~upoi.gpx
 gpsbabel -i igo2008_poi -f ${REFERENCE}/igo2008_poi.upoi -o unicsv -F ${TMPDIR}/igo2008_poi~upoi.csv
 compare ${REFERENCE}/igo2008_poi~upoi.csv ${TMPDIR}/igo2008_poi~upoi.csv
 
+#
+# MapAsia tr7 tracks
+#
+gpsbabel -i mapasia_tr7 -f ${REFERENCE}/track/mapasia-tr7.tr7 -t -o unicsv,utc=0 -F ${TMPDIR}/mapasia~tr7.csv
+compare ${REFERENCE}/track/mapasia~tr7.csv ${TMPDIR}/mapasia~tr7.csv
+gpsbabel -i mapasia_tr7 -f ${REFERENCE}/track/mapasia-tr7.tr7 -o gpx -F ${TMPDIR}/mapasia~tr7.gpx
+compare ${REFERENCE}/track/mapasia~tr7.gpx ${TMPDIR}/mapasia~tr7.gpx
+
 
 exit 0
