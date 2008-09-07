@@ -119,8 +119,8 @@ data_read(void)
 		tm.tm_mday = be_read16(&rec->crt_mday);
 		tm.tm_mon = be_read16(&rec->crt_mon) - 1;
 		tm.tm_year = be_read16(&rec->crt_year) - 1900;
-		wpt_tmp->creation_time = mktime(&tm); 
-
+		if (mkgmtime(&tm) > 0)
+			wpt_tmp->creation_time = mktime(&tm); 
 		waypt_add(wpt_tmp);
 
 	} 
