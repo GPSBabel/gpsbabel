@@ -56,21 +56,14 @@ arglist_t tr7_args[] = {
 	ARG_TERMINATOR
 };
 
-
 /*******************************************************************************
-* %%%        global callbacks called by gpsbabel main process              %%% *
+* %%%                             R E A D E R                              %%% *
 *******************************************************************************/
 
 static void
 tr7_rd_init(const char *fname)
 {
 	fin = gbfopen_le(fname, "rb", MYNAME);
-}
-
-static void 
-tr7_rd_deinit(void)
-{
-	gbfclose(fin);
 }
 
 static void
@@ -151,7 +144,48 @@ tr7_read(void)
 	}
 }
 
-/**************************************************************************/
+static void
+tr7_check_after_read_head_cb(const route_head *trk)
+{
+	trk_tmp = trk;
+	course_tmp = 0;
+	speed_tmp = 0;
+}
+
+static void
+tr7_check_after_read_wpt_cb(const waypoint *wpt)
+{
+	if (wpt->speed != 0) speed_tmp = 1;
+	if (wpt->course != 360.0) course_tmp = 1;	
+}
+
+static void
+tr7_check_after_read_trailer_cb(const route_head *trk)
+{
+	queue *elem, *tmp;
+	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
+		waypoint *wpt = (waypoint *)elem;
+		if (speed_tmp == 0) WAYPT_UNSET(wpt, speed);
+		if (course_tmp == 0) {
+			WAYPT_UNSET(wpt, course);
+			wpt->course = 0;
+		}
+	}
+}
+
+static void 
+tr7_rd_deinit(void)
+{
+	track_disp_session(curr_session(), 
+		tr7_check_after_read_head_cb, 
+		tr7_check_after_read_trailer_cb,
+		tr7_check_after_read_wpt_cb);
+	gbfclose(fin);
+}
+
+/*******************************************************************************
+* %%%                             W R I T E R                              %%% *
+*******************************************************************************/
 
 static void
 tr7_disp_track_head_cb(const route_head *trk)
@@ -209,41 +243,8 @@ tr7_wr_init(const char *fname)
 }
 
 static void
-tr7_check_after_read_head_cb(const route_head *trk)
-{
-	trk_tmp = trk;
-	course_tmp = 0;
-	speed_tmp = 0;
-}
-
-static void
-tr7_check_after_read_wpt_cb(const waypoint *wpt)
-{
-	if (wpt->speed != 0) speed_tmp = 1;
-	if (wpt->course != 360.0) course_tmp = 1;	
-}
-
-static void
-tr7_check_after_read_trailer_cb(const route_head *trk)
-{
-	queue *elem, *tmp;
-	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
-		waypoint *wpt = (waypoint *)elem;
-		if (speed_tmp == 0) WAYPT_UNSET(wpt, speed);
-		if (course_tmp == 0) {
-			WAYPT_UNSET(wpt, course);
-			wpt->course = 0;
-		}
-	}
-}
-
-static void
 tr7_wr_deinit(void)
 {
-	track_disp_session(curr_session(), 
-		tr7_check_after_read_head_cb, 
-		tr7_check_after_read_trailer_cb,
-		tr7_check_after_read_wpt_cb);
 	gbfclose(fout);
 }
 
