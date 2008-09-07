@@ -108,6 +108,7 @@ waypt_add(waypoint *wpt)
 	double lon_orig = wpt->longitude;
 	
 	ENQUEUE_TAIL(&waypt_head, &wpt->Q);
+
 	waypt_ct++;
 
 	if (wpt->latitude < -90) wpt->latitude += 180;
@@ -116,12 +117,18 @@ waypt_add(waypoint *wpt)
 	else if (wpt->longitude > +180) wpt->longitude -= 360;
 	
 	if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-		fatal ("Invalid latitude %f in waypoint %s.\n",
+		fatal("%s: Invalid latitude %f in waypoint %s.\n",
+			wpt->session->name,
 			lat_orig, wpt->shortname ? wpt->shortname : "");
 	if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
 		fatal ("Invalid longitude %f in waypoint %s.\n",
 			lon_orig, wpt->shortname ? wpt->shortname : "");
-
+	if (wpt->creation_time < 0) {
+		warning("%s: Invalid timestamp in waypoint %s.\n",
+			wpt->session->name,
+			wpt->shortname ? wpt->shortname : "");
+		wpt->creation_time = 0;
+	}
 	/*
 	 * Some input may not have one or more of these types so we
 	 * try to be sure that we have these fields even if just by
@@ -248,6 +255,28 @@ waypt_disp_all(waypt_cb cb)
 			waypt_status_disp(waypt_ct, i);
 		}
 		(*cb) (waypointp);
+	}
+	if (global_opts.verbose_status) {
+		fprintf(stdout, "\r\n");
+	}
+}
+
+void
+waypt_disp_session(const session_t *se, waypt_cb cb)
+{
+	queue *elem, *tmp;
+	waypoint *waypointp;
+	int i = 0;
+
+	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+		waypointp = (waypoint *) elem;
+		if (waypointp->session == se) {
+			if (global_opts.verbose_status) {
+				i++;
+				waypt_status_disp(waypt_ct, i);
+			}
+			(*cb) (waypointp);
+		}
 	}
 	if (global_opts.verbose_status) {
 		fprintf(stdout, "\r\n");
