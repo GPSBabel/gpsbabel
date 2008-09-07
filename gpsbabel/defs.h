@@ -529,6 +529,7 @@ waypoint * waypt_new(void);
 void waypt_del (waypoint *);
 void waypt_free (waypoint *);
 void waypt_disp_all(waypt_cb);
+void waypt_disp_session(const session_t *se, waypt_cb cb);
 void waypt_init_bounds(bounds *bounds);
 int waypt_bounds_valid(bounds *bounds);
 void waypt_add_to_bounds(bounds *bounds, const waypoint *waypointp);
