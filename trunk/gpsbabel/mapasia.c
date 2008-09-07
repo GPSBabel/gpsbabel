@@ -83,6 +83,7 @@ tr7_read(void)
 		double lat, lon;
 		struct tm tm;
 		waypoint *wpt;
+		float speed, course;
 
 		gbfread(buff, 1, sizeof(buff), fin);
 
@@ -102,21 +103,25 @@ tr7_read(void)
 		tm.tm_hour = buff[TR7_S_HOUR];
 		tm.tm_min = buff[TR7_S_MIN];
 		tm.tm_sec = buff[TR7_S_SEC];
+		if ((tm.tm_mday < 1) || (tm.tm_mday > 31) || 
+		    (tm.tm_mon < 1) || (tm.tm_mon > 12) ||
+		    (tm.tm_year <= 1970)) continue;
+		
+		speed = KPH_TO_MPS(le_read16(&buff[TR7_S_SPEED]));
+		course = 360 - le_read16(&buff[TR7_S_COURSE]);
+		if ((speed < 0) || (course > 360) || (course < 0)) continue;
 
 		wpt = waypt_new();
 
 		wpt->latitude = lat;
 		wpt->longitude = lon;
 
-		/* create only valid timestamps */
-		if (tm.tm_mday && (tm.tm_mday <= 31) && tm.tm_mon && (tm.tm_mon <= 12) && (tm.tm_year > 1970)) {
-			tm.tm_year -= 1900;
-			tm.tm_mon -= 1;
-			wpt->creation_time = mkgmtime(&tm);
-		}
+		tm.tm_year -= 1900;
+		tm.tm_mon -= 1;
+		wpt->creation_time = mkgmtime(&tm);
 
-		WAYPT_SET(wpt, course, 360 - le_read16(&buff[TR7_S_COURSE]));
-		WAYPT_SET(wpt, speed, KPH_TO_MPS(le_read16(&buff[TR7_S_SPEED])));
+		WAYPT_SET(wpt, course, course);
+		WAYPT_SET(wpt, speed, speed);
 
 #if 0		/* unsure, not validated items */
 		wpt->fix = buff[TR7_S_FIX];
