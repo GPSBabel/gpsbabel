@@ -779,7 +779,11 @@ yyyymmdd_to_time(const char *s)
 	tm.tm_mon = t % 100 - 1;
 	t = t / 100;
 	tm.tm_year = t - 1900;
-	return mktime(&tm);
+	
+	if (mkgmtime(&tm) > 0)
+		return mktime(&tm);
+	else
+		return 0;
 }
 
 
