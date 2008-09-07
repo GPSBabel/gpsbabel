@@ -244,21 +244,7 @@ waypt_status_disp(int total_ct, int myct)
 void
 waypt_disp_all(waypt_cb cb)
 {
-	queue *elem, *tmp;
-	waypoint *waypointp;
-	int i = 0;
-
-	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-		waypointp = (waypoint *) elem;
-		if (global_opts.verbose_status) {
-			i++;
-			waypt_status_disp(waypt_ct, i);
-		}
-		(*cb) (waypointp);
-	}
-	if (global_opts.verbose_status) {
-		fprintf(stdout, "\r\n");
-	}
+	waypt_disp_session(NULL, cb);
 }
 
 void
@@ -270,7 +256,7 @@ waypt_disp_session(const session_t *se, waypt_cb cb)
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypointp = (waypoint *) elem;
-		if (waypointp->session == se) {
+		if ((se == NULL) || (waypointp->session == se)) {
 			if (global_opts.verbose_status) {
 				i++;
 				waypt_status_disp(waypt_ct, i);
