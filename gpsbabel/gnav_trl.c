@@ -68,23 +68,23 @@ gnav_trl_rw_deinit(void)
 }
 
 static double
-read_altitude(const gbuint32 alt)
+read_altitude(void *ptr)
 {
-	const void *p = &alt;
-	unsigned char *i = (unsigned char *) p;
-	gbuint32 res = (gbuint32)i[2] << 24 | (gbuint32)i[1] << 16  | (gbuint32)i[0] << 8 | (gbuint32)i[3];
+	gbint32 res;
+	unsigned char *i = (unsigned char *) &res;
+	res = le_read32(ptr);
+	res = (gbuint32)i[2] << 24 | (gbuint32)i[1] << 16  | (gbuint32)i[0] << 8 | (gbuint32)i[3];
 	return le_read_float(&res);
 }
 
-static gbuint32
-write_altitude(const float alt)
+static void
+write_altitude(void *ptr, const float alt)
 {
-	gbuint32 res;
-	const void *p = &res;
-	unsigned char *i = (unsigned char *)p;
+	gbint32 res;
+	unsigned char *i = (unsigned char *)&res;
 	le_write_float(&res, alt);
 	res = (gbuint32)i[0] << 24 | (gbuint32)i[3] << 16  | (gbuint32)i[2] << 8 | (gbuint32)i[1];
-	return res;
+	le_write32(ptr, res);
 }
 
 static void
@@ -101,10 +101,10 @@ gnav_trl_read(void)
 
 		wpt = waypt_new();
 
-		wpt->creation_time = rec.time;
-		wpt->latitude = rec.lat;
-		wpt->longitude = rec.lon;
-		wpt->altitude = read_altitude(rec.alt);
+		wpt->creation_time = le_read32(&rec.time);
+		wpt->latitude = le_read_float(&rec.lat);
+		wpt->longitude = le_read_float(&rec.lon);
+		wpt->altitude = read_altitude(&rec.alt);
 
 		if (trk == NULL) {
 			trk = route_head_alloc();
@@ -119,10 +119,13 @@ gnav_trl_write_trkpt(const waypoint *wpt)
 {
 	gnav_trl_t rec;
 	
-	rec.time = wpt->creation_time;
-	rec.lat = wpt->latitude;
-	rec.lon = wpt->longitude;
-	rec.alt = write_altitude(wpt->altitude);
+	le_write32(&rec.time, wpt->creation_time);
+	le_write_float(&rec.lat, wpt->latitude);
+	le_write_float(&rec.lon, wpt->longitude);
+	if (wpt->altitude != unknown_alt)
+		write_altitude(&rec.alt, wpt->altitude);
+	else
+		write_altitude(&rec.alt, 0);
 	
 	gbfwrite(&rec, sizeof(rec), 1, fout);
 }
