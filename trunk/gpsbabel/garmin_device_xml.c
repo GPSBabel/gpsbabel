@@ -71,8 +71,9 @@ void dir_s(const char *args, const char **unused) {
 	mountpoint, GB_PATHSEP, path);
    my_gdx_info->from_device.basename = xstrdup(base);
    my_gdx_info->from_device.extension = xstrdup(ext);
-   xasprintf(&my_gdx_info->from_device.canon, "%s.%s",
+   xasprintf(&my_gdx_info->from_device.canon, "%s/%s.%s",
      my_gdx_info->from_device.path, 
+     my_gdx_info->from_device.basename, 
      my_gdx_info->from_device.extension);
   } else
   if (0 == strcmp(args, "InputToUnit")) {
@@ -125,7 +126,7 @@ gdx_find_file(char **dirlist) {
   const gdx_info *gdx;
   while (*dirlist) {
     char *tbuf;
-    xasprintf(&tbuf, "%s/%s", *dirlist, "GarminDevice.xml");
+    xasprintf(&tbuf, "%s/%s", *dirlist, "/Garmin/GarminDevice.xml");
     mountpoint = *dirlist;
     gdx = gdx_read(tbuf);
     xfree(tbuf);
