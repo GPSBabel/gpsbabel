@@ -61,6 +61,34 @@ static usb_dev_handle *udev;
 static int garmin_usb_scan(libusb_unit_data *, int);
 static const gdx_info *gdx;
 
+
+#if __linux__
+static
+char ** os_get_garmin_mountpoints() 
+{
+	// Hacked for testing.
+	return { ".", NULL };
+}
+#elif __APPLE__
+// In fantasy land, we'd query iokit for enumerated devices of the Garmin
+// vendor ID and match that against the mounted device table.  In practical
+// matters, that's crazy complex and this is where the devices seems to always
+// get mounted...
+char ** os_get_garmin_mountpoints() 
+{
+	char **dlist = xcalloc(2, sizeof *dlist);
+	dlist[0] = xstrdup("/Volumes/GARMIN");
+	dlist[1] = NULL;
+	return dlist;
+}
+#elif
+char ** os_get_garmin_mountpoints() 
+{
+	return {NULL};
+}
+#endif
+
+
 static int
 gusb_libusb_send(const garmin_usb_packet *opkt, size_t sz)
 {
@@ -291,11 +319,16 @@ int garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
 			/* Probably too promiscious of a match, but since
 			 * Garmin doesn't document the _proper_ matching,
 			 * we just take the easy way out for now.
+			 * Unfortunatey, blowing on DeviceClass == Mass storage
+			 * doesn't work on CO, at least.
 			 */
 			if (dev->descriptor.idVendor == GARMIN_VID) {
-				/* Nuvi */
-				if (dev->descriptor.idProduct == 0x19) 
-					continue;
+				switch (dev->descriptor.idProduct) {
+					case 0x19:  // Nuvi;
+					case 0x2244:  // Zumo;
+					case 0x2295:  // CO;
+						continue;
+				}
 				if (req_unit_number < 0) {
 					garmin_usb_start(dev);	
 					/* 
@@ -325,7 +358,7 @@ int garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
 		 * that is wants to read and write GPX files on a 
 		 * mounted drive.  Try that now.
 		 */
-char *dlist[] = { ".", NULL}; 
+		char **dlist = os_get_garmin_mountpoints();
 		gdx = gdx_find_file(dlist);
 		if (gdx) return 1;
 		/* Plan C. */
