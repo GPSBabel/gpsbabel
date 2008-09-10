@@ -67,7 +67,7 @@ static
 char ** os_get_garmin_mountpoints() 
 {
 	// Hacked for testing.
-	return { ".", NULL };
+	return NULL;
 }
 #elif __APPLE__
 // In fantasy land, we'd query iokit for enumerated devices of the Garmin
@@ -84,7 +84,7 @@ char ** os_get_garmin_mountpoints()
 #elif
 char ** os_get_garmin_mountpoints() 
 {
-	return {NULL};
+	return NULL;
 }
 #endif
 
