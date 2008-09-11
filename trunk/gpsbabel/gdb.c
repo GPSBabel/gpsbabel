@@ -60,6 +60,7 @@
 	    2008/01/09: Fix handling of option category (cat)
 	    2008/04/27: Add zero to checklist of "unknown bytes"
 	    2008/08/17: Add concept of route/track line colors
+	    2008/09/11: Make format 'pipeable' (cached writes using gbfile memapi)
 */
 
 #include <stdio.h>
@@ -109,10 +110,10 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.66 $"; */
-static char gdb_release_date[] = "$Date: 2008-08-17 21:07:43 $";
+/* static char gdb_release[] = "$Revision: 1.67 $"; */
+static char gdb_release_date[] = "$Date: 2008-09-11 20:41:43 $";
 
-static gbfile *fin, *fout;
+static gbfile *fin, *fout, *ftmp;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
 
 static queue wayptq_in, wayptq_out, wayptq_in_hidden;
@@ -945,9 +946,10 @@ read_track(void)
 /*******************************************************************************/
 
 static void
-init_reader(const char *fname)
+gdb_rd_init(const char *fname)
 {
 	fin = gbfopen_le(fname, "rb", MYNAME);
+	ftmp = gbfopen_le(NULL, "wb", MYNAME);
 	read_file_header();
 	/* VERSION DEPENDENT CODE */
 	if (gdb_ver >= GDB_VER_UTF8)
@@ -969,32 +971,39 @@ init_reader(const char *fname)
 }
 
 static void
-done_reader(void)
+gdb_rd_deinit(void)
 {
 	disp_summary(fin);
 	gdb_flush_waypt_queue(&wayptq_in);
 	gdb_flush_waypt_queue(&wayptq_in_hidden);
+	gbfclose(ftmp);
 	gbfclose(fin);
 }
 
 static void
 read_data(void)
 {
+	gbfile *fsave;
 	int incomplete = 0;	/* number of incomplete reads */
 
 	for (;;) {
 		int len, delta;
 		char typ, dump;
 		gt_waypt_classes_e wpt_class;
-		gbsize_t pos;
 		waypoint *wpt;
 		route_head *trk, *rte;
 		
 		len = FREAD_i32;
 		FREAD(&typ, 1);
-		pos = gbftell(fin);
-		
 		if (typ == 'V') break;	/* break the loop */
+
+		gbfrewind(ftmp);
+		gbfwrite(NULL, 0, 0, ftmp);	/* truncate */
+		gbfcopyfrom(ftmp, fin, len);
+		gbfrewind(ftmp);
+		
+		fsave = fin;			/* swap standard 'fin' with cached input */
+		fin = ftmp;
 		
 		dump = 1;
 		wpt_class = GDB_DEF_CLASS;
@@ -1024,7 +1033,9 @@ read_data(void)
 				break;
 		}
 		
-		delta = (pos + len) - gbftell(fin);
+		fin = fsave;
+		delta = len - gbftell(ftmp);
+
 		if (dump && delta) {
 			if (! incomplete++) {
 				warning(MYNAME ":==========================================\n");
@@ -1046,7 +1057,6 @@ read_data(void)
 			}
 			warning("\n");
 		}
-		gbfseek(fin, pos + len, SEEK_SET);
 	}
 	
 	
@@ -1468,16 +1478,19 @@ write_track(const route_head *trk, const char *trk_name)
 /*-----------------------------------------------------------------------------*/
 
 static void
-finalize_item(const gbsize_t anchor)
+finalize_item(gbfile *origin, const char identifier)
 {
-	gbsize_t mark;
-	int len;
+	int len = gbftell(fout);
 	
-	mark = gbftell(fout);
-	len = mark - anchor;
-	gbfseek(fout, -(len + 5), SEEK_CUR);
-	FWRITE_i32(mark - anchor);
-	gbfseek(fout, len + 1, SEEK_CUR);
+	fout = origin;
+	gbfseek(ftmp, 0, SEEK_SET);
+	
+	FWRITE_i32(len);
+	FWRITE_C(identifier);
+	gbfcopyfrom(fout, ftmp, len);
+
+	gbfseek(ftmp, 0, SEEK_SET);	/* Truncate memory stream */
+	gbfwrite(NULL, 0, 0, ftmp);
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -1499,7 +1512,7 @@ write_waypoint_cb(const waypoint *refpt)
 {
 	garmin_fs_t *gmsd;
 	waypoint *test;
-	gbsize_t anchor;
+	gbfile *fsave;
 	
 	/* do this when backup always happens in main */
 	
@@ -1520,9 +1533,8 @@ write_waypoint_cb(const waypoint *refpt)
 		gdb_check_waypt(wpt);
 		ENQUEUE_TAIL(&wayptq_out, &wpt->Q);
 		
-		FWRITE_i32(-1);
-		FWRITE_C('W');
-		anchor = gbftell(fout);
+		fsave = fout;
+		fout = ftmp;
 		
 		/* prepare the waypoint */
 		gmsd = GMSD_FIND(wpt);
@@ -1570,14 +1582,14 @@ write_waypoint_cb(const waypoint *refpt)
 		wpt->extra_data = (void *)name;
 		write_waypoint(wpt, name, gmsd, icon, display);
 
-		finalize_item(anchor);
+		finalize_item(fsave, 'W');
 	}
 }
 
 static void
 write_route_cb(const route_head *rte)
 {
-	gbsize_t anchor;
+	gbfile *fsave;
 	char *name;
 	char buf[32];
 	
@@ -1592,12 +1604,10 @@ write_route_cb(const route_head *rte)
 	
 	rte_ct++;	/* increase informational number of written routes */
 
-	FWRITE_i32(-1);
-	FWRITE_C('R');
-
-	anchor = gbftell(fout);
+	fsave = fout;
+	fout = ftmp;
 	write_route(rte, name);
-	finalize_item(anchor);
+	finalize_item(fsave, 'R');
 
 	xfree(name);
 }
@@ -1605,7 +1615,7 @@ write_route_cb(const route_head *rte)
 static void
 write_track_cb(const route_head *trk)
 {
-	gbsize_t anchor;
+	gbfile *fsave;
 	char *name;
 	char buf[32];
 	
@@ -1620,12 +1630,10 @@ write_track_cb(const route_head *trk)
 
 	trk_ct++;	/* increase informational number of written tracks */
 	
-	FWRITE_i32(-1);
-	FWRITE_C('T');
-
-	anchor = gbftell(fout);
+	fsave = fout;
+	fout = ftmp;
 	write_track(trk, name);
-	finalize_item(anchor);
+	finalize_item(fsave, 'T');
 
 	xfree(name);
 }
@@ -1633,9 +1641,10 @@ write_track_cb(const route_head *trk)
 /*-----------------------------------------------------------------------------*/
 
 static void
-init_writer(const char *fname)
+gdb_wr_init(const char *fname)
 {
 	fout = gbfopen_le(fname, "wb", MYNAME);
+	ftmp = gbfopen_le(NULL, "wb", MYNAME);
 
 	gdb_category = (gdb_opt_category) ? atoi(gdb_opt_category) : 0;
 	gdb_ver = (gdb_opt_ver && *gdb_opt_ver) ? atoi(gdb_opt_ver) : 0;
@@ -1665,12 +1674,13 @@ init_writer(const char *fname)
 }
 
 static void
-done_writer(void)
+gdb_wr_deinit(void)
 {
 	disp_summary(fout);
 	gdb_flush_waypt_queue(&wayptq_out);
 	mkshort_del_handle(&short_h);
 	gbfclose(fout);
+	gbfclose(ftmp);
 }
 
 static void
@@ -1726,10 +1736,10 @@ static arglist_t gdb_args[] = {
 ff_vecs_t gdb_vecs = {
 	ff_type_file,
 	FF_CAP_RW_ALL,
-	init_reader,	
-	init_writer,
-	done_reader,
-	done_writer,
+	gdb_rd_init,	
+	gdb_wr_init,
+	gdb_rd_deinit,
+	gdb_wr_deinit,
 	read_data,
 	write_data,
 	NULL, 
