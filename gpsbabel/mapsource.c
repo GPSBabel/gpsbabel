@@ -1167,7 +1167,7 @@ mps_routehdr_w(gbfile *mps_file, int mps_ver, const route_head *rte)
 
 		gbfputint32(reclen, mps_file);
 		gbfputc('R', mps_file);
-		gbfwrite(rname, rname_len, 1, mps_file);
+		gbfwrite(rname, 1, rname_len, mps_file);
 
 		xfree(rname);
 
@@ -1543,7 +1543,7 @@ mps_trackhdr_w(gbfile *mps_file, int mps_ver, const route_head *trk)
 												/* -1 is because reclen starts from 0 which means a length of 1 */
 		gbfputint32(reclen, mps_file);
 		gbfputc('T', mps_file);
-		gbfwrite(tname, tname_len, 1, mps_file);
+		gbfwrite(tname, 1, tname_len, mps_file);
 
 		xfree(tname);
 
