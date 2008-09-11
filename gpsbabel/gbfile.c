@@ -352,7 +352,7 @@ memapi_open(gbfile *self, const char *mode)
 static int
 memapi_close(gbfile *self)
 {
-	xfree(self->handle.mem);
+	if (self->handle.mem) xfree(self->handle.mem);
 
 	return 0;
 }
