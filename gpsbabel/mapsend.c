@@ -300,7 +300,7 @@ mapsend_waypt_pr(const waypoint *waypointp)
 
 	if (c > 30) c = 30;
 	gbfputc(c, mapsend_file_out);
-	gbfwrite(tmp, c, 1, mapsend_file_out);
+	gbfwrite(tmp, 1, c, mapsend_file_out);
 
 	/* #, icon, status */
 	gbfputint32(++cnt, mapsend_file_out);
@@ -374,7 +374,7 @@ mapsend_route_disp(const waypoint *waypointp)
 	/* waypoint name */
 	c = waypointp->shortname ? strlen(waypointp->shortname) : 0;
 	gbfwrite(&c, 1, 1, mapsend_file_out);
-	gbfwrite(waypointp->shortname, c, 1, mapsend_file_out);
+	gbfwrite(waypointp->shortname, 1, c, mapsend_file_out);
 	
 	/* waypoint number */
 	gbfputint32(route_wp_count, mapsend_file_out);
