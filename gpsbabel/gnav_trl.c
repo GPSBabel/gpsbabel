@@ -19,7 +19,7 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
- 
+
 #include <ctype.h>
 #include "defs.h"
 
@@ -55,13 +55,13 @@ gnav_trl_rw_init(const char *fname)
 	fout = gbfopen_le(fname, "wb", MYNAME);
 }
 
-static void 
+static void
 gnav_trl_rd_deinit(void)
 {
 	gbfclose(fin);
 }
 
-static void 
+static void
 gnav_trl_rw_deinit(void)
 {
 	gbfclose(fout);
@@ -70,28 +70,26 @@ gnav_trl_rw_deinit(void)
 static double
 read_altitude(void *ptr)
 {
-	gbint32 res;
-	unsigned char *i = (unsigned char *) &res;
-	res = le_read32(ptr);
-	res = (gbuint32)i[2] << 24 | (gbuint32)i[1] << 16  | (gbuint32)i[0] << 8 | (gbuint32)i[3];
-	return le_read_float(&res);
+	unsigned char *i = (unsigned char *) ptr;
+	char buf[sizeof(float)];
+	le_write32(&buf, i[2] << 24 | i[1] << 16 | i[0] <<8 | i[3]);
+	return le_read_float(&buf);
 }
 
 static void
 write_altitude(void *ptr, const float alt)
 {
-	gbint32 res;
-	unsigned char *i = (unsigned char *)&res;
-	le_write_float(&res, alt);
-	res = (gbuint32)i[0] << 24 | (gbuint32)i[3] << 16  | (gbuint32)i[2] << 8 | (gbuint32)i[1];
-	le_write32(ptr, res);
+	char buf[sizeof(float)];
+	unsigned char *i = (unsigned char *) &buf;
+	le_write_float(&buf, alt);
+	le_write32(ptr, i[0] << 24 | i[3] << 16 | i[2] << 8 | i[1]);
 }
 
 static void
 gnav_trl_read(void)
 {
 	route_head *trk = NULL;
-	
+
 	while (! gbfeof(fin)) {
 		gnav_trl_t rec;
 		waypoint *wpt;
@@ -118,7 +116,7 @@ static void
 gnav_trl_write_trkpt(const waypoint *wpt)
 {
 	gnav_trl_t rec;
-	
+
 	le_write32(&rec.time, wpt->creation_time);
 	le_write_float(&rec.lat, wpt->latitude);
 	le_write_float(&rec.lon, wpt->longitude);
@@ -126,7 +124,7 @@ gnav_trl_write_trkpt(const waypoint *wpt)
 		write_altitude(&rec.alt, wpt->altitude);
 	else
 		write_altitude(&rec.alt, 0);
-	
+
 	gbfwrite(&rec, sizeof(rec), 1, fout);
 }
 
@@ -141,9 +139,9 @@ gnav_trl_write(void)
 
 ff_vecs_t gnav_trl_vecs = {
 	ff_type_file,
-	{ 
-		ff_cap_none			/* waypoints */, 
-	  	ff_cap_read | ff_cap_write	/* tracks */, 
+	{
+		ff_cap_none			/* waypoints */,
+	  	ff_cap_read | ff_cap_write	/* tracks */,
 	  	ff_cap_none			/* routes */
 	},
 	gnav_trl_rd_init,
