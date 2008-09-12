@@ -1,16 +1,34 @@
 <para>
-GPSBabel has limited support for Garmin Training Center files.   That program is the successor to Garmin' Logbook program for their workout units.  It is a free upgrade.
+GPSBabel supports reading and writing of tracks in the .tcx 
+format used by Garmin Training Center (GTC). GTC is the successor 
+to Garmin's Logbook program for their workout units.  It is a 
+free upgrade.
 </para>
 <para>
-This format is somewhat underachieving in GPSBabel.  It is a write-only
-format; we never read it.  The bigger problem, however, is a fundamental
-impedance mismatch between this format and most of what we support.  GPSBabel
-fundamentally deals in waypoints, tracks, and routes.  While we do record
-things like heart rate and temperature when we know it, the fundamentals
-of Training Center are different - it deals in concepts like laps and calories
-which are rather alien to GPSBabel and most of the formats we support.  As 
-such, while we can describe the tracks pretty accurately, things like 
-calories and heart zone tracking are not supported.
+GPSBabel can read GTC .tcx v1 and v2 files, and can write v2 files. 
+There is a fundamental mismatch between this format and most of
+what we support.  GPSBabel deals in waypoints, tracks, and routes.
+While we do record things like heart rate and temperature when we know
+it, the fundamentals of Training Center are different.  It deals in
+concepts like laps and calories, which are rather alien to GPSBabel 
+and most of the formats we support.  As such, while we can describe
+the tracks pretty accurately, things like calories and heart zone
+tracking are not supported.
 </para>
+<para>
+One of the most useful things you can do with this format is to send 
+.tcx files found on the web or elsewhere to any supported GPS 
+unit. You will probably want to include the transform (rte=trk) 
+and simplify filters in this process. For example,
+</para>
+<para><userinput>
+gpsbabel -i gtrnctr -f somefile.tcx -x simplify,count=50 
+-x transform,rte=trk -r -o garmin -F usb:
+</userinput></para>
+<para>
+where you select the count not to exceed the number of available
+waypoints for routing on your device.
+</para>
+
 
 
