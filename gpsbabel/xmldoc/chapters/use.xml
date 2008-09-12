@@ -355,4 +355,26 @@ merged data to multiple destinations.
     <member>-x track,pack,split,title="LOG # %Y%m%d"</member>
   </simplelist>
 </sect1>
+      <sect1 id="all_options">
+	<title>List of Options</title>
+  <para>
+   The complete list of available options to GPSBabel can be obtained by
+   running <command>gpsbabel -h</command>.  While there are a number of
+   options, most people will not use most of them, so don't be intimiated.
+  </para>
+<para><option>-p</option> Read preferences file.   On startup, GPSBabel will look for a  file named <filename>gpsbabel.init</filename> containing preferences you have provided.  This option lets you pick a different files.  See <xref linkend="inifile"/> for more info.</para>
+<para><option>-s</option> Write "smart" names.  This option influences some - but not all - of our writers to try to build "smart" waypoint names.   For example, in modules that know about geocaching, it may replace "GC1234" with the actual name of the geocache.</para>
+<para><option>-r</option> Work on routes.  This option has a subtly different meaning in different cases.  As the very first formats in GPSBabel were for serial GPSes and routes and tracks were large and thus time-consuming to transfer, the default was waypoints only with this option to turn on the extra data.   Some of our file formats use this option to mean "work only on routes, even if you have tracks/waypoints", but we're trying to discourage that behavior and in most cases, consider it a bug. </para>
+<para><option>-t</option> Work on tracks.  See <option>-r</option> for excuses. </para>
+<para><option>-w</option> Work on waypoints.  This is the default. </para>
+<para><option>-T</option> Enable Realtime tracking. This option isn't supported by the majority of our file formats, but repeatedly reads location from a GPS and writes it to a file as described in <xref linkend="tracking" /></para>
+<para><option>-b</option> Process batch file. In addition to reading arguments from the command line, we can read them from files containing lists of commands as described in <xref linkend="batchfile"/> </para>
+<para><option>-c</option> Select character set. This option lets you chose the character set.  You can get a list of supported character sets via <option>-l</option> </para>
+<para><option>-N</option> Control "smart" output.   The <option>-N</option> actually has two subtoptions, <option>-Ni</option> and <option>-Ns</option>.   This lets you control whether a given writer will choose smart icons and names, respectively.   The option <option>-N</option> by itself selects both.    </para> 
+<para><option>-x filter</option> Run filter. This option lets use use one of of our many data filters. Position of this in the command line does matter - remember, we process left to right.</para>
+<para><option>-D</option> Enable debugging.   Not all formats support this.  It's typically better supported by the various protocol modules because they just plain need more debugging.   This option may be followed by a number.   Zero means no debugging.  Larger numbers mean more debugging. </para>
+<para><option>-l</option> Print character sets.   </para>
+<para><option>-h</option><option>-?</option> Print help. </para>
+<para><option>-V</option> Print version number. </para>
+      </sect1>
 </chapter>
