@@ -47,6 +47,7 @@ static char *deficon = NULL;
 static char *category = NULL;
 static char *categorybitsopt = NULL;
 static int categorybits;
+static int receiver_must_upper = 1;
 
 static ff_vecs_t *gpx_vec;
 
@@ -971,7 +972,7 @@ route_waypt_pr(const waypoint *wpt)
 	for (s = wpt->shortname; *s; s++) {
 		int c = *s;
 		if (receiver_must_upper && isalpha(c)) c = toupper(c);
-		if (strchr(valid_waypt_char, c)) {
+		if (strchr(valid_waypt_chars, c)) {
 			*d++ = c;
 		}
 	}
