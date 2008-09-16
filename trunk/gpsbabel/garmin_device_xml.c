@@ -102,6 +102,7 @@ static xg_tag_mapping gdx_map[] = {
   { ext_s, cb_cdata, "/Device/MassStorageMode/DataType/File/Location/FileExtension" },
   { base_s, cb_cdata, "/Device/MassStorageMode/DataType/File/Location/BaseName" },
   { dir_s, cb_cdata, "/Device/MassStorageMode/DataType/File/TransferDirection" },
+  { 0, 0, NULL }
 };
 
 const gdx_info *
@@ -124,7 +125,7 @@ gdx_read(const char *fname) {
 const gdx_info *
 gdx_find_file(char **dirlist) {
   const gdx_info *gdx;
-  while (*dirlist) {
+  while (dirlist && *dirlist) {
     char *tbuf;
     xasprintf(&tbuf, "%s/%s", *dirlist, "/Garmin/GarminDevice.xml");
     mountpoint = *dirlist;
