@@ -185,16 +185,15 @@ HANDLE * garmin_usb_start(HDEVINFO* hdevinfo, SP_DEVICE_INTERFACE_DATA *infodata
 }
 
 
-static char ** get_garmin_mountpoints() {
+static char ** get_garmin_mountpoints(void)
+{
 #define BUFSIZE 512
   TCHAR szTemp[MAX_PATH];
   char *p = szTemp;
   char **dlist = xmalloc(0);
   int i = 0;
 
-  fprintf(stderr, "eek!\n");
-  if (GetLogicalDriveStrings(BUFSIZE-1, szTemp)) 
-  {
+  if (GetLogicalDriveStrings(BUFSIZE-1, szTemp)) {
     while(*p) {
       dlist = xrealloc(dlist, sizeof (*dlist ) * ++i);
       //            fprintf(stderr, "Found: %d, %s\n", i, p);
