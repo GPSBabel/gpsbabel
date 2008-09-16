@@ -970,8 +970,8 @@ route_waypt_pr(const waypoint *wpt)
 	d = rte->ident;
 	for (s = wpt->shortname; *s; s++) {
 		int c = *s;
-		if (isalpha(c)) c = toupper(c);
-		if (strchr(MILITANT_VALID_WAYPT_CHARS, c)) {
+		if (receiver_must_upper && isalpha(c)) c = toupper(c);
+		if (strchr(valid_waypt_char, c)) {
 			*d++ = c;
 		}
 	}
