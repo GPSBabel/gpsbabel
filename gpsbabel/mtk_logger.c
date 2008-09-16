@@ -435,11 +435,11 @@ static void mtk_read(void){
   char cmd[256];
   char *line = NULL;
   unsigned char crc, *data = NULL;
-  int cmdLen, j, bsize, i, len, ff_len, rc, init_scan, retry_cnt, log_enabled; 
+  int cmdLen, j, bsize, i, len, ff_len, rc, init_scan, retry_cnt, log_enabled;
   unsigned int line_size, data_size, data_addr, addr, addr_max;
   FILE *dout;
   char *fusage = NULL;
-  
+
   log_enabled = 0;
   init_scan = 0;
   dout = fopen(TEMP_DATA_BIN, "wb");
@@ -612,31 +612,31 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm){
         spds[0] = '\0';
         if ( mtk_info.speed > 0 )
            sprintf(spds, " when moving above %.0f km/h", mtk_info.speed/10.);
-        xasprintf(&trk_head->rte_desc, "Log every %.0f sec, %.0f m%s" 
+        xasprintf(&trk_head->rte_desc, "Log every %.0f sec, %.0f m%s"
            , mtk_info.period/10., mtk_info.distance/10., spds);
         track_add_head(trk_head);
-    } 
+    }
 
     if ( bmask & (1<<LATITUDE) && bmask & (1<<LONGITUDE) ){
        trk->latitude       = itm->lat;
        trk->longitude      = itm->lon;
     } else {
        return -1; // GPX requires lat/lon...
-    }  
+    }
 
     if ( bmask & (1<<HEIGHT) ){
        trk->altitude       = itm->height;
     }
     trk->creation_time  = itm->timestamp; // in UTC..
-    if ( bmask & (1<<MILLISECOND) ) 
+    if ( bmask & (1<<MILLISECOND) )
        trk->microseconds  = MILLI_TO_MICRO(itm->timestamp_ms);
-    
+
     if ( bmask & (1<<PDOP) )
-       trk->pdop = itm->pdop; 
+       trk->pdop = itm->pdop;
     if ( bmask & (1<<HDOP) )
-       trk->hdop = itm->hdop; 
+       trk->hdop = itm->hdop;
     if ( bmask & (1<<VDOP) )
-       trk->vdop = itm->vdop; 
+       trk->vdop = itm->vdop;
 
     if ( bmask & (1<<HEADING) ){
        WAYPT_SET(trk, course, itm->heading);
@@ -652,20 +652,29 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm){
          case 0x0004: trk->fix = fix_dgps;   break;
          case 0x0008: trk->fix = fix_pps;    break; /* Military GPS */
 
-         case 0x0010: /* "RTK" */  
-         case 0x0020: /* "FRTK" */ 
+         case 0x0010: /* "RTK" */
+         case 0x0020: /* "FRTK" */
          case 0x0080: /* "Manual input mode"  */
          case 0x0100: /* "Simulator";*/
-         default:      
+         default:
             trk->fix = fix_unknown;
             break;
        }
-    }   
+      /* This is a flagrantly bogus position; don't queue it.
+       * The 747 does log some "real" positions with fix_none, though,
+       * so keep those.
+       */
+      if ((trk->fix == fix_unknown || trk->fix == fix_none)  &&
+          trk->latitude - 90.0 < .000001 && trk->longitude < 0.000001) {
+        waypt_free(trk);
+        return -1;
+      }
+    }
     if ( bmask & (1<<NSAT) )
        trk->sat = itm->sat_used;
-       
+
     // RCR is a bitmask of possibly several log reasons..
-    if ( global_opts.masked_objective & WPTDATAMASK 
+    if ( global_opts.masked_objective & WPTDATAMASK
        && bmask & (1<<RCR) && itm->rcr & 0x0008  )
     {
        /* Button press -- create waypoint, start count at 1 */
@@ -674,10 +683,10 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm){
        sprintf(wp_name, "WP%06d", waypt_count()+1);
        w->shortname      = xstrdup(wp_name);
        waypt_add(w);
-    } 
+    }
     // In theory we would not add the waypoint to the list of
-    // trackpoints. But as the MTK logger restart the 
-    // log session from the button press we would loose a 
+    // trackpoints. But as the MTK logger restart the
+    // log session from the button press we would loose a
     // trackpoint unless we include/duplicate it.
 
     if ( global_opts.masked_objective & TRKDATAMASK ){
@@ -685,7 +694,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm){
        trk->shortname      = xstrdup(wp_name);
 
        track_add_wpt(trk_head, trk);
-    }    
+    }
     return 0;
 }
 
@@ -1229,9 +1238,9 @@ static void file_read(void) {
       i = 0;
       while ( (bLen - i) >= mtk_info.logLen ){
          k = 0;
-         if ( (bLen - i) >= 16 && memcmp(&buf[i], &LOG_RST[0], 6) == 0 
+         if ( (bLen - i) >= 16 && memcmp(&buf[i], &LOG_RST[0], 6) == 0
               && memcmp(&buf[i+12], &LOG_RST[12], 4) == 0 )
-         {     
+         {
             mtk_parse_info(&buf[i], (bLen-i));
             k = 16;
          } else if  ( is_holux_string(&buf[i], (bLen - i)) ) {
@@ -1241,7 +1250,7 @@ static void file_read(void) {
          {
             /* End of 64k block segment -- realign to next data area */
 
-            k = ((pos+mtk_info.logLen+1024)/0x10000) *0x10000 + 0x200; 
+            k = ((pos+mtk_info.logLen+1024)/0x10000) *0x10000 + 0x200;
             i = sizeof(buf);
             if ( k <= pos  ) {
               k += 0x10000;
