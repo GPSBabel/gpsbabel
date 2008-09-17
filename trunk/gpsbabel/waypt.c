@@ -627,3 +627,9 @@ waypt_alloc_gc_data(waypoint *wpt)
 	}
 	return res;
 }
+
+int
+waypt_empty_gc_data(const waypoint *wpt)
+{
+	return (wpt->gc_data == &empty_gc_data);
+}
