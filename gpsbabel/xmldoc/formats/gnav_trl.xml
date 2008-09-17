@@ -1,7 +1,45 @@
 <para>
-   Binary tracklogs containing coordinates, timestamps and altitude values.
+   Binary (little endian) tracklogs containing coordinates, timestamps and altitude values.
 </para>
+
 <para>
    <ulink url="http://www.pdafun.net/">Google Navigator</ulink> is an application for PDAs
    running under Windows Mobile 5.0 or 6.0.
+</para>
+
+<para>
+  <table>
+    <title>Track point structure (16 bytes)</title>
+    <tgroup cols="2">
+    <thead>
+      <row>
+        <entry>Position</entry>
+        <entry>Data type</entry>
+        <entry>Field info</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>0</entry>
+        <entry>32-bit signed int</entry>
+        <entry>Unix timestamp</entry>
+      </row>
+      <row>
+        <entry>4</entry>
+        <entry>32-bit float</entry>
+        <entry>Latitude</entry>
+      </row>
+      <row>
+        <entry>8</entry>
+        <entry>32-bit float</entry>
+        <entry>Longitude</entry>
+      </row>
+      <row>
+        <entry>12</entry>
+        <entry>32-bit float</entry>
+        <entry>Altitude (!rotated left by eight bits!)</entry>
+      </row>
+    </tbody>
+    </tgroup>
+  </table>
 </para>
