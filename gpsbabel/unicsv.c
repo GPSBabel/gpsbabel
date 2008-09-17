@@ -31,6 +31,8 @@
 
 #define MYNAME "unicsv"
 
+#define UNICSV_GC_READY
+
 /* "UNICSV_FIELD_SEP" and "UNICSV_LINE_SEP" are only used by the writer */
 
 #define UNICSV_FIELD_SEP	","
@@ -98,7 +100,7 @@ typedef enum {
 	fld_garmin_fax_nr,
 	fld_garmin_email,
 	fld_garmin_facility,
-#if UNICSV_GC_READY
+#ifdef UNICSV_GC_READY
 	fld_gc_id,
 	fld_gc_type,
 	fld_gc_container,
@@ -223,7 +225,7 @@ static field_t fields_def[] = {
 	{ "email",	fld_garmin_email, STR_ANY },
 	{ "state",	fld_garmin_state, STR_ANY },
 	{ "faci",	fld_garmin_facility, STR_ANY },
-#if UNICSV_GC_READY
+#ifdef UNICSV_GC_READY
 	/* geocache details */
 	{ "gcid",	fld_gc_id, STR_ANY },
 	{ "type",	fld_gc_type, STR_ANY },
@@ -255,7 +257,7 @@ static int unicsv_datum_idx;
 static char *opt_datum, *opt_grid, *opt_utc, *opt_filename, *opt_format, *opt_prec;
 static int unicsv_waypt_ct;
 static char unicsv_detect;
-int llprec;
+static int llprec;
 
 static arglist_t unicsv_args[] = { 
 	{"datum", &opt_datum, "GPS datum (def. WGS 84)",
@@ -386,7 +388,7 @@ unicsv_parse_time(const char *str, int *msec, time_t *date)
 	return ((hour * SECONDS_PER_HOUR) + (min * 60) + (int)sec);
 }
 
-#if UNICSV_GC_READY
+#ifdef UNICSV_GC_READY
 static status_type
 unicsv_parse_status(const char *str)
 {
@@ -400,7 +402,7 @@ unicsv_parse_status(const char *str)
 }
 #endif
 
-#if UNICSV_GC_READY
+#ifdef UNICSV_GC_READY
 static time_t
 unicsv_adjust_time(const time_t time, time_t *date)
 {
@@ -612,7 +614,7 @@ unicsv_parse_one_line(char *ibuf)
 	int src_datum = unicsv_datum_idx;
 	int ns = 1;
 	int ew = 1;
-#if UNICSV_GC_READY
+#ifdef UNICSV_GC_READY
 	geocache_data *gc_data = NULL;
 #endif
 	wpt = waypt_new();
@@ -927,7 +929,7 @@ unicsv_parse_one_line(char *ibuf)
 			default: break;
 			}
 			break;
-#if UNICSV_GC_READY
+#ifdef UNICSV_GC_READY
 		case fld_gc_id:
 		case fld_gc_type:
 		case fld_gc_container:
@@ -955,7 +957,6 @@ unicsv_parse_one_line(char *ibuf)
 			case fld_gc_diff: gc_data->diff = atof(s) * 10; break;
 			case fld_gc_is_archived: gc_data->is_archived = unicsv_parse_status(s); break;
 			case fld_gc_is_available: gc_data->is_available = unicsv_parse_status(s); break;
-
 			case fld_gc_exported: {
 				time_t time, date; int msec;
 				time = unicsv_parse_time(s, &msec, &date);
@@ -1140,7 +1141,7 @@ unicsv_print_str(const char *str)
 	else gbfputs(unicsv_fieldsep, fout);
 }
 
-#if UNICSV_GC_READY
+#ifdef UNICSV_GC_READY
 static void
 unicsv_print_data_time(const time_t atime)
 {
@@ -1217,7 +1218,7 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
 		if GMSD_HAS(facility) gb_setbit(&unicsv_outp_flags, fld_garmin_facility);
 	}
 	
-#if UNICSV_GC_READY
+#ifdef UNICSV_GC_READY
 	if (! waypt_empty_gc_data(wpt)) {
 		const geocache_data *gc_data = wpt->gc_data;
 		
@@ -1244,7 +1245,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	char *cout = NULL;
 	char *shortname;
 	garmin_fs_t *gmsd;
-#if UNICSV_GC_READY
+#ifdef UNICSV_GC_READY
 	const geocache_data *gc_data = NULL;
 #endif
 	unicsv_waypt_ct++;
@@ -1485,9 +1486,9 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	if FIELD_USED(fld_garmin_fax_nr) unicsv_print_str(GMSD_GET(fax_nr, NULL));
 	if FIELD_USED(fld_garmin_email) unicsv_print_str(GMSD_GET(email, NULL));
 
-#if UNICSV_GC_READY
-	if (! waypt_empty_gc_data(wpt)) gc_data = wpt->gc_data;
-	else gc_data = NULL;
+#ifdef UNICSV_GC_READY
+	if (waypt_empty_gc_data(wpt)) gc_data = NULL;
+	else gc_data = wpt->gc_data;
 	
 	if FIELD_USED(fld_gc_id) {
 		gbfputs(unicsv_fieldsep, fout);
@@ -1663,7 +1664,7 @@ unicsv_wr(void)
 	if FIELD_USED(fld_garmin_fax_nr) gbfprintf(fout, "%sFax", unicsv_fieldsep);
 	if FIELD_USED(fld_garmin_email) gbfprintf(fout, "%sEmail", unicsv_fieldsep);
 
-#if UNICSV_GC_READY
+#ifdef UNICSV_GC_READY
 	if FIELD_USED(fld_gc_id) gbfprintf(fout, "%sGCID", unicsv_fieldsep);
 	if FIELD_USED(fld_gc_type) gbfprintf(fout, "%sType", unicsv_fieldsep);
 	if FIELD_USED(fld_gc_container) gbfprintf(fout, "%sContainer", unicsv_fieldsep);
