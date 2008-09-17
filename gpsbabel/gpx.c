@@ -1676,12 +1676,15 @@ gpx_track_hdr(const route_head *rte)
 	if (rte->rte_num) {
 		gbfprintf(ofd, "<number>%d</number>\n", rte->rte_num);
 	}
-	gbfprintf(ofd, "<trkseg>\n");
-
-	fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
-	if ( fs_gpx ) {
-		fprint_xml_chain( fs_gpx->tag, NULL );
+	
+	if (gpx_wversion_num > 10) {
+		fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
+		if ( fs_gpx ) {
+			fprint_xml_chain( fs_gpx->tag, NULL );
+		}
 	}
+
+	gbfprintf(ofd, "<trkseg>\n");
 }
 
 static void
@@ -1749,9 +1752,11 @@ gpx_route_hdr(const route_head *rte)
 		gbfprintf(ofd, "  <number>%d</number>\n", rte->rte_num);
 	}
 
-	fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
-	if ( fs_gpx ) {
-		fprint_xml_chain( fs_gpx->tag, NULL );
+	if (gpx_wversion_num > 10) {
+		fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
+		if ( fs_gpx ) {
+			fprint_xml_chain( fs_gpx->tag, NULL );
+		}
 	}
 }
 
