@@ -11,7 +11,9 @@
 <para>
    The list of keywords include:
    <screen format="linespecific">
-     alt =      Elevation (in meters) of the point. Add "ft" or "feet" for feet.
+      alt =      Elevation (in meters) of the point. Add "ft" or "feet" for feet.
+      arch =     <link linkend="style_def_isarchived">Geocache archived flag</link>
+      avail =    <link linkend="style_def_isavailable">Geocache available flag</link>
       bng_e =    British National Grid's easting
       bng =      full coordinate in BNG format (zone easting northing)
       bng_pos =  full coordinate in BNG format (zone easting northing)
@@ -19,18 +21,24 @@
       bng_z =    British National Grid's zone
       caden =    Cadence
       comment =  Notes
+      cont =     <link linkend="style_def_geocontainer">Geocache container</link>
       cour =     Heading / Course true
       date =     Date (yyyy/mm/dd)
       depth =    Depth (in meters).  Add "ft" or "feet" for feet.
       desc =     Description
+      diff =     <link linkend="style_def_geodiff">Geocache difficulty</link>
       ele =      Elevation (in meters) of the point. Add "ft" or "feet" for feet.
       e/w =      'e' for eastern hemisphere, 'w' for western
+      exported = Geocache export date 
+      found =    <link linkend="style_def_geofound">Geocache last found date</link>
       fix =      3d, 2d, etc.
+      gcid =     Geocache chache id
       geschw =   Geschwindigkeit (speed)
       hdop =     Horizontal dilution of precision
       head =     Heading / Course true
       heart =    Heartrate
       height =   Elevation (in meters) of the point
+      hint =     <link linkend="style_def_geohint">Geocache cache hint</link>
       icon =     Symbol (icon) name
       lat =      Latitude
       lon =      Longitude
@@ -38,13 +46,17 @@
       n/s =      'n' for northern hemisphere, 's' for southern
       notes =    Notes
       pdop =     Position dilution of precision
+      placer =   <link linkend="style_def_geoplacer">Geocache placer</link>
+      placer_id =Geocache placer id
       prox =     Proximity (in meters).  Add "ft" or "feet" for feet.
       sat =      Number of sats used for fix
       speed =    Speed
       symb =     Symbol (icon) name
       tempf =    Temperature (degrees Fahrenheit)
       temp =     Temperature (degrees Celsius)
+      terr =     <link linkend="style_def_geoterr">Geocache terrain</link>
       time =     Time (hh:mm:ss[.msec])
+      type =     <link linkend="style_def_geotype">Geocache cache type</link>
       url =      URL
       utc_d =    UTC date
       utc_t =    UTC time
