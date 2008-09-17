@@ -39,6 +39,7 @@ reverse_route_head( const route_head *rte )
 void 
 reverse_route_process( void ) 
 {
+	track_disp_all( reverse_route_head, NULL, NULL );
 	route_disp_all( reverse_route_head, NULL, NULL );
 }
 
