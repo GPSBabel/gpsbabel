@@ -154,7 +154,7 @@ print_buff(const char *buf, int sz, const char *cmt)
 		printf("%02x ", buf[i] & 0xFF);
 	for (i = 0; i < sz; i++) {
 		char c = buf[i];
-		if isspace(c) c = ' ';
+		if (isspace(c)) c = ' ';
 		else if (! isprint(c)) c = '.';
 		printf("%c", c);
 	}
@@ -440,12 +440,12 @@ exif_read_ifd(exif_app_t *app, const gbuint16 ifd_nr, gbsize_t offs,
 		exif_tag_t *tag = (exif_tag_t *)elem;
 		if ((tag->size > 4) && (tag->value)) {
 			gbuint16 i;
-			void *ptr;
+			char *ptr;
 
 			tag->data = xmalloc(tag->size);
 			tag->data_is_dynamic = 1;
 
-			ptr = (void *)tag->data;
+			ptr = tag->data;
 			gbfseek(fin, tag->value, SEEK_SET);
 
 			if (BYTE_TYPE(tag->type)) gbfread(ptr, tag->count, 1, fin);
@@ -734,11 +734,11 @@ exif_waypt_from_exif_app(exif_app_t *app)
 	if (tag && (tag->size > 8)) {
 		char *str = NULL;
 		if (memcmp(tag->data, "ASCII\0\0\0", 8) == 0) {
-			str = xstrndup(tag->data + 8, tag->size - 8);
+			str = xstrndup((char *)tag->data + 8, tag->size - 8);
 		}
 		else if (memcmp(tag->data, "UNICODE\0", 8) == 0) {
 			int i, len = (tag->size - 8) / 2;
-			gbint16 *s = tag->data + 8;
+			gbint16 *s = (void *)((char *)tag->data + 8);
 			for (i = 0; i < len; i++) s[i] = be_read16(&s[i]); /* always BE ? */
 			str = cet_str_uni_to_any(s, len, global_opts.charset);
 		}
@@ -987,7 +987,7 @@ exif_write_value(exif_tag_t *tag, gbfile *fout)
 {
 	if (tag->size > 4) gbfputuint32(tag->value, fout);	/* offset to data */
 	else {
-		void *data = tag->data;
+		char *data = tag->data;
 
 		if BYTE_TYPE(tag->type) gbfwrite(data, 4, 1, fout);
 		else if WORD_TYPE(tag->type) {
@@ -1032,7 +1032,7 @@ exif_write_ifd(const exif_ifd_t *ifd, const char next, gbfile *fout)
 
 		if (tag->size > 4) {
 			gbuint16 i;
-			void *ptr = tag->data;
+			char *ptr = tag->data;
 
 			if BYTE_TYPE(tag->type) gbfwrite(tag->data, tag->size, 1, fout);
 			else for (i = 0; i < tag->count; i++) {
@@ -1244,9 +1244,10 @@ exif_wr_deinit(void)
 static void
 exif_write(void)
 {
-	exif_wpt_ref = NULL;
 	char alt_ref = 0;
 	time_t frame;
+
+	exif_wpt_ref = NULL;
 
 	if (opt_name) {
 		waypt_disp_all(exif_find_wpt_by_name);
