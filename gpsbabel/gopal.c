@@ -325,7 +325,7 @@ static void
 gopal_write_waypt(const waypoint *wpt)
 {
 	char tbuffer[64];
-	unsigned long long timestamp;
+	unsigned long timestamp;
 	int fix=fix_unknown;
 	//TICK;    TIME;   LONG;     LAT;       HEIGHT; SPEED;  UN; HDOP;     SAT
 	//3801444, 080558, 2.944362, 43.262117, 295.28, 0.12964, 2, 2.900000, 3 
@@ -339,8 +339,8 @@ gopal_write_waypt(const waypoint *wpt)
 		}
 	}
 	//MSVC handles time_t as int64, gcc and mac only int32, so convert it: 
-	timestamp=(unsigned long long)wpt->creation_time;
-	gbfprintf(fout, "%llu, %s, %lf, %lf, %5.1lf, %8.5lf, %d, %lf, %d\n",timestamp,tbuffer,  wpt->longitude, wpt->latitude,wpt->altitude,
+	timestamp=(unsigned long)wpt->creation_time;
+	gbfprintf(fout, "%lu, %s, %lf, %lf, %5.1lf, %8.5lf, %d, %lf, %d\n",timestamp,tbuffer,  wpt->longitude, wpt->latitude,wpt->altitude,
 	wpt->speed,fix,wpt->hdop,wpt->sat);
 }
 
