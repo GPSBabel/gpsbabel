@@ -43,7 +43,7 @@
 #define NO_ZLIB MYNAME ": No zlib support.\n"
 
 /* About the ZLIB_INHIBITED stuff:
- * 
+ *
  * If a user goes out of his way to build with ZLIB_INHIBITED set,
  * we jettison our use of zlib entirely within this file, replacing
  * all calls out to zlib with calls to abort() as that's an internal
@@ -88,8 +88,8 @@ gzapi_open(gbfile *self, const char *mode)
 		self->handle.gz = gzopen(self->name, openmode);
 
 	if (self->handle.gz == NULL) {
-		fatal("%s: Cannot %s file '%s'!\n", 
-			self->module, 
+		fatal("%s: Cannot %s file '%s'!\n",
+			self->module,
 			(self->mode == 'r') ? "open" : "create",
 			self->name);
 	}
@@ -128,7 +128,7 @@ gzapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
 	int result = 0;
 	char *target = buf;
 	int count = size * members;
-		
+
 	if (self->back != -1) {
 		*target++ = self->back;
 		count--;
@@ -136,7 +136,7 @@ gzapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
 		self->back = -1;
 	}
 	result += gzread(self->handle.gz, target, count);
-		
+
 	/* Check for an incomplete READ */
 	if ((members == 1) && (size > 1) && (result > 0) && (result < (int)size))
 		fatal("%s: Unexpected end of file (EOF)!\n", self->module);
@@ -146,9 +146,9 @@ gzapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
 	if ((result < 0) || ((gbsize_t)result < members)) {
 		int errnum;
 		const char *errtxt;
-			
+
 		errtxt = gzerror(self->handle.gz, &errnum);
-			
+
 		/* Workaround for zlib bug: buffer error on empty files */
 		if ((errnum == Z_BUF_ERROR) && (gztell(self->handle.gz) == 0)) {
 			return (gbsize_t) 0;
@@ -187,7 +187,7 @@ static int
 gzapi_eof(gbfile *self)
 {
 	int res = 0;
-		
+
 	if (self->back != -1) return res;
 
 	res  = gzeof(self->handle.gz);
@@ -260,7 +260,7 @@ stdapi_seek(gbfile *self, gbint32 offset, int whence)
 {
 	int result;
 	gbsize_t pos = 0;
-		
+
 	if (whence != SEEK_SET) pos = ftell(self->handle.std);
 
 	result = fseek(self->handle.std, offset, whence);
@@ -284,7 +284,7 @@ stdapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self
 {
 	int errno;
 	gbsize_t result = fread(buf, size, members, self->handle.std);
-		
+
 	if ((result < members) && (errno = ferror(self->handle.std))) {
 		fatal("%s: Error %d occured during read of file '%s'!\n",
 			self->module, errno, self->name);
@@ -361,7 +361,7 @@ static int
 memapi_seek(gbfile *self, gbint32 offset, int whence)
 {
 	long long pos = (int)self->mempos;
-	
+
 	switch (whence) {
 		case SEEK_CUR:
 		case SEEK_END: pos = pos + offset; break;
@@ -369,7 +369,7 @@ memapi_seek(gbfile *self, gbint32 offset, int whence)
 	}
 
 	if ((pos < 0) || (pos > self->memlen)) return -1;
-	
+
 	self->mempos = pos;
 	return 0;
 }
@@ -394,14 +394,14 @@ static gbsize_t
 memapi_write(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
 {
 	gbsize_t count;
-	
+
 	if ((size == 0) && (members == 0)) {	/* truncate stream */
 		self->memlen = self->mempos;
 		return 0;
 	}
-	
+
 	count = size * members;
-	
+
 	if (self->mempos + count > self->memsz) {
 		self->memsz = ((self->mempos + count + 4095) / 4096) * 4096;
 		self->handle.mem = xrealloc(self->handle.mem, self->memsz);
@@ -448,13 +448,13 @@ memapi_clearerr(gbfile *self)
 	return;
 }
 
-static int 
+static int
 memapi_error(gbfile *self)
 {
 	return 0;
 }
 
-	
+
 /* GPSBabel 'file' standard calls */
 
 /*
@@ -467,15 +467,15 @@ gbfopen(const char *filename, const char *mode, const char *module)
 	gbfile *file;
 	const char *m;
 	int len;
-		
+
 	file = xcalloc(1, sizeof(*file));
-	
+
 	file->module = xstrdup(module);
 	file->mode = 'r'; // default
 	file->binary = (strchr(mode, 'b') != NULL);
 	file->back = -1;
 	file->memapi = (filename == NULL);
-	
+
 	for (m = mode; *m; m++) {
 		switch(tolower(*m)) {
 			case 'r':
@@ -509,7 +509,7 @@ gbfopen(const char *filename, const char *mode, const char *module)
 	else {
 		file->name = xstrdup(filename);
 		file->is_pipe = (strcmp(filename, "-") == 0);
-	
+
 		/* Do we have a '.gz' extension in the filename ? */
 		len = strlen(file->name);
 		if ((len > 3) && (case_ignore_strcmp(&file->name[len-3], ".gz") == 0)) {
@@ -523,7 +523,7 @@ gbfopen(const char *filename, const char *mode, const char *module)
 
 		if (file->gzapi) {
 #if !ZLIB_INHIBITED
-		
+
 			file->fileclearerr = gzapi_clearerr;
 			file->fileclose = gzapi_close;
 			file->fileeof = gzapi_eof;
@@ -567,30 +567,30 @@ gbfopen(const char *filename, const char *mode, const char *module)
 	return file;
 }
 
-/* 
- * gbfopen_be: as gbfopen, but set the BIG-ENDIAN flag 
+/*
+ * gbfopen_be: as gbfopen, but set the BIG-ENDIAN flag
  */
 
 gbfile *
 gbfopen_be(const char *filename, const char *mode, const char *module)
 {
 	gbfile *result;
-	
+
 	result = gbfopen(filename, mode, module);
 	result->big_endian = 1;
-	
+
 	return result;
 }
 
 /*
  * gbfclose: (as fclose)
  */
- 
+
 void
 gbfclose(gbfile *file)
 {
 	if (!file) return;
-	
+
 	file->fileclose(file);
 
 	xfree(file->name);
@@ -602,8 +602,8 @@ gbfclose(gbfile *file)
 /*
  * gbfgetc: (as fgetc)
  */
- 
-int 
+
+int
 gbfgetc(gbfile *file)
 {
 	unsigned char c;
@@ -620,20 +620,20 @@ gbfgetc(gbfile *file)
 /*
  * gbfgets: (as fgets)
  */
- 
-char * 
+
+char *
 gbfgets(char *buf, int len, gbfile *file)
 {
 	char *result = buf;
-	
+
 	while (--len > 0) {
 		int c = gbfgetc(file);
 
 		if (c == EOF) break;
-		
+
 		*(unsigned char *)buf = (unsigned char)c;
 		buf++;
-		
+
 		if (c == '\r') {
 			c = gbfgetc(file);
 			if ((c != '\n') && (c != EOF)) gbfungetc(c, file);
@@ -649,7 +649,7 @@ gbfgets(char *buf, int len, gbfile *file)
 /*
  * gbfread: (as fread)
  */
- 
+
 gbsize_t
 gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 {
@@ -660,14 +660,14 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 /*
  * gbvfprintf: (as vfprintf)
  */
- 
+
 int gbvfprintf(gbfile *file, const char *format, va_list ap)
 {
 	int len;
-	
+
 	for (;;) {
 		va_list args;
-		
+
 		va_copy(args, ap);
 		len = vsnprintf(file->buff, file->buffsz, format, args);
 		va_end(args);
@@ -679,7 +679,7 @@ int gbvfprintf(gbfile *file, const char *format, va_list ap)
 		/* First case: C99 behaviour.  Len is correctly sized.
 	 	 * add space for null terminator.  Next time through the
 		 * loop we're guaranteed success.
-		 * 
+		 *
 		 * Second case: SUS (and Windows) behaviour.  We know it
 		 * doesn't fit, but we don't know how big it has to be.
 `		 * double it and try again.  We'll loop until we succeed.
@@ -687,9 +687,9 @@ int gbvfprintf(gbfile *file, const char *format, va_list ap)
 		 * Since we keep the I/O buffer in the file handle, we
 		 * quickly reach a steady state on the size of these buffers.
 		 */
-		if (len > -1) 
+		if (len > -1)
 			file->buffsz = len + 1;
-		else 
+		else
 			file->buffsz *= 2;
 
 		file->buff = xrealloc(file->buff, file->buffsz);
@@ -700,31 +700,31 @@ int gbvfprintf(gbfile *file, const char *format, va_list ap)
 /*
  * gbfprintf: (as fprintf)
  */
- 
-int 
+
+int
 gbfprintf(gbfile *file, const char *format, ...)
 {
 	va_list args;
 	int result;
-	
+
 	va_start(args, format);
 	result = gbvfprintf(file, format, args);
 	va_end(args);
-	
+
 	return result;
 }
 
 /*
  * gbfputc: (as fputc)
  */
- 
-int 
+
+int
 gbfputc(int c, gbfile *file)
 {
 	unsigned char temp = (unsigned int) c;
-	
+
 	gbfwrite(&temp, 1, 1, file);
-	
+
 	return c;
 }
 
@@ -732,7 +732,7 @@ gbfputc(int c, gbfile *file)
  * gbfputs: (as fputs)
  */
 
-int 
+int
 gbfputs(const char *s, gbfile *file)
 {
 	return gbfwrite(s, 1, strlen(s), file);
@@ -742,27 +742,27 @@ gbfputs(const char *s, gbfile *file)
  * gbfwrite: (as fwrite)
  */
 
-int 
+int
 gbfwrite(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
 {
 	int result;
-	
+
 	result = file->filewrite(buf, size, members, file);
 	if (result != members) {
-		fatal("%s: Could not write %lld bytes to %s (result %d)!\n", 
+		fatal("%s: Could not write %lld bytes to %s (result %d)!\n",
 			file->module,
 			(long long int) (members - result) * size,
 			file->name,
 			result);
 	}
-		
+
 	return result;
 }
 
 /*
  * gbfflush: (as fflush)
  */
- 
+
 int
 gbfflush(gbfile *file)
 {
@@ -782,7 +782,7 @@ gbfclearerr(gbfile *file)
 /*
  * gbferror: (as ferror)
  */
- 
+
 int
 gbferror(gbfile *file)
 {
@@ -792,7 +792,7 @@ gbferror(gbfile *file)
 /*
  * gbfrewind: (as frewind)
  */
- 
+
 void
 gbfrewind(gbfile *file)
 {
@@ -803,7 +803,7 @@ gbfrewind(gbfile *file)
 /*
  * gbfseek: (as fseek)
  */
- 
+
 int
 gbfseek(gbfile *file, gbint32 offset, int whence)
 {
@@ -814,7 +814,7 @@ gbfseek(gbfile *file, gbint32 offset, int whence)
  * gbftell: (as ftell)
  */
 
-gbsize_t 
+gbsize_t
 gbftell(gbfile *file)
 {
 	gbsize_t result = file->filetell(file);
@@ -828,7 +828,7 @@ gbftell(gbfile *file)
  * gbfeof: (as feof)
  */
 
-int 
+int
 gbfeof(gbfile *file)
 {
 	return file->fileeof(file);
@@ -854,7 +854,7 @@ gbint32
 gbfgetint32(gbfile *file)
 {
 	char buf[4];
-	
+
 	is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)),
 		"%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
@@ -872,10 +872,10 @@ gbint16
 gbfgetint16(gbfile *file)
 {
 	char buf[2];
-	
+
 	is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)),
 		"%s: Unexpected end of file (%s)!\n", file->module, file->name);
-	
+
 	if (file->big_endian)
 		return be_read16(buf);
 	else
@@ -886,7 +886,7 @@ gbfgetint16(gbfile *file)
  * gbfgetdbl: read a double value (8 byte, double precision) from input stream
  */
 
-double 
+double
 gbfgetdbl(gbfile *file)
 {
 	char buf[8];
@@ -905,7 +905,7 @@ float
 gbfgetflt(gbfile *file)
 {
 	char buf[4];
-	
+
 	is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)),
 		"%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
@@ -916,19 +916,19 @@ gbfgetflt(gbfile *file)
  * gbfgetcstr: Reads a string from file until either a '\0' or eof.
  *             The result is a temporary allocated entity: use it or free it!
  */
- 
+
 char *
 gbfgetcstr(gbfile *file)
 {
 	char *result;
 	int len = 0;
 	char *str = file->buff;
-	
+
 	for (;;) {
 		int c = gbfgetc(file);
-		
+
 		if ((c == 0) || (c == EOF)) break;
-		
+
 		if (len == file->buffsz) {
 			file->buffsz += 64;
 			str = file->buff = xrealloc(file->buff, file->buffsz + 1);
@@ -936,12 +936,12 @@ gbfgetcstr(gbfile *file)
 		str[len] = c;
 		len++;
 	}
-	
+
 	result = (char *) xmalloc(len + 1);
 	if (len > 0)
 		memcpy(result, str, len);
 	result[len] = '\0';
-	
+
 	return result;
 }
 
@@ -955,14 +955,14 @@ gbfgetpstr(gbfile *file)
 {
 	int len;
 	char *result;
-	
+
 	len = gbfgetc(file);
 	result = xmalloc(len + 1);
 	if (len > 0) {
 		gbfread(result, 1, len, file);
 	}
 	result[len] = '\0';
-	
+
 	return result;
 }
 
@@ -971,28 +971,38 @@ gbfgetucs2str(gbfile *file)
 {
 	int len = 0;
 	char *result = file->buff;
-	
+
 	for (;;) {
 		char buff[8];
 		int clen;
-		int c = gbfgetc(file);
+		int c0, c1;
 		
-		if ((c == EOF) && (len == 0)) return NULL;
-		
-		c = c | (gbfgetc(file) << 8);
-		if (file->big_endian) c = be_read16(&c);
+		c0 = gbfgetc(file);
+		if ((c0 == EOF) && (len == 0)) return NULL;
+		c1 = gbfgetc(file);
+		if ((c1 == EOF) && (len == 0)) return NULL;
 
-		if (c == '\r') {
-			c = gbfgetc(file) | (gbfgetc(file) << 8);
-			if (file->big_endian) c = be_read16(&c);
-			if (c != '\n')
-				fatal("%s: Invalid unicode (UCS-2/%s endian) line break!\n", 
+		if (file->big_endian) c0 = c1 | (c0 << 8);
+		else c0 = c0 | (c1 << 8);
+
+		if (c0 == '\r') {
+
+			c0 = gbfgetc(file);
+			if ((c0 == EOF) && (len == 0)) return NULL;
+			c1 = gbfgetc(file);
+			if ((c1 == EOF) && (len == 0)) return NULL;
+
+			if (file->big_endian) c0 = c1 | (c0 << 8);
+			else c0 = c0 | (c1 << 8);
+
+			if (c0 != '\n')
+				fatal("%s: Invalid unicode (UCS-2/%s endian) line break!\n",
 					file->module,
 					file->big_endian ? "Big" : "Little");
 			break;
 		}
-		
-		clen = cet_ucs4_to_utf8(buff, sizeof(buff), c);
+
+		clen = cet_ucs4_to_utf8(buff, sizeof(buff), c0);
 
 		if (len+clen >= file->buffsz) {
 			file->buffsz += 64;
@@ -1002,7 +1012,7 @@ gbfgetucs2str(gbfile *file)
 		len += clen;
 	}
 	result[len] = '\0';	// terminate resulting string
-	
+
 	return result;
 }
 
@@ -1016,12 +1026,12 @@ gbfgetstr(gbfile *file)
 {
 	int len = 0;
 	char *result = file->buff;
-	
+
 	if (file->unicode) return gbfgetucs2str(file);
-	
+
 	for (;;) {
 		int c = gbfgetc(file);
-		
+
 		if ((c == EOF) || (c == 0x1A)) {
 			if (len == 0) {
 				return NULL;
@@ -1055,9 +1065,9 @@ gbfgetstr(gbfile *file)
 				else gbfungetc(c1, file);
 			}
 		}
-		
+
 		file->unicode_checked = 1;
-		
+
 		if (len == file->buffsz) {
 			file->buffsz += 64;
 			result = file->buff = xrealloc(file->buff, file->buffsz + 1);
@@ -1066,19 +1076,19 @@ gbfgetstr(gbfile *file)
 		len++;
 	}
 	result[len] = '\0';	// terminate resulting string
-	
+
 	return result;
 }
 
 /*
  * gbfputint16: write a signed 16-bit integer value into output stream
  */
- 
+
 int
 gbfputint16(const gbint16 i, gbfile *file)
 {
 	char buf[2];
-	
+
 	if (file->big_endian)
 		be_write16(buf, i);
 	else
@@ -1094,7 +1104,7 @@ int
 gbfputint32(const gbint32 i, gbfile *file)
 {
 	char buf[4];
-	
+
 	if (file->big_endian)
 		be_write32(buf, i);
 	else
@@ -1110,7 +1120,7 @@ int
 gbfputdbl(const double d, gbfile *file)
 {
 	char buf[8];
-	
+
 	endian_write_double(buf, d, ! file->big_endian);
 	return gbfwrite(buf, 1, sizeof(buf), file);
 }
@@ -1119,11 +1129,11 @@ gbfputdbl(const double d, gbfile *file)
  * gbfputflt: write a float value (4 byte, single precision) into output stream
  */
 
-int 
+int
 gbfputflt(const float f, gbfile *file)
 {
 	char buf[4];
-	
+
 	endian_write_float(buf, f, ! file->big_endian);
 	return gbfwrite(buf, 1, sizeof(buf), file);
 }
@@ -1133,11 +1143,11 @@ gbfputflt(const float f, gbfile *file)
  *             return the number of written characters
  */
 
-int 
+int
 gbfputcstr(const char *s, gbfile *file)
 {
 	int len;
-	
+
 	len = (s == NULL) ? 0 : strlen(s);
 	if (len > 0) {
 		return gbfwrite(s, 1, len + 1, file);
@@ -1156,7 +1166,7 @@ int
 gbfputpstr(const char *s, gbfile *file)
 {
 	int len;
-	
+
 	len = (s == NULL) ? 0 : strlen(s);
 	if (len > 255) len = 255;	/* the maximum size of a standard pascal string */
 	gbfputc(len, file);
