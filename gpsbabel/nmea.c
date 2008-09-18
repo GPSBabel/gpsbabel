@@ -1300,6 +1300,7 @@ nmea_trackpt_pr(const waypoint *wpt)
 		cksum = nmea_cksum(obuf);
 		gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
 	}
+        gbfflush(file_out);
 }
 
 static void
