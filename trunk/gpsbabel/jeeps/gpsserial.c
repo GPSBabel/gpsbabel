@@ -208,7 +208,7 @@ int32 GPS_Serial_Write(gpsdevh *dh, const void *obuf, int size)
 	}
 	WriteFile (wsd->comport, obuf, size, &len, NULL);
 	if (len != (DWORD) size) {
-		fatal ("Write error.   Wrote %d of %d bytes.\n", len, size);
+		fatal ("Write error.   Wrote %d of %d bytes.\n", (int)len, size);
 	}
 	return len;
 }
