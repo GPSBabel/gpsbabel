@@ -275,9 +275,6 @@ static arglist_t unicsv_args[] = {
 	ARG_TERMINATOR };
 
 
-extern geocache_type gs_mktype(const char *t);
-extern geocache_container gs_mkcont(const char *t);
-
 /* helpers */
 
 // #define UNICSV_IS(f) (0 == strcmp(s, f))

@@ -138,9 +138,6 @@ xcsv_file_t xcsv_file;
 extern char *xcsv_urlbase;
 extern char *prefer_shortnames;
 
-extern geocache_type gs_mktype(const char *t);
-extern geocache_container gs_mkcont(const char *t);
-
 static double pathdist = 0;
 static double oldlon = 999;
 static double oldlat = 999;
