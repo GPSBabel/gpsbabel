@@ -59,7 +59,8 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 	wbt-200.o stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
 	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o \
-	igo8.o gopal.o humminbird.o mapasia.o gnav_trl.o navitel.o ggv_ovl.o
+	igo8.o gopal.o humminbird.o mapasia.o gnav_trl.o navitel.o ggv_ovl.o \
+	geotagger.o
 
 FMTS=@FMTS@
 
@@ -503,6 +504,8 @@ geoniche.o: geoniche.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
   jeeps/gpsproj.h garmin_tables.h
+geotagger.o: geotagger.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h csv_util.h
 ggv_log.o: ggv_log.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h grtcirc.h \
   jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
