@@ -28,10 +28,10 @@
 #include "csv_util.h"
 #include "avltree.h"
 
-#define MYNAME "geotagger"
+#define MYNAME "jtr"
 
 static
-arglist_t geotagger_args[] = {
+arglist_t jtr_args[] = {
 	ARG_TERMINATOR
 };
 
@@ -39,7 +39,7 @@ static gbfile *fin, *fout;
 static avltree_t *trkpts;
 
 static time_t
-geotagger_parse_time(const char *str, struct tm *tm, int *micro)
+jtr_parse_time(const char *str, struct tm *tm, int *micro)
 {
 	long int hms;
 	char *dot;
@@ -60,7 +60,7 @@ geotagger_parse_time(const char *str, struct tm *tm, int *micro)
 }
 
 static time_t
-geotagger_parse_date(const char *str, struct tm *tm)
+jtr_parse_date(const char *str, struct tm *tm)
 {
 	int dmy = atoi(str);
 
@@ -80,21 +80,21 @@ geotagger_parse_date(const char *str, struct tm *tm)
 *******************************************************************************/
 
 static void
-geotagger_rd_init(const char *fname)
+jtr_rd_init(const char *fname)
 {
 	fin = gbfopen(fname, "r", MYNAME);
 	trkpts = avltree_init(0, MYNAME);
 }
 
 static void
-geotagger_rd_deinit(void)
+jtr_rd_deinit(void)
 {
 	avltree_done(trkpts);
 	gbfclose(fin);
 }
 
 static void
-geotagger_read(void)
+jtr_read(void)
 {
 	char *str;
 	int line = 0;
@@ -135,7 +135,7 @@ geotagger_read(void)
 
 			switch(column) {
 				case 0: break;		/* GEOTAG2 */
-				case 1: geotagger_parse_time(str, &tm, &micros); break;
+				case 1: jtr_parse_time(str, &tm, &micros); break;
 				case 2: valid = *str; break;
 				case 3: lat = ddmm2degrees(atof(str)); break;
 				case 4: if (*str == 'S') lat *= -1; break;
@@ -143,7 +143,7 @@ geotagger_read(void)
 				case 6: if (*str == 'W') lon *= -1; break;
 				case 7: speed = KNOTS_TO_MPS(atof(str)); break;
 				case 8: course = atof(str); break;
-				case 9: geotagger_parse_date(str, &tm); break;
+				case 9: jtr_parse_date(str, &tm); break;
 				case 13: mcourse = atof(str); break;
 				case 14: mdev = atof(str); break;
 				case 15: mdevdir = *str; break;
@@ -196,19 +196,19 @@ geotagger_read(void)
 }
 
 static void
-geotagger_wr_init(const char *fname)
+jtr_wr_init(const char *fname)
 {
 	fout = gbfopen(fname, "wb", MYNAME);
 }
 
 static void
-geotagger_wr_deinit(void)
+jtr_wr_deinit(void)
 {
 	gbfclose(fout);
 }
 
 static void
-geotagger_trkpt_disp_cb(const waypoint *wpt)
+jtr_trkpt_disp_cb(const waypoint *wpt)
 {
 	char *str, *tmp;
 	char stime[10], sdate[7], scourse[6], sspeed[8];
@@ -257,28 +257,28 @@ geotagger_trkpt_disp_cb(const waypoint *wpt)
 }
 
 static void
-geotagger_write(void)
+jtr_write(void)
 {
-	track_disp_all(NULL, NULL, geotagger_trkpt_disp_cb);
+	track_disp_all(NULL, NULL, jtr_trkpt_disp_cb);
 }
 
 /**************************************************************************/
 
-ff_vecs_t geotagger_vecs = {
+ff_vecs_t jtr_vecs = {
 	ff_type_file,
 	{
 	  	ff_cap_none, 			/* waypoints */
 		ff_cap_read | ff_cap_write, 	/* tracks */
 	  	ff_cap_none 			/* routes */
 	},
-	geotagger_rd_init,
-	geotagger_wr_init,
-	geotagger_rd_deinit,
-	geotagger_wr_deinit,
-	geotagger_read,
-	geotagger_write,
+	jtr_rd_init,
+	jtr_wr_init,
+	jtr_rd_deinit,
+	jtr_wr_deinit,
+	jtr_read,
+	jtr_write,
 	NULL,
-	geotagger_args,
+	jtr_args,
 	CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
 						/* not fixed, can be changed through command line parameter */
 };
