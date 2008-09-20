@@ -850,7 +850,7 @@ vecs_t vec_list[] = {
 #if CSVFMTS_ENABLED
         {
                 &geotagger_vecs,
-                "geotagger",
+                "jtr",
                 "Jelbert GeoTagger data file",
                 "jtr"
         },
