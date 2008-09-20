@@ -1,7 +1,7 @@
 /*
     Magellan ".gs" files as they appear on USB of Explorist 400,500,600.
 
-    Copyright (C) 2005, 2006 robertlipe@usa.net
+    Copyright (C) 2005, 2006, 2008 robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,17 +21,20 @@
 
 #include <ctype.h>
 #include "defs.h"
+#include "csv_util.h"
 #include "xmlgeneric.h"
 #include "magellan.h"
 
 #define MYNAME "maggeo"
 
 /* Turn this on (remove) after 5.2 becomes widespread. */
-#define FIRMWARE_DOES_88591 0		
+#define FIRMWARE_DOES_88591 0
 
 static gbfile *maggeofile_in;
 static gbfile *maggeofile_out;
 static short_handle desc_handle = NULL;
+
+static time_t maggeo_parsedate(char *dmy);
 
 static void
 maggeo_writemsg(const char * const buf)
@@ -75,7 +78,75 @@ maggeo_wr_deinit(void)
 static void
 maggeo_read(void)
 {
-	fatal(MYNAME ": Reading maggeo is not implemented yet.\n");
+	char *buff;
+	char *s;
+	waypoint *wpt_tmp = NULL;
+        geocache_data *gcdata = NULL;
+	int fld = 0;
+
+	while ((buff = gbfgetstr(maggeofile_in))) {
+		while ((s = csv_lineparse(buff, ",", "", fld++))) {
+                  switch(fld) {
+                    case 1: if (strcmp(s, "$PMGNGEO")) goto next_line;
+                              break;;
+                    case 2:
+                              buff = NULL;
+                              if (!wpt_tmp) {
+                                wpt_tmp = waypt_new();
+                                gcdata = waypt_alloc_gc_data(wpt_tmp);
+                              }
+                                wpt_tmp->latitude = ddmm2degrees(atof(s));
+                                break;
+                    case 3:
+                                if (s[0] == 'S')
+                                  wpt_tmp->latitude = -wpt_tmp->latitude;
+                                break;
+                    case 4:
+                                wpt_tmp->longitude = ddmm2degrees(atof(s));
+                                break;
+                    case 5:
+                                if (s[0] == 'W')
+                                  wpt_tmp->longitude = -wpt_tmp->longitude;
+                                break;
+                    case 6:
+                                wpt_tmp->altitude = atof(s);
+                                break;
+                    case 7:
+                                if (s[0] == 'F') wpt_tmp->altitude = METERS_TO_FEET(wpt_tmp->altitude);
+                                break;
+                    case 8:
+                                wpt_tmp->shortname = xstrdup(s);
+                                break;
+                    case 9:
+                                wpt_tmp->description = xstrdup(s);
+                                break;
+                    case 10:
+                                gcdata->placer = xstrdup(s);
+                                break;
+                    case 11:
+                                gcdata->hint = xstrdup(s);
+                                break;
+                    case 12: // cache type
+                                break;
+                    case 13:    wpt_tmp->creation_time = maggeo_parsedate(s);
+                                break;
+                    case 14: // last found date is ignored.
+                                break;
+                    case 15:
+                                gcdata->diff = 10 * atof(s);
+                                break;
+                    case 16:
+                                gcdata->terr = 10 * atof(s);
+                                break;
+                  }
+                }
+next_line: fld = 0;
+                if (wpt_tmp) {
+                  waypt_add(wpt_tmp);
+                  wpt_tmp = NULL;
+                }
+	}
+
 }
 
 /*
@@ -100,6 +171,34 @@ maggeo_fmtdate(time_t t)
 		cbuf[0] = '\0';
 	}
 	return cbuf;
+}
+
+/*
+ * The maggeo date format s DDMMYYY where "YYY" is the number
+ * of years since 1900.  This, of course, means anything in this
+ * century is three digits but anything from before 2000, we'd have
+ * two digit years.  This makes this easier to parse as strings.
+ */
+static time_t maggeo_parsedate(char *dmy)
+{
+        struct tm tm;
+        char dd[3];
+        char mm[3];
+        memset(&tm, 0, sizeof(tm));
+
+        dd[0] = dmy[0];
+        dd[1] = dmy[1];
+        dd[2] = 0;
+
+        mm[0] = dmy[2];
+        mm[1] = dmy[3];
+        mm[2] = 0;
+
+        tm.tm_mday = atoi(dd);
+        tm.tm_mon = atoi(mm) - 1;
+        tm.tm_year = atoi(dmy + 4);
+
+        return mktime(&tm);
 }
 
 /*
@@ -230,7 +329,7 @@ maggeo_write(void)
 
 ff_vecs_t maggeo_vecs = {
 	ff_type_file,
-	{ ff_cap_write, ff_cap_none, ff_cap_none },
+	{ ff_cap_read | ff_cap_write, ff_cap_none, ff_cap_none },
 	maggeo_rd_init,
 	maggeo_wr_init,
 	maggeo_rd_deinit,
