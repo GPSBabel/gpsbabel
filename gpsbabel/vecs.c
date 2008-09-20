@@ -147,6 +147,9 @@ extern ff_vecs_t mapasia_tr7_vecs;
 extern ff_vecs_t gnav_trl_vecs;
 extern ff_vecs_t navitel_trk_vecs;
 extern ff_vecs_t ggv_ovl_vecs;
+#if CSVFMTS_ENABLED
+extern ff_vecs_t geotagger_vecs;
+#endif
 
 static
 vecs_t vec_list[] = {
@@ -844,6 +847,14 @@ vecs_t vec_list[] = {
                 "Geogrid-Viewer ascii overlay file (.ovl)",
                 "ovl"
         },
+#if CSVFMTS_ENABLED
+        {
+                &geotagger_vecs,
+                "geotagger",
+                "Jelbert GeoTagger data file",
+                "jtr"
+        },
+#endif
 
 #endif // MAXIMAL_ENABLED
 	{
