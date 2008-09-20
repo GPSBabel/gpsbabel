@@ -1479,5 +1479,12 @@ compare ${REFERENCE}/track/mapasia~tr7.csv ${TMPDIR}/mapasia~tr7.csv
 gpsbabel -i mapasia_tr7 -f ${REFERENCE}/track/mapasia-tr7.tr7 -o gpx -F ${TMPDIR}/mapasia~tr7.gpx
 compare ${REFERENCE}/track/mapasia~tr7.gpx ${TMPDIR}/mapasia~tr7.gpx
 
+#
+# Jelbert GeoTagger JTR data files
+#
+gpsbabel -i jtr -f ${REFERENCE}/track/expertgps.jtr -o gpx -F ${TMPDIR}/expertgps~jtr.gpx -o jtr -F ${TMPDIR}/expertgps~jtr.jtr
+compare ${REFERENCE}/track/expertgps~jtr.gpx ${TMPDIR}/expertgps~jtr.gpx
+compare ${REFERENCE}/track/expertgps.jtr ${TMPDIR}/expertgps~jtr.jtr
+
 
 exit 0
