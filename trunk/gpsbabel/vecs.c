@@ -148,7 +148,7 @@ extern ff_vecs_t gnav_trl_vecs;
 extern ff_vecs_t navitel_trk_vecs;
 extern ff_vecs_t ggv_ovl_vecs;
 #if CSVFMTS_ENABLED
-extern ff_vecs_t geotagger_vecs;
+extern ff_vecs_t jtr_vecs;
 #endif
 
 static
@@ -849,7 +849,7 @@ vecs_t vec_list[] = {
         },
 #if CSVFMTS_ENABLED
         {
-                &geotagger_vecs,
+                &jtr_vecs,
                 "jtr",
                 "Jelbert GeoTagger data file",
                 "jtr"
