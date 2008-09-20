@@ -191,7 +191,6 @@ jtr_read(void)
 
 		avltree_insert(trkpts, buf, wpt);
 		track_add_wpt(trk, wpt);
-		xfree(str);
 	}
 }
 
