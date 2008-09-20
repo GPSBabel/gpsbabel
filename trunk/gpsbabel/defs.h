@@ -545,8 +545,11 @@ void xcsv_read_internal_style(const char *style_buf);
 waypoint * find_waypt_by_name(const char *name);
 void waypt_backup(signed int *count, queue **head_bak);
 void waypt_restore(signed int count, queue *head_bak);
+
 geocache_data *waypt_alloc_gc_data(waypoint *wpt);
 int waypt_empty_gc_data(const waypoint *wpt);
+geocache_type gs_mktype(const char *t);
+geocache_container gs_mkcont(const char *t);
 
 route_head *route_head_alloc(void);
 void route_add (waypoint *);

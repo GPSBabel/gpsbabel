@@ -127,6 +127,7 @@ maggeo_read(void)
                                 gcdata->hint = xstrdup(s);
                                 break;
                     case 12: // cache type
+                                gcdata->type = gs_mktype(s);
                                 break;
                     case 13:    wpt_tmp->creation_time = maggeo_parsedate(s);
                                 break;
