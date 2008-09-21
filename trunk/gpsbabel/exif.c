@@ -133,13 +133,13 @@ time_t exif_time_ref;
 static char exif_success;
 static char *exif_fout_name;
 
-static char *opt_filename, *opt_nobackup, *opt_frame, *opt_name;
+static char *opt_filename, *opt_overwrite, *opt_frame, *opt_name;
 
 arglist_t exif_args[] = {
-	{ "filename", &opt_filename, "Set waypoint name to source filename.", "Y", ARGTYPE_BOOL, ARG_NOMINMAX },
-	{ "frame", &opt_frame, "Time-frame (in seconds).", "10", ARGTYPE_INT, "0", NULL },
-	{ "name", &opt_name, "Locate waypoint by this name.", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-	{ "nobackup", &opt_nobackup, "!OVERWRITE! the original file. Default 0=no.", "N", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{ "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{ "frame", &opt_frame, "Time-frame (in seconds)", "10", ARGTYPE_INT, "0", NULL },
+	{ "name", &opt_name, "Locate waypoint for tagging by this name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+	{ "overwrite", &opt_overwrite, "!OVERWRITE! the original file. Default=N", "N", ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -1230,7 +1230,7 @@ exif_wr_deinit(void)
 	gbfclose(fout);
 
 	if (exif_success) {
-		if (*opt_nobackup == '1') {
+		if (*opt_overwrite == '1') {
 			remove(exif_fout_name);
 			rename(tmpname, exif_fout_name);
 		}
