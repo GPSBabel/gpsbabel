@@ -861,6 +861,9 @@
 				RelativePath="..\interpolate.c">
 			</File>
 			<File
+				RelativePath="..\jtr.c">
+			</File>
+			<File
 				RelativePath="..\kml.c">
 				<FileConfiguration
 					Name="Release|Win32">
