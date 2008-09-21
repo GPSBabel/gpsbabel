@@ -21,7 +21,7 @@
 </para>
 <para>
   <table id="distance_units">
-  <title>Supported distance units</title>
+  <title>Supported distance units (garmin_gpi)</title>
   <tgroup cols="2">
   <thead>
   <row>
