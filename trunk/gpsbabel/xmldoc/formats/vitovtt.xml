@@ -20,7 +20,7 @@
 </para>
 
 <table>
-  <title>track file header (8 bytes)</title>
+  <title>Vito SmartMap track file header (8 bytes)</title>
   <tgroup cols="2">
   <thead>
     <row>
@@ -42,7 +42,7 @@
 </table>
 
 <table>
-  <title>track point (32 bytes)</title>
+  <title>Vito SmartMap track point (32 bytes)</title>
   <tgroup cols="2">
   <thead>
     <row>
