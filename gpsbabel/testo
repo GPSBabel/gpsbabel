@@ -1486,5 +1486,13 @@ gpsbabel -i jtr -f ${REFERENCE}/track/expertgps.jtr -o gpx -F ${TMPDIR}/expertgp
 compare ${REFERENCE}/track/expertgps~jtr.gpx ${TMPDIR}/expertgps~jtr.gpx
 compare ${REFERENCE}/track/expertgps.jtr ${TMPDIR}/expertgps~jtr.jtr
 
+#
+# Navitel Navigator binary tracks
+#
+gpsbabel -i gdb -f ${REFERENCE}/gdb-sample.gdb -o navitel_trk -F ${TMPDIR}/navitel_trk.bin
+bincompare ${REFERENCE}/track/navitel_trk.bin ${TMPDIR}/navitel_trk.bin
+gpsbabel -i navitel_trk -f ${REFERENCE}/track/navitel_trk.bin -o navitel_trk -F ${TMPDIR}/navitel_trk2.bin
+bincompare ${TMPDIR}/navitel_trk.bin ${TMPDIR}/navitel_trk2.bin
+
 
 exit 0
