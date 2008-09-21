@@ -335,6 +335,8 @@ xml_init0(const char *fname, xg_tag_mapping *tbl, const char *encoding,
 
 	xg_tag_tbl = tbl;
 
+	cet_convert_init(CET_CHARSET_UTF8, 1);
+
 	XML_SetUnknownEncodingHandler(psr, cet_lib_expat_UnknownEncodingHandler, NULL);
 	XML_SetElementHandler(psr, xml_start, xml_end);
 	XML_SetCharacterDataHandler(psr, xml_cdata);
