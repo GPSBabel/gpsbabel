@@ -190,12 +190,14 @@ static char ** get_garmin_mountpoints(void)
 #define BUFSIZE 512
   TCHAR szTemp[MAX_PATH];
   char *p = szTemp;
-  char **dlist = xmalloc(0);
+  char **dlist = xmalloc(sizeof(*dlist));
+
   int i = 0;
+  dlist[0] = NULL;
 
   if (GetLogicalDriveStrings(BUFSIZE-1, szTemp)) {
     while(*p) {
-      dlist = xrealloc(dlist, sizeof (*dlist ) * ++i);
+      dlist = xrealloc(dlist, sizeof (*dlist ) * (++i + 1));
       //            fprintf(stderr, "Found: %d, %s\n", i, p);
       dlist[i-1] = xstrdup(p);
       dlist[i] = NULL;
