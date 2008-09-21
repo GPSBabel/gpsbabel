@@ -1,0 +1,8 @@
+<para>
+   <ulink url="http://www.navitel.su">Navitel</ulink>Navigator is very popular navigation
+   software in Russia and it's neighbors.
+</para>
+<para>
+   This binary format only stores the latitude and the longitude of a trackpoint and is
+   limited to 10000 points per file.
+</para>
