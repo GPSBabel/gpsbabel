@@ -1,5 +1,7 @@
 <chapter id="Getting_and_Building">
-  <title>Getting it and Building it</title>
+  <title>Getting it or Building it</title>
+<sect1 id="Download">
+<title>Downloading - the easy way.</title>
   <para> 
 GPSBabel is distributed "ready to run" on most common 
 operating systems via the 
@@ -10,12 +12,18 @@ be sure to visit the
 <ulink url="http://www.gpsbabel.org/osnotes.html">OS-Specific notes</ulink> for
 additional information.
 </para>
+</sect1>
+<sect1 id="Source">
+<title>Building from source.</title>
   <para> 
  For operating systems where no binary is provided or if 
 you want the latest development version, you will have to build it from
 source.  The code should be compilable on any system with
 ISO C89 compilers.  It's been tested on UnixWare, OpenServer, OS/X,
 Linux, Solaris, and a variety of processors and compilers.
+</para>
+<para>
+You can grab a release from the <ulink url="http://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="http://sourceforge.net/cvs/?group_id=58972">GPSBabel CVS tree</ulink> is easier.
 </para>
   <para>
   In most cases, the code is as simple to build as running:
@@ -61,4 +69,5 @@ lists all the supported options, but of interest we have:</para><para>
 <para>
  <option>--with-zlib=(included)|system|no</option> By default, we use our own version of zlib. If you specify <option>system</option> the system zlib is used.  A value of <option>no</option> (or --without-zlib) disables zlib.
 </para>
+</sect1>
 </chapter>
