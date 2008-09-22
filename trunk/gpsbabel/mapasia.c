@@ -50,6 +50,7 @@ static gbfile *fin, *fout;
 static const waypoint *wpt_tmp;
 static const route_head *trk_tmp;
 static int course_tmp, speed_tmp;
+struct tm tmref;
 
 static
 arglist_t tr7_args[] = {
@@ -64,6 +65,9 @@ static void
 tr7_rd_init(const char *fname)
 {
 	fin = gbfopen_le(fname, "rb", MYNAME);
+	tmref = *gmtime(&gpsbabel_now);
+	tmref.tm_year += 1900;
+	tmref.tm_mon += 1;
 }
 
 static void
@@ -103,9 +107,11 @@ tr7_read(void)
 		tm.tm_hour = buff[TR7_S_HOUR];
 		tm.tm_min = buff[TR7_S_MIN];
 		tm.tm_sec = buff[TR7_S_SEC];
+
 		if ((tm.tm_mday < 1) || (tm.tm_mday > 31) || 
 		    (tm.tm_mon < 1) || (tm.tm_mon > 12) ||
-		    (tm.tm_year <= 1970)) continue;
+		    (tm.tm_year <= 1970) ||
+		    (tm.tm_year > tmref.tm_year+1)) continue;
 		
 		speed = KPH_TO_MPS(le_read16(&buff[TR7_S_SPEED]));
 		course = 360 - le_read16(&buff[TR7_S_COURSE]);
