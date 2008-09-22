@@ -186,6 +186,10 @@ waypt_new(void)
 	waypoint *wpt;
 
 	wpt = (waypoint *) xcalloc(sizeof (*wpt), 1);
+#ifdef DEBUG_MEM
+	wpt->altitude = unknown_alt;
+	wpt->longitude = unknown_alt;
+#endif
 	wpt->altitude = unknown_alt;
 	wpt->fix = fix_unknown;
 	wpt->sat = -1;
