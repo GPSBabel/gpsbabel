@@ -184,7 +184,7 @@ rw_init(const char *fname)
 				case 292: /* (60|76)C[S]x series */
 				case 421: /* Vista|Legend Cx */
 				case 694: /* Legend HCx */
-				case 695: /* Vista HCx */
+				case 695: /* Vista HC */
 				case 786: /* HC model */
 					receiver_short_length = 14;
 					snwhiteopt = xstrdup("1");
