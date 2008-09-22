@@ -165,6 +165,7 @@ jtr_read(void)
 		if (avltree_find(trkpts, buf, NULL)) continue;
 
 		wpt = waypt_new();
+		avltree_insert(trkpts, buf, wpt);
 
 		wpt->latitude = lat;
 		wpt->longitude = lon;
@@ -189,7 +190,6 @@ jtr_read(void)
 			track_add_head(trk);
 		}
 
-		avltree_insert(trkpts, buf, wpt);
 		track_add_wpt(trk, wpt);
 	}
 }
@@ -209,7 +209,7 @@ jtr_wr_deinit(void)
 static void
 jtr_trkpt_disp_cb(const waypoint *wpt)
 {
-	char *str, *tmp;
+	char *str;
 	char stime[10], sdate[7], scourse[6], sspeed[8];
 	struct tm tm;
 
@@ -243,13 +243,8 @@ jtr_trkpt_disp_cb(const waypoint *wpt)
 		scourse,
 		sdate);
 
-	xasprintf(&tmp, "%s*%02X", str, nmea_cksum(str));
-	xfree(str);
-	str = tmp;
-
-	xasprintf(&tmp, "%s,,,E,,E*%02X\n", str, nmea_cksum(str));
-	xfree(str);
-	str = tmp;
+	xasprintf2(&str, "%s*%02X", str, nmea_cksum(str));
+	xasprintf2(&str, "%s,,,E,,E*%02X\r", str, nmea_cksum(str));
 
 	gbfputs(str, fout);
 	xfree(str);
