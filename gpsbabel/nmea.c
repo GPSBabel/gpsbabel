@@ -183,6 +183,7 @@ static int amod_waypoint;
 static time_t last_time;
 static double last_read_time;   /* Last timestamp of GGA or PRMC */
 static int datum;
+static int had_checksum;
 
 static waypoint * nmea_rd_posn(posn_status *);
 static void nmea_rd_posn_init(const char *fname);
@@ -253,6 +254,7 @@ nmea_rd_init(const char *fname)
 	last_waypt = NULL;
 	last_time = -1;
 	datum = DATUM_WGS84;
+	had_checksum = 0;
 
 	CHECK_BOOL(opt_gprmc);
 	CHECK_BOOL(opt_gpgga);
@@ -858,7 +860,6 @@ nmea_fix_timestamps(route_head *track)
 void
 nmea_parse_one_line(char *ibuf)
 {
-	int had_checksum = 0;
 	char *ck;
 	int ckval, ckcmp;
 	char *tbuf = lrtrim(ibuf);
