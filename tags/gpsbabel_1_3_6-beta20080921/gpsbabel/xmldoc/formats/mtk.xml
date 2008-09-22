@@ -1,0 +1,21 @@
+<para>Serial download protocol for the <productname>i-Blue 747</productname> and other MTK based GPS data loggers. Observe that it is only possible to download data using USB cable, Bluetooth requires a hardware modification.</para>
+<para>
+<ulink url="http://www.transystem.com.tw/p-gps-iblue747.htm">Transystem i-Blue 747</ulink>
+Downloaded data will be stored in data.bin file in the current directory together with
+the choosen output format.
+</para>
+<para>It has been tested with Transystem i-Blue 747 but other devices should work as well (Qstarz BT-Q1000, iTrek Z1, ...)</para>
+
+<para>See <link linkend="fmt_mtk-bin">mtk-bin</link> on how trackpoints/waypoints are handled</para>
+<example id="mtk-on-linux">
+  <title>Command showing MTK download track and waypoints and erase on Linux</title>
+  <para><userinput>gpsbabel -t -w -i mtk,erase -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput></para>
+</example>
+    
+<para>
+  For more info and tweaks on MTK based loggers: 
+   <ulink url="http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=81990">MTK Tips ans Tweaks</ulink>
+   <ulink url="http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=81315">iBlue 747 Logger</ulink>
+ For info about the used log format:
+  <ulink url="http://spreadsheets.google.com/pub?key=pyCLH-0TdNe-5N-5tBokuOA&amp;gid=5">MTK binary format</ulink>
+</para>

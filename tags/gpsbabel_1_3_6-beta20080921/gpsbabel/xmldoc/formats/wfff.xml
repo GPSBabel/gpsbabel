@@ -1,0 +1,7 @@
+
+	
+        
+	<para> WFFF is the export format for <ulink url="http://www.aspecto-software.com/rw/applications/wififofum/index.html">Aspecto Software's WiFiFoFum</ulink> 2.0 for Windows Mobile PCs.</para>
+	<para>It is a simple XML format that is read-only to GPSBabel and stores information about a WiFi stumbling session.</para>
+	<para>All WiFi-specific elements are written in the description  field, similar to the netstumbler format.</para>
+	

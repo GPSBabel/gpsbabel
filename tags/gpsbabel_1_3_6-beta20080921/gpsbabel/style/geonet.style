@@ -1,0 +1,49 @@
+# gpsbabel XCSV style file
+#
+# Format: GEOnet Names Server (GNS) (http://earth-info.nga.mil/gns/html/cntry_files.html)
+# Author: Olaf Klein
+#   Date: 08/20/2002
+#
+
+DESCRIPTION		GEOnet Names Server (GNS)
+EXTENSION		txt
+
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+
+FIELD_DELIMITER		TAB
+RECORD_DELIMITER	CRNEWLINE
+BADCHARS		TAB
+ENCODING		UTF-8
+
+PROLOGUE		RC	UFI	UNI	LAT	LONG	DMS_LAT	DMS_LONG	UTM	JOG	FC	DSG	PC	CC1	ADM1	ADM2	DIM	CC2	NT	LC	SHORT_FORM	GENERIC	SORT_NAME	FULL_NAME	FULL_NAME_ND	MODIFY_DATE
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	IGNORE, "", "%s"		# RC		( http://earth-info.nga.mil/gns/html/gis_contryfiles.html )
+IFIELD	IGNORE, "", "%s"		# UFI
+IFIELD	IGNORE, "", "%s"		# UNI
+IFIELD	LAT_DECIMAL, "", "%03.7f"	# LAT
+IFIELD	LON_DECIMAL, "", "%03.7f"	# LONG
+IFIELD	IGNORE, "", "%s"		# DMS_LAT
+IFIELD	IGNORE, "", "%s"		# DMS_LONG
+IFIELD	IGNORE, "", "%s"		# UTM
+IFIELD	IGNORE, "", "%s"		# JOG
+IFIELD	IGNORE, "", "%s"		# FC
+IFIELD	IGNORE, "", "%s"		# DSG
+IFIELD	IGNORE, "", "%s"		# PC
+IFIELD	IGNORE, "", "%s"		# CC1
+IFIELD	IGNORE, "", "%s"		# ADM1
+IFIELD	IGNORE, "", "%s"		# ADM2
+IFIELD	IGNORE, "", "%s"		# DIM
+IFIELD	IGNORE, "", "%s"		# CC2
+IFIELD	IGNORE, "", "%s"		# NT
+IFIELD	IGNORE, "", "%s"		# LC
+IFIELD	IGNORE, "", "%s"		# SHORT_FORM
+IFIELD	IGNORE, "", "%s"		# GENERIC
+IFIELD	SHORTNAME, "", "%s"		# SHORT_NAME
+IFIELD	DESCRIPTION, "", "%s"		# FULL_NAME
+IFIELD	IGNORE, "", "%s"		# FULL_NAME_ND
+IFIELD	IGNORE, "", "%s"		# MOD_DATE

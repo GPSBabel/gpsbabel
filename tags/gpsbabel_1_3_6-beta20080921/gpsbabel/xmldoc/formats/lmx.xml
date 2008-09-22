@@ -1,0 +1,6 @@
+<para> 
+This format supports Nokia Landmark Exchange (LMX) files used by several
+Nokia phones.   GPSBabel supports only the traditional XML format and 
+not the compressed binary format.   
+</para>
+
