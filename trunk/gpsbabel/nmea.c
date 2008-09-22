@@ -1249,7 +1249,10 @@ nmea_trackpt_pr(const waypoint *wpt)
 				WAYPT_HAS(wpt, course) ? (wpt->course):(0),
 				(int) ymd);
 		cksum = nmea_cksum(obuf);
-		/* GISTeq doesn't care about the checksum */
+
+		/* GISTeq doesn't care about the checksum, but wants this prefixed, so
+		 * we can write it with abandon.
+  		 */
 		if (opt_gisteq) {
 			gbfprintf(file_out, "---,");
 		}
