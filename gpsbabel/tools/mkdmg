@@ -29,6 +29,17 @@ makedmg() {
   hdiutil create ${QUIET} -srcfolder mac/dmg-contents -scrub -size 15m ${UDMG} -format UDRW -volname ${NAME}
   hdiutil  attach ${QUIET} ${UDMG} -noautoopen -mountpoint ${WORKDIR}
 
+  # Since CVS loses the resource forkes, we've stored a ditto image in the 
+  # repository.  Unwind that now and turn the *.app back into a "real" 
+  # executable.
+  (
+    cd ${WORKDIR}
+    bzcat GPSBabel+.app.dittoed | cpio -ivd
+    rm GPSBabel+.app.dittoed
+    # Clean this out of taste.
+    rm -fr CVS
+  )
+
   # Copy in the new executable.
   cp -p ./gpsbabel ${WORKDIR}
   hdiutil detach ${QUIET} ${WORKDIR}
