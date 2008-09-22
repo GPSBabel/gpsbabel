@@ -79,73 +79,79 @@ static void
 maggeo_read(void)
 {
 	char *buff;
-	char *s;
-	waypoint *wpt_tmp = NULL;
-        geocache_data *gcdata = NULL;
-	int fld = 0;
 
 	while ((buff = gbfgetstr(maggeofile_in))) {
+		waypoint *wpt_tmp;
+        	geocache_data *gcdata;
+		char *s = NULL;
+		int fld;
+
+		buff = lrtrim(buff);
+		if (*buff == '\0') continue;
+		if (strncmp(buff, "$PMGNGEO,", 9)) continue;
+
+		buff += 9; /* skip field no. 1 */
+		fld = 1;
+
+		wpt_tmp = waypt_new();
+		gcdata = waypt_alloc_gc_data(wpt_tmp);
+
 		while ((s = csv_lineparse(buff, ",", "", fld++))) {
+		  buff = NULL;
+
+		  s = lrtrim(s);
+		  if (*s == '\0') continue;
+
                   switch(fld) {
-                    case 1: if (strcmp(s, "$PMGNGEO")) goto next_line;
-                              break;;
                     case 2:
-                              buff = NULL;
-                              if (!wpt_tmp) {
-                                wpt_tmp = waypt_new();
-                                gcdata = waypt_alloc_gc_data(wpt_tmp);
-                              }
-                                wpt_tmp->latitude = ddmm2degrees(atof(s));
-                                break;
+                              wpt_tmp->latitude = ddmm2degrees(atof(s));
+                              break;
                     case 3:
-                                if (s[0] == 'S')
-                                  wpt_tmp->latitude = -wpt_tmp->latitude;
-                                break;
+                              if (s[0] == 'S')
+                                wpt_tmp->latitude = -wpt_tmp->latitude;
+                              break;
                     case 4:
-                                wpt_tmp->longitude = ddmm2degrees(atof(s));
-                                break;
+                              wpt_tmp->longitude = ddmm2degrees(atof(s));
+                              break;
                     case 5:
-                                if (s[0] == 'W')
-                                  wpt_tmp->longitude = -wpt_tmp->longitude;
-                                break;
+                              if (s[0] == 'W')
+                                wpt_tmp->longitude = -wpt_tmp->longitude;
+                              break;
                     case 6:
-                                wpt_tmp->altitude = atof(s);
-                                break;
+                              wpt_tmp->altitude = atof(s);
+                              break;
                     case 7:
-                                if (s[0] == 'F') wpt_tmp->altitude = METERS_TO_FEET(wpt_tmp->altitude);
-                                break;
+                              if (s[0] == 'F') wpt_tmp->altitude = METERS_TO_FEET(wpt_tmp->altitude);
+                              break;
                     case 8:
-                                wpt_tmp->shortname = xstrdup(s);
-                                break;
+                              wpt_tmp->shortname = xstrdup(s);
+                              break;
                     case 9:
-                                wpt_tmp->description = xstrdup(s);
-                                break;
+                              wpt_tmp->description = xstrdup(s);
+                              break;
                     case 10:
-                                gcdata->placer = xstrdup(s);
-                                break;
+                              gcdata->placer = xstrdup(s);
+                              break;
                     case 11:
-                                gcdata->hint = xstrdup(s);
-                                break;
+                              gcdata->hint = xstrdup(s);
+                              break;
                     case 12: // cache type
-                                gcdata->type = gs_mktype(s);
-                                break;
-                    case 13:    wpt_tmp->creation_time = maggeo_parsedate(s);
-                                break;
+                              gcdata->type = gs_mktype(s);
+                              break;
+                    case 13:  
+		    	      wpt_tmp->creation_time = maggeo_parsedate(s);
+                              break;
                     case 14: // last found date is ignored.
-                                break;
+                              break;
                     case 15:
-                                gcdata->diff = 10 * atof(s);
-                                break;
+                              gcdata->diff = 10 * atof(s);
+                              break;
                     case 16:
-                                gcdata->terr = 10 * atof(s);
-                                break;
+                              gcdata->terr = 10 * atof(s);
+                              break;
                   }
                 }
-next_line: fld = 0;
-                if (wpt_tmp) {
-                  waypt_add(wpt_tmp);
-                  wpt_tmp = NULL;
-                }
+                waypt_add(wpt_tmp);
 	}
 
 }
@@ -159,17 +165,18 @@ maggeo_fmtdate(time_t t)
 {
 	#define SZ 16
 
-	char *cbuf = xmalloc(SZ);
 	struct tm *tm = NULL;
 	int date;
-	tm = gmtime(&t);
+	char *cbuf = xmalloc(SZ);
 
-	if ( t && tm ) {
-		date = tm->tm_mday * 100000 + (1+tm->tm_mon) * 1000 + 
-			   tm->tm_year;
-		snprintf(cbuf, SZ, "%07d", date);
-	} else {
-		cbuf[0] = '\0';
+	cbuf[0] = '\0';
+	if (t > 0) {
+		tm = gmtime(&t);
+		if ( tm ) {
+			date = tm->tm_mday * 100000 + (1+tm->tm_mon) * 1000 + 
+				   tm->tm_year;
+			snprintf(cbuf, SZ, "%07d", date);
+		}
 	}
 	return cbuf;
 }
@@ -185,6 +192,9 @@ static time_t maggeo_parsedate(char *dmy)
         struct tm tm;
         char dd[3];
         char mm[3];
+
+	if (strlen(dmy) < 5) return 0;
+
         memset(&tm, 0, sizeof(tm));
 
         dd[0] = dmy[0];
