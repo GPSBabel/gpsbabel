@@ -28,6 +28,7 @@
 #include "gps.h"
 #include "garminusb.h"
 #include "gpsusbcommon.h"
+#include "garmin_device_xml.h"
 
 #define GARMIN_VID 0x91e
 
@@ -57,7 +58,36 @@ static int gusb_bulk_in_ep;
 static gusb_llops_t libusb_llops;
 
 static usb_dev_handle *udev;
-static void garmin_usb_scan(libusb_unit_data *, int);
+static int garmin_usb_scan(libusb_unit_data *, int);
+static const gdx_info *gdx;
+
+
+#if __linux__
+static
+char ** os_get_garmin_mountpoints() 
+{
+	// Hacked for testing.
+	return NULL;
+}
+#elif __APPLE__
+// In fantasy land, we'd query iokit for enumerated devices of the Garmin
+// vendor ID and match that against the mounted device table.  In practical
+// matters, that's crazy complex and this is where the devices seems to always
+// get mounted...
+char ** os_get_garmin_mountpoints() 
+{
+	char **dlist = xcalloc(2, sizeof *dlist);
+	dlist[0] = xstrdup("/Volumes/GARMIN");
+	dlist[1] = NULL;
+	return dlist;
+}
+#elif
+char ** os_get_garmin_mountpoints() 
+{
+	return NULL;
+}
+#endif
+
 
 static int
 gusb_libusb_send(const garmin_usb_packet *opkt, size_t sz)
@@ -277,7 +307,7 @@ garmin_usb_start(struct usb_device *dev)
 }
 
 static
-void garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
+int garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
 {
 	int found_devices = 0;
 	struct usb_bus *bus;
@@ -289,11 +319,16 @@ void garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
 			/* Probably too promiscious of a match, but since
 			 * Garmin doesn't document the _proper_ matching,
 			 * we just take the easy way out for now.
+			 * Unfortunatey, blowing on DeviceClass == Mass storage
+			 * doesn't work on CO, at least.
 			 */
 			if (dev->descriptor.idVendor == GARMIN_VID) {
-				/* Nuvi */
-				if (dev->descriptor.idProduct == 0x19) 
-					continue;
+				switch (dev->descriptor.idProduct) {
+					case 0x19:  // Nuvi;
+					case 0x2244:  // Zumo;
+					case 0x2295:  // CO;
+						continue;
+				}
 				if (req_unit_number < 0) {
 					garmin_usb_start(dev);	
 					/* 
@@ -315,9 +350,22 @@ void garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
 		gusb_list_units();
 		exit (0);
 	}
+
 	if (0 == found_devices) {
+		/* It's time for Plan B.  The user told us to use 
+		 * Garmin Protocol in device "usb:" but it's possible
+		 * that they're talking to one of the dozens of models
+		 * that is wants to read and write GPX files on a 
+		 * mounted drive.  Try that now.
+		 */
+		char **dlist = os_get_garmin_mountpoints();
+		gdx = gdx_find_file(dlist);
+		if (gdx) return 1;
+		/* Plan C. */
 		fatal("Found no Garmin USB devices.\n");
-	}
+	} else { 
+		return 1;
+        }
 }
 
 static gusb_llops_t libusb_llops = {
@@ -350,9 +398,7 @@ gusb_init(const char *portname, gpsdevh **dh)
 	usb_find_busses();
 	usb_find_devices();
 	lud->busses = usb_get_busses();
-	garmin_usb_scan(lud, req_unit_number);
-
-	return 1;
+	return garmin_usb_scan(lud, req_unit_number);
 }
 
 #endif /* HAVE_LIBUSB */
