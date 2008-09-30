@@ -4174,6 +4174,20 @@ echo "${ECHO_T}USB skipped" >&6; }
 		USB_LIBS=-lsetupapi
 	fi
 	;;
+    *-*-darwin*)
+      GBSER=gbser_posix.o
+      OSJEEPS="jeeps/gpslibusb.o \
+      mac/libusb/darwin.o \
+      mac/libusb/descriptors.o \
+      mac/libusb/error.o \
+      mac/libusb/usb.o "
+      USB_LIBS="-framework  IOKit -framework CoreFoundation"
+      cat >>confdefs.h <<\_ACEOF
+#define HAVE_LIBUSB 1
+_ACEOF
+
+      CFLAGS="$CFLAGS -Imac/libusb/"
+      ;;
     *)
 	GBSER=gbser_posix.o
 	{ echo "$as_me:$LINENO: checking for libusb" >&5
@@ -4300,23 +4314,7 @@ _ACEOF
 
 fi
 
-		# Override libusb for Darwin to reduce external
-		# runtime requirement.
-		case "$target" in
-		*-*-darwin*)
-		  if test "x$ac_cv_lib_usb_usb_interrupt_read" = "xyes" ; then
-			USB_LIBS="`libusb-config --prefix`/lib/libusb.a -framework  IOKit -framework CoreFoundation"
-			LDFLAGS=$OLDFLAGS
-			CDFLAGS=$OCDFLAGS
-			OSJEEPS=jeeps/gpslibusb.o
-		    else
-			OSJEEPS=jeeps/gpsusbstub.o
-		  fi
-		  ;;
-		*)
-		  OSJEEPS=jeeps/gpslibusb.o
-		  ;;
-		esac
+		OSJEEPS=jeeps/gpslibusb.o
 		CFLAGS="$OCFLAGS"
 	#	LIBS="$LIBS `libusb-config --libs`"
 	    else
