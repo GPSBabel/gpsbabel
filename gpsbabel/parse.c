@@ -20,15 +20,13 @@
 
  */
 
+#include "defs.h"
+#include "jeeps/gpsmath.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <errno.h>
 #include <time.h>
-
-#include "defs.h"
-#include "jeeps/gpsmath.h"
-#include "strptime.h"
 
 /*
  * parse_distance:
@@ -64,7 +62,6 @@ parse_distance(const char *str, double *val, double scale, const char *module)
 	if (case_ignore_strcmp(unit, "m") == 0) /* do nothing, that's our standard */;
 	else if (case_ignore_strcmp(unit, "ft") == 0) *val = FEET_TO_METERS(*val);
 	else if (case_ignore_strcmp(unit, "feet") == 0) *val = FEET_TO_METERS(*val);
-	else if (case_ignore_strcmp(unit, "k") == 0) *val *= 1000.0;
 	else if (case_ignore_strcmp(unit, "km") == 0) *val *= 1000.0;
 	else if (case_ignore_strcmp(unit, "nm") == 0) *val = NMILES_TO_METERS(*val);
 	else if (case_ignore_strcmp(unit, "mi") == 0) *val = MILES_TO_METERS(*val);
@@ -104,12 +101,10 @@ parse_speed(const char *str, double *val, const double scale, const char *module
 	else if (case_ignore_strcmp(unit, "mps") == 0) ;
 	else if (case_ignore_strcmp(unit, "kph") == 0) *val = KPH_TO_MPS(*val);
 	else if (case_ignore_strcmp(unit, "km/h") == 0) *val = KPH_TO_MPS(*val);
-	else if (case_ignore_strcmp(unit, "kmh") == 0) *val = KPH_TO_MPS(*val);
 	else if (case_ignore_strcmp(unit, "kt") == 0) *val = KNOTS_TO_MPS(*val);
 	else if (case_ignore_strcmp(unit, "knot") == 0) *val = KNOTS_TO_MPS(*val);
 	else if (case_ignore_strcmp(unit, "mph") == 0) *val = MPH_TO_MPS(*val);
 	else if (case_ignore_strcmp(unit, "mi/h") == 0) *val = MPH_TO_MPS(*val);
-	else if (case_ignore_strcmp(unit, "mih") == 0) *val = MPH_TO_MPS(*val);
 	else
 		fatal("%s: Unsupported speed unit '%s' in item '%s'!\n", module, unit, str);
 
@@ -209,7 +204,7 @@ parse_coordinates(const char *str, int datum, const grid_type grid,
 			ct = sscanf(str, format,
 				&east, &north, &result);
 			valid = (ct == 2);
-			GPS_Math_Swiss_EN_To_WGS84(east, north, &lat, &lon);
+			GPS_Math_CH1903_NGEN_To_WGS84(east, north, &lat, &lon);
 			break;
 		}
 		default:
@@ -237,55 +232,4 @@ parse_coordinates(const char *str, int datum, const grid_type grid,
 	if (longitude) *longitude = lon;
 		
 	return result;
-}
-
-
-time_t
-parse_date(const char *str, const char *format, const char *module)
-{
-	struct tm tm;
-
-	memset(&tm, 0, sizeof(tm));
-
-	if (format) {
-		char *cx = strptime(str, format, &tm);
-		if ((cx != NULL) && (*cx != '\0'))
-			fatal("%s: Could not parse date string (%s).\n", module, str);
-	}
-	else {
-		int p1, p2, p3, ct;
-		char sep[2];
-
-		ct = sscanf(str, "%d%1[-.//]%d%1[-.//]%d", &p1, sep, &p2, sep, &p3);
-		if (ct != 5)
-			fatal("%s: Could not parse date string (%s).\n", module, str);
-
-		if ((p1 > 99) || (sep[0] == '-')) { /* Y-M-D (iso like) */
-			tm.tm_year = p1;
-			tm.tm_mon = p2;
-			tm.tm_mday = p3;
-		}
-		else if (sep[0] == '.') {	/* Germany and any other countries */
-			tm.tm_mday = p1;	/* have a fixed D.M.Y format */
-			tm.tm_mon = p2;
-			tm.tm_year = p3;
-		}
-		else {
-			tm.tm_mday = p2;
-			tm.tm_mon = p1;
-			tm.tm_year = p3;
-		}
-		if ((p1 < 100) && (p2 < 100) && (p3 < 100)) {
-			if (tm.tm_year < 70) tm.tm_year += 2000;
-			else tm.tm_year += 1900;
-		}
-		/* some low-level checks */
-		if ((tm.tm_mon > 12) || (tm.tm_mon < 1) || (tm.tm_mday > 31) || (tm.tm_mday < 1))
-			fatal("%s: Could not parse date string (%s).\n", module, str);
-
-		tm.tm_year -= 1900;
-		tm.tm_mon -= 1;
-	}
-	
-	return mkgmtime(&tm);
 }

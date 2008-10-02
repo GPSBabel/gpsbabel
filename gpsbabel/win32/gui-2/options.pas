@@ -46,9 +46,13 @@ type
     FOpts: TStringList;
     FCanvas: TCanvas;
     FInitialOpts: string;
+    procedure CreateStringOption(const x, y, tag: Integer; o: POption; xmax: Integer = -1);
     procedure CreateIntegerOption(const x, y, tag: Integer; o: POption; xmax: Integer = -1);
+    procedure CreateFileOption(const x, y, tag: Integer; o: POption; IsInput: Boolean; xmax: Integer = -1);
     function FindUpDown(AControl: TControl): TUpDown;
     function GetOptsStr: string;
+    procedure OptionOpenFile(Sender: TObject);
+    procedure OptionSaveFile(Sender: TObject);
     function ParseOptsLine(const Line: string; List: TStrings): Integer;
     procedure SetOpts(AList: TStringList);
     procedure SetOptsStr(const AValue: string);
@@ -60,72 +64,15 @@ type
     FFormat: string;
     FIsInput: Boolean;
     constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
   property
     Opts: TStringList read FOpts write SetOpts;
     property OptsStr: string read GetOptsStr write SetOptsStr;
   end;
 
-  TIntegerEdit = class(TOptionEdit)
-  protected
-    ed: TEdit;
-    up: TUpDown;
-    max, min : Integer;
-    function GetValue : String; override;
-    procedure SetValue(Value : String); override;
-    function GetEnabled : Boolean; override;
-    procedure SetEnabled(value : Boolean); override;
-    procedure UpDownClick(Sender: TObject; Button: TUDBtnType);
-    function GetIntValue : Integer;
-    procedure SetIntValue(Value : Integer);
-  public
-    constructor Create(Form : TForm; Parent : TWinControl; AOption : POption; const x,y : Integer);
-  end;
-
-  TIntegerSelectEdit = class(TOptionEdit)
-  protected
-    combo: TComboBox;
-    min : Integer;
-    function GetValue : String; override;
-    procedure SetValue(Value : String); override;
-    function GetEnabled : Boolean; override;
-    procedure SetEnabled(value : Boolean); override;
-  public
-    constructor Create(Form : TForm; Parent : TWinControl; AOption : POption; const x,y,xmax : Integer);
-  end;
-
-  TStringEdit = class(TOptionEdit)
-  protected
-    ed: TEdit;
-    function GetValue : String; override;
-    procedure SetValue(Value : String); override;
-    function GetEnabled : Boolean; override;
-    procedure SetEnabled(value : Boolean); override;
-  public
-    constructor Create(Form : TForm; Parent : TWinControl; AOption : POption; const x,y : Integer);
-  end;
-
-  TFileEdit = class(TOptionEdit)
-  protected
-    ed: TEdit;
-    btn: TSpeedButton;
-    FForm : TfrmOptions;
-    FIsInput : Boolean;
-    function GetValue : String; override;
-    procedure SetValue(Value : String); override;
-    function GetEnabled : Boolean; override;
-    procedure SetEnabled(value : Boolean); override;
-    procedure OpenFile(Sender: TObject);
-    procedure SaveFile(Sender: TObject);
-  public
-    constructor Create(AForm : TfrmOptions; Parent : TWinControl; AOption : POption;
-      const x,y : Integer; AIsInput: Boolean; xmax: Integer = -1);
-  end;
-
 type
   eUnknownOption = class(Exception);
   eParserError = class(Exception);
-
+  
 var
   frmOptions: TfrmOptions;
 
@@ -191,233 +138,6 @@ begin
   end;
 end;
 
-constructor TIntegerEdit.Create;
-begin
-  FOption:=AOption;
-  ed:=TEdit.Create(form);
-  ed.Parent:=Parent;
-  up:=TUpDown.Create(form);
-  up.Parent:=Parent;
-
-  // The following initialization will allow users
-  // to decrease or increase max 16383 times before
-  // TUpDown blocks - if a user will every reach that limit?
-  up.Min := 0;
-  up.Max := MAXSHORT;
-  up.Position:=MAXSHORT DIV 2;
-
-  ed.Left := x;
-  ed.Top := y;
-
-  ed.Width := ed.Width - up.Width;
-  up.Left := ed.Left + ed.Width;
-  up.Top := ed.Top;
-
-  if (Option.min <> nil) then
-    min := StrToInt(Option.min)
-  else
-    min := -(MAXLONG-1);
-  if (Option.max <> nil) then
-    max := StrToInt(Option.max)
-  else
-    max := MAXLONG;
-  if (Option.def <> nil) then
-    Value:=Option.def;
-  up.OnClick:=UpDownClick;
-end;
-
-procedure TIntegerEdit.UpDownClick(Sender: TObject; Button: TUDBtnType);
-begin
-  if (Button = btNext) then
-    SetIntValue(GetIntValue+1)
-  else
-    SetIntValue(GetIntValue-1);
-end;
-
-procedure TIntegerEdit.SetIntValue(Value : Integer);
-begin
-  if (Value <min) or (value >max) then exit;
-  ed.Text:=InttoStr(Value);
-end;
-
-function TIntegerEdit.GetIntValue : Integer;
-begin
-  Result:=StrToIntDef(ed.Text,0);
-end;
-
-function TIntegerEdit.GetValue : String;
-begin
-  Result:=InttoStr(GetIntValue);
-end;
-
-procedure TIntegerEdit.SetValue(Value : String);
-begin
-  SetIntValue(StrToIntDef(value,Min));
-end;
-
-function TIntegerEdit.GetEnabled : Boolean;
-begin
-  result:=ed.Enabled;
-end;
-
-procedure TIntegerEdit.SetEnabled(value : Boolean);
-begin
-  ed.Enabled:=Value;
-  up.Enabled:=Value;
-end;
-
-//*******************************************++
-
-constructor TIntegerSelectEdit.Create;
-Var
-  I : Integer;
-begin
-  FOption:=AOption;
-  Combo := TComboBox.Create(Form);
-  Combo.Left := x;
-  Combo.Top := y;
-  if (Combo.Left + Combo.Width < xmax) then
-    Combo.Left := xmax - Combo.Width;
-  Combo.Parent := Parent;
-  min:=StrToInt(Option.min);
-  for i := min to StrToInt(Option.max) do
-    Combo.Items.Add(IntToStr(i));
-  if (Option.def <> nil) then
-    Combo.Text := Option.def
-  else
-    Combo.ItemIndex := 0;
-end;
-
-function TIntegerSelectEdit.GetValue : String;
-begin
-  Result:=InttoStr(Min + Combo.ItemIndex);
-end;
-
-procedure TIntegerSelectEdit.SetValue(Value : String);
-Var
-  I : Integer;
-begin
-  I:=StrToIntDef(Value,Min);
-  I:=I-Min;
-  Combo.ItemIndex:=I;
-end;
-
-function TIntegerSelectEdit.GetEnabled : Boolean;
-begin
-  Result:=Combo.Enabled;
-end;
-
-procedure TIntegerSelectEdit.SetEnabled(value : Boolean);
-begin
-  Combo.Enabled:=Value;
-end;
-
-constructor TStringEdit.Create;
-begin
-  FOption:=AOption;
-  ed := TEdit.Create(form);
-  ed.Left := x;
-  ed.Top := y;
-  if (Option.def <> nil) then
-    Value := string(Option.def);
-  ed.Parent := Parent;
-end;
-
-function TStringEdit.GetValue : String;
-begin
-  Result:=ed.Text;
-end;
-
-procedure TStringEdit.SetValue(Value : String);
-begin
-  ed.Text:=Value;
-end;
-
-function TStringEdit.GetEnabled : Boolean;
-begin
-  Result:=ed.Enabled;
-end;
-
-procedure TStringEdit.SetEnabled(value : Boolean);
-begin
-  ed.Enabled:=Value;
-end;
-
-constructor TFileEdit.Create;
-begin
-  FOption:=AOption;
-  FForm:=AForm;
-  FIsInput:=AIsInput;
-  ed := TEdit.Create(FForm);
-
-  ed.Left := x;
-  ed.Top := y;
-  ed.Parent := Parent;
-
-  btn := TSpeedButton.Create(FForm);
-  btn.Parent := Parent;
-  ed.Width := ed.Width - btn.Width;
-  btn.Left := ed.Left + ed.Width;
-  btn.Top := ed.top;
-
-  if FIsInput then begin
-    frmMain.ImageList1.GetBitmap(15, btn.Glyph);
-    btn.OnClick := OpenFile;
-  end else begin
-    frmMain.ImageList1.GetBitmap(17, btn.Glyph);
-    btn.OnClick := SaveFile;
-  end;
-end;
-
-procedure TFileEdit.OpenFile(Sender: TObject);
-var
-  d: TOpenDialog;
-begin
-  d := TOpenDialog.Create(FForm);
-  try
-    d.FileName := Value;
-    if d.Execute then
-      Value:=d.FileName;
-  finally
-    d.Free;
-  end;
-end;
-
-procedure TFileEdit.SaveFile(Sender: TObject);
-var
-  d: TSaveDialog;
-begin
-  d := TSaveDialog.Create(FForm);
-  try
-    d.FileName := Value;
-    if d.Execute then
-      Value:=d.FileName;
-  finally
-    d.Free;
-  end;
-end;
-
-function TFileEdit.GetEnabled : Boolean;
-begin
-  Result:=ed.Enabled;
-end;
-
-procedure TFileEdit.SetEnabled(value : Boolean);
-begin
-  ed.Enabled:=Value;
-  btn.Enabled:=Value;
-end;
-
-function TFileEdit.GetValue : String;
-begin
-  Result:=ed.Text;
-end;
-
-procedure TFileEdit.SetValue(Value : String);
-begin
-  ed.Text:=value;
-end;
-
 { TfrmOptions }
 
 constructor TfrmOptions.Create(AOwner: TComponent); // override;
@@ -439,11 +159,9 @@ var
   xy, _xy: TPoint;
   xmax: Integer;
   lb: TLabel;
-  us: string;
-
 begin
   if (AList = nil) then Exit;
-
+  
   FOpts := AList;
 
   xy.x := 0;
@@ -470,22 +188,19 @@ begin
       btnHelp.ShowHint := True;
     end;
 
-    us := AnsiLowerCase(o.hint);
-    if FIsInput and (AnsiPos('read', us) = 0) and
-      (
-       (AnsiPos('generate ', us) <> 0) or
-       (AnsiPos(' generate', us) <> 0) or
-       (AnsiPos('output ', us) <> 0) or
-       (AnsiPos(' output', us) <> 0) or
-       (AnsiPos('write', us) <> 0) or
-       (AnsiPos(' write', us) <> 0)
-      ) then Continue;
+    if FIsInput and (
+       (AnsiPos('generate ', o.hint) <> 0) or
+       (AnsiPos(' generate', o.hint) <> 0) or
+       (AnsiPos('output ', o.hint) <> 0) or
+       (AnsiPos(' output', o.hint) <> 0) or
+       (AnsiPos('write', o.hint) <> 0) or
+       (AnsiPos(' write', o.hint) <> 0)) then Continue;
 
     chb := TCheckBox.Create(nil);
     o.chb := chb;
     chb.Name := '___' + o.name;
     chb.OnClick := CheckBoxClicked;
-    chb.Tag := i;
+    chb.Tag := i + 1;
 
     InsertComponent(chb);
 
@@ -517,8 +232,6 @@ begin
       chb.AllowGrayed := True;
       chb.State := cbGrayed;
     end;
-    if (Assigned(o.edit)) and (chb.checked) then
-      o.edit.Enabled:=True;
   end;
 
   xy.y := 8;
@@ -535,10 +248,10 @@ begin
     // ('unknown', 'integer', 'float', 'string', 'boolean', 'file', 'outfile');
     case o.otype of
       1: CreateIntegerOption(xy.X, xy.Y - 2, i + 1, o, xmax);
-      2, 3:   o.edit:=TStringEdit.Create(self,pnOptions,o,xy.X, xy.Y - 2);
+      2, 3: CreateStringOption(xy.X, xy.Y - 2, i + 1, o, xmax);
       4: ;
-      5: o.edit:=TFileEdit.Create(self,pnOptions,o,xy.X, xy.Y - 2, True, xmax);
-      6: if not FIsInput then o.edit:=TFileEdit.Create(self,pnOptions,o,xy.X, xy.Y - 2, False, xmax);
+      5: CreateFileOption(xy.X, xy.Y - 2, i + 1, o, True, xmax);
+      6: if not FIsInput then CreateFileOption(xy.X, xy.Y - 2, i + 1, o, False, xmax);
     end;
     if (o.edit <> nil) then
       o.edit.Enabled := False;
@@ -606,7 +319,7 @@ begin
         Result := Result + '=0';
       Continue;
     end;
-    s := o.edit.value;
+    s := GetStrProp(o.edit, 'Text');
     if (Pos(' ', s) <> 0) or (Pos('"', s) <> 0) or (Pos(',', s) <> 0) then
       s := SysUtils.AnsiQuotedStr(s, '"');
     Result := SysUtils.Format('%s=%s', [Result, s]);
@@ -665,8 +378,11 @@ begin
       if (o.edit <> nil) then
       begin
         o.chb.Checked := True;
-        o.Edit.Enabled:=True;
-        o.Edit.Value:=Value;
+        ud := FindUpDown(o.Edit);
+        if (ud <> nil) then
+          ud.Position := StrToInt(Value)
+        else
+          SetStrProp(o.edit, 'Text', Value);
       end
       else if (o.otype = 4) then
         o.chb.Checked := (value = '') or (value <> '0');
@@ -679,15 +395,38 @@ end;
 
 procedure TfrmOptions.CheckBoxClicked(Sender: TObject);
 var
+  i: Integer;
+  c: TComponent;
   chb: TCheckBox;
-  o : POption; 
+  ctrl: TWinControl;
 begin
   if (Sender = nil) or not (Sender is TCheckBox) then Exit;
   chb := Pointer(Sender);
-  o:=POption(FOpts.Objects[chb.tag]);
-  if not Assigned(o) Then exit;
-  if not Assigned(o^.edit) Then exit;
-  o^.edit.Enabled:=chb.Checked;
+
+  for i := 0 to ComponentCount - 1 do
+  begin
+    c := Components[i];
+    if (c = chb) or not(c.InheritsFrom(TWinControl)) then Continue;
+    if (c.Tag <> chb.Tag) then Continue;
+    ctrl := Pointer(c);
+    ctrl.Enabled := chb.Checked;
+  end;
+end;
+
+procedure TfrmOptions.CreateStringOption(const x, y, tag: Integer; o: POption; xmax: Integer);
+var
+  ed: TEdit;
+begin
+  ed := TEdit.Create(Self);
+  o.edit := ed;
+
+  ed.Left := x;
+  ed.Top := y;
+  ed.Tag := tag;
+  ed.Parent := pnOptions;
+
+  if (o.def <> nil) then
+    ed.Text := string(o.def);
 end;
 
 procedure TfrmOptions.CreateIntegerOption(const x, y, tag: Integer; o: POption; xmax: Integer);
@@ -699,9 +438,50 @@ var
 begin
   if (o.min <> nil) and (o.max <> nil) and
      ((StrToInt(o.max) - StrToInt(o.min)) < 32) then
-     o.edit:=TIntegerSelectEdit.Create(self,pnOptions,o,x,y,xmax)
+  begin
+    cb := TComboBox.Create(Self);
+    o.edit := cb;
+    cb.Left := x;
+    cb.Top := y;
+    cb.Tag := tag;
+    if (cb.Left + cb.Width < xmax) then
+      cb.Left := xmax - cb.Width;
+    cb.Parent := pnOptions;
+
+    for i := StrToInt(o.min) to StrToInt(o.max) do
+      cb.Items.Add(IntToStr(i));
+    if (o.def <> nil) then
+      cb.Text := o.def
+    else
+      cb.ItemIndex := 0;
+    Exit;
+  end;
+
+  ed := TEdit.Create(Self);
+  o.edit := ed;
+
+  ed.Left := x;
+  ed.Top := y;
+  ed.Tag := tag;
+  ed.Parent := pnOptions;
+
+  up := TUpDown.Create(Self);
+  up.Parent := pnOptions;
+
+  ed.Width := ed.Width - up.Width;
+  up.Left := ed.Left + ed.Width;
+  up.Top := ed.Top;
+  if (o.min <> nil) then
+    up.Min := StrToInt(o.min)
   else
-    o.edit:=TIntegerEdit.Create(self,pnOptions,o,x,y);
+    up.Min := -(MAXSHORT-1);
+  if (o.max <> nil) then
+    up.Max := StrToInt(o.max)
+  else
+    up.Max := MAXSHORT;
+  if (o.def <> nil) then
+    up.Position := StrToInt(o.def);
+  up.Associate := ed;
 end;
 
 procedure TfrmOptions.FormCreate(Sender: TObject);
@@ -713,6 +493,93 @@ end;
 procedure TfrmOptions.btnHelpClick(Sender: TObject);
 begin
   WinOpenURL(readme_html_path + '#fmt_' + FFormat);
+end;
+
+procedure TfrmOptions.CreateFileOption(const x, y, tag: Integer;
+  o: POption; IsInput: Boolean; xmax: Integer = -1);
+var
+  ed: TEdit;
+  btn: TSpeedButton;
+begin
+  ed := TEdit.Create(Self);
+  o.edit := ed;
+
+  ed.Left := x;
+  ed.Top := y;
+  ed.Tag := tag;
+  ed.Parent := pnOptions;
+
+  btn := TSpeedButton.Create(Self);
+  btn.Parent := pnOptions;
+  btn.Tag := tag;
+  ed.Width := ed.Width - btn.Width;
+  btn.Left := ed.Left + ed.Width;
+  btn.Top := ed.top;
+
+  if IsInput then
+  begin
+    btn.OnClick := Self.OptionOpenFile;
+    frmMain.ImageList1.GetBitmap(15, btn.Glyph);
+  end
+    else
+  begin
+    btn.OnClick := Self.OptionSaveFile;
+    frmMain.ImageList1.GetBitmap(17, btn.Glyph);
+  end;
+end;
+
+procedure TfrmOptions.OptionOpenFile(Sender: TObject);
+var
+  c: TControl;
+  i: Integer;
+  o: POption;
+  d: TOpenDialog;
+begin
+  if (Sender = nil) or not(Sender is TControl) then Exit;
+
+  c := Pointer(Sender);
+
+  for i := 0 to FOpts.Count - 1 do
+  begin
+    o := Pointer(FOpts.Objects[i]);
+    if (o.chb = nil) or (o.chb.Tag <> c.Tag) then Continue;
+
+    d := TOpenDialog.Create(Self);
+    try
+      d.FileName := GetStrProp(o.edit, 'Text');
+      if d.Execute then
+        SetStrProp(o.edit, 'Text', d.FileName);
+    finally
+      d.Free;
+    end;
+  end;
+end;
+
+procedure TfrmOptions.OptionSaveFile(Sender: TObject);
+var
+  c: TControl;
+  i: Integer;
+  o: POption;
+  d: TSaveDialog;
+begin
+  if (Sender = nil) or not(Sender is TControl) then Exit;
+  
+  c := Pointer(Sender);
+
+  for i := 0 to FOpts.Count - 1 do
+  begin
+    o := Pointer(FOpts.Objects[i]);
+    if (o.chb = nil) or (o.chb.Tag <> c.Tag) then Continue;
+
+    d := TSaveDialog.Create(Self);
+    try
+      d.FileName := GetStrProp(o.edit, 'Text');
+      if d.Execute then
+        SetStrProp(o.edit, 'Text', d.FileName);
+    finally
+      d.Free;
+    end;
+  end;
 end;
 
 function TfrmOptions.ParseOptsLine(const Line: string; List: TStrings): Integer;
@@ -907,7 +774,7 @@ begin
         else
           value := '0';
       end
-        else value := o.edit.Value;
+        else value := GetStrProp(o.edit, 'Text');
       if (o.gbdef <> nil) and (StrPas(o.gbdef) = value) then
         r.WriteString(key, '(default)')
       else
@@ -957,7 +824,17 @@ begin
       begin
         o.chb.Checked := True;
         if (value <> '(default)') then
-           o.edit.Value := value;
+        begin
+          if HasUpDown(TEdit(o.edit), u) then
+          begin
+            if (o.def <> nil) then
+              v := StrToIntDef(o.def, 0) else
+              v := 0;
+            u.Position := StrToIntDef(value, v);
+          end
+          else
+            SetStrProp(o.edit, 'Text', value);
+        end;
         o.edit.Enabled := True;
       end;
     end;
@@ -975,25 +852,6 @@ end;
 procedure TfrmOptions.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   StoreBounds('options_form', Self);
-end;
-
-destructor TfrmOptions.Destroy;
-Var
-  I : Integer;
-  o: POption;
-begin
-  try
-    for i := 0 to FOpts.Count - 1 do
-    begin
-      o := Pointer(FOpts.Objects[i]);
-      if (Assigned(o.edit)) then begin
-        o.edit.Free;
-        o.edit := nil;
-      end;
-    end;
-  finally
-    inherited;
-  end;
 end;
 
 end.

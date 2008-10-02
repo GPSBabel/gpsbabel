@@ -2,7 +2,7 @@
 
     Character encoding transformation - utilities
 
-    Copyright (C) 2005-2008 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005,2006,2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -106,11 +106,6 @@ cet_str_cp1252_to_utf8(const char *src)
 	return cet_str_any_to_utf8(src, &cet_cs_vec_cp1252);
 }
 
-short *
-cet_str_utf8_to_uni(const char *src, int *length)
-{
-	return cet_str_any_to_uni(src, &cet_cs_vec_utf8, length);
-}
 
 /* helpers */
 
@@ -996,7 +991,6 @@ cet_convert_waypt(const waypoint *wpt)
 	waypoint *w = (waypoint *)wpt;
 	format_specific_data *fs;
 	url_link *url_next;
-	geocache_data *gc_data = (geocache_data *)wpt->gc_data;
 	
 	if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) return;
 	
@@ -1011,8 +1005,6 @@ cet_convert_waypt(const waypoint *wpt)
 		url_next->url = cet_convert_string(url_next->url);
 		url_next->url_link_text = cet_convert_string(url_next->url_link_text);
 	}
-	gc_data->placer = cet_convert_string(gc_data->placer);
-	gc_data->hint = cet_convert_string(gc_data->hint);
 	
 	fs = wpt->fs;
 	while (fs != NULL)
@@ -1123,7 +1115,7 @@ cet_disp_character_set_names(FILE *fout)
 	
 	ac = 0;
 	
-	fprintf(fout, "GPSBabel builtin character sets: (-c option)\n");
+	fprintf(fout, "GPSbabel builtin character sets: (-c option)\n");
 	for (i = 0; i < c; i++)
 	{
 	    char **a;
@@ -1162,30 +1154,38 @@ cet_disp_character_set_names(FILE *fout)
 
 int cet_gbfprintf(gbfile *stream, const cet_cs_vec_t *src_vec, const char *fmt, ...)
 {
-	int res;
-	char *cout;
+	char buff[128];
+	int res, ct;
 	va_list args;
+	char *cout = buff;
 
 	va_start(args, fmt);
-	xvasprintf(&cout, fmt, args);
+	ct = vsnprintf(buff, sizeof(buff), fmt, args);
 	va_end(args);
+
+	if (ct >= (int)sizeof(buff)) {
+		cout = xmalloc(ct + 1);
+		va_start(args, fmt);
+		vsnprintf(cout, ct + 1, fmt, args);
+		va_end(args);
+	}
 
 	if (global_opts.charset != src_vec)
 	{
 		if (src_vec != &cet_cs_vec_utf8) {
 			char *ctemp = cet_str_any_to_utf8(cout, src_vec);
-			xfree(cout);
+			if (cout != buff) xfree(cout);
 			cout = ctemp;
 		}
 		if (global_opts.charset != &cet_cs_vec_utf8) {
 			char *ctemp = cet_str_utf8_to_any(cout, global_opts.charset);
-			xfree(cout);
+			if (cout != buff) xfree(cout);
 			cout = ctemp;
 		}
 	}
 
 	res = gbfprintf(stream, "%s", cout);
-	xfree(cout);
+	if (cout != buff) xfree(cout);
 	
 	return res;
 }

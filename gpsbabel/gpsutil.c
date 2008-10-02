@@ -64,7 +64,7 @@ data_read(void)
 	char alttype;
 	char icon[3];
 	waypoint *wpt_tmp;
-	int line = 0;
+
 	/*
 	 * Make sure that all waypoints in single read have same 
 	 * timestamp.
@@ -75,9 +75,6 @@ data_read(void)
 	while ((ibuf = gbfgetstr(file_in))) {
 		int n, len;
 		char *sn;
-
-		if ((line++ == 0) && file_in->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
-
 	/*  A sharp in column zero or an blank line is a comment */
 		ibuf = lrtrim(ibuf);
 		len = strlen(ibuf);

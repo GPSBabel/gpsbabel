@@ -24,13 +24,11 @@
 #include "cet_util.h"
 #include "grtcirc.h"
 #include "garmin_fs.h"
-#include "session.h"
 
 queue waypt_head;
 static unsigned int waypt_ct;
 static short_handle mkshort_handle;
 int geocaches_present;
-static geocache_data empty_gc_data = { 0 };
 
 void
 waypt_init(void)
@@ -69,27 +67,20 @@ waypt_dupe(const waypoint *wpt)
 	}
 	if (wpt->icon_descr && wpt->wpt_flags.icon_descr_is_dynamic)
 		tmp->icon_descr = xstrdup(wpt->icon_descr);
-		
-	if (wpt->gc_data != &empty_gc_data) {
-		geocache_data *gc_data = xmalloc(sizeof(*gc_data));
-		tmp->gc_data = (const geocache_data *)gc_data;
-		
-		memcpy(gc_data, wpt->gc_data, sizeof(*gc_data));
-		if (wpt->gc_data->desc_short.utfstring) {
-			gc_data->desc_short.utfstring = 
-				xstrdup(wpt->gc_data->desc_short.utfstring);
-		}
-		if (wpt->gc_data->desc_long.utfstring) {
-			gc_data->desc_long.utfstring = 
-				xstrdup(wpt->gc_data->desc_long.utfstring);
-		}
-		if (wpt->gc_data->placer) {
-			gc_data->placer = xstrdup(wpt->gc_data->placer);
-		}
-		if (wpt->gc_data->hint) {
-			gc_data->hint = xstrdup(wpt->gc_data->hint);
-		}
+	if (wpt->gc_data.desc_short.utfstring) {
+		tmp->gc_data.desc_short.utfstring = 
+			xstrdup(wpt->gc_data.desc_short.utfstring);
 	}
+	if (wpt->gc_data.desc_long.utfstring) {
+		tmp->gc_data.desc_long.utfstring = 
+			xstrdup(wpt->gc_data.desc_long.utfstring);
+	}
+	if (wpt->gc_data.placer) {
+                tmp->gc_data.placer = xstrdup(wpt->gc_data.placer);
+        }
+	if (wpt->gc_data.hint) {
+                tmp->gc_data.hint = xstrdup(wpt->gc_data.hint);
+        }
 
 	/*
 	 * It's important that this duplicated waypoint not appear
@@ -108,7 +99,6 @@ waypt_add(waypoint *wpt)
 	double lon_orig = wpt->longitude;
 	
 	ENQUEUE_TAIL(&waypt_head, &wpt->Q);
-
 	waypt_ct++;
 
 	if (wpt->latitude < -90) wpt->latitude += 180;
@@ -117,18 +107,12 @@ waypt_add(waypoint *wpt)
 	else if (wpt->longitude > +180) wpt->longitude -= 360;
 	
 	if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-		fatal("%s: Invalid latitude %f in waypoint %s.\n",
-			wpt->session->name,
+		fatal ("Invalid latitude %f in waypoint %s.\n",
 			lat_orig, wpt->shortname ? wpt->shortname : "");
 	if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
 		fatal ("Invalid longitude %f in waypoint %s.\n",
 			lon_orig, wpt->shortname ? wpt->shortname : "");
-	if (wpt->creation_time < 0) {
-		warning("%s: Invalid timestamp in waypoint %s.\n",
-			wpt->session->name,
-			wpt->shortname ? wpt->shortname : "");
-		wpt->creation_time = 0;
-	}
+
 	/*
 	 * Some input may not have one or more of these types so we
 	 * try to be sure that we have these fields even if just by
@@ -165,7 +149,7 @@ waypt_add(waypoint *wpt)
 	 * all waypoints may have this and a few other pitfalls, but it's
 	 * an easy and fast test here.
 	 */
-	if (wpt->gc_data->diff && wpt->gc_data->terr) {
+	if (wpt->gc_data.diff && wpt->gc_data.terr) {
 		geocaches_present = 1;
 	}
 }
@@ -186,15 +170,9 @@ waypt_new(void)
 	waypoint *wpt;
 
 	wpt = (waypoint *) xcalloc(sizeof (*wpt), 1);
-#ifdef DEBUG_MEM
-	wpt->altitude = unknown_alt;
-	wpt->longitude = unknown_alt;
-#endif
 	wpt->altitude = unknown_alt;
 	wpt->fix = fix_unknown;
 	wpt->sat = -1;
-	wpt->session = curr_session();
-	wpt->gc_data = &empty_gc_data;
 
 	QUEUE_INIT(&wpt->Q);
 	return wpt;
@@ -248,25 +226,17 @@ waypt_status_disp(int total_ct, int myct)
 void
 waypt_disp_all(waypt_cb cb)
 {
-	waypt_disp_session(NULL, cb);
-}
-
-void
-waypt_disp_session(const session_t *se, waypt_cb cb)
-{
 	queue *elem, *tmp;
 	waypoint *waypointp;
 	int i = 0;
 
 	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 		waypointp = (waypoint *) elem;
-		if ((se == NULL) || (waypointp->session == se)) {
-			if (global_opts.verbose_status) {
-				i++;
-				waypt_status_disp(waypt_ct, i);
-			}
-			(*cb) (waypointp);
+		if (global_opts.verbose_status) {
+			i++;
+			waypt_status_disp(waypt_ct, i);
 		}
+		(*cb) (waypointp);
 	}
 	if (global_opts.verbose_status) {
 		fprintf(stdout, "\r\n");
@@ -390,24 +360,18 @@ waypt_free( waypoint *wpt )
 	if (wpt->icon_descr && wpt->wpt_flags.icon_descr_is_dynamic) {
 		xfree((char *)(void *)wpt->icon_descr);
 	}
-	
-	if (wpt->gc_data != &empty_gc_data) {
-		geocache_data *gc_data = (geocache_data *)wpt->gc_data;
-		
-		if (gc_data->desc_short.utfstring) {
-			xfree(gc_data->desc_short.utfstring);
-		}
-		if (gc_data->desc_long.utfstring) {
-			xfree(gc_data->desc_long.utfstring);
-		}
-		if (gc_data->placer) {
-			xfree(gc_data->placer);
-		}
-		if (gc_data->hint) {
-			xfree (gc_data->hint);
-		} 
-		xfree(gc_data);
+	if (wpt->gc_data.desc_short.utfstring) {
+		xfree(wpt->gc_data.desc_short.utfstring);
 	}
+	if (wpt->gc_data.desc_long.utfstring) {
+		xfree(wpt->gc_data.desc_long.utfstring);
+	}
+	if (wpt->gc_data.placer) {
+		xfree(wpt->gc_data.placer);
+	}
+	if (wpt->gc_data.hint) {
+		xfree (wpt->gc_data.hint);
+	} 
 	fs_chain_destroy( wpt->fs );
 	xfree(wpt);	
 }
@@ -618,22 +582,4 @@ waypt_course(const waypoint *A, const waypoint *B)
 		return heading_true_degrees(RAD(A->latitude), RAD(A->longitude), RAD(B->latitude), RAD(B->longitude));
 	else
 		return 0;
-}
-
-geocache_data *
-waypt_alloc_gc_data(waypoint *wpt)
-{
-	geocache_data *res = (geocache_data *)wpt->gc_data;
-	if (res == &empty_gc_data) {
-		res = xcalloc(1, sizeof(*res));
-		wpt->gc_data = (const geocache_data *)res;
-		
-	}
-	return res;
-}
-
-int
-waypt_empty_gc_data(const waypoint *wpt)
-{
-	return (wpt->gc_data == &empty_gc_data);
 }

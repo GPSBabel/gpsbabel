@@ -327,7 +327,7 @@ print_position(const waypoint *wpt)
 
 	case grid_swiss:
 
-		valid = GPS_Math_WGS84_To_Swiss_EN(wpt->latitude, wpt->longitude, &east, &north);
+		valid = GPS_Math_WGS84_To_CH1903_NGEN(wpt->latitude, wpt->longitude, &east, &north);
 		if (valid) gbfprintf(fout, "%.f %.f\t", east, north);
 		break;
 
@@ -482,6 +482,7 @@ print_temperature(const float temperature)
 		gbfprintf(fout, "%.f C", temperature);
 	else
 		gbfprintf(fout, "%.f F", (temperature * 1.8) + 32);
+	gbfprintf(fout, "\t");
 }
 
 static void
@@ -511,7 +512,7 @@ write_waypt(const waypoint *wpt)
 	garmin_fs_p gmsd;
 	char *wpt_type;
 	char *dspl_mode;
-	const char *country;
+	char *country;
 	double x;
 	int i, icon, dynamic;
 	char *icon_descr;
@@ -774,7 +775,6 @@ static void
 garmin_txt_write(void)
 {
 	char *grid_str, *c;
-	const char *datum_str;
 	
 	grid_str = xstrdup(gt_get_mps_grid_longname(grid_index, MYNAME));
 	while ((c = strchr(grid_str, '*'))) *c = 0xB0;	/* degree sign */
@@ -1243,8 +1243,7 @@ garmin_txt_read(void)
 	while ((buff = gbfgetstr(fin))) {
 		char *cin;
 		
-		if ((current_line++ == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
-
+		current_line++;
 		cin = lrtrim(buff);
 		if (*cin == '\0') continue;
 

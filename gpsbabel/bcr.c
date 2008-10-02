@@ -65,7 +65,7 @@ static char *prefer_shortnames_opt;
 
 static
 arglist_t bcr_args[] = {
-	{"index", &rtenum_opt, "Index of route to write (if more than one in source)", 
+	{"index", &rtenum_opt, "Index of route to write (if more the one in source)", 
 		NULL, ARGTYPE_INT, "1", NULL },
 	{"name", &rtename_opt, "New name for the route", 
 		NULL, ARGTYPE_STRING, ARG_NOMINMAX },
@@ -77,9 +77,9 @@ arglist_t bcr_args[] = {
 };
 
 typedef struct {
-	const char *bcr_name;
-	const char *mps_name;
-	const char *symbol_DE;
+	char *bcr_name;
+	char *mps_name;
+	char *symbol_DE;
 	int  warned;
 } bcr_icon_mapping_t;
 
@@ -145,10 +145,10 @@ bcr_handle_icon_str(const char *str, waypoint *wpt)
 	}
 }
 
-static const char *
+static char *
 get_bcr_icon_from_icon_descr(const char *icon_descr)
 {
-	const char *result = BCR_DEF_ICON;
+	char *result = BCR_DEF_ICON;
 	
 	if (icon_descr) {
 		bcr_icon_mapping_t *m;
@@ -185,7 +185,6 @@ bcr_rd_init(const char *fname)
 {
 	filename = xstrdup(fname);
 	ini = inifile_init(fname, MYNAME);
-	if (ini->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 	bcr_init_radius();
 }
 
@@ -379,7 +378,7 @@ bcr_route_header(const route_head *route)
 	i = 0;
 	QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) 
 	{
-		const char *icon;
+		char *icon;
 		waypoint *wpt = (waypoint *) elem;
 
 		i++;

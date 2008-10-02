@@ -51,7 +51,7 @@ static char *index_opt = NULL;
 static
 arglist_t stmwpp_args[] = 
 {
-	{"index", &index_opt, "Index of route/track to write (if more than one in source)", 
+	{"index", &index_opt, "Index of route/track to write (if more the one in source)", 
 		NULL, ARGTYPE_INT, "1", NULL },
 	ARG_TERMINATOR
 };
@@ -76,7 +76,6 @@ static void
 stmwpp_data_read(void)
 {
 	char *buff;
-	int line = 0;
 	
 	what = STM_NOTHING;
 	buff = gbfgetstr(fin);
@@ -91,8 +90,6 @@ stmwpp_data_read(void)
 		int column = -1;
 		struct tm time;
 		
-		if ((line++ == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
-
 		buff = lrtrim(buff);
 		if (*buff == '\0') continue;
 		

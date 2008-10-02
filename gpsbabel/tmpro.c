@@ -76,7 +76,7 @@ data_read(void)
     int linecount = 0;
     
     while ((buff = gbfgetstr(file_in))) {
-        if ((linecount++ == 0) && file_in->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
+        linecount++;
 
 	/* skip the line if it contains "sHyperLink" as it is a header (I hope :) */
 	if ((strlen(buff)) && (strstr(buff, "sHyperLink") == NULL)) {

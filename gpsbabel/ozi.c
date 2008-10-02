@@ -58,13 +58,7 @@ static char *wptbgcolor = NULL;
 static char *pack_opt = NULL;
 static int datum;
 static char *proximityarg = NULL;
-static double proximity;
-static char *altunit_opt;
-static char *proxunit_opt;
-static char altunit;
-static char proxunit;
-static double alt_scale;
-static double prox_scale;
+static int proximity;
 
 static
 arglist_t ozi_args[] = {
@@ -83,11 +77,7 @@ arglist_t ozi_args[] = {
 	{"wptbgcolor", &wptbgcolor, "Waypoint background color",
 		"yellow", ARGTYPE_STRING, ARG_NOMINMAX},
 	{"proximity", &proximityarg, "Proximity distance",
-		"0", ARGTYPE_STRING, ARG_NOMINMAX},
-	{"altunit", &altunit_opt, "Unit used in altitude values",
-		"feet", ARGTYPE_STRING, ARG_NOMINMAX},
-	{"proxunit", &proxunit_opt, "Unit used in proximity values",
-		"miles", ARGTYPE_STRING, ARG_NOMINMAX},
+		"0", ARGTYPE_INT, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
 
@@ -224,15 +214,14 @@ ozi_track_hdr(const route_head * rte)
     static char *ozi_trk_header = 
         "OziExplorer Track Point File Version 2.1\r\n"
         "WGS 84\r\n"
-        "Altitude is in %s\r\n"
+        "Altitude is in Feet\r\n"
         "Reserved 3\r\n" 
         "0,2,255,%s,0,0,2,8421376\r\n"
         "0\r\n";
 
     if ((! pack_opt) || (track_out_count == 0)) {
 	ozi_openfile(ozi_ofname);
-	gbfprintf(file_out, ozi_trk_header,
-	    altunit == 'f' ? "Feet" : "Meters",
+	gbfprintf(file_out, ozi_trk_header, 
 	    rte->rte_name ? rte->rte_name : "ComplimentsOfGPSBabel");
     }
 
@@ -243,20 +232,20 @@ ozi_track_hdr(const route_head * rte)
 static void 
 ozi_track_disp(const waypoint * waypointp)
 {
-    double alt;
+    double alt_feet;
     char ozi_time[16];
 
     ozi_get_time_str(waypointp, ozi_time, sizeof(ozi_time));
 
     if (waypointp->altitude == unknown_alt) {
-        alt = -777;
+        alt_feet = -777;
     } else {
-        alt = waypointp->altitude * alt_scale;
+        alt_feet = METERS_TO_FEET(waypointp->altitude);
     }
 
     gbfprintf(file_out, "%.6f,%.6f,%d,%.0f,%s,,\r\n",
        	waypointp->latitude, waypointp->longitude, new_track, 
-	alt, ozi_time);
+	alt_feet, ozi_time);
 
     new_track = 0;
 }
@@ -311,7 +300,7 @@ ozi_route_hdr(const route_head * rte)
 static void
 ozi_route_disp(const waypoint * waypointp)
 {
-    double alt;
+    double alt_feet;
     char ozi_time[16];
 
     route_wpt_count++;
@@ -319,9 +308,9 @@ ozi_route_disp(const waypoint * waypointp)
     ozi_get_time_str(waypointp, ozi_time, sizeof(ozi_time));
 
     if (waypointp->altitude == unknown_alt) {
-        alt = -777;
+        alt_feet = -777;
     } else {
-        alt = waypointp->altitude * alt_scale;
+        alt_feet = METERS_TO_FEET(waypointp->altitude);
     }
 
 /*
@@ -368,35 +357,11 @@ ozi_route_pr()
 }
 
 static void
-ozi_init_units(const int direction)	/* 0 = in; 1 = out */
-{
-    altunit = tolower(*altunit_opt);
-    switch(altunit) {
-    	case 'm': /* meters, okay */	alt_scale = 1.0; break;
-    	case 'f': /* feet, okay */	alt_scale = FEET_TO_METERS(1.0); break;
-    	default:
-    		fatal(MYNAME ": Unknown value (%s) for option 'altunit'!\n", altunit_opt);
-    }
-    if (direction != 0) alt_scale = 1 / alt_scale;
-
-    proxunit = tolower(*proxunit_opt);
-    switch(proxunit) {
-    	case 'm': /* miles, okay */	prox_scale = MILES_TO_METERS(1.0); break;
-    	case 'n': /* nautical miles, okay */	prox_scale = NMILES_TO_METERS(1.0); break;
-    	case 'k': /* kilometers, okay */	prox_scale = 1000.0; break;
-    	default:
-    		fatal(MYNAME ": Unknown value (%s) for option 'proxunit'!\n", proxunit_opt);
-    }
-    if (direction != 0) prox_scale = 1 / prox_scale;
-}
-
-static void
 rd_init(const char *fname)
 {
     file_in = gbfopen(fname, "rb", MYNAME);
 
     mkshort_handle = mkshort_new_handle();
-    ozi_init_units(0);
 }
 
 static void
@@ -437,8 +402,7 @@ wr_init(const char *fname)
         setshort_badchars(mkshort_handle, "\",");
     }
 
-    ozi_init_units(1);
-    parse_distance(proximityarg, &proximity, 1 / prox_scale, MYNAME);
+    proximity = atoi(proximityarg);
 
     file_out = NULL;
 }
@@ -512,15 +476,15 @@ ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp, ozi_fsdata *fsdata)
         break;
     case 13:
         /* proximity distance - meters */
-	WAYPT_SET(wpt_tmp, proximity, atof(str) * prox_scale);
+	WAYPT_SET(wpt_tmp, proximity, atof(str));
         break;
     case 14:
-        /* altitude */
+        /* altitude in feet */
         alt = atof(str);
         if (alt == -777) {
             wpt_tmp->altitude = unknown_alt;
         } else {
-            wpt_tmp->altitude = alt * alt_scale;
+            wpt_tmp->altitude = FEET_TO_METERS(alt);
         }
         break;
     case 15:
@@ -566,12 +530,12 @@ ozi_parse_track(int field, char *str, waypoint * wpt_tmp)
 	}
         break;
     case 3:
-        /* altitude */
+        /* altitude in feet */
         alt = atof(str);
         if (alt == -777) {
             wpt_tmp->altitude = unknown_alt;
         } else {
-            wpt_tmp->altitude = alt * alt_scale;
+            wpt_tmp->altitude = FEET_TO_METERS(alt);
         }
         break;
     case 4:
@@ -681,8 +645,7 @@ data_read(void)
     int linecount = 0;
     
     while ((buff = gbfgetstr(file_in))) {
-
-        if ((linecount++ == 0) && file_in->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
+        linecount++;
 
         /* 
          * this is particularly nasty.  use the first line of the file
@@ -704,20 +667,6 @@ data_read(void)
 	    datum = GPS_Lookup_Datum_Index(buff);
 	    if (datum < 0) {
 		fatal(MYNAME ": Unsupported datum '%s'.\n", buff);
-	    }
-	}
-	else if (linecount == 3) {
-	    if (case_ignore_strncmp(buff, "Altitude is in ", 15) == 0) {
-		char *unit = &buff[15];
-		if (case_ignore_strncmp(unit, "Feet", 4) == 0) {
-		    altunit = 'f';
-		    alt_scale = FEET_TO_METERS(1.0);
-		}
-		else if (case_ignore_strncmp(unit, "Meter", 5) == 0) {
-		    altunit = 'm';
-		    alt_scale = 1.0;
-		}
-		else fatal(MYNAME ": Unknown unit (%s) used by altitude values!\n", unit); 
 	    }
 	}
 
@@ -797,7 +746,7 @@ static void
 ozi_waypt_pr(const waypoint * wpt)
 {
     static int index = 0;
-    double alt;
+    double alt_feet;
     char ozi_time[16];
     char *description;
     char *shortname;
@@ -814,9 +763,9 @@ ozi_waypt_pr(const waypoint * wpt)
     ozi_get_time_str(wpt, ozi_time, sizeof(ozi_time));
 
     if (wpt->altitude == unknown_alt) {
-        alt = -777;
+        alt_feet = -777;
     } else {
-        alt = wpt->altitude * alt_scale;
+        alt_feet = METERS_TO_FEET(wpt->altitude);
     }
 
     if ((!wpt->shortname) || (global_opts.synthesize_shortnames)) {
@@ -850,12 +799,10 @@ ozi_waypt_pr(const waypoint * wpt)
             index, shortname, wpt->latitude, wpt->longitude, ozi_time, 0,
             1, 3, fs->fgcolor, fs->bgcolor, description, 0, 0);
     if (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0))
-	gbfprintf(file_out, "%.1f,", wpt->proximity * prox_scale);
-    else if (proximity > 0)
-	gbfprintf(file_out,"%.1f,", proximity * prox_scale);
+	gbfprintf(file_out, "%.1f,", wpt->proximity);
     else
-	gbfprintf(file_out,"%d,", 0);
-    gbfprintf(file_out, "%.0f,%d,%d,%d\r\n", alt, 6, 0, 17);
+	gbfprintf(file_out,"%d,", proximity);
+    gbfprintf(file_out, "%.0f,%d,%d,%d\r\n", alt_feet, 6, 0, 17);
 
     xfree(description);
     xfree(shortname);

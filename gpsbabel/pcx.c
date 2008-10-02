@@ -98,7 +98,6 @@ data_read(void)
 	char tbuf[20];
 	char nbuf[20];
 	int points;
-	int line = 0;
 
 	read_as_degrees  = 0;
 	points = 0;
@@ -108,8 +107,6 @@ data_read(void)
 		char *ibuf = lrtrim(buff);
 		char *cp;
 		
-		if ((line++ == 0) && file_in->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
-
 		switch (ibuf[0]) {
 		case 'W': 
 			time[0] = 0;
@@ -322,7 +319,7 @@ gpsutil_disp(const waypoint *wpt)
 	}
 
 
-	gbfprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5.f %-40.40s %5e  %d\n",
+	gbfprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5d %-40.40s %5e  %d\n",
                 global_opts.synthesize_shortnames ?
                         mkshort_from_wpt(mkshort_handle, wpt) : 
 			wpt->shortname,
@@ -331,7 +328,7 @@ gpsutil_disp(const waypoint *wpt)
 		lon < 0.0 ? 'W' : 'E',
 		fabs(lon),
 		tbuf, 
-		(wpt->altitude == unknown_alt) ? -9999 : wpt->altitude,
+		-9999,
 		(wpt->description != NULL) ? wpt->description : "",
 		0.0,
 		icon_token);

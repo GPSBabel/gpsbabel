@@ -42,7 +42,7 @@ static char *index_opt;
 
 static
 arglist_t nmn4_args[] = {
-	{"index", &index_opt, "Index of route to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL },
+	{"index", &index_opt, "Index of route to write (if more the one in source)", NULL, ARGTYPE_INT, "1", NULL },
 	ARG_TERMINATOR
 };
 
@@ -101,7 +101,6 @@ nmn4_read_data(void)
 	char *buff;
 	char *str, *c;
 	int column;
-	int line = 0;
 
 	char *zip1, *zip2, *city, *street, *number;	
 	route_head *route;
@@ -112,7 +111,6 @@ nmn4_read_data(void)
 	
 	while ((buff = gbfgetstr(fin)))
 	{
-		if ((line++ == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 		str = buff = lrtrim(buff);
 		if (*buff == '\0') continue;
 		

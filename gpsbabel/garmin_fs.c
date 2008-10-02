@@ -2,7 +2,7 @@
   
     Implementation of special data used by Garmin products.
     
-    Copyright (C) 2006, 2007, 2008 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2006 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -66,9 +66,6 @@ garmin_fs_destroy(void *fs)
 		if (data->cross_road != NULL) xfree(data->cross_road);
 		if (data->facility != NULL) xfree(data->facility);
 		if (data->phone_nr != NULL) xfree(data->phone_nr);
-		if (data->phone_nr2 != NULL) xfree(data->phone_nr2);
-		if (data->fax_nr != NULL) xfree(data->fax_nr);
-		if (data->email != NULL) xfree(data->email);
 		if (data->postal_code != NULL) xfree(data->postal_code);
 		if (data->state != NULL) xfree(data->state);
 
@@ -107,9 +104,6 @@ void garmin_fs_copy(garmin_fs_t **dest, garmin_fs_t *src)
 	(*dest)->cross_road = (src->cross_road != NULL) ? xstrdup(src->cross_road) : NULL;
 	(*dest)->facility = (src->facility != NULL) ? xstrdup(src->facility) : NULL;
 	(*dest)->phone_nr = (src->phone_nr != NULL) ? xstrdup(src->phone_nr) : NULL;
-	(*dest)->phone_nr2 = (src->phone_nr2 != NULL) ? xstrdup(src->phone_nr2) : NULL;
-	(*dest)->fax_nr = (src->fax_nr != NULL) ? xstrdup(src->fax_nr) : NULL;
-	(*dest)->email = (src->email != NULL) ? xstrdup(src->email) : NULL;
 	(*dest)->postal_code = (src->postal_code != NULL) ? xstrdup(src->postal_code) : NULL;
 	(*dest)->state = (src->state != NULL) ? xstrdup(src->state) : NULL;
 }
@@ -125,9 +119,6 @@ void garmin_fs_convert(void *fs)
 	if (gmsd->cross_road) gmsd->cross_road = cet_convert_string(gmsd->cross_road);
 	if (gmsd->facility) gmsd->facility = cet_convert_string(gmsd->facility);
 	if (gmsd->phone_nr) gmsd->phone_nr = cet_convert_string(gmsd->phone_nr);
-	if (gmsd->phone_nr2) gmsd->phone_nr2 = cet_convert_string(gmsd->phone_nr2);
-	if (gmsd->fax_nr) gmsd->fax_nr = cet_convert_string(gmsd->fax_nr);
-	if (gmsd->email) gmsd->email = cet_convert_string(gmsd->email);
 	if (gmsd->postal_code) gmsd->postal_code = cet_convert_string(gmsd->postal_code);
 	if (gmsd->state) gmsd->state = cet_convert_string(gmsd->state);
 }
@@ -142,7 +133,6 @@ garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
 	
 	if (gmsd == NULL) return;
 	
-	/* Find out if there is at least one field set */
 	addr = GMSD_GET(addr, "");
 	if (! *addr) addr = GMSD_GET(city, "");
 	if (! *addr) addr = GMSD_GET(country, "");
@@ -199,42 +189,24 @@ garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
 			gbfprintf(ofd, "%*s</gpxx:Categories>\n", --space * 2, "");
 		}
 		if (*addr) {
-			char *str, *tmp;
+			char *str;
 			gbfprintf(ofd, "%*s<gpxx:Address>\n", space++ * 2, "");
 
-			if ((str = GMSD_GET(addr, NULL))) {
-				tmp = xml_entitize(str);
-				gbfprintf(ofd, "%*s<gpxx:StreetAddress>%s</gpxx:StreetAddress>\n", space * 2, "", tmp);
-				xfree(tmp);
-			}
-			if ((str = GMSD_GET(city, NULL))) {
-				tmp = xml_entitize(str);
-				gbfprintf(ofd, "%*s<gpxx:City>%s</gpxx:City>\n", space * 2, "", tmp);
-				xfree(tmp);
-			}
-			if ((str = GMSD_GET(state, NULL))) {
-				tmp = xml_entitize(str);
-				gbfprintf(ofd, "%*s<gpxx:State>%s</gpxx:State>\n", space * 2, "", tmp);
-				xfree(tmp);
-			}
-			if ((str = GMSD_GET(country, NULL))) {
-				tmp = xml_entitize(str);
-				gbfprintf(ofd, "%*s<gpxx:Country>%s</gpxx:Country>\n", space * 2, "", tmp);
-				xfree(tmp);
-			}
-			if ((str = GMSD_GET(postal_code, NULL))) {
-				tmp = xml_entitize(str);
-				gbfprintf(ofd, "%*s<gpxx:PostalCode>%s</gpxx:PostalCode>\n", space * 2, "", tmp);
-				xfree(tmp);
-			}
+			if ((str = GMSD_GET(addr, NULL)))
+				gbfprintf(ofd, "%*s<gpxx:StreetAddress>%s</gpxx:StreetAddress>\n", space * 2, "", str);
+			if ((str = GMSD_GET(city, NULL)))
+				gbfprintf(ofd, "%*s<gpxx:City>%s</gpxx:City>\n", space * 2, "", str);
+			if ((str = GMSD_GET(state, NULL)))
+				gbfprintf(ofd, "%*s<gpxx:State>%s</gpxx:State>\n", space * 2, "", str);
+			if ((str = GMSD_GET(country, NULL)))
+				gbfprintf(ofd, "%*s<gpxx:Country>%s</gpxx:Country>\n", space * 2, "", str);
+			if ((str = GMSD_GET(postal_code, NULL)))
+				gbfprintf(ofd, "%*s<gpxx:PostalCode>%s</gpxx:PostalCode>\n", space * 2, "", str);
 
 			gbfprintf(ofd, "%*s</gpxx:Address>\n", --space * 2, "");
 		}
-
 		if (*phone) {
-			char *tmp = xml_entitize(phone);
-			gbfprintf(ofd, "%*s<gpxx:PhoneNumber>%s</gpxx:PhoneNumber>\n", space * 2, "", tmp);
-			xfree(tmp);
+			gbfprintf(ofd, "%*s<gpxx:PhoneNumber>%s</gpxx:PhoneNumber>\n", space * 2, "", phone);
 		}
 
 		gbfprintf(ofd, "%*s</gpxx:WaypointExtension>\n", --space * 2, "");

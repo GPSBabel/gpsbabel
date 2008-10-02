@@ -228,68 +228,68 @@ static void rev_bytes(void *dword) {
 }
 
 static void swap_wpthdr(struct wpthdr *wpthdr,
-			void (*swap16_func)(void *), void (*swap32_func)(void *)) {
+			void (*swap16)(void *), void (*swap32)(void *)) {
   int i;
 
-  if ( swap32_func != NULL ) {
-    swap32_func( &wpthdr->id );
+  if ( swap32 != NULL ) {
+    swap32( &wpthdr->id );
   }
-  if ( swap16_func != NULL ) {
-    swap16_func( &wpthdr->num );
-    swap16_func( &wpthdr->next );
+  if ( swap16 != NULL ) {
+    swap16( &wpthdr->num );
+    swap16( &wpthdr->next );
     for (i=0; i<MAXWPT; i++)
-      swap16_func( &wpthdr->idx[i] );
+      swap16( &wpthdr->idx[i] );
   }
 }
 
 static void swap_wpt(struct wpt *wpt,
-		     void (*swap16_func)(void *), void (*swap32_func)(void *)) {
-  if ( swap16_func != NULL ) {
-    swap16_func( &wpt->usecount );
+		     void (*swap16)(void *), void (*swap32)(void *)) {
+  if ( swap16 != NULL ) {
+    swap16( &wpt->usecount );
   }
-  if ( swap32_func != NULL ) {
-    swap32_func( &wpt->pt.x );
-    swap32_func( &wpt->pt.y );
-    swap32_func( &wpt->date );
-    swap32_func( &wpt->time );
+  if ( swap32 != NULL ) {
+    swap32( &wpt->pt.x );
+    swap32( &wpt->pt.y );
+    swap32( &wpt->date );
+    swap32( &wpt->time );
   }
 }
 
 static void swap_rtehdr(struct rtehdr *rtehdr,
-			void (*swap16_func)(void *), void (*swap32_func)(void *)) {
+			void (*swap16)(void *), void (*swap32)(void *)) {
   int i;
 
-  if ( swap16_func != NULL) {
-    swap16_func( &rtehdr->num );
-    swap16_func( &rtehdr->next );
+  if ( swap16 != NULL) {
+    swap16( &rtehdr->num );
+    swap16( &rtehdr->next );
     for (i=0; i<MAXRTE; i++)
-      swap16_func( &rtehdr->idx[i] );
-    swap16_func( &rtehdr->rteno );
+      swap16( &rtehdr->idx[i] );
+    swap16( &rtehdr->rteno );
   }
-  if ( swap32_func != NULL ) {
-    swap32_func( &rtehdr->id );
+  if ( swap32 != NULL ) {
+    swap32( &rtehdr->id );
   }
 }
 
 static void swap_rte(struct rte *rte,
-		     void (*swap16_func)(void *), void (*swap32_func)(void *)) {
+		     void (*swap16)(void *), void (*swap32)(void *)) {
   int i;
 
-  if (swap16_func != NULL) {
-    swap16_func( &rte->wptnum );
+  if (swap16 != NULL) {
+    swap16( &rte->wptnum );
     for (i=0; i<MAXWPTINRTE; i++)
-      swap16_func( &rte->wptidx[i] );
-    swap16_func( &rte->reserved );
+      swap16( &rte->wptidx[i] );
+    swap16( &rte->reserved );
   }
-  if ( swap32_func != NULL ) {
-    swap32_func( &rte->date );
-    swap32_func( &rte->time );
+  if ( swap32 != NULL ) {
+    swap32( &rte->date );
+    swap32( &rte->time );
   }
 }
 
 static void wpr_swap(struct wprdata *wprdata) {
-  void (*swap16_func)(void *);
-  void (*swap32_func)(void *);
+  void (*swap16)(void *);
+  void (*swap32)(void *);
   int i;
 
   switch( byte_order() ) {
@@ -297,80 +297,80 @@ static void wpr_swap(struct wprdata *wprdata) {
     return;
     break;
   case SWAP_BOTH:		   /* swap words and bytes, BIG_ENDIAN */
-    swap16_func = sw_bytes;
-    swap32_func = rev_bytes;
+    swap16 = sw_bytes;
+    swap32 = rev_bytes;
     break;
   case SWAP_WORDS:		   /* swap words, PDP_ENDIAN */
-    swap16_func = NULL;
-    swap32_func = sw_words;
+    swap16 = NULL;
+    swap32 = sw_words;
     break;
   case SWAP_BYTES:		   /* swap bytes */
-    swap16_func = sw_bytes;
-    swap32_func = NULL;
+    swap16 = sw_bytes;
+    swap32 = NULL;
     break;
   default:
     return;			   /* never reached */
   }
   
-  swap_wpthdr( &(wprdata->wpthdr), swap16_func, swap32_func );
+  swap_wpthdr( &(wprdata->wpthdr), swap16, swap32 );
   for (i=0; i< MAXWPT; i++)
-    swap_wpt( &(wprdata->wpt[i]), swap16_func, swap32_func );
-  swap_rtehdr( &(wprdata->rtehdr), swap16_func, swap32_func );
+    swap_wpt( &(wprdata->wpt[i]), swap16, swap32 );
+  swap_rtehdr( &(wprdata->rtehdr), swap16, swap32 );
   for (i=0; i<MAXRTE; i++)
-    swap_rte( &(wprdata->rte[i]), swap16_func, swap32_func );
+    swap_rte( &(wprdata->rte[i]), swap16, swap32 );
 }
 
 static void swap_trkhdr(struct trkhdr *trkhdr,
-			void (*swap16_func)(void *), void (*swap32_func)(void *)) {
-  if ( swap16_func != NULL ) {
-    swap16_func( &(trkhdr->totalpt) );
-    swap16_func( &(trkhdr->next) );
+			void (*swap16)(void *), void (*swap32)(void *)) {
+  if ( swap16 != NULL ) {
+    swap16( &(trkhdr->totalpt) );
+    swap16( &(trkhdr->next) );
   }
-  if ( swap32_func != NULL ) {
-    swap32_func( &(trkhdr->occupied) );
-    swap32_func( &(trkhdr->show) );
-    swap32_func( &(trkhdr->fill) );
+  if ( swap32 != NULL ) {
+    swap32( &(trkhdr->occupied) );
+    swap32( &(trkhdr->show) );
+    swap32( &(trkhdr->fill) );
   }
 }
 
 static void swap_loghdr(struct loghdr *loghdr,
-			void (*swap16_func)(void *), void (*swap32_func)(void *)) {
+			void (*swap16)(void *), void (*swap32)(void *)) {
   int i;
 
-  if ( swap16_func != NULL ) {
-    swap16_func( &(loghdr->num) );
-    swap16_func( &(loghdr->next) );
+  if ( swap16 != NULL ) {
+    swap16( &(loghdr->num) );
+    swap16( &(loghdr->next) );
   }
-  if ( swap32_func != NULL ) {
-    swap32_func( &(loghdr->id) );
-    swap32_func( &(loghdr->date) );
-    swap32_func( &(loghdr->time) );
+  if ( swap32 != NULL ) {
+    swap32( &(loghdr->id) );
+    swap32( &(loghdr->date) );
+    swap32( &(loghdr->time) );
   }
   for (i=0; i<MAXTRK; i++)
-    swap_trkhdr( &(loghdr->trkhdr[i]), swap16_func, swap32_func );
+    swap_trkhdr( &(loghdr->trkhdr[i]), swap16, swap32 );
 }
 
 static void swap_trklog(struct trklog *trklog,
-			void (*swap16_func)(void *), void (*swap32_func)(void *)) {
+			void (*swap16)(void *), void (*swap32)(void *)) {
   int i;
 
-  if ( swap16_func != NULL ) {
+  if ( swap16 != NULL ) {
     for (i=0; i<MAXPTINTRK; i++) {
-      swap16_func( &(trklog->sh[i].speed) );
-      swap16_func( &(trklog->sh[i].height) );
+      swap16( &(trklog->sh[i].speed) );
+      swap16( &(trklog->sh[i].height) );
     }
   }
-  if ( swap32_func != NULL ) {
+  if ( swap32 != NULL ) {
     for (i=0; i<MAXPTINTRK; i++) {
-      swap32_func( &(trklog->pt[i].x) );
-      swap32_func( &(trklog->pt[i].y) );
+      swap32( &(trklog->pt[i].x) );
+      swap32( &(trklog->pt[i].y) );
     }
   }
 }
 
 static void trl_swap(struct trldata *trldata) {
-  void (*swap16_func)(void *);
-  void (*swap32_func)(void *);
+  void (*swap16)(void *);
+  void (*swap32)(void *);
   int i;
 
   switch( byte_order() ) {
@@ -378,24 +378,24 @@ static void trl_swap(struct trldata *trldata) {
     return;
     break;
   case SWAP_BOTH:		   /* swap words and bytes, BIG_ENDIAN */
-    swap16_func = sw_bytes;
-    swap32_func = rev_bytes;
+    swap16 = sw_bytes;
+    swap32 = rev_bytes;
     break;
   case SWAP_WORDS:		   /* swap words, PDP_ENDIAN */
-    swap16_func = NULL;
-    swap32_func = sw_words;
+    swap16 = NULL;
+    swap32 = sw_words;
     break;
   case SWAP_BYTES:		   /* swap bytes */
-    swap16_func = sw_bytes;
-    swap32_func = NULL;
+    swap16 = sw_bytes;
+    swap32 = NULL;
     break;
   default:
     return;                        /* never reached */
   }
 
-  swap_loghdr( &(trldata->loghdr), swap16_func, swap32_func);
+  swap_loghdr( &(trldata->loghdr), swap16, swap32);
   for (i=0; i<MAXTRK; i++)
-    swap_trklog( &(trldata->trklog[i]), swap16_func, swap32_func);
+    swap_trklog( &(trldata->trklog[i]), swap16, swap32);
 }
 
 
@@ -570,12 +570,10 @@ static void trl_read(void) {
 	j >= 0 && (trkhdr->name[j] == ' ' || trkhdr->name[j] == '\0');
 	j--) {};
     TL->rte_name = xstrndup(trkhdr->name,j+1);
-/*  TL->rte_name[TRK_NAME_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
     for(j=TRK_COMMENT_LEN-1;
 	j >= 0 && (trkhdr->comment[j] == ' ' || trkhdr->comment[j] == '\0');
 	j--) {};
     TL->rte_desc = xstrndup(trkhdr->comment,j+1);
-/*  TL->rte_desc[TRK_COMMENT_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
     TL->rte_num = i;
 
     track_add_head(TL);          

@@ -50,7 +50,7 @@ pdb_invalid_file(const pdbfile *pdb_in, const char *fmt, ...)
 /* try to read to EOF (avoid determining file-size) */
 
 static void *
-pdb_read_tail(gbfile *fin, gbuint32 *size)
+pdb_read_tail(gbfile *fin, gbint32 *size)
 {
 	int count;
 	char buff[256];
@@ -82,7 +82,7 @@ pdb_load_data(pdbfile *fin)
 {
 	gbuint16 i, ct;
 	pdbrec_t *last_rec;
-	gbuint32 offs;
+	gbint32 offs;
 	pdbrec_t *rec;
 	
 	/* load the header */
@@ -157,7 +157,7 @@ pdb_load_data(pdbfile *fin)
 	last_rec = fin->rec_list;
 
 	if (fin->appinfo_offs != 0) {
-		gbuint32 top;
+		gbint32 top;
 
 		/* seek to application info offset */
 		while (offs < fin->appinfo_offs) {
@@ -176,7 +176,7 @@ pdb_load_data(pdbfile *fin)
 			offs += fin->appinfo_len;
 		}
 		else {
-			gbuint32 size;
+			gbint32 size;
 			fin->appinfo = pdb_read_tail(fin->file, &size);
 			fin->appinfo_len = size;
 			offs += size;

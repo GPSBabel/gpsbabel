@@ -27,15 +27,6 @@
 /* Define to 1 if you have the `sleep' function. */
 #undef HAVE_SLEEP
 
-/* Define if we have va_copy */
-#undef HAVE_VA_COPY
-
-/* Define if we have __va_copy */
-#undef HAVE___VA_COPY
-
-/* Define as 1 if your va_list type is an array */
-#undef HAVE_VA_LIST_AS_ARRAY
-
 /* 1 to enable as many formats as possible */
 #undef MAXIMAL_ENABLED
 

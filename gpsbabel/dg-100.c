@@ -75,6 +75,7 @@ struct dg100_command dg100_commands[] = {
 };
 const unsigned dg100_numcommands = sizeof(dg100_commands) / sizeof(dg100_commands[0]);
 
+/* TODO: use obstacks or vmem_t instead? */
 struct dynarray16 {
 	unsigned count; /* number of elements used */
 	unsigned limit; /* number of elements allocated */
@@ -85,7 +86,7 @@ struct dynarray16 {
 static struct dg100_command *
 dg100_findcmd(int id)
 {
-	unsigned int i;
+	int i;
 
 	/* linear search should be OK as long as dg100_numcommands is small */
 	for (i = 0; i < dg100_numcommands; i++) {
@@ -107,19 +108,20 @@ dynarray16_init(struct dynarray16 *a, unsigned limit)
 static gbint16 *
 dynarray16_alloc(struct dynarray16 *a, unsigned n)
 {
-	unsigned oldcount, need;
+	unsigned i;
+	int need;
 	const unsigned elements_per_chunk = 4096 / sizeof(a->data[0]);
 	
-	oldcount = a->count;
+	i = a->count;
 	a->count += n;
 	
-	if (a->count > a->limit) {
-		need = a->count - a->limit;
+	need = a->count - a->limit;
+	if (need > 0) {
 		need = (need > elements_per_chunk) ? need : elements_per_chunk;
 		a->limit += need;
-		a->data = xrealloc(a->data, sizeof(a->data[0]) * a->limit);
+		xrealloc(a->data, sizeof(a->data[0]) * a->limit);
 	}
-	return(a->data + oldcount);
+	return(a->data + i);
 }
 
 static time_t
@@ -149,7 +151,7 @@ bintime2utc(int date, int time)
 static void 
 dg100_debug(const char *hdr, int include_nl, size_t sz, unsigned char *buf)
 {
-	unsigned int i;
+	int i;
 
 	/* Only give byte dumps for higher debug levels */
 	if (global_opts.debug_level < 5) {
@@ -244,11 +246,7 @@ process_gpsfile(gbuint8 data[], route_head *track)
 			bintime = be_read32(data + i +  8);
 			bindate = be_read32(data + i + 12);
 			wpt->creation_time = bintime2utc(bindate, bintime);
-			/* The device presents the speed as a fixed-point number
-			 * with a scaling factor of 100, in km/h.
-			 * The waypoint struct wants the speed as a
-			 * floating-point number, in m/s. */
-			wpt->speed = KPH_TO_MPS(be_read32(data + i + 16) / 100.0);
+			wpt->speed = be_read32(data + i + 16) / 100.0;
 			wpt->wpt_flags.speed = 1;
 		}
 
@@ -385,11 +383,10 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 	 */
 
 	/* read Payload Length, Command ID, and two further bytes */
-	i = gbser_read_wait(serial_handle, &buf[2], 5, 1000);
-	if (i < 5) {
-		fatal("Expected to read 5 bytes, but got %d\n", i);
+	for (i = 2; i < 7; i++) {
+		buf[i] = dg100_recv_byte();
+		dg100_debug("", 0, 1, &buf[i]);
 	}
-	dg100_debug("", 0, 5, &buf[2]);
 
 	payload_len_field = be_read16(buf + 2);
 	cmd = buf[4];
@@ -433,12 +430,21 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 				frame_len, FRAME_MAXLEN);
 	}
 
+	/* TODO: Since we know how long the frame should be, we could try to
+	 * read the rest of the frame at once using gbser_read_wait(). */
+#if 0
+	for (i = 7; i < frame_len; i++) {
+		buf[i] = dg100_recv_byte();
+		dg100_debug("", 0, 1, &buf[i]);
+	}
+#else
 	i = gbser_read_wait(serial_handle, &buf[7], frame_len - 7, 1000);
+	dg100_debug("", 0, frame_len - 7, &buf[7]);
 	if (i < frame_len - 7) {
 		fatal("Expected to read %d bytes, but got %d\n", 
 			frame_len - 7, i);
 	}
-	dg100_debug("", 0, frame_len - 7, &buf[7]);
+#endif
 
 	frame_start_seq   = be_read16(buf + 0);
 	payload_len_field = be_read16(buf + 2);
@@ -469,12 +475,12 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 
 /* return value: number of bytes copied into buf, -1 on error */
 static int
-dg100_recv(gbuint8 expected_id, void *buf, unsigned int len)
+dg100_recv(gbuint8 expected_id, void *buf, unsigned len)
 {
 	int n;
 	struct dg100_command *cmdinfo;
 	gbuint8 *data;
-	unsigned int copysize, trailing_bytes;
+	int copysize, trailing_bytes;
 
 	n = dg100_recv_frame(&cmdinfo, &data);
 
@@ -545,10 +551,6 @@ dg100_getfileheaders(struct dynarray16 *headers)
 		nextheader = be_read16(answer + 2);
 		dg100_log("found %d headers, nextheader=%d\n",
 			numheaders, nextheader);
-		if (numheaders <= 0) {
-			dg100_log("no further headers, aborting the loop\n");
-			break;
-		}
 
 		h = dynarray16_alloc(headers, numheaders);
 		for (i = 0; i < numheaders; i++) {
@@ -580,8 +582,7 @@ dg100_getfile(gbint16 num, route_head *track)
 static void
 dg100_getfiles()
 {
-	unsigned int i;
-	int filenum;
+	int i, filenum;
 	struct dynarray16 headers;
 	route_head *track;
 

@@ -1,7 +1,7 @@
 /*
     Access GPX data files.
 
-    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,8 +31,6 @@
 static xml_tag *cur_tag;
 static vmem_t cdatastr;
 static char *opt_logpoint = NULL;
-static char *opt_humminbirdext = NULL;
-static char *opt_garminext = NULL;
 static int logpoint_ct = 0;
 
 static const char *gpx_version;
@@ -178,10 +176,6 @@ typedef enum {
 	tt_trk_trkseg_trkpt_time,
 	tt_trk_trkseg_trkpt_course,	
 	tt_trk_trkseg_trkpt_speed,
-
-	tt_humminbird_wpt_depth,
-	tt_humminbird_wpt_status,
-	tt_humminbird_trk_trkseg_trkpt_depth,
 } tag_type;
 
 typedef struct {
@@ -235,7 +229,7 @@ gpx_rm_from_global(gpx_global_entry *ge)
 }
 
 static void
-gpx_write_gdata(gpx_global_entry *ge, const char *tag)
+gpx_write_gdata(gpx_global_entry *ge, char *tag)
 {
 	queue *elem, *tmp;
 	gpx_global_entry * gep;
@@ -339,9 +333,6 @@ tag_mapping tag_path_map[] = {
 	{ tt_garmin_wpt_postal_code, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:PostalCode", 0UL },
 	{ tt_garmin_wpt_phone_nr, 0, GARMIN_WPT_EXT "/gpxx:PhoneNumber", 0UL },
 
-	{ tt_humminbird_wpt_depth, 0, "/gpx/wpt/extensions/h:depth", 0UL },  // in centimeters.
-	{ tt_humminbird_wpt_status, 0, "/gpx/wpt/extensions/h:status", 0UL },
-
 	{ tt_rte, 0, "/gpx/rte", 0UL },
 	{ tt_rte_name, 0, "/gpx/rte/name", 0UL },
 	{ tt_rte_desc, 0, "/gpx/rte/desc", 0UL },
@@ -372,8 +363,6 @@ tag_mapping tag_path_map[] = {
 	{ tt_trk_trkseg_trkpt_sym, 0, "/gpx/trk/trkseg/trkpt/sym", 0UL },
 	{ tt_trk_trkseg_trkpt_course, 0, "/gpx/trk/trkseg/trkpt/course", 0UL },
 	{ tt_trk_trkseg_trkpt_speed, 0, "/gpx/trk/trkseg/trkpt/speed", 0UL },
-
-	{ tt_humminbird_trk_trkseg_trkpt_depth, 0, "/gpx/trk/trkseg/trkpt/extensions/h:depth", 0UL },  // in centimeters.
 
 	/* Common to tracks, routes, and waypts */
 	{ tt_fix,  0, "/gpx/wpt/fix", 0UL },
@@ -492,24 +481,23 @@ static void
 tag_gs_cache(const char **attrv)
 {
 	const char **avp;
-	geocache_data *gc_data = waypt_alloc_gc_data(wpt_tmp);
 
 	for (avp = &attrv[0]; *avp; avp+=2) {
 		if (strcmp(avp[0], "id") == 0) {
-				gc_data->id = atoi(avp[1]);
+				wpt_tmp->gc_data.id = atoi(avp[1]);
 		} else if (strcmp(avp[0], "available") == 0) {
 			if (case_ignore_strcmp(avp[1], "True") == 0) {
-				gc_data->is_available = status_true;
+				wpt_tmp->gc_data.is_available = status_true;
 			}
 			else if (case_ignore_strcmp(avp[1], "False") == 0) {
-				gc_data->is_available = status_false;
+				wpt_tmp->gc_data.is_available = status_false;
 			}			
 		} else if (strcmp(avp[0], "archived") == 0) {
 			if (case_ignore_strcmp(avp[1], "True") == 0) {
-				gc_data->is_archived = status_true;
+				wpt_tmp->gc_data.is_archived = status_true;
 			}
 			else if (case_ignore_strcmp(avp[1], "False") == 0) {
-				gc_data->is_archived = status_false;
+				wpt_tmp->gc_data.is_archived = status_false;
 			}			
 		}
 	}
@@ -635,7 +623,6 @@ gpx_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 	char *e;
 	char *ep;
 	int passthrough;
-	int tag;
 	const char *el = xml_convert_to_char_string(xml_el);
 	const char **attr = xml_convert_attrs_to_char_string(xml_attr);
 
@@ -647,12 +634,12 @@ gpx_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 
 	
 	/*
-	 * Reset end-of-string without actually emptying/reallocing cdatastr.
+	 * FIXME: Find out why a cdatastr[0] doesn't adequately reset the 	
+	 * cdata handler.
 	 */
-	*(char *) cdatastr.mem = 0;
+	memset(cdatastr.mem, 0, cdatastr.size);
 
-	tag = get_tag(current_tag.mem, &passthrough);
-	switch (tag) {
+	switch (get_tag(current_tag.mem, &passthrough)) {
 	case tt_gpx:
 		tag_gpx(attr);
 		break;
@@ -699,7 +686,7 @@ gpx_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 		break;
 	case tt_cache_placer:
 		if (*attr && (0 == strcmp(attr[0], "id"))) {
-			waypt_alloc_gc_data(wpt_tmp)->placer_id = atoi(attr[1]);
+			wpt_tmp->gc_data.placer_id = atoi(attr[1]);
 		}
 	default:
 		break;
@@ -935,43 +922,41 @@ gpx_end(void *data, const XML_Char *xml_el)
 		wpt_tmp->notes = xstrdup(cdatastrp);
 		break;
 	case tt_cache_container:
-		waypt_alloc_gc_data(wpt_tmp)->container = gs_mkcont(cdatastrp);
+		wpt_tmp->gc_data.container = gs_mkcont(cdatastrp);
 		break;
 	case tt_cache_type:
-		waypt_alloc_gc_data(wpt_tmp)->type = gs_mktype(cdatastrp);
+		wpt_tmp->gc_data.type = gs_mktype(cdatastrp);
 		break;
 	case tt_cache_difficulty:
 		sscanf(cdatastrp, "%f", &x);
-		waypt_alloc_gc_data(wpt_tmp)->diff = x * 10;
+		wpt_tmp->gc_data.diff = x * 10;
 		break;
 	case tt_cache_hint:
 		rtrim(cdatastrp);
 		if (cdatastrp[0]) {
-			waypt_alloc_gc_data(wpt_tmp)->hint = xstrdup(cdatastrp);
+			wpt_tmp->gc_data.hint = xstrdup(cdatastrp);
 		}
 		break;
 	case tt_cache_desc_long:
 		rtrim(cdatastrp);
 		if (cdatastrp[0]) {
-			geocache_data *gc_data = waypt_alloc_gc_data(wpt_tmp);
-			gc_data->desc_long.is_html = cache_descr_is_html;
-			gc_data->desc_long.utfstring = xstrdup(cdatastrp);
+			wpt_tmp->gc_data.desc_long.is_html = cache_descr_is_html;
+			wpt_tmp->gc_data.desc_long.utfstring = xstrdup(cdatastrp);
 		}
 		break;
 	case tt_cache_desc_short:
 		rtrim(cdatastrp);
 		if (cdatastrp[0]) {
-			geocache_data *gc_data = waypt_alloc_gc_data(wpt_tmp);
-			gc_data->desc_short.is_html = cache_descr_is_html;
-			gc_data->desc_short.utfstring = xstrdup(cdatastrp);
+			wpt_tmp->gc_data.desc_short.is_html = cache_descr_is_html;
+			wpt_tmp->gc_data.desc_short.utfstring = xstrdup(cdatastrp);
 		}
 		break;
 	case tt_cache_terrain:
 		sscanf(cdatastrp, "%f", &x);
-		waypt_alloc_gc_data(wpt_tmp)->terr = x * 10;
+		wpt_tmp->gc_data.terr = x * 10;
 		break;
 	case tt_cache_placer:
-		waypt_alloc_gc_data(wpt_tmp)->placer = xstrdup(cdatastrp);
+		wpt_tmp->gc_data.placer = xstrdup(cdatastrp);
 		break;
 	case tt_cache_log_date:
 		gc_log_date = xml_parse_time( cdatastrp, NULL );
@@ -983,8 +968,8 @@ gpx_end(void *data, const XML_Char *xml_el)
 	 */
 	case tt_cache_log_type:
 		if ((0 == strcmp(cdatastrp, "Found it")) && 
-		    (0 == wpt_tmp->gc_data->last_found)) {
-			waypt_alloc_gc_data(wpt_tmp)->last_found  = gc_log_date;
+		    (0 == wpt_tmp->gc_data.last_found)) {
+			wpt_tmp->gc_data.last_found  = gc_log_date;
 		}
 		gc_log_date = 0;
 		break;
@@ -1006,13 +991,6 @@ gpx_end(void *data, const XML_Char *xml_el)
 		garmin_fs_xml_convert(tt_garmin_wpt_extensions, tag, cdatastrp, wpt_tmp);
 		break;
 
-	/*
-	 * Humminbird-waypoint-specific tags.
- 	 */
-	case tt_humminbird_wpt_depth:
-	case tt_humminbird_trk_trkseg_trkpt_depth:
-		WAYPT_SET(wpt_tmp, depth, atof(cdatastrp) / 100.0)
-		break;
 	/*
 	 * Route-specific tags.
  	 */
@@ -1184,7 +1162,7 @@ gpx_cdata(void *dta, const XML_Char *xml_el, int len)
 	memcpy(estr, s, len);
 	estr[len]  = 0;
 
- 	if (!cur_tag)
+	if (!cur_tag) 
 		return;
 
 		if ( cur_tag->child ) {
@@ -1200,7 +1178,11 @@ gpx_cdata(void *dta, const XML_Char *xml_el, int len)
 			cdatalen = &(cur_tag->cdatalen);
 		}
 		estr = *cdata;
-		*cdata = xrealloc(*cdata, *cdatalen + len + 1);
+		*cdata = xcalloc( *cdatalen + len + 1, 1);
+		if ( estr ) {
+			memcpy( *cdata, estr, *cdatalen);
+			xfree( estr );
+		}
 		estr = *cdata + *cdatalen;
 		memcpy( estr, s, len );
 		*(estr+len) = '\0';
@@ -1365,7 +1347,7 @@ gpx_read(void)
 				badchar = strchr( badchar+1, '&' );
 			} 
 			{
-				char hex[]="0123456789abcdef";
+				char *hex="0123456789abcdef";
 				badchar = strstr( buf, "&#x" );
 				while ( badchar ) {
 					int val = 0;
@@ -1413,7 +1395,7 @@ gpx_read(void)
 }
 
 static void
-fprint_tag_and_attrs( const char *prefix, const char *suffix, xml_tag *tag )
+fprint_tag_and_attrs( char *prefix, char *suffix, xml_tag *tag )
 {
 	char **pa;
 	gbfprintf( ofd, "%s%s", prefix, tag->tagname );
@@ -1446,9 +1428,9 @@ fprint_xml_chain( xml_tag *tag, const waypoint *wpt )
 			if ( tag->child ) {
 				fprint_xml_chain(tag->child, wpt);
 			}
-			if ( wpt && wpt->gc_data->exported &&
+			if ( wpt && wpt->gc_data.exported &&
 			    strcmp(tag->tagname, "groundspeak:cache" ) == 0 ) {
-				xml_write_time( ofd, wpt->gc_data->exported, 0,
+				xml_write_time( ofd, wpt->gc_data.exported, 0,
 						"groundspeak:exported" );
 			}
 			gbfprintf( ofd, "</%s>\n", tag->tagname);
@@ -1536,7 +1518,7 @@ write_gpx_url(const waypoint *waypointp)
 static void
 gpx_write_common_acc(const waypoint *waypointp, const char *indent)
 {
-	const char *fix = NULL;
+	char *fix = NULL;
 
 	switch (waypointp->fix) {
 		case fix_2d:
@@ -1576,7 +1558,6 @@ gpx_write_common_acc(const waypoint *waypointp, const char *indent)
 	}
 }
 
-
 static void
 gpx_write_common_position(const waypoint *waypointp, const char *indent)
 {
@@ -1585,25 +1566,7 @@ gpx_write_common_position(const waypoint *waypointp, const char *indent)
 			 indent, waypointp->altitude);
 	}
 	if (waypointp->creation_time) {
-		gbfprintf(ofd, indent);
 		xml_write_time(ofd, waypointp->creation_time, waypointp->microseconds, "time");
-	}
-}
-
-static void
-gpx_write_common_depth(const waypoint *waypointp, const char *indent)
-{
-	if (waypointp->depth != 0) {
-		if (opt_humminbirdext || opt_garminext) {
-			gbfprintf(ofd, "%s<extensions>\n", indent);
-			if (opt_humminbirdext)
-				gbfprintf(ofd, "%s  <h:depth>%f</h:depth>\n",
-				          indent, waypointp->depth*100.0);
-			if (opt_garminext)
-				gbfprintf(ofd, "%s  <gpxx:Depth>%f</gpxx:Depth>\n",
-				          indent, waypointp->depth);
-			gbfprintf(ofd, "%s</extensions>\n", indent);
-		}
 	}
 }
 
@@ -1661,7 +1624,6 @@ gpx_waypt_pr(const waypoint *waypointp)
 		/* MapSource doesn't accepts extensions from 1.0 */
 		garmin_fs_xml_fprint(ofd, waypointp);
 	}
-	gpx_write_common_depth(waypointp, "  ");
 	gbfprintf(ofd, "</wpt>\n");
 }
 
@@ -1676,15 +1638,12 @@ gpx_track_hdr(const route_head *rte)
 	if (rte->rte_num) {
 		gbfprintf(ofd, "<number>%d</number>\n", rte->rte_num);
 	}
-	
-	if (gpx_wversion_num > 10) {
-		fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
-		if ( fs_gpx ) {
-			fprint_xml_chain( fs_gpx->tag, NULL );
-		}
-	}
-
 	gbfprintf(ofd, "<trkseg>\n");
+
+	fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
+	if ( fs_gpx ) {
+		fprint_xml_chain( fs_gpx->tag, NULL );
+	}
 }
 
 static void
@@ -1723,7 +1682,6 @@ gpx_track_disp(const waypoint *waypointp)
 		fprint_xml_chain( fs_gpx->tag, waypointp );
 	}
 
-	gpx_write_common_depth(waypointp, "  ");
 	gbfprintf(ofd, "</trkpt>\n");
 }
 
@@ -1752,11 +1710,9 @@ gpx_route_hdr(const route_head *rte)
 		gbfprintf(ofd, "  <number>%d</number>\n", rte->rte_num);
 	}
 
-	if (gpx_wversion_num > 10) {
-		fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
-		if ( fs_gpx ) {
-			fprint_xml_chain( fs_gpx->tag, NULL );
-		}
+	fs_gpx = (fs_xml *)fs_chain_find( rte->fs, FS_GPX );
+	if ( fs_gpx ) {
+		fprint_xml_chain( fs_gpx->tag, NULL );
 	}
 }
 
@@ -1778,7 +1734,6 @@ gpx_route_disp(const waypoint *waypointp)
 		fprint_xml_chain( fs_gpx->tag, waypointp );
 	}
 
-	gpx_write_common_depth(waypointp, "    ");
 	gbfprintf(ofd, "  </rtept>\n");
 }
 
@@ -1824,9 +1779,6 @@ gpx_write(void)
 	time_t now = 0;
 	int short_length;
 
-	if (opt_humminbirdext || opt_garminext)
-		gpx_wversion = (char *)"1.1";
-
 	gpx_wversion_num = strtod(gpx_wversion, NULL) * 10;
 
 	if (gpx_wversion_num <= 0) {
@@ -1844,21 +1796,15 @@ gpx_write(void)
 	setshort_length(mkshort_handle, short_length);
 
 	gbfprintf(ofd, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", global_opts.charset_name);
-	gbfprintf(ofd, "<gpx\n  version=\"%s\"\n", gpx_wversion);
-	gbfprintf(ofd, "  creator=\"" CREATOR_NAME_URL "\"\n");
-	gbfprintf(ofd, "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-
-	if (opt_humminbirdext)
-		gbfprintf(ofd, "  xmlns:h=\"http://humminbird.com\"\n");
-	if (opt_garminext)
-		gbfprintf(ofd, "  xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\"");
-
-	gbfprintf(ofd, "  xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
+	gbfprintf(ofd, "<gpx\n version=\"%s\"\n", gpx_wversion);
+	gbfprintf(ofd, "creator=\"" CREATOR_NAME_URL "\"\n");
+	gbfprintf(ofd, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+	gbfprintf(ofd, "xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
 	if (xsi_schema_loc) {
-		gbfprintf(ofd, "  xsi:schemaLocation=\"%s\">\n", xsi_schema_loc);
+		gbfprintf(ofd, "xsi:schemaLocation=\"%s\">\n", xsi_schema_loc);
 	} else {
 		gbfprintf(ofd,
-			"  xsi:schemaLocation=" DEFAULT_XSI_SCHEMA_LOC_FMT">\n",
+			"xsi:schemaLocation=" DEFAULT_XSI_SCHEMA_LOC_FMT">\n",
 			gpx_wversion[0], gpx_wversion[2],
 			gpx_wversion[0], gpx_wversion[2]);
 	}
@@ -1935,12 +1881,6 @@ arglist_t gpx_args[] = {
 		NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	{ "gpxver", &gpx_wversion, "Target GPX version for output", 
 		"1.0", ARGTYPE_STRING, ARG_NOMINMAX},
-	{ "humminbirdextensions", &opt_humminbirdext,
-		"Add info (depth) as Humminbird extension", 
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
-	{ "garminextensions", &opt_garminext,
-		"Add info (depth) as Garmin extension", 
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
 

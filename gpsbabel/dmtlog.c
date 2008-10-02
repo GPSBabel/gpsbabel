@@ -54,7 +54,7 @@ static int track_index, this_index;
 static
 arglist_t dmtlog_args[] = {
 	{ "index", &opt_index,
-		"Index of track (if more than one in source)", "1", ARGTYPE_INT, "1", NULL },
+		"Index of track (if more the one in source)", "1", ARGTYPE_INT, "1", NULL },
 	ARG_TERMINATOR
 };
 
@@ -324,26 +324,6 @@ read_str(gbfile *f)
 	return res;
 }
 
-static void
-write_str(const char *str, gbfile *f)
-{
-	if (str && *str) {
-		int len = strlen(str);
-		if (len > 0xfe) {
-#if 0
-			if (len > 0x7fff) len = 0x7fff;
-			gbfputc((unsigned char) 0xff, f);
-			gbfputint16(len, f);
-#else
-			len = 0xfe;
-			gbfputc(len, f);
-#endif
-		}
-		else gbfputc(len, f);
-		gbfwrite(str, len, 1, f);
-	}
-	else gbfputc(0, f);
-}
 
 static int
 read_datum(gbfile *f)
@@ -690,18 +670,18 @@ write_header(const route_head *trk)
 		queue *curr, *prev;
 		QUEUE_FOR_EACH(&trk->waypoint_list, curr, prev) count++;
 	}
-	write_str(trk && trk->rte_name && *trk->rte_name ? trk->rte_name : "Name", fout);
+	gbfputpstr(trk && trk->rte_name && *trk->rte_name ? trk->rte_name : "Name", fout);
 	
 	xasprintf(&cout, "%d trackpoints and %d waypoints", count, waypt_count());
-	write_str(cout, fout);
+	gbfputpstr(cout, fout);
 	xfree(cout);
 	
 	for (i = 3; i <= 8; i++) gbfputc(ZERO, fout);
-	write_str("GPSBabel", fout);
+	gbfputpstr("GPSBabel", fout);
 	gbfputint32(count, fout);
 	if (count > 0) {
-		write_str("WGS84", fout);
-		write_str("WGS84", fout);
+		gbfputpstr("WGS84", fout);
+		gbfputpstr("WGS84", fout);
 	}
 }
 
@@ -741,8 +721,8 @@ wpt_cb(const waypoint *wpt)
 	names = 1;
 	if (wpt->description && *wpt->description) names = 2;
 	gbfputint32(names, fout);
-	if (names > 1) write_str(wpt->description, fout);
-	write_str(wpt->shortname && *wpt->shortname ? wpt->shortname : "Name", fout);
+	if (names > 1) gbfputpstr(wpt->description, fout);
+	gbfputpstr(wpt->shortname && *wpt->shortname ? wpt->shortname : "Name", fout);
 }
 
 static void
@@ -766,8 +746,8 @@ dmtlog_write(void)
 		write_header(NULL);
 	gbfputint32(waypt_count(), fout);
 	if (waypt_count() > 0) {
-		write_str("WGS84", fout);
-		write_str("WGS84", fout);
+		gbfputpstr("WGS84", fout);
+		gbfputpstr("WGS84", fout);
 		waypt_disp_all(wpt_cb);
 	}
 }

@@ -78,7 +78,6 @@ data_read(void)
 	long flags = 0;
 	int speed = 0, channel = 0;
 	struct tm tm;
-	int line = 0;
 	
 	memset(&tm, 0, sizeof(tm));
 
@@ -86,7 +85,6 @@ data_read(void)
 		char *field;
 		int field_num, len, i, stealth = 0;
 		
-		if ((line++ == 0) && file_in->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 		ibuf = lrtrim(ibuf);
         /* A sharp in column zero might be a comment.  Or it might be
          * something useful, like the date.

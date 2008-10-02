@@ -389,7 +389,7 @@ data_read(void)
 		char *cin = buff;
 		char *cdata;
 		
-		if ((line++ == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
+		line++;
 		
 		cin = lrtrim(buff);
 		if (!*cin) continue;

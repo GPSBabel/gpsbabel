@@ -276,10 +276,8 @@ gusb_init(const char *pname, gpsdevh **dh)
 		if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL, 
 			(GUID *) &GARMIN_GUID, match, &devinterface)) {
 			if (GetLastError() == ERROR_NO_MORE_ITEMS) {
- 
 				break;
 			} else {
-
 				GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
 				warning("Is the Garmin USB unit number %d powered up and connected?", un);
 				return 0;
@@ -292,4 +290,3 @@ gusb_init(const char *pname, gpsdevh **dh)
 	gusb_list_units();
 	exit (0);
 }
-

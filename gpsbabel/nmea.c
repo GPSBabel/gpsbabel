@@ -987,8 +987,6 @@ nmea_read(void)
 		
 		line++;
 		
-		if ((line == 0) & file_in->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
-
 		if ((line == 0) && (case_ignore_strncmp(ibuf, "@SonyGPS/ver", 12) == 0)) {
 			/* special hack for Sony GPS-CS1 files:
 			   they are fully (?) nmea compatible, but come with a header line like

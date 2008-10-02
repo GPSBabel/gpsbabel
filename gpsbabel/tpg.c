@@ -32,8 +32,8 @@
 #define MAXTPGSTRINGSIZE	256
 #define MAXTPGOUTPUTPINS	65535   
 
-static gbfile *tpg_file_in;
-static gbfile *tpg_file_out;
+static FILE *tpg_file_in;
+static FILE *tpg_file_out;
 static short_handle mkshort_handle;
 static char *tpg_datum_opt;
 static int tpg_datum_idx;
@@ -45,6 +45,37 @@ arglist_t tpg_args[] = {
 	{"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
+
+static int
+tpg_fread(void *buff, size_t size, size_t members, FILE * fp) 
+{
+    size_t br;
+
+    br = fread(buff, size, members, fp);
+
+    if (br != members) {
+        fatal(MYNAME ": requested to read %lu bytes, read %lu bytes.\n", 
+                    (unsigned long) members, (unsigned long) br);
+    }
+
+    return (br);
+}
+
+static double
+tpg_fread_double(FILE *fp)
+{
+	unsigned char buf[8];
+	tpg_fread(buf, 1, 8, fp);
+	return le_read_double(buf);
+}
+
+static void
+tpg_fwrite_double(double x, FILE *fp)
+{
+	unsigned char cbuf[8];
+	le_write_double(cbuf,x);
+	fwrite(cbuf, 8, 1, fp);
+}
 
 static int
 valid_tpg_header(char * header, int len) 
@@ -73,20 +104,20 @@ static void
 tpg_rd_init(const char *fname)
 {
 	tpg_common_init();
-	tpg_file_in = gbfopen_le(fname, "rb", MYNAME);
+	tpg_file_in = xfopen(fname, "rb", MYNAME);
 }
 
 static void
 tpg_rd_deinit(void)
 {
-	gbfclose(tpg_file_in);
+	fclose(tpg_file_in);
 }
 
 static void
 tpg_wr_init(const char *fname)
 {
 	tpg_common_init();
-	tpg_file_out = gbfopen_le(fname, "wb", MYNAME);
+	tpg_file_out = xfopen(fname, "wb", MYNAME);
 	mkshort_handle = mkshort_new_handle();
 	waypt_out_count = 0;
 }
@@ -95,7 +126,7 @@ static void
 tpg_wr_deinit(void)
 {
 	mkshort_del_handle(&mkshort_handle);
-	gbfclose(tpg_file_out);
+	fclose(tpg_file_out);
 }
 
 static void
@@ -105,12 +136,15 @@ tpg_read(void)
 	waypoint *wpt_tmp;
 	double lat, lon, elev;
 	double amt;
+	int stringsize;
 	short int pointcount;
 
-        pointcount = gbfgetint16(tpg_file_in);
+        tpg_fread(&buff[0], 2, 1, tpg_file_in);
+        
+        pointcount = le_read16(&buff[0]);
         
         /* the rest of the header */
-        gbfread(&buff[0], 19, 1, tpg_file_in);
+        tpg_fread(&buff[0], 19, 1, tpg_file_in);
 
         if (valid_tpg_header(buff, 19) != 0) {
             fatal(MYNAME ": input file does not appear to be a valid .TPG file.\n");
@@ -120,23 +154,33 @@ tpg_read(void)
 	while (pointcount--) {
 	    wpt_tmp = waypt_new();
 
-            /* pascal-like shortname */
-    	    wpt_tmp->shortname = gbfgetpstr(tpg_file_in);
+            /* 1 bytes at start of record - string size for shortname */
+    	    tpg_fread(&buff[0], 1, 1, tpg_file_in);
+    	    
+    	    stringsize = buff[0];
+    	    
+	    if (stringsize)
+    	    	tpg_fread(&buff[0], stringsize, 1, tpg_file_in);
+		
+	    buff[stringsize] = '\0';
+    	    
+    	    wpt_tmp->shortname = xstrdup(buff);
 
             /* for some very odd reason, signs on longitude are swapped */
             /* coordinates are in NAD27/CONUS datum                     */
             
             /* 8 bytes - longitude, sign swapped  */
-	    lon = gbfgetdbl(tpg_file_in);
+	    lon = tpg_fread_double(tpg_file_in);
 
             /* 8 bytes - latitude */
-	    lat = gbfgetdbl(tpg_file_in);
+	    lat = tpg_fread_double(tpg_file_in);
 	    
             /* swap sign before we do datum conversions */
 	    lon *= -1.0;
 	    
             /* 2 bytes - elevation in feet */
-    	    elev = FEET_TO_METERS(gbfgetint16(tpg_file_in));
+    	    tpg_fread(&buff[0], 2, 1, tpg_file_in);
+    	    elev = FEET_TO_METERS(le_read16(&buff[0]));
 
             /* convert incoming NAD27/CONUS coordinates to WGS84 */
             GPS_Math_Known_Datum_To_WGS84_M(
@@ -152,13 +196,21 @@ tpg_read(void)
             
 
             /* 4 bytes? */
-    	    (void) gbfgetint32(tpg_file_in);
+    	    tpg_fread(&buff[0], 4, 1, tpg_file_in);
 
-            /* pascal-like description */
-    	    wpt_tmp->description = gbfgetpstr(tpg_file_in);
+            /* 1 bytes - string size for description */
+    	    tpg_fread(&buff[0], 1, 1, tpg_file_in);
+    	    
+    	    stringsize = buff[0];
+    	    
+    	    if (stringsize)
+		tpg_fread(&buff[0], stringsize, 1, tpg_file_in);
+    	    buff[stringsize] = '\0';
+    	    
+    	    wpt_tmp->description = xstrdup(buff);
     	    
     	    /* 2 bytes */
-    	    (void) gbfgetint16(tpg_file_in);
+    	    tpg_fread(&buff[0], 2, 1, tpg_file_in);
 
 	    waypt_add(wpt_tmp);
 	}
@@ -245,38 +297,43 @@ tpg_waypt_pr(const waypoint *wpt)
 		}
 	}
 
-        gbfwrite(&ocount, 1, 1, tpg_file_out);
+        fwrite(&ocount, 1, 1, tpg_file_out);
 
 	for (i = 0; i < c; i++) {
 		char oc = toupper(shortname[i]);
 		if (isalnum(oc) || oc == ' ') {
-			gbfputc(oc, tpg_file_out);
+			fputc(oc, tpg_file_out);
 		}
 	}
 
         /* 8 bytes - longitude */
-        gbfputdbl(lon, tpg_file_out);
+        tpg_fwrite_double(lon, tpg_file_out);
 
         /* 8 bytes - latitude */
-        gbfputdbl(lat, tpg_file_out);
+        tpg_fwrite_double(lat, tpg_file_out);
 
         /* 2 bytes - elevation_feet */
-        gbfputint16(elev, tpg_file_out);
+        fwrite(&elev, 1, 2, tpg_file_out);
 
         /* 4 unknown bytes */
         memset(tbuf, '\0', sizeof(tbuf));
-        gbfwrite(unknown4, 1, 4, tpg_file_out);
+        fwrite(unknown4, 1, 4, tpg_file_out);
 
-	/* pascal-like description */
-	gbfputpstr(description, tpg_file_out);
+        /* 1 bytes stringsize for description */
+        c = strlen(description);
+        fwrite(&c, 1, 1, tpg_file_out);
+        
+        /* description */
+        fwrite(description, 1, c, tpg_file_out);
 
         /* and finally 2 unknown bytes */
         
         if (waypt_out_count == waypt_count()) {
         	/* last point gets 0x0000 instead of 0x0180 */
-	        gbfputint16(0, tpg_file_out);
+	        memset(tbuf, '\0', sizeof(tbuf));
+	        fwrite(tbuf, 1, 2, tpg_file_out);
 	} else {
-	        gbfwrite(unknown2, 1, 2, tpg_file_out);
+	        fwrite(unknown2, 1, 2, tpg_file_out);
 	}
         
         xfree(shortname);
@@ -287,6 +344,7 @@ static void
 tpg_write(void)
 {
         int s;
+        unsigned char uc[2];
         unsigned char header_bytes[] = { 0xFF, 0xFF, 0x01, 0x00, 0x0D, 
                                          0x00, 0x43, 0x54, 0x6F, 0x70, 
                                          0x6F, 0x57, 0x61, 0x79, 0x70, 
@@ -304,11 +362,13 @@ tpg_write(void)
             fatal(MYNAME ": attempt to output too many points (%d).  The max is %d.  Sorry.\n", s, MAXTPGOUTPUTPINS);
         }
 
+	le_write16(uc, s);
+
         /* write the waypoint count */
-        gbfputint16(s, tpg_file_out);
+        fwrite(uc, 1,  2, tpg_file_out);
 
         /* write the rest of the header */
-        gbfwrite(header_bytes, 1, 19, tpg_file_out);
+        fwrite(header_bytes, 1, 19, tpg_file_out);
 
         waypt_disp_all(tpg_waypt_pr);
 }

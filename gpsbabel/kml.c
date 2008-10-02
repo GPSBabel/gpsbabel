@@ -56,7 +56,7 @@ static int wpt_tmp_queued;
 static const char *posnfilename;
 static char *posnfilenametmp;
 
-static gbfile *ofd;
+static FILE *ofd;
 
 typedef struct {
   double latitude;
@@ -139,7 +139,7 @@ arglist_t kml_args[] = {
 static 
 struct {
 	int freshness;
-	const char *icon;
+	char *icon;
 } kml_tracking_icons[] = {
  { 60, ICON_BASE "youarehere-60.png" }, // Red
  { 30, ICON_BASE "youarehere-30.png" }, // Yellow
@@ -177,8 +177,6 @@ xg_tag_mapping kml_map[] = {
 	{ wpt_name, 	cb_cdata, 	"/Placemark/name" },
 	{ wpt_desc, 	cb_cdata, 	"/Placemark/description" },
 	{ wpt_time, 	cb_cdata, 	"/Placemark/TimeStamp/when" },
-	// Alias for above used in KML 2.0
-	{ wpt_time, 	cb_cdata, 	"/Placemark/TimeInstant/timePosition" },
 	{ wpt_coord, 	cb_cdata, 	"/Placemark/Point/coordinates" },
 	{ wpt_icon, 	cb_cdata, 	"/Placemark/Style/Icon/href" },
 	{ trk_coord, 	cb_cdata, 	"/Placemark/MultiGeometry/LineString/coordinates" },
@@ -311,7 +309,7 @@ kml_wr_init(const char *fname)
 	/*
 	 * Reduce race conditions with network read link.
 	 */	
-	ofd = gbfopen(fname, "w", MYNAME);
+	ofd = xfopen(fname, "w", MYNAME);
 }
 
 /* 
@@ -337,7 +335,7 @@ kml_wr_position_init(const char *fname)
 static void
 kml_wr_deinit(void)
 {
-	gbfclose(ofd);
+	fclose(ofd);
 
 	if (posnfilenametmp) {
 #if __WIN32__
@@ -376,11 +374,11 @@ kml_write_xml(int indent, const char *fmt, ...)
 
 	if (fmt[1] != '!' && do_indentation) {
 		for (i = 0; i < indent_level; i++) {
-			gbfputs("  ", ofd);
+			fputs("  ", ofd);
 		}
 	}
 
-	gbvfprintf(ofd, fmt, args);
+	vfprintf(ofd, fmt, args);
 
 	if (indent > 0) indent_level++;
 
@@ -398,9 +396,9 @@ kml_write_xmle(const char *tag, const char *v)
 	if (v && *v) {
 		char *tmp_ent = xml_entitize(v);
 		for (i = 0; i < indent_level; i++) {
-			gbfputs("  ", ofd);
+			fputs("  ", ofd);
 		}
-		gbfprintf(ofd, "<%s>%s</%s>\n",tag, tmp_ent, tag);
+		fprintf(ofd, "<%s>%s</%s>\n",tag, tmp_ent, tag);
 		xfree(tmp_ent);
 	}
 }
@@ -618,13 +616,7 @@ static void kml_output_description(const waypoint *pt)
 	if (pt->altitude != unknown_alt) TD2("Altitude: %.3f %s", alt, alt_units);
 	if (pt->heartrate) TD("Heart rate: %d", pt->heartrate);
 	if (pt->cadence) TD("Cadence: %d", pt->cadence);
-	/* Which unit is this temp in? C? F? K? */
 	if WAYPT_HAS(pt, temperature) TD("Temperature: %.1f", pt->temperature);
-	if WAYPT_HAS(pt, depth) {
-		char *depth_units;
-		double depth = fmt_distance(pt->depth, &depth_units);
-		TD2("Depth: %.1f %s", depth, depth_units);
-	}
 	if WAYPT_HAS(pt, speed) {
 		char *spd_units;
 		double spd = fmt_speed(pt->speed, &spd_units);
@@ -650,7 +642,7 @@ static void kml_output_description(const waypoint *pt)
 
 static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type)
 {
-  const char *style;
+  char *style;
   // Save off this point for later use
   point3d *pt = &point3d_list[point3d_list_len];
   point3d_list_len++;
@@ -723,17 +715,6 @@ static void kml_output_tailer(const route_head *header)
     kml_write_xml(1, "<Placemark>\n");
     kml_write_xml(0, "<name>Path</name>\n");
     kml_write_xml(0, "<styleUrl>#lineStyle</styleUrl>\n");
-    if (header->line_color.bbggrr >= 0 || header->line_width >= 0) {
-      kml_write_xml(1, "<Style>\n");
-      kml_write_xml(1, "<LineStyle>\n");
-      if (header->line_color.bbggrr >= 0)
-        kml_write_xml(0, "<color>%02x%06x</color>\n",
-                      header->line_color.opacity, header->line_color.bbggrr);
-      if (header->line_width >= 0)
-        kml_write_xml(0, "<width>%d</width>\n",header->line_width);
-      kml_write_xml(-1, "</LineStyle>\n");
-      kml_write_xml(-1, "</Style>\n");
-    }
     kml_write_xml(1, "<LineString>\n");
     if (floating) {
       kml_write_xml(0, "<altitudeMode>absolute</altitudeMode>\n");
@@ -795,7 +776,7 @@ kml_lookup_gc_icon(const waypoint *waypointp)
 	/* This could be done so much better in C99 with designated
 	 * initializers...
 	 */
-	switch (waypointp->gc_data->type) {
+	switch (waypointp->gc_data.type) {
 		case gt_traditional: icon = "2.png"; break;
 		case gt_multi: icon = "3.png"; break;
 		case gt_virtual: icon = "4.png"; break;
@@ -815,13 +796,13 @@ kml_lookup_gc_icon(const waypoint *waypointp)
 	return rb;
 }
 
-static const
+static 
 char *
 kml_lookup_gc_container(const waypoint *waypointp)
 {
-	const char *cont;
+	char *cont;
 
-	switch (waypointp->gc_data->container) {
+	switch (waypointp->gc_data.container) {
 		case gc_micro: cont="micro"; break;
 		case gc_regular: cont="regular"; break;
 		case gc_large: cont="large"; break;
@@ -883,38 +864,38 @@ static void kml_geocache_pr(const waypoint *waypointp)
 		xfree(p);
 	}
 
-	if (waypointp->url_link_text) {
+	if(waypointp->url_link_text) {
 		p = xml_entitize(waypointp->url_link_text);
 		kml_write_xml(0, "<Data name=\"gc_name\"><value>%s</value></Data>\n", p);
 		xfree(p);
 	}
 
-	if (waypointp->gc_data->placer) {
-		p = xml_entitize(waypointp->gc_data->placer);
+	if (waypointp->gc_data.placer) {
+		p = xml_entitize(waypointp->gc_data.placer);
 		kml_write_xml(0, "<Data name=\"gc_placer\"><value>%s</value></Data>\n", p);
 		xfree(p);
 	}
 
-	kml_write_xml(0, "<Data name=\"gc_placer_id\"><value>%d</value></Data>\n", waypointp->gc_data->placer_id);
+	kml_write_xml(0, "<Data name=\"gc_placer_id\"><value>%d</value></Data>\n", waypointp->gc_data.placer_id);
 
-	kml_write_xml(0, "<Data name=\"gc_diff_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data->diff));
-	kml_write_xml(0, "<Data name=\"gc_terr_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data->terr));
+	kml_write_xml(0, "<Data name=\"gc_diff_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data.diff));
+	kml_write_xml(0, "<Data name=\"gc_terr_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data.terr));
 
 	kml_write_xml(0, "<Data name=\"gc_cont_icon\"><value>%s</value></Data>\n", kml_lookup_gc_container(waypointp));
 
  	 // Highlight any issues with the cache, such as temp unavail 
 	 // or archived.
 	kml_write_xml(0, "<Data name=\"gc_issues\"><value>");
-	if (waypointp->gc_data->is_archived == status_true) {
+	if (waypointp->gc_data.is_archived == status_true) {
 		kml_write_xml(0, "&lt;font color=\"red\"&gt;This cache has been archived.&lt;/font&gt;<br/>\n");
-	} else if (waypointp->gc_data->is_available == status_false) {
+	} else if (waypointp->gc_data.is_available == status_false) {
 		kml_write_xml(0, "&lt;font color=\"red\"&gt;This cache is temporarily unavailable.&lt;/font&gt;<br/>\n");
 	}
 	kml_write_xml(0, "</value></Data>\n");
 
-	kml_write_xml(0, "<Data name=\"gc_type\"><value>%s</value></Data>\n", gs_get_cachetype(waypointp->gc_data->type));
-	kml_write_xml(0, "<Data name=\"gc_short_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data->desc_short.utfstring ? waypointp->gc_data->desc_short.utfstring : "");
-	kml_write_xml(0, "<Data name=\"gc_long_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data->desc_long.utfstring ? waypointp->gc_data->desc_long.utfstring : "");
+	kml_write_xml(0, "<Data name=\"gc_type\"><value>%s</value></Data>\n", gs_get_cachetype(waypointp->gc_data.type));
+	kml_write_xml(0, "<Data name=\"gc_short_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data.desc_short.utfstring ? waypointp->gc_data.desc_short.utfstring : "");
+	kml_write_xml(0, "<Data name=\"gc_long_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data.desc_long.utfstring ? waypointp->gc_data.desc_long.utfstring : "");
 	
 	kml_write_xml(-1, "</ExtendedData>\n");
 
@@ -948,7 +929,7 @@ static void kml_waypt_pr(const waypoint *waypointp)
 	}
 #endif
 
-	if (waypointp->gc_data->diff && waypointp->gc_data->terr) {
+	if (waypointp->gc_data.diff && waypointp->gc_data.terr) {
 		kml_geocache_pr(waypointp);
 		return;
 	}
@@ -967,7 +948,7 @@ static void kml_waypt_pr(const waypoint *waypointp)
 			kml_write_xml(0, "<![CDATA[<a href=\"%s\">%s</a>]]>", odesc, olink);
 			xfree(olink);
 		} else {
-			gbfputs(odesc, ofd);
+			fputs(odesc, ofd);
 		}
 
 		kml_write_xml(0, "</description>\n");
@@ -1174,14 +1155,12 @@ void kml_write(void)
 /*
  * This depends on the table being sorted correctly.
  */
-static const
+static 
 char *
 kml_get_posn_icon(int freshness)
 {
 	int i;
-	int n_stations = sizeof(kml_tracking_icons) / sizeof(kml_tracking_icons[0]);
-
-	for (i = 0; i < n_stations ; i++) {
+	for (i = 0; i < sizeof(kml_tracking_icons) / sizeof(kml_tracking_icons[0]); i++) {
 		if (freshness >= kml_tracking_icons[i].freshness)
 			return kml_tracking_icons[i].icon;
 	}

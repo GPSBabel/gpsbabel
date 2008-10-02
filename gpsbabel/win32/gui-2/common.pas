@@ -21,7 +21,7 @@ unit common;
 interface
 
 uses
-  Windows, SysUtils, Classes, Messages, Controls, StdCtrls, ExtCtrls;
+  Windows, SysUtils, Classes, Messages, Controls, StdCtrls;
 
 const
   OTypes: array[0..6] of PChar =
@@ -70,14 +70,9 @@ const
   SREG_SOURCE_FILE = 'Source:File';
 
   SREG_GLOBAL_LANG = 'Global:Language';
-
-  SREG_MAIN_LAYOUT = 'Main:Layout';
-  SREG_MAIN_WAYPOINTS = 'Main:Waypoints';
-  SREG_MAIN_ROUTES    = 'Main:Routes';
-  SREG_MAIN_TRACKS    = 'Main:Tracks';
-
+  
 const
-  Profile: array[0..15] of string =
+  Profile: array[0..12] of string =
   ('?',
    SREG_SOURCE_DIR,
    SREG_SOURCE_FMT,
@@ -90,42 +85,22 @@ const
    SREG_TARGET_FILE,
    SREG_SOURCE_FILE,
    SREG_GLOBAL_LANG,
-   SREG_MAIN_LAYOUT,
-   SREG_MAIN_WAYPOINTS,
-   SREG_MAIN_ROUTES,
-   SREG_MAIN_TRACKS
-   );
+   'Main:Layout');
 
 const
   GPSBabel_Domain = 'gpsbabel';
 
 type
-  TCapability = class
-  protected
-    FName : String;
-    FDescription : string;
-    FExt:   string;
+  PFileInfo = ^TFileInfo;
+  TFileInfo = record
+    Descr: string;
+    Ext:   string;
     internal: string;
-    Furl: PChar;
-  protected
-    function CanReadAny : Boolean;
-    function CanWriteAny : Boolean;
-    function FIsDevice : Boolean;
-    function FIsFile : Boolean;
-  public
     Capas: Integer;
-    property Name : String read FName;
-    property Description : String read FDescription;
-    property Ext : String read FExt;
-    property ReadAny : Boolean read CanReadAny;
-    property WriteAny : Boolean read CanWriteAny;
-    property IsDevice : Boolean read FIsDevice;
-    property IsFile : Boolean read FIsFile;
+    url: PChar;
   end;
 
 type
-  TOptionEdit = class;
-
   TOption = record
     format: string;
     name:   string;
@@ -133,28 +108,16 @@ type
     defname: string;
     otype:  Byte;
     def:    PChar;       // default value from gpsbabel or ini-file
-    gbdef:  PChar;       // default value from gpsbabel
+    gbdef:  PChar;       // default value from gpsbabel       
     min:    PChar;
     max:    PChar;
     chb:    TCheckBox;
-    edit:   TOptionEdit;
+    edit:   TControl;
     dir:    Byte;        // 1 = only in; 2 = only out
   end;
   POption = ^TOption;
 
-  TOptionEdit = class(TObject)
-  protected
-    FOption : POption;
-    function GetValue : String; virtual; abstract;
-    procedure SetValue(Value : String); virtual; abstract;
-    function GetEnabled : Boolean; virtual; abstract;
-    procedure SetEnabled(Value : Boolean); virtual; abstract;
-  public
-    property Value : String read GetValue write SetValue;
-    property Option : POption read FOption;
-    property Enabled : Boolean read GetEnabled write SetEnabled;
-  end;
-
+type
   TCapabilities = class;
   
   TOptions = class(TStringList)
@@ -167,10 +130,8 @@ type
     constructor Create(ACapabilities: TCapabilities);
     procedure AddOptionLine(const ALine: string);
     procedure DebugGetHints(List: TStringList);
-    function FormatOpts(const Descr: string): TStringList; overload;
-    function FormatOpts(cap : TCapability): TStringList; overload;
-    function HasFormatOpts(const Format: string): Boolean; overload;
-    function HasFormatOpts(cap : TCapability): Boolean; overload;
+    function FormatOpts(const Descr: string): TStringList;
+    function HasFormatOpts(const Format: string): Boolean;
   property
     List: TStrings read GetList write SetList;
   end;
@@ -182,11 +143,16 @@ type
     function GetList: TStrings;
     procedure SetList(const Value: TStrings);
   public
-    function GetCapabilityByName(const Descr: string): TCapability;
-    function GetCapability(Index: Integer) : TCapability;
-
-    property List: TStrings read GetList write SetList;
-    property Capability[Index : Integer] : TCapability read GetCapability;
+    function CanReadAny(Index: Integer): Boolean;
+    function CanWriteAny(Index: Integer): Boolean;
+    function GetDescr(Index: Integer): string;
+    function GetExt(const Descr: string): string;
+    function GetCaps(const Descr: string): Integer;
+    function GetName(const Descr: string): string;
+    function IsDevice(Index: Integer): Boolean;
+    function IsFile(Index: Integer): Boolean;
+  property
+    List: TStrings read GetList write SetList;
   end;
 
 type
@@ -378,18 +344,9 @@ function TOptions.FormatOpts(const Descr: string): TStringList;
 var
   i: Integer;
   s: string;
-  cap : TCapability;
 begin
-  cap:=FCaps.GetCapabilityByName(Descr);
-  result:=FormatOpts(cap);
-end;
-
-function TOptions.FormatOpts(cap : TCapability): TStringList;
-var
-  i: Integer;
-  s: string;
-begin
-  if (Assigned(Cap)) and Self.Find(Cap.Name, i) then
+  s := FCaps.GetName(Descr);
+  if (s <> '') and Self.Find(s, i) then
     Result := TStringList(Self.Objects[i])
   else
     Result := nil;
@@ -403,11 +360,6 @@ end;
 function TOptions.HasFormatOpts(const Format: string): Boolean;
 begin
   Result := (FormatOpts(Format) <> nil);
-end;
-
-function TOptions.HasFormatOpts(cap : TCapability): Boolean;
-begin
-  Result := (FormatOpts(cap) <> nil);
 end;
 
 procedure TOptions.SetList(const Value: TStrings);
@@ -434,12 +386,11 @@ var
   name: string;
   internal: string;
   caps: Integer;
-  info: TCapability;
+  info: PFileInfo;
 
 begin
   StrPCopy(buff, Line);
   StrCat(buff, #9);
-  //OutputDebugString(buff);
 
   cin := @buff;
   index := 0;
@@ -459,37 +410,38 @@ begin
       1:
         scaps := StrPas(cin);
       2:
-        name := StrPas(cin);
+          name := StrPas(cin);
       3:
         ext := StrPas(cin);
-    else begin
-      comment := StrPas(cin);
-      if (Length(comment) = 0) or (Length(name) = 0) then break;
+    else
+      begin
+        comment := StrPas(cin);
+        if (Length(comment) = 0) or (Length(name) = 0) then break;
+        
+//      if (comment[1] = '?') then break;
+        
+        caps := 0;
+        for i := 1 to Length(scaps) do
+          if (scaps[i] <> '-') then caps := caps or (1 shl (i - 1));
 
-//    if (comment[1] = '?') then break;
+         New(info);
+         info.Descr := comment;
+         info.Ext := ext;
+         info.internal := internal;
+         info.Capas := caps;
 
-      caps := 0;
-      for i := 1 to Length(scaps) do
-        if (scaps[i] <> '-') then caps := caps or (1 shl (i - 1));
+         i := SELF.Add(name);
+         SELF.PutObject(i, Pointer(info));
 
-        info:=TCapability.Create;
-        info.FName:=name;
-        info.FDescription := comment;
-        info.FExt := ext;
-        info.internal := internal;
-        info.Capas := caps;
-
-        SELF.AddObject(name,info);
-
-        if (name = 'garmin_txt') then
-        begin
-          gpsbabel_knows_inifile := True;
-          // add -p "" to command-line
-        end
-        else if (name = 'xcsv') then
-          info.internal := 'file';
-        break;
-      end;
+         if (name = 'garmin_txt') then
+         begin
+           gpsbabel_knows_inifile := True;
+           // add -p "" to command-line
+         end
+         else if (name = 'xcsv') then
+           info.internal := 'file';
+         break;
+       end;
     end;
 
     index := index + 1;
@@ -497,24 +449,62 @@ begin
   end;
 end;
 
-function TCapability.FIsDevice : Boolean;
+function TCapabilities.CanReadAny(Index: Integer): Boolean;
+var
+  caps: Integer;
 begin
-  Result := (AnsiCompareText(Internal, 'serial') = 0);
+  caps := PFileInfo(SELF.Objects[Index]).Capas;
+  Result := caps and (1 or 4 or 16) <> 0;
 end;
 
-function TCapability.FIsFile : Boolean;
+function TCapabilities.CanWriteAny(Index: Integer): Boolean;
+var
+  caps: Integer;
 begin
-  Result := (AnsiCompareText(Internal, 'file') = 0);
+  caps := PFileInfo(SELF.Objects[Index]).Capas;
+  Result := caps and (2 or 8 or 32) <> 0;
 end;
 
-function TCapability.CanReadAny : Boolean;
+function TCapabilities.GetCaps(const Descr: string): Integer;
+var
+  info: PFileInfo;
+  i: Integer;
 begin
-  Result := capas and (1 or 4 or 16) <> 0;
+  for i := 0 to Count - 1 do
+  begin
+    info := PFileInfo(Objects[i]);
+    if (AnsiCompareText(info.Descr, Descr) = 0) then
+    begin
+      Result := info.Capas;
+      Exit;
+    end;
+  end;
+  Result := 0;
 end;
 
-function TCapability.CanWriteAny : Boolean;
+function TCapabilities.GetDescr(Index: Integer): string;
+var
+  info: PFileInfo;
 begin
-  Result := capas and (2 or 8 or 32) <> 0;
+  info := PFileInfo(Objects[Index]);
+  Result := info.Descr;
+end;
+
+function TCapabilities.GetExt(const Descr: string): string;
+var
+  i: Integer;
+  info: PFileInfo;
+begin
+  for i := 0 to Count - 1 do
+  begin
+    info := PFileInfo(Objects[i]);
+    if (AnsiCompareText(info.Descr, Descr) = 0) then
+    begin
+      Result := info.Ext;
+      Exit;
+    end;
+  end;
+  Result := '.*';
 end;
 
 function TCapabilities.GetList: TStrings;
@@ -522,28 +512,39 @@ begin
   Result := TStringList.Create;
 end;
 
-function TCapabilities.GetCapabilityByName(const Descr: string): TCapability;
+function TCapabilities.GetName(const Descr: string): string;
 var
   i: Integer;
-  info: TCapability;
+  info: PFileInfo;
 begin
   for i := 0 to Count - 1 do
   begin
-    info := TCapability(Objects[i]);
-    if (AnsiCompareText(info.Description, Descr) = 0) then
+    info := PFileInfo(Objects[i]);
+    if (AnsiCompareText(info.Descr, Descr) = 0) then
     begin
-      Result := info;
+      Result := SELF[i];
       Exit;
     end;
   end;
-  Result := nil;
+  Result := 'unknown';
 end;
 
-function TCapabilities.GetCapability(Index: Integer) : TCapability;
+function TCapabilities.IsDevice(Index: Integer): Boolean;
+var
+  info: PFileInfo;
 begin
-  Result := TCapability(Objects[Index]);
+  info := PFileInfo(Objects[Index]);
+  Result := (AnsiCompareText(info.Internal, 'serial') = 0);
 end;
 
+function TCapabilities.IsFile(Index: Integer): Boolean;
+var
+  info: PFileInfo;
+  name: string;
+begin
+  info := PFileInfo(Objects[Index]);
+  Result := (AnsiCompareText(info.Internal, 'file') = 0);
+end;
 
 procedure TCapabilities.SetList(const Value: TStrings);
 var

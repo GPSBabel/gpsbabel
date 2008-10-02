@@ -44,17 +44,30 @@ static void
 psp_write_str(const char *str)
 {
 	if (str && *str) {
-		short *unicode;
-		int len;
+		const char *cin = str;
+		gbint16 *tmp, *res;
+		int len = 0;
 		
 		/* convert UTF-8 string into a unicode sequence */
 		/* not perfect, but enough for us */
-		unicode = cet_str_any_to_uni(str, global_opts.charset, &len);
-		if (len > MAXPSPSTRINGSIZE) len = MAXPSPSTRINGSIZE;
-		gbfputc((unsigned char)len, psp_file_out);
-		if (len) gbfwrite(unicode, 2, len, psp_file_out);
 
-		xfree(unicode);
+		res = tmp = xmalloc(strlen(str) << 1);
+		while (*cin) {
+			int bytes, value;
+
+			if (cet_utf8_to_ucs4(cin, &bytes, &value) != CET_SUCCESS)
+				value = CET_NOT_CONVERTABLE_DEFAULT;
+			*tmp++ = value;
+			cin += bytes;
+			len++;
+			if (len == (MAXPSPSTRINGSIZE >> 1)) break;
+		}
+		gbfputc(len, psp_file_out);
+		tmp = res;
+		while (len--)
+			/* ! we need LE values, don't use gbfwrite ! */
+			gbfputint16(*tmp++, psp_file_out);
+		xfree(res);
 	}
 	else
 		gbfputc(0, psp_file_out);
@@ -64,18 +77,18 @@ psp_write_str(const char *str)
 static char *
 psp_read_str(gbfile *fin)
 {
-	int len;
+	int i, len;
 	gbint16 *buff;
 	char *res;
 	
 	len = (unsigned char)gbfgetc(fin);
 	if (len == 0) return NULL;
 	
-	buff = xmalloc(len * sizeof(*buff));
-	gbfread(buff, sizeof(*buff), len, fin);
+	buff = xmalloc(len * 2);
+	for (i = 0; i < len; i++)
+		buff[i] = gbfgetint16(fin);
 	res = cet_str_uni_to_utf8(buff, len);
 	xfree(buff);
-
 	return res;
 }
 

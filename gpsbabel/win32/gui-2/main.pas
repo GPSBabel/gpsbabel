@@ -181,8 +181,6 @@ type
     procedure PopupMenuPopup(Sender: TObject);
     procedure acOptionsSynthesizeShortNamesExecute(Sender: TObject);
     procedure acOptionsNukeTypesExecute(Sender: TObject);
-    procedure cbInputFormatExit(Sender: TObject);
-    procedure cbOutputFormatExit(Sender: TObject);
   private
     { Private-Deklarationen }
     FCaps: TCapabilities;
@@ -193,7 +191,7 @@ type
     FFmtIn, FFmtOut: string;
     procedure AddToOutput(const Str: string);
     procedure AddToOutputFmt(const Format: string; const Args: array of const);
-    procedure ComboBoxChanged(Source : TComboBox; IsInput, IsFile: Boolean);
+    procedure ComboBoxChanged(const Format: string; IsInput, IsFile: Boolean);
     procedure DoOnIdle(Sender: TObject; var Done: Boolean);
     procedure EnableOptions(const Version: string);
     function HandleOptions(const Format: string; AObject: TObject; IsInput: Boolean): Boolean;
@@ -338,13 +336,6 @@ begin
   cbInputLang.ItemIndex := 0;
   cbOutputLang.ItemIndex := 0;
 
-  cbWaypoints.Checked := StrToBool(ReadProfile(cbWaypoints.Tag));
-  cbTracks.Checked := StrToBool(ReadProfile(cbTracks.Tag));
-  cbRoutes.Checked := StrToBool(ReadProfile(cbRoutes.Tag));
-
-  acCopySelected.Enabled := False;
-  acSelectAll.Enabled := False;
-  
   Application.OnIdle := Self.DoOnIdle;
 
   RefreshDesign(True);
@@ -427,45 +418,37 @@ var
   i: Integer;
   OK: Boolean;
   s: string;
-  cap : TCapability;
 begin
   for i := 0 to FCaps.Count - 1 do
   begin
-    cap:=FCaps.Capability[i];
-    if (ForDevice and not cap.IsDevice) then Continue;
-    if not(ForDevice) and not cap.IsFile then Continue;
+    if (ForDevice and not(FCaps.IsDevice(i))) then Continue;
+    if not(ForDevice) and not FCaps.IsFile(i) then Continue;
 
     if (IsInput) then
-      OK := Cap.ReadAny
+      OK := FCaps.CanReadAny(i)
     else
-      OK := Cap.WriteAny;
+      OK := FCaps.CanWriteAny(i);
     if OK then
-      Target.Items.AddObject(Cap.Description, Cap);
+      Target.Items.Add(FCaps.GetDescr(i));
   end;
 
   s := ReadProfile(Target.Tag);
   ComboBoxSelect(Target, s);
 
-  ComboBoxChanged(Target, IsInput, not(ForDevice));
+  ComboBoxChanged(Target.Text, IsInput, not(ForDevice));
 end;
 
 procedure TfrmMain.OpenButtonClick(Sender: TObject);
 var
-  s,ext: string;
+  s: string;
   i: Integer;
-  cap : TCapability;
 begin
   dlgFileOpen.Filter := '';
   dlgFileOpen.DefaultExt := '*.*';
 
-  s:='';
-  if (cbInputFormat.ItemIndex <> -1 ) then  begin
-    cap:= TCapability(cbInputFormat.Items.Objects[cbInputFormat.ItemIndex]);
-    ext := cap.Ext;
-    if (Length(ext)>0) then
-       s := cbInputFormat.Text + '|*.' + ext + '|';
-  end;
-  s := s + _('All files (*.*)|*.*');
+  if (cbInputFormat.Text <> '') then
+    s := cbInputFormat.Text + '|*.' + FCaps.GetExt(cbInputFormat.Text) + '|';
+  s := s + _('All files|*.*');
 
   dlgFileOpen.Filter := s;
   if not SELF.dlgFileOpen.Execute then Exit;
@@ -483,33 +466,30 @@ begin
   CheckInput;
 end;
 
-procedure TfrmMain.ComboBoxChanged(Source : TComboBox; IsInput, IsFile: Boolean);
+procedure TfrmMain.ComboBoxChanged(const Format: string; IsInput, IsFile: Boolean);
 var
   caps: Integer;
   ext: string;
   ac: TAction;
-  capability : TCapability;
 begin
-  if (Source.ItemIndex<0) then exit;
-  capability:=TCapability(Source.Items.Objects[Source.ItemIndex]);
-  ext := capability.Ext;
+  caps := FCaps.GetCaps(Format);
+  ext := FCaps.GetExt(Format);
   if IsFile and FOutHandmade and (ext = '') then
   begin
     ext := SysUtils.ExtractFileExt(edOutputFile.Text);
     if (ext <> '') and (ext[1] = '.') then Delete(ext, 1, 1);
   end;
 
-  caps := capability.Capas;
   if IsInput then
   begin
-    FFmtIn := capability.Name;
+    FFmtIn := Format;
     wptInputOK.Enabled := (caps and 1 <> 0);
     trkInputOK.Enabled := (caps and 4 <> 0);
     rteInputOK.Enabled := (caps and 16 <> 0);
   end
     else
   begin
-    FFmtOut := capability.Name;
+    FFmtOut := Format;
     wptOutputOK.Enabled := (caps and 2 <> 0);
     trkOutputOK.Enabled := (caps and 8 <> 0);
     rteOutputOK.Enabled := (caps and 32 <> 0);
@@ -528,7 +508,7 @@ begin
     edInputOpts.Items.Clear;
     
     ac := acOptionsSourceFormat;
-    acOptionsSourceFormat.Caption := _('Input') + ': ' + capability.Name;
+    acOptionsSourceFormat.Caption := _('Input') + ': ' + Format;
     btnInputOpts.Caption := '';
   end
   else begin
@@ -536,18 +516,18 @@ begin
     edOutputOpts.Items.Clear;
 
     ac := acOptionsTargetFormat;
-    acOptionsTargetFormat.Caption := _('Output') + ': ' + capability.Name;
+    acOptionsTargetFormat.Caption := _('Output') + ': ' + Format;
     btnOutputOpts.Caption := '';
   end;
 
-  ac.Enabled := FOpts.HasFormatOpts(capability);
+  ac.Enabled := FOpts.HasFormatOpts(Format);
   if ac.Enabled then
   begin
-    ac.Hint := SysUtils.Format(_('Select and edit options for "%s"'), [capability.Name]);
+    ac.Hint := SysUtils.Format(_('Select and edit options for "%s"'), [Format]);
   end
     else
   begin
-    ac.Hint := SysUtils.Format(_('No options available for "%s"'), [capability.Name]);
+    ac.Hint := SysUtils.Format(_('No options available for "%s"'), [Format]);
   end;
 end;
 
@@ -603,16 +583,12 @@ end;
 procedure TfrmMain.sbSaveFileClick(Sender: TObject);
 var
   s: string;
-  cap : TCapability;
 begin
   dlgFileSave.Filter := '';
   dlgFileSave.DefaultExt := '*.*';
 
-  s:='';
-  if (cbOutputFormat.ItemIndex <> -1) then begin
-    cap:=FCaps.Capability[cbOutputFormat.ItemIndex];
-    s := Format('%s|%s',[cbOutputFormat.Text,cap.Ext,cap.Ext]);
-  end;
+  if (cbOutputFormat.Text <> '') then
+    s := cbOutputFormat.Text + '|*.' + FCaps.GetExt(cbOutputFormat.Text) + '|';
   s := s + _('All files|*.*');
 
   dlgFileSave.Filter := s;
@@ -633,7 +609,7 @@ var
   IFormat, OFormat, IFiles: string;
   Fatal: Boolean;
   sp: PChar;
-  cap : TCapability;
+
 begin
   acLetsGo.Enabled := False;
   try
@@ -643,16 +619,14 @@ begin
     if gpsbabel_knows_inifile then cmdline := '-p ""';
 
     if chbInputDevice.Checked then
-      cap:= TCapability(cbInputFormatDevice.Items.Objects[cbInputFormatDevice.ItemIndex])
+      IFormat := FCaps.GetName(cbInputFormatDevice.Text)
     else
-      cap:= TCapability(cbInputFormat.Items.Objects[cbInputFormat.ItemIndex]);
-    IFormat :=cap.Name;
-
+      IFormat := FCaps.GetName(cbInputFormat.Text);
     if chbOutputDevice.Checked then
-      cap:= TCapability(cbOutputFormatDevice.Items.Objects[cbOutputFormatDevice.ItemIndex])
+      OFormat := FCaps.GetName(cbOutputFormatDevice.Text)
     else
-      cap:= TCapability(cbOutputFormat.Items.Objects[cbOutputFormat.ItemIndex]);
-    OFormat := cap.Name;
+      OFormat := FCaps.GetName(cbOutputFormat.Text);
+
     if cbWaypoints.Checked then cmdline := cmdline + ' -w';
     if cbRoutes.Checked then cmdline := cmdline + ' -r';
     if cbTracks.Checked then cmdline := cmdline + ' -t';
@@ -984,9 +958,7 @@ begin
   StoreProfile(cbOutputDevice.Tag, cbOutputDevice.Text);
   StoreProfile(cbOutputFormatDevice.Tag, cbOutputFormatDevice.Text);
   StoreProfile(edInputFile.Tag, edInputFile.Text);
-  StoreProfile(cbWayPoints.Tag, BoolToStr(cbWayPoints.Checked,true));
-  StoreProfile(cbRoutes.Tag, BoolToStr(cbRoutes.Checked,true));
-  StoreProfile(cbTracks.Tag, BoolToStr(cbTracks.Checked,true));
+  StoreProfile(edOutputFile.Tag, edOutputFile.Text);
 end;
 
 procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -1014,7 +986,7 @@ begin
     cbOutputFormat.Visible := True;
     sbSaveFile.Visible := True;
     edOutputFile.Visible := True;
-    cbOutputDevice.Visible := False;
+   cbOutputDevice.Visible := False;
     cbOutputFormatDevice.Visible := False;
     lbOutputFile.Caption := _('File');
     FFmtOut := cbOutputFormat.Text;
@@ -1040,32 +1012,22 @@ end;
 
 procedure TfrmMain.cbInputFormatDeviceChange(Sender: TObject);
 begin
-  ComboBoxChanged(cbInputFormatDevice, True, False);
-end;
-
-procedure TfrmMain.cbInputFormatExit(Sender: TObject);
-begin
-  if (cbInputFormat.ItemIndex=-1) then cbInputFormat.ItemIndex:=0;
+  ComboBoxChanged(cbInputFormatDevice.Text, True, False);
 end;
 
 procedure TfrmMain.cbOutputFormatDeviceChange(Sender: TObject);
 begin
-  ComboBoxChanged(cbOutputFormatDevice, False, False);
-end;
-
-procedure TfrmMain.cbOutputFormatExit(Sender: TObject);
-begin
-  if (cbOutputFormat.ItemIndex=-1) then cbOutputFormat.ItemIndex:=0;
+  ComboBoxChanged(cbOutputFormatDevice.Text, False, False);
 end;
 
 procedure TfrmMain.cbInputFormatChange(Sender: TObject);
 begin
-  ComboBoxChanged(cbInputFormat, True, True);
+  ComboBoxChanged(cbInputFormat.Text, True, True);
 end;
 
 procedure TfrmMain.cbOutputFormatChange(Sender: TObject);
 begin
-  ComboBoxChanged(cbOutputFormat, False, True);
+  ComboBoxChanged(cbOutputFormat.Text, False, True);
 end;
 
 procedure TfrmMain.acOptionsSourceFormatExecute(Sender: TObject);
@@ -1361,9 +1323,6 @@ var
                   _translate(GPSBabel_Domain, MsgID) + '"');
   end;
 
-var
-  cap : TCapability;
-
 begin
   if not SelectLanguage(
     _('Choose language') + ' ' + _('for export'),
@@ -1400,11 +1359,10 @@ begin
 
       for i := 0 to FCaps.Count - 1 do
       begin
-        cap:=FCaps.Capability[i];
-        if not Cap.IsFile then Continue;
+        if not FCaps.IsFile(i) then Continue;
 
-        s := Cap.Description;
-        UniWrite(f, Format('format:%s,', [Cap.Name]));
+        s := FCaps.GetDescr(i);
+        UniWrite(f, Format('format:%s,', [FCaps.GetName(s)]));
         UniWriteLn(f, '"' + s + '","' + _translate(GPSBabel_Domain, s) + '"');
 
         l := FOpts.FormatOpts(s);
@@ -1460,14 +1418,12 @@ procedure TfrmMain.acSelectAllExecute(Sender: TObject);
 begin
   memoOutput.SetFocus;
   memoOutput.SelectAll;
-  acSelectAll.Enabled := False;
 end;
 
 procedure TfrmMain.acCopySelectedExecute(Sender: TObject);
 begin
   memoOutput.SetFocus;
   memoOutput.CopyToClipboard;
-  acCopySelected.Enabled := False;
 end;
 
 procedure TfrmMain.PopupMenuPopup(Sender: TObject);
@@ -1476,9 +1432,8 @@ begin
   pmnuCopySelected.Caption := dgettext('delphi', pmnuCopySelected.Caption);
   pmnuClearOutput.Caption := dgettext('delphi', pmnuClearOutput.Caption);
   
-  acSelectAll.Enabled := (memoOutput.Lines.Count > 0);
-  acCopySelected.Enabled := (memoOutput.Lines.Count > 0);
-
+  pmnuSelectAll.Enabled := (memoOutput.Lines.Count > 0);
+  pmnuCopySelected.Enabled := (memoOutput.Lines.Count > 0);
   pmnuClearOutput.Enabled := (memoOutput.Lines.Count > 0);
 end;
 

@@ -97,7 +97,7 @@ static int opt_route_index_value;
 static
 arglist_t stmsdf_args[] = {
 	{ "index", &opt_route_index,
-		"Index of route (if more than one in source)", "1", ARGTYPE_INT, "1", NULL },
+		"Index of route (if more the one in source)", "1", ARGTYPE_INT, "1", NULL },
 	ARG_TERMINATOR
 };
 
@@ -363,7 +363,7 @@ data_read(void)
 	while ((buf = gbfgetstr(fin)))
 	{
 		char *cin = lrtrim(buf);
-		if ((lineno++ == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
+		lineno++;
 		
 		if (*cin == '\0') continue;
 		
@@ -605,7 +605,7 @@ static void
 track_disp_custom_cb(const waypoint *wpt)
 {
 	if (wpt->creation_time && (wpt->altitude != unknown_alt)) {
-		gbfprintf(fout, "%d,%.f\n", (int)(wpt->creation_time - start_time), wpt->altitude);
+		gbfprintf(fout, "%lu,%.f\n", wpt->creation_time - start_time, wpt->altitude);
 	}
 }
 

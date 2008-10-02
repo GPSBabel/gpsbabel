@@ -701,22 +701,6 @@ example:
 </screen>
 </section>
 
-<section id="style_def_latddmmdir">
-<title>LAT_DDMMDIR</title>
-<para>
-Derived from the LAT_NMEA latitude format, with degrees * 100 plus decimal 
-minutes, but using an additional specifier to position the  'N' or 'S' instead of a leading minus sign (or 
-absence thereof) to give direction from zero.
-</para>
-<para>
-<screen format="linespecific"> IFIELD LAT_DDMMDIR, "%f", "%08.3f%c" # (writes "5334.192S" giving -53.56987 degrees latitude)
-</screen>
-</para>
-</section>
-
-
-
-
 <section id="style_def_lonnmea">
 <title>LON_NMEA</title>
 <para>
@@ -724,26 +708,11 @@ absence thereof) to give direction from zero.
    degrees multiplied by 100 plus decimal minutes.
 </para>
 <para>
-Example:
+example:
 </para>
 <screen format="linespecific">   IFIELD  LON_NMEA, "%f", "%010.3f"  # (writes -08708.082)
 </screen>
 </section>
-
-<section id="style_def_londdmmdir">
-<title>LON_DDMMDIR</title>
-<para>
-Derived from the LON_NMEA longitude format, with degrees * 100 plus decimal minutes, but using an additional character format character to position the
-'E' or 'W' instead of a leading minus sign (or absence thereof) to give direction from zero.
-</para>
-<para>
-Example:
-</para>
-<screen format="linespecific"> IFIELD LON_DDMMDIR, "%f", "%010.3f%c" # (writes "01232.745W" giving -12.54575 degrees
-longitude)
-</screen>
-</section>
-
 
 <section id="style_def_latlon_10ex">
 <title>LAT_10EX / LON_10EX</title>
@@ -1210,54 +1179,6 @@ example:
 <section id="style_route_name">
 <title>ROUTE_NAME</title>
 <para>The name of the route currently being operated on.  Needs string conversion.</para><para>example:<screen format="linespecific">ROUTE_NAME, "", "%s"</screen></para></section>
-
-<section id="style_street_addr">
-<title>STREET_NAME</title>
-<para>Street address including house number.  Notice that this is not used for any geocoding, it's merely textual description associated with a position.</para>
-<para>example:<screen format="linespecific">STREET_ADDR, "", "%s"</screen></para>
-</section>
-
-<section id="style_city">
-<title>CITY</title>
-<para>The name of a city. Sometimes part of "Points of Interest".   This is simple textual data associated with a position, no geocoding will be done..</para>
-<para>example:<screen format="linespecific">CITY, "", "%s"</screen></para>
-</section>
-
-<section id="style_country">
-<title>COUNTRY</title>
-<para>The name of a country associated with a position.</para>
-<para>example:<screen format="linespecific">COUNTRY, "", "%s"</screen></para>
-</section>
-
-<section id="style_facility">
-<title>FACILITY</title>
-<para>The name of a facility to associate with a position.</para>
-<para>example:<screen format="linespecific">FACILITY, "", "%s"</screen></para>
-</section>
-
-<section id="style_phone_nr">
-<title>PHONE_NR</title>
-<para>A phone number associated with a position.  This is just textual data attached for convenience.</para>
-<para>example:<screen format="linespecific">PHONE_NR, "", "%s"</screen></para>
-</section>
-
-<section id="style_postal_code">
-<title>POSTAL_CODE</title>
-<para>A postal code to associate with a position.  It is freeform text and is not used by GPSBabel for any geocoding or such.</para>
-<para>example:<screen format="linespecific">POSTAL_CODE, "", "%s"</screen></para>
-</section>
-
-<section id="style_filename">
-<title>FILENAME</title>
-<para>The name of the input file from where the points were loaded. This field is available only on output.</para>
-<para>example:<screen format="linespecific">OFIELD FILENAME, "", "%s"</screen></para>
-</section>
-
-<section id="style_format">
-<title>FORMAT</title>
-<para>The name of the input format from where format the points came. This field is available only on output.</para>
-<para>example:<screen format="linespecific">OFIELD FORMAT, "", "%s"</screen></para>
-</section>
 
 </section> <!-- definitions -->
 
