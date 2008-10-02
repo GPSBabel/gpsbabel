@@ -1,0 +1,16 @@
+      <para> GPSBabel's HTML output generates a single HTML file of all of the
+waypoints in the input file.  It supports a number of Groundspeak GPX
+extensions and filters out potentially harmful HTML from the
+input file while maintaining almost all of the source HTML formatting.   
+This makes this format well suited for generating HTML to hand to programs
+like Plucker for putting in a PDA and especially so for "paperless caching"
+for Geocachers with pocket queries.
+</para>
+<para>This format is similar to the <link linkend="fmt_text">text</link> format.
+</para>
+      <para> The following command line reads a GPX file with
+Groundspeak extensions and writes an HTML file with encrypted hints
+that is rendered using a custom stylesheet:
+</para>
+<para><userinput>gpsbabel -i gpx -f 12345.gpx -o html,stylesheet=green.css,encrypt -F 12345.html</userinput></para>
+    

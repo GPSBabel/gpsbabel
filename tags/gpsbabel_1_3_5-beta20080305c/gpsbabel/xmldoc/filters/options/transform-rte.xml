@@ -1,0 +1,11 @@
+<para>
+This option selects the destination type of this filter to be routes.  Choose this when you want to convert tracks into waypoints routes.  A single route will be created in the sequence they appear in the input.
+</para>
+<example id="transform_to_rte">
+<title>Converting a pile of waypoints to a GPX route</title>
+<para>
+Say you you have a data file that came from CSV file that you want to convert  
+to a GPX route that can be loaded into Mapsource.  Use the following command:
+</para>
+<para><userinput>gpsbabel -i csv -f blah.txt -x transform,rte=wpt -o gdb -F blah.gdb</userinput></para>
+</example>

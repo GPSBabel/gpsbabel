@@ -1,0 +1,96 @@
+Grid	Lat/Lon hddd°mm.mmm'
+Datum	WGS 84
+
+Header	Name	Description	Type	Position	Altitude	Depth	Proximity	Temperature	Display Mode	Color	Symbol	Facility	City	State	Country	Date Modified	Link	Categories
+
+Waypoint	001		Map Line	N50 29.556188732 E12 06.325848140					Symbol	Unknown	Waypoint					28/03/2006 00:10:37 		
+Waypoint	002		Map Intersection	N50 29.556188732 E12 06.325848140					Symbol	Unknown	Waypoint					28/03/2006 00:10:37 		
+Waypoint	003		Map Intersection	N50 29.656610638 E12 06.307823695					Symbol	Unknown	Waypoint					28/03/2006 00:10:37 		
+Waypoint	004		Map Line	N50 29.630036652 E12 06.366030984					Symbol	Unknown	Waypoint					28/03/2006 00:10:37 		
+Waypoint	005		Map Line	N50 29.630036652 E12 06.366030984					Symbol	Unknown	Waypoint					28/03/2006 00:10:37 		
+Waypoint	006		Map Intersection	N50 29.602537304 E12 06.426270045					Symbol	Unknown	Waypoint					28/03/2006 00:10:37 		
+Waypoint	007		Map Line	N50 29.619586095 E12 06.429106481					Symbol	Unknown	Waypoint					28/03/2006 00:10:37 		
+Waypoint	ED_X	Dummy airport (Germany)	Airport	N51 53.627961650 E12 58.676564991					Symbol & Name	Unknown	Airport	FAC1	CITY1		Germany	28/03/2006 01:38:07 		
+Waypoint	GC_X	Dummy airport (Spain)	Airport	N38 37.919719778 W3 10.443304181					Symbol & Name	Unknown	Airport	FAC2	CITY2		Canary Island	28/03/2006 01:42:01 		
+Waypoint	Jahnstrasse	Jahnstrasse 11	User Waypoint	N50 29.619998485 E12 06.429000869					Symbol & Description	Unknown	Flag, Red					31/03/2006 21:48:22 		
+Waypoint	LF_X	Dummy airport (France)	Airport	N46 23.256332763 E3 29.896638617					Symbol & Name	Unknown	Airport	FAC3	CITY3		France	28/03/2006 01:40:32 		
+Waypoint	Liebknechtstrasse	Liebknechtstrasse 90	User Waypoint	N50 29.630041681 E12 06.366015896					Symbol & Name	Unknown	Waypoint					31/03/2006 21:49:30 		
+Waypoint	LI_X	Dummy airport (Italy)	Airport	N43 18.873018846 E12 09.693240859					Symbol & Name	Unknown	Heliport	FAC4	CITY4		Italy	28/03/2006 01:43:25 		
+Waypoint	NARVA	Start	User Waypoint	N50 29.556958191 E12 06.326884143	391 m				Symbol	Unknown	Flag, Green					31/03/2006 21:49:26 	http://www.narva-light.de	Category 15
+
+
+Header	Name	Length	Course	Waypoints	Link
+
+Route	ED_X-LF_X	4087 km	232° true	4 waypoints	
+
+Header	Waypoint Name	Distance	Leg Length	Course
+
+Route Waypoint	ED_X	0 m
+Route Waypoint	GC_X	1936 km	1936 km	227° true
+Route Waypoint	LI_X	3323 km	1388 km	63° true
+Route Waypoint	LF_X	4087 km	764 km	300° true
+
+Route	NARVA to Jahnstrasse	394 m	46° true	10 waypoints	
+
+Header	Waypoint Name	Distance	Leg Length	Course
+
+Route Waypoint	NARVA	0 m
+Route Waypoint	001	2 m	2 m	221° true
+Route Waypoint	002	2 m	0 m	0° true
+Route Waypoint	003	189 m	188 m	353° true
+Route Waypoint	004	274 m	85 m	126° true
+Route Waypoint	Liebknechtstrasse	274 m	0 m	298° true
+Route Waypoint	005	274 m	0 m	118° true
+Route Waypoint	006	361 m	88 m	126° true
+Route Waypoint	007	393 m	32 m	6° true
+Route Waypoint	Jahnstrasse	394 m	1 m	351° true
+
+
+Header	Name	Start Time	Elapsed Time	Length	Average Speed	Link
+
+Track	ACTIVE LOG 006	01/05/2005 15:02:47 	0:33:09	653 m	1.2 kph	
+
+Header	Position	Time	Altitude	Depth	Temperature	Leg Length	Leg Time	Leg Speed	Leg Course
+
+Trackpoint	N51 18.776294924 E12 24.789910130	01/05/2005 15:02:47 	161 m	0.0 m
+Trackpoint	N51 18.772960603 E12 24.794909097	01/05/2005 15:03:25 	154 m	0.0 m		8 m	0:00:38	0.8 kph	137° true
+Trackpoint	N51 18.771295957 E12 24.794909097	01/05/2005 15:03:39 	148 m	0.0 m		3 m	0:00:14	0.8 kph	180° true
+Trackpoint	N51 18.769626282 E12 24.798243418	01/05/2005 15:04:16 	139 m	0.0 m		5 m	0:00:37	0.5 kph	129° true
+Trackpoint	N51 18.769626282 E12 24.796573743	01/05/2005 15:05:02 	145 m	0.0 m		2 m	0:00:46	0.2 kph	270° true
+Trackpoint	N51 18.769626282 E12 24.798243418	01/05/2005 15:05:45 	134 m	0.0 m		2 m	0:00:43	0.2 kph	90° true
+Trackpoint	N51 18.766296990 E12 24.799908064	01/05/2005 15:06:44 	131 m	0.0 m		6 m	0:00:59	0.4 kph	163° true
+Trackpoint	N51 18.766296990 E12 24.799908064	01/05/2005 15:07:50 	130 m	0.0 m		0 m	0:01:06	0 kph	0° true
+Trackpoint	N51 18.764627315 E12 24.799908064	01/05/2005 15:08:19 	132 m	0.0 m		3 m	0:00:29	0.4 kph	180° true
+Trackpoint	N51 18.767961636 E12 24.798243418	01/05/2005 15:11:16 	144 m	0.0 m		6 m	0:02:57	0.1 kph	343° true
+Trackpoint	N51 18.774630278 E12 24.806576706	01/05/2005 15:12:34 	147 m	0.0 m		16 m	0:01:18	0.7 kph	38° true
+Trackpoint	N51 18.779629245 E12 24.828242250	01/05/2005 15:13:18 	145 m	0.0 m		27 m	0:00:44	2 kph	70° true
+Trackpoint	N51 18.782963566 E12 24.828242250	01/05/2005 15:13:27 	145 m	0.0 m		6 m	0:00:09	2 kph	0° true
+Trackpoint	N51 18.782963566 E12 24.829906896	01/05/2005 15:13:37 	135 m	0.0 m		2 m	0:00:10	0.7 kph	90° true
+Trackpoint	N51 18.786292858 E12 24.829906896	01/05/2005 15:13:46 	135 m	0.0 m		6 m	0:00:09	2 kph	0° true
+Trackpoint	N51 18.792961501 E12 24.833241217	01/05/2005 15:14:03 	136 m	0.0 m		13 m	0:00:17	3 kph	17° true
+Trackpoint	N51 18.797960468 E12 24.838240184	01/05/2005 15:14:16 	135 m	0.0 m		11 m	0:00:13	3 kph	32° true
+Trackpoint	N51 18.796295822 E12 24.843239151	01/05/2005 15:14:26 	139 m	0.0 m		7 m	0:00:10	2 kph	118° true
+Trackpoint	N51 18.796295822 E12 24.846573472	01/05/2005 15:14:30 	139 m	0.0 m		4 m	0:00:04	3 kph	90° true
+Trackpoint	N51 18.782963566 E12 24.876572303	01/05/2005 15:15:06 	141 m	0.0 m		43 m	0:00:36	4 kph	125° true
+Trackpoint	N51 18.777959570 E12 24.889909588	01/05/2005 15:15:27 	140 m	0.0 m		18 m	0:00:21	3 kph	121° true
+Trackpoint	N51 18.774630278 E12 24.896573201	01/05/2005 15:15:39 	140 m	0.0 m		10 m	0:00:12	3 kph	129° true
+Trackpoint	N51 18.776294924 E12 24.898242876	01/05/2005 15:25:31 	152 m	0.0 m		4 m	0:09:52	0.0 kph	32° true
+Trackpoint	N51 18.776294924 E12 24.898242876	01/05/2005 15:25:40 	152 m	0.0 m		0 m	0:00:09	0 kph	0° true
+Trackpoint	N51 18.777959570 E12 24.896573201	01/05/2005 15:29:18 	155 m	0.0 m		4 m	0:03:38	0.1 kph	328° true
+Trackpoint	N51 18.789627180 E12 24.874907658	01/05/2005 15:30:30 	149 m	0.0 m		33 m	0:01:12	2 kph	311° true
+Trackpoint	N51 18.789627180 E12 24.873243012	01/05/2005 15:30:37 	150 m	0.0 m		2 m	0:00:07	1.0 kph	270° true
+Trackpoint	N51 18.789627180 E12 24.866574369	01/05/2005 15:30:47 	151 m	0.0 m		8 m	0:00:10	3 kph	270° true
+Trackpoint	N51 18.789627180 E12 24.863240048	01/05/2005 15:30:48 	151 m	0.0 m		4 m	0:00:01	14 kph	270° true
+Trackpoint	N51 18.799630143 E12 24.834905863	01/05/2005 15:30:52 	150 m	0.0 m		38 m	0:00:04	34 kph	299° true
+Trackpoint	N51 18.821295686 E12 24.799908064	01/05/2005 15:30:57 	150 m	0.0 m		57 m	0:00:05	41 kph	315° true
+Trackpoint	N51 18.839626908 E12 24.771573879	01/05/2005 15:31:03 	150 m	0.0 m		47 m	0:00:06	28 kph	316° true
+Trackpoint	N51 18.852959163 E12 24.749908336	01/05/2005 15:31:10 	150 m	0.0 m		35 m	0:00:07	18 kph	315° true
+Trackpoint	N51 18.877959028 E12 24.573239610	01/05/2005 15:32:38 	143 m	0.0 m		210 m	0:01:28	9 kph	283° true
+Trackpoint	N51 18.877959028 E12 24.569910318	01/05/2005 15:32:45 	141 m	0.0 m		4 m	0:00:07	2 kph	270° true
+Trackpoint	N51 18.877959028 E12 24.569910318	01/05/2005 15:33:17 	143 m	0.0 m		0 m	0:00:32	0 kph	0° true
+Trackpoint	N51 18.877959028 E12 24.566575997	01/05/2005 15:33:42 	139 m	0.0 m		4 m	0:00:25	0.6 kph	270° true
+Trackpoint	N51 18.877959028 E12 24.561572000	01/05/2005 15:33:54 	139 m	0.0 m		6 m	0:00:12	2 kph	270° true
+Trackpoint	N51 18.877959028 E12 24.561572000	01/05/2005 15:34:04 	138 m	0.0 m		0 m	0:00:10	0 kph	0° true
+Trackpoint	N51 18.877959028 E12 24.561572000	01/05/2005 15:34:20 	139 m	0.0 m		0 m	0:00:16	0 kph	0° true
+Trackpoint	N51 18.877959028 E12 24.561572000	01/05/2005 15:35:45 	144 m	0.0 m		0 m	0:01:25	0 kph	0° true
+Trackpoint	N51 18.877959028 E12 24.561572000	01/05/2005 15:35:56 	145 m	0.0 m		0 m	0:00:11	0 kph	0° true
