@@ -130,8 +130,11 @@ GPX files from the mass storage device as mounted on your computer.
 <member>Nuvi 250W<footnoteref linkend="gpx"/></member>
 <member>Nuvi 255W<footnoteref linkend="gpx"/></member>
 <member>Nuvi 260<footnoteref linkend="gpx"/></member>
+<member>Nuvi 265T<footnoteref linkend="gpx"/></member>
+<member>Nuvi 265WT<footnoteref linkend="gpx"/></member>
 <member>Nuvi 260W<footnoteref linkend="gpx"/></member>
 <member>Nuvi 270<footnoteref linkend="gpx"/></member>
+<member>Nuvi 275T<footnoteref linkend="gpx"/></member>
 <member>Nuvi 300<footnote id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.  Members of this class of products do not support realtime positioning protocol.</para></footnote></member>
 <member>Nuvi 310<footnoteref linkend="gpx"/></member>
 <member>Nuvi 350<footnoteref linkend="gpx"/></member>
@@ -145,9 +148,13 @@ GPX files from the mass storage device as mounted on your computer.
 <member>Nuvi 670<footnoteref linkend="gpx"/></member>
 <member>Nuvi 680<footnoteref linkend="gpx"/></member>
 <member>Nuvi 750<footnoteref linkend="gpx"/></member>
+<member>Nuvi 755T<footnoteref linkend="gpx"/></member>
 <member>Nuvi 760<footnoteref linkend="gpx"/></member>
+<member>Nuvi 765T<footnoteref linkend="gpx"/></member>
 <member>Nuvi 770<footnoteref linkend="gpx"/></member>
+<member>Nuvi 775T<footnoteref linkend="gpx"/></member>
 <member>Nuvi 780<footnoteref linkend="gpx"/></member>
+<member>Nuvi 785T<footnoteref linkend="gpx"/></member>
 <member>Nuvi 880<footnoteref linkend="gpx"/></member>
 <member>Oregon 200<footnoteref linkend="gpx"/></member>
 <member>Oregon 300<footnoteref linkend="gpx"/></member>
@@ -158,6 +165,7 @@ GPX files from the mass storage device as mounted on your computer.
 <member>StreetPilot c530<footnoteref linkend="gpx"/></member>
 <member>StreetPilot c550<footnoteref linkend="gpx"/></member>
 <member>StreetPilot c580<footnoteref linkend="gpx"/></member>
+<member>Road Tech Zumo<footnoteref linkend="gpx"/></member>
 <member>Zumo 450<footnoteref linkend="gpx"/></member>
 <member>Zumo 500<footnoteref linkend="gpx"/></member>
 <member>Zumo 550<footnoteref linkend="gpx"/></member>
