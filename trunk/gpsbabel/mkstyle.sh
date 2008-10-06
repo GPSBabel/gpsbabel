@@ -6,7 +6,7 @@ echo
 echo "#include \"defs.h\""
 echo "#if CSVFMTS_ENABLED"
 nstyles="0"
-for i in style/*.style
+for i in `dirname $0`/style/*.style
 do
 	A=`basename $i | sed "s/.style$//"`
 	[ $A = "README" ] && continue
