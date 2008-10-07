@@ -1494,5 +1494,20 @@ bincompare ${REFERENCE}/track/navitel_trk.bin ${TMPDIR}/navitel_trk.bin
 gpsbabel -i navitel_trk -f ${REFERENCE}/track/navitel_trk.bin -o navitel_trk -F ${TMPDIR}/navitel_trk2.bin
 bincompare ${TMPDIR}/navitel_trk.bin ${TMPDIR}/navitel_trk2.bin
 
+#
+# Garmin Tranining Center .tcx (gtrnctr)
+#
+# reading
+rm -f ${TMPDIR}/history~tcx.csv ${TMPDIR}/course~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/history.tcx -t -o unicsv,utc=0 -F ${TMPDIR}/history~tcx.csv
+compare ${REFERENCE}/track/history~tcx.csv ${TMPDIR}/history~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o unicsv,utc=0 -F ${TMPDIR}/course~tcx.csv
+compare ${REFERENCE}/track/course~tcx.csv ${TMPDIR}/course~tcx.csv
+# writing
+rm -f ${TMPDIR}tcxtest~gpx-course.tcx ${TMPDIR}tcxtest~gpx-history.tcx
+gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=1 -F ${TMPDIR}/tcxtest~gpx-course.tcx
+compare ${REFERENCE}/track/tcxtest~gpx-course.tcx ${TMPDIR}/tcxtest~gpx-course.tcx
+gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=0 -F ${TMPDIR}/tcxtest~gpx-history.tcx
+compare ${REFERENCE}/track/tcxtest~gpx-history.tcx ${TMPDIR}/tcxtest~gpx-history.tcx
 
 exit 0
