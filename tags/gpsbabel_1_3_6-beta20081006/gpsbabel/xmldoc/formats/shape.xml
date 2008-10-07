@@ -1,0 +1,15 @@
+      <para>This format reads and writes ESRI shapefiles as best it can.  The
+reality is that shapefiles can contain a lot of map-oriented data that does
+not convert well to our model of waypoints, tracks, and routes.  Points are
+mapped to waypoints. Arcs are mapped to tracks.<para>
+<para>
+If a field is named 'NAME', that will be used for hte shortname.  Likewise
+for a field named 'URL'.
+</para>
+<para>
+Given the forced fit nature of conversions between shapefiles and other
+formats, the results of these conversions are frequently disappointing.
+A custom converter (perhaps via a modification to our source) will frequently
+deliver better results.
+</para>
+    

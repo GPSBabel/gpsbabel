@@ -1,0 +1,36 @@
+   <preface id="Introduction">
+      <title>Introduction</title>
+      <section id="The_Problem">
+         <title>The Problem: Too many incompatible GPS file formats</title>
+         <para> There are simply too many gratuitously different file formats
+to hold waypoint, track, and route information in various programs
+used by computers and GPS receivers.  
+<ulink url="http://www.topografix.com/gpx.asp">GPX</ulink>  defines a
+standard in XML to contain all the data, but there are too many
+programs that don't understand it yet and too much data in 
+alternate formats.
+</para>
+<para>
+Perhaps you have an <link linkend="fmt_magellanx">Explorist 600</link> and your friend has a <link linkend="fmt_garmin">StreetPilot 2720</link>.
+You've collected a a list of your favorite locations as waypoints and you'd
+like to be able to share them.  Unfortunately, his copy of <link linkend="fmt_gdb">Garmin Mapsource</link>
+won't read data created by your copy of <link linkend="fmt_mapsend">Magellan Mapsend DirectRoute</link>.  What you need
+is a program that converts data bewteen the two programs.
+</para>
+<para>
+GPSBabel actually solves that problem for you and much more...
+</para>
+      </section>
+      <section id="The_Solution">
+         <title>The Solution</title>
+         <para> The original author of GPSBabel, <ulink url="/people/robertlipe.html">Robert Lipe</ulink>, needed to convert waypoints between a couple of formats, so he
+whipped up a converter and designed it upon an extensible foundation so
+that it was easy to add new formats and made the program freely available. <ulink url="/people/index.html">Many others</ulink> have contributed to the program since then.</para>
+	<para>  Most file formats added so far have taken under 200 
+	lines of reasonable ISO C so they can be stamped
+	out pretty trivially.  Formats that are ASCII text delimited in some
+	fixed way can be added with no programming at all via our 
+	<link linkend="Styles">style</link> mechanism.
+	</para>
+      </section>
+   </preface>

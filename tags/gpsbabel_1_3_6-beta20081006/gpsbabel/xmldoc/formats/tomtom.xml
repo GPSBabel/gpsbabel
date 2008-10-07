@@ -1,0 +1,15 @@
+
+      
+      
+      <para> This format can read and write <ulink url="http://www.tomtom.com">TomTom</ulink> .ov2 (POI) files,
+as used by the TomTom GO and TomTom Navigator.  It has been tested
+with an original TomTom GO running version 5.00 of the TomTom
+software.  There may be some records that confuse the input module -
+if you have an example of such a record "in the wild", and you aren't
+restricted from sharing it, we encourage you to post to the
+gpsbabel-misc mailing list to contact a developer.</para>
+      <para> Note that in addition to the .ov2 file, you will need a
+.bmp file for the icon.  It should be 22x22 and 16 colors, and have
+the same name (not including the extension) as the .ov2 file.
+</para>
+    

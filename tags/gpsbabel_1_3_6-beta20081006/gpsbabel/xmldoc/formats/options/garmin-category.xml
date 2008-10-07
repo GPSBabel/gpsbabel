@@ -1,0 +1,3 @@
+<para>This numeric option will force waypoints to be written with that
+category number when sending to a Garmin receiver that has category
+support. It is ignored on receivers without that capability. </para>

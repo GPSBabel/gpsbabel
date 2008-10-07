@@ -1,0 +1,8 @@
+<para>
+This format supports the <ulink url="http://www.magellangps.com">Magellan</ulink> <productname>MapSend</productname> native
+file format.
+</para>
+<para>
+Kudos to Magellan for having the foresight to document their file formats,
+making software like this possible.
+</para>

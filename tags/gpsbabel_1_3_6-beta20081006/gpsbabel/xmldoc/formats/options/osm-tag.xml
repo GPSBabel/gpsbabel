@@ -1,0 +1,6 @@
+<para>
+  With this option you can preset OSM <ulink url="http://wiki.openstreetmap.org/index.php/Map_Features">features</ulink> (tags) on all exported ways.
+</para>
+<para>
+  <userinput>gpsbabel -i gdb -f ways.gdb -o osm,tag="highway:motorway" -F ways.osm</userinput>
+</para>

@@ -1,0 +1,16 @@
+<para>
+   Frame means the maximum time difference that we accept between the EXIF time information
+   of a picture and the timestamp of a track-, route- and waypoint used for tagging. 
+   Without this option the maximum time frame is 10 seconds.
+</para>
+<para>
+  <userinput>gpsbabel -i gpx -f holiday.gpx -o exif,frame=60 -F IMG0784.JPG</userinput>
+</para>
+<para>
+   If the camera time wasn't adjusted, you should move the track(s) by the this difference.
+   I.e. if the camera time is five minutes behind your time, the track(s) should be shifted
+   five minutes back.
+</para>
+<para>
+  <userinput>gpsbabel -i gpx -f holiday.gpx -x track,move=-5m -o exif,frame=60 -F IMG0784.JPG</userinput>
+</para>
