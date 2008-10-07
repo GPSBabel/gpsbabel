@@ -26,7 +26,7 @@ makedmg() {
   trap 'rm -fr $WORKDIR' 0 1 15
 
   # Create the image uncompressed based on our preloaded copy.
-  hdiutil create ${QUIET} -srcfolder mac/dmg-contents -scrub -size 15m ${UDMG} -format UDRW -volname ${NAME}
+  hdiutil create ${QUIET} -srcfolder mac/dmg-contents -scrub -size 30m ${UDMG} -format UDRW -volname ${NAME}
   hdiutil  attach ${QUIET} ${UDMG} -noautoopen -mountpoint ${WORKDIR}
 
   # Since CVS loses the resource forkes, we've stored a ditto image in the 
@@ -42,6 +42,7 @@ makedmg() {
 
   # Copy in the new executable.
   cp -p ./gpsbabel ${WORKDIR}
+  rm -fr ${WORKDIR}/CVS
   hdiutil detach ${QUIET} ${WORKDIR}
 
   hdiutil convert ${QUIET} ${UDMG} -format UDZO -imagekey zlib-level=9 -o ${DMG}
