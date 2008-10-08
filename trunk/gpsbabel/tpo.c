@@ -424,7 +424,7 @@ int tpo_read_int()
 
         case 0xfe:  // 16-bit value
 //printf("Found 16-bit value indicator: %x\n", val);
-            return( gbfgetint16(tpo_file_in) );
+            return( gbfgetuint16(tpo_file_in) );
             break;
 
         default:    // 8-bit value
