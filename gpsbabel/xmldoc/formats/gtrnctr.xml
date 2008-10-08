@@ -5,7 +5,12 @@ to Garmin's Logbook program for their workout units.  It is a
 free upgrade.
 </para>
 <para>
-GPSBabel can read GTC .tcx v1 and v2 files, and can write v2 files. 
+GPSBabel can read GTC v1 and v2 files, and can write v2 files. 
+v2 files are most likely to have a .tcx extension. v1 files
+typically have a .hst or .crs extension, depending on whether they
+are in the "history" or "course" format.
+</para>
+<para>
 There is a fundamental mismatch between this format and most of
 what we support.  GPSBabel deals in waypoints, tracks, and routes.
 While we do record things like heart rate and temperature when we know
