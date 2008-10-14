@@ -254,7 +254,6 @@ nmea_rd_init(const char *fname)
 	last_waypt = NULL;
 	last_time = -1;
 	datum = DATUM_WGS84;
-	static int had_checksum = 0;
 
 	CHECK_BOOL(opt_gprmc);
 	CHECK_BOOL(opt_gpgga);

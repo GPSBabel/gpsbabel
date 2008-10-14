@@ -51,6 +51,14 @@
 #  define M_PI 3.14159265358979323846
 #endif
 
+#ifndef FALSE
+#  define FALSE 0
+#endif
+
+#ifndef TRUE
+#  define TRUE !FALSE
+#endif
+
 #define FEET_TO_METERS(feetsies) ((feetsies) * 0.3048)
 #define METERS_TO_FEET(meetsies) ((meetsies) * 3.2808399)
 

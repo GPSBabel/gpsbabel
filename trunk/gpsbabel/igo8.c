@@ -67,8 +67,6 @@
 #include "cet.h"
 #include "cet_util.h"
 
-#define TRUE 1
-#define FALSE 0
 #define FLOAT_TO_INT(x) ((int)((x) + ((x)<0?-0.5:0.5)))
 #define IGO8_HEADER_SIZE (sizeof(igo8_id_block) + 256)
 #define MYNAME "IGO8"
