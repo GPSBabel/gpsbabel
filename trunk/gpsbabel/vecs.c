@@ -150,6 +150,7 @@ extern ff_vecs_t ggv_ovl_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t jtr_vecs;
 #endif
+extern ff_vecs_t sbp_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -855,6 +856,13 @@ vecs_t vec_list[] = {
                 "jtr"
         },
 #endif
+        {
+                &sbp_vecs,
+                "sbp",
+                "NaviGPS GT-31/BGT-31 datalogger (.sbp)",
+                "sbp"
+        },
+        
 
 #endif // MAXIMAL_ENABLED
 	{

@@ -2,6 +2,7 @@
     NaviGPS serial protocol.
 
     Copyright (C) 2007 Tom Hughes, tom@compton.nu
+    Copyright (C) 2008 Rodney Lorrimar, rodney@rodney.id.au
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,13 +25,16 @@
 #include "defs.h"
 #include "gbser.h"
 #include "jeeps/gpsmath.h"
+#include "navilink.h"
 
 #define MYNAME "NAVILINK"
 
 static char *nuketrk = NULL;
 static char *nukerte = NULL;
 static char *nukewpt = NULL;
+static char *nukedlg = NULL;
 static char *poweroff = NULL;
+static char *datalog = NULL;
 
 static void *serial_handle = NULL;
 static gbfile *file_handle = NULL;
@@ -48,7 +52,8 @@ static enum {
 	WRITING
 } operation = READING;
 
-#define SERIAL_TIMEOUT 8000
+#define SERIAL_TIMEOUT        8000
+#define CLEAR_DATALOG_TIME    7000
 
 #define MAX_WAYPOINTS         1000
 #define MAX_SUBROUTES         9
@@ -56,6 +61,7 @@ static enum {
 #define MAX_ROUTE_LENGTH      (MAX_SUBROUTES * MAX_SUBROUTE_LENGTH - 1)
 #define MAX_READ_TRACKPOINTS  512
 #define MAX_WRITE_TRACKPOINTS 127
+#define MAX_READ_LOGPOINTS    256
 
 #define PID_SYNC              0xd6
 #define PID_ACK               0x0c
@@ -77,6 +83,9 @@ static enum {
 #define PID_CMD_OK            0xf3
 #define PID_CMD_FAIL          0xf4
 #define PID_QUIT              0xf2
+#define PID_INFO_DATALOG      0x1c
+#define PID_READ_DATALOG      0x14
+#define PID_CLEAR_DATALOG     0x1b
 
 static
 const char *const icon_table[] = {
@@ -135,6 +144,10 @@ arglist_t navilink_args[] = {
 		ARG_NOMINMAX },
 	{ "nukewpt", &nukewpt, "Delete all waypoints", NULL, ARGTYPE_BOOL,
 		ARG_NOMINMAX },
+	{ "nukedlg", &nukedlg, "Clear the datalog", NULL, ARGTYPE_BOOL,
+		ARG_NOMINMAX },
+	{ "datalog", &datalog, "Read from datalogger buffer",
+	  NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "power_off", &poweroff, "Command unit to power itself down",
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
@@ -757,6 +770,170 @@ serial_write_route_end(const route_head *route)
 	xfree(route_ids);
 }
 
+static int
+decode_sbp_usec(const unsigned char *buffer)
+{
+	int msec = le_read16(buffer);
+	return (msec % 1000) * 1000;
+}
+
+static time_t
+decode_sbp_datetime_packed(const unsigned char *buffer)
+{
+	/*
+	 * Packed_Date_Time_UTC:
+	 *   bit 31..22 :year*12+month (10 bits) :   real year= year+2000
+	 *   bit17.21: day (5bits)
+	 *   bit12.16: hour (5bits)
+	 *   bit6..11: min  (6bits)
+	 *   bit0..5 : sec  (6bits)
+	 *
+	 * 0        1        2        3
+	 * 01234567 01234567 01234567 01234567 
+	 * ........ ........ ........ ........
+	 * SSSSSSMM MMMMHHHH Hdddddmm mmmmmmmm
+	 */
+
+	int months;
+	struct tm tm;
+
+	memset(&tm, 0, sizeof(tm));
+
+	tm.tm_sec = buffer[0] & 0x3F;
+	tm.tm_min = ((buffer[0] & 0xC0) >> 6) | ((buffer[1] & 0x0F) << 2);
+	tm.tm_hour = ((buffer[1] & 0xF0) >> 4) | ((buffer[2] & 0x01) << 4);
+	tm.tm_mday = (buffer[2] & 0x3E) >> 1;
+	months = ((buffer[2] & 0xC0) >> 6) | buffer[3] << 2;
+	tm.tm_mon = months % 12 - 1;
+	tm.tm_year = 100 + months / 12;
+
+	return mkgmtime(&tm);
+}
+
+static void
+decode_sbp_position(const unsigned char *buffer, waypoint *waypt)
+{
+	waypt->latitude = le_read32(buffer + 0) / 10000000.0;
+	waypt->longitude = le_read32(buffer + 4) / 10000000.0;
+	waypt->altitude = le_read32(buffer + 8) / 100.0;
+}
+
+waypoint *
+navilink_decode_logpoint(const unsigned char *buffer)
+{
+	waypoint *waypt = NULL;
+	waypt = waypt_new();
+
+	waypt->hdop = ((unsigned char)buffer[0]) * 0.2f;
+	waypt->sat = buffer[1];
+	waypt->microseconds = decode_sbp_usec(buffer + 2);
+	waypt->creation_time = decode_sbp_datetime_packed(buffer + 4);
+	decode_sbp_position(buffer + 12, waypt);
+	WAYPT_SET(waypt, speed, le_read16(buffer + 24) * 0.01f);
+	WAYPT_SET(waypt, course, le_read16(buffer + 26) * 0.01f);
+
+	return waypt;
+}
+
+/*
+ * The datalog is a circular buffer, so it may be necessary to glue
+ * together two segments. This function queries the device for the
+ * circular buffer pointers, and returns two pairs of address/length.
+ * If there is only one segment (i.e. the datalog has not yet wrapped
+ * around), then seg2_addr and seg2_len will be zero.
+ */
+static void
+read_datalog_info(unsigned int *seg1_addr, unsigned int *seg1_len,
+                  unsigned int *seg2_addr, unsigned int *seg2_len)
+{
+	unsigned char  info[16];
+	unsigned int   flash_start_addr;
+	unsigned int   flash_length;
+	unsigned int   data_start_addr;
+	unsigned int   next_blank_addr;
+	
+	write_packet(PID_INFO_DATALOG, NULL, 0);
+	read_packet(PID_DATA, info, sizeof(info), sizeof(info), FALSE);
+
+	flash_start_addr = le_read32(info);
+	flash_length = le_read32(info + 4);
+	data_start_addr = le_read32(info + 8);
+	next_blank_addr = le_read32(info + 12);
+
+	if (data_start_addr > next_blank_addr) {
+		/* usually there are two segments to be read */
+		*seg1_addr = data_start_addr;
+		*seg1_len = flash_start_addr + flash_length - *seg1_addr;
+		*seg2_addr = flash_start_addr;
+		*seg2_len = next_blank_addr - flash_start_addr;
+	} else {
+		/* hasn't wrapped around yet, only one segment */
+		*seg1_addr = data_start_addr;
+		*seg1_len = next_blank_addr - data_start_addr;
+		*seg2_addr = 0;
+		*seg2_len = 0;
+	}
+
+	if (*seg1_len & 0x1F || *seg2_len & 0x1F) {
+		fatal(MYNAME ": Protocol error: datalog lengths %u, %u "
+		      "not aligned to 32 bytes\n", *seg1_len, *seg2_len);
+	}
+}
+
+static void
+read_datalog_records(route_head *track,
+                     unsigned int start_addr, unsigned int len)
+{
+	unsigned char  logpoints[MAX_READ_LOGPOINTS * SBP_RECORD_LEN];
+	unsigned int   logpoints_len;
+	unsigned char  payload[7];
+	unsigned char *p;
+
+	/* The protocol only supports reading 256 logpoints at once, so
+	 * read small chunks until none left. */
+	while (len > 0) {
+		logpoints_len = len > MAX_READ_LOGPOINTS ? MAX_READ_LOGPOINTS : len;
+		
+		le_write32(payload, start_addr);
+		le_write16(payload + 4, logpoints_len);
+		payload[6] = 0x01;
+		
+		write_packet(PID_READ_DATALOG, payload, sizeof(payload));
+		read_packet(PID_DATA, logpoints, logpoints_len, logpoints_len, FALSE);
+		write_packet(PID_ACK, NULL, 0);
+
+		for (p = logpoints; p < logpoints + logpoints_len; p += 32) {
+			track_add_wpt(track, navilink_decode_logpoint(p));
+		}
+
+		len -= logpoints_len;
+		start_addr += logpoints_len;
+	}
+}
+
+static void
+serial_read_datalog(void)
+{
+	route_head *track;
+	unsigned int seg1_addr;
+	unsigned int seg1_len;
+	unsigned int seg2_addr;
+	unsigned int seg2_len;
+	
+	read_datalog_info(&seg1_addr, &seg1_len, &seg2_addr, &seg2_len);
+
+	track = route_head_alloc();
+	track_add_head(track);
+
+	if (seg1_len) {
+		read_datalog_records(track, seg1_addr, seg1_len);
+	}
+	
+	if (seg2_len) {
+		read_datalog_records(track, seg2_addr, seg2_len);
+	}
+}
+
 static void
 file_read(void)
 {
@@ -844,8 +1021,8 @@ nuke(void)
 
 		write_packet(PID_QRY_INFORMATION, NULL, 0);
 		read_packet(PID_DATA, information,
-								sizeof(information), sizeof(information),
-								FALSE);
+		            sizeof(information), sizeof(information),
+		            FALSE);
 
 		le_write32(data + 0, le_read32(information + 4));
 		le_write16(data + 4, 0);
@@ -871,10 +1048,20 @@ nuke(void)
 		le_write32(data, 0x00f00000);
 		write_packet(PID_DEL_ALL_WAYPOINT, data, sizeof(data));
 		if (!read_packet(PID_ACK, NULL, 0, 0, TRUE)) {
-			fatal(MYNAME ": You have to nuke all routes before nuking waypoints.\n");
+			fatal(MYNAME ": You must nuke all routes before nuking waypoints.\n");
 			/* perhaps a better action would be to nuke routes for user.
 			 * i.e. set nukerte when nukewpt is set */
 		}
+	}
+
+	if (nukedlg) {
+		write_packet(PID_CLEAR_DATALOG, NULL, 0);
+		/* The flash erase operation is time-consuming. Each sector (64KB)
+		 * takes around 1 second.  The total sectors for SBP is 10.
+		 * So give the device some time to clear its datalog, in addition
+		 * to SERIAL_TIMEOUT, which applies to read_packet() */
+		gb_sleep(CLEAR_DATALOG_TIME * 1000);
+		read_packet(PID_ACK, NULL, 0, 0, FALSE);
 	}
 }
 
@@ -959,32 +1146,46 @@ navilink_deinit(void)
 static void
 navilink_read(void)
 {
-	if (serial_handle) {
-		waypoint **waypts = NULL;
-
-		if (global_opts.masked_objective & (WPTDATAMASK|RTEDATAMASK)) {
-			waypts = serial_read_waypoints();
-		}
-
+	if (datalog) {
 		if (global_opts.masked_objective & TRKDATAMASK) {
-			serial_read_track();
+			if (serial_handle) {
+				serial_read_datalog();
+			} else if (file_handle) {
+				fatal(MYNAME ": Not supported. Use SBP format.\n");
+			}
 		}
+	} else {
+		if (serial_handle) {
+			waypoint **waypts = NULL;
 
-		if (global_opts.masked_objective & RTEDATAMASK) {
-			serial_read_routes(waypts);
-		}
+			if (global_opts.masked_objective & (WPTDATAMASK|RTEDATAMASK)) {
+				waypts = serial_read_waypoints();
+			}
 
-		if (waypts) {
-			free_waypoints(waypts);
+			if (global_opts.masked_objective & TRKDATAMASK) {
+				serial_read_track();
+			}
+
+			if (global_opts.masked_objective & RTEDATAMASK) {
+				serial_read_routes(waypts);
+			}
+		
+			if (waypts) {
+				free_waypoints(waypts);
+			}
+		} else if (file_handle) {
+			file_read();
 		}
-	} else if (file_handle) {
-		file_read();
 	}
 }
 
 static void
 navilink_write(void)
 {
+	if (datalog)  {
+		fatal(MYNAME ": Writing to datalog not supported.\n");
+	}
+	
 	switch (global_opts.objective)
 	{
 		case trkdata:

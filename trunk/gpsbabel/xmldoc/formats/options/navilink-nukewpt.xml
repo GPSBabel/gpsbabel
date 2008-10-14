@@ -1,10 +1,11 @@
 <para>
-This option erases all waypoints in the receiver before doing a transfer.
+This option erases all waypoints in the receiver before or after doing
+the transfer, depending on whether waypoints are sent to or received
+from the device.
 </para>
 <para>
-This is a convenient option to use in automated processes where you want
-to ensure the units starts with a clean state before sending waypoints to
-it.   Using this option on transmit is a better idea than doing it on 
-receive since the latter would erase all the waypoints before asking the
-unit to send all the waypoints.
+This is a convenient option to use in automated processes where you
+want to ensure the units starts with a clean state before sending
+waypoints to it, or if you want to clear the device after receiving
+the waypoints.
 </para>
