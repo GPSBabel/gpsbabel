@@ -929,6 +929,10 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     char *enclosure = "";
     geocache_data *gc_data = NULL;
 
+    if (!fmp->printfc) {
+      fatal(MYNAME ": xcsv style '%s' is missing format specifier", fmp->key);
+    }
+
     if (0 == strcmp(fmp->printfc, "\"%s\"")) {
 	enclosure = "\"";
     }
