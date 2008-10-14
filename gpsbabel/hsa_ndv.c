@@ -50,9 +50,6 @@ arglist_t hsa_ndv_args[] = {
 #define MYNAME "HsaNdv"
 #define MY_CBUF 4096
 
-#define TRUE	1
-#define FALSE	0
-
 
 #if ! HAVE_LIBEXPAT
 static void
