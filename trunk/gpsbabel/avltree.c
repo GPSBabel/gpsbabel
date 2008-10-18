@@ -195,7 +195,18 @@ avltree_find(const avltree_t *tree, const char *key, const void **data)
 const char *
 avltree_first(const avltree_t *tree, const void **data)
 {
-	return avltree_next(tree, NULL, data);
+	avlnode_t *node;
+
+	AVLTREE_CHECK_HANDLE(tree);
+
+	node = tree->root;
+	if (! node) return NULL;
+	
+	while (node->left) node = node->left;
+	avltree_save_key((avltree_t *)tree, node->key);
+	if (data) (*data) = node->data;
+
+	return tree->key;
 }
 
 
