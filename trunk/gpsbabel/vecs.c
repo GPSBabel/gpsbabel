@@ -151,6 +151,7 @@ extern ff_vecs_t ggv_ovl_vecs;
 extern ff_vecs_t jtr_vecs;
 #endif
 extern ff_vecs_t sbp_vecs;
+extern ff_vecs_t mmo_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -861,6 +862,12 @@ vecs_t vec_list[] = {
                 "sbp",
                 "NaviGPS GT-31/BGT-31 datalogger (.sbp)",
                 "sbp"
+        },
+        {
+                &mmo_vecs,
+                "mmo",
+                "Memory-Map overlay files (.mmo)",
+                "mmo"
         },
         
 
