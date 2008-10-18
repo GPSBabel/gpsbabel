@@ -161,7 +161,7 @@ jtr_read(void)
 
 		/* check for duplicates as suggested in format description */
 
-		snprintf(buf, sizeof(buf), "%.6f\01\%.6f\01\%ld", lat, lon, (long)time);
+		snprintf(buf, sizeof(buf), "%.6f\01%.6f\01%ld", lat, lon, (long)time);
 		if (avltree_find(trkpts, buf, NULL)) continue;
 
 		wpt = waypt_new();
