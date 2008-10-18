@@ -157,11 +157,11 @@ mmo_readstr(void)
 
 
 static int
-mmo_fillbuf2(void *buf, const gbsize_t bufsz, const int count, const int need_all)
+mmo_fillbuf2(void *buf, const gbsize_t bufsz, const gbsize_t count, const int need_all)
 {
-	int res;
+	gbsize_t res;
 	
-	if (count > bufsz) fatal(MYNAME ": Internal error (bufsz too small)!\n");
+	if (count > (int)bufsz) fatal(MYNAME ": Internal error (bufsz too small)!\n");
 	
 	memset(buf, 0xFF, count);
 	res = gbfread(buf, 1, count, fin);
