@@ -22,6 +22,9 @@ LANG = \
   locale\fr\LC_MESSAGES\delphi.mo \
   locale\fr\LC_MESSAGES\default.mo \
   locale\fr\LC_MESSAGES\gpsbabel.mo \
+  locale\it\LC_MESSAGES\delphi.mo \
+  locale\it\LC_MESSAGES\default.mo \
+  locale\it\LC_MESSAGES\gpsbabel.mo \
   locale\hu\LC_MESSAGES\delphi.mo \
   locale\hu\LC_MESSAGES\default.mo \
   locale\hu\LC_MESSAGES\gpsbabel.mo
