@@ -1086,6 +1086,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\mmo.c">
+			</File>
+			<File
 				RelativePath="..\msroute.c">
 			</File>
 			<File
