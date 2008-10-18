@@ -1503,6 +1503,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\sbp.c">
+			</File>
+			<File
 				RelativePath="..\session.c">
 			</File>
 			<File
