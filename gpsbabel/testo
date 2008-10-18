@@ -1510,4 +1510,15 @@ compare ${REFERENCE}/track/tcxtest~gpx-course.tcx ${TMPDIR}/tcxtest~gpx-course.t
 gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=0 -F ${TMPDIR}/tcxtest~gpx-history.tcx
 compare ${REFERENCE}/track/tcxtest~gpx-history.tcx ${TMPDIR}/tcxtest~gpx-history.tcx
 
+#
+# Memory-Map Navigator overlay files (.mmo)
+#
+# reading
+gpsbabel -i mmo -f ${REFERENCE}/memory-map.mmo -o gpx -F ${TMPDIR}/memory-map~mmo.gpx
+compare ${REFERENCE}/memory-map~mmo.gpx ${TMPDIR}/memory-map~mmo.gpx
+#writing (check only for memory leaks)
+gpsbabel -i gpx -f ${REFERENCE}/memory-map~mmo.gpx -o mmo -F ${TMPDIR}/memory-map~mmo.mmo
+gpsbabel -i mmo -f ${TMPDIR}/memory-map~mmo.mmo -o gpx -F ${TMPDIR}/memory-map~mmo~gpx.mmo
+
+
 exit 0
