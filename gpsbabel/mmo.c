@@ -24,6 +24,8 @@
     History:
 	
 	2008/10/18: Initial release
+	2008/10/19: Don't write empty names
+		    Add options 'locked' and 'visible'
 */
 
 #include <ctype.h>
@@ -41,8 +43,14 @@
 
 // #define MMO_DBG
 
+static char *opt_locked, *opt_visible;
+
 static
 arglist_t mmo_args[] = {
+	{ "locked", &opt_locked, "Write items 'locked' [default no]", "0",
+		ARGTYPE_BOOL, ARG_NOMINMAX },
+	{ "visible", &opt_visible, "Write items 'visible' [default yes]", "1",
+		ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -921,9 +929,9 @@ mmo_write_obj_mark(const char *sobj, const char *name)
 	else {
 		mmo_object_id++;
 		snprintf(buf, sizeof(buf), "%u", mmo_object_id);
-#ifdef MMO_DBG
-		printf(MYNAME ": Object \"%s\" registered (id = 0x%04X)\n", sobj, mmo_object_id);
-#endif
+
+		DBG(("write", "object \"%s\" registered (id = 0x%04X)\n", mmo_object_id));
+
 		avltree_insert(mmobjects, sobj, xstrdup(buf));
 		
 		gbfputuint32(mmo_filemark, fout);
@@ -967,8 +975,8 @@ mmo_write_obj_head(const char *sobj, const char *name, const time_t ctime,
 	gbfputuint32(ctime, fout);
 	gbfputuint32(ctime, fout);
 
-	gbfputc(0, fout);	/* not locked */
-	gbfputc(1, fout);	/* visible */
+	gbfputc(*opt_locked, fout);
+	gbfputc(*opt_visible, fout);
 
 	switch(type) {
 		case trkdata: gbfputuint16(0x1E, fout); break;
@@ -1006,9 +1014,10 @@ mmo_write_wpt_cb(const waypoint *wpt)
 		return;
 	}
 
-	objid = mmo_write_obj_head("CObjWaypoint", (wpt->shortname) ? wpt->shortname : "Marks", time, wptdata);
+	objid = mmo_write_obj_head("CObjWaypoint",
+		(wpt->shortname && *wpt->shortname) ? wpt->shortname : "Mark", time, wptdata);
 	mmo_register_object(objid, wpt, wptdata);
-	mmo_write_category("CCategory", "Marks"); // (mmo_datatype == rtedata) ? "Waypoints" : "Marks");
+	mmo_write_category("CCategory", (mmo_datatype == rtedata) ? "Waypoints" : "Marks");
 
 	gbfputdbl(wpt->latitude, fout);
 	gbfputdbl(wpt->longitude, fout);
@@ -1028,8 +1037,8 @@ mmo_write_wpt_cb(const waypoint *wpt)
 	}
 	else str = xstrdup("");
 	
-	cx = wpt->description;
-	if (cx == NULL) cx = wpt->notes;
+	cx = wpt->notes;
+	if (cx == NULL) cx = wpt->description;
 	if (cx != NULL) {
 		char *kml = NULL;
 		
@@ -1088,7 +1097,7 @@ mmo_write_rte_head_cb(const route_head *rte)
 	if (time == 0x7FFFFFFF) time = gpsbabel_time;
 	
 	objid = mmo_write_obj_head("CObjRoute",
-		(rte->rte_name) ? rte->rte_name : "Route", time, rtedata);
+		(rte->rte_name && *rte->rte_name) ? rte->rte_name : "Route", time, rtedata);
 	mmo_register_object(objid, rte, rtedata);
 	mmo_write_category("CCategory", "Route");
 	gbfputc(0, fout); /* unknown */
@@ -1131,7 +1140,8 @@ mmo_write_trk_head_cb(const route_head *trk)
 
 	if (trk->rte_waypt_ct <= 0) return;
 	
-	objid = mmo_write_obj_head("CObjTrack", (trk->rte_name) ? trk->rte_name : "Track", gpsbabel_time, trkdata);
+	objid = mmo_write_obj_head("CObjTrack",
+		(trk->rte_name && *trk->rte_name) ? trk->rte_name : "Track", gpsbabel_time, trkdata);
 	mmo_write_category("CCategory", "Track");
 	gbfputuint16(trk->rte_waypt_ct, fout);
 	
