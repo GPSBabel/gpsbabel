@@ -2,7 +2,7 @@
 	GPSBabel supports the Navilink protocol used by the
 	<ulink url="http://www.locosystech.com/product.php?zln=en&amp;id=5">Locosys GT-11</ulink> 
 	and
-	<ulink url="http://www.locosystech.com/product.php?zln=en&id=30">GT-31</ulink>
+	<ulink url="http://www.locosystech.com/product.php?zln=en&amp;id=30">GT-31</ulink>
 	GPS receivers. These are sold under a variety of names including:
 <simplelist columns="3">
 	<member>NaviGPS</member>
