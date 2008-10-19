@@ -7,7 +7,7 @@ all the created nodes and ways.
 
 <para>
 <userinput>
-gpsbabel -i INTYPE -f INFILE -o osm,created_by=somestring -O out.osm
+gpsbabel -i INTYPE -f INFILE -o osm,created_by=somestring -F out.osm
 </userinput>
 </para>
 
@@ -17,6 +17,6 @@ gpsbabel -i INTYPE -f INFILE -o osm,created_by=somestring -O out.osm
 
 <para>
 <userinput>
-gpsbabel -i INTYPE -f INFILE -o osm,created_by= -O out.osm
+gpsbabel -i INTYPE -f INFILE -o osm,created_by= -F out.osm
 </userinput>
 </para>
