@@ -1,7 +1,7 @@
 unit common;
 
 {
-    Copyright (C) 2005-2007 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -115,7 +115,7 @@ type
   public
     Capas: Integer;
     property Name : String read FName;
-    property Description : String read FDescription;
+    property Description : String read FDescription write FDescription;
     property Ext : String read FExt;
     property ReadAny : Boolean read CanReadAny;
     property WriteAny : Boolean read CanWriteAny;
@@ -461,7 +461,11 @@ begin
       2:
         name := StrPas(cin);
       3:
-        ext := StrPas(cin);
+        begin
+          ext := StrPas(cin);
+          while (Pos('.', ext) <> 0) do
+            System.Delete(ext, Pos('.', ext), 1);
+        end
     else begin
       comment := StrPas(cin);
       if (Length(comment) = 0) or (Length(name) = 0) then break;
@@ -578,5 +582,6 @@ initialization
   gpsbabel_exe := SysUtils.ExtractFilePath(ParamStr(0)) + SGPSBabelExeFilename;
   SGPSBabelGUIVersion := GetFileVersion(ParamStr(0));
 //gpsbabel_ini := Open_gpsbabel_ini();
+  DecimalSeparator := '.';
 
 end.

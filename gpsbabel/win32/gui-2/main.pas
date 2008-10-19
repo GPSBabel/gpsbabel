@@ -3,7 +3,7 @@ unit main;
 {
     GPSBabelGUI main unit/formular
 
-    Copyright (C) 2005-2007 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@ uses
   gnugettext, TypInfo, delphi, 
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, Buttons, ExtCtrls,
-  common, utils, ImgList, ActnList, Menus, ComCtrls, ToolWin;
+  common, utils, ImgList, ActnList, Menus, ComCtrls, ToolWin, ActnMan,
+  ActnColorMaps;
 
 type
   TfrmMain = class(TForm)
@@ -139,6 +140,7 @@ type
     pmnuFilter: TMenuItem;
     btnFilter: TBitBtn;
     btnProcess: TBitBtn;
+    XPColorMap1: TXPColorMap;
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure OpenButtonClick(Sender: TObject);
@@ -338,9 +340,21 @@ begin
   cbInputLang.ItemIndex := 0;
   cbOutputLang.ItemIndex := 0;
 
-  cbWaypoints.Checked := StrToBool(ReadProfile(cbWaypoints.Tag));
-  cbTracks.Checked := StrToBool(ReadProfile(cbTracks.Tag));
-  cbRoutes.Checked := StrToBool(ReadProfile(cbRoutes.Tag));
+  try
+    cbWaypoints.Checked := StrToBool(ReadProfile(cbWaypoints.Tag));
+  except
+    cbWaypoints.Checked := True;
+  end;
+  try
+    cbTracks.Checked := StrToBool(ReadProfile(cbTracks.Tag));
+  except
+    cbTracks.Checked := False;
+  end;
+  try
+    cbRoutes.Checked := StrToBool(ReadProfile(cbRoutes.Tag));
+  except
+    cbRoutes.Checked := False;
+  end;
 
   acCopySelected.Enabled := False;
   acSelectAll.Enabled := False;
@@ -440,7 +454,14 @@ begin
     else
       OK := Cap.WriteAny;
     if OK then
+    begin
+      if (Cap.Ext <> '') and (AnsiPos('.' + Cap.Ext, Cap.Description) = 0) then
+      begin
+        Cap.Description := Cap.Description + ' (.' + Cap.Ext + ')'; 
+      end;
+      
       Target.Items.AddObject(Cap.Description, Cap);
+    end;
   end;
 
   s := ReadProfile(Target.Tag);
@@ -455,25 +476,41 @@ var
   i: Integer;
   cap : TCapability;
 begin
+  edInputFile.SetFocus;
   dlgFileOpen.Filter := '';
-  dlgFileOpen.DefaultExt := '*.*';
+  dlgFileOpen.DefaultExt := '';
 
-  s:='';
-  if (cbInputFormat.ItemIndex <> -1 ) then  begin
-    cap:= TCapability(cbInputFormat.Items.Objects[cbInputFormat.ItemIndex]);
-    ext := cap.Ext;
-    if (Length(ext)>0) then
-       s := cbInputFormat.Text + '|*.' + ext + '|';
+  s := '';
+  if (cbInputFormat.ItemIndex <> -1 ) then
+  begin
+    cap := FCaps.GetCapabilityByName(cbInputFormat.Text);
+    if (cap.Ext <> '') then
+    begin
+      s := Format('%s|*.%s|', [cbInputFormat.Text, cap.Ext]);
+      dlgFileOpen.DefaultExt := '*.' + cap.Ext;
+    end;
   end;
   s := s + _('All files (*.*)|*.*');
 
   dlgFileOpen.Filter := s;
+
+  if (dlgFileOpen.InitialDir = '') then
+  begin
+    dlgFileOpen.InitialDir := SysUtils.ExtractFilePath(dlgFileSave.FileName);
+    if (dlgFileOpen.InitialDir = '') then
+      dlgFileOpen.InitialDir := dlgFileSave.InitialDir;
+    if (dlgFileOpen.InitialDir = '') then
+      dlgFileOpen.InitialDir := GetCurrentDir;
+  end;
+
   if not SELF.dlgFileOpen.Execute then Exit;
 
   edInputFile.Text := '';
   for i := 0 to dlgFileOpen.Files.Count - 1 do
   begin
     s := dlgFileOpen.Files[i];
+    if (i = 0) then
+      dlgFileSave.InitialDir := ExtractFilePath(s);
     if (s[1] <> '"') or (s[Length(s)] <> '"') then
       s := AnsiQuotedStr(s, '"');
     if (edInputFile.Text <> '') then edInputFile.Text := edInputFile.Text + ', ';
@@ -603,22 +640,41 @@ end;
 procedure TfrmMain.sbSaveFileClick(Sender: TObject);
 var
   s: string;
-  cap : TCapability;
+  cap: TCapability;
 begin
+  edOutputFile.SetFocus;
   dlgFileSave.Filter := '';
-  dlgFileSave.DefaultExt := '*.*';
+  dlgFileSave.DefaultExt := '';
 
-  s:='';
-  if (cbOutputFormat.ItemIndex <> -1) then begin
-    cap:=FCaps.Capability[cbOutputFormat.ItemIndex];
-    s := Format('%s|%s',[cbOutputFormat.Text,cap.Ext,cap.Ext]);
+  s := '';
+  if (cbOutputFormat.ItemIndex <> -1) then
+  begin
+    cap := FCaps.GetCapabilityByName(cbOutputFormat.Text);
+    if (cap.Ext <> '') then
+    begin
+      s := Format('%s|*.%s|',[cbOutputFormat.Text, cap.Ext]);
+      dlgFileSave.DefaultExt := '*.' + cap.Ext;
+    end;
   end;
   s := s + _('All files|*.*');
 
   dlgFileSave.Filter := s;
+
+
+  if (dlgFileSave.InitialDir = '') then
+  begin
+    dlgFileSave.InitialDir := SysUtils.ExtractFilePath(dlgFileOpen.FileName);
+    if (dlgFileSave.InitialDir = '') then
+      dlgFileSave.InitialDir := dlgFileOpen.InitialDir;
+    if (dlgFileSave.InitialDir = '') then
+      dlgFileSave.InitialDir := GetCurrentDir;
+  end;
+  
   if not SELF.dlgFileSave.Execute then Exit;
 
   edOutputFile.Text := dlgFileSave.FileName;
+  dlgFileSave.InitialDir := SysUtils.ExtractFilePath(dlgFileSave.FileName);
+
   CheckInput;
 end;
 
@@ -635,6 +691,7 @@ var
   sp: PChar;
   cap : TCapability;
 begin
+  memoOutput.SetFocus;
   acLetsGo.Enabled := False;
   try
     acFinalizeDropDownsExecute(nil);
