@@ -735,6 +735,11 @@ msgstr "Español"
 msgid "Hungarian"
 msgstr "Húngaro"
 
+#: about.pas:90
+#: select.pas:85
+msgid "Italian"
+msgstr "Italiano"
+
 #: about.pas:132
 msgid ""
 "Please have a look at the file README.GUI.\n"

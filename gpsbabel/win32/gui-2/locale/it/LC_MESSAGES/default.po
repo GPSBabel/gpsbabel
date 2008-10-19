@@ -229,6 +229,9 @@ msgstr "Aiuto"
 msgid "Hungarian"
 msgstr "Ungherese"
 
+msgid "Italian"
+msgstr "Italiano"
+
 msgid "Ignore shortnames from source data and synthesize them from description or notes"
 msgstr "Ignora i nomi brevi per dati in ingresso e sintetizzali a partire da descrizioni o note"
 
