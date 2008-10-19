@@ -866,7 +866,7 @@ vecs_t vec_list[] = {
         {
                 &mmo_vecs,
                 "mmo",
-                "Memory-Map overlay files (.mmo)",
+                "Memory-Map Navigator overlay files (.mmo)",
                 "mmo"
         },
         
