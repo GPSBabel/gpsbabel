@@ -1,6 +1,6 @@
 program GPSBabelGUI;
 {
-    Copyright (C) 2005-2007 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,22 @@ program GPSBabelGUI;
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 }
+
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\filter\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\delphi\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\options\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\common\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\about\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\utils\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\main\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\gnugettext\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\gnugettextDx\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\GPSBabelGUI\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\select\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\main\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_GPSBabelGUI\GPSBabelGUI\default.txvpck'}
 
 uses
   gnugettext in 'gnugettext.pas',
@@ -48,6 +64,7 @@ begin
 {$ENDIF}
 
   Application.Initialize;
+  Application.Title := 'GPSBabelGUI-2';
   Application.CreateForm(TfrmMain, frmMain);
   Application.Run;
 end.

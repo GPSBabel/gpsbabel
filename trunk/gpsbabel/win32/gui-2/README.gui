@@ -61,10 +61,4 @@ the snapshots.
 * Compiling from source *
 -------------------------
 
-Currently the gui is developed under Delphi 4. Other releases of Delphi are
-tested but are not used because of backward compatibility. If you want to help
-us and Delphi is not in your software collection, "Delphi 6 Personal Edition"
-would be the cheapest (or free) way.
-
-
-
+Currently the GUI is developed with Turbo Delphi 2006, a free release.

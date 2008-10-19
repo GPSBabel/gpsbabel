@@ -1,7 +1,7 @@
 unit select;
 
 {
-    Copyright (C) 2005-2007 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2005-2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -103,6 +103,7 @@ begin
       if (CompareText(s, 'fr') = 0) then sx := _('French') else
       if (CompareText(s, 'en') = 0) then sx := _('English') else
       if (CompareText(s, 'hu') = 0) then sx := _('Hungarian') else
+      if (CompareText(s, 'it') = 0) then sx := _('Italian') else
         sx := '???';
 
       sx := Format('%s - %s', [s, sx]);
