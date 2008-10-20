@@ -9,7 +9,8 @@ export MALLOC_CHECK_
 
 PNAME=${PNAME:-./gpsbabel}
 DIFF=${DIFF:-diff}
-REFERENCE=reference
+BASEPATH=$(dirname $0)
+REFERENCE=${BASEPATH}/reference
 # OD=${OD:-od -Ax -txC -v}
 if [ -x /usr/bin/hexdump ] ; then
 	OD=${OD:-hexdump -v -C}
@@ -1306,6 +1307,12 @@ gpsbabel -t -i navilink -f ${REFERENCE}/navilink_tracks.trk -o gpx -F ${TMPDIR}/
 compare ${TMPDIR}/navilink_tracks.gpx ${REFERENCE}/navilink_tracks.gpx
 gpsbabel -t -i gpx -f ${TMPDIR}/navilink_tracks.gpx -o navilink -F ${TMPDIR}/navilink_tracks_gpx.trk
 #compare ${TMPDIR}/navilink_tracks_gpx.trk ${REFERENCE}/navilink_tracks_gpx.trk
+
+#
+# SBP tracks (Locosys NaviGPS)
+#
+gpsbabel -t -i sbp -f ${REFERENCE}/track/datalog.sbp -o gpx -F ${TMPDIR}/datalog.gpx
+compare ${TMPDIR}/datalog.gpx ${REFERENCE}/track/datalog.gpx
 
 #
 # MTK logger tests
