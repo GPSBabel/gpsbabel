@@ -373,13 +373,15 @@ static void rd_deinit(void) {
     xfree(port);
 }
 
-static void rd_buf(void *buf, int len) {
+static int rd_buf(void *buf, int len) {
     int rc;
     if (rc = gbser_read_wait(fd, buf, len, TIMEOUT), rc < 0) {
         fatal(MYNAME ": Read error (%d)\n", rc);
     } else if (rc < len) {
-        fatal(MYNAME ": Read timout\n");
+        db(2, MYNAME ": Read timout, got %i of %i bytes\n", rc, len);
+		return 0;
     }
+	return 1;
 }
 
 static void file_init(const char *fname) {
@@ -622,7 +624,7 @@ static void state_empty(struct read_state *pst) {
     state_init(pst);
 }
 
-static void want_bytes(struct buf_head *h, size_t len) {
+static int want_bytes(struct buf_head *h, size_t len) {
     char buf[512];
 
     db(3, "Reading %lu bytes from device\n", (unsigned long) len);
@@ -630,10 +632,12 @@ static void want_bytes(struct buf_head *h, size_t len) {
     while (len > 0) {
         size_t want = sizeof(buf);
         if (want > len) { want = len; }
-        rd_buf(buf, want);
+        if (!rd_buf(buf, want))
+			return 0;
         buf_write(h, buf, want);
         len -= want;
     }
+	return 1;
 }
 
 static void wbt200_data_read(void) {
@@ -815,7 +819,9 @@ static int wbt201_read_chunk(struct read_state *st, unsigned pos, unsigned limit
     sprintf(cmd_buf, "@AL,5,3,%d", pos);
     wr_cmdl(cmd_buf);
 
-    want_bytes(&st->data, want);
+	
+    if (!want_bytes(&st->data, want))
+		return 0;
 
     /* checksum */
     rd_line(BUFSPEC(line_buf));
@@ -858,6 +864,10 @@ static void wbt201_data_read(void) {
     unsigned            log_area_start;
     unsigned            log_area_end;
 
+	unsigned			wantbytes;
+	unsigned			read_pointer;
+	unsigned			read_limit;
+	
     /* Read various device information. We don't use much of this yet -
      * just log_addr_start and log_addr_end - but it's useful to have it
      * here for debug and documentation purposes. 
@@ -873,9 +883,9 @@ static void wbt201_data_read(void) {
         ver_hw, ver_sw, ver_fmt);
     
     log_addr_start = get_param_int("@AL,5,1");  /* we read from here... */
-    log_addr_end   = get_param_int("@AL,5,2");  /*  ...to here and ... */
-    log_area_start = get_param_int("@AL,5,9");  /*  ...probably don't... */
-    log_area_end   = get_param_int("@AL,5,10"); /*  ...need these. */
+    log_addr_end   = get_param_int("@AL,5,2");  /*  ...to here, but ... */
+    log_area_start = get_param_int("@AL,5,9");  /*  ...we need these when ... */
+    log_area_end   = get_param_int("@AL,5,10"); /*  ...the gps wrote more then it fits in memory */
     
     db(2, "Log addr=(%d..%d), area=(%d..%d)\n", 
         log_addr_start, log_addr_end, 
@@ -884,11 +894,29 @@ static void wbt201_data_read(void) {
     state_init(&st);
 
     tries = 10;
-    while (log_addr_start < log_addr_end) {
-        if (wbt201_read_chunk(&st, log_addr_start, log_addr_end)) {
+	
+	/* If the WBT-201 device logs more then the memory can handle it continues to write at the beginning of the memory,
+	 * thus overwriting the oldest tracks. In this case log_addr_end is smaller then log_addr_start and we need to read
+	 * from log_addr_start to log_area_end and then from log_area_start to log_addr_end.
+	 */
+	
+	wantbytes = (log_addr_start < log_addr_end) ? log_addr_end - log_addr_start : log_area_end - (log_addr_start - log_addr_end);
+	read_pointer = log_addr_start;
+	read_limit = (log_addr_start < log_addr_end) ? log_addr_end : log_area_end;
+	
+	db(2, "Want %d bytes from device\n", wantbytes);
+    while (wantbytes > 0) {
+		db(2, "Read params: Want %d bytes, read_pointer = %d, read_limit = %d\n", wantbytes, read_pointer, read_limit);
+        if (wbt201_read_chunk(&st, read_pointer, read_limit)) {
             buf_rewind(&st.data);
             wbt201_process_chunk(&st);
-            log_addr_start += st.data.used;
+            wantbytes -= st.data.used;
+			read_pointer += st.data.used;
+			if (read_pointer >= log_area_end)
+			{
+				read_pointer = log_area_start;
+				read_limit = log_addr_end;
+			}
         } else {
             if (--tries <= 0) {
                 fatal(MYNAME ": Too many data errors during read\n");
