@@ -49,7 +49,7 @@ static
 arglist_t gtc_args[] = {
 	{ "course", &opt_course, "Write course rather than history, default yes",
 	  "1", ARGTYPE_BOOL, ARG_NOMINMAX},
-	{ "sport", &opt_sport, "Sport: Biking (deflt), Running, MultiSport, Other", 
+	{ "sport", &opt_sport, "Sport: Biking (deflt), Running, MultiSport, Other",
 	  "Biking", ARGTYPE_STRING, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
@@ -119,7 +119,7 @@ static xg_tag_mapping gtc_map[] = {
 	{ NULL, 	0,         NULL}
 };
 
-static const char * 
+static const char *
 gtc_tags_to_ignore[] = {
         "TrainingCenterDatabase",
 	"Lap",
@@ -178,7 +178,7 @@ gtc_wr_deinit(void)
 
 static int gtc_indent_level;
 
-static void 
+static void
 gtc_write_xml(int indent, const char *fmt, ...)
 {
 	va_list args;
@@ -197,7 +197,7 @@ gtc_write_xml(int indent, const char *fmt, ...)
 
 static void
 gtc_waypt_pr(const waypoint *wpt)
-{	
+{
 	if (wpt->wpt_flags.is_split != 0) {
 		gtc_write_xml(1, "<Trackpoint split=\"yes\">\n");
 	} else {
@@ -209,7 +209,7 @@ gtc_waypt_pr(const waypoint *wpt)
 		xml_fill_in_time(time_string, wpt->creation_time, wpt->microseconds,
 				 XML_LONG_TIME);
 		if (time_string[0]) {
-			gtc_write_xml(0, "<Time>%s</Time>\n", 
+			gtc_write_xml(0, "<Time>%s</Time>\n",
 				      time_string);
 		}
 	}
@@ -243,7 +243,7 @@ gtc_fake_hdr(void)
 	if(gtc_course_flag) { /* course format */
 
 		gtc_write_xml(0, "<TotalTimeSeconds>%d</TotalTimeSeconds>\n", secs);
-		gtc_write_xml(0, "<DistanceMeters>%lf</DistanceMeters>\n", 
+		gtc_write_xml(0, "<DistanceMeters>%lf</DistanceMeters>\n",
 			      tdata->distance_meters ? tdata->distance_meters : 0);
 		gtc_write_xml(1, "<BeginPosition>\n");
 		gtc_write_xml(0, "<LatitudeDegrees>%lf</LatitudeDegrees>\n", gtc_start_lat);
@@ -313,7 +313,9 @@ gtc_crs_hdr( const route_head *rte)
 
         gtc_write_xml(1, "<Course>\n");
         if(rte->rte_name) {
-		gtc_write_xml(0, "<Name>%s</Name>\n", xstrndup(rte->rte_name, GTC_MAX_NAME_LEN));
+		char *name = xstrndup(rte->rte_name, GTC_MAX_NAME_LEN);
+		gtc_write_xml(0, "<Name>%s</Name>\n", name);
+		xfree(name);
 	} else {
 		gtc_write_xml(0, "<Name>New Course</Name>\n");
 	}
@@ -353,7 +355,7 @@ gtc_study_lap(const waypoint *wpt)
 		gtc_start_lat = wpt->latitude;
 		gtc_start_long = wpt->longitude;
 	}
-  
+
 	if (wpt->creation_time && (gtc_least_time > wpt->creation_time)) {
 		gtc_least_time =  wpt->creation_time;
 		gtc_start_lat = wpt->latitude;
@@ -412,6 +414,9 @@ void
 gtc_trk_pnt_e(const char *args, const char **unused)
 {
         if(wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) track_add_wpt(trk_head, wpt_tmp);
+	else waypt_free(wpt_tmp);
+
+	wpt_tmp = NULL;
 }
 
 void
@@ -452,9 +457,9 @@ gtc_trk_cad(const char *args, const char **unused)
 
 ff_vecs_t gtc_vecs = {
         ff_type_file,
-	{ 
-	  	ff_cap_none 			/* waypoints */, 
-		ff_cap_read | ff_cap_write 	/* tracks */, 
+	{
+	  	ff_cap_none 			/* waypoints */,
+		ff_cap_read | ff_cap_write 	/* tracks */,
 	  	ff_cap_none 			/* routes */
 	},
         gtc_rd_init,
