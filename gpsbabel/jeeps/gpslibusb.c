@@ -82,7 +82,7 @@ char ** os_get_garmin_mountpoints()
 	dlist[1] = NULL;
 	return dlist;
 }
-#elif
+#else
 char ** os_get_garmin_mountpoints() 
 {
 	return NULL;
