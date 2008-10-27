@@ -12,7 +12,7 @@ alternate formats.
 </para>
 <para>
 Perhaps you have an <link linkend="fmt_magellanx">Explorist 600</link> and your friend has a <link linkend="fmt_garmin">StreetPilot 2720</link>.
-You've collected a a list of your favorite locations as waypoints and you'd
+You've collected a list of your favorite locations as waypoints and you'd
 like to be able to share them.  Unfortunately, his copy of <link linkend="fmt_gdb">Garmin Mapsource</link>
 won't read data created by your copy of <link linkend="fmt_mapsend">Magellan Mapsend DirectRoute</link>.  What you need
 is a program that converts data bewteen the two programs.
