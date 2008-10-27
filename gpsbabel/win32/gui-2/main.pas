@@ -206,6 +206,7 @@ type
     procedure InitializeSerialPorts;
     procedure LoadLanguages;
     procedure LoadFileFormats;
+    procedure LoadFilters;
     procedure LoadVersion;
     procedure RefreshDesign(FirstTime: Boolean = False);
     procedure WMOPTIONSCHANGED(var Msg: TMessage); message WM_OPTIONS_CHANGED;
@@ -404,6 +405,28 @@ begin
   end;
 end;
 
+procedure TfrmMain.LoadFilters;
+var
+  l: TStrings;
+  i: Integer;
+  s: string;
+begin
+  l := TStringList.Create;
+  try
+
+    gpsbabel('-%0', l);
+
+    for i := 0 to l.Count - 1 do
+    begin
+      s := l.Strings[i];
+      if (Trim(Copy(s, 1, 5)) = 'swap') then gpsbabel_knows_swap_filter := True;
+    end;
+
+  finally
+    l.Free;
+  end;
+end;
+
 procedure TfrmMain.FormShow(Sender: TObject);
 begin
   if not(FFirstShow) then Exit;
@@ -427,6 +450,7 @@ begin
 //  gpsbabel_ini := TIniFile.Create('gpsbabel.ini');
   LoadVersion;
   EnableOptions(gpsbabel_vfmt);
+  LoadFilters;
   LoadFileFormats;
 
   // ? valid README form

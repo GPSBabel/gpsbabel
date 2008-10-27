@@ -29,6 +29,7 @@ const
 
   gpsbabel_knows_inifile: Boolean = False;
 //gpsbabel_ini: TInifile = nil;
+  gpsbabel_knows_swap_filter: Boolean = False;
   
 resourcestring
   SGPSBabelURL =         'http://www.gpsbabel.org';
