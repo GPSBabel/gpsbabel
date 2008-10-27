@@ -45,6 +45,7 @@ extern filter_vecs_t nuke_vecs;
 extern filter_vecs_t interpolatefilt_vecs;
 extern filter_vecs_t transform_vecs;
 extern filter_vecs_t height_vecs;
+extern filter_vecs_t swapdata_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -123,6 +124,11 @@ fl_vecs_t filter_vec_list[] = {
 		&height_vecs,
 		"height",
 		"Manipulate altitudes"
+	},
+	{
+		&swapdata_vecs,
+		"swap",
+		"Swap latitude and longitude of all loaded points"
 	},
 	
 #endif
