@@ -362,7 +362,7 @@ merged data to multiple destinations.
    running <command>gpsbabel -h</command>.  While there are a number of
    options, most people will not use most of them, so don't be intimiated.
   </para>
-<para><option>-p</option> Read preferences file.   On startup, GPSBabel will look for a  file named <filename>gpsbabel.init</filename> containing preferences you have provided.  This option lets you pick a different files.  See <xref linkend="inifile"/> for more info.</para>
+<para><option>-p</option> Read preferences file.   On startup, GPSBabel will look for a file named <filename>gpsbabel.ini</filename> containing preferences you have provided.  This option lets you pick a different files.  See <xref linkend="inifile"/> for more info.</para>
 <para><option>-s</option> Write "smart" names.  This option influences some - but not all - of our writers to try to build "smart" waypoint names.   For example, in modules that know about geocaching, it may replace "GC1234" with the actual name of the geocache.</para>
 <para><option>-r</option> Work on routes.  This option has a subtly different meaning in different cases.  As the very first formats in GPSBabel were for serial GPSes and routes and tracks were large and thus time-consuming to transfer, the default was waypoints only with this option to turn on the extra data.   Some of our file formats use this option to mean "work only on routes, even if you have tracks/waypoints", but we're trying to discourage that behavior and in most cases, consider it a bug. </para>
 <para><option>-t</option> Work on tracks.  See <option>-r</option> for excuses. </para>
