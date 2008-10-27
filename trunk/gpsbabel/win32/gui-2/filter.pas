@@ -90,6 +90,9 @@ type
     cbTransform: TCheckBox;
     cbTransformDelete: TCheckBox;
     cobGPSfixes: TComboBox;
+    Panel1: TPanel;
+    gbMisc: TGroupBox;
+    cbSwapData: TCheckBox;
     procedure cbTrackTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure cbTrackTitleClick(Sender: TObject);
@@ -258,6 +261,9 @@ begin
 
   cobTransformType.Enabled := cbTransform.Checked;
   cbTransformDelete.Enabled := cbTransform.Checked;
+
+  cbSwapData.Enabled := gpsbabel_knows_swap_filter;
+  gbMisc.Enabled := (cbSwapData.Enabled { or ... });
 end;
 
 function TfrmFilter.ValidateNumerical(AEdit: TCustomEdit; AMin, AMax: Extended): Boolean;
@@ -338,6 +344,11 @@ begin
   if not AnyChecked(Self) then Exit;
 
   Result := '';
+
+  if cbSwapData.Checked then
+  begin
+    Result := Format('%s -x %s', [Result, 'swap']);
+  end;
 
   if gbTransform.Enabled and cbTransform.Checked then
   begin
@@ -462,7 +473,10 @@ begin
     if ((c is TCheckBox) and TCheckBox(c).Enabled) then
       Result := TCheckBox(c).Checked else
     if ((c is TGroupBox) and c.Enabled) then
+      Result := AnyChecked(c) else
+    if (c is TPanel) then
       Result := AnyChecked(c);
+
     if (Result) then Exit;
   end;
 end;
