@@ -681,7 +681,17 @@ static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type)
 	kml_output_lookat(waypointp);
 	kml_output_timestamp(waypointp);
 
-	if (trackdirection && (pt_type == kmlpt_track)) {
+
+        if (opt_deficon) {
+		kml_write_xml(1, "<Style>\n");
+		kml_write_xml(1, "<IconStyle>\n");
+		kml_write_xml(1, "<Icon>\n");
+		kml_write_xml(0, "<href>%s</href>\n", opt_deficon);
+		kml_write_xml(-1, "</Icon>\n");
+		kml_write_xml(-1, "</IconStyle>\n");
+		kml_write_xml(-1, "</Style>\n");
+        } else {
+          if (trackdirection && (pt_type == kmlpt_track)) {
 		char buf[100];
 		if (waypointp->speed < 1) 
 			snprintf(buf, sizeof(buf), "%s-none", style);
@@ -689,9 +699,10 @@ static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type)
 			snprintf(buf, sizeof(buf), "%s-%d", style, 
 				(int) (waypointp->course / 22.5 + .5) % 16);
 		kml_write_xml(0, "<styleUrl>%s</styleUrl>\n", buf);
-	} else {
+	  } else {
 		kml_write_xml(0, "<styleUrl>%s</styleUrl>\n", style);
-	}
+	  }
+        }
 
 	kml_write_xml(1, "<Point>\n");
         if (floating) {
