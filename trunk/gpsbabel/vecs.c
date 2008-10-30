@@ -152,6 +152,7 @@ extern ff_vecs_t jtr_vecs;
 #endif
 extern ff_vecs_t sbp_vecs;
 extern ff_vecs_t mmo_vecs;
+extern ff_vecs_t skyforce_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -868,6 +869,12 @@ vecs_t vec_list[] = {
                 "mmo",
                 "Memory-Map Navigator overlay files (.mmo)",
                 "mmo"
+        },
+        {
+        	&skyforce_vecs,
+        	"skyforce",
+        	"Skymap / KMD150 ascii files",
+        	NULL
         },
         
 
