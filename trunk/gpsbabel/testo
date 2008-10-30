@@ -49,7 +49,7 @@ sort_and_compare()
 	compare $TMPDIR/s1 $TMPDIR/s2
 }
 
-function gpsbabel()
+gpsbabel()
 {
 	${PNAME} $* || {
 		echo "$PNAME returned error $?"
