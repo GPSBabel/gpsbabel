@@ -1,0 +1,12 @@
+<para>
+   This format provides support for ascii files from Skyforce PC interface for 
+   Skymap IIIC, Skymap II (Version 4) and KMD 150. Based on their interface description our module
+   was developed.
+</para>
+<para>
+   Each kind of our basic GPS data (waypoints, routes or tracks) is stored in a seperate file. Thatswhy you
+   need three steps to convert a complex format as GPX or GDB into skyforce.
+   <userinput>
+      gpsbabel -i gpx -f file.gpx -o skyforce -w -F waypoints.txt -r -F routes.txt -t -F tracks.txt
+   </userinput>
+</para>
