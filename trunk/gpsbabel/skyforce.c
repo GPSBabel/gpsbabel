@@ -93,6 +93,7 @@ skyforce_parse_trk(const char *str)
 
 	memset(&tm, 0, sizeof(tm));
 	strncpy(buf, str + 2, sizeof(buf) - 1);
+        buf[14] = 0;
 
 	cx = strptime(buf, "%d%m%y  %H%M%S ", &tm);
 	if ((cx != NULL) && (*cx != '\0'))
