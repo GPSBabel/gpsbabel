@@ -1744,9 +1744,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 # Increase GBBUILD for a new release
-GBBUILD=19
+GBBUILD=20
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-PACKAGE_RELEASE="-beta20081006"
+# PACKAGE_RELEASE="-beta20081006"
 
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE_RELEASE "$PACKAGE_RELEASE"
@@ -1756,7 +1756,7 @@ _ACEOF
 
 DOCVERSION=`echo $PACKAGE_VERSION`
 DOCVERSION=development
-# DOCVERSION=1.3.5
+DOCVERSION=1.3.6
 
 
 GBMAJOR=`echo $PACKAGE_VERSION | (IFS="."; read major minor micro; echo $major)`
