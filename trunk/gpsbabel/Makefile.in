@@ -182,7 +182,7 @@ leaktest:
 
 dep:
 	make clean && make EXTRA_CFLAGS="-isystem /sw/include -MMD"  && cat *.d */*.d > /tmp/dep && rm *.d */*.d
-	echo "internal_styles.c: mkstyle.sh style/*.style\n	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)"  >> /tmp/dep
+	echo "internal_styles.c: mkstyle.sh @srcdir@style/*.style\n	@srcdir@/mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)"  >> /tmp/dep
 	echo Edit Makefile.in and bring in /tmp/dep
 
 $(WEB)/htmldoc-$(DOCVERSION)/index.html: FORCE
@@ -638,8 +638,8 @@ mapsource.o: mapsource.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsinput.h jeeps/gpsproj.h
 mkshort.o: mkshort.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h
-mmo.o: mmo.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h avltree.h
+mmo.o: mmo.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h session.h avltree.h
 msroute.o: msroute.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
   jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
@@ -657,7 +657,7 @@ navilink.o: navilink.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
-  jeeps/gpsproj.h
+  jeeps/gpsproj.h navilink.h
 navitel.o: navitel.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
   jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
@@ -747,14 +747,15 @@ route.o: route.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h grtcirc.h
 saroute.o: saroute.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h grtcirc.h
+sbp.o: sbp.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h session.h navilink.h
 session.o: session.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h
 shape.o: shape.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
   shapelib/shapefil.h
-skyforce.o: skyforce.c defs.h config.h queue.h gbtypes.h \
-  zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
-  pdbfile.h
+skyforce.o: skyforce.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h strptime.h
 smplrout.o: smplrout.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h filterdefs.h \
   grtcirc.h
