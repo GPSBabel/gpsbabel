@@ -509,7 +509,7 @@ route_read(void)
 			if (array[i]->islink)  {
 				continue; 
 			} else {
-				waypoint *wpt_tmp = xcalloc(sizeof (*wpt_tmp), 1);
+				waypoint *wpt_tmp = waypt_new();
 				wpt_tmp->latitude = array[i]->lat;
 				wpt_tmp->longitude = array[i]->lon;
 				wpt_tmp->shortname = array[i]->ident;
