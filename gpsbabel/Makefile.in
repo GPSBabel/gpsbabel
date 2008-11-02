@@ -225,6 +225,8 @@ gpsbabel.pdf: gpsbabel.fo
 
 
 gpsbabel.html: FORCE
+	rm -f gpsbabel.html
+	perl xmldoc/makedoc
 	xsltproc \
 	  --stringparam toc.section.depth "1" \
 	  --stringparam html.stylesheet \
