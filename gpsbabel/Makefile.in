@@ -224,15 +224,15 @@ gpsbabel.pdf: gpsbabel.fo
 	cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
 
 
-gpsbabel.html: FORCE
-	rm -f gpsbabel.html
+gpsbabel.html: FORCE gpsbabel
 	perl xmldoc/makedoc
 	xsltproc \
+	  --output $@ \
 	  --stringparam toc.section.depth "1" \
 	  --stringparam html.stylesheet \
 	  "http://www.gpsbabel.org/style3.css" \
 	  http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
-	xmldoc/readme.xml > $@ || rm $@
+	xmldoc/readme.xml
 
 readme.txt: gpsbabel.html
 	lynx -nolist -dump gpsbabel.html  > $@
