@@ -224,8 +224,8 @@ gpsbabel.pdf: gpsbabel.fo
 	cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
 
 
-gpsbabel.html: FORCE gpsbabel
-	perl xmldoc/makedoc
+gpsbabel.html: FORCE # gpsbabel
+	# perl xmldoc/makedoc
 	xsltproc \
 	  --output $@ \
 	  --stringparam toc.section.depth "1" \
@@ -258,7 +258,7 @@ release-sourcecheck: changes.html
 	./chkdoc
 	make clean
 	rm -fr gpsbabel-$(VERSIOND)
-#rjl	make gpsbabel doc gpsbabel.html
+	make gpsbabel doc gpsbabel.html
 	@(. tools/functions && ask "Enter 'y' to tag the tree as gpsbabel_$(VERSIONU)." "y") && cvs tag -F gpsbabel_$(VERSIONU) ; exit 0
 	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
 	touch gpsbabel-$(VERSIOND)/internal_styles.c
