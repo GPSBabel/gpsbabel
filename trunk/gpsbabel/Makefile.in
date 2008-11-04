@@ -315,15 +315,17 @@ release-winbuild:
 	  zip -j /tmp/gpsbabel-$(VERSIOND).zip $(WINFILES)
 	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
 
+# gb_upload is an external script to do the copy to the server.
 release-upload:  /tmp/gpsbabel-$(VERSIOND).tar.gz  /tmp/gpsbabel-$(VERSIOND).zip /tmp/dist/SRPMS/gpsbabel-$(VERSIOND)-0.src.rpm  /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND)-0.i386.rpm
 	@(. tools/functions && ask "Type 'yes' if you want to do the upload now" "yes" )
-	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).tar.gz ftp://upload.sf.net/incoming/
-	curl -u anonymous:anonymous --upload-file /tmp/gpsbabel-$(VERSIOND).zip ftp://upload.sf.net/incoming/
-	curl -u anonymous:anonymous --upload-file /tmp/dist/SRPMS/gpsbabel-$(VERSIOND).src.rpm  ftp://upload.sf.net/incoming/ 
-	curl -u anonymous:anonymous --upload-file /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND).i386.rpm  ftp://upload.sf.net/incoming/ 
+	gb_upload /tmp/gpsbabel-$(VERSIOND).tar.gz 
+	gb_upload /tmp/gpsbabel-$(VERSIOND).zip 
+	gb_upload /tmp/dist/SRPMS/gpsbabel-$(VERSIOND)-0.src.rpm  
+	gb_upload /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND)-0.i386.rpm  
+	gb_upload /tmp/dist/RPMS/i386/gpsbabel-debuginfo-$(VERSIOND)-0.i386.rpm  
 
 mac-upload:
-	curl -u anonymous:anonymous --upload-file GPSBabel+-$(VERSIOND).dmg  ftp://upload.sf.net/incoming/
+	gb_upload GPSBabel+-$(VERSIOND).dmg  
 
 release: release-sourcecheck  release-tarball release-winbuild release-rpm release-upload
 
