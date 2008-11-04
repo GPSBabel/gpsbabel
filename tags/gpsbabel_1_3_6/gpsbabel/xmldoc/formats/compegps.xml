@@ -1,0 +1,14 @@
+<para>
+<productname>CompeGPS</productname> data files are "character" separated text files like
+the pcx format. "Character" means special data lines can have their
+own separator.
+</para>
+<para> 
+Since release 6.1 of <productname>CompeGPS</productname>, GPX is also a 
+supported import/export format for waypoints, routes and tracks.
+</para>
+<para> 
+For more information please have a look at 
+<ulink url="http://www.compegps.com">http://www.compegps.com</ulink>
+</para>
+    

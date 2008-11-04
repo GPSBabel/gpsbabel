@@ -1,0 +1,12 @@
+<para>
+	The Holux m241 is a small datalogger using the MTK chipset, with 
+	a couple small differences in the binary format. In its default 
+	configuration, it can store ~100000 trackpoints with very limited
+	 data; to configure extended logging you can use the BT747 open 
+	source software 
+         <ulink url="http://bt747.wiki.sourceforge.net">bt747</ulink>
+	 Waypoint storage is possible only if "recording reason" (RCR) is enabled in the settings.
+</para>
+<para>
+	Use the m241 format to connect with the unit serially and m241-bin to read files saved by the device.
+</para>

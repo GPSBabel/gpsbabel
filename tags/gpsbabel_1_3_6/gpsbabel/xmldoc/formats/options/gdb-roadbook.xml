@@ -1,0 +1,19 @@
+<para>
+  If this option is specified, GPSBabel drops all calculated route points, 
+  with exception of points with a description (i.e. "Make U-turns until you know where you are.").
+  The priority of this option is higher than of the <option>via</option> option. 
+  A value of 1 or y overwrites the <option>via</option> settings.
+</para>
+<example id="gdb_roadbook_option">
+  <title>Using gdb option <option>roadbook</option> to create simple html roadbook</title>
+  <para>
+    <userinput>
+      gpsbabel -i gdb,roadbook -f sample.gdb -x nuketypes,waypoints,tracks -x transform,wpt=rte -o html -F roadbook.html
+    </userinput>
+  </para>
+  <para>
+    Because gdb internally creates a route AND a waypoint list, you have to drop all
+    waypoints and transform the route into waypoints in order to get a well ordered
+    html output. We suggest these steps for all waypoint-only formats as html. 
+  </para>
+</example>

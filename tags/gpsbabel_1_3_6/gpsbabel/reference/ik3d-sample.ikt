@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Root FileFormat="IK3D-Project-File" >
+ <Info>
+  <ProductVersion>
+   <Version>Germany TK25 Demo</Version>
+   <FileFormatVersion>1.1</FileFormatVersion>
+  </ProductVersion>
+  <Language>German</Language>
+ </Info>
+ <Header>
+  <Projectname>Undefiniert</Projectname>
+  <countOfObjects>5</countOfObjects>
+  <description><![CDATA[keine Beschreibung vorhanden]]></description>
+ </Header>
+ <Content>
+  <MMGeoObjects>
+   <count>5</count>
+   <MMGeoObject_0>
+    <GeoObjectType>0</GeoObjectType>
+    <Name>Jahnstrasse</Name>
+    <Remark></Remark>
+    <Link></Link>
+    <Priority>0</Priority>
+    <ID>132048172029964614</ID>
+    <Locked>False</Locked>
+    <GeoPosition X="12.1071525290" Y="50.4936628700" />
+    <DrawType2D>1</DrawType2D>
+    <DrawType3D>1</DrawType3D>
+    <POIDrawable2D>
+     <Text>Jahnstrasse 11</Text>
+     <BorderColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <TextColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <BorderType>2</BorderType>
+     <BackRounded>True</BackRounded>
+     <Distance>32.0000000000</Distance>
+     <BackAlpha>1.0000000000</BackAlpha>
+     <ArrowColor Blue="1.0000" Red="1.0000" Green="1.0000" />
+     <FrameColor Blue="0.2000" Red="0.8980" Green="0.8980" />
+     <Height>16.0000000000</Height>
+     <Frame>1</Frame>
+     <PicFileName>.\default.jpg</PicFileName>
+     <MarkerType>0</MarkerType>
+     <antiAliasing>False</antiAliasing>
+     <TextDesc>0.0000000000</TextDesc>
+     <Orientation>1</Orientation>
+     <ScaleFac>1.0000000000</ScaleFac>
+    </POIDrawable2D>
+    <POIDrawable3D>
+     <Text>Jahnstrasse 11</Text>
+     <BorderColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <TextColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <BorderType>2</BorderType>
+     <BackRounded>False</BackRounded>
+     <Distance>99.0000000000</Distance>
+     <BackAlpha>1.0000000000</BackAlpha>
+     <ArrowColor Blue="0.6000" Red="0.6000" Green="0.6000" />
+     <FrameColor Blue="0.2000" Red="0.8980" Green="0.8980" />
+     <Height>180.0000000000</Height>
+     <Frame>1</Frame>
+     <PicFileName>.\default.jpg</PicFileName>
+     <antiAliasing>False</antiAliasing>
+     <TextDesc>-36.0000000000</TextDesc>
+     <Orientation>1</Orientation>
+     <ScaleFac>0.2500000000</ScaleFac>
+    </POIDrawable3D>
+   </MMGeoObject_0>
+   <MMGeoObject_1>
+    <GeoObjectType>0</GeoObjectType>
+    <Name>Liebknechtstrasse</Name>
+    <Remark></Remark>
+    <Link></Link>
+    <Priority>1</Priority>
+    <ID>194043035650486614</ID>
+    <Locked>False</Locked>
+    <GeoPosition X="12.1061010190" Y="50.4938370460" />
+    <DrawType2D>1</DrawType2D>
+    <DrawType3D>1</DrawType3D>
+    <POIDrawable2D>
+     <Text>Liebknechtstrasse 90</Text>
+     <BorderColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <TextColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <BorderType>2</BorderType>
+     <BackRounded>True</BackRounded>
+     <Distance>32.0000000000</Distance>
+     <BackAlpha>1.0000000000</BackAlpha>
+     <ArrowColor Blue="1.0000" Red="1.0000" Green="1.0000" />
+     <FrameColor Blue="0.2000" Red="0.8980" Green="0.8980" />
+     <Height>16.0000000000</Height>
+     <Frame>1</Frame>
+     <PicFileName>.\default.jpg</PicFileName>
+     <MarkerType>0</MarkerType>
+     <antiAliasing>False</antiAliasing>
+     <TextDesc>0.0000000000</TextDesc>
+     <Orientation>1</Orientation>
+     <ScaleFac>1.0000000000</ScaleFac>
+    </POIDrawable2D>
+    <POIDrawable3D>
+     <Text>Liebknechtstrasse 90</Text>
+     <BorderColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <TextColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <BorderType>2</BorderType>
+     <BackRounded>False</BackRounded>
+     <Distance>100.0000000000</Distance>
+     <BackAlpha>1.0000000000</BackAlpha>
+     <ArrowColor Blue="0.6000" Red="0.6000" Green="0.6000" />
+     <FrameColor Blue="0.2000" Red="0.8980" Green="0.8980" />
+     <Height>180.0000000000</Height>
+     <Frame>1</Frame>
+     <PicFileName>.\default.jpg</PicFileName>
+     <antiAliasing>False</antiAliasing>
+     <TextDesc>-36.0000000000</TextDesc>
+     <Orientation>1</Orientation>
+     <ScaleFac>0.2500000000</ScaleFac>
+    </POIDrawable3D>
+   </MMGeoObject_1>
+   <MMGeoObject_2>
+    <GeoObjectType>0</GeoObjectType>
+    <Name>NARVA</Name>
+    <Remark></Remark>
+    <Link></Link>
+    <Priority>2</Priority>
+    <ID>319457729961128278</ID>
+    <Locked>False</Locked>
+    <GeoPosition X="12.1054488230" Y="50.4926189870" />
+    <DrawType2D>1</DrawType2D>
+    <DrawType3D>1</DrawType3D>
+    <POIDrawable2D>
+     <Text>Start</Text>
+     <BorderColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <TextColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <BorderType>2</BorderType>
+     <BackRounded>True</BackRounded>
+     <Distance>32.0000000000</Distance>
+     <BackAlpha>1.0000000000</BackAlpha>
+     <ArrowColor Blue="1.0000" Red="1.0000" Green="1.0000" />
+     <FrameColor Blue="0.2000" Red="0.8980" Green="0.8980" />
+     <Height>16.0000000000</Height>
+     <Frame>1</Frame>
+     <PicFileName>.\default.jpg</PicFileName>
+     <MarkerType>0</MarkerType>
+     <antiAliasing>False</antiAliasing>
+     <TextDesc>0.0000000000</TextDesc>
+     <Orientation>1</Orientation>
+     <ScaleFac>1.0000000000</ScaleFac>
+    </POIDrawable2D>
+    <POIDrawable3D>
+     <Text>Start</Text>
+     <BorderColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <TextColor Blue="0.0000" Red="0.0000" Green="0.0000" />
+     <BorderType>2</BorderType>
+     <BackRounded>False</BackRounded>
+     <Distance>99.0000000000</Distance>
+     <BackAlpha>1.0000000000</BackAlpha>
+     <ArrowColor Blue="0.6000" Red="0.6000" Green="0.6000" />
+     <FrameColor Blue="0.2000" Red="0.8980" Green="0.8980" />
+     <Height>180.0000000000</Height>
+     <Frame>1</Frame>
+     <PicFileName>.\default.jpg</PicFileName>
+     <antiAliasing>False</antiAliasing>
+     <TextDesc>-36.0000000000</TextDesc>
+     <Orientation>1</Orientation>
+     <ScaleFac>0.2500000000</ScaleFac>
+    </POIDrawable3D>
+   </MMGeoObject_2>
+   <MMGeoObject_3>
+    <GeoObjectType>1</GeoObjectType>
+    <Name>NARVA to Jahnstrasse</Name>
+    <Remark></Remark>
+    <Link></Link>
+    <Priority>3</Priority>
+    <ID>232341224669180246</ID>
+    <Locked>False</Locked>
+    <PathWidthFactor>1.0000000000</PathWidthFactor>
+    <PathDrawType>5</PathDrawType>
+    <PathPoints>
+     <count>10</count>
+     <Point_0>
+      <Link></Link>
+      <GeoPosition X="12.1054488230" Y="50.4926189870" />
+     </Point_0>
+     <Point_1>
+      <Link></Link>
+      <GeoPosition X="12.1054315570" Y="50.4926061630" />
+     </Point_1>
+     <Point_2>
+      <Link></Link>
+      <GeoPosition X="12.1054315570" Y="50.4926061630" />
+     </Point_2>
+     <Point_3>
+      <Link></Link>
+      <GeoPosition X="12.1051311490" Y="50.4942798610" />
+     </Point_3>
+     <Point_4>
+      <Link></Link>
+      <GeoPosition X="12.1061012710" Y="50.4938369620" />
+     </Point_4>
+     <Point_5>
+      <Link></Link>
+      <GeoPosition X="12.1061010190" Y="50.4938370460" />
+     </Point_5>
+     <Point_6>
+      <Link></Link>
+      <GeoPosition X="12.1061012710" Y="50.4938369620" />
+     </Point_6>
+     <Point_7>
+      <Link></Link>
+      <GeoPosition X="12.1071052550" Y="50.4933786390" />
+     </Point_7>
+     <Point_8>
+      <Link></Link>
+      <GeoPosition X="12.1071525290" Y="50.4936627860" />
+     </Point_8>
+     <Point_9>
+      <Link></Link>
+      <GeoPosition X="12.1071525290" Y="50.4936628700" />
+     </Point_9>
+    </PathPoints>
+    <PathDrawable2D>
+     <PathColor Blue="0.0000" Red="1.0000" Green="0.0000" />
+     <PointColor Blue="0.0000" Red="1.0000" Green="1.0000" />
+     <MarkingColor Blue="1.0000" Red="1.0000" Green="0.0000" />
+     <Alpha>1.0000000000</Alpha>
+     <Antialiasing>False</Antialiasing>
+     <CirclePieces>12</CirclePieces>
+    </PathDrawable2D>
+    <PathDrawable3D>
+     <PathColor Blue="0.0000" Red="1.0000" Green="0.0000" />
+     <PointColor Blue="0.0000" Red="1.0000" Green="1.0000" />
+     <MarkingColor Blue="1.0000" Red="1.0000" Green="0.0000" />
+     <Alpha>1.0000000000</Alpha>
+     <Antialiasing>False</Antialiasing>
+    </PathDrawable3D>
+   </MMGeoObject_3>
+   <MMGeoObject_4>
+    <GeoObjectType>1</GeoObjectType>
+    <Name>ACTIVE LOG 006</Name>
+    <Remark></Remark>
+    <Link></Link>
+    <Priority>4</Priority>
+    <ID>387926518045995350</ID>
+    <Locked>False</Locked>
+    <PathWidthFactor>1.0000000000</PathWidthFactor>
+    <PathDrawType>5</PathDrawType>
+    <PathPoints>
+     <count>42</count>
+     <Point_0>
+      <Link></Link>
+      <GeoPosition X="12.4131659230" Y="51.3129413500" />
+     </Point_0>
+     <Point_1>
+      <Link></Link>
+      <GeoPosition X="12.4132492390" Y="51.3128857780" />
+     </Point_1>
+     <Point_2>
+      <Link></Link>
+      <GeoPosition X="12.4132492390" Y="51.3128580340" />
+     </Point_2>
+     <Point_3>
+      <Link></Link>
+      <GeoPosition X="12.4133048110" Y="51.3128302060" />
+     </Point_3>
+     <Point_4>
+      <Link></Link>
+      <GeoPosition X="12.4132769830" Y="51.3128302060" />
+     </Point_4>
+     <Point_5>
+      <Link></Link>
+      <GeoPosition X="12.4133048110" Y="51.3128302060" />
+     </Point_5>
+     <Point_6>
+      <Link></Link>
+      <GeoPosition X="12.4133325550" Y="51.3127747180" />
+     </Point_6>
+     <Point_7>
+      <Link></Link>
+      <GeoPosition X="12.4133325550" Y="51.3127747180" />
+     </Point_7>
+     <Point_8>
+      <Link></Link>
+      <GeoPosition X="12.4133325550" Y="51.3127468900" />
+     </Point_8>
+     <Point_9>
+      <Link></Link>
+      <GeoPosition X="12.4133048110" Y="51.3128024620" />
+     </Point_9>
+     <Point_10>
+      <Link></Link>
+      <GeoPosition X="12.4134436990" Y="51.3129136060" />
+     </Point_10>
+     <Point_11>
+      <Link></Link>
+      <GeoPosition X="12.4138047920" Y="51.3129969220" />
+     </Point_11>
+     <Point_12>
+      <Link></Link>
+      <GeoPosition X="12.4138047920" Y="51.3130524940" />
+     </Point_12>
+     <Point_13>
+      <Link></Link>
+      <GeoPosition X="12.4138325360" Y="51.3130524940" />
+     </Point_13>
+     <Point_14>
+      <Link></Link>
+      <GeoPosition X="12.4138325360" Y="51.3131079820" />
+     </Point_14>
+     <Point_15>
+      <Link></Link>
+      <GeoPosition X="12.4138881080" Y="51.3132191260" />
+     </Point_15>
+     <Point_16>
+      <Link></Link>
+      <GeoPosition X="12.4139714240" Y="51.3133024420" />
+     </Point_16>
+     <Point_17>
+      <Link></Link>
+      <GeoPosition X="12.4140547400" Y="51.3132746980" />
+     </Point_17>
+     <Point_18>
+      <Link></Link>
+      <GeoPosition X="12.4141103120" Y="51.3132746980" />
+     </Point_18>
+     <Point_19>
+      <Link></Link>
+      <GeoPosition X="12.4146102930" Y="51.3130524940" />
+     </Point_19>
+     <Point_20>
+      <Link></Link>
+      <GeoPosition X="12.4148325810" Y="51.3129690940" />
+     </Point_20>
+     <Point_21>
+      <Link></Link>
+      <GeoPosition X="12.4149436410" Y="51.3129136060" />
+     </Point_21>
+     <Point_22>
+      <Link></Link>
+      <GeoPosition X="12.4149714690" Y="51.3129413500" />
+     </Point_22>
+     <Point_23>
+      <Link></Link>
+      <GeoPosition X="12.4149714690" Y="51.3129413500" />
+     </Point_23>
+     <Point_24>
+      <Link></Link>
+      <GeoPosition X="12.4149436410" Y="51.3129690940" />
+     </Point_24>
+     <Point_25>
+      <Link></Link>
+      <GeoPosition X="12.4145825490" Y="51.3131635540" />
+     </Point_25>
+     <Point_26>
+      <Link></Link>
+      <GeoPosition X="12.4145548050" Y="51.3131635540" />
+     </Point_26>
+     <Point_27>
+      <Link></Link>
+      <GeoPosition X="12.4144436610" Y="51.3131635540" />
+     </Point_27>
+     <Point_28>
+      <Link></Link>
+      <GeoPosition X="12.4143880890" Y="51.3131635540" />
+     </Point_28>
+     <Point_29>
+      <Link></Link>
+      <GeoPosition X="12.4139158520" Y="51.3133302700" />
+     </Point_29>
+     <Point_30>
+      <Link></Link>
+      <GeoPosition X="12.4133325550" Y="51.3136913630" />
+     </Point_30>
+     <Point_31>
+      <Link></Link>
+      <GeoPosition X="12.4128603190" Y="51.3139968830" />
+     </Point_31>
+     <Point_32>
+      <Link></Link>
+      <GeoPosition X="12.4124992270" Y="51.3142190870" />
+     </Point_32>
+     <Point_33>
+      <Link></Link>
+      <GeoPosition X="12.4095547480" Y="51.3146357520" />
+     </Point_33>
+     <Point_34>
+      <Link></Link>
+      <GeoPosition X="12.4094992600" Y="51.3146357520" />
+     </Point_34>
+     <Point_35>
+      <Link></Link>
+      <GeoPosition X="12.4094992600" Y="51.3146357520" />
+     </Point_35>
+     <Point_36>
+      <Link></Link>
+      <GeoPosition X="12.4094436880" Y="51.3146357520" />
+     </Point_36>
+     <Point_37>
+      <Link></Link>
+      <GeoPosition X="12.4093602880" Y="51.3146357520" />
+     </Point_37>
+     <Point_38>
+      <Link></Link>
+      <GeoPosition X="12.4093602880" Y="51.3146357520" />
+     </Point_38>
+     <Point_39>
+      <Link></Link>
+      <GeoPosition X="12.4093602880" Y="51.3146357520" />
+     </Point_39>
+     <Point_40>
+      <Link></Link>
+      <GeoPosition X="12.4093602880" Y="51.3146357520" />
+     </Point_40>
+     <Point_41>
+      <Link></Link>
+      <GeoPosition X="12.4093602880" Y="51.3146357520" />
+     </Point_41>
+    </PathPoints>
+    <PathDrawable2D>
+     <PathColor Blue="0.0000" Red="1.0000" Green="0.0000" />
+     <PointColor Blue="0.0000" Red="1.0000" Green="1.0000" />
+     <MarkingColor Blue="1.0000" Red="1.0000" Green="0.0000" />
+     <Alpha>1.0000000000</Alpha>
+     <Antialiasing>False</Antialiasing>
+     <CirclePieces>12</CirclePieces>
+    </PathDrawable2D>
+    <PathDrawable3D>
+     <PathColor Blue="0.0000" Red="1.0000" Green="0.0000" />
+     <PointColor Blue="0.0000" Red="1.0000" Green="1.0000" />
+     <MarkingColor Blue="1.0000" Red="1.0000" Green="0.0000" />
+     <Alpha>1.0000000000</Alpha>
+     <Antialiasing>False</Antialiasing>
+    </PathDrawable3D>
+   </MMGeoObject_4>
+  </MMGeoObjects>
+ </Content>
+</Root>

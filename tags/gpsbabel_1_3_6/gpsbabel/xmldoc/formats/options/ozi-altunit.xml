@@ -1,0 +1,5 @@
+<para>
+  By default the ozi module uses feet as altitude unit. With this option you can specify also 'Meters' (m)
+  as unit for altitude values.
+</para>
+

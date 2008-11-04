@@ -1,0 +1,18 @@
+<para>
+  Support for <productname>Destinator</productname> itinerary files.
+</para>
+<para>
+  These have (mostly) extension .dat and are binary files. The file structure is undocumented
+  and so this format was reverse engineered from some .dat files.
+  At this time we can read and write name, comment and the coordinates of the route points.
+</para>
+<para>
+  <productname>Destinator</productname> by
+  <ulink url="http://www.destinatortechnologies.net">Destinator Technologies</ulink>
+  is a software for PNDs, Smartphones and PDAs.
+</para>
+<para>
+  <userinput>
+      gpsbabel -i destinator_itn -f from_A_to_B.dat -o gpx -F from_A_to_B.gpx
+  </userinput>
+</para>

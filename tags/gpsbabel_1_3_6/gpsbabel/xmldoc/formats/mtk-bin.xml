@@ -1,0 +1,26 @@
+<para>Binary file protocol converter for MTK based GPS loggers.
+This format reads the raw binary format created by the MTK Windows application
+and outputs to other formats  supported by GPSBabel
+When using the csv option a MTK application compatible output file will also be created.</para>
+<para>
+It has been tested with <productname>Transystem i-Blue 747</productname> but other devices should
+work as well (Qstarz BT-Q1000, iTrek Z1, ...)
+</para><para>
+All position items (including button push) will be listed as trackpoints in the output. 
+Log items due to button push are presented as waypoints. 
+In theory we would not add waypoints to the list of trackpoints. But as the MTK logger restart the 
+log session from the button press we would loose a trackpoint unless we include/duplicate it.
+
+</para>
+<para>
+<ulink url="http://www.transystem.com.tw/p-gps-iblue747.htm">Transystem i-Blue 747</ulink>
+</para>
+<example id="mtk-bin-on-linux">
+  <title>Convert MTK binary trackpoints to GPX</title>
+  <para>
+  <userinput>gpsbabel -t -i mtk-bin,csv=extra.csv -f data.bin -o gpx -F out.gpx</userinput>
+   Additionally a CSV output file is created.
+  </para>
+
+</example>
+

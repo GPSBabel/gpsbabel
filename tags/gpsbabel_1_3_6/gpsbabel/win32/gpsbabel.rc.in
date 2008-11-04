@@ -1,0 +1,27 @@
+MAINICON ICON "@srcdir@/win32/gpsbabel.ico"
+
+1 VERSIONINFO
+FILEVERSION @GBMAJOR@,@GBMINOR@,@GBMICRO@,@GBBUILD@
+PRODUCTVERSION @GBMAJOR@,@GBMINOR@,@GBMICRO@,@GBBUILD@
+FILEOS 0x4
+FILETYPE 0x1
+FILESUBTYPE 0x0L
+FILEFLAGSMASK 0x3fL
+{
+ BLOCK "StringFileInfo"
+ {
+	BLOCK "040904E4"
+	{
+		VALUE "CompanyName", "GPSBabel Makers\0"
+		VALUE "FileDescription", "GPS format converter\0"
+		VALUE "FileVersion", "@GBMAJOR@.@GBMINOR@.@GBMICRO@@PACKAGE_RELEASE@\0"
+		VALUE "InternalName", "\0"
+		VALUE "LegalCopyright", "(C) 2002-2008 The people behind GPSBabel\0"
+		VALUE "LegalTrademarks", "\0"
+		VALUE "OriginalFilename", "gpsbabel.exe\0"
+		VALUE "ProductName", "GPSBabel\0"
+		VALUE "ProductVersion", "@GBMAJOR@.@GBMINOR@.@GBMICRO@@PACKAGE_RELEASE@\0"
+		VALUE "Comments", "http://www.gpsbabel.org\0"
+	}
+ }
+}
