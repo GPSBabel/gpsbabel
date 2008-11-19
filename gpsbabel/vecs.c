@@ -150,6 +150,8 @@ extern ff_vecs_t ggv_ovl_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t jtr_vecs;
 #endif
+extern ff_vecs_t itracku_vecs;
+extern ff_vecs_t itracku_fvecs;
 extern ff_vecs_t sbp_vecs;
 extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t skyforce_vecs;
@@ -858,6 +860,19 @@ vecs_t vec_list[] = {
                 "jtr"
         },
 #endif
+        {
+                &itracku_vecs,
+                "itracku",
+                "XAiOX iTrackU Logger",
+                NULL
+        },
+
+        {
+                &itracku_fvecs,
+                "itracku-bin",
+                "XAiOX iTrackU Logger Binary File Format",
+                "bin"
+        },
         {
                 &sbp_vecs,
                 "sbp",

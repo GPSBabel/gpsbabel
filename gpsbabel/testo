@@ -1502,6 +1502,14 @@ gpsbabel -i navitel_trk -f ${REFERENCE}/track/navitel_trk.bin -o navitel_trk -F 
 bincompare ${TMPDIR}/navitel_trk.bin ${TMPDIR}/navitel_trk2.bin
 
 #
+# XAiOX iTrackU Logger
+#
+rm -f ${TMPDIR}/itracku.unicsv
+gpsbabel -w -i itracku-bin -f ${REFERENCE}/itracku.dat -o unicsv -F ${TMPDIR}/itracku.unicsv
+echo FIXME: Skipping itracku for TZ problem.
+# compare ${REFERENCE}/itracku.unicsv ${TMPDIR}/itracku.unicsv
+
+#
 # Garmin Tranining Center .tcx (gtrnctr)
 #
 # reading
@@ -1516,6 +1524,7 @@ gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=1 -F ${TMPDI
 compare ${REFERENCE}/track/tcxtest~gpx-course.tcx ${TMPDIR}/tcxtest~gpx-course.tcx
 gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=0 -F ${TMPDIR}/tcxtest~gpx-history.tcx
 compare ${REFERENCE}/track/tcxtest~gpx-history.tcx ${TMPDIR}/tcxtest~gpx-history.tcx
+>>>>>>> 1.210
 
 #
 # Memory-Map Navigator overlay files (.mmo)
