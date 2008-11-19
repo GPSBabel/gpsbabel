@@ -1,0 +1,30 @@
+<para>
+	This format is for SBN datalog files saved to the SD card by
+	the Locosys GT-11/BGT-11/GT-31/BGT-31.
+</para>
+<para>
+	On the device, logging in this format is enabled by choosing
+	SBN from the NMEA ITEMS menu on the MEMORY CARD screen.
+</para>
+<para>
+	Not all data logged in this format is converted by GPSBabel,
+	but the following are:
+
+<simplelist columns="3">
+	<member>Position</member>
+	<member>Elevation</member>
+	<member>Time</member>
+	<member>Fix type (2D/3D/DGPS)</member>
+	<member>Speed</member>
+	<member>Course</member>
+	<member>Number of satellites visible</member>
+	<member>Horizontal Dilution of Precision (HDOP)</member>
+</simplelist>
+</para>
+
+<para>
+	The specification of this format can be found in
+	the <ulink url="http://www.navmanwirelessoem.com/oem/customer-support/oem-news/product-briefs-and-data-sheets/jupiter-32-xlp-new2/sirf-binary-protocol-reference-manual">
+	SiRF Binary Protocol Reference Manual</ulink>, in the section
+	called Geodetic Navigation Data - Message ID 41.
+</para>
