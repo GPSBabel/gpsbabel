@@ -61,7 +61,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
 	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o \
 	igo8.o gopal.o humminbird.o mapasia.o gnav_trl.o navitel.o ggv_ovl.o \
-	jtr.o sbp.o mmo.o skyforce.o
+	jtr.o sbp.o mmo.o skyforce.o itracku.o
 
 FMTS=@FMTS@
 
