@@ -1068,7 +1068,7 @@ gbfgetstr(gbfile *file)
 
 		file->unicode_checked = 1;
 
-		if (len == file->buffsz) {
+		if ((len + 1) == file->buffsz) {
 			file->buffsz += 64;
 			result = file->buff = xrealloc(file->buff, file->buffsz + 1);
 		}
