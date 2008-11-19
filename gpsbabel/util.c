@@ -689,6 +689,13 @@ be_read16(const void *p)
 	return i[0] << 8 | i[1];
 }
 
+unsigned int
+be_readu16(const void *p)
+{
+	const unsigned char *i = (unsigned char *) p;
+	return i[0] << 8 | i[1];
+}
+
 void
 be_write16(void *addr, const unsigned value)
 {

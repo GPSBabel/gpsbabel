@@ -1315,6 +1315,12 @@ gpsbabel -t -i sbp -f ${REFERENCE}/track/datalog.sbp -o gpx -F ${TMPDIR}/datalog
 compare ${TMPDIR}/datalog.gpx ${REFERENCE}/track/datalog.gpx
 
 #
+# SBN tracks (Locosys NaviGPS)
+#
+gpsbabel -t -i sbn -f ${REFERENCE}/track/sbn.SBN -o gpx -F ${TMPDIR}/sbn.gpx
+compare ${TMPDIR}/sbn.gpx ${REFERENCE}/track/sbn.gpx
+
+#
 # MTK logger tests
 #
 rm -f ${TMPDIR}/mtk_logger.*
@@ -1506,7 +1512,7 @@ bincompare ${TMPDIR}/navitel_trk.bin ${TMPDIR}/navitel_trk2.bin
 #
 rm -f ${TMPDIR}/itracku.unicsv
 gpsbabel -w -i itracku-bin -f ${REFERENCE}/itracku.dat -o unicsv -F ${TMPDIR}/itracku.unicsv
-echo FIXME: Skipping itracku for TZ problem.
+echo FIXME: Skipping itracku for TZ problem.  Continuing.
 # compare ${REFERENCE}/itracku.unicsv ${TMPDIR}/itracku.unicsv
 
 #

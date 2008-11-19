@@ -49,77 +49,36 @@ sbp_rd_deinit(void)
 	gbfclose(file_handle);
 }
 
-#ifdef SBP_PARSE_HEADER
-static size_t
-hdrcpy(char *dest, const char *src,
-       size_t max_len, char delim)
-{
-	size_t i;
-	
-	for (i = 0; i < max_len && *src != delim; i++) 
-		*dest++ = *src++;
-	*dest++ = 0;
-
-	return ++i;
-}
-#endif
-
 static void
-decode_header(route_head *track)
+read_sbp_header(route_head *track)
 {
-  char header[64];
+	/*
+	 * A complete SBP file contains 64 bytes header,
+	 *
+	 * Here is the definition of the SBP header 
+	 * BYTE 0 ~1 : true SBP header length 
+	 * BYTE 2~63:  MID_FILE_ID(0xfd)
+	 *             will stuff 0xff for remaining bytes
+	 */
 
-  if (gbfread(header, sizeof(header), 1, file_handle) == 1) {
-#ifdef SBP_PARSE_HEADER
-		/*
-		 * A complete SBP file contains 64 bytes header,
-		 *
-		 * Here is the definition of the SBP header 
-		 * BYTE 0 ~1 : true SBP header length 
-		 * BYTE 2~63:  MID_FILE_ID(0xfd) with following payload :
-		 *             User Name, Serial Number, Log Rate, Firmware Version
-		 *               >field separator:","
-		 *               >User Name : MAX CHAR(13)
-		 *               >Serial Number : MAX CHAR(8)
-		 *               >Log Rate : MAX CHAR 3, 0..255 in seconds
-		 *               >Firmware Version  :  MAX CHAR (13)
-		 *               // will stuff 0xff for remaining bytes
-		 */
+#define HEADER_SKIP 7
 
-#define HDR_LEN         2
-#define PACKET_HDR_LEN  5       /* 0xa0 0xa2 len 0xfd */
-#define USERNAME_LEN    13
-#define SERIAL_NUM_LEN  9
-#define LOG_RATE_LEN    3
-#define VERSION_LEN     13
-#define SEP             ','
-#define PAD             0xFF
+	int success;
+	char header[64];
 
-		int hdr_len;
-		char username[USERNAME_LEN + 1];
-		char serial_num[SERIAL_NUM_LEN + 1];
-		char log_rate[LOG_RATE_LEN + 1];
-		char version[VERSION_LEN + 1];
-		char *p = header;
+	if (gbfread(header, sizeof(header), 1, file_handle) == 1) {
+		size_t len = le_read16(header) - HEADER_SKIP;
+		if (len > sizeof(header))
+			len = sizeof(header);
 
-		hdr_len = le_read16(p);
-		p += HDR_LEN;
-		p += PACKET_HDR_LEN;
-
-		p += hdrcpy(username,   p, USERNAME_LEN,   SEP);
-		p += hdrcpy(serial_num, p, SERIAL_NUM_LEN, SEP);
-		p += hdrcpy(log_rate,   p, LOG_RATE_LEN,   SEP);
-		p += hdrcpy(version,    p, VERSION_LEN,	   PAD);
-    /* fixme: version includes checksum and end sequence bytes */
-
-		printf("Username: %s\n", username);
-		printf("Serial Number: %s\n", serial_num);
-		printf("Log rate (seconds): %s\n", log_rate);
-		printf("Firmware version: %s\n", version);
-#endif /* SBP_PARSE_HEADER */
+		success = locosys_decode_file_id(header + HEADER_SKIP, len);
 	} else {
-		fatal(MYNAME ": Couldn't read SBP header. "
-		     "This probably isn't a SBP file.\n");
+		success = FALSE;
+	}
+
+	if (!success) {
+		fatal(MYNAME ": Format error: Couldn't read SBP header."
+		      "This probably isn't a SBP file.\n");
 	}
 }
 
@@ -145,7 +104,7 @@ sbp_read(void)
 		track = route_head_alloc();
 		track_add_head(track);
 
-		decode_header(track);
+		read_sbp_header(track);
   
 		while ((logpoint = read_logpoint())) {
 			track_add_wpt(track, logpoint);

@@ -197,8 +197,8 @@ compare_waypoints(const waypoint *waypt1, const waypoint *waypt2)
 		strcmp(waypt1->shortname, waypt2->shortname) == 0;
 }
 
-static unsigned
-checksum_packet(const unsigned char *packet, unsigned length)
+unsigned
+navilink_checksum_packet(const unsigned char *packet, unsigned length)
 {
 	unsigned checksum = 0;
 
@@ -237,7 +237,7 @@ write_packet(unsigned type, const void *payload, unsigned length)
 	le_write16(packet + 2, length + 1);
 	packet[4] = type;
 	memcpy(packet + 5, payload, length);
-	le_write16(packet + length + 5, checksum_packet(packet + 4, length + 1));
+	le_write16(packet + length + 5, navilink_checksum_packet(packet + 4, length + 1));
 	packet[length + 7] = 0xb0;
 	packet[length + 8] = 0xb3;
 
@@ -310,8 +310,9 @@ read_packet(unsigned type, void *payload,
 		fatal(MYNAME ": Protocol error: Bad packet type (expected 0x%02x but got 0x%02x)\n", type, data[0]);
 	}
 
-	if ((checksum = read_word()) != checksum_packet(data, size)) {
-		fatal(MYNAME ": Checksum error - expected %x got %x\n", checksum_packet(data, size), checksum);
+	if ((checksum = read_word()) != navilink_checksum_packet(data, size)) {
+		fatal(MYNAME ": Checksum error - expected %x got %x\n",
+		      navilink_checksum_packet(data, size), checksum);
 	}
 
 	if (read_word() != 0xb3b0) {

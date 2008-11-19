@@ -909,6 +909,7 @@ typedef struct {
  */
 
 signed int be_read16(const void *p);
+unsigned int be_readu16(const void *p);
 signed int be_read32(const void *p);
 signed int le_read16(const void *p);
 unsigned int le_readu16(const void *p);
