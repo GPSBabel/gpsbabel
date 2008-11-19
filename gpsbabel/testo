@@ -1524,7 +1524,6 @@ gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=1 -F ${TMPDI
 compare ${REFERENCE}/track/tcxtest~gpx-course.tcx ${TMPDIR}/tcxtest~gpx-course.tcx
 gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=0 -F ${TMPDIR}/tcxtest~gpx-history.tcx
 compare ${REFERENCE}/track/tcxtest~gpx-history.tcx ${TMPDIR}/tcxtest~gpx-history.tcx
->>>>>>> 1.210
 
 #
 # Memory-Map Navigator overlay files (.mmo)
