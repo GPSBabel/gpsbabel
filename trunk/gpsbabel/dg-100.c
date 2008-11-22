@@ -640,6 +640,9 @@ dg100_rd_init(const char *fname)
 	if (gbser_set_speed(serial_handle, 115200) != gbser_OK) {
 		fatal(MYNAME ": Can't configure port '%s'\n", fname);
 	}
+        // Toss anything that came in before our speed was set, particularly
+        // for the bluetooth BT-335 product.
+        gbser_flush(serial_handle);
 }
 
 static void 
