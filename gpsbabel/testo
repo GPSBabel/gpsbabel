@@ -28,7 +28,7 @@ bincompare()
         rm -f ${TMPDIR}/bc2
         ${OD} $1 >${TMPDIR}/bc1 
         ${OD} $2 >${TMPDIR}/bc2
-        ${DIFF} -u ${TMPDIR}/bc1 ${TMPDIR}/bc2 || {
+        ${DIFF} ${TMPDIR}/bc1 ${TMPDIR}/bc2 || {
 		echo ERROR binary comparing $*
                 exit 1
 	}
@@ -36,7 +36,7 @@ bincompare()
 
 compare()
 {
-	${DIFF} $* ||  {
+	${DIFF} -u $* ||  {
 		echo ERROR comparing $*
 		exit 1
 	} 
@@ -158,6 +158,18 @@ gpsbabel -i lowranceusr,ignoreicons -f ${REFERENCE}/all.usr -o gpx -F ${TMPDIR}/
 gpsbabel -i gpx -f ${TMPDIR}/enchilada.gpx -o lowranceusr -F ${TMPDIR}/enchilada1.usr
 bincompare ${TMPDIR}/enchilada1.usr ${REFERENCE}/ignoreicons.usr
 
+#
+# Another variation of Lowrance.  Compare v2 and v3.  These original
+# files were saved on the same units as v2 and v3.
+#
+${PNAME} -i lowranceusr -f ${REFERENCE}/lowrance-v2.usr -o unicsv -F ${TMPDIR}/lowrance-v2-unicsv.txt
+${PNAME} -i lowranceusr -f ${REFERENCE}/lowrance-v3.usr -o unicsv -F ${TMPDIR}/lowrance-v3-unicsv.txt
+compare ${REFERENCE}/lowrance-v2-unicsv.txt ${TMPDIR}/lowrance-v2-unicsv.txt
+compare ${REFERENCE}/lowrance-v3-unicsv.txt ${TMPDIR}/lowrance-v3-unicsv.txt
+# Ideally, there'd be a test for v2 vs. v3 writes, but their numeric
+# instability makes this icky.
+
+#
 # CSV (Comma separated value) data.
 
 gpsbabel  -i geo -f ${REFERENCE}/../geocaching.loc -o csv -F ${TMPDIR}/csv.csv
@@ -1061,7 +1073,6 @@ compare ${TMPDIR}/nmea+ms.gpx ${REFERENCE}/track/nmea+ms.gpx
 # Read an NMEA file  with AMOD 3808 waypoints.  Be sure we read the points.
 # Also write as a "normal" NMEA to be sure AMOD extensions don't leak.
 #
-
 gpsbabel -i nmea -f ${REFERENCE}/track/amod-nmea -o gpx -F ${TMPDIR}/amod-out.gpx -o nmea -F ${TMPDIR}/amod-pure
 compare ${TMPDIR}/amod-out.gpx ${REFERENCE}/track/amod.gpx
 compare ${TMPDIR}/amod-pure ${REFERENCE}/track/amod-cleansed
