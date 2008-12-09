@@ -77,6 +77,9 @@ static xg_callback	gtc_trk_long;
 static xg_callback	gtc_trk_alt;
 static xg_callback	gtc_trk_hr;
 static xg_callback	gtc_trk_cad;
+static xg_callback	gtc_wpt_pnt_s, gtc_wpt_pnt_e;
+static xg_callback	gtc_wpt_lat;
+static xg_callback	gtc_wpt_long;
 
 static xg_tag_mapping gtc_map[] = {
 	/* courses tcx v1 & v2 */
@@ -116,13 +119,17 @@ static xg_tag_mapping gtc_map[] = {
 	{ gtc_trk_hr,   cb_cdata, "/History/Run/Track/Trackpoint/HeartRateBpm" },
 	{ gtc_trk_cad,  cb_cdata, "/History/Run/Track/Trackpoint/Cadence" },
 
+	{ gtc_wpt_pnt_s,cb_start, "/Courses/Course/Lap/BeginPosition" },
+	{ gtc_wpt_pnt_e,cb_end, "/Courses/Course/Lap/BeginPosition" },
+	{ gtc_wpt_lat,  cb_cdata, "/Courses/Course/Lap/BeginPosition/LatitudeDegrees" },
+	{ gtc_wpt_long, cb_cdata, "/Courses/Course/Lap/BeginPosition/LongitudeDegrees" },
+
 	{ NULL, 	0,         NULL}
 };
 
 static const char *
 gtc_tags_to_ignore[] = {
         "TrainingCenterDatabase",
-	"Lap",
 	"CourseFolder",
 	"Running",
 	"Biking",
@@ -455,10 +462,37 @@ gtc_trk_cad(const char *args, const char **unused)
 	wpt_tmp->cadence = atoi(args);
 }
 
+void
+gtc_wpt_pnt_s(const char *unused, const char **attrv)
+{
+	wpt_tmp = waypt_new();
+}
+
+void
+gtc_wpt_pnt_e(const char *args, const char **unused)
+{
+        if(wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) waypt_add(wpt_tmp);
+	else waypt_free(wpt_tmp);
+
+	wpt_tmp = NULL;
+}
+
+void
+gtc_wpt_lat(const char *args, const char **unused)
+{
+	wpt_tmp->latitude = atof(args);
+}
+
+void
+gtc_wpt_long(const char *args, const char **unused)
+{
+	wpt_tmp->longitude = atof(args);
+}
+
 ff_vecs_t gtc_vecs = {
         ff_type_file,
 	{
-	  	ff_cap_none 			/* waypoints */,
+	  	ff_cap_read 			/* waypoints */,
 		ff_cap_read | ff_cap_write 	/* tracks */,
 	  	ff_cap_none 			/* routes */
 	},
