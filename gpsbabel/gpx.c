@@ -302,6 +302,7 @@ tag_mapping tag_path_map[] = {
   {type, 1, "/gpx/wpt/geocache/" name, 0UL }  /* opencaching.de */
 
 #define GARMIN_WPT_EXT "/gpx/wpt/extensions/gpxx:WaypointExtension"
+#define GARMIN_TRK_EXT "/gpx/trk/trkseg/trkpt/extensions/gpxtpx:TrackPointExtension"
 
 //	GEOTAG( tt_cache, 		"cache"),
 	{ tt_cache, 1, "/gpx/wpt/groundspeak:cache" },
@@ -328,6 +329,7 @@ tag_mapping tag_path_map[] = {
 	{ tt_garmin_wpt_extensions, 0, GARMIN_WPT_EXT, 0UL },
 	{ tt_garmin_wpt_proximity, 0, GARMIN_WPT_EXT "/gpxx:Proximity", 0UL },
 	{ tt_garmin_wpt_temperature, 0, GARMIN_WPT_EXT "/gpxx:Temperature", 0UL },
+	{ tt_garmin_wpt_temperature, 0, GARMIN_TRK_EXT "/gpxtpx:atemp", 0UL },
 	{ tt_garmin_wpt_depth, 0, GARMIN_WPT_EXT "/gpxx:Depth", 0UL },
 	{ tt_garmin_wpt_display_mode, 0, GARMIN_WPT_EXT "/gpxx:DisplayMode", 0UL },
 	{ tt_garmin_wpt_categories, 0, GARMIN_WPT_EXT "/gpxx:Categories", 0UL },
