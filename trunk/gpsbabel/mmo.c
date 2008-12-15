@@ -26,6 +26,13 @@
 	2008/10/18: Initial release
 	2008/10/19: Don't write empty names
 		    Add options 'locked' and 'visible'
+	2008/11/06: Fix enumeration of objects for empty routes or tracks
+		    Add option "ver" (internal version) to writer
+		    We support write of version:
+		    * 0x11 - reported as " "Memory Map OS Edition 2004, Version 4.2.3 Build 432"
+		    * 0x12 - most files in my test pool :-)
+	2008/11/19: Fix routes with a loop but different start and end point
+	2008/12/12: Fix object release error
 */
 
 #include <ctype.h>
@@ -43,7 +50,7 @@
 
 // #define MMO_DBG
 
-static char *opt_locked, *opt_visible;
+static char *opt_locked, *opt_visible, *opt_version;
 
 static
 arglist_t mmo_args[] = {
@@ -51,6 +58,8 @@ arglist_t mmo_args[] = {
 		ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "visible", &opt_visible, "Write items 'visible' [default yes]", "1",
 		ARGTYPE_BOOL, ARG_NOMINMAX },
+	{ "ver", &opt_version, "Write files with internal version [n]", NULL,
+		ARGTYPE_INT, "17", "18" },
 	ARG_TERMINATOR
 };
 
@@ -62,11 +71,12 @@ typedef struct mmo_data_s {
 	time_t ctime;
 	time_t mtime;
 	int left;		/* number of un-readed route points */
-	int done;		/* number of completely loaded route points */
 	void *data;		/* can be a waypoint, a route or a track */
+	int refct;
+	struct mmo_data_s **members;
 	unsigned char visible:1;
 	unsigned char locked:1;
-	unsigned char loop:1;	/* loop flag */
+	unsigned char loaded:1;
 } mmo_data_t;
 
 static gbfile *fin, *fout;
@@ -246,6 +256,13 @@ mmo_get_object(const gbuint16 objid)
 	return data;
 }
 
+static waypoint *
+mmo_get_waypt(mmo_data_t *data)
+{
+	data->refct++;
+	if (data->refct == 1) return (waypoint *)data->data;
+	else return waypt_dupe((waypoint *)data->data);
+}
 
 static void
 mmo_release_avltree(avltree_t *tree, const int is_object)
@@ -259,6 +276,8 @@ mmo_release_avltree(avltree_t *tree, const int is_object)
 			if (is_object) {
 				mmo_data_t *data = (mmo_data_t *)name;
 				if (data->name) xfree(data->name);
+				if ((data->type == wptdata) && (data->refct == 0))
+					waypt_free((waypoint *)data->data);
 			}
 			xfree(name);
 		} while ((key = avltree_next(tree, key, (void *)&name)));
@@ -277,7 +296,7 @@ mmo_register_icon(const int id, const char *name)
 }
 
 
-static mmo_data_t *mmo_read_object(const waypoint *add);
+static mmo_data_t *mmo_read_object(void);
 
 
 static void
@@ -287,15 +306,7 @@ mmo_end_of_route(mmo_data_t *data)
 	const char *sobj = "CObjRoute";
 #endif
 	route_head *rte = data->data;
-	int rtept = rte->rte_waypt_ct;
-	int i;
-	char buf[64];
-		
-	if (data->visible && data->loop) {
-		DBG((sobj, "route \"%s\" is a loop.\n", data->name));
-		(void) mmo_read_object(NULL);
-		rtept--;
-	}
+	char buf[7];
 
 	if (mmo_version >= 0x12) {
 		mmo_fillbuf(buf, 7, 1);
@@ -306,17 +317,6 @@ mmo_end_of_route(mmo_data_t *data)
 		rte->line_color.opacity = 255 - (buf[6] * 51);
 		DBG((sobj, "color = 0x%06X\n", rte->line_color.bbggrr));
 		DBG((sobj, "transparency = %d (-> %d)\n", buf[6], rte->line_color.opacity));
-	}
-
-	if (data->visible) {
-		for (i = 0; i < rtept; i++) (void) mmo_read_object(NULL);
-	}
-	if (data->loop && (data->done > 1)) {
-		queue *elem;
-					
-		elem = QUEUE_FIRST(&rte->waypoint_list);
-		dequeue(elem);
-		ENQUEUE_TAIL(&rte->waypoint_list, elem);
 	}
 
 	if (rte->rte_waypt_ct == 0) {	/* don't keep empty routes */
@@ -335,7 +335,7 @@ mmo_read_category(mmo_data_t *data)
 		mmo_data_t *tmp;
 		
 		gbfseek(fin, -2, SEEK_CUR);
-		tmp = mmo_read_object(NULL);
+		tmp = mmo_read_object();
 		if (data) data->category = tmp->name;
 	}
 }
@@ -386,7 +386,7 @@ mmo_read_CObjWaypoint(mmo_data_t *data)
 	DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n", 
 		data->name, data->visible ? "yes" : "NO", data->objid));
 
-	wpt = waypt_new();
+	data->data = wpt = waypt_new();
 	wpt->shortname = xstrdup(data->name);
 
 	time = data->mtime;
@@ -406,23 +406,9 @@ mmo_read_CObjWaypoint(mmo_data_t *data)
 
 		for (i = 0; i < rtelinks; i++) {
 			mmo_data_t *tmp;
-			int objid;			
 
 			DBG((sobj, "read rtelink number %d\n", i + 1));
-
-			objid = gbfgetuint16(fin);
-			gbfseek(fin, -2, SEEK_CUR);
-
-			rtelink[i] = tmp = mmo_read_object(wpt);
-			
-			if ((objid < 0x8000) && (tmp != NULL) && (tmp->type == rtedata)) {
-				route_head *rte = tmp->data;
-
-				tmp->left--;
-				route_add_wpt(rte, waypt_dupe(wpt));
-
-				DBG((sobj, "\"%s\" Added to route \"%s\"\n", wpt->shortname, rte->rte_name));
-			}
+			rtelink[i] = tmp = mmo_read_object();
 		}
 
 	}
@@ -479,38 +465,16 @@ mmo_read_CObjWaypoint(mmo_data_t *data)
 
 	ux = gbfgetuint32(fin);
 	DBG((sobj, "proximity type = %d\n", ux));
+	
+	data->loaded = 1;
 
-	if (rtelinks) {
-		int i;
-
-		for (i = 0; i < rtelinks; i++) {
-			int j;
-			route_head *rte = rtelink[i]->data;
-
-			for (j = 0; j < rtelinks; j++) {
-				if ((i != j) && (rtelink[i] == rtelink[j])) {
-					rtelink[i]->loop = 1;
-					break;
-				}
-			}
-			rtelink[i]->done++;
-			if ((rtelink[i]->left == 0) && (rtelink[i]->done == rte->rte_waypt_ct)) {
-				if (mmo_version <= 0x11) mmo_end_of_route(rtelink[i]);
-			}
-		}
-	}
-
-	if (rtelink) {
-		xfree(rtelink);
-		waypt_free(wpt);
-		data->data = NULL;
-	}
-	else waypt_add(wpt);
+	if (rtelink) xfree(rtelink);
+	else waypt_add(mmo_get_waypt(data));
 }
 
 
 static void
-mmo_read_CObjRoute(mmo_data_t *data, const waypoint *add)
+mmo_read_CObjRoute(mmo_data_t *data)
 {
 #ifdef MMO_DBG
 	const char *sobj = "CObjRoute";
@@ -534,20 +498,37 @@ mmo_read_CObjRoute(mmo_data_t *data, const waypoint *add)
 	data->left = rtept = gbfgetint16(fin);
 	DBG((sobj, "route has %d point(s)\n", rtept));
 
-	if ((data->left <= 0) && (mmo_version >= 0x12)) {
-		mmo_fillbuf(buf, 7, 1);
+	if (data->left <= 0) {
+		if (mmo_version >= 0x12) mmo_fillbuf(buf, 7, 1);
+		route_del_head(rte);
+		data->data = NULL;
+
+		return;
 	}
 
-	if (add) {	/* waypoint loaded before route */
-		route_add_wpt(rte, waypt_dupe(add));
-		data->left--;
-	}
-	
 	while (data->left > 0) {
-		(void) mmo_read_object(NULL);
+		mmo_data_t *tmp;
+		
+		tmp = mmo_read_object();
+		if (tmp && tmp->data && (tmp->type = wptdata)) {
+			waypoint *wpt;
+			
+			/* FIXME: At this point this waypoint maybe not fully loaded (initialized) !!!
+				  We need a final procedure to handle this !!! */
+			if (! tmp->loaded) {
+				wpt = waypt_new();
+				wpt->latitude = 0;
+				wpt->longitude = 0;
+				xasprintf(&wpt->shortname, "\01%p", tmp);
+			}
+			else wpt = mmo_get_waypt(tmp);
+			
+			route_add_wpt(rte, wpt);
+			data->left--;
+		}
 	}
-	
-	if ((mmo_version > 0x11) && (data->done > 0)) mmo_end_of_route(data);
+
+	if (mmo_version > 0x11) mmo_end_of_route(data);
 }
 
 
@@ -656,8 +637,7 @@ mmo_read_CObjText(mmo_data_t *data)
 #ifdef MMO_DBG
 	const char *sobj = "CObjText";
 #endif
-	int i;
-	char buf[512];
+	char buf[28];
 	double lat, lon;
 	char *text, *font;
 			
@@ -672,15 +652,14 @@ mmo_read_CObjText(mmo_data_t *data)
 	text = mmo_readstr();
 	DBG((sobj, "text = \"%s\"\n", text));
 	xfree(text);
-	
+
 	mmo_fillbuf(buf, 28, 1);
 
 	font = mmo_readstr();
 	DBG((sobj, "font = \"%s\"\n", font));
 	xfree(font);
 
-	i = mmo_fillbuf(buf, 25, 1);
-//	mmo_printbuf(buf, i, "CObjText\n");
+	mmo_fillbuf(buf, 25, 1);
 }
 
 
@@ -715,12 +694,13 @@ mmo_read_CObjCurrentPosition(mmo_data_t *data)
 
 
 static mmo_data_t *
-mmo_read_object(const waypoint *add)
+mmo_read_object(void)
 {
 	int objid;
 	mmo_data_t *data = NULL;
 
 	objid = gbfgetuint16(fin);
+	DBG(("mmo_read_object", "objid = 0x%04X\n", objid));
 	if (objid == 0xFFFF) {
 		gbuint16 version;
 		char *sobj;
@@ -777,7 +757,7 @@ mmo_read_object(const waypoint *add)
 		}
 		else if (objid == rte_object_id) {
 			data->type = rtedata;
-			mmo_read_CObjRoute(data, add);
+			mmo_read_CObjRoute(data);
 		}
 		else if (objid == pos_object_id) mmo_read_CObjCurrentPosition(data);
 		else if (objid == txt_object_id) mmo_read_CObjText(data);
@@ -787,6 +767,38 @@ mmo_read_object(const waypoint *add)
 	else data = mmo_get_object(objid);
 	
 	return data;
+}
+
+static void
+mmo_finalize_rtept_cb(const waypoint *wptref)
+{
+	waypoint *wpt = (waypoint *)wptref;
+	
+	if ((wpt->shortname[0] == 1) && (wpt->latitude == 0) && (wpt->longitude == 0)) {
+		mmo_data_t *data;
+		waypoint *wpt2;
+
+		sscanf(wpt->shortname + 1, "%p", &data);
+		wpt2 = (waypoint *)data->data;
+
+		wpt->latitude = wpt2->latitude;
+		wpt->longitude = wpt2->longitude;
+
+		xfree(wpt->shortname);
+		wpt->shortname = xstrdup(wpt2->shortname);
+
+		if (wpt2->description) wpt->description = xstrdup(wpt2->description);
+		if (wpt2->notes) wpt->notes = xstrdup(wpt2->notes);
+		if (wpt2->url) wpt->notes = xstrdup(wpt2->url);
+
+		wpt->proximity = wpt2->proximity;
+		wpt->wpt_flags.proximity = wpt2->wpt_flags.proximity;
+
+		if (wpt2->icon_descr) {
+			wpt->icon_descr = xstrdup(wpt2->icon_descr);
+			wpt->wpt_flags.icon_descr_is_dynamic = 1;
+		}
+	}
 }
 
 /*******************************************************************************
@@ -820,6 +832,8 @@ mmo_rd_init(const char *fname)
 static void 
 mmo_rd_deinit(void)
 {
+	route_disp_session(curr_session(), NULL, NULL, mmo_finalize_rtept_cb);
+
 	mmo_release_avltree(icons, 0);
 	mmo_release_avltree(category_ids, 0);
 	mmo_release_avltree(objects, 1);
@@ -862,7 +876,7 @@ mmo_read(void)
 
 	while (! gbfeof(fin)) {		/* main read loop */
 
-		(void) mmo_read_object(NULL);
+		(void) mmo_read_object();
 
 	}
 
@@ -910,7 +924,7 @@ mmo_enum_waypt_cb(const waypoint *wpt)
 static void
 mmo_enum_route_cb(const route_head *rte)
 {
-	mmo_obj_ct++;
+	if (rte->rte_waypt_ct > 0) mmo_obj_ct++;
 }
 
 
@@ -930,7 +944,7 @@ mmo_write_obj_mark(const char *sobj, const char *name)
 		mmo_object_id++;
 		snprintf(buf, sizeof(buf), "%u", mmo_object_id);
 
-		DBG(("write", "object \"%s\" registered (id = 0x%04X)\n", mmo_object_id));
+		DBG(("write", "object \"%s\" registered (id = 0x%04X)\n", name, mmo_object_id));
 
 		avltree_insert(mmobjects, sobj, xstrdup(buf));
 		
@@ -997,6 +1011,7 @@ mmo_write_wpt_cb(const waypoint *wpt)
 	int objid;
 	time_t time;
 	int icon = 0;
+	mmo_data_t *data;
 
 	time = wpt->creation_time;
 	if (time < 0) time = 0;
@@ -1014,9 +1029,12 @@ mmo_write_wpt_cb(const waypoint *wpt)
 		return;
 	}
 
+	DBG(("write", "waypoint \"%s\"\n", wpt->shortname ? wpt->shortname : "Mark"));
+
 	objid = mmo_write_obj_head("CObjWaypoint",
 		(wpt->shortname && *wpt->shortname) ? wpt->shortname : "Mark", time, wptdata);
-	mmo_register_object(objid, wpt, wptdata);
+	data = mmo_register_object(objid, wpt, wptdata);
+	data->refct = 1;
 	mmo_write_category("CCategory", (mmo_datatype == rtedata) ? "Waypoints" : "Marks");
 
 	gbfputdbl(wpt->latitude, fout);
@@ -1112,19 +1130,23 @@ mmo_write_rte_tail_cb(const route_head *rte)
 	
 	if (rte->rte_waypt_ct <= 0) return;
 
-	if (rte->line_color.bbggrr < 0) {
-		gbfputuint32(0xFF, fout);	/* color; default red */
-		gbfputc(0x01, fout);		/* Line width "normal" */
-		gbfputc(0x00, fout);		/* Line style "solid"*/
-		gbfputc(0x00, fout);		/* Transparency "Opaque" */
+	DBG(("write", "route with %d point(s).\n", rte->rte_waypt_ct));
+
+	if (mmo_version >= 0x12) {
+		if (rte->line_color.bbggrr < 0) {
+			gbfputuint32(0xFF, fout);	/* color; default red */
+			gbfputc(0x01, fout);		/* Line width "normal" */
+			gbfputc(0x00, fout);		/* Line style "solid"*/
+			gbfputc(0x00, fout);		/* Transparency "Opaque" */
+		}
+		else {
+			gbfputuint32(rte->line_color.bbggrr, fout);	/* color */
+			gbfputc(0x01, fout);		/* Line width "normal" */
+			gbfputc(0x00, fout);		/* Line style "solid"*/
+			gbfputc((255 - rte->line_color.opacity) / 51, fout);	/* Transparency "Opaque" */
+		}
 	}
-	else {
-		gbfputuint32(rte->line_color.bbggrr, fout);	/* color */
-		gbfputc(0x01, fout);		/* Line width "normal" */
-		gbfputc(0x00, fout);		/* Line style "solid"*/
-		gbfputc((255 - rte->line_color.opacity) / 51, fout);	/* Transparency "Opaque" */
-	}
-	
+
 	QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
 		waypoint *wpt = (waypoint *)elem;
 		int objid = mmo_get_objid(wpt);
@@ -1164,15 +1186,19 @@ mmo_write_trk_tail_cb(const route_head *trk)
 
 	if (trk->line_color.bbggrr < 0) {
 		gbfputuint32(0xFF0000, fout);	/* color; default blue */
-		gbfputc(0x01, fout);		/* Line width "normal" */
-		gbfputc(0x00, fout);		/* Line style "solid"*/
-		gbfputc(0x00, fout);		/* Transparency "Opaque" */
+		if (mmo_version >= 0x12) {
+			gbfputc(0x01, fout);		/* Line width "normal" */
+			gbfputc(0x00, fout);		/* Line style "solid"*/
+			gbfputc(0x00, fout);		/* Transparency "Opaque" */
+		}
 	}
 	else {
 		gbfputuint32(trk->line_color.bbggrr, fout);	/* color */
-		gbfputc(0x01, fout);		/* Line width "normal" */
-		gbfputc(0x00, fout);		/* Line style "solid"*/
-		gbfputc((255 - trk->line_color.opacity) / 51, fout);	/* Transparency "Opaque" */
+		if (mmo_version >= 0x12) {
+			gbfputc(0x01, fout);		/* Line width "normal" */
+			gbfputc(0x00, fout);		/* Line style "solid"*/
+			gbfputc((255 - trk->line_color.opacity) / 51, fout);	/* Transparency "Opaque" */
+		}
 	}
 }
 
@@ -1189,7 +1215,16 @@ mmo_wr_init(const char *fname)
 
 	mmo_object_id = 0x8000;
 	mmo_obj_ct = 1;			/* ObjIcons always present */
-	mmo_version = 0x12;		/* we write as version 0x12 */
+	mmo_version = 0x12;		/* by default we write as version 0x12 */
+	if (opt_version) {
+		while (isspace(*opt_version)) opt_version++;
+		errno = 0;
+		mmo_version = strtol(opt_version, NULL, 0);
+		if (errno || ((mmo_version != 0x11) && (mmo_version != 0x12))) {
+			fatal(MYNAME ": Unsupported version identifier (%s)!\n", opt_version);
+		}
+	}
+	DBG(("write", "version = 0x%02X\n", mmo_version));
 	mmo_filemark = 0xFFFFUL | (mmo_version << 16);
 }
 
