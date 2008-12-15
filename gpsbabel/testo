@@ -162,8 +162,8 @@ bincompare ${TMPDIR}/enchilada1.usr ${REFERENCE}/ignoreicons.usr
 # Another variation of Lowrance.  Compare v2 and v3.  These original
 # files were saved on the same units as v2 and v3.
 #
-${PNAME} -i lowranceusr -f ${REFERENCE}/lowrance-v2.usr -o unicsv -F ${TMPDIR}/lowrance-v2-unicsv.txt
-${PNAME} -i lowranceusr -f ${REFERENCE}/lowrance-v3.usr -o unicsv -F ${TMPDIR}/lowrance-v3-unicsv.txt
+${PNAME} -i lowranceusr -f ${REFERENCE}/lowrance-v2.usr -o unicsv,utc=0 -F ${TMPDIR}/lowrance-v2-unicsv.txt
+${PNAME} -i lowranceusr -f ${REFERENCE}/lowrance-v3.usr -o unicsv,utc=0 -F ${TMPDIR}/lowrance-v3-unicsv.txt
 compare ${REFERENCE}/lowrance-v2-unicsv.txt ${TMPDIR}/lowrance-v2-unicsv.txt
 compare ${REFERENCE}/lowrance-v3-unicsv.txt ${TMPDIR}/lowrance-v3-unicsv.txt
 # Ideally, there'd be a test for v2 vs. v3 writes, but their numeric
@@ -1522,9 +1522,8 @@ bincompare ${TMPDIR}/navitel_trk.bin ${TMPDIR}/navitel_trk2.bin
 # XAiOX iTrackU Logger
 #
 rm -f ${TMPDIR}/itracku.unicsv
-gpsbabel -w -i itracku-bin -f ${REFERENCE}/itracku.dat -o unicsv -F ${TMPDIR}/itracku.unicsv
-echo FIXME: Skipping itracku for TZ problem.  Continuing.
-# compare ${REFERENCE}/itracku.unicsv ${TMPDIR}/itracku.unicsv
+gpsbabel -w -i itracku-bin -f ${REFERENCE}/itracku.dat -o unicsv,utc=0 -F ${TMPDIR}/itracku.unicsv
+compare ${REFERENCE}/itracku.unicsv ${TMPDIR}/itracku.unicsv
 
 #
 # Garmin Tranining Center .tcx (gtrnctr)
