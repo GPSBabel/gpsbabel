@@ -542,6 +542,8 @@ void waypt_init_bounds(bounds *bounds);
 int waypt_bounds_valid(bounds *bounds);
 void waypt_add_to_bounds(bounds *bounds, const waypoint *waypointp);
 void waypt_compute_bounds(bounds *);
+double gcgeodist(const double lat1, const double lon1,
+                 const double lat2, const double lon2);
 void waypt_flush(queue *);
 void waypt_flush_all(void);
 unsigned int waypt_count(void);
