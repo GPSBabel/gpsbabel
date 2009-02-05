@@ -502,7 +502,7 @@ waypt_add_url(waypoint *wpt, char *link, char *url_link_text)
 	}
 }
 
-static double
+double
 gcgeodist(const double lat1, const double lon1,
 	     const double lat2, const double lon2)
 {
