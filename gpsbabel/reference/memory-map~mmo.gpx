@@ -84,38 +84,58 @@
   <rtept lat="50.492618987" lon="12.105448823">
     <time>2008-10-18T17:42:02Z</time>
     <name>NARVA</name>
+    <desc>Start</desc>
+  <url>http://www.narva-light.de</url>
+    <sym>Flag</sym>
   </rtept>
   <rtept lat="50.493837046" lon="12.106101019">
     <time>2008-10-18T17:43:07Z</time>
     <name>Liebknechtstrasse</name>
+    <desc>Liebknechtstrasse 90</desc>
+    <sym>Dot</sym>
   </rtept>
   <rtept lat="50.493662870" lon="12.107152529">
     <time>2008-10-18T17:43:02Z</time>
     <name>Jahnstrasse</name>
+    <desc>Jahnstrasse 11</desc>
+    <sym>Dot</sym>
   </rtept>
   <rtept lat="50.610795273" lon="12.173802154">
     <time>2008-10-18T17:42:45Z</time>
     <name>Elsterberg</name>
+    <desc>Piehlerstrasse</desc>
+    <sym>Dot</sym>
   </rtept>
   <rtept lat="50.654763049" lon="12.204956766">
     <time>2008-10-18T17:42:56Z</time>
     <name>Greiz</name>
+    <desc>August-Bebel-Strasse</desc>
+    <sym>Dot</sym>
   </rtept>
   <rtept lat="50.844125748" lon="12.408757210">
     <time>2008-10-18T17:42:51Z</time>
     <name>Gosel</name>
+    <desc>Gosel</desc>
+    <sym>Dot</sym>
   </rtept>
   <rtept lat="50.877340632" lon="12.433888670">
     <time>2008-10-18T17:42:31Z</time>
     <name>3</name>
+    <desc>B93</desc>
+    <sym>Dot</sym>
   </rtept>
   <rtept lat="50.964955240" lon="12.435919438">
     <time>2008-10-18T17:42:39Z</time>
     <name>Altenburg-Umgehung</name>
+    <desc>Altenburg-Umgehung</desc>
+    <sym>Dot</sym>
   </rtept>
   <rtept lat="51.314520836" lon="12.409143448">
     <time>2008-10-18T17:42:15Z</time>
     <name>Völkerschlachtdenkmal</name>
+    <desc>P+R Am Völkerschlachtdenkmal P+R</desc>
+  <url>http://www.leipzig.de</url>
+    <sym>Flag</sym>
   </rtept>
 </rte>
 <trk>
