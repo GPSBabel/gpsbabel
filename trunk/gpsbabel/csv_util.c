@@ -1168,7 +1168,10 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
 	if (csv_route) csv_route->rte_name = csv_stringtrim(s, enclosure, 0);
     	break;
     case XT_TRACK_NAME:
-	if (csv_track) csv_track->rte_name = csv_stringtrim(s, enclosure, 0);
+	if (!csv_track) {
+		csv_track = route_head_alloc();
+        }
+	csv_track->rte_name = csv_stringtrim(s, enclosure, 0);
     	break;
 	
     /* OTHER STUFF ***************************************************/
@@ -1336,6 +1339,7 @@ xcsv_data_read(void)
 		case trkdata:
 		    if (trk == NULL) {
 			trk = route_head_alloc();
+			csv_track = trk;
 			track_add_head(trk);
 		    }
 		    track_add_wpt(trk, wpt_tmp);
@@ -1343,6 +1347,7 @@ xcsv_data_read(void)
 		case rtedata:
 		    if (rte == NULL) {
 			rte = route_head_alloc();
+			csv_route = rte;
 			route_add_head(rte);
 		    }
 		    route_add_wpt(rte, wpt_tmp);
