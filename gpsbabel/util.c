@@ -975,8 +975,15 @@ endian_read_double(void* ptr, int read_le)
 	  }
 	  p = r;
   }
-  
+
+// Word order is different on arm, but not on arm-eabi.  
+#if defined(__arm__) && !defined(__ARM_EABI__)
+  memcpy(&ret, p + 4, 4);
+  memcpy(((void *)&ret) + 4, p, 4);
+#else
   memcpy(&ret, p, 8);
+#endif
+
   return ret;
 }
 
@@ -1006,12 +1013,20 @@ endian_read_float(void* ptr, int read_le)
 void
 endian_write_double(void* ptr, double d, int write_le)
 {
-  char *r = (char *)(void *)&d;
   int i;
   char *optr = ptr;
+// Word order is different on arm, but not on arm-eabi.  
+#if defined(__arm__) && !defined(__ARM_EABI__)
+  char r[8];
+  memcpy( r + 4, &d, 4);
+  memcpy( r, ((void *)&d) + 4, 4);
+#else     
+  char *r = (char *)(void *)&d;
+#endif
+
 
   if ( i_am_little_endian == write_le ) {
-	  memcpy( ptr, &d, 8);
+	  memcpy( ptr, r, 8);
   }
   else {
 	  for (i = 0; i < 8; i++)
