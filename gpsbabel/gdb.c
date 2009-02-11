@@ -110,8 +110,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.67 $"; */
-static char gdb_release_date[] = "$Date: 2008-09-11 20:41:43 $";
+/* static char gdb_release[] = "$Revision: 1.68 $"; */
+static char gdb_release_date[] = "$Date: 2009-02-11 12:49:27 $";
 
 static gbfile *fin, *fout, *ftmp;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -441,7 +441,8 @@ static waypoint *
 read_waypoint(gt_waypt_classes_e *waypt_class_out)
 {
 	char buf[128];		/* used for temporary stuff */
-	int wpt_class, display, icon, dynamic;
+	int display, icon, dynamic;
+	gt_waypt_classes_e wpt_class;
 	int i;
 	waypoint *res;
 	garmin_fs_t *gmsd;
@@ -1249,7 +1250,7 @@ write_waypoint(
 	else /* if (gdb_ver > GDB_VER_3) */ {
 		int cnt;
 		url_link *url_next;
-		char *str;
+		const char *str;
 
 		if (wpt_class < gt_waypt_class_map_point)	/* street address */
 			str  = GMSD_GET(addr, "");
@@ -1282,7 +1283,7 @@ write_waypoint(
 
 	/* VERSION DEPENDENT CODE */
 	if (gdb_ver >= GDB_VER_3) {
-		char *str = GMSD_GET(phone_nr, "");
+		const char *str = GMSD_GET(phone_nr, "");
 		if (*str) {
 			FWRITE_i32(1);
 			FWRITE_CSTR(str);
