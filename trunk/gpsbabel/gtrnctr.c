@@ -98,14 +98,14 @@ static xg_tag_mapping gtc_map[] = {
 	/* history tcx v2 (activities) */
 	{ gtc_trk_s,    cb_start, "/Activities/Activity" },
 	{ gtc_trk_ident,cb_cdata, "/Activities/Activity/Id" },
-	{ gtc_trk_pnt_s,cb_start, "/Activities/Activity/Track/Trackpoint" },
-	{ gtc_trk_pnt_e,cb_end,   "/Activities/Activity/Track/Trackpoint" },
-	{ gtc_trk_utc,  cb_cdata, "/Activities/Activity/Track/Trackpoint/Time" },
-	{ gtc_trk_lat,  cb_cdata, "/Activities/Activity/Track/Trackpoint/Position/LatitudeDegrees" },
-	{ gtc_trk_long, cb_cdata, "/Activities/Activity/Track/Trackpoint/Position/LongitudeDegrees" },
-	{ gtc_trk_alt,  cb_cdata, "/Activities/Activity/Track/Trackpoint/AltitudeMeters" },
-	{ gtc_trk_hr,   cb_cdata, "/Activities/Activity/Track/Trackpoint/HeartRateBpm" },
-	{ gtc_trk_cad,  cb_cdata, "/Activities/Activity/Track/Trackpoint/Cadence" },
+	{ gtc_trk_pnt_s,cb_start, "/Activities/Activity/Lap/Track/Trackpoint" },
+	{ gtc_trk_pnt_e,cb_end,   "/Activities/Activity/Lap/Track/Trackpoint" },
+	{ gtc_trk_utc,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Time" },
+	{ gtc_trk_lat,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Position/LatitudeDegrees" },
+	{ gtc_trk_long, cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Position/LongitudeDegrees" },
+	{ gtc_trk_alt,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/AltitudeMeters" },
+	{ gtc_trk_hr,   cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/HeartRateBpm" },
+	{ gtc_trk_cad,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Cadence" },
 
 	/* history tcx v1 */
 	{ gtc_trk_s,    cb_start, "/History/Run" },
