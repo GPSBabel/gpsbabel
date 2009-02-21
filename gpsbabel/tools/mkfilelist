@@ -34,7 +34,7 @@ function loop()
 		echo "$LINE" |
 		(
 			read LEAD NAME READ
-			test "x$NAME" == "x" && continue
+			test "x$NAME" = "x" && continue
 			case $LEAD in
 			D)	
 				loop "$1/$NAME/" "$2"
