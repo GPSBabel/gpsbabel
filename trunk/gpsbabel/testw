@@ -58,7 +58,7 @@ function STAGE_1 () # format
     while read type caps format comment; do
     
 	for i in $EXCL; do
-	    if [ "$format" == "$i" ]; then
+	    if [ "$format" = "$i" ]; then
 		caps="------"
 	    fi
 	done
@@ -97,7 +97,7 @@ function STAGE_0 ()
     while read type caps format comment; do
     
 	for i in $EXCL; do
-		if [ "$format" == "$i" ]; then
+		if [ "$format" = "$i" ]; then
 			caps="------"
 		fi
 	done

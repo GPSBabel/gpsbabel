@@ -6,7 +6,7 @@ VERSION=$2
 RELEASE=$3	# may be empty
 
 REL=`echo $RELEASE | sed 's/^-//'`
-test "$REL" == "" && REL=0
+test "$REL" = "" && REL=0
 
 cat << EOF
 Summary:   GPSBabel
