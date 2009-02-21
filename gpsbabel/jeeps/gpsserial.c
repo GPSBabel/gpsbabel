@@ -281,7 +281,7 @@ int32 GPS_Serial_Open(gpsdevh *dh, const char *port)
     tty.c_cc[VMIN] = 1;
     tty.c_cc[VTIME] = 0;
 
-    if(tcsetattr(psd->fd,TCSANOW,&tty)==-1)
+    if(tcsetattr(psd->fd,TCSANOW|TCSAFLUSH,&tty)==-1)
     {
 	GPS_Serial_Error("SERIAL: tcsetattr error");
 	return 0;

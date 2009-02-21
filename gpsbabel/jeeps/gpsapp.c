@@ -3366,7 +3366,7 @@ static void GPS_D201_Send(UC *data, GPS_PWay way, int32 *len)
     p = data;
 
     *p++ = way->rte_num;
-    copy_char_array(&p, way->rte_cmnt, 20, 1);
+    copy_char_array(&p, way->rte_cmnt, 20, UpperYes);
     *len = 21;
 
     return;
