@@ -26,6 +26,26 @@
 	* date is formatted in DDMMYYYY instead of YYYYMMDD
 
 	Release 4.x store only numeric coordinates and uses a six-number date.
+	
+	Modified by by Andrei Boros <slackware@andrix.ro> 2008-11-07
+	* added information about database vehicle icon 
+	* Pathaway 4.x can handle invalid date/time and date format apparently 
+	has changed slightly between revisions : 
+	131502.29 26102008 = HHMMSS.MS DDMMYYYY
+	* work around errors reading date/time information 
+	(real life data collected by Pathaway sometimes has the date/time field
+	contain some missing/invalid data. This information can be safely
+	ignored most of the time. So far gpsbabel stopped processing files
+	when encountering such invalid data)
+	    - date/time field may contain one or more spaces between fields
+	    - date/time field may start with one or more spaces
+	    - date/time field may contain invalid characters -> ignore
+	    - invalid or missing date/time -> ignore
+	    - only time may be present (some older versions of Pathaway 4)
+	    	
+	(this is still incomplete, but solved most of my problems when converting
+	pathaway .pdb files)
+	
 */
 
 #include <ctype.h>
@@ -41,6 +61,8 @@
 #define PPDB_MAGIC_WPT  0x506f4c69		/* PoLi */
 #define PPDB_MAGIC	0x4b6e5772 		/* KwNr */
 
+#define VEHICLE_LEN	100
+
 static pdbfile *file_in, *file_out;
 static char *fname_out;
 static short_handle mkshort_handle;
@@ -55,7 +77,7 @@ typedef struct ppdb_appdata
 	unsigned char dirtyFlag;
 	unsigned char dataBaseSubType; 		/* 0 = Track, 1 = Route */
 	short int dbAttributes;			/* 0 */
-	char vehicleStr[100];
+	char vehicleStr[VEHICLE_LEN]; 
 	unsigned char reservedB[100];           /* all 0 */
 } ppdb_appdata_t;
 
@@ -63,6 +85,7 @@ typedef struct ppdb_appdata
 static ppdb_appdata_t *appinfo;
 
 static char *opt_dbname = NULL;
+static char *opt_dbicon = NULL; 
 static char *opt_deficon = NULL;
 static char *opt_snlen = NULL;
 static char *opt_date = NULL;
@@ -71,6 +94,7 @@ static arglist_t ppdb_args[] =
 {
 	{"date",    &opt_date, "Read/Write date format (i.e. DDMMYYYY)", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	{"dbname",  &opt_dbname, "Database name", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
+	{"dbicon",  &opt_dbicon, "Database vehicle icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX}, 
 	{"deficon", &opt_deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	{"snlen",   &opt_snlen, "Length of generated shortnames", "10", ARGTYPE_INT, "1", NULL },
 	ARG_TERMINATOR
@@ -187,7 +211,7 @@ char *str_pool_get(size_t size)
 }
 
 static
-char *str_pool_getcpy(char *src, char *def)
+char *str_pool_getcpy(const char *src, char *def)
 {
 	char *res;
 
@@ -291,7 +315,10 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 {
 	int msec, d1, d2, d3, d4;
 	int year;
+	int temp=0;
 	char *cx;
+    
+	while (*str == ' ') str++;	/* WORKAROUND may start with or contain several empty spaces, but no date or time info */ 
     
 	if (*str == '\0') return 0;	/* empty date and time */
 
@@ -301,12 +328,17 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 			&tm->tm_hour, &tm->tm_min, &tm->tm_sec, &msec), 
 			"decode_tm(1)");
 	}
-	else
+	else if (sscanf(str,"%06d",&temp)==1)
+					/* WORKAROUND read time info only if a valid 6 digit string found */
 	{
 		CHECK_INP(3, sscanf(str, "%02d%02d%02d",
 			&tm->tm_hour, &tm->tm_min, &tm->tm_sec), 
 			"decode_tm(2)");
 	}
+	else
+	{
+		return 0;		/* WORKAROUND maybe invalid time, just ignore it and continue */
+	} 
 	cx = strchr(str, ' ');
 	if (cx == NULL) return 0;	/* no date */
 	
@@ -380,17 +412,18 @@ int ppdb_read_wpt(route_head *head, int isRoute)
 		int line = 0;
 		char *tmp = data;
 
-		while ((str = csv_lineparse(tmp, ",", """", line++))) {
+// 		while ((str = csv_lineparse(tmp, ",", """", line++))) {
+		while ((str = csv_lineparse(tmp, ",", "\"", line++))) { 
 		    tmp = NULL;
 		    switch(line)
 		    {
-			case 1:
+			case 1:		/* latitude */
 			    wpt_tmp->latitude = ppdb_decode_coord(str);
 			    break;
-			case 2:
+			case 2:		/* longitude */
 			    wpt_tmp->longitude = ppdb_decode_coord(str);
 			    break;
-			case 3:
+			case 3:		/* altitude */
 			    if (*str != '\0')
 			    {
 				CHECK_INP(1, sscanf(str, "%lf", &altfeet), "altitude");
@@ -398,7 +431,7 @@ int ppdb_read_wpt(route_head *head, int isRoute)
 				    wpt_tmp->altitude = FEET_TO_METERS(altfeet);
 			    }
 			    break;
-			case 4:
+			case 4:		/* time and date (optional) */ 
 			    memset(&tm, 0, sizeof(tm));
 			    if (ppdb_decode_tm(str, &tm))
 			    {
@@ -407,13 +440,15 @@ int ppdb_read_wpt(route_head *head, int isRoute)
 				wpt_tmp->creation_time = mkgmtime(&tm);
 			    }
 			    break;
-			case 5:
+			case 5:		/* name */
 			    if (*str != '\0')
 				wpt_tmp->shortname = xstrdup(str);
 			    break;
-			case 6:		/* icon, ignore */
+			case 6:		/* icon */
+			    if (*str != '\0')
+				wpt_tmp->icon_descr = xstrdup(str); 
 			    break;
-			case 7:
+			case 7:		/* notes */
 			    if (*str != '\0')
 				wpt_tmp->notes = xstrdup(str);
 			    break;
@@ -589,6 +624,8 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	    longdir = 'W';
 	else
 	    longdir = 'E';
+				/* 1 latitude, 
+				   2 longitude */ 
 
 	snprintf(buff, REC_SIZE, "%s,%s,", 
 	    ppdb_fmt_degrees(latdir, wpt->latitude),
@@ -596,6 +633,7 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	);
 	
 	len = REC_SIZE;		/* we have coordinates in buff, now optional stuff */
+				/* 3 altitude */ 	
 	
 	if (fabs(wpt->altitude) < 9999.0)	
 	{
@@ -604,6 +642,8 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	    buff = ppdb_strcat(buff, tmp, NULL, &len);
 	}
 	buff = ppdb_strcat(buff, ",", NULL, &len);
+				/* 4 time, date */ 
+				
 	if ( wpt->creation_time != 0)
 	{
 	    tmp = str_pool_get(20);
@@ -612,6 +652,7 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	    buff = ppdb_strcat(buff, tmp, NULL, &len);
 	}
 	buff = ppdb_strcat(buff, ",", NULL, &len);
+				/* 5 name */ 	
 	
 	if (global_opts.synthesize_shortnames != 0)
 	{
@@ -627,8 +668,13 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	buff = ppdb_strcat(buff, tmp, "", &len);
 	
 	buff = ppdb_strcat(buff, ",", NULL, &len);
-	buff = ppdb_strcat(buff, opt_deficon, "0", &len);
+				/* 6 icon */
+	
+	tmp = str_pool_getcpy(wpt->icon_descr, opt_deficon);	/* point icon or deficon from options */
+	buff = ppdb_strcat(buff, tmp, "0", &len);
+	/* buff = ppdb_strcat(buff, opt_deficon, "0", &len);*/
 	buff = ppdb_strcat(buff, ",", NULL, &len);
+				/* 7 description */ 
 
 	tmp = str_pool_getcpy(wpt->description, "");
 	if (strchr(tmp, ',') != NULL )
@@ -663,12 +709,15 @@ static void ppdb_write(void)
 	file_out->creator = PPDB_MAGIC;
 	file_out->version = 3;
 	
-	if (global_opts.objective != wptdata)	/* Waypoint target do not need appinfo block */
-	{
+/*	Waypoint target does use vehicleStr from appinfo block 
+	Actually, all 3 types have vehicle information. 
+	if (global_opts.objective != wptdata)	/ * Waypoint target do not need appinfo block * /
+	{   */
 	    appinfo = xcalloc(1, sizeof(*appinfo));
 	    file_out->appinfo = (void *)appinfo;
 	    file_out->appinfo_len = PPDB_APPINFO_SIZE;
-	}
+/*	}   */
+	if (opt_dbicon != NULL) strncpy(appinfo->vehicleStr, opt_dbicon, VEHICLE_LEN);
 	
 	switch(global_opts.objective)		/* Only one target is possible */
 	{
