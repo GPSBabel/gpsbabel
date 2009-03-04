@@ -926,6 +926,7 @@ exif_put_coord(const int ifd_nr, const int tag_id, const double val)
 	vint = abs((int) val);
 	vmin = 60.0 * (fabs(val) - vint);
 	vsec = 60.0 * (vmin - floor(vmin));
+	vmin = floor(vmin);
 
 	exif_put_double(ifd_nr, tag_id, 0, (double)vint);
 	exif_put_double(ifd_nr, tag_id, 1, (double)vmin);
