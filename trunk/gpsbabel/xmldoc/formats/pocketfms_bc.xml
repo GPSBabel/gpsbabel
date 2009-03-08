@@ -1,0 +1,6 @@
+<para>
+   This format provides support for binary breadcrumb files from <ulink url="www.pocketfms.com">PocketFMS</ulink>. The default filename is GPS followed by the timestamp with no file extension. 
+</para>
+<para>
+   PocketFMS breadcrumbs files contain track information. That is latitude, longitude, altitude, speed, course, variation, separation, GPS error, fix type and timestamp. With exception of separation all info get processed by GPSBabel in both in and out direction.
+</para>
