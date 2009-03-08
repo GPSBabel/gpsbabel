@@ -1532,8 +1532,12 @@ compare ${REFERENCE}/itracku.unicsv ${TMPDIR}/itracku.unicsv
 rm -f ${TMPDIR}/history~tcx.csv ${TMPDIR}/course~tcx.csv
 gpsbabel -i gtrnctr -f ${REFERENCE}/track/history.tcx -t -o unicsv,utc=0 -F ${TMPDIR}/history~tcx.csv
 compare ${REFERENCE}/track/history~tcx.csv ${TMPDIR}/history~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/history.tcx -t -o gpx -F ${TMPDIR}/history~tcx.gpx
+compare ${REFERENCE}/track/history~tcx.gpx ${TMPDIR}/history~tcx.gpx
 gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o unicsv,utc=0 -F ${TMPDIR}/course~tcx.csv
 compare ${REFERENCE}/track/course~tcx.csv ${TMPDIR}/course~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o gpx -F ${TMPDIR}/course~tcx.gpx
+compare ${REFERENCE}/track/course~tcx.gpx ${TMPDIR}/course~tcx.gpx
 # writing
 rm -f ${TMPDIR}tcxtest~gpx-course.tcx ${TMPDIR}tcxtest~gpx-history.tcx
 gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=1 -F ${TMPDIR}/tcxtest~gpx-course.tcx
