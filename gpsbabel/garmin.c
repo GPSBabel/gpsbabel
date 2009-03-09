@@ -848,7 +848,9 @@ waypoint_write(void)
 		way[i]->ident[sizeof(way[i]->ident)-1] = 0;
 
 		// If we were explictly given a comment from GPX, use that. 
-		if (wpt->description) {
+		//  This logic really is horrible and needs to be untangled.
+		if (wpt->description && 
+		    global_opts.smart_names && !wpt->gc_data->diff) {
 			memcpy(way[i]->cmnt, wpt->description, strlen(wpt->description));
 		} else {
 			if (global_opts.smart_names && 
