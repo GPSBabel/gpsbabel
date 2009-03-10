@@ -23,7 +23,7 @@
 #include "xmlgeneric.h"
 
 static int isFirst = 1;
-static route_head *route;
+static route_head *route = NULL;
 static waypoint *wpt_to, *wpt_from;
 
 #define MYNAME "PocketFMS FlightPlan"
@@ -59,6 +59,16 @@ data_read(void)
 static void
 rd_deinit(void)
 {
+	if (route != NULL)
+	{
+		waypoint *head = (waypoint *) QUEUE_FIRST(&route->waypoint_list);
+		waypoint *tail = (waypoint *) QUEUE_LAST(&route->waypoint_list);
+		if (head != NULL)
+			route->rte_name = xstrdup (head->shortname);
+		route->rte_name = xstrappend(route->rte_name, " - ");
+		if (tail != NULL)
+			route->rte_name = xstrappend(route->rte_name, tail->shortname);
+	}
 	xml_deinit();
 }
 
@@ -73,7 +83,7 @@ void	wpt_s(const char *args, const char **unused)
 	if (isFirst == 1) {
 		wpt_from = waypt_new();
 		route = route_head_alloc();
-		route->rte_name=xstrdup("PocketFMS flightplan");
+		route->rte_desc=xstrdup("PocketFMS flightplan");
 		route_add_head(route); 
 	}
 	wpt_to = waypt_new();

@@ -1571,5 +1571,19 @@ gpsbabel -i skyforce \
 	-f ${REFERENCE}/track/skyforce_trk.txt -o gpx -F ${TMPDIR}/skyforce.gpx
 compare ${REFERENCE}/skyforce.gpx ${TMPDIR}/skyforce.gpx
 
+#
+# PocketFMS breadcrumb files
+#${TMPDIR}
+gpsbabel -i pocketfms_bc -f ${REFERENCE}/pocketfms_bc -o gpx -F ${TMPDIR}/pocketfms_bc.gpx
+compare ${REFERENCE}/pocketfms_bc.gpx ${TMPDIR}/pocketfms_bc.gpx
+gpsbabel -i gpx -f ${REFERENCE}/pocketfms_bc.gpx -o pocketfms_bc -F ${TMPDIR}/pocketfms_bc
+bincompare ${REFERENCE}/pocketfms_bc.babel ${TMPDIR}/pocketfms_bc
+
+#
+# PocketFMS flightplan files (.xml)
+#
+gpsbabel -i pocketfms_fp -f ${REFERENCE}/pocketfms_fp.xml -o gpx -F ${TMPDIR}/pocketfms_fp.gpx
+compare ${REFERENCE}/pocketfms_fp.gpx ${TMPDIR}/pocketfms_fp.gpx
+
 
 exit 0

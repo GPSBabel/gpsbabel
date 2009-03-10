@@ -61,7 +61,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
 	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o \
 	igo8.o gopal.o humminbird.o mapasia.o gnav_trl.o navitel.o ggv_ovl.o \
-	jtr.o sbp.o sbn.o mmo.o skyforce.o itracku.o
+	jtr.o sbp.o sbn.o mmo.o skyforce.o itracku.o pocketfms_bc.o pocketfms_fp.o
 
 FMTS=@FMTS@
 
@@ -760,6 +760,8 @@ shape.o: shape.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   shapelib/shapefil.h
 skyforce.o: skyforce.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h strptime.h
+pocketfms_bc.o: pocketfms_bc.c defs.h gbtypes.h 
+pocketfms_fp.o: pocketfms_fp.c defs.h gbtypes.h 
 smplrout.o: smplrout.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h filterdefs.h \
   grtcirc.h
