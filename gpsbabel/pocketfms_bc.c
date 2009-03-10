@@ -134,28 +134,33 @@ pocketfms_waypt_disp(const waypoint *wpt)
 	tm = localtime(&wpt->creation_time);
 	if (wpt->creation_time) {
 		tm = gmtime(&wpt->creation_time);
-		//tm = localtime(&wpt->creation_time);
 	}
 
 	strcpy (bc.id, header_id);
-	bc.version = 1;
-	bc.latitude = wpt->latitude;
-	bc.longitude = wpt->longitude;
-	bc.altitude = METERS_TO_FEET(wpt->altitude);
-	bc.year = tm->tm_year + 1900;
-	bc.month = tm->tm_mon + 1;
-	bc.day = tm->tm_mday;
-	bc.hour = tm->tm_hour;
-	bc.minute = tm->tm_min;
-	bc.second = tm->tm_sec;
-	bc.ehpe = wpt->hdop;
-	bc.evpe = wpt->vdop;
-	bc.espe = wpt->pdop;
-	bc.course = wpt->course;
-	bc.speed = wpt->speed;
-	bc.fix = wpt->fix+1;
+	le_write16(&bc.version, 1);
+	le_write_float(&bc.latitude, wpt->latitude);
+	le_write_float(&bc.longitude, wpt->longitude);
+	le_write_float(&bc.altitude, METERS_TO_FEET(wpt->altitude));
+	le_write16(&bc.year, tm->tm_year + 1900);
+	le_write16(&bc.month, tm->tm_mon + 1);
+	le_write16(&bc.day, tm->tm_mday);
+	le_write16(&bc.hour, tm->tm_hour);
+	le_write16(&bc.minute, tm->tm_min);
+	le_write16(&bc.second, tm->tm_sec);
+	le_write_float(&bc.ehpe, wpt->hdop);
+	le_write_float(&bc.evpe, wpt->vdop);
+	le_write_float(&bc.espe, wpt->pdop);
+	le_write_float(&bc.course, wpt->course);
+	le_write_float(&bc.speed, wpt->speed);
+	le_write16(&bc.fix, wpt->fix+1);
 
 	gbfwrite(&bc, sizeof (bc), 1, file_out);
+}
+
+static void
+data_read(void)
+{
+	read_tracks();
 }
 
 static void
@@ -175,7 +180,7 @@ ff_vecs_t pocketfms_bc_vecs = {
 	wr_init,
 	rd_deinit,
 	wr_deinit,
-	NULL,
+	data_read,
 	data_write,
 	NULL,
 	NULL,

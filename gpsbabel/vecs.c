@@ -156,6 +156,8 @@ extern ff_vecs_t sbp_vecs;
 extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t skyforce_vecs;
+extern ff_vecs_t pocketfms_bc_vecs;
+extern ff_vecs_t pocketfms_fp_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -896,6 +898,18 @@ vecs_t vec_list[] = {
         	&skyforce_vecs,
         	"skyforce",
         	"Skymap / KMD150 ascii files",
+        	NULL
+        },
+        {
+        	&pocketfms_bc_vecs,
+        	"pocketfms_bc",
+        	"PocketFMS breadcrumbs",
+        	NULL
+        },
+        {
+        	&pocketfms_fp_vecs,
+        	"pocketfms_fp",
+        	"PocketFMS flightplan",
         	NULL
         },
         

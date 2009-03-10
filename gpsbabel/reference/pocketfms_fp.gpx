@@ -5,7 +5,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://www.topografix.com/GPX/1/0"
   xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>2009-03-03T10:09:38Z</time>
+<time>1970-01-01T00:00:00Z</time>
 <bounds minlat="51.158882000" minlon="14.902600000" maxlat="51.363167000" maxlon="14.952033000"/>
 <wpt lat="51.158882000" lon="14.950277000">
   <name>EDBX</name>
@@ -28,7 +28,8 @@
   <desc>EDBR</desc>
 </wpt>
 <rte>
-  <name>PocketFMS flightplan</name>
+  <name>EDBX - EDBR</name>
+  <desc>PocketFMS flightplan</desc>
   <rtept lat="51.158882000" lon="14.950277000">
     <name>EDBX</name>
   </rtept>

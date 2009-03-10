@@ -5,11 +5,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://www.topografix.com/GPX/1/0"
   xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>2009-03-03T09:17:42Z</time>
+<time>1970-01-01T00:00:00Z</time>
 <bounds minlat="51.157424927" minlon="14.946011543" maxlat="51.170711517" maxlon="14.964761734"/>
 <trk>
-  <name>PocketFMS flight #1</name>
-  <desc>PocketFMS breadcrumb</desc>
+  <name>PocketFMS</name>
+  <desc>Breadcrumb</desc>
 <number>1</number>
 <trkseg>
 <trkpt lat="51.160198212" lon="14.946299553">
