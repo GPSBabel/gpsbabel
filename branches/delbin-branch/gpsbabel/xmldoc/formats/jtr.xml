@@ -1,0 +1,28 @@
+<para>
+   From the <ulink url="http://www.geotagger.co.uk/files/JTR_Format.pdf">file format description</ulink>:
+</para>
+<para>
+   The JTR file format is used by the Jelbert GeoTagger device to record
+   location information relating to where photographs have been taken.
+   One record entry is created for each press of the shutter on the
+   camera.
+</para>
+<para>
+   The JTR file format will be updated in the future so it is important to
+   check for the current version ID within the file that is present at the
+   beginning of each line of data. It is currently “GEOTAG2”
+</para>
+<para>
+   Each line of the JTR file currently starts with the word “GEOTAG2”
+   followed by a comma and then two NMEA sentences separated by a
+   comma character with a CR at the end. The $GPRMC (date, time and
+   position) data is followed by the $HCHDG (magnetic compass) data.
+</para>
+<para>
+   Although the $GPRMC data segment contains a compass bearing, this
+   should be ignored unless the $HCHDG compass direction is null which
+   can happen if the electronic compass is switched off. Use the magnetic
+   compass bearing in preference to the GPS derived compass.
+   The two NMEA checksums can be ignored for the time being.
+</para>
+

@@ -1,0 +1,13 @@
+<para>
+This option selects the destination type of this filter to be tracks.  
+Choose this when you want to create tracks from a list of waypoints or routes. 
+A single track will be created in the sequence they appear in the input.
+</para>
+<example id="transform_to_trk">
+<title>Converting a pile of waypoints to a GPX track</title>
+<para>
+Say you you have a data file that came from CSV file that you want to convert  
+to a GPX track that can be loaded into Mapsource.  Use the following command:
+</para>
+<para><userinput>gpsbabel -i csv -f blah.txt -x transform,trk=wpt -o gdb -F blah.gdb</userinput></para>
+</example>

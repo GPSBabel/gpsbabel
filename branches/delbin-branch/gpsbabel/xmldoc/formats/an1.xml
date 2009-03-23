@@ -1,0 +1,15 @@
+<para> 
+This format supports the <ulink url="http://www.delorme.com">DeLorme</ulink> ".an1" drawing file format.  It can 
+currently be used to either read or write drawing files.  If you use 
+this format to create drawing files with routes or waypoints from another 
+source, by default it will create "Red Flag" symbols for waypoints, and 
+thick red lines for routes or tracks.  It is possible to merge two drawing 
+layers by doing something like this:
+</para>
+
+<para><userinput>gpsbabel -i an1 -f one.an1 -f two.an1 -o an1 -F merged.an1</userinput></para>
+
+<para> 
+In this case, the merged data will contain all of the
+properties of the original data.
+</para>

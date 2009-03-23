@@ -1,0 +1,905 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="30.045500000" minlon="-91.610500000" maxlat="42.468666667" maxlon="-71.103000000"/>
+<wpt lat="42.438833333" lon="-71.119333333">
+  <name>5066</name>
+  <cmt>5066</cmt>
+  <desc>5066</desc>
+</wpt>
+<wpt lat="42.439166667" lon="-71.119666667">
+  <name>5067</name>
+  <cmt>5067</cmt>
+  <desc>5067</desc>
+</wpt>
+<wpt lat="42.439000000" lon="-71.116166667">
+  <name>5096</name>
+  <cmt>5096</cmt>
+  <desc>5096</desc>
+</wpt>
+<wpt lat="42.443833333" lon="-71.122000000">
+  <name>5142</name>
+  <cmt>5142</cmt>
+  <desc>5142</desc>
+</wpt>
+<wpt lat="42.447333333" lon="-71.121500000">
+  <name>5156</name>
+  <cmt>5156</cmt>
+  <desc>5156</desc>
+</wpt>
+<wpt lat="42.454833333" lon="-71.125166667">
+  <name>5224</name>
+  <cmt>5224</cmt>
+  <desc>5224</desc>
+</wpt>
+<wpt lat="42.459000000" lon="-71.125000000">
+  <name>5229</name>
+  <cmt>5229</cmt>
+  <desc>5229</desc>
+</wpt>
+<wpt lat="42.457000000" lon="-71.124500000">
+  <name>5237</name>
+  <cmt>5237</cmt>
+  <desc>5237</desc>
+</wpt>
+<wpt lat="42.454333333" lon="-71.121000000">
+  <name>5254</name>
+  <cmt>5254</cmt>
+  <desc>5254</desc>
+</wpt>
+<wpt lat="42.451500000" lon="-71.121666667">
+  <name>5258</name>
+  <cmt>5258</cmt>
+  <desc>5258</desc>
+</wpt>
+<wpt lat="42.454333333" lon="-71.120666667">
+  <name>5264</name>
+  <cmt>5264</cmt>
+  <desc>5264</desc>
+</wpt>
+<wpt lat="42.457833333" lon="-71.121000000">
+  <name>526708</name>
+  <cmt>526708</cmt>
+  <desc>526708</desc>
+</wpt>
+<wpt lat="42.457166667" lon="-71.120333333">
+  <name>526750</name>
+  <cmt>526750</cmt>
+  <desc>526750</desc>
+</wpt>
+<wpt lat="42.456666667" lon="-71.119666667">
+  <name>527614</name>
+  <cmt>527614</cmt>
+  <desc>527614</desc>
+</wpt>
+<wpt lat="42.456333333" lon="-71.119333333">
+  <name>527631</name>
+  <cmt>527631</cmt>
+  <desc>527631</desc>
+</wpt>
+<wpt lat="42.458166667" lon="-71.119166667">
+  <name>5278</name>
+  <cmt>5278</cmt>
+  <desc>5278</desc>
+</wpt>
+<wpt lat="42.459333333" lon="-71.117666667">
+  <name>5289</name>
+  <cmt>5289</cmt>
+  <desc>5289</desc>
+</wpt>
+<wpt lat="42.464166667" lon="-71.119833333">
+  <name>5374FIRE</name>
+  <cmt>5374FIRE</cmt>
+  <desc>5374FIRE</desc>
+</wpt>
+<wpt lat="42.465666667" lon="-71.119333333">
+  <name>5376</name>
+  <cmt>5376</cmt>
+  <desc>5376</desc>
+</wpt>
+<wpt lat="42.439000000" lon="-71.114500000">
+  <name>6006</name>
+  <cmt>6006</cmt>
+  <desc>6006</desc>
+</wpt>
+<wpt lat="42.438666667" lon="-71.114833333">
+  <name>6006BLUE</name>
+  <cmt>6006BLUE</cmt>
+  <desc>6006BLUE</desc>
+</wpt>
+<wpt lat="42.436833333" lon="-71.113166667">
+  <name>6014MEADW</name>
+  <cmt>6014MEADW</cmt>
+  <desc>6014MEADW</desc>
+</wpt>
+<wpt lat="42.441833333" lon="-71.113166667">
+  <name>6029</name>
+  <cmt>6029</cmt>
+  <desc>6029</desc>
+</wpt>
+<wpt lat="42.436166667" lon="-71.109000000">
+  <name>6053</name>
+  <cmt>6053</cmt>
+  <desc>6053</desc>
+</wpt>
+<wpt lat="42.439333333" lon="-71.107500000">
+  <name>6066</name>
+  <cmt>6066</cmt>
+  <desc>6066</desc>
+</wpt>
+<wpt lat="42.439833333" lon="-71.107500000">
+  <name>6067</name>
+  <cmt>6067</cmt>
+  <desc>6067</desc>
+</wpt>
+<wpt lat="42.434833333" lon="-71.105833333">
+  <name>6071</name>
+  <cmt>6071</cmt>
+  <desc>6071</desc>
+</wpt>
+<wpt lat="42.433333333" lon="-71.106666667">
+  <name>6073</name>
+  <cmt>6073</cmt>
+  <desc>6073</desc>
+</wpt>
+<wpt lat="42.437333333" lon="-71.104833333">
+  <name>6084</name>
+  <cmt>6084</cmt>
+  <desc>6084</desc>
+</wpt>
+<wpt lat="42.442166667" lon="-71.111000000">
+  <name>6130</name>
+  <cmt>6130</cmt>
+  <desc>6130</desc>
+</wpt>
+<wpt lat="42.443000000" lon="-71.111500000">
+  <name>6131</name>
+  <cmt>6131</cmt>
+  <desc>6131</desc>
+</wpt>
+<wpt lat="42.444833333" lon="-71.108833333">
+  <name>6153</name>
+  <cmt>6153</cmt>
+  <desc>6153</desc>
+</wpt>
+<wpt lat="42.443666667" lon="-71.106333333">
+  <name>6171</name>
+  <cmt>6171</cmt>
+  <desc>6171</desc>
+</wpt>
+<wpt lat="42.447833333" lon="-71.106666667">
+  <name>6176</name>
+  <cmt>6176</cmt>
+  <desc>6176</desc>
+</wpt>
+<wpt lat="42.448500000" lon="-71.106166667">
+  <name>6177</name>
+  <cmt>6177</cmt>
+  <desc>6177</desc>
+</wpt>
+<wpt lat="42.453333333" lon="-71.106833333">
+  <name>6272</name>
+  <cmt>6272</cmt>
+  <desc>6272</desc>
+</wpt>
+<wpt lat="42.453500000" lon="-71.107333333">
+  <name>6272.1</name>
+  <cmt>6272.1</cmt>
+  <desc>6272.1</desc>
+</wpt>
+<wpt lat="42.458333333" lon="-71.106833333">
+  <name>6278</name>
+  <cmt>6278</cmt>
+  <desc>6278</desc>
+</wpt>
+<wpt lat="42.451500000" lon="-71.105333333">
+  <name>6280</name>
+  <cmt>6280</cmt>
+  <desc>6280</desc>
+</wpt>
+<wpt lat="42.453833333" lon="-71.105166667">
+  <name>6283</name>
+  <cmt>6283</cmt>
+  <desc>6283</desc>
+</wpt>
+<wpt lat="42.460000000" lon="-71.106166667">
+  <name>6289</name>
+  <cmt>6289</cmt>
+  <desc>6289</desc>
+</wpt>
+<wpt lat="42.457666667" lon="-71.105166667">
+  <name>6297</name>
+  <cmt>6297</cmt>
+  <desc>6297</desc>
+</wpt>
+<wpt lat="42.467166667" lon="-71.113500000">
+  <name>6328</name>
+  <cmt>6328</cmt>
+  <desc>6328</desc>
+</wpt>
+<wpt lat="42.464166667" lon="-71.109833333">
+  <name>6354</name>
+  <cmt>6354</cmt>
+  <desc>6354</desc>
+</wpt>
+<wpt lat="42.466500000" lon="-71.110000000">
+  <name>635722</name>
+  <cmt>635722</cmt>
+  <desc>635722</desc>
+</wpt>
+<wpt lat="42.466500000" lon="-71.109333333">
+  <name>635783</name>
+  <cmt>635783</cmt>
+  <desc>635783</desc>
+</wpt>
+<wpt lat="42.463500000" lon="-71.107166667">
+  <name>6373</name>
+  <cmt>6373</cmt>
+  <desc>6373</desc>
+</wpt>
+<wpt lat="42.401000000" lon="-71.110166667">
+  <name>6634</name>
+  <cmt>6634</cmt>
+  <desc>6634</desc>
+</wpt>
+<wpt lat="42.432666667" lon="-71.106500000">
+  <name>6979</name>
+  <cmt>6979</cmt>
+  <desc>6979</desc>
+</wpt>
+<wpt lat="42.431000000" lon="-71.107833333">
+  <name>6997</name>
+  <cmt>6997</cmt>
+  <desc>6997</desc>
+</wpt>
+<wpt lat="42.465666667" lon="-71.107333333">
+  <name>BEARHILL</name>
+  <cmt>BEARHILL</cmt>
+  <desc>BEARHILL</desc>
+</wpt>
+<wpt lat="42.431000000" lon="-71.107666667">
+  <name>BELLEVUE</name>
+  <cmt>BELLEVUE</cmt>
+  <desc>BELLEVUE</desc>
+</wpt>
+<wpt lat="42.438666667" lon="-71.114000000">
+  <name>6016</name>
+  <cmt>6016</cmt>
+  <desc>6016</desc>
+</wpt>
+<wpt lat="42.456500000" lon="-71.124666667">
+  <name>5236BRIDG</name>
+  <cmt>5236BRIDG</cmt>
+  <desc>5236BRIDG</desc>
+</wpt>
+<wpt lat="42.465833333" lon="-71.119833333">
+  <name>5376BRIDG</name>
+  <cmt>5376BRIDG</cmt>
+  <desc>5376BRIDG</desc>
+</wpt>
+<wpt lat="42.443000000" lon="-71.105833333">
+  <name>6181CROSS</name>
+  <cmt>6181CROSS</cmt>
+  <desc>6181CROSS</desc>
+</wpt>
+<wpt lat="42.435500000" lon="-71.109666667">
+  <name>6042CROSS</name>
+  <cmt>6042CROSS</cmt>
+  <desc>6042CROSS</desc>
+</wpt>
+<wpt lat="42.458500000" lon="-71.103666667">
+  <name>DARKHOLLP</name>
+  <cmt>DARKHOLLP</cmt>
+  <desc>DARKHOLLP</desc>
+</wpt>
+<wpt lat="42.443166667" lon="-71.112666667">
+  <name>6121DEAD</name>
+  <cmt>6121DEAD</cmt>
+  <desc>6121DEAD</desc>
+</wpt>
+<wpt lat="42.449833333" lon="-71.119333333">
+  <name>5179DEAD</name>
+  <cmt>5179DEAD</cmt>
+  <desc>5179DEAD</desc>
+</wpt>
+<wpt lat="42.459666667" lon="-71.116500000">
+  <name>5299DEAD</name>
+  <cmt>5299DEAD</cmt>
+  <desc>5299DEAD</desc>
+</wpt>
+<wpt lat="42.465500000" lon="-71.119166667">
+  <name>5376DEAD</name>
+  <cmt>5376DEAD</cmt>
+  <desc>5376DEAD</desc>
+</wpt>
+<wpt lat="42.462833333" lon="-71.110000000">
+  <name>6353DEAD</name>
+  <cmt>6353DEAD</cmt>
+  <desc>6353DEAD</desc>
+</wpt>
+<wpt lat="42.446833333" lon="-71.108833333">
+  <name>6155DEAD</name>
+  <cmt>6155DEAD</cmt>
+  <desc>6155DEAD</desc>
+</wpt>
+<wpt lat="42.451166667" lon="-71.126666667">
+  <name>GATE14</name>
+  <cmt>GATE14</cmt>
+  <desc>GATE14</desc>
+</wpt>
+<wpt lat="42.458500000" lon="-71.122000000">
+  <name>GATE16</name>
+  <cmt>GATE16</cmt>
+  <desc>GATE16</desc>
+</wpt>
+<wpt lat="42.459333333" lon="-71.119166667">
+  <name>GATE17</name>
+  <cmt>GATE17</cmt>
+  <desc>GATE17</desc>
+</wpt>
+<wpt lat="42.466333333" lon="-71.119166667">
+  <name>GATE19</name>
+  <cmt>GATE19</cmt>
+  <desc>GATE19</desc>
+</wpt>
+<wpt lat="42.468666667" lon="-71.107666667">
+  <name>GATE21</name>
+  <cmt>GATE21</cmt>
+  <desc>GATE21</desc>
+</wpt>
+<wpt lat="42.456666667" lon="-71.103000000">
+  <name>GATE24</name>
+  <cmt>GATE24</cmt>
+  <desc>GATE24</desc>
+</wpt>
+<wpt lat="42.430833333" lon="-71.107666667">
+  <name>GATE5</name>
+  <cmt>GATE5</cmt>
+  <desc>GATE5</desc>
+</wpt>
+<wpt lat="42.431166667" lon="-71.109166667">
+  <name>GATE6</name>
+  <cmt>GATE6</cmt>
+  <desc>GATE6</desc>
+</wpt>
+<wpt lat="42.439500000" lon="-71.106500000">
+  <name>6077LOGS</name>
+  <cmt>6077LOGS</cmt>
+  <desc>6077LOGS</desc>
+</wpt>
+<wpt lat="42.449833333" lon="-71.122333333">
+  <name>5148NANEP</name>
+  <cmt>5148NANEP</cmt>
+  <desc>5148NANEP</desc>
+</wpt>
+<wpt lat="42.457333333" lon="-71.119833333">
+  <name>5267OBSTC</name>
+  <cmt>5267OBSTC</cmt>
+  <desc>5267OBSTC</desc>
+</wpt>
+<wpt lat="42.435000000" lon="-71.110000000">
+  <name>PANTHRCAV</name>
+  <cmt>PANTHRCAV</cmt>
+  <desc>PANTHRCAV</desc>
+</wpt>
+<wpt lat="42.453333333" lon="-71.121166667">
+  <name>5252PURPL</name>
+  <cmt>5252PURPL</cmt>
+  <desc>5252PURPL</desc>
+</wpt>
+<wpt lat="42.457666667" lon="-71.117500000">
+  <name>5287WATER</name>
+  <cmt>5287WATER</cmt>
+  <desc>5287WATER</desc>
+</wpt>
+<wpt lat="42.459333333" lon="-71.124500000">
+  <name>5239ROAD</name>
+  <cmt>5239ROAD</cmt>
+  <desc>5239ROAD</desc>
+</wpt>
+<wpt lat="42.458833333" lon="-71.119000000">
+  <name>5278ROAD</name>
+  <cmt>5278ROAD</cmt>
+  <desc>5278ROAD</desc>
+</wpt>
+<wpt lat="42.440000000" lon="-71.121000000">
+  <name>5058ROAD</name>
+  <cmt>5058ROAD</cmt>
+  <desc>5058ROAD</desc>
+</wpt>
+<wpt lat="42.453333333" lon="-71.106833333">
+  <name>SHEEPFOLD</name>
+  <cmt>SHEEPFOLD</cmt>
+  <desc>SHEEPFOLD</desc>
+</wpt>
+<wpt lat="42.456000000" lon="-71.107500000">
+  <name>SOAPBOX</name>
+  <cmt>SOAPBOX</cmt>
+  <desc>SOAPBOX</desc>
+</wpt>
+<wpt lat="42.465833333" lon="-71.119333333">
+  <name>5376STREM</name>
+  <cmt>5376STREM</cmt>
+  <desc>5376STREM</desc>
+</wpt>
+<wpt lat="42.445333333" lon="-71.122833333">
+  <name>5144SUMMT</name>
+  <cmt>5144SUMMT</cmt>
+  <desc>5144SUMMT</desc>
+</wpt>
+<wpt lat="42.441666667" lon="-71.121666667">
+  <name>5150TANK</name>
+  <cmt>5150TANK</cmt>
+  <desc>5150TANK</desc>
+</wpt>
+<rte>
+  <number>1</number>
+  <rtept lat="42.431000000" lon="-71.107666667">
+    <name>BELLEVUE</name>
+  </rtept>
+  <rtept lat="42.431166667" lon="-71.109166667">
+    <name>GATE6</name>
+  </rtept>
+  <rtept lat="42.435000000" lon="-71.110000000">
+    <name>PANTHRCAV</name>
+  </rtept>
+  <rtept lat="42.436833333" lon="-71.113166667">
+    <name>6014MEADW</name>
+  </rtept>
+  <rtept lat="42.439000000" lon="-71.114500000">
+    <name>6006</name>
+  </rtept>
+  <rtept lat="42.438666667" lon="-71.114833333">
+    <name>6006BLUE</name>
+  </rtept>
+  <rtept lat="42.439000000" lon="-71.116166667">
+    <name>5096</name>
+  </rtept>
+  <rtept lat="42.438833333" lon="-71.119333333">
+    <name>5066</name>
+  </rtept>
+  <rtept lat="42.439166667" lon="-71.119666667">
+    <name>5067</name>
+  </rtept>
+  <rtept lat="42.440000000" lon="-71.121000000">
+    <name>5058ROAD</name>
+  </rtept>
+  <rtept lat="42.441666667" lon="-71.121666667">
+    <name>5150TANK</name>
+  </rtept>
+  <rtept lat="42.443833333" lon="-71.122000000">
+    <name>5142</name>
+  </rtept>
+  <rtept lat="42.445333333" lon="-71.122833333">
+    <name>5144SUMMT</name>
+  </rtept>
+  <rtept lat="42.447333333" lon="-71.121500000">
+    <name>5156</name>
+  </rtept>
+  <rtept lat="42.449833333" lon="-71.122333333">
+    <name>5148NANEP</name>
+  </rtept>
+  <rtept lat="42.451500000" lon="-71.121666667">
+    <name>5258</name>
+  </rtept>
+  <rtept lat="42.453333333" lon="-71.121166667">
+    <name>5252PURPL</name>
+  </rtept>
+  <rtept lat="42.456333333" lon="-71.119333333">
+    <name>527631</name>
+  </rtept>
+  <rtept lat="42.456666667" lon="-71.119666667">
+    <name>527614</name>
+  </rtept>
+  <rtept lat="42.457333333" lon="-71.119833333">
+    <name>5267OBSTC</name>
+  </rtept>
+  <rtept lat="42.458166667" lon="-71.119166667">
+    <name>5278</name>
+  </rtept>
+  <rtept lat="42.459333333" lon="-71.117666667">
+    <name>5289</name>
+  </rtept>
+  <rtept lat="42.464166667" lon="-71.119833333">
+    <name>5374FIRE</name>
+  </rtept>
+  <rtept lat="42.465666667" lon="-71.119333333">
+    <name>5376</name>
+  </rtept>
+  <rtept lat="42.465833333" lon="-71.119333333">
+    <name>5376STREM</name>
+  </rtept>
+  <rtept lat="42.467166667" lon="-71.113500000">
+    <name>6328</name>
+  </rtept>
+  <rtept lat="42.466500000" lon="-71.110000000">
+    <name>635722</name>
+  </rtept>
+  <rtept lat="42.466500000" lon="-71.109333333">
+    <name>635783</name>
+  </rtept>
+  <rtept lat="42.463500000" lon="-71.107166667">
+    <name>6373</name>
+  </rtept>
+  <rtept lat="42.465666667" lon="-71.107333333">
+    <name>BEARHILL</name>
+  </rtept>
+  <rtept lat="42.460000000" lon="-71.106166667">
+    <name>6289</name>
+  </rtept>
+  <rtept lat="42.457666667" lon="-71.105166667">
+    <name>6297</name>
+  </rtept>
+  <rtept lat="42.453833333" lon="-71.105166667">
+    <name>6283</name>
+  </rtept>
+  <rtept lat="42.451500000" lon="-71.105333333">
+    <name>6280</name>
+  </rtept>
+  <rtept lat="42.448500000" lon="-71.106166667">
+    <name>6177</name>
+  </rtept>
+  <rtept lat="42.447833333" lon="-71.106666667">
+    <name>6176</name>
+  </rtept>
+  <rtept lat="42.444833333" lon="-71.108833333">
+    <name>6153</name>
+  </rtept>
+  <rtept lat="42.443666667" lon="-71.106333333">
+    <name>6171</name>
+  </rtept>
+  <rtept lat="42.443000000" lon="-71.111500000">
+    <name>6131</name>
+  </rtept>
+  <rtept lat="42.442166667" lon="-71.111000000">
+    <name>6130</name>
+  </rtept>
+  <rtept lat="42.441833333" lon="-71.113166667">
+    <name>6029</name>
+  </rtept>
+  <rtept lat="42.439000000" lon="-71.114500000">
+    <name>6006</name>
+  </rtept>
+  <rtept lat="42.436833333" lon="-71.113166667">
+    <name>6014MEADW</name>
+  </rtept>
+  <rtept lat="42.435000000" lon="-71.110000000">
+    <name>PANTHRCAV</name>
+  </rtept>
+  <rtept lat="42.431166667" lon="-71.109166667">
+    <name>GATE6</name>
+  </rtept>
+  <rtept lat="42.431000000" lon="-71.107666667">
+    <name>BELLEVUE</name>
+  </rtept>
+</rte>
+<trk>
+<trkseg>
+<trkpt lat="30.062166667" lon="-91.610333333">
+  <ele>0.914400</ele>
+  <time>2002-05-25T17:06:21Z</time>
+  <speed>0.000000</speed>
+</trkpt>
+<trkpt lat="30.062833333" lon="-91.610500000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:09:55Z</time>
+  <speed>0.329244</speed>
+</trkpt>
+<trkpt lat="30.062666667" lon="-91.608333333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:12:00Z</time>
+  <speed>1.774833</speed>
+</trkpt>
+<trkpt lat="30.062333333" lon="-91.607333333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:12:48Z</time>
+  <speed>1.970322</speed>
+</trkpt>
+<trkpt lat="30.061500000" lon="-91.605333333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:14:41Z</time>
+  <speed>1.954889</speed>
+</trkpt>
+<trkpt lat="30.059833333" lon="-91.599333333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:17:16Z</time>
+  <speed>3.868622</speed>
+</trkpt>
+<trkpt lat="30.057833333" lon="-91.596666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:17:46Z</time>
+  <speed>11.415523</speed>
+</trkpt>
+<trkpt lat="30.055333333" lon="-91.594833333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:18:20Z</time>
+  <speed>9.388611</speed>
+</trkpt>
+<trkpt lat="30.053833333" lon="-91.592666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:19:01Z</time>
+  <speed>6.734078</speed>
+</trkpt>
+<trkpt lat="30.049666667" lon="-91.589833333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:20:46Z</time>
+  <speed>5.123867</speed>
+</trkpt>
+<trkpt lat="30.049000000" lon="-91.589833333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:21:10Z</time>
+  <speed>3.364467</speed>
+</trkpt>
+<trkpt lat="30.048833333" lon="-91.593000000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:21:51Z</time>
+  <speed>7.191933</speed>
+</trkpt>
+<trkpt lat="30.046166667" lon="-91.596500000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:22:35Z</time>
+  <speed>10.072823</speed>
+</trkpt>
+<trkpt lat="30.045500000" lon="-91.598666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T17:23:08Z</time>
+  <speed>7.047889</speed>
+</trkpt>
+<trkpt lat="30.047333333" lon="-91.600333333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:04:23Z</time>
+  <speed>0.102889</speed>
+</trkpt>
+<trkpt lat="30.047000000" lon="-91.599666667">
+  <ele>2.133600</ele>
+  <time>2002-05-25T18:06:04Z</time>
+  <speed>0.689356</speed>
+</trkpt>
+<trkpt lat="30.046500000" lon="-91.599500000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:07:06Z</time>
+  <speed>1.049467</speed>
+</trkpt>
+<trkpt lat="30.046166667" lon="-91.599000000">
+  <ele>0.914400</ele>
+  <time>2002-05-25T18:08:18Z</time>
+  <speed>0.781956</speed>
+</trkpt>
+<trkpt lat="30.046333333" lon="-91.597666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:10:20Z</time>
+  <speed>0.972300</speed>
+</trkpt>
+<trkpt lat="30.046333333" lon="-91.597166667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:11:09Z</time>
+  <speed>1.111200</speed>
+</trkpt>
+<trkpt lat="30.046833333" lon="-91.596333333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:12:18Z</time>
+  <speed>1.358133</speed>
+</trkpt>
+<trkpt lat="30.047500000" lon="-91.595166667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:14:22Z</time>
+  <speed>1.064900</speed>
+</trkpt>
+<trkpt lat="30.047833333" lon="-91.594833333">
+  <ele>2.133600</ele>
+  <time>2002-05-25T18:15:04Z</time>
+  <speed>1.358133</speed>
+</trkpt>
+<trkpt lat="30.048166667" lon="-91.594000000">
+  <ele>0.914400</ele>
+  <time>2002-05-25T18:16:14Z</time>
+  <speed>1.183222</speed>
+</trkpt>
+<trkpt lat="30.048666667" lon="-91.593833333">
+  <ele>0.914400</ele>
+  <time>2002-05-25T18:17:01Z</time>
+  <speed>1.178078</speed>
+</trkpt>
+<trkpt lat="30.049333333" lon="-91.593833333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:18:07Z</time>
+  <speed>1.126633</speed>
+</trkpt>
+<trkpt lat="30.050333333" lon="-91.594000000">
+  <ele>2.133600</ele>
+  <time>2002-05-25T18:19:51Z</time>
+  <speed>1.044322</speed>
+</trkpt>
+<trkpt lat="30.050833333" lon="-91.594166667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:20:39Z</time>
+  <speed>1.111200</speed>
+</trkpt>
+<trkpt lat="30.051166667" lon="-91.594333333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:21:24Z</time>
+  <speed>1.234667</speed>
+</trkpt>
+<trkpt lat="30.051833333" lon="-91.594333333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:22:17Z</time>
+  <speed>1.188367</speed>
+</trkpt>
+<trkpt lat="30.052166667" lon="-91.594666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:23:18Z</time>
+  <speed>0.895133</speed>
+</trkpt>
+<trkpt lat="30.053000000" lon="-91.594666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:24:37Z</time>
+  <speed>1.126633</speed>
+</trkpt>
+<trkpt lat="30.054833333" lon="-91.595166667">
+  <ele>6.096000</ele>
+  <time>2002-05-25T18:28:13Z</time>
+  <speed>0.982589</speed>
+</trkpt>
+<trkpt lat="30.053666667" lon="-91.595000000">
+  <ele>2.133600</ele>
+  <time>2002-05-25T18:31:36Z</time>
+  <speed>0.632767</speed>
+</trkpt>
+<trkpt lat="30.053166667" lon="-91.594833333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:32:56Z</time>
+  <speed>0.787100</speed>
+</trkpt>
+<trkpt lat="30.052666667" lon="-91.594833333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:34:02Z</time>
+  <speed>0.931144</speed>
+</trkpt>
+<trkpt lat="30.052500000" lon="-91.595500000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:36:03Z</time>
+  <speed>0.504156</speed>
+</trkpt>
+<trkpt lat="30.052500000" lon="-91.596000000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:36:48Z</time>
+  <speed>1.147211</speed>
+</trkpt>
+<trkpt lat="30.052666667" lon="-91.596833333">
+  <ele>0.914400</ele>
+  <time>2002-05-25T18:37:52Z</time>
+  <speed>1.260389</speed>
+</trkpt>
+<trkpt lat="30.053166667" lon="-91.597833333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:39:18Z</time>
+  <speed>1.347844</speed>
+</trkpt>
+<trkpt lat="30.053666667" lon="-91.598000000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:40:15Z</time>
+  <speed>0.967156</speed>
+</trkpt>
+<trkpt lat="30.054000000" lon="-91.597833333">
+  <ele>6.096000</ele>
+  <time>2002-05-25T18:41:25Z</time>
+  <speed>0.622478</speed>
+</trkpt>
+<trkpt lat="30.053666667" lon="-91.598000000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:42:37Z</time>
+  <speed>0.684211</speed>
+</trkpt>
+<trkpt lat="30.053166667" lon="-91.598000000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:44:01Z</time>
+  <speed>0.586467</speed>
+</trkpt>
+<trkpt lat="30.052833333" lon="-91.597500000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:45:53Z</time>
+  <speed>0.514444</speed>
+</trkpt>
+<trkpt lat="30.052500000" lon="-91.597000000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:46:54Z</time>
+  <speed>1.028889</speed>
+</trkpt>
+<trkpt lat="30.052333333" lon="-91.596500000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:47:42Z</time>
+  <speed>1.142067</speed>
+</trkpt>
+<trkpt lat="30.052333333" lon="-91.595666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:48:41Z</time>
+  <speed>1.234667</speed>
+</trkpt>
+<trkpt lat="30.052166667" lon="-91.595000000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:49:52Z</time>
+  <speed>0.905422</speed>
+</trkpt>
+<trkpt lat="30.051833333" lon="-91.594666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:50:49Z</time>
+  <speed>0.843689</speed>
+</trkpt>
+<trkpt lat="30.051000000" lon="-91.594333333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:52:14Z</time>
+  <speed>1.142067</speed>
+</trkpt>
+<trkpt lat="30.050500000" lon="-91.594166667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:52:56Z</time>
+  <speed>1.337556</speed>
+</trkpt>
+<trkpt lat="30.050166667" lon="-91.594166667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:53:38Z</time>
+  <speed>1.064900</speed>
+</trkpt>
+<trkpt lat="30.049166667" lon="-91.593666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:55:11Z</time>
+  <speed>1.358133</speed>
+</trkpt>
+<trkpt lat="30.048500000" lon="-91.594333333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:56:32Z</time>
+  <speed>1.095767</speed>
+</trkpt>
+<trkpt lat="30.048000000" lon="-91.594666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:57:24Z</time>
+  <speed>1.214089</speed>
+</trkpt>
+<trkpt lat="30.047500000" lon="-91.595500000">
+  <ele>7.010400</ele>
+  <time>2002-05-25T18:58:40Z</time>
+  <speed>1.229522</speed>
+</trkpt>
+<trkpt lat="30.047000000" lon="-91.596000000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T18:59:28Z</time>
+  <speed>1.491889</speed>
+</trkpt>
+<trkpt lat="30.046666667" lon="-91.596666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T19:00:22Z</time>
+  <speed>1.394144</speed>
+</trkpt>
+<trkpt lat="30.046333333" lon="-91.597666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T19:01:41Z</time>
+  <speed>1.322122</speed>
+</trkpt>
+<trkpt lat="30.046166667" lon="-91.598500000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T19:02:48Z</time>
+  <speed>1.208944</speed>
+</trkpt>
+<trkpt lat="30.046333333" lon="-91.599000000">
+  <ele>0.000000</ele>
+  <time>2002-05-25T19:03:43Z</time>
+  <speed>0.889989</speed>
+</trkpt>
+<trkpt lat="30.046833333" lon="-91.599333333">
+  <ele>0.000000</ele>
+  <time>2002-05-25T19:04:49Z</time>
+  <speed>0.910567</speed>
+</trkpt>
+<trkpt lat="30.047166667" lon="-91.599666667">
+  <ele>0.000000</ele>
+  <time>2002-05-25T19:05:57Z</time>
+  <speed>0.792244</speed>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>

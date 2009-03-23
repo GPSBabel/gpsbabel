@@ -1,0 +1,10 @@
+
+      
+      
+      <para>Vito Navigator II is a Pocket PC GPS application.  This
+format reads a Vito Navigator II .SMT track file and can work in
+either waypoint or track mode.  The speed, heading and Dilution of
+Position data is written in the notes field.</para>
+      <para> Support for writing .SMT tracks is very experimental and
+may crash VitoNavigator II on the Pocket PC.</para>
+    

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="51.158882000" minlon="14.902600000" maxlat="51.363167000" maxlon="14.952033000"/>
+<wpt lat="51.158882000" lon="14.950277000">
+  <name>EDBX</name>
+  <cmt>EDBX</cmt>
+  <desc>EDBX</desc>
+</wpt>
+<wpt lat="51.302700000" lon="14.902600000">
+  <name>Horka,NOL(GM)</name>
+  <cmt>Horka,NOL(GM)</cmt>
+  <desc>Horka,NOL(GM)</desc>
+</wpt>
+<wpt lat="51.343624000" lon="14.952033000">
+  <name>RO(EDBR)-N</name>
+  <cmt>RO(EDBR)-N</cmt>
+  <desc>RO(EDBR)-N</desc>
+</wpt>
+<wpt lat="51.363167000" lon="14.950000000">
+  <name>EDBR</name>
+  <cmt>EDBR</cmt>
+  <desc>EDBR</desc>
+</wpt>
+<rte>
+  <name>EDBX - EDBR</name>
+  <desc>PocketFMS flightplan</desc>
+  <rtept lat="51.158882000" lon="14.950277000">
+    <name>EDBX</name>
+  </rtept>
+  <rtept lat="51.302700000" lon="14.902600000">
+    <name>Horka,NOL(GM)</name>
+  </rtept>
+  <rtept lat="51.343624000" lon="14.952033000">
+    <name>RO(EDBR)-N</name>
+  </rtept>
+  <rtept lat="51.363167000" lon="14.950000000">
+    <name>EDBR</name>
+  </rtept>
+</rte>
+</gpx>

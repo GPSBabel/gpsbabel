@@ -1,0 +1,15 @@
+<para>
+	Convert route number 'index' from source into sdf format.
+</para>
+<para>
+	We have a lot of more expressive formats thats support more than one route.
+	At this place sdf files are limited to only one single route. With option index
+	you can specify which route from source should be converted.
+</para>
+<para>
+	Our default index is 1.
+</para>
+<para>
+	This example will convert route number two and three into separate sdf files:
+</para>
+	<para><userinput> gpsbabel -i gdb -f routes.gdb -r -o stmsdf,index=2 -F route-one.sdf -r -o stmsdf,index=3 -F route-three.sdf </userinput></para>

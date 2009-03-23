@@ -1,0 +1,34 @@
+# gpsbabel XCSV style file
+#
+# Format: Garmin 301 Position + Heartrate data
+# Author: Jeff Kalikstein
+#   Date: 08/29/2005
+#
+
+DESCRIPTION		Garmin 301 Custom position and heartrate
+
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		COMMA
+RECORD_DELIMITER	NEWLINE
+BADCHARS		COMMA
+#FORMAT_TYPE		INTERNAL
+
+#
+# HEADER STUFF:
+#
+PROLOGUE	Garmin 301 data __FILE__ 
+PROLOGUE	Timestamp,Latitude, Longitude, Altitude(ft), heart rate
+#
+# INDIVIDUAL DATA FIELDS:
+#
+IFIELD	TIMET_TIME,"","%ld"
+IFIELD	LAT_DECIMAL, "", "%f"
+IFIELD	LON_DECIMAL, "", "%f"
+IFIELD	ALT_FEET, "", "%fF"
+IFIELD  HEART_RATE,""," %d"	# beats per minute
+
+
+# EPILOGUE: 
+#EPILOGUE	Epilogue Line 1
+#EPILOGUE	Epilogue Line 2

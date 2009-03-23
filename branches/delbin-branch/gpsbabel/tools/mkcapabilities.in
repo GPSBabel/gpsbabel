@@ -1,0 +1,42 @@
+#
+# mkcapabilities.in is used to create mkcapabilities.  
+#
+./gpsbabel -^2 | sed 's/\&/\&amp;/' | awk  -F'\t' '
+function getcap(type, cap, sname, lname) {
+	if (type == "internal") return
+	print "<tr>"
+	print "<td class=\"fmtline\">" lname "</td>"
+
+	print "<td class=\"c4\"> <a href=\"htmldoc-development/fmt_" sname ".html\">" sname "</a></td>"
+	# This is bad...
+	
+	printf "<td class=\"c4\">"
+	if (sname == "geo") {
+		printf "<a href=\"/tips/browser.html\">Yes</a>"
+	} else if (sname == "s_and_t") {
+		printf "<a href=\"/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html\">[1]</a><a href=\"http://www.gpsbabel.org/formats/s_and_t/TripPlanning.html\">[2]</a>"
+	} else if (sname == "an1") {
+		printf "<a href=\"/formats/delorme-new-interstate\">Yes</a>"
+	}
+	print "</td>"
+
+
+	for (i = 1; i <= 6; i++) {
+		c = substr(cap, i, 1)
+		printf "<td class=\"cap\">"
+		if (c != ("-")) printf "yes"
+		printf "</td>\n"
+	}
+	print "</tr>"
+}
+
+getcap($1, $2, $3, $5)
+' > @DOCDIR@capabilities.inc > @DOCDIR@capabilities.inc
+
+FMTS=`./gpsbabel -^2 | grep -v '^internal' | sed 's/\&/\&amp;/' | awk  -F'\t' '{print $3}'`
+for f in $FMTS
+do
+	[ ! -f @DOCDIR@/htmldoc-@DOCVERSION@/fmt_${f}.html ] && echo Missing doc for $f
+done
+
+exit 0

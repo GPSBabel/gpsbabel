@@ -1,0 +1,10 @@
+Group	sID	sDescription	fLat	fLong	fEasting	fNorthing	fAlt	iColour	iSymbol	sHyperLink
+new	GCEBB	Mountain Bike Heaven by susy1313	35.972033	-87.134700			0.00	255	1	http://www.geocaching.com/seek/cache_details.asp?ID=3771
+new	GC1A37	The Troll by a182pilot & Family	36.090683	-86.679550			0.00	255	1	http://www.geocaching.com/seek/cache_details.asp?ID=6711
+new	GC1C2B	Dive Bomber by JoGPS & family	35.996267	-86.620117			0.00	255	1	http://www.geocaching.com/seek/cache_details.asp?ID=7211
+new	GC25A9	FOSTER by JoGPS & Family	36.038483	-86.648617			0.00	255	1	http://www.geocaching.com/seek/cache_details.asp?ID=9641
+new	GC2723	Logan Lighthouse by JoGps & Family	36.112183	-86.741767			0.00	255	1	http://www.geocaching.com/seek/cache_details.asp?ID=10019
+new	GC2B71	Ganier Cache by Susy1313	36.064083	-86.790517			0.00	255	1	http://www.geocaching.com/seek/cache_details.asp?ID=11121
+new	GC309F	Shy's Hill by FireFighterEng33	36.087767	-86.809733			0.00	255	1	http://www.geocaching.com/seek/cache_details.asp?ID=12447
+new	GC317A	GittyUp by JoGPS / Warner Parks	36.057500	-86.892000			0.00	255	1	http://www.geocaching.com/seek/cache_details.asp?ID=12666
+new	GC317D	Inlighting by JoGPS / Warner Parks	36.082800	-86.867283			0.00	255	1	http://www.geocaching.com/seek/cache_details.asp?ID=12669

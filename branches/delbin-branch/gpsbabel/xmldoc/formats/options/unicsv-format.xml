@@ -1,0 +1,22 @@
+<para>
+  When this option is enabled, we generate an additional 'Format' column.
+  The values of this column are filled with names of previous input formats.
+</para>
+<example id="unicsv_format">
+  <title>Example for unicsv format option to write names of input formats.</title>
+  <para>
+    The next example ...
+    <userinput>
+      gpsbabel -i gpx -f file1.gpx -i gdb -f file2.gdb -o unicsv,format=y -F result.txt
+    </userinput>
+    ... could produce following output:
+    <simplelist type="vert">
+      <member>No,Latitude,Longitude,Name,Description,Symbol,Date,Time,Format</member>
+      <member>1,51.075139,12.463689,"578","578","Waypoint",2005/04/26,16:27:23,"gdb"</member>
+      <member>2,51.081104,12.465277,"579","579","Waypoint",2005/04/26,16:27:23,"gdb"</member>
+      <member>3,50.844126,12.408757,"Gosel","Gosel","Exit",2005/02/26,10:10:47,"gpx"</member>
+      <member>4,50.654763,12.204957,"Greiz",,"Exit",2005/02/26,09:57:04,"gpx"</member>
+    </simplelist>
+  </para>
+</example>
+
