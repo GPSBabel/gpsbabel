@@ -67,6 +67,12 @@ static void
 gtc_read(void)
 {
 }
+
+static void
+gtc_rd_deinit(void)
+{
+
+}
 #else
 
 /* Tracks */
