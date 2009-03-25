@@ -44,6 +44,28 @@ int delbin_pkt_size(int message_id) {
 };
 
 
+signed short get_cs(unsigned char *buf, short len) 
+{
+  signed short i, cs, tdat;
+
+  cs = 0;
+  for (i = 0; i < len; i += 2) {
+    if ((len -i) > 1) {
+      tdat = *(unsigned char*) (buf + i + 1);
+      tdat = tdat << 8;
+      tdat |= *(unsigned char *)(buf + i);
+      cs += tdat;
+    } else {
+      tdat = *(unsigned char *)(buf + i);
+      cs += tdat;
+    }
+  }
+  cs = (signed short)(0x10000 - (long) cs);
+  return cs;
+}
+
+
+
 
 
 // Needed:
@@ -110,6 +132,7 @@ delbin_deinit(void)
 static void
 delbin_read(void)
 {
+  delbin_blah();
 }
 
 static void
