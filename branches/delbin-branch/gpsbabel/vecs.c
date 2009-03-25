@@ -158,6 +158,7 @@ extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t skyforce_vecs;
 extern ff_vecs_t pocketfms_bc_vecs;
 extern ff_vecs_t pocketfms_fp_vecs;
+extern ff_vecs_t delbin_vecs;;
 
 static
 vecs_t vec_list[] = {
@@ -910,6 +911,13 @@ vecs_t vec_list[] = {
         	&pocketfms_fp_vecs,
         	"pocketfms_fp",
         	"PocketFMS flightplan",
+        	NULL
+        },
+
+        {
+        	&delbin_vecs,
+        	"delbin",
+        	"Delorme binary protocol",
         	NULL
         },
         
