@@ -602,7 +602,7 @@ void track_recompute( const route_head *trk, computed_trkdata **);
  * All shortname functions take a shortname handle as the first arg.
  * This is an opaque pointer.  Callers must not fondle the contents of it.
  */
-typedef struct short_handle * short_handle;
+typedef struct short_handle_ * short_handle;
 #ifndef DEBUG_MEM 
 char *mkshort (short_handle,  const char *);
 void *mkshort_new_handle(void);
