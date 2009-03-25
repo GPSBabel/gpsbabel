@@ -16,6 +16,9 @@
 
 int delbin_pkt_size(int message_id);
 
+int delbin_blah(void);
+signed short get_cs(unsigned char *buf, short len);
+
 class delbin_packet {
   gbuint16 message_id_;
   unsigned char *payload_;
