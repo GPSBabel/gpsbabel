@@ -93,7 +93,7 @@ static char *port;
 static char *erase;
 
 static enum { 
-    UNKNOWN, WBT200, WBT201 
+    UNKNOWN, WBT200, WBT201, WSG1000 
 } dev_type = UNKNOWN;
 
 struct buf_chunk {
@@ -338,6 +338,20 @@ static int wbt201_try() {
     return expect("@AL");
 }
 
+static int wsg1000_try() {
+	int rc;
+
+	db(1, "Trying WSG 1000/G-Rays 2\n");
+
+	if ((rc = gbser_set_port(fd, WBT201BAUD, 8, 0, 1))) {
+			db(1, "Set baud rate to %d failed (%d)\n", WBT201BAUD, rc);
+			return 0;
+	}
+	
+	wr_cmdl("@AL,2,3");
+	return expect("@AL,2,3,OK"); 
+}
+
 static int guess_device() {
     int i;
     db(1, "Guessing device...\n");
@@ -348,8 +362,12 @@ static int guess_device() {
         if (wbt201_try()) {
             return WBT201;
         }
+	if (wsg1000_try()) {
+	    return WSG1000;
+	}
     }
     return UNKNOWN;
+    
 }
 
 static void rd_init(const char *fname) {
@@ -844,8 +862,15 @@ static int wbt201_read_chunk(struct read_state *st, unsigned pos, unsigned limit
     }
     
     /* ack */
-    rd_line(BUFSPEC(line_buf));
+/*    rd_line(BUFSPEC(line_buf));
     return starts_with(line_buf, cmd_buf);
+*/	
+	if (dev_type == WBT201){
+			rd_line(BUFSPEC(line_buf));
+			return starts_with(line_buf, cmd_buf);
+	}
+	return 1;
+	
 }
 
 static void wbt201_data_read(void) {
@@ -993,13 +1018,15 @@ static void file_read(void) {
 
 static void data_read(void) {
     switch (dev_type) {
-        case WBT200: 
+	case WBT200: 
             wbt200_data_read(); 
             break;
-            
         case WBT201: 
             wbt201_data_read(); 
             break;
+        case WSG1000: 
+            wbt201_data_read(); 
+            break;			
             
         default:
             fatal(MYNAME ": Unknown device type (internal)\n");
