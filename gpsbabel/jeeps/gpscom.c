@@ -269,10 +269,11 @@ int32 GPS_Command_Send_Track(const char *port, GPS_PTrack *trk, int32 n)
 	ret = GPS_A300_Send(port, trk, n);
 	break;
     case pA301:
+    case pA302:
 	ret = GPS_A301_Send(port, trk, n);
 	break;
     default:
-	GPS_Error("Send_Track: Unknown track protocol");
+	GPS_Error("Send_Track: Unknown track protocol %d.", gps_trk_transfer);
 	break;
     }
 

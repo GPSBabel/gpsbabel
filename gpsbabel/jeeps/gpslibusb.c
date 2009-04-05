@@ -338,7 +338,9 @@ garmin_usb_start(struct usb_device *dev, libusb_unit_data *lud)
 			// It's a case instead of an 'if' becuase I have a 
 			// feeling there are more affected models either
 			// on the market or on the way.
-			case 695: break;
+			case 695: break;   // Venture HC
+			case 285: break;   // GPSMap 276C/4.80
+			case 402: break;   // GPSMap 396C/4.50
 			default: gusb_syncup();
 		}
 		return;
