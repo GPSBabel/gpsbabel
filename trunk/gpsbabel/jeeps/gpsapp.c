@@ -3833,6 +3833,11 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
     if(gps_trk_transfer == -1)
 	return GPS_UNSUPPORTED;
 
+    if(gps_trk_transfer == 302) {
+	GPS_Warning("A302: Device does not support sending tracks to it. ");
+	return GPS_UNSUPPORTED;
+    }
+
     /* Only those GPS' with L001 can send track data */
     if(!LINK_ID[gps_link_type].Pid_Trk_Data)
     {
@@ -3870,8 +3875,11 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 	    case pD312:
 		GPS_D310_Send(data,trk[i],&len);
 		break;
+	    case pD311:
+		GPS_D311_Send(data,trk[i],&len);
+		break;
 	    default:
-		GPS_Error("A301_Send: Unknown track protocol");
+		GPS_Error("A301_Send: Unknown track protocol %d", gps_trk_hdr_type);
 		return PROTOCOL_ERROR;
 	    }
 	}
@@ -3886,13 +3894,16 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 		len = 13;
 		break;
 	    case pD301:
-	    case pD302:
-		GPS_D301_Send(data,trk[i]);
+		GPS_D301_Send(data,trk[i], 301);
 		len = 21;
+		break;
+	    case pD302:
+		GPS_D301_Send(data,trk[i], 302);
+		len = 25;
 		break;
 	    case pD304:
 		GPS_D304_Send(data,trk[i]);
-		len = 26;
+		len = 23;
 		break;
 	    default:
 		GPS_Error("A301_Send: Unknown track protocol");
@@ -4276,7 +4287,7 @@ void GPS_D300_Send(UC *data, GPS_PTrack trk)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D301_Send(UC *data, GPS_PTrack trk)
+void GPS_D301_Send(UC *data, GPS_PTrack trk, int type)
 {
     UC *p;
 
@@ -4288,6 +4299,11 @@ void GPS_D301_Send(UC *data, GPS_PTrack trk)
     p+=sizeof(float);
     GPS_Util_Put_Float(p,trk->dpth);
     p+=sizeof(float);
+
+    if (type == 302) {
+      GPS_Util_Put_Float(p,1.0e25);
+      p+=sizeof(float);
+    }
 
     *p = trk->tnew;
 
@@ -4319,12 +4335,33 @@ void GPS_D304_Send(UC *data, GPS_PTrack trk)
     *p = trk->cadence > 0 ? trk->cadence : 0xff;
     p+=sizeof(char);
 
-    *p = trk->tnew;
-
     return;
 }
 
+/* @func GPS_D311_Send **************************************************
+**
+** Form track header data string
+**
+** @param [w] data [UC *] string to write to
+** @param [r] trk [GPS_PTrack] track data
+** @param [w] len [int32 *] length of data
+**
+** @return [void]
+************************************************************************/
+void GPS_D311_Send(UC *data, GPS_PTrack trk, int32 *len)
+{
+    UC *p;
+    int identifier;
 
+    p = data;
+//    sscanf(trk->trk_ident, "%d", &identifier);
+    identifier = 0x1234;
+    GPS_Util_Put_Short(p,identifier);
+    p += 2;
+    *len = p-data;
+
+    return;
+}
 
 /* @func GPS_D310_Send **************************************************
 **
