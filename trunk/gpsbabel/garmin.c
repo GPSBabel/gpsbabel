@@ -207,6 +207,11 @@ rw_init(const char *fname)
                                         receiver_must_upper = 0;
                                         receiver_short_length = 14;
                                         break;
+				case 429: // Streetpilot i3
+					receiver_must_upper = 0;
+					receiver_charset = CET_CHARSET_MS_ANSI;
+					receiver_short_length = 30;
+					break;
 				case 260: /* GPSMap 296 */
 				default:
 					break;
