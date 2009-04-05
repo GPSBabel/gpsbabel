@@ -1,6 +1,7 @@
 <para>Serial download protocol for the 
 <productname>Wintec WBT-200</productname>  and
 <productname>Wintec WBT-201</productname> 
+<productname>Wintec WBT-1000</productname> 
 GPS data loggers. Although untested it is expected that this will also support the WBT-100.</para>
 <para>
 <ulink url="http://www.semsons.com/wiwbmu3gpsre2.html">Wintec WBT-201</ulink>
