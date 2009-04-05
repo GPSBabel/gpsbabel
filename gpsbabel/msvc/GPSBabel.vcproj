@@ -1245,6 +1245,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\itracku.c"
+				>
+			</File>
+			<File
 				RelativePath="..\jtr.c"
 				>
 			</File>
@@ -2133,6 +2137,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\sbn.c"
+				>
+			</File>
+			<File
 				RelativePath="..\sbp.c"
 				>
 			</File>
@@ -2142,6 +2150,10 @@
 			</File>
 			<File
 				RelativePath="..\shape.c"
+				>
+			</File>
+			<File
+				RelativePath="..\skyforce.c"
 				>
 			</File>
 			<File
@@ -2230,6 +2242,10 @@
 			</File>
 			<File
 				RelativePath="..\strptime.c"
+				>
+			</File>
+			<File
+				RelativePath="..\swapdata.c"
 				>
 			</File>
 			<File
@@ -3202,6 +3218,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\defs.h"
+				>
+			</File>
+			<File
 				RelativePath="..\filterdefs.h"
 				>
 			</File>
@@ -3243,10 +3263,6 @@
 			</File>
 			<File
 				RelativePath="..\inifile.h"
-				>
-			</File>
-			<File
-				RelativePath="..\defs.h"
 				>
 			</File>
 			<File
