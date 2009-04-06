@@ -73,7 +73,7 @@ static
 arglist_t gopal_args[] = {
 	{"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX },
 	{"maxspeed", &optmaxspeed, "The maximum speed (km/h) traveling from waypoint to waypoint.", "200", ARGTYPE_INT, "1", "1000" },
-	{"minspeed", &optminspeed, "The minimum speed (km/h) traveling from waypoint to waypoint.\nset >0 to remove duplicate waypoints", "0", ARGTYPE_INT, "0", "999" },
+	{"minspeed", &optminspeed, "The minimum speed (km/h) traveling from waypoint to waypoint. Set >0 to remove duplicate waypoints", "0", ARGTYPE_INT, "0", "999" },
 	{"clean", &optclean, "Cleanup common errors in trackdata", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
