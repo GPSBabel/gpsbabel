@@ -1150,6 +1150,9 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
 				le_write32(p, color);
 				p += 4;
 			}
+			for (j = (src_h.width * src_h.bpp) / 8; j < src_line_sz; j++) {
+				gbfgetc(f);  /* drop fill-in bytes */
+			}
 			ptr -= dest_line_sz;
 		}
 	}
