@@ -958,11 +958,11 @@ get_cache_icon(const waypoint *waypointp)
 }
 
 double
-endian_read_double(void* ptr, int read_le)
+endian_read_double(const void* ptr, int read_le)
 {
   double ret;
   char r[8];
-  void *p;
+  const void *p;
   int i;
   
   if ( i_am_little_endian == read_le ) {
@@ -988,11 +988,11 @@ endian_read_double(void* ptr, int read_le)
 }
 
 float
-endian_read_float(void* ptr, int read_le)
+endian_read_float(const void* ptr, int read_le)
 {
   float ret;
   char r[4];
-  void *p;
+  const void *p;
   int i;
   
   if ( i_am_little_endian == read_le ) {
@@ -1055,7 +1055,7 @@ endian_write_float(void* ptr, float f, int write_le)
 }
 
 float
-le_read_float( void *ptr ) {return endian_read_float(ptr, 1);}
+le_read_float( const void *ptr ) {return endian_read_float(ptr, 1);}
 
 void
 le_write_float( void *ptr, float f ) {endian_write_float(ptr,f,1);}
@@ -1067,7 +1067,7 @@ void
 be_write_float( void *ptr, float f ) {endian_write_float(ptr,f,0);}
 
 double 
-le_read_double( void *ptr ) {return endian_read_double(ptr,1);}
+le_read_double( const void *ptr ) {return endian_read_double(ptr,1);}
 
 void
 le_write_double( void *ptr, double d ) {endian_write_double(ptr,d,1);}
