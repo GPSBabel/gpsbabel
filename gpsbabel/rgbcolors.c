@@ -27,8 +27,8 @@
  * same colors supported by X11.
  */
 
-static struct {
-	char *cn;
+static const struct {
+	const char *cn;
 	unsigned char r;
 	unsigned char g;
 	unsigned char b;
@@ -202,7 +202,7 @@ static int HexDigit( char hex ) {
 	return 0;
 }
 
-static int HexByte( char* hex ) {
+static int HexByte( const char* hex ) {
 	int b =  (HexDigit(hex[0])<<4)+HexDigit(hex[1]);
 	return b;
 }
@@ -216,7 +216,7 @@ static int HexByte( char* hex ) {
  */
  
 int
-color_to_bbggrr( char *opt_color ) 
+color_to_bbggrr( const char *opt_color ) 
 {
 	int color_num;
 	unsigned int i;
