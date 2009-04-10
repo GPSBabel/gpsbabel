@@ -166,7 +166,7 @@ find_icon_from_descr(const char *descr)
 {
 	int i;
 
-	for (i = 0; i < sizeof(icon_table) / sizeof(const char *); i++) {
+	for (i = 0; descr && i < sizeof(icon_table) / sizeof(const char *); i++) {
 		if (strcmp(descr, icon_table[i]) == 0)
 			return i;
 	}
