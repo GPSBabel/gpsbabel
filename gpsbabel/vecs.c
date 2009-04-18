@@ -156,6 +156,7 @@ extern ff_vecs_t sbp_vecs;
 extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t skyforce_vecs;
+extern ff_vecs_t v900_vecs;
 extern ff_vecs_t pocketfms_bc_vecs;
 extern ff_vecs_t pocketfms_fp_vecs;
 
@@ -910,6 +911,12 @@ vecs_t vec_list[] = {
         	&pocketfms_fp_vecs,
         	"pocketfms_fp",
         	"PocketFMS flightplan",
+        	NULL
+        },
+        {
+        	&v900_vecs,
+        	"v900",
+        	"Columbus/Visiontac V900 files (.csv)",
         	NULL
         },
         

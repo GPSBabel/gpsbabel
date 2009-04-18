@@ -1585,5 +1585,12 @@ bincompare ${REFERENCE}/pocketfms_bc.babel ${TMPDIR}/pocketfms_bc
 gpsbabel -i pocketfms_fp -f ${REFERENCE}/pocketfms_fp.xml -o gpx -F ${TMPDIR}/pocketfms_fp.gpx
 compare ${REFERENCE}/pocketfms_fp.gpx ${TMPDIR}/pocketfms_fp.gpx
 
+#
+# Columbus/Visiontac V900 "binary" csv files
+#
+gpsbabel -i v900 -f ${REFERENCE}/v900_basic_mode.csv -o gpx -F ${TMPDIR}/v900_basic_mode.gpx
+compare ${REFERENCE}/v900_basic_mode.gpx ${TMPDIR}/v900_basic_mode.gpx
+gpsbabel -i v900 -f ${REFERENCE}/v900_advanced_mode.csv -o gpx -F ${TMPDIR}/v900_advanced_mode.gpx
+compare ${REFERENCE}/v900_advanced_mode.gpx ${TMPDIR}/v900_advanced_mode.gpx
 
 exit 0
