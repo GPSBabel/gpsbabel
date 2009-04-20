@@ -210,7 +210,9 @@ tpo_read_until_section(const char* section_name, int seek_bytes)
 	int header_size = 0;
 
 	while (1) {
-		gbfread(&byte, 1, 1, tpo_file_in);
+		if (gbfread(&byte, 1, 1, tpo_file_in) < 1) {
+                  fatal(MYNAME ": malformed input file - attempt to read past end");
+                }
 		header_size++;
 
 		if (byte == section_name[match_index]) {
@@ -1856,4 +1858,3 @@ ff_vecs_t tpo3_vecs = {
 	tpo3_args,
 	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
-
