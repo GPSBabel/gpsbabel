@@ -862,6 +862,7 @@ char * get_filename(const char *fname);				/* extract the filename portion */
 #define CET_NOT_CONVERTABLE_DEFAULT '$'
 #define CET_CHARSET_ASCII	"US-ASCII"
 #define CET_CHARSET_UTF8	"UTF-8"
+#define CET_CHARSET_HEBREW  "CP1255"
 #define CET_CHARSET_MS_ANSI	"MS-ANSI"
 #define CET_CHARSET_LATIN1	"ISO-8859-1"
 

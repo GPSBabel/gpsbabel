@@ -733,6 +733,75 @@ void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double *lat, double *lon)
 }
 
 
+/* @func int32 GPS_Math_WGS84_To_ICS_EN ******************************
+**
+** Convert WGS84 latitude and longitude to 
+** Israeli old  Grid Eastings and Northings
+** ( Israeli Cassini Soldner )
+**
+** @param [r] phi [double] WGS84 latitude     (deg)
+** @param [r] lambda [double] WGS84 longitude (deg)
+** @param [w] E [double *] ICS easting (metres)
+** @param [w] N [double *] ICS northing (metres)
+**
+** @return [void]
+************************************************************************/
+
+int32 GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double *E,
+				   double *N)
+{
+	const double phi0 = 31.734090;
+	const double lambda0 = 35.212060;
+	const double E0 = 170251.0;
+	const double N0 = 1126868.0;
+	double phi, lambda, alt, a, b;
+
+	if (lat < 29.333) return 0;
+	if (lat > 33.28) return 0;
+	if (lon < 34.18) return 0;
+	if (lon > 37.67) return 0;
+	
+	a = GPS_Ellipse[27].a;
+	b = a - (a / GPS_Ellipse[27].invf);
+	
+	GPS_Math_WGS84_To_Known_Datum_M(lat, lon, 0, &phi, &lambda, &alt, 124);
+	GPS_Math_Swiss_LatLon_To_EN(phi, lambda, E, N, phi0, lambda0, E0, N0, a, b);
+		
+	return 1;
+}
+
+
+/* @GPS_Math_ICS_EN_To_WGS84 *****************************************
+**
+** Convert WGS84 latitude and longitude to 
+** Israeli Oldl Grid Eastings and Northings
+**
+** @param [r] E [double] ICS easting (metres)
+** @param [r] N [double] ICS northing (metres)
+** @param [w] lat [double *] WGS84 latitude     (deg)
+** @param [w] lon [double *] WGS84 longitude (deg)
+**
+** @return [void]
+************************************************************************/
+void GPS_Math_ICS_EN_To_WGS84(double E, double N, double *lat, double *lon)
+{
+	const double phi0 = 31.734090;
+	const double lambda0 = 35.212060;
+	const double E0 = 170251.0;
+	const double N0 = 1126868.0;
+	double phi, lambda, alt, a, b;
+
+
+	a = GPS_Ellipse[27].a;
+	b = a - (a / GPS_Ellipse[27].invf);
+	
+	GPS_Math_Swiss_EN_To_LatLon(E, N, &phi, &lambda, phi0, lambda0, E0, N0, a, b);
+	GPS_Math_Known_Datum_To_WGS84_M(phi, lambda, 0, lat, lon, &alt, 124);
+}
+
+
+
+
 /* @func  GPS_Math_EN_To_LatLon **************************************
 **
 ** Convert Eastings and Northings to latitude and longitude
