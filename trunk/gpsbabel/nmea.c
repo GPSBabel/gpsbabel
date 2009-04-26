@@ -992,11 +992,21 @@ nmea_read(void)
 			/* special hack for Sony GPS-CS1 files:
 			   they are fully (?) nmea compatible, but come with a header line like
 			   "@Sonygps/ver1.0/wgs-84". */
+			/* The Sony GPS-CS3KA extends that line even further
+			   so we now look for the second field to be / 
+			   delimited.
+			   @Sonygps/ver1.0/wgs-84/gps-cs3.0
+			 */
 			   
 			/* Check the GPS datum */
 			cx = strchr(&ibuf[12], '/');
 			if (cx != NULL) {
+				char *edatum;
 				sdatum = cx + 1;
+			 	edatum = strchr(sdatum, '/');
+				if (edatum) {
+					*edatum = 0;
+				}
 				datum = GPS_Lookup_Datum_Index(sdatum);
 				if (datum < 0)
 					fatal(MYNAME "/SonyGPS: Unsupported datum \"%s\" in source data!\n", sdatum);
