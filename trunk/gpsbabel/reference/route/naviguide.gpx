@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="31.079045442" minlon="35.334190367" maxlat="31.151765285" maxlon="35.373230782"/>
+<rte>
+  <rtept lat="31.151765285" lon="35.334190367">
+    <ele>0.000000</ele>
+    <name>A001</name>
+    <cmt>תחילת מסלול</cmt>
+    <desc>תחילת מסלול</desc>
+  </rtept>
+  <rtept lat="31.148400849" lon="35.334573980">
+    <ele>0.000000</ele>
+    <name>A002</name>
+  </rtept>
+  <rtept lat="31.145293726" lon="35.339246729">
+    <ele>0.000000</ele>
+    <name>A003</name>
+  </rtept>
+  <rtept lat="31.148123714" lon="35.349747499">
+    <ele>0.000000</ele>
+    <name>A004</name>
+  </rtept>
+  <rtept lat="31.137826120" lon="35.356023541">
+    <ele>0.000000</ele>
+    <name>A005</name>
+  </rtept>
+  <rtept lat="31.140851348" lon="35.360474097">
+    <ele>0.000000</ele>
+    <name>A006</name>
+  </rtept>
+  <rtept lat="31.143551295" lon="35.365291416">
+    <ele>0.000000</ele>
+    <name>A007</name>
+    <cmt>כניסה לשטח</cmt>
+    <desc>כניסה לשטח</desc>
+  </rtept>
+  <rtept lat="31.136832106" lon="35.365353825">
+    <ele>0.000000</ele>
+    <name>A008</name>
+  </rtept>
+  <rtept lat="31.135111786" lon="35.363442742">
+    <ele>0.000000</ele>
+    <name>A009</name>
+  </rtept>
+  <rtept lat="31.126143897" lon="35.373230782">
+    <ele>0.000000</ele>
+    <name>A010</name>
+  </rtept>
+  <rtept lat="31.120209540" lon="35.373147193">
+    <ele>0.000000</ele>
+    <name>A011</name>
+  </rtept>
+  <rtept lat="31.116200552" lon="35.369618057">
+    <ele>0.000000</ele>
+    <name>A012</name>
+  </rtept>
+  <rtept lat="31.105589618" lon="35.366078374">
+    <ele>0.000000</ele>
+    <name>A013</name>
+  </rtept>
+  <rtept lat="31.101040765" lon="35.361312446">
+    <ele>0.000000</ele>
+    <name>A014</name>
+  </rtept>
+  <rtept lat="31.095575660" lon="35.360999808">
+    <ele>0.000000</ele>
+    <name>A015</name>
+    <cmt>צומת עם שביל ירוק</cmt>
+    <desc>צומת עם שביל ירוק</desc>
+  </rtept>
+  <rtept lat="31.092797983" lon="35.368352534">
+    <ele>0.000000</ele>
+    <name>A016</name>
+  </rtept>
+  <rtept lat="31.080009929" lon="35.367712966">
+    <ele>0.000000</ele>
+    <name>A017</name>
+  </rtept>
+  <rtept lat="31.079045442" lon="35.351794193">
+    <ele>0.000000</ele>
+    <name>A018</name>
+  </rtept>
+  <rtept lat="31.083848669" lon="35.355249026">
+    <ele>0.000000</ele>
+    <name>A019</name>
+    <cmt>מערה</cmt>
+    <desc>מערה</desc>
+  </rtept>
+</rte>
+</gpx>

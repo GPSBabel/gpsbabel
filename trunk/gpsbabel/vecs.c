@@ -153,6 +153,7 @@ extern ff_vecs_t jtr_vecs;
 extern ff_vecs_t itracku_vecs;
 extern ff_vecs_t itracku_fvecs;
 extern ff_vecs_t sbp_vecs;
+extern ff_vecs_t ng_vecs;
 extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t skyforce_vecs;
@@ -919,7 +920,12 @@ vecs_t vec_list[] = {
         	"Columbus/Visiontac V900 files (.csv)",
         	NULL
         },
-        
+        {
+        	&ng_vecs,
+        	"naviguide",
+        	"Naviguide binary route file (.twl)",
+        	"twl"
+        },
 
 #endif // MAXIMAL_ENABLED
 	{

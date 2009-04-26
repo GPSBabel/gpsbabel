@@ -1593,4 +1593,10 @@ compare ${REFERENCE}/v900_basic_mode.gpx ${TMPDIR}/v900_basic_mode.gpx
 gpsbabel -i v900 -f ${REFERENCE}/v900_advanced_mode.csv -o gpx -F ${TMPDIR}/v900_advanced_mode.gpx
 compare ${REFERENCE}/v900_advanced_mode.gpx ${TMPDIR}/v900_advanced_mode.gpx
 
+#
+# Naivguide 
+#
+gpsbabel -i naviguide -f ${REFERENCE}/route/naviguide-route.twl -o gpx -F ${TMPDIR}/naviguide.gpx
+compare ${REFERENCE}/route/naviguide.gpx ${TMPDIR}/naviguide.gpx
+
 exit 0

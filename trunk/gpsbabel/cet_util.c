@@ -53,8 +53,10 @@ static int cet_output = 0;
 
 #include "cet/ansi_x3_4_1968.h"
 #include "cet/iso_8859_1.h"
+#include "cet/iso_8859_8.h"
 #include "cet/iso_8859_15.h"
 #include "cet/cp1252.h"
+#include "cet/cp1255.h"
 
 /* %%% short hand strings transmission for main character sets %%% */
 
@@ -68,6 +70,18 @@ char *
 cet_str_iso8859_1_to_utf8(const char *src)
 {
 	return cet_str_any_to_utf8(src, &cet_cs_vec_iso_8859_1);
+}
+
+char *
+cet_str_utf8_to_iso8859_8(const char *src)
+{
+	return cet_str_utf8_to_any(src, &cet_cs_vec_iso_8859_8);
+}
+
+char *
+cet_str_iso8859_8_to_utf8(const char *src)
+{
+	return cet_str_any_to_utf8(src, &cet_cs_vec_iso_8859_8);
 }
 
 char *
@@ -106,11 +120,24 @@ cet_str_cp1252_to_utf8(const char *src)
 	return cet_str_any_to_utf8(src, &cet_cs_vec_cp1252);
 }
 
+char *
+cet_str_utf8_to_cp1255(const char *src)
+{
+	return cet_str_utf8_to_any(src, &cet_cs_vec_cp1255);
+}
+
+char *
+cet_str_cp1255_to_utf8(const char *src)
+{
+	return cet_str_any_to_utf8(src, &cet_cs_vec_cp1255);
+}
 short *
 cet_str_utf8_to_uni(const char *src, int *length)
 {
 	return cet_str_any_to_uni(src, &cet_cs_vec_utf8, length);
 }
+
+
 
 /* helpers */
 

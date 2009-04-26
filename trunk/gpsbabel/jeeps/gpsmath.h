@@ -128,6 +128,10 @@ void GPS_Math_Swiss_EN_To_LatLon(double E, double N, double *phi,
 				 double *lambda, double phi0, double lambda0,
 				 double E0, double N0, double a, double b);
 
+int32 GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double *E,
+				   double *N);
+void GPS_Math_ICS_EN_To_WGS84(double E, double N, double *lat, double *lon);				   
+
 int32 GPS_Math_WGS84_To_Swiss_EN(double phi, double lambda, double *E, double *N);
 void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double *lat, double *lon);
 
