@@ -319,6 +319,9 @@ main(int argc, char *argv[])
 				optarg = argv[argn][2]
 					? argv[argn]+2 : argv[++argn];
 				ivecs = find_vec(optarg, &ivec_opts);
+				if (ivecs == NULL) {
+					fatal ("Input type '%s' not recognized\n", optarg);
+				}
 				break;
 			case 'o':
 				if (ivecs == NULL) {
