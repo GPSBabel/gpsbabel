@@ -198,24 +198,29 @@ trackfilter_merge_qsort_cb(const void *a, const void *b)
 }
 
 static fix_type
-trackfilter_parse_fix()
+trackfilter_parse_fix(int *nsats)
 {
 	if ( !opt_fix ) {
 		return fix_unknown;
 	}
 	if ( !case_ignore_strcmp( opt_fix, "pps" )) {
+		*nsats = 4;
 		return fix_pps;
 	}
 	if ( !case_ignore_strcmp( opt_fix, "dgps" )) {
+		*nsats = 4;
 		return fix_dgps;
 	}
 	if ( !case_ignore_strcmp( opt_fix, "3d" )) {
+		*nsats = 4;
 		return fix_3d;
 	}
 	if ( !case_ignore_strcmp( opt_fix, "2d" )) {
+		*nsats = 3;
 		return fix_2d;
 	}
 	if ( !case_ignore_strcmp( opt_fix, "none" )) {
+		*nsats = 0;
 		return fix_none;
 	}
 	fatal( MYNAME ": invalid fix type\n" );
@@ -715,8 +720,9 @@ trackfilter_synth(void)
 	time_t oldtime = 0;
 	int first = 1;
 	fix_type fix;
+	int nsats = 0;
 	
-	fix = trackfilter_parse_fix();
+	fix = trackfilter_parse_fix(&nsats);
 	
 	for (i = 0; i < track_ct; i++)
 	{
@@ -727,6 +733,8 @@ trackfilter_synth(void)
 		wpt = (waypoint *)elem;
 		if ( opt_fix ) {
 			wpt->fix = fix;
+			if (wpt->sat == 0)
+				wpt->sat = nsats;
 		}
 		if ( first ) {
 			if ( opt_course ) {
