@@ -2684,6 +2684,18 @@
 				RelativePath="..\yahoo.c"
 				>
 			</File>
+			<File
+				RelativePath="..\pocketfms_fp.c">
+			</File>
+			<File
+				RelativePath="..\pocketfmt_bc.c">
+			</File>
+			<File
+				RelativePath="..\naviguide.c">
+			</File>
+			<File
+				RelativePath="..\v900.c">
+			</File>
 			<Filter
 				Name="Jeeps"
 				>
