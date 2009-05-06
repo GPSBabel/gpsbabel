@@ -8,5 +8,11 @@
 	 Waypoint storage is possible only if "recording reason" (RCR) is enabled in the settings.
 </para>
 <para>
+	Holux GPSport 245 is a datalogger with display suitable for cycling, walking and running. 
+        It can store ~200k trackpoints with limited data. The m241 and m241-bin format is 
+        able to automatically detect GPSport 245 data and handle the differences from Holux M-241 devices.
+        Note: GP245 does not log any quality of the position.
+</para>
+<para>
 	Use the m241 format to connect with the unit serially and m241-bin to read files saved by the device.
 </para>

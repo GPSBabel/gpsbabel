@@ -1350,6 +1350,13 @@ compare ${TMPDIR}/mtk_logger_m241.gpx ${REFERENCE}/track/mtk_logger_m241.gpx
 compare ${TMPDIR}/mtk_logger_m241.csv ${REFERENCE}/track/mtk_logger_m241.csv
 
 #
+# MTK logger tests (Holux GPsport-245 - using m241 module)
+#
+rm -f ${TMPDIR}/mtk_logger_gp245.*
+gpsbabel -t -w -i m241-bin -f ${REFERENCE}/track/mtk_logger_gp245.bin -o gpx -F ${TMPDIR}/mtk_logger_gp245.gpx
+compare ${TMPDIR}/mtk_logger_gp245.gpx ${REFERENCE}/track/mtk_logger_gp245.gpx
+
+#
 # MagicMaps IK3D Project File .ikt test
 #
 gpsbabel -i ik3d -f ${REFERENCE}/ik3d-sample.ikt -o gpx -F ${TMPDIR}/ik3d-sample.gpx
