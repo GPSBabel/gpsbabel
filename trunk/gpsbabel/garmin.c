@@ -186,6 +186,7 @@ rw_init(const char *fname)
 				case 694: /* Legend HCx */
 				case 695: /* Vista HC */
 				case 786: /* HC model */
+				case 957: /* Legend HC */
 					receiver_short_length = 14;
 					snwhiteopt = xstrdup("1");
 					receiver_must_upper = 0;
