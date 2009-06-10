@@ -1217,11 +1217,14 @@ get_option(const char *iarglist, const char *argname)
 			 * return "bar".   Otherwise, we assume we have
 			 * simply "foo" so we return that.
 			 */
-			if (argp[arglen] == '=')
+            if (argp[arglen] == '=') {
 				rval = argp + arglen + 1;
-			else
+                break;
+            }
+            else if (argp[arglen] == '\0') {
 				rval = argp;
-			break;
+                break;
+            }
 		}
 	}
 	/*
