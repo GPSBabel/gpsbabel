@@ -214,14 +214,16 @@ enum MTK_DEVICE_TYPE {
 static void *fd;  /* serial fd */
 static FILE *fl;  /* bin.file fd */
 static char *port; /* serial port name */
-static char *erase;  /* erase ? command option */
+static char *OPT_erase;  /* erase ? command option */
+static char *OPT_log_enable;  /* enable ? command option */
 static char *csv_file; /* csv ? command option */
 static enum MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;
 
 struct mtk_loginfo mtk_info;
 
 const char LIVE_CHAR[4] = {'-', '\\','|','/'};
-const char TEMP_DATA_BIN[]= "data.bin";
+static const char TEMP_DATA_BIN[]= "data.bin";
+static const char TEMP_DATA_BIN_OLD[]= "data_old.bin";
 
 
 const char CMD_LOG_DISABLE[]= "$PMTK182,5*20\r\n";
@@ -241,7 +243,9 @@ static int mtk_parse_info(const unsigned char *data, int dataLen);
 // Arguments for log fetch 'mtk' command..
 
 static arglist_t mtk_sargs[] = {
-    { "erase", &erase, "Erase device data after download",
+    { "erase", &OPT_erase, "Erase device data after download",
+        "0", ARGTYPE_BOOL, ARG_NOMINMAX },
+    { "log_enable", &OPT_log_enable, "Enable logging after download",
         "0", ARGTYPE_BOOL, ARG_NOMINMAX },
     { "csv",   &csv_file, "MTK compatible CSV output file",
         NULL, ARGTYPE_STRING, ARG_NOMINMAX },
@@ -375,7 +379,7 @@ static void mtk_rd_init(const char *fname){
     port = xstrdup(fname);
 
     dbg(1, "Opening port %s...\n", fname);
-    if (fd = gbser_init(port), NULL == fd) {
+    if ( (fd = gbser_init(port)) == NULL ) {
         fatal(MYNAME ": Can't initialise port \"%s\"\n", port);
     }
     
@@ -453,17 +457,28 @@ static void mtk_read(void){
   char cmd[256];
   char *line = NULL;
   unsigned char crc, *data = NULL;
-  int cmdLen, j, bsize, i, len, ff_len, rc, init_scan, retry_cnt, log_enabled;
+  int cmdLen, j, bsize, i, len, ff_len, null_len, rc, init_scan, retry_cnt, log_enabled;
   unsigned int line_size, data_size, data_addr, addr, addr_max;
+  long dsize, dpos = 0;
   FILE *dout;
   char *fusage = NULL;
 
   log_enabled = 0;
   init_scan = 0;
-  dout = fopen(TEMP_DATA_BIN, "wb");
+  dout = fopen(TEMP_DATA_BIN, "r+b");
   if ( dout == NULL ){
-     fatal(MYNAME ": Can't create temporary file %s", TEMP_DATA_BIN);
-     return;
+     dout = fopen(TEMP_DATA_BIN, "wb");
+     if ( dout == NULL ){
+        fatal(MYNAME ": Can't create temporary file %s", TEMP_DATA_BIN);
+        return;
+     }
+  }
+  fseek(dout, 0L,SEEK_END);
+  dsize = ftell(dout);
+  if ( dsize > 1024 ){
+     dbg(1, "Temp %s file exists. with size %d\n", TEMP_DATA_BIN, dsize);
+     dpos = 0;
+     init_scan = 1;
   }
   dbg(1, "Download %s -> %s\n", port, TEMP_DATA_BIN);
 
@@ -494,10 +509,23 @@ static void mtk_read(void){
    }  
   
   if ( addr_max == 0 ) { // get flash usage failed...      
-    addr_max = 0x200000-64*1024;  // 16Mbit/2Mbyte/32x64kByte block. -- fixme Q1000-ng has 32Mbit 
+    addr_max = 0x200000;  // 16Mbit/2Mbyte/32x64kByte block. -- fixme Q1000-ng has 32Mbit 
     init_scan = 1;
   }
   dbg(1, "Download %dkB from device\n", (addr_max+1) >> 10);
+
+  if ( dsize > addr_max ){
+     dbg(1, "Temp %s file (%ld) is larger than data size %d. Data erased since last download !\n", TEMP_DATA_BIN, dsize, addr_max);
+     fclose(dout);
+     dsize = 0;
+     init_scan = 0;
+     rename(TEMP_DATA_BIN, TEMP_DATA_BIN_OLD);
+     dout = fopen(TEMP_DATA_BIN, "wb");
+     if ( dout == NULL ){
+        fatal(MYNAME ": Can't create temporary file %s", TEMP_DATA_BIN);
+        return;
+     }
+  }
 
   bsize = 0x0400;
   addr  = 0x0000;
@@ -548,21 +576,36 @@ mtk_retry:
                i = 20;
                j = 0;
                ff_len = 0; // number of 0xff bytes.
+               null_len = 0; // number of 0x00 bytes.
                while ( i < (len-3) ){
                   data[j] = (isdigit(line[i])?(line[i]-'0'):(line[i]-'A'+0xA))*0x10 +
                             (isdigit(line[i+1])?(line[i+1]-'0'):(line[i+1]-'A'+0xA));
                   if ( data[j] == 0xff )
                      ff_len++;
+                  if ( data[j] == 0x00 )
+                     null_len++;
                   i += 2;
                   j++;          
                }
                if ( init_scan ){
-                  if ( ff_len == j ){ // data in sector - we've found max sector..
+                  if ( dsize > 0 && addr < dsize ){
+                    fseek(dout, addr, SEEK_SET);
+                    if ( fread(line, 1, bsize, dout) == bsize && memcmp(line, data, bsize) == 0 ){
+                       dpos = addr;
+                       dbg(2, "%s same at %d\n", TEMP_DATA_BIN, addr);
+                    } else {
+                       dbg(2, "%s differs at %d\n", TEMP_DATA_BIN, addr);
+                    }   
+                 }
+                 if ( ff_len == j ){ // data in sector - we've found max sector..
                      addr_max = addr;
-                     dbg(3, "### Init scan complete - max block is 0x%6x!!! ###\n", addr_max);
+                     dbg(1, "Initial scan done - Download %dkB from device\n", (addr_max+1) >> 10);
                   }   
                   len = 0;
                } else {
+                  if ( null_len == j ){ // 0x00 block - bad block....
+                     fprintf(stderr, "FIXME -- read bad block at 0x%.6x - retry ? skip ?\n%s\n", data_addr, line);
+                  }
                   if ( fwrite(data, 1, j, dout) != j )
                      fatal(MYNAME ": Failed to write temp. binary file\n");
                   if ( ff_len == j ){ // 0xff block - read complete...
@@ -580,7 +623,7 @@ mtk_retry:
          addr += 0x10000;
          if ( addr >= addr_max ){ // initial scan complete...
             init_scan = 0;
-            addr = 0x0000;
+            addr = dpos;
          }
       } else {
          addr += bsize;
@@ -598,7 +641,8 @@ mtk_retry:
    if ( global_opts.verbose_status || global_opts.debug_level >= 2 )
       fprintf(stderr,"\n");
 
-  if ( log_enabled ){
+  // Fixme - Order or. Enable - parse - erase ??
+  if ( log_enabled || *OPT_log_enable=='1' ){
      i = do_cmd(CMD_LOG_ENABLE, "PMTK001,182,4,3", NULL, 2);
      dbg(3, " ---- LOG ENABLE ----%s\n", i==0?"Success":"Fail");
   } else {
@@ -614,7 +658,7 @@ mtk_retry:
   file_deinit();   
  
    /* fixme -- we're assuming all went well - erase flash.... */
-   if ( *erase != '0' ) {
+   if ( *OPT_erase != '0' ) {
       mtk_erase();
    } 
      
@@ -1057,7 +1101,7 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
    }    
 
    if ( data[i] != crc ){
-      dbg(0,"%2d: Bad CRC %.2x != %.2x\n", count, data[i], crc);
+      dbg(0,"%2d: Bad CRC %.2x != %.2x (pos 0x%.6x)\n", count, data[i], crc, (fl!=NULL)?ftell(fl):-1);
    }
    i++; // crc         
    count++;
@@ -1091,6 +1135,8 @@ static int mtk_parse_info(const unsigned char *data, int dataLen){
             dbg(1, "# Log bitmask is: %.8x\n", bm);
             if ( mtk_device != MTK_LOGGER ) 
                bm &= 0x7fffffffU;
+            if ( mtk_device == HOLUX_GR245 )
+               bm &= ~HOLUX245_MASK;
             if ( mtk_info.bitmask != bm ){
                dbg(1," ########## Bitmask Change   %.8x -> %.8x ###########\n", mtk_info.bitmask, bm);
                mtk_info.track_event |= MTK_EVT_BITMASK;
@@ -1135,7 +1181,7 @@ static int mtk_parse_info(const unsigned char *data, int dataLen){
    } else {
       if ( global_opts.debug_level > 0 ){
         fprintf(stderr,"#!! Invalid INFO block !! %d bytes\n >> ", dataLen);
-        for (bm=0;bm<16;bm++) printf("%.2x ", data[bm]);
+        for (bm=0;bm<16;bm++) fprintf(stderr, "%.2x ", data[bm]);
         fprintf(stderr,"\n");
       }
       return 0;
@@ -1247,8 +1293,15 @@ static void file_read(void) {
    /* get default bitmask, log period/speed/distance */
    bLen = fread(buf, 1, 20, fl);
    if ( bLen == 20 ){
-      unsigned int mask, log_period, log_distance, log_speed;
-       
+      unsigned int mask, log_period, log_distance, log_speed, log_policy;
+      log_policy   = le_read16(buf + 6);
+
+      if ( !(log_policy == 0x0104 || log_policy == 0x0106) && fsize > 0x10000 ){
+         dbg(1, "Invalid initial log policy 0x%.4x - check next block\n", log_policy);
+         fseek(fl, 0x10000, SEEK_SET);
+         bLen = fread(buf, 1, 20, fl);
+         log_policy   = le_read16(buf + 6);
+      }       
       mask = le_read32(buf + 2);
       if ( mtk_device != MTK_LOGGER ) { // clear Holux-specific 'low precision' bit
          mask &= 0x7fffffffU;
@@ -1260,7 +1313,6 @@ static void file_read(void) {
          mask &= ~HOLUX245_MASK;
       }
 
-      // log_policy   = le_read16(buf + 6);
       log_period   = le_read32(buf + 8);
       log_distance = le_read32(buf + 12);
       log_speed    = le_read32(buf + 16);
