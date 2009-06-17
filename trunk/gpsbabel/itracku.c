@@ -392,7 +392,7 @@ itracku_rd_ser_init(const char *fname)
 				break;
 			}
 			dbg(1, "trying port %s", port);
-			if (fd = gbser_init(port), NULL == fd) {
+			if ((fd = gbser_init(port)) == NULL) {
 				dbg(1, "port %s not available.", port);
 				continue;
 			}
@@ -413,7 +413,7 @@ itracku_rd_ser_init(const char *fname)
 				break;
 			}
 			dbg(1, "trying port %s", port);
-			if (fd = gbser_init(port), NULL == fd) {
+			if ((fd = gbser_init(port)) == NULL) {
 				dbg(1, "port %s not available.", port);
 				continue;
 			}
@@ -440,7 +440,7 @@ itracku_rd_ser_init(const char *fname)
 			port = xstrdup(fname);
 
 			dbg(1, "opening port %s", fname);
-			if (fd = gbser_init(port), NULL == fd)
+			if ((fd = gbser_init(port)) == NULL)
 			{
 				fatal(MYNAME ": can't initialise port \"%s\"", port);
 			}
