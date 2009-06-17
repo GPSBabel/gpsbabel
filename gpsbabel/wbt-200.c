@@ -197,10 +197,8 @@ static size_t buf_read(struct buf_head *h, void *data, size_t len) {
 static void buf_extend(struct buf_head *h, size_t amt) {
     struct buf_chunk *c;
     size_t sz = amt + sizeof(struct buf_chunk);
-    if (c = xmalloc(sz), NULL == c) {
-        fatal(MYNAME ": Can't allocate %lu bytes for buffer\n", (unsigned long) sz);
-    }
 
+    c = xmalloc(sz);
     c->next = NULL;
     c->size = amt;
     c->used = 0;
@@ -374,7 +372,7 @@ static void rd_init(const char *fname) {
     port = xstrdup(fname);
 
     db(1, "Opening port...\n");
-    if (fd = gbser_init(port), NULL == fd) {
+    if ((fd = gbser_init(port)) == NULL) {
         fatal(MYNAME ": Can't initialise port \"%s\"\n", port);
     }
     
@@ -404,7 +402,7 @@ static int rd_buf(void *buf, int len) {
 
 static void file_init(const char *fname) {
     db(1, "Opening file...\n");
-    if (fl = fopen(fname, "rb"), NULL == fl) {
+    if ((fl = fopen(fname, "rb")) == NULL) {
         fatal(MYNAME ": Can't open file '%s'\n", fname);
     }
 }
