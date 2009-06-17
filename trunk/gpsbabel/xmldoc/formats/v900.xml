@@ -1,13 +1,13 @@
 <para>Read only support for csv file format used by <productname>Visiontac VGPS-900</productname> or <productname>Columbus V-900</productname> GPS data loggers. These seem to be two brand names for the exact same product.</para>
 
-<para>The the V-900 stores logs in on a microSD in a custom csv format. This format contains NULL chracters and fiexed length fields, and therefore can not  handled by the normal csv module in GPSBabel.</para>
+<para>The the V-900 stores logs in on a microSD in a custom csv format. This format contains NULL chracters and fixed length fields, and therefore can not  handled by the normal csv module in GPSBabel.</para>
 
 <para>
 <ulink url="http://www.visiontac.com/v900_specs.htm">Visiontac VGPS-900</ulink>
 </para>
 
 <example id="v900">
-  <title>Command convertion of a v900 csv log file to a gpx format</title>
+  <title>Conversion of a v900 csv log file to a gpx format</title>
   <para><userinput>gpsbabel -i v900 -f 09040400.csv -o gpx -F outfile.gpx</userinput></para>
 </example>
 
