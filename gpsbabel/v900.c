@@ -344,7 +344,10 @@ Advanced mode: INDEX,TAG,DATE,TIME,LATITUDE N/S,LONGITUDE E/W,HEIGHT,SPEED,HEADI
 				wpt->fix = fix_unknown;
 		}
 
-		track_add_wpt(track, wpt);
+		if(line.bas.common.tag == 'T')
+                	track_add_wpt(track, wpt);
+                else
+                	waypt_add(wpt);
 	}
 }
 
@@ -362,4 +365,3 @@ ff_vecs_t v900_vecs = {
 	CET_CHARSET_UTF8, 1,	/* Could be  US-ASCII, since we only read "0-9,A-Z\n\r" */
 	{NULL,NULL,NULL,NULL,NULL,NULL}
 };
-
