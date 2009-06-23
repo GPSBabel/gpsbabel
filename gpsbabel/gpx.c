@@ -1595,15 +1595,25 @@ gpx_write_common_position(const waypoint *waypointp, const char *indent)
 static void
 gpx_write_common_depth(const waypoint *waypointp, const char *indent)
 {
-	if (waypointp->depth != 0) {
+	if (waypointp->depth != 0 || waypointp->temperature != 0) {
 		if (opt_humminbirdext || opt_garminext) {
 			gbfprintf(ofd, "%s<extensions>\n", indent);
-			if (opt_humminbirdext)
-				gbfprintf(ofd, "%s  <h:depth>%f</h:depth>\n",
-				          indent, waypointp->depth*100.0);
-			if (opt_garminext)
-				gbfprintf(ofd, "%s  <gpxx:Depth>%f</gpxx:Depth>\n",
-				          indent, waypointp->depth);
+			if (waypointp->depth != 0) {
+				if (opt_humminbirdext)
+					gbfprintf(ofd, "%s  <h:depth>%f</h:depth>\n",
+				        	  indent, waypointp->depth*100.0);
+				if (opt_garminext)
+					gbfprintf(ofd, "%s  <gpxx:Depth>%f</gpxx:Depth>\n",
+				        	  indent, waypointp->depth);
+			}
+			if (waypointp->temperature != 0) {
+				if (opt_humminbirdext)
+					gbfprintf(ofd, "%s  <h:temperature>%f</h:temperature>\n",
+				        	  indent, waypointp->temperature);
+				if (opt_garminext)
+					gbfprintf(ofd, "%s  <gpxx:Temperature>%f</gpxx:Temperature>\n",
+					          indent, waypointp->temperature);
+			}
 			gbfprintf(ofd, "%s</extensions>\n", indent);
 		}
 	}
