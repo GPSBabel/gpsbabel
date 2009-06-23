@@ -110,8 +110,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.68 $"; */
-static char gdb_release_date[] = "$Date: 2009-02-11 12:49:27 $";
+/* static char gdb_release[] = "$Revision: 1.69 $"; */
+static char gdb_release_date[] = "$Date: 2009-06-23 03:29:25 $";
 
 static gbfile *fin, *fout, *ftmp;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -432,7 +432,7 @@ read_file_header(void)
 	}
 
 	i = FREAD_STR(buf);
-	is_fatal((i != 9) || (strcmp(buf, "MapSource") != 0), "Invalid header!");
+	is_fatal(!(((i == 9) && (strcmp(buf, "MapSource") == 0)) || ((i == 8) && (strcmp(buf, "BaseCamp") == 0))), "Invalid header!");
 }
 
 /*-----------------------------------------------------------------------------*/
