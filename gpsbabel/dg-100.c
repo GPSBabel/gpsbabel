@@ -619,10 +619,13 @@ dg100_erase()
 /* GPSBabel integration */
 
 static char *erase;
+static char *erase_only;
 
 static
 arglist_t dg100_args[] = {
 	{ "erase", &erase, "Erase device data after download", 
+		"0", ARGTYPE_BOOL, ARG_NOMINMAX }, 
+	{ "erase_only", &erase_only, "Only erase device data, do not download anything",
 		"0", ARGTYPE_BOOL, ARG_NOMINMAX }, 
 	ARG_TERMINATOR
 };
@@ -655,6 +658,10 @@ dg100_rd_deinit(void)
 static void
 dg100_read(void)
 {
+	if (*erase_only == '1') {
+		dg100_erase();
+		return;
+	}
 	dg100_getfiles();
 	if (*erase == '1') {
 		dg100_erase();

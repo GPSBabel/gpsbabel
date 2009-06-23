@@ -7,6 +7,10 @@
   <title>Command showing DG-100 download and erase on Linux</title>
   <para><userinput>gpsbabel -t -i dg-100,erase -o gpx /dev/ttyUSB0 outputfile.gpx</userinput></para>
 </example>
+<example id="dg-100-on-linux-erase_only">
+  <title>Command showing DG-100 erase_only option on Linux</title>
+  <para><userinput>gpsbabel -t -i dg-100,erase_only /dev/ttyUSB0</userinput></para>
+</example>
 
 <para>
 The DG-100 provides a physical USB interface to the host computer, but
