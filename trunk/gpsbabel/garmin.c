@@ -468,7 +468,11 @@ track_read(void)
 		wpt->creation_time = array[i]->Time;
                 wpt->wpt_flags.is_split = checkWayPointIsAtSplit(wpt, laps,
                                                                  nlaps);
-		
+		if (array[i]->dpth < 1.0e25f)
+			WAYPT_SET(wpt, depth, array[i]->dpth);
+		if (array[i]->temperature_populated)
+			WAYPT_SET(wpt, temperature, array[i]->temperature);
+
 		track_add_wpt(trk_head, wpt);
 	}
 
