@@ -1,13 +1,8 @@
 <para>
   The 'delbin' module supports Delorme PN-20, PN-30, and PN-40 receivers.
   <important>
-    <para>Mac OS/X is not supported.  We need to figure out the codeless 
-  	kext thing to keep the OS from claiming this as a HID, which is 
-	the interface it presents to the host OS.</para>
-  </important>
-  <important>
     <para>
-      Not all strains of Linux are supported.   Fedora 7 is known not to work.
+      Not all strains of Linux are supported.   Fedora 7 is known not to work, for example.
     </para>
   </important>
 </para>
@@ -18,8 +13,9 @@
 
 <para>
   This module implements the (undocumented) waypoint extensions introduced
-  in firmware version 2.5 for enhanced geocaching mode.  As these are reverse
-  engineered, there may be issues with those modes in particular.
+  for enhanced geocaching mode in 2.5 for PN-40 and 1.6 for PN-20.  As 
+  these are reverse engineered, there may be issues with those modes 
+  in particular.
 </para>
 
 <example id="pn-40-send">

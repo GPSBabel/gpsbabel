@@ -728,13 +728,11 @@ send_batch(int expect_transfer_complete)
 		warning(MYNAME ": begin send_batch, %u messages\n", n);
 	for (i = 0; i < n; i++) {
 		unsigned timeout_count = 0;
-		int nack = 0;
 		message_write(batch_array[i].msg_id, &batch_array[i].msg);
 		for (;;) {
 			unsigned id = message_read_1(0, &m);
 			switch (id) {
 			case MSG_ACK:
-				if (nack) gb_sleep(100000);
 				break;
 			case MSG_NAVIGATION:
 				timeout_count++;
@@ -2036,6 +2034,8 @@ ff_vecs_t delbin_vecs = {
 // Windows
 #if _WIN32
 
+#undef HAVE_LIBUSB
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <setupapi.h>
@@ -2154,6 +2154,156 @@ delbin_os_ops_t delbin_os_ops = {
 #endif // _WIN32
 
 //-----------------------------------------------------------------------------
+// MacOS X
+#if __APPLE__
+
+#undef HAVE_LIBUSB
+
+#include <pthread.h>
+#include <IOKit/IOKitLib.h>
+#include <IOKit/IOCFPlugIn.h>
+#include <IOKit/hid/IOHIDLib.h>
+
+// IOHIDDeviceInterface121::getReport() does not work, it hangs the process
+// in some sort of unkillable state.  So reading is done via a separate thread
+// with a run loop and interrupt report callback. Yuck.
+
+static IOHIDDeviceInterface122** device;
+static pthread_t thread;
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+static char* report_buf;
+static char* packet_array[8];
+static unsigned packet_array_head;
+static unsigned packet_array_tail;
+static CFRunLoopRef run_loop;
+
+static void*
+thread_func(void* run_loop_source)
+{
+	run_loop = CFRunLoopGetCurrent();
+	CFRunLoopAddSource(run_loop, run_loop_source, kCFRunLoopDefaultMode);
+	CFRunLoopRun();
+	return NULL;
+}
+
+static void
+interrupt_report_cb(void* target, IOReturn result, void* refcon, void* sender, UInt32 bufferSize)
+{
+	memcpy(packet_array[packet_array_head], report_buf, delbin_os_packet_size);
+	pthread_mutex_lock(&mutex);
+	if (packet_array_head == packet_array_tail) {
+		pthread_cond_signal(&cond);
+	}
+	packet_array_head++;
+	packet_array_head &= sizeofarray(packet_array) - 1;
+	if (packet_array_head == packet_array_tail && global_opts.debug_level >= DBGLVL_M)
+		warning(MYNAME ": packet_array overrun, packets lost\n");
+	pthread_mutex_unlock(&mutex);
+}
+
+static void
+mac_os_init(const char* fname)
+{
+	CFMutableDictionaryRef dict = IOServiceMatching(kIOHIDDeviceKey);
+	io_service_t service;
+	IOCFPlugInInterface** plugin;
+	CFNumberRef cf_num;
+	CFRunLoopSourceRef run_loop_source;
+	int i;
+	kern_return_t kr;
+	HRESULT hr;
+	IOReturn ir;
+	SInt32 unused;
+
+	i = VENDOR_ID;
+	cf_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &i);
+	CFDictionaryAddValue(dict, CFSTR(kIOHIDVendorIDKey), cf_num);
+	CFRelease(cf_num);
+	i = PRODUCT_ID;
+	cf_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &i);
+	CFDictionaryAddValue(dict, CFSTR(kIOHIDProductIDKey), cf_num);
+	CFRelease(cf_num);
+	service = IOServiceGetMatchingService(kIOMasterPortDefault, dict);
+	if (service == 0) {
+		fatal(MYNAME ": no DeLorme PN found\n");
+	}
+	kr = IOCreatePlugInInterfaceForService(
+		service, kIOHIDDeviceUserClientTypeID, kIOCFPlugInInterfaceID, &plugin, &unused);
+	if (kr)
+		fatal(MYNAME ": IOCreatePlugInInterfaceForService failed 0x%x\n", (int)kr);
+	IOObjectRelease(service);
+	hr = (*plugin)->QueryInterface(plugin, CFUUIDGetUUIDBytes(kIOHIDDeviceInterfaceID122), (void*)&device);
+	if (hr)
+		fatal(MYNAME ": QueryInterface failed 0x%x\n", (int)hr);
+	(*plugin)->Release(plugin);
+	ir = (*device)->open(device, kIOHIDOptionsTypeSeizeDevice);
+	if (ir)
+		fatal(MYNAME ": device open failed 0x%x\n", (int)ir);
+	ir = (*device)->createAsyncEventSource(device, &run_loop_source);
+	if (ir)
+		fatal(MYNAME ": createAsyncEventSource failed 0x%x\n", (int)ir);
+	delbin_os_packet_size = 64;
+	report_buf = xmalloc(delbin_os_packet_size);
+	for (i = sizeofarray(packet_array); i--;) {
+		packet_array[i] = xmalloc(delbin_os_packet_size);
+	}
+	ir = (*device)->setInterruptReportHandlerCallback(
+		device, report_buf, delbin_os_packet_size, interrupt_report_cb, NULL, NULL);
+	if (ir)
+		fatal(MYNAME ": setInterruptReportHandlerCallback failed 0x%x\n", (int)ir);
+	i = pthread_create(&thread, NULL, thread_func, run_loop_source);
+	if (i)
+		fatal(MYNAME ": pthread_create failed %d\n", i);
+}
+
+static void
+mac_os_deinit(void)
+{
+	void* unused;
+	unsigned i;
+	CFRunLoopStop(run_loop);
+	pthread_join(thread, &unused);
+	(*device)->Release(device);
+	xfree(report_buf);
+	for (i = sizeofarray(packet_array); i--;) {
+		xfree(packet_array[i]);
+	}
+}
+
+static unsigned
+mac_os_packet_read(void* buf)
+{
+	pthread_mutex_lock(&mutex);
+	while (packet_array_head == packet_array_tail) {
+		pthread_cond_wait(&cond, &mutex);
+	}
+	memcpy(buf, packet_array[packet_array_tail++], delbin_os_packet_size);
+	packet_array_tail &= sizeofarray(packet_array) - 1;
+	pthread_mutex_unlock(&mutex);
+	return delbin_os_packet_size;
+}
+
+static unsigned
+mac_os_packet_write(const void* buf, unsigned size)
+{
+	IOReturn r = (*device)->setReport(
+		device, kIOHIDReportTypeOutput, 0, (void*)buf, size, 2000, NULL, NULL, NULL);
+	if (r)
+		fatal("setReport failed 0x%x\n", (int)r);
+	return size;
+}
+
+delbin_os_ops_t delbin_os_ops = {
+	mac_os_init,
+	mac_os_deinit,
+	mac_os_packet_read,
+	mac_os_packet_write
+};
+
+#endif // __APPLE__
+
+//-----------------------------------------------------------------------------
 // libusb
 #if HAVE_LIBUSB
 
@@ -2269,6 +2419,8 @@ delbin_os_ops_t delbin_os_ops =
 #include <linux/hiddev.h>
 #include <linux/hidraw.h>
 
+// Read from hidraw, write to hiddev. Reading from hiddev does not work,
+// and neither does writing to hidraw.
 static int fd_hidraw;
 static int fd_hiddev;
 
@@ -2278,7 +2430,6 @@ static void
 linuxhid_os_init(const char* fname)
 {
 	struct hidraw_devinfo info;
-	struct hiddev_report_info rinfo;
 	struct hiddev_field_info finfo;
 	DIR* dir = NULL;
 	struct dirent* d;
@@ -2345,16 +2496,8 @@ linuxhid_os_init(const char* fname)
 			fatal(MYNAME ": no DeLorme PN found\n");
 		return;
 	}
-	rinfo.report_type = HID_REPORT_TYPE_INPUT;
-	rinfo.report_id = HID_REPORT_ID_FIRST;
-	if (ioctl(fd_hiddev, HIDIOCGREPORTINFO, &rinfo) < 0) {
-		warning(MYNAME ": HIDIOCGREPORTINFO: %s\n", strerror(errno));
-		if (linuxhid_os_init_status == 0)
-			exit(1);
-		return;
-	}
-	finfo.report_type = rinfo.report_type;
-	finfo.report_id = rinfo.report_id;
+	finfo.report_type = HID_REPORT_TYPE_INPUT;
+	finfo.report_id = 0;
 	finfo.field_index = 0;
 	if (ioctl(fd_hiddev, HIDIOCGFIELDINFO, &finfo) < 0) {
 		warning(MYNAME ": HIDIOCGFIELDINFO: %s\n", strerror(errno));
@@ -2415,15 +2558,6 @@ static const delbin_os_ops_t linuxhid_os_ops = {
 	linuxhid_os_packet_write
 };
 
-static void linux_os_init(const char* fname);
-
-delbin_os_ops_t delbin_os_ops = {
-	linux_os_init,
-	NULL,
-	NULL,
-	NULL
-};
-
 static void
 linux_os_init(const char* fname)
 {
@@ -2444,11 +2578,18 @@ linux_os_init(const char* fname)
 	}
 }
 
+delbin_os_ops_t delbin_os_ops = {
+	linux_os_init,
+	NULL,
+	NULL,
+	NULL
+};
+
 #endif // __linux
 
 //-----------------------------------------------------------------------------
 // stubs
-#if !(_WIN32 || __linux || HAVE_LIBUSB)
+#if !(_WIN32 || __linux || __APPLE__ || HAVE_LIBUSB)
 static void
 stub_os_init(const char* fname)
 {
