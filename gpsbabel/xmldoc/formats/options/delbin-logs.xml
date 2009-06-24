@@ -1,0 +1,5 @@
+<para>
+  When set to true, this includes Groundspeak logs from GPX pocket queries 
+  when writing to Delorme devices that support the extended features introduced
+  in firmware version 2.5.
+</para>
