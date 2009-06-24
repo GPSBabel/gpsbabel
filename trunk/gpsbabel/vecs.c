@@ -45,6 +45,7 @@ extern ff_vecs_t compegps_vecs;
 extern ff_vecs_t copilot_vecs;
 extern ff_vecs_t coto_vecs;
 extern ff_vecs_t cst_vecs;
+extern ff_vecs_t delbin_vecs;
 extern ff_vecs_t dg100_vecs;
 extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t garmin_vecs;
@@ -926,6 +927,12 @@ vecs_t vec_list[] = {
         	"Naviguide binary route file (.twl)",
         	"twl"
         },
+	{
+		&delbin_vecs, 
+		"delbin",
+		"DeLorme PN-20/PN-30/PN-40 USB protocol",
+		NULL
+	}, 
 
 #endif // MAXIMAL_ENABLED
 	{
