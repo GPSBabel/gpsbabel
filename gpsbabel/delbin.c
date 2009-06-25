@@ -37,6 +37,10 @@ device was upgraded to firmware 2.5.165506 during development.
 The "data size" in the message header includes the 4 trailer bytes, so it
 is really the size of the whole message minus the header.
 
+Messages do not always start at the beginning of a packet. Every once in a
+while, the start of the next message directly follows the end of the previous
+one, in the same packet.
+
 The time before an unacknowledged message will be retransmitted by the
 device is on the order of 2 to 4 seconds.
 
@@ -524,6 +528,7 @@ static unsigned
 message_read_1(unsigned msg_id, message_t* m)
 {
 	gbuint8 buf[256];
+	static gbuint8 buf_prev[256];
 	gbuint8* p;
 	unsigned total = 0;
 	unsigned count = 0;
@@ -531,24 +536,38 @@ message_read_1(unsigned msg_id, message_t* m)
 
 	for (;;) {
 		for (;;) {
-			unsigned n = packet_read(buf);
+			unsigned n;
+			// if last packet had extra data
+			if (buf_prev[1]) {
+				// try that first
+				n = buf_prev[1] + 2;
+				memcpy(buf, buf_prev, n);
+				buf_prev[1] = 0;
+			} else {
+				n = packet_read(buf);
+			}
 			if (n >= 10 && buf[2] == 0xdb && buf[3] == 0xfe &&
 			    checksum(buf + 2, 6) == le_readu16(buf + 8))
 			{
-				count = buf[1] - 8;
-				total = le_readu16(buf + 6);
-				id = le_readu16(buf + 4);
-				message_ensure_size(m, total - 4);
-				memcpy(m->buf, buf, 2 + buf[1]);
 				break;
 			}
 		}
-		while (count < total && buf[1] == delbin_os_packet_size - 2) {
+		count = buf[1] - 8;
+		total = le_readu16(buf + 6);
+		id = le_readu16(buf + 4);
+		message_ensure_size(m, total - 4);
+		memcpy(m->buf, buf, 2 + buf[1]);
+		while (count < total) {
 			unsigned n;
 			packet_read(buf);
 			n = buf[1];
+			// if packet has more than needed to complete message
 			if (n > total - count) {
-				n = total - count;
+				const unsigned n_next = n - (total - count);
+				n -= n_next;
+				// save the rest for next time
+				memcpy(buf_prev + 2, buf + 2 + n, n_next);
+				buf_prev[1] = n_next;
 			}
 			memcpy((char*)m->data + count, buf + 2, n);
 			count += n;
