@@ -676,6 +676,7 @@ get_batch(message_t** array, unsigned* n)
 					break;
 				}
 				// fall through
+			case 0:
 			case MSG_ACK:
 			case MSG_NACK:
 			case MSG_SATELLITE_INFO:
@@ -764,6 +765,7 @@ send_batch(int expect_transfer_complete)
 					message_write(batch_array[i].msg_id, &batch_array[i].msg);
 				}
 				// fall through
+			case 0:
 			case MSG_NACK:
 			case MSG_SATELLITE_INFO:
 				continue;
@@ -2192,7 +2194,7 @@ static pthread_t thread;
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 static char* report_buf;
-static char* packet_array[8];
+static char* packet_array[32];
 static unsigned packet_array_head;
 static unsigned packet_array_tail;
 static CFRunLoopRef run_loop;
