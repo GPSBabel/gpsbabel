@@ -522,56 +522,67 @@ message_write(unsigned msg_id, message_t* m)
 		warning(MYNAME ": sent %x\n", msg_id);
 }
 
+// read from the payload of a single packet
+static unsigned
+read_depacketize_1(gbuint8** p, unsigned n, int new_packet)
+{
+	static gbuint8 buf[256];
+	static unsigned buf_i, buf_n;
+	while (buf_n == 0 || new_packet) {
+		packet_read(buf);
+		if (buf[1] <= delbin_os_packet_size - 2) {
+			buf_n = buf[1];
+			buf_i = 2;
+		}
+	}
+	*p = buf + buf_i;
+	if (n > buf_n) {
+		n = buf_n;
+	}
+	buf_n -= n;
+	buf_i += n;
+	return n;
+}
+
+// read from packet payloads until request is fulfilled
+static void
+read_depacketize(gbuint8* buf, unsigned n)
+{
+	while (n) {
+		gbuint8* p;
+		unsigned nn = read_depacketize_1(&p, n, FALSE);
+		memcpy(buf, p, nn);
+		n -= nn;
+		buf += nn;
+	}
+}
+
 // Get one valid message.
 // If a corrupted message with the right id is seen, return failure (0).
 static unsigned
 message_read_1(unsigned msg_id, message_t* m)
 {
-	gbuint8 buf[256];
-	static gbuint8 buf_prev[256];
-	gbuint8* p;
-	unsigned total = 0;
-	unsigned count = 0;
-	unsigned id = 0;
-
+	unsigned id;
 	for (;;) {
-		for (;;) {
-			unsigned n;
-			// if last packet had extra data
-			if (buf_prev[1]) {
-				// try that first
-				n = buf_prev[1] + 2;
-				memcpy(buf, buf_prev, n);
-				buf_prev[1] = 0;
-			} else {
-				n = packet_read(buf);
-			}
-			if (n >= 10 && buf[2] == 0xdb && buf[3] == 0xfe &&
-			    checksum(buf + 2, 6) == le_readu16(buf + 8))
-			{
-				break;
-			}
+		unsigned total;
+		gbuint8 buf[8];
+		gbuint8* p;
+
+		read_depacketize(buf, 8);
+		while (buf[0] != 0xdb || buf[1] != 0xfe || checksum(buf, 6) != le_readu16(buf + 6)) {
+			gbuint8* pp;
+			// try for a message start at the beginning of next packet
+			read_depacketize_1(&pp, 8, TRUE);
+			memcpy(buf, pp, 8);
 		}
-		count = buf[1] - 8;
-		total = le_readu16(buf + 6);
-		id = le_readu16(buf + 4);
+		id = le_readu16(buf + 2);
+		total = le_readu16(buf + 4);
 		message_ensure_size(m, total - 4);
-		memcpy(m->buf, buf, 2 + buf[1]);
-		while (count < total) {
-			unsigned n;
-			packet_read(buf);
-			n = buf[1];
-			// if packet has more than needed to complete message
-			if (n > total - count) {
-				const unsigned n_next = n - (total - count);
-				n -= n_next;
-				// save the rest for next time
-				memcpy(buf_prev + 2, buf + 2 + n, n_next);
-				buf_prev[1] = n_next;
-			}
-			memcpy((char*)m->data + count, buf + 2, n);
-			count += n;
-		}
+		// copy in message head, really only need id field, do the rest for debugging
+		m->buf[0] = m->buf[1] = 0;
+		memcpy(m->buf + 2, buf, 8);
+		// read message body and trailer
+		read_depacketize(m->data, total);
 		p = (gbuint8*)m->data + m->size;
 		if (checksum(m->data, m->size) == le_readu16(p) &&
 			p[2] == 0xad && p[3] == 0xbc)
