@@ -336,7 +336,11 @@ const cet_ucs4_link_t cet_ucs4_to_ansi_x3_4_1968_extra[] =
 	{0x2006, (unsigned char) ' '}, // six-per-em space
 	{0x2010, (unsigned char) '-'}, // hyphen
 	{0x2011, (unsigned char) '-'}, // non-breaking hyphen
+	{0x2013, (unsigned char) '-'}, // en dash
+	{0x2014, (unsigned char) '-'}, // em dash
 	{0x2017, (unsigned char) '='}, // double low line
+	{0x2018, (unsigned char) '`'}, // left single quotation mark
+	{0x2019, (unsigned char) '\''}, // right single quotation mark
 	{0x201C, (unsigned char) '"'}, 
 	{0x201D, (unsigned char) '"'},
 	{0x2032, (unsigned char) '\''}, // prime
