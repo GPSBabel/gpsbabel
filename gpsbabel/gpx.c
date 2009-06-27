@@ -440,9 +440,10 @@ tag_gpx(const char **attrv)
 		 */
 		else if (strcmp(avp[0], "xsi:schemaLocation") == 0) {
 			if (0 == strcmp(avp[1], DEFAULT_XSI_SCHEMA_LOC_11)) {
-				if (0 == strcmp(xsi_schema_loc, DEFAULT_XSI_SCHEMA_LOC))
+				if (0 == strcmp(xsi_schema_loc, DEFAULT_XSI_SCHEMA_LOC)) {
 					xfree(xsi_schema_loc);
 					xsi_schema_loc = xstrdup(DEFAULT_XSI_SCHEMA_LOC_11);
+				}
 				continue;
 			}
 			if (0 == strstr(xsi_schema_loc, avp[1])) {
