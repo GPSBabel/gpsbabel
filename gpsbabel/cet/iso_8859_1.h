@@ -53,8 +53,8 @@ cet_cs_vec_t cet_cs_vec_iso_8859_1 =	/* defined in cet.h */
 	cet_cs_name_iso_8859_1,		/* name of character set	*/
 	cet_cs_alias_iso_8859_1,		/* alias table			*/
 
-	NULL,				/* ... to UCS-4 converter (multi-byte) */
-	NULL,				/* UCS-4 to ... converter (multi-byte) */
+	&cet_cs_vec_ansi_x3_4_1968,	/* fallback character set */
+	NULL,				/* unused */
 
 	cet_ucs4_map_iso_8859_1,		/* char to UCS-4 value table	*/
 	cet_ucs4_ofs_iso_8859_1,		/* first non standard character	*/
