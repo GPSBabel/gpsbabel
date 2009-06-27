@@ -18,6 +18,9 @@
 /* Defined if you have libusb */
 #undef HAVE_LIBUSB
 
+/* Defined if you have Linux HID interface */
+#undef HAVE_LINUX_HID
+
 /* Define to 1 if you have the `z' library (-lz). */
 #undef HAVE_LIBZ
 
