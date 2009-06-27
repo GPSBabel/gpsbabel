@@ -39,7 +39,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib setupapi.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib setupapi.lib hid.lib"
 				OutputFile=".\Release/GPSBabel.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -100,7 +100,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib setupapi.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib setupapi.lib hid.lib"
 				OutputFile=".\Debug/GPSBabel.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -313,6 +313,9 @@
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\delbin.c">
 			</File>
 			<File
 				RelativePath="..\delgpl.c">
@@ -1998,7 +2001,7 @@
 				RelativePath="..\pocketfms_fp.c">
 			</File>
 			<File
-				RelativePath="..\pocketfmt_bc.c">
+				RelativePath="..\pocketfms_bc.c">
 			</File>
 			<File
 				RelativePath="..\naviguide.c">

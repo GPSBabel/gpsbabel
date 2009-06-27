@@ -78,7 +78,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="setupapi.lib"
+				AdditionalDependencies="setupapi.lib hid.lib"
 				OutputFile=".\Release/GPSBabel.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -172,7 +172,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="setupapi.lib"
+				AdditionalDependencies="setupapi.lib hid.lib"
 				OutputFile=".\Debug/GPSBabel.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -270,7 +270,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="setupapi.lib expatw\libexpatw.lib"
+				AdditionalDependencies="setupapi.lib hid.lib expatw\libexpatw.lib"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="false"
@@ -503,6 +503,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\delbin.c"
+				>
 			</File>
 			<File
 				RelativePath="..\delgpl.c"
@@ -2688,7 +2692,7 @@
 				RelativePath="..\pocketfms_fp.c">
 			</File>
 			<File
-				RelativePath="..\pocketfmt_bc.c">
+				RelativePath="..\pocketfms_bc.c">
 			</File>
 			<File
 				RelativePath="..\naviguide.c">

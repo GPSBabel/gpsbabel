@@ -74,6 +74,9 @@ for a little more info, see structures:
 #include <stdio.h>
 #include <assert.h>
 
+#if _MSC_VER
+    #define __func__ __FUNCTION__
+#endif
 
 /* the start of each record (line) is common to both advanced and basic mode.
    it will be parsed by a single common code. hence, it will be easier and clearer

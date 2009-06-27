@@ -302,10 +302,9 @@ wr_init(const char *fname) {
 }
 
 static void
-wr_deinit () {
+wr_deinit(void)
+{
 	gbfclose(file_out);	
-	
-	
 }
 
 /*=========================== Read data functions ==================================*/
@@ -354,7 +353,8 @@ ng_read_file_header(void)
 static void
 data_read(void)
 {
-	int n, i;
+	int n;
+	unsigned i;
 	waypoint *wpt_tmp;
 	
 	if (process_rte) {

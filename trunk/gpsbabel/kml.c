@@ -1080,6 +1080,8 @@ static void kml_route_tlr(const route_head *header)
 // the bounding box of our entire data set and set the event times
 // to include all our data.
 void kml_write_AbstractView(void) {
+  double bb_size;
+
   kml_write_xml(1, "<LookAt>\n");
 
   if (kml_time_min || kml_time_max) {
@@ -1115,7 +1117,7 @@ void kml_write_AbstractView(void) {
 
   // It turns out the length of the diagonal of the bounding box gives us a
   // reasonable guess for setting the camera altitude.
-  double bb_size = gcgeodist(kml_bounds.min_lat, kml_bounds.min_lon,
+  bb_size = gcgeodist(kml_bounds.min_lat, kml_bounds.min_lon,
                              kml_bounds.max_lat, kml_bounds.max_lon);
   // Clamp bottom zoom level.  Otherwise, a single point zooms to grass.
   if (bb_size < 1000) {
