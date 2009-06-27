@@ -2424,7 +2424,7 @@ libusb_os_packet_write(const void* buf, unsigned size)
 	return n;
 }
 
-#if __linux
+#if HAVE_LINUX_HID
 static const delbin_os_ops_t libusb_os_ops =
 #else
 delbin_os_ops_t delbin_os_ops =
@@ -2440,7 +2440,7 @@ delbin_os_ops_t delbin_os_ops =
 
 //-----------------------------------------------------------------------------
 // Linux
-#if __linux
+#if HAVE_LINUX_HID
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -2617,11 +2617,11 @@ delbin_os_ops_t delbin_os_ops = {
 	NULL
 };
 
-#endif // __linux
+#endif // HAVE_LINUX_HID
 
 //-----------------------------------------------------------------------------
 // stubs
-#if !(_WIN32 || __linux || __APPLE__ || HAVE_LIBUSB)
+#if !(_WIN32 || __APPLE__ || HAVE_LIBUSB || HAVE_LINUX_HID)
 static void
 stub_os_init(const char* fname)
 {

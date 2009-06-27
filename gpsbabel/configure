@@ -680,7 +680,6 @@ INSTALL_PROGRAM
 INSTALL_SCRIPT
 INSTALL_DATA
 SET_MAKE
-
 CPP
 GREP
 EGREP
@@ -4332,6 +4331,62 @@ esac
 
 
 
+
+case "$target" in
+	*-linux-*)
+	{ echo "$as_me:$LINENO: checking for Linux HID interface" >&5
+echo $ECHO_N "checking for Linux HID interface... $ECHO_C" >&6; }
+	cat >conftest.$ac_ext <<_ACEOF
+
+		#include <sys/ioctl.h>
+		#include <linux/types.h>
+		#include <linux/hiddev.h>
+		#include <linux/hidraw.h>
+		void f(void) {
+			struct hidraw_devinfo info;
+			struct hiddev_field_info finfo;
+			struct hiddev_usage_ref_multi urefm;
+			struct hiddev_report_info rinfo;
+			ioctl(0, HIDIOCGRAWINFO, &info);
+			ioctl(0, HIDIOCGFIELDINFO, &finfo);
+			ioctl(0, HIDIOCSUSAGES, &urefm);
+			ioctl(0, HIDIOCSREPORT, &rinfo);
+		}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+		cat >>confdefs.h <<\_ACEOF
+#define HAVE_LINUX_HID 1
+_ACEOF
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	{ echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+	;;
+esac
 
 { echo "$as_me:$LINENO: checking for random stuff to make you feel better" >&5
 echo $ECHO_N "checking for random stuff to make you feel better... $ECHO_C" >&6; }
