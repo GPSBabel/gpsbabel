@@ -44,9 +44,10 @@ static avltree_t *icons = NULL;
 
 static gbfile *fout;
 static int node_id;
-static route_head *rte;
 static int skip_rte;
 
+#if HAVE_LIBEXPAT
+static route_head *rte;
 static waypoint *wpt;
 static int wpt_loaded, rte_loaded;
 
@@ -64,6 +65,7 @@ xg_tag_mapping osm_map[] = {
 	{ osm_way_end,	cb_end,		"/osm/way" },
 	{ NULL,		0,		NULL }
 };
+#endif // HAVE_LIBEXPAT
 
 static const char *osm_features[] = {
 	"- dummy -",	/*  0 */
