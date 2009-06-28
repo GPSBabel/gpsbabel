@@ -161,6 +161,8 @@ extern ff_vecs_t skyforce_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t pocketfms_bc_vecs;
 extern ff_vecs_t pocketfms_fp_vecs;
+extern ff_vecs_t pocketfms_wp_vecs;
+extern ff_vecs_t enigma_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -912,8 +914,14 @@ vecs_t vec_list[] = {
         {
         	&pocketfms_fp_vecs,
         	"pocketfms_fp",
-        	"PocketFMS flightplan",
-        	NULL
+        	"PocketFMS flightplan (.xml)",
+        	"xml"
+        },
+        {
+        	&pocketfms_wp_vecs,
+        	"pocketfms_wp",
+        	"PocketFMS waypoints (.txt)",
+        	"txt"
         },
         {
         	&v900_vecs,
@@ -926,6 +934,12 @@ vecs_t vec_list[] = {
         	"naviguide",
         	"Naviguide binary route file (.twl)",
         	"twl"
+        },
+        {
+        	&enigma_vecs,
+        	"enigma",
+        	"Enigma binary waypoint file (.ert)",
+        	"ert"
         },
 	{
 		&delbin_vecs, 
