@@ -1,0 +1,6 @@
+<para>
+   This format provides support for the <ulink url="www.pocketfms.com">PocketFMS</ulink> user waypoints text file. 
+</para>
+<para>
+   PocketFMS waypoint text files contain one waypoint per line. Any waypoint has name, latitude and longitude, separated by space. Latitude and longitude are either decimal degrees or degrees°minutes'seconds'' triples. For details see the PocketFMS help file. You can also visit the very friendly <ulink url="http://www.pocketfms.com/phpBB3/">PocketFMS forum</ulink>. 
+</para>
