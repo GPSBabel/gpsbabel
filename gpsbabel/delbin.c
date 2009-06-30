@@ -530,6 +530,7 @@ read_depacketize_1(gbuint8** p, unsigned n, int new_packet)
 	static unsigned buf_i, buf_n;
 	while (buf_n == 0 || new_packet) {
 		packet_read(buf);
+		new_packet = FALSE;
 		if (buf[1] <= delbin_os_packet_size - 2) {
 			buf_n = buf[1];
 			buf_i = 2;
@@ -1984,8 +1985,10 @@ delbin_rw_init(const char *fname)
 			warning(MYNAME ": device %s %s\n", p->product, p->firmware);
 		if (opt_long_notes) {
 			use_extended_notes = TRUE;
+		} else if (strstr(p->product, "PN-20")) {
+			use_extended_notes = p->firmware[0] > '1' ||
+				(p->firmware[0] == '1' && p->firmware[2] >= '6');
 		} else if (strstr(p->product, "PN-40")) {
-			// Don't know if pre-2.5 PN-40 firmware or PN-20 can handle 0xb016 message
 			use_extended_notes = p->firmware[0] > '2' ||
 				(p->firmware[0] == '2' && p->firmware[2] >= '5');
 		}
@@ -2034,11 +2037,7 @@ delbin_write(void)
 static waypoint*
 delbin_rd_position(posn_status* status)
 {
-	waypoint* wp = read_position();
-	if (wp == NULL) {
-		status->request_terminate = 1;
-	}
-	return wp;
+	return read_position();
 }
 
 ff_vecs_t delbin_vecs = {
@@ -2468,20 +2467,21 @@ linuxhid_os_init(const char* fname)
 
 	fd_hidraw = fd_hiddev = -1;
 	if (fname && memcmp(fname, "hid:", 4) == 0) {
-		const char* raw_name = fname + 4;
-		const char* dev_name = strchr(raw_name, ',');
+		char* raw_name = xstrdup(fname + 4);
+		char* dev_name = strchr(raw_name, ',');
 		if (dev_name == NULL) {
-			fatal(MYNAME ": missing hiddev\n");
+			fatal(MYNAME ": missing hiddev path\n");
 		}
+		*dev_name++ = 0;
 		fd_hidraw = open(raw_name, O_RDONLY);
 		if (fd_hidraw < 0) {
 			fatal(MYNAME ": %s: %s\n", raw_name, strerror(errno));
 		}
-		dev_name++;
 		fd_hiddev = open(dev_name, O_WRONLY);
 		if (fd_hiddev < 0) {
 			fatal(MYNAME ": %s: %s\n", dev_name, strerror(errno));
 		}
+		xfree(raw_name);
 	} else {
 		dir = opendir("/dev");
 	}

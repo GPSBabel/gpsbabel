@@ -1,5 +1,5 @@
 <para>
-  The 'delbin' module supports Delorme PN-20, PN-30, and PN-40 receivers.
+  The 'delbin' module supports DeLorme PN-20, PN-30, and PN-40 receivers.
   <important>
     <para>
       Not all strains of Linux are supported.   Fedora 7 is known not to work, for example.
@@ -9,7 +9,12 @@
 <para>
   Only the 'usb:' device is supported.  If you're on Windows, do not attempt to
   run this through the serial driver.
+</para>
 <para>
+  On Linux, a name of the form 'hid:path-to-hidraw,path-to-hiddev' is also supported.
+  You will need to use this only if the HID device nodes on your system are not named
+  /dev/hidrawN and /dev/hiddevN or /dev/usb/hiddevN.
+</para>
 
 <para>
   This module implements the (undocumented) waypoint extensions introduced
@@ -26,43 +31,3 @@
     </userinput>
   </para>
 </example>
-
-
-<para>GPSBabel supports the following <ulink url="http://www.magellangps.com">Magellan</ulink> receivers:
-<simplelist columns="2">
-	<member>310</member>
-	<member>315</member>
-	<member>Map330</member>
-	<member>SporTrak Map Color</member>
-	<member>SporTrak Map</member>
-	<member>SporTrak Map Pro</member>
-	<member>SporTrak Map Topo</member>
-	<member>Meridian (green or yellow)</member>
-	<member>Meridian Gold</member>
-	<member>Meridian Platinum</member>
-	<member>Meridian Color</member>
-	<member>Explorist 100 (with aftermarket cable)</member>
-	<member>Explorist 200 (with aftermarket cable)</member>
-	<member>Explorist 300 (with aftermarket cable)</member>
-	<member>Explorist 210</member>
-	<member>Explorist 300</member>
-	<member>Explorist 400</member>
-	<member>Explorist 500</member>
-	<member>Explorist 600</member>
-	<member>Explorist XL</member>
-</simplelist>
-</para>
-     
-<para>
-	This format is used for both the serial protocol used on the
-	devices with serial ports such as Map330 and Meridian and for
-	the files stored either in either the unit's internal memory 
-	(Explorist 210, Explorist 400, Explorist 500, Explorist 600, 
-	Explorist XL) or on removable memory.
-</para> 
-<para>
-	If you specify a serial port for the file (.e.g. "COM1", "/dev/ttyS0")
-	to be read or written, GPSBabel will use serial protocol.   Specifying
-	a file, either on local filesystem or on a mounted flash card reader,
-	will results in the file-based format being used.
-</para>
