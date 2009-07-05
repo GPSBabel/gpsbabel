@@ -1,0 +1,256 @@
+<ui version="4.0" >
+ <class>WayPtsWidget</class>
+ <widget class="QWidget" name="WayPtsWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>523</width>
+    <height>171</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2" >
+   <item row="0" column="0" >
+    <layout class="QGridLayout" name="gridLayout" >
+     <item row="0" column="0" colspan="5" >
+      <widget class="QLabel" name="label" >
+       <property name="font" >
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Waypoints Filters</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QCheckBox" name="duplicatesCheck" >
+       <property name="toolTip" >
+        <string>Remove duplicates</string>
+       </property>
+       <property name="whatsThis" >
+        <string>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint's name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </string>
+       </property>
+       <property name="text" >
+        <string>Duplicates</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QCheckBox" name="shortNamesCheck" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip" >
+        <string>Suppress duplicate waypoints based on name.</string>
+       </property>
+       <property name="whatsThis" >
+        <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Suppress duplicate waypoints based on name. &lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This option is the one most often used with the duplicate filter. This option instructs the duplicate filter to remove any waypoints that share a short name with a waypoint that has come before. This option might be used to remove duplicates if you are merging two datasets that were each created in part from a common ancestor dataset. &lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>Short Names</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2" >
+      <widget class="QCheckBox" name="locationsCheck" >
+       <property name="toolTip" >
+        <string>Suppress duplicate waypoint based on coords. </string>
+       </property>
+       <property name="whatsThis" >
+        <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Suppress duplicate waypoint based on coords. &lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This option causes the duplicate filter to remove any additional waypoint that has the same coordinates (to six decimal degrees) as a waypoint that came before. This option may be used to remove duplicate waypoints if the names are not expected to be the same. It also might be used along with the &lt;span style=" font-family:'Courier New,courier';">shortname&lt;/span> option to remove duplicate waypoints if the names of several unrelated groups of waypoints might be the same. &lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>Locations</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QCheckBox" name="positionCheck" >
+       <property name="toolTip" >
+        <string>Remove points based on proximity</string>
+       </property>
+       <property name="whatsThis" >
+        <string>Maximum positional distance.
+
+This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </string>
+       </property>
+       <property name="text" >
+        <string>Position</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="QLineEdit" name="positionText" >
+       <property name="maximumSize" >
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Maximum positional distance.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2" >
+      <widget class="QComboBox" name="positionUnitCombo" >
+       <item>
+        <property name="text" >
+         <string>Feet</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Meters</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="0" >
+      <widget class="QCheckBox" name="radiusCheck" >
+       <property name="toolTip" >
+        <string>Include points only within radius</string>
+       </property>
+       <property name="whatsThis" >
+        <string>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
+
+By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </string>
+       </property>
+       <property name="text" >
+        <string>Radius</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" >
+      <widget class="QLineEdit" name="radiusText" >
+       <property name="maximumSize" >
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Maximum distance from center. </string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2" >
+      <widget class="QComboBox" name="radiusUnitCombo" >
+       <item>
+        <property name="text" >
+         <string>Miles</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>km</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="3" >
+      <widget class="QLabel" name="latLabel" >
+       <property name="text" >
+        <string>Lat.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="4" >
+      <widget class="QLineEdit" name="latText" >
+       <property name="minimumSize" >
+        <size>
+         <width>110</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Latitude of the central point in decimal degrees.  South latitudes should be expressed as a negative number.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="3" >
+      <widget class="QLabel" name="longLabel" >
+       <property name="text" >
+        <string>Long.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="4" >
+      <widget class="QLineEdit" name="longText" >
+       <property name="minimumSize" >
+        <size>
+         <width>110</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Longitude of the central point in decimal degrees. West longitudes should be expressed as a negative number.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" >
+      <widget class="QCheckBox" name="sortCheck" >
+       <property name="toolTip" >
+        <string>This filter sorts waypoints into alphabetical order</string>
+       </property>
+       <property name="whatsThis" >
+        <string>This filter sorts waypoints into alphabetical order</string>
+       </property>
+       <property name="text" >
+        <string>Sort</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1" >
+    <spacer name="horizontalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>80</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
