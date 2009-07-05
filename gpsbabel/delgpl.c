@@ -1,7 +1,7 @@
 /*
     DeLorme GPL Track Format.
 
-    Copyright (C) 2003 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2003, 2009 Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -75,7 +75,12 @@ gpl_read(void)
 	        WAYPT_SET(wpt_tmp, course, le_read_double(&gp.heading));
 		WAYPT_SET(wpt_tmp, speed, le_read_double(&gp.speed));
 	        WAYPT_SET(wpt_tmp, speed, MILES_TO_METERS(wpt_tmp->speed)/3600);	
-		
+		// 2008 and 2009 seem to throw track points in that go back
+		// in time.  The only thing I see "special" about those 
+		// trackpoints is that these fields are zeroed.  Toss them.
+		if ((wpt_tmp->speed == 0.0) && (wpt_tmp->course == 0.0)) {
+			continue;
+		}
 		track_add_wpt(track_head, wpt_tmp);
 	}
 }
