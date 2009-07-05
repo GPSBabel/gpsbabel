@@ -1,0 +1,20 @@
+ <!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+     <file>images/00.png</file>
+     <file>images/01.png</file>
+     <file>images/10.png</file>
+     <file>images/11.png</file>
+     <file>images/open.png</file>
+     <file>images/save.png</file>
+     <file>images/runit.png</file>
+     <file>images/exit.png</file>
+     <file>images/help.png</file>
+     <file>images/babel2.png</file>
+     <file>images/ok20.png</file>
+     <file>images/ok.png</file>
+     <file>images/cancel.png</file>
+     <file>images/reload.png</file>
+     <file>images/appicon.png</file>
+ </qresource>
+ </RCC>
+

@@ -1,0 +1,662 @@
+<ui version="4.0" >
+ <class>MainDlg</class>
+ <widget class="QWidget" name="MainDlg" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>614</width>
+    <height>587</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+    <horstretch>0</horstretch>
+    <verstretch>10</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>GpsBabel</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_5" >
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" >
+     <item>
+      <widget class="QPushButton" name="aboutButton" >
+       <property name="text" >
+        <string>About</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="app.qrc" >
+         <normaloff>:/images/appicon.png</normaloff>:/images/appicon.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="helpButton" >
+       <property name="text" >
+        <string>Help</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="app.qrc" >
+         <normaloff>:/images/help.png</normaloff>:/images/help.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Input </string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" >
+      <property name="topMargin" >
+       <number>4</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>4</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5" >
+        <item>
+         <widget class="QRadioButton" name="inputFileOptBtn" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>If selected, input is from a file.</string>
+          </property>
+          <property name="text" >
+           <string>File</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="inputDeviceOptBtn" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>If selected, input is from a device or GPS unit</string>
+          </property>
+          <property name="text" >
+           <string>Device</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2a" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>18</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="label" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text" >
+           <string>Format</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="inputFormatCombo" >
+          <property name="toolTip" >
+           <string>Input data format</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="inputCharSetCombo" >
+          <property name="toolTip" >
+           <string>Character encoding of input</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QStackedWidget" name="inputStackedWidget" >
+        <property name="lineWidth" >
+         <number>0</number>
+        </property>
+        <property name="currentIndex" >
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="inputFilePage" >
+         <layout class="QHBoxLayout" name="horizontalLayout_4" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2" >
+            <item>
+             <widget class="QPushButton" name="inputFileNameBrowseBtn" >
+              <property name="toolTip" >
+               <string>Browse for one or more input files. </string>
+              </property>
+              <property name="text" >
+               <string>File Name(s)</string>
+              </property>
+              <property name="icon" >
+               <iconset resource="app.qrc" >
+                <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="inputFileNameText" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+                <horstretch>10</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="inputDevicePage" >
+         <layout class="QVBoxLayout" name="verticalLayout_2" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3" >
+            <item>
+             <widget class="QLabel" name="label_2" >
+              <property name="text" >
+               <string>Device Name:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="inputDeviceNameCombo" >
+              <property name="toolTip" >
+               <string>Name of port to which input device is connected</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3a" >
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_6" >
+        <item>
+         <widget class="QPushButton" name="inputOptionsBtn" >
+          <property name="toolTip" >
+           <string>Options for the selected input format. </string>
+          </property>
+          <property name="text" >
+           <string>Options</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="inputOptionsText" />
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>Translation Options</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_7" >
+      <property name="margin" >
+       <number>4</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="wayPtLabel" >
+        <property name="text" >
+         <string>-</string>
+        </property>
+        <property name="scaledContents" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="xlateWayPtsCk" >
+        <property name="toolTip" >
+         <string>If selected, translate waypoints.</string>
+        </property>
+        <property name="text" >
+         <string>Waypoints</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line" >
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_6" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>15</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="routeLabel" >
+        <property name="text" >
+         <string>-</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="xlateRoutesCk" >
+        <property name="toolTip" >
+         <string>If selected, translate routes.</string>
+        </property>
+        <property name="text" >
+         <string>Routes</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_2" >
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_7" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>15</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="trackLabel" >
+        <property name="text" >
+         <string>-</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="xlateTracksCk" >
+        <property name="toolTip" >
+         <string>If selected, translate tracks.</string>
+        </property>
+        <property name="text" >
+         <string>Tracks</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_4" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>18</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="filterStatus" >
+        <property name="text" >
+         <string/>
+        </property>
+        <property name="pixmap" >
+         <pixmap resource="app.qrc" >:/images/ok20.png</pixmap>
+        </property>
+        <property name="scaledContents" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="xlateFiltersBtn" >
+        <property name="toolTip" >
+         <string>Data Filters between input and output</string>
+        </property>
+        <property name="text" >
+         <string>Filters</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_8" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_5" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>244</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="moreOptionButton" >
+        <property name="toolTip" >
+         <string>More translation options. </string>
+        </property>
+        <property name="text" >
+         <string>More Options</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3" >
+     <property name="title" >
+      <string>Output</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3" >
+      <property name="topMargin" >
+       <number>4</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>4</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_8" >
+        <item>
+         <widget class="QRadioButton" name="outputFileOptBtn" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>If selected, output is to a file. </string>
+          </property>
+          <property name="text" >
+           <string>File</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="outputDeviceOptBtn" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>If selected, output is to a device or GPS unit</string>
+          </property>
+          <property name="text" >
+           <string>Device</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2b" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>18</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_4" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text" >
+           <string>Format</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="outputFormatCombo" >
+          <property name="toolTip" >
+           <string>Output data format.</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="outputCharSetCombo" >
+          <property name="toolTip" >
+           <string>Character encoding of output</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QStackedWidget" name="outputStackedWidget" >
+        <property name="currentIndex" >
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="outputFilePage" >
+         <layout class="QHBoxLayout" name="horizontalLayout_9" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10" >
+            <item>
+             <widget class="QPushButton" name="outputFileNameBrowseBtn" >
+              <property name="toolTip" >
+               <string>Browse for an output file name. </string>
+              </property>
+              <property name="text" >
+               <string>File Name</string>
+              </property>
+              <property name="icon" >
+               <iconset resource="app.qrc" >
+                <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="outputFileNameText" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+                <horstretch>10</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="outputDevicePage" >
+         <layout class="QVBoxLayout" name="verticalLayout_4" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_11" >
+            <item>
+             <widget class="QLabel" name="label_6" >
+              <property name="text" >
+               <string>Device Name:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="outputDeviceNameCombo" >
+              <property name="toolTip" >
+               <string>Name of port to which output device is connected</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3b" >
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_12" >
+        <item>
+         <widget class="QPushButton" name="outputOptionsBtn" >
+          <property name="toolTip" >
+           <string>Options for the selected output format. </string>
+          </property>
+          <property name="text" >
+           <string>Options</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="outputOptionsText" />
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPlainTextEdit" name="outputWindow" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+       <horstretch>10</horstretch>
+       <verstretch>10</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip" >
+      <string>Output of GPSBabel translation process. </string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="toolTip" >
+      <string/>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Close</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="app.qrc" />
+ </resources>
+ <connections/>
+</ui>
