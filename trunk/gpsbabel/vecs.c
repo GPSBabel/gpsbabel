@@ -99,6 +99,7 @@ extern ff_vecs_t psp_vecs;
 extern ff_vecs_t quovadis_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t shape_vecs;
+extern ff_vecs_t skytraq_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t stmsdf_vecs;
 #endif
@@ -949,6 +950,12 @@ vecs_t vec_list[] = {
 	}, 
 
 #endif // MAXIMAL_ENABLED
+        {
+                &skytraq_vecs,
+                "skytraq",
+                "SkyTraq Venus 5/6 GPS Data Logger Download",
+                NULL
+        },
 	{
 		NULL,
 		NULL,
