@@ -47,7 +47,7 @@ MINIMAL_FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin.o \
 	garmin_device_xml.o garmin_tables.o internal_styles.o nmea.o kml.o
 
 ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
-	gpspilot.o magnav.o \
+	gpspilot.o magnav.o skytraq.o \
 	psp.o holux.o tmpro.o tpg.o tpo.o \
 	xcsv.o gcdb.o tiger.o easygps.o quovadis.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
@@ -62,7 +62,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o \
 	igo8.o gopal.o humminbird.o mapasia.o gnav_trl.o navitel.o ggv_ovl.o \
 	jtr.o sbp.o sbn.o mmo.o skyforce.o itracku.o v900.o delbin.o \
-	pocketfms_bc.o pocketfms_fp.o pocketfms_wp.o naviguide.o enigma.o
+	pocketfms_bc.o pocketfms_fp.o pocketfms_wp.o naviguide.o enigma.o \
 
 FMTS=@FMTS@
 

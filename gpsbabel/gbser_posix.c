@@ -64,6 +64,9 @@ static speed_t mkspeed(unsigned br) {
 #if defined B115200
     case 115200: return B115200;
 #endif
+#if defined B230400
+    case 230400: return B230400;
+#endif
     default:
         fatal("Unsupported serial speed: %d\n", br);
         return 0;   /* keep compiler happy */

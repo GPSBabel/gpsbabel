@@ -110,7 +110,7 @@ int gbser_print(void *handle, const char *str);
 
 /* Write a single character to the serial port.
  */ 
-int gbset_writec(void *handle, int c);
+int gbser_writec(void *handle, int c);
 
 /* Return true if a port name seems to refer to a serial port.
  * On Windows this tests the filename (against the regex
