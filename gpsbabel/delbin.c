@@ -79,6 +79,15 @@ static unsigned delbin_os_packet_size;
 #define DBGLVL_M 2
 #define DBGLVL_H 3
 
+// Multiple unit support.
+#define DELBIN_MAX_UNITS 32
+static struct {
+	unsigned int unit_number;
+	const char *unit_serial_number;
+	const char *unit_name;
+} delbin_unit_info[DELBIN_MAX_UNITS];
+static int n_delbin_units;
+
 #define UNKNOWN_ELEV -2000000
 
 #define sizeofarray(x) (sizeof(x) / sizeof(x[0]))
@@ -395,6 +404,11 @@ packet_read(void* buf)
 		for (j = 0; j < n; j++) {
 			warning("%02x ", ((gbuint8*)buf)[j]);
 		}
+		warning("  ");
+		for (j = 0; j < n; j++) {
+			gbuint8 c = ((gbuint8*)buf)[j];
+			warning("%c", isprint(c) ? c : '.');
+		}
 		warning("\n");
 	}
 	return n;
@@ -409,6 +423,11 @@ packet_write(const void* p, unsigned size)
 		warning(MYNAME ": pcktwr ");
 		for (j = 0; j < size; j++) {
 			warning("%02x ", ((gbuint8*)p)[j]);
+		}
+		warning("  ");
+		for (j = 0; j < size; j++) {
+			gbuint8 c = ((gbuint8*)p)[j];
+			warning("%c", isprint(c) ? c : '.');
 		}
 		warning("\n");
 	}
@@ -1965,6 +1984,20 @@ read_position(void)
 //-----------------------------------------------------------------------------
 
 static void
+delbin_list_units()
+{
+	int i;
+	for (i = 0; i < n_delbin_units; i++) {
+		printf("%d %s %s\n", 
+			delbin_unit_info[i].unit_number,
+			delbin_unit_info[i].unit_serial_number,
+			delbin_unit_info[i].unit_name );
+	}
+}
+
+
+
+static void
 delbin_rw_init(const char *fname)
 {
 	message_t m;
@@ -1992,8 +2025,19 @@ delbin_rw_init(const char *fname)
 			use_extended_notes = p->firmware[0] > '2' ||
 				(p->firmware[0] == '2' && p->firmware[2] >= '5');
 		}
+		delbin_unit_info[n_delbin_units].unit_number = n_delbin_units;
+		delbin_unit_info[n_delbin_units].unit_serial_number = xstrndup(p->serial, sizeof(p->serial));
+		delbin_unit_info[n_delbin_units].unit_name = xstrndup(p->product, sizeof(p->product));
+		n_delbin_units++;
 	}
 	message_free(&m);
+
+	if (strlen(fname) > 4) {
+		if (0 == strcmp(fname+4, "list")) {
+			delbin_list_units();
+			exit(1);
+		}
+	}
 }
 
 static void
