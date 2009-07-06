@@ -1,72 +1,73 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>MiscFltWidget</class>
- <widget class="QWidget" name="MiscFltWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="MiscFltWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>271</width>
-    <height>95</height>
+    <width>297</width>
+    <height>107</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label" >
-     <property name="font" >
+    <widget class="QLabel" name="label">
+     <property name="font">
       <font>
        <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>Misc. Filters</string>
      </property>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" >
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QCheckBox" name="transformCheck" >
-       <property name="toolTip" >
+      <widget class="QCheckBox" name="transformCheck">
+       <property name="toolTip">
         <string>Convert routes, waypoints and tracks to different types.</string>
        </property>
-       <property name="whatsThis" >
+       <property name="whatsThis">
         <string>This filter can be used to convert GPS data between different data types.
 
 Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Transform</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="transformCombo" >
-       <property name="toolTip" >
+      <widget class="QComboBox" name="transformCombo">
+       <property name="toolTip">
         <string>Type of transformation. </string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="deleteCheck" >
-       <property name="toolTip" >
+      <widget class="QCheckBox" name="deleteCheck">
+       <property name="toolTip">
         <string>Delete original data after transform to prevent duplicated data. </string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Delete</string>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer" >
-       <property name="orientation" >
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -77,24 +78,24 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </layout>
    </item>
    <item>
-    <widget class="QCheckBox" name="swapCheck" >
-     <property name="toolTip" >
+    <widget class="QCheckBox" name="swapCheck">
+     <property name="toolTip">
       <string>Swap Longitude and Latitudes for badly formatted data formats.</string>
      </property>
-     <property name="whatsThis" >
+     <property name="whatsThis">
       <string>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>Swap Coordinates</string>
      </property>
     </widget>
    </item>
    <item>
-    <spacer name="verticalSpacer" >
-     <property name="orientation" >
+    <spacer name="verticalSpacer">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>1</height>

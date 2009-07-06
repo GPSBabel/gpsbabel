@@ -1,73 +1,74 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>RtTrkWidget</class>
- <widget class="QWidget" name="RtTrkWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="RtTrkWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>269</width>
+    <width>305</width>
     <height>114</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="toolTip" >
+  <property name="toolTip">
    <string>Simplify routes and tracks by removing points</string>
   </property>
-  <property name="whatsThis" >
-   <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+  <property name="whatsThis">
+   <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:9pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route. &lt;/p>
-&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible. &lt;/p>
-&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The quality of the results will vary depending on the density of points in the original route and the length of the original route. &lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The quality of the results will vary depending on the density of points in the original route and the length of the original route. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label" >
-     <property name="font" >
+    <widget class="QLabel" name="label">
+     <property name="font">
       <font>
        <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>Routes &amp; Tracks</string>
      </property>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" >
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QCheckBox" name="simplifyCheck" >
-       <property name="toolTip" >
+      <widget class="QCheckBox" name="simplifyCheck">
+       <property name="toolTip">
         <string>Simplify route by removing points</string>
        </property>
-       <property name="whatsThis" >
+       <property name="whatsThis">
         <string> The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route.
 
 The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible.
 
 The quality of the results will vary depending on the density of points in the original route and the length of the original route. </string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Simplify</string>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer" >
-       <property name="orientation" >
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeType" >
+       <property name="sizeType">
         <enum>QSizePolicy::Fixed</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
          <height>20</height>
@@ -76,32 +77,32 @@ The quality of the results will vary depending on the density of points in the o
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="limitToLabel" >
-       <property name="text" >
+      <widget class="QLabel" name="limitToLabel">
+       <property name="text">
         <string>Limit To</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="limitToSpin" >
-       <property name="toolTip" >
+      <widget class="QSpinBox" name="limitToSpin">
+       <property name="toolTip">
         <string>Maximum number points in track or route. </string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="pointLabel" >
-       <property name="text" >
+      <widget class="QLabel" name="pointLabel">
+       <property name="text">
         <string>Points</string>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_2" >
-       <property name="orientation" >
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -112,25 +113,25 @@ The quality of the results will vary depending on the density of points in the o
     </layout>
    </item>
    <item>
-    <widget class="QCheckBox" name="reverseCheck" >
-     <property name="toolTip" >
+    <widget class="QCheckBox" name="reverseCheck">
+     <property name="toolTip">
       <string>Reverse tracks and routes</string>
      </property>
-     <property name="whatsThis" >
+     <property name="whatsThis">
       <string>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a wierd thing and place each waypoint on a separate day. 
 Additionally, if you're using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>Reverse</string>
      </property>
     </widget>
    </item>
    <item>
-    <spacer name="verticalSpacer" >
-     <property name="orientation" >
+    <spacer name="verticalSpacer">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>19</height>
