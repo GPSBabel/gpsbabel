@@ -407,13 +407,27 @@ kml_write_xmle(const char *tag, const char *v)
 static void kml_write_bitmap_style_(const char *style, const char * bitmap,
 				    int highlighted, int force_heading)
 {
+        int is_track = !strncmp(style, "track", 5);
+        
 	kml_write_xml(0, "<!-- %s %s style -->\n",
 		highlighted ? "Highlighted" : "Normal", style);
 	kml_write_xml(1, "<Style id=\"%s_%c\">\n", style, hovertag(highlighted));
-	kml_write_xml(1, "<IconStyle>\n");
+
+        
+	if (is_track && !highlighted) {
+		kml_write_xml(1, "<LabelStyle>\n");
+		kml_write_xml(0, "<scale>0</scale>\n");
+		kml_write_xml(-1, "</LabelStyle>\n");
+	}
+
+        kml_write_xml(1, "<IconStyle>\n");
 	if (highlighted) {
 		kml_write_xml(0, "<scale>1.2</scale>\n");
-	}
+	} else {
+          if (is_track) {
+		kml_write_xml(0, "<scale>.5</scale>\n");
+          }
+        }
 	/* Our icons are pre-rotated, so nail them to the maps. */
 	if (force_heading) {
 		kml_write_xml(0, "<heading>0</heading>\n");
