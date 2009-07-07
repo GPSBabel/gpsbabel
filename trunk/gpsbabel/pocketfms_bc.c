@@ -141,12 +141,14 @@ pocketfms_waypt_disp(const waypoint *wpt)
 	le_write_float(&bc.latitude, wpt->latitude);
 	le_write_float(&bc.longitude, wpt->longitude);
 	le_write_float(&bc.altitude, METERS_TO_FEET(wpt->altitude));
-	le_write16(&bc.year, tm->tm_year + 1900);
-	le_write16(&bc.month, tm->tm_mon + 1);
-	le_write16(&bc.day, tm->tm_mday);
-	le_write16(&bc.hour, tm->tm_hour);
-	le_write16(&bc.minute, tm->tm_min);
-	le_write16(&bc.second, tm->tm_sec);
+        if (tm) {
+		le_write16(&bc.year, tm->tm_year + 1900);
+		le_write16(&bc.month, tm->tm_mon + 1);
+		le_write16(&bc.day, tm->tm_mday);
+		le_write16(&bc.hour, tm->tm_hour);
+		le_write16(&bc.minute, tm->tm_min);
+		le_write16(&bc.second, tm->tm_sec);
+        }
 	le_write_float(&bc.ehpe, wpt->hdop);
 	le_write_float(&bc.evpe, wpt->vdop);
 	le_write_float(&bc.espe, wpt->pdop);
