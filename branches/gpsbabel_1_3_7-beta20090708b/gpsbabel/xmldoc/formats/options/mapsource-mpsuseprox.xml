@@ -1,0 +1,5 @@
+<para>
+This option causes GPSBabel to write proximity values for waypoints.  Most 
+input formats do not support proximity values, so the default is to not write
+them.
+</para>

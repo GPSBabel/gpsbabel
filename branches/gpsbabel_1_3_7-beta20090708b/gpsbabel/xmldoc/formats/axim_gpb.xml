@@ -1,0 +1,10 @@
+<para>
+ This format reads the binary (.gpb) track logs recorded on 
+ <ulink url="http://www.dell.com">Dell</ulink> Axim Navigation Systems. 
+</para>
+
+<para>
+  This is a read-only format for now as the format was reverse
+  engineered and there are many unknown bytes.  We can successfully
+  extract the common GPS data.
+</para>

@@ -1,0 +1,33 @@
+<para>
+  The 'delbin' module supports DeLorme PN-20, PN-30, and PN-40 receivers.
+  <important>
+    <para>
+      Not all strains of Linux are supported.   Fedora 7 is known not to work, for example.
+    </para>
+  </important>
+</para>
+<para>
+  Only the 'usb:' device is supported.  If you're on Windows, do not attempt to
+  run this through the serial driver.
+</para>
+<para>
+  On Linux, a name of the form 'hid:path-to-hidraw,path-to-hiddev' is also supported.
+  You will need to use this only if the HID device nodes on your system are not named
+  /dev/hidrawN and /dev/hiddevN or /dev/usb/hiddevN.
+</para>
+
+<para>
+  This module implements the (undocumented) waypoint extensions introduced
+  for enhanced geocaching mode in 2.5 for PN-40 and 1.6 for PN-20.  As 
+  these are reverse engineered, there may be issues with those modes 
+  in particular.
+</para>
+
+<example id="pn-40-send">
+  <title>Command to send a pocket query (GPX) to a Delorme PN device </title>
+  <para>
+    <userinput>
+      gpsbabel -i gpx -f "My Caches.gpx" -o delbin -F usb:
+    </userinput>
+  </para>
+</example>

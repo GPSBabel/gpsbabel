@@ -1,0 +1,4 @@
+<para>
+This option specifies the default category for gdb output.  It should be a 
+number from 1 to 16.
+</para>

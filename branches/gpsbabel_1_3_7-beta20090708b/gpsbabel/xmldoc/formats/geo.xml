@@ -1,0 +1,11 @@
+<para>
+This format supports the <ulink  url="http://www.geocaching.com">Geocaching.com</ulink>/<ulink url="http://www.easygps.com">EasyGPS</ulink> ".loc" format.  This format
+was created specifically for Geocaching.com and is not the same as the 
+standard EasyGPS .loc format.  See the <link linkend="fmt_easygps">EasyGPS</link> 
+or <link linkend="fmt_gpx">GPX</link> formats for more general EasyGPS support.
+</para>
+<para>
+This is a simple XML-based format containing only very basic information 
+about geocaches.  If you can use the <link linkend="fmt_gpx">GPX</link> 
+format instead, you should consider doing so as it is a much richer format.
+</para>
