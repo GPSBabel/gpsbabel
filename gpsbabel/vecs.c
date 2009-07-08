@@ -471,12 +471,14 @@ vecs_t vec_list[] = {
                 "Holux M-241 (MTK based) Binary File Format",
                 "bin"
         },
+#endif // MAXIMAL_ENABLED
         {
                 &wbt_svecs,
                 "wbt",
                 "Wintec WBT-100/200 GPS Download",
                 NULL
         },
+#if MAXIMAL_ENABLED
         {
                 &wbt_fvecs,
                 "wbt-bin",
