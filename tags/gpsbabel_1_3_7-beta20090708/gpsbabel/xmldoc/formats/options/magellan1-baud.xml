@@ -1,0 +1,8 @@
+<para>
+  This option causes GPSBabel to use the given baud rate for serial
+  communications.  It must match the given baud rate on the receiver.  The 
+  default value matches the default on the receiver, 4800.
+</para>
+<para>
+  Valid options are 1200, 2400, 4800, 9600, 19200, 57600, and 115200.
+</para>

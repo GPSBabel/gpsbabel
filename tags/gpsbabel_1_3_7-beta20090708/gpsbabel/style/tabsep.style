@@ -1,0 +1,57 @@
+# gpsbabel XCSV style file
+#
+# Format: Dumps all fields in a traditional Unix tab separated style
+#
+# The order of the fields (with the exception of LAT_DIR/LON_DIR) was
+# the same as documented in README.style when this format was created.
+# LAT_DIR/LON_DIR were undocumented, so I stuck them at the end of the
+# other lat/lon fields.
+#
+# However, please add any new gpsbabel fields to the end (to avoid
+# upsetting existing applications) regardless of where they land in
+# the README.style documentation.
+#
+
+DESCRIPTION		All database fields on one tab-separated line
+
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		TAB
+RECORD_DELIMITER	NEWLINE
+BADCHARS		TAB
+FORMAT_TYPE		INTERNAL
+
+#
+# INDIVIDUAL DATA FIELDS:
+#
+IFIELD	INDEX, "", "%d"
+IFIELD	SHORTNAME, "", "%s"
+IFIELD	DESCRIPTION, "", "%s"
+IFIELD	NOTES, "", "%s"
+IFIELD	URL, "", "%s" 		
+IFIELD	URL_LINK_TEXT, "", "%s"
+IFIELD	ICON_DESCR, "", "%s"
+IFIELD	LAT_DECIMAL, "", "%f"
+IFIELD	LON_DECIMAL, "", "%f"
+IFIELD	LAT_INT32DEG, "", "%ld"
+IFIELD	LON_INT32DEG, "", "%ld"
+IFIELD	LAT_DECIMALDIR, "", "%f%c"
+IFIELD	LON_DECIMALDIR, "", "%f%c"
+IFIELD	LAT_DIRDECIMAL, "", "%c%f"
+IFIELD	LON_DIRDECIMAL, "", "%c%f"
+IFIELD	LAT_DIR, "", "%c"
+IFIELD	LON_DIR, "", "%c"
+IFIELD	ALT_FEET, "", "%fF"
+IFIELD	ALT_METERS, "", "%fM"
+IFIELD	EXCEL_TIME, "", "%f"
+IFIELD	TIMET_TIME, "", "%ld"
+IFIELD  GEOCACHE_DIFF,"","%3.1f"
+IFIELD  GEOCACHE_TERR,"","%3.1f"
+IFIELD  GEOCACHE_CONTAINER,"","%s"
+IFIELD  GEOCACHE_TYPE,"","%s"
+IFIELD  PATH_DISTANCE_MILES,"","%f"
+IFIELD  PATH_DISTANCE_KM, "", "%f"
+IFIELD  GEOCACHE_PLACER,"","%s"
+IFIELD  YYYYMMDD_TIME,"","%ld"
+IFIELD	GEOCACHE_HINT, "", "%s"
+IFIELD	GEOCACHE_LAST_FOUND, "", "%d"

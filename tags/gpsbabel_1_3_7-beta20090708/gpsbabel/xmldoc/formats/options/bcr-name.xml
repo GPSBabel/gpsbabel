@@ -1,0 +1,5 @@
+<para>
+This route specifies the name of the route.  This is particularly useful if
+the route came from an input format that did not support named routes, but 
+it may also be used to rename a route.
+</para>

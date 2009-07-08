@@ -1,0 +1,22 @@
+<para> 
+The height filter allows the correction of altitude values.
+
+At least one popular gps logger does store the ellipsoidal height (sum of the height above mean see level and the height of the geoid above the WGS84 ellipsoid) instead of the height above sea level, as it can be found on maps. 
+
+The height filter allows for the correction of these altitude values. This filter supports two options:   
+
+<option>wgs84tomsl</option> and <option>add</option>.  
+At least one of these options is required, both can be combined.  
+</para>
+<example id="height_wgs84tomsl">
+  <title> This option subtracts the WGS84 geoid height from every altitude. For GPS receivers like the iBlue747 the result is the height above mean see level.</title>
+  <para><userinput> gpsbabel -i gpx -f in.gpx -x height,wgs84tomsl -o gpx -F out.gpx</userinput></para>
+  <para>The coordinates and altitude vales must be based an the WGS84 ellipsoid for this option to produce sensible results</para>
+</example>
+<example id="height_add">
+  <title> This options adds a constant value to every altitude.</title>
+  <para><userinput> gpsbabel -i gpx -f in.gpx -x height,add=10.2f -o gpx -F out.gpx</userinput></para>
+  <para>You can specify negative numbers to subtract the value. If no unit is specified meters are assumed. For feet you can attach an "f" to the value.</para>
+</example>
+
+      
