@@ -413,14 +413,14 @@ static void kml_write_bitmap_style_(const char *style, const char * bitmap,
 		highlighted ? "Highlighted" : "Normal", style);
 	kml_write_xml(1, "<Style id=\"%s_%c\">\n", style, hovertag(highlighted));
 
-        
+
 	if (is_track && !highlighted) {
 		kml_write_xml(1, "<LabelStyle>\n");
 		kml_write_xml(0, "<scale>0</scale>\n");
 		kml_write_xml(-1, "</LabelStyle>\n");
 	}
 
-        kml_write_xml(1, "<IconStyle>\n");
+	kml_write_xml(1, "<IconStyle>\n");
 	if (highlighted) {
 		kml_write_xml(0, "<scale>1.2</scale>\n");
 	} else {
@@ -672,8 +672,7 @@ static void kml_recompute_time_bounds(const waypoint *waypointp) {
   }
 }
 
-static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type)
-{
+static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type) {
   const char *style;
   // Save off this point for later use
   point3d *pt = &point3d_list[point3d_list_len];

@@ -292,4 +292,3 @@ gusb_init(const char *pname, gpsdevh **dh)
 	gusb_list_units();
 	exit (0);
 }
-

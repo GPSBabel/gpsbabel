@@ -138,12 +138,14 @@ xcsv_file_t xcsv_file;
 extern char *xcsv_urlbase;
 extern char *prefer_shortnames;
 
+#if CSVFMTS_ENABLED
 static double pathdist = 0;
 static double oldlon = 999;
 static double oldlat = 999;
 
 static int waypt_out_count;
 static route_head *csv_track, *csv_route;
+#endif // CSVFMTS_ENABLED
 
 /*********************************************************************/
 /* csv_stringclean() - remove any unwanted characters from string.   */

@@ -949,13 +949,13 @@ vecs_t vec_list[] = {
 		NULL
 	}, 
 
-#endif // MAXIMAL_ENABLED
         {
                 &skytraq_vecs,
                 "skytraq",
                 "SkyTraq Venus 5/6 GPS Data Logger Download",
                 NULL
         },
+#endif // MAXIMAL_ENABLED
 	{
 		NULL,
 		NULL,
