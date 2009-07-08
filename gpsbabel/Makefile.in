@@ -44,7 +44,8 @@ INSTALL_DIR=$(DESTDIR)/$(PREFIX)
 # OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
 
 MINIMAL_FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin.o \
-	garmin_device_xml.o garmin_tables.o internal_styles.o nmea.o kml.o
+	garmin_device_xml.o garmin_tables.o internal_styles.o nmea.o kml.o \
+	wbt-200.o
 
 ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 	gpspilot.o magnav.o skytraq.o \

@@ -270,7 +270,7 @@ garmin_usb_start(struct usb_device *dev, libusb_unit_data *lud)
 	 * Hrmph.  No iManufacturer or iProduct headers....
 	 */
 
-	
+
 #if __APPLE__
 	// On Leopard, if we don't do an explicit set_configuration, some
 	// devices will work only the first time after a reset.
