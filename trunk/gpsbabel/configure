@@ -4173,7 +4173,7 @@ echo "${ECHO_T}USB skipped" >&6; }
 		OSJEEPS=jeeps/gpsusbstub.o
 	else
 		OSJEEPS=jeeps/gpsusbwin.o
-		USB_LIBS=-lsetupapi
+		USB_LIBS="-lsetupapi -lhid"
 	fi
 	;;
     *-*-darwin*)

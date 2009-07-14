@@ -156,7 +156,7 @@ case "$target" in
 		OSJEEPS=jeeps/gpsusbstub.o
 	else
 		OSJEEPS=jeeps/gpsusbwin.o
-		USB_LIBS=-lsetupapi
+		USB_LIBS="-lsetupapi -lhid"
 	fi
 	;;
     *-*-darwin*)
