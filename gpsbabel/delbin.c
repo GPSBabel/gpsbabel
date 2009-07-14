@@ -2114,7 +2114,7 @@ ff_vecs_t delbin_vecs = {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <setupapi.h>
-#include <hidsdi.h>
+#include <ddk/hidsdi.h>
 
 static HANDLE hid_handle;
 
