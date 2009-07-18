@@ -1,4 +1,4 @@
-/* ANSI-C code produced by gperf version 3.0.2 */
+/* ANSI-C code produced by gperf version 3.0.1 */
 /* Command-line: gperf -L ANSI-C -D -t xcsv_tokens.in  */
 /* Computed positions: -k'2,4-5,12,$' */
 
@@ -32,7 +32,7 @@
 #line 1 "xcsv_tokens.in"
 struct xt_mapping {char *name; int xt_token; };
 
-#define TOTAL_KEYWORDS 73
+#define TOTAL_KEYWORDS 74
 #define MIN_WORD_LENGTH 3
 #define MAX_WORD_LENGTH 21
 #define MIN_HASH_VALUE 7
@@ -59,7 +59,7 @@ hash (register const char *str, register unsigned int len)
       154, 154, 154, 154, 154, 154, 154, 154, 154, 154,
       154, 154, 154, 154, 154,   0, 154,   0,   0,  10,
        55,  15,  50,  35, 154,  10,  40,  20,   0,  25,
-       25, 154,   0,  40,  15, 154,  20, 154,  25,  45,
+       25, 154,   0,  40,  15, 154,  20,   0,  25,  45,
       154, 154, 154, 154, 154,   0, 154, 154, 154, 154,
       154, 154, 154, 154, 154, 154, 154, 154, 154, 154,
       154, 154, 154, 154, 154, 154, 154, 154, 154, 154,
@@ -125,6 +125,8 @@ in_word_set (register const char *str, register unsigned int len)
       {"LAT_DECIMALDIR", XT_LAT_DECIMALDIR},
 #line 5 "xcsv_tokens.in"
       {"ANYNAME", XT_ANYNAME},
+#line 73 "xcsv_tokens.in"
+      {"TRACK_NEW", XT_TRACK_NEW},
 #line 10 "xcsv_tokens.in"
       {"DESCRIPTION", XT_DESCRIPTION},
 #line 22 "xcsv_tokens.in"
@@ -153,7 +155,7 @@ in_word_set (register const char *str, register unsigned int len)
       {"LON_DECIMALDIR", XT_LON_DECIMALDIR},
 #line 19 "xcsv_tokens.in"
       {"GEOCACHE_ISAVAILABLE", XT_GEOCACHE_ISAVAILABLE},
-#line 74 "xcsv_tokens.in"
+#line 75 "xcsv_tokens.in"
       {"URL", XT_URL},
 #line 30 "xcsv_tokens.in"
       {"HEART_RATE", XT_HEART_RATE},
@@ -217,7 +219,7 @@ in_word_set (register const char *str, register unsigned int len)
       {"LAT_HUMAN_READABLE", XT_LAT_HUMAN_READABLE},
 #line 9 "xcsv_tokens.in"
       {"COUNTRY", XT_COUNTRY},
-#line 73 "xcsv_tokens.in"
+#line 74 "xcsv_tokens.in"
       {"URL_LINK_TEXT", XT_URL_LINK_TEXT},
 #line 11 "xcsv_tokens.in"
       {"EXCEL_TIME", XT_EXCEL_TIME},
@@ -257,23 +259,23 @@ in_word_set (register const char *str, register unsigned int len)
       {"GEOCACHE_DIFF", XT_GEOCACHE_DIFF},
 #line 63 "xcsv_tokens.in"
       {"PATH_SPEED_MPH", XT_PATH_SPEED_MPH},
-#line 75 "xcsv_tokens.in"
+#line 76 "xcsv_tokens.in"
       {"YYYYMMDD_TIME", XT_YYYYMMDD_TIME}
     };
 
   static signed char lookup[] =
     {
       -1, -1, -1, -1, -1, -1, -1,  0,  1, -1,  2,  3, -1, -1,
-       4, -1, -1,  5, -1, -1, -1,  6, -1,  7, -1,  8, -1,  9,
-      10, 11, 12, -1, 13, 14, -1, 15, 16, -1, 17, 18, 19, -1,
-      -1, 20, -1, 21, 22, -1, -1, -1, -1, 23, -1, 24, 25, 26,
-      27, -1, 28, -1, 29, 30, -1, 31, -1, 32, 33, -1, 34, 35,
-      36, 37, -1, 38, 39, -1, 40, 41, 42, 43, 44, -1, -1, 45,
-      46, 47, 48, 49, 50, -1, -1, -1, 51, 52, -1, 53, 54, -1,
-      -1, 55, -1, -1, 56, 57, -1, -1, 58, -1, 59, 60, 61, -1,
-      62, 63, -1, -1, 64, -1, 65, -1, 66, -1, -1, -1, 67, -1,
-      -1, -1, 68, 69, -1, -1, -1, 70, 71, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 72
+       4, -1, -1,  5, -1,  6, -1,  7, -1,  8, -1,  9, -1, 10,
+      11, 12, 13, -1, 14, 15, -1, 16, 17, -1, 18, 19, 20, -1,
+      -1, 21, -1, 22, 23, -1, -1, -1, -1, 24, -1, 25, 26, 27,
+      28, -1, 29, -1, 30, 31, -1, 32, -1, 33, 34, -1, 35, 36,
+      37, 38, -1, 39, 40, -1, 41, 42, 43, 44, 45, -1, -1, 46,
+      47, 48, 49, 50, 51, -1, -1, -1, 52, 53, -1, 54, 55, -1,
+      -1, 56, -1, -1, 57, 58, -1, -1, 59, -1, 60, 61, 62, -1,
+      63, 64, -1, -1, 65, -1, 66, -1, 67, -1, -1, -1, 68, -1,
+      -1, -1, 69, 70, -1, -1, -1, 71, 72, -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 73
     };
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)

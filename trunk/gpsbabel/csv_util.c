@@ -123,6 +123,7 @@ typedef enum {
 	XT_STREET_ADDR,
 	XT_TIMET_TIME,
 	XT_TRACK_NAME,
+	XT_TRACK_NEW,
 	XT_URL,
 	XT_URL_LINK_TEXT,
 	XT_YYYYMMDD_TIME
@@ -926,7 +927,8 @@ gmsd_init(waypoint *wpt)
 /* usage: xcsv_parse_val("-123.34", *waypt, *field_map)                      */
 /*****************************************************************************/
 static void
-xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
+xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp, 
+               route_head **trk)
 {
     char *enclosure = "";
     geocache_data *gc_data = NULL;
@@ -1169,6 +1171,14 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp)
     case XT_ROUTE_NAME:
 	if (csv_route) csv_route->rte_name = csv_stringtrim(s, enclosure, 0);
     	break;
+    case XT_TRACK_NEW: 
+	if (atoi(s) && csv_track && !QUEUE_EMPTY(&csv_track->Q)) {
+		*trk = route_head_alloc();
+		csv_track = *trk;
+
+		track_add_head(*trk);
+	}
+	break;
     case XT_TRACK_NAME:
 	if (!csv_track) {
 		csv_track = route_head_alloc();
@@ -1313,7 +1323,7 @@ xcsv_data_read(void)
              */
             while (s) {
                 fmp = (field_map_t *) elem;
-                xcsv_parse_val(s, wpt_tmp, fmp);
+                xcsv_parse_val(s, wpt_tmp, fmp, &trk);
 
                 elem = QUEUE_NEXT(elem);
                 
