@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="GPSBabel"
 	ProjectGUID="{EB2609DB-5800-45B2-BCB2-06D72F389DCA}"
 	RootNamespace="GPSBabel"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -86,6 +87,8 @@
 				AssemblyDebug="1"
 				ProgramDatabaseFile=".\Release/GPSBabel.pdb"
 				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -105,9 +108,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -179,6 +179,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/GPSBabel.pdb"
 				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -198,9 +200,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -277,6 +276,8 @@
 				AssemblyDebug="0"
 				ProgramDatabaseFile=".\unicode/GPSBabel.pdb"
 				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -296,9 +297,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1585,6 +1583,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\naviguide.c"
+				>
+			</File>
+			<File
 				RelativePath="..\navilink.c"
 				>
 			</File>
@@ -1798,6 +1800,14 @@
 			</File>
 			<File
 				RelativePath="..\pdbfile.c"
+				>
+			</File>
+			<File
+				RelativePath="..\pocketfms_bc.c"
+				>
+			</File>
+			<File
+				RelativePath="..\pocketfms_fp.c"
 				>
 			</File>
 			<File
@@ -2501,6 +2511,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\v900.c"
+				>
+			</File>
+			<File
 				RelativePath="..\vcf.c"
 				>
 			</File>
@@ -2687,18 +2701,6 @@
 			<File
 				RelativePath="..\yahoo.c"
 				>
-			</File>
-			<File
-				RelativePath="..\pocketfms_fp.c">
-			</File>
-			<File
-				RelativePath="..\pocketfms_bc.c">
-			</File>
-			<File
-				RelativePath="..\naviguide.c">
-			</File>
-			<File
-				RelativePath="..\v900.c">
 			</File>
 			<Filter
 				Name="Jeeps"

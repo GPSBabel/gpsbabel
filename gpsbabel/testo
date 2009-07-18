@@ -1622,4 +1622,10 @@ compare ${REFERENCE}/v900_advanced_mode.gpx ${TMPDIR}/v900_advanced_mode.gpx
 gpsbabel -i naviguide -f ${REFERENCE}/route/naviguide-route.twl -o gpx -F ${TMPDIR}/naviguide.gpx
 compare ${REFERENCE}/route/naviguide.gpx ${TMPDIR}/naviguide.gpx
 
+#
+# Basic VPL test
+#
+gpsbabel -i vpl -f ${REFERENCE}/track/vpl_reference.vpl -o gpx -F ${TMPDIR}/vpl_reference.gpx
+compare ${TMPDIR}/vpl_reference.gpx ${REFERENCE}/track/vpl_reference.gpx
+
 exit 0
