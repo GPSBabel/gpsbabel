@@ -164,6 +164,7 @@ extern ff_vecs_t pocketfms_bc_vecs;
 extern ff_vecs_t pocketfms_fp_vecs;
 extern ff_vecs_t pocketfms_wp_vecs;
 extern ff_vecs_t enigma_vecs;
+extern ff_vecs_t vpl_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -478,6 +479,12 @@ vecs_t vec_list[] = {
                 "Wintec WBT-100/200 GPS Download",
                 NULL
         },
+		{
+				&vpl_vecs,
+				"vpl",
+				"Honda/Acura Navigation System VP Log File Format",
+				NULL
+		},
 #if MAXIMAL_ENABLED
         {
                 &wbt_fvecs,
