@@ -125,17 +125,17 @@ void *gbser_init(const char *port_name) {
 		return h;
 	}
         else if (h->fd = open(port_name, O_RDWR | O_NOCTTY), h->fd == -1) {
-		gbser__db(1, "Failed to open port (%s)\n", strerror(errno));	
+		warning("Failed to open port (%s)\n", strerror(errno));	
 	        goto failed;
 	}
 
 	if (!isatty(h->fd)) { 
-		gbser__db(1, "%s is not a TTY\n");
+		warning("%s is not a TTY\n", port_name);
 		goto failed;
 	}
 
 	if (gbser_set_port(h, 4800, 8, 0, 1)) {
-		gbser__db(1, "gbser_set_port() failed\n");
+		warning("gbser_set_port() failed\n");
 	    goto failed;
 	}
 
