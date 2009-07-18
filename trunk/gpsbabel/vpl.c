@@ -154,8 +154,8 @@ vpl_parse_75_sentence(const char *ibuf)
 	waypt->longitude = lon_raw / (double) 0xE1000;
 	waypt->altitude  = alt;
 	waypt->sat       = sats;
-	// Speed comes in MPH*16 which we have to convert to m/s
-	waypt->speed     = (speed_raw / (double) 0x10) * 0.44704;
+	// Speed comes in (MPH x 0x10) which we have to convert to m/s
+	WAYPT_SET(waypt, speed, (speed_raw / (double) 0x10) * 0.44704);
 	waypt->course    = hdg_raw * (double) (360/65535);
 
 	waypt->creation_time = mkgmtime(&tm);
