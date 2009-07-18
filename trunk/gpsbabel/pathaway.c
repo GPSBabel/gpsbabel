@@ -638,7 +638,7 @@ static void ppdb_write_wpt(const waypoint *wpt)
 	if (fabs(wpt->altitude) < 9999.0)	
 	{
 	    tmp = str_pool_get(32);
-	    snprintf(tmp, 32, ppdb_fmt_float(METERS_TO_FEET(wpt->altitude)));
+	    snprintf(tmp, 32, "%s", ppdb_fmt_float(METERS_TO_FEET(wpt->altitude)));
 	    buff = ppdb_strcat(buff, tmp, NULL, &len);
 	}
 	buff = ppdb_strcat(buff, ",", NULL, &len);

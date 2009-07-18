@@ -654,7 +654,7 @@ dec_to_human( char *buff, const char *format, const char *dirs, double val )
 		    index++;
 		    break;
 		case '%':
-		    sprintf( buff+strlen(buff), subformat );
+		    sprintf( buff+strlen(buff), "%s", subformat );
 		    break;
 		default:
 		    fatal(MYNAME ": invalid format specifier\n");
@@ -663,7 +663,7 @@ dec_to_human( char *buff, const char *format, const char *dirs, double val )
 	    }
 	}
 	else {
-	    sprintf( buff+strlen(buff), subformat );
+	    sprintf( buff+strlen(buff), "%s", subformat );
 	}
 	formatptr += strlen(subformat);
     } 

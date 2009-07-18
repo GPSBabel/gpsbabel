@@ -75,7 +75,7 @@ my_rd_init(const char *fname)
 				txt = xstrappend( txt, txtName  );
 			}
 			txt = xstrappend( txt,  "\n" );
-			fatal( txt );
+			fatal("%s",  txt);
 		}
 		if ( strchr(opt_name, '+')) {
 			nameidx = -2;

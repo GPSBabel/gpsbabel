@@ -92,7 +92,7 @@ int gopal_check_line(char *line)
 	if (i != 8)
 	{
 		snprintf(tmp,sizeof(tmp),"\"%s\"\n",line);
-		fprintf(stderr,tmp);
+		fprintf(stderr,"%s",tmp);
 	}
 	return i;
 }
