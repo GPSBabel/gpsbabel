@@ -1,4 +1,6 @@
 ECODE=0
+BABELDOC=${BABELDOC:-~/src/babelweb}
+
 
 checkit() {
 	export ECODE
@@ -6,13 +8,13 @@ checkit() {
 	STY=$2
 	DIR=${2}s
 
-	if ! grep -q $TYPE ~/src/babelweb/capabilities.html ~/src/babelweb/capabilities.inc
+	if ! grep -q $TYPE $BABELDOC/capabilities.html $BABELDOC/capabilities.inc
 	then
 		echo $STY $TYPE is not documented in capabilities.html.
 		ECODE=1
 	fi
 	
-	if ! grep -qi $TYPE  ~/src/babelweb/changes*.html
+	if ! grep -qi $TYPE  $BABELDOC/changes*.html
 	then
 		echo $STY $TYPE is not documented in changes.html.
 		ECODE=1
