@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: maindlg.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: maindlg.cpp,v 1.2 2009-07-19 06:52:23 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -678,7 +678,11 @@ void MainDlg::applyClicked()
   // Input char set if specified
   if (bd.enableCharSetXform && bd.inputCharSet != QString()) 
     args << "-c" << bd.inputCharSet;
-      
+
+  if (bd.xlateWayPts)        args << "-w";
+  if (bd.xlateRoutes)        args << "-r";
+  if (bd.xlateTracks)        args << "-t";
+
   // Input type, with options
   bool iisFile = (bd.inputType == BabelData::fileType);
   int fidx = formatIndexFromName(iisFile, iisFile ?
@@ -694,10 +698,6 @@ void MainDlg::applyClicked()
   else {
     args << "-f" << bd.inputDeviceName;
   }
-
-  if (bd.xlateWayPts)        args << "-w";
-  if (bd.xlateRoutes)        args << "-r";
-  if (bd.xlateTracks)        args << "-t";
 
   // --- Filters!
   args << filterData.getAllFilterStrings();
@@ -731,6 +731,12 @@ void MainDlg::applyClicked()
     ftemp.open();
     tempName = ftemp.fileName();
     ftemp.close();
+
+    // Ideally, expost this in the UI.  For now, just split the track
+    // if we've no recorded fixes for > 5 mins and we've moved > 300 meters.
+    args << "-x";
+    args << "track,pack,sdistance=0.3k,split=5m";
+
     args << "-o";
     args << "gpx";
     args << "-F" << tempName;
