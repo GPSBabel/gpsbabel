@@ -1,4 +1,4 @@
-<para>Read only support for csv file format used by <productname>Visiontac VGPS-900</productname> or <productname>Columbus V-900</productname> GPS data loggers. These seem to be two brand names for the exact same product.</para>
+<para>Read-only support for the csv file format used by <productname>Visiontac VGPS-900</productname> or <productname>Columbus V-900</productname> GPS data loggers. These seem to be two brand names for the exact same product.</para>
 
 <para>The the V-900 stores logs in on a microSD in a custom csv format. This format contains NULL chracters and fixed length fields, and therefore can not  handled by the normal csv module in GPSBabel.</para>
 
@@ -12,5 +12,5 @@
 </example>
 
 <para>
-The device support logging of track points, way points, and voice recordings (.wav files). Currently only track points are supported.
+The device support logging of trackpoints, waypoints, and voice recordings (.wav files). Currently only track points are supported.
 </para>
