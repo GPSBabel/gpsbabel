@@ -12,7 +12,7 @@
 </member>
 </simplelist>
 <para>
-	Longging may be enabled by simultaneously holding down the MAP/GUIDE, MENU, and CANCEL
+	Logging may be enabled by simultaneously holding down the MAP/GUIDE, MENU, and CANCEL
 	buttons for 3-5 seconds, then selecting "Functional Setup", "Log Data".  A PCMCIA card
 	must be inserted into the system (behind the Nav LCD) for logging to work.  (The system
 	can read MP3/WMA files on this card and will also write logs to it.  Generally, a
@@ -29,8 +29,8 @@
 	Generally, the layout of the format seems similar to NMEA, with discrete sentences
 	containing different fields of data, followed by a 1-byte XOR'd checksum.  Some sentences
 	are generated only once per engine start, others every few seconds, many every second,
-	and a few on the order of 5 and in one case up to 25 times per second.  All data in
-	the file is written in ASCII, most of it simply as hexadecimal characters.  Most
+	and a few on the order of five and in one case, up to twenty five times per second.  All data in
+	the file is written in ASCII; most of it simply as hexadecimal characters.  Most
 	fields are fixed width, though a few can be variable.  (Those that are variable
 	have a field count as the first field after their sentence identifier)  Currently,
 	only the '75'-sentence is decoded (and only about 50% of it), though this provides all
