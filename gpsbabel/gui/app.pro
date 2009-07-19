@@ -1,12 +1,15 @@
-# $Id: app.pro,v 1.2 2009-07-18 06:11:17 robertl Exp $
+# $Id: app.pro,v 1.3 2009-07-19 03:41:41 robertl Exp $
 #
 
 #CONFIG += qt debug console
 CONFIG += qt release 
 
-#QT += network \
-#    xml \
-#    webkit
+# For Mac, build Universal binary.   Ignored on other OSes.
+CONFIG += x86 ppc
+
+QT += network \
+    xml \
+    webkit
 
 unix:DESTDIR = objects
 unix:MOC_DIR = objects
