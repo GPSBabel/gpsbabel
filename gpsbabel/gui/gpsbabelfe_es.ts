@@ -281,7 +281,7 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainui.ui" line="19"/>
-        <source>GpsBabel</source>
+        <source>GPSBabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -647,7 +647,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="processwait.cpp" line="68"/>
-        <source> ... Process GpsBabel</source>
+        <source> ... Process GPSBabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
