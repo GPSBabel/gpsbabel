@@ -2,7 +2,7 @@
 </para>
 <para>
  This camera creates log files on the SD card in a folder name "GPSLOG" that 
-  are named "YYMMDDN.LOG" wher NN increments from 00 through 99.  The camera 
+  are named "YYMMDDNN.LOG" wher NN increments from 00 through 99.  The camera 
   appends new tracks into the current file, hence the "new track" field. When 
   the current file reaches about 500K, NN increments and logging continues into 
   the next file. Therefore, there may be multiple tracks in each log 
@@ -15,6 +15,6 @@
 </para>
 <para>
 For additional tips, see the
-  <ulink url="http://http://wiki.openstreetmap.org/wiki/Ricoh_500SE_GPS_Log">OpenStreetMap page on Ricoh 500SE</ulink>.
+  <ulink url="http://wiki.openstreetmap.org/wiki/Ricoh_500SE_GPS_Log">OpenStreetMap page on Ricoh 500SE</ulink>.
 </para>
 
