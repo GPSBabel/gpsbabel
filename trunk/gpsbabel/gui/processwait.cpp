@@ -1,5 +1,5 @@
 // -*- c++ -*-
-// $Id: processwait.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: processwait.cpp,v 1.2 2009-07-20 02:30:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -65,7 +65,7 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget *parent, QProcess *process):
   QDialog(parent), process(process)
 {
   this->resize(400, 220);
-  this->setWindowTitle(QString(appName) + tr(" ... Process GpsBabel"));
+  this->setWindowTitle(QString(appName) + tr(" ... Process GPSBabel"));
   QVBoxLayout *layout = new QVBoxLayout(this);
   
   textEdit = new QPlainTextEdit(this);
