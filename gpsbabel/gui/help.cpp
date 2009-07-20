@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: help.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: help.cpp,v 1.2 2009-07-20 01:38:38 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -22,31 +22,20 @@
 //------------------------------------------------------------------------
 #include "help.h"
 #include <QApplication>
-#include <QString>
-#include <QProcess>
-
-
-//------------------------------------------------------------------------
-#ifndef _WIN32
-void ShowUrl(const QString &url) 
-{
-  QString progName = QApplication::applicationDirPath() + "/showUrl.sh";
-  QStringList args;
-  args << url;
-  QProcess::startDetached(progName, args);
-}
-#else
-#include <windows.h>
-void ShowUrl(const QString &url) 
-{
-  ShellExecuteA(0, "open", url.toStdString().c_str(), 0, 0, SW_SHOWNORMAL);
-}
-#endif
+// #include <QProcess>
+// #include <QString>
+#include <QUrl>
+#include <QWebView>
 
 //------------------------------------------------------------------------
 void ShowHelp(const char *name)
 {
-  QString urlname = "file://" + QApplication::applicationDirPath() + "/help/" + name;
-  ShowUrl(urlname);
+  QUrl urlname("file://" + QApplication::applicationDirPath() + 
+                "/help/" + name);
+  // FIXME(robertl): This shoud probably parent from QApplication::mainWidget();
+  QWebView *view = new QWebView();
+  view->setWindowTitle("GPSBabel Help");
+  view->load(urlname);
+  view->show();
 }
 
