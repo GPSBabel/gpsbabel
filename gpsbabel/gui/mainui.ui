@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>GpsBabel</string>
+   <string>GPSBabel</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
@@ -655,9 +655,100 @@
     </widget>
    </item>
   </layout>
+  <widget class="QWidget" name="centralwidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>100</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuHello">
+    <property name="title">
+     <string>GPSBabel</string>
+    </property>
+    <addaction name="actionAbout"/>
+    <addaction name="separator"/>
+    <addaction name="actionPreferences"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionGPSBabel_Help"/>
+   </widget>
+   <addaction name="menuHello"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <action name="actionGPSBabel_Help">
+   <property name="text">
+    <string>GPSBabel Help</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About GPSBabel</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="app.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionGPSBabel_Help</sender>
+   <signal>activated()</signal>
+   <receiver>MainDlg</receiver>
+   <slot>helpClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>336</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>activated()</signal>
+   <receiver>MainDlg</receiver>
+   <slot>aboutClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>336</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
