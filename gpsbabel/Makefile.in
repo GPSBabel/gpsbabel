@@ -341,6 +341,19 @@ mac-release:
 	tar cvzf gpsbabel-osx.tgz usr/bin/gpsbabel
 	curl -u anonymous:anonymous --upload-file gpsbabel-osx.tgz ftp://upload.sf.net/incoming/
 
+
+mac-gui: gpsbabel
+	cd gui ; qmake && xcodebuild
+	cp gpsbabel gui/objects/gpsbabelfe-bin.app/Contents/MacOS
+	cp -r gui/help  gui/objects/gpsbabelfe-bin.app/Contents/MacOS
+	cp gui/gmapbase.html gui/objects/gpsbabelfe-bin.app/Contents/MacOS
+
+# Build the Qt front end, place GPSBabel in the right place, deploy all 
+# the libs.
+mac-gui-dmg: mac-gui
+	rm -f gui/objects/gpsbabelfe-bin.dmg
+	cd gui/objects ; macdeployqt gpsbabelfe-bin.app -dmg
+
 msvc-build:
 	make CC=@CL.EXE DEBUGGING="" EXTRA_CFLAGS="-nologo -W3 -WL -D__WIN32__ -I msvc/expat " OUTPUT_SWITCH="-Fo" $(OBJS)
 	echo $(OBJS) > objs.lst
