@@ -565,10 +565,15 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 		}
 
 		/*
-		 * If we've moved as much as a meter, recompute speed.
+		 * If we've moved as much as a meter, 
+		 * conditionally recompute speeds.
 		 */
 		if (timed && (dist > 1)) {
-			WAYPT_SET(this, speed, dist / labs(timed));
+			if(!WAYPT_HAS(this, speed)) {
+				// Only recompute speed if the waypoint
+				// didn't already have a speed
+				WAYPT_SET(this, speed, dist / labs(timed));
+			}
 			if (this->speed > tdata->max_spd) {
 				tdata->max_spd = this->speed;
 			}
