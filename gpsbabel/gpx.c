@@ -737,6 +737,7 @@ gs_type_mapping{
 	{ gt_locationless, "Locationless (Reverse) Cache" },
 	{ gt_ape, "Project APE Cache" },
 	{ gt_mega, "Mega-Event Cache" },
+	{ gt_wherigo, "Wherigo Cache" },
 
 	{ gt_benchmark, "Benchmark" }, /* Not Groundspeak; for GSAK  */
 };
