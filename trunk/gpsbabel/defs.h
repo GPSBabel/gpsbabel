@@ -237,7 +237,8 @@ typedef enum {
 	gt_benchmark, /* Extension to Groundspeak for GSAK */
 	gt_cito,
 	gt_ape,
-	gt_mega
+	gt_mega,
+	gt_wherigo
 } geocache_type;
 
 typedef enum {

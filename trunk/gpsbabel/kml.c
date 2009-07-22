@@ -844,7 +844,8 @@ kml_lookup_gc_icon(const waypoint *waypointp)
 		case gt_webcam: icon = "11.png"; break;
 		case gt_cito: icon = "13.png"; break;
 		case gt_earth:  icon = "earthcache.png"; break;
-		case gt_mega: icon = "6.png"; break; // No unique icon yet.
+		case gt_mega: icon = "453.png"; break; 
+		case gt_wherigo: icon = "1858.png"; break; 
 		default: icon = "8.png"; break;
 	}
 
