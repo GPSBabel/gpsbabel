@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: main.cpp,v 1.2 2009-07-20 02:30:42 robertl Exp $
+// $Id: main.cpp,v 1.3 2009-07-23 03:22:24 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -28,7 +28,7 @@
 #include <QTranslator>
 #include <QIcon>
 
-#include "maindlg.h"
+#include "mainwindow.h"
 #include "gmapdlg.h"
 
 #ifdef _WIN32
@@ -68,9 +68,8 @@ int main(int argc, char**argv)
   QCoreApplication::setOrganizationDomain("gpsbabel.org");
   QCoreApplication::setApplicationName("GPSBabelFE");
 
-#ifdef XXX  
-#endif
-  MainDlg mainDlg(0);
-  mainDlg.exec();
+  MainWindow mainWindow(0);
+  mainWindow.show();
+  app->exec();
 }
 

@@ -1,4 +1,4 @@
-# $Id: app.pro,v 1.3 2009-07-19 03:41:41 robertl Exp $
+# $Id: app.pro,v 1.4 2009-07-23 03:22:23 robertl Exp $
 #
 
 #CONFIG += qt debug console
@@ -31,7 +31,7 @@ extras.target = extras
 QMAKE_EXTRA_TARGETS += extras
 #POST_TARGETDEPS=extras
 
-FORMS += mainui.ui
+FORMS += mainwinui.ui
 FORMS += advui.ui
 FORMS += aboutui.ui
 FORMS += trackui.ui
@@ -50,8 +50,7 @@ SOURCES += gmapdlg.cpp
 SOURCES += aboutdlg.cpp
 SOURCES += main.cpp
 SOURCES += help.cpp
-SOURCES += maindlg.cpp
-SOURCES += persistdlg.cpp
+SOURCES += mainwindow.cpp
 SOURCES += format.cpp
 SOURCES += filterdata.cpp
 SOURCES += formatload.cpp
@@ -61,7 +60,7 @@ SOURCES += filterwidgets.cpp
 SOURCES += filterdlg.cpp
 
 
-HEADERS += maindlg.h
+HEADERS += mainwindow.h
 HEADERS += map.h
 HEADERS += gmapdlg.h
 HEADERS += gpx.h
@@ -74,7 +73,6 @@ HEADERS += help.h
 HEADERS += format.h
 HEADERS += formatload.h
 HEADERS += optionsdlg.h
-HEADERS += persistdlg.h
 HEADERS += processwait.h
 HEADERS += filterwidgets.h
 HEADERS += filterdata.h
