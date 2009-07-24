@@ -1203,6 +1203,11 @@ example:
 </screen>
 </section>
 
+<section id="style_track_new">
+<title>TRACK_NEW</title>
+<para>If '1', it indicates that this trackpoint is the first point of a new track.  Needs integer conversion.</para><para>example:<screen format="linespecific">IFIELD TRACK_NEW,"","%d"<screen></para></section>
+
+
 <section id="style_track_name">
 <title>TRACK_NAME</title>
 <para>The name of the track currently being operated on.  Needs string conversion.</para><para>example:<screen format="linespecific">TRACK_NAME, "", "%s"</screen></para></section>

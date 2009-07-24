@@ -73,8 +73,8 @@ static unsigned delbin_os_packet_size;
 
 // number of times to attempt a transfer before giving up
 #define ATTEMPT_MAX 2
-// seconds to wait for expected message, this value is 1 greater than
-// minimum, i.e. READ_TIMEOUT - 1 <= actual_timeout <= READ_TIMEOUT
+// seconds to wait for expected message (actual time will be somewhat
+// indeterminate, but at least READ_TIMEOUT - 1)
 #define READ_TIMEOUT 6
 
 // debug output: low, medium, high, higher
