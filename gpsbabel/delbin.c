@@ -74,10 +74,11 @@ static unsigned delbin_os_packet_size;
 // number of times to attempt a transfer before giving up
 #define ATTEMPT_MAX 2
 
-// debug output: low, medium, high
+// debug output: low, medium, high, higher
 #define DBGLVL_L 1
 #define DBGLVL_M 2
 #define DBGLVL_H 3
+#define DBGLVL_H2 4
 
 // Multiple unit support.
 #define DELBIN_MAX_UNITS 32
@@ -373,6 +374,34 @@ typedef struct {
 
 //-----------------------------------------------------------------------------
 
+#if __APPLE__ || __linux
+	#include <sys/time.h>
+#endif
+
+static void
+debug_out(const char* fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	fputs(MYNAME ": ", stderr);
+	vfprintf(stderr, fmt, ap);
+	va_end(ap);
+}
+
+static void
+debug_out_time(const char* s)
+{
+#if __APPLE__ || __linux
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	debug_out("%u.%03u %s", (unsigned)tv.tv_sec & 0xf, (unsigned)tv.tv_usec / 1000, s);
+#else
+	debug_out("%s", s);
+#endif
+}
+
+//-----------------------------------------------------------------------------
+
 static gbuint16
 checksum(const gbuint8* p, unsigned n)
 {
@@ -400,14 +429,18 @@ packet_read(void* buf)
 	}
 	if (global_opts.debug_level >= DBGLVL_H) {
 		unsigned j;
-		warning(MYNAME ": pcktrd ");
+		const gbuint8* p = buf;
+
+		debug_out_time("pcktrd");
 		for (j = 0; j < n; j++) {
-			warning("%02x ", ((gbuint8*)buf)[j]);
+			warning(" %02x", p[j]);
 		}
-		warning("  ");
-		for (j = 0; j < n; j++) {
-			gbuint8 c = ((gbuint8*)buf)[j];
-			warning("%c", isprint(c) ? c : '.');
+		if (global_opts.debug_level >= DBGLVL_H2) {
+			warning("  ");
+			for (j = 0; j < n; j++) {
+				int c = p[j];
+				warning("%c", isprint(c) ? c : '.');
+			}
 		}
 		warning("\n");
 	}
@@ -420,14 +453,18 @@ packet_write(const void* p, unsigned size)
 	unsigned n;
 	if (global_opts.debug_level >= DBGLVL_H) {
 		unsigned j;
-		warning(MYNAME ": pcktwr ");
+		const gbuint8* pp = p;
+
+		debug_out_time("pcktwr");
 		for (j = 0; j < size; j++) {
-			warning("%02x ", ((gbuint8*)p)[j]);
+			warning(" %02x", pp[j]);
 		}
-		warning("  ");
-		for (j = 0; j < size; j++) {
-			gbuint8 c = ((gbuint8*)p)[j];
-			warning("%c", isprint(c) ? c : '.');
+		if (global_opts.debug_level >= DBGLVL_H2) {
+			warning("  ");
+			for (j = 0; j < size; j++) {
+				int c = pp[j];
+				warning("%c", isprint(c) ? c : '.');
+			}
 		}
 		warning("\n");
 	}
@@ -547,9 +584,11 @@ read_depacketize_1(gbuint8** p, unsigned n, int new_packet)
 {
 	static gbuint8 buf[256];
 	static unsigned buf_i, buf_n;
-	while (buf_n == 0 || new_packet) {
+	if (new_packet) {
+		buf_n = 0;
+	}
+	while (buf_n == 0) {
 		packet_read(buf);
-		new_packet = FALSE;
 		if (buf[1] <= delbin_os_packet_size - 2) {
 			buf_n = buf[1];
 			buf_i = 2;
@@ -2021,7 +2060,7 @@ delbin_rw_init(const char *fname)
 		} else if (strstr(p->product, "PN-20")) {
 			use_extended_notes = p->firmware[0] > '1' ||
 				(p->firmware[0] == '1' && p->firmware[2] >= '6');
-		} else if (strstr(p->product, "PN-40")) {
+		} else if (strstr(p->product, "PN-30") || strstr(p->product, "PN-40")) {
 			use_extended_notes = p->firmware[0] > '2' ||
 				(p->firmware[0] == '2' && p->firmware[2] >= '5');
 		}
@@ -2114,7 +2153,7 @@ ff_vecs_t delbin_vecs = {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <setupapi.h>
-#include <ddk/hidsdi.h>
+#include <hidsdi.h>
 
 static HANDLE hid_handle;
 
