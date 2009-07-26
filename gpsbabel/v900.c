@@ -21,7 +21,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
 	TODO:
-		- support way points
 		- QUESTION: course = heading ??
                 - HEIGHT: Altitude in meters (not corrected to WGS84...) ??
  */
@@ -36,8 +35,8 @@ First line is a header line. It contains no nulls.
 Following lines are record lines. They are comma separated, but fields always
 have the exact same length (per field), and therfore, the commas are always
 at the exact same position on the line. Fields are padded with nulls, in case
-they hace shorter value then the fixed field length.
-Two modes availe: basic and advanced.
+they have shorter value then the fixed field length.
+Two modes are available: basic and advanced.
 
 The following two examples show "*" where null appears.
 
@@ -64,6 +63,8 @@ INDEX,TAG,DATE,TIME,LATITUDE N/S,LONGITUDE E/W,HEIGHT,SPEED,HEADING,FIX MODE,VAL
 9*****,T,090204,055737,31.768326N,035.209993E,150**,0***,0**,3D,SPS ,2.5**,2.3**,0.9**,*********
 10****,T,090204,055738,31.768339N,035.209976E,153**,0***,0**,3D,SPS ,2.5**,2.3**,0.9**,*********
 11****,T,090204,055739,31.768338N,035.209991E,155**,0***,0**,3D,SPS ,2.5**,2.3**,0.9**,*********
+42****,C,090724,162320,31.763841N,035.205461E,788**,9***,344,3D,SPS ,1.2**,0.9**,0.8**,*********
+121***,V,090724,162502,31.769619N,035.208964E,786**,16**,306,3D,SPS ,1.1**,0.8**,0.8**,VOX00003*
 ------advanced mode - end--------------------------- 
 
 for a little more info, see structures: 
@@ -347,10 +348,24 @@ Advanced mode: INDEX,TAG,DATE,TIME,LATITUDE N/S,LONGITUDE E/W,HEIGHT,SPEED,HEADI
 				wpt->fix = fix_unknown;
 		}
 
-		if(line.bas.common.tag == 'T')
-                	track_add_wpt(track, wpt);
-                else
-                	waypt_add(wpt);
+               	track_add_wpt(track, wpt);
+		if(line.bas.common.tag != 'T')
+		{
+			assert(line.bas.common.tag == 'C' || line.bas.common.tag == 'V');
+			waypoint *wpt2 = waypt_dupe(wpt);
+			if(line.bas.common.tag == 'V')	// waypoint with voice recording?
+			{
+				char vox_file_name[sizeof(line.adv.vox)+5];
+				const char *vox = is_advanced_mode ? line.adv.vox : line.bas.vox;
+				assert(vox[0] != '\0');
+				strcpy(vox_file_name,vox);
+				strcat(vox_file_name,".WAV");
+				wpt2->shortname = xstrdup(vox_file_name);
+				wpt2->description = xstrdup(vox_file_name);
+				waypt_add_url(wpt2, xstrdup(vox_file_name), xstrdup(vox_file_name));
+			} 
+                	waypt_add(wpt2);
+		}
 	}
 }
 
