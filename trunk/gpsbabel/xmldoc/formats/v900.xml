@@ -1,16 +1,26 @@
-<para>Read-only support for the csv file format used by <productname>Visiontac VGPS-900</productname> or <productname>Columbus V-900</productname> GPS data loggers. These seem to be two brand names for the exact same product.</para>
+<para>Read-only support for the csv file format used by <productname>Visiontac VGPS-900</productname> and <productname>Columbus V-900</productname> GPS data loggers. These seem to be two brand names for the exact same product.</para>
 
-<para>The the V-900 stores logs in on a microSD in a custom csv format. This format contains NULL chracters and fixed length fields, and therefore can not  handled by the normal csv module in GPSBabel.</para>
+<para>The the V-900 stores logs on a microSD card in a custom csv format. This format contains NULL chracters and fixed length fields, and therefore can not  be handled by the normal csv module in GPSBabel.</para>
 
 <para>
 <ulink url="http://www.visiontac.com/v900_specs.htm">Visiontac VGPS-900</ulink>
 </para>
 
-<example id="v900">
+<example id="v900_e1">
   <title>Conversion of a v900 csv log file to a gpx format</title>
   <para><userinput>gpsbabel -i v900 -f 09040400.csv -o gpx -F outfile.gpx</userinput></para>
 </example>
 
 <para>
-The device support logging of trackpoints, waypoints, and voice recordings (.wav files). Currently only track points are supported.
+The device support logging of trackpoints, waypoints, and voice recordings (.wav files).
 </para>
+
+<para>If you create voice recording waypoints, a link (url) to the corresponding wav file is added to the waypoint.
+If you happen to use this for OpenStreetMap.org project, you can easily click on a waypoint and open the wav file from within JOSM. For this you must use gpx version 1.1 as the output file. The next example shows exactly how to do that.
+</para>
+
+<example id="v900_e2">
+  <title>Conversion of a v900 csv log file to a gpx 1.1 format</title>
+  <para><userinput>gpsbabel -i v900 -f 09040400.csv -o gpx,gpxver=1.1 -F outfile.gpx</userinput></para>
+</example>
+
