@@ -199,6 +199,7 @@ typedef struct GPS_SDatum_Alias
 GPS_ODatum_Alias GPS_DatumAlias[] =
 {
     { "Australian GDA94", 122 },
+    { "Australian Geocentric 1994 (GDA94)", 122},  /* Observed in Ozi */
     { "GDA94", 122 },
     { "GDA-94", 122 },
     { "CH1903", 123 },
