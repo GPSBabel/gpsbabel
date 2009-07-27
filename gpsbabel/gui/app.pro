@@ -1,4 +1,4 @@
-# $Id: app.pro,v 1.4 2009-07-23 03:22:23 robertl Exp $
+# $Id: app.pro,v 1.5 2009-07-27 15:36:30 robertl Exp $
 #
 
 #CONFIG += qt debug console
@@ -40,6 +40,7 @@ FORMS += wayptsui.ui
 FORMS += rttrkui.ui
 FORMS += miscfltui.ui
 FORMS += gmapui.ui
+FORMS += upgrade.ui
 
 SOURCES += advdlg.cpp
 SOURCES += dpencode.cpp
@@ -58,7 +59,7 @@ SOURCES += optionsdlg.cpp
 SOURCES += processwait.cpp
 SOURCES += filterwidgets.cpp
 SOURCES += filterdlg.cpp
-
+SOURCES += upgrade.cpp
 
 HEADERS += mainwindow.h
 HEADERS += map.h
@@ -77,6 +78,7 @@ HEADERS += processwait.h
 HEADERS += filterwidgets.h
 HEADERS += filterdata.h
 HEADERS += setting.h
+HEADERS += upgrade.h
 
 TRANSLATIONS += gpsbabelfe_de.ts
 TRANSLATIONS += gpsbabelfe_es.ts
