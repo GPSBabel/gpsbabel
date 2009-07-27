@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: help.cpp,v 1.2 2009-07-20 01:38:38 robertl Exp $
+// $Id: help.cpp,v 1.3 2009-07-27 04:04:42 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -22,8 +22,6 @@
 //------------------------------------------------------------------------
 #include "help.h"
 #include <QApplication>
-// #include <QProcess>
-// #include <QString>
 #include <QUrl>
 #include <QWebView>
 
