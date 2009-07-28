@@ -596,7 +596,7 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 			for (x = 0; x < sz; x++)
 			  fprintf(stderr, "%c", isalnum(b[x]) ? b[x] : '.');
 			}
-#endif GPI_DBG
+#endif // GPI_DBG
 			break;
 		default:
 			warning(MYNAME ": Unknown tag (0x%x). Please report!\n", tag);
