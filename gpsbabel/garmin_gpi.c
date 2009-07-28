@@ -176,7 +176,7 @@ typedef struct {
 } gpi_waypt_t;
 
 static gbfile *fin, *fout;
-static gbint32 codepage;	/* code-page, i.e. 1252 */
+static gbint16 codepage;	/* code-page, i.e. 1252 */
 static reader_data_t *rdata;
 static writer_data_t *wdata;
 static short_handle short_h;
@@ -290,8 +290,16 @@ read_header(void)
 	len = gbfgetint16(fin);
 	gbfseek(fin, len, SEEK_CUR);	/* "my.gpi" */
 
-	(void) gbfgetint32(fin);	/* 1 */
+	i =  gbfgetint32(fin);	/* 1 */
 	(void) gbfgetint32(fin);	/* 12 */
+        /* There are two dwords next.  On most typical files, they're 
+	 * "1" and "12".  On files from garminoneline.de/extras/poi, the
+	 * next two words are "15" and "5" and there's 17 additional bytes 
+ 	 * that I can't identify.   So hardcode a seek here for now.
+	 */
+	if (i == 15) {
+		gbfseek(fin, 17, SEEK_CUR);	
+	}
 
 	gbfread(&rdata->POI, 1, sizeof(rdata->POI) - 1, fin);
 	if (strcmp(rdata->POI, "POI") != 0)
@@ -300,7 +308,9 @@ read_header(void)
 	for (i = 0; i < 3; i++) (void)gbfgetc(fin);
 	gbfread(&rdata->S8, 1, sizeof(rdata->S8) - 1, fin);
 
-	codepage = gbfgetint32(fin);
+	codepage = gbfgetint16(fin);
+	(void) gbfgetint16(fin);   	/* typically 0, but  0x11 in 
+  					Garminonline.de files.  */
 
 #ifdef GPI_DBG
 	PP;
@@ -562,6 +572,32 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 		case 0x80012:	/* ? sounds / images ? */
 			break;
 
+		case 0x11:
+		case 0xb:
+		case 0xc:   
+		  /* appears to be web links.  If the first 16 bit 
+		     value  is 0x10, the remainder is a length/URL pair.
+         	     if it's 0x19, there is a length/phone # (?) pair followed
+		     by a length/URL pair.
+   		   */
+		case 0x80007: 
+		/* Looks like some kind of calendar information. */
+
+#ifdef GPI_DBG
+			{
+			int x;
+			char *b = xmalloc(sz);
+			fprintf(stderr, "Tag: %x\n", tag);
+			gbfread(b, 1, sz, fin);
+			fprintf(stderr, "\n");
+			for (x = 0; x < sz; x++)
+			  fprintf(stderr, "%02x ", b[x]);
+			fprintf(stderr, "\n");
+			for (x = 0; x < sz; x++)
+			  fprintf(stderr, "%c", isalnum(b[x]) ? b[x] : '.');
+			}
+#endif GPI_DBG
+			break;
 		default:
 			warning(MYNAME ": Unknown tag (0x%x). Please report!\n", tag);
 			return 0;
@@ -997,7 +1033,8 @@ write_header(void)
 	gbfputc(0, fout);
 	gbfputc(0, fout);
 	gbfwrite("00", 1, 2, fout);
-	gbfputint32(codepage, fout);
+	gbfputint16(codepage, fout);
+	gbfputint16(0, fout);
 }
 
 

@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="47.545639984" minlon="4.290249981" maxlat="54.402619991" maxlon="16.385979988"/>
+<wpt lat="48.399400022" lon="11.753660012">
+  <name>Uferlos Festival</name>
+  <cmt>Uferlos Festival</cmt>
+  <desc>Uferlos Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.874490006" lon="8.653959967">
+  <name>Schlossgrabenfest</name>
+  <cmt>Schlossgrabenfest</cmt>
+  <desc>Schlossgrabenfest</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.039299991" lon="8.716329960">
+  <name>Kultival</name>
+  <cmt>Kultival</cmt>
+  <desc>Kultival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="53.546119994" lon="9.966749987">
+  <name>Hafengeburtstag Hamburg</name>
+  <cmt>Hafengeburtstag Hamburg</cmt>
+  <desc>Hafengeburtstag Hamburg</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.660460001" lon="6.622350002">
+  <name>EselRock</name>
+  <cmt>EselRock</cmt>
+  <desc>EselRock</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.962610008" lon="7.628400000">
+  <name>EuroCityFest Münster</name>
+  <cmt>EuroCityFest Münster</cmt>
+  <desc>EuroCityFest Münster</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.349280002" lon="7.761930004">
+  <name>Wispa Festival</name>
+  <cmt>Wispa Festival</cmt>
+  <desc>Wispa Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.799310034" lon="9.919969998">
+  <name>Umsonst + Draußen Würzburg</name>
+  <cmt>Umsonst + Draußen Würzburg</cmt>
+  <desc>Umsonst + Draußen Würzburg</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="50.208350010" lon="10.083699999">
+  <name>Umsonst + Draußen Bad Kissingen</name>
+  <cmt>Umsonst + Draußen Bad Kissingen</cmt>
+  <desc>Umsonst + Draußen Bad Kissingen</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="52.071980014" lon="10.018159971">
+  <name>Teichrock</name>
+  <cmt>Teichrock</cmt>
+  <desc>Teichrock</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="53.310100017" lon="9.598830035">
+  <name>Spreehafenfestival</name>
+  <cmt>Spreehafenfestival</cmt>
+  <desc>Spreehafenfestival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.713909984" lon="9.106200021">
+  <name>Rohrer Seefest</name>
+  <cmt>Rohrer Seefest</cmt>
+  <desc>Rohrer Seefest</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.427960016" lon="9.768199967">
+  <name>Rock die Heide</name>
+  <cmt>Rock die Heide</cmt>
+  <desc>Rock die Heide</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.646140022" lon="6.798919989">
+  <name>Rock and Bike</name>
+  <cmt>Rock and Bike</cmt>
+  <desc>Rock and Bike</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.510489995" lon="9.035319965">
+  <name>RACT Festival</name>
+  <cmt>RACT Festival</cmt>
+  <desc>RACT Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.702990040" lon="8.530369978">
+  <name>Polterplatz Open Air</name>
+  <cmt>Polterplatz Open Air</cmt>
+  <desc>Polterplatz Open Air</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="52.052970026" lon="4.290249981">
+  <name>Parkpop</name>
+  <cmt>Parkpop</cmt>
+  <desc>Parkpop</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.383819981" lon="6.996099986">
+  <name>Open Air Werden</name>
+  <cmt>Open Air Werden</cmt>
+  <desc>Open Air Werden</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="50.049679996" lon="8.700139979">
+  <name>Open Doors Festivals</name>
+  <cmt>Open Doors Festivals</cmt>
+  <desc>Open Doors Festivals</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.506919974" lon="8.323650034">
+  <name>Happiness</name>
+  <cmt>Happiness</cmt>
+  <desc>Happiness</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.683030035" lon="7.813850027">
+  <name>Hafenfest Hamm</name>
+  <cmt>Hafenfest Hamm</cmt>
+  <desc>Hafenfest Hamm</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="53.133990029" lon="7.319710013">
+  <name>Free for All</name>
+  <cmt>Free for All</cmt>
+  <desc>Free for All</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.372929960" lon="7.696949970">
+  <name>Friedensfestival</name>
+  <cmt>Friedensfestival</cmt>
+  <desc>Friedensfestival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.002669984" lon="8.371280031">
+  <name>Das Fest Karlsruhe</name>
+  <cmt>Das Fest Karlsruhe</cmt>
+  <desc>Das Fest Karlsruhe</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.249339983" lon="16.385979988">
+  <name>Donauinselfest</name>
+  <cmt>Donauinselfest</cmt>
+  <desc>Donauinselfest</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.946109992" lon="9.430129984">
+  <name>Backnanger Nachwuchsfestival</name>
+  <cmt>Backnanger Nachwuchsfestival</cmt>
+  <desc>Backnanger Nachwuchsfestival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="52.491740026" lon="7.296230039">
+  <name>Abifestival</name>
+  <cmt>Abifestival</cmt>
+  <desc>Abifestival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.969729967" lon="10.417360011">
+  <name>Weinlabyrinth</name>
+  <cmt>Weinlabyrinth</cmt>
+  <desc>Weinlabyrinth</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.760510037" lon="11.537659960">
+  <name>Waldstock</name>
+  <cmt>Waldstock</cmt>
+  <desc>Waldstock</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.413060009" lon="9.068780020">
+  <name>Umsonst + Draußen Mössingen</name>
+  <cmt>Umsonst + Draußen Mössingen</cmt>
+  <desc>Umsonst + Draußen Mössingen</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="52.187669976" lon="8.938270016">
+  <name>Umsonst + Draußen Vlotho</name>
+  <cmt>Umsonst + Draußen Vlotho</cmt>
+  <desc>Umsonst + Draußen Vlotho</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="47.545639984" lon="9.679759992">
+  <name>Umsonst + Draußen Lindau</name>
+  <cmt>Umsonst + Draußen Lindau</cmt>
+  <desc>Umsonst + Draußen Lindau</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.966509975" lon="9.784779958">
+  <name>Umsonst + Draußen Karlstadt</name>
+  <cmt>Umsonst + Draußen Karlstadt</cmt>
+  <desc>Umsonst + Draußen Karlstadt</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.786249999" lon="9.945200030">
+  <name>Umsonst + Draußen Heubach</name>
+  <cmt>Umsonst + Draußen Heubach</cmt>
+  <desc>Umsonst + Draußen Heubach</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.314740034" lon="11.913810018">
+  <name>Sinnflutfestival</name>
+  <cmt>Sinnflutfestival</cmt>
+  <desc>Sinnflutfestival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="52.672489984" lon="9.902839987">
+  <name>Südwinsen Festival</name>
+  <cmt>Südwinsen Festival</cmt>
+  <desc>Südwinsen Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="52.444449998" lon="13.393969964">
+  <name>Rocktreff</name>
+  <cmt>Rocktreff</cmt>
+  <desc>Rocktreff</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="50.706969984" lon="7.145749982">
+  <name>Rheinkultur</name>
+  <cmt>Rheinkultur</cmt>
+  <desc>Rheinkultur</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.261089986" lon="11.642399970">
+  <name>Open Air am Garchinger See</name>
+  <cmt>Open Air am Garchinger See</cmt>
+  <desc>Open Air am Garchinger See</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.459379999" lon="9.942190005">
+  <name>Obstwiesenfestival</name>
+  <cmt>Obstwiesenfestival</cmt>
+  <desc>Obstwiesenfestival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="47.991100000" lon="9.252010016">
+  <name>Live at Plaza</name>
+  <cmt>Live at Plaza</cmt>
+  <desc>Live at Plaza</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.491600035" lon="9.207370011">
+  <name>KuRt Festival</name>
+  <cmt>KuRt Festival</cmt>
+  <desc>KuRt Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.194310011" lon="6.431639995">
+  <name>HORST Festival</name>
+  <cmt>HORST Festival</cmt>
+  <desc>HORST Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.191120027" lon="10.094509972">
+  <name>Go Ahead Weekend</name>
+  <cmt>Go Ahead Weekend</cmt>
+  <desc>Go Ahead Weekend</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="50.006319992" lon="8.419119995">
+  <name>Flörsheimer Open Air</name>
+  <cmt>Flörsheimer Open Air</cmt>
+  <desc>Flörsheimer Open Air</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="54.088740014" lon="9.073549993">
+  <name>Frequenzen Festival</name>
+  <cmt>Frequenzen Festival</cmt>
+  <desc>Frequenzen Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.270319995" lon="11.048290003">
+  <name>Bardentreffen</name>
+  <cmt>Bardentreffen</cmt>
+  <desc>Bardentreffen</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.009889988" lon="12.060559960">
+  <name>Bayerisches Jazzweekend</name>
+  <cmt>Bayerisches Jazzweekend</cmt>
+  <desc>Bayerisches Jazzweekend</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.289210003" lon="7.129469980">
+  <name>Bochum Total</name>
+  <cmt>Bochum Total</cmt>
+  <desc>Bochum Total</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.597130040" lon="8.862640020">
+  <name>48er Festival</name>
+  <cmt>48er Festival</cmt>
+  <desc>48er Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.413060009" lon="9.068780020">
+  <name>Umsonst + Draußen Mössingen</name>
+  <cmt>Umsonst + Draußen Mössingen</cmt>
+  <desc>Umsonst + Draußen Mössingen</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="52.187669976" lon="8.938270016">
+  <name>Umsonst + Draußen Vlotho</name>
+  <cmt>Umsonst + Draußen Vlotho</cmt>
+  <desc>Umsonst + Draußen Vlotho</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.314740034" lon="11.913810018">
+  <name>Sinnflutfestival</name>
+  <cmt>Sinnflutfestival</cmt>
+  <desc>Sinnflutfestival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="53.486279994" lon="10.112810014">
+  <name>Wutzrock Festival</name>
+  <cmt>Wutzrock Festival</cmt>
+  <desc>Wutzrock Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.861859987" lon="8.423670027">
+  <name>Wutzdog Festival</name>
+  <cmt>Wutzdog Festival</cmt>
+  <desc>Wutzdog Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="53.546119994" lon="9.966749987">
+  <name>Welt Astra Tag</name>
+  <cmt>Welt Astra Tag</cmt>
+  <desc>Welt Astra Tag</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.748850031" lon="9.110089978">
+  <name>Umsonst + Draußen Stuttgart</name>
+  <cmt>Umsonst + Draußen Stuttgart</cmt>
+  <desc>Umsonst + Draußen Stuttgart</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="53.757100040" lon="12.608659985">
+  <name>TeteRock Festival</name>
+  <cmt>TeteRock Festival</cmt>
+  <desc>TeteRock Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="52.408349980" lon="8.386299983">
+  <name>Stemweder Openair Festival</name>
+  <cmt>Stemweder Openair Festival</cmt>
+  <desc>Stemweder Openair Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="52.743069967" lon="8.167319996">
+  <name>Staatsforsten Open Air</name>
+  <cmt>Staatsforsten Open Air</cmt>
+  <desc>Staatsforsten Open Air</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="50.077860039" lon="8.420490017">
+  <name>Sommerschein Festival</name>
+  <cmt>Sommerschein Festival</cmt>
+  <desc>Sommerschein Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.188649999" lon="10.285149990">
+  <name>Sommerfühl</name>
+  <cmt>Sommerfühl</cmt>
+  <desc>Sommerfühl</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="50.006099967" lon="8.282699995">
+  <name>Rockfield Open Air</name>
+  <cmt>Rockfield Open Air</cmt>
+  <desc>Rockfield Open Air</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="49.255299959" lon="9.111690000">
+  <name>Römersee Open Air</name>
+  <cmt>Römersee Open Air</cmt>
+  <desc>Römersee Open Air</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.503850007" lon="6.877499996">
+  <name>Olgas Rock Festival</name>
+  <cmt>Olgas Rock Festival</cmt>
+  <desc>Olgas Rock Festival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.188539993" lon="7.504489990">
+  <name>Midsummer Open Air</name>
+  <cmt>Midsummer Open Air</cmt>
+  <desc>Midsummer Open Air</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.300879970" lon="9.897989966">
+  <name>Live im Schlossgarten</name>
+  <cmt>Live im Schlossgarten</cmt>
+  <desc>Live im Schlossgarten</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.903490014" lon="8.633109983">
+  <name>Holter Meeting</name>
+  <cmt>Holter Meeting</cmt>
+  <desc>Holter Meeting</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="54.107789984" lon="10.803940007">
+  <name>Gogenkrog Open-Air</name>
+  <cmt>Gogenkrog Open-Air</cmt>
+  <desc>Gogenkrog Open-Air</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.335239979" lon="9.336189972">
+  <name>Fest der leisen Tönen</name>
+  <cmt>Fest der leisen Tönen</cmt>
+  <desc>Fest der leisen Tönen</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.331050033" lon="6.562150000">
+  <name>Folklorefest Krefeld</name>
+  <cmt>Folklorefest Krefeld</cmt>
+  <desc>Folklorefest Krefeld</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.456610020" lon="7.011569962">
+  <name>Essen Original</name>
+  <cmt>Essen Original</cmt>
+  <desc>Essen Original</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="51.407510005" lon="6.689430038">
+  <name>Open Air Folksfest</name>
+  <cmt>Open Air Folksfest</cmt>
+  <desc>Open Air Folksfest</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="50.286050001" lon="8.504360011">
+  <name>Open Ernstival</name>
+  <cmt>Open Ernstival</cmt>
+  <desc>Open Ernstival</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="53.568390040" lon="9.982860005">
+  <name>Karneval der Kulturen Hamburg</name>
+  <cmt>Karneval der Kulturen Hamburg</cmt>
+  <desc>Karneval der Kulturen Hamburg</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="54.402619991" lon="11.161179990">
+  <name>Fehmarn Open Air</name>
+  <cmt>Fehmarn Open Air</cmt>
+  <desc>Fehmarn Open Air</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="48.934029993" lon="10.896470016">
+  <name>Eber-Hart Open Air</name>
+  <cmt>Eber-Hart Open Air</cmt>
+  <desc>Eber-Hart Open Air</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="52.180170016" lon="7.538499981">
+  <name>Detten Rockt</name>
+  <cmt>Detten Rockt</cmt>
+  <desc>Detten Rockt</desc>
+  <sym>Waypoint</sym>
+</wpt>
+</gpx>
