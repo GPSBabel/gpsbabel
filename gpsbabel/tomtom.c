@@ -75,7 +75,7 @@ wr_deinit(void)
 }
 
 #define read_long(f) gbfgetint32((f))
-#define read_char(f) (unsigned char)gbfgetc((f))
+#define read_char(f) gbfgetc((f))
 
 /*
  *  Decode a type 8 compressed record
@@ -155,8 +155,13 @@ data_read(void)
 			recsize = read_long( file_in ) - 5;
 			if (global_opts.debug_level >= 5)
 				printf("Skipping %li bytes\n", recsize );
-			while (recsize-- > 0)
-				(void) read_char( file_in );
+			while (recsize-- > 0) {
+				int junk;
+				junk = read_char( file_in );
+                                if (junk == EOF) {
+					fatal(MYNAME ":Unexpected EOF");
+                                }
+                        }
                         break;
 		  case 1:
 			/* a block header; ignored on read */
@@ -208,8 +213,12 @@ data_read(void)
                 if (global_opts.debug_level >= 5)
                   warning("Unknown record type 0x%x; skipping %ld bytes.\n",
                           rectype, recsize);
-                 while (recsize--)
-                  (void) read_char( file_in );
+                 while (recsize--) {
+                  int junk = read_char( file_in );
+                  if (junk == EOF) {
+                          fatal(MYNAME ":Unexpected EOF");
+                  }
+                 }
                  break;
           default:
                 if (global_opts.debug_level >= 1) {
