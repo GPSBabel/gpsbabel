@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.1 2009-07-31 17:59:58 robertl Exp $
+// $Id: mainwindow.cpp,v 1.2 2009-07-31 18:32:32 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -149,7 +149,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   connect(ui.actionQuit, SIGNAL(triggered()), this, SLOT(closeActionX()));
   connect(ui.actionHelp, SIGNAL(triggered()), this, SLOT(helpActionX()));
   connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(aboutActionX()));
-  connect(ui.actionCheckForUpgrade, SIGNAL(triggered()), this, SLOT(checkForUpgradeX()));
 
   connect(ui.inputFormatCombo,  SIGNAL(currentIndexChanged(int)),
 	  this,                 SLOT(inputFormatChanged(int)));
@@ -188,8 +187,16 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   //--- Restore from registry
   restoreSettings();
+  upgrade = new UpgradeCheck();
+  upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, bd.upgradeCheckTime);
 }
 
+//------------------------------------------------------------------------
+MainWindow::~MainWindow()
+{
+  if (upgrade)
+    delete upgrade;
+}
 //------------------------------------------------------------------------
 void MainWindow::loadDeviceNameCombos()
 {
@@ -758,8 +765,8 @@ void MainWindow::applyActionX()
 
     // Ideally, expost this in the UI.  For now, just split the track
     // if we've no recorded fixes for > 5 mins and we've moved > 300 meters.
-    args << "-x";
-    args << "track,pack,sdistance=0.3k,split=5m";
+    //args << "-x";
+    //args << "track,pack,sdistance=0.3k,split=5m";
 
     args << "-o";
     args << "gpx";
@@ -792,14 +799,19 @@ void MainWindow::applyActionX()
 //------------------------------------------------------------------------
 void MainWindow::closeActionX() 
 {
+  QDateTime wt= upgrade->getUpgradeWarningTime();
+  if (wt.isValid()) {
+    bd.upgradeCheckTime = wt;
+  }
   saveSettings();
+  delete upgrade;
+  upgrade = 0;
   qApp->exit(0);
 }
 
 //------------------------------------------------------------------------
 void MainWindow::closeEvent(QCloseEvent*)  
 {
-  fprintf(stderr, "Close happened\n");
   closeActionX();
 }
 //------------------------------------------------------------------------
@@ -877,12 +889,6 @@ void MainWindow::aboutActionX()
 void MainWindow::helpActionX()
 {
   ShowHelp("gpsbabel.html");
-}
-void MainWindow::checkForUpgradeX()
-{
-  Upgrade *foo = new Upgrade(this);
-  foo->show();
-  foo->checkForUpgrade();
 }
 //------------------------------------------------------------------------
 void MainWindow::filtersClicked()

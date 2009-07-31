@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.h,v 1.1 2009-07-31 17:59:58 robertl Exp $
+// $Id: mainwindow.h,v 1.2 2009-07-31 18:32:32 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -26,6 +26,7 @@
 #include "format.h"
 #include "filterdata.h"
 #include "babeldata.h"
+#include "upgrade.h"
 
 class MainWindow: public QMainWindow {
   Q_OBJECT
@@ -33,14 +34,14 @@ class MainWindow: public QMainWindow {
   
   public:
   MainWindow(QWidget* parent);
-  QString getBabelVersion(void) {return babelVersion;}
+  ~MainWindow();
 
 private:
   Ui_MainWindow     ui;
   QList<Format>  formatList;
+  QString        babelVersion;
   QPixmap        lights[4];
   QStringList    charSets;
-  QString        babelVersion;
   AllFiltersData filterData;
   BabelData      bd;
   bool           fmtChgInterlock;
@@ -74,6 +75,7 @@ private:
   void updateFilterStatus();
   void setWidgetValues();
   void getWidgetValues();
+  UpgradeCheck *upgrade;
 
 protected:
   void closeEvent(QCloseEvent*);
@@ -93,7 +95,6 @@ protected:
   void applyActionX();
   void aboutActionX();
   void helpActionX();
-  void checkForUpgradeX();
   void closeActionX();
   void filtersClicked();
   void resetFormatDefaults();

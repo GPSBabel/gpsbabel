@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: filterdata.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: filterdata.cpp,v 1.2 2009-07-31 18:32:32 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -88,7 +88,29 @@ QStringList TrackFilterData::makeOptionString()
   if (speed)    s += ",speed";
   if (pack)     s += ",pack";
   if (merge)    s += ",merge";
-  if (split && (pack || merge))    s += ",split";
+  if (split && (pack || merge))  {
+    s += ",split";
+    if (splitTime > 0) 
+      s += QString("=%1%2").arg(splitTime).arg("mhd"[splitTimeUnit]);
+  }
+  if (splitDist > 0) {
+    double d = splitDist;
+    char u = ' ';
+    if (splitDistUnit == 0) { // ft.
+      d /= 5280.0;  u = 'm';
+    }
+    else if (splitDistUnit == 1) { //m
+      d /= 1000.0;  u = 'k';
+    }
+    else if (splitDistUnit == 2) { //km
+      u = 'k';
+    }
+    else if (splitDistUnit == 3) { //m
+      u = 'm';
+    }
+    s += QString(",sdistance=%1%2").arg(d).arg(u);
+  }
+
   if (start)    s += QString(",start=%1").arg(optionDate(startTime, TZ));
   if (stop)     s += QString(",stop=%1").arg(optionDate(stopTime, TZ));
   if (move)     s += QString(",move=%1d%2h%3m%4s").arg(days).arg(hours).arg(mins).arg(secs);

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>533</width>
-    <height>251</height>
+    <width>558</width>
+    <height>218</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0" colspan="5">
+     <item row="0" column="0" colspan="2">
       <widget class="QLabel" name="label">
        <property name="font">
         <font>
@@ -51,7 +51,7 @@ If this value contains a percent (%) character, it is treated as a format string
        </property>
       </widget>
      </item>
-     <item row="1" column="1" colspan="4">
+     <item row="1" column="1">
       <widget class="QLineEdit" name="titleText">
        <property name="toolTip">
         <string>the title of the new track is composed of the start time of the track appended to this value. </string>
@@ -72,8 +72,8 @@ This option changes the time of all trackpoints. This might be useful if your tr
        </property>
       </widget>
      </item>
-     <item row="2" column="1" colspan="4">
-      <layout class="QHBoxLayout" name="horizontalLayout">
+     <item row="2" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
         <widget class="QSpinBox" name="daysSpin"/>
        </item>
@@ -84,6 +84,10 @@ This option changes the time of all trackpoints. This might be useful if your tr
          </property>
         </widget>
        </item>
+      </layout>
+     </item>
+     <item row="2" column="2">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
         <widget class="QSpinBox" name="hoursSpin"/>
        </item>
@@ -94,6 +98,10 @@ This option changes the time of all trackpoints. This might be useful if your tr
          </property>
         </widget>
        </item>
+      </layout>
+     </item>
+     <item row="2" column="3">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QSpinBox" name="minsSpin"/>
        </item>
@@ -104,6 +112,10 @@ This option changes the time of all trackpoints. This might be useful if your tr
          </property>
         </widget>
        </item>
+      </layout>
+     </item>
+     <item row="2" column="4">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QSpinBox" name="secsSpin"/>
        </item>
@@ -235,6 +247,77 @@ If the input has multiple tracks, pack them together before splitting them back 
        </property>
       </widget>
      </item>
+     <item row="5" column="3">
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <widget class="QSpinBox" name="splitTimeSpin">
+         <property name="toolTip">
+          <string>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </string>
+         </property>
+         <property name="maximum">
+          <number>500</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="splitTimeCombo">
+         <item>
+          <property name="text">
+           <string>mins</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>hrs</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>days</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="5" column="4">
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <item>
+        <widget class="QSpinBox" name="splitDistSpin">
+         <property name="toolTip">
+          <string>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </string>
+         </property>
+         <property name="maximum">
+          <number>5280</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="splitDistCombo">
+         <item>
+          <property name="text">
+           <string>ft</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>m</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>km</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mi</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
      <item row="6" column="0" colspan="2">
       <widget class="QWidget" name="widget_5" native="true">
        <property name="toolTip">
@@ -337,7 +420,7 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>83</width>
+       <width>1</width>
        <height>20</height>
       </size>
      </property>
@@ -350,8 +433,8 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>25</height>
+       <width>10</width>
+       <height>2</height>
       </size>
      </property>
     </spacer>

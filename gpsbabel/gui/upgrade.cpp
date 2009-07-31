@@ -1,3 +1,5 @@
+// -*- C++ -*-
+// $Id: upgrade.cpp,v 1.2 2009-07-31 18:32:32 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -19,58 +21,66 @@
 
 
 #include "upgrade.h"
-#include "mainwindow.h"
-#include "ui_upgrade.h"
 
 #include <QHttp>
-#include <QUrl>
 #include <QMessageBox>
-#include <QFile>
 #include <QDomDocument>
-#include <QDomNode>
-#include <QDomElement>
-#include <QDomNodeList>
 
-Upgrade::Upgrade(QWidget *parent) :
-    QDialog(parent),
-    m_ui(new Ui::Upgrade)
+//static const bool testing = true;
+static const bool testing = false;
+
+static int versionAsNumber(const QString &s) 
 {
-    m_ui->setupUi(this);
+  QStringList list = s.split(".");
+  return (list[0].toInt()<<16 | list[1].toInt() << 8 | list[2].toInt() );
 }
 
-Upgrade::~Upgrade()
+UpgradeCheck::UpgradeCheck(QWidget *parent) :
+  QObject(parent),
+  http(0)
 {
-    delete m_ui;
 }
 
-void Upgrade::changeEvent(QEvent *e)
+UpgradeCheck::~UpgradeCheck()
 {
-    QDialog::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        m_ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
+  if (http) {
+    http->clearPendingRequests();
+    http->abort();
+    delete http;
+    http = 0;
+  }
 }
 
-Upgrade::updateStatus Upgrade::checkForUpgrade()
+void UpgradeCheck::changeEvent(QEvent *)
 {
+}
+
+UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentVersion,
+							 int checkMethod,
+							 const QDateTime &lastCheckTime)
+{
+  this->currentVersion = currentVersion;
+  this->upgradeCheckMethod = checkMethod;
+
+  QDateTime soonestCheckTime = lastCheckTime.addDays(1);
+  if (!testing && QDateTime::currentDateTime() < soonestCheckTime) {
+    // Not time to check yet.
+    return UpgradeCheck::updateUnknown;
+  }
   http = new QHttp;
-
+  
   connect(http, SIGNAL(requestFinished(int, bool)),
           this, SLOT(httpRequestFinished(int, bool)));
   connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
           this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
-
+  
   http->setHost("www.gpsbabel.org");
   httpRequestId = http->get("/updates.xml");
-
-  return Upgrade::updateUnknown;
+  
+  return UpgradeCheck::updateUnknown;
 }
 
-void Upgrade::readResponseHeader(const QHttpResponseHeader &responseHeader)
+void UpgradeCheck::readResponseHeader(const QHttpResponseHeader &responseHeader)
 {
   switch (responseHeader.statusCode()) {
   case 200:                   // Ok
@@ -78,57 +88,67 @@ void Upgrade::readResponseHeader(const QHttpResponseHeader &responseHeader)
   case 302:                   // Found
   case 303:                   // See Other
   case 307:                   // Temporary Redirect
-      // these are not error conditions
-      break;
-
+    // these are not error conditions
+    break;
+    
   default:
-      QMessageBox::information(this, tr("HTTP"),
-                               tr("Download failed: %1.")
-                               .arg(responseHeader.reasonPhrase()));
-      httpRequestAborted = true;
-      http->abort();
-    }
+    QMessageBox::information(0, tr("HTTP"),
+			     tr("Download failed: %1.")
+			     .arg(responseHeader.reasonPhrase()));
+    httpRequestAborted = true;
+    http->abort();
+  }
 }
 
-void Upgrade::httpRequestFinished(int requestId, bool error)
+void UpgradeCheck::httpRequestFinished(int requestId, bool error)
 {
-  if(error or requestId != httpRequestId) {
+  if (http == 0 || error)
     return;
-  }
+
+  if (requestId != httpRequestId) 
+    return;
 
   QString oresponse(http->readAll());
-  QDomDocument document;
-  if (!document.setContent(oresponse)) {
-    return;
-  }
-  
-  QString response("snore");
 
-  QString currentVersion =  "1.3.6"; // FIXME: Work with Khai to pry this out of MainWindow 
+  QDomDocument document;
+  if (!document.setContent(oresponse)) 
+    return;
+  
+  QString response;
+  
+  if (testing)
+    currentVersion =  "1.3.1"; // for testing
+
   bool allowBeta = false;  // TODO: come from prefs or current version...
 
+  int currentVersionNum = versionAsNumber(currentVersion);
+  
   QDomNodeList upgrades = document.elementsByTagName("update");
-
+  
   for (unsigned int i = 0; i < upgrades.length(); i++) {
     QDomNode upgradeNode = upgrades.item(i);
     QDomElement upgrade = upgradeNode.toElement();
-
+    
     QString updateVersion = upgrade.attribute("version");
     bool updateIsBeta  = upgrade.attribute("type") == "beta";
     bool updateIsMajor = upgrade.attribute("type") == "major";
     bool updateCandidate = updateIsMajor || (updateIsBeta && allowBeta);
+    int updateVersionNum = versionAsNumber(updateVersion);
+    
+    if(updateVersionNum > currentVersionNum && updateCandidate) {
+      response = tr("<center><b>A new version of GPSBabel is available</b><br>"
+		    "Your version is %1 <br>"
+		    "The latest version is %2</center>")
+	.arg(currentVersion)
+	.arg(updateVersion);
 
-    if(updateVersion > currentVersion && updateCandidate) {
-      response = "<b>A new version of GPSBabel is available</b><br/ >";
-      response += "Your version is " + currentVersion + " <br />";;
-      response += "The latest version is " + updateVersion + " <br />";;
       break;  
     }
   }
-
-  // FIXME: this doesn't actually write into the UI's text browser...
-  m_ui->textBrowser->setText(response);
-
-  //QMessageBox::information(this, tr("Finished"), response);
-
+  if (response.length()) {
+    QMessageBox::information(0, tr("Upgrade"), response);
+    upgradeWarningTime = QDateTime(QDateTime::currentDateTime());
+  }
+  delete http;
+  http = 0;
 }

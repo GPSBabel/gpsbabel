@@ -21,20 +21,17 @@
 
 
 #include <QDialog>
-#include "ui_upgrade.h"
+#include <QDateTime>
+#include <QHttp>
 
 class QHttp;
 class QHttpResponseHeader;
 
-namespace Ui {
-    class Upgrade;
-}
-
-class Upgrade : public QDialog {
+class UpgradeCheck : public QObject {
   Q_OBJECT
 public:
-  Upgrade(QWidget *parent = 0);
-  ~Upgrade();
+  UpgradeCheck(QWidget *parent = 0);
+  ~UpgradeCheck();
 
   typedef enum {
     updateUnknown,
@@ -42,21 +39,28 @@ public:
     updateNeeded,
   } updateStatus;
 
-  Upgrade::updateStatus checkForUpgrade(void);
+  UpgradeCheck::updateStatus checkForUpgrade(const QString &babelVersion, 
+					     int upgradeCheckMethod,
+					     const QDateTime &lastCheckTime);
+  QDateTime getUpgradeWarningTime() {
+    return upgradeWarningTime;
+  }
 
 protected:
   void changeEvent(QEvent *e);
 
-private:
-//  Ui::Upgrade *m_ui;
-  Ui_Upgrade     *m_ui;
+ private:
+  QString currentVersion;
+  int     upgradeCheckMethod;
   QHttp *http;
   int httpRequestId;
   bool httpRequestAborted;
   QString latestVersion;
+  QDateTime upgradeWarningTime;  // invalid time if this object never issued.
 
 private slots:
   void httpRequestFinished(int requestId, bool error);
+
 //  void httpStateChanged(int state);
   void readResponseHeader(const QHttpResponseHeader &responseHeader);
 
