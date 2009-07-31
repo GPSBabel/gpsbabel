@@ -618,7 +618,7 @@
      <x>0</x>
      <y>0</y>
      <width>674</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -634,7 +634,6 @@
     <addaction name="actionHelp"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
-    <addaction name="actionCheckForUpgrade"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
@@ -653,11 +652,6 @@
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
-   </property>
-  </action>
-  <action name="actionCheckForUpgrade">
-   <property name="text">
-    <string>Check for Upgrade</string>
    </property>
   </action>
  </widget>

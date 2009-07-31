@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: babeldata.h,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: babeldata.h,v 1.2 2009-07-31 18:32:32 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -52,7 +52,9 @@ public:
     debugLevel(-1),
     inputBrowse(QString()),
     outputBrowse(QString()),
-    previewGmap(false)
+    previewGmap(false),
+    upgradeCheckMethod(0),
+    upgradeCheckTime(QDateTime(QDate(2001, 1, 1), QTime(0, 0)))
   {
   };
   
@@ -92,6 +94,8 @@ public:
     sg.addVarSetting(new StringSetting("app.outputBrowse", outputBrowse));
 
     sg.addVarSetting(new BoolSetting("app.previewGmap", previewGmap));
+    sg.addVarSetting(new IntSetting("app.upgradeCheckMethod", upgradeCheckMethod));
+    sg.addVarSetting(new DateTimeSetting("app.upgradeCheckTime", upgradeCheckTime));
   }
 
   static const int noType;
@@ -124,6 +128,8 @@ public:
   QString inputBrowse, outputBrowse;
 
   bool  previewGmap;
+  int   upgradeCheckMethod;
+  QDateTime upgradeCheckTime;
 
 };
 

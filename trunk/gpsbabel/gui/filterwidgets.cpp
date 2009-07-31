@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: filterwidgets.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: filterwidgets.cpp,v 1.2 2009-07-31 18:32:32 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -41,6 +41,7 @@ TrackWidget::TrackWidget(QWidget *parent, TrackFilterData &tfd): FilterWidget(pa
   addCheckEnabler(ui.GPSFixesCheck, ui.GPSFixesCombo);
   
   connect(ui.mergeCheck, SIGNAL(clicked()) , this, SLOT(mergeCheckX()));
+  connect(ui.splitCheck, SIGNAL(clicked()) , this, SLOT(OtherCheckX()));
   connect(ui.packCheck,  SIGNAL(clicked()),  this, SLOT(packCheckX()));
   connect(ui.startCheck, SIGNAL(clicked()),  this, SLOT(OtherCheckX()));
   connect(ui.stopCheck,   SIGNAL(clicked()), this, SLOT(OtherCheckX()));
@@ -65,12 +66,16 @@ TrackWidget::TrackWidget(QWidget *parent, TrackFilterData &tfd): FilterWidget(pa
   fopts << new IntSpinFilterOption(tfd.hours, ui.hoursSpin);
   fopts << new IntSpinFilterOption(tfd.mins,  ui.minsSpin);
   fopts << new IntSpinFilterOption(tfd.secs,  ui.secsSpin);
+  fopts << new IntSpinFilterOption(tfd.splitTime,  ui.splitTimeSpin, 0, 1000);
+  fopts << new IntSpinFilterOption(tfd.splitDist,  ui.splitDistSpin, 0, 5280);
 
   fopts << new DateTimeFilterOption(tfd.startTime, ui.startEdit);
   fopts << new DateTimeFilterOption(tfd.stopTime,  ui.stopEdit);
 
   fopts << new StringFilterOption(tfd.titleString, ui.titleText);
   fopts << new ComboFilterOption(tfd.GPSFixesVal,  ui.GPSFixesCombo);
+  fopts << new ComboFilterOption(tfd.splitTimeUnit,  ui.splitTimeCombo);
+  fopts << new ComboFilterOption(tfd.splitDistUnit,  ui.splitDistCombo);
   setWidgetValues();
   checkChecks();
 }
@@ -80,7 +85,13 @@ void TrackWidget::OtherCheckX()
 {
   ui.TZCheck->setEnabled(ui.stopCheck->isChecked() || ui.startCheck->isChecked());
   ui.splitCheck->setEnabled(ui.mergeCheck->isChecked() || ui.packCheck->isChecked());
+  bool bb = ui.packCheck->isChecked() &&ui.splitCheck->isChecked();
+  ui.splitTimeSpin->setEnabled(bb);
+  ui.splitTimeCombo->setEnabled(bb);
+  //ui.splitDistSpin->setEnabled(bb); 
+  //ui.splitDistCombo->setEnabled(bb);
 }
+
 //------------------------------------------------------------------------
 void TrackWidget::mergeCheckX()
 {
