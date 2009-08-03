@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.2 2009-07-31 18:32:32 robertl Exp $
+// $Id: upgrade.cpp,v 1.3 2009-08-03 05:16:23 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -23,11 +23,12 @@
 #include "upgrade.h"
 
 #include <QHttp>
+//#include <QHttpRequestHeader>
 #include <QMessageBox>
 #include <QDomDocument>
 
-//static const bool testing = true;
-static const bool testing = false;
+static const bool testing = true;
+// static const bool testing = false;
 
 static int versionAsNumber(const QString &s) 
 {
@@ -57,7 +58,8 @@ void UpgradeCheck::changeEvent(QEvent *)
 
 UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentVersion,
 							 int checkMethod,
-							 const QDateTime &lastCheckTime)
+							 const QDateTime &lastCheckTime,
+							 const QString &installationUuid)
 {
   this->currentVersion = currentVersion;
   this->upgradeCheckMethod = checkMethod;
@@ -74,9 +76,17 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
   connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
           this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
   
+  QHttpRequestHeader header("POST", "/upgrade_check.html");
+	header.setValue("Host",  "www.gpsbabel.org");
+	        header.setContentType("application/x-www-form-urlencoded");
+ QString args = "current_version=" + currentVersion;
+   args += "&installation=" + installationUuid;	header.setValue("Host", "www.gpsbabel.org");
+	
   http->setHost("www.gpsbabel.org");
-  httpRequestId = http->get("/updates.xml");
-  
+//	http->request(header);
+	http->request(header, args.toUtf8());
+//  httpRequestId = http->get("/upgrade_check.html");
+
   return UpgradeCheck::updateUnknown;
 }
 
