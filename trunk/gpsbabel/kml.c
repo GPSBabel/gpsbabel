@@ -1109,7 +1109,16 @@ void kml_write_AbstractView(void) {
     }
     if (kml_time_max) {
       char time_string[64];
-      xml_fill_in_time(time_string, kml_time_max, 0, XML_LONG_TIME);
+      time_t time_max;
+      // In realtime tracking mode, we fudge the end time by a few minutes
+      // to ensure that the freshest data (our current location) is contained
+      // within the timespan.   Earth's time may not match the GPS because
+      // we may not be running NTP, plus it's polling a file (sigh) to read
+      // the network position.  So we shove the end of the timespan out to
+      // ensure the right edge of that time slider includes us.
+      //
+      time_max = realtime_positioning ? kml_time_max + 600 : kml_time_max;
+      xml_fill_in_time(time_string, time_max, 0, XML_LONG_TIME);
       if (time_string[0]) {
         kml_write_xml(0, "<end>%s</end>\n", time_string);
       }
