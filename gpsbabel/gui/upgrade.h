@@ -41,7 +41,8 @@ public:
 
   UpgradeCheck::updateStatus checkForUpgrade(const QString &babelVersion, 
 					     int upgradeCheckMethod,
-					     const QDateTime &lastCheckTime);
+					     const QDateTime &lastCheckTime,
+					     const QString &installationUuid);
   QDateTime getUpgradeWarningTime() {
     return upgradeWarningTime;
   }

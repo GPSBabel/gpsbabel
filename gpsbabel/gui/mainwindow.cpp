@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.2 2009-07-31 18:32:32 robertl Exp $
+// $Id: mainwindow.cpp,v 1.3 2009-08-03 05:16:23 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -188,7 +188,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
   upgrade = new UpgradeCheck();
-  upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, bd.upgradeCheckTime);
+  upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, bd.upgradeCheckTime, bd.installationUuid);
 }
 
 //------------------------------------------------------------------------
