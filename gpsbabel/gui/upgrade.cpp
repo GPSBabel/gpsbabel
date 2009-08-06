@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.3 2009-08-03 05:16:23 robertl Exp $
+// $Id: upgrade.cpp,v 1.4 2009-08-06 01:54:06 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -23,9 +23,9 @@
 #include "upgrade.h"
 
 #include <QHttp>
-//#include <QHttpRequestHeader>
 #include <QMessageBox>
 #include <QDomDocument>
+#include <QSysInfo>
 
 static const bool testing = true;
 // static const bool testing = false;
@@ -52,8 +52,20 @@ UpgradeCheck::~UpgradeCheck()
   }
 }
 
-void UpgradeCheck::changeEvent(QEvent *)
+// See http://doc.trolltech.com/4.5/qsysinfo.html to interpret results
+QString UpgradeCheck::UpgradeCheck::getOsName(void)
 {
+	// Do not translate these strings.
+#if defined (Q_OS_LINUX)
+		return "Linux";
+#elif defined (Q_OS_MAC)
+	return QString("Mac %1").arg(QSysInfo::MacintoshVersion);
+#elif defined (Q_OS_WIN)
+	return QString("Windows %1").arg(QSysInfo::WindowsVersion);
+#elif
+	return "Unknown"'
+#endif
+	
 }
 
 UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentVersion,
@@ -69,6 +81,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
     // Not time to check yet.
     return UpgradeCheck::updateUnknown;
   }
+	
   http = new QHttp;
   
   connect(http, SIGNAL(requestFinished(int, bool)),
@@ -77,15 +90,16 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
           this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
   
   QHttpRequestHeader header("POST", "/upgrade_check.html");
-	header.setValue("Host",  "www.gpsbabel.org");
-	        header.setContentType("application/x-www-form-urlencoded");
- QString args = "current_version=" + currentVersion;
-   args += "&installation=" + installationUuid;	header.setValue("Host", "www.gpsbabel.org");
-	
+  header.setValue("Host",  "www.gpsbabel.org");
+  header.setContentType("application/x-www-form-urlencoded");
+  header.setValue("Host", "www.gpsbabel.org");
+
+  QString args = "current_version=" + currentVersion;
+  args += "&installation=" + installationUuid;	
+	args += "&os=" + getOsName();	
+
   http->setHost("www.gpsbabel.org");
-//	http->request(header);
-	http->request(header, args.toUtf8());
-//  httpRequestId = http->get("/upgrade_check.html");
+	httpRequestId = http->request(header, args.toUtf8());
 
   return UpgradeCheck::updateUnknown;
 }
@@ -149,16 +163,18 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
       response = tr("<center><b>A new version of GPSBabel is available</b><br>"
 		    "Your version is %1 <br>"
 		    "The latest version is %2</center>")
-	.arg(currentVersion)
-	.arg(updateVersion);
+	        .arg(currentVersion)
+        	.arg(updateVersion);
 
       break;  
     }
   }
+	
   if (response.length()) {
     QMessageBox::information(0, tr("Upgrade"), response);
     upgradeWarningTime = QDateTime(QDateTime::currentDateTime());
   }
+	
   delete http;
   http = 0;
 }

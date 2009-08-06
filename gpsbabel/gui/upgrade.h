@@ -48,7 +48,6 @@ public:
   }
 
 protected:
-  void changeEvent(QEvent *e);
 
  private:
   QString currentVersion;
@@ -58,6 +57,7 @@ protected:
   bool httpRequestAborted;
   QString latestVersion;
   QDateTime upgradeWarningTime;  // invalid time if this object never issued.
+  QString getOsName(void);
 
 private slots:
   void httpRequestFinished(int requestId, bool error);
