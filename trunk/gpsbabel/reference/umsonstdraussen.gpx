@@ -1,478 +1,1443 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx
-  version="1.0"
+  version="1.1"
   creator="GPSBabel - http://www.gpsbabel.org"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  xmlns="http://www.topografix.com/GPX/1/1"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata>
 <time>1970-01-01T00:00:00Z</time>
 <bounds minlat="47.545639984" minlon="4.290249981" maxlat="54.402619991" maxlon="16.385979988"/>
+</metadata>
 <wpt lat="48.399400022" lon="11.753660012">
   <name>Uferlos Festival</name>
   <cmt>Uferlos Festival</cmt>
   <desc>Uferlos Festival</desc>
+  <link href="www.uferlos-festival.de">
+  <text>www.uferlos-festival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Luitpoldstrasse</gpxx:StreetAddress>
+        <gpxx:City>Freising</gpxx:City>
+        <gpxx:PostalCode>85356</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+49 8161 88 49 305</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.874490006" lon="8.653959967">
   <name>Schlossgrabenfest</name>
   <cmt>Schlossgrabenfest</cmt>
   <desc>Schlossgrabenfest</desc>
+  <link href="www.schlossgrabenfest.de">
+  <text>www.schlossgrabenfest.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Zeughausstrasse</gpxx:StreetAddress>
+        <gpxx:City>Darmstadt</gpxx:City>
+        <gpxx:PostalCode>64283</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+49  61 51 9 71 12 27</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.039299991" lon="8.716329960">
   <name>Kultival</name>
   <cmt>Kultival</cmt>
   <desc>Kultival</desc>
+  <link href="www.Kult-Verein.de">
+  <text>www.Kult-Verein.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Bretten / Grillplatz / B 35</gpxx:StreetAddress>
+        <gpxx:City>Bretten</gpxx:City>
+        <gpxx:PostalCode>75015</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="53.546119994" lon="9.966749987">
   <name>Hafengeburtstag Hamburg</name>
   <cmt>Hafengeburtstag Hamburg</cmt>
   <desc>Hafengeburtstag Hamburg</desc>
+  <link href="www.hafengeburtstag.de">
+  <text>www.hafengeburtstag.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Alter Elbtunnel / St. Pauli Landungsbrücken</gpxx:StreetAddress>
+        <gpxx:City>Hamburg</gpxx:City>
+        <gpxx:PostalCode>20359</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 040 428412893</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.660460001" lon="6.622350002">
   <name>EselRock</name>
   <cmt>EselRock</cmt>
   <desc>EselRock</desc>
+  <link href="www.eselrock.de">
+  <text>www.eselrock.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Heubergpark / Alte Roßmühlstraße</gpxx:StreetAddress>
+        <gpxx:City>Wesel</gpxx:City>
+        <gpxx:PostalCode>46483</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.962610008" lon="7.628400000">
   <name>EuroCityFest Münster</name>
   <cmt>EuroCityFest Münster</cmt>
   <desc>EuroCityFest Münster</desc>
+  <link href="www.eurocityfest.de">
+  <text>www.eurocityfest.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Prinzipalmarkt</gpxx:StreetAddress>
+        <gpxx:City>Münster</gpxx:City>
+        <gpxx:PostalCode>48159</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 251 9226665</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.349280002" lon="7.761930004">
   <name>Wispa Festival</name>
   <cmt>Wispa Festival</cmt>
   <desc>Wispa Festival</desc>
+  <link href="www.wispafestival.de">
+  <text>www.wispafestival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Frönsberg</gpxx:StreetAddress>
+        <gpxx:City>Hemer</gpxx:City>
+        <gpxx:PostalCode>58675</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.799310034" lon="9.919969998">
   <name>Umsonst + Draußen Würzburg</name>
   <cmt>Umsonst + Draußen Würzburg</cmt>
   <desc>Umsonst + Draußen Würzburg</desc>
+  <link href="www.umsonst-und-draussen.de">
+  <text>www.umsonst-und-draussen.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Talavera</gpxx:StreetAddress>
+        <gpxx:City>Würzburg</gpxx:City>
+        <gpxx:PostalCode>97082</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+49 9306 9855748</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="50.208350010" lon="10.083699999">
   <name>Umsonst + Draußen Bad Kissingen</name>
   <cmt>Umsonst + Draußen Bad Kissingen</cmt>
   <desc>Umsonst + Draußen Bad Kissingen</desc>
+  <link href="www.umsonst-und-draussen-kg.de">
+  <text>www.umsonst-und-draussen-kg.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Kasernenstrasse</gpxx:StreetAddress>
+        <gpxx:City>Bad Kissingen</gpxx:City>
+        <gpxx:PostalCode>97688</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="52.071980014" lon="10.018159971">
   <name>Teichrock</name>
   <cmt>Teichrock</cmt>
   <desc>Teichrock</desc>
+  <link href="www.teichrock.de">
+  <text>www.teichrock.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Solebadstrasse</gpxx:StreetAddress>
+        <gpxx:City>Bad Salzdetfurth</gpxx:City>
+        <gpxx:PostalCode>31162</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="53.310100017" lon="9.598830035">
   <name>Spreehafenfestival</name>
   <cmt>Spreehafenfestival</cmt>
   <desc>Spreehafenfestival</desc>
+  <link href="www.spreehafenfestival.de">
+  <text>www.spreehafenfestival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Zwischen Potsdamer und Berliner Ufer</gpxx:StreetAddress>
+        <gpxx:City>Hamburg</gpxx:City>
+        <gpxx:PostalCode>20457</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.713909984" lon="9.106200021">
   <name>Rohrer Seefest</name>
   <cmt>Rohrer Seefest</cmt>
   <desc>Rohrer Seefest</desc>
+  <link href="www.rohrer-seefest.de">
+  <text>www.rohrer-seefest.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Parkanlage Stuttgart-Rohr</gpxx:StreetAddress>
+        <gpxx:City>Stuttgart</gpxx:City>
+        <gpxx:PostalCode>70565</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+49162  90 90 857</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.427960016" lon="9.768199967">
   <name>Rock die Heide</name>
   <cmt>Rock die Heide</cmt>
   <desc>Rock die Heide</desc>
+  <link href="www.rockdieheide.de">
+  <text>www.rockdieheide.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Himmelreichgelände bei den Hessenhöfen</gpxx:StreetAddress>
+        <gpxx:City>Blaubeuren</gpxx:City>
+        <gpxx:PostalCode>89143</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.646140022" lon="6.798919989">
   <name>Rock and Bike</name>
   <cmt>Rock and Bike</cmt>
   <desc>Rock and Bike</desc>
+  <link href="www.rockandbike.de">
+  <text>www.rockandbike.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Ossenbergweg</gpxx:StreetAddress>
+        <gpxx:City>Hünxe</gpxx:City>
+        <gpxx:PostalCode>46569</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.510489995" lon="9.035319965">
   <name>RACT Festival</name>
   <cmt>RACT Festival</cmt>
   <desc>RACT Festival</desc>
+  <link href="www.ract-festival.de">
+  <text>www.ract-festival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Rappenberghalde</gpxx:StreetAddress>
+        <gpxx:City>Tübingen</gpxx:City>
+        <gpxx:PostalCode>72074</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+49 7071 26969</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.702990040" lon="8.530369978">
   <name>Polterplatz Open Air</name>
   <cmt>Polterplatz Open Air</cmt>
   <desc>Polterplatz Open Air</desc>
+  <link href="www.polterplatz.de">
+  <text>www.polterplatz.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Ginsterweg</gpxx:StreetAddress>
+        <gpxx:City>Bad Wildbad</gpxx:City>
+        <gpxx:PostalCode>75323</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="52.052970026" lon="4.290249981">
   <name>Parkpop</name>
   <cmt>Parkpop</cmt>
   <desc>Parkpop</desc>
+  <link href="www.parkpop.nl">
+  <text>www.parkpop.nl</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Zuiderpark</gpxx:StreetAddress>
+        <gpxx:City>Den Haag</gpxx:City>
+        <gpxx:PostalCode>02533</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.383819981" lon="6.996099986">
   <name>Open Air Werden</name>
   <cmt>Open Air Werden</cmt>
   <desc>Open Air Werden</desc>
+  <link href="www.openair-werden.de">
+  <text>www.openair-werden.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Im Löwental</gpxx:StreetAddress>
+        <gpxx:City>Essen</gpxx:City>
+        <gpxx:PostalCode>45239</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+49 201  88 511 86</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="50.049679996" lon="8.700139979">
   <name>Open Doors Festivals</name>
   <cmt>Open Doors Festivals</cmt>
   <desc>Open Doors Festivals</desc>
+  <link href="www.open-doors-festival.de">
+  <text>www.open-doors-festival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Neu-Isenburg</gpxx:StreetAddress>
+        <gpxx:City>Neu-Isenburg</gpxx:City>
+        <gpxx:PostalCode>63263</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.506919974" lon="8.323650034">
   <name>Happiness</name>
   <cmt>Happiness</cmt>
   <desc>Happiness</desc>
+  <link href="www.regioactive.de">
+  <text>www.regioactive.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:City>Straubenhardt</gpxx:City>
+        <gpxx:PostalCode>75334</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.683030035" lon="7.813850027">
   <name>Hafenfest Hamm</name>
   <cmt>Hafenfest Hamm</cmt>
   <desc>Hafenfest Hamm</desc>
+  <link href="www.stadtwerke-hamm.de">
+  <text>www.stadtwerke-hamm.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Hafenstraße</gpxx:StreetAddress>
+        <gpxx:City>Hamm</gpxx:City>
+        <gpxx:PostalCode>59065</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 2381 2741234</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="53.133990029" lon="7.319710013">
   <name>Free for All</name>
   <cmt>Free for All</cmt>
   <desc>Free for All</desc>
+  <link href="www.ffa-stapelmoor.de">
+  <text>www.ffa-stapelmoor.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Heidjerstraße</gpxx:StreetAddress>
+        <gpxx:City>Weener</gpxx:City>
+        <gpxx:PostalCode>26826</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 4962 996835</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.372929960" lon="7.696949970">
   <name>Friedensfestival</name>
   <cmt>Friedensfestival</cmt>
   <desc>Friedensfestival</desc>
+  <link href="www.friedensfestival.de">
+  <text>www.friedensfestival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Altstadt</gpxx:StreetAddress>
+        <gpxx:City>Iserlohn</gpxx:City>
+        <gpxx:PostalCode>58636</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.002669984" lon="8.371280031">
   <name>Das Fest Karlsruhe</name>
   <cmt>Das Fest Karlsruhe</cmt>
   <desc>Das Fest Karlsruhe</desc>
+  <link href="www.dasfest-karlsruhe.de">
+  <text>www.dasfest-karlsruhe.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Günther-Klutz-Anlage</gpxx:StreetAddress>
+        <gpxx:City>Karlsruhe</gpxx:City>
+        <gpxx:PostalCode>76135</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 721 7817213</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.249339983" lon="16.385979988">
   <name>Donauinselfest</name>
   <cmt>Donauinselfest</cmt>
   <desc>Donauinselfest</desc>
+  <link href="www.donauinselfest.at">
+  <text>www.donauinselfest.at</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Donauinsel</gpxx:StreetAddress>
+        <gpxx:City>Wien</gpxx:City>
+        <gpxx:PostalCode>01220</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 43 1 2020202</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.946109992" lon="9.430129984">
   <name>Backnanger Nachwuchsfestival</name>
   <cmt>Backnanger Nachwuchsfestival</cmt>
   <desc>Backnanger Nachwuchsfestival</desc>
+  <link href="www.backnanger-strassenfest.de">
+  <text>www.backnanger-strassenfest.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Obstmarkt</gpxx:StreetAddress>
+        <gpxx:City>Backnang</gpxx:City>
+        <gpxx:PostalCode>71522</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 7191 35210</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="52.491740026" lon="7.296230039">
   <name>Abifestival</name>
   <cmt>Abifestival</cmt>
   <desc>Abifestival</desc>
+  <link href="www.abifestival.de">
+  <text>www.abifestival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Am Kohschultenhof</gpxx:StreetAddress>
+        <gpxx:City>Lingen</gpxx:City>
+        <gpxx:PostalCode>49808</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.969729967" lon="10.417360011">
   <name>Weinlabyrinth</name>
   <cmt>Weinlabyrinth</cmt>
   <desc>Weinlabyrinth</desc>
+  <link href="www.weinlabyrinth.de">
+  <text>www.weinlabyrinth.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Falkenstein</gpxx:StreetAddress>
+        <gpxx:City>Donnersdorf-Falkenstein</gpxx:City>
+        <gpxx:PostalCode>97499</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+491 70 / 4 60 05 38</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.760510037" lon="11.537659960">
   <name>Waldstock</name>
   <cmt>Waldstock</cmt>
   <desc>Waldstock</desc>
+  <link href="www.waldstock.de">
+  <text>www.waldstock.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Schloßberg</gpxx:StreetAddress>
+        <gpxx:City>Pegnitz</gpxx:City>
+        <gpxx:PostalCode>91257</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.413060009" lon="9.068780020">
   <name>Umsonst + Draußen Mössingen</name>
   <cmt>Umsonst + Draußen Mössingen</cmt>
   <desc>Umsonst + Draußen Mössingen</desc>
+  <link href="www.umsonstunddraussen.com">
+  <text>www.umsonstunddraussen.com</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Firstwaldstrasse</gpxx:StreetAddress>
+        <gpxx:City>Mössingen</gpxx:City>
+        <gpxx:PostalCode>72116</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="52.187669976" lon="8.938270016">
   <name>Umsonst + Draußen Vlotho</name>
   <cmt>Umsonst + Draußen Vlotho</cmt>
   <desc>Umsonst + Draußen Vlotho</desc>
+  <link href="www.festivalkult.de">
+  <text>www.festivalkult.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Weserwiese Veltheim</gpxx:StreetAddress>
+        <gpxx:City>Vlotho</gpxx:City>
+        <gpxx:PostalCode>32602</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="47.545639984" lon="9.679759992">
   <name>Umsonst + Draußen Lindau</name>
   <cmt>Umsonst + Draußen Lindau</cmt>
   <desc>Umsonst + Draußen Lindau</desc>
+  <link href="www.vaudeville.de">
+  <text>www.vaudeville.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Hintere Insel</gpxx:StreetAddress>
+        <gpxx:City>Lindau</gpxx:City>
+        <gpxx:PostalCode>88131</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.966509975" lon="9.784779958">
   <name>Umsonst + Draußen Karlstadt</name>
   <cmt>Umsonst + Draußen Karlstadt</cmt>
   <desc>Umsonst + Draußen Karlstadt</desc>
+  <link href="www.umsonstunddraussen.de">
+  <text>www.umsonstunddraussen.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Am Saupurzl</gpxx:StreetAddress>
+        <gpxx:City>Karlstadt</gpxx:City>
+        <gpxx:PostalCode>97753</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.786249999" lon="9.945200030">
   <name>Umsonst + Draußen Heubach</name>
   <cmt>Umsonst + Draußen Heubach</cmt>
   <desc>Umsonst + Draußen Heubach</desc>
+  <link href="www.ud-heubach.de">
+  <text>www.ud-heubach.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:City>Heubach</gpxx:City>
+        <gpxx:PostalCode>73540</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.314740034" lon="11.913810018">
   <name>Sinnflutfestival</name>
   <cmt>Sinnflutfestival</cmt>
   <desc>Sinnflutfestival</desc>
+  <link href="www.sinnflut.biz">
+  <text>www.sinnflut.biz</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Volksfestplatz am Stadion</gpxx:StreetAddress>
+        <gpxx:City>Erding</gpxx:City>
+        <gpxx:PostalCode>85435</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+49 8122  880 989 0</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="52.672489984" lon="9.902839987">
   <name>Südwinsen Festival</name>
   <cmt>Südwinsen Festival</cmt>
   <desc>Südwinsen Festival</desc>
+  <link href="www.suedwinsen-festival.de">
+  <text>www.suedwinsen-festival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:City>Südwinsen</gpxx:City>
+        <gpxx:PostalCode>29308</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="52.444449998" lon="13.393969964">
   <name>Rocktreff</name>
   <cmt>Rocktreff</cmt>
   <desc>Rocktreff</desc>
+  <link href="www.rocktreff.de">
+  <text>www.rocktreff.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Andlauer Weg</gpxx:StreetAddress>
+        <gpxx:City>Berlin</gpxx:City>
+        <gpxx:PostalCode>12105</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="50.706969984" lon="7.145749982">
   <name>Rheinkultur</name>
   <cmt>Rheinkultur</cmt>
   <desc>Rheinkultur</desc>
+  <link href="www.rheinkultur.com">
+  <text>www.rheinkultur.com</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Freizeitpark Rheinaue</gpxx:StreetAddress>
+        <gpxx:City>Bonn</gpxx:City>
+        <gpxx:PostalCode>53111</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+49 228  20 70 80 6</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.261089986" lon="11.642399970">
   <name>Open Air am Garchinger See</name>
   <cmt>Open Air am Garchinger See</cmt>
   <desc>Open Air am Garchinger See</desc>
+  <link href="www.openairamsee.de">
+  <text>www.openairamsee.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Stadionweg</gpxx:StreetAddress>
+        <gpxx:City>Garching</gpxx:City>
+        <gpxx:PostalCode>85748</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.459379999" lon="9.942190005">
   <name>Obstwiesenfestival</name>
   <cmt>Obstwiesenfestival</cmt>
   <desc>Obstwiesenfestival</desc>
+  <link href="www.obstwiesenfestival.de">
+  <text>www.obstwiesenfestival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>im Lerchenfeld</gpxx:StreetAddress>
+        <gpxx:City>Dornstadt bei Ulm</gpxx:City>
+        <gpxx:PostalCode>89160</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="47.991100000" lon="9.252010016">
   <name>Live at Plaza</name>
   <cmt>Live at Plaza</cmt>
   <desc>Live at Plaza</desc>
+  <link href="www.live-at-plaza.de">
+  <text>www.live-at-plaza.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Riedweg</gpxx:StreetAddress>
+        <gpxx:City>Hausen am Andelsbach</gpxx:City>
+        <gpxx:PostalCode>72505</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 7576 962 478</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.491600035" lon="9.207370011">
   <name>KuRt Festival</name>
   <cmt>KuRt Festival</cmt>
   <desc>KuRt Festival</desc>
+  <link href="www.ku-rt.de">
+  <text>www.ku-rt.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Karlsstraße</gpxx:StreetAddress>
+        <gpxx:City>Reutlingen</gpxx:City>
+        <gpxx:PostalCode>72764</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.194310011" lon="6.431639995">
   <name>HORST Festival</name>
   <cmt>HORST Festival</cmt>
   <desc>HORST Festival</desc>
+  <link href="www.horstfestival.de">
+  <text>www.horstfestival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Noch nicht bekannt</gpxx:StreetAddress>
+        <gpxx:City>Mönchengladbach</gpxx:City>
+        <gpxx:PostalCode>41065</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.191120027" lon="10.094509972">
   <name>Go Ahead Weekend</name>
   <cmt>Go Ahead Weekend</cmt>
   <desc>Go Ahead Weekend</desc>
+  <link href="www.kjr-eschwege.de">
+  <text>www.kjr-eschwege.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Am Werratalsee</gpxx:StreetAddress>
+        <gpxx:City>Schwebda</gpxx:City>
+        <gpxx:PostalCode>37276</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49  5651 96154</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="50.006319992" lon="8.419119995">
   <name>Flörsheimer Open Air</name>
   <cmt>Flörsheimer Open Air</cmt>
   <desc>Flörsheimer Open Air</desc>
+  <link href="www.floersheimer-openair.de">
+  <text>www.floersheimer-openair.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Liebigstraße</gpxx:StreetAddress>
+        <gpxx:City>Flörsheim</gpxx:City>
+        <gpxx:PostalCode>65439</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 179 2056219</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="54.088740014" lon="9.073549993">
   <name>Frequenzen Festival</name>
   <cmt>Frequenzen Festival</cmt>
   <desc>Frequenzen Festival</desc>
+  <link href="www.frequenzen-festival.de">
+  <text>www.frequenzen-festival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Rathausplatz</gpxx:StreetAddress>
+        <gpxx:City>Meldorf</gpxx:City>
+        <gpxx:PostalCode>25704</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.270319995" lon="11.048290003">
   <name>Bardentreffen</name>
   <cmt>Bardentreffen</cmt>
   <desc>Bardentreffen</desc>
+  <link href="www.bardentreffen.de">
+  <text>www.bardentreffen.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Innenstadt Nürnberg</gpxx:StreetAddress>
+        <gpxx:City>Nürnberg</gpxx:City>
+        <gpxx:PostalCode>90402</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 911 2313325</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.009889988" lon="12.060559960">
   <name>Bayerisches Jazzweekend</name>
   <cmt>Bayerisches Jazzweekend</cmt>
   <desc>Bayerisches Jazzweekend</desc>
+  <link href="www.bayerisches-jazzweekend.de">
+  <text>www.bayerisches-jazzweekend.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Innenstadt Regensburg</gpxx:StreetAddress>
+        <gpxx:City>Regensburg</gpxx:City>
+        <gpxx:PostalCode>93047</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.289210003" lon="7.129469980">
   <name>Bochum Total</name>
   <cmt>Bochum Total</cmt>
   <desc>Bochum Total</desc>
+  <link href="www.bochumtotal.de">
+  <text>www.bochumtotal.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Innenstadt Bochum</gpxx:StreetAddress>
+        <gpxx:City>Bochum</gpxx:City>
+        <gpxx:PostalCode>44787</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 234 65067</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.597130040" lon="8.862640020">
   <name>48er Festival</name>
   <cmt>48er Festival</cmt>
   <desc>48er Festival</desc>
+  <link href="www.48er.com">
+  <text>www.48er.com</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Schießmauer</gpxx:StreetAddress>
+        <gpxx:City>Herrenberg</gpxx:City>
+        <gpxx:PostalCode>71083</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.413060009" lon="9.068780020">
   <name>Umsonst + Draußen Mössingen</name>
   <cmt>Umsonst + Draußen Mössingen</cmt>
   <desc>Umsonst + Draußen Mössingen</desc>
+  <link href="www.umsonstunddraussen.com">
+  <text>www.umsonstunddraussen.com</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Firstwaldstrasse</gpxx:StreetAddress>
+        <gpxx:City>Mössingen</gpxx:City>
+        <gpxx:PostalCode>72116</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="52.187669976" lon="8.938270016">
   <name>Umsonst + Draußen Vlotho</name>
   <cmt>Umsonst + Draußen Vlotho</cmt>
   <desc>Umsonst + Draußen Vlotho</desc>
+  <link href="www.festivalkult.de">
+  <text>www.festivalkult.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Weserwiese Veltheim</gpxx:StreetAddress>
+        <gpxx:City>Vlotho</gpxx:City>
+        <gpxx:PostalCode>32602</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.314740034" lon="11.913810018">
   <name>Sinnflutfestival</name>
   <cmt>Sinnflutfestival</cmt>
   <desc>Sinnflutfestival</desc>
+  <link href="www.sinnflut.biz">
+  <text>www.sinnflut.biz</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Volksfestplatz am Stadion</gpxx:StreetAddress>
+        <gpxx:City>Erding</gpxx:City>
+        <gpxx:PostalCode>85435</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+49 8122  880 989 0</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="53.486279994" lon="10.112810014">
   <name>Wutzrock Festival</name>
   <cmt>Wutzrock Festival</cmt>
   <desc>Wutzrock Festival</desc>
+  <link href="www.wutzrock.de">
+  <text>www.wutzrock.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Moorfleeter Deich</gpxx:StreetAddress>
+        <gpxx:City>Hamburg</gpxx:City>
+        <gpxx:PostalCode>21037</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.861859987" lon="8.423670027">
   <name>Wutzdog Festival</name>
   <cmt>Wutzdog Festival</cmt>
   <desc>Wutzdog Festival</desc>
+  <link href="www.wutzdog-festival.de">
+  <text>www.wutzdog-festival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Geinsheimer Straße</gpxx:StreetAddress>
+        <gpxx:City>Riedstadt-Leeheim</gpxx:City>
+        <gpxx:PostalCode>64560</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+49 6158 985025</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="53.546119994" lon="9.966749987">
   <name>Welt Astra Tag</name>
   <cmt>Welt Astra Tag</cmt>
   <desc>Welt Astra Tag</desc>
+  <link href="www.weltastratag.de">
+  <text>www.weltastratag.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>An den St Pauli Landungsbrücken</gpxx:StreetAddress>
+        <gpxx:City>Hamburg</gpxx:City>
+        <gpxx:PostalCode>20359</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.748850031" lon="9.110089978">
   <name>Umsonst + Draußen Stuttgart</name>
   <cmt>Umsonst + Draußen Stuttgart</cmt>
   <desc>Umsonst + Draußen Stuttgart</desc>
+  <link href="www.ud-stuttgart.de">
+  <text>www.ud-stuttgart.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Pfaffenwaldring</gpxx:StreetAddress>
+        <gpxx:City>Stuttgart</gpxx:City>
+        <gpxx:PostalCode>70569</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="53.757100040" lon="12.608659985">
   <name>TeteRock Festival</name>
   <cmt>TeteRock Festival</cmt>
   <desc>TeteRock Festival</desc>
+  <link href="www.bth-kjm.de">
+  <text>www.bth-kjm.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Koppelbergstrasse</gpxx:StreetAddress>
+        <gpxx:City>Teterow</gpxx:City>
+        <gpxx:PostalCode>17166</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="52.408349980" lon="8.386299983">
   <name>Stemweder Openair Festival</name>
   <cmt>Stemweder Openair Festival</cmt>
   <desc>Stemweder Openair Festival</desc>
+  <link href="www.jfk-stemwede.de/festival">
+  <text>www.jfk-stemwede.de/festival</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Ilweder Strasse</gpxx:StreetAddress>
+        <gpxx:City>Stemwede-Haldem</gpxx:City>
+        <gpxx:PostalCode>32351</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="52.743069967" lon="8.167319996">
   <name>Staatsforsten Open Air</name>
   <cmt>Staatsforsten Open Air</cmt>
   <desc>Staatsforsten Open Air</desc>
+  <link href="www.staatsforsten-openair.de">
+  <text>www.staatsforsten-openair.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Festivalgelände</gpxx:StreetAddress>
+        <gpxx:City>Bakum (Büschel)</gpxx:City>
+        <gpxx:PostalCode>49456</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="50.077860039" lon="8.420490017">
   <name>Sommerschein Festival</name>
   <cmt>Sommerschein Festival</cmt>
   <desc>Sommerschein Festival</desc>
+  <link href="www.sommerschein.de">
+  <text>www.sommerschein.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Schlossstraße</gpxx:StreetAddress>
+        <gpxx:City>Hofheim</gpxx:City>
+        <gpxx:PostalCode>65719</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.188649999" lon="10.285149990">
   <name>Sommerfühl</name>
   <cmt>Sommerfühl</cmt>
   <desc>Sommerfühl</desc>
+  <link href="www.sommerfuehl.de">
+  <text>www.sommerfuehl.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Oberransbach</gpxx:StreetAddress>
+        <gpxx:City>Feuchtwangen</gpxx:City>
+        <gpxx:PostalCode>91555</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="50.006099967" lon="8.282699995">
   <name>Rockfield Open Air</name>
   <cmt>Rockfield Open Air</cmt>
   <desc>Rockfield Open Air</desc>
+  <link href="www.kulturfabrik-airfield.de">
+  <text>www.kulturfabrik-airfield.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Am Rheinufer/In der Reduit</gpxx:StreetAddress>
+        <gpxx:City>Mainz-Kastel</gpxx:City>
+        <gpxx:PostalCode>55252</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="49.255299959" lon="9.111690000">
   <name>Römersee Open Air</name>
   <cmt>Römersee Open Air</cmt>
   <desc>Römersee Open Air</desc>
+  <link href="www.roemersee.de">
+  <text>www.roemersee.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Römersee</gpxx:StreetAddress>
+        <gpxx:City>Bad Rappenau-Zimmerhof</gpxx:City>
+        <gpxx:PostalCode>74906</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.503850007" lon="6.877499996">
   <name>Olgas Rock Festival</name>
   <cmt>Olgas Rock Festival</cmt>
   <desc>Olgas Rock Festival</desc>
+  <link href="www.olgas-rock.de">
+  <text>www.olgas-rock.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Vestische Straße</gpxx:StreetAddress>
+        <gpxx:City>Oberhausen</gpxx:City>
+        <gpxx:PostalCode>46047</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.188539993" lon="7.504489990">
   <name>Midsummer Open Air</name>
   <cmt>Midsummer Open Air</cmt>
   <desc>Midsummer Open Air</desc>
+  <link href="www.midsummer-records.de">
+  <text>www.midsummer-records.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Thomasstrasse</gpxx:StreetAddress>
+        <gpxx:City>Halver</gpxx:City>
+        <gpxx:PostalCode>58553</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.300879970" lon="9.897989966">
   <name>Live im Schlossgarten</name>
   <cmt>Live im Schlossgarten</cmt>
   <desc>Live im Schlossgarten</desc>
+  <link href="www.live-im-schlossgarten.de">
+  <text>www.live-im-schlossgarten.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Werdensteinstrasse</gpxx:StreetAddress>
+        <gpxx:City>Dellmensingen bei Ulm</gpxx:City>
+        <gpxx:PostalCode>89155</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.903490014" lon="8.633109983">
   <name>Holter Meeting</name>
   <cmt>Holter Meeting</cmt>
   <desc>Holter Meeting</desc>
+  <link href="www.holtermeeting.de">
+  <text>www.holtermeeting.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Holter Straße</gpxx:StreetAddress>
+        <gpxx:City>Schloß Holte-Stukenbrock</gpxx:City>
+        <gpxx:PostalCode>33758</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="54.107789984" lon="10.803940007">
   <name>Gogenkrog Open-Air</name>
   <cmt>Gogenkrog Open-Air</cmt>
   <desc>Gogenkrog Open-Air</desc>
+  <link href="www.gogenkrog-openair.de">
+  <text>www.gogenkrog-openair.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Am Gogenkrog</gpxx:StreetAddress>
+        <gpxx:City>Neustadt in Holstein</gpxx:City>
+        <gpxx:PostalCode>23730</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 4561 1073</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.335239979" lon="9.336189972">
   <name>Fest der leisen Tönen</name>
   <cmt>Fest der leisen Tönen</cmt>
   <desc>Fest der leisen Tönen</desc>
+  <link href="www.festderleisentoene.de">
+  <text>www.festderleisentoene.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Höllchenstrasse</gpxx:StreetAddress>
+        <gpxx:City>Dörnberg</gpxx:City>
+        <gpxx:PostalCode>34317</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 5606 599615</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.331050033" lon="6.562150000">
   <name>Folklorefest Krefeld</name>
   <cmt>Folklorefest Krefeld</cmt>
   <desc>Folklorefest Krefeld</desc>
+  <link href="www.folklorefest.de">
+  <text>www.folklorefest.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>An der alten Kirche</gpxx:StreetAddress>
+        <gpxx:City>Krefeld</gpxx:City>
+        <gpxx:PostalCode>47798</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 2151 501729</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.456610020" lon="7.011569962">
   <name>Essen Original</name>
   <cmt>Essen Original</cmt>
   <desc>Essen Original</desc>
+  <link href="www.essen-original.de">
+  <text>www.essen-original.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Kennedyplatz</gpxx:StreetAddress>
+        <gpxx:City>Essen</gpxx:City>
+        <gpxx:PostalCode>45127</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 201 887200</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="51.407510005" lon="6.689430038">
   <name>Open Air Folksfest</name>
   <cmt>Open Air Folksfest</cmt>
   <desc>Open Air Folksfest</desc>
+  <link href="www.folkfest.de">
+  <text>www.folkfest.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Peschmannstrasse</gpxx:StreetAddress>
+        <gpxx:City>Duisburg</gpxx:City>
+        <gpxx:PostalCode>47228</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="50.286050001" lon="8.504360011">
   <name>Open Ernstival</name>
   <cmt>Open Ernstival</cmt>
   <desc>Open Ernstival</desc>
+  <link href="www.open-ernstival.de">
+  <text>www.open-ernstival.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Am Steinchen</gpxx:StreetAddress>
+        <gpxx:City>Neu-Anspach</gpxx:City>
+        <gpxx:PostalCode>61267</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="53.568390040" lon="9.982860005">
   <name>Karneval der Kulturen Hamburg</name>
   <cmt>Karneval der Kulturen Hamburg</cmt>
   <desc>Karneval der Kulturen Hamburg</desc>
+  <link href="www.karneval-kulturen-hamburg.de">
+  <text>www.karneval-kulturen-hamburg.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Grindelhof/Siemersallee/Allendeplatz</gpxx:StreetAddress>
+        <gpxx:City>Hamburg</gpxx:City>
+        <gpxx:PostalCode>20149</gpxx:PostalCode>
+      </gpxx:Address>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="54.402619991" lon="11.161179990">
   <name>Fehmarn Open Air</name>
   <cmt>Fehmarn Open Air</cmt>
   <desc>Fehmarn Open Air</desc>
+  <link href="www.fehmarnfestivalgroup.com">
+  <text>www.fehmarnfestivalgroup.com</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Flögger Strand</gpxx:StreetAddress>
+        <gpxx:City>Fehmarn</gpxx:City>
+        <gpxx:PostalCode>23769</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 4372 1890</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="48.934029993" lon="10.896470016">
   <name>Eber-Hart Open Air</name>
   <cmt>Eber-Hart Open Air</cmt>
   <desc>Eber-Hart Open Air</desc>
+  <link href="www.eber-hart.de">
+  <text>www.eber-hart.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>Treuchtlingen Ri. Möhren, links Ri. Haag</gpxx:StreetAddress>
+        <gpxx:City>Treuchtlingen</gpxx:City>
+        <gpxx:PostalCode>91757</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 91421221</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 <wpt lat="52.180170016" lon="7.538499981">
   <name>Detten Rockt</name>
   <cmt>Detten Rockt</cmt>
   <desc>Detten Rockt</desc>
+  <link href="www.dettenrockt.de">
+  <text>www.dettenrockt.de</text>
+  </link>
   <sym>Waypoint</sym>
+  <extensions>
+    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:Address>
+        <gpxx:StreetAddress>An den Klärteichen</gpxx:StreetAddress>
+        <gpxx:City>Emsdetten</gpxx:City>
+        <gpxx:PostalCode>48282</gpxx:PostalCode>
+      </gpxx:Address>
+      <gpxx:PhoneNumber>+ 49 151 10302099</gpxx:PhoneNumber>
+    </gpxx:WaypointExtension>
+  </extensions>
 </wpt>
 </gpx>
