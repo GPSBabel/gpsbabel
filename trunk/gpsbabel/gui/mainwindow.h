@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.h,v 1.2 2009-07-31 18:32:32 robertl Exp $
+// $Id: mainwindow.h,v 1.3 2009-08-06 03:19:10 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -76,6 +76,7 @@ private:
   void setWidgetValues();
   void getWidgetValues();
   UpgradeCheck *upgrade;
+  void osLoadDeviceNameCombos(QComboBox*);
 
 protected:
   void closeEvent(QCloseEvent*);

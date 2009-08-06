@@ -1,4 +1,4 @@
-# $Id: app.pro,v 1.5 2009-07-27 15:36:30 robertl Exp $
+# $Id: app.pro,v 1.6 2009-08-06 03:19:10 robertl Exp $
 #
 
 #CONFIG += qt debug console
@@ -17,6 +17,7 @@ unix:OBJECTS_DIR = objects
 unix:RCC_DIR = objects
 
 win32:LIBS += SHELL32.LIB
+mac:LIBS += -framework IOKit
 
 UI_DIR = tmp
 
@@ -60,6 +61,7 @@ SOURCES += processwait.cpp
 SOURCES += filterwidgets.cpp
 SOURCES += filterdlg.cpp
 SOURCES += upgrade.cpp
+mac:SOURCES += serial_mac.cpp
 
 HEADERS += mainwindow.h
 HEADERS += map.h
