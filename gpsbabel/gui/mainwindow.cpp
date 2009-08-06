@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.3 2009-08-03 05:16:23 robertl Exp $
+// $Id: mainwindow.cpp,v 1.4 2009-08-06 03:19:10 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -39,22 +39,22 @@
 #include "gmapdlg.h"
 #include "upgrade.h"
 
-#ifndef _WIN32
-static const char *deviceNames[] = {
-  "USB:",
-  "/dev/ttyS0",
-  "/dev/ttyS1",
-  "/dev/ttyS2",
-  "/dev/ttyS3",
-  0
-};
-#else
+#ifdef _WIN32
 static const char *deviceNames[] = {
   "USB:",
   "COM1:",
   "COM2:",
   "COM3:",
   "COM4:",
+  0
+};
+#else
+static const char *deviceNames[] = {
+  "USB:",
+  "/dev/ttyS0",
+  "/dev/ttyS1",
+  "/dev/ttyS2",
+  "/dev/ttyS3",
   0
 };
 #endif
@@ -202,10 +202,18 @@ void MainWindow::loadDeviceNameCombos()
 {
   ui.inputDeviceNameCombo->clear();
   ui.outputDeviceNameCombo->clear();
+#if defined Q_OS_MAC
+  ui.inputDeviceNameCombo->addItem("usb:");
+  ui.outputDeviceNameCombo->addItem("usb:");
+
+  osLoadDeviceNameCombos(ui.inputDeviceNameCombo);
+  osLoadDeviceNameCombos(ui.outputDeviceNameCombo);
+#else
   for (int i=0; deviceNames[i]; i++) {
     ui.inputDeviceNameCombo->addItem(deviceNames[i]);
     ui.outputDeviceNameCombo->addItem(deviceNames[i]);
   }
+#endif
 }
 //------------------------------------------------------------------------
 void MainWindow::loadCharSetCombos()

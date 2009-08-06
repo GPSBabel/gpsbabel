@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.4 2009-08-06 01:54:06 robertl Exp $
+// $Id: upgrade.cpp,v 1.5 2009-08-06 03:19:10 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -162,7 +162,9 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
     if(updateVersionNum > currentVersionNum && updateCandidate) {
       response = tr("<center><b>A new version of GPSBabel is available</b><br>"
 		    "Your version is %1 <br>"
-		    "The latest version is %2</center>")
+		    "The latest version is %2</center>"
+		    "<center><a ref=\"http://www.gpsbabel.org/download.html\">"
+		    "Download GPSBabel</a> now.</center>")
 	        .arg(currentVersion)
         	.arg(updateVersion);
 
@@ -171,7 +173,11 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
   }
 	
   if (response.length()) {
-    QMessageBox::information(0, tr("Upgrade"), response);
+    QMessageBox information;
+    information.setWindowTitle(tr("Upgrade"));
+    information.setTextFormat(Qt::RichText);
+    information.setText(response);
+    information.exec();
     upgradeWarningTime = QDateTime(QDateTime::currentDateTime());
   }
 	
