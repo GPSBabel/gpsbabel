@@ -351,8 +351,9 @@ Advanced mode: INDEX,TAG,DATE,TIME,LATITUDE N/S,LONGITUDE E/W,HEIGHT,SPEED,HEADI
                	track_add_wpt(track, wpt);
 		if(line.bas.common.tag != 'T')
 		{
+			waypoint *wpt2;
 			assert(line.bas.common.tag == 'C' || line.bas.common.tag == 'V');
-			waypoint *wpt2 = waypt_dupe(wpt);
+			wpt2 = waypt_dupe(wpt);
 			if(line.bas.common.tag == 'V')	// waypoint with voice recording?
 			{
 				char vox_file_name[sizeof(line.adv.vox)+5];

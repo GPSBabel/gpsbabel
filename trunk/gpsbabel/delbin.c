@@ -2150,6 +2150,11 @@ ff_vecs_t delbin_vecs = {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <setupapi.h>
+// If hidsdi.h is not found, you need to download the Windows Driver Kit, 
+// from http://www.microsoft.com/whdc/Devtools/wdk/default.mspx
+// You need to install 'build environments' and 'tools' from the SDK and
+// follow the instructions in the Install.html to get MSVC to find the right
+// headers and libraries.
 #include <hidsdi.h>
 
 static HANDLE hid_handle;

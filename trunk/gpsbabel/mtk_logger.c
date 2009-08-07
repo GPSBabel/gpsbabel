@@ -465,7 +465,7 @@ static void mtk_read(void){
   unsigned char crc, *data = NULL;
   int cmdLen, j, bsize, i, len, ff_len, null_len, rc, init_scan, retry_cnt, log_enabled;
   unsigned int line_size, data_size, data_addr, addr, addr_max;
-  long dsize, dpos = 0;
+  unsigned long dsize, dpos = 0;
   FILE *dout;
   char *fusage = NULL;
 

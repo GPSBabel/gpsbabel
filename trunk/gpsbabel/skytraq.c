@@ -112,6 +112,7 @@ rd_char(int *errors)
 		}
 	}
 	fatal(MYNAME ": Too many read errors on serial port\n");
+    return -1;
 }
 
 static int
@@ -455,7 +456,7 @@ skytraq_get_log_buffer_status(gbuint32 *log_wr_ptr, gbuint16 *sectors_free, gbui
 }
 
 /* reads 32-bit "middle-endian" fields */
-static unsigned int me_read32(const void *p) {
+static unsigned int me_read32(const unsigned char *p) {
  return ((unsigned)be_read16(p+2) << 16) | ((unsigned)be_read16(p));
 }
 
@@ -821,7 +822,7 @@ skytraq_read_tracks(route_head *track)
 	int i, t, s, rc, got_bytes;
 	int read_at_once = MAX(atoi(opt_read_at_once), 1);
 	int sectors_read, multi_read_supported = 1;
-	gbuint8 *buffer;
+	gbuint8 *buffer = NULL;
 
 	state_init(&st);
 	st.route_head = track;
