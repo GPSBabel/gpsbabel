@@ -110,7 +110,9 @@
 #  if _MSC_VER
 #    pragma warning(disable:4244)
 #  endif
+#if !defined _CRT_SECURE_NO_DEPRECATE
 #  define _CRT_SECURE_NO_DEPRECATE 1
+#endif
 #endif
 
 /* Pathname separator character */
