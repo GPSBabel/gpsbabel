@@ -423,6 +423,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\delbin.c"
+				>
+			</File>
+			<File
 				RelativePath="..\delgpl.c"
 				>
 				<FileConfiguration
@@ -515,6 +519,10 @@
 						BrowseInformation="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\enigma.c"
+				>
 			</File>
 			<File
 				RelativePath="..\exif.c"
@@ -793,6 +801,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\gopal.c"
+				>
+			</File>
+			<File
 				RelativePath="..\gpilots.c"
 				>
 				<FileConfiguration
@@ -935,6 +947,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\height.c"
+				>
+			</File>
+			<File
 				RelativePath="..\hiketech.c"
 				>
 				<FileConfiguration
@@ -1073,6 +1089,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\igo8.c"
+				>
+			</File>
+			<File
 				RelativePath="..\ik3d.c"
 				>
 			</File>
@@ -1108,6 +1128,10 @@
 			</File>
 			<File
 				RelativePath="..\interpolate.c"
+				>
+			</File>
+			<File
+				RelativePath="..\itracku.c"
 				>
 			</File>
 			<File
@@ -1673,6 +1697,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\pocketfms_wp.c"
+				>
+			</File>
+			<File
 				RelativePath="..\polygon.c"
 				>
 				<FileConfiguration
@@ -1923,6 +1951,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\sbn.c"
+				>
+			</File>
+			<File
 				RelativePath="..\sbp.c"
 				>
 			</File>
@@ -1955,6 +1987,14 @@
 						BrowseInformation="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\skyforce.c"
+				>
+			</File>
+			<File
+				RelativePath="..\skytraq.c"
+				>
 			</File>
 			<File
 				RelativePath="..\smplrout.c"
@@ -2044,6 +2084,10 @@
 			</File>
 			<File
 				RelativePath="..\strptime.c"
+				>
+			</File>
+			<File
+				RelativePath="..\swapdata.c"
 				>
 			</File>
 			<File
@@ -2415,6 +2459,10 @@
 						BrowseInformation="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\vpl.c"
+				>
 			</File>
 			<File
 				RelativePath="..\waypt.c"
