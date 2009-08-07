@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.5 2009-08-06 03:19:10 robertl Exp $
+// $Id: upgrade.cpp,v 1.6 2009-08-07 00:25:43 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -27,8 +27,8 @@
 #include <QDomDocument>
 #include <QSysInfo>
 
-static const bool testing = true;
-// static const bool testing = false;
+// static const bool testing = true;
+static const bool testing = false;
 
 static int versionAsNumber(const QString &s) 
 {
