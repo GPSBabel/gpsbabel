@@ -627,15 +627,18 @@ message_read_1(unsigned msg_id, message_t* m)
 	unsigned id;
 	for (;;) {
 		unsigned total;
+		unsigned n;
 		gbuint8 buf[8];
 		gbuint8* p;
 
-		read_depacketize(buf, 8);
+		n = read_depacketize_1(&p, 8, FALSE);
+		memset(buf, 0, 8);
+		memcpy(buf, p, n);
 		while (buf[0] != 0xdb || buf[1] != 0xfe || checksum(buf, 6) != le_readu16(buf + 6)) {
-			gbuint8* pp;
 			// try for a message start at the beginning of next packet
-			read_depacketize_1(&pp, 8, TRUE);
-			memcpy(buf, pp, 8);
+			n = read_depacketize_1(&p, 8, TRUE);
+			memset(buf, 0, 8);
+			memcpy(buf, p, n);
 		}
 		id = le_readu16(buf + 2);
 		total = le_readu16(buf + 4);
@@ -653,7 +656,7 @@ message_read_1(unsigned msg_id, message_t* m)
 				warning(MYNAME ": received %x\n", id);
 			break;
 		}
-		if (global_opts.debug_level >= DBGLVL_M)
+		if (global_opts.debug_level >= DBGLVL_L)
 			warning(MYNAME ": corrupted message %x\n", id);
 		if (id == msg_id) {
 			id = 0;
@@ -2037,9 +2040,13 @@ static void
 delbin_rw_init(const char *fname)
 {
 	message_t m;
+	char buf[256];
 
 	delbin_os_ops.init(fname);
 
+	// Often the first packet is part of an old message, sometimes it can
+	// confuse the first message read if we don't get rid of it
+	packet_read(buf);
 	// Send a break to clear any state from a previous failure
 	message_init(&m);
 	m.size = MSG_BREAK_SIZE;
