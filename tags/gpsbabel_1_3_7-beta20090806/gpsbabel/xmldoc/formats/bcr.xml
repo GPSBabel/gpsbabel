@@ -1,0 +1,21 @@
+<para> 
+This file format (extension .bcr) is used in Map&amp;Guide 
+<productname>Motorrad Routenplaner 2002</productname> and later versions. 
+BCR is a route-only format. If you own a newer release (2005 or later) you 
+may also use the XML export with GPSBabel's <link linkend="fmt_tef">tef</link> 
+input format.  
+</para>
+<para>
+There may be other products from Map&amp;Guide that use this format as well.
+</para>
+<para> 
+Coordinates are stored in a BCR file in a Mercator projection. The
+conversion from the Mercator projection to polar (latitude/longitude) 
+coordinates and back again may result in visible differences.  Experience 
+reports are welcome.
+</para>
+<example id="sample_bcr_command">
+  <title>Sample BCR command with all options</title>
+  <para><userinput>gpsbabel -r -i gpx -f in.gpx -o bcr,index=1,name="From A to B",radius=6371012 -F a_to_b.bcr</userinput></para>
+</example>
+    

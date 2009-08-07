@@ -1,0 +1,1145 @@
+Version 2:G7T
+#Sat Apr 14 21:27:12 2007 GMT
+#Sinnotts Radius=6371.0 km
+D WGS-72
+M UTM
+Z 0.000000
+A Feet ->Altitude/Depth units for this file
+#Velocity units Statute miles per hour
+C Category 1,Category 2,Category 3,Category 4,Category 5,Category 6,Category 7,Category 8,Category 9,Category 10,Category 11,Category 12,Category 13,Category 14,Category 15,Category 16
+
+W  5058ROAD        19T  325561.6  4700804.1 Sat Jun 02 00:18:14 2001 ROAD CROSSING                                     ^   18^Black       ^S+N^0
+cA    5058ROAD|||||
+cB    |||0|0|1.0e25
+cC    177.000001|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.415 S mi
+cD    1.0e25|1.0e25|0
+
+W  5058ROAD        19T  325561.6  4700804.1 Sat Jun 02 00:18:14 2001 ROAD CROSSING                                     ^   18^Black       ^S+N^0
+cA    5058ROAD|||||
+cB    |||0|0|1.0e25
+cC    177.000001|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.415 S mi
+cD    1.0e25|1.0e25|0
+
+W  5066            19T  325694.0  4700676.9 Wed Nov 28 21:05:28 2001 5066                                              ^ 8238^Black       ^S+N^0
+cA    5066|||||
+cB    |||0|0|1.0e25
+cC    146.281325|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.400 S mi
+cD    1.0e25|1.0e25|0
+
+W  5066            19T  325694.0  4700676.9 Wed Nov 28 21:05:28 2001                                                   ^ 8238^Black       ^S+N^0
+cA    5066|||||
+cB    |||0|0|1.0e25
+cC    146.281325|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.400 S mi
+cD    1.0e25|1.0e25|0
+
+W  5067            19T  325661.1  4700716.5 Sat Jun 02 03:26:55 2001                                                   ^   18^Black       ^S+N^0
+cA    5067|||||
+cB    |||0|0|1.0e25
+cC    189.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.400 S mi
+cD    1.0e25|1.0e25|0
+
+W  5067            19T  325661.1  4700716.5 Sat Jun 02 03:26:55 2001 5067                                              ^   18^Black       ^S+N^0
+cA    5067|||||
+cB    |||0|0|1.0e25
+cC    189.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.400 S mi
+cD    1.0e25|1.0e25|0
+
+W  5096            19T  325951.7  4700674.8 Fri Nov 16 23:03:38 2001 5096                                              ^   18^Black       ^S+N^0
+cA    5096|||||
+cB    |||0|0|1.0e25
+cC    147.069896|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.276 S mi
+cD    1.0e25|1.0e25|0
+
+W  5096            19T  325951.7  4700674.8 Fri Nov 16 23:03:38 2001                                                   ^   18^Black       ^S+N^0
+cA    5096|||||
+cB    |||0|0|1.0e25
+cC    147.069896|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.276 S mi
+cD    1.0e25|1.0e25|0
+
+W  5142            19T  325480.4  4701240.7 Wed Nov 28 21:05:28 2001                                                   ^   18^Black       ^S+N^0
+cA    5142|||||
+cB    |||0|0|1.0e25
+cC    165.993197|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.285 S mi
+cD    1.0e25|1.0e25|0
+
+W  5142            19T  325480.4  4701240.7 Wed Nov 28 21:05:28 2001 5142                                              ^   18^Black       ^S+N^0
+cA    5142|||||
+cB    |||0|0|1.0e25
+cC    165.993197|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.285 S mi
+cD    1.0e25|1.0e25|0
+
+W  5144SUMMIT      19T  325418.6  4701403.9 Wed Nov 28 21:05:28 2001                                                   ^ 8246^Black       ^S+N^0
+cA    5144SUMMIT|||||
+cB    |||0|0|1.0e25
+cC    202.263459|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.252 S mi
+cD    1.0e25|1.0e25|0
+
+W  5144SUMMIT      19T  325418.6  4701403.9 Wed Nov 28 21:05:28 2001 Summit                                            ^ 8246^Black       ^S+N^0
+cA    5144SUMMIT|||||
+cB    |||0|0|1.0e25
+cC    202.263459|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.252 S mi
+cD    1.0e25|1.0e25|0
+
+W  5148NANEPA      19T  325474.0  4701892.1 Wed Nov 07 23:53:41 2001 Nanepashemet Road Crossing                        ^   18^Black       ^S+N^0
+cA    5148NANEPA|||||
+cB    |||0|0|1.0e25
+cC    393.074416|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.036 S mi
+cD    1.0e25|1.0e25|0
+
+W  5148NANEPA      19T  325474.0  4701892.1 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    5148NANEPA|||||
+cB    |||0|0|1.0e25
+cC    393.074416|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.036 S mi
+cD    1.0e25|1.0e25|0
+
+W  5150TANK        19T  325504.6  4700998.2 Sat Jun 02 00:18:16 2001 WATER TANK                                        ^ 8211^Black       ^S+N^0
+cA    5150TANK|||||
+cB    |||0|0|1.0e25
+cC    221.000006|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.367 S mi
+cD    1.0e25|1.0e25|0
+
+W  5150TANK        19T  325504.6  4700998.2 Sat Jun 02 00:18:16 2001 WATER TANK                                        ^ 8211^Black       ^S+N^0
+cA    5150TANK|||||
+cB    |||0|0|1.0e25
+cC    221.000006|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.367 S mi
+cD    1.0e25|1.0e25|0
+
+W  5156            19T  325538.9  4701616.4 Sat Jun 02 03:26:58 2001                                                   ^   18^Black       ^S+N^0
+cA    5156|||||
+cB    |||0|0|1.0e25
+cC    418.999990|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.111 S mi
+cD    1.0e25|1.0e25|0
+
+W  5156            19T  325538.9  4701616.4 Sat Jun 02 03:26:58 2001 5156                                              ^   18^Black       ^S+N^0
+cA    5156|||||
+cB    |||0|0|1.0e25
+cC    418.999990|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.111 S mi
+cD    1.0e25|1.0e25|0
+
+W  5179DEAD        19T  325722.8  4701897.1 Sat Jun 02 03:26:59 2001 Dead End                                          ^  166^Black       ^S+N^0
+cA    5179DEAD|||||
+cB    |||0|0|1.0e25
+cC    383.999992|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.913 S mi
+cD    1.0e25|1.0e25|0
+
+W  5224            19T  325260.1  4702465.0 Sat Jun 02 03:26:59 2001 5224                                              ^   18^Black       ^S+N^0
+cA    5224|||||
+cB    |||0|0|1.0e25
+cC    317.999997|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.918 S mi
+cD    1.0e25|1.0e25|0
+
+W  5229            19T  325280.5  4702931.9 Sat Jun 02 03:26:59 2001 5229                                              ^   18^Black       ^S+N^0
+cA    5229|||||
+cB    |||0|0|1.0e25
+cC    270.999999|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.727 S mi
+cD    1.0e25|1.0e25|0
+
+W  5236BRIDGE      19T  325300.9  4702641.4 Sat Jun 02 03:26:59 2001 Bridge                                            ^ 8233^Black       ^S+N^0
+cA    5236BRIDGE|||||
+cB    |||0|0|1.0e25
+cC    295.000001|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.830 S mi
+cD    1.0e25|1.0e25|0
+
+W  5237            19T  325316.9  4702697.6 Sat Jun 02 03:26:59 2001 5237                                              ^   18^Black       ^S+N^0
+cA    5237|||||
+cB    |||0|0|1.0e25
+cC    272.000005|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.800 S mi
+cD    1.0e25|1.0e25|0
+
+W  5239ROAD        19T  325315.1  4702953.1 Sat Jun 02 03:27:00 2001 Road                                              ^  176^Black       ^S+N^0
+cA    5239ROAD|||||
+cB    |||0|0|1.0e25
+cC    265.999992|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.702 S mi
+cD    1.0e25|1.0e25|0
+
+W  5252PURPLE      19T  325574.9  4702277.5 Wed Nov 07 23:53:41 2001                                                   ^ 8246^Black       ^S+N^0
+cA    5252PURPLE|||||
+cB    |||0|0|1.0e25
+cC    255.879480|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.838 S mi
+cD    1.0e25|1.0e25|0
+
+W  5252PURPLE      19T  325574.9  4702277.5 Wed Nov 07 23:53:41 2001 Purple Rock Hill                                  ^ 8246^Black       ^S+N^0
+cA    5252PURPLE|||||
+cB    |||0|0|1.0e25
+cC    255.879480|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.838 S mi
+cD    1.0e25|1.0e25|0
+
+W  5254            19T  325596.2  4702404.2 Wed Nov 28 21:05:28 2001 5254                                              ^   18^Black       ^S+N^0
+cA    5254|||||
+cB    |||0|0|1.0e25
+cC    218.821047|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.778 S mi
+cD    1.0e25|1.0e25|0
+
+W  5258            19T  325525.9  4702077.2 Wed Nov 07 23:53:41 2001 5258                                              ^   18^Black       ^S+N^0
+cA    5258|||||
+cB    |||0|0|1.0e25
+cC    244.840687|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.939 S mi
+cD    1.0e25|1.0e25|0
+
+W  5258            19T  325525.9  4702077.2 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    5258|||||
+cB    |||0|0|1.0e25
+cC    244.840687|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.939 S mi
+cD    1.0e25|1.0e25|0
+
+W  5264            19T  325623.4  4702403.8 Wed Nov 28 21:05:28 2001 5264                                              ^   18^Black       ^S+N^0
+cA    5264|||||
+cB    |||0|0|1.0e25
+cC    214.090422|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.765 S mi
+cD    1.0e25|1.0e25|0
+
+W  526708          19T  325601.0  4702777.4 Sat Jun 02 03:27:00 2001 526708                                            ^   18^Black       ^S+N^0
+cA    526708|||||
+cB    |||0|0|1.0e25
+cC    253.999990|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.632 S mi
+cD    1.0e25|1.0e25|0
+
+W  526750          19T  325659.4  4702701.3 Sat Jun 02 03:27:00 2001 526750                                            ^   18^Black       ^S+N^0
+cA    526750|||||
+cB    |||0|0|1.0e25
+cC    245.000008|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.633 S mi
+cD    1.0e25|1.0e25|0
+
+W  5267OBSTAC      19T  325698.7  4702733.5 Sat Jun 02 03:27:00 2001 Obstacle                                          ^ 8204^Black       ^S+N^0
+cA    5267OBSTAC|||||
+cB    |||0|0|1.0e25
+cC    241.999989|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.601 S mi
+cD    1.0e25|1.0e25|0
+
+W  5267OBSTAC      19T  325698.7  4702733.5 Sat Jun 02 03:27:00 2001                                                   ^ 8204^Black       ^S+N^0
+cA    5267OBSTAC|||||
+cB    |||0|0|1.0e25
+cC    241.999989|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.601 S mi
+cD    1.0e25|1.0e25|0
+
+W  527614          19T  325710.4  4702644.8 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    527614|||||
+cB    |||0|0|1.0e25
+cC    258.245193|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.630 S mi
+cD    1.0e25|1.0e25|0
+
+W  527614          19T  325710.4  4702644.8 Wed Nov 07 23:53:41 2001 527614                                            ^   18^Black       ^S+N^0
+cA    527614|||||
+cB    |||0|0|1.0e25
+cC    258.245193|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.630 S mi
+cD    1.0e25|1.0e25|0
+
+W  527631          19T  325735.7  4702606.4 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    527631|||||
+cB    |||0|0|1.0e25
+cC    258.245193|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.632 S mi
+cD    1.0e25|1.0e25|0
+
+W  527631          19T  325735.7  4702606.4 Wed Nov 07 23:53:41 2001 527631                                            ^   18^Black       ^S+N^0
+cA    527631|||||
+cB    |||0|0|1.0e25
+cC    258.245193|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.632 S mi
+cD    1.0e25|1.0e25|0
+
+W  5278            19T  325759.2  4702816.5 Sat Jun 02 03:27:00 2001                                                   ^   18^Black       ^S+N^0
+cA    5278|||||
+cB    |||0|0|1.0e25
+cC    224.000000|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.540 S mi
+cD    1.0e25|1.0e25|0
+
+W  5278            19T  325759.2  4702816.5 Sat Jun 02 03:27:00 2001 5278                                              ^   18^Black       ^S+N^0
+cA    5278|||||
+cB    |||0|0|1.0e25
+cC    224.000000|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.540 S mi
+cD    1.0e25|1.0e25|0
+
+W  5278ROAD        19T  325772.8  4702886.6 Sat Jun 02 03:27:01 2001 Road                                              ^  176^Black       ^S+N^0
+cA    5278ROAD|||||
+cB    |||0|0|1.0e25
+cC    221.000006|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.506 S mi
+cD    1.0e25|1.0e25|0
+
+W  5287WATER       19T  325894.0  4702767.1 Sat Jun 02 03:27:01 2001 Reservoir                                         ^  163^Black       ^S+N^0
+cA    5287WATER|||||
+cB    |||0|0|1.0e25
+cC    222.999993|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.493 S mi
+cD    1.0e25|1.0e25|0
+
+W  5289            19T  325881.1  4702950.0 Sat Jun 02 03:27:01 2001 5289                                              ^   18^Black       ^S+N^0
+cA    5289|||||
+cB    |||0|0|1.0e25
+cC    210.000011|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.429 S mi
+cD    1.0e25|1.0e25|0
+
+W  5289            19T  325881.1  4702950.0 Sat Jun 02 03:27:01 2001                                                   ^   18^Black       ^S+N^0
+cA    5289|||||
+cB    |||0|0|1.0e25
+cC    210.000011|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.429 S mi
+cD    1.0e25|1.0e25|0
+
+W  5299DEAD        19T  325978.0  4702975.6 Sat Jun 02 03:27:01 2001 Dead End                                          ^  166^Black       ^S+N^0
+cA    5299DEAD|||||
+cB    |||0|0|1.0e25
+cC    228.000000|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.372 S mi
+cD    1.0e25|1.0e25|0
+
+W  5374FIRE        19T  325718.9  4703488.0 Wed Nov 28 21:05:28 2001 5374FIRE                                          ^   18^Black       ^S+N^0
+cA    5374FIRE|||||
+cB    |||0|0|1.0e25
+cC    173.877706|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.299 S mi
+cD    1.0e25|1.0e25|0
+
+W  5374FIRE        19T  325718.9  4703488.0 Wed Nov 28 21:05:28 2001                                                   ^   18^Black       ^S+N^0
+cA    5374FIRE|||||
+cB    |||0|0|1.0e25
+cC    173.877706|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.299 S mi
+cD    1.0e25|1.0e25|0
+
+W  5376            19T  325758.3  4703650.1 Sat Jun 02 03:27:02 2001 5376                                              ^   18^Black       ^S+N^0
+cA    5376|||||
+cB    |||0|0|1.0e25
+cC    185.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.217 S mi
+cD    1.0e25|1.0e25|0
+
+W  5376            19T  325758.3  4703650.1 Sat Jun 02 03:27:02 2001                                                   ^   18^Black       ^S+N^0
+cA    5376|||||
+cB    |||0|0|1.0e25
+cC    185.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.217 S mi
+cD    1.0e25|1.0e25|0
+
+W  5376BRIDGE      19T  325724.4  4703663.0 Sat Jun 02 03:27:01 2001 Bridge                                            ^ 8233^Black       ^S+N^0
+cA    5376BRIDGE|||||
+cB    |||0|0|1.0e25
+cC    181.999995|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.229 S mi
+cD    1.0e25|1.0e25|0
+
+W  5376DEAD        19T  325778.5  4703631.2 Sat Jun 02 03:27:02 2001 Dead End                                          ^  166^Black       ^S+N^0
+cA    5376DEAD|||||
+cB    |||0|0|1.0e25
+cC    187.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.215 S mi
+cD    1.0e25|1.0e25|0
+
+W  5376STREAM      19T  325764.8  4703679.1 Wed Nov 07 23:53:41 2001 Stream Crossing                                   ^ 8233^Black       ^S+N^0
+cA    5376STREAM|||||
+cB    |||0|0|1.0e25
+cC    211.724709|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.203 S mi
+cD    1.0e25|1.0e25|0
+
+W  5376STREAM      19T  325764.8  4703679.1 Wed Nov 07 23:53:41 2001                                                   ^ 8233^Black       ^S+N^0
+cA    5376STREAM|||||
+cB    |||0|0|1.0e25
+cC    211.724709|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.203 S mi
+cD    1.0e25|1.0e25|0
+
+W  6006            19T  326091.0  4700682.6 Sat Jun 02 03:26:55 2001                                                   ^   18^Black       ^S+N^0
+cA    6006|||||
+cB    |||0|0|1.0e25
+cC    185.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.205 S mi
+cD    1.0e25|1.0e25|0
+
+W  6006            19T  326091.0  4700682.6 Sat Jun 02 03:26:55 2001                                                   ^   18^Black       ^S+N^0
+cA    6006|||||
+cB    |||0|0|1.0e25
+cC    185.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.205 S mi
+cD    1.0e25|1.0e25|0
+
+W  6006            19T  326091.0  4700682.6 Sat Jun 02 03:26:55 2001 600698                                            ^   18^Black       ^S+N^0
+cA    6006|||||
+cB    |||0|0|1.0e25
+cC    185.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.205 S mi
+cD    1.0e25|1.0e25|0
+
+W  6006BLUE        19T  326061.3  4700636.2 Wed Nov 28 21:05:28 2001                                                   ^   18^Black       ^S+N^0
+cA    6006BLUE|||||
+cB    |||0|0|1.0e25
+cC    151.012351|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.237 S mi
+cD    1.0e25|1.0e25|0
+
+W  6006BLUE        19T  326061.3  4700636.2 Wed Nov 28 21:05:28 2001 6006BLUE                                          ^   18^Black       ^S+N^0
+cA    6006BLUE|||||
+cB    |||0|0|1.0e25
+cC    151.012351|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.237 S mi
+cD    1.0e25|1.0e25|0
+
+W  6014MEADOW      19T  326186.1  4700429.0 Wed Nov 28 21:05:28 2001 6014MEADOW                                        ^   18^Black       ^S+N^0
+cA    6014MEADOW|||||
+cB    |||0|0|1.0e25
+cC    123.415169|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.257 S mi
+cD    1.0e25|1.0e25|0
+
+W  6014MEADOW      19T  326186.1  4700429.0 Wed Nov 28 21:05:28 2001                                                   ^   18^Black       ^S+N^0
+cA    6014MEADOW|||||
+cB    |||0|0|1.0e25
+cC    123.415169|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.257 S mi
+cD    1.0e25|1.0e25|0
+
+W  6014MEADOW      19T  326186.1  4700429.0 Wed Nov 28 21:05:28 2001                                                   ^   18^Black       ^S+N^0
+cA    6014MEADOW|||||
+cB    |||0|0|1.0e25
+cC    123.415169|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.257 S mi
+cD    1.0e25|1.0e25|0
+
+W  6016            19T  326121.0  4700642.7 Wed Nov 28 21:05:28 2001 Bike Loop Connector                               ^   18^Black       ^S+N^0
+cA    6016|||||
+cB    |||0|0|1.0e25
+cC    142.338470|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.206 S mi
+cD    1.0e25|1.0e25|0
+
+W  6029            19T  326200.2  4700983.9 Sat Jun 02 03:26:55 2001 6029                                              ^   18^Black       ^S+N^0
+cA    6029|||||
+cB    |||0|0|1.0e25
+cC    185.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.035 S mi
+cD    1.0e25|1.0e25|0
+
+W  6029            19T  326200.2  4700983.9 Sat Jun 02 03:26:55 2001                                                   ^   18^Black       ^S+N^0
+cA    6029|||||
+cB    |||0|0|1.0e25
+cC    185.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.035 S mi
+cD    1.0e25|1.0e25|0
+
+W  6042CROSS       19T  326475.3  4700279.0 Sat Jun 02 03:27:05 2001 Crossing                                          ^ 8238^Black       ^S+N^0
+cA    6042CROSS|||||
+cB    |||0|0|1.0e25
+cC    148.000004|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.175 S mi
+cD    1.0e25|1.0e25|0
+
+W  6053            19T  326525.9  4700363.4 Sat Jun 02 03:27:05 2001 6053                                              ^   18^Black       ^S+N^0
+cA    6053|||||
+cB    |||0|0|1.0e25
+cC    164.999999|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.118 S mi
+cD    1.0e25|1.0e25|0
+
+W  6066            19T  326663.7  4700694.1 Sat Jun 02 03:26:57 2001 6066                                              ^   18^Black       ^S+N^0
+cA    6066|||||
+cB    |||0|0|1.0e25
+cC    84.000003|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.923 S mi
+cD    1.0e25|1.0e25|0
+
+W  6067            19T  326658.4  4700751.4 Sat Jun 02 03:26:57 2001 6067                                              ^   18^Black       ^S+N^0
+cA    6067|||||
+cB    |||0|0|1.0e25
+cC    113.000006|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.903 S mi
+cD    1.0e25|1.0e25|0
+
+W  6071            19T  326785.1  4700192.9 Sat Jun 02 03:26:57 2001 6071                                              ^   18^Black       ^S+N^0
+cA    6071|||||
+cB    |||0|0|1.0e25
+cC    99.999998|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.058 S mi
+cD    1.0e25|1.0e25|0
+
+W  6073            19T  326721.5  4700032.0 Sat Jun 02 03:26:56 2001 6073                                              ^   18^Black       ^S+N^0
+cA    6073|||||
+cB    |||0|0|1.0e25
+cC    49.999999|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.151 S mi
+cD    1.0e25|1.0e25|0
+
+W  6077LOGS        19T  326742.1  4700720.2 Sat Jun 02 00:18:16 2001 Log Crossing                                      ^ 8204^Black       ^S+N^0
+cA    6077LOGS|||||
+cB    |||0|0|1.0e25
+cC    105.000005|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.875 S mi
+cD    1.0e25|1.0e25|0
+
+W  6084            19T  326882.9  4700476.2 Sat Jun 02 03:26:57 2001 6084                                              ^   18^Black       ^S+N^0
+cA    6084|||||
+cB    |||0|0|1.0e25
+cC    124.000001|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.901 S mi
+cD    1.0e25|1.0e25|0
+
+W  6121DEAD        19T  326248.8  4701133.2 Sat Jun 02 03:26:57 2001 Dead End                                          ^  166^Black       ^S+N^0
+cA    6121DEAD|||||
+cB    |||0|0|1.0e25
+cC    183.999995|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.954 S mi
+cD    1.0e25|1.0e25|0
+
+W  6130            19T  326386.1  4701028.3 Sat Jun 02 03:26:55 2001 6130                                              ^   18^Black       ^S+N^0
+cA    6130|||||
+cB    |||0|0|1.0e25
+cC    210.000011|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.928 S mi
+cD    1.0e25|1.0e25|0
+
+W  6130            19T  326386.1  4701028.3 Sat Jun 02 03:26:55 2001                                                   ^   18^Black       ^S+N^0
+cA    6130|||||
+cB    |||0|0|1.0e25
+cC    210.000011|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.928 S mi
+cD    1.0e25|1.0e25|0
+
+W  6131            19T  326349.9  4701116.5 Sat Jun 02 03:26:58 2001                                                   ^   18^Black       ^S+N^0
+cA    6131|||||
+cB    |||0|0|1.0e25
+cC    210.000011|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.911 S mi
+cD    1.0e25|1.0e25|0
+
+W  6131            19T  326349.9  4701116.5 Sat Jun 02 03:26:58 2001 6131                                              ^   18^Black       ^S+N^0
+cA    6131|||||
+cB    |||0|0|1.0e25
+cC    210.000011|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.911 S mi
+cD    1.0e25|1.0e25|0
+
+W  6153            19T  326565.3  4701310.2 Sat Jun 02 03:27:05 2001 6153                                              ^   18^Black       ^S+N^0
+cA    6153|||||
+cB    |||0|0|1.0e25
+cC    205.999998|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.732 S mi
+cD    1.0e25|1.0e25|0
+
+W  6153            19T  326565.3  4701310.2 Sat Jun 02 03:27:05 2001                                                   ^   18^Black       ^S+N^0
+cA    6153|||||
+cB    |||0|0|1.0e25
+cC    205.999998|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.732 S mi
+cD    1.0e25|1.0e25|0
+
+W  6155DEAD        19T  326579.0  4701534.3 Sat Jun 02 03:27:04 2001 Dead End                                          ^  166^Black       ^S+N^0
+cA    6155DEAD|||||
+cB    |||0|0|1.0e25
+cC    201.000003|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.638 S mi
+cD    1.0e25|1.0e25|0
+
+W  6171            19T  326774.3  4701173.8 Sat Jun 02 03:27:05 2001 6171                                              ^   18^Black       ^S+N^0
+cA    6171|||||
+cB    |||0|0|1.0e25
+cC    181.999995|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.683 S mi
+cD    1.0e25|1.0e25|0
+
+W  6171            19T  326774.3  4701173.8 Sat Jun 02 03:27:05 2001                                                   ^   18^Black       ^S+N^0
+cA    6171|||||
+cB    |||0|0|1.0e25
+cC    181.999995|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.683 S mi
+cD    1.0e25|1.0e25|0
+
+W  6176            19T  326759.4  4701642.2 Sat Jun 02 03:27:04 2001                                                   ^   18^Black       ^S+N^0
+cA    6176|||||
+cB    |||0|0|1.0e25
+cC    205.000004|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.509 S mi
+cD    1.0e25|1.0e25|0
+
+W  6176            19T  326759.4  4701642.2 Sat Jun 02 03:27:04 2001 6176                                              ^   18^Black       ^S+N^0
+cA    6176|||||
+cB    |||0|0|1.0e25
+cC    205.000004|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.509 S mi
+cD    1.0e25|1.0e25|0
+
+W  6177            19T  326799.5  4701712.8 Sat Jun 02 03:27:04 2001 6177                                              ^   18^Black       ^S+N^0
+cA    6177|||||
+cB    |||0|0|1.0e25
+cC    203.999997|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.462 S mi
+cD    1.0e25|1.0e25|0
+
+W  6177            19T  326799.5  4701712.8 Sat Jun 02 03:27:04 2001                                                   ^   18^Black       ^S+N^0
+cA    6177|||||
+cB    |||0|0|1.0e25
+cC    203.999997|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.462 S mi
+cD    1.0e25|1.0e25|0
+
+W  6181CROSS       19T  326807.5  4701106.4 Sat Jun 02 03:27:05 2001 Crossing                                          ^ 8238^Black       ^S+N^0
+cA    6181CROSS|||||
+cB    |||0|0|1.0e25
+cC    173.000000|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.693 S mi
+cD    1.0e25|1.0e25|0
+
+W  6272            19T  326723.2  4702268.7 Sat Jun 02 03:26:56 2001 6272                                              ^   18^Black       ^S+N^0
+cA    6272|||||
+cB    |||0|0|1.0e25
+cC    240.000001|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.284 S mi
+cD    1.0e25|1.0e25|0
+
+W  6272            19T  326761.8  4702265.6 Sat Jun 02 03:26:55 2001 6272                                              ^   18^Black       ^S+N^0
+cA    6272|||||
+cB    |||0|0|1.0e25
+cC    229.000006|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.267 S mi
+cD    1.0e25|1.0e25|0
+
+W  6278            19T  326776.2  4702807.8 Sat Jun 02 03:27:04 2001 6278                                              ^   18^Black       ^S+N^0
+cA    6278|||||
+cB    |||0|0|1.0e25
+cC    229.999988|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.050 S mi
+cD    1.0e25|1.0e25|0
+
+W  6280            19T  326869.0  4702042.4 Fri Nov 16 23:03:38 2001 6280                                              ^   18^Black       ^S+N^0
+cA    6280|||||
+cB    |||0|0|1.0e25
+cC    188.858953|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.301 S mi
+cD    1.0e25|1.0e25|0
+
+W  6280            19T  326869.0  4702042.4 Fri Nov 16 23:03:38 2001                                                   ^   18^Black       ^S+N^0
+cA    6280|||||
+cB    |||0|0|1.0e25
+cC    188.858953|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.301 S mi
+cD    1.0e25|1.0e25|0
+
+W  6283            19T  326892.6  4702310.1 Fri Nov 16 23:03:38 2001 6283                                              ^   18^Black       ^S+N^0
+cA    6283|||||
+cB    |||0|0|1.0e25
+cC    218.821047|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.186 S mi
+cD    1.0e25|1.0e25|0
+
+W  6283            19T  326892.6  4702310.1 Fri Nov 16 23:03:38 2001                                                   ^   18^Black       ^S+N^0
+cA    6283|||||
+cB    |||0|0|1.0e25
+cC    218.821047|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.186 S mi
+cD    1.0e25|1.0e25|0
+
+W  6289            19T  326830.3  4702994.0 Fri Nov 16 23:03:38 2001                                                   ^   18^Black       ^S+N^0
+cA    6289|||||
+cB    |||0|0|1.0e25
+cC    239.321491|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.951 S mi
+cD    1.0e25|1.0e25|0
+
+W  6289            19T  326830.3  4702994.0 Fri Nov 16 23:03:38 2001 6289                                              ^   18^Black       ^S+N^0
+cA    6289|||||
+cB    |||0|0|1.0e25
+cC    239.321491|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.951 S mi
+cD    1.0e25|1.0e25|0
+
+W  6297            19T  326910.4  4702728.7 Sat Jun 02 03:27:04 2001 6297                                              ^   18^Black       ^S+N^0
+cA    6297|||||
+cB    |||0|0|1.0e25
+cC    238.999995|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.015 S mi
+cD    1.0e25|1.0e25|0
+
+W  6297            19T  326910.4  4702728.7 Sat Jun 02 03:27:04 2001                                                   ^   18^Black       ^S+N^0
+cA    6297|||||
+cB    |||0|0|1.0e25
+cC    238.999995|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.015 S mi
+cD    1.0e25|1.0e25|0
+
+W  6328            19T  326241.2  4703800.2 Sat Jun 02 03:27:02 2001 6328                                              ^   18^Black       ^S+N^0
+cA    6328|||||
+cB    |||0|0|1.0e25
+cC    175.999994|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.925 S mi
+cD    1.0e25|1.0e25|0
+
+W  6328            19T  326241.2  4703800.2 Sat Jun 02 03:27:02 2001                                                   ^   18^Black       ^S+N^0
+cA    6328|||||
+cB    |||0|0|1.0e25
+cC    175.999994|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.925 S mi
+cD    1.0e25|1.0e25|0
+
+W  6353DEAD        19T  326524.2  4703311.6 Sat Jun 02 03:27:03 2001 Dead End                                          ^  166^Black       ^S+N^0
+cA    6353DEAD|||||
+cB    |||0|0|1.0e25
+cC    154.000004|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.977 S mi
+cD    1.0e25|1.0e25|0
+
+W  6354            19T  326538.3  4703469.7 Sat Jun 02 03:27:03 2001 6354                                              ^   18^Black       ^S+N^0
+cA    6354|||||
+cB    |||0|0|1.0e25
+cC    144.000003|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.909 S mi
+cD    1.0e25|1.0e25|0
+
+W  635722          19T  326527.7  4703720.8 Sat Jun 02 03:27:02 2001                                                   ^   18^Black       ^S+N^0
+cA    635722|||||
+cB    |||0|0|1.0e25
+cC    160.000005|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.817 S mi
+cD    1.0e25|1.0e25|0
+
+W  635722          19T  326527.7  4703720.8 Sat Jun 02 03:27:02 2001 635722                                            ^   18^Black       ^S+N^0
+cA    635722|||||
+cB    |||0|0|1.0e25
+cC    160.000005|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.817 S mi
+cD    1.0e25|1.0e25|0
+
+W  635783          19T  326582.0  4703730.3 Sat Jun 02 03:27:02 2001 635783                                            ^   18^Black       ^S+N^0
+cA    635783|||||
+cB    |||0|0|1.0e25
+cC    160.999999|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.787 S mi
+cD    1.0e25|1.0e25|0
+
+W  635783          19T  326582.0  4703730.3 Sat Jun 02 03:27:02 2001                                                   ^   18^Black       ^S+N^0
+cA    635783|||||
+cB    |||0|0|1.0e25
+cC    160.999999|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.787 S mi
+cD    1.0e25|1.0e25|0
+
+W  6373            19T  326762.1  4703385.6 Sat Jun 02 03:27:03 2001                                                   ^   18^Black       ^S+N^0
+cA    6373|||||
+cB    |||0|0|1.0e25
+cC    205.000004|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.833 S mi
+cD    1.0e25|1.0e25|0
+
+W  6373            19T  326762.1  4703385.6 Sat Jun 02 03:27:03 2001 6373                                              ^   18^Black       ^S+N^0
+cA    6373|||||
+cB    |||0|0|1.0e25
+cC    205.000004|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.833 S mi
+cD    1.0e25|1.0e25|0
+
+W  6634            19T  326332.9  4696457.9 Sat Jun 02 03:26:56 2001 6634                                              ^   18^Black       ^S+N^0
+cA    6634|||||
+cB    |||0|0|1.0e25
+cC    13.000000|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3790.724 S mi
+cD    1.0e25|1.0e25|0
+
+W  6979            19T  326725.1  4699956.0 Sat Jun 02 03:26:56 2001 6979                                              ^   18^Black       ^S+N^0
+cA    6979|||||
+cB    |||0|0|1.0e25
+cC    43.999999|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.179 S mi
+cD    1.0e25|1.0e25|0
+
+W  6997            19T  326609.6  4699782.4 Fri Nov 16 23:03:38 2001 6997                                              ^   18^Black       ^S+N^0
+cA    6997|||||
+cB    |||0|0|1.0e25
+cC    111.588205|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.302 S mi
+cD    1.0e25|1.0e25|0
+
+W  BEAR HILL       19T  326748.2  4703629.5 Sat Jun 02 03:27:03 2001 BEAR HILL TOWER                                   ^16391^Black       ^S+N^0
+cA    BEAR HILL|||||
+cB    |||0|0|1.0e25
+cC    288.000007|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.745 S mi
+cD    1.0e25|1.0e25|0
+
+W  BEAR HILL       19T  326748.2  4703629.5 Sat Jun 02 03:27:03 2001 BEAR HILL TOWER                                   ^16391^Black       ^S+N^0
+cA    BEAR HILL|||||
+cB    |||0|0|1.0e25
+cC    288.000007|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.745 S mi
+cD    1.0e25|1.0e25|0
+
+W  BELLEVUE        19T  326630.3  4699772.7 Sat Jun 02 00:18:15 2001 BELLEVUE                                          ^  158^Black       ^S+N^0
+cA    BELLEVUE|||||
+cB    |||0|0|1.0e25
+cC    77.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.296 S mi
+cD    1.0e25|1.0e25|0
+
+W  BELLEVUE        19T  326630.3  4699772.7 Sat Jun 02 00:18:15 2001 BELLEVUE                                          ^  158^Black       ^S+N^0
+cA    BELLEVUE|||||
+cB    |||0|0|1.0e25
+cC    77.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.296 S mi
+cD    1.0e25|1.0e25|0
+
+W  BELLEVUE        19T  326630.3  4699772.7 Sat Jun 02 00:18:15 2001 BELLEVUE                                          ^  158^Black       ^S+N^0
+cA    BELLEVUE|||||
+cB    |||0|0|1.0e25
+cC    77.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.296 S mi
+cD    1.0e25|1.0e25|0
+
+W  DARKHOLLPO      19T  327033.8  4702825.6 Sat Jul 16 20:53:40 2005 Dark Hollow Pond                                  ^    7^Black       ^S+N^0
+cA    DARKHOLLPO|||||
+cB    |||0|0|1.0e25
+cC    1e25|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.918 S mi
+cD    1.0e25|1.0e25|0
+
+W  GATE14          19T  325125.9  4702060.7 Sat Jun 02 03:26:59 2001 Gate 14                                           ^  176^Black       ^S+N^0
+cA    GATE14|||||
+cB    |||0|0|1.0e25
+cC    363.999990|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.140 S mi
+cD    1.0e25|1.0e25|0
+
+W  GATE16          19T  325518.2  4702861.5 Sat Jun 02 03:27:00 2001 Gate 16                                           ^  176^Black       ^S+N^0
+cA    GATE16|||||
+cB    |||0|0|1.0e25
+cC    254.999997|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.639 S mi
+cD    1.0e25|1.0e25|0
+
+W  GATE17          19T  325754.1  4702953.0 Sat Jun 02 03:27:01 2001 Gate 17                                           ^  176^Black       ^S+N^0
+cA    GATE17|||||
+cB    |||0|0|1.0e25
+cC    215.999999|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.489 S mi
+cD    1.0e25|1.0e25|0
+
+W  GATE19          19T  325773.3  4703727.8 Sat Jun 02 03:27:02 2001 Gate 19                                           ^  176^Black       ^S+N^0
+cA    GATE19|||||
+cB    |||0|0|1.0e25
+cC    187.999996|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.180 S mi
+cD    1.0e25|1.0e25|0
+
+W  GATE21          19T  326728.7  4703959.8 Sat Jun 02 03:27:03 2001 Gate 21                                           ^  176^Black       ^S+N^0
+cA    GATE21|||||
+cB    |||0|0|1.0e25
+cC    162.000005|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.627 S mi
+cD    1.0e25|1.0e25|0
+
+W  GATE24          19T  327084.2  4702624.6 Sat Jun 02 03:27:03 2001 Gate 24                                           ^  176^Black       ^S+N^0
+cA    GATE24|||||
+cB    |||0|0|1.0e25
+cC    265.999992|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3787.971 S mi
+cD    1.0e25|1.0e25|0
+
+W  GATE5           19T  326624.9  4699761.4 Wed Nov 28 21:05:28 2001 Gate 5                                            ^  176^Black       ^S+N^0
+cA    GATE5|||||
+cB    |||0|0|1.0e25
+cC    70.587318|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.303 S mi
+cD    1.0e25|1.0e25|0
+
+W  GATE6           19T  326498.9  4699808.2 Wed Nov 07 23:53:41 2001 Gate 6                                            ^   18^Black       ^S+N^0
+cA    GATE6|||||
+cB    |||0|0|1.0e25
+cC    87.145307|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.346 S mi
+cD    1.0e25|1.0e25|0
+
+W  GATE6           19T  326498.9  4699808.2 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    GATE6|||||
+cB    |||0|0|1.0e25
+cC    87.145307|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.346 S mi
+cD    1.0e25|1.0e25|0
+
+W  GATE6           19T  326498.9  4699808.2 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    GATE6|||||
+cB    |||0|0|1.0e25
+cC    87.145307|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.346 S mi
+cD    1.0e25|1.0e25|0
+
+W  PANTHRCAVE      19T  326451.1  4700224.9 Wed Nov 07 23:53:41 2001                                                   ^ 8243^Black       ^S+N^0
+cA    PANTHRCAVE|||||
+cB    |||0|0|1.0e25
+cC    148.646638|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.207 S mi
+cD    1.0e25|1.0e25|0
+
+W  PANTHRCAVE      19T  326451.1  4700224.9 Wed Nov 07 23:53:41 2001 Panther Cave                                      ^ 8243^Black       ^S+N^0
+cA    PANTHRCAVE|||||
+cB    |||0|0|1.0e25
+cC    148.646638|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.207 S mi
+cD    1.0e25|1.0e25|0
+
+W  PANTHRCAVE      19T  326451.1  4700224.9 Wed Nov 07 23:53:41 2001                                                   ^ 8243^Black       ^S+N^0
+cA    PANTHRCAVE|||||
+cB    |||0|0|1.0e25
+cC    148.646638|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3789.207 S mi
+cD    1.0e25|1.0e25|0
+
+W  SHEEPFOLD       19T  326761.9  4702265.6 Sat Jun 02 00:18:13 2001 Sheepfold Parking Lot                             ^  158^Black       ^S+N^0
+cA    SHEEPFOLD|||||
+cB    |||0|0|1.0e25
+cC    229.000006|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.267 S mi
+cD    1.0e25|1.0e25|0
+
+W  SOAPBOX         19T  326711.2  4702549.2 Sat Jun 02 03:27:04 2001 Soap Box Derby Track                              ^ 8235^Black       ^S+N^0
+cA    SOAPBOX|||||
+cB    |||0|0|1.0e25
+cC    210.000011|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|3788.181 S mi
+cD    1.0e25|1.0e25|0
+
+N  New Track Log Start - Trk from .gpx file,Black,1
+T  15R  633951.5  3326484.2 Sat May 25 17:06:21 2002 ;3.280840;      1e25; SM;    0.0000;    0.0000;    0.0000;       INF;         -;|1e25
+T  15R  633929.8  3326550.5 Sat May 25 17:09:55 2002 ;      1e25;      1e25; SM;    0.0434;    0.0434;    0.0434;0.730757;       214;|1e25
+T  15R  634151.6  3326544.0 Sat May 25 17:12:00 2002 ;      1e25;      1e25; SM;    0.1377;    0.1811;    0.1811;3.964510;       125;|1e25
+T  15R  634237.3  3326504.3 Sat May 25 17:12:48 2002 ;      1e25;      1e25; SM;    0.0586;    0.2397;    0.2397;4.397203;        48;|1e25
+T  15R  634440.8  3326418.2 Sat May 25 17:14:41 2002 ;      1e25;      1e25; SM;    0.1372;    0.3769;    0.3769;4.371133;       113;|1e25
+T  15R  635010.3  3326231.1 Sat May 25 17:17:16 2002 ;      1e25;      1e25; SM;    0.3720;    0.7489;    0.7489;8.640052;       155;|1e25
+T  15R  635275.0  3326014.6 Sat May 25 17:17:46 2002 ;      1e25;      1e25; SM;    0.2125;    0.9615;    0.9615;25.504435;        30;|1e25
+T  15R  635450.2  3325748.8 Sat May 25 17:18:20 2002 ;      1e25;      1e25; SM;    0.1981;    1.1596;    1.1596;20.979147;        34;|1e25
+T  15R  635672.3  3325585.3 Sat May 25 17:19:01 2002 ;      1e25;      1e25; SM;    0.1714;    1.3310;    1.3310;15.050832;        41;|1e25
+T  15R  635954.4  3325128.8 Sat May 25 17:20:46 2002 ;      1e25;      1e25; SM;    0.3341;    1.6651;    1.6651;11.454587;       105;|1e25
+T  15R  635942.5  3325049.3 Sat May 25 17:21:10 2002 ;      1e25;      1e25; SM;    0.0501;    1.7152;    1.7152;7.515936;        24;|1e25
+T  15R  635648.8  3325021.6 Sat May 25 17:21:51 2002 ;      1e25;      1e25; SM;    0.1830;    1.8982;    1.8982;16.070644;        41;|1e25
+T  15R  635313.2  3324732.9 Sat May 25 17:22:35 2002 ;      1e25;      1e25; SM;    0.2751;    2.1734;    2.1734;22.511499;        44;|1e25
+T  15R  635095.6  3324650.9 Sat May 25 17:23:08 2002 ;      1e25;      1e25; SM;    0.1443;    2.3177;    2.3177;15.745092;        33;|1e25
+T  15R  634943.7  3324846.7 Sat May 25 18:04:23 2002 ;      1e25;      1e25; SM;    0.1542;    2.4719;    2.4719;0.224257;      2475;|1e25
+T  15R  635005.2  3324814.2 Sat May 25 18:06:04 2002 ;6.561680;      1e25; SM;    0.0432;    2.5151;    2.5151;1.540302;       101;|1e25
+T  15R  635022.0  3324751.5 Sat May 25 18:07:06 2002 ;      1e25;      1e25; SM;    0.0404;    2.5555;    2.5555;2.346642;        62;|1e25
+T  15R  635072.2  3324726.3 Sat May 25 18:08:18 2002 ;3.280840;      1e25; SM;    0.0349;    2.5904;    2.5904;1.743045;        72;|1e25
+T  15R  635189.3  3324746.3 Sat May 25 18:10:20 2002 ;      1e25;      1e25; SM;    0.0737;    2.6641;    2.6641;2.174638;       122;|1e25
+T  15R  635243.9  3324745.1 Sat May 25 18:11:09 2002 ;      1e25;      1e25; SM;    0.0339;    2.6979;    2.6979;2.488559;        49;|1e25
+T  15R  635323.7  3324794.0 Sat May 25 18:12:18 2002 ;      1e25;      1e25; SM;    0.0582;    2.7561;    2.7561;3.034664;        69;|1e25
+T  15R  635432.0  3324869.3 Sat May 25 18:14:22 2002 ;      1e25;      1e25; SM;    0.0819;    2.8381;    2.8381;2.379163;       124;|1e25
+T  15R  635473.3  3324908.6 Sat May 25 18:15:04 2002 ;6.561680;      1e25; SM;    0.0354;    2.8735;    2.8735;3.037052;        42;|1e25
+T  15R  635538.6  3324959.3 Sat May 25 18:16:14 2002 ;3.280840;      1e25; SM;    0.0514;    2.9249;    2.9249;2.642554;        70;|1e25
+T  15R  635565.3  3325007.6 Sat May 25 18:17:01 2002 ;3.280840;      1e25; SM;    0.0344;    2.9593;    2.9593;2.632849;        47;|1e25
+T  15R  635559.6  3325081.5 Sat May 25 18:18:07 2002 ;      1e25;      1e25; SM;    0.0462;    3.0054;    3.0054;2.519028;        66;|1e25
+T  15R  635545.5  3325188.5 Sat May 25 18:19:51 2002 ;6.561680;      1e25; SM;    0.0673;    3.0727;    3.0727;2.329100;       104;|1e25
+T  15R  635531.9  3325240.0 Sat May 25 18:20:39 2002 ;      1e25;      1e25; SM;    0.0332;    3.1059;    3.1059;2.488490;        48;|1e25
+T  15R  635507.2  3325289.5 Sat May 25 18:21:24 2002 ;      1e25;      1e25; SM;    0.0345;    3.1404;    3.1404;2.760011;        45;|1e25
+T  15R  635506.4  3325352.4 Sat May 25 18:22:17 2002 ;      1e25;      1e25; SM;    0.0392;    3.1796;    3.1796;2.661007;        53;|1e25
+T  15R  635476.9  3325398.2 Sat May 25 18:23:18 2002 ;      1e25;      1e25; SM;    0.0339;    3.2135;    3.2135;2.003106;        61;|1e25
+T  15R  635474.3  3325486.9 Sat May 25 18:24:37 2002 ;      1e25;      1e25; SM;    0.0553;    3.2688;    3.2688;2.519224;        79;|1e25
+T  15R  635421.9  3325691.3 Sat May 25 18:28:13 2002 ;19.685039;      1e25; SM;    0.1315;    3.4003;    3.4003;2.191816;       216;|1e25
+T  15R  635449.2  3325565.9 Sat May 25 18:31:36 2002 ;6.561680;      1e25; SM;    0.0800;    3.4803;    3.4803;1.418052;       203;|1e25
+T  15R  635464.4  3325505.1 Sat May 25 18:32:56 2002 ;      1e25;      1e25; SM;    0.0390;    3.5193;    3.5193;1.757061;        80;|1e25
+T  15R  635460.4  3325444.1 Sat May 25 18:34:02 2002 ;      1e25;      1e25; SM;    0.0381;    3.5574;    3.5574;2.079208;        66;|1e25
+T  15R  635402.8  3325423.1 Sat May 25 18:36:03 2002 ;      1e25;      1e25; SM;    0.0380;    3.5955;    3.5955;1.131931;       121;|1e25
+T  15R  635351.2  3325426.2 Sat May 25 18:36:48 2002 ;      1e25;      1e25; SM;    0.0320;    3.6275;    3.6275;2.561370;        45;|1e25
+T  15R  635272.3  3325443.7 Sat May 25 18:37:52 2002 ;3.280840;      1e25; SM;    0.0501;    3.6776;    3.6776;2.820732;        64;|1e25
+T  15R  635168.8  3325496.0 Sat May 25 18:39:18 2002 ;      1e25;      1e25; SM;    0.0720;    3.7497;    3.7497;3.014423;        86;|1e25
+T  15R  635156.9  3325549.5 Sat May 25 18:40:15 2002 ;      1e25;      1e25; SM;    0.0342;    3.7838;    3.7838;2.157813;        57;|1e25
+T  15R  635175.7  3325588.5 Sat May 25 18:41:25 2002 ;19.685039;      1e25; SM;    0.0270;    3.8108;    3.8108;1.387488;        70;|1e25
+T  15R  635145.7  3325549.3 Sat May 25 18:42:37 2002 ;      1e25;      1e25; SM;    0.0307;    3.8415;    3.8415;1.534552;        72;|1e25
+T  15R  635162.3  3325503.3 Sat May 25 18:44:01 2002 ;      1e25;      1e25; SM;    0.0305;    3.8720;    3.8720;1.306042;        84;|1e25
+T  15R  635201.3  3325461.3 Sat May 25 18:45:53 2002 ;      1e25;      1e25; SM;    0.0357;    3.9076;    3.9076;1.146618;       112;|1e25
+T  15R  635258.0  3325434.3 Sat May 25 18:46:54 2002 ;      1e25;      1e25; SM;    0.0390;    3.9466;    3.9466;2.299515;        61;|1e25
+T  15R  635306.5  3325409.0 Sat May 25 18:47:42 2002 ;      1e25;      1e25; SM;    0.0340;    3.9806;    3.9806;2.549512;        48;|1e25
+T  15R  635378.9  3325400.7 Sat May 25 18:48:41 2002 ;      1e25;      1e25; SM;    0.0452;    4.0258;    4.0258;2.759120;        59;|1e25
+T  15R  635443.2  3325397.8 Sat May 25 18:49:52 2002 ;      1e25;      1e25; SM;    0.0399;    4.0657;    4.0657;2.022865;        71;|1e25
+T  15R  635474.2  3325361.2 Sat May 25 18:50:49 2002 ;      1e25;      1e25; SM;    0.0299;    4.0956;    4.0956;1.886267;        57;|1e25
+T  15R  635504.3  3325269.2 Sat May 25 18:52:14 2002 ;      1e25;      1e25; SM;    0.0603;    4.1559;    4.1559;2.553308;        85;|1e25
+T  15R  635521.0  3325215.9 Sat May 25 18:52:56 2002 ;      1e25;      1e25; SM;    0.0348;    4.1907;    4.1907;2.985822;        42;|1e25
+T  15R  635534.4  3325173.5 Sat May 25 18:53:38 2002 ;      1e25;      1e25; SM;    0.0277;    4.2184;    4.2184;2.374160;        42;|1e25
+T  15R  635572.8  3325053.9 Sat May 25 18:55:11 2002 ;      1e25;      1e25; SM;    0.0783;    4.2966;    4.2966;3.029246;        93;|1e25
+T  15R  635522.3  3324981.2 Sat May 25 18:56:32 2002 ;      1e25;      1e25; SM;    0.0551;    4.3517;    4.3517;2.447726;        81;|1e25
+T  15R  635474.6  3324940.0 Sat May 25 18:57:24 2002 ;      1e25;      1e25; SM;    0.0392;    4.3909;    4.3909;2.714362;        52;|1e25
+T  15R  635407.9  3324874.5 Sat May 25 18:58:40 2002 ;22.965879;      1e25; SM;    0.0581;    4.4490;    4.4490;2.751982;        76;|1e25
+T  15R  635355.4  3324825.9 Sat May 25 18:59:28 2002 ;      1e25;      1e25; SM;    0.0445;    4.4935;    4.4935;3.334841;        48;|1e25
+T  15R  635298.2  3324777.1 Sat May 25 19:00:22 2002 ;      1e25;      1e25; SM;    0.0468;    4.5403;    4.5403;3.117638;        54;|1e25
+T  15R  635197.2  3324750.0 Sat May 25 19:01:41 2002 ;      1e25;      1e25; SM;    0.0648;    4.6051;    4.6051;2.954261;        79;|1e25
+T  15R  635118.7  3324730.6 Sat May 25 19:02:48 2002 ;      1e25;      1e25; SM;    0.0502;    4.6553;    4.6553;2.697719;        67;|1e25
+T  15R  635070.4  3324739.3 Sat May 25 19:03:43 2002 ;      1e25;      1e25; SM;    0.0305;    4.6858;    4.6858;1.993899;        55;|1e25
+T  15R  635039.3  3324790.5 Sat May 25 19:04:49 2002 ;      1e25;      1e25; SM;    0.0373;    4.7231;    4.7231;2.036431;        66;|1e25
+T  15R  635001.8  3324828.9 Sat May 25 19:05:57 2002 ;      1e25;      1e25; SM;    0.0334;    4.7564;    4.7564;1.765615;        68;|1e25
+R  01 BELLEVUE
+W  BELLEVUE        19T  326630.3  4699772.7 Sat Jun 02 00:18:15 2001 BELLEVUE                                          ^  158^Black       ^S+N^0
+cA    BELLEVUE|||||
+cB    |||0|0|1.0e25
+cC    77.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  GATE6           19T  326498.9  4699808.2 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    GATE6|||||
+cB    |||0|0|1.0e25
+cC    87.145307|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  PANTHRCAVE      19T  326451.1  4700224.9 Wed Nov 07 23:53:41 2001                                                   ^ 8243^Black       ^S+N^0
+cA    PANTHRCAVE|||||
+cB    |||0|0|1.0e25
+cC    148.646638|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6014MEADOW      19T  326186.1  4700429.0 Wed Nov 28 21:05:28 2001                                                   ^   18^Black       ^S+N^0
+cA    6014MEADOW|||||
+cB    |||0|0|1.0e25
+cC    123.415169|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6006            19T  326091.0  4700682.6 Sat Jun 02 03:26:55 2001                                                   ^   18^Black       ^S+N^0
+cA    6006|||||
+cB    |||0|0|1.0e25
+cC    185.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6006BLUE        19T  326061.3  4700636.2 Wed Nov 28 21:05:28 2001                                                   ^   18^Black       ^S+N^0
+cA    6006BLUE|||||
+cB    |||0|0|1.0e25
+cC    151.012351|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5096            19T  325951.7  4700674.8 Fri Nov 16 23:03:38 2001                                                   ^   18^Black       ^S+N^0
+cA    5096|||||
+cB    |||0|0|1.0e25
+cC    147.069896|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5066            19T  325694.0  4700676.9 Wed Nov 28 21:05:28 2001                                                   ^ 8238^Black       ^S+N^0
+cA    5066|||||
+cB    |||0|0|1.0e25
+cC    146.281325|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5067            19T  325661.1  4700716.5 Sat Jun 02 03:26:55 2001                                                   ^   18^Black       ^S+N^0
+cA    5067|||||
+cB    |||0|0|1.0e25
+cC    189.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5058ROAD        19T  325561.6  4700804.1 Sat Jun 02 00:18:14 2001 ROAD CROSSING                                     ^   18^Black       ^S+N^0
+cA    5058ROAD|||||
+cB    |||0|0|1.0e25
+cC    177.000001|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5150TANK        19T  325504.6  4700998.2 Sat Jun 02 00:18:16 2001 WATER TANK                                        ^ 8211^Black       ^S+N^0
+cA    5150TANK|||||
+cB    |||0|0|1.0e25
+cC    221.000006|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5142            19T  325480.4  4701240.7 Wed Nov 28 21:05:28 2001                                                   ^   18^Black       ^S+N^0
+cA    5142|||||
+cB    |||0|0|1.0e25
+cC    165.993197|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5144SUMMIT      19T  325418.6  4701403.9 Wed Nov 28 21:05:28 2001                                                   ^ 8246^Black       ^S+N^0
+cA    5144SUMMIT|||||
+cB    |||0|0|1.0e25
+cC    202.263459|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5156            19T  325538.9  4701616.4 Sat Jun 02 03:26:58 2001                                                   ^   18^Black       ^S+N^0
+cA    5156|||||
+cB    |||0|0|1.0e25
+cC    418.999990|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5148NANEPA      19T  325474.0  4701892.1 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    5148NANEPA|||||
+cB    |||0|0|1.0e25
+cC    393.074416|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5258            19T  325525.9  4702077.2 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    5258|||||
+cB    |||0|0|1.0e25
+cC    244.840687|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5252PURPLE      19T  325574.9  4702277.5 Wed Nov 07 23:53:41 2001                                                   ^ 8246^Black       ^S+N^0
+cA    5252PURPLE|||||
+cB    |||0|0|1.0e25
+cC    255.879480|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  527631          19T  325735.7  4702606.4 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    527631|||||
+cB    |||0|0|1.0e25
+cC    258.245193|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  527614          19T  325710.4  4702644.8 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    527614|||||
+cB    |||0|0|1.0e25
+cC    258.245193|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5267OBSTAC      19T  325698.7  4702733.5 Sat Jun 02 03:27:00 2001                                                   ^ 8204^Black       ^S+N^0
+cA    5267OBSTAC|||||
+cB    |||0|0|1.0e25
+cC    241.999989|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5278            19T  325759.2  4702816.5 Sat Jun 02 03:27:00 2001                                                   ^   18^Black       ^S+N^0
+cA    5278|||||
+cB    |||0|0|1.0e25
+cC    224.000000|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5289            19T  325881.1  4702950.0 Sat Jun 02 03:27:01 2001                                                   ^   18^Black       ^S+N^0
+cA    5289|||||
+cB    |||0|0|1.0e25
+cC    210.000011|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5374FIRE        19T  325718.9  4703488.0 Wed Nov 28 21:05:28 2001                                                   ^   18^Black       ^S+N^0
+cA    5374FIRE|||||
+cB    |||0|0|1.0e25
+cC    173.877706|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5376            19T  325758.3  4703650.1 Sat Jun 02 03:27:02 2001                                                   ^   18^Black       ^S+N^0
+cA    5376|||||
+cB    |||0|0|1.0e25
+cC    185.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  5376STREAM      19T  325764.8  4703679.1 Wed Nov 07 23:53:41 2001                                                   ^ 8233^Black       ^S+N^0
+cA    5376STREAM|||||
+cB    |||0|0|1.0e25
+cC    211.724709|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6328            19T  326241.2  4703800.2 Sat Jun 02 03:27:02 2001                                                   ^   18^Black       ^S+N^0
+cA    6328|||||
+cB    |||0|0|1.0e25
+cC    175.999994|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  635722          19T  326527.7  4703720.8 Sat Jun 02 03:27:02 2001                                                   ^   18^Black       ^S+N^0
+cA    635722|||||
+cB    |||0|0|1.0e25
+cC    160.000005|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  635783          19T  326582.0  4703730.3 Sat Jun 02 03:27:02 2001                                                   ^   18^Black       ^S+N^0
+cA    635783|||||
+cB    |||0|0|1.0e25
+cC    160.999999|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6373            19T  326762.1  4703385.6 Sat Jun 02 03:27:03 2001                                                   ^   18^Black       ^S+N^0
+cA    6373|||||
+cB    |||0|0|1.0e25
+cC    205.000004|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  BEAR HILL       19T  326748.2  4703629.5 Sat Jun 02 03:27:03 2001 BEAR HILL TOWER                                   ^16391^Black       ^S+N^0
+cA    BEAR HILL|||||
+cB    |||0|0|1.0e25
+cC    288.000007|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6289            19T  326830.3  4702994.0 Fri Nov 16 23:03:38 2001                                                   ^   18^Black       ^S+N^0
+cA    6289|||||
+cB    |||0|0|1.0e25
+cC    239.321491|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6297            19T  326910.4  4702728.7 Sat Jun 02 03:27:04 2001                                                   ^   18^Black       ^S+N^0
+cA    6297|||||
+cB    |||0|0|1.0e25
+cC    238.999995|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6283            19T  326892.6  4702310.1 Fri Nov 16 23:03:38 2001                                                   ^   18^Black       ^S+N^0
+cA    6283|||||
+cB    |||0|0|1.0e25
+cC    218.821047|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6280            19T  326869.0  4702042.4 Fri Nov 16 23:03:38 2001                                                   ^   18^Black       ^S+N^0
+cA    6280|||||
+cB    |||0|0|1.0e25
+cC    188.858953|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6177            19T  326799.5  4701712.8 Sat Jun 02 03:27:04 2001                                                   ^   18^Black       ^S+N^0
+cA    6177|||||
+cB    |||0|0|1.0e25
+cC    203.999997|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6176            19T  326759.4  4701642.2 Sat Jun 02 03:27:04 2001                                                   ^   18^Black       ^S+N^0
+cA    6176|||||
+cB    |||0|0|1.0e25
+cC    205.000004|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6153            19T  326565.3  4701310.2 Sat Jun 02 03:27:05 2001                                                   ^   18^Black       ^S+N^0
+cA    6153|||||
+cB    |||0|0|1.0e25
+cC    205.999998|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6171            19T  326774.3  4701173.8 Sat Jun 02 03:27:05 2001                                                   ^   18^Black       ^S+N^0
+cA    6171|||||
+cB    |||0|0|1.0e25
+cC    181.999995|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6131            19T  326349.9  4701116.5 Sat Jun 02 03:26:58 2001                                                   ^   18^Black       ^S+N^0
+cA    6131|||||
+cB    |||0|0|1.0e25
+cC    210.000011|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6130            19T  326386.1  4701028.3 Sat Jun 02 03:26:55 2001                                                   ^   18^Black       ^S+N^0
+cA    6130|||||
+cB    |||0|0|1.0e25
+cC    210.000011|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6029            19T  326200.2  4700983.9 Sat Jun 02 03:26:55 2001                                                   ^   18^Black       ^S+N^0
+cA    6029|||||
+cB    |||0|0|1.0e25
+cC    185.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6006            19T  326091.0  4700682.6 Sat Jun 02 03:26:55 2001                                                   ^   18^Black       ^S+N^0
+cA    6006|||||
+cB    |||0|0|1.0e25
+cC    185.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  6014MEADOW      19T  326186.1  4700429.0 Wed Nov 28 21:05:28 2001                                                   ^   18^Black       ^S+N^0
+cA    6014MEADOW|||||
+cB    |||0|0|1.0e25
+cC    123.415169|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  PANTHRCAVE      19T  326451.1  4700224.9 Wed Nov 07 23:53:41 2001                                                   ^ 8243^Black       ^S+N^0
+cA    PANTHRCAVE|||||
+cB    |||0|0|1.0e25
+cC    148.646638|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  GATE6           19T  326498.9  4699808.2 Wed Nov 07 23:53:41 2001                                                   ^   18^Black       ^S+N^0
+cA    GATE6|||||
+cB    |||0|0|1.0e25
+cC    87.145307|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+W  BELLEVUE        19T  326630.3  4699772.7 Sat Jun 02 00:18:15 2001 BELLEVUE                                          ^  158^Black       ^S+N^0
+cA    BELLEVUE|||||
+cB    |||0|0|1.0e25
+cC    77.000002|1e25|FF|00|00|00|00|00|00|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF|FF
+cD    1.0e25|1.0e25|0
+
+E  01

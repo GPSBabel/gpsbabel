@@ -1,0 +1,4 @@
+<para>
+This option specifies the data format version for the input and the output file.
+Valid values are 1 (without altitude) or 2 (with altitude). 1 is the default.
+</para>

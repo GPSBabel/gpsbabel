@@ -1,0 +1,11 @@
+<para>
+   By default GPSBabel creates only 'un-locked' items.
+</para>
+<para>
+   Sample command to write an mmo file with 'locked' items:
+</para>
+<para>
+   <userinput>
+      gpsbabel -i gpx -f in.gpx -o mmo,locked=y -F out.mmo
+   </userinput>
+</para>

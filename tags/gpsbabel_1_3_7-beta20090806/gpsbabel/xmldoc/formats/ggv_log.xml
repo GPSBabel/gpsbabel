@@ -1,0 +1,12 @@
+<para>
+   Binary track logs used by the <productname>Geogrid</productname>-Viewer, a very
+   popular product in Germany.
+</para>
+<para>
+   GPSBabel has full support for version 1.0 of this file format. 
+</para>
+<para>
+   We can also read some GPS data (including coordinates) from version 2.5. But 
+   it seems, that this newer version no longer stores time stamps. This can be 
+   a problem when converting to other formats or if you want to use our track filter.
+</para>

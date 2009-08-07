@@ -1,0 +1,30 @@
+<para>
+This filter modifies any tracks so that either the distance or the time
+between consecutive points is no less than the specified interval. Where
+points are missing, the filter fills them in by following a straight 
+line (actually a great circle) between the adjacent points.  You
+must specify either the 
+<option>distance</option> or the <option>time</option> option.
+</para>
+<example id="example_interpolate_filter">
+<title>Using the interpolate filter</title>
+<para>
+This command line reads track.gpx and inserts points wherever two adjacent
+trackpoints are more than 10 seconds apart:
+</para>
+<para><userinput>gpsbabel -i gpx -f track.gpx -x interpolate,time=10 -o gpx -F newtrack.gpx</userinput></para>
+
+<para>
+This command reads track.gpx and inserts points wherever two adjacent
+trackpoints are more than 15 kilometers apart:
+</para>
+
+<para><userinput>gpsbabel -i gpx -f track.gpx -x interpolate,distance=15k -o gpx -F newtrack.gpx</userinput></para>
+
+<para>
+This command reads track.gpx and inserts points wherever two adjacent
+trackpoints are more than 2 miles apart:
+</para>
+
+<para><userinput>gpsbabel -i gpx -f track.gpx -x interpolate,distance=2m -o gpx -F newtrack.gpx</userinput></para>
+</example>      

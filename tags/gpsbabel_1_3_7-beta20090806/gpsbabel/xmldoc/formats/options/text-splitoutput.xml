@@ -1,0 +1,15 @@
+<para>
+  Splits output into separate files for each waypoint by appending a
+  decimal number to the output filename.
+</para>
+<example id="text_splitoutput">
+  <title>Example for splitoutput option to text format</title>
+  <para>
+    If "MyPQ.gpx" contains five waypoints, 
+	<userinput>
+	    gpsbabel -i gpx -f MyPocketQuery -o text,split -F blah
+	</userinput>
+    will result in files named blah1 ... blah5, each containing info
+    from one of those waypoints.
+   </para>
+</example>

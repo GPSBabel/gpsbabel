@@ -1,0 +1,15 @@
+No,Latitude,Longitude,Name,Altitude,Description,Symbol,Date,Time,URL,Facility,City,Country
+1,50.492603,12.105431,"001",,"001","Waypoint",2006/03/28,00:10:37,,,,
+2,50.492603,12.105431,"002",,"002","Waypoint",2006/03/28,00:10:37,,,,
+3,50.494277,12.105130,"003",,"003","Waypoint",2006/03/28,00:10:37,,,,
+4,50.493834,12.106101,"004",,"004","Waypoint",2006/03/28,00:10:37,,,,
+5,50.493834,12.106101,"005",,"005","Waypoint",2006/03/28,00:10:37,,,,
+6,50.493376,12.107105,"006",,"006","Waypoint",2006/03/28,00:10:37,,,,
+7,50.493660,12.107152,"007",,"007","Waypoint",2006/03/28,00:10:37,,,,
+8,51.893799,12.977943,"ED_X",,"Dummy airport (Germany)","Airport",2006/03/28,01:38:07,,"FAC1","CITY1","Germany"
+9,38.631995,-3.174055,"GC_X",,"Dummy airport (Spain)","Airport",2006/03/28,01:42:01,,"FAC2","CITY2","Canary Island"
+10,50.493667,12.107150,"Jahnstrasse",,"Jahnstrasse 11","Flag, Red",2006/03/31,21:48:22,,,,
+11,46.387606,3.498277,"LF_X",,"Dummy airport (France)","Airport",2006/03/28,01:40:32,,"FAC3","CITY3","France"
+12,50.493834,12.106100,"Liebknechtstrasse",,"Liebknechtstrasse 90","Waypoint",2006/03/31,21:49:30,,,,
+13,43.314550,12.161554,"LI_X",,"Dummy airport (Italy)","Heliport",2006/03/28,01:43:25,,"FAC4","CITY4","Italy"
+14,50.492616,12.105448,"NARVA",391.0,"Start","Flag, Green",2006/03/31,21:49:26,"http://www.narva-light.de",,,
