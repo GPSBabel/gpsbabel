@@ -58,6 +58,8 @@ protected:
   QString latestVersion;
   QDateTime upgradeWarningTime;  // invalid time if this object never issued.
   QString getOsName(void);
+  QString getOsVersion(void);
+
 
 private slots:
   void httpRequestFinished(int requestId, bool error);
