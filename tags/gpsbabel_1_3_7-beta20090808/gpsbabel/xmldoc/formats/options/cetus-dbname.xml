@@ -1,0 +1,6 @@
+<para>
+This option specifies the database name for the output file.  This name is
+not the same thing as the file name on your computer; this is the name that
+appears in the file browser on your handheld.
+</para>
+

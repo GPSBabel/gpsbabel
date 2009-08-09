@@ -1,0 +1,23 @@
+H  SOFTWARE NAME & VERSION
+I  GPSU 4.20	01 REGISTERED to 'THIS FILE CREATED BY HAND FOR GPSBABEL TEST'
+S DateFormat=dd/mm/yyyy
+S Timezone=+01:00
+S Units=N,M
+S SymbolSet=0
+
+H R DATUM
+M E               WGS 84	100	 0.0000000E+00	 0.0000000E+00	0	0	0
+
+H  COORDINATE SYSTEM
+U  LAT LON DM
+
+F	ID----	Latitude    	Longitude    	T	O 	Comment
+W	GCEBB  	N35°58.3220'	W087°08.0820'	I	E 	Mountain Bike Heaven by susy1313
+W	GC1A37 	N36°05.4410'	W086°40.7730'	I	E 	The Troll by a182pilot & Family
+W	GC1C2B 	N35°59.7760'	W086°37.2070'	I	E 	Dive Bomber by JoGPS & family
+W	GC25A9 	N36°02.3090'	W086°38.9170'	I	E 	FOSTER by JoGPS & Family
+W	GC2723 	N36°06.7310'	W086°44.5060'	I	E 	Logan Lighthouse by JoGps & Family
+W	GC2B71 	N36°03.8450'	W086°47.4310'	I	E 	Ganier Cache by Susy1313
+W	GC309F 	N36°05.2660'	W086°48.5840'	I	E 	Shy's Hill by FireFighterEng33
+W	GC317A 	N36°03.4500'	W086°53.5200'	I	E 	GittyUp by JoGPS / Warner Parks
+W	GC317D 	N36°04.9680'	W086°52.0370'	I	E 	Inlighting by JoGPS / Warner Parks
