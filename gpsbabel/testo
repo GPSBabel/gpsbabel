@@ -1290,7 +1290,7 @@ gpsbabel -i garmin_gpi -f ${REFERENCE}/gpi_ext-sample.gpi -o unicsv -F ${TMPDIR}
 compare ${REFERENCE}/gpi_ext-sample.csv ${TMPDIR}/gpi_ext-sample.csv
 # Don't test writing this sample file from garminonline.de/extras/poi, but 
 # prove we can read it
-gpsbabel -i garmin_gpi -f ${REFERENCE}/umsonstdraussen.gpi -o gpx -F ${TMPDIR}/umsonstdraussen.gpx
+gpsbabel -i garmin_gpi -f ${REFERENCE}/umsonstdraussen.gpi -o gpx,gpxver=1.1 -F ${TMPDIR}/umsonstdraussen.gpx
 compare ${REFERENCE}/umsonstdraussen.gpx ${TMPDIR}/umsonstdraussen.gpx
 
 #
