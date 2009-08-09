@@ -2,7 +2,7 @@
 	DeLorme PN-20/40 USB "DeLBin" protocol
 
     Copyright (C) 2009 Paul Cornett, pc-gpsb at bullseye.com
-    Copyright (C) 2005  Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2005, 2009  Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <assert.h>
 
 #define MYNAME "delbin"
+static short_handle mkshort_handle;
 
 /*
 Device documentation:
@@ -96,9 +97,15 @@ static int n_delbin_units;
 
 #define sizeofarray(x) (sizeof(x) / sizeof(x[0]))
 
-static char* opt_getposn;
-static char* opt_logs;
-static char* opt_long_notes;
+static char *opt_getposn = NULL;
+static char *opt_logs = NULL;
+static char *opt_long_notes = NULL;
+static char *opt_nuke_wpt = NULL;
+static char *opt_nuke_trk = NULL;
+static char *opt_nuke_rte = NULL;
+/* If true, Order hint to match Cache Register and Topo 7 */
+static char *opt_hint_at_end = NULL;
+
 
 static arglist_t delbin_args[] = {
 	{ "get_posn", &opt_getposn, "Return current position as a waypoint",
@@ -107,6 +114,13 @@ static arglist_t delbin_args[] = {
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "long_notes", &opt_long_notes, "Use long waypoint notes regardless of PN version",
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"nukewpt", &opt_nuke_wpt, "Delete all waypoints before sending", NULL, ARGTYPE_BOOL,
+		ARG_NOMINMAX },
+	{"nuketrk", &opt_nuke_trk, "Delete all tracks before sending", NULL, ARGTYPE_BOOL,
+		ARG_NOMINMAX },
+	{"nukerte", &opt_nuke_rte, "Delete all waypoints before sending", NULL, ARGTYPE_BOOL,
+		ARG_NOMINMAX },
+	{"hint_at_end", &opt_hint_at_end, "If true, geocache hint at end of text", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
 
@@ -129,6 +143,7 @@ static waypoint** wp_array;
 #define MSG_ACK 0xaa00
 #define MSG_BREAK 0xaa02
 #define MSG_BREAK_SIZE 33
+#define MSG_DELETE 0xb005
 #define MSG_NAVIGATION 0xa010
 #define MSG_REQUEST_ROUTES 0xb051
 #define MSG_REQUEST_ROUTES_SIZE 65
@@ -165,6 +180,33 @@ static waypoint** wp_array;
 
 //-----------------------------------------------------------------------------
 // Message structures
+
+
+// Input Delete Message
+// Message ID: 0xB005
+typedef enum {
+  nuke_type_wpt = 0,
+  nuke_type_trk = 1,
+  nuke_type_rte = 2,
+  // int nuke_map = 3;
+} nuke_type;
+
+typedef enum {
+  nuke_mode_all = 0,
+  nuke_mode_single = 1
+} nuke_mode;
+
+typedef enum {
+  nuke_dest_internal = 0,
+  nuke_dest_sd = 1
+} nuke_dest;
+
+typedef struct {
+	gbuint8 type;
+	gbuint8 mode;
+	gbuint8 location;
+	gbuint8 object_name[];
+} msg_delete_t;
 
 // Output Waypoint Message
 // Message ID: 0xB013
@@ -809,6 +851,7 @@ send_batch(int expect_transfer_complete)
 	message_t m;
 	const unsigned n = batch_array_i;
 	unsigned i;
+	unsigned progress = 0;
 
 	message_init(&m);
 	if (global_opts.debug_level >= DBGLVL_M)
@@ -816,6 +859,13 @@ send_batch(int expect_transfer_complete)
 	for (i = 0; i < n; i++) {
 		unsigned timeout_count = 0;
 		time_t time_start = time(NULL);
+
+		// Can't really trigger this off either i or n as we don't
+		// know how the various packets map to actual waypts.
+		if (global_opts.verbose_status &&
+		   (batch_array[i].msg_id == MSG_WAYPOINT_IN)) {
+			waypt_status_disp(waypoint_n, ++progress);
+		}
 
 		message_write(batch_array[i].msg_id, &batch_array[i].msg);
 		for (;;) {
@@ -1061,6 +1111,7 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
 		}
 		gbfputc('\n', fd);
 	}
+
 	gbfprintf(fd, "Cache ID: %s\n", wp->shortname);
 	if (gc_sym) {
 		gbfprintf(fd, "%s\n", waypoint_symbol(gc_sym));
@@ -1091,7 +1142,7 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
 	} else {
 		gbfprintf(fd, "/T%u\n", wp->gc_data->terr / 10);
 	}
-	if (wp->gc_data->hint) {
+	if (wp->gc_data->hint && !opt_hint_at_end) {
 		gbfprintf(fd, "HINT: %s\n", wp->gc_data->hint);
 	}
 	if (wp->gc_data->desc_short.utfstring || wp->gc_data->desc_long.utfstring) {
@@ -1146,6 +1197,9 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
 			gbfputc('\n', fd);
 		}
 	}
+	if (wp->gc_data->hint && opt_hint_at_end) {
+		gbfprintf(fd, "\nHINT: %s\n", wp->gc_data->hint);
+	}
 	gbfputc(0, fd);
 	*notes_size = fd->memlen;
 	*notes = xmalloc(*notes_size);
@@ -1191,6 +1245,25 @@ write_waypoint_notes(const char* notes, unsigned size, const char* name)
 }
 
 static void
+add_nuke(nuke_type nuke_type)
+{
+	message_t m;
+	msg_delete_t* p;
+
+	message_init_size(&m, 63);
+	p = m.data;
+	p->type = nuke_type;
+	p->mode = nuke_mode_all;
+	p->location = nuke_dest_internal;
+	p->object_name[0] = '0';
+
+	add_to_batch(MSG_DELETE, &m);
+ 	send_batch(TRUE);
+
+	message_free(&m);
+}
+
+static void
 write_waypoint(const waypoint* wp)
 {
 	message_t m;
@@ -1217,9 +1290,10 @@ write_waypoint(const waypoint* wp)
 		get_gc_notes(wp, &symbol, &notes, &notes_size);
 		notes_freeable = notes;
 		if (wp->description) {
-			name = wp->description;
+			name = mkshort(mkshort_handle, wp->description);
 		}
 	}
+
 	if (notes_size > 800) {
 		if (use_extended_notes) {
 			extended_notes_size = notes_size;
@@ -1228,6 +1302,7 @@ write_waypoint(const waypoint* wp)
 			notes_size = 800;
 		}
 	}
+
 	name_size = strlen(name) + 1;
 	if (name_size > 255) {
 		name_size = 255;
@@ -2042,6 +2117,16 @@ delbin_rw_init(const char *fname)
 	message_t m;
 	char buf[256];
 
+	if (!mkshort_handle)
+		mkshort_handle = mkshort_new_handle();
+	//  Contrary to doc, it looks like there's a limit of 32 bytes
+	// and a null terminator is required, at least in F/W 2.6.210726
+	// on a PN-40.
+	setshort_length(mkshort_handle, 31);
+	setshort_whitespace_ok(mkshort_handle, 1);
+	setshort_badchars(mkshort_handle, "");
+	setshort_mustuniq(mkshort_handle, 1);
+
 	delbin_os_ops.init(fname);
 
 	// Often the first packet is part of an old message, sometimes it can
@@ -2086,6 +2171,9 @@ delbin_rw_init(const char *fname)
 static void
 delbin_rw_deinit(void)
 {
+	if (mkshort_handle) {
+		mkshort_del_handle(&mkshort_handle);
+	}
 	delbin_os_ops.deinit();
 }
 
@@ -2111,12 +2199,15 @@ static void
 delbin_write(void)
 {
 	if (doing_wpts) {
+ 		if (opt_nuke_wpt) add_nuke(nuke_type_wpt);
 		write_waypoints();
 	}
 	if (doing_trks) {
+ 		if (opt_nuke_trk) add_nuke(nuke_type_wpt);
 		write_tracks();
 	}
 	if (doing_rtes) {
+ 		if (opt_nuke_rte) add_nuke(nuke_type_wpt);
 		write_routes();
 	}
 }
@@ -2286,6 +2377,7 @@ delbin_os_ops_t delbin_os_ops = {
 #include <IOKit/IOKitLib.h>
 #include <IOKit/IOCFPlugIn.h>
 #include <IOKit/hid/IOHIDLib.h>
+#include <mach/mach_error.h>
 
 // IOHIDDeviceInterface121::getReport() does not work, it hangs the process
 // in some sort of unkillable state.  So reading is done via a separate thread
@@ -2362,7 +2454,8 @@ mac_os_init(const char* fname)
 	(*plugin)->Release(plugin);
 	ir = (*device)->open(device, kIOHIDOptionsTypeSeizeDevice);
 	if (ir)
-		fatal(MYNAME ": device open failed 0x%x\n", (int)ir);
+		fatal(MYNAME ": device open failed 0x%x - %s\n", (int)ir,
+			mach_error_string(ir));
 	ir = (*device)->createAsyncEventSource(device, &run_loop_source);
 	if (ir)
 		fatal(MYNAME ": createAsyncEventSource failed 0x%x\n", (int)ir);
