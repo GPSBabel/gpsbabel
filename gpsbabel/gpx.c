@@ -178,6 +178,8 @@ typedef enum {
 	tt_trk_trkseg_trkpt_time,
 	tt_trk_trkseg_trkpt_course,	
 	tt_trk_trkseg_trkpt_speed,
+        tt_trk_trkseg_trkpt_heartrate,
+        tt_trk_trkseg_trkpt_cadence,
 
 	tt_humminbird_wpt_depth,
 	tt_humminbird_wpt_status,
@@ -303,6 +305,7 @@ tag_mapping tag_path_map[] = {
 
 #define GARMIN_WPT_EXT "/gpx/wpt/extensions/gpxx:WaypointExtension"
 #define GARMIN_TRK_EXT "/gpx/trk/trkseg/trkpt/extensions/gpxtpx:TrackPointExtension"
+#define GARMIN_RTE_EXT "/gpx/rte/rtept/extensions/gpxxx:RoutePointExtension"
 
 //	GEOTAG( tt_cache, 		"cache"),
 	{ tt_cache, 1, "/gpx/wpt/groundspeak:cache" },
@@ -340,6 +343,10 @@ tag_mapping tag_path_map[] = {
 	{ tt_garmin_wpt_country, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:Country", 0UL },
 	{ tt_garmin_wpt_postal_code, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:PostalCode", 0UL },
 	{ tt_garmin_wpt_phone_nr, 0, GARMIN_WPT_EXT "/gpxx:PhoneNumber", 0UL },
+
+        // In Garmin space, but in core of waypoint.
+	{ tt_trk_trkseg_trkpt_heartrate, 0, GARMIN_TRK_EXT "/gpxtpx:hr", 0UL },
+	{ tt_trk_trkseg_trkpt_cadence, 0, GARMIN_TRK_EXT "/gpxtpx:cad", 0UL },
 
 	{ tt_humminbird_wpt_depth, 0, "/gpx/wpt/extensions/h:depth", 0UL },  // in centimeters.
 	{ tt_humminbird_wpt_status, 0, "/gpx/wpt/extensions/h:status", 0UL },
@@ -1059,6 +1066,12 @@ gpx_end(void *data, const XML_Char *xml_el)
 	case tt_trk_trkseg_trkpt_speed:
 		WAYPT_SET(wpt_tmp, speed, atof(cdatastrp));
 		break;
+        case tt_trk_trkseg_trkpt_heartrate:
+                wpt_tmp->heartrate = atof(cdatastrp);
+                break;
+        case tt_trk_trkseg_trkpt_cadence:
+                wpt_tmp->cadence = atof(cdatastrp);
+                break;
 
 	/*
 	 * Items that are actually in multiple categories.
