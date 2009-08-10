@@ -144,6 +144,7 @@ static waypoint** wp_array;
 #define MSG_BREAK 0xaa02
 #define MSG_BREAK_SIZE 33
 #define MSG_DELETE 0xb005
+#define MSG_DELETE_SIZE 67
 #define MSG_NAVIGATION 0xa010
 #define MSG_REQUEST_ROUTES 0xb051
 #define MSG_REQUEST_ROUTES_SIZE 65
@@ -205,7 +206,7 @@ typedef struct {
 	gbuint8 type;
 	gbuint8 mode;
 	gbuint8 location;
-	gbuint8 object_name[];
+	char object_name[64];
 } msg_delete_t;
 
 // Output Waypoint Message
@@ -1245,22 +1246,19 @@ write_waypoint_notes(const char* notes, unsigned size, const char* name)
 }
 
 static void
-add_nuke(nuke_type nuke_type)
+add_nuke(nuke_type type)
 {
 	message_t m;
 	msg_delete_t* p;
 
-	message_init_size(&m, 63);
+	message_init_size(&m, MSG_DELETE_SIZE);
 	p = m.data;
-	p->type = nuke_type;
+	p->type = type;
 	p->mode = nuke_mode_all;
 	p->location = nuke_dest_internal;
-	p->object_name[0] = '0';
+	memset(p->object_name, 0, sizeof(p->object_name));
 
 	add_to_batch(MSG_DELETE, &m);
- 	send_batch(TRUE);
-
-	message_free(&m);
 }
 
 static void
@@ -2109,8 +2107,6 @@ delbin_list_units()
 	}
 }
 
-
-
 static void
 delbin_rw_init(const char *fname)
 {
@@ -2203,11 +2199,11 @@ delbin_write(void)
 		write_waypoints();
 	}
 	if (doing_trks) {
- 		if (opt_nuke_trk) add_nuke(nuke_type_wpt);
+ 		if (opt_nuke_trk) add_nuke(nuke_type_trk);
 		write_tracks();
 	}
 	if (doing_rtes) {
- 		if (opt_nuke_rte) add_nuke(nuke_type_wpt);
+ 		if (opt_nuke_rte) add_nuke(nuke_type_rte);
 		write_routes();
 	}
 }
