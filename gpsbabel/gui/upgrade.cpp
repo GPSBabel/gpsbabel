@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.8 2009-08-10 19:19:27 robertl Exp $
+// $Id: upgrade.cpp,v 1.9 2009-08-10 21:21:29 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -61,10 +61,10 @@ QString UpgradeCheck::UpgradeCheck::getOsName(void)
 #elif
   return "Unknown"'
 #endif
-  
+
 }
 
-// See http://doc.trolltech.com/4.5/qsysinfo.html to interpret results  
+// See http://doc.trolltech.com/4.5/qsysinfo.html to interpret results
 QString UpgradeCheck::UpgradeCheck::getOsVersion(void)
 {
   #if defined (Q_OS_MAC)
@@ -92,9 +92,9 @@ QString UpgradeCheck::UpgradeCheck::getOsVersion(void)
   }
   #endif
   // FIXME: find something appropriately clever to do for Linux, etc. here.
-  return "Unknown";  
+  return "Unknown";
 }
-  
+
 
 UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentVersionIn,
                int checkMethod,
@@ -110,23 +110,23 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
     // Not time to check yet.
     return UpgradeCheck::updateUnknown;
   }
-  
+
   http = new QHttp;
-  
+
   connect(http, SIGNAL(requestFinished(int, bool)),
           this, SLOT(httpRequestFinished(int, bool)));
   connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
           this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
-  
+
   QHttpRequestHeader header("POST", "/upgrade_check.html");
   header.setValue("Host",  "www.gpsbabel.org");
   header.setContentType("application/x-www-form-urlencoded");
   header.setValue("Host", "www.gpsbabel.org");
   QLocale locale;
-  
+
   QString args = "current_version=" + currentVersion;
-  args += "&installation=" + installationUuid;  
-  args += "&os=" + getOsName();  
+  args += "&installation=" + installationUuid;
+  args += "&os=" + getOsName();
   args += "&os_ver=" + getOsVersion();
   args += "&beta_ok=1";   // Eventually to come from prefs.
   args += "&lang=" + QLocale::languageToString(locale.language());
@@ -147,7 +147,7 @@ void UpgradeCheck::readResponseHeader(const QHttpResponseHeader &responseHeader)
   case 307:                   // Temporary Redirect
     // these are not error conditions
     break;
-    
+
   default:
     QMessageBox::information(0, tr("HTTP"),
            tr("Download failed: %1.")
@@ -162,35 +162,35 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
   if (http == 0 || error)
     return;
 
-  if (requestId != httpRequestId) 
+  if (requestId != httpRequestId)
     return;
 
   QString oresponse(http->readAll());
 
   QDomDocument document;
-  if (!document.setContent(oresponse)) 
+  if (!document.setContent(oresponse))
     return;
-  
+
   QString response;
   QString upgradeText;
-  
+
   if (testing)
     currentVersion =  "1.3.1"; // for testing
 
   bool allowBeta = false;  // TODO: come from prefs or current version...
 
   QDomNodeList upgrades = document.elementsByTagName("update");
-  
+
   for (unsigned int i = 0; i < upgrades.length(); i++) {
     QDomNode upgradeNode = upgrades.item(i);
     QDomElement upgrade = upgradeNode.toElement();
-    
+
     QString updateVersion = upgrade.attribute("version");
     bool updateIsBeta  = upgrade.attribute("type") == "beta";
     bool updateIsMajor = upgrade.attribute("type") == "major";
     bool updateCandidate = updateIsMajor || (updateIsBeta && allowBeta);
     upgradeText = upgrade.firstChildElement("overview").text();
-  
+
     // String compare, not a numeric one.  Server will return "best first".
     if((updateVersion > currentVersion) && updateCandidate) {
       response = tr("A new version of GPSBabel is available.<br />"
@@ -198,30 +198,27 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
         "The latest version is %2")
           .arg(currentVersion)
           .arg(updateVersion);
-      break;  
+      break;
     }
   }
-  
+
   if (response.length()) {
     QMessageBox information;
     information.setWindowTitle(tr("Upgrade"));
 
     information.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     information.setDefaultButton(QMessageBox::Yes);
-  
+
     information.setText(response);
     information.setInformativeText(tr("Do you wish do download an upgrade?"));
     information.setDetailedText(upgradeText);
-  
+
     switch (information.exec()) {
-      case QMessageBox::Yes: 
+      case QMessageBox::Yes:
           QDesktopServices::openUrl(QUrl("http://www.gpsbabel.org/download.html", QUrl::TolerantMode));
       default: ;
     }
-  
+
     upgradeWarningTime = QDateTime(QDateTime::currentDateTime());
   }
-  
-  delete http;
-  http = 0;
 }
