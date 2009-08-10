@@ -3,6 +3,12 @@
    RGB-colors (24- and 32-bit) or 8-bit indexed color format.
 </para>
 <para>
+  If you're starting from images in another format, you may need to
+  use another tool like Gimp or ImageMagick's convert to get the imaga
+  into oen of the above formats to avoid errors about "Unsupported color 
+  depth".
+</para>
+<para>
    A color value of 0xFF00FF (blue=255, green=0, red=255), 
    also called "Magenta", can be used for transparent areas.
 </para>
