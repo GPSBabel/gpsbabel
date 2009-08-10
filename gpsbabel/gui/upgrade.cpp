@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.7 2009-08-09 03:09:11 robertl Exp $
+// $Id: upgrade.cpp,v 1.8 2009-08-10 19:19:27 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QDomDocument>
+#include <QLocale>
 #include <QSysInfo>
 #include <QUrl>
 
@@ -121,12 +122,14 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
   header.setValue("Host",  "www.gpsbabel.org");
   header.setContentType("application/x-www-form-urlencoded");
   header.setValue("Host", "www.gpsbabel.org");
-
+  QLocale locale;
+  
   QString args = "current_version=" + currentVersion;
   args += "&installation=" + installationUuid;  
   args += "&os=" + getOsName();  
   args += "&os_ver=" + getOsVersion();
   args += "&beta_ok=1";   // Eventually to come from prefs.
+  args += "&lang=" + QLocale::languageToString(locale.language());
 
   http->setHost("www.gpsbabel.org");
   httpRequestId = http->request(header, args.toUtf8());
