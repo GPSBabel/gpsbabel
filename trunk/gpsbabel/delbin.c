@@ -1258,7 +1258,10 @@ add_nuke(nuke_type type)
 	p->location = nuke_dest_internal;
 	memset(p->object_name, 0, sizeof(p->object_name));
 
+	// MSG_DELETE generates a MSG_TRANSFER_COMPLETE,
+	// so use the batch facility to wait for it
 	add_to_batch(MSG_DELETE, &m);
+	send_batch(TRUE);
 }
 
 static void
@@ -2249,6 +2252,7 @@ ff_vecs_t delbin_vecs = {
 // You need to install 'build environments' and 'tools' from the SDK and
 // follow the instructions in the Install.html to get MSVC to find the right
 // headers and libraries.
+#include <specstrings.h>
 #include <hidsdi.h>
 
 static HANDLE hid_handle;
