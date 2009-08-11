@@ -588,6 +588,9 @@ ce_waypt_pr(const waypoint *wp)
 	sprintf(xml_buffer, "%3.6f %c %3.6f %c", latitude, NorS, longitude, EorW);
 	write_xml_entity(ofd, "\t\t", "Position", xml_buffer);
 	write_optional_xml_entity(ofd, "\t\t", "Name", wp->shortname);
+	if (wp->description && wp->shortname && 
+             strcmp(wp->description, wp->shortname))
+	write_optional_xml_entity(ofd, "\t\t", "Description", wp->description);
 }
 
 static char *
