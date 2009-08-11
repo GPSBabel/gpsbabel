@@ -135,6 +135,7 @@
 	<Mark created="20041105T213647Z" id="{e0e1e2e3-e4e5-e6e7-e8e9-eaebecedeeef}">
 		<Position>34.884641 N 120.652026 W</Position>
 		<Name>PTSALENT</Name>
+		<Description>A description of the Point Sal Entrance mark</Description>
 	</Mark>
 	<Mark created="20041105T213704Z" id="{f0f1f2f3-f4f5-f6f7-f8f9-fafbfcfdfeff}">
 		<Position>34.896555 N 120.649124 W</Position>
