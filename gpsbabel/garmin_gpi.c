@@ -438,7 +438,12 @@ read_poi_group(const int sz, const int tag)
 #endif
 }
 
-
+// TODO: 'tag' is probably not a 32 bit value.
+// most likely it's a pair of 16's: the first pair is the tag number.
+// if the second 16 is "eight", then it's an
+// extended thingy and it has a 4-byte extended record length (total number 
+// of bytes for all record fields and all nested records, starting after the 
+// length field)
 /* gpi tag handler */
 static int
 read_tag(const char *caller, const int tag, waypoint *wpt)
@@ -562,9 +567,13 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 				gmsd = gpi_gmsd_init(wpt);
 				GMSD_SET(phone_nr, str);
 			}
-			if ((mask & 2) && (str = gpi_read_string("Unknown 1"))) {
+			if ((mask & 2) && (str = gpi_read_string("Phone2"))) {
+				gmsd = gpi_gmsd_init(wpt);
+				GMSD_SET(phone_nr2, str);
 			}
-			if ((mask & 4) && (str = gpi_read_string("Unknown 2"))) {
+			if ((mask & 4) && (str = gpi_read_string("Fax"))) {
+				gmsd = gpi_gmsd_init(wpt);
+				GMSD_SET(fax_nr, str);
 			}
 			if ((mask & 8) && (str = gpi_read_string("Email"))) {
 				gmsd = gpi_gmsd_init(wpt);
