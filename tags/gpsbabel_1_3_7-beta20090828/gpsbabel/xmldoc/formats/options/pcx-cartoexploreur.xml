@@ -1,0 +1,4 @@
+<para>
+  Carto Exploreur requires a slightly incompatible variation of the PCX format
+when written.  Specifying this option on write tells us to create that strain of PCX.
+</para>

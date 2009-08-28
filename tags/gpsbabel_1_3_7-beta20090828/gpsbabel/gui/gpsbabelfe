@@ -1,0 +1,55 @@
+#!/bin/sh
+#
+# gpsbabelfe startup script,  Adpated from googleearth startup
+#
+
+# Function to find the real directory a program resides in.
+# Feb. 17, 2000 - Sam Lantinga, Loki Entertainment Software
+FindPath()
+{
+    fullpath="`echo $1 | grep /`"
+    if [ "$fullpath" = "" ]; then
+        oIFS="$IFS"
+        IFS=:
+        for path in $PATH
+        do if [ -x "$path/$1" ]; then
+               if [ "$path" = "" ]; then
+                   path="."
+               fi
+               fullpath="$path/$1"
+               break
+           fi
+        done
+        IFS="$oIFS"
+    fi
+    if [ "$fullpath" = "" ]; then
+        fullpath="$1"
+    fi
+
+    # Is the sed/ls magic portable?
+    if [ -L "$fullpath" ]; then
+        #fullpath="`ls -l "$fullpath" | awk '{print $11}'`"
+        fullpath=`ls -l "$fullpath" |sed -e 's/.* -> //' |sed -e 's/\*//'`
+    fi
+    dirname $fullpath
+}
+
+
+THIS_PATH="`FindPath $0`"
+echo $THIS_PATH
+
+
+LD_LIBRARY_PATH=.:${THIS_PATH}:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH
+
+# Let's boogie!
+if [ -x "${THIS_PATH}/gpsbabelfe-bin" ]
+then
+	cd "${THIS_PATH}/"
+	exec "./gpsbabelfe-bin"  "$@"
+fi
+echo "Couldn't run GPSBabelFE (gpsbabelfe-bin). Cannot find it."
+exit 1
+
+
+

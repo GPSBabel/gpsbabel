@@ -1,0 +1,15 @@
+<para>
+   Because speed isn't a real member of a normal waypoint, you can put the speed values into
+   the waypoint names. "Point@30" will result in a speed value of 30. By default we assume these
+   values are in kilometers per hour.
+</para>
+<para>
+   Proximity distance is also supported by <link linkend="fmt_gpx">GPX</link>, <link linkend="fmt_gdb">Garmin GDB</link>, <link linkend="fmt_ozi">OZI Explorer</link>, 
+   <link linkend="fmt_compegps">CompeGPS</link> and <link linkend="fmt_unicsv">Universal CSV</link>.
+</para>
+<para>
+  <userinput>
+    gpsbabel -i gpx -f "warnings.gpx" -o garmin_gpi,alerts=1 -F "warnings.gpi"
+  </userinput>
+</para>
+

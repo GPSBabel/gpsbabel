@@ -1,0 +1,14 @@
+<para>
+  This is the waypoint file format for Navigon units such as the Navigon 7100.
+</para>
+<para>
+  To actually manipulate the file on the unit, use a USB cable or SD card
+  reader and work with <filename>MN6\Settings\Favorites.storage</filename> 
+  The waypoints are be created with a minimal amount of data; the unit will
+  fill in the other fields on use. The other fields appear to be data the
+  unit infers, such as nearby streets.
+</para>
+<para>
+  Note that this is the waypoint/placemark format (.storage) and not the 
+  route file format (.rte, .mn4) that is used by routes.
+</para>

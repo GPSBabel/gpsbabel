@@ -1,0 +1,6 @@
+<para>
+Adds a constant value to every altitude. You can specify negative numbers to subtract the value.
+</para>
+<para>
+If no unit is specified, (m)eters are assumed. You can override this by attaching a "f" for feet to the number.
+</para>

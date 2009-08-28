@@ -1,0 +1,14 @@
+<para>
+  This format supports flight analysis data from the 
+	<ulink url="http://www.seeyou.ws/">See You</ulink> 
+  program.
+</para>
+<para>
+  Position information is preserved, but the aviation-specific 
+  information such as runway length and airport frequency, are
+  written as blanks and ignored on read.
+</para>
+<para>
+  Tasks are not supported.
+</para>
+

@@ -1,0 +1,13 @@
+
+      
+      
+      <para> This is a format for creating data to be read by
+<ulink url="http://www.microsoft.com/streets/default.mspx"> Microsoft Streets and
+Trips</ulink>.  It's been exercised on versions from 2003 through 2008. Detailed
+instructions on how to use it, including preserving hyperlinks, are at
+<ulink url="http://www.gpsbabel.org/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html">gpsbabel.org</ulink>
+         </para>
+	<para>
+		This format has nothing to do with the <link linkend="fmt_msroute1"> .est/axe format</link> used by this program to store routes.
+	</para>
+    

@@ -1,0 +1,63 @@
+<para>Serial download protocol for GPS data loggers based on Skytraq Venus 5 and Venus 6 chipsets.
+If your logger came with the Windows software iTravelTech GPS Photo Tagger, chances are that you can
+use this format to read its memory.</para>
+
+<para>Following a list of devices which should be supported by this module
+(note that not all of them have actually been tested):</para>
+
+<table id="skytraq_devices">
+<title>Devices supported by skytraq module</title>
+<tgroup cols="4">
+<thead>
+<row>
+ <entry>Manufacturer</entry> 
+ <entry>Model</entry> 
+ <entry>USB (baud)</entry> 
+ <entry>Bluetooth (baud)</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>Navilock</entry>
+  <entry>BT-455PDL</entry>
+  <entry>untested</entry>
+  <entry>untested</entry>
+</row>
+<row>
+  <entry>SJA</entry>
+  <entry>"3-in-1" GPS logger</entry>
+  <entry>up to 230400</entry>
+  <entry>9600</entry>
+</row>
+<row>
+  <entry>?</entry>
+  <entry>Travel Honey</entry>
+  <entry>untested</entry>
+  <entry>untested</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<example id="skytraq-on-linux">
+  <title>Command showing skytraq download of tracks and erasing the logger on Linux</title>
+  <para><userinput>gpsbabel -i skytraq,erase -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput></para>
+</example>
+
+<para>If available, reading the logger using bluetooth should also work. However, many devices support only one
+specific baud rate over bluetooth, e.g. 9600:</para>
+<example id="skytraq-on-linux-bt">
+  <title>Command showing skytraq download tracks via bluetooth on Linux</title>
+  <para><userinput>rfcomm bind 0 &lt;bdaddr&gt;</userinput>
+  <userinput>gpsbabel -i skytraq,baud=9600 -f /dev/rfcomm0 -o gpx -F out.gpx</userinput></para>
+</example>
+
+<para>The "initbaud" option might be helpful if autodetection fails or takes too long. With this option you
+can tell GPSBabel the baud rate the device is currently set to. In contrast, the option "baud" specifies
+the rate at which the actual download should take place. If it is different than "initbaud" (or the autodetected
+rate, if initbaud wasn't given), the initial setting will be restored after finishing the download.</para>
+
+<para>If read-at-once >= 1, batch mode is enabled with that many sectors being read at a time.
+Under normal circumstances, the larger this number the faster the transfer.
+Reducing "read-at-once" might help when you get transmission errors/aborts.
+This option only applies to Venus 6 devices; Venus 5 devices always use read-at-once = 0.</para>

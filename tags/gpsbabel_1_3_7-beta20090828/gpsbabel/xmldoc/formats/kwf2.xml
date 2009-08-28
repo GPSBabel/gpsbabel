@@ -1,0 +1,9 @@
+
+      
+      
+      <para>Support for Kartex 5 waypoint files. Kartex is a Swedish 
+	map and GPS positioning system. GPSBabel can read and write 
+	files from Kartex 4 and 5 with WGS84 coordinates. UTM or 
+	Swedish grid are not supported.
+      </para>
+    

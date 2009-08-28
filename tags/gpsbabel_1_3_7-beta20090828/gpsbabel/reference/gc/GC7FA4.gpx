@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" creator="Groundspeak, Inc. All Rights Reserved. http://www.groundspeak.com" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd" xmlns="http://www.topografix.com/GPX/1/0">
+  <name>Cache Listing Generated from Geocaching.com</name>
+  <desc>This is an individual cache generated from Geocaching.com</desc>
+  <author>Account "Sverdrup2" From Geocaching.com</author>
+  <email>contact@geocaching.com</email>
+  <url>http://www.geocaching.com</url>
+  <urlname>Geocaching - High Tech Treasure Hunting</urlname>
+  <time>2005-07-16T18:15:40.7599561-07:00</time>
+  <keywords>cache, geocache</keywords>
+  <bounds minlat="46.1333333333333" minlon="-73" maxlat="46.1333333333333" maxlon="-73"/>
+  <wpt lat="46.1333333333333" lon="-73">
+    <time>2002-08-15T00:00:00.0000000-07:00</time>
+    <name>GC7FA4</name>
+    <desc>Points géodésiques du Québec by Sverdrup2, Locationless (Reverse) Cache (1/1)</desc>
+    <url>http://www.geocaching.com/seek/cache_details.aspx?guid=727f9d2c-f080-41f1-a2c9-a326ead462ed</url>
+    <urlname>Points géodésiques du Québec</urlname>
+    <sym>Geocache</sym>
+    <type>Geocache|Locationless (Reverse) Cache</type>
+    <groundspeak:cache id="32676" available="True" archived="False" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0">
+      <groundspeak:name>Points géodésiques du Québec</groundspeak:name>
+      <groundspeak:placed_by>Sverdrup2</groundspeak:placed_by>
+      <groundspeak:owner id="6293">Sverdrup2</groundspeak:owner>
+      <groundspeak:type>Locationless (Reverse) Cache</groundspeak:type>
+      <groundspeak:container>Virtual</groundspeak:container>
+      <groundspeak:difficulty>1</groundspeak:difficulty>
+      <groundspeak:terrain>1</groundspeak:terrain>
+      <groundspeak:country>Canada</groundspeak:country>
+      <groundspeak:state>Quebec</groundspeak:state>
+      <groundspeak:short_description html="True">LES COORDONÉES PUBLIÉES NE REPRÉSENTENT PAS LA LOCALISATION D'UNE CACHE
+PUBLISHED COORDINATES DO NOT REPRESENT THE LOCALIZATION OF A CACHE</groundspeak:short_description>
+      <groundspeak:long_description html="True">Le but de cette cache virtuelle est de trouver les points géodésiques du territoire québécois. Les points géodésiques sont faciles à identifier (capuchons de laiton au niveau du sol). Généralement, il y a un panneau de couleur orange sur un poteau à proximité du point. Sur ce panneau, le numéro du point est identifié. Aussi, la distance relative du panneau au point est indiquée. 
+&lt;P&gt;
+Pour inscrire votre découverte, vous devez prendre en note le NUMÉRO DU POINT(inscrit sur le point même ou au centre du panneau)LA COORDONNÉE(en format HDDD MM.MM WGS84 datum ET UTM NAD83 indiquer la zone SVP)et L'ALTITUDE RELATIVE. Si le points n'est pas visible (il se peut qu'il soit sous quelques centimètres de terre) vous pouvez prendre la coordonnée à l'emplacement du panneau SI LA PRÉCISION DE VOTRE GPS EST SUPÉRIEUR À LA DISTANCE INSCRITE SUR LE PANNEAU (ex : Précison du GPS de 5m et distance au point inscrite sur le panneau de 3m).
+&lt;P&gt;
+Une photo du point ou du panneau et une description générale des lieux serait aussi des informations importantes.
+&lt;P&gt;
+Enfin, il faudrait aussi prendre en note l'organisme propriétaire du point géodésique. Au Québec il en existe plusieurs:
+&lt;P&gt;
+Le Service de la géodésie du Québec, Ministère des Ressources naturelles, Québec
+&lt;P&gt;
+La Division des levés géodésiques, Géomatique Canada, Secteur des sciences de la terre Ressources naturelles Canada 
+&lt;P&gt;
+Le Service hydrographique du Canada, Direction des sciences, Pêches et Océans Canada et la Garde côtière canadienne, Pêches et Océans Canada 
+&lt;P&gt;
+Et tout les anciens noms de ministères et/ou organisme
+&lt;P&gt;
+Des photos de points de même que des panneaux suivront bientôt.
+VOUS NE POUVEZ INSCRIRE QU'UN SEUL POINT GÉODÉSIQUE (UN POINT PAR GÉOCACHEUR)
+Bonne chance!
+
+&lt;P&gt;
+
+The goal of this virtual cache is to find the geodetic points of Québec’s territory. The geodetic points are easy to identify (Brass cap at ground level) Generally, there is an orange panel of on a post near the point. On this panel, the number of the point is identified. Also, the distance relating from the panel to the point is also indicated. In order to log your find, you must take in note THE NUMBER OF THE POINT(registered on the point or in the center of the panel) and THE COORDINATES(in format HDDD MM.MM WGS84 datum AND UTM NAD83 indicate the zone please)and THE ALTITUDE. If the point is not visible (it may be buried under few centimetres) you can take the coordinate at the panel IF THE ACCURACY OF YOUR GPS IS HIGHER Than the DISTANCE REGISTERED ON the PANEL. (Ex: accuracy of the GPS is 5m and the distance to the point registered on the panel is 3m). 
+ &lt;P&gt;
+A picture of the point or panel and a general description of the places would be also significant information. Finally, it would also be important to take in note the organization owner of the geodetic point. 
+In Quebec there are several: 
+&lt;P&gt;
+The "Service de la géodésie du Québec, Ministère des Ressources naturelles Québec"
+The Geodetic Survey Division, Geomatics Canada, Earth Sciences Sector, Natural Resources Canada 
+The Canadian Hydrographic Service, Sciences Directorate, Fisheries and Oceans Canada and the Canadian Coast Guard, Fisheries and Oceans Canada
+And all old names of ministries and/or organization
+&lt;P&gt;
+
+PICTURES of points and of the panels will follow soon. YOU CAN ONLY LOG ONE POINT (ONE POINT PER GEOCACHER)
+Good luck!</groundspeak:long_description>
+      <groundspeak:encoded_hints>
+      </groundspeak:encoded_hints>
+      <groundspeak:logs>
+        <groundspeak:log id="9032712">
+          <groundspeak:date>2005-07-12T07:00:00</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="153849">Christopher R &amp; Pooh B</groundspeak:finder>
+          <groundspeak:text encoded="False">This marker is not in Quebec but it is a Geodesic marker in Clarenville, Newfoundland, Canada!
+
+Found this one while hunting a traditional cache and thought of this cache right away! 
+
+It is located on Bare Mountain in Clarenville - There are aactually two markers within 15 feet of one another on Bare Mountain...
+
+Smiles Pooh Bear 
+
+Ce marqueur n'est pas au Québec mais c'est un marqueur géodésique dans Clarenville, Terre-Neuve, Canada!  
+
+A trouvé celui-ci tandis que chasse une cachette traditionnelle et pensé à cette cachette tout de suite!  Elle est située sur la montagne nue dans Clarenville - il y a aactually deux marqueurs à moins de 15 pieds d'un des autres sur la montagne nue...  Ours De Pooh De Sourires
+
+
+</groundspeak:text>
+          <groundspeak:log_wpt lat="48.170117" lon="-53.968283" />
+        </groundspeak:log>
+        <groundspeak:log id="8750499">
+          <groundspeak:date>2005-06-26T07:00:00</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="373600">TravelBen</groundspeak:finder>
+          <groundspeak:text encoded="False">[:D] 14h22
+
+Marqueur du Service de la Géodégie (c'est bien un "g" pas un "s") du Québec.
+
+Position Average (100 échantillons):
+N 45° 26.872 W 075° 56.410, 21 mètres d'altitude
+UTM: 18T E 582877 N 5033250
+
+Ce marqueur se trouve dans le ville de Senneville, sur un monument décrivant une page d'histoire du Québec, sur le bas côté avant droit.
+
+Près de la cache:  Exo-07 La Jumelle de Loudiver (GCP3VE)</groundspeak:text>
+          <groundspeak:log_wpt lat="45.447867" lon="-73.940167" />
+        </groundspeak:log>
+        <groundspeak:log id="8328239">
+          <groundspeak:date>2005-06-03T07:00:00</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="267122">etasse</groundspeak:finder>
+          <groundspeak:text encoded="False">MRN marker 94K4731 in Gatineau, QC. corner of Du Rhone and Gatineau Ave.
+
+Position Average
+N 45° 29.5247  W 075° 43.0049  59.49m
+UTM 18T 0443995 5037866
+
+Least Squares Average
+N 45° 29.5257  W 075° 43.0043  55.74m
+UTM 18T 0443996 5037868
+
+This pole has everything:  An underground cable warning, a geodesic mark, a bus stop and a garage sale sign.
+
+Judging by the coordinates it looks like the coords should be 45°29'31.5" -75°43'0"  I placed the GPS antenna right against the marker, to no avail.
+
+</groundspeak:text>
+          <groundspeak:log_wpt lat="45.492083" lon="-75.71675" />
+        </groundspeak:log>
+        <groundspeak:log id="8326389">
+          <groundspeak:date>2005-06-03T07:00:00</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="310909">Katou</groundspeak:finder>
+          <groundspeak:text encoded="False">Un bo point géodésique a Lotbinière..en allant faire une nouvelle cache a l'île richelieu ;-)
+
+</groundspeak:text>
+          <groundspeak:log_wpt lat="46.618183" lon="-71.9329" />
+        </groundspeak:log>
+        <groundspeak:log id="8214050">
+          <groundspeak:date>2005-05-29T07:00:00</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="231453">Gps_Gulliver&amp;DauphinBleu</groundspeak:finder>
+          <groundspeak:text encoded="False">Point Geodesique situe near Port de Plaisance de Longueuil
+sur le bord du fleuve st-laurent.
+Il y a des sentiers et une grande piste cyclable
+Enjoy !</groundspeak:text>
+          <groundspeak:log_wpt lat="45.540817" lon="-73.51245" />
+        </groundspeak:log>
+      </groundspeak:logs>
+      <groundspeak:travelbugs />
+    </groundspeak:cache>
+  </wpt>
+</gpx>

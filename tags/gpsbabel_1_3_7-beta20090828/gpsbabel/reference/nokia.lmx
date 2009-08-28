@@ -1,0 +1,112 @@
+<?xml version="1.0" ?>
+<lm:lmx xmlns:lm="http://www.nokia.com/schemas/location/landmarks/1/0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.nokia.com/schemas/location/landmarks/1/0/lmx.xsd">  <lm:landmarkCollection>
+    <lm:landmark>
+        <lm:name>GCEBB</lm:name>
+        <lm:description>Mountain Bike Heaven by susy1313</lm:description>
+        <lm:coordinates>
+          <lm:latitude>35.972033</lm:latitude>
+          <lm:longitude>-87.134700</lm:longitude>
+        </lm:coordinates>
+        <lm:mediaLink>
+          <lm:name>Cache Details</lm:name>
+          <lm:url>http://www.geocaching.com/seek/cache_details.asp?ID=3771</lm:url>
+        </lm:mediaLink>
+    </lm:landmark>
+    <lm:landmark>
+        <lm:name>GC1A37</lm:name>
+        <lm:description>The Troll by a182pilot &amp; Family</lm:description>
+        <lm:coordinates>
+          <lm:latitude>36.090683</lm:latitude>
+          <lm:longitude>-86.679550</lm:longitude>
+        </lm:coordinates>
+        <lm:mediaLink>
+          <lm:name>Cache Details</lm:name>
+          <lm:url>http://www.geocaching.com/seek/cache_details.asp?ID=6711</lm:url>
+        </lm:mediaLink>
+    </lm:landmark>
+    <lm:landmark>
+        <lm:name>GC1C2B</lm:name>
+        <lm:description>Dive Bomber by JoGPS &amp; family</lm:description>
+        <lm:coordinates>
+          <lm:latitude>35.996267</lm:latitude>
+          <lm:longitude>-86.620117</lm:longitude>
+        </lm:coordinates>
+        <lm:mediaLink>
+          <lm:name>Cache Details</lm:name>
+          <lm:url>http://www.geocaching.com/seek/cache_details.asp?ID=7211</lm:url>
+        </lm:mediaLink>
+    </lm:landmark>
+    <lm:landmark>
+        <lm:name>GC25A9</lm:name>
+        <lm:description>FOSTER by JoGPS &amp; Family</lm:description>
+        <lm:coordinates>
+          <lm:latitude>36.038483</lm:latitude>
+          <lm:longitude>-86.648617</lm:longitude>
+        </lm:coordinates>
+        <lm:mediaLink>
+          <lm:name>Cache Details</lm:name>
+          <lm:url>http://www.geocaching.com/seek/cache_details.asp?ID=9641</lm:url>
+        </lm:mediaLink>
+    </lm:landmark>
+    <lm:landmark>
+        <lm:name>GC2723</lm:name>
+        <lm:description>Logan Lighthouse by JoGps &amp; Family</lm:description>
+        <lm:coordinates>
+          <lm:latitude>36.112183</lm:latitude>
+          <lm:longitude>-86.741767</lm:longitude>
+        </lm:coordinates>
+        <lm:mediaLink>
+          <lm:name>Cache Details</lm:name>
+          <lm:url>http://www.geocaching.com/seek/cache_details.asp?ID=10019</lm:url>
+        </lm:mediaLink>
+    </lm:landmark>
+    <lm:landmark>
+        <lm:name>GC2B71</lm:name>
+        <lm:description>Ganier Cache by Susy1313</lm:description>
+        <lm:coordinates>
+          <lm:latitude>36.064083</lm:latitude>
+          <lm:longitude>-86.790517</lm:longitude>
+        </lm:coordinates>
+        <lm:mediaLink>
+          <lm:name>Cache Details</lm:name>
+          <lm:url>http://www.geocaching.com/seek/cache_details.asp?ID=11121</lm:url>
+        </lm:mediaLink>
+    </lm:landmark>
+    <lm:landmark>
+        <lm:name>GC309F</lm:name>
+        <lm:description>Shy&apos;s Hill by FireFighterEng33</lm:description>
+        <lm:coordinates>
+          <lm:latitude>36.087767</lm:latitude>
+          <lm:longitude>-86.809733</lm:longitude>
+        </lm:coordinates>
+        <lm:mediaLink>
+          <lm:name>Cache Details</lm:name>
+          <lm:url>http://www.geocaching.com/seek/cache_details.asp?ID=12447</lm:url>
+        </lm:mediaLink>
+    </lm:landmark>
+    <lm:landmark>
+        <lm:name>GC317A</lm:name>
+        <lm:description>GittyUp by JoGPS / Warner Parks</lm:description>
+        <lm:coordinates>
+          <lm:latitude>36.057500</lm:latitude>
+          <lm:longitude>-86.892000</lm:longitude>
+        </lm:coordinates>
+        <lm:mediaLink>
+          <lm:name>Cache Details</lm:name>
+          <lm:url>http://www.geocaching.com/seek/cache_details.asp?ID=12666</lm:url>
+        </lm:mediaLink>
+    </lm:landmark>
+    <lm:landmark>
+        <lm:name>GC317D</lm:name>
+        <lm:description>Inlighting by JoGPS / Warner Parks</lm:description>
+        <lm:coordinates>
+          <lm:latitude>36.082800</lm:latitude>
+          <lm:longitude>-86.867283</lm:longitude>
+        </lm:coordinates>
+        <lm:mediaLink>
+          <lm:name>Cache Details</lm:name>
+          <lm:url>http://www.geocaching.com/seek/cache_details.asp?ID=12669</lm:url>
+        </lm:mediaLink>
+    </lm:landmark>
+  </lm:landmarkCollection>
+</lm:lmx>

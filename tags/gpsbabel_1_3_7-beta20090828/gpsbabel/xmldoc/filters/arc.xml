@@ -1,0 +1,42 @@
+<para> 
+This filter keeps or removes waypoints based on their proximity to an arc, 
+which is a series of connected line segments similar to a route or a track 
+but without any associated data other than the coordinates.
+</para>
+
+<para> 
+The arc is defined in a file whose name must be provided with the 
+<option>file</option>.  That file contains pairs of coordinates for the 
+vertices of the arc, one coordinate pair per line.  Comments may be
+included by preceding them with a '#' character.  An arc file looks 
+something like this sample:
+</para>
+
+<screen format="linespecific">	  
+# Lima Road/SR3 north of Fort Wayne, Indiana 	  
+41.150064468    -85.166207433 	  
+41.150064468    -85.165371895 	  
+41.149034500    -85.165157318 	  
+41.147832870    -85.164771080 	  
+41.146631241    -85.164384842 	  
+41.144270897    -85.163655281 	  
+41.141953468    -85.162882805
+</screen>
+
+<para> 
+An arc file may optionally contain gaps in the arc.  You may specify 
+such a gap by inserting a line containing "#break" either on a line by 
+itself or after the coordinates of the starting point of the new arc segment.
+</para>
+
+<example id="example_arc_filter">         
+<title>Using the arc filter</title>
+<para>
+Assuming the arc above is in a file called 
+<filename moreinfo="none">lima_rd.txt</filename>, the following command line
+would include only points within one mile of the section of Lima Road 
+covered by the arc.
+</para>
+<para><userinput>gpsbabel -i geo -f 1.loc -x arc,file=lima_rd.txt,distance=1 -o mapsend -F 2.wpt</userinput></para>
+</example>
+      

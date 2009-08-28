@@ -1,0 +1,23 @@
+   <chapter id="Data_Filters">
+      <title>Data Filters</title>
+      <para> GPSBabel supports data filtering.  Data filters are
+      invoked from the command line via the '-x' option.  It should be
+      noted that data filters are invoked in the internal pipeline at
+      the point that corresponds to their position on the
+      command. This implies that specifying a filter before reading
+      any data ('-x &lt;filter&gt; -f &lt;file&gt;'), despite being
+      legal, will not have any effect. The advantage is that filters
+      can be used intermittently between several variations of input
+      and output functions.  It should also be noted that filtering
+      data from different input types can sometimes produce
+      undesirable results due to differences in the native data
+      formats.
+</para>
+      <para> Beware that most filters only apply to a certain kind of
+      data. This is usually indicated below by referring to points,
+      tracks or routes in the first sentence which describes each
+      filter or in the table at <ulink url="http://www.gpsbabel.org/capabilities.html">gpsbabel.org</ulink>
+      .
+</para>
+     &filters;
+     </chapter>
