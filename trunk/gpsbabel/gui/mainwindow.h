@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.h,v 1.4 2009-08-28 17:08:55 robertl Exp $
+// $Id: mainwindow.h,v 1.5 2009-08-28 17:21:37 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -68,6 +68,10 @@ private:
   void setComboToDevice(QComboBox *comboBox, const QString &);
 
   void loadDeviceNameCombos();
+  void loadInputDeviceNameCombo(QString format);
+  void loadOutputDeviceNameCombo(QString format);
+  bool MainWindow::formatSupportsUSB(QString format);
+  bool MainWindow::formatSupportsSerial(QString format);
   void loadCharSetCombos();
   void checkCharSetCombos();
   QString charSetFromCombo(QComboBox *);

@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.5 2009-08-28 17:08:55 robertl Exp $
+// $Id: mainwindow.cpp,v 1.6 2009-08-28 17:21:37 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -197,18 +197,41 @@ MainWindow::~MainWindow()
   if (upgrade)
     delete upgrade;
 }
+
+//------------------------------------------------------------------------
+void MainWindow::loadInputDeviceNameCombo(QString format)
+{
+  ui.inputDeviceNameCombo->clear();
+  // Later, we can probe the system for multiple USB devices and populate 
+  // here.
+  if (formatSupportsUSB(format))
+    ui.inputDeviceNameCombo->addItem("usb:");
+  if (formatSupportsSerial(format))
+    osLoadDeviceNameCombos(ui.inputDeviceNameCombo);
+  // If only one choice, just disable it.
+  ui.inputDeviceNameCombo->setEnabled(ui.inputDeviceNameCombo->count() > 1);
+}
+
+//------------------------------------------------------------------------
+void MainWindow::loadOutputDeviceNameCombo(QString format)
+{
+  ui.outputDeviceNameCombo->clear();
+  // Later, we can probe the system for multiple USB devices and populate 
+  // here.
+  if (formatSupportsUSB(format))
+    ui.outputDeviceNameCombo->addItem("usb:");
+  if (formatSupportsSerial(format))
+    osLoadDeviceNameCombos(ui.outputDeviceNameCombo);
+  // If only one choice, just disable it.
+  ui.outputDeviceNameCombo->setEnabled(ui.outputDeviceNameCombo->count() > 1);
+}
+
 //------------------------------------------------------------------------
 void MainWindow::loadDeviceNameCombos()
 {
-  ui.inputDeviceNameCombo->clear();
-  ui.outputDeviceNameCombo->clear();
+  loadInputDeviceNameCombo("");
+  loadOutputDeviceNameCombo("");
 #if defined Q_OS_MAC
-  ui.inputDeviceNameCombo->addItem("usb:");
-  ui.outputDeviceNameCombo->addItem("usb:");
-
-  osLoadDeviceNameCombos(ui.inputDeviceNameCombo);
-  osLoadDeviceNameCombos(ui.outputDeviceNameCombo);
-#else
   for (int i=0; deviceNames[i]; i++) {
     ui.inputDeviceNameCombo->addItem(deviceNames[i]);
     ui.outputDeviceNameCombo->addItem(deviceNames[i]);
@@ -374,7 +397,7 @@ void MainWindow::browseInputFile()
     QString str;
     for (int i=0; i<bd.inputFileNames.size(); i++) {
       if (i != 0)
-	str += ", ";
+        str += ", ";
       str += "\"" + bd.inputFileNames[i] + "\"";
     }
     ui.inputFileNameText->setText(str);
@@ -552,6 +575,18 @@ void MainWindow::setComboToFormat(QComboBox *comboBox, const QString &name, bool
 }
 
 //------------------------------------------------------------------------
+bool MainWindow::formatSupportsUSB(QString format)
+{
+    return (format == "garmin" || format == "delbin");
+}
+
+//------------------------------------------------------------------------
+bool MainWindow::formatSupportsSerial(QString format)
+{
+    return (format != "delbin");
+}
+
+//------------------------------------------------------------------------
 void MainWindow::inputFormatChanged(int comboIdx)
 {
   if (fmtChgInterlock)
@@ -565,6 +600,8 @@ void MainWindow::inputFormatChanged(int comboIdx)
     bd.inputFileFormat =formatList[fidx].getName();
   else
     bd.inputDeviceFormat = formatList[fidx].getName();
+
+  loadInputDeviceNameCombo(formatList[fidx].getName());
 }
 
 //------------------------------------------------------------------------
@@ -582,6 +619,7 @@ void MainWindow::outputFormatChanged(int comboIdx)
   else if (ui.outputDeviceOptBtn->isChecked())
     bd.outputDeviceFormat = formatList[fidx].getName();
 
+  loadOutputDeviceNameCombo(formatList[fidx].getName());
 }
 
 //------------------------------------------------------------------------
@@ -931,6 +969,7 @@ void MainWindow::setWidgetValues()
     ui.inputDeviceOptBtn->setChecked(true);
     inputDeviceOptBtnClicked();
     setComboToFormat(ui.inputFormatCombo, bd.inputDeviceFormat, false);
+    loadInputDeviceNameCombo(bd.inputDeviceFormat);
     ui.inputStackedWidget->setCurrentWidget(ui.inputDevicePage);
   }
   setComboToDevice(ui.inputDeviceNameCombo, bd.inputDeviceName);
@@ -946,6 +985,7 @@ void MainWindow::setWidgetValues()
     ui.outputDeviceOptBtn->setChecked(true);
     outputDeviceOptBtnClicked();
     setComboToFormat(ui.outputFormatCombo, bd.outputDeviceFormat, false);
+    loadOutputDeviceNameCombo(bd.outputDeviceFormat);
     ui.outputStackedWidget->setCurrentWidget(ui.outputDevicePage);
   }
   else {
@@ -966,7 +1006,6 @@ void MainWindow::setWidgetValues()
   crossCheckInOutFormats();
   displayOptionsText(ui.inputOptionsText,  ui.inputFormatCombo, true);
   displayOptionsText(ui.outputOptionsText,  ui.outputFormatCombo, false);
-
   checkCharSetCombos();
   updateFilterStatus();
 }
