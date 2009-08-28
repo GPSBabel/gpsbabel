@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: latlng.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: latlng.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -43,7 +43,7 @@ static const double EARTH_RADIUS_IN_METERS = 6372797.560856;
   *
   * @sa http://en.wikipedia.org/wiki/Law_of_haversines
   */
-static double ArcInRadians(const LatLng& from, const LatLng& to) 
+static double ArcInRadians(const LatLng& from, const LatLng& to)
 {
   double latitudeArc  = (from.lat() - to.lat()) * DEG_TO_RAD;
   double longitudeArc = (from.lng() - to.lng()) * DEG_TO_RAD;

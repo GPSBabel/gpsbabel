@@ -1,5 +1,5 @@
 // -*- c++ -*-
-// $Id: formatload.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: formatload.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -38,7 +38,7 @@ static QString xlt(const QString &f) {
 bool FormatLoad::skipToValidLine()
 {
   QRegExp regex("^(file|serial)");
-  while (currentLine <lines.size() && regex.indexIn(lines[currentLine]) != 0) 
+  while (currentLine <lines.size() && regex.indexIn(lines[currentLine]) != 0)
     currentLine++;
   return (currentLine<lines.size());
 }
@@ -73,16 +73,16 @@ bool FormatLoad::processFormat(Format &format)
       type = FormatOption::OPTstring;
     else if (optionType == "integer") {
       type = (optionMax != "" && optionMin != "") ? FormatOption::OPTboundedInt : FormatOption::OPTint;
-      if (optionMax == "") 
+      if (optionMax == "")
 	optionMax = "2147483647";
-      if (optionMin == "") 
+      if (optionMin == "")
 	optionMin = "-2147483647";
     }
     else if (optionType == "float") {
       type = FormatOption::OPTfloat;
-      if (optionMax == "") 
+      if (optionMax == "")
 	optionMax = "1.0E308";
-      if (optionMin == "") 
+      if (optionMin == "")
 	optionMin = "-1.0E308";
     }
     else if (optionType == "file") {
@@ -101,13 +101,13 @@ bool FormatLoad::processFormat(Format &format)
   }
   QList <FormatOption> optionList2 = optionList;
 
-  format = Format(hfields[2], xlt(hfields[4]), 
+  format = Format(hfields[2], xlt(hfields[4]),
 		  hfields[1][0] == QChar('r'),  hfields[1][2] == QChar('r'),  hfields[1][4] == QChar('r'),
 		  hfields[1][1] == QChar('w'),  hfields[1][3] == QChar('w'),  hfields[1][5] == QChar('w'),
 		  hfields[0] == "file",
 		  hfields[0] == "serial",
 		  QStringList() << hfields[3],
-		  optionList,		
+		  optionList,
 		  optionList2);
   return true;
 }
@@ -116,7 +116,7 @@ bool FormatLoad::processFormat(Format &format)
 bool FormatLoad::getFormats(QList<Format> &formatList)
 {
   formatList.clear();
-  
+
   QProcess babel;
   babel.start("gpsbabel", QStringList() << "-^3");
   if (!babel.waitForStarted())
@@ -124,7 +124,7 @@ bool FormatLoad::getFormats(QList<Format> &formatList)
   babel.closeWriteChannel();
   if (!babel.waitForFinished())
     return false;
-  if (babel.exitCode() != 0) 
+  if (babel.exitCode() != 0)
     return false;
 
   QTextStream tstream(babel.readAll());
@@ -144,13 +144,12 @@ bool FormatLoad::getFormats(QList<Format> &formatList)
     Format format;
     if (!processFormat(format)) {
       QMessageBox::information
-	(0, appName, 
+	(0, appName,
 	 QObject::tr("Error processing formats from running process \"gpsbabel -^3\" at line %1").arg(lineList[currentLine]));
-    } 
+    }
     else {
       formatList << format;
     }
   }
   return true;
 }
-

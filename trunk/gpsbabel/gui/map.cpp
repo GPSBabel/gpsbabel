@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: map.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: map.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -45,12 +45,12 @@ static QString stripDoubleQuotes(const QString s) {
 }
 
 //------------------------------------------------------------------------
-Map::Map(QWidget *parent, 
+Map::Map(QWidget *parent,
 	 const Gpx  &gpx, QPlainTextEdit *te):
-    QWebView(parent), 
+    QWebView(parent),
     gpx(gpx),
     mapPresent(false),
-    busyCursor(false), 
+    busyCursor(false),
     te(te)
 {
   busyCursor = true;
@@ -59,7 +59,7 @@ Map::Map(QWidget *parent,
   manager = new QNetworkAccessManager(this);
   connect(this,SIGNAL(loadFinished(bool)),
 	  this,SLOT(loadFinishedX(bool)));
-  this->logTimeX("Start map constuctor"); 
+  this->logTimeX("Start map constuctor");
   QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
   if (!QFile(baseFile).exists()) {
     QMessageBox::critical(0, appName,
@@ -80,8 +80,8 @@ Map::~Map()
 //------------------------------------------------------------------------
 void Map::loadFinishedX(bool f)
 {
-  this->logTimeX("Done initial page load"); 
-  if (!f) 
+  this->logTimeX("Done initial page load");
+  if (!f)
     QMessageBox::critical(0, appName,
 			  tr("Failed to load Google maps base page"));
   else {
@@ -132,7 +132,7 @@ void Map::showGpxData()
   // It is appreciably faster to do the encoding on the C++ side.
   int numLevels = 18;
   double zoomFactor = 2;
-  PolylineEncoder encoder(numLevels, zoomFactor, 0.00001); 
+  PolylineEncoder encoder(numLevels, zoomFactor, 0.00001);
 
 
   this->logTimeX("Start defining JS string");
@@ -158,11 +158,11 @@ void Map::showGpxData()
     ;
 
   mapPresent = true;
-  
+
   // Waypoints.
   int num=0;
   foreach (const  GpxWaypoint &pt, gpx.getWaypoints() ) {
-    scriptStr 
+    scriptStr
       << QString("waypts[%1] = new GMarker(new GLatLng(%2), "
 		 "{title:\"%3\",icon:blueIcon});")
       .arg(num)
@@ -193,7 +193,7 @@ void Map::showGpxData()
     string encPts, encLevels;
     encoder.dpEncode(encPts, encLevels, epts);
 
-    scriptStr 
+    scriptStr
       << QString("var startPt = new GLatLng(%1);").arg(fmtLatLng(epts[0]))
       << QString("var endPt = new GLatLng(%1);").arg(fmtLatLng(epts[epts.size()-1]))
       << QString("var idx = %1;").arg(num)
@@ -210,7 +210,7 @@ void Map::showGpxData()
 
   scriptStr
     << "for( var i=0; i<trks.length; ++i ) {"
-    << "   var trkbound = trks[i].getBounds();" 
+    << "   var trkbound = trks[i].getBounds();"
     << "   bounds.extend(trkbound.getSouthWest());"
     << "   bounds.extend(trkbound.getNorthEast());"
     << "}"
@@ -226,7 +226,7 @@ void Map::showGpxData()
     }
     string encPts, encLevels;
     encoder.dpEncode(encPts, encLevels, epts);
-    scriptStr 
+    scriptStr
       << QString("var startPt = new GLatLng(%1);").arg(fmtLatLng(epts[0]))
       << QString("var endPt = new GLatLng(%1);").arg(fmtLatLng(epts[epts.size()-1]))
       << QString("var idx = %1;").arg(num)
@@ -242,7 +242,7 @@ void Map::showGpxData()
 
   scriptStr
     << "for( var i=0; i<rtes.length; ++i ) {"
-    << "   var rtebound = rtes[i].getBounds();" 
+    << "   var rtebound = rtes[i].getBounds();"
     << "   bounds.extend(rtebound.getSouthWest());"
     << "   bounds.extend(rtebound.getNorthEast());"
     << "}"
@@ -253,7 +253,7 @@ void Map::showGpxData()
     << "map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));"
     << "mclicker.logTime(\"done setCenter\");"
     ;
-  
+
   this->logTimeX("Done defining JS string");
   evaluateJS(scriptStr);
   this->logTimeX("Done JS evaluation");
@@ -261,11 +261,11 @@ void Map::showGpxData()
 
 //------------------------------------------------------------------------
 void Map::markerClicked(int t, int i){
-  if (t == 0) 
+  if (t == 0)
     emit waypointClicked(i);
-  else if (t == 1) 
+  else if (t == 1)
     emit trackClicked(i);
-  else if (t == 2) 
+  else if (t == 2)
     emit routeClicked(i);
 
 }
@@ -359,7 +359,7 @@ void Map::setTrackVisibility(int i, bool show)
 {
   QString x = show?"show": "hide";
   QStringList scriptStr;
-  scriptStr 
+  scriptStr
     << QString("trks[%1].%2();").arg(i).arg(x)
     ;
   evaluateJS(scriptStr);
@@ -370,7 +370,7 @@ void Map::setRouteVisibility(int i, bool show)
 {
   QString x = show?"show": "hide";
   QStringList scriptStr;
-  scriptStr 
+  scriptStr
     << QString("rtes[%1].%2();").arg(i).arg(x)
     ;
   evaluateJS(scriptStr);
@@ -386,7 +386,7 @@ void Map::panTo(const LatLng &loc)
 void Map::resizeEvent ( QResizeEvent * ev)
 {
   QWebView::resizeEvent(ev);
-  if (mapPresent) 
+  if (mapPresent)
     evaluateJS(QString("map.checkResize();"));
 }
 
@@ -427,7 +427,7 @@ void Map::frameRoute(int i)
 
 
 //------------------------------------------------------------------------
-void Map::evaluateJS(const QString &s, bool upd) 
+void Map::evaluateJS(const QString &s, bool upd)
 {
   this->page()->mainFrame()->evaluateJavaScript(s);
   if (upd) {
@@ -436,7 +436,7 @@ void Map::evaluateJS(const QString &s, bool upd)
 }
 
 //------------------------------------------------------------------------
-void Map::evaluateJS(const QStringList &s, bool upd) 
+void Map::evaluateJS(const QStringList &s, bool upd)
 {
   evaluateJS(s.join("\n"), upd);
 }

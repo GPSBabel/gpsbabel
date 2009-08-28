@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: filterwidgets.cpp,v 1.2 2009-07-31 18:32:32 robertl Exp $
+// $Id: filterwidgets.cpp,v 1.3 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -30,8 +30,8 @@ TrackWidget::TrackWidget(QWidget *parent, TrackFilterData &tfd): FilterWidget(pa
 
   // Checkbox interlocks
   addCheckEnabler(ui.titleCheck, ui.titleText);
-  addCheckEnabler(ui.moveCheck, 
-		  (QList<QWidget *> () 
+  addCheckEnabler(ui.moveCheck,
+		  (QList<QWidget *> ()
 		   << ui.daysLabel << ui.daysSpin
 		   << ui.hoursLabel<< ui.hoursSpin
 		   << ui.minsLabel << ui.minsSpin
@@ -39,7 +39,7 @@ TrackWidget::TrackWidget(QWidget *parent, TrackFilterData &tfd): FilterWidget(pa
   addCheckEnabler(ui.startCheck,    ui.startEdit);
   addCheckEnabler(ui.stopCheck,     ui.stopEdit);
   addCheckEnabler(ui.GPSFixesCheck, ui.GPSFixesCombo);
-  
+
   connect(ui.mergeCheck, SIGNAL(clicked()) , this, SLOT(mergeCheckX()));
   connect(ui.splitCheck, SIGNAL(clicked()) , this, SLOT(OtherCheckX()));
   connect(ui.packCheck,  SIGNAL(clicked()),  this, SLOT(packCheckX()));
@@ -48,7 +48,7 @@ TrackWidget::TrackWidget(QWidget *parent, TrackFilterData &tfd): FilterWidget(pa
 
   ui.startEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
   ui.stopEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
-  
+
   // Collect the data fields.
   fopts << new BoolFilterOption(tfd.title,  ui.titleCheck);
   fopts << new BoolFilterOption(tfd.move,   ui.moveCheck);
@@ -88,7 +88,7 @@ void TrackWidget::OtherCheckX()
   bool bb = ui.packCheck->isChecked() &&ui.splitCheck->isChecked();
   ui.splitTimeSpin->setEnabled(bb);
   ui.splitTimeCombo->setEnabled(bb);
-  //ui.splitDistSpin->setEnabled(bb); 
+  //ui.splitDistSpin->setEnabled(bb);
   //ui.splitDistCombo->setEnabled(bb);
 }
 

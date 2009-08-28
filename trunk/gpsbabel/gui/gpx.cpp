@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: gpx.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: gpx.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -29,7 +29,7 @@
 #include "gpx.h"
 
 
-static QDateTime decodeDateTime(const QString s) 
+static QDateTime decodeDateTime(const QString s)
 {
   QDateTime utc = QDateTime::fromString(s, "yyyy-MM-dd'T'HH:mm:ss'Z'");
   return utc;
@@ -45,10 +45,10 @@ static bool trackIsEmpty(const GpxTrack &trk){
   return count <=2 ;
 }
 
-class GpxHandler: public QXmlDefaultHandler 
+class GpxHandler: public QXmlDefaultHandler
 {
-public: 
-  GpxHandler(): QXmlDefaultHandler() 
+public:
+  GpxHandler(): QXmlDefaultHandler()
 
   {
     state = e_noop;
@@ -122,12 +122,12 @@ public:
     }
 
 
-    else if (state == e_wpt || 
+    else if (state == e_wpt ||
 	     state == e_trkpt || state == e_trkseg || state == e_trk ||
 	     state == e_rte || state == e_rtept) {
     }
     else {
-      //fprintf(stderr, "localName:  %s     name:  %s\n", 
+      //fprintf(stderr, "localName:  %s     name:  %s\n",
       //localName.toStdString().c_str(), qName.toStdString().c_str());
     }
     return true;
@@ -175,7 +175,7 @@ public:
 
     else if (localName == "trk") {
       state = stateStack.takeLast();
-      if (!trackIsEmpty(currentTrk)) 
+      if (!trackIsEmpty(currentTrk))
 	trkList << currentTrk;
     }
 
@@ -206,7 +206,7 @@ public:
     }
 
     else {
-      //fprintf(stderr, "end ---- localName:  %s     name:  %s\n\n", 
+      //fprintf(stderr, "end ---- localName:  %s     name:  %s\n\n",
       //localName.toStdString().c_str(), qName.toStdString().c_str());
     }
     return true;
@@ -225,7 +225,7 @@ public:
 bool Gpx::read(const QString & fileName)
 {
   QFile file(fileName);
-  if (!file.open(QIODevice::ReadOnly)) 
+  if (!file.open(QIODevice::ReadOnly))
     return false;
 
   QXmlInputSource xmlIn(&file);
@@ -240,8 +240,6 @@ bool Gpx::read(const QString & fileName)
     routes = gpxHandler.rteList;
     return true;
   }
-  else 
+  else
     return false;
 }
-
-

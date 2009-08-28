@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: help.cpp,v 1.3 2009-07-27 04:04:42 robertl Exp $
+// $Id: help.cpp,v 1.4 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -28,7 +28,7 @@
 //------------------------------------------------------------------------
 void ShowHelp(const char *name)
 {
-  QUrl urlname("file://" + QApplication::applicationDirPath() + 
+  QUrl urlname("file://" + QApplication::applicationDirPath() +
                 "/help/" + name);
   // FIXME(robertl): This shoud probably parent from QApplication::mainWidget();
   QWebView *view = new QWebView();
@@ -36,4 +36,3 @@ void ShowHelp(const char *name)
   view->load(urlname);
   view->show();
 }
-

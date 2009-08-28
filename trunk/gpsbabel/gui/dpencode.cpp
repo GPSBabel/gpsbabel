@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: dpencode.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: dpencode.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Original in JavaScript: 
@@ -40,7 +40,7 @@ PolylineEncoder::PolylineEncoder(int numLevels, double zoomFactor, double vs):
 {
   if (verySmall <=0.0)
     verySmall = 1.0E-5;
-  for(int i = 0; i < numLevels; i++) 
+  for(int i = 0; i < numLevels; i++)
     zoomLevelBreaks.push_back(verySmall*pow(zoomFactor, numLevels-i-1));
 }
 
@@ -90,8 +90,8 @@ int roundToInt(double x) {
   return (x>0.0) ? int(x+0.5) : int(x-0.5);
 }
 //------------------------------------------------------------------------
-void PolylineEncoder::createEncodings(string &encoded_points, 
-				      const vector <LatLng> &points, 
+void PolylineEncoder::createEncodings(string &encoded_points,
+				      const vector <LatLng> &points,
 				      const vector <double> dists)
 {
   encoded_points = "";;
@@ -111,7 +111,7 @@ void PolylineEncoder::createEncodings(string &encoded_points,
 }
 
 //------------------------------------------------------------------------
-// This computes the appropriate zoom level of a point in terms of it's 
+// This computes the appropriate zoom level of a point in terms of it's
 // distance from the relevant segment in the DP algorithm.  Could be done
 // in terms of a logarithm, but this approach makes it a bit easier to
 // ensure that the level is not too large.
@@ -202,9 +202,3 @@ void PolylineEncoder::dpEncode(string &encPts, string &encLevels, const vector<L
   createEncodings(encPts, points, dists);
   encodeLevels(encLevels, points, dists);
 }
-
-
-
-
-
-
