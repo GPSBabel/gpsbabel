@@ -81,7 +81,7 @@ static void CloseSerialPort(int fileDescriptor);
 // releasing the iterator when iteration is complete.
 static kern_return_t FindModems(io_iterator_t *matchingServices)
 {
-    kern_return_t			kernResult; 
+    kern_return_t			kernResult;
     CFMutableDictionaryRef	classesToMatch;
 
 /*! @function IOServiceMatching
@@ -105,7 +105,7 @@ static kern_return_t FindModems(io_iterator_t *matchingServices)
 		undefined. If the dictionary is a fixed-capacity dictionary and
 		it is full before this operation, and the key does not exist in
 		the dictionary, the behavior is undefined.
-	@param key The key of the value to set into the dictionary. If a key 
+	@param key The key of the value to set into the dictionary. If a key
 		which matches this key is already present in the dictionary, only
 		the value is changed ("add if absent, replace if present"). If
 		no key matches the given key, the key-value pair is added to the
@@ -122,18 +122,18 @@ static kern_return_t FindModems(io_iterator_t *matchingServices)
 //        CFDictionarySetValue(classesToMatch,
 //                             CFSTR(kIOSerialBSDTypeKey),
 //                             CFSTR(kIOSerialBSDModemType));
-        
+
 		// Each serial device object has a property with key
         // kIOSerialBSDTypeKey and a value that is one of kIOSerialBSDAllTypes,
         // kIOSerialBSDModemType, or kIOSerialBSDRS232Type. You can experiment with the
         // matching by changing the last parameter in the above call to CFDictionarySetValue.
-        
+
         // As shipped, this sample is only interested in modems,
-        // so add this property to the CFDictionary we're matching on. 
+        // so add this property to the CFDictionary we're matching on.
         // This will find devices that advertise themselves as modems,
         // such as built-in and USB modems. However, this match won't find serial modems.
     }
-    
+
     /*! @function IOServiceGetMatchingServices
         @abstract Look up registered IOService objects that match a matching dictionary.
         @discussion This is the preferred method of finding IOService objects currently registered by IOKit. IOServiceAddNotification can also supply this information and install a notification of new IOServices. The matching information used in the matching dictionary may vary depending on the class of service being looked up.
@@ -142,17 +142,17 @@ static kern_return_t FindModems(io_iterator_t *matchingServices)
         @param existing An iterator handle is returned on success, and should be released by the caller when the iteration is finished.
         @result A kern_return_t error code. */
 
-    kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatch, matchingServices);    
+    kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatch, matchingServices);
     if (KERN_SUCCESS != kernResult)
     {
         printf("IOServiceGetMatchingServices returned %d\n", kernResult);
 		goto exit;
     }
-        
+
 exit:
     return kernResult;
 }
-    
+
 // Given an iterator across a set of modems, return the BSD path to the first one.
 // If no modems are found the path name is set to an empty string.
 static kern_return_t GetModemPath(io_iterator_t serialPortIterator, char *bsdPath, CFIndex maxPathSize, QComboBox *box)
@@ -160,12 +160,12 @@ static kern_return_t GetModemPath(io_iterator_t serialPortIterator, char *bsdPat
     io_object_t		modemService;
     kern_return_t	kernResult = KERN_FAILURE;
     Boolean			modemFound = false;
-    
+
     // Initialize the returned path
     *bsdPath = '\0';
-    
+
     // Iterate across all modems found. In this example, we bail after finding the first modem.
-    
+
     while ((modemService = IOIteratorNext(serialPortIterator)) && !modemFound)
     {
         CFTypeRef	bsdPathAsCFString;
@@ -181,16 +181,16 @@ static kern_return_t GetModemPath(io_iterator_t serialPortIterator, char *bsdPat
         if (bsdPathAsCFString)
         {
             Boolean result;
-            
+
             // Convert the path from a CFString to a C (NUL-terminated) string for use
 			// with the POSIX open() call.
-	    
+	
 			result = CFStringGetCString((const __CFString*) bsdPathAsCFString,
                                         bsdPath,
-                                        maxPathSize, 
+                                        maxPathSize,
                                         kCFStringEncodingUTF8);
             CFRelease(bsdPathAsCFString);
-            
+
             if (result) {
 		    box->addItem(bsdPath);
             }
@@ -202,7 +202,7 @@ static kern_return_t GetModemPath(io_iterator_t serialPortIterator, char *bsdPat
 	
 //		(void) IOObjectRelease(modemService);
     }
-        
+
     return kernResult;
 }
 
@@ -216,4 +216,4 @@ void MainWindow::osLoadDeviceNameCombos(QComboBox *box)
   kernResult = FindModems(&serialPortIterator);
   kernResult = GetModemPath(serialPortIterator, bsdPath, sizeof(bsdPath), box);
 
-} 
+}

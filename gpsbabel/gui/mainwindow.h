@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.h,v 1.3 2009-08-06 03:19:10 robertl Exp $
+// $Id: mainwindow.h,v 1.4 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -31,7 +31,7 @@
 class MainWindow: public QMainWindow {
   Q_OBJECT
 
-  
+
   public:
   MainWindow(QWidget* parent);
   ~MainWindow();

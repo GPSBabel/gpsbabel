@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: filterdata.cpp,v 1.2 2009-07-31 18:32:32 robertl Exp $
+// $Id: filterdata.cpp,v 1.3 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -90,7 +90,7 @@ QStringList TrackFilterData::makeOptionString()
   if (merge)    s += ",merge";
   if (split && (pack || merge))  {
     s += ",split";
-    if (splitTime > 0) 
+    if (splitTime > 0)
       s += QString("=%1%2").arg(splitTime).arg("mhd"[splitTimeUnit]);
   }
   if (splitDist > 0) {
@@ -116,7 +116,7 @@ QStringList TrackFilterData::makeOptionString()
   if (move)     s += QString(",move=%1d%2h%3m%4s").arg(days).arg(hours).arg(mins).arg(secs);
   if (title)    s += QString(",title=%1").arg(titleString);
 
-  if (s.length()) 
+  if (s.length())
     args << "-x" << "track" + s;
 
   return args;
@@ -160,5 +160,3 @@ QStringList MiscFltFilterData::makeOptionString()
   }
   return args;
 }
-
-

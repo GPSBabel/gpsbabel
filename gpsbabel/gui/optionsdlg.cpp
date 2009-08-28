@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: optionsdlg.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: optionsdlg.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -42,19 +42,19 @@ static void SetSizeStuff(QWidget *w)
 }
 
 //------------------------------------------------------------------------
-FileDlgManager::FileDlgManager(QObject*parent, 
+FileDlgManager::FileDlgManager(QObject*parent,
 			       QLineEdit *le,
 			       QToolButton *tb, bool isInFile):
   QObject(parent), le(le), tb(tb), isInFile(isInFile)
 {
   connect(tb, SIGNAL(clicked()), this, SLOT(buttonClicked()));
 }
-  
+
 //------------------------------------------------------------------------
 QVariant getOptionValue(QList<FormatOption> opts, int k) {
-  if (opts[k].getValue().toString() != "") 
+  if (opts[k].getValue().toString() != "")
     return opts[k].getValue();
-  else 
+  else
     return opts[k].getDefaultValue();
 }
 
@@ -68,12 +68,12 @@ void FileDlgManager::buttonClicked()
   QString str;
   if (isInFile) {
     str = QFileDialog::getOpenFileName(0, tr("Select input file"),
-				       le->text(), 
+				       le->text(),
 				       "All Files (*.*)");
   }
   else {
     str = QFileDialog::getSaveFileName(0, tr("Select output file"),
-				       le->text(), 
+				       le->text(),
 				       "All Files (*.*)");
   }
   if (str != "")
@@ -98,11 +98,11 @@ OptionsDlg::OptionsDlg(QWidget*parent,  const QString &fmtName, QList<FormatOpti
 
     QSpacerItem *horizontalSpacer = new QSpacerItem(0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     horizontalLayout->addItem(horizontalSpacer);
-    
+
     QWidget *w = 0;
-    switch (options[k].getType()) 
+    switch (options[k].getType())
       {
-      case FormatOption::OPTstring: 
+      case FormatOption::OPTstring:
 	{
 	  QLineEdit *lineEdit = new QLineEdit(this);
 	  SetSizeStuff(lineEdit);
@@ -112,8 +112,8 @@ OptionsDlg::OptionsDlg(QWidget*parent,  const QString &fmtName, QList<FormatOpti
 	}
 	break;
 
-      case FormatOption::OPTinFile: 
-      case FormatOption::OPToutFile: 
+      case FormatOption::OPTinFile:
+      case FormatOption::OPToutFile:
 	{
 	  bool inFile = options[k].getType() == FormatOption::OPTinFile;
 	  QLineEdit *lineEdit = new QLineEdit(this);
@@ -128,7 +128,7 @@ OptionsDlg::OptionsDlg(QWidget*parent,  const QString &fmtName, QList<FormatOpti
 	}
 	break;
 
-      case FormatOption::OPTbool: 
+      case FormatOption::OPTbool:
 	w = 0;
 	break;
 
@@ -174,7 +174,7 @@ OptionsDlg::OptionsDlg(QWidget*parent,  const QString &fmtName, QList<FormatOpti
       }
     checkBoxes.push_back(checkBox);
     fields.push_back(w);
-    
+
     verticalLayout->addLayout(horizontalLayout);
   }
   QPushButton *helpButton = new QPushButton(this);
@@ -218,7 +218,7 @@ void OptionsDlg::acceptClicked()
 	value = qMax(qMin(value, options[k].getMaxValue().toDouble()),options[k].getMinValue().toDouble());
 	options[k].setValue(QVariant(value));
       }
-      else 
+      else
 	options[k].setValue(static_cast<QLineEdit*>(fields[k])->text());
     }
   }

@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: main.cpp,v 1.3 2009-07-23 03:22:24 robertl Exp $
+// $Id: main.cpp,v 1.4 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -63,7 +63,7 @@ int main(int argc, char**argv)
   installTranslation(app, "qt_");
   installTranslation(app, "gpsbabelfe_");
   installTranslation(app, "gpsbabel_");
-  
+
   QCoreApplication::setOrganizationName("GPSBabel");
   QCoreApplication::setOrganizationDomain("gpsbabel.org");
   QCoreApplication::setApplicationName("GPSBabelFE");
@@ -72,4 +72,3 @@ int main(int argc, char**argv)
   mainWindow.show();
   app->exec();
 }
-

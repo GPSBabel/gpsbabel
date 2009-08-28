@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.4 2009-08-06 03:19:10 robertl Exp $
+// $Id: mainwindow.cpp,v 1.5 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -103,7 +103,7 @@ static QStringList getCharSets()
 }
 
 //------------------------------------------------------------------------
-static QString MakeOptions(const QList<FormatOption>& options) 
+static QString MakeOptions(const QList<FormatOption>& options)
 {
   QString str;
   for (int i=0; i<options.size(); i++) {
@@ -119,11 +119,11 @@ static QString MakeOptions(const QList<FormatOption>& options)
 }
 
 //------------------------------------------------------------------------
-static QString MakeOptionsNoLeadingComma(const QList<FormatOption>& options) 
+static QString MakeOptionsNoLeadingComma(const QList<FormatOption>& options)
 {
   QString str = MakeOptions(options);
   return (str.length()) ? str.mid(1) : str;
-    
+
 }
 //------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
@@ -181,7 +181,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   lights[1] = QPixmap::fromImage(QImage(":images/01.png").scaledToHeight(20, Qt::SmoothTransformation));
   lights[2] = QPixmap::fromImage(QImage(":images/10.png").scaledToHeight(20, Qt::SmoothTransformation));
   lights[3] = QPixmap::fromImage(QImage(":images/11.png").scaledToHeight(20, Qt::SmoothTransformation));
-  
+
   ui.outputWindow->setReadOnly(true);
 
 
@@ -254,7 +254,7 @@ void MainWindow::inputFileOptBtnClicked()
 }
 
 //------------------------------------------------------------------------
-void MainWindow::inputDeviceOptBtnClicked() 
+void MainWindow::inputDeviceOptBtnClicked()
 {
   fmtChgInterlock = true;
   QString fmt = bd.inputDeviceFormat;
@@ -285,7 +285,7 @@ void MainWindow:: outputFileOptBtnClicked()
       ui.outputFormatCombo->addItem(formatList[k].getDescription(), QVariant(k));
     }
     setComboToFormat(ui.outputFormatCombo, fmt, true);
-  } 
+  }
   else {
     ui.outputStackedWidget->setCurrentWidget(ui.outputFilePage);
     ui.outputFilePage->setEnabled(false);
@@ -363,17 +363,17 @@ void MainWindow::browseInputFile()
   if (!finfo.isDir() && (!filterForFormatIncludes(idx, finfo.suffix()))) {
     startFile = finfo.dir().absolutePath();
   }
- 
-  QStringList userList = 
+
+  QStringList userList =
     QFileDialog::getOpenFileNames(0, tr("Select one or more input files"),
-				  startFile, 
+				  startFile,
 				  filterForFormat(idx));
   if (userList.size()) {
     bd.inputBrowse = userList[0];
     bd.inputFileNames = userList;
     QString str;
     for (int i=0; i<bd.inputFileNames.size(); i++) {
-      if (i != 0) 
+      if (i != 0)
 	str += ", ";
       str += "\"" + bd.inputFileNames[i] + "\"";
     }
@@ -390,10 +390,10 @@ void MainWindow::browseOutputFile()
   if (!finfo.isDir() && (!filterForFormatIncludes(idx, finfo.suffix()))) {
     startFile = finfo.dir().absolutePath();
   }
- 
+
   QString str =
     QFileDialog::getSaveFileName(0, tr("Output File Name"),
-				 startFile, 
+				 startFile,
 				 filterForFormat(idx));
   if (str.length() != 0) {
     bd.outputBrowse = str;
@@ -407,7 +407,7 @@ QList<int> MainWindow::inputFileFormatIndices()
 {
   QList<int>indices;
   for (int i=0; i<formatList.size(); i++) {
-    if (formatList[i].isReadSomething() && formatList[i].isFileFormat()) 
+    if (formatList[i].isReadSomething() && formatList[i].isFileFormat())
       indices<<i;
   }
   return indices;
@@ -418,7 +418,7 @@ QList<int> MainWindow::inputDeviceFormatIndices()
 {
   QList<int>indices;
   for (int i=0; i<formatList.size(); i++) {
-    if (formatList[i].isReadSomething() && formatList[i].isDeviceFormat()) 
+    if (formatList[i].isReadSomething() && formatList[i].isDeviceFormat())
       indices<<i;
   }
   return indices;
@@ -429,7 +429,7 @@ QList<int> MainWindow::outputFileFormatIndices()
 {
   QList<int>indices;
   for (int i=0; i<formatList.size(); i++) {
-    if (formatList[i].isWriteSomething() && formatList[i].isFileFormat()) 
+    if (formatList[i].isWriteSomething() && formatList[i].isFileFormat())
       indices<<i;
   }
   return indices;
@@ -440,7 +440,7 @@ QList<int> MainWindow::outputDeviceFormatIndices()
 {
   QList<int>indices;
   for (int i=0; i<formatList.size(); i++) {
-    if (formatList[i].isWriteSomething() && formatList[i].isDeviceFormat()) 
+    if (formatList[i].isWriteSomething() && formatList[i].isDeviceFormat())
       indices<<i;
   }
   return indices;
@@ -450,7 +450,7 @@ QList<int> MainWindow::outputDeviceFormatIndices()
 void MainWindow::loadFormats()
 {
   if (!FormatLoad().getFormats(formatList)) {
-    QMessageBox::information(0, QString(appName), 
+    QMessageBox::information(0, QString(appName),
 			     tr("Error reading format configuration.  "
 				"Check that the backend program \"gpsbabel\" is properly installed "
 				"and is in the current PATH\n\n"
@@ -461,7 +461,7 @@ void MainWindow::loadFormats()
       inputDeviceFormatIndices().size() == 0 ||
       outputFileFormatIndices().size() == 0 ||
       outputDeviceFormatIndices().size() == 0) {
-    QMessageBox::information(0, QString(appName), 
+    QMessageBox::information(0, QString(appName),
 			     tr("Some file/device formats were not found during initialization.  "
 				"Check that the backend program \"gpsbabel\" is properly installed "
 				"and is in the current PATH\n\n"
@@ -476,11 +476,11 @@ static int iconIndex(bool a, bool b)
 }
 
 //------------------------------------------------------------------------
-void MainWindow::setIndicatorLights(QLabel *label, const QString type, int code) 
+void MainWindow::setIndicatorLights(QLabel *label, const QString type, int code)
 {
   label->setPixmap(lights[code]);
   QString s;
-  switch (code) 
+  switch (code)
     {
     default:
     case 0:
@@ -509,23 +509,23 @@ void MainWindow::crossCheckInOutFormats()
   }
   Format ifmt = formatList[currentComboFormatIndex(ui.inputFormatCombo)];
   Format ofmt = formatList[currentComboFormatIndex(ui.outputFormatCombo)];
-  
+
   ui.xlateWayPtsCk->setEnabled(ifmt.isReadWaypoints() && ofmt.isWriteWaypoints());
   ui.xlateTracksCk->setEnabled(ifmt.isReadTracks()    && ofmt.isWriteTracks());
   ui.xlateRoutesCk->setEnabled(ifmt.isReadRoutes()    && ofmt.isWriteRoutes());
-  
+
   setIndicatorLights(ui.wayPtLabel, tr("waypoints"), iconIndex(ifmt.isReadWaypoints(), ofmt.isWriteWaypoints()));
   setIndicatorLights(ui.trackLabel, tr("tracks"), iconIndex(ifmt.isReadTracks(), ofmt.isWriteTracks()));
   setIndicatorLights(ui.routeLabel, tr("routes"), iconIndex(ifmt.isReadRoutes(), ofmt.isWriteRoutes()));
 }
 
 //------------------------------------------------------------------------
-void MainWindow::displayOptionsText(QLineEdit *le, QComboBox *combo, bool isInput) 
+void MainWindow::displayOptionsText(QLineEdit *le, QComboBox *combo, bool isInput)
 {
   int fidx = combo->itemData(combo->currentIndex()).toInt();
   if (isInput)
     le->setText(MakeOptionsNoLeadingComma(formatList[fidx].getInputOptions()));
-  else 
+  else
     le->setText(MakeOptionsNoLeadingComma(formatList[fidx].getOutputOptions()));
 
 }
@@ -552,7 +552,7 @@ void MainWindow::setComboToFormat(QComboBox *comboBox, const QString &name, bool
 }
 
 //------------------------------------------------------------------------
-void MainWindow::inputFormatChanged(int comboIdx) 
+void MainWindow::inputFormatChanged(int comboIdx)
 {
   if (fmtChgInterlock)
     return;
@@ -568,7 +568,7 @@ void MainWindow::inputFormatChanged(int comboIdx)
 }
 
 //------------------------------------------------------------------------
-void MainWindow::outputFormatChanged(int comboIdx) 
+void MainWindow::outputFormatChanged(int comboIdx)
 {
   if (fmtChgInterlock)
     return;
@@ -585,10 +585,10 @@ void MainWindow::outputFormatChanged(int comboIdx)
 }
 
 //------------------------------------------------------------------------
-void MainWindow::inputOptionButtonClicked() 
+void MainWindow::inputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui.inputFormatCombo);
-  OptionsDlg optionDlg(0, 
+  OptionsDlg optionDlg(0,
 		       formatList[fidx].getName(),
 		       formatList[fidx].getInputOptionsRef());
   optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList[fidx].getName()));
@@ -597,7 +597,7 @@ void MainWindow::inputOptionButtonClicked()
 }
 
 //------------------------------------------------------------------------
-void MainWindow::outputOptionButtonClicked() 
+void MainWindow::outputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui.outputFormatCombo);
   OptionsDlg optionDlg(0, formatList[fidx].getName(), formatList[fidx].getOutputOptionsRef());
@@ -616,7 +616,7 @@ bool MainWindow::isOkToGo()
     QMessageBox::information(0, QString(appName), tr("No valid waypoints/routes/tracks translation specified"));
     return false;
   }
-  
+
   if ((bd.inputType == BabelData::fileType) &&
       (bd.inputFileNames.size() == 0)) {
     QMessageBox::information(0, QString(appName), tr("No input file specified"));
@@ -629,7 +629,7 @@ bool MainWindow::isOkToGo()
     QMessageBox::information(0, QString(appName), tr("No valid output specified"));
     return false;
   }
-  else if (bd.outputType == BabelData::fileType && 
+  else if (bd.outputType == BabelData::fileType &&
 	   bd.outputFileName.length() == 0) {
     QMessageBox::information(0, QString(appName), tr("No output file specified"));
     return false;
@@ -638,7 +638,7 @@ bool MainWindow::isOkToGo()
 }
 
 //------------------------------------------------------------------------
-bool MainWindow::runGpsbabel(const QStringList &args, QString &errorString, 
+bool MainWindow::runGpsbabel(const QStringList &args, QString &errorString,
 			  QString &outputString)
 {
   QProcess *proc = new QProcess(0);
@@ -650,7 +650,7 @@ bool MainWindow::runGpsbabel(const QStringList &args, QString &errorString,
     errorString = QString(tr("Process \"%1\" did not start")).arg(name);
     return false;
   }
-  
+
   waitDlg->show();
   waitDlg->exec();
   int exitCode = -1;
@@ -660,7 +660,7 @@ bool MainWindow::runGpsbabel(const QStringList &args, QString &errorString,
     if (exitCode == 0)
       retStatus = true;
     else  {
-      errorString = 
+      errorString =
 	QString(tr("Process exited unsucessfully with code %1"))
 	.arg(exitCode);
       retStatus = false;
@@ -703,7 +703,7 @@ void MainWindow::setComboToCharSet(QComboBox *combo, const QString &cset)
   }
 }
 //------------------------------------------------------------------------
-void MainWindow::applyActionX() 
+void MainWindow::applyActionX()
 {
   getWidgetValues();
   if (!isOkToGo())
@@ -715,7 +715,7 @@ void MainWindow::applyActionX()
   if (bd.synthShortNames)    args << "-s";
 
   // Input char set if specified
-  if (bd.enableCharSetXform && bd.inputCharSet != QString()) 
+  if (bd.enableCharSetXform && bd.inputCharSet != QString())
     args << "-c" << bd.inputCharSet;
 
   if (bd.xlateWayPts)        args << "-w";
@@ -728,10 +728,10 @@ void MainWindow::applyActionX()
 				 bd.inputFileFormat : bd.inputDeviceFormat);
   args << "-i";
   args << (formatList[fidx].getName() + MakeOptions(formatList[fidx].getInputOptions()));
-  
+
   // Input file(s) or device
   if (bd.inputType == BabelData::fileType) {
-    for (int i=0; i<bd.inputFileNames.size(); i++) 
+    for (int i=0; i<bd.inputFileNames.size(); i++)
       args << "-f" << bd.inputFileNames[i];
   }
   else {
@@ -742,7 +742,7 @@ void MainWindow::applyActionX()
   args << filterData.getAllFilterStrings();
 
   // Output char set if specified
-  if (bd.enableCharSetXform && bd.outputCharSet != QString()) 
+  if (bd.enableCharSetXform && bd.outputCharSet != QString())
     args << "-c" << bd.outputCharSet;
 
   // Output type, with options
@@ -752,7 +752,7 @@ void MainWindow::applyActionX()
 					   bd.outputFileFormat : bd.outputDeviceFormat));
     args << "-o";
     args << (formatList[fidx].getName() + MakeOptions(formatList[fidx].getOutputOptions()));
-    
+
     // output file or device option
     if (outIsFile) {
       if (bd.outputFileName != "")
@@ -800,12 +800,12 @@ void MainWindow::applyActionX()
       this->show();
     }
   }
-  else 
+  else
     ui.outputWindow->appendPlainText(tr("Error running gpsbabel: %1\n").arg(errorString));
 }
 
 //------------------------------------------------------------------------
-void MainWindow::closeActionX() 
+void MainWindow::closeActionX()
 {
   QDateTime wt= upgrade->getUpgradeWarningTime();
   if (wt.isValid()) {
@@ -818,7 +818,7 @@ void MainWindow::closeActionX()
 }
 
 //------------------------------------------------------------------------
-void MainWindow::closeEvent(QCloseEvent*)  
+void MainWindow::closeEvent(QCloseEvent*)
 {
   closeActionX();
 }
@@ -840,7 +840,7 @@ void MainWindow::saveSettings()
 
   QSettings settings;
   bd.saveSettings(settings);
-  for (int i=0; i<formatList.size(); i++) 
+  for (int i=0; i<formatList.size(); i++)
     formatList[i].saveSettings(settings);
   for (int i=0; i<filterData.filters.size(); i++)
     filterData.filters[i]->saveSettings(settings);
@@ -851,7 +851,7 @@ void MainWindow::restoreSettings()
 {
   QSettings settings;
   bd.restoreSettings(settings);
-  for (int i=0; i<formatList.size(); i++) 
+  for (int i=0; i<formatList.size(); i++)
     formatList[i].restoreSettings(settings);
 
   for (int i=0; i<filterData.filters.size(); i++)
@@ -868,7 +868,7 @@ void MainWindow::resetFormatDefaults()
      tr("Are you sure you want to reset all format options to default values?"),
      QMessageBox::Yes | QMessageBox::No);
   if (ret == QMessageBox::Yes) {
-    for (int i=0; i<formatList.size(); i++) 
+    for (int i=0; i<formatList.size(); i++)
       formatList[i].setToDefault();
     displayOptionsText(ui.inputOptionsText,  ui.inputFormatCombo, true);
     displayOptionsText(ui.outputOptionsText,  ui.outputFormatCombo, false);
@@ -878,7 +878,7 @@ void MainWindow::resetFormatDefaults()
 //------------------------------------------------------------------------
 void MainWindow::moreOptionButtonClicked()
 {
-  AdvDlg advDlg(0, bd.synthShortNames, 
+  AdvDlg advDlg(0, bd.synthShortNames,
 		bd.forceGPSTypes, bd.enableCharSetXform, bd.previewGmap, bd.debugLevel);
   connect(advDlg.formatButton(), SIGNAL(clicked()),
 	  this, SLOT(resetFormatDefaults()));
@@ -912,7 +912,7 @@ void MainWindow::updateFilterStatus()
 {
   bool filterActive = filterData.getAllFilterStrings().size();
   ui.filterStatus->setEnabled(filterActive);
-  if (filterActive) 
+  if (filterActive)
     ui.filterStatus->setToolTip(tr("One or more data filters are active"));
   else {
     ui.filterStatus->setToolTip(tr("No data filters are active"));
@@ -1007,5 +1007,3 @@ void MainWindow::getWidgetValues()
   bd.xlateTracks = ui.xlateTracksCk->isChecked();
   bd.xlateRoutes = ui.xlateRoutesCk->isChecked();
 }
-
-

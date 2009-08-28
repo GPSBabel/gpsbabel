@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.9 2009-08-10 21:21:29 robertl Exp $
+// $Id: upgrade.cpp,v 1.10 2009-08-28 17:08:55 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -210,7 +210,7 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
     information.setDefaultButton(QMessageBox::Yes);
 
     information.setText(response);
-    information.setInformativeText(tr("Do you wish do download an upgrade?"));
+    information.setInformativeText(tr("Do you wish to download an upgrade?"));
     information.setDetailedText(upgradeText);
 
     switch (information.exec()) {

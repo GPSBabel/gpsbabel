@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: filterdlg.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: filterdlg.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -58,7 +58,7 @@ FilterDialog::FilterDialog(QWidget*parent, AllFiltersData &fd): QDialog(parent),
 
   connect(ui.helpButton, SIGNAL(clicked()), this, SLOT(helpX()));
   connect(ui.resetButton, SIGNAL(clicked()), this, SLOT(resetX()));
-  
+
 
   ui.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/ok"));
   ui.buttonBox->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":images/cancel"));
@@ -71,7 +71,7 @@ FilterDialog::FilterDialog(QWidget*parent, AllFiltersData &fd): QDialog(parent),
 
 
 //------------------------------------------------------------------------
-void FilterDialog::addFilterPage(const QString &name, FilterWidget *fw, bool*use) 
+void FilterDialog::addFilterPage(const QString &name, FilterWidget *fw, bool*use)
 {
   QListWidgetItem *it = new QListWidgetItem(name);
   it->setCheckState(*use? Qt::Checked:Qt::Unchecked);
@@ -110,7 +110,7 @@ void FilterDialog::resetX()
       pages[i]->setWidgetValues();
       pages[i]->setEnabled(*(usePages[i]));
       pages[i]->checkChecks();
-      ui.filterList->item(i)->setCheckState(*(usePages[i]) ? Qt::Checked: Qt::Unchecked); 
+      ui.filterList->item(i)->setCheckState(*(usePages[i]) ? Qt::Checked: Qt::Unchecked);
     }
   }
 }

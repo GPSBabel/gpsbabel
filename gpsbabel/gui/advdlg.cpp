@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: advdlg.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: advdlg.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -26,8 +26,8 @@
 #include "advdlg.h"
 
 //------------------------------------------------------------------------
-AdvDlg::AdvDlg(QWidget* parent, 
-	       bool &synthShortNames, 
+AdvDlg::AdvDlg(QWidget* parent,
+	       bool &synthShortNames,
 	       bool &forceGPSTypes,
 	       bool &enableCharSetXform,
 	       bool &previewGmap,
