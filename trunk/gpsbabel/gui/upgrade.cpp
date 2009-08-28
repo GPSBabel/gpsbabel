@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.10 2009-08-28 17:08:55 robertl Exp $
+// $Id: upgrade.cpp,v 1.11 2009-08-28 19:22:43 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -102,7 +102,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
                const QString &installationUuid)
 {
   this->currentVersion = currentVersionIn;
-  this->currentVersion.remove("GPSBabel Version");
+  this->currentVersion.remove("GPSBabel Version ");
   this->upgradeCheckMethod = checkMethod;
 
   QDateTime soonestCheckTime = lastCheckTime.addDays(1);
