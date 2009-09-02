@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.h,v 1.5 2009-08-28 17:21:37 robertl Exp $
+// $Id: mainwindow.h,v 1.6 2009-09-02 19:05:27 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -59,7 +59,7 @@ private:
   bool isOkToGo();
   bool runGpsbabel(const QStringList &args, QString &errorString, QString &outputString);
   void crossCheckInOutFormats();
-  void setIndicatorLights(QLabel *label, const QString type, int code) ;
+  void setIndicatorLights(QLabel *label, const QString &type, int code) ;
   void displayOptionsText(QLineEdit *, QComboBox *, bool);
 
   void saveSettings();
@@ -68,10 +68,10 @@ private:
   void setComboToDevice(QComboBox *comboBox, const QString &);
 
   void loadDeviceNameCombos();
-  void loadInputDeviceNameCombo(QString format);
-  void loadOutputDeviceNameCombo(QString format);
-  bool MainWindow::formatSupportsUSB(QString format);
-  bool MainWindow::formatSupportsSerial(QString format);
+  void loadInputDeviceNameCombo(const QString &format);
+  void loadOutputDeviceNameCombo(const QString &format);
+  bool formatSupportsUSB(const QString &format);
+  bool formatSupportsSerial(const QString &format);
   void loadCharSetCombos();
   void checkCharSetCombos();
   QString charSetFromCombo(QComboBox *);

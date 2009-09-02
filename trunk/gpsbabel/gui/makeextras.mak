@@ -1,5 +1,10 @@
 # -*- Makefile -*-
-# $Id: makeextras.mak,v 1.1 2009-07-05 21:14:56 robertl Exp $
+# $Id: makeextras.mak,v 1.2 2009-09-02 19:05:27 robertl Exp $
+#
+# Some make targets and scripts that I find hard to do in the
+# Qt qmake system.
+#
+
 
 COPY=cp
 
@@ -39,7 +44,7 @@ objects/libQtCore.so.4.4.3 \
 objects/libQtGui.so.4.4.3 \
 
 
-all: $(EXTRAS) $(XLATE) $(EXTERNS) 
+all: $(EXTRAS) $(XLATE) #$(EXTERNS)
 
 objects/translations:
 	mkdir -p objects/translations
@@ -53,6 +58,14 @@ objects/qt.conf: qt.conf
 	$(COPY) $< $@
 objects/gpsbabelfe: gpsbabelfe
 	$(COPY) $< $@
+
+babelts: 
+	./babelstrings.pl >foo.h && \
+	lupdate foo.h -ts gpsbabel_de.ts -ts gpsbabel_fr.ts -ts gpsbabel-es.ts -ts gpsbabel_hu.ts \
+		-ts gpsbabel_it.ts
+
+babelfets:
+	lupdate app.pro
 
 objects/translations/gpsbabel_de.ts: gpsbabel_de.ts
 	$(COPY) $< $@
@@ -76,7 +89,7 @@ objects/translations/gpsbabelfe_it.ts: gpsbabelfe_it.ts
 	$(COPY) $< $@
 
 $(EXTERNS):
-	(cd externs; tar cf - .) | (cd objects; tar xvf -)
+	(cd externs && tar cf - .) | (cd objects && tar xvf -)
 
 %.qm: %.ts
 	lrelease $< -qm $@

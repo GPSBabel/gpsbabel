@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: setting.h,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: setting.h,v 1.2 2009-09-02 19:05:27 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -30,7 +30,7 @@
 class VarSetting {
  public:
   VarSetting() {};
-  ~VarSetting() {};
+  virtual ~VarSetting() {};
 
   virtual void saveSetting(QSettings &) = 0;
   virtual void restoreSetting(QSettings &) = 0;

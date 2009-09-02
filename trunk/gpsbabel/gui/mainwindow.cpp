@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.6 2009-08-28 17:21:37 robertl Exp $
+// $Id: mainwindow.cpp,v 1.7 2009-09-02 19:05:27 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -38,26 +38,6 @@
 #include "formatload.h"
 #include "gmapdlg.h"
 #include "upgrade.h"
-
-#ifdef _WIN32
-static const char *deviceNames[] = {
-  "USB:",
-  "COM1:",
-  "COM2:",
-  "COM3:",
-  "COM4:",
-  0
-};
-#else
-static const char *deviceNames[] = {
-  "USB:",
-  "/dev/ttyS0",
-  "/dev/ttyS1",
-  "/dev/ttyS2",
-  "/dev/ttyS3",
-  0
-};
-#endif
 
 const int BabelData::noType = -1;
 const int BabelData::fileType = 0;
@@ -199,7 +179,7 @@ MainWindow::~MainWindow()
 }
 
 //------------------------------------------------------------------------
-void MainWindow::loadInputDeviceNameCombo(QString format)
+void MainWindow::loadInputDeviceNameCombo(const QString &format)
 {
   ui.inputDeviceNameCombo->clear();
   // Later, we can probe the system for multiple USB devices and populate 
@@ -213,7 +193,7 @@ void MainWindow::loadInputDeviceNameCombo(QString format)
 }
 
 //------------------------------------------------------------------------
-void MainWindow::loadOutputDeviceNameCombo(QString format)
+void MainWindow::loadOutputDeviceNameCombo(const QString &format)
 {
   ui.outputDeviceNameCombo->clear();
   // Later, we can probe the system for multiple USB devices and populate 
@@ -231,12 +211,6 @@ void MainWindow::loadDeviceNameCombos()
 {
   loadInputDeviceNameCombo("");
   loadOutputDeviceNameCombo("");
-#if defined Q_OS_MAC
-  for (int i=0; deviceNames[i]; i++) {
-    ui.inputDeviceNameCombo->addItem(deviceNames[i]);
-    ui.outputDeviceNameCombo->addItem(deviceNames[i]);
-  }
-#endif
 }
 //------------------------------------------------------------------------
 void MainWindow::loadCharSetCombos()
@@ -499,7 +473,7 @@ static int iconIndex(bool a, bool b)
 }
 
 //------------------------------------------------------------------------
-void MainWindow::setIndicatorLights(QLabel *label, const QString type, int code)
+void MainWindow::setIndicatorLights(QLabel *label, const QString &type, int code)
 {
   label->setPixmap(lights[code]);
   QString s;
@@ -575,13 +549,13 @@ void MainWindow::setComboToFormat(QComboBox *comboBox, const QString &name, bool
 }
 
 //------------------------------------------------------------------------
-bool MainWindow::formatSupportsUSB(QString format)
+bool MainWindow::formatSupportsUSB(const QString &format)
 {
     return (format == "garmin" || format == "delbin");
 }
 
 //------------------------------------------------------------------------
-bool MainWindow::formatSupportsSerial(QString format)
+bool MainWindow::formatSupportsSerial(const QString &format)
 {
     return (format != "delbin");
 }

@@ -1,5 +1,4 @@
-// -*- C++ -*-
-// $Id: help.cpp,v 1.5 2009-09-02 19:05:27 robertl Exp $
+// $Id: serial_unix.cpp,v 1.1 2009-09-02 19:05:27 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -19,24 +18,21 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111
 //  USA
 //
-//------------------------------------------------------------------------
-#include "help.h"
-#include <QApplication>
-#include <QUrl>
-#include <QWebView>
-#include <QDesktopServices>
+#include "mainwindow.h"
+#if !defined (Q_OS_MAC) // FIXME: find a better way to hide this on Mac.
 
-//------------------------------------------------------------------------
-void ShowHelp(const char *name)
+static const char *deviceNames[] = {
+  "/dev/ttyS0",
+  "/dev/ttyS1",
+  "/dev/ttyS2",
+  "/dev/ttyS3",
+  0
+};
+
+void MainWindow::osLoadDeviceNameCombos(QComboBox *box)
 {
-  QString urlname("file:///" + QApplication::applicationDirPath() +
-		  "/help/" + name);
-#ifndef XXXX
-  QWebView *view = new QWebView();
-  view->setWindowTitle("GPSBabel Help");
-  view->load(urlname);
-  view->show();
-#else
-  QDesktopServices::openUrl(QUrl(urlname));
-#endif
+  for (int i=0; deviceNames[i]; i++) {
+    box->addItem(deviceNames[i]);
+  }
 }
+#endif

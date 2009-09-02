@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: filterdata.h,v 1.2 2009-07-31 18:32:32 robertl Exp $
+// $Id: filterdata.h,v 1.3 2009-09-02 19:05:27 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -33,6 +33,7 @@
 class FilterData {
 public:
   FilterData(): inUse(true) {};
+  virtual ~FilterData() {};
 
   void saveSettings(QSettings &st) {
     SettingGroup sg;
