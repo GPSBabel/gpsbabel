@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.11 2009-08-28 19:22:43 robertl Exp $
+// $Id: upgrade.cpp,v 1.12 2009-09-02 06:14:12 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -21,6 +21,7 @@
 
 
 #include "upgrade.h"
+#include "../gbversion.h"
 
 #include <QHttp>
 #include <QMessageBox>
@@ -59,7 +60,7 @@ QString UpgradeCheck::UpgradeCheck::getOsName(void)
 #elif defined (Q_OS_WIN)
   return "Windows";
 #elif
-  return "Unknown"'
+  return "Unknown";
 #endif
 
 }
@@ -125,6 +126,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
   QLocale locale;
 
   QString args = "current_version=" + currentVersion;
+  args += "&current_gui_version=" VERSION;
   args += "&installation=" + installationUuid;
   args += "&os=" + getOsName();
   args += "&os_ver=" + getOsVersion();
@@ -180,12 +182,17 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
   bool allowBeta = false;  // TODO: come from prefs or current version...
 
   QDomNodeList upgrades = document.elementsByTagName("update");
-
+  QUrl downloadUrl;
   for (unsigned int i = 0; i < upgrades.length(); i++) {
     QDomNode upgradeNode = upgrades.item(i);
     QDomElement upgrade = upgradeNode.toElement();
 
     QString updateVersion = upgrade.attribute("version");
+    if (upgrade.attribute("downloadURL").isEmpty()) {
+      downloadUrl = "http://www.gpsbabel.org/download.html";
+    } else {
+      downloadUrl = upgrade.attribute("downloadURL");
+    }
     bool updateIsBeta  = upgrade.attribute("type") == "beta";
     bool updateIsMajor = upgrade.attribute("type") == "major";
     bool updateCandidate = updateIsMajor || (updateIsBeta && allowBeta);
@@ -215,7 +222,8 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
 
     switch (information.exec()) {
       case QMessageBox::Yes:
-          QDesktopServices::openUrl(QUrl("http://www.gpsbabel.org/download.html", QUrl::TolerantMode));
+        // downloadUrl.addQueryItem("os", getOsName());
+        QDesktopServices::openUrl(downloadUrl);
       default: ;
     }
 
