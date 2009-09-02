@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: main.cpp,v 1.4 2009-08-28 17:08:55 robertl Exp $
+// $Id: main.cpp,v 1.5 2009-09-02 19:05:27 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -71,4 +71,5 @@ int main(int argc, char**argv)
   MainWindow mainWindow(0);
   mainWindow.show();
   app->exec();
+  return 0;
 }

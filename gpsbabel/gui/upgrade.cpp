@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.12 2009-09-02 06:14:12 robertl Exp $
+// $Id: upgrade.cpp,v 1.13 2009-09-02 19:05:27 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -50,7 +50,7 @@ UpgradeCheck::~UpgradeCheck()
   }
 }
 
-QString UpgradeCheck::UpgradeCheck::getOsName(void)
+QString UpgradeCheck::getOsName(void)
 {
   // Do not translate these strings.
 #if defined (Q_OS_LINUX)
@@ -59,14 +59,13 @@ QString UpgradeCheck::UpgradeCheck::getOsName(void)
   return "Mac";
 #elif defined (Q_OS_WIN)
   return "Windows";
-#elif
+#else
   return "Unknown";
 #endif
 
 }
-
 // See http://doc.trolltech.com/4.5/qsysinfo.html to interpret results
-QString UpgradeCheck::UpgradeCheck::getOsVersion(void)
+QString UpgradeCheck::getOsVersion()
 {
   #if defined (Q_OS_MAC)
   switch (QSysInfo::MacintoshVersion) {
@@ -77,20 +76,23 @@ QString UpgradeCheck::UpgradeCheck::getOsVersion(void)
   default: return QString("Unknown Mac %1").arg(QSysInfo::MacintoshVersion);
   };
   #elif defined (Q_OS_WIN)
-  switch (QSysInfo::WinVersion) {
+
+  switch (QSysInfo::WindowsVersion) {
   // Wildly improbable...
   case QSysInfo::WV_95: return "95"; break;
   case QSysInfo::WV_98: return "98"; break;
   case QSysInfo::WV_Me: return "Me"; break;
-
+#ifdef XXX
   case QSysInfo::WV_4_0: return "NT 4"; break;
   case QSysInfo::WV_5_0: return "2000"; break;
   case QSysInfo::WV_5_1: return "XP"; break;
   case QSysInfo::WV_5_2: return "2003"; break;
   case QSysInfo::WV_6_0: return "Vista"; break;
   case QSysInfo::WV_6_1: return "7"; break;
-
+#endif
+  default:;
   }
+  return "Windows";
   #endif
   // FIXME: find something appropriately clever to do for Linux, etc. here.
   return "Unknown";

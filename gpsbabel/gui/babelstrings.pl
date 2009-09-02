@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-open(FF, "gpsbabel -^3|");
+open(FF, "./objects/gpsbabel -^3|");
 while (<FF>) {
     if (/^file/ || /^serial/) {
 	my @x = split(/\t/, $_);
