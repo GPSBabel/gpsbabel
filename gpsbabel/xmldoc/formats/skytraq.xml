@@ -3,7 +3,7 @@ If your logger came with the Windows software iTravelTech GPS Photo Tagger, chan
 use this format to read its memory.</para>
 
 <para>Following a list of devices which should be supported by this module
-(note that not all of them have actually been tested):</para>
+(Note that not all of them have actually been tested, so if you can confirm that additional models work, please mail the gpsbabel-misc group with your success, tips, and any pertinent links for your model.):</para>
 
 <table id="skytraq_devices">
 <title>Devices supported by skytraq module</title>
@@ -18,20 +18,38 @@ use this format to read its memory.</para>
 </thead>
 <tbody>
 <row>
-  <entry>Navilock</entry>
-  <entry>BT-455PDL</entry>
-  <entry>untested</entry>
-  <entry>untested</entry>
-</row>
-<row>
   <entry>SJA</entry>
   <entry>"3-in-1" GPS logger</entry>
   <entry>up to 230400</entry>
   <entry>9600</entry>
 </row>
 <row>
-  <entry>?</entry>
+  <entry>Navilock</entry>
+  <entry>BT-455PDL</entry>
+  <entry>untested</entry>
+  <entry>untested</entry>
+</row>
+<row>
+  <entry>Polaris<entry>
   <entry>Travel Honey</entry>
+  <entry>untested</entry>
+  <entry>untested</entry>
+</row>
+<row>
+  <entry>Pearl Diffusion<entry>
+  <entry>Keymate STV-5</entry>
+  <entry>untested</entry>
+  <entry>untested</entry>
+</row>
+<row>
+  <entry>Canmore<entry>
+  <entry>GT-750F</entry>
+  <entry>untested</entry>
+  <entry>untested</entry>
+</row>
+<row>
+  <entry>Adapt Mobile<entry>
+  <entry>Keychain Pro</entry>
   <entry>untested</entry>
   <entry>untested</entry>
 </row>
