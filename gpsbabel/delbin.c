@@ -127,6 +127,9 @@ static arglist_t delbin_args[] = {
 // Whether device understands message 0xb016
 static int use_extended_notes;
 
+// Device capabilities
+static unsigned device_max_waypoint;
+
 static const char* waypoint_symbol(unsigned index);
 static unsigned waypoint_symbol_index(const char* name);
 static int track_color(unsigned index);
@@ -143,6 +146,7 @@ static waypoint** wp_array;
 #define MSG_ACK 0xaa00
 #define MSG_BREAK 0xaa02
 #define MSG_BREAK_SIZE 33
+#define MSG_CAPABILITIES 0xb001
 #define MSG_DELETE 0xb005
 #define MSG_DELETE_SIZE 67
 #define MSG_NAVIGATION 0xa010
@@ -181,7 +185,6 @@ static waypoint** wp_array;
 
 //-----------------------------------------------------------------------------
 // Message structures
-
 
 // Input Delete Message
 // Message ID: 0xB005
@@ -417,6 +420,24 @@ typedef struct {
 	char serial[16];
 	char extra[16];
 } msg_version_t;
+
+// Output Device Capabilities Message
+// Message ID: 0xB001
+typedef struct {
+	gbuint8 max_waypoints[4]; // U32
+	gbuint8 max_tracks[2]; // U16
+	gbuint8 max_track_points[4]; // U32
+	gbuint8 max_routes[2]; // U16
+	gbuint8 max_route_points[4]; // U32
+	gbuint8 max_route_shape_points[4]; // U32
+	gbuint8 max_maps[2]; // U16
+	gbuint8 min_map_version[2]; // U16
+	gbuint8 max_map_version[2]; // U16
+	gbuint8 total_internal_file_memory[4]; // U32
+	gbuint8 avail_internal_file_memory[4]; // U32
+	gbuint8 total_external_file_memory[4]; // U32
+	gbuint8 avail_external_file_memory[4]; // U32
+} msg_capabilities_t;
 
 //-----------------------------------------------------------------------------
 
@@ -1359,10 +1380,37 @@ write_waypoint(const waypoint* wp)
 static void
 write_waypoints(void)
 {
+	message_t m;
+	unsigned device_n = 0;
+
 	waypoint_i = 0;
 	waypoint_n = waypt_count();
+	if (waypoint_n > device_max_waypoint) {
+		fatal(MYNAME ": waypoint count (%u) exceeds device limit (%u)\n",
+			waypoint_n, device_max_waypoint);
+	}
+
+	message_init_size(&m, 0);
+	message_write(MSG_WAYPOINT_COUNT, &m);
+	if (message_read(MSG_WAYPOINT_COUNT, &m)) {
+		device_n = le_readu32(m.data);
+	}
+
 	waypt_disp_all(write_waypoint);
 	send_batch(TRUE);
+
+	if (device_n + waypoint_n > device_max_waypoint) {
+		m.size = 0;
+		message_write(MSG_WAYPOINT_COUNT, &m);
+		if (message_read(MSG_WAYPOINT_COUNT, &m) &&
+		    le_readu32(m.data) == device_max_waypoint)
+		{
+			warning(MYNAME ": waypoint count (%u already on device + %u added = %u)"
+				" exceeds device limit (%u), some may have been discarded\n",
+				device_n, waypoint_n, device_n + waypoint_n, device_max_waypoint);
+		}
+	}
+	message_free(&m);
 }
 
 //-----------------------------------------------------------------------------
@@ -2132,8 +2180,7 @@ delbin_rw_init(const char *fname)
 	// confuse the first message read if we don't get rid of it
 	packet_read(buf);
 	// Send a break to clear any state from a previous failure
-	message_init(&m);
-	m.size = MSG_BREAK_SIZE;
+	message_init_size(&m, MSG_BREAK_SIZE);
 	memset(m.data, 0, m.size);
 	message_write(MSG_BREAK, &m);
 	// get version info
@@ -2198,6 +2245,16 @@ static void
 delbin_write(void)
 {
 	if (doing_wpts) {
+		message_t m;
+		device_max_waypoint = 1000;
+		message_init_size(&m, 0);
+		message_write(MSG_CAPABILITIES, &m);
+		if (message_read(MSG_CAPABILITIES, &m)) {
+			const msg_capabilities_t* p = m.data;
+			device_max_waypoint = le_read32(p->max_waypoints);
+		}
+		message_free(&m);
+
  		if (opt_nuke_wpt) add_nuke(nuke_type_wpt);
 		write_waypoints();
 	}
