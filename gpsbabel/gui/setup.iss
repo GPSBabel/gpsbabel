@@ -1,4 +1,4 @@
-; $Id: setup.iss,v 1.2 2009-09-02 19:05:27 robertl Exp $
+; $Id: setup.iss,v 1.3 2009-09-04 16:55:59 robertl Exp $
 ;
 ; Script for generating installation setup program for GPSBabel
 ; Uses the Inno setup compiler.  Typically used from the command
@@ -66,6 +66,10 @@ Source: gpsbabelfe_it.ts;           	DestDir: "{app}\translations"; Flags: ignor
 ; Only Spanish is adequately translated for now.
 Source: gpsbabel_es.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
 Source: gpsbabelfe_es.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
+
+; German is usable
+Source: gpsbabel_de.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
+Source: gpsbabelfe_de.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
 
 ; Now translations from Qt's own UI stuff.
 Source: qtdir\translations\*;  		DestDir: "{app}\translations"; Flags: ignoreversion recursesubdirs createallsubdirs
