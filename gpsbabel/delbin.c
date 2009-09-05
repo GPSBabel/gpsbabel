@@ -2251,7 +2251,7 @@ delbin_write(void)
 		message_write(MSG_CAPABILITIES, &m);
 		if (message_read(MSG_CAPABILITIES, &m)) {
 			const msg_capabilities_t* p = m.data;
-			device_max_waypoint = le_read32(p->max_waypoints);
+			device_max_waypoint = le_readu32(p->max_waypoints);
 		}
 		message_free(&m);
 
@@ -2988,7 +2988,7 @@ static const char* const waypoint_symbol_name[] = {
 	"Arrow Up Left",
 	"Arrow Up Right",
 	"Arrow Down Left",
-	"Arrow Dow Right",
+	"Arrow Down Right",
 	"Green Star",
 	"Yellow Square",
 	"Red X",
@@ -3052,7 +3052,7 @@ static const char* const waypoint_symbol_name[] = {
 	"Telephone",
 	"Traffic Light",
 	"Fire Hydrant",
-	"Tombstone",
+	"Cemetery",
 	"Picnic Table",
 	"Tent",
 	"Shelter",
