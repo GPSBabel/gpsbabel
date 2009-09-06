@@ -1,4 +1,4 @@
-; $Id: setup.iss.in,v 1.1 2009-09-06 00:09:13 robertl Exp $
+; $Id: setup.iss.in,v 1.2 2009-09-06 05:04:07 robertl Exp $
 ;
 ; NOTE: setup.iss is generated from setup.iss.in via autoconf.
 ; The generated setup.iss is checked in to help keep the version numbers
@@ -29,6 +29,7 @@ OutputBaseFilename=GPSBabelSetup
 SetupIconFile=images\babel2.ico
 Compression=lzma
 SolidCompression=yes
+LicenseFile=COPYING.txt
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -80,9 +81,9 @@ Source: qtdir\translations\*;  		DestDir: "{app}\translations"; Flags: ignorever
 
 ; Miscellaneous
 Source: COPYING;			DestDir: {app}; Flags: ignoreversion
-Source: AUTHORS;			DestDir: {app}; Flags: ignoreversion
-Source: README.contrib;			DestDir: {app}; Flags: ignoreversion
-Source: README.gui;			DestDir: {app}; Flags: ignoreversion
+; Source: AUTHORS;			DestDir: {app}; Flags: ignoreversion
+; Source: README.contrib;			DestDir: {app}; Flags: ignoreversion
+; Source: README.gui;			DestDir: {app}; Flags: ignoreversion
 
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
