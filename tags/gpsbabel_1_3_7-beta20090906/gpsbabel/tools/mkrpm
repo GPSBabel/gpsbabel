@@ -1,0 +1,52 @@
+#!/bin/sh
+#
+
+WEB=$1
+VERSION=$2
+RELEASE=$3
+
+SPEC=gpsbabel.spec
+TAR_IGNORE="--exclude CVS"
+
+if test -x /usr/bin/rpmbuild; then 
+	RPM=rpmbuild
+else
+	RPM=rpm
+fi
+
+test -f gpsbabel.html || exit 1
+
+SRC=`pwd`
+TEMPDIR=/tmp/gpsbabel-rpm.$$
+
+mkdir -p $TEMPDIR
+trap "rm -fr $TEMPDIR" 0 1 2 3 15
+
+mkdir -p $TEMPDIR/BUILD $TEMPDIR/RPMS $TEMPDIR/SPECS \
+         $TEMPDIR/SOURCES $TEMPDIR/SRPMS $TEMPDIR/TMP $TEMPDIR/install 
+
+echo "Generate rpm spec file..."
+sh $SRC/tools/mkspec "$WEB" "$VERSION" "$RELEASE" > "$TEMPDIR/SPECS/gpsbabel.spec"
+cp -apr ./ $TEMPDIR/TMP/gpsbabel-$VERSION
+
+# 
+pushd $TEMPDIR/TMP/gpsbabel-$VERSION
+echo "Cleaning source..."
+make more-clean > /dev/null 2>&1
+find . -type d -name CVS -exec rm -rf \{\} \; > /dev/null 2>&1
+find . -type d -name "autom4*" -exec rm -rf \{\} \; > /dev/null 2>&1
+
+echo "Add needed files..."
+cp -ap $SRC/gpsbabel.html ./
+cp -ap $SRC/CHANGELOG ./
+
+echo "Create rpm source tarball..."
+cd ..
+# --verbose 
+tar --owner=0 --group=0 -czf ../SOURCES/gpsbabel-$VERSION.tgz gpsbabel-$VERSION
+echo "And now create rpm packages..."
+${RPM} -ba \
+	  --define "_topdir $TEMPDIR" \
+	  --define "buildroot $TEMPDIR/install" \
+	  $TEMPDIR/SPECS/gpsbabel.spec
+find ../. -type f -name "*.rpm" -exec cp -apf \{\} /tmp/ \;

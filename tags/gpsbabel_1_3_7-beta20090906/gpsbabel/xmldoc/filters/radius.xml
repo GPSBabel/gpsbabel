@@ -1,0 +1,17 @@
+<para> 
+This filter includes or excludes waypoints based on their proximity to a 
+central point.  All waypoints more than the specified distance from the 
+specified point will be removed from the dataset.
+</para>
+<para>
+By default, all remaining points are sorted so that points closer to the 
+center appear earlier in the output file.
+</para>
+<example id="radius_to_find_points_close">
+ <title>Using the radius filter to find points close to a given point</title>
+ <para>This example command line would include only points within 1 1/2 miles
+       of N30.000 W 90.000</para>
+
+<para><userinput>gpsbabel -i geo -f 1.loc -x radius,distance=1.5M,lat=30.0,lon=-90.0 -o mapsend -F 2.wpt</userinput></para>
+</example>
+      

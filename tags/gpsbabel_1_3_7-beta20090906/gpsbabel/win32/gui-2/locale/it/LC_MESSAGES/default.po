@@ -1,0 +1,548 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: GPSBabelGUI-0.2.15.0-it\n"
+"POT-Creation-Date: 2007-05-01 19:36\n"
+"PO-Revision-Date: 2008-10-13 17:03+0100\n"
+"Last-Translator: Michele Locati <mlocati@tiscali.it>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: dxgettext 1.2.1\n"
+"Language-Team: ing. Michele Locati <mlocati@tiscali.it>\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+msgid "\"gpsbabel.exe\" not found!!!"
+msgstr "Impossibile trovare \"gpsbabel.exe\"!!!"
+
+msgid "\"gpsbabel.exe\" returned error 0x%x (%d)"
+msgstr "\"gpsbabel.exe\" è terminato col codice d'errore 0x%x (%d)"
+
+msgid "\"short names\""
+msgstr "\"nomi brevi\""
+
+msgid "&About"
+msgstr "&Informazioni su"
+
+msgid "&File"
+msgstr "&File"
+
+msgid "&Filter"
+msgstr "&Filtro"
+
+msgid "&Help"
+msgstr "&Aiuto"
+
+msgid "&Intro"
+msgstr "&Intro"
+
+msgid "&Move"
+msgstr "&Muovi"
+
+msgid "&Options"
+msgstr "&Opzioni"
+
+msgid "&Pack (or)"
+msgstr "Com&patta (o)"
+
+msgid "&Routes"
+msgstr "&Rotte"
+
+msgid "&Routes && Tracks"
+msgstr "&Rotte e tracce"
+
+msgid "&Split"
+msgstr "&Suddividi"
+
+msgid "&Tracks"
+msgstr "&Tracce"
+
+msgid "&Waypoints"
+msgstr "P&unti di interesse"
+
+msgid "- default -"
+msgstr "- predefinito -"
+
+msgid "... for source format"
+msgstr "...per il formato di ingresso"
+
+msgid "... for target format"
+msgstr "...per il formato di destinazione"
+
+msgid "Abort"
+msgstr "Interrompi"
+
+msgid "About"
+msgstr "Informazioni su"
+
+msgid "Adding a new language"
+msgstr "Aggiungi una nuova lingua"
+
+msgid "All file(s)|*.*|Garmin MapSource mps|*.mps"
+msgstr "Tutti i file|*.*|Garmin MapSource mps|*.mps"
+
+msgid "All files|*.*"
+msgstr "Tutti i file|*.*"
+
+msgid "BETA"
+msgstr "BETA"
+
+msgid "Babel"
+msgstr "Babel"
+
+msgid "Be aware, that most options are made for the output side. "
+msgstr "Attenzione: molte opzioni sono pensate per la destinazione."
+
+msgid "Change language"
+msgstr "Cambia la lingua"
+
+msgid "Characterset for input data"
+msgstr "Set di caratteri dei dati in ingresso"
+
+msgid "Characterset for output data"
+msgstr "Set di caratteri dei dati di destinazione"
+
+msgid "Choose language"
+msgstr "Seleziona la lingua"
+
+msgid "Clear messages"
+msgstr "Cancella i messaggi"
+
+msgid "Clear output"
+msgstr "Azzera la destinazione"
+
+msgid "Converted successfully from \"%s\" to \"%s\"."
+msgstr "Conversione da \"%s\" a \"%s\" completata."
+
+msgid "Copyright (C) 2005,2006 Olaf Klein (o.b.klein@gpsbabel.org)"
+msgstr "Copyright (C) 2005,2006 Olaf Klein (o.b.klein@gpsbabel.org)"
+
+msgid "Could not run \"gpsbabel.exe\" (Error %d)!"
+msgstr "Impossibile avviare \"gpsbabel.exe\" (Errore %d)!"
+
+msgid "Could not run \"gpsbabel.exe\"!"
+msgstr "Impossibile avviare \"gpsbabel.exe\"!"
+
+msgid "Course"
+msgstr "Rotta"
+
+msgid "Currently we don't have a flag which tells us which direction is used by the options."
+msgstr "Al momento non c'è un modo per determinare quale direzione è usata dalle opzioni."
+
+msgid "Delete"
+msgstr "Elimina"
+
+msgid "Delete source data after transformation"
+msgstr "Elimina i dati di origine dopo la trasformazione"
+
+msgid "Device"
+msgstr "Dispositivo"
+
+msgid "Discard changes?"
+msgstr "Annullare le modifiche?"
+
+msgid "Duplicates"
+msgstr "Duplicati"
+
+msgid "E&xit"
+msgstr "E&sci"
+
+msgid "Enable characterset transformation"
+msgstr "Attiva la trasformazione del set di caratteri"
+
+msgid "English"
+msgstr "Inglese"
+
+msgid "Error WINAPI: Could not create \"NamedPipe\"!"
+msgstr "Errore WINAPI: impossibile creare \"NamedPipe\"!"
+
+msgid "Export"
+msgstr "Esporta"
+
+msgid "Export gpsbabel.csv (unicode)"
+msgstr "Esporta gpsbabel.csv (unicode)"
+
+msgid "Feet"
+msgstr "Piedi"
+
+msgid "File"
+msgstr "File"
+
+msgid "File \"%s\" exists ! Overwrite ?"
+msgstr "Il file %s esiste già. Sovrascriverlo?"
+
+msgid "File %s not found."
+msgstr "Impossibile trovare il file %s"
+
+msgid "File based filters"
+msgstr "Filtro basato su file"
+
+msgid "Filter"
+msgstr "Filtro"
+
+msgid "Filter incomming data before writing them to file or device"
+msgstr "Filtra i dati in ingresso prima di salvarli su file o nel dispositivo"
+
+msgid "Find more info at"
+msgstr "Per maggiori informazioni visita"
+
+msgid "Force selected GPS data types (nuketypes filter)"
+msgstr "Forza il tipo di dati GPS selezionato (filtro nuketype)"
+
+msgid "Format"
+msgstr "Formato"
+
+msgid "Format for input from device"
+msgstr "Formato dell'ingresso dal dispositivo"
+
+msgid "Format for input from file"
+msgstr "Formato del file in ingresso"
+
+msgid "Format for ouput to device"
+msgstr "Formato del dispositivo in uscita"
+
+msgid "Format for output to file"
+msgstr "Formato del file di destinazione"
+
+msgid "French"
+msgstr "Francese"
+
+msgid "GPS fixes"
+msgstr "Aggiustamenti GPS"
+
+msgid "GPSBabel README"
+msgstr "File LEGGIMI di GPSBabel"
+
+msgid "GPSBabel, version %s"
+msgstr "GPSBabel, versione %s"
+
+msgid "Garmin Mapsource mps|*.mps|All files|*.*"
+msgstr "Garmin Mapsource mps|*.mps|Tutti i file|*.*"
+
+msgid "German"
+msgstr "Tedesco"
+
+msgid "Help"
+msgstr "Aiuto"
+
+msgid "Hungarian"
+msgstr "Ungherese"
+
+msgid "Italian"
+msgstr "Italiano"
+
+msgid "Ignore shortnames from source data and synthesize them from description or notes"
+msgstr "Ignora i nomi brevi per dati in ingresso e sintetizzali a partire da descrizioni o note"
+
+msgid "Include points based on their proximity to central point"
+msgstr "Includi i punti in base alla vicinanza a un punto centrale"
+
+msgid "Input"
+msgstr "Ingresso"
+
+msgid "Internal development release"
+msgstr "Versione interna di sviluppo"
+
+msgid "Invalid line format!"
+msgstr "Formato di linea non corretto!"
+
+msgid "Kilometer"
+msgstr "Chilometri"
+
+msgid "Latitude"
+msgstr "Latitudine"
+
+msgid "Latitude of central point"
+msgstr "Latitudine del punto centrale"
+
+msgid "Longitude"
+msgstr "Longitudine"
+
+msgid "Longitude of central point"
+msgstr "Longitudine del punto centrale"
+
+msgid "Merge"
+msgstr "Unisci"
+
+msgid "Merge all tracks into one track"
+msgstr "Unisci tutte le tracce in una traccia"
+
+msgid "Merge duplicate waypoints"
+msgstr "Unisci i punti di interesse duplicati"
+
+msgid "Merge waypoints separated by less then"
+msgstr "Unisci i punti di interesse meno distanti di"
+
+msgid "Merge waypoints with duplicate \"short name\""
+msgstr "Unisci i punti di interesse con \"nome breve\" duplicato"
+
+msgid "Merge waypoints with duplicate locations"
+msgstr "Unisci i punti di interesse con posizioni duplicate"
+
+msgid "Meter"
+msgstr "Metri"
+
+msgid "Miles"
+msgstr "Miglia"
+
+msgid "No options available for \"%s\""
+msgstr "Nessuna opzione disponibile per \"%s\""
+
+msgid "Not supported by gpsbabel.exe, release %s!"
+msgstr "Non supportato dalla versione %s di gpsbabel.exe!"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Options"
+msgstr "Opzioni"
+
+msgid "Options for \"%s\""
+msgstr "Opzioni per \"%s\""
+
+msgid "Options for ..."
+msgstr "Opzioni per..."
+
+msgid "Options for the selected input format"
+msgstr "Opzioni per il formato di ingresso selezionato"
+
+msgid "Options for the selected output format"
+msgstr "Opzioni per il formato di destinazione selezionato"
+
+msgid "Output"
+msgstr "Destinazione"
+
+msgid "Output to screen"
+msgstr "Uscita a video"
+
+msgid "Pack all tracks into one track (No duplicate timestamps)"
+msgstr "Comprimi tutte le tracce in una sola traccia (nessuna data duplicata)"
+
+msgid ""
+"Please have a look at the file README.GUI.\n"
+"\n"
+"There you will find all information you need to\n"
+"get GPSBabelGUI working in your own language."
+msgstr ""
+"Per favore leggi il file README.GUI\n"
+"\n"
+"Lì troverai tutte le informazioni necessarie\n"
+"per tradurre GPSBabelGUI nella tua lingua."
+
+msgid "Points"
+msgstr "Punti"
+
+msgid "Port"
+msgstr "Porta"
+
+msgid "Position"
+msgstr "Posizione"
+
+msgid "Private release"
+msgstr "Versione riservata"
+
+msgid "Process route information"
+msgstr "Elabora le rotte"
+
+msgid "Process track information"
+msgstr "Elabora le tracce"
+
+msgid "Process waypoint information"
+msgstr "Elabora i punti di interesse"
+
+msgid "Radius"
+msgstr "Raggio"
+
+msgid "Read data from device ..."
+msgstr "Leggi i dati dal dispositivo"
+
+msgid "Read data from device instead from file"
+msgstr "Leggi i dati da un dispositivo invece che da un file"
+
+msgid "Read data from given filename"
+msgstr "Leggi i dati dal file specificato"
+
+msgid "Reverse"
+msgstr "Inverti"
+
+msgid "Reverse routes and tracks"
+msgstr "Inverti rotte e tracce"
+
+msgid "Routes"
+msgstr "Rotte"
+
+msgid "Select and edit options for \"%s\""
+msgstr "Sekeziona e modifica le opzioni per \"%s\""
+
+msgid "Shift all tracks"
+msgstr "Sposta tutte le tracce"
+
+msgid "Shift start/stop by local timezone offset"
+msgstr "Sposta inizio/fine per l'offset dell'ora locale"
+
+msgid "Short \"%s\""
+msgstr "Abbrevia \"%s\""
+
+msgid "Simplify"
+msgstr "Semplifica"
+
+msgid "Simplify routes and tracks by limited number of points"
+msgstr "Semplifica le rotte e le tracce limitanto il numero di punti"
+
+msgid "Sorry, gpsbabel.exe reported problems!"
+msgstr "Spacenti, ma gpsbabel.exe è terminato con errori!"
+
+msgid "Sort"
+msgstr "Ordina"
+
+msgid "Sort waypoints by \"short name\" or by description"
+msgstr "Ordina i punti di interesse per \"nome breve\" o descrizione"
+
+msgid "Spanish"
+msgstr "Spagnolo"
+
+msgid "Special release"
+msgstr "Versione speciale"
+
+msgid "Speed"
+msgstr "Velocità"
+
+msgid "Split track into several tracks depending on date of trackpoint"
+msgstr "Suddividi una traccia in più tracce in funzione della data del punto-traccia"
+
+msgid "Start at"
+msgstr "Inizia da"
+
+msgid "Start data conversion"
+msgstr "Avvia la conversione"
+
+msgid "Start the file open dialog"
+msgstr "Apri la finestra di dialogo per aprire i file"
+
+msgid "Start the file save dialog"
+msgstr "Apri la finestra per salvare il file"
+
+msgid "Synthesize GPS fixes (PPS, DGPS, 3D, 2D)"
+msgstr "Sintetizzare gli aggiustamenti GPS (PPS, DGPS, 3D, 2D)"
+
+msgid "Synthesize course values"
+msgstr "Sintetizza i valori delle rotte"
+
+msgid "Synthesize shortnames"
+msgstr "Sintetizza i nomi brevi"
+
+msgid "Synthesize speed values"
+msgstr "Sintetizza i valori di velocità"
+
+msgid "THIS SOFTWARE MAY ONLY BE LICENSED FREE OF CHARGE"
+msgstr "QUESTO SOFTWARE PUO' ESSERE CONCESSO IN LICENZA SOLO IN FORMA GRATUITA"
+
+msgid "TZ"
+msgstr "TZ"
+
+msgid "Take only trackpoints starting at"
+msgstr "Usa solo i punti traccia che iniziano da"
+
+msgid "The file \"gpsbabel.exe\" found in current directory is too old!"
+msgstr "Il file \"gpsbabel.exe\" trovato nella cartella corrente è troppo vecchio!"
+
+msgid "The frontend for GPSBabel command line program"
+msgstr "L'interfaccia grafica del programma a linea di comando GPSBabel"
+
+msgid "This program is part of the GPSBabel project, hosted on"
+msgstr "Questo programma fa parte del progetto GPSBabel project, ospitato su"
+
+msgid "Tit&le"
+msgstr "Tito&lo"
+
+msgid "Title for new tracks"
+msgstr "Titolo per le nuove tracce"
+
+msgid "Tracks"
+msgstr "Tracce"
+
+msgid "Transform"
+msgstr "Trasforma"
+
+msgid "Transformation"
+msgstr "Trasformazione"
+
+msgid "Translations"
+msgstr "Traduzioni"
+
+msgid "Unknown option \"%s\"!"
+msgstr "L'opzione \"%s\" non è stata riconosciuta!"
+
+msgid "Upper limit of points for routes and tracks"
+msgstr "Limite superiore dei punti per rotte e tracce"
+
+msgid "Value (%s) out of range (%g to %g)!"
+msgstr "Valore (%s) esterno all'intervallo valido da %g a %g!"
+
+msgid "Version"
+msgstr "Versione"
+
+msgid "Warning"
+msgstr "Attenzione"
+
+msgid "Waypoints"
+msgstr "Punti di interesse"
+
+msgid "What ?"
+msgstr "Cosa?"
+
+msgid "Write data to device ..."
+msgstr "Invia i dati al dispositivo..."
+
+msgid "Write data to device instead to file"
+msgstr "Invia i dati a un dispositivo invece che su file"
+
+msgid "Write data to given filename"
+msgstr "Scrivi i dati nel file specificato"
+
+msgid "by"
+msgstr "da"
+
+msgid "day(s), "
+msgstr "giorni"
+
+msgid "dgps"
+msgstr "dgps"
+
+msgid "for GUIBabelGUI"
+msgstr "per GUIBabelGUI"
+
+msgid "for export"
+msgstr "per l'esportazione"
+
+msgid "hour(s), "
+msgstr "ore"
+
+msgid "let's go"
+msgstr "vai"
+
+msgid "limit to"
+msgstr "limita a"
+
+msgid "locations"
+msgstr "posizioni"
+
+msgid "minute(s),"
+msgstr "minuti"
+
+msgid "none"
+msgstr "nulla"
+
+msgid "pps"
+msgstr "pps"
+
+msgid "second(s)"
+msgstr "secondi"
+
+msgid "stop at"
+msgstr "fermati a"
+
+msgid "www.gpsbabel.org"
+msgstr "www.gpsbabel.org"
+

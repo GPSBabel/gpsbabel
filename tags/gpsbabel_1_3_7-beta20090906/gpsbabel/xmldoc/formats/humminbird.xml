@@ -1,0 +1,51 @@
+<para>
+  This format supports:
+  <simplelist>
+    <member><ulink url="http://www.humminbird.com">Humminbird</ulink>
+       waypoints and routes (<filename>.hwr</filename> files)</member>
+    <member><ulink url="http://www.humminbird.com">Humminbird</ulink>
+       tracks (<filename>.ht</filename> files)</member>
+    <member><ulink url="http://www.humminbird.com">Humminbird</ulink>
+       <filename>.dat</filename> files. (These accompany the
+       <filename>.png</filename> files you get when you take snapshots.
+       There are also <filename>.dat</filename> files generated when making
+       recordings, but those are not supported here.)</member>
+   </simplelist>
+</para>
+<para>
+  If you do "save all nav data" on the device, you'll get a 
+  <filename>data.hwr</filename> and a <filename>000.ht</filename> file on the
+  flash card (on a 797 in the <filename>matrix</filename> directory).
+</para>
+<para>
+  The humminbird module can read all of these file formats, but you need to
+  tell it which ones to write. By default, you get a <filename>.hwr</filename>
+  file, to get a track (<filename>.ht</filename> file), use the
+  "humminbird-track" format.
+</para> 
+<para>
+  <informalfigure><mediaobject><imageobject>
+    <imagedata fileref="humminbird.png" format="PNG"/>
+  </imageobject> </mediaobject> </informalfigure> 
+</para>
+<para>
+Note:<filename>.dat</filename> files are read-only, they only make sense
+together with their images.
+</para>
+<para>
+  Supported models:
+  <simplelist>
+    <member>797c2i SI</member>
+  </simplelist>
+ (They should all work, but this is the only one tested so far.)
+ </para> 
+<para>
+  Known limits:
+  <simplelist>
+    <member>max 12 characters for waypoint names.</member>
+    <member>max 20 characters for route and track names.</member>
+    <member>max 50 points per route. Use <link linkend="filter_simplify">simplify</link> filter (count=50 or less) if you have routes with more points!</member>
+    <member>max 21835 points per track.</member>
+  </simplelist>
+</para>
+

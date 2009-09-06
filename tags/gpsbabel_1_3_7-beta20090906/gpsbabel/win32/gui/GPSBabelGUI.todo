@@ -1,0 +1,28 @@
+{DONE : v02.00.00 Add About.}
+{DONE : v02.00.00 Add Exit button.}
+{DONE : v02.00.00 Add Help.}
+{DONE : v02.00.00 Add hotkeys for most common buttons.}
+{DONE : v02.00.00 Add timer to load formats after form is created.}
+{DONE : v02.00.00 Align controls on dialog.}
+{DONE : v02.00.00 Don't permit file processing unless GPSBabel is OK.}
+{DONE : v02.00.00 Evaluate need for memoStdErr vs. Message dialog.}
+{DONE : v02.00.00 Include all project management and Delphi project files in upload.}
+{DONE : v02.00.00 LoadFormatsFromGPSBabelExe: Delete unused AllocConsole.}
+{DONE : v02.00.00 LoadFormatsFromGPSBabelExe: don't continue if GPSBabel not found.}
+{DONE : v02.00.00 LoadFormatsFromGPSBabelExe: 'GPS file formats loaded from GPSBabel.exe.' doesn't get written.}
+{DONE : v02.00.00 Look for GPSBabel.exe before attempting to open it.}
+{DONE : v02.00.00 Modify to use input filename and output type to generate default output filename.}
+{DONE : v02.00.00 Output file dialog: fill in filename and filetype, if possible.}
+{DONE : v02.00.00 Port to Delphi 7.}
+{DONE : v02.00.00 Process: Delete unused AllocConsole.}
+{DONE : v02.00.00 Process: don't allow processing null, or undefined, files.}
+{DONE : v02.00.00 Process: handle cases where input/output file is a dir.}
+{DONE : v02.00.00 Remove unused console invocations.}
+{DONE : v02.00.00 Remove unused variable declarations.}
+{DONE : v02.00.00 Rewrite to eliminate 'exit;'.}
+{DONE : v02.00.00 Sort default file types by alpha; add sort routine: CANCELLED: placed in GPSBabel.}
+{TODO : v02.01.00 Add option to suppress 'internal'.}
+{TODO : v02.01.00 Add options for track and route support (-t/-r) for each format, only when available.}
+{TODO : v02.01.00 Add serial port support.}
+{TODO : v02.01.00 Add sticky output directory.}
+{TODO : v02.01.00 Improve menu presentation via 'gpsbabel -^2'.}

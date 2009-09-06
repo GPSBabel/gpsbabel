@@ -1,0 +1,18 @@
+<para>
+   The 'mmo' format provides support for binary .mmo files used by the
+   Memory-Map Navigator software.
+</para>
+<para>
+   Our module was reverse engineered from a couple of .mmo files found
+   in the www. The results of the writing code have been tested with a current
+   Memory-Map Navigator trial ('Viewer') release.
+</para>
+<para>
+   Because of different file versions and sometimes slightly different file structure
+   we cannot ensure, that every .mmo file is loadable at this time. If you have one,
+   which causes errors, please provide it [mailto:gpsbabel-misc@lists.sourceforge.net].
+</para>
+<para>
+   More information can be found at the 
+   <ulink url="http://www.memory-map.com/">Memory-Map</ulink> site.
+</para>

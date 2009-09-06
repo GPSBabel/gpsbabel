@@ -1,0 +1,12 @@
+
+      
+      
+      <para> This is the binary file format used by  <ulink url="http://www.easygps.com/">EasyGPS</ulink>
+format is seemingly being phased out in favor of GPX in newer versions
+of EasyGPS, but this allows conversions to and from the old binary
+.loc format.
+</para>
+      <para> Information about and sketchy code to implement this file
+format were provided by Eric Cloninger.
+</para>
+    

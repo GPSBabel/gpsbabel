@@ -1,0 +1,20 @@
+<para> 
+The duplicate filter is designed to remove duplicate points based on their 
+short name (traditionally a waypoint's name on the GPS receiver), and/or 
+their location (to a  precision of 6 decimals).  This filter supports two 
+options that specify how duplicates will be recognized, 
+<option>shortname</option> and <option>location</option>.  
+Generally, at least one of these options is required.  
+</para>
+<example id="duplicate_to_suppress_points">
+  <title>Using the duplicate filter to suppress points with the same 
+         name and location</title>
+  <para>
+  This command line removes points that have duplicate short names
+  and duplicate locations.  The result would be a 
+  <link linkend="fmt_gpx">gpx</link> file that more than likely 
+  contains only unique points and point data.
+  </para>
+  <para><userinput> gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname -o gpx -F merged_with_no_dupes.gpx</userinput></para>
+</example>
+      

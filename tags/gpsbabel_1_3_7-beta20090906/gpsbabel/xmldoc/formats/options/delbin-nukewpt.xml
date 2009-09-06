@@ -1,0 +1,5 @@
+<para>
+  When present on the command line and sending waypoins (either explicitly 
+  via -w or as the default), this will erase
+  all waypoints in the receiver before sending the new ones.
+</para>

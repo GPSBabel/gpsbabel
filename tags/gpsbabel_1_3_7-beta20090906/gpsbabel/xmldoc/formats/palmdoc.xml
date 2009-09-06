@@ -1,0 +1,13 @@
+<para> 
+PalmDoc output is similar to <link linkend="fmt_text">Text</link>
+output, except that it generates a Palm Database (PDB) file suitable for 
+use with programs like CSpotRun, TealDoc, AportisDoc, Palm Reader, and 
+others.  The resulting file also contains bookmarks to make it easy to jump 
+to a particular waypoint.  
+</para>
+<para> 
+The following command line reads a GPX file with Groundspeak extensions 
+and writes a Palm document with encrypted hints and logs:
+</para>
+<para><userinput>gpsbabel -i gpx -f 12345.gpx -o "palmdoc,dbname=Unfound Geocaches,encrypt,logs" -F 12345.pdb</userinput></para>
+    
