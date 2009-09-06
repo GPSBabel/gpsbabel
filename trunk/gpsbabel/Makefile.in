@@ -116,7 +116,8 @@ gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@
 gpsbabel-debug: $(OBJS)
 	$(CC)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
-Makefile gbversion.h: Makefile.in config.status xmldoc/makedoc.in gbversion.h.in
+Makefile gbversion.h: Makefile.in config.status xmldoc/makedoc.in \
+	  gbversion.h.in gui/setup.iss.in
 	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
 
 xcsv_tokens.gperf: xcsv_tokens.in
