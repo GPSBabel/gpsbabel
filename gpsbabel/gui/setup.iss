@@ -1,4 +1,4 @@
-; $Id: setup.iss,v 1.4 2009-09-06 00:09:13 robertl Exp $
+; $Id: setup.iss,v 1.5 2009-09-06 05:04:07 robertl Exp $
 ;
 ; Script for generating installation setup program for GPSBabel
 ; Uses the Inno setup compiler.  Typically used from the command
@@ -25,6 +25,7 @@ OutputBaseFilename=GPSBabelSetup
 SetupIconFile=images\babel2.ico
 Compression=lzma
 SolidCompression=yes
+LicenseFile=COPYING.txt
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -75,10 +76,10 @@ Source: gpsbabelfe_de.qm;           	DestDir: "{app}\translations"; Flags: ignor
 Source: qtdir\translations\*;  		DestDir: "{app}\translations"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Miscellaneous
-Source: COPYING;			DestDir: {app}; Flags: ignoreversion
-Source: AUTHORS;			DestDir: {app}; Flags: ignoreversion
-Source: README.contrib;			DestDir: {app}; Flags: ignoreversion
-Source: README.gui;			DestDir: {app}; Flags: ignoreversion
+;Source: COPYING;			DestDir: {app}; Flags: ignoreversion
+;Source: AUTHORS;			DestDir: {app}; Flags: ignoreversion
+;Source: README.contrib;			DestDir: {app}; Flags: ignoreversion
+;Source: README.gui;			DestDir: {app}; Flags: ignoreversion
 
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
