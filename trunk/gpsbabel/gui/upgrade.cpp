@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.14 2009-09-06 05:04:07 robertl Exp $
+// $Id: upgrade.cpp,v 1.15 2009-09-06 17:04:36 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -91,8 +91,8 @@ QString UpgradeCheck::getOsVersion()
   case QSysInfo::WV_6_1: return "7"; break;
   default:
       return "Windows/Unknown";
-#endif
   }
+#endif
   // FIXME: find something appropriately clever to do for Linux, etc. here.
   return "Unknown";
 }

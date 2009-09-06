@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: main.cpp,v 1.5 2009-09-02 19:05:27 robertl Exp $
+// $Id: main.cpp,v 1.6 2009-09-06 17:04:36 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -66,7 +66,7 @@ int main(int argc, char**argv)
 
   QCoreApplication::setOrganizationName("GPSBabel");
   QCoreApplication::setOrganizationDomain("gpsbabel.org");
-  QCoreApplication::setApplicationName("GPSBabelFE");
+  QCoreApplication::setApplicationName("GPSBabel");
 
   MainWindow mainWindow(0);
   mainWindow.show();
