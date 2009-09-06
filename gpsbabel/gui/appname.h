@@ -1,4 +1,4 @@
-// $Id: appname.h,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: appname.h,v 1.2 2009-09-06 17:04:36 robertl Exp $
 //
 //------------------------------------------------------------------------
 //
@@ -21,6 +21,6 @@
 //
 #ifndef APPNAME_H
 #define APPNAME_H
-static const char *appName = "GPSBabelFE";
+static const char *appName = "GPSBabel";
 #endif
 
