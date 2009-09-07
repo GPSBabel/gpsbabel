@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.15 2009-09-06 17:04:36 robertl Exp $
+// $Id: upgrade.cpp,v 1.16 2009-09-07 00:55:07 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -227,7 +227,7 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
         QDesktopServices::openUrl(downloadUrl);
       default: ;
     }
-
-    upgradeWarningTime = QDateTime(QDateTime::currentDateTime());
   }
+
+  upgradeWarningTime = QDateTime(QDateTime::currentDateTime());
 }
