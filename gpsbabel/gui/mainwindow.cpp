@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.7 2009-09-02 19:05:27 robertl Exp $
+// $Id: mainwindow.cpp,v 1.8 2009-09-07 18:47:55 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -38,6 +38,7 @@
 #include "formatload.h"
 #include "gmapdlg.h"
 #include "upgrade.h"
+#include "../gbversion.h"
 
 const int BabelData::noType = -1;
 const int BabelData::fileType = 0;
@@ -900,7 +901,7 @@ void MainWindow::moreOptionButtonClicked()
 //------------------------------------------------------------------------
 void MainWindow::aboutActionX()
 {
-  AboutDlg aboutDlg(0, babelVersion, QString(appName) + " Version 0.11");
+  AboutDlg aboutDlg(0, babelVersion, QString(appName) + QString(" " VERSION));
   aboutDlg.setWindowTitle(tr("About %1").arg(appName));
   aboutDlg.exec();
 }
