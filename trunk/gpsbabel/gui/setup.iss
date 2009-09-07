@@ -1,4 +1,8 @@
-; $Id: setup.iss,v 1.5 2009-09-06 05:04:07 robertl Exp $
+; $Id: setup.iss,v 1.6 2009-09-07 18:46:18 robertl Exp $
+;
+; NOTE: setup.iss is generated from setup.iss.in via autoconf.
+; The generated setup.iss is checked in to help keep the version numbers
+; synchronized.
 ;
 ; Script for generating installation setup program for GPSBabel
 ; Uses the Inno setup compiler.  Typically used from the command
@@ -12,16 +16,16 @@
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{1B8FE958-A304-4902-BF7A-4E2F0F5B7017}
-AppName=GPSBabelFE
-AppVerName=GPSBabelFE 1.3.7-beta20090901
+AppName=GPSBabel
+AppVerName=GPSBabel 1.3.7-beta20090906
 AppPublisher=GPSBabel
 AppPublisherURL=http://www.gpsbabel.org
 AppSupportURL=http://www.gpsbabel.org
 AppUpdatesURL=http://www.gpsbabel.org
-DefaultDirName={pf}\GPSBabelFE
-DefaultGroupName=GPSBabelFE
+DefaultDirName={pf}\GPSBabel
+DefaultGroupName=GPSBabel
 OutputDir=release
-OutputBaseFilename=GPSBabelSetup
+OutputBaseFilename=GPSBabel-1.3.7-beta20090906-Setup
 SetupIconFile=images\babel2.ico
 Compression=lzma
 SolidCompression=yes
@@ -76,17 +80,17 @@ Source: gpsbabelfe_de.qm;           	DestDir: "{app}\translations"; Flags: ignor
 Source: qtdir\translations\*;  		DestDir: "{app}\translations"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Miscellaneous
-;Source: COPYING;			DestDir: {app}; Flags: ignoreversion
-;Source: AUTHORS;			DestDir: {app}; Flags: ignoreversion
-;Source: README.contrib;			DestDir: {app}; Flags: ignoreversion
-;Source: README.gui;			DestDir: {app}; Flags: ignoreversion
+Source: COPYING;			DestDir: {app}; Flags: ignoreversion
+; Source: AUTHORS;			DestDir: {app}; Flags: ignoreversion
+; Source: README.contrib;			DestDir: {app}; Flags: ignoreversion
+; Source: README.gui;			DestDir: {app}; Flags: ignoreversion
 
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{group}\GPSBabelFE"; Filename: "{app}\gpsbabelfe.exe"
-Name: "{commondesktop}\GPSBabelFE"; Filename: "{app}\gpsbabelfe.exe"; Tasks: desktopicon
+Name: "{group}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"
+Name: "{commondesktop}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\gpsbabelfe.exe"; Description: "{cm:LaunchProgram,GPSBabelFE}"; Flags: nowait postinstall skipifsilent
