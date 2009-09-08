@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.8 2009-09-07 18:47:55 robertl Exp $
+// $Id: mainwindow.cpp,v 1.9 2009-09-08 00:29:09 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -731,9 +731,15 @@ void MainWindow::applyActionX()
   if (bd.enableCharSetXform && bd.inputCharSet != QString())
     args << "-c" << bd.inputCharSet;
 
-  if (bd.xlateWayPts)        args << "-w";
-  if (bd.xlateRoutes)        args << "-r";
-  if (bd.xlateTracks)        args << "-t";
+  Format ifmt = formatList[currentComboFormatIndex(ui.inputFormatCombo)];
+  Format ofmt = formatList[currentComboFormatIndex(ui.outputFormatCombo)];
+
+  if (bd.xlateWayPts && ifmt.isReadWaypoints() && ofmt.isWriteWaypoints())
+    args << "-w";
+  if (bd.xlateRoutes && ifmt.isReadRoutes()    && ofmt.isWriteRoutes())
+    args << "-r";
+  if (bd.xlateTracks && ifmt.isReadTracks()    && ofmt.isWriteTracks())
+    args << "-t";
 
   // Input type, with options
   bool iisFile = (bd.inputType == BabelData::fileType);
