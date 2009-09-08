@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.9 2009-09-08 00:29:09 robertl Exp $
+// $Id: mainwindow.cpp,v 1.10 2009-09-08 16:06:32 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -601,23 +601,38 @@ void MainWindow::outputFormatChanged(int comboIdx)
 void MainWindow::inputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui.inputFormatCombo);
-  OptionsDlg optionDlg(0,
-		       formatList[fidx].getName(),
-		       formatList[fidx].getInputOptionsRef());
-  optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList[fidx].getName()));
-  optionDlg.exec();
-  displayOptionsText(ui.inputOptionsText,  ui.inputFormatCombo, true);
+  if (formatList[fidx].getInputOptionsRef()->size() == 0) {
+    QMessageBox::information
+      (0, appName,
+       tr("There are no input options for format \"%1\"").arg(formatList[fidx].getDescription()));
+  }
+  else {
+    OptionsDlg optionDlg(0,
+			 formatList[fidx].getName(),
+			 formatList[fidx].getInputOptionsRef());
+    optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList[fidx].getName()));
+    optionDlg.exec();
+    displayOptionsText(ui.inputOptionsText,  ui.inputFormatCombo, true);
+  }
 }
 
 //------------------------------------------------------------------------
 void MainWindow::outputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui.outputFormatCombo);
-  OptionsDlg optionDlg(0, formatList[fidx].getName(), formatList[fidx].getOutputOptionsRef());
-  optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList[fidx].getName()));
-  optionDlg.exec();
-  displayOptionsText(ui.outputOptionsText,  ui.outputFormatCombo, false);
+  if (formatList[fidx].getOutputOptionsRef()->size() == 0) {
+    QMessageBox::information
+      (0, appName,
+       tr("There are no output options for format \"%1\"").arg(formatList[fidx].getDescription()));
+  }
+  else {
+    OptionsDlg optionDlg(0, formatList[fidx].getName(), formatList[fidx].getOutputOptionsRef());
+    optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList[fidx].getName()));
+    optionDlg.exec();
+    displayOptionsText(ui.outputOptionsText,  ui.outputFormatCombo, false);
+  }
 }
+
 
 
 //------------------------------------------------------------------------
@@ -915,7 +930,7 @@ void MainWindow::aboutActionX()
 //------------------------------------------------------------------------
 void MainWindow::helpActionX()
 {
-  ShowHelp("gpsbabel.html");
+  ShowHelp("index.html");
 }
 //------------------------------------------------------------------------
 void MainWindow::filtersClicked()

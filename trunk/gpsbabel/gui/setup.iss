@@ -1,4 +1,4 @@
-; $Id: setup.iss,v 1.6 2009-09-07 18:46:18 robertl Exp $
+; $Id: setup.iss,v 1.7 2009-09-08 16:06:32 robertl Exp $
 ;
 ; NOTE: setup.iss is generated from setup.iss.in via autoconf.
 ; The generated setup.iss is checked in to help keep the version numbers
@@ -56,7 +56,7 @@ Source: release\help\*;           	DestDir: "{app}\help"; Flags: ignoreversion r
 
 ; Translation strings extracted from source code.  Include it in the dist
 ; so that users can translate if they want to. 
-Source: gpsbabel_de.ts;           	DestDir: "{app}"; Flags: ignoreversion 
+Source: gpsbabel_de.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
 Source: gpsbabel_es.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
 Source: gpsbabel_fr.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
 Source: gpsbabel_hu.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 

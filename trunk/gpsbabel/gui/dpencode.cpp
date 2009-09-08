@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: dpencode.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
+// $Id: dpencode.cpp,v 1.3 2009-09-08 16:06:32 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Original in JavaScript: 
@@ -92,7 +92,7 @@ int roundToInt(double x) {
 //------------------------------------------------------------------------
 void PolylineEncoder::createEncodings(string &encoded_points,
 				      const vector <LatLng> &points,
-				      const vector <double> dists)
+				      const vector <double> &dists)
 {
   encoded_points = "";;
   int plat = 0;

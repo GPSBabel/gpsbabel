@@ -1,4 +1,4 @@
-# $Id: app.pro,v 1.9 2009-09-06 17:04:36 robertl Exp $
+# $Id: app.pro,v 1.10 2009-09-08 16:06:32 robertl Exp $
 #
 
 CONFIG += qt release 
@@ -25,7 +25,9 @@ UI_DIR = tmp
 RESOURCES = app.qrc 
 RC_FILE = app.rc
 
-TARGET=GPSBabelFE
+mac:TARGET=GPSBabelFE
+win32:TARGET=GPSBabelFE
+unix:TARGET=gpsbabelfe-bin
 
 extras.commands = (make -f makeextras.mak)
 extras.target = extras
