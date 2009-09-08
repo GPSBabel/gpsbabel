@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: help.cpp,v 1.5 2009-09-02 19:05:27 robertl Exp $
+// $Id: help.cpp,v 1.6 2009-09-08 16:06:32 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -31,7 +31,7 @@ void ShowHelp(const char *name)
 {
   QString urlname("file:///" + QApplication::applicationDirPath() +
 		  "/help/" + name);
-#ifndef XXXX
+#ifdef XXXX
   QWebView *view = new QWebView();
   view->setWindowTitle("GPSBabel Help");
   view->load(urlname);

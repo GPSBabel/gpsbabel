@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: dpencode.h,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: dpencode.h,v 1.2 2009-09-08 16:06:32 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -42,7 +42,7 @@ private:
   void encodeLevels(string &, const vector<LatLng> &points, const vector<double>&dists);
   void createEncodings(string &encoded_points, 
 		       const vector <LatLng> &points, 
-		       const vector <double> dists);
+		       const vector <double> &dists);
 
   int numLevels;
   double zoomFactor;
