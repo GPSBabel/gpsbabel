@@ -1202,7 +1202,7 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
 			if (logpart) {
 				time_t logtime = xml_parse_time(logpart->cdata, NULL);
 				const struct tm* logtm = gmtime(&logtime);
-				gbfprintf(fd, "%d-%d-%d ", logtm->tm_year + 1900, logtm->tm_mon + 1, logtm->tm_mday);
+				gbfprintf(fd, "%d-%02d-%02d ", logtm->tm_year + 1900, logtm->tm_mon + 1, logtm->tm_mday);
 			}
 			logpart = xml_findfirst(curlog, "groundspeak:finder");
 			if (logpart) {
