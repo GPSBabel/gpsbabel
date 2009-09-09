@@ -1146,9 +1146,11 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
 	case gc_small: size = "Small"; break;
 	case gc_regular: size = "Regular"; break;
 	case gc_large: size = "Large"; break;
-	case gc_unknown:
-	case gc_other:
-	case gc_virtual:
+	case gc_unknown: size = "Not Chosen" ; break;
+	case gc_other: size = "Other"; break;
+        // Device has no symbol for this, but this is what Topo sends.
+	case gc_virtual: size = "Virtual"; break; 
+	default:
 		break;
 	}
 	if (size) {
