@@ -26,6 +26,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
+
+    2009-09-06 | Josef Reisinger | Added "set target location", i.e. -i skytrag,targetlocation=<lat>:<lng>
  */
 
 #include <ctype.h>
@@ -64,6 +66,7 @@ static char *opt_erase;		/* erase after read? (0/1) */
 static char *opt_initbaud;	/* baud rate used to init device */
 static char *opt_dlbaud;	/* baud rate used for downloading tracks */
 static char *opt_read_at_once;	/* number of sectors to read at once (Venus6 only) */
+static char *opt_set_location;	/* set if the "targetlocation" options was used */
 
 static
 arglist_t skytraq_args[] = {
@@ -75,6 +78,8 @@ arglist_t skytraq_args[] = {
 	  "230400", ARGTYPE_INT, "4800", "230400" },
 	{ "read-at-once", &opt_read_at_once, "Number of sectors to read at once (Venus6 only)",
 	  "255", ARGTYPE_INT, "0", "255" },
+	{ "targetlocation", &opt_set_location, "Set location finder target location as lat,lng",
+	  "", ARGTYPE_STRING, "", "" },
 	ARG_TERMINATOR
 };
 
@@ -998,6 +1003,32 @@ skytraq_erase()
 	return res_OK;
 }
 
+static void
+skytraq_set_location(void) 
+{
+	double lat, lng;
+	int i;
+	gbuint8 MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	gbuint8 MSG_GET_LOCATION = 0x35;
+
+	db(3, MYNAME ": set_location='%s'\n", opt_set_location);
+
+	sscanf(opt_set_location, "%lf:%lf", &lat, &lng);
+	le_write_double(&MSG_SET_LOCATION[1], lat);
+	le_write_double(&MSG_SET_LOCATION[9], lng);
+	for (i=0; i<sizeof MSG_SET_LOCATION; i++) {
+		db (3, "%02x ", MSG_SET_LOCATION[i]);
+	}
+	db(3, "\n");
+	if (skytraq_wr_msg_verify((gbuint8*)&MSG_SET_LOCATION, sizeof(MSG_SET_LOCATION)) != res_OK) {
+		fatal(MYNAME ": cannot set new location\n");
+	}
+	{
+		char buf[32];
+		skytraq_wr_msg_verify(&MSG_GET_LOCATION, 1);
+		skytraq_rd_msg(buf, 32);
+	}
+}
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
@@ -1029,6 +1060,10 @@ skytraq_read(void)
 	int dlbaud;
 	route_head *track;
 
+ 	if (*opt_set_location) {
+ 		skytraq_set_location();
+		return;
+ 	} 
 	track = route_head_alloc();
 	track->rte_name = xstrdup("SkyTraq tracklog");
 	track->rte_desc = xstrdup("SkyTraq GPS tracklog data");

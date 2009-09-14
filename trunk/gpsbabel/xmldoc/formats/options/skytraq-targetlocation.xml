@@ -1,0 +1,18 @@
+<para>
+  The device provides a location finder built from eight LEDs and can use
+  those LEDs to guide you to a location.  You can set the target location
+  with the 'targetlocation' option.  Use ':' as the delimiter between latitude
+  and longitude.
+</para>
+<example id="skytraq-targetlocation">
+  <title>Set the target location of the Skytraq location finder</title>
+  <para>
+       <userinput>gpsbabel -i skytraq,targetlocation=12.34:-56.78 -f /dev/ttyUSB
+0 -o unicsv -F -</userinput>
+       Sets latitude and longitude of the location finder to N12.34 and 
+	W56.78 re ectivly. 
+       The arrows on the device will point you to this location as soon as 
+	it h as a satlitte fix.
+ </para>
+</example>
+
