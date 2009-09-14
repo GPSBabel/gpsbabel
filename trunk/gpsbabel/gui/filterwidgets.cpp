@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: filterwidgets.cpp,v 1.3 2009-08-28 17:08:55 robertl Exp $
+// $Id: filterwidgets.cpp,v 1.4 2009-09-14 14:25:14 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -85,11 +85,13 @@ void TrackWidget::OtherCheckX()
 {
   ui.TZCheck->setEnabled(ui.stopCheck->isChecked() || ui.startCheck->isChecked());
   ui.splitCheck->setEnabled(ui.mergeCheck->isChecked() || ui.packCheck->isChecked());
-  bool bb = ui.packCheck->isChecked() &&ui.splitCheck->isChecked();
+  bool bb = ui.packCheck->isChecked() && ui.splitCheck->isChecked();
   ui.splitTimeSpin->setEnabled(bb);
   ui.splitTimeCombo->setEnabled(bb);
-  //ui.splitDistSpin->setEnabled(bb);
-  //ui.splitDistCombo->setEnabled(bb);
+
+  bb = ui.packCheck->isChecked();
+  ui.splitDistSpin->setEnabled(bb);
+  ui.splitDistCombo->setEnabled(bb);
 }
 
 //------------------------------------------------------------------------

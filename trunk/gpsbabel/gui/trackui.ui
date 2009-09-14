@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>558</width>
-    <height>218</height>
+    <width>544</width>
+    <height>219</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,7 +51,7 @@ If this value contains a percent (%) character, it is treated as a format string
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="1" column="1" colspan="3">
       <widget class="QLineEdit" name="titleText">
        <property name="toolTip">
         <string>the title of the new track is composed of the start time of the track appended to this value. </string>
