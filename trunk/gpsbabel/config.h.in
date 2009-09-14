@@ -30,6 +30,9 @@
 /* Define to 1 if you have the `sleep' function. */
 #undef HAVE_SLEEP
 
+/* Define to 1 if you have the `uname' function. */
+#undef HAVE_UNAME
+
 /* Define if we have va_copy */
 #undef HAVE_VA_COPY
 
