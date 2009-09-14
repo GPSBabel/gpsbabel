@@ -366,7 +366,7 @@ AC_SUBST(DOCDIR)
 # AC_FUNC_STRTOD
 # AC_FUNC_VPRINTF
 # AC_CHECK_FUNCS([atexit floor localtime_r memmove memset pow select sqrt strchr strcspn strdup strerror strncasecmp strrchr strspn strstr strtol strtoul])
-AC_CHECK_FUNCS([nanosleep sleep])
+AC_CHECK_FUNCS([nanosleep sleep uname])
 
 #
 # Checks for how the system handles va_list

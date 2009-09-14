@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.16 2009-09-07 00:55:07 robertl Exp $
+// $Id: upgrade.cpp,v 1.17 2009-09-14 14:20:39 robertl Exp $
 /*
     Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -21,7 +21,12 @@
 
 
 #include "upgrade.h"
+#include "../config.h"
 #include "../gbversion.h"
+
+#if HAVE_UNAME
+#include <sys/utsname.h>
+#endif // HAVE_UNAME
 
 #include <QHttp>
 #include <QMessageBox>
@@ -130,6 +135,12 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
   args += "&current_gui_version=" VERSION;
   args += "&installation=" + installationUuid;
   args += "&os=" + getOsName();
+#if HAVE_UNAME
+  struct utsname utsname;
+  if (0 == uname(&utsname)) {
+    args += "&cpu=" + QString(utsname.machine);
+  }
+#endif
   args += "&os_ver=" + getOsVersion();
   args += "&beta_ok=1";   // Eventually to come from prefs.
   args += "&lang=" + QLocale::languageToString(locale.language());
