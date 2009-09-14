@@ -1,55 +1,46 @@
 #!/bin/sh
+#  $Id: gpsbabelfe,v 1.2 2009-09-14 14:25:14 robertl Exp $
+#  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
 #
-# gpsbabelfe startup script,  Adpated from googleearth startup
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
+#  published by the Free Software Foundation; either version 2 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111
+#  USA
 #
 
-# Function to find the real directory a program resides in.
-# Feb. 17, 2000 - Sam Lantinga, Loki Entertainment Software
-FindPath()
+
+FollowSymLinks()
 {
-    fullpath="`echo $1 | grep /`"
-    if [ "$fullpath" = "" ]; then
-        oIFS="$IFS"
-        IFS=:
-        for path in $PATH
-        do if [ -x "$path/$1" ]; then
-               if [ "$path" = "" ]; then
-                   path="."
-               fi
-               fullpath="$path/$1"
-               break
-           fi
-        done
-        IFS="$oIFS"
-    fi
-    if [ "$fullpath" = "" ]; then
-        fullpath="$1"
-    fi
-
-    # Is the sed/ls magic portable?
-    if [ -L "$fullpath" ]; then
-        #fullpath="`ls -l "$fullpath" | awk '{print $11}'`"
-        fullpath=`ls -l "$fullpath" |sed -e 's/.* -> //' |sed -e 's/\*//'`
-    fi
-    dirname $fullpath
+    fullpath="$1"
+    while [ -L "$fullpath" ]; do
+	pathdir=`dirname "$fullpath"`
+        linktarget=`/bin/ls -l "$fullpath" | sed -e 's/.* -> //'`
+	d1=`dirname "$linktarget"`
+ 	linkdir=`cd "$pathdir" && cd "$d1" && pwd`
+	linkfile=`basename "$linktarget"`
+	fullpath=$linkdir/$linkfile
+    done
+    echo $fullpath
 }
 
-
-THIS_PATH="`FindPath $0`"
-echo $THIS_PATH
-
-
-LD_LIBRARY_PATH=.:${THIS_PATH}:${LD_LIBRARY_PATH}
+finalpath=`FollowSymLinks "$0"`
+LD_LIBRARY_PATH=`dirname "$finalpath"`:${LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH
 
-# Let's boogie!
-if [ -x "${THIS_PATH}/gpsbabelfe-bin" ]
-then
-	cd "${THIS_PATH}/"
-	exec "./gpsbabelfe-bin"  "$@"
+if [ -x "${finalpath}-bin" ]; then
+    #ldd "${finalpath}-bin"
+    exec "${finalpath}-bin"  "$@"
 fi
-echo "Couldn't run GPSBabelFE (gpsbabelfe-bin). Cannot find it."
+echo "Couldn't find/run gpsbabelfe-bin.  Possible installation issues"
 exit 1
-
-
 

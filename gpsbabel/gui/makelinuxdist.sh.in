@@ -1,12 +1,15 @@
 #!/bin/sh
+set -e -v
 QTLIBDIR=/usr/lib
 QTSHDIR=/usr/share/qt4
 
-DISTDIR=gpsbabel-1.3.7Beta
+DISTNAME=GPSBabel@PACKAGE_VERSION@@PACKAGE_RELEASE@
+DISTDIR=$DISTNAME
 rm -rf $DISTDIR
 mkdir $DISTDIR
 mkdir $DISTDIR/plugins
 mkdir $DISTDIR/translations
+mkdir $DISTDIR/help
 
 cp `ldd objects/gpsbabelfe-bin  | grep libQtCore |awk '{print $3}'` $DISTDIR
 cp `ldd objects/gpsbabelfe-bin  | grep libQtGui |awk '{print $3}'` $DISTDIR
@@ -15,6 +18,7 @@ cp `ldd objects/gpsbabelfe-bin  | grep libQtXml |awk '{print $3}'` $DISTDIR
 cp `ldd objects/gpsbabelfe-bin  | grep libQtNetwork |awk '{print $3}'` $DISTDIR
 cp `ldd objects/gpsbabelfe-bin  | grep libQtDBus |awk '{print $3}'` $DISTDIR
 cp `ldd objects/gpsbabelfe-bin  | grep libphonon |awk '{print $3}'` $DISTDIR
+cp `ldd objects/gpsbabelfe-bin  | grep libaudio   |awk '{print $3}'` $DISTDIR
 
 cp -r $QTSHDIR/plugins/imageformats $DISTDIR/plugins
 cp $QTSHDIR/translations/qt_*.qm $DISTDIR/translations/
@@ -48,10 +52,12 @@ cp qt.conf $DISTDIR/
 cp ../gpsbabel $DISTDIR/
 #
 # Help needs to be donea
+cp ../../babelweb/htmldoc-development/* $DISTDIR/help/
+
 cp COPYING $DISTDIR/
-cp AUTHORS $DISTDIR/
-cp README.contrib $DISTDIR/
-cp README.gui $DISTDIR/
+#cp AUTHORS $DISTDIR/
+#cp README.contrib $DISTDIR/
+#cp README.gui $DISTDIR/
 
 
 rm -f $DISTDIR.tar $DISTDIR.tar.bz2

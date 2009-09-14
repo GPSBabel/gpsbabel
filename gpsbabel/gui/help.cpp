@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: help.cpp,v 1.6 2009-09-08 16:06:32 robertl Exp $
+// $Id: help.cpp,v 1.7 2009-09-14 14:25:14 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -32,6 +32,8 @@ void ShowHelp(const char *name)
   QString urlname("file:///" + QApplication::applicationDirPath() +
 		  "/help/" + name);
 #ifdef XXXX
+  // This has window modality problems.  Unless the problem is solved, just use
+  // the native browser.
   QWebView *view = new QWebView();
   view->setWindowTitle("GPSBabel Help");
   view->load(urlname);

@@ -1,4 +1,4 @@
-# $Id: app.pro,v 1.10 2009-09-08 16:06:32 robertl Exp $
+# $Id: app.pro,v 1.11 2009-09-14 14:25:14 robertl Exp $
 #
 
 CONFIG += qt release 
@@ -28,11 +28,6 @@ RC_FILE = app.rc
 mac:TARGET=GPSBabelFE
 win32:TARGET=GPSBabelFE
 unix:TARGET=gpsbabelfe-bin
-
-extras.commands = (make -f makeextras.mak)
-extras.target = extras
-QMAKE_EXTRA_TARGETS += extras
-#POST_TARGETDEPS=extras
 
 FORMS += mainwinui.ui
 FORMS += advui.ui
