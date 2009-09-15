@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.10 2009-09-08 16:06:32 robertl Exp $
+// $Id: mainwindow.cpp,v 1.11 2009-09-15 18:04:03 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -319,6 +319,8 @@ void MainWindow:: outputDeviceOptBtnClicked()
 QString MainWindow::filterForFormat(int idx)
 {
   QString str = formatList[idx].getDescription();
+  str.replace(QRegExp("\\("), "[");
+  str.replace(QRegExp("\\)"), "]");
   str += " (";
   QStringList extensions = formatList[idx].getExtensions();
   for (int i=0; i<extensions.size(); i++) {
@@ -328,6 +330,17 @@ QString MainWindow::filterForFormat(int idx)
   }
   str += ");;All Files (*.*)";
   return str;
+}
+//------------------------------------------------------------------------
+QString MainWindow::ensureExtensionPresent(const QString &name, int idx)
+{
+  QString outname = name;
+  if (QFileInfo(name).suffix().length() == 0) {
+    QStringList extensions = formatList[idx].getExtensions();
+    if (extensions.size() > 0) 
+      outname += "." + extensions[0];
+  }
+  return outname;
 }
 
 //------------------------------------------------------------------------
@@ -394,6 +407,7 @@ void MainWindow::browseOutputFile()
 				 startFile,
 				 filterForFormat(idx));
   if (str.length() != 0) {
+    str = ensureExtensionPresent(str, idx);
     bd.outputBrowse = str;
     bd.outputFileName = str;
     ui.outputFileNameText->setText(str);
