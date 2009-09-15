@@ -105,6 +105,7 @@ static char *opt_nuke_trk = NULL;
 static char *opt_nuke_rte = NULL;
 /* If true, Order hint to match Cache Register and Topo 7 */
 static char *opt_hint_at_end = NULL;
+static char *opt_gcsym = NULL;
 
 
 static arglist_t delbin_args[] = {
@@ -121,6 +122,7 @@ static arglist_t delbin_args[] = {
 	{"nukerte", &opt_nuke_rte, "Delete all waypoints before sending", NULL, ARGTYPE_BOOL,
 		ARG_NOMINMAX },
 	{"hint_at_end", &opt_hint_at_end, "If true, geocache hint at end of text", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{"gcsym", &opt_gcsym, "If set to 0, prefer user-provided symbols over Groundspeaks ones for geocaches", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, "1" },
 	ARG_TERMINATOR
 };
 
@@ -1135,7 +1137,7 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
 	}
 
 	gbfprintf(fd, "Cache ID: %s\n", wp->shortname);
-	if (gc_sym) {
+	if (gc_sym && atoi(opt_gcsym)) {
 		gbfprintf(fd, "%s\n", waypoint_symbol(gc_sym));
 		*symbol = gc_sym;
 	} else if (wp->icon_descr) {
