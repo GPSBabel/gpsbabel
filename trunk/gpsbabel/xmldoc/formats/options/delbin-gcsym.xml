@@ -1,0 +1,8 @@
+<para>
+This 1/0 option, defaulting to  if not provided, tells GPSBabel to 
+use its own logic when sending data it can deduce is a geocache to 
+the device. If false, any icon data present in the source data will
+ be used instead. If you've taken control of the icon data, you are
+ responsible for providing valid icons; GPSBabel will make no attempt 
+to purify what gets sent.
+</par>
