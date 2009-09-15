@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.h,v 1.6 2009-09-02 19:05:27 robertl Exp $
+// $Id: mainwindow.h,v 1.7 2009-09-15 18:04:03 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -49,6 +49,7 @@ private:
 private:
   void loadFormats();
   QString filterForFormat(int idx);
+  QString ensureExtensionPresent(const QString &nanme, int idx);
   bool    filterForFormatIncludes(int idx, const QString &s);
   int  formatIndexFromName(bool isFile, const QString &);
   QList<int>inputFileFormatIndices();
