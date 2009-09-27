@@ -31,3 +31,17 @@
     </userinput>
   </para>
 </example>
+
+<para>
+  If you receive a message that the device is busy, especially on Windows,
+  that could be because another program, likely Delorme's own, has the 
+  device open even though it's not actively interacting with the GPS.   In 
+  Topo 8, on the GPS tab, look for GPS Options.  Uncheck "Start GPS" and 
+  "Automatically detect GPS".   Then just click the Exchange button when
+  you're ready for Topo to interact with the GPS.  Other Delorme software may
+  be similar.
+</para>
+<para>
+  The GPS should not be in 'map exchange' mode.   When in that mode, it appears
+  as a disk to the USB system, thus GPSBabel will be unable to find the GPS.
+</para>
