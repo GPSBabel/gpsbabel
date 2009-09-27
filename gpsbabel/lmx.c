@@ -94,7 +94,7 @@ lmx_print(const waypoint *wpt)
 		gbfprintf(ofd, "        <lm:mediaLink>\n");
 		if (wpt->url_link_text)
 			lmx_write_xml(5,"lm:name", wpt->url_link_text);
-		gbfprintf(ofd, "          <lm:url>%s</lm:url>\n", wpt->url);
+		lmx_write_xml(5, "lm:url", wpt->url);
 		gbfprintf(ofd, "        </lm:mediaLink>\n");
 	}
 

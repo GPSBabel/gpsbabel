@@ -491,6 +491,7 @@ ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp, ozi_fsdata *fsdata)
            operation. */
 	if (str && isdigit(str[0])) {
 	    wpt_tmp->icon_descr = xstrdup(str);
+	    wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
         }
         break;
     case 6:

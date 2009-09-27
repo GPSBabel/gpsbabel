@@ -447,6 +447,7 @@ int ppdb_read_wpt(route_head *head, int isRoute)
 			case 6:		/* icon */
 			    if (*str != '\0')
 				wpt_tmp->icon_descr = xstrdup(str); 
+	    			wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
 			    break;
 			case 7:		/* notes */
 			    if (*str != '\0')
