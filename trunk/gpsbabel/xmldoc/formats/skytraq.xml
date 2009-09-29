@@ -1,4 +1,5 @@
 <para>Serial download protocol for GPS data loggers based on Skytraq Venus 5 and Venus 6 chipsets.
+This chipset is used by a number of devices from different manufacturers.
 If your logger came with the Windows software iTravelTech GPS Photo Tagger, chances are that you can
 use this format to read its memory.</para>
 
@@ -62,20 +63,15 @@ use this format to read its memory.</para>
   <para><userinput>gpsbabel -i skytraq,erase -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput></para>
 </example>
 
+<example id="skytraq-erase">
+  <title>Command showing skytraq erasing the logger without download on Linux</title>
+  <para><userinput>gpsbabel -i skytraq,erase,no-output -f /dev/ttyUSB0</userinput></para>
+</example>
+
 <para>If available, reading the logger using bluetooth should also work. However, many devices support only one
 specific baud rate over bluetooth, e.g. 9600:</para>
 <example id="skytraq-on-linux-bt">
   <title>Command showing skytraq download tracks via bluetooth on Linux</title>
-  <para><userinput>rfcomm bind 0 &lt;bdaddr&gt;</userinput>
-  <userinput>gpsbabel -i skytraq,baud=9600 -f /dev/rfcomm0 -o gpx -F out.gpx</userinput></para>
+  <para><userinput>rfcomm bind 0 &lt;bdaddr&gt;</userinput></para>
+  <para><userinput>gpsbabel -i skytraq,baud=9600 -f /dev/rfcomm0 -o gpx -F out.gpx</userinput></para>
 </example>
-
-<para>The "initbaud" option might be helpful if autodetection fails or takes too long. With this option you
-can tell GPSBabel the baud rate the device is currently set to. In contrast, the option "baud" specifies
-the rate at which the actual download should take place. If it is different than "initbaud" (or the autodetected
-rate, if initbaud wasn't given), the initial setting will be restored after finishing the download.</para>
-
-<para>If read-at-once >= 1, batch mode is enabled with that many sectors being read at a time.
-Under normal circumstances, the larger this number the faster the transfer.
-Reducing "read-at-once" might help when you get transmission errors/aborts.
-This option only applies to Venus 6 devices; Venus 5 devices always use read-at-once = 0.</para>

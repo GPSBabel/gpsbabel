@@ -1632,4 +1632,11 @@ compare ${REFERENCE}/route/naviguide.gpx ${TMPDIR}/naviguide.gpx
 gpsbabel -i vpl -f ${REFERENCE}/track/vpl_reference.vpl -o gpx -F ${TMPDIR}/vpl_reference.gpx
 compare ${TMPDIR}/vpl_reference.gpx ${REFERENCE}/track/vpl_reference.gpx
 
+#
+# Skytraq logger tests
+#
+rm -f ${TMPDIR}/skytraq.*
+gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq.bin -o gpx -F ${TMPDIR}/skytraq.gpx
+compare ${TMPDIR}/skytraq.gpx ${REFERENCE}/skytraq.gpx
+
 exit 0
