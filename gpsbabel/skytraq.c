@@ -2,15 +2,10 @@
 
     Serial download of track data from GPS loggers with Skytraq chipset.
 
-    6) Add sample files (it's better when they're created by the "real" 
-       application and not our own output) to reference/ along with 
-       files in a well supported (preferably non-binary) format and 
-       entries in our 'testo' program.   This allows users of different
-       OSes and hardware to exercise your module.
+    Copyright (C) 2008-2009  Mathias Adam, m.adam (at) adamis.de
 
-    Copyright (C) 2008  Mathias Adam, m.adam (at) adamis.de
-    Copyright (C) 2008  J.C Haessig, jean-christophe.haessig (at) dianosis.org
-    Copyright (C) 2005  Robert Lipe, robertlipe@usa.net
+    2008         J.C Haessig, jean-christophe.haessig (at) dianosis.org
+    2009-09-06 | Josef Reisinger | Added "set target location", i.e. -i skytrag,targetlocation=<lat>:<lng>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,9 +20,6 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
-
-
-    2009-09-06 | Josef Reisinger | Added "set target location", i.e. -i skytrag,targetlocation=<lat>:<lng>
  */
 
 #include <ctype.h>
@@ -38,8 +30,10 @@
 
 #define MYNAME "skytraq"
 
-#define SECTOR_SIZE		4096
 #define TIMEOUT			5000
+#define SECTOR_SIZE		4096
+#define FULL_ITEM_LEN		18
+#define COMPACT_ITEM_LEN	8
 
 /* Maximum number of chars to skip while waiting for a reply: */
 #define RETRIES			250
@@ -58,28 +52,50 @@
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
 
-static char *port;		/* port name */
-static void *serial_handle;	/* IO file descriptor */
-static int skytraq_baud = 0;	/* detected baud rate */
+static char *port;			/* port name */
+static void *serial_handle = 0;		/* IO file descriptor */
+static int skytraq_baud = 0;		/* detected baud rate */
+static gbfile *file_handle = 0;		/* file descriptor (used by skytraq-bin format) */
 
-static char *opt_erase;		/* erase after read? (0/1) */
-static char *opt_initbaud;	/* baud rate used to init device */
-static char *opt_dlbaud;	/* baud rate used for downloading tracks */
-static char *opt_read_at_once;	/* number of sectors to read at once (Venus6 only) */
-static char *opt_set_location;	/* set if the "targetlocation" options was used */
+static char *opt_erase = 0;		/* erase after read? (0/1) */
+static char *opt_initbaud = 0;		/* baud rate used to init device */
+static char *opt_dlbaud = 0;		/* baud rate used for downloading tracks */
+static char *opt_read_at_once = 0;	/* number of sectors to read at once (Venus6 only) */
+static char *opt_first_sector = 0;	/* first sector to be read from the device (default: 0) */
+static char *opt_last_sector = 0;	/* last sector to be read from the device (default: smart read everything) */
+static char *opt_dump_file = 0;		/* dump raw data to this file (optional) */
+static char *opt_no_output = 0;		/* disable output? (0/1) */
+static char *opt_set_location = 0;	/* set if the "targetlocation" options was used */
 
 static
 arglist_t skytraq_args[] = {
 	{ "erase", &opt_erase, "Erase device data after download",
 	  "0", ARGTYPE_BOOL, ARG_NOMINMAX },
-	{ "initbaud", &opt_initbaud, "Baud rate used to init device, 0=autodetect",
+	{ "targetlocation", &opt_set_location, "Set location finder target location as lat,lng",
+	  "", ARGTYPE_STRING, "", "" },
+	{ "initbaud", &opt_initbaud, "Baud rate used to init device (0=autodetect)",
 	  "0", ARGTYPE_INT, "4800", "230400" },
 	{ "baud", &opt_dlbaud, "Baud rate used for download",
 	  "230400", ARGTYPE_INT, "4800", "230400" },
-	{ "read-at-once", &opt_read_at_once, "Number of sectors to read at once (Venus6 only)",
+	{ "read-at-once", &opt_read_at_once, "Number of sectors to read at once (0=use single sector mode)",
 	  "255", ARGTYPE_INT, "0", "255" },
-	{ "targetlocation", &opt_set_location, "Set location finder target location as lat,lng",
-	  "", ARGTYPE_STRING, "", "" },
+	{ "first-sector", &opt_first_sector, "First sector to be read from the device",
+	  "0", ARGTYPE_INT, "0", "65535" },
+	{ "last-sector", &opt_last_sector, "Last sector to be read from the device (-1: smart read everything)",
+	  "-1", ARGTYPE_INT, "-1", "65535" },
+	{ "dump-file", &opt_dump_file, "Dump raw data to this file",
+	  NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX },
+	{ "no-output", &opt_no_output, "Disable output (useful with e.g. erase or targetlocation)",
+	  "0", ARGTYPE_BOOL, ARG_NOMINMAX },
+	ARG_TERMINATOR
+};
+
+static
+arglist_t skytraq_fargs[] = {
+	{ "first-sector", &opt_first_sector, "First sector to be read from the file",
+	  "0", ARGTYPE_INT, "0", "65535" },
+	{ "last-sector", &opt_last_sector, "Last sector to be read from the file (-1: read till empty sector)",
+	  "-1", ARGTYPE_INT, "-1", "65535" },
 	ARG_TERMINATOR
 };
 
@@ -462,7 +478,7 @@ skytraq_get_log_buffer_status(gbuint32 *log_wr_ptr, gbuint16 *sectors_free, gbui
 
 /* reads 32-bit "middle-endian" fields */
 static unsigned int me_read32(const unsigned char *p) {
- return ((unsigned)be_read16(p+2) << 16) | ((unsigned)be_read16(p));
+	return ((unsigned)be_read16(p+2) << 16) | ((unsigned)be_read16(p));
 }
 
 struct read_state {
@@ -473,8 +489,17 @@ struct read_state {
 	long x, y, z;
 };
 
-static void state_init(struct read_state *pst) {
-	pst->route_head = NULL;
+static void
+state_init(struct read_state *pst)
+{
+	route_head *track;
+
+	track = route_head_alloc();
+	track->rte_name = xstrdup("SkyTraq tracklog");
+	track->rte_desc = xstrdup("SkyTraq GPS tracklog data");
+	track_add_head(track);
+
+	pst->route_head = track;
 	pst->wpn        = 0;
 	pst->tpn        = 0;
 
@@ -588,7 +613,7 @@ process_data_item(struct read_state *pst, const item_frame *pitem, int len)
 		/* fall through: */
 
 	case 0x4:	/* full item */
-		if (len < 18) {
+		if (len < FULL_ITEM_LEN) {
 			db(1, MYNAME ": Not enough bytes in sector for a full item.\n");
 			return res_ERROR;
 		}
@@ -610,11 +635,11 @@ process_data_item(struct read_state *pst, const item_frame *pitem, int len)
 			f.x, f.y, f.z,
 			ITEM_SPEED(pitem));
 
-		res = 18;
+		res = FULL_ITEM_LEN;
 		break;
 
 	case 0x8:	/* compact item */
-		if (len < 8) {
+		if (len < COMPACT_ITEM_LEN) {
 			db(1, MYNAME ": Not enough bytes in sector for a compact item.\n");
 			return res_ERROR;
 		}
@@ -635,7 +660,7 @@ process_data_item(struct read_state *pst, const item_frame *pitem, int len)
 		pst->y += c.dy;
 		pst->z += c.dz;
 
-		res = 8;
+		res = COMPACT_ITEM_LEN;
 		break;
 
 	default:
@@ -643,7 +668,7 @@ process_data_item(struct read_state *pst, const item_frame *pitem, int len)
 		return 0;
 	}
 
-	if (res == 8  ||  res == 18) {
+	if (res == COMPACT_ITEM_LEN  ||  res == FULL_ITEM_LEN) {
 		ECEF_to_LLA(pst->x, pst->y, pst->z, &lat, &lon, &alt);
 //		GPS_Math_XYZ_To_WGS84LatLonH(&lat, &lon, &alt, pst->x, pst->y, pst->z);
 		tpt = make_trackpoint(pst, lat, lon, alt);
@@ -671,14 +696,16 @@ process_data_sector(struct read_state *pst, const gbuint8 *buf, int len)
 	for (plen = 0; plen < len  &&  buf[plen] != 0xFF; plen += ilen) {
 		ilen = process_data_item(pst, (item_frame*)&buf[plen], len-plen);
 		if (ilen <= 0) {
-			fatal(MYNAME ": Error processing data item (%i)\n", ilen);
+			fatal(MYNAME ": Error %i while processing data item #%i (starts at %i)\n",
+				ilen, pst->tpn, plen);
 		}
 	}
 
 	return plen;
 }
 
-static int	/* returns number of bytes read, negative values indicate errors */
+/* Note: the buffer is being padded with 0xFFs if necessary so there are always SECTOR_SIZE valid bytes */
+static int
 skytraq_read_single_sector(int sector, gbuint8 *buf)
 {
 	gbuint8 MSG_LOG_SECTOR_READ_CONTROL[2] = { 0x1B, sector };
@@ -743,7 +770,7 @@ skytraq_read_single_sector(int sector, gbuint8 *buf)
 	i = i-j;
 	db(3, "Received %i bytes of log data\n", i);
 
-#define SINGLE_READ_WORKAROUND
+//#define SINGLE_READ_WORKAROUND
 #ifdef SINGLE_READ_WORKAROUND
 	gbser_set_speed(serial_handle, skytraq_baud);
 	rd_char(&errors);
@@ -766,7 +793,7 @@ skytraq_read_single_sector(int sector, gbuint8 *buf)
 		buf[i] = 0xFF;
 	}
 
-	return i;
+	return res_OK;
 }
 
 static int
@@ -819,18 +846,20 @@ skytraq_read_multiple_sectors(int first_sector, int sector_count, gbuint8 *buf)
 }
 
 static void
-skytraq_read_tracks(route_head *track)
+skytraq_read_tracks(void)
 {
 	struct read_state st;
 	gbuint32 log_wr_ptr;
 	gbuint16 sectors_free, sectors_total, /*sectors_used_a, sectors_used_b,*/ sectors_used;
-	int i, t, s, rc, got_bytes;
+	int i, t, s, rc, got_sectors, total_sectors_read = 0;
 	int read_at_once = MAX(atoi(opt_read_at_once), 1);
-	int sectors_read, multi_read_supported = 1;
+	int opt_first_sector_val = atoi(opt_first_sector);
+	int opt_last_sector_val = atoi(opt_last_sector);
+	int multi_read_supported = 1;
 	gbuint8 *buffer = NULL;
+	gbfile *dumpfile = NULL;
 
 	state_init(&st);
-	st.route_head = track;
 
 	if (skytraq_get_log_buffer_status(&log_wr_ptr, &sectors_free, &sectors_total) != res_OK) {
 		fatal(MYNAME ": Can't get log buffer status\n");
@@ -839,6 +868,10 @@ skytraq_read_tracks(route_head *track)
 	db(1, MYNAME ": Device status: free sectors: %i / total sectors: %i / %i%% used / write ptr: %i\n",
 		sectors_free, sectors_total, 100 - sectors_free*100 / sectors_total, log_wr_ptr);
 
+	if (opt_first_sector_val >= sectors_total) {
+		db(1, "Warning: sector# specified by option first-sector (%i) is beyond reported total sector count (%i)",
+		   opt_first_sector_val, sectors_total);
+	}
 /* Workaround: sectors_free is sometimes reported wrong. Tried to use log_wr_ptr as an
    indicator for how many sectors are currently used. However this isn't correct in every case too.
    The current read logic is aware of that so this shouldn't be necessary anymore.
@@ -850,19 +883,34 @@ skytraq_read_tracks(route_head *track)
 	}
 	sectors_used = MAX(sectors_used_a, sectors_used_b);
 */
-	sectors_used = sectors_total - sectors_free + 1 /*+5*/;
+	if (opt_last_sector_val < 0) {
+		sectors_used = sectors_total - sectors_free + 1 /*+5*/;
+		if (opt_first_sector_val >= sectors_used) {
+			sectors_used = opt_first_sector_val + 1;
+		}
+	} else {
+		sectors_used = opt_last_sector_val;
+		if (opt_last_sector_val >= sectors_total) {
+			db(1, "Warning: sector# specified by option last-sector (%i) is beyond reported total sector count (%i)",
+			   opt_last_sector_val, sectors_total);
+		}
+	}
 
-	while (read_at_once > 0 && !(buffer = malloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6))) {
+	while (read_at_once > 0 && !(buffer = xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6))) {
 		read_at_once--;
 	}
 	if (read_at_once == 0) fatal(MYNAME ": Can't allocate buffer for reading\n");
 
+	if (opt_dump_file) {
+		dumpfile = gbfopen(opt_dump_file, "w", MYNAME);
+	}
+
 	db(1, MYNAME ": Reading log data from device...\n");
-	for (i = 0; i < sectors_used; i += sectors_read) {
-		for (t = 0, got_bytes = 0; (t < SECTOR_RETRIES) && (got_bytes <= 0); t++) {
+	for (i = opt_first_sector_val; i < sectors_used; i += got_sectors) {
+		for (t = 0, got_sectors = 0; (t < SECTOR_RETRIES) && (got_sectors <= 0); t++) {
 			if (atoi(opt_read_at_once) == 0  ||  multi_read_supported == 0) {
 				rc = skytraq_read_single_sector(i, buffer);
-				if (rc > 0)  got_bytes = rc;
+				if (rc == res_OK)  got_sectors = 1;
 			} else {
 				/* Try to read read_at_once sectors at once.
 				 * If tere aren't any so many interesting ones, read the remainder (sectors_used-i).
@@ -873,7 +921,7 @@ skytraq_read_tracks(route_head *track)
 				rc = skytraq_read_multiple_sectors(i, read_at_once, buffer);
 				switch (rc) {
 				case res_OK:
-					got_bytes = read_at_once*SECTOR_SIZE;
+					got_sectors = read_at_once;
 					read_at_once = MIN(read_at_once*2, atoi(opt_read_at_once));
 					break;
 
@@ -889,29 +937,41 @@ skytraq_read_tracks(route_head *track)
 				}
 			}
 		}
-		if (got_bytes <= 0) {
+		if (got_sectors <= 0) {
 			fatal(MYNAME ": Error reading sector %i\n", i);
 		}
-		sectors_read = (got_bytes-1)/SECTOR_SIZE + 1;
 
-		for (s = 0; s < sectors_read; s++) {
+		total_sectors_read += got_sectors;
+
+		if (dumpfile) {
+			gbfwrite(buffer, SECTOR_SIZE, got_sectors, dumpfile);
+		}
+
+		if (*opt_no_output == '1') {
+			continue;		// skip decoding
+		}
+
+		for (s = 0; s < got_sectors; s++) {
 			db(4, MYNAME ": Decoding sector #%i...\n", i+s);
-			rc = process_data_sector(&st, buffer+s*SECTOR_SIZE, MIN(got_bytes, SECTOR_SIZE));
+			rc = process_data_sector(&st, buffer+s*SECTOR_SIZE, SECTOR_SIZE);
 			if (rc == 0) {
-				db(1, MYNAME ": Empty sector encountered: apparently only %i sectors "
+				db(1, MYNAME ": Empty sector encountered: apparently only %i sectors are "
 					"used but device reported %i.\n",
 					i+s, sectors_used);
 				i = sectors_used;	/* terminate to avoid reading stale data still in the logger */
 				break;
-			} else if (rc >= (4096-18) && i+s+1 >= sectors_used && i+s+1 < sectors_total) {
-				db(1, MYNAME ": Last sector is nearly full, reading one more sector (some "
-					"devices report free sector count wrong)\n");
+			} else if (rc >= (4096-FULL_ITEM_LEN) && i+s+1 >= sectors_used && i+s+1 < sectors_total) {
+				db(1, MYNAME ": Last sector is nearly full, reading one more sector\n");
 				sectors_used++;
 			}
 		}
 	}
 	free(buffer);
-	db(1, MYNAME ": Got %i trackpoints.\n", st.tpn);
+	db(1, MYNAME ": Got %i trackpoints from %i sectors.\n", st.tpn, total_sectors_read);
+
+	if (dumpfile) {
+		gbfclose(dumpfile);
+	}
 }
 
 static int
@@ -1058,23 +1118,21 @@ static void
 skytraq_read(void)
 {
 	int dlbaud;
-	route_head *track;
-
- 	if (*opt_set_location) {
- 		skytraq_set_location();
-		return;
- 	} 
-	track = route_head_alloc();
-	track->rte_name = xstrdup("SkyTraq tracklog");
-	track->rte_desc = xstrdup("SkyTraq GPS tracklog data");
-	track_add_head(track);      
 
 	dlbaud = atoi(opt_dlbaud);
 	if (dlbaud != skytraq_baud) {
 		skytraq_set_baud(dlbaud);
 	}
 
-	skytraq_read_tracks(track);
+ 	if (*opt_set_location) {
+ 		skytraq_set_location();
+//		return;
+ 	}
+
+	// read device unless no-output=1 and dump-file=0 (i.e. no data needed at all)
+	if (*opt_no_output == '0'  ||  opt_dump_file != NULL) {
+		skytraq_read_tracks();
+	}
 
 	if (*opt_erase == '1') {
 		skytraq_erase();
@@ -1082,6 +1140,60 @@ skytraq_read(void)
 
 	skytraq_set_baud(skytraq_baud);		// note that _system_restart resets baud rate anyway...
 	skytraq_system_restart();
+}
+
+static void
+file_init(const char *fname)
+{
+	db(1, "Opening file...\n");
+	if ((file_handle = gbfopen(fname, "rb", MYNAME)) == NULL) {
+		fatal(MYNAME ": Can't open file '%s'\n", fname);
+	}
+}
+
+static void
+file_deinit(void)
+{
+	db(1, "Closing file...\n");
+	gbfclose(file_handle);
+	file_handle = NULL;
+}
+
+static void
+file_read(void)
+{
+	struct read_state st;
+	int rc, got_bytes;
+	int opt_first_sector_val = atoi(opt_first_sector);
+	int opt_last_sector_val = atoi(opt_last_sector);
+	int sectors_read;
+	gbuint8 *buffer;
+
+	state_init(&st);
+	buffer = xmalloc(SECTOR_SIZE);
+
+	if (opt_first_sector_val > 0) {
+		db(4, MYNAME ": Seeking to first-sector index %i\n", opt_first_sector_val*SECTOR_SIZE);
+		gbfseek(file_handle, opt_first_sector_val*SECTOR_SIZE, SEEK_SET);
+	}
+
+	db(1, MYNAME ": Reading log data from file...\n");
+	sectors_read = 0;
+	while ((got_bytes = gbfread(buffer, 1, SECTOR_SIZE, file_handle)) > 0) {
+		db(4, MYNAME ": Decoding sector #%i...\n", sectors_read++);
+		rc = process_data_sector(&st, buffer, got_bytes);
+		if (opt_last_sector_val < 0) {
+			if (rc < (4096-FULL_ITEM_LEN)) {
+				db(1, MYNAME ": Empty sector encountered, terminating.\n");
+				break;
+			}
+		} else if (sectors_read-1 >= opt_last_sector_val) {
+			db(1, MYNAME ": desired last-sector #%i reached, terminating.\n", sectors_read-1);
+			break;
+		}
+	}
+	free(buffer);
+	db(1, MYNAME ": Got %i trackpoints from %i sectors.\n", st.tpn, sectors_read);
 }
 
 /**************************************************************************/
@@ -1103,6 +1215,24 @@ ff_vecs_t skytraq_vecs = {
 	NULL,
 	NULL,
 	skytraq_args,
+	CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
+};
+
+ff_vecs_t skytraq_fvecs = {
+	ff_type_file,
+	{
+		ff_cap_read			/* waypoints */,
+	  	ff_cap_read 			/* tracks */,
+	  	ff_cap_none 			/* routes */
+	},
+	file_init,
+	NULL,
+	file_deinit,
+	NULL,
+	file_read,
+	NULL,
+	NULL, 
+	skytraq_fargs,
 	CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
 };
 /**************************************************************************/

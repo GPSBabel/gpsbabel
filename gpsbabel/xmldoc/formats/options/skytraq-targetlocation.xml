@@ -10,9 +10,9 @@
        <userinput>gpsbabel -i skytraq,targetlocation=12.34:-56.78 -f /dev/ttyUSB
 0 -o unicsv -F -</userinput>
        Sets latitude and longitude of the location finder to N12.34 and 
-	W56.78 re ectivly. 
+	W56.78 respectively. 
        The arrows on the device will point you to this location as soon as 
-	it h as a satlitte fix.
+	it has a satellite fix.
  </para>
 </example>
 

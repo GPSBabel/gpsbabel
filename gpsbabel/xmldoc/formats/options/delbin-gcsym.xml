@@ -5,4 +5,4 @@ the device. If false, any icon data present in the source data will
  be used instead. If you've taken control of the icon data, you are
  responsible for providing valid icons; GPSBabel will make no attempt 
 to purify what gets sent.
-</par>
+</para>

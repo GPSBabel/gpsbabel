@@ -1,0 +1,3 @@
+<para>The following baud rates can be used: 4800, 9600, 19200, 38400, 57600, 115200, 230400.
+Note that your logger might support only a subset of them (especially 230400 which isn't documented
+in the chipset manual, though there are devices that are capable of this speed).</para>
