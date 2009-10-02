@@ -349,6 +349,7 @@ garmin_usb_start(struct usb_device *dev, libusb_unit_data *lud)
 			// feeling there are more affected models either
 			// on the market or on the way.
 			case 695: break;   // Venture HC
+			case 957: break;   // Legend H
 			case 285: break;   // GPSMap 276C/4.80
 			case 402: break;   // GPSMap 396C/4.50
 			default: gusb_syncup();
