@@ -6,7 +6,6 @@ cvsps $* |  awk '
 	split($0, dte, " ");
 	
 	printf "\n<tr><td class=\"date\">%s</td>", dte[2];
-	printf "<td class=\"release\"></td>"
 	}
 /^Log:/ { gsub("^Log:", ""); inlog = 1 }
 /^Members:/ {printf "<td>%s</td></tr>", logt ; inlog = 0; }
