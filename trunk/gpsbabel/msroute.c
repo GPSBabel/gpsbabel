@@ -566,7 +566,7 @@ ole_deinit(void)
 static void
 msroute_read_journey(void)
 {
-	int bufsz;
+	int bufsz = 0;
 	char *buff;
 	
 	buff = ole_read_property_stream(MSROUTE_OBJ_NAME, &bufsz);

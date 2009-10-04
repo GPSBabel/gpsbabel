@@ -1745,7 +1745,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # Increase GBBUILD for a new release
 GBBUILD=20
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-PACKAGE_RELEASE="-beta20090906"
+PACKAGE_RELEASE="-beta20091003"
 
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE_RELEASE "$PACKAGE_RELEASE"
@@ -3422,7 +3422,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f conftest*
+rm -f -r conftest*
 
 fi
 
@@ -3443,7 +3443,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f conftest*
+rm -f -r conftest*
 
 fi
 
@@ -4934,7 +4934,7 @@ else
        { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
 fi
-ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc jeeps/Makefile shapelib/Makefile zlib/empty"
+ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss gui/makelinuxdist.sh xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc jeeps/Makefile shapelib/Makefile zlib/empty"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5493,6 +5493,7 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "gbversion.h") CONFIG_FILES="$CONFIG_FILES gbversion.h" ;;
     "gui/setup.iss") CONFIG_FILES="$CONFIG_FILES gui/setup.iss" ;;
+    "gui/makelinuxdist.sh") CONFIG_FILES="$CONFIG_FILES gui/makelinuxdist.sh" ;;
     "xmldoc/makedoc") CONFIG_FILES="$CONFIG_FILES xmldoc/makedoc" ;;
     "tools/mkcapabilities") CONFIG_FILES="$CONFIG_FILES tools/mkcapabilities" ;;
     "win32/gpsbabel.rc") CONFIG_FILES="$CONFIG_FILES win32/gpsbabel.rc" ;;
