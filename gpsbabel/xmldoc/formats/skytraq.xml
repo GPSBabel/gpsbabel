@@ -69,9 +69,10 @@ use this format to read its memory.</para>
 </example>
 
 <para>If available, reading the logger using bluetooth should also work. However, many devices support only one
-specific baud rate over bluetooth, e.g. 9600:</para>
+specific baud rate over bluetooth, e.g. 9600. In that case you should use the option <userinput>baud=0</userinput>
+to tell GPSBabel to use that default baud rate:</para>
 <example id="skytraq-on-linux-bt">
   <title>Command showing skytraq download tracks via bluetooth on Linux</title>
   <para><userinput>rfcomm bind 0 &lt;bdaddr&gt;</userinput></para>
-  <para><userinput>gpsbabel -i skytraq,baud=9600 -f /dev/rfcomm0 -o gpx -F out.gpx</userinput></para>
+  <para><userinput>gpsbabel -i skytraq,baud=0 -f /dev/rfcomm0 -o gpx -F out.gpx</userinput></para>
 </example>
