@@ -77,7 +77,7 @@ lmx_print(const waypoint *wpt)
 {	
 	gbfprintf(ofd, "    <lm:landmark>\n");
 	if (wpt->shortname) {
-		lmx_write_xml(4, "lm:name", wpt->shortname);
+		lmx_write_xml(4, "lm:name", global_opts.synthesize_shortnames ? wpt->description : wpt->shortname);
 	}
 	if (wpt->description) {
 		lmx_write_xml(4, "lm:description", wpt->description);
