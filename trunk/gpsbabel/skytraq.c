@@ -73,10 +73,10 @@ arglist_t skytraq_args[] = {
 	  "0", ARGTYPE_BOOL, ARG_NOMINMAX },
 	{ "targetlocation", &opt_set_location, "Set location finder target location as lat,lng",
 	  "", ARGTYPE_STRING, "", "" },
+	{ "baud", &opt_dlbaud, "Baud rate used for download",
+	  "230400", ARGTYPE_INT, "0", "230400" },
 	{ "initbaud", &opt_initbaud, "Baud rate used to init device (0=autodetect)",
 	  "0", ARGTYPE_INT, "4800", "230400" },
-	{ "baud", &opt_dlbaud, "Baud rate used for download",
-	  "230400", ARGTYPE_INT, "4800", "230400" },
 	{ "read-at-once", &opt_read_at_once, "Number of sectors to read at once (0=use single sector mode)",
 	  "255", ARGTYPE_INT, "0", "255" },
 	{ "first-sector", &opt_first_sector, "First sector to be read from the device",
@@ -85,7 +85,7 @@ arglist_t skytraq_args[] = {
 	  "-1", ARGTYPE_INT, "-1", "65535" },
 	{ "dump-file", &opt_dump_file, "Dump raw data to this file",
 	  NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX },
-	{ "no-output", &opt_no_output, "Disable output (useful with e.g. erase or targetlocation)",
+	{ "no-output", &opt_no_output, "Disable output (useful with erase)",
 	  "0", ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
@@ -896,10 +896,8 @@ skytraq_read_tracks(void)
 		}
 	}
 
-	while (read_at_once > 0 && !(buffer = xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6))) {
-		read_at_once--;
-	}
-	if (read_at_once == 0) fatal(MYNAME ": Can't allocate buffer for reading\n");
+	buffer = xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6);
+	// m.ad/090930: removed code that tried reducing read_at_once if necessary since doesn't work with xmalloc
 
 	if (opt_dump_file) {
 		dumpfile = gbfopen(opt_dump_file, "w", MYNAME);
@@ -1119,15 +1117,15 @@ skytraq_read(void)
 {
 	int dlbaud;
 
-	dlbaud = atoi(opt_dlbaud);
-	if (dlbaud != skytraq_baud) {
-		skytraq_set_baud(dlbaud);
+	if (*opt_set_location) {
+		skytraq_set_location();
+		return;
 	}
 
- 	if (*opt_set_location) {
- 		skytraq_set_location();
-//		return;
- 	}
+	dlbaud = atoi(opt_dlbaud);
+	if (dlbaud != 0  &&  dlbaud != skytraq_baud) {
+		skytraq_set_baud(dlbaud);
+	}
 
 	// read device unless no-output=1 and dump-file=0 (i.e. no data needed at all)
 	if (*opt_no_output == '0'  ||  opt_dump_file != NULL) {
@@ -1138,7 +1136,9 @@ skytraq_read(void)
 		skytraq_erase();
 	}
 
-	skytraq_set_baud(skytraq_baud);		// note that _system_restart resets baud rate anyway...
+	if (dlbaud != 0  &&  dlbaud != skytraq_baud) {
+		skytraq_set_baud(skytraq_baud);		// note that _system_restart resets baud rate anyway...
+	}
 	skytraq_system_restart();
 }
 
