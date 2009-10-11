@@ -1640,11 +1640,17 @@ gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq.bin -o gpx -F ${TMPDIR}/sk
 compare ${TMPDIR}/skytraq.gpx ${REFERENCE}/skytraq.gpx
 
 #
-# Skytraq logger tests
+# Teletype tests
 #
 rm -f ${TMPDIR}/teletype.*
 gpsbabel -i teletype -f ${REFERENCE}/track/teletype.way -o gpx -F ${TMPDIR}/teletype.gpx
 compare ${TMPDIR}/teletype.gpx ${REFERENCE}/track/teletype.gpx
 
-exit 0
+#
+# Jogmap XML tests
+#
+rm -f ${TMPDIR}/jogmap.*
+gpsbabel -i jogmap -f ${REFERENCE}/track/jogmap.xml -o gpx -F ${TMPDIR}/jogmap.gpx
+compare ${TMPDIR}/jogmap.gpx ${REFERENCE}/track/jogmap-gpx.gpx
+
 exit 0
