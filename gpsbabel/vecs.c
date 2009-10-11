@@ -166,6 +166,7 @@ extern ff_vecs_t pocketfms_fp_vecs;
 extern ff_vecs_t pocketfms_wp_vecs;
 extern ff_vecs_t enigma_vecs;
 extern ff_vecs_t vpl_vecs;
+extern ff_vecs_t teletype_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -962,6 +963,12 @@ vecs_t vec_list[] = {
                 &skytraq_vecs,
                 "skytraq",
                 "SkyTraq Venus based loggers (download)",
+                NULL
+        },
+        {
+                &teletype_vecs,
+                "teletype",
+                "Teletype [ Get Jonathon Johnson to describe",
                 NULL
         },
         {

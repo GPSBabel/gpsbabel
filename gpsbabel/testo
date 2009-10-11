@@ -1639,4 +1639,12 @@ rm -f ${TMPDIR}/skytraq.*
 gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq.bin -o gpx -F ${TMPDIR}/skytraq.gpx
 compare ${TMPDIR}/skytraq.gpx ${REFERENCE}/skytraq.gpx
 
+#
+# Skytraq logger tests
+#
+rm -f ${TMPDIR}/teletype.*
+gpsbabel -i teletype -f ${REFERENCE}/track/teletype.way -o gpx -F ${TMPDIR}/teletype.gpx
+compare ${TMPDIR}/teletype.gpx ${REFERENCE}/track/teletype.gpx
+
+exit 0
 exit 0
