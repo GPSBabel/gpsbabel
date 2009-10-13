@@ -184,19 +184,6 @@ icon_mapping_t garmin_icon_table[] = {
 	 * ....
 	 * {    -2,  8192, "Custom 511" },
 	 */
-#if 1
-/* Since Garmin is busily adding icons to new units, we have to hide
- * these so we can pass them through to the new entries.  6/2/07 robertl
- */
-	{    92,  8227, "Micro-Cache" },   	/* icon for "Toll Booth" */
-	{    48,   161, "Virtual cache" }, 	/* icon for "Scenic Area" */
-	{    86,  8217, "Multi-Cache" },   	/* icon for "Stadium" */
-	{    44,   157, "Unknown Cache" },   	/* icon for "Information" */
-	{    64,   178, "Locationless (Reverse) Cache" }, /* Icon for "Flag" */
-	{    83,  8214, "Post Office" },  	/* Icon for "Post Office" */
-	{    47,   160, "Event Cache" }, 	/* Icon for "Event" */
-	{    90,  8221, "Webcam Cache" }, 	/* Icon for "Live Theatre" */
-#endif
 	/* MapSource V6.x */
 	
 	{   140,  8286, "Flag, Red" },		
@@ -352,6 +339,19 @@ icon_mapping_t garmin_icon_table[] = {
 
 	
 	{    -1,    -1, NULL },
+};
+
+icon_mapping_t garmin_smart_icon_table[] = {
+	/* Additional (optional, activated with -Si) icons */
+	{    92,  8227, "Micro-Cache" },   	/* icon for "Toll Booth" */
+	{    48,   161, "Virtual cache" }, 	/* icon for "Scenic Area" */
+	{    86,  8217, "Multi-Cache" },   	/* icon for "Stadium" */
+	{    44,   157, "Unknown Cache" },   	/* icon for "Information" */
+	{    64,   178, "Locationless (Reverse) Cache" }, /* Icon for "Flag" */
+	{    83,  8214, "Post Office" },  	/* Icon for "Post Office" */
+	{    47,   160, "Event Cache" }, 	/* Icon for "Event" */
+	{    90,  8221, "Webcam Cache" }, 	/* Icon for "Live Theatre" */
+	{    -1,    -1, NULL }
 };
 
 /* ICAO coutry code table */
@@ -791,6 +791,20 @@ int gt_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_form
 		}
 	}
 
+	for (i = garmin_smart_icon_table; global_opts.smart_icons && i->icon; i++) {
+		if (case_ignore_strcmp(desc,i->icon) == 0) {
+			switch (garmin_format) {
+			case MAPSOURCE:
+			case GDB:
+				return i->mpssymnum;
+			case PCX:
+			case GARMIN_SERIAL:
+				return i->pcxsymnum;
+			default:
+				fatal(MYNAME ": unknown garmin format.\n");
+			}
+		}
+	}
 	for (i = garmin_icon_table; i->icon; i++) {
 		if (case_ignore_strcmp(desc,i->icon) == 0) {
 			switch (garmin_format) {
