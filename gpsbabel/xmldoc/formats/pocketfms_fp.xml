@@ -1,5 +1,5 @@
 <para>
-   This format provides support for XML flightplans from <ulink url="www.pocketfms.com">PocketFMS</ulink>.  
+   This format provides support for XML flightplans from <ulink url="http://www.pocketfms.com">PocketFMS</ulink>.  
 </para>
 <para>
    PocketFMS XML flightplans contain route and waypoint information and much more flight planning info as airspaces, aircraft performance, fuel managment etc. This format cannot be read by PocketFMS. Hence GPSBabel supports only input of route and waypoint information.
