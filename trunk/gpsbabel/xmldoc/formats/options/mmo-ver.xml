@@ -1,0 +1,11 @@
+<para>
+Two major strains of Mobile Mapper files have been identified in the wild.  Version 17 is reported as "Memory Map OS Edition 2004, Versio 4.2.3 Build 432" and version 18 is used by the large majority of current files.   We can read either and when writing, we write version 18 by default.  
+</para>
+<para>
+If you have a particularly old Mobile Mapper installation, it may complain "This file was created with a newer version of the Software" when reading our output.You can get around this if force GPSBabel to create the old format with this option.   
+</para>
+<example id="mmo_ver">
+<title>Forcing creation of old Mobile Mapper files</title>
+<para>
+  gpsbabel -i gpx -f whaetever.gpx -o mmo,ver=17 -F whatever.mmo
+</para>
