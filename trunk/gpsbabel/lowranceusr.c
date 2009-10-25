@@ -360,7 +360,7 @@ lowranceusr_parse_waypt(waypoint *wpt_tmp)
 	wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
 	wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
 	wpt_tmp->altitude = FEET_TO_METERS(gbfgetint32(file_in));
-	if (wpt_tmp->altitude <= UNKNOWN_USR_ALTITUDE) {
+	if (METERS_TO_FEET(wpt_tmp->altitude) <= -10000) {
 		wpt_tmp->altitude = unknown_alt;
 	}
 
