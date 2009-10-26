@@ -1,0 +1,7 @@
+<para>
+  This option specifies the database vehicle/transportation icon name for the
+  output file. This name is not for individual points, but for the entire
+  database; this is the icon that appears  in the points
+  databases/tracks/routes screens besides the database name, in the Pathaway
+  application on your handheld.
+</para>
