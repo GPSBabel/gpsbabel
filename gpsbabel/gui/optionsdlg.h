@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: optionsdlg.h,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: optionsdlg.h,v 1.2 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -55,7 +55,8 @@ private slots:
 class OptionsDlg: public QDialog {
 Q_OBJECT
  public:
-  OptionsDlg(QWidget *parent, const QString &fmtName, QList<FormatOption> *options);
+  OptionsDlg(QWidget *parent, const QString &fmtName, QList<FormatOption> *options,
+	     const QString &html);
   
  private:
   QString fmtName;
@@ -63,6 +64,7 @@ Q_OBJECT
   QDialogButtonBox *buttonBox;
   QList<QCheckBox*> checkBoxes;
   QList<QWidget*> fields;
+  QString html;
 
  private slots:
   void acceptClicked();

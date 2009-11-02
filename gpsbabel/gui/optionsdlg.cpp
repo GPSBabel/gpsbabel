@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: optionsdlg.cpp,v 1.3 2009-09-08 16:06:32 robertl Exp $
+// $Id: optionsdlg.cpp,v 1.4 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -81,10 +81,12 @@ void FileDlgManager::buttonClicked()
 }
 
 //------------------------------------------------------------------------
-OptionsDlg::OptionsDlg(QWidget*parent,  const QString &fmtName, QList<FormatOption> *opts):
+OptionsDlg::OptionsDlg(QWidget*parent,  const QString &fmtName, QList<FormatOption> *opts,
+		       const QString &html):
   QDialog(parent),
   fmtName(fmtName),
-  options(*opts)
+  options(*opts),
+  html(html)
 {
 
   QVBoxLayout *verticalLayout = new QVBoxLayout(this);
@@ -95,6 +97,7 @@ OptionsDlg::OptionsDlg(QWidget*parent,  const QString &fmtName, QList<FormatOpti
     checkBox->setText(tr(options[k].getDescription().toAscii().data()));
     horizontalLayout->addWidget(checkBox);
     checkBox->setChecked(options[k].getSelected());
+    //checkBox->setWhatsThis(options[k].getHtml());
 
     QSpacerItem *horizontalSpacer = new QSpacerItem(0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     horizontalLayout->addItem(horizontalSpacer);
@@ -234,6 +237,5 @@ void OptionsDlg::rejectClicked()
 //------------------------------------------------------------------------
 void OptionsDlg::helpClicked()
 {
-  QString str = "fmt_" + fmtName + ".html";
-  ShowHelp(str.toStdString().c_str());
+  ShowHelp(html);
 }

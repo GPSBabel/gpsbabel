@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: advdlg.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
+// $Id: advdlg.cpp,v 1.3 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -28,20 +28,17 @@
 //------------------------------------------------------------------------
 AdvDlg::AdvDlg(QWidget* parent,
 	       bool &synthShortNames,
-	       bool &forceGPSTypes,
 	       bool &enableCharSetXform,
 	       bool &previewGmap,
 	       int  &debugLevel):
   QDialog(parent),
   synthShortNames(synthShortNames),
-  forceGPSTypes(forceGPSTypes),
   enableCharSetXform(enableCharSetXform),
   previewGmap(previewGmap),
   debugLevel(debugLevel)
 {
   ui.setupUi(this);
   ui.synthShortNames->setChecked(synthShortNames);
-  ui.forceGPSTypes->setChecked(forceGPSTypes);
   ui.enableCharSetXform->setChecked(enableCharSetXform);
   ui.previewGmap->setChecked(previewGmap);
   ui.debugCombo->setCurrentIndex(debugLevel+1);
@@ -54,7 +51,6 @@ AdvDlg::AdvDlg(QWidget* parent,
 void AdvDlg::acceptClicked()
 {
   synthShortNames = ui.synthShortNames->isChecked();
-  forceGPSTypes = ui.forceGPSTypes->isChecked();
   enableCharSetXform = ui.enableCharSetXform->isChecked();
   previewGmap = ui.previewGmap->isChecked();
   debugLevel = ui.debugCombo->currentIndex()-1;

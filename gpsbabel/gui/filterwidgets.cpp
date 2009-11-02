@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: filterwidgets.cpp,v 1.4 2009-09-14 14:25:14 robertl Exp $
+// $Id: filterwidgets.cpp,v 1.5 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -40,11 +40,23 @@ TrackWidget::TrackWidget(QWidget *parent, TrackFilterData &tfd): FilterWidget(pa
   addCheckEnabler(ui.stopCheck,     ui.stopEdit);
   addCheckEnabler(ui.GPSFixesCheck, ui.GPSFixesCombo);
 
+  addCheckEnabler(ui.splitTimeCheck, 
+		  (QList<QWidget *> ()
+		   <<ui.splitTimeSpin
+		   <<ui.splitTimeCombo));
+  addCheckEnabler(ui.splitDistanceCheck, 
+		  (QList<QWidget *> ()
+		   <<ui.splitDistSpin
+		   <<ui.splitDistCombo));
+
   connect(ui.mergeCheck, SIGNAL(clicked()) , this, SLOT(mergeCheckX()));
-  connect(ui.splitCheck, SIGNAL(clicked()) , this, SLOT(OtherCheckX()));
   connect(ui.packCheck,  SIGNAL(clicked()),  this, SLOT(packCheckX()));
-  connect(ui.startCheck, SIGNAL(clicked()),  this, SLOT(OtherCheckX()));
-  connect(ui.stopCheck,   SIGNAL(clicked()), this, SLOT(OtherCheckX()));
+  connect(ui.startCheck, SIGNAL(clicked()),  this, SLOT(otherCheckX()));
+  connect(ui.stopCheck,   SIGNAL(clicked()), this, SLOT(otherCheckX()));
+
+  connect(ui.splitDateCheck,   SIGNAL(clicked()), this, SLOT(splitDateX()));
+  connect(ui.splitTimeCheck,   SIGNAL(clicked()), this, SLOT(splitTimeX()));
+  connect(ui.splitDistanceCheck,   SIGNAL(clicked()), this, SLOT(splitDistanceX()));
 
   ui.startEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
   ui.stopEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
@@ -57,7 +69,9 @@ TrackWidget::TrackWidget(QWidget *parent, TrackFilterData &tfd): FilterWidget(pa
   fopts << new BoolFilterOption(tfd.stop,   ui.stopCheck);
   fopts << new BoolFilterOption(tfd.pack,   ui.packCheck);
   fopts << new BoolFilterOption(tfd.merge,  ui.mergeCheck);
-  fopts << new BoolFilterOption(tfd.split,  ui.splitCheck);
+  fopts << new BoolFilterOption(tfd.splitByDate,  ui.splitDateCheck);
+  fopts << new BoolFilterOption(tfd.splitByTime,  ui.splitTimeCheck);
+  fopts << new BoolFilterOption(tfd.splitByDistance,  ui.splitDistanceCheck);
   fopts << new BoolFilterOption(tfd.GPSFixes,  ui.GPSFixesCheck);
   fopts << new BoolFilterOption(tfd.course, ui.courseCheck);
   fopts << new BoolFilterOption(tfd.speed,  ui.speedCheck);
@@ -81,17 +95,19 @@ TrackWidget::TrackWidget(QWidget *parent, TrackFilterData &tfd): FilterWidget(pa
 }
 
 //------------------------------------------------------------------------
-void TrackWidget::OtherCheckX()
+void TrackWidget::otherCheckX()
 {
   ui.TZCheck->setEnabled(ui.stopCheck->isChecked() || ui.startCheck->isChecked());
-  ui.splitCheck->setEnabled(ui.mergeCheck->isChecked() || ui.packCheck->isChecked());
-  bool bb = ui.packCheck->isChecked() && ui.splitCheck->isChecked();
-  ui.splitTimeSpin->setEnabled(bb);
-  ui.splitTimeCombo->setEnabled(bb);
 
-  bb = ui.packCheck->isChecked();
-  ui.splitDistSpin->setEnabled(bb);
-  ui.splitDistCombo->setEnabled(bb);
+  ui.splitTimeSpin->setEnabled(ui.splitTimeCheck->isChecked());
+  ui.splitTimeCombo->setEnabled(ui.splitTimeCheck->isChecked());
+  ui.splitDistSpin->setEnabled(ui.splitDistanceCheck->isChecked());
+  ui.splitDistCombo->setEnabled(ui.splitDistanceCheck->isChecked());
+  
+  bool bb = (ui.mergeCheck->isChecked() || ui.packCheck->isChecked());
+  ui.splitDateCheck->setEnabled(bb);
+  ui.splitTimeCheck->setEnabled(bb);
+  ui.splitDistanceCheck->setEnabled(bb);
 }
 
 //------------------------------------------------------------------------
@@ -99,16 +115,44 @@ void TrackWidget::mergeCheckX()
 {
   if (ui.mergeCheck->isChecked())
     ui.packCheck->setChecked(false);
-  OtherCheckX();
+  otherCheckX();
 }
 //------------------------------------------------------------------------
-
 void TrackWidget::packCheckX()
 {
   if (ui.packCheck->isChecked())
     ui.mergeCheck->setChecked(false);
-  OtherCheckX();
+  otherCheckX();
 }
+
+//------------------------------------------------------------------------
+void TrackWidget::splitDateX()
+{
+  if (ui.splitDateCheck->isChecked()) {
+    ui.splitTimeCheck->setChecked(false);
+    ui.splitDistanceCheck->setChecked(false);
+  }
+  otherCheckX();
+}
+//------------------------------------------------------------------------
+void TrackWidget::splitTimeX()
+{
+  if (ui.splitTimeCheck->isChecked()) {
+    ui.splitDateCheck->setChecked(false);
+    ui.splitDistanceCheck->setChecked(false);
+  }
+  otherCheckX();
+}
+//------------------------------------------------------------------------
+void TrackWidget::splitDistanceX()
+{
+  if (ui.splitDistanceCheck->isChecked()) {
+    ui.splitDateCheck->setChecked(false);
+    ui.splitTimeCheck->setChecked(false);
+  }
+  otherCheckX();
+}
+
 
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
@@ -186,6 +230,9 @@ MiscFltWidget::MiscFltWidget(QWidget *parent, MiscFltFilterData &mfd): FilterWid
   fopts << new BoolFilterOption(mfd.transform, ui.transformCheck);
   fopts << new BoolFilterOption(mfd.swap, ui.swapCheck);
   fopts << new BoolFilterOption(mfd.del, ui.deleteCheck);
+  fopts << new BoolFilterOption(mfd.nukeTracks, ui.nukeTracks);
+  fopts << new BoolFilterOption(mfd.nukeRoutes, ui.nukeRoutes);
+  fopts << new BoolFilterOption(mfd.nukeWaypoints, ui.nukeWaypoints);
   fopts << new ComboFilterOption(mfd.transformVal,  ui.transformCombo);
 
   setWidgetValues();

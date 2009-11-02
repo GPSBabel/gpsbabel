@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.11 2009-09-15 18:04:03 robertl Exp $
+// $Id: mainwindow.cpp,v 1.12 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -359,8 +359,7 @@ int MainWindow::currentComboFormatIndex(QComboBox *comboBox)
 {
   int idx = comboBox->currentIndex();
   if (idx<0 || idx >= comboBox->count()) {
-    QMessageBox::critical(0, appName,
-			 "*** Internal Error -- current combo index is invalid!");
+    //    QMessageBox::critical(0, appName, "*** Internal Error -- current combo index is invalid!");
     return 0;
   }
   return comboBox->itemData(idx).toInt();
@@ -623,7 +622,8 @@ void MainWindow::inputOptionButtonClicked()
   else {
     OptionsDlg optionDlg(0,
 			 formatList[fidx].getName(),
-			 formatList[fidx].getInputOptionsRef());
+			 formatList[fidx].getInputOptionsRef(),
+			 formatList[fidx].getHtml());
     optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList[fidx].getName()));
     optionDlg.exec();
     displayOptionsText(ui.inputOptionsText,  ui.inputFormatCombo, true);
@@ -640,7 +640,10 @@ void MainWindow::outputOptionButtonClicked()
        tr("There are no output options for format \"%1\"").arg(formatList[fidx].getDescription()));
   }
   else {
-    OptionsDlg optionDlg(0, formatList[fidx].getName(), formatList[fidx].getOutputOptionsRef());
+    OptionsDlg optionDlg(0, 
+			 formatList[fidx].getName(), 
+			 formatList[fidx].getOutputOptionsRef(),
+			 formatList[fidx].getHtml());
     optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList[fidx].getName()));
     optionDlg.exec();
     displayOptionsText(ui.outputOptionsText,  ui.outputFormatCombo, false);
@@ -927,7 +930,7 @@ void MainWindow::resetFormatDefaults()
 void MainWindow::moreOptionButtonClicked()
 {
   AdvDlg advDlg(0, bd.synthShortNames,
-		bd.forceGPSTypes, bd.enableCharSetXform, bd.previewGmap, bd.debugLevel);
+		bd.enableCharSetXform, bd.previewGmap, bd.debugLevel);
   connect(advDlg.formatButton(), SIGNAL(clicked()),
 	  this, SLOT(resetFormatDefaults()));
   advDlg.exec();

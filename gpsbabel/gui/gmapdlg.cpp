@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: gmapdlg.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
+// $Id: gmapdlg.cpp,v 1.3 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -208,6 +208,9 @@ GMapDialog::GMapDialog(QWidget *parent, const QString &gpxFileName, QPlainTextEd
   connect(ui.treeView, SIGNAL(customContextMenuRequested(const QPoint &)),
 	  this, SLOT(showContextMenu(const QPoint &)));
 
+  connect(ui.copyButton, SIGNAL(clicked()), this, SLOT(copyButtonClickedX()));
+
+  ui.copyButton->hide(); // Hide for now, not working
 
 }
 
@@ -557,4 +560,8 @@ void GMapDialog::showContextMenu(const QPoint &pt)
   }
   else {
   }
+}
+//------------------------------------------------------------------------
+void GMapDialog::copyButtonClickedX() {
+  
 }

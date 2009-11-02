@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: advdlg.h,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: advdlg.h,v 1.2 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -30,7 +30,6 @@ class AdvDlg: public QDialog {
 public:
   AdvDlg(QWidget* parent, 
 	 bool &synthShortNames, 
-	 bool &forceGPSTypes,
 	 bool &enableCharSetXform,
 	 bool &previewGmap,
 	 int   &debugLevel);
@@ -39,7 +38,6 @@ public:
 private:
   Ui_AdvUi ui;
   bool &synthShortNames;
-  bool &forceGPSTypes;
   bool &enableCharSetXform;
   bool &previewGmap;
   int  &debugLevel;

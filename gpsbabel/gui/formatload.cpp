@@ -1,5 +1,5 @@
 // -*- c++ -*-
-// $Id: formatload.cpp,v 1.2 2009-08-28 17:08:55 robertl Exp $
+// $Id: formatload.cpp,v 1.3 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -51,6 +51,8 @@ bool FormatLoad::processFormat(Format &format)
     return false;
   }
   QString htmlPage = lines[currentLine++];
+  htmlPage.replace(QRegExp("^[\\s]*"), "");
+  htmlPage.replace(QRegExp("[\\s]$"), "");
 
   QRegExp regex("^option");
   QList <FormatOption> optionList;
@@ -108,7 +110,12 @@ bool FormatLoad::processFormat(Format &format)
 		  hfields[0] == "serial",
 		  QStringList() << hfields[3],
 		  optionList,
-		  optionList2);
+		  optionList2, htmlPage);
+  if (htmlPage.length() > 0 && Format::getHtmlBase().length() == 0) {
+    QString base = htmlPage;
+    base.replace(QRegExp("/[^/]+$"), "/");
+    Format::setHtmlBase(base);
+  }
   return true;
 }
 

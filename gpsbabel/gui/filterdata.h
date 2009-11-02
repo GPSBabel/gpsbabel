@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: filterdata.h,v 1.3 2009-09-02 19:05:27 robertl Exp $
+// $Id: filterdata.h,v 1.4 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -62,6 +62,9 @@ class TrackFilterData: public FilterData  {
 		     stop(false),
 		     pack(false), merge(false), split(false), 
 		     GPSFixes(false), GPSFixesVal(0),
+		     splitByDate(false),
+		     splitByTime(false),
+		     splitByDistance(false),
 		     course(false), speed(false),
 		     splitTime(0), splitTimeUnit(0),
 		     splitDist(0), splitDistUnit(0)
@@ -82,6 +85,9 @@ class TrackFilterData: public FilterData  {
     sg.addVarSetting(new BoolSetting("trks.pack", pack));
     sg.addVarSetting(new BoolSetting("trks.merge", merge));
     sg.addVarSetting(new BoolSetting("trks.split", split));
+    sg.addVarSetting(new BoolSetting("trks.splitByDate", splitByDate));
+    sg.addVarSetting(new BoolSetting("trks.splitByTime", splitByTime));
+    sg.addVarSetting(new BoolSetting("trks.splitByDistance", splitByDistance));
     sg.addVarSetting(new BoolSetting("trks.start", start));
     sg.addVarSetting(new DateTimeSetting("trks.startTime", startTime));
     sg.addVarSetting(new BoolSetting("trks.stop", stop));
@@ -114,6 +120,7 @@ class TrackFilterData: public FilterData  {
   QDateTime stopTime;
   bool pack, merge, split, GPSFixes;
   int  GPSFixesVal;
+  bool splitByDate, splitByTime, splitByDistance;
   bool course, speed;
   int  splitTime, splitTimeUnit;
   int  splitDist, splitDistUnit;
@@ -186,6 +193,9 @@ class RtTrkFilterData: public FilterData  {
 class MiscFltFilterData: public FilterData  {
  public:
   MiscFltFilterData(): FilterData(), 
+		       nukeRoutes(false),
+		       nukeTracks(false),
+		       nukeWaypoints(false),
 		       transform(false),
 		       del(false),
 		       swap(false),
@@ -196,6 +206,9 @@ class MiscFltFilterData: public FilterData  {
   virtual QStringList makeOptionString();
   virtual void makeSettingGroup(SettingGroup &sg)
   {
+    sg.addVarSetting(new BoolSetting("mscflt.nukeRoutes", nukeRoutes));
+    sg.addVarSetting(new BoolSetting("mscflt.nukeTracks", nukeTracks));
+    sg.addVarSetting(new BoolSetting("mscflt.nukeWaypoints", nukeWaypoints));
     sg.addVarSetting(new BoolSetting("mscflt.inUse", inUse));
     sg.addVarSetting(new BoolSetting("mscflt.transform", transform));
     sg.addVarSetting(new IntSetting("mscflt.transformVal", transformVal));
@@ -204,6 +217,7 @@ class MiscFltFilterData: public FilterData  {
   }
 
  public:
+  bool nukeRoutes, nukeTracks, nukeWaypoints;
   bool transform, del, swap;
   int transformVal;
 };

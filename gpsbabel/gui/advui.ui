@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>347</width>
-    <height>222</height>
+    <width>280</width>
+    <height>185</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,16 +21,6 @@
      </property>
      <property name="text">
       <string>Synthesize short names</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="forceGPSTypes">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>Force Selected GPS data types (nuketypes filter)</string>
      </property>
     </widget>
    </item>
