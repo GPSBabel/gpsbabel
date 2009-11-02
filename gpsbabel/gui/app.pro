@@ -1,4 +1,4 @@
-# $Id: app.pro,v 1.12 2009-10-04 01:35:51 robertl Exp $
+# $Id: app.pro,v 1.13 2009-11-02 19:54:13 robertl Exp $
 #
 
 CONFIG += qt release 
@@ -18,7 +18,7 @@ unix:MOC_DIR = objects
 unix:OBJECTS_DIR = objects
 unix:RCC_DIR = objects
 
-mac:LIBS += -framework IOKit
+mac:LIBS += -framework IOKit -framework CoreFoundation
 
 UI_DIR = tmp
 
