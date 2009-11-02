@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: gmapdlg.h,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: gmapdlg.h,v 1.2 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -64,6 +64,7 @@ private slots:
   void routeClickedX(int i);
   void treeDoubleClicked(const QModelIndex &idx);
   void selectionChangedX (const QItemSelection &,  const QItemSelection &);
+  void copyButtonClickedX();
   void showContextMenu(const QPoint &);
 
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>297</width>
-    <height>107</height>
+    <width>303</width>
+    <height>175</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,6 +26,42 @@
      <property name="text">
       <string>Misc. Filters</string>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Nuke (Remove) Data Types</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
+      <item>
+       <widget class="QCheckBox" name="nukeRoutes">
+        <property name="text">
+         <string>Routes</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="nukeTracks">
+        <property name="text">
+         <string>Tracks</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="nukeWaypoints">
+        <property name="text">
+         <string>Waypoints</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>

@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: filterwidgets.h,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: filterwidgets.h,v 1.2 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -37,14 +37,14 @@ class CheckEnabler: public QObject
 {
   Q_OBJECT
     public:
-  CheckEnabler(QObject *parent, QCheckBox *ck, QWidget *w): QObject(parent), checkBox(ck)
+  CheckEnabler(QObject *parent, QAbstractButton *ck, QWidget *w): QObject(parent), checkBox(ck)
   {
     widgetList << w;
     connect(ck, SIGNAL(clicked()), this, SLOT(checkStatusChanged()));
     checkStatusChanged();
     fixWhatsThis();
   }
-  CheckEnabler(QObject *parent, QCheckBox *ck, QList<QWidget *> &wl): 
+  CheckEnabler(QObject *parent, QAbstractButton *ck, QList<QWidget *> &wl): 
     QObject(parent), checkBox(ck)
   {
     widgetList = wl;
@@ -63,7 +63,7 @@ public slots:
   }
   
 private:
-  QCheckBox *checkBox;
+  QAbstractButton *checkBox;
   QList<QWidget*> widgetList;
   void fixWhatsThis()
   {
@@ -101,7 +101,7 @@ class FilterOption
 class BoolFilterOption: public FilterOption
 {
  public:
- BoolFilterOption(bool &b, QCheckBox *ck): FilterOption(), b(b), checkBox(ck)
+ BoolFilterOption(bool &b, QAbstractButton *ck): FilterOption(), b(b), checkBox(ck)
   {
   }
   void setWidgetValue() {checkBox->setChecked(b); }
@@ -109,7 +109,7 @@ class BoolFilterOption: public FilterOption
     
  private:
   bool &b;
-  QCheckBox *checkBox;
+  QAbstractButton *checkBox;
 };
 
 //------------------------------------------------------------------------
@@ -224,10 +224,10 @@ public:
     for (int i=0; i<fopts.size(); i++)
       fopts[i]->setWidgetValue();
   }
-  void addCheckEnabler(QCheckBox *ck, QWidget *w) {
+  void addCheckEnabler(QAbstractButton *ck, QWidget *w) {
     enbls << new CheckEnabler(this, ck, w);
   }
-  void addCheckEnabler(QCheckBox *ck, QList<QWidget *> &wl)
+  void addCheckEnabler(QAbstractButton *ck, QList<QWidget *> &wl)
   {
     enbls << new CheckEnabler(this, ck, wl);
   }
@@ -250,7 +250,7 @@ Q_OBJECT
   TrackWidget(QWidget *parent, TrackFilterData &tf);
 
   virtual void checkChecks(){
-    OtherCheckX();
+    otherCheckX();
     FilterWidget::checkChecks();
   }
 
@@ -260,7 +260,10 @@ Q_OBJECT
 
   private slots:
   void mergeCheckX();
-  void OtherCheckX();
+  void otherCheckX();
+  void splitDateX();
+  void splitTimeX();
+  void splitDistanceX();
   void packCheckX();
 };
 

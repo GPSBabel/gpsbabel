@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: format.h,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: format.h,v 1.2 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -60,6 +60,7 @@ public:
     value = QVariant();
     selected = false;
   }
+
   FormatOption(const FormatOption & c)
     : name(c.name), description(c.description), type(c.type),
       defaultValue(c.defaultValue), minValue(c.minValue), maxValue(c.maxValue), html(c.html),
@@ -77,7 +78,8 @@ public:
   QVariant getDefaultValue() const {return defaultValue; }
 
   void setValue(QVariant v) { value = v; };
-  void setSelected(bool v)  { selected = v; };
+  void setSelected(bool v)  { selected = v; }; 
+  QString getHtml() const { return html; };
 
 private:
   QString name;
@@ -106,7 +108,8 @@ class Format
 	   writeRoutes(false),
 	   fileFormat(false),
 	   deviceFormat(false),
-	   extensions(QStringList()) 
+	   extensions(QStringList()),
+           html(QString())
   {
     inputOptions.clear();
     outputOptions.clear();
@@ -119,14 +122,16 @@ class Format
 	 bool fileFormat, bool deviceFormat,
 	 const QStringList &extensions,
 	 QList<FormatOption> &inputOptions, 
-	 QList<FormatOption> &outputOptions):
+	 QList<FormatOption> &outputptions, 
+         const QString &html):
     name(name), description(description),
     readWaypoints(readWaypoints), readTracks(readTracks), readRoutes(readRoutes),
     writeWaypoints(writeWaypoints), writeTracks(writeTracks), writeRoutes(writeRoutes),
     fileFormat(fileFormat), deviceFormat(deviceFormat),
     extensions(extensions),
     inputOptions(inputOptions),
-    outputOptions(outputOptions)
+    outputOptions(outputptions),
+    html(QString())
   {
   }
 
@@ -137,7 +142,8 @@ class Format
     fileFormat(c.fileFormat), deviceFormat(c.deviceFormat),
     extensions(c.extensions),
     inputOptions(c.inputOptions),
-    outputOptions(c.outputOptions)
+    outputOptions(c.outputOptions),
+    html(c.html)
   {
   }
 
@@ -159,6 +165,7 @@ class Format
 
   QString getName() const           { return name; };
   QString getDescription() const    { return description; };
+  QString getHtml() const           { return html; };
   QStringList getExtensions() const { return extensions; };
   const QList<FormatOption> &getInputOptions()  const { return inputOptions; };
   const QList<FormatOption> &getOutputOptions() const { return outputOptions; };
@@ -172,6 +179,8 @@ class Format
   void saveSettings(QSettings &settings);
   void restoreSettings(QSettings &settings);
   void setToDefault();
+  static QString getHtmlBase() { return htmlBase; }
+  static void setHtmlBase(const QString &s) { htmlBase = s; }
 
  private:
   QString name, description;
@@ -181,6 +190,8 @@ class Format
   QStringList extensions;
   QList<FormatOption>inputOptions;
   QList<FormatOption>outputOptions;
+  QString html;
+  static QString htmlBase;
   
 };
 

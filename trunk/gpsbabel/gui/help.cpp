@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: help.cpp,v 1.7 2009-09-14 14:25:14 robertl Exp $
+// $Id: help.cpp,v 1.8 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -20,25 +20,22 @@
 //  USA
 //
 //------------------------------------------------------------------------
-#include "help.h"
-#include <QApplication>
 #include <QUrl>
-#include <QWebView>
 #include <QDesktopServices>
 
+#include "help.h"
+#include "format.h"
+
 //------------------------------------------------------------------------
-void ShowHelp(const char *name)
+void ShowHelp(const QString &urlIn)
+
 {
-  QString urlname("file:///" + QApplication::applicationDirPath() +
-		  "/help/" + name);
-#ifdef XXXX
-  // This has window modality problems.  Unless the problem is solved, just use
-  // the native browser.
-  QWebView *view = new QWebView();
-  view->setWindowTitle("GPSBabel Help");
-  view->load(urlname);
-  view->show();
-#else
-  QDesktopServices::openUrl(QUrl(urlname));
-#endif
+  QString url = urlIn;
+  if (!url.contains(QRegExp("^http://"))) {
+    url = Format::getHtmlBase() + url;
+  }
+  QDesktopServices::openUrl(QUrl(url));
 }
+
+
+

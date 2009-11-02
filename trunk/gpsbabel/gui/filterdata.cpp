@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: filterdata.cpp,v 1.3 2009-08-28 17:08:55 robertl Exp $
+// $Id: filterdata.cpp,v 1.4 2009-11-02 20:38:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -88,27 +88,32 @@ QStringList TrackFilterData::makeOptionString()
   if (speed)    s += ",speed";
   if (pack)     s += ",pack";
   if (merge)    s += ",merge";
-  if (split && (pack || merge))  {
-    s += ",split";
-    if (splitTime > 0)
-      s += QString("=%1%2").arg(splitTime).arg("mhd"[splitTimeUnit]);
-  }
-  if (splitDist > 0) {
-    double d = splitDist;
-    char u = ' ';
-    if (splitDistUnit == 0) { // ft.
-      d /= 5280.0;  u = 'm';
+  if (pack || merge) {
+    if (splitByDate)  {
+      s += ",split";
     }
-    else if (splitDistUnit == 1) { //m
-      d /= 1000.0;  u = 'k';
+    if (splitByTime)  {
+      s += ",split";
+      if (splitTime > 0)
+	s += QString("=%1%2").arg(splitTime).arg("mhd"[splitTimeUnit]);
     }
-    else if (splitDistUnit == 2) { //km
-      u = 'k';
+    if (splitByDistance && splitDist > 0) {
+      double d = splitDist;
+      char u = ' ';
+      if (splitDistUnit == 0) { // ft.
+	d /= 5280.0;  u = 'm';
+      }
+      else if (splitDistUnit == 1) { //m
+	d /= 1000.0;  u = 'k';
+      }
+      else if (splitDistUnit == 2) { //km
+	u = 'k';
+      }
+      else if (splitDistUnit == 3) { //m
+	u = 'm';
+      }
+      s += QString(",sdistance=%1%2").arg(d).arg(u);
     }
-    else if (splitDistUnit == 3) { //m
-      u = 'm';
-    }
-    s += QString(",sdistance=%1%2").arg(d).arg(u);
   }
 
   if (start)    s += QString(",start=%1").arg(optionDate(startTime, TZ));
@@ -141,6 +146,15 @@ QStringList MiscFltFilterData::makeOptionString()
   QStringList args;
   if (!inUse)
     return args;
+
+  if (nukeRoutes || nukeTracks || nukeWaypoints) {
+    args << QString("-x");
+    QString s = "nuketypes";
+    if (nukeRoutes) s += ",routes";
+    if (nukeTracks) s += ",tracks";
+    if (nukeWaypoints) s += ",waypoints";
+    args << s;
+  }
 
   if (swap) args << "-x" << "swap";
 
