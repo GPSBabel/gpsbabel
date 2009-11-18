@@ -151,6 +151,7 @@ static waypoint** wp_array;
 #define MSG_CAPABILITIES 0xb001
 #define MSG_DELETE 0xb005
 #define MSG_DELETE_SIZE 67
+#define MSG_ERROR 0xa003
 #define MSG_NAVIGATION 0xa010
 #define MSG_REQUEST_ROUTES 0xb051
 #define MSG_REQUEST_ROUTES_SIZE 65
@@ -771,6 +772,10 @@ message_read(unsigned msg_id, message_t* m)
 		id = message_read_1(msg_id, m);
 		if (id == 0) {
 			break;
+		}
+		if (id == MSG_ERROR) {
+			const gbuint8* p = m->data;
+			fatal(MYNAME ": device error %u: \"%s\"\n", *p, p + 1);
 		}
 		message_ack(id, m);
 		if (id == msg_id || time(NULL) - time_start >= READ_TIMEOUT) {
