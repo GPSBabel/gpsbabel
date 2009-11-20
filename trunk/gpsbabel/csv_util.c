@@ -108,6 +108,7 @@ typedef enum {
 	XT_LON_NMEA,
 	XT_MAP_EN_BNG,
 	XT_NOTES,
+	XT_NET_TIME,
 	XT_PATH_COURSE,
 	XT_PATH_DISTANCE_KM,
 	XT_PATH_DISTANCE_MILES,
@@ -1096,6 +1097,9 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp,
     case XT_ISO_TIME_MS: 
 	wpt->creation_time = xml_parse_time(s, &wpt->microseconds);
     	break;
+    case XT_NET_TIME: 
+	dotnet_time_to_time_t(atof(s), &wpt->creation_time, &wpt->microseconds);
+	break;
     case XT_GEOCACHE_LAST_FOUND:
         waypt_alloc_gc_data(wpt)->last_found = yyyymmdd_to_time(s);
     	break;

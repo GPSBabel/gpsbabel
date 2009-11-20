@@ -948,6 +948,20 @@ example:
 </screen>
 </section>
 
+<section id="style_def_nettime">
+<title>NET_TIME</title>
+<para>
+  Microsoft dot net represents times in 100 nanoscond intervals since midnight
+  Jan 1/0001 GMT, giving absurdly large numbers like 633943150010000000 for 
+  mid-November, 2009.  NET_TIME is how to represent those in GPSBabel.
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   IFIELD NET_TIME,"","%f"
+</screen>
+</section>
+
 <section id="style_def_geodiff">
 <title>GEOCACHE_DIFF</title>
 <para>
