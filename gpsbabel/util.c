@@ -912,6 +912,25 @@ month_lookup(const char *m)
 }
 
 /*
+ * Microsoft dot net's time format is the number of 100 nanosecond intervals
+ * since midnight Jan 1, 0001.   We have time_t deeply ingrained into our 
+ * internals and since we're in the GPS biz, timestamps before 1/1/1970 aren't
+ * that interesting to us anyway.
+ */
+#define EPOCH_TICKS 621355968000000000.0
+void dotnet_time_to_time_t(double dotnet, time_t *t, int *ms)
+{
+  *t = (dotnet - EPOCH_TICKS) / 10000000.;
+#if LATER
+  // TODO: work out fractional seconds.
+  if (ms) {
+    *ms = dotnet % 10000;
+  }
+#endif
+}
+
+
+/*
  * Return a pointer to a constant string that is suitable for icon lookup
  * based on geocache attributes.   The strings used are those present in 
  * a GPX file from geocaching.com.  Thus we sort of make all the other 
