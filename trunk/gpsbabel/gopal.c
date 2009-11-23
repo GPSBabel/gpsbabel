@@ -89,11 +89,6 @@ int gopal_check_line(char *line)
 		c++;
 		i++;
 	}
-	if (i != 8)
-	{
-		snprintf(tmp,sizeof(tmp),"\"%s\"\n",line);
-		fprintf(stderr,"%s",tmp);
-	}
 	return i;
 }
 
@@ -156,11 +151,11 @@ gopal_rd_init(const char *fname)
 		}
 		// in buff we should now have something wich looks like a valid date starting with YYYYMMDD
 		ck = (char *)strptime(buff, "%Y%m%d", &filenamedate);
-		if (((ck == NULL) || (*ck != '\0') )&&!(optdate))
-		fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"optdate\" switch!\n", buff);
-		else if (filenamedate.tm_year < 70)
-		fatal(MYNAME ": Date \"%s\" is out of range (have to be 19700101 or later)!\n", buff);
-		tx= mkgmtime(&filenamedate);
+		// if (((ck == NULL) || (*ck != '\0') )&&!(optdate))
+		// fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);
+		// /* else */ if (filenamedate.tm_year < 70)
+		// fatal(MYNAME ": Date \"%s\" is out of range (have to be 19700101 or later)!\n", buff);
+		// tx= mkgmtime(&filenamedate);
 	}
 }
 
@@ -186,6 +181,7 @@ gopal_read(void)
 	char tbuffer[64];
 	long_old=0;lat_old=0;
 	strftime(routename,sizeof(routename),"Tracklog %c",localtime(&tx));
+	struct tm tm2;
 	
 	route = route_head_alloc();
 	route->rte_name=xstrdup(routename);
@@ -194,11 +190,18 @@ gopal_read(void)
 	line=0;
 	while ((buff = gbfgetstr(fin)))
 	{
+		int nfields;
+		unsigned long microsecs;
 		if ((line == 0) && fin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
 
 		str = buff = lrtrim(buff);
 		if (*buff == '\0') continue;	
-		if (gopal_check_line(buff)!=8)continue;
+		nfields = gopal_check_line(buff);
+		if ((nfields != 8) && (nfields != 11))continue;
+		// Old format.  Hassle for date.
+		if ((nfields == 8) && (tx == 0)) {
+			// fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);
+		}
 		wpt = waypt_new();
 		
 		column = -1;
@@ -211,7 +214,9 @@ gopal_read(void)
 			switch(column)
 			{
 			case  0: /* "-" */	/* unknown fields for the moment */
-				//sscanf(c, "%llu", &wpt->microseconds);
+				sscanf(c, "%lu", &microsecs);
+				wpt->microseconds += microsecs % 1000000;
+				wpt->creation_time += microsecs / 1000000;
 				break;
 			case  1:				/* Time UTC */	
 				sscanf(c,"%lf",&hmsd);
@@ -271,7 +276,18 @@ gopal_read(void)
 			case  8: 				/* number of sats */
 				sscanf(c, "%d", &wpt->sat);
 				break;
-				
+			// Somewhere around mid/late 2009, these files started
+			// seeing 11 fields.
+			case  9:
+				memset(&tm2, 0, sizeof(tm2));
+				if (!strptime(c, "%Y%m%d", &tm2)) {
+					fatal ("Bad date '%s'.\n", c);
+				}
+				wpt->creation_time += mkgmtime(&tm2);
+				break;
+			case 10:  // Unknown.  Ignored.
+			case 11:  // Bearing.  Ignored.
+				break;
 			}
 			c = csv_lineparse(NULL, ",", "", column++);
 		}
