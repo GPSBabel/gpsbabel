@@ -1,6 +1,14 @@
 <para> 
-This format supports Nokia Landmark Exchange (LMX) files used by several
-Nokia phones.   GPSBabel supports only the traditional XML format and 
-not the compressed binary format.   
+This format supports
+<ulink url="http://sw.nokia.com/id/9001c8de-c19e-41a0-87d3-5be4297e4d4c/S60_Platform_Landmarks_Exchange_Specification_v1_0_en.pdf">
+Nokia Landmark Exchange (LMX) files</ulink> used by several Nokia phones.
+GPSBabel supports the traditional XML format for reading and writing. The
+compressed binary format (WBXML) can be written, but most current Nokia phones
+do not support it (confirmed with N82 and N95).
 </para>
-
+<para>
+With this format, landmarks can be imported into the landmark store of the
+mobile phone. This landmark store is then used to display them on a map with
+several applications. The most common ones are the pre-installed Ovi Maps (or
+its predecessor Nokia Maps) and Google Maps Mobile.
+</para>

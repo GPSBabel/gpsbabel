@@ -1192,7 +1192,7 @@ file_read(void)
 			break;
 		}
 	}
-	free(buffer);
+	xfree(buffer);
 	db(1, MYNAME ": Got %i trackpoints from %i sectors.\n", st.tpn, sectors_read);
 }
 
