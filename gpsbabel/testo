@@ -1298,6 +1298,8 @@ compare ${REFERENCE}/umsonstdraussen.gpx ${TMPDIR}/umsonstdraussen.gpx
 #
 gpsbabel -i lmx -f ${REFERENCE}/nokia.lmx -o lmx -F ${TMPDIR}/nokia.lmx
 compare ${REFERENCE}/nokia.lmx ${TMPDIR}/nokia.lmx
+gpsbabel -i lmx -f ${REFERENCE}/nokia.lmx -o lmx,binary -F ${TMPDIR}/binary.lmx
+bincompare ${REFERENCE}/binary.lmx ${TMPDIR}/binary.lmx
 
 #
 # Swiss Map (.xol) tests
@@ -1638,7 +1640,6 @@ compare ${TMPDIR}/vpl_reference.gpx ${REFERENCE}/track/vpl_reference.gpx
 rm -f ${TMPDIR}/skytraq.*
 gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq.bin -o gpx -F ${TMPDIR}/skytraq.gpx
 compare ${TMPDIR}/skytraq.gpx ${REFERENCE}/skytraq.gpx
-
 #
 # Teletype tests
 #
