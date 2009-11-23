@@ -60,8 +60,8 @@ teletype_read(void)
 	int i;
 	for (i = 0; i < tty_wpt_count; i++) {
 		waypoint *wpt = waypt_new();
-		wpt->shortname = xstrdup(gbfgetcstr(fin));
-		wpt->description = xstrdup(gbfgetcstr(fin));
+		wpt->shortname = (gbfgetcstr(fin));
+		wpt->description = (gbfgetcstr(fin));
 
 		if (1) { // needs bit values of NEWFORMAT2
 			int direction = gbfgetuint32(fin);
@@ -73,6 +73,7 @@ teletype_read(void)
 			// probably could treat as a pascal string
 			char *junk = xmalloc(len);
 			gbfread(junk, len, 1, fin);
+                        xfree(junk);
 		}
 		wpt->latitude = gbfgetint32(fin) / 1000000.0 ;
 		wpt->longitude = gbfgetint32(fin) / 1000000.0 ;
