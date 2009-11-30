@@ -638,16 +638,13 @@ pvt2wpt(GPS_PPvt_Data pvt, waypoint *wpt)
         wpt->longitude = pvt->lon;
 	WAYPT_SET(wpt,course,1);
 	WAYPT_SET(wpt,speed,1);
-	/* convert to true course in degrees */
-	if ( pvt->east >= 0.0 )
-		wpt->course = 90 - DEG(atan(pvt->north/pvt->east));
-	else
-		wpt->course = 270 - DEG(atan(pvt->north/pvt->east));
-#if 0
+
+	wpt->course = 180 + DEG(atan2(-pvt->east, -pvt->north));
+
 	/* velocity in m/s */
-	wpt->speed = sqrt(pvt->north*pvt->north + pvt->east*pvt->east);
-	wpt->vs = pvt->up;
-#endif
+	WAYPT_SET(wpt,speed, sqrt(pvt->north*pvt->north + pvt->east*pvt->east));
+	// wpt->vs = pvt->up;
+
 	/*
 	 * The unit reports time in three fields:
 	 * 1) The # of days to most recent Sun. since  1989-12-31 midnight UTC.
