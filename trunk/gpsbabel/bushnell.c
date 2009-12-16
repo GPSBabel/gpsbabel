@@ -1,7 +1,7 @@
 /*
     Read and write Bushnellfiles.
 
-    Copyright (C) 2008  Robert Lipe (robertlipe@gpsbabel.org)
+    Copyright (C) 2008, 2009  Robert Lipe (robertlipe@gpsbabel.org)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,7 +24,8 @@
 #define MYNAME "Bushnell"
 
 static gbfile *file_in;
-static gbfile *file_out;
+static const char *ofname;
+static short_handle mkshort_handle = NULL; 
 
 static
 arglist_t bushnell_args[] = {
@@ -156,12 +157,19 @@ rd_deinit(void) {
 
 static void
 wr_init(const char *fname) {
-  file_out = gbfopen_le(fname, "wb", MYNAME);
+  ofname = fname;
+  static char valid_chars [] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
+                "abcdefghijklmnopqrstuvwxyz";
+
+  mkshort_handle = mkshort_new_handle();
+  setshort_length(mkshort_handle, 19);
+  setshort_goodchars(mkshort_handle, valid_chars);
 }
 
 static void
 wr_deinit(void) {
-  gbfclose(file_out);
+  mkshort_del_handle(&mkshort_handle);
+  
 }
 
 /*
@@ -180,7 +188,6 @@ bushnell_read(void) {
   icon = gbfgetc(file_in);
   wpt_tmp->icon_descr = bushnell_get_name_from_symbol(icon);
   unknown = gbfgetc(file_in);
-  // wpt_tmp->altitude = gbfgetuint8(file_in);
   wpt_tmp->latitude = lat_tmp / 10000000.0;
   wpt_tmp->longitude = lon_tmp / 10000000.0;
 
@@ -194,16 +201,26 @@ bushnell_read(void) {
 static void
 bushnell_write_one(const waypoint *wpt) {
   char tbuf[22];
+  gbfile *file_out;
+  static int wpt_count;
+  char *fname;
+  char *ident;
+  xasprintf(&fname, "%s-%d.wpt", ofname, wpt_count++);
 
+  file_out = gbfopen_le(fname, "wb", MYNAME);
   gbfputint32(wpt->latitude  * 10000000, file_out);
   gbfputint32(wpt->longitude * 10000000, file_out);
   gbfputc(bushnell_get_icon_from_name(wpt->icon_descr ? wpt->icon_descr : 
                                       "Waypoint"), file_out);
   gbfputc(0x01, file_out);  // Unknown.  Appears to be constant "1"
 
+  ident = mkshort(mkshort_handle, wpt->shortname);
   strncpy(tbuf, wpt->shortname, sizeof(tbuf));
   tbuf[sizeof(tbuf)-1] = 0;
   gbfwrite(tbuf, sizeof(tbuf), 1, file_out);
+
+  xfree(fname);
+  gbfclose(file_out);
 }
 
 static void
