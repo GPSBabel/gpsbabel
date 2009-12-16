@@ -160,6 +160,7 @@ extern ff_vecs_t ng_vecs;
 extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t bushnell_vecs;
+extern ff_vecs_t bushnell_trl_vecs;
 extern ff_vecs_t skyforce_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t pocketfms_bc_vecs;
@@ -913,12 +914,18 @@ vecs_t vec_list[] = {
                 "Memory-Map Navigator overlay files (.mmo)",
                 "mmo"
         },
-#if PLANE
+#if PLANE || 1
         {
                 &bushnell_vecs,
                 "bushnell",
-                "Bushnell GPS file",
+                "Bushnell GPS Waypoint file",
                 "wpt"
+        },
+        {
+                &bushnell_trl_vecs,
+                "bushnell_trl",
+                "Bushnell GPS Trail file",
+                "trl"
         },
 #endif
         {
