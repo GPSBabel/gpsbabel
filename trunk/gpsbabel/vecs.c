@@ -914,7 +914,6 @@ vecs_t vec_list[] = {
                 "Memory-Map Navigator overlay files (.mmo)",
                 "mmo"
         },
-#if PLANE || 1
         {
                 &bushnell_vecs,
                 "bushnell",
@@ -927,7 +926,6 @@ vecs_t vec_list[] = {
                 "Bushnell GPS Trail file",
                 "trl"
         },
-#endif
         {
         	&skyforce_vecs,
         	"skyforce",

@@ -70,7 +70,6 @@ typedef struct {
 /* Global variables */
 
 static gbfile *file_in, *file_out;
-static short_handle mkshort_handle;
 static gbuint16 nof_wp;
 static route_head *rte_head;
 static ng_file_header_t ng_file_header;
@@ -314,7 +313,6 @@ rd_init(const char *fname)
 {
     file_in = gbfopen_le(fname, "rb", MYNAME);
 
-    mkshort_handle = mkshort_new_handle();
     ng_read_file_header();
 
 	if (NULL != process) {
@@ -330,7 +328,6 @@ rd_deinit(void)
 {
     gbfclose(file_in);
     file_in = NULL;
-    mkshort_del_handle(&mkshort_handle);
 }
 
 
