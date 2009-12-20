@@ -1,0 +1,317 @@
+#!/bin/sh
+
+#
+# IGN Rando tests
+#
+gpsbabel -i ignrando -f ${REFERENCE}/track/ignrando-sample.rdn -o ignrando -F ${TMPDIR}/ignrando-sample.rdn
+gpsbabel -i ignrando -f ${TMPDIR}/ignrando-sample.rdn -o gpx -F ${TMPDIR}/ignrando-sample.gpx
+compare ${TMPDIR}/ignrando-sample.gpx ${REFERENCE}/track/ignrando-sample.gpx
+
+#
+# STMwpp "Suunto Trek Manager" WaypointPlus format tests
+#
+rm -f ${TMPDIR}/stmwpp-*
+gpsbabel -i stmwpp -f ${REFERENCE}/track/stmwpp-track.txt -o gpx -F ${TMPDIR}/stmwpp-track.gpx
+compare ${TMPDIR}/stmwpp-track.gpx ${REFERENCE}/track/stmwpp-track.gpx
+gpsbabel -i stmwpp -f ${REFERENCE}/route/stmwpp-route.txt -o gpx -F ${TMPDIR}/stmwpp-route.gpx
+compare ${TMPDIR}/stmwpp-route.gpx ${REFERENCE}/route/stmwpp-route.gpx
+gpsbabel -i stmwpp -f ${REFERENCE}/route/stmwpp-route.txt -o stmwpp -F ${TMPDIR}/stmwpp-route.txt
+compare ${TMPDIR}/stmwpp-route.txt ${REFERENCE}/route/stmwpp-route.txt
+
+#
+# Microsoft AutoRoute 2002 test (read-only)
+#
+gpsbabel -i msroute -f ${REFERENCE}/route/msroute-sample.axe -o gpx -F ${TMPDIR}/msroute-sample.gpx
+compare ${TMPDIR}/msroute-sample.gpx ${REFERENCE}/route/msroute-sample.gpx
+
+#
+# CarteSurTable read test
+#
+rm -f ${TMPDIR}/cst-*
+gpsbabel -i cst -f ${REFERENCE}/route/cst-sample.cst -o gpx -F ${TMPDIR}/cst-sample.gpx
+compare ${TMPDIR}/cst-sample.gpx ${REFERENCE}/route/cst-sample.gpx
+
+#
+# Navigon Mobile Navigator .rte tests
+#
+rm -f ${TMPDIR}/nmn4-sample*
+gpsbabel -i nmn4 -f ${REFERENCE}/route/nmn4-sample.rte -o gpx -F ${TMPDIR}/nmn4-sample.gpx
+compare ${REFERENCE}/route/nmn4-sample.gpx ${TMPDIR}/nmn4-sample.gpx
+gpsbabel -i gpx -f ${REFERENCE}/route/nmn4-sample.gpx -o nmn4 -F ${TMPDIR}/nmn4-sample-out.rte
+compare ${REFERENCE}/route/nmn4-sample-out.rte ${TMPDIR}/nmn4-sample-out.rte
+
+#
+# Map&Guide Palm/OS .pdb files (read-only)
+#
+rm -f ${TMPDIR}/mag_pdb-*
+gpsbabel -i mag_pdb -f ${REFERENCE}/route/mag_pdb-sample.pdb -o gpx -F ${TMPDIR}/mag_pdb-sample.gpx
+compare ${TMPDIR}/mag_pdb-sample.gpx ${REFERENCE}/route/mag_pdb-sample.gpx
+
+#
+# CompeGPS I/O tests
+#
+rm -f ${TMPDIR}/compegps*
+# read (CompeGPS)
+gpsbabel -i compegps -f ${REFERENCE}/compegps.wpt -o gpx -F ${TMPDIR}/compegps-wpt.gpx
+compare ${REFERENCE}/compegps-wpt.gpx ${TMPDIR}/compegps-wpt.gpx
+gpsbabel -i compegps -f ${REFERENCE}/route/compegps.rte -o gpx -F ${TMPDIR}/compegps-rte.gpx
+compare ${REFERENCE}/route/compegps-rte.gpx ${TMPDIR}/compegps-rte.gpx
+gpsbabel -i compegps -f ${REFERENCE}/track/compegps.trk -o gpx -F ${TMPDIR}/compegps-trk.gpx
+compare ${REFERENCE}/track/compegps-trk.gpx ${TMPDIR}/compegps-trk.gpx
+# write (CompeGPS)
+gpsbabel -i compegps -f ${REFERENCE}/compegps.wpt -o compegps -F ${TMPDIR}/compegps.wpt
+gpsbabel -i compegps -f ${TMPDIR}/compegps.wpt -o gpx -F ${TMPDIR}/compegps-wpt2.gpx
+compare ${REFERENCE}/compegps-wpt.gpx ${TMPDIR}/compegps-wpt2.gpx
+gpsbabel -t -i compegps -f ${REFERENCE}/track/compegps.trk -o compegps -F ${TMPDIR}/compegps.trk
+gpsbabel -i compegps -f ${TMPDIR}/compegps.trk -o gpx -F ${TMPDIR}/compegps-trk2.gpx
+compare ${REFERENCE}/track/compegps-trk.gpx ${TMPDIR}/compegps-trk2.gpx
+gpsbabel -r -i compegps -f ${REFERENCE}/route/compegps.rte -o compegps -F ${TMPDIR}/compegps.rte
+gpsbabel -i compegps -f ${TMPDIR}/compegps.rte -o gpx -F ${TMPDIR}/compegps-rte2.gpx
+compare ${REFERENCE}/route/compegps-rte.gpx ${TMPDIR}/compegps-rte2.gpx
+
+#
+# Testing the 'nuketypes' filter is funky.
+# Convert a GPX file to GPX to eliminate jitter.
+# Then nuke the all but the three individual types, merge the result together
+# and verify we got the original back.
+#
+gpsbabel -i gpx -f ${REFERENCE}/gdb-sample.gpx -o gpx -F ${TMPDIR}/alltypes.gpx
+gpsbabel -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,tracks,routes -o gpx -F ${TMPDIR}/wpts.gpx
+gpsbabel -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,waypoints,routes -o gpx -F ${TMPDIR}/trks.gpx
+gpsbabel -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,waypoints,tracks -o gpx -F ${TMPDIR}/rtes.gpx
+gpsbabel -i gpx -f ${TMPDIR}/wpts.gpx -f ${TMPDIR}/trks.gpx -f ${TMPDIR}/rtes.gpx -o gpx -F ${TMPDIR}/merged.gpx
+compare ${TMPDIR}/alltypes.gpx ${TMPDIR}/merged.gpx
+
+#
+# Interpolate filter
+# 
+
+gpsbabel -i gpx -f ${REFERENCE}/track/simpletrack.gpx -x interpolate,distance=50m -o gpx -F ${TMPDIR}/interp.gpx
+compare ${REFERENCE}/track/interptrack.gpx ${TMPDIR}/interp.gpx 
+gpsbabel -i gpx -f ${REFERENCE}/track/simpletrack.gpx -x interpolate,time=1 -o gpx -F ${TMPDIR}/tinterp.gpx
+compare ${REFERENCE}/track/tinterptrack.gpx ${TMPDIR}/tinterp.gpx 
+
+#
+# Universal CSV - unicsv
+#
+echo "lat,lon,descr,name,notes,unk,unk" > ${TMPDIR}/unicsv.txt
+cat ${REFERENCE}/mxf.mxf >> ${TMPDIR}/unicsv.txt
+gpsbabel -i unicsv -f ${TMPDIR}/unicsv.txt -o gpx -F ${TMPDIR}/unicsv.gpx
+compare ${TMPDIR}/unicsv.gpx ${REFERENCE}/unicsv.gpx
+gpsbabel -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -x nuketypes,routes,tracks -o unicsv -F ${TMPDIR}/garmin_txt-uni.csv
+compare ${TMPDIR}/garmin_txt-uni.csv ${REFERENCE}/garmin_txt-uni.csv
+
+#
+# Basic NMEA tests
+#
+gpsbabel -i nmea -f ${REFERENCE}/track/nmea -o gpx -F ${TMPDIR}/nmea.gpx
+compare ${TMPDIR}/nmea.gpx ${REFERENCE}/track/nmea.gpx
+gpsbabel -i nmea -f ${REFERENCE}/track/nmea+ms.txt -o gpx -F ${TMPDIR}/nmea+ms.gpx
+compare ${TMPDIR}/nmea+ms.gpx ${REFERENCE}/track/nmea+ms.gpx
+
+#
+# Read an NMEA file  with AMOD 3808 waypoints.  Be sure we read the points.
+# Also write as a "normal" NMEA to be sure AMOD extensions don't leak.
+#
+gpsbabel -i nmea -f ${REFERENCE}/track/amod-nmea -o gpx -F ${TMPDIR}/amod-out.gpx -o nmea -F ${TMPDIR}/amod-pure
+compare ${TMPDIR}/amod-out.gpx ${REFERENCE}/track/amod.gpx
+compare ${TMPDIR}/amod-pure ${REFERENCE}/track/amod-cleansed
+
+
+#
+# Wfff.
+#
+gpsbabel -i wfff -f ${REFERENCE}/wfff.xml -o gpsutil -F ${TMPDIR}/wfff.gpu
+compare ${TMPDIR}/wfff.gpu ${REFERENCE}/wfff.gpu
+
+#
+# Garmin MapSource tab delimited text files - garmin_txt
+#
+rm -f ${TMPDIR}/garmin_txt*
+#
+# !!! garmin_txt timestamps are stored in localtime !!!
+#
+gpsbabel -i gdb -f ${REFERENCE}/gdb-sample2.gdb -o garmin_txt,utc,prec=9 -F ${TMPDIR}/garmin_txt.txt
+compare ${REFERENCE}/garmin_txt.txt ${TMPDIR}/garmin_txt.txt 
+gpsbabel -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -o garmin_txt,prec=9 -F ${TMPDIR}/garmin_txt-2.txt
+gpsbabel -i garmin_txt -f ${TMPDIR}/garmin_txt-2.txt -o garmin_txt,prec=9 -F ${TMPDIR}/garmin_txt-3.txt
+#
+# test can fail because of localtime/gmtime differences
+# 
+## compare ${TMPDIR}/garmin_txt-2.txt ${TMPDIR}/garmin_txt-3.txt
+
+#
+# hiketech tests
+#
+rm -f ${TMPDIR}/hiketech*
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o hiketech -F ${TMPDIR}/hiketech.out
+compare ${TMPDIR}/hiketech.out ${REFERENCE}/hiketech.ref
+gpsbabel -i hiketech -f ${REFERENCE}/hiketech.ref -o gpx -F ${TMPDIR}/hiketech.gpx
+compare ${TMPDIR}/hiketech.gpx ${REFERENCE}/hiketech.gpx
+
+#
+# Kartex waypoints and tracks
+#
+rm -f ${TMPDIR}/kartex*
+gpsbabel -i kwf2 -f ${REFERENCE}/waypointsDd.kwf -o kwf2 -F ${TMPDIR}/kartex-1a.kwf
+compare ${REFERENCE}/kartex-out.kwf ${TMPDIR}/kartex-1a.kwf
+# ! different format of coords; this checks LATLON_HUMAN_READABLE !
+gpsbabel -i kwf2 -f ${REFERENCE}/waypointsDMm.kwf -o kwf2 -F ${TMPDIR}/kartex-1b.kwf
+compare ${TMPDIR}/kartex-1a.kwf ${TMPDIR}/kartex-1b.kwf 
+#
+gpsbabel -i ktf2 -f ${REFERENCE}/track/trackDd.ktf -o ktf2 -F ${TMPDIR}/kartex-2a.ktf
+compare ${REFERENCE}/track/kartex-out.ktf ${TMPDIR}/kartex-2a.ktf
+# ! different format of coords; this checks LATLON_HUMAN_READABLE !
+gpsbabel -i ktf2 -f ${REFERENCE}/track/trackDMm.ktf -o ktf2 -F ${TMPDIR}/kartex-2b.ktf
+compare ${TMPDIR}/kartex-2a.ktf ${TMPDIR}/kartex-2b.ktf
+
+#
+# Dell Axim Navigation System 'axim_gpb' test
+#
+rm -f ${TMPDIR}/axim-*
+gpsbabel -i axim_gpb -f ${REFERENCE}/track/axim-sample.gpb -o gpx -F ${TMPDIR}/axim-sample.gpx
+compare ${REFERENCE}/track/axim-sample.gpx ${TMPDIR}/axim-sample.gpx
+
+#
+# Franson GPSGate simulation
+#
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpssim -F ${TMPDIR}/waypoints.gpssim
+compare ${TMPDIR}/waypoints.gpssim ${REFERENCE}
+gpsbabel -i gpx -f ${REFERENCE}/track/tracks.gpx -o gpssim -F ${TMPDIR}/tracks.gpssim
+compare ${TMPDIR}/tracks.gpssim ${REFERENCE}/track
+
+#
+# WBT-200 tests
+#
+rm -f ${TMPDIR}/wbt-200.*
+gpsbabel -i wbt-bin -f ${REFERENCE}/wbt-200.bin -o gpx -F ${TMPDIR}/wbt-200.gpx
+# Remove the timestamp
+grep -v time <${TMPDIR}/wbt-200.gpx >${TMPDIR}/wbt-200.gpx2
+compare ${TMPDIR}/wbt-200.gpx2 ${REFERENCE}/wbt-200.gpx
+
+#
+# WBT-201 tests
+#
+rm -f ${TMPDIR}/wbt-200.*
+gpsbabel -t -w -i wbt-bin -f ${REFERENCE}/wbt-201.tk1 -o gpx -F ${TMPDIR}/wbt-201.gpx
+# Remove the timestamp
+grep -v time <${TMPDIR}/wbt-201.gpx >${TMPDIR}/wbt-201.gpx2
+compare ${TMPDIR}/wbt-201.gpx2 ${REFERENCE}/wbt-201.gpx
+
+#
+# Sportsim style-sheet
+#
+rm -f ${TMPDIR}/sportsim*
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,routes -o sportsim -F ${TMPDIR}/sportsim.txt
+compare ${TMPDIR}/sportsim.txt ${REFERENCE}/track/sportsim-sample.txt
+
+#
+# Suunto SDF
+#
+rm -f ${TMPDIR}/stmsdf*
+gpsbabel -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -t -o stmsdf -F ${TMPDIR}/stmsdf-track.sdf -r -o stmsdf,index=2 -F ${TMPDIR}/stmsdf-route.sdf
+compare ${TMPDIR}/stmsdf-track.sdf ${REFERENCE}/track/stmsdf-track.sdf
+compare ${TMPDIR}/stmsdf-route.sdf ${REFERENCE}/route/stmsdf-route.sdf
+gpsbabel -i stmsdf -f ${TMPDIR}/stmsdf-track.sdf -f ${TMPDIR}/stmsdf-route.sdf -o garmin_txt,prec=2 -F ${TMPDIR}/stmsdf.txt
+compare ${TMPDIR}/stmsdf.txt ${REFERENCE}/stmsdf.txt
+
+#
+# Digital Mapping Tracklogs
+#
+rm -f ${TMPDIR}/dmtlog*
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o dmtlog -F ${TMPDIR}/dmtlog-sample.trl
+gpsbabel -i dmtlog -f ${TMPDIR}/dmtlog-sample.trl -o gpx -F ${TMPDIR}/dmtlog-sample.gpx
+compare ${TMPDIR}/dmtlog-sample.gpx ${REFERENCE}/track/dmtlog-sample.gpx
+
+#
+# gzipped file i/o
+#
+gpsbabel -i compegps -f ${REFERENCE}/compegps.wpt.gz -o gpx -F ${TMPDIR}/compegps-wpt.gpx
+compare ${REFERENCE}/compegps-wpt.gpx ${TMPDIR}/compegps-wpt.gpx
+gpsbabel -i cst -f ${REFERENCE}/route/cst-sample.cst.gz -o gpx -F ${TMPDIR}/cst-sample.gpx
+compare ${TMPDIR}/cst-sample.gpx ${REFERENCE}/route/cst-sample.gpx
+
+#
+# Quick tests for Google Earth/KML format
+# Note: Reference files are from GPSBabel's own output.
+#
+gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o kml -F ${TMPDIR}/ge-gc.kml
+compare ${TMPDIR}/ge-gc.kml ${REFERENCE}/earth-gc.kml
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml -F ${TMPDIR}/ge-eg.kml
+compare ${TMPDIR}/ge-eg.kml ${REFERENCE}/earth-expertgps.kml
+
+#
+# Transformation filter (transform) tests
+#
+rm -f ${TMPDIR}/transform*
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x transform,rte=wpt,del=y -o gpx,gpxver=1.1 -F ${TMPDIR}/transform-rte.gpx
+compare ${TMPDIR}/transform-rte.gpx ${REFERENCE}/transform-rte.gpx
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,tracks -x transform,wpt=rte,del=y -o gpx,gpxver=1.1 -F ${TMPDIR}/transform-wpt.gpx
+compare ${TMPDIR}/transform-wpt.gpx ${REFERENCE}/transform-wpt.gpx
+
+#
+# "Raymarine Waypoint File" tests
+#
+gpsbabel -i raymarine -f ${REFERENCE}/raymarine-sample.rwf -o gpx -F ${TMPDIR}/raymarine-sample.gpx
+compare ${TMPDIR}/raymarine-sample.gpx ${REFERENCE}/raymarine-sample.gpx
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o raymarine -F ${TMPDIR}/expertgps.rwf
+compare ${TMPDIR}/expertgps.rwf ${REFERENCE}/expertgps.rwf
+
+
+#
+# Alan MAp500 waypoint & route test
+#
+rm -f ${TMPDIR}/alanwpr*
+gpsbabel -i alanwpr -f ${REFERENCE}/alanwpr.wpr -o alanwpr -F ${TMPDIR}/alanwpr-new.wpr
+gpsbabel -i alanwpr -f ${TMPDIR}/alanwpr-new.wpr -o gpx -F ${TMPDIR}/alanwpr-new.gpx
+compare ${TMPDIR}/alanwpr-new.gpx ${REFERENCE}/alanwpr.gpx
+
+#
+# Alan Map500 tracklogs< test
+#
+rm -f ${TMPDIR}/alantrl*
+gpsbabel -i alantrl -f ${REFERENCE}/alantrl.trl -o alantrl -F ${TMPDIR}/alantrl-new.trl
+gpsbabel -i alantrl -f ${TMPDIR}/alantrl-new.trl -o gpx -F ${TMPDIR}/alantrl-new.gpx
+compare ${TMPDIR}/alantrl-new.gpx ${REFERENCE}/alantrl.gpx
+
+#
+# VITO SmartMap .vtt track file 'vitovtt' test
+#
+rm -f ${TMPDIR}/vitovtt-*
+gpsbabel -i vitovtt -f ${REFERENCE}/track/vitovtt-sample.vtt -o gpx -F ${TMPDIR}/vitovtt-sample.gpx
+compare ${REFERENCE}/track/vitovtt-sample.gpx ${TMPDIR}/vitovtt-sample.gpx
+
+#
+# Test > 1 URL in selected files.
+#
+rm -f ${TMPDIR}/mlink*
+gpsbabel -i gpx -f ${REFERENCE}/multiple-links.gpx -o gpx,gpxver=1.1 -F ${TMPDIR}/mlink-1.gpx
+compare ${TMPDIR}/mlink-1.gpx ${REFERENCE}/multiple-links.gpx
+
+#
+# Geogrid Viewer tracklogs
+#
+rm -f ${TMPDIR}/ggv_log*
+gpsbabel -i gdb -f ${REFERENCE}/gdb-sample.gdb -x track,pack -o ggv_log -F ${TMPDIR}/ggv_log-sample.log
+bincompare ${REFERENCE}/track/ggv_log-sample.log ${TMPDIR}/ggv_log-sample.log
+gpsbabel -i ggv_log -f ${REFERENCE}/track/ggv_log-sample.log -o ggv_log -F ${TMPDIR}/ggv_log-sample2.log
+bincompare ${REFERENCE}/track/ggv_log-sample.log ${TMPDIR}/ggv_log-sample2.log
+
+#
+# G7ToWin (read only) test
+#
+gpsbabel -i g7towin -f ${REFERENCE}/expertgps.g7t -o garmin_txt,utc=0 -F ${TMPDIR}/expertgps-g7t.txt
+compare ${REFERENCE}/expertgps-g7t.txt ${TMPDIR}/expertgps-g7t.txt
+
+#
+# TomTom Navigator Places of Interest (.asc)
+#
+gpsbabel -i tomtom_asc -f ${REFERENCE}/tomtom_poi.asc -o tomtom_asc -F ${TMPDIR}/tomtom_poi.asc
+compare ${REFERENCE}/tomtom_poi.asc ${TMPDIR}/tomtom_poi.asc
+
+#
+# TomTom Navigator Itinerary files (.asc)
+#
+gpsbabel -i tomtom_itn -f ${REFERENCE}/route/tomtom_itn.itn -o tomtom_itn -F ${TMPDIR}/tomtom_itn.itn
+compare ${REFERENCE}/route/tomtom_itn.itn ${TMPDIR}/tomtom_itn.itn
+

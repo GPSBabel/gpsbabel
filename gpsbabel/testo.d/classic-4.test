@@ -1,0 +1,383 @@
+#!/bin/sh
+#
+# Garmin Points of Interest "garmin_gpi" (.gpi)
+#
+gpsbabel -i garmin_gpi -f ${REFERENCE}/garmin_gpi.gpi -o gpx -F ${TMPDIR}/garmin_gpi.gpx
+compare ${REFERENCE}/garmin_gpi.gpx ${TMPDIR}/garmin_gpi.gpx
+gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi.gpx -o garmin_gpi -F ${TMPDIR}/garmin_gpi.gpi
+gpsbabel -i garmin_gpi -f ${TMPDIR}/garmin_gpi.gpi -o gpx -F ${TMPDIR}/garmin_gpi2.gpx
+compare ${REFERENCE}/garmin_gpi2.gpx ${TMPDIR}/garmin_gpi2.gpx
+gpsbabel -i gpx -f ${REFERENCE}/track/vitovtt-sample.gpx -x transform,wpt=trk -o garmin_gpi -F ${TMPDIR}/garmin_gpi3a.gpi
+gpsbabel -i garmin_gpi -f ${TMPDIR}/garmin_gpi3a.gpi -o garmin_gpi -F ${TMPDIR}/garmin_gpi3b.gpi
+bincompare ${TMPDIR}/garmin_gpi3a.gpi ${TMPDIR}/garmin_gpi3b.gpi
+gpsbabel -i garmin_gpi -f ${REFERENCE}/gpi_ext-sample.gpi -o unicsv -F ${TMPDIR}/gpi_ext-sample.csv
+compare ${REFERENCE}/gpi_ext-sample.csv ${TMPDIR}/gpi_ext-sample.csv
+# Don't test writing this sample file from garminonline.de/extras/poi, but 
+# prove we can read it
+gpsbabel -i garmin_gpi -f ${REFERENCE}/umsonstdraussen.gpi -o gpx,gpxver=1.1 -F ${TMPDIR}/umsonstdraussen.gpx
+compare ${REFERENCE}/umsonstdraussen.gpx ${TMPDIR}/umsonstdraussen.gpx
+
+#
+# Nokia  LMX
+#
+gpsbabel -i lmx -f ${REFERENCE}/nokia.lmx -o lmx -F ${TMPDIR}/nokia.lmx
+compare ${REFERENCE}/nokia.lmx ${TMPDIR}/nokia.lmx
+gpsbabel -i lmx -f ${REFERENCE}/nokia.lmx -o lmx,binary -F ${TMPDIR}/binary.lmx
+bincompare ${REFERENCE}/binary.lmx ${TMPDIR}/binary.lmx
+
+#
+# Swiss Map (.xol) tests
+#
+gpsbabel -i xol -f ${REFERENCE}/xol-sample.xol -o gpx -F ${TMPDIR}/xol-sample.gpx
+compare ${TMPDIR}/xol-sample.gpx ${REFERENCE}/xol-sample.gpx
+gpsbabel -i gpx -f ${REFERENCE}/xol-sample.gpx -o xol -F ${TMPDIR}/xol-sample-gpx.xol
+compare ${TMPDIR}/xol-sample-gpx.xol ${REFERENCE}/xol-sample-gpx.xol
+
+#
+# NaviLink waypoints
+#
+gpsbabel -i navilink -f ${REFERENCE}/navilink_waypoints.wpt -o gpx -F ${TMPDIR}/navilink_waypoints.gpx
+compare ${TMPDIR}/navilink_waypoints.gpx ${REFERENCE}/navilink_waypoints.gpx
+gpsbabel -i gpx -f ${TMPDIR}/navilink_waypoints.gpx -o navilink -F ${TMPDIR}/navilink_waypoints_gpx.wpt
+#compare ${TMPDIR}/navilink_waypoints_gpx.wpt ${REFERENCE}/navilink_waypoints_gpx.wpt
+
+#
+# NaviLink tracks
+#
+gpsbabel -t -i navilink -f ${REFERENCE}/navilink_tracks.trk -o gpx -F ${TMPDIR}/navilink_tracks.gpx
+compare ${TMPDIR}/navilink_tracks.gpx ${REFERENCE}/navilink_tracks.gpx
+gpsbabel -t -i gpx -f ${TMPDIR}/navilink_tracks.gpx -o navilink -F ${TMPDIR}/navilink_tracks_gpx.trk
+#compare ${TMPDIR}/navilink_tracks_gpx.trk ${REFERENCE}/navilink_tracks_gpx.trk
+
+#
+# SBP tracks (Locosys NaviGPS)
+#
+gpsbabel -t -i sbp -f ${REFERENCE}/track/datalog.sbp -o gpx -F ${TMPDIR}/datalog.gpx
+compare ${TMPDIR}/datalog.gpx ${REFERENCE}/track/datalog.gpx
+
+#
+# SBN tracks (Locosys NaviGPS)
+#
+gpsbabel -t -i sbn -f ${REFERENCE}/track/sbn.SBN -o gpx -F ${TMPDIR}/sbn.gpx
+compare ${TMPDIR}/sbn.gpx ${REFERENCE}/track/sbn.gpx
+
+#
+# MTK logger tests
+#
+rm -f ${TMPDIR}/mtk_logger.*
+gpsbabel -t -w -i mtk-bin,csv=${TMPDIR}/mtk_logger.csv -f ${REFERENCE}/track/mtk_logger.bin -o gpx -F ${TMPDIR}/mtk_logger.gpx
+compare ${TMPDIR}/mtk_logger.gpx ${REFERENCE}/track/mtk_logger.gpx
+## CSV compare needs to be done with '-w' - ignore whitespace.
+compare ${TMPDIR}/mtk_logger.csv ${REFERENCE}/track/mtk_logger.csv
+
+#
+# MTK logger tests (Holux M-241)
+#
+rm -f ${TMPDIR}/mtk_logger_m241.*
+gpsbabel -t -w -i m241-bin,csv=${TMPDIR}/mtk_logger_m241.csv -f ${REFERENCE}/track/mtk_logger_m241.bin -o gpx -F ${TMPDIR}/mtk_logger_m241.gpx
+compare ${TMPDIR}/mtk_logger_m241.gpx ${REFERENCE}/track/mtk_logger_m241.gpx
+## CSV compare needs to be done with '-w' - ignore whitespace.
+compare ${TMPDIR}/mtk_logger_m241.csv ${REFERENCE}/track/mtk_logger_m241.csv
+
+#
+# MTK logger tests (Holux GPsport-245 - using m241 module)
+#
+rm -f ${TMPDIR}/mtk_logger_gp245.*
+gpsbabel -t -w -i m241-bin -f ${REFERENCE}/track/mtk_logger_gp245.bin -o gpx -F ${TMPDIR}/mtk_logger_gp245.gpx
+compare ${TMPDIR}/mtk_logger_gp245.gpx ${REFERENCE}/track/mtk_logger_gp245.gpx
+
+#
+# MagicMaps IK3D Project File .ikt test
+#
+gpsbabel -i ik3d -f ${REFERENCE}/ik3d-sample.ikt -o gpx -F ${TMPDIR}/ik3d-sample.gpx
+compare ${TMPDIR}/ik3d-sample.gpx ${REFERENCE}/ik3d-sample.gpx
+
+# osm data files
+rm -f ${TMPDIR}/osm-*
+gpsbabel -i osm -f ${REFERENCE}/osm-data.xml -o gpx -F ${TMPDIR}/osm-data.gpx
+compare ${TMPDIR}/osm-data.gpx ${REFERENCE}/osm-data.gpx
+
+# Destinator POI
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o destinator_poi -F ${TMPDIR}/destinator_poi.dat
+gpsbabel -i destinator_poi -f ${TMPDIR}/destinator_poi.dat -w -o unicsv,utc=0 -F ${TMPDIR}/destinator_poi.txt
+compare ${TMPDIR}/destinator_poi.txt ${REFERENCE}/destinator_poi.txt
+
+# Destinator Itinerary
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o destinator_itn -F ${TMPDIR}/destinator_itn.dat
+gpsbabel -i destinator_itn -f ${TMPDIR}/destinator_itn.dat -r -o unicsv,utc=0 -F ${TMPDIR}/destinator_itn.txt
+compare ${TMPDIR}/destinator_itn.txt ${REFERENCE}/route/destinator_itn.txt
+
+# Destinator TrackLog
+gpsbabel -i nmea -f ${REFERENCE}/track/nmea+ms.txt -o destinator_trl -F ${TMPDIR}/destinator_trl.dat
+gpsbabel -i destinator_trl -f ${TMPDIR}/destinator_trl.dat -t -o unicsv,utc=0 -F ${TMPDIR}/destinator_trl.txt
+compare ${TMPDIR}/destinator_trl.txt ${REFERENCE}/track/destinator_trl.txt
+
+# Exif format test (read only)
+gpsbabel -i exif -f ${REFERENCE}/IMG_2065.JPG -o unicsv,utc=0 -F ${TMPDIR}/exif-dat.csv
+compare ${TMPDIR}/exif-dat.csv ${REFERENCE}/exif-dat.csv
+
+# VidaOne track logs
+gpsbabel -i vidaone -f ${REFERENCE}/track/vidaone.gpb -t -o unicsv -F ${TMPDIR}/vidaone.csv
+compare ${TMPDIR}/vidaone.csv ${REFERENCE}/track/vidaone.csv
+
+# iGo8
+# This format has some jitter in the first 64 bytes of the header.
+# So we read our reference track, spin to GPX.
+# Read that track, spin to igo.
+# read the igo file we just wrote, and spin that to GPX.
+# compare the two GPX files.
+gpsbabel -i igo8 -f ${REFERENCE}/track/igo8.trk -o gpx -F ${TMPDIR}/igo.gpx
+gpsbabel -i gpx -f ${TMPDIR}/igo.gpx -o igo8 -F ${TMPDIR}/new-igo.trk
+gpsbabel -i igo8 -f ${TMPDIR}/new-igo.trk -o gpx -F ${TMPDIR}/new-igo2.gpx
+compare ${TMPDIR}/igo.gpx ${TMPDIR}/new-igo2.gpx
+
+
+# GoPal
+# GoPal is a bit tricky, because it's a lossy format regarding the first field (timetick).
+# so we first read a reference gopal file, and then write it out as gopal trk file, now with a computed timestamp.
+# Doing so results in more useful timestamps.
+# Next we convert this tst file to gpx to test the writing path, but gpx does not save speed, so do it twice...
+GoPalName=track20080703_173036.trk 
+rm -f ${TMPDIR}/${GoPalName}.*
+#step 1: reference file
+gpsbabel -i gopal -f ${REFERENCE}/track20080703_173036.trk -o gopal -F ${TMPDIR}/${GoPalName}.tst
+#step2: gpx without speed information
+gpsbabel -i gopal -f ${TMPDIR}/${GoPalName}.tst -o gpx  -F ${TMPDIR}/${GoPalName}.im
+gpsbabel -i gpx -f ${TMPDIR}/${GoPalName}.im  -o gopal -F ${TMPDIR}/${GoPalName}.tst2
+#step 3: do it again to have 2 identical gopal files:
+gpsbabel -i gopal -f ${TMPDIR}/${GoPalName}.tst -o gpx  -F ${TMPDIR}/${GoPalName}.im2
+gpsbabel -i gpx -f ${TMPDIR}/${GoPalName}.im2  -o gopal -F ${TMPDIR}/${GoPalName}.tst3
+compare ${TMPDIR}/${GoPalName}.tst2 ${TMPDIR}/${GoPalName}.tst3
+
+# Gopal with 11 fields is slightly more sane.
+gpsbabel -i gopal -f reference/gopal-11.trk -o gpx -F ${TMPDIR}/gopal-11-gpx.gpx
+compare ${TMPDIR}/gopal-11-gpx.gpx reference/gopal-11-gpx.gpx
+
+#
+# Height filter
+#
+rm -f ${TMPDIR}/height_out.gpx
+gpsbabel -i gpx -f ${REFERENCE}/track/height.gpx \
+		-x height,wgs84tomsl,add=100m  \
+		-o gpx -F ${TMPDIR}/height_out.gpx
+compare ${TMPDIR}/height_out.gpx ${REFERENCE}/track/height_out.gpx
+
+#
+# iBlue747 (style) track files
+#
+gpsbabel -i iblue747 -f ${REFERENCE}/track/iblue747.csv -o gpx -F ${TMPDIR}/iblue747~csv.gpx
+compare ${REFERENCE}/track/iblue747~csv.gpx ${TMPDIR}/iblue747~csv.gpx
+
+#
+# Humminbird waypoints/routes
+#
+gpsbabel -i humminbird -f ${REFERENCE}/humminbird.hwr -o unicsv,utc=0 -F ${TMPDIR}/humminbird~hwr.csv
+compare ${REFERENCE}/humminbird~hwr.csv ${TMPDIR}/humminbird~hwr.csv
+gpsbabel -i humminbird -f ${REFERENCE}/humminbird.hwr -o humminbird -F ${TMPDIR}/humminbird.hwr
+bincompare ${REFERENCE}/humminbird.hwr ${TMPDIR}/humminbird.hwr
+gpsbabel -i humminbird -f ${REFERENCE}/route/humminbird.hwr -o gpx -F ${TMPDIR}/humminbird~hwr.gpx
+compare ${REFERENCE}/route/humminbird~hwr.gpx ${TMPDIR}/humminbird~hwr.gpx
+#
+# Humminbird tracks
+#
+gpsbabel -i humminbird -f ${REFERENCE}/track/humminbird.ht -o humminbird_ht -F ${TMPDIR}/humminbird.ht
+bincompare ${REFERENCE}/track/humminbird.ht ${TMPDIR}/humminbird.ht
+
+gpsbabel -i humminbird -f ${REFERENCE}/humminbird.hwr -f ${REFERENCE}/track/humminbird.ht -o gpx,humminbirdextensions=1 -F ${TMPDIR}/combo.gpx
+gpsbabel -i gpx -f ${TMPDIR}/combo.gpx -o humminbird -F ${TMPDIR}/funky.hwr -o humminbird_ht -F ${TMPDIR}/funky.ht
+bincompare ${REFERENCE}/humminbird.hwr ${TMPDIR}/funky.hwr
+bincompare ${REFERENCE}/track/humminbird.ht ${TMPDIR}/funky.ht 
+
+#
+# Google Navigator tracklines
+#
+gpsbabel -i gnav_trl -f ${REFERENCE}/track/gnav_trl.trl -t -o unicsv,utc=0 -F ${TMPDIR}/gnav_trl~trl.csv
+compare ${REFERENCE}/track/gnav_trl~trl.csv ${TMPDIR}/gnav_trl~trl.csv
+gpsbabel -i gnav_trl -f ${REFERENCE}/track/gnav_trl.trl -o gnav_trl -F ${TMPDIR}/gnav_trl.trl
+gpsbabel -i gnav_trl -f ${TMPDIR}/gnav_trl.trl -t -o unicsv,utc=0 -F ${TMPDIR}/gnav_trl~trl2.csv
+compare ${REFERENCE}/track/gnav_trl~trl.csv ${TMPDIR}/gnav_trl~trl2.csv
+
+#
+# simplify, option 'relative'
+#
+gpsbabel -i gpx -f ${REFERENCE}/track/simplify-relative.gpx -x simplify,relative,count=33 -o gpx -F ${TMPDIR}/simplify-relative2.gpx
+compare ${REFERENCE}/track/simplify-relative2.gpx ${TMPDIR}/simplify-relative2.gpx
+
+#
+# unicsv with various grids
+#
+gpsbabel -i unicsv,utc=0 -f ${REFERENCE}/grid-swiss.csv -o gpx -F ${TMPDIR}/grid-swiss~csv.gpx
+compare ${REFERENCE}/grid-swiss~csv.gpx ${TMPDIR}/grid-swiss~csv.gpx
+gpsbabel -i gpx -f ${REFERENCE}/grid-swiss~csv.gpx -o unicsv,utc=0,grid=swiss -F ${TMPDIR}/grid-swiss.csv
+compare ${REFERENCE}/grid-swiss.csv ${TMPDIR}/grid-swiss.csv
+
+gpsbabel -i unicsv,utc=0 -f ${REFERENCE}/grid-bng.csv -o gpx -F ${TMPDIR}/grid-bng~csv.gpx
+compare ${REFERENCE}/grid-bng~csv.gpx ${TMPDIR}/grid-bng~csv.gpx
+gpsbabel -i gpx -f ${REFERENCE}/grid-bng~csv.gpx -o unicsv,utc=0,grid=bng -F ${TMPDIR}/grid-bng.csv
+compare ${REFERENCE}/grid-bng.csv ${TMPDIR}/grid-bng.csv
+
+gpsbabel -i unicsv,utc=0 -f ${REFERENCE}/grid-utm.csv -o gpx -F ${TMPDIR}/grid-utm~csv.gpx
+compare ${REFERENCE}/grid-utm~csv.gpx ${TMPDIR}/grid-utm~csv.gpx
+gpsbabel -i gpx -f ${REFERENCE}/grid-utm~csv.gpx -o unicsv,utc=0,grid=utm -F ${TMPDIR}/grid-utm.csv
+compare ${REFERENCE}/grid-utm.csv ${TMPDIR}/grid-utm.csv
+
+#
+# ggv_ovl 'Geogrid Viewer ascii overlay files'
+#
+gpsbabel -i ggv_ovl -f ${REFERENCE}/ggv_ovl.ovl -o gpx -F ${TMPDIR}/ggv_ovl~ovl.gpx
+compare ${REFERENCE}/ggv_ovl~ovl.gpx ${TMPDIR}/ggv_ovl~ovl.gpx
+
+#
+# igo2008_poi
+#
+gpsbabel -i igo2008_poi -f ${REFERENCE}/igo2008_poi.upoi -o gpx -F ${TMPDIR}/igo2008_poi~upoi.gpx
+compare ${REFERENCE}/igo2008_poi~upoi.gpx ${TMPDIR}/igo2008_poi~upoi.gpx
+gpsbabel -i igo2008_poi -f ${REFERENCE}/igo2008_poi.upoi -o unicsv -F ${TMPDIR}/igo2008_poi~upoi.csv
+compare ${REFERENCE}/igo2008_poi~upoi.csv ${TMPDIR}/igo2008_poi~upoi.csv
+
+#
+# MapAsia tr7 tracks
+#
+gpsbabel -i mapasia_tr7 -f ${REFERENCE}/track/mapasia-tr7.tr7 -t -o unicsv,utc=0 -F ${TMPDIR}/mapasia~tr7.csv
+compare ${REFERENCE}/track/mapasia~tr7.csv ${TMPDIR}/mapasia~tr7.csv
+gpsbabel -i mapasia_tr7 -f ${REFERENCE}/track/mapasia-tr7.tr7 -o gpx -F ${TMPDIR}/mapasia~tr7.gpx
+compare ${REFERENCE}/track/mapasia~tr7.gpx ${TMPDIR}/mapasia~tr7.gpx
+
+#
+# Jelbert GeoTagger JTR data files
+#
+gpsbabel -i jtr -f ${REFERENCE}/track/expertgps.jtr -o gpx -F ${TMPDIR}/expertgps~jtr.gpx -o jtr -F ${TMPDIR}/expertgps~jtr.jtr
+compare ${REFERENCE}/track/expertgps~jtr.gpx ${TMPDIR}/expertgps~jtr.gpx
+compare ${REFERENCE}/track/expertgps.jtr ${TMPDIR}/expertgps~jtr.jtr
+
+#
+# Navitel Navigator binary tracks
+#
+gpsbabel -i gdb -f ${REFERENCE}/gdb-sample.gdb -o navitel_trk -F ${TMPDIR}/navitel_trk.bin
+bincompare ${REFERENCE}/track/navitel_trk.bin ${TMPDIR}/navitel_trk.bin
+gpsbabel -i navitel_trk -f ${REFERENCE}/track/navitel_trk.bin -o navitel_trk -F ${TMPDIR}/navitel_trk2.bin
+bincompare ${TMPDIR}/navitel_trk.bin ${TMPDIR}/navitel_trk2.bin
+
+#
+# XAiOX iTrackU Logger
+#
+rm -f ${TMPDIR}/itracku.unicsv
+gpsbabel -w -i itracku-bin -f ${REFERENCE}/itracku.dat -o unicsv,utc=0 -F ${TMPDIR}/itracku.unicsv
+compare ${REFERENCE}/itracku.unicsv ${TMPDIR}/itracku.unicsv
+
+#
+# Garmin Tranining Center .tcx (gtrnctr)
+#
+# reading
+rm -f ${TMPDIR}/history~tcx.csv ${TMPDIR}/course~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/history.tcx -t -o unicsv,utc=0 -F ${TMPDIR}/history~tcx.csv
+compare ${REFERENCE}/track/history~tcx.csv ${TMPDIR}/history~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/history.tcx -t -o gpx -F ${TMPDIR}/history~tcx.gpx
+compare ${REFERENCE}/track/history~tcx.gpx ${TMPDIR}/history~tcx.gpx
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o unicsv,utc=0 -F ${TMPDIR}/course~tcx.csv
+compare ${REFERENCE}/track/course~tcx.csv ${TMPDIR}/course~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o gpx -F ${TMPDIR}/course~tcx.gpx
+compare ${REFERENCE}/track/course~tcx.gpx ${TMPDIR}/course~tcx.gpx
+# writing
+rm -f ${TMPDIR}tcxtest~gpx-course.tcx ${TMPDIR}tcxtest~gpx-history.tcx
+gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=1 -F ${TMPDIR}/tcxtest~gpx-course.tcx
+compare ${REFERENCE}/track/tcxtest~gpx-course.tcx ${TMPDIR}/tcxtest~gpx-course.tcx
+gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=0 -F ${TMPDIR}/tcxtest~gpx-history.tcx
+compare ${REFERENCE}/track/tcxtest~gpx-history.tcx ${TMPDIR}/tcxtest~gpx-history.tcx
+
+#
+# Memory-Map Navigator overlay files (.mmo)
+#
+# reading
+gpsbabel -i mmo -f ${REFERENCE}/memory-map.mmo -o gpx -F ${TMPDIR}/memory-map~mmo.gpx
+compare ${REFERENCE}/memory-map~mmo.gpx ${TMPDIR}/memory-map~mmo.gpx
+#writing (check only for memory leaks)
+gpsbabel -i gpx -f ${REFERENCE}/memory-map~mmo.gpx -o mmo -F ${TMPDIR}/memory-map~mmo.mmo
+gpsbabel -i mmo -f ${TMPDIR}/memory-map~mmo.mmo -o gpx -F ${TMPDIR}/memory-map~mmo~gpx.mmo
+
+#
+# Skyforce ascii files
+#
+gpsbabel -i skyforce -f ${REFERENCE}/skyforce_wpt.txt -o gpx -F ${TMPDIR}/skyforce_wpt.gpx
+compare ${REFERENCE}/skyforce_wpt.gpx ${TMPDIR}/skyforce_wpt.gpx
+gpsbabel -i skyforce -f ${REFERENCE}/route/skyforce_rte.txt -o gpx -F ${TMPDIR}/skyforce_rte.gpx
+compare ${REFERENCE}/route/skyforce_rte.gpx ${TMPDIR}/skyforce_rte.gpx
+gpsbabel -i skyforce -f ${REFERENCE}/track/skyforce_trk.txt -o gpx -F ${TMPDIR}/skyforce_trk.gpx
+compare ${REFERENCE}/track/skyforce_trk.gpx ${TMPDIR}/skyforce_trk.gpx
+
+gpsbabel -i skyforce \
+	-f ${REFERENCE}/skyforce_wpt.txt \
+	-f ${REFERENCE}/route/skyforce_rte.txt \
+	-f ${REFERENCE}/track/skyforce_trk.txt -o gpx -F ${TMPDIR}/skyforce.gpx
+compare ${REFERENCE}/skyforce.gpx ${TMPDIR}/skyforce.gpx
+
+#
+# PocketFMS breadcrumb files
+#
+gpsbabel -i pocketfms_bc -f ${REFERENCE}/pocketfms_bc -o gpx -F ${TMPDIR}/pocketfms_bc.gpx
+compare ${REFERENCE}/pocketfms_bc.gpx ${TMPDIR}/pocketfms_bc.gpx
+gpsbabel -i gpx -f ${REFERENCE}/pocketfms_bc.gpx -o pocketfms_bc -F ${TMPDIR}/pocketfms_bc
+bincompare ${REFERENCE}/pocketfms_bc.babel ${TMPDIR}/pocketfms_bc
+
+#
+# PocketFMS flightplan files (.xml)
+#
+gpsbabel -i pocketfms_fp -f ${REFERENCE}/pocketfms_fp.xml -o gpx -F ${TMPDIR}/pocketfms_fp.gpx
+compare ${REFERENCE}/pocketfms_fp.gpx ${TMPDIR}/pocketfms_fp.gpx
+
+#
+# PocketFMS waypoints file (.txt)
+#
+gpsbabel -i gpx -f ${REFERENCE}/pocketfms_fp.gpx -o pocketfms_wp -F ${TMPDIR}/pocketfms_wp.txt
+compare ${REFERENCE}/pocketfms_wp.txt ${TMPDIR}/pocketfms_wp.txt
+gpsbabel -i pocketfms_wp -f ${REFERENCE}/pocketfms_wp.txt -o gpx -F ${TMPDIR}/pocketfms_wp.gpx
+compare ${REFERENCE}/pocketfms_wp.gpx ${TMPDIR}/pocketfms_wp.gpx
+
+#
+# MGL Enigma route file (.ert)
+#
+gpsbabel -i gpx -f ${REFERENCE}/enigma.gpx -o enigma -F ${TMPDIR}/enigma.ert
+compare ${REFERENCE}/enigma-gpsb.ert ${TMPDIR}/enigma.ert
+gpsbabel -i enigma -f ${REFERENCE}/enigma-pfms.ert -o gpx -F ${TMPDIR}/enigma.gpx
+compare ${REFERENCE}/enigma.gpx ${TMPDIR}/enigma.gpx
+
+#
+# Columbus/Visiontac V900 "binary" csv files
+#
+gpsbabel -i v900 -f ${REFERENCE}/v900_basic_mode.csv -o gpx -F ${TMPDIR}/v900_basic_mode.gpx
+compare ${REFERENCE}/v900_basic_mode.gpx ${TMPDIR}/v900_basic_mode.gpx
+gpsbabel -i v900 -f ${REFERENCE}/v900_advanced_mode.csv -o gpx -F ${TMPDIR}/v900_advanced_mode.gpx
+compare ${REFERENCE}/v900_advanced_mode.gpx ${TMPDIR}/v900_advanced_mode.gpx
+
+#
+# Naivguide 
+#
+gpsbabel -i naviguide -f ${REFERENCE}/route/naviguide-route.twl -o gpx -F ${TMPDIR}/naviguide.gpx
+compare ${REFERENCE}/route/naviguide.gpx ${TMPDIR}/naviguide.gpx
+
+#
+# Basic VPL test
+#
+gpsbabel -i vpl -f ${REFERENCE}/track/vpl_reference.vpl -o gpx -F ${TMPDIR}/vpl_reference.gpx
+compare ${TMPDIR}/vpl_reference.gpx ${REFERENCE}/track/vpl_reference.gpx
+
+#
+# Skytraq logger tests
+#
+rm -f ${TMPDIR}/skytraq.*
+gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq.bin -o gpx -F ${TMPDIR}/skytraq.gpx
+compare ${TMPDIR}/skytraq.gpx ${REFERENCE}/skytraq.gpx
+#
+# Teletype tests
+#
+rm -f ${TMPDIR}/teletype.*
+gpsbabel -i teletype -f ${REFERENCE}/track/teletype.way -o gpx -F ${TMPDIR}/teletype.gpx
+compare ${TMPDIR}/teletype.gpx ${REFERENCE}/track/teletype.gpx
+
+#
+# Jogmap XML tests
+#
+rm -f ${TMPDIR}/jogmap.*
+gpsbabel -i jogmap -f ${REFERENCE}/track/jogmap.xml -o gpx -F ${TMPDIR}/jogmap.gpx
+compare ${TMPDIR}/jogmap.gpx ${REFERENCE}/track/jogmap-gpx.gpx
+
