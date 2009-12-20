@@ -30,6 +30,8 @@ bincompare()
         ${OD} $2 >${TMPDIR}/bc2
         ${DIFF} ${TMPDIR}/bc1 ${TMPDIR}/bc2 || {
 		echo ERROR binary comparing $*
+cat ${TMPDIR}/bc1
+cat ${TMPDIR}/bc2
                 exit 1
 	}
 }
