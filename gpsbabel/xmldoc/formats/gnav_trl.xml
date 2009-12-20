@@ -10,7 +10,7 @@
 <para>
   <table>
     <title>Track point structure (16 bytes)</title>
-    <tgroup cols="2">
+    <tgroup cols="3">
     <thead>
       <row>
         <entry>Position</entry>
