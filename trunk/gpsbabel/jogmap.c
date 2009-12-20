@@ -26,7 +26,6 @@
 #include "garmin_tables.h"
 
 static route_head *trk;
-static gbfile *fout;
 
 static arglist_t jogmap_args[] = 
 {
@@ -49,8 +48,8 @@ jogmap_read(void)
 
 #else
 
-static xg_callback	jogmap_shape, xol_shape_end;
-static xg_callback	jogmap_waypt, xol_overlay;
+// static xg_callback	jogmap_shape, xol_shape_end;
+// static xg_callback	jogmap_waypt, xol_overlay;
 
 #define XOL "/overlays/overlay"
 

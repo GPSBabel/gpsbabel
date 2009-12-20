@@ -64,8 +64,8 @@ teletype_read(void)
 		wpt->description = (gbfgetcstr(fin));
 
 		if (1) { // needs bit values of NEWFORMAT2
-			int direction = gbfgetuint32(fin);
-			int mins = gbfgetuint32(fin);
+			// int direction = gbfgetuint32(fin);
+			// int mins = gbfgetuint32(fin);
 		}
 		
 		if (1) {  // need bit value of NEWFORMAT
