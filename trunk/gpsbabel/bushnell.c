@@ -177,13 +177,13 @@ wr_deinit(void) {
  */
 static void
 bushnell_read(void) {
-  long lat_tmp,lon_tmp;
+  gbint32 lat_tmp,lon_tmp;
   unsigned int unknown;
   unsigned int icon;
   waypoint *wpt_tmp = waypt_new();
 
-  lat_tmp = gbfgetuint32(file_in);
-  lon_tmp = gbfgetuint32(file_in);
+  lat_tmp = gbfgetint32(file_in);
+  lon_tmp = gbfgetint32(file_in);
 
   icon = gbfgetc(file_in);
   wpt_tmp->icon_descr = bushnell_get_name_from_symbol(icon);
