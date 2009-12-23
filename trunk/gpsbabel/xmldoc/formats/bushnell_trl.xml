@@ -1,11 +1,15 @@
 <para>
-This format supports reading tracks from 
+This format supports tracks from 
 <ulink url="http://www.bushnell.com/products/gps/">Bushnell GPS</ulink> 
 receivers, notably the <productname>Onix 400</productname>.
 </para>
 <para>
 This format reads individual .trl files as written by the GPS.  As this is
 a reverse-engineered format, it's not understood how long tracks, in 
-particular, spam multiple files so initially this format is most effective
-on tracks under a few thousand points.  
+particular, span multiple files so initially this format is most effective
+on tracks under a few thousand points.
+</para>
+<para>
+  When writing tracks, a maximum of 4502 points is supported as this is the
+  most we believe these units can represent in a track.
 </para>
