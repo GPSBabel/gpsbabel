@@ -1372,7 +1372,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 		unicsv_print_str((wpt->icon_descr != NULL) ? wpt->icon_descr : "Waypoint");
 	if FIELD_USED(fld_depth) {
 		if WAYPT_HAS(wpt, depth)
-			gbfprintf(fout, "%s%.1f", unicsv_fieldsep, wpt->depth);
+			gbfprintf(fout, "%s%.3f", unicsv_fieldsep, wpt->depth);
 		else
 			gbfputs(unicsv_fieldsep, fout);
 	}
@@ -1384,13 +1384,13 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	}
 	if FIELD_USED(fld_temperature) {
 		if WAYPT_HAS(wpt, temperature)
-			gbfprintf(fout, "%s%.1f", unicsv_fieldsep, wpt->temperature);
+			gbfprintf(fout, "%s%.3f", unicsv_fieldsep, wpt->temperature);
 		else
 			gbfputs(unicsv_fieldsep, fout);
 	}
 	if FIELD_USED(fld_speed) {
 		if WAYPT_HAS(wpt, speed)
-			gbfprintf(fout, "%s%.1f", unicsv_fieldsep, wpt->speed);
+			gbfprintf(fout, "%s%.2f", unicsv_fieldsep, wpt->speed);
 		else
 			gbfputs(unicsv_fieldsep, fout);
 	}
@@ -1415,19 +1415,19 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 	}
 	if FIELD_USED(fld_hdop) {
 		if (wpt->hdop > 0)
-			gbfprintf(fout, "%s%.1f", unicsv_fieldsep, wpt->hdop);
+			gbfprintf(fout, "%s%.2f", unicsv_fieldsep, wpt->hdop);
 		else
 			gbfputs(unicsv_fieldsep, fout);
 	}
 	if FIELD_USED(fld_vdop) {
 		if (wpt->vdop > 0)
-			gbfprintf(fout, "%s%.1f", unicsv_fieldsep, wpt->vdop);
+			gbfprintf(fout, "%s%.2f", unicsv_fieldsep, wpt->vdop);
 		else
 			gbfputs(unicsv_fieldsep, fout);
 	}
 	if FIELD_USED(fld_pdop) {
 		if (wpt->pdop > 0)
-			gbfprintf(fout, "%s%.1f", unicsv_fieldsep, wpt->pdop);
+			gbfprintf(fout, "%s%.2f", unicsv_fieldsep, wpt->pdop);
 		else
 			gbfputs(unicsv_fieldsep, fout);
 	}
