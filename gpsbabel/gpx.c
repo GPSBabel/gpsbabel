@@ -1608,29 +1608,38 @@ gpx_write_common_position(const waypoint *waypointp, const char *indent)
 }
 
 static void
-gpx_write_common_depth(const waypoint *waypointp, const char *indent)
+gpx_write_common_extensions(const waypoint *waypointp, const char *indent)
 {
-	if (waypointp->depth != 0 || waypointp->temperature != 0) {
-		if (opt_humminbirdext || opt_garminext) {
-			gbfprintf(ofd, "%s<extensions>\n", indent);
-			if (waypointp->depth != 0) {
-				if (opt_humminbirdext)
-					gbfprintf(ofd, "%s  <h:depth>%f</h:depth>\n",
-				        	  indent, waypointp->depth*100.0);
-				if (opt_garminext)
-					gbfprintf(ofd, "%s  <gpxx:Depth>%f</gpxx:Depth>\n",
-				        	  indent, waypointp->depth);
-			}
-			if (waypointp->temperature != 0) {
-				if (opt_humminbirdext)
-					gbfprintf(ofd, "%s  <h:temperature>%f</h:temperature>\n",
-				        	  indent, waypointp->temperature);
-				if (opt_garminext)
-					gbfprintf(ofd, "%s  <gpxx:Temperature>%f</gpxx:Temperature>\n",
-					          indent, waypointp->temperature);
-			}
-			gbfprintf(ofd, "%s</extensions>\n", indent);
+	if (((opt_humminbirdext || opt_garminext) && (waypointp->depth != 0 || waypointp->temperature != 0))
+	    || (opt_garminext && (waypointp->heartrate != 0 || waypointp->cadence != 0))) {
+		gbfprintf(ofd, "%s<extensions>\n", indent);
+		if (waypointp->depth != 0) {
+			if (opt_humminbirdext)
+				gbfprintf(ofd, "%s  <h:depth>%f</h:depth>\n",
+			        	  indent, waypointp->depth*100.0);
+			if (opt_garminext)
+				gbfprintf(ofd, "%s  <gpxx:Depth>%f</gpxx:Depth>\n",
+			        	  indent, waypointp->depth);
 		}
+		if (waypointp->temperature != 0) {
+			if (opt_humminbirdext)
+				gbfprintf(ofd, "%s  <h:temperature>%f</h:temperature>\n",
+			        	  indent, waypointp->temperature);
+			if (opt_garminext)
+				gbfprintf(ofd, "%s  <gpxx:Temperature>%f</gpxx:Temperature>\n",
+				          indent, waypointp->temperature);
+		}
+		if (opt_garminext && (waypointp->heartrate != 0 || waypointp->cadence != 0)) {
+			gbfprintf(ofd, "%s  <gpxtpx:TrackPointExtension>\n", indent);
+			if (waypointp->heartrate != 0)
+				gbfprintf(ofd, "%s    <gpxtpx:hr>%u</gpxtpx:hr>\n",
+				          indent, waypointp->heartrate);
+			if (waypointp->cadence != 0)
+				gbfprintf(ofd, "%s    <gpxtpx:cad%u</gpxtpx:cad>\n",
+				          indent, waypointp->cadence);
+			gbfprintf(ofd, "%s  </gpxtpx:TrackPointExtension>\n", indent);
+		}
+		gbfprintf(ofd, "%s</extensions>\n", indent);
 	}
 }
 
@@ -1688,7 +1697,7 @@ gpx_waypt_pr(const waypoint *waypointp)
 		/* MapSource doesn't accepts extensions from 1.0 */
 		garmin_fs_xml_fprint(ofd, waypointp);
 	}
-	gpx_write_common_depth(waypointp, "  ");
+	gpx_write_common_extensions(waypointp, "  ");
 	gbfprintf(ofd, "</wpt>\n");
 }
 
@@ -1750,7 +1759,7 @@ gpx_track_disp(const waypoint *waypointp)
 		fprint_xml_chain( fs_gpx->tag, waypointp );
 	}
 
-	gpx_write_common_depth(waypointp, "  ");
+	gpx_write_common_extensions(waypointp, "  ");
 	gbfprintf(ofd, "</trkpt>\n");
 }
 
@@ -1805,7 +1814,7 @@ gpx_route_disp(const waypoint *waypointp)
 		fprint_xml_chain( fs_gpx->tag, waypointp );
 	}
 
-	gpx_write_common_depth(waypointp, "    ");
+	gpx_write_common_extensions(waypointp, "    ");
 	gbfprintf(ofd, "  </rtept>\n");
 }
 
@@ -1878,7 +1887,8 @@ gpx_write(void)
 	if (opt_humminbirdext)
 		gbfprintf(ofd, "  xmlns:h=\"http://humminbird.com\"\n");
 	if (opt_garminext)
-		gbfprintf(ofd, "  xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\"");
+		gbfprintf(ofd, "  xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\"\n"
+		               "  xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\"\n");
 
 	gbfprintf(ofd, "  xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
 	if (xsi_schema_loc) {
