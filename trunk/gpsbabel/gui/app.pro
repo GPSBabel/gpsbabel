@@ -1,11 +1,11 @@
-# $Id: app.pro,v 1.13 2009-11-02 19:54:13 robertl Exp $
+# $Id: app.pro,v 1.14 2010-01-05 15:01:30 robertl Exp $
 #
 
 CONFIG += qt release 
 #CONFIG += qt debug console
 
 # For Mac, build Universal binary.   Ignored on other OSes.
-CONFIG += x86 # ppc
+CONFIG += x86 ppc
 
 ICON = images/appicon.icns
 
