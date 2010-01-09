@@ -274,8 +274,8 @@ gtc_fake_hdr(void)
 		gtc_write_xml(0, "<LongitudeDegrees>%lf</LongitudeDegrees>\n", gtc_end_long);
 		gtc_write_xml(-1, "</EndPosition>\n");
 		gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-		gtc_write_xml(0,"<Value>%g</Value>\n",
-			      tdata->avg_hrt ? tdata->avg_hrt : 100);
+		gtc_write_xml(0,"<Value>%d</Value>\n",
+			      tdata->avg_hrt ? (int) tdata->avg_hrt : 100);
 		gtc_write_xml(-1, "</AverageHeartRateBpm>\n");
 		gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
 		gtc_write_xml(0,"<Value>%d</Value>\n",
@@ -296,7 +296,7 @@ gtc_fake_hdr(void)
 		gtc_write_xml(-1, "</AverageHeartRateBpm>\n");
 		gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
 		gtc_write_xml(0,"<Value>%d</Value>\n",
-			      tdata->max_hrt ? tdata->max_hrt : 200);
+			      tdata->max_hrt ? (int) tdata->max_hrt : 200);
 		gtc_write_xml(-1,"</MaximumHeartRateBpm>\n");
 		gtc_write_xml(0, "<Intensity>Active</Intensity>\n");
 		gtc_write_xml(0, "<TriggerMethod>Manual</TriggerMethod>\n");
