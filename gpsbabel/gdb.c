@@ -110,8 +110,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.69 $"; */
-static char gdb_release_date[] = "$Date: 2009-06-23 03:29:25 $";
+/* static char gdb_release[] = "$Revision: 1.70 $"; */
+static char gdb_release_date[] = "$Date: 2010-01-13 22:52:52 $";
 
 static gbfile *fin, *fout, *ftmp;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -995,7 +995,9 @@ read_data(void)
 		route_head *trk, *rte;
 		
 		len = FREAD_i32;
-		FREAD(&typ, 1);
+		if (FREAD(&typ, 1) < 1) {
+                  fatal(MYNAME ": Attempt to read past EOF.");
+                }
 		if (typ == 'V') break;	/* break the loop */
 
 		gbfrewind(ftmp);
@@ -1037,6 +1039,10 @@ read_data(void)
 		fin = fsave;
 		delta = len - gbftell(ftmp);
 
+                // Avoid finite loop on bogus beta files from '06.
+                // THe 100000 is totally pulled from my hat.
+                // is_fatal((delta > 1000000) || (delta < 0), "Internal GDB error; invalid delta.");
+
 		if (dump && delta) {
 			if (! incomplete++) {
 				warning(MYNAME ":==========================================\n");
@@ -1050,7 +1056,8 @@ read_data(void)
 			if (delta > 0) {
 				int i;
 				char *buf = xmalloc(delta);
-				FREAD(buf, delta);
+				if (FREAD(buf, delta) < 1)
+                                  fatal(MYNAME ": Attempt to read past EOF.\n");
 				for (i = 0; i < delta; i++) {
 					warning(" %02x", (unsigned char)buf[i]);
 				}
