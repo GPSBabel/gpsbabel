@@ -1,7 +1,7 @@
 #ifndef UPGRADE_H
 #define UPGRADE_H
 /*
-    Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (C) 2009, 2010  Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@ public:
   QDateTime getUpgradeWarningTime() {
     return upgradeWarningTime;
   }
+  static bool isTestMode(void);
 
 protected:
 

@@ -71,8 +71,8 @@
 
 // Function prototypes
 static kern_return_t FindModems(io_iterator_t *matchingServices);
-static kern_return_t GetModemPath(io_iterator_t serialPortIterator, char *bsdPath, CFIndex maxPathSize);
-static int OpenSerialPort(const char *bsdPath);
+// static kern_return_t GetModemPath(io_iterator_t serialPortIterator, char *bsdPath, CFIndex maxPathSize);
+// static int OpenSerialPort(const char *bsdPath);
 
 // Returns an iterator across all known modems. Caller is responsible for
 // releasing the iterator when iteration is complete.

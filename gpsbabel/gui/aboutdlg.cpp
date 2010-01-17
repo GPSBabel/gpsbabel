@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: aboutdlg.cpp,v 1.1 2009-07-05 21:14:56 robertl Exp $
+// $Id: aboutdlg.cpp,v 1.2 2010-01-17 21:57:00 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -22,6 +22,7 @@
 
 #include "aboutdlg.h"
 #include "appname.h"
+#include "upgrade.h"
 
 AboutDlg::AboutDlg(QWidget *parent, const QString &ver1,
 		   const QString &ver2): QDialog(parent)
@@ -33,6 +34,11 @@ AboutDlg::AboutDlg(QWidget *parent, const QString &ver1,
   tt.replace(QRegExp("\\$appname\\$"),  QString(appName));
   tt.replace(QRegExp("\\$babelversion\\$"),  ver1);
   tt.replace(QRegExp("\\$babelfeversion\\$"),  ver2);
+
+  // Not localized as it should never be seen.
+  tt.replace(QRegExp("\\$upgradetestmode\\$"),  
+    UpgradeCheck::isTestMode() ? "**Upgrade test mode**" : "");
+      
   doc->setHtml(tt);
   QTextCursor cur(doc);
   cur.setPosition(0);

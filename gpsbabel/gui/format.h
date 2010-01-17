@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: format.h,v 1.3 2010-01-17 01:42:10 robertl Exp $
+// $Id: format.h,v 1.4 2010-01-17 21:57:00 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -124,7 +124,7 @@ class Format
 	 bool fileFormat, bool deviceFormat,
 	 const QStringList &extensions,
 	 QList<FormatOption> &inputOptions, 
-	 QList<FormatOption> &outputptions, 
+	 QList<FormatOption> &outputptions,
          const QString &html):
     name(name), description(description),
     readWaypoints(readWaypoints), readTracks(readTracks), readRoutes(readRoutes),
@@ -136,8 +136,8 @@ class Format
     html(QString()),
     readUseCount_(0),
     writeUseCount_(0)
-  
   {
+    (void)html; // suppress 'unused' warning.
   }
 
   Format(const Format &c):
