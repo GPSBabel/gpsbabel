@@ -19,7 +19,7 @@
 
  */
 
-
+#include "format.h"
 #include <QDialog>
 #include <QDateTime>
 #include <QHttp>
@@ -42,7 +42,10 @@ public:
   UpgradeCheck::updateStatus checkForUpgrade(const QString &babelVersion, 
 					     int upgradeCheckMethod,
 					     const QDateTime &lastCheckTime,
-					     const QString &installationUuid);
+					     const QString &installationUuid,
+               QList<Format> &formatList
+                                             
+                                             );
   QDateTime getUpgradeWarningTime() {
     return upgradeWarningTime;
   }
@@ -59,12 +62,10 @@ protected:
   QDateTime upgradeWarningTime;  // invalid time if this object never issued.
   QString getOsName(void);
   QString getOsVersion(void);
-
+  QList<Format> *formatList;
 
 private slots:
   void httpRequestFinished(int requestId, bool error);
-
-//  void httpStateChanged(int state);
   void readResponseHeader(const QHttpResponseHeader &responseHeader);
 
 
