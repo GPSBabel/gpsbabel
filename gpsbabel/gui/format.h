@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: format.h,v 1.2 2009-11-02 20:38:02 robertl Exp $
+// $Id: format.h,v 1.3 2010-01-17 01:42:10 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -109,7 +109,9 @@ class Format
 	   fileFormat(false),
 	   deviceFormat(false),
 	   extensions(QStringList()),
-           html(QString())
+     html(QString()),
+     readUseCount_(0),
+     writeUseCount_(0)
   {
     inputOptions.clear();
     outputOptions.clear();
@@ -131,7 +133,10 @@ class Format
     extensions(extensions),
     inputOptions(inputOptions),
     outputOptions(outputptions),
-    html(QString())
+    html(QString()),
+    readUseCount_(0),
+    writeUseCount_(0)
+  
   {
   }
 
@@ -143,7 +148,10 @@ class Format
     extensions(c.extensions),
     inputOptions(c.inputOptions),
     outputOptions(c.outputOptions),
-    html(c.html)
+    html(c.html),
+    readUseCount_(0),
+    writeUseCount_(0)
+  
   {
   }
 
@@ -181,7 +189,13 @@ class Format
   void setToDefault();
   static QString getHtmlBase() { return htmlBase; }
   static void setHtmlBase(const QString &s) { htmlBase = s; }
-
+  
+  void bumpReadUseCount(int v)  { readUseCount_ += v; }
+  void bumpWriteUseCount(int v) { writeUseCount_ += v; }
+  int getReadUseCount()  const { return readUseCount_; }
+  int getWriteUseCount() const { return writeUseCount_; }
+  void zeroUseCounts(void);
+  
  private:
   QString name, description;
   bool readWaypoints, readTracks, readRoutes;
@@ -192,6 +206,8 @@ class Format
   QList<FormatOption>outputOptions;
   QString html;
   static QString htmlBase;
+  int      readUseCount_;
+  int      writeUseCount_;
   
 };
 

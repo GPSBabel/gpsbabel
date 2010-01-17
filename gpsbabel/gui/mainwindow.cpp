@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.12 2009-11-02 20:38:02 robertl Exp $
+// $Id: mainwindow.cpp,v 1.13 2010-01-17 01:42:10 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -169,7 +169,9 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
   upgrade = new UpgradeCheck();
-  upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, bd.upgradeCheckTime, bd.installationUuid);
+  upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, 
+                           bd.upgradeCheckTime, bd.installationUuid,
+                           formatList);
 }
 
 //------------------------------------------------------------------------
@@ -781,13 +783,18 @@ void MainWindow::applyActionX()
   args << (formatList[fidx].getName() + MakeOptions(formatList[fidx].getInputOptions()));
 
   // Input file(s) or device
+  int read_use_count = 0;
   if (bd.inputType == BabelData::fileType) {
-    for (int i=0; i<bd.inputFileNames.size(); i++)
+    for (int i=0; i<bd.inputFileNames.size(); i++) {
       args << "-f" << bd.inputFileNames[i];
+      read_use_count++;
+    }
   }
   else {
     args << "-f" << bd.inputDeviceName;
+    read_use_count++;
   }
+  formatList[fidx].bumpReadUseCount(read_use_count);
 
   // --- Filters!
   args << filterData.getAllFilterStrings();
@@ -807,11 +814,13 @@ void MainWindow::applyActionX()
     // output file or device option
     if (outIsFile) {
       if (bd.outputFileName != "")
-	args << "-F" << bd.outputFileName;
+	      args << "-F" << bd.outputFileName;
     }
     else if (bd.outputType == BabelData::deviceType) {
       args << "-F" << bd.outputDeviceName;
     }
+    // GUI only ever writes a single file at a time.
+    formatList[fidx].bumpWriteUseCount(1);
   }
 
   // Now output for preview in google maps
