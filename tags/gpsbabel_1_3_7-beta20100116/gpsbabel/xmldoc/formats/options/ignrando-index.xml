@@ -1,0 +1,9 @@
+<para>
+Because the format supports only one track, this option may be used 
+on output to select a single track from a collection of 
+tracks read from a more expressive format.  If you have, say, a 
+<link linkend="fmt_gpx">gpx</link> file that contains two tracks, you may
+use this option to write them one at a time to individual files.
+</para>
+<para><userinput>gpsbabel -i gpx -f tracks.gpx -o ignrando,index=1 -F track1.txt -o ignrando,index=2 -F track2.txt</userinput></para>
+

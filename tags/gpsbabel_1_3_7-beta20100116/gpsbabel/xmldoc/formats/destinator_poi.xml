@@ -1,0 +1,19 @@
+<para>
+  Support for <productname>Destinator</productname> binary POI files (.dat).
+</para>
+<para>
+  The basic information was found at <ulink url="http://mozoft.com/d3log.html">mozoft.com</ulink>.
+  GPSBabel can read and write all fields described at this document. Please note that 'house number' isn't
+  supported as a separate field. This field, if available in any source file, will be stored together with 'street'
+  into GSPBabel's internal 'address' field.
+</para>
+<para>
+  <productname>Destinator</productname> by
+  <ulink url="http://www.destinatortechnologies.net">Destinator Technologies</ulink>
+  is a software for PNDs, Smartphones and PDAs.
+</para>
+<para>
+  <userinput>
+      gpsbabel -i destinator_poi -f interesting_places.dat -o gpx -F interesting_places.gpx
+  </userinput>
+</para>

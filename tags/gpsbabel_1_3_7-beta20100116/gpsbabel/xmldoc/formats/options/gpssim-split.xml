@@ -1,0 +1,17 @@
+<para>When this option is specified, GPSBabel will split 
+        split the output into multiple files using the output filename
+        as a base.  For example, if you specify an output file of 'mytrip',
+<simplelist type="vert">
+  <member>mytrip-waypoints.gpssim - will contain the waypoints.</member>
+  <member>mytrip-track0000.gpssim - will contain the first track.</member>
+  <member>mytrip-track0001.gpssim - will contain the second track.</member>
+  <member>... and so on.</member>
+  <member>mytrip-route0000.gpssim - will contain the first route.</member>
+  <member>mytrip-route0001.gpssim - will contain the seconds route.</member>
+  <member>... and so on.</member>
+</simplelist>
+</para>
+
+<para>
+Valid values for this option are 0 (off) and 1 (on).  The default is '0'.
+</para>

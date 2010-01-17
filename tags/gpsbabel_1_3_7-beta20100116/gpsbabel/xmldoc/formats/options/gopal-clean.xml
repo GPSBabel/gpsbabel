@@ -1,0 +1,10 @@
+<para>
+  Specifying the <option>clean</option> flag makes the Gopal reader pass
+  over the data and discard data that is probably incorrect such as the
+  longitude and latitude of "0".
+</para>
+<para>
+  If you happen to be a boater or pilot off the south short of Ghana,
+  you may disagree that coordinates of "0, 0" are bad.
+</para>
+

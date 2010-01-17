@@ -1,0 +1,7 @@
+<para>
+This format reads the files written by the <ulink url="http://teletype.com">Teletype</ulink> GPS devices with the extension of ".way".
+</para>
+<para>
+  It's not entirely clear exactly which Teletype products are supported or
+  what versions write the format we read.
+</para>

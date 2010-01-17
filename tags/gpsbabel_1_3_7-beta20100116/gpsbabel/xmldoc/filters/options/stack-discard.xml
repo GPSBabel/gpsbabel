@@ -1,0 +1,5 @@
+<para>
+This option is only valid when used with the <option>pop</option> option.
+When this option is specified, the popped state is discarded and the current
+state remains unchanged.
+</para>

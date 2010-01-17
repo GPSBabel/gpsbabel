@@ -1,0 +1,10 @@
+<para>Specifies a backup file for the binary logger data. New waypoints from the logger will be appended to an existing 
+backup file. This allows you to create "endless" binary logger files which, for example, could contain the waypoint data of a whole year.</para>
+<para>The backup file can be read with gpsbabel by  using the itracku format.</para>
+
+<example id="itracku-backup">
+  <title>Download from the data logger while and append the new binary logger data to a backup file. Read the contents of the backup file.</title>
+  <para><userinput>gpsbabel -i itracku,auto,backup=itracku.bak -f dummy -o gpx -F out.gpx</userinput></para>
+  <para><userinput>gpsbabel -i itracku -f itracku.bak -o gpx -F out.gpx</userinput></para>
+</example>
+

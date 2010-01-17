@@ -1,0 +1,23 @@
+<para>
+This format supports reading and writing wayponts to 
+<ulink url="http://www.bushnell.com/products/gps/">Bushnell GPS</ulink> 
+receivers, notably the <productname>Onix 400</productname>.
+</para>
+<para>
+It's an oddity for many GPSBabel norms that this format requires each 
+waypoint be in a separate file.   Our "output filename" argument, -F is 
+modified to take an "output filename template".   The output filename
+you specify will have a dash, and a sequentially increasing integer,
+and the ".wpt" extension appended to it.
+</para>
+<example id="bushnell-output">
+<title>Command showing writing to Bushnell files</title>
+<para>
+Consider the case where 'whatever.gpx' holds three waypoints.
+<userinput>
+  gpsbabel -i gpx -f whatever.gpx -o bushnell -F /Volumes/Bushnell/whatever
+</userinput>
+will result in "whatever-0.wpt", "whatever-1.wpt", and "whatever-2.wpt" being
+credated in that directory.
+</para>
+</example>

@@ -1,0 +1,39 @@
+<para>
+	This is the log format output by factory-installed Honda/Acura (Alpine) Navigation Systems 
+	in (at least) 2006 models and newer.  (Though I've seen indirect data that says that Acura 
+	nav systems at least as far back as 2004 use it too)
+</para>
+<para>
+	This format is definitely known to work with the following model cars specifically:
+</para>
+<simplelist columns="1">
+<member>
+	2006 Honda Civic Hybrid
+</member>
+</simplelist>
+<para>
+	Logging may be enabled by simultaneously holding down the MAP/GUIDE, MENU, and CANCEL
+	buttons for 3-5 seconds, then selecting "Functional Setup", "Log Data".  A PCMCIA card
+	must be inserted into the system (behind the Nav LCD) for logging to work.  (The system
+	can read MP3/WMA files on this card and will also write logs to it.  Generally, a
+	PCMCIA to CF or PCMCIA to SD adapter is used with a corresponding CF/SD card)  With
+	logging successfully set up, the system will create a directory named "VPlog" off the
+	root of the card.  Inside this directory, files will be created with names corresponding
+	to the date and time of engine start, in GMT.  (YYMMDD_HHMM.vpl)
+</para>
+<para>
+	The VPL format contains quite a bit of data, much of which remains undecoded.  This format
+	currently reads only lat/lon, altitude, speed, heading, date/time, and visible sats.
+</para>
+<para>
+	Generally, the layout of the format seems similar to NMEA, with discrete sentences
+	containing different fields of data, followed by a 1-byte XOR'd checksum.  Some sentences
+	are generated only once per engine start, others every few seconds, many every second,
+	and a few on the order of five and in one case, up to twenty five times per second.  All data in
+	the file is written in ASCII; most of it simply as hexadecimal characters.  Most
+	fields are fixed width, though a few can be variable.  (Those that are variable
+	have a field count as the first field after their sentence identifier)  Currently,
+	only the '75'-sentence is decoded (and only about 50% of it), though this provides all
+	the data necessary for position information.  (It is likely that it also contains
+	HDOP/VDOP, but they've not yet been found)
+</para>
