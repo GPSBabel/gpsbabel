@@ -1,7 +1,7 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.18 2010-01-17 01:42:10 robertl Exp $
+// $Id: upgrade.cpp,v 1.19 2010-01-17 21:57:00 robertl Exp $
 /*
-    Copyright (C) 2009  Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (C) 2009, 2010  Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -54,6 +54,11 @@ UpgradeCheck::~UpgradeCheck()
     delete http;
     http = 0;
   }
+}
+
+bool UpgradeCheck::isTestMode()
+{
+  return testing;
 }
 
 QString UpgradeCheck::getOsName(void)
