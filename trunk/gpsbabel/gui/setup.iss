@@ -1,4 +1,4 @@
-; $Id: setup.iss,v 1.12 2010-01-17 01:42:10 robertl Exp $
+; $Id: setup.iss,v 1.13 2010-01-17 02:27:20 robertl Exp $
 ;
 ; NOTE: setup.iss is generated from setup.iss.in via autoconf.
 ; The generated setup.iss is checked in to help keep the version numbers
@@ -17,7 +17,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{1B8FE958-A304-4902-BF7A-4E2F0F5B7017}
 AppName=GPSBabel
-AppVerName=GPSBabel 1.3.7-beta20091003
+AppVerName=GPSBabel 1.3.7-beta20100116
 AppPublisher=GPSBabel
 AppPublisherURL=http://www.gpsbabel.org
 AppSupportURL=http://www.gpsbabel.org
@@ -25,7 +25,7 @@ AppUpdatesURL=http://www.gpsbabel.org
 DefaultDirName={pf}\GPSBabel
 DefaultGroupName=GPSBabel
 OutputDir=release
-OutputBaseFilename=GPSBabel-1.3.7-beta20091003-Setup
+OutputBaseFilename=GPSBabel-1.3.7-beta20100116-Setup
 SetupIconFile=images\babel2.ico
 Compression=lzma
 SolidCompression=yes
