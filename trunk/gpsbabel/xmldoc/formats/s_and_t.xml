@@ -5,8 +5,11 @@
 <ulink url="http://www.microsoft.com/streets/default.mspx"> Microsoft Streets and
 Trips</ulink>.  It's been exercised on versions from 2003 through 2008. Detailed
 instructions on how to use it, including preserving hyperlinks, are at
-<ulink url="http://www.gpsbabel.org/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html">gpsbabel.org</ulink>
+<ulink url="/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html">gpsbabel.org</ulink>
          </para>
+<para>
+	We have an additional page describing how to solve the <ulink url="/formats/s_and_t/TripPlanning.html">traveling salesman problem with Streets &amp; Trips</ulink> to efficiently optimize a trip with many stops, such as is often made by geocachers.
+</para>
 	<para>
 		This format has nothing to do with the <link linkend="fmt_msroute1"> .est/axe format</link> used by this program to store routes.
 	</para>
