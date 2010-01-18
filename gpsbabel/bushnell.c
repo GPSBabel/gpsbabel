@@ -159,6 +159,7 @@ static void
 wr_init(const char *fname) {
   ofname = fname;
   static char valid_chars [] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
+		".-/\\~@#$%^&*()_+=<>"
                 "abcdefghijklmnopqrstuvwxyz";
 
   mkshort_handle = mkshort_new_handle();
