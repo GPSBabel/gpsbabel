@@ -13,3 +13,7 @@ layers by doing something like this:
 In this case, the merged data will contain all of the
 properties of the original data.
 </para>
+
+<para>
+GPSBabel has a page describing <ulink url="/formats/delorme-new-interstate/">creating routable onramps in Street Atlas with GPSBabel</ulink>.
+</para>
