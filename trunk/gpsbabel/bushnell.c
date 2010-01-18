@@ -1,5 +1,5 @@
 /*
-    Read and write Bushnellfiles.
+    Read and write Bushnell files.
 
     Copyright (C) 2008, 2009  Robert Lipe (robertlipe@gpsbabel.org)
 
