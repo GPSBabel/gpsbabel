@@ -5,10 +5,9 @@
 function getcap(type, cap, sname, lname) {
 	if (type == "internal") return
 	print "<tr>"
-	print "<td class=\"fmtline\">" lname "</td>"
+	print "<td class=\"fmtline\">" lname "<br >"
 
-	print "<td class=\"c4\"> <a href=\"htmldoc-development/fmt_" sname ".html\">" sname "</a></td>"
-	# This is bad...
+	print "<a href=\"htmldoc-development/fmt_" sname ".html\">" sname "</a></td>"
 	
 	for (i = 1; i <= 6; i++) {
 		c = substr(cap, i, 1)
