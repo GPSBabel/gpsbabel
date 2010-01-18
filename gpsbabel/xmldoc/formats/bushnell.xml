@@ -8,16 +8,31 @@ It's an oddity for many GPSBabel norms that this format requires each
 waypoint be in a separate file.   Our "output filename" argument, -F is 
 modified to take an "output filename template".   The output filename
 you specify will have a dash, and a sequentially increasing integer,
-and the ".wpt" extension appended to it.
+and the ".wpt" extension appended to it.  When the names are shown on
+the GPS itself, the shortnames from the source format are used and not these
+"made up" names.
 </para>
 <example id="bushnell-output">
 <title>Command showing writing to Bushnell files</title>
 <para>
 Consider the case where 'whatever.gpx' holds three waypoints.
 <userinput>
-  gpsbabel -i gpx -f whatever.gpx -o bushnell -F /Volumes/Bushnell/whatever
+  gpsbabel -i gpx -f whatever.gpx -o bushnell -F /Volumes/Bushnell/WAYPOINT/whatever
 </userinput>
 will result in "whatever-0.wpt", "whatever-1.wpt", and "whatever-2.wpt" being
 credated in that directory.
+Windows users may prefer the spelling:
+<userinput>
+  gpsbabel -i gpx -f whatever.gpx -o bushnell -F e:/WAYPOINT/whatever
+</userinput>
 </para>
+
+<para>
+At least for the 200CR, the directory name used by the device is "WAYPOINT"
+in the root directory.  It's also worth mentioning that its USB Mass Storage
+protocol appears to not work on (at least) Snow Leopard 10.6.2.  It's not 
+known if other Onix models have a more compatible USB implementation.
+</para>
+
+
 </example>

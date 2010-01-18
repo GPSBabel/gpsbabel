@@ -52,9 +52,18 @@ rd_deinit(void) {
 
 static void
 wr_init(const char *fname) {
+  int i,l = strlen(fname);
+  char obuf[20] = { 0 } ; 
+  char *p = obuf;
   file_out = gbfopen_le(fname, "w", MYNAME);
   trkpt_count = 0;
-  static char obuf[20] = {"TL003"};
+  for (i = 0; (i < l) && (i < 20); i++) {
+    char c = toupper(fname[i]);
+    if (isalnum(c))
+      *p++ = c;
+    if (c == '.')
+      break;
+  }
   gbfwrite(&obuf, 1, 20, file_out);
 }
 
