@@ -769,7 +769,7 @@ sane_GPS_Way_New(void)
 	way->cross_road[0] = 0;
 	way->cross_road[0] = 0;
 	way->dpth = 1.0e25f;
-	way->wpt_class = 0;
+	way->wpt_class = 0;  // user waypoint by default.
 
 	return way;
 }
@@ -965,6 +965,9 @@ route_waypt_pr(const waypoint *wpt)
 	rte->lon = wpt->longitude;
 	rte->lat = wpt->latitude;
 	rte->smbl = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
+
+        // map class so unit doesn't duplicate routepoints as a waypoint.
+	rte->wpt_class = 0x80;  
 
 	if (wpt->altitude != unknown_alt) {
 		rte->alt = wpt->altitude;
