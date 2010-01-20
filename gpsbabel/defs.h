@@ -25,7 +25,9 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stddef.h>
+#if HAVE_CONFIG_H
 #include "config.h"
+#endif
 #include "queue.h"
 #include "gbtypes.h"
 #if HAVE_LIBZ

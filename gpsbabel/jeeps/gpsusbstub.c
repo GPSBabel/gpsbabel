@@ -20,8 +20,12 @@
  */
 
 
+#if HAVE_CONFIG_H
 #include "config.h"
+#endif
+
 #include "../defs.h"
+
 #if !HAVE_LIBUSB 
 
 const char no_usb[] = "USB support is not available in this build.\n";

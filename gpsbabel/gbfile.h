@@ -26,7 +26,6 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <string.h>
-#include "config.h"
 #include "defs.h"
 #include "cet.h"
 
