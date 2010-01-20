@@ -30,7 +30,7 @@
 #include "gps.h"
 #include "garminusb.h"
 #include "gpsusbcommon.h"
-#include "garmin_device_xml.h"
+#include "../garmin_device_xml.h"
 
 #define GARMIN_VID 0x91e
 
