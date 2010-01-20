@@ -26,7 +26,6 @@
 #include <string.h>
 
 #include "defs.h"
-#include "config.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
 #include "strptime.h"
