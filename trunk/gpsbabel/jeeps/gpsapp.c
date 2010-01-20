@@ -2220,7 +2220,7 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len, int protoid)
     p = data;
 
     *p++ = 1; /* data packet type; must be 1 for D109 and D110 */
-    *p++ = 0; // way->wpt_class;
+    *p++ = way->wpt_class;   
 
     *p++ = ((way->dspl & 3) << 5) | 0x1f;	/* colour & display */
 

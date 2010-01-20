@@ -271,13 +271,10 @@ GPS_PWay GPS_Way_New(void)
     ret->dst = 0;
     ret->smbl = ret->dspl = ret->colour = ret->alt = ret->prot = INT_MAX;
 
-    if(gps_waypt_type==pD108)
-    {
-	ret->dst  = 0;
-	ret->attr = 0x60;
-	for(i=0;i<7;++i) ret->subclass[i] = 0;
-	for(i=6;i<18;++i) ret->subclass[i] = 0xff;
-    }
+    ret->dst  = 0;
+    ret->attr = 0x60;
+    for(i=0;i<7;++i) ret->subclass[i] = 0;
+    for(i=6;i<18;++i) ret->subclass[i] = 0xff;
         
     return ret;
 }
