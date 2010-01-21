@@ -170,6 +170,7 @@ extern ff_vecs_t enigma_vecs;
 extern ff_vecs_t vpl_vecs;
 extern ff_vecs_t teletype_vecs;
 extern ff_vecs_t jogmap_vecs;
+extern ff_vecs_t wintec_tes_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -997,6 +998,12 @@ vecs_t vec_list[] = {
                 "jogmap",
                 "Jogmap.de XML format",
                 "xml"
+        },
+        {
+                &wintec_tes_vecs,
+                "wintec_tes",
+                "Wintec TES file",
+                "tes"
         },
 #endif // MAXIMAL_ENABLED
 	{
