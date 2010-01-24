@@ -230,8 +230,12 @@ rw_init(const char *fname)
 		fprintf(stderr, "Waypoint category type: %d\n",
 		gps_category_type);
 	}
-
 	}
+
+	// Allow override of sent character set for internationalized GPSes.
+	if (global_opts.charset != &cet_cs_vec_utf8)
+		receiver_charset = xstrdup(global_opts.charset_name);
+
 	/*
 	 * If the user provided a short_length, override the calculated value.
 	 */
