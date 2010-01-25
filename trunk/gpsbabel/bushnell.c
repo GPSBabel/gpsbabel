@@ -179,7 +179,7 @@ wr_deinit(void) {
 static void
 bushnell_read(void) {
   gbint32 lat_tmp,lon_tmp;
-  unsigned int unknown;
+  unsigned int proximity;
   unsigned int icon;
   waypoint *wpt_tmp = waypt_new();
 
@@ -188,7 +188,8 @@ bushnell_read(void) {
 
   icon = gbfgetc(file_in);
   wpt_tmp->icon_descr = bushnell_get_name_from_symbol(icon);
-  unknown = gbfgetc(file_in);
+  proximity = gbfgetc(file_in); // 1 = off, 3 = proximity alarm.
+  (void) proximity;
   wpt_tmp->latitude = lat_tmp /  10000000.0;
   wpt_tmp->longitude = lon_tmp / 10000000.0;
 
@@ -201,7 +202,8 @@ bushnell_read(void) {
 
 static void
 bushnell_write_one(const waypoint *wpt) {
-  char tbuf[22];
+  char tbuf[20]; // 19 text bytes + null terminator.
+  char padding[2] = {0, 0};
   gbfile *file_out;
   static int wpt_count;
   char *fname;
@@ -213,12 +215,15 @@ bushnell_write_one(const waypoint *wpt) {
   gbfputint32(wpt->longitude * 10000000, file_out);
   gbfputc(bushnell_get_icon_from_name(wpt->icon_descr ? wpt->icon_descr : 
                                       "Waypoint"), file_out);
-  gbfputc(0x01, file_out);  // Unknown.  Appears to be constant "1"
+  gbfputc(0x01, file_out);  // Proximity alarm.  1 == "off", 3 == armed.
 
   ident = mkshort(mkshort_handle, wpt->shortname);
   strncpy(tbuf, wpt->shortname, sizeof(tbuf));
   tbuf[sizeof(tbuf)-1] = 0;
   gbfwrite(tbuf, sizeof(tbuf), 1, file_out);
+
+  // two padding bytes follow name.
+  gbfwrite(padding, sizeof(padding), 1, file_out);
 
   xfree(fname);
   gbfclose(file_out);
