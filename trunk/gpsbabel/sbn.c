@@ -45,7 +45,8 @@ arglist_t sbn_args[] = {
  */
 
 #define PID_SBN              41
-#define SBN_RECORD_LEN       95 /* 91 plus two shorts added by Locosys */
+#define SBN_RECORD_LEN       97 /* 91 plus three two shorts added by Locosys */
+				/* V1.3 of the s/w added SDOP and and VSDOP bytes */
 #define PID_VISIBLE_LIST     13
 #define PID_QRY_INFORMATION  253
 #define QRY_INFORMATION_LEN  41
