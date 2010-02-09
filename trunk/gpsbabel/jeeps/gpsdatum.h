@@ -204,6 +204,7 @@ GPS_ODatum_Alias GPS_DatumAlias[] =
     { "GDA-94", 122 },
     { "CH1903", 123 },
     { "CH 1903", 123 },
+    { "European 1950 (Spain and Portugal)", 38 },
     { "Geodetic Datum 1949", 42 },
     { "NAD27 Alaska", 3 },
     { "NAD27 Bahamas", 14 },
