@@ -222,6 +222,13 @@ rw_init(const char *fname)
 			break;
 			
 	}
+
+	// If a user has specified a non-default character set, we'll trust
+	// them to sort our the wreckage of violating the Garmin protocol and
+	// ship characters to the device in that character set.
+	if (global_opts.charset != &cet_cs_vec_utf8) {
+		receiver_charset = global_opts.charset_name;
+	}
 	if (global_opts.debug_level > 0)  {
 		fprintf(stderr, "Waypoint type: %d\n"
 			"Chosen waypoint length %d\n",
