@@ -23,7 +23,8 @@
 </para>
 <para>
 	The VPL format contains quite a bit of data, much of which remains undecoded.  This format
-	currently reads only lat/lon, altitude, speed, heading, date/time, and visible sats.
+	currently reads only lat/lon, altitude, speed, heading, date/time, visible sats, HDOP and
+	VDOP.
 </para>
 <para>
 	Generally, the layout of the format seems similar to NMEA, with discrete sentences
@@ -33,7 +34,9 @@
 	the file is written in ASCII; most of it simply as hexadecimal characters.  Most
 	fields are fixed width, though a few can be variable.  (Those that are variable
 	have a field count as the first field after their sentence identifier)  Currently,
-	only the '75'-sentence is decoded (and only about 50% of it), though this provides all
-	the data necessary for position information.  (It is likely that it also contains
-	HDOP/VDOP, but they've not yet been found)
+	only the '75'-sentence is processed (and only about 70% of it), though this provides all
+	the data necessary for position information.
+
+	Some fields in other sentences have been decoded, but they are not currently processed.
+	Information on the data in these fields can be found in vpl.c.
 </para>
