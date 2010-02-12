@@ -41,7 +41,6 @@ wintec_tes_rd_deinit(void)
 static time_t
 wintec_date_to_time(gbuint32 w)
 {
-	time_t t;
 	struct tm tm;
 	memset(&tm, 0, sizeof(tm));
 	tm.tm_sec  = ((w & 0x0000003f));
@@ -68,6 +67,7 @@ wintec_tes_read(void)
 		gbint32 longitude = gbfgetint32(fin);
 		gbint16 alt = gbfgetint16(fin);  // Signed.  Meters.
 
+		(void) flags; // Silence 'unused' warning until we use flags.
 		wpt = waypt_new();
 		wpt->latitude = latitude / 1.0e7;
 		wpt->longitude = longitude / 1.0e7;
