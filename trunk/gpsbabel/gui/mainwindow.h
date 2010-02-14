@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.h,v 1.7 2009-09-15 18:04:03 robertl Exp $
+// $Id: mainwindow.h,v 1.8 2010-02-14 21:29:06 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -87,22 +87,23 @@ protected:
   void closeEvent(QCloseEvent*);
 
  private slots:
-  void inputFileOptBtnClicked();
-  void inputDeviceOptBtnClicked();
-  void inputOptionButtonClicked();
-  void inputFormatChanged(int);
-  void browseInputFile();
-  void outputFileOptBtnClicked();
-  void outputDeviceOptBtnClicked();
-  void outputOptionButtonClicked();
-  void outputFormatChanged(int);
-  void browseOutputFile();
-  void moreOptionButtonClicked();
-  void applyActionX();
   void aboutActionX();
-  void helpActionX();
+  void applyActionX();
+  void browseInputFile();
+  void browseOutputFile();
   void closeActionX();
   void filtersClicked();
+  void helpActionX();
+  void inputDeviceOptBtnClicked();
+  void inputFileOptBtnClicked();
+  void inputFormatChanged(int);
+  void inputOptionButtonClicked();
+  void moreOptionButtonClicked();
+  void outputDeviceOptBtnClicked();
+  void outputFileOptBtnClicked();
+  void outputFormatChanged(int);
+  void outputOptionButtonClicked();
+  void preferencesActionX();
   void resetFormatDefaults();
 
 };

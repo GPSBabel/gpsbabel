@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.14 2010-02-14 05:33:37 robertl Exp $
+// $Id: mainwindow.cpp,v 1.15 2010-02-14 21:29:06 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -27,16 +27,17 @@
 #include <QTemporaryFile>
 
 #include "mainwindow.h"
-#include "babeldata.h"
-#include "appname.h"
-#include "help.h"
-#include "advdlg.h"
 #include "aboutdlg.h"
-#include "optionsdlg.h"
+#include "advdlg.h"
+#include "appname.h"
+#include "babeldata.h"
 #include "filterdlg.h"
-#include "processwait.h"
 #include "formatload.h"
 #include "gmapdlg.h"
+#include "help.h"
+#include "optionsdlg.h"
+#include "preferences.h"
+#include "processwait.h"
 #include "upgrade.h"
 #include "../gbversion.h"
 
@@ -131,6 +132,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   connect(ui.actionQuit, SIGNAL(triggered()), this, SLOT(closeActionX()));
   connect(ui.actionHelp, SIGNAL(triggered()), this, SLOT(helpActionX()));
   connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(aboutActionX()));
+  connect(ui.actionPreferences, SIGNAL(triggered()), this, SLOT(preferencesActionX()));
 
   connect(ui.inputFormatCombo,  SIGNAL(currentIndexChanged(int)),
 	  this,                 SLOT(inputFormatChanged(int)));
@@ -959,6 +961,14 @@ void MainWindow::aboutActionX()
   aboutDlg.setWindowTitle(tr("About %1").arg(appName));
   aboutDlg.exec();
 }
+
+//------------------------------------------------------------------------
+void MainWindow::preferencesActionX()
+{
+  Preferences preferences(0, formatList);
+  preferences.exec();
+}
+
 
 //------------------------------------------------------------------------
 void MainWindow::helpActionX()
