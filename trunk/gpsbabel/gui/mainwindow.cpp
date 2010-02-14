@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.13 2010-01-17 01:42:10 robertl Exp $
+// $Id: mainwindow.cpp,v 1.14 2010-02-14 05:33:37 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -106,6 +106,7 @@ static QString MakeOptionsNoLeadingComma(const QList<FormatOption>& options)
   return (str.length()) ? str.mid(1) : str;
 
 }
+
 //------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 {
@@ -168,10 +169,12 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   //--- Restore from registry
   restoreSettings();
-  upgrade = new UpgradeCheck();
-  upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, 
-                           bd.upgradeCheckTime, bd.installationUuid,
-                           formatList);
+
+  if (bd.checkUpgradeOnStart) {
+    upgrade = new UpgradeCheck(parent, formatList);
+    upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, 
+                             bd.upgradeCheckTime, bd.installationUuid);
+  }
 }
 
 //------------------------------------------------------------------------
@@ -247,7 +250,9 @@ void MainWindow::inputFileOptBtnClicked()
   ui.inputFormatCombo->clear();
   for (int i=0; i<indices.size(); i++) {
     int k = indices[i];
-    ui.inputFormatCombo->addItem(formatList[k].getDescription(), QVariant(k));
+fprintf(stderr, "%s/%d\n", qPrintable(formatList[k].getName()), formatList[k].isHidden());
+    if (!formatList[k].isHidden())
+      ui.inputFormatCombo->addItem(formatList[k].getDescription(), QVariant(k));
   }
   setComboToFormat(ui.inputFormatCombo, fmt, true);
   fmtChgInterlock = false;
@@ -263,7 +268,9 @@ void MainWindow::inputDeviceOptBtnClicked()
   ui.inputFormatCombo->clear();
   for (int i=0; i<indices.size(); i++) {
     int k = indices[i];
-    ui.inputFormatCombo->addItem(formatList[k].getDescription(), QVariant(k));
+fprintf(stderr, "%s/%d\n", qPrintable(formatList[k].getName()), formatList[k].isHidden());
+    if (!formatList[k].isHidden())
+      ui.inputFormatCombo->addItem(formatList[k].getDescription(), QVariant(k));
   }
   setComboToFormat(ui.inputFormatCombo, fmt, false);
   fmtChgInterlock = false;
