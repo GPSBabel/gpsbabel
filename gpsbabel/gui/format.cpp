@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: format.cpp,v 1.3 2010-01-17 01:42:10 robertl Exp $
+// $Id: format.cpp,v 1.4 2010-02-14 05:33:37 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -51,19 +51,18 @@ void Format::saveSettings(QSettings &settings)
 {
   saveOptions(settings, name+".input", inputOptions);
   saveOptions(settings, name+".output", outputOptions);
-  // TODO: Finish this; let's not corrupt the .plsts until we can start from zero.
-  if (getReadUseCount() || getWriteUseCount()) {    
-    settings.setValue(name + ".readcount", getReadUseCount());
-    settings.setValue(name + ".writecount", getWriteUseCount());
-  }
+  settings.setValue(name + ".readcount", getReadUseCount());
+  settings.setValue(name + ".writecount", getWriteUseCount());
+  settings.setValue(name+".hidden", isHidden());
 }
 
 void Format::restoreSettings(QSettings &settings)
 {
-  restoreOptions(settings, name+".input", inputOptions);
-  restoreOptions(settings, name+".output", outputOptions);
+  restoreOptions(settings, name + ".input", inputOptions);
+  restoreOptions(settings, name + ".output", outputOptions);
   bumpReadUseCount(settings.value(name + ".readcount").toInt());
   bumpWriteUseCount(settings.value(name + ".writecount").toInt());
+  hidden_ = settings.value(name + ".hidden", false).toBool();
 }
 
 void Format::setToDefault()

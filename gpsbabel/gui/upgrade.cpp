@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.19 2010-01-17 21:57:00 robertl Exp $
+// $Id: upgrade.cpp,v 1.20 2010-02-14 05:33:37 robertl Exp $
 /*
     Copyright (C) 2009, 2010  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -37,12 +37,15 @@
 #include <QSysInfo>
 #include <QUrl>
 
-// static const bool testing = true;
+#if 0
+static const bool testing = true;
+#else
 static const bool testing = false;
+#endif
 
-UpgradeCheck::UpgradeCheck(QWidget *parent) :
+UpgradeCheck::UpgradeCheck(QWidget *parent, QList<Format> &formatList) :
   QObject(parent),
-  http(0)
+  http(0), formatList_(formatList), updateStatus_(updateUnknown)
 {
 }
 
@@ -112,13 +115,12 @@ QString UpgradeCheck::getOsVersion()
 UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentVersionIn,
                int checkMethod,
                const QDateTime &lastCheckTime,
-               const QString &installationUuid,
-               QList<Format> &formatList)
+               const QString &installationUuid)
 {
-  this->currentVersion = currentVersionIn;
-  this->currentVersion.remove("GPSBabel Version ");
-  this->upgradeCheckMethod = checkMethod;
-  this->formatList = &formatList;
+  currentVersion = currentVersionIn;
+  currentVersion.remove("GPSBabel Version ");
+  upgradeCheckMethod = checkMethod;
+//  formatList_ = &formatList;
 
   QDateTime soonestCheckTime = lastCheckTime.addDays(1);
   if (!testing && QDateTime::currentDateTime() < soonestCheckTime) {
@@ -154,12 +156,14 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
   args += "&os_ver=" + getOsVersion();
   args += "&beta_ok=1";   // Eventually to come from prefs.
   args += "&lang=" + QLocale::languageToString(locale.language());
+  args += "&last_checkin=" + lastCheckTime.toString(Qt::ISODate);
 
   int j = 0;
-  for (int i = 0; i < formatList.size(); i++) {
-    int rc = formatList[i].getReadUseCount();
-    int wc = formatList[i].getWriteUseCount();
-    QString formatName = formatList[i].getName();
+
+  for (int i = 0; i < formatList_.size(); i++) {
+    int rc = formatList_[i].getReadUseCount();
+    int wc = formatList_[i].getWriteUseCount();
+    QString formatName = formatList_[i].getName();
     if (rc)
       args += QString("&uc%1=rd/%2/%3").arg(j++).arg(formatName).arg(rc);
     if (wc)
@@ -167,7 +171,10 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
   }
   if (j)
     args += QString("&uc=%1").arg(j);
-  
+
+  if (false && testing)
+   fprintf(stderr, "Posting %s\n", qPrintable(args));
+
   http->setHost(host, 80);
   httpRequestId = http->request(header, args.toUtf8());
 
@@ -218,6 +225,8 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
 
   QDomNodeList upgrades = document.elementsByTagName("update");
   QUrl downloadUrl;
+  updateStatus_ = updateCurrent;  // Current until proven guilty.
+
   for (unsigned int i = 0; i < upgrades.length(); i++) {
     QDomNode upgradeNode = upgrades.item(i);
     QDomElement upgrade = upgradeNode.toElement();
@@ -236,6 +245,7 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
     upgradeText = upgrade.firstChildElement("overview").text();
     // String compare, not a numeric one.  Server will return "best first".
     if((updateVersion > currentVersion) && updateCandidate) {
+      updateStatus_ = updateNeeded;
       response = tr("A new version of GPSBabel is available.<br />"
         "Your version is %1 <br />"
         "The latest version is %2")
@@ -265,4 +275,8 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
   }
 
   upgradeWarningTime = QDateTime(QDateTime::currentDateTime());
+
+  for (int i = 0; i < formatList_.size(); i++) {
+     formatList_[i].zeroUseCounts();
+  }
 }

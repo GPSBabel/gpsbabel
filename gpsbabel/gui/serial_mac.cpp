@@ -193,8 +193,6 @@ static kern_return_t GetModemPath(io_iterator_t serialPortIterator, char *bsdPat
             }
         }
 
-        printf("\n");
-
         // Release the io_service_t now that we are done with it.
 	
 //		(void) IOObjectRelease(modemService);

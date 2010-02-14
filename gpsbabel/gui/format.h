@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: format.h,v 1.4 2010-01-17 21:57:00 robertl Exp $
+// $Id: format.h,v 1.5 2010-02-14 05:33:37 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -108,10 +108,11 @@ class Format
 	   writeRoutes(false),
 	   fileFormat(false),
 	   deviceFormat(false),
+           hidden_(false),
 	   extensions(QStringList()),
-     html(QString()),
-     readUseCount_(0),
-     writeUseCount_(0)
+           html(QString()),
+           readUseCount_(0),
+           writeUseCount_(0)
   {
     inputOptions.clear();
     outputOptions.clear();
@@ -130,6 +131,7 @@ class Format
     readWaypoints(readWaypoints), readTracks(readTracks), readRoutes(readRoutes),
     writeWaypoints(writeWaypoints), writeTracks(writeTracks), writeRoutes(writeRoutes),
     fileFormat(fileFormat), deviceFormat(deviceFormat),
+    hidden_(false),
     extensions(extensions),
     inputOptions(inputOptions),
     outputOptions(outputptions),
@@ -145,13 +147,13 @@ class Format
     readWaypoints(c.readWaypoints), readTracks(c.readTracks), readRoutes(c.readRoutes),
     writeWaypoints(c.writeWaypoints), writeTracks(c.writeTracks), writeRoutes(c.writeRoutes),
     fileFormat(c.fileFormat), deviceFormat(c.deviceFormat),
+    hidden_(false),
     extensions(c.extensions),
     inputOptions(c.inputOptions),
     outputOptions(c.outputOptions),
     html(c.html),
     readUseCount_(0),
     writeUseCount_(0)
-  
   {
   }
 
@@ -183,6 +185,7 @@ class Format
 
   bool isDeviceFormat() const { return deviceFormat; };
   bool isFileFormat() const { return   fileFormat; };
+  bool isHidden() const { return hidden_; };
   
   void saveSettings(QSettings &settings);
   void restoreSettings(QSettings &settings);
@@ -194,13 +197,16 @@ class Format
   void bumpWriteUseCount(int v) { writeUseCount_ += v; }
   int getReadUseCount()  const { return readUseCount_; }
   int getWriteUseCount() const { return writeUseCount_; }
-  void zeroUseCounts(void);
+  void zeroUseCounts(void) {
+    readUseCount_ = 0;
+    writeUseCount_= 0;
+  }
   
  private:
   QString name, description;
   bool readWaypoints, readTracks, readRoutes;
   bool writeWaypoints, writeTracks, writeRoutes;
-  bool fileFormat, deviceFormat;
+  bool fileFormat, deviceFormat, hidden_;
   QStringList extensions;
   QList<FormatOption>inputOptions;
   QList<FormatOption>outputOptions;

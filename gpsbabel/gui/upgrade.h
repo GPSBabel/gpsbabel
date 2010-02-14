@@ -30,7 +30,8 @@ class QHttpResponseHeader;
 class UpgradeCheck : public QObject {
   Q_OBJECT
 public:
-  UpgradeCheck(QWidget *parent = 0);
+  //UpgradeCheck(QWidget *parent = 0);
+  UpgradeCheck(QWidget *parent, QList<Format> &formatList);
   ~UpgradeCheck();
 
   typedef enum {
@@ -42,12 +43,14 @@ public:
   UpgradeCheck::updateStatus checkForUpgrade(const QString &babelVersion, 
 					     int upgradeCheckMethod,
 					     const QDateTime &lastCheckTime,
-					     const QString &installationUuid,
-               QList<Format> &formatList
-                                             
+					     const QString &installationUuid
                                              );
   QDateTime getUpgradeWarningTime() {
     return upgradeWarningTime;
+  }
+
+  updateStatus getStatus() {
+    return updateStatus_;
   }
   static bool isTestMode(void);
 
@@ -63,7 +66,8 @@ protected:
   QDateTime upgradeWarningTime;  // invalid time if this object never issued.
   QString getOsName(void);
   QString getOsVersion(void);
-  QList<Format> *formatList;
+  QList<Format> &formatList_;
+  updateStatus updateStatus_;
 
 private slots:
   void httpRequestFinished(int requestId, bool error);

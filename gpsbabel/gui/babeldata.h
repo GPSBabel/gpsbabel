@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: babeldata.h,v 1.3 2009-08-03 05:16:23 robertl Exp $
+// $Id: babeldata.h,v 1.4 2010-02-14 05:33:36 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -56,7 +56,8 @@ public:
     previewGmap(false),
     upgradeCheckMethod(0),
     upgradeCheckTime(QDateTime(QDate(2001, 1, 1), QTime(0, 0))),
-    installationUuid(QUuid::createUuid().toString())
+    installationUuid(QUuid::createUuid().toString()),
+    checkUpgradeOnStart(true)
   {
   };
   
@@ -134,6 +135,9 @@ public:
   int   upgradeCheckMethod;
   QDateTime upgradeCheckTime;
   QString installationUuid;
+
+  // Global preferences.
+  bool checkUpgradeOnStart;
 
 };
 
