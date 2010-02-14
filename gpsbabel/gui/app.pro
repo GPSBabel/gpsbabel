@@ -1,4 +1,4 @@
-# $Id: app.pro,v 1.14 2010-01-05 15:01:30 robertl Exp $
+# $Id: app.pro,v 1.15 2010-02-14 21:29:05 robertl Exp $
 #
 
 CONFIG += qt release 
@@ -29,55 +29,58 @@ mac:TARGET=GPSBabelFE
 win32:TARGET=GPSBabelFE
 unix:TARGET=gpsbabelfe-bin
 
-FORMS += mainwinui.ui
-FORMS += advui.ui
 FORMS += aboutui.ui
-FORMS += trackui.ui
+FORMS += advui.ui
 FORMS += filterui.ui
-FORMS += wayptsui.ui
-FORMS += rttrkui.ui
-FORMS += miscfltui.ui
 FORMS += gmapui.ui
+FORMS += mainwinui.ui
+FORMS += miscfltui.ui
+FORMS += preferences.ui
+FORMS += rttrkui.ui
+FORMS += trackui.ui
 FORMS += upgrade.ui
+FORMS += wayptsui.ui
 
+SOURCES += aboutdlg.cpp
 SOURCES += advdlg.cpp
 SOURCES += dpencode.cpp
-SOURCES += map.cpp
-SOURCES += latlng.cpp
-SOURCES += gpx.cpp
-SOURCES += gmapdlg.cpp
-SOURCES += aboutdlg.cpp
-SOURCES += main.cpp
-SOURCES += help.cpp
-SOURCES += mainwindow.cpp
-SOURCES += format.cpp
 SOURCES += filterdata.cpp
-SOURCES += formatload.cpp
-SOURCES += optionsdlg.cpp
-SOURCES += processwait.cpp
-SOURCES += filterwidgets.cpp
 SOURCES += filterdlg.cpp
+SOURCES += filterwidgets.cpp
+SOURCES += format.cpp
+SOURCES += formatload.cpp
+SOURCES += gmapdlg.cpp
+SOURCES += gpx.cpp
+SOURCES += help.cpp
+SOURCES += latlng.cpp
+SOURCES += main.cpp
+SOURCES += mainwindow.cpp
+SOURCES += map.cpp
+SOURCES += optionsdlg.cpp
+SOURCES += preferences.cpp
+SOURCES += processwait.cpp
 SOURCES += upgrade.cpp
 macx:SOURCES += serial_mac.cpp
 unix:SOURCES += serial_unix.cpp
 windows:SOURCES += serial_win.cpp
 
-HEADERS += mainwindow.h
-HEADERS += map.h
-HEADERS += gmapdlg.h
-HEADERS += gpx.h
-HEADERS += babeldata.h
-HEADERS += filterdlg.h
-HEADERS += appname.h
-HEADERS += advdlg.h
 HEADERS += aboutdlg.h
-HEADERS += help.h
+HEADERS += advdlg.h
+HEADERS += appname.h
+HEADERS += babeldata.h
+HEADERS += filterdata.h
+HEADERS += filterdlg.h
+HEADERS += filterwidgets.h
 HEADERS += format.h
 HEADERS += formatload.h
+HEADERS += gmapdlg.h
+HEADERS += gpx.h
+HEADERS += help.h
+HEADERS += mainwindow.h
+HEADERS += map.h
 HEADERS += optionsdlg.h
+HEADERS += preferences.h
 HEADERS += processwait.h
-HEADERS += filterwidgets.h
-HEADERS += filterdata.h
 HEADERS += setting.h
 HEADERS += upgrade.h
 
