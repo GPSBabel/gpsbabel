@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.21 2010-02-14 21:29:06 robertl Exp $
+// $Id: upgrade.cpp,v 1.22 2010-02-15 02:57:00 robertl Exp $
 /*
     Copyright (C) 2009, 2010  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -115,7 +115,8 @@ QString UpgradeCheck::getOsVersion()
 UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentVersionIn,
                int checkMethod,
                const QDateTime &lastCheckTime,
-               const QString &installationUuid)
+               const QString &installationUuid,
+               bool reportStatistics)
 {
   currentVersion = currentVersionIn;
   currentVersion.remove("GPSBabel Version ");
@@ -168,7 +169,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
     if (wc)
       args += QString("&uc%1=wr/%2/%3").arg(j++).arg(formatName).arg(wc);
   }
-  if (j)
+  if (j && reportStatistics)
     args += QString("&uc=%1").arg(j);
 
   if (false && testing)

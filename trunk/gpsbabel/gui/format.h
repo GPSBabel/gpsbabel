@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: format.h,v 1.5 2010-02-14 05:33:37 robertl Exp $
+// $Id: format.h,v 1.6 2010-02-15 02:57:00 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -185,7 +185,9 @@ class Format
 
   bool isDeviceFormat() const { return deviceFormat; };
   bool isFileFormat() const { return   fileFormat; };
+
   bool isHidden() const { return hidden_; };
+  void setHidden(bool state) { hidden_ = state; };
   
   void saveSettings(QSettings &settings);
   void restoreSettings(QSettings &settings);
