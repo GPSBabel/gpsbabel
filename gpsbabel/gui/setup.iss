@@ -1,4 +1,4 @@
-; $Id: setup.iss,v 1.15 2010-01-18 21:04:28 robertl Exp $
+; $Id: setup.iss,v 1.16 2010-02-15 19:49:39 robertl Exp $
 ;
 ; NOTE: setup.iss is generated from setup.iss.in via autoconf.
 ; The generated setup.iss is checked in to help keep the version numbers
