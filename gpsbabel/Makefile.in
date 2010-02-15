@@ -260,9 +260,9 @@ WINFILES = gpsbabel.exe mingw/libexpat.dll win32/GPSBabelGUI.exe win32/gui-2/REA
 release-sourcecheck: changes.html
 	cvs commit
 	./chkdoc
-	make clean
+	# make clean
 	rm -fr gpsbabel-$(VERSIOND)
-	make gpsbabel doc gpsbabel.html
+	# make gpsbabel doc gpsbabel.html
 	@(. tools/functions && ask "Enter 'y' to tag the tree as gpsbabel_$(VERSIONU)." "y") && cvs tag -F gpsbabel_$(VERSIONU) ; exit 0
 	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
 	touch gpsbabel-$(VERSIOND)/internal_styles.c
@@ -271,9 +271,8 @@ release-sourcecheck: changes.html
 # Build the release tarball from the exported CVS tree, tweaking 
 # timestamps and including generated filess as needed.
 #
-release-tarball: gpsbabel.html
+release-tarball: release-sourcecheck
 #	rm -fr gpsbabel-$(VERSIOND)
-	cp -ap gpsbabel.html gpsbabel-$(VERSIOND)/
 	cp -ap internal_styles.c gpsbabel-$(VERSIOND)/
 	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
 #	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
