@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: babeldata.h,v 1.4 2010-02-14 05:33:36 robertl Exp $
+// $Id: babeldata.h,v 1.5 2010-02-15 02:57:00 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -57,7 +57,8 @@ public:
     upgradeCheckMethod(0),
     upgradeCheckTime(QDateTime(QDate(2001, 1, 1), QTime(0, 0))),
     installationUuid(QUuid::createUuid().toString()),
-    checkUpgradeOnStart(true)
+    startupVersionCheck(true),
+    reportStatistics(true)
   {
   };
   
@@ -100,6 +101,11 @@ public:
     sg.addVarSetting(new IntSetting("app.upgradeCheckMethod", upgradeCheckMethod));
     sg.addVarSetting(new DateTimeSetting("app.upgradeCheckTime", upgradeCheckTime));
     sg.addVarSetting(new StringSetting("app.installationUuid", installationUuid));
+
+    // Global preferences.
+    sg.addVarSetting(new BoolSetting("app.startupVersionCheck", startupVersionCheck));
+    sg.addVarSetting(new BoolSetting("app.reportStatistics", reportStatistics));
+
   }
 
   static const int noType;
@@ -137,7 +143,8 @@ public:
   QString installationUuid;
 
   // Global preferences.
-  bool checkUpgradeOnStart;
+  bool startupVersionCheck;
+  bool reportStatistics;
 
 };
 

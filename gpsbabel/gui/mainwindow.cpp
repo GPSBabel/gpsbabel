@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.15 2010-02-14 21:29:06 robertl Exp $
+// $Id: mainwindow.cpp,v 1.16 2010-02-15 02:57:00 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -172,10 +172,11 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
 
-  if (bd.checkUpgradeOnStart) {
+  if (bd.startupVersionCheck) {
     upgrade = new UpgradeCheck(parent, formatList);
     upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, 
-                             bd.upgradeCheckTime, bd.installationUuid);
+                             bd.upgradeCheckTime, bd.installationUuid,
+                             bd.reportStatistics);
   }
 }
 
@@ -252,7 +253,6 @@ void MainWindow::inputFileOptBtnClicked()
   ui.inputFormatCombo->clear();
   for (int i=0; i<indices.size(); i++) {
     int k = indices[i];
-fprintf(stderr, "%s/%d\n", qPrintable(formatList[k].getName()), formatList[k].isHidden());
     if (!formatList[k].isHidden())
       ui.inputFormatCombo->addItem(formatList[k].getDescription(), QVariant(k));
   }
@@ -270,7 +270,6 @@ void MainWindow::inputDeviceOptBtnClicked()
   ui.inputFormatCombo->clear();
   for (int i=0; i<indices.size(); i++) {
     int k = indices[i];
-fprintf(stderr, "%s/%d\n", qPrintable(formatList[k].getName()), formatList[k].isHidden());
     if (!formatList[k].isHidden())
       ui.inputFormatCombo->addItem(formatList[k].getDescription(), QVariant(k));
   }
@@ -965,8 +964,11 @@ void MainWindow::aboutActionX()
 //------------------------------------------------------------------------
 void MainWindow::preferencesActionX()
 {
-  Preferences preferences(0, formatList);
+  Preferences preferences(0, formatList, bd);
   preferences.exec();
+
+  // We may have changed the list of displayed formats.  Resynchronize.
+  setWidgetValues();
 }
 
 

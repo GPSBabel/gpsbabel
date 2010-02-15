@@ -20,17 +20,20 @@
 //  USA
 
 #include "ui_preferences.h"
+
+#include "babeldata.h"
 #include "format.h"
 
 class Preferences : public QDialog {
   Q_OBJECT
 
  public:
-  Preferences(QWidget* parent, QList<Format>& formatList);
+  Preferences(QWidget* parent, QList<Format>& formatList, BabelData& bd);
 
  private:
   QList<Format>& formatList_;
   Ui_Preferences ui_;
+  BabelData& bd_;
 
  private slots:
   void enableAllClicked();

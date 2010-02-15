@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>777</width>
-    <height>351</height>
+    <width>554</width>
+    <height>404</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -22,12 +22,6 @@
   <layout class="QFormLayout" name="formLayout">
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="currentIndex">
       <number>1</number>
      </property>
@@ -50,18 +44,12 @@
           <property name="text">
            <string>Check for newer version on start.</string>
           </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="checkBox">
+         <widget class="QCheckBox" name="reportStatisticsCheck">
           <property name="text">
            <string>Anonymously report usage data.</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -84,8 +72,14 @@
          </item>
          <item>
           <widget class="QListWidget" name="enabledFormatsList">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="sortingEnabled">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>

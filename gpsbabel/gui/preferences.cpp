@@ -17,7 +17,6 @@
 //  USA
 
 
-#include <QSettings>
 #include "preferences.h"
 
 class FormatListEntry : public QListWidgetItem {
@@ -32,13 +31,16 @@ class FormatListEntry : public QListWidgetItem {
    Format& fmt_;
 };
 
-Preferences::Preferences(QWidget* parent, QList<Format>& formatList) :
-  formatList_(formatList)
+Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
+                         BabelData& bd) : QDialog(parent),
+  formatList_(formatList),
+  bd_(bd)
 {
   ui_.setupUi(this);
 
-  // TODO: read from prefs.
-  // ui_.startupCheck->setChecked(true);
+  ui_.startupCheck->setChecked(bd_.startupVersionCheck);
+  ui_.reportStatisticsCheck->setChecked(bd_.reportStatistics);
+
   connect (ui_.buttonBox, SIGNAL(accepted()), this, SLOT(acceptClicked()));
   connect (ui_.buttonBox, SIGNAL(rejected()), this, SLOT(rejectClicked()));
 
@@ -48,7 +50,7 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList) :
   for (int i = 0; i < formatList_.size(); i++) {
     FormatListEntry *item = new FormatListEntry(formatList[i]);
 
-    ui_.enabledFormatsList->insertItem(0, item);
+    ui_.enabledFormatsList->addItem(item);
   }
 }
 
@@ -70,6 +72,13 @@ void Preferences::disableAllClicked()
 
 void Preferences::acceptClicked()
 {
+  for (int i = 0; i < ui_.enabledFormatsList->count(); i++) {
+    QListWidgetItem* item = ui_.enabledFormatsList->item(i);
+    formatList_[i].setHidden(item->checkState() == Qt::Unchecked);
+  }
+
+  bd_.startupVersionCheck = ui_.startupCheck->isChecked();
+  bd_.reportStatistics = ui_.reportStatisticsCheck->isChecked();
   accept();
 }
 
