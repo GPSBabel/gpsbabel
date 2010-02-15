@@ -1,0 +1,15 @@
+<para> 
+This filter removes points based on their proximity to each other.  A 
+point is removed if it is within the specified distance of a point that 
+has come before.
+</para>
+
+<example id="posn_to_suppress_close_points">
+<title>Using the position filter to suppress close points</title>
+<para>
+The following command removes multiple points that are within 
+one foot of each other, leaving just one.
+</para>
+<para><userinput>gpsbabel -i geo -f 1.loc -f 2.loc -x position,distance=1f -o mapsend -F 3.wpt</userinput></para>
+</example>
+      

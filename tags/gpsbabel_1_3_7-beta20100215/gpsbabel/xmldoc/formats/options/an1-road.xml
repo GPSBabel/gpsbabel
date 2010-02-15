@@ -1,0 +1,79 @@
+<para>
+If you are creating a road layer, you may use the "road" option, which 
+allows you to change the types of roads based on their names.  You can 
+change multiple roads at the same time.  Currently supported types are 
+</para>
+<para>
+<segmentedlist>
+<?dbhtml list-presentation="table"?>
+<segtitle>Type</segtitle>
+<segtitle>Meaning</segtitle>
+<seglistitem>
+               <seg>limited</seg>
+	       <seg>Limited-access freeways</seg>
+        </seglistitem>
+        <seglistitem>
+               <seg>toll</seg>
+               <seg>Limited-access toll highways</seg>
+        </seglistitem>
+        <seglistitem>
+               <seg>ramp</seg>      
+               <seg>Access ramps for limited-access highways</seg>
+        </seglistitem>
+        <seglistitem>
+               <seg>us</seg> 
+               <seg>National highways (e.g. US routes)</seg>
+        </seglistitem>
+        <seglistitem>
+               <seg>primary</seg> 
+               <seg>Primary State/Provincial routes</seg>
+        </seglistitem>
+        <seglistitem>
+               <seg>state</seg>
+               <seg>State/Provincial routes</seg>
+        </seglistitem>
+        <seglistitem>
+               <seg>major</seg>     
+               <seg>Major Connectors</seg>
+        </seglistitem>
+        <seglistitem>
+               <seg>ferry</seg>     
+               <seg>Ferry Routes</seg>
+        </seglistitem>
+        <seglistitem>
+               <seg>local</seg>     
+               <seg>Local Roads</seg>
+        </seglistitem>
+        <seglistitem>
+               <seg>editable</seg>
+               <seg>User-drawn Roads</seg>
+        </seglistitem>
+      </segmentedlist>
+</para>
+<para>
+GPSBabel defaults to creating editable roads.  These are routed just like 
+local roads, but may be edited with the drawing tools in Street Atlas.
+</para>
+
+<para> 
+This option has a special format that is best demonstrated by example:
+</para>
+
+<screen format="linespecific"> "road=I-599!limited!Beecher St.!major" </screen>
+
+<para>
+This option will cause any road named "I-599" to become a limited-access 
+highway and any road named "Beecher St." to become a major connector.  Note 
+that roads that have had their types changed in this way are not editable 
+in Street Atlas, so make sure they are where you want them before you 
+change them, and make sure to keep a backup of your original road layer.  
+Note that the ! is a shell metacharacter in bash and possibly other shells, 
+so you may have to use single quotes or some other escape mechanism.
+</para>
+
+<para>
+There is a tutorial on 
+<ulink url="http://www.gpsbabel.org/formats/delorme-new-interstate/">how 
+to create an onramp for a limited access highway in Street Atlas USA 
+using GPSBabel.</ulink>
+</para>

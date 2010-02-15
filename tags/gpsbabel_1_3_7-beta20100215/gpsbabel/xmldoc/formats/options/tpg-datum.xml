@@ -1,0 +1,6 @@
+      <para>The option 'datum="datum name"' can be used to override
+the default of NAD27 ("N. America 1927 mean") which is correct for the
+continental U.S.</para> <para>Any legal <link linkend="Datums">datum supported
+by GPSBabel</link> may be used.  For example, points in Hawaii should 
+use "Old Hawaiian_mean".</para>
+    

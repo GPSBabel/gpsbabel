@@ -1,0 +1,6 @@
+<para>
+When this option is specified, the usual sense of the arc filter is reversed. 
+That is, points that are closer than <varname>distance</varname> are discarded
+while points that are further away are kept.
+</para>
+

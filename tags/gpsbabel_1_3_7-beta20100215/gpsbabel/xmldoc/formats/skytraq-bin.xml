@@ -1,0 +1,3 @@
+<para>Reads the binary format of GPS data loggers based on Skytraq Venus 5 and Venus 6 chipsets.
+This can be used to read raw binary files created with the "dump-file" option of the skytraq format.
+Mainly useful for debugging/development purposes.</para>

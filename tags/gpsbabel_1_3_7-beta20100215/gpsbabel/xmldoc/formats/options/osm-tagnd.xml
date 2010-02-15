@@ -1,0 +1,6 @@
+<para>
+  With this option you can preset OSM <ulink url="http://wiki.openstreetmap.org/index.php/Map_Features">features</ulink> (tags) on every written nodes.
+</para>
+<para>
+  <userinput>gpsbabel -i gdb -f nodes.gdb -o osm,tagnd="amenity:pub;building:yes" -F nodes.osm</userinput>
+</para>

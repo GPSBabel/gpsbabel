@@ -1,0 +1,11 @@
+<para>
+Similar to the <option>crosstrack</option> method, but the error introduced by
+removing a point is set into relation to its associated horizontal accuracy,
+determined as 6m * HDOP. If there is timestamp information, the distance to the interpolated point between
+the two neighboring points is used instead of the distance to their connecting line.
+</para>
+<para>
+The effect of the relative method is similar to a combination of
+the crosstrack method with the discard filter: points are removed preserving the
+overall shape of the route (track), but preferably those that are unreliable.
+</para>

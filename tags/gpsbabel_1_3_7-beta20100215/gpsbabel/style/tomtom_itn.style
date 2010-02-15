@@ -1,0 +1,23 @@
+# gpsbabel XCSV style file
+#
+# Format: TomTom Navigator Itineraries (Routes)
+# Author: Olaf Klein
+#   Date: 04/17/2007
+#
+DESCRIPTION		TomTom Itineraries (.itn)
+EXTENSION		itn
+DATATYPE		ROUTE
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		PIPE
+RECORD_DELIMITER	CRNEWLINE
+BADCHARS		,|
+ENCODING		MS-ANSI
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	LON_10E5, "", "%.f"
+IFIELD	LAT_10E5, "", "%.f"
+IFIELD	SHORTNAME, "", "%s"
+IFIELD	CONSTANT, "0", "%s"

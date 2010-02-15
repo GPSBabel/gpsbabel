@@ -1,0 +1,27 @@
+
+      
+      
+      <para> This was a requested <link linkend="fmt_csv">CSV format</link>, and is <emphasis>not</emphasis> the proprietary
+binary format used by <ulink url="http://www.fugawi.com">Fugawi</ulink>. Like any other CSV format, GPSBabel
+cannot read tracks in this format, but converting a track into it and
+then importing as track in Fugawi works.</para>
+      <para> It is known to work with Fugawi V3.1.4.635. When
+importing/exporting waypoints, one has to specify the order of fields
+as follows (names of fields may depend on the language used by
+Fugawi):</para>
+      <simplelist type="vert">
+	<member> - Name</member>
+	<member> - Comment</member>
+	<member> - Description</member>
+	<member> - Latidude</member>
+	<member> - Longitude</member>
+	<member> - Altitude (metres)</member>
+	<member> - Date (yyyymmdd/yymmdd)</member>
+	<member> - Time of day (hhmmss)</member>
+      </simplelist>
+      <para> When importing tracks, use "[ignore]" instead of "Name",
+"Comment" and "Description".</para>
+      <para>
+            <ulink url="http://www.fugawi.com/">http://www.fugawi.com/</ulink>
+         </para>
+    

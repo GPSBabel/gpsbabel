@@ -1,0 +1,29 @@
+<para>
+GPSBabel supports .wpr and .trl files for Alan Map500 devices running operating 
+system versions 2.xx.
+</para>
+
+<para>
+.trl contain files tracklogs. If you use a CF-Card based
+operating system, tracklog files must have a <filename>.TRL</filename> extension when
+copied to the CF-Card. The default filename is <filename>TEMP_TRK.TRL</filename>.
+Only one <filename>.TRL</filename> file may be present.
+</para>
+
+<para>
+Alan's operating system 3.0 for Map500 is not supported yet.
+At the time of this writing, OS3 is still beta.
+Documentation on the new dataformats is sparse.
+</para>
+
+<para>
+The Alan Map500 handheld GPSr is identical to the Holux GM101.
+This GPSBabel module has only been tested against the Alan Map500.
+Still, if you use a GM101, GPSBabel will probably be able to convert
+your waypoints, routes and tracklogs.
+</para>
+
+<para>
+For more information on the Alan Map500 visit
+<ulink url="http://www.alan-electronics.de/gps/gpsuebersicht.php3">Alan Germany</ulink>. There is very informative <ulink url="http://www.alan-germany.de/forum/index.php">forum</ulink>, too. The forum language is German but posts in English will be answered, too.
+</para>

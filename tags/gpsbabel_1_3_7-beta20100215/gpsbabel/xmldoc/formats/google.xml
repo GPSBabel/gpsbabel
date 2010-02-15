@@ -1,0 +1,36 @@
+
+      
+      
+      <para> This format is designed to read the XML emitted when you
+tack "&amp;output=js" onto the end of a <ulink url="http://maps.google.com>Google Maps">Google Maps</ulink> route URL (use
+the "link to this page" option to get a usable URL.)  This allows you
+to plan a route using Google Maps, then download it and use it in your
+own mapping program or GPS receiver.   To get a file suitable for use
+with GPSBabel, plan your route as usual with Google Maps.  Once you've 
+got it the way you want it, click the "Link to this page" link in the
+upper right-hand corner of the Google Maps page.  Then, edit the URL 
+that appears in your address bar by adding "&amp;output=js" (without
+the quotes) onto the end.  Hit enter, and the resulting page will be
+mostly empty.  It doesn't look like much, but it contains exactly what 
+GPSBabel needs.  Save it to disk using whatever menu option your web 
+browser provides.
+</para>
+<para>
+Note that if you are using Microsoft Internet Explorer, you should make sure
+to save the web page as "Web Page, HTML Only".  If you save it as "Web Page,
+Complete", it will be reformatted into a non-XHTML format that GPSBabel 
+cannot read.
+</para>
+<para>
+If you use a Unix-compatible
+operating system, this shell script might be useful:
+</para>
+<programlisting format="linespecific">
+#!/bin/sh 
+FROM="233 S. Upper Wacker Dr, Chicago, IL" 
+TO="1060 W. Addison St, Chicago, IL" 
+wget -O - "http://maps.google.com/maps?q=$FROM to $TO&amp;output=js" \
+2&amp;&gt;/dev/null &gt;google_map.js
+gpsbabel -i google -f google_map.js -o gpx -F google_map.gpx
+</programlisting>
+    

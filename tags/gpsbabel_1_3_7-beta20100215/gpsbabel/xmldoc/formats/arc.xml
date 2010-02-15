@@ -1,0 +1,14 @@
+<para>
+This format is used by GPSBabel itself as the input to the 
+<link linkend="filter_arc">arc</link> and 
+<link linkend="filter_polygon">polygon</link> filters.  See those filters
+for more information.
+</para>
+<para>
+The arc format reads two numeric fields, a latitude and a longitude, 
+in any format recognized as <link linkend="style_def_lathuman">human 
+readable</link> and writes as simple degrees decimal.  It really is
+intended for GPSBabel's own internal use more than general use, though
+it turns out to be a convenient way of expressing simple polylines and 
+polygons.
+</para>
