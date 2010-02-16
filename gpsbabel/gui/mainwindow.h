@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.h,v 1.8 2010-02-14 21:29:06 robertl Exp $
+// $Id: mainwindow.h,v 1.9 2010-02-16 02:49:43 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -105,6 +105,7 @@ protected:
   void outputOptionButtonClicked();
   void preferencesActionX();
   void resetFormatDefaults();
+  void upgradeCheckActionX();
 
 };
 

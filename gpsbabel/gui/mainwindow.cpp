@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.16 2010-02-15 02:57:00 robertl Exp $
+// $Id: mainwindow.cpp,v 1.17 2010-02-16 02:49:43 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -132,6 +132,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   connect(ui.actionQuit, SIGNAL(triggered()), this, SLOT(closeActionX()));
   connect(ui.actionHelp, SIGNAL(triggered()), this, SLOT(helpActionX()));
   connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(aboutActionX()));
+  connect(ui.actionUpgradeCheck, SIGNAL(triggered()), this, SLOT(upgradeCheckActionX()));
   connect(ui.actionPreferences, SIGNAL(triggered()), this, SLOT(preferencesActionX()));
 
   connect(ui.inputFormatCombo,  SIGNAL(currentIndexChanged(int)),
@@ -172,8 +173,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
 
+  upgrade = new UpgradeCheck(parent, formatList);
   if (bd.startupVersionCheck) {
-    upgrade = new UpgradeCheck(parent, formatList);
     upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, 
                              bd.upgradeCheckTime, bd.installationUuid,
                              bd.reportStatistics);
@@ -959,6 +960,14 @@ void MainWindow::aboutActionX()
   AboutDlg aboutDlg(0, babelVersion, QString(appName) + QString(" " VERSION));
   aboutDlg.setWindowTitle(tr("About %1").arg(appName));
   aboutDlg.exec();
+}
+
+//------------------------------------------------------------------------
+void MainWindow::upgradeCheckActionX()
+{
+    upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, 
+                             QDateTime(), bd.installationUuid,
+                             bd.reportStatistics);
 }
 
 //------------------------------------------------------------------------
