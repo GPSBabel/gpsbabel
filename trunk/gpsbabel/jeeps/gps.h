@@ -38,6 +38,13 @@ extern char gps_categories[16][17];
 
 typedef struct GPS_SPacket
 {
+    US type;
+    uint32 n;
+    UC *data;
+} GPS_OPacket, *GPS_PPacket;
+
+typedef struct GPS_Serial_SPacket
+{
     UC dle;
     UC type;
     UC n;
@@ -45,10 +52,7 @@ typedef struct GPS_SPacket
     UC chk;
     UC edle;
     UC etx;
-    UC bytes;		/* Actual number of bytes (for sending) */    
-} GPS_OPacket, *GPS_PPacket;
-
-
+} GPS_Serial_OPacket, *GPS_Serial_PPacket;
 
 typedef struct GPS_SProduct_Data_Type
 {

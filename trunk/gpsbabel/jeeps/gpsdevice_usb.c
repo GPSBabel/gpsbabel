@@ -54,6 +54,5 @@ gps_device_ops gps_usb_ops = {
 	(gps_device_op10) success_stub,
 	(gps_device_op10) success_stub,
 	gdu_read,
-	GPS_Make_Packet_usb,
 	GPS_Write_Packet_usb
 };

@@ -71,7 +71,7 @@ do_over:
 	 */
 	(*packet)->type = le_read16(&pkt.gusb_pkt.pkt_id);
 	payload_size = le_read32(&pkt.gusb_pkt.datasz);
-	(*packet)->n = (UC) payload_size;
+	(*packet)->n = payload_size;
 	memcpy((*packet)->data, &pkt.gusb_pkt.databuf, payload_size);
 	
 	return 1;

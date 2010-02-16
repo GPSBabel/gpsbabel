@@ -56,9 +56,6 @@ GPS_PPacket GPS_Packet_New(void)
 	return NULL;
     }
 
-    ret->dle = ret->edle = DLE;
-    ret->etx = ETX;
-
     return ret;
 }
 
@@ -301,7 +298,7 @@ void GPS_Way_Del(GPS_PWay *thys)
 **
 ** Lap constructor
 **
-** @return [GPS_PLap] virgin track
+** @return [GPS_PLap] virgin lap
 **********************************************************************/
 
 GPS_PLap GPS_Lap_New(void)
@@ -325,7 +322,7 @@ GPS_PLap GPS_Lap_New(void)
 **
 ** Lap destructor
 **
-** @param [w] thys [GPS_PLap *] track to delete
+** @param [w] thys [GPS_PLap *] lap to delete
 **
 ** @return [void]
 **********************************************************************/

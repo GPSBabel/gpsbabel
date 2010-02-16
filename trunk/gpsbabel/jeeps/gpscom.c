@@ -648,7 +648,7 @@ int32 GPS_Command_Pvt_Get(gpsdevh **fd, GPS_PPvt_Data *pvt)
 ** Get lap from GPS
 **
 ** @param [r] port [const char *] serial port
-** @param [w] way [GPS_PLap **] pointer to lap array
+** @param [w] lap [GPS_PLap **] pointer to lap array
 **
 ** @return [int32] number of lap entries
 ************************************************************************/

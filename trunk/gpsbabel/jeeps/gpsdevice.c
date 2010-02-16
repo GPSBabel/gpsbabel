@@ -80,7 +80,9 @@ int32 GPS_Get_Ack(gpsdevh * fd, GPS_PPacket *tra, GPS_PPacket *rec)
 	return (ops->Get_Ack)(fd, tra, rec);
 }
 
-void GPS_Make_Packet(GPS_PPacket *packet, UC type, UC *data, int16 n)
+void GPS_Make_Packet(GPS_PPacket *packet, US type, UC *data, uint32 n)
 {
-	(ops->Make_Packet)(packet, type, data, n);
+	(*packet)->type = type;
+	memcpy((*packet)->data, data, n);
+	(*packet)->n = n;
 }

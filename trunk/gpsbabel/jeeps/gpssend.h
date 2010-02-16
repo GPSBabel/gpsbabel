@@ -11,11 +11,10 @@ extern "C"
 
 #define GPS_ARB_LEN 1024
 
-void   GPS_Serial_Make_Packet(GPS_PPacket *packet, UC type, UC *data, int16 n);    
 int32  GPS_Serial_Write_Packet(gpsdevh *fd, GPS_PPacket packet);
 int32  GPS_Serial_Send_Ack(gpsdevh *fd, GPS_PPacket *tra, GPS_PPacket *rec);
 
-void   GPS_Make_Packet(GPS_PPacket *packet, UC type, UC *data, int16 n);    
+void   GPS_Make_Packet(GPS_PPacket *packet, US type, UC *data, uint32 n);    
 
 
 #endif

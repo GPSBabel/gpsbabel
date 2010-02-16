@@ -77,7 +77,7 @@ int32 GPS_Serial_Packet_Read(gpsdevh *fd, GPS_PPacket *packet)
     int32  isDLE;
     UC     *p;
     int32  i;
-    UC     chk=0;
+    UC     chk=0, chk_read;
     const char *m1;
     const char *m2;
     
@@ -103,7 +103,6 @@ int32 GPS_Serial_Packet_Read(gpsdevh *fd, GPS_PPacket *packet)
 
 	    if(!len)
 	    {
-		(*packet)->dle = u;
 		if(u != DLE)
 		{
 		    (void) fprintf(stderr,"GPS_Packet_Read: No DLE.  Data received, but probably not a garmin packet.\n");
@@ -141,21 +140,19 @@ int32 GPS_Serial_Packet_Read(gpsdevh *fd, GPS_PPacket *packet)
 	    if(u == ETX)
 		if(isDLE)
 		{
-		    (*packet)->edle = DLE;
-		    (*packet)->etx = ETX;
 		    if(p-(*packet)->data-2 != (*packet)->n)
 		    {
 			GPS_Error("GPS_Packet_Read: Bad count");
 			gps_errno = FRAMING_ERROR;
 			return 0;
 		    }
-		    (*packet)->chk = *(p-2);
+		    chk_read = *(p-2);
 
 		    for(i=0,p=(*packet)->data;i<(*packet)->n;++i)
 			chk -= *p++;
 		    chk -= (*packet)->type;
 		    chk -= (*packet)->n;
-		    if(chk != (*packet)->chk)
+		    if(chk != chk_read)
 		    {
 			GPS_Error("CHECKSUM: Read error\n");
 			gps_errno = FRAMING_ERROR;

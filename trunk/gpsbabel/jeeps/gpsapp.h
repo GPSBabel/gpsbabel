@@ -96,7 +96,7 @@ Capability A918: D918
 Capability A1013: D1014
 */
 
-const char * Get_Pkt_Type(unsigned char p, unsigned short d0, const char **xinfo);
+const char * Get_Pkt_Type(US p, US d0, const char **xinfo);
 
 
 #endif
