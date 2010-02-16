@@ -985,7 +985,7 @@ int32 GPS_A100_Send(const char *port, GPS_PWay *way, int32 n, int (*cb)(GPS_PWay
 	}
 
 	GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Wpt_Data,
-                  data, (US) len);
+                  data, len);
 
 	if(!GPS_Write_Packet(fd,tra))
 	    return gps_errno;
@@ -2922,7 +2922,7 @@ int32 GPS_A200_Send(const char *port, GPS_PWay *way, int32 n)
     GPS_PPacket rec;
     int32 i;
     int32 len;
-    UC  method;
+    US  method;
 
     if(!GPS_Device_On(port,&fd))
 	return gps_errno;
@@ -3019,7 +3019,7 @@ int32 GPS_A200_Send(const char *port, GPS_PWay *way, int32 n)
 	}
 	
 
-	GPS_Make_Packet(&tra, method, data,(US) len);
+	GPS_Make_Packet(&tra, method, data, len);
 
 	if(!GPS_Write_Packet(fd,tra))
 	    return gps_errno;
@@ -3071,7 +3071,7 @@ int32 GPS_A201_Send(const char *port, GPS_PWay *way, int32 n)
     GPS_PPacket rec;
     int32 i;
     int32 len;
-    UC  method;
+    US  method;
 
     if(!GPS_Device_On(port,&fd))
 	return gps_errno;
@@ -3188,7 +3188,7 @@ int32 GPS_A201_Send(const char *port, GPS_PWay *way, int32 n)
 	}
 	
 
-	GPS_Make_Packet(&tra, method, data,(US) len);
+	GPS_Make_Packet(&tra, method, data, len);
 
 	if(!GPS_Write_Packet(fd,tra))
 	    return gps_errno;
@@ -3776,7 +3776,7 @@ int32 GPS_A300_Send(const char *port, GPS_PTrack *trk, int32 n)
 	}
 
 	GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Trk_Data,
-			data,(US) len);
+			data, len);
 
 	if(!GPS_Write_Packet(fd,tra))
 	    return gps_errno;
@@ -3828,7 +3828,7 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
     GPS_PPacket rec;
     int32 i;
     int32 len;
-    UC  method;
+    US  method;
 
     if(gps_trk_transfer == -1)
 	return GPS_UNSUPPORTED;
@@ -3912,14 +3912,14 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 	}
 	
 
-	GPS_Make_Packet(&tra, method, data,(US) len);
+	GPS_Make_Packet(&tra, method, data, len);
 
 	if(!GPS_Write_Packet(fd,tra))
 	    return gps_errno;
 
 	if(!GPS_Get_Ack(fd, &tra, &rec))
 	{
-	    GPS_Error("A301_Send: Track packet not acknowledgedn");
+	    GPS_Error("A301_Send: Track packet not acknowledged");
 	    return FRAMING_ERROR;
 	}
     }
@@ -4714,7 +4714,7 @@ int32 GPS_A400_Send(const char *port, GPS_PWay *way, int32 n)
 	}
 
 	GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Prx_Wpt_Data,
-			data,(US) len);
+			data, len);
 
 	if(!GPS_Write_Packet(fd,tra))
 	    return gps_errno;
@@ -5174,7 +5174,7 @@ int32 GPS_A500_Send(const char *port, GPS_PAlmanac *alm, int32 n)
 	}
 
 	GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Almanac_Data,
-			data,(US) len);
+			data, len);
 
 	if(!GPS_Write_Packet(fd,tra))
 	    return gps_errno;
@@ -6070,7 +6070,7 @@ int32 GPS_A906_Get(const char *port, GPS_PLap **lap, pcb_fn cb)
        return MEMORY_ERROR;
 
     GPS_Util_Put_Short(data,
-                       COMMAND_ID[gps_device_command].Cmnd_Transfer_Lap);
+                       COMMAND_ID[gps_device_command].Cmnd_Transfer_Laps);
     GPS_Make_Packet(&trapkt, LINK_ID[gps_link_type].Pid_Command_Data,
                     data,2);
     if(!GPS_Write_Packet(fd,trapkt))
@@ -6246,7 +6246,7 @@ void GPS_D1011b_Get(GPS_PLap *Lap, UC *p)
  *  but they really are runtime variable.  Sigh.
  */
 const char *
-Get_Pkt_Type(unsigned char p, unsigned short d0, const char **xinfo)
+Get_Pkt_Type(US p, US d0, const char **xinfo)
 {
 	*xinfo = NULL;
 #define LT LINK_ID[gps_link_type]
@@ -6325,7 +6325,7 @@ Get_Pkt_Type(unsigned char p, unsigned short d0, const char **xinfo)
 		return "FLIBOO";
 	if (p == LT.Pid_Lap)
 		return "LAPDAT";
-	if (p == LT.Pid_Wpt_Cat_Data)
+	if (p == LT.Pid_Wpt_Cat)
 		return "WPTCAT";
 	if (p == LT.Pid_Run)
 		return "RUNDAT";

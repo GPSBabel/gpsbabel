@@ -84,6 +84,7 @@ gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
 	int rv;
 	unsigned char *buf = (unsigned char *) &ibuf->dbuf;
 	int orig_receive_state;
+	unsigned short pkt_id;
 top:
 	orig_receive_state = receive_state;
 	switch (receive_state) {
@@ -97,6 +98,7 @@ top:
 		fatal("Unknown receiver state %d\n", receive_state);
 	}
 
+	pkt_id = le_read16(&ibuf->gusb_pkt.pkt_id);
 	if (gps_show_bytes) {
 		int i;
 		const char *m1, *m2;
@@ -121,13 +123,13 @@ top:
 			GPS_Diag("%c", isalnum(buf[i])? buf[i] : '.');
 		}
 
-		m1 = Get_Pkt_Type(ibuf->gusb_pkt.pkt_id[0], pkttype, &m2);
+		m1 = Get_Pkt_Type(pkt_id, pkttype, &m2);
 if ((rv == 0)  &&  (receive_state == rs_frombulk) ) {m1= "RET2INTR";m2=NULL;};
 		GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
 	}
 
 	/* Adjust internal state and retry the read */
-	if ((rv > 0) && (ibuf->gusb_pkt.pkt_id[0] == GUSB_REQUEST_BULK)) {
+	if ((rv > 0) && (pkt_id == GUSB_REQUEST_BULK)) {
 		receive_state = rs_frombulk;
 		goto top;
 	}
@@ -158,6 +160,7 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 
 	if (gps_show_bytes) {
 		const unsigned short pkttype = le_read16(&opkt->gusb_pkt.databuf[0]);
+		const unsigned short pkt_id = le_read16(&opkt->gusb_pkt.pkt_id);
 		GPS_Diag("TX [%d]:", sz);
 
 		for(i=0;i<sz;i++)
@@ -166,7 +169,7 @@ gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
 		for(i=0;i<sz;i++)
 			GPS_Diag("%c", isalnum(obuf[i])? obuf[i] : '.');
 
-		m1 = Get_Pkt_Type(opkt->gusb_pkt.pkt_id[0], pkttype, &m2);
+		m1 = Get_Pkt_Type(pkt_id, pkttype, &m2);
 
 		GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
         }

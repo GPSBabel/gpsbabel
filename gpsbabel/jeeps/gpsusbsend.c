@@ -25,23 +25,6 @@
 #include "garminusb.h"
 #include "gpsusbint.h"
 
-void 
-GPS_Make_Packet_usb(GPS_PPacket *packet, UC type, UC *data, int16 n)
-{
-	/*
-	 * For the USB case, it's a little tacky that we just copy
-	 * the params into *packet, but we really don't have any manipulations
-	 * to do here.   They're done in send_packet in order to keep the
-	 * contents of *packet identical for the serial and USB cases.
-	 */
-
-	(*packet)->type = type;
-	memcpy((*packet)->data, data, n);
-	(*packet)->n = (UC) n;
-	
-	return;
-}
-
 int32
 GPS_Write_Packet_usb(gpsdevh *dh, GPS_PPacket packet)
 {

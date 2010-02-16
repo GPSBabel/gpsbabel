@@ -32,6 +32,5 @@ gps_device_ops  gps_serial_ops = {
 	GPS_Serial_Send_Ack,
 	GPS_Serial_Get_Ack,
 	GPS_Serial_Packet_Read,
-	GPS_Serial_Make_Packet,
 	GPS_Serial_Write_Packet,
 };

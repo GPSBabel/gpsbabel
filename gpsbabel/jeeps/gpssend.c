@@ -30,69 +30,65 @@
 #include <ctype.h>
 
 
-/* @func GPS_Make_Packet ***********************************************
+/* @funcstatic Build_Serial_Packet *************************************
 **
-** Forms a complete packet to send 
+** Forms a complete packet to send on serial port
+*
+** @param [r] in [GPS_PPacket *] packet string with portable packet data
+** @param [w] out [GPS_Serial_PPacket *] packet string suitable for serial port
 **
-** @param [w] packet [GPS_PPacket *] packet string
-** @param [r] type [UC] packet type
-** @param [r] data [UC *] data string
-** @param [r] n [int16] number of bytes in data string
-**
-** @return [void]
+** @return [US] number of data bytes to send
 ************************************************************************/
-
-void GPS_Serial_Make_Packet(GPS_PPacket *packet, UC type, UC *data, int16 n)
+static US
+Build_Serial_Packet(GPS_PPacket in, GPS_Serial_PPacket out)
 {
     UC *p;
     UC *q;
     
     int32 i;
     UC  chk=0;
+    US  bytes=0;
 
-    
-    p = data;
-    q = (*packet)->data;
+    p = in->data;
+    q = out->data;
 
-    (*packet)->dle   = DLE;
-    (*packet)->edle  = DLE;
-    (*packet)->etx   = ETX;
-    (*packet)->n     = (UC) n;
-    (*packet)->type  = type;
-    (*packet)->bytes = 0;
+    out->dle   = DLE;
+    out->edle  = DLE;
+    out->etx   = ETX;
+    out->n     = in->n;
+    out->type  = in->type;
 
-    chk -= type;
+    chk -= in->type;
 
-    if(n == DLE)
+    if(in->n == DLE)
     {
-	++(*packet)->bytes;
+	++bytes;
 	*q++ = DLE;
     }
     
+    chk -= in->n;
     
-    chk -= (UC) n;
-    
-    for(i=0;i<n;++i)
+    for(i = 0; i < in->n; ++i)
     {
 	if(*p == DLE)
 	{
-	    ++(*packet)->bytes;
+	    ++bytes;
 	    *q++ = DLE;
 	}
 	chk -= *p;
 	*q++ = *p++;
-	++(*packet)->bytes;
+	++bytes;
     }
 
     if(chk == DLE)
     {
 	*q++ = DLE;
-	++(*packet)->bytes;
+	++bytes;
     }
     
-    (*packet)->chk = chk;
+    out->chk = chk;
     
-    return;
+    return bytes;
 }
 
 
@@ -130,11 +126,21 @@ int32 GPS_Serial_Write_Packet(gpsdevh *fd, GPS_PPacket packet)
 {
     size_t ret;
     const char *m1, *m2;
-    
+    GPS_Serial_OPacket ser_pkt;
+    UC ser_pkt_data[MAX_GPS_PACKET_SIZE * sizeof(UC)];
+    US bytes;
 
+    if (packet->type >= 0xff || packet->n >= 0xff) {
+	GPS_Error("SEND: Unsupported packet type/size for serial protocol");
+        return 0;
+    }
+    
+    ser_pkt.data = ser_pkt_data;
+    bytes = Build_Serial_Packet(packet, &ser_pkt);
+    
     GPS_Diag("Tx Data:");
-    Diag(&packet->dle, 3);    
-    if((ret=GPS_Serial_Write(fd,(const void *) &packet->dle,(size_t)3)) == -1)
+    Diag(&ser_pkt.dle, 3);    
+    if((ret=GPS_Serial_Write(fd,(const void *) &ser_pkt.dle,(size_t)3)) == -1)
     {
 	perror("write");
 	GPS_Error("SEND: Write to GPS failed");
@@ -146,29 +152,29 @@ int32 GPS_Serial_Write_Packet(gpsdevh *fd, GPS_PPacket packet)
 	return 0;
     }
 
-    Diag(packet->data, packet->bytes);
-    if((ret=GPS_Serial_Write(fd,(const void *)packet->data,(size_t)packet->bytes)) == -1)
+    Diag(ser_pkt.data, bytes);
+    if((ret=GPS_Serial_Write(fd,(const void *)ser_pkt.data,(size_t)bytes)) == -1)
     {
 	perror("write");
 	GPS_Error("SEND: Write to GPS failed");
 	return 0;
     }
-    if(ret!=packet->bytes)
+    if(ret!=bytes)
     {
 	GPS_Error("SEND: Incomplete write to GPS");
 	return 0;
     }
 
 
-    Diag(&packet->chk, 3);
+    Diag(&ser_pkt.chk, 3);
 
     GPS_Diag(": ");
-    DiagS(packet->data, packet->bytes);
-    DiagS(&packet->chk, 3);
-    m1 = Get_Pkt_Type(packet->type, packet->data[0], &m2);
+    DiagS(ser_pkt.data, bytes);
+    DiagS(&ser_pkt.chk, 3);
+    m1 = Get_Pkt_Type(ser_pkt.type, ser_pkt.data[0], &m2);
     GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
 
-    if((ret=GPS_Serial_Write(fd,(const void *)&packet->chk,(size_t)3)) == -1)
+    if((ret=GPS_Serial_Write(fd,(const void *)&ser_pkt.chk,(size_t)3)) == -1)
     {
 	perror("write");
 	GPS_Error("SEND: Write to GPS failed");

@@ -52,7 +52,6 @@ typedef int32 (*gps_device_op5)(const char *, gpsdevh **fd);
 typedef int32 (*gps_device_op10)(gpsdevh * fd,  GPS_PPacket *tra, GPS_PPacket *rec);
 typedef int32 (*gps_device_op12)(gpsdevh * fd, GPS_PPacket packet);
 typedef int32 (*gps_device_op13)(gpsdevh * fd, GPS_PPacket *packet);
-typedef void (*gps_device_op14)(GPS_PPacket *packet, UC type, UC *data, int16 n);
 typedef struct {
 	gps_device_op5 Device_On;
 	gps_device_op Device_Off;
@@ -62,7 +61,6 @@ typedef struct {
 	gps_device_op10 Send_Ack;
 	gps_device_op10 Get_Ack;
 	gps_device_op13 Read_Packet;
-	gps_device_op14 Make_Packet;
 	gps_device_op12 Write_Packet;
 } gps_device_ops;
 

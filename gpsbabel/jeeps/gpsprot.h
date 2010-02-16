@@ -38,7 +38,7 @@ struct LINKDATA
 	
     US Pid_FlightBook_Record;
     US Pid_Lap;
-    US Pid_Wpt_Cat_Data;
+    US Pid_Wpt_Cat;
     US Pid_Run;
     US Pid_Workout;
     US Pid_Workout_Occurrence;
@@ -81,7 +81,7 @@ struct COMMANDDATA
     US Cmnd_Start_Pvt_Data;
     US Cmnd_Stop_Pvt_Data;
     US Cmnd_FlightBook_Transfer;
-    US Cmnd_Transfer_Lap;
+    US Cmnd_Transfer_Laps;
     US Cmnd_Transfer_Wpt_Cats;
     US Cmnd_Transfer_Runs;
     US Cmnd_Transfer_Workouts;
