@@ -46,7 +46,7 @@ wintec_date_to_time(gbuint32 w)
 	tm.tm_sec  = ((w & 0x0000003f));
 	tm.tm_min  = ((w & 0x00000fc0) >> 6);
 	tm.tm_hour = ((w & 0x0001f000) >> 12);
-	tm.tm_mday = ((w & 0x00370000) >> 17);
+	tm.tm_mday = ((w & 0x003f0000) >> 17);
 	tm.tm_mon  = ((w & 0x03c00000) >> 22) - 1;
 	tm.tm_year = ((w & 0xfc000000) >> 26) + 100;
 
