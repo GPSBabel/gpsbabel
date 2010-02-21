@@ -1,10 +1,76 @@
-<para>Serial download protocol for the <productname>i-Blue 747</productname> and other MTK based GPS data loggers. Observe that it is only possible to download data using USB cable, Bluetooth requires a hardware modification.</para>
 <para>
-<ulink url="http://www.transystem.com.tw/p-gps-iblue747.htm">Transystem i-Blue 747</ulink>
-Downloaded data will be stored in data.bin file in the current directory together with
-the choosen output format.
+  This format is the serial download protocol for the MTK chips.   
+  Mediatek's MT3301/3179 (MTKv1) and MT3318 (MTKv2) chips are used 
+  in a large number of products sold under different names.  
 </para>
-<para>It has been tested with Transystem i-Blue 747 but other devices should work as well (Qstarz BT-Q1000, iTrek Z1, ...)</para>
+<para>
+  Many GPS products, especially of the data logger variety, expose 
+  the Mediatek protocol to the user via USB.  Some modify Mediatek's 
+  protocol in minor ways, but the core protocol is very commonly 
+  seen in loggers.   
+</par>
+<para>The Holux M-241 and M-241  <link linkend="m241">m241</link> is an example of device using in incompatible variation of the MTK protocol.
+</para>
+<para>
+The following products are known or are expected to work with this module.
+As the products are typically very low cost, they tend to have a short 
+product life cycle and are often imported to different areas under 
+different names.  Keeping
+track of the list is difficult.   Often the "same" GPS is sold in different
+plastic or with different Windows software or different options such as 
+compass or motion sensors or charging cables with different model numbers.
+If you can confirm success with others, please share with us.
+</para>
+ 
+<table id="mtk_devices">
+<title>Devices supported by MTK module</title>
+<tgroup cols="2">
+<thead>
+<row>
+ <entry>Product</entry> 
+ <entry>Confirmed to work</entry> 
+ <entry>Notes</entry> 
+</row>
+</thead>
+<tbody>
+<row>
+ <entry>iBlue 821</entry> 
+ <entry>Yes</entry> 
+ <entry>Available from <ulink url="http://www.semsons.com/i821ulblgpsr.html">Semsons</ulink></entry> 
+</row>
+<row>
+ <entry>iBlue 747, 747A+</entry> 
+ <entry>Yes</entry> 
+ <entry></entry> 
+ <entry>Available from <ulink url="http://www.semsons.com/i74blgpsdalo.html">Semsons</ulink></entry> 
+</row>
+<row>
+ <entry>QStarz BT-1000, BT-Q1000X, BT-1000eX</entry> 
+ <entry>Yes</entry> 
+ <entry></entry> 
+</row>
+<row>
+ <entry>iTrek Z1</entry> 
+ <entry></entry> 
+ <entry></entry> 
+</row>
+</tbody>
+</table>
+
+<para>
+  The Mediatek chip offers a native serial port.   Data logger designers
+  frequently pair this with commodity USB/Serial converter internally.  So
+  these devices typically look like Prolific, FTDI, or Silab usb/serial 
+  devices to the host OS.  You'll need drivers for that whatever chip 
+  your product uses for your operating system.
+</para>
+<para>
+  Downloaded data will be stored in data.bin file in the current 
+  directory together with the choosen output format.  This is a rather
+  uncommon feature in GPSBabel's formats and is likely to change in future
+  versions.
+</para>
+
 
 <para>See <link linkend="fmt_mtk-bin">mtk-bin</link> on how trackpoints/waypoints are handled</para>
 <example id="mtk-on-linux">
@@ -14,8 +80,9 @@ the choosen output format.
     
 <para>
   For more info and tweaks on MTK based loggers: 
-   <ulink url="http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=81990">MTK Tips ans Tweaks</ulink>
+   <ulink url="http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=81990">MTK Tips and Tweaks</ulink> and
    <ulink url="http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=81315">iBlue 747 Logger</ulink>
- For info about the used log format:
+ For info about the used log format, see
   <ulink url="http://spreadsheets.google.com/pub?key=pyCLH-0TdNe-5N-5tBokuOA&amp;gid=5">MTK binary format</ulink>
 </para>
+
