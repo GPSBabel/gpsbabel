@@ -1011,7 +1011,10 @@ static void kml_waypt_pr(const waypoint *waypointp)
 
 		kml_write_xml(0, "</description>\n");
 		xfree(odesc);
-	}
+	} else {
+	  if (strcmp(waypointp->shortname, waypointp->description))
+	    kml_write_xmle("description", waypointp->description);
+        }
 
 	// Timestamp
 	kml_output_timestamp(waypointp);
