@@ -1,14 +1,16 @@
 <para>
-<productname>CompeGPS</productname> data files are "character" separated text files like
-the pcx format. "Character" means special data lines can have their
-own separator.
+CompeGPS data files are those read and written by the
+<productname>CompeGPS</productname> TwoNav software (running on a Mac, a PC,
+or on select cell phones) as well as  CompeGPS Land, and CompeGPS Air.  
+These files are also used by the CompeGPS TwoNav Aventura and TwoNav Sportiva GPS receivers when they are in mass storage mode.
 </para>
-<para> 
-Since release 6.1 of <productname>CompeGPS</productname>, GPX is also a 
-supported import/export format for waypoints, routes and tracks.
+
+<para>
+Release 6.1 of CompeGPS Land and CompeGPS Air added GPX as an import export format for waypoints, routes, and tracks.   As GPX is a more heavily used format, you should probably use that for new applications.
 </para>
+
 <para> 
-For more information please have a look at 
+For more information please see
 <ulink url="http://www.compegps.com">http://www.compegps.com</ulink>
 </para>
     
