@@ -19,7 +19,7 @@
   metric units by default. Time is UTC.
 </para>
 
-<table>
+<table id="vito_header">
   <title>Vito SmartMap track file header (8 bytes)</title>
   <tgroup cols="2">
   <thead>

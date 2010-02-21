@@ -18,7 +18,7 @@ Unfortunately, you need one .PSP file for every .MPS file.
 </para>
 <section id="fmt_psp_faq">
 <title>Frequently Asked Questions</title>
-<qandaset>
+<qandaset id="fmt_psp_faq_questions">
 <qandaentry id="why">
 <question>
 <para>

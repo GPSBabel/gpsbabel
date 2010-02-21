@@ -5,7 +5,7 @@
 function getcap(type, cap, sname, lname) {
 	if (type == "internal") return
 	print "<tr>"
-	print "<td class=\"fmtline\">" lname "<br >"
+	print "<td class=\"fmtline\">" lname "<br />"
 
 	print "<a href=\"htmldoc-development/fmt_" sname ".html\">" sname "</a></td>"
 	
