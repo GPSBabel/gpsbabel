@@ -8,8 +8,8 @@
   the Mediatek protocol to the user via USB.  Some modify Mediatek's 
   protocol in minor ways, but the core protocol is very commonly 
   seen in loggers.   
-</par>
-<para>The Holux M-241 and M-241  <link linkend="m241">m241</link> is an example of device using in incompatible variation of the MTK protocol.
+</para>
+<para>The <link linkend="fmt_m241">Holux M-241 and GPSport 245</link> are examples of a device using an incompatible variation of the MTK protocol.
 </para>
 <para>
 The following products are known or are expected to work with this module.
@@ -24,7 +24,7 @@ If you can confirm success with others, please share with us.
  
 <table id="mtk_devices">
 <title>Devices supported by MTK module</title>
-<tgroup cols="2">
+<tgroup cols="3">
 <thead>
 <row>
  <entry>Product</entry> 
@@ -41,7 +41,6 @@ If you can confirm success with others, please share with us.
 <row>
  <entry>iBlue 747, 747A+</entry> 
  <entry>Yes</entry> 
- <entry></entry> 
  <entry>Available from <ulink url="http://www.semsons.com/i74blgpsdalo.html">Semsons</ulink></entry> 
 </row>
 <row>
@@ -55,6 +54,7 @@ If you can confirm success with others, please share with us.
  <entry></entry> 
 </row>
 </tbody>
+</tgroup>
 </table>
 
 <para>
