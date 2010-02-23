@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.22 2010-02-15 02:57:00 robertl Exp $
+// $Id: upgrade.cpp,v 1.23 2010-02-23 15:38:26 robertl Exp $
 /*
     Copyright (C) 2009, 2010  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -36,6 +36,7 @@
 #include <QLocale>
 #include <QSysInfo>
 #include <QUrl>
+#include <stdio.h>
 
 #if 0
 static const bool testing = true;
