@@ -931,7 +931,7 @@ wdata_write(const writer_data_t *data)
 		gbfputint32(GPS_Math_Deg_To_Semi(wpt->longitude), fout);
 	
 		gbfputint16(1, fout);	/* ? always 1 ? */
-		gbfputc(0, fout);	/* seems to be 1 when extra options present */
+		gbfputc(alerts, fout);	/* seems to be 1 when extra options present */
 		
 		write_string(wpt->shortname, 1);
 
