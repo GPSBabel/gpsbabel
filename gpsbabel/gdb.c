@@ -110,8 +110,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.70 $"; */
-static char gdb_release_date[] = "$Date: 2010-01-13 22:52:52 $";
+/* static char gdb_release[] = "$Revision: 1.71 $"; */
+static char gdb_release_date[] = "$Date: 2010-02-28 02:31:28 $";
 
 static gbfile *fin, *fout, *ftmp;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -1038,6 +1038,7 @@ read_data(void)
 		
 		fin = fsave;
 		delta = len - gbftell(ftmp);
+                is_fatal(delta > 1000000, "Internal consistency error.  Delta too big");
 
                 // Avoid finite loop on bogus beta files from '06.
                 // THe 100000 is totally pulled from my hat.
