@@ -7,6 +7,34 @@
   xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
 <time>1970-01-01T00:00:00Z</time>
 <bounds minlat="53.114860800" minlon="8.913261600" maxlat="53.122966400" maxlon="8.943510400"/>
+<wpt lat="53.122505600" lon="8.917130400">
+  <ele>-2.000000</ele>
+  <time>2009-12-25T13:53:00Z</time>
+  <name>WPT001</name>
+  <cmt>WPT001</cmt>
+  <desc>WPT001</desc>
+</wpt>
+<wpt lat="53.121904000" lon="8.918889600">
+  <ele>-1.000000</ele>
+  <time>2009-12-25T13:54:48Z</time>
+  <name>WPT002</name>
+  <cmt>WPT002</cmt>
+  <desc>WPT002</desc>
+</wpt>
+<wpt lat="53.114876800" lon="8.943505600">
+  <ele>0.000000</ele>
+  <time>2009-12-25T14:14:59Z</time>
+  <name>WPT003</name>
+  <cmt>WPT003</cmt>
+  <desc>WPT003</desc>
+</wpt>
+<wpt lat="53.122966400" lon="8.916116800">
+  <ele>0.000000</ele>
+  <time>2009-12-25T14:37:19Z</time>
+  <name>WPT004</name>
+  <cmt>WPT004</cmt>
+  <desc>WPT004</desc>
+</wpt>
 <trk>
 <trkseg>
 <trkpt lat="53.122908800" lon="8.917149600">

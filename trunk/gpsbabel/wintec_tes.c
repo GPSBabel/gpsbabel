@@ -75,6 +75,20 @@ wintec_tes_read(void)
 		// The unit of altitude isn't clear and we have a lot of
 		// samples with wildly negative values, so ignore those for now.
 		wpt->altitude = alt;
+                
+                // The description given to us says this is a bitmask with
+                //  0x01 "split mark" (not at all clear what that is)
+                //  0x02 interest point
+                //  0x04 track point
+                //  But of the files we've seen, none have had > 1 bit set
+                //  and none have had 0x04 set.
+                //  Wintec's software puts a waypoint in the track, so we
+                //  mock that.
+                if (flags &  0x02) {
+                  waypoint *temp = waypt_dupe(wpt);
+                  waypt_add(temp);
+                }
+
 		track_add_wpt(trk, wpt);
 	}
 }
@@ -87,8 +101,8 @@ arglist_t wintec_tes_args[] = {
 ff_vecs_t wintec_tes_vecs = {
 	ff_type_file,
 	{ 
-		ff_cap_none 			/* waypoints */, 
-	  	ff_cap_read 			/* tracks */, 
+		ff_cap_read 			/* waypoints */,
+	  	ff_cap_read 			/* tracks */,
 	  	ff_cap_none 			/* routes */
 	},
 	wintec_tes_rd_init,	
