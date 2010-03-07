@@ -220,29 +220,54 @@ static int32 GPS_A000(const char *port)
 	gps_save_string, gps_save_id, gps_save_version);
 
 #if 0
-    gps_date_time_transfer = pA600;
-    gps_date_time_type     = pD600;  /* All models so far */
-    gps_position_transfer  = pA700;
-    gps_position_type      = pD700;  /* All models so far */
+    gps_date_time_transfer      = pA600;
+    gps_date_time_type          = pD600;  /* All models so far */
+    gps_position_transfer       = pA700;
+    gps_position_type           = pD700;  /* All models so far */
 #else
-    gps_date_time_transfer = -1;
-    gps_date_time_type     = -1;
-    gps_position_transfer  = -1;
-    gps_position_type      = -1;
+    gps_date_time_transfer      = -1;
+    gps_date_time_type          = -1;
+    gps_position_transfer       = -1;
+    gps_position_type           = -1;
 #endif
-    gps_pvt_transfer       = -1;
-    gps_pvt_type           = -1;
-    gps_trk_transfer       = -1;
-    gps_trk_type           = -1;
-    gps_trk_hdr_type       = -1;
-    gps_rte_link_type      = -1;
+    gps_pvt_transfer            = -1;
+    gps_pvt_type                = -1;
+    gps_trk_transfer            = -1;
+    gps_trk_type                = -1;
+    gps_trk_hdr_type            = -1;
+    gps_rte_link_type           = -1;
 
-    gps_prx_waypt_transfer = -1;
-    gps_prx_waypt_type     = -1;
-    gps_almanac_transfer   = -1;
-    gps_almanac_type       = -1;
-    gps_lap_transfer       = -1;
-    gps_lap_type           = -1;
+    gps_waypt_transfer          = -1;
+    gps_waypt_type              = -1;
+    gps_route_transfer          = -1;
+    gps_rte_hdr_type            = -1;
+    gps_rte_type                = -1;
+
+    gps_prx_waypt_transfer      = -1;
+    gps_prx_waypt_type          = -1;
+    gps_almanac_transfer        = -1;
+    gps_almanac_type            = -1;
+
+    gps_lap_transfer            = -1;
+    gps_lap_type                = -1;
+    gps_run_transfer            = -1;
+    gps_run_type                = -1;
+    gps_workout_transfer        = -1;
+    gps_workout_type            = -1;
+    gps_workout_occurrence_type = -1;
+    gps_user_profile_transfer   = -1;
+    gps_user_profile_type       = -1;
+    gps_workout_limits_transfer = -1;
+    gps_workout_limits_type     = -1;
+    gps_course_transfer         = -1;
+    gps_course_type             = -1;
+    gps_course_lap_type         = -1;
+    gps_course_point_type       = -1;
+    gps_course_limits_transfer  = -1;
+    gps_course_limits_type      = -1;
+
+    gps_device_command          = -1;
+    gps_link_type               = -1;
 
     if(!GPS_Device_Wait(fd))
     {
@@ -342,22 +367,6 @@ static void GPS_A001(GPS_PPacket packet)
     US data;
     US lasta=0;
 
-    gps_link_type          = -1;
-    gps_device_command     = -1;
-    gps_waypt_transfer     = -1;
-    gps_waypt_type         = -1;
-    gps_route_transfer     = -1;
-    gps_rte_hdr_type       = -1;
-    gps_rte_type           = -1;
-    gps_trk_transfer       = -1;
-    gps_trk_type           = -1;
-    gps_prx_waypt_transfer = -1;
-    gps_prx_waypt_type     = -1;
-    gps_almanac_transfer   = -1;
-    gps_almanac_type       = -1;
-    gps_lap_transfer       = -1;
-    gps_lap_type           = -1;
-
     entries = packet->n / 3;
     p = packet->data;
 
@@ -383,7 +392,7 @@ static void GPS_A001(GPS_PPacket packet)
 		    gps_device_command = pA010-10;
 		    break;
 		case 11:
-		    gps_device_command = pA010-10;
+		    gps_device_command = pA011-10;
 		    break;
 		case 100:
 		    gps_waypt_transfer = pA100;
@@ -633,13 +642,13 @@ static void GPS_A001(GPS_PPacket packet)
 	    {
 		if (data == 906)
 		    gps_lap_type = pD906;
-			else if (data == 1001)
-				gps_lap_type = pD1001;
-			else if (data == 1011)
-				gps_lap_type = pD1011;
-			else if (data == 1015)
-				gps_lap_type = pD1015;
-			continue;
+		else if (data == 1001)
+		    gps_lap_type = pD1001;
+		else if (data == 1011)
+		    gps_lap_type = pD1011;
+		else if (data == 1015)
+		    gps_lap_type = pD1015;
+		continue;
 	    }
 		
 	    else if (lasta < 1002)
@@ -3598,7 +3607,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
     if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
-    if ((gps_trk_type == pD304) && gps_run_transfer) {
+    if ((gps_trk_type == pD304) && gps_run_transfer != -1) {
 	drain_run_cmd(fd);
     }
 
@@ -4149,7 +4158,7 @@ void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
 
     /*
      * Let the caller decide if it wants to toss trackpionts with only
-     * hear and/or time data.
+     * heart rate and/or time data.
      */
     if (lat_undefined || lon_undefined) {
 	(*trk)->no_latlon = 1;
