@@ -5,6 +5,8 @@
 ** @version 1.0 
 ** @modified Dec 28 1999 Alan Bleasby. First version
 ** @modified Copyright (C) 2005, 2006 Robert Lipe
+** @modified Copyright (C) 2007 Achim Schumacher
+** @modified Copyright (C) 2010 Martin Buck
 ** @@
 ** 
 ** This library is free software; you can redistribute it and/or
@@ -269,9 +271,14 @@ int32 GPS_Command_Send_Track(const char *port, GPS_PTrack *trk, int32 n)
 	ret = GPS_A300_Send(port, trk, n);
 	break;
     case pA301:
-    case pA302:
 	ret = GPS_A301_Send(port, trk, n);
 	break;
+    case pA302:
+       /* Units with A302 don't support track upload, so we convert the
+        * track to a course on the fly and send that instead
+        */
+       ret = GPS_Command_Send_Track_As_Course(port, trk, n);
+       break;
     default:
 	GPS_Error("Send_Track: Unknown track protocol %d.", gps_trk_transfer);
 	break;
@@ -672,20 +679,464 @@ int32 GPS_Command_Get_Lap(const char *port, GPS_PLap **lap, pcb_fn cb)
 
     return ret;
 }    
+
+/* @func GPS_Command_Get_Course ***************************************
+**
+** Get Courses from GPS. According to Garmin protocol specification, this
+** includes getting all course laps, course tracks and course points
+** from the device.
+**
+** @param [r] port [const char *] serial port
+** @param [w] crs [GPS_PCourse **] pointer to course array
+** @param [w] clp [GPS_PCourse_Lap **] pointer to course lap array
+** @param [w] trk [GPS_PTrack **] pointer to track array
+** @param [w] cpt [GPS_PCourse_Point **] pointer to course point array
+** @param [w] n_clp [int32 **] pointer to number of lap entries
+** @param [w] n_trk [int32 **] pointer to number of track entries
+** @param [w] n_cpt [int32 **] pointer to number of course point entries
+**
+** @return [int32] number of course entries
+************************************************************************/
+int32  GPS_Command_Get_Course
+                (const char *port,
+                 GPS_PCourse **crs,
+                 GPS_PCourse_Lap **clp,
+                 GPS_PTrack **trk,
+                 GPS_PCourse_Point **cpt,
+                 int32 *n_clp,
+                 int32 *n_trk,
+                 int32 *n_cpt,
+                 pcb_fn cb)
+{
+    int32 ret=0;
+
+    if(gps_course_transfer == -1)
+       return GPS_UNSUPPORTED;
+
+    switch(gps_course_transfer)
+    {
+       case pA1006:
+           ret = GPS_A1006_Get(port,crs,cb);
+           break;
+       default:
+           GPS_Error("Get_Course: Unknown course protocol");
+           return PROTOCOL_ERROR;
+    }
+
+    switch(gps_course_lap_transfer)
+    {
+       case pA1007:
+           *n_clp = GPS_A1007_Get(port,clp, 0);
+           break;
+       default:
+           GPS_Error("Get_Course: Unknown course lap protocol");
+           return PROTOCOL_ERROR;
+    }
+
+    switch(gps_course_trk_transfer)
+    {
+        case pA1012:
+           GPS_Error("Get_Course: Not implemented track protocol %d\n",
+                            gps_trk_transfer);
+           break;
+        case pA302:
+           *n_trk = GPS_A302_Get(port,trk,cb);
+           break;
+        default:
+           GPS_Error("Get_Course: Unknown course track protocol %d\n",
+                            gps_trk_transfer);
+           return PROTOCOL_ERROR;
+    }
+
+    switch(gps_course_point_transfer)
+    {
+       case pA1008:
+           *n_cpt = GPS_A1008_Get(port,cpt, 0);
+           break;
+       default:
+           GPS_Error("Get_Course: Unknown course point protocol");
+           return PROTOCOL_ERROR;
+    }
+
+    return ret;
+}
+
+
+/* @func GPS_Command_Send_Course ***************************************
+**
+** Send Courses to GPS. According to Garmin protocol specification, this
+** includes sending all course laps, course tracks and course points
+** to the device.
+**
+** Data integrity is being checked: only those course laps, tracks and
+** points are sent to the device which belong to a course in the course
+** array. Otherwise, those data will be silently dropped.
+**
+** @param [r] port [const char *] serial port
+** @param [w] crs [GPS_PCourse **] course array
+** @param [w] clp [GPS_PCourse_Lap *] course lap array
+** @param [w] trk [GPS_PTrack *] track array
+** @param [w] cpt [GPS_PCourse_Point *] course point array
+** @param [w] n_crs [int32] number of course entries
+** @param [w] n_clp [int32] number of lap entries
+** @param [w] n_trk [int32] number of track entries
+** @param [w] n_cpt [int32] number of course point entries
+**
+** @return [int32] Success
+************************************************************************/
+int32  GPS_Command_Send_Course
+                (const char *port,
+                 GPS_PCourse *crs,
+                 GPS_PCourse_Lap *clp,
+                 GPS_PTrack *trk,
+                 GPS_PCourse_Point *cpt,
+                 int32 n_crs,
+                 int32 n_clp,
+                 int32 n_trk,
+                 int32 n_cpt)
+{
+    gpsdevh *fd;
+    int32 ret_crs=0;
+    int32 ret_clp=0;
+    int32 ret_trk=0;
+    int32 ret_cpt=0;
+
+    if(gps_course_transfer == -1)
+       return GPS_UNSUPPORTED;
+
+    /* Initialize device communication:
+     * In contrast to other transfer protocols, this has to be handled here;
+     * shutting off communication in between the different parts
+     * could lead to data corruption on the device because all the courses
+     * and their associated lap and track data have to be sent in one
+     * transaction.
+     */
+    if(!GPS_Device_On(port,&fd))
+        return gps_errno;
+
+    switch(gps_course_transfer)
+    {
+       case pA1006:
+           ret_crs = GPS_A1006_Send(port,crs,n_crs,fd);
+           break;
+       default:
+           GPS_Error("Send_Course: Unknown course protocol");
+           return PROTOCOL_ERROR;
+    }
+
+    switch(gps_course_lap_transfer)
+    {
+       case pA1007:
+           ret_clp = GPS_A1007_Send(port,clp,n_clp,fd);
+           break;
+       default:
+           GPS_Error("Send_Course: Unknown course lap protocol");
+           return PROTOCOL_ERROR;
+    }
+
+    switch(gps_course_trk_transfer)
+    {
+        case pA1012:
+           GPS_Error("Send_Course: Not implemented track protocol %d\n",
+                            gps_trk_transfer);
+           break;
+        case pA302:
+           ret_trk = GPS_A302_Send(port,trk,n_trk,fd);
+           break;
+        default:
+           GPS_Error("Send_Course: Unknown course track protocol %d\n",
+                            gps_trk_transfer);
+           return PROTOCOL_ERROR;
+    }
+
+    switch(gps_course_point_transfer)
+    {
+       case pA1008:
+           ret_cpt = GPS_A1008_Send(port,cpt,n_cpt,fd);
+           break;
+       default:
+           GPS_Error("Send_Course: Unknown course point protocol");
+           return PROTOCOL_ERROR;
+    }
+
+    if(!GPS_Device_Off(fd))
+        return gps_errno;
+
+
+    return ret_crs * ret_clp * ret_trk * ret_cpt;
+}
+
+
+static uint32 Unique_Course_Index(GPS_PCourse *crs, int n_crs)
+{
+    uint32 idx;
+    int i;
+
+    for (idx=0; ; idx++)
+    {
+       for (i=0; i<n_crs; i++)
+           if (crs[i]->index==idx)
+               break; /* Already have this index */
+       if (i>=n_crs)
+           return idx; /* Found unused index */
+    }
+}
+
+
+static uint32 Unique_Track_Index(GPS_PCourse *crs, int n_crs)
+{
+    uint32 idx;
+    int i;
+
+    for (idx=0; ; idx++)
+    {
+       for (i=0; i<n_crs; i++)
+           if (crs[i]->track_index==idx)
+               break; /* Already have this index */
+       if (i>=n_crs)
+           return idx; /* Found unused index */
+    }
+}
+
+
+static void
+Course_Garbage_Collect(GPS_PCourse *crs, int *n_crs,
+                       GPS_PCourse_Lap *clp, int *n_clp,
+                       GPS_PTrack *ctk, int *n_ctk,
+                       GPS_PCourse_Point *cpt, int *n_cpt) {
+    int i, j;
+
+    /* Remove courses with duplicate names, keeping newest */
+restart_courses:
+    for (i=*n_crs-1; i>0; i--)
+    {
+       for (j=i-1; j>=0; j--)
+       {
+           if (!strcmp(crs[i]->course_name, crs[j]->course_name))
+           {
+               /* Remove course */
+               GPS_Course_Del(&crs[j]);
+               memmove(&crs[j], &crs[j+1], (*n_crs-j-1)*sizeof(*crs));
+               (*n_crs)--;
+               goto restart_courses;
+           }
+       }
+    }
+
+  /* Remove unreferenced laps */
+restart_laps:
+  for (i=0; i<*n_clp; i++)
+  {
+    for (j=0; j<*n_crs; j++)
+      if (crs[j]->index == clp[i]->course_index)
+        break;
+    if (j>=*n_crs)
+    {
+      /* Remove lap */
+      GPS_Course_Lap_Del(&clp[i]);
+      memmove(&clp[i], &clp[i+1], (*n_clp-i-1)*sizeof(*clp));
+      (*n_clp)--;
+      goto restart_laps;
+    }
+  }
+
+  /* Remove unreferenced tracks */
+restart_tracks:
+  for (i=0; i<*n_ctk; i++)
+  {
+    uint32 trk_idx;
+
+    if (!ctk[i]->ishdr)
+      continue;
+    trk_idx = strtoul(ctk[i]->trk_ident, NULL, 0);
+    for (j=0; j<*n_crs; j++)
+      if (crs[j]->index == trk_idx)
+        break;
+    if (j>=*n_crs)
+    {
+      /* Remove track */
+      for (j=i; j<*n_ctk; j++)
+      {
+        if (j!=i && ctk[j]->ishdr)
+          break;
+        GPS_Track_Del(&ctk[j]);
+      }
+      memmove(&ctk[i], &ctk[j], (*n_ctk-j)*sizeof(*ctk));
+      *(n_ctk) -= j-i;
+      goto restart_tracks;
+    }
+  }
+
+  /* Remove unreferenced course points */
+restart_course_points:
+  for (i=0; i<*n_cpt; i++)
+  {
+    for (j=0; j<*n_crs; j++)
+      if (crs[j]->index == cpt[i]->course_index)
+        break;
+    if (j>=*n_crs)
+    {
+      /* Remove course point */
+      GPS_Course_Point_Del(&cpt[i]);
+      memmove(&cpt[i], &cpt[i+1], (*n_cpt-i-1)*sizeof(*cpt));
+      (*n_cpt)--;
+      goto restart_course_points;
+    }
+  }
+}
+
+
+/* @func GPS_Command_Send_Track_As_Course ******************************
+**
+** Convert track log to course, then send to GPS. Since sending a course
+** to the device will erase all existing courses regardless of their
+** name or index, we first have to download all courses, merge the new
+** one and then send all courses at once.
+**
+** @param [r] port [const char *] serial port
+** @param [r] trk [GPS_PTrack *] track array
+** @param [r] n [int32] number of track entries
+**
+** @return [int32] success
+************************************************************************/
+
+int32 GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 n)
+{
+    GPS_PCourse *crs = NULL;
+    GPS_PCourse_Lap *clp = NULL;
+    GPS_PTrack *ctk = NULL;
+    GPS_PCourse_Point *cpt = NULL;
+    int n_crs, n_clp=0, n_ctk=0, n_cpt=0;
+    int i, trk_end, trk_crs;
+    int32 ret;
+
+    /* Read existing courses from device */
+    n_crs = GPS_Command_Get_Course(port, &crs, &clp, &ctk, &cpt, &n_clp, &n_ctk, &n_cpt, NULL);
+    if (n_crs < 0) return n_crs;
+
+    /* Create new course+lap+track points for each track */
+    trk_crs = n_crs;
+    for (i=0;i<n;i++) {
+       if (!trk[i]->ishdr)
+           continue;
+
+       /* Find end of track */
+       for (trk_end=i; trk_end<n-1; trk_end++)
+           if (trk[trk_end+1]->ishdr)
+               break;
+       if (trk_end==i)
+           trk_end=0; /* Empty track */
+
+       /* Create & append course */
+       crs = realloc(crs, (n_crs+1) * sizeof(GPS_PCourse));
+       if (!crs) return MEMORY_ERROR;
+       crs[n_crs] = GPS_Course_New();
+       if (!crs[n_crs]) return MEMORY_ERROR;
+
+       crs[n_crs]->index = Unique_Course_Index(crs, n_crs);
+       strncpy(crs[n_crs]->course_name, trk[i]->trk_ident,
+               sizeof(crs[n_crs]->course_name)-1);
+
+       crs[n_crs]->track_index = Unique_Track_Index(crs, n_crs);
+
+       /* Create & append new lap */
+       clp = realloc(clp, (n_clp+1) * sizeof(GPS_PCourse_Lap));
+       if (!clp) return MEMORY_ERROR;
+       clp[n_clp] = GPS_Course_Lap_New();
+       if (!clp[n_clp]) return MEMORY_ERROR;
+
+       clp[n_clp]->course_index = crs[n_crs]->index; /* Index of associated course */
+       clp[n_clp]->lap_index = 0; /* Lap index, unique per course */
+       clp[n_clp]->total_time = 0; /* FIXME: Calculate */
+       clp[n_clp]->total_dist = 0; /* FIXME: Calculate */
+       if (trk_end)
+       {
+           clp[n_clp]->begin_lat = trk[i+1]->lat;
+           clp[n_clp]->begin_lon = trk[i+1]->lon;
+           clp[n_clp]->end_lat = trk[trk_end]->lat;
+           clp[n_clp]->end_lon = trk[trk_end]->lon;
+       }
+       else
+       {
+           clp[n_clp]->begin_lat = 0x7fffffff;
+           clp[n_clp]->begin_lon = 0x7fffffff;
+           clp[n_clp]->end_lat = 0x7fffffff;
+           clp[n_clp]->end_lon = 0x7fffffff;
+       }
+       clp[n_clp]->avg_heart_rate = 0; /* FIXME: Calculate */
+       clp[n_clp]->max_heart_rate = 0; /* FIXME: Calculate */
+       clp[n_clp]->intensity = 0;
+       clp[n_clp]->avg_cadence = 0xff; /* FIXME: Calculate */
+       n_crs++;
+       n_clp++;
+    }
+
+    /* Append new track points */
+    ctk = realloc(ctk, (n_ctk+n) * sizeof(GPS_PTrack));
+    if (!ctk) return MEMORY_ERROR;
+
+    for (i=0;i<n;i++) {
+       ctk[n_ctk] = GPS_Track_New();
+       if (!ctk[n_ctk]) return MEMORY_ERROR;
+       *ctk[n_ctk] = *trk[i];
+
+       if (ctk[n_ctk]->ishdr)
+       {
+           /* Index of new track, must match the track index in associated course */
+           memset(ctk[n_ctk]->trk_ident, 0, sizeof(ctk[n_ctk]->trk_ident));
+           sprintf(ctk[n_ctk]->trk_ident, "%d", crs[trk_crs]->track_index);
+           trk_crs++;
+       }
+       n_ctk++;
+    }
+
+    /* Remove course data that's no longer needed */
+    Course_Garbage_Collect(crs, &n_crs, clp, &n_clp, ctk, &n_ctk, cpt, &n_cpt);
+
+    /* Finally send courses including new ones to device */
+    ret = GPS_Command_Send_Course(port, crs, clp, ctk, cpt,
+                                  n_crs, n_clp, n_ctk, n_cpt);
+
+    for (i=0;i<n_crs;i++)
+    {
+       GPS_Course_Del(&crs[i]);
+    }
+    free(crs);
+
+    for (i=0;i<n_clp;i++)
+    {
+       GPS_Course_Lap_Del(&clp[i]);
+    }
+    free(clp);
+
+    for (i=0;i<n_ctk;i++)
+    {
+       GPS_Track_Del(&ctk[i]);
+    }
+    free(ctk);
+
+    for (i=0;i<n_cpt;i++)
+    {
+       GPS_Course_Point_Del(&cpt[i]);
+    }
+    free(cpt);
+
+    return ret;
+}
+
  /*Stubs for unimplemented stuff*/
 int32  GPS_Command_Get_Workout(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **)){
   return 0;
 }  
+
 int32  GPS_Command_Get_Fitness_User_Profile(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **)){
   return 0;
 }  
+
 int32  GPS_Command_Get_Workout_Limits(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **)){
   return 0;
 }  
-int32  GPS_Command_Get_Course(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **)){
-  return 0;
-}  
+
 int32  GPS_Command_Get_Course_Limits(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **)){
   return 0;
 }  
-

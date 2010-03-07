@@ -6,6 +6,7 @@
 ** @modified December 28th 1999 Alan Bleasby. First version
 ** @modified June 29th 2000 Alan Bleasby. NMEA additions
 ** @modified Copyright (C) 2006 Robert Lipe
+** @modified Copyright (C) 2007 Achim Schumacher
 ** @@
 ** 
 ** This library is free software; you can redistribute it and/or
@@ -328,6 +329,125 @@ GPS_PLap GPS_Lap_New(void)
 **********************************************************************/
 
 void GPS_Lap_Del(GPS_PLap *thys)
+{
+    free((void *)*thys);
+
+    return;
+}
+
+
+/* @func GPS_Course_New ***********************************************
+**
+** Course constructor
+**
+** @return [GPS_PCourse] virgin Course
+**********************************************************************/
+GPS_PCourse GPS_Course_New(void)
+{
+    GPS_PCourse ret;
+
+    if(!(ret=(GPS_PCourse)calloc(1,sizeof(GPS_OCourse))))
+    {
+       perror("malloc");
+       fprintf(stderr,"GPS_Course_New: Insufficient memory");
+       fflush(stderr);
+       return NULL;
+    }
+
+    return ret;
+}
+
+
+
+/* @func GPS_Course_Del ***********************************************
+**
+** Course destructor
+**
+** @param [w] thys [GPS_PCourse *] Course to delete
+**
+** @return [void]
+**********************************************************************/
+void GPS_Course_Del(GPS_PCourse *thys)
+{
+    free((void *)*thys);
+
+    return;
+}
+
+/* @func GPS_Course_Lap_New ***********************************************
+**
+** Course_Lap constructor
+**
+** @return [GPS_PCourse_Lap] virgin course lap
+**********************************************************************/
+
+GPS_PCourse_Lap GPS_Course_Lap_New(void)
+{
+    GPS_PCourse_Lap ret;
+
+    if(!(ret=(GPS_PCourse_Lap)calloc(1,sizeof(GPS_OCourse_Lap))))
+    {
+       perror("malloc");
+       fprintf(stderr,"GPS_Course_Lap_New: Insufficient memory");
+       fflush(stderr);
+       return NULL;
+    }
+
+    return ret;
+}
+
+
+
+/* @func GPS_Course_Lap_Del ***********************************************
+**
+** Course_Lap destructor
+**
+** @param [w] thys [GPS_PCourse_Lap *] course lap to delete
+**
+** @return [void]
+**********************************************************************/
+
+void GPS_Course_Lap_Del(GPS_PCourse_Lap *thys)
+{
+    free((void *)*thys);
+
+    return;
+}
+
+/* @func GPS_Course_Point_New ***********************************************
+**
+** Course_Point constructor
+**
+** @return [GPS_PCourse_Point] virgin course point
+**********************************************************************/
+
+GPS_PCourse_Point GPS_Course_Point_New(void)
+{
+    GPS_PCourse_Point ret;
+
+    if(!(ret=(GPS_PCourse_Point)calloc(1,sizeof(GPS_OCourse_Point))))
+    {
+       perror("malloc");
+       fprintf(stderr,"GPS_Course_Point_New: Insufficient memory");
+       fflush(stderr);
+       return NULL;
+    }
+
+    return ret;
+}
+
+
+
+/* @func GPS_Course_Point_Del ***********************************************
+**
+** Course_Point destructor
+**
+** @param [w] thys [GPS_PCourse_Point *] course lap to delete
+**
+** @return [void]
+**********************************************************************/
+
+void GPS_Course_Point_Del(GPS_PCourse_Point *thys)
 {
     free((void *)*thys);
 
