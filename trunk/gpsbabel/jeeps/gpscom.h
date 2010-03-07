@@ -39,10 +39,14 @@ int32  GPS_Command_Send_Route(const char *port, GPS_PWay *way, int32 n);
 
 int32  GPS_Command_Get_Lap(const char *port, GPS_PLap **lap, int (*cb)(int, struct GPS_SWay **));
 
+int32  GPS_Command_Send_Course(const char *port, GPS_PCourse *crs, GPS_PCourse_Lap *clp,
+                               GPS_PTrack *trk, GPS_PCourse_Point *cpt,
+                               int32 n_crs, int32 n_clp, int32 n_trk, int32 n_cpt);
+int32  GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 n);
+
 int32  GPS_Command_Get_Workout(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **));
 int32  GPS_Command_Get_Fitness_User_Profile(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **));
 int32  GPS_Command_Get_Workout_Limits(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **));
-int32  GPS_Command_Get_Course(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **));
 int32  GPS_Command_Get_Course_Limits(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **));
 #endif
 

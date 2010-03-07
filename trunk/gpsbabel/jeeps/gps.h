@@ -197,6 +197,57 @@ typedef struct GPS_SLap {
 	*/
 } GPS_OLap, *GPS_PLap;
 
+
+typedef struct GPS_SCourse
+{
+    uint32    index;                    /* Unique among courses on device */
+    char      course_name[16];          /* Null-terminated unique course name */
+    uint32    track_index;              /* Index of the associated track
+                                         * Must be 0xFFFFFFFF if there is none*/
+} GPS_OCourse, *GPS_PCourse;
+
+
+typedef struct GPS_SCourse_Lap
+{
+    uint32        course_index;         /* Index of associated course */
+    uint32        lap_index;            /* This lap's index in the course */
+    uint32        total_time;           /* In hundredths of a second */
+    float         total_dist;           /* [m] */
+    double        begin_lat;            /* Starting position of the lap */
+    double        begin_lon;            /* Invalid if lat,lon are 0x7FFFFFFF.*/
+    double        end_lat;              /* Final position of the lap */
+    double        end_lon;              /* Invalid if lat,lon are 0x7FFFFFFF.*/
+    UC            avg_heart_rate;       /* In beats-per-minute, >0 */
+    UC            max_heart_rate;       /* In beats-per-minute, >0 */
+    UC            intensity;            /* 0=standard, active lap.
+                                           1=rest lap in a workout */
+    UC            avg_cadence;          /* In revolutions-per-minute */
+} GPS_OCourse_Lap, *GPS_PCourse_Lap;
+
+typedef struct GPS_SCourse_Point
+{
+    char        name[11];               /* Null-terminated name */
+    uint32      course_index;           /* Index of associated course */
+    time_t      track_point_time;       /* Time */
+    UC          point_type;             /* generic = 0,
+                                         * summit = 1,
+                                         * valley = 2,
+                                         * water = 3,
+                                         * food = 4,
+                                         * danger = 5,
+                                         * left = 6,
+                                         * right = 7,
+                                         * straight = 8,
+                                         * first_aid = 9,
+                                         * fourth_category = 10,
+                                         * third_category = 11,
+                                         * second_category = 12,
+                                         * first_category = 13,
+                                         * hors_category = 14,
+                                         * sprint = 15 */
+} GPS_OCourse_Point, *GPS_PCourse_Point;
+
+
 typedef int (*pcb_fn) (int, struct GPS_SWay **);
 
 #include "gpsdevice.h"
