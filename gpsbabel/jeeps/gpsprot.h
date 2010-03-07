@@ -184,8 +184,14 @@ int32 gps_user_profile_transfer;
 int32 gps_workout_limits_transfer;
 #define pA1006 1006
 int32 gps_course_transfer;
+#define pA1007 1007
+int32 gps_course_lap_transfer;
+#define pA1008 1008
+int32 gps_course_point_transfer;
 #define pA1009 1009
 int32 gps_course_limits_transfer;
+#define pA1012 1012
+int32 gps_course_trk_transfer;
 
 /*
  * Waypoint D Type
@@ -241,6 +247,7 @@ int32 gps_rte_link_type;
 #define pD303 303
 #define pD304 304
 int32 gps_trk_type;
+int32 gps_run_crs_trk_type;
 
 
 /*
@@ -250,6 +257,7 @@ int32 gps_trk_type;
 #define pD311 311
 #define pD312 312
 int32 gps_trk_hdr_type;
+int32 gps_run_crs_trk_hdr_type;
 
 
 

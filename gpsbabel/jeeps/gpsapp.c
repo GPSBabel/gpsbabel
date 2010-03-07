@@ -5,6 +5,7 @@
 ** @version 1.0
 ** @modified Dec 28 1999 Alan Bleasby. First version
 ** @modified Copyright (C) 2004, 2005, 2006 Robert Lipe
+** @modified Copyright (C) 2007 Achim Schumacher
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -252,6 +253,8 @@ static int32 GPS_A000(const char *port)
     gps_lap_type                = -1;
     gps_run_transfer            = -1;
     gps_run_type                = -1;
+    gps_run_crs_trk_type        = -1;
+    gps_run_crs_trk_hdr_type    = -1;
     gps_workout_transfer        = -1;
     gps_workout_type            = -1;
     gps_workout_occurrence_type = -1;
@@ -261,10 +264,13 @@ static int32 GPS_A000(const char *port)
     gps_workout_limits_type     = -1;
     gps_course_transfer         = -1;
     gps_course_type             = -1;
+    gps_course_lap_transfer     = -1;
     gps_course_lap_type         = -1;
+    gps_course_point_transfer   = -1;
     gps_course_point_type       = -1;
     gps_course_limits_transfer  = -1;
     gps_course_limits_type      = -1;
+    gps_course_trk_transfer     = -1;
 
     gps_device_command          = -1;
     gps_link_type               = -1;
@@ -414,6 +420,14 @@ static void GPS_A001(GPS_PPacket packet)
 		    break;
 		case 302:
 		    gps_trk_transfer = pA302;
+		    /* Use A302 for course track transfer only if we don't
+		     * have another protocol for it yet. This is in accordance
+		     * with the Garmin docs for A1006 which say to use A302
+		     * in this context only if A1012 is not reported.
+		     */
+		    if (gps_course_trk_transfer == -1) {
+			gps_course_trk_transfer = pA302;
+		    }
 		    break;
 		case 400:
 		    gps_prx_waypt_transfer = pA400;
@@ -451,8 +465,17 @@ static void GPS_A001(GPS_PPacket packet)
 		case 1006:
 		    gps_course_transfer = pA1006;
 		    break;
+		case 1007:
+		    gps_course_lap_transfer = pA1007;
+		    break;
+		case 1008:
+		    gps_course_point_transfer = pA1008;
+		    break;
 		case 1009:
 		    gps_course_limits_transfer = pA1009;
+		    break;
+		case 1012:
+		    gps_course_trk_transfer = pA1012;
 		    break;
 	    }
 	    break;
@@ -563,6 +586,18 @@ static void GPS_A001(GPS_PPacket packet)
 			    case 312: gps_trk_hdr_type = pD312; break;
 			    default:  GPS_Protocol_Error(tag,data); break;
 		    }
+		    if (lasta==302 && gps_course_trk_transfer == pA302)
+			switch (data) {
+				case 300: gps_run_crs_trk_type = pD300; break;
+				case 301: gps_run_crs_trk_type = pD301; break;
+				case 302: gps_run_crs_trk_type = pD302; break;
+				case 303: gps_run_crs_trk_type = pD303; break;
+				case 304: gps_run_crs_trk_type = pD304; break;
+				case 310: gps_run_crs_trk_hdr_type = pD310; break;
+				case 311: gps_run_crs_trk_hdr_type = pD311; break;
+				case 312: gps_run_crs_trk_hdr_type = pD312; break;
+				default:  GPS_Protocol_Error(tag,data); break;
+			}
 		    continue;
 	    }
 
@@ -717,6 +752,25 @@ static void GPS_A001(GPS_PPacket packet)
 	    {
 		if (data == 1013)
 		    gps_course_limits_type = pD1013;
+		continue;
+	    }
+	    else if (lasta == 1012)
+	    {
+		/* We don't know which data types to expect for A1012. For now,
+		 * accept the same ones as for A302 since it is used as a
+		 * replacement for this.
+		 */
+		switch (data) {
+			case 300: gps_run_crs_trk_type = pD300; break;
+			case 301: gps_run_crs_trk_type = pD301; break;
+			case 302: gps_run_crs_trk_type = pD302; break;
+			case 303: gps_run_crs_trk_type = pD303; break;
+			case 304: gps_run_crs_trk_type = pD304; break;
+			case 310: gps_run_crs_trk_hdr_type = pD310; break;
+			case 311: gps_run_crs_trk_hdr_type = pD311; break;
+			case 312: gps_run_crs_trk_hdr_type = pD312; break;
+			default:  GPS_Protocol_Error(tag,data); break;
+		}
 		continue;
 	    }
 	}
