@@ -24,7 +24,7 @@
 #define MYNAME "Bushnell"
 
 static gbfile *file_in;
-static const char *ofname;
+static char *ofname;
 static short_handle mkshort_handle = NULL; 
 
 static
@@ -157,7 +157,14 @@ rd_deinit(void) {
 
 static void
 wr_init(const char *fname) {
-  ofname = fname;
+  char *dot;
+
+  ofname = xstrdup(fname);
+
+  // If user provided an extension, whack it.
+  dot = strchr(ofname, '.');
+  if (dot) *dot = 0;
+
   static char valid_chars [] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
 		".-/\\~@#$%^&*()_+=<>"
                 "abcdefghijklmnopqrstuvwxyz";
@@ -170,7 +177,7 @@ wr_init(const char *fname) {
 static void
 wr_deinit(void) {
   mkshort_del_handle(&mkshort_handle);
-  
+  xfree(ofname);
 }
 
 /*
