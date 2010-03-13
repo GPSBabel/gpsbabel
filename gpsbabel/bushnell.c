@@ -157,13 +157,14 @@ rd_deinit(void) {
 
 static void
 wr_init(const char *fname) {
-  char *dot;
+  char *dot, *slash;
 
   ofname = xstrdup(fname);
 
-  // If user provided an extension, whack it.
-  dot = strchr(ofname, '.');
-  if (dot) *dot = 0;
+  // If user provided an extension in the pathname, whack it.
+  dot = strrchr(ofname, '.');
+  slash = strrchr(ofname, GB_PATHSEP);
+  if (dot > slash) *dot = 0;
 
   static char valid_chars [] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
 		".-/\\~@#$%^&*()_+=<>"
