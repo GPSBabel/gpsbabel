@@ -194,6 +194,7 @@ rw_init(const char *fname)
 					receiver_charset = CET_CHARSET_MS_ANSI;
 					break;
 				case 291: /* GPSMAP 60CS, probably others */
+				case 1095: /* GPS 72H */
 					receiver_short_length = 10;
 					valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " +-";
 					setshort_badchars(mkshort_handle, "\"$.,'!");
