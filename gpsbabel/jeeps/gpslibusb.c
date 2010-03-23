@@ -355,6 +355,7 @@ garmin_usb_start(struct usb_device *dev, libusb_unit_data *lud)
 			case 957: break;   // Legend H
 			case 285: break;   // GPSMap 276C/4.80
 			case 402: break;   // GPSMap 396C/4.50
+			case 1095: break;  // GPS72H/2.30
 			default: gusb_syncup();
 		}
 		return;
