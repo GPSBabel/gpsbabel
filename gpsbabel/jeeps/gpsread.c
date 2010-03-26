@@ -172,6 +172,12 @@ int32 GPS_Serial_Packet_Read(gpsdevh *fd, GPS_PPacket *packet)
 		    return (*packet)->n;
 		}
 		
+	    if (p - (*packet)->data >= MAX_GPS_PACKET_SIZE)
+	    {
+		GPS_Error("GPS_Serial_Packet_Read: Bad payload size/no ETX found");
+		gps_errno = FRAMING_ERROR;
+		return 0;
+	    }
 	    *p++ = u;
 	}
     }
