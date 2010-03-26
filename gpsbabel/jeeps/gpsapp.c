@@ -104,7 +104,7 @@ static void   GPS_D501_Send(UC *data, GPS_PAlmanac alm);
 static void   GPS_D550_Send(UC *data, GPS_PAlmanac alm);
 static void   GPS_D551_Send(UC *data, GPS_PAlmanac alm);
 
-static UC Is_Trackpoint_Invalid(GPS_PTrack *trk);
+static UC Is_Trackpoint_Invalid(GPS_PTrack trk);
 
 
 int32	gps_save_id;
@@ -3634,14 +3634,15 @@ drain_run_cmd(gpsdevh *fd)
 
 /* @func GPS_A301_Get ******************************************************
 **
-** Get track data from GPS
+** Get track data from GPS (A301/A302)
 **
 ** @param [r] port [const char *] serial port
 ** @param [w] trk [GPS_PTrack **] track array
+** @param [r] protoid [int] protocol ID (301 or 302)
 **
 ** @return [int32] number of track entries
 ************************************************************************/
-int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
+int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb, int protoid)
 {
     static UC data[2];
     gpsdevh *fd;
@@ -3649,12 +3650,36 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
     GPS_PPacket rec;
     int32 n;
     int32 i;
+    US Pid_Trk_Data, Pid_Trk_Hdr, Cmnd_Transfer_Trk;
+    int32 trk_type, trk_hdr_type;
 
     if(gps_trk_transfer == -1)
 	return GPS_UNSUPPORTED;
 
+    /* A301 and A302 are similar except for all these protocol IDs */
+    switch (protoid)
+    {
+    case 301:
+	Pid_Trk_Data = LINK_ID[gps_link_type].Pid_Trk_Data;
+	Pid_Trk_Hdr = LINK_ID[gps_link_type].Pid_Trk_Hdr;
+	Cmnd_Transfer_Trk = COMMAND_ID[gps_device_command].Cmnd_Transfer_Trk;
+	trk_type = gps_trk_type;
+	trk_hdr_type = gps_trk_hdr_type;
+	break;
+    case 302:
+	Pid_Trk_Data = LINK_ID[gps_link_type].Pid_Course_Trk_Data;
+	Pid_Trk_Hdr = LINK_ID[gps_link_type].Pid_Course_Trk_Hdr;
+	Cmnd_Transfer_Trk = COMMAND_ID[gps_device_command].Cmnd_Transfer_Course_Tracks;
+	trk_type = gps_run_crs_trk_type;
+	trk_hdr_type = gps_run_crs_trk_hdr_type;
+	break;
+    default:
+	GPS_Error("A301_Get: Bad protocol ID %d", protoid);
+	return GPS_UNSUPPORTED;
+    }
+
     /* Only those GPS' with L001 can send track data */
-    if(!LINK_ID[gps_link_type].Pid_Trk_Data)
+    if(!Pid_Trk_Data)
     {
 	GPS_Warning("A301 protocol unsupported");
 	return GPS_UNSUPPORTED;
@@ -3663,15 +3688,14 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
     if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
-    if ((gps_trk_type == pD304) && gps_run_transfer != -1) {
+    if ((trk_type == pD304) && gps_run_transfer != -1) {
 	drain_run_cmd(fd);
     }
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
 	return MEMORY_ERROR;
 
-    GPS_Util_Put_Short(data,
-		       COMMAND_ID[gps_device_command].Cmnd_Transfer_Trk);
+    GPS_Util_Put_Short(data, Cmnd_Transfer_Trk);
     GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
 		    data,2);
     if(!GPS_Write_Packet(fd,tra))
@@ -3702,9 +3726,9 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
 	    return gps_errno;
 	if(!GPS_Send_Ack(fd, &tra, &rec))
 	    return gps_errno;
-	if(rec->type == LINK_ID[gps_link_type].Pid_Trk_Hdr)
+	if(rec->type == Pid_Trk_Hdr)
 	{
-	    switch(gps_trk_hdr_type)
+	    switch(trk_hdr_type)
 	    {
 	    case pD310:
 	    case pD312:
@@ -3721,7 +3745,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
 	    continue;
 	}
 	
-	if(rec->type != LINK_ID[gps_link_type].Pid_Trk_Data)
+	if(rec->type != Pid_Trk_Data)
 	{
 	    GPS_Error("A301_Get: Non-Pid_Trk_Data");
 	    return FRAMING_ERROR;
@@ -3729,7 +3753,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
 
 	(*trk)[i]->ishdr = 0;
 	
-	switch(gps_trk_type)
+	switch(trk_type)
 	{
 	case pD300:
 	    GPS_D300b_Get(&((*trk)[i]),rec->data);
@@ -3743,13 +3767,28 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
 	case pD303:
 	case pD304:
 	    GPS_D303b_Get(&((*trk)[i]),rec->data);
+	    /* Fitness devices don't send track segment markers, so we have
+	     * to create them ourselves. We do so at the beginning of the
+	     * track or if the device signals a pause by sending two
+	     * invalid points in a row.
+	     */
+	    if (i>0)
+	    {
+		if ((*trk)[i-1]->ishdr ||
+		    (Is_Trackpoint_Invalid((*trk)[i-1]) &&
+		     Is_Trackpoint_Invalid((*trk)[i])))
+		{
+		    (*trk)[i]->tnew = 1;
+		}
+	    }
 	    break;
 	default:
 	    GPS_Error("A301_GET: Unknown track protocol");
 	    return PROTOCOL_ERROR;
 	}
 	/* Cheat and don't _really_ pass the trkpt back */
-	cb(n, NULL);
+	if (cb)
+           cb(n, NULL);
     }
 
     if(!GPS_Packet_Read(fd, &rec))
@@ -3773,165 +3812,6 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
 
     if(!GPS_Device_Off(fd))
 	return gps_errno;
-
-    return n;
-}
-
-
-/* @func GPS_A302_Get ******************************************************
-**
-** Get course track data from GPS with protocol A302
-**
-** @param [r] port [const char *] serial port
-** @param [w] trk [GPS_PTrack **] track array
-**
-** @return [int32] number of track entries
-************************************************************************/
-/* FIXME: Merge with GPS_A301_Get()? */
-int32 GPS_A302_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
-{
-    static UC data[2];
-    gpsdevh *fd;
-    GPS_PPacket tra;
-    GPS_PPacket rec;
-    int32 n;
-    int32 i;
-
-    if(gps_trk_transfer == -1)
-       return GPS_UNSUPPORTED;
-
-    /* Only those GPS' with L001 can send track data */
-    if  (!LINK_ID[gps_link_type].Pid_Course_Trk_Data)
-    {
-       GPS_Warning("Course track data unsupported");
-       return GPS_UNSUPPORTED;
-    }
-
-    if(!GPS_Device_On(port, &fd))
-       return gps_errno;
-
-    if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
-       return MEMORY_ERROR;
-
-    GPS_Util_Put_Short(data,
-                    COMMAND_ID[gps_device_command].Cmnd_Transfer_Course_Tracks);
-    GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
-                   data,2);
-    if(!GPS_Write_Packet(fd,tra))
-       return gps_errno;
-    if(!GPS_Get_Ack(fd, &tra, &rec))
-       return gps_errno;
-    if(!GPS_Packet_Read(fd, &rec))
-       return gps_errno;
-    if(!GPS_Send_Ack(fd, &tra, &rec))
-       return gps_errno;
-
-
-    n = GPS_Util_Get_Short(rec->data);
-
-    if(n)
-       if(!((*trk)=(GPS_PTrack *)malloc(n*sizeof(GPS_PTrack))))
-       {
-           GPS_Error("A302b_Get: Insufficient memory");
-           return MEMORY_ERROR;
-       }
-    for(i=0;i<n;++i)
-       if(!((*trk)[i]=GPS_Track_New()))
-           return MEMORY_ERROR;
-
-    for(i=0;i<n;++i)
-    {
-       if(!GPS_Packet_Read(fd, &rec))
-           return gps_errno;
-       if(!GPS_Send_Ack(fd, &tra, &rec))
-           return gps_errno;
-       if (rec->type == LINK_ID[gps_link_type].Pid_Course_Trk_Hdr)
-       {
-           switch(gps_run_crs_trk_hdr_type)
-           {
-           case pD310:
-           case pD312:
-               GPS_D310_Get(&((*trk)[i]),rec->data);
-               break;
-           case pD311:
-               GPS_D311_Get(&((*trk)[i]),rec->data);
-               break;
-           default:
-               GPS_Error("A302b_Get: Unknown track header data");
-               return PROTOCOL_ERROR;
-           }
-           (*trk)[i]->ishdr = 1;
-           continue;
-       }
-
-       if  (rec->type != LINK_ID[gps_link_type].Pid_Course_Trk_Data)
-       {
-           GPS_Error("A302b_Get: Non-Pid_Course_Trk_Data");
-           return FRAMING_ERROR;
-       }
-
-       (*trk)[i]->ishdr = 0;
-
-       switch(gps_run_crs_trk_type)
-       {
-       case pD300:
-           GPS_D300b_Get(&((*trk)[i]),rec->data);
-           break;
-       case pD301:
-           GPS_D301b_Get(&((*trk)[i]),rec->data);
-           break;
-       case pD302:
-           GPS_D302b_Get(&((*trk)[i]),rec->data);
-           break;
-       case pD303:
-       case pD304:
-           GPS_D303b_Get(&((*trk)[i]),rec->data);
-           /* Fitness devices don't send track segment markers, so we have
-            * to create them ourselves. We do so at the beginning of the
-            * track or if the device signals a pause by sending two
-            * invalid points in a row.
-            */
-            if (i>0)
-            {
-                if ((*trk)[i-1]->ishdr ||
-                    (Is_Trackpoint_Invalid(&((*trk)[i-1])) &&
-                     Is_Trackpoint_Invalid(&((*trk)[i]))))
-                {
-                    (*trk)[i]->tnew = 1;
-                }
-            }
-           break;
-       default:
-           GPS_Error("A301_GET: Unknown track protocol");
-           return PROTOCOL_ERROR;
-       }
-       /* Cheat and don't _really_ pass the trkpt back */
-       if (cb) {
-           cb(n, NULL);
-        }
-    }
-
-    if(!GPS_Packet_Read(fd, &rec))
-       return gps_errno;
-    if(!GPS_Send_Ack(fd, &tra, &rec))
-       return gps_errno;
-    if(rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt)
-    {
-       GPS_Error("A302b_Get: Error transferring course tracks");
-       return FRAMING_ERROR;
-    }
-
-    if(i != n)
-    {
-       GPS_Error("A302b_Get: Course track entry number mismatch");
-       return FRAMING_ERROR;
-    }
-
-    GPS_Packet_Del(&tra);
-    GPS_Packet_Del(&rec);
-
-    if(!GPS_Device_Off(fd))
-       return gps_errno;
 
     return n;
 }
@@ -4032,35 +3912,100 @@ int32 GPS_A300_Send(const char *port, GPS_PTrack *trk, int32 n)
 
 /* @func GPS_A301_Send **************************************************
 **
-** Send track log to GPS
+** Send track log to GPS (A301/A302). Note that in case of A302, track
+** log transfer is part of the course transfer sequence, so we must not
+** call GPS_Device_On/Off() but expect to get a usable gpsdevh from our
+** caller.
 **
 ** @param [r] port [const char *] serial port
 ** @param [r] trk [GPS_PTrack *] track array
 ** @param [r] n [int32] number of track entries
+** @param [r] protoid [int] protocol ID (301 or 302)
+** @param [r] fd [gpsdevh *] pointer to communication port (for A302 only)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
+int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n, int protoid,
+                    gpsdevh *fd)
 {
     UC data[GPS_ARB_LEN];
-    gpsdevh *fd;
     GPS_PPacket tra;
     GPS_PPacket rec;
-    int32 i;
+    int32 i, j;
     int32 len;
     US  method;
+    US Pid_Trk_Data, Pid_Trk_Hdr, Cmnd_Transfer_Trk;
+    int32 trk_type, trk_hdr_type;
 
     if(gps_trk_transfer == -1)
 	return GPS_UNSUPPORTED;
 
+    /* A301 and A302 are similar except for all these protocol IDs */
+    switch (protoid)
+    {
+    case 301:
+	Pid_Trk_Data = LINK_ID[gps_link_type].Pid_Trk_Data;
+	Pid_Trk_Hdr = LINK_ID[gps_link_type].Pid_Trk_Hdr;
+	Cmnd_Transfer_Trk = COMMAND_ID[gps_device_command].Cmnd_Transfer_Trk;
+	trk_type = gps_trk_type;
+	trk_hdr_type = gps_trk_hdr_type;
+	break;
+    case 302:
+	Pid_Trk_Data = LINK_ID[gps_link_type].Pid_Course_Trk_Data;
+	Pid_Trk_Hdr = LINK_ID[gps_link_type].Pid_Course_Trk_Hdr;
+	Cmnd_Transfer_Trk = COMMAND_ID[gps_device_command].Cmnd_Transfer_Course_Tracks;
+	trk_type = gps_run_crs_trk_type;
+	trk_hdr_type = gps_run_crs_trk_hdr_type;
+	break;
+    default:
+	GPS_Error("A301_Send: Bad protocol ID %d", protoid);
+	return GPS_UNSUPPORTED;
+    }
+    
     /* Only those GPS' with L001 can send track data */
-    if(!LINK_ID[gps_link_type].Pid_Trk_Data)
+    if(!Pid_Trk_Data)
     {
 	GPS_Warning("A301 protocol unsupported");
 	return GPS_UNSUPPORTED;
     }
 
-    if(!GPS_Device_On(port, &fd))
+    /* D303/304 marks track segments with two consecutive invalid track
+     * points. Create them unless we're at the beginning of a track or there
+     * are already invalid track points (because the track was downloaded
+     * using D303/304). This needs to be done here because it will change
+     * the number of track points.
+     */
+    if (trk_type == pD303 || trk_type == pD304)
+    {
+	for(i=0;i<n;++i)
+	{
+	    if (trk[i]->tnew && i>0 && !trk[i]->ishdr && !trk[i-1]->ishdr)
+	    {
+		/* Create in reverse order to avoid having to readjust the
+		 * index after inserting the first point.
+		 */
+		for (j=i; j>=i-1; j--)
+		{
+		    if (!Is_Trackpoint_Invalid(trk[j]))
+		    {
+			GPS_PTrack trkpt = GPS_Track_New();
+			*trkpt = *(trk[j]);
+			trkpt->no_latlon = 1;
+			trkpt->alt = 1e25;
+			trkpt->distance = 1e25;
+			trkpt->heartrate = 0;
+			trkpt->cadence = 0xff;
+			trk = xrealloc(trk, (n+1) * sizeof(GPS_PTrack));
+			memmove(&trk[i+1], &trk[i], (n-i) * sizeof(GPS_PTrack));
+			n++;
+			trk[i] = trkpt;
+		    }
+		}
+	    }
+	}
+    }
+
+    if(protoid != 302 && !GPS_Device_On(port, &fd))
 	return gps_errno;
 
     if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
@@ -4082,9 +4027,9 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
     {
 	if(trk[i]->ishdr)
 	{
-	    method = LINK_ID[gps_link_type].Pid_Trk_Hdr;
+	    method = Pid_Trk_Hdr;
 
-	    switch(gps_trk_hdr_type)
+	    switch(trk_hdr_type)
 	    {
 	    case pD310:
 	    case pD312:
@@ -4094,15 +4039,15 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 		GPS_D311_Send(data,trk[i],&len);
 		break;
 	    default:
-		GPS_Error("A301_Send: Unknown track protocol %d", gps_trk_hdr_type);
+		GPS_Error("A301_Send: Unknown track protocol %d", trk_hdr_type);
 		return PROTOCOL_ERROR;
 	    }
 	}
 	else
 	{
-	    method = LINK_ID[gps_link_type].Pid_Trk_Data;
+	    method = Pid_Trk_Data;
 
-	    switch(gps_trk_type)
+	    switch(trk_type)
 	    {
 	    case pD300:
                GPS_D300_Send(data,trk[i],&len);
@@ -4113,18 +4058,15 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 	    case pD302:
                GPS_D301_Send(data,trk[i],&len,302);
                break;
-           case pD303:
-               GPS_D303_Send(data,trk[i],&len,303);
-		break;
+	    case pD303:
 	    case pD304:
-               GPS_D303_Send(data,trk[i],&len,304);
+		GPS_D303_Send(data,trk[i],&len,(trk_type==pD303) ? 303 : 304);
 		break;
 	    default:
 		GPS_Error("A301_Send: Unknown track protocol");
 		return PROTOCOL_ERROR;
 	    }
 	}
-	
 
 	GPS_Make_Packet(&tra, method, data, len);
 
@@ -4137,9 +4079,8 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
 	    return FRAMING_ERROR;
 	}
     }
-	
 
-    GPS_Util_Put_Short(data,COMMAND_ID[gps_device_command].Cmnd_Transfer_Trk);
+    GPS_Util_Put_Short(data, Cmnd_Transfer_Trk);
     GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Xfer_Cmplt,
 		    data,2);
     if(!GPS_Write_Packet(fd,tra))
@@ -4153,138 +4094,8 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n)
     GPS_Packet_Del(&tra);
     GPS_Packet_Del(&rec);
 
-    if(!GPS_Device_Off(fd))
+    if(protoid != 302 && !GPS_Device_Off(fd))
 	return gps_errno;
-
-    return 1;
-}
-
-
-/* @func GPS_A302_Send **************************************************
-**
-** Send Course-track log to GPS
-**
-** Note that different to other GPS_Axxx_Send functions, the device
-** communication is not initialized/ended within the function, since
-** this packet transfer is only part of a series of transfers to the
-** device. Communication init/end has to be handled by the caller.
-**
-** @param [r] port [const char *] serial port
-** @param [r] trk [GPS_PTrack *] track array
-** @param [r] n [int32] number of track entries
-** @param [r] fd [gpsdevh *] pointer to the communication port
-**
-** @return [int32] success
-************************************************************************/
-/* FIXME: Merge with GPS_A301_Send()? */
-int32 GPS_A302_Send(const char *port,
-                     GPS_PTrack *trk,
-                     int32 n,
-                     gpsdevh *fd)
-{
-    UC data[GPS_ARB_LEN];
-    GPS_PPacket tra;
-    GPS_PPacket rec;
-    int32 i;
-    int32 len;
-    US  method;
-
-    if(gps_trk_transfer == -1)
-       return GPS_UNSUPPORTED;
-
-    /* Only those GPS' with L001 can send track data */
-    if(!LINK_ID[gps_link_type].Pid_Course_Trk_Data)
-    {
-       GPS_Warning("A302b: course-track protocol unsupported");
-       return GPS_UNSUPPORTED;
-    }
-
-    if(!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New()))
-       return MEMORY_ERROR;
-
-    GPS_Util_Put_Short(data,(US) n);
-    GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Records,
-                   data,2);
-    if(!GPS_Write_Packet(fd,tra))
-       return gps_errno;
-    if(!GPS_Get_Ack(fd, &tra, &rec))
-    {
-       GPS_Error("A302_Send: Course-track start data not acknowledged");
-       return FRAMING_ERROR;
-    }
-
-    for(i=0;i<n;++i)
-    {
-       if(trk[i]->ishdr)
-       {
-           method = LINK_ID[gps_link_type].Pid_Course_Trk_Hdr;
-
-           switch(gps_run_crs_trk_hdr_type)
-           {
-           case pD310:
-           case pD312:
-               GPS_D310_Send(data,trk[i],&len);
-               break;
-           case pD311:
-               GPS_D311_Send(data,trk[i],&len);
-               break;
-           default:
-               GPS_Error("A302_Send: Unknown track header type");
-               return PROTOCOL_ERROR;
-           }
-       }
-       else
-       {
-           method = LINK_ID[gps_link_type].Pid_Course_Trk_Data;
-
-           switch(gps_run_crs_trk_type)
-           {
-           case pD300:
-               GPS_D300_Send(data,trk[i],&len);
-               break;
-           case pD301:
-               GPS_D301_Send(data,trk[i],&len, 301);
-               break;
-           case pD302:
-               GPS_D301_Send(data,trk[i],&len, 302);
-               break;
-           case pD303:
-               GPS_D303_Send(data,trk[i],&len,303);
-               break;
-           case pD304:
-               GPS_D303_Send(data,trk[i],&len,304);
-               break;
-           default:
-               GPS_Error("A302_Send: Unknown track protocol");
-               return PROTOCOL_ERROR;
-           }
-       }
-
-       GPS_Make_Packet(&tra, method, data,(US) len);
-
-       if(!GPS_Write_Packet(fd,tra))
-           return gps_errno;
-
-       if(!GPS_Get_Ack(fd, &tra, &rec))
-       {
-          GPS_Error("A302_Send: Course-track packet not acknowledged");
-          return FRAMING_ERROR;
-       }
-    }
-
-    GPS_Util_Put_Short(data,COMMAND_ID[gps_device_command].Cmnd_Transfer_Course_Tracks);
-    GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Xfer_Cmplt,
-                   data,2);
-    if(!GPS_Write_Packet(fd,tra))
-       return gps_errno;
-    if(!GPS_Get_Ack(fd, &tra, &rec))
-    {
-       GPS_Error("A302_Send: Course-track complete data not acknowledged");
-       return FRAMING_ERROR;
-    }
-
-    GPS_Packet_Del(&tra);
-    GPS_Packet_Del(&rec);
 
     return 1;
 }
@@ -4685,7 +4496,7 @@ void GPS_D303_Send(UC *data, GPS_PTrack trk, int32 *len, int protoid)
     p+=sizeof(float);
 
     if (protoid == 304) {
-       GPS_Util_Put_Float(p, 1.0e25f);
+       GPS_Util_Put_Float(p, 1.0e25f); /* Distance, not supported for now */
        p+=sizeof(float);
     }
 
@@ -4693,10 +4504,10 @@ void GPS_D303_Send(UC *data, GPS_PTrack trk, int32 *len, int protoid)
     p+=sizeof(char);
 
     if (protoid == 304) {
-       *p = trk->cadence;
+       *p = trk->cadence > 0 ? trk->cadence : 0xff;
        p+=sizeof(char);
 
-       *p = trk->cadence > 0 ? trk->cadence : 0xff;
+       *p = 0; /* Wheel sensor present, not supported for now */
        p+=sizeof(char);
     }
 
@@ -4807,10 +4618,13 @@ static void GPS_A300_Encode(UC *s, GPS_PTrack trk)
 
     p=s;
 
-    GPS_Util_Put_Int(p,GPS_Math_Deg_To_Semi(trk->lat));
+    /* Note: lat/lon == 0x7fffffff is only valid for D303/D304, but our
+     * caller shouldn't set no_latlon unless one of these protocols actually
+     * is in use */
+    GPS_Util_Put_Int(p,trk->no_latlon ? 0x7fffffff : GPS_Math_Deg_To_Semi(trk->lat));
     p+=sizeof(int32);
 
-    GPS_Util_Put_Int(p,GPS_Math_Deg_To_Semi(trk->lon));
+    GPS_Util_Put_Int(p,trk->no_latlon ? 0x7fffffff : GPS_Math_Deg_To_Semi(trk->lon));
     p+=sizeof(int32);
 
     GPS_Util_Put_Uint(p,GPS_Math_Utime_To_Gtime(trk->Time));
@@ -7515,13 +7329,13 @@ Get_Pkt_Type(US p, US d0, const char **xinfo)
 **
 ** @return [UC] 1 if the trackpoint is invalid
 ************************************************************************/
-static UC Is_Trackpoint_Invalid(GPS_PTrack *trk)
+static UC Is_Trackpoint_Invalid(GPS_PTrack trk)
 {
     /* FIXME: We should have more *_is_unknown fields instead of
      * checking for special values here (e.g. cadence = 0 would be
      * perfectly valid, but GPS_D303b_Get() chose to use it to mark
      * nonexistent cadence data.
      */
-    return (*trk)->no_latlon && (*trk)->distance > 1e24 &&
-           !(*trk)->heartrate && !(*trk)->cadence;
+    return trk->no_latlon && trk->distance > 1e24 &&
+           !trk->heartrate && !trk->cadence;
 }

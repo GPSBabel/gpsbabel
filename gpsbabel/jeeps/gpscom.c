@@ -26,6 +26,7 @@
 ********************************************************************/
 #include "gps.h"
 #include <stdio.h>
+#include <float.h>
 
 
 /* @func GPS_Command_Off ***********************************************
@@ -235,7 +236,7 @@ int32 GPS_Command_Get_Track(const char *port, GPS_PTrack **trk, pcb_fn cb)
 	break;
     case pA301:
     case pA302:
-	ret = GPS_A301_Get(port,trk,cb);
+	ret = GPS_A301_Get(port,trk,cb,301);
 	break;
     default:
 	GPS_Error("Get_Track: Unknown track protocol %d\n", gps_trk_transfer);
@@ -271,13 +272,13 @@ int32 GPS_Command_Send_Track(const char *port, GPS_PTrack *trk, int32 n)
 	ret = GPS_A300_Send(port, trk, n);
 	break;
     case pA301:
-	ret = GPS_A301_Send(port, trk, n);
+	ret = GPS_A301_Send(port, trk, n, 301, NULL);
 	break;
     case pA302:
        /* Units with A302 don't support track upload, so we convert the
         * track to a course on the fly and send that instead
         */
-       ret = GPS_Command_Send_Track_As_Course(port, trk, n);
+	ret = GPS_Command_Send_Track_As_Course(port, trk, n, NULL, 0);
        break;
     default:
 	GPS_Error("Send_Track: Unknown track protocol %d.", gps_trk_transfer);
@@ -740,7 +741,7 @@ int32  GPS_Command_Get_Course
                             gps_trk_transfer);
            break;
         case pA302:
-           *n_trk = GPS_A302_Get(port,trk,cb);
+	    *n_trk = GPS_A301_Get(port,trk,cb,302);
            break;
         default:
            GPS_Error("Get_Course: Unknown course track protocol %d\n",
@@ -767,10 +768,6 @@ int32  GPS_Command_Get_Course
 ** Send Courses to GPS. According to Garmin protocol specification, this
 ** includes sending all course laps, course tracks and course points
 ** to the device.
-**
-** Data integrity is being checked: only those course laps, tracks and
-** points are sent to the device which belong to a course in the course
-** array. Otherwise, those data will be silently dropped.
 **
 ** @param [r] port [const char *] serial port
 ** @param [w] crs [GPS_PCourse **] course array
@@ -841,7 +838,7 @@ int32  GPS_Command_Send_Course
                             gps_trk_transfer);
            break;
         case pA302:
-           ret_trk = GPS_A302_Send(port,trk,n_trk,fd);
+	    ret_trk = GPS_A301_Send(port,trk,n_trk,302,fd);
            break;
         default:
            GPS_Error("Send_Course: Unknown course track protocol %d\n",
@@ -867,6 +864,15 @@ int32  GPS_Command_Send_Course
 }
 
 
+/* @funcstatic Unique_Course_Index *************************************
+**
+** Choose a course index that's not yet used by another course.
+**
+** @param [r] crs [GPS_PCourse **] course array
+** @param [r] n_crs [int32] number of course entries
+**
+** @return [uint32] course index
+************************************************************************/
 static uint32 Unique_Course_Index(GPS_PCourse *crs, int n_crs)
 {
     uint32 idx;
@@ -874,15 +880,25 @@ static uint32 Unique_Course_Index(GPS_PCourse *crs, int n_crs)
 
     for (idx=0; ; idx++)
     {
-       for (i=0; i<n_crs; i++)
-           if (crs[i]->index==idx)
-               break; /* Already have this index */
-       if (i>=n_crs)
-           return idx; /* Found unused index */
+        for (i=0; i<n_crs; i++)
+            if (crs[i]->index==idx)
+                break; /* Already have this index */
+        if (i>=n_crs)
+            return idx; /* Found unused index */
     }
 }
 
 
+/* @funcstatic Unique_Track_Index ***************************************
+**
+** Choose a track index that's not yet used by another track referenced
+** by the courses.
+**
+** @param [r] crs [GPS_PCourse **] course array
+** @param [r] n_crs [int32] number of course entries
+**
+** @return [uint32] track index
+************************************************************************/
 static uint32 Unique_Track_Index(GPS_PCourse *crs, int n_crs)
 {
     uint32 idx;
@@ -890,99 +906,220 @@ static uint32 Unique_Track_Index(GPS_PCourse *crs, int n_crs)
 
     for (idx=0; ; idx++)
     {
-       for (i=0; i<n_crs; i++)
-           if (crs[i]->track_index==idx)
-               break; /* Already have this index */
-       if (i>=n_crs)
-           return idx; /* Found unused index */
+        for (i=0; i<n_crs; i++)
+            if (crs[i]->track_index==idx)
+                break; /* Already have this index */
+        if (i>=n_crs)
+            return idx; /* Found unused index */
     }
 }
 
 
+/* @funcstatic Calculate_Course_Lap_Data *******************************
+**
+** Calculate lap data totals from individual track points. Also
+** generates time stamps for track points if they don't have
+** time stamps yet (using an arbitrary speed of 10 km/h which is
+** currently hardcoded. This is required so that couse points can
+** refer to track points and identify them uniquely.
+**
+** @param [w] clp [GPS_PCourse_Lap] course lap to be calculated
+** @param [r] ctk [GPS_PTrack *] track array to calculate lap from
+** @param [r] ctk_start [int] start index of lap in track array
+** @param [r] ctk_end [int] end index of lap in track array
+**
+** @return [void]
+************************************************************************/
+static void
+Calculate_Course_Lap_Data(GPS_PCourse_Lap clp, GPS_PTrack *ctk,
+                          int ctk_start, int ctk_end)
+{
+    int i;
+    double heartrate_sum = 0, cadence_sum = 0;
+    int heartrate_sum_time = 0, cadence_sum_time = 0;
+    double time_synth_speed = 10.0 * 1000 / 3600; /* speed in m/s */
+
+    if (ctk_start && ctk_end && !ctk[ctk_start]->Time)
+	ctk[ctk_start]->Time = GPS_Time_Now();
+    else
+	time_synth_speed = 0;
+
+    clp->total_dist = 0;
+    clp->avg_heart_rate = 0;
+    clp->max_heart_rate = 0;
+    clp->intensity = 0;
+    clp->avg_cadence = 0xff;
+    for (i=ctk_start; i <= ctk_end; i++)
+    {
+	if (ctk[i]->heartrate && ctk[i]->heartrate > clp->max_heart_rate)
+	    clp->max_heart_rate = ctk[i]->heartrate;
+	if (i < ctk_end)
+	{
+	    double dist = 0;
+	    int seg_time;
+
+	    if (!ctk[i]->no_latlon && !ctk[i+1]->no_latlon)
+		dist = gcgeodist(ctk[i]->lat, ctk[i]->lon,
+		                 ctk[i+1]->lat, ctk[i+1]->lon);
+	    clp->total_dist += dist;
+
+	    if (time_synth_speed)
+		ctk[i+1]->Time = ctk[i]->Time + (dist / time_synth_speed + 0.5);
+
+	    seg_time = ctk[i+1]->Time - ctk[i]->Time;
+
+	    if (ctk[i]->heartrate)
+	    {
+		heartrate_sum += ctk[i]->heartrate * seg_time;
+		heartrate_sum_time += seg_time;
+	    }
+	    if (ctk[i]->cadence)
+	    {
+		cadence_sum += ctk[i]->cadence * seg_time;
+		cadence_sum_time += seg_time;
+	    }
+	}
+    }
+
+    clp->total_time = 0;
+    clp->begin_lat = 0x7fffffff;
+    clp->begin_lon = 0x7fffffff;
+    clp->end_lat = 0x7fffffff;
+    clp->end_lon = 0x7fffffff;
+    if (ctk_start && ctk_end)
+    {
+	clp->total_time = (ctk[ctk_end]->Time - ctk[ctk_start]->Time) * 100;
+	if (!ctk[ctk_start]->no_latlon && !ctk[ctk_end]->no_latlon)
+	{
+	    clp->begin_lat = ctk[ctk_start]->lat;
+	    clp->begin_lon = ctk[ctk_start]->lon;
+	    clp->end_lat = ctk[ctk_end]->lat;
+	    clp->end_lon = ctk[ctk_end]->lon;
+	}
+    }
+    if (heartrate_sum_time)
+	clp->avg_heart_rate = heartrate_sum / heartrate_sum_time;
+    if (cadence_sum_time)
+	clp->avg_cadence = cadence_sum / cadence_sum_time;
+}
+
+
+/* @funcstatic Course_Garbage_Collect **********************************
+**
+** Remove duplicate courses, then remove unreferenced laps, tracks and
+** course points from arrays.
+**
+** @param [w] crs [GPS_PCourse *] course array
+** @param [w] n_crs [int *] number of course entries
+** @param [w] clp [GPS_PCourse_Lap *] course lap array
+** @param [w] n_clp [int *] number of lap entries
+** @param [w] ctk [GPS_PTrack *] track array
+** @param [w] n_ctk [int *] number of track entries
+** @param [w] cpt [GPS_PCourse_Point *] course point array
+** @param [w] n_cpt [int *] number of course point entries
+**
+** @return [void]
+************************************************************************/
 static void
 Course_Garbage_Collect(GPS_PCourse *crs, int *n_crs,
                        GPS_PCourse_Lap *clp, int *n_clp,
                        GPS_PTrack *ctk, int *n_ctk,
-                       GPS_PCourse_Point *cpt, int *n_cpt) {
+                       GPS_PCourse_Point *cpt, int *n_cpt)
+{
     int i, j;
 
-    /* Remove courses with duplicate names, keeping newest */
+    /* Remove courses with duplicate names, keeping newest.
+     * This is actually pretty important: Sending two courses with the same
+     * name to the device will result in internal data corruption on the
+     * device (e.g. "inventing" laps with weird course IDs that nobody ever
+     * transferred to it, that change with every upload of unrelated data
+     * and that can't be deleted except with a master reset by holding the
+     * Mode button during power on).
+     */
 restart_courses:
     for (i=*n_crs-1; i>0; i--)
     {
-       for (j=i-1; j>=0; j--)
-       {
-           if (!strcmp(crs[i]->course_name, crs[j]->course_name))
-           {
-               /* Remove course */
-               GPS_Course_Del(&crs[j]);
-               memmove(&crs[j], &crs[j+1], (*n_crs-j-1)*sizeof(*crs));
-               (*n_crs)--;
-               goto restart_courses;
-           }
-       }
+        for (j=i-1; j>=0; j--)
+        {
+            if (!strcmp(crs[i]->course_name, crs[j]->course_name))
+            {
+                /* Remove course */
+                GPS_Course_Del(&crs[j]);
+                memmove(&crs[j], &crs[j+1], (*n_crs-j-1)*sizeof(*crs));
+                (*n_crs)--;
+                goto restart_courses;
+            }
+        }
     }
 
   /* Remove unreferenced laps */
 restart_laps:
-  for (i=0; i<*n_clp; i++)
-  {
-    for (j=0; j<*n_crs; j++)
-      if (crs[j]->index == clp[i]->course_index)
-        break;
-    if (j>=*n_crs)
+    for (i=0; i<*n_clp; i++)
     {
-      /* Remove lap */
-      GPS_Course_Lap_Del(&clp[i]);
-      memmove(&clp[i], &clp[i+1], (*n_clp-i-1)*sizeof(*clp));
-      (*n_clp)--;
-      goto restart_laps;
+        for (j=0; j<*n_crs; j++)
+            if (crs[j]->index == clp[i]->course_index)
+                break;
+        if (j>=*n_crs)
+        {
+            /* Remove lap */
+            GPS_Course_Lap_Del(&clp[i]);
+            memmove(&clp[i], &clp[i+1], (*n_clp-i-1)*sizeof(*clp));
+            (*n_clp)--;
+            goto restart_laps;
+        }
     }
-  }
 
-  /* Remove unreferenced tracks */
+    /* Remove unreferenced tracks */
 restart_tracks:
-  for (i=0; i<*n_ctk; i++)
-  {
-    uint32 trk_idx;
-
-    if (!ctk[i]->ishdr)
-      continue;
-    trk_idx = strtoul(ctk[i]->trk_ident, NULL, 0);
-    for (j=0; j<*n_crs; j++)
-      if (crs[j]->index == trk_idx)
-        break;
-    if (j>=*n_crs)
+    for (i=0; i<*n_ctk; i++)
     {
-      /* Remove track */
-      for (j=i; j<*n_ctk; j++)
-      {
-        if (j!=i && ctk[j]->ishdr)
-          break;
-        GPS_Track_Del(&ctk[j]);
-      }
-      memmove(&ctk[i], &ctk[j], (*n_ctk-j)*sizeof(*ctk));
-      *(n_ctk) -= j-i;
-      goto restart_tracks;
-    }
-  }
+        uint32 trk_idx;
 
-  /* Remove unreferenced course points */
+        if (!ctk[i]->ishdr)
+            continue;
+        trk_idx = strtoul(ctk[i]->trk_ident, NULL, 0);
+        for (j=0; j<*n_crs; j++)
+            if (crs[j]->track_index == trk_idx)
+                break;
+        if (j>=*n_crs)
+        {
+            /* Remove track */
+            for (j=i; j<*n_ctk; j++)
+            {
+                if (j!=i && ctk[j]->ishdr)
+                    break;
+                GPS_Track_Del(&ctk[j]);
+            }
+            memmove(&ctk[i], &ctk[j], (*n_ctk-j)*sizeof(*ctk));
+            *(n_ctk) -= j-i;
+            goto restart_tracks;
+        }
+    }
+
+    /* Remove unreferenced/duplicate course points */
 restart_course_points:
-  for (i=0; i<*n_cpt; i++)
-  {
-    for (j=0; j<*n_crs; j++)
-      if (crs[j]->index == cpt[i]->course_index)
-        break;
-    if (j>=*n_crs)
+    for (i=0; i<*n_cpt; i++)
     {
-      /* Remove course point */
-      GPS_Course_Point_Del(&cpt[i]);
-      memmove(&cpt[i], &cpt[i+1], (*n_cpt-i-1)*sizeof(*cpt));
-      (*n_cpt)--;
-      goto restart_course_points;
+        /* Check for unreferenced point */
+        for (j=0; j<*n_crs; j++)
+            if (crs[j]->index == cpt[i]->course_index)
+                break;
+        if (j<*n_crs)
+        {
+            /* Check for duplicate point */
+            for (j=0; j<i; j++)
+                if (cpt[i]->course_index == cpt[j]->course_index &&
+                    cpt[i]->track_point_time == cpt[j]->track_point_time)
+                    break;
+            if (j>=i)
+                continue; /* Referenced & unique */
+        }
+        /* Remove course point */
+        GPS_Course_Point_Del(&cpt[i]);
+        memmove(&cpt[i], &cpt[i+1], (*n_cpt-i-1)*sizeof(*cpt));
+        (*n_cpt)--;
+        goto restart_course_points;
     }
-  }
 }
 
 
@@ -995,19 +1132,22 @@ restart_course_points:
 **
 ** @param [r] port [const char *] serial port
 ** @param [r] trk [GPS_PTrack *] track array
-** @param [r] n [int32] number of track entries
+** @param [r] n_trk [int32] number of track entries
+** @param [r] wpt [GPS_PWay *] waypoint array
+** @param [r] n_wpt [int32] number of waypoint entries
 **
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 n)
+int32 GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 n_trk,
+                                       GPS_PWay *wpt, int32 n_wpt)
 {
     GPS_PCourse *crs = NULL;
     GPS_PCourse_Lap *clp = NULL;
     GPS_PTrack *ctk = NULL;
     GPS_PCourse_Point *cpt = NULL;
     int n_crs, n_clp=0, n_ctk=0, n_cpt=0;
-    int i, trk_end, trk_crs;
+    int i, j, trk_end, new_crs, first_new_ctk;
     int32 ret;
 
     /* Read existing courses from device */
@@ -1015,80 +1155,97 @@ int32 GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 
     if (n_crs < 0) return n_crs;
 
     /* Create new course+lap+track points for each track */
-    trk_crs = n_crs;
-    for (i=0;i<n;i++) {
-       if (!trk[i]->ishdr)
-           continue;
+    new_crs = n_crs;
+    for (i=0;i<n_trk;i++) {
+        if (!trk[i]->ishdr)
+            continue;
 
-       /* Find end of track */
-       for (trk_end=i; trk_end<n-1; trk_end++)
-           if (trk[trk_end+1]->ishdr)
-               break;
-       if (trk_end==i)
-           trk_end=0; /* Empty track */
+        /* Find end of track */
+	for (trk_end=i; trk_end<n_trk-1; trk_end++)
+            if (trk[trk_end+1]->ishdr)
+                break;
+        if (trk_end==i)
+            trk_end=0; /* Empty track */
 
-       /* Create & append course */
-       crs = realloc(crs, (n_crs+1) * sizeof(GPS_PCourse));
-       if (!crs) return MEMORY_ERROR;
-       crs[n_crs] = GPS_Course_New();
-       if (!crs[n_crs]) return MEMORY_ERROR;
+        /* Create & append course */
+        crs = xrealloc(crs, (n_crs+1) * sizeof(GPS_PCourse));
+        crs[n_crs] = GPS_Course_New();
+        if (!crs[n_crs]) return MEMORY_ERROR;
 
-       crs[n_crs]->index = Unique_Course_Index(crs, n_crs);
-       strncpy(crs[n_crs]->course_name, trk[i]->trk_ident,
-               sizeof(crs[n_crs]->course_name)-1);
+        crs[n_crs]->index = Unique_Course_Index(crs, n_crs);
+        strncpy(crs[n_crs]->course_name, trk[i]->trk_ident,
+                sizeof(crs[n_crs]->course_name)-1);
 
-       crs[n_crs]->track_index = Unique_Track_Index(crs, n_crs);
+        crs[n_crs]->track_index = Unique_Track_Index(crs, n_crs);
 
-       /* Create & append new lap */
-       clp = realloc(clp, (n_clp+1) * sizeof(GPS_PCourse_Lap));
-       if (!clp) return MEMORY_ERROR;
-       clp[n_clp] = GPS_Course_Lap_New();
-       if (!clp[n_clp]) return MEMORY_ERROR;
+        /* Create & append new lap */
+        clp = xrealloc(clp, (n_clp+1) * sizeof(GPS_PCourse_Lap));
+        clp[n_clp] = GPS_Course_Lap_New();
+        if (!clp[n_clp]) return MEMORY_ERROR;
 
-       clp[n_clp]->course_index = crs[n_crs]->index; /* Index of associated course */
-       clp[n_clp]->lap_index = 0; /* Lap index, unique per course */
-       clp[n_clp]->total_time = 0; /* FIXME: Calculate */
-       clp[n_clp]->total_dist = 0; /* FIXME: Calculate */
-       if (trk_end)
-       {
-           clp[n_clp]->begin_lat = trk[i+1]->lat;
-           clp[n_clp]->begin_lon = trk[i+1]->lon;
-           clp[n_clp]->end_lat = trk[trk_end]->lat;
-           clp[n_clp]->end_lon = trk[trk_end]->lon;
-       }
-       else
-       {
-           clp[n_clp]->begin_lat = 0x7fffffff;
-           clp[n_clp]->begin_lon = 0x7fffffff;
-           clp[n_clp]->end_lat = 0x7fffffff;
-           clp[n_clp]->end_lon = 0x7fffffff;
-       }
-       clp[n_clp]->avg_heart_rate = 0; /* FIXME: Calculate */
-       clp[n_clp]->max_heart_rate = 0; /* FIXME: Calculate */
-       clp[n_clp]->intensity = 0;
-       clp[n_clp]->avg_cadence = 0xff; /* FIXME: Calculate */
-       n_crs++;
-       n_clp++;
+        clp[n_clp]->course_index = crs[n_crs]->index; /* Index of associated course */
+        clp[n_clp]->lap_index = 0; /* Lap index, unique per course */
+	Calculate_Course_Lap_Data(clp[n_clp], trk, i+1, trk_end);
+        n_crs++;
+        n_clp++;
     }
 
     /* Append new track points */
-    ctk = realloc(ctk, (n_ctk+n) * sizeof(GPS_PTrack));
-    if (!ctk) return MEMORY_ERROR;
+    ctk = xrealloc(ctk, (n_ctk+n_trk) * sizeof(GPS_PTrack));
 
-    for (i=0;i<n;i++) {
-       ctk[n_ctk] = GPS_Track_New();
-       if (!ctk[n_ctk]) return MEMORY_ERROR;
-       *ctk[n_ctk] = *trk[i];
+    first_new_ctk = n_ctk;
+    for (i=0;i<n_trk;i++) {
+        ctk[n_ctk] = GPS_Track_New();
+        if (!ctk[n_ctk]) return MEMORY_ERROR;
+        *ctk[n_ctk] = *trk[i];
 
-       if (ctk[n_ctk]->ishdr)
-       {
-           /* Index of new track, must match the track index in associated course */
-           memset(ctk[n_ctk]->trk_ident, 0, sizeof(ctk[n_ctk]->trk_ident));
-           sprintf(ctk[n_ctk]->trk_ident, "%d", crs[trk_crs]->track_index);
-           trk_crs++;
-       }
-       n_ctk++;
+        if (ctk[n_ctk]->ishdr)
+        {
+            /* Index of new track, must match the track index in associated course */
+            memset(ctk[n_ctk]->trk_ident, 0, sizeof(ctk[n_ctk]->trk_ident));
+            sprintf(ctk[n_ctk]->trk_ident, "%d", crs[new_crs]->track_index);
+            new_crs++;
+        }
+        n_ctk++;
     }
+
+    /* Convert waypoints to course points by searching closest track point &
+     * append
+     */
+    cpt = xrealloc(cpt, (n_cpt+n_wpt) * sizeof(GPS_PCourse_Point));
+    for (i=0; i<n_wpt; i++)
+    {
+	double dist, min_dist = DBL_MAX;
+	int min_dist_idx = 0, trk_idx = 0, min_dist_trk_idx = 0;
+
+	/* Find closest track point */
+	for (j=first_new_ctk; j<first_new_ctk+n_trk; j++) {
+	    if (ctk[j]->ishdr) {
+		trk_idx = strtoul(ctk[j]->trk_ident, NULL, 0);
+		continue;
+	    }
+
+	    dist = gcgeodist(wpt[i]->lat, wpt[i]->lon, ctk[j]->lat, ctk[j]->lon);
+	    if (dist < min_dist) {
+		min_dist = dist;
+		min_dist_idx = j;
+		min_dist_trk_idx = trk_idx;
+	    }
+	}
+
+	cpt[i+n_cpt] = GPS_Course_Point_New();
+	strncpy(cpt[i+n_cpt]->name, wpt[i]->cmnt,
+	        sizeof(cpt[i+n_cpt]->name) - 1);
+	for (j=0; j<n_crs; j++)
+	    if (crs[j]->track_index == min_dist_trk_idx)
+	    {
+		cpt[i+n_cpt]->course_index = crs[j]->index;
+		break;
+	    }
+	cpt[i+n_cpt]->track_point_time = ctk[min_dist_idx]->Time;
+	cpt[i+n_cpt]->point_type = 0;
+    }
+    n_cpt += n_wpt;
 
     /* Remove course data that's no longer needed */
     Course_Garbage_Collect(crs, &n_crs, clp, &n_clp, ctk, &n_ctk, cpt, &n_cpt);

@@ -33,6 +33,7 @@
 #define MYNAME "GARMIN" 
 static const char *portname;
 static short_handle mkshort_handle;
+static GPS_PWay *tx_waylist;
 static GPS_PWay *tx_routelist;
 static GPS_PWay *cur_tx_routelist_entry;
 static GPS_PTrack *tx_tracklist;
@@ -818,21 +819,19 @@ get_gc_info(waypoint *wpt)
 	return "";
 }
 
-static void
-waypoint_write(void)
+static int
+waypoint_prepare(void)
 {
 	int i;
-	int32 ret;
 	int n = waypt_count();
 	queue *elem, *tmp;
 	extern queue waypt_head;
-	GPS_PWay *way;
 	int icon;
 
-	way = xcalloc(n,sizeof(*way));
+	tx_waylist = xcalloc(n,sizeof(*tx_waylist));
 
 	for (i = 0; i < n; i++) {
-		way[i] = sane_GPS_Way_New();
+		tx_waylist[i] = sane_GPS_Way_New();
 	}
 
 	i = 0;
@@ -859,18 +858,18 @@ waypoint_write(void)
 		 * but rather a garmin "fixed length" buffer that's padded
 		 * to the end with spaces.  So this is NOT (strlen+1).
 		 */
-		memcpy(way[i]->ident, ident, strlen(ident));
+		memcpy(tx_waylist[i]->ident, ident, strlen(ident));
 
 		if (global_opts.synthesize_shortnames) { 
 			xfree(ident);
 		}
-		way[i]->ident[sizeof(way[i]->ident)-1] = 0;
+		tx_waylist[i]->ident[sizeof(tx_waylist[i]->ident)-1] = 0;
 
 		// If we were explictly given a comment from GPX, use that. 
 		//  This logic really is horrible and needs to be untangled.
 		if (wpt->description && 
 		    global_opts.smart_names && !wpt->gc_data->diff) {
-			memcpy(way[i]->cmnt, wpt->description, strlen(wpt->description));
+			memcpy(tx_waylist[i]->cmnt, wpt->description, strlen(wpt->description));
 		} else {
 			if (global_opts.smart_names && 
 			     wpt->gc_data->diff && wpt->gc_data->terr) {
@@ -881,16 +880,16 @@ xasprintf(&src, "%s %s", &wpt->shortname[2], src);
 						get_gc_info(wpt),
 						wpt->gc_data->diff, wpt->gc_data->terr, 
 						src);
-				memcpy(way[i]->cmnt, obuf, strlen(obuf));
+				memcpy(tx_waylist[i]->cmnt, obuf, strlen(obuf));
 			} else  {
-				memcpy(way[i]->cmnt, src, strlen(src));
+				memcpy(tx_waylist[i]->cmnt, src, strlen(src));
 			}
 		}
 
 		
 
-		way[i]->lon = wpt->longitude;
-		way[i]->lat = wpt->latitude;
+		tx_waylist[i]->lon = wpt->longitude;
+		tx_waylist[i]->lat = wpt->latitude;
 
 		if (deficon) {
 			icon = gt_find_icon_number_from_desc(deficon, PCX);
@@ -908,41 +907,52 @@ xasprintf(&src, "%s %s", &wpt->shortname[2], src);
 		if (gps_waypt_type == 103) {
 			icon = d103_icon_number_from_symbol(wpt->icon_descr);
 		}
-		way[i]->smbl = icon;
+		tx_waylist[i]->smbl = icon;
 		if (wpt->altitude == unknown_alt) {
-			way[i]->alt_is_unknown = 1;
-			way[i]->alt = 0;
+			tx_waylist[i]->alt_is_unknown = 1;
+			tx_waylist[i]->alt = 0;
 		} else {
-			way[i]->alt = wpt->altitude;
+			tx_waylist[i]->alt = wpt->altitude;
 		}
 		if (wpt->creation_time) {
-			way[i]->time = wpt->creation_time;
-			way[i]->time_populated = 1;
+			tx_waylist[i]->time = wpt->creation_time;
+			tx_waylist[i]->time_populated = 1;
 		}
 		if (category) {
-			way[i]->category = 1 << (atoi(category) - 1);
+			tx_waylist[i]->category = 1 << (atoi(category) - 1);
 		}
 		if (categorybits) {
-			way[i]->category = categorybits;
+			tx_waylist[i]->category = categorybits;
 		}
 #if SOON
-		garmin_fs_garmin_before_write(wpt, way[i], gps_waypt_type);
+		garmin_fs_garmin_before_write(wpt, tx_waylist[i], gps_waypt_type);
 #endif
 		i++;
 	}
 
-	if ((ret = GPS_Command_Send_Waypoint(portname, way, n, waypt_write_cb)) < 0) {
+	return n;
+}
+
+static void
+waypoint_write(void)
+{
+	int i, n;
+	int32 ret;
+
+	n = waypoint_prepare();
+
+	if ((ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb)) < 0) {
 		fatal(MYNAME ":communication error sending wayoints..\n");
 	}
 
 	for (i = 0; i < n; ++i) {
-		GPS_Way_Del(&way[i]);
+		GPS_Way_Del(&tx_waylist[i]);
 	}
 	if (global_opts.verbose_status) {
 		fprintf(stdout, "\r\n");
 		fflush(stdout);
 	}
-	xfree(way);
+	xfree(tx_waylist);
 }
 
 static void
@@ -1063,8 +1073,8 @@ track_waypt_pr(const waypoint *wpt)
 	cur_tx_tracklist_entry++;
 }
 
-static void
-track_write(void)
+static int
+track_prepare(void)
 {
 	int i;
 	int n = track_waypt_count() + track_count();
@@ -1077,9 +1087,41 @@ track_write(void)
 	my_track_count = 0;
 	track_disp_all(track_hdr_pr, route_noop, track_waypt_pr);
 
+	return n;
+}
+
+static void
+track_write(void)
+{
+	int i, n;
+
+	n = track_prepare();
+
 	GPS_Command_Send_Track(portname, tx_tracklist, n);
 
 	for (i = 0; i < n; i++) {
+		GPS_Track_Del(&tx_tracklist[i]);
+	}
+	xfree(tx_tracklist);
+}
+
+static void
+course_write(void)
+{
+	int i, n_trk, n_wpt;
+
+	n_wpt = waypoint_prepare();
+	n_trk = track_prepare();
+
+	GPS_Command_Send_Track_As_Course(portname, tx_tracklist, n_trk,
+	                                 tx_waylist, n_wpt);
+
+	for (i = 0; i < n_wpt; ++i) {
+		GPS_Way_Del(&tx_waylist[i]);
+	}
+	xfree(tx_waylist);
+
+	for (i = 0; i < n_trk; i++) {
 		GPS_Track_Del(&tx_tracklist[i]);
 	}
 	xfree(tx_tracklist);
@@ -1092,12 +1134,25 @@ data_write(void)
 		return;
 	}
 
-	if (global_opts.masked_objective & WPTDATAMASK)
-	  waypoint_write();
+	/* If we have both trackpoints and waypoints and the device
+	 * supports courses, combine them to a course. Otherwise,
+	 * send tracks & waypoints separately.
+	 */
+	if ((global_opts.masked_objective & WPTDATAMASK) &&
+	    (global_opts.masked_objective & TRKDATAMASK) &&
+	    gps_course_transfer != -1)
+	{
+	  course_write();
+	}
+	else
+	{
+	    if (global_opts.masked_objective & WPTDATAMASK)
+		waypoint_write();
+	    if (global_opts.masked_objective & TRKDATAMASK)
+		track_write();
+	}
 	if (global_opts.masked_objective & RTEDATAMASK)
 	  route_write();
-	if (global_opts.masked_objective & TRKDATAMASK)
-	  track_write();
 }
 
 

@@ -21,11 +21,9 @@ int32  GPS_A200_Send(const char *port, GPS_PWay *way, int32 n);
 int32  GPS_A201_Send(const char *port, GPS_PWay *way, int32 n);
 
 int32  GPS_A300_Get(const char *port, GPS_PTrack **trk, pcb_fn cb);
-int32  GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb);
-int32  GPS_A302_Get(const char *port, GPS_PTrack **trk, pcb_fn cb);
+int32  GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb, int protoid);
 int32  GPS_A300_Send(const char *port, GPS_PTrack *trk, int32 n);
-int32  GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n);
-int32  GPS_A302_Send(const char *port, GPS_PTrack *trk, int32 n,
+int32  GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n, int protoid,
                     gpsdevh *fd);
 
 int32  GPS_D300_Get(GPS_PTrack *trk, int32 entries, gpsdevh *h);
