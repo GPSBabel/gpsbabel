@@ -71,6 +71,12 @@ do_over:
 	 */
 	(*packet)->type = le_read16(&pkt.gusb_pkt.pkt_id);
 	payload_size = le_read32(&pkt.gusb_pkt.datasz);
+	if (payload_size<0 || payload_size>MAX_GPS_PACKET_SIZE)
+	{
+		GPS_Error("GPS_Packet_Read_usb: Bad payload size %d", payload_size);
+		gps_errno = FRAMING_ERROR;
+		return 0;
+	}
 	(*packet)->n = payload_size;
 	memcpy((*packet)->data, &pkt.gusb_pkt.databuf, payload_size);
 	
