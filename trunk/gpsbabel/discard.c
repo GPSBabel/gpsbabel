@@ -29,9 +29,13 @@ static char *andopt = NULL;
 static char *satopt = NULL;
 static char *fixnoneopt = NULL;
 static char *fixunknownopt = NULL;
+static char *eleminopt = NULL;
+static char *elemaxopt = NULL;
 static double hdopf;
 static double vdopf;
 static int satpf;
+static int eleminpf;
+static int elemaxpf;
 static gpsdata_type what;
 static route_head *head;
 
@@ -49,6 +53,10 @@ arglist_t fix_args[] = {
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{"fixunknown", &fixunknownopt, "Suppress waypoints with unknown fix",
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+        {"elemin", &eleminopt, "Suppress waypoints below given elevation in meters",
+                NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX},
+        {"elemax", &elemaxopt, "Suppress waypoints above given elevation in meters",
+                NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
 
@@ -81,6 +89,12 @@ fix_process_wpt(const waypoint *wpt)
 		del = 1;
 
 	if ((fixunknownopt) && (waypointp->fix == fix_unknown))
+		del = 1;
+
+	if ((eleminopt) && (waypointp->altitude < eleminpf))
+		del = 1;
+
+	if ((elemaxopt) && (waypointp->altitude > elemaxpf))
 		del = 1;
 
 	if (del) {
@@ -142,6 +156,11 @@ fix_init(const char *args)
 	else
 		satpf = -1;
 		
+        if (eleminopt)
+		eleminpf = atoi(eleminopt);
+
+        if (elemaxopt)
+		elemaxpf = atoi(elemaxopt);
 }
 
 filter_vecs_t discard_vecs = {
