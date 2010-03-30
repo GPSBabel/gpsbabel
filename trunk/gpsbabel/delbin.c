@@ -1142,7 +1142,7 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
 	}
 
 	gbfprintf(fd, "Cache ID: %s\n", wp->shortname);
-	if (gc_sym && atoi(opt_gcsym)) {
+	if (gc_sym && opt_gcsym && atoi(opt_gcsym)) {
 		gbfprintf(fd, "%s\n", waypoint_symbol(gc_sym));
 		*symbol = gc_sym;
 	} else if (wp->icon_descr) {
@@ -3138,7 +3138,52 @@ static const char* const waypoint_symbol_name[] = {
 	// 180
 	"Trailhead",
 	"Temporarily Disable Listing",
-	"Enable Listing"
+	"Enable Listing",
+	// 183-222 added in PN-40 2.7 firmware
+	"Crane Truck",
+	"Forest Fire",
+	"Oil Derrick",
+	"Wind Turbine",
+	"Letter A",
+	"Letter B",
+	"Letter C",
+	// 190
+	"Letter D",
+	"Letter E",
+	"Letter F",
+	"Letter G",
+	"Letter H",
+	"Letter I",
+	"Letter J",
+	"Letter K",
+	"Letter L",
+	"Letter M",
+	// 200
+	"Letter N",
+	"Letter O",
+	"Letter P",
+	"Letter Q",
+	"Letter R",
+	"Letter S",
+	"Letter T",
+	"Letter U",
+	"Letter V",
+	"Letter W",
+	// 210
+	"Letter X",
+	"Letter Y",
+	"Letter Z",
+	"Numeral 0",
+	"Numeral 1",
+	"Numeral 2",
+	"Numeral 3",
+	"Numeral 4",
+	"Numeral 5",
+	"Numeral 6",
+	// 220
+	"Numeral 7",
+	"Numeral 8",
+	"Numeral 9"
 };
 
 static const char*
