@@ -601,6 +601,10 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 		case 0x80012:	/* ? sounds / images ? */
 			break;
 
+		/* Images? Seen in http://geepeeex.com/Stonepages.gpi */
+		case 0xd:	
+			break;
+
 		case 0x11:
 		case 0x80007: 
 		/* Looks like some kind of calendar information. */
