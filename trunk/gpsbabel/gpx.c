@@ -1635,7 +1635,7 @@ gpx_write_common_extensions(const waypoint *waypointp, const char *indent)
 				gbfprintf(ofd, "%s    <gpxtpx:hr>%u</gpxtpx:hr>\n",
 				          indent, waypointp->heartrate);
 			if (waypointp->cadence != 0)
-				gbfprintf(ofd, "%s    <gpxtpx:cad%u</gpxtpx:cad>\n",
+				gbfprintf(ofd, "%s    <gpxtpx:cad>%u</gpxtpx:cad>\n",
 				          indent, waypointp->cadence);
 			gbfprintf(ofd, "%s  </gpxtpx:TrackPointExtension>\n", indent);
 		}
