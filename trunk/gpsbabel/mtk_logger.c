@@ -381,6 +381,7 @@ static void mtk_rd_init_m241 (const char *fname) {
 
 static void mtk_rd_init(const char *fname){
     int rc;
+    char *model;
     
     port = xstrdup(fname);
     
@@ -410,13 +411,28 @@ static void mtk_rd_init(const char *fname){
         fatal(MYNAME ": Failed to set baudrate !\n");
     }
 
-    rc = do_cmd("$PMTK605*31\r\n", "PMTK705", NULL, 10);
+    rc = do_cmd("$PMTK605*31\r\n", "PMTK705,", &model, 10);
     if ( rc != 0 )
       fatal(MYNAME ": This is not a MTK based GPS ! (or is device turned off ?)\n");
 
+    // say hello to GR245 to make it display "USB PROCESSING"
+    if (strstr(model, "GR-245")) {
+      mtk_device = HOLUX_GR245; // remember we have a GR245 for mtk_rd_deinit()
+      rc |= do_cmd("$PHLX810*35\r\n", "PHLX852,", NULL, 10);
+      rc |= do_cmd("$PHLX826*30\r\n", "PHLX859*38", NULL, 10);
+      if (rc != 0)
+        dbg(2, "Greeting not successfull.\n");
+    }
+    xfree(model);
  }
 
 static void mtk_rd_deinit(void){
+    if (mtk_device == HOLUX_GR245) {
+      int rc = do_cmd("$PHLX827*31\r\n", "PHLX860*32", NULL, 10);
+      if (rc != 0)
+        dbg(2, "Goodbye not successfull.\n");
+    }
+
     dbg(3, "Closing port...\n");
     gbser_deinit(fd);
     fd = NULL;
