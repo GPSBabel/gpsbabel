@@ -1125,6 +1125,31 @@ static char tomtom_itn[] =
 "IFIELD	SHORTNAME, \"\", \"%s\"\n"
 "IFIELD	CONSTANT, \"0\", \"%s\"\n"
 ;
+static char tomtom_itn_places[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: TomTom Navigator Itineraries (Routes)\n"
+"# Author: Olaf Klein\n"
+"#   Date: 04/17/2007\n"
+"#\n"
+"DESCRIPTION		TomTom Places Itineraries (.itn)\n"
+"EXTENSION		itn\n"
+"DATATYPE		ROUTE\n"
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		PIPE\n"
+"RECORD_DELIMITER	CRNEWLINE\n"
+"BADCHARS		,|\n"
+"ENCODING		MS-ANSI\n"
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	LON_10E5, \"\", \"%.f\"\n"
+"IFIELD	LAT_10E5, \"\", \"%.f\"\n"
+"IFIELD	SHORTNAME, \"\", \"%s\"\n"
+"IFIELD	CONSTANT, \"2\", \"%s\"\n"
+;
 static char xmap[] = 
 "# gpsbabel XCSV style file\n"
 "#\n"
@@ -1230,8 +1255,8 @@ static char xmapwpt[] =
 "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "ricoh", ricoh } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "igo2008_poi", igo2008_poi } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 34;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn_places", tomtom_itn_places } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "ricoh", ricoh } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "igo2008_poi", igo2008_poi } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 35;
 #else /* CSVFMTS_ENABLED */
 style_vecs_t style_list[] = {{0,0}};
 size_t nstyles = 0;
