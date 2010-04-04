@@ -150,11 +150,12 @@ static void
 v900_log(const char *fmt, ...)
 {
 	va_list ap;
-	va_start (ap, fmt);
 
 	if (global_opts.debug_level < 1) {
 		return;
 	}
+
+	va_start (ap, fmt);
 	vfprintf(stderr, fmt, ap);
 	va_end(ap);
 }
@@ -217,6 +218,7 @@ v900_read(void)
 		char text[200]; /* used to read the header line, which is normal text */
 	} line;
 	int is_advanced_mode = 0;
+	int lc = 0;
 	route_head *track;
 
 	v900_log("%s\n",__func__);
@@ -231,7 +233,7 @@ Advanced mode: INDEX,TAG,DATE,TIME,LATITUDE N/S,LONGITUDE E/W,HEIGHT,SPEED,HEADI
 		fatal("v900: error reading header (first) line from input file\n");
 	is_advanced_mode = (NULL != strstr(line.text,"PDOP")); /* PDOP field appears only in advanced mode */
 
-	v900_log("header line: %s",line);
+	v900_log("header line: %s",line.text);
 	v900_log("is_advance_mode=%d\n",is_advanced_mode);
 
 	track = route_head_alloc();
@@ -243,24 +245,31 @@ Advanced mode: INDEX,TAG,DATE,TIME,LATITUDE N/S,LONGITUDE E/W,HEIGHT,SPEED,HEADI
 	{
 		waypoint *wpt;
 		char c;
+		int bad = 0;
 		int record_len = is_advanced_mode ? sizeof(line.adv) : sizeof(line.bas);
 		if (fread ( &line, record_len, 1, fin ) != 1)
 		{
 			break;
 		}
+		lc++;
 
 		/* change all "," characters to NULLs.
                    so every field is null terminated.
                  */
-		assert(line.bas.common.comma1==',');  // TODO: abort with fatal()
-		assert(line.bas.common.comma2==',');
-		assert(line.bas.common.comma3==',');
-		assert(line.bas.common.comma4==',');
-		assert(line.bas.common.comma5==',');
-		assert(line.bas.common.comma6==',');
-		assert(line.bas.common.comma7==',');
-		assert(line.bas.common.comma8==',');
-		assert(line.bas.common.comma9==',');
+		bad |= (line.bas.common.comma1 != ',');  
+		bad |= (line.bas.common.comma2 != ',');
+		bad |= (line.bas.common.comma3 != ',');
+		bad |= (line.bas.common.comma4 != ',');
+		bad |= (line.bas.common.comma5 != ',');
+		bad |= (line.bas.common.comma6 != ',');
+		bad |= (line.bas.common.comma7 != ',');
+		bad |= (line.bas.common.comma8 != ',');
+		bad |= (line.bas.common.comma9 != ',');
+
+		if (bad) {
+			warning("v900: skipping malformed record at line %d\n", lc);
+		}
+
 		line.bas.common.comma1 = 0;
 		line.bas.common.comma2 = 0;
 		line.bas.common.comma3 = 0;
