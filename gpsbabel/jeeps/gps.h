@@ -95,12 +95,14 @@ typedef struct GPS_STrack
     int      temperature_populated; /* True if above is valid. */
     unsigned char  heartrate;		/* Heartrate as in Garmin 301 */
     unsigned char  cadence;		/* Crank cadence as in Edge 305 */
+    unsigned int   wsensor_pres:1; /* Wheel sensor present */
     unsigned int   tnew:1;	/* New track? */
     unsigned int   ishdr:1;	/* Track header? */
     unsigned int   no_latlon:1;	/* True if no valid lat/lon found. */
     int32    dspl;		/* Display on map? */
     int32    colour;		/* Colour */
     float    distance; /* distance traveled in meters.*/
+    int      distance_populated; /* True if above is valid. */
     char     trk_ident[256];	/* Track identifier */
 }
 GPS_OTrack, *GPS_PTrack;

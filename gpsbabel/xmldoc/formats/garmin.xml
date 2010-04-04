@@ -185,7 +185,15 @@ GPX files from the mass storage device as mounted on your computer.
 	while we do extract data such as heart rate and temperature from
 	tracks on the sporting models like Edge and Forerunner, GPSBabel
 	is not a fitness program at its core and does not support features 
-	like courses or calorie/fitness zone data.
+	like workouts or calorie/fitness zone data. Furthermore, sporting
+	models don't support track upload. When trying to upload tracks to
+	these devices, GPSBabel converts them to courses on the fly and
+	uploads these instead. When uploading waypoints at the same
+	time, these are converted to course points by mapping them to the
+	nearest track point on the track/course (no matter how far away from
+	the track they are). Since course point creation requires time
+	stamps for the track points, they are created automatically assuming
+	a speed of 10 km/h for tracks that lack them.
 </para>
 
 <para> 

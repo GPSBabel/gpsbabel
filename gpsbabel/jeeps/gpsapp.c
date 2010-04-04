@@ -3992,7 +3992,7 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n, int protoid,
 			*trkpt = *(trk[j]);
 			trkpt->no_latlon = 1;
 			trkpt->alt = 1e25;
-			trkpt->distance = 1e25;
+			trkpt->distance_populated = 0;
 			trkpt->heartrate = 0;
 			trkpt->cadence = 0xff;
 			trk = xrealloc(trk, (n+1) * sizeof(GPS_PTrack));
@@ -4199,11 +4199,9 @@ void GPS_D301b_Get(GPS_PTrack *trk, UC *data)
 	(*trk)->Time = GPS_Math_Gtime_To_Utime((time_t)t);
     p+=sizeof(uint32);
 
-    /* FIXME: check validity */
     (*trk)->alt = GPS_Util_Get_Float(p);
     p+=sizeof(float);
 
-    /* FIXME: check validity */
     (*trk)->dpth = GPS_Util_Get_Float(p);
     p+=sizeof(float);
 
@@ -4242,11 +4240,9 @@ void GPS_D302b_Get(GPS_PTrack *trk, UC *data)
 	(*trk)->Time = GPS_Math_Gtime_To_Utime((time_t)t);
     p+=sizeof(uint32);
 
-    /* FIXME: check validity */
     (*trk)->alt = GPS_Util_Get_Float(p);
     p+=sizeof(float);
 
-    /* FIXME: check validity */
     (*trk)->dpth = GPS_Util_Get_Float(p);
     p+=sizeof(float);
 
@@ -4324,11 +4320,7 @@ void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
 	(*trk)->Time = GPS_Math_Gtime_To_Utime((time_t)t);
     p+=sizeof(uint32);
 
-    /* When latitude and longitude are undefined, this field seems to be
-     * a constant on my receiver (51 59 04 69) */
-    /* FIXME: check validity */
     (*trk)->alt = GPS_Util_Get_Float(p);
-    if (lat_undefined || lon_undefined) (*trk)->alt = 0.0f;
     p+=sizeof(float);
 
     /* Heartrate is reported as 0 if there is no signal from
@@ -4338,6 +4330,7 @@ void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
     switch (gps_trk_type) {
     case pD304:
 	(*trk)->distance = GPS_Util_Get_Float(p);
+	(*trk)->distance_populated = ((*trk)->distance <= 1e24);
 	p+=sizeof(float); /* A float indicating number of meters travelled. */
 	
 	(*trk)->heartrate = (*p++);
@@ -4345,10 +4338,10 @@ void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
 	if (*p != 0xff) {
 		(*trk)->cadence = (*p);
 	}
-
-	/* sensor present.  Boolean */
 	p++;
-	
+
+	(*trk)->wsensor_pres = (*p++);
+
 	break;
     case pD303:
 	(*trk)->heartrate = *p++;
@@ -4496,7 +4489,7 @@ void GPS_D303_Send(UC *data, GPS_PTrack trk, int32 *len, int protoid)
     p+=sizeof(float);
 
     if (protoid == 304) {
-       GPS_Util_Put_Float(p, 1.0e25f); /* Distance, not supported for now */
+       GPS_Util_Put_Float(p, trk->distance_populated ? trk->distance : 1e25);
        p+=sizeof(float);
     }
 
@@ -4507,7 +4500,7 @@ void GPS_D303_Send(UC *data, GPS_PTrack trk, int32 *len, int protoid)
        *p = trk->cadence > 0 ? trk->cadence : 0xff;
        p+=sizeof(char);
 
-       *p = 0; /* Wheel sensor present, not supported for now */
+       *p = trk->wsensor_pres;
        p+=sizeof(char);
     }
 
