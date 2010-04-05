@@ -70,6 +70,7 @@ static gpsdata_type ppdb_type;
 static unsigned char german_release = 0;
 static char *datefmt;
 static int ct;
+static int warn_ = 0;
 
 typedef struct ppdb_appdata
 {
@@ -126,7 +127,7 @@ internal_debug2(const char *format, ... )
 #endif
 
 
-#define CHECK_INP(i, j, k) is_fatal((i != j), "Error in data structure (%s).", (k))
+#define CHECK_INP(i, j, k, l) is_fatal((i != j), "Error in data structure (in %s? Value is : %s).", (k), (l))
 
 /*
  * utilities
@@ -285,7 +286,7 @@ double ppdb_decode_coord(const char *str)
 	
 	if (*str < 'A') 	/* only numeric */
 	{
-	    CHECK_INP(1, sscanf(str,"%lf", &val), "decode_coord(1)");
+	    CHECK_INP(1, sscanf(str,"%lf", &val), "decode_coord(1) DD.dddd", str);
 	    return val;
 	}
 	else
@@ -297,12 +298,12 @@ double ppdb_decode_coord(const char *str)
 	    tmp = strchr(str, ' ');
 	    if ((tmp) && (tmp - str < 5))
 	    {
-		CHECK_INP(3, sscanf(str,"%c%d %lf", &dir, &deg, &val), "decode_coord(2)");
+		CHECK_INP(3, sscanf(str,"%c%d %lf", &dir, &deg, &val), "decode_coord(2) DD MM.mmm", str);
 		val = deg + (val / 60.0);
 	    }
 	    else
 	    {
-		CHECK_INP(2, sscanf(str,"%c%lf", &dir, &val), "decode_coord(3)");
+		CHECK_INP(2, sscanf(str,"%c%lf", &dir, &val), "decode_coord(3) DD.dddd", str);
 	    }
 	    if ((dir == 'S') || (dir == 'W'))
 		val = -val;
@@ -318,32 +319,62 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 	int temp=0;
 	char *cx;
     
-	while (*str == ' ') str++;	/* WORKAROUND may start with or contain several empty spaces, but no date or time info */ 
+	str = lrtrim(str);              /* time field may start/end with spaces, drop them */
     
-	if (*str == '\0') return 0;	/* empty date and time */
+        if (*str == '\0')
+        {
+		if (global_opts.debug_level > 0) 
+		{
+            	    warning(MYNAME ": Time value missing, reseting to 0\n");
+            	    warn_ = 1;
+		}
+                return 0;                       /* empty time field */
+        }
 
 	if (strchr(str, '.'))		/* time in hhmmss.ms */
 	{
 		CHECK_INP(4, sscanf(str, "%02d%02d%02d.%d",
 			&tm->tm_hour, &tm->tm_min, &tm->tm_sec, &msec), 
-			"decode_tm(1)");
+			"decode_tm(1) hhmmss.ss", str);
 	}
 	else if (sscanf(str,"%06d",&temp)==1)
 					/* WORKAROUND read time info only if a valid 6 digit string found */
 	{
 		CHECK_INP(3, sscanf(str, "%02d%02d%02d",
 			&tm->tm_hour, &tm->tm_min, &tm->tm_sec), 
-			"decode_tm(2)");
+			"decode_tm(2) hhmmss", str);
 	}
 	else
 	{
+		if (global_opts.debug_level > 0) 
+		{
+		    warning(MYNAME ": Invalid time value, reseting to 0\n");
+                    warn_ = 1;
+		}
 		return 0;		/* WORKAROUND maybe invalid time, just ignore it and continue */
 	} 
 	cx = strchr(str, ' ');
-	if (cx == NULL) return 0;	/* no date */
 	
-	while (*cx == ' ') cx++;
-	if (*cx == '\0') return 0;	/* no date */
+        if (cx == NULL)
+        {
+		if (global_opts.debug_level > 0) 
+		{
+            	    warning(MYNAME ": Date value missing, reseting to 0\n");
+            	    warn_ = 1;
+		}
+                return 0;       /* empty date field */
+        }
+
+        cx = lrtrim(cx);
+        if (*cx == '\0')
+        {
+		if (global_opts.debug_level > 0) 
+		{
+            	    warning(MYNAME ": Date value missing, found only spaces, reseting to 0\n");
+            	    warn_ = 1;
+		}
+                return 0;       /* empty date field */
+        }
 	
 	if (datefmt)
 	{
@@ -363,28 +394,23 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 		time_t tnow;
 		struct tm now;
 		
-		if (strlen(cx) != 8)
-		{
-			printf(MYNAME ": Date from first record is %s.\n", cx);
-			printf(MYNAME ": Please use option 'date' to specify how this is formatted.\n");
-			fatal(MYNAME  ": (... -i pathaway,date=DDMMYY ...)\n");
-		}
-		
-		CHECK_INP(4, sscanf(cx, "%02d%02d%02d%02d", &d1, &d2, &d3, &d4), "decode_tm(3)");
 		
 		tnow = current_time();
 		now = *localtime(&tnow);
 		now.tm_year += 1900;
 		now.tm_mon++;
 		
-		year = (d1 * 100) + d2;
+		if (strlen(cx) == 8) 
+		{	    
+		    CHECK_INP(4, sscanf(cx, "%02d%02d%02d%02d", &d1, &d2, &d3, &d4), "decode_tm(3) invalid date (YYYYMMDD)", cx);
 		
+		    year = (d1 * 100) + d2;
 		/* the coordinates comes before date and time in
 		   the dataset, so the flag "german_release" is set yet. */
 
 		/* next code works for most, except for 19. and 20. of month */
 	
-		if ((german_release != 0) || (year < 1980) || (year > now.tm_year))	/* YYYYMMDD or DDMMYYY ????? */
+		    if ((german_release != 0) || (year < 1980) || (year > now.tm_year))	/* YYYYMMDD or DDMMYYYY ????? */
 		{
 		    tm->tm_year = (d3 * 100) + d4;
 		    tm->tm_mon = d2;
@@ -395,6 +421,26 @@ int ppdb_decode_tm(char *str, struct tm *tm)
 		    tm->tm_year = (d1 * 100) + d2;
 		    tm->tm_mon = d3;
 		    tm->tm_mday = d4;
+		}
+		} else if (strlen(cx) == 6)
+		{
+		    CHECK_INP(3, sscanf(cx, "%02d%02d%02d", &d1, &d2, &d3), "decode_tm(3) invalid date (DDMMYY)", cx);
+		    if (d3 < 1970)			/* Usual Y2K interpretation */
+			year = d3 + 2000;
+		    else 
+			year = d3 + 1900;
+		    
+/* I don't know how a german release handles this
+ * so for now I will assume only DDMMYY if date has 6 digits
+ */	
+		    tm->tm_year = year;
+		    tm->tm_mon = d2;
+		    tm->tm_mday = d1;
+		} else 			/* date string is neither 8 nor 6 digits */
+		{
+			printf(MYNAME ": Date from first record is %s.\n", cx);
+			printf(MYNAME ": Please use option 'date' to specify how this is formatted.\n");
+			fatal(MYNAME  ": (... -i pathaway,date=DDMMYY ...)\n");
 		}
 	}
 	return 1;
@@ -412,7 +458,15 @@ int ppdb_read_wpt(route_head *head, int isRoute)
 		int line = 0;
 		char *tmp = data;
 
-// 		while ((str = csv_lineparse(tmp, ",", """", line++))) {
+/* Print the whole input record. All input records are printed before processing. */
+               if (global_opts.debug_level >= 5)
+               {
+                       DBG(("\n\
+--- BEGIN Input data record -----------------------------------------------\n\
+%s\n\
+--- END Input data record -------------------------------------------------\n",data));
+               }
+
 		while ((str = csv_lineparse(tmp, ",", "\"", line++))) { 
 		    tmp = NULL;
 		    switch(line)
@@ -426,7 +480,7 @@ int ppdb_read_wpt(route_head *head, int isRoute)
 			case 3:		/* altitude */
 			    if (*str != '\0')
 			    {
-				CHECK_INP(1, sscanf(str, "%lf", &altfeet), "altitude");
+				CHECK_INP(1, sscanf(str, "%lf", &altfeet), "altitude", str);
 				if (altfeet != -9999) 
 				    wpt_tmp->altitude = FEET_TO_METERS(altfeet);
 			    }
@@ -457,6 +511,16 @@ int ppdb_read_wpt(route_head *head, int isRoute)
 		    }
 		}
 		
+/* Print the whole input record, should a warning be triggered.
+ * Use warning() here instead of DBG() to print the data record
+ * right after the warning is issued.
+ */
+               if (warn_ && (global_opts.debug_level > 1) && (global_opts.debug_level < 5))
+               {
+                       warning("Faulty input data record : %s\n",data);
+                       warn_ = 0;
+               }
+
 		if (head && isRoute )
 		    route_add_wpt(head, wpt_tmp);
 		else if (head)
@@ -672,8 +736,7 @@ static void ppdb_write_wpt(const waypoint *wpt)
 				/* 6 icon */
 	
 	tmp = str_pool_getcpy(wpt->icon_descr, opt_deficon);	/* point icon or deficon from options */
-	buff = ppdb_strcat(buff, tmp, "0", &len);
-	/* buff = ppdb_strcat(buff, opt_deficon, "0", &len);*/
+	buff = ppdb_strcat(buff, tmp, NULL, &len);
 	buff = ppdb_strcat(buff, ",", NULL, &len);
 				/* 7 description */ 
 
@@ -711,13 +774,15 @@ static void ppdb_write(void)
 	file_out->version = 3;
 	
 /*	Waypoint target does use vehicleStr from appinfo block 
-	Actually, all 3 types have vehicle information. 
-	if (global_opts.objective != wptdata)	/ * Waypoint target do not need appinfo block * /
-	{   */
+ *	Actually, all 3 types have vehicle information. 
+ *	if (global_opts.objective != wptdata)	/ * Waypoint target do not need appinfo block * /
+ *	{   
+ */
 	    appinfo = xcalloc(1, sizeof(*appinfo));
 	    file_out->appinfo = (void *)appinfo;
 	    file_out->appinfo_len = PPDB_APPINFO_SIZE;
-/*	}   */
+/*	}   
+ */
 	if (opt_dbicon != NULL) strncpy(appinfo->vehicleStr, opt_dbicon, VEHICLE_LEN);
 	
 	switch(global_opts.objective)		/* Only one target is possible */
