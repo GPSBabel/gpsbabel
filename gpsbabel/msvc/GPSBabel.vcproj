@@ -145,7 +145,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="expat;."
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;__WIN32__;_DEBUG;_CONSOLE;"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;__WIN32__;_DEBUG;_CONSOLE;HAVE_CONFIG_H"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
@@ -155,10 +155,11 @@
 				ProgramDataBaseFileName=".\Debug/"
 				BrowseInformation="1"
 				WarningLevel="3"
-				WarnAsError="true"
+				WarnAsError="false"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
 				CompileAs="0"
+				ErrorReporting="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -376,11 +377,9 @@
 				>
 			</File>
 			<File
-			<File
 				RelativePath="..\bushnell_trl.c"
 				>
 			</File>
-			<File
 			<File
 				RelativePath="..\cet.c"
 				>
@@ -1822,15 +1821,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\pocketfms_wp.c"
-				>
-			</File>
-			<File
 				RelativePath="..\pocketfms_bc.c"
 				>
 			</File>
 			<File
 				RelativePath="..\pocketfms_fp.c"
+				>
+			</File>
+			<File
+				RelativePath="..\pocketfms_wp.c"
 				>
 			</File>
 			<File
@@ -2632,6 +2631,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\vpl.c"
+				>
 			</File>
 			<File
 				RelativePath="..\waypt.c"
