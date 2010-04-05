@@ -179,9 +179,9 @@ gopal_read(void)
 	waypoint *wpt, *lastwpt=NULL;
 	double long_old,lat_old;
 	char tbuffer[64];
+	struct tm tm2;
 	long_old=0;lat_old=0;
 	strftime(routename,sizeof(routename),"Tracklog %c",localtime(&tx));
-	struct tm tm2;
 	
 	route = route_head_alloc();
 	route->rte_name=xstrdup(routename);
