@@ -108,12 +108,12 @@ bushnell_read(void) {
 
 static void
 bushnell_write_one(const waypoint *wpt) {
+  gbint32 lat = wpt->latitude  * 10000000.0;
+  gbint32 lon = wpt->longitude * 10000000.0;
   trkpt_count++;
   if (trkpt_count > 4502)
     fatal(MYNAME " too many trackpoints.  Max is 4502.");
 
-  gbint32 lat = wpt->latitude  * 10000000.0;
-  gbint32 lon = wpt->longitude * 10000000.0;
   gbfputint32(lat, file_out);
   gbfputint32(lon, file_out);
 }

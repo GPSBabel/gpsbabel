@@ -158,6 +158,9 @@ rd_deinit(void) {
 static void
 wr_init(const char *fname) {
   char *dot, *slash;
+  static char valid_chars [] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
+		".-/\\~@#$%^&*()_+=<>"
+                "abcdefghijklmnopqrstuvwxyz";
 
   ofname = xstrdup(fname);
 
@@ -165,10 +168,6 @@ wr_init(const char *fname) {
   dot = strrchr(ofname, '.');
   slash = strrchr(ofname, GB_PATHSEP);
   if (dot > slash) *dot = 0;
-
-  static char valid_chars [] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
-		".-/\\~@#$%^&*()_+=<>"
-                "abcdefghijklmnopqrstuvwxyz";
 
   mkshort_handle = mkshort_new_handle();
   setshort_length(mkshort_handle, 19);
