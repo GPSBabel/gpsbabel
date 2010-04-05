@@ -9,7 +9,10 @@
   protocol in minor ways, but the core protocol is very commonly 
   seen in loggers.   
 </para>
-<para>The <link linkend="fmt_m241">Holux M-241 and GPSport 245</link> are examples of a device using an incompatible variation of the MTK protocol.
+<para>
+  The <link linkend="fmt_m241">Holux M-241 and GPSport 245</link> 
+  are examples of a device using an incompatible variation of the MTK 
+  protocol.
 </para>
 <para>
 The following products are known or are expected to work with this module.
