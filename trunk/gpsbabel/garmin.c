@@ -215,6 +215,9 @@ rw_init(const char *fname)
 					receiver_charset = CET_CHARSET_MS_ANSI;
 					receiver_short_length = 30;
 					break;
+                                case 484: // Forerunner 305
+                                        receiver_short_length = 8;
+                                        break;
 				case 260: /* GPSMap 296 */
 				default:
 					break;
@@ -1064,7 +1067,7 @@ track_waypt_pr(const waypoint *wpt)
 {
 	(*cur_tx_tracklist_entry)->lat = wpt->latitude;
 	(*cur_tx_tracklist_entry)->lon = wpt->longitude;
-	(*cur_tx_tracklist_entry)->alt = wpt->altitude;
+	(*cur_tx_tracklist_entry)->alt = (wpt->altitude != unknown_alt) ? wpt->altitude : 1e25;
 	(*cur_tx_tracklist_entry)->Time = wpt->creation_time;
 	if ( wpt->shortname ) {
 		strncpy((*cur_tx_tracklist_entry)->trk_ident, wpt->shortname, sizeof((*cur_tx_tracklist_entry)->trk_ident));
