@@ -1,4 +1,6 @@
+<para>
 This option drops waypoints with an altitude lower than the specified 
 value (in meters).   Although GPS altitude isn't very accurate, 
 GPS devices may log faulty waypoints from time to time, such as when 
 near tall buildings.  Elevation values that are way off may signify such waypoints.  Use this option to the filter to toss known rogue points.
+</para>
