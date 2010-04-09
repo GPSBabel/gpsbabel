@@ -4397,7 +4397,6 @@ void GPS_D311_Get(GPS_PTrack *trk, UC *s)
     /* Forerunner */
     identifier = GPS_Util_Get_Short(s);
     sprintf((*trk)->trk_ident, "%d", identifier);
-    (*trk)->tnew = 1;
 
     return;
 }
