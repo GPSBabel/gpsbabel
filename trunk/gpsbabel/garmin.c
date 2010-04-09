@@ -454,7 +454,8 @@ track_read(void)
 		}
 
 
-		if ((trk_head == NULL) || array[i]->tnew) {
+		if (trk_head == NULL || array[i]->ishdr
+		    || (array[i]->tnew && i > 0 && !array[i - 1]->ishdr)) {
 			trk_head = route_head_alloc();
 			trk_head->rte_num = trk_num;
 			if (trk_seg_num == 1) {
@@ -1050,7 +1051,6 @@ route_write(void)
 static void
 track_hdr_pr(const route_head *trk_head)
 {
-	(*cur_tx_tracklist_entry)->tnew = gpsTrue;
 	(*cur_tx_tracklist_entry)->ishdr = gpsTrue;
 	if ( trk_head->rte_name ) {
 		strncpy((*cur_tx_tracklist_entry)->trk_ident, trk_head->rte_name, sizeof((*cur_tx_tracklist_entry)->trk_ident));
