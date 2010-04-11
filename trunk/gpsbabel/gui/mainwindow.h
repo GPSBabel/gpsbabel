@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.h,v 1.10 2010-04-11 18:11:47 robertl Exp $
+// $Id: mainwindow.h,v 1.11 2010-04-11 22:38:07 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -85,6 +85,7 @@ private:
   UpgradeCheck *upgrade;
   bool allowBetaUpgrades();
   void osLoadDeviceNameCombos(QComboBox*);
+  QString getFormatNameForExtension(QString ext);
 
 protected:
   void closeEvent(QCloseEvent*);
@@ -95,6 +96,8 @@ protected:
   void browseInputFile();
   void browseOutputFile();
   void closeActionX();
+  void dragEnterEvent(QDragEnterEvent *);
+  void dropEvent(QDropEvent *event);
   void filtersClicked();
   void helpActionX();
   void inputDeviceOptBtnClicked();
