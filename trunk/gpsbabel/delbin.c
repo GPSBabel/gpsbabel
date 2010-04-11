@@ -1133,6 +1133,8 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
 	case gt_ape:
 		break;
 	}
+        if (0 == strcmp(wp->icon_descr, "Geocache Found"))
+            gc_sym = 124;
 	if (wp->description) {
 		gbfputs(wp->description, fd);
 		if (wp->gc_data->placer) {
