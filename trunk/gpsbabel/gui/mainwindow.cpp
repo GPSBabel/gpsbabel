@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.17 2010-02-16 02:49:43 robertl Exp $
+// $Id: mainwindow.cpp,v 1.18 2010-04-11 18:11:47 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -45,7 +45,7 @@ const int BabelData::noType = -1;
 const int BabelData::fileType = 0;
 const int BabelData::deviceType = 1;
 //------------------------------------------------------------------------
-static QString findBabelVersion()
+QString MainWindow::findBabelVersion()
 {
   QProcess babel;
   babel.start("gpsbabel", QStringList() << "-V");
@@ -56,10 +56,22 @@ static QString findBabelVersion()
     return QString();
 
   QString str = babel.readAll();
+  is_beta = str.contains("-beta");
   str.replace(QRegExp("^[\\s]*"),  "");
   str.replace(QRegExp("[\\s]+$"),  "");
   return str;
 }
+
+//------------------------------------------------------------------------
+// Decides whether available beta upgrades are suggested to user for download.
+bool MainWindow::allowBetaUpgrades()
+{
+  // If this is a beta version (which means the user consciously downloaded
+  // it and decided to be on the beta track or the user has ticked the 
+  // 'suggest beta upgrade' box, allow betas to be suggested for installation.
+  return is_beta || bd.allowBetaUpgrades;
+}
+
 //------------------------------------------------------------------------
 static QStringList getCharSets()
 {
@@ -177,7 +189,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   if (bd.startupVersionCheck) {
     upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, 
                              bd.upgradeCheckTime, bd.installationUuid,
-                             bd.reportStatistics);
+                             bd.reportStatistics, allowBetaUpgrades());
   }
 }
 
@@ -966,8 +978,9 @@ void MainWindow::aboutActionX()
 void MainWindow::upgradeCheckActionX()
 {
     upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, 
-                             QDateTime(), bd.installationUuid,
-                             bd.reportStatistics);
+                             QDateTime(QDate(2000, 1, 1), QTime(0, 0)), 
+                             bd.installationUuid,
+                             bd.reportStatistics, allowBetaUpgrades());
 }
 
 //------------------------------------------------------------------------

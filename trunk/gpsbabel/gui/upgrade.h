@@ -44,7 +44,8 @@ public:
 					     int upgradeCheckMethod,
 					     const QDateTime &lastCheckTime,
 					     const QString &installationUuid,
-                                             bool reportStatistics
+                                             bool reportStatistics,
+                                             bool allowBeta
                                              );
   QDateTime getUpgradeWarningTime() {
     return upgradeWarningTime;
