@@ -110,8 +110,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.71 $"; */
-static char gdb_release_date[] = "$Date: 2010-02-28 02:31:28 $";
+/* static char gdb_release[] = "$Revision: 1.72 $"; */
+static char gdb_release_date[] = "$Date: 2010-04-11 22:41:17 $";
 
 static gbfile *fin, *fout, *ftmp;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -432,7 +432,7 @@ read_file_header(void)
 	}
 
 	i = FREAD_STR(buf);
-	is_fatal(!(((i == 9) && (strcmp(buf, "MapSource") == 0)) || ((i == 8) && (strcmp(buf, "BaseCamp") == 0))), "Invalid header!");
+	is_fatal(!(((i == 9) && (strcmp(buf, "MapSource") == 0)) || ((i == 8) && (strcmp(buf, "BaseCamp") == 0))), MYNAME ": Not a recognized signature in header");
 }
 
 /*-----------------------------------------------------------------------------*/
