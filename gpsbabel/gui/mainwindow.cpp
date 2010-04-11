@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.18 2010-04-11 18:11:47 robertl Exp $
+// $Id: mainwindow.cpp,v 1.19 2010-04-11 22:38:06 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -19,12 +19,13 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111
 //  USA
 //
-#include <QMessageBox>
-#include <QProcess>
 #include <QFileDialog>
-#include <QTextStream>
+#include <QMessageBox>
+#include <QMimeData>
+#include <QProcess>
 #include <QSettings>
 #include <QTemporaryFile>
+#include <QTextStream>
 
 #include "mainwindow.h"
 #include "aboutdlg.h"
@@ -168,9 +169,13 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   ui.inputOptionsText->setReadOnly(true);
   ui.outputOptionsText->setReadOnly(true);
-
+#if 0
+  // 02/28/10  - let's try letting people edit these outside the browse.
   ui.inputFileNameText->setReadOnly(true);
   ui.outputFileNameText->setReadOnly(true);
+#else
+  setAcceptDrops(true);
+#endif
   ui.wayPtLabel->setText("");
   ui.trackLabel->setText("");
   ui.routeLabel->setText("");
@@ -344,14 +349,20 @@ QString MainWindow::filterForFormat(int idx)
   QString str = formatList[idx].getDescription();
   str.replace(QRegExp("\\("), "[");
   str.replace(QRegExp("\\)"), "]");
-  str += " (";
   QStringList extensions = formatList[idx].getExtensions();
-  for (int i=0; i<extensions.size(); i++) {
-    if (i!= 0)
-      str += " ";
-    str += "*." + extensions[i];
+
+  // If we don't have any meaningful extensions available for this format,
+  // don't be clever here; just fall through to "All files" case.
+  if (extensions.size() > 0 && !extensions[0].isEmpty()) {
+    str += " (";
+    for (int i=0; i<extensions.size(); i++) {
+      if (i!= 0)
+        str += " ";
+      str += "*." + extensions[i];
+    }
+    str += ");;";
   }
-  str += ");;All Files (*.*)";
+  str += "All Files (*.*)";
   return str;
 }
 //------------------------------------------------------------------------
@@ -360,7 +371,7 @@ QString MainWindow::ensureExtensionPresent(const QString &name, int idx)
   QString outname = name;
   if (QFileInfo(name).suffix().length() == 0) {
     QStringList extensions = formatList[idx].getExtensions();
-    if (extensions.size() > 0) 
+    if (extensions.size() > 0)
       outname += "." + extensions[0];
   }
   return outname;
@@ -685,6 +696,19 @@ bool MainWindow::isOkToGo()
     return false;
   }
 
+  // Paper over what didn't happen in inputBrowse() if the user edited
+  // the filename fields directly.
+  if ((bd.inputType == BabelData::fileType) &&
+      (bd.inputFileNames.size() == 0) &&
+      (!ui.inputFileNameText->text().isEmpty())) {
+    bd.inputFileNames << ui.inputFileNameText->text();
+  }
+  if ((bd.outputType == BabelData::fileType) &&
+      (bd.outputFileName.size() == 0) &&
+      (!ui.outputFileNameText->text().isEmpty())) {
+    bd.outputFileName = ui.outputFileNameText->text();
+  }
+
   if ((bd.inputType == BabelData::fileType) &&
       (bd.inputFileNames.size() == 0)) {
     QMessageBox::information(0, QString(appName), tr("No input file specified"));
@@ -903,6 +927,27 @@ void MainWindow::closeEvent(QCloseEvent*)
 {
   closeActionX();
 }
+
+
+//------------------------------------------------------------------------
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+  event->acceptProposedAction();
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+  foreach (QString format, event->mimeData()->formats()) {
+    if (format == "text/uri-list") {
+      QList<QUrl> urlList = event->mimeData()->urls();
+      for (int i = 0; i < urlList.size(); ++i) {
+        QString url = urlList.at(i).path();
+        QString fmt = getFormatNameForExtension("gpx");
+        setComboToFormat(ui.inputFormatCombo, fmt, true);
+      }
+    }
+  }
+}
 //------------------------------------------------------------------------
 void MainWindow::setComboToDevice(QComboBox *comboBox, const QString &name)
 {
@@ -1108,4 +1153,23 @@ void MainWindow::getWidgetValues()
   bd.xlateWayPts = ui.xlateWayPtsCk->isChecked();
   bd.xlateTracks = ui.xlateTracksCk->isChecked();
   bd.xlateRoutes = ui.xlateRoutesCk->isChecked();
+}
+
+// This could be made faster, but any attempt to do so would have to be
+// careful about disabled formats.  As it was written to be handled by a
+// drag response, performance is hardly critical.
+// It's also kind of dumb to return the name which SetCombo then looks up,
+// but there's not a 1:1 correlation between offsets in the combo box and
+// in the list of formats.
+QString MainWindow::getFormatNameForExtension(QString ext)
+{
+  for (int i = 0; i < formatList.size(); i++) {
+    QStringList extensions = formatList[i].getExtensions();
+    for (int j = 0; j < extensions.size(); ++j) {
+      if (extensions[j] == ext) {
+        return formatList[i].getName();;
+      }
+    }
+  }
+  return 0;
 }
