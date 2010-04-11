@@ -275,7 +275,7 @@ gtc_fake_hdr(void)
 		gtc_write_xml(-1, "</EndPosition>\n");
 		gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
 		gtc_write_xml(0,"<Value>%d</Value>\n",
-			      tdata->avg_hrt ? (int) tdata->avg_hrt : 100);
+			      tdata->avg_hrt ? (int)(tdata->avg_hrt + .5): 100);
 		gtc_write_xml(-1, "</AverageHeartRateBpm>\n");
 		gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
 		gtc_write_xml(0,"<Value>%d</Value>\n",
