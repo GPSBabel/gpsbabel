@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: babeldata.h,v 1.5 2010-02-15 02:57:00 robertl Exp $
+// $Id: babeldata.h,v 1.6 2010-04-11 18:11:46 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -58,7 +58,8 @@ public:
     upgradeCheckTime(QDateTime(QDate(2001, 1, 1), QTime(0, 0))),
     installationUuid(QUuid::createUuid().toString()),
     startupVersionCheck(true),
-    reportStatistics(true)
+    reportStatistics(true),
+    allowBetaUpgrades(false)
   {
   };
   
@@ -105,6 +106,7 @@ public:
     // Global preferences.
     sg.addVarSetting(new BoolSetting("app.startupVersionCheck", startupVersionCheck));
     sg.addVarSetting(new BoolSetting("app.reportStatistics", reportStatistics));
+    sg.addVarSetting(new BoolSetting("app.allowBetaUpgrades", allowBetaUpgrades));
 
   }
 
@@ -145,6 +147,7 @@ public:
   // Global preferences.
   bool startupVersionCheck;
   bool reportStatistics;
+  bool allowBetaUpgrades;
 
 };
 
