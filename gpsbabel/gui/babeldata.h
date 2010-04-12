@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: babeldata.h,v 1.6 2010-04-11 18:11:46 robertl Exp $
+// $Id: babeldata.h,v 1.7 2010-04-12 02:53:04 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -57,6 +57,10 @@ public:
     upgradeCheckMethod(0),
     upgradeCheckTime(QDateTime(QDate(2001, 1, 1), QTime(0, 0))),
     installationUuid(QUuid::createUuid().toString()),
+    upgradeCallbacks(0),
+    upgradeDeclines(0),
+    upgradeErrors(0),
+    upgradeOffers(0),
     startupVersionCheck(true),
     reportStatistics(true),
     allowBetaUpgrades(false)
@@ -102,6 +106,10 @@ public:
     sg.addVarSetting(new IntSetting("app.upgradeCheckMethod", upgradeCheckMethod));
     sg.addVarSetting(new DateTimeSetting("app.upgradeCheckTime", upgradeCheckTime));
     sg.addVarSetting(new StringSetting("app.installationUuid", installationUuid));
+    sg.addVarSetting(new IntSetting("app.upgradeCallbacks", upgradeCallbacks));
+    sg.addVarSetting(new IntSetting("app.upgradeDeclines", upgradeDeclines));
+    sg.addVarSetting(new IntSetting("app.upgradeErrors", upgradeErrors));
+    sg.addVarSetting(new IntSetting("app.upgradeOffers", upgradeOffers));
 
     // Global preferences.
     sg.addVarSetting(new BoolSetting("app.startupVersionCheck", startupVersionCheck));
@@ -143,6 +151,10 @@ public:
   int   upgradeCheckMethod;
   QDateTime upgradeCheckTime;
   QString installationUuid;
+  int upgradeCallbacks;
+  int upgradeDeclines;
+  int upgradeErrors;
+  int upgradeOffers;
 
   // Global preferences.
   bool startupVersionCheck;

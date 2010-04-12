@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.19 2010-04-11 22:38:06 robertl Exp $
+// $Id: mainwindow.cpp,v 1.20 2010-04-12 02:53:03 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -190,11 +190,10 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
 
-  upgrade = new UpgradeCheck(parent, formatList);
+  upgrade = new UpgradeCheck(parent, formatList, bd);
   if (bd.startupVersionCheck) {
-    upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, 
-                             bd.upgradeCheckTime, bd.installationUuid,
-                             bd.reportStatistics, allowBetaUpgrades());
+    upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckTime, 
+                             allowBetaUpgrades());
   }
 }
 
@@ -1022,10 +1021,9 @@ void MainWindow::aboutActionX()
 //------------------------------------------------------------------------
 void MainWindow::upgradeCheckActionX()
 {
-    upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckMethod, 
-                             QDateTime(QDate(2000, 1, 1), QTime(0, 0)), 
-                             bd.installationUuid,
-                             bd.reportStatistics, allowBetaUpgrades());
+    upgrade->checkForUpgrade(babelVersion, 
+                            QDateTime(QDate(2000, 1, 1), QTime(0, 0)), 
+                            allowBetaUpgrades());
 }
 
 //------------------------------------------------------------------------

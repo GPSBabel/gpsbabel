@@ -19,6 +19,7 @@
 
  */
 
+#include "babeldata.h"
 #include "format.h"
 #include <QDialog>
 #include <QDateTime>
@@ -30,8 +31,7 @@ class QHttpResponseHeader;
 class UpgradeCheck : public QObject {
   Q_OBJECT
 public:
-  //UpgradeCheck(QWidget *parent = 0);
-  UpgradeCheck(QWidget *parent, QList<Format> &formatList);
+  UpgradeCheck(QWidget *parent, QList<Format> &formatList, BabelData& bd);
   ~UpgradeCheck();
 
   typedef enum {
@@ -39,14 +39,9 @@ public:
     updateCurrent,
     updateNeeded,
   } updateStatus;
-
   UpgradeCheck::updateStatus checkForUpgrade(const QString &babelVersion, 
-					     int upgradeCheckMethod,
 					     const QDateTime &lastCheckTime,
-					     const QString &installationUuid,
-                                             bool reportStatistics,
-                                             bool allowBeta
-                                             );
+                                             bool allowBeta);
   QDateTime getUpgradeWarningTime() {
     return upgradeWarningTime;
   }
@@ -70,6 +65,7 @@ protected:
   QString getOsVersion(void);
   QList<Format> &formatList_;
   updateStatus updateStatus_;
+  BabelData& bd_;
 
 private slots:
   void httpRequestFinished(int requestId, bool error);

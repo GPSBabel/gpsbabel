@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.24 2010-04-11 18:11:47 robertl Exp $
+// $Id: upgrade.cpp,v 1.25 2010-04-12 02:53:04 robertl Exp $
 /*
     Copyright (C) 2009, 2010  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -20,8 +20,9 @@
  */
 
 
-#include "upgrade.h"
+#include "babeldata.h"
 #include "format.h"
+#include "upgrade.h"
 #include "../config.h"
 #include "../gbversion.h"
 
@@ -44,9 +45,13 @@ static const bool testing = true;
 static const bool testing = false;
 #endif
 
-UpgradeCheck::UpgradeCheck(QWidget *parent, QList<Format> &formatList) :
+UpgradeCheck::UpgradeCheck(QWidget *parent, QList<Format> &formatList,
+                           BabelData& bd) :
   QObject(parent),
-  http(0), formatList_(formatList), updateStatus_(updateUnknown)
+  http(0), 
+  formatList_(formatList), 
+  updateStatus_(updateUnknown),
+  bd_(bd)
 {
 }
 
@@ -113,16 +118,13 @@ QString UpgradeCheck::getOsVersion()
 }
 
 
-UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentVersionIn,
-               int checkMethod,
+UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
+               const QString &currentVersionIn,
                const QDateTime &lastCheckTime,
-               const QString &installationUuid,
-               bool reportStatistics,
                bool allowBeta)
 {
   currentVersion = currentVersionIn;
   currentVersion.remove("GPSBabel Version ");
-  upgradeCheckMethod = checkMethod;
 
   QDateTime soonestCheckTime = lastCheckTime.addDays(1);
   if (!testing && QDateTime::currentDateTime() < soonestCheckTime) {
@@ -147,7 +149,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
 
   QString args = "current_version=" + currentVersion;
   args += "&current_gui_version=" VERSION;
-  args += "&installation=" + installationUuid;
+  args += "&installation=" + bd_.installationUuid;
   args += "&os=" + getOsName();
 #if HAVE_UNAME
   struct utsname utsname;
@@ -160,6 +162,10 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
   args += QString("&beta_ok=%1").arg(allowBeta); 
   args += "&lang=" + QLocale::languageToString(locale.language());
   args += "&last_checkin=" + lastCheckTime.toString(Qt::ISODate);
+  args += QString("&ugcb=%1").arg(bd_.upgradeCallbacks); 
+  args += QString("&ugdec=%1").arg(bd_.upgradeDeclines); 
+  args += QString("&ugoff=%1").arg(bd_.upgradeOffers); 
+  args += QString("&ugerr=%1").arg(bd_.upgradeErrors); 
 
   int j = 0;
 
@@ -172,7 +178,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(const QString &currentV
     if (wc)
       args += QString("&uc%1=wr/%2/%3").arg(j++).arg(formatName).arg(wc);
   }
-  if (j && reportStatistics)
+  if (j && bd_.reportStatistics)
     args += QString("&uc=%1").arg(j);
 
   if (false && testing)
@@ -206,17 +212,33 @@ void UpgradeCheck::readResponseHeader(const QHttpResponseHeader &responseHeader)
 
 void UpgradeCheck::httpRequestFinished(int requestId, bool error)
 {
-  if (http == 0 || error)
-    return;
+  bd_.upgradeCallbacks++;
 
-  if (requestId != httpRequestId)
+  if (http == 0 || error) {
+    bd_.upgradeErrors++;
     return;
+  }
+
+  // This is not an error state; it's just the internal state of Qt's network
+  // stack flailing around.
+  if (requestId != httpRequestId) {
+    return;
+  }
 
   QString oresponse(http->readAll());
 
   QDomDocument document;
-  if (!document.setContent(oresponse))
+  int line = -1;
+  QString error_text;
+  // This shouldn't ever be seen by a user.  
+  if (!document.setContent(oresponse, &error_text, &line)) {
+    QMessageBox::critical(0, tr("Error"),
+           tr("Invalid return data at line %1: %2.")
+           .arg(line)
+	   .arg( error_text));
+    bd_.upgradeErrors++;
     return;
+  }
 
   QString response;
   QString upgradeText;
@@ -248,6 +270,7 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
     upgradeText = upgrade.firstChildElement("overview").text();
     // String compare, not a numeric one.  Server will return "best first".
     if((updateVersion > currentVersion) && updateCandidate) {
+      bd_.upgradeOffers++;
       updateStatus_ = updateNeeded;
       response = tr("A new version of GPSBabel is available.<br />"
         "Your version is %1 <br />"
@@ -274,6 +297,7 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
         // downloadUrl.addQueryItem("os", getOsName());
         QDesktopServices::openUrl(downloadUrl);
       default: ;
+        bd_.upgradeDeclines++;
     }
   }
 
