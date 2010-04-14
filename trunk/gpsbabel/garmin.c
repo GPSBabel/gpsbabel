@@ -422,11 +422,10 @@ track_read(void)
 	route_head *trk_head = NULL;
 	int trk_num = 0;
 	int i;
-	int trk_seg_num = 1;
-	char trk_seg_num_buf[10];
 	char *trk_name = "";
 	GPS_PLap* laps = NULL;
 	int nlaps = 0;
+	int next_is_new_trkseg = 0;
 
 	if (gps_lap_type != -1) {
 		nlaps = GPS_Command_Get_Lap(portname, &laps, &lap_read_nop_cb);
@@ -450,26 +449,21 @@ track_read(void)
 			trk_name = array[i]->trk_ident;
 			if (!trk_name)
 				trk_name = "";
-			trk_seg_num = 1;
 		}
 
-
-		if (trk_head == NULL || array[i]->ishdr
-		    || (array[i]->tnew && i > 0 && !array[i - 1]->ishdr)) {
+		if (trk_head == NULL || array[i]->ishdr) {
 			trk_head = route_head_alloc();
 			trk_head->rte_num = trk_num;
-			if (trk_seg_num == 1) {
-				trk_head->rte_name = xstrdup(trk_name);
-			} else {
-				/* name in the form TRACKNAME #n */
-				snprintf(trk_seg_num_buf, sizeof(trk_seg_num_buf), "%d", trk_seg_num);
-				trk_head->rte_name = xmalloc(strlen(trk_name)+strlen(trk_seg_num_buf)+3);
-				sprintf(trk_head->rte_name, "%s #%s", trk_name, trk_seg_num_buf);
-			}
-			trk_seg_num++;
+			trk_head->rte_name = xstrdup(trk_name);
 			trk_num++;
 			track_add_head(trk_head);
 		}
+
+		/* Need to do this here because fitness devices set tnew
+		 * on a trackpoint without lat/lon.
+		 */
+		if (array[i]->tnew)
+			next_is_new_trkseg = 1;
 
 		if (array[i]->no_latlon || array[i]->ishdr) {
 			continue;
@@ -485,6 +479,9 @@ track_read(void)
 		wpt->creation_time = array[i]->Time;
                 wpt->wpt_flags.is_split = checkWayPointIsAtSplit(wpt, laps,
                                                                  nlaps);
+                wpt->wpt_flags.new_trkseg = next_is_new_trkseg;
+                next_is_new_trkseg = 0;
+
 		if (array[i]->dpth < 1.0e25f)
 			WAYPT_SET(wpt, depth, array[i]->dpth);
 		if (array[i]->temperature_populated)
