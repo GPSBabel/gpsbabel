@@ -670,7 +670,7 @@ void tpo_process_tracks(void)
                 llvalid = 1;
 
                 waypoint_temp = tpo_convert_ll(lat, lon);
-                route_add_wpt(track_temp, waypoint_temp);
+                track_add_wpt(track_temp, waypoint_temp);
                 waypoint_count++;
             }
 

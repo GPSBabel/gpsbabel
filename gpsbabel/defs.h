@@ -355,6 +355,7 @@ typedef struct {
 	... and others
 	*/
 	unsigned int is_split:1;		/* the waypoint represents a split */
+	unsigned int new_trkseg:1;		/* True if first in new trkseg. */
 
 	
 } wp_flags;

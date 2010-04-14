@@ -64,8 +64,10 @@ static char *suppresswhite = NULL;
 static char *urlbase = NULL;
 static route_head *trk_head;
 static route_head *rte_head;
+static const route_head *current_trk_head;		// Output.
 /* used for bounds calculation on output */
 static bounds all_bounds;
+static int next_trkpt_is_new_seg;
 
 static format_specific_data **fs_ptr;
 
@@ -692,6 +694,10 @@ gpx_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 		break;
 	case tt_trk_trkseg_trkpt:
 		tag_wpt(attr);
+		if (next_trkpt_is_new_seg) {
+			wpt_tmp->wpt_flags.new_trkseg = 1;
+			next_trkpt_is_new_seg = 0;
+		}
 		break;
 	case tt_unknown:
 		start_something_else(el, attr);
@@ -1049,6 +1055,9 @@ gpx_end(void *data, const XML_Char *xml_el)
 		trk_head->rte_name = xstrdup(cdatastrp);
 		break;
 	case tt_trk:
+		break;
+	case tt_trk_trkseg:
+		next_trkpt_is_new_seg = 1;
 		break;
 	case tt_trk_trkseg_trkpt:
 		track_add_wpt(trk_head, wpt_tmp);
@@ -1705,6 +1714,7 @@ static void
 gpx_track_hdr(const route_head *rte)
 {
 	fs_xml *fs_gpx;
+	current_trk_head = rte;
 
 	gbfprintf(ofd, "<trk>\n");
 	write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
@@ -1720,13 +1730,21 @@ gpx_track_hdr(const route_head *rte)
 		}
 	}
 
-	gbfprintf(ofd, "<trkseg>\n");
 }
 
 static void
 gpx_track_disp(const waypoint *waypointp)
 {
 	fs_xml *fs_gpx;
+	int first_in_trk;
+	first_in_trk = waypointp->Q.prev == &current_trk_head->waypoint_list;
+
+	if (waypointp->wpt_flags.new_trkseg) {
+		if (!first_in_trk) {
+			gbfprintf(ofd, "</trkseg>\n");
+		}
+		gbfprintf(ofd, "<trkseg>\n");
+	}
 
 	gbfprintf(ofd, "<trkpt lat=\"" FLT_FMT_T "\" lon=\"" FLT_FMT_T "\">\n",
 		waypointp->latitude,
@@ -1766,8 +1784,11 @@ gpx_track_disp(const waypoint *waypointp)
 static void
 gpx_track_tlr(const route_head *rte)
 {
-	gbfprintf(ofd, "</trkseg>\n");
+	if (!QUEUE_EMPTY(&current_trk_head->waypoint_list)) {
+		gbfprintf(ofd, "</trkseg>\n");
+	}
 	gbfprintf(ofd, "</trk>\n");
+	current_trk_head = NULL;
 }
 
 static

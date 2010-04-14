@@ -2,7 +2,7 @@
 <title>GPSBabel XCSV Style Files</title>
 
 <section id="styles_intro">
-<title>Introduction</title>
+<title>Introduction to GPSBabel Styles</title>
 <para>
 Often it is desirable to add a new file format for "one-off" work (perhaps
 you want to export something to a spreadsheet or graphing program) or to read

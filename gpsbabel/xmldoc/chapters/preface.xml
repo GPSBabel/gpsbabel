@@ -1,5 +1,5 @@
    <preface id="Introduction">
-      <title>Introduction</title>
+      <title>Introduction to GPSBabel</title>
       <section id="The_Problem">
          <title>The Problem: Too many incompatible GPS file formats</title>
          <para> There are simply too many gratuitously different file formats
