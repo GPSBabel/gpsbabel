@@ -189,6 +189,13 @@ route_add_wpt( route_head *rte, waypoint *wpt )
 void 
 track_add_wpt( route_head *rte, waypoint *wpt )
 {
+	// First point in a track is always a new segment.
+	// This improves compatibility when reading from 
+	// segment-unaware formats.
+	if (QUEUE_EMPTY(&rte->waypoint_list)) {
+		wpt->wpt_flags.new_trkseg = 1;
+	}
+	
 	any_route_add_wpt( rte, wpt, &trk_waypts, 0 );
 }
 
@@ -209,6 +216,11 @@ route_find_waypt_by_name( route_head *rh, const char *name )
 static void 
 any_route_del_wpt( route_head *rte, waypoint *wpt, int *ct)
 {
+	if (wpt->wpt_flags.new_trkseg && wpt != (waypoint*)QUEUE_LAST(&rte->waypoint_list)) {
+		waypoint* wpt_next = (waypoint*)QUEUE_NEXT(&wpt->Q);
+		wpt_next->wpt_flags.new_trkseg = 1;
+	}
+	wpt->wpt_flags.new_trkseg = 0;
 	dequeue( &wpt->Q );
 	rte->rte_waypt_ct--;
 	if ( ct ) (*ct)--;
@@ -236,7 +248,7 @@ route_disp (const route_head *rh, waypt_cb cb )
 	QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
 		waypoint *waypointp;
 		waypointp = (waypoint *) elem;
-			(*cb)(waypointp);
+		(*cb)(waypointp);
 	}
 		
 }
