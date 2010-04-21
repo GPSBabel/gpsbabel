@@ -183,8 +183,8 @@ trackfilter_parse_time_opt(const char *arg)
 static int
 trackfilter_init_qsort_cb(const void *a, const void *b)
 {
-	const trkflt_t *ra = a;
-	const trkflt_t *rb = b;
+	const trkflt_t *ra = (const trkflt_t*) a;
+	const trkflt_t *rb = (const trkflt_t*) b;
 
 	return ra->first_time - rb->first_time;
 }
@@ -437,7 +437,7 @@ trackfilter_merge(void)
 	
 	if (track_pts < 1) return;
 	
-	buff = xcalloc(track_pts, sizeof(*buff));
+	buff = (waypoint **)xcalloc(track_pts, sizeof(*buff));
 
 	j = 0;
 	for (i = 0; i < track_ct; i++)		/* put all points into temp buffer */

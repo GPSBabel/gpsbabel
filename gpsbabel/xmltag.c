@@ -71,7 +71,7 @@ copy_xml_tag( xml_tag **copy, xml_tag *src, xml_tag *parent ) {
 		return;
 	}
 	
-	res = xcalloc( 1, sizeof(xml_tag));
+	res = (xml_tag*) xcalloc( 1, sizeof(xml_tag));
 	*copy = res;
 	
 	memcpy( res, src, sizeof(xml_tag));
@@ -158,4 +158,3 @@ fs_xml *fs_xml_alloc( long type ) {
 	result->fs.convert = fs_xml_convert;
 	return result;
 }
-

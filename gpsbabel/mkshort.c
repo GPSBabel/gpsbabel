@@ -101,7 +101,7 @@ mkshort_new_handle()
 #endif
 {
 	int i;
-	mkshort_handle *h = xxcalloc(sizeof *h, 1, file, line);
+	mkshort_handle *h = (mkshort_handle *) xxcalloc(sizeof *h, 1, file, line);
 
 	for (i = 0; i < PRIME; i++)
 		QUEUE_INIT(&h->namelist[i]);
@@ -138,7 +138,7 @@ void
 add_to_hashlist(mkshort_handle *h, char *name)
 {
 	int hash = hash_string(name);
-	uniq_shortname *s = xcalloc(1, sizeof (uniq_shortname));
+	uniq_shortname *s = (uniq_shortname*) xcalloc(1, sizeof (uniq_shortname));
 
 	s->orig_shortname = xstrdup(name);
 	ENQUEUE_TAIL(&h->namelist[hash], &s->list);
@@ -159,7 +159,7 @@ mkshort_add_to_list(mkshort_handle *h, char *name)
 		dl = sprintf(tbuf, ".%d", s->conflictctr);
 
 		if (l + dl < h->target_len) {
-			name = xrealloc(name, l + dl + 1);
+			name = (char *) xrealloc(name, l + dl + 1);
 			strcat(name, tbuf);
 		}
 		else {

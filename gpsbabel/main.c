@@ -42,7 +42,7 @@ typedef struct arg_stack_s {
 static arg_stack_t
 *push_args(arg_stack_t *stack, const int argn, const int argc, char *argv[])
 {
-	arg_stack_t *res = xmalloc(sizeof(*res));
+	arg_stack_t *res = (arg_stack_t *) xmalloc(sizeof(*res));
 	
 	res->prev = stack;
 	res->argn = argn;
@@ -98,13 +98,13 @@ load_args(const char *filename, int *argc, char **argv[])
 	}
 	gbfclose(fin);
 	
-	argv2 = xmalloc(2 * sizeof(*argv2));
+	argv2 = (char **) xmalloc(2 * sizeof(*argv2));
 	argv2[0] = xstrdup(*argv[0]);
 	argc2 = 1;
 	
 	str = csv_lineparse(line, " ", "\"", 0);
 	while (str != NULL) {
-		argv2 = xrealloc(argv2, (argc2 + 2) * sizeof(*argv2));
+		argv2 = (char **) xrealloc(argv2, (argc2 + 2) * sizeof(*argv2));
 		argv2[argc2] = xstrdup(str);
 		argc2++;
 		str = csv_lineparse(NULL, " ", "\"", 0);

@@ -67,7 +67,7 @@ avltree_init(const int options, const char *module)
 	if ((module == NULL) || (*module == '\0'))
 		fatal(MYNAME ": 'avltree_init' should be called with a valid module name!\n");
 
-	tree = xcalloc(1, sizeof(*tree));
+	tree = (avltree_t*) xcalloc(1, sizeof(*tree));
 	tree->options = options;
 	tree->module = module;
 
@@ -445,7 +445,7 @@ avltree_insert_node(avltree_t *tree, avlnode_t **root, const char *key, const vo
 	avlnode_t *node = (*root);
 
 	if (node == NULL) {
-		(*root) = node = xcalloc(1, sizeof(*node));
+		(*root) = node = (avlnode_t*) xcalloc(1, sizeof(*node));
 		if (tree->options & AVLTREE_STATIC_KEYS)
 			node->key = key;
 		else
@@ -643,7 +643,7 @@ avltree_delete_node(avltree_t *tree, const char *key, avlnode_t **root, int *cha
 static avlnode_t *
 avltree_dupe_node(const avltree_t *tree, const avlnode_t *node)
 {
-	avlnode_t *res = xcalloc(1, sizeof(*res));
+	avlnode_t *res = (avlnode_t*) xcalloc(1, sizeof(*res));
 	
 	if (tree->options & AVLTREE_STATIC_KEYS)
 		res->key = node->key;

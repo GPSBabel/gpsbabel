@@ -331,7 +331,7 @@ nmea_wr_init(const char *portname)
 		}
 	}
 
-	mkshort_handle = mkshort_new_handle();
+	mkshort_handle = (struct short_handle_*) mkshort_new_handle();
 	setshort_length(mkshort_handle, atoi(snlenopt));
 
 	if (opt_gisteq) {
@@ -1345,7 +1345,9 @@ nmea_wr_posn_deinit(void)
 
 ff_vecs_t nmea_vecs = {
 	ff_type_file,
-	{ ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write, ff_cap_none},
+	{ (ff_cap)(ff_cap_read | ff_cap_write),
+          (ff_cap)(ff_cap_read | ff_cap_write), 
+          ff_cap_none},
 	nmea_rd_init,	
 	nmea_wr_init,	
 	nmea_rd_deinit,	

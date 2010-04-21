@@ -54,7 +54,7 @@ start_session(const char *name, const char *filename)
 	if (session_ct == 0) QUEUE_INIT(&session_list);
 	session_ct++;
 
-	s = xcalloc(1, sizeof(*s));
+	s = (session_t*) xcalloc(1, sizeof(*s));
 	ENQUEUE_TAIL(&session_list, &s->Q);
 	QUEUE_INIT(&s->category_list);
 	s->nr = session_ct;
@@ -114,4 +114,3 @@ session_free(session_t *s)
 	xfree(s->filename);
 	xfree(s);
 }
-

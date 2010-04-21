@@ -542,8 +542,8 @@ unicsv_fondle_header(char *ibuf)
 
 		if (column % 4 == 0) {
 			int sz = (column + 4) * sizeof(*unicsv_fields_tab);
-			if (column == 0) unicsv_fields_tab = xmalloc(sz);
-			else unicsv_fields_tab = xrealloc(unicsv_fields_tab, sz);
+			if (column == 0) unicsv_fields_tab = (field_e*) xmalloc(sz);
+			else unicsv_fields_tab = (field_e*) xrealloc(unicsv_fields_tab, sz);
 			for (i = 0; i < 4; i++) unicsv_fields_tab[column + i] = fld_terminator;
 		}
 
@@ -1192,7 +1192,7 @@ unicsv_print_data_time(const time_t atime)
 static void
 unicsv_waypt_enum_cb(const waypoint *wpt)
 {
-	char *shortname;
+	const char *shortname;
 	garmin_fs_t *gmsd;
 
 	shortname = (wpt->shortname) ? wpt->shortname : "";
@@ -1267,7 +1267,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 {
 	double lat, lon, alt;
 	char *cout = NULL;
-	char *shortname;
+	const char *shortname;
 	garmin_fs_t *gmsd;
 #ifdef UNICSV_GC_READY
 	const geocache_data *gc_data = NULL;

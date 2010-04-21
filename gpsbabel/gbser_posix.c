@@ -116,7 +116,7 @@ void *gbser_init(const char *port_name) {
 
 	gbser__db(4, "gbser_init(\"%s\")\n", port_name);
 
-	h = xcalloc(sizeof *h, 1);
+	h = (gbser_handle*) xcalloc(sizeof *h, 1);
 	h->magic = MYMAGIC;
 	h->vmin = h->vtime = 0;
 
@@ -234,7 +234,7 @@ int gbser_set_port(void *handle, unsigned speed, unsigned bits, unsigned parity,
 unsigned gbser__read_buffer(void *handle, void **buf, unsigned *len) {
 	gbser_handle *h = gbser__get_handle(handle);
     unsigned count = *len;
-    unsigned char *cp = *buf;
+    unsigned char *cp = (unsigned char *) *buf;
     if (count > h->inbuf_used) {
         count = h->inbuf_used;
     }
@@ -348,7 +348,7 @@ int gbser_flush(void *handle) {
  */
 int gbser_write(void *handle, const void *buf, unsigned len) {
 	gbser_handle *h = gbser__get_handle(handle);
-    const char *bp = buf;
+    const char *bp = (const char *) buf;
     int rc;
     while (len > 0) {
         /*printf("write(%d, %p, %d)\n", h->fd, bp, len);*/

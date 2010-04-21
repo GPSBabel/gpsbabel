@@ -33,7 +33,7 @@ vmem_alloc(size_t size, int flags)
 	if (flags & VMFL_NOZERO)
 		vm.mem = xmalloc(size);
 	else
-		vm.mem = xcalloc(size, 1);
+		vm.mem = (char *) xcalloc(size, 1);
 	vm.size = size;
 	return vm;
 }
@@ -63,5 +63,3 @@ vmem_realloc(vmem_t *vm, size_t size)
 	}
 	return;
 }
-
-

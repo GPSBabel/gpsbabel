@@ -137,7 +137,7 @@ void garmin_fs_convert(void *fs)
 void 
 garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
 {
-	char *phone, *addr;
+	const char *phone, *addr;
 	garmin_fs_t *gmsd = GMSD_FIND(waypt);
 	
 	if (gmsd == NULL) return;
@@ -421,4 +421,3 @@ garmin_fs_garmin_before_write(const waypoint *wpt, GPS_PWay way, const int proto
 	GMSD_GETNSTR(cross_road, way->cross_road, sizeof(way->cross_road));
 	GMSD_GETNSTR(addr, way->addr, sizeof(way->addr));
 }
-
