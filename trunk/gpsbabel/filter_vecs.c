@@ -289,8 +289,8 @@ disp_filter_vec( const char *vecname )
 static signed int
 alpha (const void *a, const void *b)
 {
-        const fl_vecs_t *const ap = a;
-        const fl_vecs_t *const bp = b;
+        const fl_vecs_t *const ap = (const fl_vecs_t*) a;
+        const fl_vecs_t *const bp = (const fl_vecs_t*) b;
 
         return case_ignore_strcmp(ap->desc , bp->desc);
 }

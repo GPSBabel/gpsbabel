@@ -243,7 +243,7 @@ xstrappend(char *src, const char *newd)
 	}
 
 	newsz = strlen(src) + strlen(newd) + 1;
-	src = xxrealloc(src, newsz, file, line);
+	src = (char *) xxrealloc(src, newsz, file, line);
 	strcat(src, newd);
 
 	return src;
@@ -338,12 +338,12 @@ xvasprintf(char **strp, const char *fmt, va_list ap)
 	bufsize = 0;
 	for (;;) {
 		if (bufsize == 0) {
-			if ((buf = xmalloc(FIRSTSIZE)) == NULL) {
+			if ((buf = (char *) xmalloc(FIRSTSIZE)) == NULL) {
 				*strp = NULL;
 				return -1;
 			}
 			bufsize = FIRSTSIZE;
-		} else if ((newbuf = xrealloc(buf, nextsize)) != NULL) {
+		} else if ((newbuf = (char *) xrealloc(buf, nextsize)) != NULL) {
 			buf = newbuf;
 			bufsize = nextsize;
 		} else {
@@ -397,7 +397,7 @@ xvasprintf(char **strp, const char *fmt, va_list ap)
 	if (bufsize > outsize + 1) {
 		const unsigned ptrsz = sizeof(buf);
 		if (((bufsize + ptrsz + 1) / ptrsz) > ((outsize + ptrsz + 1) / ptrsz))
-			buf = xrealloc(buf, outsize + 1);	
+			buf = (char *) xrealloc(buf, outsize + 1);
 
 	}
 	*strp = buf;
@@ -412,7 +412,7 @@ char *
 pstrdup(char *src)
 {
 	int len = src[0];
-	char *obuf = xmalloc(len + 1);
+	char *obuf = (char *) xmalloc(len + 1);
 
 	memcpy(obuf, src + 1, len);
 	obuf[len] = 0;
@@ -629,7 +629,7 @@ strenquote(const char *str, const char quot_char)
 	else cin = (char *)str;
 	
 	len = strlen(cin);
-	cout = tmp = xmalloc((len * 2) + 3);
+	cout = tmp = (char *) xmalloc((len * 2) + 3);
 	
 	*cout++ = quot_char;
 	while (*cin) {
@@ -699,7 +699,7 @@ be_readu16(const void *p)
 void
 be_write16(void *addr, const unsigned value)
 {
-	unsigned char *p = addr;
+	unsigned char *p = (unsigned char *) addr;
 	p[0] = value >> 8;
 	p[1] = value;
 	
@@ -719,28 +719,28 @@ be_write32(void *pp, const unsigned i)
 signed int
 le_read16(const void *addr)
 {
-	const unsigned char *p = addr;
+	const unsigned char *p = (const unsigned char *) addr;
 	return p[0] | (p[1] << 8);
 }
 
 unsigned int
 le_readu16(const void *addr)
 {
-	const unsigned char *p = addr;
+	const unsigned char *p = (const unsigned char *) addr;
 	return p[0] | (p[1] << 8);
 }
 
 signed int
 le_read32(const void *addr)
 {
-	const unsigned char *p = addr;
+	const unsigned char *p = (const unsigned char *) addr;
 	return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
 }
 
 unsigned int
 le_readu32(const void *addr)
 {
-	const unsigned char *p = addr;
+	const unsigned char *p = (const unsigned char *) addr;
 	return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
 }
 
@@ -751,8 +751,8 @@ le_readu32(const void *addr)
 void
 le_read64(void *dest, const void *src)
 {
-	char *cdest = dest;
-	const char *csrc = src;
+	char *cdest = (char *) dest;
+	const char *csrc = (const char *) src;
 
 	if (i_am_little_endian) {
 		memcpy(dest, src, 8);
@@ -767,7 +767,7 @@ le_read64(void *dest, const void *src)
 void
 le_write16(void *addr, const unsigned value)
 {
-	unsigned char *p = addr;
+	unsigned char *p = (unsigned char *) addr;
 	p[0] = value;
 	p[1] = value >> 8;
 	
@@ -776,7 +776,7 @@ le_write16(void *addr, const unsigned value)
 void 
 le_write32(void *addr, const unsigned value)
 {
-	unsigned char *p = addr;
+	unsigned char *p = (unsigned char *) addr;
 	p[0] = value;
 	p[1] = value >> 8;
 	p[2] = value >> 16;
@@ -1033,7 +1033,7 @@ void
 endian_write_double(void* ptr, double d, int write_le)
 {
   int i;
-  char *optr = ptr;
+  char *optr = (char *) ptr;
 // Word order is different on arm, but not on arm-eabi.  
 #if defined(__arm__) && !defined(__ARM_EABI__)
   char r[8];
@@ -1060,7 +1060,7 @@ endian_write_float(void* ptr, float f, int write_le)
 {
   char *r = (char *)(void *)&f;
   int i;
-  char *optr = ptr;
+  char *optr = (char *) ptr;
 
   if ( i_am_little_endian == write_le ) {
 	  memcpy( ptr, &f, 4);
@@ -1132,7 +1132,7 @@ strsub(const char *s, const char *search, const char *replace)
                return NULL;
        }
        
-       d = xmalloc(len + rlen);
+       d = (char *) xmalloc(len + rlen);
 
        /* Copy first part */
        len = p - s;
@@ -1160,11 +1160,11 @@ gstrsub(const char *s, const char *search, const char *replace)
 	int slen = strlen(search);
 	int rlen = strlen(replace);
 
-	o = xmalloc(olen + 1);
+	o = (char *) xmalloc(olen + 1);
 	
 	while ((c = strstr(src, search))) {
 		olen += (rlen - slen);
-		o = xrealloc(o, olen + 1);
+		o = (char *) xrealloc(o, olen + 1);
 		memcpy(o + ooffs, src, c - src);
 		ooffs += (c - src);
 		src = c + slen;
@@ -1257,7 +1257,7 @@ convert_human_date_format(const char *human_datef)
 	char prev;
 	int ylen;
 	
-	result = xcalloc((2*strlen(human_datef)) + 1, 1);
+	result = (char *) xcalloc((2*strlen(human_datef)) + 1, 1);
 	cout = result;
 	prev = '\0';
 	ylen = 0;
@@ -1324,7 +1324,7 @@ convert_human_time_format(const char *human_timef)
 	char *result, *cin, *cout;
 	char prev;
 	
-	result = xcalloc((2*strlen(human_timef)) + 1, 1);
+	result = (char *) xcalloc((2*strlen(human_timef)) + 1, 1);
 	cout = result;
 	prev = '\0';
 	
@@ -1645,7 +1645,7 @@ entitize(const char * str, int is_html)
 #endif
 
 	/* enough space for the whole string plus entity replacements, if any */
-	tmp = xcalloc((strlen(str) + elen + 1), 1);
+	tmp = (char *) xcalloc((strlen(str) + elen + 1), 1);
 	strcpy(tmp, str);
 
 	/* no entity replacements */
@@ -1788,7 +1788,7 @@ char *get_filename(const char *fname)
  */
 void gb_setbit(void *buf, const gbuint32 nr)
 {
-	unsigned char *bytes = buf;
+	unsigned char *bytes = (unsigned char *) buf;
 	bytes[nr / 8] |= (1 << (nr % 8));
 }
 
@@ -1797,7 +1797,7 @@ void gb_setbit(void *buf, const gbuint32 nr)
  */
 char gb_getbit(const void *buf, const gbuint32 nr)
 {
-	const unsigned char *bytes = buf;
+	const unsigned char *bytes = (const unsigned char *) buf;
 	return (bytes[nr / 8] & (1 << (nr % 8)));
 	
 }

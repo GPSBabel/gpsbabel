@@ -60,7 +60,7 @@ pdb_read_tail(gbfile *fin, gbuint32 *size)
 	while ((count = gbfread(buff, 1, sizeof(buff), fin))) {
 		
 		if (!res) {
-			res = xmalloc(count);
+			res = (char *) xmalloc(count);
 			memcpy(res, buff, count);
 		}
 		else {

@@ -372,7 +372,7 @@ route_copy( int *dst_count, int *dst_wpt_count, queue **dst, queue *src ) {
 	}
 	
 	if ( !*dst ) {
-		*dst = xcalloc( 1, sizeof( queue ));
+		*dst = (queue *)xcalloc( 1, sizeof( queue ));
 		QUEUE_INIT( *dst );
 		*dst_count = 0;
 		*dst_wpt_count = 0;
@@ -529,7 +529,7 @@ tracks_to_routes(void)
 void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 {
 	waypoint first;
-	waypoint *this;
+	waypoint *thisw;
 	waypoint *prev = &first;
 	queue *elem, *tmp;
 	int tkpt = 0;
@@ -538,7 +538,7 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 	int pts_cad = 0;
 	double tot_cad = 0.0;
 	char tkptname[100];
-	computed_trkdata *tdata = xcalloc(1, sizeof (computed_trkdata));
+	computed_trkdata *tdata = (computed_trkdata *)xcalloc(1, sizeof (computed_trkdata));
 
 	if (trkdatap) {
 		*trkdatap = tdata;
@@ -555,17 +555,17 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 		time_t timed;
 		double tlat, tlon, plat, plon, dist;
 
-		this = (waypoint *)elem;
-		timed = this->creation_time - prev->creation_time;
+		thisw = (waypoint *)elem;
+		timed = thisw->creation_time - prev->creation_time;
 
 		/* 
 		 * gcdist and heading want radians, not degrees.
 		 */
-		tlat = RAD(this->latitude);
-		tlon = RAD(this->longitude);
+		tlat = RAD(thisw->latitude);
+		tlon = RAD(thisw->longitude);
 		plat = RAD(prev->latitude);
 		plon = RAD(prev->longitude);
-		WAYPT_SET(this, course, heading_true_degrees(plat, plon,
+		WAYPT_SET(thisw, course, heading_true_degrees(plat, plon,
 			tlat, tlon));
 		dist = radtometers(gcdist(plat, plon, tlat, tlon));
 
@@ -581,63 +581,63 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 		 * conditionally recompute speeds.
 		 */
 		if (timed && (dist > 1)) {
-			if(!WAYPT_HAS(this, speed)) {
+			if(!WAYPT_HAS(thisw, speed)) {
 				// Only recompute speed if the waypoint
 				// didn't already have a speed
-				WAYPT_SET(this, speed, dist / labs(timed));
+				WAYPT_SET(thisw, speed, dist / labs(timed));
 			}
-			if (this->speed > tdata->max_spd) {
-				tdata->max_spd = this->speed;
+			if (thisw->speed > tdata->max_spd) {
+				tdata->max_spd = thisw->speed;
 			}
-			if (this->speed < tdata->min_spd) {
-				tdata->min_spd = this->speed;
+			if (thisw->speed < tdata->min_spd) {
+				tdata->min_spd = thisw->speed;
 			}
 		}
 
-		if ((this->altitude > 0) && (this->altitude < tdata->min_alt)) {
-			tdata->min_alt = this->altitude;
+		if ((thisw->altitude > 0) && (thisw->altitude < tdata->min_alt)) {
+			tdata->min_alt = thisw->altitude;
 		}
-		if (this->altitude > tdata->max_alt) {
-			tdata->max_alt = this->altitude;
+		if (thisw->altitude > tdata->max_alt) {
+			tdata->max_alt = thisw->altitude;
 		}
 
-		if (this->heartrate > 0) {
+		if (thisw->heartrate > 0) {
 			pts_hrt++;
-			tot_hrt += (float) this->heartrate;
+			tot_hrt += (float) thisw->heartrate;
 		}
 
-		if ((this->heartrate > 0) && (this->heartrate < tdata->min_hrt)) {
-			tdata->min_hrt = (int) this->heartrate;
+		if ((thisw->heartrate > 0) && (thisw->heartrate < tdata->min_hrt)) {
+			tdata->min_hrt = (int) thisw->heartrate;
 		}
 
-		if ((this->heartrate > 0) && (this->heartrate > tdata->max_hrt)) {
-			tdata->max_hrt = (int) this->heartrate;
+		if ((thisw->heartrate > 0) && (thisw->heartrate > tdata->max_hrt)) {
+			tdata->max_hrt = (int) thisw->heartrate;
 		}
 
-		if (this->cadence > 0) {
+		if (thisw->cadence > 0) {
 			pts_cad++;
-			tot_cad += (float) this->cadence;
+			tot_cad += (float) thisw->cadence;
 		}
 
-		if ((this->cadence > 0) && (this->cadence > tdata->max_cad)) {
-			tdata->max_cad = (int) this->cadence;
+		if ((thisw->cadence > 0) && (thisw->cadence > tdata->max_cad)) {
+			tdata->max_cad = (int) thisw->cadence;
 		}
 
-		if (this->creation_time && (this->creation_time < tdata->start)) {
-			tdata->start = this->creation_time;
+		if (thisw->creation_time && (thisw->creation_time < tdata->start)) {
+			tdata->start = thisw->creation_time;
 		}
 
-		if (this->creation_time > tdata->end) {
-			tdata->end = this->creation_time;
+		if (thisw->creation_time > tdata->end) {
+			tdata->end = thisw->creation_time;
 			if (tdata->start == 0) {
 				tdata->start = tdata->end;
 			}
 		}
-		prev = this;
-		if (!this->shortname || !this->shortname[0] ) {
+		prev = thisw;
+		if (!thisw->shortname || !thisw->shortname[0] ) {
 			snprintf(tkptname, sizeof(tkptname), "%s-%d", 
 				trk->rte_name ? trk->rte_name : "" , tkpt);
-			this->shortname = xstrdup(tkptname);
+			thisw->shortname = xstrdup(tkptname);
 		}
 		tkpt++;
 	}

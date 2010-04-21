@@ -163,7 +163,7 @@ inifile_load_file(gbfile *fin, inifile_t *inifile, const char *myname)
 			if ((*cin == '\0') || (cend == NULL))
 				fatal("%s: invalid section header '%s' in '%s'.\n", myname, cin, gbinipathname);
 				
-			sec = xcalloc(1, sizeof(*sec));
+			sec = (inifile_section_t *) xcalloc(1, sizeof(*sec));
 			
 			sec->name = xstrdup(cin);
 			QUEUE_INIT(&sec->entries);
@@ -178,7 +178,7 @@ inifile_load_file(gbfile *fin, inifile_t *inifile, const char *myname)
 			if (sec == NULL)
 				fatal("%s: missing section header in '%s'.\n", myname,gbinipathname);
 			
-			entry = xcalloc(1, sizeof(*entry));
+			entry = (inifile_entry_t *) xcalloc(1, sizeof(*entry));
 			ENQUEUE_TAIL(&sec->entries, &entry->Q);
 			sec->ientries++;
 			
@@ -252,7 +252,7 @@ inifile_init(const char *filename, const char *myname)
 	}
 	else fin = gbfopen(filename, "rb", myname);
 	
-	result = xcalloc(1, sizeof(*result));
+	result = (inifile_t *) xcalloc(1, sizeof(*result));
 	QUEUE_INIT(&result->secs);
 	inifile_load_file(fin, result, myname);
 	

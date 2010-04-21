@@ -420,7 +420,7 @@ cetus_writewpt(const waypoint *wpt)
 	char *desc_geo;
 	char *desc;
 
-	rec = xcalloc(sizeof(*rec)+18 + NOTESZ + DESCSZ,1);
+	rec = (struct cetus_wpt_s*) xcalloc(sizeof(*rec)+18 + NOTESZ + DESCSZ,1);
 
 	if (wpt->creation_time && (NULL != (tm = gmtime(&wpt->creation_time)))){
 		rec->min = tm->tm_min;
@@ -557,8 +557,8 @@ static
 int 
 compare(const void *a, const void *b)
 {
-	const struct hdr *wa = a;
-	const struct hdr *wb = b;
+	const struct hdr *wa = (const struct hdr*) a;
+	const struct hdr *wb = (const struct hdr*) b;
 
 	return strcmp(wa->wpt->shortname, wb->wpt->shortname);
 }

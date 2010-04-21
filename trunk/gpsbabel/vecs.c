@@ -1331,8 +1331,8 @@ static signed int
 alpha (const void *a, const void *b)
 {
 
-	const vecs_t *const *ap = a;
-	const vecs_t *const *bp = b;
+	const vecs_t *const *ap = (const vecs_t *const*) a;
+	const vecs_t *const *bp = (const vecs_t *const*) b;
 	
 	return case_ignore_strcmp((*ap)->desc , (*bp)->desc);
 }
@@ -1363,7 +1363,7 @@ sort_and_unify_vecs(int *ctp)
 #endif // CSVFMTS_ENABLED
 
 
-	svp = xcalloc(vc, sizeof(style_vecs_t *));
+	svp = (vecs_t **)xcalloc(vc, sizeof(style_vecs_t *));
 	/* Normal vecs are easy; populate the first part of the array. */
 	for (vec = vec_list; vec->vec; vec++, i++) {
 		svp[i] = vec;
@@ -1376,9 +1376,9 @@ sort_and_unify_vecs(int *ctp)
 	/* Walk the style list, parse the entries, dummy up a "normal" vec */
 	for (svec = style_list; svec->name; svec++, i++)  {
 		xcsv_read_internal_style(svec->style_buf);
-		svp[i] = xcalloc(1, sizeof **svp);
+		svp[i] = (vecs_t*) xcalloc(1, sizeof **svp);
 		svp[i]->name = svec->name;
-		svp[i]->vec = xmalloc(sizeof(*svp[i]->vec));
+		svp[i]->vec = (ff_vecs_t*) xmalloc(sizeof(*svp[i]->vec));
 		svp[i]->extension = xcsv_file.extension;
 		*svp[i]->vec = *vec_list[0].vec; /* Interits xcsv opts */
 		/* Reset file type to inherit ff_type from xcsv for everything
@@ -1397,11 +1397,11 @@ sort_and_unify_vecs(int *ctp)
 		switch(xcsv_file.datatype) {
 			case 0:
 			case wptdata:
-				svp[i]->vec->cap[ff_cap_rw_wpt] = ff_cap_read | ff_cap_write; break;
+				svp[i]->vec->cap[ff_cap_rw_wpt] = (ff_cap) (ff_cap_read | ff_cap_write); break;
 			case trkdata:
-				svp[i]->vec->cap[ff_cap_rw_trk] = ff_cap_read | ff_cap_write; break;
+				svp[i]->vec->cap[ff_cap_rw_trk] = (ff_cap) (ff_cap_read | ff_cap_write); break;
 			case rtedata:
-				svp[i]->vec->cap[ff_cap_rw_rte] = ff_cap_read | ff_cap_write; break;
+				svp[i]->vec->cap[ff_cap_rw_rte] = (ff_cap)(ff_cap_read | ff_cap_write); break;
 			default: ;
 		}
 		svp[i]->desc = xcsv_file.description;
