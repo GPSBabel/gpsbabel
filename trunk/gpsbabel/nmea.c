@@ -509,21 +509,36 @@ gprmc_parse(char *ibuf)
 	double speed,course;
 	waypoint *waypt;
 	double microseconds;
+	char *dmybuf;
+	int i;
 
 	if (trk_head == NULL) {
 		trk_head = route_head_alloc();
 		track_add_head(trk_head);
 	}
 
-	sscanf(ibuf,"$GPRMC,%lf,%c,%lf,%c,%lf,%c,%lf,%lf,%u",
+	/*
+	 * Read everything except the dmy, in case lngdeg
+	 * and lngdir are missing.
+	 */
+	sscanf(ibuf,"$GPRMC,%lf,%c,%lf,%c,%lf,%c,%lf,%lf",
 		&hms, &fix, &latdeg, &latdir,
 		&lngdeg, &lngdir,
-		&speed, &course, &dmy);
+		&speed, &course);
 
 	if (fix != 'A') {
 		/* ignore this fix - it is invalid */
 		return;
 	}
+
+	/* Skip past nine commas in ibuf to reach the dmy value */
+	for (dmybuf=ibuf,i=0; i<9 && dmybuf != NULL; i++) {
+		dmybuf= strchr(dmybuf, ',');
+		dmybuf++;
+	}
+
+	/* Now read dmy from the correct position */
+	sscanf(dmybuf,"%u", &dmy);
 
 	last_read_time = hms;
 	microseconds = MILLI_TO_MICRO(1000 * (hms - (int)hms));
