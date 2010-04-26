@@ -181,7 +181,7 @@ gopal_read(void)
 	char tbuffer[64];
 	struct tm tm2;
 	long_old=0;lat_old=0;
-	strftime(routename,sizeof(routename),"Tracklog %c",localtime(&tx));
+	strftime(routename,sizeof(routename),"Tracklog %c",gmtime(&tx));
 	
 	route = route_head_alloc();
 	route->rte_name=xstrdup(routename);
