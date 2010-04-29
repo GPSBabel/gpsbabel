@@ -1133,8 +1133,8 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
 	case gt_ape:
 		break;
 	}
-        if (0 == strcmp(wp->icon_descr, "Geocache Found"))
-            gc_sym = 124;
+	if (0 == strcmp(wp->icon_descr, "Geocache Found"))
+		gc_sym = 124;
 	if (wp->description) {
 		gbfputs(wp->description, fd);
 		if (wp->gc_data->placer) {
@@ -1467,8 +1467,7 @@ decode_track_point(const void* data, unsigned* wp_array_i, unsigned max_point)
 		wp->speed *= (100.0f / (60 * 60));
 		wp->wpt_flags.speed = 1;
 		decode_sat_fix(wp, p->point[i].status);
-		// use microseconds as track segment marker
-		wp->microseconds = p->point[i].status & 0x10;
+		wp->wpt_flags.new_trkseg = (p->point[i].status & 0x10) != 0;
 	}
 	*wp_array_i = j;
 }
@@ -1482,8 +1481,6 @@ read_track(route_head* track)
 	unsigned msg_array_n;
 	unsigned wp_array_i = 0;
 	unsigned n_point;
-	unsigned segment = 1;
-	char* track_name = NULL;
 	unsigned i;
 	int attempt = ATTEMPT_MAX;
 
@@ -1533,33 +1530,10 @@ read_track(route_head* track)
 	}
 	if (global_opts.debug_level >= DBGLVL_L)
 		warning(MYNAME ": read track '%s' %u points\n", track->rte_name, n_point);
-	// make track (one for each segment)
-	track_add_wpt(track, wp_array[0]);
-	for (i = 1; i < n_point; i++) {
-		// if track segment marker
-		if (wp_array[i]->microseconds) {
-			const char* desc = track->rte_desc;
-			if (track_name == NULL) {
-				// save original name, append " #1" to first segment name
-				track_name = track->rte_name;
-				track->rte_name = xmalloc(strlen(track_name) + 4);
-				sprintf(track->rte_name, "%s #1", track_name);
-			}
-			// make a new track for segment
-			segment++;
-			track_add_head(track);
-			track = route_head_alloc();
-			track->rte_name = xmalloc(strlen(track_name) + 7);
-			sprintf(track->rte_name, "%s #%u", track_name, segment);
-			track->rte_desc = xstrdup(desc);
-		}
-		wp_array[i]->microseconds = 0;
+	for (i = 0; i < n_point; i++) {
 		track_add_wpt(track, wp_array[i]);
 	}
 	track_add_head(track);
-	if (track_name) {
-		xfree(track_name);
-	}
 	xfree(wp_array);
 }
 
@@ -1677,6 +1651,9 @@ write_track_points(void)
 		case fix_2d:   p->point[j].status = 2; break;
 		case fix_3d:   p->point[j].status = 3; break;
 		case fix_dgps: p->point[j].status = 4 | 3; break;
+		}
+		if (wp->wpt_flags.new_trkseg) {
+			p->point[j].status |= 0x10;
 		}
 		i++;
 		j++;
