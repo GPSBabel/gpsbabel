@@ -135,6 +135,13 @@ track_del_head(route_head *rte)
 	trk_head_ct--;
 }
 
+void
+track_insert_head(route_head *rte, route_head *predecessor)
+{
+	ENQUEUE_AFTER(&predecessor->Q, &rte->Q );
+	trk_head_ct++;
+}
+
 static 
 route_head *
 common_route_by_name(queue *routes, const char *name)

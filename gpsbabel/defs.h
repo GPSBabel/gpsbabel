@@ -579,6 +579,7 @@ void route_reverse(const route_head *rte_hd);
 waypoint * route_find_waypt_by_name(route_head *rh, const char *name);
 void track_add_head(route_head *rte);
 void track_del_head(route_head *rte);
+void track_insert_head(route_head *rte, route_head *predecessor);
 void route_disp(const route_head *rte, waypt_cb);
 void route_disp_all(route_hdr, route_trl, waypt_cb);
 void track_disp_all(route_hdr, route_trl, waypt_cb);

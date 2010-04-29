@@ -57,6 +57,8 @@
 #define TRACKFILTER_FIX_OPTION          "fix"
 #define TRACKFILTER_COURSE_OPTION       "course"
 #define TRACKFILTER_SPEED_OPTION        "speed"
+#define TRACKFILTER_SEG2TRK_OPTION      "seg2trk"
+#define TRACKFILTER_TRK2SEG_OPTION      "trk2seg"
 
 #undef TRACKF_DBG
 
@@ -72,6 +74,8 @@ static char *opt_fix = NULL;
 static char *opt_course = NULL;
 static char *opt_speed = NULL;
 static char *opt_name = NULL;
+static char *opt_seg2trk = NULL;
+static char *opt_trk2seg = NULL;
 
 static
 arglist_t trackfilter_args[] = {
@@ -106,6 +110,12 @@ arglist_t trackfilter_args[] = {
 	{TRACKFILTER_COURSE_OPTION, &opt_course, "Synthesize course",
 	    NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{TRACKFILTER_SPEED_OPTION, &opt_speed, "Synthesize speed",
+            NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{TRACKFILTER_SEG2TRK_OPTION, &opt_seg2trk,
+	    "Split track at segment boundaries into multiple tracks",
+            NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{TRACKFILTER_TRK2SEG_OPTION, &opt_trk2seg,
+	    "Merge tracks inserting segment separators at boundaries",
             NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	ARG_TERMINATOR
 };
@@ -869,6 +879,101 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
 }
 
 /*******************************************************************************
+* option "seg2trk"
+*******************************************************************************/
+
+static void
+trackfilter_seg2trk(void)
+{
+	int i;
+
+	for (i = 0; i < track_ct; i++)
+	{
+	    queue *elem, *tmp;
+	    route_head *src = track_list[i].track;
+	    route_head *dest = NULL;
+	    route_head *insert_point = src;
+	    int trk_seg_num = 1, first = 1;
+
+	    QUEUE_FOR_EACH((queue *)&src->waypoint_list, elem, tmp)
+	    {
+		waypoint *wpt = (waypoint *)elem;
+		if (wpt->wpt_flags.new_trkseg && !first)
+		{
+		    char trk_seg_num_buf[10];
+
+		    dest = route_head_alloc();
+		    dest->rte_num = src->rte_num;
+		    /* name in the form TRACKNAME #n */
+		    snprintf(trk_seg_num_buf, sizeof(trk_seg_num_buf), "%d", ++trk_seg_num);
+		    dest->rte_name = xmalloc(strlen(src->rte_name)+strlen(trk_seg_num_buf)+3);
+		    sprintf(dest->rte_name, "%s #%s", src->rte_name, trk_seg_num_buf);
+
+		    /* Insert after original track or after last newly
+		     * created track */
+		    track_insert_head(dest, insert_point);
+		    insert_point = dest;
+		}
+
+		/* If we found a track separator, transfer from original to
+		 * new track. We have to reset new_trkseg temporarily to
+		 * prevent track_del_wpt() from copying it to the next track
+		 * point.
+		 */
+		if (dest)
+		{
+		    int orig_new_trkseg = wpt->wpt_flags.new_trkseg;
+		    wpt->wpt_flags.new_trkseg = 0;
+		    track_del_wpt(src, wpt);
+		    wpt->wpt_flags.new_trkseg = orig_new_trkseg;
+		    track_add_wpt(dest, wpt);
+		}
+		first = 0;
+	    }
+	}
+}
+
+/*******************************************************************************
+* option "trk2seg"
+*******************************************************************************/
+
+static void
+trackfilter_trk2seg(void)
+{
+	int i, first;
+	route_head *master;
+	
+	master = track_list[0].track;
+	
+	for (i = 1; i < track_ct; i++)
+	{
+	    queue *elem, *tmp;
+	    route_head *curr = track_list[i].track;
+	    
+	    first = 1;
+	    QUEUE_FOR_EACH((queue *)&curr->waypoint_list, elem, tmp)
+	    {
+		waypoint *wpt = (waypoint *)elem;
+
+
+		int orig_new_trkseg = wpt->wpt_flags.new_trkseg;
+		wpt->wpt_flags.new_trkseg = 0;
+		track_del_wpt(curr, wpt);
+		wpt->wpt_flags.new_trkseg = orig_new_trkseg;
+		track_add_wpt(master, wpt);
+		if (first)
+		{
+		    wpt->wpt_flags.new_trkseg = 1;
+		    first = 0;
+		}
+	    }
+	    track_del_head(curr);
+	    track_list[i].track = NULL;
+	}
+	track_ct = 1;
+}
+
+/*******************************************************************************
 * global cb's
 *******************************************************************************/
 
@@ -969,6 +1074,21 @@ trackfilter_process(void)
 	    
 	}
 	
+	if (opt_seg2trk != NULL)
+	{
+	    trackfilter_seg2trk();
+	    if (--opts == 0) return;
+	    
+	    trackfilter_deinit();	/* reinitialize */
+	    trackfilter_init(NULL);
+	}
+
+	if (opt_trk2seg != NULL)
+	{
+	    trackfilter_trk2seg();
+	    if (--opts == 0) return;
+	}
+
 	if (opt_title != NULL)
 	{
 	    if (--opts == 0)
