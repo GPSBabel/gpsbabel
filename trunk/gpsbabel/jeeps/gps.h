@@ -249,6 +249,14 @@ typedef struct GPS_SCourse_Point
                                          * sprint = 15 */
 } GPS_OCourse_Point, *GPS_PCourse_Point;
 
+typedef struct GPS_SCourse_Limits
+{
+    uint32 max_courses;
+    uint32 max_course_laps;
+    uint32 max_course_pnt;
+    uint32 max_course_trk_pnt;
+} GPS_OCourse_Limits, *GPS_PCourse_Limits;
+
 
 typedef int (*pcb_fn) (int, struct GPS_SWay **);
 

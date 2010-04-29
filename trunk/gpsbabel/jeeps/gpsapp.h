@@ -81,6 +81,9 @@ int32  GPS_A1008_Send(const char *port, GPS_PCourse_Point *cpt, int32 n_cpt,
 void   GPS_D1012_Get(GPS_PCourse_Point *cpt, UC *p);
 void   GPS_D1012_Send(UC *data, GPS_PCourse_Point cpt, int32 *len);
 
+int32  GPS_A1009_Get(const char *port, GPS_PCourse_Limits limits);
+void   GPS_D1013_Get(GPS_PCourse_Limits limits, UC *p);
+
 /* Unhandled documented protocols, as of:
   Garmin Device Interface Specification, May 19, 2006, Drawing Number: 001-00063-00 Rev. C
 A650  FlightBook Transfer Protocol
@@ -95,8 +98,6 @@ A1004  Fitness User Profile Transfer Protocol
 	Capability A1004: D1004
 A1005  Workout Limits Transfer Protocol
 	Capability A1005: D1005
-A1009  Course Limits Transfer Protocol
-	Capability A1009: D1013
 */
 /* Unimplemted and Undocumented, as listed from the following device/sw:
 	GF305 3.70
@@ -113,6 +114,7 @@ Capability A1013: D1014
 
 const char * Get_Pkt_Type(US p, US d0, const char **xinfo);
 
+void GPS_Prepare_Track_For_Device(GPS_PTrack **trk, int32 *n);
 
 #endif
 
