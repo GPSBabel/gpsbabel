@@ -793,13 +793,41 @@ int32  GPS_Command_Send_Course
                  int32 n_cpt)
 {
     gpsdevh *fd;
+    GPS_OCourse_Limits limits;
+    int32 ret;
     int32 ret_crs=0;
     int32 ret_clp=0;
     int32 ret_trk=0;
     int32 ret_cpt=0;
 
-    if(gps_course_transfer == -1)
+    if(gps_course_transfer == -1 || gps_course_limits_transfer == -1)
        return GPS_UNSUPPORTED;
+
+    /* Check course limits to make sure we're not exceeding the device's
+     * capacity.
+     */
+    switch(gps_course_limits_transfer)
+    {
+       case pA1009:
+           ret = GPS_A1009_Get(port,&limits);
+           break;
+       default:
+           GPS_Error("Send_Course: Unknown course limitsprotocol");
+           return PROTOCOL_ERROR;
+    }
+
+    if (n_crs > limits.max_courses
+        || n_clp > limits.max_course_laps
+        || n_trk > limits.max_course_trk_pnt
+        || n_cpt > limits.max_course_pnt)
+    {
+	GPS_Error("Course upload would exceed device capacity:");
+	GPS_Error("# of courses: %d, max: %d", n_crs, limits.max_courses);
+	GPS_Error("# of laps: %d, max: %d", n_clp, limits.max_course_laps);
+	GPS_Error("# of track points: %d, max: %d", n_trk, limits.max_course_trk_pnt);
+	GPS_Error("# of course points: %d, max: %d", n_cpt, limits.max_course_pnt);
+	return GPS_UNSUPPORTED;
+    }
 
     /* Initialize device communication:
      * In contrast to other transfer protocols, this has to be handled here;
@@ -1165,7 +1193,7 @@ int32 GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 
             if (trk[trk_end+1]->ishdr)
                 break;
         if (trk_end==i)
-            trk_end=0; /* Empty track */
+            continue; /* Skip empty track */
 
         /* Create & append course */
         crs = xrealloc(crs, (n_crs+1) * sizeof(GPS_PCourse));
@@ -1192,14 +1220,16 @@ int32 GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 
 
     /* Append new track points */
     ctk = xrealloc(ctk, (n_ctk+n_trk) * sizeof(GPS_PTrack));
-
     first_new_ctk = n_ctk;
     for (i=0;i<n_trk;i++) {
+        if (trk[i]->ishdr && (i>=n_trk || trk[i+1]->ishdr))
+            continue;
+
         ctk[n_ctk] = GPS_Track_New();
         if (!ctk[n_ctk]) return MEMORY_ERROR;
         *ctk[n_ctk] = *trk[i];
 
-        if (ctk[n_ctk]->ishdr)
+        if (trk[i]->ishdr)
         {
             /* Index of new track, must match the track index in associated course */
             memset(ctk[n_ctk]->trk_ident, 0, sizeof(ctk[n_ctk]->trk_ident));
@@ -1219,7 +1249,7 @@ int32 GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 
 	int min_dist_idx = 0, trk_idx = 0, min_dist_trk_idx = 0;
 
 	/* Find closest track point */
-	for (j=first_new_ctk; j<first_new_ctk+n_trk; j++) {
+	for (j=first_new_ctk; j<n_ctk; j++) {
 	    if (ctk[j]->ishdr) {
 		trk_idx = strtoul(ctk[j]->trk_ident, NULL, 0);
 		continue;

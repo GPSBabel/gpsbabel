@@ -1070,6 +1070,7 @@ track_waypt_pr(const waypoint *wpt)
 		strncpy((*cur_tx_tracklist_entry)->trk_ident, wpt->shortname, sizeof((*cur_tx_tracklist_entry)->trk_ident));
 		(*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
 	}
+	(*cur_tx_tracklist_entry)->tnew = wpt->wpt_flags.new_trkseg;
 	cur_tx_tracklist_entry++;
 }
 
@@ -1077,7 +1078,7 @@ static int
 track_prepare(void)
 {
 	int i;
-	int n = track_waypt_count() + track_count();
+	int32 n = track_waypt_count() + track_count();
 
 	tx_tracklist = xcalloc(n, sizeof(GPS_PTrack));
 	cur_tx_tracklist_entry = tx_tracklist;
@@ -1086,6 +1087,8 @@ track_prepare(void)
 	}
 	my_track_count = 0;
 	track_disp_all(track_hdr_pr, route_noop, track_waypt_pr);
+
+	GPS_Prepare_Track_For_Device(&tx_tracklist, &n);
 
 	return n;
 }

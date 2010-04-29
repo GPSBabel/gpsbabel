@@ -43,8 +43,8 @@
  * coalescion into packets anyway becuase of their serial background) will
  * compensate.
  */
-#define TMOUT_I 3000 /*  Milliseconds to timeout intr pipe access. */
-#define TMOUT_B 3000 /*  Milliseconds to timeout bulk pipe access. */
+#define TMOUT_I 5000 /*  Milliseconds to timeout intr pipe access. */
+#define TMOUT_B 5000 /*  Milliseconds to timeout bulk pipe access. */
 
 typedef struct {
 	struct usb_bus *busses;

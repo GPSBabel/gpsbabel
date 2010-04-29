@@ -3688,7 +3688,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb, int protoid)
     if(!GPS_Device_On(port, &fd))
 	return gps_errno;
 
-    if ((trk_type == pD304) && gps_run_transfer != -1) {
+    if (protoid == 301 && trk_type == pD304 && gps_run_transfer != -1) {
 	drain_run_cmd(fd);
     }
 
@@ -3931,7 +3931,7 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n, int protoid,
     UC data[GPS_ARB_LEN];
     GPS_PPacket tra;
     GPS_PPacket rec;
-    int32 i, j;
+    int32 i;
     int32 len;
     US  method;
     US Pid_Trk_Data, Pid_Trk_Hdr, Cmnd_Transfer_Trk;
@@ -3967,42 +3967,6 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n, int protoid,
     {
 	GPS_Warning("A301 protocol unsupported");
 	return GPS_UNSUPPORTED;
-    }
-
-    /* D303/304 marks track segments with two consecutive invalid track
-     * points. Create them unless we're at the beginning of a track or there
-     * are already invalid track points (because the track was downloaded
-     * using D303/304). This needs to be done here because it will change
-     * the number of track points.
-     */
-    if (trk_type == pD303 || trk_type == pD304)
-    {
-	for(i=0;i<n;++i)
-	{
-	    if (trk[i]->tnew && i>0 && !trk[i]->ishdr && !trk[i-1]->ishdr)
-	    {
-		/* Create in reverse order to avoid having to readjust the
-		 * index after inserting the first point.
-		 */
-		for (j=i; j>=i-1; j--)
-		{
-		    if (!Is_Trackpoint_Invalid(trk[j]))
-		    {
-			GPS_PTrack trkpt = GPS_Track_New();
-			*trkpt = *(trk[j]);
-			trkpt->no_latlon = 1;
-			trkpt->alt = 1e25;
-			trkpt->distance_populated = 0;
-			trkpt->heartrate = 0;
-			trkpt->cadence = 0xff;
-			trk = xrealloc(trk, (n+1) * sizeof(GPS_PTrack));
-			memmove(&trk[i+1], &trk[i], (n-i) * sizeof(GPS_PTrack));
-			n++;
-			trk[i] = trkpt;
-		    }
-		}
-	    }
-	}
     }
 
     if(protoid != 302 && !GPS_Device_On(port, &fd))
@@ -7188,6 +7152,89 @@ void GPS_D1012_Send(UC *data, GPS_PCourse_Point cpt, int32 *len)
 }
 
 
+/* @func GPS_A1009_Get ******************************************************
+**
+** Get course limits from GPS
+**
+** @param [r] port [const char *] serial port
+** @param [w] limits [GPS_PCourse_Limits] course limits structure
+**
+** @return [int32] success
+************************************************************************/
+
+int32 GPS_A1009_Get(const char *port, GPS_PCourse_Limits limits)
+{
+    static UC data[2];
+    gpsdevh *fd;
+    GPS_PPacket trapkt;
+    GPS_PPacket recpkt;
+
+    if (gps_course_limits_transfer == -1)
+       return GPS_UNSUPPORTED;
+
+    if (!GPS_Device_On(port, &fd))
+       return gps_errno;
+
+    if (!(trapkt = GPS_Packet_New() ) || !(recpkt = GPS_Packet_New()))
+       return MEMORY_ERROR;
+
+    GPS_Util_Put_Short(data,
+                    COMMAND_ID[gps_device_command].Cmnd_Transfer_Course_Limits);
+    GPS_Make_Packet(&trapkt, LINK_ID[gps_link_type].Pid_Command_Data,
+                    data,2);
+    if(!GPS_Write_Packet(fd,trapkt))
+        return gps_errno;
+    if(!GPS_Get_Ack(fd, &trapkt, &recpkt))
+        return gps_errno;
+    if(!GPS_Packet_Read(fd, &recpkt))
+        return gps_errno;
+    if(!GPS_Send_Ack(fd, &trapkt, &recpkt))
+        return gps_errno;
+
+    switch(gps_course_limits_type) {
+	case pD1013:
+	    GPS_D1013_Get(limits,recpkt->data);
+	    break;
+	default:
+	    GPS_Error("A1009_Get: Unknown Course Limits protocol %d\n",
+	              gps_course_limits_type);
+	    return PROTOCOL_ERROR;
+    }
+
+    GPS_Packet_Del(&trapkt);
+    GPS_Packet_Del(&recpkt);
+
+    if (!GPS_Device_Off(fd))
+       return gps_errno;
+    return 1;
+}
+
+
+/* @func GPS_D1013_Get ******************************************************
+**
+** Convert packet D1013 to course limits structure
+**
+** @param [w] limits [GPS_PCourse_Limits] course limits structure
+** @param [r] p [UC *] packet data
+**
+** @return [void]
+************************************************************************/
+void GPS_D1013_Get(GPS_PCourse_Limits limits, UC *p)
+{
+    limits->max_courses = GPS_Util_Get_Uint(p);
+    p+=sizeof(uint32);
+
+    limits->max_course_laps = GPS_Util_Get_Uint(p);
+    p+=sizeof(uint32);
+
+    limits->max_course_pnt = GPS_Util_Get_Uint(p);
+    p+=sizeof(uint32);
+
+    limits->max_course_trk_pnt = GPS_Util_Get_Uint(p);
+    p+=sizeof(uint32);
+}
+
+
 /*
  *  It's unfortunate that these aren't constant and therefore switchable,
  *  but they really are runtime variable.  Sigh.
@@ -7330,4 +7377,55 @@ static UC Is_Trackpoint_Invalid(GPS_PTrack trk)
      */
     return trk->no_latlon && trk->distance > 1e24 &&
            !trk->heartrate && !trk->cadence;
+}
+
+
+/* @func GPS_Prepare_Track_For_Device **********************************
+**
+** Perform device-specific adjustments on a track before upload.
+**
+** @param [r] trk [GPS_PTrack **] track
+** @param [r] n [int32 *] Number of trackpoints
+************************************************************************/
+void GPS_Prepare_Track_For_Device(GPS_PTrack **trk, int32 *n)
+{
+    int32 i, j;
+
+    /* D303/304 marks track segments with two consecutive invalid track
+     * points instead of the tnew flag. Create them unless we're at the
+     * beginning of a track or there are already invalid track points
+     * (because the track was downloaded using D303/304). This needs to be
+     * done here because it will change the number of track points.
+     */
+    if (gps_trk_type == pD303 || gps_trk_type == pD304)
+    {
+	for(i=0;i<*n;++i)
+	{
+	    if ((*trk)[i]->tnew && i>0 && !(*trk)[i]->ishdr && !(*trk)[i-1]->ishdr)
+	    {
+		/* Create invalid points based on the data from the point
+		 * marked with tnew and the one before it.
+		 */
+		for (j=i-1; j<=i; j++)
+		{
+		    if (!Is_Trackpoint_Invalid((*trk)[j]))
+		    {
+			GPS_PTrack trkpt = GPS_Track_New();
+			*trkpt = *((*trk)[j]);
+			trkpt->no_latlon = 1;
+			trkpt->alt = 1e25;
+			trkpt->distance_populated = 0;
+			trkpt->heartrate = 0;
+			trkpt->cadence = 0xff;
+			*trk = xrealloc(*trk, (*n+1) * sizeof(GPS_PTrack));
+			memmove(&(*trk)[i+1], &(*trk)[i], (*n-i) * sizeof(GPS_PTrack));
+			(*trk)[i] = trkpt;
+			i++;
+			j++;
+			(*n)++;
+		    }
+		}
+	    }
+	}
+    }
 }
