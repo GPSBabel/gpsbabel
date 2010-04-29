@@ -875,7 +875,7 @@ add_to_batch(unsigned id, message_t* m)
 
 // send an accumulated sequence of messages
 static void
-send_batch(int expect_transfer_complete)
+send_batch(void)
 {
 	message_t m;
 	const unsigned n = batch_array_i;
@@ -924,9 +924,7 @@ send_batch(int expect_transfer_complete)
 			break;
 		}
 	}
-	if (expect_transfer_complete) {
-		message_read(MSG_TRANSFER_COMPLETE, &m);
-	}
+	message_read(MSG_TRANSFER_COMPLETE, &m);
 	if (global_opts.debug_level >= DBGLVL_M)
 		warning(MYNAME ": end send_batch\n");
 	for (i = n; i--;) {
@@ -1293,7 +1291,7 @@ add_nuke(nuke_type type)
 	// MSG_DELETE generates a MSG_TRANSFER_COMPLETE,
 	// so use the batch facility to wait for it
 	add_to_batch(MSG_DELETE, &m);
-	send_batch(TRUE);
+	send_batch();
 }
 
 static void
@@ -1408,7 +1406,7 @@ write_waypoints(void)
 	}
 
 	waypt_disp_all(write_waypoint);
-	send_batch(TRUE);
+	send_batch();
 
 	if (device_n + waypoint_n > device_max_waypoint) {
 		m.size = 0;
@@ -1712,7 +1710,7 @@ write_track_end(const route_head* track)
 	}
 	add_to_batch(MSG_TRACK_HEADER_IN, &m);
 	write_track_points();
-	send_batch(FALSE);
+	send_batch();
 	xfree(wp_array);
 }
 
@@ -2063,7 +2061,7 @@ write_route_end(const route_head* route)
 	le_write32(p->total_shape_point, shape_point_n);
 	add_to_batch(MSG_ROUTE_HEADER_IN, &m);
 	write_route_points();
-	send_batch(TRUE);
+	send_batch();
 	if (wp_array) {
 		xfree(wp_array);
 		xfree(shape_point_counts);
