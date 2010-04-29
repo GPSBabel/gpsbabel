@@ -50,6 +50,8 @@ void sortqueue (queue *qh, int (*cmp)(const queue *, const queue *));
 		enqueue(element, (listhead)->prev)
 #define ENQUEUE_HEAD(listhead, element) \
 		enqueue(element, listhead)
+#define ENQUEUE_AFTER(predecessor, element) \
+		enqueue(element, predecessor)
 
 #define QUEUE_FOR_EACH(listhead, element, tmp) \
 	for ((element) = QUEUE_FIRST(listhead); \
