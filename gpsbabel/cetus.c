@@ -121,12 +121,12 @@ typedef struct cetus_track_head_s
 
 typedef struct cetus_track_point_s
 {
-	char hour;
-	char min;
-	char sec;
-	char dsec;
-	char sat;
-	char hdop;
+	signed char hour;
+	signed char min;
+	signed char sec;
+	signed char dsec;
+	signed char sat;
+	signed char hdop;
 	pdb_32 latitude;
 	pdb_32 longitude;
 	short speed;

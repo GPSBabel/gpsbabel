@@ -537,7 +537,7 @@ osm_node_tag(const char *args, const char **attrv)
 	const char **avp = &attrv[0];
 	const char *key = "", *value = "";
 	char *str;
-	char ikey;
+	signed char ikey;
 	
         while (*avp) {
 		if (strcmp(avp[0], "k") == 0)
