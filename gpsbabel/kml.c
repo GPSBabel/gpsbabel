@@ -398,7 +398,12 @@ kml_write_xmle(const char *tag, const char *v)
 		for (i = 0; i < indent_level; i++) {
 			gbfputs("  ", ofd);
 		}
-		gbfprintf(ofd, "<%s>%s</%s>\n",tag, tmp_ent, tag);
+		if (strspn(tmp_ent, "&'<>\"")) {
+			gbfprintf(ofd, "<%s><![CDATA]%s]]></%s>\n", 
+					tag, tmp_ent, tag);
+		} else {
+			gbfprintf(ofd, "<%s>%s</%s>\n",tag, tmp_ent, tag);
+		}
 		xfree(tmp_ent);
 	}
 }
