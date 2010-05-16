@@ -2852,7 +2852,7 @@ delbin_os_ops_t delbin_os_ops = {
 
 //-----------------------------------------------------------------------------
 // stubs
-#if !(_WIN32 || __APPLE__ || HAVE_LIBUSB || HAVE_LINUX_HID)
+#if !(_WIN32 || __APPLE__ || HAVE_LIBUSB || HAVE_LINUX_HID) || 1
 static void
 stub_os_init(const char* fname)
 {

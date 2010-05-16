@@ -765,7 +765,7 @@ exif_waypt_from_exif_app(exif_app_t *app)
 }
 
 static void
-exif_dec2frac(double val, int *num, int *den)
+exif_dec2frac(double val, gbint32 *num, gbint32 *den)
 {
 	char sval[16], snum[16];
 	char dot = 0;
