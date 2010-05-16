@@ -2371,11 +2371,12 @@ win_os_deinit(void)
 static unsigned
 win_os_packet_read(void* buf)
 {
-	unsigned n;
+	DWORD n;
 	char buf1[257];
 	// first byte is report id
 	if (ReadFile(hid_handle, buf1, delbin_os_packet_size + 1, &n, NULL) == 0) {
-		fatal(MYNAME ": ReadFile failed %u\n", GetLastError());
+		unsigned err = GetLastError();
+		fatal(MYNAME ": ReadFile failed %u\n", err);
 	}
 	if (n > 0) {
 		n--;
@@ -2387,13 +2388,15 @@ win_os_packet_read(void* buf)
 static unsigned
 win_os_packet_write(const void* buf, unsigned size)
 {
-	unsigned n;
+	DWORD n;
 	char buf1[257];
 	// first byte is report id
 	buf1[0] = 0;
 	memcpy(buf1 + 1, buf, size);
 	if (WriteFile(hid_handle, buf1, delbin_os_packet_size + 1, &n, NULL) == 0) {
-		fatal(MYNAME ": WriteFile failed %u\n", GetLastError());
+		unsigned err = GetLastError();
+		fatal(MYNAME ": WriteFile of %u bytes failed with %u.  Size: %u Wrote: %d\n", 
+			delbin_os_packet_size + 1, err, size, (int) n);
 	}
 	if (n > size) {
 		n = size;
