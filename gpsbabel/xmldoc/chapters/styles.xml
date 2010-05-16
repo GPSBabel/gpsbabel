@@ -1331,7 +1331,7 @@ that are suitable for Garmin's POI loader.
 <para>
 For additional examples, please see the 
 <filename>*.style</filename> files in the 
-<filename>style/</filename> subdirectory of GPSBabel or at the <ulink url="http://gpsbabel.cvs.sourceforge.net/gpsbabel/gpsbabel/style/">online source tree</ulink>.
+<filename>style/</filename> subdirectory of the GPSBabel source tree or at the <ulink url="http://gpsbabel.cvs.sourceforge.net/gpsbabel/gpsbabel/style/">online source.</ulink>.
 </para>
 </section> <!-- examples -->
 
