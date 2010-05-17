@@ -1,4 +1,4 @@
-; $Id: setup.iss,v 1.17 2010-05-17 00:42:54 robertl Exp $
+; $Id: setup.iss,v 1.18 2010-05-17 03:11:51 robertl Exp $
 ;
 ; NOTE: setup.iss is generated from setup.iss.in via autoconf.
 ; The generated setup.iss is checked in to help keep the version numbers
@@ -95,3 +95,7 @@ Name: "{commondesktop}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"; Tasks: deskt
 [Run]
 Filename: "{app}\gpsbabelfe.exe"; Description: "{cm:LaunchProgram,GPSBabelFE}"; Flags: nowait postinstall skipifsilent
 
+[Registry]
+Root: HKCU; Subkey: "Software\GPSBabel"; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\GPSBabel\GPSBabel"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\GPSBabel\GPSBabelFE"; Flags: uninsdeletekey
