@@ -1,0 +1,36 @@
+<para>
+   Overlay files used by <productname>Geogrid</productname>-Viewer has to be in ASCII format. 
+   Make sure you save the files correctly.
+</para>
+<para>
+   Lines or polygons within the <productname>Geogrid</productname>-Viewer (type 3 and 4) will be
+   converted to tracks, except they are grouped. In this case GPSBabel creates routes.
+</para>
+<para>
+   During the creation of an overlay file, a circle will be added to each 
+   postion of a waypoint or a route.
+</para>
+
+<para>
+  Sample layout of the ASCII overlay file
+  <programlisting format="linespecific">
+    [Symbol &lt;number # &gt;]
+    Typ=&lt;1=picture,2=Text, 3=line, 4=area, 5=retangle, 6=circle, 7=triangle&gt;
+    Group=&lt;1=no group, number &gt; 1=group number&gt;
+    Col=&lt;number of the line color&gt;
+    Zoom=&lt;1=no zoom, 2=zoom&gt;
+    Size=&lt;size can be between 101 and 118&gt;
+    Art=&lt;style&gt;
+    Punkte=&lt;number of XKoord&gt;
+    XKoord0=&lt;decimal X coordinate (Longitude) of the waypoint&gt;
+    YKoord0=&lt;decimal Y coordinate (Latitude) of the waypoint&gt;
+    [MapLage]
+    MapName=Top. Karte 1:50.000 Nieders.
+    DimmFc=100
+    ZoomFc=&lt;zoom level of the map&gt;
+    CenterLat=&lt;map center in decimal Y coordinates&gt;
+    CenterLong=&lt;map center in decimal X coordinates of &gt;
+    RefOn=0
+  </programlisting>
+</para>
+

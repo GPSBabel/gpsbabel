@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="51.744667000" minlon="10.552068390" maxlat="51.816378030" maxlon="10.690602210"/>
+<rte>
+  <name>Route 1</name>
+  <rtept lat="51.784454440" lon="10.552068390">
+    <name>RPT001</name>
+  </rtept>
+  <rtept lat="51.784276590" lon="10.555323070">
+    <name>RPT002</name>
+  </rtept>
+  <rtept lat="51.784562040" lon="10.560912500">
+    <name>RPT003</name>
+  </rtept>
+  <rtept lat="51.786522840" lon="10.565545520">
+    <name>RPT004</name>
+  </rtept>
+  <rtept lat="51.786488080" lon="10.568153080">
+    <name>RPT005</name>
+  </rtept>
+  <rtept lat="51.785136980" lon="10.571729400">
+    <name>RPT006</name>
+  </rtept>
+  <rtept lat="51.782313340" lon="10.577862740">
+    <name>RPT007</name>
+  </rtept>
+  <rtept lat="51.781366090" lon="10.578119510">
+    <name>RPT008</name>
+  </rtept>
+  <rtept lat="51.780651230" lon="10.577804750">
+    <name>RPT009</name>
+  </rtept>
+  <rtept lat="51.780402110" lon="10.576274480">
+    <name>RPT010</name>
+  </rtept>
+  <rtept lat="51.780194970" lon="10.574963060">
+    <name>RPT011</name>
+  </rtept>
+  <rtept lat="51.779127530" lon="10.574128890">
+    <name>RPT012</name>
+  </rtept>
+  <rtept lat="51.777883310" lon="10.573071260">
+    <name>RPT013</name>
+  </rtept>
+  <rtept lat="51.776788700" lon="10.574264830">
+    <name>RPT014</name>
+  </rtept>
+  <rtept lat="51.775214760" lon="10.577687550">
+    <name>RPT015</name>
+  </rtept>
+</rte>
+<rte>
+  <name>Route 2</name>
+  <rtept lat="51.801880930" lon="10.596525070">
+    <name>RPT016</name>
+  </rtept>
+  <rtept lat="51.799386890" lon="10.608038670">
+    <name>RPT017</name>
+  </rtept>
+  <rtept lat="51.792633700" lon="10.589092900">
+    <name>RPT018</name>
+  </rtept>
+  <rtept lat="51.801812320" lon="10.578321280">
+    <name>RPT019</name>
+  </rtept>
+  <rtept lat="51.802690830" lon="10.593145420">
+    <name>RPT020</name>
+  </rtept>
+</rte>
+<rte>
+  <name>Route 3</name>
+  <rtept lat="51.762554050" lon="10.606579240">
+    <name>RPT021</name>
+  </rtept>
+  <rtept lat="51.766304200" lon="10.598527400">
+    <name>RPT022</name>
+  </rtept>
+  <rtept lat="51.768078260" lon="10.590332330">
+    <name>RPT023</name>
+  </rtept>
+  <rtept lat="51.775274560" lon="10.586600710">
+    <name>RPT024</name>
+  </rtept>
+</rte>
+<rte>
+  <name>Route 4</name>
+  <rtept lat="51.764389200" lon="10.610410780">
+    <name>RPT025</name>
+  </rtept>
+  <rtept lat="51.754961410" lon="10.606382150">
+    <name>RPT026</name>
+  </rtept>
+  <rtept lat="51.752379790" lon="10.624176150">
+    <name>RPT027</name>
+  </rtept>
+  <rtept lat="51.762748450" lon="10.625127710">
+    <name>RPT028</name>
+  </rtept>
+  <rtept lat="51.766185410" lon="10.617066160">
+    <name>RPT029</name>
+  </rtept>
+</rte>
+<trk>
+  <name>Track 1</name>
+<trkseg>
+<trkpt lat="51.765875800" lon="10.655444680">
+</trkpt>
+<trkpt lat="51.767854210" lon="10.652184990">
+</trkpt>
+<trkpt lat="51.771409830" lon="10.648620290">
+</trkpt>
+<trkpt lat="51.772674410" lon="10.644971740">
+</trkpt>
+<trkpt lat="51.772539270" lon="10.641779290">
+</trkpt>
+<trkpt lat="51.773195950" lon="10.636587090">
+</trkpt>
+<trkpt lat="51.772021370" lon="10.633791750">
+</trkpt>
+<trkpt lat="51.771059550" lon="10.628613680">
+</trkpt>
+<trkpt lat="51.771393060" lon="10.627249280">
+</trkpt>
+<trkpt lat="51.772946940" lon="10.631869180">
+</trkpt>
+<trkpt lat="51.773521860" lon="10.632541930">
+</trkpt>
+<trkpt lat="51.777578030" lon="10.628486130">
+</trkpt>
+<trkpt lat="51.778930660" lon="10.628172570">
+</trkpt>
+<trkpt lat="51.779438820" lon="10.627176490">
+</trkpt>
+<trkpt lat="51.779995900" lon="10.625892350">
+</trkpt>
+<trkpt lat="51.780478010" lon="10.626779150">
+</trkpt>
+<trkpt lat="51.779849570" lon="10.633205090">
+</trkpt>
+<trkpt lat="51.779997570" lon="10.638717070">
+</trkpt>
+<trkpt lat="51.778863890" lon="10.642660960">
+</trkpt>
+<trkpt lat="51.779068250" lon="10.644117480">
+</trkpt>
+<trkpt lat="51.780852880" lon="10.645051840">
+</trkpt>
+<trkpt lat="51.781401350" lon="10.647607830">
+</trkpt>
+<trkpt lat="51.786661020" lon="10.647509640">
+</trkpt>
+<trkpt lat="51.789234650" lon="10.646661310">
+</trkpt>
+<trkpt lat="51.790795400" lon="10.644326530">
+</trkpt>
+<trkpt lat="51.789819300" lon="10.643421370">
+</trkpt>
+<trkpt lat="51.789454480" lon="10.640581750">
+</trkpt>
+<trkpt lat="51.787562800" lon="10.640875440">
+</trkpt>
+<trkpt lat="51.786205630" lon="10.638289880">
+</trkpt>
+<trkpt lat="51.785310710" lon="10.634779160">
+</trkpt>
+<trkpt lat="51.785626530" lon="10.631457210">
+</trkpt>
+<trkpt lat="51.786877530" lon="10.628748610">
+</trkpt>
+<trkpt lat="51.786894590" lon="10.627517290">
+</trkpt>
+<trkpt lat="51.794775820" lon="10.616566750">
+</trkpt>
+<trkpt lat="51.796012670" lon="10.621394750">
+</trkpt>
+<trkpt lat="51.798403450" lon="10.620755680">
+</trkpt>
+<trkpt lat="51.800206230" lon="10.617123440">
+</trkpt>
+</trkseg>
+</trk>
+<trk>
+  <name>Track 2</name>
+<trkseg>
+<trkpt lat="51.744667000" lon="10.686742170">
+</trkpt>
+<trkpt lat="51.747218240" lon="10.690602210">
+</trkpt>
+<trkpt lat="51.749006510" lon="10.688134760">
+</trkpt>
+<trkpt lat="51.750618150" lon="10.685443300">
+</trkpt>
+<trkpt lat="51.751508570" lon="10.679756020">
+</trkpt>
+<trkpt lat="51.754989850" lon="10.684592260">
+</trkpt>
+<trkpt lat="51.757430020" lon="10.683669200">
+</trkpt>
+<trkpt lat="51.761254580" lon="10.677075860">
+</trkpt>
+<trkpt lat="51.764203010" lon="10.668855600">
+</trkpt>
+<trkpt lat="51.764605510" lon="10.665828320">
+</trkpt>
+<trkpt lat="51.763965550" lon="10.663414560">
+</trkpt>
+<trkpt lat="51.764932500" lon="10.658597170">
+</trkpt>
+</trkseg>
+</trk>
+<trk>
+  <name>Track 3</name>
+<trkseg>
+<trkpt lat="51.811032760" lon="10.636942470">
+</trkpt>
+<trkpt lat="51.800068270" lon="10.627121840">
+</trkpt>
+<trkpt lat="51.793333190" lon="10.642824360">
+</trkpt>
+<trkpt lat="51.800948430" lon="10.666950260">
+</trkpt>
+<trkpt lat="51.812379720" lon="10.649897680">
+</trkpt>
+<trkpt lat="51.816378030" lon="10.630682440">
+</trkpt>
+</trkseg>
+</trk>
+</gpx>

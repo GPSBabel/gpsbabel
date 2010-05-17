@@ -1,0 +1,451 @@
+#!/bin/sh
+
+#
+# GPilotS.   A Palm format.  Another binary format that 
+#
+# rm -f ${TMPDIR/gpilots.l
+#gpsbabel -i easygps -f ${REFERENCE}/gpilots.pdb -o gpx -F ${TMPDIR}/gp.gpx
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpilots -F ${TMPDIR}/blah.pdb
+gpsbabel -i gpilots -f ${TMPDIR}/blah.pdb -o gpx -F ${TMPDIR}/1.gpx
+gpsbabel -i gpilots -f ${REFERENCE}/gpilots.pdb -o gpx -F ${TMPDIR}/2.gpx
+compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
+#gpsbabel -i easygps -f ${REFERENCE}/gpilots.pdb -o gpx -F ${TMPDIR}/gp.gpx
+
+#
+# Navicache.
+gpsbabel -i navicache -f ${REFERENCE}/navicache.xml -o gpsutil -F ${TMPDIR}/navi.wpt
+compare ${TMPDIR}/navi.wpt ${REFERENCE}/navicache.ref
+#
+
+#
+# CoastalExplorer..
+gpsbabel -r -i coastexp -f ${REFERENCE}/coastexp.nob -o gpx -F ${TMPDIR}/coastexp.gpx
+compare ${TMPDIR}/coastexp.gpx ${REFERENCE}/coastexp.ref
+gpsbabel -r -i gpx -f ${TMPDIR}/coastexp.gpx -o coastexp -F ${TMPDIR}/coastexp.nob
+compare ${TMPDIR}/coastexp.nob ${REFERENCE}/coastexp.ref2
+gpsbabel -w -i coastexp -f ${REFERENCE}/coastexp.nob -o gpx -F ${TMPDIR}/coastexp.gpx
+compare ${TMPDIR}/coastexp.gpx ${REFERENCE}/coastexp.ref3
+gpsbabel -w -i gpx -f ${TMPDIR}/coastexp.gpx -o coastexp -F ${TMPDIR}/coastexp.nob
+compare ${TMPDIR}/coastexp.nob ${REFERENCE}/coastexp.ref4
+#
+
+# PsiTrex.  A text format that can't be handled by XCSV due to context of
+# data based on other data values in the file
+# Waypoints first
+rm -f ${TMPDIR}/psit-ww.txt ${TMPDIR}/psit-ww.mps
+gpsbabel -i psitrex -f ${REFERENCE}/psitwpts.txt -o mapsource -F ${TMPDIR}/psit-ww.mps
+gpsbabel -i mapsource -f ${TMPDIR}/psit-ww.mps -o psitrex -F ${TMPDIR}/psit-ww.txt
+compare ${REFERENCE}/psitwpts.txt ${TMPDIR}/psit-ww.txt
+
+# Now test correct "empty" handling - ask for routes when there aren't any
+# Uses mapsource as the empty handling for this has already happened above
+rm -f ${TMPDIR}/psit-wr.mps
+gpsbabel -r -i psitrex -f ${REFERENCE}/psitwpts.txt -o mapsource,mpsverout=3 -F ${TMPDIR}/psit-wr.mps
+compare ${REFERENCE}/mps-empty.mps ${TMPDIR}/psit-wr.mps
+
+# Routes next
+rm -f ${TMPDIR}/psit-rr.txt ${TMPDIR}/psit-rr.mps
+gpsbabel -r -i psitrex -f ${REFERENCE}/route/psitrtes.txt -o mapsource -F ${TMPDIR}/psit-rr.mps
+gpsbabel -r -i mapsource -f ${TMPDIR}/psit-rr.mps -o psitrex -F ${TMPDIR}/psit-rr.txt
+compare ${REFERENCE}/route/psitrtes.txt ${TMPDIR}/psit-rr.txt
+
+# Now test correct "empty" handling - ask for tracks when there aren't any
+# Uses mapsource as the empty handling for this has already happened above
+rm -f ${TMPDIR}/psit-rt.mps
+gpsbabel -t -i psitrex -f ${REFERENCE}/route/psitrtes.txt -o mapsource,mpsverout=3 -F ${TMPDIR}/psit-rt.mps
+compare ${REFERENCE}/mps-empty.mps ${TMPDIR}/psit-rt.mps
+
+# Tracks last
+rm -f ${TMPDIR}/psit-tt.txt ${TMPDIR}/psit-tt.mps
+gpsbabel -t -i psitrex -f ${REFERENCE}/track/psittrks.txt -o mapsource -F ${TMPDIR}/psit-tt.mps
+gpsbabel -t -i mapsource -f ${TMPDIR}/psit-tt.mps -o psitrex -F ${TMPDIR}/psit-tt.txt
+compare ${REFERENCE}/track/psittrks.txt ${TMPDIR}/psit-tt.txt
+
+# Now test correct "empty" handling - ask for waypoints when there aren't any
+# Uses mapsource as the empty handling for this has already happened above
+rm -f ${TMPDIR}/psit-tw.mps
+gpsbabel -i psitrex -f ${REFERENCE}/track/psittrks.txt -o mapsource,mpsverout=3 -F ${TMPDIR}/psit-tw.mps
+compare ${REFERENCE}/mps-empty.mps ${TMPDIR}/psit-tw.mps
+
+#
+# Arc Distance filter
+#
+rm -f ${TMPDIR}/arcdist.txt
+gpsbabel -i xmap -f ${REFERENCE}/arcdist_input.txt \
+         -x arc,file=${REFERENCE}/arcdist_arc.txt,distance=1 \
+         -o xmap -F ${TMPDIR}/arcdist.txt
+compare ${TMPDIR}/arcdist.txt ${REFERENCE}/arcdist_output.txt
+
+#
+# Polygon filter
+#
+rm -f ${TMPDIR}/polygon.txt
+gpsbabel -i xmap -f ${REFERENCE}/arcdist_input.txt \
+         -x polygon,file=${REFERENCE}/polygon_allencty.txt \
+         -o xmap -F ${TMPDIR}/polygon.txt
+compare ${TMPDIR}/polygon.txt ${REFERENCE}/polygon_output.txt
+
+#
+# Simplify filter
+#
+rm -f ${TMPDIR}/simplify.txt
+gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
+         -x simplify,count=10 \
+         -o arc -F ${TMPDIR}/simplify.txt
+compare ${TMPDIR}/simplify.txt ${REFERENCE}/simplify_output.txt
+
+#
+# Route reversal filter.   Do it twice and be sure we get what we
+# started with.
+#
+rm -f ${TMPDIR}/reverse1.arc ${TMPDIR}/reverse2.arc ${TMPDIR}/reference.arc
+gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
+	  -o arc -F ${TMPDIR}/reference.arc
+gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
+         -x reverse \
+         -o arc -F ${TMPDIR}/reverse1.arc
+gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
+         -x reverse \
+         -x reverse \
+         -o arc -F ${TMPDIR}/reverse2.arc
+# Verify the first and last are the same
+compare ${TMPDIR}/reference.arc  ${TMPDIR}/reverse2.arc
+# Verify the first and second are different.
+#${DIFF}  ${TMPDIR}/reverse1.arc  ${TMPDIR}/reverse2.arc > /dev/null && {
+#		echo ERROR Failed reversal test.
+#		exit 1
+#}
+
+# parkrrrr: This isn't a straightforward compare; we *want* it to fail.
+# Obviously this test should just be rewritten with a new reference.
+#compare  ${TMPDIR}/reverse1.arc  ${TMPDIR}/reverse2.arc
+
+#
+# Geoniche: No reference file was available, so we created one and just
+# test it against itself.
+#
+rm -f ${TMPDIR}/gn.pdb ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
+gpsbabel -i geoniche -f ${REFERENCE}/geoniche.pdb -o geoniche -F ${TMPDIR}/gn.pdb
+gpsbabel -i geoniche -f ${REFERENCE}/geoniche.pdb -o gpx -F ${TMPDIR}/1.gpx
+gpsbabel -i geoniche -f ${TMPDIR}/gn.pdb -o gpx -F ${TMPDIR}/2.gpx
+compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
+#
+gpsbabel -i geoniche -f ${REFERENCE}/gn-targets.pdb -o gpx -F ${TMPDIR}/gn-targets.gpx
+compare ${TMPDIR}/gn-targets.gpx ${REFERENCE}/gn-targets.gpx
+
+#
+# saroute covers *.anr, *.rte, and *.rtd, but I only have an .anr for testing.
+# Unfortunately for us, this is a read-only format for now.
+#
+gpsbabel -t -i saroute -f ${REFERENCE}/track/i65.anr -o gpx -F ${TMPDIR}/gpl1.gpx
+gpsbabel -t -i gpx -f ${REFERENCE}/track/i65.anr.gpx -o gpx -F ${TMPDIR}/gpl2.gpx
+compare ${TMPDIR}/gpl1.gpx ${TMPDIR}/gpl2.gpx
+
+#
+# Delorme GPL file.   This is sort of a track format.
+#
+rm -f ${TMPDIR}/gpl1.gpx ${TMPDIR}/gpl2.gpx ${TMPDIR}/gpl1.gpl
+gpsbabel -t -i gpl -f ${REFERENCE}/track/webpark1.gpl -o gpx -F ${TMPDIR}/gpl1.gpx
+gpsbabel -t -i gpl -f ${REFERENCE}/track/webpark1.gpl -o gpl -F ${TMPDIR}/gpl1.gpl
+gpsbabel -t -i gpl -f ${TMPDIR}/gpl1.gpl -o gpx -F ${TMPDIR}/gpl2.gpx
+compare ${TMPDIR}/gpl1.gpx ${TMPDIR}/gpl2.gpx
+
+#
+# NetStumbler Summary File (read-only)
+#
+rm -f ${TMPDIR}/netstumbler.mps
+gpsbabel -i netstumbler -f ${REFERENCE}/netstumbler.txt -o mapsource -F ${TMPDIR}/netstumbler.mps
+bincompare ${TMPDIR}/netstumbler.mps ${REFERENCE}/netstumbler.mps
+
+#
+# IGC tests
+#
+rm -f ${TMPDIR}/igc*out
+gpsbabel -i gpx -f ${REFERENCE}/igc1.gpx -o igc -F ${TMPDIR}/igc.out
+sed '/^LXXXGenerated by GPSBabel Version/d' ${TMPDIR}/igc.out > ${TMPDIR}/igc_sed.out
+compare ${TMPDIR}/igc_sed.out ${REFERENCE}/igc1_igc.out
+
+gpsbabel -i igc -f ${TMPDIR}/igc.out -o gpx -F ${TMPDIR}/igc.gpx
+compare ${TMPDIR}/igc.gpx ${REFERENCE}/igc1_gpx.out
+
+gpsbabel -i gpx -f ${TMPDIR}/igc.gpx -o igc -F ${TMPDIR}/igc.out
+sed '/^LXXXGenerated by GPSBabel Version/d' ${TMPDIR}/igc.out > ${TMPDIR}/igc_sed.out
+compare ${TMPDIR}/igc_sed.out ${REFERENCE}/igc1_igc.out
+
+gpsbabel -i gpx -f ${REFERENCE}/igc1_baro.gpx -i igc -f ${REFERENCE}/igc1_igc.out -o igc,timeadj=auto -F ${TMPDIR}/igc.out
+sed '/^LXXXGenerated by GPSBabel Version/d' ${TMPDIR}/igc.out > ${TMPDIR}/igc_sed.out
+compare ${TMPDIR}/igc_sed.out ${REFERENCE}/igc1_3d.out
+
+
+gpsbabel -i igc -f ${REFERENCE}/igc2.igc -o gpx -F ${TMPDIR}/igc.gpx
+compare ${TMPDIR}/igc.gpx ${REFERENCE}/igc2_gpx.out
+
+gpsbabel -i gpx -f ${TMPDIR}/igc.gpx -o igc -F ${TMPDIR}/igc.out
+sed '/^LXXXGenerated by GPSBabel Version/d' ${TMPDIR}/igc.out > ${TMPDIR}/igc_sed.out
+compare ${TMPDIR}/igc_sed.out ${REFERENCE}/igc2_igc.out
+
+gpsbabel -i igc -f ${TMPDIR}/igc.out -o gpx -F ${TMPDIR}/igc.gpx
+compare ${TMPDIR}/igc.gpx ${REFERENCE}/igc2_gpx.out
+
+#
+# Google Maps XML test
+#
+rm -f ${TMPDIR}/google.out
+gpsbabel -i google -f ${REFERENCE}/google.xml -o csv -F ${TMPDIR}/google.out
+compare ${TMPDIR}/google.out ${REFERENCE}/google.csv
+
+rm -f ${TMPDIR}/google.out
+gpsbabel -i google -f ${REFERENCE}/google.js -o csv -F ${TMPDIR}/google.out
+compare ${TMPDIR}/google.out ${REFERENCE}/google.csv
+
+rm -f ${TMPDIR}/google.out
+gpsbabel -i google -f ${REFERENCE}/google_jan_06.html -o csv -F ${TMPDIR}/google.out
+compare ${TMPDIR}/google.out ${REFERENCE}/google_jan_06.csv
+
+#
+# DeLorme .an1 tests
+#
+rm -f ${TMPDIR}/an1.out
+gpsbabel -i an1 -f ${REFERENCE}/foo.an1 -o csv -F ${TMPDIR}/an1.out
+compare ${TMPDIR}/an1.out ${REFERENCE}/an1-in.ref
+
+rm -f ${TMPDIR}/an1.out
+gpsbabel -i an1 -f ${REFERENCE}/foo.an1 -o an1 -F ${TMPDIR}/an1.out
+bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-an1.ref
+
+rm -f ${TMPDIR}/an1.out
+gpsbabel -i xmap -f ${REFERENCE}/xmap -o an1 -F ${TMPDIR}/an1.out 
+bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-out.ref
+
+rm -f ${TMPDIR}/an1.out
+gpsbabel -i google -f ${REFERENCE}/google.js -o an1 -F ${TMPDIR}/an1.out
+bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-line-out.ref
+
+#
+# TomTom .ov2 tests
+#
+
+rm -f ${TMPDIR}/ov2.out
+gpsbabel -i arc -f ${REFERENCE}/google.arc -o tomtom -F ${TMPDIR}/ov2.out
+compare ${TMPDIR}/ov2.out ${REFERENCE}/ov2-arc-out.ref
+
+rm -f ${TMPDIR}/ov2.out
+gpsbabel -i geo -f ${REFERENCE}/gl.loc -o tomtom -F ${TMPDIR}/ov2.out
+compare ${TMPDIR}/ov2.out ${REFERENCE}/ov2-geo-out.ref
+
+rm -f ${TMPDIR}/ov2.out
+gpsbabel -i tomtom -f ${REFERENCE}/ov2-geo-out.ref -o gpsutil -F ${TMPDIR}/ov2.out
+compare ${TMPDIR}/ov2.out ${REFERENCE}/ov2-in.ref
+
+#
+# XCSV "human readable" tests
+#
+rm -f ${TMPDIR}/humanread.out
+gpsbabel -i xcsv,style=${REFERENCE}/humanread.style -f ${REFERENCE}/human.in -o arc -F ${TMPDIR}/humanread.out
+compare ${TMPDIR}/humanread.out ${REFERENCE}/humanread.out
+
+rm -f ${TMPDIR}/humanwrite.out
+gpsbabel -i xcsv,style=${REFERENCE}/humanread.style -f ${REFERENCE}/human.in -o xcsv,style=${REFERENCE}/humanwrite.style -F ${TMPDIR}/humanwrite.out
+compare ${TMPDIR}/humanwrite.out ${REFERENCE}/humanwrite.out
+
+#
+# XCSV "path distance" test
+#
+rm -f ${TMPDIR}/pathdist.out
+gpsbabel -i magellan -f ${REFERENCE}/dusky.trk -o xcsv,style=${REFERENCE}/gnuplot.style -F ${TMPDIR}/pathdist.out
+compare ${TMPDIR}/pathdist.out ${REFERENCE}/dusky.gnuplot
+
+# hsandv
+rm -f ${TMPDIR}/hsandv.exp ${TMPDIR}/1.exp ${TMPDIR}/1.exp ${TMPDIR}/Glad_5.exp
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o hsandv -F ${TMPDIR}/hsandv.exp
+compare ${TMPDIR}/hsandv.exp ${REFERENCE}
+#the hsandv format is too lossy to do this test :(
+#gpsbabel -i hsandv -f ${TMPDIR}/hsandv.exp -o geo -F ${TMPDIR}/1.exp
+#gpsbabel -i hsandv -f ${REFERENCE}/hsandv.exp -o geo -F ${TMPDIR}/2.exp
+#compare ${TMPDIR}/1.exp ${TMPDIR}/2.exp
+#test conversion from v4 to v5 files
+gpsbabel -i hsandv -f ${REFERENCE}/Glad_4.exp -o hsandv -F ${TMPDIR}/Glad_5.exp
+# FIXME: Can't compare directly because of potential FP rounding.
+# FIXME: compare ${TMPDIR}/Glad_5.exp reference
+
+#
+# stack filter tests
+# These don't actually test for proper behavior, for now, but they do 
+# exercise all of the currently-extant filter code.
+#
+
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -x stack,push,copy,nowarn -x stack,push,copy -x stack,push -x stack,pop,replace -x stack,pop,append -x stack,push,copy -x stack,pop,discard -x stack,swap,depth=1 -o arc -F ${TMPDIR}/stackfilt.txt
+
+#
+# 'tabsep' isn't really tested in any non-trivial way, but we do exercise
+# it.
+#
+
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc  -o tabsep -F ${TMPDIR}/tabsep.in
+gpsbabel -i tabsep -f ${TMPDIR}/tabsep.in -o geo -F ${TMPDIR}/tabsep.out
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc  -o geo -F ${TMPDIR}/geotabsep.out
+compare ${TMPDIR}/tabsep.out ${TMPDIR}/geotabsep.out
+
+# 
+# Now do the same for custom - it has the same issues.
+#
+
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc  -o custom -F ${TMPDIR}/custom.in
+gpsbabel -i custom -f ${TMPDIR}/custom.in -o geo -F ${TMPDIR}/custom.out
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc  -o geo -F ${TMPDIR}/geocustom.out
+
+#
+# Write something to the various output-only formats
+#
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o text -F ${TMPDIR}/text.out -o html -F ${TMPDIR}/html.out -o vcard -F ${TMPDIR}/vcard.out #-o palmdoc -F ${TMPDIR}/pd.out
+
+#
+# tef "TourExchangeFormat" read test
+#
+rm -f ${TMPDIR}/tef_xml*
+gpsbabel -i tef -f ${REFERENCE}/route/tef_xml.sample.xml -o gpx -F ${TMPDIR}/tef_xml.sample.gpx
+compare ${TMPDIR}/tef_xml.sample.gpx ${REFERENCE}/route/tef_xml.sample.gpx 
+
+#
+# PathAway Palm Database .pdb tests
+#
+rm -f ${TMPDIR}/pathaway*
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o pathaway,dbname="pathaway-geo" -F ${TMPDIR}/pathaway-geo.pdb
+gpsbabel -i pathaway -f ${TMPDIR}/pathaway-geo.pdb -o geo -F ${TMPDIR}/pathaway-geo.loc
+compare ${TMPDIR}/pathaway-geo.loc ${REFERENCE}/pathaway-geo.loc
+rm -f ${TMPDIR}/pathaway*
+gpsbabel -t -i pathaway -f ${REFERENCE}/track/pathaway.pdb -o gpx -F ${TMPDIR}/pathaway.gpx
+compare ${TMPDIR}/pathaway.gpx ${REFERENCE}/track/pathaway.gpx
+
+#
+# Garmin GPS Database .gdb tests
+#
+rm -f ${TMPDIR}/gdb-*
+gpsbabel -i gdb,via -f ${REFERENCE}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
+compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
+gpsbabel -i gpx -f ${REFERENCE}/gdb-sample.gpx -o gdb,ver=1 -F ${TMPDIR}/gdb-sample.gdb
+gpsbabel -i gdb -f ${TMPDIR}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
+gpsbabel -i gdb,via -f ${REFERENCE}/gdb-sample-v3.gdb -o gpx -F ${TMPDIR}/gdb-sample_v3.gpx
+compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample_v3.gpx
+#
+# Because of Garmin coordinates storage gpx is not good for this test
+# compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
+#
+# compare ${TMPDIR}/gdb-sample.gpx ${REFERENCE}/gdb-sample.gpx 
+
+#
+# Vito Navigator II .smt tests
+#
+rm -f ${TMPDIR}/vitosmt*
+gpsbabel    -i vitosmt -f ${REFERENCE}/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt.gpx
+compare ${TMPDIR}/vitosmt.gpx ${REFERENCE}/vitosmt.gpx
+gpsbabel -t -i vitosmt -f ${REFERENCE}/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt_t.gpx
+compare ${TMPDIR}/vitosmt_t.gpx ${REFERENCE}/track/vitosmt_t.gpx
+
+#
+# tracks filter tests
+#
+
+rm -f ${TMPDIR}/trackfilter*
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,title="LOG-%Y%m%d" -o gpx -F ${TMPDIR}/trackfilter.gpx
+compare ${TMPDIR}/trackfilter.gpx ${REFERENCE}/track/trackfilter.gpx
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,sdistance=0.1k  -o gpx -F ${TMPDIR}/trackfilter2.gpx
+compare ${TMPDIR}/trackfilter2.gpx ${REFERENCE}/track/trackfilter-sdistance.gpx
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,sdistance=0.1k,split=5m,title=%Y%m%d  -o gpx -F ${TMPDIR}/trackfilter-sdistance2.gpx
+compare ${TMPDIR}/trackfilter-sdistance2.gpx ${REFERENCE}/track/trackfilter-sdistance2.gpx
+
+#
+# Map&Guide Motorrad Routenplaner .bcr files test
+#
+rm -f ${TMPDIR}/bcr*
+gpsbabel -r -i bcr -f ${REFERENCE}/route/bcr-sample.bcr -o gpx -F ${TMPDIR}/bcr-sample.gpx
+compare ${TMPDIR}/bcr-sample.gpx ${REFERENCE}/route/bcr-sample.gpx 
+gpsbabel -r -i gpx -f ${REFERENCE}/route/bcr-sample.gpx -o bcr -F ${TMPDIR}/bcr-sample2.bcr
+compare ${REFERENCE}/route/bcr-sample2.bcr ${TMPDIR}/bcr-sample2.bcr
+gpsbabel -r -i bcr -f ${TMPDIR}/bcr-sample2.bcr -o gpx -F ${TMPDIR}/bcr-sample2.gpx
+compare	${REFERENCE}/route/bcr-sample.gpx ${TMPDIR}/bcr-sample2.gpx
+
+#
+# cet - Character encoding transformation tests
+#
+rm -f ${TMPDIR}/cet-sample*
+gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o gpx -F ${TMPDIR}/cet-sample.gpx
+compare ${TMPDIR}/cet-sample.gpx ${REFERENCE}/cet/cet-sample.gpx
+gpsbabel -w -i gpx -f ${TMPDIR}/cet-sample.gpx -o tmpro -c Latin1 -F ${TMPDIR}/cet-sample.latin1.txt
+compare ${TMPDIR}/cet-sample.latin1.txt ${REFERENCE}/cet/cet-sample.latin1.txt
+gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o tmpro -c Latin2 -F ${TMPDIR}/cet-sample.latin2.txt
+compare ${TMPDIR}/cet-sample.latin2.txt ${REFERENCE}/cet/cet-sample.latin2.txt
+gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o tmpro -c cp1250 -F ${TMPDIR}/cet-sample.cp1250.txt
+compare ${TMPDIR}/cet-sample.cp1250.txt ${REFERENCE}/cet/cet-sample.cp1250.txt
+gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o tmpro -c macroman -F ${TMPDIR}/cet-sample.macroman.txt
+compare ${TMPDIR}/cet-sample.macroman.txt ${REFERENCE}/cet/cet-sample.macroman.txt
+
+#
+# Garmin logbook.   This format has an extra section (lap data with things
+# like heartbeat and calories burned) that we don't know what to do with,
+# so we convert it to gpx, convert it to itself, convert THAT to gpx, and
+# compare those.
+#
+rm -f ${TMPDIR}/glogbook*
+gpsbabel -i glogbook -f ${REFERENCE}/track/garmin_logbook.xml -o gpx -F ${TMPDIR}/glog1.gpx
+gpsbabel -i glogbook -f ${REFERENCE}/track/garmin_logbook.xml -o glogbook -F ${TMPDIR}/glog.xml
+gpsbabel -i glogbook -f ${TMPDIR}/glog.xml -o gpx -F ${TMPDIR}/glog2.gpx
+compare ${TMPDIR}/glog1.gpx ${TMPDIR}/glog2.gpx
+
+#
+# Dop filter test
+#
+rm -f ${TMPDIR}/dop*
+sed '/<hdop>50/d' ${REFERENCE}/dop-test.gpx | gpsbabel -i gpx -f - -o openoffice -F - | sed 's/RPT...//g' > ${TMPDIR}/dop-hdop.ref
+gpsbabel -i gpx -f ${REFERENCE}/dop-test.gpx -x discard,hdop=50 -o openoffice -F - | sed 's/RPT...//g' > ${TMPDIR}/dop-hdop.fil
+compare ${TMPDIR}/dop-hdop.ref ${TMPDIR}/dop-hdop.fil
+sed '/<vdop>50/d' ${REFERENCE}/dop-test.gpx | gpsbabel -i gpx -f - -o openoffice -F - | sed 's/RPT...//g' > ${TMPDIR}/dop-vdop.ref
+gpsbabel -i gpx -f ${REFERENCE}/dop-test.gpx -x discard,vdop=50 -o openoffice -F - | sed 's/RPT...//g' > ${TMPDIR}/dop-vdop.fil
+compare ${TMPDIR}/dop-vdop.ref ${TMPDIR}/dop-vdop.fil
+
+#
+# cotoGPS tests
+#
+rm -f ${TMPDIR}/coto*
+# Track reading
+gpsbabel -i coto -f ${REFERENCE}/cototesttrack.pdb -o xcsv,style=${REFERENCE}/cototest.style -F ${TMPDIR}/cototrack.csv
+compare ${REFERENCE}/cototesttrack.csv ${TMPDIR}/cototrack.csv
+# Marker read
+gpsbabel -i coto -f ${REFERENCE}/cototestmarker.pdb -o gpx -F ${TMPDIR}/cotomarker.gpx
+compare ${REFERENCE}/cototestmarker.gpx ${TMPDIR}/cotomarker.gpx
+# Marker write
+gpsbabel -i gpx -f ${REFERENCE}/cototestmarker.gpx -o coto -F ${TMPDIR}/cotomarker.pdb
+# bincompare ${REFERENCE}/cototestmarker.pdb ${TMPDIR}/cotomarker.pdb
+gpsbabel -i coto -f ${TMPDIR}/cotomarker.pdb -o gpx -F ${TMPDIR}/cotomarker.gpx
+compare ${REFERENCE}/cototestmarker.gpx ${TMPDIR}/cotomarker.gpx
+
+#
+# Fugawi test cases
+rm -f ${TMPDIR}/fugawi*
+gpsbabel  -i fugawi -f ${REFERENCE}/fugawi.notime.txt -o fugawi -F ${TMPDIR}/fugawi1.txt
+compare ${REFERENCE}/fugawi.ref.txt ${TMPDIR}/fugawi1.txt
+gpsbabel  -i geo -f ${REFERENCE}/../geocaching.loc -o fugawi -F ${TMPDIR}/fugawi2.txt
+compare ${REFERENCE}/fugawi.ref.txt ${TMPDIR}/fugawi2.txt
+gpsbabel  -i fugawi -f ${TMPDIR}/fugawi2.txt -o fugawi -F ${TMPDIR}/fugawi3.txt
+compare ${TMPDIR}/fugawi2.txt ${TMPDIR}/fugawi3.txt
+gpsbabel  -i fugawi -f ${REFERENCE}/fugawi.time.txt  -o fugawi -F ${TMPDIR}/fugawi4.txt
+compare ${REFERENCE}/fugawi.time.ref.txt ${TMPDIR}/fugawi4.txt
+gpsbabel -i gpx -f ${REFERENCE}/track/tracks.gpx  -o fugawi -F ${TMPDIR}/fugawi5.txt
+compare ${REFERENCE}/track/fugawi.txt ${TMPDIR}/fugawi5.txt
+
+#
+# Magellan Explorist geocaching format (write-only).
+#
+gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o maggeo -F ${TMPDIR}/maggeo.gs
+compare ${REFERENCE}/gc/maggeo.gs ${TMPDIR}/maggeo.gs
+
+#
+# IGN Rando tests
+#
+gpsbabel -i ignrando -f ${REFERENCE}/track/ignrando-sample.rdn -o ignrando -F ${TMPDIR}/ignrando-sample.rdn
+gpsbabel -i ignrando -f ${TMPDIR}/ignrando-sample.rdn -o gpx -F ${TMPDIR}/ignrando-sample.gpx
+compare ${TMPDIR}/ignrando-sample.gpx ${REFERENCE}/track/ignrando-sample.gpx
+

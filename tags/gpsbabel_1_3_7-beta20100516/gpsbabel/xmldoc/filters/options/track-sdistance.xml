@@ -1,0 +1,36 @@
+         <para> The input track will be split into several tracks
+         if the distance between successive track points
+         is greater than the distance given as a parameter.
+         The distance must be numeric and can be in miles or kilometers,
+         expressed as one of the character "k", or "m".
+	If sdistance is given no parameters, this option has the same 
+	effect as the split option without parameters. If there is more 
+	than one track,
+         use the pack option before before using this.</para>
+
+         <para> For example, to split the track if the distance between
+         points is greater than 100 meters, use this:</para>
+         <para><userinput>
+gpsbabel -t 
+     -i gpx -f in.gpx 
+     -x track,pack,sdistance=0.1k" 
+     -o gpx -F out.gpx
+</userinput></para>
+        <para> The sdistance option can be combined with the split option.
+        The track then will be split only if both time and distance
+        interval exceeds the supplied values. This technique can be used to 
+	filter out gaps from
+        the tracklog.  The gap is kept only if the gps device is without
+        signal for longer time than that given and during that time it moves 
+	a distance over that given.
+        This example splits the track
+        if the device is without signal for at least 5 minutes
+        and during this time moves more than 300 meters:</para>
+        <para><userinput>
+gpsbabel -t 
+     -i gpx -f in.gpx 
+     -x track,pack,sdistance=0.3k,split=5m 
+     -o gpx -F out.gpx
+</userinput></para>
+
+

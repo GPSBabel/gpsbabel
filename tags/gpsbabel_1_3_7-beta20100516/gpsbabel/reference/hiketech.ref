@@ -1,0 +1,1530 @@
+<hiketech version="1.2" url="http://www.hiketech.com">
+<gpsdata>
+<trk>
+ <pnt>
+  <utc>2002-05-25 05:06:21</utc>
+  <lat>30.062183</lat>
+  <long>-91.610350</long>
+  <alt>1.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:09:55</utc>
+  <lat>30.062783</lat>
+  <long>-91.610567</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:12:00</utc>
+  <lat>30.062700</lat>
+  <long>-91.608267</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:12:48</utc>
+  <lat>30.062333</lat>
+  <long>-91.607383</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:14:41</utc>
+  <lat>30.061533</lat>
+  <long>-91.605283</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:17:16</utc>
+  <lat>30.059783</lat>
+  <long>-91.599400</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:17:46</utc>
+  <lat>30.057800</lat>
+  <long>-91.596683</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:18:20</utc>
+  <lat>30.055383</lat>
+  <long>-91.594900</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:19:01</utc>
+  <lat>30.053883</lat>
+  <long>-91.592617</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:20:46</utc>
+  <lat>30.049733</lat>
+  <long>-91.589750</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:21:10</utc>
+  <lat>30.049017</lat>
+  <long>-91.589883</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:21:51</utc>
+  <lat>30.048800</lat>
+  <long>-91.592933</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:22:35</utc>
+  <lat>30.046233</lat>
+  <long>-91.596450</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:23:08</utc>
+  <lat>30.045517</lat>
+  <long>-91.598717</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:04:23</utc>
+  <lat>30.047300</lat>
+  <long>-91.600267</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:06:04</utc>
+  <lat>30.047000</lat>
+  <long>-91.599633</long>
+  <alt>2.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:07:06</utc>
+  <lat>30.046433</lat>
+  <long>-91.599467</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:08:18</utc>
+  <lat>30.046200</lat>
+  <long>-91.598950</long>
+  <alt>1.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:10:20</utc>
+  <lat>30.046367</lat>
+  <long>-91.597733</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:11:09</utc>
+  <lat>30.046350</lat>
+  <long>-91.597167</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:12:18</utc>
+  <lat>30.046783</lat>
+  <long>-91.596333</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:14:22</utc>
+  <lat>30.047450</lat>
+  <long>-91.595200</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:15:04</utc>
+  <lat>30.047800</lat>
+  <long>-91.594767</long>
+  <alt>2.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:16:14</utc>
+  <lat>30.048250</lat>
+  <long>-91.594083</long>
+  <alt>1.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:17:01</utc>
+  <lat>30.048683</lat>
+  <long>-91.593800</long>
+  <alt>1.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:18:07</utc>
+  <lat>30.049350</lat>
+  <long>-91.593850</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:19:51</utc>
+  <lat>30.050317</lat>
+  <long>-91.593983</long>
+  <alt>2.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:20:39</utc>
+  <lat>30.050783</lat>
+  <long>-91.594117</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:21:24</utc>
+  <lat>30.051233</lat>
+  <long>-91.594367</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:22:17</utc>
+  <lat>30.051800</lat>
+  <long>-91.594367</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:23:18</utc>
+  <lat>30.052217</lat>
+  <long>-91.594667</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:24:37</utc>
+  <lat>30.053017</lat>
+  <long>-91.594683</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:28:13</utc>
+  <lat>30.054867</lat>
+  <long>-91.595200</long>
+  <alt>6.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:31:36</utc>
+  <lat>30.053733</lat>
+  <long>-91.594933</long>
+  <alt>2.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:32:56</utc>
+  <lat>30.053183</lat>
+  <long>-91.594783</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:34:02</utc>
+  <lat>30.052633</lat>
+  <long>-91.594833</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:36:03</utc>
+  <lat>30.052450</lat>
+  <long>-91.595433</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:36:48</utc>
+  <lat>30.052483</lat>
+  <long>-91.595967</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:37:52</utc>
+  <lat>30.052650</lat>
+  <long>-91.596783</long>
+  <alt>1.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:39:18</utc>
+  <lat>30.053133</lat>
+  <long>-91.597850</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:40:15</utc>
+  <lat>30.053617</lat>
+  <long>-91.597967</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:41:25</utc>
+  <lat>30.053967</lat>
+  <long>-91.597767</long>
+  <alt>6.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:42:37</utc>
+  <lat>30.053617</lat>
+  <long>-91.598083</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:44:01</utc>
+  <lat>30.053200</lat>
+  <long>-91.597917</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:45:53</utc>
+  <lat>30.052817</lat>
+  <long>-91.597517</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:46:54</utc>
+  <lat>30.052567</lat>
+  <long>-91.596933</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:47:42</utc>
+  <lat>30.052333</lat>
+  <long>-91.596433</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:48:41</utc>
+  <lat>30.052250</lat>
+  <long>-91.595683</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:49:52</utc>
+  <lat>30.052217</lat>
+  <long>-91.595017</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:50:49</utc>
+  <lat>30.051883</lat>
+  <long>-91.594700</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:52:14</utc>
+  <lat>30.051050</lat>
+  <long>-91.594400</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:52:56</utc>
+  <lat>30.050567</lat>
+  <long>-91.594233</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:53:38</utc>
+  <lat>30.050183</lat>
+  <long>-91.594100</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:55:11</utc>
+  <lat>30.049100</lat>
+  <long>-91.593717</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:56:32</utc>
+  <lat>30.048450</lat>
+  <long>-91.594250</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:57:24</utc>
+  <lat>30.048083</lat>
+  <long>-91.594750</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:58:40</utc>
+  <lat>30.047500</lat>
+  <long>-91.595450</long>
+  <alt>7.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:59:28</utc>
+  <lat>30.047067</lat>
+  <long>-91.596000</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:00:22</utc>
+  <lat>30.046633</lat>
+  <long>-91.596600</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:01:41</utc>
+  <lat>30.046400</lat>
+  <long>-91.597650</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:02:48</utc>
+  <lat>30.046233</lat>
+  <long>-91.598467</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:03:43</utc>
+  <lat>30.046317</lat>
+  <long>-91.598967</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:04:49</utc>
+  <lat>30.046783</lat>
+  <long>-91.599283</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:05:57</utc>
+  <lat>30.047133</lat>
+  <long>-91.599667</long>
+ </pnt>
+</trk>
+ <pnt>
+  <utc>2002-05-25 05:06:21</utc>
+  <lat>30.062183</lat>
+  <long>-91.610350</long>
+  <alt>1.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:09:55</utc>
+  <lat>30.062783</lat>
+  <long>-91.610567</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:12:00</utc>
+  <lat>30.062700</lat>
+  <long>-91.608267</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:12:48</utc>
+  <lat>30.062333</lat>
+  <long>-91.607383</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:14:41</utc>
+  <lat>30.061533</lat>
+  <long>-91.605283</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:17:16</utc>
+  <lat>30.059783</lat>
+  <long>-91.599400</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:17:46</utc>
+  <lat>30.057800</lat>
+  <long>-91.596683</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:18:20</utc>
+  <lat>30.055383</lat>
+  <long>-91.594900</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:19:01</utc>
+  <lat>30.053883</lat>
+  <long>-91.592617</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:20:46</utc>
+  <lat>30.049733</lat>
+  <long>-91.589750</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:21:10</utc>
+  <lat>30.049017</lat>
+  <long>-91.589883</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:21:51</utc>
+  <lat>30.048800</lat>
+  <long>-91.592933</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:22:35</utc>
+  <lat>30.046233</lat>
+  <long>-91.596450</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 05:23:08</utc>
+  <lat>30.045517</lat>
+  <long>-91.598717</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:04:23</utc>
+  <lat>30.047300</lat>
+  <long>-91.600267</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:06:04</utc>
+  <lat>30.047000</lat>
+  <long>-91.599633</long>
+  <alt>2.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:07:06</utc>
+  <lat>30.046433</lat>
+  <long>-91.599467</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:08:18</utc>
+  <lat>30.046200</lat>
+  <long>-91.598950</long>
+  <alt>1.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:10:20</utc>
+  <lat>30.046367</lat>
+  <long>-91.597733</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:11:09</utc>
+  <lat>30.046350</lat>
+  <long>-91.597167</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:12:18</utc>
+  <lat>30.046783</lat>
+  <long>-91.596333</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:14:22</utc>
+  <lat>30.047450</lat>
+  <long>-91.595200</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:15:04</utc>
+  <lat>30.047800</lat>
+  <long>-91.594767</long>
+  <alt>2.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:16:14</utc>
+  <lat>30.048250</lat>
+  <long>-91.594083</long>
+  <alt>1.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:17:01</utc>
+  <lat>30.048683</lat>
+  <long>-91.593800</long>
+  <alt>1.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:18:07</utc>
+  <lat>30.049350</lat>
+  <long>-91.593850</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:19:51</utc>
+  <lat>30.050317</lat>
+  <long>-91.593983</long>
+  <alt>2.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:20:39</utc>
+  <lat>30.050783</lat>
+  <long>-91.594117</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:21:24</utc>
+  <lat>30.051233</lat>
+  <long>-91.594367</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:22:17</utc>
+  <lat>30.051800</lat>
+  <long>-91.594367</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:23:18</utc>
+  <lat>30.052217</lat>
+  <long>-91.594667</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:24:37</utc>
+  <lat>30.053017</lat>
+  <long>-91.594683</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:28:13</utc>
+  <lat>30.054867</lat>
+  <long>-91.595200</long>
+  <alt>6.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:31:36</utc>
+  <lat>30.053733</lat>
+  <long>-91.594933</long>
+  <alt>2.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:32:56</utc>
+  <lat>30.053183</lat>
+  <long>-91.594783</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:34:02</utc>
+  <lat>30.052633</lat>
+  <long>-91.594833</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:36:03</utc>
+  <lat>30.052450</lat>
+  <long>-91.595433</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:36:48</utc>
+  <lat>30.052483</lat>
+  <long>-91.595967</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:37:52</utc>
+  <lat>30.052650</lat>
+  <long>-91.596783</long>
+  <alt>1.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:39:18</utc>
+  <lat>30.053133</lat>
+  <long>-91.597850</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:40:15</utc>
+  <lat>30.053617</lat>
+  <long>-91.597967</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:41:25</utc>
+  <lat>30.053967</lat>
+  <long>-91.597767</long>
+  <alt>6.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:42:37</utc>
+  <lat>30.053617</lat>
+  <long>-91.598083</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:44:01</utc>
+  <lat>30.053200</lat>
+  <long>-91.597917</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:45:53</utc>
+  <lat>30.052817</lat>
+  <long>-91.597517</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:46:54</utc>
+  <lat>30.052567</lat>
+  <long>-91.596933</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:47:42</utc>
+  <lat>30.052333</lat>
+  <long>-91.596433</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:48:41</utc>
+  <lat>30.052250</lat>
+  <long>-91.595683</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:49:52</utc>
+  <lat>30.052217</lat>
+  <long>-91.595017</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:50:49</utc>
+  <lat>30.051883</lat>
+  <long>-91.594700</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:52:14</utc>
+  <lat>30.051050</lat>
+  <long>-91.594400</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:52:56</utc>
+  <lat>30.050567</lat>
+  <long>-91.594233</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:53:38</utc>
+  <lat>30.050183</lat>
+  <long>-91.594100</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:55:11</utc>
+  <lat>30.049100</lat>
+  <long>-91.593717</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:56:32</utc>
+  <lat>30.048450</lat>
+  <long>-91.594250</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:57:24</utc>
+  <lat>30.048083</lat>
+  <long>-91.594750</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:58:40</utc>
+  <lat>30.047500</lat>
+  <long>-91.595450</long>
+  <alt>7.000000</alt>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 06:59:28</utc>
+  <lat>30.047067</lat>
+  <long>-91.596000</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:00:22</utc>
+  <lat>30.046633</lat>
+  <long>-91.596600</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:01:41</utc>
+  <lat>30.046400</lat>
+  <long>-91.597650</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:02:48</utc>
+  <lat>30.046233</lat>
+  <long>-91.598467</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:03:43</utc>
+  <lat>30.046317</lat>
+  <long>-91.598967</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:04:49</utc>
+  <lat>30.046783</lat>
+  <long>-91.599283</long>
+ </pnt>
+ <pnt>
+  <utc>2002-05-25 07:05:57</utc>
+  <lat>30.047133</lat>
+  <long>-91.599667</long>
+ </pnt>
+<wpt>
+	<ident>5066</ident>
+	<sym>Crossing</sym>
+	<lat>42.438878</lat>
+	<long>-71.119277</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5067</ident>
+	<sym>Dot</sym>
+	<lat>42.439227</lat>
+	<long>-71.119689</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5096</ident>
+	<sym>Dot</sym>
+	<lat>42.438917</lat>
+	<long>-71.116146</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5142</ident>
+	<sym>Dot</sym>
+	<lat>42.443904</lat>
+	<long>-71.122044</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5156</ident>
+	<sym>Dot</sym>
+	<lat>42.447298</lat>
+	<long>-71.121447</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5224</ident>
+	<sym>Dot</sym>
+	<lat>42.454873</lat>
+	<long>-71.125094</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5229</ident>
+	<sym>Dot</sym>
+	<lat>42.459079</lat>
+	<long>-71.124988</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5237</ident>
+	<sym>Dot</sym>
+	<lat>42.456979</lat>
+	<long>-71.124474</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5254</ident>
+	<sym>Dot</sym>
+	<lat>42.454401</lat>
+	<long>-71.120990</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5258</ident>
+	<sym>Dot</sym>
+	<lat>42.451442</lat>
+	<long>-71.121746</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5264</ident>
+	<sym>Dot</sym>
+	<lat>42.454404</lat>
+	<long>-71.120660</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>526708</ident>
+	<sym>Dot</sym>
+	<lat>42.457761</lat>
+	<long>-71.121045</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>526750</ident>
+	<sym>Dot</sym>
+	<lat>42.457089</lat>
+	<long>-71.120313</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>527614</ident>
+	<sym>Dot</sym>
+	<lat>42.456592</lat>
+	<long>-71.119676</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>527631</ident>
+	<sym>Dot</sym>
+	<lat>42.456252</lat>
+	<long>-71.119356</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5278</ident>
+	<sym>Dot</sym>
+	<lat>42.458148</lat>
+	<long>-71.119135</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5289</ident>
+	<sym>Dot</sym>
+	<lat>42.459377</lat>
+	<long>-71.117693</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5374FIRE</ident>
+	<sym>Dot</sym>
+	<lat>42.464183</lat>
+	<long>-71.119828</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5376</ident>
+	<sym>Dot</sym>
+	<lat>42.465650</lat>
+	<long>-71.119399</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6006</ident>
+	<sym>Dot</sym>
+	<lat>42.439018</lat>
+	<long>-71.114456</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6006BLUE</ident>
+	<sym>Dot</sym>
+	<lat>42.438594</lat>
+	<long>-71.114803</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6014MEADOW</ident>
+	<sym>Dot</sym>
+	<lat>42.436757</lat>
+	<long>-71.113223</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6029</ident>
+	<sym>Dot</sym>
+	<lat>42.441754</lat>
+	<long>-71.113220</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6053</ident>
+	<sym>Dot</sym>
+	<lat>42.436243</lat>
+	<long>-71.109075</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6066</ident>
+	<sym>Dot</sym>
+	<lat>42.439250</lat>
+	<long>-71.107500</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6067</ident>
+	<sym>Dot</sym>
+	<lat>42.439764</lat>
+	<long>-71.107582</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6071</ident>
+	<sym>Dot</sym>
+	<lat>42.434766</lat>
+	<long>-71.105874</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6073</ident>
+	<sym>Dot</sym>
+	<lat>42.433304</lat>
+	<long>-71.106599</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6084</ident>
+	<sym>Dot</sym>
+	<lat>42.437338</lat>
+	<long>-71.104772</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6130</ident>
+	<sym>Dot</sym>
+	<lat>42.442196</lat>
+	<long>-71.110975</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6131</ident>
+	<sym>Dot</sym>
+	<lat>42.442981</lat>
+	<long>-71.111441</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6153</ident>
+	<sym>Dot</sym>
+	<lat>42.444773</lat>
+	<long>-71.108882</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6171</ident>
+	<sym>Dot</sym>
+	<lat>42.443592</lat>
+	<long>-71.106301</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6176</ident>
+	<sym>Dot</sym>
+	<lat>42.447804</lat>
+	<long>-71.106624</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6177</ident>
+	<sym>Dot</sym>
+	<lat>42.448448</lat>
+	<long>-71.106158</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6272</ident>
+	<sym>Dot</sym>
+	<lat>42.453415</lat>
+	<long>-71.106783</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6272</ident>
+	<sym>Dot</sym>
+	<lat>42.453434</lat>
+	<long>-71.107253</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6278</ident>
+	<sym>Dot</sym>
+	<lat>42.458298</lat>
+	<long>-71.106771</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6280</ident>
+	<sym>Dot</sym>
+	<lat>42.451430</lat>
+	<long>-71.105413</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6283</ident>
+	<sym>Dot</sym>
+	<lat>42.453845</lat>
+	<long>-71.105206</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6289</ident>
+	<sym>Dot</sym>
+	<lat>42.459986</lat>
+	<long>-71.106170</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6297</ident>
+	<sym>Dot</sym>
+	<lat>42.457616</lat>
+	<long>-71.105116</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6328</ident>
+	<sym>Dot</sym>
+	<lat>42.467110</lat>
+	<long>-71.113574</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6354</ident>
+	<sym>Dot</sym>
+	<lat>42.464202</lat>
+	<long>-71.109863</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>635722</ident>
+	<sym>Dot</sym>
+	<lat>42.466459</lat>
+	<long>-71.110067</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>635783</ident>
+	<sym>Dot</sym>
+	<lat>42.466557</lat>
+	<long>-71.109410</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6373</ident>
+	<sym>Dot</sym>
+	<lat>42.463495</lat>
+	<long>-71.107117</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6634</ident>
+	<sym>Dot</sym>
+	<lat>42.401051</lat>
+	<long>-71.110241</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6979</ident>
+	<sym>Dot</sym>
+	<lat>42.432621</lat>
+	<long>-71.106532</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6997</ident>
+	<sym>Dot</sym>
+	<lat>42.431033</lat>
+	<long>-71.107883</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>BEAR HILL</ident>
+	<sym>Tall Tower</sym>
+	<lat>42.465687</lat>
+	<long>-71.107360</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>BELLEVUE</ident>
+	<sym>Parking Area</sym>
+	<lat>42.430950</lat>
+	<long>-71.107628</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6016</ident>
+	<sym>Waypoint</sym>
+	<lat>42.438666</lat>
+	<long>-71.114079</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5236BRIDGE</ident>
+	<sym>Bridge</sym>
+	<lat>42.456469</lat>
+	<long>-71.124651</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5376BRIDGE</ident>
+	<sym>Bridge</sym>
+	<lat>42.465759</lat>
+	<long>-71.119815</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6181CROSS</ident>
+	<sym>Crossing</sym>
+	<lat>42.442993</lat>
+	<long>-71.105878</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6042CROSS</ident>
+	<sym>Crossing</sym>
+	<lat>42.435472</lat>
+	<long>-71.109664</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>DARKHOLLPO</ident>
+	<sym>Fishing Area</sym>
+	<lat>42.458516</lat>
+	<long>-71.103646</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6121DEAD</ident>
+	<sym>Danger Area</sym>
+	<lat>42.443109</lat>
+	<long>-71.112675</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5179DEAD</ident>
+	<sym>Danger Area</sym>
+	<lat>42.449866</lat>
+	<long>-71.119298</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5299DEAD</ident>
+	<sym>Danger Area</sym>
+	<lat>42.459629</lat>
+	<long>-71.116524</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5376DEAD</ident>
+	<sym>Danger Area</sym>
+	<lat>42.465485</lat>
+	<long>-71.119148</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6353DEAD</ident>
+	<sym>Danger Area</sym>
+	<lat>42.462776</lat>
+	<long>-71.109986</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6155DEAD</ident>
+	<sym>Danger Area</sym>
+	<lat>42.446793</lat>
+	<long>-71.108784</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>GATE14</ident>
+	<sym>Truck Stop</sym>
+	<lat>42.451204</lat>
+	<long>-71.126602</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>GATE16</ident>
+	<sym>Truck Stop</sym>
+	<lat>42.458499</lat>
+	<long>-71.122078</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>GATE17</ident>
+	<sym>Truck Stop</sym>
+	<lat>42.459376</lat>
+	<long>-71.119238</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>GATE19</ident>
+	<sym>Truck Stop</sym>
+	<lat>42.466353</lat>
+	<long>-71.119240</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>GATE21</ident>
+	<sym>Truck Stop</sym>
+	<lat>42.468655</lat>
+	<long>-71.107697</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>GATE24</ident>
+	<sym>Truck Stop</sym>
+	<lat>42.456718</lat>
+	<long>-71.102973</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>GATE5</ident>
+	<sym>Truck Stop</sym>
+	<lat>42.430847</lat>
+	<long>-71.107690</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>GATE6</ident>
+	<sym>Waypoint</sym>
+	<lat>42.431240</lat>
+	<long>-71.109236</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>6077LOGS</ident>
+	<sym>Amusement Park</sym>
+	<lat>42.439502</lat>
+	<long>-71.106556</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5148NANEPA</ident>
+	<sym>Waypoint</sym>
+	<lat>42.449765</lat>
+	<long>-71.122320</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5267OBSTAC</ident>
+	<sym>Amusement Park</sym>
+	<lat>42.457388</lat>
+	<long>-71.119845</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>PANTHRCAVE</ident>
+	<sym>Tunnel</sym>
+	<lat>42.434980</lat>
+	<long>-71.109942</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5252PURPLE</ident>
+	<sym>Summit</sym>
+	<lat>42.453256</lat>
+	<long>-71.121211</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5287WATER</ident>
+	<sym>Swimming Area</sym>
+	<lat>42.457734</lat>
+	<long>-71.117481</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5239ROAD</ident>
+	<sym>Truck Stop</sym>
+	<lat>42.459278</lat>
+	<long>-71.124574</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5278ROAD</ident>
+	<sym>Truck Stop</sym>
+	<lat>42.458782</lat>
+	<long>-71.118991</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5058ROAD</ident>
+	<sym>Dot</sym>
+	<lat>42.439993</lat>
+	<long>-71.120925</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>SHEEPFOLD</ident>
+	<sym>Parking Area</sym>
+	<lat>42.453415</lat>
+	<long>-71.106782</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>SOAPBOX</ident>
+	<sym>Cemetery</sym>
+	<lat>42.455956</lat>
+	<long>-71.107483</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5376STREAM</ident>
+	<sym>Bridge</sym>
+	<lat>42.465913</lat>
+	<long>-71.119328</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5144SUMMIT</ident>
+	<sym>Summit</sym>
+	<lat>42.445359</lat>
+	<long>-71.122845</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+<wpt>
+	<ident>5150TANK</ident>
+	<sym>Museum</sym>
+	<lat>42.441727</lat>
+	<long>-71.121676</long>
+	<color>
+		<lbl>FAFFB4</lbl>
+		<obj>FF8000</obj>
+	</color>
+</wpt>
+</gpsdata>
+</hiketech>

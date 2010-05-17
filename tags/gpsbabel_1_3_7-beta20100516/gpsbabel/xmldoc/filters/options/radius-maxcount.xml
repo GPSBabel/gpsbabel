@@ -1,0 +1,22 @@
+<para>
+This option specifies the maximum number of points that the radius filter may
+keep.  If there are more than this number of points within the specified 
+distance of the center, the more distant points will be discarded even though
+they are within the specified distance.  If this option is not specified, 
+all points are kept regardless of how many there are.
+</para>
+<para>
+Note that if the <option>nosort</option> option is also specified, this 
+option will instead keep points based on their position within the input
+file rather than on their distance from the center.  This may or may not be
+what you want.
+</para>
+<para>
+Note, too, that this option may be used with the <option>exclude</option> 
+option, but the results might not be what you expect.  In particular, the 
+results will not be the same as if you had kept all of the points you'd 
+otherwise throw away.  You will still get no more than 
+<varname>maxcount</varname> points, but they will all be at least 
+<varname>distance</varname> away from the center.  (And possibly sorted.)
+</para>
+      

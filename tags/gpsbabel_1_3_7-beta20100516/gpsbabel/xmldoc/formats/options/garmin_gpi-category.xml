@@ -1,0 +1,9 @@
+<para>
+    With this option you can specify the category which is primary
+    visible on the device (default is "My points").
+</para>
+<para>
+  <userinput>
+    gpsbabel -i gpx -f "My Points.gpx" -o garmin_gpi,category="Best Restaurants" -F "My Points.gpi"
+  </userinput>
+</para>

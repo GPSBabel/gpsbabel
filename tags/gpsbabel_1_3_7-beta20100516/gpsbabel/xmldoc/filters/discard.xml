@@ -1,0 +1,26 @@
+<para>
+This filter is used to "fix" unreliable GPS data by discarding points
+that are believed to be unreliable.  You may specify an 
+HDOP and/or VDOP above a specified limit, a minimum number of satellits
+that must have been in view for a fix to be considered, or both.
+</para>
+<para>
+HDOP and VDOP are measures of the best possible horizontal or vertical precision for a given configuration of GPS satellites.   Higher numbers indicate a higher dilution of precision and therefore mathematically less useful.
+</para>
+<para>
+<example id="example_discard_filter">
+<title>Using the discard filter for HDOP and VDOP. </title>
+<para><userinput> gpsbabel -i gpx -f in.gpx -x discard,hdop=10,vdop=20,hdopandvdop -o gpx -F out.gpx</userinput></para>
+</example>
+</para>
+<para>
+You may specify a minimmum number of  satellites.  
+</para>
+<para>
+<example id="example_discard_filter_sats">
+<title>Using the discard filter to require at least three satellites. </title>
+<para><userinput> gpsbabel -i gpx -f in.gpx -x discard,sat=3 -o gpx -F out.gpx</userinput></para>
+</example>
+</para>
+<para> Contributed by Tobias Minich and Serge Droz. </para>
+      
