@@ -36,7 +36,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="advui.ui" line="14"/>
         <source>Global Options</source>
-        <translation>globale Optionen</translation>
+        <translation>Globale Optionen</translation>
     </message>
     <message>
         <location filename="advui.ui" line="23"/>
@@ -478,7 +478,7 @@ Das Prgramm muss abgebrochen werden.</translation>
     <message>
         <location filename="mainwindow.cpp" line="621"/>
         <source>There are no input options for format &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Es gibt keine Eingabeoptionen für das Format &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="627"/>
@@ -489,7 +489,7 @@ Das Prgramm muss abgebrochen werden.</translation>
     <message>
         <location filename="mainwindow.cpp" line="640"/>
         <source>There are no output options for format &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Es gibt keine Ausgabeoptionen für das Format &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="658"/>
@@ -972,7 +972,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible. &lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The quality of the results will vary depending on the density of points in the original route and the length of the original route. &lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -1187,7 +1187,7 @@ Diese Option wird zusammen mit ihrem Gegenstück verwendet, um alle Trackpunkte 
         <location filename="trackui.ui" line="203"/>
         <source>Pack all tracks into one. </source>
         <translatorcomment>no sentence</translatorcomment>
-        <translation type="unfinished">Alle Tracks verketten.</translation>
+        <translation>Alle Tracks in einem zusammenfassen.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="206"/>
@@ -1196,7 +1196,7 @@ Diese Option wird zusammen mit ihrem Gegenstück verwendet, um alle Trackpunkte 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
 
 This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop. </source>
-        <translation>Alle Tracks verketten
+        <translation>Alle Tracks in einem zusammenfassen.
 
 Diese Option sorgt dafür, daβ alle Tracks hintereinander zu einen gemeinsamen Track werden. Das funktioniert nicht, wenn die Zeitpunkte von Tracks überlappen. Falls das der Fall ist, kommt eher die &apos;Migrieren&apos;-Funktion in Frage.
 
@@ -1211,14 +1211,14 @@ Diese Option eignet sich am besten dafuer, Tracks zu verbinden, die durch eine F
     <message>
         <location filename="trackui.ui" line="220"/>
         <source>Merge multiple tracks for the same way.</source>
-        <translation>Migriere mehrere Tracks in einen</translation>
+        <translation>Mehrere Tracks auf einem Weg zusammenfassen.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="223"/>
         <source> Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
-        <translation>Migriere mehrere Tracks in einen.
+        <translation>Mehrere Tracks auf einem Weg zusammenfassen.
 
 Diese Option übernimmt alle Punkte aus allen Tracks in einen einzigen Track und sortiert sie nach der Zeit. Punkte mit den gleichen Zeitdaten werden entfernt.</translation>
     </message>
@@ -1230,7 +1230,7 @@ Diese Option übernimmt alle Punkte aus allen Tracks in einen einzigen Track und
     <message>
         <location filename="trackui.ui" line="235"/>
         <source>Split tracks. </source>
-        <translation>Splitte Tracks auf</translation>
+        <translation>Tracks aufspalten.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="238"/>
@@ -1240,7 +1240,7 @@ The input track will be split into several tracks depending on date of track poi
 
 If the input has multiple tracks, pack them together before splitting them back apart per day.
 </source>
-        <translation>Aufsplitten nach Datum oder Zeitintervall
+        <translation>Aufspalten nach Datum oder Zeitintervall
 
 Der Track wird aufgeteilt nach den Zeitdatum der Trackpunkte. Wenn mehrere Tracks verarbeitet werden sollen, müssen sie vorher zu einem kombiniert werden.
 
@@ -1250,7 +1250,7 @@ Mehrere Tracks, die sich ueber Tagesgrenzen verteilen, können so ebenfalls an D
     <message>
         <location filename="trackui.ui" line="246"/>
         <source>Split</source>
-        <translation>Aufsplitten</translation>
+        <translation>Aufspalten</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="255"/>
@@ -1292,7 +1292,7 @@ Mehrere Tracks, die sich ueber Tagesgrenzen verteilen, können so ebenfalls an D
         <location filename="trackui.ui" line="324"/>
         <source>Synthesize GPS Fixes. </source>
         <translatorcomment>no sentence</translatorcomment>
-        <translation>Generieren von GPS Fixwerten</translation>
+        <translation>GPS-Fixwerte generieren.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="327"/>
@@ -1301,7 +1301,7 @@ Mehrere Tracks, die sich ueber Tagesgrenzen verteilen, können so ebenfalls an D
 This option sets the GPS fix status for all trackpoints to the specified value. Valid values for this option are PPS, DGPS, 3D, 2D, or NONE.
 
 This option is most useful when converting from a format that doesn&apos;t contain GPS fix status to one that requires it. </source>
-        <translation>Generieren von GPS Fixwerten (PPS, DGPS, 3D, 2D, KEINE).
+        <translation>GPS-Fixwerte generieren.n (PPS, DGPS, 3D, 2D, KEINE).
 
 Diese Option erzeugt GPS Fixwerte und setzt diese für alle Trackpunkte auf die angegebenen Werte. Gültige Werte sind: &apos;PPS&apos;, &apos;DGPS&apos;, &apos;3D&apos;, &apos;2D&apos;, oder &apos;KEINE&apos;.
 
@@ -1402,12 +1402,12 @@ Diese Option generiert für jeden Trackpunkt einen Geschwindigkeitswert. Sie wir
     <message>
         <location filename="upgrade.cpp" line="215"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine neue Version von GPSBabel ist verfügbar.&lt;br /&gt;Die installierte Version ist %1 &lt;br /&gt;Die neueste Version ist %2</translation>
     </message>
     <message>
         <location filename="upgrade.cpp" line="232"/>
         <source>Do you wish to download an upgrade?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die Aktualisierung herunter laden?</translation>
     </message>
     <message>
         <source>&lt;center&gt;&lt;b&gt;A new version of GPSBabel is available&lt;/b&gt;&lt;br&gt;Your version is %1 &lt;br&gt;The latest version is %2&lt;/center&gt;</source>
