@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: main.cpp,v 1.6 2009-09-06 17:04:36 robertl Exp $
+// $Id: main.cpp,v 1.7 2010-05-19 11:41:02 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -41,7 +41,11 @@ const char *pathSeparator = ":";
 static void installTranslation(QApplication *app, const QString &nm)
 {
   QTranslator *xlator = new QTranslator();
+fprintf(stderr, "Loading %s\n", qPrintable(QLibraryInfo::location(QLibraryInfo::TranslationsPath) + "/" + nm + QLocale::system().name()));
   xlator->load(QLibraryInfo::location(QLibraryInfo::TranslationsPath) + "/" + nm + QLocale::system().name());
+
+fprintf(stderr, "...Loading %s\n", qPrintable(nm + QLocale::system().name()));
+  xlator->load(nm + QLocale::system().name());
   app->installTranslator(xlator);
 }
 
