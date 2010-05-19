@@ -1,4 +1,4 @@
-# $Id: app.pro,v 1.15 2010-02-14 21:29:05 robertl Exp $
+# $Id: app.pro,v 1.16 2010-05-19 11:41:02 robertl Exp $
 #
 
 CONFIG += qt release 
@@ -89,6 +89,8 @@ TRANSLATIONS += gpsbabelfe_es.ts
 TRANSLATIONS += gpsbabelfe_fr.ts
 TRANSLATIONS += gpsbabelfe_hu.ts
 TRANSLATIONS += gpsbabelfe_it.ts
+TRANSLATIONS += gpsbabelfe.ts
+TRANSLATIONS += gpsbabel.ts
 
 
 

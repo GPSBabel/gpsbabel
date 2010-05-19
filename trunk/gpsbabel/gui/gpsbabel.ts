@@ -1236,6 +1236,10 @@ This program cannot continue.</source>
         <source>No data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Check for Upgrade</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Map</name>
@@ -1723,6 +1727,14 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
     </message>
     <message>
         <source>Do you wish to download an upgrade?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid return data at line %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
