@@ -349,6 +349,8 @@ mac-gui: gpsbabel
 	file gpsbabel | grep '2 architectures' || exit 1
 	file gui/objects/gpsbabelfe-bin.app/Contents/MacOS/gpsbabelfe-bin | grep '2 architectures' || exit 1
 	cd gui ; qmake && xcodebuild
+	lupdate 
+	lrelease 
 	cp gpsbabel gui/objects/gpsbabelfe-bin.app/Contents/MacOS
 	cp -r gui/help  gui/objects/gpsbabelfe-bin.app/Contents/MacOS
 	cp gui/gmapbase.html gui/objects/gpsbabelfe-bin.app/Contents/MacOS
