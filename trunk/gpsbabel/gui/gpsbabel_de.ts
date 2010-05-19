@@ -31,7 +31,7 @@
     <message>
         <location filename="foo.h" line="195"/>
         <source>After output job done sleep n second(s)</source>
-        <translation>Pausiere im Anschluß n sekunde(n)</translation>
+        <translation>Im Anschluß n Sekunde(n) pausieren</translation>
     </message>
     <message>
         <location filename="foo.h" line="3"/>
@@ -73,7 +73,7 @@
         <location filename="foo.h" line="584"/>
         <location filename="foo.h" line="592"/>
         <source>Allow whitespace synth. shortnames</source>
-        <translation>Erlaube Leerzeichen in Kurznamen</translation>
+        <translation>Leerzeichen in Kurznamen erlauben</translation>
     </message>
     <message>
         <location filename="foo.h" line="237"/>
@@ -83,17 +83,17 @@
     <message>
         <location filename="foo.h" line="30"/>
         <source>Append icon_descr to description</source>
-        <translation>Erweitere Beschreibung um Symbolbeschreibung</translation>
+        <translation>Beschreibung um Symbolbeschreibung erweitern</translation>
     </message>
     <message>
         <location filename="foo.h" line="494"/>
         <source>Append realtime positioning data to the output file instead of truncating</source>
-        <translation></translation>
+        <translation>Echtzeit-Positionierungsdaten an Ausgabendatei anhängen und nicht kürzen</translation>
     </message>
     <message>
         <location filename="foo.h" line="293"/>
         <source>Base URL for link tag in output</source>
-        <translation>Basis-URL für Verknüpfungseintrag </translation>
+        <translation>Basis-URL für Verknüpfungseintrag in Ausgabe</translation>
     </message>
     <message>
         <location filename="foo.h" line="6"/>
@@ -132,7 +132,7 @@
         <location filename="foo.h" line="587"/>
         <location filename="foo.h" line="595"/>
         <source>Basename prepended to URL on output</source>
-        <translation>Basis-Adresse für erzeugte URL&apos;s</translation>
+        <translation>Basis-Adresse für erzeugte URLs</translation>
     </message>
     <message>
         <location filename="foo.h" line="155"/>
@@ -148,7 +148,7 @@
     <message>
         <location filename="foo.h" line="206"/>
         <source>Category number to use for written waypoints</source>
-        <translation>Benutze Kategorie # beim Schreiben von Wegpunkten  (1..16)</translation>
+        <translation>Kategorienummer (1..16) beim Schreiben von Wegpunkten verwenden</translation>
     </message>
     <message>
         <location filename="foo.h" line="71"/>
@@ -165,17 +165,17 @@
         <location filename="foo.h" line="247"/>
         <location filename="foo.h" line="491"/>
         <source>Complete date-free tracks with given date (YYYYMMDD).</source>
-        <translation>Komplettiere Tracks ohne Datumsangaben mit Datum ... (YYYYMMDD)</translation>
+        <translation>Tracks ohne Datumsangaben mit diesem Datum vervollständigen (YYYYMMDD)</translation>
     </message>
     <message>
         <location filename="foo.h" line="197"/>
         <source>Create unique waypoint names (default = yes)</source>
-        <translation>Erzeuge eindeutige Wegpunktnamen (Vorgabe: JA)</translation>
+        <translation>Eindeutige Wegpunktnamen erzeugen (Vorgabe: JA)</translation>
     </message>
     <message>
         <location filename="foo.h" line="292"/>
         <source>Create waypoints from geocache log entries</source>
-        <translation>Erzeuge Wegpunkte aus Geocache Log-Einträgen</translation>
+        <translation>Wegpunkte aus Geocache Log-Einträgen erzeugen</translation>
     </message>
     <message>
         <location filename="foo.h" line="29"/>
@@ -215,7 +215,7 @@
     <message>
         <location filename="foo.h" line="154"/>
         <source>Default category on output (1..16)</source>
-        <translation>Standard Kategorie (1..16)</translation>
+        <translation>Standardkategorie der Ausgabe (1..16)</translation>
     </message>
     <message>
         <location filename="foo.h" line="42"/>
@@ -248,7 +248,7 @@
     <message>
         <location filename="foo.h" line="133"/>
         <source>Default speed for waypoints (knots/hr)</source>
-        <translation>Vorgabegeschwindigkeit (Knoten/h)</translation>
+        <translation>Vorgabegeschwindigkeit für Wegpunkte (Knoten/h)</translation>
     </message>
     <message>
         <location filename="foo.h" line="311"/>
@@ -259,23 +259,23 @@
     <message>
         <location filename="foo.h" line="452"/>
         <source>Delete all routes</source>
-        <translation>Lösche alle Routen</translation>
+        <translation>Alle Routen löschen</translation>
     </message>
     <message>
         <location filename="foo.h" line="451"/>
         <source>Delete all track points</source>
-        <translation>Lösche alle Trackpunkte</translation>
+        <translation>Alle Trackpunkte löschen</translation>
     </message>
     <message>
         <location filename="foo.h" line="386"/>
         <location filename="foo.h" line="453"/>
         <source>Delete all waypoints</source>
-        <translation>Lösche alle Wegpunkte</translation>
+        <translation>Alle Wegpunkte löschen</translation>
     </message>
     <message>
         <location filename="foo.h" line="242"/>
         <source>Display labels on track and routepoints  (default = 1)</source>
-        <translation>Zeige Beschriftung bei Track- und Routenpunkten (Vorgabe: 1)</translation>
+        <translation>Beschriftung bei Track- und Routenpunkten anzeigen (Vorgabe: 1)</translation>
     </message>
     <message>
         <location filename="foo.h" line="169"/>
@@ -290,27 +290,27 @@
     <message>
         <location filename="foo.h" line="69"/>
         <source>Do not add URLs to description</source>
-        <translation>Hänge keine URL&apos;s an die Beschreibung an</translation>
+        <translation>Keine URLs zur Beschreibung hinzufügen</translation>
     </message>
     <message>
         <location filename="foo.h" line="190"/>
         <source>Don&apos;t show gpi bitmap on device</source>
-        <translation>Zeige keine Bitmap (Icon) auf dem GPS</translation>
+        <translation>Kein Bitmap (Icon) auf dem GPS anzeigen</translation>
     </message>
     <message>
         <location filename="foo.h" line="238"/>
         <source>Draw extrusion line from trackpoint to ground</source>
-        <translation>Zeichne eine Verbindungslinie vom Trackpunkt zum Erdboden</translation>
+        <translation>Verbindungslinie vom Trackpunkt zum Erdboden zeichnen</translation>
     </message>
     <message>
         <location filename="foo.h" line="157"/>
         <source>Drop route points that do not have an equivalent waypoint (hidden points)</source>
-        <translation>Lösche versteckte Wegpunkte (automatisch berechnete Routenpunkte)</translation>
+        <translation>Versteckte Wegpunkte löschen (automatisch berechnete Routenpunkte)</translation>
     </message>
     <message>
         <location filename="foo.h" line="187"/>
         <source>Enable alerts on speed or proximity distance</source>
-        <translation>Aktiviere Alarm für Annäherung and Geschwindigkeit</translation>
+        <translation>Alarm für Annäherung oder Geschwindigkeit aktivieren</translation>
     </message>
     <message>
         <location filename="foo.h" line="309"/>
@@ -331,37 +331,37 @@
         <location filename="foo.h" line="550"/>
         <location filename="foo.h" line="635"/>
         <source>Erase device data after download</source>
-        <translation>Nach Download Daten auf dem Gerät löschen</translation>
+        <translation>Nachdem  Download Daten auf dem Gerät löschen</translation>
     </message>
     <message>
         <location filename="foo.h" line="233"/>
         <source>Export linestrings for tracks and routes</source>
-        <translation>Exportiere Linendaten (linestrings) für Tracks und Routen (Vorgabe: JA)</translation>
+        <translation>Linendaten (linestrings) für Tracks und Routen exportieren (Vorgabe: JA)</translation>
     </message>
     <message>
         <location filename="foo.h" line="234"/>
         <source>Export placemarks for tracks and routes</source>
-        <translation>Exportiere Markierungen für Tracks und Routen</translation>
+        <translation>Markierungen für Tracks und Routen exportieren</translation>
     </message>
     <message>
         <location filename="foo.h" line="1"/>
         <source>Full path to XCSV style file</source>
-        <translation>Pfad zur &apos;XCSV-Style&apos;-Datei</translation>
+        <translation>Vollständiger Pfad zur &apos;XCSV-Style&apos;-Datei</translation>
     </message>
     <message>
         <location filename="foo.h" line="329"/>
         <source>Generate # points</source>
-        <translation>Erzeuge # Punkte</translation>
+        <translation># Punkte erzeugen</translation>
     </message>
     <message>
         <location filename="foo.h" line="604"/>
         <source>Generate file with lat/lon for centering map</source>
-        <translation>Erzeuge Datei mit Breiten- und Längengradwerten (für Kartenzentrierung)</translation>
+        <translation>Datei mit Breiten- und Längengradwerten erzeugen (für Kartenzentrierung)</translation>
     </message>
     <message>
         <location filename="foo.h" line="44"/>
         <source>Give points (waypoints/route points) a default radius (proximity)</source>
-        <translation>Gebe Wegpunkten/Routenpunkten diesen Radius </translation>
+        <translation>Wegpunkten/Routenpunkten diesen Standardradius (Annäherung) geben</translation>
     </message>
     <message>
         <location filename="foo.h" line="8"/>
@@ -412,7 +412,7 @@
     <message>
         <location filename="foo.h" line="366"/>
         <source>Ignore event marker icons on read</source>
-        <translation>Ignoriere Ereignis-Icons beim Lesen</translation>
+        <translation>Ereignis-Symbole beim Lesen ignorieren</translation>
     </message>
     <message>
         <location filename="foo.h" line="239"/>
@@ -424,22 +424,22 @@
         <location filename="foo.h" line="517"/>
         <location filename="foo.h" line="578"/>
         <source>Include groundspeak logs if present</source>
-        <translation>Groundspeak Log&apos;s beifügen (wenn vorhandan)</translation>
+        <translation>Groundspeak Logs beifügen (sofern vorhandan)</translation>
     </message>
     <message>
         <location filename="foo.h" line="158"/>
         <source>Include major turn points (with description) from calculated route</source>
-        <translation>Beziehe Hauptrichtungsänderungen (Ansage vorhanden) mit ein</translation>
+        <translation>Hauptrichtungsänderungen (Ansage vorhanden) mit einbeziehen</translation>
     </message>
     <message>
         <location filename="foo.h" line="389"/>
         <source>Include only via stations in route</source>
-        <translation>Übernehme nur Stationspunkte (&apos;viastations&apos;) der Route</translation>
+        <translation>Nur Stationspunkte (&apos;via stations&apos;) der Route übernehmen</translation>
     </message>
     <message>
         <location filename="foo.h" line="518"/>
         <source>Include short name in bookmarks</source>
-        <translation>Übernehme Kurznamen in Lesezeichen</translation>
+        <translation>Kurznamen in Lesezeichen übernehmen</translation>
     </message>
     <message>
         <location filename="foo.h" line="128"/>
@@ -449,29 +449,29 @@
     <message>
         <location filename="foo.h" line="563"/>
         <source>Index of route (if more than one in source)</source>
-        <translation type="unfinished">Index des Route (falls mehrere im Eingabeformat)</translation>
+        <translation>Routen-Index (falls mehrere im Eingabeformat)</translation>
     </message>
     <message>
         <location filename="foo.h" line="423"/>
         <location filename="foo.h" line="441"/>
         <source>Index of route to write (if more than one in source)</source>
-        <translation type="unfinished">Routen-Index (wenn mehrere vorhanden)</translation>
+        <translation>Zu Schreibender Routen-Index (falls mehrere im Eingabeformat)</translation>
     </message>
     <message>
         <location filename="foo.h" line="43"/>
         <location filename="foo.h" line="565"/>
         <source>Index of route/track to write (if more than one in source)</source>
-        <translation type="unfinished">Route oder Track-Index (wenn mehrere vorhanden)</translation>
+        <translation>Routen- oder Track-Index (falls mehrere im Eingabeformat)</translation>
     </message>
     <message>
         <location filename="foo.h" line="601"/>
         <source>Index of track (if more than one in source)</source>
-        <translation type="unfinished">Index des Tracks (falls mehrere im Eingabeformat)</translation>
+        <translation>Track-Index (falls mehrere im Eingabeformat)</translation>
     </message>
     <message>
         <location filename="foo.h" line="316"/>
         <source>Index of track to write (if more than one in source)</source>
-        <translation type="unfinished">Track-Index (wenn mehrere vorhanden)</translation>
+        <translation>Track-Index (falls mehrere im Eingabeformat)</translation>
     </message>
     <message>
         <location filename="foo.h" line="129"/>
@@ -481,7 +481,7 @@
     <message>
         <location filename="foo.h" line="240"/>
         <source>Indicate direction of travel in track icons (default = 0)</source>
-        <translation>Erzeuge spezielle Icons (Richtungspfeile)</translation>
+        <translation>Bewegungsrichtung in Tracksymbolen mit Richtungspfeilen anzeigen (Vorgabe: 0)</translation>
     </message>
     <message>
         <location filename="foo.h" line="628"/>
@@ -496,7 +496,7 @@
     <message>
         <location filename="foo.h" line="89"/>
         <source>Keep turns if simplify filter is used</source>
-        <translation>Erhalte Abbiegungen bei Benutzung des Simplify-Filters (Vereinfachen)</translation>
+        <translation>Abbiegungen bei Verwendung des Simplify(Vereinfachen)-Filters beibehalten</translation>
     </message>
     <message>
         <location filename="foo.h" line="160"/>
@@ -509,12 +509,12 @@
     <message>
         <location filename="foo.h" line="45"/>
         <source>Length of generated shortnames (default 16)</source>
-        <translation>Maximale Länge der zu generierten Kurznamen</translation>
+        <translation>Maximale Länge der zu generierenden Kurznamen (Vorgabe: 16)</translation>
     </message>
     <message>
         <location filename="foo.h" line="236"/>
         <source>Line color, specified in hex AABBGGRR</source>
-        <translation>Linienfarbe (hex. Angabe in Form AABBGGRR)</translation>
+        <translation>Linienfarbe (hexadezimaler Wert AABBGGRR)</translation>
     </message>
     <message>
         <location filename="foo.h" line="5"/>
@@ -559,7 +559,7 @@
     <message>
         <location filename="foo.h" line="373"/>
         <source>MapSend version TRK file to generate (3,4)</source>
-        <translation>Generiere TRK-Datei in MapSend-Version # (3,4)</translation>
+        <translation>TRK-Datei in MapSend-Version # (3,4) erzeugen</translation>
     </message>
     <message>
         <location filename="foo.h" line="605"/>
@@ -664,7 +664,7 @@
     <message>
         <location filename="foo.h" line="514"/>
         <source>No separator lines between waypoints</source>
-        <translation>keine Trennlinien zwischen den Wegpunkten</translation>
+        <translation>Keine Trennlinien zwischen den Wegpunkten</translation>
     </message>
     <message>
         <location filename="foo.h" line="291"/>
@@ -694,12 +694,12 @@
     <message>
         <location filename="foo.h" line="90"/>
         <source>Only read turns; skip all other points</source>
-        <translation>Lese nur Abbiegungen und ignoriere alle sonstigen Punkte</translation>
+        <translation>Nur Abbiegungen lesen und alle sonstigen Punkte überspringen</translation>
     </message>
     <message>
         <location filename="foo.h" line="308"/>
         <source>Path to HTML style sheet</source>
-        <translation>Pfad zum HTML-Style-Sheet</translation>
+        <translation>Pfad zum HTML-Stylesheet</translation>
     </message>
     <message>
         <location filename="foo.h" line="171"/>
@@ -764,14 +764,14 @@
     <message>
         <location filename="foo.h" line="243"/>
         <source>Retain at most this number of position points  (0 = unlimited)</source>
-        <translation>Behalte höchstens diese Anzahl an Positionspunkten (0 = kein Limit)</translation>
+        <translation>Höchstens diese Anzahl an Positionspunkten behalten (0 = keine Begrenzung)</translation>
     </message>
     <message>
         <location filename="foo.h" line="77"/>
         <location filename="foo.h" line="203"/>
         <location filename="foo.h" line="492"/>
         <source>Return current position as a waypoint</source>
-        <translation>Übertrage aktuelle Position als Wegpunkt</translation>
+        <translation>Aktuelle Position als Wegpunkt übertragen</translation>
     </message>
     <message>
         <location filename="foo.h" line="67"/>
@@ -792,7 +792,7 @@
     <message>
         <location filename="foo.h" line="134"/>
         <source>Split input into separate files</source>
-        <translation>Teile gelesene Daten in seperate Dateien</translation>
+        <translation>Gelesene Daten in einzelne Dateien aufteilen</translation>
     </message>
     <message>
         <location filename="foo.h" line="91"/>
@@ -802,57 +802,57 @@
     <message>
         <location filename="foo.h" line="208"/>
         <source>Garmin Training Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin Training Center</translation>
     </message>
     <message>
         <location filename="foo.h" line="209"/>
         <source>Write course rather than history, default yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurs statt Verlauf schreiben (Vorgabe: ja)</translation>
     </message>
     <message>
         <location filename="foo.h" line="210"/>
         <source>Sport: Biking (deflt), Running, MultiSport, Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Sport: Radfahren, Laufen, Mehrere Sportarten, Andere</translation>
     </message>
     <message>
         <location filename="foo.h" line="215"/>
         <source>Geogrid-Viewer ascii overlay file (.ovl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Geogrid-Viewer ASCII Overlay-Datei (.ovl)</translation>
     </message>
     <message>
         <location filename="foo.h" line="216"/>
         <source>Geogrid-Viewer tracklogs (.log)</source>
-        <translation type="unfinished"></translation>
+        <translation>Geogrid-Viewer Tracklogs (.log)</translation>
     </message>
     <message>
         <location filename="foo.h" line="249"/>
         <source>The minimum speed (km/h) traveling from waypoint to waypoint. Set &gt;0 to remove duplicate waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimalgeschwindigkeit (km/h) bei Bewegung von einem Wegpunkt zum nächsten. Größer Null wählen, um doppelte Wegpunkte zu entfernen.</translation>
     </message>
     <message>
         <location filename="foo.h" line="317"/>
         <source>iGO2008 points of interest (.upoi)</source>
-        <translation type="unfinished"></translation>
+        <translation>iGO2008 points of interest (.upoi)</translation>
     </message>
     <message>
         <location filename="foo.h" line="325"/>
         <source>IGO8 .trk</source>
-        <translation type="unfinished"></translation>
+        <translation>IGO8 .trk</translation>
     </message>
     <message>
         <location filename="foo.h" line="326"/>
         <source>Track identification number</source>
-        <translation type="unfinished"></translation>
+        <translation>Track-Identifikationsnummer</translation>
     </message>
     <message>
         <location filename="foo.h" line="327"/>
         <source>Track title</source>
-        <translation type="unfinished"></translation>
+        <translation>Tracktitel</translation>
     </message>
     <message>
         <location filename="foo.h" line="328"/>
         <source>Track description</source>
-        <translation type="unfinished"></translation>
+        <translation>Trackbeschreibung</translation>
     </message>
     <message>
         <location filename="foo.h" line="330"/>
@@ -862,7 +862,7 @@
     <message>
         <location filename="foo.h" line="331"/>
         <source>Jelbert GeoTagger data file</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelbert GeoTagger data file</translation>
     </message>
     <message>
         <location filename="foo.h" line="474"/>
@@ -877,22 +877,22 @@
     <message>
         <location filename="foo.h" line="566"/>
         <source>Swiss Map 25/50/100 (.xol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Swiss Map 25/50/100 (.xol)</translation>
     </message>
     <message>
         <location filename="foo.h" line="619"/>
         <source>Write name(s) of format(s) from input session(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Name(n) der Format(e) der Eingabesitzung(en) ausgeben</translation>
     </message>
     <message>
         <location filename="foo.h" line="620"/>
         <source>Write filename(s) from input session(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateiname(n) der Eingabesitzung(en) ausgeben</translation>
     </message>
     <message>
         <location filename="foo.h" line="624"/>
         <source>Version of VidaOne file to read or write (1 or 2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Version der zu schreibenden/lesenden VidaOne-Datei (1 oder 2)</translation>
     </message>
     <message>
         <location filename="foo.h" line="644"/>
@@ -957,7 +957,7 @@
     <message>
         <location filename="foo.h" line="367"/>
         <source>Treat waypoints as icons on write</source>
-        <translation>Behandle Wegpunkte als Icons beim Schreiben</translation>
+        <translation>Wegpunkte beim Schreiben als Symbole behandeln</translation>
     </message>
     <message>
         <location filename="foo.h" line="66"/>
@@ -1028,7 +1028,7 @@
     <message>
         <location filename="foo.h" line="165"/>
         <source>Use proximity values on output (default is ignore)</source>
-        <translation>Benutze Proximity-Werte bei der Ausgabe (Vorgabe: NEIN)</translation>
+        <translation>Proximity-Werte bei der Ausgabe verwenden (Vorgabe: NEIN)</translation>
     </message>
     <message>
         <location filename="foo.h" line="7"/>
@@ -1068,12 +1068,12 @@
         <location filename="foo.h" line="588"/>
         <location filename="foo.h" line="596"/>
         <source>Use shortname instead of description</source>
-        <translation>Benutze den Kurznamen anstelle der Beschreibung</translation>
+        <translation>Kurznamen anstelle der Beschreibung verwenden</translation>
     </message>
     <message>
         <location filename="foo.h" line="188"/>
         <source>Use specified bitmap on output</source>
-        <translation>Benutze spezifische Bitmap (.BMP) für die Ausgabe</translation>
+        <translation>Gewähltes Bitmap (.BMP) für die Ausgabe verwenden</translation>
     </message>
     <message>
         <location filename="foo.h" line="156"/>
@@ -1113,59 +1113,59 @@
     <message>
         <location filename="foo.h" line="500"/>
         <source>Write additional node tag key/value pairs</source>
-        <translation>Schreibe zusätzliche Wegpunkt (node) Informationspaare (tags)</translation>
+        <translation>Zusätzliche Wegpunkt (node) Informationspaare (tags) schreiben</translation>
     </message>
     <message>
         <location filename="foo.h" line="499"/>
         <source>Write additional way tag key/value pairs</source>
-        <translation>Schreibe zusätzliche Routen (way) Informationspaare (tags)</translation>
+        <translation>Zusätzliche Routen (way) Informationspaare (tags) schreiben</translation>
     </message>
     <message>
         <location filename="foo.h" line="503"/>
         <source>Write all tracks into one file</source>
-        <translation>Schreibe alle Tracks in eine Datei</translation>
+        <translation>Alle Tracks in eine Datei schreiben</translation>
     </message>
     <message>
         <location filename="foo.h" line="191"/>
         <source>Write description to address field</source>
-        <translation>Platziere die Beschreibung im Adressfeld</translation>
+        <translation>Beschreibung in das Adressfeld schreiben</translation>
     </message>
     <message>
         <location filename="foo.h" line="581"/>
         <source>Write each waypoint in a separate file</source>
-        <translation>Schreibe jeden Wegpunkt in eine separate Datei</translation>
+        <translation>Jeden Wegpunkt in eine separate Datei schreiben</translation>
     </message>
     <message>
         <location filename="foo.h" line="192"/>
         <source>Write notes to address field</source>
-        <translation>Schreibe Kommentar (Notizen) in das Adressfeld</translation>
+        <translation>Kommentar (Notizen) in das Adressfeld schreiben</translation>
     </message>
     <message>
         <location filename="foo.h" line="193"/>
         <source>Write position to address field</source>
-        <translation>Platziere die Koordinaten im Adressfeld</translation>
+        <translation>Koordinaten in das Adressfeld schreiben</translation>
     </message>
     <message>
         <location filename="foo.h" line="170"/>
         <location filename="foo.h" line="617"/>
         <source>Write position using this grid.</source>
-        <translation>Erzeuge Koordinaten unter Benutzung dieses Gitters (Grids).</translation>
+        <translation>Koordinaten unter Benutzung dieses Gitters (Grids) erzeugen.</translation>
     </message>
     <message>
         <location filename="foo.h" line="174"/>
         <location filename="foo.h" line="618"/>
         <source>Write timestamps with offset x to UTC time</source>
-        <translation>Schreibe Zeitstempel relativ zur UTC + x</translation>
+        <translation>Zeitstempel mit Versatz x zur UTC schreiben</translation>
     </message>
     <message>
         <location filename="foo.h" line="177"/>
         <source>Write tracks compatible with Carto Exploreur</source>
-        <translation>Erzeuge Tracks ohne Titel (kompatibel zu &quot;Carto Exploreur&quot;)</translation>
+        <translation>Tracks ohne Titel erzeugen (kompatibel zu &quot;Carto Exploreur&quot;)</translation>
     </message>
     <message>
         <location filename="foo.h" line="496"/>
         <source>Write tracks for Gisteq Phototracker</source>
-        <translation>Schreibe Tracks für &quot;Gisteq Phototracker&quot;</translation>
+        <translation>Tracks für &quot;Gisteq Phototracker&quot; schreiben</translation>
     </message>
     <message>
         <location filename="foo.h" line="72"/>
@@ -1175,885 +1175,885 @@
     <message>
         <location filename="foo.h" line="9"/>
         <source>Alan Map500 tracklogs (.trl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alan Map500 Tracklogs (.trl)</translation>
     </message>
     <message>
         <location filename="foo.h" line="10"/>
         <source>Alan Map500 waypoints and routes (.wpr)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alan Map500 Wegpunkte und Routen (.wpr)</translation>
     </message>
     <message>
         <location filename="foo.h" line="18"/>
         <source>Brauniger IQ Series Barograph Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Brauniger IQ Series Barograph Download</translation>
     </message>
     <message>
         <location filename="foo.h" line="19"/>
         <source>Cambridge/Winpilot glider software</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambridge/Winpilot glider Software</translation>
     </message>
     <message>
         <location filename="foo.h" line="27"/>
         <source>CarteSurTable data file</source>
-        <translation type="unfinished"></translation>
+        <translation>CarteSurTable Datendatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="28"/>
         <source>Cetus for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <translation>Cetus für Palm/OS</translation>
     </message>
     <message>
         <location filename="foo.h" line="31"/>
         <source>CoastalExplorer XML</source>
-        <translation type="unfinished"></translation>
+        <translation>CoastalExplorer XML</translation>
     </message>
     <message>
         <location filename="foo.h" line="32"/>
         <source>Columbus/Visiontac V900 files (.csv)</source>
-        <translation type="unfinished"></translation>
+        <translation>Columbus/Visiontac V900 Datei (.csv)</translation>
     </message>
     <message>
         <location filename="foo.h" line="33"/>
         <source>Comma separated values</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommaseparierte Werte</translation>
     </message>
     <message>
         <location filename="foo.h" line="41"/>
         <source>CompeGPS data files (.wpt/.trk/.rte)</source>
-        <translation type="unfinished"></translation>
+        <translation>CompeGPS Datendatei (.wpt/.trk/.rte)</translation>
     </message>
     <message>
         <location filename="foo.h" line="46"/>
         <source>CoPilot Flight Planner for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <translation>CoPilot Flight Planner für Palm/OS</translation>
     </message>
     <message>
         <location filename="foo.h" line="47"/>
         <source>cotoGPS for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <translation>cotoGPS für Palm/OS</translation>
     </message>
     <message>
         <location filename="foo.h" line="56"/>
         <source>Data Logger iBlue747 csv</source>
-        <translation type="unfinished"></translation>
+        <translation>Data Logger iBlue747 (.csv)</translation>
     </message>
     <message>
         <location filename="foo.h" line="64"/>
         <source>Dell Axim Navigation System (.gpb) file format</source>
-        <translation type="unfinished"></translation>
+        <translation>Dell Axim Navigationssystem (.gpb) Dateiformat</translation>
     </message>
     <message>
         <location filename="foo.h" line="65"/>
         <source>DeLorme .an1 (drawing) file</source>
-        <translation type="unfinished"></translation>
+        <translation>DeLorme .an1 (drawing) Datei</translation>
     </message>
     <message>
         <location filename="foo.h" line="75"/>
         <source>DeLorme GPL</source>
-        <translation type="unfinished"></translation>
+        <translation>DeLorme GPL</translation>
     </message>
     <message>
         <location filename="foo.h" line="76"/>
         <source>DeLorme PN-20/PN-30/PN-40 USB protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>DeLorme PN-20/PN-30/PN-40 USB-Protokoll</translation>
     </message>
     <message>
         <location filename="foo.h" line="78"/>
         <source>Include groundspeak logs when writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Groundspeak-Logs beim Schreiben einbeziehen</translation>
     </message>
     <message>
         <location filename="foo.h" line="79"/>
         <source>Use long waypoint notes regardless of PN version</source>
-        <translation type="unfinished"></translation>
+        <translation>Unabhängig von PN-Version lange Wegpunkte verwenden</translation>
     </message>
     <message>
         <location filename="foo.h" line="80"/>
         <source>DeLorme Street Atlas Plus</source>
-        <translation type="unfinished"></translation>
+        <translation>DeLorme PN-20/PN-30/PN-40 USB protocol</translation>
     </message>
     <message>
         <location filename="foo.h" line="88"/>
         <source>DeLorme Street Atlas Route</source>
-        <translation type="unfinished"></translation>
+        <translation>DeLorme Street Atlas Route</translation>
     </message>
     <message>
         <location filename="foo.h" line="94"/>
         <source>DeLorme XMap HH Native .WPT</source>
-        <translation type="unfinished"></translation>
+        <translation>DeLorme XMap HH Native (.wpt)</translation>
     </message>
     <message>
         <location filename="foo.h" line="102"/>
         <source>DeLorme XMap/SAHH 2006 Native .TXT</source>
-        <translation type="unfinished"></translation>
+        <translation>DeLorme XMap/SAHH 2006 Native (.txt)</translation>
     </message>
     <message>
         <location filename="foo.h" line="110"/>
         <source>DeLorme XMat HH Street Atlas USA .WPT (PPC)</source>
-        <translation type="unfinished"></translation>
+        <translation>DeLorme XMat HH Street Atlas USA .WPT (PPC)</translation>
     </message>
     <message>
         <location filename="foo.h" line="118"/>
         <source>Destinator Itineraries (.dat)</source>
-        <translation type="unfinished"></translation>
+        <translation>Destinator Reiserouten (.dat)</translation>
     </message>
     <message>
         <location filename="foo.h" line="119"/>
         <source>Destinator Points of Interest (.dat)</source>
-        <translation type="unfinished"></translation>
+        <translation>Destinator Points of Interest (.dat)</translation>
     </message>
     <message>
         <location filename="foo.h" line="120"/>
         <source>Destinator TrackLogs (.dat)</source>
-        <translation type="unfinished"></translation>
+        <translation>Destinator TrackLogs (.dat)</translation>
     </message>
     <message>
         <location filename="foo.h" line="121"/>
         <source>EasyGPS binary format</source>
-        <translation type="unfinished"></translation>
+        <translation>EasyGPS Binärformat</translation>
     </message>
     <message>
         <location filename="foo.h" line="122"/>
         <source>Embedded Exif-GPS data (.jpg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingebettete EXIF-GPS-Daten (.jpg)</translation>
     </message>
     <message>
         <location filename="foo.h" line="123"/>
         <source>Set waypoint name to source filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Wegpunktnamen nach Eingabedatei benennen</translation>
     </message>
     <message>
         <location filename="foo.h" line="124"/>
         <source>Time-frame (in seconds)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit-Frame (in Sekunden)</translation>
     </message>
     <message>
         <location filename="foo.h" line="125"/>
         <source>Locate waypoint for tagging by this name</source>
-        <translation type="unfinished"></translation>
+        <translation>Wegpunkt für Tagging mit diesem Namen auffinden</translation>
     </message>
     <message>
         <location filename="foo.h" line="126"/>
         <source>!OVERWRITE! the original file. Default=N</source>
-        <translation type="unfinished"></translation>
+        <translation>Originaldatei !ÜBERSCHREIBEN!. Standard=N</translation>
     </message>
     <message>
         <location filename="foo.h" line="127"/>
         <source>Enigma binary waypoint file (.ert)</source>
-        <translation type="unfinished"></translation>
+        <translation>Enigma binäre Wegpunkt-Datei (.ert)</translation>
     </message>
     <message>
         <location filename="foo.h" line="130"/>
         <source>FAI/IGC Flight Recorder Data Format</source>
-        <translation type="unfinished"></translation>
+        <translation>FAI/IGC Flight Recorder Datenformat</translation>
     </message>
     <message>
         <location filename="foo.h" line="132"/>
         <source>Franson GPSGate Simulation</source>
-        <translation type="unfinished"></translation>
+        <translation>Franson GPSGate Simulation</translation>
     </message>
     <message>
         <location filename="foo.h" line="135"/>
         <source>Fugawi</source>
-        <translation type="unfinished"></translation>
+        <translation>Fugawi</translation>
     </message>
     <message>
         <location filename="foo.h" line="143"/>
         <source>G7ToWin data files (.g7t)</source>
-        <translation type="unfinished"></translation>
+        <translation>G7ToWin Datendatei (.g7t)</translation>
     </message>
     <message>
         <location filename="foo.h" line="144"/>
         <source>Garmin 301 Custom position and heartrate</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin 301 Custom Position und Herzfrequenz</translation>
     </message>
     <message>
         <location filename="foo.h" line="152"/>
         <source>Garmin Logbook XML</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin Logbook XML</translation>
     </message>
     <message>
         <location filename="foo.h" line="153"/>
         <source>Garmin MapSource - gdb</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin MapSource - gdb</translation>
     </message>
     <message>
         <location filename="foo.h" line="159"/>
         <source>Garmin MapSource - mps</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin MapSource - mps</translation>
     </message>
     <message>
         <location filename="foo.h" line="166"/>
         <source>Garmin MapSource - txt (tab delimited)</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin MapSource - txt (Tabulator getrennt)</translation>
     </message>
     <message>
         <location filename="foo.h" line="175"/>
         <source>Garmin PCX5</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin PCX5</translation>
     </message>
     <message>
         <location filename="foo.h" line="178"/>
         <source>Garmin POI database</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin POI-Datenbank</translation>
     </message>
     <message>
         <location filename="foo.h" line="186"/>
         <source>Garmin Points of Interest (.gpi)</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin Points of Interest (.gpi)</translation>
     </message>
     <message>
         <location filename="foo.h" line="199"/>
         <source>Garmin serial/USB protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Garmin Serielles/USB-Protokoll</translation>
     </message>
     <message>
         <location filename="foo.h" line="211"/>
         <source>Geocaching.com .loc</source>
-        <translation type="unfinished"></translation>
+        <translation>Geocaching.com .loc</translation>
     </message>
     <message>
         <location filename="foo.h" line="214"/>
         <source>GeocachingDB for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <translation>GeocachingDB für Palm/OS</translation>
     </message>
     <message>
         <location filename="foo.h" line="217"/>
         <source>GEOnet Names Server (GNS)</source>
-        <translation type="unfinished"></translation>
+        <translation>GEOnet Names Server (GNS)</translation>
     </message>
     <message>
         <location filename="foo.h" line="225"/>
         <source>GeoNiche .pdb</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoNiche .pdb</translation>
     </message>
     <message>
         <location filename="foo.h" line="228"/>
         <source>GlobalSat DG-100/BT-335 Download</source>
-        <translation type="unfinished"></translation>
+        <translation>GlobalSat DG-100/BT-335 Download</translation>
     </message>
     <message>
         <location filename="foo.h" line="230"/>
         <source>Only erase device data, do not download anything</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur Gerätedaten löschen, aber nichts herunter laden</translation>
     </message>
     <message>
         <location filename="foo.h" line="231"/>
         <source>Google Earth (Keyhole) Markup Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Google Earth (Keyhole) Markup Language (.kml)</translation>
     </message>
     <message>
         <location filename="foo.h" line="244"/>
         <source>Google Maps XML</source>
-        <translation type="unfinished"></translation>
+        <translation>Google Maps XML</translation>
     </message>
     <message>
         <location filename="foo.h" line="245"/>
         <source>Google Navigator Tracklines (.trl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Google Navigator Tracklines (.trl)</translation>
     </message>
     <message>
         <location filename="foo.h" line="246"/>
         <source>GoPal GPS track log (.trk)</source>
-        <translation type="unfinished"></translation>
+        <translation>GoPal GPS Tracklog (.trk)</translation>
     </message>
     <message>
         <location filename="foo.h" line="248"/>
         <source>The maximum speed (km/h) traveling from waypoint to waypoint.</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximalgeschwindigkeit (km/h) für Bewegung von einem Wegpunkt zum nächsten.</translation>
     </message>
     <message>
         <location filename="foo.h" line="250"/>
         <source>Cleanup common errors in trackdata</source>
-        <translation type="unfinished"></translation>
+        <translation>Gängige Fehler in Trackdaten beseitigen</translation>
     </message>
     <message>
         <location filename="foo.h" line="251"/>
         <source>GpilotS</source>
-        <translation type="unfinished"></translation>
+        <translation>GpilotS</translation>
     </message>
     <message>
         <location filename="foo.h" line="253"/>
         <source>GPS TrackMaker</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS TrackMaker</translation>
     </message>
     <message>
         <location filename="foo.h" line="254"/>
         <source>GPSBabel arc filter file</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSBabel arc Filterdatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="262"/>
         <source>GpsDrive Format</source>
-        <translation type="unfinished"></translation>
+        <translation>GpsDrive Format</translation>
     </message>
     <message>
         <location filename="foo.h" line="270"/>
         <source>GpsDrive Format for Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>GpsDrive Format für Tracks</translation>
     </message>
     <message>
         <location filename="foo.h" line="278"/>
         <source>GPSman</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSman</translation>
     </message>
     <message>
         <location filename="foo.h" line="286"/>
         <source>GPSPilot Tracker for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSPilot Tracker für Palm/OS</translation>
     </message>
     <message>
         <location filename="foo.h" line="288"/>
         <source>gpsutil</source>
-        <translation type="unfinished"></translation>
+        <translation>gpsutil</translation>
     </message>
     <message>
         <location filename="foo.h" line="289"/>
         <source>GPX XML</source>
-        <translation type="unfinished"></translation>
+        <translation>GPX XML</translation>
     </message>
     <message>
         <location filename="foo.h" line="295"/>
         <source>Add info (depth) as Humminbird extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Information (Tiefe) als Humminbird-Erweiterung hinzufügen</translation>
     </message>
     <message>
         <location filename="foo.h" line="296"/>
         <source>Add info (depth) as Garmin extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Information (Tiefe) als Garminerweiterung hinzufügen</translation>
     </message>
     <message>
         <location filename="foo.h" line="297"/>
         <source>HikeTech</source>
-        <translation type="unfinished"></translation>
+        <translation>HikeTech</translation>
     </message>
     <message>
         <location filename="foo.h" line="298"/>
         <source>Holux (gm-100) .wpo Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Holux (gm-100) .wpo Format</translation>
     </message>
     <message>
         <location filename="foo.h" line="299"/>
         <source>Holux M-241 (MTK based) Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Holux M-241 (MTK basiert) Binärdatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="301"/>
         <source>Holux M-241 (MTK based) download</source>
-        <translation type="unfinished"></translation>
+        <translation>Holux M-241 (MTK basiert) Download</translation>
     </message>
     <message>
         <location filename="foo.h" line="303"/>
         <location filename="foo.h" line="432"/>
         <source>Enable logging after download</source>
-        <translation type="unfinished"></translation>
+        <translation>Logging nach dem Download aktivieren</translation>
     </message>
     <message>
         <location filename="foo.h" line="305"/>
         <source>Honda/Acura Navigation System VP Log File Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Honda/Acura Navigationssystem VP Logdatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="306"/>
         <source>HSA Endeavour Navigator export File</source>
-        <translation type="unfinished"></translation>
+        <translation>HSA Endeavour Navigator Export</translation>
     </message>
     <message>
         <location filename="foo.h" line="307"/>
         <source>HTML Output</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML Ausgabe</translation>
     </message>
     <message>
         <location filename="foo.h" line="313"/>
         <source>Humminbird tracks (.ht)</source>
-        <translation type="unfinished"></translation>
+        <translation>Humminbird Tracks (.ht)</translation>
     </message>
     <message>
         <location filename="foo.h" line="314"/>
         <source>Humminbird waypoints and routes (.hwr)</source>
-        <translation type="unfinished"></translation>
+        <translation>Humminbird Wegpunkte und Routen (.hwr)</translation>
     </message>
     <message>
         <location filename="foo.h" line="315"/>
         <source>IGN Rando track files</source>
-        <translation type="unfinished"></translation>
+        <translation>IGN Rando Trackdatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="332"/>
         <source>Kartex 5 Track File</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartex 5 Trackdatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="340"/>
         <source>Kartex 5 Waypoint File</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartex 5 Wegpunktdatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="348"/>
         <source>Kompass (DAV) Track (.tk)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompass (DAV) Track (.tk)</translation>
     </message>
     <message>
         <location filename="foo.h" line="356"/>
         <source>Kompass (DAV) Waypoints (.wp)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompass (DAV) Wegpunkte (.wp)</translation>
     </message>
     <message>
         <location filename="foo.h" line="364"/>
         <source>KuDaTa PsiTrex text</source>
-        <translation type="unfinished"></translation>
+        <translation>KuDaTa PsiTrex Text</translation>
     </message>
     <message>
         <location filename="foo.h" line="365"/>
         <source>Lowrance USR</source>
-        <translation type="unfinished"></translation>
+        <translation>Lowrance USR</translation>
     </message>
     <message>
         <location filename="foo.h" line="370"/>
         <source>(USR output) Write version</source>
-        <translation type="unfinished"></translation>
+        <translation>(USR Ausgabe) Write version</translation>
     </message>
     <message>
         <location filename="foo.h" line="371"/>
         <source>Magellan Explorist Geocaching</source>
-        <translation type="unfinished"></translation>
+        <translation>Magellan Explorist Geocaching</translation>
     </message>
     <message>
         <location filename="foo.h" line="372"/>
         <source>Magellan Mapsend</source>
-        <translation type="unfinished"></translation>
+        <translation>Magellan Mapsend</translation>
     </message>
     <message>
         <location filename="foo.h" line="374"/>
         <source>Magellan NAV Companion for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <translation>Magellan NAV Companion für Palm/OS</translation>
     </message>
     <message>
         <location filename="foo.h" line="375"/>
         <source>Magellan SD files (as for eXplorist)</source>
-        <translation type="unfinished"></translation>
+        <translation>Magellan SD files (für eXplorist)</translation>
     </message>
     <message>
         <location filename="foo.h" line="378"/>
         <source>Magellan SD files (as for Meridian)</source>
-        <translation type="unfinished"></translation>
+        <translation>Magellan SD files (für Meridian)</translation>
     </message>
     <message>
         <location filename="foo.h" line="381"/>
         <source>Magellan serial protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Magellan serielles Protokoll</translation>
     </message>
     <message>
         <location filename="foo.h" line="387"/>
         <source>MagicMaps IK3D project file (.ikt)</source>
-        <translation type="unfinished"></translation>
+        <translation>MagicMaps IK3D Projektdatei (.ikt)</translation>
     </message>
     <message>
         <location filename="foo.h" line="388"/>
         <source>Map&amp;Guide &apos;TourExchangeFormat&apos; XML</source>
-        <translation type="unfinished"></translation>
+        <translation>Map&amp;Guide &apos;TourExchangeFormat&apos; XML</translation>
     </message>
     <message>
         <location filename="foo.h" line="390"/>
         <source>Map&amp;Guide to Palm/OS exported files (.pdb)</source>
-        <translation type="unfinished"></translation>
+        <translation>Map&amp;Guide nach Palm/OS exportierte Datei (.pdb)</translation>
     </message>
     <message>
         <location filename="foo.h" line="391"/>
         <source>MapAsia track file (.tr7)</source>
-        <translation type="unfinished"></translation>
+        <translation>MapAsia Trackdatei (.tr7)</translation>
     </message>
     <message>
         <location filename="foo.h" line="392"/>
         <source>Mapopolis.com Mapconverter CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapopolis.com Mapconverter CSV</translation>
     </message>
     <message>
         <location filename="foo.h" line="400"/>
         <source>MapTech Exchange Format</source>
-        <translation type="unfinished"></translation>
+        <translation>MapTech Exchange Format</translation>
     </message>
     <message>
         <location filename="foo.h" line="408"/>
         <source>Memory-Map Navigator overlay files (.mmo)</source>
-        <translation type="unfinished"></translation>
+        <translation>Memory-Map Navigator Overlay-Datei (.mmo)</translation>
     </message>
     <message>
         <location filename="foo.h" line="409"/>
         <source>Write items &apos;locked&apos; [default no]</source>
-        <translation type="unfinished"></translation>
+        <translation>Element &apos;locked&apos; schreiben [Standard nein]</translation>
     </message>
     <message>
         <location filename="foo.h" line="410"/>
         <source>Write items &apos;visible&apos; [default yes]</source>
-        <translation type="unfinished"></translation>
+        <translation>Element &apos;visible&apos; schreiben [Standard ja]</translation>
     </message>
     <message>
         <location filename="foo.h" line="411"/>
         <source>Write files with internal version [n]</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateien mit interner Version schreiben [n]</translation>
     </message>
     <message>
         <location filename="foo.h" line="412"/>
         <source>Microsoft AutoRoute 2002 (pin/route reader)</source>
-        <translation type="unfinished"></translation>
+        <translation>Microsoft AutoRoute 2002 (pin/route reader)</translation>
     </message>
     <message>
         <location filename="foo.h" line="413"/>
         <source>Microsoft Streets and Trips (pin/route reader)</source>
-        <translation type="unfinished"></translation>
+        <translation>Microsoft Streets and Trips (pin/route reader)</translation>
     </message>
     <message>
         <location filename="foo.h" line="414"/>
         <source>Microsoft Streets and Trips 2002-2007</source>
-        <translation type="unfinished"></translation>
+        <translation>Microsoft Streets and Trips 2002-2007</translation>
     </message>
     <message>
         <location filename="foo.h" line="422"/>
         <source>Motorrad Routenplaner (Map&amp;Guide) .bcr files</source>
-        <translation type="unfinished"></translation>
+        <translation>Motorrad Routenplaner (Map&amp;Guide) (.bcr)</translation>
     </message>
     <message>
         <location filename="foo.h" line="427"/>
         <source>MS PocketStreets 2002 Pushpin</source>
-        <translation type="unfinished"></translation>
+        <translation>MS PocketStreets 2002 Pushpin</translation>
     </message>
     <message>
         <location filename="foo.h" line="428"/>
         <source>MTK Logger (iBlue 747,...) Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <translation>MTK Logger (iBlue 747,...) Binärdatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="430"/>
         <source>MTK Logger (iBlue 747,Qstarz BT-1000,...) download</source>
-        <translation type="unfinished"></translation>
+        <translation>MTK Logger (iBlue 747,Qstarz BT-1000,...) Download</translation>
     </message>
     <message>
         <location filename="foo.h" line="434"/>
         <source>National Geographic Topo .tpg (waypoints)</source>
-        <translation type="unfinished"></translation>
+        <translation>National Geographic Topo .tpg (Wegpunkte)</translation>
     </message>
     <message>
         <location filename="foo.h" line="436"/>
         <source>National Geographic Topo 2.x .tpo</source>
-        <translation type="unfinished"></translation>
+        <translation>National Geographic Topo 2.x .tpo</translation>
     </message>
     <message>
         <location filename="foo.h" line="437"/>
         <source>National Geographic Topo 3.x/4.x .tpo</source>
-        <translation type="unfinished"></translation>
+        <translation>National Geographic Topo 3.x/4.x .tpo</translation>
     </message>
     <message>
         <location filename="foo.h" line="438"/>
         <source>Navicache.com XML</source>
-        <translation type="unfinished"></translation>
+        <translation>Navicache.com XML</translation>
     </message>
     <message>
         <location filename="foo.h" line="440"/>
         <source>Navigon Mobile Navigator .rte files</source>
-        <translation type="unfinished"></translation>
+        <translation>Navigon Mobile Navigator .rte-Datei</translation>
     </message>
     <message>
         <location filename="foo.h" line="442"/>
         <source>Navigon Waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Navigon Wegpunkte</translation>
     </message>
     <message>
         <location filename="foo.h" line="450"/>
         <source>NaviGPS GT-11/BGT-11 Download</source>
-        <translation type="unfinished"></translation>
+        <translation>NaviGPS GT-11/BGT-11 Download</translation>
     </message>
     <message>
         <location filename="foo.h" line="454"/>
         <source>Clear the datalog</source>
-        <translation type="unfinished"></translation>
+        <translation>Datalog löschen</translation>
     </message>
     <message>
         <location filename="foo.h" line="455"/>
         <source>Read from datalogger buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Datalogger-Puffer auslesen</translation>
     </message>
     <message>
         <location filename="foo.h" line="457"/>
         <source>NaviGPS GT-31/BGT-31 datalogger (.sbp)</source>
-        <translation type="unfinished"></translation>
+        <translation>NaviGPS GT-31/BGT-31 Datalogger (.sbp)</translation>
     </message>
     <message>
         <location filename="foo.h" line="458"/>
         <source>NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)</source>
-        <translation type="unfinished"></translation>
+        <translation>NaviGPS GT-31/BGT-31 SiRF binäre Logdatei (.sbn)</translation>
     </message>
     <message>
         <location filename="foo.h" line="459"/>
         <source>Naviguide binary route file (.twl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Naviguide binäre Routendatei (.twl)</translation>
     </message>
     <message>
         <location filename="foo.h" line="460"/>
         <source>&apos;wp&apos; - Create waypoint file , &apos;rte&apos; - Create route file</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;wp&apos; - Wegpunktdatei erstellen, &apos;rte&apos; - Routendatei erstellen</translation>
     </message>
     <message>
         <location filename="foo.h" line="461"/>
         <source>&apos;n&apos; - Keep the existing wp name, &apos;y&apos; - rename waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;n&apos; - Existierende Wegpunktnamen behalten, &apos;y&apos; - Wegpunkte umbenennen</translation>
     </message>
     <message>
         <location filename="foo.h" line="462"/>
         <source>Navitel binary track (.bin)</source>
-        <translation type="unfinished"></translation>
+        <translation>Navitel binäre Trackdatei (.bin)</translation>
     </message>
     <message>
         <location filename="foo.h" line="463"/>
         <source>Navitrak DNA marker format</source>
-        <translation type="unfinished"></translation>
+        <translation>Navitrak DNA marker format</translation>
     </message>
     <message>
         <location filename="foo.h" line="471"/>
         <source>NetStumbler Summary File (text)</source>
-        <translation type="unfinished"></translation>
+        <translation>NetStumbler Summary File (text)</translation>
     </message>
     <message>
         <location filename="foo.h" line="477"/>
         <source>NIMA/GNIS Geographic Names File</source>
-        <translation type="unfinished"></translation>
+        <translation>NIMA/GNIS Geographic Names File</translation>
     </message>
     <message>
         <location filename="foo.h" line="485"/>
         <source>NMEA 0183 sentences</source>
-        <translation type="unfinished"></translation>
+        <translation>NMEA 0183 Sätze</translation>
     </message>
     <message>
         <location filename="foo.h" line="497"/>
         <source>Nokia Landmark Exchange</source>
-        <translation type="unfinished"></translation>
+        <translation>Nokia Landmark Exchange</translation>
     </message>
     <message>
         <location filename="foo.h" line="498"/>
         <source>OpenStreetMap data files</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenStreetMap Datendatei (.osm)</translation>
     </message>
     <message>
         <location filename="foo.h" line="501"/>
         <source>Use this value as custom created_by value</source>
-        <translation type="unfinished"></translation>
+        <translation>Diesen Wert als eigenen Wert für created_by verwenden</translation>
     </message>
     <message>
         <location filename="foo.h" line="502"/>
         <source>OziExplorer</source>
-        <translation type="unfinished"></translation>
+        <translation>OziExplorer</translation>
     </message>
     <message>
         <location filename="foo.h" line="511"/>
         <source>Unit used in altitude values</source>
-        <translation type="unfinished"></translation>
+        <translation>Einheit für Höhenwerte</translation>
     </message>
     <message>
         <location filename="foo.h" line="512"/>
         <source>Unit used in proximity values</source>
-        <translation type="unfinished"></translation>
+        <translation>Einheit für Entfernungswerte</translation>
     </message>
     <message>
         <location filename="foo.h" line="513"/>
         <source>PalmDoc Output</source>
-        <translation type="unfinished"></translation>
+        <translation>PalmDoc Output</translation>
     </message>
     <message>
         <location filename="foo.h" line="519"/>
         <source>PathAway Database for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <translation>PathAway Database für Palm/OS</translation>
     </message>
     <message>
         <location filename="foo.h" line="522"/>
         <source>Database vehicle icon name</source>
-        <translation type="unfinished"></translation>
+        <translation>Name des Fahrzeugsymbols der Datenbank</translation>
     </message>
     <message>
         <location filename="foo.h" line="525"/>
         <source>PocketFMS breadcrumbs</source>
-        <translation type="unfinished"></translation>
+        <translation>PocketFMS breadcrumbs</translation>
     </message>
     <message>
         <location filename="foo.h" line="526"/>
         <source>PocketFMS flightplan (.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation>PocketFMS flightplan (.xml)</translation>
     </message>
     <message>
         <location filename="foo.h" line="527"/>
         <source>PocketFMS waypoints (.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>PocketFMS Wegpunkte (.txt)</translation>
     </message>
     <message>
         <location filename="foo.h" line="528"/>
         <source>Quovadis</source>
-        <translation type="unfinished"></translation>
+        <translation>Quovadis</translation>
     </message>
     <message>
         <location filename="foo.h" line="530"/>
         <source>Raymarine Waypoint File (.rwf)</source>
-        <translation type="unfinished"></translation>
+        <translation>Raymarine Wegpunktdatei (.rwf)</translation>
     </message>
     <message>
         <location filename="foo.h" line="532"/>
         <source>Ricoh GPS Log File</source>
-        <translation type="unfinished"></translation>
+        <translation>Ricoh GPS Logdatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="540"/>
         <source>See You flight analysis data</source>
-        <translation type="unfinished"></translation>
+        <translation>You flight Analysedaten anzeigen</translation>
     </message>
     <message>
         <location filename="foo.h" line="548"/>
         <source>Skymap / KMD150 ascii files</source>
-        <translation type="unfinished"></translation>
+        <translation>Skymap / KMD150 ASCII-Datei</translation>
     </message>
     <message>
         <location filename="foo.h" line="549"/>
         <source>SkyTraq Venus 5/6 GPS Data Logger Download</source>
-        <translation type="unfinished"></translation>
+        <translation>SkyTraq Venus 5/6 GPS Data Logger Download</translation>
     </message>
     <message>
         <location filename="foo.h" line="551"/>
         <source>Baud rate used to init device, 0=autodetect</source>
-        <translation type="unfinished"></translation>
+        <translation>Baudrate für die Geräteinitialisierung, 0=automatische Erkennung</translation>
     </message>
     <message>
         <location filename="foo.h" line="552"/>
         <source>Baud rate used for download</source>
-        <translation type="unfinished"></translation>
+        <translation>Baudrate für das Herunterladen</translation>
     </message>
     <message>
         <location filename="foo.h" line="553"/>
         <source>Number of sectors to read at once (Venus6 only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Sektoren, die gleichzeitig gelesen werden (nur Venus6)</translation>
     </message>
     <message>
         <location filename="foo.h" line="554"/>
         <source>Sportsim track files (part of zipped .ssz files)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sportsim Trackdatei (Teil gezippter .ssz Dateien)</translation>
     </message>
     <message>
         <location filename="foo.h" line="562"/>
         <source>Suunto Trek Manager (STM) .sdf files</source>
-        <translation type="unfinished"></translation>
+        <translation>Suunto Trek Manager (STM) .sdf-Datei</translation>
     </message>
     <message>
         <location filename="foo.h" line="564"/>
         <source>Suunto Trek Manager (STM) WaypointPlus files</source>
-        <translation type="unfinished"></translation>
+        <translation>Suunto Trek Manager (STM) WaypointPlus-Datei</translation>
     </message>
     <message>
         <location filename="foo.h" line="567"/>
         <source>Tab delimited fields useful for OpenOffice, Ploticus etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabulator-getrennte Felder (nützlich für OpenOffice, Ploticus etc.)</translation>
     </message>
     <message>
         <location filename="foo.h" line="575"/>
         <source>Textual Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Textausgabe</translation>
     </message>
     <message>
         <location filename="foo.h" line="582"/>
         <source>TomTom Itineraries (.itn)</source>
-        <translation type="unfinished"></translation>
+        <translation>TomTom Reiserouten (.itn)</translation>
     </message>
     <message>
         <location filename="foo.h" line="590"/>
         <source>TomTom POI file (.asc)</source>
-        <translation type="unfinished"></translation>
+        <translation>TomTom POI-Datei (.asc)</translation>
     </message>
     <message>
         <location filename="foo.h" line="598"/>
         <source>TomTom POI file (.ov2)</source>
-        <translation type="unfinished"></translation>
+        <translation>TomTom POI-Datei (.ov2)</translation>
     </message>
     <message>
         <location filename="foo.h" line="599"/>
         <source>TopoMapPro Places File</source>
-        <translation type="unfinished"></translation>
+        <translation>TopoMapPro Places-Datei</translation>
     </message>
     <message>
         <location filename="foo.h" line="600"/>
         <source>TrackLogs digital mapping (.trl)</source>
-        <translation type="unfinished"></translation>
+        <translation>TrackLogs digital mapping (.trl)</translation>
     </message>
     <message>
         <location filename="foo.h" line="602"/>
         <source>U.S. Census Bureau Tiger Mapping Service</source>
-        <translation type="unfinished"></translation>
+        <translation>U.S. Census Bureau Tiger Mapping Service</translation>
     </message>
     <message>
         <location filename="foo.h" line="615"/>
         <source>Universal csv with field structure in first line</source>
-        <translation type="unfinished"></translation>
+        <translation>Universelle CSV-Datei mit Feldstruktur in der ersten Zeile</translation>
     </message>
     <message>
         <location filename="foo.h" line="621"/>
         <source>Vcard Output (for iPod)</source>
-        <translation type="unfinished"></translation>
+        <translation>VCard-Ausgabe (für iPod)</translation>
     </message>
     <message>
         <location filename="foo.h" line="623"/>
         <source>VidaOne GPS for Pocket PC (.gpb)</source>
-        <translation type="unfinished"></translation>
+        <translation>VidaOne GPS für Pocket PC (.gpb)</translation>
     </message>
     <message>
         <location filename="foo.h" line="625"/>
         <source>Vito Navigator II tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Vito Navigator II Tracks</translation>
     </message>
     <message>
         <location filename="foo.h" line="626"/>
         <source>Vito SmartMap tracks (.vtt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vito SmartMap Tracks (.vtt)</translation>
     </message>
     <message>
         <location filename="foo.h" line="627"/>
         <source>WiFiFoFum 2.0 for PocketPC XML</source>
-        <translation type="unfinished"></translation>
+        <translation>WiFiFoFum 2.0 für PocketPC XML</translation>
     </message>
     <message>
         <location filename="foo.h" line="633"/>
         <source>Wintec WBT-100/200 Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Wintec WBT-100/200 Binärdatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="634"/>
         <source>Wintec WBT-100/200 GPS Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Wintec WBT-100/200 GPS Download</translation>
     </message>
     <message>
         <location filename="foo.h" line="636"/>
         <source>Wintec WBT-201/G-Rays 2 Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Wintec WBT-201/G-Rays 2 Binärdatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="637"/>
         <source>XAiOX iTrackU Logger</source>
-        <translation type="unfinished"></translation>
+        <translation>XAiOX iTrackU Logger</translation>
     </message>
     <message>
         <location filename="foo.h" line="638"/>
         <location filename="foo.h" line="641"/>
         <source>Appends the input to a backup file</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingabe an Sicherungsdatei anhängen</translation>
     </message>
     <message>
         <location filename="foo.h" line="639"/>
         <location filename="foo.h" line="642"/>
         <source>Only waypoints that are not the backup file</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur Wegpunkte, die keine Sicherungsdatei sind</translation>
     </message>
     <message>
         <location filename="foo.h" line="640"/>
         <source>XAiOX iTrackU Logger Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <translation>XAiOX iTrackU Logger Binärdatei</translation>
     </message>
     <message>
         <location filename="foo.h" line="643"/>
         <source>Yahoo Geocode API data</source>
-        <translation type="unfinished"></translation>
+        <translation>Yahoo Geocode API-Daten</translation>
     </message>
 </context>
 </TS>

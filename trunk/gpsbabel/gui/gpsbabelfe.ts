@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.0">
 <context>
     <name>AboutDlg</name>
     <message>
@@ -40,8 +40,18 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="advui.ui" line="20"/>
+        <source>Create smart shortened names. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="advui.ui" line="23"/>
         <source>Synthesize short names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="advui.ui" line="33"/>
+        <source>Convert character set encoding between input and output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -52,6 +62,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="advui.ui" line="43"/>
         <source>Preview in Google Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="advui.ui" line="52"/>
+        <source>Debugging diagnostics.  
+Higher number provides more deitaled diagnostics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -124,22 +140,6 @@ p, li { white-space: pre-wrap; }
         <source>Default Format Options</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="advui.ui" line="33"/>
-        <source>Convert character set encoding between input and output</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="advui.ui" line="52"/>
-        <source>Debugging diagnostics.  
-Higher number provides more deitaled diagnostics.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="advui.ui" line="20"/>
-        <source>Create smart shortened names. </source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>FileDlgManager</name>
@@ -159,12 +159,12 @@ Higher number provides more deitaled diagnostics.</source>
     <message>
         <location filename="filterdlg.cpp" line="41"/>
         <source>Tracks</source>
-        <translation type="unfinished">Traces</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="filterdlg.cpp" line="44"/>
         <source>Waypoints</source>
-        <translation type="unfinished">Waypoints</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="filterdlg.cpp" line="47"/>
@@ -197,7 +197,7 @@ Higher number provides more deitaled diagnostics.</source>
     <message>
         <location filename="filterui.ui" line="72"/>
         <source>Help</source>
-        <translation type="unfinished">Aide</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="filterui.ui" line="83"/>
@@ -271,17 +271,17 @@ Higher number provides more deitaled diagnostics.</source>
     <message>
         <location filename="gmapdlg.cpp" line="149"/>
         <source>Waypoints</source>
-        <translation type="unfinished">Waypoints</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="gmapdlg.cpp" line="164"/>
         <source>Tracks</source>
-        <translation type="unfinished">Traces</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="gmapdlg.cpp" line="179"/>
         <source>Routes</source>
-        <translation type="unfinished">Routes</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="gmapdlg.cpp" line="521"/>
@@ -362,50 +362,225 @@ Higher number provides more deitaled diagnostics.</source>
     </message>
 </context>
 <context>
-    <name>MainDlg</name>
-    <message>
-        <source>About</source>
-        <translation type="obsolete">A propos</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="obsolete">Aide</translation>
-    </message>
-    <message>
-        <source>File</source>
-        <translation type="obsolete">Fichier</translation>
-    </message>
-    <message>
-        <source>Device</source>
-        <translation type="obsolete">Périphérique</translation>
-    </message>
-    <message>
-        <source>Format</source>
-        <translation type="obsolete">Format</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="obsolete">Options</translation>
-    </message>
-    <message>
-        <source>Waypoints</source>
-        <translation type="obsolete">Waypoints</translation>
-    </message>
-    <message>
-        <source>Routes</source>
-        <translation type="obsolete">Routes</translation>
-    </message>
-    <message>
-        <source>Tracks</source>
-        <translation type="obsolete">Traces</translation>
-    </message>
-    <message>
-        <source>Output</source>
-        <translation type="obsolete">Sortie</translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
+    <message>
+        <location filename="mainwinui.ui" line="14"/>
+        <source>MainWindow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="21"/>
+        <source>Input </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="41"/>
+        <source>If selected, input is from a file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="44"/>
+        <location filename="mainwinui.ui" line="428"/>
+        <location filename="mainwinui.ui" line="632"/>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="57"/>
+        <source>If selected, input is from a device or GPS unit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="60"/>
+        <location filename="mainwinui.ui" line="444"/>
+        <source>Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="89"/>
+        <location filename="mainwinui.ui" line="473"/>
+        <source>Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="96"/>
+        <source>Input data format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="103"/>
+        <source>Character encoding of input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="127"/>
+        <source>Browse for one or more input files. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="130"/>
+        <source>File Name(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="162"/>
+        <location filename="mainwinui.ui" line="543"/>
+        <source>Device Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="169"/>
+        <source>Name of port to which input device is connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="200"/>
+        <source>Options for the selected input format. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="203"/>
+        <location filename="mainwinui.ui" line="584"/>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="218"/>
+        <source>Translation Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="227"/>
+        <location filename="mainwinui.ui" line="270"/>
+        <location filename="mainwinui.ui" line="310"/>
+        <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="237"/>
+        <source>If selected, translate waypoints.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="240"/>
+        <source>Waypoints</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="277"/>
+        <source>If selected, translate routes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="280"/>
+        <source>Routes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="317"/>
+        <source>If selected, translate tracks.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="320"/>
+        <source>Tracks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="356"/>
+        <source>Data Filters between input and output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="359"/>
+        <source>Filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="392"/>
+        <source>More translation options. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="395"/>
+        <source>More Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="405"/>
+        <source>Output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="425"/>
+        <source>If selected, output is to a file. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="441"/>
+        <source>If selected, output is to a device or GPS unit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="480"/>
+        <source>Output data format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="487"/>
+        <source>Character encoding of output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="508"/>
+        <source>Browse for an output file name. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="511"/>
+        <source>File Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="550"/>
+        <source>Name of port to which output device is connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="581"/>
+        <source>Options for the selected output format. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="605"/>
+        <source>Output of GPSBabel translation process. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="639"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="651"/>
+        <source>GPSBabel Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="656"/>
+        <source>About GPSBabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="661"/>
+        <source>Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="666"/>
+        <source>Preferences...</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="mainwindow.cpp" line="231"/>
         <location filename="mainwindow.cpp" line="232"/>
@@ -548,224 +723,6 @@ This program cannot continue.</source>
         <source>No data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="mainwinui.ui" line="14"/>
-        <source>MainWindow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="21"/>
-        <source>Input </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="41"/>
-        <source>If selected, input is from a file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="44"/>
-        <location filename="mainwinui.ui" line="428"/>
-        <location filename="mainwinui.ui" line="632"/>
-        <source>File</source>
-        <translation type="unfinished">Fichier</translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="57"/>
-        <source>If selected, input is from a device or GPS unit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="60"/>
-        <location filename="mainwinui.ui" line="444"/>
-        <source>Device</source>
-        <translation type="unfinished">Périphérique</translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="89"/>
-        <location filename="mainwinui.ui" line="473"/>
-        <source>Format</source>
-        <translation type="unfinished">Format</translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="96"/>
-        <source>Input data format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="103"/>
-        <source>Character encoding of input</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="127"/>
-        <source>Browse for one or more input files. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="130"/>
-        <source>File Name(s)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="162"/>
-        <location filename="mainwinui.ui" line="543"/>
-        <source>Device Name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="169"/>
-        <source>Name of port to which input device is connected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="200"/>
-        <source>Options for the selected input format. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="203"/>
-        <location filename="mainwinui.ui" line="584"/>
-        <source>Options</source>
-        <translation type="unfinished">Options</translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="218"/>
-        <source>Translation Options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="227"/>
-        <location filename="mainwinui.ui" line="270"/>
-        <location filename="mainwinui.ui" line="310"/>
-        <source>-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="237"/>
-        <source>If selected, translate waypoints.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="240"/>
-        <source>Waypoints</source>
-        <translation type="unfinished">Waypoints</translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="277"/>
-        <source>If selected, translate routes.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="280"/>
-        <source>Routes</source>
-        <translation type="unfinished">Routes</translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="317"/>
-        <source>If selected, translate tracks.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="320"/>
-        <source>Tracks</source>
-        <translation type="unfinished">Traces</translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="356"/>
-        <source>Data Filters between input and output</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="359"/>
-        <source>Filters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="392"/>
-        <source>More translation options. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="395"/>
-        <source>More Options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="405"/>
-        <source>Output</source>
-        <translation type="unfinished">Sortie</translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="425"/>
-        <source>If selected, output is to a file. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="441"/>
-        <source>If selected, output is to a device or GPS unit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="480"/>
-        <source>Output data format.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="487"/>
-        <source>Character encoding of output</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="508"/>
-        <source>Browse for an output file name. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="511"/>
-        <source>File Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="550"/>
-        <source>Name of port to which output device is connected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="581"/>
-        <source>Options for the selected output format. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="605"/>
-        <source>Output of GPSBabel translation process. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="639"/>
-        <source>Help</source>
-        <translation type="unfinished">Aide</translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="651"/>
-        <source>GPSBabel Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="656"/>
-        <source>About GPSBabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="661"/>
-        <source>Quit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="666"/>
-        <source>Preferences...</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Map</name>
@@ -783,33 +740,6 @@ This program cannot continue.</source>
 <context>
     <name>MiscFltWidget</name>
     <message>
-        <location filename="miscfltui.ui" line="53"/>
-        <location filename="filterwidgets.cpp" line="221"/>
-        <location filename="filterwidgets.cpp" line="222"/>
-        <location filename="filterwidgets.cpp" line="225"/>
-        <location filename="filterwidgets.cpp" line="226"/>
-        <source>Tracks</source>
-        <translation type="unfinished">Traces</translation>
-    </message>
-    <message>
-        <location filename="miscfltui.ui" line="60"/>
-        <location filename="filterwidgets.cpp" line="221"/>
-        <location filename="filterwidgets.cpp" line="223"/>
-        <location filename="filterwidgets.cpp" line="224"/>
-        <location filename="filterwidgets.cpp" line="226"/>
-        <source>Waypoints</source>
-        <translation type="unfinished">Waypoints</translation>
-    </message>
-    <message>
-        <location filename="miscfltui.ui" line="46"/>
-        <location filename="filterwidgets.cpp" line="222"/>
-        <location filename="filterwidgets.cpp" line="223"/>
-        <location filename="filterwidgets.cpp" line="224"/>
-        <location filename="filterwidgets.cpp" line="225"/>
-        <source>Routes</source>
-        <translation type="unfinished">Routes</translation>
-    </message>
-    <message>
         <location filename="miscfltui.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
@@ -822,6 +752,33 @@ This program cannot continue.</source>
     <message>
         <location filename="miscfltui.ui" line="34"/>
         <source>Nuke (Remove) Data Types</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="46"/>
+        <location filename="filterwidgets.cpp" line="222"/>
+        <location filename="filterwidgets.cpp" line="223"/>
+        <location filename="filterwidgets.cpp" line="224"/>
+        <location filename="filterwidgets.cpp" line="225"/>
+        <source>Routes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="53"/>
+        <location filename="filterwidgets.cpp" line="221"/>
+        <location filename="filterwidgets.cpp" line="222"/>
+        <location filename="filterwidgets.cpp" line="225"/>
+        <location filename="filterwidgets.cpp" line="226"/>
+        <source>Tracks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="60"/>
+        <location filename="filterwidgets.cpp" line="221"/>
+        <location filename="filterwidgets.cpp" line="223"/>
+        <location filename="filterwidgets.cpp" line="224"/>
+        <location filename="filterwidgets.cpp" line="226"/>
+        <source>Waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -877,7 +834,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="optionsdlg.cpp" line="185"/>
         <source>Help</source>
-        <translation type="unfinished">Aide</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1014,6 +971,20 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="rttrkui.ui" line="49"/>
+        <source>Simplify route by removing points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="rttrkui.ui" line="52"/>
+        <source> The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route.
+
+The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible.
+
+The quality of the results will vary depending on the density of points in the original route and the length of the original route. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="rttrkui.ui" line="59"/>
         <source>Simplify</source>
         <translation type="unfinished"></translation>
@@ -1039,28 +1010,14 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="rttrkui.ui" line="125"/>
-        <source>Reverse</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="rttrkui.ui" line="49"/>
-        <source>Simplify route by removing points</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="rttrkui.ui" line="52"/>
-        <source> The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route.
-
-The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible.
-
-The quality of the results will vary depending on the density of points in the original route and the length of the original route. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="rttrkui.ui" line="121"/>
         <source>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a wierd thing and place each waypoint on a separate day. 
 Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="rttrkui.ui" line="125"/>
+        <source>Reverse</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1231,7 +1188,11 @@ This option puts all track points from all tracks into a single track and sorts 
     <message>
         <location filename="trackui.ui" line="235"/>
         <source>Split by Date</source>
-        <oldsource>Split tracks. </oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="trackui.ui" line="242"/>
+        <source>Split by Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1305,6 +1266,23 @@ This option puts all track points from all tracks into a single track and sorts 
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="trackui.ui" line="392"/>
+        <source>Synthesize speed. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="trackui.ui" line="395"/>
+        <source>Synthesize speed.
+
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="trackui.ui" line="400"/>
+        <source>Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="trackui.ui" line="407"/>
         <source>Synthesize course.</source>
         <translation type="unfinished"></translation>
@@ -1319,28 +1297,6 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
     <message>
         <location filename="trackui.ui" line="415"/>
         <source>Course</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="trackui.ui" line="392"/>
-        <source>Synthesize speed. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="trackui.ui" line="242"/>
-        <source>Split by Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="trackui.ui" line="395"/>
-        <source>Synthesize speed.
-
-This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="trackui.ui" line="400"/>
-        <source>Speed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1370,13 +1326,13 @@ This option computes a value for the GPS speed at each trackpoint. This is most 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="266"/>
-        <source>Do you wish to download an upgrade?</source>
+        <location filename="upgrade.cpp" line="260"/>
+        <source>Upgrade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="260"/>
-        <source>Upgrade</source>
+        <location filename="upgrade.cpp" line="266"/>
+        <source>Do you wish to download an upgrade?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
