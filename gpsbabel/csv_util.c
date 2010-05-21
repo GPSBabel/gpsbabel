@@ -1070,9 +1070,9 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp,
         utm_zone = strtod(s, &ss);
         utm_zonec = ss[i];
         ss++;
-        utm_easting = strtof(ss, &ss);
+        utm_easting = strtod(ss, &ss);
         while(*ss && !isdigit(*ss)) ss++;
-        utm_northing = strtof(ss, NULL);
+        utm_northing = strtod(ss, NULL);
         }
         break;
     /* ALTITUDE CONVERSIONS ************************************************/
