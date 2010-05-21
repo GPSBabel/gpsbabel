@@ -1727,9 +1727,9 @@ xcsv_waypt_pr(const waypoint *wpt)
                 writebuff(buff, fmp->printfc, utmzc);
                 break;
         case XT_UTM_ZONEF: {
+                char tbuf[10];
                 GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                                          &utme, &utmn, &utmz, &utmzc);
-                char tbuf[10];
                 tbuf[0] = 0;
                 snprintf(tbuf, sizeof(tbuf), "%d%c", utmz, utmzc);
                 writebuff(buff, fmp->printfc, tbuf);
