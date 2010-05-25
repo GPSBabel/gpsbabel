@@ -17,6 +17,7 @@
 <member>Edge 305</member> 
 <member>eTrex Legend C</member> 
 <member>eTrex Legend Cx</member>  
+<member>eTrex Legend H</member>  
 <member>eTrex Legend HCx</member>  
 <member>eTrex Summit Cx</member> 
 <member>eTrex Summit HC</member>  
@@ -25,6 +26,7 @@
 <member>eTrex Venture HC</member> 
 <member>eTrex Vista C</member> 
 <member>eTrex Vista Cx</member> 
+<member>eTrex Vista H</member> 
 <member>eTrex Vista HCx</member> 
 <member>Forerunner 205</member> 
 <member>Forerunner 301</member> 
@@ -121,6 +123,11 @@ GPX files from the mass storage device as mounted on your computer.
 <member>Colorado 400c<footnoteref linkend="gpx"/></member>
 <member>Colorado 400i<footnoteref linkend="gpx"/></member>
 <member>Colorado 400t<footnoteref linkend="gpx"/></member>
+<member>Dakota 10<footnoteref linkend="gpx"/></member>
+<member>Dakota 20<footnoteref linkend="gpx"/></member>
+<member>GPSMap 78<footnoteref linkend="gpx"/></member>
+<member>GPSMap 78s<footnoteref linkend="gpx"/></member>
+<member>GPSMap 78sc<footnoteref linkend="gpx"/></member>
 <member>Nuvi 200<footnoteref linkend="gpx"/></member>
 <member>Nuvi 205<footnoteref linkend="gpx"/></member>
 <member>Nuvi 200W<footnoteref linkend="gpx"/></member>
@@ -139,6 +146,7 @@ GPX files from the mass storage device as mounted on your computer.
 <member>Nuvi 310<footnoteref linkend="gpx"/></member>
 <member>Nuvi 350<footnoteref linkend="gpx"/></member>
 <member>Nuvi 370<footnoteref linkend="gpx"/></member>
+<member>Nuvi 465T<footnoteref linkend="gpx"/></member>
 <member>Nuvi 500<footnoteref linkend="gpx"/></member>
 <member>Nuvi 550<footnoteref linkend="gpx"/></member>
 <member>Nuvi 600<footnoteref linkend="gpx"/></member>
@@ -156,19 +164,40 @@ GPX files from the mass storage device as mounted on your computer.
 <member>Nuvi 780<footnoteref linkend="gpx"/></member>
 <member>Nuvi 785T<footnoteref linkend="gpx"/></member>
 <member>Nuvi 880<footnoteref linkend="gpx"/></member>
+<member>Nuvi 885T<footnoteref linkend="gpx"/></member>
+<member>Nuvi 1200<footnoteref linkend="gpx"/></member>
+<member>Nuvi 1250<footnoteref linkend="gpx"/></member>
+<member>Nuvi 1260T<footnoteref linkend="gpx"/></member>
+<member>Nuvi 1300<footnoteref linkend="gpx"/></member>
+<member>Nuvi 1350<footnoteref linkend="gpx"/></member>
+<member>Nuvi 1370T<footnoteref linkend="gpx"/></member>
+<member>Nuvi 1390T<footnoteref linkend="gpx"/></member>
+<member>Nuvi 1350<footnoteref linkend="gpx"/></member>
+<member>Nuvi 1490T<footnoteref linkend="gpx"/></member>
+<member>Nuvi 1690T<footnoteref linkend="gpx"/></member>
+<member>Nuvi 3750<footnoteref linkend="gpx"/></member>
+<member>Nuvi 3760T<footnoteref linkend="gpx"/></member>
+<member>Nuvi 3790T<footnoteref linkend="gpx"/></member>
 <member>Oregon 200<footnoteref linkend="gpx"/></member>
 <member>Oregon 300<footnoteref linkend="gpx"/></member>
 <member>Oregon 400c<footnoteref linkend="gpx"/></member>
 <member>Oregon 400i<footnoteref linkend="gpx"/></member>
 <member>Oregon 400t<footnoteref linkend="gpx"/></member>
+<member>Oregon 450<footnoteref linkend="gpx"/></member>
+<member>Oregon 450t<footnoteref linkend="gpx"/></member>
+<member>Oregon 550<footnoteref linkend="gpx"/></member>
+<member>Oregon 550t<footnoteref linkend="gpx"/></member>
 <member>StreetPilot c510<footnoteref linkend="gpx"/></member>
 <member>StreetPilot c530<footnoteref linkend="gpx"/></member>
 <member>StreetPilot c550<footnoteref linkend="gpx"/></member>
 <member>StreetPilot c580<footnoteref linkend="gpx"/></member>
 <member>Road Tech Zumo<footnoteref linkend="gpx"/></member>
+<member>Zumo 220<footnoteref linkend="gpx"/></member>
 <member>Zumo 450<footnoteref linkend="gpx"/></member>
 <member>Zumo 500<footnoteref linkend="gpx"/></member>
 <member>Zumo 550<footnoteref linkend="gpx"/></member>
+<member>Zumo 660<footnoteref linkend="gpx"/></member>
+<member>Zumo 665<footnoteref linkend="gpx"/></member>
 </simplelist>
 </para>
 
