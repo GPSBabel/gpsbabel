@@ -113,6 +113,7 @@ void
 my_read(void)
 {
 	int npts;
+	char *etype = "unknown";
 
 	SHPGetInfo(ihandle, &npts, NULL, NULL, NULL);
 
@@ -169,8 +170,8 @@ my_read(void)
 		else {
 			url = NULL;
 		}
-			
-		if (shp->nSHPType == SHPT_ARC) {
+		switch (shp->nSHPType) {	
+		case SHPT_ARC: {
 			int j;
 			route_head *routehead = route_head_alloc();
 			routehead->rte_name = xstrdup(name);
@@ -182,9 +183,10 @@ my_read(void)
 				wpt->altitude = shp->padfZ[j];
 				route_add_wpt(routehead, wpt);
 			}
-		}
+			}
+			break;
 
-		if (shp->nSHPType == SHPT_POINT) {
+		case SHPT_POINT: 
 			wpt = waypt_new();
 			wpt->latitude = shp->dfYMin;
 			wpt->longitude = shp->dfXMin;
@@ -193,7 +195,25 @@ my_read(void)
 				wpt->url = xstrdup(url);
 			}
 			waypt_add(wpt);
-		}
+			break;	
+		case SHPT_POLYGON: etype = "polygon"; goto err;
+		case SHPT_MULTIPOINT: etype = "multipoint"; goto err;
+		case SHPT_POINTZ: etype = "pointz" ; goto err;
+		case SHPT_ARCZ: etype = "arcz" ; goto err;
+		case SHPT_POLYGONZ: etype = "polygonz" ; goto err;
+		case SHPT_MULTIPOINTZ: etype = "multipointz" ; goto err;
+		case SHPT_POINTM: etype = "pointm" ; goto err;
+		case SHPT_ARCM: etype = "arcm" ; goto err;
+		case SHPT_POLYGONM: etype = "polygonm" ; goto err;
+		case SHPT_MULTIPOINTM: etype = "multipointm" ; goto err;
+		case SHPT_MULTIPATCH: etype = "multipatch" ; goto err;
+		default:
+
+		err:
+			warning("This file contains shapefile geometry type %s that does not naturally convert\nCustom programming is likely required.\n",
+				etype);
+			break;
+		}	
 
 		SHPDestroyObject(shp);
 
