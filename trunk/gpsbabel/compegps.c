@@ -116,6 +116,32 @@ void fix_datum(double *lat, double *lon)
 	}
 }
 
+static void
+compegps_parse_date(const char *c, struct tm* tm)
+{
+	char month[4];
+	int year;
+	tm->tm_mday = atoi(c);
+        strncpy(month, c+3, 3);
+        month[3] = 0;
+        tm->tm_mon = month_lookup(month);
+	year = atoi(c + 7);
+	if (year < 70) 
+		year += 100;
+	if (year > 1900)
+		year -= 1900;
+        tm->tm_year = year;
+        // if (tm->tm_year < 70) tm->tm_year += 100;
+}
+
+static void
+compegps_parse_time(const char *c, struct tm* tm)
+{
+	tm->tm_hour = atoi(c);
+       	tm->tm_min = atoi(c+3);
+        tm->tm_sec = atoi(c+6);
+}
+
 /* specialized readers */
 
 static waypoint*
@@ -124,6 +150,9 @@ parse_wpt(char *buff)
 	int col = -1;
 	char *c, *cx;
 	waypoint *wpt = waypt_new();
+	struct tm tm;
+	memset(&tm, 0, sizeof(tm));
+	int has_time = 0;
 
 	c = strstr(buff, "A ");
 	if (c == buff) col++;
@@ -152,8 +181,21 @@ parse_wpt(char *buff)
 				case 3:
 					human_to_dec(c, NULL, &wpt->longitude, 2);
 					break;
-				case 4:	break;				/* Unused date and time */
-				case 5: break;				/* always "27-MAR-62 00:00:00" */
+				// Older compegps used a dumb constant.
+				// Report are that 2010-era writes a sensible
+				// value here.
+				/* always "27-MAR-62 00:00:00" */
+				case 4:	
+					if (strcmp(c, "27-MAR-62")) {
+						has_time = 1;
+						compegps_parse_date(c, &tm);
+					}
+					break;
+				case 5:
+					if (has_time) {
+						compegps_parse_time(c, &tm);
+						wpt->creation_time = mkgmtime(&tm);
+					}
 				case 6:
 					wpt->altitude = atof(c);
 					break;
@@ -219,7 +261,6 @@ parse_trkpt(char *buff)
 	int col = -1;
 	char *c;
 	struct tm tm;
-	char month[4];
 	waypoint *wpt = waypt_new();
 
 	c = strstr(buff, "A ");
@@ -244,17 +285,10 @@ parse_trkpt(char *buff)
 					human_to_dec(c, NULL, &wpt->longitude, 2);
 					break;
 				case 4:
-					tm.tm_mday = atoi(c);
-					strncpy(month, c+3, 3);
-					month[3] = 0;
-					tm.tm_mon = month_lookup(month);
-					tm.tm_year = atoi(c + 7);
-					if (tm.tm_year < 70) tm.tm_year += 100;
+					compegps_parse_date(c, &tm);
 					break;
 				case 5:
-					tm.tm_hour = atoi(c);
-					tm.tm_min = atoi(c+3);
-					tm.tm_sec = atoi(c+6);
+					compegps_parse_time(c, &tm);
 					wpt->creation_time = mkgmtime(&tm);
 					break;
 				case 7:

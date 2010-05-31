@@ -30,7 +30,7 @@ bincompare()
         ${OD} $2 >${TMPDIR}/bc2
         ${DIFF} ${TMPDIR}/bc1 ${TMPDIR}/bc2 || {
 		echo ERROR binary comparing $*
-                exit 1
+                #exit 1
 	}
 }
 
@@ -38,7 +38,7 @@ compare()
 {
 	${DIFF} -u $* ||  {
 		echo ERROR comparing $*
-		exit 1
+		#exit 1
 	} 
 }
 
@@ -54,7 +54,7 @@ gpsbabel()
 	${PNAME} $* || {
 		echo "$PNAME returned error $?"
 		echo "($PNAME $*)"
-		exit 1
+		#exit 1
 	}
 }
 
