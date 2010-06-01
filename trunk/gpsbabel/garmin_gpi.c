@@ -465,6 +465,7 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 	
 	switch(tag) {
 		case 0x3:	/* size = 12 */
+		case 0x80003:	/* size = 12 */
 			
 			dist = gbfgetint16(fin);		/* proximity distance in meters */
 			speed = (double)gbfgetint16(fin) / 100;	/* speed in meters per second */
