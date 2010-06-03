@@ -1,4 +1,4 @@
-# $Id: app.pro,v 1.16 2010-05-19 11:41:02 robertl Exp $
+# $Id: app.pro,v 1.17 2010-06-03 15:01:24 robertl Exp $
 #
 
 CONFIG += qt release 
@@ -84,6 +84,7 @@ HEADERS += processwait.h
 HEADERS += setting.h
 HEADERS += upgrade.h
 
+TRANSLATIONS += gpsbabelfe_ru.ts
 TRANSLATIONS += gpsbabelfe_de.ts
 TRANSLATIONS += gpsbabelfe_es.ts
 TRANSLATIONS += gpsbabelfe_fr.ts
