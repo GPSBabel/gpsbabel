@@ -480,7 +480,7 @@ This program cannot continue.</source>
         <location filename="mainwindow.cpp" line="660"/>
         <location filename="mainwindow.cpp" line="680"/>
         <source>Options for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Options pour %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="673"/>
@@ -568,7 +568,7 @@ This program cannot continue.</source>
         <location filename="mainwinui.ui" line="428"/>
         <location filename="mainwinui.ui" line="632"/>
         <source>File</source>
-        <translation type="unfinished">Fichier</translation>
+        <translation>Fichier</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="57"/>
@@ -579,7 +579,7 @@ This program cannot continue.</source>
         <location filename="mainwinui.ui" line="60"/>
         <location filename="mainwinui.ui" line="444"/>
         <source>Device</source>
-        <translation type="unfinished">Périphérique</translation>
+        <translation>Périphérique</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="89"/>
@@ -611,7 +611,8 @@ This program cannot continue.</source>
         <location filename="mainwinui.ui" line="162"/>
         <location filename="mainwinui.ui" line="543"/>
         <source>Device Name:</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>via google translate</translatorcomment>
+        <translation>nom du périphérique:</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="169"/>
@@ -621,7 +622,8 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwinui.ui" line="200"/>
         <source>Options for the selected input format. </source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Via GT</translatorcomment>
+        <translation>Options pour le format d&apos;entrée sélectionnée.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="203"/>
@@ -679,7 +681,8 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwinui.ui" line="359"/>
         <source>Filters</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>via Google Translate</translatorcomment>
+        <translation>Filtres</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="392"/>
@@ -689,7 +692,8 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwinui.ui" line="395"/>
         <source>More Options</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>via Google Translate</translatorcomment>
+        <translation>Plus d&apos;options</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="405"/>
@@ -744,12 +748,13 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwinui.ui" line="639"/>
         <source>Help</source>
-        <translation type="unfinished">Aide</translation>
+        <translation>Aide</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="652"/>
         <source>GPSBabel Help</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Via Google Translate</translatorcomment>
+        <translation>GPSBabel aider</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="657"/>
@@ -882,7 +887,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="optionsdlg.cpp" line="189"/>
         <source>Help</source>
-        <translation type="unfinished">Aide</translation>
+        <translation>Aide</translation>
     </message>
 </context>
 <context>
@@ -910,7 +915,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="preferences.ui" line="61"/>
         <source>Formats</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="preferences.ui" line="69"/>

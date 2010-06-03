@@ -931,7 +931,8 @@ Manche Dateiformate unterstuetzen nur eine Teilmenge, entweder Wegpunkte oder Tr
     <message>
         <location filename="preferences.ui" line="45"/>
         <source>Check for newer version on start.</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Via GT</translatorcomment>
+        <translation type="unfinished">Check für neuere Version auf Start.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="52"/>
@@ -956,7 +957,8 @@ Manche Dateiformate unterstuetzen nur eine Teilmenge, entweder Wegpunkte oder Tr
     <message>
         <location filename="preferences.ui" line="100"/>
         <source>Disable All</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Via GT</translatorcomment>
+        <translation>Alle deaktivieren</translation>
     </message>
 </context>
 <context>
@@ -1302,7 +1304,7 @@ Diese Option übernimmt alle Punkte aus allen Tracks in einen einzigen Track und
         <location filename="trackui.ui" line="235"/>
         <source>Split by Date</source>
         <oldsource>Split tracks. </oldsource>
-        <translation type="unfinished">Tracks aufspalten.</translation>
+        <translation type="unfinished">Tracks aufspalten</translation>
     </message>
     <message>
         <source>Split by date or time interval 
@@ -1538,7 +1540,7 @@ Diese Option generiert für jeden Trackpunkt einen Geschwindigkeitswert. Sie wir
         <location filename="wayptsui.ui" line="55"/>
         <source>Suppress duplicate waypoints based on name.</source>
         <translatorcomment>no sentence</translatorcomment>
-        <translation>Unterdrücken gleichnamiger Wegpunkte</translation>
+        <translation type="unfinished">Unterdrücken gleichnamiger Wegpunkte</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="58"/>
