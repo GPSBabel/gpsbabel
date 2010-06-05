@@ -33,6 +33,7 @@
     2007-01-08: if not really needed disable check for valid timestamps
 		(based on patch from Vladimir Kondratiev)
     2007-07-26: Allow 'range' together with trackpoints without timestamp
+    2010-06-02: Add specified timestamp to each trackpoint (added by sven_luzar)
  */
  
 #include <ctype.h>
@@ -59,6 +60,7 @@
 #define TRACKFILTER_SPEED_OPTION        "speed"
 #define TRACKFILTER_SEG2TRK_OPTION      "seg2trk"
 #define TRACKFILTER_TRK2SEG_OPTION      "trk2seg"
+#define TRACKFILTER_FAKETIME_OPTION     "faketime"
 
 #undef TRACKF_DBG
 
@@ -76,6 +78,7 @@ static char *opt_speed = NULL;
 static char *opt_name = NULL;
 static char *opt_seg2trk = NULL;
 static char *opt_trk2seg = NULL;
+static char *opt_faketime = NULL;
 
 static
 arglist_t trackfilter_args[] = {
@@ -117,6 +120,9 @@ arglist_t trackfilter_args[] = {
 	{TRACKFILTER_TRK2SEG_OPTION, &opt_trk2seg,
 	    "Merge tracks inserting segment separators at boundaries",
             NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{TRACKFILTER_FAKETIME_OPTION, &opt_faketime,
+	    "Add specified timestamp to each trackpoint",
+             NULL, ARGTYPE_STRING, ARG_NOMINMAX},
 	ARG_TERMINATOR
 };
 
@@ -974,6 +980,101 @@ trackfilter_trk2seg(void)
 }
 
 /*******************************************************************************
+* option: "faketime"
+*******************************************************************************/
+
+typedef struct faketime_s
+{
+       time_t start;
+       int    step;
+       int   force;
+} faketime_t;
+
+static faketime_t
+trackfilter_faketime_check(const char *timestr)
+{
+       int i, j;
+       char fmtstart[20];
+       char fmtstep[20];
+       char c;
+       const char *cin;
+       struct tm time;
+       int timeparse = 1;
+       faketime_t result;
+       result.force = 0;
+
+       i = j = 0;
+       strncpy(fmtstart, "00000101000000", sizeof(fmtstart));
+       strncpy(fmtstep,  "00000000000000", sizeof(fmtstep));
+       cin = timestr;
+
+       while ((c = *cin++))
+       {
+               if (c=='f') {
+                       result.force = 1;
+                       continue;
+               }
+
+               if (c!='+' && isdigit(c) == 0)
+                       fatal(MYNAME "-faketime: invalid character \"%c\"!\n", c);
+
+               if (timeparse) {
+                       if ((c == '+')) {
+                               fmtstart[i++] = '\0';
+                               timeparse = 0;
+                       } else {
+                               if (fmtstart[i] == '\0') fatal(MYNAME "-faketime: parameter too long \"%s\"!\n", timestr);
+                               fmtstart[i++] = c;
+                       }
+               } else {
+                       if (fmtstep[j] == '\0') fatal(MYNAME "-faketime: parameter too long \"%s\"!\n", timestr);
+                       fmtstep[j++] = c;
+               }
+       }
+       fmtstep[j++] = '\0';
+
+       cin = strptime(fmtstart, "%Y%m%d%H%M%S", &time);
+       result.step = atoi(fmtstep);
+       if ((cin != NULL) && (*cin != '\0'))
+           fatal(MYNAME "-faketime-check: Invalid time stamp (stopped at %s of %s)!\n", cin, fmtstart);
+
+       result.start = mkgmtime(&time);
+       return result;
+}
+
+static int
+trackfilter_faketime(void)             /* returns number of track points left after filtering */
+{
+       faketime_t faketime;
+
+       queue *elem, *tmp;
+       int i, dropped, inside = 0;
+
+       if (opt_faketime != 0)
+           faketime = trackfilter_faketime_check(opt_faketime);
+
+       dropped = inside = 0;
+
+       for (i = 0; i < track_ct; i++)
+       {
+           route_head *track = track_list[i].track;
+
+           QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp)
+           {
+               waypoint *wpt = (waypoint *)elem;
+
+                       if (opt_faketime != 0 && (wpt->creation_time == 0 || faketime.force)) {
+                               wpt->creation_time = faketime.start;
+                               faketime.start += faketime.step;
+                       }
+           }
+       }
+
+       return track_pts - dropped;
+}
+
+
+/*******************************************************************************
 * global cb's
 *******************************************************************************/
 
@@ -1057,6 +1158,20 @@ trackfilter_process(void)
 	    if ( opt_fix ) opts--;
 	    if ( !opts ) return;
 	}
+
+       if ((opt_faketime != NULL))
+       {
+           opts--;
+
+           trackfilter_faketime();
+
+           if (opts == 0) return;
+
+           trackfilter_deinit();       /* reinitialize */
+           trackfilter_init(NULL);
+
+           if (track_ct == 0) return;          /* no more track(s), no more fun */
+       }
 
 	if ((opt_stop != NULL) || (opt_start != NULL))
 	{
