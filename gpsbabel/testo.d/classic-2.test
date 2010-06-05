@@ -343,21 +343,6 @@ gpsbabel -t -i vitosmt -f ${REFERENCE}/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt_t
 compare ${TMPDIR}/vitosmt_t.gpx ${REFERENCE}/track/vitosmt_t.gpx
 
 #
-# tracks filter tests
-#
-
-rm -f ${TMPDIR}/trackfilter*
-
-gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,title="LOG-%Y%m%d" -o gpx -F ${TMPDIR}/trackfilter.gpx
-compare ${TMPDIR}/trackfilter.gpx ${REFERENCE}/track/trackfilter.gpx
-
-gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,sdistance=0.1k  -o gpx -F ${TMPDIR}/trackfilter2.gpx
-compare ${TMPDIR}/trackfilter2.gpx ${REFERENCE}/track/trackfilter-sdistance.gpx
-
-gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,sdistance=0.1k,split=5m,title=%Y%m%d  -o gpx -F ${TMPDIR}/trackfilter-sdistance2.gpx
-compare ${TMPDIR}/trackfilter-sdistance2.gpx ${REFERENCE}/track/trackfilter-sdistance2.gpx
-
-#
 # Map&Guide Motorrad Routenplaner .bcr files test
 #
 rm -f ${TMPDIR}/bcr*
