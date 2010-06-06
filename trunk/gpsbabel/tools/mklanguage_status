@@ -1,5 +1,5 @@
 lrelease gui/app.pro | 
 sed  -e  's#Updating.*gpsbabelfe_\(..\).*#<tr><td>\1</td>#' \
-    -e 's#Generated \([0-9]*\) translation.*(\([0-9]*\) finished and \([0-9]*\) unfinished)#<td>\1</td><td>\2</td>\3</td>#' \
+    -e 's#Generated \([0-9]*\) translation.*(\([0-9]*\) finished and \([0-9]*\) unfinished)#<td>\1</td><td>\2</td><td>\3</td>#' \
    -e 's#Ignored \([0-9]*\).*#<td>\1</td></tr>#'
 
