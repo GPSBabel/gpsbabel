@@ -1,0 +1,12 @@
+# Creating even empty (?!?!) directories is enough to trigger the merge
+# of the trnslations for the application menu.  This isn't as ambitious
+# as described at 
+# http://doc.qt.nokia.com/4.6/mac-differences.html#translating-the-application-menu-and-native-dialogs
+# but at least for German, it seems to work.
+#
+
+cd gui 
+for i in $(echo  gpsbabelfe_??.ts | sed 's/gpsbabelfe_\(..\).ts/\1/g')
+do
+  mkdir objects/gpsbabelfe-bin.app/Contents/Resources/$i.lproj 
+done

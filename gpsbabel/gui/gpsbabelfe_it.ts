@@ -459,7 +459,7 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwindow.cpp" line="561"/>
         <source>waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="562"/>
@@ -520,7 +520,7 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwindow.cpp" line="898"/>
         <source>Translation successful</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Translation Opzioni</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="908"/>
@@ -632,7 +632,7 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwinui.ui" line="218"/>
         <source>Translation Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Translation Opzioni</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="227"/>
@@ -649,7 +649,7 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwinui.ui" line="240"/>
         <source>Waypoints</source>
-        <translation type="unfinished">Punti di interesse</translation>
+        <translation>Punti di interesse</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="277"/>
@@ -659,7 +659,7 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwinui.ui" line="280"/>
         <source>Routes</source>
-        <translation type="unfinished">Rotte</translation>
+        <translation>Rotte</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="317"/>
@@ -669,7 +669,7 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwinui.ui" line="320"/>
         <source>Tracks</source>
-        <translation type="unfinished">Tracce</translation>
+        <translation>Tracce</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="356"/>
@@ -694,7 +694,7 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwinui.ui" line="405"/>
         <source>Output</source>
-        <translation type="unfinished">Destinazione</translation>
+        <translation>Destinazione</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="425"/>

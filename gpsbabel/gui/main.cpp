@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: main.cpp,v 1.7 2010-05-19 11:41:02 robertl Exp $
+// $Id: main.cpp,v 1.8 2010-06-06 00:49:08 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -37,15 +37,32 @@ const char *pathSeparator = ";";
 const char *pathSeparator = ":";
 #endif
 
+#if defined (Q_OS_MAC)
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 //------------------------------------------------------------------------
 static void installTranslation(QApplication *app, const QString &nm)
 {
   QTranslator *xlator = new QTranslator();
-fprintf(stderr, "Loading %s\n", qPrintable(QLibraryInfo::location(QLibraryInfo::TranslationsPath) + "/" + nm + QLocale::system().name()));
+
   xlator->load(QLibraryInfo::location(QLibraryInfo::TranslationsPath) + "/" + nm + QLocale::system().name());
 
-fprintf(stderr, "...Loading %s\n", qPrintable(nm + QLocale::system().name()));
   xlator->load(nm + QLocale::system().name());
+
+#if defined (Q_OS_MAC)
+  CFURLRef pluginRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+  CFStringRef macPath = CFURLCopyFileSystemPath(pluginRef,
+                                           kCFURLPOSIXPathStyle);
+  QString pathPtr(CFStringGetCStringPtr(macPath, CFStringGetSystemEncoding()));
+  pathPtr += "/Contents/MacOS/lang/" + nm;
+  // pathPtr +=  QLocale::system().name().left(2);
+  pathPtr +=  QLocale::system().name();
+
+  xlator->load(pathPtr);
+
+#endif
+
   app->installTranslator(xlator);
 }
 
