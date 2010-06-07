@@ -4,2076 +4,1943 @@
 <context>
     <name></name>
     <message>
-        <location filename="foo.h" line="131"/>
+        <source></source>
+        <translation>Project-Id-Version: GPSBabel command line program
+POT-Creation-Date: 2005-11-19 01:14
+PO-Revision-Date: 2008-04-26 21:18+0100
+Last-Translator: Michele Locati &lt;mlocati@tiscali.it&gt;
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-Generator: dxgettext 1.2.1
+Language-Team:  &lt;mlocati@tiscali.it&gt;
+X-Poedit-SourceCharset: iso-8859-1
+X-Poedit-Language: Italian
+X-Poedit-Country: ITALY
+</translation>
+    </message>
+    <message>
         <source>(integer sec or &apos;auto&apos;) Barograph to GPS time diff</source>
-        <translation>(sec interi o &apos;auto&apos;) Differenza temporale tra il barografo e il GPS</translation>
+        <translation type="obsolete">(sec interi o &apos;auto&apos;) Differenza temporale tra barografo e GPS</translation>
     </message>
     <message>
-        <location filename="foo.h" line="369"/>
         <source>(USR input) Break segments into separate tracks</source>
-        <translation>(ingresso USR) suddividi i segmenti in tracce separate</translation>
+        <translation type="obsolete">Ingresso USR: suddividi i segmenti in tracce separate</translation>
     </message>
     <message>
-        <location filename="foo.h" line="368"/>
         <source>(USR output) Merge into one segmented track</source>
-        <translation>(destinazione USR) Unisci tracce segmentate in una traccia</translation>
+        <translation type="obsolete">Uscita USR: unisci in una traccia segmentata</translation>
     </message>
     <message>
-        <location filename="foo.h" line="630"/>
         <source>Ad-hoc closed icon name</source>
-        <translation>Nome ad-hoc icona chiusa</translation>
+        <translation type="obsolete">Nome ad-hoc icona chiusa</translation>
     </message>
     <message>
-        <location filename="foo.h" line="631"/>
         <source>Ad-hoc open icon name</source>
-        <translation>Nome ad-hoc icona aperta</translation>
+        <translation type="obsolete">Nome ad-hoc icona aperta</translation>
     </message>
     <message>
-        <location filename="foo.h" line="195"/>
         <source>After output job done sleep n second(s)</source>
-        <translation>Attendi n secondi dopo il termine dell&apos;elaborazione</translation>
+        <translation type="obsolete">Attendi n secondi dopo il termine dell&apos;elaborazione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="3"/>
-        <location filename="foo.h" line="12"/>
-        <location filename="foo.h" line="21"/>
-        <location filename="foo.h" line="35"/>
-        <location filename="foo.h" line="50"/>
-        <location filename="foo.h" line="58"/>
-        <location filename="foo.h" line="82"/>
-        <location filename="foo.h" line="96"/>
-        <location filename="foo.h" line="104"/>
-        <location filename="foo.h" line="112"/>
-        <location filename="foo.h" line="137"/>
-        <location filename="foo.h" line="146"/>
-        <location filename="foo.h" line="161"/>
-        <location filename="foo.h" line="180"/>
-        <location filename="foo.h" line="201"/>
-        <location filename="foo.h" line="219"/>
-        <location filename="foo.h" line="256"/>
-        <location filename="foo.h" line="264"/>
-        <location filename="foo.h" line="272"/>
-        <location filename="foo.h" line="280"/>
-        <location filename="foo.h" line="319"/>
-        <location filename="foo.h" line="334"/>
-        <location filename="foo.h" line="342"/>
-        <location filename="foo.h" line="350"/>
-        <location filename="foo.h" line="358"/>
-        <location filename="foo.h" line="394"/>
-        <location filename="foo.h" line="402"/>
-        <location filename="foo.h" line="416"/>
-        <location filename="foo.h" line="444"/>
-        <location filename="foo.h" line="465"/>
-        <location filename="foo.h" line="479"/>
-        <location filename="foo.h" line="505"/>
-        <location filename="foo.h" line="534"/>
-        <location filename="foo.h" line="542"/>
-        <location filename="foo.h" line="556"/>
-        <location filename="foo.h" line="569"/>
-        <location filename="foo.h" line="584"/>
-        <location filename="foo.h" line="592"/>
         <source>Allow whitespace synth. shortnames</source>
-        <translation>Permetti spazi nei nomi brevi sintetizzati</translation>
+        <translation type="obsolete">Permetti spazi nei nomi brevi sintetizzati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="237"/>
         <source>Altitudes are absolute and not clamped to ground</source>
-        <translation>Le quote sono assolute e non relative al terreno</translation>
+        <translation type="obsolete">Le quote sono assolute e non relative al terreno</translation>
     </message>
     <message>
-        <location filename="foo.h" line="30"/>
         <source>Append icon_descr to description</source>
-        <translation>Aggiungi icon_descr alla descrizione</translation>
+        <translation type="obsolete">Aggiungi icon_descr alla descrizione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="494"/>
-        <source>Append realtime positioning data to the output file instead of truncating</source>
-        <translation>Aggiungi le informazioni sulla posizione in realtime all&apos;uscita invece che troncarle</translation>
-    </message>
-    <message>
-        <location filename="foo.h" line="293"/>
         <source>Base URL for link tag in output</source>
-        <translation>Url di base per i tag link in uscita</translation>
+        <translation type="obsolete">Url di base per i tag link in uscita</translation>
     </message>
     <message>
-        <location filename="foo.h" line="155"/>
-        <location filename="foo.h" line="207"/>
+        <source>Basename prepended to URL on output</source>
+        <translation type="obsolete">Nome base anteposto all&apos;URL in uscita</translation>
+    </message>
+    <message>
         <source>Bitmap of categories</source>
-        <translation>Bitmap delle categorie</translation>
+        <translation type="obsolete">Bitmap delle categorie</translation>
     </message>
     <message>
-        <location filename="foo.h" line="227"/>
         <source>Category name (Cache)</source>
-        <translation>Nome categoria (cache)</translation>
+        <translation type="obsolete">Nome della categoria (cache)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="206"/>
         <source>Category number to use for written waypoints</source>
-        <translation>Numero categoria da usare per i punti d&apos;interesse scritti</translation>
+        <translation type="obsolete">Numero categoria da usare per i punti d&apos;interesse scritti</translation>
     </message>
     <message>
-        <location filename="foo.h" line="71"/>
         <source>Color for lines or mapnotes</source>
-        <translation>Colore per le linee o le note della mappa</translation>
+        <translation type="obsolete">Colore per le linee o le note della mappa</translation>
     </message>
     <message>
-        <location filename="foo.h" line="204"/>
-        <location filename="foo.h" line="456"/>
         <source>Command unit to power itself down</source>
-        <translation>Chiedi al dispositivo di spegnersi</translation>
+        <translation type="obsolete">Chiedi al dispositivo di spegnersi</translation>
     </message>
     <message>
-        <location filename="foo.h" line="247"/>
-        <location filename="foo.h" line="491"/>
         <source>Complete date-free tracks with given date (YYYYMMDD).</source>
-        <translation>Completa le tracce senza data con la data fornita (AAAAMMGG).</translation>
+        <translation type="obsolete">Completa le tracce senza data con la data fornita (AAAAMMGG).</translation>
     </message>
     <message>
-        <location filename="foo.h" line="197"/>
         <source>Create unique waypoint names (default = yes)</source>
-        <translation>Crea punti d&apos;interesse con nomi univoci (predef.: yes)</translation>
+        <translation type="obsolete">Crea punti d&apos;interesse con nomi univoci (predefinito: sì)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="292"/>
         <source>Create waypoints from geocache log entries</source>
-        <translation>Crea punti d&apos;interesse dagli elementi nel registro geocache</translation>
+        <translation type="obsolete">Crea punti d&apos;interesse dagli elementi nel registro geocache</translation>
     </message>
     <message>
-        <location filename="foo.h" line="29"/>
-        <location filename="foo.h" line="252"/>
-        <location filename="foo.h" line="287"/>
-        <location filename="foo.h" line="515"/>
-        <location filename="foo.h" line="521"/>
-        <location filename="foo.h" line="529"/>
         <source>Database name</source>
-        <translation>Nome banca dati</translation>
+        <translation type="obsolete">Nome della banca dati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="226"/>
         <source>Database name (filename)</source>
-        <translation>Nome banca dati (nome file)</translation>
+        <translation type="obsolete">Nome della banca dati (nome file)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="435"/>
         <source>Datum (default=NAD27)</source>
-        <translation>Datum (predef.=NAD27)</translation>
+        <translation type="obsolete">Datum (predefinito: NAD27)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="607"/>
         <source>Days after which points are considered old</source>
-        <translation>Giorni dopo i quali i punti sono considerati vecchi</translation>
+        <translation type="obsolete">Giorni dopo i quali i punti sono considerati vecchi</translation>
     </message>
     <message>
-        <location filename="foo.h" line="493"/>
         <source>Decimal seconds to pause between groups of strings</source>
-        <translation>Decimi di secondo di pausa tra gruppi di stringhe</translation>
+        <translation type="obsolete">Pausa (in decimi di secondo) tra gruppi di stringhe</translation>
     </message>
     <message>
-        <location filename="foo.h" line="189"/>
         <source>Default category on output</source>
-        <translation>Categoria predefinita in uscita</translation>
+        <translation type="obsolete">Categoria predefinita in uscita</translation>
     </message>
     <message>
-        <location filename="foo.h" line="154"/>
         <source>Default category on output (1..16)</source>
-        <translation>Categoria predefinita in uscita (1... 16)</translation>
+        <translation type="obsolete">Categoria predefinita in uscita (1... 16)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="42"/>
-        <location filename="foo.h" line="176"/>
-        <location filename="foo.h" line="202"/>
-        <location filename="foo.h" line="212"/>
-        <location filename="foo.h" line="232"/>
-        <location filename="foo.h" line="376"/>
-        <location filename="foo.h" line="379"/>
-        <location filename="foo.h" line="382"/>
-        <location filename="foo.h" line="523"/>
         <source>Default icon name</source>
-        <translation>Nome icona predefinita</translation>
+        <translation type="obsolete">Nome dell&apos;icona predefinita</translation>
     </message>
     <message>
-        <location filename="foo.h" line="531"/>
         <source>Default location</source>
-        <translation>Posizione predefinita</translation>
+        <translation type="obsolete">Posizione predefinita</translation>
     </message>
     <message>
-        <location filename="foo.h" line="194"/>
         <source>Default proximity</source>
-        <translation>Prossimità predefinita</translation>
+        <translation type="obsolete">Prossimità predefinita</translation>
     </message>
     <message>
-        <location filename="foo.h" line="196"/>
         <source>Default speed</source>
-        <translation>Velocità predefinita</translation>
+        <translation type="obsolete">Velocità predefinita</translation>
     </message>
     <message>
-        <location filename="foo.h" line="133"/>
         <source>Default speed for waypoints (knots/hr)</source>
-        <translation>Velocità predefinita per i punti di interesse (nodi/ora)</translation>
+        <translation type="obsolete">Velocità predefinita per i punti di interesse (nodi/ora)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="311"/>
-        <location filename="foo.h" line="579"/>
         <source>Degrees output as &apos;ddd&apos;, &apos;dmm&apos;(default) or &apos;dms&apos;</source>
-        <translation>Gradi in uscita come &apos;ggg&apos;, &apos;gmm&apos; (predef.) o &apos;gms&apos;</translation>
+        <translation type="obsolete">Gradi in uscita come &apos;ggg&apos;, &apos;gmm&apos; (predefinito) o &apos;gms&apos;</translation>
     </message>
     <message>
-        <location filename="foo.h" line="452"/>
         <source>Delete all routes</source>
-        <translation>Cancella tutte le rotte</translation>
+        <translation type="obsolete">Cancella tutte le rotte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="451"/>
         <source>Delete all track points</source>
-        <translation>Cancella tutti i punti traccia</translation>
+        <translation type="obsolete">Cancella tutti i punti traccia</translation>
     </message>
     <message>
-        <location filename="foo.h" line="386"/>
-        <location filename="foo.h" line="453"/>
         <source>Delete all waypoints</source>
-        <translation>Cancella tutti i punti d&apos;interesse</translation>
+        <translation type="obsolete">Cancella tutti i punti d&apos;interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="242"/>
         <source>Display labels on track and routepoints  (default = 1)</source>
-        <translation>Mostra le etichette su tracce e punti rotta (predef.=1)</translation>
+        <translation type="obsolete">Mostra le etichette su tracce e punti rotta (predefinito: 1)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="169"/>
         <source>Distance unit [m=metric, s=statute]</source>
-        <translation>Unità di lunghezza (m=metrico, s=statutario)</translation>
+        <translation type="obsolete">Unità di lunghezza [m=metrico, s=statutario]</translation>
     </message>
     <message>
-        <location filename="foo.h" line="68"/>
         <source>Do not add geocache data to description</source>
-        <translation>Non aggiungere dati geocache alla descrizione</translation>
+        <translation type="obsolete">Non aggiungere dati geocache alla descrizione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="69"/>
         <source>Do not add URLs to description</source>
-        <translation>Non aggiungere url alla descrizione</translation>
+        <translation type="obsolete">Non aggiungere url alla descrizione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="190"/>
         <source>Don&apos;t show gpi bitmap on device</source>
-        <translation>Non mostrare la bitmap gpi sul dispositivo</translation>
+        <translation type="obsolete">Non mostrare la bitmap gpi sul dispositivo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="238"/>
         <source>Draw extrusion line from trackpoint to ground</source>
-        <translation>Disegna linee estruse dai punti traccia al terreno</translation>
+        <translation type="obsolete">Disegna linee estruse dai punti traccia al terreno</translation>
     </message>
     <message>
-        <location filename="foo.h" line="157"/>
         <source>Drop route points that do not have an equivalent waypoint (hidden points)</source>
-        <translation>Ometti i punti rotta che non hanno un punto di interesse equivalente (punti nascosti)</translation>
+        <translation type="obsolete">Ometti i punti rotta che non hanno un punto di interesse equivalente (punti nascosti)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="187"/>
         <source>Enable alerts on speed or proximity distance</source>
-        <translation>Abilita avvisi su velocità o prossimità</translation>
+        <translation type="obsolete">Abilita avvisi su velocità o prossimità</translation>
     </message>
     <message>
-        <location filename="foo.h" line="309"/>
-        <location filename="foo.h" line="577"/>
-        <location filename="foo.h" line="622"/>
         <source>Encrypt hints using ROT13</source>
-        <translation>Cripta le note usando ROT13</translation>
+        <translation type="obsolete">Cripta le note usando ROT13</translation>
     </message>
     <message>
-        <location filename="foo.h" line="516"/>
         <source>Encrypt hints with ROT13</source>
-        <translation>Cripta le note con ROT13</translation>
+        <translation type="obsolete">Cripta le note con ROT13</translation>
     </message>
     <message>
-        <location filename="foo.h" line="229"/>
-        <location filename="foo.h" line="302"/>
-        <location filename="foo.h" line="431"/>
-        <location filename="foo.h" line="550"/>
-        <location filename="foo.h" line="635"/>
         <source>Erase device data after download</source>
-        <translation>Cancella i dati dal dispositivo dopo lo scaricamento</translation>
+        <translation type="obsolete">Cancella i dati dal dispositivo dopo lo scaricamento</translation>
     </message>
     <message>
-        <location filename="foo.h" line="233"/>
         <source>Export linestrings for tracks and routes</source>
-        <translation>Esporta le linee stringa da tracce e rotte</translation>
+        <translation type="obsolete">Esporta le linee stringa da tracce e rotte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="234"/>
         <source>Export placemarks for tracks and routes</source>
-        <translation>Esporta segnaposti da tracce e rotte</translation>
+        <translation type="obsolete">Esporta segnaposti da tracce e rotte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="1"/>
         <source>Full path to XCSV style file</source>
-        <translation>Percorso completo del file di stile XCSV</translation>
+        <translation type="obsolete">Percorso completo del file di stile XCSV</translation>
     </message>
     <message>
-        <location filename="foo.h" line="329"/>
         <source>Generate # points</source>
-        <translation>N° punti da creare</translation>
+        <translation type="obsolete">N° punti da creare</translation>
     </message>
     <message>
-        <location filename="foo.h" line="604"/>
         <source>Generate file with lat/lon for centering map</source>
-        <translation>Crea un file con lat/lon per centrare la mappa</translation>
+        <translation type="obsolete">Crea un file con lat/lon per centrare la mappa</translation>
     </message>
     <message>
-        <location filename="foo.h" line="44"/>
         <source>Give points (waypoints/route points) a default radius (proximity)</source>
-        <translation>Raggio predefinito (prossimità) dei punti (d&apos;interesse/delle rotte)</translation>
+        <translation type="obsolete">Raggio predefinito (prossimità) dei punti (d&apos;interesse/delle rotte)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="8"/>
-        <location filename="foo.h" line="17"/>
-        <location filename="foo.h" line="26"/>
-        <location filename="foo.h" line="40"/>
-        <location filename="foo.h" line="55"/>
-        <location filename="foo.h" line="63"/>
-        <location filename="foo.h" line="87"/>
-        <location filename="foo.h" line="101"/>
-        <location filename="foo.h" line="109"/>
-        <location filename="foo.h" line="117"/>
-        <location filename="foo.h" line="142"/>
-        <location filename="foo.h" line="151"/>
-        <location filename="foo.h" line="168"/>
-        <location filename="foo.h" line="185"/>
-        <location filename="foo.h" line="224"/>
-        <location filename="foo.h" line="261"/>
-        <location filename="foo.h" line="269"/>
-        <location filename="foo.h" line="277"/>
-        <location filename="foo.h" line="285"/>
-        <location filename="foo.h" line="324"/>
-        <location filename="foo.h" line="339"/>
-        <location filename="foo.h" line="347"/>
-        <location filename="foo.h" line="355"/>
-        <location filename="foo.h" line="363"/>
-        <location filename="foo.h" line="399"/>
-        <location filename="foo.h" line="407"/>
-        <location filename="foo.h" line="421"/>
-        <location filename="foo.h" line="449"/>
-        <location filename="foo.h" line="470"/>
-        <location filename="foo.h" line="484"/>
-        <location filename="foo.h" line="539"/>
-        <location filename="foo.h" line="547"/>
-        <location filename="foo.h" line="561"/>
-        <location filename="foo.h" line="574"/>
-        <location filename="foo.h" line="589"/>
-        <location filename="foo.h" line="597"/>
-        <location filename="foo.h" line="616"/>
         <source>GPS datum (def. WGS 84)</source>
-        <translation>Datum GPS (predef. WGS 84)</translation>
+        <translation type="obsolete">Datum GPS (predefinito: WGS 84)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="613"/>
         <source>Height in pixels of map</source>
-        <translation>Altezza in pixel della mappa</translation>
+        <translation type="obsolete">Altezza della mappa, in pixel</translation>
     </message>
     <message>
-        <location filename="foo.h" line="366"/>
         <source>Ignore event marker icons on read</source>
-        <translation>Ignora le icone dei marcatori in fase di lettura</translation>
+        <translation type="obsolete">Ignora le icone dei marcatori in fase di lettura</translation>
     </message>
     <message>
-        <location filename="foo.h" line="239"/>
         <source>Include extended data for trackpoints (default = 1)</source>
-        <translation>Includi dati estesi sui punti traccia (predef.=1)</translation>
+        <translation type="obsolete">Includi dati estesi sui punti traccia (predefinito: 1)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="310"/>
-        <location filename="foo.h" line="517"/>
-        <location filename="foo.h" line="578"/>
         <source>Include groundspeak logs if present</source>
-        <translation>Includi registri groundspeak se presenti</translation>
+        <translation type="obsolete">Includi registri groundspeak (se presenti)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="158"/>
         <source>Include major turn points (with description) from calculated route</source>
-        <translation>Includi i punti di svolta principali (con descrizione) dalla rotta calcolata</translation>
+        <translation type="obsolete">Includi i punti di svolta principali (con descrizione) dalla rotta calcolata</translation>
     </message>
     <message>
-        <location filename="foo.h" line="389"/>
         <source>Include only via stations in route</source>
-        <translation>Includi solo stazioni di via nella rotta</translation>
+        <translation type="obsolete">Includi solo stazioni intermedie nella rotta</translation>
     </message>
     <message>
-        <location filename="foo.h" line="518"/>
         <source>Include short name in bookmarks</source>
-        <translation>Includi nomi brevi dei segnaposti</translation>
+        <translation type="obsolete">Includi nomi brevi nei segnaposti</translation>
     </message>
     <message>
-        <location filename="foo.h" line="128"/>
         <source>Index of name field in .dbf</source>
-        <translation>Indice del campo nome del .dbf</translation>
+        <translation type="obsolete">Indice del campo nome del .dbf</translation>
     </message>
     <message>
-        <source>Index of route (if more the one in source)</source>
+        <source>Index of route (if more than one in source)</source>
         <translation type="obsolete">Indice della rotta (se nell&apos;origine ce nè più d&apos;una)</translation>
     </message>
     <message>
-        <source>Index of route to write (if more the one in source)</source>
+        <source>Index of route to write (if more than one in source)</source>
         <translation type="obsolete">Indice della rotta da scrivere (se nell&apos;origine ce nè più d&apos;una)</translation>
     </message>
     <message>
-        <source>Index of route/track to write (if more the one in source)</source>
+        <source>Index of route/track to write (if more than one in source)</source>
         <translation type="obsolete">Indice della rotta/traccia da scrivere (se nell&apos;origine ce nè più d&apos;una)</translation>
     </message>
     <message>
-        <source>Index of track (if more the one in source)</source>
+        <source>Index of track (if more than one in source)</source>
         <translation type="obsolete">Indice della traccia (se nell&apos;origine ce nè più d&apos;una)</translation>
     </message>
     <message>
-        <source>Index of track to write (if more the one in source)</source>
+        <source>Index of track to write (if more than one in source)</source>
         <translation type="obsolete">Indice della traccia da scrivere (se nell&apos;origine ce nè più d&apos;una)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="129"/>
         <source>Index of URL field in .dbf</source>
-        <translation>Indice del campo url nel .dbf</translation>
+        <translation type="obsolete">Indice del campo url nel .dbf</translation>
     </message>
     <message>
-        <location filename="foo.h" line="240"/>
         <source>Indicate direction of travel in track icons (default = 0)</source>
-        <translation>Indica la direzione di viaggio nelle icone di traccia (predef.=0)</translation>
+        <translation type="obsolete">Indica la direzione di viaggio nelle icone di traccia (predefinito: 0)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="628"/>
         <source>Infrastructure closed icon name</source>
-        <translation>Nome icona per infrastruttura chiusa</translation>
+        <translation type="obsolete">Nome icona per infrastrutture chiuse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="629"/>
         <source>Infrastructure open icon name</source>
-        <translation>Nome icona per infrastruttura aperta</translation>
+        <translation type="obsolete">Nome icona per infrastrutture aperte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="89"/>
         <source>Keep turns if simplify filter is used</source>
-        <translation>Mantieni le svolte se si usa il filtro di semplificazione</translation>
+        <translation type="obsolete">Mantieni le svolte se si usa il filtro di semplificazione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="160"/>
-        <location filename="foo.h" line="200"/>
-        <location filename="foo.h" line="290"/>
-        <location filename="foo.h" line="524"/>
         <source>Length of generated shortnames</source>
-        <translation>Lunghezza dei nomi brevi generati</translation>
+        <translation type="obsolete">Lunghezza dei nomi brevi generati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="45"/>
         <source>Length of generated shortnames (default 16)</source>
-        <translation>Lunghezza dei nomi brevi generati (predef. 16)</translation>
+        <translation type="obsolete">Lunghezza dei nomi brevi generati (predefinito: 16)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="236"/>
         <source>Line color, specified in hex AABBGGRR</source>
-        <translation>Colore delle linee, indicato in esadecimale AABBVVRR</translation>
+        <translation type="obsolete">Colore delle linee, indicato in esadecimale AABBVVRR</translation>
     </message>
     <message>
-        <location filename="foo.h" line="5"/>
-        <location filename="foo.h" line="14"/>
-        <location filename="foo.h" line="23"/>
-        <location filename="foo.h" line="37"/>
-        <location filename="foo.h" line="52"/>
-        <location filename="foo.h" line="60"/>
-        <location filename="foo.h" line="84"/>
-        <location filename="foo.h" line="98"/>
-        <location filename="foo.h" line="106"/>
-        <location filename="foo.h" line="114"/>
-        <location filename="foo.h" line="139"/>
-        <location filename="foo.h" line="148"/>
-        <location filename="foo.h" line="182"/>
-        <location filename="foo.h" line="221"/>
-        <location filename="foo.h" line="258"/>
-        <location filename="foo.h" line="266"/>
-        <location filename="foo.h" line="274"/>
-        <location filename="foo.h" line="282"/>
-        <location filename="foo.h" line="321"/>
-        <location filename="foo.h" line="336"/>
-        <location filename="foo.h" line="344"/>
-        <location filename="foo.h" line="352"/>
-        <location filename="foo.h" line="360"/>
-        <location filename="foo.h" line="396"/>
-        <location filename="foo.h" line="404"/>
-        <location filename="foo.h" line="418"/>
-        <location filename="foo.h" line="446"/>
-        <location filename="foo.h" line="467"/>
-        <location filename="foo.h" line="481"/>
-        <location filename="foo.h" line="507"/>
-        <location filename="foo.h" line="536"/>
-        <location filename="foo.h" line="544"/>
-        <location filename="foo.h" line="558"/>
-        <location filename="foo.h" line="571"/>
-        <location filename="foo.h" line="586"/>
-        <location filename="foo.h" line="594"/>
         <source>Make synth. shortnames unique</source>
-        <translation>I nomi brevi sintetizzati vengono generati univoci</translation>
+        <translation type="obsolete">Crea nomi brevi sintetizzati univoci</translation>
     </message>
     <message>
-        <location filename="foo.h" line="373"/>
         <source>MapSend version TRK file to generate (3,4)</source>
-        <translation>Versione del file TRK di MapSen da generare (3, 4)</translation>
+        <translation type="obsolete">Versione del file TRK di MapSend da generare (3, 4)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="605"/>
         <source>Margin for map.  Degrees or percentage</source>
-        <translation>Margine della mappa. Gradi o percentuale</translation>
+        <translation type="obsolete">Margine della mappa. Gradi o percentuale</translation>
     </message>
     <message>
-        <location filename="foo.h" line="609"/>
         <source>Marker type for new points</source>
-        <translation>Tipo marcatore per i nuovi punti</translation>
+        <translation type="obsolete">Tipo di marcatore per i punti nuovi</translation>
     </message>
     <message>
-        <location filename="foo.h" line="608"/>
         <source>Marker type for old points</source>
-        <translation>Tipo marcatore per i vecchi punti</translation>
+        <translation type="obsolete">Tipo di marcatore per i punti vecchi</translation>
     </message>
     <message>
-        <location filename="foo.h" line="611"/>
         <source>Marker type for unfound points</source>
-        <translation>Tipo marcatore per i punti non trovati</translation>
+        <translation type="obsolete">Tipo di marcatore per i punti non trovati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="486"/>
         <source>Max length of waypoint name to write</source>
-        <translation>Lunghezza massima dei nomi dei punti d&apos;interesse da scrivere</translation>
+        <translation type="obsolete">Lunghezza massima dei nomi dei punti d&apos;interesse da scrivere</translation>
     </message>
     <message>
-        <location filename="foo.h" line="377"/>
-        <location filename="foo.h" line="380"/>
-        <location filename="foo.h" line="383"/>
         <source>Max number of comments to write (maxcmts=200)</source>
-        <translation>Numero massimo di commenti da scrivere (maxcmts=200)</translation>
+        <translation type="obsolete">Numero massimo di commenti da scrivere (maxcmts=200)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="606"/>
         <source>Max shortname length when used with -s</source>
-        <translation>Lunghezza massima dei nomi brevi quando si usa -s</translation>
+        <translation type="obsolete">Lunghezza massima dei nomi brevi quando si usa -s</translation>
     </message>
     <message>
-        <location filename="foo.h" line="2"/>
-        <location filename="foo.h" line="11"/>
-        <location filename="foo.h" line="20"/>
-        <location filename="foo.h" line="34"/>
-        <location filename="foo.h" line="49"/>
-        <location filename="foo.h" line="57"/>
-        <location filename="foo.h" line="81"/>
-        <location filename="foo.h" line="95"/>
-        <location filename="foo.h" line="103"/>
-        <location filename="foo.h" line="111"/>
-        <location filename="foo.h" line="136"/>
-        <location filename="foo.h" line="145"/>
-        <location filename="foo.h" line="179"/>
-        <location filename="foo.h" line="218"/>
-        <location filename="foo.h" line="255"/>
-        <location filename="foo.h" line="263"/>
-        <location filename="foo.h" line="271"/>
-        <location filename="foo.h" line="279"/>
-        <location filename="foo.h" line="318"/>
-        <location filename="foo.h" line="333"/>
-        <location filename="foo.h" line="341"/>
-        <location filename="foo.h" line="349"/>
-        <location filename="foo.h" line="357"/>
-        <location filename="foo.h" line="393"/>
-        <location filename="foo.h" line="401"/>
-        <location filename="foo.h" line="415"/>
-        <location filename="foo.h" line="443"/>
-        <location filename="foo.h" line="464"/>
-        <location filename="foo.h" line="478"/>
-        <location filename="foo.h" line="504"/>
-        <location filename="foo.h" line="533"/>
-        <location filename="foo.h" line="541"/>
-        <location filename="foo.h" line="555"/>
-        <location filename="foo.h" line="568"/>
-        <location filename="foo.h" line="583"/>
-        <location filename="foo.h" line="591"/>
         <source>Max synthesized shortname length</source>
-        <translation>Lunghezza massima dei nomi brevi sintetizzati</translation>
+        <translation type="obsolete">Lunghezza massima dei nomi brevi sintetizzati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="163"/>
         <source>Merge output with existing file</source>
-        <translation>Unisci la destinazione con un file esistente</translation>
+        <translation type="obsolete">Unisci la destinazione con un file esistente</translation>
     </message>
     <message>
-        <location filename="foo.h" line="300"/>
-        <location filename="foo.h" line="304"/>
-        <location filename="foo.h" line="429"/>
-        <location filename="foo.h" line="433"/>
         <source>MTK compatible CSV output file</source>
-        <translation>FIle di destinazione CVS compatibile con MTK</translation>
+        <translation type="obsolete">File di destinazione CVS compatibile con MTK</translation>
     </message>
     <message>
-        <location filename="foo.h" line="48"/>
         <source>Name of the &apos;unassigned&apos; category</source>
-        <translation>Nome della categoria &apos;Non assegnato&apos;</translation>
+        <translation type="obsolete">Nome della categoria &apos;Non assegnato&apos;</translation>
     </message>
     <message>
-        <location filename="foo.h" line="424"/>
         <source>New name for the route</source>
-        <translation>Nuovo nome della rotta</translation>
+        <translation type="obsolete">Nuovo nome della rotta</translation>
     </message>
     <message>
-        <location filename="foo.h" line="514"/>
         <source>No separator lines between waypoints</source>
-        <translation>Nessuna linea di separazione tra punti d&apos;interesse</translation>
+        <translation type="obsolete">Nessuna linea di separazione tra punti d&apos;interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="291"/>
         <source>No whitespace in generated shortnames</source>
-        <translation>Nessuno spazio nei nomi brevi generati</translation>
+        <translation type="obsolete">Nessuno spazio nei nomi brevi generati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="472"/>
         <source>Non-stealth encrypted icon name</source>
-        <translation>Nome codificato dell&apos;icona non nascosta</translation>
+        <translation type="obsolete">Nome dell&apos;icona non nascosta/codificata</translation>
     </message>
     <message>
-        <location filename="foo.h" line="473"/>
         <source>Non-stealth non-encrypted icon name</source>
-        <translation>Nome non codificato dell&apos;icona non nascosta</translation>
+        <translation type="obsolete">Nome dell&apos;icona non nascosta/non codificata</translation>
     </message>
     <message>
-        <location filename="foo.h" line="384"/>
         <source>Numeric value of bitrate (baud=4800)</source>
-        <translation>Valore numerico del bitrate (baud=4800)</translation>
+        <translation type="obsolete">Valore numerico del bitrate (baud=4800)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="213"/>
         <source>Omit Placer name</source>
-        <translation>Ometti nome localizzatore</translation>
+        <translation type="obsolete">Ometti nome localizzatore</translation>
     </message>
     <message>
-        <location filename="foo.h" line="90"/>
         <source>Only read turns; skip all other points</source>
-        <translation>Leggi solo le svolte; tralascia tutti gli altri punti</translation>
+        <translation type="obsolete">Leggi solo le svolte; tralascia tutti gli altri punti</translation>
     </message>
     <message>
-        <location filename="foo.h" line="308"/>
         <source>Path to HTML style sheet</source>
-        <translation>Percorso del foglio di stile html</translation>
+        <translation type="obsolete">Percorso del foglio di stile html</translation>
     </message>
     <message>
-        <location filename="foo.h" line="171"/>
         <source>Precision of coordinates</source>
-        <translation>Precisione delle coordinate</translation>
+        <translation type="obsolete">Precisione delle coordinate</translation>
     </message>
     <message>
-        <location filename="foo.h" line="510"/>
         <source>Proximity distance</source>
-        <translation>Distanza di prossimità</translation>
+        <translation type="obsolete">Distanza di prossimità</translation>
     </message>
     <message>
-        <location filename="foo.h" line="74"/>
         <source>Radius for circles</source>
-        <translation>Raggio dei cerchi</translation>
+        <translation type="obsolete">Raggio dei cerchi</translation>
     </message>
     <message>
-        <location filename="foo.h" line="425"/>
         <source>Radius of our big earth (default 6371000 meters)</source>
-        <translation>Raggio della Terra (predef. 6371000 metri)</translation>
+        <translation type="obsolete">Raggio della Terra (predefinito: 6371000 metri)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="92"/>
         <source>Read control points as waypoint/route/none</source>
-        <translation>Leggi i punti di controllo come waypoint/route/none</translation>
+        <translation type="obsolete">Leggi i punti di controllo come punti di interesse/rotte/nessuno</translation>
     </message>
     <message>
-        <location filename="foo.h" line="520"/>
         <source>Read/Write date format (i.e. DDMMYYYY)</source>
-        <translation>Formato data in lettura/scrittura (per es. DDMMYYYY)</translation>
+        <translation type="obsolete">Formato data in lettura/scrittura (per es. DDMMYYYY)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="167"/>
         <source>Read/Write date format (i.e. yyyy/mm/dd)</source>
-        <translation>Formato data in lettura/scrittura (per es. yyyy/mm/dd)</translation>
+        <translation type="obsolete">Formato data in lettura/scrittura (per es. yyyy/mm/dd)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="488"/>
         <source>Read/write GPGGA sentences</source>
-        <translation>Leggi/scrivi frasi GPGGA</translation>
+        <translation type="obsolete">Leggi/scrivi frasi GPGGA</translation>
     </message>
     <message>
-        <location filename="foo.h" line="490"/>
         <source>Read/write GPGSA sentences</source>
-        <translation>Leggi/scrivi frasi GPGSA</translation>
+        <translation type="obsolete">Leggi/scrivi frasi GPGSA</translation>
     </message>
     <message>
-        <location filename="foo.h" line="487"/>
         <source>Read/write GPRMC sentences</source>
-        <translation>Leggi/scrivi frasi GPRMC</translation>
+        <translation type="obsolete">Leggi/scrivi frasi GPRMC</translation>
     </message>
     <message>
-        <location filename="foo.h" line="489"/>
         <source>Read/write GPVTG sentences</source>
-        <translation>Leggi/scrivi frasi GPVTG</translation>
+        <translation type="obsolete">Leggi/scrivi frasi GPVTG</translation>
     </message>
     <message>
-        <location filename="foo.h" line="173"/>
         <source>Read/Write time format (i.e. HH:mm:ss xx)</source>
-        <translation>Formato ora in lettura/scrittura (per es. HH:mm:ss xx)</translation>
+        <translation type="obsolete">Formato ora in lettura/scrittura (per es. HH:mm:ss xx)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="243"/>
         <source>Retain at most this number of position points  (0 = unlimited)</source>
-        <translation>Mantieni almeno questo numero di punti posizione (0=illimitati)</translation>
+        <translation type="obsolete">Mantieni almeno questo numero di punti posizione (0 = illimitati)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="77"/>
-        <location filename="foo.h" line="203"/>
-        <location filename="foo.h" line="492"/>
         <source>Return current position as a waypoint</source>
-        <translation>Ritorna la posizione corrente sotto forma di punto d&apos;interesse</translation>
+        <translation type="obsolete">Ritorna la posizione corrente sotto forma di punto d&apos;interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="67"/>
         <source>Road type changes</source>
-        <translation>Modifiche al tipo di strada</translation>
+        <translation type="obsolete">Modifiche al tipo di strada</translation>
     </message>
     <message>
-        <location filename="foo.h" line="476"/>
-        <location filename="foo.h" line="632"/>
+        <source>Set waypoint name to source filename.</source>
+        <translation type="obsolete">Imposta il nome del punto di interesse col nome del file di origine</translation>
+    </message>
+    <message>
         <source>Shortname is MAC address</source>
-        <translation>Il nome breve è un indirizzo MAC</translation>
+        <translation type="obsolete">Il nome breve è un indirizzo MAC</translation>
     </message>
     <message>
-        <location filename="foo.h" line="495"/>
         <source>Speed in bits per second of serial port (baud=4800)</source>
-        <translation>Velocità in bit/secondo della porta seriale (baud=4800)</translation>
+        <translation type="obsolete">Velocità in bit/secondo della porta seriale (baud=4800)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="134"/>
         <source>Split input into separate files</source>
-        <translation>Suddividi l&apos;ingresso in più file separati</translation>
+        <translation type="obsolete">Suddividi l&apos;ingresso in più file separati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="91"/>
         <source>Split into multiple routes at turns</source>
-        <translation>Suddividi in più rotte alle svolte</translation>
+        <translation type="obsolete">Suddividi in più rotte alle svolte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="208"/>
-        <source>Garmin Training Center</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="foo.h" line="209"/>
-        <source>Write course rather than history, default yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="foo.h" line="210"/>
-        <source>Sport: Biking (deflt), Running, MultiSport, Other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="foo.h" line="215"/>
-        <source>Geogrid-Viewer ascii overlay file (.ovl)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="foo.h" line="216"/>
-        <source>Geogrid-Viewer tracklogs (.log)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="foo.h" line="249"/>
-        <source>The minimum speed (km/h) traveling from waypoint to waypoint. Set &gt;0 to remove duplicate waypoints</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="foo.h" line="330"/>
         <source>Starting seed of the internal number generator</source>
-        <translation>Seme iniziale del generatore interno di numeri</translation>
+        <translation type="obsolete">Seme iniziale del generatore interno di numeri</translation>
     </message>
     <message>
-        <location filename="foo.h" line="474"/>
         <source>Stealth encrypted icon name</source>
-        <translation>Nome codificato dell&apos;icona nascosta</translation>
+        <translation type="obsolete">Nome dell&apos;icona nascosta/codificata</translation>
     </message>
     <message>
-        <location filename="foo.h" line="475"/>
         <source>Stealth non-encrypted icon name</source>
-        <translation>Nome non codificato dell&apos;icona nascosta</translation>
+        <translation type="obsolete">Nome dell&apos;icona nascosta/non codificata</translation>
     </message>
     <message>
-        <location filename="foo.h" line="566"/>
-        <source>Swiss Map 25/50/100 (.xol)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="foo.h" line="644"/>
         <source>String to separate concatenated address fields (default=&quot;, &quot;)</source>
-        <translation>Stringa per separare i campi indirizzo concatenati (predef.=&quot;, &quot;)</translation>
+        <translation type="obsolete">Stringa per separare i campi indirizzo concatenati (predefinito: &quot;, &quot;)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="603"/>
         <source>Suppress labels on generated pins</source>
-        <translation>Ometti le etichette sugli spilli generati</translation>
+        <translation type="obsolete">Ometti le etichette sugli spilli generati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="439"/>
         <source>Suppress retired geocaches</source>
-        <translation>Ometti i geocache obsoleti</translation>
+        <translation type="obsolete">Ometti i geocache obsoleti</translation>
     </message>
     <message>
-        <location filename="foo.h" line="576"/>
         <source>Suppress separator lines between waypoints</source>
-        <translation>Ometti le linee di separazione tra punti d&apos;interesse</translation>
+        <translation type="obsolete">Ometti le linee di separazione tra punti d&apos;interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="385"/>
         <source>Suppress use of handshaking in name of speed</source>
-        <translation>Ometti l&apos;uso dell&apos;handshake per aumentare la velocità</translation>
+        <translation type="obsolete">Ometti l&apos;uso dell&apos;handshake per aumentare la velocità</translation>
     </message>
     <message>
-        <location filename="foo.h" line="610"/>
         <source>Suppress whitespace in generated shortnames</source>
-        <translation>Ometti gli spazi nei nomi brevi generati</translation>
+        <translation type="obsolete">Ometti gli spazi nei nomi brevi generati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="70"/>
         <source>Symbol to use for point data</source>
-        <translation>Simbolo da usare per i punti</translation>
+        <translation type="obsolete">Simbolo da usare per i punti</translation>
     </message>
     <message>
-        <location filename="foo.h" line="205"/>
         <source>Sync GPS time to computer time</source>
-        <translation>Sincronizza l&apos;ora del GPS con quella del computer</translation>
+        <translation type="obsolete">Sincronizza l&apos;ora del GPS con quella del computer</translation>
     </message>
     <message>
-        <location filename="foo.h" line="93"/>
         <source>Synthesize track times</source>
-        <translation>Sintetizza gli orari delle tracce</translation>
+        <translation type="obsolete">Sintetizza gli orari delle tracce</translation>
     </message>
     <message>
-        <location filename="foo.h" line="294"/>
         <source>Target GPX version for output</source>
-        <translation>Versione GPX del file di destinazione</translation>
+        <translation type="obsolete">Versione GPX del file di destinazione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="172"/>
         <source>Temperature unit [c=Celsius, f=Fahrenheit]</source>
-        <translation>Unità di temperatura [c=Celsius, f=Fahrenheit]</translation>
+        <translation type="obsolete">Unità di temperatura [c=Celsius, f=Fahrenheit]</translation>
     </message>
     <message>
-        <location filename="foo.h" line="614"/>
         <source>The icon description is already the marker</source>
-        <translation>La descrizione dell&apos;icona è già il segnaposto</translation>
+        <translation type="obsolete">La descrizione dell&apos;icona è già il segnaposto</translation>
     </message>
     <message>
-        <location filename="foo.h" line="367"/>
         <source>Treat waypoints as icons on write</source>
-        <translation>Considera i punti d&apos;interesse come icone in fase di scrittura</translation>
+        <translation type="obsolete">Considera i punti d&apos;interesse come icone in fase di scrittura</translation>
     </message>
     <message>
-        <location filename="foo.h" line="66"/>
         <source>Type of .an1 file</source>
-        <translation>Tipo del file .an1</translation>
+        <translation type="obsolete">Tipo del file .an1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="312"/>
-        <location filename="foo.h" line="580"/>
         <source>Units for altitude (f)eet or (m)etres</source>
-        <translation>Unità di misura della quota [m per metri, f per piedi]</translation>
+        <translation type="obsolete">Unità di misura della quota [m: metri, f: piedi]</translation>
     </message>
     <message>
-        <location filename="foo.h" line="198"/>
         <source>Units used for names with @speed (&apos;s&apos;tatute or &apos;m&apos;etric)</source>
-        <translation>Untià di misura per nomi con @speed (m: metric, s: statute)</translation>
+        <translation type="obsolete">Untià di misura per nomi con @speed [m: metrico, s: statutario]</translation>
     </message>
     <message>
-        <location filename="foo.h" line="241"/>
         <source>Units used when writing comments (&apos;s&apos;tatute or &apos;m&apos;etric)</source>
-        <translation>Unità da usare quando si scrivono i commenti (m: metric, s: statute)</translation>
+        <translation type="obsolete">Unità da usare quando si scrivono i commenti [m: metrico, s: statutario]</translation>
     </message>
     <message>
-        <location filename="foo.h" line="4"/>
-        <location filename="foo.h" line="13"/>
-        <location filename="foo.h" line="22"/>
-        <location filename="foo.h" line="36"/>
-        <location filename="foo.h" line="51"/>
-        <location filename="foo.h" line="59"/>
-        <location filename="foo.h" line="83"/>
-        <location filename="foo.h" line="97"/>
-        <location filename="foo.h" line="105"/>
-        <location filename="foo.h" line="113"/>
-        <location filename="foo.h" line="138"/>
-        <location filename="foo.h" line="147"/>
-        <location filename="foo.h" line="181"/>
-        <location filename="foo.h" line="220"/>
-        <location filename="foo.h" line="257"/>
-        <location filename="foo.h" line="265"/>
-        <location filename="foo.h" line="273"/>
-        <location filename="foo.h" line="281"/>
-        <location filename="foo.h" line="320"/>
-        <location filename="foo.h" line="335"/>
-        <location filename="foo.h" line="343"/>
-        <location filename="foo.h" line="351"/>
-        <location filename="foo.h" line="359"/>
-        <location filename="foo.h" line="395"/>
-        <location filename="foo.h" line="403"/>
-        <location filename="foo.h" line="417"/>
-        <location filename="foo.h" line="445"/>
-        <location filename="foo.h" line="466"/>
-        <location filename="foo.h" line="480"/>
-        <location filename="foo.h" line="506"/>
-        <location filename="foo.h" line="535"/>
-        <location filename="foo.h" line="543"/>
-        <location filename="foo.h" line="557"/>
-        <location filename="foo.h" line="570"/>
-        <location filename="foo.h" line="585"/>
-        <location filename="foo.h" line="593"/>
         <source>UPPERCASE synth. shortnames</source>
-        <translation>Nomi brevi sintetizzati in MAIUSCOLO</translation>
+        <translation type="obsolete">Nomi brevi sintetizzati in MAIUSCOLO</translation>
     </message>
     <message>
-        <location filename="foo.h" line="164"/>
         <source>Use depth values on output (default is ignore)</source>
-        <translation>Usa i valori di profondità nella destinazione (predef: è ignora)</translation>
+        <translation type="obsolete">Usa i valori di profondità nella destinazione (predefinito: ignora)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="165"/>
         <source>Use proximity values on output (default is ignore)</source>
-        <translation>Usa i valori di prossimità nella destinazione (predef. è ignora)</translation>
+        <translation type="obsolete">Usa i valori di prossimità nella destinazione (predefinito: ignora)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="7"/>
-        <location filename="foo.h" line="16"/>
-        <location filename="foo.h" line="25"/>
-        <location filename="foo.h" line="39"/>
-        <location filename="foo.h" line="54"/>
-        <location filename="foo.h" line="62"/>
-        <location filename="foo.h" line="86"/>
-        <location filename="foo.h" line="100"/>
-        <location filename="foo.h" line="108"/>
-        <location filename="foo.h" line="116"/>
-        <location filename="foo.h" line="141"/>
-        <location filename="foo.h" line="150"/>
-        <location filename="foo.h" line="184"/>
-        <location filename="foo.h" line="223"/>
-        <location filename="foo.h" line="260"/>
-        <location filename="foo.h" line="268"/>
-        <location filename="foo.h" line="276"/>
-        <location filename="foo.h" line="284"/>
-        <location filename="foo.h" line="323"/>
-        <location filename="foo.h" line="338"/>
-        <location filename="foo.h" line="346"/>
-        <location filename="foo.h" line="354"/>
-        <location filename="foo.h" line="362"/>
-        <location filename="foo.h" line="398"/>
-        <location filename="foo.h" line="406"/>
-        <location filename="foo.h" line="420"/>
-        <location filename="foo.h" line="426"/>
-        <location filename="foo.h" line="448"/>
-        <location filename="foo.h" line="469"/>
-        <location filename="foo.h" line="483"/>
-        <location filename="foo.h" line="538"/>
-        <location filename="foo.h" line="546"/>
-        <location filename="foo.h" line="560"/>
-        <location filename="foo.h" line="573"/>
-        <location filename="foo.h" line="588"/>
-        <location filename="foo.h" line="596"/>
         <source>Use shortname instead of description</source>
-        <translation>Usa il nome breve invece della descrizione</translation>
+        <translation type="obsolete">Usa il nome breve invece della descrizione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="188"/>
         <source>Use specified bitmap on output</source>
-        <translation>Usa la bitmap specificata nella destinazione</translation>
+        <translation type="obsolete">Usa la bitmap specificata nella destinazione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="156"/>
         <source>Version of gdb file to generate (1..3)</source>
-        <translation>Versione del file gdb da generare (1... 3)</translation>
+        <translation type="obsolete">Versione del file gdb da generare (1... 3)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="162"/>
         <source>Version of mapsource file to generate (3,4,5)</source>
-        <translation>Versione del file MapSource da generare (3, 4, 5)</translation>
+        <translation type="obsolete">Versione del file MapSource da generare (3, 4, 5)</translation>
     </message>
     <message>
-        <location filename="foo.h" line="509"/>
         <source>Waypoint background color</source>
-        <translation>Colore di sfondo dei punti d&apos;interesse</translation>
+        <translation type="obsolete">Colore di sfondo dei punti d&apos;interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="508"/>
         <source>Waypoint foreground color</source>
-        <translation>Colore dei punti d&apos;interesse</translation>
+        <translation type="obsolete">Colore dei punti d&apos;interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="73"/>
         <source>Waypoint type</source>
-        <translation>Tipo dei punti d&apos;interesse</translation>
+        <translation type="obsolete">Tipo dei punti d&apos;interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="612"/>
         <source>Width in pixels of map</source>
-        <translation>Larghezza in pixel della mappa</translation>
+        <translation type="obsolete">Larghezza della mappa, in pixel</translation>
     </message>
     <message>
-        <location filename="foo.h" line="235"/>
         <source>Width of lines, in pixels</source>
-        <translation>Larghezza delle linee, in pixel</translation>
+        <translation type="obsolete">Larghezza delle linee, in pixel</translation>
     </message>
     <message>
-        <location filename="foo.h" line="500"/>
         <source>Write additional node tag key/value pairs</source>
-        <translation>Scrivi coppie addizionali di tag chiave/valore per i nodi</translation>
+        <translation type="obsolete">Scrivi coppie addizionali di tag chiave/valore per i nodi</translation>
     </message>
     <message>
-        <location filename="foo.h" line="499"/>
         <source>Write additional way tag key/value pairs</source>
-        <translation>Scrivi coppie addizionali di tag chiave/valore per le vie</translation>
+        <translation type="obsolete">Scrivi coppie addizionali di tag chiave/valore per le vie</translation>
     </message>
     <message>
-        <location filename="foo.h" line="503"/>
         <source>Write all tracks into one file</source>
-        <translation>Scrivi tutte le tracce in un solo file</translation>
+        <translation type="obsolete">Scrivi tutte le tracce in un solo file</translation>
     </message>
     <message>
-        <location filename="foo.h" line="191"/>
         <source>Write description to address field</source>
-        <translation>Scrivi la descrizione del campo indirizzo</translation>
+        <translation type="obsolete">Scrivi la descrizione nel campo indirizzo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="581"/>
         <source>Write each waypoint in a separate file</source>
-        <translation>Scrivi ciascun punto d&apos;interesse in un file separato</translation>
+        <translation type="obsolete">Scrivi ciascun punto d&apos;interesse in un file separato</translation>
     </message>
     <message>
-        <location filename="foo.h" line="192"/>
         <source>Write notes to address field</source>
-        <translation>Scrivi le note nel campo indirizzo</translation>
+        <translation type="obsolete">Scrivi le note nel campo indirizzo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="193"/>
         <source>Write position to address field</source>
-        <translation>Scrivi la posizione del campo indirizzo</translation>
+        <translation type="obsolete">Scrivi la posizione del campo indirizzo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="170"/>
-        <location filename="foo.h" line="617"/>
         <source>Write position using this grid.</source>
-        <translation>Scrivi la posizione usando questa griglia</translation>
+        <translation type="obsolete">Scrivi la posizione usando questa griglia.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="174"/>
-        <location filename="foo.h" line="618"/>
         <source>Write timestamps with offset x to UTC time</source>
-        <translation>Scrivi date e ore con offset X rispetto al tempo UTC</translation>
+        <translation type="obsolete">Scrivi date e ore con scostamento X rispetto al tempo UTC</translation>
     </message>
     <message>
-        <location filename="foo.h" line="177"/>
         <source>Write tracks compatible with Carto Exploreur</source>
-        <translation>Scrivi le tracce compatibili con Carto Exploreur</translation>
+        <translation type="obsolete">Scrivi tracce compatibili con Carto Exploreur</translation>
     </message>
     <message>
-        <location filename="foo.h" line="496"/>
         <source>Write tracks for Gisteq Phototracker</source>
-        <translation>Scrivi le tracce per Gisteq Phototracker</translation>
+        <translation type="obsolete">Scrivi tracce per Gisteq Phototracker</translation>
     </message>
     <message>
-        <location filename="foo.h" line="72"/>
         <source>Zoom level to reduce points</source>
-        <translation>Livello di zoom per rigurre i punti</translation>
+        <translation type="obsolete">Livello di zoom per ridurre i punti</translation>
     </message>
+</context>
+<context>
+    <name>AboutDlg</name>
     <message>
-        <location filename="foo.h" line="6"/>
-        <location filename="foo.h" line="15"/>
-        <location filename="foo.h" line="24"/>
-        <location filename="foo.h" line="38"/>
-        <location filename="foo.h" line="53"/>
-        <location filename="foo.h" line="61"/>
-        <location filename="foo.h" line="85"/>
-        <location filename="foo.h" line="99"/>
-        <location filename="foo.h" line="107"/>
-        <location filename="foo.h" line="115"/>
-        <location filename="foo.h" line="140"/>
-        <location filename="foo.h" line="149"/>
-        <location filename="foo.h" line="183"/>
-        <location filename="foo.h" line="222"/>
-        <location filename="foo.h" line="259"/>
-        <location filename="foo.h" line="267"/>
-        <location filename="foo.h" line="275"/>
-        <location filename="foo.h" line="283"/>
-        <location filename="foo.h" line="322"/>
-        <location filename="foo.h" line="337"/>
-        <location filename="foo.h" line="345"/>
-        <location filename="foo.h" line="353"/>
-        <location filename="foo.h" line="361"/>
-        <location filename="foo.h" line="397"/>
-        <location filename="foo.h" line="405"/>
-        <location filename="foo.h" line="419"/>
-        <location filename="foo.h" line="447"/>
-        <location filename="foo.h" line="468"/>
-        <location filename="foo.h" line="482"/>
-        <location filename="foo.h" line="537"/>
-        <location filename="foo.h" line="545"/>
-        <location filename="foo.h" line="559"/>
-        <location filename="foo.h" line="572"/>
-        <location filename="foo.h" line="587"/>
-        <location filename="foo.h" line="595"/>
-        <source>Basename prepended to URL on output</source>
-        <translation type="unfinished"></translation>
+        <source>About GPSBabel</source>
+        <translation>Informazioni su GPSBabel</translation>
     </message>
     <message>
-        <location filename="foo.h" line="9"/>
-        <source>Alan Map500 tracklogs (.trl)</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;$babelfeversion$&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;Copyright (C) 2009 Robert Lipe&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;GUI designed and contributed by  S. Khai Mong&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;LGPL Crystal Icons by Alvarado Coehlo&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;(Using backend $babelversion$)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;$upgradetestmode$&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;This program is free software; you can redistribute it and/or  modify it under the terms of the GNU General Public License as  published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;$babelfeversion$&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;Copyright (C) 2009 Robert Lipe&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;Interfaccia grafica disegnata e implementata da  S. Khai Mong&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;LGPL Crystal Icons di Alvarado Coehlo&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;(Uso backend $babelversion$)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;$upgradetestmode$&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;
+Questo programma &amp;egrave; software libero; è possibile distribuirlo e/o modificarlo secondo i termini della GNU General Public License come  pubblicata dalla Free Software Foundation; sia la versione 2 della licenza, sia (a propria scelta) una versione successiva.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;Questo programma &amp;egrave; distribuito nella speranza che sia utile, ma SENZA ALCUNA GARANZIA; senza neppure la garanzia implicita di COMMERCIABILIT&amp;Agrave; o IDONEIT&amp;Agrave; PER UNO SCOPO PARTICOLARE.  Vedere la GNU General Public License per ulteriori dettagli.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;Si dovrebbe aver ricevuto una copia della GNU General Public License insieme a questo programma; in caso contrario, scrivere alla Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+</translation>
     </message>
+</context>
+<context>
+    <name>AdvUi</name>
     <message>
-        <location filename="foo.h" line="10"/>
-        <source>Alan Map500 waypoints and routes (.wpr)</source>
-        <translation type="unfinished"></translation>
+        <source>Global Options</source>
+        <translation>Opzioni generali</translation>
     </message>
     <message>
-        <location filename="foo.h" line="18"/>
-        <source>Brauniger IQ Series Barograph Download</source>
-        <translation type="unfinished"></translation>
+        <source>Create smart shortened names. </source>
+        <translation>Crea nomi abbreviati intelligenti. </translation>
     </message>
     <message>
-        <location filename="foo.h" line="19"/>
-        <source>Cambridge/Winpilot glider software</source>
-        <translation type="unfinished"></translation>
+        <source>Synthesize short names</source>
+        <translation>Sintetizza i nomi brevi</translation>
     </message>
     <message>
-        <location filename="foo.h" line="27"/>
-        <source>CarteSurTable data file</source>
-        <translation type="unfinished"></translation>
+        <source>Convert character set encoding between input and output</source>
+        <translation>Converti la codifica del set di caratteri tra sorgente e destinazione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="28"/>
-        <source>Cetus for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <source>Enable character set transformation</source>
+        <translation>Abilita la trasformazione del set di caratteri</translation>
     </message>
     <message>
-        <location filename="foo.h" line="31"/>
-        <source>CoastalExplorer XML</source>
-        <translation type="unfinished"></translation>
+        <source>Preview in Google Maps</source>
+        <translation>Anteprima in Google Maps</translation>
     </message>
     <message>
-        <location filename="foo.h" line="32"/>
-        <source>Columbus/Visiontac V900 files (.csv)</source>
-        <translation type="unfinished"></translation>
+        <source>Debugging diagnostics.  
+Higher number provides more deitaled diagnostics.</source>
+        <translation>Diagnosi di debug.  
+Un numero più alto fornisce un livello di diagnosi più dettagliato.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="33"/>
-        <source>Comma separated values</source>
-        <translation type="unfinished"></translation>
+        <source>None</source>
+        <translation>Nessuno</translation>
     </message>
     <message>
-        <location filename="foo.h" line="41"/>
-        <source>CompeGPS data files (.wpt/.trk/.rte)</source>
-        <translation type="unfinished"></translation>
+        <source>0</source>
+        <translation>0</translation>
     </message>
     <message>
-        <location filename="foo.h" line="43"/>
-        <location filename="foo.h" line="565"/>
-        <source>Index of route/track to write (if more than one in source)</source>
-        <translation type="unfinished"></translation>
+        <source>1</source>
+        <translation>1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="46"/>
-        <source>CoPilot Flight Planner for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <source>2</source>
+        <translation>2</translation>
     </message>
     <message>
-        <location filename="foo.h" line="47"/>
-        <source>cotoGPS for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <source>3</source>
+        <translation>3</translation>
     </message>
     <message>
-        <location filename="foo.h" line="56"/>
-        <source>Data Logger iBlue747 csv</source>
-        <translation type="unfinished"></translation>
+        <source>4</source>
+        <translation>4</translation>
     </message>
     <message>
-        <location filename="foo.h" line="64"/>
-        <source>Dell Axim Navigation System (.gpb) file format</source>
-        <translation type="unfinished"></translation>
+        <source>5</source>
+        <translation>5</translation>
     </message>
     <message>
-        <location filename="foo.h" line="65"/>
-        <source>DeLorme .an1 (drawing) file</source>
-        <translation type="unfinished"></translation>
+        <source>6</source>
+        <translation>6</translation>
     </message>
     <message>
-        <location filename="foo.h" line="75"/>
-        <source>DeLorme GPL</source>
-        <translation type="unfinished"></translation>
+        <source>7</source>
+        <translation>7</translation>
     </message>
     <message>
-        <location filename="foo.h" line="76"/>
-        <source>DeLorme PN-20/PN-30/PN-40 USB protocol</source>
-        <translation type="unfinished"></translation>
+        <source>8</source>
+        <translation>8</translation>
     </message>
     <message>
-        <location filename="foo.h" line="78"/>
-        <source>Include groundspeak logs when writing</source>
-        <translation type="unfinished"></translation>
+        <source>9</source>
+        <translation>9</translation>
     </message>
     <message>
-        <location filename="foo.h" line="79"/>
-        <source>Use long waypoint notes regardless of PN version</source>
-        <translation type="unfinished"></translation>
+        <source>Debugging Diagnostics</source>
+        <translation>Diagnosi di debug</translation>
     </message>
     <message>
-        <location filename="foo.h" line="80"/>
-        <source>DeLorme Street Atlas Plus</source>
-        <translation type="unfinished"></translation>
+        <source>Set all format input/output options to default values</source>
+        <translation>Imposta tutte le opzioni di origine/destinazione ai valori predefiniti</translation>
     </message>
     <message>
-        <location filename="foo.h" line="88"/>
-        <source>DeLorme Street Atlas Route</source>
-        <translation type="unfinished"></translation>
+        <source>Default Format Options</source>
+        <translation>Opzioni predefinite dei formati</translation>
     </message>
+</context>
+<context>
+    <name>FileDlgManager</name>
     <message>
-        <location filename="foo.h" line="94"/>
-        <source>DeLorme XMap HH Native .WPT</source>
-        <translation type="unfinished"></translation>
+        <source>Select input file</source>
+        <translation>Seleziona il file di origine</translation>
     </message>
     <message>
-        <location filename="foo.h" line="102"/>
-        <source>DeLorme XMap/SAHH 2006 Native .TXT</source>
-        <translation type="unfinished"></translation>
+        <source>Select output file</source>
+        <translation>Seleziona il file di destinazione</translation>
     </message>
+</context>
+<context>
+    <name>FilterDialog</name>
     <message>
-        <location filename="foo.h" line="110"/>
-        <source>DeLorme XMat HH Street Atlas USA .WPT (PPC)</source>
-        <translation type="unfinished"></translation>
+        <source>Tracks</source>
+        <translation>Tracce</translation>
     </message>
     <message>
-        <location filename="foo.h" line="118"/>
-        <source>Destinator Itineraries (.dat)</source>
-        <translation type="unfinished"></translation>
+        <source>Waypoints</source>
+        <translation>Punti di interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="119"/>
-        <source>Destinator Points of Interest (.dat)</source>
-        <translation type="unfinished"></translation>
+        <source>Routes &amp; Tracks</source>
+        <translation>Rotte e tracce</translation>
     </message>
     <message>
-        <location filename="foo.h" line="120"/>
-        <source>Destinator TrackLogs (.dat)</source>
-        <translation type="unfinished"></translation>
+        <source>Miscellaneous</source>
+        <translation>Varie</translation>
     </message>
     <message>
-        <location filename="foo.h" line="121"/>
-        <source>EasyGPS binary format</source>
-        <translation type="unfinished"></translation>
+        <source>Are you sure you want to reset all filter options to default values?</source>
+        <translation>Si è certi di voler reimpostare tutte le opzioni dei filtri ai valori predefiniti?</translation>
     </message>
+</context>
+<context>
+    <name>FilterDlg</name>
     <message>
-        <location filename="foo.h" line="122"/>
-        <source>Embedded Exif-GPS data (.jpg)</source>
-        <translation type="unfinished"></translation>
+        <source>Data Filters</source>
+        <translation>Filtri di dati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="123"/>
-        <source>Set waypoint name to source filename</source>
-        <translation type="unfinished"></translation>
+        <source>Data filters process and transform the data between input and output files or devices. </source>
+        <translation>I filtri di dati processano e trasformano i dati da file/dispositivi di origine e destinazione.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="124"/>
-        <source>Time-frame (in seconds)</source>
-        <translation type="unfinished"></translation>
+        <source>Help</source>
+        <translation>Aiuto</translation>
     </message>
     <message>
-        <location filename="foo.h" line="125"/>
-        <source>Locate waypoint for tagging by this name</source>
-        <translation type="unfinished"></translation>
+        <source>Reset</source>
+        <translation>Reimposta</translation>
     </message>
+</context>
+<context>
+    <name>GMapDialog</name>
     <message>
-        <location filename="foo.h" line="126"/>
-        <source>!OVERWRITE! the original file. Default=N</source>
-        <translation type="unfinished"></translation>
+        <source>meters</source>
+        <translation>metri</translation>
     </message>
     <message>
-        <location filename="foo.h" line="127"/>
-        <source>Enigma binary waypoint file (.ert)</source>
-        <translation type="unfinished"></translation>
+        <source>feet</source>
+        <translation>piede</translation>
     </message>
     <message>
-        <location filename="foo.h" line="130"/>
-        <source>FAI/IGC Flight Recorder Data Format</source>
-        <translation type="unfinished"></translation>
+        <source>miles</source>
+        <translation>miglia</translation>
     </message>
     <message>
-        <location filename="foo.h" line="132"/>
-        <source>Franson GPSGate Simulation</source>
-        <translation type="unfinished"></translation>
+        <source>Length: %1 %2
+  %3 %4</source>
+        <translation>Lunghezza: %1 %2
+  %3 %4</translation>
     </message>
     <message>
-        <location filename="foo.h" line="135"/>
-        <source>Fugawi</source>
-        <translation type="unfinished"></translation>
+        <source>Lat: %1</source>
+        <translation>Lat: %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="143"/>
-        <source>G7ToWin data files (.g7t)</source>
-        <translation type="unfinished"></translation>
+        <source>Lng: %1</source>
+        <translation>Lng: %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="144"/>
-        <source>Garmin 301 Custom position and heartrate</source>
-        <translation type="unfinished"></translation>
+        <source>Desc: %1</source>
+        <translation>Desc: %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="152"/>
-        <source>Garmin Logbook XML</source>
-        <translation type="unfinished"></translation>
+        <source>Cmt: %1</source>
+        <translation>Cmt: %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="153"/>
-        <source>Garmin MapSource - gdb</source>
-        <translation type="unfinished"></translation>
+        <source>Ele: %1</source>
+        <translation>Alt: %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="159"/>
-        <source>Garmin MapSource - mps</source>
-        <translation type="unfinished"></translation>
+        <source>Start: %1</source>
+        <translation>Avvio: %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="166"/>
-        <source>Garmin MapSource - txt (tab delimited)</source>
-        <translation type="unfinished"></translation>
+        <source>Stop: %1</source>
+        <translation>Stop: %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="175"/>
-        <source>Garmin PCX5</source>
-        <translation type="unfinished"></translation>
+        <source>Points: %1</source>
+        <translation>Punti: %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="178"/>
-        <source>Garmin POI database</source>
-        <translation type="unfinished"></translation>
+        <source>Waypoints</source>
+        <translation>Punti di interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="186"/>
-        <source>Garmin Points of Interest (.gpi)</source>
-        <translation type="unfinished"></translation>
+        <source>Tracks</source>
+        <translation>Tracce</translation>
     </message>
     <message>
-        <location filename="foo.h" line="199"/>
-        <source>Garmin serial/USB protocol</source>
-        <translation type="unfinished"></translation>
+        <source>Routes</source>
+        <translation>Rotte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="211"/>
-        <source>Geocaching.com .loc</source>
-        <translation type="unfinished"></translation>
+        <source>Show All Waypoints</source>
+        <translation>Mostra tutti i punti di interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="214"/>
-        <source>GeocachingDB for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <source>Hide All Waypoints</source>
+        <translation>Nascondi tutti i punti di interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="217"/>
-        <source>GEOnet Names Server (GNS)</source>
-        <translation type="unfinished"></translation>
+        <source>Expand All</source>
+        <translation>Espandi tutto</translation>
     </message>
     <message>
-        <location filename="foo.h" line="225"/>
-        <source>GeoNiche .pdb</source>
-        <translation type="unfinished"></translation>
+        <source>Collapse All</source>
+        <translation>Contrai tutto</translation>
     </message>
     <message>
-        <location filename="foo.h" line="228"/>
-        <source>GlobalSat DG-100/BT-335 Download</source>
-        <translation type="unfinished"></translation>
+        <source>Show All Routes</source>
+        <translation>Mostra tutte le rotte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="230"/>
-        <source>Only erase device data, do not download anything</source>
-        <translation type="unfinished"></translation>
+        <source>Hide All Routes</source>
+        <translation>Nascondi tutte le rotte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="231"/>
-        <source>Google Earth (Keyhole) Markup Language</source>
-        <translation type="unfinished"></translation>
+        <source>Show All Tracks</source>
+        <translation>Mostra tutte le tracce</translation>
     </message>
     <message>
-        <location filename="foo.h" line="244"/>
-        <source>Google Maps XML</source>
-        <translation type="unfinished"></translation>
+        <source>Hide All Tracks</source>
+        <translation>Nascondi tutte le tracce</translation>
     </message>
     <message>
-        <location filename="foo.h" line="245"/>
-        <source>Google Navigator Tracklines (.trl)</source>
-        <translation type="unfinished"></translation>
+        <source>Show Only This Waypoint</source>
+        <translation>Mostra solo questo punto di interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="246"/>
-        <source>GoPal GPS track log (.trk)</source>
-        <translation type="unfinished"></translation>
+        <source>Show Only This Track</source>
+        <translation>Mostra solo questa traccia</translation>
     </message>
     <message>
-        <location filename="foo.h" line="248"/>
-        <source>The maximum speed (km/h) traveling from waypoint to waypoint.</source>
-        <translation type="unfinished"></translation>
+        <source>Show Only This Route</source>
+        <translation>Mostra solo questa rotta</translation>
     </message>
+</context>
+<context>
+    <name>GMapDlg</name>
     <message>
-        <location filename="foo.h" line="250"/>
-        <source>Cleanup common errors in trackdata</source>
-        <translation type="unfinished"></translation>
+        <source>Dialog</source>
+        <translation>Finestra di dialogo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="251"/>
-        <source>GpilotS</source>
-        <translation type="unfinished"></translation>
+        <source>Copy to Clipboard</source>
+        <translation>Copia negli appunti</translation>
     </message>
     <message>
-        <location filename="foo.h" line="253"/>
-        <source>GPS TrackMaker</source>
-        <translation type="unfinished"></translation>
+        <source>Copy</source>
+        <translation>Copia</translation>
     </message>
+</context>
+<context>
+    <name>MainWindow</name>
     <message>
-        <location filename="foo.h" line="254"/>
-        <source>GPSBabel arc filter file</source>
-        <translation type="unfinished"></translation>
+        <source>MainWindow</source>
+        <translation>FinestraPrincipale</translation>
     </message>
     <message>
-        <location filename="foo.h" line="262"/>
-        <source>GpsDrive Format</source>
-        <translation type="unfinished"></translation>
+        <source>Input </source>
+        <translation>Ingresso</translation>
     </message>
     <message>
-        <location filename="foo.h" line="270"/>
-        <source>GpsDrive Format for Tracks</source>
-        <translation type="unfinished"></translation>
+        <source>If selected, input is from a file.</source>
+        <translation>Se selezionato, l&apos;ingresso è da file.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="278"/>
-        <source>GPSman</source>
-        <translation type="unfinished"></translation>
+        <source>File</source>
+        <translation>File</translation>
     </message>
     <message>
-        <location filename="foo.h" line="286"/>
-        <source>GPSPilot Tracker for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <source>If selected, input is from a device or GPS unit</source>
+        <translation>Se selezionato, l&apos;ingresso è da un dispositivo o da un&apos;unità GPS</translation>
     </message>
     <message>
-        <location filename="foo.h" line="288"/>
-        <source>gpsutil</source>
-        <translation type="unfinished"></translation>
+        <source>Device</source>
+        <translation>Dispositivo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="289"/>
-        <source>GPX XML</source>
-        <translation type="unfinished"></translation>
+        <source>Format</source>
+        <translation>Formato</translation>
     </message>
     <message>
-        <location filename="foo.h" line="295"/>
-        <source>Add info (depth) as Humminbird extension</source>
-        <translation type="unfinished"></translation>
+        <source>Input data format</source>
+        <translation>Formato dei dati in ingresso</translation>
     </message>
     <message>
-        <location filename="foo.h" line="296"/>
-        <source>Add info (depth) as Garmin extension</source>
-        <translation type="unfinished"></translation>
+        <source>Character encoding of input</source>
+        <translation>Codifica dei caratteri dell&apos;ingresso</translation>
     </message>
     <message>
-        <location filename="foo.h" line="297"/>
-        <source>HikeTech</source>
-        <translation type="unfinished"></translation>
+        <source>Browse for one or more input files. </source>
+        <translation>Sfoglia uno o più file d&apos;ingresso.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="298"/>
-        <source>Holux (gm-100) .wpo Format</source>
-        <translation type="unfinished"></translation>
+        <source>File Name(s)</source>
+        <translation>Nome/i di file</translation>
     </message>
     <message>
-        <location filename="foo.h" line="299"/>
-        <source>Holux M-241 (MTK based) Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <source>Device Name:</source>
+        <translation>Nome del dispositivo:</translation>
     </message>
     <message>
-        <location filename="foo.h" line="301"/>
-        <source>Holux M-241 (MTK based) download</source>
-        <translation type="unfinished"></translation>
+        <source>Name of port to which input device is connected</source>
+        <translation>Nome della porta cui è connesso il dispositivo d&apos;ingresso</translation>
     </message>
     <message>
-        <location filename="foo.h" line="303"/>
-        <location filename="foo.h" line="432"/>
-        <source>Enable logging after download</source>
-        <translation type="unfinished"></translation>
+        <source>Options for the selected input format. </source>
+        <translation>Opzioni per il formato d&apos;ingresso selezionato.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="305"/>
-        <source>Honda/Acura Navigation System VP Log File Format</source>
-        <translation type="unfinished"></translation>
+        <source>Options</source>
+        <translation>Opzioni</translation>
     </message>
     <message>
-        <location filename="foo.h" line="306"/>
-        <source>HSA Endeavour Navigator export File</source>
-        <translation type="unfinished"></translation>
+        <source>Translation Options</source>
+        <translation>Opzioni di traduzione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="307"/>
-        <source>HTML Output</source>
-        <translation type="unfinished"></translation>
+        <source>-</source>
+        <translation>-</translation>
     </message>
     <message>
-        <location filename="foo.h" line="313"/>
-        <source>Humminbird tracks (.ht)</source>
-        <translation type="unfinished"></translation>
+        <source>If selected, translate waypoints.</source>
+        <translation>Se selezionato, traduce i punti di interesse.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="314"/>
-        <source>Humminbird waypoints and routes (.hwr)</source>
-        <translation type="unfinished"></translation>
+        <source>Waypoints</source>
+        <translation>Punti di interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="315"/>
-        <source>IGN Rando track files</source>
-        <translation type="unfinished"></translation>
+        <source>If selected, translate routes.</source>
+        <translation>Se selezionato, traduce le rotte.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="316"/>
-        <source>Index of track to write (if more than one in source)</source>
-        <translation type="unfinished"></translation>
+        <source>Routes</source>
+        <translation>Rotte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="317"/>
-        <source>iGO2008 points of interest (.upoi)</source>
-        <translation type="unfinished"></translation>
+        <source>If selected, translate tracks.</source>
+        <translation>Se selezionato, traduce le tracce.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="325"/>
-        <source>IGO8 .trk</source>
-        <translation type="unfinished"></translation>
+        <source>Tracks</source>
+        <translation>Tracce</translation>
     </message>
     <message>
-        <location filename="foo.h" line="326"/>
-        <source>Track identification number</source>
-        <translation type="unfinished"></translation>
+        <source>Data Filters between input and output</source>
+        <translation>Filtri di dati tra sorgente e destinazione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="327"/>
-        <source>Track title</source>
-        <translation type="unfinished"></translation>
+        <source>Filters</source>
+        <translation>Filtri</translation>
     </message>
     <message>
-        <location filename="foo.h" line="328"/>
-        <source>Track description</source>
-        <translation type="unfinished"></translation>
+        <source>More translation options. </source>
+        <translation>Altre opzioni di traduzione.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="331"/>
-        <source>Jelbert GeoTagger data file</source>
-        <translation type="unfinished"></translation>
+        <source>More Options</source>
+        <translation>Altre opzioni</translation>
     </message>
     <message>
-        <location filename="foo.h" line="332"/>
-        <source>Kartex 5 Track File</source>
-        <translation type="unfinished"></translation>
+        <source>Output</source>
+        <translation>Destinazione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="340"/>
-        <source>Kartex 5 Waypoint File</source>
-        <translation type="unfinished"></translation>
+        <source>If selected, output is to a file. </source>
+        <translation>Se selezionato, la destinazione è un file.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="348"/>
-        <source>Kompass (DAV) Track (.tk)</source>
-        <translation type="unfinished"></translation>
+        <source>If selected, output is to a device or GPS unit</source>
+        <translation>Se selezionato, la destinazione è un dispositivo o un&apos;unità GPS</translation>
     </message>
     <message>
-        <location filename="foo.h" line="356"/>
-        <source>Kompass (DAV) Waypoints (.wp)</source>
-        <translation type="unfinished"></translation>
+        <source>Output data format.</source>
+        <translation>Formato dei dati di destinazione.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="364"/>
-        <source>KuDaTa PsiTrex text</source>
-        <translation type="unfinished"></translation>
+        <source>Character encoding of output</source>
+        <translation>Codifica dei caratteri della destinazione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="365"/>
-        <source>Lowrance USR</source>
-        <translation type="unfinished"></translation>
+        <source>Browse for an output file name. </source>
+        <translation>Seleziona il nome del file di destinazione.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="370"/>
-        <source>(USR output) Write version</source>
-        <translation type="unfinished"></translation>
+        <source>File Name</source>
+        <translation>Nome del file</translation>
     </message>
     <message>
-        <location filename="foo.h" line="371"/>
-        <source>Magellan Explorist Geocaching</source>
-        <translation type="unfinished"></translation>
+        <source>Name of port to which output device is connected</source>
+        <translation>Nome della porta cui è connesso il dispositivo di destinazione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="372"/>
-        <source>Magellan Mapsend</source>
-        <translation type="unfinished"></translation>
+        <source>Options for the selected output format. </source>
+        <translation>Opzioni per il formato di destinazione selezionato.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="374"/>
-        <source>Magellan NAV Companion for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <source>Output of GPSBabel translation process. </source>
+        <translation>Risultato del processo di traduzione di GPSBabel.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="375"/>
-        <source>Magellan SD files (as for eXplorist)</source>
-        <translation type="unfinished"></translation>
+        <source>Help</source>
+        <translation>Aiuto</translation>
     </message>
     <message>
-        <location filename="foo.h" line="378"/>
-        <source>Magellan SD files (as for Meridian)</source>
-        <translation type="unfinished"></translation>
+        <source>GPSBabel Help</source>
+        <translation>Aiuto di GPSBabel</translation>
     </message>
     <message>
-        <location filename="foo.h" line="381"/>
-        <source>Magellan serial protocol</source>
-        <translation type="unfinished"></translation>
+        <source>About GPSBabel</source>
+        <translation>Informazioni su GPSBabel</translation>
     </message>
     <message>
-        <location filename="foo.h" line="387"/>
-        <source>MagicMaps IK3D project file (.ikt)</source>
-        <translation type="unfinished"></translation>
+        <source>Quit</source>
+        <translation>Esci</translation>
     </message>
     <message>
-        <location filename="foo.h" line="388"/>
-        <source>Map&amp;Guide &apos;TourExchangeFormat&apos; XML</source>
-        <translation type="unfinished"></translation>
+        <source>Preferences...</source>
+        <translation>Preferenze...</translation>
     </message>
     <message>
-        <location filename="foo.h" line="390"/>
-        <source>Map&amp;Guide to Palm/OS exported files (.pdb)</source>
-        <translation type="unfinished"></translation>
+        <source>default</source>
+        <translation>predefinite</translation>
     </message>
     <message>
-        <location filename="foo.h" line="391"/>
-        <source>MapAsia track file (.tr7)</source>
-        <translation type="unfinished"></translation>
+        <source>Select one or more input files</source>
+        <translation>Selezionare uno o più file in ingresso</translation>
     </message>
     <message>
-        <location filename="foo.h" line="392"/>
-        <source>Mapopolis.com Mapconverter CSV</source>
-        <translation type="unfinished"></translation>
+        <source>Output File Name</source>
+        <translation>Nome del file in uscita</translation>
     </message>
     <message>
-        <location filename="foo.h" line="400"/>
-        <source>MapTech Exchange Format</source>
-        <translation type="unfinished"></translation>
+        <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
+
+This program cannot continue.</source>
+        <translation>Errore durante la lettura del formato della configurazione.  Verificare che il programma backend &quot;gpsbabel&quot; sia installato correttamente e che sia nel percorso corrente (variabile PATH)
+
+Questo programma non può proseguire.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="408"/>
-        <source>Memory-Map Navigator overlay files (.mmo)</source>
-        <translation type="unfinished"></translation>
+        <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
+
+This program cannot continue.</source>
+        <translation>Qualche formato di file/dispositivo non è stato trovato durante l&apos;inizializzazione.  Verifica che il programma di backend &quot;gpsbabel&quot; sia correttamente installato e che sia nel PATH corrente
+
+Questo programma non può proseguire.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="409"/>
-        <source>Write items &apos;locked&apos; [default no]</source>
-        <translation type="unfinished"></translation>
+        <source>Input and output formats do not support %1</source>
+        <translation>I formati di ingresso e di uscita non supportano %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="410"/>
-        <source>Write items &apos;visible&apos; [default yes]</source>
-        <translation type="unfinished"></translation>
+        <source>Input does not support %1; output format supports %2</source>
+        <translation>L&apos;ingresso non supporta %1, il formato di destinazione supporta %2</translation>
     </message>
     <message>
-        <location filename="foo.h" line="411"/>
-        <source>Write files with internal version [n]</source>
-        <translation type="unfinished"></translation>
+        <source>Input format supports %1; output format does not support %2</source>
+        <translation>Il formato in ingresso supporta %1, il formato di destinazione non supporta %2</translation>
     </message>
     <message>
-        <location filename="foo.h" line="412"/>
-        <source>Microsoft AutoRoute 2002 (pin/route reader)</source>
-        <translation type="unfinished"></translation>
+        <source>Both input and output formats support %1</source>
+        <translation>I formati di origine e di destinazione supportano %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="413"/>
-        <source>Microsoft Streets and Trips (pin/route reader)</source>
-        <translation type="unfinished"></translation>
+        <source>waypoints</source>
+        <translation>punti di interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="414"/>
-        <source>Microsoft Streets and Trips 2002-2007</source>
-        <translation type="unfinished"></translation>
+        <source>tracks</source>
+        <translation>tracce</translation>
     </message>
     <message>
-        <location filename="foo.h" line="422"/>
-        <source>Motorrad Routenplaner (Map&amp;Guide) .bcr files</source>
-        <translation type="unfinished"></translation>
+        <source>routes</source>
+        <translation>rotte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="423"/>
-        <location filename="foo.h" line="441"/>
-        <source>Index of route to write (if more than one in source)</source>
-        <translation type="unfinished"></translation>
+        <source>There are no input options for format &quot;%1&quot;</source>
+        <translation>Non ci sono opzioni in ingresso per il formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="foo.h" line="427"/>
-        <source>MS PocketStreets 2002 Pushpin</source>
-        <translation type="unfinished"></translation>
+        <source>Options for %1</source>
+        <translation>Opzioni per %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="428"/>
-        <source>MTK Logger (iBlue 747,...) Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <source>There are no output options for format &quot;%1&quot;</source>
+        <translation>Non ci sono opzioni in uscita per il formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="foo.h" line="430"/>
-        <source>MTK Logger (iBlue 747,Qstarz BT-1000,...) download</source>
-        <translation type="unfinished"></translation>
+        <source>No valid waypoints/routes/tracks translation specified</source>
+        <translation>Non è stato specificato alcun punto di interesse/rotta/traccia</translation>
     </message>
     <message>
-        <location filename="foo.h" line="434"/>
-        <source>National Geographic Topo .tpg (waypoints)</source>
-        <translation type="unfinished"></translation>
+        <source>No input file specified</source>
+        <translation>Il file di origine non è stato specificato</translation>
     </message>
     <message>
-        <location filename="foo.h" line="436"/>
-        <source>National Geographic Topo 2.x .tpo</source>
-        <translation type="unfinished"></translation>
+        <source>No valid output specified</source>
+        <translation>Non è stata specificata una destinazione valida</translation>
     </message>
     <message>
-        <location filename="foo.h" line="437"/>
-        <source>National Geographic Topo 3.x/4.x .tpo</source>
-        <translation type="unfinished"></translation>
+        <source>No output file specified</source>
+        <translation>Il file di destinazione non è stato specificato</translation>
     </message>
     <message>
-        <location filename="foo.h" line="438"/>
-        <source>Navicache.com XML</source>
-        <translation type="unfinished"></translation>
+        <source>Process &quot;%1&quot; did not start</source>
+        <translation>Il processo &quot;%1&quot; non è stato avviato</translation>
     </message>
     <message>
-        <location filename="foo.h" line="440"/>
-        <source>Navigon Mobile Navigator .rte files</source>
-        <translation type="unfinished"></translation>
+        <source>Process exited unsucessfully with code %1</source>
+        <translation>Il processo è terminato con il codice di errorre %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="442"/>
-        <source>Navigon Waypoints</source>
-        <translation type="unfinished"></translation>
+        <source>Translation successful</source>
+        <translation>Traduzione terminata con successo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="450"/>
-        <source>NaviGPS GT-11/BGT-11 Download</source>
-        <translation type="unfinished"></translation>
+        <source>Error running gpsbabel: %1
+</source>
+        <translation>Errore durante l&apos;esecuzione di gpsbabel: %1
+</translation>
     </message>
     <message>
-        <location filename="foo.h" line="454"/>
-        <source>Clear the datalog</source>
-        <translation type="unfinished"></translation>
+        <source>Are you sure you want to reset all format options to default values?</source>
+        <translation>Si è certi di voler reimpostare tutte le opzioni dei formati ai valori predefiniti?</translation>
     </message>
     <message>
-        <location filename="foo.h" line="455"/>
-        <source>Read from datalogger buffer</source>
-        <translation type="unfinished"></translation>
+        <source>About %1</source>
+        <translation>Informazioni su %1</translation>
     </message>
     <message>
-        <location filename="foo.h" line="457"/>
-        <source>NaviGPS GT-31/BGT-31 datalogger (.sbp)</source>
-        <translation type="unfinished"></translation>
+        <source>One or more data filters are active</source>
+        <translation>È attivo uno o più filtri di dati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="458"/>
-        <source>NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)</source>
-        <translation type="unfinished"></translation>
+        <source>No data filters are active</source>
+        <translation>Nessun filtro di dati è attivo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="459"/>
-        <source>Naviguide binary route file (.twl)</source>
-        <translation type="unfinished"></translation>
+        <source>Check for Upgrade</source>
+        <translation>Verifica aggiornamenti</translation>
     </message>
+</context>
+<context>
+    <name>Map</name>
     <message>
-        <location filename="foo.h" line="460"/>
-        <source>&apos;wp&apos; - Create waypoint file , &apos;rte&apos; - Create route file</source>
-        <translation type="unfinished"></translation>
+        <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
+        <translation>Il file &quot;gmapbase.html&quot; manca. Verifica l&apos;installazione</translation>
     </message>
     <message>
-        <location filename="foo.h" line="461"/>
-        <source>&apos;n&apos; - Keep the existing wp name, &apos;y&apos; - rename waypoints</source>
-        <translation type="unfinished"></translation>
+        <source>Failed to load Google maps base page</source>
+        <translation>Non è stato possibile caricare la pagina di base delle mappe di Google</translation>
     </message>
+</context>
+<context>
+    <name>MiscFltWidget</name>
     <message>
-        <location filename="foo.h" line="462"/>
-        <source>Navitel binary track (.bin)</source>
-        <translation type="unfinished"></translation>
+        <source>Form</source>
+        <translation>Modulo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="463"/>
-        <source>Navitrak DNA marker format</source>
-        <translation type="unfinished"></translation>
+        <source>Misc. Filters</source>
+        <translation>Filtri vari</translation>
     </message>
     <message>
-        <location filename="foo.h" line="471"/>
-        <source>NetStumbler Summary File (text)</source>
-        <translation type="unfinished"></translation>
+        <source>Nuke (Remove) Data Types</source>
+        <translation>Rimuovi tipi di dati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="477"/>
-        <source>NIMA/GNIS Geographic Names File</source>
-        <translation type="unfinished"></translation>
+        <source>Routes</source>
+        <translation>Rotte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="485"/>
-        <source>NMEA 0183 sentences</source>
-        <translation type="unfinished"></translation>
+        <source>Tracks</source>
+        <translation>Tracce</translation>
     </message>
     <message>
-        <location filename="foo.h" line="497"/>
-        <source>Nokia Landmark Exchange</source>
-        <translation type="unfinished"></translation>
+        <source>Waypoints</source>
+        <translation>Punti di interesse</translation>
     </message>
     <message>
-        <location filename="foo.h" line="498"/>
-        <source>OpenStreetMap data files</source>
-        <translation type="unfinished"></translation>
+        <source>Convert routes, waypoints and tracks to different types.</source>
+        <translation>Converti rotte, punti di interesse e tracce in tipi differenti.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="501"/>
-        <source>Use this value as custom created_by value</source>
-        <translation type="unfinished"></translation>
+        <source>This filter can be used to convert GPS data between different data types.
+
+Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </source>
+        <translation>Questo filtro può essere usato per convertire dati GPS tra diversi tipi di dati.
+
+Qualche formato di dati del GPS supporta solo un sottoinsieme di punti di interesse, tracce e rotte. Il filtro di trasformazione permette la conversione tra questi tipi. Per esempio, può essere usato per convertire un insieme di punti di interesse (per esempio da un file CSV) in una traccia (o viceversa).</translation>
     </message>
     <message>
-        <location filename="foo.h" line="502"/>
-        <source>OziExplorer</source>
-        <translation type="unfinished"></translation>
+        <source>Transform</source>
+        <translation>Trasforma</translation>
     </message>
     <message>
-        <location filename="foo.h" line="511"/>
-        <source>Unit used in altitude values</source>
-        <translation type="unfinished"></translation>
+        <source>Type of transformation. </source>
+        <translation>Tipo di trasformazione.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="512"/>
-        <source>Unit used in proximity values</source>
-        <translation type="unfinished"></translation>
+        <source>Delete original data after transform to prevent duplicated data. </source>
+        <translation>Elimina i dati originali dopo la trasformazione per evitare dati duplicati.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="513"/>
-        <source>PalmDoc Output</source>
-        <translation type="unfinished"></translation>
+        <source>Delete</source>
+        <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="foo.h" line="519"/>
-        <source>PathAway Database for Palm/OS</source>
-        <translation type="unfinished"></translation>
+        <source>Swap Longitude and Latitudes for badly formatted data formats.</source>
+        <translation>Scambia longitudine e latitudine per i formati di data malformati.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="522"/>
-        <source>Database vehicle icon name</source>
-        <translation type="unfinished"></translation>
+        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </source>
+        <translation>Semplice filtro per scambiare i valori delle coordinate (latitudine e longitudine) di tutti i punti. Può essere utile nel caso di dati malformati. O, se preferisci, puoi usare uno dei nostri formati xcsv, ma latitudine e longitudine sono scambiate.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="525"/>
-        <source>PocketFMS breadcrumbs</source>
-        <translation type="unfinished"></translation>
+        <source>Swap Coordinates</source>
+        <translation>Scambia le coordinate</translation>
     </message>
+</context>
+<context>
+    <name>OptionsDlg</name>
     <message>
-        <location filename="foo.h" line="526"/>
-        <source>PocketFMS flightplan (.xml)</source>
-        <translation type="unfinished"></translation>
+        <source>Help</source>
+        <translation>Aiuto</translation>
     </message>
+</context>
+<context>
+    <name>Preferences</name>
     <message>
-        <location filename="foo.h" line="527"/>
-        <source>PocketFMS waypoints (.txt)</source>
-        <translation type="unfinished"></translation>
+        <source>GPSBabel Preferences</source>
+        <translation>Preferenze di GPSBabel</translation>
     </message>
     <message>
-        <location filename="foo.h" line="528"/>
-        <source>Quovadis</source>
-        <translation type="unfinished"></translation>
+        <source>General</source>
+        <translation>Generali</translation>
     </message>
     <message>
-        <location filename="foo.h" line="530"/>
-        <source>Raymarine Waypoint File (.rwf)</source>
-        <translation type="unfinished"></translation>
+        <source>Check for newer version on start.</source>
+        <translation>Verifica nuove versioni all&apos;avvio.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="532"/>
-        <source>Ricoh GPS Log File</source>
-        <translation type="unfinished"></translation>
+        <source>Anonymously report usage data.</source>
+        <translation>Trasmetti informazioni anonime sull&apos;utilizzo.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="540"/>
-        <source>See You flight analysis data</source>
-        <translation type="unfinished"></translation>
+        <source>Formats</source>
+        <translation>Formati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="548"/>
-        <source>Skymap / KMD150 ascii files</source>
-        <translation type="unfinished"></translation>
+        <source>Enabled Formats</source>
+        <translation>Formati abilitati</translation>
     </message>
     <message>
-        <location filename="foo.h" line="549"/>
-        <source>SkyTraq Venus 5/6 GPS Data Logger Download</source>
-        <translation type="unfinished"></translation>
+        <source>Enable All</source>
+        <translation>Abilita tutti</translation>
     </message>
     <message>
-        <location filename="foo.h" line="551"/>
-        <source>Baud rate used to init device, 0=autodetect</source>
-        <translation type="unfinished"></translation>
+        <source>Disable All</source>
+        <translation>Disabilita tutti</translation>
     </message>
+</context>
+<context>
+    <name>ProcessWaitDialog</name>
     <message>
-        <location filename="foo.h" line="552"/>
-        <source>Baud rate used for download</source>
-        <translation type="unfinished"></translation>
+        <source>Process failed to start</source>
+        <translation>Si è verificato un errore durante l&apos;avvio del processo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="553"/>
-        <source>Number of sectors to read at once (Venus6 only)</source>
-        <translation type="unfinished"></translation>
+        <source>Process crashed</source>
+        <translation>Il processo si è interrotto</translation>
     </message>
     <message>
-        <location filename="foo.h" line="554"/>
-        <source>Sportsim track files (part of zipped .ssz files)</source>
-        <translation type="unfinished"></translation>
+        <source>Process timedout</source>
+        <translation>Il processo non è terminato entro il tempo limite</translation>
     </message>
     <message>
-        <location filename="foo.h" line="562"/>
-        <source>Suunto Trek Manager (STM) .sdf files</source>
-        <translation type="unfinished"></translation>
+        <source>Error while trying to write to process</source>
+        <translation>Errore durante la scrittura nel processo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="563"/>
-        <source>Index of route (if more than one in source)</source>
-        <translation type="unfinished"></translation>
+        <source>Error while trying to read from process</source>
+        <translation>Errore durante la lettura dal processo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="564"/>
-        <source>Suunto Trek Manager (STM) WaypointPlus files</source>
-        <translation type="unfinished"></translation>
+        <source>Unknown process error</source>
+        <translation>Errore sconosciuto nel processo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="567"/>
-        <source>Tab delimited fields useful for OpenOffice, Ploticus etc.</source>
-        <translation type="unfinished"></translation>
+        <source> ... Process GPSBabel</source>
+        <translation>... processo GPSBabel</translation>
     </message>
     <message>
-        <location filename="foo.h" line="575"/>
-        <source>Textual Output</source>
-        <translation type="unfinished"></translation>
+        <source>Stop Process</source>
+        <translation>Arresta il processo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="582"/>
-        <source>TomTom Itineraries (.itn)</source>
-        <translation type="unfinished"></translation>
+        <source>Process did not terminate successfully</source>
+        <translation>Il processo non è terminato correttamente</translation>
     </message>
     <message>
-        <location filename="foo.h" line="590"/>
-        <source>TomTom POI file (.asc)</source>
-        <translation type="unfinished"></translation>
+        <source>Process crashed whle running</source>
+        <translation>Il processo si è interrotto</translation>
     </message>
+</context>
+<context>
+    <name>QObject</name>
     <message>
-        <location filename="foo.h" line="598"/>
-        <source>TomTom POI file (.ov2)</source>
-        <translation type="unfinished"></translation>
+        <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
+        <translation>Si è verificato un errore durante l&apos;elaborazione dei formati da parte del processo di lavoro &quot;gpsbabel -^3&quot; alla linea %1</translation>
     </message>
+</context>
+<context>
+    <name>RtTrkWidget</name>
     <message>
-        <location filename="foo.h" line="599"/>
-        <source>TopoMapPro Places File</source>
-        <translation type="unfinished"></translation>
+        <source>Form</source>
+        <translation>Modulo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="600"/>
-        <source>TrackLogs digital mapping (.trl)</source>
-        <translation type="unfinished"></translation>
+        <source>Simplify routes and tracks by removing points</source>
+        <translation>Semplifica rotte e tracce mediante rimozione di punti</translation>
     </message>
     <message>
-        <location filename="foo.h" line="601"/>
-        <source>Index of track (if more than one in source)</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The quality of the results will vary depending on the density of points in the original route and the length of the original route. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;margin-top:12px;margin-bottom:12px;margin-left:0px;margin-right:0px;-qt-block-indent:0;text-indent:0px;&quot;&gt;Il filtro di semplificazione viene usato per semplificare rotte e tracce per l&apos;uso con formati che supportano un limitato numero di punti o semplicemente per ridurre la complessit&amp;agrave; di una rotta.&lt;/p&gt;
+&lt;p style=&quot;margin-top:12px;margin-bottom:12px;margin-left:0px;margin-right:0px;-qt-block-indent:0;text-indent:0px;&quot;&gt;Il filtro prova a rimuovere i punti da ogni rotta finch&amp;acute; il numero di punti o l&apos;errore ricade entro i limiti forniti, cercando nel contempo di mantenere per quanto possibile la forma della rotta originale.&lt;/p&gt;
+&lt;p style=&quot;margin-top:12px;margin-bottom:12px;margin-left:0px;margin-right:0px;-qt-block-indent:0;text-indent:0px;&quot;&gt;La qualit&amp;agrave; dei risultati dipender&amp;agrave; dalla densit&amp;agrave; dei punti e dalla lunghezza della rotta originale.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty;margin-top:0px;margin-bottom:0px;margin-left:0px;margin-right:0px;-qt-block-indent:0;text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="foo.h" line="602"/>
-        <source>U.S. Census Bureau Tiger Mapping Service</source>
-        <translation type="unfinished"></translation>
+        <source>Routes &amp; Tracks</source>
+        <translation>Rotte e tracce</translation>
     </message>
     <message>
-        <location filename="foo.h" line="615"/>
-        <source>Universal csv with field structure in first line</source>
-        <translation type="unfinished"></translation>
+        <source>Simplify route by removing points</source>
+        <translation>Semplifica la rotta mediante la rimozione di punti</translation>
     </message>
     <message>
-        <location filename="foo.h" line="619"/>
-        <source>Write name(s) of format(s) from input session(s)</source>
-        <translation type="unfinished"></translation>
+        <source> The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route.
+
+The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible.
+
+The quality of the results will vary depending on the density of points in the original route and the length of the original route. </source>
+        <translation> Il filtro di semplificazione viene usato per semplificare rotte e tracce per l&apos;uso con formati che supportano un limitato numero di punti o semplicemente per ridurre la complessità di una rotta.
+
+Il filtro prova a rimuovere i punti da ogni rotta finché il numero di punti o l&apos;errore ricade entro i limiti forniti, cercando nel contempo di mantenere per quanto possibile la forma della rotta originale.
+
+La qualità dei risultati dipenderà dalla densità dei punti e dalla lunghezza della rotta originale. </translation>
     </message>
     <message>
-        <location filename="foo.h" line="620"/>
-        <source>Write filename(s) from input session(s)</source>
-        <translation type="unfinished"></translation>
+        <source>Simplify</source>
+        <translation>Semplifica</translation>
     </message>
     <message>
-        <location filename="foo.h" line="621"/>
-        <source>Vcard Output (for iPod)</source>
-        <translation type="unfinished"></translation>
+        <source>Limit To</source>
+        <translation>Limita a</translation>
     </message>
     <message>
-        <location filename="foo.h" line="623"/>
-        <source>VidaOne GPS for Pocket PC (.gpb)</source>
-        <translation type="unfinished"></translation>
+        <source>Maximum number points in track or route. </source>
+        <translation>Numero massimo di punti nella traccia o rotta. </translation>
     </message>
     <message>
-        <location filename="foo.h" line="624"/>
-        <source>Version of VidaOne file to read or write (1 or 2)</source>
-        <translation type="unfinished"></translation>
+        <source>Points</source>
+        <translation>Punti</translation>
     </message>
     <message>
-        <location filename="foo.h" line="625"/>
-        <source>Vito Navigator II tracks</source>
-        <translation type="unfinished"></translation>
+        <source>Reverse tracks and routes</source>
+        <translation>Inverti e rotte</translation>
     </message>
     <message>
-        <location filename="foo.h" line="626"/>
-        <source>Vito SmartMap tracks (.vtt)</source>
-        <translation type="unfinished"></translation>
+        <source>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a wierd thing and place each waypoint on a separate day. 
+Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </source>
+        <translation>L&apos;inversione è effettuata nel modo più pigro possibile. Date ed ore sono mantenute con i punti di interesse originali in modo che la traccia o rotta risultante avrà la caratteristica interessante che il tempo scorre all&apos;indietro. Questo comporta, in particolare, che Magellan MapSend si comporti in modo strano e inserisca ogni punti di interesse in un giorno diverso.
+Inoltre, se stai usando questa operazione per invertire una rotta che percorre, ad esempio, una rampa di uscita o una strada a senso unico, potrai incappare in un giro poco piacevoli. L&apos;applicazione si preoccupa di data e ora</translation>
     </message>
     <message>
-        <location filename="foo.h" line="627"/>
-        <source>WiFiFoFum 2.0 for PocketPC XML</source>
-        <translation type="unfinished"></translation>
+        <source>Reverse</source>
+        <translation>Inverti</translation>
     </message>
+</context>
+<context>
+    <name>TrackWidget</name>
     <message>
-        <location filename="foo.h" line="633"/>
-        <source>Wintec WBT-100/200 Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <source>Track Filter Options</source>
+        <translation>Opzioni del filtro traccia</translation>
     </message>
     <message>
-        <location filename="foo.h" line="634"/>
-        <source>Wintec WBT-100/200 GPS Download</source>
-        <translation type="unfinished"></translation>
+        <source>This filter performs various operations on track data. </source>
+        <translation>Questo filtro esegue varie operazioni sui dati delle tracce.</translation>
     </message>
     <message>
-        <location filename="foo.h" line="636"/>
-        <source>Wintec WBT-201/G-Rays 2 Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <source>Track Filters</source>
+        <translation>Filtri delle tracce</translation>
     </message>
     <message>
-        <location filename="foo.h" line="637"/>
-        <source>XAiOX iTrackU Logger</source>
-        <translation type="unfinished"></translation>
+        <source>Basic title for track</source>
+        <translation>Titolo base della traccia</translation>
     </message>
     <message>
-        <location filename="foo.h" line="638"/>
-        <location filename="foo.h" line="641"/>
-        <source>Appends the input to a backup file</source>
-        <translation type="unfinished"></translation>
+        <source>Basic title for new track(s). 
+This option specifies a title for tracks generated by the track filter. By default, the title of the new track is composed of the start time of the track appended to this value. 
+If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names. </source>
+        <translation>Titolo base per nuove tracce. 
+Questa opzione specifica un titolo per le tracce generate dal filtro traccia. Come impostazione predefinita, il tutolo di una nuova traccia è composto dall&apos;ora di avvio della traccia aggiunto a questo valore. 
+Se questo valore contiene un simbolo percentuale (%), questo viene trattato come stringa di formato per la funzione POSIX strftime, permettendo nomi di tracce personalizzati in base all&apos;ora. </translation>
     </message>
     <message>
-        <location filename="foo.h" line="639"/>
-        <location filename="foo.h" line="642"/>
-        <source>Only waypoints that are not the backup file</source>
-        <translation type="unfinished"></translation>
+        <source>Title</source>
+        <translation>Titolo</translation>
     </message>
     <message>
-        <location filename="foo.h" line="640"/>
-        <source>XAiOX iTrackU Logger Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <source>the title of the new track is composed of the start time of the track appended to this value. </source>
+        <translation>il titolo della nuova traccia è composto dall&apos;ora di avvio della traccia aggiunto a questo valore. </translation>
     </message>
     <message>
-        <location filename="foo.h" line="643"/>
-        <source>Yahoo Geocode API data</source>
-        <translation type="unfinished"></translation>
+        <source>Correct track point timestamps by specified amount</source>
+        <translation>Correggi date ed ore dei punti traccia di un valore specifico</translation>
+    </message>
+    <message>
+        <source>Correct trackpoint timestamps by a delta. 
+This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone. </source>
+        <translation>Corregge date e ore dei punti traccia aggiungento /sottraendo un certo valore. 
+Questa opzione modifica la data/l&apos;ora di tutti i punti traccia. Può essere utile se la tua traccia deve essere spostata di una o più ore per un&apos;impostazione errata del fuso orario. </translation>
+    </message>
+    <message>
+        <source>Move</source>
+        <translation>Sposta</translation>
+    </message>
+    <message>
+        <source>days</source>
+        <translation>giorni</translation>
+    </message>
+    <message>
+        <source>hours</source>
+        <translation>ore</translation>
+    </message>
+    <message>
+        <source>mins</source>
+        <translation>minuti</translation>
+    </message>
+    <message>
+        <source>secs</source>
+        <translation>secondi</translation>
+    </message>
+    <message>
+        <source>Use track pts. after this time. </source>
+        <translation>Usa i punti traccia dopo quest&apos;ora. </translation>
+    </message>
+    <message>
+        <source>Use only track points after this timestamp.
+
+This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period. </source>
+        <translation>Usa solo i punti traccia successivi a questa data/ora.
+
+Questa opzione viene usata congiuntamente con lo stop per scartare i punti traccia che sono stati salvati al di fuori di uno specifico intervallo temporale. Questa opzione specifica l&apos;inizio dell&apos;intervallo temporale.</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>Inizio</translation>
+    </message>
+    <message>
+        <source>If checked, time specified here is based on this computer&apos;s current time zone. </source>
+        <translation>Se selezionato, l&apos;ora indicata qui è basata sul fuso orario impostato nel PC. </translation>
+    </message>
+    <message>
+        <source>If checked, the times specified here are based on the local computer&apos;s time zone.  Otherwise it is UTC.</source>
+        <translation>Se selezionato, gli orari specificati qui sono basati sul fuso orario del computer.  Altrimenti saranno in UTC (fuso di Greenwich).</translation>
+    </message>
+    <message>
+        <source>Local Time</source>
+        <translation>Tempo locale</translation>
+    </message>
+    <message>
+        <source>Use track pts before this time. </source>
+        <translation>Usa i punti traccia prima di quest&apos;ora. </translation>
+    </message>
+    <message>
+        <source> Use only track points before this timestamp.
+
+This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
+        <translation>Usa solo i punti traccia precedenti a questa data/ora.
+
+Questa opzione viene usata congiuntamente con l&apos;inizio per scartare i punti traccia che sono stati salvati al di fuori di uno specifico intervallo temporale. Questa opzione specifica la fine dell&apos;intervallo temporale. </translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation>Fine</translation>
+    </message>
+    <message>
+        <source>Pack all tracks into one. </source>
+        <translation>Concatena tutte le tracce in una. </translation>
+    </message>
+    <message>
+        <source>Pack all tracks into one.
+
+This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
+
+This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop. </source>
+        <translation>Concatena tutte le tracce in una.
+
+Questa opzione fa in modo che tutte le tracce vengano unite per formarne una sola. Questa opzione non funziona se due tracce si sovrappongono temporalmente: in quel caso prova ad utilizzare l&apos;opzione unisci.
+
+Questa opzione è utile soprattutto per unire tracce che si sono interrotte per un malfunzionamento del dispositivo o per un arresto notturno. </translation>
+    </message>
+    <message>
+        <source>Pack</source>
+        <translation>Concatena</translation>
+    </message>
+    <message>
+        <source>Merge multiple tracks for the same way.</source>
+        <translation>Unisci più tracce per la stessa strada.</translation>
+    </message>
+    <message>
+        <source> Merge multiple tracks for the same way.
+
+This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
+        <translation> Unisce più tracce per la stessa strada.
+
+Questa opzione inserisce tutti i punti di ogni traccia in una singola traccia e li ordina in base all&apos;orario. I punti con lo stesso orario saranno tralasciati. </translation>
+    </message>
+    <message>
+        <source>Merge</source>
+        <translation>Unisci</translation>
+    </message>
+    <message>
+        <source>Split by Date</source>
+        <translation>Suddividi per data</translation>
+    </message>
+    <message>
+        <source>Split by Time</source>
+        <translation>Suddividi per ora</translation>
+    </message>
+    <message>
+        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
+        <translation>Se diverso da zero, la traccia verrà suddivisa se il tempo tra due punti è maggiore di questo parametro.   Se zero, la traccia verrà suddivisa in base al giorno. </translation>
+    </message>
+    <message>
+        <source>hrs</source>
+        <translation>ore</translation>
+    </message>
+    <message>
+        <source>Split by Dist.</source>
+        <translation>Suddividi per distanza</translation>
+    </message>
+    <message>
+        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
+        <translation>Se non zero, la traccia in ingresso verrà suddivisa in più tracce se la distanza tra punti traccia successivi è maggiore della distanza specificata nel parametro. </translation>
+    </message>
+    <message>
+        <source>ft</source>
+        <translation>ft</translation>
+    </message>
+    <message>
+        <source>m</source>
+        <translation>m</translation>
+    </message>
+    <message>
+        <source>km</source>
+        <translation>km</translation>
+    </message>
+    <message>
+        <source>mi</source>
+        <translation>mi</translation>
+    </message>
+    <message>
+        <source>GPS Fixes</source>
+        <translation>Stato del GPS</translation>
+    </message>
+    <message>
+        <source>none</source>
+        <translation>nessuno</translation>
+    </message>
+    <message>
+        <source>pps</source>
+        <translation>pps</translation>
+    </message>
+    <message>
+        <source>dgps</source>
+        <translation>dgps</translation>
+    </message>
+    <message>
+        <source>3d</source>
+        <translation>3d</translation>
+    </message>
+    <message>
+        <source>2d</source>
+        <translation>2d</translation>
+    </message>
+    <message>
+        <source>Synthesize speed. </source>
+        <translation>Sintetizza la velocità. </translation>
+    </message>
+    <message>
+        <source>Synthesize speed.
+
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+        <translation>Sintetizza la velocità.
+
+Questa opzione calcola il valore della velocità GPS in ogni punto traccia. Risulta utile soprattutto con punti traccia tratti da un formato che non specifica informazioni sulla velocità o da punti traccia sintetizzati dal filtro di interpolazione. La velocità in ogni punto traccia è la velocità media calcolata dal punto precedente (distanza diviso il tempo). Al primo punto di ogni traccia viene assegnata una velocità &quot;sconosciuta.&quot; </translation>
+    </message>
+    <message>
+        <source>Speed</source>
+        <translation>Velocità</translation>
+    </message>
+    <message>
+        <source>Synthesize course.</source>
+        <translation>Sintetizza la direzione.</translation>
+    </message>
+    <message>
+        <source>Synthesize course.
+
+This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
+        <translation>Sintetizza la direzione.
+
+Questa opzione calcola (o ricalcola) un valore per la direzione del GPS in ogni punto traccia. Risulta utile soprattutto con punti traccia tratti da un formato che non specifica informazioni sulla direzione o da punti traccia sintetizzati dal filtro di interpolazione. La direzione in ogni punto traccia è tratta semplicemente dalla posizione del punto traccia precedente nella traccia stessa. Al primo punto di ogni traccia viene arbitrariamente assegnato un valore pari a 0 gradi. </translation>
+    </message>
+    <message>
+        <source>Course</source>
+        <translation>Direzione</translation>
+    </message>
+</context>
+<context>
+    <name>Upgrade</name>
+    <message>
+        <source>Dialog</source>
+        <translation>Dialogo</translation>
+    </message>
+</context>
+<context>
+    <name>UpgradeCheck</name>
+    <message>
+        <source>HTTP</source>
+        <translation>HTTP</translation>
+    </message>
+    <message>
+        <source>Download failed: %1.</source>
+        <translation>Scaricamento non riuscito: %1.</translation>
+    </message>
+    <message>
+        <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
+        <translation>È disponibile una nuova versione di GPSBabel.&lt;br /&gt;Versione corrente: %1 &lt;br /&gt;Nuova versione: %2</translation>
+    </message>
+    <message>
+        <source>Upgrade</source>
+        <translation>Aggiorna</translation>
+    </message>
+    <message>
+        <source>Do you wish to download an upgrade?</source>
+        <translation>Si desidera scaricare un aggiornamento?</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Errore</translation>
+    </message>
+    <message>
+        <source>Invalid return data at line %1: %2.</source>
+        <translation>Dati ricevuti non validi alla linea %1: %2.</translation>
+    </message>
+</context>
+<context>
+    <name>WayPtsWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Modulo</translation>
+    </message>
+    <message>
+        <source>Waypoints Filters</source>
+        <translation>Filtri dei punti di interesse</translation>
+    </message>
+    <message>
+        <source>Remove duplicates</source>
+        <translation>Rimuovi i duplicati</translation>
+    </message>
+    <message>
+        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </source>
+        <translation>Il filtro dei duplicati è studiato per rimuovere i punti duplicati in base al loro nome breve (tipicamente un nome del punto di interesse sul ricevitore GPS), e/o in base alla posizione (con una precisione di 6 decimali). Questo filtro supporta due opzioni che indicano come individuare i duplicati, nome breve e posizione. In genere è necessario specificare almeno una di queste opzioni. </translation>
+    </message>
+    <message>
+        <source>Duplicates</source>
+        <translation>Duplicati</translation>
+    </message>
+    <message>
+        <source>Suppress duplicate waypoints based on name.</source>
+        <translation>Rimuovi i punti di interesse in base al nome.</translation>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Suppress duplicate waypoints based on name. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This option is the one most often used with the duplicate filter. This option instructs the duplicate filter to remove any waypoints that share a short name with a waypoint that has come before. This option might be used to remove duplicates if you are merging two datasets that were each created in part from a common ancestor dataset. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rimuovi i punti di interesse in base al nome. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Questa opzione è la più usata col filtro dei duplicati. Indica al filtro dei duplicaati di rimuovere qualsiasi punto di interesse con un nome breve condiviso con un puntio di interesse già analizzato. Questa opzione può essere usata per rimuovere i duplicati se stai unendo due serie di dati che sono state create partendo dalla stessa una serie di dati iniziale. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Short Names</source>
+        <translation>Nomi brevi</translation>
+    </message>
+    <message>
+        <source>Suppress duplicate waypoint based on coords. </source>
+        <translation>Rimuovi i punti di interesse in base alle coordinate. </translation>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Suppress duplicate waypoint based on coords. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This option causes the duplicate filter to remove any additional waypoint that has the same coordinates (to six decimal degrees) as a waypoint that came before. This option may be used to remove duplicate waypoints if the names are not expected to be the same. It also might be used along with the &lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;shortname&lt;/span&gt; option to remove duplicate waypoints if the names of several unrelated groups of waypoints might be the same. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rimuovi i punti di interesse in base alle coordinate. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Questa opzione fa sì che il filtro dei duplicati rimuova ogni ulteriore punto di interesse avente le stesse coordinate (con una precisione di sei cifre decimali). Questa opzione può essere usata per rimuovere punti di interesse duplicati anche quando i nomi non coincidono. Puà essere usata anche congiuntamente all&apos;opzione &lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;bomi brevi&lt;/span&gt; per rimuovere punti di interesse se i nomi di diversi gruppi indipendenti di punti di interesse potrebbero coincidere. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Locations</source>
+        <translation>Posizioni</translation>
+    </message>
+    <message>
+        <source>Remove points based on proximity</source>
+        <translation>Rimuovi i punti in base alla vicinanza</translation>
+    </message>
+    <message>
+        <source>Maximum positional distance.
+
+This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </source>
+        <translation>Massima distanza di posizione.
+
+Questa opzione specifica la distanza minima consentita tra due punti. Se due punti sono più vicini di questa distanza, solo uno di essi viene mantenuto. </translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation>Posizione</translation>
+    </message>
+    <message>
+        <source>Maximum positional distance.</source>
+        <translation>Massima distanza di posizione.</translation>
+    </message>
+    <message>
+        <source>Feet</source>
+        <translation>Piedi</translation>
+    </message>
+    <message>
+        <source>Meters</source>
+        <translation>Metri</translation>
+    </message>
+    <message>
+        <source>Include points only within radius</source>
+        <translation>Includi punto solo entro una distanza</translation>
+    </message>
+    <message>
+        <source>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
+
+By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </source>
+        <translation>Questo filtro include o esclude i punti di interesse in funzione della loro distanza da un punto centrale. Tutti i punti di interesse con una distanza superiore a quella indicata dal punto specificato saranno rimossi dalla serie di dati.
+
+Per impostazione predefinita, tutti gli altri punti sono ordinati in modo che i punti più vicini al centro vengano prima nel file di destinazione.</translation>
+    </message>
+    <message>
+        <source>Radius</source>
+        <translation>Raggio</translation>
+    </message>
+    <message>
+        <source>Maximum distance from center. </source>
+        <translation>Distanza massima dal centro.</translation>
+    </message>
+    <message>
+        <source>Miles</source>
+        <translation>Miglia</translation>
+    </message>
+    <message>
+        <source>km</source>
+        <translation>km</translation>
+    </message>
+    <message>
+        <source>Lat.</source>
+        <translation>Lat.</translation>
+    </message>
+    <message>
+        <source>Latitude of the central point in decimal degrees.  South latitudes should be expressed as a negative number.</source>
+        <translation>Latitudine del punto centrale in gradi decimali. Le latitudini dell&apos;emisfero sud vanno inserite come un numero negativo.</translation>
+    </message>
+    <message>
+        <source>Long.</source>
+        <translation>Long.</translation>
+    </message>
+    <message>
+        <source>Longitude of the central point in decimal degrees. West longitudes should be expressed as a negative number.</source>
+        <translation>Longitudine del punto centrale in gradi decimali. Le latitudini dell&apos;emisfero occidentale vanno inserite come un numero negativo.</translation>
+    </message>
+    <message>
+        <source>This filter sorts waypoints into alphabetical order</source>
+        <translation>Questo filtro ordina i punti di interesse in ordine alfabetico</translation>
+    </message>
+    <message>
+        <source>Sort</source>
+        <translation>Ordina</translation>
     </message>
 </context>
 </TS>
