@@ -29,7 +29,23 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$babelfeversion$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009 S. Khai Mong&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LGPL Crystal Icons by Alvarado Coehlo&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(Using backend $babelversion$)&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Este programa es un programa libre, puedes distribuirlo o modificarlo de acuerdo a los términos de la licencia GNU tal y como la publica la Free Software Foundation, en su segunda versión o (si lo deseas) en cualquier versión posterior.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;El programa se distribuye confiando en su utilidad, pero sin ninguna garantía, incluso sin las garantías que conlleva la distribución de productos para un uso particular. Consulta la GNU General Public License si quieres más detalles.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Junto con el programa deberías haber recibido una copia de la  GNU General Public License, si es no fuera el caso, solícitala por escrito a la Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -398,12 +414,12 @@ Higher number provides more deitaled diagnostics.</source>
     <message>
         <location filename="gmapui.ui" line="47"/>
         <source>Copy to Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar al portapapeles</translation>
     </message>
     <message>
         <location filename="gmapui.ui" line="50"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar</translation>
     </message>
 </context>
 <context>
@@ -519,7 +535,7 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwindow.cpp" line="653"/>
         <source>There are no input options for format &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>No hay opciones de entrada para el formato &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="660"/>
@@ -530,7 +546,7 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwindow.cpp" line="673"/>
         <source>There are no output options for format &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>No hay opciones de salida para el formato &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="694"/>
@@ -810,12 +826,12 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwinui.ui" line="667"/>
         <source>Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>Preferencias ...</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="672"/>
         <source>Check for Upgrade</source>
-        <translation type="unfinished"></translation>
+        <translation>Comprueba si hay una actualización</translation>
     </message>
 </context>
 <context>
@@ -873,7 +889,8 @@ This program cannot continue.</source>
     <message>
         <location filename="miscfltui.ui" line="34"/>
         <source>Nuke (Remove) Data Types</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Espero que sea la traducción correcta (ADC)</translatorcomment>
+        <translation>Borrar todo tipo de datos</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="72"/>
@@ -938,42 +955,42 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
     <message>
         <location filename="preferences.ui" line="20"/>
         <source>GPSBabel Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Preferencias de GPSBabel</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="30"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>General</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="45"/>
         <source>Check for newer version on start.</source>
-        <translation type="unfinished"></translation>
+        <translation>Comprobar actualizaciones al arrancar.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="52"/>
         <source>Anonymously report usage data.</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar datos de uso de manera anónima.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="61"/>
         <source>Formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Formatos</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="69"/>
         <source>Enabled Formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Formatos activos</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="93"/>
         <source>Enable All</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar todo</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="100"/>
         <source>Disable All</source>
-        <translation type="unfinished"></translation>
+        <translation>Desactivar todo</translation>
     </message>
 </context>
 <context>
@@ -1011,7 +1028,7 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
     <message>
         <location filename="processwait.cpp" line="68"/>
         <source> ... Process GPSBabel</source>
-        <translation>GPSBabel se está ejecutando... </translation>
+        <translation>GPSBabel se está ejecutando ...</translation>
     </message>
     <message>
         <location filename="processwait.cpp" line="83"/>
@@ -1306,7 +1323,7 @@ Esta opción pone todos los puntos de todos los trazados en un único trazado y 
         <location filename="trackui.ui" line="235"/>
         <source>Split by Date</source>
         <oldsource>Split tracks. </oldsource>
-        <translation type="unfinished">Dividir trazados. </translation>
+        <translation>Dividir trazados por fecha</translation>
     </message>
     <message>
         <source>Split by date or time interval 
@@ -1338,7 +1355,7 @@ Si la entrada tiene múltiples trazados, júntalos antes de dividirlos por día.
     <message>
         <location filename="trackui.ui" line="285"/>
         <source>Split by Dist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividir trazados por distancia.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="297"/>
@@ -1439,16 +1456,16 @@ Esta opción calcula (o recalcula) un valor para el rumbo de cada punto del traz
     <message>
         <location filename="trackui.ui" line="242"/>
         <source>Split by Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividir trazados en función del tiempo</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="395"/>
         <source>Synthesize speed.
 
 This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
-        <translation>Sintetizar la dirección.
+        <translation>Sintetizar la veloclidad.
 
-Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del trazado. Es muy útil para puntos de trazado en formatos que no contienen información sobre la velocidad o para puntos de trazado calculados con el filtro interpolar. La velocidad de cada punto es simplemente la media (distancia partido por tiempo) desde el punto previo en el trazado. El primer punto de cada trazado tiene el valor arbitrario de &quot;desconocido&quot;. </translation>
+Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del trazado. Es muy útil para puntos de trazado en formatos que no contienen información sobre la velocidad o para puntos de trazado calculados con el filtro interpolar. La velocidad de cada punto es simplemente la media (distancia partido por tiempo) desde el punto previo en el trazado. El primer punto de cada trazado tiene el valor arbitrario de &quot;desconocido&quot;.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="400"/>
@@ -1479,22 +1496,22 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
     <message>
         <location filename="upgrade.cpp" line="235"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Error</translation>
     </message>
     <message>
         <location filename="upgrade.cpp" line="236"/>
         <source>Invalid return data at line %1: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha devuelto datos no válidos en la línea %1: %2.</translation>
     </message>
     <message>
         <location filename="upgrade.cpp" line="275"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Una nueva versióon de GPSBabel ha salido ya. &lt;br /&gt;Tu versión es la %1 &lt;br /&gt;La última versióon sería %2</translation>
     </message>
     <message>
         <location filename="upgrade.cpp" line="292"/>
         <source>Do you wish to download an upgrade?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Quieres bajarte una actualización?</translation>
     </message>
     <message>
         <source>&lt;center&gt;&lt;b&gt;A new version of GPSBabel is available&lt;/b&gt;&lt;br&gt;Your version is %1 &lt;br&gt;The latest version is %2&lt;/center&gt;</source>
