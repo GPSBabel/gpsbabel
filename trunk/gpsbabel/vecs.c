@@ -220,6 +220,18 @@ vecs_t vec_list[] = {
 		NULL
 	},
 	{
+		&gdb_vecs,
+		"gdb",
+		"Garmin MapSource - gdb",
+		"gdb"
+	},
+	{
+		&gtc_vecs,
+		"gtrnctr",
+		"Garmin Training Center",
+		"xml"
+	},
+	{
 		&mapsend_vecs,
 		"mapsend",
 		"Magellan Mapsend", 
@@ -238,18 +250,24 @@ vecs_t vec_list[] = {
 		NULL
 	},
 	{
-		&kml_vecs,
-		"kml",
-		"Google Earth (Keyhole) Markup Language",
-		"kml"
+		&ozi_vecs,
+		"ozi",
+		"OziExplorer",
+		NULL
 	},
-#if MAXIMAL_ENABLED
 	{
 		&pcx_vecs,
 		"pcx",
 		"Garmin PCX5",
 		"pcx"
 	},
+	{
+		&kml_vecs,
+		"kml",
+		"Google Earth (Keyhole) Markup Language",
+		"kml"
+	},
+#if MAXIMAL_ENABLED
 	{
 		&gpsutil_vecs,
 		"gpsutil",
@@ -349,7 +367,7 @@ vecs_t vec_list[] = {
 		&quovadis_vecs,
 		"quovadis",
 		"Quovadis",
-		"pdb"	
+		"pdb"
 	},
 	{
 		&gpilots_vecs,
@@ -405,12 +423,6 @@ vecs_t vec_list[] = {
 		"gpl"
 	},
 	{
-		&ozi_vecs,
-		"ozi",
-		"OziExplorer",
-		NULL
-	},
-	{
 		&text_vecs,
 		"text",
 		"Textual Output",
@@ -420,7 +432,7 @@ vecs_t vec_list[] = {
 		&html_vecs,
 		"html",
 		"HTML Output",
-		"html"	
+		"html"
 	},
 #if PDBFMTS_ENABLED
 	{
@@ -573,7 +585,7 @@ vecs_t vec_list[] = {
 		"vitosmt",
 		"Vito Navigator II tracks",
 		"smt"
-	},	
+	},
 	{
 		&wfff_xml_vecs,
 		"wfff",
@@ -581,17 +593,11 @@ vecs_t vec_list[] = {
 		"xml"
 	},
 	{
-		&gdb_vecs,
-		"gdb",
-		"Garmin MapSource - gdb",
-		"gdb"
-	},	
-	{
 		&bcr_vecs,
 		"bcr",
 		"Motorrad Routenplaner (Map&Guide) .bcr files",
 		"bcr"
-	},	
+	},
 #if PDBFMTS_ENABLED
 	{
 		&coto_vecs,
@@ -1066,7 +1072,7 @@ void
 assign_option(const char *module, arglist_t *ap, const char *val)
 {
 	char *c;
-	
+
 	if (ap->argval == NULL)
 		fatal("%s: No local variable defined for option \"%s\"!", module, ap->argstring);
 
@@ -1122,7 +1128,7 @@ assign_option(const char *module, arglist_t *ap, const char *val)
 	}
 
 	/* for bool options without default: don't set argval if "FALSE" */
-	
+
 	if (((ap->argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) && 
 	    (*c == '0') && (ap->defaultvalue == NULL)) {
 		return;
@@ -1254,9 +1260,9 @@ find_vec(char *const vecname, char **opts)
 
 		if (global_opts.debug_level >= 1)
 			disp_vec_options(svec->name, vec_list[0].vec->args);
-#if CSVFMTS_ENABLED		
+#if CSVFMTS_ENABLED
 		xcsv_setup_internal_style(svec->style_buf);
-#endif // CSVFMTS_ENABLED		
+#endif // CSVFMTS_ENABLED
 
 		xfree(v);
 		vec_list[0].vec->name = svec->name;	/* needed for session information */
@@ -1442,7 +1448,7 @@ disp_vecs(void)
 				(ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
 		}
 	}
-	xfree (svp);	
+	xfree (svp);
 	return;
 }
 
@@ -1470,7 +1476,7 @@ disp_vec( const char *vecname )
 				(ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
 		}
 	}
-	xfree (svp);	
+	xfree (svp);
 	return;
 }
 
@@ -1597,7 +1603,7 @@ disp_formats(int version)
 				disp_v3(vec);
 			}
 		}
-		xfree (svp);	
+		xfree (svp);
 		break;
 	default:
 		;

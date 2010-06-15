@@ -131,6 +131,12 @@ fl_vecs_t filter_vec_list[] = {
 		"Swap latitude and longitude of all loaded points"
 	},
 	
+#elif defined (MINIMAL_FILTERS)
+	{
+		&trackfilter_vecs,
+		"track",
+		"Manipulate track lists"
+	},
 #endif
         {
 		NULL,

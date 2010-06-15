@@ -86,6 +86,7 @@ static xg_callback	gtc_trk_long;
 static xg_callback	gtc_trk_alt;
 static xg_callback	gtc_trk_hr;
 static xg_callback	gtc_trk_cad;
+static xg_callback	gtc_trk_pwr;
 static xg_callback	gtc_wpt_pnt_s, gtc_wpt_pnt_e;
 static xg_callback	gtc_wpt_lat;
 static xg_callback	gtc_wpt_long;
@@ -117,6 +118,7 @@ static xg_tag_mapping gtc_map[] = {
 	{ gtc_trk_alt,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/AltitudeMeters" },
 	{ gtc_trk_hr,   cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/HeartRateBpm" },
 	{ gtc_trk_cad,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Cadence" },
+	{ gtc_trk_pwr,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/ns3:TPX/ns3:Watts" },
 
 	/* history tcx v1 */
 	{ gtc_trk_s,    cb_start, "/History/Run" },
@@ -499,6 +501,12 @@ void
 gtc_trk_cad(const char *args, const char **unused)
 {
 	wpt_tmp->cadence = atoi(args);
+}
+
+void
+gtc_trk_pwr(const char *args, const char **unused)
+{
+	wpt_tmp->power = atof(args);
 }
 
 void

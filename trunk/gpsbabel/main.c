@@ -207,7 +207,7 @@ print_extended_info(void)
 #endif
 #if HAVE_LIBEXPAT
 	"HAVE_LIBEXPAT "
-#if XML_UNICODE
+#if defined(XML_UNICODE)
 	"XML_UNICODE "
 #endif
 #endif

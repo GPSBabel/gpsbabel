@@ -36,7 +36,7 @@ bincompare()
 
 compare()
 {
-	${DIFF} -u $* ||  {
+	${DIFF} -u -b $* ||  {
 		echo ERROR comparing $*
 		#exit 1
 	} 
