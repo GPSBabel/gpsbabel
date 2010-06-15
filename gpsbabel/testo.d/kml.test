@@ -1,0 +1,32 @@
+#
+# Quick tests for Google Earth/KML format
+# Note: Reference files are from GPSBabel's own output.
+#
+gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o kml -F ${TMPDIR}/ge-gc.kml
+compare ${TMPDIR}/ge-gc.kml ${REFERENCE}/earth-gc.kml
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml -F ${TMPDIR}/ge-eg.kml
+compare ${TMPDIR}/ge-eg.kml ${REFERENCE}/earth-expertgps.kml
+
+# And again, but with tracks.
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml,track=1 \
+  -F ${TMPDIR}/ge-eg-track.kml
+compare ${REFERENCE}/earth-expertgps-track.kml ${TMPDIR}/ge-eg-track.kml
+
+# Segmented input, with and without <Track>.
+gpsbabel -i gpx -f ${REFERENCE}/track/segmented_tracks.gpx -o kml,track=0 \
+  -F ${TMPDIR}/ge-seg.kml
+compare ${REFERENCE}/track/segmented_tracks.kml ${TMPDIR}/ge-seg.kml
+
+gpsbabel -i gpx -f ${REFERENCE}/track/segmented_tracks.gpx  -o kml,track=1 \
+  -F ${TMPDIR}/ge-seg-track.kml
+compare ${REFERENCE}/track/segmented_tracks-track.kml ${TMPDIR}/ge-seg-track.kml
+
+# Fitness data.
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_garmin_extensions.gpx  \
+  -o kml,track=1 -F ${TMPDIR}/ge-fitness-track.kml
+compare ${REFERENCE}/track/gpx_garmin_extensions-kml_track.kml ${TMPDIR}/ge-fitness-track.kml
+# Fitness data with more extended data, specifically power.
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr_power.tcx \
+  -o kml,track=1,points=0,lines=0 -F ${TMPDIR}/ge-power.kml
+compare ${REFERENCE}/track/gtrnctr_power-kml.kml ${TMPDIR}/ge-power.kml
+

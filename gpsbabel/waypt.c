@@ -29,8 +29,13 @@
 queue waypt_head;
 static unsigned int waypt_ct;
 static short_handle mkshort_handle;
-int geocaches_present;
 static geocache_data empty_gc_data = { 0 };
+static global_trait traits;
+
+const global_trait* get_traits(void)
+{
+	return &traits;
+}
 
 void
 waypt_init(void)
@@ -101,6 +106,22 @@ waypt_dupe(const waypoint *wpt)
 	return tmp;
 }
 
+void update_common_traits(const waypoint* wpt)
+{
+	/* This is a bit tacky, but it allows a hint whether we've seen
+	 * this data or not in the life cycle of this run.   Of course,
+	 * the caches could have been filtered out of existance and not
+	 * all waypoints may have this and a few other pitfalls, but it's
+	 * an easy and fast test here.
+	 */
+	traits.trait_geocaches |=  (wpt->gc_data->diff && wpt->gc_data->terr);
+	traits.trait_heartrate |= wpt->heartrate > 0;
+	traits.trait_cadence |= wpt->cadence > 0;
+	traits.trait_power |= wpt->power > 0;
+	traits.trait_depth |= WAYPT_HAS(wpt, depth);
+	traits.trait_temperature |= WAYPT_HAS(wpt, temperature);
+}
+
 void
 waypt_add(waypoint *wpt)
 {
@@ -159,15 +180,8 @@ waypt_add(waypoint *wpt)
 		}
 	}
 
-	/* This is a bit tacky, but it allows a hint whether we've seen
-	 * geocaches or not in the life cycle of this run.   Of course,
-	 * the caches could have been filtered out of existance and not
-	 * all waypoints may have this and a few other pitfalls, but it's
-	 * an easy and fast test here.
-	 */
-	if (wpt->gc_data->diff && wpt->gc_data->terr) {
-		geocaches_present = 1;
-	}
+        update_common_traits(wpt);
+
 }
 
 void

@@ -210,15 +210,6 @@ gpsbabel -i cst -f ${REFERENCE}/route/cst-sample.cst.gz -o gpx -F ${TMPDIR}/cst-
 compare ${TMPDIR}/cst-sample.gpx ${REFERENCE}/route/cst-sample.gpx
 
 #
-# Quick tests for Google Earth/KML format
-# Note: Reference files are from GPSBabel's own output.
-#
-gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o kml -F ${TMPDIR}/ge-gc.kml
-compare ${TMPDIR}/ge-gc.kml ${REFERENCE}/earth-gc.kml
-gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml -F ${TMPDIR}/ge-eg.kml
-compare ${TMPDIR}/ge-eg.kml ${REFERENCE}/earth-expertgps.kml
-
-#
 # Transformation filter (transform) tests
 #
 rm -f ${TMPDIR}/transform*

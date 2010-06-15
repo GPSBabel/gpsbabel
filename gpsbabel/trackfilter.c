@@ -1,7 +1,7 @@
 /*
 
     Track manipulation filter
-
+    Copyright (c) 2009, 2010 Robert Lipe, robertlipe@gpsbabel.org
     Copyright (C) 2005-2006 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
@@ -43,7 +43,7 @@
 #include "grtcirc.h"
 #include "xmlgeneric.h"
 
-#if FILTERS_ENABLED
+#if FILTERS_ENABLED || MINIMAL_FILTERS
 #define MYNAME "trackfilter"
 
 #define TRACKFILTER_PACK_OPTION		"pack"
@@ -60,6 +60,7 @@
 #define TRACKFILTER_SPEED_OPTION        "speed"
 #define TRACKFILTER_SEG2TRK_OPTION      "seg2trk"
 #define TRACKFILTER_TRK2SEG_OPTION      "trk2seg"
+#define TRACKFILTER_SEGMENT_OPTION      "segment"
 #define TRACKFILTER_FAKETIME_OPTION     "faketime"
 
 #undef TRACKF_DBG
@@ -78,6 +79,7 @@ static char *opt_speed = NULL;
 static char *opt_name = NULL;
 static char *opt_seg2trk = NULL;
 static char *opt_trk2seg = NULL;
+static char *opt_segment = NULL;
 static char *opt_faketime = NULL;
 
 static
@@ -120,6 +122,9 @@ arglist_t trackfilter_args[] = {
 	{TRACKFILTER_TRK2SEG_OPTION, &opt_trk2seg,
 	    "Merge tracks inserting segment separators at boundaries",
             NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+	{TRACKFILTER_SEGMENT_OPTION, &opt_segment,
+	    "segment tracks with abnormally long gaps",
+	    NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
 	{TRACKFILTER_FAKETIME_OPTION, &opt_faketime,
 	    "Add specified timestamp to each trackpoint",
              NULL, ARGTYPE_STRING, ARG_NOMINMAX},
@@ -1073,6 +1078,66 @@ trackfilter_faketime(void)             /* returns number of track points left af
        return track_pts - dropped;
 }
 
+static int
+trackfilter_points_are_same(const waypoint *wpta, const waypoint *wptb)
+{
+  // We use a simpler (non great circle) test for lat/lon here as this
+  // is used for keeping the 'bookends' of non-moving points.
+  return
+      abs(wpta->latitude - wptb->latitude) < .0000001 &&
+      abs(wpta->latitude - wptb->latitude) < .0000001 &&
+      abs(wpta->altitude - wptb->altitude) < 20 &&
+      (WAYPT_HAS(wpta,course) == WAYPT_HAS(wptb,course)) &&
+      (wpta->course == wptb->course) &&
+      (wpta->speed == wptb->speed) &&
+      (wpta->heartrate == wptb->heartrate) &&
+      (wpta->cadence == wptb->cadence) &&
+      (wpta->temperature == wptb->temperature);
+}
+
+static void
+trackfilter_segment_head(const route_head *rte)
+{
+  queue *elem, *tmp;
+  double avg_dist = 0;
+  int index = 0;
+  waypoint *prev_wpt = NULL;
+  // Consider tossing trackpoints closer than this in radians.
+  // (Empirically determined; It's a few dozen feet.)
+  const double ktoo_close = 0.000005;
+
+  QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
+    waypoint *wpt = (waypoint *)elem;
+    if (index > 0) {
+      double cur_dist = gcdist(RAD(prev_wpt->latitude),
+                               RAD(prev_wpt->longitude),
+                               RAD(wpt->latitude),
+                               RAD(wpt->longitude));
+      // Denoise points that are on top of each other.
+      if (avg_dist == 0)
+        avg_dist = cur_dist;
+
+      if (cur_dist < ktoo_close) {
+        if (wpt != (waypoint *) QUEUE_LAST(&rte->waypoint_list)) {
+          waypoint *next_wpt = (waypoint *) QUEUE_NEXT(&wpt->Q);
+          if (trackfilter_points_are_same(prev_wpt, wpt) &&
+              trackfilter_points_are_same(wpt, next_wpt)) {
+            track_del_wpt((route_head *)rte, wpt);
+            continue;
+            }
+        }
+      }
+      if (cur_dist > .001 && cur_dist > 1.2* avg_dist) {
+        avg_dist = cur_dist = 0;
+        wpt->wpt_flags.new_trkseg = 1;
+      }
+      // Update weighted moving average;
+      avg_dist = (cur_dist + 4.0 * avg_dist) / 5.0;
+    }
+    prev_wpt = wpt;
+    index++;
+  }
+}
 
 /*******************************************************************************
 * global cb's
@@ -1101,6 +1166,11 @@ trackfilter_init(const char *args)
 	
 	track_ct = 0;
 	track_pts = 0;
+
+	// Perform segmenting first.
+	if (opt_segment) {
+		track_disp_all(trackfilter_segment_head, NULL, NULL);
+	}
 	
 	if (count > 0)
 	{

@@ -1,0 +1,10 @@
+<para>
+  This is a boolean flag, defaulting to '0', that controls whether GPSBabel
+  writes the <Track> tag that Google introduced in Earth 5.2 for tracks. You
+    may need to turn this off if you have a KML reader that's confused by new
+    tags or if size is critical.
+<para>
+</para>
+  Routes and tracks without sufficient time data are always drawn as
+  Linestrings and never Tracsks.
+</para>

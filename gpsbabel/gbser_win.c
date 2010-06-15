@@ -162,7 +162,7 @@ void *gbser_init(const char *port_name)
 
 	h->magic = MYMAGIC;
 
-	comport = CreateFile(xname, GENERIC_READ | GENERIC_WRITE, 
+	comport = CreateFileA(xname, GENERIC_READ | GENERIC_WRITE, 
             			 0, NULL, OPEN_EXISTING, 0, NULL);
 
 	if (comport == INVALID_HANDLE_VALUE) {
