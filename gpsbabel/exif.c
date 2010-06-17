@@ -209,7 +209,10 @@ exif_time_str(const time_t time)
 static char *
 exif_read_str(exif_tag_t *tag)
 {
-	return xstrndup((char *)tag->data, tag->size);
+	// Panasonic DMC-TZ10 stores datum with trailing spaces.
+	char *buf = xstrndup((char *)tag->data, tag->size);
+	rtrim (buf);
+	return buf;
 }
 
 static double
