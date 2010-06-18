@@ -171,6 +171,7 @@ extern ff_vecs_t vpl_vecs;
 extern ff_vecs_t teletype_vecs;
 extern ff_vecs_t jogmap_vecs;
 extern ff_vecs_t wintec_tes_vecs;
+extern ff_vecs_t format_garmin_xt_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -1010,6 +1011,12 @@ vecs_t vec_list[] = {
                 "wintec_tes",
                 "Wintec TES file",
                 "tes"
+        },
+        {
+        	&format_garmin_xt_vecs,
+        	"garmin_xt",
+        	"Mobile Garmin XT Track files",
+        	NULL
         },
 #endif // MAXIMAL_ENABLED
 	{
