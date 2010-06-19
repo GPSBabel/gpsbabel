@@ -79,7 +79,6 @@ do_over:
 	    && pkt.gusb_pkt.reserved2 == 0 && pkt.gusb_pkt.reserved3 != 0
 	    && pkt.gusb_pkt.pkt_id[0] == 0 && pkt.gusb_pkt.pkt_id[1] == 0
 	    && pkt.gusb_pkt.reserved6 == 0 && pkt.gusb_pkt.reserved7 != 0) {
-		GPS_Warning("Received USB packet looks corrupted, trying to fix");
 		memmove(&pkt.dbuf[1], &pkt.dbuf[0], sizeof(pkt) - 1);
 		pkt.gusb_pkt.type = 20;
 	}
