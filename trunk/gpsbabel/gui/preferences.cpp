@@ -40,6 +40,7 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
 
   ui_.startupCheck->setChecked(bd_.startupVersionCheck);
   ui_.reportStatisticsCheck->setChecked(bd_.reportStatistics);
+  ui_.ignoreVersionMismatchCheck->setChecked(bd_.ignoreVersionMismatch);
 
   connect (ui_.buttonBox, SIGNAL(accepted()), this, SLOT(acceptClicked()));
   connect (ui_.buttonBox, SIGNAL(rejected()), this, SLOT(rejectClicked()));
@@ -79,6 +80,7 @@ void Preferences::acceptClicked()
 
   bd_.startupVersionCheck = ui_.startupCheck->isChecked();
   bd_.reportStatistics = ui_.reportStatisticsCheck->isChecked();
+  bd_.ignoreVersionMismatch = ui_.ignoreVersionMismatchCheck->isChecked();
   accept();
 }
 
