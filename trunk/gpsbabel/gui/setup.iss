@@ -1,4 +1,4 @@
-; $Id: setup.iss,v 1.19 2010-05-19 11:41:02 robertl Exp $
+; $Id: setup.iss,v 1.20 2010-06-19 23:47:45 robertl Exp $
 ;
 ; NOTE: setup.iss is generated from setup.iss.in via autoconf.
 ; The generated setup.iss is checked in to help keep the version numbers
@@ -66,6 +66,7 @@ Source: gpsbabelfe_es.ts;           	DestDir: "{app}\translations"; Flags: ignor
 Source: gpsbabelfe_fr.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
 Source: gpsbabelfe_hu.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
 Source: gpsbabelfe_it.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
+Source: gpsbabelfe_ru.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
 
 ; Compiled translation strings that are used at runtime.
 ; Only Spanish is adequately translated for now.
@@ -99,3 +100,4 @@ Filename: "{app}\gpsbabelfe.exe"; Description: "{cm:LaunchProgram,GPSBabelFE}"; 
 Root: HKCU; Subkey: "Software\GPSBabel"; Flags: uninsdeletekeyifempty
 Root: HKCU; Subkey: "Software\GPSBabel\GPSBabel"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\GPSBabel\GPSBabelFE"; Flags: uninsdeletekey
+
