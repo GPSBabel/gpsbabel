@@ -62,6 +62,28 @@ do_over:
 		goto do_over;
 	}
 	
+	/* We sometimes get corrupted packets during a track log transfer
+	 * where the first byte in a packet is lost, causing all remaining
+	 * bytes in this packet to be shifted. So far, this has only been
+	 * observed on a Forerunner 305 (both on Linux and Windows). The
+	 * cause is unknown, but it seems to be timing dependent.
+	 * We try to detect the corruption mainly by checking reserved bytes
+	 * 3 and 7 which normally should be 0, the remaining comparisons are
+	 * only sanity checks and they alone could also trigger in case of
+	 * valid packets. Note: We can't detect corrupted packets with an ID
+	 * or length that's a multiple of 256, but such corrupted packets
+	 * haven't been observed so far.
+	 */
+	if (gps_save_id == 484
+	    && pkt.gusb_pkt.type == 0 && pkt.gusb_pkt.reserved1 == 0
+	    && pkt.gusb_pkt.reserved2 == 0 && pkt.gusb_pkt.reserved3 != 0
+	    && pkt.gusb_pkt.pkt_id[0] == 0 && pkt.gusb_pkt.pkt_id[1] == 0
+	    && pkt.gusb_pkt.reserved6 == 0 && pkt.gusb_pkt.reserved7 != 0) {
+		GPS_Warning("Received USB packet looks corrupted, trying to fix");
+		memmove(&pkt.dbuf[1], &pkt.dbuf[0], sizeof(pkt) - 1);
+		pkt.gusb_pkt.type = 20;
+	}
+	
 	/* 
 	 * Populate members of serial packet from USB packet.   The
 	 * copy here seems wasteful, but teaching all the callers about
@@ -73,6 +95,10 @@ do_over:
 	payload_size = le_read32(&pkt.gusb_pkt.datasz);
 	if (payload_size<0 || payload_size>MAX_GPS_PACKET_SIZE)
 	{
+		/* If you get this, the packet might have been corrupted
+		 * by the unit. Have a look at the corruption detection
+		 * code above.
+		 */
 		GPS_Error("GPS_Packet_Read_usb: Bad payload size %d", payload_size);
 		gps_errno = FRAMING_ERROR;
 		return 0;
