@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: upgrade.cpp,v 1.25 2010-04-12 02:53:04 robertl Exp $
+// $Id: upgrade.cpp,v 1.26 2010-06-19 23:59:06 robertl Exp $
 /*
     Copyright (C) 2009, 2010  Robert Lipe, robertlipe@gpsbabel.org
 
@@ -164,8 +164,10 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
   args += "&last_checkin=" + lastCheckTime.toString(Qt::ISODate);
   args += QString("&ugcb=%1").arg(bd_.upgradeCallbacks); 
   args += QString("&ugdec=%1").arg(bd_.upgradeDeclines); 
+  args += QString("&ugacc=%1").arg(bd_.upgradeAccept); 
   args += QString("&ugoff=%1").arg(bd_.upgradeOffers); 
   args += QString("&ugerr=%1").arg(bd_.upgradeErrors); 
+  args += QString("&rc=%1").arg(bd_.runCount); 
 
   int j = 0;
 
@@ -212,7 +214,6 @@ void UpgradeCheck::readResponseHeader(const QHttpResponseHeader &responseHeader)
 
 void UpgradeCheck::httpRequestFinished(int requestId, bool error)
 {
-  bd_.upgradeCallbacks++;
 
   if (http == 0 || error) {
     bd_.upgradeErrors++;
@@ -225,6 +226,7 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
     return;
   }
 
+  bd_.upgradeCallbacks++;
   QString oresponse(http->readAll());
 
   QDomDocument document;
@@ -287,8 +289,8 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
 
     information.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     information.setDefaultButton(QMessageBox::Yes);
-
     information.setText(response);
+    
     information.setInformativeText(tr("Do you wish to download an upgrade?"));
     information.setDetailedText(upgradeText);
 
@@ -296,6 +298,8 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
       case QMessageBox::Yes:
         // downloadUrl.addQueryItem("os", getOsName());
         QDesktopServices::openUrl(downloadUrl);
+        bd_.upgradeAccept++;
+        break;
       default: ;
         bd_.upgradeDeclines++;
     }

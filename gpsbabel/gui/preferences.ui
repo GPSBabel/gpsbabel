@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>504</width>
-    <height>328</height>
+    <width>454</width>
+    <height>327</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,8 +34,8 @@
         <rect>
          <x>23</x>
          <y>18</y>
-         <width>234</width>
-         <height>43</height>
+         <width>387</width>
+         <height>62</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -50,6 +50,13 @@
          <widget class="QCheckBox" name="reportStatisticsCheck">
           <property name="text">
            <string>Anonymously report usage data.</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="ignoreVersionMismatchCheck">
+          <property name="text">
+           <string>Ignore mismatch between command line and GUI version.</string>
           </property>
          </widget>
         </item>
@@ -102,19 +109,6 @@
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>

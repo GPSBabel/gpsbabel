@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.20 2010-04-12 02:53:03 robertl Exp $
+// $Id: mainwindow.cpp,v 1.21 2010-06-19 23:59:06 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -28,10 +28,12 @@
 #include <QTextStream>
 
 #include "mainwindow.h"
+#include "../gbversion.h"
 #include "aboutdlg.h"
 #include "advdlg.h"
 #include "appname.h"
 #include "babeldata.h"
+#include "donate.h"
 #include "filterdlg.h"
 #include "formatload.h"
 #include "gmapdlg.h"
@@ -39,8 +41,8 @@
 #include "optionsdlg.h"
 #include "preferences.h"
 #include "processwait.h"
+#include "version_mismatch.h"
 #include "upgrade.h"
-#include "../gbversion.h"
 
 const int BabelData::noType = -1;
 const int BabelData::fileType = 0;
@@ -194,6 +196,13 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   if (bd.startupVersionCheck) {
     upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckTime, 
                              allowBetaUpgrades());
+  }
+
+  if (!bd.ignoreVersionMismatch && babelVersion != VERSION) {
+    VersionMismatch vm(0, babelVersion, QString(appName) + QString(" " VERSION));
+
+    vm.exec();
+    bd.ignoreVersionMismatch = vm.neverAgain();
   }
 }
 
@@ -914,6 +923,16 @@ void MainWindow::closeActionX()
   QDateTime wt= upgrade->getUpgradeWarningTime();
   if (wt.isValid()) {
     bd.upgradeCheckTime = wt;
+  }
+  bd.runCount++;
+
+  QDateTime now = QDateTime::currentDateTime();
+  if((bd.runCount > 5) && (bd.donateSplashed.daysTo(now) > 30)) {
+    Donate donate(0);
+    if (bd.donateSplashed.date() == QDate(2010,1,1))
+      donate.showNever(false);
+    donate.exec();
+    bd.donateSplashed = now;
   }
   saveSettings();
   delete upgrade;

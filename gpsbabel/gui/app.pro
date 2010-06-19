@@ -1,4 +1,4 @@
-# $Id: app.pro,v 1.17 2010-06-03 15:01:24 robertl Exp $
+# $Id: app.pro,v 1.18 2010-06-19 23:59:06 robertl Exp $
 #
 
 CONFIG += qt release 
@@ -11,7 +11,7 @@ ICON = images/appicon.icns
 
 QT += network \
     xml \
-    webkit
+    webkit \
 
 unix:DESTDIR = objects
 unix:MOC_DIR = objects
@@ -25,12 +25,13 @@ UI_DIR = tmp
 RESOURCES = app.qrc 
 RC_FILE = app.rc
 
-mac:TARGET=GPSBabelFE
 win32:TARGET=GPSBabelFE
 unix:TARGET=gpsbabelfe-bin
+mac:TARGET=GPSBabelFE
 
 FORMS += aboutui.ui
 FORMS += advui.ui
+FORMS += donate.ui
 FORMS += filterui.ui
 FORMS += gmapui.ui
 FORMS += mainwinui.ui
@@ -39,10 +40,12 @@ FORMS += preferences.ui
 FORMS += rttrkui.ui
 FORMS += trackui.ui
 FORMS += upgrade.ui
+FORMS += version_mismatch.ui
 FORMS += wayptsui.ui
 
 SOURCES += aboutdlg.cpp
 SOURCES += advdlg.cpp
+SOURCES += donate.cpp
 SOURCES += dpencode.cpp
 SOURCES += filterdata.cpp
 SOURCES += filterdlg.cpp
@@ -60,6 +63,7 @@ SOURCES += optionsdlg.cpp
 SOURCES += preferences.cpp
 SOURCES += processwait.cpp
 SOURCES += upgrade.cpp
+SOURCES += version_mismatch.cpp
 macx:SOURCES += serial_mac.cpp
 unix:SOURCES += serial_unix.cpp
 windows:SOURCES += serial_win.cpp
@@ -68,6 +72,7 @@ HEADERS += aboutdlg.h
 HEADERS += advdlg.h
 HEADERS += appname.h
 HEADERS += babeldata.h
+HEADERS += donate.h
 HEADERS += filterdata.h
 HEADERS += filterdlg.h
 HEADERS += filterwidgets.h
@@ -83,6 +88,7 @@ HEADERS += preferences.h
 HEADERS += processwait.h
 HEADERS += setting.h
 HEADERS += upgrade.h
+HEADERS += version_mismatch.h
 
 TRANSLATIONS += gpsbabelfe_ru.ts
 TRANSLATIONS += gpsbabelfe_de.ts

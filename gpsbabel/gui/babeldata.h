@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: babeldata.h,v 1.7 2010-04-12 02:53:04 robertl Exp $
+// $Id: babeldata.h,v 1.8 2010-06-19 23:59:06 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -58,12 +58,17 @@ public:
     upgradeCheckTime(QDateTime(QDate(2001, 1, 1), QTime(0, 0))),
     installationUuid(QUuid::createUuid().toString()),
     upgradeCallbacks(0),
+    upgradeAccept(0),
     upgradeDeclines(0),
     upgradeErrors(0),
     upgradeOffers(0),
+    runCount(0),
     startupVersionCheck(true),
     reportStatistics(true),
-    allowBetaUpgrades(false)
+    allowBetaUpgrades(false),
+    ignoreVersionMismatch(false),
+    disableDonateDialog(false),
+    donateSplashed(QDateTime(QDate(2010, 1, 1), QTime(0, 0, 0)))
   {
   };
   
@@ -105,16 +110,21 @@ public:
     sg.addVarSetting(new BoolSetting("app.previewGmap", previewGmap));
     sg.addVarSetting(new IntSetting("app.upgradeCheckMethod", upgradeCheckMethod));
     sg.addVarSetting(new DateTimeSetting("app.upgradeCheckTime", upgradeCheckTime));
+    sg.addVarSetting(new DateTimeSetting("app.donateSplashed", donateSplashed));
     sg.addVarSetting(new StringSetting("app.installationUuid", installationUuid));
     sg.addVarSetting(new IntSetting("app.upgradeCallbacks", upgradeCallbacks));
+    sg.addVarSetting(new IntSetting("app.upgradeAccept", upgradeAccept));
     sg.addVarSetting(new IntSetting("app.upgradeDeclines", upgradeDeclines));
     sg.addVarSetting(new IntSetting("app.upgradeErrors", upgradeErrors));
     sg.addVarSetting(new IntSetting("app.upgradeOffers", upgradeOffers));
+    sg.addVarSetting(new IntSetting("app.runCount", runCount));
 
     // Global preferences.
     sg.addVarSetting(new BoolSetting("app.startupVersionCheck", startupVersionCheck));
     sg.addVarSetting(new BoolSetting("app.reportStatistics", reportStatistics));
     sg.addVarSetting(new BoolSetting("app.allowBetaUpgrades", allowBetaUpgrades));
+    sg.addVarSetting(new BoolSetting("app.ignoreVersionMismatch", ignoreVersionMismatch));
+    sg.addVarSetting(new BoolSetting("app.disableDonateDialog", disableDonateDialog));
 
   }
 
@@ -152,14 +162,19 @@ public:
   QDateTime upgradeCheckTime;
   QString installationUuid;
   int upgradeCallbacks;
+  int upgradeAccept;
   int upgradeDeclines;
   int upgradeErrors;
   int upgradeOffers;
+  int runCount;
 
   // Global preferences.
   bool startupVersionCheck;
   bool reportStatistics;
   bool allowBetaUpgrades;
+  bool ignoreVersionMismatch;
+  bool disableDonateDialog;
+  QDateTime donateSplashed;
 
 };
 
