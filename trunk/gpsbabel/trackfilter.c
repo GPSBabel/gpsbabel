@@ -864,9 +864,13 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
 	    QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp)
 	    {
 		waypoint *wpt = (waypoint *)elem;
-
 		if (wpt->creation_time > 0) {
 		    inside = ((wpt->creation_time >= start) && (wpt->creation_time <= stop));
+		}
+		// If the time is mangled so horribly that it's 
+		// negative, toss it.
+		if (wpt->creation_time < 0) {
+		    inside = 0;
 		}
 		
 		if (! inside) {
