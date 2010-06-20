@@ -107,15 +107,15 @@ format_garmin_xt_rd_st_attrs(char *p_trk_name, unsigned char *p_track_color)
 	// set to RED if not specified
 	*p_track_color=9;
 
-	gbfread(&trackbytes, 2, DATABLOCKSIZE, fin);
-	gbfread(&TrackPoints, 2, DATABLOCKSIZE, fin);
+	trackbytes = gbfgetuint16(fin);
+	TrackPoints = gbfgetuint16(fin);
 
 	switch (method)
 	{
 		case 1:	break; // IGNORE
 			/* TODO: SHIFT - can't test behaviour, do not have appropriate files
 			   case 2: { // SHIFTED method
-			   gbfread(&spam, 1, DATABLOCKSIZE, fin);
+			   spam = gbfgetc(fin);
 			   gbfread(&trk_name, 30, DATABLOCKSIZE, fin);
 			   gbfseek(fin, -1, SEEK_CUR);
 			   for (ii = 0; ii<29; ii++)
@@ -126,13 +126,13 @@ format_garmin_xt_rd_st_attrs(char *p_trk_name, unsigned char *p_track_color)
 			   break;
 			   */
 		default: { // NORMAL
-				 gbfread(&spam, 1, DATABLOCKSIZE, fin);
+			         spam = gbfgetc(fin);
 				 gbfread(&trk_name, 30, DATABLOCKSIZE, fin);
 				 gbfseek(fin, -1, SEEK_CUR);
 			 }
 			break;
 	}
-	gbfread(&spam, 1, DATABLOCKSIZE, fin);
+	spam = gbfgetc(fin);
 
 	gbfread(&TrackMaxLat, 3, DATABLOCKSIZE, fin);
 	gbfread(&spam, 1, DATABLOCKSIZE, fin);
@@ -254,7 +254,7 @@ format_garmin_xt_proc_strk(void)
 	gbfseek(fin, 12, SEEK_SET);
 
 	// read # of tracks
-	gbfread(&NumberOfTracks, 2, DATABLOCKSIZE, fin);
+	NumberOfTracks = gbfgetuint16(fin);
 
 	// Skip 2 bytes
 	gbfseek(fin, 2, SEEK_CUR);
@@ -360,6 +360,8 @@ format_garmin_xt_proc_atrk(void)
 	double		LatF = 0, LonF = 0, AltF = 0;
 	waypoint	*wpt;
 	int		method = 0;
+	unsigned char 	buf[3];
+	uint32_t 	num_trackpoints;
 
 	// get the option for the processing the track name
 	if ( opt_trk_header )
@@ -377,14 +379,22 @@ format_garmin_xt_proc_atrk(void)
 		track_add_head(track);
 	}
 
-	// Skip 18 bytes
-	gbfseek(fin, 18, SEEK_SET);
-	while (!gbfeof( fin ) ) {
-		gbfread(&Lat, 3, DATABLOCKSIZE, fin); //1. Lat
-		gbfread(&Lon, 3, DATABLOCKSIZE, fin); //2. Lon
-		gbfread(&uu, 2, DATABLOCKSIZE, fin); //3. Ele
-		gbfread(&Tim, 4, DATABLOCKSIZE, fin); //4. Garmin Time
-		gbfread(&block, 2, DATABLOCKSIZE, fin); //0. ?Record delimiter?
+	// We think the word at offset 0xc is the trackpoint count.
+	gbfseek(fin, 12, SEEK_SET);
+	num_trackpoints = gbfgetuint32(fin);
+	
+	while (num_trackpoints--) {
+		block = gbfgetuint16(fin);
+		if (block != 0x0c)
+			break;
+			
+		gbfread(&buf, 3, DATABLOCKSIZE, fin); //1. Lat
+		Lat = buf[0] | (buf[1] << 8) | (buf[2] << 16);
+		gbfread(&buf, 3, DATABLOCKSIZE, fin); //2. Lon
+		Lon = buf[0] | (buf[1] << 8) | (buf[2] << 16);
+
+		uu = gbfgetuint16(fin);
+		Tim = gbfgetuint32(fin);
 
 		Tim += 631065600; // adjustment to UnixTime
 		LatF = Lat;
