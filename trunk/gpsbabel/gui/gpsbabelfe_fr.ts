@@ -142,6 +142,43 @@ Higher number provides more deitaled diagnostics.</source>
     </message>
 </context>
 <context>
+    <name>Donate</name>
+    <message>
+        <location filename="donate.ui" line="32"/>
+        <source>Support GPSBabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="donate.ui" line="47"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;http://www.gpsbabel.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed) or Google Checkout.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="donate.ui" line="61"/>
+        <source>&lt;p&gt;Of course, if you&apos;ve already contributed  to the project or you just can&apos;t help the project, please check the box below to never see this message again.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="donate.ui" line="71"/>
+        <source>Never show this message again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="donate.ui" line="93"/>
+        <source>No, Thanks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="donate.ui" line="100"/>
+        <source>Contribute</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FileDlgManager</name>
     <message>
         <location filename="optionsdlg.cpp" line="70"/>
@@ -407,144 +444,144 @@ Higher number provides more deitaled diagnostics.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cpp" line="248"/>
-        <location filename="mainwindow.cpp" line="249"/>
+        <location filename="mainwindow.cpp" line="257"/>
+        <location filename="mainwindow.cpp" line="258"/>
         <source>default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="411"/>
+        <location filename="mainwindow.cpp" line="420"/>
         <source>Select one or more input files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="438"/>
+        <location filename="mainwindow.cpp" line="447"/>
         <source>Output File Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="498"/>
+        <location filename="mainwindow.cpp" line="507"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="509"/>
+        <location filename="mainwindow.cpp" line="518"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="531"/>
+        <location filename="mainwindow.cpp" line="540"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="534"/>
+        <location filename="mainwindow.cpp" line="543"/>
         <source>Input does not support %1; output format supports %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="537"/>
+        <location filename="mainwindow.cpp" line="546"/>
         <source>Input format supports %1; output format does not support %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="540"/>
+        <location filename="mainwindow.cpp" line="549"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="561"/>
+        <location filename="mainwindow.cpp" line="570"/>
         <source>waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="562"/>
+        <location filename="mainwindow.cpp" line="571"/>
         <source>tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="563"/>
+        <location filename="mainwindow.cpp" line="572"/>
         <source>routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="653"/>
+        <location filename="mainwindow.cpp" line="662"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="660"/>
-        <location filename="mainwindow.cpp" line="680"/>
+        <location filename="mainwindow.cpp" line="669"/>
+        <location filename="mainwindow.cpp" line="689"/>
         <source>Options for %1</source>
         <translation>Options pour %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="673"/>
+        <location filename="mainwindow.cpp" line="682"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="694"/>
+        <location filename="mainwindow.cpp" line="703"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="713"/>
+        <location filename="mainwindow.cpp" line="722"/>
         <source>No input file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="720"/>
+        <location filename="mainwindow.cpp" line="729"/>
         <source>No valid output specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="725"/>
+        <location filename="mainwindow.cpp" line="734"/>
         <source>No output file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="741"/>
+        <location filename="mainwindow.cpp" line="750"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="755"/>
+        <location filename="mainwindow.cpp" line="764"/>
         <source>Process exited unsucessfully with code %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="898"/>
+        <location filename="mainwindow.cpp" line="907"/>
         <source>Translation successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="908"/>
+        <location filename="mainwindow.cpp" line="917"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="993"/>
+        <location filename="mainwindow.cpp" line="1012"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1017"/>
+        <location filename="mainwindow.cpp" line="1036"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1060"/>
+        <location filename="mainwindow.cpp" line="1079"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1062"/>
+        <location filename="mainwindow.cpp" line="1081"/>
         <source>No data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
@@ -913,22 +950,27 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="61"/>
+        <location filename="preferences.ui" line="59"/>
+        <source>Ignore mismatch between command line and GUI version.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="preferences.ui" line="68"/>
         <source>Formats</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="69"/>
+        <location filename="preferences.ui" line="76"/>
         <source>Enabled Formats</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="93"/>
+        <location filename="preferences.ui" line="100"/>
         <source>Enable All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="100"/>
+        <location filename="preferences.ui" line="107"/>
         <source>Disable All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1365,38 +1407,66 @@ This option computes a value for the GPS speed at each trackpoint. This is most 
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cpp" line="205"/>
+        <location filename="upgrade.cpp" line="207"/>
         <source>HTTP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="206"/>
+        <location filename="upgrade.cpp" line="208"/>
         <source>Download failed: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="235"/>
+        <location filename="upgrade.cpp" line="237"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="236"/>
+        <location filename="upgrade.cpp" line="238"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="275"/>
+        <location filename="upgrade.cpp" line="277"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="292"/>
+        <location filename="upgrade.cpp" line="294"/>
         <source>Do you wish to download an upgrade?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="286"/>
+        <location filename="upgrade.cpp" line="288"/>
         <source>Upgrade</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>VersionMismatch</name>
+    <message>
+        <location filename="version_mismatch.ui" line="32"/>
+        <source>GPSBabel Version Mismatch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="version_mismatch.ui" line="38"/>
+        <source>&lt;b&gt;A version mismatch has been detected.&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="version_mismatch.ui" line="47"/>
+        <source>GPSBabel command line version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="version_mismatch.ui" line="81"/>
+        <source>GPSBabel GUI version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="version_mismatch.ui" line="115"/>
+        <source>Never show this message again.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

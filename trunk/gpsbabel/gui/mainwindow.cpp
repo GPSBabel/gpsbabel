@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.21 2010-06-19 23:59:06 robertl Exp $
+// $Id: mainwindow.cpp,v 1.22 2010-06-20 04:16:21 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -199,7 +199,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   }
 
   if (!bd.ignoreVersionMismatch && babelVersion != VERSION) {
-    VersionMismatch vm(0, babelVersion, QString(appName) + QString(" " VERSION));
+    VersionMismatch vm(0, babelVersion, QString(appName) + QString(" Version " VERSION));
 
     vm.exec();
     bd.ignoreVersionMismatch = vm.neverAgain();

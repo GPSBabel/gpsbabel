@@ -8,5 +8,5 @@
 cd gui 
 for i in $(echo  gpsbabelfe_??.ts | sed 's/gpsbabelfe_\(..\).ts/\1/g')
 do
-  mkdir objects/gpsbabelfe-bin.app/Contents/Resources/$i.lproj 
+  mkdir objects/GPSBabelFE.app/Contents/Resources/$i.lproj 
 done

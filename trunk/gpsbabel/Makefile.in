@@ -348,23 +348,23 @@ mac-release:
 
 mac-gui: gpsbabel
 	file gpsbabel | grep '2 architectures' || exit 1
-	file gui/objects/gpsbabelfe-bin.app/Contents/MacOS/gpsbabelfe-bin | grep '2 architectures' || exit 1
+	file gui/objects/GPSBabelFE.app/Contents/MacOS/GPSBabelFE | grep '2 architectures' || exit 1
 	cd gui ; qmake && xcodebuild
 	cd gui ; lupdate  app.pro
 	cd gui ; lrelease  app.pro
-	mkdir gui/objects/gpsbabelfe-bin.app/Contents/MacOS/lang
-	cp gui/*.qm  gui/objects/gpsbabelfe-bin.app/Contents/MacOS/lang
-	cp gpsbabel gui/objects/gpsbabelfe-bin.app/Contents/MacOS
-	cp -r gui/help  gui/objects/gpsbabelfe-bin.app/Contents/MacOS
-	cp gui/gmapbase.html gui/objects/gpsbabelfe-bin.app/Contents/MacOS
+	mkdir gui/objects/GPSBabelFE.app/Contents/MacOS/lang
+	cp gui/*.qm  gui/objects/gpsbabelFE.app/Contents/MacOS/lang
+	cp gpsbabel gui/objects/GPSBabelFE.app/Contents/MacOS
+	cp -r gui/help  gui/objects/GPSBabelFE.app/Contents/MacOS
+	cp gui/gmapbase.html gui/objects/GPSBabelFE.app/Contents/MacOS
 	tools/mac-localize
 
 # Build the Qt front end, place GPSBabel in the right place, deploy all 
 # the libs.
 mac-gui-dmg: mac-gui
-	rm -f gui/objects/gpsbabelfe-bin.dmg
-	cd gui/objects ; macdeployqt gpsbabelfe-bin.app -dmg
-	mv gui/objects/gpsbabelfe-bin.dmg  gui/objects/GPSBabel-$(VERSIOND).dmg
+	rm -f gui/objects/GPSBabelFE.dmg
+	cd gui/objects ; macdeployqt GPSBabelFE.app -dmg
+	mv gui/objects/GPSBabelFE.dmg  gui/objects/GPSBabel-$(VERSIOND).dmg
 
 msvc-build:
 	make CC=@CL.EXE DEBUGGING="" EXTRA_CFLAGS="-nologo -W3 -WL -D__WIN32__ -I msvc/expat " OUTPUT_SWITCH="-Fo" $(OBJS)
