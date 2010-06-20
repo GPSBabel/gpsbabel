@@ -1,0 +1,7 @@
+<para>
+   Sample command tells GPSBabel to handle speed values in miles per hour:
+  <userinput>
+    gpsbabel -i gpx -f "My Points.gpx" -o garmin_gpi,units=s -F "My Points.gpi"
+  </userinput>
+</para>
+

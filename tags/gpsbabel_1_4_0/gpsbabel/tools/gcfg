@@ -1,0 +1,17 @@
+# Script to configure cross build suitable for inclusion in Earth.
+S=.
+LDFLAGS=-s \
+CFLAGS=-DXML_UNICODE \
+CC=/usr/local/cross-tools/bin/i386-mingw32msvc-gcc  \
+$S/configure --host=i386-pc-mingw32 \
+        --without-zlib \
+  --disable-shapefile \
+  --disable-pdb \
+  --disable-csv \
+  --disable-filters \
+        --without-cet \
+        --without-pdb \
+        --without-filters \
+        --with-expathdr=$S/mingw/includew \
+        --with-libexpat=$S/mingw/libw
+

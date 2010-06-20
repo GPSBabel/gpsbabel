@@ -1,0 +1,10 @@
+
+      
+      
+      <para>Reads and writes places files for
+use in <ulink url="http://www.topomappro.com">TopoMapPro places files</ulink>.  As this file
+type can store links other than web links, anything that is not a http
+url will be discarded.  Note that this does not do datum conversions,
+so if your input file does not have WGS84/NZGD2000 data, your output
+file won't either. Colour of waypoint icons defaults to red.</para>
+    

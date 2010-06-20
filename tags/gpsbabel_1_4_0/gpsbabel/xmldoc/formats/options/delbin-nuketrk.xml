@@ -1,0 +1,4 @@
+<para>
+  When present on the command line and sending tracks with -t, this will erase
+  all tracks in the receiver before sending the new ones.
+</para>

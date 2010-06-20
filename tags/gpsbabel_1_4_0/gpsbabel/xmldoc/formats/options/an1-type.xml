@@ -1,0 +1,7 @@
+<para> This option specifies the type of the drawing layer
+to be created.  The supported values are "drawing", "road", "trail",
+"waypoint", or "track".  If you do not specify a type, the default
+will be either the type of the previous an1 file or "drawing" if there
+is no previous file. This lets you merge, for example, two road layers
+without having to specify "type=road" for the output.  </para>
+

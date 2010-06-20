@@ -1,0 +1,2 @@
+<para>If this option is given, no GPS log data will be read from the device
+(unless "dump-file" is given too; in that case only decoding will be disabled).</para>

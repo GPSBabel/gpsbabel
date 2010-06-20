@@ -1,0 +1,13 @@
+<para>
+This option specifies how to represent point data in the draw file.  
+Valid waypoint types are "symbol", "text", "mapnote", "circle", and "image".  
+The default is "symbol". 
+</para>
+<para>
+If you specify a waypoint type of "image", you should make sure that the
+icon descriptions of your waypoints are the full names, including drive letters
+and full path, of image files in a format that works with your DeLorme 
+product.  Note that this means that the .an1 file you generate will not work
+on any computer that does not have those images in the same place; this is 
+part of the design of the an1 format and cannot be avoided.
+</para>

@@ -1,0 +1,4 @@
+<para>
+To the "nmea" module, the "baud" option specifies the baud rate of the
+serial connection when used with the real-time tracking option.
+</para>

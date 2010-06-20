@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.5" generator="OpenStreetMap server">
+  <node id="250870628" lat="48.1421982" lon="11.5412243" user="user_4133" visible="true" timestamp="2008-03-06T19:16:18+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21585826" lat="48.1449059" lon="11.5411711" visible="true" timestamp="2006-12-14T23:22:36+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21585827" lat="48.1444666" lon="11.5407244" user="user_4133" visible="true" timestamp="2006-12-29T14:41:35+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21324374" lat="48.1448788" lon="11.5426666" user="user_4133" visible="true" timestamp="2006-11-30T14:20:49+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="245339" lat="48.1463562" lon="11.53574" user="3247" visible="true" timestamp="2008-02-10T13:05:27+00:00"/>
+  <node id="245353" lat="48.146296" lon="11.5363118" user="3247" visible="true" timestamp="2008-02-10T13:05:27+00:00"/>
+  <node id="398692" lat="48.145241" lon="11.5415523" user="helm" visible="true" timestamp="2007-02-07T16:49:43+00:00"/>
+  <node id="398694" lat="48.1452209" lon="11.540887" user="user_4133" visible="true" timestamp="2006-12-18T10:06:05+00:00"/>
+  <node id="398704" lat="48.1453234" lon="11.5405037" user="user_4133" visible="true" timestamp="2006-12-18T10:06:05+00:00"/>
+  <node id="398705" lat="48.1457468" lon="11.5386711" user="user_4133" visible="true" timestamp="2006-12-18T10:07:09+00:00"/>
+  <node id="398710" lat="48.1462259" lon="11.5369775" user="Jörg Ostertag" visible="true" timestamp="2006-08-28T23:19:19+01:00"/>
+  <node id="19404292" lat="48.1442413" lon="11.545447" user="Jörg Ostertag" visible="true" timestamp="2006-10-24T13:41:23+01:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21040287" lat="48.1461044" lon="11.5369041" user="user_4133" visible="true" timestamp="2006-11-17T12:37:19+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21040288" lat="48.1462212" lon="11.5356144" user="3247" visible="true" timestamp="2008-02-10T13:05:37+00:00"/>
+  <node id="21040289" lat="48.1461793" lon="11.5362042" user="3247" visible="true" timestamp="2008-02-10T13:05:36+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21040291" lat="48.1459432" lon="11.5377728" user="user_4133" visible="true" timestamp="2006-12-18T10:06:05+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21040296" lat="48.1462657" lon="11.5365998" user="3247" visible="true" timestamp="2008-02-10T13:05:26+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21324375" lat="48.1439353" lon="11.5467331" user="user_4133" visible="true" timestamp="2006-11-30T14:20:49+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21324376" lat="48.1451471" lon="11.541886" user="user_4133" visible="true" timestamp="2006-12-18T10:06:06+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21324380" lat="48.1453506" lon="11.5409376" user="user_4133" visible="true" timestamp="2006-12-18T10:06:04+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21324381" lat="48.1454507" lon="11.5405629" user="user_4133" visible="true" timestamp="2006-12-18T10:06:07+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21324382" lat="48.1459135" lon="11.538651" user="user_4133" visible="true" timestamp="2006-12-18T10:06:04+00:00"/>
+  <node id="21585828" lat="48.1447078" lon="11.5384168" user="ludwich" visible="true" timestamp="2007-06-27T19:34:56+01:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21632176" lat="48.1451206" lon="11.5414087" user="user_4133" visible="true" timestamp="2006-12-18T10:06:01+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="21632177" lat="48.1439747" lon="11.5453262" user="ludwich" visible="true" timestamp="2007-06-27T19:34:56+01:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="250870622" lat="48.1423259" lon="11.5327741" user="user_4133" visible="true" timestamp="2008-03-06T19:16:17+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="250870624" lat="48.1423839" lon="11.5358031" user="user_4133" visible="true" timestamp="2008-03-06T19:16:17+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <node id="250870626" lat="48.1423608" lon="11.5384055" user="user_4133" visible="true" timestamp="2008-03-06T19:16:17+00:00">
+    <tag k="created_by" v="JOSM"/>
+  </node>
+  <way id="4020271" visible="true" timestamp="2007-07-13T09:52:50+01:00" user="user_4133">
+    <nd ref="21324374"/>
+    <nd ref="21324376"/>
+    <nd ref="398692"/>
+    <nd ref="21324380"/>
+    <nd ref="21324381"/>
+    <nd ref="21324382"/>
+    <nd ref="398710"/>
+    <nd ref="21040296"/>
+    <nd ref="245353"/>
+    <nd ref="245339"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="created_by" v="JOSM"/>
+    <tag k="name" v="Arnulfstraße"/>
+    <tag k="lanes" v="2"/>
+    <tag k="oneway" v="true"/>
+  </way>
+  <way id="4020916" visible="true" timestamp="2008-01-27T16:37:31+00:00" user="helm">
+    <nd ref="21324374"/>
+    <nd ref="19404292"/>
+    <nd ref="21324375"/>
+    <tag k="osmarender:renderName" v="no"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="created_by" v="JOSM"/>
+    <tag k="name" v="Arnulfstraße"/>
+    <tag k="lanes" v="2"/>
+  </way>
+  <way id="4078867" visible="true" timestamp="2006-12-18T10:06:02+00:00" user="user_4133">
+    <nd ref="398692"/>
+    <nd ref="21632176"/>
+    <nd ref="21585826"/>
+    <nd ref="21585827"/>
+    <tag k="name" v="Helmholtzstraße"/>
+    <tag k="highway" v="residential"/>
+    <tag k="created_by" v="JOSM"/>
+  </way>
+  <way id="4078868" visible="true" timestamp="2007-06-27T19:34:56+01:00" user="ludwich">
+    <nd ref="21632177"/>
+    <nd ref="21585827"/>
+    <nd ref="21585828"/>
+    <tag k="highway" v="residential"/>
+    <tag k="created_by" v="Potlatch alpha"/>
+    <tag k="name" v="Marlene-Dietrich-Straße"/>
+  </way>
+  <way id="4513917" visible="true" timestamp="2008-01-27T16:37:31+00:00" user="helm">
+    <nd ref="21040288"/>
+    <nd ref="21040289"/>
+    <nd ref="21040287"/>
+    <nd ref="21040291"/>
+    <nd ref="398705"/>
+    <nd ref="398704"/>
+    <nd ref="398694"/>
+    <nd ref="21632176"/>
+    <nd ref="21324374"/>
+    <tag k="lanes" v="2"/>
+    <tag k="created_by" v="Potlatch 0.5d"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="osmarender:renderName" v="no"/>
+    <tag k="name" v="Arnulfstraße"/>
+    <tag k="oneway" v="true"/>
+  </way>
+  <way id="23197114" visible="true" timestamp="2008-03-06T19:18:07+00:00" user="user_4133">
+    <nd ref="250870622"/>
+    <nd ref="250870624"/>
+    <nd ref="250870626"/>
+    <nd ref="250870628"/>
+    <tag k="name" v="S7"/>
+    <tag k="created_by" v="Potlatch 0.6c"/>
+    <tag k="railway" v="rail"/>
+  </way>
+</osm>

@@ -1,0 +1,8 @@
+<para>
+This option causes the position filter to remove all points that are within
+the specified distance of one another, rather than leaving just one of them.
+</para>
+<para>
+This option may be used to entirely remove clusters of points.
+</para>
+

@@ -1,0 +1,31 @@
+<para>
+This option tells GPSBabel to pause between individual track records when
+used on output.  This may be used with appropriate external software or 
+hardware to simulate a GPS receiver for testing purposes.  On Unix, for
+example, you may use a named pipe to feed the output from GPSBabel to gpsd.
+</para>
+<para>
+If a value for this option is specified, it is in seconds and it may be
+either a whole number of seconds or a fraction (e.g. 0.5 for a 1/2 second
+pause between trackpoints.)
+</para>
+<para>
+If this option is specified without a value, the time between adjacent 
+trackpoints will be computed and used for the length of the pause.  That is,
+if your trackpoints are 5 seconds apart, GPSBabel will pause 5 seconds 
+between trackpoints.
+</para>
+<para>
+Note that very long tracks may be subject to clock drift, as GPSBabel does 
+not take into account the amount of time it may take to write the NMEA 
+sentences.  Also, there is no guarantee that it will pause for exactly the
+specified number of seconds between samples; different operating systems 
+will allow greater or lesser precision for timers, so actual precision may
+be as much as plus or minus 100 milliseconds.
+</para>
+<para>
+If you are using this option with compressed or simplified tracks from 
+your handheld GPS receiver, you might find the 
+<link linkend="filter_interpolate">interpolate</link> filter useful.
+</para>
+

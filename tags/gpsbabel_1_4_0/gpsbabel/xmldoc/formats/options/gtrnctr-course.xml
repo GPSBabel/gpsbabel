@@ -1,0 +1,3 @@
+<para>
+  This flag defaults to true; it must be turned off (course=0) if you want history instead of courses.
+</para>

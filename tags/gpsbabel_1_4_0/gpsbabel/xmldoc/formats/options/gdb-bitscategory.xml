@@ -1,0 +1,19 @@
+<para>
+ This option is closely related to the 'category' option.  While category 
+ allows you to choose a single category that waypoints should appear in,
+ this options allows you to specify a bitmask to be used for the category.
+ Options may be specified in either decimal or hex.
+</para>
+<example id="gdb_bitscategory">
+  <title>Example for gdb bitcategory option to put all waypoints in categories 1 and 16.</title>
+<para>
+  The following two commands are equivalent.  They place a the point in both the first and last of the sixteen available categories.
+  <userinput>
+	 gpsbabel -i gpx -f PocketQuery.gpx -o gdb,bitscategory=32769 -F foo.gdb
+  </userinput>
+  <userinput>
+	 gpsbabel -i gpx -f PocketQuery.gpx -o gdb,bitscategory=0x8001 -F foo.gdb
+  </userinput>
+  
+</para>
+</example>

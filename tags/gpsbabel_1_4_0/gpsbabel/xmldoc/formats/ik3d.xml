@@ -1,0 +1,11 @@
+<para>
+  This is the format for <ulink url="http://www.magicmaps.de">MagicMaps</ulink> project (.ikt) files.
+</para>
+<para>
+  <ulink url="http://www.magicmaps.de">MagicMaps</ulink> <productname>"Das interaktive Kartenwerk"</productname> is a Software from Germany. It's a
+  route-planning software with a 3-dimensional envirounment.
+</para>
+<para>
+  The project files are XML based and we can read the main GPS items (names and coordinates). 
+  For an output these files are too complex.
+</para>

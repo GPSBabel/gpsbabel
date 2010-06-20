@@ -1,0 +1,93 @@
+#!/bin/sh
+
+GPSBABEL_FREEZE_TIME=y
+export GPSBABEL_FREEZE_TIME
+
+# Turn on GNU libc instrumentation.
+MALLOC_CHECK_=2
+export MALLOC_CHECK_
+
+PNAME=${PNAME:-./gpsbabel}
+DIFF=${DIFF:-diff}
+BASEPATH=`dirname $0`
+REFERENCE=${BASEPATH}/reference
+# OD=${OD:-od -Ax -txC -v}
+if [ -x /usr/bin/hexdump ] ; then
+	OD=${OD:-hexdump -v -C}
+else
+	OD=${OD:-od -Ax -txC -v}
+fi
+
+TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
+mkdir -p $TMPDIR
+trap "rm -fr $TMPDIR" 0 1 2 3 15
+
+bincompare()
+{
+	rm -f ${TMPDIR}/bc1
+        rm -f ${TMPDIR}/bc2
+        ${OD} $1 >${TMPDIR}/bc1 
+        ${OD} $2 >${TMPDIR}/bc2
+        ${DIFF} ${TMPDIR}/bc1 ${TMPDIR}/bc2 || {
+		echo ERROR binary comparing $*
+                #exit 1
+	}
+}
+
+compare()
+{
+	${DIFF} -u -b $* ||  {
+		echo ERROR comparing $*
+		#exit 1
+	} 
+}
+
+sort_and_compare()
+{
+	sort $1 > $TMPDIR/s1
+	sort $2 > $TMPDIR/s2
+	compare $TMPDIR/s1 $TMPDIR/s2
+}
+
+gpsbabel()
+{
+	${PNAME} $* || {
+		echo "$PNAME returned error $?"
+		echo "($PNAME $*)"
+		#exit 1
+	}
+}
+
+# Some formats are just too boring to test.   The ones that
+# are xcsv include 
+# garmin301 
+# garmin_poi 
+# gpsdrivetrack
+# nima 
+# mapconverter
+# geonet
+# saplus
+# s_and_t
+# xmap2006
+# cambridge
+# cup
+
+if [ $# -ge 1 ];
+then
+  while [ $# -ge 1 ];
+  do
+    t=testo.d/$1.test
+    echo Running $t
+    . $t
+    shift;
+  done
+  exit 0
+fi
+
+for i in testo.d/*.test
+do
+  echo Running $i
+  . $i
+done
+
+exit 0
