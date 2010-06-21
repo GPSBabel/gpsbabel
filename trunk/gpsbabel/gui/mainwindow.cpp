@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.22 2010-06-20 04:16:21 robertl Exp $
+// $Id: mainwindow.cpp,v 1.23 2010-06-21 03:45:10 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -60,8 +60,11 @@ QString MainWindow::findBabelVersion()
 
   QString str = babel.readAll();
   is_beta = str.contains("-beta");
+  str.replace("Version",  "");
+  str.replace("GPSBabel",  "");
   str.replace(QRegExp("^[\\s]*"),  "");
   str.replace(QRegExp("[\\s]+$"),  "");
+  str = str.simplified();
   return str;
 }
 
@@ -199,7 +202,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   }
 
   if (!bd.ignoreVersionMismatch && babelVersion != VERSION) {
-    VersionMismatch vm(0, babelVersion, QString(appName) + QString(" Version " VERSION));
+    VersionMismatch vm(0, babelVersion, QString(VERSION));
 
     vm.exec();
     bd.ignoreVersionMismatch = vm.neverAgain();
