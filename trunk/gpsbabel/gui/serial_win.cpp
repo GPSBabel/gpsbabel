@@ -1,4 +1,4 @@
-// $Id: serial_win.cpp,v 1.2 2009-11-19 03:56:03 robertl Exp $
+// $Id: serial_win.cpp,v 1.3 2010-06-21 02:35:06 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -57,6 +57,7 @@ void MainWindow::osLoadDeviceNameCombos(QComboBox *box)
                                 // but DevList is already at the maximum size it can be without running into kb 931305.
     // FIXME: This shold be a QMessageBox::warning() - RJL
     // fprintf(stderr,"QueryDosDevice() failed with %d.  GetLastError()==%d.\n", res, err);
+    (void) err;
     return;
   }
 
