@@ -77,7 +77,7 @@ do_over:
 	if (gps_save_id == 484
 	    && pkt.gusb_pkt.type == 0 && pkt.gusb_pkt.reserved1 == 0
 	    && pkt.gusb_pkt.reserved2 == 0 && pkt.gusb_pkt.reserved3 != 0
-	    && pkt.gusb_pkt.pkt_id[0] == 0 && pkt.gusb_pkt.pkt_id[1] == 0
+	    && pkt.gusb_pkt.pkt_id[0] <= 4 && pkt.gusb_pkt.pkt_id[1] == 0
 	    && pkt.gusb_pkt.reserved6 == 0 && pkt.gusb_pkt.reserved7 != 0) {
 		memmove(&pkt.dbuf[1], &pkt.dbuf[0], sizeof(pkt) - 1);
 		pkt.gusb_pkt.type = 20;
