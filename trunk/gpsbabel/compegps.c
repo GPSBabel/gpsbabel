@@ -151,8 +151,8 @@ parse_wpt(char *buff)
 	char *c, *cx;
 	waypoint *wpt = waypt_new();
 	struct tm tm;
-	memset(&tm, 0, sizeof(tm));
 	int has_time = 0;
+	memset(&tm, 0, sizeof(tm));
 
 	c = strstr(buff, "A ");
 	if (c == buff) col++;
