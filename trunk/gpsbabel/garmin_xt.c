@@ -83,12 +83,12 @@ format_garmin_xt_rd_deinit(void)
 	gbfclose(fin);
 }
 
-static uint16_t
-format_garmin_xt_rd_st_attrs(char *p_trk_name, unsigned char *p_track_color)
+static gbuint16
+format_garmin_xt_rd_st_attrs(char *p_trk_name, gbuint8 *p_track_color)
 {
 	int		method = 0;
-	uint16_t	trackbytes = 0, TrackPoints = 0;
-	unsigned char	spam = 0;
+	gbuint16	trackbytes = 0, TrackPoints = 0;
+	gbuint8	spam = 0;
 	int32_t		TrackMaxLat = 0, TrackMaxLon = 0, TrackMinLat = 0, TrackMinLon = 0;
 	char		trk_name[30]="";
 	// TODO: SHIFT - can't test behaviour, do not have appropriate files
@@ -152,9 +152,9 @@ format_garmin_xt_rd_st_attrs(char *p_trk_name, unsigned char *p_track_color)
  * Function to decrypt track block in saved read from saved tracks file
  */
 static void
-format_garmin_xt_decrypt_trk_blk(int Count, unsigned char TrackBlock[])
+format_garmin_xt_decrypt_trk_blk(int Count, gbuint8 TrackBlock[])
 {
-	unsigned char i,j = 12;
+	gbuint8 i,j = 12;
 	while (j<(Count-1))
 	{
 		for ( i = j; i < Count; i++)
@@ -173,11 +173,11 @@ format_garmin_xt_decrypt_trk_blk(int Count, unsigned char TrackBlock[])
  * Function to Decompose track block of STRK_BLOCK_SIZE bytes
  */
 static void
-format_garmin_xt_decomp_trk_blk(unsigned char ii, unsigned char TrackBlock[], double *Ele, double *Lat, double *Lon, uint32_t *Time)
+format_garmin_xt_decomp_trk_blk(gbuint8 ii, gbuint8 TrackBlock[], double *Ele, double *Lat, double *Lon, gbuint32 *Time)
 {	
-	uint32_t	LatLW = 0, LonLW = 0, TimeLW = 0;
+	gbuint32	LatLW = 0, LonLW = 0, TimeLW = 0;
 	double		LatF = 0, LonF = 0;
-	uint16_t	PrevEleW;
+	gbuint16	PrevEleW;
 
 	//printf("%d %d %d %d %d %d\n", TrackBlock[0], TrackBlock[1], TrackBlock[2], TrackBlock[3], TrackBlock[4], TrackBlock[5]); 
 	PrevEleW = TrackBlock[ ( ii - 1 ) * 12 + 1 ];
@@ -223,9 +223,9 @@ format_garmin_xt_decomp_trk_blk(unsigned char ii, unsigned char TrackBlock[], do
  * Decompose Last Waypoint Eleveation
  */
 static void
-format_garmin_xt_decomp_last_ele(unsigned char ii, double *PrevEle, unsigned char TrackBlock[])
+format_garmin_xt_decomp_last_ele(gbuint8 ii, double *PrevEle, gbuint8 TrackBlock[])
 {
-	uint16_t	PrevEleW;
+	gbuint16	PrevEleW;
 
 	PrevEleW = TrackBlock[ii - 1];
 	PrevEleW = PrevEleW << 8;
@@ -241,14 +241,14 @@ format_garmin_xt_proc_strk(void)
 {
 	int 		Count = 0; // Used to obtain number of read bytes
 	int		NumberOfTracks = 0, TracksCompleted = 0; // Number of tracks in the file and number of processed tracks
-	uint16_t	trackbytes = 0; // Bytes in track
-	unsigned char	TrackBlock[STRK_BLOCK_SIZE]; // File Block
-	unsigned char 	ii; // temp variable
+	gbuint16	trackbytes = 0; // Bytes in track
+	gbuint8	TrackBlock[STRK_BLOCK_SIZE]; // File Block
+	gbuint8 	ii; // temp variable
 	double		Lat = 0, Lon = 0; // wpt data
 	double		PrevLat = 0, PrevLon = 0, PrevEle = 0; // wpt data
-	uint32_t	Time = 0, PrevTime =0; // wpt data
+	gbuint32	Time = 0, PrevTime =0; // wpt data
 	int		FirstCoo;
-	unsigned char	trk_color = 0xff;
+	gbuint8	trk_color = 0xff;
 
 	// Skip 12 bytes from the BOF
 	gbfseek(fin, 12, SEEK_SET);
@@ -354,9 +354,9 @@ format_garmin_xt_proc_strk(void)
 static void
 format_garmin_xt_proc_atrk(void)
 {
-	uint16_t	block=0, uu=0;
-	uint32_t	Lat=0, Lon=0;
-	uint32_t	Tim=0;
+	gbuint16	block=0, uu=0;
+	gbuint32	Lat=0, Lon=0;
+	gbuint32	Tim=0;
 	double		LatF = 0, LonF = 0, AltF = 0;
 	waypoint	*wpt;
 	int		method = 0;
