@@ -104,8 +104,9 @@ static char* igo8_option_title = NULL;
 static char* igo8_option_description = NULL;
 
 // Internal state
-gbuint32 invented_time;
-gbuint32 point_count;
+static gbuint32 invented_time;
+static gbuint32 point_count;
+static int in_point_count;
 
 // Exported options list
 static arglist_t igo8_options[] = {
@@ -145,8 +146,12 @@ static void igo8_read_init(const char *fname)
 	// Make sure that we are in the environment we expect and require
 	igo8_check_type_sizes();
 
-	// Seek past the header and the Information Block
-	gbfseek(igo8_file_in, IGO8_HEADER_SIZE + sizeof(igo8_information_block), SEEK_SET);
+	// Seek past the header and most of the Information Block.  Read
+	// the last word for trackpoint count since latest igo8 seems to 
+	// zero-pad the files.
+	gbfseek(igo8_file_in, IGO8_HEADER_SIZE + sizeof(igo8_information_block) - 4, SEEK_SET);
+	in_point_count = (gbfgetint32(igo8_file_in) - IGO8_HEADER_SIZE -
+		sizeof(igo8_information_block)) / sizeof(igo8_point);
 }
 
 // Reader callback
@@ -159,7 +164,9 @@ static void igo8_read(void)
 	track_head = route_head_alloc();
 	track_add_head(track_head);
 
-	while (gbfread(&point, sizeof(point), 1, igo8_file_in) > 0) {
+	while (in_point_count &&
+			gbfread(&point, sizeof(point), 1, igo8_file_in) > 0) {
+		in_point_count--;
 		wpt_tmp = waypt_new();
 
 		wpt_tmp->latitude = le_read32(&point.lat) / (double)0x800000;
