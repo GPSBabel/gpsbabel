@@ -114,18 +114,6 @@ compare ${TMPDIR}/exif-dat.csv ${REFERENCE}/exif-dat.csv
 gpsbabel -i vidaone -f ${REFERENCE}/track/vidaone.gpb -t -o unicsv -F ${TMPDIR}/vidaone.csv
 compare ${TMPDIR}/vidaone.csv ${REFERENCE}/track/vidaone.csv
 
-# iGo8
-# This format has some jitter in the first 64 bytes of the header.
-# So we read our reference track, spin to GPX.
-# Read that track, spin to igo.
-# read the igo file we just wrote, and spin that to GPX.
-# compare the two GPX files.
-gpsbabel -i igo8 -f ${REFERENCE}/track/igo8.trk -o gpx -F ${TMPDIR}/igo.gpx
-gpsbabel -i gpx -f ${TMPDIR}/igo.gpx -o igo8 -F ${TMPDIR}/new-igo.trk
-gpsbabel -i igo8 -f ${TMPDIR}/new-igo.trk -o gpx -F ${TMPDIR}/new-igo2.gpx
-compare ${TMPDIR}/igo.gpx ${TMPDIR}/new-igo2.gpx
-
-
 # GoPal
 # GoPal is a bit tricky, because it's a lossy format regarding the first field (timetick).
 # so we first read a reference gopal file, and then write it out as gopal trk file, now with a computed timestamp.
