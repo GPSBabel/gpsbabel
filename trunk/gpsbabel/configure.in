@@ -3,8 +3,11 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT(GPSBabel, 1.4.0, BUG-REPORT-ADDRESS)
+AC_INIT(GPSBabel, 1.4.1, BUG-REPORT-ADDRESS)
 DOCVERSION=`echo $PACKAGE_VERSION`
+
+# 1.4.1 is a tiny tweak to 1.4.0.  Use that doc.
+DOCVERSION=1.4.0
 
 
 # Increase GBBUILD for a new release

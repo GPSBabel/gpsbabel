@@ -240,6 +240,7 @@ static int  mtk_log_len(unsigned int bitmask);
 static void mtk_rd_init(const char *fname);
 static void file_init(const char *fname);
 static void file_deinit(void) ;
+static void holux245_init(void);
 static void file_read(void);
 static int mtk_parse_info(const unsigned char *data, int dataLen);
 
@@ -417,7 +418,7 @@ static void mtk_rd_init(const char *fname){
 
     // say hello to GR245 to make it display "USB PROCESSING"
     if (strstr(model, "GR-245")) {
-      mtk_device = HOLUX_GR245; // remember we have a GR245 for mtk_rd_deinit()
+      holux245_init();	// remember we have a GR245 for mtk_rd_deinit()
       rc |= do_cmd("$PHLX810*35\r\n", "PHLX852,", NULL, 10);
       rc |= do_cmd("$PHLX826*30\r\n", "PHLX859*38", NULL, 10);
       if (rc != 0)
@@ -1004,7 +1005,7 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask){
         case 1<<HEIGHT:
             switch ( mtk_device ){
                case HOLUX_GR245: // Stupid Holux GPsport 245 - log speed as centimeters/sec. (in height position !) 
-                  hspd = data[i] + data[i+1]*0x100 + data[i+2]*0x10000 + data[i+2]*0x1000000;
+                  hspd = data[i] + data[i+1]*0x100 + data[i+2]*0x10000 + data[i+3]*0x1000000;
                   itm.speed =  MPS_TO_KPH(hspd)/100.; // convert to km/h..
                   break;
                case HOLUX_M241:
@@ -1416,7 +1417,7 @@ static void file_read(void) {
             k = 16;
             // m241  - HOLUXGR241LOGGER or HOLUXGR241WAYPNT or HOLUXGR241LOGGER<SP><SP><SP><SP>
             // gr245 - HOLUXGR245LOGGER<SP><SP><SP><SP> or HOLUXGR245WAYPNT<SP><SP><SP><SP>
-            if ((mtk_device != HOLUX_GR245) && (memcmp(&buf[i], "HOLUXGR245", 10) == 0)) {
+            if (memcmp(&buf[i], "HOLUXGR245", 10) == 0) {
                dbg(2, "Detected Holux GR245 !\n");
                holux245_init();
             }
