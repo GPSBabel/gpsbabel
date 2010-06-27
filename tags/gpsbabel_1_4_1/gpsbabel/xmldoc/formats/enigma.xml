@@ -1,0 +1,6 @@
+<para>
+   This <ulink url="http://www.mglavionics.co.za/">MGL Avionics</ulink> format holds waypoints or routes. This routes can be loaded by the MGL Stratomaster Enigma EFIS series (Enigma, Odyssey, Voyager, Explorer).  
+</para>
+<para>
+    The format is designed for microcontrollers. The use is free for any none military application. You can find a detailed description in the <ulink url="http://www.mglavionics.co.za/Docs/Enigma%20Waypoint%20format.pdf">MGL Documentation</ulink>.
+</para>

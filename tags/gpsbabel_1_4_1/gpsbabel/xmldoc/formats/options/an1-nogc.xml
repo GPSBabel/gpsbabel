@@ -1,0 +1,8 @@
+<para>
+If your original data contains geocaching-specific information such as 
+difficulty and terrain, GPSBabel will automatically include that information 
+in the waypoint descriptions in the generated drawing file.  If you do not 
+want that, specify the "nogc" option on the command line:
+</para>
+<para><userinput>gpsbabel -i gpx -f 12345.gpx -o an1,nogc -F 12345.an1</userinput></para>
+

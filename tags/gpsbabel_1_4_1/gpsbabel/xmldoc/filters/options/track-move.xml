@@ -1,0 +1,13 @@
+<para>
+This option changes the time of all trackpoints. This might be useful if
+your track must be moved by one or more hours because of an incorrect
+time zone.
+</para>
+<example id="ex_track_move">
+<title>Time-shifting a track with the track filter</title>
+<para>
+The following command line will shift all tracks to be one hour later.
+</para>
+<para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,move=+1h -o gpx -F out.gpx</userinput></para>
+</example>
+

@@ -1,0 +1,10 @@
+
+      
+      
+      <para>The file format for GPSPILOT <ulink url="http://www.gpspilot.com">gpspilot.com</ulink> was provided by Ron
+Parker.  The output from this module has been tested with GPSPilot
+Tracker v5.05sx, but it is based on reverse-engineering so it may not
+work with all versions of all GPSPilot products.  It had read-only
+support for Airport, Navaid, City and Landmark files but will read and
+write Point files.</para>
+    

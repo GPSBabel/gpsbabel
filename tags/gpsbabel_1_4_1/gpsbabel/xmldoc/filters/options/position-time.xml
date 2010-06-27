@@ -1,0 +1,9 @@
+<para>
+  Specifies the maximum time in seconds between any two points. If the 
+  time difference is larger than what's specified here, the points will 
+  not be discarded.
+</para>
+<para>
+  This is useful if you have multiple tracks of the same course and you'd
+  like the filter to consider the tracks the same.
+</para>

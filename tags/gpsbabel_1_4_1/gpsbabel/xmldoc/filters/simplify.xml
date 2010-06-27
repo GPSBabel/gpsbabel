@@ -1,0 +1,21 @@
+<para> 
+The Simplify filter is used to simplify routes and tracks for use with 
+formats that limit the number of points they can contain or just to 
+reduce the complexity of a route.
+</para>
+<para>
+The filter attempts to remove points from each route until the number 
+of points or the error is within the given bounds, while also attempting 
+to preserve the shape of the original route as much as possible.  
+</para>
+<para> 
+The quality of the results will vary depending on the density of points 
+in the original route and the length of the original route.
+</para>
+<para> 
+For example, suppose you have a route from Street Atlas 2003 that you 
+wish to use with a Magellan GPS receiver that only supports up to 50 points 
+in a route:
+</para>
+<para><userinput>gpsbabel -r -i saroute -f RoadTrip.anr -x simplify,count=50 -o magellan  -F grocery.rte</userinput></para>
+      

@@ -1,0 +1,8 @@
+<para>
+This option transfers the contents of the unit's data log. The data is
+downloaded as a single track.
+</para>
+<para>
+Only reading of the data log is supported, and you must use
+the <option>-t</option> option to receive any data.
+</para>

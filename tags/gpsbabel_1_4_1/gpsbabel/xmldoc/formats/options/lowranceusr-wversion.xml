@@ -1,0 +1,25 @@
+<para>
+  Newer (post 2006 or so) Lowrance devices added a version three of their
+  .usr file format that adds depth.   Specify "3" here to use that format
+  on write.  
+</para>
+
+<para>
+<userinput>
+ gpsbabel ... -o lowranceusr,wversion=2 -F blah.usr
+</userinput>
+is exactly the same as
+<userinput>
+ gpsbabel ... -o lowranceusr -F blah.usr
+</userinput>
+</para>
+
+
+<para>
+To create a file that contains depth but therefore isn't usable
+on older Lowrance products, use this:
+<userinput>
+ gpsbabel ... -o lowranceusr,wversion=3 -F blah.usr
+</userinput>
+
+</para>

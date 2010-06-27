@@ -1,0 +1,8 @@
+<para>
+This option clears the datalogger in the receiver after doing the
+transfer.
+</para>
+<para>
+This is a convenient option to use in automated processes if you want
+to clear the device after receiving the data logger contents.
+</para>

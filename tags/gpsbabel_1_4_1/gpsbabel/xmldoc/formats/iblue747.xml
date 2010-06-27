@@ -1,0 +1,7 @@
+<para>
+  This is the format used by the software that comes with the <ulink url="http://www.transystem.com.tw/p-gps-iblue747.htm">Transystem i-Blue747 GPS</ulink>
+</para>
+
+<para>
+  Notice that the iBlue 747 logs the sum of "height above sealevel" and "height of geoid above WGS84".   If precise altitude matters to you, check out the <link linkend="filter_height">height filter</link> which allows you to compensate for this.
+</para>

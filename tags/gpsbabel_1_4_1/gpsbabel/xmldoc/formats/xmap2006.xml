@@ -1,0 +1,12 @@
+
+      
+      
+      <para>Delorme XMap2006 Conduit is just like 
+<link linkend="fmt_xmap">XMap</link> 
+, except there are 
+	no spaces between fields and the coordinate format is slightly 
+	different. The completely pointless header and footer lines 
+	are the same, at least. Use this to create the XMapHHWptsSend.txt 
+	file needed to sync to Street Atlas Handheld 2006.</para>
+	<para>Note that in order to keep from creating duplicates on your handheld, you must first remove the file "XMapWptsDB" from your handheld, restart SAHH2006 on the handheld to create an empty database, and THEN sync the new file. </para>
+    

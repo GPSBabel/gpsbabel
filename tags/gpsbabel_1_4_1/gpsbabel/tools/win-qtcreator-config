@@ -1,0 +1,12 @@
+# Script to configure cross build suitable for inclusion in Earth.
+# Call from mingw under Windows
+CHAIN=/cygdrive/c/Qt/2009.03/mingw
+
+S=.
+CFLAGS="$CFLAGS -I $S/mingw/include/" \
+CFLAGS="$CFLAGS -I $S/mingw/include/ddk" \
+CC=$CHAIN/bin/gcc \
+$S/configure  --host=i386-mingw32  \
+        --with-expathdr=$S/mingw/include \
+        --with-libexpat=$S/mingw/lib
+
