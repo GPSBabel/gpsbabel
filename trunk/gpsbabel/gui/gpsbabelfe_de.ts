@@ -825,12 +825,14 @@ Das Prgramm muss abgebrochen werden.</translation>
     <message>
         <location filename="mainwinui.ui" line="667"/>
         <source>Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Via Google Translate</translatorcomment>
+        <translation>Einstellungen ...</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="672"/>
         <source>Check for Upgrade</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>via Google Translate</translatorcomment>
+        <translation>Prüfen Sie für ein Upgrade</translation>
     </message>
 </context>
 <context>
@@ -1524,12 +1526,12 @@ Diese Option generiert für jeden Trackpunkt einen Geschwindigkeitswert. Sie wir
     <message>
         <location filename="upgrade.cpp" line="237"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="upgrade.cpp" line="238"/>
         <source>Invalid return data at line %1: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="upgrade.cpp" line="277"/>
