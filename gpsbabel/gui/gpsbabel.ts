@@ -1271,6 +1271,14 @@ This program cannot continue.</source>
         <source>Check for Upgrade</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Visit Website...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Make a Donation...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Map</name>

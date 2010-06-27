@@ -454,23 +454,23 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cpp" line="257"/>
-        <location filename="mainwindow.cpp" line="258"/>
+        <location filename="mainwindow.cpp" line="263"/>
+        <location filename="mainwindow.cpp" line="264"/>
         <source>default</source>
         <translation>default</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="420"/>
+        <location filename="mainwindow.cpp" line="426"/>
         <source>Select one or more input files</source>
         <translation>eine oder mehrere Originaldateien markieren</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="447"/>
+        <location filename="mainwindow.cpp" line="453"/>
         <source>Output File Name</source>
         <translation>Zieldatei-Name</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="507"/>
+        <location filename="mainwindow.cpp" line="513"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -479,7 +479,7 @@ This program cannot continue.</source>
 Das Programm muss abgebrochen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="518"/>
+        <location filename="mainwindow.cpp" line="524"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -488,114 +488,114 @@ This program cannot continue.</source>
 Das Prgramm muss abgebrochen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="540"/>
+        <location filename="mainwindow.cpp" line="546"/>
         <source>Input and output formats do not support %1</source>
         <translation>Keine Unterstützung für %1 im Ein- oder Ausgabeformat</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="543"/>
+        <location filename="mainwindow.cpp" line="549"/>
         <source>Input does not support %1; output format supports %2</source>
         <translation>Keine Unterstützung für %1 im Eingabeformat; Ausgabeformat unterstützt %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="546"/>
+        <location filename="mainwindow.cpp" line="552"/>
         <source>Input format supports %1; output format does not support %2</source>
         <translation>Eingabeformat  unterstützt %1. Keine Unterstützung für %2 im Ausgabeformat</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="549"/>
+        <location filename="mainwindow.cpp" line="555"/>
         <source>Both input and output formats support %1</source>
         <translation>Ein- und Ausgabeformat unterstützen %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="570"/>
+        <location filename="mainwindow.cpp" line="576"/>
         <source>waypoints</source>
         <translation>Wegpunkte</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="571"/>
+        <location filename="mainwindow.cpp" line="577"/>
         <source>tracks</source>
         <translation>tracks</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="572"/>
+        <location filename="mainwindow.cpp" line="578"/>
         <source>routes</source>
         <translation>Routen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="662"/>
+        <location filename="mainwindow.cpp" line="668"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>Es gibt keine Eingabeoptionen für das Format &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="669"/>
-        <location filename="mainwindow.cpp" line="689"/>
+        <location filename="mainwindow.cpp" line="675"/>
+        <location filename="mainwindow.cpp" line="695"/>
         <source>Options for %1</source>
         <translation>Optionen für %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="682"/>
+        <location filename="mainwindow.cpp" line="688"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>Es gibt keine Ausgabeoptionen für das Format &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="703"/>
+        <location filename="mainwindow.cpp" line="709"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>keine gültige Angabe von Wegpunkt-/Routen-/Trackfiltern</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="722"/>
+        <location filename="mainwindow.cpp" line="728"/>
         <source>No input file specified</source>
         <translation>keine Quelldatei angegeben</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="729"/>
+        <location filename="mainwindow.cpp" line="735"/>
         <source>No valid output specified</source>
         <translation>keine gültiges Ziel angegeben</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="734"/>
+        <location filename="mainwindow.cpp" line="740"/>
         <source>No output file specified</source>
         <translation>keine Zieldatei angegeben</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="750"/>
+        <location filename="mainwindow.cpp" line="756"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation>Prozess &quot;%1&quot; wurde nicht gestartet</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="764"/>
+        <location filename="mainwindow.cpp" line="770"/>
         <source>Process exited unsucessfully with code %1</source>
         <translation>Prozess endete mit code %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="907"/>
+        <location filename="mainwindow.cpp" line="913"/>
         <source>Translation successful</source>
         <translation>Konvertierung erfolgreich</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="917"/>
+        <location filename="mainwindow.cpp" line="923"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Fehler beim Aufruf von gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1012"/>
+        <location filename="mainwindow.cpp" line="1029"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>Sind Sie sicher, dass Sie alle Formatoptionen auf die Vorgaben stellen wollen?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1036"/>
+        <location filename="mainwindow.cpp" line="1053"/>
         <source>About %1</source>
         <translation>Über %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1079"/>
+        <location filename="mainwindow.cpp" line="1096"/>
         <source>One or more data filters are active</source>
         <translation>Einer oder mehrere Datenfilter sind aktiviert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1081"/>
+        <location filename="mainwindow.cpp" line="1098"/>
         <source>No data filters are active</source>
         <translation>Keine Datenfilter sind aktiv</translation>
     </message>
@@ -808,31 +808,41 @@ Das Prgramm muss abgebrochen werden.</translation>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="652"/>
+        <location filename="mainwinui.ui" line="655"/>
         <source>GPSBabel Help</source>
         <translation>GPSBabel Hilfe</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="657"/>
+        <location filename="mainwinui.ui" line="660"/>
         <source>About GPSBabel</source>
         <translation>Über GPSBabel</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="662"/>
+        <location filename="mainwinui.ui" line="665"/>
         <source>Quit</source>
         <translation>Beenden</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="667"/>
+        <location filename="mainwinui.ui" line="670"/>
         <source>Preferences...</source>
         <translatorcomment>Via Google Translate</translatorcomment>
         <translation>Einstellungen ...</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="672"/>
+        <location filename="mainwinui.ui" line="675"/>
         <source>Check for Upgrade</source>
         <translatorcomment>via Google Translate</translatorcomment>
         <translation>Prüfen Sie für ein Upgrade</translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="680"/>
+        <source>Visit Website...</source>
+        <translation>Webseite besuchen ...</translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="685"/>
+        <source>Make a Donation...</source>
+        <translation>Machen Sie eine Spende...</translation>
     </message>
 </context>
 <context>
