@@ -505,144 +505,144 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cpp" line="257"/>
-        <location filename="mainwindow.cpp" line="258"/>
+        <location filename="mainwindow.cpp" line="263"/>
+        <location filename="mainwindow.cpp" line="264"/>
         <source>default</source>
         <translation>Defecto</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="420"/>
+        <location filename="mainwindow.cpp" line="426"/>
         <source>Select one or more input files</source>
         <translation>Seleccionar uno o más archivos de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="447"/>
+        <location filename="mainwindow.cpp" line="453"/>
         <source>Output File Name</source>
         <translation>Nombre del fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="507"/>
+        <location filename="mainwindow.cpp" line="513"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>Se ha producido un error cuando se intentaba leer la configuración. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="518"/>
+        <location filename="mainwindow.cpp" line="524"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>El formato de alfunos ficheros o dispositivos no se halló durante la inicialización. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="540"/>
+        <location filename="mainwindow.cpp" line="546"/>
         <source>Input and output formats do not support %1</source>
         <translation>Formatos de entrada y salida inadmisibles %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="543"/>
+        <location filename="mainwindow.cpp" line="549"/>
         <source>Input does not support %1; output format supports %2</source>
         <translation>Formatos de entrada inadmisible %1; Formatos de salida inadmisible %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="546"/>
+        <location filename="mainwindow.cpp" line="552"/>
         <source>Input format supports %1; output format does not support %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="549"/>
+        <location filename="mainwindow.cpp" line="555"/>
         <source>Both input and output formats support %1</source>
         <translation>Formatos de entrada y salida admisibles (ambos) %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="570"/>
+        <location filename="mainwindow.cpp" line="576"/>
         <source>waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="571"/>
+        <location filename="mainwindow.cpp" line="577"/>
         <source>tracks</source>
         <translation>Registro de trazados</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="572"/>
+        <location filename="mainwindow.cpp" line="578"/>
         <source>routes</source>
         <translation>Rutas</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="662"/>
+        <location filename="mainwindow.cpp" line="668"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>No hay opciones de entrada para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="669"/>
-        <location filename="mainwindow.cpp" line="689"/>
+        <location filename="mainwindow.cpp" line="675"/>
+        <location filename="mainwindow.cpp" line="695"/>
         <source>Options for %1</source>
         <translation>Opciones de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="682"/>
+        <location filename="mainwindow.cpp" line="688"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>No hay opciones de salida para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="703"/>
+        <location filename="mainwindow.cpp" line="709"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Se han especificicado puntos de interés, trazados o rutas no traducibles</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="722"/>
+        <location filename="mainwindow.cpp" line="728"/>
         <source>No input file specified</source>
         <translation>No se ha especificado el fichero de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="729"/>
+        <location filename="mainwindow.cpp" line="735"/>
         <source>No valid output specified</source>
         <translation>El fichero de salida no es válido</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="734"/>
+        <location filename="mainwindow.cpp" line="740"/>
         <source>No output file specified</source>
         <translation>No se ha especificado el fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="750"/>
+        <location filename="mainwindow.cpp" line="756"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation>El proceso &quot;%1&quot; no comenzó</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="764"/>
+        <location filename="mainwindow.cpp" line="770"/>
         <source>Process exited unsucessfully with code %1</source>
         <translation>El proceso terminó sin suerte y con el código %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="907"/>
+        <location filename="mainwindow.cpp" line="913"/>
         <source>Translation successful</source>
         <translation>Traducción realizada con éxito</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="917"/>
+        <location filename="mainwindow.cpp" line="923"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Error ejecutando gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1012"/>
+        <location filename="mainwindow.cpp" line="1029"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>¿Estás seguro de que quieres volver a los formatos por defecto?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1036"/>
+        <location filename="mainwindow.cpp" line="1053"/>
         <source>About %1</source>
         <translation>Acerca de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1079"/>
+        <location filename="mainwindow.cpp" line="1096"/>
         <source>One or more data filters are active</source>
         <translation>Uno o más filtros de datos están activos</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1081"/>
+        <location filename="mainwindow.cpp" line="1098"/>
         <source>No data filters are active</source>
         <translation>Ningún filtro de datos está activo</translation>
     </message>
@@ -846,29 +846,39 @@ This program cannot continue.</source>
         <translation>Ayuda</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="652"/>
+        <location filename="mainwinui.ui" line="655"/>
         <source>GPSBabel Help</source>
         <translation>Ayuda de GPSBabel</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="657"/>
+        <location filename="mainwinui.ui" line="660"/>
         <source>About GPSBabel</source>
         <translation>Acerca de GPSBabel</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="662"/>
+        <location filename="mainwinui.ui" line="665"/>
         <source>Quit</source>
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="667"/>
+        <location filename="mainwinui.ui" line="670"/>
         <source>Preferences...</source>
         <translation>Preferencias ...</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="672"/>
+        <location filename="mainwinui.ui" line="675"/>
         <source>Check for Upgrade</source>
         <translation>Comprueba si hay una actualización</translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="680"/>
+        <source>Visit Website...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="685"/>
+        <source>Make a Donation...</source>
+        <translation>Haga una donación...</translation>
     </message>
 </context>
 <context>
