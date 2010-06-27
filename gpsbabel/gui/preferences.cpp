@@ -18,6 +18,7 @@
 
 
 #include "preferences.h"
+#include "../gbversion.h"
 
 class FormatListEntry : public QListWidgetItem {
  public:
