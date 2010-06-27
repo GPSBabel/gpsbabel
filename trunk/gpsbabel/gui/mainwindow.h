@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.h,v 1.11 2010-04-11 22:38:07 robertl Exp $
+// $Id: mainwindow.h,v 1.12 2010-06-27 21:12:37 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -96,6 +96,7 @@ protected:
   void browseInputFile();
   void browseOutputFile();
   void closeActionX();
+  void donateActionX();
   void dragEnterEvent(QDragEnterEvent *);
   void dropEvent(QDropEvent *event);
   void filtersClicked();
@@ -110,6 +111,7 @@ protected:
   void outputFormatChanged(int);
   void outputOptionButtonClicked();
   void preferencesActionX();
+  void visitWebsiteActionX();
   void resetFormatDefaults();
   void upgradeCheckActionX();
 

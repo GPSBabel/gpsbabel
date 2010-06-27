@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.23 2010-06-21 03:45:10 robertl Exp $
+// $Id: mainwindow.cpp,v 1.24 2010-06-27 21:12:37 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -19,6 +19,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111
 //  USA
 //
+#include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QMimeData>
@@ -150,6 +151,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   connect(ui.actionQuit, SIGNAL(triggered()), this, SLOT(closeActionX()));
   connect(ui.actionHelp, SIGNAL(triggered()), this, SLOT(helpActionX()));
   connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(aboutActionX()));
+  connect(ui.actionVisit_Website, SIGNAL(triggered()), this, SLOT(visitWebsiteActionX()));
+  connect(ui.actionMake_a_Donation, SIGNAL(triggered()), this, SLOT(donateActionX()));
   connect(ui.actionUpgradeCheck, SIGNAL(triggered()), this, SLOT(upgradeCheckActionX()));
   connect(ui.actionPreferences, SIGNAL(triggered()), this, SLOT(preferencesActionX()));
 
@@ -949,6 +952,17 @@ void MainWindow::closeEvent(QCloseEvent*)
   closeActionX();
 }
 
+//------------------------------------------------------------------------
+void MainWindow::donateActionX()
+{
+  QDesktopServices::openUrl(QString("http://www.gpsbabel.org/contribute.html?gbversion=" VERSION));
+}
+
+//------------------------------------------------------------------------
+void MainWindow::visitWebsiteActionX()
+{
+  QDesktopServices::openUrl(QString("http://www.gpsbabel.org"));
+}
 
 //------------------------------------------------------------------------
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
