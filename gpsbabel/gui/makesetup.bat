@@ -1,4 +1,4 @@
-rem $Id: makesetup.bat,v 1.1 2009-09-02 19:05:27 robertl Exp $
+rem $Id: makesetup.bat,v 1.2 2010-06-27 21:13:07 robertl Exp $
 rem 
 rem Copy the Qt stuff into a local directory. The Inno Setup compiler
 rem cannot handle %QTDIR environment variable in the source file
@@ -43,6 +43,7 @@ lrelease gpsbabelfe_es.ts
 lrelease gpsbabelfe_fr.ts
 lrelease gpsbabelfe_hu.ts
 lrelease gpsbabelfe_it.ts
+lrelease gpsbabelfe_ru.ts
 
 
 "c:\Program Files\Inno Setup 5\ISCC.exe" setup.iss
