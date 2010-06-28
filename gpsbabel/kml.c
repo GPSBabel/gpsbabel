@@ -413,9 +413,9 @@ kml_write_xmle(const char *tag, const char *fmt, ...)
 		if (strspn(tmp_ent, "&'<>\""))
 			needs_escaping = 1;
 		gbfprintf(ofd, "<%s>", tag);
-                if (needs_escaping) gbfprintf(ofd, "<![CDATA]");
+                if (needs_escaping) gbfprintf(ofd, "<![CDATA[");
 		gbvfprintf(ofd, fmt, args);
-                if (needs_escaping) gbfprintf(ofd, "]]");
+                if (needs_escaping) gbfprintf(ofd, "]]>");
 		gbfprintf(ofd, "</%s>\n", tag);
 		xfree(tmp_ent);
 	}
