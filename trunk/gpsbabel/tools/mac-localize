@@ -1,12 +1,25 @@
-# Creating even empty (?!?!) directories is enough to trigger the merge
-# of the trnslations for the application menu.  This isn't as ambitious
-# as described at 
+# Create locversion.plist in the bundle to trigger translations for 
+# the application menu and system buttons.  See description at
 # http://doc.qt.nokia.com/4.6/mac-differences.html#translating-the-application-menu-and-native-dialogs
-# but at least for German, it seems to work.
-#
+
+QTDIR=/Developer/Applications/Qt/translations/
+LANGDIR=objects/GPSBabelFE.app/Contents/MacOS/lang
+
+
+mkplist() {
+  D=objects/GPSBabelFE.app/Contents/Resources/$1.lproj 
+  [ ! -d $D ] && mkdir $D
+  sed "s/LANGUAGE/$1/" ../tools/skeleton-locversion-plist > $D/locversion.plist
+  # optional as en, it, and hu aren't translated in Qt yet.
+  [ -f $QTDIR/qt_$1.qm ] && cp $QTDIR/qt_$1.qm $LANGDIR
+  [ -f gpsbabelfe_${1}.qm ] && cp gpsbabelfe_${1}.qm  $LANGDIR
+}
 
 cd gui 
+[ ! -d $LANGDIR ] && mkdir $LANGDIR
 for i in $(echo  gpsbabelfe_??.ts | sed 's/gpsbabelfe_\(..\).ts/\1/g')
 do
-  mkdir objects/GPSBabelFE.app/Contents/Resources/$i.lproj 
+	mkplist $i
 done
+
+mkplist en
