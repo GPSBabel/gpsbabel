@@ -551,7 +551,7 @@ ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp, ozi_fsdata *fsdata)
 }
 
 static void
-ozi_parse_track(int field, char *str, waypoint * wpt_tmp)
+ozi_parse_track(int field, char *str, waypoint * wpt_tmp, char *trk_name)
 {
     double alt;
 
@@ -571,6 +571,8 @@ ozi_parse_track(int field, char *str, waypoint * wpt_tmp)
 	if ((atoi(str) == 1) && (trk_head->rte_waypt_ct > 0)) {
 	    trk_head = route_head_alloc();
 	    track_add_head(trk_head);
+	    if (trk_name)
+		trk_head->rte_name = trk_name;
 	}
         break;
     case 3:
@@ -683,7 +685,8 @@ static void
 data_read(void)
 {
     char *buff;
-    char *s;
+    char *s = NULL;
+    char *trk_name = NULL;
     waypoint *wpt_tmp;
     int i;
     int linecount = 0;
@@ -727,6 +730,16 @@ data_read(void)
 		}
 		else fatal(MYNAME ": Unknown unit (%s) used by altitude values!\n", unit); 
 	    }
+	} else if ((linecount == 5) && (ozi_objective == trkdata)) {
+	   int field = 0;
+            s = csv_lineparse(buff, ",", "", linecount);
+            while (s) {
+		field ++;
+		if (field == 4) {
+			trk_head->rte_name = xstrdup(lrtrim(s));
+		}
+                s = csv_lineparse(NULL, ",", "", linecount);
+	    }
 	}
 
         if ((strlen(buff)) && (strstr(buff, ",") != NULL)) {
@@ -741,7 +754,7 @@ data_read(void)
             while (s) {
                 switch (ozi_objective) {
                 case trkdata:
-                    ozi_parse_track(i, s, wpt_tmp);
+                    ozi_parse_track(i, s, wpt_tmp, trk_name);
                     break;
                 case rtedata:
                     if (buff[0] == 'R') {
