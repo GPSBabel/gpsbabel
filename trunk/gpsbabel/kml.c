@@ -347,7 +347,7 @@ kml_wr_deinit(void)
 
 	if (posnfilenametmp) {
 #if __WIN32__
-		MoveFileEx(posnfilenametmp, posnfilename,
+		MoveFileExA(posnfilenametmp, posnfilename,
 		MOVEFILE_REPLACE_EXISTING);
 #endif
 		rename(posnfilenametmp, posnfilename);
