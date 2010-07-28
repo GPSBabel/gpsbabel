@@ -37,7 +37,7 @@ may need to 'yum install expat-devel'.  Ubuntu users may need to
 </para>
   <para><ulink url="http://libusb.sourceforge.net">libusb</ulink> 
 is recommended for OS/X and Linux if you want to use a USB Garmin.
-Fedora users may need to 'yum install expat-devel'.  Ubuntu users may
+Fedora users may need to 'yum install libusb-devel'.  Ubuntu users may
 need to 'apt-get install libusb-dev'.
 </para>
 <para>There are additional flags that can be passed to configure to
