@@ -153,10 +153,10 @@ static double oldlat = 999;
 
 static int waypt_out_count;
 static route_head *csv_track, *csv_route;
-#endif // CSVFMTS_ENABLED
-
 static double utm_northing, utm_easting, utm_zone = 0;
 static char utm_zonec;
+#endif // CSVFMTS_ENABLED
+
 
 /*********************************************************************/
 /* csv_stringclean() - remove any unwanted characters from string.   */
