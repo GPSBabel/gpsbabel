@@ -7413,7 +7413,7 @@ void GPS_Prepare_Track_For_Device(GPS_PTrack **trk, int32 *n)
 			GPS_PTrack trkpt = GPS_Track_New();
 			*trkpt = *((*trk)[j]);
 			trkpt->no_latlon = 1;
-			trkpt->alt = 1e25;
+			trkpt->alt = (float) 1e25;
 			trkpt->distance_populated = 0;
 			trkpt->heartrate = 0;
 			trkpt->cadence = 0xff;
