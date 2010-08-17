@@ -239,7 +239,17 @@ void wpt_time(const char *args, const char **unused)
 
 void wpt_coord(const char *args, const char **attrv)
 {
-	sscanf(args, "%lf,%lf,%lf", &wpt_tmp->longitude, &wpt_tmp->latitude, &wpt_tmp->altitude);
+	int n = 0;
+	double lat, lon, alt;
+	// Alt is actually optional. 
+	n = sscanf(args, "%lf,%lf,%lf", &lat, &lon, &alt);
+	if (n > 2) {
+		wpt_tmp->latitude = lat;
+		wpt_tmp->longitude = lon;
+	}
+	if (n == 3) {
+		wpt_tmp->altitude = alt;
+	}
 	wpt_tmp_queued = 1;
 }
 
@@ -256,6 +266,7 @@ void trk_coord(const char *args, const char **attrv)
 	int consumed = 0;
 	double lat, lon, alt;
 	waypoint *trkpt;
+        int n = 0;
 
 	route_head *trk_head = route_head_alloc();
 	if (wpt_tmp->shortname) {
@@ -263,11 +274,20 @@ void trk_coord(const char *args, const char **attrv)
 	}
 	track_add_head(trk_head);
 
-	while (3 == sscanf(args, "%lf,%lf,%lf %n", &lon, &lat, &alt, &consumed)){
+	while ((n = sscanf(args, "%lf,%lf,%lf %n", &lon, &lat, &alt, &consumed)) > 0) {
+
 		trkpt = waypt_new();
 		trkpt->latitude = lat;
 		trkpt->longitude = lon;
-		trkpt->altitude = alt;
+
+		// Line malformed or two-arg format without alt .  Rescan.
+		if (2 == n) {
+		  sscanf(args, "%lf,%lf %n", &lon, &lat, &consumed);
+		}
+
+		if (3 == n) {
+		  trkpt->altitude = alt;
+		}
 
 		track_add_wpt(trk_head, trkpt);
 
