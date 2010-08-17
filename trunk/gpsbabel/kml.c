@@ -243,7 +243,7 @@ void wpt_coord(const char *args, const char **attrv)
 	double lat, lon, alt;
 	// Alt is actually optional. 
 	n = sscanf(args, "%lf,%lf,%lf", &lat, &lon, &alt);
-	if (n > 2) {
+	if (n >= 2) {
 		wpt_tmp->latitude = lat;
 		wpt_tmp->longitude = lon;
 	}
