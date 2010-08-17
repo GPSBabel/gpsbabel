@@ -1512,7 +1512,7 @@ static arglist_t mtk_fargs[] = {
 
 ff_vecs_t mtk_fvecs = {
     ff_type_file,
-    { ff_cap_none, ff_cap_read, ff_cap_none },
+    { ff_cap_read, ff_cap_read, ff_cap_none },
     file_init,
     NULL,
     file_deinit,
@@ -1526,7 +1526,7 @@ ff_vecs_t mtk_fvecs = {
 
 ff_vecs_t mtk_m241_fvecs = {
     ff_type_file,
-    { ff_cap_none, ff_cap_read, ff_cap_none },
+    { ff_cap_read, ff_cap_read, ff_cap_none },
     file_init_m241,
     NULL,
     file_deinit,
