@@ -89,7 +89,7 @@ format_garmin_xt_rd_st_attrs(char *p_trk_name, gbuint8 *p_track_color)
 	int		method = 0;
 	gbuint16	trackbytes = 0, TrackPoints = 0;
 	gbuint8	spam = 0;
-	int32_t		TrackMaxLat = 0, TrackMaxLon = 0, TrackMinLat = 0, TrackMinLon = 0;
+	gbint32		TrackMaxLat = 0, TrackMaxLon = 0, TrackMinLat = 0, TrackMinLon = 0;
 	char		trk_name[30]="";
 	// TODO: SHIFT - can't test behaviour, do not have appropriate files
 	//int		ii;
@@ -361,7 +361,7 @@ format_garmin_xt_proc_atrk(void)
 	waypoint	*wpt;
 	int		method = 0;
 	unsigned char 	buf[3];
-	uint32_t 	num_trackpoints;
+	gbint32 	num_trackpoints;
 
 	// get the option for the processing the track name
 	if ( opt_trk_header )
