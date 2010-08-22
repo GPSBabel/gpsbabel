@@ -41,6 +41,7 @@ static GPS_PTrack *cur_tx_tracklist_entry;
 static int my_track_count = 0;
 static char *getposn = NULL;
 static char *poweroff = NULL;
+static char *eraset = NULL;                                                           
 static char *resettime = NULL;
 static char *snlen = NULL;
 static char *snwhiteopt = NULL;
@@ -68,6 +69,8 @@ arglist_t garmin_args[] = {
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{ "power_off", &poweroff, "Command unit to power itself down", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+       { "erase_t", &eraset, "Erase existing courses when writing new ones",          
+               NULL, ARGTYPE_BOOL, ARG_NOMINMAX},                                     
 	{ "resettime", &resettime, "Sync GPS time to computer time", 
 		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
 	{ "category", &category, "Category number to use for written waypoints", 
@@ -1099,9 +1102,8 @@ track_write(void)
 	int i, n;
 
 	n = track_prepare();
-
-	GPS_Command_Send_Track(portname, tx_tracklist, n);
-
+       GPS_Command_Send_Track(portname, tx_tracklist, n, (eraset)? 1 : 0);            
+                                                                                      
 	for (i = 0; i < n; i++) {
 		GPS_Track_Del(&tx_tracklist[i]);
 	}
@@ -1117,7 +1119,7 @@ course_write(void)
 	n_trk = track_prepare();
 
 	GPS_Command_Send_Track_As_Course(portname, tx_tracklist, n_trk,
-	                                 tx_waylist, n_wpt);
+                                        tx_waylist, n_wpt, (eraset)? 1 : 0);          
 
 	for (i = 0; i < n_wpt; ++i) {
 		GPS_Way_Del(&tx_waylist[i]);

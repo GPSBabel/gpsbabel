@@ -259,7 +259,7 @@ int32 GPS_Command_Get_Track(const char *port, GPS_PTrack **trk, pcb_fn cb)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Track(const char *port, GPS_PTrack *trk, int32 n)
+int32 GPS_Command_Send_Track(const char *port, GPS_PTrack *trk, int32 n, int eraset)
 {
     int32 ret=0;
 
@@ -278,7 +278,7 @@ int32 GPS_Command_Send_Track(const char *port, GPS_PTrack *trk, int32 n)
        /* Units with A302 don't support track upload, so we convert the
         * track to a course on the fly and send that instead
         */
-	ret = GPS_Command_Send_Track_As_Course(port, trk, n, NULL, 0);
+       ret = GPS_Command_Send_Track_As_Course(port, trk, n, NULL, 0, eraset);
        break;
     default:
 	GPS_Error("Send_Track: Unknown track protocol %d.", gps_trk_transfer);
@@ -1168,7 +1168,7 @@ restart_course_points:
 ************************************************************************/
 
 int32 GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 n_trk,
-                                       GPS_PWay *wpt, int32 n_wpt)
+                                       GPS_PWay *wpt, int32 n_wpt, int eraset)
 {
     GPS_PCourse *crs = NULL;
     GPS_PCourse_Lap *clp = NULL;
@@ -1179,8 +1179,13 @@ int32 GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 
     int32 ret;
 
     /* Read existing courses from device */
-    n_crs = GPS_Command_Get_Course(port, &crs, &clp, &ctk, &cpt, &n_clp, &n_ctk, &n_cpt, NULL);
-    if (n_crs < 0) return n_crs;
+    if (eraset)
+      n_crs = 0;
+    else {
+      n_crs = GPS_Command_Get_Course(port, &crs, &clp, &ctk, &cpt, &n_clp, &n_ctk, &n_cpt, NULL);
+      if (n_crs < 0) return n_crs;
+    }
+
 
     /* Create new course+lap+track points for each track */
     new_crs = n_crs;
