@@ -2184,6 +2184,9 @@ delbin_rw_init(const char *fname)
 		} else if (strstr(p->product, "PN-30") || strstr(p->product, "PN-40")) {
 			use_extended_notes = p->firmware[0] > '2' ||
 				(p->firmware[0] == '2' && p->firmware[2] >= '5');
+		} else {
+			// assume PN-60 or later
+			use_extended_notes = TRUE;
 		}
 		delbin_unit_info[n_delbin_units].unit_number = n_delbin_units;
 		delbin_unit_info[n_delbin_units].unit_serial_number = xstrndup(p->serial, sizeof(p->serial));
