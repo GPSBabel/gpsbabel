@@ -804,7 +804,7 @@ vecs_t vec_list[] = {
                 &osm_vecs,
                 "osm",
                 "OpenStreetMap data files",
-                "xml"
+                "osm"
         },
         {
                 &destinator_poi_vecs,
