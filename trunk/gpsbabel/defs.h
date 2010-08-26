@@ -65,6 +65,8 @@
 #define METERS_TO_FEET(meetsies) ((meetsies) * 3.2808399)
 
 #define NMILES_TO_METERS(a) ((a) * 1852.0)	/* nautical miles */
+#define METERS_TO_NMILES(a) ((a) / 1852.0)
+
 #define MILES_TO_METERS(a) ((a) * 1609.344)
 #define METERS_TO_MILES(a) ((a) / 1609.344)
 #define FATHOMS_TO_METERS(a) ((a) * 1.8288)
@@ -1018,7 +1020,8 @@ unsigned long get_crc32_s(const void * data);
 typedef enum {
 	units_unknown = 0,
 	units_statute = 1,
-	units_metric =2
+	units_metric = 2,
+	units_nautical =3
 } fmt_units;
 
 int    fmt_setunits(fmt_units);
