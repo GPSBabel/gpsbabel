@@ -149,7 +149,7 @@ dbgprintf(const char *sobj, const char *fmt, ...)
 
 # define DBG(args) dbgprintf args
 #else
-# define DBG(args) ;
+# define DBG(args) do {} while (0) ;
 #endif
 
 static char *

@@ -331,7 +331,7 @@ nmea_wr_init(const char *portname)
 		}
 	}
 
-	mkshort_handle = (struct short_handle_*) mkshort_new_handle();
+	mkshort_handle = (struct short_handle*) mkshort_new_handle();
 	setshort_length(mkshort_handle, atoi(snlenopt));
 
 	if (opt_gisteq) {

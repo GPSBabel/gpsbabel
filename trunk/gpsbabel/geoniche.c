@@ -604,6 +604,7 @@ wpt2icon(const waypoint *wpt)
 	case gt_benchmark: return 0;
 	case gt_ape: return 0;
 	case gt_mega: return 0;
+	case gt_wherigo: return 0;
     }
 
     return 0;

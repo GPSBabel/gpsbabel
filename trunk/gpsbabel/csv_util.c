@@ -136,6 +136,10 @@ typedef enum {
 	XT_YYYYMMDD_TIME
 } xcsv_token;
 
+// Static definition of in_word_set to meet C99 rules as used by Clang.
+static struct xt_mapping *
+in_word_set (register const char *str, register unsigned int len);
+
 #include "xcsv_tokens.gperf"
 
 /****************************************************************************/
@@ -704,7 +708,7 @@ xcsv_file_init(void)
      */
     xcsv_file.type = ff_type_file;
 
-    xcsv_file.mkshort_handle = (struct short_handle_*) mkshort_new_handle();
+    xcsv_file.mkshort_handle = (struct short_handle *) mkshort_new_handle();
     xcsv_file.gps_datum = GPS_DATUM_WGS84;
 }
 

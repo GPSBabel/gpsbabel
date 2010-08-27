@@ -1,4 +1,4 @@
-/* ANSI-C code produced by gperf version 3.0.1 */
+/* ANSI-C code produced by gperf version 3.0.3 */
 /* Command-line: gperf -L ANSI-C -D -t xcsv_tokens.in  */
 /* Computed positions: -k'2,4-5,12,$' */
 
@@ -107,6 +107,9 @@ hash (register const char *str, register unsigned int len)
 
 #ifdef __GNUC__
 __inline
+#ifdef __GNUC_STDC_INLINE__
+__attribute__ ((__gnu_inline__))
+#endif
 #endif
 struct xt_mapping *
 in_word_set (register const char *str, register unsigned int len)

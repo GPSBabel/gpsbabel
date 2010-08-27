@@ -191,33 +191,36 @@ itracku_device_update_data_read(void* buf, int len)
 
 	49 degrees 34.7687 minutes
 */
+// The argument is marked 'volatile' because of an issue in Apple's v1.5 clang.
+// Without this, the sign of 'x' mysteriously changes while in the function.
+// adding a printf inside branches not taken changes the behaviour.   Very
+// mysterious, but not worth tracking down at this time.   When xcode 4 comes
+// along (or anyone really cares about mega performance of this fairly obscure
+// target, we should revisit this.
 double
-deg_min_to_deg(gbuint32 x)
+deg_min_to_deg(volatile gbuint32 x)
 {
     double sign;
-	gbuint32 sep;
-	gbuint32 d;
-	gbuint32 m10000;
-
+    gbuint32 sep;
+    gbuint32 d;
+    gbuint32 m10000;
     // determine the sign
-	if (x > 0x80000000) {
+    if (x > 0x80000000) {
         sign = -1.0;
         x -= 0x80000000;
-    }
-    else {
+    } else {
         sign = 1.0;
     }
 
     sep = 1000000;
     
-	// extract degrees
-	d = x / sep;
-
-	// extract (minutes * 10000)
+    // extract degrees
+    d = (unsigned int) x / (unsigned int) sep;
+    // extract (minutes * 10000)
     m10000 = x - d * sep;
 
     // convert minutes and degrees to a double
-	return sign * ((double)d + ((double)m10000) / 600000.0);
+    return sign * ((double)d + ((double)m10000) / 600000.0);
 }
 
 /*
@@ -493,6 +496,7 @@ static int
 import_data_record(itracku_data_record* d)
 {
 	int result = 0;
+
 	if (!itracku_is_valid_data_record(d)) {
 		result = 0;
 	}

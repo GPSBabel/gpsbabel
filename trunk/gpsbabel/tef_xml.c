@@ -249,7 +249,7 @@ tef_item_start(const char *args, const char **attrv)
 		else if (0 == case_ignore_strcmp(avp[0], "Altitude"))
 			wpt_tmp->altitude = atof(avp[1]);
 		else if (0 == case_ignore_strcmp(avp[0], "TimeStamp"))
-			/* nothing for the moment */;
+			{ /* nothing for the moment */ }
 
 		avp+=2;
 	}
