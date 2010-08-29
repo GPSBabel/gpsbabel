@@ -157,7 +157,7 @@ subrip_trkpt_pr(const waypoint *waypointp)
 	 * way of solving this should be trivial to you :-)
 	 */
 	{
-		time_offset = sync_time(prevwpp->creation_time, opt_videotime);
+		time_offset = sync_time(waypointp->creation_time, opt_videotime);
 	}
 	
 	if (prevwpp)
