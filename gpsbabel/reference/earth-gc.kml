@@ -106,7 +106,7 @@ PICTURES of points and of the panels will follow soon. YOU CAN ONLY LOG ONE POIN
 Good luck!]]></value></Data>
         </ExtendedData>
         <Point>
-          <coordinates>-73.000000,46.133333,0.000000</coordinates>
+          <coordinates>-73.000000,46.133333</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -151,7 +151,7 @@ Now that it's intuitively obvious to even the most casual observer where the cac
 <img SRC="http://www.mtgc.org/mtgc_member-banner.gif" WIDTH="500" HEIGHT="40" ALT="Member of Middle Tennessee GeoCachers Club [www.mtgc.org]" BORDER="0"></a></p>]]></value></Data>
         </ExtendedData>
         <Point>
-          <coordinates>-86.861667,35.921667,0.000000</coordinates>
+          <coordinates>-86.861667,35.921667</coordinates>
         </Point>
       </Placemark>
     </Folder>
